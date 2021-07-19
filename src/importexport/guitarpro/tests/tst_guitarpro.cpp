@@ -270,7 +270,7 @@ void TestGuitarPro::initTestCase()
 
     using namespace mu::iex::guitarpro;
 
-    std::shared_ptr<IGuitarProConfiguration> conf = mu::framework::ioc()->resolve<IGuitarProConfiguration>("");
+    std::shared_ptr<IGuitarProConfiguration> conf = mu::modularity::ioc()->resolve<IGuitarProConfiguration>("");
     conf->setImportGuitarProCharset("");
 }
 

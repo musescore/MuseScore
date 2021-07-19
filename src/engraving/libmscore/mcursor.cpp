@@ -21,6 +21,9 @@
  */
 
 #include "libmscore/mcursor.h"
+
+#include "engraving/compat/scoreaccess.h"
+
 #include "libmscore/part.h"
 #include "libmscore/staff.h"
 #include "libmscore/note.h"
@@ -143,7 +146,7 @@ TimeSig* MCursor::addTimeSig(const Fraction& f)
 void MCursor::createScore(const QString& name)
 {
     delete _score;
-    _score = new MasterScore(mscore->baseStyle());
+    _score = mu::engraving::compat::ScoreAccess::createMasterScoreWithBaseStyle();
     _score->setName(name);
     move(0, Fraction(0, 1));
 }
@@ -175,19 +178,5 @@ void MCursor::addPart(const QString& instrument)
     staff->init(it, 0, 0);
     _score->appendPart(part);
     _score->insertStaff(staff, 0);
-}
-
-//---------------------------------------------------------
-//   saveScore
-//---------------------------------------------------------
-
-void MCursor::saveScore()
-{
-    QFile fp(_score->fileInfo()->completeBaseName() + ".mscx");
-    if (!fp.open(QIODevice::WriteOnly)) {
-        qFatal("Open <%s> failed", qPrintable(fp.fileName()));
-    }
-    _score->Score::saveFile(&fp, false);
-    fp.close();
 }
 }

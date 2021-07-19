@@ -59,7 +59,7 @@
 #include "dev/keynav/keynavdevcontrol.h"
 
 using namespace mu::ui;
-using namespace mu::framework;
+using namespace mu::modularity;
 
 static std::shared_ptr<UiConfiguration> s_configuration = std::make_shared<UiConfiguration>();
 static std::shared_ptr<UiActionsRegister> s_uiactionsRegister = std::make_shared<UiActionsRegister>();
@@ -102,7 +102,7 @@ void UiModule::resolveImports()
         ar->reg(s_keyNavigationUiActions);
     }
 
-    auto ir = framework::ioc()->resolve<IInteractiveUriRegister>(moduleName());
+    auto ir = modularity::ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerWidgetUri(Uri("musescore://devtools/interactive/testdialog"), TestDialog::static_metaTypeId());
         ir->registerQmlUri(Uri("musescore://devtools/interactive/sample"), "DevTools/Interactive/SampleDialog.qml");
@@ -144,14 +144,30 @@ void UiModule::registerUiTypes()
     qmlRegisterUncreatableType<KeyNavDevSection>("MuseScore.Ui", 1, 0, "KeyNavDevSection", "Cannot create a KeyNavDevSection");
     qmlRegisterUncreatableType<KeyNavDevControl>("MuseScore.Ui", 1, 0, "KeyNavDevControl", "Cannot create a KeyNavDevControl");
 
-    framework::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(ui_QML_IMPORT);
+    modularity::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(ui_QML_IMPORT);
 }
 
-void UiModule::onInit(const IApplication::RunMode&)
+void UiModule::onInit(const framework::IApplication::RunMode&)
 {
     s_configuration->init();
-    s_uiactionsRegister->init();
     s_keyNavigationController->init();
+}
+
+void UiModule::onAllInited(const framework::IApplication::RunMode& mode)
+{
+    if (framework::IApplication::RunMode::Editor != mode) {
+        return;
+    }
+
+    //! NOTE Some of the settings are taken from the workspace,
+    //! we need to be sure that the workspaces are initialized.
+    //! So, we loads these settings on onStartApp
+    s_configuration->load();
+
+    //! NOTE UIActions are collected from many modules, and these modules determine the state of their UIActions.
+    //! All modules need to be initialized in order to get the correct state of UIActions.
+    //! So, we do init on onStartApp
+    s_uiactionsRegister->init();
 }
 
 void UiModule::onDeinit()

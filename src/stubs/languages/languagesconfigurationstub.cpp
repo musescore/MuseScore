@@ -24,14 +24,13 @@
 using namespace mu::languages;
 using namespace mu;
 
-QString LanguagesConfigurationStub::currentLanguageCode() const
+ValCh<QString> LanguagesConfigurationStub::currentLanguageCode() const
 {
-    return QString();
+    return ValCh<QString>();
 }
 
-Ret LanguagesConfigurationStub::setCurrentLanguageCode(const QString&) const
+void LanguagesConfigurationStub::setCurrentLanguageCode(const QString&) const
 {
-    return make_ret(Ret::Code::NotSupported);
 }
 
 QUrl LanguagesConfigurationStub::languagesUpdateUrl() const
@@ -49,17 +48,12 @@ ValCh<LanguagesHash> LanguagesConfigurationStub::languages() const
     return ValCh<LanguagesHash>();
 }
 
-Ret LanguagesConfigurationStub::setLanguages(const LanguagesHash&) const
+Ret LanguagesConfigurationStub::setLanguages(const LanguagesHash&)
 {
     return make_ret(Ret::Code::NotSupported);
 }
 
-io::path LanguagesConfigurationStub::languagesSharePath() const
-{
-    return io::path();
-}
-
-io::path LanguagesConfigurationStub::languagesDataPath() const
+io::path LanguagesConfigurationStub::languagesUserAppDataPath() const
 {
     return io::path();
 }

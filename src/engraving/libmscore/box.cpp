@@ -36,7 +36,7 @@
 #include "fret.h"
 #include "mscore.h"
 #include "stafftext.h"
-#include "icon.h"
+#include "actionicon.h"
 #include "xml.h"
 #include "measure.h"
 #include "undo.h"
@@ -107,34 +107,24 @@ void Box::draw(mu::draw::Painter* painter) const
     if (score() && score()->printing()) {
         return;
     }
-    if (!(selected() || editMode || dropTarget() || score()->showFrames())) {
-        qreal w = spatium() * .15;
-        QPainterPathStroker stroker;
-        stroker.setWidth(w);
-        stroker.setJoinStyle(Qt::MiterJoin);
-        stroker.setCapStyle(Qt::SquareCap);
 
-        QVector<qreal> dashes;
-        dashes.append(1);
-        dashes.append(3);
-        stroker.setDashPattern(dashes);
-        PainterPath path;
-        w *= .5;
-        path.addRect(bbox().adjusted(w, w, -w, -w).toQRectF());
-        PainterPath stroke = stroker.createStroke(path);
-        painter->setBrush(Qt::NoBrush);
-        painter->fillPath(stroke, (selected() || editMode || dropTarget()) ? MScore::selectColor[0] : MScore::frameMarginColor);
+    const bool showBlueFrame = selected() || dropTarget();
+    const bool showFrame = showBlueFrame || (score() ? score()->showFrames() : false);
+
+    if (showFrame) {
+        qreal lineWidth = spatium() * .15;
+        Pen pen;
+        pen.setWidthF(lineWidth);
+        pen.setJoinStyle(PenJoinStyle::MiterJoin);
+        pen.setCapStyle(PenCapStyle::SquareCap);
+        pen.setColor(showBlueFrame ? MScore::selectColor[0] : MScore::frameMarginColor);
+        pen.setDashPattern({ 1, 3 });
+
+        painter->setBrush(BrushStyle::NoBrush);
+        painter->setPen(pen);
+        lineWidth *= 0.5;
+        painter->drawRect(bbox().adjusted(lineWidth, lineWidth, -lineWidth, -lineWidth));
     }
-}
-
-//---------------------------------------------------------
-//   startEdit
-//---------------------------------------------------------
-
-void Box::startEdit(EditData& ed)
-{
-    Element::startEdit(ed);
-    editMode   = true;
 }
 
 //---------------------------------------------------------
@@ -194,7 +184,6 @@ void Box::editDrag(EditData& ed)
 
 void Box::endEdit(EditData&)
 {
-    editMode = false;
     layout();
 }
 
@@ -544,13 +533,13 @@ bool Box::acceptDrop(EditData& data) const
     case ElementType::IMAGE:
     case ElementType::SYMBOL:
         return true;
-    case ElementType::ICON:
-        switch (toIcon(data.dropElement)->iconType()) {
-        case IconType::VFRAME:
-        case IconType::TFRAME:
-        case IconType::FFRAME:
-        case IconType::HFRAME:
-        case IconType::MEASURE:
+    case ElementType::ACTION_ICON:
+        switch (toActionIcon(data.dropElement)->actionType()) {
+        case ActionIconType::VFRAME:
+        case ActionIconType::TFRAME:
+        case ActionIconType::FFRAME:
+        case ActionIconType::HFRAME:
+        case ActionIconType::MEASURE:
             return true;
         default:
             break;
@@ -617,21 +606,21 @@ Element* Box::drop(EditData& data)
         return text;
     }
 
-    case ElementType::ICON:
-        switch (toIcon(e)->iconType()) {
-        case IconType::VFRAME:
+    case ElementType::ACTION_ICON:
+        switch (toActionIcon(e)->actionType()) {
+        case ActionIconType::VFRAME:
             score()->insertMeasure(ElementType::VBOX, this);
             break;
-        case IconType::TFRAME:
+        case ActionIconType::TFRAME:
             score()->insertMeasure(ElementType::TBOX, this);
             break;
-        case IconType::FFRAME:
+        case ActionIconType::FFRAME:
             score()->insertMeasure(ElementType::FBOX, this);
             break;
-        case IconType::HFRAME:
+        case ActionIconType::HFRAME:
             score()->insertMeasure(ElementType::HBOX, this);
             break;
-        case IconType::MEASURE:
+        case ActionIconType::MEASURE:
             score()->insertMeasure(ElementType::MEASURE, this);
             break;
         default:

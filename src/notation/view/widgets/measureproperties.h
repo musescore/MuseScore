@@ -36,8 +36,7 @@ class Measure;
 class Fraction;
 }
 
-namespace mu {
-namespace notation {
+namespace mu::notation {
 class MeasurePropertiesDialog : public QDialog, private Ui::MeasurePropertiesBase
 {
     Q_OBJECT
@@ -77,7 +76,6 @@ private:
 
     std::shared_ptr<INotation> m_notation;
 };
-}
 }
 
 Q_DECLARE_METATYPE(mu::notation::MeasurePropertiesDialog)

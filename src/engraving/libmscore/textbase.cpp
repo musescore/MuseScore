@@ -21,11 +21,19 @@
  */
 
 #include <cmath>
-#include <QClipboard>
+
+#include <QGuiApplication>
+
 #include <QStack>
 #include <QTextFragment>
 #include <QTextDocument>
 #include <QRegularExpression>
+
+#include "draw/fontmetrics.h"
+#include "draw/fontcompat.h"
+#include "draw/pen.h"
+#include "draw/brush.h"
+#include "style/defaultstyle.h"
 
 #include "text.h"
 #include "textedit.h"
@@ -44,10 +52,8 @@
 #include "undo.h"
 #include "mscore.h"
 
-#include "draw/fontmetrics.h"
-#include "draw/fontcompat.h"
-
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 #ifdef Q_OS_MAC
@@ -646,9 +652,6 @@ bool TextCursor::set(const PointF& p, QTextCursor::MoveMode mode)
         _text->score()->setUpdateAll();
         if (mode == QTextCursor::MoveAnchor) {
             clearSelection();
-        }
-        if (hasSelection()) {
-            QApplication::clipboard()->setText(selectedText(), QClipboard::Selection);
         }
     }
     updateCursorFormat();
@@ -1667,10 +1670,10 @@ TextBase::TextBase(Score* s, ElementFlags f)
 TextBase::TextBase(const TextBase& st)
     : Element(st)
 {
-    _cursor                      = st._cursor;
+    _cursor                      = new TextCursor(this);
     _text                        = st._text;
-    _layout                      = st._layout;
     textInvalid                  = st.textInvalid;
+    _layout                      = st._layout;
     layoutInvalid                = st.layoutInvalid;
     frame                        = st.frame;
     _layoutToParentWidth         = st._layoutToParentWidth;
@@ -1695,13 +1698,18 @@ TextBase::TextBase(const TextBase& st)
     _links = 0;
 }
 
+TextBase::~TextBase()
+{
+    delete _cursor;
+}
+
 //---------------------------------------------------------
 //   drawSelection
 //---------------------------------------------------------
 
 void TextBase::drawSelection(mu::draw::Painter* p, const RectF& r) const
 {
-    QBrush bg(QColor("steelblue"));
+    mu::draw::Brush bg(QColor("steelblue"));
     p->setCompositionMode(mu::draw::CompositionMode::HardLight);
     p->setBrush(bg);
     p->setNoPen();
@@ -2545,9 +2553,7 @@ bool TextBase::mousePress(EditData& ed)
     if (!ted->cursor()->set(ed.startMove, shift ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor)) {
         return false;
     }
-    if (ed.buttons == Qt::MiddleButton) {
-        paste(ed);
-    }
+
     score()->setUpdateAll();
     return true;
 }
@@ -3238,7 +3244,7 @@ void TextBase::editCut(EditData& ed)
     QString s = cursor->selectedText(true);
 
     if (!s.isEmpty()) {
-        QApplication::clipboard()->setText(s, QClipboard::Clipboard);
+        ted->selectedText = cursor->selectedText(true);
         ed.curGrip = Grip::START;
         ed.key     = Qt::Key_Delete;
         ed.s       = QString();
@@ -3257,10 +3263,7 @@ void TextBase::editCopy(EditData& ed)
     //
     TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
     TextCursor* cursor = ted->cursor();
-    QString s = cursor->selectedText(true);
-    if (!s.isEmpty()) {
-        QApplication::clipboard()->setText(s, QClipboard::Clipboard);
-    }
+    ted->selectedText = cursor->selectedText(true);
 }
 
 //---------------------------------------------------------
@@ -3281,19 +3284,20 @@ TextCursor* TextBase::cursorFromEditData(const EditData& ed)
 void TextBase::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
+    using namespace mu::draw;
     if (hasFrame()) {
-        qreal baseSpatium = MScore::baseStyle().value(Sid::spatium).toDouble();
+        qreal baseSpatium = DefaultStyle::baseStyle().value(Sid::spatium).toDouble();
         if (frameWidth().val() != 0.0) {
             QColor fColor = curColor(visible(), frameColor());
             qreal frameWidthVal = frameWidth().val() * (sizeIsSpatiumDependent() ? spatium() : baseSpatium);
 
-            QPen pen(fColor, frameWidthVal, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin);
+            Pen pen(fColor, frameWidthVal, PenStyle::SolidLine, PenCapStyle::SquareCap, PenJoinStyle::MiterJoin);
             painter->setPen(pen);
         } else {
             painter->setNoPen();
         }
         QColor bg(bgColor());
-        painter->setBrush(bg.alpha() ? QBrush(bg) : Qt::NoBrush);
+        painter->setBrush(bg.alpha() ? Brush(bg) : BrushStyle::NoBrush);
         if (circle()) {
             painter->drawEllipse(frame);
         } else {
@@ -3306,7 +3310,7 @@ void TextBase::draw(mu::draw::Painter* painter) const
             painter->drawRoundedRect(frame, frameRound() * frameRoundFactor, r2);
         }
     }
-    painter->setBrush(Qt::NoBrush);
+    painter->setBrush(BrushStyle::NoBrush);
     painter->setPen(textColor());
     for (const TextBlock& t : _layout) {
         t.draw(painter, this);
@@ -3320,6 +3324,7 @@ void TextBase::draw(mu::draw::Painter* painter) const
 
 void TextBase::drawEditMode(mu::draw::Painter* p, EditData& ed)
 {
+    using namespace mu::draw;
     PointF pos(canvasPos());
     p->translate(pos);
 
@@ -3331,7 +3336,7 @@ void TextBase::drawEditMode(mu::draw::Painter* p, EditData& ed)
     TextCursor* cursor = ted->cursor();
 
     if (cursor->hasSelection()) {
-        p->setBrush(Qt::NoBrush);
+        p->setBrush(BrushStyle::NoBrush);
         p->setPen(textColor());
         int r1 = cursor->selectLine();
         int r2 = cursor->row();
@@ -3360,8 +3365,8 @@ void TextBase::drawEditMode(mu::draw::Painter* p, EditData& ed)
         }
     }
     p->setBrush(curColor());
-    QPen pen(curColor());
-    pen.setJoinStyle(Qt::MiterJoin);
+    Pen pen(curColor());
+    pen.setJoinStyle(PenJoinStyle::MiterJoin);
     p->setPen(pen);
 
     // Don't draw cursor if there is a selection
@@ -3369,17 +3374,17 @@ void TextBase::drawEditMode(mu::draw::Painter* p, EditData& ed)
         p->drawRect(cursor->cursorRect());
     }
 
-    QMatrix matrix = p->worldTransform().toAffine();
+    QTransform transform = p->worldTransform();
     p->translate(-pos);
-    p->setPen(QPen(QBrush(Qt::lightGray), 4.0 / matrix.m11()));    // 4 pixel pen size
-    p->setBrush(Qt::NoBrush);
+    p->setPen(Pen(Qt::lightGray, 4.0 / transform.m11()));    // 4 pixel pen size
+    p->setBrush(BrushStyle::NoBrush);
 
     qreal m = spatium();
     RectF r = canvasBoundingRect().adjusted(-m, -m, m, m);
 //      qDebug("%f %f %f %f\n", r.x(), r.y(), r.width(), r.height());
 
     p->drawRect(r);
-    pen = QPen(MScore::defaultColor, 0.0);
+    pen = Pen(MScore::defaultColor, 0.0);
 }
 
 //---------------------------------------------------------

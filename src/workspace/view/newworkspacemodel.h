@@ -25,17 +25,10 @@
 
 #include <QObject>
 
-#include "internal/iworkspacecreator.h"
-#include "iworkspacemanager.h"
-#include "modularity/ioc.h"
-
 namespace mu::workspace {
 class NewWorkspaceModel : public QObject
 {
     Q_OBJECT
-
-    INJECT(workspace, IWorkspaceCreator, workspaceCreator)
-    INJECT(workspace, IWorkspaceManager, workspaceManager)
 
     Q_PROPERTY(QString workspaceName READ workspaceName WRITE setWorkspaceName NOTIFY dataChanged)
     Q_PROPERTY(bool useUiPreferences READ useUiPreferences WRITE setUseUiPreferences NOTIFY dataChanged)
@@ -69,7 +62,6 @@ signals:
     void canCreateWorkspaceChanged();
 
 private:
-    void addStubData(IWorkspacePtr workspace, WorkspaceTag tag) const;
 
     QString m_workspaceName;
     bool m_useUiPreferences = false;

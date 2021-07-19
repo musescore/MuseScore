@@ -91,8 +91,9 @@ jobs:
       if: env.DO_BUILD == 'true'   
       run: |
         T_ID=${{ secrets.TELEMETRY_TRACK_ID }}; if [ -z "$T_ID" ]; then T_ID="''"; fi
-        bash ./build/ci/macos/build.sh -n ${{ github.run_id }} --telemetry $T_ID
-    - name: Package 
+        YT_API_KEY=${{ secrets.YOUTUBE_API_KEY }}; if [ -z "$YT_API_KEY" ]; then YT_API_KEY="''"; fi
+        bash ./build/ci/macos/build.sh -n ${{ github.run_id }} --telemetry $T_ID --youtube_api_key $YT_API_KEY
+      name: Package
       if: env.DO_BUILD == 'true'
       run: |
         S_S="${{ secrets.MAC_SIGN_CERTIFICATE_ENCRYPT_SECRET }}"; if [ -z "$S_S" ]; then S_S="''"; fi

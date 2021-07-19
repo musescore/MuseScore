@@ -25,7 +25,7 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu::iex::guitarpro {
-class GuitarProModule : public framework::IModuleSetup
+class GuitarProModule : public modularity::IModuleSetup
 {
 public:
 

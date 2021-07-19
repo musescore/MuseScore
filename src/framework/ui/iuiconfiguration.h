@@ -27,6 +27,7 @@
 
 #include "modularity/imoduleexport.h"
 #include "async/notification.h"
+#include "actions/actiontypes.h"
 
 #include "uitypes.h"
 
@@ -70,14 +71,22 @@ public:
     //! NOTE Maybe set from command line
     virtual void setPhysicalDotsPerInch(std::optional<float> dpi) = 0;
 
-    virtual QByteArray pageState(const std::string& pageName) const = 0;
-    virtual void setPageState(const std::string& pageName, const QByteArray& state) = 0;
+    virtual QByteArray pageState(const QString& pageName) const = 0;
+    virtual void setPageState(const QString& pageName, const QByteArray& state) = 0;
 
     virtual QByteArray windowGeometry() const = 0;
     virtual void setWindowGeometry(const QByteArray& state) = 0;
     virtual async::Notification windowGeometryChanged() const = 0;
 
     virtual void applyPlatformStyle(QWindow* window) = 0;
+
+    virtual bool isVisible(const QString& key, bool def = true) const = 0;
+    virtual void setIsVisible(const QString& key, bool val) = 0;
+    virtual async::Notification isVisibleChanged(const QString& key) const = 0;
+
+    virtual ToolConfig toolConfig(const QString& toolName) const = 0;
+    virtual void setToolConfig(const QString& toolName, const ToolConfig& config) = 0;
+    virtual async::Notification toolConfigChanged(const QString& toolName) const = 0;
 };
 }
 

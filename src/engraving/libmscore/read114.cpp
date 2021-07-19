@@ -25,6 +25,11 @@
 #include <QTextDocument>
 #include <QTextDocumentFragment>
 
+#include "style/style.h"
+#include "style/defaultstyle.h"
+#include "compat/pageformat.h"
+#include "compat/chordlist.h"
+
 #include "score.h"
 #include "slur.h"
 #include "staff.h"
@@ -46,7 +51,6 @@
 #include "box.h"
 #include "dynamic.h"
 #include "drumset.h"
-#include "style.h"
 #include "symid.h"
 #include "xml.h"
 #include "stringdata.h"
@@ -76,6 +80,7 @@
 #include "pedal.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 static int g_guitarStrings[] = { 40, 45, 50, 55, 59, 64 };
@@ -1427,7 +1432,7 @@ static void readPedal114(XmlReader& e, Pedal* pedal)
             pedal->setLineWidth(qreal(e.readDouble()));
             pedal->setPropertyFlags(Pid::LINE_WIDTH, PropertyFlags::UNSTYLED);
         } else if (tag == "lineStyle") {
-            pedal->setLineStyle(Qt::PenStyle(e.readInt()));
+            pedal->setLineStyle(mu::draw::PenStyle(e.readInt()));
             pedal->setPropertyFlags(Pid::LINE_STYLE, PropertyFlags::UNSTYLED);
         } else if (!readTextLineProperties114(e, pedal)) {
             e.unknown();
@@ -2652,7 +2657,7 @@ static void readPart(Part* part, XmlReader& e)
 //   readPageFormat
 //---------------------------------------------------------
 
-static void readPageFormat(PageFormat* pf, XmlReader& e)
+static void readPageFormat(compat::PageFormat* pf, XmlReader& e)
 {
     qreal _oddRightMargin  = 0.0;
     qreal _evenRightMargin = 0.0;
@@ -2715,34 +2720,12 @@ static void readPageFormat(PageFormat* pf, XmlReader& e)
     pf->setPrintableWidth(qMin(w1, w2));       // silently adjust right margins
 }
 
-MStyle* styleDefaults114()
-{
-    static MStyle* result = nullptr;
-
-    if (result) {
-        return result;
-    }
-
-    result = new MStyle();
-    QFile baseDefaults(":/styles/legacy-style-defaults-v1.mss");
-
-    if (!baseDefaults.open(QIODevice::ReadOnly)) {
-        return result;
-    }
-
-    result->load(&baseDefaults);
-
-    return result;
-}
-
 //---------------------------------------------------------
 //   readStyle
 //---------------------------------------------------------
 
-static void readStyle(MStyle* style, XmlReader& e)
+static void readStyle(MStyle* style, XmlReader& e, compat::ReadChordListHook& readChordListHook)
 {
-    QString oldChordDescriptionFile = style->value(Sid::chordDescriptionFile).toString();
-    bool chordListTag = false;
     while (e.readNextStartElement()) {
         QString tag = e.name().toString();
 
@@ -2762,22 +2745,11 @@ static void readStyle(MStyle* style, XmlReader& e)
         } else if (tag == "Spatium") {
             style->set(Sid::spatium, e.readDouble() * DPMM);
         } else if (tag == "page-layout") {
-            PageFormat pf;
-            initPageFormat(style, &pf);
-            pf.read(e);
-            setPageFormat(style, pf);
+            compat::readPageFormat206(style, e);
         } else if (tag == "displayInConcertPitch") {
             style->set(Sid::concertPitch, QVariant(bool(e.readInt())));
         } else if (tag == "ChordList") {
-            style->chordList()->clear();
-            style->chordList()->read(e);
-            for (ChordFont f : style->chordList()->fonts) {
-                if (f.family == "MuseJazz") {
-                    f.family = "MuseJazz Text";
-                }
-            }
-            style->setCustomChordList(true);
-            chordListTag = true;
+            readChordListHook.read(e);
         } else if (tag == "pageFillLimit" || tag == "genTimesig" || tag == "FixMeasureNumbers" || tag == "FixMeasureWidth") {   // obsolete
             e.skipCurrentElement();
         } else if (tag == "systemDistance") {  // obsolete
@@ -2841,31 +2813,8 @@ static void readStyle(MStyle* style, XmlReader& e)
         style->set(Sid::harmonyPlay, false);
     }
 
-    // if we just specified a new chord description file
-    // and didn't encounter a ChordList tag
-    // then load the chord description file
+    readChordListHook.validate();
 
-    QString newChordDescriptionFile = style->value(Sid::chordDescriptionFile).toString();
-    if (newChordDescriptionFile != oldChordDescriptionFile && !chordListTag) {
-        if (!newChordDescriptionFile.startsWith("chords_") && style->value(Sid::chordStyle).toString() == "std") {
-            // should not normally happen,
-            // but treat as "old" (114) score just in case
-            style->set(Sid::chordStyle, QVariant(QString("custom")));
-            style->set(Sid::chordsXmlFile, QVariant(true));
-            qDebug("StyleData::load: custom chord description file %s with chordStyle == std", qPrintable(newChordDescriptionFile));
-        }
-        if (style->value(Sid::chordStyle).toString() == "custom") {
-            style->setCustomChordList(true);
-        } else {
-            style->setCustomChordList(false);
-        }
-        style->chordList()->unload();
-    }
-
-    // make sure we have a chordlist
-    if (!chordListTag) {
-        style->checkChordList();
-    }
 #if 0 // TODO
       //
       //  Compatibility with old scores/styles:
@@ -2954,7 +2903,8 @@ Score::FileError MasterScore::read114(XmlReader& e)
             setShowPageborders(e.readInt());
         } else if (tag == "Style") {
             qreal sp = spatium();
-            readStyle(&style(), e);
+            compat::ReadChordListHook clhook(this);
+            readStyle(&style(), e, clhook);
             //style()->load(e);
             // adjust this now so chords render properly on read
             // other style adjustments can wait until reading is finished
@@ -2993,7 +2943,7 @@ Score::FileError MasterScore::read114(XmlReader& e)
             style().setTextStyle(s);
 #endif
         } else if (tag == "page-layout") {
-            PageFormat pf;
+            compat::PageFormat pf;
             readPageFormat(&pf, e);
         } else if (tag == "copyright" || tag == "rights") {
             Text* text = new Text(this);
@@ -3332,7 +3282,7 @@ Score::FileError MasterScore::read114(XmlReader& e)
     // we'll force this and live with it for the score
     // but we wait until now to do it so parts don't have this issue
 
-    if (styleV(Sid::voltaPosAbove) == MScore::baseStyle().value(Sid::voltaPosAbove)) {
+    if (styleV(Sid::voltaPosAbove) == DefaultStyle::baseStyle().value(Sid::voltaPosAbove)) {
         style().set(Sid::voltaPosAbove, PointF(0.0, -2.0f));
     }
 

@@ -139,7 +139,7 @@ DockPage {
     Component {
         id: audioComp
 
-        AudioEngineTests {}
+        Playback {}
     }
 
     Component {

@@ -29,7 +29,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/midiinstrument.h
     )
 
-include(${PROJECT_SOURCE_DIR}/build/module.cmake)
+set(MODULE_NOT_LINK_GLOBAL ON)
+include(SetupModule)
 
 if (NOT MSVC AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 9.0)
    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated-copy")

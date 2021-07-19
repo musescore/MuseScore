@@ -24,7 +24,7 @@
 using namespace mu::languages;
 using namespace mu;
 
-Ret LanguageUnpackerStub::unpack(const QString&, const QString&, const QString&) const
+Ret LanguageUnpackerStub::unpack(const QString&, const QString&, const io::path&) const
 {
     return make_ret(Ret::Code::NotSupported);
 }

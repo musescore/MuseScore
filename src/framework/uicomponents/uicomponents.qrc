@@ -10,7 +10,6 @@
         <file>qml/MuseScore/UiComponents/FlatButton.qml</file>
         <file>qml/MuseScore/UiComponents/ExpandableBlankSection.qml</file>
         <file>qml/MuseScore/UiComponents/ExpandableBlank.qml</file>
-        <file>qml/MuseScore/UiComponents/StyledComboBox.qml</file>
         <file>qml/MuseScore/UiComponents/TabPanel.qml</file>
         <file>qml/MuseScore/UiComponents/RadioButtonGroup.qml</file>
         <file>qml/MuseScore/UiComponents/TextInputField.qml</file>
@@ -53,5 +52,9 @@
         <file>qml/MuseScore/UiComponents/TabItem.qml</file>
         <file>qml/MuseScore/UiComponents/StyledDropShadow.qml</file>
         <file>qml/MuseScore/UiComponents/StyledToolTip.qml</file>
+        <file>qml/MuseScore/UiComponents/Utils.js</file>
+        <file>qml/MuseScore/UiComponents/Dropdown.qml</file>
+        <file>qml/MuseScore/UiComponents/internal/DropdownItem.qml</file>
+        <file>qml/MuseScore/UiComponents/VisibilityBox.qml</file>
     </qresource>
 </RCC>

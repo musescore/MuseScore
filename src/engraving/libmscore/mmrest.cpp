@@ -26,6 +26,7 @@
 #include "symid.h"
 #include "undo.h"
 #include "utils.h"
+#include "draw/pen.h"
 
 using namespace mu;
 
@@ -95,8 +96,8 @@ void MMRest::draw(mu::draw::Painter* painter) const
             x += symBbox(sym).width() + spacing;
         }
     } else {
-        QPen pen(painter->pen());
-        pen.setCapStyle(Qt::FlatCap);
+        mu::draw::Pen pen(painter->pen());
+        pen.setCapStyle(mu::draw::PenCapStyle::FlatCap);
 
         // draw horizontal line
         qreal hBarThickness = score()->styleP(Sid::mmRestHBarThickness);

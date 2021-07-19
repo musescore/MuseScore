@@ -93,6 +93,7 @@ public:
     virtual void editText(QKeyEvent* event) = 0;
     virtual void endEditText() = 0;
     virtual void changeTextCursorPosition(const PointF& newCursorPos) = 0;
+    virtual TextBase* editedText() const = 0;
     virtual async::Notification textEditingStarted() const = 0;
     virtual async::Notification textEditingChanged() const = 0;
 
@@ -165,6 +166,12 @@ public:
 
     virtual ScoreConfig scoreConfig() const = 0;
     virtual void setScoreConfig(ScoreConfig config) = 0;
+
+    virtual void nextLyrics(bool = false, bool = false, bool = true) = 0;
+    virtual void nextLyricsVerse(bool = false) = 0;
+    virtual void nextSyllable() = 0;
+    virtual void addMelisma() = 0;
+    virtual void addLyricsVerse() = 0;
 };
 
 using INotationInteractionPtr = std::shared_ptr<INotationInteraction>;

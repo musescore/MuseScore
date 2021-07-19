@@ -27,16 +27,16 @@
 #include "../iconvertercontroller.h"
 
 #include "modularity/ioc.h"
-#include "notation/inotationcreator.h"
-#include "notation/inotationwritersregister.h"
+#include "project/iprojectcreator.h"
+#include "project/inotationwritersregister.h"
 
 #include "retval.h"
 
 namespace mu::converter {
 class ConverterController : public IConverterController
 {
-    INJECT(converter, notation::INotationCreator, notationCreator)
-    INJECT(converter, notation::INotationWritersRegister, writers)
+    INJECT(converter, project::IProjectCreator, notationCreator)
+    INJECT(converter, project::INotationWritersRegister, writers)
 
 public:
     ConverterController() = default;
@@ -69,12 +69,11 @@ private:
     RetVal<BatchJob> parseBatchJob(const io::path& batchJobFile) const;
 
     bool isConvertPageByPage(const std::string& suffix) const;
-    Ret convertPageByPage(notation::INotationWriterPtr writer, notation::INotationPtr notation, const io::path& out) const;
-    Ret convertFullNotation(notation::INotationWriterPtr writer, notation::INotationPtr notation, const io::path& out) const;
+    Ret convertPageByPage(project::INotationWriterPtr writer, notation::INotationPtr notation, const io::path& out) const;
+    Ret convertFullNotation(project::INotationWriterPtr writer, notation::INotationPtr notation, const io::path& out) const;
 
-    Ret convertScorePartsToPdf(notation::INotationWriterPtr writer, notation::IMasterNotationPtr masterNotation, const io::path& out) const;
-    Ret convertScorePartsToPngs(notation::INotationWriterPtr writer, notation::IMasterNotationPtr masterNotation,
-                                const io::path& out) const;
+    Ret convertScorePartsToPdf(project::INotationWriterPtr writer, notation::IMasterNotationPtr masterNotation, const io::path& out) const;
+    Ret convertScorePartsToPngs(project::INotationWriterPtr writer, notation::IMasterNotationPtr masterNotation, const io::path& out) const;
 };
 }
 

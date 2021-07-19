@@ -33,11 +33,6 @@ using namespace mu::audio;
 
 std::thread::id AudioThread::ID;
 
-AudioThread::AudioThread()
-{
-    m_channel = std::make_shared<rpc::QueuedRpcChannel>();
-}
-
 AudioThread::~AudioThread()
 {
     if (m_running) {
@@ -45,13 +40,14 @@ AudioThread::~AudioThread()
     }
 }
 
-void AudioThread::run(const OnStart& onStart)
+void AudioThread::run(const Runnable& onStart, const Runnable& loopBody)
 {
     m_onStart = onStart;
+    m_mainLoopBody = loopBody;
 
 #ifndef Q_OS_WASM
     m_running = true;
-    m_thread = std::make_shared<std::thread>([this]() {
+    m_thread = std::make_unique<std::thread>([this]() {
         main();
     });
 #else
@@ -62,7 +58,7 @@ void AudioThread::run(const OnStart& onStart)
 #endif
 }
 
-void AudioThread::stop(const OnFinished& onFinished)
+void AudioThread::stop(const Runnable& onFinished)
 {
     m_onFinished = onFinished;
     m_running = false;
@@ -71,24 +67,14 @@ void AudioThread::stop(const OnFinished& onFinished)
     }
 }
 
-void AudioThread::setAudioBuffer(std::shared_ptr<IAudioBuffer> buffer)
+bool AudioThread::isRunning() const
 {
-    m_buffer = buffer;
-}
-
-void AudioThread::loopBody()
-{
-    mu::async::processEvents();
-    m_channel->process();
-    if (m_buffer) {
-        m_buffer->forward();
-    }
+    return m_running;
 }
 
 void AudioThread::main()
 {
     mu::runtime::setThreadName("audio_worker");
-    m_channel->setupWorkerThread();
 
     AudioThread::ID = std::this_thread::get_id();
 
@@ -97,16 +83,16 @@ void AudioThread::main()
     }
 
     while (m_running) {
-        loopBody();
+        mu::async::processEvents();
+
+        if (m_mainLoopBody) {
+            m_mainLoopBody();
+        }
+
         std::this_thread::sleep_for(std::chrono::milliseconds(2));
     }
 
     if (m_onFinished) {
         m_onFinished();
     }
-}
-
-rpc::QueuedRpcChannelPtr AudioThread::channel() const
-{
-    return m_channel;
 }

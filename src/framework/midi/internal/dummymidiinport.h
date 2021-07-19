@@ -28,6 +28,9 @@ namespace mu::midi {
 class DummyMidiInPort : public IMidiInPort
 {
 public:
+
+    void init();
+
     std::vector<MidiDevice> devices() const override;
 
     Ret connect(const MidiDeviceID& deviceID) override;

@@ -24,9 +24,10 @@
 
 #include <cmath>
 
+#include "style/style.h"
+
 #include "score.h"
 #include "xml.h"
-#include "style.h"
 #include "utils.h"
 #include "tuplet.h"
 #include "symid.h"
@@ -41,7 +42,7 @@
 #include "harmony.h"
 #include "segment.h"
 #include "stafftype.h"
-#include "icon.h"
+#include "actionicon.h"
 #include "image.h"
 
 using namespace mu;
@@ -157,12 +158,12 @@ bool Rest::acceptDrop(EditData& data) const
     Element* e = data.dropElement;
     ElementType type = e->type();
     if (
-        (type == ElementType::ICON && toIcon(e)->iconType() == IconType::SBEAM)
-        || (type == ElementType::ICON && toIcon(e)->iconType() == IconType::MBEAM)
-        || (type == ElementType::ICON && toIcon(e)->iconType() == IconType::NBEAM)
-        || (type == ElementType::ICON && toIcon(e)->iconType() == IconType::BEAM32)
-        || (type == ElementType::ICON && toIcon(e)->iconType() == IconType::BEAM64)
-        || (type == ElementType::ICON && toIcon(e)->iconType() == IconType::AUTOBEAM)
+        (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_START)
+        || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_MID)
+        || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_NONE)
+        || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_BEGIN_32)
+        || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_BEGIN_64)
+        || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_AUTO)
         || (type == ElementType::FERMATA)
         || (type == ElementType::CLEF)
         || (type == ElementType::KEYSIG)
@@ -176,7 +177,6 @@ bool Rest::acceptDrop(EditData& data) const
         || (type == ElementType::STAFF_STATE)
         || (type == ElementType::INSTRUMENT_CHANGE)
         || (type == ElementType::DYNAMIC)
-        || (type == ElementType::HAIRPIN)
         || (type == ElementType::HARMONY)
         || (type == ElementType::TEMPO_TEXT)
         || (type == ElementType::REHEARSAL_MARK)
@@ -188,7 +188,7 @@ bool Rest::acceptDrop(EditData& data) const
         ) {
         return true;
     }
-    return false;
+    return type != ElementType::SLUR && e->isSpanner();
 }
 
 //---------------------------------------------------------

@@ -77,7 +77,7 @@ if [ "$RUN_CMD" == "gen" ]; then
     rm -rf $PNG_DIR
     mkdir $PNG_DIR
 
-    SCORES_LIST=$(ls $SCORES_DIR)
+    SCORES_LIST=$(ls -p $SCORES_DIR | grep -v /) 
     
     echo "Generate JSON job file"
     echo "[" >> $JSON_FILE
@@ -90,10 +90,8 @@ if [ "$RUN_CMD" == "gen" ]; then
     cat $JSON_FILE        
 
     echo "Generate PNG files"
-    $MSCORE_BIN -j $JSON_FILE -r $DPI >$LOG_FILE 2>&1
+    $MSCORE_BIN -j $JSON_FILE -r $DPI 2>&1 | tee $LOG_FILE
 
-    echo "LOG:"
-    cat $LOG_FILE
     echo "========"
     ls $PNG_DIR
     echo "========"

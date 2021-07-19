@@ -23,7 +23,6 @@
 
 #include <QBuffer>
 
-#include "log.h"
 #include "stringutils.h"
 
 #include "thirdparty/qzip/qzipreader_p.h"
@@ -32,159 +31,212 @@
 #include "global/xmlreader.h"
 #include "global/xmlwriter.h"
 
+#include "workspaceerrors.h"
+
+#include "log.h"
+
 using namespace mu::workspace;
 using namespace mu::system;
 using namespace mu::framework;
-
-static const QString WS_CONTAINTER_XML_PATH("META-INF/container.xml");
-
-static constexpr std::string_view WS_CONTAINER_TAG("container");
-static constexpr std::string_view WS_ROOTFILES_TAG("rootfiles");
-static constexpr std::string_view WS_ROOTFILE_TAG("rootfile");
-static constexpr std::string_view WS_FULLPATH_ATTRIBUTE("full-path");
 
 WorkspaceFile::WorkspaceFile(const io::path& filePath)
     : m_filePath(filePath)
 {}
 
-QByteArray WorkspaceFile::readRootFile()
+mu::io::path WorkspaceFile::filePath() const
+{
+    return m_filePath;
+}
+
+mu::Ret WorkspaceFile::load()
 {
     RetVal<QByteArray> data = fileSystem()->readFile(m_filePath);
     if (!data.ret) {
-        LOGE() << data.ret.toString();
-        return QByteArray();
+        LOGE() << "failed read file, err: " << data.ret.toString();
+        return data.ret;
     }
 
     QBuffer buf(&data.val);
+    buf.open(QIODevice::ReadOnly);
     MQZipReader zip(&buf);
 
-    std::string rootFile;
-    MetaInfo meta;
+    Meta::read(zip, m_meta);
+    if (m_meta.empty() || zip.status() != MQZipReader::NoError) {
+        LOGE() << "failed read meta data";
+        return make_ret(Err::FailedUnPack);
+    }
 
-    if (meta.read(zip)) {
-        rootFile = meta.rootFile();
-    } else {
-        QVector<MQZipReader::FileInfo> fis = zip.fileInfoList();
-        if (!fis.isEmpty()) {
-            rootFile = fis.first().filePath.toStdString();
+    QVector<MQZipReader::FileInfo> files = zip.fileInfoList();
+    for (const MQZipReader::FileInfo& fi : files) {
+        if (fi.isFile) {
+            QByteArray fdata = zip.fileData(fi.filePath);
+            m_data[fi.filePath.toStdString()] = fdata;
         }
     }
 
-    if (rootFile.empty()) {
-        LOGE() << "not found root file: " << m_filePath;
-        return QByteArray();
+    if (zip.status() != MQZipReader::NoError) {
+        LOGE() << "failed read data, status: " << zip.status();
+        return make_ret(Err::FailedUnPack);
     }
 
-    QByteArray fileData = zip.fileData(QString::fromStdString(rootFile));
-    if (fileData.isEmpty()) {
-        LOGE() << "failed read root file: " << m_filePath;
-        return QByteArray();
-    }
-
-    return fileData;
+    zip.close();
+    return make_ret(Ret::Code::Ok);
 }
 
-bool WorkspaceFile::writeRootFile(const std::string& name, const QByteArray& data)
+mu::Ret WorkspaceFile::save()
 {
-    MQZipWriter zip(m_filePath.toQString());
+    std::vector<std::string> paths;
+    for (const auto& d : m_data) {
+        paths.push_back(d.first);
+    }
 
-    MetaInfo meta;
-    meta.setRootFile(name);
-    meta.write(zip);
+    QByteArray data;
+    QBuffer buf(&data);
+    buf.open(QIODevice::WriteOnly);
+    MQZipWriter zip(&buf);
 
-    zip.addFile(QString::fromStdString(name), data);
+    Container::write(zip, paths);
+    if (zip.status() != MQZipWriter::NoError) {
+        LOGE() << "failed write files to zip, status: " << zip.status();
+        return make_ret(Err::FailedPack);
+    }
 
-    bool ret = zip.status() == MQZipWriter::NoError;
+    Meta::write(zip, m_meta);
+    if (zip.status() != MQZipWriter::NoError) {
+        LOGE() << "failed write files to zip, status: " << zip.status();
+        return make_ret(Err::FailedPack);
+    }
+
+    for (const auto& d : m_data) {
+        zip.addFile(QString::fromStdString(d.first), d.second);
+    }
+
+    if (zip.status() != MQZipWriter::NoError) {
+        LOGE() << "failed write files to zip, status: " << zip.status();
+        return make_ret(Err::FailedPack);
+    }
+
+    zip.close();
+
+    Ret ret = fileSystem()->writeToFile(m_filePath, data);
     if (!ret) {
-        LOGE() << "Error while writing workspace, zip status: " << zip.status();
+        LOGE() << "failed write to file, err: " << ret.toString();
     }
 
     return ret;
 }
 
-void WorkspaceFile::MetaInfo::setRootFile(const std::string& name)
-{
-    m_rootFile = name;
-}
-
-std::string WorkspaceFile::MetaInfo::rootFile() const
-{
-    return m_rootFile;
-}
-
-void WorkspaceFile::MetaInfo::write(MQZipWriter& zip)
+void WorkspaceFile::Container::write(MQZipWriter& zip, const std::vector<std::string>& paths)
 {
     QByteArray data;
-    writeContainer(&data);
-    zip.addFile(WS_CONTAINTER_XML_PATH, data);
-}
+    QBuffer buf(&data);
+    buf.open(QIODevice::WriteOnly);
+    XmlWriter xml(&buf);
+    xml.writeStartDocument();
+    xml.writeStartElement("container");
+    xml.writeStartElement("rootfiles");
 
-bool WorkspaceFile::MetaInfo::read(const MQZipReader& zip)
-{
-    QByteArray container = zip.fileData(WS_CONTAINTER_XML_PATH);
-    if (container.isEmpty()) {
-        LOGE() << "not found" << WS_CONTAINTER_XML_PATH;
-        return false;
+    for (const std::string& f : paths) {
+        xml.writeStartElement("rootfile");
+        xml.writeAttribute("full-path", f);
+        xml.writeEndElement();
     }
 
-    readContainer(container);
-    if (m_rootFile.empty()) {
-        return false;
-    }
+    xml.writeEndElement();
+    xml.writeEndElement();
+    xml.writeEndDocument();
 
-    return true;
+    zip.addFile("META-INF/container.xml", data);
 }
 
-void WorkspaceFile::MetaInfo::readContainer(const QByteArray& data)
+void WorkspaceFile::Meta::write(MQZipWriter& zip, const std::map<std::string, Val>& meta)
 {
-    XmlReader reader(data);
+    QByteArray data;
+    QBuffer buf(&data);
+    buf.open(QIODevice::WriteOnly);
+    XmlWriter xml(&buf);
+    xml.writeStartDocument();
+    xml.writeStartElement("metadata");
+    xml.writeStartElement("items");
 
-    while (reader.readNextStartElement()) {
-        if (WS_CONTAINER_TAG != reader.tagName()) {
-            reader.skipCurrentElement();
-            continue;
-        }
-
-        while (reader.readNextStartElement()) {
-            if (WS_ROOTFILES_TAG != reader.tagName()) {
-                reader.skipCurrentElement();
-                continue;
-            }
-
-            while (reader.readNextStartElement()) {
-                if (WS_ROOTFILE_TAG != reader.tagName()) {
-                    reader.skipCurrentElement();
-                    continue;
-                }
-
-                m_rootFile = reader.attribute(WS_FULLPATH_ATTRIBUTE);
-                return;
-            }
-        }
+    for (const auto& m : meta) {
+        xml.writeStartElement("item");
+        xml.writeAttribute("name", m.first);
+        xml.writeCharacters(m.second.toString());
+        xml.writeEndElement();
     }
+
+    xml.writeEndElement();
+    xml.writeEndElement();
+    xml.writeEndDocument();
+
+    zip.addFile("META-INF/metadata.xml", data);
 }
 
-void WorkspaceFile::MetaInfo::writeContainer(QByteArray* data) const
+void WorkspaceFile::Meta::read(MQZipReader& zip, std::map<std::string, Val>& meta)
 {
-    IF_ASSERT_FAILED(data) {
+    QByteArray data = zip.fileData("META-INF/metadata.xml");
+    if (data.isEmpty()) {
+        LOGE() << "not found META-INF/metadata.xml";
         return;
     }
 
-    QBuffer buffer(data);
-    buffer.open(Device::WriteOnly);
+    XmlReader xml(data);
+    while (xml.readNextStartElement()) {
+        if ("metadata" != xml.tagName()) {
+            xml.skipCurrentElement();
+            continue;
+        }
 
-    XmlWriter writer(&buffer);
-    writer.writeStartDocument();
-    writer.writeStartElement(WS_CONTAINER_TAG);
-    writer.writeStartElement(WS_ROOTFILES_TAG);
+        while (xml.readNextStartElement()) {
+            if ("items" != xml.tagName()) {
+                xml.skipCurrentElement();
+                continue;
+            }
 
-    writer.writeStartElement(WS_ROOTFILE_TAG);
-    writer.writeAttribute(WS_FULLPATH_ATTRIBUTE, m_rootFile);
-    writer.writeEndElement();
+            while (xml.readNextStartElement()) {
+                if ("item" != xml.tagName()) {
+                    xml.skipCurrentElement();
+                    continue;
+                }
 
-    writer.writeEndElement();
-    writer.writeEndElement();
-    writer.writeEndDocument();
+                std::string name = xml.attribute("name");
+                std::string val = xml.readString();
+                meta[name] = Val(val);
+            }
+        }
+    }
+}
 
-    buffer.close();
+bool WorkspaceFile::isLoaded() const
+{
+    return !m_meta.empty();
+}
+
+mu::Val WorkspaceFile::meta(const std::string& key) const
+{
+    auto it = m_meta.find(key);
+    if (it != m_meta.end()) {
+        return it->second;
+    }
+    return Val();
+}
+
+void WorkspaceFile::setMeta(const std::string& key, const Val& val)
+{
+    m_meta[key] = val;
+}
+
+QByteArray WorkspaceFile::data(const std::string& name) const
+{
+    auto it = m_data.find(name);
+    if (it != m_data.end()) {
+        return it->second;
+    }
+    return QByteArray();
+}
+
+void WorkspaceFile::setData(const std::string& name, const QByteArray& data)
+{
+    m_data[name] = data;
 }

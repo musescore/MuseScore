@@ -48,9 +48,9 @@ std::string ExtensionsModule::moduleName() const
 
 void ExtensionsModule::registerExports()
 {
-    framework::ioc()->registerExport<IExtensionsConfiguration>(moduleName(), m_extensionsConfiguration);
-    framework::ioc()->registerExport<IExtensionsService>(moduleName(), m_extensionsService);
-    framework::ioc()->registerExport<IExtensionUnpacker>(moduleName(), new ExtensionUnpacker());
+    modularity::ioc()->registerExport<IExtensionsConfiguration>(moduleName(), m_extensionsConfiguration);
+    modularity::ioc()->registerExport<IExtensionsService>(moduleName(), m_extensionsService);
+    modularity::ioc()->registerExport<IExtensionUnpacker>(moduleName(), new ExtensionUnpacker());
 }
 
 void ExtensionsModule::registerResources()
@@ -63,7 +63,7 @@ void ExtensionsModule::registerUiTypes()
     qmlRegisterType<ExtensionListModel>("MuseScore.Extensions", 1, 0, "ExtensionListModel");
     qmlRegisterUncreatableType<ExtensionStatus>("MuseScore.Extensions", 1, 0, "ExtensionStatus", "Cannot create an ExtensionStatus");
 
-    framework::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(extensions_QML_IMPORT);
+    modularity::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(extensions_QML_IMPORT);
 }
 
 void ExtensionsModule::onInit(const framework::IApplication::RunMode& runMode)
@@ -72,6 +72,10 @@ void ExtensionsModule::onInit(const framework::IApplication::RunMode& runMode)
         return;
     }
 
-    m_extensionsService->init();
     m_extensionsConfiguration->init();
+}
+
+void ExtensionsModule::onDelayedInit()
+{
+    m_extensionsService->refreshExtensions();
 }

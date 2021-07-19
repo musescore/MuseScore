@@ -25,11 +25,15 @@
  Implementation of class Score (partial).
 */
 
+#include "score.h"
+
 #include <assert.h>
 #include <cmath>
 #include <QBuffer>
 
-#include "score.h"
+#include "style/style.h"
+#include "style/defaultstyle.h"
+
 #include "fermata.h"
 #include "imageStore.h"
 #include "key.h"
@@ -50,7 +54,6 @@
 #include "slur.h"
 #include "staff.h"
 #include "part.h"
-#include "style.h"
 #include "tuplet.h"
 #include "lyrics.h"
 #include "pitchspelling.h"
@@ -87,6 +90,8 @@
 #include "instrchange.h"
 #include "synthesizerstate.h"
 
+#include "engravingproject.h"
+
 #include "config.h"
 
 #ifdef USE_SCORE_ACCESSIBLE_TREE
@@ -94,6 +99,7 @@
 #endif
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 MasterScore* gscore;                 ///< system score, used for palettes etc.
@@ -315,7 +321,7 @@ Score::Score()
     _scoreFont = ScoreFont::fontByName("Leland");
 
     _fileDivision           = MScore::division;
-    _style  = MScore::defaultStyle();
+    _style  = DefaultStyle::defaultStyle();
 //      accInfo = tr("No selection");     // ??
     accInfo = "No selection";
 
@@ -329,8 +335,8 @@ Score::Score(MasterScore* parent, bool forcePartStyle /* = true */)
 {
     Score::validScores.insert(this);
     _masterScore = parent;
-    if (MScore::defaultStyleForParts()) {
-        _style = *MScore::defaultStyleForParts();
+    if (DefaultStyle::defaultStyleForParts()) {
+        _style = *DefaultStyle::defaultStyleForParts();
     } else {
         // inherit most style settings from parent
         _style = parent->style();
@@ -350,7 +356,7 @@ Score::Score(MasterScore* parent, bool forcePartStyle /* = true */)
         };
         // but borrow defaultStyle page layout settings
         for (auto i : styles) {
-            _style.set(i, MScore::defaultStyle().value(i));
+            _style.set(i, DefaultStyle::defaultStyle().value(i));
         }
         // and force some style settings that just make sense for parts
         if (forcePartStyle) {
@@ -2120,13 +2126,30 @@ MasterScore* MasterScore::clone()
 
     buffer.close();
 
-    XmlReader r(buffer.buffer());
-    MasterScore* score = new MasterScore(style());
-    score->read1(r, true);
+    QByteArray scoreData = buffer.buffer();
+    QString completeBaseName = masterScore()->fileInfo()->completeBaseName();
+
+    auto getStyleDefaultsVersion = [this, &scoreData, &completeBaseName]() {
+        return readStyleDefaultsVersion(scoreData, completeBaseName);
+    };
+
+    XmlReader r(scoreData);
+    MasterScore* score = new MasterScore(style(), m_project);
+    score->read1(r, true, getStyleDefaultsVersion);
 
     score->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
     score->doLayout();
     return score;
+}
+
+Score* MasterScore::createScore()
+{
+    return new Score(this, DefaultStyle::baseStyle());
+}
+
+Score* MasterScore::createScore(const MStyle& s)
+{
+    return new Score(this, s);
 }
 
 //---------------------------------------------------------
@@ -5190,6 +5213,24 @@ QVariant Score::propertyDefault(Pid /*id*/) const
     return QVariant();
 }
 
+void Score::resetAllStyle()
+{
+    const MStyle& defStyle = DefaultStyle::defaultStyle();
+    int beginIdx = int(Sid::NOSTYLE) + 1;
+    int endIdx = int(Sid::STYLES);
+    for (int idx = beginIdx; idx < endIdx; ++idx) {
+        undo(new ChangeStyleVal(this, Sid(idx), defStyle.value(Sid(idx))));
+    }
+}
+
+void Score::resetStyles(const QSet<Sid>& stylesToReset)
+{
+    const MStyle& defStyle = DefaultStyle::defaultStyle();
+    for (const Sid& idx : stylesToReset) {
+        undo(new ChangeStyleVal(this, idx, defStyle.value(idx)));
+    }
+}
+
 //---------------------------------------------------------
 //   setStyle
 //---------------------------------------------------------
@@ -5235,9 +5276,10 @@ QString Score::getTextStyleUserName(Tid tid)
 //   MasterScore
 //---------------------------------------------------------
 
-MasterScore::MasterScore()
+MasterScore::MasterScore(std::shared_ptr<engraving::EngravingProject> project)
     : Score()
 {
+    m_project = project;
     _tempomap    = new TempoMap;
     _sigmap      = new TimeSigMap();
     _repeatList  = new RepeatList(this);
@@ -5272,8 +5314,8 @@ MasterScore::MasterScore()
     metaTags().insert("creationDate", QDate::currentDate().toString(Qt::ISODate));
 }
 
-MasterScore::MasterScore(const MStyle& s)
-    : MasterScore{}
+MasterScore::MasterScore(const MStyle& s, std::shared_ptr<engraving::EngravingProject> project)
+    : MasterScore{project}
 {
     _movements = new Movements;
     _movements->push_back(this);
@@ -5282,6 +5324,11 @@ MasterScore::MasterScore(const MStyle& s)
 
 MasterScore::~MasterScore()
 {
+    if (m_project) {
+        m_project->m_masterScore = nullptr;
+        m_project = nullptr;
+    }
+
     delete _revisions;
     delete _repeatList;
     delete _repeatList2;

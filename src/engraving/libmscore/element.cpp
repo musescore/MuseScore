@@ -30,6 +30,9 @@
 #include <cmath>
 #include <QBuffer>
 
+#include "draw/pen.h"
+#include "style/style.h"
+
 #include "accidental.h"
 #include "ambitus.h"
 #include "arpeggio.h"
@@ -53,7 +56,7 @@
 #include "glissando.h"
 #include "hairpin.h"
 #include "harmony.h"
-#include "icon.h"
+#include "actionicon.h"
 #include "image.h"
 #include "iname.h"
 #include "instrchange.h"
@@ -87,7 +90,6 @@
 #include "stafftype.h"
 #include "stem.h"
 #include "sticking.h"
-#include "style.h"
 #include "symbol.h"
 #include "system.h"
 #include "tempotext.h"
@@ -113,6 +115,7 @@
 #include "palmmute.h"
 #include "fermata.h"
 #include "shape.h"
+
 //#include "musescoreCore.h"
 
 #include "config.h"
@@ -1231,7 +1234,7 @@ Element* Element::create(ElementType type, Score* score)
     case ElementType::MARKER:            return new Marker(score);
     case ElementType::JUMP:              return new Jump(score);
     case ElementType::MEASURE_REPEAT:    return new MeasureRepeat(score);
-    case ElementType::ICON:              return new Icon(score);
+    case ElementType::ACTION_ICON:       return new ActionIcon(score);
     case ElementType::NOTE:              return new Note(score);
     case ElementType::SYMBOL:            return new Symbol(score);
     case ElementType::FSYMBOL:           return new FSymbol(score);
@@ -1250,7 +1253,7 @@ Element* Element::create(ElementType type, Score* score)
     case ElementType::STEM:              return new Stem(score);
     case ElementType::SLUR:              return new Slur(score);
     case ElementType::TIE:               return new Tie(score);
-    case ElementType::FINGERING:          return new Fingering(score);
+    case ElementType::FINGERING:         return new Fingering(score);
     case ElementType::HBOX:              return new HBox(score);
     case ElementType::VBOX:              return new VBox(score);
     case ElementType::TBOX:              return new TBox(score);
@@ -2154,13 +2157,14 @@ void EditData::addData(ElementEditData* ed)
 
 void Element::drawEditMode(mu::draw::Painter* p, EditData& ed)
 {
-    QPen pen(MScore::defaultColor, 0.0);
+    using namespace mu::draw;
+    Pen pen(MScore::defaultColor, 0.0);
     p->setPen(pen);
     for (int i = 0; i < ed.grips; ++i) {
         if (Grip(i) == ed.curGrip) {
             p->setBrush(MScore::frameMarginColor);
         } else {
-            p->setBrush(Qt::NoBrush);
+            p->setBrush(BrushStyle::NoBrush);
         }
         p->drawRect(ed.grip[i]);
     }

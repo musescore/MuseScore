@@ -43,8 +43,20 @@
 #include "spannermap.h"
 #include "layoutbreak.h"
 #include "property.h"
+#include "chordlist.h"
+
+#include "io/msczwriter.h"
+#include "io/msczreader.h"
 
 class QMimeData;
+
+namespace mu::engraving {
+class EngravingProject;
+}
+
+namespace mu::engraving::compat {
+class ScoreAccess;
+}
 
 namespace mu::score {
 class AccessibleScore;
@@ -426,7 +438,6 @@ public:
 class Score : public QObject, public ScoreElement
 {
     Q_OBJECT
-
 public:
     enum class FileError : char {
         FILE_NO_ERROR,
@@ -483,6 +494,7 @@ private:
 
     InputState _is;
     MStyle _style;
+    ChordList _chordList;
 
     bool _created { false };            ///< file is never saved, has generated name
     bool _startedEmpty { false };       ///< The score was created from an empty template (typically ":/data/My_First_Score.mscx")
@@ -596,14 +608,16 @@ protected:
     inline virtual Movements* movements();
     inline virtual const Movements* movements() const;
 
+    friend class MasterScore;
+    Score();
+    Score(MasterScore*, bool forcePartStyle = true);
+    Score(MasterScore*, const MStyle&);
+
 signals:
     void posChanged(POS, unsigned);
     void playlistChanged();
 
 public:
-    Score();
-    Score(MasterScore*, bool forcePartStyle = true);
-    Score(MasterScore*, const MStyle&);
     Score(const Score&) = delete;
     Score& operator=(const Score&) = delete;
     virtual ~Score();
@@ -805,8 +819,8 @@ public:
     bool checkTimeDelete(Segment*, Segment*);
     void timeDelete(Measure*, Segment*, const Fraction&);
 
-    void startCmd();                            // start undoable command
-    void endCmd(const bool isCmdFromInspector = false, bool rollback = false);       // end undoable command
+    void startCmd();                    // start undoable command
+    void endCmd(bool rollback = false); // end undoable command
     void update() { update(true); }
     void undoRedo(bool undo, EditData*);
 
@@ -837,7 +851,6 @@ public:
 
     void changeSelectedNotesVoice(int);
 
-    void colorItem(Element*);
     QList<Part*>& parts() { return _parts; }
     const QList<Part*>& parts() const { return _parts; }
 
@@ -862,10 +875,8 @@ public:
     void setShowInstrumentNames(bool v) { _showInstrumentNames = v; }
     void setShowVBox(bool v) { _showVBox = v; }
 
-    bool saveFile(QFileInfo& info);
-    bool saveFile(QIODevice* f, bool msczFormat, bool onlySelection = false);
-    bool saveCompressedFile(QFileInfo&, bool onlySelection, bool createThumbnail = true);
-    bool saveCompressedFile(QIODevice*, const QString& fileName, bool onlySelection, bool createThumbnail = true);
+    bool writeScore(QIODevice* f, bool msczFormat, bool onlySelection = false);
+    bool writeMscz(mu::engraving::MsczWriter& msczWriter, bool onlySelection = false, bool createThumbnail = true);
 
     void print(mu::draw::Painter* printer, int page);
     ChordRest* getSelectedChordRest() const;
@@ -938,20 +949,27 @@ public:
     void spell(Note*);
     Fraction nextSeg(const Fraction& tick, int track);
 
+    ChordList* chordList() { return &_chordList; }
+    const ChordList* chordList() const { return &_chordList; }
+    void checkChordList() { _chordList.checkChordList(style()); }
+
     virtual MStyle& style() { return _style; }
     virtual const MStyle& style() const { return _style; }
+
+    void resetAllStyle();
+    void resetStyles(const QSet<Sid>& stylesToReset);
 
     void setStyle(const MStyle& s, const bool overlap = false);
     bool loadStyle(const QString&, bool ign = false, const bool overlap = false);
     bool saveStyle(const QString&);
 
-    QVariant styleV(Sid idx) const { return style().value(idx); }
-    Spatium  styleS(Sid idx) const { Q_ASSERT(!strcmp(MStyle::valueType(idx), "Ms::Spatium")); return style().value(idx).value<Spatium>(); }
-    qreal    styleP(Sid idx) const { Q_ASSERT(!strcmp(MStyle::valueType(idx), "Ms::Spatium")); return style().pvalue(idx); }
-    QString  styleSt(Sid idx) const { Q_ASSERT(!strcmp(MStyle::valueType(idx), "QString")); return style().value(idx).toString(); }
-    bool     styleB(Sid idx) const { Q_ASSERT(!strcmp(MStyle::valueType(idx), "bool")); return style().value(idx).toBool(); }
-    qreal    styleD(Sid idx) const { Q_ASSERT(!strcmp(MStyle::valueType(idx), "double")); return style().value(idx).toDouble(); }
-    int      styleI(Sid idx) const { Q_ASSERT(!strcmp(MStyle::valueType(idx), "int")); return style().value(idx).toInt(); }
+    const QVariant& styleV(Sid idx) const { return style().styleV(idx); }
+    Spatium  styleS(Sid idx) const { return style().styleS(idx); }
+    qreal styleP(Sid idx) const { return style().styleP(idx); }
+    QString styleSt(Sid idx) const { return style().styleSt(idx); }
+    bool styleB(Sid idx) const { return style().styleB(idx); }
+    qreal styleD(Sid idx) const { return style().styleD(idx); }
+    int styleI(Sid idx) const { return style().styleI(idx); }
 
     void setStyleValue(Sid sid, QVariant value) { style().set(sid, value); }
     QString getTextStyleUserName(Tid tid);
@@ -1371,6 +1389,8 @@ class MasterScore : public Score
     QSet<int> occupiedMidiChannels;                   // each entry is port*16+channel, port range: 0-inf, channel: 0-15
     unsigned int searchMidiMappingFrom = 0;           // makes getting next free MIDI mapping faster
 
+    std::shared_ptr<mu::engraving::EngravingProject> m_project = nullptr;
+
     void parseVersion(const QString&);
     void reorderMidiMapping();
     void rebuildExcerptsMidiMapping();
@@ -1381,14 +1401,28 @@ class MasterScore : public Score
     QFileInfo info;
 
     bool read(XmlReader&);
+    FileError read1(XmlReader&, bool ignoreVersionError, const std::function<int()>& readStyleDefaultsVersion);
+    FileError read114(XmlReader&);
+    FileError read206(XmlReader&);
+    FileError read302(XmlReader&);
+
     void setPrev(MasterScore* s) { _prev = s; }
     void setNext(MasterScore* s) { _next = s; }
 
+    friend class mu::engraving::compat::ScoreAccess;
+    friend class mu::engraving::EngravingProject;
+    MasterScore(std::shared_ptr<mu::engraving::EngravingProject> project);
+    MasterScore(const MStyle&, std::shared_ptr<mu::engraving::EngravingProject> project);
+
+    FileError loadMscz(const mu::engraving::MsczReader& msczFile, bool ignoreVersionError);
+
 public:
-    MasterScore();
-    MasterScore(const MStyle&);
+
     virtual ~MasterScore();
     MasterScore* clone();
+
+    Score* createScore();
+    Score* createScore(const MStyle& s);
 
     virtual bool isMaster() const override { return true; }
     virtual bool readOnly() const override { return _readOnly; }
@@ -1438,17 +1472,7 @@ public:
     bool isSavable() const;
     void setTempomap(TempoMap* tm);
 
-    bool saveFile(bool generateBackup = true);
-    FileError read1(XmlReader&, bool ignoreVersionError);
-    FileError loadCompressedMsc(QIODevice*, bool ignoreVersionError);
-    FileError loadMsc(QString name, bool ignoreVersionError);
-    FileError loadMsc(QString name, QIODevice*, bool ignoreVersionError);
-    FileError read114(XmlReader&);
-    FileError read206(XmlReader&);
-    FileError read302(XmlReader&);
-    QByteArray readToBuffer();
-    QByteArray readCompressedToBuffer();
-    int readStyleDefaultsVersion();
+    int readStyleDefaultsVersion(const QByteArray& scoreData, const QString& completeBaseName);
     int styleDefaultByMscVersion(const int mscVer) const;
 
     Omr* omr() const { return _omr; }
@@ -1557,10 +1581,6 @@ inline Fraction Score::pos(POS pos) const { return _masterScore->pos(pos); }
 inline void Score::setPos(POS pos, Fraction tick) { _masterScore->setPos(pos, tick); }
 
 extern Ms::MasterScore* gscore;
-
-extern MStyle* styleDefaults114();
-extern MStyle* styleDefaults206();
-extern MStyle* styleDefaults301();
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(LayoutFlags);
 }     // namespace Ms

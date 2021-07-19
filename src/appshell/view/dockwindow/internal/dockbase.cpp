@@ -57,8 +57,6 @@ using namespace mu::dock;
 DockBase::DockBase(QQuickItem* parent)
     : QQuickItem(parent)
 {
-    connect(this, &DockBase::minimumSizeChanged, this, &DockBase::resize);
-    connect(this, &DockBase::maximumSizeChanged, this, &DockBase::resize);
 }
 
 QString DockBase::title() const
@@ -201,6 +199,15 @@ void DockBase::init()
     applySizeConstraints();
 }
 
+bool DockBase::isShown() const
+{
+    IF_ASSERT_FAILED(m_dockWidget) {
+        return false;
+    }
+
+    return m_dockWidget->isOpen();
+}
+
 void DockBase::show()
 {
     IF_ASSERT_FAILED(m_dockWidget) {
@@ -217,6 +224,15 @@ void DockBase::hide()
     }
 
     m_dockWidget->forceClose();
+}
+
+void DockBase::toggle()
+{
+    if (isShown()) {
+        hide();
+    } else {
+        show();
+    }
 }
 
 DockBase::DockLocation DockBase::location() const
@@ -253,6 +269,9 @@ void DockBase::componentComplete()
     writePropertiesToObject(properties, *m_dockWidget);
 
     listenFloatingChanges();
+
+    connect(this, &DockBase::minimumSizeChanged, this, &DockBase::resize);
+    connect(this, &DockBase::maximumSizeChanged, this, &DockBase::resize);
 }
 
 void DockBase::applySizeConstraints()

@@ -23,6 +23,17 @@
 
 using namespace mu::shortcuts;
 
+const MidiMappingList& MidiRemoteStub::midiMappings() const
+{
+    static MidiMappingList l;
+    return l;
+}
+
+mu::Ret MidiRemoteStub::setMidiMappings(const MidiMappingList&)
+{
+    return make_ret(Ret::Code::NotImplemented);
+}
+
 void MidiRemoteStub::setIsSettingMode(bool)
 {
 }
@@ -38,5 +49,5 @@ void MidiRemoteStub::setCurrentActionEvent(const mu::midi::Event&)
 
 mu::Ret MidiRemoteStub::process(const mu::midi::Event&)
 {
-    return make_ret(Ret::Code::NotSupported);
+    return make_ret(Ret::Code::NotImplemented);
 }

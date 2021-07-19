@@ -31,52 +31,49 @@ using namespace mu::framework;
 static const std::string module_name("plugins");
 static const Settings::Key USER_PLUGINS_PATH(module_name, "application/paths/myPlugins");
 static const Settings::Key INSTALLED_PLUGINS(module_name, "plugins/installedPlugins");
-static const std::string PLUGINS_DIR("/plugins");
 
 void PluginsConfiguration::init()
 {
-    settings()->setDefaultValue(USER_PLUGINS_PATH, Val(globalConfiguration()->appDataPath().toStdString() + "Plugins"));
+    settings()->setDefaultValue(USER_PLUGINS_PATH, Val(globalConfiguration()->userDataPath() + "/Plugins"));
     settings()->valueChanged(USER_PLUGINS_PATH).onReceive(nullptr, [this](const Val& val) {
-        m_pluginsPathChanged.send(val.toString());
+        m_userPluginsPathChanged.send(val.toString());
     });
+    fileSystem()->makePath(userPluginsPath());
 
     settings()->valueChanged(INSTALLED_PLUGINS).onReceive(nullptr, [this](const Val& val) {
         CodeKeyList installedPlugins = parseInstalledPlugins(val);
         m_installedPluginsChanged.send(installedPlugins);
     });
-
-    fileSystem()->makePath(pluginsPath().val);
 }
 
 mu::io::paths PluginsConfiguration::availablePluginsPaths() const
 {
     io::paths result;
 
-    result.push_back(globalConfiguration()->userAppDataPath() + PLUGINS_DIR);
-
-    io::path defaultPluginsPath  = this->defaultPluginsPath();
-    result.push_back(defaultPluginsPath);
+    io::path appPluginsPath  = globalConfiguration()->appDataPath() + "/plugins";
+    result.push_back(appPluginsPath);
 
     io::path userPluginsPath = this->userPluginsPath();
-    if (!userPluginsPath.empty() && userPluginsPath != defaultPluginsPath) {
+    if (!userPluginsPath.empty() && userPluginsPath != appPluginsPath) {
         result.push_back(userPluginsPath);
     }
 
     return result;
 }
 
-mu::ValCh<mu::io::path> PluginsConfiguration::pluginsPath() const
+mu::io::path PluginsConfiguration::userPluginsPath() const
 {
-    ValCh<io::path> result;
-    result.ch = m_pluginsPathChanged;
-    result.val = userPluginsPath();
-
-    return result;
+    return settings()->value(USER_PLUGINS_PATH).toPath();
 }
 
-void PluginsConfiguration::setPluginsPath(const io::path& path)
+void PluginsConfiguration::setUserPluginsPath(const io::path& path)
 {
-    settings()->setValue(USER_PLUGINS_PATH, Val(path.toStdString()));
+    settings()->setSharedValue(USER_PLUGINS_PATH, Val(path));
+}
+
+mu::async::Channel<mu::io::path> PluginsConfiguration::userPluginsPathChanged() const
+{
+    return m_userPluginsPathChanged;
 }
 
 mu::ValCh<CodeKeyList> PluginsConfiguration::installedPlugins() const
@@ -96,20 +93,10 @@ void PluginsConfiguration::setInstalledPlugins(const CodeKeyList& codeKeyList)
         plugins << codeKey;
     }
 
-    settings()->setValue(INSTALLED_PLUGINS, Val::fromQVariant(plugins));
+    settings()->setSharedValue(INSTALLED_PLUGINS, Val::fromQVariant(plugins));
 }
 
 CodeKeyList PluginsConfiguration::parseInstalledPlugins(const mu::Val& val) const
 {
     return val.toQVariant().toStringList();
-}
-
-mu::io::path PluginsConfiguration::userPluginsPath() const
-{
-    return settings()->value(USER_PLUGINS_PATH).toString();
-}
-
-mu::io::path PluginsConfiguration::defaultPluginsPath() const
-{
-    return settings()->defaultValue(USER_PLUGINS_PATH).toString();
 }

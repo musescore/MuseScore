@@ -25,9 +25,7 @@
 #include <list>
 #include <stack>
 
-#include <QPen>
 #include <QColor>
-#include <QPainter>
 
 #include "config.h"
 #include "ipaintprovider.h"
@@ -35,9 +33,10 @@
 #include "geometry.h"
 #include "drawtypes.h"
 #include "font.h"
+#include "pen.h"
+#include "pixmap.h"
 
 class QPaintDevice;
-class QImage;
 
 #ifndef NO_QT_SUPPORT
 class QPainter;
@@ -56,8 +55,6 @@ public:
 
     ~Painter();
 
-    QPaintDevice* device() const;
-    QPainter* qpainter() const;
     IPaintProviderPtr provider() const;
 
     bool isActive() const;
@@ -74,13 +71,13 @@ public:
     void setFont(const Font& font);
     const Font& font() const;
 
-    void setPen(const QPen& pen);
+    void setPen(const Pen& pen);
     inline void setPen(const QColor& color);
     void setNoPen();
-    const QPen& pen() const;
+    const Pen& pen() const;
 
-    void setBrush(const QBrush& brush);
-    const QBrush& brush() const;
+    void setBrush(const Brush& brush);
+    const Brush& brush() const;
 
     void setWorldTransform(const QTransform& matrix, bool combine = false);
     const QTransform& worldTransform() const;
@@ -98,9 +95,9 @@ public:
     void restore();
 
     // drawing
-    void fillPath(const QPainterPath& path, const QBrush& brush);
+    void fillPath(const QPainterPath& path, const Brush& brush);
     void drawPath(const QPainterPath& path);
-    void strokePath(const QPainterPath& path, const QPen& pen);
+    void strokePath(const QPainterPath& path, const Pen& pen);
 
     void drawLines(const LineF* lines, size_t lineCount);
     void drawLines(const PointF* pointPairs, size_t lineCount);
@@ -159,10 +156,18 @@ public:
 
     void drawSymbol(const PointF& point, uint ucs4Code);
 
-    void fillRect(const RectF& rect, const QBrush& brush);
+    void fillRect(const RectF& rect, const Brush& brush);
 
+    void drawPixmap(const PointF& point, const Pixmap& pm);
+    void drawTiledPixmap(const RectF& rect, const Pixmap& pm, const PointF& offset = PointF());
+
+#ifndef NO_QT_SUPPORT
     void drawPixmap(const PointF& point, const QPixmap& pm);
     void drawTiledPixmap(const RectF& rect, const QPixmap& pm, const PointF& offset = PointF());
+#endif
+
+    void setClipRect(const RectF& rect);
+    void setClipping(bool enable);
 
     //! NOTE Provider for tests.
     //! We're not ready to use DI (ModuleIoC) here yet
@@ -195,7 +200,7 @@ private:
 
 inline void Painter::setPen(const QColor& color)
 {
-    setPen(QPen(color.isValid() ? color : QColor(Qt::black)));
+    setPen(Pen(color.isValid() ? color : QColor(Qt::black)));
 }
 
 inline void Painter::translate(const PointF& offset)

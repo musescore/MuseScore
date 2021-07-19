@@ -78,12 +78,12 @@ void MultiInstancesProvider::onMsg(const Msg& msg)
     if (msg.type == MsgType::Request && msg.method == METHOD_SCORE_IS_OPENED) {
         CHECK_ARGS_COUNT(1);
         io::path scorePath = io::path(msg.args.at(0));
-        bool isOpened = fileScoreController()->isScoreOpened(scorePath);
+        bool isOpened = fileScoreController()->isProjectOpened(scorePath);
         m_ipcChannel->response(METHOD_SCORE_IS_OPENED, { QString::number(isOpened) }, msg.srcID);
     } else if (msg.method == METHOD_ACTIVATE_WINDOW_WITH_SCORE) {
         CHECK_ARGS_COUNT(1);
         io::path scorePath = io::path(msg.args.at(0));
-        bool isOpened = fileScoreController()->isScoreOpened(scorePath);
+        bool isOpened = fileScoreController()->isProjectOpened(scorePath);
         if (isOpened) {
             mainWindow()->requestShowOnFront();
         }
@@ -108,7 +108,7 @@ void MultiInstancesProvider::onMsg(const Msg& msg)
         Settings::Key key("", msg.args.at(0).toStdString());
         Val val(msg.args.at(1).toStdString());
         val.setType(static_cast<Val::Type>(msg.args.at(2).toInt()));
-        settings()->setValue(key, val, false);
+        settings()->setLocalValue(key, val);
     }
 }
 

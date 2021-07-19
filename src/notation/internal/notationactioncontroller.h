@@ -30,7 +30,6 @@
 #include "context/iglobalcontext.h"
 #include "inotation.h"
 #include "iinteractive.h"
-#include "audio/isequencer.h"
 #include "playback/iplaybackcontroller.h"
 #include "playback/iplaybackconfiguration.h"
 #include "inotationconfiguration.h"
@@ -41,7 +40,6 @@ class NotationActionController : public actions::Actionable, public async::Async
     INJECT(notation, actions::IActionsDispatcher, dispatcher)
     INJECT(notation, context::IGlobalContext, globalContext)
     INJECT(notation, framework::IInteractive, interactive)
-    INJECT(notation, audio::ISequencer, sequencer)
     INJECT(notation, playback::IPlaybackController, playbackController)
     INJECT(notation, playback::IPlaybackConfiguration, playbackConfiguration)
     INJECT(notation, INotationConfiguration, configuration)
@@ -122,6 +120,14 @@ private:
     void firstElement();
     void lastElement();
 
+    void nextLyrics();
+    void previousLyrics();
+    void nextLyricsVerse();
+    void previousLyricsVerse();
+    void nextSyllable();
+    void addMelisma();
+    void addLyricsVerse();
+
     void toggleLayoutBreak(LayoutBreakType breakType);
 
     void splitMeasure();
@@ -169,6 +175,7 @@ private:
     void openTransposeDialog();
     void openPartsDialog();
     void openTupletOtherDialog();
+    void openStaffTextPropertiesDialog();
 
     void toggleScoreConfig(ScoreConfigType configType);
     void toggleNavigator();
@@ -177,8 +184,9 @@ private:
 
     void playSelectedElement(bool playChord = true);
 
-    bool isTextEditing() const;
-    bool isNotTextEditing() const;
+    bool isEditingText() const;
+    bool isNotEditingText() const;
+    bool isEditingLyrics() const;
 
     void pasteSelection(PastingType type = PastingType::Default);
     Fraction resolvePastingScale(const INotationInteractionPtr& interaction, PastingType type) const;
@@ -198,6 +206,7 @@ private:
     void registerNoteInputAction(const mu::actions::ActionCode&, NoteInputMethod inputMethod);
     void registerNoteAction(const mu::actions::ActionCode&, NoteName, NoteAddingMode addingMode = NoteAddingMode::NextChord);
     void registerPadNoteAction(const mu::actions::ActionCode&, Pad padding);
+    void registerLyricsAction(const mu::actions::ActionCode&, void (NotationActionController::*)());
 
     async::Notification m_currentNotationNoteInputChanged;
 };

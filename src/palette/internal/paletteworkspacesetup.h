@@ -23,14 +23,15 @@
 #define MU_PALETTE_PALETTEWORKSPACESETUP_H
 
 #include "modularity/ioc.h"
-#include "workspace/iworkspacemanager.h"
-#include "../ipaletteadapter.h"
+#include "workspace/iworkspacesdataprovider.h"
+#include "palette/ipaletteprovider.h"
+#include "async/asyncable.h"
 
 namespace mu::palette {
-class PaletteWorkspaceSetup
+class PaletteWorkspaceSetup : public async::Asyncable
 {
-    INJECT(palette, workspace::IWorkspaceManager, workspaceManager)
-    INJECT(palette, IPaletteAdapter, adapter)
+    INJECT(palette, workspace::IWorkspacesDataProvider, workspacesDataProvider)
+    INJECT(palette, IPaletteProvider, paletteProvider)
 
 public:
     void setup();

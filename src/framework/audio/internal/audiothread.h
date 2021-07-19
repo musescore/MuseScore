@@ -28,40 +28,29 @@
 #include <atomic>
 #include <functional>
 
-#include "iaudiobuffer.h"
-#include "modularity/ioc.h"
-#include "rpc/queuedrpcchannel.h"
-
 namespace mu::audio {
 class AudioThread
 {
 public:
-    AudioThread();
+    AudioThread() = default;
     ~AudioThread();
 
     static std::thread::id ID;
 
-    using OnStart = std::function<void ()>;
-    using OnFinished = std::function<void ()>;
+    using Runnable = std::function<void ()>;
 
-    void run(const OnStart& onStart = nullptr);
-    void stop(const OnFinished& onFinished = nullptr);
-
-    void setAudioBuffer(std::shared_ptr<IAudioBuffer> buffer);
-
-    //! use if you don't want to use internal thread
-    void loopBody();
-
-    rpc::QueuedRpcChannelPtr channel() const;
+    void run(const Runnable& onStart, const Runnable& loopBody);
+    void stop(const Runnable& onFinished = nullptr);
+    bool isRunning() const;
 
 private:
     void main();
 
-    OnStart m_onStart;
-    OnFinished m_onFinished;
-    rpc::QueuedRpcChannelPtr m_channel;
-    std::shared_ptr<IAudioBuffer> m_buffer = nullptr;
-    std::shared_ptr<std::thread> m_thread = nullptr;
+    Runnable m_onStart = nullptr;
+    Runnable m_mainLoopBody = nullptr;
+    Runnable m_onFinished = nullptr;
+
+    std::unique_ptr<std::thread> m_thread = nullptr;
     std::atomic<bool> m_running = false;
 };
 }

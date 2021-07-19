@@ -21,6 +21,8 @@
  */
 #include "notationuiactions.h"
 
+#include <unordered_map>
+
 #include "ui/view/iconcodes.h"
 
 using namespace mu::notation;
@@ -338,6 +340,16 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Staff/Part Properties")
              ),
+    UiAction("staff-text-properties",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Staff Text Properties…"),
+             QT_TRANSLATE_NOOP("action", "Staff text properties")
+             ),
+    UiAction("system-text-properties",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "System Text Properties…"),
+             QT_TRANSLATE_NOOP("action", "System text properties")
+             ),
     UiAction("add-remove-breaks",
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Add/Remove System Breaks…"),
@@ -526,8 +538,8 @@ const UiActionList NotationUiActions::m_actions = {
              ),
     UiAction("beam-64",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Beam 32th Sub"),
-             QT_TRANSLATE_NOOP("action", "Beam 32th sub"),
+             QT_TRANSLATE_NOOP("action", "Beam 32nd Sub"),
+             QT_TRANSLATE_NOOP("action", "Beam 32nd sub"),
              IconCode::Code::BEAM_64
              ),
     UiAction("auto-beam",
@@ -1139,9 +1151,9 @@ const UiActionList NotationUiActions::m_noteInputActions = {
              ),
     UiAction("pad-note-32",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "32th note"),
-             QT_TRANSLATE_NOOP("action", "Note duration: 32th note"),
-             IconCode::Code::NOTE_32TH
+             QT_TRANSLATE_NOOP("action", "32nd note"),
+             QT_TRANSLATE_NOOP("action", "Note duration: 32nd note"),
+             IconCode::Code::NOTE_32ND
              ),
     UiAction("pad-note-64",
              mu::context::UiCtxNotationOpened,
@@ -1335,8 +1347,8 @@ const UiActionList NotationUiActions::m_scoreConfigActions = {
              ),
     UiAction(SHOW_UNPRINTABLE_CODE,
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Show Unprintable"),
-             QT_TRANSLATE_NOOP("action", "Show unprintable"),
+             QT_TRANSLATE_NOOP("action", "Show Formatting"),
+             QT_TRANSLATE_NOOP("action", "Show Formatting"),
              Checkable::Yes
              ),
     UiAction(SHOW_FRAMES_CODE,
@@ -1367,6 +1379,48 @@ const UiActionList NotationUiActions::m_scoreConfigActions = {
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Documents Stacked"),
              QT_TRANSLATE_NOOP("action", "Display documents stacked"),
+             Checkable::Yes
+             ),
+    UiAction("next-lyric",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Next lyric"),
+             QT_TRANSLATE_NOOP("action", "Move to lyric on next note"),
+             Checkable::Yes
+             ),
+    UiAction("prev-lyric",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Previous lyric"),
+             QT_TRANSLATE_NOOP("action", "Move to lyric on previous note"),
+             Checkable::Yes
+             ),
+    UiAction("next-lyric-verse",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Next lyric verse"),
+             QT_TRANSLATE_NOOP("action", "Move to lyric in the next verse"),
+             Checkable::Yes
+             ),
+    UiAction("prev-lyric-verse",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Previous lyric verse"),
+             QT_TRANSLATE_NOOP("action", "Move to lyric in the previous verse"),
+             Checkable::Yes
+             ),
+    UiAction("next-syllable",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Next syllable"),
+             QT_TRANSLATE_NOOP("action", "Add hyphen and move to lyric on next note"),
+             Checkable::Yes
+             ),
+    UiAction("add-melisma",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Add melisma"),
+             QT_TRANSLATE_NOOP("action", "Add melisma line and move to lyric on next note"),
+             Checkable::Yes
+             ),
+    UiAction("add-lyric-verse",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Add lyric verse"),
+             QT_TRANSLATE_NOOP("action", "Adds a new verse and starts editing"),
              Checkable::Yes
              )
 };
@@ -1593,4 +1647,43 @@ SymbolId NotationUiActions::actionArticulationSymbolId(const ActionCode& actionC
     }
 
     return symbolId;
+}
+
+const mu::ui::ToolConfig& NotationUiActions::defaultNoteInputBarConfig()
+{
+    static ToolConfig config;
+    if (!config.isValid()) {
+        config.items = {
+            { "note-input", true },
+            { "pad-note-1", true },
+            { "pad-note-2", true },
+            { "pad-note-4", true },
+            { "pad-note-8", true },
+            { "pad-note-16", true },
+            { "pad-note-32", true },
+            { "pad-note-64", true },
+            { "", true },
+            { "pad-dot", true },
+            { "", true },
+            { "pad-rest", true },
+            { "", true },
+            { "flat", true },
+            { "nat", true },
+            { "sharp", true },
+            { "tie", true },
+            { "add-slur", true },
+            { "", true },
+            { "add-marcato", true },
+            { "add-sforzato", true },
+            { "add-tenuto", true },
+            { "add-staccato", true },
+            { "", true },
+            { "tuplet", true },
+            { "", true },
+            { "voice-1", true },
+            { "", true },
+            { "flip", true },
+        };
+    }
+    return config;
 }

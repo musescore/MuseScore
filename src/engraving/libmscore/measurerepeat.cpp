@@ -28,6 +28,7 @@
 #include "staff.h"
 #include "symid.h"
 #include "system.h"
+#include "draw/pen.h"
 
 using namespace mu;
 
@@ -57,6 +58,7 @@ MeasureRepeat::MeasureRepeat(Score* score)
 void MeasureRepeat::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
+    using namespace mu::draw;
     painter->setPen(curColor());
     drawSymbol(symId(), painter);
 
@@ -69,8 +71,8 @@ void MeasureRepeat::draw(mu::draw::Painter* painter) const
             // for now, using thickness and margin same as mmrests
             qreal hBarThickness = score()->styleP(Sid::mmRestHBarThickness);
             if (hBarThickness) { // don't draw at all if 0, QPainter interprets 0 pen width differently
-                QPen pen(painter->pen());
-                pen.setCapStyle(Qt::FlatCap);
+                Pen pen(painter->pen());
+                pen.setCapStyle(PenCapStyle::FlatCap);
                 pen.setWidthF(hBarThickness);
                 painter->setPen(pen);
 

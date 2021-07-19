@@ -50,7 +50,7 @@ AppShell::AppShell()
 {
 }
 
-void AppShell::addModule(mu::framework::IModuleSetup* module)
+void AppShell::addModule(modularity::IModuleSetup* module)
 {
     m_modules.push_back(module);
 }
@@ -84,16 +84,16 @@ int AppShell::run(int argc, char** argv)
     globalModule.registerExports();
     globalModule.registerUiTypes();
 
-    for (mu::framework::IModuleSetup* m : m_modules) {
+    for (mu::modularity::IModuleSetup* m : m_modules) {
         m->registerResources();
     }
 
-    for (mu::framework::IModuleSetup* m : m_modules) {
+    for (mu::modularity::IModuleSetup* m : m_modules) {
         m->registerExports();
     }
 
     globalModule.resolveImports();
-    for (mu::framework::IModuleSetup* m : m_modules) {
+    for (mu::modularity::IModuleSetup* m : m_modules) {
         m->registerUiTypes();
         m->resolveImports();
     }
@@ -110,8 +110,16 @@ int AppShell::run(int argc, char** argv)
     // Setup modules: onInit
     // ====================================================
     globalModule.onInit(runMode);
-    for (mu::framework::IModuleSetup* m : m_modules) {
+    for (mu::modularity::IModuleSetup* m : m_modules) {
         m->onInit(runMode);
+    }
+
+    // ====================================================
+    // Setup modules: onAllInited
+    // ====================================================
+    globalModule.onAllInited(runMode);
+    for (mu::modularity::IModuleSetup* m : m_modules) {
+        m->onAllInited(runMode);
     }
 
     // ====================================================
@@ -119,7 +127,7 @@ int AppShell::run(int argc, char** argv)
     // ====================================================
     QMetaObject::invokeMethod(qApp, [this]() {
         globalModule.onStartApp();
-        for (mu::framework::IModuleSetup* m : m_modules) {
+        for (mu::modularity::IModuleSetup* m : m_modules) {
             m->onStartApp();
         }
     }, Qt::QueuedConnection);
@@ -188,6 +196,16 @@ int AppShell::run(int argc, char** argv)
         QQuickWindow::setDefaultAlphaBuffer(true);
 
         engine->load(url);
+
+        // ====================================================
+        // Setup modules: onDelayedInit
+        // ====================================================
+        QTimer::singleShot(5000, [this]() {
+                globalModule.onDelayedInit();
+                for (mu::modularity::IModuleSetup* m : m_modules) {
+                    m->onDelayedInit();
+                }
+            });
     }
     }
 
@@ -214,7 +232,7 @@ int AppShell::run(int argc, char** argv)
     ui::UiEngine::instance()->quit();
 
     // Deinit
-    for (mu::framework::IModuleSetup* m : m_modules) {
+    for (mu::modularity::IModuleSetup* m : m_modules) {
         m->onDeinit();
     }
 

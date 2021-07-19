@@ -14,7 +14,7 @@ FlatToggleButton 1.0 FlatToggleButton.qml
 IncrementalPropertyControl 1.0 IncrementalPropertyControl.qml
 RadioButtonGroup 1.0 RadioButtonGroup.qml
 SeparatorLine 1.0 SeparatorLine.qml
-StyledComboBox 1.0 StyledComboBox.qml
+Dropdown 1.0 Dropdown.qml
 Icon 1.0 Icon.qml
 StyledPopup 1.0 StyledPopup.qml
 TabPanel 1.0 TabPanel.qml
@@ -46,3 +46,5 @@ MenuButton 1.0 MenuButton.qml
 FilePicker 1.0 FilePicker.qml
 ValueList 1.0 ValueList.qml
 StyledDropShadow 1.0 StyledDropShadow.qml
+VisibilityBox 1.0 VisibilityBox.qml
+Utils 1.0 Utils.js

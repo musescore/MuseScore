@@ -25,7 +25,7 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu::midi {
-class MidiModule : public framework::IModuleSetup
+class MidiModule : public modularity::IModuleSetup
 {
 public:
 

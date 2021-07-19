@@ -33,8 +33,10 @@ NICE-TO-HAVE TODO:
 
 #include <cmath>
 
-#include "framework/global/log.h"
-#include "framework/global/translation.h"
+#include "translation.h"
+#include "draw/fontmetrics.h"
+#include "draw/pen.h"
+#include "style/style.h"
 
 #include "accidental.h"
 #include "arpeggio.h"
@@ -47,11 +49,10 @@ NICE-TO-HAVE TODO:
 #include "scorefont.h"
 #include "segment.h"
 #include "staff.h"
-#include "style.h"
 #include "system.h"
 #include "xml.h"
 
-#include "draw/fontmetrics.h"
+#include "log.h"
 
 using namespace mu;
 
@@ -97,12 +98,13 @@ void GlissandoSegment::layout()
 void GlissandoSegment::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
+    using namespace mu::draw;
     painter->save();
     qreal _spatium = spatium();
 
-    QPen pen(curColor(visible(), glissando()->lineColor()));
+    Pen pen(curColor(visible(), glissando()->lineColor()));
     pen.setWidthF(glissando()->lineWidth());
-    pen.setCapStyle(Qt::RoundCap);
+    pen.setCapStyle(PenCapStyle::RoundCap);
     painter->setPen(pen);
 
     // rotate painter so that the line become horizontal

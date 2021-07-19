@@ -120,7 +120,9 @@ private:
 
 public:
     Staff(Score* score = 0);
+    Staff(const Staff& staff);
     Staff* clone() const override;
+    ~Staff();
     void init(const InstrumentTemplate*, const StaffType* staffType, int);
     void initFromStaffType(const StaffType* staffType);
     void init(const Staff*);

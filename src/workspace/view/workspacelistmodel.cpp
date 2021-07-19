@@ -41,15 +41,12 @@ void WorkspaceListModel::load()
     beginResetModel();
     m_workspaces.clear();
 
-    RetVal<IWorkspacePtrList> workspaces = workspacesManager()->workspaces();
-    if (!workspaces.ret) {
-        LOGE() << workspaces.ret.toString();
-    }
+    IWorkspacePtrList workspaces = workspacesManager()->workspaces();
 
-    IWorkspacePtr currentWorkspace = workspacesManager()->currentWorkspace().val;
+    IWorkspacePtr currentWorkspace = workspacesManager()->currentWorkspace();
     IWorkspacePtr selectedWorkspace;
 
-    for (const IWorkspacePtr& workspace : workspaces.val) {
+    for (const IWorkspacePtr& workspace : workspaces) {
         if (workspace == currentWorkspace) {
             selectedWorkspace = workspace;
         }
@@ -153,10 +150,17 @@ void WorkspaceListModel::createNewWorkspace()
         return;
     }
 
-    IWorkspacePtr newWorkspace = obj.val.toQVariant().value<IWorkspacePtr>();
-    if (!newWorkspace) {
+    QVariantMap meta = obj.val.toQVariant().toMap();
+    QString name = meta.value("name").toString();
+    IF_ASSERT_FAILED(!name.isEmpty()) {
         return;
     }
+
+    IWorkspacePtr newWorkspace = workspacesManager()->newWorkspace(name.toStdString());
+    newWorkspace->setIsManaged(DataKey::UiSettings, meta.value("ui_settings").toBool());
+    newWorkspace->setIsManaged(DataKey::UiStates, meta.value("ui_states").toBool());
+    newWorkspace->setIsManaged(DataKey::UiToolConfigs, meta.value("ui_toolconfigs").toBool());
+    newWorkspace->setIsManaged(DataKey::Palettes, meta.value("palettes").toBool());
 
     int newWorkspaceIndex = m_workspaces.size();
 

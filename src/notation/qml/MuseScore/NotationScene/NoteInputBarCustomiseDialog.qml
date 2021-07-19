@@ -160,12 +160,10 @@ StyledDialogView {
                 }
 
                 Loader {
-                    property var delegateType: Boolean(itemRole) ? itemRole.type : NoteInputBarItem.UNDEFINED
+                    property var delegateType: Boolean(itemRole) ? itemRole.type : NoteInputBarCustomiseItem.UNDEFINED
 
-                    height: parent.height
-                    width: parent.width
-
-                    sourceComponent: delegateType === NoteInputBarItem.ACTION ? actionComponent : separatorLineComponent
+                    anchors.fill: parent
+                    sourceComponent: delegateType === NoteInputBarCustomiseItem.ACTION ? actionComponent : separatorLineComponent
 
                     Component {
                         id: actionComponent

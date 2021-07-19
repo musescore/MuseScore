@@ -24,9 +24,11 @@
 
 #include <QList>
 #include <functional>
+
+#include "engraving/style/style.h"
+
 #include "libmscore/element.h"
 #include "libmscore/score.h"
-#include "libmscore/style.h"
 #include "libmscore/property.h"
 
 #include "internal/interfaces/ielementrepositoryservice.h"

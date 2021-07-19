@@ -20,8 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <QColorDialog>
-
 #include "note.h"
 #include "rest.h"
 #include "chord.h"
@@ -1983,10 +1981,10 @@ void Score::addNoteLine()
     TextLine* line = new TextLine(this);
     line->setParent(firstNote);
     line->setStartElement(firstNote);
-    line->setEndElement(lastNote);
     line->setDiagonal(true);
     line->setAnchor(Spanner::Anchor::NOTE);
     line->setTick(firstNote->chord()->tick());
+    line->setEndElement(lastNote);
 
     undoAddElement(line);
 }
@@ -3397,36 +3395,6 @@ void Score::cmdCreateTuplet(ChordRest* ocr, Tuplet* tuplet)
         rest->setTicks(tuplet->baseLen().fraction());
         undoAddCR(rest, measure, tick);
     }
-}
-
-//---------------------------------------------------------
-//   colorItem
-//---------------------------------------------------------
-
-void Score::colorItem(Element* element)
-{
-    QColor sc(element->color());
-    QColor c = QColorDialog::getColor(sc);
-    if (!c.isValid()) {
-        return;
-    }
-
-    for (Element* e : selection().elements()) {
-        if (e->color() != c) {
-            e->undoChangeProperty(Pid::COLOR, c);
-            e->setGenerated(false);
-            addRefresh(e->abbox());
-            if (e->isBarLine()) {
-//                        Element* ep = e->parent();
-//                        if (ep->isSegment() && toSegment(ep)->isEndBarLineType()) {
-//                              Measure* m = toSegment(ep)->measure();
-//                              BarLine* bl = toBarLine(e);
-//                              m->setEndBarLineType(bl->barLineType(), false, e->visible(), e->color());
-//                              }
-            }
-        }
-    }
-    deselectAll();
 }
 
 //---------------------------------------------------------

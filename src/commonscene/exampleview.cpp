@@ -29,7 +29,7 @@
 #include "libmscore/element.h"
 #include "libmscore/page.h"
 #include "libmscore/system.h"
-#include "libmscore/icon.h"
+#include "libmscore/actionicon.h"
 #include "libmscore/chord.h"
 #include "libmscore/xml.h"
 
@@ -288,7 +288,7 @@ void ExampleView::dragMoveEvent(QDragMoveEvent* event)
 {
     event->acceptProposedAction();
 
-    if (!dragElement || dragElement->type() != ElementType::ICON) {
+    if (!dragElement || dragElement->isActionIcon()) {
         return;
     }
 
@@ -349,27 +349,27 @@ void ExampleView::dropEvent(QDropEvent* event)
     if (!dragElement) {
         return;
     }
-    if (dragElement->type() != ElementType::ICON) {
+    if (dragElement->isActionIcon()) {
         delete dragElement;
         dragElement = 0;
         return;
     }
     foreach (Element* e, elementsAt(pos)) {
         if (e->type() == ElementType::NOTE) {
-            Icon* icon = static_cast<Icon*>(dragElement);
+            ActionIcon* icon = static_cast<ActionIcon*>(dragElement);
             Chord* chord = static_cast<Note*>(e)->chord();
             emit beamPropertyDropped(chord, icon);
-            switch (icon->iconType()) {
-            case IconType::SBEAM:
+            switch (icon->actionType()) {
+            case ActionIconType::BEAM_START:
                 chord->setBeamMode(Beam::Mode::BEGIN);
                 break;
-            case IconType::MBEAM:
+            case ActionIconType::BEAM_MID:
                 chord->setBeamMode(Beam::Mode::AUTO);
                 break;
-            case IconType::BEAM32:
+            case ActionIconType::BEAM_BEGIN_32:
                 chord->setBeamMode(Beam::Mode::BEGIN32);
                 break;
-            case IconType::BEAM64:
+            case ActionIconType::BEAM_BEGIN_64:
                 chord->setBeamMode(Beam::Mode::BEGIN64);
                 break;
             default:

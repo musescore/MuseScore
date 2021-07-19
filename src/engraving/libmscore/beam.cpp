@@ -24,11 +24,13 @@
 
 #include <cmath>
 
+#include "draw/brush.h"
+#include "style/style.h"
+
 #include "segment.h"
 #include "score.h"
 #include "chord.h"
 #include "sig.h"
-#include "style.h"
 #include "note.h"
 #include "tuplet.h"
 #include "system.h"
@@ -40,7 +42,7 @@
 #include "stem.h"
 #include "hook.h"
 #include "mscore.h"
-#include "icon.h"
+#include "actionicon.h"
 #include "stemslash.h"
 #include "groups.h"
 #include "xml.h"
@@ -233,7 +235,7 @@ void Beam::draw(mu::draw::Painter* painter) const
     if (beamSegments.empty()) {
         return;
     }
-    painter->setBrush(QBrush(curColor()));
+    painter->setBrush(mu::draw::Brush(curColor()));
     painter->setNoPen();
     qreal lw2 = point(score()->styleS(Sid::beamWidth)) * .5 * mag();
 
@@ -2415,9 +2417,15 @@ void Beam::triggerLayout() const
 
 bool Beam::acceptDrop(EditData& data) const
 {
-    return (data.dropElement->type() == ElementType::ICON)
-           && ((toIcon(data.dropElement)->iconType() == IconType::FBEAM1)
-               || (toIcon(data.dropElement)->iconType() == IconType::FBEAM2));
+    Element* e = data.dropElement;
+
+    if (e->isActionIcon()) {
+        ActionIconType type = toActionIcon(e)->actionType();
+        return type == ActionIconType::BEAM_FEATHERED_SLOWER
+               || type == ActionIconType::BEAM_FEATHERED_FASTER;
+    }
+
+    return false;
 }
 
 //---------------------------------------------------------
@@ -2426,15 +2434,15 @@ bool Beam::acceptDrop(EditData& data) const
 
 Element* Beam::drop(EditData& data)
 {
-    if (!data.dropElement->isIcon()) {
+    if (!data.dropElement->isActionIcon()) {
         return nullptr;
     }
 
-    Icon* e = toIcon(data.dropElement);
+    ActionIcon* e = toActionIcon(data.dropElement);
 
-    if (e->iconType() == IconType::FBEAM1) {
+    if (e->actionType() == ActionIconType::BEAM_FEATHERED_SLOWER) {
         setAsFeathered(true /*slower*/);
-    } else if (e->iconType() == IconType::FBEAM2) {
+    } else if (e->actionType() == ActionIconType::BEAM_FEATHERED_FASTER) {
         setAsFeathered(false /*slower*/);
     }
 
@@ -2653,28 +2661,28 @@ Fraction Beam::ticks() const
 }
 
 //---------------------------------------------------------
-//   iconType
+//   actionIconTypeForBeamMode
 //---------------------------------------------------------
 
-IconType Beam::iconType(Mode mode)
+ActionIconType Beam::actionIconTypeForBeamMode(Mode mode)
 {
     switch (mode) {
     case Mode::BEGIN:
-        return IconType::SBEAM;
+        return ActionIconType::BEAM_START;
     case Mode::MID:
-        return IconType::MBEAM;
+        return ActionIconType::BEAM_MID;
     case Mode::NONE:
-        return IconType::NBEAM;
+        return ActionIconType::BEAM_NONE;
     case Mode::BEGIN32:
-        return IconType::BEAM32;
+        return ActionIconType::BEAM_BEGIN_32;
     case Mode::BEGIN64:
-        return IconType::BEAM64;
+        return ActionIconType::BEAM_BEGIN_64;
     case Mode::AUTO:
-        return IconType::AUTOBEAM;
+        return ActionIconType::BEAM_AUTO;
     default:
         break;
     }
-    return IconType::NONE;
+    return ActionIconType::UNDEFINED;
 }
 
 //---------------------------------------------------------

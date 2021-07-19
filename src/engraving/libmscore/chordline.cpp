@@ -251,8 +251,8 @@ void ChordLine::draw(mu::draw::Painter* painter) const
 
     if (this->isStraight()) {
         painter->scale(_spatium, _spatium);
-        painter->setPen(QPen(curColor(), .15, Qt::SolidLine));
-        painter->setBrush(Qt::NoBrush);
+        painter->setPen(Pen(curColor(), .15, PenStyle::SolidLine));
+        painter->setBrush(BrushStyle::NoBrush);
 
         PainterPath pathOffset = path;
         qreal offset = 0.5;
@@ -271,8 +271,8 @@ void ChordLine::draw(mu::draw::Painter* painter) const
         painter->scale(1.0 / _spatium, 1.0 / _spatium);
     } else {
         painter->scale(_spatium, _spatium);
-        painter->setPen(QPen(curColor(), .15, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-        painter->setBrush(Qt::NoBrush);
+        painter->setPen(Pen(curColor(), .15, PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin));
+        painter->setBrush(BrushStyle::NoBrush);
         painter->drawPath(path);
         painter->scale(1.0 / _spatium, 1.0 / _spatium);
     }

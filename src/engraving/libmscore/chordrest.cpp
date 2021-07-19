@@ -24,9 +24,10 @@
 
 #include <QDebug>
 
+#include "style/style.h"
+
 #include "chord.h"
 #include "xml.h"
-#include "style.h"
 #include "system.h"
 #include "measure.h"
 #include "staff.h"
@@ -53,7 +54,7 @@
 #include "harmony.h"
 #include "hairpin.h"
 #include "figuredbass.h"
-#include "icon.h"
+#include "actionicon.h"
 #include "utils.h"
 #include "keysig.h"
 #include "page.h"
@@ -600,25 +601,25 @@ Element* ChordRest::drop(EditData& data)
         score()->undoAddElement(e);
         return e;
 
-    case ElementType::ICON:
+    case ElementType::ACTION_ICON:
     {
-        switch (toIcon(e)->iconType()) {
-        case IconType::SBEAM:
+        switch (toActionIcon(e)->actionType()) {
+        case ActionIconType::BEAM_START:
             undoChangeProperty(Pid::BEAM_MODE, int(Beam::Mode::BEGIN));
             break;
-        case IconType::MBEAM:
+        case ActionIconType::BEAM_MID:
             undoChangeProperty(Pid::BEAM_MODE, int(Beam::Mode::MID));
             break;
-        case IconType::NBEAM:
+        case ActionIconType::BEAM_NONE:
             undoChangeProperty(Pid::BEAM_MODE, int(Beam::Mode::NONE));
             break;
-        case IconType::BEAM32:
+        case ActionIconType::BEAM_BEGIN_32:
             undoChangeProperty(Pid::BEAM_MODE, int(Beam::Mode::BEGIN32));
             break;
-        case IconType::BEAM64:
+        case ActionIconType::BEAM_BEGIN_64:
             undoChangeProperty(Pid::BEAM_MODE, int(Beam::Mode::BEGIN64));
             break;
-        case IconType::AUTOBEAM:
+        case ActionIconType::BEAM_AUTO:
             undoChangeProperty(Pid::BEAM_MODE, int(Beam::Mode::AUTO));
             break;
         default:
@@ -639,17 +640,15 @@ Element* ChordRest::drop(EditData& data)
     }
     break;
 
-    case ElementType::HAIRPIN:
-    {
-        Hairpin* hairpin = toHairpin(e);
-        hairpin->setTick(tick());
-        hairpin->setTrack(track());
-        hairpin->setTrack2(track());
-        score()->undoAddElement(hairpin);
-    }
-        return e;
-
     default:
+        if (e->isSpanner()) {
+            Spanner* spanner = toSpanner(e);
+            spanner->setTick(tick());
+            spanner->setTrack(track());
+            spanner->setTrack2(track());
+            score()->undoAddElement(spanner);
+            return e;
+        }
         qDebug("cannot drop %s", e->name());
         delete e;
         return 0;

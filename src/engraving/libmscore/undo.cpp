@@ -32,7 +32,6 @@
  between startUndo() and endUndo().
 */
 
-#include "log.h"
 #include "undo.h"
 #include "element.h"
 #include "note.h"
@@ -1810,17 +1809,17 @@ void ChangeStyleVal::flip(EditData*)
         case Sid::chordModifierMag:
         case Sid::chordModifierAdjust:
         case Sid::chordDescriptionFile: {
-            score->style().chordList()->unload();
+            score->chordList()->unload();
             qreal emag = score->styleD(Sid::chordExtensionMag);
             qreal eadjust = score->styleD(Sid::chordExtensionAdjust);
             qreal mmag = score->styleD(Sid::chordModifierMag);
             qreal madjust = score->styleD(Sid::chordModifierAdjust);
-            score->style().chordList()->configureAutoAdjust(emag, eadjust, mmag, madjust);
+            score->chordList()->configureAutoAdjust(emag, eadjust, mmag, madjust);
             if (score->styleB(Sid::chordsXmlFile)) {
-                score->style().chordList()->read("chords.xml");
+                score->chordList()->read("chords.xml");
             }
-            score->style().chordList()->read(score->styleSt(Sid::chordDescriptionFile));
-            score->style().setCustomChordList(score->styleSt(Sid::chordStyle) == "custom");
+            score->chordList()->read(score->styleSt(Sid::chordDescriptionFile));
+            score->chordList()->setCustomChordList(score->styleSt(Sid::chordStyle) == "custom");
         }
         break;
         case Sid::spatium:

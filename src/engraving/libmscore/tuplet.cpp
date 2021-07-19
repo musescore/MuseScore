@@ -21,12 +21,15 @@
  */
 
 #include "tuplet.h"
+
+#include "draw/pen.h"
+#include "style/style.h"
+
 #include "score.h"
 #include "chord.h"
 #include "note.h"
 #include "xml.h"
 #include "staff.h"
-#include "style.h"
 #include "text.h"
 #include "element.h"
 #include "undo.h"
@@ -707,6 +710,7 @@ void Tuplet::layout()
 void Tuplet::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
+    using namespace mu::draw;
     // if in a TAB without stems, tuplets are not shown
     const StaffType* stt = staffType();
     if (stt && stt->isTabStaff() && stt->stemless()) {
@@ -722,7 +726,7 @@ void Tuplet::draw(mu::draw::Painter* painter) const
         painter->translate(-pos);
     }
     if (_hasBracket) {
-        painter->setPen(QPen(color, _bracketWidth.val()));
+        painter->setPen(Pen(color, _bracketWidth.val()));
         if (!_number) {
             painter->drawPolyline(bracketL, 4);
         } else {

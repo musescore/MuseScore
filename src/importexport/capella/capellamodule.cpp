@@ -25,11 +25,11 @@
 #include "config.h"
 #include "modularity/ioc.h"
 
-#include "notation/inotationreadersregister.h"
+#include "project/inotationreadersregister.h"
 #include "internal/capellareader.h"
 
 using namespace mu::iex::capella;
-using namespace mu::notation;
+using namespace mu::project;
 
 std::string CapellaModule::moduleName() const
 {
@@ -38,7 +38,7 @@ std::string CapellaModule::moduleName() const
 
 void CapellaModule::resolveImports()
 {
-    auto readers = framework::ioc()->resolve<INotationReadersRegister>(moduleName());
+    auto readers = modularity::ioc()->resolve<INotationReadersRegister>(moduleName());
     if (readers) {
         readers->reg({ "cap", "capx" }, std::make_shared<CapellaReader>());
     }

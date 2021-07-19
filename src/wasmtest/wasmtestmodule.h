@@ -29,9 +29,9 @@
 #include "context/iglobalcontext.h"
 
 namespace mu::wasmtest {
-class WasmTestModule : public framework::IModuleSetup
+class WasmTestModule : public modularity::IModuleSetup
 {
-    INJECT(wasmtest, notation::INotationCreator, notationCreator)
+    INJECT(wasmtest, notation::IProjectCreator, notationCreator)
     INJECT(notation, actions::IActionsDispatcher, dispatcher)
     INJECT(wasmtest, context::IGlobalContext, context)
 

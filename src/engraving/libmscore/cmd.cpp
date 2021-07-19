@@ -26,7 +26,11 @@
 */
 
 #include <assert.h>
-#include <QMessageBox>
+#include <QGuiApplication>
+
+#include "translation.h"
+#include "interactive/messagebox.h"
+#include "style/style.h"
 
 #include "types.h"
 #include "musescoreCore.h"
@@ -44,7 +48,6 @@
 #include "sig.h"
 #include "staff.h"
 #include "part.h"
-#include "style.h"
 #include "page.h"
 #include "barline.h"
 #include "tuplet.h"
@@ -86,7 +89,10 @@
 #include "rehearsalmark.h"
 #include "sym.h"
 
+#include "log.h"
+
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -273,13 +279,14 @@ void Score::undoRedo(bool undo, EditData* ed)
 ///   and (always) updating the redraw area.
 //---------------------------------------------------------
 
-void Score::endCmd(const bool isCmdFromInspector, bool rollback)
+void Score::endCmd(bool rollback)
 {
     if (!undoStack()->active()) {
-        qDebug("Score::endCmd(): no cmd active");
+        LOGW() << "no command active";
         update();
         return;
     }
+
     if (readOnly() || MScore::_error != MsError::MS_NO_ERROR) {
         rollback = true;
     }
@@ -290,16 +297,16 @@ void Score::endCmd(const bool isCmdFromInspector, bool rollback)
 
     update(false);
 
-    if (MScore::debugMode) {
-        qDebug("===endCmd() %d", undoStack()->current()->childCount());
-    }
-    const bool noUndo = undoStack()->current()->empty();         // nothing to undo?
+    LOGD() << "Undo stack current macro child count: " << undoStack()->current()->childCount();
+
+    const bool noUndo = undoStack()->current()->empty(); // nothing to undo?
     undoStack()->endMacro(noUndo);
 
     if (dirty()) {
-        masterScore()->setPlaylistDirty();      // TODO: flag individual operations
+        masterScore()->setPlaylistDirty(); // TODO: flag individual operations
         masterScore()->setAutosaveDirty(true);
     }
+
     cmdState().reset();
 }
 
@@ -2169,7 +2176,7 @@ void Score::cmdResetBeamMode()
 
 void Score::cmdResetAllStyle()
 {
-    style().resetAllStyles(this);
+    resetAllStyle();
 }
 
 void Score::cmdResetTextStyleOverrides()
@@ -2189,7 +2196,7 @@ void Score::cmdResetTextStyleOverrides()
         Pid::ALIGN
     };
 
-    for (Page* page : pages()) {
+    for (Page* page : qAsConst(pages())) {
         auto elements = page->elements();
 
         for (Element* element : elements) {
@@ -3025,13 +3032,9 @@ bool Score::makeMeasureRepeatGroup(Measure* firstMeasure, int numMeasures, int s
     }
 
     if (!empty) {
-        auto b = QMessageBox::warning(0, QObject::tr("Current contents of measures will be replaced"),
-                                      // QMessageBox titles aren't being shown, so include in message
-                                      QObject::tr("Current contents of measures will be replaced.")
-                                      + QObject::tr("\nContinue with inserting measure repeat?"),
-                                      QMessageBox::Cancel | QMessageBox::Ok,
-                                      QMessageBox::Ok);
-        if (b == QMessageBox::Cancel) {
+        auto b = MessageBox::warning(trc("engraving", "Current contents of measures will be replaced"),
+                                     trc("engraving", "Continue with inserting measure repeat?"));
+        if (b == MessageBox::Button::Cancel) {
             return false;
         }
     }

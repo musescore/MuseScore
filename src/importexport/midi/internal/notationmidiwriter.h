@@ -23,20 +23,28 @@
 #ifndef MU_IMPORTEXPORT_NOTATIONMIDIWRITER_H
 #define MU_IMPORTEXPORT_NOTATIONMIDIWRITER_H
 
-#include "notation/abstractnotationwriter.h"
+#include "project/inotationwriter.h"
 
 #include "modularity/ioc.h"
 #include "notation/inotationconfiguration.h"
 #include "imidiconfiguration.h"
 
 namespace mu::iex::midi {
-class NotationMidiWriter : public notation::AbstractNotationWriter
+class NotationMidiWriter : public project::INotationWriter
 {
     INJECT(midi, notation::INotationConfiguration, notationConfiguration)
     INJECT(midi, IMidiImportExportConfiguration, midiImportExportConfiguration)
 
 public:
+
+    std::vector<UnitType> supportedUnitTypes() const override;
+    bool supportsUnitType(UnitType unitType) const override;
+
     Ret write(notation::INotationPtr notation, io::Device& destinationDevice, const Options& options = Options()) override;
+    Ret writeList(const notation::INotationPtrList& notations, io::Device& destinationDevice, const Options& options = Options()) override;
+
+    void abort() override;
+    framework::ProgressChannel progress() const override;
 };
 }
 

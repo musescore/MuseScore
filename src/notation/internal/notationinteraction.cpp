@@ -45,12 +45,14 @@
 #include "libmscore/textframe.h"
 #include "libmscore/figuredbass.h"
 #include "libmscore/stafflines.h"
-#include "libmscore/icon.h"
+#include "libmscore/actionicon.h"
 #include "libmscore/undo.h"
 #include "libmscore/navigate.h"
 #include "libmscore/keysig.h"
 #include "libmscore/instrchange.h"
 #include "libmscore/lasso.h"
+#include "libmscore/textedit.h"
+#include "libmscore/lyrics.h"
 
 #include "masternotation.h"
 #include "scorecallbacks.h"
@@ -59,11 +61,13 @@
 
 #include "instrumentsconverter.h"
 
+#include "draw/pen.h"
+
 using namespace mu::notation;
 
 NotationInteraction::NotationInteraction(Notation* notation, INotationUndoStackPtr undoStack)
     : m_notation(notation), m_undoStack(undoStack), m_gripEditData(&m_scoreCallbacks),
-    m_lasso(new Ms::Lasso(notation->score()))
+    m_lasso(new Ms::Lasso(notation->score())), m_textEditData(&m_scoreCallbacks)
 {
     m_noteInput = std::make_shared<NotationNoteInput>(notation, this, m_undoStack);
     m_selection = std::make_shared<NotationSelection>(notation);
@@ -76,6 +80,7 @@ NotationInteraction::NotationInteraction(Notation* notation, INotationUndoStackP
 
     m_dragData.ed = Ms::EditData(&m_scoreCallbacks);
     m_dropData.ed = Ms::EditData(&m_scoreCallbacks);
+    m_scoreCallbacks.setScore(notation->score());
 }
 
 NotationInteraction::~NotationInteraction()
@@ -105,6 +110,7 @@ void NotationInteraction::apply()
     m_undoStack->commitChanges();
     if (m_notifyAboutDropChanged) {
         notifyAboutDropChanged();
+        notifyAboutSelectionChanged();
     }
 }
 
@@ -481,7 +487,7 @@ void NotationInteraction::moveChordNoteSelection(MoveDirection d)
     notifyAboutSelectionChanged();
 }
 
-void NotationInteraction::select(const std::vector<Element*>& elements, SelectType type, int staffIndex)
+void NotationInteraction::doSelect(const std::vector<Element*>& elements, SelectType type, int staffIndex)
 {
     if (needEndTextEditing(elements)) {
         endEditText();
@@ -492,7 +498,11 @@ void NotationInteraction::select(const std::vector<Element*>& elements, SelectTy
     for (Element* element: elements) {
         score()->select(element, type, staffIndex);
     }
+}
 
+void NotationInteraction::select(const std::vector<Element*>& elements, SelectType type, int staffIndex)
+{
+    doSelect(elements, type, staffIndex);
     notifyAboutSelectionChanged();
 }
 
@@ -694,15 +704,15 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
 
     notifyAboutDragChanged();
 
-    //    Element* e = _score->getSelectedElement();
+    //    Element* e = score()->getSelectedElement();
     //    if (e) {
-    //        if (_score->playNote()) {
+    //        if (score()->playNote()) {
     //            mscore->play(e);
-    //            _score->setPlayNote(false);
+    //            score()->setPlayNote(false);
     //        }
     //    }
     //    updateGrips();
-    //    _score->update();
+    //    score()->update();
 }
 
 void NotationInteraction::endDrag()
@@ -724,7 +734,7 @@ void NotationInteraction::endDrag()
     notifyAboutDragChanged();
     //    updateGrips();
     //    if (editData.element->normalModeEditBehavior() == Element::EditBehavior::Edit
-    //        && _score->selection().element() == editData.element) {
+    //        && score()->selection().element() == editData.element) {
     //        startEdit(/* editMode */ false);
     //    }
 }
@@ -814,7 +824,7 @@ bool NotationInteraction::isDropAccepted(const PointF& pos, Qt::KeyboardModifier
     case ElementType::REHEARSAL_MARK:
     case ElementType::JUMP:
     case ElementType::MEASURE_REPEAT:
-    case ElementType::ICON:
+    case ElementType::ACTION_ICON:
     case ElementType::CHORD:
     case ElementType::SPACER:
     case ElementType::SLUR:
@@ -968,7 +978,7 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
     case ElementType::REHEARSAL_MARK:
     case ElementType::JUMP:
     case ElementType::MEASURE_REPEAT:
-    case ElementType::ICON:
+    case ElementType::ACTION_ICON:
     case ElementType::NOTE:
     case ElementType::CHORD:
     case ElementType::SPACER:
@@ -1043,7 +1053,7 @@ void NotationInteraction::selectInstrument(Ms::InstrumentChange* instrumentChang
         return;
     }
 
-    instruments::Instrument selectedIstrument = retVal.val.toQVariant().value<instruments::Instrument>();
+    Instrument selectedIstrument = retVal.val.toQVariant().value<Instrument>();
     if (!selectedIstrument.isValid()) {
         return;
     }
@@ -1191,12 +1201,12 @@ bool NotationInteraction::applyPaletteElement(Ms::Element* element, Qt::Keyboard
             || element->type() == ElementType::MEASURE
             || element->type() == ElementType::BRACKET
             || element->type() == ElementType::STAFFTYPE_CHANGE
-            || (element->type() == ElementType::ICON
-                && (toIcon(element)->iconType() == Ms::IconType::VFRAME
-                    || toIcon(element)->iconType() == Ms::IconType::HFRAME
-                    || toIcon(element)->iconType() == Ms::IconType::TFRAME
-                    || toIcon(element)->iconType() == Ms::IconType::MEASURE
-                    || toIcon(element)->iconType() == Ms::IconType::BRACKETS))) {
+            || (element->type() == ElementType::ACTION_ICON
+                && (toActionIcon(element)->actionType() == Ms::ActionIconType::VFRAME
+                    || toActionIcon(element)->actionType() == Ms::ActionIconType::HFRAME
+                    || toActionIcon(element)->actionType() == Ms::ActionIconType::TFRAME
+                    || toActionIcon(element)->actionType() == Ms::ActionIconType::MEASURE
+                    || toActionIcon(element)->actionType() == Ms::ActionIconType::BRACKETS))) {
             Measure* last = sel.endSegment() ? sel.endSegment()->measure() : nullptr;
             for (Measure* m = sel.startSegment()->measure(); m; m = m->nextMeasureMM()) {
                 RectF r = m->staffabbox(sel.staffStart());
@@ -1367,13 +1377,19 @@ void NotationInteraction::applyDropPaletteElement(Ms::Score* score, Ms::Element*
                                                   Qt::KeyboardModifiers modifiers,
                                                   PointF pt, bool pasteMode)
 {
-    Ms::EditData dropData(&m_scoreCallbacks);
-    dropData.pos         = pt.isNull() ? target->pagePos() : pt;
-    dropData.dragOffset  = QPointF();
-    dropData.modifiers   = modifiers;
-    dropData.dropElement = e;
+    Ms::EditData newData(&m_scoreCallbacks);
+    Ms::EditData* dropData = &newData;
 
-    if (target->acceptDrop(dropData)) {
+    if (isTextEditingStarted()) {
+        dropData = &m_textEditData;
+    }
+
+    dropData->pos         = pt.isNull() ? target->pagePos() : pt;
+    dropData->dragOffset  = QPointF();
+    dropData->modifiers   = modifiers;
+    dropData->dropElement = e;
+
+    if (target->acceptDrop(*dropData)) {
         // use same code path as drag&drop
 
         QByteArray a = e->mimeData(PointF());
@@ -1383,20 +1399,20 @@ void NotationInteraction::applyDropPaletteElement(Ms::Score* score, Ms::Element*
         Fraction duration;      // dummy
         PointF dragOffset;
         ElementType type = Element::readType(n, &dragOffset, &duration);
-        dropData.dropElement = Element::create(type, score);
+        dropData->dropElement = Element::create(type, score);
 
-        dropData.dropElement->read(n);
-        dropData.dropElement->styleChanged();       // update to local style
+        dropData->dropElement->read(n);
+        dropData->dropElement->styleChanged();       // update to local style
 
-        Ms::Element* el = target->drop(dropData);
+        Ms::Element* el = target->drop(*dropData);
         if (el && el->isInstrumentChange()) {
             selectInstrument(toInstrumentChange(el));
         }
 
         if (el && !score->inputState().noteEntryMode()) {
-            select({ el }, Ms::SelectType::SINGLE, 0);
+            doSelect({ el }, Ms::SelectType::SINGLE, 0);
         }
-        dropData.dropElement = 0;
+        dropData->dropElement = nullptr;
 
         m_notifyAboutDropChanged = true;
     }
@@ -1536,21 +1552,21 @@ mu::async::Notification NotationInteraction::dropChanged() const
 //! NOTE Copied from ScoreView::dropCanvas
 bool NotationInteraction::dropCanvas(Element* e)
 {
-    if (e->isIcon()) {
-        switch (Ms::toIcon(e)->iconType()) {
-        case Ms::IconType::VFRAME:
+    if (e->isActionIcon()) {
+        switch (Ms::toActionIcon(e)->actionType()) {
+        case Ms::ActionIconType::VFRAME:
             score()->insertMeasure(ElementType::VBOX, 0);
             break;
-        case Ms::IconType::HFRAME:
+        case Ms::ActionIconType::HFRAME:
             score()->insertMeasure(ElementType::HBOX, 0);
             break;
-        case Ms::IconType::TFRAME:
+        case Ms::ActionIconType::TFRAME:
             score()->insertMeasure(ElementType::TBOX, 0);
             break;
-        case Ms::IconType::FFRAME:
+        case Ms::ActionIconType::FFRAME:
             score()->insertMeasure(ElementType::FBOX, 0);
             break;
-        case Ms::IconType::MEASURE:
+        case Ms::ActionIconType::MEASURE:
             score()->insertMeasure(ElementType::MEASURE, 0);
             break;
         default:
@@ -1681,7 +1697,7 @@ void NotationInteraction::drawAnchorLines(mu::draw::Painter* painter)
     }
 
     const auto dropAnchorColor = configuration()->anchorLineColor();
-    QPen pen(QBrush(dropAnchorColor), 2.0 / painter->worldTransform().m11(), Qt::DotLine);
+    mu::draw::Pen pen(dropAnchorColor, 2.0 / painter->worldTransform().m11(), mu::draw::PenStyle::DotLine);
 
     for (const LineF& anchor : m_anchorLines) {
         painter->setPen(pen);
@@ -1690,7 +1706,7 @@ void NotationInteraction::drawAnchorLines(mu::draw::Painter* painter)
         qreal d = 4.0 / painter->worldTransform().m11();
         RectF rect(-d, -d, 2 * d, 2 * d);
 
-        painter->setBrush(QBrush(dropAnchorColor));
+        painter->setBrush(mu::draw::Brush(dropAnchorColor));
         painter->setNoPen();
         rect.moveCenter(anchor.p1());
         painter->drawEllipse(rect);
@@ -1710,19 +1726,20 @@ void NotationInteraction::drawTextEditMode(draw::Painter* painter)
 
 void NotationInteraction::drawSelectionRange(draw::Painter* painter)
 {
+    using namespace draw;
     if (!m_selection->isRange()) {
         return;
     }
 
-    painter->setBrush(Qt::NoBrush);
+    painter->setBrush(BrushStyle::NoBrush);
 
     QColor selectionColor = configuration()->selectionColor();
-    qreal penWidth = 3.0 / painter->worldTransform().toAffine().m11();
+    qreal penWidth = 3.0 / painter->worldTransform().m11();
 
-    QPen pen;
+    Pen pen;
     pen.setColor(selectionColor);
     pen.setWidthF(penWidth);
-    pen.setStyle(Qt::SolidLine);
+    pen.setStyle(PenStyle::SolidLine);
     painter->setPen(pen);
 
     std::vector<RectF> rangeArea = m_selection->range()->boundingArea();
@@ -1994,9 +2011,26 @@ void NotationInteraction::changeTextCursorPosition(const PointF& newCursorPos)
     }
 
     m_textEditData.startMove = newCursorPos;
-    m_textEditData.element->mousePress(m_textEditData);
+
+    Ms::TextBase* textEl = Ms::toTextBase(m_textEditData.element);
+
+    textEl->mousePress(m_textEditData);
+    if (m_textEditData.buttons == Qt::MiddleButton) {
+        #if defined(Q_OS_MAC) || defined(Q_OS_WIN)
+        QClipboard::Mode mode = QClipboard::Clipboard;
+        #else
+        QClipboard::Mode mode = QClipboard::Selection;
+        #endif
+        QString txt = QGuiApplication::clipboard()->text(mode);
+        textEl->paste(m_textEditData, txt);
+    }
 
     notifyAboutTextEditingChanged();
+}
+
+TextBase* NotationInteraction::editedText() const
+{
+    return Ms::toTextBase(m_textEditData.element);
 }
 
 void NotationInteraction::undo()
@@ -2171,6 +2205,10 @@ void NotationInteraction::copySelection()
 
     if (isTextEditingStarted()) {
         m_textEditData.element->editCopy(m_textEditData);
+        Ms::TextEditData* ted = static_cast<Ms::TextEditData*>(m_textEditData.getData(m_textEditData.element));
+        if (!ted->selectedText.isEmpty()) {
+            QGuiApplication::clipboard()->setText(ted->selectedText, QClipboard::Clipboard);
+        }
     } else {
         QMimeData* mimeData = selection()->mimeData();
         if (!mimeData) {
@@ -2191,7 +2229,13 @@ void NotationInteraction::pasteSelection(const Fraction& scale)
     startEdit();
 
     if (isTextEditingStarted()) {
-        toTextBase(m_textEditData.element)->paste(m_textEditData);
+        #if defined(Q_OS_MAC) || defined(Q_OS_WIN)
+        QClipboard::Mode mode = QClipboard::Clipboard;
+        #else
+        QClipboard::Mode mode = QClipboard::Selection;
+        #endif
+        QString txt = QGuiApplication::clipboard()->text(mode);
+        toTextBase(m_textEditData.element)->paste(m_textEditData, txt);
     } else {
         const QMimeData* mimeData = QApplication::clipboard()->mimeData();
         score()->cmdPaste(mimeData, nullptr, scale);
@@ -2651,7 +2695,7 @@ void NotationInteraction::addText(TextType type)
     apply();
 
     if (textBox) {
-        select({ textBox }, SelectType::SINGLE);
+        doSelect({ textBox }, SelectType::SINGLE, 0);
         startEditText(textBox, PointF());
     }
 
@@ -2957,4 +3001,428 @@ void NotationInteraction::resetShapesAndPosition()
     apply();
 
     notifyAboutNotationChanged();
+}
+
+void NotationInteraction::nextLyrics(bool back, bool moveOnly, bool end)
+{
+    if (!m_textEditData.element || !m_textEditData.element->isLyrics()) {
+        qWarning("nextLyric called with invalid current element");
+        return;
+    }
+    Ms::Lyrics* lyrics = toLyrics(m_textEditData.element);
+    int track = lyrics->track();
+    Ms::Segment* segment = lyrics->segment();
+    int verse = lyrics->no();
+    Ms::Placement placement = lyrics->placement();
+    Ms::PropertyFlags pFlags = lyrics->propertyFlags(Ms::Pid::PLACEMENT);
+
+    Ms::Segment* nextSegment = segment;
+    if (back) {
+        // search prev chord
+        while ((nextSegment = nextSegment->prev1(Ms::SegmentType::ChordRest))) {
+            Element* el = nextSegment->element(track);
+            if (el && el->isChord()) {
+                break;
+            }
+        }
+    } else {
+        // search next chord
+        while ((nextSegment = nextSegment->next1(Ms::SegmentType::ChordRest))) {
+            Element* el = nextSegment->element(track);
+            if (el && el->isChord()) {
+                break;
+            }
+        }
+    }
+    if (nextSegment == 0) {
+        return;
+    }
+
+    endEditText();
+
+    // look for the lyrics we are moving from; may be the current lyrics or a previous one
+    // if we are skipping several chords with spaces
+    Ms::Lyrics* fromLyrics = 0;
+    if (!back) {
+        while (segment) {
+            ChordRest* cr = toChordRest(segment->element(track));
+            if (cr) {
+                fromLyrics = cr->lyrics(verse, placement);
+                if (fromLyrics) {
+                    break;
+                }
+            }
+            segment = segment->prev1(Ms::SegmentType::ChordRest);
+        }
+    }
+
+    ChordRest* cr = toChordRest(nextSegment->element(track));
+    if (!cr) {
+        qDebug("no next lyrics list: %s", nextSegment->element(track)->name());
+        return;
+    }
+    Ms::Lyrics* nextLyrics = cr->lyrics(verse, placement);
+
+    bool newLyrics = false;
+    if (!nextLyrics) {
+        nextLyrics = new Ms::Lyrics(score());
+        nextLyrics->setTrack(track);
+        cr = toChordRest(nextSegment->element(track));
+        nextLyrics->setParent(cr);
+        nextLyrics->setNo(verse);
+        nextLyrics->setPlacement(placement);
+        nextLyrics->setPropertyFlags(Ms::Pid::PLACEMENT, pFlags);
+        nextLyrics->setSyllabic(Ms::Lyrics::Syllabic::SINGLE);
+        newLyrics = true;
+    }
+
+    score()->startCmd();
+    if (fromLyrics && !moveOnly) {
+        switch (nextLyrics->syllabic()) {
+        // as we arrived at nextLyrics by a [Space], it can be the beginning
+        // of a multi-syllable, but cannot have syllabic dashes before
+        case Ms::Lyrics::Syllabic::SINGLE:
+        case Ms::Lyrics::Syllabic::BEGIN:
+            break;
+        case Ms::Lyrics::Syllabic::END:
+            nextLyrics->undoChangeProperty(Ms::Pid::SYLLABIC, int(Ms::Lyrics::Syllabic::SINGLE));
+            break;
+        case Ms::Lyrics::Syllabic::MIDDLE:
+            nextLyrics->undoChangeProperty(Ms::Pid::SYLLABIC, int(Ms::Lyrics::Syllabic::BEGIN));
+            break;
+        }
+        // as we moved away from fromLyrics by a [Space], it can be
+        // the end of a multi-syllable, but cannot have syllabic dashes after
+        switch (fromLyrics->syllabic()) {
+        case Ms::Lyrics::Syllabic::SINGLE:
+        case Ms::Lyrics::Syllabic::END:
+            break;
+        case Ms::Lyrics::Syllabic::BEGIN:
+            fromLyrics->undoChangeProperty(Ms::Pid::SYLLABIC, int(Ms::Lyrics::Syllabic::SINGLE));
+            break;
+        case Ms::Lyrics::Syllabic::MIDDLE:
+            fromLyrics->undoChangeProperty(Ms::Pid::SYLLABIC, int(Ms::Lyrics::Syllabic::END));
+            break;
+        }
+        // for the same reason, it cannot have a melisma
+        fromLyrics->undoChangeProperty(Ms::Pid::LYRIC_TICKS, 0);
+    }
+
+    if (newLyrics) {
+        score()->undoAddElement(nextLyrics);
+    }
+    score()->endCmd();
+    score()->select(nextLyrics, SelectType::SINGLE, 0);
+    score()->setLayoutAll();
+
+    startEditText(nextLyrics, PointF());
+
+    Ms::TextCursor* cursor = nextLyrics->cursor();
+    if (end) {
+        nextLyrics->selectAll(cursor);
+    } else {
+        cursor->movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
+        cursor->movePosition(QTextCursor::Start, QTextCursor::KeepAnchor);
+    }
+}
+
+void NotationInteraction::nextSyllable()
+{
+    if (!m_textEditData.element || !m_textEditData.element->isLyrics()) {
+        qWarning("nextSyllable called with invalid current element");
+        return;
+    }
+    Ms::Lyrics* lyrics = toLyrics(m_textEditData.element);
+    int track = lyrics->track();
+    Ms::Segment* segment = lyrics->segment();
+    int verse = lyrics->no();
+    Ms::Placement placement = lyrics->placement();
+    Ms::PropertyFlags pFlags = lyrics->propertyFlags(Ms::Pid::PLACEMENT);
+
+    // search next chord
+    Ms::Segment* nextSegment = segment;
+    while ((nextSegment = nextSegment->next1(Ms::SegmentType::ChordRest))) {
+        Element* el = nextSegment->element(track);
+        if (el && el->isChord()) {
+            break;
+        }
+    }
+    if (nextSegment == 0) {
+        return;
+    }
+
+    // look for the lyrics we are moving from; may be the current lyrics or a previous one
+    // we are extending with several dashes
+    Ms::Lyrics* fromLyrics = 0;
+    while (segment) {
+        ChordRest* cr = toChordRest(segment->element(track));
+        if (!cr) {
+            segment = segment->prev1(Ms::SegmentType::ChordRest);
+            continue;
+        }
+        fromLyrics = cr->lyrics(verse, placement);
+        if (fromLyrics) {
+            break;
+        }
+        segment = segment->prev1(Ms::SegmentType::ChordRest);
+    }
+
+    endEditText();
+
+    score()->startCmd();
+    ChordRest* cr = toChordRest(nextSegment->element(track));
+    Ms::Lyrics* toLyrics = cr->lyrics(verse, placement);
+    bool newLyrics = (toLyrics == 0);
+    if (!toLyrics) {
+        toLyrics = new Ms::Lyrics(score());
+        toLyrics->setTrack(track);
+        toLyrics->setParent(nextSegment->element(track));
+        toLyrics->setNo(verse);
+        toLyrics->setPlacement(placement);
+        toLyrics->setPropertyFlags(Ms::Pid::PLACEMENT, pFlags);
+        toLyrics->setSyllabic(Ms::Lyrics::Syllabic::END);
+    } else {
+        // as we arrived at toLyrics by a dash, it cannot be initial or isolated
+        if (toLyrics->syllabic() == Ms::Lyrics::Syllabic::BEGIN) {
+            toLyrics->undoChangeProperty(Ms::Pid::SYLLABIC, int(Ms::Lyrics::Syllabic::MIDDLE));
+        } else if (toLyrics->syllabic() == Ms::Lyrics::Syllabic::SINGLE) {
+            toLyrics->undoChangeProperty(Ms::Pid::SYLLABIC, int(Ms::Lyrics::Syllabic::END));
+        }
+    }
+
+    if (fromLyrics) {
+        // as we moved away from fromLyrics by a dash,
+        // it can have syll. dashes before and after but cannot be isolated or terminal
+        switch (fromLyrics->syllabic()) {
+        case Ms::Lyrics::Syllabic::BEGIN:
+        case Ms::Lyrics::Syllabic::MIDDLE:
+            break;
+        case Ms::Lyrics::Syllabic::SINGLE:
+            fromLyrics->undoChangeProperty(Ms::Pid::SYLLABIC, int(Ms::Lyrics::Syllabic::BEGIN));
+            break;
+        case Ms::Lyrics::Syllabic::END:
+            fromLyrics->undoChangeProperty(Ms::Pid::SYLLABIC, int(Ms::Lyrics::Syllabic::MIDDLE));
+            break;
+        }
+        // for the same reason, it cannot have a melisma
+        fromLyrics->undoChangeProperty(Ms::Pid::LYRIC_TICKS, 0);
+    }
+
+    if (newLyrics) {
+        score()->undoAddElement(toLyrics);
+    }
+
+    score()->endCmd();
+    score()->select(toLyrics, SelectType::SINGLE, 0);
+    score()->setLayoutAll();
+
+    startEditText(toLyrics, PointF());
+
+    toLyrics->selectAll(toLyrics->cursor());
+}
+
+void NotationInteraction::nextLyricsVerse(bool back)
+{
+    if (!m_textEditData.element || !m_textEditData.element->isLyrics()) {
+        qWarning("nextLyricVerse called with invalid current element");
+        return;
+    }
+    Ms::Lyrics* lyrics = toLyrics(m_textEditData.element);
+    int track = lyrics->track();
+    ChordRest* cr = lyrics->chordRest();
+    int verse = lyrics->no();
+    Ms::Placement placement = lyrics->placement();
+    Ms::PropertyFlags pFlags = lyrics->propertyFlags(Ms::Pid::PLACEMENT);
+
+    if (back) {
+        if (verse == 0) {
+            return;
+        }
+        --verse;
+    } else {
+        ++verse;
+        if (verse > cr->lastVerse(placement)) {
+            return;
+        }
+    }
+
+    endEditText();
+
+    lyrics = cr->lyrics(verse, placement);
+    if (!lyrics) {
+        lyrics = new Ms::Lyrics(score());
+        lyrics->setTrack(track);
+        lyrics->setParent(cr);
+        lyrics->setNo(verse);
+        lyrics->setPlacement(placement);
+        lyrics->setPropertyFlags(Ms::Pid::PLACEMENT, pFlags);
+        score()->startCmd();
+        score()->undoAddElement(lyrics);
+        score()->endCmd();
+    }
+
+    score()->select(lyrics, SelectType::SINGLE, 0);
+    startEditText(lyrics, PointF());
+
+    lyrics = toLyrics(m_textEditData.element);
+
+    score()->setLayoutAll();
+    score()->update();
+
+    lyrics->selectAll(lyrics->cursor());
+}
+
+void NotationInteraction::addMelisma()
+{
+    if (!m_textEditData.element || !m_textEditData.element->isLyrics()) {
+        qWarning("addMelisma called with invalid current element");
+        return;
+    }
+    Ms::Lyrics* lyrics = toLyrics(m_textEditData.element);
+    int track = lyrics->track();
+    Ms::Segment* segment = lyrics->segment();
+    int verse = lyrics->no();
+    Ms::Placement placement = lyrics->placement();
+    Ms::PropertyFlags pFlags = lyrics->propertyFlags(Ms::Pid::PLACEMENT);
+    Fraction endTick = segment->tick(); // a previous melisma cannot extend beyond this point
+
+    endEditText();
+
+    // search next chord
+    Ms::Segment* nextSegment = segment;
+    while ((nextSegment = nextSegment->next1(Ms::SegmentType::ChordRest))) {
+        Element* el = nextSegment->element(track);
+        if (el && el->isChord()) {
+            break;
+        }
+    }
+
+    // look for the lyrics we are moving from; may be the current lyrics or a previous one
+    // we are extending with several underscores
+    Ms::Lyrics* fromLyrics = 0;
+    while (segment) {
+        ChordRest* cr = toChordRest(segment->element(track));
+        if (cr) {
+            fromLyrics = cr->lyrics(verse, placement);
+            if (fromLyrics) {
+                break;
+            }
+        }
+        segment = segment->prev1(Ms::SegmentType::ChordRest);
+        // if the segment has a rest in this track, stop going back
+        Element* e = segment ? segment->element(track) : 0;
+        if (e && !e->isChord()) {
+            break;
+        }
+    }
+
+    // one-chord melisma?
+    // if still at melisma initial chord and there is a valid next chord (if not,
+    // there will be no melisma anyway), set a temporary melisma duration
+    if (fromLyrics == lyrics && nextSegment) {
+        score()->startCmd();
+        lyrics->undoChangeProperty(Ms::Pid::LYRIC_TICKS, Fraction::fromTicks(Ms::Lyrics::TEMP_MELISMA_TICKS));
+        score()->setLayoutAll();
+        score()->endCmd();
+    }
+
+    if (nextSegment == 0) {
+        score()->startCmd();
+        if (fromLyrics) {
+            switch (fromLyrics->syllabic()) {
+            case Ms::Lyrics::Syllabic::SINGLE:
+            case Ms::Lyrics::Syllabic::END:
+                break;
+            default:
+                fromLyrics->undoChangeProperty(Ms::Pid::SYLLABIC, int(Ms::Lyrics::Syllabic::END));
+                break;
+            }
+            if (fromLyrics->segment()->tick() < endTick) {
+                fromLyrics->undoChangeProperty(Ms::Pid::LYRIC_TICKS, endTick - fromLyrics->segment()->tick());
+            }
+        }
+
+        if (fromLyrics) {
+            score()->select(fromLyrics, SelectType::SINGLE, 0);
+        }
+        score()->setLayoutAll();
+        score()->endCmd();
+        return;
+    }
+
+    // if a place for a new lyrics has been found, create a lyrics there
+
+    score()->startCmd();
+    ChordRest* cr = toChordRest(nextSegment->element(track));
+    Ms::Lyrics* toLyrics = cr->lyrics(verse, placement);
+    bool newLyrics = (toLyrics == 0);
+    if (!toLyrics) {
+        toLyrics = new Ms::Lyrics(score());
+        toLyrics->setTrack(track);
+        toLyrics->setParent(nextSegment->element(track));
+        toLyrics->setNo(verse);
+        toLyrics->setPlacement(placement);
+        toLyrics->setPropertyFlags(Ms::Pid::PLACEMENT, pFlags);
+        toLyrics->setSyllabic(Ms::Lyrics::Syllabic::SINGLE);
+    }
+    // as we arrived at toLyrics by an underscore, it cannot have syllabic dashes before
+    else if (toLyrics->syllabic() == Ms::Lyrics::Syllabic::MIDDLE) {
+        toLyrics->undoChangeProperty(Ms::Pid::SYLLABIC, int(Ms::Lyrics::Syllabic::BEGIN));
+    } else if (toLyrics->syllabic() == Ms::Lyrics::Syllabic::END) {
+        toLyrics->undoChangeProperty(Ms::Pid::SYLLABIC, int(Ms::Lyrics::Syllabic::SINGLE));
+    }
+    if (fromLyrics) {
+        // as we moved away from fromLyrics by an underscore,
+        // it can be isolated or terminal but cannot have dashes after
+        switch (fromLyrics->syllabic()) {
+        case Ms::Lyrics::Syllabic::SINGLE:
+        case Ms::Lyrics::Syllabic::END:
+            break;
+        default:
+            fromLyrics->undoChangeProperty(Ms::Pid::SYLLABIC, int(Ms::Lyrics::Syllabic::END));
+            break;
+        }
+        // for the same reason, if it has a melisma, this cannot extend beyond toLyrics
+        if (fromLyrics->segment()->tick() < endTick) {
+            fromLyrics->undoChangeProperty(Ms::Pid::LYRIC_TICKS, endTick - fromLyrics->segment()->tick());
+        }
+    }
+    if (newLyrics) {
+        score()->undoAddElement(toLyrics);
+    }
+    score()->endCmd();
+
+    score()->select(toLyrics, SelectType::SINGLE, 0);
+    startEditText(toLyrics, PointF());
+
+    toLyrics->selectAll(toLyrics->cursor());
+}
+
+void NotationInteraction::addLyricsVerse()
+{
+    if (!m_textEditData.element || !m_textEditData.element->isLyrics()) {
+        qWarning("nextLyricVerse called with invalid current element");
+        return;
+    }
+    Ms::Lyrics* lyrics = toLyrics(m_textEditData.element);
+
+    endEditText();
+
+    score()->startCmd();
+    int newVerse;
+    newVerse = lyrics->no() + 1;
+
+    Ms::Lyrics* oldLyrics = lyrics;
+    lyrics = new Ms::Lyrics(score());
+    lyrics->setTrack(oldLyrics->track());
+    lyrics->setParent(oldLyrics->segment()->element(oldLyrics->track()));
+    lyrics->setPlacement(oldLyrics->placement());
+    lyrics->setPropertyFlags(Ms::Pid::PLACEMENT, oldLyrics->propertyFlags(Ms::Pid::PLACEMENT));
+    lyrics->setNo(newVerse);
+
+    score()->undoAddElement(lyrics);
+    score()->endCmd();
+
+    score()->select(lyrics, SelectType::SINGLE, 0);
+    startEditText(lyrics, PointF());
 }

@@ -24,6 +24,7 @@
 
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
+#include "multiinstances/imultiinstancesprovider.h"
 #include "ishortcutsconfiguration.h"
 #include "shortcutstypes.h"
 #include "../imidiremote.h"
@@ -38,6 +39,7 @@ class MidiRemote : public IMidiRemote
 {
     INJECT(shortcuts, IShortcutsConfiguration, configuration)
     INJECT(shortcuts, actions::IActionsDispatcher, dispatcher)
+    INJECT(shortcuts, mi::IMultiInstancesProvider, multiInstancesProvider)
 
 public:
     MidiRemote() = default;
@@ -58,10 +60,10 @@ public:
 
 private:
     void readMidiMappings();
-    MidiMapping readMidiMapping(framework::XmlReader& reader) const;
+    MidiControlsMapping readMidiMapping(framework::XmlReader& reader) const;
 
     bool writeMidiMappings(const MidiMappingList& midiMappings) const;
-    void writeMidiMapping(framework::XmlWriter& writer, const MidiMapping& midiMapping) const;
+    void writeMidiMapping(framework::XmlWriter& writer, const MidiControlsMapping& midiMapping) const;
 
     bool needIgnoreEvent(const midi::Event& event) const;
 

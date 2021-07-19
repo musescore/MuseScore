@@ -34,9 +34,10 @@
 #include "internal/playbackconfiguration.h"
 
 #include "view/playbacktoolbarmodel.h"
+#include "view/mixerpanelmodel.h"
 
 using namespace mu::playback;
-using namespace mu::framework;
+using namespace mu::modularity;
 using namespace mu::ui;
 using namespace mu::actions;
 
@@ -76,13 +77,14 @@ void PlaybackModule::registerResources()
 void PlaybackModule::registerUiTypes()
 {
     qmlRegisterType<PlaybackToolBarModel>("MuseScore.Playback", 1, 0, "PlaybackToolBarModel");
+    qmlRegisterType<MixerPanelModel>("MuseScore.Playback", 1, 0, "MixerPanelModel");
 
     ioc()->resolve<IUiEngine>(moduleName())->addSourceImportPath(playback_QML_IMPORT);
 }
 
-void PlaybackModule::onInit(const IApplication::RunMode& mode)
+void PlaybackModule::onInit(const framework::IApplication::RunMode& mode)
 {
-    if (IApplication::RunMode::Editor != mode) {
+    if (framework::IApplication::RunMode::Editor != mode) {
         return;
     }
 

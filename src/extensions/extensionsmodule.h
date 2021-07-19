@@ -25,7 +25,7 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu::extensions {
-class ExtensionsModule : public framework::IModuleSetup
+class ExtensionsModule : public modularity::IModuleSetup
 {
 public:
 
@@ -35,6 +35,7 @@ public:
     void registerResources() override;
     void registerUiTypes() override;
     void onInit(const framework::IApplication::RunMode& mode) override;
+    void onDelayedInit() override;
 };
 }
 

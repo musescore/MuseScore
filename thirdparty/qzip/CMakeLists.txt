@@ -21,16 +21,26 @@ set(MODULE_SRC
 include(GetPlatformInfo)
 include(GetCompilerInfo)
 
-if (OS_IS_WIN)
-    set(MODULE_INCLUDE ${PROJECT_SOURCE_DIR}/dependencies/include/zlib)
-endif(OS_IS_WIN)
-
-if (CC_IS_EMSCRIPTEN)
+set(Z_LIB )
+if (CC_IS_MSVC)
+    include(FindStaticLibrary)
+    set(Z_LIB zlibstat)
+    set(Z_INCLUDE ${PROJECT_SOURCE_DIR}/dependencies/include/zlib)
+elseif (CC_IS_EMSCRIPTEN)
     #zlib included in main linker
-elseif (NOT CC_IS_MSVC)
-    set(MODULE_LINK z)
-endif()
+else ()
+    set(Z_LIB z)
+endif ()
 
-include(${PROJECT_SOURCE_DIR}/build/module.cmake)
+set(MODULE_INCLUDE
+    ${Z_INCLUDE}
+    )
+
+set(MODULE_LINK
+    ${Z_LIB}
+    )
+
+set(MODULE_NOT_LINK_GLOBAL ON)
+include(SetupModule)
 
 target_no_warning(${MODULE} -Wimplicit-fallthrough=0)

@@ -39,7 +39,7 @@ FocusScope {
     QtObject {
         id: privateProperties
 
-        readonly property int sideMargin: 133
+        readonly property int sideMargin: 46
         readonly property int buttonWidth: 160
     }
 
@@ -48,7 +48,7 @@ FocusScope {
 
         anchors.top: parent.top
         anchors.left: parent.left
-        anchors.topMargin: 66
+        anchors.topMargin: privateProperties.sideMargin
         anchors.leftMargin: privateProperties.sideMargin
 
         text: qsTrc("scores", "Account")

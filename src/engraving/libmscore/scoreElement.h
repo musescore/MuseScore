@@ -24,14 +24,15 @@
 #define __SCORE_ELEMENT_H__
 
 #include "types.h"
-#include "style.h"
-
 #include "draw/geometry.h"
+#include "style/styledef.h"
+#include "style/textstyle.h"
 
 namespace Ms {
 class ScoreElement;
 class MasterScore;
 class XmlWriter;
+class XmlReader;
 class ConnectorInfoReader;
 class Measure;
 class Staff;
@@ -107,7 +108,7 @@ class TextLineSegment;
 class Pedal;
 class PedalSegment;
 class LedgerLine;
-class Icon;
+class ActionIcon;
 class VoltaSegment;
 class NoteLine;
 class Trill;
@@ -375,7 +376,7 @@ public:
     CONVERT(PedalSegment,  PEDAL_SEGMENT)
     CONVERT(OttavaSegment, OTTAVA_SEGMENT)
     CONVERT(LedgerLine,    LEDGER_LINE)
-    CONVERT(Icon,          ICON)
+    CONVERT(ActionIcon,    ACTION_ICON)
     CONVERT(VoltaSegment,  VOLTA_SEGMENT)
     CONVERT(NoteLine,      NOTELINE)
     CONVERT(Trill,         TRILL)
@@ -685,7 +686,7 @@ CONVERT(Pedal)
 CONVERT(PedalSegment)
 CONVERT(OttavaSegment)
 CONVERT(LedgerLine)
-CONVERT(Icon)
+CONVERT(ActionIcon)
 CONVERT(VoltaSegment)
 CONVERT(NoteLine)
 CONVERT(Trill)

@@ -26,7 +26,6 @@
 
 #include "modularity/ioc.h"
 #include "iplaybackcontroller.h"
-#include "workspace/iworkspacemanager.h"
 
 namespace mu::playback {
 class PlaybackToolBarModel : public ui::AbstractMenuModel
@@ -34,7 +33,6 @@ class PlaybackToolBarModel : public ui::AbstractMenuModel
     Q_OBJECT
 
     INJECT(playback, IPlaybackController, playbackController)
-    INJECT(playback, workspace::IWorkspaceManager, workspaceManager)
 
     Q_PROPERTY(bool isToolbarFloating READ isToolbarFloating WRITE setIsToolbarFloating NOTIFY isToolbarFloatingChanged)
     Q_PROPERTY(bool isPlayAllowed READ isPlayAllowed NOTIFY isPlayAllowedChanged)
@@ -87,8 +85,6 @@ private:
 
     void updateActions();
     void onActionsStateChanges(const actions::ActionCodeList& codes) override;
-
-    actions::ActionCodeList currentWorkspaceActionCodes() const;
 
     bool isAdditionalAction(const actions::ActionCode& actionCode) const;
 

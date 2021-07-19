@@ -33,31 +33,21 @@ std::string WorkspaceStub::title() const
     return std::string();
 }
 
-AbstractDataPtr WorkspaceStub::data(WorkspaceTag, const std::string&) const
+bool WorkspaceStub::isManaged(const DataKey&) const
 {
-    return std::make_shared<AbstractData>();
+    return false;
 }
 
-AbstractDataPtrList WorkspaceStub::dataList(WorkspaceTag) const
-{
-    return {};
-}
-
-void WorkspaceStub::addData(AbstractDataPtr)
+void WorkspaceStub::setIsManaged(const DataKey&, bool)
 {
 }
 
-mu::async::Channel<AbstractDataPtr> WorkspaceStub::dataChanged() const
+mu::RetVal<QByteArray> WorkspaceStub::rawData(const DataKey&) const
 {
-    return mu::async::Channel<AbstractDataPtr>();
+    return RetVal<QByteArray>(make_ret(Ret::Code::NotImplemented));
 }
 
-mu::Val WorkspaceStub::settingValue(const std::string&) const
+mu::Ret WorkspaceStub::setRawData(const DataKey&, const QByteArray&)
 {
-    return mu::Val();
-}
-
-std::vector<std::string> WorkspaceStub::toolbarActions(const std::string&) const
-{
-    return {};
+    return make_ret(Ret::Code::NotImplemented);
 }

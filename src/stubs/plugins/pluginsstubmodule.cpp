@@ -30,7 +30,7 @@
 #include "ui/iinteractiveuriregister.h"
 
 using namespace mu::plugins;
-using namespace mu::framework;
+using namespace mu::modularity;
 using namespace mu::ui;
 
 static void plugins_init_qrc()

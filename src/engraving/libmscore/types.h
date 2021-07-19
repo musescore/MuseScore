@@ -25,6 +25,10 @@
 
 #include "config.h"
 
+#ifdef SCRIPT_INTERFACE
+#include <QObject>
+#endif
+
 /**
  * \namespace Ms .
  */
@@ -146,7 +150,7 @@ enum class ElementType {
     VBOX,
     TBOX,
     FBOX,
-    ICON,
+    ACTION_ICON,
     OSSIA,
     BAGPIPE_EMBELLISHMENT,
     STICKING,
@@ -498,7 +502,7 @@ constexpr bool operator&(const SegmentType t1, const SegmentType t2)
 //   Tid
 ///   Enumerates the list of built-in text substyles
 ///   \internal
-///   Must be in sync with textStyles array (in style.cpp)
+///   Must be in sync with textStyles array (in textstyle.cpp)
 //-------------------------------------------------------------------
 
 enum class Tid {

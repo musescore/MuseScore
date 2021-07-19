@@ -98,6 +98,8 @@ void UiTheme::init()
         update();
     });
 
+    initThemeValues();
+
     initUiFonts();
     initIconsFont();
     initMusicalFont();
@@ -105,66 +107,91 @@ void UiTheme::init()
     setupWidgetTheme();
 }
 
+void UiTheme::initThemeValues()
+{
+    QMap<ThemeStyleKey, QVariant> themeValues = configuration()->currentTheme().values;
+
+    m_backgroundPrimaryColor = themeValues[BACKGROUND_PRIMARY_COLOR].toString();
+    m_backgroundSecondaryColor = themeValues[BACKGROUND_SECONDARY_COLOR].toString();
+    m_popupBackgroundColor = themeValues[POPUP_BACKGROUND_COLOR].toString();
+    m_textFieldColor = themeValues[TEXT_FIELD_COLOR].toString();
+    m_accentColor = themeValues[ACCENT_COLOR].toString();
+    m_strokeColor = themeValues[STROKE_COLOR].toString();
+    m_buttonColor = themeValues[BUTTON_COLOR].toString();
+    m_fontPrimaryColor = themeValues[FONT_PRIMARY_COLOR].toString();
+    m_fontSecondaryColor = themeValues[FONT_SECONDARY_COLOR].toString();
+    m_linkColor = themeValues[LINK_COLOR].toString();
+    m_focusColor = themeValues[FOCUS_COLOR].toString();
+
+    m_accentOpacityNormal = themeValues[ACCENT_OPACITY_NORMAL].toReal();
+    m_accentOpacityHover = themeValues[ACCENT_OPACITY_HOVER].toReal();
+    m_accentOpacityHit = themeValues[ACCENT_OPACITY_HIT].toReal();
+    m_buttonOpacityNormal = themeValues[BUTTON_OPACITY_NORMAL].toReal();
+    m_buttonOpacityHover = themeValues[BUTTON_OPACITY_HOVER].toReal();
+    m_buttonOpacityHit = themeValues[BUTTON_OPACITY_HIT].toReal();
+    m_itemOpacityDisabled = themeValues[ITEM_OPACITY_DISABLED].toReal();
+}
+
 void UiTheme::update()
 {
+    initThemeValues();
     setupWidgetTheme();
-
     notifyAboutThemeChanged();
 }
 
 QColor UiTheme::backgroundPrimaryColor() const
 {
-    return colorByKey(BACKGROUND_PRIMARY_COLOR);
+    return m_backgroundPrimaryColor;
 }
 
 QColor UiTheme::backgroundSecondaryColor() const
 {
-    return colorByKey(BACKGROUND_SECONDARY_COLOR);
+    return m_backgroundSecondaryColor;
 }
 
 QColor UiTheme::popupBackgroundColor() const
 {
-    return colorByKey(POPUP_BACKGROUND_COLOR);
+    return m_popupBackgroundColor;
 }
 
 QColor UiTheme::textFieldColor() const
 {
-    return colorByKey(TEXT_FIELD_COLOR);
+    return m_textFieldColor;
 }
 
 QColor UiTheme::accentColor() const
 {
-    return colorByKey(ACCENT_COLOR);
+    return m_accentColor;
 }
 
 QColor UiTheme::strokeColor() const
 {
-    return colorByKey(STROKE_COLOR);
+    return m_strokeColor;
 }
 
 QColor UiTheme::buttonColor() const
 {
-    return colorByKey(BUTTON_COLOR);
+    return m_buttonColor;
 }
 
 QColor UiTheme::fontPrimaryColor() const
 {
-    return colorByKey(FONT_PRIMARY_COLOR);
+    return m_fontPrimaryColor;
 }
 
 QColor UiTheme::fontSecondaryColor() const
 {
-    return colorByKey(FONT_SECONDARY_COLOR);
+    return m_fontSecondaryColor;
 }
 
 QColor UiTheme::linkColor() const
 {
-    return colorByKey(LINK_COLOR);
+    return m_linkColor;
 }
 
 QColor UiTheme::focusColor() const
 {
-    return colorByKey(FOCUS_COLOR);
+    return m_focusColor;
 }
 
 QFont UiTheme::bodyFont() const
@@ -229,52 +256,37 @@ QFont UiTheme::musicalFont() const
 
 qreal UiTheme::accentOpacityNormal() const
 {
-    return realByKey(ACCENT_OPACITY_NORMAL);
+    return m_accentOpacityNormal;
 }
 
 qreal UiTheme::accentOpacityHover() const
 {
-    return realByKey(ACCENT_OPACITY_HOVER);
+    return m_accentOpacityHover;
 }
 
 qreal UiTheme::accentOpacityHit() const
 {
-    return realByKey(ACCENT_OPACITY_HIT);
+    return m_accentOpacityHit;
 }
 
 qreal UiTheme::buttonOpacityNormal() const
 {
-    return realByKey(BUTTON_OPACITY_NORMAL);
+    return m_buttonOpacityNormal;
 }
 
 qreal UiTheme::buttonOpacityHover() const
 {
-    return realByKey(BUTTON_OPACITY_HOVER);
+    return m_buttonOpacityHover;
 }
 
 qreal UiTheme::buttonOpacityHit() const
 {
-    return realByKey(BUTTON_OPACITY_HIT);
+    return m_buttonOpacityHit;
 }
 
 qreal UiTheme::itemOpacityDisabled() const
 {
-    return realByKey(ITEM_OPACITY_DISABLED);
-}
-
-QColor UiTheme::colorByKey(ThemeStyleKey key) const
-{
-    return currentTheme().values[key].toString();
-}
-
-qreal UiTheme::realByKey(ThemeStyleKey key) const
-{
-    return currentTheme().values[key].toDouble();
-}
-
-const ThemeInfo& UiTheme::currentTheme() const
-{
-    return configuration()->currentTheme();
+    return m_itemOpacityDisabled;
 }
 
 void UiTheme::initUiFonts()
@@ -730,23 +742,16 @@ void UiTheme::drawCheckboxIndicator(QPainter* painter, const QRect& rect, bool e
 void UiTheme::drawRadioButtonIndicator(QPainter* painter, const QRect& rect, bool /*enabled*/, bool hovered, bool pressed,
                                        bool selected) const
 {
-    QColor borderColor(fontPrimaryColor());
-    QColor backgroundColor(textFieldColor());
-    QColor centerColor(accentColor());
+    QColor borderColor = fontPrimaryColor();
+    QColor backgroundColor = textFieldColor();
 
     if (pressed) {
-        backgroundColor.setAlphaF(accentOpacityHit());
-    } else if (selected && !hovered) {
-        backgroundColor.setAlphaF(accentOpacityNormal());
-    } else if (hovered && !selected && !pressed) {
-        backgroundColor.setAlphaF(buttonOpacityHover());
-    } else if (hovered && selected) {
-        backgroundColor.setAlphaF(accentOpacityHover());
+        borderColor.setAlphaF(buttonOpacityHit());
+    } else if (hovered) {
+        borderColor.setAlphaF(buttonOpacityHover());
     } else {
-        backgroundColor.setAlphaF(buttonOpacityNormal());
+        borderColor.setAlphaF(buttonOpacityNormal());
     }
-
-    borderColor.setAlphaF(backgroundColor.alphaF());
 
     const int borderWidth = 1;
     const qreal outerCircleRadius = 10; // diameter = 20
@@ -755,6 +760,7 @@ void UiTheme::drawRadioButtonIndicator(QPainter* painter, const QRect& rect, boo
     drawRoundedRect(painter, outerCircleRect, outerCircleRadius, backgroundColor, QPen(borderColor, borderWidth));
 
     if (selected || pressed) {
+        QColor centerColor = accentColor();
         const int innerCircleRadius = 5; // diameter = 10
         const QRect innerCircleRect(rect.center() + QPoint(1, 1) - QPoint(innerCircleRadius, innerCircleRadius),
                                     QSize(innerCircleRadius, innerCircleRadius) * 2);

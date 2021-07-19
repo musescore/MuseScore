@@ -33,6 +33,7 @@
 #include "engraving/accessibility/accessibleelement.h"
 
 #include "notationinteraction.h"
+#include "notationmidievents.h"
 #include "notationplayback.h"
 #include "notationundostack.h"
 #include "notationstyle.h"
@@ -42,6 +43,7 @@
 #include "notationparts.h"
 #include "notationtypes.h"
 #include "scoreorderconverter.h"
+#include "draw/pen.h"
 
 using namespace mu::notation;
 
@@ -89,10 +91,11 @@ Notation::Notation(Ms::Score* score)
 
     m_undoStack = std::make_shared<NotationUndoStack>(this, m_notationChanged);
     m_interaction = std::make_shared<NotationInteraction>(this, m_undoStack);
-    m_playback = std::make_shared<NotationPlayback>(this, m_notationChanged);
     m_midiInput = std::make_shared<NotationMidiInput>(this, m_undoStack);
     m_accessibility = std::make_shared<NotationAccessibility>(this, m_interaction->selectionChanged());
     m_parts = std::make_shared<NotationParts>(this, m_interaction, m_undoStack);
+    m_midiEventsProvider = std::make_shared<NotationMidiEvents>(this, m_notationChanged);
+    m_playback = std::make_shared<NotationPlayback>(this, m_notationChanged, m_midiEventsProvider);
     m_style = std::make_shared<NotationStyle>(this);
     m_elements = std::make_shared<NotationElements>(this);
 
@@ -140,6 +143,20 @@ Notation::Notation(Ms::Score* score)
 
 Notation::~Notation()
 {
+    //! Note Dereference internal pointers before the deallocation of Ms::Score* in order to prevent access to dereferenced object
+    //! Makes sense to use std::shared_ptr<Ms::Score*> ubiquitous instead of the raw pointers
+    m_parts = nullptr;
+    m_playback = nullptr;
+    m_undoStack = nullptr;
+    m_interaction = nullptr;
+    m_midiInput = nullptr;
+    m_accessibility = nullptr;
+    m_parts = nullptr;
+    m_midiEventsProvider = nullptr;
+    m_playback = nullptr;
+    m_style = nullptr;
+    m_elements = nullptr;
+
     delete m_score;
 }
 
@@ -156,9 +173,6 @@ void Notation::init()
     for (int i = 0; i < VOICES; ++i) {
         Ms::MScore::selectColor[i] = configuration()->selectionColor(i);
     }
-
-    Ms::MScore::readDefaultStyle(configuration()->defaultStyleFilePath().toQString());
-    Ms::MScore::readPartStyle(configuration()->partStyleFilePath().toQString());
 }
 
 void Notation::setScore(Ms::Score* score)
@@ -167,7 +181,7 @@ void Notation::setScore(Ms::Score* score)
 
     if (score) {
         static_cast<NotationInteraction*>(m_interaction.get())->init();
-        static_cast<NotationPlayback*>(m_playback.get())->init();
+        static_cast<NotationPlayback*>(m_playback.get())->init(m_parts);
     }
 }
 
@@ -227,12 +241,9 @@ void Notation::setMetaInfo(const Meta& meta)
     score()->setMetaTags(tags);
 }
 
-mu::instruments::ScoreOrder Notation::scoreOrder() const
+mu::notation::ScoreOrder Notation::scoreOrder() const
 {
-    if (!m_score) {
-        return mu::instruments::ScoreOrder();
-    }
-    return ScoreOrderConverter::convertScoreOrder(m_score->scoreOrder());
+    return m_score ? ScoreOrderConverter::convertScoreOrder(m_score->scoreOrder()) : ScoreOrder();
 }
 
 INotationPtr Notation::clone() const
@@ -309,27 +320,31 @@ void Notation::paintPages(draw::Painter* painter, const RectF& frameRect, const 
         PointF pagePosition(page->pos());
         painter->translate(pagePosition);
         paintForeground(painter, page->bbox());
+        painter->setClipping(true);
+        painter->setClipRect(page->bbox());
 
         QList<Element*> elements = page->items(frameRect.translated(-page->pos()));
         Ms::paintElements(*painter, elements);
 
         painter->translate(-pagePosition);
+        painter->setClipping(false);
     }
 }
 
 void Notation::paintPageBorder(draw::Painter* painter, const Ms::Page* page) const
 {
+    using namespace mu::draw;
     RectF boundingRect(page->canvasBoundingRect());
 
-    painter->setBrush(Qt::NoBrush);
-    painter->setPen(QPen(configuration()->borderColor(), configuration()->borderWidth()));
+    painter->setBrush(BrushStyle::NoBrush);
+    painter->setPen(Pen(configuration()->borderColor(), configuration()->borderWidth()));
     painter->drawRect(boundingRect);
 
     if (!score()->showPageborders()) {
         return;
     }
 
-    painter->setBrush(Qt::NoBrush);
+    painter->setBrush(BrushStyle::NoBrush);
     painter->setPen(Ms::MScore::frameMarginColor);
     boundingRect.adjust(page->lm(), page->tm(), -page->rm(), -page->bm());
     painter->drawRect(boundingRect);

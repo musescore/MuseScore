@@ -41,8 +41,8 @@ Column {
         currentIndex: control.indexOfValue(preferencesModel.currentShortestNote)
         model: preferencesModel.shortestNotes()
 
-        control.textRoleName: "title"
-        control.valueRoleName: "value"
+        control.textRole: "title"
+        control.valueRole: "value"
 
         onValueEdited: {
             preferencesModel.currentShortestNote = newValue

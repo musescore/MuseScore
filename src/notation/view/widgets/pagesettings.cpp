@@ -21,14 +21,15 @@
  */
 #include "pagesettings.h"
 
+#include <QPageSize>
+
+#include "engraving/style/pagestyle.h"
+
 #include "widgetstatestore.h"
 #include "libmscore/page.h"
-#include "libmscore/style.h"
 #include "libmscore/score.h"
 #include "libmscore/mscore.h"
 #include "libmscore/excerpt.h"
-
-#include <QPageSize>
 
 using namespace mu::notation;
 using namespace Ms;

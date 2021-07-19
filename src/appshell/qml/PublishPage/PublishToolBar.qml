@@ -28,14 +28,14 @@ import MuseScore.AppShell 1.0
 Rectangle {
     id: root
 
-    property alias navigation: keynavSub
+    property alias navigation: navPanel
 
     color: ui.theme.backgroundPrimaryColor
 
     NavigationPanel {
-        id: keynavSub
-
+        id: navPanel
         name: "PublishToolBar"
+        enabled: root.enabled && root.visible
     }
 
     PublishToolBarModel {
@@ -71,6 +71,12 @@ Rectangle {
 
             orientation: Qt.Horizontal
             normalStateColor: "transparent"
+
+            navigation.panel: navPanel
+            navigation.order: model.index
+
+            iconFont: ui.theme.toolbarIconsFont
+            height: 36
 
             onClicked: {
                 toolBarModel.handleAction(model.code)

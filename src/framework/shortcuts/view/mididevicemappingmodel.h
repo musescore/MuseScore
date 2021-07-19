@@ -88,9 +88,9 @@ private:
         RoleMappedValue
     };
 
-    QVariantMap midiMappingToObject(const MidiMapping& midiMapping) const;
+    QVariantMap midiMappingToObject(const MidiControlsMapping& midiMapping) const;
 
-    QList<MidiMapping> m_midiMappings;
+    QList<MidiControlsMapping> m_midiMappings;
     QItemSelection m_selection;
 };
 }

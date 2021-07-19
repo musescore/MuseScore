@@ -25,7 +25,7 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu::languages {
-class LanguagesModule : public framework::IModuleSetup
+class LanguagesModule : public modularity::IModuleSetup
 {
 public:
     std::string moduleName() const override;
@@ -34,6 +34,7 @@ public:
     void registerResources() override;
     void registerUiTypes() override;
     void onInit(const framework::IApplication::RunMode& mode) override;
+    void onDelayedInit() override;
 };
 }
 

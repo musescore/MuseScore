@@ -784,18 +784,18 @@ bool isLaissezVibrer(const SymId id)
 }
 
 //---------------------------------------------------------
-//   hasLaissezVibrer
+//   findLaissezVibrer
 //---------------------------------------------------------
 
 // TODO: there should be a lambda hiding somewhere ...
 
-bool hasLaissezVibrer(const Chord* const chord)
+const Articulation* findLaissezVibrer(const Chord* const chord)
 {
     for (const Articulation* a : chord->articulations()) {
         if (isLaissezVibrer(a->symId())) {
-            return true;
+            return a;
         }
     }
-    return false;
+    return nullptr;
 }
 }

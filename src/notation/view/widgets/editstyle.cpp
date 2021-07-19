@@ -1253,7 +1253,7 @@ void EditStyle::buttonClicked(QAbstractButton* b)
     switch (buttonBox->standardButton(b)) {
     case QDialogButtonBox::Ok:
         accept();
-        settings()->setValue(STYLE_MENU_ORDER, Val(arrayToString(pageListMap)));
+        settings()->setSharedValue(STYLE_MENU_ORDER, Val(arrayToString(pageListMap)));
         break;
     case QDialogButtonBox::Cancel:
         reject();
@@ -1593,7 +1593,7 @@ void EditStyle::setValues()
 
 void EditStyle::selectChordDescriptionFile()
 {
-    io::path dir = configuration()->stylesPath().val;
+    io::path dir = configuration()->userStylesPath();
     QString filter = qtrc("notation", "MuseScore Styles") + " (*.mss)";
 
     mu::io::path path = interactive()->selectOpeningFile(qtrc("notation", "Load Style"), dir, filter);

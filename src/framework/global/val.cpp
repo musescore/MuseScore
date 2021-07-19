@@ -45,6 +45,9 @@ Val::Val(bool val)
 Val::Val(int val)
     : m_val(val), m_type(Type::Int) {}
 
+Val::Val(const io::path& path)
+    : m_val(path.toQString()), m_type(Type::String) {}
+
 Val::Val(QColor color)
     : m_val(std::move(color)), m_type(Type::Color) {}
 
@@ -110,6 +113,11 @@ bool Val::toBool() const
 int Val::toInt() const
 {
     return m_val.toInt();
+}
+
+io::path Val::toPath() const
+{
+    return toQString();
 }
 
 QColor Val::toQColor() const

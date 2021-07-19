@@ -32,111 +32,86 @@
 #include <set>
 #include <cassert>
 #include "async/channel.h"
+#include "retval.h"
 #include "midievent.h"
 
 namespace mu::midi {
-using track_t = unsigned int;
-using program_t = unsigned int;
-using bank_t = unsigned int;
-using tick_t = int;
-using msec_t = uint64_t;
-using tempo_t = unsigned int;
+using track_t = int32_t;
+using program_t = int32_t;
+using bank_t = int32_t;
+using tick_t = uint32_t;
+using tempo_t = uint32_t;
 using TempoMap = std::map<tick_t, tempo_t>;
 
 using SynthName = std::string;
-using SynthMap = std::map<midi::channel_t, SynthName>;
 
 using EventType = Ms::EventType;
 using CntrType = Ms::CntrType;
-using Events = std::multimap<tick_t, Event>;
-
-struct Chunk {
-    tick_t beginTick = 0;
-    tick_t endTick = 0;
-    Events events;
-};
-using Chunks = std::map<tick_t /*begin*/, Chunk>;
+using Events = std::map<tick_t, std::vector<Event> >;
 
 struct Program {
     channel_t channel = 0;
     program_t program = 0;
     bank_t bank = 0;
+
+    bool operator==(const Program& other) const
+    {
+        return channel == other.channel
+               && program == other.program
+               && bank == other.bank;
+    }
 };
 using Programs = std::vector<midi::Program>;
 
-struct Track {
-    track_t num = 0;
-    std::vector<channel_t> channels;
-};
-
-struct MidiData {
+struct MidiMapping {
     int division = 480;
-    TempoMap tempoMap;
-    SynthMap synthMap;
-    std::vector<Event> initEvents;  //! NOTE Set channels programs and others
-    std::vector<Track> tracks;
-    Chunks chunks;
+    TempoMap tempo;
+    SynthName synthName;
+    Programs programms;
 
-    bool isValid() const { return !tracks.empty(); }
-
-    std::set<channel_t> channels() const
+    bool isValid() const
     {
-        std::set<channel_t> cs;
-        for (const Event& e : initEvents) {
-            cs.insert(e.channel());
-        }
-        return cs;
+        return !synthName.empty() && !programms.empty() && !tempo.empty();
     }
 
-    std::vector<Event> initEventsForChannels(const std::set<channel_t>& chs) const
+    bool operator==(const MidiMapping& other) const
     {
-        std::vector<Event> evts;
-        for (const Event& e : initEvents) {
-            if (chs.find(e.channel()) != chs.end()) {
-                evts.push_back(e);
-            }
-        }
-        return evts;
-    }
-
-    tick_t lastChunksTick() const
-    {
-        if (chunks.empty()) {
-            return 0;
-        }
-        return chunks.rbegin()->second.endTick;
-    }
-
-    std::string dump(bool withEvents = false)
-    {
-        std::stringstream ss;
-        ss << "division: " << division << "\n";
-        ss << "tempo changes: " << tempoMap.size() << "\n";
-        for (const auto& it : tempoMap) {
-            ss << "  tick: " << it.first << ", tempo: " << it.second << "\n";
-        }
-        ss << "\n";
-        ss << "tracks count: " << tracks.size() << "\n";
-        ss << "channels count: " << channels().size() << "\n";
-
-        if (withEvents) {
-            //! TODO
-        }
-
-        ss.flush();
-        return ss.str();
+        return division == other.division
+               && tempo == other.tempo
+               && synthName == other.synthName
+               && programms == other.programms;
     }
 };
 
 struct MidiStream {
-    MidiData initData;
-
-    bool isStreamingAllowed = false;
     tick_t lastTick = 0;
-    async::Channel<Chunk> stream;
-    async::Channel<tick_t> request;
 
-    bool isValid() const { return initData.isValid(); }
+    ValCh<std::vector<Event> > controlEventsStream;
+    async::Channel<Events, tick_t /*endTick*/> mainStream;
+    async::Channel<Events, tick_t /*endTick*/> backgroundStream;
+    async::Channel<tick_t /*from*/, tick_t /*from*/> eventsRequest;
+
+    bool operator==(const MidiStream& other) const
+    {
+        return lastTick == other.lastTick
+               && controlEventsStream.val == other.controlEventsStream.val;
+    }
+};
+
+struct MidiData {
+    MidiMapping mapping;
+    MidiStream stream;
+
+    bool isValid() const
+    {
+        return mapping.isValid() && stream.lastTick > 0;
+    }
+
+    bool operator==(const MidiData& other) const
+    {
+        return mapping == other.mapping
+               && stream == other.stream;
+    }
 };
 
 using MidiDeviceID = std::string;

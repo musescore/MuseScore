@@ -28,16 +28,17 @@
 #include "notation/inotationconfiguration.h"
 #include "playback/iplaybackconfiguration.h"
 #include "languages/ilanguagesconfiguration.h"
-#include "global/iworkspacesettings.h"
+#include "ui/iuiconfiguration.h"
+#include "async/asyncable.h"
 
 namespace mu::appshell {
-class AppShellConfiguration : public IAppShellConfiguration
+class AppShellConfiguration : public IAppShellConfiguration, public async::Asyncable
 {
     INJECT(appshell, userscores::IUserScoresConfiguration, userScoresConfiguration)
     INJECT(appshell, notation::INotationConfiguration, notationConfiguration)
     INJECT(appshell, playback::IPlaybackConfiguration, playbackConfiguration)
     INJECT(appshell, languages::ILanguagesConfiguration, languagesConfiguration)
-    INJECT(appshell, framework::IWorkspaceSettings, workspaceSettings)
+    INJECT(appshell, ui::IUiConfiguration, uiConfiguration)
 
 public:
     void init();
@@ -68,10 +69,9 @@ public:
 
     ValCh<io::paths> recentScorePaths() const override;
 
-    ValCh<bool> isNotationStatusBarVisible() const override;
-    void setIsNotationStatusBarVisible(bool visible) const override;
-    ValCh<bool> isNotationNavigatorVisible() const override;
+    bool isNotationNavigatorVisible() const override;
     void setIsNotationNavigatorVisible(bool visible) const override;
+    async::Notification isNotationNavigatorVisibleChanged() const override;
 
     bool needShowSplashScreen() const override;
     void setNeedShowSplashScreen(bool show) override;
@@ -90,9 +90,6 @@ private:
     std::string sha() const;
 
     std::string currentLanguageCode() const;
-
-    async::Channel<bool> m_notationStatusBarVisibleChanged;
-    async::Channel<bool> m_notationNavigatorVisibleChanged;
 };
 }
 

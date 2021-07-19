@@ -21,14 +21,15 @@
  */
 #include "bwwmodule.h"
 
-#include "log.h"
 #include "modularity/ioc.h"
 
-#include "notation/inotationreadersregister.h"
+#include "project/inotationreadersregister.h"
 #include "internal/notationbwwreader.h"
 
+#include "log.h"
+
 using namespace mu::iex::bww;
-using namespace mu::notation;
+using namespace mu::project;
 
 std::string BwwModule::moduleName() const
 {
@@ -37,7 +38,7 @@ std::string BwwModule::moduleName() const
 
 void BwwModule::resolveImports()
 {
-    auto readers = framework::ioc()->resolve<INotationReadersRegister>(moduleName());
+    auto readers = modularity::ioc()->resolve<INotationReadersRegister>(moduleName());
     if (readers) {
         readers->reg({ "bmw", "bww" }, std::make_shared<NotationBwwReader>());
     }

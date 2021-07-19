@@ -21,38 +21,42 @@
  */
 
 #include "excerpt.h"
-#include "score.h"
-#include "part.h"
-#include "xml.h"
-#include "staff.h"
-#include "box.h"
-#include "textframe.h"
-#include "style.h"
-#include "page.h"
-#include "text.h"
-#include "slur.h"
-#include "tie.h"
-#include "sig.h"
-#include "tempo.h"
-#include "measure.h"
-#include "rest.h"
-#include "stafftype.h"
-#include "tuplet.h"
-#include "chord.h"
-#include "note.h"
-#include "lyrics.h"
-#include "segment.h"
-#include "textline.h"
-#include "tupletmap.h"
-#include "tiemap.h"
-#include "layoutbreak.h"
-#include "harmony.h"
-#include "beam.h"
-#include "utils.h"
-#include "tremolo.h"
+
+#include <QRegularExpression>
+
+#include "style/style.h"
+
 #include "barline.h"
-#include "undo.h"
+#include "beam.h"
+#include "box.h"
 #include "bracketItem.h"
+#include "chord.h"
+#include "harmony.h"
+#include "layoutbreak.h"
+#include "lyrics.h"
+#include "measure.h"
+#include "note.h"
+#include "page.h"
+#include "part.h"
+#include "rest.h"
+#include "score.h"
+#include "segment.h"
+#include "sig.h"
+#include "slur.h"
+#include "staff.h"
+#include "stafftype.h"
+#include "tempo.h"
+#include "text.h"
+#include "textframe.h"
+#include "textline.h"
+#include "tie.h"
+#include "tiemap.h"
+#include "tremolo.h"
+#include "tuplet.h"
+#include "tupletmap.h"
+#include "undo.h"
+#include "utils.h"
+#include "xml.h"
 
 using namespace mu;
 
@@ -1395,8 +1399,9 @@ QString Excerpt::formatTitle(const QString& partName, const QList<Excerpt*>& exc
             e->setTitle(e->title() + " 1");
         }
 
-        QRegExp rx("^(.+)\\s\\d+$");
-        if (rx.indexIn(e->title()) > -1 && rx.cap(1) == name) {
+        QRegularExpression regex("^(.+)\\s\\d+$");
+        QRegularExpressionMatch match = regex.match(e->title());
+        if (match.hasMatch() && match.capturedTexts()[1] == name) {
             count++;
         }
     }

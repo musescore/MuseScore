@@ -108,16 +108,6 @@ const UiActionList PlaybackUiActions::m_loopBoundaryActions = {
              ),
 };
 
-const UiActionList& PlaybackUiActions::settingsActions()
-{
-    return m_settingsActions;
-}
-
-const UiActionList& PlaybackUiActions::loopBoundaryActions()
-{
-    return m_loopBoundaryActions;
-}
-
 PlaybackUiActions::PlaybackUiActions(std::shared_ptr<PlaybackController> controller)
     : m_controller(controller)
 {
@@ -167,4 +157,30 @@ mu::async::Channel<mu::actions::ActionCodeList> PlaybackUiActions::actionEnabled
 mu::async::Channel<mu::actions::ActionCodeList> PlaybackUiActions::actionCheckedChanged() const
 {
     return m_actionCheckedChanged;
+}
+
+const UiActionList& PlaybackUiActions::settingsActions()
+{
+    return m_settingsActions;
+}
+
+const UiActionList& PlaybackUiActions::loopBoundaryActions()
+{
+    return m_loopBoundaryActions;
+}
+
+const mu::ui::ToolConfig& PlaybackUiActions::defaultPlaybackToolConfig()
+{
+    static ToolConfig config;
+    if (!config.isValid()) {
+        config.items = {
+            { "rewind", true },
+            { "play", true },
+            { "loop", true },
+            { "loop-in", true },
+            { "loop-out", true },
+            { "metronome", true },
+        };
+    }
+    return config;
 }

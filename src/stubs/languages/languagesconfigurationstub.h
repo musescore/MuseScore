@@ -28,17 +28,16 @@ namespace mu::languages {
 class LanguagesConfigurationStub : public ILanguagesConfiguration
 {
 public:
-    QString currentLanguageCode() const override;
-    Ret setCurrentLanguageCode(const QString& languageCode) const override;
+    ValCh<QString> currentLanguageCode() const override;
+    void setCurrentLanguageCode(const QString& languageCode) const override;
 
     QUrl languagesUpdateUrl() const override;
     QUrl languageFileServerUrl(const QString& languageCode) const override;
 
     ValCh<LanguagesHash> languages() const override;
-    Ret setLanguages(const LanguagesHash& languages) const override;
+    Ret setLanguages(const LanguagesHash& languages) override;
 
-    io::path languagesSharePath() const override;
-    io::path languagesDataPath() const override;
+    io::path languagesUserAppDataPath() const override;
 
     io::paths languageFilePaths(const QString& languageCode) const override;
     io::path languageArchivePath(const QString& languageCode) const override;

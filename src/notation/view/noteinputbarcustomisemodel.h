@@ -26,9 +26,10 @@
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
-#include "inotationconfiguration.h"
-#include "workspace/iworkspacemanager.h"
+#include "ui/iuiconfiguration.h"
 #include "ui/iuiactionsregister.h"
+
+#include "noteinputbarcustomiseitem.h"
 
 class QItemSelectionModel;
 
@@ -37,14 +38,11 @@ class ItemMultiSelectionModel;
 }
 
 namespace mu::notation {
-class AbstractNoteInputBarItem;
-class ActionNoteInputBarItem;
 class NoteInputBarCustomiseModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(notation, INotationConfiguration, configuration)
-    INJECT(notation, workspace::IWorkspaceManager, workspaceManager)
+    INJECT(notation, ui::IUiConfiguration, uiConfiguration)
     INJECT(notation, ui::IUiActionsRegister, actionsRegister)
 
     Q_PROPERTY(QItemSelectionModel * selectionModel READ selectionModel NOTIFY selectionChanged)
@@ -90,7 +88,7 @@ private:
         SelectedRole
     };
 
-    AbstractNoteInputBarItem* modelIndexToItem(const QModelIndex& index) const;
+    NoteInputBarCustomiseItem* modelIndexToItem(const QModelIndex& index) const;
 
     void setIsMovingUpAvailable(bool isMovingUpAvailable);
     void setIsMovingDownAvailable(bool isMovingDownAvailable);
@@ -104,20 +102,12 @@ private:
     void updateRemovingAvailability();
     void updateAddSeparatorAvailability();
 
-    AbstractNoteInputBarItem* makeItem(const ui::UiAction& action, bool checked);
-    AbstractNoteInputBarItem* makeSeparatorItem() const;
-
-    actions::ActionCodeList customizedActions() const;
-    actions::ActionCodeList defaultActions() const;
-    actions::ActionCodeList currentActions() const;
-
-    actions::ActionCodeList currentWorkspaceActions() const;
-
-    bool actionFromNoteInputModes(const actions::ActionCode& actionCode) const;
+    NoteInputBarCustomiseItem* makeItem(const ui::UiAction& action, bool checked);
+    NoteInputBarCustomiseItem* makeSeparatorItem();
 
     void saveActions();
 
-    QList<AbstractNoteInputBarItem*> m_actions;
+    QList<NoteInputBarCustomiseItem*> m_items;
     uicomponents::ItemMultiSelectionModel* m_selectionModel = nullptr;
 
     bool m_isMovingUpAvailable = false;

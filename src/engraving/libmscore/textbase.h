@@ -25,13 +25,13 @@
 
 #include <QTextCursor>
 
-class QInputMethodEvent;
+#include "draw/fontmetrics.h"
 
 #include "element.h"
 #include "property.h"
-#include "style.h"
+#include "style/style.h"
 
-#include "draw/fontmetrics.h"
+class QInputMethodEvent;
 
 namespace Ms {
 class MuseScoreView;
@@ -302,6 +302,7 @@ public:
     TextBase(Score* = 0, Tid tid = Tid::DEFAULT, ElementFlags = ElementFlag::NOTHING);
     TextBase(Score*, ElementFlags);
     TextBase(const TextBase&);
+    ~TextBase();
 
     virtual bool mousePress(EditData&) override;
 
@@ -360,7 +361,7 @@ public:
     void writeProperties(XmlWriter&, bool, bool) const;
     bool readProperties(XmlReader&) override;
 
-    virtual void paste(EditData&);
+    virtual void paste(EditData& ed, const QString& txt);
 
     mu::RectF pageRectangle() const;
 

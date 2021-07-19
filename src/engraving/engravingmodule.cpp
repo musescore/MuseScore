@@ -23,16 +23,30 @@
 
 #include "modularity/ioc.h"
 
+#ifndef NO_ENGRAVING_QFONTENGINE
 #include "engraving/draw/qfontprovider.h"
+#endif
+#include "engraving/draw/qimageconverter.h"
+
+#include "engraving/style/defaultstyle.h"
 
 #include "engraving/libmscore/mscore.h"
 #include "engraving/libmscore/score.h"
 #include "engraving/libmscore/scorefont.h"
 
-#include "notation/inotationconfiguration.h"
+#include "compat/scoreaccess.h"
+
+#include "engraving/internal/engravingconfiguration.h"
 
 using namespace mu::engraving;
-using namespace mu::framework;
+using namespace mu::modularity;
+
+static std::shared_ptr<EngravingConfiguration> s_configuration = std::make_shared<EngravingConfiguration>();
+
+static void engraving_init_qrc()
+{
+    Q_INIT_RESOURCE(engraving);
+}
 
 std::string EngravingModule::moduleName() const
 {
@@ -41,7 +55,12 @@ std::string EngravingModule::moduleName() const
 
 void EngravingModule::registerExports()
 {
+#ifndef NO_ENGRAVING_QFONTENGINE
     ioc()->registerExport<draw::IFontProvider>(moduleName(), new draw::QFontProvider());
+#endif
+
+    ioc()->registerExport<draw::IImageConverter>(moduleName(), new draw::QImageConverter());
+    ioc()->registerExport<IEngravingConfiguration>(moduleName(), s_configuration);
 }
 
 void EngravingModule::resolveImports()
@@ -50,6 +69,7 @@ void EngravingModule::resolveImports()
 
 void EngravingModule::registerResources()
 {
+    engraving_init_qrc();
 }
 
 void EngravingModule::registerUiTypes()
@@ -61,14 +81,17 @@ void EngravingModule::onInit(const framework::IApplication::RunMode&)
 {
     Ms::MScore::init(); // initialize libmscore
 
+    DefaultStyle::instance()->init(s_configuration->defaultStyleFilePath(),
+                                   s_configuration->partStyleFilePath());
+
     Ms::MScore::setNudgeStep(0.1); // cursor key (default 0.1)
     Ms::MScore::setNudgeStep10(1.0); // Ctrl + cursor key (default 1.0)
     Ms::MScore::setNudgeStep50(0.01); // Alt  + cursor key (default 0.01)
 
-    Ms::gscore = new Ms::MasterScore();
+    Ms::gscore = compat::ScoreAccess::createMasterScore();
     Ms::gscore->setPaletteMode(true);
     Ms::gscore->setMovements(new Ms::Movements());
-    Ms::gscore->setStyle(Ms::MScore::baseStyle());
+    Ms::gscore->setStyle(DefaultStyle::baseStyle());
 
     Ms::gscore->style().set(Ms::Sid::MusicalTextFont, QString("Leland Text"));
     Ms::ScoreFont* scoreFont = Ms::ScoreFont::fontByName("Leland");

@@ -164,8 +164,7 @@ void PartListModel::createNewPart()
     Meta meta;
     meta.title = qtrc("notation", "Part");
 
-    INotationPtr notation = notationCreator()->newExcerptNotation()->notation();
-
+    INotationPtr notation = masterNotation()->newExcerptNotation()->notation();
     notation->setMetaInfo(meta);
 
     int index = m_notations.size();

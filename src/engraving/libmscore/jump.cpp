@@ -22,7 +22,7 @@
 
 #include "jump.h"
 
-#include <QApplication>
+#include "translation.h"
 
 #include "score.h"
 #include "xml.h"
@@ -106,7 +106,7 @@ QString Jump::jumpTypeUserName() const
 {
     int idx = static_cast<int>(this->jumpType());
     if (idx < jumpTypeTableSize()) {
-        return qApp->translate("jumpType", jumpTypeTable[idx].userText.toUtf8().constData());
+        return qtrc("jumpType", jumpTypeTable[idx].userText.toUtf8().constData());
     }
     return QObject::tr("Custom");
 }

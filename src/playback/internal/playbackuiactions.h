@@ -27,6 +27,7 @@
 #include "modularity/ioc.h"
 #include "context/iuicontextresolver.h"
 #include "async/asyncable.h"
+#include "ui/uitypes.h"
 
 namespace mu::playback {
 class PlaybackUiActions : public ui::IUiActionsModule, public async::Asyncable
@@ -48,6 +49,8 @@ public:
 
     static const ui::UiActionList& settingsActions();
     static const ui::UiActionList& loopBoundaryActions();
+
+    static const ui::ToolConfig& defaultPlaybackToolConfig();
 
 private:
     static const ui::UiActionList m_mainActions;

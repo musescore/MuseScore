@@ -25,7 +25,7 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu::autobot {
-class AutobotModule : public framework::IModuleSetup
+class AutobotModule : public modularity::IModuleSetup
 {
 public:
 

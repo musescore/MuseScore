@@ -24,22 +24,24 @@
 #define MU_UI_UICONFIGURATION_H
 
 #include "iuiconfiguration.h"
-#include "imainwindow.h"
-#include "internal/iplatformtheme.h"
-#include "iworkspacesettings.h"
-#include "val.h"
 
 #include "modularity/ioc.h"
+#include "imainwindow.h"
+#include "internal/iplatformtheme.h"
+
+#include "val.h"
+#include "uiarrangement.h"
+#include "async/asyncable.h"
 
 namespace mu::ui {
-class UiConfiguration : public IUiConfiguration
+class UiConfiguration : public IUiConfiguration, public async::Asyncable
 {
     INJECT(ui, IMainWindow, mainWindow)
     INJECT(ui, IPlatformTheme, platformTheme)
-    INJECT(ui, framework::IWorkspaceSettings, workspaceSettings)
 
 public:
     void init();
+    void load();
     void deinit();
 
     ThemeList themes() const override;
@@ -70,14 +72,22 @@ public:
 
     void setPhysicalDotsPerInch(std::optional<float> dpi) override;
 
-    QByteArray pageState(const std::string& pageName) const override;
-    void setPageState(const std::string& pageName, const QByteArray& state) override;
+    QByteArray pageState(const QString& pageName) const override;
+    void setPageState(const QString& pageName, const QByteArray& state) override;
 
     QByteArray windowGeometry() const override;
     void setWindowGeometry(const QByteArray& geometry) override;
     async::Notification windowGeometryChanged() const override;
 
     void applyPlatformStyle(QWindow* window) override;
+
+    bool isVisible(const QString& key, bool def = true) const override;
+    void setIsVisible(const QString& key, bool val) override;
+    async::Notification isVisibleChanged(const QString& key) const override;
+
+    ToolConfig toolConfig(const QString& toolName) const override;
+    void setToolConfig(const QString& toolName, const ToolConfig& config) override;
+    async::Notification toolConfigChanged(const QString& toolName) const override;
 
 private:
     bool needFollowSystemTheme() const;
@@ -93,11 +103,7 @@ private:
     ThemeList readThemes() const;
     void writeThemes(const ThemeList& themes);
 
-    Val uiArrangmentValue(const std::string& key) const;
-    void setUiArrangmentValue(const std::string& key, const Val& value) const;
-
-    QByteArray stringToByteArray(const std::string& string) const;
-    std::string byteArrayToString(const QByteArray& byteArray) const;
+    UiArrangement m_uiArrangement;
 
     async::Notification m_currentThemeChanged;
     async::Notification m_fontChanged;

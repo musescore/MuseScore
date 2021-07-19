@@ -21,10 +21,13 @@
  */
 
 #include "timesig.h"
+
+#include "translation.h"
+#include "style/style.h"
+
 #include "xml.h"
 #include "score.h"
 #include "scorefont.h"
-#include "style.h"
 #include "symbol.h"
 #include "staff.h"
 #include "stafftype.h"
@@ -574,19 +577,19 @@ QString TimeSig::accessibleInfo() const
     QString timeSigString;
     switch (timeSigType()) {
     case TimeSigType::FOUR_FOUR:
-        timeSigString = qApp->translate("symUserNames", "Common time");
+        timeSigString = qtrc("symUserNames", "Common time");
         break;
     case TimeSigType::ALLA_BREVE:
-        timeSigString = qApp->translate("symUserNames", "Cut time");
+        timeSigString = qtrc("symUserNames", "Cut time");
         break;
     case TimeSigType::CUT_BACH:
-        timeSigString = qApp->translate("symUserNames", "Cut time (Bach)");
+        timeSigString = qtrc("symUserNames", "Cut time (Bach)");
         break;
     case TimeSigType::CUT_TRIPLE:
-        timeSigString = qApp->translate("symUserNames", "Cut triple time (9/8)");
+        timeSigString = qtrc("symUserNames", "Cut triple time (9/8)");
         break;
     default:
-        timeSigString = QObject::tr("%1/%2 time").arg(QString::number(numerator()), QString::number(denominator()));
+        timeSigString = qtrc("engraving", "%1/%2 time").arg(QString::number(numerator()), QString::number(denominator()));
     }
     return QString("%1: %2").arg(Element::accessibleInfo(), timeSigString);
 }

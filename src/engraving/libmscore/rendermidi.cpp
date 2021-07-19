@@ -25,10 +25,13 @@
  render score into event list
 */
 
+#include "rendermidi.h"
+
 #include <set>
 #include <cmath>
 
-#include "rendermidi.h"
+#include "style/style.h"
+
 #include "score.h"
 #include "volta.h"
 #include "note.h"
@@ -38,7 +41,6 @@
 #include "chord.h"
 #include "trill.h"
 #include "vibrato.h"
-#include "style.h"
 #include "slur.h"
 #include "tie.h"
 #include "stafftext.h"
@@ -88,6 +90,8 @@ namespace Ms {
 //    }
 //    return 0;
 //}
+
+static constexpr int MIN_CHUNK_SIZE(10); // measure
 
 struct SndConfig {
     bool useSND = false;
@@ -910,6 +914,12 @@ void MidiRenderer::collectMeasureEventsDefault(EventMap* events, Measure const* 
             }
         }
     }
+}
+
+MidiRenderer::MidiRenderer(Score* s)
+    : score(s)
+{
+    setMinChunkSize(MIN_CHUNK_SIZE);
 }
 
 //---------------------------------------------------------
@@ -2457,7 +2467,8 @@ void Score::renderMidi(EventMap* events, const SynthesizerState& synthState)
 void Score::renderMidi(EventMap* events, bool metronome, bool expandRepeats, const SynthesizerState& synthState)
 {
     masterScore()->setExpandRepeats(expandRepeats);
-    MidiRenderer::Context ctx(synthState);
+    MidiRenderer::Context ctx;
+    ctx.synthState = synthState;
     ctx.metronome = metronome;
     ctx.renderHarmony = true;
     MidiRenderer(this).renderScore(events, ctx);
@@ -2494,9 +2505,6 @@ void MidiRenderer::renderChunk(const Chunk& chunk, EventMap* events, const Conte
             // since sometimes the synth state is not init
             method = 1;
             cc = 2;
-#ifndef Q_OS_WASM
-            qWarning("Had to fall back to defaults to render measure");
-#endif
         }
     }
 
@@ -2701,6 +2709,26 @@ MidiRenderer::Chunk MidiRenderer::chunkAt(int utick)
 
     const Chunk& ch = *it;
     return ch;
+}
+
+std::vector<MidiRenderer::Chunk> MidiRenderer::chunksFromRange(const int fromTick, const int toTick)
+{
+    std::vector<Chunk> result;
+
+    Chunk currentChunk = chunkAt(fromTick);
+
+    if (fromTick == toTick) {
+        result.push_back(std::move(currentChunk));
+        return result;
+    }
+
+    while (currentChunk.utick2() <= toTick) {
+        result.push_back(currentChunk);
+
+        currentChunk = chunkAt(currentChunk.utick2());
+    }
+
+    return result;
 }
 
 //---------------------------------------------------------

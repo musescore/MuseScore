@@ -21,10 +21,12 @@
  */
 #include "midiremote.h"
 
-#include "log.h"
-
 #include "global/xmlreader.h"
 #include "global/xmlwriter.h"
+
+#include "multiinstances/resourcelockguard.h"
+
+#include "log.h"
 
 using namespace mu::shortcuts;
 using namespace mu::framework;
@@ -87,7 +89,7 @@ mu::Ret MidiRemote::process(const Event& ev)
 
     RemoteEvent event = remoteEventFromMidiEvent(ev);
 
-    for (const MidiMapping& midiMapping : m_midiMappings) {
+    for (const MidiControlsMapping& midiMapping : m_midiMappings) {
         if (midiMapping.event == event) {
             dispatcher()->dispatch(midiMapping.action);
             return make_ret(Ret::Code::Ok);
@@ -99,6 +101,8 @@ mu::Ret MidiRemote::process(const Event& ev)
 
 void MidiRemote::readMidiMappings()
 {
+    mi::ResourceLockGuard resource_guard(multiInstancesProvider(), "MIDIMAPPING");
+
     io::path midiMappingsPath = configuration()->midiMappingUserAppDataPath();
     XmlReader reader(midiMappingsPath);
 
@@ -113,7 +117,7 @@ void MidiRemote::readMidiMappings()
             continue;
         }
 
-        MidiMapping midiMapping = readMidiMapping(reader);
+        MidiControlsMapping midiMapping = readMidiMapping(reader);
         if (midiMapping.isValid()) {
             m_midiMappings.push_back(midiMapping);
         }
@@ -124,9 +128,9 @@ void MidiRemote::readMidiMappings()
     }
 }
 
-MidiMapping MidiRemote::readMidiMapping(XmlReader& reader) const
+MidiControlsMapping MidiRemote::readMidiMapping(XmlReader& reader) const
 {
-    MidiMapping midiMapping;
+    MidiControlsMapping midiMapping;
 
     while (reader.readNextStartElement()) {
         std::string tag(reader.tagName());
@@ -149,13 +153,15 @@ bool MidiRemote::writeMidiMappings(const MidiMappingList& midiMappings) const
 {
     TRACEFUNC;
 
+    mi::ResourceLockGuard resource_guard(multiInstancesProvider(), "MIDIMAPPING");
+
     io::path midiMappingsPath = configuration()->midiMappingUserAppDataPath();
     XmlWriter writer(midiMappingsPath);
 
     writer.writeStartDocument();
     writer.writeStartElement(MIDIMAPPING_TAG);
 
-    for (const MidiMapping& midiMapping : midiMappings) {
+    for (const MidiControlsMapping& midiMapping : midiMappings) {
         writeMidiMapping(writer, midiMapping);
     }
 
@@ -165,7 +171,7 @@ bool MidiRemote::writeMidiMappings(const MidiMappingList& midiMappings) const
     return writer.success();
 }
 
-void MidiRemote::writeMidiMapping(XmlWriter& writer, const MidiMapping& midiMapping) const
+void MidiRemote::writeMidiMapping(XmlWriter& writer, const MidiControlsMapping& midiMapping) const
 {
     writer.writeStartElement(EVENT_TAG);
     writer.writeTextElement(MAPPING_ACTION_CODE_TAG, midiMapping.action);
@@ -199,7 +205,7 @@ bool MidiRemote::needIgnoreEvent(const Event& event) const
 
 RemoteEvent MidiRemote::remoteEvent(const std::string& action) const
 {
-    for (const MidiMapping& midiMapping : m_midiMappings) {
+    for (const MidiControlsMapping& midiMapping : m_midiMappings) {
         if (midiMapping.action == action) {
             return midiMapping.event;
         }

@@ -28,12 +28,15 @@ namespace mu::context {
 class GlobalContext : public IGlobalContext
 {
 public:
-    void addMasterNotation(const notation::IMasterNotationPtr& notation) override;
-    void removeMasterNotation(const notation::IMasterNotationPtr& notation) override;
-    const std::vector<notation::IMasterNotationPtr>& masterNotations() const override;
-    bool containsMasterNotation(const io::path& path) const override;
+    void addNotationProject(const project::INotationProjectPtr& project) override;
+    void removeNotationProject(const project::INotationProjectPtr& project) override;
+    const std::vector<project::INotationProjectPtr>& notationProjects() const override;
+    bool containsNotationProject(const io::path& path) const override;
 
-    void setCurrentMasterNotation(const notation::IMasterNotationPtr& notation) override;
+    void setCurrentNotationProject(const project::INotationProjectPtr& project) override;
+    project::INotationProjectPtr currentNotationProject() const override;
+    async::Notification currentNotationProjectChanged() const override;
+
     notation::IMasterNotationPtr currentMasterNotation() const override;
     async::Notification currentMasterNotationChanged() const override;
 
@@ -44,10 +47,10 @@ public:
 private:
     void doSetCurrentNotation(const notation::INotationPtr& notation);
 
-    std::vector<notation::IMasterNotationPtr> m_masterNotations;
+    std::vector<project::INotationProjectPtr> m_projects;
 
-    notation::IMasterNotationPtr m_currentMasterNotation;
-    async::Notification m_currentMasterNotationChanged;
+    project::INotationProjectPtr m_currentNotationProject;
+    async::Notification m_currentNotationProjectChanged;
 
     notation::INotationPtr m_currentNotation;
     async::Notification m_currentNotationChanged;

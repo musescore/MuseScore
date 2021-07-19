@@ -25,7 +25,7 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu::shortcuts {
-class ShortcutsModule : public framework::IModuleSetup
+class ShortcutsModule : public modularity::IModuleSetup
 {
 public:
 

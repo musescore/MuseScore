@@ -32,6 +32,7 @@
 #include "tie.h"
 
 #include "libmscore/musescoreCore.h"
+#include "engraving/compat/scoreaccess.h"
 
 #include <QQmlEngine>
 
@@ -188,7 +189,7 @@ Score* PluginAPI::newScore(const QString& name, const QString& part, int measure
     if (msc()->currentScore()) {
         msc()->currentScore()->endCmd();
     }
-    MasterScore* score = new MasterScore(MScore::defaultStyle());
+    MasterScore* score = mu::engraving::compat::ScoreAccess::createMasterScoreWithDefaultStyle();
     score->setName(name);
     score->appendPart(Score::instrTemplateFromName(part));
     score->appendMeasures(measures);

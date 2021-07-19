@@ -29,6 +29,7 @@
 #include "mscore.h"
 #include "accidental.h"
 #include "articulation.h"
+#include "draw/pen.h"
 
 using namespace mu;
 
@@ -141,6 +142,7 @@ bool ShadowNote::computeUp() const
 void ShadowNote::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
+    using namespace mu::draw;
     if (!visible() || !isValid()) {
         return;
     }
@@ -148,7 +150,7 @@ void ShadowNote::draw(mu::draw::Painter* painter) const
     PointF ap(pagePos());
     painter->translate(ap);
     qreal lw = score()->styleP(Sid::stemWidth);
-    QPen pen(MScore::selectColor[voice()].lighter(SHADOW_NOTE_LIGHT), lw, Qt::SolidLine, Qt::FlatCap);
+    Pen pen(MScore::selectColor[voice()].lighter(SHADOW_NOTE_LIGHT), lw, PenStyle::SolidLine, PenCapStyle::FlatCap);
     painter->setPen(pen);
 
     // Draw the accidental

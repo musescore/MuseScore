@@ -22,16 +22,24 @@
 #ifndef MU_PLAYBACK_PLAYBACKCONTROLLER_H
 #define MU_PLAYBACK_PLAYBACKCONTROLLER_H
 
-#include "../iplaybackcontroller.h"
+#include <unordered_map>
+
 #include "modularity/ioc.h"
+#include "retval.h"
+#include "async/asyncable.h"
 #include "actions/iactionsdispatcher.h"
 #include "actions/actionable.h"
 #include "context/iglobalcontext.h"
-#include "../iplaybackconfiguration.h"
+#include "notation/notationtypes.h"
 #include "notation/inotationconfiguration.h"
-#include "retval.h"
-#include "async/asyncable.h"
-#include "audio/isequencer.h"
+#include "notation/inotationplayback.h"
+#include "audio/iplayer.h"
+#include "audio/itracks.h"
+#include "audio/iplayback.h"
+#include "audio/audiotypes.h"
+
+#include "../iplaybackcontroller.h"
+#include "../iplaybackconfiguration.h"
 
 namespace mu::playback {
 class PlaybackController : public IPlaybackController, public actions::Actionable, public async::Asyncable
@@ -40,7 +48,7 @@ class PlaybackController : public IPlaybackController, public actions::Actionabl
     INJECT(playback, context::IGlobalContext, globalContext)
     INJECT(playback, IPlaybackConfiguration, configuration)
     INJECT(playback, notation::INotationConfiguration, notationConfiguration)
-    INJECT(playback, audio::ISequencer, sequencer)
+    INJECT(playback, audio::IPlayback, playback)
 
 public:
     void init();
@@ -51,9 +59,17 @@ public:
     bool isPlaying() const override;
     async::Notification isPlayingChanged() const override;
 
+    void reset() override;
+
+    void seek(const midi::tick_t tick) override;
+    void seek(const audio::msecs_t msecs) override;
+
     async::Notification playbackPositionChanged() const override;
     async::Channel<uint32_t> midiTickPlayed() const override;
     float playbackPositionInSeconds() const override;
+
+    audio::TrackSequenceId currentTrackSequenceId() const override;
+    async::Notification currentTrackSequenceIdChanged() const override;
 
     void playElement(const notation::Element* element) override;
 
@@ -64,12 +80,10 @@ public:
 
     notation::Tempo currentTempo() const override;
     notation::MeasureBeat currentBeat() const override;
-    uint64_t beatToMilliseconds(int measureIndex, int beatIndex) const override;
+    audio::msecs_t beatToMilliseconds(int measureIndex, int beatIndex) const override;
 
 private:
-    static constexpr unsigned int MIDI_TRACK = 0;
-
-    notation::INotationPlaybackPtr playback() const;
+    notation::INotationPlaybackPtr notationPlayback() const;
     notation::INotationSelectionPtr selection() const;
 
     int currentTick() const;
@@ -82,8 +96,8 @@ private:
     void togglePlay();
     void rewind(const actions::ActionData& args);
     void play();
-    void seek(int tick);
     void pause();
+    void stop();
     void resume();
 
     void togglePlayRepeats();
@@ -103,6 +117,11 @@ private:
 
     void notifyActionCheckedChanged(const actions::ActionCode& actionCode);
 
+    void setCurrentSequence(const audio::TrackSequenceId sequenceId);
+    void setCurrentTick(const midi::tick_t tick);
+    void addTrack(const notation::INotationPlayback::InstrumentTrackId& id);
+    void removeTrack(const notation::INotationPlayback::InstrumentTrackId& id);
+
     notation::INotationPtr m_notation;
     async::Notification m_isPlayAllowedChanged;
     async::Notification m_isPlayingChanged;
@@ -111,6 +130,15 @@ private:
     async::Channel<actions::ActionCode> m_actionCheckedChanged;
 
     bool m_needRewindBeforePlay = false;
+
+    bool m_isPlaying = false;
+
+    audio::TrackSequenceId m_currentSequenceId = -1;
+    async::Notification m_currentSequenceIdChanged;
+    audio::PlaybackStatus m_currentPlaybackStatus = audio::PlaybackStatus::Stopped;
+    midi::tick_t m_currentTick = 0;
+    std::unordered_map<std::string /* score file path*/, audio::TrackSequenceId> m_sequenceIdMap;
+    std::unordered_map<notation::INotationPlayback::InstrumentTrackId, audio::TrackId> m_trackIdMap;
 };
 }
 

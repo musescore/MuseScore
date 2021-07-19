@@ -47,7 +47,7 @@ QString downloadingStatusTitle()
 }
 }
 
-void ExtensionsService::init()
+void ExtensionsService::refreshExtensions()
 {
     if (configuration()->needCheckForUpdate()) {
         QtConcurrent::run(this, &ExtensionsService::th_refreshExtensions);
@@ -383,7 +383,7 @@ void ExtensionsService::th_install(const QString& extensionCode,
 
     QString extensionArchivePath = download.val;
 
-    Ret unpack = extensionUnpacker()->unpack(extensionArchivePath, configuration()->extensionsPath().val.toQString());
+    Ret unpack = extensionUnpacker()->unpack(extensionArchivePath, configuration()->userExtensionsPath().toQString());
     if (!unpack) {
         LOGE() << "Error unpack" << unpack.toString();
         fileSystem()->remove(extensionArchivePath);
@@ -416,7 +416,7 @@ void ExtensionsService::th_update(const QString& extensionCode, async::Channel<E
         finishChannel->send(remove);
     }
 
-    Ret unpack = extensionUnpacker()->unpack(extensionArchivePath, configuration()->extensionsPath().val.toQString());
+    Ret unpack = extensionUnpacker()->unpack(extensionArchivePath, configuration()->userExtensionsPath().toQString());
     if (!unpack) {
         LOGE() << "Error unpack" << unpack.toString();
         finishChannel->send(unpack);

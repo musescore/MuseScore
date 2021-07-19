@@ -98,10 +98,11 @@ void LedgerLine::layout()
 void LedgerLine::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
+    using namespace mu::draw;
     if (chord()->crossMeasure() == CrossMeasure::SECOND) {
         return;
     }
-    painter->setPen(QPen(curColor(), _width, Qt::SolidLine, Qt::FlatCap));
+    painter->setPen(Pen(curColor(), _width, PenStyle::SolidLine, PenCapStyle::FlatCap));
     if (vertical) {
         painter->drawLine(LineF(0.0, 0.0, 0.0, _len));
     } else {

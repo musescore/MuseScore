@@ -169,12 +169,12 @@ void TextSettingsModel::resetProperties()
 
 void TextSettingsModel::insertSpecialCharacters()
 {
-    NOT_IMPLEMENTED;
+    dispatcher()->dispatch("show-keys");
 }
 
 void TextSettingsModel::showStaffTextProperties()
 {
-    NOT_IMPLEMENTED;
+    dispatcher()->dispatch("staff-text-properties");
 }
 
 PropertyItem* TextSettingsModel::fontFamily() const

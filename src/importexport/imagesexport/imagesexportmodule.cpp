@@ -21,18 +21,19 @@
  */
 #include "imagesexportmodule.h"
 
-#include "log.h"
 #include "modularity/ioc.h"
 
-#include "notation/inotationwritersregister.h"
+#include "project/inotationwritersregister.h"
 #include "internal/pdfwriter.h"
 #include "internal/pngwriter.h"
 #include "internal/svgwriter.h"
 
 #include "internal/imagesexportconfiguration.h"
 
+#include "log.h"
+
 using namespace mu::iex::imagesexport;
-using namespace mu::notation;
+using namespace mu::project;
 
 static std::shared_ptr<ImagesExportConfiguration> s_configuration = std::make_shared<ImagesExportConfiguration>();
 
@@ -43,12 +44,12 @@ std::string ImagesExportModule::moduleName() const
 
 void ImagesExportModule::registerExports()
 {
-    framework::ioc()->registerExport<IImagesExportConfiguration>(moduleName(), s_configuration);
+    modularity::ioc()->registerExport<IImagesExportConfiguration>(moduleName(), s_configuration);
 }
 
 void ImagesExportModule::resolveImports()
 {
-    auto writers = framework::ioc()->resolve<INotationWritersRegister>(moduleName());
+    auto writers = modularity::ioc()->resolve<INotationWritersRegister>(moduleName());
     if (writers) {
         writers->reg({ "pdf" }, std::make_shared<PdfWriter>());
         writers->reg({ "svg" }, std::make_shared<SvgWriter>());

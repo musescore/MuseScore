@@ -22,56 +22,28 @@
 #ifndef MU_WORKSPACE_WORKSPACETYPES_H
 #define MU_WORKSPACE_WORKSPACETYPES_H
 
-#include <vector>
-#include <map>
-
-#include "val.h"
-
 namespace mu::workspace {
-enum class WorkspaceTag
-{
-    Unknown,
-    UiArrangement,
-    Settings,
+static const std::string DEFAULT_WORKSPACE_NAME("Default");
+
+enum class DataKey {
+    Undefined = 0,
+    UiSettings,
+    UiStates,
+    UiToolConfigs,
     Palettes,
-    Toolbar
 };
-using WorkspaceTagList = std::vector<WorkspaceTag>;
 
-inline bool containsTag(const WorkspaceTagList& list, const WorkspaceTag& tag)
+inline std::string key_to_string(DataKey key)
 {
-    return std::find(list.cbegin(), list.cend(), tag) != list.cend();
+    switch (key) {
+    case DataKey::Undefined: return std::string();
+    case DataKey::UiSettings: return std::string("ui_settings");
+    case DataKey::UiStates: return std::string("ui_states");
+    case DataKey::UiToolConfigs: return std::string("ui_toolconfigs");
+    case DataKey::Palettes: return std::string("palettes");
+    }
+    return std::string();
 }
-
-struct AbstractData
-{
-    virtual ~AbstractData() = default;
-
-    WorkspaceTag tag;
-    std::string name;
-};
-
-using AbstractDataPtr = std::shared_ptr<AbstractData>;
-using AbstractDataPtrList = std::vector<AbstractDataPtr>;
-
-//! NOTE Only data associations with framework.
-//! Other data must be in the appropriate modules.
-
-struct SettingsData : public AbstractData
-{
-    std::map<std::string /*key*/, Val> values;
-};
-
-using SettingsDataPtr = std::shared_ptr<SettingsData>;
-
-struct ToolbarData : public AbstractData
-{
-    std::vector<std::string /*action*/> actions;
-};
-
-using ToolbarDataPtr = std::shared_ptr<ToolbarData>;
-
-static constexpr std::string_view DEFAULT_WORKSPACE_NAME("Default");
 }
 
 #endif // MU_WORKSPACE_WORKSPACETYPES_H

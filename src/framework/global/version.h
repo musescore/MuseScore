@@ -24,18 +24,15 @@
 
 #include <string>
 
-namespace mu {
-namespace framework {
+namespace mu::framework {
 class Version
 {
 public:
-
     static bool unstable();
     static std::string version();
     static std::string fullVersion();  // e.g. 3.4.0-Beta
     static std::string revision();
 };
-}
 }
 
 #endif // MU_FRAMEWORK_VERSION_H

@@ -31,15 +31,15 @@ Rectangle {
         id: autobot
     }
 
-    StyledComboBox {
+    Dropdown {
         id: selectTestCase
         anchors.left: parent.left
         anchors.right: parent.right
-        textRoleName: "name"
-        valueRoleName: "name"
+        textRole: "name"
+        valueRole: "name"
 
         model: autobot.testCases
-        onValueChanged: autobot.setCurrentTestCase(value)
+        onCurrentValueChanged: autobot.setCurrentTestCase(selectTestCase.currentValue)
     }
 
     Row {

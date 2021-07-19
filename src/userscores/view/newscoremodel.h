@@ -28,7 +28,7 @@
 
 #include "iuserscoresconfiguration.h"
 
-#include "notation/inotationcreator.h"
+#include "project/iprojectcreator.h"
 #include "notation/notationtypes.h"
 #include "context/iglobalcontext.h"
 
@@ -38,7 +38,7 @@ class NewScoreModel : public QObject
     Q_OBJECT
 
     INJECT(scores, IUserScoresConfiguration, configuration)
-    INJECT(scores, notation::INotationCreator, notationCreator)
+    INJECT(scores, project::IProjectCreator, notationCreator)
     INJECT(scores, context::IGlobalContext, globalContext)
 
 public:
@@ -48,7 +48,7 @@ public:
     Q_INVOKABLE bool createScore(const QVariant& info);
 
 private:
-    notation::ScoreCreateOptions parseOptions(const QVariantMap& info) const;
+    project::ProjectCreateOptions parseOptions(const QVariantMap& info) const;
     notation::DurationType noteIconToDurationType(int noteIconCode) const;
     void updatePreferredScoreCreationMode(bool isScoreCreatedFromInstruments);
 };

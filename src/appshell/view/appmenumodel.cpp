@@ -84,7 +84,13 @@ void AppMenuModel::setupConnections()
         emit itemsChanged();
     });
 
-    workspacesManager()->currentWorkspace().ch.onReceive(this, [this](const IWorkspacePtr&) {
+    workspacesManager()->currentWorkspaceChanged().onNotify(this, [this]() {
+        MenuItem& workspacesItem = findMenu("select-workspace");
+        workspacesItem.subitems = workspacesItems();
+        emit itemsChanged();
+    });
+
+    workspacesManager()->workspacesListChanged().onNotify(this, [this]() {
         MenuItem& workspacesItem = findMenu("select-workspace");
         workspacesItem.subitems = workspacesItems();
         emit itemsChanged();
@@ -470,25 +476,20 @@ MenuItemList AppMenuModel::workspacesItems() const
 {
     MenuItemList items;
 
-    RetVal<IWorkspacePtrList> workspaces = workspacesManager()->workspaces();
-    if (!workspaces.ret) {
-        return items;
-    }
+    IWorkspacePtrList workspaces = workspacesManager()->workspaces();
+    IWorkspacePtr currentWorkspace = workspacesManager()->currentWorkspace();
 
-    IWorkspacePtr currentWorkspace = workspacesManager()->currentWorkspace().val;
-
-    std::sort(workspaces.val.begin(), workspaces.val.end(), [](const IWorkspacePtr& workspace1, const IWorkspacePtr& workspace2) {
+    std::sort(workspaces.begin(), workspaces.end(), [](const IWorkspacePtr& workspace1, const IWorkspacePtr& workspace2) {
         return workspace1->name() < workspace2->name();
     });
 
-    for (const IWorkspacePtr& workspace : workspaces.val) {
+    for (const IWorkspacePtr& workspace : workspaces) {
         MenuItem item = uiactionsRegister()->action("select-workspace");
         item.title = QString::fromStdString(workspace->title());
         item.args = ActionData::make_arg1<std::string>(workspace->name());
 
-        bool isCurrentWorkspace = workspace == currentWorkspace;
         item.selectable = true;
-        item.selected = isCurrentWorkspace;
+        item.selected = (workspace == currentWorkspace);
         item.state.enabled = true;
 
         items << item;

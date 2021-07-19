@@ -100,7 +100,7 @@ public:
     int mscoreVersion() const { return Ms::version(); }
     int mscoreMajorVersion() const { return majorVersion(); }
     int mscoreMinorVersion() const { return minorVersion(); }
-    int mscoreUpdateVersion() const { return updateVersion(); }
+    int mscoreUpdateVersion() const { return patchVersion(); }
     qreal mscoreDPI() const { return DPI; }
 };
 } // namespace Ms

@@ -24,7 +24,9 @@
 
 #include <cmath>
 
-#include "style.h"
+#include "translation.h"
+#include "style/style.h"
+
 #include "system.h"
 #include "measure.h"
 #include "xml.h"
@@ -462,7 +464,7 @@ QString Trill::trillTypeName() const
 
 QString Trill::trillTypeUserName() const
 {
-    return qApp->translate("trillType", trillTable[static_cast<int>(trillType())].userName.toUtf8().constData());
+    return qtrc("trillType", trillTable[static_cast<int>(trillType())].userName.toUtf8().constData());
 }
 
 //---------------------------------------------------------

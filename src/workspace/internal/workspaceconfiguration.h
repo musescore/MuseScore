@@ -39,11 +39,11 @@ public:
 
     io::paths workspacePaths() const override;
 
-    io::path userWorkspacesDirPath() const override;
-    io::path userWorkspacePath(const std::string& workspaceName) const override;
+    io::path userWorkspacesPath() const override;
 
-    ValCh<std::string> currentWorkspaceName() const override;
+    std::string currentWorkspaceName() const override;
     void setCurrentWorkspaceName(const std::string& workspaceName) override;
+    async::Channel<std::string> currentWorkspaceNameChanged() const override;
 
 private:
     io::paths extensionsPaths() const;

@@ -36,6 +36,9 @@ Item {
 
     property alias font: textField.font
 
+    property alias navigation: navCtrl
+    property alias accessible: navCtrl.accessible
+
     signal valueEdited(var newValue)
 
     implicitWidth: textField.contentWidth
@@ -43,13 +46,25 @@ Item {
 
     opacity: enabled ? 1 : ui.theme.itemOpacityDisabled
 
+    function ensureActiveFocus() {
+        if (!root.activeFocus) {
+            root.forceActiveFocus()
+        }
+    }
+
+    onActiveFocusChanged: {
+        if (activeFocus) {
+            textField.forceActiveFocus()
+        }
+    }
+
     QtObject {
         id: privateProperties
 
         function pad(value) {
             var str = value.toString()
 
-            if (!addLeadingZeros) {
+            if (!root.addLeadingZeros) {
                 return str;
             }
 
@@ -63,6 +78,22 @@ Item {
 
     onValueChanged: {
         textField.text = privateProperties.pad(value)
+    }
+
+    NavigationControl {
+        id: navCtrl
+        name: root.objectName !== "" ? root.objectName : "NumberInputField"
+        enabled: root.enabled && root.visible
+
+        accessible.role: MUAccessible.EditableText
+        accessible.name: textField.text
+        accessible.visualItem: root
+
+        onActiveChanged: {
+            if (navCtrl.active) {
+                root.ensureActiveFocus()
+            }
+        }
     }
 
     TextField {

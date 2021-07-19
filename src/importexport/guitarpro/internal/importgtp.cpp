@@ -25,6 +25,7 @@
 #include <cmath>
 #include <QTextCodec>
 #include <QDebug>
+#include <QRegularExpression>
 
 #include "importptb.h"
 
@@ -770,8 +771,8 @@ void GuitarPro::readLyrics()
     gpLyrics.beatCounter = 0;
 
     QString lyrics = readWordPascalString();
-    lyrics.replace(QRegExp("\n"), " ");
-    lyrics.replace(QRegExp("\r"), " ");
+    lyrics.replace(QRegularExpression("\n"), " ");
+    lyrics.replace(QRegularExpression("\r"), " ");
     auto sl = lyrics.split(" ", Qt::KeepEmptyParts);
     //gpLyrics.lyrics = lyrics.split(" ", Qt::KeepEmptyParts);
     for (auto& str : sl) {
@@ -1919,7 +1920,7 @@ bool GuitarPro1::readNote(int string, Note* note)
 
             int grace_len = MScore::division / 8;
             if (duration == 1) {
-                grace_len = MScore::division / 8;       //32th
+                grace_len = MScore::division / 8;       //32nd
             } else if (duration == 2) {
                 grace_len = MScore::division / 6;       //24th
             } else if (duration == 3) {
@@ -2974,7 +2975,7 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
             continue;
         }
         QMultiMap<int, int> tracks;
-        Score* pscore = new Score(score);
+        Score* pscore = score->createScore();
         //TODO-ws		pscore->showLyrics = score->showLyrics;
         pscore->style().set(Sid::createMultiMeasureRests, false);
         pscore->style().set(Sid::ArpeggioHiddenInStdIfTab, true);

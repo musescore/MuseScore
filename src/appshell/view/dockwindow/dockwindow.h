@@ -74,6 +74,9 @@ public:
 
     Q_INVOKABLE void loadPage(const QString& uri);
 
+    bool isDockShown(const QString& dockName) const;
+    void toggleDockVisibility(const QString& dockName);
+
 public slots:
     void setMainToolBarDockingHolder(DockToolBarHolder* mainToolBarDockingHolder);
 
@@ -107,6 +110,7 @@ private:
     void restorePageState(const QString& pageName);
 
     void resetWindowState();
+    bool restoreLayout(const QByteArray& layout, KDDockWidgets::RestoreOptions options = KDDockWidgets::RestoreOptions());
 
     void initDocks(DockPage* page);
 
@@ -125,6 +129,8 @@ private:
     uicomponents::QmlListProperty<DockPage> m_pages;
     DockToolBarHolder* m_currentToolBarDockingHolder = nullptr;
     DockPanelHolder* m_currentPanelDockingHolder = nullptr;
+
+    bool m_quiting = false;
 };
 }
 

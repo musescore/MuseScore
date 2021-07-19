@@ -39,12 +39,11 @@ static const Settings::Key EXTENSIONS_JSON(module_name, "extensions/extensionsJs
 static const Settings::Key CHECK_FOR_UPDATE(module_name, "extensions/checkForUpdate");
 static const Settings::Key USER_EXTENSIONS_PATH(module_name, "application/paths/myExtensions");
 
-static const io::path EXTENSIONS_DIR("Extensions");
 static const io::path WORKSPACES_DIR("workspaces");
 static const io::path INSTRUMENTS_DIR("instruments");
 static const io::path TEMPLATES_DIR("templates");
 
-static const QString WORKSPACE_FILTER("*.workspace");
+static const QString WORKSPACE_FILTER("*.mws");
 static const QString MSCZ_FILTER("*.mscz");
 static const QString MSCX_FILTER(".mscx");
 static const QString XML_FILTER("*.xml");
@@ -53,18 +52,16 @@ void ExtensionsConfiguration::init()
 {
     settings()->setDefaultValue(CHECK_FOR_UPDATE, Val(true));
 
-    settings()->setDefaultValue(USER_EXTENSIONS_PATH, Val((globalConfiguration()->appDataPath() + EXTENSIONS_DIR).toStdString()));
+    settings()->setDefaultValue(USER_EXTENSIONS_PATH, Val((globalConfiguration()->userDataPath() + "/Extensions")));
     settings()->valueChanged(USER_EXTENSIONS_PATH).onReceive(nullptr, [this](const Val& val) {
-        m_extensionsPathChanged.send(val.toString());
+        m_userExtensionsPathChanged.send(val.toString());
     });
+    fileSystem()->makePath(userExtensionsPath());
 
     settings()->valueChanged(EXTENSIONS_JSON).onReceive(nullptr, [this](const Val& val) {
         ExtensionsHash extensionHash = parseExtensionConfig(val.toQString().toLocal8Bit());
         m_extensionHashChanged.send(extensionHash);
     });
-
-    fileSystem()->makePath(extensionsPath().val);
-    fileSystem()->makePath(extensionsDataPath());
 }
 
 QUrl ExtensionsConfiguration::extensionsUpdateUrl() const
@@ -85,7 +82,7 @@ bool ExtensionsConfiguration::needCheckForUpdate() const
 
 void ExtensionsConfiguration::setNeedCheckForUpdate(bool needCheck)
 {
-    settings()->setValue(CHECK_FOR_UPDATE, Val(needCheck));
+    settings()->setSharedValue(CHECK_FOR_UPDATE, Val(needCheck));
 }
 
 ValCh<ExtensionsHash> ExtensionsConfiguration::extensions() const
@@ -110,25 +107,25 @@ Ret ExtensionsConfiguration::setExtensions(const ExtensionsHash& extensions) con
     QJsonDocument jsonDoc(jsonArray);
 
     Val value(jsonDoc.toJson(QJsonDocument::Compact).constData());
-    settings()->setValue(EXTENSIONS_JSON, value);
+    settings()->setSharedValue(EXTENSIONS_JSON, value);
 
     return make_ret(Err::NoError);
 }
 
 io::path ExtensionsConfiguration::extensionPath(const QString& extensionCode) const
 {
-    return extensionsPath().val + "/" + extensionCode;
+    return userExtensionsPath() + "/" + extensionCode;
 }
 
 io::path ExtensionsConfiguration::extensionWorkspacesPath(const QString& extensionCode) const
 {
-    return extensionsPath().val + "/" + extensionCode + "/" + WORKSPACES_DIR;
+    return userExtensionsPath() + "/" + extensionCode + "/" + WORKSPACES_DIR;
 }
 
 io::path ExtensionsConfiguration::extensionArchivePath(const QString& extensionCode) const
 {
     io::path fileName = extensionFileName(extensionCode);
-    return extensionsDataPath() + "/" + fileName;
+    return userExtensionsPath() + "/" + fileName;
 }
 
 ExtensionsHash ExtensionsConfiguration::parseExtensionConfig(const QByteArray& json) const
@@ -179,7 +176,7 @@ io::paths ExtensionsConfiguration::fileList(const io::path& directory, const QSt
 
 io::path ExtensionsConfiguration::extensionInstrumentsPath(const QString& extensionCode) const
 {
-    return extensionsPath().val + "/" + extensionCode + "/" + INSTRUMENTS_DIR;
+    return userExtensionsPath() + "/" + extensionCode + "/" + INSTRUMENTS_DIR;
 }
 
 io::paths ExtensionsConfiguration::extensionWorkspaceFiles(const QString& extensionCode) const
@@ -248,26 +245,22 @@ io::paths ExtensionsConfiguration::templatesPaths() const
     return paths;
 }
 
-ValCh<io::path> ExtensionsConfiguration::extensionsPath() const
+io::path ExtensionsConfiguration::userExtensionsPath() const
 {
-    ValCh<io::path> result;
-    result.ch = m_extensionsPathChanged;
-    result.val = settings()->value(USER_EXTENSIONS_PATH).toString();
-
-    return result;
+    return settings()->value(USER_EXTENSIONS_PATH).toPath();
 }
 
-void ExtensionsConfiguration::setExtensionsPath(const io::path& path)
+void ExtensionsConfiguration::setUserExtensionsPath(const io::path& path)
 {
-    settings()->setValue(USER_EXTENSIONS_PATH, Val(path.toStdString()));
+    settings()->setSharedValue(USER_EXTENSIONS_PATH, Val(path));
+}
+
+async::Channel<io::path> ExtensionsConfiguration::userExtensionsPathChanged() const
+{
+    return m_userExtensionsPathChanged;
 }
 
 io::path ExtensionsConfiguration::extensionTemplatesPath(const QString& extensionCode) const
 {
-    return extensionsPath().val + "/" + extensionCode + "/" + TEMPLATES_DIR;
-}
-
-io::path ExtensionsConfiguration::extensionsDataPath() const
-{
-    return globalConfiguration()->userAppDataPath() + EXTENSIONS_DIR;
+    return userExtensionsPath() + "/" + extensionCode + "/" + TEMPLATES_DIR;
 }

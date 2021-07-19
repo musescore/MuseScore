@@ -24,11 +24,12 @@
 
 #include <vector>
 #include <memory>
+
 #include "modularity/imoduleexport.h"
+#include "async/promise.h"
 
 #include "synthtypes.h"
-#include "io/path.h"
-#include "async/notification.h"
+#include "audiotypes.h"
 
 namespace mu::audio::synth {
 class ISoundFontsProvider : MODULE_EXPORT_INTERFACE
@@ -37,10 +38,8 @@ class ISoundFontsProvider : MODULE_EXPORT_INTERFACE
 public:
     virtual ~ISoundFontsProvider() = default;
 
-    virtual std::vector<io::path> soundFontPathsForSynth(const SynthName& synth) const = 0;
-    virtual async::Notification soundFontPathsForSynthChanged(const SynthName& synth) const = 0;
-
-    virtual std::vector<io::path> soundFontPaths(SoundFontFormats formats) const = 0;
+    virtual void refreshPaths() = 0;
+    virtual async::Promise<SoundFontPaths> soundFontPaths(SoundFontFormats formats) const = 0;
 };
 
 using ISoundFontsProviderPtr = std::shared_ptr<ISoundFontsProvider>;

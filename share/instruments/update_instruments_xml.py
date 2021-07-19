@@ -7,10 +7,6 @@ import requests
 import sys
 import xml.etree.ElementTree as ET
 
-parser = argparse.ArgumentParser(description='Fetch the latest spreadsheet and generate instruments.xml.')
-parser.add_argument('-c', '--cached', action='store_true', help='Use cached version instead of downloading')
-args = parser.parse_args()
-
 spreadsheet_id = '1SwqZb8lq5rfv5regPSA10drWjUAoi65EuMoYtG-4k5s'
 
 sheet_ids = {
@@ -27,6 +23,11 @@ sheet_ids = {
     'GM+GS_Percussion':         '1216482735',
 }
 
+parser = argparse.ArgumentParser(description='Fetch the latest spreadsheet and generate instruments.xml.')
+parser.add_argument('-c', '--cached', action='store_true', help='Use cached version instead of downloading')
+parser.add_argument('-d', '--download', action='append', choices=sheet_ids.keys(), help='Override cached option for a specific sheet')
+args = parser.parse_args()
+
 null='[null]' # value used in TSV when attributes or tags are to be omitted in XML
 list_sep=';' # character used as separator in TSV when a cell contains multiple values
 
@@ -36,7 +37,7 @@ def eprint(*args, **kwargs):
 def download_google_spreadsheet(sheet):
     assert sheet in sheet_ids.keys()
     path = 'tsv/download/{sheet}.tsv'.format(sheet=sheet)
-    if args.cached and os.path.isfile(path):
+    if args.cached and os.path.isfile(path) and (args.download is None or sheet not in args.download):
         eprint('Using cached spreadsheet:', path)
     else:
         eprint('Downloading spreadsheet: ', sheet)
@@ -159,12 +160,17 @@ for group in groups.values():
     for instrument in instruments[group['id']].values():
         el = ET.SubElement(g_el, 'Instrument')
         to_attribute(el, instrument, 'id')
+        to_subelement(el, instrument, 'init') # must be first subelement
         to_subelement(el, instrument, 'family')
         to_comment(el, instrument, 'comment')
-        to_subelement(el, instrument, 'trackName')
-        to_subelement(el, instrument, 'longName')
-        to_subelement(el, instrument, 'shortName')
-        to_subelement(el, instrument, 'init')
+        if instrument["ddName"] != '[hide]':
+             to_subelement(el, instrument, 'trackName')
+             to_subelement(el, instrument, 'longName')
+             to_subelement(el, instrument, 'shortName')
+             if instrument["ddName"]:
+                 dd_el = ET.SubElement(el, 'dropdownName')
+                 dd_el.text = instrument["ddName"]
+                 to_attribute(dd_el, instrument, 'ddMeaning', 'meaning')
         to_subelement(el, instrument, 'description')
         to_subelement(el, instrument, 'musicXMLid')
 

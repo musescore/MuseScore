@@ -29,7 +29,7 @@ using namespace mu;
 using namespace mu::workspace;
 using namespace mu::framework;
 
-static const Settings::Key CURRENT_WORKSPACE("workspace", "application/workspace");
+static const Settings::Key CURRENT_WORKSPACE("workspace", "workspace");
 
 void WorkspaceConfiguration::init()
 {
@@ -42,10 +42,7 @@ void WorkspaceConfiguration::init()
 io::paths WorkspaceConfiguration::workspacePaths() const
 {
     io::paths paths;
-
-    io::path sharePath = globalConfiguration()->appDataPath() + "/workspaces";
-    paths.push_back(sharePath);
-    paths.push_back(userWorkspacesDirPath());
+    paths.push_back(userWorkspacesPath());
 
     std::vector<io::path> extensionsPath = this->extensionsPaths();
     paths.insert(paths.end(), extensionsPath.begin(), extensionsPath.end());
@@ -53,28 +50,25 @@ io::paths WorkspaceConfiguration::workspacePaths() const
     return paths;
 }
 
-io::path WorkspaceConfiguration::userWorkspacesDirPath() const
+io::path WorkspaceConfiguration::userWorkspacesPath() const
 {
     return globalConfiguration()->userAppDataPath() + "/workspaces";
 }
 
-io::path WorkspaceConfiguration::userWorkspacePath(const std::string& workspaceName) const
+std::string WorkspaceConfiguration::currentWorkspaceName() const
 {
-    return userWorkspacesDirPath() + "/" + workspaceName + ".workspace";
-}
-
-ValCh<std::string> WorkspaceConfiguration::currentWorkspaceName() const
-{
-    ValCh<std::string> result;
-    result.ch = m_currentWorkspaceNameChanged;
-    result.val = settings()->value(CURRENT_WORKSPACE).toString();
-
-    return result;
+    return settings()->value(CURRENT_WORKSPACE).toString();
 }
 
 void WorkspaceConfiguration::setCurrentWorkspaceName(const std::string& workspaceName)
 {
-    settings()->setValue(CURRENT_WORKSPACE, Val(workspaceName));
+    //! NOTE Workspace selection does not need to be synchronized between instances
+    settings()->setLocalValue(CURRENT_WORKSPACE, Val(workspaceName));
+}
+
+async::Channel<std::string> WorkspaceConfiguration::currentWorkspaceNameChanged() const
+{
+    return m_currentWorkspaceNameChanged;
 }
 
 io::paths WorkspaceConfiguration::extensionsPaths() const

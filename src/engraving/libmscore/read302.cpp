@@ -20,13 +20,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "style/style.h"
+#include "style/defaultstyle.h"
+
+#include "compat/chordlist.h"
+
 #include "xml.h"
 #include "score.h"
 #include "staff.h"
 #include "revisions.h"
 #include "part.h"
 #include "page.h"
-#include "style.h"
 #include "scorefont.h"
 #include "audio.h"
 #include "sig.h"
@@ -37,6 +41,7 @@
 #include "measurebase.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -106,7 +111,8 @@ bool Score::read(XmlReader& e)
             _markIrregularMeasures = e.readInt();
         } else if (tag == "Style") {
             qreal sp = style().value(Sid::spatium).toDouble();
-            style().load(e);
+            compat::ReadChordListHook clhook(this);
+            style().load(e, &clhook);
             // if (_layoutMode == LayoutMode::FLOAT || _layoutMode == LayoutMode::SYSTEM) {
             if (_layoutMode == LayoutMode::FLOAT) {
                 // style should not change spatium in
@@ -178,11 +184,11 @@ bool Score::read(XmlReader& e)
             } else {
                 e.tracks().clear();             // ???
                 MasterScore* m = masterScore();
-                Score* s       = new Score(m, MScore::baseStyle());
+                Score* s = m->createScore();
                 int defaultsVersion = m->style().defaultStyleVersion();
-                s->setStyle(*MStyle::resolveStyleDefaults(defaultsVersion));
+                s->setStyle(DefaultStyle::resolveStyleDefaults(defaultsVersion));
                 s->style().setDefaultStyleVersion(defaultsVersion);
-                Excerpt* ex    = new Excerpt(m);
+                Excerpt* ex = new Excerpt(m);
 
                 ex->setPartScore(s);
                 e.setLastMeasure(nullptr);
@@ -384,7 +390,7 @@ Score::FileError MasterScore::read302(XmlReader& e)
                 score = this;
                 top   = false;
             } else {
-                score = new MasterScore();
+                score = new MasterScore(m_project);
                 score->setMscVersion(mscVersion());
                 addMovement(score);
             }
@@ -401,26 +407,5 @@ Score::FileError MasterScore::read302(XmlReader& e)
         }
     }
     return FileError::FILE_NO_ERROR;
-}
-
-MStyle* styleDefaults301()
-{
-    static MStyle* result = nullptr;
-
-    if (result) {
-        return result;
-    }
-
-    result = new MStyle();
-
-    QFile baseDefaults(":/styles/legacy-style-defaults-v3.mss");
-
-    if (!baseDefaults.open(QIODevice::ReadOnly)) {
-        return result;
-    }
-
-    result->load(&baseDefaults);
-
-    return result;
 }
 }

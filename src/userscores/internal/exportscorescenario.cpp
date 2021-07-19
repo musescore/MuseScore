@@ -25,12 +25,11 @@
 #include "translation.h"
 
 using namespace mu::userscores;
+using namespace mu::project;
 using namespace mu::notation;
 using namespace mu::framework;
 
-using UnitType = INotationWriter::UnitType;
-
-std::vector<UnitType> ExportScoreScenario::supportedUnitTypes(const ExportType& exportType) const
+std::vector<INotationWriter::UnitType> ExportScoreScenario::supportedUnitTypes(const ExportType& exportType) const
 {
     IF_ASSERT_FAILED(!exportType.suffixes.isEmpty()) {
         return {};
@@ -44,7 +43,8 @@ std::vector<UnitType> ExportScoreScenario::supportedUnitTypes(const ExportType& 
     return writer->supportedUnitTypes();
 }
 
-bool ExportScoreScenario::exportScores(const INotationPtrList& notations, const ExportType& exportType, UnitType unitType) const
+bool ExportScoreScenario::exportScores(const INotationPtrList& notations, const ExportType& exportType,
+                                       INotationWriter::UnitType unitType) const
 {
     IF_ASSERT_FAILED(!exportType.suffixes.isEmpty()) {
         return false;
@@ -72,7 +72,7 @@ bool ExportScoreScenario::exportScores(const INotationPtrList& notations, const 
     m_fileConflictPolicy = isCreatingOnlyOneFile ? FileConflictPolicy::ReplaceAll : FileConflictPolicy::Undefined;
 
     switch (unitType) {
-    case UnitType::PER_PAGE: {
+    case INotationWriter::UnitType::PER_PAGE: {
         for (INotationPtr notation : notations) {
             for (int page = 0; page < notation->elements()->msScore()->pages().size(); page++) {
                 INotationWriter::Options options {
@@ -94,7 +94,7 @@ bool ExportScoreScenario::exportScores(const INotationPtrList& notations, const 
             }
         }
     } break;
-    case UnitType::PER_PART: {
+    case INotationWriter::UnitType::PER_PART: {
         for (INotationPtr notation : notations) {
             INotationWriter::Options options {
                 { INotationWriter::OptionKey::UNIT_TYPE, Val(static_cast<int>(unitType)) },
@@ -113,7 +113,7 @@ bool ExportScoreScenario::exportScores(const INotationPtrList& notations, const 
             doExportLoop(definitivePath, exportFunction);
         }
     } break;
-    case UnitType::MULTI_PART: {
+    case INotationWriter::UnitType::MULTI_PART: {
         INotationWriter::Options options {
             { INotationWriter::OptionKey::UNIT_TYPE, Val(static_cast<int>(unitType)) },
             { INotationWriter::OptionKey::TRANSPARENT_BACKGROUND, Val(imagesExportConfiguration()->exportPngWithTransparentBackground()) }
@@ -130,14 +130,14 @@ bool ExportScoreScenario::exportScores(const INotationPtrList& notations, const 
     return true;
 }
 
-bool ExportScoreScenario::isCreatingOnlyOneFile(const INotationPtrList& notations, UnitType unitType) const
+bool ExportScoreScenario::isCreatingOnlyOneFile(const INotationPtrList& notations, INotationWriter::UnitType unitType) const
 {
     switch (unitType) {
-    case UnitType::PER_PAGE:
+    case INotationWriter::UnitType::PER_PAGE:
         return notations.size() == 1 && notations.front()->elements()->pages().size() == 1;
-    case UnitType::PER_PART:
+    case INotationWriter::UnitType::PER_PART:
         return notations.size() == 1;
-    case UnitType::MULTI_PART:
+    case INotationWriter::UnitType::MULTI_PART:
         return true;
     }
 
@@ -149,17 +149,18 @@ bool ExportScoreScenario::isMainNotation(INotationPtr notation) const
     return context()->currentMasterNotation()->notation() == notation;
 }
 
-mu::io::path ExportScoreScenario::askExportPath(const INotationPtrList& notations, const ExportType& exportType, UnitType unitType) const
+mu::io::path ExportScoreScenario::askExportPath(const INotationPtrList& notations, const ExportType& exportType,
+                                                INotationWriter::UnitType unitType) const
 {
-    IMasterNotationPtr currentMasterNotation = context()->currentMasterNotation();
+    INotationProjectPtr currentNotationProject = context()->currentNotationProject();
 
-    io::path suggestedPath = configuration()->scoresPath().val;
-    io::path masterNotationDirPath = io::dirpath(currentMasterNotation->path());
-    if (masterNotationDirPath != "") {
-        suggestedPath = masterNotationDirPath;
+    io::path suggestedPath = configuration()->userScoresPath();
+    io::path notationProjectDirPath = io::dirpath(currentNotationProject->path());
+    if (notationProjectDirPath != "") {
+        suggestedPath = notationProjectDirPath;
     }
 
-    suggestedPath += "/" + currentMasterNotation->metaInfo().title;
+    suggestedPath += "/" + currentNotationProject->metaInfo().title;
 
     // If only one file will be created, the filename will be exactly what the user
     // types in the save dialog and therefore we can put the file dialog in charge of
@@ -168,7 +169,7 @@ mu::io::path ExportScoreScenario::askExportPath(const INotationPtrList& notation
     bool isCreatingOnlyOneFile = this->isCreatingOnlyOneFile(notations, unitType);
     bool isExportingOnlyOneScore = notations.size() == 1;
 
-    if (unitType == UnitType::MULTI_PART && !isExportingOnlyOneScore) {
+    if (unitType == INotationWriter::UnitType::MULTI_PART && !isExportingOnlyOneScore) {
         bool containsMaster = std::find_if(notations.cbegin(), notations.cend(), [this](INotationPtr notation) {
             return isMainNotation(notation);
         }) != notations.cend();
@@ -183,7 +184,7 @@ mu::io::path ExportScoreScenario::askExportPath(const INotationPtrList& notation
             suggestedPath += "-" + io::escapeFileName(notations.front()->metaInfo().title);
         }
 
-        if (unitType == UnitType::PER_PAGE && isCreatingOnlyOneFile) {
+        if (unitType == INotationWriter::UnitType::PER_PAGE && isCreatingOnlyOneFile) {
             // So there is only one page
             suggestedPath += "-1";
         }

@@ -77,6 +77,7 @@ path completebasename(const path& path);
 path dirname(const path& path);
 path dirpath(const path& path);
 
+bool isAllowedFileName(const path& fn);
 path escapeFileName(const path& fn);
 
 paths pathsFromStrings(const QStringList& list);

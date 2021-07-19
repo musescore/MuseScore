@@ -25,9 +25,14 @@
  Implementation of classes Note and ShadowNote.
 */
 
+#include "note.h"
+
 #include <assert.h>
 
-#include "note.h"
+#include "config.h"
+#include "translation.h"
+#include "draw/brush.h"
+
 #include "score.h"
 #include "chord.h"
 #include "sym.h"
@@ -59,7 +64,7 @@
 #include "bend.h"
 #include "accidental.h"
 #include "page.h"
-#include "icon.h"
+#include "actionicon.h"
 #include "notedot.h"
 #include "spanner.h"
 #include "glissando.h"
@@ -69,7 +74,6 @@
 #include <QtMath>
 #include <QVector2D>
 
-#include "config.h"
 #include "log.h"
 
 #ifdef USE_SCORE_ACCESSIBLE_TREE
@@ -389,7 +393,7 @@ static NoteHeadName noteHeadTypeNames[] = {
 
 QString NoteHead::scheme2userName(NoteHead::Scheme scheme)
 {
-    return qApp->translate("noteheadschemes", noteHeadSchemeNames[int(scheme) + 1].username);
+    return qtrc("noteheadschemes", noteHeadSchemeNames[int(scheme) + 1].username);
 }
 
 //---------------------------------------------------------
@@ -398,7 +402,7 @@ QString NoteHead::scheme2userName(NoteHead::Scheme scheme)
 
 QString NoteHead::group2userName(NoteHead::Group group)
 {
-    return qApp->translate("noteheadnames", noteHeadGroupNames[int(group)].username);
+    return qtrc("noteheadnames", noteHeadGroupNames[int(group)].username);
 }
 
 //---------------------------------------------------------
@@ -407,7 +411,7 @@ QString NoteHead::group2userName(NoteHead::Group group)
 
 QString NoteHead::type2userName(NoteHead::Type type)
 {
-    return qApp->translate("noteheadnames", noteHeadTypeNames[int(type) + 1].username);
+    return qtrc("noteheadnames", noteHeadTypeNames[int(type) + 1].username);
 }
 
 //---------------------------------------------------------
@@ -919,9 +923,9 @@ int Note::tpc() const
 QString Note::tpcUserName(const int tpc, const int pitch, const bool explicitAccidental)
 {
     const auto pitchStr
-        = qApp->translate("InspectorAmbitus",
-                          tpc2name(tpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO, explicitAccidental).replace("b", "♭").replace("#",
-                                                                                                                                      "♯").toUtf8().constData());
+        = qtrc("InspectorAmbitus",
+               tpc2name(tpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO, explicitAccidental).replace("b", "♭").replace("#",
+                                                                                                                           "♯").toUtf8().constData());
     const auto octaveStr = QString::number(((pitch - static_cast<int>(tpc2alter(tpc))) / PITCH_DELTA_OCTAVE) - 1);
 
     return pitchStr + (explicitAccidental ? " " : "") + octaveStr;
@@ -1395,7 +1399,7 @@ void Note::draw(mu::draw::Painter* painter) const
             if (fretConflict() && !score()->printing() && score()->showUnprintable()) {                //on fret conflict, draw on red background
                 painter->save();
                 painter->setPen(Qt::red);
-                painter->setBrush(QBrush(QColor(Qt::red)));
+                painter->setBrush(mu::draw::Brush(QColor(Qt::red)));
                 painter->drawRect(bb);
                 painter->restore();
             }
@@ -1828,30 +1832,28 @@ bool Note::acceptDrop(EditData& data) const
            || type == ElementType::CHORD
            || type == ElementType::HARMONY
            || type == ElementType::DYNAMIC
-           || (type == ElementType::ICON && toIcon(e)->iconType() == IconType::ACCIACCATURA)
-           || (type == ElementType::ICON && toIcon(e)->iconType() == IconType::APPOGGIATURA)
-           || (type == ElementType::ICON && toIcon(e)->iconType() == IconType::GRACE4)
-           || (type == ElementType::ICON && toIcon(e)->iconType() == IconType::GRACE16)
-           || (type == ElementType::ICON && toIcon(e)->iconType() == IconType::GRACE32)
-           || (type == ElementType::ICON && toIcon(e)->iconType() == IconType::GRACE8_AFTER)
-           || (type == ElementType::ICON && toIcon(e)->iconType() == IconType::GRACE16_AFTER)
-           || (type == ElementType::ICON && toIcon(e)->iconType() == IconType::GRACE32_AFTER)
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::ACCIACCATURA)
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::APPOGGIATURA)
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::GRACE4)
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::GRACE16)
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::GRACE32)
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::GRACE8_AFTER)
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::GRACE16_AFTER)
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::GRACE32_AFTER)
            || (noteType() == NoteType::NORMAL && type == ElementType::BAGPIPE_EMBELLISHMENT)
-           || (type == ElementType::ICON && toIcon(e)->iconType() == IconType::SBEAM)
-           || (type == ElementType::ICON && toIcon(e)->iconType() == IconType::MBEAM)
-           || (type == ElementType::ICON && toIcon(e)->iconType() == IconType::NBEAM)
-           || (type == ElementType::ICON && toIcon(e)->iconType() == IconType::BEAM32)
-           || (type == ElementType::ICON && toIcon(e)->iconType() == IconType::BEAM64)
-           || (type == ElementType::ICON && toIcon(e)->iconType() == IconType::AUTOBEAM)
-           || (type == ElementType::ICON && toIcon(e)->iconType() == IconType::PARENTHESES)
-           || (type == ElementType::ICON && toIcon(e)->iconType() == IconType::BRACES)
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_START)
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_MID)
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_NONE)
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_BEGIN_32)
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_BEGIN_64)
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_AUTO)
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::PARENTHESES)
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BRACES)
            || (type == ElementType::SYMBOL)
            || (type == ElementType::CLEF)
            || (type == ElementType::KEYSIG)
            || (type == ElementType::TIMESIG)
            || (type == ElementType::BAR_LINE)
-           || (type == ElementType::SLUR)
-           || (type == ElementType::HAIRPIN)
            || (type == ElementType::STAFF_TEXT)
            || (type == ElementType::SYSTEM_TEXT)
            || (type == ElementType::STICKING)
@@ -1860,7 +1862,8 @@ bool Note::acceptDrop(EditData& data) const
            || (type == ElementType::TREMOLOBAR)
            || (type == ElementType::FRET_DIAGRAM)
            || (type == ElementType::FIGURED_BASS)
-           || (type == ElementType::LYRICS);
+           || (type == ElementType::LYRICS)
+           || e->isSpanner();
 }
 
 //---------------------------------------------------------
@@ -1895,15 +1898,6 @@ Element* Note::drop(EditData& data)
             delete e;
         }
         return 0;
-
-    case ElementType::SLUR:
-        data.view()->addSlur(chord(), nullptr, toSlur(e));
-        delete e;
-        return 0;
-
-    case ElementType::HAIRPIN:
-        // forward this event to a chord
-        return chord()->drop(data);
 
     case ElementType::LYRICS:
         e->setParent(ch);
@@ -1947,42 +1941,42 @@ Element* Note::drop(EditData& data)
     }
     break;
 
-    case ElementType::ICON:
+    case ElementType::ACTION_ICON:
     {
-        switch (toIcon(e)->iconType()) {
-        case IconType::ACCIACCATURA:
+        switch (toActionIcon(e)->actionType()) {
+        case ActionIconType::ACCIACCATURA:
             score()->setGraceNote(ch, pitch(), NoteType::ACCIACCATURA, MScore::division / 2);
             break;
-        case IconType::APPOGGIATURA:
+        case ActionIconType::APPOGGIATURA:
             score()->setGraceNote(ch, pitch(), NoteType::APPOGGIATURA, MScore::division / 2);
             break;
-        case IconType::GRACE4:
+        case ActionIconType::GRACE4:
             score()->setGraceNote(ch, pitch(), NoteType::GRACE4, MScore::division);
             break;
-        case IconType::GRACE16:
+        case ActionIconType::GRACE16:
             score()->setGraceNote(ch, pitch(), NoteType::GRACE16,  MScore::division / 4);
             break;
-        case IconType::GRACE32:
+        case ActionIconType::GRACE32:
             score()->setGraceNote(ch, pitch(), NoteType::GRACE32, MScore::division / 8);
             break;
-        case IconType::GRACE8_AFTER:
+        case ActionIconType::GRACE8_AFTER:
             score()->setGraceNote(ch, pitch(), NoteType::GRACE8_AFTER, MScore::division / 2);
             break;
-        case IconType::GRACE16_AFTER:
+        case ActionIconType::GRACE16_AFTER:
             score()->setGraceNote(ch, pitch(), NoteType::GRACE16_AFTER, MScore::division / 4);
             break;
-        case IconType::GRACE32_AFTER:
+        case ActionIconType::GRACE32_AFTER:
             score()->setGraceNote(ch, pitch(), NoteType::GRACE32_AFTER, MScore::division / 8);
             break;
-        case IconType::SBEAM:
-        case IconType::MBEAM:
-        case IconType::NBEAM:
-        case IconType::BEAM32:
-        case IconType::BEAM64:
-        case IconType::AUTOBEAM:
+        case ActionIconType::BEAM_START:
+        case ActionIconType::BEAM_MID:
+        case ActionIconType::BEAM_NONE:
+        case ActionIconType::BEAM_BEGIN_32:
+        case ActionIconType::BEAM_BEGIN_64:
+        case ActionIconType::BEAM_AUTO:
             return ch->drop(data);
             break;
-        case IconType::PARENTHESES:
+        case ActionIconType::PARENTHESES:
             addParentheses();
             break;
         default:
@@ -2085,6 +2079,17 @@ Element* Note::drop(EditData& data)
     break;
 
     default:
+        Spanner* spanner;
+        if (e->isSpanner() && (spanner = toSpanner(e))->anchor() == Spanner::Anchor::NOTE) {
+            spanner->setParent(this);
+            spanner->setStartElement(this);
+            spanner->setTick(tick());
+            spanner->setTrack(track());
+            spanner->setTrack2(track());
+            spanner->computeEndElement();
+            score()->undoAddElement(spanner);
+            return e;
+        }
         return ch->drop(data);
     }
     return 0;
@@ -3226,7 +3231,7 @@ QString Note::accessibleInfo() const
     if (fixed() && headGroup() == NoteHead::Group::HEAD_SLASH) {
         pitchName = chord()->noStem() ? QObject::tr("Beat slash") : QObject::tr("Rhythm slash");
     } else if (staff()->isDrumStaff(tick()) && drumset) {
-        pitchName = qApp->translate("drumset", drumset->name(pitch()).toUtf8().constData());
+        pitchName = qtrc("drumset", drumset->name(pitch()).toUtf8().constData());
     } else if (staff()->isTabStaff(tick())) {
         pitchName = QObject::tr("%1; String: %2; Fret: %3").arg(tpcUserName(false), QString::number(string() + 1), QString::number(fret()));
     } else {
@@ -3251,7 +3256,7 @@ QString Note::screenReaderInfo() const
     if (fixed() && headGroup() == NoteHead::Group::HEAD_SLASH) {
         pitchName = chord()->noStem() ? QObject::tr("Beat Slash") : QObject::tr("Rhythm Slash");
     } else if (staff()->isDrumStaff(tick()) && drumset) {
-        pitchName = qApp->translate("drumset", drumset->name(pitch()).toUtf8().constData());
+        pitchName = qtrc("drumset", drumset->name(pitch()).toUtf8().constData());
     } else if (staff()->isTabStaff(tick())) {
         pitchName = QObject::tr("%1; String: %2; Fret: %3").arg(tpcUserName(true), QString::number(string() + 1), QString::number(fret()));
     } else {

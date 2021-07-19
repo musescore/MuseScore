@@ -77,11 +77,6 @@ set(MODULE_TEST_LINK
     qzip
     engraving
     fonts
-#    ui
-#    actions
-#    notation
-    instruments
-    uicomponents
     )
 
 set(MODULE_TEST_DATA_ROOT ${CMAKE_CURRENT_LIST_DIR})

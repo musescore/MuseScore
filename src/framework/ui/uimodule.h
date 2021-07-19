@@ -26,7 +26,7 @@
 #include "framework/global/modularity/imodulesetup.h"
 
 namespace mu::ui {
-class UiModule : public framework::IModuleSetup
+class UiModule : public modularity::IModuleSetup
 {
 public:
     std::string moduleName() const override;
@@ -36,6 +36,7 @@ public:
     void registerResources() override;
     void registerUiTypes() override;
     void onInit(const framework::IApplication::RunMode& mode) override;
+    void onAllInited(const framework::IApplication::RunMode& mode) override;
     void onDeinit() override;
 };
 }

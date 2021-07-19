@@ -242,7 +242,7 @@ struct FiguredBassFont {
 class FiguredBass final : public TextBase
 {
     std::vector<FiguredBassItem*> items;        // the individual lines of the F.B.
-    QVector<qreal> _lineLengths;                // lengths of duration indicator lines (in raster units)
+    std::vector<double> _lineLengths;                // lengths of duration indicator lines (in raster units)
     bool _onNote;                               // true if this element is on a staff note | false if it is betweee notes
     Fraction _ticks;                            // the duration (used for cont. lines and for multiple F.B.
                                                 // under the same note)
@@ -294,9 +294,9 @@ public:
 //                                                            list.append(&item);
 //                                                      return QDeclarativeListProperty<FiguredBassItem>(this, &items, qmlItemsAppend);
 //                                                }
-    qreal             lineLength(int idx) const
+    qreal lineLength(size_t idx) const
     {
-        if (_lineLengths.size() > idx) {
+        if (idx < _lineLengths.size()) {
             return _lineLengths.at(idx);
         }
         return 0;

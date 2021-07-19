@@ -23,7 +23,7 @@
 #define MU_USERSCORES_TEMPLATEPAINTVIEW_H
 
 #include "modularity/ioc.h"
-#include "notation/inotationcreator.h"
+#include "project/iprojectcreator.h"
 #include "notation/view/notationpaintview.h"
 #include "shortcuts/ishortcutsregister.h"
 
@@ -32,7 +32,7 @@ class TemplatePaintView : public notation::NotationPaintView
 {
     Q_OBJECT
 
-    INJECT(userscores, notation::INotationCreator, notationCreator)
+    INJECT(userscores, project::IProjectCreator, notationCreator)
     INJECT(userscores, shortcuts::IShortcutsRegister, shortcutsRegister)
 
 public:

@@ -200,7 +200,7 @@ void TestChordSymbol::testNoSystem()
     //
     QList<Part*> parts;
     parts.append(score->parts().at(0));
-    Score* nscore = new Score(score);
+    Score* nscore = score->createScore();
 
     Excerpt* ex = new Excerpt(score);
     ex->setPartScore(nscore);
@@ -219,7 +219,7 @@ void TestChordSymbol::testNoSystem()
     //
     parts.clear();
     parts.append(score->parts().at(1));
-    nscore = new Score(score);
+    nscore = score->createScore();
 
     ex = new Excerpt(score);
     ex->setPartScore(nscore);

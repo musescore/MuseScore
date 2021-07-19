@@ -21,6 +21,9 @@
  */
 
 #include <QDebug>
+#include <QRegularExpression>
+
+#include "engraving/style/style.h"
 
 #include "libmscore/score.h"
 #include "libmscore/rest.h"
@@ -32,7 +35,6 @@
 #include "libmscore/segment.h"
 #include "libmscore/staff.h"
 #include "libmscore/measure.h"
-#include "libmscore/style.h"
 #include "libmscore/slur.h"
 #include "libmscore/hairpin.h"
 #include "libmscore/dynamic.h"
@@ -2156,9 +2158,8 @@ QString ExportBraille::brailleVolta(Measure* measure, Volta* volta, int staffCou
     }
 
     // 17.1.1. Page 121. Music Braille Code 2015.
-    const QRegExp separator("(,|\\.| )");
     resetOctave(staffCount);
-    QStringList voltaNumbers = volta->text().split(separator);
+    QStringList voltaNumbers = volta->text().split(QRegularExpression("(,|\\.| )"));
     QString result = QString();
     for (QString voltaNumber : voltaNumbers) {
         if (voltaNumber.isEmpty()) {

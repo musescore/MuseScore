@@ -120,27 +120,27 @@ void LayoutBreak::read(XmlReader& e)
 void LayoutBreak::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
+    using namespace mu::draw;
     if (score()->printing() || !score()->showUnprintable()) {
         return;
     }
 
-    QPainterPathStroker stroker;
-    stroker.setWidth(lw / 2);
-    stroker.setJoinStyle(Qt::MiterJoin);
-    stroker.setCapStyle(Qt::SquareCap);
+    Pen pen;
+    pen.setColor(selected() ? MScore::selectColor[0] : MScore::layoutBreakColor);
+    pen.setWidthF(lw / 2);
+    pen.setJoinStyle(PenJoinStyle::MiterJoin);
+    pen.setCapStyle(PenCapStyle::SquareCap);
+    pen.setDashPattern({ 1, 3 });
 
-    QVector<qreal> dashes;
-    dashes.append(1);
-    dashes.append(3);
-    stroker.setDashPattern(dashes);
-    PainterPath stroke = stroker.createStroke(path);
+    painter->setPen(pen);
+    painter->setBrush(BrushStyle::NoBrush);
+    painter->drawRect(m_iconBorderRect);
 
-    painter->fillPath(stroke, selected() ? MScore::selectColor[0] : MScore::layoutBreakColor);
+    pen.setWidthF(lw);
+    pen.setStyle(PenStyle::SolidLine);
 
-    painter->setPen(QPen(selected() ? MScore::selectColor[0] : MScore::layoutBreakColor,
-                         lw, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin));
-    painter->setBrush(Qt::NoBrush);
-    painter->drawPath(path2);
+    painter->setPen(pen);
+    painter->drawPath(m_iconPath);
 }
 
 //---------------------------------------------------------
@@ -150,71 +150,68 @@ void LayoutBreak::draw(mu::draw::Painter* painter) const
 void LayoutBreak::layout0()
 {
     qreal _spatium = spatium();
-    path      = PainterPath();
-    path2      = PainterPath();
-    qreal h  = _spatium * 2.5;
-    qreal w  = _spatium * 2.5;
+    qreal w = _spatium * 2.5;
+    qreal h = w;
 
-    RectF rect(0.0, 0.0, w, h);
-    path.addRect(rect.toQRectF());
+    m_iconBorderRect = RectF(0.0, 0.0, w, h);
+    m_iconPath = PainterPath();
 
     switch (layoutBreakType()) {
     case Type::LINE:
-        path2.moveTo(w * .8, h * .3);
-        path2.lineTo(w * .8, h * .6);
-        path2.lineTo(w * .3, h * .6);
+        m_iconPath.moveTo(w * .8, h * .3);
+        m_iconPath.lineTo(w * .8, h * .6);
+        m_iconPath.lineTo(w * .3, h * .6);
 
-        path2.moveTo(w * .4, h * .5);
-        path2.lineTo(w * .25, h * .6);
-        path2.lineTo(w * .4, h * .7);
-        path2.lineTo(w * .4, h * .5);
+        m_iconPath.moveTo(w * .4, h * .5);
+        m_iconPath.lineTo(w * .25, h * .6);
+        m_iconPath.lineTo(w * .4, h * .7);
+        m_iconPath.lineTo(w * .4, h * .5);
         break;
 
     case Type::PAGE:
-        path2.moveTo(w * .25, h * .2);
-        path2.lineTo(w * .60, h * .2);
-        path2.lineTo(w * .75, h * .35);
-        path2.lineTo(w * .75, h * .8);
-        path2.lineTo(w * .25, h * .8);
-        path2.lineTo(w * .25, h * .2);
+        m_iconPath.moveTo(w * .25, h * .2);
+        m_iconPath.lineTo(w * .60, h * .2);
+        m_iconPath.lineTo(w * .75, h * .35);
+        m_iconPath.lineTo(w * .75, h * .8);
+        m_iconPath.lineTo(w * .25, h * .8);
+        m_iconPath.lineTo(w * .25, h * .2);
 
-        path2.moveTo(w * .55, h * .21);       // 0.01 to avoid overlap
-        path2.lineTo(w * .55, h * .40);
-        path2.lineTo(w * .74, h * .40);
+        m_iconPath.moveTo(w * .55, h * .21); // 0.01 to avoid overlap
+        m_iconPath.lineTo(w * .55, h * .40);
+        m_iconPath.lineTo(w * .74, h * .40);
         break;
 
     case Type::SECTION:
-        path2.moveTo(w * .25, h * .2);
-        path2.lineTo(w * .75, h * .2);
-        path2.lineTo(w * .75, h * .8);
-        path2.lineTo(w * .25, h * .8);
+        m_iconPath.moveTo(w * .25, h * .2);
+        m_iconPath.lineTo(w * .75, h * .2);
+        m_iconPath.lineTo(w * .75, h * .8);
+        m_iconPath.lineTo(w * .25, h * .8);
 
-        path2.moveTo(w * .55, h * .21);       // 0.01 to avoid overlap
-        path2.lineTo(w * .55, h * .79);
+        m_iconPath.moveTo(w * .55, h * .21); // 0.01 to avoid overlap
+        m_iconPath.lineTo(w * .55, h * .79);
         break;
 
     case Type::NOBREAK:
-        path2.moveTo(w * .1,  h * .5);
-        path2.lineTo(w * .9,  h * .5);
+        m_iconPath.moveTo(w * .1,  h * .5);
+        m_iconPath.lineTo(w * .9,  h * .5);
 
-        path2.moveTo(w * .7, h * .3);
-        path2.lineTo(w * .5, h * .5);
-        path2.lineTo(w * .7, h * .7);
-        path2.lineTo(w * .7, h * .3);
+        m_iconPath.moveTo(w * .7, h * .3);
+        m_iconPath.lineTo(w * .5, h * .5);
+        m_iconPath.lineTo(w * .7, h * .7);
+        m_iconPath.lineTo(w * .7, h * .3);
 
-        path2.moveTo(w * .3,  h * .3);
-        path2.lineTo(w * .5,  h * .5);
-        path2.lineTo(w * .3,  h * .7);
-        path2.lineTo(w * .3,  h * .3);
+        m_iconPath.moveTo(w * .3,  h * .3);
+        m_iconPath.lineTo(w * .5,  h * .5);
+        m_iconPath.lineTo(w * .3,  h * .7);
+        m_iconPath.lineTo(w * .3,  h * .3);
         break;
 
     default:
         qDebug("unknown layout break symbol");
         break;
     }
-    RectF bb(0, 0, w, h);
-    bb.adjust(-lw, -lw, lw, lw);
-    setbbox(bb);
+
+    setbbox(m_iconBorderRect.adjusted(-lw, -lw, lw, lw));
 }
 
 //---------------------------------------------------------

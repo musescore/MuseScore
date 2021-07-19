@@ -22,12 +22,16 @@
 #ifndef MU_WORKSPACE_WORKSPACEFILE_H
 #define MU_WORKSPACE_WORKSPACEFILE_H
 
+#include <string>
+#include <map>
+#include <QByteArray>
+
 #include "system/ifilesystem.h"
 #include "modularity/ioc.h"
+#include "val.h"
 
 class MQZipReader;
 class MQZipWriter;
-class QByteArray;
 
 namespace mu::workspace {
 class WorkspaceFile
@@ -37,26 +41,34 @@ class WorkspaceFile
 public:
     WorkspaceFile(const io::path& filePath);
 
-    QByteArray readRootFile();
-    bool writeRootFile(const std::string& name, const QByteArray& data);
+    io::path filePath() const;
+
+    Ret load();
+    Ret save();
+    bool isLoaded() const;
+
+    Val meta(const std::string& key) const;
+    void setMeta(const std::string& key, const Val& val);
+
+    QByteArray data(const std::string& name) const;
+    void setData(const std::string& name, const QByteArray& data);
 
 private:
-    struct MetaInfo
+
+    struct Container
     {
-        void write(MQZipWriter& zip);
-        bool read(const MQZipReader& zip);
+        static void write(MQZipWriter& zip, const std::vector<std::string>& paths);
+    };
 
-        void setRootFile(const std::string& name);
-        std::string rootFile() const;
-
-    private:
-        void readContainer(const QByteArray& data);
-        void writeContainer(QByteArray* data) const;
-
-        std::string m_rootFile;
+    struct Meta
+    {
+        static void write(MQZipWriter& zip, const std::map<std::string, Val>& meta);
+        static void read(MQZipReader& zip, std::map<std::string, Val>& meta);
     };
 
     io::path m_filePath;
+    std::map<std::string, Val> m_meta;
+    std::map<std::string, QByteArray> m_data;
 };
 }
 

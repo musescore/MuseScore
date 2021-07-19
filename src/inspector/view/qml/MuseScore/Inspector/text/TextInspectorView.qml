@@ -51,7 +51,7 @@ InspectorSectionView {
 
             propertyItem: root.model ? root.model.fontFamily : null
 
-            StyledComboBox {
+            Dropdown {
                 id: fontFamilyComboBox
 
                 navigation.panel: root.navigationPanel
@@ -60,8 +60,8 @@ InspectorSectionView {
 
                 width: parent.width
 
-                textRoleName: "text"
-                valueRoleName: textRoleName
+                textRole: "text"
+                valueRole: "text"
 
                 model: {
                     var resultList = []
@@ -75,10 +75,10 @@ InspectorSectionView {
                     return resultList
                 }
 
-                currentIndex: root.model && !root.model.fontFamily.isUndefined ? indexOfValue(root.model.fontFamily.value) : -1
+                currentIndex: root.model && !root.model.fontFamily.isUndefined ? fontFamilyComboBox.indexOfValue(root.model.fontFamily.value) : -1
 
-                onValueChanged: {
-                    root.model.fontFamily.value = value
+                onCurrentValueChanged: {
+                    root.model.fontFamily.value = fontFamilyComboBox.currentValue
                 }
             }
         }
@@ -141,15 +141,14 @@ InspectorSectionView {
                 titleText: qsTrc("inspector", "Size")
                 propertyItem: root.model ? root.model.fontSize : null
 
-                StyledComboBox {
+                Dropdown {
+                    id: sizes
+
                     width: parent.width
 
                     navigation.panel: root.navigationPanel
                     navigation.name: "Size"
                     navigation.row: root.navigationRow(8)
-
-                    textRoleName: "text"
-                    valueRoleName: "value"
 
                     model: [
                         { text: "8",  value: 8 },
@@ -166,10 +165,10 @@ InspectorSectionView {
                         { text: "48", value: 48 }
                     ]
 
-                    currentIndex: root.model && !root.model.fontSize.isUndefined ? indexOfValue(root.model.fontSize.value) : -1
+                    currentIndex: root.model && !root.model.fontSize.isUndefined ? sizes.indexOfValue(root.model.fontSize.value) : -1
 
-                    onValueChanged: {
-                        root.model.fontSize.value = value
+                    onCurrentValueChanged: {
+                        root.model.fontSize.value = sizes.currentValue
                     }
                 }
             }
@@ -282,7 +281,6 @@ InspectorSectionView {
             visible: root.model ? root.model.isSpecialCharactersInsertionAvailable : false
 
             onClicked: {
-                console.log("charachters y: " + y)
                 if (root.model) {
                     root.model.insertSpecialCharacters()
                 }

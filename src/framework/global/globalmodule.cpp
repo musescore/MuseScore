@@ -22,6 +22,7 @@
 #include "globalmodule.h"
 
 #include <QTimer>
+#include <QDateTime>
 
 #include "modularity/ioc.h"
 #include "internal/globalconfiguration.h"
@@ -76,10 +77,16 @@ void GlobalModule::onInit(const IApplication::RunMode&)
     //! Console
     logger->addDest(new ConsoleLogDest(LogLayout("${time} | ${type|5} | ${thread} | ${tag|10} | ${message}")));
 
-    //! File, this creates a file named "data/logs/MuseScore_yyMMdd.log"
-    io::path logsPath = s_globalConf->userAppDataPath() + "/logs";
-    FileLogDest* logFile = new FileLogDest(logsPath.toStdString(), "MuseScore", "log",
+    io::path logPath = s_globalConf->userAppDataPath() + "/logs";
+    fileSystem()->makePath(logPath);
+    //! File, this creates a file named "data/logs/MuseScore_yyMMdd_HHmmss.log"
+    io::path logFilePath = logPath + "/MuseScore_"
+                           + QDateTime::currentDateTime().toString("yyMMdd_HHmmss")
+                           + ".log";
+
+    FileLogDest* logFile = new FileLogDest(logFilePath.toStdString(),
                                            LogLayout("${datetime} | ${type|5} | ${thread} | ${tag|10} | ${message}"));
+
     LOGI() << "log path: " << logFile->filePath();
     logger->addDest(logFile);
 

@@ -24,13 +24,13 @@
 #include "log.h"
 #include "modularity/ioc.h"
 
-#include "notation/inotationreadersregister.h"
+#include "project/inotationreadersregister.h"
 #include "internal/overeader.h"
 
 #include "internal/oveconfiguration.h"
 
 using namespace mu::iex::ove;
-using namespace mu::notation;
+using namespace mu::project;
 
 static std::shared_ptr<OveConfiguration> s_configuration = std::make_shared<OveConfiguration>();
 
@@ -41,12 +41,12 @@ std::string OveModule::moduleName() const
 
 void OveModule::registerExports()
 {
-    framework::ioc()->registerExport<IOveConfiguration>(moduleName(), s_configuration);
+    modularity::ioc()->registerExport<IOveConfiguration>(moduleName(), s_configuration);
 }
 
 void OveModule::resolveImports()
 {
-    auto readers = framework::ioc()->resolve<INotationReadersRegister>(moduleName());
+    auto readers = modularity::ioc()->resolve<INotationReadersRegister>(moduleName());
     if (readers) {
         readers->reg({ "ove", "scw" }, std::make_shared<OveReader>());
     }

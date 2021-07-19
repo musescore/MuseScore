@@ -110,6 +110,7 @@ public:
     void editText(QKeyEvent* event) override;
     void endEditText() override;
     void changeTextCursorPosition(const PointF& newCursorPos) override;
+    TextBase* editedText() const override;
     async::Notification textEditingStarted() const override;
     async::Notification textEditingChanged() const override;
 
@@ -182,12 +183,19 @@ public:
     void setScoreConfig(ScoreConfig config) override;
     async::Channel<ScoreConfigType> scoreConfigChanged() const override;
 
+    void nextLyrics(bool = false, bool = false, bool = true) override;
+    void nextLyricsVerse(bool = false) override;
+    void nextSyllable() override;
+    void addMelisma() override;
+    void addLyricsVerse() override;
+
 private:
     Ms::Score* score() const;
 
     void startEdit();
     void apply();
 
+    void doSelect(const std::vector<Element*>& elements, SelectType type, int staffIndex);
     void notifyAboutDragChanged();
     void notifyAboutDropChanged();
     void notifyAboutSelectionChanged();

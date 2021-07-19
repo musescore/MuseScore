@@ -29,8 +29,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/audiostubmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/audioconfigurationstub.cpp
     ${CMAKE_CURRENT_LIST_DIR}/audioconfigurationstub.h
-    ${CMAKE_CURRENT_LIST_DIR}/sequencerstub.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/sequencerstub.h
     ${CMAKE_CURRENT_LIST_DIR}/synthesizerstub.cpp
     ${CMAKE_CURRENT_LIST_DIR}/synthesizerstub.h
     ${CMAKE_CURRENT_LIST_DIR}/synthesizersregisterstub.cpp
@@ -39,8 +37,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/soundfontsproviderstub.h
     ${CMAKE_CURRENT_LIST_DIR}/audiodriverstub.cpp
     ${CMAKE_CURRENT_LIST_DIR}/audiodriverstub.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/rpcchannelstub.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/rpc/rpcchannelstub.h
     )                           
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

@@ -25,6 +25,8 @@
 
 #include <QTime>
 
+#include "audio/audiotypes.h"
+
 namespace mu::playback {
 enum class PlaybackCursorType {
     SMOOTH,
@@ -33,12 +35,12 @@ enum class PlaybackCursorType {
 
 static const QTime ZERO_TIME(0, 0, 0, 0);
 
-inline uint64_t secondsToMilliseconds(float seconds)
+inline audio::msecs_t secondsToMilliseconds(float seconds)
 {
     return seconds * 1000;
 }
 
-inline QTime timeFromMilliseconds(uint64_t millisecons)
+inline QTime timeFromMilliseconds(audio::msecs_t millisecons)
 {
     return ZERO_TIME.addMSecs(millisecons);
 }
@@ -49,7 +51,7 @@ inline QTime timeFromSeconds(float seconds)
     return timeFromMilliseconds(milliseconds);
 }
 
-inline uint64_t timeToMilliseconds(const QTime& time)
+inline audio::msecs_t timeToMilliseconds(const QTime& time)
 {
     return ZERO_TIME.msecsTo(time);
 }

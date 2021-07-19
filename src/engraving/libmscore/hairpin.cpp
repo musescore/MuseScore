@@ -24,8 +24,11 @@
 
 #include <cmath>
 
+#include "draw/transform.h"
+#include "draw/pen.h"
+#include "style/style.h"
+
 #include "dynamichairpingroup.h"
-#include "style.h"
 #include "xml.h"
 #include "utils.h"
 #include "score.h"
@@ -37,8 +40,6 @@
 #include "mscore.h"
 #include "chord.h"
 #include "changeMap.h"
-
-#include "draw/transform.h"
 
 using namespace mu;
 
@@ -484,6 +485,7 @@ void HairpinSegment::editDrag(EditData& ed)
 void HairpinSegment::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
+    using namespace mu::draw;
     TextLineBaseSegment::draw(painter);
 
 #if 0
@@ -499,11 +501,11 @@ void HairpinSegment::draw(mu::draw::Painter* painter) const
     if (staff()) {
         w *= staff()->staffMag(hairpin()->tick());
     }
-    QPen pen(color, w, hairpin()->lineStyle());
+    Pen pen(color, w, hairpin()->lineStyle());
     painter->setPen(pen);
 
     if (drawCircledTip) {
-        painter->setBrush(Qt::NoBrush);
+        painter->setBrush(BrushStyle::NoBrush);
         painter->drawEllipse(circledTip, circledTipRadius, circledTipRadius);
     }
 }
@@ -642,17 +644,17 @@ void Hairpin::setHairpinType(HairpinType val)
     case HairpinType::DECRESC_HAIRPIN:
         setBeginText("");
         setContinueText("");
-        setLineStyle(Qt::SolidLine);
+        setLineStyle(PenStyle::SolidLine);
         break;
     case HairpinType::CRESC_LINE:
         setBeginText("cresc.");
         setContinueText("(cresc.)");
-        setLineStyle(Qt::CustomDashLine);
+        setLineStyle(PenStyle::CustomDashLine);
         break;
     case HairpinType::DECRESC_LINE:
         setBeginText("dim.");
         setContinueText("(dim.)");
-        setLineStyle(Qt::CustomDashLine);
+        setLineStyle(PenStyle::CustomDashLine);
         break;
     case HairpinType::INVALID:
         break;
@@ -840,9 +842,9 @@ QVariant Hairpin::propertyDefault(Pid id) const
 
     case Pid::LINE_STYLE:
         if (isLineType()) {
-            return int(Qt::CustomDashLine);
+            return int(mu::draw::PenStyle::CustomDashLine);
         }
-        return int(Qt::SolidLine);
+        return int(mu::draw::PenStyle::SolidLine);
 
     case Pid::BEGIN_TEXT:
         if (_hairpinType == HairpinType::CRESC_LINE) {

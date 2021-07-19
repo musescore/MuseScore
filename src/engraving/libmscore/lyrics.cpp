@@ -22,7 +22,7 @@
 
 #include "lyrics.h"
 
-#include <QClipboard>
+#include <QGuiApplication>
 #include <QRegularExpression>
 
 #include "chord.h"
@@ -405,17 +405,11 @@ void Lyrics::layout2(int nAbove)
 //   paste
 //---------------------------------------------------------
 
-void Lyrics::paste(EditData& ed)
+void Lyrics::paste(EditData& ed, const QString& txt)
 {
     MuseScoreView* scoreview = ed.view();
-#if defined(Q_OS_MAC) || defined(Q_OS_WIN)
-    QClipboard::Mode mode = QClipboard::Clipboard;
-#else
-    QClipboard::Mode mode = QClipboard::Selection;
-#endif
-    QString txt = QApplication::clipboard()->text(mode);
     QString regex = QString("[^\\S") + QChar(0xa0) + QChar(0x202F) + "]+";
-    QStringList sl = txt.split(QRegExp(regex), Qt::SkipEmptyParts);
+    QStringList sl = txt.split(QRegularExpression(regex), Qt::SkipEmptyParts);
     if (sl.empty()) {
         return;
     }
@@ -460,9 +454,7 @@ void Lyrics::paste(EditData& ed)
     }
 
     score()->endCmd();
-    txt = sl.join(" ");
 
-    QApplication::clipboard()->setText(txt, mode);
     if (minus) {
         scoreview->lyricsMinus();
     } else if (underscore) {
@@ -510,6 +502,27 @@ Element* Lyrics::drop(EditData& data)
     e->setParent(this);
     score()->undoAddElement(e);
     return e;
+}
+
+//---------------------------------------------------------
+//   edit
+//---------------------------------------------------------
+
+bool Lyrics::edit(EditData& ed)
+{
+    if (ed.modifiers == 0 || ed.modifiers == Qt::ShiftModifier) {
+        switch (ed.key) {
+        case Qt::Key_Space:
+        case Qt::Key_Underscore:
+        case Qt::Key_Minus:
+        case Qt::Key_Enter:
+        case Qt::Key_Return:
+        case Qt::Key_Up:
+        case Qt::Key_Down:
+            return false; // allow shortcut key controller to handle
+        }
+    }
+    return TextBase::edit(ed);
 }
 
 //---------------------------------------------------------

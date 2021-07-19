@@ -28,11 +28,9 @@
 
 using namespace mu::notation;
 using namespace mu::actions;
-using namespace mu::workspace;
 using namespace mu::ui;
 
-static const std::string TOOLBAR_TAG("Toolbar");
-static const std::string TOOLBAR_NAME("noteInput");
+static const QString TOOLBAR_NAME("noteInput");
 
 static const std::string ADD_ACTION_CODE("add");
 static const char* ADD_ACTION_TITLE("Add");
@@ -74,10 +72,22 @@ static ActionCode actionCodeForNoteInputMethod(NoteInputMethod method)
 NoteInputBarModel::NoteInputBarModel(QObject* parent)
     : AbstractMenuModel(parent)
 {
+    uiConfiguration()->toolConfigChanged(TOOLBAR_NAME).onNotify(this, [this]() {
+        load();
+    });
+
+    context()->currentNotationChanged().onNotify(this, [this]() {
+        onNotationChanged();
+    });
+
+    playbackController()->isPlayingChanged().onNotify(this, [this]() {
+        updateState();
+    });
 }
 
 QVariant NoteInputBarModel::data(const QModelIndex& index, int role) const
 {
+    TRACEFUNC;
     int row = index.row();
 
     if (!isIndexValid(row)) {
@@ -107,44 +117,30 @@ void NoteInputBarModel::load()
     AbstractMenuModel::load();
     MenuItemList items;
 
-    std::vector<std::string> noteInputActions = currentWorkspaceActions();
+    ToolConfig noteInputConfig = uiConfiguration()->toolConfig(TOOLBAR_NAME);
+    if (!noteInputConfig.isValid()) {
+        noteInputConfig = NotationUiActions::defaultNoteInputBarConfig();
+    }
 
     int section = 0;
-    for (const ActionCode& actionCode: noteInputActions) {
-        if (actionCode.empty()) {
+    for (const ToolConfig::Item& citem : noteInputConfig.items) {
+        if (!citem.show) {
+            continue;
+        }
+
+        if (citem.action.empty()) {
             section++;
             continue;
         }
 
-        items << makeActionItem(uiactionsRegister()->action(actionCode), QString::number(section));
+        MenuItem item = makeActionItem(uiactionsRegister()->action(citem.action), QString::number(section));
+        items << item;
     }
 
     items << makeAddItem(QString::number(++section));
     setItems(items);
 
-    RetValCh<IWorkspacePtr> workspace = workspaceManager()->currentWorkspace();
-
-    if (workspace.ret) {
-        workspace.ch.onReceive(this, [this](IWorkspacePtr) {
-            load();
-        });
-
-        workspace.val->dataChanged().onReceive(this, [this](const AbstractDataPtr data) {
-            if (data->name == TOOLBAR_NAME) {
-                load();
-            }
-        });
-    }
-
     onNotationChanged();
-
-    context()->currentNotationChanged().onNotify(this, [this]() {
-        onNotationChanged();
-    });
-
-    playbackController()->isPlayingChanged().onNotify(this, [this]() {
-        updateState();
-    });
 }
 
 void NoteInputBarModel::onActionsStateChanges(const actions::ActionCodeList& codes)
@@ -765,24 +761,6 @@ void NoteInputBarModel::notifyAboutAddItemChanged()
     }
 
     emit dataChanged(index(addItemIndex), index(addItemIndex));
-}
-
-std::vector<std::string> NoteInputBarModel::currentWorkspaceActions() const
-{
-    RetValCh<IWorkspacePtr> workspace = workspaceManager()->currentWorkspace();
-    if (!workspace.ret) {
-        LOGE() << workspace.ret.toString();
-        return {};
-    }
-
-    AbstractDataPtr abstractData = workspace.val->data(WorkspaceTag::Toolbar, TOOLBAR_NAME);
-    ToolbarDataPtr toolbarData = std::dynamic_pointer_cast<ToolbarData>(abstractData);
-    if (!toolbarData) {
-        LOGE() << "Failed to get data of actions for " << TOOLBAR_NAME;
-        return {};
-    }
-
-    return toolbarData->actions;
 }
 
 INotationPtr NoteInputBarModel::notation() const

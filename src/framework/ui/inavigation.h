@@ -38,8 +38,8 @@ class INavigationSection;
 class INavigationPanel;
 class INavigationControl;
 
-using PanelControl = std::tuple<INavigationPanel*, INavigationControl*>;
-using SectionPanelControl = std::tuple<INavigationSection*, INavigationPanel*, INavigationControl*>;
+using PanelControlChannel = async::Channel<INavigationPanel*, INavigationControl*>;
+using SectionPanelControlChannel = async::Channel<INavigationSection*, INavigationPanel*, INavigationControl*>;
 
 class INavigation
 {
@@ -130,7 +130,7 @@ public:
     virtual Direction direction() const = 0;
     virtual const std::set<INavigationControl*>& controls() const = 0;
     virtual async::Notification controlsListChanged() const = 0;
-    virtual async::Channel<PanelControl> activeRequested() const = 0;
+    virtual PanelControlChannel activeRequested() const = 0;
 };
 
 class INavigationSection : public INavigation
@@ -149,7 +149,7 @@ public:
     virtual Type type() const = 0;
     virtual const std::set<INavigationPanel*>& panels() const = 0;
     virtual async::Notification panelsListChanged() const = 0;
-    virtual async::Channel<SectionPanelControl> activeRequested() const = 0;
+    virtual SectionPanelControlChannel activeRequested() const = 0;
 };
 }
 

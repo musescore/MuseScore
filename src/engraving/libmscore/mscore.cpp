@@ -21,10 +21,12 @@
  */
 
 #include <QDir>
+#include <QCoreApplication>
 
-#include "config.h"
+#include "translation.h"
+#include "style/style.h"
+
 #include "musescoreCore.h"
-#include "style.h"
 #include "mscore.h"
 #include "sequencer.h"
 #include "element.h"
@@ -70,6 +72,8 @@
 #include "skyline.h"
 #include "scorefont.h"
 
+#include "config.h"
+
 using namespace mu;
 
 namespace Ms {
@@ -90,8 +94,6 @@ bool MScore::useFallbackFont       = true;
 
 bool MScore::saveTemplateMode = false;
 bool MScore::noGui = false;
-
-MStyle* MScore::_defaultStyleForParts;
 
 QString MScore::_globalShare;
 int MScore::_vRaster;
@@ -131,8 +133,6 @@ bool MScore::pdfPrinting = false;
 bool MScore::svgPrinting = false;
 
 double MScore::pixelRatio  = 0.8;         // DPI / logicalDPI
-
-MPaintDevice* MScore::_paintDevice;
 
 Sequencer* MScore::seq = 0;
 
@@ -229,9 +229,9 @@ const char* toString(Direction val)
 QString toUserString(Direction val)
 {
     switch (val) {
-    case Direction::AUTO: return qApp->translate("Direction", "Auto");
-    case Direction::UP:   return qApp->translate("Direction", "Up");
-    case Direction::DOWN: return qApp->translate("Direction", "Down");
+    case Direction::AUTO: return qtrc("Direction", "Auto");
+    case Direction::UP:   return qtrc("Direction", "Up");
+    case Direction::DOWN: return qtrc("Direction", "Down");
     }
 #if (!defined (_MSCVER) && !defined (_MSC_VER))
     __builtin_unreachable();
@@ -301,7 +301,6 @@ void MScore::init()
     //
     //  initialize styles
     //
-    _baseStyle.precomputeValues();
 
     ScoreFont::initScoreFonts();
     StaffType::initStaffTypes();
@@ -360,55 +359,6 @@ void MScore::registerUiTypes()
 }
 
 //---------------------------------------------------------
-//   readDefaultStyle
-//---------------------------------------------------------
-
-bool MScore::readDefaultStyle(QString file)
-{
-    if (file.isEmpty()) {
-        return false;
-    }
-    MStyle style = defaultStyle();
-    QFile f(file);
-    if (!f.open(QIODevice::ReadOnly)) {
-        return false;
-    }
-    bool rv = style.load(&f, true);
-    if (rv) {
-        setDefaultStyle(style);
-    }
-    f.close();
-    return rv;
-}
-
-bool MScore::readPartStyle(QString filePath)
-{
-    QFile file(filePath);
-    if (!file.open(QIODevice::ReadOnly)) {
-        return false;
-    }
-
-    _defaultStyleForParts = new MStyle(_defaultStyle);
-    bool rv = _defaultStyleForParts->load(&file, true);
-    if (rv) {
-        _defaultStyleForParts->precomputeValues();
-    }
-    file.close();
-    return rv;
-}
-
-//---------------------------------------------------------
-//   defaultStyleForPartsHasChanged
-//---------------------------------------------------------
-
-void MScore::defaultStyleForPartsHasChanged()
-{
-// TODO what is needed here?
-//      delete _defaultStyleForParts;
-//      _defaultStyleForParts = 0;
-}
-
-//---------------------------------------------------------
 //   errorMessage
 //---------------------------------------------------------
 
@@ -434,42 +384,5 @@ const char* MScore::errorGroup()
         }
     }
     return "";
-}
-
-//---------------------------------------------------------
-//   paintDevice
-//---------------------------------------------------------
-
-MPaintDevice* MScore::paintDevice()
-{
-    if (!_paintDevice) {
-        _paintDevice = new MPaintDevice();
-    }
-    return _paintDevice;
-}
-
-//---------------------------------------------------------
-//   metric
-//---------------------------------------------------------
-
-int MPaintDevice::metric(PaintDeviceMetric m) const
-{
-    switch (m) {
-    case QPaintDevice::PdmDpiY:
-        return int(DPI);
-    default:
-//printf("debug: metric %d\n", int(m));
-        return 1;
-    }
-}
-
-//---------------------------------------------------------
-//   paintEngine
-//---------------------------------------------------------
-
-QPaintEngine* MPaintDevice::paintEngine() const
-{
-//printf("paint engine\n");
-    return 0;
 }
 }

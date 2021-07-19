@@ -35,6 +35,10 @@ PreferencesPage {
         id: appearanceModel
     }
 
+    Component.onCompleted: {
+        appearanceModel.init()
+    }
+
     Column {
         id: content
 

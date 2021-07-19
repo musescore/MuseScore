@@ -24,6 +24,11 @@
 #include "testbase.h"
 #include "libmscore/score.h"
 
+#include "engraving/compat/mscxcompat.h"
+#include "engraving/compat/scoreaccess.h"
+
+using namespace mu::engraving;
+
 static const QString LAYOUT_DATA_DIR("layout_data/");
 
 using namespace Ms;
@@ -67,11 +72,11 @@ void TestLayoutBenchmark::initTestCase()
 void TestLayoutBenchmark::benchmark3()
 {
     QString path = root + "/" + LAYOUT_DATA_DIR + "goldberg.mscx";
-    score = new MasterScore(mscore->baseStyle());
+    score = mu::engraving::compat::ScoreAccess::createMasterScoreWithBaseStyle();
     score->setName(path);
     MScore::testMode = true;
     QBENCHMARK {
-        score->loadMsc(path, false);
+        compat::loadMsczOrMscx(score, path);
     }
 }
 

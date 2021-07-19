@@ -25,11 +25,10 @@
 #include "ui/iuiengine.h"
 #include "ui/iinteractiveuriregister.h"
 
-#include "paletteadapterstub.h"
 #include "paletteconfigurationstub.h"
 
 using namespace mu::palette;
-using namespace mu::framework;
+using namespace mu::modularity;
 using namespace mu::ui;
 
 static void palette_init_qrc()
@@ -44,7 +43,6 @@ std::string PaletteStubModule::moduleName() const
 
 void PaletteStubModule::registerExports()
 {
-    ioc()->registerExport<IPaletteAdapter>(moduleName(), new PaletteAdapterStub());
     ioc()->registerExport<IPaletteConfiguration>(moduleName(), new PaletteConfigurationStub());
 }
 

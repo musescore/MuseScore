@@ -30,6 +30,7 @@ class FileSystemStub : public IFileSystem
 public:
     Ret exists(const io::path& path) const override;
     Ret remove(const io::path& path) const override;
+    Ret copy(const io::path& src, const io::path& dst, bool replace = false) const override;
 
     Ret makePath(const io::path& path) const override;
 
@@ -37,6 +38,7 @@ public:
                                 ScanMode mode = ScanMode::IncludeSubdirs) const override;
 
     RetVal<QByteArray> readFile(const io::path& filePath) const override;
+    Ret writeToFile(const io::path& filePath, const QByteArray& data) const override;
 };
 }
 

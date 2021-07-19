@@ -32,20 +32,16 @@ SynthsSettingsModel::SynthsSettingsModel(QObject* parent)
 
 void SynthsSettingsModel::load()
 {
-    m_state = configuration()->synthesizerState();
+    sfprovider()->soundFontPaths({ SoundFontFormat::SF3 }).onResolve(this, [this](const SoundFontPaths& paths) {
+        QString name("Fluid");
 
-    auto doLoad = [this](const QString& name) {
-        auto synth = synthRegister()->synthesizer(name.toStdString());
-        std::vector<io::path> avalaibleSFPaths = sfprovider()->soundFontPaths(synth->soundFontFormats());
-        for (const io::path& path : avalaibleSFPaths) {
+        for (const io::path& path : paths) {
             m_avalaibleSoundFonts[name] << io::filename(path).toQString();
         }
+
         emit avalaibleChanged(name);
         emit selectedChanged(name);
-    };
-
-    doLoad("Fluid");
-    doLoad("Zerberus");
+    });
 }
 
 void SynthsSettingsModel::apply()

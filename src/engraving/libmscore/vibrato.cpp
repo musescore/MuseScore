@@ -19,11 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include "vibrato.h"
 
 #include <cmath>
 
-#include "vibrato.h"
-#include "style.h"
+#include "translation.h"
+#include "style/style.h"
+
 #include "system.h"
 #include "measure.h"
 #include "xml.h"
@@ -313,7 +315,7 @@ QString Vibrato::vibratoTypeName() const
 
 QString Vibrato::vibratoTypeUserName() const
 {
-    return qApp->translate("vibratoType", vibratoTable[static_cast<int>(vibratoType())].userName.toUtf8().constData());
+    return qtrc("vibratoType", vibratoTable[static_cast<int>(vibratoType())].userName.toUtf8().constData());
 }
 
 //---------------------------------------------------------

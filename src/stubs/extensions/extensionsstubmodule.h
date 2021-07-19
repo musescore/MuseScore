@@ -25,7 +25,7 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu::extensions {
-class ExtensionsStubModule : public framework::IModuleSetup
+class ExtensionsStubModule : public modularity::IModuleSetup
 {
 public:
     std::string moduleName() const override;

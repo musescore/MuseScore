@@ -23,6 +23,7 @@
 
 #include <QString>
 #include <QDateTime>
+#include <QRegularExpression>
 
 #include "translation.h"
 
@@ -36,20 +37,7 @@ double DataFormatter::formatDouble(const double& val, const int decimals)
 QString DataFormatter::formatTimeSince(const QDate& dateTime)
 {
     QDateTime currentDateTime = QDateTime::currentDateTime();
-#if (defined (_MSCVER) || defined (_MSC_VER))
-#pragma warning (push)
-#pragma warning (disable: 4996)
-#else
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
-    // ToDo for Qt 5.15: QDateTime::QDateTime() vs. QDate::startOfDay() (available as of Qt 5.14) ??
-    int days = QDateTime(dateTime).daysTo(currentDateTime);
-#if (defined (_MSCVER) || defined (_MSC_VER))
-#pragma warning (pop)
-#else
-#pragma GCC diagnostic pop
-#endif
+    int days = dateTime.daysTo(currentDateTime.date());
 
     if (days == 0) {
         return qtrc("global", "Today");
@@ -99,4 +87,36 @@ QString DataFormatter::formatTimeSince(const QDate& dateTime)
     }
 
     return qtrc("global", "%1 years ago").arg(years);
+}
+
+QDateTime DataFormatter::dateTimeFromIsoFormat(const QString& dateTimeIso)
+{
+    // NOTE Available ISO8601 duration format: P#Y#M#DT#H#M#S
+
+    QRegularExpression regexp(QString("("
+                                      "P"
+                                      "((?<year>[0-9]+)Y)?"
+                                      "((?<month>[0-9]+)M)?"
+                                      "((?<day>[0-9]+)D)?"
+                                      "T"
+                                      "((?<hour>[0-9]+)H)?"
+                                      "((?<minute>[0-9]+)M)?"
+                                      "((?<second>[0-9]+)S)?"
+                                      ")"));
+
+    QRegularExpressionMatch match = regexp.match(dateTimeIso);
+
+    if (!match.hasMatch()) {
+        return QDateTime();
+    }
+
+    int year = match.captured("year").toInt();
+    int month = match.captured("month").toInt();
+    int day = match.captured("day").toInt();
+    int hour = match.captured("hour").toInt();
+    int minute = match.captured("minute").toInt();
+    int second = match.captured("second").toInt();
+
+    QDateTime dateTime(QDate(year, month, day), QTime(hour, minute, second));
+    return dateTime;
 }

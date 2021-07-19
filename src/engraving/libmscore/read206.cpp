@@ -22,13 +22,19 @@
 
 #include <cmath>
 
+#include <QRegularExpression>
+
+#include "style/style.h"
+#include "style/defaultstyle.h"
+#include "compat/pageformat.h"
+#include "compat/chordlist.h"
+
 #include "xml.h"
 #include "score.h"
 #include "staff.h"
 #include "revisions.h"
 #include "part.h"
 #include "page.h"
-#include "style.h"
 #include "sym.h"
 #include "scorefont.h"
 #include "arpeggio.h"
@@ -81,6 +87,7 @@
 #include "marker.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 static void readText206(XmlReader& e, TextBase* t, Element* be);
@@ -93,58 +100,6 @@ static void readText206(XmlReader& e, TextBase* t, Element* be);
 //---------------------------------------------------------
 
 static std::map<QString, std::map<Sid, QVariant> > excessTextStyles206;
-
-//---------------------------------------------------------
-//   setPageFormat
-//    set Style from PageFormat
-//---------------------------------------------------------
-
-void setPageFormat(MStyle* style, const PageFormat& pf)
-{
-    style->set(Sid::pageWidth,            pf.size().width());
-    style->set(Sid::pageHeight,           pf.size().height());
-    style->set(Sid::pagePrintableWidth,   pf.printableWidth());
-    style->set(Sid::pageEvenLeftMargin,   pf.evenLeftMargin());
-    style->set(Sid::pageOddLeftMargin,    pf.oddLeftMargin());
-    style->set(Sid::pageEvenTopMargin,    pf.evenTopMargin());
-    style->set(Sid::pageEvenBottomMargin, pf.evenBottomMargin());
-    style->set(Sid::pageOddTopMargin,     pf.oddTopMargin());
-    style->set(Sid::pageOddBottomMargin,  pf.oddBottomMargin());
-    style->set(Sid::pageTwosided,         pf.twosided());
-}
-
-//---------------------------------------------------------
-//   initPageFormat
-//    initialize PageFormat from Style
-//---------------------------------------------------------
-
-void initPageFormat(MStyle* style, PageFormat* pf)
-{
-    SizeF sz;
-    sz.setWidth(style->value(Sid::pageWidth).toReal());
-    sz.setHeight(style->value(Sid::pageHeight).toReal());
-    pf->setSize(sz);
-    pf->setPrintableWidth(style->value(Sid::pagePrintableWidth).toReal());
-    pf->setEvenLeftMargin(style->value(Sid::pageEvenLeftMargin).toReal());
-    pf->setOddLeftMargin(style->value(Sid::pageOddLeftMargin).toReal());
-    pf->setEvenTopMargin(style->value(Sid::pageEvenTopMargin).toReal());
-    pf->setEvenBottomMargin(style->value(Sid::pageEvenBottomMargin).toReal());
-    pf->setOddTopMargin(style->value(Sid::pageOddTopMargin).toReal());
-    pf->setOddBottomMargin(style->value(Sid::pageOddBottomMargin).toReal());
-    pf->setTwosided(style->value(Sid::pageTwosided).toBool());
-}
-
-//---------------------------------------------------------
-//   readPageFormat
-//---------------------------------------------------------
-
-void readPageFormat(MStyle* style, XmlReader& e)
-{
-    PageFormat pf;
-    initPageFormat(style, &pf);
-    pf.read(e);
-    setPageFormat(style, pf);
-}
 
 //---------------------------------------------------------
 //   readTextStyle206
@@ -1257,9 +1212,10 @@ static QString ReadStyleName206(QString xmlTag)
 {
     QString s;
     if (xmlTag.contains("<style>")) {
-        QRegExp re("<style>([^<]+)</style>");
-        if (re.indexIn(xmlTag) > -1) {
-            s = re.cap(1);
+        QRegularExpression regex("<style>([^<]+)</style>");
+        QRegularExpressionMatch match = regex.match(xmlTag);
+        if (match.hasMatch()) {
+            s = match.captured();
         }
     }
     return s;
@@ -3361,10 +3317,8 @@ static void readStaffContent(Score* score, XmlReader& e)
 //   readStyle
 //---------------------------------------------------------
 
-static void readStyle(MStyle* style, XmlReader& e)
+static void readStyle(MStyle* style, XmlReader& e, compat::ReadChordListHook& readChordListHook)
 {
-    QString oldChordDescriptionFile = style->value(Sid::chordDescriptionFile).toString();
-    bool chordListTag = false;
     excessTextStyles206.clear();
     while (e.readNextStartElement()) {
         QString tag = e.name().toString();
@@ -3373,7 +3327,7 @@ static void readStyle(MStyle* style, XmlReader& e)
         } else if (tag == "Spatium") {
             style->set(Sid::spatium, e.readDouble() * DPMM);
         } else if (tag == "page-layout") {
-            readPageFormat(style, e);
+            compat::readPageFormat206(style, e);
         } else if (tag == "displayInConcertPitch") {
             style->set(Sid::concertPitch, QVariant(bool(e.readInt())));
         } else if (tag == "pedalY") {
@@ -3396,15 +3350,7 @@ static void readStyle(MStyle* style, XmlReader& e)
             d += style->value(Sid::endBarWidth).toDouble();
             style->set(Sid::endBarDistance, QVariant(d));
         } else if (tag == "ChordList") {
-            style->chordList()->clear();
-            style->chordList()->read(e);
-            style->setCustomChordList(true);
-            for (ChordFont f : style->chordList()->fonts) {
-                if (f.family == "MuseJazz") {
-                    f.family = "MuseJazz Text";
-                }
-            }
-            chordListTag = true;
+            readChordListHook.read(e);
         } else if (tag == "harmonyY") {
             qreal val = -e.readDouble();
             if (val > 0.0) {
@@ -3426,31 +3372,7 @@ static void readStyle(MStyle* style, XmlReader& e)
         style->set(Sid::harmonyPlay, false);
     }
 
-    // if we just specified a new chord description file
-    // and didn't encounter a ChordList tag
-    // then load the chord description file
-
-    QString newChordDescriptionFile = style->value(Sid::chordDescriptionFile).toString();
-    if (newChordDescriptionFile != oldChordDescriptionFile && !chordListTag) {
-        if (!newChordDescriptionFile.startsWith("chords_") && style->value(Sid::chordStyle).toString() == "std") {
-            // should not normally happen,
-            // but treat as "old" (114) score just in case
-            style->set(Sid::chordStyle, QVariant(QString("custom")));
-            style->set(Sid::chordsXmlFile, QVariant(true));
-            qDebug("StyleData::load: custom chord description file %s with chordStyle == std", qPrintable(newChordDescriptionFile));
-        }
-        if (style->value(Sid::chordStyle).toString() == "custom") {
-            style->setCustomChordList(true);
-        } else {
-            style->setCustomChordList(false);
-        }
-        style->chordList()->unload();
-    }
-
-    // make sure we have a chordlist
-    if (!chordListTag) {
-        style->checkChordList();
-    }
+    readChordListHook.validate();
 }
 
 //---------------------------------------------------------
@@ -3507,7 +3429,8 @@ static bool readScore(Score* score, XmlReader& e)
             score->setShowPageborders(e.readInt());
         } else if (tag == "Style") {
             qreal sp = score->style().value(Sid::spatium).toDouble();
-            readStyle(&score->style(), e);
+            compat::ReadChordListHook clhook(score);
+            readStyle(&score->style(), e, clhook);
             if (score->style().value(Sid::MusicalTextFont).toString() == "MuseJazz") {
                 score->style().set(Sid::MusicalTextFont, "MuseJazz Text");
             }
@@ -3585,9 +3508,9 @@ static bool readScore(Score* score, XmlReader& e)
                 e.tracks().clear();
                 e.clearUserTextStyles();
                 MasterScore* m = score->masterScore();
-                Score* s = new Score(m, MScore::baseStyle());
+                Score* s = m->createScore();
                 int defaultsVersion = m->style().defaultStyleVersion();
-                s->setStyle(*MStyle::resolveStyleDefaults(defaultsVersion));
+                s->setStyle(DefaultStyle::resolveStyleDefaults(defaultsVersion));
                 s->style().setDefaultStyleVersion(defaultsVersion);
                 s->setEnableVerticalSpread(false);
                 Excerpt* ex = new Excerpt(m);
@@ -3708,73 +3631,6 @@ static bool readScore(Score* score, XmlReader& e)
 }
 
 //---------------------------------------------------------
-//   read
-//  <page-layout>
-//      <page-height>
-//      <page-width>
-//      <landscape>1</landscape>
-//      <page-margins type="both">
-//         <left-margin>28.3465</left-margin>
-//         <right-margin>28.3465</right-margin>
-//         <top-margin>28.3465</top-margin>
-//         <bottom-margin>56.6929</bottom-margin>
-//         </page-margins>
-//      </page-layout>
-//---------------------------------------------------------
-
-void PageFormat::read(XmlReader& e)
-{
-    qreal _oddRightMargin  = 0.0;
-    qreal _evenRightMargin = 0.0;
-    QString type;
-
-    while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
-        if (tag == "page-margins") {
-            type = e.attribute("type", "both");
-            qreal lm = 0.0, rm = 0.0, tm = 0.0, bm = 0.0;
-            while (e.readNextStartElement()) {
-                const QStringRef& t(e.name());
-                qreal val = e.readDouble() * 0.5 / PPI;
-                if (t == "left-margin") {
-                    lm = val;
-                } else if (t == "right-margin") {
-                    rm = val;
-                } else if (t == "top-margin") {
-                    tm = val;
-                } else if (t == "bottom-margin") {
-                    bm = val;
-                } else {
-                    e.unknown();
-                }
-            }
-            _twosided = type == "odd" || type == "even";
-            if (type == "odd" || type == "both") {
-                _oddLeftMargin   = lm;
-                _oddRightMargin  = rm;
-                _oddTopMargin    = tm;
-                _oddBottomMargin = bm;
-            }
-            if (type == "even" || type == "both") {
-                _evenLeftMargin   = lm;
-                _evenRightMargin  = rm;
-                _evenTopMargin    = tm;
-                _evenBottomMargin = bm;
-            }
-        } else if (tag == "page-height") {
-            _size.setHeight(e.readDouble() * 0.5 / PPI);
-        } else if (tag == "page-width") {
-            _size.setWidth(e.readDouble() * .5 / PPI);
-        } else {
-            e.unknown();
-        }
-    }
-    qreal w1        = _size.width() - _oddLeftMargin - _oddRightMargin;
-    qreal w2        = _size.width() - _evenLeftMargin - _evenRightMargin;
-    _printableWidth = qMin(w1, w2);       // silently adjust right margins
-}
-
-//---------------------------------------------------------
 //   read206
 //    import old version > 1.3  and < 3.x files
 //---------------------------------------------------------
@@ -3861,25 +3717,5 @@ Score::FileError MasterScore::read206(XmlReader& e)
     setAutosaveDirty(false);
 
     return FileError::FILE_NO_ERROR;
-}
-
-MStyle* styleDefaults206()
-{
-    static MStyle* result = nullptr;
-
-    if (result) {
-        return result;
-    }
-
-    result = new MStyle();
-    QFile baseDefaults(":/styles/legacy-style-defaults-v2.mss");
-
-    if (!baseDefaults.open(QIODevice::ReadOnly)) {
-        return result;
-    }
-
-    result->load(&baseDefaults);
-
-    return result;
 }
 }

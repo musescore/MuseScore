@@ -31,9 +31,11 @@
 #include "mscore.h"
 #include "harmony.h"
 #include "staff.h"
+#include "draw/pen.h"
 #include "undo.h"
 
 #include "draw/fontmetrics.h"
+#include "draw/brush.h"
 
 using namespace mu;
 
@@ -311,6 +313,7 @@ void FretDiagram::init(StringData* stringData, Chord* chord)
 void FretDiagram::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
+    using namespace mu::draw;
     PointF translation = -PointF(stringDist * (_strings - 1), 0);
     if (_orientation == Orientation::HORIZONTAL) {
         painter->save();
@@ -320,9 +323,9 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
 
     // Init pen and other values
     qreal _spatium = spatium() * _userMag;
-    QPen pen(curColor());
-    pen.setCapStyle(Qt::FlatCap);
-    painter->setBrush(QBrush(QColor(painter->pen().color())));
+    Pen pen(curColor());
+    pen.setCapStyle(PenCapStyle::FlatCap);
+    painter->setBrush(Brush(QColor(painter->pen().color())));
 
     // x2 is the x val of the rightmost string
     qreal x2 = (_strings - 1) * stringDist;
@@ -351,8 +354,8 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
     qreal dotd = _spatium * .49 * score()->styleD(Sid::fretDotSize);
 
     // Draw dots, sym pen is used to draw them (and markers)
-    QPen symPen(pen);
-    symPen.setCapStyle(Qt::RoundCap);
+    Pen symPen(pen);
+    symPen.setCapStyle(PenCapStyle::RoundCap);
     qreal symPenWidth = stringLw * 1.2;
     symPen.setWidthF(symPenWidth);
 
@@ -381,7 +384,7 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
                 symPen.setWidthF(symPenWidth);
                 break;
             case FretDotType::SQUARE:
-                painter->setBrush(Qt::NoBrush);
+                painter->setBrush(BrushStyle::NoBrush);
                 painter->drawRect(RectF(x, y, dotd, dotd));
                 break;
             case FretDotType::TRIANGLE:
@@ -401,7 +404,7 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
 
     // Draw markers
     symPen.setWidthF(symPenWidth * 1.2);
-    painter->setBrush(Qt::NoBrush);
+    painter->setBrush(BrushStyle::NoBrush);
     painter->setPen(symPen);
     for (auto const& i : _markers) {
         int string = i.first;
@@ -430,7 +433,7 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
         qreal newX2 = endString == -1 ? x2 : stringDist * endString;
         qreal y     = fretDist * (fret - 1) + fretDist * .5;
         pen.setWidthF(dotd * score()->styleD(Sid::barreLineWidth));
-        pen.setCapStyle(Qt::RoundCap);
+        pen.setCapStyle(PenCapStyle::RoundCap);
         painter->setPen(pen);
         painter->drawLine(LineF(x1, y, newX2, y));
     }

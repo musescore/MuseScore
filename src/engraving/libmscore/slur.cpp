@@ -35,6 +35,8 @@
 #include "articulation.h"
 
 #include "draw/transform.h"
+#include "draw/pen.h"
+#include "draw/brush.h"
 
 using namespace mu;
 using namespace mu::draw;
@@ -47,34 +49,35 @@ namespace Ms {
 void SlurSegment::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
-    QPen pen(curColor());
+    using namespace mu::draw;
+    Pen pen(curColor());
     qreal mag = staff() ? staff()->staffMag(slur()->tick()) : 1.0;
 
     //Replace generic Qt dash patterns with improved equivalents to show true dots (keep in sync with tie.cpp)
-    QVector<qreal> dotted     = { 0.01, 1.99 };   // tighter than Qt DotLine equivalent - woud be { 0.01, 2.99 }
-    QVector<qreal> dashed     = { 3.00, 3.00 };   // Compensating for caps. Qt default DashLine is { 4.0, 2.0 }
-    QVector<qreal> wideDashed = { 5.00, 6.00 };
+    std::vector<double> dotted     = { 0.01, 1.99 };   // tighter than Qt PenStyle::DotLine equivalent - woud be { 0.01, 2.99 }
+    std::vector<double> dashed     = { 3.00, 3.00 };   // Compensating for caps. Qt default PenStyle::DashLine is { 4.0, 2.0 }
+    std::vector<double> wideDashed = { 5.00, 6.00 };
 
     switch (slurTie()->lineType()) {
     case 0:
-        painter->setBrush(QBrush(pen.color()));
-        pen.setCapStyle(Qt::RoundCap);
-        pen.setJoinStyle(Qt::RoundJoin);
+        painter->setBrush(Brush(pen.color()));
+        pen.setCapStyle(PenCapStyle::RoundCap);
+        pen.setJoinStyle(PenJoinStyle::RoundJoin);
         pen.setWidthF(score()->styleP(Sid::SlurEndWidth) * mag);
         break;
     case 1:
-        painter->setBrush(Qt::NoBrush);
-        pen.setCapStyle(Qt::RoundCap);           // round dots
+        painter->setBrush(BrushStyle::NoBrush);
+        pen.setCapStyle(PenCapStyle::RoundCap);           // round dots
         pen.setDashPattern(dotted);
         pen.setWidthF(score()->styleP(Sid::SlurDottedWidth) * mag);
         break;
     case 2:
-        painter->setBrush(Qt::NoBrush);
+        painter->setBrush(BrushStyle::NoBrush);
         pen.setDashPattern(dashed);
         pen.setWidthF(score()->styleP(Sid::SlurDottedWidth) * mag);
         break;
     case 3:
-        painter->setBrush(Qt::NoBrush);
+        painter->setBrush(BrushStyle::NoBrush);
         pen.setDashPattern(wideDashed);
         pen.setWidthF(score()->styleP(Sid::SlurDottedWidth) * mag);
         break;
@@ -117,12 +120,12 @@ bool SlurSegment::edit(EditData& ed)
 {
     Slur* sl = slur();
 
-    if (ed.key == Qt::Key_X) {
+    if (ed.key == Qt::Key_X && !ed.modifiers) {
         sl->undoChangeProperty(Pid::SLUR_DIRECTION, QVariant::fromValue<Direction>(sl->up() ? Direction::DOWN : Direction::UP));
         sl->layout();
         return true;
     }
-    if (ed.key == Qt::Key_Home) {
+    if (ed.key == Qt::Key_Home && !ed.modifiers) {
         ups(ed.curGrip).off = PointF();              //TODO
         sl->layout();
         return true;
@@ -491,6 +494,12 @@ bool SlurSegment::isEdited() const
         }
     }
     return false;
+}
+
+Slur::Slur(const Slur& s)
+    : SlurTie(s)
+{
+    _sourceStemArrangement = s._sourceStemArrangement;
 }
 
 //---------------------------------------------------------
@@ -976,6 +985,16 @@ Slur::Slur(Score* s)
 }
 
 //---------------------------------------------------------
+//   calcStemArrangement
+//---------------------------------------------------------
+
+int calcStemArrangement(Element* start, Element* end)
+{
+    return (start && toChord(start)->stem() && toChord(start)->stem()->up() ? 2 : 0)
+           + (end && end->isChord() && toChord(end)->stem() && toChord(end)->stem()->up() ? 4 : 0);
+}
+
+//---------------------------------------------------------
 //   write
 //---------------------------------------------------------
 
@@ -989,8 +1008,25 @@ void Slur::write(XmlWriter& xml) const
         return;
     }
     xml.stag(this);
+    if (xml.clipboardmode()) {
+        xml.tag("stemArr", calcStemArrangement(startElement(), endElement()));
+    }
     SlurTie::writeProperties(xml);
     xml.etag();
+}
+
+//---------------------------------------------------------
+//   readProperties
+//---------------------------------------------------------
+
+bool Slur::readProperties(XmlReader& e)
+{
+    const QStringRef& tag(e.name());
+    if (tag == "stemArr") {
+        _sourceStemArrangement = e.readInt();
+        return true;
+    }
+    return SlurTie::readProperties(e);
 }
 
 //---------------------------------------------------------
@@ -1087,6 +1123,15 @@ SpannerSegment* Slur::layoutSystem(System* system)
             }
             Chord* c1 = startCR()->isChord() ? toChord(startCR()) : 0;
             Chord* c2 = endCR()->isChord() ? toChord(endCR()) : 0;
+
+            if (_sourceStemArrangement != -1) {
+                if (_sourceStemArrangement != calcStemArrangement(c1, c2)) {
+                    // copy & paste from incompatible stem arrangement, so reset bezier points
+                    for (int g = 0; g < (int)Ms::Grip::GRIPS; ++g) {
+                        slurSegment->ups((Ms::Grip)g) = UP();
+                    }
+                }
+            }
 
             if (c1 && c1->beam() && c1->beam()->cross()) {
                 // TODO: stem direction is not finalized, so we cannot use it here

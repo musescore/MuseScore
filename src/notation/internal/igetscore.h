@@ -26,8 +26,7 @@ namespace Ms {
 class Score;
 }
 
-namespace mu {
-namespace notation {
+namespace mu::notation {
 class IGetScore
 {
 public:
@@ -35,7 +34,6 @@ public:
 
     virtual Ms::Score* score() const = 0;
 };
-}
 }
 
 #endif // MU_NOTATION_IGETSCORE_H

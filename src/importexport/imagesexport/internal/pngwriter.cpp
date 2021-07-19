@@ -23,17 +23,17 @@
 #include "pngwriter.h"
 
 #include <cmath>
-
-#include "log.h"
+#include <QImage>
 
 #include "libmscore/score.h"
 #include "libmscore/page.h"
 
 #include "engraving/draw/qpainterprovider.h"
 
-#include <QImage>
+#include "log.h"
 
 using namespace mu::iex::imagesexport;
+using namespace mu::project;
 using namespace mu::notation;
 using namespace mu::io;
 

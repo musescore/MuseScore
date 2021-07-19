@@ -47,7 +47,6 @@ public:
 
     virtual bool backgroundUseColor() const = 0;
     virtual void setBackgroundUseColor(bool value) = 0;
-
     virtual async::Notification backgroundChanged() const = 0;
 
     virtual QColor foregroundColor() const = 0;
@@ -58,7 +57,6 @@ public:
 
     virtual bool foregroundUseColor() const = 0;
     virtual void setForegroundUseColor(bool value) = 0;
-
     virtual async::Notification foregroundChanged() const = 0;
 
     virtual io::path wallpapersDefaultDirPath() const = 0;
@@ -98,8 +96,9 @@ public:
     virtual std::string fontFamily() const = 0;
     virtual int fontSize() const = 0;
 
-    virtual ValCh<io::path> stylesPath() const = 0;
-    virtual void setStylesPath(const io::path& path) = 0;
+    virtual io::path userStylesPath() const = 0;
+    virtual void setUserStylesPath(const io::path& path) = 0;
+    virtual async::Channel<io::path> userStylesPathChanged() const = 0;
 
     virtual io::path defaultStyleFilePath() const = 0;
     virtual void setDefaultStyleFilePath(const io::path& path) = 0;
@@ -128,9 +127,6 @@ public:
     virtual std::string notationRevision() const = 0;
     virtual int notationDivision() const = 0;
 
-    virtual std::vector<std::string> toolbarActions(const std::string& toolbarName) const = 0;
-    virtual void setToolbarActions(const std::string& toolbarName, const std::vector<std::string>& actions) = 0;
-
     virtual ValCh<framework::Orientation> canvasOrientation() const = 0;
     virtual void setCanvasOrientation(framework::Orientation orientation) = 0;
 
@@ -145,6 +141,21 @@ public:
 
     virtual int notePlayDurationMilliseconds() const = 0;
     virtual void setNotePlayDurationMilliseconds(int durationMs) = 0;
+
+    virtual void setTemplateModeEnalbed(bool enabled) = 0;
+    virtual void setTestModeEnabled(bool enabled) = 0;
+
+    virtual io::paths instrumentListPaths() const = 0;
+    virtual async::Notification instrumentListPathsChanged() const = 0;
+
+    virtual io::paths userInstrumentListPaths() const = 0;
+    virtual void setUserInstrumentListPaths(const io::paths& paths) = 0;
+
+    virtual io::paths scoreOrderListPaths() const = 0;
+    virtual async::Notification scoreOrderListPathsChanged() const = 0;
+
+    virtual io::paths userScoreOrderListPaths() const = 0;
+    virtual void setUserScoreOrderListPaths(const io::paths& paths) = 0;
 };
 }
 

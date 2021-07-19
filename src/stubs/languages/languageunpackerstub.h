@@ -28,7 +28,7 @@ namespace mu::languages {
 class LanguageUnpackerStub : public ILanguageUnpacker
 {
 public:
-    Ret unpack(const QString& languageCode, const QString& source, const QString& destination) const override;
+    Ret unpack(const QString& languageCode, const QString& source, const io::path& destination) const override;
 };
 }
 

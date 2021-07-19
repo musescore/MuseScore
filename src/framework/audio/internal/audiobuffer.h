@@ -25,23 +25,22 @@
 #include <vector>
 #include <memory>
 #include <atomic>
-#include "iaudiobuffer.h"
-#include "iaudioconfiguration.h"
+
 #include "modularity/ioc.h"
+
+#include "iaudiobuffer.h"
 
 namespace mu::audio {
 class AudioBuffer : public IAudioBuffer
 {
-    static const int DEFAULT_SIZE = 16384;
-    static const unsigned int FILL_SAMPLES = 1024;
-    static const unsigned int FILL_OVER    = 1024;
-
-    INJECT(audio, IAudioConfiguration, config)
+    static const samples_t DEFAULT_SIZE = 16384;
+    static const samples_t FILL_SAMPLES = 1024;
+    static const samples_t FILL_OVER    = 1024;
 
 public:
     AudioBuffer() = default;
 
-    void init(int samplesPerChannel = DEFAULT_SIZE);
+    void init(const audioch_t audioChannelsCount, const samples_t samplesPerChannel = DEFAULT_SIZE);
 
     void setSource(std::shared_ptr<IAudioSource> source) override;
     void forward() override;
@@ -55,11 +54,12 @@ private:
     void fillup();
     void updateWriteIndex(const unsigned int samplesPerChannel);
 
-    std::recursive_mutex m_mutex; //! TODO get rid *recursive*
+    std::mutex m_mutex;
     size_t m_minSampleLag = FILL_SAMPLES;
     size_t m_writeIndex = 0;
     size_t m_readIndex = 0;
-    int m_audioChannelsCount = 2;
+    samples_t m_samplesPerChannel = 0;
+    audioch_t m_audioChannelsCount = 0;
 
     std::vector<float> m_data = {};
     std::shared_ptr<IAudioSource> m_source = nullptr;

@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "painter.h"
+#include "brush.h"
 
 #include <QPainterPath>
 
@@ -73,16 +74,6 @@ void Painter::init()
     if (extended) {
         extended->beginTarget(m_name);
     }
-}
-
-QPaintDevice* Painter::device() const
-{
-    return m_provider->device();
-}
-
-QPainter* Painter::qpainter() const
-{
-    return m_provider->qpainter();
 }
 
 IPaintProviderPtr Painter::provider() const
@@ -159,7 +150,7 @@ const Font& Painter::font() const
     return m_provider->font();
 }
 
-void Painter::setPen(const QPen& pen)
+void Painter::setPen(const Pen& pen)
 {
     m_provider->setPen(pen);
     if (extended) {
@@ -169,15 +160,15 @@ void Painter::setPen(const QPen& pen)
 
 void Painter::setNoPen()
 {
-    setPen(QPen(Qt::NoPen));
+    setPen(Pen(PenStyle::NoPen));
 }
 
-const QPen& Painter::pen() const
+const Pen& Painter::pen() const
 {
     return m_provider->pen();
 }
 
-void Painter::setBrush(const QBrush& brush)
+void Painter::setBrush(const Brush& brush)
 {
     m_provider->setBrush(brush);
     if (extended) {
@@ -185,7 +176,7 @@ void Painter::setBrush(const QBrush& brush)
     }
 }
 
-const QBrush& Painter::brush() const
+const Brush& Painter::brush() const
 {
     return m_provider->brush();
 }
@@ -282,11 +273,11 @@ void Painter::setViewport(const RectF& viewport)
 
 // drawing functions
 
-void Painter::fillPath(const QPainterPath& path, const QBrush& brush)
+void Painter::fillPath(const QPainterPath& path, const Brush& brush)
 {
-    QPen oldPen = this->pen();
-    QBrush oldBrush = this->brush();
-    setPen(QPen(Qt::NoPen));
+    Pen oldPen = this->pen();
+    Brush oldBrush = this->brush();
+    setPen(Pen(PenStyle::NoPen));
     setBrush(brush);
 
     drawPath(path);
@@ -295,12 +286,12 @@ void Painter::fillPath(const QPainterPath& path, const QBrush& brush)
     setBrush(oldBrush);
 }
 
-void Painter::strokePath(const QPainterPath& path, const QPen& pen)
+void Painter::strokePath(const QPainterPath& path, const Pen& pen)
 {
-    QPen oldPen = this->pen();
-    QBrush oldBrush = this->brush();
+    Pen oldPen = this->pen();
+    Brush oldBrush = this->brush();
     setPen(pen);
-    setBrush(Qt::NoBrush);
+    setBrush(BrushStyle::NoBrush);
 
     drawPath(path);
 
@@ -437,11 +428,11 @@ void Painter::drawSymbol(const PointF& point, uint ucs4Code)
     }
 }
 
-void Painter::fillRect(const RectF& rect, const QBrush& brush)
+void Painter::fillRect(const RectF& rect, const Brush& brush)
 {
-    QPen oldPen = this->pen();
-    QBrush oldBrush = this->brush();
-    setPen(QPen(Qt::NoPen));
+    Pen oldPen = this->pen();
+    Brush oldBrush = this->brush();
+    setPen(Pen(mu::draw::PenStyle::NoPen));
     setBrush(brush);
 
     drawRect(rect);
@@ -450,6 +441,23 @@ void Painter::fillRect(const RectF& rect, const QBrush& brush)
     setPen(oldPen);
 }
 
+void Painter::drawPixmap(const PointF& point, const Pixmap& pm)
+{
+    m_provider->drawPixmap(point, pm);
+    if (extended) {
+        extended->drawPixmap(point, pm);
+    }
+}
+
+void Painter::drawTiledPixmap(const RectF& rect, const Pixmap& pm, const PointF& offset)
+{
+    m_provider->drawTiledPixmap(rect, pm, offset);
+    if (extended) {
+        extended->drawTiledPixmap(rect, pm, offset);
+    }
+}
+
+#ifndef NO_QT_SUPPORT
 void Painter::drawPixmap(const PointF& point, const QPixmap& pm)
 {
     m_provider->drawPixmap(point, pm);
@@ -465,6 +473,8 @@ void Painter::drawTiledPixmap(const RectF& rect, const QPixmap& pm, const PointF
         extended->drawTiledPixmap(rect, pm, offset);
     }
 }
+
+#endif
 
 Painter::State& Painter::editableState()
 {
@@ -496,4 +506,14 @@ void Painter::updateMatrix()
     if (extended) {
         extended->setTransform(st.transform);
     }
+}
+
+void Painter::setClipRect(const RectF& rect)
+{
+    m_provider->setClipRect(rect);
+}
+
+void Painter::setClipping(bool enable)
+{
+    m_provider->setClipping(enable);
 }

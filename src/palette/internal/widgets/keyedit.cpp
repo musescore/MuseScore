@@ -26,6 +26,11 @@
 #include <QDragEnterEvent>
 #include <QMimeData>
 
+#include "translation.h"
+#include "commonscene/commonscenetypes.h"
+#include "engraving/draw/qpainterprovider.h"
+#include "engraving/style/defaultstyle.h"
+
 #include "palette/palette.h"
 #include "palette/palettecreator.h"
 #include "keyedit.h"
@@ -36,11 +41,6 @@
 #include "libmscore/clef.h"
 #include "libmscore/mscore.h"
 #include "libmscore/xml.h"
-
-#include "engraving/draw/qpainterprovider.h"
-
-#include "commonscene/commonscenetypes.h"
-#include "translation.h"
 
 #include "../palette_config.h"
 
@@ -130,8 +130,8 @@ void KeyCanvas::paintEvent(QPaintEvent*)
     RectF background = RectF::fromQRectF(imatrix.mapRect(QRectF(0, 0, ww, wh)));
     painter.fillRect(background, Qt::white);
 
-    QPen pen(Qt::black);
-    pen.setWidthF(MScore::defaultStyle().value(Sid::staffLineWidth).toDouble() * gscore->spatium());
+    draw::Pen pen(Qt::black);
+    pen.setWidthF(engraving::DefaultStyle::defaultStyle().value(Sid::staffLineWidth).toDouble() * gscore->spatium());
     painter.setPen(pen);
 
     for (int i = 0; i < 5; ++i) {

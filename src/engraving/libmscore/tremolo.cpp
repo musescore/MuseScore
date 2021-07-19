@@ -21,9 +21,15 @@
  */
 
 #include "tremolo.h"
+
+#include "translation.h"
+#include "draw/transform.h"
+#include "draw/pen.h"
+#include "draw/brush.h"
+#include "style/style.h"
+
 #include "score.h"
 #include "staff.h"
-#include "style.h"
 #include "chord.h"
 #include "note.h"
 #include "measure.h"
@@ -31,8 +37,6 @@
 #include "stem.h"
 #include "symid.h"
 #include "xml.h"
-
-#include "draw/transform.h"
 
 using namespace mu;
 
@@ -112,18 +116,19 @@ qreal Tremolo::minHeight() const
 void Tremolo::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
+    using namespace mu::draw;
     if (isBuzzRoll()) {
         painter->setPen(curColor());
         drawSymbol(SymId::buzzRoll, painter);
     } else {
-        painter->setBrush(QBrush(curColor()));
+        painter->setBrush(Brush(curColor()));
         painter->setNoPen();
         painter->drawPath(path);
     }
     // for palette
     if (!parent() && !twoNotes()) {
         qreal x = 0.0;     // bbox().width() * .25;
-        QPen pen(curColor(), point(score()->styleS(Sid::stemWidth)));
+        Pen pen(curColor(), point(score()->styleS(Sid::stemWidth)));
         painter->setPen(pen);
         const qreal sp = spatium();
         if (isBuzzRoll()) {
@@ -690,7 +695,7 @@ Fraction Tremolo::tremoloLen() const
 
 QString Tremolo::subtypeName() const
 {
-    return qApp->translate("Tremolo", tremoloName[subtype()]);
+    return qtrc("Tremolo", tremoloName[subtype()]);
 }
 
 //---------------------------------------------------------

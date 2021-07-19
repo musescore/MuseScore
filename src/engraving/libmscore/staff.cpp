@@ -20,6 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "style/style.h"
+
 #include "mscore.h"
 #include "staff.h"
 #include "part.h"
@@ -29,7 +31,6 @@
 #include "bracket.h"
 #include "keysig.h"
 #include "segment.h"
-#include "style.h"
 #include "measure.h"
 #include "stringdata.h"
 #include "stafftype.h"
@@ -66,7 +67,27 @@ Staff::Staff(Score* score)
 }
 
 //---------------------------------------------------------
-//   idx
+//   copy ctor
+//---------------------------------------------------------
+
+Staff::Staff(const Staff& staff)
+    : Element(staff)
+{
+    init(&staff);
+    _part = staff._part;
+}
+
+//---------------------------------------------------------
+//   ~Staff
+//---------------------------------------------------------
+
+Staff::~Staff()
+{
+    qDeleteAll(brackets());
+}
+
+//---------------------------------------------------------
+//   clone
 //---------------------------------------------------------
 
 Staff* Staff::clone() const

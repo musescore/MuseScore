@@ -23,11 +23,12 @@
 #include "instrumentsconverter.h"
 
 #include "libmscore/instrument.h"
+#include "libmscore/instrtemplate.h"
+#include "libmscore/drumset.h"
 
 using namespace mu::notation;
-using namespace mu::instruments;
 
-Ms::Instrument InstrumentsConverter::convertInstrument(const mu::instruments::Instrument& instrument)
+Ms::Instrument InstrumentsConverter::convertInstrument(const Instrument& instrument)
 {
     Ms::Instrument result;
     result.setAmateurPitchRange(instrument.amateurPitchRange.min, instrument.amateurPitchRange.max);
@@ -57,19 +58,22 @@ Ms::Instrument InstrumentsConverter::convertInstrument(const mu::instruments::In
     result.setMidiActions(convertMidiActions(instrument.midiActions));
     result.setArticulation(instrument.midiArticulations);
 
-    for (const instruments::Channel& channel : instrument.channels) {
-        result.appendChannel(new instruments::Channel(channel));
+    result.clearChannels();
+
+    for (const InstrumentChannel& channel : instrument.channels) {
+        result.appendChannel(new InstrumentChannel(channel));
     }
 
     result.setStringData(instrument.stringData);
     result.setSingleNoteDynamics(instrument.singleNoteDynamics);
+    result.setTrait(instrument.trait);
 
     return result;
 }
 
-mu::instruments::Instrument InstrumentsConverter::convertInstrument(const Ms::Instrument& instrument)
+Instrument InstrumentsConverter::convertInstrument(const Ms::Instrument& instrument)
 {
-    mu::instruments::Instrument result;
+    Instrument result;
     result.amateurPitchRange = PitchRange(instrument.minPitchA(), instrument.maxPitchA());
     result.professionalPitchRange = PitchRange(instrument.minPitchP(), instrument.maxPitchP());
 
@@ -88,6 +92,7 @@ mu::instruments::Instrument InstrumentsConverter::convertInstrument(const Ms::In
     result.useDrumset = instrument.useDrumset();
     result.drumset = instrument.drumset();
 
+    result.staves = instrument.cleffTypeCount();
     for (int i = 0; i < instrument.cleffTypeCount(); ++i) {
         result.clefs[i] = instrument.clefType(i);
     }
@@ -95,12 +100,28 @@ mu::instruments::Instrument InstrumentsConverter::convertInstrument(const Ms::In
     result.midiActions = convertMidiActions(instrument.midiActions());
     result.midiArticulations = instrument.articulation();
 
-    for (const instruments::Channel* channel : instrument.channel()) {
+    for (const InstrumentChannel* channel : instrument.channel()) {
         result.channels.append(*channel);
     }
 
     result.stringData = *instrument.stringData();
     result.singleNoteDynamics = instrument.singleNoteDynamics();
+    result.trait = instrument.trait();
+
+    return result;
+}
+
+Instrument InstrumentsConverter::convertInstrument(const Ms::InstrumentTemplate& templ)
+{
+    Ms::Instrument msInstrument = Ms::Instrument::fromTemplate(&templ);
+    Instrument result = convertInstrument(msInstrument);
+    result.templateId = templ.id;
+    result.familyId = templ.family ? templ.family->id : QString();
+    result.sequenceOrder = templ.sequenceOrder;
+
+    for (const Ms::InstrumentGenre* msGenre : templ.genres) {
+        result.genreIds << msGenre->id;
+    }
 
     return result;
 }

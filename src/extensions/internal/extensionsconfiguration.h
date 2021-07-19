@@ -56,8 +56,9 @@ public:
 
     io::paths templatesPaths() const override;
 
-    ValCh<io::path> extensionsPath() const override;
-    void setExtensionsPath(const io::path& path) override;
+    io::path userExtensionsPath() const override;
+    void setUserExtensionsPath(const io::path& path) override;
+    async::Channel<io::path> userExtensionsPathChanged() const override;
 
 private:
     ExtensionsHash parseExtensionConfig(const QByteArray& json) const;
@@ -69,10 +70,8 @@ private:
     io::path extensionInstrumentsPath(const QString& extensionCode) const;
     io::path extensionTemplatesPath(const QString& extensionCode) const;
 
-    io::path extensionsDataPath() const;
-
     async::Channel<ExtensionsHash> m_extensionHashChanged;
-    async::Channel<io::path> m_extensionsPathChanged;
+    async::Channel<io::path> m_userExtensionsPathChanged;
 };
 }
 

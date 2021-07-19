@@ -25,20 +25,27 @@
 #include <string>
 #include <map>
 
+#include "io/path.h"
 #include "midi/miditypes.h"
 
 namespace mu::audio::synth {
 using SynthName = midi::SynthName;
-using SynthMap = midi::SynthMap;
+using SoundFontPath = io::path;
+using SoundFontPaths = std::vector<SoundFontPath>;
 
 enum class SoundFontFormat {
     Undefined = 0,
     SF2,
     SF3,
-    SFZ,
     Embedded
 };
 using SoundFontFormats = std::set<SoundFontFormat>;
+
+enum class SynthType {
+    Undefined = 0,
+    Fluid,
+    VSTi
+};
 
 struct SynthesizerState {
     enum class ValID {

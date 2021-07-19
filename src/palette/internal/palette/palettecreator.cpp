@@ -70,7 +70,7 @@
 #include "libmscore/stafftext.h"
 #include "libmscore/systemtext.h"
 #include "libmscore/instrchange.h"
-#include "libmscore/icon.h"
+#include "libmscore/actionicon.h"
 #include "libmscore/accidental.h"
 #include "libmscore/harmony.h"
 #include "libmscore/rehearsalmark.h"
@@ -91,27 +91,30 @@
 using namespace mu::actions;
 
 namespace Ms {
-extern bool useFactorySettings;
-
 static Palette* toPalette(PalettePanel* pp)
 {
     return new Palette(PalettePanelPtr(pp));
 }
 
-//---------------------------------------------------------
-//   populateIconPalette
-//---------------------------------------------------------
-
-void populateIconPalette(Palette* p, const IconAction* a)
+void PaletteCreator::populateIconPalettePanel(PalettePanel* palettePanel, const PaletteActionIconList& actions)
 {
-    auto adapter = mu::framework::ioc()->resolve<mu::palette::IPaletteAdapter>("palette");
-    while (a->subtype != IconType::NONE) {
-        auto ik = makeElement<Icon>(Ms::gscore);
-        ik->setIconType(a->subtype);
-        const mu::ui::UiAction& action = adapter->getAction(codeFromQString(a->action));
-        ik->setAction(a->action, static_cast<char16_t>(action.iconCode));
-        p->append(ik, action.title);
-        ++a;
+    for (const PaletteActionIcon& paletteAction : actions) {
+        const mu::ui::UiAction& action = actionsRegister()->action(paletteAction.actionCode);
+        auto icon = makeElement<ActionIcon>(gscore);
+        icon->setActionType(paletteAction.actionType);
+        icon->setAction(paletteAction.actionCode, static_cast<char16_t>(action.iconCode));
+        palettePanel->append(icon, action.title);
+    }
+}
+
+void PaletteCreator::populateIconPalette(Palette* palette, const PaletteActionIconList& actions)
+{
+    for (const PaletteActionIcon& paletteAction : actions) {
+        const mu::ui::UiAction& action = actionsRegister()->action(paletteAction.actionCode);
+        auto icon = makeElement<ActionIcon>(gscore);
+        icon->setActionType(paletteAction.actionType);
+        icon->setAction(paletteAction.actionCode, static_cast<char16_t>(action.iconCode));
+        palette->append(icon, action.title);
     }
 }
 
@@ -416,23 +419,6 @@ PaletteTree* PaletteCreator::newDefaultPaletteTree()
 }
 
 //---------------------------------------------------------
-//   populateIconPalettePanel
-//---------------------------------------------------------
-
-static void populateIconPalettePanel(PalettePanel* p, const IconAction* a)
-{
-    auto adapter = mu::framework::ioc()->resolve<mu::palette::IPaletteAdapter>("palette");
-    while (a->subtype != IconType::NONE) {
-        auto ik = makeElement<Icon>(gscore);
-        ik->setIconType(a->subtype);
-        const mu::ui::UiAction& action = adapter->getAction(codeFromQString(a->action));
-        ik->setAction(a->action, static_cast<char16_t>(action.iconCode));
-        p->append(ik, action.title);
-        ++a;
-    }
-}
-
-//---------------------------------------------------------
 //   newBeamPalettePanel
 //---------------------------------------------------------
 
@@ -443,19 +429,19 @@ PalettePanel* PaletteCreator::newBeamPalettePanel()
     sp->setGrid(27, 40);
     sp->setDrawGrid(true);
 
-    const IconAction bpa[] = {
-        { IconType::SBEAM,    "beam-start" },
-        { IconType::MBEAM,    "beam-mid" },
-        { IconType::NBEAM,    "no-beam" },
-        { IconType::BEAM32,   "beam32" },
-        { IconType::BEAM64,   "beam64" },
-        { IconType::AUTOBEAM, "auto-beam" },
-        { IconType::FBEAM1,   "fbeam1" },
-        { IconType::FBEAM2,   "fbeam2" },
-        { IconType::NONE,     "" }
+    static const PaletteActionIconList actions = {
+        { ActionIconType::BEAM_START, "beam-start" },
+        { ActionIconType::BEAM_MID, "beam-mid" },
+        { ActionIconType::BEAM_NONE, "no-beam" },
+        { ActionIconType::BEAM_BEGIN_32, "beam32" },
+        { ActionIconType::BEAM_BEGIN_64, "beam64" },
+        { ActionIconType::BEAM_AUTO, "auto-beam" },
+        { ActionIconType::BEAM_FEATHERED_SLOWER, "fbeam1" },
+        { ActionIconType::BEAM_FEATHERED_FASTER, "fbeam2" },
+        { ActionIconType::UNDEFINED, "" }
     };
 
-    populateIconPalettePanel(sp, bpa);
+    populateIconPalettePanel(sp, actions);
     return sp;
 }
 
@@ -569,23 +555,12 @@ PalettePanel* PaletteCreator::newAccidentalsPalettePanel(bool defaultPalettePane
         sp->setMoreElements(true);
     }
 
-    auto ik = makeElement<Icon>(gscore);
-    ik->setIconType(IconType::BRACKETS);
-    const mu::ui::UiAction& bracketsAction = adapter()->getAction("add-brackets");
-    ik->setAction(bracketsAction.code, static_cast<char16_t>(bracketsAction.iconCode));
-    sp->append(ik, bracketsAction.title);
-
-    ik = makeElement<Icon>(gscore);
-    ik->setIconType(IconType::PARENTHESES);
-    const mu::ui::UiAction& parenthesesAction = adapter()->getAction("add-parentheses");
-    ik->setAction(parenthesesAction.code, static_cast<char16_t>(parenthesesAction.iconCode));
-    sp->append(ik, parenthesesAction.title);
-
-    ik = makeElement<Icon>(gscore);
-    ik->setIconType(IconType::BRACES);
-    const mu::ui::UiAction& bracesAction = adapter()->getAction("add-braces");
-    ik->setAction(bracesAction.code, static_cast<char16_t>(bracesAction.iconCode));
-    sp->append(ik, bracesAction.title);
+    static const PaletteActionIconList actions {
+        { ActionIconType::BRACKETS, "add-brackets" },
+        { ActionIconType::PARENTHESES, "add-parentheses" },
+        { ActionIconType::BRACES, "add-braces" },
+    };
+    populateIconPalettePanel(sp, actions);
 
     return sp;
 }
@@ -754,24 +729,22 @@ PalettePanel* PaletteCreator::newLayoutPalettePanel()
     sp->append(stc, QT_TRANSLATE_NOOP("palette", "Staff type change"));
 
     if (configuration()->enableExperimental()) {
-        static const IconAction bpa[] = {
-            { IconType::VFRAME,   "insert-vbox" },
-            { IconType::HFRAME,   "insert-hbox" },
-            { IconType::TFRAME,   "insert-textframe" },
-            { IconType::FFRAME,   "insert-fretframe" },
-            { IconType::MEASURE,  "insert-measure" },
-            { IconType::NONE,     "" }
+        static const PaletteActionIconList actions {
+            { ActionIconType::VFRAME, "insert-vbox" },
+            { ActionIconType::HFRAME, "insert-hbox" },
+            { ActionIconType::TFRAME, "insert-textframe" },
+            { ActionIconType::FFRAME, "insert-fretframe" },
+            { ActionIconType::MEASURE, "insert-measure" },
         };
-        populateIconPalettePanel(sp, bpa);
+        populateIconPalettePanel(sp, actions);
     } else {
-        static const IconAction bpa[] = {
-            { IconType::VFRAME,   "insert-vbox" },
-            { IconType::HFRAME,   "insert-hbox" },
-            { IconType::TFRAME,   "insert-textframe" },
-            { IconType::MEASURE,  "insert-measure" },
-            { IconType::NONE,     "" }
+        static const PaletteActionIconList actions {
+            { ActionIconType::VFRAME, "insert-vbox" },
+            { ActionIconType::HFRAME, "insert-hbox" },
+            { ActionIconType::TFRAME, "insert-textframe" },
+            { ActionIconType::MEASURE, "insert-measure" },
         };
-        populateIconPalettePanel(sp, bpa);
+        populateIconPalettePanel(sp, actions);
     }
 
     return sp;
@@ -875,11 +848,10 @@ PalettePanel* PaletteCreator::newNoteHeadsPalettePanel()
         sp->append(nh, NoteHead::group2userName(NoteHead::Group(i)));
     }
 
-    auto ik = makeElement<Icon>(gscore);
-    ik->setIconType(IconType::PARENTHESES);
-    const mu::ui::UiAction& action = adapter()->getAction("add-parentheses");
-    ik->setAction("add-parentheses", static_cast<char16_t>(action.iconCode));
-    sp->append(ik, action.title);
+    static const PaletteActionIconList actions {
+        { ActionIconType::PARENTHESES, "add-parentheses" },
+    };
+    populateIconPalettePanel(sp, actions);
 
     return sp;
 }
@@ -1099,11 +1071,15 @@ PalettePanel* PaletteCreator::newBracketsPalettePanel()
             { BracketType::LINE,   QT_TRANSLATE_NOOP("palette", "Line") } }
     };
 
-    for (auto type : types) {
+    static Staff bracketItemOwner(gscore);
+    bracketItemOwner.setBracketType(types.size() - 1, BracketType::NORMAL);
+
+    for (size_t i = 0; i < types.size(); ++i) {
         auto b1 = makeElement<Bracket>(gscore);
-        auto bi1 = makeElement<BracketItem>(gscore);
+        auto bi1 = bracketItemOwner.brackets()[i];
+        const auto& type = types[i];
         bi1->setBracketType(type.first);
-        b1->setBracketItem(bi1.get());
+        b1->setBracketItem(bi1);
         sp->append(b1, type.second); // Bracket, Brace, Square, Line
     }
     return sp;
@@ -1270,18 +1246,18 @@ PalettePanel* PaletteCreator::newGraceNotePalettePanel()
     sp->setDrawGrid(true);
     sp->setVisible(false);
 
-    static const IconAction gna[] = {
-        { IconType::ACCIACCATURA,  "acciaccatura" },
-        { IconType::APPOGGIATURA,  "appoggiatura" },
-        { IconType::GRACE4,        "grace4" },
-        { IconType::GRACE16,       "grace16" },
-        { IconType::GRACE32,       "grace32" },
-        { IconType::GRACE8_AFTER,  "grace8after" },
-        { IconType::GRACE16_AFTER, "grace16after" },
-        { IconType::GRACE32_AFTER, "grace32after" },
-        { IconType::NONE,          "" }
+    static const PaletteActionIconList actions {
+        { ActionIconType::ACCIACCATURA,  "acciaccatura" },
+        { ActionIconType::APPOGGIATURA,  "appoggiatura" },
+        { ActionIconType::GRACE4,        "grace4" },
+        { ActionIconType::GRACE16,       "grace16" },
+        { ActionIconType::GRACE32,       "grace32" },
+        { ActionIconType::GRACE8_AFTER,  "grace8after" },
+        { ActionIconType::GRACE16_AFTER, "grace16after" },
+        { ActionIconType::GRACE32_AFTER, "grace32after" },
     };
-    populateIconPalettePanel(sp, gna);
+    populateIconPalettePanel(sp, actions);
+
     return sp;
 }
 

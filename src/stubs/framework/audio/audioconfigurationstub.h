@@ -28,8 +28,19 @@ namespace mu::audio {
 class AudioConfigurationStub : public IAudioConfiguration
 {
 public:
-    unsigned int driverBufferSize() const override;
 
+    std::vector<std::string> availableAudioApiList() const override;
+
+    std::string currentAudioApi() const override;
+    void setCurrentAudioApi(const std::string& name) override;
+
+    int audioChannelsCount() const override;
+    unsigned int driverBufferSize() const override;  // samples
+
+    bool isShowControlsInMixer() const override;
+    void setIsShowControlsInMixer(bool show) override;
+
+    // synthesizers
     std::vector<io::path> soundFontPaths() const override;
     const synth::SynthesizerState& synthesizerState() const override;
     Ret saveSynthesizerState(const synth::SynthesizerState& state) override;

@@ -27,6 +27,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/imagesexportconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/imagesexportconfiguration.h
     
+    ${CMAKE_CURRENT_LIST_DIR}/internal/abstractimagewriter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/abstractimagewriter.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/svgwriter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/svgwriter.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/svggenerator.cpp
@@ -40,7 +42,6 @@ set(MODULE_SRC
 set(MODULE_LINK
     engraving
     qzip
-    notation
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

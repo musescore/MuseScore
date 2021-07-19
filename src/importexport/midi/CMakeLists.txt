@@ -42,7 +42,6 @@ set(MODULE_LINK
     beatroot    # for midi
     engraving
     qzip
-    notation
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

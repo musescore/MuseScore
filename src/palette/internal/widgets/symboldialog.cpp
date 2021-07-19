@@ -21,14 +21,17 @@
  */
 
 #include "symboldialog.h"
-#include "palette/palettecreator.h"
-#include "palette/palette.h"
+
+#include "engraving/style/style.h"
+
 #include "libmscore/score.h"
 #include "libmscore/scorefont.h"
 #include "libmscore/sym.h"
-#include "libmscore/style.h"
 #include "libmscore/element.h"
 #include "libmscore/symbol.h"
+
+#include "palette/palettecreator.h"
+#include "palette/palette.h"
 
 #include "smuflranges.h"
 

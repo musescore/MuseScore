@@ -23,6 +23,7 @@
 #include "stemslash.h"
 #include "score.h"
 #include "chord.h"
+#include "draw/pen.h"
 
 using namespace mu;
 
@@ -34,8 +35,9 @@ namespace Ms {
 void StemSlash::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
+    using namespace mu::draw;
     qreal lw = score()->styleP(Sid::stemWidth);
-    painter->setPen(QPen(curColor(), lw, Qt::SolidLine, Qt::FlatCap));
+    painter->setPen(Pen(curColor(), lw, PenStyle::SolidLine, PenCapStyle::FlatCap));
     painter->drawLine(line);
 }
 

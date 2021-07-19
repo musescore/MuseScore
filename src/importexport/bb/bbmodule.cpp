@@ -21,14 +21,15 @@
  */
 #include "bbmodule.h"
 
-#include "log.h"
 #include "modularity/ioc.h"
 
-#include "notation/inotationreadersregister.h"
+#include "project/inotationreadersregister.h"
 #include "internal/notationbbreader.h"
 
+#include "log.h"
+
 using namespace mu::iex::bb;
-using namespace mu::notation;
+using namespace mu::project;
 
 std::string BBModule::moduleName() const
 {
@@ -37,7 +38,7 @@ std::string BBModule::moduleName() const
 
 void BBModule::resolveImports()
 {
-    auto readers = framework::ioc()->resolve<INotationReadersRegister>(moduleName());
+    auto readers = modularity::ioc()->resolve<INotationReadersRegister>(moduleName());
     if (readers) {
         readers->reg({ "mgu", "sgu" }, std::make_shared<NotationBBReader>());
     }

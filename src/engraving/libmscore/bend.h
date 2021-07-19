@@ -23,12 +23,12 @@
 #ifndef __BEND_H__
 #define __BEND_H__
 
+#include "draw/font.h"
+#include "style/style.h"
+
 #include "element.h"
 #include "pitchvalue.h"
 #include "property.h"
-#include "style.h"
-
-#include "draw/font.h"
 
 namespace Ms {
 //---------------------------------------------------------

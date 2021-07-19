@@ -25,7 +25,7 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu::playback {
-class PlaybackModule : public framework::IModuleSetup
+class PlaybackModule : public modularity::IModuleSetup
 {
 public:
 

@@ -305,7 +305,11 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
 
     if (playbackController()->isPlaying()) {
         if (m_interactData.hitElement) {
-            m_view->notationPlayback()->setPlayPositionByElement(m_interactData.hitElement);
+            RetVal<midi::tick_t> tick = m_view->notationPlayback()->playPositionTickByElement(m_interactData.hitElement);
+
+            if (tick.ret) {
+                playbackController()->seek(tick.val);
+            }
         }
         return;
     }

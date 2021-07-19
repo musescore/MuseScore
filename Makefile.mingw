@@ -31,12 +31,13 @@ BUILD_NUMBER=""
 CPUS = %NUMBER_OF_PROCESSORS%
 BUILD_FOR_WINSTORE="OFF"     # Override with "ON" to enable.
 TELEMETRY_TRACK_ID=""
+YOUTUBE_API_KEY=""
 
 
 release:
 	if not exist build.release\nul mkdir build.release
 	if not exist win32install\nul mkdir win32install
-	cd build.release & cmake -G "MinGW Makefiles" -DCMAKE_INSTALL_PREFIX=../win32install -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_MAKE_PROGRAM=mingw32-make.exe -DBUILD_FOR_WINSTORE=${BUILD_FOR_WINSTORE} -DTELEMETRY_TRACK_ID=${TELEMETRY_TRACK_ID} ..
+	cd build.release & cmake -G "MinGW Makefiles" -DCMAKE_INSTALL_PREFIX=../win32install -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_MAKE_PROGRAM=mingw32-make.exe -DBUILD_FOR_WINSTORE=${BUILD_FOR_WINSTORE} -DTELEMETRY_TRACK_ID=${TELEMETRY_TRACK_ID} -DYOUTUBE_API_KEY=${YOUTUBE_API_KEY} ..
 	cd build.release & $(MAKE) lrelease
 	cd build.release & $(MAKE) -j ${CPUS}
 

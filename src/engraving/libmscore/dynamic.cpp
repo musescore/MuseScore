@@ -19,8 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 #include "dynamic.h"
+
+#include <QGuiApplication>
+
+#include "style/style.h"
+
 #include "dynamichairpingroup.h"
 #include "xml.h"
 #include "score.h"
@@ -28,7 +32,7 @@
 #include "system.h"
 #include "segment.h"
 #include "utils.h"
-#include "style.h"
+
 #include "mscore.h"
 #include "chord.h"
 #include "undo.h"

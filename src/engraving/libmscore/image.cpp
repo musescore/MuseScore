@@ -27,9 +27,12 @@
 #include "mscore.h"
 #include "imageStore.h"
 
+#include "draw/pixmap.h"
 #include "draw/transform.h"
+#include "draw/svgrenderer.h"
 
 using namespace mu;
+using namespace mu::draw;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -75,9 +78,9 @@ Image::Image(const Image& img)
     _linkPath        = img._linkPath;
     _linkIsValid     = img._linkIsValid;
     if (imageType == ImageType::RASTER) {
-        rasterDoc = img.rasterDoc ? new QImage(*img.rasterDoc) : 0;
+        rasterDoc = img.rasterDoc ? new Pixmap(*img.rasterDoc) : 0;
     } else if (imageType == ImageType::SVG) {
-        svgDoc = img.svgDoc ? new QSvgRenderer(_storeItem->buffer()) : 0;
+        svgDoc = img.svgDoc ? new SvgRenderer(_storeItem->buffer()) : 0;
     }
     setZ(img.z());
 }
@@ -123,7 +126,13 @@ SizeF Image::imageSize() const
     if (!isValid()) {
         return SizeF();
     }
-    return SizeF::fromQSizeF(imageType == ImageType::RASTER ? rasterDoc->size() : svgDoc->defaultSize());
+
+    if (imageType == ImageType::RASTER) {
+        Size rasterSize = rasterDoc->size();
+        return SizeF(rasterSize.width(), rasterSize.height());
+    }
+
+    return svgDoc->defaultSize();
 }
 
 //---------------------------------------------------------
@@ -138,7 +147,7 @@ void Image::draw(mu::draw::Painter* painter) const
         if (!svgDoc) {
             emptyImage = true;
         } else {
-            svgDoc->render(painter->qpainter(), bbox().toQRectF());
+            svgDoc->render(painter, bbox());
         }
     } else if (imageType == ImageType::RASTER) {
         if (rasterDoc == nullptr) {
@@ -154,14 +163,14 @@ void Image::draw(mu::draw::Painter* painter) const
             if (score() && score()->printing() && !MScore::svgPrinting) {
                 // use original image size for printing, but not for svg for reasonable file size.
                 painter->scale(s.width() / rasterDoc->width(), s.height() / rasterDoc->height());
-                painter->drawPixmap(PointF(0, 0), QPixmap::fromImage(*rasterDoc));
+                painter->drawPixmap(PointF(0, 0), *rasterDoc);
             } else {
                 Transform t = painter->worldTransform();
-                QSizeF ss = QSizeF(s.width() * t.m11(), s.height() * t.m22());
+                Size ss = Size(s.width() * t.m11(), s.height() * t.m22());
                 t.setMatrix(1.0, t.m12(), t.m13(), t.m21(), 1.0, t.m23(), t.m31(), t.m32(), t.m33());
                 painter->setWorldTransform(t);
                 if ((buffer.size() != ss || _dirty) && rasterDoc && !rasterDoc->isNull()) {
-                    buffer = QPixmap::fromImage(rasterDoc->scaled(ss.toSize(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+                    buffer = imageConverter()->scaled(*rasterDoc, ss);
                     _dirty = false;
                 }
                 if (buffer.isNull()) {
@@ -174,14 +183,14 @@ void Image::draw(mu::draw::Painter* painter) const
         }
     }
     if (emptyImage) {
-        painter->setBrush(Qt::NoBrush);
+        painter->setBrush(mu::draw::BrushStyle::NoBrush);
         painter->setPen(Qt::black);
         painter->drawRect(bbox());
         painter->drawLine(0.0, 0.0, bbox().width(), bbox().height());
         painter->drawLine(bbox().width(), 0.0, 0.0, bbox().height());
     }
     if (selected() && !(score() && score()->printing())) {
-        painter->setBrush(Qt::NoBrush);
+        painter->setBrush(mu::draw::BrushStyle::NoBrush);
         painter->setPen(MScore::selectColor[0]);
         painter->drawRect(bbox());
     }
@@ -536,12 +545,12 @@ void Image::layout()
     setPos(0.0, 0.0);
     if (imageType == ImageType::SVG && !svgDoc) {
         if (_storeItem) {
-            svgDoc = new QSvgRenderer(_storeItem->buffer());
+            svgDoc = new SvgRenderer(_storeItem->buffer());
         }
     } else if (imageType == ImageType::RASTER && !rasterDoc) {
         if (_storeItem) {
-            rasterDoc = new QImage;
-            rasterDoc->loadFromData(_storeItem->buffer());
+            rasterDoc = new Pixmap;
+            rasterDoc->setData(_storeItem->buffer());
             if (!rasterDoc->isNull()) {
                 _dirty = true;
             }

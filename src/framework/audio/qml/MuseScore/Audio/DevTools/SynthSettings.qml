@@ -54,14 +54,6 @@ Rectangle {
                 checked: synthListPanel.currentIndex === 0
                 onClicked: synthListPanel.currentIndex = 0
             }
-
-            Button {
-                text: "Zerberus"
-                checkable: true
-                checked: synthListPanel.currentIndex === 1
-                onClicked: synthListPanel.currentIndex = 1
-            }
-
         }
     }
 
@@ -103,33 +95,6 @@ Rectangle {
                     if (name === "Fluid") {
                         fluidPanel.avalaibleSoundFonts = []
                         fluidPanel.avalaibleSoundFonts = settingsModel.avalaibleSoundFonts("Fluid")
-                    }
-                }
-            }
-        }
-
-        SoundFontsPanel {
-            id: zerberusPanel
-            selectedSoundFonts: settingsModel.selectedSoundFonts("Zerberus")
-            avalaibleSoundFonts: settingsModel.avalaibleSoundFonts("Zerberus")
-            onSelectedUpClicked: settingsModel.soundFontUp(index, "Zerberus")
-            onSelectedDownClicked: settingsModel.soundFontDown(index, "Zerberus")
-            onSelectedRemoveClicked: settingsModel.removeSoundFont(index, "Zerberus")
-            onAddClicked: settingsModel.addSoundFont(index, "Zerberus")
-
-            Connections {
-                target: settingsModel
-                function onSelectedChanged(name) {
-                    if (name === "Zerberus") {
-                        zerberusPanel.selectedSoundFonts = []
-                        zerberusPanel.selectedSoundFonts = settingsModel.selectedSoundFonts("Zerberus")
-                    }
-                }
-
-                function onAvalaibleChanged(name) {
-                    if (name === "Zerberus") {
-                        zerberusPanel.avalaibleSoundFonts = []
-                        zerberusPanel.avalaibleSoundFonts = settingsModel.avalaibleSoundFonts("Zerberus")
                     }
                 }
             }

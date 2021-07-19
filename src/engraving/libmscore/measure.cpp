@@ -27,7 +27,7 @@
 
 #include <cmath>
 
-#include "log.h"
+#include "style/style.h"
 
 #include "measure.h"
 #include "accidental.h"
@@ -49,7 +49,7 @@
 #include "hairpin.h"
 #include "harmony.h"
 #include "hook.h"
-#include "icon.h"
+#include "actionicon.h"
 #include "image.h"
 #include "key.h"
 #include "keysig.h"
@@ -74,7 +74,6 @@
 #include "stafftext.h"
 #include "stafftype.h"
 #include "stringdata.h"
-#include "style.h"
 #include "system.h"
 #include "tempotext.h"
 #include "measurenumber.h"
@@ -94,6 +93,8 @@
 #include "stafftypechange.h"
 #include "stafflines.h"
 #include "bracketItem.h"
+
+#include "log.h"
 
 using namespace mu;
 
@@ -1487,13 +1488,13 @@ bool Measure::acceptDrop(EditData& data) const
         viewer->setDropRectangle(staffR);
         return true;
 
-    case ElementType::ICON:
-        switch (toIcon(e)->iconType()) {
-        case IconType::VFRAME:
-        case IconType::HFRAME:
-        case IconType::TFRAME:
-        case IconType::FFRAME:
-        case IconType::MEASURE:
+    case ElementType::ACTION_ICON:
+        switch (toActionIcon(e)->actionType()) {
+        case ActionIconType::VFRAME:
+        case ActionIconType::HFRAME:
+        case ActionIconType::TFRAME:
+        case ActionIconType::FFRAME:
+        case ActionIconType::MEASURE:
             viewer->setDropRectangle(canvasBoundingRect());
             return true;
         default:
@@ -1794,21 +1795,21 @@ Element* Measure::drop(EditData& data)
         score()->cmdAddMeasureRepeat(this, numMeasures, staffIdx);
         break;
     }
-    case ElementType::ICON:
-        switch (toIcon(e)->iconType()) {
-        case IconType::VFRAME:
+    case ElementType::ACTION_ICON:
+        switch (toActionIcon(e)->actionType()) {
+        case ActionIconType::VFRAME:
             score()->insertMeasure(ElementType::VBOX, this);
             break;
-        case IconType::HFRAME:
+        case ActionIconType::HFRAME:
             score()->insertMeasure(ElementType::HBOX, this);
             break;
-        case IconType::TFRAME:
+        case ActionIconType::TFRAME:
             score()->insertMeasure(ElementType::TBOX, this);
             break;
-        case IconType::FFRAME:
+        case ActionIconType::FFRAME:
             score()->insertMeasure(ElementType::FBOX, this);
             break;
-        case IconType::MEASURE:
+        case ActionIconType::MEASURE:
             score()->insertMeasure(ElementType::MEASURE, this);
             break;
         default:

@@ -26,10 +26,12 @@ using namespace mu::palette;
 using namespace mu::ui;
 
 static const mu::UriQuery MASTER_PALETTE_URI("musescore://palette/masterpalette?sync=false");
+static const mu::UriQuery SPECIAL_CHARACTERS_URI("musescore://palette/specialcharacters?sync=false");
 
 void PaletteActionsController::init()
 {
     dispatcher()->reg(this, "masterpalette", this, &PaletteActionsController::toggleMasterPalette);
+    dispatcher()->reg(this, "show-keys", this, &PaletteActionsController::openSpecialCharactersDialog);
 
     interactive()->currentUri().ch.onReceive(this, [this](const Uri& uri) {
         //! NOTE If MasterPalette are not open, then it is reasonably to compare with the current uri,
@@ -45,8 +47,7 @@ void PaletteActionsController::init()
         }
 
         if (isOpened != m_masterPaletteOpened.val) {
-            m_masterPaletteOpened.val = isOpened;
-            m_masterPaletteOpened.ch.send(isOpened);
+            m_masterPaletteOpened.set(isOpened);
         }
     });
 }
@@ -56,11 +57,21 @@ mu::ValCh<bool> PaletteActionsController::isMasterPaletteOpened() const
     return m_masterPaletteOpened;
 }
 
-void PaletteActionsController::toggleMasterPalette()
+void PaletteActionsController::toggleMasterPalette(const actions::ActionData& args)
 {
     if (interactive()->isOpened(MASTER_PALETTE_URI.uri()).val) {
         interactive()->close(MASTER_PALETTE_URI.uri());
     } else {
-        interactive()->open(MASTER_PALETTE_URI);
+        if (args.count() > 0) {
+            std::string selectedPaletteName = args.arg<std::string>(0);
+            interactive()->open(MASTER_PALETTE_URI.addingParam("selectedPaletteName", Val(selectedPaletteName)));
+        } else {
+            interactive()->open(MASTER_PALETTE_URI);
+        }
     }
+}
+
+void PaletteActionsController::openSpecialCharactersDialog()
+{
+    interactive()->open(SPECIAL_CHARACTERS_URI);
 }

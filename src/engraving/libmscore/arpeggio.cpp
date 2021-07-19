@@ -24,6 +24,8 @@
 
 #include <cmath>
 
+#include "translation.h"
+
 #include "scorefont.h"
 #include "chord.h"
 #include "note.h"
@@ -61,6 +63,11 @@ Arpeggio::Arpeggio(Score* s)
     _userLen2 = 0.0;
     _playArpeggio = true;
     _stretch = 1.0;
+}
+
+QString Arpeggio::arpeggioTypeName() const
+{
+    return qtrc("Palette", arpeggioTypeNames[int(_arpeggioType)]);
 }
 
 //---------------------------------------------------------
@@ -230,6 +237,7 @@ void Arpeggio::layout()
 void Arpeggio::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
+    using namespace mu::draw;
     if (_hidden) {
         return;
     }
@@ -239,9 +247,9 @@ void Arpeggio::draw(mu::draw::Painter* painter) const
     qreal y1 = -_userLen1;
     qreal y2 = _height + _userLen2;
 
-    painter->setPen(QPen(curColor(),
-                         score()->styleS(Sid::ArpeggioLineWidth).val() * _spatium,
-                         Qt::SolidLine, Qt::RoundCap));
+    painter->setPen(Pen(curColor(),
+                        score()->styleS(Sid::ArpeggioLineWidth).val() * _spatium,
+                        PenStyle::SolidLine, PenCapStyle::RoundCap));
 
     painter->save();
     switch (arpeggioType()) {

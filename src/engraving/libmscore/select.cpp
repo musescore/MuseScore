@@ -1068,7 +1068,7 @@ QByteArray Selection::symbolListMimeData() const
                           case ElementType::VBOX:
                           case ElementType::TBOX:
                           case ElementType::FBOX:
-                          case ElementType::ICON:
+                          case ElementType::ACTION_ICON:
                           case ElementType::OSSIA:
                           case ElementType::BAGPIPE_EMBELLISHMENT:
                                 continue;

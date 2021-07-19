@@ -31,15 +31,9 @@
 
 #include "internal/workspaceconfiguration.h"
 #include "internal/workspacemanager.h"
-#include "internal/workspacedatastreamregister.h"
-#include "internal/workspacecreator.h"
 #include "internal/workspaceactioncontroller.h"
 #include "internal/workspaceuiactions.h"
-
-#include "internal/workspacesettingsstream.h"
-#include "internal/workspacetoolbarstream.h"
-
-#include "internal/workspacesettings.h"
+#include "internal/workspacesdataprovider.h"
 
 #include "view/workspacelistmodel.h"
 #include "view/newworkspacemodel.h"
@@ -47,14 +41,13 @@
 #include "diagnostics/idiagnosticspathsregister.h"
 
 using namespace mu::workspace;
-using namespace mu::framework;
+using namespace mu::modularity;
 using namespace mu::ui;
 
 static std::shared_ptr<WorkspaceManager> s_manager = std::make_shared<WorkspaceManager>();
-static std::shared_ptr<WorkspaceDataStreamRegister> s_streamRegister = std::make_shared<WorkspaceDataStreamRegister>();
 static std::shared_ptr<WorkspaceConfiguration> s_configuration = std::make_shared<WorkspaceConfiguration>();
-static std::shared_ptr<WorkspaceSettings> s_settings = std::make_shared<WorkspaceSettings>();
 static std::shared_ptr<WorkspaceActionController> s_actionController = std::make_shared<WorkspaceActionController>();
+static std::shared_ptr<WorkspacesDataProvider> s_provider= std::make_shared<WorkspacesDataProvider>();
 
 static void workspace_init_qrc()
 {
@@ -70,17 +63,11 @@ void WorkspaceModule::registerExports()
 {
     ioc()->registerExport<IWorkspaceConfiguration>(moduleName(), s_configuration);
     ioc()->registerExport<IWorkspaceManager>(moduleName(), s_manager);
-    ioc()->registerExport<WorkspaceDataStreamRegister>(moduleName(), s_streamRegister);
-    ioc()->registerExport<IWorkspaceCreator>(moduleName(), std::make_shared<WorkspaceCreator>());
-    ioc()->registerExport<IWorkspaceSettings>(moduleName(), s_settings);
+    ioc()->registerExport<IWorkspacesDataProvider>(moduleName(), s_provider);
 }
 
 void WorkspaceModule::resolveImports()
 {
-    s_streamRegister->regStream(std::make_shared<WorkspaceSettingsStream>(WorkspaceTag::Settings));
-    s_streamRegister->regStream(std::make_shared<WorkspaceSettingsStream>(WorkspaceTag::UiArrangement));
-    s_streamRegister->regStream(std::make_shared<WorkspaceToolbarStream>());
-
     auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
     if (ar) {
         ar->reg(std::make_shared<WorkspaceUiActions>(s_actionController));
@@ -88,11 +75,8 @@ void WorkspaceModule::resolveImports()
 
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
-        ir->registerUri(Uri("musescore://workspace/select"),
-                        ContainerMeta(ContainerType::QmlDialog, "MuseScore/Workspace/WorkspacesDialog.qml"));
-
-        ir->registerUri(Uri("musescore://workspace/create"),
-                        ContainerMeta(ContainerType::QmlDialog, "MuseScore/Workspace/NewWorkspaceDialog.qml"));
+        ir->registerQmlUri(Uri("musescore://workspace/select"), "MuseScore/Workspace/WorkspacesDialog.qml");
+        ir->registerQmlUri(Uri("musescore://workspace/create"), "MuseScore/Workspace/NewWorkspaceDialog.qml");
     }
 }
 
@@ -109,15 +93,15 @@ void WorkspaceModule::registerUiTypes()
     ioc()->resolve<IUiEngine>(moduleName())->addSourceImportPath(workspace_QML_IMPORT);
 }
 
-void WorkspaceModule::onInit(const IApplication::RunMode& mode)
+void WorkspaceModule::onInit(const framework::IApplication::RunMode& mode)
 {
-    if (IApplication::RunMode::Converter == mode) {
+    if (framework::IApplication::RunMode::Converter == mode) {
         return;
     }
 
     s_configuration->init();
     s_manager->init();
-    s_settings->init();
+    s_provider->init();
     s_actionController->init();
 
     auto pr = ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());

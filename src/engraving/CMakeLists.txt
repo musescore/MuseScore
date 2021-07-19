@@ -19,6 +19,7 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 set(MODULE engraving)
+set(MODULE_QRC engraving.qrc)
 
 include(${CMAKE_CURRENT_LIST_DIR}/libmscore/libmscore.cmake)
 
@@ -26,12 +27,20 @@ set(MODULE_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/engravingmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/engravingmodule.h
+    ${CMAKE_CURRENT_LIST_DIR}/engravingerrors.h
+    ${CMAKE_CURRENT_LIST_DIR}/engravingproject.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/engravingproject.h
+    ${CMAKE_CURRENT_LIST_DIR}/iengravingconfiguration.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/internal/engravingconfiguration.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/engravingconfiguration.h
 
     ${LIBMSCORE_SRC}
 
     ${CMAKE_CURRENT_LIST_DIR}/draw/geometry.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/transform.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/drawtypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/draw/pixmap.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/painter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/draw/painter.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/ipaintprovider.h
@@ -40,17 +49,18 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/draw/buffereddrawtypes.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/bufferedpaintprovider.cpp
     ${CMAKE_CURRENT_LIST_DIR}/draw/bufferedpaintprovider.h
+    ${CMAKE_CURRENT_LIST_DIR}/draw/svgrenderer.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/draw/svgrenderer.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/ifontprovider.h
+    ${CMAKE_CURRENT_LIST_DIR}/draw/iimageconverter.h
+    ${CMAKE_CURRENT_LIST_DIR}/draw/qimageconverter.h
+    ${CMAKE_CURRENT_LIST_DIR}/draw/qimageconverter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/draw/font.cpp
     ${CMAKE_CURRENT_LIST_DIR}/draw/font.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/fontmetrics.cpp
     ${CMAKE_CURRENT_LIST_DIR}/draw/fontmetrics.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/fontcompat.cpp
     ${CMAKE_CURRENT_LIST_DIR}/draw/fontcompat.h
-    ${CMAKE_CURRENT_LIST_DIR}/draw/qfontprovider.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/draw/qfontprovider.h
-    ${CMAKE_CURRENT_LIST_DIR}/draw/fontengineft.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/draw/fontengineft.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/utils/drawlogger.cpp
     ${CMAKE_CURRENT_LIST_DIR}/draw/utils/drawlogger.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/utils/drawjson.cpp
@@ -64,22 +74,63 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/accessibility/accessibleelement.h
     ${CMAKE_CURRENT_LIST_DIR}/accessibility/accessiblenote.cpp
     ${CMAKE_CURRENT_LIST_DIR}/accessibility/accessiblenote.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/interactive/messagebox.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/interactive/messagebox.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/io/msczreader.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/io/msczreader.h
+    ${CMAKE_CURRENT_LIST_DIR}/io/msczwriter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/io/msczwriter.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/compat/scoreaccess.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/compat/scoreaccess.h
+    ${CMAKE_CURRENT_LIST_DIR}/compat/mscxcompat.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/compat/mscxcompat.h
+    ${CMAKE_CURRENT_LIST_DIR}/compat/pageformat.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/compat/pageformat.h
+    ${CMAKE_CURRENT_LIST_DIR}/compat/chordlist.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/compat/chordlist.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/style/styledef.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/style/styledef.h
+    ${CMAKE_CURRENT_LIST_DIR}/style/textstyle.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/style/textstyle.h
+    ${CMAKE_CURRENT_LIST_DIR}/style/pagestyle.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/style/pagestyle.h
+    ${CMAKE_CURRENT_LIST_DIR}/style/style.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/style/style.h
+    ${CMAKE_CURRENT_LIST_DIR}/style/defaultstyle.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/style/defaultstyle.h
     )
+
+if (NO_ENGRAVING_QFONTENGINE)
+    set(MODULE_DEF ${MODULE_DEF} -DNO_ENGRAVING_QFONTENGINE)
+else()
+    set(MODULE_SRC ${MODULE_SRC}
+        ${CMAKE_CURRENT_LIST_DIR}/draw/qfontprovider.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/draw/qfontprovider.h
+        ${CMAKE_CURRENT_LIST_DIR}/draw/fontengineft.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/draw/fontengineft.h
+        )
+
+    set(FREETYPE_LIB )
+    if (USE_SYSTEM_FREETYPE)
+         set(MODULE_LINK freetype)
+    else (USE_SYSTEM_FREETYPE)
+         set(MODULE_LINK mscore_freetype)
+    endif (USE_SYSTEM_FREETYPE)
+
+endif()
 
 set(MODULE_INCLUDE
     ${PROJECT_SOURCE_DIR}/thirdparty/dtl
     )
 
-set(FREETYPE_LIB )
-if (USE_SYSTEM_FREETYPE)
-     set(MODULE_LINK freetype)
-else (USE_SYSTEM_FREETYPE)
-     set(MODULE_LINK mscore_freetype)
-endif (USE_SYSTEM_FREETYPE)
-
 set(MODULE_LINK ${MODULE_LINK} midi_old qzip)
 
+set(MODULE_NOT_LINK_GLOBAL ON)
 set(MODULE_USE_UNITY_NONE ON) # not work
-include(${PROJECT_SOURCE_DIR}/build/module.cmake)
+include(SetupModule)
 
 set_property(TARGET ${MODULE} APPEND PROPERTY AUTOMOC_MACRO_NAMES "BEGIN_QT_REGISTERED_ENUM")

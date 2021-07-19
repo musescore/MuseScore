@@ -20,39 +20,38 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "audiobuffer.h"
+
 #include <cstring>
+
 #include "log.h"
 
 using namespace mu::audio;
 
-void AudioBuffer::init(int samplesPerChannel)
+void AudioBuffer::init(const audioch_t audioChannelsCount, const samples_t samplesPerChannel)
 {
-    m_audioChannelsCount = config()->audioChannelsCount();
-    m_data.resize(samplesPerChannel * m_audioChannelsCount, 0.f);
+    std::lock_guard<std::mutex> lock(m_mutex);
+
+    m_samplesPerChannel = samplesPerChannel;
+    m_audioChannelsCount = audioChannelsCount;
+
+    m_data.resize(m_samplesPerChannel * m_audioChannelsCount, 0.f);
 }
 
 void AudioBuffer::setSource(std::shared_ptr<IAudioSource> source)
 {
-    std::lock_guard<std::recursive_mutex> lock(m_mutex);
+    std::lock_guard<std::mutex> lock(m_mutex);
     m_source = source;
 }
 
 void AudioBuffer::forward()
 {
-    std::lock_guard<std::recursive_mutex> lock(m_mutex);
+    std::lock_guard<std::mutex> lock(m_mutex);
     fillup();
 }
 
 void AudioBuffer::pop(float* dest, size_t sampleCount)
 {
-    std::lock_guard<std::recursive_mutex> lock(m_mutex);
-
-    //catch up if we are fall behind
-    if (sampleCount > sampleLag()) {
-        //! TODO We have to decide to wait or skip.
-        //! We cannot make a direct call, this is a thread-unsafe.
-        //fillup();
-    }
+    std::lock_guard<std::mutex> lock(m_mutex);
 
     size_t from = m_readIndex;
     auto memStep = sizeof(float);
@@ -77,7 +76,7 @@ void AudioBuffer::pop(float* dest, size_t sampleCount)
 
 void AudioBuffer::setMinSampleLag(size_t lag)
 {
-    std::lock_guard<std::recursive_mutex> lock(m_mutex);
+    std::lock_guard<std::mutex> lock(m_mutex);
 
     IF_ASSERT_FAILED(lag < m_data.size()) {
         lag = m_data.size();
@@ -99,8 +98,6 @@ void AudioBuffer::fillup()
 
 void AudioBuffer::updateWriteIndex(const unsigned int samplesPerChannel)
 {
-    std::lock_guard<std::recursive_mutex> lock(m_mutex);
-
     size_t from = m_writeIndex;
 
     auto to = m_writeIndex + samplesPerChannel * m_audioChannelsCount;

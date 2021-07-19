@@ -32,9 +32,23 @@ StyledPopupView {
     property alias model: view.model
     property int minimumMenuWidth: 178
 
+    property int preferredAlign: Qt.AlignRight // Left, HCenter, Right
+
     signal handleAction(string actionCode, int actionIndex)
 
-    x: 0
+    x: {
+        switch(preferredAlign) {
+        case Qt.AlignLeft:
+            return -contentWidth + padding
+        case Qt.AlignHCenter:
+            return -contentWidth / 2 + padding
+        case Qt.AlignRight:
+            return 0
+        }
+
+        return 0
+    }
+
     y: parent.height
 
     contentWidth: prv.itemWidth

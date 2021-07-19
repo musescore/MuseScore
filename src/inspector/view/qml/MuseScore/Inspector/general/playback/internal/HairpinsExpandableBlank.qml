@@ -89,16 +89,15 @@ ExpandableBlank {
 
             propertyItem: root.model ? root.model.velocityChangeType : null
 
-            StyledComboBox {
+            Dropdown {
+                id: dranges
+
                 width: parent.width
 
                 navigation.name: "Changes in dynamics range Value"
                 navigation.panel: root.navigation.panel
                 navigation.column: root.navigation.column
                 navigation.row: root.navigation.row + 4
-
-                textRoleName: "text"
-                valueRoleName: "value"
 
                 model: [
                     { text: qsTrc("inspector", "Linear (default)"), value: Hairpin.VELOCITY_EASING_LINEAR },
@@ -108,10 +107,10 @@ ExpandableBlank {
                     { text: qsTrc("inspector", "Ease-in and out"), value: Hairpin.VELOCITY_EASING_IN_OUT }
                 ]
 
-                currentIndex: root.model && !root.model.velocityChangeType.isUndefined ? indexOfValue(root.model.velocityChangeType.value) : -1
+                currentIndex: root.model && !root.model.velocityChangeType.isUndefined ? dranges.indexOfValue(root.model.velocityChangeType.value) : -1
 
-                onValueChanged: {
-                    root.model.velocityChangeType.value = value
+                onCurrentValueChanged: {
+                    root.model.velocityChangeType.value = dranges.currentValue
                 }
             }
         }

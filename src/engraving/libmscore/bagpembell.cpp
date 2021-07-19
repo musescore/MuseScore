@@ -24,6 +24,7 @@
 #include "xml.h"
 #include "bagpembell.h"
 #include "scorefont.h"
+#include "draw/pen.h"
 
 using namespace mu;
 
@@ -604,13 +605,14 @@ void BagpipeEmbellishment::drawGraceNote(mu::draw::Painter* painter,
 void BagpipeEmbellishment::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
+    using namespace mu::draw;
     SymId headsym = SymId::noteheadBlack;
     SymId flagsym = SymId::flag32ndUp;
 
     noteList nl = getNoteList();
     BEDrawingDataX dx(headsym, flagsym, magS(), score()->spatium(), nl.size());
 
-    QPen pen(curColor(), dx.lw, Qt::SolidLine, Qt::FlatCap);
+    Pen pen(curColor(), dx.lw, PenStyle::SolidLine, PenCapStyle::FlatCap);
     painter->setPen(pen);
 
     bool drawBeam = nl.size() > 1;
@@ -635,7 +637,7 @@ void BagpipeEmbellishment::draw(mu::draw::Painter* painter) const
     if (drawBeam) {
         // beam drawing setup
         BEDrawingDataY dy(0, score()->spatium());
-        QPen beamPen(curColor(), dy.bw, Qt::SolidLine, Qt::FlatCap);
+        Pen beamPen(curColor(), dy.bw, PenStyle::SolidLine, PenCapStyle::FlatCap);
         painter->setPen(beamPen);
         // draw the beams
         drawBeams(painter, dx.spatium, dx.xl - dx.lw * .5, x - dx.headp - dx.lw * .5, dy.y1b);

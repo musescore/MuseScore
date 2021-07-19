@@ -8,34 +8,45 @@
 
 namespace deto {
 namespace async {
-template<typename T>
+template<typename ... T>
 class Promise;
-template<typename T>
+template<typename ... T>
 class Promise
 {
 public:
 
     struct Resolve
     {
-        Resolve(Promise<T> _p)
+        Resolve(Promise<T...> _p)
             : p(_p) {}
 
-        void operator ()(const T& val) const { p.resolve(val); }
+        void operator ()(const T& ... val) const { p.resolve(val ...); }
 
     private:
-        mutable Promise<T> p;
+        mutable Promise<T...> p;
     };
 
     struct Reject
     {
-        Reject(Promise<T> _p)
+        Reject(Promise<T...> _p)
             : p(_p) {}
 
         void operator ()(int code, const std::string& msg) const { p.reject(code, msg); }
 
     private:
-        mutable Promise<T> p;
+        mutable Promise<T...> p;
     };
+
+    template<typename Exec>
+    Promise(Exec exec, const std::thread::id& th = std::this_thread::get_id())
+    {
+        Resolve res(*this);
+        Reject rej(*this);
+
+        Async::call(nullptr, [res, rej](Exec exec) mutable {
+            exec(res, rej);
+        }, exec, th);
+    }
 
     template<typename Exec>
     Promise(Exec exec)
@@ -64,14 +75,14 @@ public:
     }
 
     template<typename Call>
-    Promise<T>& onResolve(const Asyncable* caller, Call f)
+    Promise<T...>& onResolve(const Asyncable* caller, Call f)
     {
-        ptr()->addCallBack(OnResolve, const_cast<Asyncable*>(caller), new ResolveCall<Call, T>(f));
+        ptr()->addCallBack(OnResolve, const_cast<Asyncable*>(caller), new ResolveCall<Call, T...>(f));
         return *this;
     }
 
     template<typename Call>
-    Promise<T>& onReject(const Asyncable* caller, Call f)
+    Promise<T...>& onReject(const Asyncable* caller, Call f)
     {
         ptr()->addCallBack(OnReject, const_cast<Asyncable*>(caller), new RejectCall<Call>(f));
         return *this;
@@ -79,10 +90,11 @@ public:
 
 private:
 
-    void resolve(const T& d)
+    void resolve(const T& ... d)
     {
         NotifyData nd;
-        nd.setArg<T>(0, d);
+        nd.setArg<T...>(0, d ...);
+        nd.setArg<std::shared_ptr<PromiseInvoker> >(1, ptr());
         ptr()->invoke(OnResolve, nd);
     }
 
@@ -91,6 +103,7 @@ private:
         NotifyData nd;
         nd.setArg<int>(0, code);
         nd.setArg<std::string>(1, msg);
+        nd.setArg<std::shared_ptr<PromiseInvoker> >(2, ptr());
         ptr()->invoke(OnReject, nd);
     }
 
@@ -105,12 +118,12 @@ private:
         virtual void resolved(const NotifyData& e) = 0;
     };
 
-    template<typename Call, typename Arg>
+    template<typename Call, typename ... Arg>
     struct ResolveCall : public IResolve {
         Call f;
         ResolveCall(Call _f)
             : f(_f) {}
-        void resolved(const NotifyData& e) { f(std::get<0>(e.arg<Arg>())); }
+        void resolved(const NotifyData& e) { std::apply(f, e.arg<Arg...>()); }
     };
 
     struct IReject {

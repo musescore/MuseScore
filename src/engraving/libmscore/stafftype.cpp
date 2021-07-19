@@ -31,6 +31,7 @@
 #include "score.h"
 
 #include "draw/fontmetrics.h"
+#include "draw/pen.h"
 
 using namespace mu;
 
@@ -967,6 +968,7 @@ void TabDurationSymbol::layout2()
 void TabDurationSymbol::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
+    using namespace mu::draw;
     if (!_tab) {
         return;
     }
@@ -982,7 +984,7 @@ void TabDurationSymbol::draw(mu::draw::Painter* painter) const
     qreal mag = magS();
     qreal imag = 1.0 / mag;
 
-    QPen pen(curColor());
+    Pen pen(curColor());
     painter->setPen(pen);
     painter->scale(mag, mag);
     if (_beamGrid == TabBeamGrid::NONE) {
@@ -995,7 +997,7 @@ void TabDurationSymbol::draw(mu::draw::Painter* painter) const
         // if beam grid, draw stem line
         TablatureDurationFont& font = _tab->_durationFonts[_tab->_durationFontIdx];
         qreal _spatium = spatium();
-        pen.setCapStyle(Qt::FlatCap);
+        pen.setCapStyle(PenCapStyle::FlatCap);
         pen.setWidthF(font.gridStemWidth * _spatium);
         painter->setPen(pen);
         // take stem height from bbox, but de-magnify it, as drawing is already magnified

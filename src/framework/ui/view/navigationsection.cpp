@@ -116,8 +116,8 @@ void NavigationSection::addPanel(NavigationPanel* panel)
 
     m_panels.insert(panel);
 
-    panel->activeRequested().onReceive(this, [this](const PanelControl& subcon) {
-        m_forceActiveRequested.send(std::make_tuple(this, std::get<0>(subcon), std::get<1>(subcon)));
+    panel->activeRequested().onReceive(this, [this](INavigationPanel* panel, INavigationControl* control) {
+        m_forceActiveRequested.send(this, panel, control);
     });
 
     if (m_panelsListChanged.isConnected()) {
@@ -125,7 +125,7 @@ void NavigationSection::addPanel(NavigationPanel* panel)
     }
 }
 
-mu::async::Channel<SectionPanelControl> NavigationSection::activeRequested() const
+SectionPanelControlChannel NavigationSection::activeRequested() const
 {
     return m_forceActiveRequested;
 }

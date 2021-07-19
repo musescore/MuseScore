@@ -22,62 +22,45 @@
 #ifndef MU_AUDIO_CLOCK_H
 #define MU_AUDIO_CLOCK_H
 
-#include <memory>
-#include <list>
-#include <atomic>
 #include "async/asyncable.h"
-#include "async/channel.h"
+
+#include "iclock.h"
 
 namespace mu::audio {
-class Clock : public async::Asyncable
+class Clock : public IClock, public async::Asyncable
 {
 public:
     Clock();
 
-    enum Status {
-        Stoped = 0,
-        Paused,
-        Running
-    };
+    msecs_t currentTime() const override;
 
-    using SyncCallback = std::function<void (time_t)>;
+    void forward(const msecs_t nextMsecs) override;
 
-    using time_t = unsigned long;
+    void start() override;
+    void reset() override;
+    void stop() override;
+    void pause() override;
+    void resume() override;
+    void seek(const msecs_t msecs) override;
 
-    //! return current position in samples
-    time_t time() const;
+    Ret setTimeLoop(const msecs_t fromMsec, const msecs_t toMsec) override;
+    void resetTimeLoop() override;
 
-    //! return current position in seconds
-    float timeInSeconds() const;
+    bool isRunning() const override;
 
-    //! return current position in milliseconds
-    time_t timeInMiliSeconds() const;
-
-    void setSampleRate(unsigned int sampleRate);
-    void forward(time_t samples);
-
-    void start();
-    void reset();
-    void stop();
-    void pause();
-    void seek(time_t time);
-    void seekMiliseconds(time_t value);
-    void seekSeconds(float seconds);
-
-    async::Channel<time_t> timeChanged() const;
-    void addBeforeCallback(SyncCallback callback);
-    void addAfterCallback(SyncCallback callback);
+    async::Channel<msecs_t> timeChanged() const override;
+    async::Notification seekOccurred() const override;
+    async::Channel<PlaybackStatus> statusChanged() const override;
 
 private:
-    void runCallbacks(const std::list<SyncCallback>& list, time_t milliseconds);
 
-    std::atomic<Status> m_status = Stoped;
-    time_t m_time = 0;
-    unsigned int m_sampleRate = 1;
+    ValCh<PlaybackStatus> m_status;
+    msecs_t m_time = 0;
+    msecs_t m_timeLoopStart = 0;
+    msecs_t m_timeLoopEnd = 0;
 
-    async::Channel<time_t> m_timeChanged;
-    std::list<SyncCallback> m_beforeCallbacks = {};
-    std::list<SyncCallback> m_afterCallbacks = {};
+    async::Channel<msecs_t> m_timeChanged;
+    async::Notification m_seekOccurred;
 };
 }
 

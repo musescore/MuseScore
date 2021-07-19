@@ -27,6 +27,7 @@
 #include "async/channel.h"
 
 #include "notation/notationtypes.h"
+#include "audio/audiotypes.h"
 #include "actions/actiontypes.h"
 
 namespace mu::playback {
@@ -43,9 +44,15 @@ public:
     virtual bool isPlaying() const = 0;
     virtual async::Notification isPlayingChanged() const = 0;
 
+    virtual void seek(const midi::tick_t tick) = 0;
+    virtual void seek(const audio::msecs_t msecs) = 0;
+    virtual void reset() = 0;
+
     virtual async::Notification playbackPositionChanged() const = 0;
     virtual async::Channel<uint32_t> midiTickPlayed() const = 0;
     virtual float playbackPositionInSeconds() const = 0;
+    virtual audio::TrackSequenceId currentTrackSequenceId() const = 0;
+    virtual async::Notification currentTrackSequenceIdChanged() const = 0;
 
     virtual void playElement(const notation::Element* element) = 0;
 
@@ -56,7 +63,7 @@ public:
 
     virtual notation::Tempo currentTempo() const = 0;
     virtual notation::MeasureBeat currentBeat() const = 0;
-    virtual uint64_t beatToMilliseconds(int measureIndex, int beatIndex) const = 0;
+    virtual audio::msecs_t beatToMilliseconds(int measureIndex, int beatIndex) const = 0;
 };
 }
 

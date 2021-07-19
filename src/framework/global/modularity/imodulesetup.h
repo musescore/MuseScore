@@ -20,13 +20,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_FRAMEWORK_IMODULESETUP_H
-#define MU_FRAMEWORK_IMODULESETUP_H
+#ifndef MU_MODULARITY_IMODULESETUP_H
+#define MU_MODULARITY_IMODULESETUP_H
 
 #include <string>
 #include "../iapplication.h"
 
-namespace mu::framework {
+namespace mu::modularity {
 class IModuleSetup
 {
 public:
@@ -42,10 +42,12 @@ public:
     virtual void registerUiTypes() {}
 
     virtual void onInit(const framework::IApplication::RunMode& mode) { (void)mode; }
+    virtual void onAllInited(const framework::IApplication::RunMode& mode) { (void)mode; }
+    virtual void onDelayedInit() {}
     virtual void onDeinit() {}
 
     virtual void onStartApp() {}
 };
 }
 
-#endif // MU_FRAMEWORK_IMODULESETUP_H
+#endif // MU_MODULARITY_IMODULESETUP_H

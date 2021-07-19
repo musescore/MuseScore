@@ -21,63 +21,77 @@
  */
 #include "paletteworkspacesetup.h"
 
-#include "log.h"
-#include "workspacepalettestream.h"
-#include "palette/paletteworkspace.h"
+#include <QBuffer>
+
+#include "palette/paletteprovider.h"
 #include "palette/palettecreator.h"
 
+#include "log.h"
+
 using namespace mu::palette;
-using namespace Ms;
+using namespace mu::workspace;
+
+static const QString PALETTE_XML_TAG("PaletteBox");
+
+static Ms::PaletteTreePtr readPalette(const QByteArray& data)
+{
+    QBuffer buf;
+    buf.setData(data);
+    buf.open(QIODevice::ReadOnly);
+    Ms::XmlReader reader(&buf);
+
+    while (!reader.atEnd()) {
+        reader.readNextStartElement();
+
+        if (reader.name() == PALETTE_XML_TAG) {
+            Ms::PaletteTreePtr tree = std::make_shared<Ms::PaletteTree>();
+            tree->read(reader);
+            return tree;
+        }
+    }
+
+    return nullptr;
+}
+
+static void writePalette(const Ms::PaletteTreePtr& tree, QByteArray& data)
+{
+    QBuffer buf(&data);
+    buf.open(QIODevice::WriteOnly);
+    Ms::XmlWriter writer(nullptr, &buf);
+    tree->write(writer);
+}
 
 void PaletteWorkspaceSetup::setup()
 {
-    if (!workspaceManager()) {
+    if (!workspacesDataProvider()) {
         return;
     }
 
-    PaletteWorkspace* paletteWorkspace = adapter()->paletteWorkspace();
-    auto updateWorkspaceConnection = std::make_shared<QMetaObject::Connection>();
+    paletteProvider()->userPaletteTreeChanged().onNotify(this, [this]() {
+        Ms::PaletteTreePtr tree = paletteProvider()->userPaletteTree();
 
-    auto applyWorkspaceData = [paletteWorkspace, updateWorkspaceConnection](workspace::IWorkspacePtr workspace) {
-        workspace::AbstractDataPtr data = workspace->data(workspace::WorkspaceTag::Palettes);
-        PaletteWorkspaceDataPtr palette = std::dynamic_pointer_cast<PaletteWorkspaceData>(data);
+        QByteArray newData;
+        writePalette(tree, newData);
 
-        if (!palette) {
-            LOGW() << "no palette data in workspace: " << workspace->name();
-            return false;
+        workspacesDataProvider()->setRawData(DataKey::Palettes, newData);
+    });
+
+    auto loadData = [this]() {
+        RetVal<QByteArray> data = workspacesDataProvider()->rawData(DataKey::Palettes);
+        Ms::PaletteTreePtr tree;
+        if (data.ret) {
+            LOGD() << "there is palette data in the workspace, we will use it";
+            tree = readPalette(data.val);
+        } else {
+            LOGD() << "no palette data in workspace, will use default";
+            tree = Ms::PaletteTreePtr(Ms::PaletteCreator::newDefaultPaletteTree());
         }
 
-        paletteWorkspace->setDefaultPaletteTree(palette->tree);
-        paletteWorkspace->setUserPaletteTree(palette->tree);
-
-        if (updateWorkspaceConnection) {
-            QObject::disconnect(*updateWorkspaceConnection);
-        }
-
-        auto newConnection
-            = QObject::connect(paletteWorkspace, &PaletteWorkspace::userPaletteChanged, [workspace, palette]() {
-            workspace->addData(palette);
-        });
-
-        *updateWorkspaceConnection = newConnection;
-
-        return true;
+        paletteProvider()->setDefaultPaletteTree(tree);
+        paletteProvider()->setUserPaletteTree(tree);
     };
 
-    RetValCh<workspace::IWorkspacePtr> workspace = workspaceManager()->currentWorkspace();
-    if (workspace.ret) {
-        bool ok = applyWorkspaceData(workspace.val);
-        if (!ok) {
-            Ms::PaletteTreePtr tree(Ms::PaletteCreator::newDefaultPaletteTree());
-            paletteWorkspace->setUserPaletteTree(tree);
-        }
-    }
+    workspacesDataProvider()->workspaceChanged().onNotify(this, loadData);
 
-    workspace.ch.onReceive(nullptr, [paletteWorkspace, applyWorkspaceData](workspace::IWorkspacePtr w) {
-        bool ok = applyWorkspaceData(w);
-        if (!ok) {
-            Ms::PaletteTreePtr tree(Ms::PaletteCreator::newDefaultPaletteTree());
-            paletteWorkspace->setUserPaletteTree(tree);
-        }
-    });
+    loadData();
 }

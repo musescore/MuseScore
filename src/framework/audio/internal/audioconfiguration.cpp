@@ -36,7 +36,7 @@ using namespace mu::framework;
 using namespace mu::audio;
 using namespace mu::audio::synth;
 
-static const int AUDIO_CHANNELS = 2;
+static const audioch_t AUDIO_CHANNELS = 2;
 
 //TODO: add other setting: audio device etc
 static const Settings::Key AUDIO_API_KEY("audio", "io/audioApi");
@@ -46,9 +46,7 @@ static const Settings::Key USER_SOUNDFONTS_PATH("midi", "application/paths/mySou
 
 static const Settings::Key SHOW_CONTROLS_IN_MIXER("midi", "io/midi/showControlsInMixer");
 
-//! FIXME Temporary for tests
-static const std::string DEFAULT_FLUID_SOUNDFONT = "MuseScore_General.sf3";     // "GeneralUser GS v1.471.sf2"; // "MuseScore_General.sf3";
-static const std::string DEFAULT_ZERBERUS_SOUNDFONT = "FM-Piano1-20190916.sfz"; // "";
+static const std::string DEFAULT_SOUND_FONT_NAME = "sound/MuseScore_General.sf3";     // "GeneralUser GS v1.471.sf2"; // "MuseScore_General.sf3";
 
 void AudioConfiguration::init()
 {
@@ -83,10 +81,10 @@ std::string AudioConfiguration::currentAudioApi() const
 
 void AudioConfiguration::setCurrentAudioApi(const std::string& name)
 {
-    settings()->setValue(AUDIO_API_KEY, Val(name));
+    settings()->setSharedValue(AUDIO_API_KEY, Val(name));
 }
 
-int AudioConfiguration::audioChannelsCount() const
+audioch_t AudioConfiguration::audioChannelsCount() const
 {
     return AUDIO_CHANNELS;
 }
@@ -96,10 +94,10 @@ unsigned int AudioConfiguration::driverBufferSize() const
     return settings()->value(AUDIO_BUFFER_SIZE).toInt();
 }
 
-std::vector<io::path> AudioConfiguration::soundFontPaths() const
+SoundFontPaths AudioConfiguration::soundFontDirectories() const
 {
     std::string pathsStr = settings()->value(USER_SOUNDFONTS_PATH).toString();
-    std::vector<io::path> paths = io::path::pathsFromString(pathsStr, ";");
+    SoundFontPaths paths = io::path::pathsFromString(pathsStr, ";");
     paths.push_back(globalConfiguration()->appDataPath());
 
     //! TODO Implement me
@@ -116,7 +114,12 @@ bool AudioConfiguration::isShowControlsInMixer() const
 
 void AudioConfiguration::setIsShowControlsInMixer(bool show)
 {
-    settings()->setValue(SHOW_CONTROLS_IN_MIXER, Val(show));
+    settings()->setSharedValue(SHOW_CONTROLS_IN_MIXER, Val(show));
+}
+
+SoundFontPath AudioConfiguration::defaultSoundFontPath() const
+{
+    return globalConfiguration()->appDataPath() + DEFAULT_SOUND_FONT_NAME;
 }
 
 const SynthesizerState& AudioConfiguration::defaultSynthesizerState() const
@@ -125,13 +128,8 @@ const SynthesizerState& AudioConfiguration::defaultSynthesizerState() const
     if (state.isNull()) {
         SynthesizerState::Group gf;
         gf.name = "Fluid";
-        gf.vals.push_back(SynthesizerState::Val(SynthesizerState::ValID::SoundFontID, DEFAULT_FLUID_SOUNDFONT));
+        gf.vals.push_back(SynthesizerState::Val(SynthesizerState::ValID::SoundFontID, DEFAULT_SOUND_FONT_NAME));
         state.groups.insert({ gf.name, std::move(gf) });
-
-        SynthesizerState::Group gz;
-        gz.name = "Zerberus";
-        gz.vals.push_back(SynthesizerState::Val(SynthesizerState::ValID::SoundFontID, DEFAULT_ZERBERUS_SOUNDFONT));
-        state.groups.insert({ gz.name, std::move(gz) });
     }
 
     return state;

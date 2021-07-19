@@ -24,6 +24,8 @@
  File handling: loading and saving.
  */
 
+#include "style/style.h"
+
 #include "xml.h"
 #include "element.h"
 #include "note.h"
@@ -35,7 +37,6 @@
 #include "score.h"
 #include "page.h"
 #include "dynamic.h"
-#include "style.h"
 #include "tempo.h"
 #include "select.h"
 #include "staff.h"
@@ -127,7 +128,7 @@ static void createExcerpts(MasterScore* cs, QList<Excerpt*> excerpts)
 {
     // borrowed from musescore.cpp endsWith(".pdf")
     for (Excerpt* e: excerpts) {
-        Score* nscore = new Score(e->oscore());
+        Score* nscore = e->oscore()->createScore();
         e->setPartScore(nscore);
         nscore->style().set(Sid::createMultiMeasureRests, true);
         cs->startCmd();

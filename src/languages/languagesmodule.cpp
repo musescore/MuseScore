@@ -50,9 +50,9 @@ std::string LanguagesModule::moduleName() const
 
 void LanguagesModule::registerExports()
 {
-    framework::ioc()->registerExport<ILanguagesConfiguration>(moduleName(), m_languagesConfiguration);
-    framework::ioc()->registerExport<ILanguagesService>(moduleName(), m_languagesService);
-    framework::ioc()->registerExport<ILanguageUnpacker>(moduleName(), new LanguageUnpacker());
+    modularity::ioc()->registerExport<ILanguagesConfiguration>(moduleName(), m_languagesConfiguration);
+    modularity::ioc()->registerExport<ILanguagesService>(moduleName(), m_languagesService);
+    modularity::ioc()->registerExport<ILanguageUnpacker>(moduleName(), new LanguageUnpacker());
 }
 
 void LanguagesModule::registerResources()
@@ -65,7 +65,7 @@ void LanguagesModule::registerUiTypes()
     qmlRegisterType<LanguageListModel>("MuseScore.Languages", 1, 0, "LanguageListModel");
     qmlRegisterUncreatableType<LanguageStatus>("MuseScore.Languages", 1, 0, "LanguageStatus", "Cannot create an LanguageStatus");
 
-    framework::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(languages_QML_IMPORT);
+    modularity::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(languages_QML_IMPORT);
 }
 
 void LanguagesModule::onInit(const framework::IApplication::RunMode& mode)
@@ -79,9 +79,14 @@ void LanguagesModule::onInit(const framework::IApplication::RunMode& mode)
 
     m_languagesService->init();
 
-    auto pr = framework::ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());
+    auto pr = modularity::ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {
         pr->reg("languagesAppDataPath", m_languagesConfiguration->languagesAppDataPath());
         pr->reg("languagesUserAppDataPath", m_languagesConfiguration->languagesUserAppDataPath());
     }
+}
+
+void LanguagesModule::onDelayedInit()
+{
+    m_languagesService->refreshLanguages();
 }

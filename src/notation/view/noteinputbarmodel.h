@@ -27,7 +27,7 @@
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 #include "playback/iplaybackcontroller.h"
-#include "workspace/iworkspacemanager.h"
+#include "ui/iuiconfiguration.h"
 
 namespace mu::notation {
 class NoteInputBarModel : public ui::AbstractMenuModel
@@ -36,7 +36,7 @@ class NoteInputBarModel : public ui::AbstractMenuModel
 
     INJECT(notation, context::IGlobalContext, context)
     INJECT(notation, playback::IPlaybackController, playbackController)
-    INJECT(notation, workspace::IWorkspaceManager, workspaceManager)
+    INJECT(notation, ui::IUiConfiguration, uiConfiguration)
 
 public:
     explicit NoteInputBarModel(QObject* parent = nullptr);
@@ -93,8 +93,6 @@ private:
 
     void notifyAboutTupletItemChanged();
     void notifyAboutAddItemChanged();
-
-    std::vector<std::string> currentWorkspaceActions() const;
 
     int findNoteInputModeItemIndex() const;
 

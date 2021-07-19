@@ -29,7 +29,7 @@
 #include "languageunpackerstub.h"
 
 using namespace mu::languages;
-using namespace mu::framework;
+using namespace mu::modularity;
 
 static void languages_init_qrc()
 {

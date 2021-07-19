@@ -37,7 +37,14 @@ struct mu::midi::AlsaMidiInPort::Alsa {
 
 using namespace mu::midi;
 
-AlsaMidiInPort::AlsaMidiInPort()
+AlsaMidiInPort::~AlsaMidiInPort()
+{
+    if (isConnected()) {
+        disconnect();
+    }
+}
+
+void AlsaMidiInPort::init()
 {
     m_alsa = std::unique_ptr<Alsa>(new Alsa());
 
@@ -59,13 +66,6 @@ AlsaMidiInPort::AlsaMidiInPort()
 
         m_devicesChanged.notify();
     });
-}
-
-AlsaMidiInPort::~AlsaMidiInPort()
-{
-    if (isConnected()) {
-        disconnect();
-    }
 }
 
 MidiDeviceList AlsaMidiInPort::devices() const

@@ -27,7 +27,6 @@
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 
-#include "instruments/iinstrumentsconfiguration.h"
 #include "notation/inotationconfiguration.h"
 #include "audio/iaudioconfiguration.h"
 
@@ -36,7 +35,6 @@ class ScorePreferencesModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(appshell, instruments::IInstrumentsConfiguration, instrumentsConfiguration)
     INJECT(appshell, notation::INotationConfiguration, notationConfiguration)
     INJECT(appshell, audio::IAudioConfiguration, audioConfiguration)
 

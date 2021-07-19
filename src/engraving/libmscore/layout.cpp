@@ -23,6 +23,8 @@
 #include <cmath>
 #include <QtMath>
 
+#include "style/style.h"
+
 #include "accidental.h"
 #include "barline.h"
 #include "beam.h"
@@ -58,7 +60,6 @@
 #include "stem.h"
 #include "stemslash.h"
 #include "sticking.h"
-#include "style.h"
 #include "sym.h"
 #include "system.h"
 #include "text.h"
@@ -2156,6 +2157,9 @@ System* Score::getNextSystem(LayoutContext& lc)
     if (!isVBox) {
         int nstaves = Score::nstaves();
         system->adjustStavesNumber(nstaves);
+        for (int i = 0; i < nstaves; ++i) {
+            system->staff(i)->setShow(score()->staff(i)->show());
+        }
     }
     return system;
 }

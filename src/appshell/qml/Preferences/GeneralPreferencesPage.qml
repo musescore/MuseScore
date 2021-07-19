@@ -54,20 +54,20 @@ PreferencesPage {
             Row {
                 spacing: 12
 
-                StyledComboBox {
+                Dropdown {
+                    id: dropdown
+
                     width: 208
 
-                    property var currValue
-
-                    textRoleName: "name"
-                    valueRoleName: "code"
+                    textRole: "name"
+                    valueRole: "code"
 
                     model: preferencesModel.languages
 
-                    currentIndex: indexOfValue(preferencesModel.currentLanguageCode)
+                    currentIndex: dropdown.indexOfValue(preferencesModel.currentLanguageCode)
 
-                    onValueChanged: {
-                        preferencesModel.currentLanguageCode = value
+                    onCurrentValueChanged: {
+                        preferencesModel.currentLanguageCode = dropdown.currentValue
                     }
                 }
 
@@ -82,12 +82,14 @@ PreferencesPage {
             }
         }
 
-        SeparatorLine { }
+        //SeparatorLine { }
 
         Column {
             anchors.left: parent.left
             anchors.right: parent.right
             spacing: 18
+
+            visible: false
 
             StyledTextLabel {
                 text: qsTrc("appshell", "Telemetry")

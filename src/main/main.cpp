@@ -66,8 +66,15 @@
 #include "stubs/userscores/userscoresstubmodule.h"
 #endif
 
+#ifdef BUILD_LEARN_MODULE
+#include "learn/learnmodule.h"
+#else
+#include "stubs/learn/learnmodule.h"
+#endif
+
 #include "engraving/engravingmodule.h"
 #include "notation/notationmodule.h"
+#include "project/projectmodule.h"
 
 #include "importexport/musicxml/musicxmlmodule.h"
 #include "importexport/bb/bbmodule.h"
@@ -91,10 +98,10 @@
 #else
 #include "stubs/playback/playbackstubmodule.h"
 #endif
-#ifdef BUILD_INSTRUMENTS_MODULE
-#include "instruments/instrumentsmodule.h"
+#ifdef BUILD_INSTRUMENTSSCENE_MODULE
+#include "instrumentsscene/instrumentsscenemodule.h"
 #else
-#include "stubs/instruments/instrumentsstubmodule.h"
+#include "stubs/instrumentsscene/instrumentsscenestubmodule.h"
 #endif
 #include "converter/convertermodule.h"
 
@@ -212,8 +219,11 @@ int main(int argc, char** argv)
     app.addModule(new mu::userscores::UserScoresStubModule());
 #endif
 
+    app.addModule(new mu::learn::LearnModule());
+
     app.addModule(new mu::engraving::EngravingModule());
     app.addModule(new mu::notation::NotationModule());
+    app.addModule(new mu::project::ProjectModule());
     app.addModule(new mu::commonscene::CommonSceneModule());
 #ifdef BUILD_PLAYBACK_MODULE
     app.addModule(new mu::playback::PlaybackModule());
@@ -221,10 +231,10 @@ int main(int argc, char** argv)
     app.addModule(new mu::playback::PlaybackStubModule());
 #endif
 
-#ifdef BUILD_INSTRUMENTS_MODULE
-    app.addModule(new mu::instruments::InstrumentsModule());
+#ifdef BUILD_INSTRUMENTSSCENE_MODULE
+    app.addModule(new mu::instrumentsscene::InstrumentsSceneModule());
 #else
-    app.addModule(new mu::instruments::InstrumentsStubModule());
+    app.addModule(new mu::instrumentsscene::InstrumentsSceneStubModule());
 #endif
 
 #ifdef BUILD_VST

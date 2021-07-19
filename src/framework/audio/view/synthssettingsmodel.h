@@ -27,18 +27,18 @@
 #include <QStringList>
 
 #include "modularity/ioc.h"
-#include "isoundfontsprovider.h"
-#include "isynthesizersregister.h"
-#include "iaudioconfiguration.h"
+#include "async/asyncable.h"
 #include "iinteractive.h"
 
+#include "isoundfontsprovider.h"
+#include "iaudioconfiguration.h"
+
 namespace mu::audio::synth {
-class SynthsSettingsModel : public QObject
+class SynthsSettingsModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
     INJECT(audio, ISoundFontsProvider, sfprovider)
-    INJECT(audio, ISynthesizersRegister, synthRegister)
     INJECT(audio, IAudioConfiguration, configuration)
     INJECT(audio, framework::IInteractive, interactive)
 

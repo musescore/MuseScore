@@ -25,7 +25,7 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu::userscores {
-class UserScoresModule : public framework::IModuleSetup
+class UserScoresModule : public modularity::IModuleSetup
 {
 public:
     std::string moduleName() const override;

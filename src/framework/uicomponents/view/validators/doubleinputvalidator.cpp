@@ -59,9 +59,9 @@ void DoubleInputValidator::fixup(QString& string) const
         floatPart.append(zeros(m_decimal - floatPart.length()));
     }
 
-    if (intPart.contains(QRegExp("^0{1,3}$"))) {
+    if (intPart.contains(QRegularExpression("^0{1,3}$"))) {
         intPart = QString("0");
-    } else if (intPart.contains(QRegExp("^\\-0{0,3}$"))) {
+    } else if (intPart.contains(QRegularExpression("^\\-0{0,3}$"))) {
         intPart = QString("-0");
     }
 
@@ -82,15 +82,15 @@ QValidator::State DoubleInputValidator::validate(QString& inputStr, int& cursorP
 {
     QValidator::State state = Invalid;
 
-    if (inputStr.contains(QRegExp(QString("^\\-?\\d{1,3}\\.\\d{%1}$").arg(m_decimal)))) {
-        if (inputStr.contains(QRegExp("^\\-?0{2,3}\\."))
+    if (inputStr.contains(QRegularExpression(QString("^\\-?\\d{1,3}\\.\\d{%1}$").arg(m_decimal)))) {
+        if (inputStr.contains(QRegularExpression("^\\-?0{2,3}\\."))
             || (inputStr.startsWith("-") && inputStr.toDouble() == 0.0)) {
             state = Intermediate;
         } else {
             state = Acceptable;
         }
-    } else if (inputStr.contains(QRegExp("^\\-?\\d{0,3}\\.?$"))
-               || inputStr.contains(QRegExp(QString("^\\-?\\d{0,3}\\.\\d{0,%1}$").arg(m_decimal)))) {
+    } else if (inputStr.contains(QRegularExpression("^\\-?\\d{0,3}\\.?$"))
+               || inputStr.contains(QRegularExpression(QString("^\\-?\\d{0,3}\\.\\d{0,%1}$").arg(m_decimal)))) {
         state = Intermediate;
     } else {
         cursorPos = 0;

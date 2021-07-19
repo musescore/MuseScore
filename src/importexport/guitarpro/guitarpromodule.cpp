@@ -21,15 +21,16 @@
  */
 #include "guitarpromodule.h"
 
-#include "log.h"
 #include "modularity/ioc.h"
 
-#include "notation/inotationreadersregister.h"
+#include "project/inotationreadersregister.h"
 #include "internal/guitarproreader.h"
 #include "internal/guitarproconfiguration.h"
 
+#include "log.h"
+
 using namespace mu::iex::guitarpro;
-using namespace mu::notation;
+using namespace mu::project;
 
 static std::shared_ptr<GuitarProConfiguration> s_configuration = std::make_shared<GuitarProConfiguration>();
 
@@ -40,12 +41,12 @@ std::string GuitarProModule::moduleName() const
 
 void GuitarProModule::registerExports()
 {
-    framework::ioc()->registerExport<IGuitarProConfiguration>(moduleName(), s_configuration);
+    modularity::ioc()->registerExport<IGuitarProConfiguration>(moduleName(), s_configuration);
 }
 
 void GuitarProModule::resolveImports()
 {
-    auto readers = framework::ioc()->resolve<INotationReadersRegister>(moduleName());
+    auto readers = modularity::ioc()->resolve<INotationReadersRegister>(moduleName());
     if (readers) {
         readers->reg({ "gtp", "gp3", "gp4", "gp5", "gpx", "gp", "ptb" }, std::make_shared<GuitarProReader>());
     }

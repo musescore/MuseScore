@@ -21,6 +21,9 @@
  */
 
 #include "scoreElement.h"
+
+#include "translation.h"
+
 #include "score.h"
 #include "undo.h"
 #include "xml.h"
@@ -145,7 +148,7 @@ static const ElementName elementNames[] = {
     { ElementType::VBOX,                 "VBox",                 QT_TRANSLATE_NOOP("elementName", "Vertical Frame") },
     { ElementType::TBOX,                 "TBox",                 QT_TRANSLATE_NOOP("elementName", "Text Frame") },
     { ElementType::FBOX,                 "FBox",                 QT_TRANSLATE_NOOP("elementName", "Fretboard Diagram Frame") },
-    { ElementType::ICON,                 "Icon",                 QT_TRANSLATE_NOOP("elementName", "Icon") },
+    { ElementType::ACTION_ICON,          "ActionIcon",           QT_TRANSLATE_NOOP("elementName", "Action Icon") },
     { ElementType::OSSIA,                "Ossia",                QT_TRANSLATE_NOOP("elementName", "Ossia") },
     { ElementType::BAGPIPE_EMBELLISHMENT,"BagpipeEmbellishment", QT_TRANSLATE_NOOP("elementName", "Bagpipe Embellishment") },
     { ElementType::STICKING,             "Sticking",             QT_TRANSLATE_NOOP("elementName", "Sticking") }
@@ -884,7 +887,7 @@ const char* ScoreElement::name(ElementType type)
 
 QString ScoreElement::userName() const
 {
-    return qApp->translate("elementName", elementNames[int(type())].userName);
+    return qtrc("elementName", elementNames[int(type())].userName);
 }
 
 //---------------------------------------------------------

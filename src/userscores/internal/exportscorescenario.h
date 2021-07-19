@@ -27,7 +27,7 @@
 #include "iexportscorescenario.h"
 #include "iuserscoresconfiguration.h"
 #include "iinteractive.h"
-#include "notation/inotationwritersregister.h"
+#include "project/inotationwritersregister.h"
 #include "importexport/imagesexport/iimagesexportconfiguration.h"
 #include "context/iglobalcontext.h"
 #include "system/ifilesystem.h"
@@ -35,18 +35,18 @@
 namespace mu::userscores {
 class ExportScoreScenario : public IExportScoreScenario
 {
-    INJECT(userscores, IUserScoresConfiguration, configuration);
-    INJECT(userscores, framework::IInteractive, interactive);
-    INJECT(userscores, notation::INotationWritersRegister, writers)
+    INJECT(userscores, IUserScoresConfiguration, configuration)
+    INJECT(userscores, framework::IInteractive, interactive)
+    INJECT(userscores, project::INotationWritersRegister, writers)
     INJECT(userscores, iex::imagesexport::IImagesExportConfiguration, imagesExportConfiguration)
     INJECT(userscores, context::IGlobalContext, context)
     INJECT(userscores, system::IFileSystem, fileSystem)
 
 public:
-    std::vector<notation::INotationWriter::UnitType> supportedUnitTypes(const ExportType& exportType) const override;
+    std::vector<project::INotationWriter::UnitType> supportedUnitTypes(const ExportType& exportType) const override;
 
     bool exportScores(const notation::INotationPtrList& notations, const ExportType& exportType,
-                      notation::INotationWriter::UnitType unitType) const override;
+                      project::INotationWriter::UnitType unitType) const override;
 
 private:
     enum class FileConflictPolicy {
@@ -55,12 +55,12 @@ private:
         ReplaceAll
     };
 
-    bool isCreatingOnlyOneFile(const notation::INotationPtrList& notations, notation::INotationWriter::UnitType unitType) const;
+    bool isCreatingOnlyOneFile(const notation::INotationPtrList& notations, project::INotationWriter::UnitType unitType) const;
 
     bool isMainNotation(notation::INotationPtr notation) const;
 
     io::path askExportPath(const notation::INotationPtrList& notations, const ExportType& exportType,
-                           notation::INotationWriter::UnitType unitType) const;
+                           project::INotationWriter::UnitType unitType) const;
     io::path completeExportPath(const io::path& basePath, notation::INotationPtr notation, bool isMain, int pageIndex = -1) const;
 
     bool shouldReplaceFile(const QString& filename) const;

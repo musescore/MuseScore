@@ -25,9 +25,9 @@
 
 #include <QAbstractListModel>
 
+#include "modularity/ioc.h"
 #include "iworkspacemanager.h"
 #include "iinteractive.h"
-#include "modularity/ioc.h"
 
 #include "async/asyncable.h"
 

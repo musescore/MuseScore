@@ -30,9 +30,8 @@
 #include "libmscore/xml.h"
 
 #include "modularity/ioc.h"
-#include "../../ipaletteadapter.h"
-#include "../../ipaletteconfiguration.h"
-#include "async/asyncable.h"
+#include "ui/iuiactionsregister.h"
+#include "ipaletteconfiguration.h"
 #include "iinteractive.h"
 
 namespace Ms {
@@ -46,7 +45,7 @@ using PaletteCellConstPtr = std::shared_ptr<const PaletteCell>;
 
 struct PaletteCell
 {
-    INJECT_STATIC(palette, mu::palette::IPaletteAdapter, adapter)
+    INJECT_STATIC(palette, mu::ui::IUiActionsRegister, actionsRegister)
 
     ElementPtr element;
     ElementPtr untranslatedElement;

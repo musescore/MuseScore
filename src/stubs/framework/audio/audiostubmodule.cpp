@@ -26,12 +26,10 @@
 
 #include "audioconfigurationstub.h"
 #include "audiodriverstub.h"
-#include "sequencerstub.h"
 #include "synthesizersregisterstub.h"
 #include "soundfontsproviderstub.h"
-#include "internal/rpc/rpcchannelstub.h"
 
-using namespace mu::framework;
+using namespace mu::modularity;
 using namespace mu::audio;
 
 static void audio_init_qrc()
@@ -48,12 +46,9 @@ void AudioStubModule::registerExports()
 {
     ioc()->registerExport<IAudioConfiguration>(moduleName(), new AudioConfigurationStub());
     ioc()->registerExport<IAudioDriver>(moduleName(), new AudioDriverStub());
-    ioc()->registerExport<ISequencer>(moduleName(), new SequencerStub());
 
     ioc()->registerExport<synth::ISynthesizersRegister>(moduleName(), new synth::SynthesizersRegisterStub());
     ioc()->registerExport<synth::ISoundFontsProvider>(moduleName(), new synth::SoundFontsProviderStub());
-
-    ioc()->registerExport<rpc::IRpcChannel>(moduleName(), new rpc::RpcChannelStub());
 }
 
 void AudioStubModule::registerResources()

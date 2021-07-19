@@ -22,14 +22,15 @@
 
 #include "pdfwriter.h"
 
-#include "log.h"
+#include <QPdfWriter>
 
 #include "libmscore/score.h"
 #include "engraving/draw/qpainterprovider.h"
 
-#include <QPdfWriter>
+#include "log.h"
 
 using namespace mu::iex::imagesexport;
+using namespace mu::project;
 using namespace mu::notation;
 using namespace mu::io;
 using namespace Ms;

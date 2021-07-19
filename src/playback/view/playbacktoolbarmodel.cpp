@@ -30,11 +30,9 @@
 
 using namespace mu::playback;
 using namespace mu::actions;
-using namespace mu::workspace;
 using namespace mu::ui;
 using namespace mu::notation;
 
-static const std::string PLAYBACK_TOOLBAR_KEY("playbackControl");
 static const ActionCode PLAY_ACTION_CODE("play");
 
 static MusicalSymbolCodes::Code tempoDurationToNoteIcon(DurationType durationType)
@@ -79,26 +77,12 @@ void PlaybackToolBarModel::setupConnections()
     playbackController()->playbackPositionChanged().onNotify(this, [this]() {
         updatePlayTime();
     });
-
-    workspaceManager()->currentWorkspace().ch.onReceive(this, [this](IWorkspacePtr) {
-        updateActions();
-    });
 }
 
 void PlaybackToolBarModel::updateActions()
 {
     MenuItemList result;
     MenuItemList settingsItems;
-    MenuItemList additionalItems;
-
-    for (const ActionCode& code : currentWorkspaceActionCodes()) {
-        if (isAdditionalAction(code)) {
-            //! NOTE: In this case, we want to see the actions' description instead of the title
-            additionalItems << makeActionWithDescriptionAsTitle(code);
-        } else {
-            result << makeMenuItem(code);
-        }
-    }
 
     for (const UiAction& action : PlaybackUiActions::settingsActions()) {
         settingsItems << makeActionWithDescriptionAsTitle(action.code);
@@ -106,16 +90,22 @@ void PlaybackToolBarModel::updateActions()
 
     if (!m_isToolbarFloating) {
         settingsItems << makeSeparator();
-        settingsItems << additionalItems;
+    }
+
+    //! NOTE At the moment no customization ability
+    ToolConfig config = PlaybackUiActions::defaultPlaybackToolConfig();
+    for (const ToolConfig::Item& item : config.items) {
+        if (isAdditionalAction(item.action) && !m_isToolbarFloating) {
+            //! NOTE In this case, we want to see the actions' description instead of the title
+            settingsItems << makeActionWithDescriptionAsTitle(item.action);
+        } else {
+            result << makeMenuItem(item.action);
+        }
     }
 
     MenuItem settingsItem = makeMenu(qtrc("action", "Playback settings"), settingsItems);
     settingsItem.iconCode = IconCode::Code::SETTINGS_COG;
     result << settingsItem;
-
-    if (m_isToolbarFloating) {
-        result << additionalItems;
-    }
 
     setItems(result);
 }
@@ -130,23 +120,6 @@ void PlaybackToolBarModel::onActionsStateChanges(const actions::ActionCodeList& 
     }
 
     emit dataChanged(index(0), index(rowCount() - 1));
-}
-
-ActionCodeList PlaybackToolBarModel::currentWorkspaceActionCodes() const
-{
-    RetValCh<IWorkspacePtr> workspace = workspaceManager()->currentWorkspace();
-    if (!workspace.ret || !workspace.val) {
-        LOGE() << workspace.ret.toString();
-        return {};
-    }
-
-    AbstractDataPtr abstractData = workspace.val->data(WorkspaceTag::Toolbar, PLAYBACK_TOOLBAR_KEY);
-    ToolbarDataPtr toolbar = std::dynamic_pointer_cast<ToolbarData>(abstractData);
-    if (!toolbar) {
-        return {};
-    }
-
-    return toolbar->actions;
 }
 
 bool PlaybackToolBarModel::isAdditionalAction(const actions::ActionCode& actionCode) const

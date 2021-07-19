@@ -30,6 +30,7 @@
 #include "log.h"
 #include "global/xmlwriter.h"
 
+using namespace mu::project;
 using namespace mu::notation;
 using namespace mu::io;
 using namespace mu::framework;
@@ -72,8 +73,19 @@ static void writeMeasureEvents(XmlWriter& writer, Measure* m, int offset, const 
 }
 
 PositionsWriter::PositionsWriter(PositionsWriter::ElementType elementType)
-    : AbstractNotationWriter(), m_elementType(elementType)
+    : m_elementType(elementType)
 {
+}
+
+std::vector<INotationWriter::UnitType> PositionsWriter::supportedUnitTypes() const
+{
+    return { UnitType::PER_PART };
+}
+
+bool PositionsWriter::supportsUnitType(UnitType unitType) const
+{
+    std::vector<UnitType> unitTypes = supportedUnitTypes();
+    return std::find(unitTypes.cbegin(), unitTypes.cend(), unitType) != unitTypes.cend();
 }
 
 mu::Ret PositionsWriter::write(INotationPtr notation, Device& destinationDevice, const Options&)
@@ -102,6 +114,24 @@ mu::Ret PositionsWriter::write(INotationPtr notation, Device& destinationDevice,
     writer.writeEndDocument();
 
     return true;
+}
+
+mu::Ret PositionsWriter::writeList(const INotationPtrList&, io::Device&, const Options&)
+{
+    NOT_SUPPORTED;
+    return Ret(Ret::Code::NotSupported);
+}
+
+void PositionsWriter::abort()
+{
+    NOT_IMPLEMENTED;
+}
+
+ProgressChannel PositionsWriter::progress() const
+{
+    NOT_IMPLEMENTED;
+    static ProgressChannel prog;
+    return prog;
 }
 
 qreal PositionsWriter::pngDpiResolution() const

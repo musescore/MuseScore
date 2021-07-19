@@ -20,12 +20,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "config.h"
 #include "chordlist.h"
+
+#include <QRegularExpression>
+
+#include "config.h"
+#include "mscore.h"
+#include "pitchspelling.h"
 #include "score.h"
 #include "xml.h"
-#include "pitchspelling.h"
-#include "mscore.h"
 
 using namespace mu;
 
@@ -497,7 +500,7 @@ void ParsedChord::configure(const ChordList* cl)
 
 void ParsedChord::correctXmlText(const QString& s)
 {
-    _xmlText.remove(QRegExp("[0-9]"));
+    _xmlText.remove(QRegularExpression("[0-9]"));
     if (s != "") {
         int pos = _xmlText.lastIndexOf(')');
         if (pos == -1) {
@@ -1200,7 +1203,7 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
         QStringList altList = _xmlDegrees.filter("alt");
         for (const QString& d : qAsConst(altList)) {
             QString unalt(d);
-            unalt.replace(QRegExp("alt[b#]"), "add");
+            unalt.replace(QRegularExpression("alt[b#]"), "add");
             if (_xmlDegrees.removeAll(unalt) > 0) {
                 QString alt(d);
                 alt.replace("alt", "add");
@@ -2012,6 +2015,31 @@ void ChordList::unload()
     renderListBase.clear();
     chordTokenList.clear();
     _autoAdjust = false;
+}
+
+const ChordDescription* ChordList::description(int id) const
+{
+    auto it = this->find(id);
+    if (it == this->end()) {
+        return nullptr;
+    }
+    return &it.value();
+}
+
+void ChordList::checkChordList(const MStyle& style)
+{
+    // make sure we have a chordlist
+    if (!loaded()) {
+        qreal emag = style.value(Sid::chordExtensionMag).toDouble();
+        qreal eadjust = style.value(Sid::chordExtensionAdjust).toDouble();
+        qreal mmag = style.value(Sid::chordModifierMag).toDouble();
+        qreal madjust = style.value(Sid::chordModifierAdjust).toDouble();
+        configureAutoAdjust(emag, eadjust, mmag, madjust);
+        if (style.value(Sid::chordsXmlFile).toBool()) {
+            read("chords.xml");
+        }
+        read(style.value(Sid::chordDescriptionFile).toString());
+    }
 }
 
 //---------------------------------------------------------

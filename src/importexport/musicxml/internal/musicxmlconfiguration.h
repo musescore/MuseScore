@@ -42,6 +42,9 @@ public:
     MusicxmlExportBreaksType musicxmlExportBreaksType() const override;
     void setMusicxmlExportBreaksType(MusicxmlExportBreaksType breaksType) override;
 
+    bool musicxmlExportInvisibleElements() const override;
+    void setMusicxmlExportInvisibleElements(bool value) override;
+
     bool needUseDefaultFont() const override;
     void setNeedUseDefaultFont(bool value) override;
 

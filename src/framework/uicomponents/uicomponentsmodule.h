@@ -26,7 +26,7 @@
 #include "framework/global/modularity/imodulesetup.h"
 
 namespace mu::uicomponents {
-class UiComponentsModule : public framework::IModuleSetup
+class UiComponentsModule : public modularity::IModuleSetup
 {
 public:
 

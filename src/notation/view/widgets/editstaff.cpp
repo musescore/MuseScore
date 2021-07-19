@@ -22,8 +22,6 @@
 
 #include "editstaff.h"
 
-#include <QMessageBox>
-
 #include "editpitch.h"
 #include "editstafftype.h"
 #include "editstringdata.h"
@@ -33,8 +31,10 @@
 #include "libmscore/stringdata.h"
 #include "libmscore/text.h"
 #include "libmscore/utils.h"
+#include "libmscore/undo.h"
 
 #include "log.h"
+#include "translation.h"
 
 #include "ui/view/iconcodes.h"
 #include "widgetstatestore.h"
@@ -45,10 +45,6 @@ using namespace mu::ui;
 static const QChar GO_UP_ICON = iconCodeToChar(IconCode::Code::ARROW_UP);
 static const QChar GO_DOWN_ICON = iconCodeToChar(IconCode::Code::ARROW_DOWN);
 static const QChar EDIT_ICON = iconCodeToChar(IconCode::Code::EDIT);
-
-//---------------------------------------------------------
-//   EditStaff
-//---------------------------------------------------------
 
 EditStaff::EditStaff(QWidget* parent)
     : QDialog(parent)
@@ -63,24 +59,29 @@ EditStaff::EditStaff(QWidget* parent)
 
     WidgetStateStore::restoreGeometry(this);
 
-    connect(buttonBox,            SIGNAL(clicked(QAbstractButton*)), SLOT(bboxClicked(QAbstractButton*)));
-    connect(changeInstrument,     SIGNAL(clicked()),            SLOT(showInstrumentDialog()));
-    connect(changeStaffType,      SIGNAL(clicked()),            SLOT(showStaffTypeDialog()));
-    connect(minPitchASelect,      SIGNAL(clicked()),            SLOT(minPitchAClicked()));
-    connect(maxPitchASelect,      SIGNAL(clicked()),            SLOT(maxPitchAClicked()));
-    connect(minPitchPSelect,      SIGNAL(clicked()),            SLOT(minPitchPClicked()));
-    connect(maxPitchPSelect,      SIGNAL(clicked()),            SLOT(maxPitchPClicked()));
-    connect(editStringData,       SIGNAL(clicked()),            SLOT(editStringDataClicked()));
-    connect(lines,                SIGNAL(valueChanged(int)),    SLOT(numOfLinesChanged()));
-    connect(lineDistance,         SIGNAL(valueChanged(double)), SLOT(lineDistanceChanged()));
-    connect(showClef,             SIGNAL(clicked()),            SLOT(showClefChanged()));
-    connect(showTimesig,          SIGNAL(clicked()),            SLOT(showTimeSigChanged()));
-    connect(showBarlines,         SIGNAL(clicked()),            SLOT(showBarlinesChanged()));
-    connect(invisible,            SIGNAL(clicked()),            SLOT(invisibleChanged()));
-    connect(nextButton,           SIGNAL(clicked()),            SLOT(gotoNextStaff()));
-    connect(previousButton,       SIGNAL(clicked()),            SLOT(gotoPreviousStaff()));
+    connect(buttonBox,        &QDialogButtonBox::clicked, this, &EditStaff::bboxClicked);
+    connect(changeInstrument, &QPushButton::clicked, this, &EditStaff::showReplaceInstrumentDialog);
+    connect(changeStaffType,  &QPushButton::clicked, this, &EditStaff::showStaffTypeDialog);
+    connect(minPitchASelect,  &QPushButton::clicked, this, &EditStaff::minPitchAClicked);
+    connect(maxPitchASelect,  &QPushButton::clicked, this, &EditStaff::maxPitchAClicked);
+    connect(minPitchPSelect,  &QPushButton::clicked, this, &EditStaff::minPitchPClicked);
+    connect(maxPitchPSelect,  &QPushButton::clicked, this, &EditStaff::maxPitchPClicked);
+    connect(editStringData,   &QPushButton::clicked, this, &EditStaff::editStringDataClicked);
+    connect(nextButton,       &QPushButton::clicked, this, &EditStaff::gotoNextStaff);
+    connect(previousButton,   &QPushButton::clicked, this, &EditStaff::gotoPreviousStaff);
 
-    connect(iList,                SIGNAL(currentIndexChanged(int)),  SLOT(transpositionChanged()));
+    connect(showClef,     &QCheckBox::clicked, this, &EditStaff::showClefChanged);
+    connect(showTimesig,  &QCheckBox::clicked, this, &EditStaff::showTimeSigChanged);
+    connect(showBarlines, &QCheckBox::clicked, this, &EditStaff::showBarlinesChanged);
+    connect(invisible,    &QCheckBox::clicked, this, &EditStaff::invisibleChanged);
+
+    connect(iList, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, &EditStaff::transpositionChanged);
+
+    connect(lines, QOverload<int>::of(&QSpinBox::valueChanged),
+            this, &EditStaff::numOfLinesChanged);
+    connect(lineDistance, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
+            this, &EditStaff::lineDistanceChanged);
 
     nextButton->setText(GO_DOWN_ICON);
     previousButton->setText(GO_UP_ICON);
@@ -100,10 +101,6 @@ int EditStaff::metaTypeId()
     return QMetaType::type("EditStaff");
 }
 
-//---------------------------------------------------------
-//   setStaff
-//---------------------------------------------------------
-
 void EditStaff::setStaff(Staff* s, const Fraction& tick)
 {
     if (m_staff != nullptr) {
@@ -111,19 +108,23 @@ void EditStaff::setStaff(Staff* s, const Fraction& tick)
     }
 
     m_orgStaff = s;
-    Part* part        = m_orgStaff->part();
-    m_instrument      = instrument();
+
+    m_instrument = instrument();
     m_orgInstrument = m_instrument;
-    Ms::Score* score      = part->score();
-    m_staff             = new Ms::Staff(score);
+
+    Part* part = m_orgStaff->part();
+    Ms::Score* score = part->score();
+
+    m_staff = new Ms::Staff(score);
     Ms::StaffType* stt = m_staff->setStaffType(Fraction(0, 1), *m_orgStaff->staffType(Fraction(0, 1)));
     stt->setInvisible(m_orgStaff->staffType(Fraction(0, 1))->invisible());
-    m_staff->setUserDist(m_orgStaff->userDist());
     stt->setColor(m_orgStaff->staffType(Fraction(0, 1))->color());
+    stt->setUserMag(m_orgStaff->staffType(Fraction(0, 1))->userMag());
+
+    m_staff->setUserDist(m_orgStaff->userDist());
     m_staff->setPart(part);
     m_staff->setHideWhenEmpty(m_orgStaff->hideWhenEmpty());
     m_staff->setShowIfEmpty(m_orgStaff->showIfEmpty());
-    stt->setUserMag(m_orgStaff->staffType(Fraction(0, 1))->userMag());
     m_staff->setHideSystemBarLine(m_orgStaff->hideSystemBarLine());
     m_staff->setMergeMatchingRests(m_orgStaff->mergeMatchingRests());
 
@@ -144,31 +145,27 @@ void EditStaff::setStaff(Staff* s, const Fraction& tick)
     // set dlg controls
     spinExtraDistance->setValue(s->userDist() / score->spatium());
     invisible->setChecked(m_staff->invisible(Fraction(0, 1)));
+    small->setChecked(stt->small());
     color->setColor(stt->color());
     partName->setText(part->partName());
+    cutaway->setChecked(m_staff->cutaway());
+
     hideMode->setCurrentIndex(int(m_staff->hideWhenEmpty()));
     showIfEmpty->setChecked(m_staff->showIfEmpty());
     hideSystemBarLine->setChecked(m_staff->hideSystemBarLine());
     mergeMatchingRests->setChecked(m_staff->mergeMatchingRests());
     mag->setValue(stt->userMag() * 100.0);
+
     updateStaffType(*m_staff->staffType(Ms::Fraction(0, 1)));
     updateInstrument();
     updateNextPreviousButtons();
 }
-
-//---------------------------------------------------------
-//   hideEvent
-//---------------------------------------------------------
 
 void EditStaff::hideEvent(QHideEvent* ev)
 {
     WidgetStateStore::saveGeometry(this);
     QWidget::hideEvent(ev);
 }
-
-//---------------------------------------------------------
-//   updateStaffType
-//---------------------------------------------------------
 
 void EditStaff::updateStaffType(const Ms::StaffType& staffType)
 {
@@ -178,12 +175,9 @@ void EditStaff::updateStaffType(const Ms::StaffType& staffType)
     showTimesig->setChecked(staffType.genTimesig());
     showBarlines->setChecked(staffType.showBarlines());
     invisible->setChecked(staffType.invisible());
-    staffGroupName->setText(qApp->translate("Staff type group name", staffType.groupName()));
+    small->setChecked(staffType.small());
+    staffGroupName->setText(qtrc("Staff type group name", staffType.groupName()));
 }
-
-//---------------------------------------------------------
-//   updateInstrument
-//---------------------------------------------------------
 
 void EditStaff::updateInstrument()
 {
@@ -198,7 +192,8 @@ void EditStaff::updateInstrument()
 
     longName->setPlainText(df);
 
-    if (partName->text() == instrumentName->text()) {    // Updates part name if no custom name has been set before
+    if (partName->text() == instrumentName->text()) {
+        // Updates part name if no custom name has been set before
         partName->setText(m_instrument.name);
     }
 
@@ -224,10 +219,6 @@ void EditStaff::updateInstrument()
     transp_PreferSharpFlat->setVisible(showPreferSharpFlat);
     preferSharpFlat->setCurrentIndex(int(m_orgStaff->part()->preferSharpFlat()));
 }
-
-//---------------------------------------------------------
-//   updateInterval
-//---------------------------------------------------------
 
 void EditStaff::updateInterval(const Ms::Interval& iv)
 {
@@ -259,10 +250,6 @@ void EditStaff::updateInterval(const Ms::Interval& iv)
     octave->setValue(oct);
 }
 
-//---------------------------------------------------------
-//   updateNextPreviousButtons
-//---------------------------------------------------------
-
 void EditStaff::updateNextPreviousButtons()
 {
     int staffIdx = m_orgStaff->idx();
@@ -270,10 +257,6 @@ void EditStaff::updateNextPreviousButtons()
     nextButton->setEnabled(staffIdx < (m_orgStaff->score()->nstaves() - 1));
     previousButton->setEnabled(staffIdx != 0);
 }
-
-//---------------------------------------------------------
-//   gotoNextStaff
-//---------------------------------------------------------
 
 void EditStaff::gotoNextStaff()
 {
@@ -285,10 +268,6 @@ void EditStaff::gotoNextStaff()
     }
 }
 
-//---------------------------------------------------------
-//   gotoPreviousStaff
-//---------------------------------------------------------
-
 void EditStaff::gotoPreviousStaff()
 {
     int previousStaffIndex = m_orgStaff->idx() - 1;
@@ -298,10 +277,6 @@ void EditStaff::gotoPreviousStaff()
         updateCurrentStaff();
     }
 }
-
-//---------------------------------------------------------
-//   bboxClicked
-//---------------------------------------------------------
 
 void EditStaff::bboxClicked(QAbstractButton* button)
 {
@@ -327,19 +302,13 @@ void EditStaff::bboxClicked(QAbstractButton* button)
     }
 }
 
-//---------------------------------------------------------
-//   apply
-//---------------------------------------------------------
-
 void EditStaff::apply()
 {
+    int index = m_staff->score()->undoStack()->getCurIdx();
     applyStaffProperties();
     applyPartProperties();
+    m_staff->score()->undoStack()->mergeCommands(index);
 }
-
-//---------------------------------------------------------
-//   Slots
-//---------------------------------------------------------
 
 void EditStaff::minPitchAClicked()
 {
@@ -469,9 +438,11 @@ Staff* EditStaff::staff(int staffIndex) const
 
     async::NotifyList<const Part*> parts = notationParts->partList();
     for (const Part* part: parts) {
-        async::NotifyList<mu::instruments::Instrument> instruments = notationParts->instrumentList(part->id());
-        for (mu::instruments::Instrument instrument: instruments) {
+        async::NotifyList<Instrument> instruments = notationParts->instrumentList(part->id());
+
+        for (const Instrument& instrument: instruments) {
             async::NotifyList<const Staff*> staves = notationParts->staffList(part->id(), instrument.id);
+
             for (const Staff* staff: staves) {
                 if (staff->idx() == staffIndex) {
                     return const_cast<Staff*>(staff);
@@ -483,18 +454,19 @@ Staff* EditStaff::staff(int staffIndex) const
     return nullptr;
 }
 
-mu::instruments::Instrument EditStaff::instrument() const
+Instrument EditStaff::instrument() const
 {
     INotationPartsPtr notationParts = this->notationParts();
     if (!notationParts) {
-        return mu::instruments::Instrument();
+        return Instrument();
     }
 
     async::NotifyList<const Part*> parts = notationParts->partList();
     for (const Part* part: parts) {
         if (part->id() == m_partId) {
-            async::NotifyList<mu::instruments::Instrument> instruments = notationParts->instrumentList(part->id());
-            for (mu::instruments::Instrument instrument: instruments) {
+            async::NotifyList<Instrument> instruments = notationParts->instrumentList(part->id());
+
+            for (const Instrument& instrument: instruments) {
                 if (instrument.id == m_instrumentId) {
                     return instrument;
                 }
@@ -502,7 +474,7 @@ mu::instruments::Instrument EditStaff::instrument() const
         }
     }
 
-    return mu::instruments::Instrument();
+    return Instrument();
 }
 
 void EditStaff::applyStaffProperties()
@@ -512,6 +484,8 @@ void EditStaff::applyStaffProperties()
     config.visibleLines = invisible->isChecked();
     config.userDistance = spinExtraDistance->value() * m_orgStaff->score()->spatium();
     config.scale = mag->value() / 100.0;
+    config.small = small->isChecked();
+    config.cutaway = cutaway->isChecked();
     config.showIfEmpty = showIfEmpty->isChecked();
     config.linesCount = lines->value();
     config.lineDistance = lineDistance->value();
@@ -525,7 +499,7 @@ void EditStaff::applyStaffProperties()
     config.hideSystemBarline = hideSystemBarLine->isChecked();
     config.mergeMatchingRests = mergeMatchingRests->isChecked();
     config.hideMode = Staff::HideMode(hideMode->currentIndex());
-    config.clefType = m_instrument.clefs[m_orgStaff->rstaff()];
+    config.clefTypeList = m_instrument.clefs[m_orgStaff->rstaff()];
 
     notationParts()->setStaffConfig(m_orgStaff->id(), config);
 
@@ -540,9 +514,8 @@ void EditStaff::applyPartProperties()
     QString sn = shortName->toPlainText();
     QString ln = longName->toPlainText();
     if (!Ms::Text::validateText(sn) || !Ms::Text::validateText(ln)) {
-        QMessageBox msgBox;
-        msgBox.setText(tr("The instrument name is invalid."));
-        msgBox.exec();
+        interactive()->warning(trc("notation", "Invalid instrument name"),
+                               trc("notation", "The instrument name is invalid."));
         return;
     }
     shortName->setPlainText(sn);    // show the fixed text
@@ -614,19 +587,17 @@ bool EditStaff::isInstrumentChanged()
            || m_instrument.singleNoteDynamics != m_orgInstrument.singleNoteDynamics;
 }
 
-//---------------------------------------------------------
-//   showInstrumentDialog
-//---------------------------------------------------------
-
-void EditStaff::showInstrumentDialog()
+void EditStaff::showReplaceInstrumentDialog()
 {
-    //!TODO: implement after merge  the select instrument dialogue to master branch
-    NOT_IMPLEMENTED;
-}
+    RetVal<Instrument> selectedInstrument = selectInstrumentsScenario()->selectInstrument(m_instrumentId.toStdString());
+    if (!selectedInstrument.ret) {
+        LOGE() << selectedInstrument.ret.toString();
+        return;
+    }
 
-//---------------------------------------------------------
-//   editStringDataClicked
-//---------------------------------------------------------
+    m_instrument = selectedInstrument.val;
+    updateInstrument();
+}
 
 void EditStaff::editStringDataClicked()
 {
@@ -684,11 +655,6 @@ void EditStaff::editStringDataClicked()
     }
 }
 
-//---------------------------------------------------------
-//   midiCodeToStr
-//    Converts a MIDI numeric pitch code to human-readable note name
-//---------------------------------------------------------
-
 static const char* s_es_noteNames[] = {
     QT_TRANSLATE_NOOP("editstaff", "C"),
     QT_TRANSLATE_NOOP("editstaff", "C♯"),
@@ -706,12 +672,8 @@ static const char* s_es_noteNames[] = {
 
 QString EditStaff::midiCodeToStr(int midiCode)
 {
-    return QString("%1 %2").arg(qApp->translate("editstaff", s_es_noteNames[midiCode % 12])).arg(midiCode / 12 - 1);
+    return QString("%1 %2").arg(qtrc("editstaff", s_es_noteNames[midiCode % 12])).arg(midiCode / 12 - 1);
 }
-
-//---------------------------------------------------------
-//   showStaffTypeDialog
-//---------------------------------------------------------
 
 void EditStaff::showStaffTypeDialog()
 {

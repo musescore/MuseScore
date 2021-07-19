@@ -48,13 +48,13 @@ Row {
         horizontalAlignment: Qt.AlignLeft
     }
 
-    StyledComboBox {
+   Dropdown {
         id: comboBox
 
         width: 210
 
-        onActivated: {
-            root.valueEdited(currentValue)
+        onCurrentValueChanged: {
+            root.valueEdited(comboBox.currentValue)
         }
     }
 }

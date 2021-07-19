@@ -307,7 +307,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
 
             int grace_len = MScore::division / 8;
             if (duration == 1) {
-                grace_len = MScore::division / 8;       //32th
+                grace_len = MScore::division / 8;       //32nd
             } else if (duration == 2) {
                 grace_len = MScore::division / 6;       //24th
             } else if (duration == 3) {

@@ -41,7 +41,7 @@ void NotationActionController::init()
     //! NOTE For historical reasons, the name of the action does not match what needs to be done
     dispatcher()->reg(this, ESCAPE_ACTION_CODE, this, &NotationActionController::resetState);
 
-    registerAction("note-input", [this]() { toggleNoteInput(); }, &NotationActionController::isNotTextEditing);
+    registerAction("note-input", [this]() { toggleNoteInput(); }, &NotationActionController::isNotEditingText);
     registerNoteInputAction("note-input-steptime", NoteInputMethod::STEPTIME);
     registerNoteInputAction("note-input-rhythm", NoteInputMethod::RHYTHM);
     registerNoteInputAction("note-input-repitch", NoteInputMethod::REPITCH);
@@ -91,6 +91,14 @@ void NotationActionController::init()
     registerNoteAction("insert-g", NoteName::G, NoteAddingMode::InsertChord);
     registerNoteAction("insert-a", NoteName::A, NoteAddingMode::InsertChord);
     registerNoteAction("insert-b", NoteName::B, NoteAddingMode::InsertChord);
+
+    registerLyricsAction("next-lyric", &NotationActionController::nextLyrics);
+    registerLyricsAction("prev-lyric", &NotationActionController::previousLyrics);
+    registerLyricsAction("next-lyric-verse", &NotationActionController::nextLyricsVerse);
+    registerLyricsAction("prev-lyric-verse", &NotationActionController::previousLyricsVerse);
+    registerLyricsAction("next-syllable", &NotationActionController::nextSyllable);
+    registerLyricsAction("add-melisma", &NotationActionController::addMelisma);
+    registerLyricsAction("add-lyric-verse", &NotationActionController::addLyricsVerse);
 
     dispatcher()->reg(this, "flat2", [this]() { toggleAccidental(AccidentalType::FLAT2); });
     dispatcher()->reg(this, "flat", [this]() { toggleAccidental(AccidentalType::FLAT); });
@@ -170,9 +178,9 @@ void NotationActionController::init()
     dispatcher()->reg(this, "first-element", this, &NotationActionController::firstElement);
     dispatcher()->reg(this, "last-element", this, &NotationActionController::lastElement);
 
-    dispatcher()->reg(this, "system-break", [this]() { toggleLayoutBreak(LayoutBreakType::LINE); });
-    dispatcher()->reg(this, "page-break", [this]() { toggleLayoutBreak(LayoutBreakType::PAGE); });
-    dispatcher()->reg(this, "section-break", [this]() { toggleLayoutBreak(LayoutBreakType::SECTION); });
+    registerAction("system-break", [this]() { toggleLayoutBreak(LayoutBreakType::LINE); }, &NotationActionController::isNotEditingText);
+    registerAction("page-break", [this]() { toggleLayoutBreak(LayoutBreakType::PAGE); }, &NotationActionController::isNotEditingText);
+    registerAction("section-break", [this]() { toggleLayoutBreak(LayoutBreakType::SECTION); }, &NotationActionController::isNotEditingText);
 
     dispatcher()->reg(this, "split-measure", this, &NotationActionController::splitMeasure);
     dispatcher()->reg(this, "join-measures", this, &NotationActionController::joinSelectedMeasures);
@@ -194,6 +202,8 @@ void NotationActionController::init()
     dispatcher()->reg(this, "edit-info", this, &NotationActionController::openScoreProperties);
     dispatcher()->reg(this, "transpose", this, &NotationActionController::openTransposeDialog);
     dispatcher()->reg(this, "parts", this, &NotationActionController::openPartsDialog);
+    dispatcher()->reg(this, "staff-text-properties", this, &NotationActionController::openStaffTextPropertiesDialog);
+    dispatcher()->reg(this, "system-text-properties", this, &NotationActionController::openStaffTextPropertiesDialog);
 
     dispatcher()->reg(this, "voice-x12", [this]() { swapVoices(0, 1); });
     dispatcher()->reg(this, "voice-x13", [this]() { swapVoices(0, 2); });
@@ -384,13 +394,8 @@ mu::async::Notification NotationActionController::currentNotationStyleChanged() 
 
 void NotationActionController::resetState()
 {
-    auto isAudioPlaying = [this]() {
-        return sequencer()->status() == audio::ISequencer::PLAYING;
-    };
-
-    if (isAudioPlaying()) {
-        sequencer()->stop();
-        return;
+    if (playbackController()->isPlaying()) {
+        playbackController()->reset();
     }
 
     auto noteInput = currentNotationNoteInput();
@@ -1499,7 +1504,7 @@ FilterElementsOptions NotationActionController::elementsFilterOptions(const Elem
     return options;
 }
 
-bool NotationActionController::isTextEditing() const
+bool NotationActionController::isEditingText() const
 {
     auto interaction = currentNotationInteraction();
     if (!interaction) {
@@ -1509,9 +1514,25 @@ bool NotationActionController::isTextEditing() const
     return interaction->isTextEditingStarted();
 }
 
+bool NotationActionController::isEditingLyrics() const
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return false;
+    }
+
+    return interaction->isTextEditingStarted() && interaction->selection()->element()
+           && interaction->selection()->element()->isLyrics();
+}
+
 void NotationActionController::openTupletOtherDialog()
 {
     interactive()->open("musescore://notation/othertupletdialog");
+}
+
+void NotationActionController::openStaffTextPropertiesDialog()
+{
+    interactive()->open("musescore://notation/stafftextproperties");
 }
 
 void NotationActionController::toggleScoreConfig(ScoreConfigType configType)
@@ -1616,17 +1637,52 @@ bool NotationActionController::isNotationPage() const
 
 bool NotationActionController::isStandardStaff() const
 {
-    return isNotTextEditing() && !isTablatureStaff();
+    return isNotEditingText() && !isTablatureStaff();
 }
 
 bool NotationActionController::isTablatureStaff() const
 {
-    return isNotTextEditing() && currentNotation()->elements()->msScore()->inputState().staffGroup() == Ms::StaffGroup::TAB;
+    return isNotEditingText() && currentNotation()->elements()->msScore()->inputState().staffGroup() == Ms::StaffGroup::TAB;
 }
 
-bool NotationActionController::isNotTextEditing() const
+bool NotationActionController::isNotEditingText() const
 {
-    return !isTextEditing();
+    return !isEditingText();
+}
+
+void NotationActionController::nextLyrics()
+{
+    currentNotationInteraction()->nextLyrics();
+}
+
+void NotationActionController::previousLyrics()
+{
+    currentNotationInteraction()->nextLyrics(true);
+}
+
+void NotationActionController::nextLyricsVerse()
+{
+    currentNotationInteraction()->nextLyricsVerse();
+}
+
+void NotationActionController::previousLyricsVerse()
+{
+    currentNotationInteraction()->nextLyricsVerse(true);
+}
+
+void NotationActionController::nextSyllable()
+{
+    currentNotationInteraction()->nextSyllable();
+}
+
+void NotationActionController::addMelisma()
+{
+    currentNotationInteraction()->addMelisma();
+}
+
+void NotationActionController::addLyricsVerse()
+{
+    currentNotationInteraction()->addLyricsVerse();
 }
 
 void NotationActionController::registerAction(const mu::actions::ActionCode& code,
@@ -1646,7 +1702,7 @@ void NotationActionController::registerAction(const mu::actions::ActionCode& cod
 
 void NotationActionController::registerNoteInputAction(const mu::actions::ActionCode& code, NoteInputMethod inputMethod)
 {
-    registerAction(code, [this, inputMethod]() { toggleNoteInputMethod(inputMethod); }, &NotationActionController::isNotTextEditing);
+    registerAction(code, [this, inputMethod]() { toggleNoteInputMethod(inputMethod); }, &NotationActionController::isNotEditingText);
 }
 
 void NotationActionController::registerNoteAction(const mu::actions::ActionCode& code, NoteName noteName, NoteAddingMode addingMode)
@@ -1656,5 +1712,10 @@ void NotationActionController::registerNoteAction(const mu::actions::ActionCode&
 
 void NotationActionController::registerPadNoteAction(const mu::actions::ActionCode& code, Pad padding)
 {
-    registerAction(code, [this, padding]() { padNote(padding); }, &NotationActionController::isNotTextEditing);
+    registerAction(code, [this, padding]() { padNote(padding); }, &NotationActionController::isNotEditingText);
+}
+
+void NotationActionController::registerLyricsAction(const mu::actions::ActionCode& code, void (NotationActionController::* handler)())
+{
+    registerAction(code, handler, &NotationActionController::isEditingLyrics);
 }

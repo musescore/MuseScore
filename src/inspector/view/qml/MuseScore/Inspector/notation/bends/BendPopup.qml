@@ -43,11 +43,10 @@ StyledPopupView {
             titleText: qsTrc("inspector", "Bend type")
             propertyItem: root.model ? root.model.bendType : null
 
-            StyledComboBox {
-                width: parent.width
+            Dropdown {
+                id: btypes
 
-                textRoleName: "text"
-                valueRoleName: "value"
+                width: parent.width
 
                 model: [
                     { text: qsTrc("inspector", "Bend"), value: BendTypes.TYPE_BEND },
@@ -58,10 +57,10 @@ StyledPopupView {
                     { text: qsTrc("inspector", "Custom"), value: BendTypes.TYPE_CUSTOM }
                 ]
 
-                currentIndex: root.model && !root.model.bendType.isUndefined ? indexOfValue(root.model.bendType.value) : -1
+                currentIndex: root.model && !root.model.bendType.isUndefined ? btypes.indexOfValue(root.model.bendType.value) : -1
 
-                onValueChanged: {
-                    root.model.bendType.value = value
+                onCurrentValueChanged: {
+                    root.model.bendType.value = btypes.currentValue
                 }
             }
         }

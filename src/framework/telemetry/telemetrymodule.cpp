@@ -27,8 +27,6 @@
 #include "modularity/ioc.h"
 
 #include "internal/telemetryconfiguration.h"
-#include "internal/telemetryservice.h"
-#include "view/telemetrypermissionmodel.h"
 
 #include "global/iglobalconfiguration.h"
 #include "internal/dump/crashhandler.h"
@@ -41,7 +39,7 @@
 #include "config.h"
 
 using namespace mu::telemetry;
-using namespace mu::framework;
+using namespace mu::modularity;
 using namespace mu::ui;
 
 static std::shared_ptr<TelemetryConfiguration> s_configuration = std::make_shared<TelemetryConfiguration>();
@@ -64,21 +62,14 @@ void TelemetryModule::registerResources()
 void TelemetryModule::registerExports()
 {
     ioc()->registerExport<ITelemetryConfiguration>(moduleName(), s_configuration);
-    ioc()->registerExport<ITelemetryService>(moduleName(), new TelemetryService());
 }
 
 void TelemetryModule::resolveImports()
 {
-    auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
-    if (ir) {
-        ir->registerUri(Uri("musescore://telemetry/permission"),
-                        ContainerMeta(ContainerType::QmlDialog, "MuseScore/Telemetry/TelemetryPermissionDialog.qml"));
-    }
 }
 
 void TelemetryModule::registerUiTypes()
 {
-    qmlRegisterType<TelemetryPermissionModel>("MuseScore.Telemetry", 1, 0, "TelemetryPermissionModel");
     qmlRegisterType<TelemetryDevTools>("MuseScore.Telemetry", 1, 0, "TelemetryDevTools");
 }
 
@@ -86,7 +77,7 @@ void TelemetryModule::onInit(const framework::IApplication::RunMode&)
 {
     s_configuration->init();
 
-    auto globalConf = framework::ioc()->resolve<framework::IGlobalConfiguration>(moduleName());
+    auto globalConf = modularity::ioc()->resolve<framework::IGlobalConfiguration>(moduleName());
     IF_ASSERT_FAILED(globalConf) {
         return;
     }
@@ -103,6 +94,7 @@ void TelemetryModule::onInit(const framework::IApplication::RunMode&)
 
     io::path handlerPath = globalConf->appBinPath() + "/" + handlerFile;
     io::path dumpsDir = globalConf->userAppDataPath() + "/logs/dumps";
+    fileSystem()->makePath(dumpsDir);
     std::string serverUrl(CRASH_REPORT_URL);
 
     if (!s_configuration->isDumpUploadAllowed()) {

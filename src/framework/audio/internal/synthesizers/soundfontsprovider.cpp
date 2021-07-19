@@ -22,108 +22,68 @@
 #include "soundfontsprovider.h"
 
 #include "log.h"
-#include "internal/audiosanitizer.h"
 
-static const std::string SF2_FILTER("*.sf2");
-static const std::string SF3_FILTER("*.sf3");
-static const std::string SFZ_FILTER("*.sfz");
+#include "async/async.h"
+
+#include "audioerrors.h"
+#include "internal/audiothread.h"
+#include "internal/audiosanitizer.h"
 
 using namespace mu;
 using namespace mu::audio::synth;
+using namespace mu::async;
 using namespace mu::framework;
 
-std::vector<io::path> SoundFontsProvider::soundFontPathsForSynth(const SynthName& synthName) const
+static const std::map<SoundFontFormat, std::string> SOUND_FONT_FILE_EXTENSIONS =
 {
-    ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
-    const SynthesizerState& state = configuration()->synthesizerState();
+    { SoundFontFormat::SF2, "*.sf2" },
+    { SoundFontFormat::SF3, "*.sf3" }
+};
 
-    auto it = state.groups.find(synthName);
-    if (it == state.groups.end()) {
-        LOGW() << "Synthesizer state not contains group: " << synthName;
-        return std::vector<io::path>();
-    }
-    const SynthesizerState::Group& g = it->second;
+void SoundFontsProvider::refreshPaths()
+{
+    Async::call(this, [this]() {
+        ONLY_AUDIO_WORKER_THREAD;
 
-    std::vector<std::string> fontNames;
-    for (const SynthesizerState::Val& val : g.vals) {
-        if (val.id == SynthesizerState::ValID::SoundFontID) {
-            fontNames.push_back(val.val);
+        m_soundFontPathsCache.clear();
+        io::paths dirPaths = configuration()->soundFontDirectories();
+
+        for (const auto& pair : SOUND_FONT_FILE_EXTENSIONS) {
+            updateCaches(dirPaths, pair.first);
         }
-    }
-
-    if (fontNames.empty()) {
-        LOGW() << "Synthesizer state not contains fonts for synth: " << synthName;
-        return std::vector<io::path>();
-    }
-
-    auto synth = synthRegister()->synthesizer(synthName);
-    IF_ASSERT_FAILED(synth) {
-        return std::vector<io::path>();
-    }
-
-    std::vector<io::path> result;
-    SoundFontFormats formats = synth->soundFontFormats();
-    std::vector<io::path> fontsFiles = soundFontPaths(formats);
-    for (const io::path& file : fontsFiles) {
-        std::string name = io::filename(file).toStdString();
-
-        if (std::find(fontNames.begin(), fontNames.end(), name) != fontNames.end()) {
-            result.push_back(file);
-        }
-    }
-
-    configuration()->synthesizerStateGroupChanged(synthName).onNotify(this, [this, synthName]() {
-        std::lock_guard<std::mutex> lock(m_mutex);
-        m_soundFontPathsForSynthChangedMap[synthName].notify();
-    });
-
-    return result;
+    }, AudioThread::ID);
 }
 
-async::Notification SoundFontsProvider::soundFontPathsForSynthChanged(const SynthName& synth) const
+async::Promise<SoundFontPaths> SoundFontsProvider::soundFontPaths(SoundFontFormats formats) const
 {
-    ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
-    async::Notification n;
-    {
-        std::lock_guard<std::mutex> lock(m_mutex);
-        n = m_soundFontPathsForSynthChangedMap[synth];
-    }
-    return n;
+    return Promise<SoundFontPaths>([this, formats](Promise<SoundFontPaths>::Resolve resolve,
+                                                   Promise<SoundFontPaths>::Reject /*reject*/) {
+        ONLY_AUDIO_WORKER_THREAD;
+
+        SoundFontPaths result;
+
+        for (const SoundFontFormat& format : formats) {
+            const auto& range = m_soundFontPathsCache.equal_range(format);
+
+            for (auto i = range.first; i != range.second; ++i) {
+                result.push_back(std::move(i->second));
+            }
+        }
+
+        resolve(std::move(result));
+    }, AudioThread::ID);
 }
 
-std::vector<io::path> SoundFontsProvider::soundFontPaths(SoundFontFormats formats) const
+void SoundFontsProvider::updateCaches(const io::paths& dirPaths, const SoundFontFormat& format)
 {
-    ONLY_AUDIO_MAIN_OR_WORKER_THREAD;
-    std::vector<io::path> paths = configuration()->soundFontPaths();
-
-    QStringList filter;
-    if (formats.find(SoundFontFormat::SF2) != formats.cend()) {
-        filter << QString::fromStdString(SF2_FILTER);
-    }
-
-    if (formats.find(SoundFontFormat::SF3) != formats.cend()) {
-        filter << QString::fromStdString(SF3_FILTER);
-    }
-
-    if (formats.find(SoundFontFormat::SFZ) != formats.cend()) {
-        filter << QString::fromStdString(SFZ_FILTER);
-    }
-
-    IF_ASSERT_FAILED(!filter.isEmpty()) {
-        return std::vector<io::path>();
-    }
-
-    std::vector<io::path> soundFonts;
-    for (const io::path& path : paths) {
-        RetVal<io::paths> files = fileSystem()->scanFiles(path, filter);
+    for (const io::path& path : dirPaths) {
+        RetVal<io::paths> files = fileSystem()->scanFiles(path, { QString::fromStdString(SOUND_FONT_FILE_EXTENSIONS.at(format)) });
         if (!files.ret) {
             continue;
         }
 
         for (const io::path& filePath : files.val) {
-            soundFonts.push_back(filePath);
+            m_soundFontPathsCache.insert({ format, filePath });
         }
     }
-
-    return soundFonts;
 }

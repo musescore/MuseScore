@@ -31,29 +31,28 @@
 #include "ui/iinteractiveuriregister.h"
 #include "ui/iuiactionsregister.h"
 
-#include "internal/mu4paletteadapter.h"
 #include "internal/paletteconfiguration.h"
-#include "internal/palette/masterpalette.h"
+#include "internal/widgets/masterpalette.h"
+#include "internal/widgets/specialcharactersdialog.h"
 #include "internal/paletteactionscontroller.h"
 #include "internal/paletteuiactions.h"
+#include "internal/palette/paletteprovider.h"
 
 #include "view/paletterootmodel.h"
 #include "view/palettepropertiesmodel.h"
 #include "view/palettecellpropertiesmodel.h"
 
-#include "workspace/iworkspacedatastreamregister.h"
-#include "internal/workspacepalettestream.h"
-
 #include "internal/paletteworkspacesetup.h"
 
 using namespace mu::palette;
-using namespace mu::framework;
+using namespace mu::modularity;
 using namespace mu::ui;
 
-static std::shared_ptr<MU4PaletteAdapter> s_adapter = std::make_shared<MU4PaletteAdapter>();
+static std::shared_ptr<Ms::PaletteProvider> s_paletteProvider = std::make_shared<Ms::PaletteProvider>();
 static std::shared_ptr<PaletteActionsController> s_actionsController = std::make_shared<PaletteActionsController>();
 static std::shared_ptr<PaletteUiActions> s_paletteUiActions = std::make_shared<PaletteUiActions>(s_actionsController);
 static std::shared_ptr<PaletteConfiguration> s_configuration = std::make_shared<PaletteConfiguration>();
+static std::shared_ptr<PaletteWorkspaceSetup> s_paletteWorkspaceSetup = std::make_shared<PaletteWorkspaceSetup>();
 
 static void palette_init_qrc()
 {
@@ -67,17 +66,12 @@ std::string PaletteModule::moduleName() const
 
 void PaletteModule::registerExports()
 {
-    ioc()->registerExport<IPaletteAdapter>(moduleName(), s_adapter);
+    ioc()->registerExport<IPaletteProvider>(moduleName(), s_paletteProvider);
     ioc()->registerExport<IPaletteConfiguration>(moduleName(), s_configuration);
 }
 
 void PaletteModule::resolveImports()
 {
-    auto workspaceStreams = ioc()->resolve<workspace::IWorkspaceDataStreamRegister>(moduleName());
-    if (workspaceStreams) {
-        workspaceStreams->regStream(std::make_shared<WorkspacePaletteStream>());
-    }
-
     auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
     if (ar) {
         ar->reg(s_paletteUiActions);
@@ -87,6 +81,9 @@ void PaletteModule::resolveImports()
     if (ir) {
         ir->registerUri(Uri("musescore://palette/masterpalette"),
                         ContainerMeta(ContainerType::QWidgetDialog, Ms::MasterPalette::static_metaTypeId()));
+
+        ir->registerUri(Uri("musescore://palette/specialcharacters"),
+                        ContainerMeta(ContainerType::QWidgetDialog, Ms::SpecialCharactersDialog::static_metaTypeId()));
 
         ir->registerUri(Uri("musescore://palette/properties"),
                         ContainerMeta(ContainerType::QmlDialog, "MuseScore/Palette/PalettePropertiesDialog.qml"));
@@ -105,7 +102,7 @@ void PaletteModule::registerUiTypes()
 {
     using namespace Ms;
 
-    qmlRegisterUncreatableType<PaletteWorkspace>("MuseScore.Palette", 1, 0, "PaletteWorkspace", "Cannot create");
+    qmlRegisterUncreatableType<PaletteProvider>("MuseScore.Palette", 1, 0, "PaletteProvider", "Cannot create");
     qmlRegisterUncreatableType<AbstractPaletteController>("MuseScore.Palette", 1, 0, "PaletteController", "Cannot ...");
     qmlRegisterUncreatableType<PaletteElementEditor>("MuseScore.Palette", 1, 0, "PaletteElementEditor", "Cannot ...");
     qmlRegisterUncreatableType<PaletteTreeModel>("MuseScore.Palette", 1, 0, "PaletteTreeModel",  "Cannot create");
@@ -115,20 +112,30 @@ void PaletteModule::registerUiTypes()
     qmlRegisterType<PalettePropertiesModel>("MuseScore.Palette", 1, 0, "PalettePropertiesModel");
     qmlRegisterType<PaletteCellPropertiesModel>("MuseScore.Palette", 1, 0, "PaletteCellPropertiesModel");
 
+    qRegisterMetaType<SpecialCharactersDialog>("SpecialCharactersDialog");
+
     ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(palette_QML_IMPORT);
 }
 
-void PaletteModule::onInit(const IApplication::RunMode& mode)
+void PaletteModule::onInit(const framework::IApplication::RunMode& mode)
 {
     if (framework::IApplication::RunMode::Editor != mode) {
         return;
     }
 
-    // load workspace
-    PaletteWorkspaceSetup w;
-    w.setup();
-
     s_configuration->init();
     s_actionsController->init();
     s_paletteUiActions->init();
+    s_paletteProvider->init();
+}
+
+void PaletteModule::onAllInited(const framework::IApplication::RunMode& mode)
+{
+    if (framework::IApplication::RunMode::Editor != mode) {
+        return;
+    }
+
+    //! NOTE We need to be sure that the workspaces are initialized.
+    //! So, we loads these settings on onAllInited
+    s_paletteWorkspaceSetup->setup();
 }

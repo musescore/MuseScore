@@ -36,8 +36,10 @@
 
 #include "actions/actiontypes.h"
 
+#include "engraving/style/style.h"
+#include "engraving/style/defaultstyle.h"
+
 #include "libmscore/element.h"
-#include "libmscore/style.h"
 #include "libmscore/symbol.h"
 #include "libmscore/score.h"
 #include "libmscore/image.h"
@@ -55,7 +57,7 @@
 #include "libmscore/part.h"
 #include "libmscore/textline.h"
 #include "libmscore/measure.h"
-#include "libmscore/icon.h"
+#include "libmscore/actionicon.h"
 #include "libmscore/mscore.h"
 #include "libmscore/imageStore.h"
 #include "thirdparty/qzip/qzipreader_p.h"
@@ -71,6 +73,8 @@
 #include "commonscene/commonscenetypes.h"
 
 #include "../palette_config.h"
+
+#include "draw/pen.h"
 
 using namespace mu;
 using namespace mu::framework;
@@ -154,7 +158,7 @@ Palette::Palette(PalettePanelPtr palettePanel, QWidget* parent)
 
     if (moreElements()) {
         connect(this, &Palette::displayMore, [](const QString& arg) {
-            adapter()->showMasterPalette(arg);
+            dispatcher()->dispatch("masterpalette", ActionData::make_arg1(arg.toStdString()));
         });
     }
 }
@@ -595,7 +599,12 @@ void Palette::mouseMoveEvent(QMouseEvent* ev)
 
 bool Palette::applyPaletteElement(ElementPtr element, Qt::KeyboardModifiers modifiers)
 {
-    return adapter()->applyPaletteElement(element.get(), modifiers);
+    auto notation = globalContext()->currentNotation();
+    if (!notation) {
+        return false;
+    }
+
+    return notation->interaction()->applyPaletteElement(element.get(), modifiers);
 }
 
 //---------------------------------------------------------
@@ -684,6 +693,16 @@ void Palette::mouseReleaseEvent(QMouseEvent* event)
     }
 }
 
+bool Palette::notationHasSelection() const
+{
+    auto notation = globalContext()->currentNotation();
+    if (!notation) {
+        return false;
+    }
+
+    return !notation->interaction()->selection()->isNone();
+}
+
 void Palette::applyElementAtPosition(QPoint pos, Qt::KeyboardModifiers modifiers)
 {
     if (m_disableElementsApply) {
@@ -696,7 +715,7 @@ void Palette::applyElementAtPosition(QPoint pos, Qt::KeyboardModifiers modifiers
         return;
     }
 
-    if (!adapter()->isSelected()) {
+    if (!notationHasSelection()) {
         return;
     }
 
@@ -860,7 +879,7 @@ void Palette::prevPaletteElement()
 
 void Palette::applyPaletteElement()
 {
-    if (!adapter()->isSelected()) {
+    if (!notationHasSelection()) {
         return;
     }
 
@@ -1040,8 +1059,8 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
     //
     // draw symbols
     //
-    QPen pen(configuration()->elementsColor());
-    pen.setWidthF(MScore::defaultStyle().value(Sid::staffLineWidth).toDouble() * magS);
+    draw::Pen pen(configuration()->elementsColor());
+    pen.setWidthF(engraving::DefaultStyle::defaultStyle().value(Sid::staffLineWidth).toDouble() * magS);
 
     for (int idx = 0; idx < ccp().size(); ++idx) {
         int yoffset  = gscore->spatium() * m_yOffsetSpatium;
@@ -1092,8 +1111,8 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
         int column = idx % columns();
 
         qreal cellMag = currentCell->mag * mag;
-        if (el->isIcon()) {
-            toIcon(el.get())->setExtent((hhgrid < vgridM ? hhgrid : vgridM) - 4);
+        if (el->isActionIcon()) {
+            toActionIcon(el.get())->setExtent((hhgrid < vgridM ? hhgrid : vgridM) - 4);
             cellMag = 1.0;
         }
         el->layout();
@@ -1143,7 +1162,7 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
             color = palette().color(QPalette::Normal, QPalette::HighlightedText);
         }
 
-        painter.setPen(QPen(color));
+        painter.setPen(Pen(color));
         el->scanElements(&painter, paintPaletteElement);
         painter.restore();
     }
@@ -1183,8 +1202,8 @@ QPixmap Palette::pixmap(int paletteIdx) const
     mu::draw::Painter painter(mu::draw::QPainterProvider::make(&pm), "palette");
     painter.setAntialiasing(true);
 
-    if (element->isIcon()) {
-        toIcon(element.get())->setExtent(w < h ? w : h);
+    if (element->isActionIcon()) {
+        toActionIcon(element.get())->setExtent(w < h ? w : h);
     }
     painter.scale(cellMag, cellMag);
 
@@ -1204,7 +1223,7 @@ QPixmap Palette::pixmap(int paletteIdx) const
         color = palette().color(QPalette::Normal, QPalette::Text);
     }
 
-    painter.setPen(QPen(color));
+    painter.setPen(Pen(color));
     element->scanElements(&painter, paintPaletteElement);
 
     element->setPos(pos);
@@ -1528,9 +1547,9 @@ void Palette::read(XmlReader& e)
                         cell->element->read(e);
                         cell->element->styleChanged();
 
-                        if (cell->element->type() == ElementType::ICON) {
-                            Icon* icon = static_cast<Icon*>(cell->element.get());
-                            const mu::ui::UiAction& actionItem = adapter()->getAction(icon->actionCode());
+                        if (cell->element->type() == ElementType::ACTION_ICON) {
+                            ActionIcon* icon = static_cast<ActionIcon*>(cell->element.get());
+                            const mu::ui::UiAction& actionItem = actionsRegister()->action(icon->actionCode());
                             if (actionItem.isValid()) {
                                 icon->setAction(icon->actionCode(), static_cast<char16_t>(actionItem.iconCode));
                             } else {
@@ -1758,9 +1777,9 @@ void Palette::dropEvent(QDropEvent* event)
                 element->read(xml);
                 element->setTrack(0);
 
-                if (element->isIcon()) {
-                    Icon* icon = toIcon(element.get());
-                    const mu::ui::UiAction& actionItem = adapter()->getAction(icon->actionCode());
+                if (element->isActionIcon()) {
+                    ActionIcon* icon = toActionIcon(element.get());
+                    const mu::ui::UiAction& actionItem = actionsRegister()->action(icon->actionCode());
                     if (actionItem.isValid()) {
                         icon->setAction(icon->actionCode(), static_cast<char16_t>(actionItem.iconCode));
                     }

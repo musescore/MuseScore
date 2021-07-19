@@ -23,18 +23,19 @@
 #define MU_FRAMEWORK_GLOBALMODULE_H
 
 #include "modularity/imodulesetup.h"
+#include "modularity/ioc.h"
+#include "system/ifilesystem.h"
 
-namespace mu {
-namespace framework {
-class GlobalModule : public IModuleSetup
+namespace mu::framework {
+class GlobalModule : public modularity::IModuleSetup
 {
+    INJECT(framework, system::IFileSystem, fileSystem)
 public:
 
     std::string moduleName() const override;
     void registerExports() override;
     void onInit(const IApplication::RunMode& mode) override;
 };
-}
 }
 
 #endif // MU_FRAMEWORK_GLOBALMODULE_H

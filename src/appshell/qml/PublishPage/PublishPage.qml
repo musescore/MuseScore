@@ -35,11 +35,10 @@ import "../NotationPage"
 DockPage {
     id: root
 
-    property var color: ui.theme.backgroundPrimaryColor
-    property var topToolKeyNavSec
-
     objectName: "Publish"
     uri: "musescore://publish"
+
+    property var topToolKeyNavSec
 
     property NavigationSection publishToolBarKeyNavSec: NavigationSection {
         id: keynavSec
@@ -59,6 +58,7 @@ DockPage {
             minimumWidth: 198
 
             contentComponent: NotationToolBar {
+                navigation.section: root.topToolKeyNavSec
                 navigation.order: 2
 
                 onActiveFocusRequested: {
@@ -98,7 +98,10 @@ DockPage {
 
             movable: false
 
-            contentComponent: UndoRedoToolBar {}
+            contentComponent: UndoRedoToolBar {
+                navigation.section: root.topToolKeyNavSec
+                navigation.order: 4
+            }
         }
     ]
 
@@ -118,9 +121,6 @@ DockPage {
     statusBar: DockStatusBar {
         objectName: "publishStatusBar"
 
-        NotationStatusBar {
-            color: root.color
-            visible: root.pageModel.isStatusBarVisible
-        }
+        NotationStatusBar {}
     }
 }

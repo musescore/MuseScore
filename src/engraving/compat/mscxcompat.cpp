@@ -1,0 +1,114 @@
+/*
+ * SPDX-License-Identifier: GPL-3.0-only
+ * MuseScore-CLA-applies
+ *
+ * MuseScore
+ * Music Composition & Notation
+ *
+ * Copyright (C) 2021 MuseScore BVBA and others
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+#include "mscxcompat.h"
+
+#include <QFile>
+#include <QBuffer>
+
+#include "scoreaccess.h"
+
+#include "log.h"
+
+Ms::Score::FileError mu::engraving::compat::mscxToMscz(const QString& mscxFilePath, QByteArray* msczData)
+{
+    QFile mscxFile(mscxFilePath);
+    if (!mscxFile.open(QIODevice::ReadOnly)) {
+        LOGE() << "failed open file: " << mscxFilePath;
+        return Ms::Score::FileError::FILE_OPEN_ERROR;
+    }
+
+    QByteArray mscxData = mscxFile.readAll();
+
+    QBuffer buf(msczData);
+    MsczWriter writer(&buf);
+    writer.setFilePath(mscxFilePath);
+    writer.open();
+    writer.writeScoreFile(mscxData);
+
+    return Ms::Score::FileError::FILE_NO_ERROR;
+}
+
+Ms::Score::FileError mu::engraving::compat::loadMsczOrMscx(Ms::MasterScore* score, const QString& path, bool ignoreVersionError)
+{
+    QByteArray msczData;
+    QString filePath = path;
+    if (path.endsWith(".mscx")) {
+        //! NOTE Convert mscx -> mscz
+
+        Ms::Score::FileError err = mscxToMscz(path, &msczData);
+        if (err != Ms::Score::FileError::FILE_NO_ERROR) {
+            return err;
+        }
+    } else if (path.endsWith(".mscz")) {
+        QFile msczFile(path);
+        if (!msczFile.open(QIODevice::ReadOnly)) {
+            LOGE() << "failed open file: " << path;
+            return Ms::Score::FileError::FILE_OPEN_ERROR;
+        }
+
+        msczData = msczFile.readAll();
+    } else {
+        LOGE() << "unknown type, path: " << path;
+        return Ms::Score::FileError::FILE_UNKNOWN_TYPE;
+    }
+
+    QBuffer msczBuf(&msczData);
+    MsczReader reader(&msczBuf);
+    reader.setFilePath(filePath);
+    reader.open();
+
+    Ms::Score::FileError err = ScoreAccess::loadMscz(score, reader, ignoreVersionError);
+    return err;
+}
+
+mu::engraving::Err mu::engraving::compat::loadMsczOrMscx(EngravingProjectPtr project, const QString& path, bool ignoreVersionError)
+{
+    QByteArray msczData;
+    QString filePath = path;
+    if (path.endsWith(".mscx")) {
+        //! NOTE Convert mscx -> mscz
+
+        Ms::Score::FileError err = mscxToMscz(path, &msczData);
+        if (err != Ms::Score::FileError::FILE_NO_ERROR) {
+            return scoreFileErrorToErr(err);
+        }
+    } else if (path.endsWith(".mscz")) {
+        QFile msczFile(path);
+        if (!msczFile.open(QIODevice::ReadOnly)) {
+            LOGE() << "failed open file: " << path;
+            return scoreFileErrorToErr(Ms::Score::FileError::FILE_OPEN_ERROR);
+        }
+
+        msczData = msczFile.readAll();
+    } else {
+        LOGE() << "unknown type, path: " << path;
+        return scoreFileErrorToErr(Ms::Score::FileError::FILE_UNKNOWN_TYPE);
+    }
+
+    QBuffer msczBuf(&msczData);
+    MsczReader reader(&msczBuf);
+    reader.setFilePath(filePath);
+    reader.open();
+
+    Err err = project->loadMscz(reader, ignoreVersionError);
+    return err;
+}

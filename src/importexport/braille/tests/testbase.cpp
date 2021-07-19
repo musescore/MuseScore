@@ -30,6 +30,11 @@
 #include "libmscore/instrtemplate.h"
 #include "libmscore/musescoreCore.h"
 
+#include "engraving/compat/mscxcompat.h"
+#include "engraving/compat/scoreaccess.h"
+
+using namespace mu::engraving;
+
 namespace Ms {
 extern bool saveBraille(Score* score, const QString& name);
 }
@@ -43,7 +48,7 @@ MTest::MTest()
 MasterScore* MTest::readScore(const QString& name)
 {
     QString path = root + "/" + name;
-    MasterScore* score = new MasterScore(mscore->baseStyle());
+    MasterScore* score = mu::engraving::compat::ScoreAccess::createMasterScoreWithBaseStyle();
     QFileInfo fi(path);
     score->setName(fi.completeBaseName());
     QString csl  = fi.suffix().toLower();
@@ -51,7 +56,7 @@ MasterScore* MTest::readScore(const QString& name)
     ScoreLoad sl;
     Score::FileError rv;
     if (csl == "mscz" || csl == "mscx") {
-        rv = score->loadMsc(path, false);
+        rv = compat::loadMsczOrMscx(score, path, false);
     } else {
         rv = Score::FileError::FILE_UNKNOWN_TYPE;
     }
@@ -70,9 +75,15 @@ MasterScore* MTest::readScore(const QString& name)
 
 bool MTest::saveScore(Score* score, const QString& name) const
 {
-    QFileInfo fi(name);
-//      MScore::testMode = true;
-    return score->Score::saveFile(fi);
+    QFile file(name);
+    if (file.exists()) {
+        file.remove();
+    }
+
+    if (!file.open(QIODevice::ReadWrite)) {
+        return false;
+    }
+    return score->Score::writeScore(&file, false);
 }
 
 bool MTest::compareFilesFromPaths(const QString& f1, const QString& f2)

@@ -186,6 +186,7 @@ Instrument::Instrument(const Instrument& i)
         _channel.append(new Channel(*c));
     }
     _clefType     = i._clefType;
+    _trait = i._trait;
 }
 
 void Instrument::operator=(const Instrument& i)
@@ -216,6 +217,7 @@ void Instrument::operator=(const Instrument& i)
         _channel.append(new Channel(*c));
     }
     _clefType     = i._clefType;
+    _trait = i._trait;
 }
 
 //---------------------------------------------------------
@@ -445,12 +447,6 @@ void Instrument::read(XmlReader& e, Part* part)
 
     if (!readSingleNoteDynamics) {
         setSingleNoteDynamicsFromTemplate();
-    }
-
-    if (_useDrumset) {
-        if (_channel[0]->bank() == 0 && _channel[0]->synti().toLower() != "zerberus") {
-            _channel[0]->setBank(128);
-        }
     }
 }
 
@@ -947,9 +943,6 @@ void Channel::read(XmlReader& e, Part* part)
         } else {
             e.unknown();
         }
-    }
-    if (128 == _bank && "zerberus" == _synti.toLower()) {
-        _bank = 0;
     }
 
     _mustUpdateInit = true;
@@ -1719,7 +1712,18 @@ Instrument Instrument::fromTemplate(const InstrumentTemplate* t)
     }
     instr.setStringData(t->stringData);
     instr.setSingleNoteDynamics(t->singleNoteDynamics);
+    instr.setTrait(t->trait);
     return instr;
+}
+
+Trait Instrument::trait() const
+{
+    return _trait;
+}
+
+void Instrument::setTrait(const Trait& trait)
+{
+    _trait = trait;
 }
 
 //---------------------------------------------------------
@@ -1739,31 +1743,53 @@ void Instrument::updateInstrumentId()
     // because there are multiple instrument using this same id.
     // For these instruments, use the value of controller 32 of the "arco"
     // channel to find the correct instrument.
+    // There are some duplicate MusicXML IDs among other instruments too. In
+    // that case we check the pitch range and use the shortest ID that matches.
     const QString arco = QString("arco");
     const bool groupHack = instrumentId() == QString("strings.group");
     const int idxref = channelIdx(arco);
     const int val32ref = (idxref < 0) ? -1 : channel(idxref)->bank();
     QString fallback;
+    int bestMatchStrength = 0; // higher when fallback ID provides better match for instrument data
 
     for (InstrumentGroup* g : qAsConst(instrumentGroups)) {
         for (InstrumentTemplate* it : qAsConst(g->instrumentTemplates)) {
-            if (it->musicXMLid == instrumentId()) {
-                if (groupHack) {
-                    if (fallback.isEmpty()) {
-                        // Instrument "Strings" doesn't have bank defined so
-                        // if no "strings.group" instrument with requested bank
-                        // is found, assume "Strings".
-                        fallback = it->id;
+            if (it->musicXMLid != instrumentId()) {
+                continue;
+            }
+            if (groupHack) {
+                if (fallback.isEmpty()) {
+                    // Instrument "Strings" doesn't have bank defined so
+                    // if no "strings.group" instrument with requested bank
+                    // is found, assume "Strings".
+                    fallback = it->id;
+                }
+                foreach (const Channel& chan, it->channel) {
+                    if ((chan.name() == arco) && (chan.bank() == val32ref)) {
+                        _id = it->id;
+                        return;
                     }
-                    for (const Channel& chan : it->channel) {
-                        if ((chan.name() == arco) && (chan.bank() == val32ref)) {
-                            _id = it->id;
-                            return;
-                        }
+                }
+            } else {
+                int matchStrength = 0
+                                    + ((minPitchP() == it->minPitchP) ? 1 : 0)
+                                    + ((minPitchA() == it->minPitchA) ? 1 : 0)
+                                    + ((maxPitchA() == it->maxPitchA) ? 1 : 0)
+                                    + ((maxPitchP() == it->maxPitchP) ? 1 : 0);
+                const int perfectMatchStrength = 4;
+                Q_ASSERT(matchStrength <= perfectMatchStrength);
+                if (fallback.isEmpty() || matchStrength > bestMatchStrength) {
+                    // Set a fallback ID or update it because we've found a better one.
+                    fallback = it->id;
+                    bestMatchStrength = matchStrength;
+                    if (bestMatchStrength == perfectMatchStrength) {
+                        break; // stop looking for matches
                     }
-                } else {
-                    _id = it->id;
-                    return;
+                } else if ((matchStrength == bestMatchStrength) && (it->id.length() < fallback.length())) {
+                    // Update fallback ID because we've found a shorter one that is equally good.
+                    // Shorter IDs tend to correspond to more generic instruments (e.g. "piano"
+                    // vs. "grand-piano") so it's better to use a shorter one if unsure.
+                    fallback = it->id;
                 }
             }
         }

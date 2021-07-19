@@ -75,8 +75,10 @@ public:
 
     virtual void init();
 
+    bool isShown() const;
     void show();
     void hide();
+    void toggle();
 
     DockLocation location() const;
 
@@ -99,8 +101,6 @@ signals:
     void minimumSizeChanged();
     void maximumSizeChanged();
     void allowedAreasChanged();
-
-    void closed();
 
     void floatingChanged();
 

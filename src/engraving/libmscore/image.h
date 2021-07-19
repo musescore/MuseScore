@@ -23,9 +23,15 @@
 #ifndef __IMAGE_H__
 #define __IMAGE_H__
 
-#include <QSvgRenderer>
+#include "modularity/ioc.h"
 
+#include "engraving/draw/iimageconverter.h"
 #include "bsymbol.h"
+
+namespace mu::draw {
+class Pixmap;
+class SvgRenderer;
+}
 
 namespace Ms {
 class ImageStoreItem;
@@ -40,9 +46,10 @@ enum class ImageType : char {
 
 class Image final : public BSymbol
 {
+    INJECT(engraving, mu::draw::IImageConverter, imageConverter)
     union {
-        QImage* rasterDoc;
-        QSvgRenderer* svgDoc;
+        mu::draw::Pixmap* rasterDoc;
+        mu::draw::SvgRenderer* svgDoc;
     };
     ImageType imageType;
 
@@ -54,7 +61,7 @@ protected:
     QString _storePath;             // the path of the img in the ImageStore
     QString _linkPath;              // the path of an external linked img
     bool _linkIsValid;              // whether _linkPath file exists or not
-    mutable QPixmap buffer;         ///< cached rendering
+    mutable mu::draw::Pixmap buffer;         ///< cached rendering
     mu::SizeF _size;                   // in mm or spatium units
     bool _lockAspectRatio;
     bool _autoScale;                ///< fill parent frame

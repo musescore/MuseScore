@@ -26,7 +26,7 @@
 
 #include "io/path.h"
 #include "modularity/imoduleexport.h"
-#include "retval.h"
+#include "async/channel.h"
 
 namespace mu::workspace {
 class IWorkspaceConfiguration : MODULE_EXPORT_INTERFACE
@@ -38,11 +38,11 @@ public:
 
     virtual io::paths workspacePaths() const = 0;
 
-    virtual io::path userWorkspacesDirPath() const = 0;
-    virtual io::path userWorkspacePath(const std::string& workspaceName) const = 0;
+    virtual io::path userWorkspacesPath() const = 0;
 
-    virtual ValCh<std::string> currentWorkspaceName() const = 0;
+    virtual std::string currentWorkspaceName() const = 0;
     virtual void setCurrentWorkspaceName(const std::string& workspaceName) = 0;
+    virtual async::Channel<std::string> currentWorkspaceNameChanged() const = 0;
 };
 }
 

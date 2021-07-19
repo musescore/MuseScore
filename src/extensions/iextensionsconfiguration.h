@@ -55,8 +55,9 @@ public:
 
     virtual io::paths templatesPaths() const = 0;
 
-    virtual ValCh<io::path> extensionsPath() const = 0;
-    virtual void setExtensionsPath(const io::path& path) = 0;
+    virtual io::path userExtensionsPath() const = 0;
+    virtual void setUserExtensionsPath(const io::path& path) = 0;
+    virtual async::Channel<io::path> userExtensionsPathChanged() const = 0;
 };
 }
 

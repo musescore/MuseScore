@@ -33,5 +33,5 @@ std::string SystemModule::moduleName() const
 
 void SystemModule::registerExports()
 {
-    framework::ioc()->registerExport<IFileSystem>(moduleName(), new FileSystem());
+    modularity::ioc()->registerExport<IFileSystem>(moduleName(), new FileSystem());
 }

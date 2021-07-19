@@ -28,28 +28,29 @@ import MuseScore.Dock 1.0
 
 import MuseScore.UserScores 1.0
 import MuseScore.Cloud 1.0
+import MuseScore.Learn 1.0
 
 import "../dockwindow"
 
 DockPage {
     id: root
 
-    property string item: "scores"
-    property string subItem: ""
+    property string section: "scores"
+    property string subSection: ""
 
     objectName: "Home"
     uri: "musescore://home"
 
-    onItemChanged: {
-        Qt.callLater(root.setCurrentCentral, item)
+    onSectionChanged: {
+        Qt.callLater(root.setCurrentCentral, section)
     }
 
     function setCurrentCentral(name) {
-        if (item === name || !Boolean(name)) {
+        if (section === name || !Boolean(name)) {
             return
         }
 
-        item = name
+        section = name
 
         switch (name) {
         case "scores": root.central = scoresComp; break
@@ -72,7 +73,7 @@ DockPage {
             allowedAreas: Qt.NoDockWidgetArea
 
             HomeMenu {
-                currentPageName: root.item
+                currentPageName: root.section
 
                 onSelected: {
                     root.setCurrentCentral(name)
@@ -99,7 +100,7 @@ DockPage {
         id: addonsComp
 
         AddonsContent {
-            item: root.subItem
+            section: root.subSection
         }
     }
 
@@ -124,9 +125,8 @@ DockPage {
     Component {
         id: learnComp
 
-        StyledTextLabel {
-            anchors.centerIn: parent
-            text: "Learn"
+        LearnPage {
+            section: root.subSection
         }
     }
 

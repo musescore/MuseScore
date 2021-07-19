@@ -61,8 +61,6 @@ static const Settings::Key KEYBOARD_ZOOM_PRECISION(module_name, "ui/canvas/zoomP
 static const Settings::Key MOUSE_ZOOM_PRECISION(module_name, "ui/canvas/zoomPrecisionMouse");
 
 static const Settings::Key USER_STYLES_PATH(module_name, "application/paths/myStyles");
-static const Settings::Key DEFAULT_STYLE_FILE_PATH(module_name, "score/style/defaultStyleFile");
-static const Settings::Key PART_STYLE_FILE_PATH(module_name, "score/style/partStyleFile");
 
 static const Settings::Key IS_MIDI_INPUT_ENABLED(module_name, "io/midi/enableInput");
 static const Settings::Key IS_AUTOMATICALLY_PAN_ENABLED(module_name, "application/playback/panPlayback");
@@ -83,6 +81,11 @@ static const Settings::Key VOICE1_COLOR_KEY(module_name, "ui/score/voice1/color"
 static const Settings::Key VOICE2_COLOR_KEY(module_name, "ui/score/voice2/color");
 static const Settings::Key VOICE3_COLOR_KEY(module_name, "ui/score/voice3/color");
 static const Settings::Key VOICE4_COLOR_KEY(module_name, "ui/score/voice4/color");
+
+static const Settings::Key FIRST_INSTRUMENT_LIST_KEY(module_name, "application/paths/instrumentList1");
+static const Settings::Key SECOND_INSTRUMENT_LIST_KEY(module_name, "application/paths/instrumentList2");
+static const Settings::Key FIRST_SCORE_ORDER_LIST_KEY(module_name, "application/paths/scoreOrderList1");
+static const Settings::Key SECOND_SCORE_ORDER_LIST_KEY(module_name, "application/paths/scoreOrderList2");
 
 static std::map<int, Settings::Key> voicesKeys {
     { 0, VOICE1_COLOR_KEY },
@@ -132,10 +135,11 @@ void NotationConfiguration::init()
         m_currentZoomChanged.send(val.toInt());
     });
 
-    settings()->setDefaultValue(USER_STYLES_PATH, Val(globalConfiguration()->appDataPath().toStdString() + "Styles"));
+    settings()->setDefaultValue(USER_STYLES_PATH, Val(globalConfiguration()->userDataPath() + "/Styles"));
     settings()->valueChanged(USER_STYLES_PATH).onReceive(nullptr, [this](const Val& val) {
-        m_stylesPathChanged.send(val.toString());
+        m_userStylesPathChanged.send(val.toPath());
     });
+    fileSystem()->makePath(userStylesPath());
 
     settings()->setDefaultValue(SELECTION_PROXIMITY, Val(6));
     settings()->setDefaultValue(IS_MIDI_INPUT_ENABLED, Val(false));
@@ -173,7 +177,27 @@ void NotationConfiguration::init()
         });
     }
 
-    fileSystem()->makePath(stylesPath().val);
+    settings()->setDefaultValue(FIRST_INSTRUMENT_LIST_KEY,
+                                Val(globalConfiguration()->appDataPath().toStdString() + "instruments/instruments.xml"));
+    settings()->valueChanged(FIRST_INSTRUMENT_LIST_KEY).onReceive(nullptr, [this](const Val&) {
+        m_instrumentListPathsChanged.notify();
+    });
+
+    settings()->setDefaultValue(SECOND_INSTRUMENT_LIST_KEY, Val(""));
+    settings()->valueChanged(SECOND_INSTRUMENT_LIST_KEY).onReceive(nullptr, [this](const Val&) {
+        m_instrumentListPathsChanged.notify();
+    });
+
+    settings()->setDefaultValue(FIRST_SCORE_ORDER_LIST_KEY,
+                                Val(globalConfiguration()->appDataPath().toStdString() + "instruments/orders.xml"));
+    settings()->valueChanged(FIRST_SCORE_ORDER_LIST_KEY).onReceive(nullptr, [this](const Val&) {
+        m_scoreOrderListPathsChanged.notify();
+    });
+
+    settings()->setDefaultValue(SECOND_SCORE_ORDER_LIST_KEY, Val(""));
+    settings()->valueChanged(SECOND_SCORE_ORDER_LIST_KEY).onReceive(nullptr, [this](const Val&) {
+        m_scoreOrderListPathsChanged.notify();
+    });
 
     // libmscore
     preferences().setBackupDirPath(globalConfiguration()->userBackupPath().toQString());
@@ -195,7 +219,7 @@ QColor NotationConfiguration::backgroundColor() const
 
 void NotationConfiguration::setBackgroundColor(const QColor& color)
 {
-    settings()->setValue(BACKGROUND_COLOR, Val(color));
+    settings()->setSharedValue(BACKGROUND_COLOR, Val(color));
 }
 
 io::path NotationConfiguration::backgroundWallpaperPath() const
@@ -205,7 +229,7 @@ io::path NotationConfiguration::backgroundWallpaperPath() const
 
 void NotationConfiguration::setBackgroundWallpaperPath(const io::path& path)
 {
-    settings()->setValue(BACKGROUND_WALLPAPER_PATH, Val(path.toStdString()));
+    settings()->setSharedValue(BACKGROUND_WALLPAPER_PATH, Val(path.toStdString()));
 }
 
 bool NotationConfiguration::backgroundUseColor() const
@@ -215,7 +239,7 @@ bool NotationConfiguration::backgroundUseColor() const
 
 void NotationConfiguration::setBackgroundUseColor(bool value)
 {
-    settings()->setValue(BACKGROUND_USE_COLOR, Val(value));
+    settings()->setSharedValue(BACKGROUND_USE_COLOR, Val(value));
 }
 
 async::Notification NotationConfiguration::backgroundChanged() const
@@ -230,7 +254,7 @@ QColor NotationConfiguration::foregroundColor() const
 
 void NotationConfiguration::setForegroundColor(const QColor& color)
 {
-    settings()->setValue(FOREGROUND_COLOR, Val(color));
+    settings()->setSharedValue(FOREGROUND_COLOR, Val(color));
 }
 
 io::path NotationConfiguration::foregroundWallpaperPath() const
@@ -240,7 +264,7 @@ io::path NotationConfiguration::foregroundWallpaperPath() const
 
 void NotationConfiguration::setForegroundWallpaperPath(const io::path& path)
 {
-    return settings()->setValue(FOREGROUND_WALLPAPER_PATH, Val(path.toStdString()));
+    return settings()->setSharedValue(FOREGROUND_WALLPAPER_PATH, Val(path.toStdString()));
 }
 
 bool NotationConfiguration::foregroundUseColor() const
@@ -250,7 +274,7 @@ bool NotationConfiguration::foregroundUseColor() const
 
 void NotationConfiguration::setForegroundUseColor(bool value)
 {
-    settings()->setValue(FOREGROUND_USE_COLOR, Val(value));
+    settings()->setSharedValue(FOREGROUND_USE_COLOR, Val(value));
 }
 
 async::Notification NotationConfiguration::foregroundChanged() const
@@ -308,7 +332,7 @@ void NotationConfiguration::setSelectionColor(int voiceIndex, const QColor& colo
         return;
     }
 
-    settings()->setValue(voicesKeys[voiceIndex], Val(color));
+    settings()->setSharedValue(voicesKeys[voiceIndex], Val(color));
 }
 
 async::Channel<int> NotationConfiguration::selectionColorChanged()
@@ -323,7 +347,7 @@ int NotationConfiguration::selectionProximity() const
 
 void NotationConfiguration::setSelectionProximity(int proxymity)
 {
-    settings()->setValue(SELECTION_PROXIMITY, Val(proxymity));
+    settings()->setSharedValue(SELECTION_PROXIMITY, Val(proxymity));
 }
 
 ZoomType NotationConfiguration::defaultZoomType() const
@@ -333,7 +357,7 @@ ZoomType NotationConfiguration::defaultZoomType() const
 
 void NotationConfiguration::setDefaultZoomType(ZoomType zoomType)
 {
-    settings()->setValue(DEFAULT_ZOOM_TYPE, Val(static_cast<int>(zoomType)));
+    settings()->setSharedValue(DEFAULT_ZOOM_TYPE, Val(static_cast<int>(zoomType)));
 }
 
 int NotationConfiguration::defaultZoom() const
@@ -343,7 +367,7 @@ int NotationConfiguration::defaultZoom() const
 
 void NotationConfiguration::setDefaultZoom(int zoomPercentage)
 {
-    settings()->setValue(DEFAULT_ZOOM, Val(zoomPercentage));
+    settings()->setSharedValue(DEFAULT_ZOOM, Val(zoomPercentage));
 }
 
 mu::ValCh<int> NotationConfiguration::currentZoom() const
@@ -357,7 +381,7 @@ mu::ValCh<int> NotationConfiguration::currentZoom() const
 
 void NotationConfiguration::setCurrentZoom(int zoomPercentage)
 {
-    settings()->setValue(CURRENT_ZOOM, Val(zoomPercentage));
+    settings()->setSharedValue(CURRENT_ZOOM, Val(zoomPercentage));
 }
 
 QList<int> NotationConfiguration::possibleZoomPercentageList() const
@@ -374,7 +398,7 @@ int NotationConfiguration::mouseZoomPrecision() const
 
 void NotationConfiguration::setMouseZoomPrecision(int precision)
 {
-    settings()->setValue(MOUSE_ZOOM_PRECISION, Val(precision));
+    settings()->setSharedValue(MOUSE_ZOOM_PRECISION, Val(precision));
 }
 
 std::string NotationConfiguration::fontFamily() const
@@ -387,39 +411,39 @@ int NotationConfiguration::fontSize() const
     return uiConfiguration()->fontSize(FontSizeType::BODY);
 }
 
-ValCh<io::path> NotationConfiguration::stylesPath() const
+io::path NotationConfiguration::userStylesPath() const
 {
-    ValCh<io::path> result;
-    result.ch = m_stylesPathChanged;
-    result.val = settings()->value(USER_STYLES_PATH).toString();
-
-    return result;
+    return settings()->value(USER_STYLES_PATH).toPath();
 }
 
-void NotationConfiguration::setStylesPath(const io::path& path)
+void NotationConfiguration::setUserStylesPath(const io::path& path)
 {
-    settings()->setValue(USER_STYLES_PATH, Val(path.toStdString()));
+    settings()->setSharedValue(USER_STYLES_PATH, Val(path));
+}
+
+async::Channel<io::path> NotationConfiguration::userStylesPathChanged() const
+{
+    return m_userStylesPathChanged;
 }
 
 io::path NotationConfiguration::defaultStyleFilePath() const
 {
-    return settings()->value(DEFAULT_STYLE_FILE_PATH).toString();
+    return engravingConfiguration()->defaultStyleFilePath();
 }
 
 void NotationConfiguration::setDefaultStyleFilePath(const io::path& path)
 {
-    preferences().setDefaultStyleFilePath(path.toQString());
-    settings()->setValue(DEFAULT_STYLE_FILE_PATH, Val(path.toStdString()));
+    engravingConfiguration()->setDefaultStyleFilePath(path.toQString());
 }
 
 io::path NotationConfiguration::partStyleFilePath() const
 {
-    return settings()->value(PART_STYLE_FILE_PATH).toString();
+    return engravingConfiguration()->partStyleFilePath();
 }
 
 void NotationConfiguration::setPartStyleFilePath(const io::path& path)
 {
-    settings()->setValue(PART_STYLE_FILE_PATH, Val(path.toStdString()));
+    engravingConfiguration()->setPartStyleFilePath(path.toQString());
 }
 
 bool NotationConfiguration::isMidiInputEnabled() const
@@ -429,7 +453,7 @@ bool NotationConfiguration::isMidiInputEnabled() const
 
 void NotationConfiguration::setIsMidiInputEnabled(bool enabled)
 {
-    settings()->setValue(IS_MIDI_INPUT_ENABLED, Val(enabled));
+    settings()->setSharedValue(IS_MIDI_INPUT_ENABLED, Val(enabled));
 }
 
 bool NotationConfiguration::isAutomaticallyPanEnabled() const
@@ -439,7 +463,7 @@ bool NotationConfiguration::isAutomaticallyPanEnabled() const
 
 void NotationConfiguration::setIsAutomaticallyPanEnabled(bool enabled)
 {
-    settings()->setValue(IS_AUTOMATICALLY_PAN_ENABLED, Val(enabled));
+    settings()->setSharedValue(IS_AUTOMATICALLY_PAN_ENABLED, Val(enabled));
     Ms::MScore::panPlayback = enabled;
 }
 
@@ -450,7 +474,7 @@ bool NotationConfiguration::isPlayRepeatsEnabled() const
 
 void NotationConfiguration::setIsPlayRepeatsEnabled(bool enabled)
 {
-    settings()->setValue(IS_PLAY_REPEATS_ENABLED, Val(enabled));
+    settings()->setSharedValue(IS_PLAY_REPEATS_ENABLED, Val(enabled));
     Ms::MScore::playRepeats = enabled;
 }
 
@@ -461,7 +485,7 @@ bool NotationConfiguration::isMetronomeEnabled() const
 
 void NotationConfiguration::setIsMetronomeEnabled(bool enabled)
 {
-    settings()->setValue(IS_METRONOME_ENABLED, Val(enabled));
+    settings()->setSharedValue(IS_METRONOME_ENABLED, Val(enabled));
 }
 
 bool NotationConfiguration::isCountInEnabled() const
@@ -471,7 +495,7 @@ bool NotationConfiguration::isCountInEnabled() const
 
 void NotationConfiguration::setIsCountInEnabled(bool enabled)
 {
-    settings()->setValue(IS_COUNT_IN_ENABLED, Val(enabled));
+    settings()->setSharedValue(IS_COUNT_IN_ENABLED, Val(enabled));
 }
 
 float NotationConfiguration::guiScaling() const
@@ -494,22 +518,6 @@ int NotationConfiguration::notationDivision() const
     return Ms::MScore::division;
 }
 
-std::vector<std::string> NotationConfiguration::toolbarActions(const std::string& toolbarName) const
-{
-    return parseToolbarActions(settings()->value(toolbarSettingsKey(toolbarName)).toString());
-}
-
-void NotationConfiguration::setToolbarActions(const std::string& toolbarName, const std::vector<std::string>& actions)
-{
-    QStringList qactions;
-    for (const std::string& action: actions) {
-        qactions << QString::fromStdString(action);
-    }
-
-    Val value(qactions.join(",").toStdString());
-    settings()->setValue(toolbarSettingsKey(toolbarName), value);
-}
-
 ValCh<Orientation> NotationConfiguration::canvasOrientation() const
 {
     ValCh<Orientation> orientation;
@@ -525,7 +533,7 @@ void NotationConfiguration::setCanvasOrientation(Orientation orientation)
     bool isVertical = orientation == Orientation::Vertical;
     Ms::MScore::setVerticalOrientation(isVertical);
 
-    settings()->setValue(IS_CANVAS_ORIENTATION_VERTICAL_KEY, Val(isVertical));
+    settings()->setSharedValue(IS_CANVAS_ORIENTATION_VERTICAL_KEY, Val(isVertical));
 }
 
 bool NotationConfiguration::isLimitCanvasScrollArea() const
@@ -535,30 +543,7 @@ bool NotationConfiguration::isLimitCanvasScrollArea() const
 
 void NotationConfiguration::setIsLimitCanvasScrollArea(bool limited)
 {
-    settings()->setValue(IS_LIMIT_CANVAS_SCROLL_AREA_KEY, Val(limited));
-}
-
-std::vector<std::string> NotationConfiguration::parseToolbarActions(const std::string& actions) const
-{
-    if (actions.empty()) {
-        return {};
-    }
-
-    std::vector<std::string> result;
-
-    QStringList actionsList = QString::fromStdString(actions).split(",");
-    for (const QString& action: actionsList) {
-        result.push_back(action.toStdString());
-    }
-
-    return result;
-}
-
-Settings::Key NotationConfiguration::toolbarSettingsKey(const std::string& toolbarName) const
-{
-    Settings::Key toolbarKey = TOOLBAR_KEY;
-    toolbarKey.key += toolbarName;
-    return toolbarKey;
+    settings()->setSharedValue(IS_LIMIT_CANVAS_SCROLL_AREA_KEY, Val(limited));
 }
 
 bool NotationConfiguration::colorNotesOusideOfUsablePitchRange() const
@@ -569,7 +554,7 @@ bool NotationConfiguration::colorNotesOusideOfUsablePitchRange() const
 void NotationConfiguration::setColorNotesOusideOfUsablePitchRange(bool value)
 {
     Ms::MScore::warnPitchRange = value;
-    settings()->setValue(COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE, Val(value));
+    settings()->setSharedValue(COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE, Val(value));
 }
 
 int NotationConfiguration::delayBetweenNotesInRealTimeModeMilliseconds() const
@@ -579,7 +564,7 @@ int NotationConfiguration::delayBetweenNotesInRealTimeModeMilliseconds() const
 
 void NotationConfiguration::setDelayBetweenNotesInRealTimeModeMilliseconds(int delayMs)
 {
-    settings()->setValue(REALTIME_DELAY, Val(delayMs));
+    settings()->setSharedValue(REALTIME_DELAY, Val(delayMs));
 }
 
 int NotationConfiguration::notePlayDurationMilliseconds() const
@@ -590,5 +575,147 @@ int NotationConfiguration::notePlayDurationMilliseconds() const
 void NotationConfiguration::setNotePlayDurationMilliseconds(int durationMs)
 {
     Ms::MScore::defaultPlayDuration = durationMs;
-    settings()->setValue(NOTE_DEFAULT_PLAY_DURATION, Val(durationMs));
+    settings()->setSharedValue(NOTE_DEFAULT_PLAY_DURATION, Val(durationMs));
+}
+
+void NotationConfiguration::setTemplateModeEnalbed(bool enabled)
+{
+    Ms::MScore::saveTemplateMode = enabled;
+}
+
+void NotationConfiguration::setTestModeEnabled(bool enabled)
+{
+    Ms::MScore::testMode = enabled;
+}
+
+io::paths NotationConfiguration::instrumentListPaths() const
+{
+    io::paths paths;
+
+    io::path firstInstrumentListPath = this->firstInstrumentListPath();
+    paths.push_back(firstInstrumentListPath);
+
+    io::path secondInstrumentListPath = this->secondInstrumentListPath();
+    if (!secondInstrumentListPath.empty()) {
+        paths.push_back(secondInstrumentListPath);
+    }
+
+    io::path firstScoreOrderListPath = this->firstScoreOrderListPath();
+    paths.push_back(firstScoreOrderListPath);
+
+    io::path secondScoreOrderListPath = this->secondScoreOrderListPath();
+    if (!secondScoreOrderListPath.empty()) {
+        paths.push_back(secondScoreOrderListPath);
+    }
+
+    return paths;
+}
+
+async::Notification NotationConfiguration::instrumentListPathsChanged() const
+{
+    return m_instrumentListPathsChanged;
+}
+
+io::paths NotationConfiguration::userInstrumentListPaths() const
+{
+    io::paths paths = {
+        firstInstrumentListPath(),
+        secondInstrumentListPath()
+    };
+
+    return paths;
+}
+
+void NotationConfiguration::setUserInstrumentListPaths(const io::paths& paths)
+{
+    if (paths.empty()) {
+        return;
+    }
+
+    setFirstInstrumentListPath(paths[0]);
+    if (paths.size() > 1) {
+        setSecondInstrumentListPath(paths[1]);
+    }
+}
+
+io::path NotationConfiguration::firstInstrumentListPath() const
+{
+    return settings()->value(FIRST_INSTRUMENT_LIST_KEY).toString();
+}
+
+void NotationConfiguration::setFirstInstrumentListPath(const io::path& path)
+{
+    settings()->setSharedValue(FIRST_INSTRUMENT_LIST_KEY, Val(path.toStdString()));
+}
+
+io::path NotationConfiguration::secondInstrumentListPath() const
+{
+    return settings()->value(SECOND_INSTRUMENT_LIST_KEY).toString();
+}
+
+void NotationConfiguration::setSecondInstrumentListPath(const io::path& path)
+{
+    settings()->setSharedValue(SECOND_INSTRUMENT_LIST_KEY, Val(path.toStdString()));
+}
+
+io::paths NotationConfiguration::scoreOrderListPaths() const
+{
+    io::paths paths;
+
+    io::path firstScoreOrderListPath = this->firstScoreOrderListPath();
+    paths.push_back(firstScoreOrderListPath);
+
+    io::path secondScoreOrderListPath = this->secondScoreOrderListPath();
+    if (!secondScoreOrderListPath.empty()) {
+        paths.push_back(secondScoreOrderListPath);
+    }
+
+    return paths;
+}
+
+async::Notification NotationConfiguration::scoreOrderListPathsChanged() const
+{
+    return m_scoreOrderListPathsChanged;
+}
+
+io::paths NotationConfiguration::userScoreOrderListPaths() const
+{
+    io::paths paths = {
+        firstScoreOrderListPath(),
+        secondScoreOrderListPath()
+    };
+
+    return paths;
+}
+
+void NotationConfiguration::setUserScoreOrderListPaths(const io::paths& paths)
+{
+    if (paths.empty()) {
+        return;
+    }
+
+    setFirstScoreOrderListPath(paths[0]);
+    if (paths.size() > 1) {
+        setSecondScoreOrderListPath(paths[1]);
+    }
+}
+
+io::path NotationConfiguration::firstScoreOrderListPath() const
+{
+    return settings()->value(FIRST_SCORE_ORDER_LIST_KEY).toString();
+}
+
+void NotationConfiguration::setFirstScoreOrderListPath(const io::path& path)
+{
+    settings()->setSharedValue(FIRST_SCORE_ORDER_LIST_KEY, Val(path.toStdString()));
+}
+
+io::path NotationConfiguration::secondScoreOrderListPath() const
+{
+    return settings()->value(SECOND_SCORE_ORDER_LIST_KEY).toString();
+}
+
+void NotationConfiguration::setSecondScoreOrderListPath(const io::path& path)
+{
+    settings()->setSharedValue(SECOND_SCORE_ORDER_LIST_KEY, Val(path.toStdString()));
 }

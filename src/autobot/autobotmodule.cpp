@@ -44,15 +44,15 @@ std::string AutobotModule::moduleName() const
 
 void AutobotModule::registerExports()
 {
-    framework::ioc()->registerExport<IAutobot>(moduleName(), s_autobot);
-    framework::ioc()->registerExport<IAutobotConfiguration>(moduleName(), new AutobotConfiguration());
+    modularity::ioc()->registerExport<IAutobot>(moduleName(), s_autobot);
+    modularity::ioc()->registerExport<IAutobotConfiguration>(moduleName(), new AutobotConfiguration());
 
     draw::Painter::extended = AbPaintProvider::instance();
 }
 
 void AutobotModule::resolveImports()
 {
-    auto ir = framework::ioc()->resolve<ui::IInteractiveUriRegister>(moduleName());
+    auto ir = modularity::ioc()->resolve<ui::IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerQmlUri(Uri("musescore://autobot/main"), "MuseScore/Autobot/AutobotDialog.qml");
     }

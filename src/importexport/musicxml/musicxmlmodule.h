@@ -25,7 +25,7 @@
 #include "modularity/imodulesetup.h"
 
 namespace mu::iex::musicxml {
-class MusicXmlModule : public framework::IModuleSetup
+class MusicXmlModule : public modularity::IModuleSetup
 {
 public:
 

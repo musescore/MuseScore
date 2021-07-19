@@ -24,10 +24,13 @@
 #define MU_TELEMETRY_TELEMETRYMODULE_H
 
 #include "framework/global/modularity/imodulesetup.h"
+#include "modularity/ioc.h"
+#include "system/ifilesystem.h"
 
 namespace mu::telemetry {
-class TelemetryModule : public mu::framework::IModuleSetup
+class TelemetryModule : public modularity::IModuleSetup
 {
+    INJECT(telemetry, system::IFileSystem, fileSystem)
 public:
     std::string moduleName() const override;
 

@@ -38,12 +38,13 @@ Rectangle {
     QtObject {
         id: privatesProperties
 
-        property bool isHorizontal: orientation === Qt.Horizontal
+        property bool isHorizontal: root.orientation === Qt.Horizontal
     }
 
     NavigationPanel {
         id: keynavSub
         name: "NoteInputBar"
+        enabled: root.enabled && root.visible
     }
 
     NoteInputBarModel {

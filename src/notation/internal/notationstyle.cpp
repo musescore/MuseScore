@@ -21,6 +21,8 @@
  */
 #include "notationstyle.h"
 
+#include "engraving/style/defaultstyle.h"
+
 #include "libmscore/score.h"
 #include "libmscore/excerpt.h"
 #include "libmscore/mscore.h"
@@ -43,7 +45,7 @@ QVariant NotationStyle::styleValue(const StyleId& styleId) const
 
 QVariant NotationStyle::defaultStyleValue(const StyleId& styleId) const
 {
-    return Ms::MScore::defaultStyle().value(styleId);
+    return engraving::DefaultStyle::defaultStyle().value(styleId);
 }
 
 void NotationStyle::setStyleValue(const StyleId& styleId, const QVariant& newValue)
@@ -60,7 +62,7 @@ void NotationStyle::setStyleValue(const StyleId& styleId, const QVariant& newVal
 
 void NotationStyle::resetStyleValue(const StyleId& styleId)
 {
-    m_getScore->score()->style().resetStyles(m_getScore->score(), { styleId });
+    m_getScore->score()->resetStyles({ styleId });
     m_styleChanged.notify();
 }
 

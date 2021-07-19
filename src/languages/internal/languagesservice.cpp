@@ -65,7 +65,10 @@ void LanguagesService::init()
     languageCode.ch.onReceive(this, [this](const QString& languageCode) {
         setCurrentLanguage(languageCode);
     });
+}
 
+void LanguagesService::refreshLanguages()
+{
     QtConcurrent::run(this, &LanguagesService::th_refreshLanguages);
 }
 

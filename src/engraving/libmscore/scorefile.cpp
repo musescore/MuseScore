@@ -23,6 +23,12 @@
 #include <cmath>
 #include <QDir>
 #include <QBuffer>
+#include <QRegularExpression>
+
+#include "draw/qpainterprovider.h"
+#include "style/defaultstyle.h"
+
+#include "compat/chordlist.h"
 
 #include "config.h"
 #include "score.h"
@@ -52,6 +58,7 @@
 #include "scoreorder.h"
 
 #include "preferences.h"
+#include "utils.h"
 
 #include "sig.h"
 #include "undo.h"
@@ -64,9 +71,10 @@
 #include <windows.h>
 #endif
 
-#include "draw/qpainterprovider.h"
+#include "log.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -172,7 +180,8 @@ void Score::writeMovement(XmlWriter& xml, bool selectionOnly)
     xml.setCurTrack(-1);
 
     if (isTopScore()) {                    // only top score
-        style().save(xml, true);           // save only differences to buildin style
+        compat::WriteChordListHook clhook(this);
+        style().save(xml, true, &clhook);           // save only differences to buildin style
     }
     xml.tag("showInvisible",   _showInvisible);
     xml.tag("showUnprintable", _showUnprintable);
@@ -391,157 +400,53 @@ void Score::readStaff(XmlReader& e)
     }
 }
 
-//---------------------------------------------------------
-//   saveFile
-///   If file has generated name, create a modal file save dialog
-///   and ask filename.
-///   Rename old file to backup file (.xxxx.msc?,).
-///   Default is to save score in .mscz format,
-///   Return true if OK and false on error.
-//---------------------------------------------------------
-
-bool MasterScore::saveFile(bool generateBackup)
+bool Score::writeMscz(engraving::MsczWriter& msczWriter, bool onlySelection, bool doCreateThumbnail)
 {
-    if (readOnly()) {
-        return false;
-    }
-    QString suffix = info.suffix();
-    if (info.exists() && !info.isWritable()) {
-        MScore::lastError = tr("The following file is locked: \n%1 \n\nTry saving to a different location.").arg(info.filePath());
-        return false;
-    }
-    //
-    // step 1
-    // save into temporary file to prevent partially overwriting
-    // the original file in case of "disc full"
-    //
-
-    QString tempName = info.filePath() + QString(".temp");
-    QFile temp(tempName);
-    if (!temp.open(QIODevice::WriteOnly)) {
-        MScore::lastError = tr("Open Temp File\n%1\nfailed: %2").arg(tempName, strerror(errno));
+    IF_ASSERT_FAILED(msczWriter.isOpened()) {
         return false;
     }
 
-    bool rv = false;
-    if ("mscx" == suffix) {
-        rv = Score::saveFile(&temp, false);
-    } else {
-        QString fileName = info.completeBaseName() + ".mscx";
-        rv = Score::saveCompressedFile(&temp, fileName, false);
+    // Write score
+    {
+        QByteArray scoreData;
+        QBuffer scoreBuf(&scoreData);
+        scoreBuf.open(QIODevice::ReadWrite);
+        Score::writeScore(&scoreBuf, onlySelection);
+
+        msczWriter.writeScoreFile(scoreData);
     }
 
-    if (!rv) {
-        return false;
-    }
-
-    if (temp.error() != QFile::NoError) {
-        MScore::lastError = tr("Save File failed: %1").arg(temp.errorString());
-        return false;
-    }
-    temp.close();
-
-    const QString name(info.filePath());
-    const QString basename(info.fileName());
-    QDir dir(info.path());
-    if (!saved() && generateBackup) {
-        // if file was already saved in this session
-        // save but don't overwrite backup again
-
-        //
-        // step 2
-        // remove old backup file if exists
-        // remove the backup file in the same dir as score (the traditional place) if exists
-        //
-        const QString backupSubdirString = preferences().backupDirPath();
-        const QString backupDirString = info.path() + QString(QDir::separator()) + backupSubdirString;
-        QDir backupDir(backupDirString);
-        if (!backupDir.exists()) {
-            dir.mkdir(backupSubdirString);
-#ifdef Q_OS_WIN
-            const QString backupDirNativePath = QDir::toNativeSeparators(backupDirString);
-            SetFileAttributesW(reinterpret_cast<LPCWSTR>(backupDirNativePath.utf16()), FILE_ATTRIBUTE_HIDDEN);
-#endif
-        }
-        const QString backupName = QString(".") + info.fileName() + QString(",");
-        if (backupDir.exists(backupName)) {
-            if (!backupDir.remove(backupName)) {
-//                      if (!MScore::noGui)
-//                            QMessageBox::critical(0, QObject::tr("Save File"),
-//                               tr("Removing old backup file %1 failed").arg(backupName));
+    // Write images
+    {
+        for (ImageStoreItem* ip : imageStore) {
+            if (!ip->isUsed(this)) {
+                continue;
             }
-        }
-        // backup files prior to 3.5 were saved in the same directory as the file itself.
-        // remove these old backup files if needed
-        if (dir != backupDir && dir.exists(backupName)) {
-            if (!dir.remove(backupName)) {
-//                      if (!MScore::noGui)
-//                            QMessageBox::critical(0, QObject::tr("Save File"),
-//                               tr("Removing old backup file %1 failed").arg(backupName));
-            }
-        }
-
-        //
-        // step 3
-        // rename old file into backup
-        //
-        if (dir.exists(basename)) {
-            if (!QFile::rename(name, backupDirString + (backupDirString.endsWith("/") ? "" : "/") + backupName)) {
-//                      if (!MScore::noGui)
-//                            QMessageBox::critical(0, tr("Save File"),
-//                               tr("Renaming old file <%1> to backup <%2> failed").arg(name, backupDirString + "/" + backupName);
-            }
-        }
-
-        QFileInfo fileBackup(backupDir, backupName);
-        _sessionStartBackupInfo = fileBackup;
-    } else {
-        // file has previously been saved - remove the old file
-        if (dir.exists(basename)) {
-            if (!dir.remove(basename)) {
-//                      if (!MScore::noGui)
-//                            QMessageBox::critical(0, tr("Save File"),
-//                               tr("Removing old file %1 failed").arg(name));
-            }
+            msczWriter.addImageFile(ip->hashName(), ip->buffer());
         }
     }
 
-    //
-    // step 4
-    // rename temp name into file name
-    //
-    if (!QFile::rename(tempName, name)) {
-        MScore::lastError = tr("Renaming temp. file <%1> to <%2> failed:\n%3").arg(tempName, name, strerror(errno));
-        return false;
-    }
-    // make file readable by all
-    QFile::setPermissions(name, QFile::ReadOwner | QFile::WriteOwner | QFile::ReadUser
-                          | QFile::ReadGroup | QFile::ReadOther);
+    // Write thumbnail
+    {
+        if (doCreateThumbnail && !pages().isEmpty()) {
+            QImage pm = createThumbnail();
 
-    undoStack()->setClean();
-    setSaved(true);
-    info.refresh();
-    update();
+            QByteArray ba;
+            QBuffer b(&ba);
+            b.open(QIODevice::WriteOnly);
+            pm.save(&b, "PNG");
+            msczWriter.writeThumbnailFile(ba);
+        }
+    }
+
+    // Write audio
+    {
+        if (_audio) {
+            msczWriter.writeAudioFile(_audio->data());
+        }
+    }
+
     return true;
-}
-
-//---------------------------------------------------------
-//   saveCompressedFile
-//---------------------------------------------------------
-
-bool Score::saveCompressedFile(QFileInfo& info, bool onlySelection, bool createThumbnail)
-{
-    if (readOnly() && info == *masterScore()->fileInfo()) {
-        return false;
-    }
-    QFile fp(info.filePath());
-    if (!fp.open(QIODevice::WriteOnly)) {
-        MScore::lastError = tr("Open File\n%1\nfailed: %2").arg(info.filePath(), strerror(errno));
-        return false;
-    }
-
-    QString fileName = info.completeBaseName() + ".mscx";
-    return saveCompressedFile(&fp, fileName, onlySelection, createThumbnail);
 }
 
 //---------------------------------------------------------
@@ -586,108 +491,6 @@ QImage Score::createThumbnail()
 }
 
 //---------------------------------------------------------
-//   saveCompressedFile
-//    file is already opened
-//---------------------------------------------------------
-
-bool Score::saveCompressedFile(QIODevice* f, const QString& fn, bool onlySelection, bool doCreateThumbnail)
-{
-    MQZipWriter uz(f);
-
-    QBuffer cbuf;
-    cbuf.open(QIODevice::ReadWrite);
-    XmlWriter xml(this, &cbuf);
-    xml << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-    xml.stag("container");
-    xml.stag("rootfiles");
-    xml.stag(QString("rootfile full-path=\"%1\"").arg(XmlWriter::xmlString(fn)));
-    xml.etag();
-    for (ImageStoreItem* ip : imageStore) {
-        if (!ip->isUsed(this)) {
-            continue;
-        }
-        QString path = QString("Pictures/") + ip->hashName();
-        xml.tag("file", path);
-    }
-
-    xml.etag();
-    xml.etag();
-    cbuf.seek(0);
-    //uz.addDirectory("META-INF");
-    uz.addFile("META-INF/container.xml", cbuf.data());
-
-    QBuffer dbuf;
-    dbuf.open(QIODevice::ReadWrite);
-    saveFile(&dbuf, true, onlySelection);
-    dbuf.seek(0);
-    uz.addFile(fn, dbuf.data());
-
-    QFileDevice* fd = dynamic_cast<QFileDevice*>(f);
-    if (fd) { // if is file (may be buffer)
-        fd->flush();     // flush to preserve score data in case of
-    }
-    // any failures on the further operations.
-
-    // save images
-    //uz.addDirectory("Pictures");
-    for (ImageStoreItem* ip : imageStore) {
-        if (!ip->isUsed(this)) {
-            continue;
-        }
-        QString path = QString("Pictures/") + ip->hashName();
-        uz.addFile(path, ip->buffer());
-    }
-
-    // create thumbnail
-    if (doCreateThumbnail && !pages().isEmpty()) {
-        QImage pm = createThumbnail();
-
-        QByteArray ba;
-        QBuffer b(&ba);
-        if (!b.open(QIODevice::WriteOnly)) {
-            qDebug("open buffer failed");
-        }
-        if (!pm.save(&b, "PNG")) {
-            qDebug("save failed");
-        }
-        uz.addFile("Thumbnails/thumbnail.png", ba);
-    }
-
-    //
-    // save audio
-    //
-    if (_audio) {
-        uz.addFile("audio.ogg", _audio->data());
-    }
-
-    uz.close();
-    return true;
-}
-
-//---------------------------------------------------------
-//   saveFile
-//    return true on success
-//---------------------------------------------------------
-
-bool Score::saveFile(QFileInfo& info)
-{
-    if (readOnly() && info == *masterScore()->fileInfo()) {
-        return false;
-    }
-    if (info.suffix().isEmpty()) {
-        info.setFile(info.filePath() + ".mscx");
-    }
-    QFile fp(info.filePath());
-    if (!fp.open(QIODevice::WriteOnly)) {
-        MScore::lastError = tr("Open File\n%1\nfailed: %2").arg(info.filePath(), strerror(errno));
-        return false;
-    }
-    saveFile(&fp, false, false);
-    fp.close();
-    return true;
-}
-
-//---------------------------------------------------------
 //   loadStyle
 //---------------------------------------------------------
 
@@ -729,7 +532,8 @@ bool Score::saveStyle(const QString& name)
     XmlWriter xml(this, &f);
     xml.header();
     xml.stag("museScore version=\"" MSC_VERSION "\"");
-    style().save(xml, false);       // save complete style
+    compat::WriteChordListHook clhook(this);
+    style().save(xml, false, &clhook);       // save complete style
     xml.etag();
     if (f.error() != QFile::NoError) {
         MScore::lastError = QObject::tr("Write Style failed: %1").arg(f.errorString());
@@ -747,7 +551,7 @@ bool Score::saveStyle(const QString& name)
 //extern QString revision;
 static QString revision;
 
-bool Score::saveFile(QIODevice* f, bool msczFormat, bool onlySelection)
+bool Score::writeScore(QIODevice* f, bool msczFormat, bool onlySelection)
 {
     XmlWriter xml(this, f);
     xml.setWriteOmr(msczFormat);
@@ -773,99 +577,50 @@ bool Score::saveFile(QIODevice* f, bool msczFormat, bool onlySelection)
     return true;
 }
 
-//---------------------------------------------------------
-//   readRootFile
-//---------------------------------------------------------
-
-QString readRootFile(MQZipReader* uz, QList<QString>& images)
+Score::FileError MasterScore::loadMscz(const mu::engraving::MsczReader& msczReader, bool ignoreVersionError)
 {
-    QString rootfile;
+    using namespace mu::engraving;
 
-    QByteArray cbuf = uz->fileData("META-INF/container.xml");
-    if (cbuf.isEmpty()) {
-        qDebug("can't find container.xml");
-        return rootfile;
+    IF_ASSERT_FAILED(msczReader.isOpened()) {
+        return FileError::FILE_OPEN_ERROR;
     }
 
-    XmlReader e(cbuf);
+    ScoreLoad sl;
+    fileInfo()->setFile(msczReader.filePath());
 
-    while (e.readNextStartElement()) {
-        if (e.name() != "container") {
-            e.unknown();
-            continue;
-        }
-        while (e.readNextStartElement()) {
-            if (e.name() != "rootfiles") {
-                e.unknown();
-                continue;
-            }
-            while (e.readNextStartElement()) {
-                const QStringRef& tag(e.name());
+    FileError retval;
+    // Read score
+    {
+        QByteArray scoreData = msczReader.readScoreFile();
+        QString completeBaseName = masterScore()->fileInfo()->completeBaseName();
+        XmlReader e(scoreData);
+        e.setDocName(completeBaseName);
 
-                if (tag == "rootfile") {
-                    if (rootfile.isEmpty()) {
-                        rootfile = e.attribute("full-path");
-                        e.skipCurrentElement();
-                    }
-                } else if (tag == "file") {
-                    images.append(e.readElementText());
-                } else {
-                    e.unknown();
-                }
-            }
-        }
-    }
-    return rootfile;
-}
+        auto getStyleDefaultsVersion = [this, &scoreData, &completeBaseName]() {
+            return readStyleDefaultsVersion(scoreData, completeBaseName);
+        };
 
-//---------------------------------------------------------
-//   loadCompressedMsc
-//    return false on error
-//---------------------------------------------------------
-
-Score::FileError MasterScore::loadCompressedMsc(QIODevice* io, bool ignoreVersionError)
-{
-    MQZipReader uz(io);
-
-    QList<QString> sl;
-    QString rootfile = readRootFile(&uz, sl);
-    if (rootfile.isEmpty()) {
-        return FileError::FILE_NO_ROOTFILE;
+        retval = read1(e, ignoreVersionError, getStyleDefaultsVersion);
     }
 
-    //
-    // load images
-    //
-    if (!MScore::noImages) {
-        foreach (const QString& s, sl) {
-            QByteArray dbuf = uz.fileData(s);
-            imageStore.add(s, dbuf);
-        }
-    }
-
-    QByteArray dbuf = uz.fileData(rootfile);
-    if (dbuf.isEmpty()) {
-        QVector<MQZipReader::FileInfo> fil = uz.fileInfoList();
-        foreach (const MQZipReader::FileInfo& fi, fil) {
-            if (fi.filePath.endsWith(".mscx")) {
-                dbuf = uz.fileData(fi.filePath);
-                break;
+    // Read images
+    {
+        if (!MScore::noImages) {
+            std::vector<QString> images = msczReader.imageFileNames();
+            for (const QString& name : images) {
+                imageStore.add(name, msczReader.readImageFile(name));
             }
         }
     }
 
-    XmlReader e(dbuf);
-    e.setDocName(masterScore()->fileInfo()->completeBaseName());
-
-    FileError retval = read1(e, ignoreVersionError);
-
-    //
-    //  read audio
-    //
-    if (audio()) {
-        QByteArray dbuf1 = uz.fileData("audio.ogg");
-        audio()->setData(dbuf1);
+    //  Read audio
+    {
+        if (audio()) {
+            QByteArray dbuf1 = msczReader.readAudioFile();
+            audio()->setData(dbuf1);
+        }
     }
+
     return retval;
 }
 
@@ -890,14 +645,14 @@ int MasterScore::styleDefaultByMscVersion(const int mscVer) const
     return MSCVERSION;
 }
 
-int MasterScore::readStyleDefaultsVersion()
+int MasterScore::readStyleDefaultsVersion(const QByteArray& scoreData, const QString& completeBaseName)
 {
     if (styleB(Sid::usePre_3_6_defaults)) {
         return style().defaultStyleVersion();
     }
 
-    XmlReader e(readToBuffer());
-    e.setDocName(masterScore()->fileInfo()->completeBaseName());
+    XmlReader e(scoreData);
+    e.setDocName(completeBaseName);
 
     while (!e.atEnd()) {
         e.readNext();
@@ -910,82 +665,51 @@ int MasterScore::readStyleDefaultsVersion()
 }
 
 //---------------------------------------------------------
-//   loadMsc
-//    return true on success
-//---------------------------------------------------------
-
-Score::FileError MasterScore::loadMsc(QString name, bool ignoreVersionError)
-{
-    QFile f(name);
-    if (!f.open(QIODevice::ReadOnly)) {
-        MScore::lastError = f.errorString();
-        return FileError::FILE_OPEN_ERROR;
-    }
-    return loadMsc(name, &f, ignoreVersionError);
-}
-
-Score::FileError MasterScore::loadMsc(QString name, QIODevice* io, bool ignoreVersionError)
-{
-    ScoreLoad sl;
-    fileInfo()->setFile(name);
-
-    if (name.endsWith(".mscz") || name.endsWith(".mscz,")) {
-        return loadCompressedMsc(io, ignoreVersionError);
-    } else {
-        XmlReader r(io);
-        return read1(r, ignoreVersionError);
-    }
-}
-
-//---------------------------------------------------------
 //   parseVersion
 //---------------------------------------------------------
 
 void MasterScore::parseVersion(const QString& val)
 {
-    QRegExp re("(\\d+)\\.(\\d+)\\.(\\d+)");
-    int v1, v2, v3, rv1, rv2, rv3;
-    if (re.indexIn(VERSION) != -1) {
-        QStringList sl = re.capturedTexts();
-        if (sl.size() == 4) {
-            v1 = sl[1].toInt();
-            v2 = sl[2].toInt();
-            v3 = sl[3].toInt();
-            if (re.indexIn(val) != -1) {
-                sl = re.capturedTexts();
-                if (sl.size() == 4) {
-                    rv1 = sl[1].toInt();
-                    rv2 = sl[2].toInt();
-                    rv3 = sl[3].toInt();
+    int appVersion = version();
 
-                    int currentVersion = v1 * 10000 + v2 * 100 + v3;
-                    int readVersion = rv1 * 10000 + rv2 * 100 + rv3;
-                    if (readVersion > currentVersion) {
-                        qDebug("read future version");
-                    }
-                }
-            } else {
-                QRegExp re1("(\\d+)\\.(\\d+)");
-                if (re1.indexIn(val) != -1) {
-                    sl = re.capturedTexts();
-                    if (sl.size() == 3) {
-                        rv1 = sl[1].toInt();
-                        rv2 = sl[2].toInt();
+    QRegularExpression majorMinorPatchRegEx("(\\d+)\\.(\\d+)\\.(\\d+)");
+    QRegularExpressionMatch scoreVersionMatch = majorMinorPatchRegEx.match(val);
 
-                        int currentVersion = v1 * 10000 + v2 * 100 + v3;
-                        int readVersion = rv1 * 10000 + rv2 * 100;
-                        if (readVersion > currentVersion) {
-                            qDebug("read future version");
-                        }
-                    }
-                } else {
-                    qDebug("1cannot parse <%s>", qPrintable(val));
-                }
+    if (scoreVersionMatch.hasMatch()) {
+        QStringList scoreVersionList = scoreVersionMatch.capturedTexts();
+        if (scoreVersionList.size() == 4) {
+            int rv1 = scoreVersionList[1].toInt();
+            int rv2 = scoreVersionList[2].toInt();
+            int rv3 = scoreVersionList[3].toInt();
+
+            int scoreVersion = rv1 * 10000 + rv2 * 100 + rv3;
+            if (scoreVersion > appVersion) {
+                qDebug("Parsed score version is higher than current app version: %d vs %d", scoreVersion, appVersion);
             }
+
+            return;
         }
-    } else {
-        qDebug("2cannot parse <%s>", VERSION);
     }
+
+    QRegularExpression majorMinorRegEx("(\\d+)\\.(\\d+)");
+    scoreVersionMatch = majorMinorRegEx.match(val);
+
+    if (scoreVersionMatch.hasMatch()) {
+        QStringList scoreVersionList = scoreVersionMatch.capturedTexts();
+        if (scoreVersionList.size() == 3) {
+            int rv1 = scoreVersionList[1].toInt();
+            int rv2 = scoreVersionList[2].toInt();
+
+            int scoreVersion = rv1 * 10000 + rv2 * 100;
+            if (scoreVersion > appVersion) {
+                qDebug("Parsed score version is higher than current app version: %d vs %d", scoreVersion, appVersion);
+            }
+
+            return;
+        }
+    }
+
+    qDebug("Cannot parse score version: %s", qPrintable(val));
 }
 
 //---------------------------------------------------------
@@ -993,7 +717,7 @@ void MasterScore::parseVersion(const QString& val)
 //    return true on success
 //---------------------------------------------------------
 
-Score::FileError MasterScore::read1(XmlReader& e, bool ignoreVersionError)
+Score::FileError MasterScore::read1(XmlReader& e, bool ignoreVersionError, const std::function<int()>& getStyleDefaultsVersion)
 {
     while (e.readNextStartElement()) {
         if (e.name() == "museScore") {
@@ -1014,11 +738,14 @@ Score::FileError MasterScore::read1(XmlReader& e, bool ignoreVersionError)
             }
 
             if (created() && !preferences().defaultStyleFilePath().isEmpty()) {
-                setStyle(MScore::defaultStyle());
+                setStyle(DefaultStyle::defaultStyle());
             } else {
-                int defaultsVersion = readStyleDefaultsVersion();
+                IF_ASSERT_FAILED(getStyleDefaultsVersion) {
+                    return Score::FileError::FILE_ERROR;
+                }
+                int defaultsVersion = getStyleDefaultsVersion();
 
-                setStyle(*MStyle::resolveStyleDefaults(defaultsVersion));
+                setStyle(DefaultStyle::resolveStyleDefaults(defaultsVersion));
                 style().setDefaultStyleVersion(defaultsVersion);
             }
 
@@ -1063,57 +790,6 @@ void Score::print(mu::draw::Painter* painter, int pageNo)
     }
     MScore::pdfPrinting = false;
     _printing = false;
-}
-
-//---------------------------------------------------------
-//   readCompressedToBuffer
-//---------------------------------------------------------
-
-QByteArray MasterScore::readCompressedToBuffer()
-{
-    MQZipReader uz(info.filePath());
-    if (!uz.exists()) {
-        qDebug("Score::readCompressedToBuffer: cannot read zip file");
-        return QByteArray();
-    }
-    QList<QString> images;
-    QString rootfile = readRootFile(&uz, images);
-
-    //
-    // load images
-    //
-    foreach (const QString& s, images) {
-        QByteArray dbuf = uz.fileData(s);
-        imageStore.add(s, dbuf);
-    }
-
-    if (rootfile.isEmpty()) {
-        qDebug("=can't find rootfile in: %s", qPrintable(info.filePath()));
-        return QByteArray();
-    }
-    return uz.fileData(rootfile);
-}
-
-//---------------------------------------------------------
-//   readToBuffer
-//---------------------------------------------------------
-
-QByteArray MasterScore::readToBuffer()
-{
-    QByteArray ba;
-    QString cs  = info.suffix();
-
-    if (cs == "mscz") {
-        ba = readCompressedToBuffer();
-    }
-    if (cs.toLower() == "msc" || cs.toLower() == "mscx") {
-        QFile f(info.filePath());
-        if (f.open(QIODevice::ReadOnly)) {
-            ba = f.readAll();
-            f.close();
-        }
-    }
-    return ba;
 }
 
 //---------------------------------------------------------

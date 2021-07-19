@@ -30,10 +30,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/workspacemanagerstub.h
     ${CMAKE_CURRENT_LIST_DIR}/workspaceconfigurationstub.cpp
     ${CMAKE_CURRENT_LIST_DIR}/workspaceconfigurationstub.h
-    ${CMAKE_CURRENT_LIST_DIR}/workspacedatastreamregisterstub.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/workspacedatastreamregisterstub.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/workspacecreatorstub.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/workspacecreatorstub.h
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

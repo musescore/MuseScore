@@ -57,8 +57,10 @@ StyledTabButton {
 
         MenuButton {
             anchors.verticalCenter: parent.verticalCenter
-
             visible: root.isCurrent
+
+            navigation.panel: root.navigation.panel
+            navigation.order: root.navigation.order + 1
 
             menuModel: root.menuModel
         }

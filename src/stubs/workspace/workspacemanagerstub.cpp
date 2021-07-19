@@ -20,25 +20,44 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "workspacemanagerstub.h"
+#include "workspacestub.h"
 
 using namespace mu::workspace;
 using namespace mu;
 
-RetValCh<IWorkspacePtr> WorkspaceManagerStub::currentWorkspace() const
+IWorkspacePtr WorkspaceManagerStub::defaultWorkspace() const
 {
-    RetValCh<IWorkspacePtr> result;
-    result.ret = make_ret(Ret::Code::NotSupported);
-    return result;
+    static IWorkspacePtr p = std::make_shared<WorkspaceStub>();
+    return p;
 }
 
-RetVal<IWorkspacePtrList> WorkspaceManagerStub::workspaces() const
+IWorkspacePtr WorkspaceManagerStub::currentWorkspace() const
 {
-    RetVal<IWorkspacePtrList> result;
-    result.ret = make_ret(Ret::Code::NotSupported);
-    return result;
+    static IWorkspacePtr p = std::make_shared<WorkspaceStub>();
+    return p;
+}
+
+async::Notification WorkspaceManagerStub::currentWorkspaceChanged() const
+{
+    return async::Notification();
+}
+
+IWorkspacePtrList WorkspaceManagerStub::workspaces() const
+{
+    return { defaultWorkspace() };
 }
 
 Ret WorkspaceManagerStub::setWorkspaces(const IWorkspacePtrList&)
 {
-    return make_ret(Ret::Code::NotSupported);
+    return make_ret(Ret::Code::NotImplemented);
+}
+
+async::Notification WorkspaceManagerStub::workspacesListChanged() const
+{
+    return async::Notification();
+}
+
+IWorkspacePtr WorkspaceManagerStub::newWorkspace(const std::string&) const
+{
+    return std::make_shared<WorkspaceStub>();
 }

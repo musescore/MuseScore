@@ -27,6 +27,8 @@
 #include "chord.h"
 #include "note.h"
 #include "xml.h"
+#include "draw/pen.h"
+#include "draw/brush.h"
 
 #include "draw/fontmetrics.h"
 
@@ -260,12 +262,13 @@ void Bend::layout()
 void Bend::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
+    using namespace mu::draw;
     qreal _spatium = spatium();
     qreal _lw = _lineWidth;
 
-    QPen pen(curColor(), _lw, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
+    Pen pen(curColor(), _lw, PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
     painter->setPen(pen);
-    painter->setBrush(QBrush(curColor()));
+    painter->setBrush(Brush(curColor()));
 
     mu::draw::Font f = font(_spatium * MScore::pixelRatio);
     painter->setFont(f);
@@ -315,7 +318,7 @@ void Bend::draw(mu::draw::Painter* painter) const
             PainterPath path;
             path.moveTo(x, y);
             path.cubicTo(x + dx / 2, y, x2, y + dy / 4, x2, y2);
-            painter->setBrush(Qt::NoBrush);
+            painter->setBrush(BrushStyle::NoBrush);
             painter->drawPath(path);
 
             painter->setBrush(curColor());
@@ -336,7 +339,7 @@ void Bend::draw(mu::draw::Painter* painter) const
             PainterPath path;
             path.moveTo(x, y);
             path.cubicTo(x + dx / 2, y, x2, y + dy / 4, x2, y2);
-            painter->setBrush(Qt::NoBrush);
+            painter->setBrush(BrushStyle::NoBrush);
             painter->drawPath(path);
 
             painter->setBrush(curColor());

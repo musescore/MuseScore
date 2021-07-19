@@ -152,12 +152,14 @@ set(LINK_LIB ${LINK_LIB}
     midi
     midi_old
     userscores
+    learn
     notation
+    project
     commonscene
     palette
     inspector
     playback
-    instruments
+    instrumentsscene
     converter
     )
 
@@ -249,8 +251,6 @@ else (MSCORE_OUTPUT_NAME)
     set(MSCORE_EXECUTABLE_NAME ${EXECUTABLE_NAME})
 endif (MSCORE_OUTPUT_NAME)
 set(MSCORE_EXECUTABLE_NAME "${MSCORE_EXECUTABLE_NAME}" PARENT_SCOPE)
-
-add_dependencies(mscore workspaces)
 
 ###########################################
 # Link

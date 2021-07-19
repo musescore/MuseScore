@@ -43,23 +43,23 @@ static qreal itor(int v)
     return static_cast<qreal>(v) / 1000.0;
 }
 
-static QJsonObject toObj(const QPen& pen)
+static QJsonObject toObj(const Pen& pen)
 {
     QJsonObject obj;
     obj["style"] = static_cast<int>(pen.style());
     obj["color"] = pen.color().name();
-    obj["width"] = pen.width();
+    obj["width"] = pen.widthF();
     return obj;
 }
 
-static void fromObj(const QJsonObject& obj, QPen& pen)
+static void fromObj(const QJsonObject& obj, Pen& pen)
 {
-    pen.setStyle(static_cast<Qt::PenStyle>(obj["style"].toInt()));
+    pen.setStyle(static_cast<PenStyle>(obj["style"].toInt()));
     pen.setColor(QColor(obj["color"].toString()));
-    pen.setWidth(obj["width"].toInt());
+    pen.setWidthF(obj["width"].toDouble());
 }
 
-static QJsonObject toObj(const QBrush& brush)
+static QJsonObject toObj(const Brush& brush)
 {
     QJsonObject obj;
     obj["style"] = static_cast<int>(brush.style());
@@ -67,9 +67,9 @@ static QJsonObject toObj(const QBrush& brush)
     return obj;
 }
 
-static void fromObj(const QJsonObject& obj, QBrush& brush)
+static void fromObj(const QJsonObject& obj, Brush& brush)
 {
-    brush.setStyle(static_cast<Qt::BrushStyle>(obj["style"].toInt()));
+    brush.setStyle(static_cast<BrushStyle>(obj["style"].toInt()));
     brush.setColor(QColor(obj["color"].toString()));
 }
 
@@ -136,17 +136,17 @@ static void fromArr(const QJsonArray& arr, RectF& r)
     r = QRectF(itor(arr.at(0).toInt()), itor(arr.at(1).toInt()), itor(arr.at(2).toInt()), itor(arr.at(3).toInt()));
 }
 
-static QJsonArray toArr(const QSize& sz)
+static QJsonArray toArr(const Size& sz)
 {
     return QJsonArray({ sz.width(), sz.height() });
 }
 
-static void fromArr(const QJsonArray& arr, QSize& sz)
+static void fromArr(const QJsonArray& arr, Size& sz)
 {
     IF_ASSERT_FAILED(arr.size() == 2) {
         return;
     }
-    sz = QSize(arr.at(0).toInt(), arr.at(1).toInt());
+    sz = Size(arr.at(0).toInt(), arr.at(1).toInt());
 }
 
 static QJsonObject toObj(const DrawData::State& st)
@@ -201,7 +201,7 @@ static void fromObj(const QJsonObject& obj, QPainterPath& path)
 
     QJsonArray elsArr = obj["elements"].toArray();
     std::vector<QPainterPath::Element> curveEls;
-    for (const QJsonValue elVal : elsArr) {
+    for (const QJsonValue& elVal : elsArr) {
         QJsonArray elArr = elVal.toArray();
         IF_ASSERT_FAILED(elArr.size() == 3) {
             continue;
@@ -332,9 +332,9 @@ static QJsonObject toObj(const DrawPixmap& pm)
 static void fromObj(const QJsonObject& obj, DrawPixmap& pm)
 {
     fromArr(obj["pos"].toArray(), pm.pos);
-    QSize size;
+    Size size;
     fromArr(obj["pmSize"].toArray(), size);
-    pm.pm = QPixmap(size);
+    pm.pm = Pixmap(size);
 }
 
 static QJsonObject toObj(const DrawTiledPixmap& pm)
@@ -349,9 +349,9 @@ static QJsonObject toObj(const DrawTiledPixmap& pm)
 static void fromObj(const QJsonObject& obj, DrawTiledPixmap& pm)
 {
     fromArr(obj["rect"].toArray(), pm.rect);
-    QSize size;
+    Size size;
     fromArr(obj["pmSize"].toArray(), size);
-    pm.pm = QPixmap(size);
+    pm.pm = Pixmap(size);
     fromArr(obj["offset"].toArray(), pm.offset);
 }
 

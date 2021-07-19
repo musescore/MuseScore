@@ -24,9 +24,8 @@
 
 #include "modularity/imodulesetup.h"
 
-namespace mu {
-namespace context {
-class ContextModule : public framework::IModuleSetup
+namespace mu::context {
+class ContextModule : public modularity::IModuleSetup
 {
 public:
 
@@ -35,7 +34,6 @@ public:
     void onInit(const framework::IApplication::RunMode& mode) override;
     void onDeinit() override;
 };
-}
 }
 
 #endif // MU_CONTEXT_CONTEXTMODULE_H

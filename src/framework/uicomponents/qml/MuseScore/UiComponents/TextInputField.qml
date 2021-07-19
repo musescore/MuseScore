@@ -24,6 +24,7 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.3
 
 import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
 
 FocusScope {
     id: root
@@ -43,6 +44,8 @@ FocusScope {
 
     property alias navigation: navCtrl
     property alias accessible: navCtrl.accessible
+
+    property alias clearTextButton: clearTextButtonItem
 
     signal currentTextEdited(var newTextValue)
     signal textCleared()
@@ -135,7 +138,7 @@ FocusScope {
             focus: false
             activeFocusOnPress: false
             selectByMouse: true
-            selectionColor: Qt.rgba(ui.theme.accentColor.r, ui.theme.accentColor.g, ui.theme.accentColor.b, ui.theme.accentOpacityNormal)
+            selectionColor: Utils.colorWithAlpha(ui.theme.accentColor, ui.theme.accentOpacityNormal)
             selectedTextColor: ui.theme.fontPrimaryColor
             visible: !root.isIndeterminate || activeFocus
 
@@ -174,7 +177,7 @@ FocusScope {
         }
 
         FlatButton {
-            id: clearTextButton
+            id: clearTextButtonItem
 
             Layout.fillHeight: true
             Layout.preferredWidth: height
@@ -190,6 +193,9 @@ FocusScope {
             normalStateColor: background.color
             hoveredStateColor: ui.theme.accentColor
             pressedStateColor: ui.theme.accentColor
+
+            navigation.panel: navCtrl.panel
+            navigation.order: navCtrl.order + 1
 
             onClicked: {
                 root.clear()
@@ -234,7 +240,7 @@ FocusScope {
         anchors.left: parent.left
 
         height: parent.height
-        width: clearTextButton.visible ? parent.width - clearTextButton.width : parent.width
+        width: clearTextButtonItem.visible ? parent.width - clearTextButtonItem.width : parent.width
 
         propagateComposedEvents: true
         hoverEnabled: true
