@@ -369,7 +369,6 @@ void MasterScore::addMovement(MasterScore* score)
 
 Score::FileError MasterScore::read302(XmlReader& e, const mu::engraving::compat::ReadScoreHooks& hooks)
 {
-    bool top = true;
     while (e.readNextStartElement()) {
         const QStringRef& tag(e.name());
         if (tag == "programVersion") {
@@ -378,16 +377,7 @@ Score::FileError MasterScore::read302(XmlReader& e, const mu::engraving::compat:
         } else if (tag == "programRevision") {
             setMscoreRevision(e.readIntHex());
         } else if (tag == "Score") {
-            MasterScore* score;
-            if (top) {
-                score = this;
-                top   = false;
-            } else {
-                score = new MasterScore(m_project);
-                score->setMscVersion(mscVersion());
-                addMovement(score);
-            }
-            if (!score->read(e, hooks)) {
+            if (!Score::read(e, hooks)) {
                 if (e.error() == QXmlStreamReader::CustomError) {
                     return FileError::FILE_CRITICALLY_CORRUPTED;
                 }

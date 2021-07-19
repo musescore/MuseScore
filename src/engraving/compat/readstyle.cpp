@@ -25,7 +25,6 @@
 #include "style/style.h"
 
 #include "libmscore/score.h"
-#include "libmscore/preferences.h"
 
 #include "chordlist.h"
 
@@ -85,7 +84,7 @@ void ReadStyleHook::setupDefaultStyle()
         return;
     }
 
-    if (m_score->created() && !preferences().defaultStyleFilePath().isEmpty()) {
+    if (m_score->created() && DefaultStyle::isHasDefaultStyle()) {
         m_score->setStyle(DefaultStyle::defaultStyle());
     } else {
         int defaultsVersion = readStyleDefaultsVersion(m_score, m_scoreData, m_completeBaseName);
