@@ -85,6 +85,12 @@ Loader {
         toggleOpened(model, navigationParentControl)
     }
 
+    function close() {
+        if (loader.isMenuOpened) {
+            loader.menu.close()
+        }
+    }
+
     function update(model, x = 0, y = 0) {
         var menu = loader.menu
         if (!Boolean(menu)) {

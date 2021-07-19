@@ -334,6 +334,8 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
     if (event->button() == Qt::MouseButton::RightButton) {
         ElementType type = selectionType();
         m_view->showContextMenu(type, event->pos());
+    } else if (event->button() == Qt::MouseButton::LeftButton) {
+        m_view->hideContextMenu();
     }
 
     if (m_interactData.hitElement) {
