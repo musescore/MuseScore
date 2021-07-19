@@ -30,6 +30,7 @@
 #include "config.h"
 #include "ipaintprovider.h"
 
+#include "color.h"
 #include "geometry.h"
 #include "drawtypes.h"
 #include "font.h"
@@ -72,7 +73,7 @@ public:
     const Font& font() const;
 
     void setPen(const Pen& pen);
-    inline void setPen(const QColor& color);
+    inline void setPen(const mu::draw::Color& color);
     void setNoPen();
     const Pen& pen() const;
 
@@ -198,9 +199,9 @@ private:
     std::stack<State> m_states;
 };
 
-inline void Painter::setPen(const QColor& color)
+inline void Painter::setPen(const mu::draw::Color& color)
 {
-    setPen(Pen(color.isValid() ? color : QColor(Qt::black)));
+    setPen(Pen(color.isValid() ? color : Color(mu::draw::black)));
 }
 
 inline void Painter::translate(const PointF& offset)

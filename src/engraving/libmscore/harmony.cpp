@@ -1540,14 +1540,14 @@ void Harmony::draw(mu::draw::Painter* painter) const
     }
     if (hasFrame()) {
         if (frameWidth().val() != 0.0) {
-            QColor color = frameColor();
+            Color color = frameColor();
             Pen pen(color, frameWidth().val() * spatium(), PenStyle::SolidLine,
                     PenCapStyle::SquareCap, PenJoinStyle::MiterJoin);
             painter->setPen(pen);
         } else {
             painter->setNoPen();
         }
-        QColor bg(bgColor());
+        Color bg(bgColor());
         painter->setBrush(bg.alpha() ? Brush(bg) : BrushStyle::NoBrush);
         if (circle()) {
             painter->drawArc(frame, 0, 5760);
@@ -1560,7 +1560,7 @@ void Harmony::draw(mu::draw::Painter* painter) const
         }
     }
     painter->setBrush(BrushStyle::NoBrush);
-    QColor color = textColor();
+    Color color = textColor();
     painter->setPen(color);
     for (const TextSegment* ts : textList) {
         mu::draw::Font f(ts->m_font);
@@ -1582,9 +1582,9 @@ void Harmony::drawEditMode(mu::draw::Painter* p, EditData& ed)
 {
     TextBase::drawEditMode(p, ed);
 
-    QColor originalColor = color();
+    mu::draw::Color originalColor = color();
     if (showSpell) {
-        setColor(QColor(Qt::red));
+        setColor(mu::draw::Color(mu::draw::red));
         setSelected(false);
     }
     PointF pos(canvasPos());

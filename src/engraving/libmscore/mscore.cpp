@@ -103,12 +103,12 @@ qreal MScore::verticalPageGap = 5.0;
 qreal MScore::horizontalPageGapEven = 1.0;
 qreal MScore::horizontalPageGapOdd = 50.0;
 
-QColor MScore::selectColor[VOICES];
-QColor MScore::defaultColor;
-QColor MScore::layoutBreakColor;
-QColor MScore::frameMarginColor;
-QColor MScore::bgColor;
-QColor MScore::dropColor;
+mu::draw::Color MScore::selectColor[VOICES];
+mu::draw::Color MScore::defaultColor;
+mu::draw::Color MScore::layoutBreakColor;
+mu::draw::Color MScore::frameMarginColor;
+mu::draw::Color MScore::bgColor;
+mu::draw::Color MScore::dropColor;
 bool MScore::warnPitchRange;
 int MScore::pedalEventsMinTicks;
 
@@ -283,8 +283,8 @@ void MScore::init()
     }
 #endif
 
-    defaultColor        = Qt::black;
-    dropColor           = QColor("#1778db");
+    defaultColor        = mu::draw::black;
+    dropColor           = mu::draw::Color("#1778db");
     defaultPlayDuration = 300;        // ms
     warnPitchRange      = true;
     pedalEventsMinTicks = 1;
@@ -294,8 +294,8 @@ void MScore::init()
 
     lastError           = "";
 
-    layoutBreakColor    = QColor("#A0A0A4");
-    frameMarginColor    = QColor("#A0A0A4");
+    layoutBreakColor    = mu::draw::Color("#A0A0A4");
+    frameMarginColor    = mu::draw::Color("#A0A0A4");
     bgColor.setNamedColor("#dddddd");
 
     //

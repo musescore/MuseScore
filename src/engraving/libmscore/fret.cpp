@@ -325,7 +325,7 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
     qreal _spatium = spatium() * _userMag;
     Pen pen(curColor());
     pen.setCapStyle(PenCapStyle::FlatCap);
-    painter->setBrush(Brush(QColor(painter->pen().color())));
+    painter->setBrush(Brush(Color(painter->pen().color())));
 
     // x2 is the x val of the rightmost string
     qreal x2 = (_strings - 1) * stringDist;

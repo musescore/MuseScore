@@ -25,6 +25,7 @@
 
 #include <QPaintEngine>
 
+#include "draw/color.h"
 #include "config.h"
 #include "style/style.h"
 
@@ -335,12 +336,12 @@ public:
     static bool verticalOrientation() { return _verticalOrientation; }
     static void setVerticalOrientation(bool val) { _verticalOrientation = val; }
 
-    static QColor selectColor[VOICES];
-    static QColor defaultColor;
-    static QColor dropColor;
-    static QColor layoutBreakColor;
-    static QColor frameMarginColor;
-    static QColor bgColor;
+    static mu::draw::Color selectColor[VOICES];
+    static mu::draw::Color defaultColor;
+    static mu::draw::Color dropColor;
+    static mu::draw::Color layoutBreakColor;
+    static mu::draw::Color frameMarginColor;
+    static mu::draw::Color bgColor;
     static bool warnPitchRange;
     static int pedalEventsMinTicks;
 

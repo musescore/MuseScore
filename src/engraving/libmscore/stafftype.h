@@ -23,6 +23,7 @@
 #ifndef __STAFFTYPE_H__
 #define __STAFFTYPE_H__
 
+#include "draw/color.h"
 #include "element.h"
 #include "spatium.h"
 #include "mscore.h"
@@ -197,7 +198,7 @@ class StaffType
     Spatium _yoffset         { 0.0 };
     bool _small              { false };
     bool _invisible          { false };
-    QColor _color            { QColor(Qt::black) };
+    mu::draw::Color _color            { mu::draw::Color(mu::draw::black) };
 
     int _lines            = 5;
     int _stepOffset       = 0;
@@ -277,10 +278,10 @@ public:
 
     StaffType(StaffTypes type, StaffGroup sg, const QString& xml, const QString& name, int lines, int stpOff, qreal lineDist, bool genClef,
               bool showBarLines, bool stemless, bool genTimeSig, bool genKeySig, bool showLedgerLiness, bool invisible,
-              const QColor& color);
+              const mu::draw::Color& color);
 
     StaffType(StaffTypes type, StaffGroup sg, const QString& xml, const QString& name, int lines, int stpOff, qreal lineDist, bool genClef,
-              bool showBarLines, bool stemless, bool genTimesig, bool invisible, const QColor& color, const QString& durFontName,
+              bool showBarLines, bool stemless, bool genTimesig, bool invisible, const mu::draw::Color& color, const QString& durFontName,
               qreal durFontSize, qreal durFontUserY, qreal genDur, const QString& fretFontName, qreal fretFontSize, qreal fretFontUserY,
               TablatureSymbolRepeat symRepeat, bool linesThrough, TablatureMinimStyle minimStyle, bool onLines, bool showRests,
               bool stemsDown, bool stemThrough, bool upsideDown, bool showTabFingering, bool useNumbers, bool showBackTied);
@@ -311,11 +312,11 @@ public:
     qreal userMag() const { return _userMag; }
     bool small() const { return _small; }
     bool invisible() const { return _invisible; }
-    const QColor& color() const { return _color; }
+    const mu::draw::Color& color() const { return _color; }
     void setUserMag(qreal val) { _userMag = val; }
     void setSmall(bool val) { _small = val; }
     void setInvisible(bool val) { _invisible = val; }
-    void setColor(const QColor& val) { _color = val; }
+    void setColor(const mu::draw::Color& val) { _color = val; }
     Spatium yoffset() const { return _yoffset; }
     void setYoffset(Spatium val) { _yoffset = val; }
     qreal spatium(Score*) const;

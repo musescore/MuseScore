@@ -22,7 +22,7 @@
 #ifndef MU_DRAW_BRUSH_H
 #define MU_DRAW_BRUSH_H
 
-#include <QColor>
+#include "color.h"
 #include "drawtypes.h"
 
 namespace mu::draw {
@@ -32,26 +32,33 @@ public:
     Brush() {}
     Brush(BrushStyle style)
         : m_style(style) {}
+    Brush(const Color& color)
+        : m_color(color) {}
+    Brush(mu::draw::GlobalColor color)
+        : m_color(color) {}
+
+#ifndef NO_QT_SUPPORT
     Brush(const QColor& color)
-        : m_color(color) {}
-    Brush(Qt::GlobalColor color)
-        : m_color(color) {}
+        : m_color(Color::fromQColor(color)) {}
+    Brush(const Qt::GlobalColor color)
+        : m_color(Color::fromQColor(color)) {}
+#endif
 
     inline BrushStyle style() const { return m_style; }
     void setStyle(BrushStyle style) { m_style = style; }
-    inline const QColor& color() const { return m_color; }
-    void setColor(const QColor& color) { m_color = color; }
-    inline void setColor(Qt::GlobalColor color) { m_color = color; }
+    inline const Color& color() const { return m_color; }
+    void setColor(const Color& color) { m_color = color; }
+    inline void setColor(mu::draw::GlobalColor color) { m_color = color; }
 
 #ifndef NO_QT_SUPPORT
     static QBrush toQBrush(const Brush& brush)
     {
-        return QBrush(brush.m_color, static_cast<Qt::BrushStyle>(brush.m_style));
+        return QBrush(brush.m_color.toQColor(), static_cast<Qt::BrushStyle>(brush.m_style));
     }
 
     static Brush fromQBrush(const QBrush& qbrush)
     {
-        Brush brush(qbrush.color());
+        Brush brush(Color::fromQColor(qbrush.color()));
         brush.setStyle(static_cast<BrushStyle>(qbrush.style()));
         return brush;
     }
@@ -59,7 +66,7 @@ public:
 #endif
 
 private:
-    QColor m_color = Qt::black;
+    Color m_color = mu::draw::black;
     BrushStyle m_style = BrushStyle::SolidPattern;
 };
 } // namespace mu::draw

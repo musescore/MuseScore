@@ -1368,7 +1368,7 @@ void Note::draw(mu::draw::Painter* painter) const
         return;
     }
 
-    QColor c(curColor());
+    mu::draw::Color c(curColor());
     painter->setPen(c);
     bool tablature = staff() && staff()->isTabStaff(chord()->tick());
 
@@ -1393,13 +1393,13 @@ void Note::draw(mu::draw::Painter* painter) const
                     view->drawBackground(painter, bb);
                 }
             } else {
-                painter->fillRect(bb, Qt::white);
+                painter->fillRect(bb, mu::draw::white);
             }
 
             if (fretConflict() && !score()->printing() && score()->showUnprintable()) {                //on fret conflict, draw on red background
                 painter->save();
-                painter->setPen(Qt::red);
-                painter->setBrush(mu::draw::Brush(QColor(Qt::red)));
+                painter->setPen(mu::draw::red);
+                painter->setBrush(mu::draw::Brush(mu::draw::Color(mu::draw::red)));
                 painter->drawRect(bb);
                 painter->restore();
             }
@@ -1423,15 +1423,15 @@ void Note::draw(mu::draw::Painter* painter) const
             const Instrument* in = part()->instrument(chord()->tick());
             int i = ppitch();
             if (i < in->minPitchP() || i > in->maxPitchP()) {
-                painter->setPen(selected() ? Qt::darkRed : Qt::red);
+                painter->setPen(selected() ? mu::draw::darkRed : mu::draw::red);
             } else if (i < in->minPitchA() || i > in->maxPitchA()) {
-                painter->setPen(selected() ? QColor("#565600") : Qt::darkYellow);
+                painter->setPen(selected() ? mu::draw::Color("#565600") : mu::draw::darkYellow);
             }
         }
         // draw blank notehead to avoid staff and ledger lines
         if (_cachedSymNull != SymId::noSym) {
             painter->save();
-            painter->setPen(Qt::white);
+            painter->setPen(mu::draw::white);
             drawSymbol(_cachedSymNull, painter);
             painter->restore();
         }
@@ -1454,7 +1454,7 @@ void Note::write(XmlWriter& xml) const
     _el.write(xml);
     bool write_dots = false;
     for (NoteDot* dot : _dots) {
-        if (!dot->offset().isNull() || !dot->visible() || dot->color() != Qt::black || dot->visible() != visible()) {
+        if (!dot->offset().isNull() || !dot->visible() || dot->color() != mu::draw::black || dot->visible() != visible()) {
             write_dots = true;
             break;
         }

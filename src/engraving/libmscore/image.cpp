@@ -184,7 +184,7 @@ void Image::draw(mu::draw::Painter* painter) const
     }
     if (emptyImage) {
         painter->setBrush(mu::draw::BrushStyle::NoBrush);
-        painter->setPen(Qt::black);
+        painter->setPen(mu::draw::black);
         painter->drawRect(bbox());
         painter->drawLine(0.0, 0.0, bbox().width(), bbox().height());
         painter->drawLine(bbox().width(), 0.0, 0.0, bbox().height());

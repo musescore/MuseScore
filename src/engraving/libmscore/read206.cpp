@@ -119,14 +119,14 @@ void readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, std::map<Si
     FrameType frameType = FrameType::NO_FRAME;
     Spatium paddingWidth(0.0);
     Spatium frameWidth(0.0);
-    QColor foregroundColor = QColor(0, 0, 0, 255);
-    QColor backgroundColor = QColor(255, 255, 255, 0);
+    mu::draw::Color foregroundColor = mu::draw::Color(0, 0, 0, 255);
+    mu::draw::Color backgroundColor = mu::draw::Color(255, 255, 255, 0);
 
     Placement placement = Placement::ABOVE;
     bool placementValid = false;
 
     QString name = e.attribute("name");
-    QColor frameColor = QColor(0, 0, 0, 255);
+    mu::draw::Color frameColor = mu::draw::Color(0, 0, 0, 255);
 
     bool systemFlag = false;
     qreal lineWidth = -1.0;
@@ -370,10 +370,10 @@ void readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, std::map<Si
             value = paddingWidth;
             break;
         case Pid::FRAME_FG_COLOR:
-            value = frameColor;
+            value = QVariant::fromValue(frameColor);
             break;
         case Pid::FRAME_BG_COLOR:
-            value = backgroundColor;
+            value = QVariant::fromValue(backgroundColor);
             break;
         case Pid::SIZE_SPATIUM_DEPENDENT:
             value = sizeIsSpatiumDependent;

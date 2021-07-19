@@ -643,7 +643,7 @@ void Technical::etag(XmlWriter& xml)
 static QString color2xml(const Element* el)
 {
     if (el->color() != MScore::defaultColor) {
-        return QString(" color=\"%1\"").arg(el->color().name().toUpper());
+        return QString(" color=\"%1\"").arg(QString::fromStdString(el->color().name()).toUpper());
     } else {
         return "";
     }

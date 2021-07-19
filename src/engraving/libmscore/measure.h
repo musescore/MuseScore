@@ -28,6 +28,7 @@
  Definition of class Measure.
 */
 
+#include "draw/color.h"
 #include "measurebase.h"
 #include "fraction.h"
 #include "segmentlist.h"
@@ -261,7 +262,7 @@ public:
 
     qreal createEndBarLines(bool);
     void barLinesSetSpan(Segment*);
-    void setEndBarLineType(BarLineType val, int track, bool visible = true, QColor color = QColor());
+    void setEndBarLineType(BarLineType val, int track, bool visible = true, mu::draw::Color color = mu::draw::Color());
 
     void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
     void createVoice(int track);

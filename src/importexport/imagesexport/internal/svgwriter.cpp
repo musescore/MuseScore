@@ -200,7 +200,7 @@ mu::Ret SvgWriter::write(INotationPtr notation, Device& destinationDevice, const
 
         // Paint it
         if (element->type() == Ms::ElementType::NOTE && !notesColors.isEmpty()) {
-            QColor color = element->color();
+            QColor color = element->color().toQColor();
             int currentNoteIndex = (++lastNoteIndex);
 
             if (notesColors.contains(currentNoteIndex)) {
