@@ -113,11 +113,7 @@ bool Score::read(XmlReader& e, const compat::ReadScoreHooks& hooks)
         } else if (tag == "Style") {
             qreal sp = style().value(Sid::spatium).toDouble();
 
-            if (hooks.readStyle) {
-                hooks.readStyle->readStyleTag(e);
-            } else {
-                compat::ReadStyleHook::readStyleTag(this, e);
-            }
+            compat::ReadStyleHook::readStyleTag(this, e);
 
             // if (_layoutMode == LayoutMode::FLOAT || _layoutMode == LayoutMode::SYSTEM) {
             if (_layoutMode == LayoutMode::FLOAT) {

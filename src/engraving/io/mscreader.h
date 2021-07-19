@@ -54,7 +54,9 @@ public:
     void close();
     bool isOpened() const;
 
+    QByteArray readStyleFile() const;
     QByteArray readScoreFile() const;
+    QByteArray readChordListFile() const;
     QByteArray readThumbnailFile() const;
     QByteArray readImageFile(const QString& fileName) const;
     std::vector<QString> imageFileNames() const;

@@ -71,6 +71,7 @@ public:
 
     bool read(QIODevice* device, bool ign = false);
     bool write(QIODevice* device);
+    void save(XmlWriter& xml, bool optimize);
 
     void precomputeValues();
 
@@ -83,7 +84,6 @@ private:
     friend class mu::engraving::compat::ReadStyleHook;
 
     void read(XmlReader& e, mu::engraving::compat::ReadChordListHook* readChordListHook);
-    void save(XmlWriter& xml, bool optimize);
 
     bool readProperties(XmlReader&);
     bool readStyleValCompat(XmlReader&);
