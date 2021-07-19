@@ -32,9 +32,10 @@
 
 #include "fontcompat.h"
 #include "utils/drawlogger.h"
-#include "log.h"
 #include "transform.h"
 #include "painterpath.h"
+
+#include "log.h"
 
 using namespace mu::draw;
 
