@@ -19,24 +19,52 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import QtQuick.Layouts 1.3
-import MuseScore.Inspector 1.0
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+
 import MuseScore.UiComponents 1.0
-import MuseScore.Ui 1.0
+import MuseScore.Inspector 1.0
 import "../../common"
 
-PopupViewButton {
+InspectorPropertyView {
     id: root
 
-    property alias model: glissandoPopup.model
+    property QtObject model: null
 
-    icon: IconCode.GLISSANDO
-    text: qsTrc("inspector", "Glissandos")
+    objectName: "GlissandoSettings"
 
-    visible: root.model ? !root.model.isEmpty : false
+    titleText: qsTrc("inspector", "Glissando line")
+    propertyItem: root.model ? root.model.lineType : null
 
-    GlissandoPopup {
-        id: glissandoPopup
+    RadioButtonGroup {
+        id: radioButtonList
+
+        height: 30
+        width: parent.width
+
+        model: [
+            { textRole: qsTrc("inspector", "Straight"), valueRole: Glissando.LINE_TYPE_STRAIGHT },
+            { textRole: qsTrc("inspector", "Wavy"), valueRole: Glissando.LINE_TYPE_WAVY }
+        ]
+
+        delegate: FlatRadioButton {
+            id: radioButtonDelegate
+
+            ButtonGroup.group: radioButtonList.radioButtonGroup
+
+            checked: root.model && !root.model.lineType.isUndefined ? root.model.lineType.value === modelData["valueRole"]
+                                                                    : false
+            onToggled: {
+                root.model.lineType.value = modelData["valueRole"]
+            }
+
+            StyledTextLabel {
+                text: modelData["textRole"]
+
+                elide: Text.ElideRight
+                verticalAlignment: Text.AlignVCenter
+                horizontalAlignment: Text.AlignHCenter
+            }
+        }
     }
 }

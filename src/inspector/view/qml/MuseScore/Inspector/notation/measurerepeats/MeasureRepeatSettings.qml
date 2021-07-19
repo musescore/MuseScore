@@ -19,24 +19,36 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import QtQuick.Layouts 1.3
-import MuseScore.Inspector 1.0
-import MuseScore.UiComponents 1.0
+import QtQuick 2.15
+
 import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
+import MuseScore.Inspector 1.0
 import "../../common"
 
-PopupViewButton {
+Column {
     id: root
 
-    property alias model: measureRepeatPopup.model
+    property QtObject model: null
 
-    icon: IconCode.QUESTION_MARK /*TODO*/
-    text: qsTrc("inspector", "Measure repeats")
+    objectName: "MeasureRepeatSettings"
 
-    visible: root.model ? !root.model.isEmpty : false
+    spacing: 12
 
-    MeasureRepeatPopup {
-        id: measureRepeatPopup
+    InspectorPropertyView {
+        titleText: qsTrc("inspector", "Number position")
+        propertyItem: root.model ? root.model.numberPosition : null
+
+        IncrementalPropertyControl {
+            isIndeterminate: root.model ? root.model.numberPosition.isUndefined : false
+            currentValue: root.model ? root.model.numberPosition.value : 0
+            iconMode: iconModeEnum.hidden
+            maxValue: 99.0
+            minValue: -99.0
+            step: 0.5
+            decimals: 2
+
+            onValueEdited: { root.model.numberPosition.value = newValue }
+        }
     }
 }

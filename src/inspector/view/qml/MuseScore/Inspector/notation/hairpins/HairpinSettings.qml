@@ -19,24 +19,52 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import QtQuick.Layouts 1.3
-import MuseScore.Inspector 1.0
-import MuseScore.UiComponents 1.0
-import MuseScore.Ui 1.0
-import "../../common"
+import QtQuick 2.15
+import QtQuick.Controls 1.5
+import QtQuick.Layouts 1.15
 
-PopupViewButton {
+import MuseScore.UiComponents 1.0
+import "../../common"
+import "internal"
+
+TabPanel {
     id: root
 
-    property alias model: hairpinPopup.model
+    property QtObject model: null
 
-    icon: IconCode.HAIRPIN
-    text: qsTrc("inspector", "Hairpins")
+    objectName: "HairpinSettings"
 
-    visible: root.model ? !root.model.isEmpty : false
+    implicitHeight: Math.max(styleTab.visible ? styleTab.implicitHeight : 0,
+                             textTab.visible ? textTab.implicitHeight : 0) + tabBarHeight + 24
+    width: parent ? parent.width : 0
 
-    HairpinPopup {
-        id: hairpinPopup
+    Tab {
+        id: styleTab
+
+        title: qsTrc("inspector", "Style")
+
+        HairpinStyleSettingsTab {
+            anchors.top: parent.top
+            anchors.topMargin: 24
+
+            width: root.width
+
+            model: root.model
+        }
+    }
+
+    Tab {
+        id: textTab
+
+        title: qsTrc("inspector", "Text")
+
+        HairpinTextSettingsTab {
+            anchors.top: parent.top
+            anchors.topMargin: 24
+
+            width: root.width
+
+            model: root.model
+        }
     }
 }

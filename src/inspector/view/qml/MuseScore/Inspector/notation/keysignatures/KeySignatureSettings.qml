@@ -19,24 +19,57 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import QtQuick.Layouts 1.3
-import MuseScore.Inspector 1.0
+import QtQuick 2.15
+
 import MuseScore.UiComponents 1.0
-import MuseScore.Ui 1.0
+import MuseScore.Inspector 1.0
 import "../../common"
 
-PopupViewButton {
+Column {
     id: root
 
-    property alias model: keySignaturePopup.model
+    property QtObject model: null
 
-    icon: IconCode.KEY_SIGNATURE
-    text: qsTrc("inspector", "Key signatures")
+    objectName: "KeySignatureSettings"
 
-    visible: root.model ? !root.model.isEmpty : false
+    spacing: 16
 
-    KeySignaturePopup {
-        id: keySignaturePopup
+    CheckBox {
+        isIndeterminate: root.model ? root.model.hasToShowCourtesy.isUndefined : false
+        checked: root.model && !isIndeterminate ? root.model.hasToShowCourtesy.value : false
+        text: qsTrc("inspector", "Show courtesy key signature on previous system")
+
+        onClicked: { root.model.hasToShowCourtesy.value = !checked }
+    }
+
+    InspectorPropertyView {
+
+        titleText: qsTrc("inspector", "Mode")
+        propertyItem: root.model ? root.model.mode : null
+
+        Dropdown {
+            id: modes
+
+            width: parent.width
+
+            model: [
+                { text: qsTrc("inspector", "Unknown"), value: KeySignatureTypes.MODE_UNKNOWN },
+                { text: qsTrc("inspector", "None"), value: KeySignatureTypes.MODE_NONE },
+                { text: qsTrc("inspector", "Major"), value: KeySignatureTypes.MODE_MAJOR },
+                { text: qsTrc("inspector", "Minor"), value: KeySignatureTypes.MODE_MINOR },
+                { text: qsTrc("inspector", "Dorian"), value: KeySignatureTypes.MODE_DORIAN },
+                { text: qsTrc("inspector", "Phrygian"), value: KeySignatureTypes.MODE_PHRYGIAN },
+                { text: qsTrc("inspector", "Lydian"), value: KeySignatureTypes.MODE_LYDIAN },
+                { text: qsTrc("inspector", "Mixolydian"), value: KeySignatureTypes.MODE_MIXOLYDIAN },
+                { text: qsTrc("inspector", "Ionian"), value: KeySignatureTypes.MODE_IONIAN },
+                { text: qsTrc("inspector", "Locrian"), value: KeySignatureTypes.MODE_LOCRIAN }
+            ]
+
+            currentIndex: root.model && !root.model.mode.isUndefined ? modes.indexOfValue(root.model.mode.value) : -1
+
+            onCurrentValueChanged: {
+                root.model.mode.value = modes.currentValue
+            }
+        }
     }
 }

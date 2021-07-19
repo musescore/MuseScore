@@ -19,23 +19,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import QtQuick.Controls 1.5
-import MuseScore.UiComponents 1.0
-import "../../common"
-import "internal"
+#ifndef MU_INSPECTOR_INSPECTORMODELCREATOR_H
+#define MU_INSPECTOR_INSPECTORMODELCREATOR_H
 
-StyledPopupView {
-    id: root
+#include "iinspectormodelcreator.h"
 
-    property alias model: hairpinTabPanel.model
-
-    contentHeight: hairpinTabPanel.implicitHeight
-
-    HairpinTabPanel {
-        id: hairpinTabPanel
-
-        width: parent.width
-    }
+namespace mu::inspector {
+class InspectorModelCreator : public IInspectorModelCreator
+{
+public:
+    AbstractInspectorModel* newInspectorModel(AbstractInspectorModel::InspectorModelType modelType, QObject* parent,
+                                              IElementRepositoryService* repository) const override;
+};
 }
+
+#endif // MU_INSPECTOR_INSPECTORMODELCREATOR_H

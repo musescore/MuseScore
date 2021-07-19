@@ -19,21 +19,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import QtQuick.Controls 2.2
-import MuseScore.UiComponents 1.0
-import "../../common"
+#ifndef MU_INSPECTOR_BARLINESETTINGSPROXYMODEL_H
+#define MU_INSPECTOR_BARLINESETTINGSPROXYMODEL_H
 
-StyledPopupView {
-    id: root
+#include "models/abstractinspectorproxymodel.h"
 
-    property alias model: noteSettingsTabPanel.proxyModel
+namespace mu::inspector {
+class BarlineSettingsProxyModel : public AbstractInspectorProxyModel
+{
+    Q_OBJECT
 
-    contentHeight: noteSettingsTabPanel.implicitHeight
-
-    NoteSettingsTabPanel {
-        id: noteSettingsTabPanel
-
-        width: parent.width
-    }
+public:
+    explicit BarlineSettingsProxyModel(QObject* parent, IElementRepositoryService* repository);
+};
 }
+
+#endif // MU_INSPECTOR_BARLINESETTINGSPROXYMODEL_H

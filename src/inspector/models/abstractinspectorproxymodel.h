@@ -31,10 +31,16 @@ class AbstractInspectorProxyModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
+    Q_PROPERTY(InspectorModelType preferedSubModelType READ preferedSubModelType CONSTANT)
+
 public:
-    explicit AbstractInspectorProxyModel(QObject* parent);
+    explicit AbstractInspectorProxyModel(QObject* parent, InspectorModelType preferedSubModelType = InspectorModelType::TYPE_UNDEFINED);
 
     Q_INVOKABLE QObject* modelByType(const InspectorModelType type);
+    Q_INVOKABLE QVariantList models();
+
+    Q_INVOKABLE bool isMultiModel() const;
+    Q_INVOKABLE QObject* firstModel();
 
     void createProperties() override {}
     void requestElements() override {}
@@ -44,11 +50,16 @@ public:
     void requestResetToDefaults() override;
     bool hasAcceptableElements() const override;
 
+    virtual bool isTypeSupported(Ms::ElementType) const { return false; }
+
+    InspectorModelType preferedSubModelType() const;
+
 protected:
     void addModel(AbstractInspectorModel* model);
 
 private:
     QHash<int, AbstractInspectorModel*> m_modelsHash;
+    InspectorModelType m_preferedSubModelType = InspectorModelType::TYPE_UNDEFINED;
 };
 }
 
