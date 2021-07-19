@@ -71,7 +71,6 @@ async::Promise<SoundFontPaths> SoundFontsProvider::soundFontPaths(SoundFontForma
         }
 
         resolve(std::move(result));
-
     }, AudioThread::ID);
 }
 
