@@ -173,6 +173,8 @@ void Notation::init()
     for (int i = 0; i < VOICES; ++i) {
         Ms::MScore::selectColor[i] = configuration()->selectionColor(i);
     }
+    // value of QColor::lighter(SHADOW_NOTE_LIGHT) for MScore::selectColor[voice()] when SHADOW_NOTE_LIGHT = 135
+    Ms::MScore::shadowNoteColor = mu::draw::Color(1.0, 0.0111696, 0.534096, 1.0);
 }
 
 void Notation::setScore(Ms::Score* score)

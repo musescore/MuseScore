@@ -1724,7 +1724,7 @@ const MeasureBase* Element::findMeasureBase() const
 //   undoSetColor
 //---------------------------------------------------------
 
-void Element::undoSetColor(const mu::draw::Color &c)
+void Element::undoSetColor(const mu::draw::Color& c)
 {
     undoChangeProperty(Pid::COLOR, QVariant::fromValue(c));
 }
