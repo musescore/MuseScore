@@ -183,6 +183,9 @@ protected:
     virtual void beforeShow();
     virtual void onHidden();
 
+    void repositionWindowIfNeed();
+    void showWindow();
+
     void setErrCode(Ret::Code code);
 
     QRect currentScreenGeometry() const;

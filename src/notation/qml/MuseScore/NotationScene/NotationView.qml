@@ -87,8 +87,12 @@ FocusScope {
                 }
 
                 onOpenContextMenuRequested: function (items, pos) {
-                    // TODO: replace `null` with a NavigationControl
-                    contextMenuLoader.toggleOpened(items, null, pos.x, pos.y)
+                    if (contextMenuLoader.isMenuOpened) {
+                        contextMenuLoader.update(items, pos.x, pos.y)
+                    } else {
+                        // TODO: replace `null` with a NavigationControl
+                        contextMenuLoader.open(items, null, pos.x, pos.y)
+                    }
                 }
 
                 onViewportChanged: {
