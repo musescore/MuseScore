@@ -90,6 +90,10 @@ Column {
             currentIndex: root.model && !root.model.voicingType.isUndefined ? voicing.indexOfValue(root.model.voicingType.value) : -1
 
             onCurrentValueChanged: {
+                if (currentIndex === -1) {
+                    return
+                }
+
                 root.model.voicingType.value = voicing.currentValue
             }
         }
@@ -113,6 +117,10 @@ Column {
             currentIndex: root.model && !root.model.durationType.isUndefined ? durations.indexOfValue(root.model.durationType.value) : -1
 
             onCurrentValueChanged: {
+                if (currentIndex === -1) {
+                    return
+                }
+
                 root.model.durationType.value = durations.currentValue
             }
         }

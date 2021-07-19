@@ -68,6 +68,10 @@ Column {
             currentIndex: root.model && !root.model.mode.isUndefined ? modes.indexOfValue(root.model.mode.value) : -1
 
             onCurrentValueChanged: {
+                if (currentIndex === -1) {
+                    return
+                }
+
                 root.model.mode.value = modes.currentValue
             }
         }

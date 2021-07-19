@@ -55,6 +55,10 @@ Column {
             currentIndex: root.model && !root.model.bendType.isUndefined ? btypes.indexOfValue(root.model.bendType.value) : -1
 
             onCurrentValueChanged: {
+                if (currentIndex === -1) {
+                    return
+                }
+
                 root.model.bendType.value = btypes.currentValue
             }
         }
