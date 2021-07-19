@@ -4155,19 +4155,20 @@ void ScoreView::cmdAddNoteLine()
             return;
             }
       if (firstNote == lastNote) {
-           qDebug("addNoteLine: no support for note to same note line %p", firstNote);
-           return;
-           }
+            qDebug("addNoteLine: no support for note to same note line %p", firstNote);
+            return;
+            }
       TextLine* tl = new TextLine(_score);
       tl->setParent(firstNote);
       tl->setStartElement(firstNote);
-      tl->setEndElement(lastNote);
       tl->setDiagonal(true);
       tl->setAnchor(Spanner::Anchor::NOTE);
       tl->setTick(firstNote->chord()->tick());
+      tl->setEndElement(lastNote);
       _score->startCmd();
       _score->undoAddElement(tl);
       _score->endCmd();
+      tl->setEndElement(lastNote);
       }
 
 //---------------------------------------------------------

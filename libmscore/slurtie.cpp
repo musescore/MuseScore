@@ -359,7 +359,7 @@ void SlurTieSegment::read(XmlReader& e)
                   ups(Grip::BEZIER2).off = e.readPoint() * _spatium;
             else if (tag == "o4")
                   ups(Grip::END).off = e.readPoint() * _spatium;
-            else if (!Element::readProperties(e))
+            else if (!readProperties(e))
                   e.unknown();
             }
       }
@@ -433,7 +433,7 @@ SlurTie::~SlurTie()
 
 void SlurTie::writeProperties(XmlWriter& xml) const
       {
-      Element::writeProperties(xml);
+      Spanner::writeProperties(xml);
       int idx = 0;
       for (const SpannerSegment* ss : spannerSegments())
             ((SlurTieSegment*)ss)->writeSlur(xml, idx++);
@@ -462,7 +462,7 @@ bool SlurTie::readProperties(XmlReader& e)
             s->read(e);
             add(s);
             }
-      else if (!Element::readProperties(e))
+      else if (!Spanner::readProperties(e))
             return false;
       return true;
       }
@@ -473,10 +473,7 @@ bool SlurTie::readProperties(XmlReader& e)
 
 void SlurTie::read(XmlReader& e)
       {
-      while (e.readNextStartElement()) {
-            if (!SlurTie::readProperties(e))
-                  e.unknown();
-            }
+      Spanner::read(e);
       }
 
 //---------------------------------------------------------

@@ -42,8 +42,8 @@ TextLineBaseSegment::TextLineBaseSegment(Spanner* sp, Score* score, ElementFlags
 TextLineBaseSegment::TextLineBaseSegment(const TextLineBaseSegment& seg)
    : LineSegment(seg)
       {
-      _text    = new Text(*seg._text);
-      _endText = new Text(*seg._endText);
+      _text    = seg._text->clone();
+      _endText = seg._endText->clone();
       _text->setParent(this);
       _endText->setParent(this);
       layout();    // set the right _text

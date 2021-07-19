@@ -1521,9 +1521,9 @@ TextBase::TextBase(const TextBase& st)
    : Element(st)
       {
       _text                        = st._text;
-      _layout                      = st._layout;
       textInvalid                  = st.textInvalid;
       layoutInvalid                = st.layoutInvalid;
+      _layout                      = st._layout;
       frame                        = st.frame;
       _layoutToParentWidth         = st._layoutToParentWidth;
       hexState                     = -1;
