@@ -37,9 +37,9 @@
 
 // synthesizers
 #include "internal/synthesizers/fluidsynth/fluidsynth.h"
+#include "internal/synthesizers/fluidsynth/fluidsynthcreator.h"
 #include "internal/synthesizers/soundfontsprovider.h"
-#include "internal/synthesizers/synthesizercontroller.h"
-#include "internal/synthesizers/synthesizersregister.h"
+#include "internal/synthesizers/synthfactory.h"
 
 #include "view/synthssettingsmodel.h"
 #include "devtools/waveformmodel.h"
@@ -50,10 +50,14 @@
 
 using namespace mu::modularity;
 using namespace mu::audio;
+using namespace mu::audio::synth;
 
 static std::shared_ptr<AudioConfiguration> s_audioConfiguration = std::make_shared<AudioConfiguration>();
 static std::shared_ptr<AudioThread> s_audioWorker = std::make_shared<AudioThread>();
 static std::shared_ptr<mu::audio::AudioBuffer> s_audioBuffer = std::make_shared<mu::audio::AudioBuffer>();
+
+static std::shared_ptr<SoundFontsProvider> s_soundFontsProvider = std::make_shared<SoundFontsProvider>();
+static std::shared_ptr<SynthFactory> s_synthFactory = std::make_shared<SynthFactory>();
 
 static std::shared_ptr<Playback> s_playbackFacade = std::make_shared<Playback>();
 
@@ -101,12 +105,8 @@ void AudioModule::registerExports()
     ioc()->registerExport<IPlayback>(moduleName(), s_playbackFacade);
 
     // synthesizers
-    std::shared_ptr<synth::ISynthesizersRegister> sreg = std::make_shared<synth::SynthesizersRegister>();
-    sreg->registerSynthesizer("Fluid", std::make_shared<synth::FluidSynth>());
-    sreg->setDefaultSynthesizer("Fluid");
-
-    ioc()->registerExport<synth::ISynthesizersRegister>(moduleName(), sreg);
-    ioc()->registerExport<synth::ISoundFontsProvider>(moduleName(), new synth::SoundFontsProvider());
+    ioc()->registerExport<ISynthFactory>(moduleName(), s_synthFactory);
+    ioc()->registerExport<ISoundFontsProvider>(moduleName(), s_soundFontsProvider);
 }
 
 void AudioModule::registerResources()
@@ -191,6 +191,9 @@ void AudioModule::onInit(const framework::IApplication::RunMode& mode)
         AudioEngine::instance()->setAudioChannelsCount(s_audioConfiguration->audioChannelsCount());
         AudioEngine::instance()->setSampleRate(activeSpec.sampleRate);
         AudioEngine::instance()->setReadBufferSize(activeSpec.samples);
+
+        s_soundFontsProvider->refreshPaths();
+        s_synthFactory->init(SynthType::Fluid, std::make_shared<FluidSynthCreator>(), s_audioConfiguration->defaultSoundFontPath());
 
         // Initialize IPlayback facade and make sure that it's initialized after the audio-engine
         s_playbackFacade->init();

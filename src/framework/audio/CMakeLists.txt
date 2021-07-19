@@ -60,7 +60,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/iaudioconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudiostream.h
     ${CMAKE_CURRENT_LIST_DIR}/isynthesizer.h
-    ${CMAKE_CURRENT_LIST_DIR}/isynthesizersregister.h
     ${CMAKE_CURRENT_LIST_DIR}/isoundfontsprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudiodriver.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudiosource.h
@@ -69,6 +68,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/iplayer.h
     ${CMAKE_CURRENT_LIST_DIR}/itracks.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudiooutput.h
+    ${CMAKE_CURRENT_LIST_DIR}/isynthfactory.h
     ${CMAKE_CURRENT_LIST_DIR}/iplayback.h
 
     # Common internal
@@ -141,12 +141,12 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/sanitysynthesizer.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/fluidsynth/fluidsynth.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/fluidsynth/fluidsynth.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/synthesizercontroller.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/synthesizercontroller.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/synthesizersregister.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/synthesizersregister.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/fluidsynth/fluidsynthcreator.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/fluidsynth/fluidsynthcreator.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/soundfontsprovider.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/soundfontsprovider.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/synthfactory.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/synthesizers/synthfactory.h
     ${CMAKE_CURRENT_LIST_DIR}/view/synthssettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/synthssettingsmodel.h
 
