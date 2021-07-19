@@ -38,7 +38,6 @@
 
 namespace mu::engraving::compat {
 struct ReadChordListHook;
-struct WriteChordListHook;
 struct ReadStyleHook;
 }
 
@@ -70,8 +69,8 @@ public:
     void setDefaultStyleVersion(const int defaultsVersion);
     int defaultStyleVersion() const;
 
-    bool load(QIODevice* device, bool ign = false);
-    void save(XmlWriter& xml, bool optimize, mu::engraving::compat::WriteChordListHook* writeChordListHook);
+    bool read(QIODevice* device, bool ign = false);
+    bool write(QIODevice* device);
 
     void precomputeValues();
 
@@ -83,7 +82,8 @@ private:
 
     friend class mu::engraving::compat::ReadStyleHook;
 
-    void load(XmlReader& e, mu::engraving::compat::ReadChordListHook* readChordListHook);
+    void read(XmlReader& e, mu::engraving::compat::ReadChordListHook* readChordListHook);
+    void save(XmlWriter& xml, bool optimize);
 
     bool readProperties(XmlReader&);
     bool readStyleValCompat(XmlReader&);

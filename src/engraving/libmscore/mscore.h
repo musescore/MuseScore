@@ -76,6 +76,8 @@ static constexpr int MSCVERSION = 400;
 //    3.02  Engraving improvements for 3.6
 
 //    4.00 (Version 4.0)
+//       - The style is stored in a separate file (inside mscz)
+//       - The ChordList is stored in a separate file (inside mscz)
 
 class MStyle;
 class Sequencer;
