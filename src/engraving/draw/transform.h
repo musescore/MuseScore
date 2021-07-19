@@ -110,18 +110,14 @@ private:
 
     void mapElement(double& nx, double& ny, TransformationType t) const;
 
-#ifdef DEBUG
-    static void nanWarning(const std::string& func)
-    {
-        LOGW() << "Transform:: " << func << " with NaN called";
-    }
-
+#ifdef TRACE_DRAW_OBJ_ENABLED
+    static void nanWarning(const std::string& func);
 #endif
 
-    Matrix m_affine { 1, 0, 0, 1, 0, 0 };
-    double m_13 = 0;
-    double m_23 = 0;
-    double m_33 = 1;
+    Matrix m_affine { 1.0, 0.0, 0.0, 1.0, 0.0, 0.0 };
+    double m_13 = 0.0;
+    double m_23 = 0.0;
+    double m_33 = 1.0;
 
     mutable TransformationType m_type  = TransformationType::None;
     mutable TransformationType m_dirty = TransformationType::None;
@@ -129,18 +125,18 @@ private:
 
 inline Transform& Transform::operator*=(double num)
 {
-    if (num == 1.) {
+    if (qFuzzyCompare(num, 1.)) {
         return *this;
     }
     m_affine.m_11 *= num;
     m_affine.m_12 *= num;
-    m_13        *= num;
+    m_13 *= num;
     m_affine.m_21 *= num;
     m_affine.m_22 *= num;
-    m_23        *= num;
-    m_affine.m_dx  *= num;
-    m_affine.m_dy  *= num;
-    m_33        *= num;
+    m_23 *= num;
+    m_affine.m_dx *= num;
+    m_affine.m_dy *= num;
+    m_33 *= num;
     if (m_dirty < TransformationType::Scale) {
         m_dirty = TransformationType::Scale;
     }
@@ -149,10 +145,10 @@ inline Transform& Transform::operator*=(double num)
 
 inline Transform& Transform::operator/=(double div)
 {
-    if (div == 0) {
+    if (qFuzzyIsNull(div)) {
         return *this;
     }
-    div = 1 / div;
+    div = 1.0 / div;
     return operator*=(div);
 }
 

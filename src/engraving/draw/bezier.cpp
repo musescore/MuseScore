@@ -40,18 +40,18 @@ Bezier Bezier::fromPoints(const PointF& p1, const PointF& p2,
 
 void Bezier::coefficients(double t, double& a, double& b, double& c, double& d)
 {
-    double m_t = 1. - t;
-    b = m_t * m_t;
+    double t1 = 1. - t;
+    b = t1 * t1;
     c = t * t;
     d = c * t;
-    a = b * m_t;
+    a = b * t1;
     b *= 3. * t;
-    c *= 3. * m_t;
+    c *= 3. * t1;
 }
 
 Bezier Bezier::bezierOnInterval(double t0, double t1) const
 {
-    if (t0 == 0 && t1 == 1) {
+    if (qFuzzyIsNull(t0) && qFuzzyCompare(t1, 1)) {
         return *this;
     }
     Bezier bezier = *this;
@@ -84,22 +84,22 @@ PointF Bezier::pointAt(double t) const
 {
     // numerically more stable:
     double x, y;
-    double m_t = 1. - t;
+    double t1 = 1. - t;
     {
-        double a = m_x1 * m_t + m_x2 * t;
-        double b = m_x2 * m_t + m_x3 * t;
-        double c = m_x3 * m_t + m_x4 * t;
-        a = a * m_t + b * t;
-        b = b * m_t + c * t;
-        x = a * m_t + b * t;
+        double a = m_x1 * t1 + m_x2 * t;
+        double b = m_x2 * t1 + m_x3 * t;
+        double c = m_x3 * t1 + m_x4 * t;
+        a = a * t1 + b * t;
+        b = b * t1 + c * t;
+        x = a * t1 + b * t;
     }
     {
-        double a = m_y1 * m_t + m_y2 * t;
-        double b = m_y2 * m_t + m_y3 * t;
-        double c = m_y3 * m_t + m_y4 * t;
-        a = a * m_t + b * t;
-        b = b * m_t + c * t;
-        y = a * m_t + b * t;
+        double a = m_y1 * t1 + m_y2 * t;
+        double b = m_y2 * t1 + m_y3 * t;
+        double c = m_y3 * t1 + m_y4 * t;
+        a = a * t1 + b * t;
+        b = b * t1 + c * t;
+        y = a * t1 + b * t;
     }
     return PointF(x, y);
 }

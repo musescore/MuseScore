@@ -22,7 +22,7 @@
 
 #include "painterpath.h"
 
-#include "global/log.h"
+#include "log.h"
 
 namespace mu {
 
@@ -40,7 +40,7 @@ static double angleForArc(double angle);
 void PainterPath::moveTo(const PointF& p)
 {
     if (!hasValidCoords(p)) {
-#ifdef DEBUG
+#ifdef TRACE_DRAW_OBJ_ENABLED
         LOGW() << "PainterPath::moveTo: Adding point with invalid coordinates, ignoring call");
 #endif
         return;
@@ -61,7 +61,7 @@ void PainterPath::moveTo(const PointF& p)
 void PainterPath::lineTo(const PointF& p)
 {
     if (!hasValidCoords(p)) {
-#ifdef DEBUG
+#ifdef TRACE_DRAW_OBJ_ENABLED
     LOGW() << "PainterPath::lineTo: Adding point with invalid coordinates, ignoring call";
 #endif
         return;
@@ -82,7 +82,7 @@ void PainterPath::lineTo(const PointF& p)
 void PainterPath::cubicTo(const PointF& ctrlPt1, const PointF& ctrlPt2, const PointF& endPt)
 {
     if (!hasValidCoords(ctrlPt1) || !hasValidCoords(ctrlPt2) || !hasValidCoords(endPt)) {
-   #ifdef DEBUG
+   #ifdef TRACE_DRAW_OBJ_ENABLED
        LOGW() << "PainterPath::cubicTo: Adding point with invalid coordinates, ignoring call";
    #endif
        return;
@@ -106,7 +106,7 @@ void PainterPath::cubicTo(const PointF& ctrlPt1, const PointF& ctrlPt2, const Po
 
 void PainterPath::translate(double dx, double dy)
 {
-    if (dx == 0 && dy == 0) {
+    if (qFuzzyIsNull(dx) && qFuzzyIsNull(dy)) {
         return;
     }
     int m_elementsLeft = m_elements.size();
@@ -156,7 +156,7 @@ PainterPath::Element PainterPath::elementAt(int i) const
 void PainterPath::addRect(const RectF &r)
 {
     if (!hasValidCoords(r)) {
-#ifdef DEBUG
+#ifdef TRACE_DRAW_OBJ_ENABLED
         LOGW() << "PainterPath::addRect: Adding point with invalid coordinates, ignoring call";
 #endif
         return;
@@ -181,7 +181,7 @@ void PainterPath::addRect(const RectF &r)
 void PainterPath::addEllipse(const RectF &boundingRect)
 {
     if (!hasValidCoords(boundingRect)) {
-#ifdef DEBUG
+#ifdef TRACE_DRAW_OBJ_ENABLED
         LOGW() << "PainterPath::addEllipse: Adding point with invalid coordinates, ignoring call";
 #endif
         return;
@@ -215,13 +215,13 @@ void PainterPath::addRoundedRect(const RectF &rect, double xRadius, double yRadi
     {
         double w = r.width() / 2;
         double h = r.height() / 2;
-        if (w == 0) {
-            xRadius = 0;
+        if (qFuzzyIsNull(w)) {
+            xRadius = 0.0;
         } else {
             xRadius = 100 * qMin(xRadius, w) / w;
         }
-        if (h == 0) {
-            yRadius = 0;
+        if (qFuzzyIsNull(h)) {
+            yRadius = 0.0;
         } else {
             yRadius = 100 * qMin(yRadius, h) / h;
         }
@@ -264,7 +264,7 @@ void PainterPath::arcMoveTo(const RectF &rect, double angle)
 void PainterPath::arcTo(const RectF &rect, double startAngle, double sweepLength)
 {
     if (!hasValidCoords(rect) || !isValidCoord(startAngle) || !isValidCoord(sweepLength)) {
-#ifdef DEBUG
+#ifdef TRACE_DRAW_OBJ_ENABLED
         LOGW() << "PainterPath::arcTo: Adding point with invalid coordinates, ignoring call";
 #endif
         return;
@@ -398,10 +398,10 @@ void PainterPath::computeBoundingRect() const
 {
     m_dirtyBounds = false;
     
-    double minx, maxx, miny, maxy;
-    minx = maxx = m_elements.at(0).x;
-    miny = maxy = m_elements.at(0).y;
-    for (size_t i=1; i<m_elements.size(); ++i) {
+    double maxx, maxy;
+    double minx = maxx = m_elements.at(0).x;
+    double miny = maxy = m_elements.at(0).y;
+    for (size_t i = 1; i < m_elements.size(); ++i) {
         const Element &e = m_elements.at(i);
         switch (e.type) {
         case ElementType::MoveToElement:
@@ -448,7 +448,7 @@ void PainterPath::computeBoundingRect() const
     m_bounds = RectF(minx, miny, maxx - minx, maxy - miny);
 }
 
-void findEllipseCoords(const RectF &r, double angle, double length,
+static void findEllipseCoords(const RectF &r, double angle, double length,
                             PointF* startPoint, PointF *endPoint)
 {
     if (r.isNull()) {
@@ -494,7 +494,7 @@ void findEllipseCoords(const RectF &r, double angle, double length,
 }
 
 
-PointF curvesForArc(const RectF &rect, double startAngle, double sweepLength,
+static PointF curvesForArc(const RectF &rect, double startAngle, double sweepLength,
                        PointF *curves, int *point_count)
 {
     assert(point_count);
@@ -543,13 +543,13 @@ PointF curvesForArc(const RectF &rect, double startAngle, double sweepLength,
         sweepLength = -360;
     }
     // Special case fast paths
-    if (startAngle == 0.0) {
-        if (sweepLength == 360.0) {
+    if (qFuzzyIsNull(startAngle)) {
+        if (qFuzzyCompare(sweepLength, 360.0)) {
             for (int i = 11; i >= 0; --i) {
                 curves[(*point_count)++] = points[i];
             }
             return points[12];
-        } else if (sweepLength == -360.0) {
+        } else if (qFuzzyCompare(sweepLength, -360.0)) {
             for (int i = 1; i <= 12; ++i) {
                 curves[(*point_count)++] = points[i];
             }
@@ -567,7 +567,7 @@ PointF curvesForArc(const RectF &rect, double startAngle, double sweepLength,
     }
     // avoid empty start segment
     if (qFuzzyIsNull(startT - double(1))) {
-        startT = 0;
+        startT = 0.0;
         startSegment += delta;
     }
     // avoid empty end segment
@@ -620,7 +620,7 @@ PointF curvesForArc(const RectF &rect, double startAngle, double sweepLength,
     return startPoint;
 }
 
-double angleForArc(double angle)
+static double angleForArc(double angle)
 {
     if (qFuzzyIsNull(angle)) {
         return 0;
@@ -635,18 +635,18 @@ double angleForArc(double angle)
     double tc = angle / 90;
     // do some iterations of newton's method to approximate cosAngle
     // finds the zero of the function b.pointAt(tc).x() - cosAngle
-    tc -= ((((2-3*pathKappa) * tc + 3*(pathKappa-1)) * tc) * tc + 1 - cosAngle) // value
-         / (((6-9*pathKappa) * tc + 6*(pathKappa-1)) * tc); // derivative
-    tc -= ((((2-3*pathKappa) * tc + 3*(pathKappa-1)) * tc) * tc + 1 - cosAngle) // value
-         / (((6-9*pathKappa) * tc + 6*(pathKappa-1)) * tc); // derivative
+    tc -= ((((2 - 3*pathKappa) * tc + 3*(pathKappa - 1)) * tc) * tc + 1 - cosAngle) // value
+         / (((6 - 9*pathKappa) * tc + 6*(pathKappa - 1)) * tc); // derivative
+    tc -= ((((2 - 3*pathKappa) * tc + 3*(pathKappa - 1)) * tc) * tc + 1 - cosAngle) // value
+         / (((6 - 9*pathKappa) * tc + 6*(pathKappa - 1)) * tc); // derivative
     // initial guess
     double ts = tc;
     // do some iterations of newton's method to approximate sinAngle
     // finds the zero of the function b.pointAt(tc).y() - sinAngle
-    ts -= ((((3*pathKappa-2) * ts -  6*pathKappa + 3) * ts + 3*pathKappa) * ts - sinAngle)
-         / (((9*pathKappa-6) * ts + 12*pathKappa - 6) * ts + 3*pathKappa);
-    ts -= ((((3*pathKappa-2) * ts -  6*pathKappa + 3) * ts + 3*pathKappa) * ts - sinAngle)
-         / (((9*pathKappa-6) * ts + 12*pathKappa - 6) * ts + 3*pathKappa);
+    ts -= ((((3*pathKappa - 2) * ts -  6*pathKappa + 3) * ts + 3*pathKappa) * ts - sinAngle)
+         / (((9*pathKappa - 6) * ts + 12*pathKappa - 6) * ts + 3*pathKappa);
+    ts -= ((((3*pathKappa - 2) * ts -  6*pathKappa + 3) * ts + 3*pathKappa) * ts - sinAngle)
+         / (((9*pathKappa - 6) * ts + 12*pathKappa - 6) * ts + 3*pathKappa);
     // use the average of the t that best approximates cosAngle
     // and the t that best approximates sinAngle
     double t = 0.5 * (tc + ts);
