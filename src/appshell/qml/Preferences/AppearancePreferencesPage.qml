@@ -57,10 +57,12 @@ PreferencesPage {
         CheckBox {
             id: highContrastEnable
             width: 200
+            checked: appearanceModel.enableHighContrastChecked()
 
             text: "Enable High-Contrast"
             onClicked: {
                 checked = !checked
+                highContrastEnable.checked ? appearanceModel.loadLastUsedHighContrastTheme() : appearanceModel.loadLastUsedGeneralTheme()
             }
         }
 

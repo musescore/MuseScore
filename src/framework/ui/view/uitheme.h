@@ -122,6 +122,8 @@ public:
     void unpolish(QWidget* widget) override;
 
     void drawPrimitive(PrimitiveElement element, const QStyleOption* option, QPainter* painter, const QWidget* widget) const override;
+    void drawComplexControl(ComplexControl control, const QStyleOptionComplex* option, QPainter* painter,
+                            const QWidget* widget = nullptr) const override;
     QRect subControlRect(QStyle::ComplexControl control, const QStyleOptionComplex* option, QStyle::SubControl subControl,
                          const QWidget* widget = nullptr) const override;
     int pixelMetric(PixelMetric metric, const QStyleOption* option, const QWidget* widget) const override;
@@ -147,6 +149,9 @@ private:
     void setupWidgetTheme();
 
     void notifyAboutThemeChanged();
+
+    bool isCurrentThemeHighContrast() const;
+    bool isCurrentThemeGeneral() const;
 
     void drawButtonBackground(QPainter* painter, const QRect& rect, bool enabled, bool hovered, bool pressed, bool accentButton,
                               bool flat) const;

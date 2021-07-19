@@ -37,6 +37,8 @@ using namespace mu::framework;
 using namespace mu::async;
 
 static const Settings::Key UI_THEMES_KEY("ui", "ui/application/themes");
+static const Settings::Key UI_PREVIOUS_GENERAL_THEME("ui", "ui/application/previousGeneralTheme");
+static const Settings::Key UI_PREVIOUS_HIGH_CONTRAST_THEME("ui", "ui/application/previousHighContrastTheme");
 static const Settings::Key UI_CURRENT_THEME_CODE_KEY("ui", "ui/application/currentThemeCode");
 static const Settings::Key UI_FONT_FAMILY_KEY("ui", "ui/theme/fontFamily");
 static const Settings::Key UI_FONT_SIZE_KEY("ui", "ui/theme/fontSize");
@@ -104,19 +106,19 @@ static const QMap<ThemeStyleKey, QVariant> HIGH_CONTRAST_BLACK_THEME_VALUES {
     { ACCENT_COLOR, "#0071DA" },
     { STROKE_COLOR, "#FFFFFF" },
     { BUTTON_COLOR, "#000000" },
-    { BORDER_WIDTH, 5.0 },
+    { BORDER_WIDTH, 1.0 },
     { FONT_PRIMARY_COLOR, "#FFFD38" },
     { FONT_SECONDARY_COLOR, "#BDBDBD" },
     { LINK_COLOR, "#70AFEA" },
     { FOCUS_COLOR, "#75507b" },
 
-    { ACCENT_OPACITY_NORMAL, 0.3 },
-    { ACCENT_OPACITY_HOVER, 0.15 },
+    { ACCENT_OPACITY_NORMAL, 0.8 },
+    { ACCENT_OPACITY_HOVER, 1.0 },
     { ACCENT_OPACITY_HIT, 0.5 },
 
     { BUTTON_OPACITY_NORMAL, 0.7 },
-    { BUTTON_OPACITY_HOVER, 0.5 },
-    { BUTTON_OPACITY_HIT, 1.0 },
+    { BUTTON_OPACITY_HOVER, 1.0 },
+    { BUTTON_OPACITY_HIT, 0.5 },
 
     { ITEM_OPACITY_DISABLED, 0.3 }
 };
@@ -129,7 +131,7 @@ static const QMap<ThemeStyleKey, QVariant> HIGH_CONTRAST_WHITE_THEME_VALUES {
     { ACCENT_COLOR, "#00D87D" },
     { STROKE_COLOR, "#000000" },
     { BUTTON_COLOR, "#FFFFFF" },
-    { BORDER_WIDTH, 5.0 },
+    { BORDER_WIDTH, 1.0 },
     { FONT_PRIMARY_COLOR, "#1E0073" },
     { FONT_SECONDARY_COLOR, "#000000" },
     { LINK_COLOR, "#70AFEA" },
@@ -149,6 +151,8 @@ static const QMap<ThemeStyleKey, QVariant> HIGH_CONTRAST_WHITE_THEME_VALUES {
 void UiConfiguration::init()
 {
     settings()->setDefaultValue(UI_CURRENT_THEME_CODE_KEY, Val(LIGHT_THEME_CODE));
+    settings()->setDefaultValue(UI_PREVIOUS_GENERAL_THEME, Val(LIGHT_THEME_CODE));
+    settings()->setDefaultValue(UI_PREVIOUS_HIGH_CONTRAST_THEME, Val(HIGH_CONTRAST_BLACK_THEME_CODE));
     settings()->setDefaultValue(UI_FONT_FAMILY_KEY, Val("Fira Sans"));
     settings()->setDefaultValue(UI_FONT_SIZE_KEY, Val(12));
     settings()->setDefaultValue(UI_ICONS_FONT_FAMILY_KEY, Val("MusescoreIcon"));
@@ -417,8 +421,24 @@ ThemeCode UiConfiguration::currentThemeCodeKey() const
     return preferredThemeCode.empty() ? LIGHT_THEME_CODE : preferredThemeCode;
 }
 
+bool UiConfiguration::isCurrentThemeHighContrast() const
+{
+    return currentThemeCodeKey() == HIGH_CONTRAST_BLACK_THEME_CODE || currentThemeCodeKey() == HIGH_CONTRAST_WHITE_THEME_CODE;
+}
+
+bool UiConfiguration::isCurrentThemeGeneral() const
+{
+    return currentThemeCodeKey() == LIGHT_THEME_CODE || currentThemeCodeKey() == DARK_THEME_CODE;
+}
+
 void UiConfiguration::setCurrentTheme(const ThemeCode& codeKey)
 {
+    if (isCurrentThemeGeneral()) {
+        settings()->setSharedValue(UI_PREVIOUS_GENERAL_THEME, Val(currentThemeCodeKey()));
+    } else {
+        settings()->setSharedValue(UI_PREVIOUS_HIGH_CONTRAST_THEME, Val(currentThemeCodeKey()));
+    }
+
     settings()->setSharedValue(UI_CURRENT_THEME_CODE_KEY, Val(codeKey));
 }
 
@@ -444,6 +464,16 @@ void UiConfiguration::setCurrentThemeStyleValue(ThemeStyleKey key, const Val& va
 Notification UiConfiguration::currentThemeChanged() const
 {
     return m_currentThemeChanged;
+}
+
+void UiConfiguration::loadLastUsedGeneralTheme()
+{
+    setCurrentTheme(settings()->value(UI_PREVIOUS_GENERAL_THEME).toQString().QString::toStdString());
+}
+
+void UiConfiguration::loadLastUsedHighContrastTheme()
+{
+    setCurrentTheme(settings()->value(UI_PREVIOUS_HIGH_CONTRAST_THEME).toQString().QString::toStdString());
 }
 
 std::string UiConfiguration::fontFamily() const

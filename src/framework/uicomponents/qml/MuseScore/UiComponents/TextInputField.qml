@@ -101,7 +101,7 @@ FocusScope {
         color: ui.theme.textFieldColor
         radius: 4
         border.color: navCtrl.active ? ui.theme.focusColor : ui.theme.strokeColor
-        border.width: navCtrl.active ? 2 : 1
+        border.width: navCtrl.active ? 2 : ui.theme.borderWidth
     }
 
     RowLayout {
