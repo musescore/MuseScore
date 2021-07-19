@@ -280,5 +280,10 @@ Flickable {
                 }
             }
         }
+
+        StyledTextLabel{
+            text:editorModel.styleDescription
+            font: ui.theme.bodyFont
+        }
     }
 }

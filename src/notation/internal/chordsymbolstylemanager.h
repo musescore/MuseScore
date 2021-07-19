@@ -31,6 +31,7 @@ struct ChordSymbolStyle {
     QString styleName;
     QString fileName;
     bool usePresets = false;
+    QString description = "";
 };
 
 struct QualitySymbol {
@@ -56,7 +57,7 @@ public:
     void extractChordStyleInfo(mu::io::path& f);
 
     QList<ChordSymbolStyle> getChordStyles();
-    QHash<QString, QList<QualitySymbol>> getQualitySymbols(QString path);
+    QHash<QString, QList<QualitySymbol> > getQualitySymbols(QString path);
 
 private:
     QList<ChordSymbolStyle> _chordStyles;

@@ -47,6 +47,7 @@ class ChordSymbolEditorModel : public QAbstractListModel
 
     Q_PROPERTY(int chordSpellingIndex READ chordSpellingIndex NOTIFY chordSpellingIndexChanged)
     Q_PROPERTY(int currentStyleIndex READ currentStyleIndex NOTIFY currentStyleIndexChanged)
+    Q_PROPERTY(QString styleDescription READ styleDescription NOTIFY styleDescriptionChanged)
     Q_PROPERTY(int majorSeventhIndex READ majorSeventhIndex NOTIFY majorSeventhIndexChanged)
     Q_PROPERTY(int halfDiminishedIndex READ halfDiminishedIndex NOTIFY halfDiminishedIndexChanged)
     Q_PROPERTY(int minorIndex READ minorIndex NOTIFY minorIndexChanged)
@@ -98,6 +99,7 @@ public:
 
     int chordSpellingIndex() const;
     int currentStyleIndex() const;
+    QString styleDescription() const;
     int majorSeventhIndex() const;
     int halfDiminishedIndex() const;
     int minorIndex() const;
@@ -159,6 +161,7 @@ signals:
 
     void chordSpellingIndexChanged();
     void currentStyleIndexChanged();
+    void styleDescriptionChanged();
     void majorSeventhIndexChanged();
     void halfDiminishedIndexChanged();
     void minorIndexChanged();
@@ -202,7 +205,7 @@ private:
 
     QList<ChordSymbolStyle> m_styles;
     ChordSymbolStyleManager* styleManager;
-    QHash<QString, QList<QualitySymbol>> m_qualitySymbols;
+    QHash<QString, QList<QualitySymbol> > m_qualitySymbols;
     QHash<QString, QHash<QString, QVariant> > m_selectionHistory;
 
     QStringList m_chordSpellingList;
@@ -215,6 +218,7 @@ private:
 
     int m_chordSpellingIndex;
     int m_currentStyleIndex;
+    QString m_styleDescription;
     int m_majorSeventhIndex;
     int m_halfDiminishedIndex;
     int m_minorIndex;

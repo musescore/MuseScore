@@ -143,6 +143,11 @@ int ChordSymbolEditorModel::currentStyleIndex() const
     return m_currentStyleIndex;
 }
 
+QString ChordSymbolEditorModel::styleDescription() const
+{
+    return m_styleDescription;
+}
+
 int ChordSymbolEditorModel::majorSeventhIndex() const
 {
     return m_majorSeventhIndex;
@@ -315,12 +320,14 @@ void ChordSymbolEditorModel::initCurrentStyleIndex()
     }
 
     globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::useChordSymbolPresets, m_styles.at(m_currentStyleIndex).usePresets);
+    m_styleDescription = m_styles.at(m_currentStyleIndex).description;
 
     // Get and extract the selection History
     QString selectionHistory = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::chordQualitySelectionHistory).toString();
     extractSelectionHistory(selectionHistory);
 
     emit currentStyleIndexChanged();
+    emit styleDescriptionChanged();
 }
 
 void ChordSymbolEditorModel::setQualitySymbolsOnStyleChange()
@@ -713,6 +720,7 @@ void ChordSymbolEditorModel::setChordStyle(QString styleName)
 
     globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordDescriptionFile, descriptionFileName);
     globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::useChordSymbolPresets, m_styles.at(m_currentStyleIndex).usePresets);
+    m_styleDescription = m_styles.at(m_currentStyleIndex).description;
 
     // Get and extract the selection History
     QString selectionHistory = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::chordQualitySelectionHistory).toString();
@@ -724,6 +732,7 @@ void ChordSymbolEditorModel::setChordStyle(QString styleName)
     updateSelectionHistory(m_styles[m_currentStyleIndex].styleName);
 
     emit currentStyleIndexChanged();
+    emit styleDescriptionChanged();
 }
 
 void ChordSymbolEditorModel::setChordSpelling(QString newSpelling)
