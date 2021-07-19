@@ -53,6 +53,8 @@ public:
     const ThemeInfo& currentTheme() const override;
     void setCurrentTheme(const ThemeCode& codeKey) override;
     void setCurrentThemeStyleValue(ThemeStyleKey key, const Val& val) override;
+    void loadLastUsedGeneralTheme() override;
+    void loadLastUsedHighContrastTheme() override;
     async::Notification currentThemeChanged() const override;
 
     std::string fontFamily() const override;
@@ -99,6 +101,8 @@ private:
     void updateCurrentTheme();
     void updateThemes();
 
+    bool isCurrentThemeHighContrast() const;
+    bool isCurrentThemeGeneral() const;
     ThemeCode currentThemeCodeKey() const;
     ThemeInfo makeStandardTheme(const ThemeCode& codeKey) const;
 

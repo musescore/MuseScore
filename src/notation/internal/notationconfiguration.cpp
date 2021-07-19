@@ -109,6 +109,11 @@ void NotationConfiguration::init()
 //        m_backgroundChanged.notify();
 //    });
 
+    uiConfiguration()->currentThemeChanged().onNotify(this, [this]()
+    {
+        m_backgroundChanged.notify();
+    });
+
     settings()->setDefaultValue(LIGHT_SCORE_BACKGROUND_COLOR, Val(QColor("#385f94")));
     settings()->valueChanged(LIGHT_SCORE_BACKGROUND_COLOR).onReceive(nullptr, [this](const Val&) {
         m_backgroundChanged.notify();
@@ -256,6 +261,19 @@ void NotationConfiguration::setBackgroundColor(const QColor& color)
         settings()->setSharedValue(HC_BLACK_SCORE_BACKGROUND_COLOR, Val(color));
     } else {
         settings()->setSharedValue(HC_WHITE_SCORE_BACKGROUND_COLOR, Val(color));
+    }
+}
+
+void NotationConfiguration::resetCurrentBackgroundColorToDefault()
+{
+    if (uiConfiguration()->currentTheme().codeKey == LIGHT_THEME_CODE) {
+        settings()->setSharedValue(LIGHT_SCORE_BACKGROUND_COLOR, settings()->defaultValue(LIGHT_SCORE_BACKGROUND_COLOR));
+    } else if (uiConfiguration()->currentTheme().codeKey == DARK_THEME_CODE) {
+        settings()->setSharedValue(DARK_SCORE_BACKGROUND_COLOR, settings()->defaultValue(DARK_SCORE_BACKGROUND_COLOR));
+    } else if (uiConfiguration()->currentTheme().codeKey == HIGH_CONTRAST_BLACK_THEME_CODE) {
+        settings()->setSharedValue(HC_BLACK_SCORE_BACKGROUND_COLOR, settings()->defaultValue(HC_BLACK_SCORE_BACKGROUND_COLOR));
+    } else {
+        settings()->setSharedValue(HC_WHITE_SCORE_BACKGROUND_COLOR, settings()->defaultValue(HC_WHITE_SCORE_BACKGROUND_COLOR));
     }
 }
 

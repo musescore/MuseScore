@@ -42,7 +42,6 @@ void AppearancePreferencesModel::init()
 {
     uiConfiguration()->currentThemeChanged().onNotify(this, [this]() {
         emit themesChanged();
-        emit backgroundColorChanged();
     });
 
     uiConfiguration()->fontChanged().onNotify(this, [this]() {
@@ -94,17 +93,31 @@ QStringList AppearancePreferencesModel::accentColors() const
     return uiConfiguration()->possibleAccentColors();
 }
 
-//void AppearancePreferencesModel::load()
-//{
-//    uiConfiguration()->currentThemeChanged().onNotify(this, [this]() {
-//        emit themesChanged();
-//    });
-//}
-
 void AppearancePreferencesModel::resetThemeToDefault()
 {
     uiConfiguration()->resetCurrentThemeToDefault(currentTheme().codeKey);
+    notationConfiguration()->resetCurrentBackgroundColorToDefault();
+    emit backgroundColorChanged();
     emit themesChanged();
+}
+
+bool AppearancePreferencesModel::enableHighContrastChecked()
+{
+    if (isCurrentThemeHighContrast()) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+void AppearancePreferencesModel::loadLastUsedGeneralTheme()
+{
+    uiConfiguration()->loadLastUsedGeneralTheme();
+}
+
+void AppearancePreferencesModel::loadLastUsedHighContrastTheme()
+{
+    uiConfiguration()->loadLastUsedHighContrastTheme();
 }
 
 void AppearancePreferencesModel::setNewColor(const QColor& newColor, const QString& propertyName)
@@ -170,6 +183,17 @@ ThemeList AppearancePreferencesModel::allThemes() const
     return uiConfiguration()->themes();
 }
 
+bool AppearancePreferencesModel::isCurrentThemeHighContrast() const
+{
+    return uiConfiguration()->currentTheme().codeKey == HIGH_CONTRAST_BLACK_THEME_CODE
+           || uiConfiguration()->currentTheme().codeKey == HIGH_CONTRAST_WHITE_THEME_CODE;
+}
+
+bool AppearancePreferencesModel::isCurrentThemeGeneral() const
+{
+    return uiConfiguration()->currentTheme().codeKey == LIGHT_THEME_CODE || uiConfiguration()->currentTheme().codeKey == DARK_THEME_CODE;
+}
+
 int AppearancePreferencesModel::currentFontIndex() const
 {
     QString currentFont = QString::fromStdString(uiConfiguration()->fontFamily());
@@ -216,20 +240,6 @@ void AppearancePreferencesModel::setCurrentThemeCode(const QString& themeCode)
     if (themeCode == currentThemeCode()) {
         return;
     }
-
-//    ThemeList genThemes;
-
-//    for (const ThemeInfo& theme : allThemes()) {
-//        if (theme.codeKey == LIGHT_THEME_CODE || theme.codeKey == DARK_THEME_CODE) {
-//            genThemes.push_back(theme);
-//        }
-//    }
-
-//    for (const ThemeInfo& theme : genThemes) {
-//        if (themeCode == QString::fromStdString(theme.codeKey)) {
-//            uiConfiguration()->setCurrentTheme(theme.codeKey);
-//        }
-//    }
 
     for (const ThemeInfo& theme : allThemes()) {
         if (themeCode == QString::fromStdString(theme.codeKey)) {

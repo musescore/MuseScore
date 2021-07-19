@@ -43,7 +43,7 @@ static const QBrush NO_FILL(Qt::transparent);
 
 static const int GROUP_BOX_LABEL_SPACING = 2;
 
-//! NOTE In QML, a border is drawn _inside_ a rectangle.
+//!      NOTE In QML, a border is drawn _inside_ a rectangle.
 //!      In C++, a border would normally be drawn half inside the rectangle, half outside.
 //!      In this function, we exactly replicate the behaviour from QML.
 static void drawRoundedRect(QPainter* painter, const QRectF& rect, const qreal radius, const QBrush& brush = NO_FILL,
@@ -428,6 +428,17 @@ void UiTheme::notifyAboutThemeChanged()
     emit themeChanged();
 }
 
+bool UiTheme::isCurrentThemeHighContrast() const
+{
+    return configuration()->currentTheme().codeKey == HIGH_CONTRAST_BLACK_THEME_CODE
+           || configuration()->currentTheme().codeKey == HIGH_CONTRAST_WHITE_THEME_CODE;
+}
+
+bool UiTheme::isCurrentThemeGeneral() const
+{
+    return configuration()->currentTheme().codeKey == LIGHT_THEME_CODE || configuration()->currentTheme().codeKey == DARK_THEME_CODE;
+}
+
 // ====================================================
 // QStyle
 // ====================================================
@@ -516,7 +527,7 @@ void UiTheme::drawPrimitive(QStyle::PrimitiveElement element, const QStyleOption
 
     // GroupBox
     case QStyle::PE_FrameGroupBox: {
-        drawRoundedRect(painter, option->rect, 3, QBrush("#03000000"), QPen(strokeColor(), 1));
+        drawRoundedRect(painter, option->rect, 3, QBrush("#03000000"), QPen(strokeColor(), borderWidth()));
     } break;
 
     // Menu
@@ -524,7 +535,7 @@ void UiTheme::drawPrimitive(QStyle::PrimitiveElement element, const QStyleOption
         drawRoundedRect(painter, option->rect, 3, backgroundPrimaryColor());
     } break;
     case QStyle::PE_FrameMenu: {
-        drawRoundedRect(painter, option->rect, 3, NO_FILL, QPen(strokeColor(), 1));
+        drawRoundedRect(painter, option->rect, 3, NO_FILL, QPen(strokeColor(), borderWidth()));
     } break;
 
     default:
@@ -533,6 +544,46 @@ void UiTheme::drawPrimitive(QStyle::PrimitiveElement element, const QStyleOption
     }
 
     painter->restore();
+}
+
+void UiTheme::drawComplexControl(ComplexControl control, const QStyleOptionComplex* option, QPainter* painter, const QWidget* widget) const
+{
+    const bool enabled = option->state & State_Enabled;
+    const bool hovered = option->state & State_MouseOver;
+    const bool pressed = option->state & State_Sunken;
+
+    switch (control) {
+    case CC_ScrollBar: {
+        QProxyStyle::drawComplexControl(control, option, painter, widget);
+
+        QRect scrollBarHandle = QProxyStyle::subControlRect(CC_ScrollBar, option, SC_ScrollBarSlider, widget);
+
+        if (isCurrentThemeHighContrast()) {
+            QColor handleColor = fontPrimaryColor();
+            handleColor.setAlphaF(
+                !enabled ? buttonOpacityNormal()
+                * itemOpacityDisabled() : pressed ? buttonOpacityHit() : hovered ? buttonOpacityHover() : buttonOpacityNormal());
+
+            drawRoundedRect(painter, option->rect, 1, NO_FILL, QPen(strokeColor(), borderWidth()));
+            drawRoundedRect(painter, scrollBarHandle, 1, handleColor, NO_BORDER);
+        }
+    } break;
+
+    case CC_SpinBox: {
+        QProxyStyle::drawComplexControl(control, option, painter, widget);
+
+        if (enabled) {
+            QRect spinBoxFrame = QProxyStyle::subControlRect(CC_SpinBox, option, SC_SpinBoxFrame, widget);
+
+            QColor penBorderColor(strokeColor());
+            penBorderColor.setAlphaF(pressed ? buttonOpacityHit() : hovered ? buttonOpacityHover() : buttonOpacityNormal());
+
+            drawRoundedRect(painter, spinBoxFrame, 3, NO_FILL, QPen(penBorderColor, borderWidth()));
+        }
+    } break;
+
+    default: QProxyStyle::drawComplexControl(control, option, painter, widget);
+    }
 }
 
 QRect UiTheme::subControlRect(QStyle::ComplexControl control, const QStyleOptionComplex* option, QStyle::SubControl subControl,
@@ -711,8 +762,18 @@ void UiTheme::drawButtonBackground(QPainter* painter, const QRect& rect, bool en
                               : !flat ? buttonOpacityNormal()
                               : 0);
 
-    //drawRoundedRect(painter, rect, 3, backgroundColor);
-    drawRoundedRect(painter, rect, 3, backgroundColor, QPen(strokeColor(), borderWidth()));
+    if (enabled) {
+        if (isCurrentThemeHighContrast()) {
+            QColor penBorderColor(strokeColor());
+            penBorderColor.setAlphaF(pressed ? buttonOpacityHit() : hovered ? buttonOpacityHover() : buttonOpacityNormal());
+
+            drawRoundedRect(painter, rect, 3, backgroundColor, QPen(penBorderColor, borderWidth()));
+        } else {
+            drawRoundedRect(painter, rect, 3, backgroundColor, NO_BORDER);
+        }
+    } else {
+        drawRoundedRect(painter, rect, 3, backgroundColor, NO_BORDER);
+    }
 }
 
 void UiTheme::drawCheckboxIndicator(QPainter* painter, const QRect& rect, bool enabled, bool hovered, bool pressed, bool checked,
@@ -725,14 +786,21 @@ void UiTheme::drawCheckboxIndicator(QPainter* painter, const QRect& rect, bool e
                                   : hovered ? buttonOpacityHover()
                                   : buttonOpacityNormal());
 
-        QColor borderColor = enabled && (hovered || pressed) ? strokeColor() : Qt::transparent;
-        borderColor.setAlphaF(enabled && pressed ? buttonOpacityHit()
-                              : enabled && hovered ? buttonOpacityHover()
-                              : 0);
+        if (isCurrentThemeGeneral()) {
+            QColor penBorderColor;
+            penBorderColor.setAlphaF(pressed ? buttonOpacityHit() : hovered ? buttonOpacityHover() : buttonOpacityNormal());
 
-        //const int borderWidth = enabled && (hovered || pressed) ? 1 : 0;
-        //drawRoundedRect(painter, rect, 2, backgroundColor, QPen(borderColor, borderWidth));
-        drawRoundedRect(painter, rect, 2, backgroundColor, QPen(strokeColor(), borderWidth()));
+            const int penBorderWidth = enabled && (hovered || pressed) ? borderWidth() : 0;
+
+            drawRoundedRect(painter, rect, 2, backgroundColor, QPen(penBorderColor, penBorderWidth));
+        } else {
+            QColor penBorderColor = strokeColor();
+            penBorderColor.setAlphaF(pressed ? buttonOpacityHit() : hovered ? buttonOpacityHover() : buttonOpacityNormal());
+
+            const int penBorderWidth = enabled ? borderWidth() : 0;
+
+            drawRoundedRect(painter, rect, 2, backgroundColor, QPen(penBorderColor, penBorderWidth));
+        }
     }
 
     if (checked || indeterminate) {
@@ -804,6 +872,7 @@ void UiTheme::drawIndicatorIcon(QPainter* painter, const QRect& rect, bool enabl
     }
 
     painter->drawText(rect, Qt::AlignCenter, iconCodeToChar(code));
+    drawRoundedRect(painter, rect, 1, NO_FILL, QPen(strokeColor(), borderWidth())); //does nothing apparently
 }
 
 void UiTheme::drawListViewItemBackground(QPainter* painter, const QRect& rect, bool enabled, bool hovered, bool pressed,
@@ -824,6 +893,10 @@ void UiTheme::drawListViewItemBackground(QPainter* painter, const QRect& rect, b
     }
 
     painter->fillRect(rect, backgroundColor);
+
+    if (isCurrentThemeHighContrast()) {
+        drawRoundedRect(painter, rect, 1, NO_FILL, QPen(strokeColor(), borderWidth()));
+    }
 }
 
 void UiTheme::drawToolbarGrip(QPainter* painter, const QRect& rect, bool horizontal) const

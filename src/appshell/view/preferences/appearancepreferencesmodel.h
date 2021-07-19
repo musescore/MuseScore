@@ -81,8 +81,10 @@ public:
     QColor foregroundColor() const;
     QString foregroundWallpaperPath() const;
 
-    //Q_INVOKABLE void load();
     Q_INVOKABLE void resetThemeToDefault();
+    Q_INVOKABLE bool enableHighContrastChecked();
+    Q_INVOKABLE void loadLastUsedGeneralTheme();
+    Q_INVOKABLE void loadLastUsedHighContrastTheme();
     Q_INVOKABLE void setNewColor(const QColor& newColor, const QString& propertyName);
     Q_INVOKABLE QStringList allFonts() const;
     Q_INVOKABLE QString wallpaperPathFilter() const;
@@ -114,6 +116,8 @@ signals:
 private:
     ui::ThemeInfo currentTheme() const;
     ui::ThemeList allThemes() const;
+    bool isCurrentThemeHighContrast() const;
+    bool isCurrentThemeGeneral() const;
 };
 }
 
