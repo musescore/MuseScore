@@ -100,6 +100,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/compat/pageformat.h
     ${CMAKE_CURRENT_LIST_DIR}/compat/chordlist.cpp
     ${CMAKE_CURRENT_LIST_DIR}/compat/chordlist.h
+    ${CMAKE_CURRENT_LIST_DIR}/compat/readscore.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/compat/readscore.h
+    ${CMAKE_CURRENT_LIST_DIR}/compat/readstyle.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/compat/readstyle.h
 
     ${CMAKE_CURRENT_LIST_DIR}/style/styledef.cpp
     ${CMAKE_CURRENT_LIST_DIR}/style/styledef.h

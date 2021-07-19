@@ -261,9 +261,9 @@ bool MStyle::readTextStyleValCompat(XmlReader& e)
     return true;
 }
 
-bool MStyle::load(QFile* qf, bool ign)
+bool MStyle::load(QIODevice* device, bool ign)
 {
-    XmlReader e(qf);
+    XmlReader e(device);
     while (e.readNextStartElement()) {
         if (e.name() == "museScore") {
             QString version = e.attribute("version");

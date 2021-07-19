@@ -29,6 +29,7 @@
 #include "style/defaultstyle.h"
 
 #include "compat/chordlist.h"
+#include "compat/readscore.h"
 
 #include "config.h"
 #include "score.h"
@@ -589,6 +590,14 @@ Score::FileError MasterScore::loadMscz(const mu::engraving::MscReader& msczReade
     fileInfo()->setFile(msczReader.params().filePath);
 
     FileError retval;
+    // Read style
+    {
+        QByteArray styleData = msczReader.readStyleFile();
+        QBuffer buf(&styleData);
+        buf.open(QIODevice::ReadOnly);
+        style().load(&buf);
+    }
+
     // Read score
     {
         QByteArray scoreData = msczReader.readScoreFile();
@@ -596,11 +605,10 @@ Score::FileError MasterScore::loadMscz(const mu::engraving::MscReader& msczReade
         XmlReader e(scoreData);
         e.setDocName(completeBaseName);
 
-        auto getStyleDefaultsVersion = [this, &scoreData, &completeBaseName]() {
-            return readStyleDefaultsVersion(scoreData, completeBaseName);
-        };
+        compat::ReadScoreHooks hooks;
+        hooks.readStyle = std::make_shared<compat::ReadStyleHook>(this, scoreData, completeBaseName);
 
-        retval = read1(e, ignoreVersionError, getStyleDefaultsVersion);
+        retval = read1(e, ignoreVersionError, hooks);
     }
 
     // Read images
@@ -622,46 +630,6 @@ Score::FileError MasterScore::loadMscz(const mu::engraving::MscReader& msczReade
     }
 
     return retval;
-}
-
-int MasterScore::styleDefaultByMscVersion(const int mscVer) const
-{
-    constexpr int LEGACY_MSC_VERSION_V3 = 301;
-    constexpr int LEGACY_MSC_VERSION_V2 = 206;
-    constexpr int LEGACY_MSC_VERSION_V1 = 114;
-
-    if (mscVer > LEGACY_MSC_VERSION_V2 && mscVer < MSCVERSION) {
-        return LEGACY_MSC_VERSION_V3;
-    }
-
-    if (mscVer > LEGACY_MSC_VERSION_V1 && mscVer <= LEGACY_MSC_VERSION_V2) {
-        return LEGACY_MSC_VERSION_V2;
-    }
-
-    if (mscVer <= LEGACY_MSC_VERSION_V1) {
-        return LEGACY_MSC_VERSION_V1;
-    }
-
-    return MSCVERSION;
-}
-
-int MasterScore::readStyleDefaultsVersion(const QByteArray& scoreData, const QString& completeBaseName)
-{
-    if (styleB(Sid::usePre_3_6_defaults)) {
-        return style().defaultStyleVersion();
-    }
-
-    XmlReader e(scoreData);
-    e.setDocName(completeBaseName);
-
-    while (!e.atEnd()) {
-        e.readNext();
-        if (e.name() == "defaultsVersion") {
-            return e.readInt();
-        }
-    }
-
-    return styleDefaultByMscVersion(mscVersion());
 }
 
 //---------------------------------------------------------
@@ -717,7 +685,7 @@ void MasterScore::parseVersion(const QString& val)
 //    return true on success
 //---------------------------------------------------------
 
-Score::FileError MasterScore::read1(XmlReader& e, bool ignoreVersionError, const std::function<int()>& getStyleDefaultsVersion)
+Score::FileError MasterScore::read1(XmlReader& e, bool ignoreVersionError, const mu::engraving::compat::ReadScoreHooks& hooks)
 {
     while (e.readNextStartElement()) {
         if (e.name() == "museScore") {
@@ -737,16 +705,8 @@ Score::FileError MasterScore::read1(XmlReader& e, bool ignoreVersionError, const
                 }
             }
 
-            if (created() && !preferences().defaultStyleFilePath().isEmpty()) {
-                setStyle(DefaultStyle::defaultStyle());
-            } else {
-                IF_ASSERT_FAILED(getStyleDefaultsVersion) {
-                    return Score::FileError::FILE_ERROR;
-                }
-                int defaultsVersion = getStyleDefaultsVersion();
-
-                setStyle(DefaultStyle::resolveStyleDefaults(defaultsVersion));
-                style().setDefaultStyleVersion(defaultsVersion);
+            if (hooks.readStyle) {
+                hooks.readStyle->setupDefaultStyle();
             }
 
             Score::FileError error;
@@ -755,7 +715,7 @@ Score::FileError MasterScore::read1(XmlReader& e, bool ignoreVersionError, const
             } else if (mscVersion() <= 207) {
                 error = read206(e);
             } else {
-                error = read302(e);
+                error = read302(e, hooks);
             }
             setExcerptsChanged(false);
             return error;

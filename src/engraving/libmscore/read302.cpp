@@ -24,6 +24,7 @@
 #include "style/defaultstyle.h"
 
 #include "compat/chordlist.h"
+#include "compat/readscore.h"
 
 #include "xml.h"
 #include "score.h"
@@ -49,7 +50,7 @@ namespace Ms {
 //    return false on error
 //---------------------------------------------------------
 
-bool Score::read(XmlReader& e)
+bool Score::read(XmlReader& e, const compat::ReadScoreHooks& hooks)
 {
     // HACK
     // style setting compatibility settings for minor versions
@@ -111,8 +112,13 @@ bool Score::read(XmlReader& e)
             _markIrregularMeasures = e.readInt();
         } else if (tag == "Style") {
             qreal sp = style().value(Sid::spatium).toDouble();
-            compat::ReadChordListHook clhook(this);
-            style().load(e, &clhook);
+
+            if (hooks.readStyle) {
+                hooks.readStyle->readStyleTag(e);
+            } else {
+                compat::ReadStyleHook::readStyleTag(this, e);
+            }
+
             // if (_layoutMode == LayoutMode::FLOAT || _layoutMode == LayoutMode::SYSTEM) {
             if (_layoutMode == LayoutMode::FLOAT) {
                 // style should not change spatium in
@@ -192,7 +198,10 @@ bool Score::read(XmlReader& e)
 
                 ex->setPartScore(s);
                 e.setLastMeasure(nullptr);
-                s->read(e);
+
+                compat::ReadScoreHooks hooks;
+                s->read(e, hooks);
+
                 s->linkMeasures(m);
                 ex->setTracks(e.tracks());
                 m->addExcerpt(ex);
@@ -336,22 +345,6 @@ void Score::linkMeasures(Score* score)
 }
 
 //---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-bool MasterScore::read(XmlReader& e)
-{
-    if (!Score::read(e)) {
-        return false;
-    }
-    for (Staff* s : staves()) {
-        s->updateOttava();
-    }
-    setCreated(false);
-    return true;
-}
-
-//---------------------------------------------------------
 //   addMovement
 //---------------------------------------------------------
 
@@ -374,7 +367,7 @@ void MasterScore::addMovement(MasterScore* score)
 //   read301
 //---------------------------------------------------------
 
-Score::FileError MasterScore::read302(XmlReader& e)
+Score::FileError MasterScore::read302(XmlReader& e, const mu::engraving::compat::ReadScoreHooks& hooks)
 {
     bool top = true;
     while (e.readNextStartElement()) {
@@ -394,7 +387,7 @@ Score::FileError MasterScore::read302(XmlReader& e)
                 score->setMscVersion(mscVersion());
                 addMovement(score);
             }
-            if (!score->read(e)) {
+            if (!score->read(e, hooks)) {
                 if (e.error() == QXmlStreamReader::CustomError) {
                     return FileError::FILE_CRITICALLY_CORRUPTED;
                 }
