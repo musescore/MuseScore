@@ -100,14 +100,12 @@ Loader {
         menu.model = model
 
         if (x !== 0) {
-            loader.menu.x = x
+            menu.x = x
         }
 
         if (y !== 0) {
-            loader.menu.y = y
+            menu.y = y
         }
-
-        prv.openMenu()
     }
 
     Component {

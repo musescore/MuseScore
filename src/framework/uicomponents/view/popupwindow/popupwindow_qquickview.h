@@ -45,6 +45,7 @@ public:
     void setContent(QQuickItem* item) override;
 
     void show(QPoint p) override;
+    void setPosition(QPoint p) override;
     void hide() override;
 
     QWindow* qWindow() const override;
