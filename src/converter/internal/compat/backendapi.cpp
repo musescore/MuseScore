@@ -41,6 +41,7 @@ using namespace mu;
 using namespace mu::converter;
 using namespace mu::project;
 using namespace mu::notation;
+using namespace mu::engraving;
 using namespace mu::io;
 
 static const std::string PNG_WRITER_NAME = "png";
@@ -608,8 +609,12 @@ RetVal<QByteArray> BackendApi::scorePartJson(Ms::Score* score, const std::string
     QByteArray scoreData;
     QBuffer buf(&scoreData);
 
-    mu::engraving::MscWriter msczWriter(&buf);
-    msczWriter.setFilePath(QString::fromStdString(fileName));
+    MscWriter::Params params;
+    params.device = &buf;
+    params.filePath = QString::fromStdString(fileName);
+    params.mode = MscWriter::Mode::Zip;
+
+    MscWriter msczWriter(params);
     msczWriter.open();
 
     bool ok = score->writeMscz(msczWriter);

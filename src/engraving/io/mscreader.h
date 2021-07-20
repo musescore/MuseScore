@@ -34,18 +34,23 @@ class MscReader
 public:
     enum class Mode {
         Zip,
-        Dir
+        Dir,
+        XmlFile
     };
 
-    MscReader(const QString& filePath = QString(), Mode mode = Mode::Zip);
-    MscReader(QIODevice* device);
+    struct Params
+    {
+        QIODevice* device = nullptr;
+        QString filePath;
+        Mode mode = Mode::Zip;
+    };
+
+    MscReader() = default;
+    MscReader(const Params& params);
     ~MscReader();
 
-    void setDevice(QIODevice* device);
-    void setFilePath(const QString& filePath);
-    QString filePath() const;
-    void setMode(Mode m);
-    Mode mode() const;
+    void setParams(const Params& params);
+    const Params& params() const;
 
     bool open();
     void close();
@@ -60,6 +65,50 @@ public:
 
 private:
 
+    struct IReader {
+        virtual ~IReader() = default;
+
+        virtual bool open(QIODevice* device, const QString& filePath) = 0;
+        virtual void close() = 0;
+        virtual bool isOpened() const = 0;
+        virtual QStringList fileList() const = 0;
+        virtual QByteArray fileData(const QString& fileName) const = 0;
+    };
+
+    struct ZipReader : public IReader
+    {
+        ~ZipReader() override;
+        bool open(QIODevice* device, const QString& filePath) override;
+        void close() override;
+        bool isOpened() const override;
+        QStringList fileList() const override;
+        QByteArray fileData(const QString& fileName) const override;
+    private:
+        QIODevice* m_device = nullptr;
+        bool m_selfDeviceOwner = false;
+        MQZipReader* m_zip = nullptr;
+    };
+
+    struct DirReader : public IReader
+    {
+        bool open(QIODevice* device, const QString& filePath) override;
+        void close() override;
+        bool isOpened() const override;
+        QStringList fileList() const override;
+        QByteArray fileData(const QString& fileName) const override;
+    private:
+        QString m_rootPath;
+    };
+
+    struct XmlFileReader : public IReader
+    {
+        bool open(QIODevice* device, const QString& filePath) override;
+        void close() override;
+        bool isOpened() const override;
+        QStringList fileList() const override;
+        QByteArray fileData(const QString& fileName) const override;
+    };
+
     struct Meta {
         QString mscxFileName;
         std::vector<QString> imageFilePaths;
@@ -67,16 +116,12 @@ private:
         bool isValid() const { return !mscxFileName.isEmpty(); }
     };
 
-    QString rootPath() const;
-    MQZipReader* reader() const;
+    IReader* reader() const;
     const Meta& meta() const;
     QByteArray fileData(const QString& fileName) const;
 
-    QString m_filePath;
-    Mode m_mode = Mode::Zip;
-    QIODevice* m_device = nullptr;
-    bool m_selfDeviceOwner = false;
-    mutable MQZipReader* m_reader = nullptr;
+    Params m_params;
+    mutable IReader* m_reader = nullptr;
     mutable Meta m_meta;
 };
 }

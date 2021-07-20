@@ -586,7 +586,7 @@ Score::FileError MasterScore::loadMscz(const mu::engraving::MscReader& msczReade
     }
 
     ScoreLoad sl;
-    fileInfo()->setFile(msczReader.filePath());
+    fileInfo()->setFile(msczReader.params().filePath);
 
     FileError retval;
     // Read score
