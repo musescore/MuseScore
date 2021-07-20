@@ -149,18 +149,17 @@ Rectangle {
                         title = inspectorData.title
                     }
 
-                    function updateContentHeight(newContentHeight) {
-                        expandableDelegate.contentHeight = newContentHeight
-                        flickableArea.ensureContentVisible(y, newContentHeight)
-                    }
-
                     Component {
                         id: generalInspector
                         GeneralInspectorView {
                             model: inspectorData
                             navigationPanel: navPanel
                             navigationRowOffset: expandableDelegate.navigation.row + 1
-                            onContentExtended: expandableDelegate.updateContentHeight(contentHeight)
+                            anchorItem: root
+
+                            onEnsureContentVisibleRequested: {
+                                flickableArea.ensureContentVisible(-invisibleContentHeight)
+                            }
                         }
                     }
                     Component {
@@ -169,7 +168,6 @@ Rectangle {
                             model: inspectorData
                             navigationPanel: navPanel
                             navigationRowOffset: expandableDelegate.navigation.row + 1
-                            onContentExtended: expandableDelegate.updateContentHeight(contentHeight)
                         }
                     }
 
@@ -195,7 +193,6 @@ Rectangle {
                             model: inspectorData
                             navigationPanel: navPanel
                             navigationRowOffset: expandableDelegate.navigation.row + 1
-                            onContentExtended: expandableDelegate.updateContentHeight(contentHeight)
                         }
                     }
 
@@ -206,7 +203,6 @@ Rectangle {
                             model: inspectorData
                             navigationPanel: navPanel
                             navigationRowOffset: expandableDelegate.navigation.row + 1
-                            onContentExtended: expandableDelegate.updateContentHeight(contentHeight)
                         }
                     }
                     Component {
@@ -216,7 +212,6 @@ Rectangle {
                             model: inspectorData
                             navigationPanel: navPanel
                             navigationRowOffset: expandableDelegate.navigation.row + 1
-                            onContentExtended: expandableDelegate.updateContentHeight(contentHeight)
                         }
                     }
                 }

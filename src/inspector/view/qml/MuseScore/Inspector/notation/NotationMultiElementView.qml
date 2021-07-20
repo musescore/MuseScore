@@ -45,7 +45,9 @@ InspectorSectionView {
 
             delegate: PopupViewButton {
                 id: button
+
                 popupAvailableWidth: parent ? parent.width : 0
+                anchorItem: root.anchorItem
 
                 icon: modelData["icon"]
                 text: modelData["title"]
@@ -56,38 +58,15 @@ InspectorSectionView {
                 navigation.name: loader.viewObjectName
                 navigation.row: root.navigationRow(index)
 
-                StyledPopupView {
-                    id: popup
-                    contentHeight: loader.implicitHeight
+                popupContent: NotationInspectorSectionLoader {
+                    id: loader
+                    width: parent.width
 
-                    anchorItem: root.anchorItem
+                    model: modelData
+                }
 
-                    onContentHeightChanged: {
-                        calculateContentVisible()
-                    }
-
-                    onOpened: {
-                        calculateContentVisible()
-                    }
-
-                    function calculateContentVisible() {
-                        if (!isOpened) {
-                            return
-                        }
-
-                        var buttonGlobalPos = button.mapToItem(root.anchorItem, Qt.point(button.x, button.y))
-                        var popupHeight = contentHeight + padding*2 + margins*2
-                        var invisibleContentHeight = root.anchorItem.height - (buttonGlobalPos.y + button.height + popupHeight)
-
-                        root.ensureContentVisibleRequested(invisibleContentHeight)
-                    }
-
-                    NotationInspectorSectionLoader {
-                        id: loader
-                        width: parent.width
-
-                        model: modelData
-                    }
+                onEnsureContentVisibleRequested: {
+                    root.ensureContentVisibleRequested(invisibleContentHeight)
                 }
             }
         }
