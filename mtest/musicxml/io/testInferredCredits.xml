@@ -184,6 +184,15 @@ the video game: a tone poem
         <duration>8</duration>
         <voice>1</voice>
         </note>
+			<direction placement='above'>
+				<direction-type>
+					<words>This music has been legally downloaded.
+Do not photocopy.</words>
+					<words>
+</words>
+				</direction-type>
+				<staff>1</staff>
+			</direction>
       </measure>
     <measure number="4" width="161.62">
       <note>
