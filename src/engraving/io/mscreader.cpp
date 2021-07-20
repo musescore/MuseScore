@@ -300,20 +300,80 @@ QByteArray MscReader::DirReader::fileData(const QString& fileName) const
 
 bool MscReader::XmlFileReader::open(QIODevice* device, const QString& filePath)
 {
+    m_device = device;
+    if (!m_device) {
+        m_device = new QFile(filePath);
+        m_selfDeviceOwner = true;
+    }
+
+    if (!m_device->isOpen()) {
+        if (!m_device->open(QIODevice::ReadOnly)) {
+            LOGE() << "failed open file: " << filePath;
+            return false;
+        }
+    }
+
+    return true;
 }
 
 void MscReader::XmlFileReader::close()
 {
+    if (m_device) {
+        m_device->close();
+    }
 }
 
 bool MscReader::XmlFileReader::isOpened() const
 {
+    return m_device ? m_device->isOpen() : false;
 }
 
 QStringList MscReader::XmlFileReader::fileList() const
 {
+    if (!m_device) {
+        return QStringList();
+    }
+
+    QStringList files;
+
+    m_device->seek(0);
+    QXmlStreamReader xml(m_device);
+    while (xml.readNextStartElement()) {
+        if ("file" != xml.name()) {
+            xml.skipCurrentElement();
+            continue;
+        }
+
+        QStringRef fileName = xml.attributes().value("name");
+        files << fileName.toString();
+        xml.skipCurrentElement();
+    }
+
+    return files;
 }
 
 QByteArray MscReader::XmlFileReader::fileData(const QString& fileName) const
 {
+    if (!m_device) {
+        return QByteArray();
+    }
+
+    m_device->seek(0);
+    QXmlStreamReader xml(m_device);
+    while (xml.readNextStartElement()) {
+        if ("file" != xml.name()) {
+            xml.skipCurrentElement();
+            continue;
+        }
+
+        QStringRef file = xml.attributes().value("name");
+        if (file != fileName) {
+            continue;
+        }
+
+        QStringRef cdata = xml.text();
+        QByteArray data = cdata.toUtf8();
+        return data;
+    }
+    return QByteArray();
 }

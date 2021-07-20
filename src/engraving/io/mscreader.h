@@ -27,6 +27,7 @@
 #include <QIODevice>
 
 class MQZipReader;
+class QXmlStreamReader;
 
 namespace mu::engraving {
 class MscReader
@@ -107,6 +108,9 @@ private:
         bool isOpened() const override;
         QStringList fileList() const override;
         QByteArray fileData(const QString& fileName) const override;
+    private:
+        QIODevice* m_device = nullptr;
+        bool m_selfDeviceOwner = false;
     };
 
     struct Meta {

@@ -57,7 +57,7 @@ mu::Ret NotationProject::load(const io::path& path, const io::path& stylePath, b
     TRACEFUNC;
 
     std::string syffix = io::syffix(path);
-    if (syffix != "mscz" && syffix != "mscx") {
+    if (syffix != "mscz" && syffix != "mscx" && syffix != "mscf") {
         return doImport(path, stylePath, forceMode);
     }
 
@@ -66,6 +66,8 @@ mu::Ret NotationProject::load(const io::path& path, const io::path& stylePath, b
     params.mode = MscReader::Mode::Zip;
     if (syffix == "mscx") {
         params.mode = MscReader::Mode::Dir;
+    } else if (syffix == "mscf") {
+        params.mode = MscReader::Mode::XmlFile;
     }
 
     MscReader reader(params);
@@ -278,7 +280,7 @@ mu::Ret NotationProject::writeToDevice(io::Device* device)
 mu::Ret NotationProject::saveScore(const io::path& path, SaveMode saveMode)
 {
     std::string suffix = io::syffix(path);
-    if (suffix != "mscz" && suffix != "mscx" && !suffix.empty()) {
+    if (suffix != "mscz" && suffix != "mscx" && suffix != "mscf" && !suffix.empty()) {
         return exportProject(path, suffix);
     }
 
@@ -319,6 +321,8 @@ mu::Ret NotationProject::doSave(bool generateBackup)
     params.mode = MscWriter::Mode::Zip;
     if (suffix == "mscx") {
         params.mode = MscWriter::Mode::Dir;
+    } else if (suffix == "mscf") {
+        params.mode = MscWriter::Mode::XmlFile;
     }
 
     MscWriter msczWriter(params);
