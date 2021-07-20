@@ -21,11 +21,13 @@
  */
 #include "stafftextpropertiesdialog.h"
 
-#include "libmscore/score.h"
-#include "libmscore/stafftext.h"
-#include "libmscore/system.h"
-#include "libmscore/staff.h"
-#include "libmscore/segment.h"
+#include "engraving/libmscore/score.h"
+#include "engraving/libmscore/stafftext.h"
+#include "engraving/libmscore/system.h"
+#include "engraving/libmscore/staff.h"
+#include "engraving/libmscore/segment.h"
+
+#include "framework/global/widgetstatestore.h"
 
 #include <QSignalMapper>
 
@@ -291,6 +293,8 @@ StaffTextPropertiesDialog::StaffTextPropertiesDialog(QWidget* parent)
 
     m_curTabIndex = tabWidget->currentIndex();
     connect(tabWidget, SIGNAL(currentChanged(int)), SLOT(tabChanged(int)));
+
+    WidgetStateStore::restoreGeometry(this);
 }
 
 StaffTextPropertiesDialog::StaffTextPropertiesDialog(const StaffTextPropertiesDialog& other)
@@ -298,13 +302,15 @@ StaffTextPropertiesDialog::StaffTextPropertiesDialog(const StaffTextPropertiesDi
 {
 }
 
-//---------------------------------------------------------
-//   ~StaffTextPropertiesDialog
-//---------------------------------------------------------
-
 StaffTextPropertiesDialog::~StaffTextPropertiesDialog()
 {
     delete m_staffText;
+}
+
+void StaffTextPropertiesDialog::hideEvent(QHideEvent* event)
+{
+    WidgetStateStore::saveGeometry(this);
+    QDialog::hideEvent(event);
 }
 
 int StaffTextPropertiesDialog::static_metaTypeId()

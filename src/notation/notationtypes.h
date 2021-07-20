@@ -70,6 +70,7 @@ using SymbolId = Ms::SymId;
 using Key = Ms::Key;
 using KeyMode = Ms::KeyMode;
 using TimeSigType = Ms::TimeSigType;
+using TimeSignature = Ms::TimeSig;
 using Part = Ms::Part;
 using Staff = Ms::Staff;
 using NoteHead = Ms::NoteHead;

@@ -37,6 +37,8 @@ MenuItemList NotationContextMenu::items(const ElementType& elementType) const
         return staffTextItems();
     case ElementType::SYSTEM_TEXT:
         return systemTextItems();
+    case ElementType::TIMESIG:
+        return timeSignatureItems();
     default:
         break;
     }
@@ -90,6 +92,15 @@ MenuItemList NotationContextMenu::systemTextItems() const
     MenuItemList items = elementItems();
     items << makeSeparator();
     items << makeMenuItem("system-text-properties");
+
+    return items;
+}
+
+MenuItemList NotationContextMenu::timeSignatureItems() const
+{
+    MenuItemList items = elementItems();
+    items << makeSeparator();
+    items << makeMenuItem("time-signature-properties");
 
     return items;
 }

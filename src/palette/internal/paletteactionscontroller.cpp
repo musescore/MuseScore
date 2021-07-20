@@ -27,11 +27,13 @@ using namespace mu::ui;
 
 static const mu::UriQuery MASTER_PALETTE_URI("musescore://palette/masterpalette?sync=false");
 static const mu::UriQuery SPECIAL_CHARACTERS_URI("musescore://palette/specialcharacters?sync=false");
+static const mu::UriQuery TIME_SIGNATURE_PROPERTIES_URI("musescore://palette/timesignatureproperties");
 
 void PaletteActionsController::init()
 {
     dispatcher()->reg(this, "masterpalette", this, &PaletteActionsController::toggleMasterPalette);
     dispatcher()->reg(this, "show-keys", this, &PaletteActionsController::openSpecialCharactersDialog);
+    dispatcher()->reg(this, "time-signature-properties", this, &PaletteActionsController::openTimeSignaturePropertiesDialog);
 
     interactive()->currentUri().ch.onReceive(this, [this](const Uri& uri) {
         //! NOTE If MasterPalette are not open, then it is reasonably to compare with the current uri,
@@ -74,4 +76,9 @@ void PaletteActionsController::toggleMasterPalette(const actions::ActionData& ar
 void PaletteActionsController::openSpecialCharactersDialog()
 {
     interactive()->open(SPECIAL_CHARACTERS_URI);
+}
+
+void PaletteActionsController::openTimeSignaturePropertiesDialog()
+{
+    interactive()->open(TIME_SIGNATURE_PROPERTIES_URI);
 }

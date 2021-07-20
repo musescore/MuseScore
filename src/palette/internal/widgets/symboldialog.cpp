@@ -30,7 +30,6 @@
 #include "libmscore/element.h"
 #include "libmscore/symbol.h"
 
-#include "palette/palettecreator.h"
 #include "palette/palette.h"
 
 #include "smuflranges.h"
