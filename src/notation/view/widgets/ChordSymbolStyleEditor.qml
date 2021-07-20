@@ -92,7 +92,7 @@ Rectangle {
 
         // To be modified still
         StyledTextLabel {
-            text: qsTrc("notation", "Adjust settings for ")
+            text: qsTrc("notation", "Adjustments")
         }
 
         TabBar {

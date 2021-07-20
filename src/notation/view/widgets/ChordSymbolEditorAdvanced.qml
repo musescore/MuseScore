@@ -50,6 +50,19 @@ Flickable {
             width: (content.width - content.spacing) / 2
             spacing: 18
 
+            LabelledSpinBox {
+                id: chordScalingSpinBox
+                width: Math.min(126, (parent.width - parent.spacing) / 2)
+                text: qsTrc("notation", "Chord Symbol Scaling")
+
+                currentValue: root.editorModel.chordSymbolScaling
+                step: 10
+                minValue: 1
+                maxValue: 100
+
+                onValueEdited: root.editorModel.setProperty("chordSymbolScaling", newValue)
+            }
+
             StyledTextLabel{
                 text: qsTrc("notation", "Quality")
                 font: ui.theme.bodyBoldFont
@@ -256,6 +269,16 @@ Flickable {
                 maxValue: 11
 
                 onValueEdited: root.editorModel.setProperty("capoPosition", newValue)
+            }
+            FlatButton{
+                id: chordSymbolFont
+                text: qsTrc("notation","Change chord symbol font NW")
+                onClicked: root.editorModel.resetProperties()
+            }
+            FlatButton{
+                id: resetProperties
+                text: qsTrc("notation","Reset settings to default")
+                onClicked: root.editorModel.resetProperties()
             }
         }
         Column{

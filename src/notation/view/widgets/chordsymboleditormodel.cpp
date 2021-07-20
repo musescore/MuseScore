@@ -288,6 +288,11 @@ qreal ChordSymbolEditorModel::addOmitParentheses() const
     return m_addOmitParentheses;
 }
 
+qreal ChordSymbolEditorModel::chordSymbolScaling() const
+{
+    return m_chordSymbolScaling;
+}
+
 void ChordSymbolEditorModel::setStyleR(Ms::Sid id, qreal val)
 {
     globalContext()->currentNotation()->style()->setStyleValue(id, val);
@@ -471,6 +476,8 @@ void ChordSymbolEditorModel::setPropertiesOnStyleChange()
         m_suspensionsParentheses = m_selectionHistory.value(currentStyle).value("susParen").toReal();
         m_minMajParentheses = m_selectionHistory.value(currentStyle).value("minMajParen").toReal();
         m_addOmitParentheses = m_selectionHistory.value(currentStyle).value("addOmitParen").toReal();
+
+        m_chordSymbolScaling = m_selectionHistory.value(currentStyle).value("chordSymbolScaling").toReal();
     } else {
         // Set the defaults
         m_chordSpellingIndex = 0; // Standard
@@ -501,6 +508,8 @@ void ChordSymbolEditorModel::setPropertiesOnStyleChange()
         m_suspensionsParentheses = 1.0;
         m_minMajParentheses = 1.0;
         m_addOmitParentheses = 1.0;
+
+        m_chordSymbolScaling = 100;
     }
     setChordSpelling(m_chordSpellingList[m_chordSpellingIndex]);
 
@@ -531,6 +540,9 @@ void ChordSymbolEditorModel::setPropertiesOnStyleChange()
     setStyleB(Ms::Sid::chordMinMajParentheses, (m_minMajParentheses == 1));
     setStyleB(Ms::Sid::chordAddOmitParentheses, (m_addOmitParentheses == 1));
 
+    int defaultSize = globalContext()->currentNotation()->style()->defaultStyleValue(Ms::Sid::chordSymbolAFontSize).toInt();
+    setStyleR(Ms::Sid::chordSymbolAFontSize, (m_chordSymbolScaling * defaultSize) / 100);
+
     emit chordSpellingIndexChanged();
 
     emit qualityMagChanged();
@@ -559,6 +571,8 @@ void ChordSymbolEditorModel::setPropertiesOnStyleChange()
     emit suspensionsParenthesesChanged();
     emit minMajParenthesesChanged();
     emit addOmitParenthesesChanged();
+
+    emit chordSymbolScalingChanged();
 }
 
 void ChordSymbolEditorModel::setQualitySymbolsLists()
@@ -852,8 +866,112 @@ void ChordSymbolEditorModel::setProperty(QString property, qreal val)
         globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordAddOmitParentheses, addOmitParentheses);
         m_addOmitParentheses = val;
         emit addOmitParenthesesChanged();
+    } else if (property == "chordSymbolScaling") {
+        // TODO: What about chordSymbolBFontSize???
+        int defaultSize = globalContext()->currentNotation()->style()->defaultStyleValue(Ms::Sid::chordSymbolAFontSize).toInt();
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordSymbolAFontSize, (defaultSize * val) / 100);
+        m_chordSymbolScaling = val;
+        emit chordSymbolScalingChanged();
     }
     updateSelectionHistory(m_styles[m_currentStyleIndex].styleName);
+}
+
+void ChordSymbolEditorModel::resetProperties()
+{
+    // Set the defaults
+    // TODO: Change it so that the default values are received from the style class
+
+    m_qualityMag = 1.0;
+    m_qualityAdjust = 0.0;
+    m_extensionMag = 1.0;
+    m_extensionAdjust = 0.0;
+    m_modifierMag = 1.0;
+    m_modifierAdjust = 0.0;
+
+    m_harmonyFretDistance = 1.0;
+    m_minHarmonyDistance = 0.5;
+    m_maxHarmonyBarDistance = 3.0;
+    m_maxChordShiftAbove = 0.0;
+    m_maxChordShiftBelow = 0.0;
+    m_capoFretPosition = 0.0;
+
+    m_stackModifiers = 1.0;
+
+    m_autoCapitalization = 1.0;
+    m_minorRootCapitalization = 1.0;
+    m_qualitySymbolsCapitalization = 1.0;
+    m_bassNotesCapitalization = 1.0;
+    m_solfegeNotesCapitalization = 0.0;
+
+    m_alterationsParentheses = 1.0;
+    m_suspensionsParentheses = 1.0;
+    m_minMajParentheses = 1.0;
+    m_addOmitParentheses = 1.0;
+
+    m_chordSymbolScaling = 100;
+
+    setStyleR(Ms::Sid::chordQualityMag, m_qualityMag);
+    setStyleR(Ms::Sid::chordQualityAdjust, m_qualityAdjust);
+    setStyleR(Ms::Sid::chordExtensionMag, m_extensionMag);
+    setStyleR(Ms::Sid::chordExtensionAdjust, m_extensionAdjust);
+    setStyleR(Ms::Sid::chordModifierMag, m_modifierMag);
+    setStyleR(Ms::Sid::chordModifierAdjust, m_modifierAdjust);
+
+    setStyleR(Ms::Sid::harmonyFretDist, m_harmonyFretDistance);
+    setStyleR(Ms::Sid::minHarmonyDistance, m_minHarmonyDistance);
+    setStyleR(Ms::Sid::maxHarmonyBarDistance, m_maxHarmonyBarDistance);
+    setStyleR(Ms::Sid::maxChordShiftAbove, m_maxChordShiftAbove);
+    setStyleR(Ms::Sid::maxChordShiftBelow, m_maxChordShiftBelow);
+    setStyleR(Ms::Sid::capoPosition, m_capoFretPosition);
+
+    setStyleB(Ms::Sid::stackModifiers, (m_stackModifiers == 1));
+
+    setStyleB(Ms::Sid::automaticCapitalization, (m_autoCapitalization == 1));
+    setStyleB(Ms::Sid::lowerCaseMinorChords, !(m_minorRootCapitalization == 1));
+    setStyleB(Ms::Sid::lowerCaseQualitySymbols, !(m_qualitySymbolsCapitalization == 1));
+    setStyleB(Ms::Sid::lowerCaseBassNotes, !(m_bassNotesCapitalization == 1));
+    setStyleB(Ms::Sid::allCapsNoteNames, (m_solfegeNotesCapitalization == 1));
+
+    setStyleB(Ms::Sid::chordAlterationsParentheses, (m_alterationsParentheses == 1));
+    setStyleB(Ms::Sid::chordSuspensionsParentheses, (m_suspensionsParentheses == 1));
+    setStyleB(Ms::Sid::chordMinMajParentheses, (m_minMajParentheses == 1));
+    setStyleB(Ms::Sid::chordAddOmitParentheses, (m_addOmitParentheses == 1));
+
+    int defaultSize = globalContext()->currentNotation()->style()->defaultStyleValue(Ms::Sid::chordSymbolAFontSize).toInt();
+    setStyleR(Ms::Sid::chordSymbolAFontSize, (m_chordSymbolScaling * defaultSize) / 100);
+
+    updateSelectionHistory(m_styles[m_currentStyleIndex].styleName);
+
+    emit chordSpellingIndexChanged();
+
+    emit qualityMagChanged();
+    emit qualityAdjustChanged();
+    emit extensionMagChanged();
+    emit extensionAdjustChanged();
+    emit modifierMagChanged();
+    emit modifierAdjustChanged();
+
+    emit harmonyFretDistanceChanged();
+    emit minHarmonyDistanceChanged();
+    emit maxHarmonyBarDistanceChanged();
+    emit maxChordShiftAboveChanged();
+    emit maxChordShiftBelowChanged();
+    emit capoFretPositionChanged();
+
+    emit stackModifiersChanged();
+
+    emit autoCapitalizationChanged();
+    emit minorRootCapitalizationChanged();
+    emit qualitySymbolsCapitalizationChanged();
+    emit bassNotesCapitalizationChanged();
+    emit solfegeNotesCapitalizationChanged();
+
+    emit alterationsParenthesesChanged();
+    emit suspensionsParenthesesChanged();
+    emit minMajParenthesesChanged();
+    emit addOmitParenthesesChanged();
+
+    emit chordSymbolScalingChanged();
 }
 
 void ChordSymbolEditorModel::stringifyAndSaveSelectionHistory()
@@ -942,6 +1060,8 @@ void ChordSymbolEditorModel::updateSelectionHistory(QString currentStyle)
     propMap.insert("susParen", QVariant(m_suspensionsParentheses));
     propMap.insert("minMajParen", QVariant(m_minMajParentheses));
     propMap.insert("addOmitParen", QVariant(m_addOmitParentheses));
+
+    propMap.insert("chordSymbolScaling", QVariant(m_chordSymbolScaling));
 
     m_selectionHistory.insert(currentStyle, propMap);
     stringifyAndSaveSelectionHistory();

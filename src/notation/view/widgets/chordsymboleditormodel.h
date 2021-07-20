@@ -82,6 +82,8 @@ class ChordSymbolEditorModel : public QAbstractListModel
     Q_PROPERTY(qreal minMajParentheses READ minMajParentheses NOTIFY minMajParenthesesChanged)
     Q_PROPERTY(qreal addOmitParentheses READ addOmitParentheses NOTIFY addOmitParenthesesChanged)
 
+    Q_PROPERTY(qreal chordSymbolScaling READ chordSymbolScaling NOTIFY chordSymbolScalingChanged)
+
 public:
     ChordSymbolEditorModel(QObject* parent = nullptr);
 
@@ -134,6 +136,8 @@ public:
     qreal minMajParentheses() const;
     qreal addOmitParentheses() const;
 
+    qreal chordSymbolScaling() const;
+
     void initCurrentStyleIndex();
     void setQualitySymbolsOnStyleChange();
     void setPropertiesOnStyleChange();
@@ -149,6 +153,7 @@ public:
     Q_INVOKABLE void setChordSpelling(QString spelling);
     Q_INVOKABLE void setQualitySymbol(QString quality, QString symbol);
     Q_INVOKABLE void setProperty(QString property, qreal val);
+    Q_INVOKABLE void resetProperties();
 
 signals:
     void chordSpellingListChanged();
@@ -195,6 +200,8 @@ signals:
     void suspensionsParenthesesChanged();
     void minMajParenthesesChanged();
     void addOmitParenthesesChanged();
+
+    void chordSymbolScalingChanged();
 
 private:
     enum RoleNames {
@@ -252,6 +259,8 @@ private:
     qreal m_suspensionsParentheses;
     qreal m_minMajParentheses;
     qreal m_addOmitParentheses;
+
+    qreal m_chordSymbolScaling;
 
     QHash<QString, Ms::Sid> chordSpellingMap = {
         { "Standard", Ms::Sid::useStandardNoteNames },
