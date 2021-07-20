@@ -128,8 +128,14 @@ EditDrumsetDialog::EditDrumsetDialog(QWidget* parent)
 {
     setObjectName(EDIT_DRUMSET_DIALOG_NAME);
 
-    //!FIXME
-    //nDrumset = *ds;
+    const INotationPtr notation = globalContext()->currentNotation();
+    const INotationInteractionPtr interaction = notation ? notation->interaction() : nullptr;
+    INotationInteraction::HitElementContext context = interaction ? interaction->hitElementContext() : INotationInteraction::HitElementContext();
+    const Measure* measure = toMeasure(context.element);
+
+    if (measure && context.staff) {
+        m_editedDrumset = *context.staff->part()->instrument(measure->tick())->drumset();
+    }
 
     setupUi(this);
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -250,23 +256,6 @@ int EditDrumsetDialog::static_metaTypeId()
     return QMetaType::type(EDIT_DRUMSET_DIALOG_NAME.toStdString().c_str());
 }
 
-int EditDrumsetDialog::staffIdx() const
-{
-    return m_staffIdx;
-}
-
-void EditDrumsetDialog::setStaffIdx(int staffIdx)
-{
-    m_staffIdx = staffIdx;
-    emit staffIdxChanged();
-}
-
-Staff* EditDrumsetDialog::staff() const
-{
-    const INotationPtr notation = globalContext()->currentNotation();
-    return notation ? notation->elements()->msScore()->staff(m_staffIdx) : nullptr;
-}
-
 //---------------------------------------------------------
 //   customGboxToggled
 //---------------------------------------------------------
@@ -292,13 +281,13 @@ void EditDrumsetDialog::updatePitchesList()
         QTreeWidgetItem* item = new EditDrumsetTreeWidgetItem(pitchList);
         item->setText(Column::PITCH, QString("%1").arg(i));
         item->setText(Column::NOTE, pitch2string(i));
-        if (nDrumset.shortcut(i) == 0) {
+        if (m_editedDrumset.shortcut(i) == 0) {
             item->setText(Column::SHORTCUT, "");
         } else {
-            QString s(QChar(nDrumset.shortcut(i)));
+            QString s(QChar(m_editedDrumset.shortcut(i)));
             item->setText(Column::SHORTCUT, s);
         }
-        item->setText(Column::NAME, mu::qtrc("drumset", nDrumset.name(i).toUtf8().constData()));
+        item->setText(Column::NAME, mu::qtrc("drumset", m_editedDrumset.name(i).toUtf8().constData()));
         item->setData(Column::PITCH, Qt::UserRole, i);
     }
     pitchList->sortItems(3, Qt::SortOrder::DescendingOrder);
@@ -312,13 +301,13 @@ void EditDrumsetDialog::refreshPitchesList()
     for (int i = 0; i < pitchList->topLevelItemCount(); ++i) {
         QTreeWidgetItem* item = pitchList->topLevelItem(i);
         int pitch = item->data(0, Qt::UserRole).toInt();
-        if (nDrumset.shortcut(pitch) == 0) {
+        if (m_editedDrumset.shortcut(pitch) == 0) {
             item->setText(Column::SHORTCUT, "");
         } else {
-            QString s(QChar(nDrumset.shortcut(pitch)));
+            QString s(QChar(m_editedDrumset.shortcut(pitch)));
             item->setText(Column::SHORTCUT, s);
         }
-        item->setText(Column::NAME, mu::qtrc("drumset", nDrumset.name(pitch).toUtf8().constData()));
+        item->setText(Column::NAME, mu::qtrc("drumset", m_editedDrumset.name(pitch).toUtf8().constData()));
         item->setData(0, Qt::UserRole, pitch);
     }
 }
@@ -350,11 +339,11 @@ void EditDrumsetDialog::nameChanged(const QString& n)
         item->setText(Column::NAME, n);
         int pitch = item->data(Column::PITCH, Qt::UserRole).toInt();
         if (!n.isEmpty()) {
-            if (!nDrumset.isValid(pitch)) {
+            if (!m_editedDrumset.isValid(pitch)) {
                 noteHead->setCurrentIndex(0);
             }
         } else {
-            nDrumset.drum(pitch).name.clear();
+            m_editedDrumset.drum(pitch).name.clear();
         }
     }
     setEnabledPitchControls(!n.isEmpty());
@@ -379,7 +368,7 @@ void EditDrumsetDialog::shortcutChanged()
         sc = "ABCDEFG"[shortcut->currentIndex()];
     }
 
-    if (QString(QChar(nDrumset.drum(pitch).shortcut)) != shortcut->currentText()) {
+    if (QString(QChar(m_editedDrumset.drum(pitch).shortcut)) != shortcut->currentText()) {
         //
         // remove conflicting shortcuts
         //
@@ -387,11 +376,11 @@ void EditDrumsetDialog::shortcutChanged()
             if (i == pitch) {
                 continue;
             }
-            if (nDrumset.drum(i).shortcut == sc) {
-                nDrumset.drum(i).shortcut = 0;
+            if (m_editedDrumset.drum(i).shortcut == sc) {
+                m_editedDrumset.drum(i).shortcut = 0;
             }
         }
-        nDrumset.drum(pitch).shortcut = sc;
+        m_editedDrumset.drum(pitch).shortcut = sc;
         if (shortcut->currentIndex() == 7) {
             item->setText(Column::SHORTCUT, "");
         } else {
@@ -438,22 +427,22 @@ void EditDrumsetDialog::apply()
 //---------------------------------------------------------
 void EditDrumsetDialog::fillCustomNoteheadsDataFromComboboxes(int pitch)
 {
-    nDrumset.drum(pitch).notehead = NoteHead::Group::HEAD_CUSTOM;
-    nDrumset.drum(pitch).noteheads[int(NoteHead::Type::HEAD_WHOLE)] = Sym::name2id(wholeCmb->currentData().toString());
-    nDrumset.drum(pitch).noteheads[int(NoteHead::Type::HEAD_QUARTER)] = Sym::name2id(quarterCmb->currentData().toString());
-    nDrumset.drum(pitch).noteheads[int(NoteHead::Type::HEAD_HALF)] = Sym::name2id(halfCmb->currentData().toString());
-    nDrumset.drum(pitch).noteheads[int(NoteHead::Type::HEAD_BREVIS)] = Sym::name2id(doubleWholeCmb->currentData().toString());
+    m_editedDrumset.drum(pitch).notehead = NoteHead::Group::HEAD_CUSTOM;
+    m_editedDrumset.drum(pitch).noteheads[int(NoteHead::Type::HEAD_WHOLE)] = Sym::name2id(wholeCmb->currentData().toString());
+    m_editedDrumset.drum(pitch).noteheads[int(NoteHead::Type::HEAD_QUARTER)] = Sym::name2id(quarterCmb->currentData().toString());
+    m_editedDrumset.drum(pitch).noteheads[int(NoteHead::Type::HEAD_HALF)] = Sym::name2id(halfCmb->currentData().toString());
+    m_editedDrumset.drum(pitch).noteheads[int(NoteHead::Type::HEAD_BREVIS)] = Sym::name2id(doubleWholeCmb->currentData().toString());
 }
 
 void EditDrumsetDialog::fillNoteheadsComboboxes(bool customGroup, int pitch)
 {
     if (customGroup) {
-        wholeCmb->setCurrentIndex(quarterCmb->findData(Sym::id2name(nDrumset.noteHeads(pitch, NoteHead::Type::HEAD_WHOLE))));
-        halfCmb->setCurrentIndex(quarterCmb->findData(Sym::id2name(nDrumset.noteHeads(pitch, NoteHead::Type::HEAD_HALF))));
-        quarterCmb->setCurrentIndex(quarterCmb->findData(Sym::id2name(nDrumset.noteHeads(pitch, NoteHead::Type::HEAD_QUARTER))));
-        doubleWholeCmb->setCurrentIndex(quarterCmb->findData(Sym::id2name(nDrumset.noteHeads(pitch, NoteHead::Type::HEAD_BREVIS))));
+        wholeCmb->setCurrentIndex(quarterCmb->findData(Sym::id2name(m_editedDrumset.noteHeads(pitch, NoteHead::Type::HEAD_WHOLE))));
+        halfCmb->setCurrentIndex(quarterCmb->findData(Sym::id2name(m_editedDrumset.noteHeads(pitch, NoteHead::Type::HEAD_HALF))));
+        quarterCmb->setCurrentIndex(quarterCmb->findData(Sym::id2name(m_editedDrumset.noteHeads(pitch, NoteHead::Type::HEAD_QUARTER))));
+        doubleWholeCmb->setCurrentIndex(quarterCmb->findData(Sym::id2name(m_editedDrumset.noteHeads(pitch, NoteHead::Type::HEAD_BREVIS))));
     } else {
-        const auto group = nDrumset.drum(pitch).notehead;
+        const auto group = m_editedDrumset.drum(pitch).notehead;
         if (group == NoteHead::Group::HEAD_INVALID) {
             return;
         }
@@ -472,25 +461,25 @@ void EditDrumsetDialog::itemChanged(QTreeWidgetItem* current, QTreeWidgetItem* p
 {
     if (previous) {
         int pitch = previous->data(0, Qt::UserRole).toInt();
-        nDrumset.drum(pitch).name          = name->text();
+        m_editedDrumset.drum(pitch).name          = name->text();
         if (customGbox->isChecked()) {
             fillCustomNoteheadsDataFromComboboxes(pitch);
         } else {
             const QVariant currData = noteHead->currentData();
             if (currData.isValid()) {
-                nDrumset.drum(pitch).notehead = NoteHead::Group(currData.toInt());
+                m_editedDrumset.drum(pitch).notehead = NoteHead::Group(currData.toInt());
             }
         }
 
-        nDrumset.drum(pitch).line          = staffLine->value();
-        nDrumset.drum(pitch).voice         = voice->currentIndex();
+        m_editedDrumset.drum(pitch).line          = staffLine->value();
+        m_editedDrumset.drum(pitch).voice         = voice->currentIndex();
         if (shortcut->currentIndex() == 7) {
-            nDrumset.drum(pitch).shortcut = 0;
+            m_editedDrumset.drum(pitch).shortcut = 0;
         } else {
-            nDrumset.drum(pitch).shortcut = "ABCDEFG"[shortcut->currentIndex()];
+            m_editedDrumset.drum(pitch).shortcut = "ABCDEFG"[shortcut->currentIndex()];
         }
-        nDrumset.drum(pitch).stemDirection = Direction(stemDirection->currentIndex());
-        previous->setText(Column::NAME, mu::qtrc("drumset", nDrumset.name(pitch).toUtf8().constData()));
+        m_editedDrumset.drum(pitch).stemDirection = Direction(stemDirection->currentIndex());
+        previous->setText(Column::NAME, mu::qtrc("drumset", m_editedDrumset.name(pitch).toUtf8().constData()));
     }
     if (current == 0) {
         return;
@@ -502,23 +491,23 @@ void EditDrumsetDialog::itemChanged(QTreeWidgetItem* current, QTreeWidgetItem* p
     noteHead->blockSignals(true);
 
     int pitch = current->data(0, Qt::UserRole).toInt();
-    name->setText(mu::qtrc("drumset", nDrumset.name(pitch).toUtf8().constData()));
-    staffLine->setValue(nDrumset.line(pitch));
-    voice->setCurrentIndex(nDrumset.voice(pitch));
-    stemDirection->setCurrentIndex(int(nDrumset.stemDirection(pitch)));
+    name->setText(mu::qtrc("drumset", m_editedDrumset.name(pitch).toUtf8().constData()));
+    staffLine->setValue(m_editedDrumset.line(pitch));
+    voice->setCurrentIndex(m_editedDrumset.voice(pitch));
+    stemDirection->setCurrentIndex(int(m_editedDrumset.stemDirection(pitch)));
 
-    NoteHead::Group nh = nDrumset.noteHead(pitch);
+    NoteHead::Group nh = m_editedDrumset.noteHead(pitch);
     bool isCustomGroup = (nh == NoteHead::Group::HEAD_CUSTOM);
-    if (nDrumset.isValid(pitch)) {
+    if (m_editedDrumset.isValid(pitch)) {
         setCustomNoteheadsGUIEnabled(isCustomGroup);
     }
     noteHead->setCurrentIndex(noteHead->findData(int(nh)));
     fillNoteheadsComboboxes(isCustomGroup, pitch);
 
-    if (nDrumset.shortcut(pitch) == 0) {
+    if (m_editedDrumset.shortcut(pitch) == 0) {
         shortcut->setCurrentIndex(7);
     } else {
-        shortcut->setCurrentIndex(nDrumset.shortcut(pitch) - 'A');
+        shortcut->setCurrentIndex(m_editedDrumset.shortcut(pitch) - 'A');
     }
 
     staffLine->blockSignals(false);
@@ -550,24 +539,24 @@ void EditDrumsetDialog::valueChanged()
         return;
     }
     int pitch = pitchList->currentItem()->data(Column::PITCH, Qt::UserRole).toInt();
-    nDrumset.drum(pitch).name          = name->text();
+    m_editedDrumset.drum(pitch).name          = name->text();
     if (customGbox->isChecked() || noteHead->currentIndex() == noteHead->findData(int(NoteHead::Group::HEAD_CUSTOM))) {
         fillCustomNoteheadsDataFromComboboxes(pitch);
         setCustomNoteheadsGUIEnabled(true);
     } else {
-        nDrumset.drum(pitch).notehead = NoteHead::Group(noteHead->currentData().toInt());
+        m_editedDrumset.drum(pitch).notehead = NoteHead::Group(noteHead->currentData().toInt());
         fillNoteheadsComboboxes(false, pitch);
         setCustomNoteheadsGUIEnabled(false);
     }
 
-    nDrumset.drum(pitch).line          = staffLine->value();
-    nDrumset.drum(pitch).voice         = voice->currentIndex();
-    nDrumset.drum(pitch).stemDirection = Direction(stemDirection->currentIndex());
-    if (QString(QChar(nDrumset.drum(pitch).shortcut)) != shortcut->currentText()) {
+    m_editedDrumset.drum(pitch).line          = staffLine->value();
+    m_editedDrumset.drum(pitch).voice         = voice->currentIndex();
+    m_editedDrumset.drum(pitch).stemDirection = Direction(stemDirection->currentIndex());
+    if (QString(QChar(m_editedDrumset.drum(pitch).shortcut)) != shortcut->currentText()) {
         if (shortcut->currentText().isEmpty()) {
-            nDrumset.drum(pitch).shortcut = 0;
+            m_editedDrumset.drum(pitch).shortcut = 0;
         } else {
-            nDrumset.drum(pitch).shortcut = shortcut->currentText().at(0).toLatin1();
+            m_editedDrumset.drum(pitch).shortcut = shortcut->currentText().at(0).toLatin1();
         }
     }
     updateExample();
@@ -579,14 +568,14 @@ void EditDrumsetDialog::valueChanged()
 void EditDrumsetDialog::updateExample()
 {
     int pitch = pitchList->currentItem()->data(0, Qt::UserRole).toInt();
-    if (!nDrumset.isValid(pitch)) {
+    if (!m_editedDrumset.isValid(pitch)) {
         drumNote->add(0,  0, "");
         return;
     }
-    int line      = nDrumset.line(pitch);
-    NoteHead::Group nh = nDrumset.noteHead(pitch);
-    int v         = nDrumset.voice(pitch);
-    Direction dir = nDrumset.stemDirection(pitch);
+    int line      = m_editedDrumset.line(pitch);
+    NoteHead::Group nh = m_editedDrumset.noteHead(pitch);
+    int v         = m_editedDrumset.voice(pitch);
+    Direction dir = m_editedDrumset.stemDirection(pitch);
     bool up = (Direction::UP == dir) || (Direction::AUTO == dir && line > 4);
     std::shared_ptr<Chord> chord = std::make_shared<Chord>(gscore);
     chord->setDurationType(TDuration::DurationType::V_QUARTER);
@@ -607,7 +596,7 @@ void EditDrumsetDialog::updateExample()
     Stem* stem = new Stem(gscore);
     stem->setLen((up ? -3.0 : 3.0) * gscore->spatium());
     chord->add(stem);
-    drumNote->add(0,  chord, mu::qtrc("drumset", nDrumset.name(pitch).toUtf8().constData()));
+    drumNote->add(0,  chord, mu::qtrc("drumset", m_editedDrumset.name(pitch).toUtf8().constData()));
 }
 
 //---------------------------------------------------------
@@ -630,7 +619,7 @@ void EditDrumsetDialog::load()
     }
 
     XmlReader e(&fp);
-    nDrumset.clear();
+    m_editedDrumset.clear();
     while (e.readNextStartElement()) {
         if (e.name() == "museScore") {
             if (e.attribute("version") != MSC_VERSION) {
@@ -647,7 +636,7 @@ void EditDrumsetDialog::load()
             }
             while (e.readNextStartElement()) {
                 if (e.name() == "Drum") {
-                    nDrumset.load(e);
+                    m_editedDrumset.load(e);
                 } else {
                     e.unknown();
                 }
@@ -682,7 +671,7 @@ void EditDrumsetDialog::save()
     XmlWriter xml(0, &f);
     xml.header();
     xml.stag("museScore version=\"" MSC_VERSION "\"");
-    nDrumset.save(xml);
+    m_editedDrumset.save(xml);
     xml.etag();
     if (f.error() != QFile::NoError) {
         QString s = mu::qtrc("palette", "Write File failed: %1").arg(f.errorString());

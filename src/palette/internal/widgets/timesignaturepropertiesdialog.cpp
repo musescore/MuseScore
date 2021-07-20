@@ -68,9 +68,8 @@ TimeSignaturePropertiesDialog::TimeSignaturePropertiesDialog(QWidget* parent)
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     const INotationInteractionPtr interaction = notation() ? notation()->interaction() : nullptr;
-    const INotationSelectionPtr selection = interaction ? interaction->selection() : nullptr;
-    Element* selectedElement = selection ? selection->element() : nullptr;
-    m_originTimeSig = selectedElement ? toTimeSig(selectedElement) : nullptr;
+    Element* element = interaction ? interaction->hitElementContext().element : nullptr;
+    m_originTimeSig = element ? toTimeSig(element) : nullptr;
 
     if (!m_originTimeSig) {
         return;

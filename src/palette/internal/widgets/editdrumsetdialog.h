@@ -44,21 +44,11 @@ class EditDrumsetDialog : public QDialog, private Ui::EditDrumsetDialog
     INJECT(Ms, mu::context::IGlobalContext, globalContext)
     INJECT(Ms, mu::notation::INotationConfiguration, notationConfiguration)
 
-    Q_PROPERTY(int staffIdx READ staffIdx WRITE setStaffIdx NOTIFY staffIdxChanged)
-
 public:
     EditDrumsetDialog(QWidget* parent = nullptr);
     EditDrumsetDialog(const EditDrumsetDialog& other);
 
     static int static_metaTypeId();
-
-    int staffIdx() const;
-
-public slots:
-    void setStaffIdx(int staffIdx);
-
-signals:
-    void staffIdxChanged();
 
 private slots:
     void bboxClicked(QAbstractButton* button);
@@ -72,10 +62,6 @@ private slots:
     void customQuarterChanged(int);
 
 private:
-    Staff* staff() const;
-
-    Drumset nDrumset;
-
     void apply();
     void updatePitchesList();
     void refreshPitchesList();
@@ -87,7 +73,7 @@ private:
     void setEnabledPitchControls(bool enable);
     void fillNoteheadsComboboxes(bool customGroup, int pitch);
 
-    int m_staffIdx = 0;
+    Drumset m_editedDrumset;
 };
 } // namespace Ms
 
