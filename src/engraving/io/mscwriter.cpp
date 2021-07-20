@@ -343,8 +343,7 @@ bool MscWriter::XmlFileWriter::open(QIODevice* device, const QString& filePath)
     m_stream = new QTextStream(m_device);
 
     // Write header
-    // m_stream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-    // m_stream << "<museScore version=" 3.02 ">";
+    *m_stream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" << Qt::endl;
 
     return true;
 }
@@ -367,4 +366,23 @@ bool MscWriter::XmlFileWriter::isOpened() const
 
 bool MscWriter::XmlFileWriter::addFileData(const QString& fileName, const QByteArray& data)
 {
+    if (!m_stream) {
+        return false;
+    }
+
+    static QList<QString> supportedExts = { "mscx", "json", "mss" };
+    QString ext = QFileInfo(fileName).suffix();
+    if (!supportedExts.contains(ext)) {
+        NOT_SUPPORTED << fileName;
+        return true; // not error
+    }
+
+    QTextStream& ts = *m_stream;
+    ts << "<file name=\"" << fileName << "\">" << Qt::endl;
+    ts << "<![CDATA[" << Qt::endl;
+    ts << data << Qt::endl;
+    ts << "]]>" << Qt::endl;
+    ts << "</file>" << Qt::endl;
+
+    return true;
 }
