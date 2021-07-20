@@ -2877,14 +2877,10 @@ void MusicXMLParserDirection::direction(const QString& partId,
       if (isLyricBracket())
             return;
       else if (isLikelyCredit(tick)) {
-            Text* t = new Text(_score, Tid::COMPOSER);
-            t->setXmlText(_wordsText.trimmed());
-            auto firstMeasure = _score->measures()->first();
-            VBox* vbox = firstMeasure->isVBox() ? toVBox(firstMeasure) : MusicXMLParserPass1::createAndAddVBoxForCreditWords(_score);
-            t->layout();
-            vbox->layout();
-            vbox->setBoxHeight(vbox->boxHeight() + Spatium(t->height()/_score->spatium())/2); // add some height
-            vbox->add(t);
+            addTextToHeader(Tid::COMPOSER);
+            }
+      else if (isLikelySource(tick)) {
+            addTextToHeader(Tid::SUBTITLE);
             }
       else if (_wordsText != "" || _rehearsalText != "" || _metroText != "") {
             TextBase* t = 0;
@@ -3363,6 +3359,19 @@ bool MusicXMLParserDirection::isLikelyFingering() const
       }
 
 //---------------------------------------------------------
+//   isLikelySource
+//---------------------------------------------------------
+
+bool MusicXMLParserDirection::isLikelySource(const Fraction& tick) const
+      {
+      return (tick + _offset < Fraction(5, 1)) // Only early in the piece
+            && _rehearsalText == ""
+            && _metroText == ""
+            && _tpoSound < 0.1
+            && _wordsText.contains(QRegularExpression("^\\s*[Ff]rom\\s+(?!$)"));
+      }
+
+//---------------------------------------------------------
 //   isLikelyCredit
 //---------------------------------------------------------
 
@@ -3373,6 +3382,19 @@ bool MusicXMLParserDirection::isLikelyCredit(const Fraction& tick) const
             && _metroText == ""
             && _tpoSound < 0.1
             && _wordsText.contains(QRegularExpression("^\\s*((Words|Music|Lyrics).*)*by\\s+([A-Z][a-zA-Zö'’-]+\\s[A-Z][a-zA-Zös'’-]+.*)+"));
+      }
+
+Text* MusicXMLParserDirection::addTextToHeader(const Tid tid) const
+      {
+      Text* t = new Text(_score, tid);
+      t->setXmlText(_wordsText.trimmed());
+      auto firstMeasure = _score->measures()->first();
+      VBox* vbox = firstMeasure->isVBox() ? toVBox(firstMeasure) : MusicXMLParserPass1::createAndAddVBoxForCreditWords(_score);
+      t->layout();
+      vbox->layout();
+      vbox->setBoxHeight(vbox->boxHeight() + Spatium(t->height()/_score->spatium())); // add the height of the text
+      vbox->add(t);
+      return t; 
       }
 
 //---------------------------------------------------------

@@ -410,6 +410,8 @@ private:
       bool isLikelyFingering() const;
       bool isLikelyCredit(const Fraction& tick) const;
       bool isLyricBracket() const;
+      bool isLikelySource(const Fraction& tick) const;
+      Text* addTextToHeader(const Tid tid) const;
       void textToDynamic(QString& text) const;
       bool directionToDynamic();
       bool isLikelyTempoText();
