@@ -61,12 +61,14 @@ mu::Ret NotationProject::load(const io::path& path, const io::path& stylePath, b
         return doImport(path, stylePath, forceMode);
     }
 
-    MscReader::Mode mode = MscReader::Mode::Zip;
+    MscReader::Params params;
+    params.filePath = path.toQString();
+    params.mode = MscReader::Mode::Zip;
     if (syffix == "mscx") {
-        mode = MscReader::Mode::Dir;
+        params.mode = MscReader::Mode::Dir;
     }
 
-    MscReader reader(path.toQString(), mode);
+    MscReader reader(params);
     if (!reader.open()) {
         return make_ret(engraving::Err::FileOpenError);
     }
@@ -78,7 +80,7 @@ mu::Ret NotationProject::doLoad(engraving::MscReader& reader, const io::path& st
 {
     // Create new engraving project
     EngravingProjectPtr project = EngravingProject::create();
-    project->setPath(reader.filePath());
+    project->setPath(reader.params().filePath);
 
     // Load engraving project
     engraving::Err err = project->loadMscz(reader, forceMode);
@@ -261,8 +263,12 @@ mu::Ret NotationProject::writeToDevice(io::Device* device)
         m_engravingProject->setPath(m_masterNotation->metaInfo().title + ".mscz");
     }
 
-    MscWriter msczWriter(device);
-    msczWriter.setFilePath(m_engravingProject->path());
+    MscWriter::Params params;
+    params.device = device;
+    params.filePath = m_engravingProject->path();
+    params.mode = MscWriter::Mode::Zip;
+
+    MscWriter msczWriter(params);
     msczWriter.open();
 
     Ret ret = writeProject(msczWriter, false);
@@ -308,12 +314,14 @@ mu::Ret NotationProject::doSave(bool generateBackup)
 
     // Step 3: write project
     std::string suffix = io::syffix(info.fileName());
-    MscWriter::Mode mode = MscWriter::Mode::Zip;
+    MscWriter::Params params;
+    params.filePath = m_engravingProject->path();
+    params.mode = MscWriter::Mode::Zip;
     if (suffix == "mscx") {
-        mode = MscWriter::Mode::Dir;
+        params.mode = MscWriter::Mode::Dir;
     }
 
-    MscWriter msczWriter(m_engravingProject->path(), mode);
+    MscWriter msczWriter(params);
     Ret ret = writeProject(msczWriter, false);
     if (!ret) {
         LOGE() << "failed write project to buffer";
@@ -370,12 +378,14 @@ mu::Ret NotationProject::saveSelectionOnScore(const mu::io::path& path)
 
     // Write project
     std::string suffix = io::syffix(info.fileName());
-    MscWriter::Mode mode = MscWriter::Mode::Zip;
+    MscWriter::Params params;
+    params.filePath = m_engravingProject->path();
+    params.mode = MscWriter::Mode::Zip;
     if (suffix == "mscx") {
-        mode = MscWriter::Mode::Dir;
+        params.mode = MscWriter::Mode::Dir;
     }
 
-    MscWriter msczWriter(path.toQString(), mode);
+    MscWriter msczWriter(params);
     Ret ret = writeProject(msczWriter, false);
 
     if (ret) {

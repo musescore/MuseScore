@@ -48,8 +48,12 @@ TEST_F(MsczFileTests, MsczFile_WriteRead)
     QByteArray msczData;
     {
         QBuffer buf(&msczData);
-        MscWriter writer(&buf);
-        writer.setFilePath("simple1.mscz");
+        MscWriter::Params params;
+        params.device = &buf;
+        params.filePath = "simple1.mscz";
+        params.mode = MscWriter::Mode::Zip;
+
+        MscWriter writer(params);
         writer.open();
 
         writer.writeScoreFile(originScoreData);
@@ -60,8 +64,12 @@ TEST_F(MsczFileTests, MsczFile_WriteRead)
     //! CHECK Read and compare with origin
     {
         QBuffer buf(&msczData);
-        MscReader reader(&buf);
-        reader.setFilePath("simple1.mscz");
+        MscReader::Params params;
+        params.device = &buf;
+        params.filePath = "simple1.mscz";
+        params.mode = MscReader::Mode::Zip;
+
+        MscReader reader(params);
         reader.open();
 
         QByteArray scoreData = reader.readScoreFile();

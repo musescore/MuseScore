@@ -96,7 +96,12 @@ mu::RetVal<Meta> MsczMetaReader::readMetaFromMscx(const io::path& filePath) cons
     }
 
     QBuffer buffer(&data.val);
-    MscReader msczReader(&buffer);
+    MscReader::Params params;
+    params.device = &buffer;
+    params.filePath = filePath.toQString();
+    params.mode = MscReader::Mode::Zip;
+
+    MscReader msczReader(params);
     msczReader.open();
 
     // Read score meta

@@ -27,6 +27,7 @@
 #include <QIODevice>
 
 class MQZipWriter;
+class QTextStream;
 
 namespace mu::engraving {
 class MscWriter
@@ -34,18 +35,23 @@ class MscWriter
 public:
     enum class Mode {
         Zip,
-        Dir
+        Dir,
+        XmlFile
     };
 
-    MscWriter(const QString& filePath = QString(), Mode mode = Mode::Zip);
-    MscWriter(QIODevice* device);
+    struct Params
+    {
+        QIODevice* device = nullptr;
+        QString filePath;
+        Mode mode = Mode::Zip;
+    };
+
+    MscWriter() = default;
+    MscWriter(const Params& params);
     ~MscWriter();
 
-    void setDevice(QIODevice* device);
-    void setFilePath(const QString& filePath);
-    QString filePath() const;
-    void setMode(Mode m);
-    Mode mode() const;
+    void setParams(const Params& params);
+    const Params& params() const;
 
     bool open();
     void close();
@@ -59,39 +65,68 @@ public:
 
 private:
 
+    struct IWriter {
+        virtual ~IWriter() = default;
+
+        virtual bool open(QIODevice* device, const QString& filePath) = 0;
+        virtual void close() = 0;
+        virtual bool isOpened() const = 0;
+        virtual bool addFileData(const QString& fileName, const QByteArray& data) = 0;
+    };
+
+    struct ZipWriter : public IWriter
+    {
+        ~ZipWriter() override;
+        bool open(QIODevice* device, const QString& filePath) override;
+        void close() override;
+        bool isOpened() const override;
+        bool addFileData(const QString& fileName, const QByteArray& data) override;
+
+    private:
+        QIODevice* m_device = nullptr;
+        bool m_selfDeviceOwner = false;
+        MQZipWriter* m_zip = nullptr;
+    };
+
+    struct DirWriter : public IWriter
+    {
+        bool open(QIODevice* device, const QString& filePath) override;
+        void close() override;
+        bool isOpened() const override;
+        bool addFileData(const QString& fileName, const QByteArray& data) override;
+    private:
+        QString m_rootPath;
+    };
+
+    struct XmlFileWriter : public IWriter
+    {
+        ~XmlFileWriter() override;
+        bool open(QIODevice* device, const QString& filePath) override;
+        void close() override;
+        bool isOpened() const override;
+        bool addFileData(const QString& fileName, const QByteArray& data) override;
+    private:
+        QIODevice* m_device = nullptr;
+        bool m_selfDeviceOwner = false;
+        QTextStream* m_stream = nullptr;
+    };
+
     struct Meta {
         std::vector<QString> files;
         bool isWrited = false;
 
-        bool contains(const QString& file) const
-        {
-            if (std::find(files.begin(), files.end(), file) != files.end()) {
-                return true;
-            }
-            return false;
-        }
-
-        void addFile(const QString& file)
-        {
-            if (!contains(file)) {
-                files.push_back(file);
-            }
-        }
+        bool contains(const QString& file) const;
+        void addFile(const QString& file);
     };
 
-    QString rootPath() const;
-
-    MQZipWriter* writer() const;
+    IWriter* writer() const;
     bool addFileData(const QString& fileName, const QByteArray& data);
 
     void writeMeta();
     void writeContainer(const std::vector<QString>& paths);
 
-    QString m_filePath;
-    Mode m_mode = Mode::Zip;
-    QIODevice* m_device = nullptr;
-    bool m_selfDeviceOwner = false;
-    mutable MQZipWriter* m_writer = nullptr;
+    Params m_params;
+    mutable IWriter* m_writer = nullptr;
     Meta m_meta;
 };
 }

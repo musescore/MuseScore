@@ -26,6 +26,7 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QBuffer>
+#include <QTextStream>
 
 #include "thirdparty/qzip/qzipwriter_p.h"
 
@@ -33,189 +34,81 @@
 
 using namespace mu::engraving;
 
-MscWriter::MscWriter(const QString& filePath, Mode mode)
-    : m_filePath(filePath), m_mode(mode)
-{
-}
-
-MscWriter::MscWriter(QIODevice* device)
-    : m_mode(Mode::Zip), m_device(device), m_selfDeviceOwner(false)
+MscWriter::MscWriter(const Params& params)
+    : m_params(params)
 {
 }
 
 MscWriter::~MscWriter()
 {
     close();
-
-    delete m_writer;
-
-    if (m_selfDeviceOwner) {
-        delete m_device;
-    }
 }
 
-QString MscWriter::rootPath() const
+void MscWriter::setParams(const Params& params)
 {
-    switch (m_mode) {
-    case Mode::Zip: {
-        return "/";
-    } break;
-    case Mode::Dir: {
-        QFileInfo fi(m_filePath);
-        return fi.absolutePath() + "/" + fi.completeBaseName();
-    } break;
+    IF_ASSERT_FAILED(!isOpened()) {
+        return;
     }
-    return QString();
+
+    if (m_writer) {
+        delete m_writer;
+        m_writer = nullptr;
+    }
+
+    m_params = params;
+}
+
+const MscWriter::Params& MscWriter::params() const
+{
+    return m_params;
 }
 
 bool MscWriter::open()
 {
-    switch (m_mode) {
-    case Mode::Zip: {
-        if (!m_device) {
-            m_device = new QFile(m_filePath);
-            m_selfDeviceOwner = true;
-        }
-
-        if (!m_device->isOpen()) {
-            if (!m_device->open(QIODevice::WriteOnly)) {
-                LOGE() << "failed open file: " << filePath();
-                return false;
-            }
-        }
-    } break;
-    case Mode::Dir: {
-        QDir dir(rootPath());
-        if (!dir.removeRecursively()) {
-            LOGE() << "failed clear dir: " << dir.absolutePath();
-            return false;
-        }
-
-        if (!dir.mkpath(dir.absolutePath())) {
-            LOGE() << "failed make path: " << dir.absolutePath();
-            return false;
-        }
-    } break;
-    }
-
-    return true;
+    return writer()->open(m_params.device, m_params.filePath);
 }
 
 void MscWriter::close()
 {
-    writeMeta();
+    if (m_writer) {
+        writeMeta();
 
-    switch (m_mode) {
-    case Mode::Zip: {
-        if (m_writer) {
-            m_writer->close();
-        }
-        m_device->close();
-    } break;
-    case Mode::Dir: {
-        // noop
-    } break;
+        m_writer->close();
+
+        delete m_writer;
+        m_writer = nullptr;
     }
 }
 
 bool MscWriter::isOpened() const
 {
-    switch (m_mode) {
-    case Mode::Zip: {
-        return m_device->isOpen();
-    } break;
-    case Mode::Dir: {
-        return QDir(rootPath()).exists();
-    } break;
-    }
-    return false;
+    return writer()->isOpened();
 }
 
-void MscWriter::setDevice(QIODevice* device)
-{
-    if (m_writer) {
-        delete m_writer;
-        m_writer = nullptr;
-    }
-
-    if (m_device && m_selfDeviceOwner) {
-        delete m_device;
-    }
-
-    m_device = device;
-    m_selfDeviceOwner = false;
-
-    if (m_mode == Mode::Dir) {
-        LOGW() << "The mode changed to ZIP";
-        m_mode = Mode::Zip;
-    }
-}
-
-void MscWriter::setFilePath(const QString& filePath)
-{
-    m_filePath = filePath;
-
-    if (m_writer) {
-        delete m_writer;
-        m_writer = nullptr;
-    }
-}
-
-QString MscWriter::filePath() const
-{
-    return m_filePath;
-}
-
-void MscWriter::setMode(Mode m)
-{
-    m_mode = m;
-}
-
-MscWriter::Mode MscWriter::mode() const
-{
-    return m_mode;
-}
-
-MQZipWriter* MscWriter::writer() const
+MscWriter::IWriter* MscWriter::writer() const
 {
     if (!m_writer) {
-        m_writer = new MQZipWriter(m_device);
+        switch (m_params.mode) {
+        case Mode::Zip:
+            m_writer = new ZipWriter();
+            break;
+        case Mode::Dir:
+            m_writer = new DirWriter();
+            break;
+        case Mode::XmlFile:
+            m_writer = new XmlFileWriter();
+            break;
+        }
     }
+
     return m_writer;
 }
 
 bool MscWriter::addFileData(const QString& fileName, const QByteArray& data)
 {
-    switch (m_mode) {
-    case Mode::Zip: {
-        writer()->addFile(fileName, data);
-        if (writer()->status() != MQZipWriter::NoError) {
-            LOGE() << "failed write files to zip, status: " << writer()->status();
-            return false;
-        }
-    } break;
-    case Mode::Dir: {
-        QString filePath = rootPath() + "/" + fileName;
-
-        QDir fileDir(QFileInfo(filePath).absolutePath());
-        if (!fileDir.exists()) {
-            if (!fileDir.mkpath(fileDir.absolutePath())) {
-                LOGE() << "failed make path: " << fileDir.absolutePath();
-                return false;
-            }
-        }
-
-        QFile file(filePath);
-        if (!file.open(QIODevice::WriteOnly)) {
-            LOGE() << "failed open file: " << filePath;
-            return false;
-        }
-
-        if (file.write(data) != qint64(data.size())) {
-            LOGE() << "failed write file: " << filePath;
-            return false;
-        }
-    } break;
+    if (!writer()->addFileData(fileName, data)) {
+        LOGE() << "failed write file: " << fileName;
+        return false;
     }
 
     m_meta.addFile(fileName);
@@ -225,7 +118,7 @@ bool MscWriter::addFileData(const QString& fileName, const QByteArray& data)
 
 void MscWriter::writeScoreFile(const QByteArray& data)
 {
-    QString completeBaseName = QFileInfo(filePath()).completeBaseName();
+    QString completeBaseName = QFileInfo(m_params.filePath).completeBaseName();
     IF_ASSERT_FAILED(!completeBaseName.isEmpty()) {
         completeBaseName = "score";
     }
@@ -285,4 +178,193 @@ void MscWriter::writeContainer(const std::vector<QString>& paths)
     xml.writeEndDocument();
 
     addFileData("META-INF/container.xml", data);
+}
+
+bool MscWriter::Meta::contains(const QString& file) const
+{
+    if (std::find(files.begin(), files.end(), file) != files.end()) {
+        return true;
+    }
+    return false;
+}
+
+void MscWriter::Meta::addFile(const QString& file)
+{
+    if (!contains(file)) {
+        files.push_back(file);
+    }
+}
+
+// =======================================================================
+// Writers
+// =======================================================================
+
+MscWriter::ZipWriter::~ZipWriter()
+{
+    delete m_zip;
+    if (m_selfDeviceOwner) {
+        delete m_device;
+    }
+}
+
+bool MscWriter::ZipWriter::open(QIODevice* device, const QString& filePath)
+{
+    m_device = device;
+    if (!m_device) {
+        m_device = new QFile(filePath);
+        m_selfDeviceOwner = true;
+    }
+
+    if (!m_device->isOpen()) {
+        if (!m_device->open(QIODevice::WriteOnly)) {
+            LOGE() << "failed open file: " << filePath;
+            return false;
+        }
+    }
+
+    m_zip = new MQZipWriter(m_device);
+
+    return true;
+}
+
+void MscWriter::ZipWriter::close()
+{
+    if (m_zip) {
+        m_zip->close();
+    }
+
+    if (m_device) {
+        m_device->close();
+    }
+}
+
+bool MscWriter::ZipWriter::isOpened() const
+{
+    return m_device ? m_device->isOpen() : false;
+}
+
+bool MscWriter::ZipWriter::addFileData(const QString& fileName, const QByteArray& data)
+{
+    IF_ASSERT_FAILED(m_zip) {
+        return false;
+    }
+
+    m_zip->addFile(fileName, data);
+    if (m_zip->status() != MQZipWriter::NoError) {
+        LOGE() << "failed write files to zip, status: " << m_zip->status();
+        return false;
+    }
+    return true;
+}
+
+bool MscWriter::DirWriter::open(QIODevice* device, const QString& filePath)
+{
+    if (device) {
+        NOT_SUPPORTED;
+        return false;
+    }
+
+    QFileInfo fi(filePath);
+    m_rootPath = fi.absolutePath() + "/" + fi.completeBaseName();
+
+    QDir dir(m_rootPath);
+    if (!dir.removeRecursively()) {
+        LOGE() << "failed clear dir: " << dir.absolutePath();
+        return false;
+    }
+
+    if (!dir.mkpath(dir.absolutePath())) {
+        LOGE() << "failed make path: " << dir.absolutePath();
+        return false;
+    }
+
+    return true;
+}
+
+void MscWriter::DirWriter::close()
+{
+    // noop
+}
+
+bool MscWriter::DirWriter::isOpened() const
+{
+    return QFileInfo::exists(m_rootPath);
+}
+
+bool MscWriter::DirWriter::addFileData(const QString& fileName, const QByteArray& data)
+{
+    QString filePath = m_rootPath + "/" + fileName;
+
+    QDir fileDir(QFileInfo(filePath).absolutePath());
+    if (!fileDir.exists()) {
+        if (!fileDir.mkpath(fileDir.absolutePath())) {
+            LOGE() << "failed make path: " << fileDir.absolutePath();
+            return false;
+        }
+    }
+
+    QFile file(filePath);
+    if (!file.open(QIODevice::WriteOnly)) {
+        LOGE() << "failed open file: " << filePath;
+        return false;
+    }
+
+    if (file.write(data) != qint64(data.size())) {
+        LOGE() << "failed write file: " << filePath;
+        return false;
+    }
+
+    return true;
+}
+
+MscWriter::XmlFileWriter::~XmlFileWriter()
+{
+    delete m_stream;
+    if (m_selfDeviceOwner) {
+        delete m_device;
+    }
+}
+
+bool MscWriter::XmlFileWriter::open(QIODevice* device, const QString& filePath)
+{
+    m_device = device;
+    if (!m_device) {
+        m_device = new QFile(filePath);
+        m_selfDeviceOwner = true;
+    }
+
+    if (!m_device->isOpen()) {
+        if (!m_device->open(QIODevice::WriteOnly)) {
+            LOGE() << "failed open file: " << filePath;
+            return false;
+        }
+    }
+
+    m_stream = new QTextStream(m_device);
+
+    // Write header
+    // m_stream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+    // m_stream << "<museScore version=" 3.02 ">";
+
+    return true;
+}
+
+void MscWriter::XmlFileWriter::close()
+{
+    if (m_stream) {
+        m_stream->flush();
+    }
+
+    if (m_device) {
+        m_device->close();
+    }
+}
+
+bool MscWriter::XmlFileWriter::isOpened() const
+{
+    return m_device ? m_device->isOpen() : false;
+}
+
+bool MscWriter::XmlFileWriter::addFileData(const QString& fileName, const QByteArray& data)
+{
 }
