@@ -31,6 +31,9 @@ FocusScope {
     property NavigationPanel navigationPanel: null
     property int navigationRowOffset: 1
 
+    property var anchorItem: null
+    signal ensureContentVisibleRequested(int invisibleContentHeight)
+
     property var contentHeight: implicitHeight
     signal contentExtended()
 
