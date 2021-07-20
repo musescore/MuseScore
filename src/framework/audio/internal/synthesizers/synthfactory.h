@@ -5,15 +5,16 @@
 
 #include "async/asyncable.h"
 
+#include "synthtypes.h"
 #include "isynthfactory.h"
 
 namespace mu::audio::synth {
 class SynthFactory : public ISynthFactory, public async::Asyncable
 {
 public:
-    void init(const SynthType defaultType, ISynthCreatorPtr defaultCreator, SoundFontPath defaultSoundFontPath) override;
+    void init(const SynthUri& defaultUri) override;
 
-    ISynthesizerPtr createNew(const SynthType type, const SoundFontPath& sfPath) const override;
+    ISynthesizerPtr createNew(const SynthUri& uri) const override;
     ISynthesizerPtr createDefault() const override;
 
     void registerCreator(const SynthType type, ISynthCreatorPtr creator) override;
@@ -21,8 +22,7 @@ public:
 private:
     std::map<SynthType, ISynthCreatorPtr> m_creators;
 
-    SynthType m_defaultSynthType = SynthType::Undefined;
-    SoundFontPath m_defaultSoundFontPath;
+    SynthUri m_defaultUri;
 };
 }
 

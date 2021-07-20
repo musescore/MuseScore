@@ -9,41 +9,43 @@
 using namespace mu::async;
 using namespace mu::audio::synth;
 
-void SynthFactory::init(const SynthType defaultType, ISynthCreatorPtr defaultCreator, SoundFontPath defaultSoundFontPath)
+void SynthFactory::init(const SynthUri& defaultUri)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    IF_ASSERT_FAILED(defaultCreator || !defaultSoundFontPath.empty() || defaultType == SynthType::Undefined) {
+    IF_ASSERT_FAILED(defaultUri.isValid()) {
         return;
     }
 
-    m_creators.emplace(defaultType, std::move(defaultCreator));
-    m_defaultSynthType = defaultType;
-    m_defaultSoundFontPath = std::move(defaultSoundFontPath);
+    m_defaultUri = defaultUri;
 }
 
-ISynthesizerPtr SynthFactory::createNew(const SynthType type, const SoundFontPath& sfPath) const
+ISynthesizerPtr SynthFactory::createNew(const SynthUri& uri) const
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    auto search = m_creators.find(type);
-
-    if (search == m_creators.cend()) {
+    IF_ASSERT_FAILED(uri.isValid()) {
         return nullptr;
     }
 
-    return search->second->create(sfPath);
+    auto search = m_creators.find(uri.type);
+
+    if (search == m_creators.end()) {
+        return nullptr;
+    }
+
+    return search->second->create(uri);
 }
 
 ISynthesizerPtr SynthFactory::createDefault() const
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    IF_ASSERT_FAILED(m_defaultSynthType != SynthType::Undefined || !m_defaultSoundFontPath.empty()) {
+    IF_ASSERT_FAILED(m_defaultUri.isValid()) {
         return nullptr;
     }
 
-    return createNew(m_defaultSynthType, m_defaultSoundFontPath);
+    return createNew(m_defaultUri);
 }
 
 void SynthFactory::registerCreator(const SynthType type, ISynthCreatorPtr creator)
