@@ -61,27 +61,15 @@ mu::Ret NotationProject::load(const io::path& path, const io::path& stylePath, b
         return doImport(path, stylePath, forceMode);
     }
 
-    QByteArray msczData;
-    if (syffix == "mscz") {
-        RetVal<QByteArray> rv = fileSystem()->readFile(path);
-        if (!rv.ret) {
-            return rv.ret;
-        }
-        msczData = rv.val;
-    } else if (syffix == "mscx") {
-        Ms::Score::FileError err = engraving::compat::mscxToMscz(path.toQString(), &msczData);
-        if (err != Ms::Score::FileError::FILE_NO_ERROR) {
-            return scoreFileErrorToRet(err, path);
-        }
-    } else {
-        UNREACHABLE;
-        return make_ret(Ret::Code::InternalError);
+    MsczReader::Mode mode = MsczReader::Mode::Zip;
+    if (syffix == "mscx") {
+        mode = MsczReader::Mode::Dir;
     }
 
-    QBuffer msczBuf(&msczData);
-    MsczReader reader(&msczBuf);
-    reader.setFilePath(path.toQString());
-    reader.open();
+    MsczReader reader(path.toQString(), mode);
+    if (!reader.open()) {
+        return make_ret(engraving::Err::FileOpenError);
+    }
 
     return doLoad(reader, stylePath, forceMode);
 }
@@ -273,14 +261,18 @@ mu::Ret NotationProject::writeToDevice(io::Device* device)
         m_engravingProject->setPath(m_masterNotation->metaInfo().title + ".mscz");
     }
 
-    Ret ret = writeProject(device, false);
+    MsczWriter msczWriter(device);
+    msczWriter.setFilePath(m_engravingProject->path());
+    msczWriter.open();
+
+    Ret ret = writeProject(msczWriter, false);
     return ret;
 }
 
 mu::Ret NotationProject::saveScore(const io::path& path, SaveMode saveMode)
 {
     std::string suffix = io::syffix(path);
-    if (suffix != "mscz" && !suffix.empty()) {
+    if (suffix != "mscz" && suffix != "mscx" && !suffix.empty()) {
         return exportProject(path, suffix);
     }
 
@@ -314,17 +306,22 @@ mu::Ret NotationProject::doSave(bool generateBackup)
         return make_ret(notation::Err::UnknownError);
     }
 
-    // Step 3: save into temporary buffer
-    QByteArray msczData;
-    QBuffer buf(&msczData);
-    Ret ret = writeProject(&buf, false);
+    // Step 3: write project
+    std::string suffix = io::syffix(info.fileName());
+    MsczWriter::Mode mode = MsczWriter::Mode::Zip;
+    if (suffix == "mscx") {
+        mode = MsczWriter::Mode::Dir;
+    }
+
+    MsczWriter msczWriter(m_engravingProject->path(), mode);
+    Ret ret = writeProject(msczWriter, false);
     if (!ret) {
         LOGE() << "failed write project to buffer";
         return ret;
     }
 
-    // Step 4: save to file
-    fileSystem()->writeToFile(info.filePath(), msczData);
+    msczWriter.close();
+
     // make file readable by all
     QFile::setPermissions(info.filePath(), QFile::ReadOwner | QFile::WriteOwner | QFile::ReadUser | QFile::ReadGroup | QFile::ReadOther);
 
@@ -332,11 +329,9 @@ mu::Ret NotationProject::doSave(bool generateBackup)
     return make_ret(Ret::Code::Ok);
 }
 
-mu::Ret NotationProject::writeProject(io::Device* device, bool onlySelection)
+mu::Ret NotationProject::writeProject(MsczWriter& msczWriter, bool onlySelection)
 {
     // Create MsczWriter
-    mu::engraving::MsczWriter msczWriter(device);
-    msczWriter.setFilePath(m_engravingProject->path());
     bool ok = msczWriter.open();
     if (!ok) {
         LOGE() << "failed open writer";
@@ -373,21 +368,22 @@ mu::Ret NotationProject::saveSelectionOnScore(const mu::io::path& path)
         return make_ret(notation::Err::UnknownError);
     }
 
-    // Write project to buffer
-    QByteArray msczData;
-    QBuffer buf(&msczData);
-    Ret ret = writeProject(&buf, true);
-    if (!ret) {
-        LOGE() << "failed write project to buffer";
-        return ret;
+    // Write project
+    std::string suffix = io::syffix(info.fileName());
+    MsczWriter::Mode mode = MsczWriter::Mode::Zip;
+    if (suffix == "mscx") {
+        mode = MsczWriter::Mode::Dir;
     }
 
-    // Save to file
-    fileSystem()->writeToFile(info.filePath(), msczData);
-    QFile::setPermissions(info.filePath(), QFile::ReadOwner | QFile::WriteOwner | QFile::ReadUser | QFile::ReadGroup | QFile::ReadOther);
+    MsczWriter msczWriter(path.toQString(), mode);
+    Ret ret = writeProject(msczWriter, false);
 
+    if (ret) {
+        QFile::setPermissions(info.filePath(),
+                              QFile::ReadOwner | QFile::WriteOwner | QFile::ReadUser | QFile::ReadGroup | QFile::ReadOther);
+    }
     LOGI() << "success save file: " << info.filePath();
-    return make_ret(Ret::Code::Ok);
+    return ret;
 }
 
 mu::Ret NotationProject::exportProject(const io::path& path, const std::string& suffix)
