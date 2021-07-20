@@ -33,6 +33,8 @@
 #include "engraving/libmscore/score.h"
 #include "engraving/style/style.h"
 
+#include "framework/global/widgetstatestore.h"
+
 #include <QListWidget>
 #include <QSplitter>
 
@@ -613,14 +615,22 @@ SpecialCharactersDialog::SpecialCharactersDialog(QWidget* parent)
     INotationInteractionPtr interaction = notation ? notation->interaction() : nullptr;
 
     if (interaction) {
-        m_textElement = interaction->editedText();
-        setFont(m_textElement->font());
+        const TextBase* editedText = interaction->editedText();
+        setFont(editedText->font());
     }
+
+    WidgetStateStore::restoreGeometry(this);
 }
 
 SpecialCharactersDialog::SpecialCharactersDialog(const SpecialCharactersDialog& other)
     : QDialog(other.parentWidget())
 {
+}
+
+void SpecialCharactersDialog::hideEvent(QHideEvent* event)
+{
+    WidgetStateStore::saveGeometry(this);
+    QDialog::hideEvent(event);
 }
 
 int SpecialCharactersDialog::static_metaTypeId()

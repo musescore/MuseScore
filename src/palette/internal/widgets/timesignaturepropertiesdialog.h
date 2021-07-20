@@ -19,57 +19,50 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PALETTE_SPECIALCHARACTERSDIALOG_H
-#define MU_PALETTE_SPECIALCHARACTERSDIALOG_H
 
-#include "ui_specialcharactersdialog.h"
+#ifndef MU_PALETTE_TIMESIGNATUREPROPERTIESDIALOG_H
+#define MU_PALETTE_TIMESIGNATUREPROPERTIESDIALOG_H
 
-#include "engraving/draw/font.h"
+#include "ui_timesignaturepropertiesdialog.h"
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
-
-class QListWidget;
+#include "ui/iuiconfiguration.h"
 
 namespace Ms {
-class TextBase;
-class Palette;
+class TimeSig;
 
 //---------------------------------------------------------
-//   SpecialCharactersDialog
+//   TimeSigProperties
 //---------------------------------------------------------
 
-class SpecialCharactersDialog : public QDialog, public Ui::SpecialCharactersDialog
+class TimeSignaturePropertiesDialog : public QDialog, public Ui::TimeSigProperties
 {
     Q_OBJECT
 
     INJECT(Ms, mu::context::IGlobalContext, globalContext)
+    INJECT(Ms, mu::ui::IUiConfiguration, uiConfiguration)
 
 public:
-    SpecialCharactersDialog(QWidget* parent = nullptr);
-    SpecialCharactersDialog(const SpecialCharactersDialog& other);
+    TimeSignaturePropertiesDialog(QWidget* parent = nullptr);
+    TimeSignaturePropertiesDialog(const TimeSignaturePropertiesDialog& other);
+    ~TimeSignaturePropertiesDialog() override;
 
     static int static_metaTypeId();
 
 private slots:
-    void populateSmufl();
-    void populateUnicode();
+    void accept() override;
 
 private:
     void hideEvent(QHideEvent*) override;
 
-    void setFont(const mu::draw::Font& font);
-    void populateCommon();
+    mu::notation::INotationPtr notation() const;
 
-    mu::draw::Font m_font;
-    Palette* m_pCommon = nullptr;
-    Palette* m_pSmufl = nullptr;
-    Palette* m_pUnicode = nullptr;
-    QListWidget* m_lws = nullptr;
-    QListWidget* m_lwu = nullptr;
+    TimeSig* m_originTimeSig = nullptr;
+    TimeSig* m_editedTimeSig = nullptr;
 };
 }
 
-Q_DECLARE_METATYPE(Ms::SpecialCharactersDialog)
+Q_DECLARE_METATYPE(Ms::TimeSignaturePropertiesDialog)
 
-#endif // MU_PALETTE_SPECIALCHARACTERSDIALOG_H
+#endif // MU_PALETTE_TIMESIGNATUREPROPERTIESDIALOG_H

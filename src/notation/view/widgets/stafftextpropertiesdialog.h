@@ -56,6 +56,8 @@ private slots:
     void setSwingControls(bool);
 
 private:
+    void hideEvent(QHideEvent*) override;
+
     void saveChannel(int channel);
 
     StaffTextBase* m_originStaffText = nullptr;

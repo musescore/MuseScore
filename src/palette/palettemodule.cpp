@@ -43,6 +43,7 @@
 #include "view/palettecellpropertiesmodel.h"
 
 #include "internal/paletteworkspacesetup.h"
+#include "internal/widgets/timesignaturepropertiesdialog.h"
 
 using namespace mu::palette;
 using namespace mu::modularity;
@@ -85,6 +86,9 @@ void PaletteModule::resolveImports()
         ir->registerUri(Uri("musescore://palette/specialcharacters"),
                         ContainerMeta(ContainerType::QWidgetDialog, Ms::SpecialCharactersDialog::static_metaTypeId()));
 
+        ir->registerUri(Uri("musescore://palette/timesignatureproperties"),
+                        ContainerMeta(ContainerType::QWidgetDialog, Ms::TimeSignaturePropertiesDialog::static_metaTypeId()));
+
         ir->registerUri(Uri("musescore://palette/properties"),
                         ContainerMeta(ContainerType::QmlDialog, "MuseScore/Palette/PalettePropertiesDialog.qml"));
 
@@ -113,6 +117,7 @@ void PaletteModule::registerUiTypes()
     qmlRegisterType<PaletteCellPropertiesModel>("MuseScore.Palette", 1, 0, "PaletteCellPropertiesModel");
 
     qRegisterMetaType<SpecialCharactersDialog>("SpecialCharactersDialog");
+    qRegisterMetaType<TimeSignaturePropertiesDialog>("TimeSignaturePropertiesDialog");
 
     ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(palette_QML_IMPORT);
 }

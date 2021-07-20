@@ -39,6 +39,7 @@ private:
     ui::MenuItemList measureItems() const;
     ui::MenuItemList staffTextItems() const;
     ui::MenuItemList systemTextItems() const;
+    ui::MenuItemList timeSignatureItems() const;
     ui::MenuItemList selectItems() const;
     ui::MenuItemList elementItems() const;
 };
