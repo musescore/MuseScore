@@ -32,13 +32,20 @@ namespace mu::engraving {
 class MsczWriter
 {
 public:
-    MsczWriter(const QString& filePath = QString());
+    enum class Mode {
+        Zip,
+        Dir
+    };
+
+    MsczWriter(const QString& filePath = QString(), Mode mode = Mode::Zip);
     MsczWriter(QIODevice* device);
     ~MsczWriter();
 
     void setDevice(QIODevice* device);
     void setFilePath(const QString& filePath);
     QString filePath() const;
+    void setMode(Mode m);
+    Mode mode() const;
 
     bool open();
     void close();
@@ -72,6 +79,8 @@ private:
         }
     };
 
+    QString rootPath() const;
+
     MQZipWriter* writer() const;
     bool addFileData(const QString& fileName, const QByteArray& data);
 
@@ -79,6 +88,7 @@ private:
     void writeContainer(const std::vector<QString>& paths);
 
     QString m_filePath;
+    Mode m_mode = Mode::Zip;
     QIODevice* m_device = nullptr;
     bool m_selfDeviceOwner = false;
     mutable MQZipWriter* m_writer = nullptr;
