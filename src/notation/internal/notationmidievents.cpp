@@ -82,7 +82,14 @@ std::vector<Event> NotationMidiEvents::retrieveSetupEvents(const std::list<Instr
         e.setOpcode(Event::Opcode::ProgramChange);
         e.setProgram(instrChannel->program());
         e.setBank(instrChannel->bank());
-        e.setChannel(instrChannel->channel());
+
+        channel_t channel = instrChannel->channel();
+        //! TODO Modification of templates is required
+        if (!(channel < 16)) {
+            channel = 15;
+        }
+
+        e.setChannel(channel);
 
         result.emplace_back(std::move(e));
     }
