@@ -32,13 +32,20 @@ namespace mu::engraving {
 class MsczReader
 {
 public:
-    MsczReader(const QString& filePath = QString());
+    enum class Mode {
+        Zip,
+        Dir
+    };
+
+    MsczReader(const QString& filePath = QString(), Mode mode = Mode::Zip);
     MsczReader(QIODevice* device);
     ~MsczReader();
 
     void setDevice(QIODevice* device);
     void setFilePath(const QString& filePath);
     QString filePath() const;
+    void setMode(Mode m);
+    Mode mode() const;
 
     bool open();
     void close();
@@ -60,11 +67,13 @@ private:
         bool isValid() const { return !mscxFileName.isEmpty(); }
     };
 
+    QString rootPath() const;
     MQZipReader* reader() const;
     const Meta& meta() const;
     QByteArray fileData(const QString& fileName) const;
 
     QString m_filePath;
+    Mode m_mode = Mode::Zip;
     QIODevice* m_device = nullptr;
     bool m_selfDeviceOwner = false;
     mutable MQZipReader* m_reader = nullptr;

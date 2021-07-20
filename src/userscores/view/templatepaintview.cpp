@@ -68,6 +68,7 @@ void TemplatePaintView::load()
 
     if (!ret) {
         LOGE() << ret.toString();
+        return;
     }
 
     setNotation(notationProject->masterNotation()->notation());

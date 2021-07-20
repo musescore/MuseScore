@@ -36,6 +36,7 @@
 
 namespace mu::engraving {
 class MsczReader;
+class MsczWriter;
 }
 
 namespace mu::project {
@@ -74,7 +75,7 @@ private:
     Ret saveSelectionOnScore(const io::path& path = io::path());
     Ret exportProject(const io::path& path, const std::string& suffix);
     Ret doSave(bool generateBackup);
-    Ret writeProject(io::Device* device, bool onlySelection);
+    Ret writeProject(engraving::MsczWriter& msczWriter, bool onlySelection);
 
     mu::engraving::EngravingProjectPtr m_engravingProject = nullptr;
     notation::MasterNotationPtr m_masterNotation = nullptr;
