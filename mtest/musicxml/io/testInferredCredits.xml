@@ -87,11 +87,17 @@
         </attributes>
       <direction placement="above">
         <direction-type>
-          <words default-y="34.66" relative-y="10.00">Words and Music by Henry Ives
+          <words default-y="34.66" relative-y="10.00">Words &amp; Music by Henry Ives (and ampersands)
 </words>
           <words>
 </words>
           <words></words>
+          </direction-type>
+        </direction>
+      <direction placement="above">
+        <direction-type>
+          <words default-y="34.66" relative-y="10.00">Lyrics to be sung by candlelight
+(and this not to be inferred)</words>
           </direction-type>
         </direction>
       <note default-x="73.72" default-y="-15.00">
