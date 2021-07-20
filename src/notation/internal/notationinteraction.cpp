@@ -276,9 +276,9 @@ Element* NotationInteraction::hitElement(const PointF& pos, float width) const
     return elements.first();
 }
 
-int NotationInteraction::hitStaffIndex(const PointF& pos) const
+Staff* NotationInteraction::hitStaff(const PointF& pos) const
 {
-    return hitMeasure(pos).staffIndex;
+    return hitMeasure(pos).staff;
 }
 
 Ms::Page* NotationInteraction::point2page(const PointF& p) const
@@ -387,15 +387,15 @@ QList<Ms::Element*> NotationInteraction::hitElements(const PointF& p_in, float w
 
 NotationInteraction::HitMeasureData NotationInteraction::hitMeasure(const PointF& pos) const
 {
-    int staffIndex;
-    Ms::Segment* segment;
+    int staffIndex = -1;
+    Ms::Segment* segment = nullptr;
     PointF offset;
     Measure* measure = score()->pos2measure(pos, &staffIndex, 0, &segment, &offset);
 
     HitMeasureData result;
     if (measure && measure->staffLines(staffIndex)->canvasBoundingRect().contains(pos)) {
         result.measure = measure;
-        result.staffIndex = staffIndex;
+        result.staff = score()->staff(staffIndex);
     }
 
     return result;
@@ -442,6 +442,16 @@ bool NotationInteraction::elementIsLess(const Ms::Element* e1, const Ms::Element
 
     // default case, use stacking order
     return e1->z() <= e2->z();
+}
+
+const NotationInteraction::HitElementContext& NotationInteraction::hitElementContext() const
+{
+    return m_hitElementContext;
+}
+
+void NotationInteraction::setHitElementContext(const HitElementContext& context)
+{
+    m_hitElementContext = context;
 }
 
 void NotationInteraction::addChordToSelection(MoveDirection d)
@@ -556,6 +566,8 @@ void NotationInteraction::clearSelection()
     score()->deselectAll();
 
     notifyAboutSelectionChanged();
+
+    setHitElementContext(HitElementContext());
 }
 
 mu::async::Notification NotationInteraction::selectionChanged() const
