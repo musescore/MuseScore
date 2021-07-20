@@ -45,8 +45,8 @@
 #include "property.h"
 #include "chordlist.h"
 
-#include "io/msczwriter.h"
-#include "io/msczreader.h"
+#include "io/mscwriter.h"
+#include "io/mscreader.h"
 
 class QMimeData;
 
@@ -876,7 +876,7 @@ public:
     void setShowVBox(bool v) { _showVBox = v; }
 
     bool writeScore(QIODevice* f, bool msczFormat, bool onlySelection = false);
-    bool writeMscz(mu::engraving::MsczWriter& msczWriter, bool onlySelection = false, bool createThumbnail = true);
+    bool writeMscz(mu::engraving::MscWriter& msczWriter, bool onlySelection = false, bool createThumbnail = true);
 
     void print(mu::draw::Painter* printer, int page);
     ChordRest* getSelectedChordRest() const;
@@ -1414,7 +1414,7 @@ class MasterScore : public Score
     MasterScore(std::shared_ptr<mu::engraving::EngravingProject> project);
     MasterScore(const MStyle&, std::shared_ptr<mu::engraving::EngravingProject> project);
 
-    FileError loadMscz(const mu::engraving::MsczReader& msczFile, bool ignoreVersionError);
+    FileError loadMscz(const mu::engraving::MscReader& msczFile, bool ignoreVersionError);
 
 public:
 

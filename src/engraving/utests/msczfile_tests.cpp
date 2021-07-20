@@ -24,8 +24,8 @@
 #include <QByteArray>
 #include <QBuffer>
 
-#include "io/msczwriter.h"
-#include "io/msczreader.h"
+#include "io/mscwriter.h"
+#include "io/mscreader.h"
 
 using namespace mu::engraving;
 
@@ -48,7 +48,7 @@ TEST_F(MsczFileTests, MsczFile_WriteRead)
     QByteArray msczData;
     {
         QBuffer buf(&msczData);
-        MsczWriter writer(&buf);
+        MscWriter writer(&buf);
         writer.setFilePath("simple1.mscz");
         writer.open();
 
@@ -60,7 +60,7 @@ TEST_F(MsczFileTests, MsczFile_WriteRead)
     //! CHECK Read and compare with origin
     {
         QBuffer buf(&msczData);
-        MsczReader reader(&buf);
+        MscReader reader(&buf);
         reader.setFilePath("simple1.mscz");
         reader.open();
 

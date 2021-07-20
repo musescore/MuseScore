@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "msczreader.h"
+#include "mscreader.h"
 
 #include <QXmlStreamReader>
 #include <QFile>
@@ -36,17 +36,17 @@
 
 using namespace mu::engraving;
 
-MsczReader::MsczReader(const QString& filePath, Mode mode)
+MscReader::MscReader(const QString& filePath, Mode mode)
     : m_filePath(filePath), m_mode(mode)
 {
 }
 
-MsczReader::MsczReader(QIODevice* device)
+MscReader::MscReader(QIODevice* device)
     : m_mode(Mode::Zip), m_device(device), m_selfDeviceOwner(false)
 {
 }
 
-MsczReader::~MsczReader()
+MscReader::~MscReader()
 {
     close();
 
@@ -57,7 +57,7 @@ MsczReader::~MsczReader()
     }
 }
 
-QString MsczReader::rootPath() const
+QString MscReader::rootPath() const
 {
     switch (m_mode) {
     case Mode::Zip: {
@@ -71,7 +71,7 @@ QString MsczReader::rootPath() const
     return QString();
 }
 
-bool MsczReader::open()
+bool MscReader::open()
 {
     switch (m_mode) {
     case Mode::Zip: {
@@ -99,7 +99,7 @@ bool MsczReader::open()
     return true;
 }
 
-void MsczReader::close()
+void MscReader::close()
 {
     switch (m_mode) {
     case Mode::Zip: {
@@ -114,7 +114,7 @@ void MsczReader::close()
     }
 }
 
-bool MsczReader::isOpened() const
+bool MscReader::isOpened() const
 {
     switch (m_mode) {
     case Mode::Zip: {
@@ -127,7 +127,7 @@ bool MsczReader::isOpened() const
     return false;
 }
 
-void MsczReader::setDevice(QIODevice* device)
+void MscReader::setDevice(QIODevice* device)
 {
     if (m_reader) {
         delete m_reader;
@@ -147,7 +147,7 @@ void MsczReader::setDevice(QIODevice* device)
     }
 }
 
-void MsczReader::setFilePath(const QString& filePath)
+void MscReader::setFilePath(const QString& filePath)
 {
     m_filePath = filePath;
 
@@ -157,22 +157,22 @@ void MsczReader::setFilePath(const QString& filePath)
     }
 }
 
-QString MsczReader::filePath() const
+QString MscReader::filePath() const
 {
     return m_filePath;
 }
 
-void MsczReader::setMode(Mode m)
+void MscReader::setMode(Mode m)
 {
     m_mode = m;
 }
 
-MsczReader::Mode MsczReader::mode() const
+MscReader::Mode MscReader::mode() const
 {
     return m_mode;
 }
 
-MQZipReader* MsczReader::reader() const
+MQZipReader* MscReader::reader() const
 {
     if (!m_reader) {
         m_reader = new MQZipReader(m_device);
@@ -180,7 +180,7 @@ MQZipReader* MsczReader::reader() const
     return m_reader;
 }
 
-const MsczReader::Meta& MsczReader::meta() const
+const MscReader::Meta& MscReader::meta() const
 {
     if (m_meta.isValid()) {
         return m_meta;
@@ -229,7 +229,7 @@ const MsczReader::Meta& MsczReader::meta() const
     return m_meta;
 }
 
-QByteArray MsczReader::fileData(const QString& fileName) const
+QByteArray MscReader::fileData(const QString& fileName) const
 {
     switch (m_mode) {
     case Mode::Zip: {
@@ -255,22 +255,22 @@ QByteArray MsczReader::fileData(const QString& fileName) const
     return QByteArray();
 }
 
-QByteArray MsczReader::readScoreFile() const
+QByteArray MscReader::readScoreFile() const
 {
     return fileData(meta().mscxFileName);
 }
 
-QByteArray MsczReader::readThumbnailFile() const
+QByteArray MscReader::readThumbnailFile() const
 {
     return fileData("Thumbnails/thumbnail.png");
 }
 
-QByteArray MsczReader::readImageFile(const QString& fileName) const
+QByteArray MscReader::readImageFile(const QString& fileName) const
 {
     return fileData("Pictures/" + fileName);
 }
 
-std::vector<QString> MsczReader::imageFileNames() const
+std::vector<QString> MscReader::imageFileNames() const
 {
     std::vector<QString> names;
     for (const QString& path : meta().imageFilePaths) {
@@ -279,12 +279,12 @@ std::vector<QString> MsczReader::imageFileNames() const
     return names;
 }
 
-QByteArray MsczReader::readAudioFile() const
+QByteArray MscReader::readAudioFile() const
 {
     return fileData("audio.ogg");
 }
 
-QByteArray MsczReader::readAudioSettingsJsonFile() const
+QByteArray MscReader::readAudioSettingsJsonFile() const
 {
     return fileData("audiosettings.json");
 }

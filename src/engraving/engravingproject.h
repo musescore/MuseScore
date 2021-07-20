@@ -25,8 +25,8 @@
 #include <memory>
 
 #include "engravingerrors.h"
-#include "io/msczreader.h"
-#include "io/msczwriter.h"
+#include "io/mscreader.h"
+#include "io/mscwriter.h"
 
 //! NOTE In addition to the score itself, the mscz file also stores other data,
 //! such as synthesizer, mixer settings, omr, etc.
@@ -60,8 +60,8 @@ public:
     Ms::MasterScore* masterScore() const;
     Err setupMasterScore();
 
-    Err loadMscz(const mu::engraving::MsczReader& reader, bool ignoreVersionError);
-    bool writeMscz(mu::engraving::MsczWriter& writer, bool onlySelection, bool createThumbnail);
+    Err loadMscz(const mu::engraving::MscReader& reader, bool ignoreVersionError);
+    bool writeMscz(mu::engraving::MscWriter& writer, bool onlySelection, bool createThumbnail);
 
 private:
 
