@@ -129,7 +129,7 @@
         <Text>
           <style>Title</style>
           <offset x="0" y="-0.07525"/>
-          <text><font size="22"/>Staff Emptiness </text>
+          <text><font size="22"/>Staff Emptiness</text>
           </Text>
         <Text>
           <style>Subtitle</style>

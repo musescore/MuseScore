@@ -44,10 +44,6 @@
     <credit-type>title</credit-type>
     <credit-words default-x="600" default-y="1611.86" justify="center" valign="top" font-size="22">Inferred Credits</credit-words>
     </credit>
-  <credit page="1">
-    <credit-type>subtitle</credit-type>
-    <credit-words default-x="600" default-y="1554.28" justify="center" valign="top" font-size="16">MuseScore Testcase</credit-words>
-    </credit>
   <part-list>
     <score-part id="P1">
       <part-name>Piano</part-name>
@@ -113,6 +109,19 @@
           <text>ha</text>
           </lyric>
         </note>
+      <direction placement="above">
+        <direction-type>
+          <words default-y="34.66" relative-y="10.00">
+          
+from MUSESCORE: the musical: the graphic novel:
+the video game: a tone poem
+
+
+
+
+</words>
+          </direction-type>
+        </direction>
       <note default-x="110.42" default-y="-15.00">
         <pitch>
           <step>C</step>

@@ -5,5 +5,6 @@
     <dontHidStavesInFirstSystm>0</dontHidStavesInFirstSystm>
     <measureSpacing>1</measureSpacing>
     <defaultsVersion>302</defaultsVersion>
+    <subTitleFontSize>14</subTitleFontSize>
     </Style>
   </museScore>
