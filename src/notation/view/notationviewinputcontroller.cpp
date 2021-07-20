@@ -111,6 +111,11 @@ INotationStylePtr NotationViewInputController::notationStyle() const
     return currentNotation() ? currentNotation()->style() : nullptr;
 }
 
+INotationInteractionPtr NotationViewInputController::viewInteraction() const
+{
+    return m_view->notationInteraction();
+}
+
 void NotationViewInputController::zoomIn()
 {
     int maxIndex = m_possibleZoomsPercentage.size() > 0 ? m_possibleZoomsPercentage.size() - 1 : 0;
@@ -299,8 +304,8 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
     m_interactData.beginPoint = logicPos;
 
     if (!m_readonly) {
-        m_interactData.hitElement = m_view->notationInteraction()->hitElement(logicPos, hitWidth());
-        m_interactData.hitStaffIndex = m_view->notationInteraction()->hitStaffIndex(logicPos);
+        m_interactData.hitElement = viewInteraction()->hitElement(logicPos, hitWidth());
+        m_interactData.hitStaffIndex = viewInteraction()->hitStaffIndex(logicPos);
     }
 
     if (playbackController()->isPlaying()) {
@@ -314,7 +319,7 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
         return;
     }
 
-    if (m_interactData.hitElement && !m_interactData.hitElement->selected()) {
+    if (needSelect(event, logicPos)) {
         SelectType selectType = SelectType::SINGLE;
         if (keyState == Qt::NoModifier) {
             selectType = SelectType::SINGLE;
@@ -323,11 +328,11 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
         } else if (keyState & Qt::ControlModifier) {
             selectType = SelectType::ADD;
         }
-        m_view->notationInteraction()->select({ m_interactData.hitElement }, selectType, m_interactData.hitStaffIndex);
+        viewInteraction()->select({ m_interactData.hitElement }, selectType, m_interactData.hitStaffIndex);
     }
 
-    if (m_view->notationInteraction()->isHitGrip(logicPos)) {
-        m_view->notationInteraction()->startEditGrip(logicPos);
+    if (viewInteraction()->isHitGrip(logicPos)) {
+        viewInteraction()->startEditGrip(logicPos);
         return;
     }
 
@@ -341,16 +346,42 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
     if (m_interactData.hitElement) {
         playbackController()->playElement(m_interactData.hitElement);
     } else {
-        m_view->notationInteraction()->endEditGrip();
+        viewInteraction()->endEditGrip();
     }
 
-    if (m_view->notationInteraction()->isTextEditingStarted()) {
+    if (viewInteraction()->isTextEditingStarted()) {
         if (!m_interactData.hitElement || !m_interactData.hitElement->isText()) {
-            m_view->notationInteraction()->endEditText();
+            viewInteraction()->endEditText();
         } else {
-            m_view->notationInteraction()->changeTextCursorPosition(m_interactData.beginPoint);
+            viewInteraction()->changeTextCursorPosition(m_interactData.beginPoint);
         }
     }
+}
+
+bool NotationViewInputController::needSelect(const QMouseEvent* event, const PointF& clickLogicPos) const
+{
+    if (!event) {
+        return false;
+    }
+
+    bool needSelect = m_interactData.hitElement != nullptr;
+    if (!needSelect) {
+        return needSelect;
+    }
+
+    Qt::MouseButton button = event->button();
+
+    if (button == Qt::MouseButton::LeftButton && event->modifiers() == Qt::NoModifier) {
+        return needSelect;
+    }
+
+    needSelect &= !m_interactData.hitElement->selected();
+
+    if (button == Qt::MouseButton::RightButton && needSelect) {
+        needSelect &= !viewInteraction()->selection()->range()->containsPoint(clickLogicPos);
+    }
+
+    return needSelect;
 }
 
 bool NotationViewInputController::isDragAllowed() const
@@ -384,13 +415,13 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
 
     // drag element
     if (!middleButton && ((m_interactData.hitElement && m_interactData.hitElement->isMovable())
-                          || m_view->notationInteraction()->isGripEditStarted())) {
-        if (m_interactData.hitElement && !m_view->notationInteraction()->isDragStarted()) {
+                          || viewInteraction()->isGripEditStarted())) {
+        if (m_interactData.hitElement && !viewInteraction()->isDragStarted()) {
             startDragElements(m_interactData.hitElement->type(), m_interactData.hitElement->offset());
         }
 
-        if (m_view->notationInteraction()->isGripEditStarted() && !m_view->notationInteraction()->isDragStarted()) {
-            Element* selectedElement = m_view->notationInteraction()->selection()->element();
+        if (viewInteraction()->isGripEditStarted() && !viewInteraction()->isDragStarted()) {
+            Element* selectedElement = viewInteraction()->selection()->element();
             startDragElements(selectedElement->type(), selectedElement->offset());
         }
 
@@ -401,14 +432,14 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
             mode = DragMode::OnlyX;
         }
 
-        m_view->notationInteraction()->drag(m_interactData.beginPoint, logicPos, mode);
+        viewInteraction()->drag(m_interactData.beginPoint, logicPos, mode);
         return;
     } else if (m_interactData.hitElement == nullptr && (keyState & (Qt::ShiftModifier | Qt::ControlModifier))) {
-        if (!m_view->notationInteraction()->isDragStarted()) {
-            m_view->notationInteraction()->startDrag(std::vector<Element*>(), PointF(), [](const Element*) { return false; });
+        if (!viewInteraction()->isDragStarted()) {
+            viewInteraction()->startDrag(std::vector<Element*>(), PointF(), [](const Element*) { return false; });
         }
-        m_view->notationInteraction()->drag(m_interactData.beginPoint, logicPos,
-                                            keyState & Qt::ControlModifier ? DragMode::LassoList : DragMode::BothXY);
+        viewInteraction()->drag(m_interactData.beginPoint, logicPos,
+                                keyState & Qt::ControlModifier ? DragMode::LassoList : DragMode::BothXY);
         return;
     }
 
@@ -427,43 +458,43 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
 
 void NotationViewInputController::startDragElements(ElementType elementsType, const PointF& elementsOffset)
 {
-    std::vector<Element*> elements = m_view->notationInteraction()->selection()->elements();
+    std::vector<Element*> elements = viewInteraction()->selection()->elements();
     IF_ASSERT_FAILED(!elements.empty()) {
         return;
     }
 
-    bool isFilterType = m_view->notationInteraction()->selection()->isRange();
+    bool isFilterType = viewInteraction()->selection()->isRange();
     auto isDraggable = [isFilterType, elementsType](const Element* element) {
         return element && element->selected() && (!isFilterType || elementsType == element->type());
     };
 
-    m_view->notationInteraction()->startDrag(elements, elementsOffset, isDraggable);
+    viewInteraction()->startDrag(elements, elementsOffset, isDraggable);
 }
 
 void NotationViewInputController::mouseReleaseEvent(QMouseEvent*)
 {
-    if (!m_interactData.hitElement && !m_isCanvasDragged && !m_view->notationInteraction()->isGripEditStarted()
-        && !m_view->notationInteraction()->isDragStarted()) {
-        m_view->notationInteraction()->clearSelection();
+    if (!m_interactData.hitElement && !m_isCanvasDragged && !viewInteraction()->isGripEditStarted()
+        && !viewInteraction()->isDragStarted()) {
+        viewInteraction()->clearSelection();
     }
 
     m_isCanvasDragged = false;
 
-    if (m_view->notationInteraction()->isDragStarted()) {
-        m_view->notationInteraction()->endDrag();
+    if (viewInteraction()->isDragStarted()) {
+        viewInteraction()->endDrag();
     }
 }
 
 void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent* event)
 {
-    Element* element = m_view->notationInteraction()->selection()->element();
+    Element* element = viewInteraction()->selection()->element();
 
     if (!element) {
         return;
     }
 
     if (element->isTextBase()) {
-        m_view->notationInteraction()->startEditText(element, m_view->toLogical(event->pos()));
+        viewInteraction()->startEditText(element, m_view->toLogical(event->pos()));
     }
 }
 
@@ -477,7 +508,7 @@ void NotationViewInputController::hoverMoveEvent(QHoverEvent* event)
 
 void NotationViewInputController::keyPressEvent(QKeyEvent* event)
 {
-    m_view->notationInteraction()->editText(event);
+    viewInteraction()->editText(event);
 }
 
 void NotationViewInputController::dragEnterEvent(QDragEnterEvent* event)
@@ -497,7 +528,7 @@ void NotationViewInputController::dragEnterEvent(QDragEnterEvent* event)
         }
 
         QByteArray edata = mimeData->data(MIME_SYMBOL_FORMAT);
-        m_view->notationInteraction()->startDrop(edata);
+        viewInteraction()->startDrop(edata);
 
         return;
     }
@@ -523,7 +554,7 @@ void NotationViewInputController::dragMoveEvent(QDragMoveEvent* event)
     PointF pos = m_view->toLogical(event->pos());
     Qt::KeyboardModifiers modifiers = event->keyboardModifiers();
 
-    bool isAccepted = m_view->notationInteraction()->isDropAccepted(pos, modifiers);
+    bool isAccepted = viewInteraction()->isDropAccepted(pos, modifiers);
     if (isAccepted) {
         event->setAccepted(isAccepted);
     } else {
@@ -533,7 +564,7 @@ void NotationViewInputController::dragMoveEvent(QDragMoveEvent* event)
 
 void NotationViewInputController::dragLeaveEvent(QDragLeaveEvent*)
 {
-    m_view->notationInteraction()->endDrop();
+    viewInteraction()->endDrop();
 }
 
 void NotationViewInputController::dropEvent(QDropEvent* event)
@@ -541,7 +572,7 @@ void NotationViewInputController::dropEvent(QDropEvent* event)
     PointF pos = m_view->toLogical(event->pos());
     Qt::KeyboardModifiers modifiers = event->keyboardModifiers();
 
-    bool isAccepted = m_view->notationInteraction()->drop(pos, modifiers);
+    bool isAccepted = viewInteraction()->drop(pos, modifiers);
     if (isAccepted) {
         event->acceptProposedAction();
     } else {

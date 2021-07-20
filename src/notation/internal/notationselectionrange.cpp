@@ -120,6 +120,17 @@ std::vector<mu::RectF> NotationSelectionRange::boundingArea() const
     return result;
 }
 
+bool NotationSelectionRange::containsPoint(const PointF& point) const
+{
+    for (const mu::RectF& area : boundingArea()) {
+        if (area.contains(point)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 Ms::Score* NotationSelectionRange::score() const
 {
     return m_getScore->score();

@@ -99,6 +99,7 @@ public:
 private:
     INotationPtr currentNotation() const;
     INotationStylePtr notationStyle() const;
+    INotationInteractionPtr viewInteraction() const;
 
     void zoomToPageWidth();
     void zoomToWholePage();
@@ -122,6 +123,7 @@ private:
 
     float hitWidth() const;
 
+    bool needSelect(const QMouseEvent* event, const PointF& clickLogicPos) const;
     ElementType selectionType() const;
 
     double guiScalling() const;
