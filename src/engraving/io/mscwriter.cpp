@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "msczwriter.h"
+#include "mscwriter.h"
 
 #include <QXmlStreamWriter>
 #include <QFile>
@@ -33,17 +33,17 @@
 
 using namespace mu::engraving;
 
-MsczWriter::MsczWriter(const QString& filePath, Mode mode)
+MscWriter::MscWriter(const QString& filePath, Mode mode)
     : m_filePath(filePath), m_mode(mode)
 {
 }
 
-MsczWriter::MsczWriter(QIODevice* device)
+MscWriter::MscWriter(QIODevice* device)
     : m_mode(Mode::Zip), m_device(device), m_selfDeviceOwner(false)
 {
 }
 
-MsczWriter::~MsczWriter()
+MscWriter::~MscWriter()
 {
     close();
 
@@ -54,7 +54,7 @@ MsczWriter::~MsczWriter()
     }
 }
 
-QString MsczWriter::rootPath() const
+QString MscWriter::rootPath() const
 {
     switch (m_mode) {
     case Mode::Zip: {
@@ -68,7 +68,7 @@ QString MsczWriter::rootPath() const
     return QString();
 }
 
-bool MsczWriter::open()
+bool MscWriter::open()
 {
     switch (m_mode) {
     case Mode::Zip: {
@@ -101,7 +101,7 @@ bool MsczWriter::open()
     return true;
 }
 
-void MsczWriter::close()
+void MscWriter::close()
 {
     writeMeta();
 
@@ -118,7 +118,7 @@ void MsczWriter::close()
     }
 }
 
-bool MsczWriter::isOpened() const
+bool MscWriter::isOpened() const
 {
     switch (m_mode) {
     case Mode::Zip: {
@@ -131,7 +131,7 @@ bool MsczWriter::isOpened() const
     return false;
 }
 
-void MsczWriter::setDevice(QIODevice* device)
+void MscWriter::setDevice(QIODevice* device)
 {
     if (m_writer) {
         delete m_writer;
@@ -151,7 +151,7 @@ void MsczWriter::setDevice(QIODevice* device)
     }
 }
 
-void MsczWriter::setFilePath(const QString& filePath)
+void MscWriter::setFilePath(const QString& filePath)
 {
     m_filePath = filePath;
 
@@ -161,22 +161,22 @@ void MsczWriter::setFilePath(const QString& filePath)
     }
 }
 
-QString MsczWriter::filePath() const
+QString MscWriter::filePath() const
 {
     return m_filePath;
 }
 
-void MsczWriter::setMode(Mode m)
+void MscWriter::setMode(Mode m)
 {
     m_mode = m;
 }
 
-MsczWriter::Mode MsczWriter::mode() const
+MscWriter::Mode MscWriter::mode() const
 {
     return m_mode;
 }
 
-MQZipWriter* MsczWriter::writer() const
+MQZipWriter* MscWriter::writer() const
 {
     if (!m_writer) {
         m_writer = new MQZipWriter(m_device);
@@ -184,7 +184,7 @@ MQZipWriter* MsczWriter::writer() const
     return m_writer;
 }
 
-bool MsczWriter::addFileData(const QString& fileName, const QByteArray& data)
+bool MscWriter::addFileData(const QString& fileName, const QByteArray& data)
 {
     switch (m_mode) {
     case Mode::Zip: {
@@ -223,7 +223,7 @@ bool MsczWriter::addFileData(const QString& fileName, const QByteArray& data)
     return true;
 }
 
-void MsczWriter::writeScoreFile(const QByteArray& data)
+void MscWriter::writeScoreFile(const QByteArray& data)
 {
     QString completeBaseName = QFileInfo(filePath()).completeBaseName();
     IF_ASSERT_FAILED(!completeBaseName.isEmpty()) {
@@ -233,27 +233,27 @@ void MsczWriter::writeScoreFile(const QByteArray& data)
     addFileData(fileName, data);
 }
 
-void MsczWriter::writeThumbnailFile(const QByteArray& data)
+void MscWriter::writeThumbnailFile(const QByteArray& data)
 {
     addFileData("Thumbnails/thumbnail.png", data);
 }
 
-void MsczWriter::addImageFile(const QString& fileName, const QByteArray& data)
+void MscWriter::addImageFile(const QString& fileName, const QByteArray& data)
 {
     addFileData("Pictures/" + fileName, data);
 }
 
-void MsczWriter::writeAudioFile(const QByteArray& data)
+void MscWriter::writeAudioFile(const QByteArray& data)
 {
     addFileData("audio.ogg", data);
 }
 
-void MsczWriter::writeAudioSettingsJsonFile(const QByteArray& data)
+void MscWriter::writeAudioSettingsJsonFile(const QByteArray& data)
 {
     addFileData("audiosettings.json", data);
 }
 
-void MsczWriter::writeMeta()
+void MscWriter::writeMeta()
 {
     if (m_meta.isWrited) {
         return;
@@ -264,7 +264,7 @@ void MsczWriter::writeMeta()
     m_meta.isWrited = true;
 }
 
-void MsczWriter::writeContainer(const std::vector<QString>& paths)
+void MscWriter::writeContainer(const std::vector<QString>& paths)
 {
     QByteArray data;
     QBuffer buf(&data);

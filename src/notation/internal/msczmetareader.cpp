@@ -30,7 +30,7 @@
 
 #include "framework/global/xmlreader.h"
 
-#include "engraving/io/msczreader.h"
+#include "engraving/io/mscreader.h"
 
 #include "log.h"
 
@@ -96,7 +96,7 @@ mu::RetVal<Meta> MsczMetaReader::readMetaFromMscx(const io::path& filePath) cons
     }
 
     QBuffer buffer(&data.val);
-    MsczReader msczReader(&buffer);
+    MscReader msczReader(&buffer);
     msczReader.open();
 
     // Read score meta

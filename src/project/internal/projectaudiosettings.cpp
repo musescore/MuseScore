@@ -41,7 +41,7 @@ void ProjectAudioSettings::makeDefault()
     m_someValue = 42;
 }
 
-mu::Ret ProjectAudioSettings::read(const engraving::MsczReader& reader)
+mu::Ret ProjectAudioSettings::read(const engraving::MscReader& reader)
 {
     QByteArray json = reader.readAudioSettingsJsonFile();
     QJsonObject rootObj = QJsonDocument::fromJson(json).object();
@@ -52,7 +52,7 @@ mu::Ret ProjectAudioSettings::read(const engraving::MsczReader& reader)
     return make_ret(Ret::Code::Ok);
 }
 
-mu::Ret ProjectAudioSettings::write(engraving::MsczWriter& writer)
+mu::Ret ProjectAudioSettings::write(engraving::MscWriter& writer)
 {
     QJsonObject exampleObj;
     exampleObj["someValue"] = m_someValue;

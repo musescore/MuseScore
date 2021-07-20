@@ -44,7 +44,7 @@ Ms::MasterScore* ScoreAccess::createMasterScore(const Ms::MStyle& style)
     return new Ms::MasterScore(style, nullptr);
 }
 
-Ms::Score::FileError ScoreAccess::loadMscz(Ms::MasterScore* masterScore, mu::engraving::MsczReader& msczFile, bool ignoreVersionError)
+Ms::Score::FileError ScoreAccess::loadMscz(Ms::MasterScore* masterScore, mu::engraving::MscReader& msczFile, bool ignoreVersionError)
 {
     return masterScore->loadMscz(msczFile, ignoreVersionError);
 }
