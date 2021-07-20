@@ -117,20 +117,20 @@
       </Part>
     <Staff id="1">
       <VBox>
-        <height>9.1273</height>
+        <height>12.9746</height>
         <Text>
           <style>Title</style>
           <offset x="0" y="-0.1505"/>
           <text><font size="22"/>Inferred Credits</text>
           </Text>
         <Text>
-          <style>Subtitle</style>
-          <offset x="0" y="9.926"/>
-          <text><font size="16"/>MuseScore Testcase</text>
-          </Text>
-        <Text>
           <style>Composer</style>
           <text>Words and Music by Henry Ives</text>
+          </Text>
+        <Text>
+          <style>Subtitle</style>
+          <text>from MUSESCORE: the musical: the graphic novel:
+the video game: a tone poem</text>
           </Text>
         </VBox>
       <Measure>

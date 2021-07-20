@@ -494,7 +494,7 @@ static void addText(VBox* vbx, Score* s, const QString strTxt, const Tid stl)
       {
       if (!strTxt.isEmpty()) {
             Text* text = new Text(s, stl);
-            text->setXmlText(strTxt);
+            text->setXmlText(strTxt.trimmed());
             vbx->add(text);
             }
       }
@@ -512,7 +512,7 @@ static void addText2(VBox* vbx, Score* s, const QString strTxt, const Tid stl, c
       {
       if (!strTxt.isEmpty()) {
             Text* text = new Text(s, stl);
-            text->setXmlText(strTxt);
+            text->setXmlText(strTxt.trimmed());
             text->setAlign(align);
             text->setPropertyFlags(Pid::ALIGN, PropertyFlags::UNSTYLED);
             text->setOffset(QPointF(0.0, yoffs));
