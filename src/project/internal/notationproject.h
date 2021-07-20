@@ -35,8 +35,8 @@
 #include "projectaudiosettings.h"
 
 namespace mu::engraving {
-class MsczReader;
-class MsczWriter;
+class MscReader;
+class MscWriter;
 }
 
 namespace mu::project {
@@ -68,14 +68,14 @@ public:
 
 private:
 
-    Ret doLoad(engraving::MsczReader& reader, const io::path& stylePath, bool forceMode);
+    Ret doLoad(engraving::MscReader& reader, const io::path& stylePath, bool forceMode);
     Ret doImport(const io::path& path, const io::path& stylePath, bool forceMode);
 
     Ret saveScore(const io::path& path = io::path(), SaveMode saveMode = SaveMode::Save);
     Ret saveSelectionOnScore(const io::path& path = io::path());
     Ret exportProject(const io::path& path, const std::string& suffix);
     Ret doSave(bool generateBackup);
-    Ret writeProject(engraving::MsczWriter& msczWriter, bool onlySelection);
+    Ret writeProject(engraving::MscWriter& msczWriter, bool onlySelection);
 
     mu::engraving::EngravingProjectPtr m_engravingProject = nullptr;
     notation::MasterNotationPtr m_masterNotation = nullptr;

@@ -400,7 +400,7 @@ void Score::readStaff(XmlReader& e)
     }
 }
 
-bool Score::writeMscz(engraving::MsczWriter& msczWriter, bool onlySelection, bool doCreateThumbnail)
+bool Score::writeMscz(engraving::MscWriter& msczWriter, bool onlySelection, bool doCreateThumbnail)
 {
     IF_ASSERT_FAILED(msczWriter.isOpened()) {
         return false;
@@ -577,7 +577,7 @@ bool Score::writeScore(QIODevice* f, bool msczFormat, bool onlySelection)
     return true;
 }
 
-Score::FileError MasterScore::loadMscz(const mu::engraving::MsczReader& msczReader, bool ignoreVersionError)
+Score::FileError MasterScore::loadMscz(const mu::engraving::MscReader& msczReader, bool ignoreVersionError)
 {
     using namespace mu::engraving;
 

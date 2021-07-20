@@ -37,7 +37,7 @@ public:
     static Ms::MasterScore* createMasterScoreWithDefaultStyle();
     static Ms::MasterScore* createMasterScore(const Ms::MStyle& style);
 
-    static Ms::Score::FileError loadMscz(Ms::MasterScore* masterScore, mu::engraving::MsczReader& msczFile, bool ignoreVersionError);
+    static Ms::Score::FileError loadMscz(Ms::MasterScore* masterScore, mu::engraving::MscReader& msczFile, bool ignoreVersionError);
 };
 }
 

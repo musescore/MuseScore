@@ -27,8 +27,8 @@
 #include "../iprojectaudiosettings.h"
 
 #include "ret.h"
-#include "engraving/io/msczreader.h"
-#include "engraving/io/msczwriter.h"
+#include "engraving/io/mscreader.h"
+#include "engraving/io/mscwriter.h"
 
 namespace mu::project {
 class ProjectAudioSettings : public IProjectAudioSettings
@@ -41,8 +41,8 @@ public:
     //! NOTE Used for new or imported project (score)
     void makeDefault();
 
-    Ret read(const engraving::MsczReader& reader);
-    Ret write(engraving::MsczWriter& writer);
+    Ret read(const engraving::MscReader& reader);
+    Ret write(engraving::MscWriter& writer);
 
 private:
 

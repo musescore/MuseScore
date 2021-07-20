@@ -39,7 +39,7 @@ Ms::Score::FileError mu::engraving::compat::mscxToMscz(const QString& mscxFilePa
     QByteArray mscxData = mscxFile.readAll();
 
     QBuffer buf(msczData);
-    MsczWriter writer(&buf);
+    MscWriter writer(&buf);
     writer.setFilePath(mscxFilePath);
     writer.open();
     writer.writeScoreFile(mscxData);
@@ -72,7 +72,7 @@ Ms::Score::FileError mu::engraving::compat::loadMsczOrMscx(Ms::MasterScore* scor
     }
 
     QBuffer msczBuf(&msczData);
-    MsczReader reader(&msczBuf);
+    MscReader reader(&msczBuf);
     reader.setFilePath(filePath);
     reader.open();
 
@@ -105,7 +105,7 @@ mu::engraving::Err mu::engraving::compat::loadMsczOrMscx(EngravingProjectPtr pro
     }
 
     QBuffer msczBuf(&msczData);
-    MsczReader reader(&msczBuf);
+    MscReader reader(&msczBuf);
     reader.setFilePath(filePath);
     reader.open();
 

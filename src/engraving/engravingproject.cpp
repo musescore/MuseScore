@@ -114,13 +114,13 @@ Ms::MasterScore* EngravingProject::masterScore() const
     return m_masterScore;
 }
 
-Err EngravingProject::loadMscz(const MsczReader& reader, bool ignoreVersionError)
+Err EngravingProject::loadMscz(const MscReader& reader, bool ignoreVersionError)
 {
     Ms::Score::FileError err = m_masterScore->loadMscz(reader, ignoreVersionError);
     return scoreFileErrorToErr(err);
 }
 
-bool EngravingProject::writeMscz(mu::engraving::MsczWriter& writer, bool onlySelection, bool createThumbnail)
+bool EngravingProject::writeMscz(mu::engraving::MscWriter& writer, bool onlySelection, bool createThumbnail)
 {
     bool ok = m_masterScore->writeMscz(writer, onlySelection, createThumbnail);
     if (ok && !onlySelection) {
