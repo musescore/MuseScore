@@ -125,7 +125,7 @@
           </Text>
         <Text>
           <style>Composer</style>
-          <text>Words and Music by Henry Ives</text>
+          <text>Words &amp; Music by Henry Ives (and ampersands)</text>
           </Text>
         <Text>
           <style>Subtitle</style>
@@ -143,6 +143,10 @@ the video game: a tone poem</text>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
+          <StaffText>
+            <text>Lyrics to be sung by candlelight
+(and this not to be inferred)</text>
+            </StaffText>
           <Beam>
             <StemDirection>down</StemDirection>
             <l1>17</l1>
