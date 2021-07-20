@@ -49,7 +49,7 @@ public:
     virtual void setIsShowControlsInMixer(bool show) = 0;
 
     // synthesizers
-    virtual synth::SoundFontPath defaultSoundFontPath() const = 0;
+    virtual synth::SynthUri defaultSynthUri() const = 0;
 
     virtual synth::SoundFontPaths soundFontDirectories() const = 0;
     virtual const synth::SynthesizerState& synthesizerState() const = 0;

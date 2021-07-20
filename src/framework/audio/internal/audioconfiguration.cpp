@@ -117,9 +117,16 @@ void AudioConfiguration::setIsShowControlsInMixer(bool show)
     settings()->setSharedValue(SHOW_CONTROLS_IN_MIXER, Val(show));
 }
 
-SoundFontPath AudioConfiguration::defaultSoundFontPath() const
+SynthUri AudioConfiguration::defaultSynthUri() const
 {
-    return globalConfiguration()->appDataPath() + DEFAULT_SOUND_FONT_NAME;
+    static SynthUri defaultUri;
+
+    if (!defaultUri.isValid()) {
+        defaultUri = SynthUri(SynthType::Fluid);
+        defaultUri.addParam("sfpath", Val(globalConfiguration()->appDataPath() + DEFAULT_SOUND_FONT_NAME));
+    }
+
+    return defaultUri;
 }
 
 const SynthesizerState& AudioConfiguration::defaultSynthesizerState() const

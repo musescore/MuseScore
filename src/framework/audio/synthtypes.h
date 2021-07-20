@@ -26,6 +26,7 @@
 #include <map>
 
 #include "io/path.h"
+#include "uri.h"
 #include "midi/miditypes.h"
 
 namespace mu::audio::synth {
@@ -46,6 +47,35 @@ enum class SynthType {
     Fluid,
     VSTi
 };
+
+struct SynthUri : public UriQuery
+{
+    SynthType type = SynthType::Undefined;
+
+    SynthUri() = default;
+    SynthUri(const SynthType& type)
+        : UriQuery("musescore://audio/" + synthTypeToString(type)), type(type) {}
+
+private:
+    std::string synthTypeToString(const SynthType& type)
+    {
+        switch (type) {
+        case SynthType::Fluid: {
+            static std::string fluid("fluid");
+            return fluid;
+        }
+        case SynthType::VSTi: {
+            static std::string vsti("vsti");
+            return vsti;
+        }
+        default:
+            static std::string undefined("undefined");
+            return undefined;
+        }
+    }
+};
+
+using SynthUriList = std::vector<SynthUri>;
 
 struct SynthesizerState {
     enum class ValID {

@@ -48,7 +48,7 @@ public:
     bool isShowControlsInMixer() const override;
     void setIsShowControlsInMixer(bool show) override;
 
-    synth::SoundFontPath defaultSoundFontPath() const override;
+    synth::SynthUri defaultSynthUri() const override;
 
     const synth::SynthesizerState& defaultSynthesizerState() const;
     const synth::SynthesizerState& synthesizerState() const override;
