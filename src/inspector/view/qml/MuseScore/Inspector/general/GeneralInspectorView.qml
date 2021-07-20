@@ -44,8 +44,6 @@ InspectorSectionView {
         spacing: 12
 
         GridLayout {
-            id: grid
-
             width: parent.width
 
             columns: 2
@@ -119,17 +117,15 @@ InspectorSectionView {
             }
         }
 
-        Row {
-            id: popupButtonsRow
-
+        GridLayout {
             width: parent.width
 
-            spacing: 4
+            columns: 2
+            columnSpacing: 4
 
-            FlatButton {
-                id: playbackButton
-
-                width: (parent.width - popupButtonsRow.spacing)/ 2
+            PopupViewButton {
+                popupAvailableWidth: parent ? parent.width : 0
+                anchorItem: root.anchorItem
 
                 navigation.panel: root.navigationPanel
                 navigation.name: "Playback"
@@ -138,25 +134,18 @@ InspectorSectionView {
                 icon: IconCode.AUDIO
                 text: qsTrc("inspector", "Playback")
 
-                onClicked: {
-                    if (playbackPopup.isOpened) {
-                        playbackPopup.close()
-                    } else {
-                        playbackPopup.open()
-                    }
+                popupContent: PlaybackSettings {
+                    proxyModel: model ? model.playbackProxyModel : null
                 }
 
-                PlaybackPopup {
-                    id: playbackPopup
-                    navigationParentControl: playbackButton.navigation
-                    proxyModel: model ? model.playbackProxyModel : null
+                onEnsureContentVisibleRequested: {
+                    root.ensureContentVisibleRequested(invisibleContentHeight)
                 }
             }
 
-            FlatButton {
-                id: appearanceButton
-
-                width: (parent.width - popupButtonsRow.spacing)/ 2
+            PopupViewButton {
+                popupAvailableWidth: parent ? parent.width : 0
+                anchorItem: root.anchorItem
 
                 navigation.panel: root.navigationPanel
                 navigation.name: "Appearance"
@@ -165,18 +154,12 @@ InspectorSectionView {
                 icon: IconCode.POSITION_ARROWS
                 text: qsTrc("inspector", "Appearance")
 
-                onClicked: {
-                    if (appearancePopup.isOpened) {
-                        appearancePopup.close()
-                    } else {
-                        appearancePopup.open()
-                    }
+                popupContent: AppearanceSettings {
+                    model: root.model ? root.model.appearanceSettingsModel : null
                 }
 
-                AppearancePopup {
-                    id: appearancePopup
-                    navigationParentControl: appearanceButton.navigation
-                    model: root.model ? root.model.appearanceSettingsModel : null
+                onEnsureContentVisibleRequested: {
+                    root.ensureContentVisibleRequested(invisibleContentHeight)
                 }
             }
         }
