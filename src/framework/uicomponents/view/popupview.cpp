@@ -218,6 +218,7 @@ void PopupView::updateView()
 
     m_globalPos = QPointF(); // invalidate
     updatePosition();
+    updateContentPosition();
     m_window->setPosition(m_globalPos.toPoint());
 }
 

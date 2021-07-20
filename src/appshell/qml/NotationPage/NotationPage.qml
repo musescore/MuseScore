@@ -87,7 +87,7 @@ DockPage {
         Qt.callLater(pageModel.init, root.dockWindow)
     }
 
-    readonly property int defaultPanelWidth: 260
+    readonly property int defaultPanelWidth: 300
     readonly property int toolBarHeight: 48
 
     mainToolBars: [
