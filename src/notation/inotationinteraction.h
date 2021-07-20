@@ -47,9 +47,20 @@ public:
     // Visibility
     virtual void toggleVisible() = 0;
 
-    // Select
+    // Hit
     virtual Element* hitElement(const PointF& pos, float width) const = 0;
-    virtual int hitStaffIndex(const PointF& pos) const = 0;
+    virtual Staff* hitStaff(const PointF& pos) const = 0;
+
+    struct HitElementContext
+    {
+        notation::Element* element = nullptr;
+        notation::Staff* staff = nullptr;
+    };
+
+    virtual const HitElementContext& hitElementContext() const = 0;
+    virtual void setHitElementContext(const HitElementContext& context) = 0;
+
+    // Select
     virtual void addChordToSelection(MoveDirection d) = 0;
     virtual void moveChordNoteSelection(MoveDirection d) = 0;
     virtual void select(const std::vector<Element*>& elements, SelectType type, int staffIndex = 0) = 0;

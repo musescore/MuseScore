@@ -66,9 +66,13 @@ public:
     // Visibility
     void toggleVisible() override;
 
-    // Select
+    // Hit
     Element* hitElement(const PointF& pos, float width) const override;
-    int hitStaffIndex(const PointF& pos) const override;
+    Staff* hitStaff(const PointF& pos) const override;
+    const HitElementContext& hitElementContext() const override;
+    void setHitElementContext(const HitElementContext& context) override;
+
+    // Select
     void addChordToSelection(MoveDirection d) override;
     void moveChordNoteSelection(MoveDirection d) override;
     void select(const std::vector<Element*>& elements, SelectType type, int staffIndex = 0) override;
@@ -250,8 +254,8 @@ private:
 
     struct HitMeasureData
     {
-        int staffIndex = -1;
-        Ms::Measure* measure = nullptr;
+        Measure* measure = nullptr;
+        Staff* staff = nullptr;
     };
 
     HitMeasureData hitMeasure(const PointF& pos) const;
@@ -301,6 +305,7 @@ private:
     Ms::Lasso* m_lasso = nullptr;
 
     bool m_notifyAboutDropChanged = false;
+    HitElementContext m_hitElementContext;
 };
 }
 
