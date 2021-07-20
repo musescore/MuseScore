@@ -43,11 +43,12 @@
     <metaTag name="arranger"></metaTag>
     <metaTag name="composer">Henry Ives</metaTag>
     <metaTag name="copyright"></metaTag>
-    <metaTag name="lyricist"></metaTag>
+    <metaTag name="lyricist">Henry Ives</metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
     <metaTag name="poet"></metaTag>
-    <metaTag name="source"></metaTag>
+    <metaTag name="source">from MUSESCORE: the musical: the graphic novel:
+the video game: a tone poem</metaTag>
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Inferred Credits</metaTag>

@@ -412,7 +412,8 @@ private:
       bool isLyricBracket() const;
       bool isLikelySource(const Fraction& tick) const;
       bool isLikelyLegallyDownloaded(const Fraction& tick) const;
-      Text* addTextToHeader(const Tid tid) const;
+      Text* addTextToHeader(const Tid tid);
+      void hideRedundantHeaderText(const Text* inferredText, const std::vector<QString> metaTags);
       void textToDynamic(QString& text) const;
       bool directionToDynamic();
       bool isLikelyTempoText();

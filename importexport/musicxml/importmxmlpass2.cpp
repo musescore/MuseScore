@@ -2877,10 +2877,17 @@ void MusicXMLParserDirection::direction(const QString& partId,
       if (isLyricBracket())
             return;
       else if (isLikelyCredit(tick)) {
-            addTextToHeader(Tid::COMPOSER);
+            Text* inferredText = addTextToHeader(Tid::COMPOSER);
+            if (inferredText)
+                  hideRedundantHeaderText(inferredText, {"lyricist", "composer", "poet"});
             }
       else if (isLikelySource(tick)) {
-            addTextToHeader(Tid::SUBTITLE);
+            Text* inferredText = addTextToHeader(Tid::SUBTITLE);
+            if (inferredText) {
+                  if (_score->metaTag("source").isEmpty())
+                        _score->setMetaTag("source", inferredText->plainText());
+                  hideRedundantHeaderText(inferredText, {"source"});
+                  }
             }
       else if (isLikelyLegallyDownloaded(tick)) {
             // Ignore (TBD: print to footer?)
@@ -3401,7 +3408,11 @@ bool MusicXMLParserDirection::isLikelyLegallyDownloaded(const Fraction& tick) co
             && _wordsText.contains(QRegularExpression("This music has been legally downloaded\\.\\sDo not photocopy\\."));
       }
 
-Text* MusicXMLParserDirection::addTextToHeader(const Tid tid) const
+//---------------------------------------------------------
+//   addTextToHeader
+//---------------------------------------------------------
+
+Text* MusicXMLParserDirection::addTextToHeader(const Tid tid)
       {
       Text* t = new Text(_score, tid);
       t->setXmlText(_wordsText.trimmed());
@@ -3414,6 +3425,32 @@ Text* MusicXMLParserDirection::addTextToHeader(const Tid tid) const
       return t; 
       }
 
+//---------------------------------------------------------
+//   hideRedundantHeaderText
+//    After inferring header text, hide redundant text.
+//    Redundant text is detected by checking all the
+//    Text elements of the inferred text's VBox against
+//    the contents of the eligible metaTags
+//---------------------------------------------------------
+
+void MusicXMLParserDirection::hideRedundantHeaderText(const Text* inferredText, const std::vector<QString> metaTags)
+      {
+      if (!inferredText->parent()->isVBox())
+            return;
+
+      for (auto e : toVBox(inferredText->parent())->el()) {
+            if (e == inferredText || !e->isText())     
+                  continue;
+            
+            Text* t = toText(e);
+            for (auto metaTag : metaTags) {
+                  if (t->plainText() == _score->metaTag(metaTag)) {
+                        t->setVisible(false);
+                        continue;
+                        }
+                  }
+            }
+      }
 //---------------------------------------------------------
 //   MusicXMLInferredFingering
 //---------------------------------------------------------
