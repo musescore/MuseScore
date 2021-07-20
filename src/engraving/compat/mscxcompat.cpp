@@ -39,8 +39,11 @@ Ms::Score::FileError mu::engraving::compat::mscxToMscz(const QString& mscxFilePa
     QByteArray mscxData = mscxFile.readAll();
 
     QBuffer buf(msczData);
-    MscWriter writer(&buf);
-    writer.setFilePath(mscxFilePath);
+    MscWriter::Params params;
+    params.device = &buf;
+    params.filePath = mscxFilePath;
+    params.mode = MscWriter::Mode::Zip;
+    MscWriter writer(params);
     writer.open();
     writer.writeScoreFile(mscxData);
 
@@ -72,8 +75,12 @@ Ms::Score::FileError mu::engraving::compat::loadMsczOrMscx(Ms::MasterScore* scor
     }
 
     QBuffer msczBuf(&msczData);
-    MscReader reader(&msczBuf);
-    reader.setFilePath(filePath);
+    MscReader::Params params;
+    params.device = &msczBuf;
+    params.filePath = filePath;
+    params.mode = MscReader::Mode::Zip;
+
+    MscReader reader(params);
     reader.open();
 
     Ms::Score::FileError err = ScoreAccess::loadMscz(score, reader, ignoreVersionError);
@@ -105,8 +112,12 @@ mu::engraving::Err mu::engraving::compat::loadMsczOrMscx(EngravingProjectPtr pro
     }
 
     QBuffer msczBuf(&msczData);
-    MscReader reader(&msczBuf);
-    reader.setFilePath(filePath);
+    MscReader::Params params;
+    params.device = &msczBuf;
+    params.filePath = filePath;
+    params.mode = MscReader::Mode::Zip;
+
+    MscReader reader(params);
     reader.open();
 
     Err err = project->loadMscz(reader, ignoreVersionError);
