@@ -65,6 +65,10 @@ Item {
                 currentIndex: root.model && !root.model.type.isUndefined ? tremolos.indexOfValue(root.model.type.value) : -1
 
                 onCurrentValueChanged: {
+                    if (currentIndex == -1) {
+                        return
+                    }
+
                     root.model.type.value = tremolos.currentValue
                 }
             }

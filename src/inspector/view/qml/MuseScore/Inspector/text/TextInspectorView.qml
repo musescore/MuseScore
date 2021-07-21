@@ -78,6 +78,10 @@ InspectorSectionView {
                 currentIndex: root.model && !root.model.fontFamily.isUndefined ? fontFamilyComboBox.indexOfValue(root.model.fontFamily.value) : -1
 
                 onCurrentValueChanged: {
+                    if (currentIndex == -1) {
+                        return
+                    }
+
                     root.model.fontFamily.value = fontFamilyComboBox.currentValue
                 }
             }
@@ -168,6 +172,10 @@ InspectorSectionView {
                     currentIndex: root.model && !root.model.fontSize.isUndefined ? sizes.indexOfValue(root.model.fontSize.value) : -1
 
                     onCurrentValueChanged: {
+                        if (currentIndex == -1) {
+                            return
+                        }
+
                         root.model.fontSize.value = sizes.currentValue
                     }
                 }

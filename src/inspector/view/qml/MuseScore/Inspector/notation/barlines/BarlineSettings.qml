@@ -66,6 +66,10 @@ Column {
             currentIndex: root.barlineSettingsModel && !root.barlineSettingsModel.type.isUndefined ? styles.indexOfValue(root.barlineSettingsModel.type.value) : -1
 
             onCurrentValueChanged: {
+                if (currentIndex == -1) {
+                    return
+                }
+
                 if (root.barlineSettingsModel) {
                     root.barlineSettingsModel.type.value = styles.currentValue
                 }
