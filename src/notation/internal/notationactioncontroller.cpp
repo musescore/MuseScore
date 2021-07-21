@@ -204,6 +204,7 @@ void NotationActionController::init()
     dispatcher()->reg(this, "parts", this, &NotationActionController::openPartsDialog);
     dispatcher()->reg(this, "staff-text-properties", this, &NotationActionController::openStaffTextPropertiesDialog);
     dispatcher()->reg(this, "system-text-properties", this, &NotationActionController::openStaffTextPropertiesDialog);
+    dispatcher()->reg(this, "measure-properties", this, &NotationActionController::openMeasurePropertiesDialog);
 
     dispatcher()->reg(this, "voice-x12", [this]() { swapVoices(0, 1); });
     dispatcher()->reg(this, "voice-x13", [this]() { swapVoices(0, 2); });
@@ -1533,6 +1534,11 @@ void NotationActionController::openTupletOtherDialog()
 void NotationActionController::openStaffTextPropertiesDialog()
 {
     interactive()->open("musescore://notation/stafftextproperties");
+}
+
+void NotationActionController::openMeasurePropertiesDialog()
+{
+    interactive()->open("musescore://notation/measureproperties");
 }
 
 void NotationActionController::toggleScoreConfig(ScoreConfigType configType)

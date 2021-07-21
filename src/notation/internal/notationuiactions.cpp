@@ -338,7 +338,8 @@ const UiActionList NotationUiActions::m_actions = {
              ),
     UiAction("staff-properties",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Staff/Part Properties")
+             QT_TRANSLATE_NOOP("action", "Staff/Part Properties…"),
+             QT_TRANSLATE_NOOP("action", "Staff/Part properties")
              ),
     UiAction("staff-text-properties",
              mu::context::UiCtxNotationOpened,
@@ -349,6 +350,11 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "System Text Properties…"),
              QT_TRANSLATE_NOOP("action", "System text properties")
+             ),
+    UiAction("measure-properties",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Measure Properties…"),
+             QT_TRANSLATE_NOOP("action", "Measure properties")
              ),
     UiAction("add-remove-breaks",
              mu::context::UiCtxNotationOpened,
