@@ -210,3 +210,8 @@ UriQuery UriQuery::addingParam(const std::string& key, const Val& val) const
     copy.addParam(key, val);
     return copy;
 }
+
+bool UriQuery::contains(const std::string& key) const
+{
+    return m_params.count(key) > 0;
+}

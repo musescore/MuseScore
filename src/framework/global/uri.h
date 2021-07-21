@@ -72,6 +72,7 @@ public:
     Val param(const std::string& key, const Val& def = Val()) const;
     void addParam(const std::string& key, const Val& val);
     UriQuery addingParam(const std::string& key, const Val& val) const;
+    bool contains(const std::string& key) const;
 
     std::string toString() const;
 
