@@ -43,7 +43,8 @@ class MidiAudioSource : public IAudioSource, public async::Asyncable
     INJECT(audio, midi::IMidiOutPort, midiOutPort)
 
 public:
-    explicit MidiAudioSource(const midi::MidiData& midiData, async::Channel<AudioInputParams> inputParamsChanged);
+    explicit MidiAudioSource(const midi::MidiData& midiData, const AudioInputParams& params,
+                             async::Channel<AudioInputParams> paramsChanged);
     ~MidiAudioSource() = default;
 
     bool isActive() const override;
@@ -110,7 +111,7 @@ private:
     bool sendEvents(const std::vector<midi::Event>& events);
     void requestNextEvents(const midi::tick_t nextTicksNumber);
 
-    void resolveSynth(const synth::SynthName& synthName);
+    void resolveSynth(const AudioInputParams& inputParams);
     void buildTempoMap();
     void setupChannels();
 

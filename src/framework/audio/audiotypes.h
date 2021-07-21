@@ -29,6 +29,7 @@
 
 #include "midi/miditypes.h"
 #include "io/path.h"
+#include "io/device.h"
 #include "async/channel.h"
 
 namespace mu::audio {
@@ -50,26 +51,63 @@ using TrackName = std::string;
 using MixerChannelId = int32_t;
 
 using AudioSourceName = std::string;
+using AudioResourceName = std::string;
 
 using FxProcessorId = std::string;
 using FxProcessorIdList =  std::vector<FxProcessorId>;
 
+enum class AudioFxType {
+    Undefined = -1,
+    Vst
+};
+
+struct AudioFxParams {
+    AudioFxType type = AudioFxType::Undefined;
+    AudioResourceName resourceName;
+    bool active = false;
+
+    bool operator ==(const AudioFxParams& other) const
+    {
+        return type == other.type
+               && resourceName == other.resourceName
+               && active == other.active;
+    }
+};
+
 struct AudioOutputParams {
-    FxProcessorIdList fxProcessors;
+    AudioFxParams fxParams;
     volume_db_t volume = 1.f;
     balance_t balance = 0.f;
     bool isMuted = false;
 
     bool operator ==(const AudioOutputParams& other) const
     {
-        return fxProcessors == other.fxProcessors
+        return fxParams == other.fxParams
                && volume == other.volume
                && balance == other.balance
                && isMuted == other.isMuted;
     }
 };
 
-using AudioInputParams = std::variant<midi::MidiData, io::path>;
+enum class AudioSourceType {
+    Undefined = -1,
+    Fluid,
+    Vsti,
+    MuseSampler
+};
+
+struct AudioSourceParams {
+    AudioSourceType type = AudioSourceType::Undefined;
+    AudioResourceName resourceName;
+
+    bool operator ==(const AudioSourceParams& other) const
+    {
+        return type == other.type
+               && resourceName == other.resourceName;
+    }
+};
+
+using AudioInputParams = AudioSourceParams;
 
 struct AudioParams {
     AudioInputParams in;
@@ -81,10 +119,7 @@ struct AudioSignalChanges {
     async::Channel<audioch_t, volume_dbfs_t> pressureChanges;
 };
 
-struct VolumePressureDbfsBoundaries {
-    volume_dbfs_t max = 0;
-    volume_dbfs_t min = -60;
-};
+using PlaybackData = std::variant<midi::MidiData, io::Device*>;
 
 enum class PlaybackStatus {
     Stopped = 0,

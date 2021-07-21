@@ -45,8 +45,8 @@ public:
     // ITrackSequence
     TrackSequenceId id() const override;
 
-    RetVal<TrackId> addTrack(const std::string& trackName, const midi::MidiData& midiData, const AudioOutputParams& outputParams) override;
-    RetVal<TrackId> addTrack(const std::string& trackName, const io::path& filePath, const AudioOutputParams& outputParams) override;
+    RetVal<TrackId> addTrack(const std::string& trackName, const midi::MidiData& midiData, const AudioParams& params) override;
+    RetVal<TrackId> addTrack(const std::string& trackName, io::Device* device, const AudioParams& params) override;
 
     TrackIdList trackIdList() const override;
 
