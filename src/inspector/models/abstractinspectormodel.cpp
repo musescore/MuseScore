@@ -22,7 +22,9 @@
 #include "abstractinspectormodel.h"
 
 #include "libmscore/musescoreCore.h"
+
 #include "log.h"
+#include "types/texttypes.h"
 
 using namespace mu::inspector;
 using namespace mu::notation;
@@ -70,15 +72,6 @@ static const QMap<Ms::ElementType, AbstractInspectorModel::InspectorModelType> N
     { Ms::ElementType::MEASURE_REPEAT, AbstractInspectorModel::InspectorModelType::TYPE_MEASURE_REPEAT }
 };
 
-static const QList<Ms::ElementType> TEXT_ELEMENT_TYPES = {
-    Ms::ElementType::TEXT,
-    Ms::ElementType::TEXTLINE,
-    Ms::ElementType::TEXTLINE_BASE,
-    Ms::ElementType::TEXTLINE_SEGMENT,
-    Ms::ElementType::STAFF_TEXT,
-    Ms::ElementType::SYSTEM_TEXT
-};
-
 AbstractInspectorModel::AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository)
     : QObject(parent)
 {
@@ -117,15 +110,18 @@ AbstractInspectorModel::InspectorModelType AbstractInspectorModel::modelType() c
     return m_modelType;
 }
 
-AbstractInspectorModel::InspectorSectionType AbstractInspectorModel::sectionTypeFromElementType(const Ms::ElementType elementType)
+QList<AbstractInspectorModel::InspectorSectionType> AbstractInspectorModel::sectionTypesFromElementType(const Ms::ElementType elementType)
 {
+    QList<AbstractInspectorModel::InspectorSectionType> result;
     if (NOTATION_ELEMENT_MODEL_TYPES.keys().contains(elementType)) {
-        return InspectorSectionType::SECTION_NOTATION;
-    } else if (TEXT_ELEMENT_TYPES.contains(elementType)) {
-        return InspectorSectionType::SECTION_TEXT;
+        result << InspectorSectionType::SECTION_NOTATION;
     }
 
-    return InspectorSectionType::SECTION_UNDEFINED;
+    if (TEXT_ELEMENT_TYPES.contains(elementType)) {
+        result << InspectorSectionType::SECTION_TEXT;
+    }
+
+    return result;
 }
 
 AbstractInspectorModel::InspectorModelType AbstractInspectorModel::notationElementModelType(const Ms::ElementType elementType)
