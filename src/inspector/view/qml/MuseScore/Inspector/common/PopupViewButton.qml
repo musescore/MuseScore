@@ -81,7 +81,7 @@ FlatButton {
                 return
             }
 
-            var buttonGlobalPos = root.mapToItem(root.anchorItem, Qt.point(root.x, root.y))
+            var buttonGlobalPos = root.mapToItem(root.anchorItem, Qt.point(0, 0))
             var popupHeight = contentHeight + padding*2 + margins*2
             var invisibleContentHeight = root.anchorItem.height - (buttonGlobalPos.y + root.height + popupHeight)
 

@@ -168,6 +168,11 @@ Rectangle {
                             model: inspectorData
                             navigationPanel: navPanel
                             navigationRowOffset: expandableDelegate.navigation.row + 1
+                            anchorItem: root
+
+                            onEnsureContentVisibleRequested: {
+                                flickableArea.ensureContentVisible(-invisibleContentHeight)
+                            }
                         }
                     }
 

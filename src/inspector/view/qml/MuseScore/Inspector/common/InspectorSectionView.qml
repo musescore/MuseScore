@@ -35,20 +35,11 @@ FocusScope {
     signal ensureContentVisibleRequested(int invisibleContentHeight)
 
     property var contentHeight: implicitHeight
-    signal contentExtended()
 
     anchors.left: parent.left
     anchors.right: parent.right
 
     function navigationRow(row) {
         return root.navigationRowOffset + row
-    }
-
-    onContentHeightChanged: {
-        if (contentHeight > implicitHeight) {
-            root.contentExtended()
-        } else if (contentHeight < implicitHeight) {
-            root.contentIntended()
-        }
     }
 }

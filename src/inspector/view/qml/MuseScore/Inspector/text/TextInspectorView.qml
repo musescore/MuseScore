@@ -287,15 +287,32 @@ InspectorSectionView {
             }
         }
 
-        TextAdvancedSettings {
+        PopupViewButton {
             id: textAdvancedSettingsButton
+
+            width: contentColumn.width
+            anchorItem: root.anchorItem
 
             navigation.panel: root.navigationPanel
             navigation.name: "TextAdvancedSettings"
             navigation.row: root.navigationRow(19)
 
-            width: contentColumn.width
-            model: root.model
+            text: qsTrc("inspector", "More...")
+            visible: root.model ? !root.model.isEmpty : false
+
+            popupContent: TextSettings {
+                id: textSettings
+                navigationPanel: textAdvancedSettingsButton.popup.navigation
+                model: root.model
+            }
+
+            onPopupOpened: {
+                textSettings.focusOnFirst()
+            }
+
+            onEnsureContentVisibleRequested: {
+                root.ensureContentVisibleRequested(invisibleContentHeight)
+            }
         }
     }
 }
