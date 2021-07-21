@@ -192,7 +192,7 @@ void FileScoreController::saveScore()
         return;
     }
 
-    if (io::syffix(filePath).empty()) {
+    if (io::suffix(filePath).empty()) {
         filePath = filePath + UserScoresConfiguration::DEFAULT_FILE_SUFFIX;
     }
 
@@ -351,7 +351,7 @@ void FileScoreController::exportScore()
 io::path FileScoreController::selectScoreOpeningFile()
 {
     QString allExt = "*.mscz *.mxl *.musicxml *.xml *.mid *.midi *.kar *.md *.mgu *.sgu *.cap *.capx"
-                     "*.ove *.scw *.bmw *.bww *.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp *.ptb *.mscx *.mscf *.mscz,";
+                     "*.ove *.scw *.bmw *.bww *.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp *.ptb *.mscx *.mscs *.mscz,";
 
     QStringList filter;
     filter << QObject::tr("All Supported Files") + " (" + allExt + ")"
@@ -365,8 +365,8 @@ io::path FileScoreController::selectScoreOpeningFile()
            << QObject::tr("Bagpipe Music Writer Files (experimental)") + " (*.bmw *.bww)"
            << QObject::tr("Guitar Pro Files") + " (*.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp)"
            << QObject::tr("Power Tab Editor Files (experimental)") + " (*.ptb)"
-           << QObject::tr("MuseScore Unpack Dir") + " (*.mscx)"
-           << QObject::tr("MuseScore Dev Files") + " (*.mscf)"
+           << QObject::tr("MuseScore Unpack Files") + " (*.mscx)"
+           << QObject::tr("MuseScore Dev Files") + " (*.mscs)"
            << QObject::tr("MuseScore Backup Files") + " (*.mscz,)";
 
     return interactive()->selectOpeningFile(qtrc("userscores", "Score"), "", filter.join(";;"));

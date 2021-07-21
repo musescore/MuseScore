@@ -82,21 +82,24 @@ void MscWriter::close()
 
 bool MscWriter::isOpened() const
 {
-    return writer()->isOpened();
+    return m_writer ? m_writer->isOpened() : false;
 }
 
 MscWriter::IWriter* MscWriter::writer() const
 {
     if (!m_writer) {
         switch (m_params.mode) {
-        case Mode::Zip:
+        case MscIoMode::Zip:
             m_writer = new ZipWriter();
             break;
-        case Mode::Dir:
+        case MscIoMode::Dir:
             m_writer = new DirWriter();
             break;
-        case Mode::XmlFile:
+        case MscIoMode::XmlFile:
             m_writer = new XmlFileWriter();
+            break;
+        case MscIoMode::Unknown:
+            UNREACHABLE;
             break;
         }
     }
@@ -344,6 +347,7 @@ bool MscWriter::XmlFileWriter::open(QIODevice* device, const QString& filePath)
 
     // Write header
     *m_stream << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" << Qt::endl;
+    *m_stream << "<files>" << Qt::endl;
 
     return true;
 }
@@ -351,6 +355,7 @@ bool MscWriter::XmlFileWriter::open(QIODevice* device, const QString& filePath)
 void MscWriter::XmlFileWriter::close()
 {
     if (m_stream) {
+        *m_stream << "</files>" << Qt::endl;
         m_stream->flush();
     }
 
@@ -379,8 +384,8 @@ bool MscWriter::XmlFileWriter::addFileData(const QString& fileName, const QByteA
 
     QTextStream& ts = *m_stream;
     ts << "<file name=\"" << fileName << "\">" << Qt::endl;
-    ts << "<![CDATA[" << Qt::endl;
-    ts << data << Qt::endl;
+    ts << "<![CDATA[";
+    ts << data;
     ts << "]]>" << Qt::endl;
     ts << "</file>" << Qt::endl;
 

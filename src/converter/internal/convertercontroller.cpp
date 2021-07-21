@@ -71,7 +71,7 @@ mu::Ret ConverterController::fileConvert(const io::path& in, const io::path& out
         return make_ret(Err::UnknownError);
     }
 
-    std::string suffix = io::syffix(out);
+    std::string suffix = io::suffix(out);
     auto writer = writers()->writer(suffix);
     if (!writer) {
         return make_ret(Err::ConvertTypeUnknown);
@@ -102,7 +102,7 @@ mu::Ret ConverterController::convertScoreParts(const mu::io::path& in, const mu:
         return make_ret(Err::UnknownError);
     }
 
-    std::string suffix = io::syffix(out);
+    std::string suffix = io::suffix(out);
     auto writer = writers()->writer(suffix);
     if (!writer) {
         return make_ret(Err::ConvertTypeUnknown);
@@ -176,7 +176,7 @@ mu::Ret ConverterController::convertPageByPage(INotationWriterPtr writer, INotat
     TRACEFUNC;
 
     for (size_t i = 0; i < notation->elements()->pages().size(); i++) {
-        const QString filePath = io::path(io::dirpath(out) + "/" + io::basename(out) + "-%1." + io::syffix(out)).toQString().arg(i + 1);
+        const QString filePath = io::path(io::dirpath(out) + "/" + io::basename(out) + "-%1." + io::suffix(out)).toQString().arg(i + 1);
 
         QFile file(filePath);
         if (!file.open(QFile::WriteOnly)) {

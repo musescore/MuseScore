@@ -42,7 +42,7 @@ Ms::Score::FileError mu::engraving::compat::mscxToMscz(const QString& mscxFilePa
     MscWriter::Params params;
     params.device = &buf;
     params.filePath = mscxFilePath;
-    params.mode = MscWriter::Mode::Zip;
+    params.mode = MscIoMode::Zip;
     MscWriter writer(params);
     writer.open();
     writer.writeScoreFile(mscxData);
@@ -78,7 +78,7 @@ Ms::Score::FileError mu::engraving::compat::loadMsczOrMscx(Ms::MasterScore* scor
     MscReader::Params params;
     params.device = &msczBuf;
     params.filePath = filePath;
-    params.mode = MscReader::Mode::Zip;
+    params.mode = MscIoMode::Zip;
 
     MscReader reader(params);
     reader.open();
@@ -115,7 +115,7 @@ mu::engraving::Err mu::engraving::compat::loadMsczOrMscx(EngravingProjectPtr pro
     MscReader::Params params;
     params.device = &msczBuf;
     params.filePath = filePath;
-    params.mode = MscReader::Mode::Zip;
+    params.mode = MscIoMode::Zip;
 
     MscReader reader(params);
     reader.open();

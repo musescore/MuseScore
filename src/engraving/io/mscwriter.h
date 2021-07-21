@@ -26,6 +26,8 @@
 #include <QByteArray>
 #include <QIODevice>
 
+#include "mscio.h"
+
 class MQZipWriter;
 class QTextStream;
 
@@ -33,17 +35,12 @@ namespace mu::engraving {
 class MscWriter
 {
 public:
-    enum class Mode {
-        Zip,
-        Dir,
-        XmlFile
-    };
 
     struct Params
     {
         QIODevice* device = nullptr;
         QString filePath;
-        Mode mode = Mode::Zip;
+        MscIoMode mode = MscIoMode::Zip;
     };
 
     MscWriter() = default;
