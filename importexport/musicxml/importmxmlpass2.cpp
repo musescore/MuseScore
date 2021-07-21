@@ -1317,7 +1317,7 @@ static void handleSpannerStop(SLine* cur_sp, int track2, const Fraction& tick, M
 //---------------------------------------------------------
 
 MusicXMLParserPass2::MusicXMLParserPass2(Score* score, MusicXMLParserPass1& pass1, MxmlLogger* logger)
-      : _divs(0), _score(score), _pass1(pass1), _logger(logger)
+      : _divs(0), _score(score), _pass1(pass1), _logger(logger), _hasInferredHeaderText(false)
       {
       // nothing
       }
@@ -1460,6 +1460,48 @@ static void cleanFretDiagrams(Measure* measure)
                   }
             }
       }
+
+//---------------------------------------------------------
+//   reformatHeaderVBox
+//---------------------------------------------------------
+/**
+ Due to inconsistencies with spacing and inferred text,
+ the header VBox frequently has collisions. This cleans
+ those (as a temporary fix for a more robust collision-prevention
+ system in Boxes).
+ */
+
+static void reformatHeaderVBox(MeasureBase* mb)
+      {
+      if (!mb->isVBox())
+            return;
+      
+      VBox* headerVBox = toVBox(mb);
+      Score* score = mb->score();
+      qreal totalHeight = 0;
+      qreal offsetHeight = 0;
+      qreal verticalPadding = score->styleS(Sid::minVerticalDistance).val() * score->spatium();
+
+      for (auto e : headerVBox->el()) {
+            if (!e->isText())
+                  continue;
+            Text* t = toText(e);
+            t->layout();
+
+            totalHeight += t->height();
+            if (Align(t->align() & Align::VMASK) == Align::TOP) {
+                  totalHeight += verticalPadding;
+                  t->setOffset(t->offset().x(), offsetHeight);
+                  t->setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
+                  offsetHeight += t->height();
+                  offsetHeight += verticalPadding;
+                  }
+            }
+
+      headerVBox->setBoxHeight(Spatium(totalHeight / score->spatium()));
+      headerVBox->setPropertyFlags(Pid::BOX_HEIGHT, PropertyFlags::UNSTYLED);
+      }
+
 //---------------------------------------------------------
 //   initPartState
 //---------------------------------------------------------
@@ -1856,6 +1898,8 @@ void MusicXMLParserPass2::scorePartwise()
       _score->connectArpeggios();
       _score->fixupLaissezVibrer();
       cleanFretDiagrams(_score->firstMeasure());
+      if (_hasInferredHeaderText)
+            reformatHeaderVBox(_score->measures()->first());
       cleanUpLayoutBreaks(_score, _logger);
       }
 
@@ -2878,12 +2922,15 @@ void MusicXMLParserDirection::direction(const QString& partId,
             return;
       else if (isLikelyCredit(tick)) {
             Text* inferredText = addTextToHeader(Tid::COMPOSER);
-            if (inferredText)
+            if (inferredText) {
+                  _pass2.setHasInferredHeaderText(true);
                   hideRedundantHeaderText(inferredText, {"lyricist", "composer", "poet"});
+                  }
             }
       else if (isLikelySource(tick)) {
             Text* inferredText = addTextToHeader(Tid::SUBTITLE);
             if (inferredText) {
+                  _pass2.setHasInferredHeaderText(true);
                   if (_score->metaTag("source").isEmpty())
                         _score->setMetaTag("source", inferredText->plainText());
                   hideRedundantHeaderText(inferredText, {"source"});
