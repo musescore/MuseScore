@@ -191,8 +191,6 @@ protected:
     void updatePosition();
     void updateContentPosition();
 
-    void updateView();
-
     QQuickItem* parentPopupContentItem() const;
     Qt::AlignmentFlag parentCascadeAlign(const QQuickItem* parent) const;
 
