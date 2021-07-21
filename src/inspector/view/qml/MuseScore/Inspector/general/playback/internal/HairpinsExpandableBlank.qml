@@ -110,6 +110,10 @@ ExpandableBlank {
                 currentIndex: root.model && !root.model.velocityChangeType.isUndefined ? dranges.indexOfValue(root.model.velocityChangeType.value) : -1
 
                 onCurrentValueChanged: {
+                    if (currentIndex == -1) {
+                        return
+                    }
+
                     root.model.velocityChangeType.value = dranges.currentValue
                 }
             }

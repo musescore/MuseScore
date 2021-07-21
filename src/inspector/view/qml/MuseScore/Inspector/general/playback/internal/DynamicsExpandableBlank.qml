@@ -72,6 +72,10 @@ ExpandableBlank {
                 currentIndex: root.model && !root.model.scopeType.isUndefined ? applies.indexOfValue(root.model.scopeType.value) : -1
 
                 onCurrentValueChanged: {
+                    if (currentIndex == -1) {
+                        return
+                    }
+
                     root.model.scopeType.value = applies.currentValue
                 }
             }
