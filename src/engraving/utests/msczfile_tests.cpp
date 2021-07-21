@@ -51,7 +51,7 @@ TEST_F(MsczFileTests, MsczFile_WriteRead)
         MscWriter::Params params;
         params.device = &buf;
         params.filePath = "simple1.mscz";
-        params.mode = MscWriter::Mode::Zip;
+        params.mode = MscIoMode::Zip;
 
         MscWriter writer(params);
         writer.open();
@@ -67,7 +67,7 @@ TEST_F(MsczFileTests, MsczFile_WriteRead)
         MscReader::Params params;
         params.device = &buf;
         params.filePath = "simple1.mscz";
-        params.mode = MscReader::Mode::Zip;
+        params.mode = MscIoMode::Zip;
 
         MscReader reader(params);
         reader.open();

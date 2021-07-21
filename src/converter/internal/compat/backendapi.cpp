@@ -612,7 +612,7 @@ RetVal<QByteArray> BackendApi::scorePartJson(Ms::Score* score, const std::string
     MscWriter::Params params;
     params.device = &buf;
     params.filePath = QString::fromStdString(fileName);
-    params.mode = MscWriter::Mode::Zip;
+    params.mode = MscIoMode::Zip;
 
     MscWriter msczWriter(params);
     msczWriter.open();

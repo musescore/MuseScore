@@ -70,7 +70,7 @@ inline mu::logger::Stream& operator<<(mu::logger::Stream& s, const mu::io::path&
     return s;
 }
 
-std::string syffix(const path& path);
+std::string suffix(const path& path);
 path filename(const path& path);
 path basename(const path& path);
 path completebasename(const path& path);

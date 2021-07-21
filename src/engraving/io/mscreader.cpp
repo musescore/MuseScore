@@ -82,21 +82,24 @@ void MscReader::close()
 
 bool MscReader::isOpened() const
 {
-    return m_reader->isOpened();
+    return m_reader ? m_reader->isOpened() : false;
 }
 
 MscReader::IReader* MscReader::reader() const
 {
     if (!m_reader) {
         switch (m_params.mode) {
-        case Mode::Zip:
+        case MscIoMode::Zip:
             m_reader = new ZipReader();
             break;
-        case Mode::Dir:
+        case MscIoMode::Dir:
             m_reader = new DirReader();
             break;
-        case Mode::XmlFile:
+        case MscIoMode::XmlFile:
             m_reader = new XmlFileReader();
+            break;
+        case MscIoMode::Unknown:
+            UNREACHABLE;
             break;
         }
     }
@@ -339,14 +342,21 @@ QStringList MscReader::XmlFileReader::fileList() const
     m_device->seek(0);
     QXmlStreamReader xml(m_device);
     while (xml.readNextStartElement()) {
-        if ("file" != xml.name()) {
+        if ("files" != xml.name()) {
             xml.skipCurrentElement();
             continue;
         }
 
-        QStringRef fileName = xml.attributes().value("name");
-        files << fileName.toString();
-        xml.skipCurrentElement();
+        while (xml.readNextStartElement()) {
+            if ("file" != xml.name()) {
+                xml.skipCurrentElement();
+                continue;
+            }
+
+            QStringRef fileName = xml.attributes().value("name");
+            files << fileName.toString();
+            xml.skipCurrentElement();
+        }
     }
 
     return files;
@@ -361,19 +371,27 @@ QByteArray MscReader::XmlFileReader::fileData(const QString& fileName) const
     m_device->seek(0);
     QXmlStreamReader xml(m_device);
     while (xml.readNextStartElement()) {
-        if ("file" != xml.name()) {
+        if ("files" != xml.name()) {
             xml.skipCurrentElement();
             continue;
         }
 
-        QStringRef file = xml.attributes().value("name");
-        if (file != fileName) {
-            continue;
-        }
+        while (xml.readNextStartElement()) {
+            if ("file" != xml.name()) {
+                xml.skipCurrentElement();
+                continue;
+            }
 
-        QStringRef cdata = xml.text();
-        QByteArray data = cdata.toUtf8();
-        return data;
+            QStringRef file = xml.attributes().value("name");
+            if (file != fileName) {
+                continue;
+            }
+
+            QString cdata = xml.readElementText();
+            QByteArray data = cdata.trimmed().toUtf8();
+            return data;
+        }
     }
+
     return QByteArray();
 }

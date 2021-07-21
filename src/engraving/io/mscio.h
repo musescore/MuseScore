@@ -19,27 +19,39 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "capellareader.h"
+#ifndef MU_ENGRAVING_MSCIO_H
+#define MU_ENGRAVING_MSCIO_H
 
-#include "io/path.h"
-#include "libmscore/score.h"
-#include "notation/notationerrors.h"
+#include <string>
 
-namespace Ms {
-extern Score::FileError importCapella(MasterScore*, const QString& name);
-extern Score::FileError importCapXml(MasterScore*, const QString& name);
-}
+namespace mu::engraving {
+static const std::string MSCZ = "mscz";
+static const std::string MSCX = "mscx";
+static const std::string MSCS = "mscs";
 
-using namespace mu::iex::capella;
-
-mu::Ret CapellaReader::read(Ms::MasterScore* score, const io::path& path, const Options&)
+inline bool isMuseScoreFile(const std::string& suffix)
 {
-    Ms::Score::FileError err = Ms::Score::FileError::FILE_UNKNOWN_TYPE;
-    std::string syffix = mu::io::suffix(path);
-    if (syffix == "cap") {
-        err = Ms::importCapella(score, path.toQString());
-    } else if (syffix == "capx") {
-        err = Ms::importCapXml(score, path.toQString());
-    }
-    return mu::notation::scoreFileErrorToRet(err, path);
+    return suffix == MSCZ || suffix == MSCX || suffix == MSCS;
 }
+
+enum class MscIoMode {
+    Unknown = 0,
+    Zip,
+    Dir,
+    XmlFile
+};
+
+inline MscIoMode mcsIoModeBySuffix(const std::string& suffix)
+{
+    if (suffix == MSCZ) {
+        return MscIoMode::Zip;
+    } else if (suffix == MSCX) {
+        return MscIoMode::Dir;
+    } else if (suffix == MSCS) {
+        return MscIoMode::XmlFile;
+    }
+    return MscIoMode::Unknown;
+}
+}
+
+#endif // MU_ENGRAVING_MSCIO_H
