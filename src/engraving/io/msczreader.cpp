@@ -75,6 +75,11 @@ bool MsczReader::open()
 {
     switch (m_mode) {
     case Mode::Zip: {
+        if (!m_device) {
+            m_device = new QFile(m_filePath);
+            m_selfDeviceOwner = true;
+        }
+
         if (!m_device->isOpen()) {
             if (!m_device->open(QIODevice::ReadOnly)) {
                 LOGE() << "failed open file: " << filePath();
