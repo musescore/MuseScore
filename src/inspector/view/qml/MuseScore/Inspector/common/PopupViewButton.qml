@@ -21,11 +21,14 @@
  */
 import QtQuick 2.15
 import QtQuick.Layouts 1.3
+
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
 FlatButton {
     id: root
 
+    property alias popup: popup
     property alias popupContent: popup.contentData
 
     property int popupAvailableWidth: 0
@@ -35,6 +38,7 @@ FlatButton {
     Layout.minimumWidth: (popupAvailableWidth - 4) / 2
 
     signal ensureContentVisibleRequested(int invisibleContentHeight)
+    signal popupOpened()
 
     onVisibleChanged: {
         if (!visible) {
@@ -55,12 +59,17 @@ FlatButton {
 
         anchorItem: root.anchorItem
 
+        navigationParentControl: root.navigation
+        navigation.name: root.navigation.name + "Popup"
+        navigation.direction: NavigationPanel.Both
+
         onContentHeightChanged: {
             calculateContentVisible()
         }
 
         onOpened: {
             calculateContentVisible()
+            root.popupOpened()
         }
 
         onClosed: {
