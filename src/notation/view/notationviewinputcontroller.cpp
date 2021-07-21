@@ -116,6 +116,11 @@ INotationInteractionPtr NotationViewInputController::viewInteraction() const
     return m_view->notationInteraction();
 }
 
+Element* NotationViewInputController::hitElement() const
+{
+    return viewInteraction()->hitElementContext().element;
+}
+
 void NotationViewInputController::zoomIn()
 {
     int maxIndex = m_possibleZoomsPercentage.size() > 0 ? m_possibleZoomsPercentage.size() - 1 : 0;
@@ -289,7 +294,7 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
 
     // When using MiddleButton, just start moving the canvas
     if (event->button() == Qt::MiddleButton) {
-        m_interactData.beginPoint = logicPos;
+        m_beginPoint = logicPos;
         return;
     }
 
@@ -301,16 +306,24 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
         return;
     }
 
-    m_interactData.beginPoint = logicPos;
+    m_beginPoint = logicPos;
+
+    Element* hitElement = nullptr;
+    int hitStaffIndex = -1;
 
     if (!m_readonly) {
-        m_interactData.hitElement = viewInteraction()->hitElement(logicPos, hitWidth());
-        m_interactData.hitStaffIndex = viewInteraction()->hitStaffIndex(logicPos);
+        INotationInteraction::HitElementContext context;
+        context.element = viewInteraction()->hitElement(logicPos, hitWidth());
+        context.staff = viewInteraction()->hitStaff(logicPos);
+        viewInteraction()->setHitElementContext(context);
+
+        hitElement = context.element;
+        hitStaffIndex = context.staff ? context.staff->idx() : -1;
     }
 
     if (playbackController()->isPlaying()) {
-        if (m_interactData.hitElement) {
-            RetVal<midi::tick_t> tick = m_view->notationPlayback()->playPositionTickByElement(m_interactData.hitElement);
+        if (hitElement) {
+            RetVal<midi::tick_t> tick = m_view->notationPlayback()->playPositionTickByElement(hitElement);
 
             if (tick.ret) {
                 playbackController()->seek(tick.val);
@@ -328,7 +341,7 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
         } else if (keyState & Qt::ControlModifier) {
             selectType = SelectType::ADD;
         }
-        viewInteraction()->select({ m_interactData.hitElement }, selectType, m_interactData.hitStaffIndex);
+        viewInteraction()->select({ hitElement }, selectType, hitStaffIndex);
     }
 
     if (viewInteraction()->isHitGrip(logicPos)) {
@@ -343,17 +356,17 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
         m_view->hideContextMenu();
     }
 
-    if (m_interactData.hitElement) {
-        playbackController()->playElement(m_interactData.hitElement);
+    if (hitElement) {
+        playbackController()->playElement(hitElement);
     } else {
         viewInteraction()->endEditGrip();
     }
 
     if (viewInteraction()->isTextEditingStarted()) {
-        if (!m_interactData.hitElement || !m_interactData.hitElement->isText()) {
+        if (!hitElement || !hitElement->isText()) {
             viewInteraction()->endEditText();
         } else {
-            viewInteraction()->changeTextCursorPosition(m_interactData.beginPoint);
+            viewInteraction()->changeTextCursorPosition(m_beginPoint);
         }
     }
 }
@@ -364,24 +377,24 @@ bool NotationViewInputController::needSelect(const QMouseEvent* event, const Poi
         return false;
     }
 
-    bool needSelect = m_interactData.hitElement != nullptr;
-    if (!needSelect) {
-        return needSelect;
+    const Element* hitElement = this->hitElement();
+    if (!hitElement) {
+        return false;
     }
 
     Qt::MouseButton button = event->button();
 
     if (button == Qt::MouseButton::LeftButton && event->modifiers() == Qt::NoModifier) {
-        return needSelect;
+        return true;
     }
 
-    needSelect &= !m_interactData.hitElement->selected();
+    bool result = hitElement && !hitElement->selected();
 
-    if (button == Qt::MouseButton::RightButton && needSelect) {
-        needSelect &= !viewInteraction()->selection()->range()->containsPoint(clickLogicPos);
+    if (button == Qt::MouseButton::RightButton && result) {
+        result &= !viewInteraction()->selection()->range()->containsPoint(clickLogicPos);
     }
 
-    return needSelect;
+    return result;
 }
 
 bool NotationViewInputController::isDragAllowed() const
@@ -408,16 +421,18 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
     Qt::KeyboardModifiers keyState = event->modifiers();
 
     // start some drag operations after a minimum of movement:
-    bool isDrag = (logicPos - m_interactData.beginPoint).manhattanLength() > 4;
+    bool isDrag = (logicPos - m_beginPoint).manhattanLength() > 4;
     if (!isDrag) {
         return;
     }
 
+    const Element* hitElement = this->hitElement();
+
     // drag element
-    if (!middleButton && ((m_interactData.hitElement && m_interactData.hitElement->isMovable())
+    if (!middleButton && ((hitElement && hitElement->isMovable())
                           || viewInteraction()->isGripEditStarted())) {
-        if (m_interactData.hitElement && !viewInteraction()->isDragStarted()) {
-            startDragElements(m_interactData.hitElement->type(), m_interactData.hitElement->offset());
+        if (hitElement && !viewInteraction()->isDragStarted()) {
+            startDragElements(hitElement->type(), hitElement->offset());
         }
 
         if (viewInteraction()->isGripEditStarted() && !viewInteraction()->isDragStarted()) {
@@ -432,19 +447,19 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
             mode = DragMode::OnlyX;
         }
 
-        viewInteraction()->drag(m_interactData.beginPoint, logicPos, mode);
+        viewInteraction()->drag(m_beginPoint, logicPos, mode);
         return;
-    } else if (m_interactData.hitElement == nullptr && (keyState & (Qt::ShiftModifier | Qt::ControlModifier))) {
+    } else if (hitElement == nullptr && (keyState & (Qt::ShiftModifier | Qt::ControlModifier))) {
         if (!viewInteraction()->isDragStarted()) {
             viewInteraction()->startDrag(std::vector<Element*>(), PointF(), [](const Element*) { return false; });
         }
-        viewInteraction()->drag(m_interactData.beginPoint, logicPos,
+        viewInteraction()->drag(m_beginPoint, logicPos,
                                 keyState & Qt::ControlModifier ? DragMode::LassoList : DragMode::BothXY);
         return;
     }
 
     // move canvas
-    PointF d = logicPos - m_interactData.beginPoint;
+    PointF d = logicPos - m_beginPoint;
     int dx = d.x();
     int dy = d.y();
 
@@ -473,7 +488,7 @@ void NotationViewInputController::startDragElements(ElementType elementsType, co
 
 void NotationViewInputController::mouseReleaseEvent(QMouseEvent*)
 {
-    if (!m_interactData.hitElement && !m_isCanvasDragged && !viewInteraction()->isGripEditStarted()
+    if (!hitElement() && !m_isCanvasDragged && !viewInteraction()->isGripEditStarted()
         && !viewInteraction()->isDragStarted()) {
         viewInteraction()->clearSelection();
     }
@@ -587,9 +602,11 @@ float NotationViewInputController::hitWidth() const
 
 ElementType NotationViewInputController::selectionType() const
 {
+    const Element* hitElement = this->hitElement();
     ElementType type = ElementType::INVALID;
-    if (m_interactData.hitElement) {
-        type = m_interactData.hitElement->type();
+
+    if (hitElement) {
+        type = hitElement->type();
     } else {
         type = ElementType::PAGE;
     }

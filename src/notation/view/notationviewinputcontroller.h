@@ -100,6 +100,7 @@ private:
     INotationPtr currentNotation() const;
     INotationStylePtr notationStyle() const;
     INotationInteractionPtr viewInteraction() const;
+    Element* hitElement() const;
 
     void zoomToPageWidth();
     void zoomToWholePage();
@@ -112,12 +113,6 @@ private:
 
     void setViewMode(const ViewMode& viewMode);
 
-    struct InteractData {
-        PointF beginPoint;
-        Element* hitElement = nullptr;
-        int hitStaffIndex = 0;
-    };
-
     bool isDragAllowed() const;
     void startDragElements(ElementType elementsType, const PointF& elementsOffset);
 
@@ -129,7 +124,6 @@ private:
     double guiScalling() const;
 
     IControlledView* m_view = nullptr;
-    InteractData m_interactData;
 
     QList<int> m_possibleZoomsPercentage;
 
@@ -137,6 +131,7 @@ private:
     bool m_isCanvasDragged = false;
 
     bool m_isZoomInited = false;
+    PointF m_beginPoint;
 };
 }
 
