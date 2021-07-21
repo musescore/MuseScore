@@ -80,7 +80,7 @@ private:
     void setRgba(int r, int g, int b, int a);
     void setRgba(Rgba rgb);
 
-    Rgba m_rgba = 0;
+    Rgba m_rgba = rgba(0, 0, 0, m_defaultAlpha);
     bool m_isValid = true;
 };
 }

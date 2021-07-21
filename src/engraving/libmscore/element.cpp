@@ -1474,8 +1474,13 @@ bool Element::setProperty(Pid propertyId, const QVariant& v)
         setGenerated(v.toBool());
         break;
     case Pid::COLOR:
+    {
+//        IF_ASSERT_FAILED(v.canConvert<mu::draw::Color>())
+//        {
+//        }
         setColor(v.value<mu::draw::Color>());
         break;
+    }
     case Pid::VISIBLE:
         setVisible(v.toBool());
         break;
