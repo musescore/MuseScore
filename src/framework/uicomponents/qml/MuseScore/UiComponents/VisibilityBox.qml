@@ -83,8 +83,6 @@ FocusScope {
         anchors.fill: content
         anchors.margins: -4
 
-        hoverEnabled: true
-
         onClicked: {
             root.visibleToggled()
         }
