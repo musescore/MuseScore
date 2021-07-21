@@ -40,12 +40,11 @@ NotationSettingsProxyModel::NotationSettingsProxyModel(QObject* parent, IElement
     } else {
         setTitle(qtrc("inspector", "Notation"));
         for (const Ms::ElementType elementType : elementSet) {
-            AbstractInspectorModel::InspectorSectionType sectionType = AbstractInspectorModel::sectionTypeFromElementType(elementType);
-            if (sectionType == AbstractInspectorModel::InspectorSectionType::SECTION_UNDEFINED) {
+            AbstractInspectorModel::InspectorModelType modelType = AbstractInspectorModel::notationElementModelType(elementType);
+            if (modelType == AbstractInspectorModel::InspectorModelType::TYPE_UNDEFINED) {
                 continue;
             }
 
-            AbstractInspectorModel::InspectorModelType modelType = AbstractInspectorModel::notationElementModelType(elementType);
             addModel(inspectorModelCreator()->newInspectorModel(modelType, parent, repository));
         }
     }

@@ -37,6 +37,7 @@
 #include "mscore.h"
 
 #include "log.h"
+#include "types/texttypes.h"
 
 using namespace mu::inspector;
 
@@ -343,9 +344,7 @@ QList<Ms::Element*> ElementRepositoryService::findTexts() const
     QList<Ms::Element*> resultList;
 
     for (Ms::Element* element : m_elementList) {
-        if (element->type() == Ms::ElementType::TEXT
-            || element->type() == Ms::ElementType::STAFF_TEXT
-            || element->type() == Ms::ElementType::SYSTEM_TEXT) {
+        if (TEXT_ELEMENT_TYPES.contains(element->type())) {
             resultList << element;
         }
     }

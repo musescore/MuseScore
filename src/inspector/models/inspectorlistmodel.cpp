@@ -31,6 +31,13 @@
 using namespace mu::inspector;
 using namespace mu::notation;
 
+namespace mu::inspector {
+inline uint qHash(AbstractInspectorModel::InspectorSectionType key)
+{
+    return ::qHash(QString::number(static_cast<int>(key)));
+}
+}
+
 InspectorListModel::InspectorListModel(QObject* parent)
     : QAbstractListModel(parent)
 {
@@ -48,22 +55,16 @@ void InspectorListModel::buildModelsForSelectedElements(const QSet<Ms::ElementTy
 
     removeUnusedModels(selectedElementSet, persistentSectionList);
 
-    QList<AbstractInspectorModel::InspectorSectionType> buildingSectionTypeList(persistentSectionList);
-    bool isNotationSectionAdded = false;
+    QSet<AbstractInspectorModel::InspectorSectionType> buildingSectionTypeSet(persistentSectionList.begin(), persistentSectionList.end());
     for (const Ms::ElementType elementType : selectedElementSet) {
-        bool isNotationSection = AbstractInspectorModel::notationElementModelType(elementType)
-                                 != AbstractInspectorModel::InspectorModelType::TYPE_UNDEFINED;
-        if (isNotationSection) {
-            if (!isNotationSectionAdded) {
-                buildingSectionTypeList << AbstractInspectorModel::sectionTypeFromElementType(elementType);
-                isNotationSectionAdded = true;
-            }
-        } else {
-            buildingSectionTypeList << AbstractInspectorModel::sectionTypeFromElementType(elementType);
+        QList<AbstractInspectorModel::InspectorSectionType> sections = AbstractInspectorModel::sectionTypesFromElementType(elementType);
+
+        for (AbstractInspectorModel::InspectorSectionType sectionType : sections) {
+            buildingSectionTypeSet << sectionType;
         }
     }
 
-    createModelsBySectionType(buildingSectionTypeList, selectedElementSet);
+    createModelsBySectionType(buildingSectionTypeSet.values(), selectedElementSet);
 
     sortModels();
 }
