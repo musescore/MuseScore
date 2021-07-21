@@ -124,6 +124,8 @@ InspectorSectionView {
             columnSpacing: 4
 
             PopupViewButton {
+                id: playbackButton
+
                 popupAvailableWidth: parent ? parent.width : 0
                 anchorItem: root.anchorItem
 
@@ -135,7 +137,13 @@ InspectorSectionView {
                 text: qsTrc("inspector", "Playback")
 
                 popupContent: PlaybackSettings {
+                    id: playbackSettings
+                    navigationPanel: playbackButton.popup.navigation
                     proxyModel: model ? model.playbackProxyModel : null
+                }
+
+                onPopupOpened: {
+                    playbackSettings.focusOnFirstTab()
                 }
 
                 onEnsureContentVisibleRequested: {
@@ -144,6 +152,8 @@ InspectorSectionView {
             }
 
             PopupViewButton {
+                id: appearanceButton
+
                 popupAvailableWidth: parent ? parent.width : 0
                 anchorItem: root.anchorItem
 
@@ -155,7 +165,13 @@ InspectorSectionView {
                 text: qsTrc("inspector", "Appearance")
 
                 popupContent: AppearanceSettings {
+                    id: appearanceSettings
+                    navigationPanel: appearanceButton.popup.navigation
                     model: root.model ? root.model.appearanceSettingsModel : null
+                }
+
+                onPopupOpened: {
+                    appearanceSettings.focusOnFirst()
                 }
 
                 onEnsureContentVisibleRequested: {

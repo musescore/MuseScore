@@ -31,24 +31,30 @@ Column {
 
     property QtObject model: null
 
+    property NavigationPanel navigationPanel: null
+
     height: implicitHeight
     width: parent.width
 
     spacing: 16
+
+    function focusOnFirst() {
+        horizontalSpacingSection.focusOnFirst()
+    }
 
     HorizontalSpacingSection {
         id: horizontalSpacingSection
         leadingSpace: model ? model.leadingSpace : null
         barWidth: model ? model.barWidth : null
 
-        navigationPanel: root.navigation
+        navigationPanel: root.navigationPanel
         navigationRowOffset: 100
     }
 
     SeparatorLine { anchors.margins: -10 }
 
     VerticalSpacingSection {
-        navigationPanel: root.navigation
+        navigationPanel: root.navigationPanel
         navigationRowOffset: 200
         minimumDistance: model ? model.minimumDistance : null
     }
@@ -56,7 +62,7 @@ Column {
     SeparatorLine { anchors.margins: -10 }
 
     OffsetSection {
-        navigationPanel: root.navigation
+        navigationPanel: root.navigationPanel
         navigationRowOffset: 300
         horizontalOffset: model ? model.horizontalOffset : null
         verticalOffset: model ? model.verticalOffset : null
@@ -78,7 +84,7 @@ Column {
     SeparatorLine { anchors.margins: -10 }
 
     ArrangeSection {
-        navigationPanel: root.navigation
+        navigationPanel: root.navigationPanel
         navigationRowOffset: 400
         onPushBackRequested: {
             if (root.model) {
@@ -96,7 +102,7 @@ Column {
     SeparatorLine { anchors.margins: -10 }
 
     ColorSection {
-        navigationPanel: root.navigation
+        navigationPanel: root.navigationPanel
         navigationRowOffset: 500
         color: root.model ? root.model.color : null
     }
