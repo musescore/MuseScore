@@ -120,7 +120,7 @@ bool PopupView::eventFilter(QObject* watched, QEvent* event)
     } else if (QEvent::Close == event->type() && watched == mainWindow()->qWindow()) {
         close();
     } else if (QEvent::UpdateRequest == event->type()) {
-        updateView();
+        repositionWindowIfNeed();
     }
 
     return QObject::eventFilter(watched, event);
@@ -210,18 +210,6 @@ void PopupView::toggleOpened()
     }
 }
 
-void PopupView::updateView()
-{
-    if (!isOpened()) {
-        return;
-    }
-
-    m_globalPos = QPointF(); // invalidate
-    updatePosition();
-    updateContentPosition();
-    m_window->setPosition(m_globalPos.toPoint());
-}
-
 bool PopupView::isOpened() const
 {
     return m_window ? m_window->isVisible() : false;
@@ -303,8 +291,10 @@ void PopupView::setLocalY(qreal y)
 
 void PopupView::repositionWindowIfNeed()
 {
-    if (isOpened()) {
+    if (isOpened() && !isDialog()) {
+        m_globalPos = QPointF();
         updatePosition();
+        updateContentPosition();
         m_window->setPosition(m_globalPos.toPoint());
         m_globalPos = QPoint();
     }
