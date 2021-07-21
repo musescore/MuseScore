@@ -39,9 +39,8 @@ public:
 
     virtual async::NotifyList<const Part*> partList() const = 0;
     virtual async::NotifyList<Instrument> instrumentList(const ID& partId) const = 0;
-    virtual async::NotifyList<const Staff*> staffList(const ID& partId, const ID& instrumentId) const = 0;
+    virtual async::NotifyList<const Staff*> staffList(const ID& partId) const = 0;
 
-    virtual ValCh<bool> canChangeInstrumentVisibility(const ID& instrumentId, const ID& fromPartId) const = 0;
     virtual bool voiceVisible(int voiceIndex) const = 0;
 
     virtual void setParts(const PartInstrumentList& instruments) = 0;
@@ -59,7 +58,6 @@ public:
     virtual void setStaffType(const ID& staffId, StaffType type) = 0;
     virtual void setCutawayEnabled(const ID& staffId, bool enabled) = 0;
     virtual void setSmallStaff(const ID& staffId, bool smallStaff) = 0;
-
     virtual void setStaffConfig(const ID& staffId, const StaffConfig& config) = 0;
 
     virtual void removeParts(const IDList& partsIds) = 0;
@@ -72,8 +70,6 @@ public:
     };
 
     virtual void moveParts(const IDList& sourcePartsIds, const ID& destinationPartId, InsertMode mode = InsertMode::Before) = 0;
-    virtual void moveInstruments(const IDList& sourceInstrumentsIds, const ID& sourcePartId, const ID& destinationPartId,
-                                 const ID& destinationInstrumentId, InsertMode mode = InsertMode::Before) = 0;
     virtual void moveStaves(const IDList& sourceStavesIds, const ID& destinationStaffId, InsertMode mode = InsertMode::Before) = 0;
 
     virtual void appendDoublingInstrument(const Instrument& instrument, const ID& destinationPartId) = 0;

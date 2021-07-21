@@ -438,15 +438,9 @@ Staff* EditStaff::staff(int staffIndex) const
 
     async::NotifyList<const Part*> parts = notationParts->partList();
     for (const Part* part: parts) {
-        async::NotifyList<Instrument> instruments = notationParts->instrumentList(part->id());
-
-        for (const Instrument& instrument: instruments) {
-            async::NotifyList<const Staff*> staves = notationParts->staffList(part->id(), instrument.id);
-
-            for (const Staff* staff: staves) {
-                if (staff->idx() == staffIndex) {
-                    return const_cast<Staff*>(staff);
-                }
+        for (const Staff* staff: notationParts->staffList(part->id())) {
+            if (staff->idx() == staffIndex) {
+                return const_cast<Staff*>(staff);
             }
         }
     }

@@ -510,7 +510,7 @@ AbstractInstrumentsPanelTreeItem* InstrumentsPanelTreeModel::loadPart(const Part
     auto partItem = buildPartItem(part);
     QString partId = part->id();
 
-    async::NotifyList<const Staff*> staves = m_masterNotationParts->staffList(partId, part->instrumentId());
+    async::NotifyList<const Staff*> staves = m_masterNotationParts->staffList(partId);
 
     for (const Staff* staff : staves) {
         auto staffItem = buildStaffItem(staff);

@@ -44,7 +44,6 @@ public:
     void setStaffType(const ID& staffId, StaffType type) override;
     void setCutawayEnabled(const ID& staffId, bool enabled) override;
     void setSmallStaff(const ID& staffId, bool smallStaff) override;
-
     void setStaffConfig(const ID& staffId, const StaffConfig& config) override;
 
     void removeParts(const IDList& partsIds) override;
@@ -52,8 +51,6 @@ public:
     void removeStaves(const IDList& stavesIds) override;
 
     void moveParts(const IDList& sourcePartsIds, const ID& destinationPartId, InsertMode mode = InsertMode::Before) override;
-    void moveInstruments(const IDList& sourceInstrumentIds, const ID& sourcePartId, const ID& destinationPartId,
-                         const ID& destinationInstrumentId, InsertMode mode = InsertMode::Before) override;
     void moveStaves(const IDList& sourceStavesIds, const ID& destinationStaffId, InsertMode mode = InsertMode::Before) override;
 
     void appendDoublingInstrument(const Instrument& instrument, const ID& destinationPartId) override;

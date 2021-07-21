@@ -105,20 +105,6 @@ void InstrumentsTreeItem::removeChildren(const int row, const int count, const b
     AbstractInstrumentsPanelTreeItem::removeChildren(row, count, deleteChild);
 }
 
-void InstrumentsTreeItem::updateCanChangeVisibility()
-{
-    if (partId().isEmpty() || id().isEmpty()) {
-        return;
-    }
-
-    ValCh<bool> canChangeVisibilityCh = notationParts()->canChangeInstrumentVisibility(id(), partId());
-    setCanChangeVisibility(canChangeVisibilityCh.val);
-
-    canChangeVisibilityCh.ch.onReceive(this, [this](bool value) {
-        setCanChangeVisibility(value);
-    });
-}
-
 ID InstrumentsTreeItem::staffId(int row) const
 {
     auto staff = dynamic_cast<const StaffTreeItem*>(childAtRow(row));
