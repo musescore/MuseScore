@@ -299,6 +299,19 @@ void MasterNotationParts::replaceInstrument(const ID& instrumentId, const ID& fr
     apply();
 }
 
+void MasterNotationParts::replaceDrumset(const ID& instrumentId, const ID& fromPartId, const Drumset& newDrumset)
+{
+    startEdit();
+
+    NotationParts::replaceDrumset(instrumentId, fromPartId, newDrumset);
+
+    for (INotationPartsPtr parts : excerptsParts()) {
+        parts->replaceDrumset(instrumentId, fromPartId, newDrumset);
+    }
+
+    apply();
+}
+
 std::vector<INotationPartsPtr> MasterNotationParts::excerptsParts() const
 {
     std::vector<INotationPartsPtr> result;

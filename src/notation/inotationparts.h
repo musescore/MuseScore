@@ -82,6 +82,7 @@ public:
     virtual void cloneStaff(const ID& sourceStaffId, const ID& destinationStaffId) = 0;
 
     virtual void replaceInstrument(const ID& instrumentId, const ID& fromPartId, const Instrument& newInstrument) = 0;
+    virtual void replaceDrumset(const ID& intrumentId, const ID& fromPartId, const Drumset& newDrumset) = 0;
 
     virtual async::Notification partsChanged() const = 0;
 };

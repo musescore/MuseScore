@@ -776,6 +776,24 @@ void NotationParts::replaceInstrument(const ID& instrumentId, const ID& fromPart
     notifyAboutPartChanged(fromPartId);
 }
 
+void NotationParts::replaceDrumset(const ID& instrumentId, const ID& fromPartId, const Drumset& newDrumset)
+{
+    Part* part = this->part(fromPartId);
+    if (!part) {
+        return;
+    }
+
+    Ms::Instrument* instrument = this->instrumentInfo(instrumentId, part).instrument;
+    if (!instrument) {
+        return;
+    }
+
+    score()->undo(new Ms::ChangeDrumset(instrument, &newDrumset));
+    updateScore();
+
+    notifyAboutPartChanged(fromPartId);
+}
+
 Notification NotationParts::partsChanged() const
 {
     return m_partsChanged;

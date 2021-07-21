@@ -75,6 +75,7 @@ public:
     void cloneStaff(const ID& sourceStaffId, const ID& destinationStaffId) override;
 
     void replaceInstrument(const ID& instrumentId, const ID& fromPartId, const Instrument& newInstrument) override;
+    void replaceDrumset(const ID& instrumentId, const ID& fromPartId, const Drumset& newDrumset) override;
 
     async::Notification partsChanged() const override;
 
