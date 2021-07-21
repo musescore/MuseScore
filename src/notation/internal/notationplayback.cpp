@@ -114,7 +114,6 @@ MidiMapping NotationPlayback::buildMidiMapping(const Ms::Part* part) const
         const Ms::Instrument* instrument = it->second;
 
         for (const Ms::Channel* channel : instrument->channel()) {
-            mapping.synthName = channel->synti().toStdString();
             mapping.programms.push_back({ static_cast<midi::channel_t>(channel->channel()),
                                           channel->program(),
                                           channel->bank() });

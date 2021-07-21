@@ -37,22 +37,17 @@ using namespace mu::midi;
 
 static tick_t MINIMAL_REQUIRED_LOOKAHEAD = 480 * 4 * 10; // about 10 measures of 4/4 time signature
 
-MidiAudioSource::MidiAudioSource(const MidiData& midiData, async::Channel<AudioInputParams> inputParamsChanged)
+MidiAudioSource::MidiAudioSource(const MidiData& midiData, const AudioInputParams& params, async::Channel<AudioInputParams> paramsChanged)
     : m_stream(midiData.stream), m_mapping(midiData.mapping)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    inputParamsChanged.onReceive(this, [this](const AudioInputParams& params) {
-        MidiData newMidiData = std::get<MidiData>(params);
-
-        m_stream = newMidiData.stream;
-        m_mapping = newMidiData.mapping;
-
-        resolveSynth(newMidiData.mapping.synthName);
+    paramsChanged.onReceive(this, [this](const AudioInputParams& params) {
+        resolveSynth(params);
         setupChannels();
     });
 
-    resolveSynth(m_mapping.synthName);
+    resolveSynth(params);
 
     m_stream.backgroundStream.onReceive(this, [this](Events events, tick_t endTick) {
         invalidateCaches(m_backgroundStreamEvents);
@@ -249,9 +244,9 @@ bool MidiAudioSource::sendEvents(const std::vector<Event>& events)
     return true;
 }
 
-void MidiAudioSource::resolveSynth(const SynthName& synthName)
+void MidiAudioSource::resolveSynth(const AudioInputParams& inputParams)
 {
-    if (m_synth && m_synth->name() == synthName) {
+    if (m_synth /*&& m_synth->name() == inputParams*/) {
         return;
     }
 
