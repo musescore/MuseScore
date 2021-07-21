@@ -267,6 +267,7 @@ public:
       MusicXmlExtendedSpannerDesc& getSpanner(const MusicXmlSpannerDesc& desc);
       void clearSpanner(const MusicXmlSpannerDesc& desc);
       void deleteHandledSpanner(SLine* const& spanner);
+      void setHasInferredHeaderText(bool b) { _hasInferredHeaderText = b; }
 
 private:
       void initPartState(const QString& partId);
@@ -338,6 +339,7 @@ private:
       std::map<int, Tie*> _ties;
       Volta* _lastVolta;
       bool _hasDrumset;                           ///< drumset defined TODO: move to pass 1
+      bool _hasInferredHeaderText;
 
       MusicXmlSpannerMap _spanners;
 
