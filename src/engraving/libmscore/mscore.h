@@ -29,8 +29,8 @@
 #include "style/style.h"
 
 namespace Ms {
-#define MSC_VERSION     "3.02"
-static constexpr int MSCVERSION = 302;
+#define MSC_VERSION     "4.00"
+static constexpr int MSCVERSION = 400;
 
 // History:
 //    1.3   added staff->_barLineSpan
@@ -74,6 +74,8 @@ static constexpr int MSCVERSION = 302;
 //    3.00  (Version 3.0 alpha)
 //    3.01  -
 //    3.02  Engraving improvements for 3.6
+
+//    4.00 (Version 4.0)
 
 class MStyle;
 class Sequencer;
