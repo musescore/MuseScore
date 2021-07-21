@@ -432,7 +432,7 @@ void PlaybackController::addTrack(const notation::INotationPlayback::InstrumentT
         return;
     }
 
-    playback()->tracks()->addTrack(m_currentSequenceId, id, notationPlayback()->instrumentMidiData(id), AudioOutputParams())
+    playback()->tracks()->addTrack(m_currentSequenceId, id, notationPlayback()->instrumentMidiData(id), AudioParams())
     .onResolve(this, [this, id](const TrackId trackId) {
         m_trackIdMap.insert({ id, trackId });
     })

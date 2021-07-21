@@ -59,8 +59,25 @@ public:
                && mixerChannel;
     }
 
-    virtual AudioInputParams inputParams() const = 0;
-    virtual bool setInputParams(const AudioInputParams& params) = 0;
+    virtual PlaybackData playbackData() const = 0;
+    virtual bool setPlaybackData(const PlaybackData& data) = 0;
+
+    AudioInputParams inputParams() const
+    {
+        return m_inParams;
+    }
+
+    bool setInputParams(const AudioInputParams& params)
+    {
+        if (m_inParams == params) {
+            return false;
+        }
+
+        m_inParams = params;
+        inputParamsChanged.send(params);
+
+        return true;
+    }
 
     AudioOutputParams outputParams() const
     {
@@ -81,11 +98,13 @@ public:
 
     async::Channel<AudioInputParams> inputParamsChanged;
     async::Channel<AudioOutputParams> outputParamsChanged;
+    async::Channel<PlaybackData> playbackDataChanged;
 
     IAudioSourcePtr audioSource = nullptr;
     IMixerChannelPtr mixerChannel = nullptr;
 
 private:
+    AudioInputParams m_inParams;
     AudioOutputParams m_outParams;
 };
 
@@ -95,21 +114,21 @@ public:
     MidiTrack()
         : Track(Midi) {}
 
-    AudioInputParams inputParams() const
+    PlaybackData playbackData() const override
     {
         return m_midiData;
     }
 
-    bool setInputParams(const AudioInputParams& params)
+    bool setPlaybackData(const PlaybackData& data) override
     {
-        midi::MidiData newMidiData = std::get<midi::MidiData>(params);
+        midi::MidiData newMidiData = std::get<midi::MidiData>(data);
 
         if (m_midiData == newMidiData) {
             return false;
         }
 
         m_midiData = newMidiData;
-        inputParamsChanged.send(std::move(newMidiData));
+        playbackDataChanged.send(std::move(newMidiData));
 
         return true;
     }
@@ -123,27 +142,28 @@ struct AudioTrack : public Track
     AudioTrack()
         : Track(Audio) {}
 
-    AudioInputParams inputParams() const override
+    PlaybackData playbackData() const override
     {
-        return m_filePath;
+        return m_ioDevice;
     }
 
-    bool setInputParams(const AudioInputParams& params) override
+    bool setPlaybackData(const PlaybackData& data) override
     {
-        io::path newPath = std::get<io::path>(params);
+        io::Device* newDevice = std::get<io::Device*>(data);
 
-        if (m_filePath == newPath) {
+        if (m_ioDevice == newDevice) {
             return false;
         }
 
-        m_filePath = newPath;
-        inputParamsChanged.send(std::move(newPath));
+        m_ioDevice->close();
+        m_ioDevice = newDevice;
+        playbackDataChanged.send(std::move(newDevice));
 
         return true;
     }
 
 private:
-    io::path m_filePath;
+    io::Device* m_ioDevice = nullptr;
 };
 
 using TrackPtr = std::shared_ptr<Track>;

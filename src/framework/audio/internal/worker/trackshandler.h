@@ -36,10 +36,10 @@ public:
     ~TracksHandler();
 
     async::Promise<TrackIdList> trackIdList(const TrackSequenceId sequenceId) const override;
-    async::Promise<TrackId> addTrack(const TrackSequenceId sequenceId, const std::string& trackName, midi::MidiData&& inParams,
-                                     AudioOutputParams&& outParams) override;
-    async::Promise<TrackId> addTrack(const TrackSequenceId sequenceId, const std::string& trackName, io::path&& inParams,
-                                     AudioOutputParams&& outParams) override;
+    async::Promise<TrackId> addTrack(const TrackSequenceId sequenceId, const std::string& trackName, midi::MidiData&& playbackData,
+                                     AudioParams&& params) override;
+    async::Promise<TrackId> addTrack(const TrackSequenceId sequenceId, const std::string& trackName, io::Device* playbackData,
+                                     AudioParams&& params) override;
     void removeTrack(const TrackSequenceId sequenceId, const TrackId trackId) override;
     void removeAllTracks(const TrackSequenceId sequenceId) override;
 
