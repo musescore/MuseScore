@@ -136,8 +136,14 @@ StyledPopupView {
             }
         }
 
-        var itemHeight = (view.contentHeight - view.spacing * (model.length - 1)) / model.length
-        root.contentHeight = view.contentHeight - sepCount * (itemHeight - prv.separatorHeight) +
+        var itemHeight = 0
+        for(var child in view.contentItem.children) {
+            itemHeight = Math.max(itemHeight, view.contentItem.children[child].height)
+        }
+
+        var itemsCount = model.length - sepCount
+
+        root.contentHeight = itemHeight * itemsCount + sepCount * prv.separatorHeight +
                 prv.viewVerticalMargin * 2
     }
 

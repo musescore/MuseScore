@@ -90,6 +90,8 @@ public:
     void showShadowNote(const PointF& pos) override;
 
     void showContextMenu(const ElementType& elementType, const QPoint& pos) override;
+    void hideContextMenu() override;
+
     Q_INVOKABLE void handleAction(const QString& actionCode);
 
     INotationInteractionPtr notationInteraction() const override;
@@ -104,7 +106,9 @@ public:
     QRect viewport() const;
 
 signals:
-    void openContextMenuRequested(const QVariantList& items, const QPoint& pos);
+    void showContextMenuRequested(const QVariantList& items, const QPoint& pos);
+    void hideContextMenuRequested();
+
     void textEdittingStarted();
 
     void horizontalScrollChanged();

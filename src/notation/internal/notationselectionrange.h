@@ -46,6 +46,7 @@ public:
     int endMeasureIndex() const override;
 
     std::vector<RectF> boundingArea() const override;
+    bool containsPoint(const PointF& point) const override;
 
 private:
     Ms::Score* score() const;

@@ -340,7 +340,12 @@ void NotationPaintView::showContextMenu(const ElementType& elementType, const QP
         menuItems << menuItem.toMap();
     }
 
-    emit openContextMenuRequested(menuItems, pos);
+    emit showContextMenuRequested(menuItems, pos);
+}
+
+void NotationPaintView::hideContextMenu()
+{
+    emit hideContextMenuRequested();
 }
 
 void NotationPaintView::handleAction(const QString& actionCode)

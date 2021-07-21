@@ -86,9 +86,17 @@ FocusScope {
                     root.textEdittingStarted()
                 }
 
-                onOpenContextMenuRequested: function (items, pos) {
-                    // TODO: replace `null` with a NavigationControl
-                    contextMenuLoader.toggleOpened(items, null, pos.x, pos.y)
+                onShowContextMenuRequested: function (items, pos) {
+                    if (contextMenuLoader.isMenuOpened) {
+                        contextMenuLoader.update(items, pos.x, pos.y)
+                    } else {
+                        // TODO: replace `null` with a NavigationControl
+                        contextMenuLoader.open(items, null, pos.x, pos.y)
+                    }
+                }
+
+                onHideContextMenuRequested: function() {
+                    contextMenuLoader.close()
                 }
 
                 onViewportChanged: {
