@@ -151,25 +151,17 @@ io::path Interactive::selectDirectory(const QString& title, const io::path& dir)
 
 RetVal<Val> Interactive::open(const std::string& uri) const
 {
-    if (uri.find("sync=") != std::string::npos) {
-        return provider()->open(UriQuery(uri));
-    }
-
-    std::string newUri = uri;
-    if (newUri.find("?") == std::string::npos) {
-        newUri += "?";
-    } else {
-        newUri += "&";
-    }
-
-    newUri += "sync=true";
-
-    return provider()->open(UriQuery(newUri));
+    return open(UriQuery(uri));
 }
 
 RetVal<Val> Interactive::open(const UriQuery& uri) const
 {
-    return provider()->open(uri);
+    UriQuery newQuery = uri;
+    if (!newQuery.contains("sync")) {
+        newQuery.addParam("sync", Val(true));
+    }
+
+    return provider()->open(newQuery);
 }
 
 RetVal<bool> Interactive::isOpened(const std::string& uri) const
