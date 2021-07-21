@@ -15,7 +15,6 @@ static void insertHexComponent(int num, std::stringstream& ss);
 
 Color::Color()
 {
-    m_isValid = false;
 }
 
 Color::Color(const Color& other)

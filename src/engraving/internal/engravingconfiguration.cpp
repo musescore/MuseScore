@@ -84,7 +84,7 @@ QString EngravingConfiguration::invisibleColor() const
 
 QString EngravingConfiguration::lassoColor() const
 {
-    return "#00003232";
+    return "#00323200";
 }
 
 QString EngravingConfiguration::figuredBassColor() const
@@ -134,7 +134,7 @@ QString EngravingConfiguration::textBaseFrameColor() const
 
 QString EngravingConfiguration::textBaseBgColor() const
 {
-    return "#FFFFFF00";
+    return "#00FFFFFF";
 }
 
 QString EngravingConfiguration::shadowNoteColor() const
