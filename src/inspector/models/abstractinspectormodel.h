@@ -119,7 +119,7 @@ public:
     bool isEmpty() const;
 
     static QList<Ms::ElementType> supportedElementTypesBySectionType(const InspectorSectionType sectionType);
-    static InspectorSectionType sectionTypeFromElementType(const Ms::ElementType elementType);
+    static QList<InspectorSectionType> sectionTypesFromElementType(const Ms::ElementType elementType);
     static InspectorModelType notationElementModelType(const Ms::ElementType elementType);
     static Ms::ElementType elementType(const InspectorModelType modelType);
 

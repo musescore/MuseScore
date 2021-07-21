@@ -23,6 +23,7 @@
 #define MU_INSPECTOR_TEXTTYPES_H
 
 #include "qobjectdefs.h"
+#include "engraving/libmscore/element.h"
 
 namespace mu::inspector {
 class TextTypes
@@ -123,6 +124,28 @@ public:
     Q_ENUM(FontHorizontalAlignment)
 
     Q_ENUM(FontVerticalAlignment)
+};
+
+static const QList<Ms::ElementType> TEXT_ELEMENT_TYPES = {
+    Ms::ElementType::TEXT,
+    Ms::ElementType::TEXTLINE,
+    Ms::ElementType::TEXTLINE_BASE,
+    Ms::ElementType::TEXTLINE_SEGMENT,
+    Ms::ElementType::STAFF_TEXT,
+    Ms::ElementType::SYSTEM_TEXT,
+    Ms::ElementType::DYNAMIC,
+    Ms::ElementType::FIGURED_BASS,
+    Ms::ElementType::FINGERING,
+    Ms::ElementType::HARMONY,
+    Ms::ElementType::INSTRUMENT_CHANGE,
+    Ms::ElementType::INSTRUMENT_NAME,
+    Ms::ElementType::JUMP,
+    Ms::ElementType::LYRICS,
+    Ms::ElementType::MARKER,
+    Ms::ElementType::MEASURE_NUMBER,
+    Ms::ElementType::REHEARSAL_MARK,
+    Ms::ElementType::STICKING,
+    Ms::ElementType::TEMPO_TEXT
 };
 }
 

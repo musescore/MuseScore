@@ -64,11 +64,11 @@ FlatButton {
         navigation.direction: NavigationPanel.Both
 
         onContentHeightChanged: {
-            calculateContentVisible()
+            checkForInsufficientSpace()
         }
 
         onOpened: {
-            calculateContentVisible()
+            checkForInsufficientSpace()
             root.popupOpened()
         }
 
@@ -76,7 +76,7 @@ FlatButton {
             root.ensureContentVisibleRequested(root.anchorItem.height) // reset contentY
         }
 
-        function calculateContentVisible() {
+        function checkForInsufficientSpace() {
             if (!isOpened) {
                 return
             }
