@@ -1459,13 +1459,7 @@ void NotationActionController::openPageSettingsDialog()
 
 void NotationActionController::openStaffProperties()
 {
-    auto interaction = currentNotationInteraction();
-    if (!interaction) {
-        return;
-    }
-
-    int staffIdx = interaction->selection()->range()->startStaffIndex();
-    interactive()->open("musescore://notation/staffproperties?staffIdx=" + QString::number(staffIdx).toStdString());
+    interactive()->open("musescore://notation/staffproperties");
 }
 
 void NotationActionController::openBreaksDialog()
