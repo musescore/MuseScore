@@ -130,7 +130,8 @@ EditDrumsetDialog::EditDrumsetDialog(QWidget* parent)
 
     m_notation = globalContext()->currentNotation();
     const INotationInteractionPtr interaction = m_notation ? m_notation->interaction() : nullptr;
-    INotationInteraction::HitElementContext context = interaction ? interaction->hitElementContext() : INotationInteraction::HitElementContext();
+    INotationInteraction::HitElementContext context
+        = interaction ? interaction->hitElementContext() : INotationInteraction::HitElementContext();
     const Measure* measure = toMeasure(context.element);
 
     if (measure && context.staff) {
