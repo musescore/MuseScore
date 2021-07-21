@@ -47,8 +47,6 @@ public:
                       const int destinationRow) override;
     void removeChildren(const int row, const int count, const bool deleteChild) override;
 
-    void updateCanChangeVisibility();
-
 private:
     notation::ID staffId(int row) const;
 

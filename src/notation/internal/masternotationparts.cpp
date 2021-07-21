@@ -220,20 +220,6 @@ void MasterNotationParts::moveParts(const IDList& sourcePartsIds, const ID& dest
     apply();
 }
 
-void MasterNotationParts::moveInstruments(const IDList& sourceInstrumentIds, const ID& sourcePartId, const ID& destinationPartId,
-                                          const ID& destinationInstrumentId, InsertMode mode)
-{
-    startEdit();
-
-    NotationParts::moveInstruments(sourceInstrumentIds, sourcePartId, destinationPartId, destinationInstrumentId, mode);
-
-    for (INotationPartsPtr parts : excerptsParts()) {
-        parts->moveInstruments(sourceInstrumentIds, sourcePartId, destinationPartId, destinationInstrumentId, mode);
-    }
-
-    apply();
-}
-
 void MasterNotationParts::moveStaves(const IDList& sourceStavesIds, const ID& destinationStaffId, InsertMode mode)
 {
     startEdit();
