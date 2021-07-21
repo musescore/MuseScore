@@ -121,6 +121,10 @@ Column {
                     currentIndex: root.model && !root.model.topTpc.isUndefined ? ttpcs.indexOfValue(root.model.topTpc.value) : -1
 
                     onCurrentValueChanged: {
+                        if (currentIndex === -1) {
+                            return
+                        }
+
                         root.model.topTpc.value = ttpcs.currentValue
                     }
                 }
@@ -171,6 +175,10 @@ Column {
                 currentIndex: root.model && !root.model.bottomTpc.isUndefined ? tpcs.indexOfValue(root.model.bottomTpc.value) : -1
 
                 onCurrentValueChanged: {
+                    if (currentIndex === -1) {
+                        return
+                    }
+
                     root.model.bottomTpc.value = tpcs.currentValue
                 }
             }

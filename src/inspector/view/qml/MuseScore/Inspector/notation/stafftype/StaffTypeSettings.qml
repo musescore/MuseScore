@@ -222,6 +222,10 @@ Column {
             currentIndex: root.model && !root.model.noteheadSchemeType.isUndefined ? shemes.indexOfValue(root.model.noteheadSchemeType.value) : -1
 
             onCurrentValueChanged: {
+                if (currentIndex === -1) {
+                    return
+                }
+
                 root.model.noteheadSchemeType.value = shemes.currentValue
             }
         }

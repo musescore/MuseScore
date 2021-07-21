@@ -37,6 +37,8 @@ Item {
     property bool custom: false
     property bool unresolved: false
 
+    property bool isInVisibleArea: true
+
     property PaletteProvider paletteProvider
     property var modelIndex: null
 
@@ -128,7 +130,7 @@ Item {
 
         z: 1000
 
-        visible: root.expanded || root.hovered || isMenuOpened || navigation.active
+        visible: (root.expanded || root.hovered || isMenuOpened || navigation.active) && root.isInVisibleArea
 
         navigation.panel: root.navigationPanel
         navigation.row: root.navigationRow

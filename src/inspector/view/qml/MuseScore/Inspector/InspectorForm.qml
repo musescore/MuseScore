@@ -86,11 +86,9 @@ Rectangle {
         anchors.fill: parent
         anchors.margins: 12
 
-        function ensureContentVisible(delegateY, delegateContentHeight) {
-            var contentBottomY = delegateY + delegateContentHeight
-
-            if (contentBottomY > flickableArea.height) {
-                flickableArea.contentY = contentBottomY - flickableArea.height
+        function ensureContentVisible(invisibleContentHeight) {
+            if (flickableArea.contentY + invisibleContentHeight > 0) {
+                flickableArea.contentY += invisibleContentHeight
             } else {
                 flickableArea.contentY = 0
             }
@@ -151,18 +149,17 @@ Rectangle {
                         title = inspectorData.title
                     }
 
-                    function updateContentHeight(newContentHeight) {
-                        expandableDelegate.contentHeight = newContentHeight
-                        flickableArea.ensureContentVisible(y, newContentHeight)
-                    }
-
                     Component {
                         id: generalInspector
                         GeneralInspectorView {
                             model: inspectorData
                             navigationPanel: navPanel
                             navigationRowOffset: expandableDelegate.navigation.row + 1
-                            onContentExtended: expandableDelegate.updateContentHeight(contentHeight)
+                            anchorItem: root
+
+                            onEnsureContentVisibleRequested: {
+                                flickableArea.ensureContentVisible(-invisibleContentHeight)
+                            }
                         }
                     }
                     Component {
@@ -171,7 +168,6 @@ Rectangle {
                             model: inspectorData
                             navigationPanel: navPanel
                             navigationRowOffset: expandableDelegate.navigation.row + 1
-                            onContentExtended: expandableDelegate.updateContentHeight(contentHeight)
                         }
                     }
 
@@ -182,7 +178,11 @@ Rectangle {
                             model: inspectorData
                             navigationPanel: navPanel
                             navigationRowOffset: expandableDelegate.navigation.row + 1
-                            onContentExtended: expandableDelegate.updateContentHeight(contentHeight)
+                            anchorItem: root
+
+                            onEnsureContentVisibleRequested: {
+                                flickableArea.ensureContentVisible(-invisibleContentHeight)
+                            }
                         }
                     }
 
@@ -193,7 +193,6 @@ Rectangle {
                             model: inspectorData
                             navigationPanel: navPanel
                             navigationRowOffset: expandableDelegate.navigation.row + 1
-                            onContentExtended: expandableDelegate.updateContentHeight(contentHeight)
                         }
                     }
 
@@ -204,7 +203,6 @@ Rectangle {
                             model: inspectorData
                             navigationPanel: navPanel
                             navigationRowOffset: expandableDelegate.navigation.row + 1
-                            onContentExtended: expandableDelegate.updateContentHeight(contentHeight)
                         }
                     }
                     Component {
@@ -214,7 +212,6 @@ Rectangle {
                             model: inspectorData
                             navigationPanel: navPanel
                             navigationRowOffset: expandableDelegate.navigation.row + 1
-                            onContentExtended: expandableDelegate.updateContentHeight(contentHeight)
                         }
                     }
                 }

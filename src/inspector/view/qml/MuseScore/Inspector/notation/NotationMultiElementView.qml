@@ -32,10 +32,6 @@ InspectorSectionView {
 
     implicitHeight: grid.implicitHeight
 
-    function updateContentHeight(popupContentHeight) {
-        root.contentHeight = implicitHeight + popupContentHeight
-    }
-
     GridLayout {
         id: grid
 
@@ -48,28 +44,29 @@ InspectorSectionView {
             model: root.model ? root.model.models() : []
 
             delegate: PopupViewButton {
+                id: button
+
                 popupAvailableWidth: parent ? parent.width : 0
+                anchorItem: root.anchorItem
 
                 icon: modelData["icon"]
                 text: modelData["title"]
 
                 visible: !modelData["isEmpty"]
 
-                onPopupContentHeightChanged: updateContentHeight(popupContentHeight)
-
                 navigation.panel: root.navigationPanel
                 navigation.name: loader.viewObjectName
                 navigation.row: root.navigationRow(index)
 
-                StyledPopupView {
-                    contentHeight: loader.implicitHeight
+                popupContent: NotationInspectorSectionLoader {
+                    id: loader
+                    width: parent.width
 
-                    NotationInspectorSectionLoader {
-                        id: loader
-                        width: parent.width
+                    model: modelData
+                }
 
-                        model: modelData
-                    }
+                onEnsureContentVisibleRequested: {
+                    root.ensureContentVisibleRequested(invisibleContentHeight)
                 }
             }
         }

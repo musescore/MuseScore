@@ -52,6 +52,8 @@ public:
     bool isVisible() const override;
     QRect geometry() const override;
 
+    void setPosition(const QPoint& position) const override;
+
     void forceActiveFocus() override;
 
     void setOnHidden(const std::function<void()>& callback) override;

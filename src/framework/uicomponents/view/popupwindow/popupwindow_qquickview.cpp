@@ -142,12 +142,17 @@ QWindow* PopupWindow_QQuickView::qWindow() const
 
 bool PopupWindow_QQuickView::isVisible() const
 {
-    return m_view->isVisible();
+    return m_view ? m_view->isVisible() : false;
 }
 
 QRect PopupWindow_QQuickView::geometry() const
 {
-    return m_view->geometry();
+    return m_view ? m_view->geometry() : QRect();
+}
+
+void PopupWindow_QQuickView::setPosition(const QPoint& position) const
+{
+    m_view->setPosition(position);
 }
 
 void PopupWindow_QQuickView::setOnHidden(const std::function<void()>& callback)

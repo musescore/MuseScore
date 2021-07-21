@@ -53,6 +53,8 @@ GridView {
 
     property bool enableAnimations: true
 
+    property bool isInVisibleArea: true
+
     property NavigationPanel navigationPanel: null
     property int navigationRow: 0
     property int navigationCol: 1
@@ -172,6 +174,8 @@ GridView {
             id: moreButton
 
             anchors.fill: parent
+
+            visible: paletteView.isInVisibleArea
 
             navigation.panel: paletteView.navigationPanel
             //! NOTE Just Up/Down navigation now
@@ -390,7 +394,6 @@ GridView {
             moreButton.forceActiveFocus();
         } else {
             currentIndex = 0;
-            currentItem.forceActiveFocus();
         }
     }
 
@@ -399,7 +402,6 @@ GridView {
             moreButton.forceActiveFocus();
         } else {
             currentIndex = count - 1;
-            currentItem.forceActiveFocus();
         }
     }
 
@@ -408,7 +410,6 @@ GridView {
         const matchedIndexList = paletteModel.match(modelIndex, Qt.ToolTipRole, str);
         if (matchedIndexList.length) {
             currentIndex = matchedIndexList[0].row;
-            currentItem.forceActiveFocus();
             return true;
         }
         return false;

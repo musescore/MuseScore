@@ -91,6 +91,10 @@ Column {
             currentIndex: root.model && !root.model.placement.isUndefined ? placements.indexOfValue(root.model.placement.value) : -1
 
             onCurrentValueChanged: {
+                if (currentIndex === -1) {
+                    return
+                }
+
                 root.model.placement.value = placements.currentValue
             }
         }

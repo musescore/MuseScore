@@ -58,7 +58,6 @@ ListView {
 
     Accessible.name: qsTrc("palette", "Palettes Tree, contains %n palette(s)", "", count)
 
-
     NavigationPanel {
         id: keynavTree
         name: "PalettesTree"
@@ -450,6 +449,8 @@ ListView {
                     hovered: control.hovered
                     text: model.display
 
+                    isInVisibleArea: control.y >= paletteTree.contentY && control.y < (paletteTree.contentY + paletteTree.height)
+
                     navigationPanel: keynavTree
                     navigationRow: control.navigationRow
 
@@ -522,6 +523,11 @@ ListView {
                         paletteRootIndex: control.modelIndex
                         paletteController: paletteTree.paletteController
                         selectionModel: paletteSelectionModel
+
+                        isInVisibleArea: {
+                            var mainPaletteBottom = control.y + mainPalette.height
+                            return mainPaletteBottom >= paletteTree.contentY && mainPaletteBottom < (paletteTree.contentY + paletteTree.height)
+                        }
 
                         showMoreButton: !filter.length
                         onMoreButtonClicked: control.togglePopup(btn);

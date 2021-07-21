@@ -74,7 +74,7 @@ FocusScope {
                 return implicitHeight === 0 ? implicitHeight : implicitHeight + contentHorizontalPadding * 2
             }
 
-            height: getContentHeight() * yScale
+            height: root.isExpanded ? getContentHeight() * yScale : 0
             width: root.width
 
             enabled: root.isExpanded
@@ -107,7 +107,7 @@ FocusScope {
 
     transitions: Transition {
         NumberAnimation {
-            properties: "opacity, yScale"
+            properties: "opacity"
             duration: 100
         }
     }
