@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="3.02">
+<museScore version="4.00">
   <Style>
     <lyricsMinDistance>0.25</lyricsMinDistance>
     <lyricsDashYposRatio>0.6</lyricsDashYposRatio>
