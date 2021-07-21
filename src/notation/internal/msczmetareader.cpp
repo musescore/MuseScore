@@ -67,7 +67,7 @@ mu::RetVal<Meta> MsczMetaReader::readMeta(const io::path& filePath) const
         return meta;
     }
 
-    bool compressed = io::syffix(filePath) == "mscz";
+    bool compressed = io::suffix(filePath) == "mscz";
 
     if (compressed) {
         meta = readMetaFromMscx(filePath);
@@ -99,7 +99,7 @@ mu::RetVal<Meta> MsczMetaReader::readMetaFromMscx(const io::path& filePath) cons
     MscReader::Params params;
     params.device = &buffer;
     params.filePath = filePath.toQString();
-    params.mode = MscReader::Mode::Zip;
+    params.mode = MscIoMode::Zip;
 
     MscReader msczReader(params);
     msczReader.open();

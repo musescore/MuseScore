@@ -56,18 +56,16 @@ mu::Ret NotationProject::load(const io::path& path, const io::path& stylePath, b
 {
     TRACEFUNC;
 
-    std::string syffix = io::syffix(path);
-    if (syffix != "mscz" && syffix != "mscx" && syffix != "mscf") {
+    std::string suffix = io::suffix(path);
+    if (!isMuseScoreFile(suffix)) {
         return doImport(path, stylePath, forceMode);
     }
 
     MscReader::Params params;
     params.filePath = path.toQString();
-    params.mode = MscReader::Mode::Zip;
-    if (syffix == "mscx") {
-        params.mode = MscReader::Mode::Dir;
-    } else if (syffix == "mscf") {
-        params.mode = MscReader::Mode::XmlFile;
+    params.mode = mcsIoModeBySuffix(suffix);
+    IF_ASSERT_FAILED(params.mode != MscIoMode::Unknown) {
+        return make_ret(Ret::Code::InternalError);
     }
 
     MscReader reader(params);
@@ -125,8 +123,8 @@ mu::Ret NotationProject::doLoad(engraving::MscReader& reader, const io::path& st
 mu::Ret NotationProject::doImport(const io::path& path, const io::path& stylePath, bool forceMode)
 {
     // Find import reader
-    std::string syffix = io::syffix(path);
-    INotationReaderPtr scoreReader = readers()->reader(syffix);
+    std::string suffix = io::suffix(path);
+    INotationReaderPtr scoreReader = readers()->reader(suffix);
     if (!scoreReader) {
         return make_ret(notation::Err::FileUnknownType, path);
     }
@@ -268,7 +266,7 @@ mu::Ret NotationProject::writeToDevice(io::Device* device)
     MscWriter::Params params;
     params.device = device;
     params.filePath = m_engravingProject->path();
-    params.mode = MscWriter::Mode::Zip;
+    params.mode = MscIoMode::Zip;
 
     MscWriter msczWriter(params);
     msczWriter.open();
@@ -279,8 +277,8 @@ mu::Ret NotationProject::writeToDevice(io::Device* device)
 
 mu::Ret NotationProject::saveScore(const io::path& path, SaveMode saveMode)
 {
-    std::string suffix = io::syffix(path);
-    if (suffix != "mscz" && suffix != "mscx" && suffix != "mscf" && !suffix.empty()) {
+    std::string suffix = io::suffix(path);
+    if (!isMuseScoreFile(suffix) && !suffix.empty()) {
         return exportProject(path, suffix);
     }
 
@@ -315,14 +313,12 @@ mu::Ret NotationProject::doSave(bool generateBackup)
     }
 
     // Step 3: write project
-    std::string suffix = io::syffix(info.fileName());
+    std::string suffix = io::suffix(info.fileName());
     MscWriter::Params params;
     params.filePath = m_engravingProject->path();
-    params.mode = MscWriter::Mode::Zip;
-    if (suffix == "mscx") {
-        params.mode = MscWriter::Mode::Dir;
-    } else if (suffix == "mscf") {
-        params.mode = MscWriter::Mode::XmlFile;
+    params.mode = mcsIoModeBySuffix(suffix);
+    IF_ASSERT_FAILED(params.mode != MscIoMode::Unknown) {
+        return make_ret(Ret::Code::InternalError);
     }
 
     MscWriter msczWriter(params);
@@ -381,12 +377,12 @@ mu::Ret NotationProject::saveSelectionOnScore(const mu::io::path& path)
     }
 
     // Write project
-    std::string suffix = io::syffix(info.fileName());
+    std::string suffix = io::suffix(info.fileName());
     MscWriter::Params params;
     params.filePath = m_engravingProject->path();
-    params.mode = MscWriter::Mode::Zip;
-    if (suffix == "mscx") {
-        params.mode = MscWriter::Mode::Dir;
+    params.mode = mcsIoModeBySuffix(suffix);
+    IF_ASSERT_FAILED(params.mode != MscIoMode::Unknown) {
+        return make_ret(Ret::Code::InternalError);
     }
 
     MscWriter msczWriter(params);

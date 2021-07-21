@@ -55,7 +55,7 @@ bool ExportScoreScenario::exportScores(const INotationPtrList& notations, const 
         return false;
     }
 
-    auto writer = writers()->writer(io::syffix(chosenPath));
+    auto writer = writers()->writer(io::suffix(chosenPath));
     if (!writer) {
         return false;
     }
@@ -208,7 +208,7 @@ mu::io::path ExportScoreScenario::completeExportPath(const io::path& basePath, I
         result += "-" + std::to_string(pageIndex + 1);
     }
 
-    result += "." + io::syffix(basePath);
+    result += "." + io::suffix(basePath);
 
     return result;
 }

@@ -82,7 +82,7 @@ paths path::pathsFromString(const std::string& str, const std::string& delim)
     return ps;
 }
 
-std::string mu::io::syffix(const mu::io::path& path)
+std::string mu::io::suffix(const mu::io::path& path)
 {
     QFileInfo fi(path.toQString());
     return fi.suffix().toStdString();

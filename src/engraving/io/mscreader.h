@@ -26,6 +26,8 @@
 #include <QByteArray>
 #include <QIODevice>
 
+#include "mscio.h"
+
 class MQZipReader;
 class QXmlStreamReader;
 
@@ -33,17 +35,12 @@ namespace mu::engraving {
 class MscReader
 {
 public:
-    enum class Mode {
-        Zip,
-        Dir,
-        XmlFile
-    };
 
     struct Params
     {
         QIODevice* device = nullptr;
         QString filePath;
-        Mode mode = Mode::Zip;
+        MscIoMode mode = MscIoMode::Zip;
     };
 
     MscReader() = default;
