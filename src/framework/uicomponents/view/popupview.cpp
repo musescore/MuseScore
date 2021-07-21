@@ -260,6 +260,8 @@ void PopupView::setLocalX(qreal x)
 
     m_localPos.setX(x);
     emit xChanged(x);
+
+    repositionWindowIfNeed();
 }
 
 void PopupView::setLocalY(qreal y)
@@ -270,6 +272,17 @@ void PopupView::setLocalY(qreal y)
 
     m_localPos.setY(y);
     emit yChanged(y);
+
+    repositionWindowIfNeed();
+}
+
+void PopupView::repositionWindowIfNeed()
+{
+    if (isOpened()) {
+        updatePosition();
+        m_window->setPosition(m_globalPos.toPoint());
+        m_globalPos = QPoint();
+    }
 }
 
 void PopupView::setClosePolicy(ClosePolicy closePolicy)

@@ -32,72 +32,85 @@ Loader {
 
     property bool isMenuOpened: Boolean(loader.menu) && loader.menu.isOpened
 
-    function toggleOpened(model, navigationParentControl, x = 0, y = 0) {
-        if (!prv.initMenu(model, navigationParentControl)) {
-            return
-        }
-
-        if (x !== 0) {
-            loader.menu.x = x
-        }
-
-        if (y !== 0) {
-            loader.menu.y = y
-        }
-
-        prv.openMenu()
-    }
-
-    function toggleOpenedWithAlign(model, navigationParentControl, align) {
-        if (!prv.initMenu(model, navigationParentControl)) {
-            return
-        }
-
-        loader.menu.preferredAlign = align
-
-        prv.openMenu()
-    }
-
-    function unloadMenu() {
-        loader.sourceComponent = null
-    }
-
     QtObject {
         id: prv
 
-        function initMenu(model, navigationParentControl) {
+        function loadMenu() {
             if (!loader.sourceComponent) {
                 loader.sourceComponent = itemMenuComp
             }
-
-            var menu = loader.menu
-            if (menu.isOpened) {
-                menu.close()
-                return false
-            }
-
-            menu.parent = loader.parent
-            if (navigationParentControl) {
-                menu.navigationParentControl = navigationParentControl
-                menu.navigation.name = navigationParentControl.name + "PopupMenu"
-            }
-            menu.anchorItem = menuAnchorItem
-            menu.model = model
-
-            return true
         }
 
-        function openMenu() {
-            loader.menu.open()
+        function unloadMenu() {
+            loader.sourceComponent = null
+        }
+    }
 
-            if (!loader.menu.focusOnSelected()) {
-                loader.menu.focusOnFirstItem()
-            }
+    function open(model, navigationParentControl, x = 0, y = 0) {
+        prv.loadMenu()
+
+        var menu = loader.menu
+        menu.parent = loader.parent
+        if (navigationParentControl) {
+            menu.navigationParentControl = navigationParentControl
+            menu.navigation.name = navigationParentControl.name + "PopupMenu"
+        }
+        menu.anchorItem = menuAnchorItem
+
+        update(model, x, y)
+        menu.open()
+
+        if (!menu.focusOnSelected()) {
+            menu.focusOnFirstItem()
+        }
+    }
+
+    function toggleOpened(model, navigationParentControl, x = 0, y = 0) {
+        prv.loadMenu()
+
+        var menu = loader.menu
+        if (menu.isOpened) {
+            menu.close()
+            return
+        }
+
+        open(model, navigationParentControl, x, y)
+    }
+
+    function toggleOpenedWithAlign(model, navigationParentControl, align) {
+        prv.loadMenu()
+
+        loader.menu.preferredAlign = align
+
+        toggleOpened(model, navigationParentControl)
+    }
+
+    function close() {
+        if (loader.isMenuOpened) {
+            loader.menu.close()
+        }
+    }
+
+    function update(model, x = 0, y = 0) {
+        var menu = loader.menu
+        if (!Boolean(menu)) {
+            return
+        }
+
+        menu.model = model
+
+        if (x !== 0) {
+            menu.x = x
+        }
+
+        if (y !== 0) {
+            menu.y = y
         }
     }
 
     Component {
         id: itemMenuComp
+
         StyledMenu {
             id: itemMenu
 
@@ -107,7 +120,7 @@ Loader {
             }
 
             onClosed: {
-                Qt.callLater(loader.unloadMenu)
+                Qt.callLater(prv.unloadMenu)
             }
         }
     }

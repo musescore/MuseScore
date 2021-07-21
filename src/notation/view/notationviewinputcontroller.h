@@ -58,6 +58,7 @@ public:
     virtual void showShadowNote(const PointF& pos) = 0;
 
     virtual void showContextMenu(const ElementType& elementType, const QPoint& pos) = 0;
+    virtual void hideContextMenu() = 0;
 
     virtual INotationInteractionPtr notationInteraction() const = 0;
     virtual INotationPlaybackPtr notationPlayback() const = 0;
@@ -98,6 +99,7 @@ public:
 private:
     INotationPtr currentNotation() const;
     INotationStylePtr notationStyle() const;
+    INotationInteractionPtr viewInteraction() const;
 
     void zoomToPageWidth();
     void zoomToWholePage();
@@ -121,6 +123,7 @@ private:
 
     float hitWidth() const;
 
+    bool needSelect(const QMouseEvent* event, const PointF& clickLogicPos) const;
     ElementType selectionType() const;
 
     double guiScalling() const;
