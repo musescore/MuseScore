@@ -395,20 +395,11 @@ void EditDrumsetDialog::shortcutChanged()
 //---------------------------------------------------------
 void EditDrumsetDialog::bboxClicked(QAbstractButton* button)
 {
-    QDialogButtonBox::ButtonRole br = buttonBox->buttonRole(button);
-    switch (br) {
+    switch (buttonBox->buttonRole(button)) {
     case QDialogButtonBox::ApplyRole:
-        apply();
-        break;
-
     case QDialogButtonBox::AcceptRole:
         apply();
-    // fall through
-
-    case QDialogButtonBox::RejectRole:
-        close();
         break;
-
     default:
         break;
     }
