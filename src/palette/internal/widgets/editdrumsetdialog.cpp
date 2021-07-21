@@ -128,13 +128,16 @@ EditDrumsetDialog::EditDrumsetDialog(QWidget* parent)
 {
     setObjectName(EDIT_DRUMSET_DIALOG_NAME);
 
-    const INotationPtr notation = globalContext()->currentNotation();
-    const INotationInteractionPtr interaction = notation ? notation->interaction() : nullptr;
+    m_notation = globalContext()->currentNotation();
+    const INotationInteractionPtr interaction = m_notation ? m_notation->interaction() : nullptr;
     INotationInteraction::HitElementContext context = interaction ? interaction->hitElementContext() : INotationInteraction::HitElementContext();
     const Measure* measure = toMeasure(context.element);
 
     if (measure && context.staff) {
-        m_editedDrumset = *context.staff->part()->instrument(measure->tick())->drumset();
+        Ms::Instrument* instrument = context.staff->part()->instrument(measure->tick());
+        m_instrumentId = instrument->getId();
+        m_partId = context.staff->part()->id();
+        m_editedDrumset = *instrument->drumset();
     }
 
     setupUi(this);
@@ -551,6 +554,8 @@ void EditDrumsetDialog::valueChanged()
         }
     }
     updateExample();
+
+    m_notation->parts()->replaceDrumset(m_instrumentId, m_partId, m_editedDrumset);
 }
 
 //---------------------------------------------------------
