@@ -73,7 +73,7 @@ static int readStyleDefaultsVersion(MasterScore* score, const QByteArray& scoreD
     return styleDefaultByMscVersion(score->mscVersion());
 }
 
-ReadStyleHook::ReadStyleHook(Ms::MasterScore* score, const QByteArray& scoreData, const QString& completeBaseName)
+ReadStyleHook::ReadStyleHook(Ms::Score* score, const QByteArray& scoreData, const QString& completeBaseName)
     : m_score(score), m_scoreData(scoreData), m_completeBaseName(completeBaseName)
 {
 }
@@ -87,7 +87,13 @@ void ReadStyleHook::setupDefaultStyle()
     if (m_score->created() && DefaultStyle::isHasDefaultStyle()) {
         m_score->setStyle(DefaultStyle::defaultStyle());
     } else {
-        int defaultsVersion = readStyleDefaultsVersion(m_score, m_scoreData, m_completeBaseName);
+        int defaultsVersion = -1;
+        if (m_score->isMaster()) {
+            defaultsVersion =  readStyleDefaultsVersion(m_score->masterScore(), m_scoreData, m_completeBaseName);
+        } else {
+            defaultsVersion = m_score->masterScore()->style().defaultStyleVersion();
+        }
+
         m_score->setStyle(DefaultStyle::resolveStyleDefaults(defaultsVersion));
         m_score->style().setDefaultStyleVersion(defaultsVersion);
     }
