@@ -341,6 +341,22 @@ void Score::linkMeasures(Score* score)
 }
 
 //---------------------------------------------------------
+//   read
+//---------------------------------------------------------
+
+bool MasterScore::read(XmlReader& e, const compat::ReadScoreHooks& hooks)
+{
+    if (!Score::read(e, hooks)) {
+        return false;
+    }
+    for (Staff* s : staves()) {
+        s->updateOttava();
+    }
+    setCreated(false);
+    return true;
+}
+
+//---------------------------------------------------------
 //   addMovement
 //---------------------------------------------------------
 
@@ -373,7 +389,7 @@ Score::FileError MasterScore::read302(XmlReader& e, const mu::engraving::compat:
         } else if (tag == "programRevision") {
             setMscoreRevision(e.readIntHex());
         } else if (tag == "Score") {
-            if (!Score::read(e, hooks)) {
+            if (!read(e, hooks)) {
                 if (e.error() == QXmlStreamReader::CustomError) {
                     return FileError::FILE_CRITICALLY_CORRUPTED;
                 }

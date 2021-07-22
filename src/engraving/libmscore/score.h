@@ -1402,6 +1402,7 @@ class MasterScore : public Score
     QFileInfo _sessionStartBackupInfo;
     QFileInfo info;
 
+    bool read(XmlReader&, const mu::engraving::compat::ReadScoreHooks& hooks);
     FileError read1(XmlReader&, bool ignoreVersionError, const mu::engraving::compat::ReadScoreHooks& hooks);
     FileError read114(XmlReader&);
     FileError read206(XmlReader&);
