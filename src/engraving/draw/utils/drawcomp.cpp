@@ -99,7 +99,7 @@ static bool isEqual(const Pen& p1, const Pen& p2)
         return false;
     }
 
-    if (p1.color().name() != p2.color().name()) {
+    if (p1.color().toString() != p2.color().toString()) {
         return false;
     }
 
@@ -112,7 +112,7 @@ static bool isEqual(const Brush& b1, const Brush& b2)
         return false;
     }
 
-    if (b1.color().name() != b2.color().name()) {
+    if (b1.color().toString() != b2.color().toString()) {
         return false;
     }
 

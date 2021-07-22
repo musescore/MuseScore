@@ -22,12 +22,13 @@
 #ifndef MU_DRAW_PEN_H
 #define MU_DRAW_PEN_H
 
-#include <QColor>
 #ifndef NO_QT_SUPPORT
 #include <QPen>
 #endif
 
+#include "color.h"
 #include "drawtypes.h"
+#include "libmscore/mscore.h"
 
 namespace mu::draw {
 class Pen
@@ -39,8 +40,8 @@ public:
     {
     }
 
-    Pen(const QColor& color = Qt::black, double width = 1, PenStyle s = PenStyle::SolidLine, PenCapStyle c = PenCapStyle::SquareCap,
-        PenJoinStyle j = PenJoinStyle::BevelJoin)
+    Pen(const Color& color = Ms::MScore::defaultColor, double width = 1, PenStyle s = PenStyle::SolidLine,
+        PenCapStyle c = PenCapStyle::SquareCap, PenJoinStyle j = PenJoinStyle::BevelJoin)
         : m_color(color), m_width(width), m_style(s), m_capStyle(c), m_joinStyle(j)
     {
     }
@@ -109,12 +110,12 @@ public:
         m_width = width;
     }
 
-    QColor color() const
+    Color color() const
     {
         return m_color;
     }
 
-    void setColor(const QColor& color)
+    void setColor(const Color& color)
     {
         m_color = color;
     }
@@ -142,7 +143,7 @@ public:
 #ifndef NO_QT_SUPPORT
     static QPen toQPen(const Pen& pen)
     {
-        QPen p(pen.m_color, pen.m_width, static_cast<Qt::PenStyle>(pen.m_style),
+        QPen p(pen.m_color.toQColor(), pen.m_width, static_cast<Qt::PenStyle>(pen.m_style),
                static_cast<Qt::PenCapStyle>(pen.m_capStyle),
                static_cast<Qt::PenJoinStyle>(pen.m_joinStyle));
         p.setDashPattern(QVector<qreal>(pen.m_dashPattern.cbegin(), pen.m_dashPattern.cend()));
@@ -162,8 +163,8 @@ public:
 
 private:
 
-    QColor m_color = Qt::black;
-    double m_width = 1;
+    Color m_color = Ms::MScore::defaultColor;
+    double m_width = 1.0;
     PenStyle m_style = PenStyle::SolidLine;
     PenCapStyle m_capStyle = PenCapStyle::SquareCap;
     PenJoinStyle m_joinStyle = PenJoinStyle::BevelJoin;

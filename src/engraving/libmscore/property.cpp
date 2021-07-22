@@ -473,7 +473,7 @@ QVariant propertyFromString(Pid id, QString value)
         return Fraction::fromString(value);
     case P_TYPE::COLOR:
         // not used by MSCX
-        return QColor(value);
+        return QVariant::fromValue(mu::draw::Color(value.toLocal8Bit().data()));
     case P_TYPE::POINT:
     case P_TYPE::POINT_SP:
     case P_TYPE::POINT_SP_MM: {
@@ -675,7 +675,7 @@ QVariant readProperty(Pid id, XmlReader& e)
     case P_TYPE::FRACTION:
         return QVariant::fromValue(e.readFraction());
     case P_TYPE::COLOR:
-        return QVariant(e.readColor());
+        return QVariant::fromValue(e.readColor());
     case P_TYPE::POINT:
     case P_TYPE::POINT_SP:
     case P_TYPE::POINT_SP_MM:

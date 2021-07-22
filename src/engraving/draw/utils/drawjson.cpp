@@ -47,7 +47,7 @@ static QJsonObject toObj(const Pen& pen)
 {
     QJsonObject obj;
     obj["style"] = static_cast<int>(pen.style());
-    obj["color"] = pen.color().name();
+    obj["color"] = pen.color().toString().c_str();
     obj["width"] = pen.widthF();
     return obj;
 }
@@ -55,7 +55,7 @@ static QJsonObject toObj(const Pen& pen)
 static void fromObj(const QJsonObject& obj, Pen& pen)
 {
     pen.setStyle(static_cast<PenStyle>(obj["style"].toInt()));
-    pen.setColor(QColor(obj["color"].toString()));
+    pen.setColor(Color(obj["color"].toString().toLocal8Bit().data()));
     pen.setWidthF(obj["width"].toDouble());
 }
 
@@ -63,14 +63,14 @@ static QJsonObject toObj(const Brush& brush)
 {
     QJsonObject obj;
     obj["style"] = static_cast<int>(brush.style());
-    obj["color"] = brush.color().name();
+    obj["color"] = QString::fromStdString(brush.color().toString());
     return obj;
 }
 
 static void fromObj(const QJsonObject& obj, Brush& brush)
 {
     brush.setStyle(static_cast<BrushStyle>(obj["style"].toInt()));
-    brush.setColor(QColor(obj["color"].toString()));
+    brush.setColor(Color(obj["color"].toString().toLocal8Bit().data()));
 }
 
 static QJsonObject toObj(const Font& font)
@@ -133,7 +133,7 @@ static void fromArr(const QJsonArray& arr, RectF& r)
     IF_ASSERT_FAILED(arr.size() == 4) {
         return;
     }
-    r = QRectF(itor(arr.at(0).toInt()), itor(arr.at(1).toInt()), itor(arr.at(2).toInt()), itor(arr.at(3).toInt()));
+    r = RectF(itor(arr.at(0).toInt()), itor(arr.at(1).toInt()), itor(arr.at(2).toInt()), itor(arr.at(3).toInt()));
 }
 
 static QJsonArray toArr(const Size& sz)

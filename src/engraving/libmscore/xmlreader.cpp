@@ -143,10 +143,10 @@ PointF XmlReader::readPoint()
 //   readColor
 //---------------------------------------------------------
 
-QColor XmlReader::readColor()
+mu::draw::Color XmlReader::readColor()
 {
     Q_ASSERT(tokenType() == QXmlStreamReader::StartElement);
-    QColor c;
+    mu::draw::Color c;
     c.setRed(intAttribute("r"));
     c.setGreen(intAttribute("g"));
     c.setBlue(intAttribute("b"));

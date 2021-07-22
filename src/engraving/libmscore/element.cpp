@@ -499,7 +499,7 @@ Part* Element::part() const
 //   curColor
 //---------------------------------------------------------
 
-QColor Element::curColor() const
+mu::draw::Color Element::curColor() const
 {
     return curColor(visible());
 }
@@ -508,17 +508,19 @@ QColor Element::curColor() const
 //   curColor
 //---------------------------------------------------------
 
-QColor Element::curColor(bool isVisible) const
+mu::draw::Color Element::curColor(bool isVisible) const
 {
+    color().toString();
     return curColor(isVisible, color());
 }
 
-QColor Element::curColor(bool isVisible, QColor normalColor) const
+mu::draw::Color Element::curColor(bool isVisible, mu::draw::Color normalColor) const
 {
     // the default element color is always interpreted as black in
     // printing
     if (score() && score()->printing()) {
-        return (normalColor == MScore::defaultColor) ? Qt::black : normalColor;
+        // TODO: fix crash when INJECT is present and replace with the comment
+        return MScore::defaultColor; //(normalColor == mu::draw::Color(engravingConfiguration()->defaultColor())) ? mu::draw::Color(engravingConfiguration()->blackColor()) : normalColor;
     }
 
     if (flag(ElementFlag::DROP_TARGET)) {
@@ -530,7 +532,7 @@ QColor Element::curColor(bool isVisible, QColor normalColor) const
         marked = toNote(this)->mark();
     }
     if (selected() || marked) {
-        QColor originalColor;
+        mu::draw::Color originalColor;
         if (track() == -1) {
             originalColor = MScore::selectColor[0];
         } else {
@@ -543,11 +545,11 @@ QColor Element::curColor(bool isVisible, QColor normalColor) const
             int green = originalColor.green();
             int blue = originalColor.blue();
             float tint = .6f;        // Between 0 and 1. Higher means lighter, lower means darker
-            return QColor(red + tint * (255 - red), green + tint * (255 - green), blue + tint * (255 - blue));
+            return mu::draw::Color(red + tint * (255 - red), green + tint * (255 - green), blue + tint * (255 - blue));
         }
     }
     if (!isVisible) {
-        return Qt::gray;
+        return mu::draw::Color(128, 128, 128);//mu::draw::Color(engravingConfiguration()->invisibleColor());
     }
     return normalColor;
 }
@@ -1427,7 +1429,7 @@ QVariant Element::getProperty(Pid propertyId) const
     case Pid::GENERATED:
         return generated();
     case Pid::COLOR:
-        return color();
+        return QVariant::fromValue(color());
     case Pid::VISIBLE:
         return visible();
     case Pid::SELECTED:
@@ -1472,8 +1474,15 @@ bool Element::setProperty(Pid propertyId, const QVariant& v)
         setGenerated(v.toBool());
         break;
     case Pid::COLOR:
-        setColor(v.value<QColor>());
+    {
+        if (v.isValid()) {
+            IF_ASSERT_FAILED(v.canConvert<mu::draw::Color>())
+            {
+            }
+        }
+        setColor(v.value<mu::draw::Color>());
         break;
+    }
     case Pid::VISIBLE:
         setVisible(v.toBool());
         break;
@@ -1540,7 +1549,7 @@ QVariant Element::propertyDefault(Pid pid) const
     case Pid::VISIBLE:
         return true;
     case Pid::COLOR:
-        return MScore::defaultColor;
+        return QVariant::fromValue(MScore::defaultColor);
     case Pid::PLACEMENT: {
         QVariant v = ScoreElement::propertyDefault(pid);
         if (v.isValid()) {        // if it's a styled property
@@ -1724,9 +1733,9 @@ const MeasureBase* Element::findMeasureBase() const
 //   undoSetColor
 //---------------------------------------------------------
 
-void Element::undoSetColor(const QColor& c)
+void Element::undoSetColor(const mu::draw::Color& c)
 {
-    undoChangeProperty(Pid::COLOR, c);
+    undoChangeProperty(Pid::COLOR, QVariant::fromValue(c));
 }
 
 //---------------------------------------------------------

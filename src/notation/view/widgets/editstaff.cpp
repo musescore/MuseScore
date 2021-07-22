@@ -146,7 +146,7 @@ void EditStaff::setStaff(Staff* s, const Fraction& tick)
     spinExtraDistance->setValue(s->userDist() / score->spatium());
     invisible->setChecked(m_staff->invisible(Fraction(0, 1)));
     small->setChecked(stt->small());
-    color->setColor(stt->color());
+    color->setColor(stt->color().toQColor());
     partName->setText(part->partName());
     cutaway->setChecked(m_staff->cutaway());
 

@@ -1653,8 +1653,8 @@ TextBase::TextBase(Score* s, Tid tid, ElementFlags f)
     _textLineSpacing        = 1.0;
 
     _tid                    = tid;
-    _bgColor                = QColor(255, 255, 255, 0);
-    _frameColor             = QColor(0, 0, 0, 255);
+    _bgColor                = mu::draw::Color(engravingConfiguration()->textBaseBgColor());
+    _frameColor             = mu::draw::Color(engravingConfiguration()->textBaseFrameColor());
     _align                  = Align::LEFT;
     _frameType              = FrameType::NO_FRAME;
     _frameWidth             = Spatium(0.1);
@@ -1709,7 +1709,7 @@ TextBase::~TextBase()
 
 void TextBase::drawSelection(mu::draw::Painter* p, const RectF& r) const
 {
-    mu::draw::Brush bg(QColor("steelblue"));
+    mu::draw::Brush bg(mu::draw::Color(engravingConfiguration()->selectionColor()));
     p->setCompositionMode(mu::draw::CompositionMode::HardLight);
     p->setBrush(bg);
     p->setNoPen();
@@ -1722,7 +1722,7 @@ void TextBase::drawSelection(mu::draw::Painter* p, const RectF& r) const
 //   textColor
 //---------------------------------------------------------
 
-QColor TextBase::textColor() const
+mu::draw::Color TextBase::textColor() const
 {
     return curColor();
 }
@@ -2911,9 +2911,9 @@ QVariant TextBase::getProperty(Pid propertyId) const
     case Pid::FRAME_ROUND:
         return frameRound();
     case Pid::FRAME_FG_COLOR:
-        return frameColor();
+        return QVariant::fromValue(frameColor());
     case Pid::FRAME_BG_COLOR:
-        return bgColor();
+        return QVariant::fromValue(bgColor());
     case Pid::ALIGN:
         return QVariant::fromValue(align());
     case Pid::TEXT_SCRIPT_ALIGN:
@@ -2965,10 +2965,10 @@ bool TextBase::setProperty(Pid pid, const QVariant& v)
         setFrameRound(v.toInt());
         break;
     case Pid::FRAME_FG_COLOR:
-        setFrameColor(v.value<QColor>());
+        setFrameColor(v.value<mu::draw::Color>());
         break;
     case Pid::FRAME_BG_COLOR:
-        setBgColor(v.value<QColor>());
+        setBgColor(v.value<mu::draw::Color>());
         break;
     case Pid::TEXT:
         setXmlText(v.toString());
@@ -3288,7 +3288,7 @@ void TextBase::draw(mu::draw::Painter* painter) const
     if (hasFrame()) {
         qreal baseSpatium = DefaultStyle::baseStyle().value(Sid::spatium).toDouble();
         if (frameWidth().val() != 0.0) {
-            QColor fColor = curColor(visible(), frameColor());
+            Color fColor = curColor(visible(), frameColor());
             qreal frameWidthVal = frameWidth().val() * (sizeIsSpatiumDependent() ? spatium() : baseSpatium);
 
             Pen pen(fColor, frameWidthVal, PenStyle::SolidLine, PenCapStyle::SquareCap, PenJoinStyle::MiterJoin);
@@ -3296,7 +3296,7 @@ void TextBase::draw(mu::draw::Painter* painter) const
         } else {
             painter->setNoPen();
         }
-        QColor bg(bgColor());
+        Color bg(bgColor());
         painter->setBrush(bg.alpha() ? Brush(bg) : BrushStyle::NoBrush);
         if (circle()) {
             painter->drawEllipse(frame);
@@ -3376,7 +3376,7 @@ void TextBase::drawEditMode(mu::draw::Painter* p, EditData& ed)
 
     Transform transform = p->worldTransform();
     p->translate(-pos);
-    p->setPen(Pen(Qt::lightGray, 4.0 / transform.m11()));    // 4 pixel pen size
+    p->setPen(Pen(Color(engravingConfiguration()->editColor()), 4.0 / transform.m11()));    // 4 pixel pen size
     p->setBrush(BrushStyle::NoBrush);
 
     qreal m = spatium();

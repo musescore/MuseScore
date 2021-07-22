@@ -24,8 +24,7 @@
 
 #include <memory>
 
-#include <QColor>
-
+#include "color.h"
 #include "brush.h"
 #include "drawtypes.h"
 #include "geometry.h"
