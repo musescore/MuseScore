@@ -46,7 +46,8 @@ void TemplatePaintView::load(const QString& templatePath)
     }
 
     m_templatePath = templatePath;
-    load();
+
+    NotationPaintView::load();
 }
 
 QString TemplatePaintView::zoomInSequence() const
@@ -59,23 +60,6 @@ QString TemplatePaintView::zoomOutSequence() const
 {
     shortcuts::Shortcut shortcut = shortcutsRegister()->shortcut("zoomout");
     return QString::fromStdString(shortcut.sequence);
-}
-
-void TemplatePaintView::load()
-{
-    INotationProjectPtr notationProject = notationCreator()->newNotationProject();
-    Ret ret = notationProject->load(m_templatePath);
-
-    if (!ret) {
-        LOGE() << ret.toString();
-        return;
-    }
-
-    setNotation(notationProject->masterNotation()->notation());
-
-    if (notationProject) {
-        adjustCanvas();
-    }
 }
 
 void TemplatePaintView::adjustCanvas()
@@ -106,4 +90,21 @@ qreal TemplatePaintView::resolveDefaultScaling() const
 void TemplatePaintView::onViewSizeChanged()
 {
     adjustCanvas();
+}
+
+void TemplatePaintView::onNotationSetup()
+{
+    INotationProjectPtr notationProject = notationCreator()->newNotationProject();
+    Ret ret = notationProject->load(m_templatePath);
+
+    if (!ret) {
+        LOGE() << ret.toString();
+        return;
+    }
+
+    setNotation(notationProject->masterNotation()->notation());
+
+    if (notationProject) {
+        adjustCanvas();
+    }
 }
