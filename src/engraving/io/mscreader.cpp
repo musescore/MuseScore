@@ -130,9 +130,19 @@ QByteArray MscReader::fileData(const QString& fileName) const
     return reader()->fileData(fileName);
 }
 
+QByteArray MscReader::readStyleFile() const
+{
+    return fileData("score_style.mss");
+}
+
 QByteArray MscReader::readScoreFile() const
 {
     return fileData(meta().mscxFileName);
+}
+
+QByteArray MscReader::readChordListFile() const
+{
+    return fileData("chordlist.xml");
 }
 
 QByteArray MscReader::readThumbnailFile() const

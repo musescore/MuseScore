@@ -75,7 +75,7 @@ bool DefaultStyle::doLoadStyle(Ms::MStyle* style, const QString& filePath)
         return false;
     }
 
-    return style->load(&file);
+    return style->read(&file);
 }
 
 // Static
@@ -83,6 +83,14 @@ bool DefaultStyle::doLoadStyle(Ms::MStyle* style, const QString& filePath)
 const Ms::MStyle& DefaultStyle::baseStyle()
 {
     return instance()->m_baseStyle;
+}
+
+bool DefaultStyle::isHasDefaultStyle()
+{
+    if (instance()->m_defaultStyle) {
+        return true;
+    }
+    return false;
 }
 
 const Ms::MStyle& DefaultStyle::defaultStyle()

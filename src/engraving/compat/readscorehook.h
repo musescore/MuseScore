@@ -19,32 +19,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "preferences.h"
 
-using namespace Ms;
+#ifndef MU_ENGRAVING_READSCOREHOOK_H
+#define MU_ENGRAVING_READSCOREHOOK_H
 
-ScorePreferences& ScorePreferences::instance()
-{
-    static ScorePreferences p;
-    return p;
+#include <memory>
+#include <QByteArray>
+#include <QString>
+
+namespace Ms {
+class MasterScore;
+class Score;
+class XmlReader;
 }
 
-QString ScorePreferences::backupDirPath() const
+namespace mu::engraving::compat {
+class ReadStyleHook;
+class ReadScoreHook
 {
-    return m_backupDirPath;
+public:
+
+    // Style
+    void installReadStyleHook(Ms::MasterScore* score, const QByteArray& scoreData, const QString& completeBaseName);
+    void installReadStyleHook(Ms::Score* score);
+    void setupDefaultStyle();
+    void onReadStyleTag302(Ms::Score* score, Ms::XmlReader& xml);
+
+private:
+    std::shared_ptr<ReadStyleHook> m_readStyle = nullptr;
+};
 }
 
-void ScorePreferences::setBackupDirPath(const QString& path)
-{
-    m_backupDirPath = path;
-}
-
-QString ScorePreferences::defaultStyleFilePath() const
-{
-    return m_defaultStyleFilePath;
-}
-
-void ScorePreferences::setDefaultStyleFilePath(const QString& path)
-{
-    m_defaultStyleFilePath = path;
-}
+#endif // MU_ENGRAVING_READSCOREHOOK_H

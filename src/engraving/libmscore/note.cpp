@@ -72,7 +72,6 @@
 #include "hairpin.h"
 #include "textline.h"
 #include <QtMath>
-#include <QVector2D>
 
 #include "log.h"
 
@@ -1779,11 +1778,11 @@ public:
         qreal x = qAbs(deltaX);
         qreal y = qAbs(deltaY);
 
-        QVector2D normalizedVector(x, y);
+        mu::PointF normalizedVector(x, y);
 
         normalizedVector.normalize();
 
-        float radians = QVector2D::dotProduct(normalizedVector, QVector2D(1, 0));
+        float radians = PointF::dotProduct(normalizedVector, PointF(1, 0));
 
         qreal degrees = (qAcos(radians) * 180.0) / M_PI;
 

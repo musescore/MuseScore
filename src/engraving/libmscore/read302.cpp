@@ -24,6 +24,7 @@
 #include "style/defaultstyle.h"
 
 #include "compat/chordlist.h"
+#include "compat/readscorehook.h"
 
 #include "xml.h"
 #include "score.h"
@@ -49,7 +50,7 @@ namespace Ms {
 //    return false on error
 //---------------------------------------------------------
 
-bool Score::read(XmlReader& e)
+bool Score::read(XmlReader& e, compat::ReadScoreHook& hooks)
 {
     // HACK
     // style setting compatibility settings for minor versions
@@ -110,16 +111,7 @@ bool Score::read(XmlReader& e)
         } else if (tag == "markIrregularMeasures") {
             _markIrregularMeasures = e.readInt();
         } else if (tag == "Style") {
-            qreal sp = style().value(Sid::spatium).toDouble();
-            compat::ReadChordListHook clhook(this);
-            style().load(e, &clhook);
-            // if (_layoutMode == LayoutMode::FLOAT || _layoutMode == LayoutMode::SYSTEM) {
-            if (_layoutMode == LayoutMode::FLOAT) {
-                // style should not change spatium in
-                // float mode
-                style().set(Sid::spatium, sp);
-            }
-            _scoreFont = ScoreFont::fontByName(style().value(Sid::MusicalSymbolFont).toString());
+            hooks.onReadStyleTag302(this, e);
         } else if (tag == "copyright" || tag == "rights") {
             Text* text = new Text(this);
             text->read(e);
@@ -185,14 +177,16 @@ bool Score::read(XmlReader& e)
                 e.tracks().clear();             // ???
                 MasterScore* m = masterScore();
                 Score* s = m->createScore();
-                int defaultsVersion = m->style().defaultStyleVersion();
-                s->setStyle(DefaultStyle::resolveStyleDefaults(defaultsVersion));
-                s->style().setDefaultStyleVersion(defaultsVersion);
-                Excerpt* ex = new Excerpt(m);
+                compat::ReadScoreHook hooks;
+                hooks.installReadStyleHook(s);
+                hooks.setupDefaultStyle();
 
+                Excerpt* ex = new Excerpt(m);
                 ex->setPartScore(s);
                 e.setLastMeasure(nullptr);
-                s->read(e);
+
+                s->read(e, hooks);
+
                 s->linkMeasures(m);
                 ex->setTracks(e.tracks());
                 m->addExcerpt(ex);
@@ -339,9 +333,9 @@ void Score::linkMeasures(Score* score)
 //   read
 //---------------------------------------------------------
 
-bool MasterScore::read(XmlReader& e)
+bool MasterScore::read(XmlReader& e, compat::ReadScoreHook& hooks)
 {
-    if (!Score::read(e)) {
+    if (!Score::read(e, hooks)) {
         return false;
     }
     for (Staff* s : staves()) {
@@ -374,9 +368,8 @@ void MasterScore::addMovement(MasterScore* score)
 //   read301
 //---------------------------------------------------------
 
-Score::FileError MasterScore::read302(XmlReader& e)
+Score::FileError MasterScore::read302(XmlReader& e, mu::engraving::compat::ReadScoreHook& hooks)
 {
-    bool top = true;
     while (e.readNextStartElement()) {
         const QStringRef& tag(e.name());
         if (tag == "programVersion") {
@@ -385,16 +378,7 @@ Score::FileError MasterScore::read302(XmlReader& e)
         } else if (tag == "programRevision") {
             setMscoreRevision(e.readIntHex());
         } else if (tag == "Score") {
-            MasterScore* score;
-            if (top) {
-                score = this;
-                top   = false;
-            } else {
-                score = new MasterScore(m_project);
-                score->setMscVersion(mscVersion());
-                addMovement(score);
-            }
-            if (!score->read(e)) {
+            if (!read(e, hooks)) {
                 if (e.error() == QXmlStreamReader::CustomError) {
                     return FileError::FILE_CRITICALLY_CORRUPTED;
                 }

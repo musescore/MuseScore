@@ -29,6 +29,7 @@
 #include "style/defaultstyle.h"
 #include "compat/pageformat.h"
 #include "compat/chordlist.h"
+#include "compat/readstyle.h"
 
 #include "score.h"
 #include "slur.h"
@@ -2770,38 +2771,8 @@ static void readStyle(MStyle* style, XmlReader& e, compat::ReadChordListHook& re
         // for compatibility:
         else if (tag == "oddHeader" || tag == "evenHeader" || tag == "oddFooter" || tag == "evenFooter") {
             tag += "C";
-        }
-#if 0 // TODO-ws
-        int idx2;
-        for (idx2 = 0; idx2 < int(ArticulationType::ARTICULATIONS); ++idx2) {
-            ArticulationInfo& ai =  Articulation::articulationList[idx2];
-            // deal with obsolete tags from 1.14 format
-            if (tag == "SforzatoaccentAnchor") {
-                tag = "SforzatoAnchor";
-            }
-            if (tag == "SnappizzicatorAnchor") {
-                tag = "SnappizzicatoAnchor";
-            } else if (tag == "EspressivoAnchor") {
-                continue;
-            }
-            if (QString::compare(tag, QString(ai.name).append("Anchor"),  Qt::CaseInsensitive) == 0
-                || QString::compare(tag, QString("U").append(ai.name).append("Anchor"), Qt::CaseInsensitive) == 0
-                || QString::compare(tag, QString("D").append(ai.name).append("Anchor"), Qt::CaseInsensitive) == 0
-                ) {
-                Sid si = MStyle::styleIdx(QString(ai.name).append("Anchor"));
-                if (si != Sid::NOSTYLE) {
-                    QString val(e.readElementText());
-                    style->set(si, val.toInt());
-                    break;
-                }
-            }
-        }
-        if (idx2 < int(ArticulationType::ARTICULATIONS)) {
-            continue;
-        }
-#endif
-        else {
-            if (!style->readProperties(e)) {
+        } else {
+            if (!compat::ReadStyleHook::readStyleProperties(style, e)) {
                 e.skipCurrentElement();
             }
         }

@@ -168,13 +168,13 @@ bool MStyle::readProperties(XmlReader& e)
                 qreal y = e.doubleAttribute("h", 0.0);
                 set(idx, SizeF(x, y));
                 e.readElementText();
-            } else if (!strcmp("QColor", type)) {
-                QColor c;
+            } else if (!strcmp("QColor", type) || !strcmp("mu::draw::Color", type)) {
+                mu::draw::Color c;
                 c.setRed(e.intAttribute("r"));
                 c.setGreen(e.intAttribute("g"));
                 c.setBlue(e.intAttribute("b"));
                 c.setAlpha(e.intAttribute("a", 255));
-                set(idx, c);
+                set(idx, QVariant::fromValue<mu::draw::Color>(c));
                 e.readElementText();
             } else {
                 qFatal("unhandled type %s", type);
@@ -261,9 +261,9 @@ bool MStyle::readTextStyleValCompat(XmlReader& e)
     return true;
 }
 
-bool MStyle::load(QFile* qf, bool ign)
+bool MStyle::read(QIODevice* device, bool ign)
 {
-    XmlReader e(qf);
+    XmlReader e(device);
     while (e.readNextStartElement()) {
         if (e.name() == "museScore") {
             QString version = e.attribute("version");
@@ -274,7 +274,7 @@ bool MStyle::load(QFile* qf, bool ign)
             }
             while (e.readNextStartElement()) {
                 if (e.name() == "Style") {
-                    load(e, nullptr);
+                    read(e, nullptr);
                 } else {
                     e.unknown();
                 }
@@ -284,7 +284,7 @@ bool MStyle::load(QFile* qf, bool ign)
     return true;
 }
 
-void MStyle::load(XmlReader& e, compat::ReadChordListHook* readChordListHook)
+void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
 {
     TRACEFUNC;
 
@@ -322,7 +322,17 @@ void MStyle::load(XmlReader& e, compat::ReadChordListHook* readChordListHook)
     }
 }
 
-void MStyle::save(XmlWriter& xml, bool optimize, compat::WriteChordListHook* writeChordListHook)
+bool MStyle::write(QIODevice* device)
+{
+    XmlWriter xml(nullptr, device);
+    xml.header();
+    xml.stag("museScore version=\"" MSC_VERSION "\"");
+    save(xml, false);
+    xml.etag();
+    return true;
+}
+
+void MStyle::save(XmlWriter& xml, bool optimize)
 {
     xml.stag("Style");
 
@@ -365,10 +375,6 @@ void MStyle::save(XmlWriter& xml, bool optimize, compat::WriteChordListHook* wri
         } else {
             xml.tag(st.name(), value(idx));
         }
-    }
-
-    if (writeChordListHook) {
-        writeChordListHook->write(xml);
     }
 
     xml.tag("Spatium", value(Sid::spatium).toDouble() / DPMM);

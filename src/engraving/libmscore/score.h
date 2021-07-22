@@ -56,6 +56,8 @@ class EngravingProject;
 
 namespace mu::engraving::compat {
 class ScoreAccess;
+class ReadScoreHook;
+class WriteScoreHook;
 }
 
 namespace mu::score {
@@ -457,6 +459,9 @@ public:
     };
 
 private:
+
+    friend class mu::engraving::compat::ReadScoreHook;
+
     static std::set<Score*> validScores;
     int _linkId { 0 };
     MasterScore* _masterScore { 0 };
@@ -648,7 +653,7 @@ public:
     void removeStaff(Staff*);
     void addMeasure(MeasureBase*, MeasureBase*);
     void readStaff(XmlReader&);
-    bool read(XmlReader&);
+    bool read(XmlReader&, mu::engraving::compat::ReadScoreHook& hooks);
     void linkMeasures(Score* score);
 
     Excerpt* excerpt() { return _excerpt; }
@@ -702,8 +707,10 @@ public:
     bool appendMeasuresFromScore(Score* score, const Fraction& startTick, const Fraction& endTick);
     bool appendScore(Score*, bool addPageBreak = false, bool addSectionBreak = true);
 
-    void write(XmlWriter&, bool onlySelection);
-    void writeMovement(XmlWriter&, bool onlySelection);
+    void write(XmlWriter&, bool onlySelection, mu::engraving::compat::WriteScoreHook& hook);
+    void writeMovement(XmlWriter&, bool onlySelection, mu::engraving::compat::WriteScoreHook& hook);
+
+    bool writeScore(QIODevice* f, bool msczFormat, bool onlySelection, mu::engraving::compat::WriteScoreHook& hook);
 
     QList<Staff*>& staves() { return _staves; }
     const QList<Staff*>& staves() const { return _staves; }
@@ -875,7 +882,6 @@ public:
     void setShowInstrumentNames(bool v) { _showInstrumentNames = v; }
     void setShowVBox(bool v) { _showVBox = v; }
 
-    bool writeScore(QIODevice* f, bool msczFormat, bool onlySelection = false);
     bool writeMscz(mu::engraving::MscWriter& msczWriter, bool onlySelection = false, bool createThumbnail = true);
 
     void print(mu::draw::Painter* printer, int page);
@@ -1400,21 +1406,22 @@ class MasterScore : public Score
     QFileInfo _sessionStartBackupInfo;
     QFileInfo info;
 
-    bool read(XmlReader&);
-    FileError read1(XmlReader&, bool ignoreVersionError, const std::function<int()>& readStyleDefaultsVersion);
+    bool read(XmlReader&, mu::engraving::compat::ReadScoreHook& hooks);
+    FileError read1(XmlReader&, bool ignoreVersionError, mu::engraving::compat::ReadScoreHook& hooks);
     FileError read114(XmlReader&);
     FileError read206(XmlReader&);
-    FileError read302(XmlReader&);
+    FileError read302(XmlReader&, mu::engraving::compat::ReadScoreHook& hooks);
 
     void setPrev(MasterScore* s) { _prev = s; }
     void setNext(MasterScore* s) { _next = s; }
 
-    friend class mu::engraving::compat::ScoreAccess;
     friend class mu::engraving::EngravingProject;
+    friend class mu::engraving::compat::ScoreAccess;
     MasterScore(std::shared_ptr<mu::engraving::EngravingProject> project);
     MasterScore(const MStyle&, std::shared_ptr<mu::engraving::EngravingProject> project);
 
-    FileError loadMscz(const mu::engraving::MscReader& msczFile, bool ignoreVersionError);
+    FileError loadMscz(const mu::engraving::MscReader& mscReader, bool ignoreVersionError);
+    bool writeMscz(mu::engraving::MscWriter& mscWriter, bool onlySelection = false, bool createThumbnail = true);
 
 public:
 
@@ -1471,9 +1478,6 @@ public:
 
     bool isSavable() const;
     void setTempomap(TempoMap* tm);
-
-    int readStyleDefaultsVersion(const QByteArray& scoreData, const QString& completeBaseName);
-    int styleDefaultByMscVersion(const int mscVer) const;
 
     Omr* omr() const { return _omr; }
     void setOmr(Omr* o) { _omr = o; }

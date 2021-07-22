@@ -28,6 +28,7 @@
 #include "style/defaultstyle.h"
 #include "compat/pageformat.h"
 #include "compat/chordlist.h"
+#include "compat/readstyle.h"
 
 #include "xml.h"
 #include "score.h"
@@ -3361,7 +3362,7 @@ static void readStyle(MStyle* style, XmlReader& e, compat::ReadChordListHook& re
                 style->set(Sid::chordSymbolAPosBelow,  PointF(.0, val));
             }
         } else {
-            if (!style->readProperties(e)) {
+            if (!compat::ReadStyleHook::readStyleProperties(style, e)) {
                 e.skipCurrentElement();
             }
         }

@@ -19,33 +19,37 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MS_SCORE_PREFERENCES_H
-#define MS_SCORE_PREFERENCES_H
 
+#ifndef MU_ENGRAVING_READSTYLE_H
+#define MU_ENGRAVING_READSTYLE_H
+
+#include <QByteArray>
 #include <QString>
 
 namespace Ms {
-class ScorePreferences
+class Score;
+class XmlReader;
+class MStyle;
+}
+
+namespace mu::engraving::compat {
+class ReadStyleHook
 {
 public:
+    ReadStyleHook(Ms::Score* score, const QByteArray& scoreData, const QString& completeBaseName);
 
-    static ScorePreferences& instance();
+    void setupDefaultStyle();
 
-    QString backupDirPath() const;
-    void setBackupDirPath(const QString& path);
+    void readStyleTag(Ms::XmlReader& e);
 
-    QString defaultStyleFilePath() const;
-    void setDefaultStyleFilePath(const QString& path);
+    static void readStyleTag(Ms::Score* score, Ms::XmlReader& e);
+    static bool readStyleProperties(Ms::MStyle* style, Ms::XmlReader& e);
 
 private:
-    QString m_backupDirPath;
-    QString m_defaultStyleFilePath;
+    Ms::Score* m_score = nullptr;
+    const QByteArray& m_scoreData;
+    const QString& m_completeBaseName;
 };
 }
 
-inline Ms::ScorePreferences& preferences()
-{
-    return Ms::ScorePreferences::instance();
-}
-
-#endif // MS_SCORE_PREFERENCES_H
+#endif // MU_ENGRAVING_READSTYLE_H

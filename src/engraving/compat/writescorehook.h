@@ -19,30 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_CHORDLIST_H
-#define MU_ENGRAVING_CHORDLIST_H
-
-#include <functional>
-#include <QString>
+#ifndef MU_ENGRAVING_WRITESCOREHOOK_H
+#define MU_ENGRAVING_WRITESCOREHOOK_H
 
 namespace Ms {
-class XmlReader;
 class Score;
+class XmlWriter;
 }
 
 namespace mu::engraving::compat {
-struct ReadChordListHook
+class WriteScoreHook
 {
-    ReadChordListHook(Ms::Score* score);
+public:
+    WriteScoreHook() = default;
 
-    void read(Ms::XmlReader& e);
-    void validate();
-
-private:
-    Ms::Score* m_score = nullptr;
-    bool m_chordListTag = false;
-    QString m_oldChordDescriptionFile;
+    void onWriteStyle302(Ms::Score* score, Ms::XmlWriter& xml);
 };
 }
-
-#endif // MU_ENGRAVING_CHORDLIST_H
+#endif // MU_ENGRAVING_WRITESCOREHOOK_H

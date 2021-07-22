@@ -21,7 +21,6 @@
  */
 #include "notationconfiguration.h"
 
-#include "libmscore/preferences.h"
 #include "libmscore/mscore.h"
 
 #include "log.h"
@@ -198,10 +197,6 @@ void NotationConfiguration::init()
     settings()->valueChanged(SECOND_SCORE_ORDER_LIST_KEY).onReceive(nullptr, [this](const Val&) {
         m_scoreOrderListPathsChanged.notify();
     });
-
-    // libmscore
-    preferences().setBackupDirPath(globalConfiguration()->userBackupPath().toQString());
-    preferences().setDefaultStyleFilePath(defaultStyleFilePath().toQString());
 
     Ms::MScore::warnPitchRange = colorNotesOusideOfUsablePitchRange();
     Ms::MScore::defaultPlayDuration = notePlayDurationMilliseconds();
