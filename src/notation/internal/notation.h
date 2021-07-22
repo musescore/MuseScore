@@ -29,6 +29,7 @@
 
 #include "modularity/ioc.h"
 #include "../inotationconfiguration.h"
+#include "iengravingconfiguration.h"
 
 namespace Ms {
 class MScore;
@@ -41,6 +42,7 @@ class NotationPlayback;
 class Notation : virtual public INotation, public IGetScore, public async::Asyncable
 {
     INJECT_STATIC(notation, INotationConfiguration, configuration)
+    INJECT(notation, mu::engraving::IEngravingConfiguration, engravingConfiguration)
 
 public:
     explicit Notation(Ms::Score* score = nullptr);

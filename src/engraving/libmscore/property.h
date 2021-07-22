@@ -35,13 +35,13 @@ class XmlReader;
 //
 //    usage example:
 //    class Text : public Element {
-//          M_PROPERTY(QColor, color, setColor)
+//          M_PROPERTY(Color, color, setColor)
 //          ...
 //          };
 //    this defines:
-//          QColor _color;
-//          const QColor& color() const { return _color; }
-//          void setColor(const QColor& val) { _color = val; }
+//          Color _color;
+//          const Color& color() const { return _color; }
+//          void setColor(const Color& val) { _color = val; }
 //---------------------------------------------------------
 
 #define M_PROPERTY(a, b, c)                                      \

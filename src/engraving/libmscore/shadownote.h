@@ -26,6 +26,8 @@
 #include "element.h"
 #include "durationtype.h"
 #include "staff.h"
+#include "iengravingconfiguration.h"
+#include "modularity/ioc.h"
 
 namespace Ms {
 //---------------------------------------------------------
@@ -39,6 +41,8 @@ namespace Ms {
 
 class ShadowNote final : public Element
 {
+    INJECT(notation, mu::engraving::IEngravingConfiguration, engravingConfiguration)
+
     Fraction m_tick;
     int m_lineIndex;
     SymId m_noteheadSymbol;

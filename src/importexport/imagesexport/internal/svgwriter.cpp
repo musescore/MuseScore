@@ -98,7 +98,7 @@ mu::Ret SvgWriter::write(INotationPtr notation, Device& destinationDevice, const
     Ms::MScore::pixelRatio = Ms::DPI / printer.logicalDpiX();
 
     if (!options[OptionKey::TRANSPARENT_BACKGROUND].toBool()) {
-        painter.fillRect(pageRect, Qt::white);
+        painter.fillRect(pageRect, mu::draw::Color(engravingConfiguration()->whiteColor()));
     }
 
     // 1st pass: StaffLines
@@ -200,7 +200,7 @@ mu::Ret SvgWriter::write(INotationPtr notation, Device& destinationDevice, const
 
         // Paint it
         if (element->type() == Ms::ElementType::NOTE && !notesColors.isEmpty()) {
-            QColor color = element->color();
+            QColor color = element->color().toQColor();
             int currentNoteIndex = (++lastNoteIndex);
 
             if (notesColors.contains(currentNoteIndex)) {

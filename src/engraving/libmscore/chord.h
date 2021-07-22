@@ -29,8 +29,9 @@
 */
 
 #include <set>
-
 #include <functional>
+
+#include "draw/color.h"
 #include "chordrest.h"
 #include "articulation.h"
 
@@ -126,7 +127,7 @@ public:
     bool readProperties(XmlReader&) override;
     Element* drop(EditData&) override;
 
-    void setColor(const QColor& c) override;
+    void setColor(const mu::draw::Color& c) override;
     void setStemDirection(Direction d) { _stemDirection = d; }
     Direction stemDirection() const { return _stemDirection; }
 

@@ -23,6 +23,7 @@
 #define MU_GEOMETRY_H
 
 #include <vector>
+#include <cmath>
 #include <QtGlobal>
 #include <QVariant>
 
@@ -86,6 +87,20 @@ public:
     inline T manhattanLength() const { return qAbs(m_x) + qAbs(m_y); }
 
     static inline qreal dotProduct(const PointX<T>& p1, const PointX<T>& p2) { return p1.m_x * p2.m_x + p1.m_y * p2.m_y; }
+
+    inline void normalize()
+    {
+        // Need some extra precision if the length is very small.
+        double len = double(m_x) * double(m_x) + double(m_y) * double(m_y);
+        if (qFuzzyIsNull(len - 1.0f) || qFuzzyIsNull(len)) {
+            return;
+        }
+
+        len = std::sqrt(len);
+
+        m_x /= len;
+        m_y /= len;
+    }
 
 #ifndef NO_QT_SUPPORT
     //! NOTE The accepting QPoint(F) constructor is deliberately omitted to avoid implicit conversions.
@@ -353,10 +368,10 @@ class Rect : public RectX<int>
 public:
     inline Rect()
         :  RectX<int>() {}
-
+#ifndef NO_QT_SUPPORT
     inline Rect(const QRect& r)
         : RectX<int>(r.x(), r.y(), r.width(), r.height()) {}
-
+#endif
     inline Rect(qreal x, qreal y, qreal w, qreal h)
         : RectX<int>(x, y, w, h) {}
 

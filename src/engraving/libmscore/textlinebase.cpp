@@ -111,14 +111,14 @@ void TextLineBaseSegment::draw(mu::draw::Painter* painter) const
 
     // color for line (text color comes from the text properties)
 #if 0
-    QColor color;
+    Color color;
     if ((selected() && !(score() && score()->printing())) || !tl->visible() || !tl->lineVisible()) {
         color = curColor(tl->visible() && tl->lineVisible());
     } else {
         color = tl->lineColor();
     }
 #endif
-    QColor color = curColor(tl->visible() && tl->lineVisible(), tl->lineColor());
+    Color color = curColor(tl->visible() && tl->lineVisible(), tl->lineColor());
 
     qreal textlineLineWidth = tl->lineWidth();
     if (staff()) {
@@ -244,7 +244,7 @@ Shape TextLineBaseSegment::shape() const
 bool TextLineBaseSegment::setProperty(Pid id, const QVariant& v)
 {
     if (id == Pid::COLOR) {
-        QColor color = v.value<QColor>();
+        mu::draw::Color color = v.value<mu::draw::Color>();
 
         if (_text) {
             _text->setColor(color);

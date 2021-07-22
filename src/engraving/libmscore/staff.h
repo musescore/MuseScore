@@ -28,6 +28,7 @@
  Definition of class Staff.
 */
 
+#include "draw/color.h"
 #include "mscore.h"
 #include "changeMap.h"
 #include "pitch.h"
@@ -98,7 +99,7 @@ private:
     bool _mergeMatchingRests { false };         // merge matching rests in multiple voices
     HideMode _hideWhenEmpty  { HideMode::AUTO };      // hide empty staves
 
-    QColor _color            { MScore::defaultColor };
+    mu::draw::Color _color            { MScore::defaultColor };
     qreal _userDist          { 0.0 };           ///< user edited extra distance
 
     StaffTypeList _staffTypeList;
@@ -281,9 +282,9 @@ public:
 
     using Element::color;
     using Element::setColor;
-    QColor color(const Fraction&) const;
-    void setColor(const Fraction&, const QColor& val);
-    void undoSetColor(const QColor& val);
+    mu::draw::Color color(const Fraction&) const;
+    void setColor(const Fraction&, const mu::draw::Color& val);
+    void undoSetColor(const mu::draw::Color& val);
     void insertTime(const Fraction&, const Fraction& len);
 
     QVariant getProperty(Pid) const override;
