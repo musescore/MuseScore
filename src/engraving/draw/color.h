@@ -23,6 +23,9 @@
 #ifndef MU_DRAW_COLOR_H
 #define MU_DRAW_COLOR_H
 
+#include <QVariant>
+#include <QString>
+
 #ifndef NO_QT_SUPPORT
 #include <QColor>
 #endif
@@ -48,6 +51,11 @@ public:
 #ifndef NO_QT_SUPPORT
     Color& operator=(const QColor& other);
 #endif
+
+    //! NOTE Needs for QVariant support
+    QString toQString() const;
+    bool operator<(const Color& other) const;
+    //! -----
 
     std::string toString() const;
 
@@ -85,8 +93,6 @@ private:
 };
 }
 
-#ifndef NO_QT_SUPPORT
-Q_DECLARE_METATYPE(mu::draw::Color);
-#endif
+Q_DECLARE_METATYPE(mu::draw::Color)
 
 #endif // MU_DRAW_COLOR_H

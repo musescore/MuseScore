@@ -3,6 +3,9 @@
 #include <sstream>
 #include <iomanip>
 
+static bool com = QMetaType::registerComparators<mu::draw::Color>();
+static bool con = QMetaType::registerConverter<mu::draw::Color, QString>(&mu::draw::Color::toQString);
+
 namespace mu::draw {
 static constexpr int fromHex(uint c);
 static int hex2int(const char* s, int n);
@@ -64,6 +67,16 @@ bool Color::operator==(const Color& other) const
 bool Color::operator!=(const Color& other) const
 {
     return !operator==(other);
+}
+
+bool Color::operator<(const Color& other) const
+{
+    return m_rgba < other.m_rgba;
+}
+
+QString Color::toQString() const
+{
+    return QString::fromStdString(toString());
 }
 
 std::string Color::toString() const

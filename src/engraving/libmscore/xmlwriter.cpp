@@ -24,6 +24,8 @@
 #include "property.h"
 #include "scoreElement.h"
 
+#include "log.h"
+
 using namespace mu;
 
 namespace Ms {
@@ -244,9 +246,8 @@ void XmlWriter::tag(const QString& name, QVariant data)
         break;
     case QVariant::Color:
     {
-        mu::draw::Color color(data.value<mu::draw::Color>());
-        *this << QString("<%1 r=\"%2\" g=\"%3\" b=\"%4\" a=\"%5\"/>\n")
-            .arg(name).arg(color.red()).arg(color.green()).arg(color.blue()).arg(color.alpha());
+        //! NOTE Shouldn't be, because we use mu::draw::Color
+        UNREACHABLE;
     }
     break;
     case QVariant::Rect:
@@ -291,6 +292,10 @@ void XmlWriter::tag(const QString& name, QVariant data)
         } else if (strcmp(type, "mu::Rect") == 0) {
             Rect r = data.value<mu::Rect>();
             *this << QString("<%1 x=\"%2\" y=\"%3\" w=\"%4\" h=\"%5\"/>\n").arg(name).arg(r.x()).arg(r.y()).arg(r.width()).arg(r.height());
+        } else if (strcmp(type, "mu::draw::Color") == 0) {
+            mu::draw::Color color(data.value<mu::draw::Color>());
+            *this << QString("<%1 r=\"%2\" g=\"%3\" b=\"%4\" a=\"%5\"/>\n")
+                .arg(name).arg(color.red()).arg(color.green()).arg(color.blue()).arg(color.alpha());
         } else if (strcmp(type, "Ms::Fraction") == 0) {
             const Fraction& f = data.value<Fraction>();
             *this << QString("<%1>%2/%3</%1>\n").arg(name).arg(f.numerator()).arg(f.denominator());
