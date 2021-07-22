@@ -243,7 +243,7 @@ private slots:
     void wedge3() { mxmlIoTest("testWedge3"); }
     void words1() { mxmlIoTest("testWords1"); }
     void words2() { mxmlIoTest("testWords2"); }
-    //void excludeInvisibleElements() { mxmlMscxExportTestRefInvisibleElements("testExcludeInvisibleElements"); }
+    void excludeInvisibleElements() { mxmlMscxExportTestRefInvisibleElements("testExcludeInvisibleElements"); }
 };
 
 //---------------------------------------------------------
