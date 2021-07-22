@@ -171,6 +171,7 @@ void Mixer::setMasterOutputParams(const AudioOutputParams& params)
     m_masterParams = params;
 
     m_globalFxProcessors.clear();
+    m_masterOutputParamsChanged.send(params);
 
     // TODO fulfill fxProcessors using fxProvider
     /*for (const FxProcessorId& fxId : m_globalOutputParams.fxProcessors) {

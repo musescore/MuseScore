@@ -63,6 +63,27 @@ void PlaybackController::init()
         onNotationChanged();
     });
 
+    globalContext()->currentNotationProjectChanged().onNotify(this, [this]() {
+        project::INotationProjectPtr project = globalContext()->currentNotationProject();
+
+        if (!project) {
+            return;
+        }
+
+        audio::AudioOutputParams masterOutputParams = project->audioSettings()->masterAudioOutputParams();
+        playback()->audioOutput()->setMasterOutputParams(masterOutputParams);
+    });
+
+    playback()->audioOutput()->masterOutputParamsChanged().onReceive(this, [this](const audio::AudioOutputParams& params) {
+        project::INotationProjectPtr project = globalContext()->currentNotationProject();
+
+        if (!project) {
+            return;
+        }
+
+        project->audioSettings()->setMasterAudioOutputParams(params);
+    });
+
     m_needRewindBeforePlay = true;
 }
 

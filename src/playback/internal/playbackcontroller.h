@@ -35,6 +35,7 @@
 #include "notation/inotationplayback.h"
 #include "audio/iplayer.h"
 #include "audio/itracks.h"
+#include "audio/iaudiooutput.h"
 #include "audio/iplayback.h"
 #include "audio/audiotypes.h"
 
