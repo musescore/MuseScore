@@ -257,7 +257,7 @@ void StaffType::write(XmlWriter& xml) const
         xml.tag("invisible", _invisible);
     }
     if (_color != MScore::defaultColor) {
-        xml.tag("color", _color.toQColor());
+        xml.tag("color", _color.toString().c_str());
     }
     if (_group == StaffGroup::STANDARD) {
         xml.tag("noteheadScheme", NoteHead::scheme2name(_noteHeadScheme), NoteHead::scheme2name(NoteHead::Scheme::HEAD_NORMAL));
