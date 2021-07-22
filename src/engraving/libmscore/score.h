@@ -56,7 +56,8 @@ class EngravingProject;
 
 namespace mu::engraving::compat {
 class ScoreAccess;
-struct ReadScoreHooks;
+class ReadScoreHook;
+class WriteScoreHook;
 }
 
 namespace mu::score {
@@ -458,6 +459,9 @@ public:
     };
 
 private:
+
+    friend class mu::engraving::compat::ReadScoreHook;
+
     static std::set<Score*> validScores;
     int _linkId { 0 };
     MasterScore* _masterScore { 0 };
@@ -649,7 +653,7 @@ public:
     void removeStaff(Staff*);
     void addMeasure(MeasureBase*, MeasureBase*);
     void readStaff(XmlReader&);
-    bool read(XmlReader&, const mu::engraving::compat::ReadScoreHooks& hooks);
+    bool read(XmlReader&, mu::engraving::compat::ReadScoreHook& hooks);
     void linkMeasures(Score* score);
 
     Excerpt* excerpt() { return _excerpt; }
@@ -703,10 +707,10 @@ public:
     bool appendMeasuresFromScore(Score* score, const Fraction& startTick, const Fraction& endTick);
     bool appendScore(Score*, bool addPageBreak = false, bool addSectionBreak = true);
 
-    void write(XmlWriter&, bool onlySelection);
-    void writeMovement(XmlWriter&, bool onlySelection);
+    void write(XmlWriter&, bool onlySelection, mu::engraving::compat::WriteScoreHook& hook);
+    void writeMovement(XmlWriter&, bool onlySelection, mu::engraving::compat::WriteScoreHook& hook);
 
-    bool writeScore(QIODevice* f, bool msczFormat, bool onlySelection = false);
+    bool writeScore(QIODevice* f, bool msczFormat, bool onlySelection, mu::engraving::compat::WriteScoreHook& hook);
 
     QList<Staff*>& staves() { return _staves; }
     const QList<Staff*>& staves() const { return _staves; }
@@ -1402,17 +1406,17 @@ class MasterScore : public Score
     QFileInfo _sessionStartBackupInfo;
     QFileInfo info;
 
-    bool read(XmlReader&, const mu::engraving::compat::ReadScoreHooks& hooks);
-    FileError read1(XmlReader&, bool ignoreVersionError, const mu::engraving::compat::ReadScoreHooks& hooks);
+    bool read(XmlReader&, mu::engraving::compat::ReadScoreHook& hooks);
+    FileError read1(XmlReader&, bool ignoreVersionError, mu::engraving::compat::ReadScoreHook& hooks);
     FileError read114(XmlReader&);
     FileError read206(XmlReader&);
-    FileError read302(XmlReader&, const mu::engraving::compat::ReadScoreHooks& hooks);
+    FileError read302(XmlReader&, mu::engraving::compat::ReadScoreHook& hooks);
 
     void setPrev(MasterScore* s) { _prev = s; }
     void setNext(MasterScore* s) { _next = s; }
 
-    friend class mu::engraving::compat::ScoreAccess;
     friend class mu::engraving::EngravingProject;
+    friend class mu::engraving::compat::ScoreAccess;
     MasterScore(std::shared_ptr<mu::engraving::EngravingProject> project);
     MasterScore(const MStyle&, std::shared_ptr<mu::engraving::EngravingProject> project);
 

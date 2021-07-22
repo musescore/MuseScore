@@ -24,6 +24,8 @@
 
 #include <QRegularExpression>
 
+#include "compat/writescorehook.h"
+
 #include "duration.h"
 #include "measure.h"
 #include "score.h"
@@ -36,6 +38,7 @@
 #include <utility>
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -761,7 +764,9 @@ static QString scoreToMscx(Score* s, XmlWriter& xml)
     QString mscx;
     xml.setString(&mscx, QIODevice::WriteOnly);
     xml.setRecordElements(true);
-    s->write(xml, /* onlySelection */ false);
+
+    compat::WriteScoreHook hook;
+    s->write(xml, /* onlySelection */ false, hook);
     xml.flush();
     return mscx;
 }

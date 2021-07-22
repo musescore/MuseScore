@@ -19,18 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#ifndef MU_ENGRAVING_WRITESCOREHOOK_H
+#define MU_ENGRAVING_WRITESCOREHOOK_H
 
-#ifndef MU_ENGRAVING_READSCORE_H
-#define MU_ENGRAVING_READSCORE_H
-
-#include <memory>
-#include "readstyle.h"
-
-namespace mu::engraving::compat {
-struct ReadScoreHooks
-{
-    std::shared_ptr<ReadStyleHook> readStyle = nullptr;
-};
+namespace Ms {
+class Score;
+class XmlWriter;
 }
 
-#endif // MU_ENGRAVING_READSCORE_H
+namespace mu::engraving::compat {
+class WriteScoreHook
+{
+public:
+    WriteScoreHook() = default;
+
+    void onWriteStyle302(Ms::Score* score, Ms::XmlWriter& xml);
+};
+}
+#endif // MU_ENGRAVING_WRITESCOREHOOK_H
