@@ -27,6 +27,7 @@
 #include <QXmlStreamReader>
 #include <QTextStream>
 
+#include "draw/color.h"
 #include "connector.h"
 #include "stafftype.h"
 #include "interval.h"
@@ -154,7 +155,7 @@ public:
     mu::PointF readPoint();
     mu::SizeF readSize();
     mu::RectF readRect();
-    QColor readColor();
+    mu::draw::Color readColor();
     Fraction readFraction();
     QString readXml();
 

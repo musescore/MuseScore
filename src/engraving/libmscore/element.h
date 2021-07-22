@@ -31,6 +31,7 @@
 #include "sig.h"
 #include "symid.h"
 
+#include "draw/color.h"
 #include "draw/geometry.h"
 #include "draw/painter.h"
 
@@ -211,7 +212,7 @@ public:
 
 protected:
     mutable int _z;
-    QColor _color;                ///< element color attribute
+    mu::draw::Color _color;                ///< element color attribute
 
 public:
     Element(Score* = 0, ElementFlags = ElementFlag::NOTHING, mu::score::AccessibleElement* access = nullptr);
@@ -437,12 +438,12 @@ public:
     //@ Returns the name of the element type
     virtual Q_INVOKABLE QString _name() const { return QString(name()); }
 
-    virtual QColor color() const { return _color; }
-    QColor curColor() const;
-    QColor curColor(bool isVisible) const;
-    QColor curColor(bool isVisible, QColor normalColor) const;
-    virtual void setColor(const QColor& c) { _color = c; }
-    void undoSetColor(const QColor& c);
+    virtual mu::draw::Color color() const { return _color; }
+    mu::draw::Color curColor() const;
+    mu::draw::Color curColor(bool isVisible) const;
+    mu::draw::Color curColor(bool isVisible, mu::draw::Color normalColor) const;
+    virtual void setColor(const mu::draw::Color& c) { _color = c; }
+    void undoSetColor(const mu::draw::Color& c);
     void undoSetVisible(bool v);
 
     static ElementType readType(XmlReader& node, mu::PointF*, Fraction*);

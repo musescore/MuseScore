@@ -1328,7 +1328,7 @@ bool Staff::showLedgerLines(const Fraction& tick) const
 //   color
 //---------------------------------------------------------
 
-QColor Staff::color(const Fraction& tick) const
+mu::draw::Color Staff::color(const Fraction& tick) const
 {
     return staffType(tick)->color();
 }
@@ -1337,7 +1337,7 @@ QColor Staff::color(const Fraction& tick) const
 //   setColor
 //---------------------------------------------------------
 
-void Staff::setColor(const Fraction& tick, const QColor& val)
+void Staff::setColor(const Fraction& tick, const mu::draw::Color& val)
 {
     staffType(tick)->setColor(val);
 }
@@ -1364,7 +1364,7 @@ void Staff::updateOttava()
 //   undoSetColor
 //---------------------------------------------------------
 
-void Staff::undoSetColor(const QColor& /*val*/)
+void Staff::undoSetColor(const mu::draw::Color& /*val*/)
 {
 //      undoChangeProperty(Pid::COLOR, val);
 }
@@ -1488,7 +1488,7 @@ QVariant Staff::getProperty(Pid id) const
     case Pid::STAFF_INVISIBLE:
         return staffType(Fraction(0, 1))->invisible();
     case Pid::STAFF_COLOR:
-        return staffType(Fraction(0, 1))->color();
+        return QVariant::fromValue(staffType(Fraction(0, 1))->color());
     case Pid::PLAYBACK_VOICE1:
         return playbackVoice(0);
     case Pid::PLAYBACK_VOICE2:
@@ -1533,7 +1533,7 @@ bool Staff::setProperty(Pid id, const QVariant& v)
     }
     break;
     case Pid::STAFF_COLOR:
-        setColor(Fraction(0, 1), v.value<QColor>());
+        setColor(Fraction(0, 1), v.value<mu::draw::Color>());
         break;
     case Pid::PLAYBACK_VOICE1:
         setPlaybackVoice(0, v.toBool());
@@ -1600,7 +1600,7 @@ QVariant Staff::propertyDefault(Pid id) const
     case Pid::MAG:
         return 1.0;
     case Pid::STAFF_COLOR:
-        return QColor(Qt::black);
+        return QVariant::fromValue(MScore::defaultColor);
     case Pid::PLAYBACK_VOICE1:
     case Pid::PLAYBACK_VOICE2:
     case Pid::PLAYBACK_VOICE3:

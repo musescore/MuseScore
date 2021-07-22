@@ -27,9 +27,13 @@
 
 #include "draw/fontmetrics.h"
 
+#include "draw/color.h"
 #include "element.h"
 #include "property.h"
 #include "style/style.h"
+
+#include "iengravingconfiguration.h"
+#include "modularity/ioc.h"
 
 class QInputMethodEvent;
 
@@ -253,11 +257,13 @@ class TextBase : public Element
     M_PROPERTY(Align,      align,                  setAlign)
     M_PROPERTY(FrameType,  frameType,              setFrameType)
     M_PROPERTY(qreal,      textLineSpacing,        setTextLineSpacing)
-    M_PROPERTY(QColor,     bgColor,                setBgColor)
-    M_PROPERTY(QColor,     frameColor,             setFrameColor)
+    M_PROPERTY(mu::draw::Color,      bgColor,                setBgColor)
+    M_PROPERTY(mu::draw::Color,      frameColor,             setFrameColor)
     M_PROPERTY(Spatium,    frameWidth,             setFrameWidth)
     M_PROPERTY(Spatium,    paddingWidth,           setPaddingWidth)
     M_PROPERTY(int,        frameRound,             setFrameRound)
+
+    INJECT(notation, mu::engraving::IEngravingConfiguration, engravingConfiguration)
 
     // there are two representations of text; only one
     // might be valid and the other can be constructed from it
@@ -289,7 +295,7 @@ class TextBase : public Element
     static QString getHtmlEndTag(bool bold, bool italic, bool underline);
 
 protected:
-    QColor textColor() const;
+    mu::draw::Color textColor() const;
     mu::RectF frame;             // calculated in layout()
     void layoutFrame();
     void layoutEdit();

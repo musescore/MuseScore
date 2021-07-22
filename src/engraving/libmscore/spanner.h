@@ -25,6 +25,7 @@
 
 #include <deque>
 
+#include "draw/color.h"
 #include "element.h"
 
 namespace Ms {
@@ -116,7 +117,7 @@ public:
 
     virtual void setSelected(bool f) override;
     virtual void setVisible(bool f) override;
-    virtual void setColor(const QColor& col) override;
+    virtual void setColor(const mu::draw::Color& col) override;
 
     virtual void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
 
@@ -275,7 +276,7 @@ public:
     virtual void setSelected(bool f) override;
     virtual void setVisible(bool f) override;
     virtual void setAutoplace(bool f) override;
-    virtual void setColor(const QColor& col) override;
+    virtual void setColor(const mu::draw::Color& col) override;
     Spanner* nextSpanner(Element* e, int activeStaff);
     Spanner* prevSpanner(Element* e, int activeStaff);
     virtual Element* nextSegmentElement() override;

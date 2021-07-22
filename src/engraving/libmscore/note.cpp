@@ -72,7 +72,6 @@
 #include "hairpin.h"
 #include "textline.h"
 #include <QtMath>
-#include <QVector2D>
 
 #include "log.h"
 
@@ -1368,7 +1367,7 @@ void Note::draw(mu::draw::Painter* painter) const
         return;
     }
 
-    QColor c(curColor());
+    mu::draw::Color c(curColor());
     painter->setPen(c);
     bool tablature = staff() && staff()->isTabStaff(chord()->tick());
 
@@ -1393,13 +1392,13 @@ void Note::draw(mu::draw::Painter* painter) const
                     view->drawBackground(painter, bb);
                 }
             } else {
-                painter->fillRect(bb, Qt::white);
+                painter->fillRect(bb, mu::draw::Color(engravingConfiguration()->whiteColor()));
             }
 
             if (fretConflict() && !score()->printing() && score()->showUnprintable()) {                //on fret conflict, draw on red background
                 painter->save();
-                painter->setPen(Qt::red);
-                painter->setBrush(mu::draw::Brush(QColor(Qt::red)));
+                painter->setPen(mu::draw::Color(engravingConfiguration()->criticalColor()));
+                painter->setBrush(mu::draw::Brush(engravingConfiguration()->criticalColor()));
                 painter->drawRect(bb);
                 painter->restore();
             }
@@ -1423,15 +1422,17 @@ void Note::draw(mu::draw::Painter* painter) const
             const Instrument* in = part()->instrument(chord()->tick());
             int i = ppitch();
             if (i < in->minPitchP() || i > in->maxPitchP()) {
-                painter->setPen(selected() ? Qt::darkRed : Qt::red);
+                painter->setPen(selected() ? mu::draw::Color(engravingConfiguration()->criticalSelectedColor()) : mu::draw::Color(
+                                    engravingConfiguration()->criticalColor()));
             } else if (i < in->minPitchA() || i > in->maxPitchA()) {
-                painter->setPen(selected() ? QColor("#565600") : Qt::darkYellow);
+                painter->setPen(selected() ? mu::draw::Color(engravingConfiguration()->warningSelectedColor()) : mu::draw::Color(
+                                    engravingConfiguration()->warningColor()));
             }
         }
         // draw blank notehead to avoid staff and ledger lines
         if (_cachedSymNull != SymId::noSym) {
             painter->save();
-            painter->setPen(Qt::white);
+            painter->setPen(mu::draw::Color(engravingConfiguration()->whiteColor()));
             drawSymbol(_cachedSymNull, painter);
             painter->restore();
         }
@@ -1454,7 +1455,7 @@ void Note::write(XmlWriter& xml) const
     _el.write(xml);
     bool write_dots = false;
     for (NoteDot* dot : _dots) {
-        if (!dot->offset().isNull() || !dot->visible() || dot->color() != Qt::black || dot->visible() != visible()) {
+        if (!dot->offset().isNull() || !dot->visible() || dot->color() != MScore::defaultColor || dot->visible() != visible()) {
             write_dots = true;
             break;
         }
@@ -1777,11 +1778,11 @@ public:
         qreal x = qAbs(deltaX);
         qreal y = qAbs(deltaY);
 
-        QVector2D normalizedVector(x, y);
+        mu::PointF normalizedVector(x, y);
 
         normalizedVector.normalize();
 
-        float radians = QVector2D::dotProduct(normalizedVector, QVector2D(1, 0));
+        float radians = PointF::dotProduct(normalizedVector, PointF(1, 0));
 
         qreal degrees = (qAcos(radians) * 180.0) / M_PI;
 

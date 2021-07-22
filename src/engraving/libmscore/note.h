@@ -36,6 +36,8 @@
 #include "pitchspelling.h"
 #include "shape.h"
 #include "key.h"
+#include "iengravingconfiguration.h"
+#include "modularity/ioc.h"
 
 namespace Ms {
 class Tie;
@@ -252,6 +254,7 @@ public:
         OFFSET_VAL, USER_VAL
     };
     Q_ENUM(ValueType);
+    INJECT(notation, mu::engraving::IEngravingConfiguration, engravingConfiguration)
 
 private:
     bool _ghost         { false };        ///< ghost note (guitar: death note)

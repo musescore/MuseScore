@@ -66,6 +66,7 @@
 #include "libmscore/fret.h"
 
 #include "engraving/draw/qpainterprovider.h"
+#include "engraving/draw/color.h"
 
 #include "translation.h"
 
@@ -964,21 +965,22 @@ PaletteCellPtr Palette::add(int idx, ElementPtr element, const QString& name, QS
 
 void Palette::paintPaletteElement(void* data, Element* element)
 {
-    mu::draw::Painter* painter = static_cast<mu::draw::Painter*>(data);
+    using namespace mu::draw;
+    Painter* painter = static_cast<Painter*>(data);
     painter->save();
     painter->translate(element->pos()); // necessary for drawing child elements
 
-    QColor colorBackup = element->getProperty(Pid::COLOR).value<QColor>();
-    QColor frameColorBackup = element->getProperty(Pid::FRAME_FG_COLOR).value<QColor>();
+    auto colorBackup = Color::fromQColor(element->getProperty(Pid::COLOR).value<QColor>());
+    auto frameColorBackup = Color::fromQColor(element->getProperty(Pid::FRAME_FG_COLOR).value<QColor>());
 
-    QColor color = configuration()->elementsColor();
-    element->setProperty(Pid::COLOR, color);
-    element->setProperty(Pid::FRAME_FG_COLOR, color);
+    auto color = Color::fromQColor(configuration()->elementsColor());
+    element->setProperty(Pid::COLOR, QVariant::fromValue(color));
+    element->setProperty(Pid::FRAME_FG_COLOR, QVariant::fromValue(color));
 
     element->draw(painter);
 
-    element->setProperty(Pid::COLOR, colorBackup);
-    element->setProperty(Pid::FRAME_FG_COLOR, frameColorBackup);
+    element->setProperty(Pid::COLOR, QVariant::fromValue(colorBackup));
+    element->setProperty(Pid::FRAME_FG_COLOR, QVariant::fromValue(frameColorBackup));
 
     painter->restore();
 }
@@ -1154,7 +1156,7 @@ void Palette::paintEvent(QPaintEvent* /*event*/)
         if (idx != m_selectedIdx) {
             // show voice colors for notes
             if (el->isChord()) {
-                color = el->curColor();
+                color = el->curColor().toQColor();
             } else {
                 color = palette().color(QPalette::Normal, QPalette::Text);
             }
@@ -1218,7 +1220,7 @@ QPixmap Palette::pixmap(int paletteIdx) const
         for (Note* note : chord->notes()) {
             note->setSelected(true);
         }
-        color = element->curColor();
+        color = element->curColor().toQColor();
     } else {
         color = palette().color(QPalette::Normal, QPalette::Text);
     }
