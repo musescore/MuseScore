@@ -24,7 +24,7 @@
 #include "style/defaultstyle.h"
 
 #include "compat/chordlist.h"
-#include "compat/readscore.h"
+#include "compat/readscorehook.h"
 
 #include "xml.h"
 #include "score.h"
@@ -50,7 +50,7 @@ namespace Ms {
 //    return false on error
 //---------------------------------------------------------
 
-bool Score::read(XmlReader& e, const compat::ReadScoreHooks& hooks)
+bool Score::read(XmlReader& e, compat::ReadScoreHook& hooks)
 {
     // HACK
     // style setting compatibility settings for minor versions
@@ -111,17 +111,7 @@ bool Score::read(XmlReader& e, const compat::ReadScoreHooks& hooks)
         } else if (tag == "markIrregularMeasures") {
             _markIrregularMeasures = e.readInt();
         } else if (tag == "Style") {
-            qreal sp = style().value(Sid::spatium).toDouble();
-
-            compat::ReadStyleHook::readStyleTag(this, e);
-
-            // if (_layoutMode == LayoutMode::FLOAT || _layoutMode == LayoutMode::SYSTEM) {
-            if (_layoutMode == LayoutMode::FLOAT) {
-                // style should not change spatium in
-                // float mode
-                style().set(Sid::spatium, sp);
-            }
-            _scoreFont = ScoreFont::fontByName(style().value(Sid::MusicalSymbolFont).toString());
+            hooks.onReadStyleTag302(this, e);
         } else if (tag == "copyright" || tag == "rights") {
             Text* text = new Text(this);
             text->read(e);
@@ -195,7 +185,7 @@ bool Score::read(XmlReader& e, const compat::ReadScoreHooks& hooks)
                 ex->setPartScore(s);
                 e.setLastMeasure(nullptr);
 
-                compat::ReadScoreHooks hooks;
+                compat::ReadScoreHook hooks;
                 s->read(e, hooks);
 
                 s->linkMeasures(m);
@@ -344,7 +334,7 @@ void Score::linkMeasures(Score* score)
 //   read
 //---------------------------------------------------------
 
-bool MasterScore::read(XmlReader& e, const compat::ReadScoreHooks& hooks)
+bool MasterScore::read(XmlReader& e, compat::ReadScoreHook& hooks)
 {
     if (!Score::read(e, hooks)) {
         return false;
@@ -379,7 +369,7 @@ void MasterScore::addMovement(MasterScore* score)
 //   read301
 //---------------------------------------------------------
 
-Score::FileError MasterScore::read302(XmlReader& e, const mu::engraving::compat::ReadScoreHooks& hooks)
+Score::FileError MasterScore::read302(XmlReader& e, mu::engraving::compat::ReadScoreHook& hooks)
 {
     while (e.readNextStartElement()) {
         const QStringRef& tag(e.name());

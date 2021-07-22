@@ -19,6 +19,34 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "readscore.h"
 
-using namespace mu::engraving::compat;
+#ifndef MU_ENGRAVING_READSCOREHOOK_H
+#define MU_ENGRAVING_READSCOREHOOK_H
+
+#include <memory>
+#include <QByteArray>
+#include <QString>
+
+namespace Ms {
+class MasterScore;
+class Score;
+class XmlReader;
+}
+
+namespace mu::engraving::compat {
+class ReadStyleHook;
+class ReadScoreHook
+{
+public:
+
+    // Style
+    void installReadStyleHook(Ms::MasterScore* score, const QByteArray& scoreData, const QString& completeBaseName);
+    void setupDefaultStyle();
+    void onReadStyleTag302(Ms::Score* score, Ms::XmlReader& xml);
+
+private:
+    std::shared_ptr<ReadStyleHook> m_readStyle = nullptr;
+};
+}
+
+#endif // MU_ENGRAVING_READSCOREHOOK_H

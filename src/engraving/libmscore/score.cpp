@@ -34,7 +34,8 @@
 #include "style/style.h"
 #include "style/defaultstyle.h"
 
-#include "compat/readscore.h"
+#include "compat/readscorehook.h"
+#include "compat/writescorehook.h"
 
 #include "fermata.h"
 #include "imageStore.h"
@@ -2123,7 +2124,9 @@ MasterScore* MasterScore::clone()
     xml.header();
 
     xml.stag("museScore version=\"" MSC_VERSION "\"");
-    write(xml, false);
+
+    compat::WriteScoreHook hook;
+    write(xml, false, hook);
     xml.etag();
 
     buffer.close();
@@ -2131,8 +2134,8 @@ MasterScore* MasterScore::clone()
     QByteArray scoreData = buffer.buffer();
     QString completeBaseName = masterScore()->fileInfo()->completeBaseName();
 
-    compat::ReadScoreHooks hooks;
-    hooks.readStyle = std::make_shared<compat::ReadStyleHook>(this, scoreData, completeBaseName);
+    compat::ReadScoreHook hooks;
+    hooks.installReadStyleHook(this, scoreData, completeBaseName);
 
     XmlReader r(scoreData);
     MasterScore* score = new MasterScore(style(), m_project);

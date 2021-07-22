@@ -34,8 +34,9 @@ class MStyle;
 }
 
 namespace mu::engraving::compat {
-struct ReadStyleHook
+class ReadStyleHook
 {
+public:
     ReadStyleHook(Ms::MasterScore* score, const QByteArray& scoreData, const QString& completeBaseName);
 
     void setupDefaultStyle();

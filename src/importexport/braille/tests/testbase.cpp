@@ -32,6 +32,7 @@
 
 #include "engraving/compat/mscxcompat.h"
 #include "engraving/compat/scoreaccess.h"
+#include "engraving/compat/writescorehook.h"
 
 using namespace mu::engraving;
 
@@ -83,7 +84,8 @@ bool MTest::saveScore(Score* score, const QString& name) const
     if (!file.open(QIODevice::ReadWrite)) {
         return false;
     }
-    return score->Score::writeScore(&file, false);
+    compat::WriteScoreHook hook;
+    return score->writeScore(&file, false, false, hook);
 }
 
 bool MTest::compareFilesFromPaths(const QString& f1, const QString& f2)

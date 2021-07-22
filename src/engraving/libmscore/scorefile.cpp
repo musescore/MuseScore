@@ -29,7 +29,8 @@
 #include "style/defaultstyle.h"
 
 #include "compat/chordlist.h"
-#include "compat/readscore.h"
+#include "compat/readscorehook.h"
+#include "compat/writescorehook.h"
 
 #include "config.h"
 #include "score.h"
@@ -101,7 +102,7 @@ static void writeMeasure(XmlWriter& xml, MeasureBase* m, int staffIdx, bool writ
 //   writeMovement
 //---------------------------------------------------------
 
-void Score::writeMovement(XmlWriter& xml, bool selectionOnly)
+void Score::writeMovement(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& hook)
 {
     // if we have multi measure rests and some parts are hidden,
     // then some layout information is missing:
@@ -179,12 +180,7 @@ void Score::writeMovement(XmlWriter& xml, bool selectionOnly)
     xml.tag("Division", MScore::division);
     xml.setCurTrack(-1);
 
-    if (isTopScore()) {                    // only top score
-        //! NOTE For the master score, the style is saved in a separate file
-        if (!isMaster() || MScore::testMode) {
-            style().save(xml, true);       // save only differences to buildin style
-        }
-    }
+    hook.onWriteStyle302(this, xml);
 
     xml.tag("showInvisible",   _showInvisible);
     xml.tag("showUnprintable", _showUnprintable);
@@ -278,7 +274,7 @@ void Score::writeMovement(XmlWriter& xml, bool selectionOnly)
         if (!selectionOnly) {
             for (const Excerpt* excerpt : excerpts()) {
                 if (excerpt->partScore() != this) {
-                    excerpt->partScore()->write(xml, false);                 // recursion
+                    excerpt->partScore()->write(xml, false, hook);                 // recursion
                 }
             }
         }
@@ -296,7 +292,7 @@ void Score::writeMovement(XmlWriter& xml, bool selectionOnly)
 //   write
 //---------------------------------------------------------
 
-void Score::write(XmlWriter& xml, bool selectionOnly)
+void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& hook)
 {
     if (isMaster()) {
         MasterScore* score = static_cast<MasterScore*>(this);
@@ -304,11 +300,11 @@ void Score::write(XmlWriter& xml, bool selectionOnly)
             score = score->prev();
         }
         while (score) {
-            score->writeMovement(xml, selectionOnly);
+            score->writeMovement(xml, selectionOnly, hook);
             score = score->next();
         }
     } else {
-        writeMovement(xml, selectionOnly);
+        writeMovement(xml, selectionOnly, hook);
     }
 }
 
@@ -414,7 +410,9 @@ bool Score::writeMscz(engraving::MscWriter& msczWriter, bool onlySelection, bool
         QByteArray scoreData;
         QBuffer scoreBuf(&scoreData);
         scoreBuf.open(QIODevice::ReadWrite);
-        Score::writeScore(&scoreBuf, onlySelection);
+
+        compat::WriteScoreHook hook;
+        Score::writeScore(&scoreBuf, false, onlySelection, hook);
 
         msczWriter.writeScoreFile(scoreData);
     }
@@ -550,7 +548,7 @@ bool Score::saveStyle(const QString& name)
 //extern QString revision;
 static QString revision;
 
-bool Score::writeScore(QIODevice* f, bool msczFormat, bool onlySelection)
+bool Score::writeScore(QIODevice* f, bool msczFormat, bool onlySelection, compat::WriteScoreHook& hook)
 {
     XmlWriter xml(this, f);
     xml.setWriteOmr(msczFormat);
@@ -562,7 +560,7 @@ bool Score::writeScore(QIODevice* f, bool msczFormat, bool onlySelection)
         xml.tag("programVersion", VERSION);
         xml.tag("programRevision", revision);
     }
-    write(xml, onlySelection);
+    write(xml, onlySelection, hook);
     xml.etag();
     if (isMaster()) {
         masterScore()->revisions()->write(xml);
@@ -603,8 +601,8 @@ Score::FileError MasterScore::loadMscz(const mu::engraving::MscReader& mscReader
         XmlReader e(scoreData);
         e.setDocName(completeBaseName);
 
-        compat::ReadScoreHooks hooks;
-        hooks.readStyle = std::make_shared<compat::ReadStyleHook>(this, scoreData, completeBaseName);
+        compat::ReadScoreHook hooks;
+        hooks.installReadStyleHook(this, scoreData, completeBaseName);
 
         retval = read1(e, ignoreVersionError, hooks);
     }
@@ -726,7 +724,7 @@ void MasterScore::parseVersion(const QString& val)
 //    return true on success
 //---------------------------------------------------------
 
-Score::FileError MasterScore::read1(XmlReader& e, bool ignoreVersionError, const mu::engraving::compat::ReadScoreHooks& hooks)
+Score::FileError MasterScore::read1(XmlReader& e, bool ignoreVersionError, mu::engraving::compat::ReadScoreHook& hook)
 {
     while (e.readNextStartElement()) {
         if (e.name() == "museScore") {
@@ -746,9 +744,7 @@ Score::FileError MasterScore::read1(XmlReader& e, bool ignoreVersionError, const
                 }
             }
 
-            if (hooks.readStyle) {
-                hooks.readStyle->setupDefaultStyle();
-            }
+            hook.setupDefaultStyle();
 
             Score::FileError error;
             if (mscVersion() <= 114) {
@@ -756,7 +752,7 @@ Score::FileError MasterScore::read1(XmlReader& e, bool ignoreVersionError, const
             } else if (mscVersion() <= 207) {
                 error = read206(e);
             } else {
-                error = read302(e, hooks);
+                error = read302(e, hook);
             }
             setExcerptsChanged(false);
             return error;
