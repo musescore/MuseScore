@@ -70,7 +70,11 @@ Item {
                 spacing: 8
 
                 VolumeSlider {
+                    value: item.volumeLevel
 
+                    onMoved: {
+                        item.volumeLevel = value
+                    }
                 }
 
                 Row {

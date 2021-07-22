@@ -74,7 +74,7 @@ float MixerChannelItem::balance() const
 
 bool MixerChannelItem::muted() const
 {
-    return m_outParams.isMuted;
+    return m_outParams.muted;
 }
 
 bool MixerChannelItem::solo() const
@@ -82,14 +82,27 @@ bool MixerChannelItem::solo() const
     return m_solo;
 }
 
-void MixerChannelItem::setInputParams(AudioInputParams&& inputParams)
+void MixerChannelItem::loadInputParams(const AudioInputParams& newParams)
 {
-    m_inputParams = inputParams;
+    m_inputParams = newParams;
 }
 
-void MixerChannelItem::setOutputParams(AudioOutputParams&& outParams)
+void MixerChannelItem::loadOutputParams(const AudioOutputParams& newParams)
 {
-    m_outParams = outParams;
+    if (m_outParams.volume != newParams.volume) {
+        m_outParams.volume = newParams.volume;
+        emit volumeLevelChanged(newParams.volume);
+    }
+
+    if (m_outParams.balance != newParams.balance) {
+        m_outParams.balance = newParams.balance;
+        emit balanceChanged(newParams.balance);
+    }
+
+    if (m_outParams.muted != newParams.muted) {
+        m_outParams.muted = newParams.muted;
+        emit mutedChanged(newParams.muted);
+    }
 }
 
 void MixerChannelItem::subscribeOnAudioSignalChanges(AudioSignalChanges&& audioSignalChanges)
@@ -159,11 +172,11 @@ void MixerChannelItem::setBalance(float balance)
 
 void MixerChannelItem::setMuted(bool muted)
 {
-    if (m_outParams.isMuted == muted) {
+    if (m_outParams.muted == muted) {
         return;
     }
 
-    m_outParams.isMuted = muted;
+    m_outParams.muted = muted;
     emit mutedChanged(muted);
     emit outputParamsChanged(m_outParams);
 }

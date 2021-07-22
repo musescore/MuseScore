@@ -80,14 +80,14 @@ bool MixerChannel::isActive() const
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    return m_params.isMuted;
+    return m_params.muted;
 }
 
 void MixerChannel::setIsActive(bool arg)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    m_params.isMuted = arg;
+    m_params.muted = !arg;
 }
 
 void MixerChannel::setSampleRate(unsigned int sampleRate)
@@ -135,7 +135,7 @@ void MixerChannel::process(float* buffer, unsigned int sampleCount)
         return;
     }
 
-    if (m_params.isMuted) {
+    if (m_params.muted) {
         std::fill(buffer, buffer + sampleCount * audioChannelsCount(), 0.f);
         return;
     }

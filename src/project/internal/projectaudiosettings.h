@@ -23,6 +23,7 @@
 #define MU_PROJECT_PROJECTAUDIOSETTINGS_H
 
 #include <memory>
+#include <string>
 
 #include "../iprojectaudiosettings.h"
 
@@ -35,21 +36,29 @@ class ProjectAudioSettings : public IProjectAudioSettings
 {
 public:
 
-    int someValue() const override;
-    void setSomeValue(int val) override;
-
-    //! NOTE Used for new or imported project (score)
-    void makeDefault();
+    audio::AudioOutputParams masterAudioOutputParams() const override;
+    void setMasterAudioOutputParams(const audio::AudioOutputParams& params) override;
 
     Ret read(const engraving::MscReader& reader);
     Ret write(engraving::MscWriter& writer);
 
-private:
+    //! NOTE Used for new or imported project (score)
+    void makeDefault();
 
+private:
     friend class NotationProject;
     ProjectAudioSettings() = default;
 
-    int m_someValue = 0;
+    audio::AudioInputParams inputParamsFromJson(const QJsonObject& object) const;
+    audio::AudioOutputParams outputParamsFromJson(const QJsonObject& object) const;
+
+    QJsonObject inputParamsToJson(const audio::AudioInputParams& params) const;
+    QJsonObject outputParamsToJson(const audio::AudioOutputParams& params) const;
+
+    audio::AudioSourceType sourceTypeFromString(const QString& string) const;
+    QString sourceTypeToString(const audio::AudioSourceType& type) const;
+
+    audio::AudioOutputParams m_masterOutputParams;
 };
 
 using ProjectAudioSettingsPtr = std::shared_ptr<ProjectAudioSettings>;
