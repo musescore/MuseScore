@@ -18,6 +18,7 @@
 #include "chord.h"
 #include "segment.h"
 #include "measure.h"
+#include "part.h"
 #include "undo.h"
 #include "staff.h"
 #include "lyrics.h"
@@ -584,14 +585,18 @@ void Spanner::computeStartElement()
       switch (_anchor) {
             case Anchor::SEGMENT: {
                   Segment* seg = score()->tick2segmentMM(tick(), false, SegmentType::ChordRest);
-                  int strack = (track() / VOICES) * VOICES;
-                  int etrack = strack + VOICES;
+                  int strack = part()->startTrack();
+                  int etrack = part()->endTrack();
                   _startElement = 0;
                   if (seg) {
-                        for (int t = strack; t < etrack; ++t) {
-                              if (seg->element(t)) {
-                                    _startElement = seg->element(t);
-                                    break;
+                        if (seg->element(track()))
+                              _startElement = seg->element(track());
+                        else {
+                              for (int t = strack; t < etrack; ++t) {
+                                    if (seg->element(t)) {
+                                          _startElement = seg->element(t);
+                                          break;
+                                          }
                                     }
                               }
                         }
