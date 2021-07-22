@@ -667,6 +667,37 @@ static bool mustAddWordToVbox(const QString& creditType)
       }
 
 //---------------------------------------------------------
+//   isLikelySubtitleText
+//---------------------------------------------------------
+
+bool isLikelySubtitleText(const QString& text, const bool caseInsensitive = true)
+      {
+      QRegularExpression::PatternOption caseOption = caseInsensitive ? QRegularExpression::CaseInsensitiveOption : QRegularExpression::NoPatternOption;
+      return (text.trimmed().contains(QRegularExpression("^[Ff]rom\\s+(?!$)", caseOption))
+            || text.trimmed().contains(QRegularExpression("^Theme from\\s+(?!$)", caseOption))  
+            || text.trimmed().contains(QRegularExpression("(Op\\.?\\s?\\d+)\\s?(No\\.?\\s?\\d+)?", caseOption))
+            || text.trimmed().contains(QRegularExpression("^\\(.*[Ff]rom\\s.*\\)$", caseOption)));
+      }
+
+//---------------------------------------------------------
+//   inferSubTitleFromTitle
+//---------------------------------------------------------
+
+// Extracts a likely subtitle from the title string
+// Returns the inferred subtitle
+
+static QString inferSubTitleFromTitle(const QString& title)
+      {
+      QString inferredSubTitle = "";
+      for (auto line : title.split(QRegularExpression("\\n"))) {
+            if (isLikelySubtitleText(line, true)) {
+                  inferredSubTitle = line;
+                  break;
+                  }
+            }
+      return inferredSubTitle;
+      }
+//---------------------------------------------------------
 //   addCreditWords
 //---------------------------------------------------------
 
@@ -732,6 +763,7 @@ static void createDefaultHeader(Score* const score)
       {
       QString strTitle;
       QString strSubTitle;
+      QString inferredStrSubTitle;
       QString strComposer;
       QString strPoet;
       QString strTranslator;
@@ -740,11 +772,16 @@ static void createDefaultHeader(Score* const score)
             strTitle = score->metaTag("movementTitle");
             if (strTitle.isEmpty())
                   strTitle = score->metaTag("workTitle");
+            inferredStrSubTitle = inferSubTitleFromTitle(strTitle);
             }
       if (!(score->metaTag("movementNumber").isEmpty() && score->metaTag("workNumber").isEmpty())) {
             strSubTitle = score->metaTag("movementNumber");
             if (strSubTitle.isEmpty())
                   strSubTitle = score->metaTag("workNumber");
+            }
+      else if (!inferredStrSubTitle.isEmpty()) {
+            strSubTitle = inferredStrSubTitle;
+            strTitle.replace(inferredStrSubTitle, "");
             }
       QString metaComposer = score->metaTag("composer");
       QString metaPoet = score->metaTag("poet");

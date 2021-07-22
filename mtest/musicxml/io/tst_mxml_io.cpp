@@ -140,7 +140,8 @@ private slots:
       void incompleteTuplet() { mxmlIoTestRef("testIncompleteTuplet"); }
       void incorrectStaffNumber1() { mxmlIoTestRef("testIncorrectStaffNumber1"); }
       void incorrectStaffNumber2() { mxmlIoTestRef("testIncorrectStaffNumber2"); }
-      void inferredCredits() { mxmlImportTestRef("testInferredCredits"); }
+      void inferredCredits1() { mxmlImportTestRef("testInferredCredits1"); }
+      void inferredCredits2() { mxmlImportTestRef("testInferredCredits2"); }
       void inferredDynamics() { mxmlImportTestRef("testInferredDynamics"); }
       // void inferredFingerings() { mxmlImportTestRef("testInferredFingerings"); }
       void inferredTempoText() { mxmlImportTestRef("testInferredTempoText"); }
