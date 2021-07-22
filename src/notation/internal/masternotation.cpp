@@ -171,8 +171,6 @@ mu::Ret MasterNotation::setupNewScore(Ms::MasterScore* score, Ms::MasterScore* t
     score->setName(qtrc("notation", "Untitled"));
     score->setCreated(true);
 
-    setScore(score);
-
     score->checkChordList();
 
     Ms::Fraction timesig(scoreOptions.timesigNumerator, scoreOptions.timesigDenominator);
@@ -406,6 +404,7 @@ mu::Ret MasterNotation::setupNewScore(Ms::MasterScore* score, Ms::MasterScore* t
         score->doLayout();
     }
 
+    setScore(score);
     initExcerpts(excerpts);
 
     score->setExcerptsChanged(true);
