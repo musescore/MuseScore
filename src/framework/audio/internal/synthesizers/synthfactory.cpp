@@ -9,46 +9,46 @@
 using namespace mu::async;
 using namespace mu::audio::synth;
 
-void SynthFactory::init(const SynthUri& defaultUri)
+void SynthFactory::init(const AudioInputParams& defaultInputParams)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    IF_ASSERT_FAILED(defaultUri.isValid()) {
+    IF_ASSERT_FAILED(defaultInputParams.isValid()) {
         return;
     }
 
-    m_defaultUri = defaultUri;
+    m_defaultInputParams = defaultInputParams;
 }
 
-ISynthesizerPtr SynthFactory::createNew(const SynthUri& uri) const
+ISynthesizerPtr SynthFactory::createNew(const AudioInputParams& params) const
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    IF_ASSERT_FAILED(uri.isValid()) {
+    IF_ASSERT_FAILED(params.isValid()) {
         return nullptr;
     }
 
-    auto search = m_creators.find(uri.type);
+    auto search = m_creators.find(params.type);
 
     if (search == m_creators.end()) {
         return nullptr;
     }
 
-    return search->second->create(uri);
+    return search->second->create(params);
 }
 
 ISynthesizerPtr SynthFactory::createDefault() const
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    IF_ASSERT_FAILED(m_defaultUri.isValid()) {
+    IF_ASSERT_FAILED(m_defaultInputParams.isValid()) {
         return nullptr;
     }
 
-    return createNew(m_defaultUri);
+    return createNew(m_defaultInputParams);
 }
 
-void SynthFactory::registerCreator(const SynthType type, ISynthCreatorPtr creator)
+void SynthFactory::registerCreator(const AudioSourceType type, ISynthCreatorPtr creator)
 {
     Async::call(this, [this, type, creator]() {
         ONLY_AUDIO_WORKER_THREAD;
