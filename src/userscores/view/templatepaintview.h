@@ -47,7 +47,8 @@ private slots:
     void onViewSizeChanged() override;
 
 private:
-    void load() override;
+    void onNotationSetup() override;
+
     void adjustCanvas();
     qreal resolveDefaultScaling() const;
 
