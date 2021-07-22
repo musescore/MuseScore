@@ -25,8 +25,6 @@
 #include <list>
 #include <stack>
 
-#include <QColor>
-
 #include "config.h"
 #include "ipaintprovider.h"
 

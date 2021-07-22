@@ -1475,9 +1475,9 @@ bool Element::setProperty(Pid propertyId, const QVariant& v)
         break;
     case Pid::COLOR:
     {
-//        IF_ASSERT_FAILED(v.canConvert<mu::draw::Color>())
-//        {
-//        }
+        IF_ASSERT_FAILED(!v.isValid() || v.canConvert<mu::draw::Color>())
+        {
+        }
         setColor(v.value<mu::draw::Color>());
         break;
     }

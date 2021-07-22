@@ -168,13 +168,13 @@ bool MStyle::readProperties(XmlReader& e)
                 qreal y = e.doubleAttribute("h", 0.0);
                 set(idx, SizeF(x, y));
                 e.readElementText();
-            } else if (!strcmp("QColor", type)) {
-                QColor c;
+            } else if (!strcmp("QColor", type) || !strcmp("mu::draw::Color", type)) {
+                mu::draw::Color c;
                 c.setRed(e.intAttribute("r"));
                 c.setGreen(e.intAttribute("g"));
                 c.setBlue(e.intAttribute("b"));
                 c.setAlpha(e.intAttribute("a", 255));
-                set(idx, c);
+                set(idx, QVariant::fromValue<mu::draw::Color>(c));
                 e.readElementText();
             } else {
                 qFatal("unhandled type %s", type);

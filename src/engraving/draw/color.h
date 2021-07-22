@@ -85,8 +85,6 @@ private:
 };
 }
 
-#ifndef NO_QT_SUPPORT
 Q_DECLARE_METATYPE(mu::draw::Color);
-#endif
 
 #endif // MU_DRAW_COLOR_H
