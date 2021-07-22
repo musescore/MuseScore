@@ -59,4 +59,6 @@ set(WIDGETS_SRC
     ${CMAKE_CURRENT_LIST_DIR}/voicingSelect.h
     ${CMAKE_CURRENT_LIST_DIR}/stafftextpropertiesdialog.cpp
     ${CMAKE_CURRENT_LIST_DIR}/stafftextpropertiesdialog.h
+    ${CMAKE_CURRENT_LIST_DIR}/timelineview.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/timelineview.h
     )

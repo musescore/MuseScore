@@ -271,6 +271,23 @@ DockPage {
                     text: pianoRollPanel.title
                 }
             }
+        },
+
+        DockPanel {
+            id: timeLinePanel
+
+            objectName: "timeLinePanel"
+            title: qsTrc("appshell", "Timeline")
+
+            allowedAreas: Qt.TopDockWidgetArea | Qt.BottomDockWidgetArea
+
+            height: 200
+            minimumHeight: 100
+            maximumHeight: 300
+
+            TimeLine {
+                anchors.fill: parent
+            }
         }
     ]
 
