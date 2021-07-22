@@ -76,6 +76,10 @@ set(YOUTUBE_API_KEY "" CACHE STRING "YouTube API key")
 
 option(USE_SCORE_ACCESSIBLE_TREE "Use score accessible tree" OFF)
 
+# Temporary flags for MU3 compatibility to make testing easier.
+option(ENGRAVING_COMPAT_WRITESTYLE_302 "Write style to score xml file" ON)
+# -----
+
 option(SOUNDFONT3    "Ogg Vorbis compressed fonts"        ON)  # Enable Ogg Vorbis compressed fonts, requires Ogg & Vorbis
 option(DOWNLOAD_SOUNDFONT "Download the latest soundfont version as part of the build process" ON)
 
