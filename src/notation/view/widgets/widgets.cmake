@@ -61,4 +61,6 @@ set(WIDGETS_SRC
     ${CMAKE_CURRENT_LIST_DIR}/stafftextpropertiesdialog.h
     ${CMAKE_CURRENT_LIST_DIR}/timelineview.cpp
     ${CMAKE_CURRENT_LIST_DIR}/timelineview.h
+    ${CMAKE_CURRENT_LIST_DIR}/timeline.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/timeline.h
     )

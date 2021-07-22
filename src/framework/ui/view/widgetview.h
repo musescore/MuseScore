@@ -28,6 +28,19 @@
 class QWidget;
 
 namespace mu::ui {
+class IDisplayableWidget
+{
+public:
+    virtual ~IDisplayableWidget() = default;
+
+    virtual bool handleEvent(QEvent* event) = 0;
+
+private:
+    friend class WidgetView;
+
+    virtual QWidget* qWidget() = 0;
+};
+
 class WidgetView : public QQuickPaintedItem
 {
     Q_OBJECT
@@ -37,13 +50,13 @@ public:
     ~WidgetView() override;
 
 protected:
-    void setWidget(QWidget* widget);
+    void setWidget(IDisplayableWidget* widget);
 
 private:
     void paint(QPainter* painter) override;
     bool event(QEvent* event) override;
 
-    QWidget* m_widget = nullptr;
+    IDisplayableWidget* m_widget = nullptr;
 };
 }
 

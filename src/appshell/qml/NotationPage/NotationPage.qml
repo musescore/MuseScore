@@ -262,6 +262,8 @@ DockPage {
 
             visible: false
 
+            tabifyPanel: timeLinePanel
+
             Rectangle {
                 anchors.fill: parent
                 color: ui.theme.backgroundPrimaryColor
