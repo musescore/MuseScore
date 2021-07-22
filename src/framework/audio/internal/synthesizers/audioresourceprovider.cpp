@@ -1,7 +1,6 @@
-#include "synthuriprovider.h"
+#include "audioresourceprovider.h"
 
 #include "async/async.h"
-
 #include "log.h"
 
 #include "audioerrors.h"
@@ -12,10 +11,10 @@ using namespace mu::audio;
 using namespace mu::audio::synth;
 using namespace mu::async;
 
-Promise<SynthUriList> SynthUriProvider::uriList(const SynthType type) const
+Promise<AudioResourceIdList> AudioResourceProvider::resourceIdList(const AudioSourceType type) const
 {
-    return Promise<SynthUriList>([this, type](Promise<SynthUriList>::Resolve resolve,
-                                              Promise<SynthUriList>::Reject reject) {
+    return Promise<AudioResourceIdList>([this, type](Promise<AudioResourceIdList>::Resolve resolve,
+                                                     Promise<AudioResourceIdList>::Reject reject) {
         ONLY_AUDIO_WORKER_THREAD;
 
         auto search = m_resolvers.find(type);
@@ -23,12 +22,12 @@ Promise<SynthUriList> SynthUriProvider::uriList(const SynthType type) const
         if (search != m_resolvers.end()) {
             resolve(search->second->resolve());
         } else {
-            reject(static_cast<int>(Err::UknownSynthType), "Unable to find uri resolver for synth type");
+            reject(static_cast<int>(Err::UknownSynthType), "Unable to find resources resolver for audio type");
         }
     }, AudioThread::ID);
 }
 
-void SynthUriProvider::registerResolver(const SynthType type, IUriResolverPtr resolver)
+void AudioResourceProvider::registerResolver(const AudioSourceType type, IResourceResolverPtr resolver)
 {
     Async::call(this, [this, type, resolver]() {
         ONLY_AUDIO_WORKER_THREAD;
@@ -42,7 +41,7 @@ void SynthUriProvider::registerResolver(const SynthType type, IUriResolverPtr re
     }, AudioThread::ID);
 }
 
-void SynthUriProvider::refreshResolvers()
+void AudioResourceProvider::refreshResolvers()
 {
     Async::call(this, [this]() {
         ONLY_AUDIO_WORKER_THREAD;

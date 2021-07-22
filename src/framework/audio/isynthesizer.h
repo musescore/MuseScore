@@ -38,6 +38,7 @@ public:
     virtual bool isValid() const = 0;
 
     virtual std::string name() const = 0;
+    virtual AudioSourceType type() const = 0;
     virtual SoundFontFormats soundFontFormats() const = 0;
 
     virtual Ret init() = 0;

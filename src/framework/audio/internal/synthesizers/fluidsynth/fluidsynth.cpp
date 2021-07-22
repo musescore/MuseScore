@@ -71,6 +71,11 @@ std::string FluidSynth::name() const
     return "Fluid";
 }
 
+AudioSourceType FluidSynth::type() const
+{
+    return AudioSourceType::Fluid;
+}
+
 SoundFontFormats FluidSynth::soundFontFormats() const
 {
     return { SoundFontFormat::SF2, SoundFontFormat::SF3 };

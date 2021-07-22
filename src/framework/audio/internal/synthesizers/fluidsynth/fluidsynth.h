@@ -42,6 +42,7 @@ public:
     bool isValid() const override;
 
     std::string name() const override;
+    AudioSourceType type() const override;
     SoundFontFormats soundFontFormats() const override;
 
     Ret init() override;

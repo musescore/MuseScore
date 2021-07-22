@@ -67,6 +67,11 @@ void VstSynthesiser::setIsActive(bool arg)
     m_isActive = arg;
 }
 
+audio::AudioSourceType VstSynthesiser::type() const
+{
+    return audio::AudioSourceType::Vsti;
+}
+
 std::string VstSynthesiser::name() const
 {
     return m_pluginMeta.name;

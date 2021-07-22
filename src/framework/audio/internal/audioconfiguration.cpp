@@ -46,7 +46,7 @@ static const Settings::Key USER_SOUNDFONTS_PATH("midi", "application/paths/mySou
 
 static const Settings::Key SHOW_CONTROLS_IN_MIXER("midi", "io/midi/showControlsInMixer");
 
-static const std::string DEFAULT_SOUND_FONT_NAME = "sound/MuseScore_General.sf3";     // "GeneralUser GS v1.471.sf2"; // "MuseScore_General.sf3";
+static const AudioResourceId DEFAULT_SOUND_FONT_NAME = "MuseScore_General";     // "GeneralUser GS v1.471.sf2"; // "MuseScore_General.sf3";
 
 void AudioConfiguration::init()
 {
@@ -107,6 +107,11 @@ SoundFontPaths AudioConfiguration::soundFontDirectories() const
     return paths;
 }
 
+async::Channel<io::paths> AudioConfiguration::soundFontDirectoriesChanged() const
+{
+    return m_soundFontDirsChanged;
+}
+
 bool AudioConfiguration::isShowControlsInMixer() const
 {
     return settings()->value(SHOW_CONTROLS_IN_MIXER).toBool();
@@ -117,16 +122,9 @@ void AudioConfiguration::setIsShowControlsInMixer(bool show)
     settings()->setSharedValue(SHOW_CONTROLS_IN_MIXER, Val(show));
 }
 
-SynthUri AudioConfiguration::defaultSynthUri() const
+AudioInputParams AudioConfiguration::defaultAudioInputParams() const
 {
-    static SynthUri defaultUri;
-
-    if (!defaultUri.isValid()) {
-        defaultUri = SynthUri(SynthType::Fluid);
-        defaultUri.addParam("sfpath", Val(globalConfiguration()->appDataPath() + DEFAULT_SOUND_FONT_NAME));
-    }
-
-    return defaultUri;
+    return { AudioSourceType::Fluid, DEFAULT_SOUND_FONT_NAME };
 }
 
 const SynthesizerState& AudioConfiguration::defaultSynthesizerState() const
