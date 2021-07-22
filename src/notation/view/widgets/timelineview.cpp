@@ -22,7 +22,46 @@
 
 #include "timelineview.h"
 
-#include <QPushButton>
+#include "timeline.h"
+
+#include <QSplitter>
+
+namespace mu::notation {
+class TimeLineAdapter : public QSplitter, public ui::IDisplayableWidget
+{
+public:
+    TimeLineAdapter()
+        : QSplitter(nullptr)
+    {
+        setFocusPolicy(Qt::NoFocus);
+        setHandleWidth(0);
+        setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+        setObjectName("TimeLineAdapter");
+
+        m_msTimeline = new Ms::Timeline(this, this);
+    }
+
+    void setScore(Ms::Score* score)
+    {
+        m_msTimeline->setScore(score);
+        m_msTimeline->setScoreView(nullptr);
+    }
+
+private:
+    // IDisplayableWidget
+    QWidget* qWidget() override
+    {
+        return this;
+    }
+
+    bool handleEvent(QEvent* e) override
+    {
+        return m_msTimeline->handleEvent(e);
+    }
+
+    Ms::Timeline* m_msTimeline = nullptr;
+};
+}
 
 using namespace mu::notation;
 
@@ -35,5 +74,23 @@ void TimeLineView::componentComplete()
 {
     WidgetView::componentComplete();
 
-    setWidget(new QPushButton("Hello, World"));
+    TimeLineAdapter* timeline = new TimeLineAdapter();
+
+    globalContext()->currentNotationChanged().onNotify(this, [this, timeline]() {
+        INotationPtr notation = globalContext()->currentNotation();
+
+        if (notation) {
+            timeline->setScore(notation->elements()->msScore());
+        }
+    });
+
+    connect(this, &QQuickItem::widthChanged, [timeline, this]() {
+        timeline->setMinimumSize(width(), height());
+    });
+
+    connect(this, &QQuickItem::heightChanged, [timeline, this]() {
+        timeline->setMinimumSize(width(), height());
+    });
+
+    setWidget(timeline);
 }

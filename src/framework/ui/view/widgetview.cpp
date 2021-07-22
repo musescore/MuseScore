@@ -22,6 +22,8 @@
 
 #include "widgetview.h"
 
+#include <QWidget>
+
 using namespace mu::ui;
 
 WidgetView::WidgetView(QQuickItem* parent)
@@ -41,12 +43,12 @@ WidgetView::~WidgetView()
 
 void WidgetView::paint(QPainter* painter)
 {
-    if (!m_widget) {
+    if (!m_widget || !m_widget->qWidget()) {
         return;
     }
 
-    m_widget->render(painter, QPoint(), QRegion(),
-                       QWidget::DrawWindowBackground | QWidget::DrawChildren);
+    m_widget->qWidget()->render(painter, QPoint(), QRegion(),
+                                QWidget::DrawWindowBackground | QWidget::DrawChildren);
 }
 
 bool WidgetView::event(QEvent* event)
@@ -64,15 +66,10 @@ bool WidgetView::event(QEvent* event)
         setFocus(true);
     }
 
-    if (qApp->sendEvent(m_widget, event)) {
-        update();
-        return true;
-    }
-
-    return QQuickItem::event(event);
+    return m_widget->handleEvent(event);
 }
 
-void WidgetView::setWidget(QWidget* widget)
+void WidgetView::setWidget(IDisplayableWidget* widget)
 {
     m_widget = widget;
 }

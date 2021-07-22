@@ -25,10 +25,16 @@
 
 #include "ui/view/widgetview.h"
 
+#include "modularity/ioc.h"
+#include "context/iglobalcontext.h"
+#include "async/asyncable.h"
+
 namespace mu::notation {
-class TimeLineView : public ui::WidgetView
+class TimeLineView : public ui::WidgetView, public async::Asyncable
 {
     Q_OBJECT
+
+    INJECT(notation, context::IGlobalContext, globalContext)
 
 public:
     explicit TimeLineView(QQuickItem* parent = nullptr);
