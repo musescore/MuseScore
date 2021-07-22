@@ -37,21 +37,6 @@ static const QString CONFIG_KEY("config");
 static const QString SOLOIST_KEY("isSoloist");
 static const QString IS_EXISTING_PART_KEY("isExistingPart");
 
-static QString formatSelectedInstrumentTitle(const Instrument& instrument)
-{
-    const QString& traitName = instrument.trait.name;
-    const QString& instrumentName = instrument.name;
-
-    switch (instrument.trait.type) {
-    case TraitType::Tuning: return mu::qtrc("instruments", "%1 %2").arg(traitName).arg(instrumentName);
-    case TraitType::Course: return mu::qtrc("instruments", "%1 (%2)").arg(instrumentName).arg(traitName);
-    case TraitType::Transposition: return mu::qtrc("instruments", "%1 in %2").arg(instrumentName).arg(traitName);
-    case TraitType::Unknown: break;
-    }
-
-    return instrumentName;
-}
-
 InstrumentListModel::InstrumentListModel(QObject* parent)
     : QObject(parent)
 {
@@ -318,7 +303,7 @@ void InstrumentListModel::selectInstrument(const QString& instrumentName, const 
     info.isExistingPart = false;
     info.isSoloist = false;
     info.id = suitedInstrument.templateId;
-    info.name = formatSelectedInstrumentTitle(suitedInstrument);
+    info.name = formatInstrumentTitle(suitedInstrument);
     info.familyId = suitedInstrument.familyId;
     info.config = suitedInstrument;
 
