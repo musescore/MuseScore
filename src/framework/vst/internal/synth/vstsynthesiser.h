@@ -25,6 +25,7 @@
 
 #include "audio/isynthesizer.h"
 #include "audio/iaudioconfiguration.h"
+#include "audio/audiotypes.h"
 #include "modularity/ioc.h"
 
 #include "vsttypes.h"
@@ -46,6 +47,7 @@ public:
     bool isActive() const override;
     void setIsActive(bool arg) override;
 
+    audio::AudioSourceType type() const override;
     std::string name() const override;
 
     audio::synth::SoundFontFormats soundFontFormats() const override;

@@ -30,7 +30,7 @@
 #include "async/asyncable.h"
 #include "iinteractive.h"
 
-#include "isoundfontsprovider.h"
+#include "iaudioresourceprovider.h"
 #include "iaudioconfiguration.h"
 
 namespace mu::audio::synth {
@@ -38,7 +38,7 @@ class SynthsSettingsModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(audio, ISoundFontsProvider, sfprovider)
+    INJECT(audio, IAudioResourceProvider, resourceProvider)
     INJECT(audio, IAudioConfiguration, configuration)
     INJECT(audio, framework::IInteractive, interactive)
 

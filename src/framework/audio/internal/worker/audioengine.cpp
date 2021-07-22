@@ -29,7 +29,6 @@
 #include "audioerrors.h"
 
 using namespace mu::audio;
-using namespace mu::audio::synth;
 
 AudioEngine* AudioEngine::instance()
 {

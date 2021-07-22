@@ -246,9 +246,18 @@ bool MidiAudioSource::sendEvents(const std::vector<Event>& events)
 
 void MidiAudioSource::resolveSynth(const AudioInputParams& inputParams)
 {
-    if (m_synth /*&& m_synth->name() == inputParams*/) {
+    if (m_synth && m_synth->type() == inputParams.type) {
         return;
     }
+
+    /* TODO
+    m_synth = synthFactory()->createNew(inputParams);
+
+    IF_ASSERT_FAILED(m_synth) {
+       m_synth = synthFactory()->createDefault();
+       return;
+    }
+    */
 
     m_synth = synthFactory()->createDefault();
 }

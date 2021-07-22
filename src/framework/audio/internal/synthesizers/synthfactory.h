@@ -12,17 +12,17 @@ namespace mu::audio::synth {
 class SynthFactory : public ISynthFactory, public async::Asyncable
 {
 public:
-    void init(const SynthUri& defaultUri) override;
+    void init(const AudioInputParams& defaultInputParams) override;
 
-    ISynthesizerPtr createNew(const SynthUri& uri) const override;
+    ISynthesizerPtr createNew(const AudioInputParams& params) const override;
     ISynthesizerPtr createDefault() const override;
 
-    void registerCreator(const SynthType type, ISynthCreatorPtr creator) override;
+    void registerCreator(const AudioSourceType type, ISynthCreatorPtr creator) override;
 
 private:
-    std::map<SynthType, ISynthCreatorPtr> m_creators;
+    std::map<AudioSourceType, ISynthCreatorPtr> m_creators;
 
-    SynthUri m_defaultUri;
+    AudioInputParams m_defaultInputParams;
 };
 }
 

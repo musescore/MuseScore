@@ -43,12 +43,13 @@ public:
     audioch_t audioChannelsCount() const override;
     unsigned int driverBufferSize() const override;
 
-    synth::SoundFontPaths soundFontDirectories() const override;
+    io::paths soundFontDirectories() const override;
+    async::Channel<io::paths> soundFontDirectoriesChanged() const override;
 
     bool isShowControlsInMixer() const override;
     void setIsShowControlsInMixer(bool show) override;
 
-    synth::SynthUri defaultSynthUri() const override;
+    AudioInputParams defaultAudioInputParams() const override;
 
     const synth::SynthesizerState& defaultSynthesizerState() const;
     const synth::SynthesizerState& synthesizerState() const override;
@@ -57,6 +58,7 @@ public:
     async::Notification synthesizerStateGroupChanged(const std::string& groupName) const override;
 
 private:
+    async::Channel<io::paths> m_soundFontDirsChanged;
 
     io::path stateFilePath() const;
     bool readState(const io::path& path, synth::SynthesizerState& state) const;

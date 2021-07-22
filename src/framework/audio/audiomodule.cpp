@@ -36,9 +36,8 @@
 #include "internal/worker/playback.h"
 
 // synthesizers
-#include "internal/synthesizers/fluidsynth/fluidcreator.h"
-#include "internal/synthesizers/fluidsynth/fluiduriresolver.h"
-#include "internal/synthesizers/synthuriprovider.h"
+#include "internal/synthesizers/fluidsynth/fluidresolver.h"
+#include "internal/synthesizers/audioresourceprovider.h"
 #include "internal/synthesizers/synthfactory.h"
 
 #include "view/synthssettingsmodel.h"
@@ -56,7 +55,7 @@ static std::shared_ptr<AudioConfiguration> s_audioConfiguration = std::make_shar
 static std::shared_ptr<AudioThread> s_audioWorker = std::make_shared<AudioThread>();
 static std::shared_ptr<mu::audio::AudioBuffer> s_audioBuffer = std::make_shared<mu::audio::AudioBuffer>();
 
-static std::shared_ptr<SynthUriProvider> s_synthUriProvider = std::make_shared<SynthUriProvider>();
+static std::shared_ptr<AudioResourceProvider> s_audioResourceProvider = std::make_shared<AudioResourceProvider>();
 static std::shared_ptr<SynthFactory> s_synthFactory = std::make_shared<SynthFactory>();
 
 static std::shared_ptr<Playback> s_playbackFacade = std::make_shared<Playback>();
@@ -106,7 +105,7 @@ void AudioModule::registerExports()
 
     // synthesizers
     ioc()->registerExport<ISynthFactory>(moduleName(), s_synthFactory);
-    ioc()->registerExport<ISynthUriProvider>(moduleName(), s_synthUriProvider);
+    ioc()->registerExport<IAudioResourceProvider>(moduleName(), s_audioResourceProvider);
 }
 
 void AudioModule::registerResources()
@@ -192,9 +191,11 @@ void AudioModule::onInit(const framework::IApplication::RunMode& mode)
         AudioEngine::instance()->setSampleRate(activeSpec.sampleRate);
         AudioEngine::instance()->setReadBufferSize(activeSpec.samples);
 
-        s_synthUriProvider->registerResolver(SynthType::Fluid, std::make_shared<FluidUriResolver>());
-        s_synthFactory->registerCreator(SynthType::Fluid, std::make_shared<FluidCreator>());
-        s_synthFactory->init(s_audioConfiguration->defaultSynthUri());
+        auto fluidResolver = std::make_shared<FluidResolver>(s_audioConfiguration->soundFontDirectories(),
+                                                             s_audioConfiguration->soundFontDirectoriesChanged());
+        s_audioResourceProvider->registerResolver(AudioSourceType::Fluid, fluidResolver);
+        s_synthFactory->registerCreator(AudioSourceType::Fluid, fluidResolver);
+        s_synthFactory->init(s_audioConfiguration->defaultAudioInputParams());
 
         // Initialize IPlayback facade and make sure that it's initialized after the audio-engine
         s_playbackFacade->init();

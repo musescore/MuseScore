@@ -42,6 +42,12 @@ std::string SanitySynthesizer::name() const
     return m_synth->name();
 }
 
+audio::AudioSourceType SanitySynthesizer::type() const
+{
+    ONLY_AUDIO_WORKER_THREAD;
+    return m_synth->type();
+}
+
 SoundFontFormats SanitySynthesizer::soundFontFormats() const
 {
     ONLY_AUDIO_WORKER_THREAD;

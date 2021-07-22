@@ -51,7 +51,8 @@ using TrackName = std::string;
 using MixerChannelId = int32_t;
 
 using AudioSourceName = std::string;
-using AudioResourceName = std::string;
+using AudioResourceId = std::string;
+using AudioResourceIdList = std::vector<AudioResourceId>;
 
 using FxProcessorId = std::string;
 using FxProcessorIdList =  std::vector<FxProcessorId>;
@@ -63,7 +64,7 @@ enum class AudioFxType {
 
 struct AudioFxParams {
     AudioFxType type = AudioFxType::Undefined;
-    AudioResourceName resourceName;
+    AudioResourceId resourceName;
     bool active = false;
 
     bool operator ==(const AudioFxParams& other) const
@@ -92,18 +93,23 @@ struct AudioOutputParams {
 enum class AudioSourceType {
     Undefined = -1,
     Fluid,
-    Vsti,
-    MuseSampler
+    Vsti
 };
 
 struct AudioSourceParams {
     AudioSourceType type = AudioSourceType::Undefined;
-    AudioResourceName resourceName;
+    AudioResourceId resourceId;
+
+    bool isValid() const
+    {
+        return type != AudioSourceType::Undefined
+               && !resourceId.empty();
+    }
 
     bool operator ==(const AudioSourceParams& other) const
     {
         return type == other.type
-               && resourceName == other.resourceName;
+               && resourceId == other.resourceId;
     }
 };
 

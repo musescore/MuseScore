@@ -28,7 +28,6 @@
 #include "async/asyncable.h"
 #include "retval.h"
 
-#include "isoundfontsprovider.h"
 #include "iaudiodriver.h"
 #include "internal/worker/mixer.h"
 #include "internal/iaudiobuffer.h"
@@ -36,7 +35,6 @@
 namespace mu::audio {
 class AudioEngine : public async::Asyncable
 {
-    INJECT(audio, synth::ISoundFontsProvider, soundFontsProvider)
 public:
     ~AudioEngine();
 
