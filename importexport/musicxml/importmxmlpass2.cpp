@@ -2041,9 +2041,20 @@ void MusicXMLParserPass2::part()
             auto sp = i.key();
             Fraction tick1 = Fraction::fromTicks(i.value().first);
             Fraction tick2 = Fraction::fromTicks(i.value().second);
-            if (sp->isPedal() && toPedal(sp)->endHookType() == HookType::HOOK_45)
+            if (sp->isPedal() && toPedal(sp)->endHookType() == HookType::HOOK_45) {
                   // Handle pedal change end tick (slightly hacky)
-                  tick2 += _score->findCR(tick2, sp->track())->ticks();
+                  // Find CR on the end tick of 
+                  ChordRest* terminatingCR = _score->findCR(tick2, sp->effectiveTrack2());
+                  for (int track = _pass1.getPart(id)->startTrack(); track <= _pass1.getPart(id)->endTrack(); ++track) {
+                        ChordRest* tempCR = _score->findCR(tick2, track);
+                        if (!terminatingCR
+                        || (tempCR && tempCR->tick() > terminatingCR->tick())
+                        || (tempCR && tempCR->tick() == terminatingCR->tick() && tempCR->ticks() < terminatingCR->ticks()))
+                              terminatingCR = tempCR;
+                        }
+                  tick2 += terminatingCR->ticks();
+                  sp->setTrack2(terminatingCR->track());
+                  }
             //qDebug("spanner %p tp %d tick1 %s tick2 %s track1 %d track2 %d",
             //       sp, sp->type(), qPrintable(tick1.print()), qPrintable(tick2.print()), sp->track(), sp->track2());
             if (incompleteSpanners.find(sp) == incompleteSpanners.end()) {
