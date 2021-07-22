@@ -25,12 +25,22 @@
 #include "libmscore/score.h"
 #include "libmscore/scorefont.h"
 
+#include "log.h"
+
 using namespace mu::engraving::compat;
 using namespace Ms;
 
 void ReadScoreHook::installReadStyleHook(Ms::MasterScore* score, const QByteArray& scoreData, const QString& completeBaseName)
 {
     m_readStyle = std::make_shared<ReadStyleHook>(score, scoreData, completeBaseName);
+}
+
+void ReadScoreHook::installReadStyleHook(Ms::Score* score)
+{
+    IF_ASSERT_FAILED(!score->isMaster()) {
+        return;
+    }
+    m_readStyle = std::make_shared<ReadStyleHook>(score, QByteArray(), QString());
 }
 
 void ReadScoreHook::setupDefaultStyle()

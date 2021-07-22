@@ -41,6 +41,7 @@ public:
 
     // Style
     void installReadStyleHook(Ms::MasterScore* score, const QByteArray& scoreData, const QString& completeBaseName);
+    void installReadStyleHook(Ms::Score* score);
     void setupDefaultStyle();
     void onReadStyleTag302(Ms::Score* score, Ms::XmlReader& xml);
 

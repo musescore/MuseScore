@@ -27,7 +27,6 @@
 #include <QString>
 
 namespace Ms {
-class MasterScore;
 class Score;
 class XmlReader;
 class MStyle;
@@ -37,7 +36,7 @@ namespace mu::engraving::compat {
 class ReadStyleHook
 {
 public:
-    ReadStyleHook(Ms::MasterScore* score, const QByteArray& scoreData, const QString& completeBaseName);
+    ReadStyleHook(Ms::Score* score, const QByteArray& scoreData, const QString& completeBaseName);
 
     void setupDefaultStyle();
 
@@ -47,7 +46,7 @@ public:
     static bool readStyleProperties(Ms::MStyle* style, Ms::XmlReader& e);
 
 private:
-    Ms::MasterScore* m_score = nullptr;
+    Ms::Score* m_score = nullptr;
     const QByteArray& m_scoreData;
     const QString& m_completeBaseName;
 };
