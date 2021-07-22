@@ -25,14 +25,16 @@
 
 #include <memory>
 
+#include "audio/audiotypes.h"
+
 namespace mu::project {
 class IProjectAudioSettings
 {
 public:
     virtual ~IProjectAudioSettings() = default;
 
-    virtual int someValue() const = 0;
-    virtual void setSomeValue(int val) = 0;
+    virtual audio::AudioOutputParams masterAudioOutputParams() const = 0;
+    virtual void setMasterAudioOutputParams(const audio::AudioOutputParams& params) = 0;
 };
 
 using IProjectAudioSettingsPtr = std::shared_ptr<IProjectAudioSettings>;

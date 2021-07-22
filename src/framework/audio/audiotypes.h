@@ -79,14 +79,14 @@ struct AudioOutputParams {
     AudioFxParams fxParams;
     volume_db_t volume = 1.f;
     balance_t balance = 0.f;
-    bool isMuted = false;
+    bool muted = false;
 
     bool operator ==(const AudioOutputParams& other) const
     {
         return fxParams == other.fxParams
                && volume == other.volume
                && balance == other.balance
-               && isMuted == other.isMuted;
+               && muted == other.muted;
     }
 };
 
