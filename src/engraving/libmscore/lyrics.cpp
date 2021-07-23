@@ -22,7 +22,6 @@
 
 #include "lyrics.h"
 
-#include <QGuiApplication>
 #include <QRegularExpression>
 
 #include "chord.h"

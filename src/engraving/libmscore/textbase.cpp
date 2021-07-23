@@ -22,8 +22,6 @@
 
 #include <cmath>
 
-#include <QGuiApplication>
-
 #include <QStack>
 #include <QTextFragment>
 #include <QTextDocument>
