@@ -55,7 +55,7 @@ void PainterPath::moveTo(const PointF& p)
     } else {
         m_elements.push_back({ p.x(), p.y(), ElementType::MoveToElement });
     }
-    m_cStart = m_elements.size() - 1;
+    m_cStart = static_cast<int>(m_elements.size() - 1);
 }
 
 void PainterPath::lineTo(const PointF& p)
@@ -109,7 +109,7 @@ void PainterPath::translate(double dx, double dy)
     if (qFuzzyIsNull(dx) && qFuzzyIsNull(dy)) {
         return;
     }
-    int m_elementsLeft = m_elements.size();
+    auto m_elementsLeft = m_elements.size();
     if (m_elementsLeft <= 0) {
         return;
     }
@@ -142,7 +142,7 @@ bool PainterPath::isEmpty() const
     return m_elements.empty() || (m_elements.size() == 1 && m_elements.front().type == ElementType::MoveToElement);
 }
 
-int PainterPath::elementCount() const
+size_t PainterPath::elementCount() const
 {
     return m_elements.size();
 }

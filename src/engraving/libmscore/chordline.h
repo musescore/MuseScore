@@ -82,7 +82,7 @@ public:
     Pid propertyId(const QStringRef& xmlName) const override;
 
     Element::EditBehavior normalModeEditBehavior() const override { return Element::EditBehavior::Edit; }
-    int gripsCount() const override { return _straight ? 1 : path.elementCount(); }
+    int gripsCount() const override { return _straight ? 1 : static_cast<int>(path.elementCount()); }
     Grip initialEditModeGrip() const override { return Grip(gripsCount() - 1); }
     Grip defaultGrip() const override { return initialEditModeGrip(); }
     std::vector<mu::PointF> gripsPositions(const EditData&) const override;

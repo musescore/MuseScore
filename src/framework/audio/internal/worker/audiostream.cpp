@@ -88,7 +88,7 @@ unsigned int AudioStream::copySamplesToBuffer(float* buffer, unsigned int fromSa
     }
 
     if (to >= m_data.size()) {
-        to = m_data.size() - 1;
+        to = static_cast<unsigned int>(m_data.size() - 1);
         count = to - from;
     }
 

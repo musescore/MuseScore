@@ -52,7 +52,7 @@ Promise<TrackSequenceId> Playback::addSequence()
     return Promise<TrackSequenceId>([this](Promise<TrackSequenceId>::Resolve resolve, Promise<TrackSequenceId>::Reject /*reject*/) {
         ONLY_AUDIO_WORKER_THREAD;
 
-        TrackSequenceId newId = m_sequences.size();
+        TrackSequenceId newId = static_cast<TrackSequenceId>(m_sequences.size());
 
         m_sequences.emplace(newId, std::make_shared<TrackSequence>(newId));
         m_sequenceAdded.send(newId);
