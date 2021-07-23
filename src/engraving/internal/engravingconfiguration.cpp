@@ -22,6 +22,7 @@
 #include "engravingconfiguration.h"
 
 #include "global/settings.h"
+#include "draw/color.h"
 
 using namespace mu::engraving;
 using namespace mu::framework;
@@ -49,92 +50,92 @@ void EngravingConfiguration::setPartStyleFilePath(const QString& path)
     settings()->setSharedValue(PART_STYLE_FILE_PATH, Val(path.toStdString()));
 }
 
-QString EngravingConfiguration::keysigColor() const
+mu::draw::Color EngravingConfiguration::keysigColor() const
 {
     return "#808080";
 }
 
-QString EngravingConfiguration::defaultColor() const
+mu::draw::Color EngravingConfiguration::defaultColor() const
 {
     return "#000000";
 }
 
-QString EngravingConfiguration::whiteColor() const
+mu::draw::Color EngravingConfiguration::whiteColor() const
 {
     return "#FFFFFF";
 }
 
-QString EngravingConfiguration::blackColor() const
+mu::draw::Color EngravingConfiguration::blackColor() const
 {
     return "#000000";
 }
 
-QString EngravingConfiguration::redColor() const
+mu::draw::Color EngravingConfiguration::redColor() const
 {
     return "#FF0000";
 }
 
-QString EngravingConfiguration::invisibleColor() const
+mu::draw::Color EngravingConfiguration::invisibleColor() const
 {
     return "#808080";
 }
 
-QString EngravingConfiguration::lassoColor() const
+mu::draw::Color EngravingConfiguration::lassoColor() const
 {
     return "#00323200";
 }
 
-QString EngravingConfiguration::figuredBassColor() const
+mu::draw::Color EngravingConfiguration::figuredBassColor() const
 {
     return "#D3D3D3";
 }
 
-QString EngravingConfiguration::selectionColor() const
+mu::draw::Color EngravingConfiguration::selectionColor() const
 {
     return "#4682B4";
 }
 
-QString EngravingConfiguration::warningColor() const
+mu::draw::Color EngravingConfiguration::warningColor() const
 {
     return "#808000";
 }
 
-QString EngravingConfiguration::warningSelectedColor() const
+mu::draw::Color EngravingConfiguration::warningSelectedColor() const
 {
     return "#565600";
 }
 
-QString EngravingConfiguration::criticalColor() const
+mu::draw::Color EngravingConfiguration::criticalColor() const
 {
     return redColor();
 }
 
-QString EngravingConfiguration::criticalSelectedColor() const
+mu::draw::Color EngravingConfiguration::criticalSelectedColor() const
 {
     return "#8B0000";
 }
 
-QString EngravingConfiguration::editColor() const
+mu::draw::Color EngravingConfiguration::editColor() const
 {
     return "#C0C0C0";
 }
 
-QString EngravingConfiguration::harmonyColor() const
+mu::draw::Color EngravingConfiguration::harmonyColor() const
 {
     return redColor();
 }
 
-QString EngravingConfiguration::textBaseFrameColor() const
+mu::draw::Color EngravingConfiguration::textBaseFrameColor() const
 {
     return blackColor();
 }
 
-QString EngravingConfiguration::textBaseBgColor() const
+mu::draw::Color EngravingConfiguration::textBaseBgColor() const
 {
     return "#00FFFFFF";
 }
 
-QString EngravingConfiguration::shadowNoteColor() const
+mu::draw::Color EngravingConfiguration::shadowNoteColor() const
 {
     // value of QColor::lighter(SHADOW_NOTE_LIGHT) for MScore::selectColor[voice()] when SHADOW_NOTE_LIGHT = 135
     return "#03FF88";

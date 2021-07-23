@@ -1392,13 +1392,13 @@ void Note::draw(mu::draw::Painter* painter) const
                     view->drawBackground(painter, bb);
                 }
             } else {
-                painter->fillRect(bb, mu::draw::Color(engravingConfiguration()->whiteColor()));
+                painter->fillRect(bb, engravingConfiguration()->whiteColor());
             }
 
             if (fretConflict() && !score()->printing() && score()->showUnprintable()) {                //on fret conflict, draw on red background
                 painter->save();
-                painter->setPen(mu::draw::Color(engravingConfiguration()->criticalColor()));
-                painter->setBrush(mu::draw::Brush(engravingConfiguration()->criticalColor()));
+                painter->setPen(engravingConfiguration()->criticalColor());
+                painter->setBrush(engravingConfiguration()->criticalColor());
                 painter->drawRect(bb);
                 painter->restore();
             }
@@ -1422,17 +1422,15 @@ void Note::draw(mu::draw::Painter* painter) const
             const Instrument* in = part()->instrument(chord()->tick());
             int i = ppitch();
             if (i < in->minPitchP() || i > in->maxPitchP()) {
-                painter->setPen(selected() ? mu::draw::Color(engravingConfiguration()->criticalSelectedColor()) : mu::draw::Color(
-                                    engravingConfiguration()->criticalColor()));
+                painter->setPen(selected() ? engravingConfiguration()->criticalSelectedColor() : engravingConfiguration()->criticalColor());
             } else if (i < in->minPitchA() || i > in->maxPitchA()) {
-                painter->setPen(selected() ? mu::draw::Color(engravingConfiguration()->warningSelectedColor()) : mu::draw::Color(
-                                    engravingConfiguration()->warningColor()));
+                painter->setPen(selected() ? engravingConfiguration()->warningSelectedColor() : engravingConfiguration()->warningColor());
             }
         }
         // draw blank notehead to avoid staff and ledger lines
         if (_cachedSymNull != SymId::noSym) {
             painter->save();
-            painter->setPen(mu::draw::Color(engravingConfiguration()->whiteColor()));
+            painter->setPen(engravingConfiguration()->whiteColor());
             drawSymbol(_cachedSymNull, painter);
             painter->restore();
         }

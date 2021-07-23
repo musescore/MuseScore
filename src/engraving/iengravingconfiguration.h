@@ -26,6 +26,10 @@
 
 #include "modularity/imoduleexport.h"
 
+namespace mu::draw {
+class Color;
+}
+
 namespace mu::engraving {
 class IEngravingConfiguration : MODULE_EXPORT_INTERFACE
 {
@@ -39,24 +43,24 @@ public:
     virtual QString partStyleFilePath() const = 0;
     virtual void setPartStyleFilePath(const QString& path) = 0;
 
-    virtual QString defaultColor() const = 0;
-    virtual QString blackColor() const = 0;
-    virtual QString whiteColor() const = 0;
-    virtual QString redColor() const = 0;
-    virtual QString invisibleColor() const = 0;
-    virtual QString lassoColor() const = 0;
-    virtual QString keysigColor() const = 0;
-    virtual QString figuredBassColor() const = 0;
-    virtual QString selectionColor() const = 0;
-    virtual QString warningColor() const = 0;
-    virtual QString warningSelectedColor() const = 0;
-    virtual QString criticalColor() const = 0;
-    virtual QString criticalSelectedColor() const = 0;
-    virtual QString editColor() const = 0;
-    virtual QString harmonyColor() const = 0;
-    virtual QString textBaseFrameColor() const = 0;
-    virtual QString textBaseBgColor() const = 0;
-    virtual QString shadowNoteColor() const = 0;
+    virtual mu::draw::Color defaultColor() const = 0;
+    virtual mu::draw::Color blackColor() const = 0;
+    virtual mu::draw::Color whiteColor() const = 0;
+    virtual mu::draw::Color redColor() const = 0;
+    virtual mu::draw::Color invisibleColor() const = 0;
+    virtual mu::draw::Color lassoColor() const = 0;
+    virtual mu::draw::Color keysigColor() const = 0;
+    virtual mu::draw::Color figuredBassColor() const = 0;
+    virtual mu::draw::Color selectionColor() const = 0;
+    virtual mu::draw::Color warningColor() const = 0;
+    virtual mu::draw::Color warningSelectedColor() const = 0;
+    virtual mu::draw::Color criticalColor() const = 0;
+    virtual mu::draw::Color criticalSelectedColor() const = 0;
+    virtual mu::draw::Color editColor() const = 0;
+    virtual mu::draw::Color harmonyColor() const = 0;
+    virtual mu::draw::Color textBaseFrameColor() const = 0;
+    virtual mu::draw::Color textBaseBgColor() const = 0;
+    virtual mu::draw::Color shadowNoteColor() const = 0;
 };
 }
 

@@ -38,7 +38,7 @@ class Color
 public:
     Color();
     Color(const Color& other);
-    Color(int red, int green, int blue, int alpha = m_defaultAlpha);
+    Color(int red, int green, int blue, int alpha = DEFAULT_ALPHA);
     Color(const char* color);
 
 #ifndef NO_QT_SUPPORT
@@ -81,14 +81,14 @@ public:
     QColor toQColor() const;
 #endif
 
-    static constexpr int m_defaultAlpha = 255;
+    static constexpr int DEFAULT_ALPHA = 255;
 
 private:
 
     void setRgba(int r, int g, int b, int a);
     void setRgba(Rgba rgb);
 
-    Rgba m_rgba = rgba(0, 0, 0, m_defaultAlpha);
+    Rgba m_rgba = rgba(0, 0, 0, DEFAULT_ALPHA);
     bool m_isValid = true;
 };
 }
