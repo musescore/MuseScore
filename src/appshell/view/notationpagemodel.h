@@ -60,6 +60,7 @@ public:
 
     Q_INVOKABLE void setPianoRollDockName(const QString& dockName);
     Q_INVOKABLE void setMixerDockName(const QString& dockName);
+    Q_INVOKABLE void setTimelineDockName(const QString& dockName);
 
     Q_INVOKABLE void setStatusBarDockName(const QString& dockName);
 
