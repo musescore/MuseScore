@@ -87,7 +87,7 @@ RetVal<TrackId> TrackSequence::addTrack(const std::string& trackName, const midi
         return result;
     }
 
-    TrackId newId = m_tracks.size();
+    TrackId newId = static_cast<TrackId>(m_tracks.size());
 
     MidiTrack track;
     track.id = newId;
@@ -119,7 +119,7 @@ RetVal<TrackId> TrackSequence::addTrack(const std::string& trackName, io::Device
         return result;
     }
 
-    TrackId newId = m_tracks.size();
+    TrackId newId = static_cast<TrackId>(m_tracks.size());
 
     AudioTrack track;
     track.id = newId;

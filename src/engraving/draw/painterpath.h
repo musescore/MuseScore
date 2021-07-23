@@ -94,7 +94,7 @@ public:
     RectF boundingRect() const;
 
     bool isEmpty() const;
-    int elementCount() const;
+    size_t elementCount() const;
     PainterPath::Element elementAt(int i) const;
     void addRect(const RectF& r);
     inline void addRect(double x, double y, double w, double h)

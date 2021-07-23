@@ -64,7 +64,7 @@ RetVal<IMixerChannelPtr> Mixer::addChannel(IAudioSourcePtr source, const AudioOu
         return result;
     }
 
-    MixerChannelId newId = m_mixerChannels.size();
+    MixerChannelId newId = static_cast<MixerChannelId>(m_mixerChannels.size());
     m_mixerChannels.emplace(newId, std::make_shared<MixerChannel>(newId, std::move(source), params, paramsChanged, m_sampleRate));
 
     result.val = m_mixerChannels[newId];
