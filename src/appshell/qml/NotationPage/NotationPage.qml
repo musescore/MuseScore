@@ -82,6 +82,7 @@ DockPage {
         pageModel.setPalettePanelDockName(palettePanel.objectName)
         pageModel.setPianoRollDockName(pianoRollPanel.objectName)
         pageModel.setMixerDockName(mixerPanel.objectName)
+        pageModel.setTimelineDockName(timelinePanel.objectNme)
         pageModel.setStatusBarDockName(notationStatusBar.objectName)
 
         Qt.callLater(pageModel.init, root.dockWindow)
@@ -262,7 +263,7 @@ DockPage {
 
             visible: false
 
-            tabifyPanel: timeLinePanel
+            tabifyPanel: timelinePanel
 
             Rectangle {
                 anchors.fill: parent
@@ -276,9 +277,9 @@ DockPage {
         },
 
         DockPanel {
-            id: timeLinePanel
+            id: timelinePanel
 
-            objectName: "timeLinePanel"
+            objectName: "timelinePanel"
             title: qsTrc("appshell", "Timeline")
 
             allowedAreas: Qt.TopDockWidgetArea | Qt.BottomDockWidgetArea
