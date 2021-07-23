@@ -1653,8 +1653,8 @@ TextBase::TextBase(Score* s, Tid tid, ElementFlags f)
     _textLineSpacing        = 1.0;
 
     _tid                    = tid;
-    _bgColor                = mu::draw::Color(engravingConfiguration()->textBaseBgColor());
-    _frameColor             = mu::draw::Color(engravingConfiguration()->textBaseFrameColor());
+    _bgColor                = engravingConfiguration()->textBaseBgColor();
+    _frameColor             = engravingConfiguration()->textBaseFrameColor();
     _align                  = Align::LEFT;
     _frameType              = FrameType::NO_FRAME;
     _frameWidth             = Spatium(0.1);
@@ -1709,7 +1709,7 @@ TextBase::~TextBase()
 
 void TextBase::drawSelection(mu::draw::Painter* p, const RectF& r) const
 {
-    mu::draw::Brush bg(mu::draw::Color(engravingConfiguration()->selectionColor()));
+    mu::draw::Brush bg(engravingConfiguration()->selectionColor());
     p->setCompositionMode(mu::draw::CompositionMode::HardLight);
     p->setBrush(bg);
     p->setNoPen();
@@ -3376,7 +3376,7 @@ void TextBase::drawEditMode(mu::draw::Painter* p, EditData& ed)
 
     Transform transform = p->worldTransform();
     p->translate(-pos);
-    p->setPen(Pen(Color(engravingConfiguration()->editColor()), 4.0 / transform.m11()));    // 4 pixel pen size
+    p->setPen(Pen(engravingConfiguration()->editColor(), 4.0 / transform.m11()));    // 4 pixel pen size
     p->setBrush(BrushStyle::NoBrush);
 
     qreal m = spatium();

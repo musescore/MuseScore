@@ -10,14 +10,15 @@ namespace mu::draw {
 static constexpr int fromHex(uint c);
 static int hex2int(const char* s, int n);
 static bool getHexRgb(const char* name, size_t len, mu::draw::Rgba* rgba);
-static std::string rgb2hex(int r, int g, int b, int a = Color::m_defaultAlpha);
+static std::string rgb2hex(int r, int g, int b, int a = Color::DEFAULT_ALPHA);
 static std::string rgb2hex(Rgba rgba);
 static constexpr bool isValidComp(int num);
-static constexpr bool isRgbaValid(int r, int g, int b, int a = Color::m_defaultAlpha);
+static constexpr bool isRgbaValid(int r, int g, int b, int a = Color::DEFAULT_ALPHA);
 static void insertHexComponent(int num, std::stringstream& ss);
 
 Color::Color()
 {
+    m_isValid = false;
 }
 
 Color::Color(const Color& other)
@@ -291,7 +292,7 @@ static std::string rgb2hex(int r, int g, int b, int a)
     insertHexComponent(r, ss);
     insertHexComponent(g, ss);
     insertHexComponent(b, ss);
-    if (a != Color::m_defaultAlpha) {
+    if (a != Color::DEFAULT_ALPHA) {
         insertHexComponent(a, ss);
     }
     return ss.str();

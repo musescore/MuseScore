@@ -510,7 +510,6 @@ mu::draw::Color Element::curColor() const
 
 mu::draw::Color Element::curColor(bool isVisible) const
 {
-    color().toString();
     return curColor(isVisible, color());
 }
 
@@ -520,7 +519,7 @@ mu::draw::Color Element::curColor(bool isVisible, mu::draw::Color normalColor) c
     // printing
     if (score() && score()->printing()) {
         // TODO: fix crash when INJECT is present and replace with the comment
-        return MScore::defaultColor; //(normalColor == mu::draw::Color(engravingConfiguration()->defaultColor())) ? mu::draw::Color(engravingConfiguration()->blackColor()) : normalColor;
+        return MScore::defaultColor; //(normalColor == engravingConfiguration()->defaultColor()) ? engravingConfiguration()->blackColor() : normalColor;
     }
 
     if (flag(ElementFlag::DROP_TARGET)) {
@@ -549,7 +548,7 @@ mu::draw::Color Element::curColor(bool isVisible, mu::draw::Color normalColor) c
         }
     }
     if (!isVisible) {
-        return mu::draw::Color(128, 128, 128);//mu::draw::Color(engravingConfiguration()->invisibleColor());
+        return mu::draw::Color(128, 128, 128);// engravingConfiguration()->invisibleColor();
     }
     return normalColor;
 }

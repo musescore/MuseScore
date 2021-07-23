@@ -36,24 +36,24 @@ public:
     QString partStyleFilePath() const override;
     void setPartStyleFilePath(const QString& path) override;
 
-    QString keysigColor() const override;
-    QString defaultColor() const override;
-    QString whiteColor() const override;
-    QString blackColor() const override;
-    QString redColor() const override;
-    QString invisibleColor() const override;
-    QString lassoColor() const override;
-    QString figuredBassColor() const override;
-    QString selectionColor() const override;
-    QString warningColor() const override;
-    QString warningSelectedColor() const override;
-    QString criticalColor() const override;
-    QString criticalSelectedColor() const override;
-    QString editColor() const override;
-    QString harmonyColor() const override;
-    QString textBaseFrameColor() const override;
-    QString textBaseBgColor() const override;
-    QString shadowNoteColor() const override;
+    mu::draw::Color keysigColor() const override;
+    mu::draw::Color defaultColor() const override;
+    mu::draw::Color whiteColor() const override;
+    mu::draw::Color blackColor() const override;
+    mu::draw::Color redColor() const override;
+    mu::draw::Color invisibleColor() const override;
+    mu::draw::Color lassoColor() const override;
+    mu::draw::Color figuredBassColor() const override;
+    mu::draw::Color selectionColor() const override;
+    mu::draw::Color warningColor() const override;
+    mu::draw::Color warningSelectedColor() const override;
+    mu::draw::Color criticalColor() const override;
+    mu::draw::Color criticalSelectedColor() const override;
+    mu::draw::Color editColor() const override;
+    mu::draw::Color harmonyColor() const override;
+    mu::draw::Color textBaseFrameColor() const override;
+    mu::draw::Color textBaseBgColor() const override;
+    mu::draw::Color shadowNoteColor() const override;
 };
 }
 
