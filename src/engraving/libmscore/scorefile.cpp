@@ -99,10 +99,10 @@ static void writeMeasure(XmlWriter& xml, MeasureBase* m, int staffIdx, bool writ
 }
 
 //---------------------------------------------------------
-//   writeMovement
+//   write
 //---------------------------------------------------------
 
-void Score::writeMovement(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& hook)
+void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& hook)
 {
     // if we have multi measure rests and some parts are hidden,
     // then some layout information is missing:
@@ -170,7 +170,7 @@ void Score::writeMovement(XmlWriter& xml, bool selectionOnly, compat::WriteScore
     }
     xml.tag("currentLayer", _currentLayer);
 
-    if (isTopScore() && !MScore::testMode) {
+    if (isMaster() && !MScore::testMode) {
         _synthesizerState.write(xml);
     }
 
@@ -285,26 +285,6 @@ void Score::writeMovement(XmlWriter& xml, bool selectionOnly, compat::WriteScore
 
     if (unhide) {
         endCmd(true);
-    }
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& hook)
-{
-    if (isMaster()) {
-        MasterScore* score = static_cast<MasterScore*>(this);
-        while (score->prev()) {
-            score = score->prev();
-        }
-        while (score) {
-            score->writeMovement(xml, selectionOnly, hook);
-            score = score->next();
-        }
-    } else {
-        writeMovement(xml, selectionOnly, hook);
     }
 }
 

@@ -46,9 +46,7 @@ void WriteScoreHook::onWriteStyle302(Ms::Score* score, Ms::XmlWriter& xml)
         isWriteStyle = true;
     }
 
-    if (score->isTopScore()) { // only top score (logic from 3.)
-        if (isWriteStyle) {
-            score->style().save(xml, true); // save only differences to buildin style (logic from 3.)
-        }
+    if (isWriteStyle) {
+        score->style().save(xml, true);     // save only differences to buildin style (logic from 3.)
     }
 }

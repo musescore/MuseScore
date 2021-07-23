@@ -5037,45 +5037,12 @@ void LayoutContext::collectPage()
                 nextSystem = systemList.empty() ? 0 : systemList.takeFirst();
                 if (nextSystem) {
                     score->systems().append(nextSystem);
-                } else if (score->isMaster()) {
-                    MasterScore* ms = static_cast<MasterScore*>(score)->next();
-                    if (ms) {
-                        score     = ms;
-                        systemIdx = 0;
-                        nextSystem = score->systems().value(systemIdx++);
-                    }
                 }
             }
         } else {
             nextSystem = score->collectSystem(*this);
             if (nextSystem) {
                 collected = true;
-            }
-            if (!nextSystem && score->isMaster()) {
-                MasterScore* ms = static_cast<MasterScore*>(score)->next();
-                if (ms) {
-                    score = ms;
-                    QList<System*>& systems = ms->systems();
-                    if (systems.empty() || systems.front()->measures().empty()) {
-                        systemList         = systems;
-                        systems.clear();
-                        measureNo          = 0;
-                        startWithLongNames = true;
-                        firstSystem        = true;
-                        tick               = Fraction(0, 1);
-                        prevMeasure        = 0;
-                        curMeasure         = 0;
-                        nextMeasure        = ms->measures()->first();
-                        ms->getNextMeasure(*this);
-                        nextSystem         = ms->collectSystem(*this);
-                        ms->setScoreFont(ScoreFont::fontByName(ms->styleSt(Sid::MusicalSymbolFont)));
-                        ms->setNoteHeadWidth(ms->scoreFont()->width(SymId::noteheadBlack, ms->spatium() / SPATIUM20));
-                    } else {
-                        rangeDone = true;
-                        systemIdx = 0;
-                        nextSystem = score->systems().value(systemIdx++);
-                    }
-                }
             }
         }
         prevSystem = curSystem;

@@ -291,11 +291,11 @@ private:
     async::Notification m_dragChanged;
     std::vector<LineF> m_anchorLines;
 
+    Ms::EditData m_gripEditData;
+
     Ms::EditData m_textEditData;
     async::Notification m_textEditingStarted;
     async::Notification m_textEditingChanged;
-
-    Ms::EditData m_gripEditData;
 
     DropData m_dropData;
     async::Notification m_dropChanged;
