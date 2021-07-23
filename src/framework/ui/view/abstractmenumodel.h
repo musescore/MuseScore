@@ -49,7 +49,7 @@ public:
 
     virtual void load();
 
-    Q_INVOKABLE void handleAction(const QString& menuId);
+    Q_INVOKABLE void handleMenuItem(const QString& itemId);
     Q_INVOKABLE QVariantMap get(int index);
 
 signals:
@@ -80,7 +80,7 @@ protected:
     static const int INVALID_ITEM_INDEX;
     int itemIndex(const actions::ActionCode& actionCode) const;
 
-    MenuItem& findItem(const QString& menuId);
+    MenuItem& findItem(const QString& itemId);
     MenuItem& findItem(const actions::ActionCode& actionCode);
     MenuItem& findMenu(const QString& menuId);
 
@@ -93,7 +93,7 @@ protected:
     void dispatch(const actions::ActionCode& actionCode, const actions::ActionData& args = actions::ActionData());
 
 private:
-    MenuItem& item(MenuItemList& items, const QString& menuId);
+    MenuItem& item(MenuItemList& items, const QString& itemId);
     MenuItem& item(MenuItemList& items, const actions::ActionCode& actionCode);
     MenuItem& menu(MenuItemList& items, const QString& menuId);
 

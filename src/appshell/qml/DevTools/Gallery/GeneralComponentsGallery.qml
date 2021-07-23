@@ -288,23 +288,23 @@ Rectangle {
 
                 onClicked: {
                     var _subitems = [
-                                {code: "2", icon: IconCode.PAGE, title: "first action", enabled: true},
-                                {code: "3", icon: IconCode.PAGE, title: "with subitems", enabled: true, subitems: [
-                                        {code: "4", title: "first action", enabled: true, selectable: true},
-                                        {code: "5", title: "second action", enabled: true, selectable: true, selected: true},
-                                        {code: "6", title: "third action", enabled: true, selectable: true},
+                                {id: "2", icon: IconCode.PAGE, title: "first action", enabled: true},
+                                {id: "3", icon: IconCode.PAGE, title: "with subitems", enabled: true, subitems: [
+                                        {id: "4", title: "first action", enabled: true, selectable: true},
+                                        {id: "5", title: "second action", enabled: true, selectable: true, selected: true},
+                                        {id: "6", title: "third action", enabled: true, selectable: true},
                                         {},
-                                        {code: "7", title: "clear"}
+                                        {id: "7", title: "clear"}
                                     ]}
                             ]
 
                     var items = [
-                                {code: "0", icon: IconCode.PAGE, title: "enabled action", enabled: true},
-                                {code: "1", icon: IconCode.AMBITUS, title: "with subitems", enabled: true, shortcut: "Ctrl+A", subitems: _subitems },
+                                {id: "00", icon: IconCode.PAGE, title: "enabled action", enabled: true},
+                                {id: "01", icon: IconCode.AMBITUS, title: "with subitems", enabled: true, shortcut: "Ctrl+A", subitems: _subitems },
                                 {},
-                                {code: "5", title: "with shortcut", enabled: true, shortcut: "Ctrl+Shift+G"},
-                                {code: "6", icon: IconCode.PAGE, title: "disabled action", enabled: false},
-                                {code: "7", icon: IconCode.CLEF_BASS, title: "checkable action", enabled: true, checkable: true, checked: true}
+                                {id: "02", title: "with shortcut", enabled: true, shortcut: "Ctrl+Shift+G"},
+                                {id: "03", icon: IconCode.PAGE, title: "disabled action", enabled: false},
+                                {id: "04", icon: IconCode.CLEF_BASS, title: "checkable action", enabled: true, checkable: true, checked: true}
                             ]
 
                     menuLoader.toggleOpened(items)
@@ -312,8 +312,8 @@ Rectangle {
 
                 StyledMenuLoader {
                     id: menuLoader
-                    onHandleAction: {
-                        console.log("selected " + actionCode + " index " + actionIndex)
+                    onHandleMenuItem: {
+                        console.log("selected " + itemId)
                     }
                 }
             }
