@@ -35,44 +35,60 @@ Rectangle {
         id: chordSymbolEditorModel
     }
 
-    height: grid.height
+    anchors.fill: parent
 
     Component {
         id: chordStyleDelegate
 
-        FlatButton {
-            id: button
+        Column {
+            FlatButton {
+                id: button
 
-            width: 170
-            height: 76
+                width: 170
+                height: 76
 
-            text: styleName
+                anchors.bottomMargin: 8
 
-            onClicked: {
-                chordSymbolEditorModel.setChordStyle(styleName)
+                opacity: 0.7
+
+                text: fileName
+
+                onClicked: {
+                    chordSymbolEditorModel.setChordStyle(styleName)
+                }
+            }
+            StyledTextLabel{
+                anchors.topMargin: 8
+                width: 170
+                height: 14
+                horizontalAlignment: Text.AlignHCenter
+                text: styleName
             }
         }
     }
 
     ColumnLayout {
         anchors.fill: parent
-        spacing: 12
+        // TODO: margins 24
 
         StyledTextLabel {
             text: qsTrc("notation", "Chord symbols")
             font: ui.theme.headerBoldFont
+            anchors.bottomMargin: 24
         }
 
         StyledTextLabel {
             text: qsTrc("notation", "Choose a style")
+            font: ui.theme.bodyBoldFont
+            anchors.bottomMargin: 12
         }
 
         ListView {
             id: chordSymbolStyleList
             Layout.fillWidth: true
 
-            height: 76
-            spacing: 12
+            height: 122
+            spacing: 21
 
             clip: true
             orientation: Qt.Horizontal
@@ -84,34 +100,39 @@ Rectangle {
 
             highlight: Rectangle {
                 color: ui.theme.accentColor
-                radius: 3
+                height: 76
+                radius: 2
             }
         }
 
         SeparatorLine {}
 
-        // To be modified still
         StyledTextLabel {
+            anchors.topMargin: 20
+            font: ui.theme.bodyBoldFont
             text: qsTrc("notation", "Adjustments")
         }
 
         TabBar {
             id: bar
-            Layout.fillWidth: true
-            height: 60
+            width: 280
+            height: 40
+            anchors.topMargin: 7
 
             StyledTabButton {
                 text: qsTrc("notation", "Basic")
                 width: bar.width/2
-                height: 60
+                height: bar.height
                 isCurrent: bar.currentIndex === 0
+                font: ui.theme.bodyBoldFont
             }
 
             StyledTabButton {
                 text: qsTrc("notation", "Advanced")
                 width: bar.width/2
-                height: 60
+                height: bar.height
                 isCurrent: bar.currentIndex === 1
+                font: ui.theme.bodyBoldFont
             }
         }
 

@@ -41,11 +41,13 @@ Column {
 
     StyledTextLabel {
         id: label
+        anchors.bottomMargin: 8
         horizontalAlignment: Text.AlignLeft
     }
 
     IncrementalPropertyControl {
         id: spinBox
+        height: 30
         onValueEdited: function (newValue) {
             root.valueEdited(newValue)
         }

@@ -52,6 +52,11 @@ Flickable {
         anchors.right: parent.right
         spacing: 12
 
+        StyledTextLabel {
+            text: qsTrc("notation","Chord spelling")
+            font: ui.theme.bodyFont
+        }
+
         ListView {
             id: chordSpellingListView
             anchors.left: parent.left
@@ -79,6 +84,11 @@ Flickable {
                 color: ui.theme.accentColor
                 radius: 3
             }
+        }
+
+        StyledTextLabel {
+            text: qsTrc("notation","Major seventh")
+            font: ui.theme.bodyFont
         }
 
         ListView {
@@ -110,6 +120,11 @@ Flickable {
             }
         }
 
+        StyledTextLabel {
+            text: qsTrc("notation","Half-diminished")
+            font: ui.theme.bodyFont
+        }
+
         ListView {
             id: halfDiminishedListView
             anchors.left: parent.left
@@ -137,6 +152,11 @@ Flickable {
                 color: ui.theme.accentColor
                 radius: 3
             }
+        }
+
+        StyledTextLabel {
+            text: qsTrc("notation","Minor")
+            font: ui.theme.bodyFont
         }
 
         ListView {
@@ -168,6 +188,11 @@ Flickable {
             }
         }
 
+        StyledTextLabel {
+            text: qsTrc("notation","Augmented")
+            font: ui.theme.bodyFont
+        }
+
         ListView {
             id: augmentedListView
             anchors.left: parent.left
@@ -195,6 +220,11 @@ Flickable {
                 color: ui.theme.accentColor
                 radius: 3
             }
+        }
+
+        StyledTextLabel {
+            text: qsTrc("notation","Diminished")
+            font: ui.theme.bodyFont
         }
 
         ListView {
@@ -226,6 +256,11 @@ Flickable {
             }
         }
 
+        StyledTextLabel {
+            text: qsTrc("notation","Omissions")
+            font: ui.theme.bodyFont
+        }
+
         ListView {
             id: omitListView
             anchors.left: parent.left
@@ -255,12 +290,15 @@ Flickable {
             }
         }
 
+        StyledTextLabel {
+            text: qsTrc("notation","Alterations")
+            font: ui.theme.bodyFont
+        }
+
         RadioButtonGroup {
             id: stackModifiers
 
-            height: 30
-
-            anchors.top: omitGridView.bottom
+            height: prv.listCellHeight
 
             model: [
                 { name: "Stacked", value: 1.0 },
@@ -268,6 +306,10 @@ Flickable {
             ]
 
             delegate: FlatRadioButton {
+
+                height: prv.listCellHeight
+                width: prv.listCellWidth
+
                 ButtonGroup.group: stackModifiers.radioButtonGroup
 
                 StyledTextLabel{

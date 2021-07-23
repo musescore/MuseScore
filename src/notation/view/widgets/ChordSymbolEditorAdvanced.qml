@@ -40,11 +40,19 @@ Flickable {
 
     ScrollBar.vertical: StyledScrollBar {}
 
+    QtObject {
+        id: prv
+        readonly property int buttonHeight: 56
+        readonly property int buttonWidth: 130
+        readonly property int buttonSpacing: 10
+    }
+
     Row{
         id: content
         anchors.left: parent.left
         anchors.right: parent.right
-        spacing: 24
+        anchors.leftMargin: 21
+        spacing: 68
         Column{
             id: leftColumn
             width: (content.width - content.spacing) / 2
@@ -52,7 +60,7 @@ Flickable {
 
             LabelledSpinBox {
                 id: chordScalingSpinBox
-                width: Math.min(126, (parent.width - parent.spacing) / 2)
+                width: Math.max(126, parent.width / 2)
                 text: qsTrc("notation", "Chord Symbol Scaling")
 
                 currentValue: root.editorModel.chordSymbolScaling
@@ -73,7 +81,7 @@ Flickable {
                 spacing: 12
                 LabelledSpinBox {
                     id: qualityAdjustSpinBox
-                    width: Math.min(126, (parent.width - parent.spacing) / 2)
+                    width: Math.max(126, parent.width / 2)
                     text: qsTrc("notation", "Vertical Offset")
 
                     currentValue: root.editorModel.qualityAdjust
@@ -86,7 +94,7 @@ Flickable {
 
                 LabelledSpinBox {
                     id: qualityMagSpinBox
-                    width: Math.min(126, (parent.width - parent.spacing) / 2)
+                    width: Math.max(126, parent.width / 2)
                     text: qsTrc("notation", "Scaling")
 
                     currentValue: root.editorModel.qualityMag
@@ -108,7 +116,7 @@ Flickable {
                 spacing: 12
                 LabelledSpinBox {
                     id: extensionAdjustSpinBox
-                    width: Math.min(126, (parent.width - parent.spacing) / 2)
+                    width: Math.max(126, parent.width / 2)
                     text: qsTrc("notation", "Vertical Offset")
 
                     currentValue: root.editorModel.extensionAdjust
@@ -121,7 +129,7 @@ Flickable {
 
                 LabelledSpinBox {
                     id: extensionMagSpinBox
-                    width: Math.min(126, (parent.width - parent.spacing) / 2)
+                    width: Math.max(126, parent.width / 2)
                     text: qsTrc("notation", "Scaling")
 
                     currentValue: root.editorModel.extensionMag
@@ -143,7 +151,7 @@ Flickable {
                 spacing: 12
                 LabelledSpinBox {
                     id: modifierAdjustSpinBox
-                    width: Math.min(126, (parent.width - parent.spacing) / 2)
+                    width: Math.max(126, parent.width / 2)
                     text: qsTrc("notation", "Vertical Offset")
 
                     currentValue: root.editorModel.modifierAdjust
@@ -156,7 +164,7 @@ Flickable {
 
                 LabelledSpinBox {
                     id: modifierMagSpinBox
-                    width: Math.min(126, (parent.width - parent.spacing) / 2)
+                    width: Math.max(126, parent.width / 2)
                     text: qsTrc("notation", "Scaling")
 
                     currentValue: root.editorModel.modifierMag
@@ -176,7 +184,7 @@ Flickable {
 
             LabelledSpinBox {
                 id: chordSpacingSpinBox
-                width: Math.min(126, (parent.width - parent.spacing) / 2)
+                width: Math.max(126, parent.width / 2)
                 text: qsTrc("notation", "Minimum chord spacing")
 
                 currentValue: root.editorModel.minHarmonyDistance
@@ -192,7 +200,7 @@ Flickable {
 
             LabelledSpinBox {
                 id: barlineDistanceSpinBox
-                width: Math.min(126, (parent.width - parent.spacing) / 2)
+                width: Math.max(126, parent.width / 2)
                 text: qsTrc("notation", "Minimum barline distance")
 
                 currentValue: root.editorModel.maxHarmonyBarDistance
@@ -208,7 +216,7 @@ Flickable {
 
             LabelledSpinBox {
                 id: distToFretboardSpinBox
-                width: Math.min(126, (parent.width - parent.spacing) / 2)
+                width: Math.max(126, parent.width / 2)
                 text: qsTrc("notation", "Distance to fretboard diagram")
 
                 currentValue: root.editorModel.harmonyFretDistance
@@ -227,7 +235,7 @@ Flickable {
                 spacing: 12
                 LabelledSpinBox {
                     id: shiftAboveSpinBox
-                    width: Math.min(126, (parent.width - parent.spacing) / 2)
+                    width: Math.max(126, parent.width / 2)
                     text: qsTrc("notation", "Minimum shift above")
 
                     currentValue: root.editorModel.maxChordShiftAbove
@@ -243,7 +251,7 @@ Flickable {
 
                 LabelledSpinBox {
                     id: shiftBelowSpinBox
-                    width: Math.min(126, (parent.width - parent.spacing) / 2)
+                    width: Math.max(126, parent.width / 2)
                     text: qsTrc("notation", "Minimum shift below")
 
                     currentValue: root.editorModel.maxChordShiftBelow
@@ -259,7 +267,7 @@ Flickable {
             }
             LabelledSpinBox {
                 id: capoFretSpinBox
-                width: Math.min(126, (parent.width - parent.spacing) / 2)
+                width: Math.max(126, parent.width / 2)
                 text: qsTrc("notation","Capo fret position")
 
                 currentValue: root.editorModel.capoFretPosition
@@ -272,11 +280,15 @@ Flickable {
             }
             FlatButton{
                 id: chordSymbolFont
+                height: 30
+                width: Math.max(126, parent.width) + 12
                 text: qsTrc("notation","Change chord symbol font NW")
                 onClicked: root.editorModel.resetProperties()
             }
             FlatButton{
                 id: resetProperties
+                height: 30
+                width: Math.max(126, parent.width) + 12
                 text: qsTrc("notation","Reset settings to default")
                 onClicked: root.editorModel.resetProperties()
             }
@@ -293,7 +305,7 @@ Flickable {
             }
 
             CheckBox {
-                width: Math.min(126, (parent.width - parent.spacing) / 2)
+                width: Math.max(126, parent.width / 2)
                 property int autoCapital: -1
                 checked: (editorModel.autoCapitalization === 1.0)
 
@@ -310,7 +322,8 @@ Flickable {
             RadioButtonGroup {
                 id: minorRootCapitalization
 
-                height: 50
+                height: prv.buttonHeight
+                spacing: 21
 
                 model: [
                     { name: "Cmin", value: 1.0 },
@@ -318,8 +331,8 @@ Flickable {
                 ]
 
                 delegate: FlatRadioButton {
-                    height: 50
-                    width: 100
+                    height: prv.buttonHeight
+                    width: prv.buttonWidth
 
                     ButtonGroup.group: minorRootCapitalization.radioButtonGroup
 
@@ -341,7 +354,8 @@ Flickable {
             RadioButtonGroup {
                 id: qualitySymbolsCapitalization
 
-                height: 50
+                height: prv.buttonHeight
+                spacing: 21
 
                 model: [
                     { name: "Maj", value: 1.0 },
@@ -349,8 +363,8 @@ Flickable {
                 ]
 
                 delegate: FlatRadioButton {
-                    height: 50
-                    width: 100
+                    height: prv.buttonHeight
+                    width: prv.buttonWidth
 
                     ButtonGroup.group: qualitySymbolsCapitalization.radioButtonGroup
 
@@ -372,7 +386,8 @@ Flickable {
             RadioButtonGroup {
                 id: bassNotesCapitalization
 
-                height: 50
+                height: prv.buttonHeight
+                spacing: 21
 
                 model: [
                     { name: "C/B", value: 1.0 },
@@ -380,8 +395,8 @@ Flickable {
                 ]
 
                 delegate: FlatRadioButton {
-                    height: 50
-                    width: 100
+                    height: prv.buttonHeight
+                    width: prv.buttonWidth
 
                     ButtonGroup.group: bassNotesCapitalization.radioButtonGroup
 
@@ -403,7 +418,8 @@ Flickable {
             RadioButtonGroup {
                 id: solfegeNotesCapitalization
 
-                height: 50
+                height: prv.buttonHeight
+                spacing: 21
 
                 model: [
                     { name: "DO", value: 1.0 },
@@ -411,8 +427,8 @@ Flickable {
                 ]
 
                 delegate: FlatRadioButton {
-                    height: 50
-                    width: 100
+                    height: prv.buttonHeight
+                    width: prv.buttonWidth
 
                     ButtonGroup.group: solfegeNotesCapitalization.radioButtonGroup
 
@@ -439,7 +455,8 @@ Flickable {
             RadioButtonGroup {
                 id: alterationsParentheses
 
-                height: 50
+                height: prv.buttonHeight
+                spacing: 21
 
                 model: [
                     { name: "(b5)", value: 1.0 },
@@ -447,8 +464,8 @@ Flickable {
                 ]
 
                 delegate: FlatRadioButton {
-                    height: 50
-                    width: 100
+                    height: prv.buttonHeight
+                    width: prv.buttonWidth
 
                     ButtonGroup.group: alterationsParentheses.radioButtonGroup
 
@@ -470,7 +487,8 @@ Flickable {
             RadioButtonGroup {
                 id: suspensionsParentheses
 
-                height: 50
+                height: prv.buttonHeight
+                spacing: 21
 
                 model: [
                     { name: "(sus)", value: 1.0 },
@@ -478,8 +496,8 @@ Flickable {
                 ]
 
                 delegate: FlatRadioButton {
-                    height: 50
-                    width: 100
+                    height: prv.buttonHeight
+                    width: prv.buttonWidth
 
                     ButtonGroup.group: suspensionsParentheses.radioButtonGroup
 
@@ -501,7 +519,8 @@ Flickable {
             RadioButtonGroup {
                 id: minMajParentheses
 
-                height: 50
+                height: prv.buttonHeight
+                spacing: 21
 
                 model: [
                     { name: "m(maj7)", value: 1.0 },
@@ -509,8 +528,8 @@ Flickable {
                 ]
 
                 delegate: FlatRadioButton {
-                    height: 50
-                    width: 100
+                    height: prv.buttonHeight
+                    width: prv.buttonWidth
 
                     ButtonGroup.group: minMajParentheses.radioButtonGroup
 
@@ -532,7 +551,8 @@ Flickable {
             RadioButtonGroup {
                 id: addOmitParentheses
 
-                height: 50
+                height: prv.buttonHeight
+                spacing: 21
 
                 model: [
                     { name: "(add)", value: 1.0 },
@@ -540,8 +560,8 @@ Flickable {
                 ]
 
                 delegate: FlatRadioButton {
-                    height: 50
-                    width: 100
+                    height: prv.buttonHeight
+                    width: prv.buttonWidth
 
                     ButtonGroup.group: addOmitParentheses.radioButtonGroup
 
