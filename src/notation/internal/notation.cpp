@@ -357,7 +357,7 @@ void Notation::paintPageBorder(draw::Painter* painter, const Ms::Page* page) con
 void Notation::paintForeground(mu::draw::Painter* painter, const RectF& pageRect) const
 {
     if (score()->printing()) {
-        painter->fillRect(pageRect, mu::draw::Color(engravingConfiguration()->whiteColor()));
+        painter->fillRect(pageRect, engravingConfiguration()->whiteColor());
         return;
     }
 

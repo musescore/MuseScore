@@ -24,7 +24,6 @@
 
 #include "color.h"
 #include "drawtypes.h"
-#include "libmscore/mscore.h"
 
 namespace mu::draw {
 class Brush
@@ -62,7 +61,7 @@ public:
 #endif
 
 private:
-    Color m_color = Ms::MScore::defaultColor;
+    Color m_color{ 0, 0, 0 };
     BrushStyle m_style = BrushStyle::SolidPattern;
 };
 } // namespace mu::draw

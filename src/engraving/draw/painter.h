@@ -199,7 +199,7 @@ private:
 
 inline void Painter::setPen(const Color& color)
 {
-    setPen(Pen(color.isValid() ? color : Ms::MScore::defaultColor));
+    setPen(Pen(color.isValid() ? color : Color(0, 0, 0)));
 }
 
 inline void Painter::translate(const PointF& offset)
