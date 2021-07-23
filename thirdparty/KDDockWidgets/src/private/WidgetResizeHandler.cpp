@@ -310,9 +310,6 @@ bool WidgetResizeHandler::handleWindowsNativeEvent(FloatingWindow *fw, const QBy
 
             return true;
         }
-
-        const bool ret = handleWindowsNativeEvent(fw->windowHandle(), msg, result, {});
-        return ret;
     }
 
     return handleWindowsNativeEvent(fw->windowHandle(), msg, result, {});
@@ -566,8 +563,8 @@ bool WidgetResizeHandler::isInterestingNativeEvent(int nativeEvent)
      }
 #else
     Q_UNUSED(nativeEvent);
+    return false;
 #endif
-     return false;
 }
 
 #if defined(Q_OS_WIN) && defined(KDDOCKWIDGETS_QTWIDGETS)
