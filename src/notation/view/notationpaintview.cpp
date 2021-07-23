@@ -78,23 +78,7 @@ void NotationPaintView::load()
 {
     TRACEFUNC;
 
-    m_notation = globalContext()->currentNotation();
-
-    globalContext()->currentNotationChanged().onNotify(this, [this]() {
-        onCurrentNotationChanged();
-    });
-
-    playbackController()->isPlayingChanged().onNotify(this, [this]() {
-        onPlayingChanged();
-    });
-
-    playbackController()->midiTickPlayed().onReceive(this, [this](uint32_t tick) {
-        movePlaybackCursor(tick);
-    });
-
-    configuration()->foregroundChanged().onNotify(this, [this]() {
-        update();
-    });
+    onNotationSetup();
 
     initBackground();
     initNavigatorOrientation();
@@ -374,6 +358,27 @@ void NotationPaintView::paint(QPainter* qp)
     m_noteInputCursor->paint(painter);
     m_loopInMarker->paint(painter);
     m_loopOutMarker->paint(painter);
+}
+
+void NotationPaintView::onNotationSetup()
+{
+    m_notation = globalContext()->currentNotation();
+
+    globalContext()->currentNotationChanged().onNotify(this, [this]() {
+        onCurrentNotationChanged();
+    });
+
+    playbackController()->isPlayingChanged().onNotify(this, [this]() {
+        onPlayingChanged();
+    });
+
+    playbackController()->midiTickPlayed().onReceive(this, [this](uint32_t tick) {
+        movePlaybackCursor(tick);
+    });
+
+    configuration()->foregroundChanged().onNotify(this, [this]() {
+        update();
+    });
 }
 
 void NotationPaintView::paintBackground(const RectF& rect, draw::Painter* painter)
@@ -740,7 +745,6 @@ void NotationPaintView::dropEvent(QDropEvent* event)
 void NotationPaintView::setNotation(INotationPtr notation)
 {
     clear();
-    initBackground();
     m_notation = notation;
     update();
 }
