@@ -1889,90 +1889,99 @@ void ParsedChord::respellQualitySymbols(const ChordList* cl)
         if (tok.tokenClass == ChordTokenClass::QUALITY && cl) {
             if (isMajorSeventh) {
                 QStringList majorSeventhTokens = cl->qualitySymbols.value("major7th").split(" ");
-                ChordToken majTok;
-                majTok.names += majorSeventhTokens.at(0);
-                majTok.tokenClass = ChordTokenClass::QUALITY;
-                _tokenList.removeAt(index);
-                _tokenList.insert(index, majTok);
+                if (majorSeventhTokens[0] != "-1") {
+                    ChordToken majTok;
+                    majTok.names += majorSeventhTokens.at(0);
+                    majTok.tokenClass = ChordTokenClass::QUALITY;
+                    _tokenList.removeAt(index);
+                    _tokenList.insert(index, majTok);
 
-                // Whether to allow or prevent the rendering of 7 extension
-                hasSeven = majorSeventhTokens.contains("7");
+                    // Whether to allow or prevent the rendering of 7 extension
+                    hasSeven = majorSeventhTokens.contains("7");
+                }
             } else if (isHalfDiminished) {
                 // This part of code is encountered when the input is <minor>7b5.
                 QStringList halfDiminishedTokens = cl->qualitySymbols.value("half-diminished").split(" ");
-                ChordToken hdTok;
-                hdTok.names += halfDiminishedTokens.at(0);
-                hdTok.tokenClass = ChordTokenClass::QUALITY;
-                _tokenList.removeAt(index);
-                _tokenList.insert(index, hdTok);
+                if (halfDiminishedTokens[0] != "-1") {
+                    ChordToken hdTok;
+                    hdTok.names += halfDiminishedTokens.at(0);
+                    hdTok.tokenClass = ChordTokenClass::QUALITY;
+                    _tokenList.removeAt(index);
+                    _tokenList.insert(index, hdTok);
 
-                // Here depending on the quality symbols set,
-                // decide whether or not to skip the 7 and b5.
-                hasSeven = halfDiminishedTokens.contains("7");
-                hasFlatFive = halfDiminishedTokens.contains("b5");
+                    // Here depending on the quality symbols set,
+                    // decide whether or not to skip the 7 and b5.
+                    hasSeven = halfDiminishedTokens.contains("7");
+                    hasFlatFive = halfDiminishedTokens.contains("b5");
+                }
             } else if (_quality == "half-diminished") {
                 // This part of code is encountered when the input is 0.
                 QStringList halfDiminishedTokens = cl->qualitySymbols.value("half-diminished").split(" ");
+                if (halfDiminishedTokens[0] != "-1") {
+                    ChordToken hdTok;
+                    hdTok.names += halfDiminishedTokens.at(0);
+                    hdTok.tokenClass = ChordTokenClass::QUALITY;
+                    _tokenList.removeAt(index);
+                    _tokenList.insert(index, hdTok);
 
-                ChordToken hdTok;
-                hdTok.names += halfDiminishedTokens.at(0);
-                hdTok.tokenClass = ChordTokenClass::QUALITY;
-                _tokenList.removeAt(index);
-                _tokenList.insert(index, hdTok);
+                    if (halfDiminishedTokens.contains("7")) {
+                        // insert extension 7
+                        ChordToken sevenToken;
+                        sevenToken.names += "7";
+                        sevenToken.tokenClass = ChordTokenClass::EXTENSION;
+                        _tokenList.insert(index + 1, sevenToken);
+                    }
+                    if (halfDiminishedTokens.contains("b5")) {
+                        // insert modifier flat
+                        ChordToken flatToken;
+                        flatToken.names += "b";
+                        flatToken.tokenClass = ChordTokenClass::MODIFIER;
+                        _tokenList.insert(index + 2, flatToken);
 
-                if (halfDiminishedTokens.contains("7")) {
-                    // insert extension 7
-                    ChordToken sevenToken;
-                    sevenToken.names += "7";
-                    sevenToken.tokenClass = ChordTokenClass::EXTENSION;
-                    _tokenList.insert(index + 1, sevenToken);
-                }
-                if (halfDiminishedTokens.contains("b5")) {
-                    // insert modifier flat
-                    ChordToken flatToken;
-                    flatToken.names += "b";
-                    flatToken.tokenClass = ChordTokenClass::MODIFIER;
-                    _tokenList.insert(index + 2, flatToken);
-
-                    // insert modifier 5
-                    ChordToken fiveToken;
-                    fiveToken.names += "5";
-                    fiveToken.tokenClass = ChordTokenClass::MODIFIER;
-                    _tokenList.insert(index + 3, fiveToken);
+                        // insert modifier 5
+                        ChordToken fiveToken;
+                        fiveToken.names += "5";
+                        fiveToken.tokenClass = ChordTokenClass::MODIFIER;
+                        _tokenList.insert(index + 3, fiveToken);
+                    }
                 }
             } else if (isDiminished) {
                 // This part of code is encountered when the input is <minor>b5.
                 QStringList diminishedTokens = cl->qualitySymbols.value("diminished").split(" ");
-                ChordToken dimTok;
-                dimTok.names += diminishedTokens.at(0);
-                dimTok.tokenClass = ChordTokenClass::QUALITY;
-                _tokenList.removeAt(index);
-                _tokenList.insert(index, dimTok);
+                if (diminishedTokens[0] != "-1") {
+                    ChordToken dimTok;
+                    dimTok.names += diminishedTokens.at(0);
+                    dimTok.tokenClass = ChordTokenClass::QUALITY;
+                    _tokenList.removeAt(index);
+                    _tokenList.insert(index, dimTok);
 
-                // Here depending on the quality symbols set,
-                // decide whether or not to skip the  b5.
-                hasFlatFive = diminishedTokens.contains("b5");
+                    // Here depending on the quality symbols set,
+                    // decide whether or not to skip the  b5.
+                    hasFlatFive = diminishedTokens.contains("b5");
+                }
             } else if (_quality == "diminished") {
                 // This part of code is encountered when the input is dim or o.
                 QStringList diminishedTokens = cl->qualitySymbols.value("diminished").split(" ");
-                ChordToken dimTok;
-                dimTok.names += diminishedTokens.at(0);
-                dimTok.tokenClass = ChordTokenClass::QUALITY;
-                _tokenList.removeAt(index);
-                _tokenList.insert(index, dimTok);
+                if (diminishedTokens[0] != "-1") {
+                    ChordToken dimTok;
+                    dimTok.names += diminishedTokens.at(0);
+                    dimTok.tokenClass = ChordTokenClass::QUALITY;
+                    _tokenList.removeAt(index);
+                    _tokenList.insert(index, dimTok);
 
-                if (diminishedTokens.contains("b5")) {
-                    // insert modifier flat
-                    ChordToken flatToken;
-                    flatToken.names += "b";
-                    flatToken.tokenClass = ChordTokenClass::MODIFIER;
-                    _tokenList.insert(index + 1, flatToken);
+                    if (diminishedTokens.contains("b5")) {
+                        // insert modifier flat
+                        ChordToken flatToken;
+                        flatToken.names += "b";
+                        flatToken.tokenClass = ChordTokenClass::MODIFIER;
+                        _tokenList.insert(index + 1, flatToken);
 
-                    // insert modifier 5
-                    ChordToken fiveToken;
-                    fiveToken.names += "5";
-                    fiveToken.tokenClass = ChordTokenClass::MODIFIER;
-                    _tokenList.insert(index + 2, fiveToken);
+                        // insert modifier 5
+                        ChordToken fiveToken;
+                        fiveToken.names += "5";
+                        fiveToken.tokenClass = ChordTokenClass::MODIFIER;
+                        _tokenList.insert(index + 2, fiveToken);
+                    }
                 }
             } else if (isAugmented) {
                 // Augmented chords are handled slightly different than the other three chords
@@ -1980,83 +1989,89 @@ void ParsedChord::respellQualitySymbols(const ChordList* cl)
 
                 // This part of code is encountered when the input is <major>#5 or +5.
                 QStringList augmentedTokens = cl->qualitySymbols.value("augmented").split(" ");
-                ChordToken augTok;
-                augTok.names += augmentedTokens.at(0);
-                augTok.tokenClass = ChordTokenClass::QUALITY;
-                _tokenList.removeAt(index);
-                _tokenList.insert(index, augTok);
+                if (augmentedTokens[0] != "-1") {
+                    ChordToken augTok;
+                    augTok.names += augmentedTokens.at(0);
+                    augTok.tokenClass = ChordTokenClass::QUALITY;
+                    _tokenList.removeAt(index);
+                    _tokenList.insert(index, augTok);
 
-                // We add the extension or modifier anyway here and
-                // then if already present we can block it
-                if (augmentedTokens.contains("5")) {
-                    // insert extension 5
-                    ChordToken fiveToken;
-                    fiveToken.names += "5";
-                    fiveToken.tokenClass = ChordTokenClass::EXTENSION;
-                    _tokenList.insert(index + 1, fiveToken);
-                    index++; // Just to prevent this added 5 from being blocked
+                    // We add the extension or modifier anyway here and
+                    // then if already present we can block it
+                    if (augmentedTokens.contains("5")) {
+                        // insert extension 5
+                        ChordToken fiveToken;
+                        fiveToken.names += "5";
+                        fiveToken.tokenClass = ChordTokenClass::EXTENSION;
+                        _tokenList.insert(index + 1, fiveToken);
+                        index++; // Just to prevent this added 5 from being blocked
+                    }
+
+                    if (augmentedTokens.contains("#5")) {
+                        // insert modifier sharp
+                        ChordToken sharpToken;
+                        sharpToken.names += "#";
+                        sharpToken.tokenClass = ChordTokenClass::MODIFIER;
+                        _tokenList.insert(index + 1, sharpToken);
+
+                        // insert modifier 5
+                        ChordToken fiveToken;
+                        fiveToken.names += "5";
+                        fiveToken.tokenClass = ChordTokenClass::MODIFIER;
+                        _tokenList.insert(index + 2, fiveToken);
+                        index+=2; // Just to prevent this added #5 from being blocked
+                    }
+                    hasSharpFive = false;
+                    hasFive = false;
                 }
-
-                if (augmentedTokens.contains("#5")) {
-                    // insert modifier sharp
-                    ChordToken sharpToken;
-                    sharpToken.names += "#";
-                    sharpToken.tokenClass = ChordTokenClass::MODIFIER;
-                    _tokenList.insert(index + 1, sharpToken);
-
-                    // insert modifier 5
-                    ChordToken fiveToken;
-                    fiveToken.names += "5";
-                    fiveToken.tokenClass = ChordTokenClass::MODIFIER;
-                    _tokenList.insert(index + 2, fiveToken);
-                    index+=2; // Just to prevent this added #5 from being blocked
-                }
-                hasSharpFive = false;
-                hasFive = false;
             } else if (_quality == "augmented") {
                 // This part of code is encountered when the input is aug or +.
                 QStringList augmentedTokens = cl->qualitySymbols.value("augmented").split(" ");
-                ChordToken augTok;
-                augTok.names += augmentedTokens.at(0);
-                augTok.tokenClass = ChordTokenClass::QUALITY;
-                _tokenList.removeAt(index);
-                _tokenList.insert(index, augTok);
+                if (augmentedTokens[0] != "-1") {
+                    ChordToken augTok;
+                    augTok.names += augmentedTokens.at(0);
+                    augTok.tokenClass = ChordTokenClass::QUALITY;
+                    _tokenList.removeAt(index);
+                    _tokenList.insert(index, augTok);
 
-                // We add the extension or modifier anyway here and
-                // then if already present we can block it
-                if (augmentedTokens.contains("5")) {
-                    // insert extension 5
-                    ChordToken fiveToken;
-                    fiveToken.names += "5";
-                    fiveToken.tokenClass = ChordTokenClass::EXTENSION;
-                    _tokenList.insert(index + 1, fiveToken);
-                    index++; // Just to prevent this added 5 from being blocked
+                    // We add the extension or modifier anyway here and
+                    // then if already present we can block it
+                    if (augmentedTokens.contains("5")) {
+                        // insert extension 5
+                        ChordToken fiveToken;
+                        fiveToken.names += "5";
+                        fiveToken.tokenClass = ChordTokenClass::EXTENSION;
+                        _tokenList.insert(index + 1, fiveToken);
+                        index++; // Just to prevent this added 5 from being blocked
+                    }
+
+                    if (augmentedTokens.contains("#5")) {
+                        // insert modifier sharp
+                        ChordToken sharpToken;
+                        sharpToken.names += "#";
+                        sharpToken.tokenClass = ChordTokenClass::MODIFIER;
+                        _tokenList.insert(index + 1, sharpToken);
+
+                        // insert modifier 5
+                        ChordToken fiveToken;
+                        fiveToken.names += "5";
+                        fiveToken.tokenClass = ChordTokenClass::MODIFIER;
+                        _tokenList.insert(index + 2, fiveToken);
+                        index+=2; // Just to prevent this added #5 from being blocked
+                    }
+                    hasSharpFive = false;
+                    hasFive = false;
                 }
-
-                if (augmentedTokens.contains("#5")) {
-                    // insert modifier sharp
-                    ChordToken sharpToken;
-                    sharpToken.names += "#";
-                    sharpToken.tokenClass = ChordTokenClass::MODIFIER;
-                    _tokenList.insert(index + 1, sharpToken);
-
-                    // insert modifier 5
-                    ChordToken fiveToken;
-                    fiveToken.names += "5";
-                    fiveToken.tokenClass = ChordTokenClass::MODIFIER;
-                    _tokenList.insert(index + 2, fiveToken);
-                    index+=2; // Just to prevent this added #5 from being blocked
-                }
-                hasSharpFive = false;
-                hasFive = false;
             } else {
                 // for major and minor chords(have only one component).
                 QString sym = cl->qualitySymbols.value(_quality);
-                ChordToken qualTok;
-                qualTok.names += sym;
-                qualTok.tokenClass = ChordTokenClass::QUALITY;
-                _tokenList.removeAt(index);
-                _tokenList.insert(index, qualTok);
+                if (sym != "-1") {
+                    ChordToken qualTok;
+                    qualTok.names += sym;
+                    qualTok.tokenClass = ChordTokenClass::QUALITY;
+                    _tokenList.removeAt(index);
+                    _tokenList.insert(index, qualTok);
+                }
             }
         }
 
@@ -2064,11 +2079,13 @@ void ParsedChord::respellQualitySymbols(const ChordList* cl)
         if (tok.tokenClass == ChordTokenClass::MODIFIER && cl) {
             if (tok.names.contains("omit") || tok.names.contains("no")) {
                 QString sym = cl->qualitySymbols.value("omit");
-                ChordToken omitTok;
-                omitTok.names += sym;
-                omitTok.tokenClass = ChordTokenClass::MODIFIER;
-                _tokenList.removeAt(index);
-                _tokenList.insert(index, omitTok);
+                if (sym != "-1") {
+                    ChordToken omitTok;
+                    omitTok.names += sym;
+                    omitTok.tokenClass = ChordTokenClass::MODIFIER;
+                    _tokenList.removeAt(index);
+                    _tokenList.insert(index, omitTok);
+                }
             }
         }
     }

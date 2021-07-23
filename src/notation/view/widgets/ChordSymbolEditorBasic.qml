@@ -89,6 +89,7 @@ Flickable {
         StyledTextLabel {
             text: qsTrc("notation","Major seventh")
             font: ui.theme.bodyFont
+            visible: (root.editorModel.majorSeventhIndex != -1)
         }
 
         ListView {
@@ -103,6 +104,7 @@ Flickable {
 
             model: root.editorModel.majorSeventhList
             currentIndex: root.editorModel.majorSeventhIndex
+            visible: (root.editorModel.majorSeventhIndex != -1)
 
             delegate: FlatButton {
                 height: prv.listCellHeight
@@ -123,6 +125,7 @@ Flickable {
         StyledTextLabel {
             text: qsTrc("notation","Half-diminished")
             font: ui.theme.bodyFont
+            visible: (root.editorModel.halfDiminishedIndex != -1)
         }
 
         ListView {
@@ -137,6 +140,7 @@ Flickable {
 
             model: root.editorModel.halfDiminishedList
             currentIndex: root.editorModel.halfDiminishedIndex
+            visible: (root.editorModel.halfDiminishedIndex != -1)
 
             delegate: FlatButton {
                 height: prv.listCellHeight
@@ -157,6 +161,7 @@ Flickable {
         StyledTextLabel {
             text: qsTrc("notation","Minor")
             font: ui.theme.bodyFont
+            visible: (root.editorModel.minorIndex != -1)
         }
 
         ListView {
@@ -171,6 +176,7 @@ Flickable {
 
             model: root.editorModel.minorList
             currentIndex: root.editorModel.minorIndex
+            visible: (root.editorModel.minorIndex != -1)
 
             delegate: FlatButton {
                 height: prv.listCellHeight
@@ -191,6 +197,7 @@ Flickable {
         StyledTextLabel {
             text: qsTrc("notation","Augmented")
             font: ui.theme.bodyFont
+            visible: (root.editorModel.augmentedIndex != -1)
         }
 
         ListView {
@@ -205,6 +212,7 @@ Flickable {
 
             model: root.editorModel.augmentedList
             currentIndex: root.editorModel.augmentedIndex
+            visible: (root.editorModel.augmentedIndex != -1)
 
             delegate: FlatButton {
                 height: prv.listCellHeight
@@ -225,6 +233,7 @@ Flickable {
         StyledTextLabel {
             text: qsTrc("notation","Diminished")
             font: ui.theme.bodyFont
+            visible: (root.editorModel.diminishedIndex != -1)
         }
 
         ListView {
@@ -239,6 +248,7 @@ Flickable {
 
             model: root.editorModel.diminishedList
             currentIndex: root.editorModel.diminishedIndex
+            visible: (root.editorModel.diminishedIndex != -1)
 
             delegate: FlatButton {
                 height: prv.listCellHeight
@@ -259,6 +269,7 @@ Flickable {
         StyledTextLabel {
             text: qsTrc("notation","Omissions")
             font: ui.theme.bodyFont
+            visible: (root.editorModel.omitIndex != -1)
         }
 
         ListView {
@@ -273,6 +284,7 @@ Flickable {
 
             model: root.editorModel.omitList
             currentIndex: root.editorModel.omitIndex
+            visible: (root.editorModel.omitIndex != -1)
 
             delegate: FlatButton {
                 height: prv.listCellHeight

@@ -172,22 +172,24 @@ void ChordSymbolStylesModel::setQualitySymbolsOnStyleChange()
         QHash<QString, QList<QualitySymbol> > qualitySymbols = styleManager->getQualitySymbols(descriptionFile);
 
         //set the default
-        QString defaultSymbol = qualitySymbols.value("major7th").at(0).qualitySymbol;
+        QString defaultSymbol
+            = (qualitySymbols.value("major7th").size() != 0) ? qualitySymbols.value("major7th").at(0).qualitySymbol : "-1";
         globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityMajorSeventh, defaultSymbol);
 
-        defaultSymbol = qualitySymbols.value("half-diminished").at(0).qualitySymbol;
+        defaultSymbol
+            = (qualitySymbols.value("half-diminished").size() != 0) ? qualitySymbols.value("half-diminished").at(0).qualitySymbol : "-1";
         globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityHalfDiminished, defaultSymbol);
 
-        defaultSymbol = qualitySymbols.value("minor").at(0).qualitySymbol;
+        defaultSymbol = (qualitySymbols.value("minor").size() != 0) ? qualitySymbols.value("minor").at(0).qualitySymbol : "-1";
         globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityMinor, defaultSymbol);
 
-        defaultSymbol = qualitySymbols.value("augmented").at(0).qualitySymbol;
+        defaultSymbol = (qualitySymbols.value("augmented").size() != 0) ? qualitySymbols.value("augmented").at(0).qualitySymbol : "-1";
         globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityAugmented, defaultSymbol);
 
-        defaultSymbol = qualitySymbols.value("diminished").at(0).qualitySymbol;
+        defaultSymbol = (qualitySymbols.value("diminished").size() != 0) ? qualitySymbols.value("diminished").at(0).qualitySymbol : "-1";
         globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityDiminished, defaultSymbol);
 
-        defaultSymbol = qualitySymbols.value("omit").at(0).qualitySymbol;
+        defaultSymbol = (qualitySymbols.value("omit").size() != 0) ? qualitySymbols.value("omit").at(0).qualitySymbol : "-1";
         globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordModifierOmit, defaultSymbol);
     }
 }
