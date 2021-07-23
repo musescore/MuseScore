@@ -149,10 +149,7 @@ void Score::writeMovement(XmlWriter& xml, bool selectionOnly, compat::WriteScore
         xml.tag("layoutMode", "system");
     }
 
-    if (isMaster() && masterScore()->showOmr() && xml.writeOmr()) {
-        xml.tag("showOmr", masterScore()->showOmr());
-    }
-    if (_audio && xml.writeOmr()) {
+    if (_audio && xml.isMsczMode()) {
         xml.tag("playMode", int(_playMode));
         _audio->write(xml);
     }
@@ -551,7 +548,7 @@ static QString revision;
 bool Score::writeScore(QIODevice* f, bool msczFormat, bool onlySelection, compat::WriteScoreHook& hook)
 {
     XmlWriter xml(this, f);
-    xml.setWriteOmr(msczFormat);
+    xml.setIsMsczMode(msczFormat);
     xml.header();
 
     xml.stag("museScore version=\"" MSC_VERSION "\"");

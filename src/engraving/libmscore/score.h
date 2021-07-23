@@ -1379,11 +1379,6 @@ class MasterScore : public Score
 
     CmdState _cmdState;       // modified during cmd processing
 
-    Omr* _omr               { 0 };
-    bool _showOmr           { false };
-
-    std::shared_ptr<Avs::AvsOmr> _avsOmr { nullptr };
-
     Fraction _pos[3];                      ///< 0 - current, 1 - left loop, 2 - right loop
 
     int _midiPortCount      { 0 };                    // A count of ALSA midi out ports
@@ -1478,15 +1473,6 @@ public:
 
     bool isSavable() const;
     void setTempomap(TempoMap* tm);
-
-    Omr* omr() const { return _omr; }
-    void setOmr(Omr* o) { _omr = o; }
-    void removeOmr();
-    bool showOmr() const { return _showOmr; }
-    void setShowOmr(bool v) { _showOmr = v; }
-
-    std::shared_ptr<Avs::AvsOmr> avsOmr() const { return _avsOmr; }
-    void setAvsOmr(std::shared_ptr<Avs::AvsOmr> omr) { _avsOmr = omr; }
 
     int midiPortCount() const { return _midiPortCount; }
     void setMidiPortCount(int val) { _midiPortCount = val; }

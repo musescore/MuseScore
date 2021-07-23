@@ -248,7 +248,7 @@ class XmlWriter : public QTextStream
 
     bool _clipboardmode  { false };     // used to modify write() behaviour
     bool _excerptmode    { false };     // true when writing a part
-    bool _writeOmr       { true };      // false if writing into *.msc file
+    bool _msczMode       { true };      // false if writing into *.msc file
     bool _writeTrack     { false };
     bool _writePosition  { false };
 
@@ -279,13 +279,13 @@ public:
 
     bool clipboardmode() const { return _clipboardmode; }
     bool excerptmode() const { return _excerptmode; }
-    bool writeOmr() const { return _writeOmr; }
+    bool isMsczMode() const { return _msczMode; }
     bool writeTrack() const { return _writeTrack; }
     bool writePosition() const { return _writePosition; }
 
     void setClipboardmode(bool v) { _clipboardmode = v; }
     void setExcerptmode(bool v) { _excerptmode = v; }
-    void setWriteOmr(bool v) { _writeOmr = v; }
+    void setIsMsczMode(bool v) { _msczMode = v; }
     void setWriteTrack(bool v) { _writeTrack= v; }
     void setWritePosition(bool v) { _writePosition = v; }
 

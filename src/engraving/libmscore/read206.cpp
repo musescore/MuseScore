@@ -3395,7 +3395,7 @@ static bool readScore(Score* score, XmlReader& e)
             score->setAudio(new Audio);
             score->audio()->read(e);
         } else if (tag == "showOmr") {
-            score->masterScore()->setShowOmr(e.readInt());
+            e.skipCurrentElement();
         } else if (tag == "playMode") {
             score->setPlayMode(PlayMode(e.readInt()));
         } else if (tag == "LayerTag") {
@@ -3620,9 +3620,6 @@ static bool readScore(Score* score, XmlReader& e)
 
     if (score->isMaster()) {
         MasterScore* ms = static_cast<MasterScore*>(score);
-        if (!ms->omr()) {
-            ms->setShowOmr(false);
-        }
         ms->rebuildMidiMapping();
         ms->updateChannel();
         //           ms->createPlayEvents();
