@@ -22,7 +22,11 @@
 
 #include "libmscore/select.h"
 
+#include "modularity/ioc.h"
+#include "ui/iuiconfiguration.h"
 #include "ui/view/widgetview.h"
+#include "notation/inotation.h"
+#include "async/asyncable.h"
 
 #include <vector>
 #include <QGraphicsView>
@@ -30,7 +34,6 @@
 
 namespace Ms {
 class Score;
-class ScoreView;
 class Page;
 class Timeline;
 class ViewRect;
@@ -110,9 +113,11 @@ struct TimelineTheme {
 //   Timeline
 //---------------------------------------------------------
 
-class Timeline : public QGraphicsView, public mu::ui::IDisplayableWidget
+class Timeline : public QGraphicsView, public mu::ui::IDisplayableWidget, public mu::async::Asyncable
 {
     Q_OBJECT
+
+    INJECT(Ms, mu::ui::IUiConfiguration, uiConfiguration)
 
 public:
     enum class ItemType {
@@ -142,8 +147,7 @@ private:
     QSplitter* _splitter { nullptr };
     TRowLabels* _rowNames { nullptr };
 
-    Score* _score { nullptr };
-    ScoreView* _cv { nullptr };
+    mu::notation::INotationPtr m_notation;
 
     int gridRows = 0;
     int gridCols = 0;
@@ -207,10 +211,12 @@ private:
 
     void updateGrid(int startMeasure = -1, int endMeasure = -1);
 
+    mu::notation::INotationInteractionPtr interaction() const;
+    Ms::Score* score() const;
+
 private slots:
     void handleScroll(int value);
     void updateView();
-    void objectDestroyed(QObject*);
 
 public slots:
     void changeSelection(SelState);
@@ -236,8 +242,7 @@ public:
     void drawSelection();
     void drawGrid(int globalRows, int globalCols, int startMeasure = 0, int endMeasure = -1);
 
-    void setScore(Score* s);
-    void setScoreView(ScoreView* sv);
+    void setNotation(mu::notation::INotationPtr notation);
 
     int nstaves() const;
 
