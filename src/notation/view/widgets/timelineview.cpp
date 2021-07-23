@@ -41,14 +41,12 @@ public:
         m_msTimeline = new Ms::Timeline(this, this);
     }
 
-    void setScore(Ms::Score* score)
+    void setNotation(INotationPtr notation)
     {
-        m_msTimeline->setScore(score);
-        m_msTimeline->setScoreView(nullptr);
+        m_msTimeline->setNotation(notation);
     }
 
 private:
-    // IDisplayableWidget
     QWidget* qWidget() override
     {
         return this;
@@ -77,11 +75,7 @@ void TimeLineView::componentComplete()
     TimeLineAdapter* timeline = new TimeLineAdapter();
 
     globalContext()->currentNotationChanged().onNotify(this, [this, timeline]() {
-        INotationPtr notation = globalContext()->currentNotation();
-
-        if (notation) {
-            timeline->setScore(notation->elements()->msScore());
-        }
+        timeline->setNotation(globalContext()->currentNotation());
     });
 
     connect(this, &QQuickItem::widthChanged, [timeline, this]() {
