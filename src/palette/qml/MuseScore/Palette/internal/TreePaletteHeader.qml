@@ -137,19 +137,19 @@ Item {
         navigation.column: 3
 
         menuModel: [
-            {code: "hide", title: root.custom ? qsTrc("palette", "Hide/Delete Palette") : qsTrc("palette", "Hide Palette") },
-            {code: "new", title: qsTrc("palette", "Insert New Palette") },
-            {code: "", title: "" }, // separator
-            {code: "edit", title: qsTrc("palette", "Enable Editing"), checkable: true, checked: root.editingEnabled },
-            {code: "", title: "" }, // separator
-            {code: "reset", title: qsTrc("palette", "Reset Palette") },
-            {code: "save", title: qsTrc("palette", "Save Palette…") },
-            {code: "load", title: qsTrc("palette", "Load Palette…") },
-            {code: "", title: "" }, // separator
-            {code: "properties", title: qsTrc("palette", "Palette Properties…") },
+            {id: "hide", title: root.custom ? qsTrc("palette", "Hide/Delete Palette") : qsTrc("palette", "Hide Palette") },
+            {id: "new", title: qsTrc("palette", "Insert New Palette") },
+            {id: "", title: "" }, // separator
+            {id: "edit", title: qsTrc("palette", "Enable Editing"), checkable: true, checked: root.editingEnabled },
+            {id: "", title: "" }, // separator
+            {id: "reset", title: qsTrc("palette", "Reset Palette") },
+            {id: "save", title: qsTrc("palette", "Save Palette…") },
+            {id: "load", title: qsTrc("palette", "Load Palette…") },
+            {id: "", title: "" }, // separator
+            {id: "properties", title: qsTrc("palette", "Palette Properties…") },
         ]
 
-        onHandleAction: {
+        onHandleMenuItem: {
             switch(actionCode) {
             case "hide": root.hidePaletteRequested(); break
             case "new": root.insertNewPaletteRequested(); break

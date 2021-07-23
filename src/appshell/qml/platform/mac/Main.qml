@@ -72,12 +72,12 @@ AppWindow {
     function makeMenuItem(parentMenu, itemInfo) {
         var menuItem = menuItemComponent.createObject(parentMenu)
 
+        menuItem.id = itemInfo.id
         menuItem.text = itemInfo.title
         menuItem.enabled = itemInfo.enabled
         menuItem.checked = itemInfo.checked
         menuItem.checkable = itemInfo.checkable
         menuItem.shortcut = itemInfo.shortcut
-        menuItem.id = itemInfo.id
         menuItem.separator = !Boolean(itemInfo.title)
 
         return menuItem

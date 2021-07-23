@@ -52,10 +52,6 @@ public:
     Q_INVOKABLE void handleMenuItem(const QString& itemId);
     Q_INVOKABLE QVariantMap get(int index);
 
-signals:
-    void countChanged(int count);
-
-protected:
     virtual void onActionsStateChanges(const actions::ActionCodeList& codes);
 
     enum Roles {
@@ -91,6 +87,9 @@ protected:
 
     bool isIndexValid(int index) const;
     void dispatch(const actions::ActionCode& actionCode, const actions::ActionData& args = actions::ActionData());
+
+signals:
+    void countChanged(int count);
 
 private:
     MenuItem& item(MenuItemList& items, const QString& itemId);
