@@ -22,7 +22,7 @@
 
 #include "testing/qtestsuite.h"
 #include "testbase.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 
 static const QString UNROLLREPEATS_DATA_DIR("unrollrepeats_data/");
 

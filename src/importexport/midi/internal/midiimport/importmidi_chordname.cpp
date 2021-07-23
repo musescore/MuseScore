@@ -23,7 +23,7 @@
 #include "importmidi_inner.h"
 #include "importmidi_chord.h"
 #include "importmidi_fraction.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/staff.h"
 #include "libmscore/measure.h"
 #include "libmscore/harmony.h"

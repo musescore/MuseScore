@@ -35,7 +35,7 @@
 #include "palette/palettecreator.h"
 #include "keyedit.h"
 #include "libmscore/keysig.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/accidental.h"
 #include "keycanvas.h"
 #include "libmscore/clef.h"

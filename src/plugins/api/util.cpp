@@ -27,7 +27,7 @@
 
 #include "score.h"
 
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/measurebase.h"
 #include "libmscore/page.h"
 #include "libmscore/system.h"

@@ -25,7 +25,7 @@
 #include <cmath>
 #include <QMimeData>
 
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/element.h"
 #include "libmscore/page.h"
 #include "libmscore/system.h"

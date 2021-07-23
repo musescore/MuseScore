@@ -21,7 +21,7 @@
  */
 #include "writescorehook.h"
 
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/xml.h"
 
 #include "config.h"

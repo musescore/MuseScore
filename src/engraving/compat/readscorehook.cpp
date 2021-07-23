@@ -22,7 +22,7 @@
 #include "readscorehook.h"
 #include "readstyle.h"
 
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/scorefont.h"
 
 #include "log.h"

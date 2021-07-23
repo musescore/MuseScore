@@ -25,7 +25,7 @@
 #include "engraving/engravingmodule.h"
 #include "framework/fonts/fontsmodule.h"
 
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/musescoreCore.h"
 
 #include "log.h"

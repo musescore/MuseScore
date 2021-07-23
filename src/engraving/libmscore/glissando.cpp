@@ -237,7 +237,7 @@ void Glissando::layout()
 {
     qreal _spatium = spatium();
 
-    if (score() == gscore || !startElement() || !endElement()) {    // for use in palettes or while dragging
+    if (score()->isPaletteScore() || !startElement() || !endElement()) {    // for use in palettes or while dragging
         if (spannerSegments().empty()) {
             add(createLineSegment());
         }

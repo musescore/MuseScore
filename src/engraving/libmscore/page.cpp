@@ -44,6 +44,8 @@
 #include "mscore.h"
 #include "segment.h"
 
+#include "masterscore.h"
+
 using namespace mu;
 
 namespace Ms {

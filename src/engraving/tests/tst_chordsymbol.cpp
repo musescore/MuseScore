@@ -24,7 +24,7 @@
 
 #include "testbase.h"
 
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/undo.h"
 #include "libmscore/excerpt.h"
 #include "libmscore/part.h"

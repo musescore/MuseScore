@@ -41,6 +41,8 @@
 #include "scoreorder.h"
 #include "measurebase.h"
 
+#include "masterscore.h"
+
 using namespace mu;
 using namespace mu::engraving;
 

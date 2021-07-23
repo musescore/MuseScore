@@ -28,7 +28,7 @@
 #include "libmscore/keylist.h"
 #include "libmscore/measure.h"
 #include "libmscore/staff.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "importmidi_operations.h"
 
 // This simple key detection algorithm is from thesis

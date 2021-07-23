@@ -42,7 +42,7 @@
 #include "libmscore/tuplet.h"
 #include "libmscore/accidental.h"
 #include "libmscore/musescoreCore.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/undo.h"
 #include "playevent.h"
 #include "libmscore/types.h"

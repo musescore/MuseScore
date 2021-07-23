@@ -25,7 +25,7 @@
 #include <QQmlEngine>
 #include <QMetaEnum>
 
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 
 namespace Ms {
 namespace PluginAPI {

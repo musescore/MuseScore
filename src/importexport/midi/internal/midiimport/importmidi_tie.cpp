@@ -32,7 +32,7 @@
 
 #ifdef QT_DEBUG
 #include "libmscore/staff.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/measure.h"
 #endif
 

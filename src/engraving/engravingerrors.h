@@ -23,7 +23,7 @@
 #ifndef MU_ENGRAVING_ENGRAVINGERRORS_H
 #define MU_ENGRAVING_ENGRAVINGERRORS_H
 
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 
 namespace mu::engraving {
 enum class Err {

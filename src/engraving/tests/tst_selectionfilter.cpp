@@ -22,7 +22,7 @@
 
 #include "testing/qtestsuite.h"
 #include "testbase.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/measure.h"
 
 static const QString SELECTIONFILTER_DATA_DIR("selectionfilter_data/");

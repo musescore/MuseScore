@@ -29,7 +29,7 @@
 #include "libmscore/spatium.h"
 #include "libmscore/mscore.h"
 #include "libmscore/xml.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/articulation.h"
 #include "libmscore/harmony.h"
 #include "libmscore/chordlist.h"

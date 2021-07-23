@@ -27,7 +27,7 @@
 #include "accessibility/iaccessibilitycontroller.h"
 
 #include "accessibleelement.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 
 namespace mu::score {
 class AccessibleScore : public accessibility::IAccessible

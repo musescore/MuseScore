@@ -31,6 +31,7 @@
 #include "selection.h"
 #include "tie.h"
 
+#include "libmscore/masterscore.h"
 #include "libmscore/musescoreCore.h"
 #include "engraving/compat/scoreaccess.h"
 

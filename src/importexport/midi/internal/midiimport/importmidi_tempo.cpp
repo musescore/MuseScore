@@ -23,7 +23,7 @@
 
 #include "importmidi_inner.h"
 #include "importmidi_beat.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/measure.h"
 #include "libmscore/tempo.h"
 #include "libmscore/tempotext.h"

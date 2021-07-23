@@ -87,6 +87,8 @@
 #include "measurenumber.h"
 #include "marker.h"
 
+#include "masterscore.h"
+
 using namespace mu;
 using namespace mu::engraving;
 

@@ -48,7 +48,7 @@
 
 #include "engraving/style/style.h"
 
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/rest.h"
 #include "libmscore/chord.h"
 #include "libmscore/sig.h"

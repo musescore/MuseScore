@@ -23,7 +23,7 @@
 #include "testing/qtestsuite.h"
 #include "testutils.h"
 #include "libmscore/text.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/sym.h"
 #include "libmscore/xml.h"
 

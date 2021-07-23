@@ -24,7 +24,7 @@
 #include "style/defaultstyle.h"
 #include "style/style.h"
 
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 
 #include "chordlist.h"
 

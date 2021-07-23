@@ -29,7 +29,7 @@
 #include "selectnotedialog.h"
 #include "libmscore/element.h"
 #include "libmscore/system.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/chord.h"
 #include "libmscore/segment.h"
 #include "libmscore/note.h"

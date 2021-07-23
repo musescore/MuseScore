@@ -22,7 +22,7 @@
 
 #include "libmscore/mscore.h"
 #include "bb.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/part.h"
 #include "libmscore/staff.h"
 #include "libmscore/text.h"

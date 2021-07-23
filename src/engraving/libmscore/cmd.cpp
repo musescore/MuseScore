@@ -88,6 +88,8 @@
 #include "rehearsalmark.h"
 #include "sym.h"
 
+#include "masterscore.h"
+
 #include "log.h"
 
 using namespace mu;

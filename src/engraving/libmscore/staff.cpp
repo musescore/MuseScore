@@ -44,6 +44,8 @@
 #include "bracketItem.h"
 #include "chord.h"
 
+#include "masterscore.h"
+
 // #define DEBUG_CLEFS
 
 using namespace mu;

@@ -25,7 +25,7 @@
 #include "ret.h"
 #include "translation.h"
 #include "io/path.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "engraving/engravingerrors.h"
 
 namespace mu {

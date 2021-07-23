@@ -27,7 +27,7 @@
 #include <QQmlEngine>
 
 #include "libmscore/element.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 
 class InspectorFormWidget;
 

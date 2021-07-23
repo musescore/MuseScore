@@ -1153,14 +1153,14 @@ SpannerSegment* SLine::layoutSystem(System* system)
 
 void SLine::layout()
 {
-    if (score() == gscore || (tick() == Fraction(-1, 1)) || (tick2() == Fraction::fromTicks(1))) {
+    if (score()->isPaletteScore() || (tick() == Fraction(-1, 1)) || (tick2() == Fraction::fromTicks(1))) {
         //
         // when used in a palette or while dragging from palette,
         // SLine has no parent and
         // tick and tick2 has no meaning so no layout is
         // possible and needed
         //
-        setLen(gscore->spatium() * 7);
+        setLen(score()->spatium() * 7);
         if (!spannerSegments().empty()) {
             LineSegment* lineSegm = frontSegment();
             lineSegm->layout();
@@ -1279,7 +1279,7 @@ void SLine::writeProperties(XmlWriter& xml) const
     writeProperty(xml, Pid::ANCHOR);
     writeProperty(xml, Pid::DASH_LINE_LEN);
     writeProperty(xml, Pid::DASH_GAP_LEN);
-    if (score() == gscore) {
+    if (score()->isPaletteScore()) {
         // when used as icon
         if (!spannerSegments().empty()) {
             const LineSegment* s = frontSegment();

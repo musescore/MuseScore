@@ -94,6 +94,8 @@
 #include "stafflines.h"
 #include "bracketItem.h"
 
+#include "masterscore.h"
+
 #include "log.h"
 
 using namespace mu;
