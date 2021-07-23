@@ -23,7 +23,7 @@
 #include "testing/qtestsuite.h"
 #include "testbase.h"
 #include "libmscore/staff.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/tuplet.h"
 #include "libmscore/chord.h"
 #include "libmscore/measure.h"

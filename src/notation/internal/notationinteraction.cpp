@@ -30,7 +30,7 @@
 
 #include "ptrutils.h"
 
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/page.h"
 #include "libmscore/shadownote.h"
 #include "libmscore/staff.h"

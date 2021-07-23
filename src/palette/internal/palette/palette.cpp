@@ -41,7 +41,7 @@
 
 #include "libmscore/element.h"
 #include "libmscore/symbol.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/image.h"
 #include "libmscore/xml.h"
 #include "libmscore/note.h"

@@ -90,6 +90,8 @@
 #include "textedit.h"
 #include "textline.h"
 
+#include "masterscore.h"
+
 #include "log.h"
 #define LOG_UNDO() if (0) LOGD()
 

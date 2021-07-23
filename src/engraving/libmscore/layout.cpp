@@ -83,6 +83,8 @@
 #include "fermata.h"
 #include "measurenumber.h"
 
+#include "masterscore.h"
+
 using namespace mu;
 
 namespace Ms {

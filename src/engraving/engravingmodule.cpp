@@ -31,7 +31,7 @@
 #include "engraving/style/defaultstyle.h"
 
 #include "engraving/libmscore/mscore.h"
-#include "engraving/libmscore/score.h"
+#include "engraving/libmscore/masterscore.h"
 #include "engraving/libmscore/scorefont.h"
 
 #include "compat/scoreaccess.h"

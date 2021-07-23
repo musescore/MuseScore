@@ -40,7 +40,7 @@
 #include "libmscore/image.h"
 #include "libmscore/imageStore.h"
 #include "libmscore/mscore.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/textbase.h"
 #include "libmscore/element.h"
 #include "libmscore/bracket.h"

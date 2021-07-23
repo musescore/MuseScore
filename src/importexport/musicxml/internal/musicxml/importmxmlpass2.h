@@ -25,7 +25,7 @@
 
 #include <array>
 
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/tuplet.h"
 #include "importxmlfirstpass.h"
 #include "importmxmlpass1.h"

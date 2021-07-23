@@ -34,6 +34,8 @@
 #include "musescoreCore.h"
 #include "sym.h"
 
+#include "masterscore.h"
+
 using namespace mu;
 
 namespace Ms {

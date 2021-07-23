@@ -40,7 +40,7 @@
 #include "libmscore/note.h"
 #include "libmscore/part.h"
 #include "libmscore/pitchspelling.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/slur.h"
 #include "libmscore/tie.h"
 #include "libmscore/staff.h"

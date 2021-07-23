@@ -23,7 +23,7 @@
 #include "cursor.h"
 #include "elements.h"
 #include "score.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/chordrest.h"
 #include "libmscore/chord.h"
 #include "libmscore/rest.h"

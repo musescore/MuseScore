@@ -22,7 +22,7 @@
 
 #include <QtTest/QtTest>
 #include "mtest/testutils.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 
 #define DIR QString("libmscore/compat114/")
 

@@ -26,7 +26,7 @@
 #include <QTextStream>
 
 #include "config.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/note.h"
 #include "libmscore/chord.h"
 #include "libmscore/instrtemplate.h"

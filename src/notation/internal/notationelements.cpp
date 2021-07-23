@@ -21,7 +21,7 @@
  */
 #include "notationelements.h"
 
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/segment.h"
 #include "libmscore/rehearsalmark.h"
 #include "libmscore/measure.h"

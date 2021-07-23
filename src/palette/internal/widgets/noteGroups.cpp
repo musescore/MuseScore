@@ -25,7 +25,7 @@
 #include "libmscore/chord.h"
 #include "libmscore/mcursor.h"
 #include "libmscore/timesig.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/part.h"
 #include "libmscore/key.h"
 #include "libmscore/actionicon.h"

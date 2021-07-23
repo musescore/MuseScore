@@ -24,7 +24,7 @@
 
 #include "svggenerator.h"
 
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/page.h"
 #include "libmscore/system.h"
 #include "libmscore/staff.h"

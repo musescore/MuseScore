@@ -21,7 +21,7 @@
  */
 #include "notationnoteinput.h"
 
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/input.h"
 #include "libmscore/staff.h"
 #include "libmscore/note.h"

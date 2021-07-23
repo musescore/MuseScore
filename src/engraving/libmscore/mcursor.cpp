@@ -20,22 +20,22 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "libmscore/mcursor.h"
+#include "mcursor.h"
 
 #include "engraving/compat/scoreaccess.h"
 
-#include "libmscore/part.h"
-#include "libmscore/staff.h"
-#include "libmscore/note.h"
-#include "libmscore/chord.h"
-#include "libmscore/rest.h"
-#include "libmscore/durationtype.h"
-#include "libmscore/measure.h"
-#include "libmscore/segment.h"
-#include "libmscore/score.h"
-#include "libmscore/instrtemplate.h"
-#include "libmscore/keysig.h"
-#include "libmscore/timesig.h"
+#include "part.h"
+#include "staff.h"
+#include "note.h"
+#include "chord.h"
+#include "rest.h"
+#include "durationtype.h"
+#include "measure.h"
+#include "segment.h"
+#include "instrtemplate.h"
+#include "keysig.h"
+#include "timesig.h"
+#include "masterscore.h"
 
 using namespace mu;
 

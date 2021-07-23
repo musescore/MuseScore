@@ -34,6 +34,8 @@
 #include "part.h"
 #include "score.h"
 
+#include "masterscore.h"
+
 #include "framework/midi_old/midipatch.h"
 #include "log.h"
 

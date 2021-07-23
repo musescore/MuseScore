@@ -26,7 +26,7 @@
 
 #include "log.h"
 
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/scorefont.h"
 #include "libmscore/page.h"
 #include "libmscore/rendermidi.h"

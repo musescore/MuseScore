@@ -26,6 +26,8 @@
 #include "range.h"
 #include "spanner.h"
 
+#include "masterscore.h"
+
 using namespace mu;
 
 namespace Ms {

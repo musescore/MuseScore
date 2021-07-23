@@ -21,6 +21,7 @@
  */
 #include "scoreaccess.h"
 #include "style/defaultstyle.h"
+#include "libmscore/masterscore.h"
 
 using namespace mu::engraving::compat;
 

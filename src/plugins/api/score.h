@@ -27,7 +27,7 @@
 #include "part.h"
 #include "style.h"
 #include "excerpt.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 
 namespace Ms {
 class InstrumentTemplate;

@@ -26,7 +26,7 @@
 
 #include "libmscore/clef.h"
 #include "libmscore/measure.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/undo.h"
 
 static const QString CLEFCOURTESY_DATA_DIR("clef_courtesy_data/");

@@ -80,6 +80,8 @@
 #include "textline.h"
 #include "pedal.h"
 
+#include "masterscore.h"
+
 using namespace mu;
 using namespace mu::engraving;
 

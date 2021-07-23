@@ -34,6 +34,8 @@
 #include "textedit.h"
 #include "measure.h"
 
+#include "masterscore.h"
+
 using namespace mu;
 
 namespace Ms {

@@ -25,7 +25,7 @@
 #include "testbase.h"
 
 #include "libmscore/mscore.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/note.h"
 #include "libmscore/accidental.h"
 #include "libmscore/chord.h"

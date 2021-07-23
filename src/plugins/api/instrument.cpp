@@ -24,7 +24,7 @@
 
 #include "framework/midi_old/midipatch.h"
 #include "libmscore/part.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/undo.h"
 
 namespace Ms {

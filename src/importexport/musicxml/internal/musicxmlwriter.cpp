@@ -24,7 +24,7 @@
 
 #include "log.h"
 
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "musicxml/exportxml.h"
 
 using namespace mu::iex::musicxml;

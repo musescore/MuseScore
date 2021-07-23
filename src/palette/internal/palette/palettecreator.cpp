@@ -28,7 +28,7 @@
 
 #include "actions/actiontypes.h"
 
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/note.h"
 #include "libmscore/chordrest.h"
 #include "libmscore/dynamic.h"
@@ -1074,7 +1074,7 @@ PalettePanel* PaletteCreator::newBracketsPalettePanel()
     static Staff bracketItemOwner(gscore);
     bracketItemOwner.setBracketType(static_cast<int>(types.size()) - 1, BracketType::NORMAL);
 
-    for (int i = 0; i < types.size(); ++i) {
+    for (size_t i = 0; i < types.size(); ++i) {
         auto b1 = makeElement<Bracket>(gscore);
         auto bi1 = bracketItemOwner.brackets()[i];
         const auto& type = types[i];

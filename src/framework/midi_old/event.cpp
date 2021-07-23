@@ -28,7 +28,7 @@
 #include "libmscore/staff.h"
 #include "libmscore/instrument.h"
 #include "libmscore/part.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 
 namespace Ms {
 //---------------------------------------------------------
