@@ -332,7 +332,8 @@ void CmdState::dump()
 void Score::update(bool resetCmdState)
 {
     bool updateAll = false;
-    for (MasterScore* ms : *movements()) {
+    {
+        MasterScore* ms = masterScore();
         CmdState& cs = ms->cmdState();
         ms->deletePostponed();
         if (cs.layoutRange()) {
@@ -343,7 +344,8 @@ void Score::update(bool resetCmdState)
         }
     }
 
-    for (MasterScore* ms : *movements()) {
+    {
+        MasterScore* ms = masterScore();
         CmdState& cs = ms->cmdState();
         if (updateAll || cs.updateAll()) {
             for (Score* s : scoreList()) {
@@ -374,6 +376,7 @@ void Score::update(bool resetCmdState)
             cs.reset();
         }
     }
+
     if (_selection.isRange() && !_selection.isLocked()) {
         _selection.updateSelectedElements();
     }

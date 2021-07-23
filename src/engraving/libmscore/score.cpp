@@ -5284,6 +5284,7 @@ MasterScore::MasterScore(std::shared_ptr<engraving::EngravingProject> project)
     : Score()
 {
     m_project = project;
+    _undoStack   = new UndoStack();
     _tempomap    = new TempoMap;
     _sigmap      = new TimeSigMap();
     _repeatList  = new RepeatList(this);
@@ -5321,8 +5322,6 @@ MasterScore::MasterScore(std::shared_ptr<engraving::EngravingProject> project)
 MasterScore::MasterScore(const MStyle& s, std::shared_ptr<engraving::EngravingProject> project)
     : MasterScore{project}
 {
-    _movements = new Movements;
-    _movements->push_back(this);
     setStyle(s);
 }
 
@@ -5339,18 +5338,6 @@ MasterScore::~MasterScore()
     delete _sigmap;
     delete _tempomap;
     qDeleteAll(_excerpts);
-}
-
-//---------------------------------------------------------
-//   setMovements
-//---------------------------------------------------------
-
-void MasterScore::setMovements(Movements* m)
-{
-    _movements = m;
-    if (_movements) {
-        _movements->push_back(this);
-    }
 }
 
 //---------------------------------------------------------
@@ -5621,34 +5608,9 @@ void MasterScore::rebuildAndUpdateExpressive(Synthesizer* synth)
     rebuildMidiMapping();
 }
 
-//---------------------------------------------------------
-//   isTopScore
-//---------------------------------------------------------
-
-bool Score::isTopScore() const
-{
-    return !(isMaster() && static_cast<const MasterScore*>(this)->prev());
-}
-
 mu::score::AccessibleScore* Score::accessible() const
 {
     return m_accessible;
-}
-
-//---------------------------------------------------------
-//   Movements
-//---------------------------------------------------------
-
-Movements::Movements()
-    : std::vector<MasterScore*>()
-{
-    _undo = new UndoStack();
-}
-
-Movements::~Movements()
-{
-    qDeleteAll(_pages);
-    delete _undo;
 }
 
 //---------------------------------------------------------
