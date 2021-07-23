@@ -56,9 +56,9 @@ struct SynthUri : public UriQuery
         : UriQuery("musescore://audio/" + synthTypeToString(type)), type(type) {}
 
 private:
-    std::string synthTypeToString(const SynthType& type)
+    std::string synthTypeToString(const SynthType& synthType)
     {
-        switch (type) {
+        switch (synthType) {
         case SynthType::Fluid: {
             static std::string fluid("fluid");
             return fluid;

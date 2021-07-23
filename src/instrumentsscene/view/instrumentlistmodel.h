@@ -104,7 +104,7 @@ private:
         bool customized = false;
         notation::ScoreOrder info;
 
-        bool operator==(const ScoreOrderInfo& info) const { return id == info.id; }
+        bool operator==(const ScoreOrderInfo& orderInfo) const { return id == orderInfo.id; }
     };
 
     void initSelectedInstruments(const notation::IDList& selectedPartIds);

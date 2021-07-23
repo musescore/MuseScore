@@ -60,8 +60,8 @@ SelectDialog::SelectDialog(QWidget* parent)
         subtype->setText(qApp->translate("TextStyle", m_element->subtypeName().toUtf8()));
         break;
     case ElementType::ARTICULATION: { // comes translated, but from a different method
-        const Articulation* articulation = dynamic_cast<const Articulation*>(m_element);
-        subtype->setText(articulation->userName());
+        const Articulation* artic = dynamic_cast<const Articulation*>(m_element);
+        subtype->setText(artic->userName());
         break;
     }
     // other come translated or don't need any or are too difficult to implement
