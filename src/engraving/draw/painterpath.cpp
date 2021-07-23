@@ -147,7 +147,7 @@ size_t PainterPath::elementCount() const
     return m_elements.size();
 }
 
-PainterPath::Element PainterPath::elementAt(int i) const
+PainterPath::Element PainterPath::elementAt(size_t i) const
 {
     assert(i >= 0 && i < elementCount());
     return m_elements.at(i);

@@ -95,7 +95,7 @@ public:
 
     bool isEmpty() const;
     size_t elementCount() const;
-    PainterPath::Element elementAt(int i) const;
+    PainterPath::Element elementAt(size_t i) const;
     void addRect(const RectF& r);
     inline void addRect(double x, double y, double w, double h)
     {
