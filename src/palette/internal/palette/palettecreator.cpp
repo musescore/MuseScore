@@ -1076,7 +1076,7 @@ PalettePanel* PaletteCreator::newBracketsPalettePanel()
 
     for (size_t i = 0; i < types.size(); ++i) {
         auto b1 = makeElement<Bracket>(gscore);
-        auto bi1 = bracketItemOwner.brackets()[i];
+        auto bi1 = bracketItemOwner.brackets()[static_cast<int>(i)];
         const auto& type = types[i];
         bi1->setBracketType(type.first);
         b1->setBracketItem(bi1);
