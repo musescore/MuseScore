@@ -35,7 +35,7 @@ static const QString ICON_KEY("icon");
 static const QString SELECTABLE_KEY("selectable");
 static const QString SELECTED_KEY("selected");
 static const QString TYPE_KEY("type");
-static const QString CODE_KEY("code");
+static const QString ID_KEY("id");
 static const QString VALUE_KEY("value");
 
 static const ActionCode TOGGLE_CONCERT_PITCH_CODE("concert-pitch");
@@ -73,6 +73,7 @@ QVariant NotationStatusBarModel::concertPitchAction() const
 QVariant NotationStatusBarModel::currentWorkspaceAction() const
 {
     MenuItem item = menuItem(SELECT_WORKSPACE_CODE);
+    item.id = QString::fromStdString(item.code);
     item.title = qtrc("appshell", "Workspace: ") + QString::fromStdString(workspaceConfiguration()->currentWorkspaceName());
     return item.toMap();
 }
@@ -80,6 +81,7 @@ QVariant NotationStatusBarModel::currentWorkspaceAction() const
 MenuItem NotationStatusBarModel::menuItem(const actions::ActionCode& actionCode) const
 {
     MenuItem item = actionsRegister()->action(actionCode);
+    item.id = QString::fromStdString(item.code);
     item.state = actionsRegister()->actionState(actionCode);
 
     return item;
@@ -126,7 +128,7 @@ QVariantList NotationStatusBarModel::availableViewModeList() const
 
         QVariantMap viewModeObj;
         viewModeObj[TYPE_KEY] = static_cast<int>(viewMode);
-        viewModeObj[CODE_KEY] = QString::fromStdString(code);
+        viewModeObj[ID_KEY] = QString::fromStdString(code);
         viewModeObj[TITLE_KEY] = correctedTitle(viewMode, action.title);
         viewModeObj[ICON_KEY] = static_cast<int>(action.iconCode);
 
@@ -246,6 +248,7 @@ QVariantList NotationStatusBarModel::availableZoomList() const
         obj[TITLE_KEY] = title.isEmpty() ? zoomTypeTitle(type) : title;
         obj[SELECTABLE_KEY] = true;
         obj[SELECTED_KEY] = false;
+        obj[ID_KEY] = obj[TITLE_KEY];
 
         if (m_currentZoomType == type) {
             obj[SELECTED_KEY] = type == ZoomType::Percentage ? value == currZoomPercentage : true;
@@ -276,9 +279,17 @@ QVariantList NotationStatusBarModel::availableZoomList() const
     return result;
 }
 
-void NotationStatusBarModel::setCurrentZoomIndex(int zoomIndex)
+void NotationStatusBarModel::setCurrentZoom(const QString& zoomId)
 {
     QVariantList zoomList = availableZoomList();
+    int zoomIndex = -1;
+    for (int i = 0; i < zoomList.count(); ++i) {
+        QVariantMap zoomObj = zoomList[i].toMap();
+        if (zoomObj[ID_KEY].toString() == zoomId) {
+            zoomIndex = i;
+            break;
+        }
+    }
 
     if (zoomIndex < 0 || zoomIndex >= zoomList.size()) {
         return;
@@ -314,9 +325,9 @@ void NotationStatusBarModel::zoomOut()
     dispatch("zoomout");
 }
 
-void NotationStatusBarModel::handleAction(const QString& actionCode)
+void NotationStatusBarModel::handleMenuItem(const QString& itemId)
 {
-    dispatch(codeFromQString(actionCode));
+    dispatch(codeFromQString(itemId));
 }
 
 INotationPtr NotationStatusBarModel::notation() const
