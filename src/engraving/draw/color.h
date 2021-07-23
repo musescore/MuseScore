@@ -89,7 +89,7 @@ private:
     void setRgba(Rgba rgb);
 
     Rgba m_rgba = rgba(0, 0, 0, DEFAULT_ALPHA);
-    bool m_isValid = true;
+    bool m_isValid = false;
 };
 }
 
