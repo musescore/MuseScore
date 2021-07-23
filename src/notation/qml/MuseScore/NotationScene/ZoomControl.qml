@@ -38,7 +38,7 @@ RowLayout {
     readonly property int navigationOrderMax: menuButton.navigation.order
 
     signal changeZoomPercentageRequested(var newZoomPercentage)
-    signal changeZoomRequested(var newZoomIndex)
+    signal changeZoomRequested(var zoomId)
     signal zoomInRequested()
     signal zoomOutRequested()
 
@@ -122,8 +122,8 @@ RowLayout {
 
             menuAnchorItem: ui.rootItem
 
-            onHandleAction: {
-                root.changeZoomRequested(actionIndex)
+            onHandleMenuItem: {
+                root.changeZoomRequested(itemId)
             }
         }
 
