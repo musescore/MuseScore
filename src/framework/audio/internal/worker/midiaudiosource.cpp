@@ -100,6 +100,10 @@ void MidiAudioSource::setupChannels()
 {
     ONLY_AUDIO_WORKER_THREAD;
 
+    IF_ASSERT_FAILED(m_synth) {
+        return;
+    }
+
     m_synth->setupMidiChannels(m_stream.controlEventsStream.val);
 }
 
