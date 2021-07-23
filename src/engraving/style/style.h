@@ -81,7 +81,7 @@ public:
 
 private:
 
-    friend class mu::engraving::compat::ReadStyleHook;
+    friend struct mu::engraving::compat::ReadStyleHook;
 
     void read(XmlReader& e, mu::engraving::compat::ReadChordListHook* readChordListHook);
 

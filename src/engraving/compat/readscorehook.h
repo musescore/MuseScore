@@ -34,7 +34,7 @@ class XmlReader;
 }
 
 namespace mu::engraving::compat {
-class ReadStyleHook;
+struct ReadStyleHook;
 class ReadScoreHook
 {
 public:
