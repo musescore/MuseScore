@@ -111,7 +111,7 @@ void MixerPanelModel::removeItem(const audio::TrackId trackId)
 {
     beginResetModel();
 
-    std::remove_if(m_mixerChannelList.begin(), m_mixerChannelList.end(), [&trackId](const MixerChannelItem* item) {
+    (void)std::remove_if(m_mixerChannelList.begin(), m_mixerChannelList.end(), [&trackId](const MixerChannelItem* item) {
         return item->id() == trackId;
     });
 
