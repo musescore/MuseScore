@@ -49,7 +49,7 @@ public:
 
     virtual void load();
 
-    Q_INVOKABLE void handleAction(const QString& actionCode, int actionIndex = -1);
+    Q_INVOKABLE void handleAction(const QString& menuId);
     Q_INVOKABLE QVariantMap get(int index);
 
 signals:
@@ -60,6 +60,7 @@ protected:
 
     enum Roles {
         CodeRole = Qt::UserRole + 1,
+        IdRole,
         TitleRole,
         DescriptionRole,
         ShortcutRole,
@@ -79,12 +80,11 @@ protected:
     static const int INVALID_ITEM_INDEX;
     int itemIndex(const actions::ActionCode& actionCode) const;
 
+    MenuItem& findItem(const QString& menuId);
     MenuItem& findItem(const actions::ActionCode& actionCode);
-    MenuItem& findItemByIndex(const actions::ActionCode& menuActionCode, int actionIndex);
-    MenuItem& findMenu(const actions::ActionCode& subitemsActionCode);
+    MenuItem& findMenu(const QString& menuId);
 
-    MenuItem makeMenu(const QString& title, const MenuItemList& items, bool enabled = true,
-                      const actions::ActionCode& menuActionCode = "") const;
+    MenuItem makeMenu(const QString& title, const MenuItemList& items, bool enabled = true, const QString& menuId = "") const;
 
     MenuItem makeMenuItem(const actions::ActionCode& actionCode) const;
     MenuItem makeSeparator() const;
@@ -93,8 +93,9 @@ protected:
     void dispatch(const actions::ActionCode& actionCode, const actions::ActionData& args = actions::ActionData());
 
 private:
+    MenuItem& item(MenuItemList& items, const QString& menuId);
     MenuItem& item(MenuItemList& items, const actions::ActionCode& actionCode);
-    MenuItem& menu(MenuItemList& items, const actions::ActionCode& subitemsActionCode);
+    MenuItem& menu(MenuItemList& items, const QString& menuId);
 
     MenuItemList m_items;
 };
