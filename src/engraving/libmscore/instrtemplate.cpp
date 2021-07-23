@@ -500,7 +500,7 @@ void InstrumentTemplate::read(XmlReader& e)
             QString traitName = qtrc("InstrumentsXML", e.readElementText().toUtf8().data());
             trait.isDefault = traitName.contains("*");
             trait.isHiddenOnScore = traitName.contains("(") && traitName.contains(")");
-            trait.name = traitName.remove("\*").remove("(").remove(")");
+            trait.name = traitName.remove("*").remove("(").remove(")");
         } else if (tag == "StringData") {
             stringData.read(e);
         } else if (tag == "drumset") {
