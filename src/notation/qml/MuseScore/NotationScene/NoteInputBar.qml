@@ -103,7 +103,7 @@ Rectangle {
                 if (menuLoader.isMenuOpened || hasMenu) {
                     toggleMenuOpened()
                 } else {
-                    handleAction()
+                    handleMenuItem()
                 }
             }
 
@@ -116,8 +116,8 @@ Rectangle {
                 menuLoader.toggleOpened(item.subitems, btn.navigation)
             }
 
-            function handleAction() {
-                Qt.callLater(noteInputModel.handleAction, item.code)
+            function handleMenuItem() {
+                Qt.callLater(noteInputModel.handleMenuItem, item.id)
             }
 
             onClicked: function (mouse) {
@@ -130,7 +130,7 @@ Rectangle {
                 }
 
                 if (mouse.button === Qt.LeftButton) {
-                    handleAction()
+                    handleMenuItem()
                 }
             }
 
@@ -170,8 +170,8 @@ Rectangle {
 
             StyledMenuLoader {
                 id: menuLoader
-                onHandleAction: function(actionCode) {
-                    noteInputModel.handleAction(actionCode)
+                onHandleMenuItem: function(itemId) {
+                    noteInputModel.handleMenuItem(itemId)
                 }
             }
         }
