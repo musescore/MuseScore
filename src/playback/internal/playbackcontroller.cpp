@@ -460,11 +460,11 @@ void PlaybackController::setCurrentSequence(const TrackSequenceId sequenceId)
 {
     PlaybackCursorType cursorType = configuration()->cursorType();
 
-    m_currentSequenceId = sequenceId;
-    m_currentSequenceIdChanged.notify();
-
     m_trackIdMap.clear();
     playback()->tracks()->removeAllTracks(m_currentSequenceId);
+
+    m_currentSequenceId = sequenceId;
+    m_currentSequenceIdChanged.notify();
 
     if (!notationPlayback()) {
         return;
