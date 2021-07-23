@@ -384,33 +384,6 @@ public:
 
 class MasterScore;
 
-//-----------------------------------------------------------------------------
-//   Movements
-//    A movement is a unit of a larger work that may stand
-//    by itself as a complete composition.
-//    A MuseScore score file can contain several movements represented as
-//    MasterScore's. A MasterScore can have several parts represented
-//    as Score. MasterScores are connected in a double linked list.
-//-----------------------------------------------------------------------------
-
-class Movements : public std::vector<MasterScore*>
-{
-    UndoStack* _undo;
-    QList<Page*> _pages;            // pages are build from systems
-    MStyle _style;
-
-public:
-    Movements();
-    ~Movements();
-    int pageIdx(Page* page) const { return _pages.indexOf(page); }
-    int npages() const { return _pages.size(); }
-    const QList<Page*>& pages() const { return _pages; }
-    QList<Page*>& pages() { return _pages; }
-    UndoStack* undo() const { return _undo; }
-    MStyle& style() { return _style; }
-    const MStyle& style() const { return _style; }
-};
-
 //---------------------------------------------------------------------------------------
 //   @@ Score
 //   @P composer        string            composer of the score (read only)
@@ -610,8 +583,6 @@ protected:
     void cmdToggleHideEmpty();
     void cmdSetVisible();
     void cmdUnsetVisible();
-    inline virtual Movements* movements();
-    inline virtual const Movements* movements() const;
 
     friend class MasterScore;
     Score();
@@ -708,8 +679,6 @@ public:
     bool appendScore(Score*, bool addPageBreak = false, bool addSectionBreak = true);
 
     void write(XmlWriter&, bool onlySelection, mu::engraving::compat::WriteScoreHook& hook);
-    void writeMovement(XmlWriter&, bool onlySelection, mu::engraving::compat::WriteScoreHook& hook);
-
     bool writeScore(QIODevice* f, bool msczFormat, bool onlySelection, mu::engraving::compat::WriteScoreHook& hook);
 
     QList<Staff*>& staves() { return _staves; }
@@ -1321,8 +1290,6 @@ public:
     void localTimeDelete();
     void globalTimeDelete();
 
-    bool isTopScore() const;
-
     Text* headerText(int index) const { return _headersText[index]; }
     Text* footerText(int index) const { return _footersText[index]; }
     void setHeaderText(Text* t, int index) { _headersText.at(index) = t; }
@@ -1361,7 +1328,8 @@ static inline const Score* toScore(const ScoreElement* e)
 class MasterScore : public Score
 {
     Q_OBJECT
-    TimeSigMap * _sigmap;
+    UndoStack * _undoStack = nullptr;
+    TimeSigMap* _sigmap;
     TempoMap* _tempomap;
     RepeatList* _repeatList;
     RepeatList* _repeatList2;
@@ -1371,9 +1339,6 @@ class MasterScore : public Score
     std::vector<PartChannelSettingsLink> _playbackSettingsLinks;
     Score* _playbackScore = nullptr;
     Revisions* _revisions;
-    MasterScore* _next      { 0 };
-    MasterScore* _prev      { 0 };
-    Movements* _movements   { 0 };
 
     bool _readOnly          { false };
 
@@ -1412,9 +1377,6 @@ class MasterScore : public Score
     FileError read206(XmlReader&);
     FileError read302(XmlReader&, mu::engraving::compat::ReadScoreHook& hooks);
 
-    void setPrev(MasterScore* s) { _prev = s; }
-    void setNext(MasterScore* s) { _next = s; }
-
     friend class mu::engraving::EngravingProject;
     friend class mu::engraving::compat::ScoreAccess;
     MasterScore(std::shared_ptr<mu::engraving::EngravingProject> project);
@@ -1434,7 +1396,7 @@ public:
     virtual bool isMaster() const override { return true; }
     virtual bool readOnly() const override { return _readOnly; }
     void setReadOnly(bool ro) { _readOnly = ro; }
-    virtual UndoStack* undoStack() const override { return _movements->undo(); }
+    virtual UndoStack* undoStack() const override { return _undoStack; }
     virtual TimeSigMap* sigmap() const override { return _sigmap; }
     virtual TempoMap* tempomap() const override { return _tempomap; }
 
@@ -1451,13 +1413,6 @@ public:
     virtual const QList<Excerpt*>& excerpts() const override { return _excerpts; }
     virtual QQueue<MidiInputEvent>* midiInputQueue() override { return &_midiInputQueue; }
     virtual std::list<MidiInputEvent>* activeMidiPitches() override { return &_activeMidiPitches; }
-
-    MasterScore* next() const { return _next; }
-    MasterScore* prev() const { return _prev; }
-    virtual Movements* movements() override { return _movements; }
-    virtual const Movements* movements() const override { return _movements; }
-    void setMovements(Movements* m);
-    void addMovement(MasterScore* score);
 
     virtual void setUpdateAll() override;
 
@@ -1531,14 +1486,6 @@ public:
     const QFileInfo& sessionStartBackupInfo() const { return _sessionStartBackupInfo; }
 
     virtual QString title() const override;
-
-    virtual int pageIdx(Page* page) const override { return movements()->pageIdx(page); }
-    virtual const QList<Page*>& pages() const override { return movements()->pages(); }
-    virtual QList<Page*>& pages() override { return movements()->pages(); }
-    virtual int npages() const override { return movements()->npages(); }
-
-    virtual MStyle& style() override { return movements()->style(); }
-    virtual const MStyle& style() const override { return movements()->style(); }
 };
 
 //---------------------------------------------------------
@@ -1578,15 +1525,13 @@ inline CmdState& Score::cmdState() { return _masterScore->cmdState(); }
 inline const CmdState& Score::cmdState() const { return _masterScore->cmdState(); }
 inline void Score::addLayoutFlags(LayoutFlags f) { _masterScore->addLayoutFlags(f); }
 inline void Score::setInstrumentsChanged(bool v) { _masterScore->setInstrumentsChanged(v); }
-inline Movements* Score::movements() { return _masterScore->movements(); }
-inline const Movements* Score::movements() const { return _masterScore->movements(); }
 
 inline Fraction Score::pos(POS pos) const { return _masterScore->pos(pos); }
 inline void Score::setPos(POS pos, Fraction tick) { _masterScore->setPos(pos, tick); }
 
 extern Ms::MasterScore* gscore;
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(LayoutFlags);
+Q_DECLARE_OPERATORS_FOR_FLAGS(LayoutFlags)
 }     // namespace Ms
 
 #endif

@@ -90,7 +90,6 @@ void EngravingModule::onInit(const framework::IApplication::RunMode&)
 
     Ms::gscore = compat::ScoreAccess::createMasterScore();
     Ms::gscore->setPaletteMode(true);
-    Ms::gscore->setMovements(new Ms::Movements());
     Ms::gscore->setStyle(DefaultStyle::baseStyle());
 
     Ms::gscore->style().set(Ms::Sid::MusicalTextFont, QString("Leland Text"));
