@@ -242,18 +242,18 @@ void ShadowNote::drawArticulations(mu::draw::Painter* painter) const
 
     RectF boundRect = RectF(PointF(x1, y1), PointF(x2, y2));
 
-    for (const SymId& articulation: score()->inputState().articulationIds()) {
-        bool isMarcato = QString(Articulation::symId2ArticulationName(articulation)).contains("marcato");
+    for (const SymId& artic: score()->inputState().articulationIds()) {
+        bool isMarcato = QString(Articulation::symId2ArticulationName(artic)).contains("marcato");
 
         if (isMarcato) {
-            drawMarcato(painter, articulation, boundRect);
+            drawMarcato(painter, artic, boundRect);
         } else {
-            drawArticulation(painter, articulation, boundRect);
+            drawArticulation(painter, artic, boundRect);
         }
     }
 }
 
-void ShadowNote::drawMarcato(mu::draw::Painter* painter, const SymId& articulation, RectF& boundRect) const
+void ShadowNote::drawMarcato(mu::draw::Painter* painter, const SymId& artic, RectF& boundRect) const
 {
     PointF coord;
     qreal spacing = spatium();
@@ -262,13 +262,13 @@ void ShadowNote::drawMarcato(mu::draw::Painter* painter, const SymId& articulati
     if (topY > 0) {
         topY = 0;
     }
-    coord.ry() = topY - symHeight(articulation);
+    coord.ry() = topY - symHeight(artic);
 
-    boundRect.setY(boundRect.y() - symHeight(articulation) - spacing);
-    drawSymbol(articulation, painter, coord);
+    boundRect.setY(boundRect.y() - symHeight(artic) - spacing);
+    drawSymbol(artic, painter, coord);
 }
 
-void ShadowNote::drawArticulation(mu::draw::Painter* painter, const SymId& articulation, RectF& boundRect) const
+void ShadowNote::drawArticulation(mu::draw::Painter* painter, const SymId& artic, RectF& boundRect) const
 {
     PointF coord;
     qreal spacing = spatium();
@@ -279,18 +279,18 @@ void ShadowNote::drawArticulation(mu::draw::Painter* painter, const SymId& artic
         if (topY > 0) {
             topY = 0;
         }
-        coord.ry() = topY - symHeight(articulation);
-        boundRect.setY(topY - symHeight(articulation) - spacing);
+        coord.ry() = topY - symHeight(artic);
+        boundRect.setY(topY - symHeight(artic) - spacing);
     } else {
         qreal bottomY = boundRect.bottomLeft().y();
         if (bottomY < 0) {
             bottomY = symHeight(m_noteheadSymbol);
         }
-        coord.ry() = bottomY + symHeight(articulation);
-        boundRect.setHeight(bottomY + symHeight(articulation) + spacing);
+        coord.ry() = bottomY + symHeight(artic);
+        boundRect.setHeight(bottomY + symHeight(artic) + spacing);
     }
 
-    drawSymbol(articulation, painter, coord);
+    drawSymbol(artic, painter, coord);
 }
 
 //---------------------------------------------------------

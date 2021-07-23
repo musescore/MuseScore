@@ -161,8 +161,8 @@ void InputState::update(Selection& selection)
                 }
 
                 std::set<SymId> articulationsIds;
-                for (Articulation* articulation: n->chord()->articulations()) {
-                    articulationsIds.insert(articulation->symId());
+                for (Articulation* artic: n->chord()->articulations()) {
+                    articulationsIds.insert(artic->symId());
                 }
 
                 articulationsIds = Ms::splitArticulations(articulationsIds);
@@ -177,8 +177,8 @@ void InputState::update(Selection& selection)
                 setAccidentalType(n->accidentalType());
 
                 std::set<SymId> articulationsIds;
-                for (Articulation* articulation: n->chord()->articulations()) {
-                    articulationsIds.insert(articulation->symId());
+                for (Articulation* artic: n->chord()->articulations()) {
+                    articulationsIds.insert(artic->symId());
                 }
                 articulationSymbolIds = Ms::flipArticulations(articulationsIds, Ms::Placement::ABOVE);
 

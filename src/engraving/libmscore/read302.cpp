@@ -177,9 +177,9 @@ bool Score::read(XmlReader& e, compat::ReadScoreHook& hooks)
                 e.tracks().clear();             // ???
                 MasterScore* m = masterScore();
                 Score* s = m->createScore();
-                compat::ReadScoreHook hooks;
-                hooks.installReadStyleHook(s);
-                hooks.setupDefaultStyle();
+                compat::ReadScoreHook compatHooks;
+                compatHooks.installReadStyleHook(s);
+                compatHooks.setupDefaultStyle();
 
                 Excerpt* ex = new Excerpt(m);
                 ex->setPartScore(s);

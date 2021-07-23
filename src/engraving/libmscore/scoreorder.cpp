@@ -42,18 +42,18 @@ static const QString UNSORTED_ID("<unsorted>");
 //   readBoolAttribute
 //---------------------------------------------------------
 
-bool ScoreOrder::readBoolAttribute(Ms::XmlReader& reader, const char* name, bool defvalue)
+bool ScoreOrder::readBoolAttribute(Ms::XmlReader& reader, const char* attrName, bool defvalue)
 {
-    if (!reader.hasAttribute(name)) {
+    if (!reader.hasAttribute(attrName)) {
         return defvalue;
     }
-    QString attr { reader.attribute(name) };
+    QString attr { reader.attribute(attrName) };
     if (attr.toLower() == "false") {
         return false;
     } else if (attr.toLower() == "true") {
         return true;
     }
-    qDebug("invalid value \"%s\" for attribute \"%s\", using default \"%d\"", qPrintable(attr), qPrintable(name), defvalue);
+    qDebug("invalid value \"%s\" for attribute \"%s\", using default \"%d\"", qPrintable(attr), qPrintable(attrName), defvalue);
     return defvalue;
 }
 
@@ -145,10 +145,10 @@ void ScoreOrder::readSection(Ms::XmlReader& reader)
 //   hasGroup
 //---------------------------------------------------------
 
-bool ScoreOrder::hasGroup(const QString& id, const QString& group) const
+bool ScoreOrder::hasGroup(const QString& familyId, const QString& group) const
 {
     for (const ScoreGroup& sg: groups) {
-        if ((sg.family == id) && (group == sg.unsorted)) {
+        if ((sg.family == familyId) && (group == sg.unsorted)) {
             return true;
         }
     }

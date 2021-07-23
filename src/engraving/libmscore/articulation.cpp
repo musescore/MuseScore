@@ -796,8 +796,8 @@ std::set<SymId> splitArticulations(const std::set<SymId>& articulationSymbolIds)
 {
     std::set<SymId> result;
     for (const SymId& articulationSymbolId: articulationSymbolIds) {
-        auto articulation = articulationAboveSplitGroups.find(articulationSymbolId);
-        if (articulation != articulationAboveSplitGroups.end()) {
+        auto artic = articulationAboveSplitGroups.find(articulationSymbolId);
+        if (artic != articulationAboveSplitGroups.end()) {
             ArticulationGroup group = articulationAboveSplitGroups[articulationSymbolId];
             result.insert(group.first);
             result.insert(group.second);

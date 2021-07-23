@@ -2945,9 +2945,9 @@ Articulation* Chord::hasArticulation(const Articulation* aa)
 void Chord::updateArticulations(const std::set<SymId>& newArticulationIds, ArticulationsUpdateMode updateMode)
 {
     std::set<SymId> currentArticulationIds;
-    for (Articulation* articulation: _articulations) {
-        currentArticulationIds.insert(articulation->symId());
-        score()->undoRemoveElement(articulation);
+    for (Articulation* artic: _articulations) {
+        currentArticulationIds.insert(artic->symId());
+        score()->undoRemoveElement(artic);
     }
 
     std::set<SymId> articulationIds = flipArticulations(currentArticulationIds, Placement::ABOVE);
@@ -3932,8 +3932,8 @@ void Chord::layoutArticulations3(Slur* slur)
 std::set<SymId> Chord::articulationSymbolIds() const
 {
     std::set<SymId> result;
-    for (const Articulation* articulation: _articulations) {
-        result.insert(articulation->symId());
+    for (const Articulation* artic: _articulations) {
+        result.insert(artic->symId());
     }
 
     return result;
