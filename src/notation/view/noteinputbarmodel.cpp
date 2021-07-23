@@ -302,12 +302,12 @@ void NoteInputBarModel::updateTieState()
         }
     }
 
-    findItem("tie").state.checked = checked;
+    findItem(ActionCode("tie")).state.checked = checked;
 }
 
 void NoteInputBarModel::updateSlurState()
 {
-    findItem("add-slur").state.checked = resolveSlurSelected();
+    findItem(ActionCode("add-slur")).state.checked = resolveSlurSelected();
 }
 
 void NoteInputBarModel::updateVoicesState()
@@ -349,7 +349,7 @@ void NoteInputBarModel::updateArticulationsState()
 
 void NoteInputBarModel::updateRestState()
 {
-    findItem("pad-rest").state.checked = resolveRestSelected();
+    findItem(ActionCode("pad-rest")).state.checked = resolveRestSelected();
 }
 
 int NoteInputBarModel::resolveCurrentVoiceIndex() const

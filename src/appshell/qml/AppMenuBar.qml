@@ -97,7 +97,7 @@ ListView {
 
         StyledMenuLoader {
             id: menuLoader
-            onHandleAction: Qt.callLater(appMenuModel.handleAction, actionCode, actionIndex)
+            onHandleAction: Qt.callLater(appMenuModel.handleAction, menuId)
         }
     }
 }

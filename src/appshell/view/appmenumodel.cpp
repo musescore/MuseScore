@@ -79,19 +79,19 @@ void AppMenuModel::onActionsStateChanges(const actions::ActionCodeList& codes)
 void AppMenuModel::setupConnections()
 {
     userScoresService()->recentScoreList().ch.onReceive(this, [this](const MetaList&) {
-        MenuItem& recentScoreListItem = findMenu("file-open");
+        MenuItem& recentScoreListItem = findMenu("menu-file-open");
         recentScoreListItem.subitems = recentScores();
         emit itemsChanged();
     });
 
     workspacesManager()->currentWorkspaceChanged().onNotify(this, [this]() {
-        MenuItem& workspacesItem = findMenu("select-workspace");
+        MenuItem& workspacesItem = findMenu("menu-select-workspace");
         workspacesItem.subitems = workspacesItems();
         emit itemsChanged();
     });
 
     workspacesManager()->workspacesListChanged().onNotify(this, [this]() {
-        MenuItem& workspacesItem = findMenu("select-workspace");
+        MenuItem& workspacesItem = findMenu("menu-select-workspace");
         workspacesItem.subitems = workspacesItems();
         emit itemsChanged();
     });
@@ -104,7 +104,7 @@ MenuItem AppMenuModel::fileItem() const
     MenuItemList fileItems {
         makeMenuItem("file-new"),
         makeMenuItem("file-open"),
-        makeMenu(qtrc("appshell", "Open &Recent"), recentScoresList, !recentScoresList.empty(), "file-open"),
+        makeMenu(qtrc("appshell", "Open &Recent"), recentScoresList, !recentScoresList.empty(), "menu-file-open"),
         makeSeparator(),
         makeMenuItem("file-close"),
         makeMenuItem("file-save"),
@@ -169,7 +169,7 @@ MenuItem AppMenuModel::viewItem() const
         makeMenuItem("zoomout"),
         makeSeparator(),
         makeMenu(qtrc("appshell", "&Toolbars"), toolbarsItems()),
-        makeMenu(qtrc("appshell", "W&orkspaces"), workspacesItems(), true, "select-workspace"),
+        makeMenu(qtrc("appshell", "W&orkspaces"), workspacesItems(), true, "menu-select-workspace"),
         makeMenuItem("toggle-statusbar"),
         makeSeparator(),
         makeMenuItem("split-h"), // need implement
@@ -306,8 +306,11 @@ MenuItemList AppMenuModel::recentScores() const
     MenuItemList items;
     MetaList recentScores = userScoresService()->recentScoreList().val;
 
+    int index = 0;
     for (const Meta& meta : recentScores) {
-        MenuItem item = uiactionsRegister()->action("file-open");
+        MenuItem item;
+        item.id = QString::fromStdString(item.code) + QString::number(index++);
+        item.code = "file-open";
         item.title = !meta.title.isEmpty() ? meta.title : meta.fileName.toQString();
         item.args = ActionData::make_arg1<io::path>(meta.filePath);
         item.state.enabled = true;
@@ -483,8 +486,10 @@ MenuItemList AppMenuModel::workspacesItems() const
         return workspace1->name() < workspace2->name();
     });
 
+    int index = 0;
     for (const IWorkspacePtr& workspace : workspaces) {
         MenuItem item = uiactionsRegister()->action("select-workspace");
+        item.id = QString::fromStdString(item.code) + QString::number(index);
         item.title = QString::fromStdString(workspace->title());
         item.args = ActionData::make_arg1<std::string>(workspace->name());
 
