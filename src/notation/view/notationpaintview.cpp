@@ -332,9 +332,9 @@ void NotationPaintView::hideContextMenu()
     emit hideContextMenuRequested();
 }
 
-void NotationPaintView::handleAction(const QString& actionCode)
+void NotationPaintView::handleMenuItem(const QString& itemId)
 {
-    dispatcher()->dispatch(actionCode.toStdString());
+    dispatcher()->dispatch(itemId.toStdString());
 }
 
 void NotationPaintView::paint(QPainter* qp)

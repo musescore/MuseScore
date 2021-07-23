@@ -165,7 +165,7 @@ Rectangle {
             }
 
             onChangeZoomRequested: {
-                model.setCurrentZoomIndex(newZoomIndex)
+                model.setCurrentZoom(zoomId)
             }
 
             onZoomInRequested: {
@@ -204,8 +204,8 @@ Rectangle {
                 return result
             }
 
-            onHandleAction: {
-                model.handleAction(actionCode)
+            onHandleMenuItem: {
+                model.handleMenuItem(itemId)
             }
         }
     }

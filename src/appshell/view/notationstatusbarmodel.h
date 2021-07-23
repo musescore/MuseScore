@@ -77,11 +77,11 @@ public:
 
     Q_INVOKABLE int minZoomPercentage() const;
     Q_INVOKABLE int maxZoomPercentage() const;
-    Q_INVOKABLE void setCurrentZoomIndex(int zoomIndex);
+    Q_INVOKABLE void setCurrentZoom(const QString& zoomId);
     Q_INVOKABLE void zoomIn();
     Q_INVOKABLE void zoomOut();
 
-    Q_INVOKABLE void handleAction(const QString& actionCode);
+    Q_INVOKABLE void handleMenuItem(const QString& itemId);
 
 public slots:
     void setCurrentZoomPercentage(int zoomPercentage);
