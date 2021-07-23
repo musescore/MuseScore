@@ -31,6 +31,11 @@ using namespace mu::notation;
 using namespace mu::workspace;
 using namespace mu::actions;
 
+static QString makeId(const ActionCode& actionCode, int itemIndex)
+{
+    return QString::fromStdString(actionCode) + QString::number(itemIndex);
+}
+
 AppMenuModel::AppMenuModel(QObject* parent)
     : AbstractMenuModel(parent)
 {
@@ -309,7 +314,7 @@ MenuItemList AppMenuModel::recentScores() const
     int index = 0;
     for (const Meta& meta : recentScores) {
         MenuItem item;
-        item.id = QString::fromStdString(item.code) + QString::number(index++);
+        item.id = makeId(item.code, index++);
         item.code = "file-open";
         item.title = !meta.title.isEmpty() ? meta.title : meta.fileName.toQString();
         item.args = ActionData::make_arg1<io::path>(meta.filePath);
@@ -489,7 +494,7 @@ MenuItemList AppMenuModel::workspacesItems() const
     int index = 0;
     for (const IWorkspacePtr& workspace : workspaces) {
         MenuItem item = uiactionsRegister()->action("select-workspace");
-        item.id = QString::fromStdString(item.code) + QString::number(index);
+        item.id = makeId(item.code, index++);
         item.title = QString::fromStdString(workspace->title());
         item.args = ActionData::make_arg1<std::string>(workspace->name());
 

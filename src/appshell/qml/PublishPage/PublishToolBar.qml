@@ -79,7 +79,7 @@ Rectangle {
             height: 36
 
             onClicked: {
-                toolBarModel.handleAction(model.code)
+                toolBarModel.handleMenuItem(model.id)
             }
         }
     }

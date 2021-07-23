@@ -318,23 +318,31 @@ void NotationPaintView::showShadowNote(const PointF& pos)
 
 void NotationPaintView::showContextMenu(const ElementType& elementType, const QPoint& pos)
 {
-    QVariantList menuItems;
+    QVariantList result;
 
-    for (const MenuItem& menuItem: notationContextMenu()->items(elementType)) {
-        menuItems << menuItem.toMap();
+    m_currentContextMenuModel.setItems(notationContextMenu()->items(elementType));
+
+    for (const MenuItem& menuItem: m_currentContextMenuModel.items()) {
+        result << menuItem.toMap();
     }
 
-    emit showContextMenuRequested(menuItems, pos);
+    emit showContextMenuRequested(result, pos);
 }
 
 void NotationPaintView::hideContextMenu()
 {
+    m_currentContextMenuModel.setItems({});
     emit hideContextMenuRequested();
 }
 
-void NotationPaintView::handleMenuItem(const QString& itemId)
+void NotationPaintView::handleContextMenuItem(const QString& itemId)
 {
-    dispatcher()->dispatch(itemId.toStdString());
+    MenuItem item = m_currentContextMenuModel.findItem(itemId);
+    if (item.isValid()) {
+        dispatcher()->dispatch(item.code);
+    }
+
+    m_currentContextMenuModel.setItems({});
 }
 
 void NotationPaintView::paint(QPainter* qp)
