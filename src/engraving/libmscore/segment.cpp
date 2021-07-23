@@ -2353,7 +2353,11 @@ qreal Segment::elementsTopOffsetFromSkyline(int staffIndex) const
     Ms::SkylineLine north = staffSystem->skyline().north();
     int topOffset = INT_MAX;
     for (Ms::SkylineSegment segment: north) {
-        bool ok = prev1enabled()->pagePos().x() <= segment.x && segment.x <= pagePos().x();
+        Segment* seg = prev1enabled();
+        if (!seg) {
+            continue;
+        }
+        bool ok = seg->pagePos().x() <= segment.x && segment.x <= pagePos().x();
         if (!ok) {
             continue;
         }
@@ -2378,6 +2382,10 @@ qreal Segment::elementsBottomOffsetFromSkyline(int staffIndex) const
     Ms::SkylineLine south = staffSystem->skyline().south();
     int bottomOffset = INT_MIN;
     for (Ms::SkylineSegment segment: south) {
+        Segment* seg = prev1enabled();
+        if (!seg) {
+            continue;
+        }
         bool ok = prev1enabled()->pagePos().x() <= segment.x && segment.x <= pagePos().x();
         if (!ok) {
             continue;
