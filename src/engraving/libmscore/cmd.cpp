@@ -26,7 +26,6 @@
 */
 
 #include <assert.h>
-#include <QGuiApplication>
 
 #include "translation.h"
 #include "interactive/messagebox.h"
@@ -2285,114 +2284,6 @@ void Score::cmdResetAllPositions(bool undoable)
 void Score::resetAllPositions()
 {
     scanElements(nullptr, resetElementPosition);
-}
-
-//---------------------------------------------------------
-//   processMidiInput
-//---------------------------------------------------------
-
-bool Score::processMidiInput()
-{
-    if (midiInputQueue()->empty()) {
-        return false;
-    }
-
-    if (MScore::debugMode) {
-        qDebug("processMidiInput");
-    }
-
-    NoteEntryMethod entryMethod = _is.noteEntryMethod();
-    bool cmdActive = false;
-    while (!midiInputQueue()->empty()) {
-        MidiInputEvent ev = midiInputQueue()->dequeue();
-        for (auto itr = activeMidiPitches()->begin(); itr != activeMidiPitches()->end();) {
-            if ((*itr).pitch == ev.pitch) {
-                itr = activeMidiPitches()->erase(itr);
-            } else {
-                ++itr;
-            }
-        }
-        if (MScore::debugMode) {
-            qDebug("<-- !noteentry dequeue %i", ev.pitch);
-        }
-        if (!noteEntryMode()
-            || entryMethod == NoteEntryMethod::REALTIME_AUTO
-            || entryMethod == NoteEntryMethod::REALTIME_MANUAL) {
-            int staffIdx = selection().staffStart();
-            Part* p;
-            if (staffIdx < 0 || staffIdx >= nstaves()) {
-                p = staff(0)->part();
-            } else {
-                p = staff(staffIdx)->part();
-            }
-            if (p) {
-                if (!styleB(Sid::concertPitch)) {
-                    ev.pitch += p->instrument(selection().tickStart())->transpose().chromatic;
-                }
-                MScore::seq->startNote(
-                    p->instrument(selection().tickStart())->channel(0)->channel(),                         // tick that way?
-                    ev.pitch,
-                    ev.velocity,
-                    0.0);
-            }
-        }
-        if (noteEntryMode()) {
-            if (ev.velocity == 0) {
-                // delete note in realtime mode
-                //Chord* chord = toChord(_is.cr());
-                //std::vector<Note*> notes = chord->notes();
-                if (entryMethod == NoteEntryMethod::REALTIME_AUTO || entryMethod == NoteEntryMethod::REALTIME_MANUAL) {
-                    if (_is.cr()->isChord()) {
-                        Note* n = toChord(_is.cr())->findNote(ev.pitch);
-                        if (n) {
-                            qDebug("Pitches match! Note %i, Pitch %i", n->pitch(), ev.pitch);
-                            if (!cmdActive) {
-                                startCmd();
-                                cmdActive = true;
-                            }
-                            deleteItem(n->tieBack());
-                            deleteItem(n);
-                        }
-                    }
-                }
-                continue;
-            }
-            if (!cmdActive) {
-                startCmd();
-                cmdActive = true;
-            }
-            if (activeMidiPitches()->empty()) {
-                ev.chord = false;
-            } else {
-                ev.chord = true;
-            }
-
-            // holding shift while inputting midi will add the new pitch to the prior existing chord
-            if (qApp->keyboardModifiers() & Qt::ShiftModifier) {
-                Element* cr = _is.lastSegment()->element(_is.track());
-                if (cr && cr->isChord()) {
-                    ev.chord = true;
-                }
-            }
-
-            // TODO: add shadow note instead of real note in realtime modes
-            // (note becomes real when realtime-advance triggered).
-            addMidiPitch(ev.pitch, ev.chord);
-            activeMidiPitches()->push_back(ev);
-        }
-    }
-    if (cmdActive) {
-        endCmd();
-        //after relayout
-        Element* e = inputState().cr();
-        if (e) {
-            for (MuseScoreView* v : qAsConst(viewer)) {
-                v->adjustCanvasPosition(e, false);
-            }
-        }
-        return true;
-    }
-    return false;
 }
 
 //---------------------------------------------------------

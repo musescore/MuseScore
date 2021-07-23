@@ -23,8 +23,6 @@
 #ifndef __ARPEGGIO_H__
 #define __ARPEGGIO_H__
 
-#include <QGuiApplication>
-
 #include "element.h"
 
 namespace Ms {

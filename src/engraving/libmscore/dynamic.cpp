@@ -20,9 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "dynamic.h"
-
-#include <QGuiApplication>
-
 #include "style/style.h"
 
 #include "dynamichairpingroup.h"
@@ -465,7 +462,7 @@ mu::RectF Dynamic::drag(EditData& ed)
     //
     // move anchor
     //
-    Qt::KeyboardModifiers km = qApp->keyboardModifiers();
+    Qt::KeyboardModifiers km = ed.modifiers;
     if (km != (Qt::ShiftModifier | Qt::ControlModifier)) {
         int si       = staffIdx();
         Segment* seg = segment();

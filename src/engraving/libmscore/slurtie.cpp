@@ -20,8 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <QGuiApplication>
-
 #include "measure.h"
 #include "score.h"
 #include "system.h"
@@ -188,7 +186,7 @@ void SlurTieSegment::editDrag(EditData& ed)
         //
         if ((g == Grip::START && isSingleBeginType()) || (g == Grip::END && isSingleEndType())) {
             Spanner* spanner = slurTie();
-            Qt::KeyboardModifiers km = qApp->keyboardModifiers();
+            Qt::KeyboardModifiers km = ed.modifiers;
             Element* e = ed.view()->elementNear(ed.pos);
             if (e && e->isNote()) {
                 Note* note = toNote(e);
