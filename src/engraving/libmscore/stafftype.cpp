@@ -1383,7 +1383,7 @@ void StaffType::initStaffTypes()
 //                       group,              xml-name,  human-readable-name,          lin stpOff  dist clef   bars stmless time  key    ledger invis     color
         StaffType(StaffTypes::STANDARD, StaffGroup::STANDARD,   "stdNormal", QObject::tr("Standard"),        5, 0,     1,   true,  true, false, true, true, true, false,  MScore::defaultColor),
 //       StaffType(StaffGroup::PERCUSSION, "perc1Line", QObject::tr("Perc. 1 line"),    1, -4,    1,   true,  true, false, true, false, true, false,   MScore::defaultColor),
-        //StaffType(StaffTypes::PERC_1LINE, StaffGroup::PERCUSSION, "perc1Line", QObject::tr("Perc. 1 line"),    1, 0,     1,   true,  true, false, true, false, true, false,  mu::draw:::black),
+        StaffType(StaffTypes::PERC_1LINE, StaffGroup::PERCUSSION, "perc1Line", QObject::tr("Perc. 1 line"),    1, 0,     1,   true,  true, false, true, false, true, false,  MScore::defaultColor),
         StaffType(StaffTypes::PERC_3LINE, StaffGroup::PERCUSSION, "perc3Line", QObject::tr("Perc. 3 lines"),   3, 0,     2,   true,  true, false, true, false, true, false,  MScore::defaultColor),
         StaffType(StaffTypes::PERC_5LINE, StaffGroup::PERCUSSION, "perc5Line", QObject::tr("Perc. 5 lines"),   5, 0,     1,   true,  true, false, true, false, true, false,  MScore::defaultColor),
 
