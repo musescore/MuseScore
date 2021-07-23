@@ -228,7 +228,7 @@ void ChordLine::write(XmlWriter& xml) const
     xml.tag("lengthY", _lengthY, 0.0);
     Element::writeProperties(xml);
     if (modified) {
-        int n = path.elementCount();
+        auto n = path.elementCount();
         xml.stag("Path");
         for (int i = 0; i < n; ++i) {
             const PainterPath::Element& e = path.elementAt(i);
@@ -296,7 +296,7 @@ void ChordLine::startEditDrag(EditData& ed)
 
 void ChordLine::editDrag(EditData& ed)
 {
-    int n = path.elementCount();
+    auto n = path.elementCount();
     PainterPath p;
     qreal sp = spatium();
     _lengthX += ed.delta.x();
@@ -377,7 +377,7 @@ void ChordLine::editDrag(EditData& ed)
 std::vector<PointF> ChordLine::gripsPositions(const EditData&) const
 {
     qreal sp = spatium();
-    int n    = path.elementCount();
+    auto n   = path.elementCount();
     PointF cp(pagePos());
     if (_straight) {
         // limit the number of grips to one

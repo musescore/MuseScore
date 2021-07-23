@@ -1072,9 +1072,9 @@ PalettePanel* PaletteCreator::newBracketsPalettePanel()
     };
 
     static Staff bracketItemOwner(gscore);
-    bracketItemOwner.setBracketType(types.size() - 1, BracketType::NORMAL);
+    bracketItemOwner.setBracketType(static_cast<int>(types.size()) - 1, BracketType::NORMAL);
 
-    for (size_t i = 0; i < types.size(); ++i) {
+    for (int i = 0; i < types.size(); ++i) {
         auto b1 = makeElement<Bracket>(gscore);
         auto bi1 = bracketItemOwner.brackets()[i];
         const auto& type = types[i];

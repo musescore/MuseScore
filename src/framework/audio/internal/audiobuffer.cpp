@@ -121,5 +121,5 @@ unsigned int AudioBuffer::sampleLag() const
         lag = m_writeIndex + m_data.size() - m_readIndex;
     }
 
-    return lag / m_audioChannelsCount;
+    return static_cast<unsigned int>(lag / m_audioChannelsCount);
 }
