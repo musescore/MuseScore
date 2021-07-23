@@ -253,7 +253,10 @@ struct MenuItem : public UiAction
 
     MenuItem() = default;
     MenuItem(const UiAction& a)
-        : UiAction(a) {}
+        : UiAction(a)
+    {
+        id = QString::fromStdString(a.code);
+    }
 
     QVariantMap toMap() const
     {
