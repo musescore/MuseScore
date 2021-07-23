@@ -95,7 +95,7 @@ void DockFrameModel::listenChangesInFrame()
         emit currentDockUniqueNameChanged();
     });
 
-    connect(qApp, &QApplication::aboutToQuit, [numDocksChangedCon, currentDockWidgetChangedCon]() {
+    connect(qApp, &QApplication::aboutToQuit, [numDocksChangedCon, currentDockWidgetChangedCon, this]() {
         disconnect(numDocksChangedCon);
         disconnect(currentDockWidgetChangedCon);
     });
