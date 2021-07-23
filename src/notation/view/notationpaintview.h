@@ -66,7 +66,7 @@ class NotationPaintView : public QQuickPaintedItem, public IControlledView, publ
 public:
     explicit NotationPaintView(QQuickItem* parent = nullptr);
 
-    Q_INVOKABLE virtual void load();
+    Q_INVOKABLE void load();
 
     Q_INVOKABLE void scrollHorizontal(qreal position);
     Q_INVOKABLE void scrollVertical(qreal position);
@@ -133,6 +133,8 @@ protected:
 
     // Draw
     void paint(QPainter* painter) override;
+
+    virtual void onNotationSetup();
 
 protected slots:
     virtual void onViewSizeChanged();
