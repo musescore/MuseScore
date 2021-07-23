@@ -27,7 +27,7 @@
 #include "style/style.h"
 
 namespace mu::engraving::compat {
-class ReadChordListHook;
+struct ReadChordListHook;
 }
 
 namespace Ms {
@@ -297,7 +297,7 @@ public:
 
 private:
 
-    friend class mu::engraving::compat::ReadChordListHook;
+    friend struct mu::engraving::compat::ReadChordListHook;
 
     void read(XmlReader&);
     void write(XmlWriter& xml) const;
