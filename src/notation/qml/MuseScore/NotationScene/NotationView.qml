@@ -165,7 +165,7 @@ FocusScope {
                     id: contextMenuLoader
 
                     onHandleMenuItem: function (itemId) {
-                        notationView.handleMenuItem(itemId)
+                        notationView.handleContextMenuItem(itemId)
                     }
                 }
             }

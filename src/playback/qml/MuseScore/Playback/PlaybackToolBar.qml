@@ -120,12 +120,12 @@ Rectangle {
                                     return
                                 }
 
-                                Qt.callLater(playbackModel.handleAction, modelData.code)
+                                Qt.callLater(playbackModel.handleMenuItem, modelData.id)
                             }
 
                             StyledMenuLoader {
                                 id: menuLoader
-                                onHandleAction: playbackModel.handleAction(actionCode)
+                                onHandleMenuItem: playbackModel.handleMenuItem(itemId)
                             }
                         }
                     }
