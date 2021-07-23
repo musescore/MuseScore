@@ -34,7 +34,7 @@ StyledPopupView {
 
     property int preferredAlign: Qt.AlignRight // Left, HCenter, Right
 
-    signal handleAction(string actionCode, int actionIndex)
+    signal handleAction(string menuId)
 
     x: {
         switch(preferredAlign) {
@@ -231,7 +231,7 @@ StyledPopupView {
                         // NOTE: reset view state
                         view.update()
 
-                        root.handleAction(actionCode, actionIndex)
+                        root.handleAction(menuId)
                     }
 
                     onRequestParentItemActive: {

@@ -243,6 +243,7 @@ struct UiActionState
 
 struct MenuItem : public UiAction
 {
+    QString id;
     QString section;
     UiActionState state;
     bool selectable = false;
@@ -262,6 +263,7 @@ struct MenuItem : public UiAction
         }
 
         return {
+            { "id", id },
             { "code", QString::fromStdString(code) },
             { "shortcut", QString::fromStdString(shortcut) },
             { "title", title },
