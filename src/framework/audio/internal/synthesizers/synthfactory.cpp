@@ -34,7 +34,8 @@ ISynthesizerPtr SynthFactory::createNew(const AudioInputParams& params) const
         return nullptr;
     }
 
-    return search->second->create(params);
+    const ISynthCreatorPtr& creator = search->second;
+    return creator->create(params);
 }
 
 ISynthesizerPtr SynthFactory::createDefault() const
