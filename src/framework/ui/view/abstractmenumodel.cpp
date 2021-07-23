@@ -88,9 +88,9 @@ QHash<int, QByteArray> AbstractMenuModel::roleNames() const
     return roles;
 }
 
-void AbstractMenuModel::handleAction(const QString& menuId)
+void AbstractMenuModel::handleMenuItem(const QString& itemId)
 {
-    MenuItem menuItem = findItem(menuId);
+    MenuItem menuItem = findItem(itemId);
 
     dispatch(menuItem.code, menuItem.args);
 }
@@ -155,9 +155,9 @@ int AbstractMenuModel::itemIndex(const actions::ActionCode& actionCode) const
     return INVALID_ITEM_INDEX;
 }
 
-MenuItem& AbstractMenuModel::findItem(const QString& menuId)
+MenuItem& AbstractMenuModel::findItem(const QString& itemId)
 {
-    return item(m_items, menuId);
+    return item(m_items, itemId);
 }
 
 MenuItem& AbstractMenuModel::findItem(const ActionCode& actionCode)
@@ -189,7 +189,6 @@ MenuItem AbstractMenuModel::makeMenuItem(const ActionCode& actionCode) const
     }
 
     MenuItem item = action;
-    item.id = QString::fromStdString(actionCode);
     item.state = uiactionsRegister()->actionState(actionCode);
 
     return item;
@@ -216,16 +215,16 @@ void AbstractMenuModel::onActionsStateChanges(const actions::ActionCodeList& cod
     }
 }
 
-MenuItem& AbstractMenuModel::item(MenuItemList& items, const QString& menuId)
+MenuItem& AbstractMenuModel::item(MenuItemList& items, const QString& itemId)
 {
     for (MenuItem& menuItem : items) {
-        if (menuItem.id == menuId) {
+        if (menuItem.id == itemId) {
             return menuItem;
         }
 
         if (!menuItem.subitems.empty()) {
-            MenuItem& subitem = item(menuItem.subitems, menuId);
-            if (subitem.id == menuId) {
+            MenuItem& subitem = item(menuItem.subitems, itemId);
+            if (subitem.id == itemId) {
                 return subitem;
             }
         }

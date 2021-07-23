@@ -34,7 +34,7 @@ StyledPopupView {
 
     property int preferredAlign: Qt.AlignRight // Left, HCenter, Right
 
-    signal handleAction(string menuId)
+    signal handleMenuItem(string itemId)
 
     x: {
         switch(preferredAlign) {
@@ -227,11 +227,11 @@ StyledPopupView {
                         root.closePolicy = PopupView.CloseOnPressOutsideParent
                     }
 
-                    onHandleAction: {
+                    onHandleMenuItem: {
                         // NOTE: reset view state
                         view.update()
 
-                        root.handleAction(menuId)
+                        root.handleMenuItem(itemId)
                     }
 
                     onRequestParentItemActive: {
