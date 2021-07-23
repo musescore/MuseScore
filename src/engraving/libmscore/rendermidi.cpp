@@ -67,6 +67,8 @@
 #include "synthesizerstate.h"
 #include "easeInOut.h"
 
+#include "masterscore.h"
+
 #include "framework/midi_old/event.h"
 
 #include "log.h"

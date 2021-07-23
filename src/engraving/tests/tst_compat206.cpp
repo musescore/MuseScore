@@ -22,7 +22,7 @@
 
 #include "testing/qtestsuite.h"
 #include "testbase.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 
 static const QString COMPAT206_DATA_DIR("compat206_data/");
 

@@ -51,7 +51,7 @@
 #include "libmscore/pitchspelling.h"
 #include "libmscore/measurerepeat.h"
 #include "libmscore/rest.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/segment.h"
 #include "libmscore/slur.h"
 #include "libmscore/tie.h"

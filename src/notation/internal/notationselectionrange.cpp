@@ -21,7 +21,7 @@
  */
 #include "notationselectionrange.h"
 
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/segment.h"
 #include "libmscore/measure.h"
 #include "libmscore/system.h"

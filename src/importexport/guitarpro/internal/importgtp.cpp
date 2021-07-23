@@ -75,6 +75,7 @@
 #include <libmscore/letring.h>
 #include <libmscore/palmmute.h>
 #include <libmscore/vibrato.h>
+#include <libmscore/masterscore.h>
 
 namespace Ms {
 //---------------------------------------------------------

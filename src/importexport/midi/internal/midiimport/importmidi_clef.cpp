@@ -23,7 +23,7 @@
 #include <QDebug>
 
 #include "importmidi_clef.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/staff.h"
 #include "libmscore/measure.h"
 #include "libmscore/segment.h"

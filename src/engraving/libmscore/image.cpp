@@ -31,6 +31,8 @@
 #include "draw/transform.h"
 #include "draw/svgrenderer.h"
 
+#include "masterscore.h"
+
 using namespace mu;
 using namespace mu::draw;
 

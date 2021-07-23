@@ -21,7 +21,7 @@
  */
 
 #include "musedata.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/part.h"
 #include "libmscore/staff.h"
 #include "libmscore/barline.h"

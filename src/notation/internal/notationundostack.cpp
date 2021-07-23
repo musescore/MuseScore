@@ -24,7 +24,7 @@
 
 #include "log.h"
 
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/undo.h"
 
 using namespace mu::notation;

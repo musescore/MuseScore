@@ -27,7 +27,7 @@
 
 #include "libmscore/chord.h"
 #include "libmscore/measure.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/undo.h"
 
 static const QString EARLYMUSIC_DATA_DIR("earlymusic_data/");

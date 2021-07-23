@@ -30,7 +30,7 @@
 #include <cmath>
 #include <QRegularExpression>
 
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "thirdparty/qzip/qzipreader_p.h"
 #include "capella.h"
 

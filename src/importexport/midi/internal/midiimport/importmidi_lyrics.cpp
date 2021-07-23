@@ -27,7 +27,7 @@
 #include "libmscore/box.h"
 #include "libmscore/element.h"
 #include "libmscore/measurebase.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/staff.h"
 #include "libmscore/text.h"
 

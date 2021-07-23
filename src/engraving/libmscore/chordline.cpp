@@ -228,9 +228,9 @@ void ChordLine::write(XmlWriter& xml) const
     xml.tag("lengthY", _lengthY, 0.0);
     Element::writeProperties(xml);
     if (modified) {
-        auto n = path.elementCount();
+        size_t n = path.elementCount();
         xml.stag("Path");
-        for (int i = 0; i < n; ++i) {
+        for (size_t i = 0; i < n; ++i) {
             const PainterPath::Element& e = path.elementAt(i);
             xml.tagE(QString("Element type=\"%1\" x=\"%2\" y=\"%3\"")
                      .arg(int(e.type)).arg(e.x).arg(e.y));

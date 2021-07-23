@@ -156,6 +156,8 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/lyricsline.cpp
     ${CMAKE_CURRENT_LIST_DIR}/marker.cpp
     ${CMAKE_CURRENT_LIST_DIR}/marker.h
+    ${CMAKE_CURRENT_LIST_DIR}/masterscore.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/masterscore.h
     ${CMAKE_CURRENT_LIST_DIR}/mcursor.cpp
     ${CMAKE_CURRENT_LIST_DIR}/mcursor.h
     ${CMAKE_CURRENT_LIST_DIR}/measurebase.cpp

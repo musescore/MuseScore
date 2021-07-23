@@ -25,7 +25,7 @@
 
 #include "style/defaultstyle.h"
 
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/part.h"
 #include "libmscore/undo.h"
 

@@ -116,6 +116,8 @@
 #include "fermata.h"
 #include "shape.h"
 
+#include "masterscore.h"
+
 //#include "musescoreCore.h"
 
 #include "config.h"

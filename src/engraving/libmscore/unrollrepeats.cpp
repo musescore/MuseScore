@@ -72,6 +72,8 @@
 #include "chordlist.h"
 #include "mscore.h"
 
+#include "masterscore.h"
+
 using namespace mu;
 
 namespace Ms {

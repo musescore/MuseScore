@@ -24,7 +24,7 @@
 #include "elements.h"
 #include "score.h"
 #include "fraction.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/scoreElement.h"
 
 namespace Ms {

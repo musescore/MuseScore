@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "importmidi_swing.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/chordrest.h"
 #include "libmscore/stafftext.h"
 #include "libmscore/element.h"

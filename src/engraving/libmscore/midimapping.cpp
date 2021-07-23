@@ -27,6 +27,8 @@
 #include "instrument.h"
 #include "part.h"
 
+#include "masterscore.h"
+
 using namespace mu;
 
 namespace Ms {

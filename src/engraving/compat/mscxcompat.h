@@ -23,7 +23,7 @@
 #define MU_ENGRAVING_MSCXCOMPAT_H
 
 #include <QByteArray>
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "engravingproject.h"
 
 namespace mu::engraving::compat {

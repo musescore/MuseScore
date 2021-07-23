@@ -28,7 +28,7 @@
 #include "framework/system/systemmodule.h"
 #include "importexport/guitarpro/guitarpromodule.h"
 
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/musescoreCore.h"
 
 static mu::testing::SuiteEnvironment importexport_se(

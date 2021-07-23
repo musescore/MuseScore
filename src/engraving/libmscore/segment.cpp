@@ -2386,7 +2386,7 @@ qreal Segment::elementsBottomOffsetFromSkyline(int staffIndex) const
         if (!seg) {
             continue;
         }
-        bool ok = prev1enabled()->pagePos().x() <= segment.x && segment.x <= pagePos().x();
+        bool ok = seg->pagePos().x() <= segment.x && segment.x <= pagePos().x();
         if (!ok) {
             continue;
         }

@@ -25,7 +25,7 @@
 
 #include "igetscore.h"
 
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/spanner.h"
 #include "libmscore/segment.h"
 #include "libmscore/slur.h"

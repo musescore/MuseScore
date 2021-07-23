@@ -21,7 +21,7 @@
  */
 #include "guitarproreader.h"
 
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "notation/notationerrors.h"
 
 namespace Ms {

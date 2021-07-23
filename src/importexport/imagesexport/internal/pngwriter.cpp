@@ -25,7 +25,7 @@
 #include <cmath>
 #include <QImage>
 
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/page.h"
 
 #include "engraving/draw/qpainterprovider.h"

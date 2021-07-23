@@ -22,7 +22,7 @@
 
 #include "testing/qtestsuite.h"
 #include "testbase.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 
 static const QString ALL_ELEMENTS_DATA_DIR("all_elements_data/");
 

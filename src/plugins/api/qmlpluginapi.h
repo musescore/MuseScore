@@ -30,7 +30,7 @@
 #include "libmscore/lyrics.h"
 #include "libmscore/mscore.h"
 #include "libmscore/utils.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/spanner.h"
 #include "framework/shortcuts/ishortcutscontroller.h"
 #include "context/iglobalcontext.h"

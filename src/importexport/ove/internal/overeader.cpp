@@ -21,7 +21,7 @@
  */
 #include "overeader.h"
 
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "notation/notationerrors.h"
 
 extern Ms::Score::FileError importOve(Ms::MasterScore*, const QString& name);

@@ -204,7 +204,7 @@ Vibrato::~Vibrato()
 void Vibrato::layout()
 {
     SLine::layout();
-    if (score() == gscore) {
+    if (score()->isPaletteScore()) {
         return;
     }
     if (spannerSegments().empty()) {

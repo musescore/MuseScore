@@ -69,7 +69,7 @@ bool AccessibleElement::isAvalaible() const
     }
 
     //! NOTE Disabled for not score elements and palettes
-    if (s == Ms::gscore) {
+    if (s->isPaletteScore()) {
         return false;
     }
 

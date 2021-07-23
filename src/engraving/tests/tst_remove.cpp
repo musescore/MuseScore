@@ -23,7 +23,7 @@
 #include "testing/qtestsuite.h"
 #include "testbase.h"
 #include "libmscore/excerpt.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/spanner.h"
 
 static const QString REMOVE_DATA_DIR("remove_data/");

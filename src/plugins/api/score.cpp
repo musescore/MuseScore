@@ -25,7 +25,7 @@
 #include "elements.h"
 #include "libmscore/instrtemplate.h"
 #include "libmscore/measure.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/segment.h"
 #include "libmscore/text.h"
 

@@ -23,7 +23,7 @@
 
 #include "engraving/style/defaultstyle.h"
 
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/excerpt.h"
 #include "libmscore/mscore.h"
 #include "libmscore/undo.h"

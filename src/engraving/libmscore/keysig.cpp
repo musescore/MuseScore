@@ -34,6 +34,8 @@
 #include "undo.h"
 #include "xml.h"
 
+#include "masterscore.h"
+
 using namespace mu;
 
 namespace Ms {

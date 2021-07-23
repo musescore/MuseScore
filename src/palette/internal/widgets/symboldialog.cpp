@@ -24,7 +24,7 @@
 
 #include "engraving/style/style.h"
 
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/scorefont.h"
 #include "libmscore/sym.h"
 #include "libmscore/element.h"

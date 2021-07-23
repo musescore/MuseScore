@@ -331,7 +331,7 @@ void Trill::remove(Element* e)
 void Trill::layout()
 {
     SLine::layout();
-    if (score() == gscore) {
+    if (score()->isPaletteScore()) {
         return;
     }
     if (spannerSegments().empty()) {

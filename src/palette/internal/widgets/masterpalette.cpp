@@ -25,7 +25,7 @@
 
 #include "palette/palette.h"
 #include "keyedit.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/clef.h"
 #include "libmscore/fingering.h"
 #include "libmscore/spacer.h"

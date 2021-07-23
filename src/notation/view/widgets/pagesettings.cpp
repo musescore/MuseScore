@@ -27,7 +27,7 @@
 
 #include "widgetstatestore.h"
 #include "libmscore/page.h"
-#include "libmscore/score.h"
+#include "libmscore/masterscore.h"
 #include "libmscore/mscore.h"
 #include "libmscore/excerpt.h"
 
