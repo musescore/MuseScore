@@ -2060,9 +2060,9 @@ void Score::cmdFlip()
                 slurTieSegment->undoChangeProperty(Pid::SLUR_DIRECTION, QVariant::fromValue<Direction>(dir));
             });
         } else if (e->isArticulation()) {
-            auto articulation = toArticulation(e);
-            flipOnce(articulation, [articulation]() {
-                ArticulationAnchor articAnchor = articulation->anchor();
+            auto artic = toArticulation(e);
+            flipOnce(artic, [artic]() {
+                ArticulationAnchor articAnchor = artic->anchor();
                 switch (articAnchor) {
                 case ArticulationAnchor::TOP_CHORD:
                     articAnchor = ArticulationAnchor::BOTTOM_CHORD;
@@ -2071,7 +2071,7 @@ void Score::cmdFlip()
                     articAnchor = ArticulationAnchor::TOP_CHORD;
                     break;
                 case ArticulationAnchor::CHORD:
-                    articAnchor = articulation->up() ? ArticulationAnchor::BOTTOM_CHORD : ArticulationAnchor::TOP_CHORD;
+                    articAnchor = artic->up() ? ArticulationAnchor::BOTTOM_CHORD : ArticulationAnchor::TOP_CHORD;
                     break;
                 case ArticulationAnchor::TOP_STAFF:
                     articAnchor = ArticulationAnchor::BOTTOM_STAFF;
@@ -2080,11 +2080,11 @@ void Score::cmdFlip()
                     articAnchor = ArticulationAnchor::TOP_STAFF;
                     break;
                 }
-                PropertyFlags pf = articulation->propertyFlags(Pid::ARTICULATION_ANCHOR);
+                PropertyFlags pf = artic->propertyFlags(Pid::ARTICULATION_ANCHOR);
                 if (pf == PropertyFlags::STYLED) {
                     pf = PropertyFlags::UNSTYLED;
                 }
-                articulation->undoChangeProperty(Pid::ARTICULATION_ANCHOR, int(articAnchor), pf);
+                artic->undoChangeProperty(Pid::ARTICULATION_ANCHOR, int(articAnchor), pf);
             });
         } else if (e->isTuplet()) {
             auto tuplet = toTuplet(e);
