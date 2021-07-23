@@ -3,6 +3,8 @@
 #include "internal/audiosanitizer.h"
 #include "fluidsynth.h"
 
+#include "log.h"
+
 using namespace mu::audio;
 using namespace mu::audio::synth;
 
@@ -29,14 +31,16 @@ ISynthesizerPtr FluidResolver::create(const AudioInputParams& params)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
+    ISynthesizerPtr synth = std::make_shared<FluidSynth>();
+    synth->init();
+
     auto search = m_resourcesCache.find(params.resourceId);
 
     if (search == m_resourcesCache.end()) {
-        return nullptr;
+        LOGE() << "Not found: " << params.resourceId;
+        return synth;
     }
 
-    ISynthesizerPtr synth = std::make_shared<FluidSynth>();
-    synth->init();
     synth->addSoundFonts({ search->second });
 
     return synth;
