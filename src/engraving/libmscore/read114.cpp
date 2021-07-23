@@ -3206,8 +3206,6 @@ Score::FileError MasterScore::read114(XmlReader& e)
     qreal adjustedSpacing = qMax(styleD(Sid::measureSpacing) * 0.95, 1.0);
     style().set(Sid::measureSpacing, adjustedSpacing);
 
-    _showOmr = false;
-
     // add invisible tempo text if necessary
     // some 1.3 scores have tempolist but no tempo text
     fixTicks();

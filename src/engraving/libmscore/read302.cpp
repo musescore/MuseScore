@@ -75,7 +75,7 @@ bool Score::read(XmlReader& e, compat::ReadScoreHook& hooks)
             _audio = new Audio;
             _audio->read(e);
         } else if (tag == "showOmr") {
-            masterScore()->setShowOmr(e.readInt());
+            e.skipCurrentElement();
         } else if (tag == "playMode") {
             _playMode = PlayMode(e.readInt());
         } else if (tag == "LayerTag") {
@@ -287,10 +287,6 @@ bool Score::read(XmlReader& e, compat::ReadScoreHook& hooks)
         for (auto it = il->begin(); it != il->end(); it++) {
             static_cast<Instrument*>(it->second)->updateInstrumentId();
         }
-    }
-
-    if (!masterScore()->omr()) {
-        masterScore()->setShowOmr(false);
     }
 
     fixTicks();
