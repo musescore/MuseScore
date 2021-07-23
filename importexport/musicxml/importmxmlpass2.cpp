@@ -1480,7 +1480,7 @@ static void reformatHeaderVBox(MeasureBase* mb)
       Score* score = mb->score();
       qreal totalHeight = 0;
       qreal offsetHeight = 0;
-      qreal verticalPadding = score->styleS(Sid::minVerticalDistance).val() * score->spatium();
+      qreal lineSpacingMultiplier = 1.2;
 
       for (auto e : headerVBox->el()) {
             if (!e->isText())
@@ -1490,11 +1490,11 @@ static void reformatHeaderVBox(MeasureBase* mb)
 
             totalHeight += t->height();
             if (Align(t->align() & Align::VMASK) == Align::TOP) {
-                  totalHeight += verticalPadding;
+                  totalHeight += t->lineHeight() * lineSpacingMultiplier;
                   t->setOffset(t->offset().x(), offsetHeight);
                   t->setPropertyFlags(Pid::OFFSET, PropertyFlags::UNSTYLED);
                   offsetHeight += t->height();
-                  offsetHeight += verticalPadding;
+                  offsetHeight += t->lineHeight() * lineSpacingMultiplier;
                   }
             }
 
