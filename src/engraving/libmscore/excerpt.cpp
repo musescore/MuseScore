@@ -1297,7 +1297,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                         case ElementType::LYRICS:                     // not normally segment-attached
                             continue;
                         default:
-                            if (toTextLine(e)->systemFlag()) {
+                            if (e->isTextLine() && toTextLine(e)->systemFlag()) {
                                 continue;
                             }
                             Element* ne1 = e->clone();
