@@ -135,9 +135,6 @@ public:
     bool isExpanded() const { return m_isExpanded; }
     void setExpanded(bool val) { m_isExpanded = val; }
 
-    bool hasMoreElements() const { return m_hasMoreElements; }
-    void setHasMoreElements(bool val) { m_hasMoreElements = val; }
-
     bool read(Ms::XmlReader&);
     void write(Ms::XmlWriter&) const;
     static PalettePanelPtr fromMimeData(const QByteArray& data);
@@ -169,7 +166,6 @@ private:
     bool m_isVisible = true;
     bool m_isEditable = true;
     bool m_isExpanded = false;
-    bool m_hasMoreElements = false; // not used by QML palettes, default is false for compatibility with Palette class. TODO: remove?
 };
 }
 

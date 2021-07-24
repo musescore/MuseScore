@@ -48,7 +48,6 @@ struct PaletteCell
     Ms::ElementPtr untranslatedElement;
     QString id;
     QString name; // used for tool tip
-    QString tag;
 
     bool drawStaff { false };
     double xoffset { 0.0 }; // in spatium units of "gscore"

@@ -184,8 +184,7 @@ int PalettePanel::indexOfCell(const PaletteCell& cell, bool matchName) const
             continue;
         }
 
-        if (localCell.tag != cell.tag
-            || localCell.drawStaff != cell.drawStaff
+        if (localCell.drawStaff != cell.drawStaff
             || localCell.xoffset != cell.xoffset
             || localCell.yoffset != cell.yoffset
             || localCell.mag != cell.mag
@@ -221,8 +220,6 @@ bool PalettePanel::read(XmlReader& e)
             m_mag = e.readDouble();
         } else if (tag == "grid") {
             m_drawGrid = e.readInt();
-        } else if (tag == "moreElements") {
-            m_hasMoreElements = e.readBool();
         } else if (tag == "yoffset") {
             m_yOffset = e.readDouble();
         } else if (tag == "drumPalette") { // obsolete
@@ -286,7 +283,6 @@ void PalettePanel::write(XmlWriter& xml) const
         xml.tag("grid", m_drawGrid);
     }
 
-    xml.tag("moreElements", m_hasMoreElements);
     if (m_yOffset != 0.0) {
         xml.tag("yoffset", m_yOffset);
     }
@@ -298,10 +294,8 @@ void PalettePanel::write(XmlWriter& xml) const
         xml.tag("expanded", m_isExpanded, false);
     }
 
-    for (auto& cell: m_cells) {
-//             if (cells[i] && cells[i]->tag == "ShowMore")
-//                   continue;
-        if (!cell) {     // from old palette, not sure if it is still needed
+    for (PaletteCellPtr cell : m_cells) {
+        if (!cell) { // from old palette, not sure if it is still needed
             xml.tagE("Cell");
             continue;
         }
