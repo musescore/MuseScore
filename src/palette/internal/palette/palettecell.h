@@ -41,7 +41,7 @@ struct PaletteCell
 {
     INJECT_STATIC(palette, mu::ui::IUiActionsRegister, actionsRegister)
 
-    explicit PaletteCell() = default;
+    explicit PaletteCell();
     PaletteCell(Ms::ElementPtr e, const QString& _name, qreal _mag = 1.0);
 
     Ms::ElementPtr element;
@@ -74,6 +74,8 @@ struct PaletteCell
 
     static PaletteCellPtr fromMimeData(const QByteArray& data);
     static PaletteCellPtr fromElementMimeData(const QByteArray& data);
+
+private:
     static QString makeId();
 };
 }
