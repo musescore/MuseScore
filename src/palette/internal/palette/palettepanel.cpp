@@ -260,7 +260,7 @@ bool PalettePanel::read(XmlReader& e)
     if (m_gridSize.width() <= 0) {
         m_gridSize.setWidth(28);
     }
-    if (m_gridSize.width() <= 0) {
+    if (m_gridSize.height() <= 0) {
         m_gridSize.setHeight(28);
     }
 
