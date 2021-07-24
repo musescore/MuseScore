@@ -47,7 +47,7 @@ private:
     void paintTag(draw::Painter& painter, const RectF& rect, QString tag) const;
     qreal paintStaff(draw::Painter& painter, const RectF& rect, qreal spatium) const;
     void paintScoreElement(draw::Painter& painter, Ms::Element* element, qreal spatium, bool alignToStaff) const;
-    void paintIconElement(draw::Painter& painter, const RectF& rect, Ms::Element* element) const;
+    void paintActionIcon(draw::Painter& painter, const RectF& rect, Ms::Element* element) const;
 
     Ms::PaletteCellConstPtr m_cell;
     qreal m_extraMag = 1.0;
