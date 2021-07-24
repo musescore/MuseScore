@@ -53,17 +53,21 @@ static bool needsStaff(ElementPtr e)
     }
 }
 
+PaletteCell::PaletteCell()
+{
+    id = makeId();
+}
+
 PaletteCell::PaletteCell(ElementPtr e, const QString& _name, qreal _mag)
     : element(e), name(_name), mag(_mag)
 {
     id = makeId();
-
     drawStaff = needsStaff(element);
 }
 
 QString PaletteCell::makeId()
 {
-    static int id = 0;
+    static unsigned int id = 0;
     return QString::number(++id);
 }
 

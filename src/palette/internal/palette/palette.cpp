@@ -903,7 +903,6 @@ PaletteCellPtr Palette::append(ElementPtr element, const QString& name, QString 
     }
 
     PaletteCellPtr cell = std::make_shared<PaletteCell>();
-    cell->id = PaletteCell::makeId();
 
     int idx = 0;
     if (m_moreElements) {
@@ -931,7 +930,6 @@ PaletteCellPtr Palette::add(int idx, ElementPtr element, const QString& name, QS
     }
 
     PaletteCellPtr cell = std::make_shared<PaletteCell>();
-    cell->id = PaletteCell::makeId();
 
     if (idx < m_cells.size()) {
         m_cells.removeAt(idx);
@@ -1524,7 +1522,6 @@ void Palette::read(XmlReader& e)
             e.skipCurrentElement();
         } else if (t == "Cell") {
             PaletteCellPtr cell = std::make_shared<PaletteCell>();
-            cell->id = PaletteCell::makeId();
             cell->name = e.attribute("name");
             bool add = true;
             while (e.readNextStartElement()) {

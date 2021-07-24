@@ -839,8 +839,7 @@ bool PaletteTreeModel::insertRows(int row, int count, const QModelIndex& parent)
 
         beginInsertRows(parent, row, row + count - 1);
         for (int i = 0; i < count; ++i) {
-            PaletteCellPtr cell(new PaletteCell);
-            cell->id = PaletteCell::makeId();
+            PaletteCellPtr cell = std::make_shared<PaletteCell>();
             panel->insertCell(row, cell);
         }
         endInsertRows();
