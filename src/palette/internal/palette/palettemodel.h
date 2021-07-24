@@ -50,13 +50,13 @@ signals:
     void filterChanged();
 
 protected:
-    virtual bool acceptCell(const PaletteCell&) const = 0;
+    virtual bool acceptCell(const mu::palette::PaletteCell&) const = 0;
 
 public:
     PaletteCellFilter(QObject* parent = nullptr)
         : QObject(parent) {}
 
-    bool accept(const PaletteCell&) const;
+    bool accept(const mu::palette::PaletteCell&) const;
 
     void addChainedFilter(PaletteCellFilter*);
     void connectToModel(const QAbstractItemModel*);
@@ -70,7 +70,7 @@ class VisibilityCellFilter : public PaletteCellFilter
 {
     bool acceptedValue;
 
-    bool acceptCell(const PaletteCell& cell) const override { return cell.visible == acceptedValue; }
+    bool acceptCell(const mu::palette::PaletteCell& cell) const override { return cell.visible == acceptedValue; }
 
 public:
     VisibilityCellFilter(bool acceptedVal, QObject* parent = nullptr)
@@ -85,7 +85,7 @@ class CustomizedCellFilter : public PaletteCellFilter
 {
     bool acceptedValue;
 
-    bool acceptCell(const PaletteCell& cell) const override { return cell.custom == acceptedValue; }
+    bool acceptCell(const mu::palette::PaletteCell& cell) const override { return cell.custom == acceptedValue; }
 
 public:
     CustomizedCellFilter(bool acceptedVal, QObject* parent = nullptr)
@@ -119,15 +119,15 @@ public:
     Q_ENUM(PaletteTreeModelRoles)
 
 private:
-    PaletteTreePtr _paletteTree;
+    mu::palette::PaletteTreePtr _paletteTree;
     bool _treeChanged = false;
     bool _treeChangedSignalBlocked = false;
 
-    std::vector<PalettePanelPtr>& palettes() { return _paletteTree->palettes; }
-    const std::vector<PalettePanelPtr>& palettes() const { return _paletteTree->palettes; }
+    std::vector<mu::palette::PalettePanelPtr>& palettes() { return _paletteTree->palettes; }
+    const std::vector<mu::palette::PalettePanelPtr>& palettes() const { return _paletteTree->palettes; }
 
-    PalettePanel* iptrToPalettePanel(void* iptr, int* idx = nullptr);
-    const PalettePanel* iptrToPalettePanel(void* iptr, int* idx = nullptr) const
+    mu::palette::PalettePanel* iptrToPalettePanel(void* iptr, int* idx = nullptr);
+    const mu::palette::PalettePanel* iptrToPalettePanel(void* iptr, int* idx = nullptr) const
     {
         return const_cast<PaletteTreeModel*>(this)->iptrToPalettePanel(iptr, idx);
     }
@@ -146,13 +146,13 @@ signals:
     void treeChanged();
 
 public:
-    explicit PaletteTreeModel(PaletteTreePtr tree, QObject* parent = nullptr);
+    explicit PaletteTreeModel(mu::palette::PaletteTreePtr tree, QObject* parent = nullptr);
 
     bool blockTreeChanged(bool block);
 
-    void setPaletteTree(PaletteTreePtr tree);
-    const PaletteTree* paletteTree() const { return _paletteTree.get(); }
-    const PaletteTreePtr paletteTreePtr() const { return _paletteTree; }
+    void setPaletteTree(mu::palette::PaletteTreePtr tree);
+    const mu::palette::PaletteTree* paletteTree() const { return _paletteTree.get(); }
+    const mu::palette::PaletteTreePtr paletteTreePtr() const { return _paletteTree; }
 
     bool paletteTreeChanged() const { return _treeChanged; }
 
@@ -176,7 +176,7 @@ public:
     bool dropMimeData(const QMimeData* data, Qt::DropAction action, int row, int column, const QModelIndex& parent) override;
 
     QModelIndexList match(const QModelIndex& start, int role, const QVariant& value, int hits, Qt::MatchFlags flags) const override;
-    QModelIndex findPaletteCell(const PaletteCell& cell, const QModelIndex& parent) const;
+    QModelIndex findPaletteCell(const mu::palette::PaletteCell& cell, const QModelIndex& parent) const;
     PaletteCellFilter* getFilter(const QModelIndex&) const;
 
     bool moveRows(const QModelIndex& sourceParent, int sourceRow, int count, const QModelIndex& destinationParent,
@@ -184,11 +184,11 @@ public:
     bool removeRows(int row, int count, const QModelIndex& parent = QModelIndex()) override;
     bool insertRows(int row, int count, const QModelIndex& parent = QModelIndex()) override;
 
-    const PalettePanel* findPalettePanel(const QModelIndex&) const;
-    PalettePanel* findPalettePanel(const QModelIndex& index);
-    PaletteCellConstPtr findCell(const QModelIndex&) const;
-    PaletteCellPtr findCell(const QModelIndex& index);
-    bool insertPalettePanel(PalettePanelPtr pp, int row, const QModelIndex& parent = QModelIndex());
+    const mu::palette::PalettePanel* findPalettePanel(const QModelIndex&) const;
+    mu::palette::PalettePanel* findPalettePanel(const QModelIndex& index);
+    mu::palette::PaletteCellConstPtr findCell(const QModelIndex&) const;
+    mu::palette::PaletteCellPtr findCell(const QModelIndex& index);
+    bool insertPalettePanel(mu::palette::PalettePanelPtr pp, int row, const QModelIndex& parent = QModelIndex());
 
     void updateCellsState(const Selection&);
     void retranslate();

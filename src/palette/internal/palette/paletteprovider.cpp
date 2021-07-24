@@ -200,7 +200,7 @@ Qt::DropAction UserPaletteController::dropAction(const QVariantMap& mimeData, Qt
     }
 
     if (mimeData.contains(PaletteCell::mimeDataFormat) && proposedAction == Qt::MoveAction) {
-        const auto cell = PaletteCell::readMimeData(mimeData[PaletteCell::mimeDataFormat].toByteArray());
+        const auto cell = PaletteCell::fromMimeData(mimeData[PaletteCell::mimeDataFormat].toByteArray());
         if (!cell) {
             return Qt::IgnoreAction;
         }
@@ -232,7 +232,7 @@ bool UserPaletteController::insert(const QModelIndex& parent, int row, const QVa
     PaletteCellPtr cell;
 
     if (mimeData.contains(PaletteCell::mimeDataFormat)) {
-        cell = PaletteCell::readMimeData(mimeData[PaletteCell::mimeDataFormat].toByteArray());
+        cell = PaletteCell::fromMimeData(mimeData[PaletteCell::mimeDataFormat].toByteArray());
 
         if (!cell) {
             return false;
@@ -251,7 +251,7 @@ bool UserPaletteController::insert(const QModelIndex& parent, int row, const QVa
             }
         }
     } else if (mimeData.contains(mu::commonscene::MIME_SYMBOL_FORMAT) && (action == Qt::CopyAction)) {
-        cell = PaletteCell::readElementMimeData(mimeData[mu::commonscene::MIME_SYMBOL_FORMAT].toByteArray());
+        cell = PaletteCell::fromElementMimeData(mimeData[mu::commonscene::MIME_SYMBOL_FORMAT].toByteArray());
     }
 
     if (!cell) {
@@ -267,7 +267,7 @@ bool UserPaletteController::insert(const QModelIndex& parent, int row, const QVa
     cell->visible = _visible;
 
     QMimeData data;
-    data.setData(PaletteCell::mimeDataFormat, cell->mimeData());
+    data.setData(PaletteCell::mimeDataFormat, cell->toMimeData());
     constexpr int column = 0;
     return model()->dropMimeData(&data, action, row, column, parent);
 }
@@ -566,10 +566,10 @@ bool UserPaletteController::applyPaletteElement(const QModelIndex& index, Qt::Ke
 
 void PaletteProvider::init()
 {
-    m_userPaletteModel = new Ms::PaletteTreeModel(std::make_shared<Ms::PaletteTree>(), this);
+    m_userPaletteModel = new Ms::PaletteTreeModel(std::make_shared<PaletteTree>(), this);
     connect(m_userPaletteModel, &PaletteTreeModel::treeChanged, this, &PaletteProvider::notifyAboutUserPaletteChanged);
 
-    m_masterPaletteModel = new Ms::PaletteTreeModel(Ms::PaletteCreator::newMasterPaletteTree());
+    m_masterPaletteModel = new Ms::PaletteTreeModel(PaletteCreator::newMasterPaletteTree());
     m_masterPaletteModel->setParent(this);
 
     m_searchFilterModel = new PaletteCellFilterProxyModel(this);

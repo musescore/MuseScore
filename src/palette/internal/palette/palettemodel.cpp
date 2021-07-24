@@ -141,7 +141,7 @@ void PaletteTreeModel::notifyAboutCellsChanged(int changedRole)
 
         const QModelIndex parent = index(int(row), 0, QModelIndex());
         const QModelIndex first = index(0, 0, parent);
-        const QModelIndex last = index(palette->ncells() - 1, 0, parent);
+        const QModelIndex last = index(palette->cellsCount() - 1, 0, parent);
         emit dataChanged(first, last, { changedRole });
     }
 }
@@ -181,10 +181,10 @@ PaletteCellConstPtr PaletteTreeModel::findCell(const QModelIndex& index) const
 {
     if (const PalettePanel* pp = iptrToPalettePanel(index.internalPointer())) {
         const int row = index.row();
-        if (index.column() != 0 || row < 0 || row >= pp->ncells()) {
+        if (index.column() != 0 || row < 0 || row >= pp->cellsCount()) {
             return nullptr;
         }
-        return pp->cell(row);
+        return pp->cellAt(row);
     }
 
     return nullptr;
@@ -272,7 +272,7 @@ int PaletteTreeModel::rowCount(const QModelIndex& parent) const
         if (parent.column() != 0 || row < 0 || row >= int(palettes().size())) {
             return 0;
         }
-        return palettes()[row]->ncells();
+        return palettes()[row]->cellsCount();
     }
 
     return 0;
@@ -302,17 +302,17 @@ QVariant PaletteTreeModel::data(const QModelIndex& index, int role) const
         case Qt::AccessibleTextRole:
             return QString("%1 palette").arg(pp->translatedName());
         case VisibleRole:
-            return pp->visible();
+            return pp->isVisible();
         case CustomRole:
-            return pp->custom();
+            return pp->isCustom();
         case EditableRole:
-            return pp->editable();
+            return pp->isEditable();
         case GridSizeRole:
             return pp->scaledGridSize();
         case DrawGridRole:
             return pp->drawGrid();
         case PaletteExpandedRole:
-            return pp->expanded();
+            return pp->isExpanded();
         // TODO showMore?
         case PaletteTypeRole:
             return QVariant::fromValue(pp->type());
@@ -350,7 +350,7 @@ QVariant PaletteTreeModel::data(const QModelIndex& index, int role) const
             return cell->custom;
         case EditableRole: {
             if (const PalettePanel* pp = iptrToPalettePanel(index.internalPointer())) {
-                return pp->editable();
+                return pp->isEditable();
             }
             return false;
         }
@@ -359,7 +359,7 @@ QVariant PaletteTreeModel::data(const QModelIndex& index, int role) const
             if (cell->element) {
                 map[mu::commonscene::MIME_SYMBOL_FORMAT] = cell->element->mimeData(PointF());
             }
-            map[PaletteCell::mimeDataFormat] = cell->mimeData();
+            map[PaletteCell::mimeDataFormat] = cell->toMimeData();
             return map;
         }
         case CellActiveRole:
@@ -392,7 +392,7 @@ bool PaletteTreeModel::setData(const QModelIndex& index, const QVariant& value, 
         case VisibleRole:
             if (value.canConvert<bool>()) {
                 const bool val = value.toBool();
-                if (val != pp->visible()) {
+                if (val != pp->isVisible()) {
                     pp->setVisible(val);
                     emit dataChanged(index, index, { VisibleRole });
                 }
@@ -402,7 +402,7 @@ bool PaletteTreeModel::setData(const QModelIndex& index, const QVariant& value, 
         case EditableRole:
             if (value.canConvert<bool>()) {
                 const bool val = value.toBool();
-                if (val != pp->editable()) {
+                if (val != pp->isEditable()) {
                     pp->setEditable(val);
                     emit dataChanged(index, index, { EditableRole });
                     // notify cells editability changed too
@@ -417,7 +417,7 @@ bool PaletteTreeModel::setData(const QModelIndex& index, const QVariant& value, 
         case PaletteExpandedRole:
             if (value.canConvert<bool>()) {
                 const bool val = value.toBool();
-                if (val != pp->expanded()) {
+                if (val != pp->isExpanded()) {
                     const bool singlePalette = configuration()->isSinglePalette();
 
                     if (singlePalette && val) {
@@ -503,14 +503,14 @@ bool PaletteTreeModel::setData(const QModelIndex& index, const QVariant& value, 
 
             if (map.contains(PaletteCell::mimeDataFormat)) {
                 const QByteArray cellMimeData = map[PaletteCell::mimeDataFormat].toByteArray();
-                PaletteCellPtr newCell(PaletteCell::readMimeData(cellMimeData));
+                PaletteCellPtr newCell(PaletteCell::fromMimeData(cellMimeData));
                 if (!newCell) {
                     return false;
                 }
                 *cell = *newCell;
             } else if (map.contains(mu::commonscene::MIME_SYMBOL_FORMAT)) {
                 const QByteArray elementMimeData = map[mu::commonscene::MIME_SYMBOL_FORMAT].toByteArray();
-                *cell = *PaletteCell::readElementMimeData(elementMimeData);
+                *cell = *PaletteCell::fromElementMimeData(elementMimeData);
                 cell->custom = true;               // mark the updated cell custom
             } else {
                 return false;
@@ -577,7 +577,7 @@ QMimeData* PaletteTreeModel::mimeData(const QModelIndexList& indexes) const
     }
 
     if (const PalettePanel* pp = findPalettePanel(indexes[0])) {
-        mime->setData(PalettePanel::mimeDataFormat, pp->mimeData());
+        mime->setData(PalettePanel::mimeDataFormat, pp->toMimeData());
     } else if (PaletteCellConstPtr cell = findCell(indexes[0])) {
         mime->setData(mu::commonscene::MIME_SYMBOL_FORMAT, cell->element->mimeData(PointF()));
     }
@@ -610,7 +610,7 @@ bool PaletteTreeModel::canDropMimeData(const QMimeData* data, Qt::DropAction act
     }
 
     if (const PalettePanel* pp = findPalettePanel(parent)) {
-        if (row < 0 || row > pp->ncells()) {
+        if (row < 0 || row > int(pp->cellsCount())) {
             return false;
         }
 
@@ -640,7 +640,7 @@ bool PaletteTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action
             return false;
         }
 
-        auto panel = PalettePanel::readMimeData(data->data(PalettePanel::mimeDataFormat));
+        auto panel = PalettePanel::fromMimeData(data->data(PalettePanel::mimeDataFormat));
         if (!panel) {
             return false;
         }
@@ -652,19 +652,19 @@ bool PaletteTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action
     }
 
     if (PalettePanel* pp = findPalettePanel(parent)) {
-        if (row < 0 || row > pp->ncells()) {
+        if (row < 0 || row > int(pp->cellsCount())) {
             return false;
         }
 
         PaletteCellPtr cell;
 
         if (data->hasFormat(PaletteCell::mimeDataFormat)) {
-            cell = PaletteCell::readMimeData(data->data(PaletteCell::mimeDataFormat));
+            cell = PaletteCell::fromMimeData(data->data(PaletteCell::mimeDataFormat));
             if (action == Qt::CopyAction) {
                 cell->custom = true;
             }
         } else if (data->hasFormat(mu::commonscene::MIME_SYMBOL_FORMAT)) {
-            cell = PaletteCell::readElementMimeData(data->data(mu::commonscene::MIME_SYMBOL_FORMAT));
+            cell = PaletteCell::fromElementMimeData(data->data(mu::commonscene::MIME_SYMBOL_FORMAT));
             cell->custom = true;       // the cell is created by dropping an element so it is custom
         }
 
@@ -739,7 +739,7 @@ bool PaletteTreeModel::moveRows(const QModelIndex& sourceParent, int sourceRow, 
     PalettePanel* destPanel = sameParent ? sourcePanel : findPalettePanel(destinationParent);
     if (sourcePanel && destPanel) {
         // moving palette cells
-        if (sourceRow + count > sourcePanel->ncells() || destinationChild > destPanel->ncells()) {
+        if (sourceRow + count > int(sourcePanel->cellsCount()) || destinationChild > int(destPanel->cellsCount())) {
             return false;
         }
 
@@ -794,7 +794,7 @@ bool PaletteTreeModel::removeRows(int row, int count, const QModelIndex& parent)
 
     if (PalettePanel* panel = findPalettePanel(parent)) {
         // removing palette cells
-        if (row < 0 || row + count > panel->ncells()) {
+        if (row < 0 || row + count > panel->cellsCount()) {
             return false;
         }
 
@@ -833,7 +833,7 @@ bool PaletteTreeModel::insertRows(int row, int count, const QModelIndex& parent)
 
     if (PalettePanel* panel = findPalettePanel(parent)) {
         // inserting palette cells
-        if (row < 0 || row > panel->ncells()) {
+        if (row < 0 || row > panel->cellsCount()) {
             return false;
         }
 
@@ -895,8 +895,8 @@ void PaletteTreeModel::updateCellsState(const Selection& sel)
             continue;
         }
 
-        for (int ci = 0; ci < palette->ncells(); ++ci) {
-            PaletteCellPtr cell = palette->cell(ci);
+        for (int ci = 0; ci < palette->cellsCount(); ++ci) {
+            PaletteCellPtr cell = palette->cellAt(ci);
             if (deactivateAll) {
                 cell->active = false;
             } else if (cell->element && cell->element->isActionIcon()) {
@@ -925,7 +925,7 @@ void PaletteTreeModel::retranslate()
 QModelIndex PaletteTreeModel::findPaletteCell(const PaletteCell& cell, const QModelIndex& parent) const
 {
     if (const PalettePanel* pp = findPalettePanel(parent)) {
-        const int idx = pp->findPaletteCell(cell);
+        const int idx = pp->indexOfCell(cell);
         if (idx == -1) {
             return QModelIndex();
         }
@@ -1040,7 +1040,7 @@ void PaletteCellFilter::connectToModel(const QAbstractItemModel* model)
 class ExcludePaletteCellFilter : public PaletteCellFilter
 {
     const PalettePanel* excludePanel;
-    const QPersistentModelIndex panelIndex;   // filter is valid as long as this index is valid too
+    const QPersistentModelIndex panelIndex; // filter is valid as long as this index is valid too
 
 public:
     ExcludePaletteCellFilter(const PalettePanel* p, QPersistentModelIndex index, QObject* parent = nullptr)
@@ -1048,7 +1048,7 @@ public:
 
     bool acceptCell(const PaletteCell& cell) const override
     {
-        return panelIndex.isValid() && -1 == excludePanel->findPaletteCell(cell, /* matchName */ false);
+        return panelIndex.isValid() && -1 == excludePanel->indexOfCell(cell, /* matchName */ false);
     }
 };
 

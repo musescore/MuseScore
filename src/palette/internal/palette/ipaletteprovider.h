@@ -39,10 +39,10 @@ public:
 
     virtual void init() = 0;
 
-    virtual Ms::PaletteTreePtr userPaletteTree() const = 0;
+    virtual PaletteTreePtr userPaletteTree() const = 0;
     virtual async::Notification userPaletteTreeChanged() const = 0;
-    virtual void setUserPaletteTree(Ms::PaletteTreePtr tree) = 0;
-    virtual void setDefaultPaletteTree(Ms::PaletteTreePtr tree) = 0;
+    virtual void setUserPaletteTree(PaletteTreePtr tree) = 0;
+    virtual void setDefaultPaletteTree(PaletteTreePtr tree) = 0;
 };
 }
 

@@ -24,7 +24,7 @@
 
 #include <QIconEngine>
 
-#include "palettetree.h"
+#include "palettecell.h"
 
 #include "modularity/ioc.h"
 #include "ipaletteconfiguration.h"
@@ -35,7 +35,7 @@ class PaletteCellIconEngine : public QIconEngine
     INJECT_STATIC(palette, mu::palette::IPaletteConfiguration, configuration)
 
 public:
-    explicit PaletteCellIconEngine(Ms::PaletteCellConstPtr cell, qreal extraMag = 1.0);
+    explicit PaletteCellIconEngine(PaletteCellConstPtr cell, qreal extraMag = 1.0);
 
     QIconEngine* clone() const override;
 
@@ -49,7 +49,7 @@ private:
     void paintScoreElement(draw::Painter& painter, Ms::Element* element, qreal spatium, bool alignToStaff) const;
     void paintActionIcon(draw::Painter& painter, const RectF& rect, Ms::Element* element) const;
 
-    Ms::PaletteCellConstPtr m_cell;
+    PaletteCellConstPtr m_cell;
     qreal m_extraMag = 1.0;
 };
 }

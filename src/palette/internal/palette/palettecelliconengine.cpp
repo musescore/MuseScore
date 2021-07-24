@@ -21,9 +21,19 @@
  */
 #include "palettecelliconengine.h"
 
+#include "palette_config.h"
+
+#include "engraving/draw/geometry.h"
+#include "engraving/draw/painter.h"
+#include "engraving/draw/pen.h"
+#include "engraving/libmscore/actionicon.h"
+#include "engraving/libmscore/element.h"
+#include "engraving/style/defaultstyle.h"
+
 #include "log.h"
 
 using namespace mu::palette;
+using namespace mu::draw;
 using namespace Ms;
 
 PaletteCellIconEngine::PaletteCellIconEngine(PaletteCellConstPtr cell, qreal extraMag)
@@ -38,14 +48,14 @@ QIconEngine* PaletteCellIconEngine::clone() const
 
 void PaletteCellIconEngine::paint(QPainter* qp, const QRect& rect, QIcon::Mode mode, QIcon::State state)
 {
-    mu::draw::Painter p(qp, "palettecell");
+    Painter p(qp, "palettecell");
     p.save();
     p.setAntialiasing(true);
     paintCell(p, RectF::fromQRectF(rect), mode == QIcon::Selected, state == QIcon::On);
     p.restore();
 }
 
-void PaletteCellIconEngine::paintCell(mu::draw::Painter& painter, const RectF& rect, bool selected, bool current) const
+void PaletteCellIconEngine::paintCell(Painter& painter, const RectF& rect, bool selected, bool current) const
 {
     paintBackground(painter, rect, selected, current);
 
@@ -145,7 +155,7 @@ qreal PaletteCellIconEngine::paintStaff(Painter& painter, const RectF& rect, qre
 /// system. If alignToStaff is true then the element is only centered horizontally;
 /// i.e. vertical alignment is unchanged from the default so that item will appear
 /// at the correct height on the staff.
-void PaletteCellIconEngine::paintScoreElement(mu::draw::Painter& painter, Element* element, qreal spatium, bool alignToStaff) const
+void PaletteCellIconEngine::paintScoreElement(Painter& painter, Element* element, qreal spatium, bool alignToStaff) const
 {
     IF_ASSERT_FAILED(element && !element->isActionIcon()) {
         return;
@@ -174,7 +184,7 @@ void PaletteCellIconEngine::paintScoreElement(mu::draw::Painter& painter, Elemen
 
 /// Paint an icon element so that it fills a QRect, preserving aspect ratio, and
 /// leaving a small margin around the edges.
-void PaletteCellIconEngine::paintActionIcon(mu::draw::Painter& painter, const RectF& rect, Element* element) const
+void PaletteCellIconEngine::paintActionIcon(Painter& painter, const RectF& rect, Element* element) const
 {
     IF_ASSERT_FAILED(element && element->isActionIcon()) {
         return;

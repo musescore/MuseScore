@@ -82,14 +82,14 @@ signals:
 
 public:
     Palette(QWidget* parent = nullptr);
-    Palette(PalettePanelPtr palettePanel, QWidget* parent = nullptr);
+    Palette(mu::palette::PalettePanelPtr palettePanel, QWidget* parent = nullptr);
 
     void nextPaletteElement();
     void prevPaletteElement();
     void applyPaletteElement();
     static bool applyPaletteElement(ElementPtr element, Qt::KeyboardModifiers modifiers = {});
-    PaletteCellPtr append(ElementPtr element, const QString& name, QString tag = QString(), qreal mag = 1.0);
-    PaletteCellPtr add(int idx, ElementPtr element, const QString& name, const QString tag = QString(), qreal mag = 1.0);
+    mu::palette::PaletteCellPtr append(ElementPtr element, const QString& name, QString tag = QString(), qreal mag = 1.0);
+    mu::palette::PaletteCellPtr add(int idx, ElementPtr element, const QString& name, const QString tag = QString(), qreal mag = 1.0);
 
     void emitChanged() { emit changed(); }
     void setGrid(int, int);
@@ -123,7 +123,7 @@ public:
     int columns() const;
     int rows() const;
     int size() const;
-    PaletteCellPtr cellAt(int index) const;
+    mu::palette::PaletteCellPtr cellAt(int index) const;
     void setCellReadOnly(int cellIndex, bool readonly);
     QString name() const;
     void setName(const QString& name);
@@ -143,7 +143,7 @@ public:
     int getCurrentIdx() const;
     void setCurrentIdx(int i);
     bool isFilterActive();
-    QList<PaletteCellPtr> getDragCells();
+    QList<mu::palette::PaletteCellPtr> getDragCells();
     int heightForWidth(int) const override;
     QSize sizeHint() const override;
     int idx(const QPoint&) const;
@@ -167,15 +167,15 @@ private:
     int idx2(const QPoint&) const;
     QRect idxRect(int) const;
 
-    const QList<PaletteCellPtr>& ccp() const;
+    const QList<mu::palette::PaletteCellPtr>& ccp() const;
     QPixmap pixmap(int cellIdx) const;
 
     bool notationHasSelection() const;
     void applyElementAtPosition(QPoint pos, Qt::KeyboardModifiers modifiers);
 
     QString m_name;
-    QList<PaletteCellPtr> m_cells;
-    QList<PaletteCellPtr> m_dragCells; // used for filter & backup
+    QList<mu::palette::PaletteCellPtr> m_cells;
+    QList<mu::palette::PaletteCellPtr> m_dragCells; // used for filter & backup
 
     int m_hgrid = -1;
     int m_vgrid = -1;
