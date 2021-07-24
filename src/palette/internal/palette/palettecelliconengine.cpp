@@ -63,14 +63,12 @@ void PaletteCellIconEngine::paintCell(Painter& painter, const RectF& rect, bool 
         return;
     }
 
-    painter.setPen(configuration()->elementsColor());
-
-    paintTag(painter, rect, m_cell->tag);
-
     Element* element = m_cell->element.get();
     if (!element) {
         return;
     }
+
+    painter.setPen(configuration()->elementsColor());
 
     if (element->isActionIcon()) {
         paintActionIcon(painter, rect, element);
@@ -99,26 +97,6 @@ void PaletteCellIconEngine::paintBackground(Painter& painter, const RectF& rect,
         c.setAlpha(selected ? 100 : 60);
         painter.fillRect(rect, c);
     }
-}
-
-void PaletteCellIconEngine::paintTag(Painter& painter, const RectF& rect, QString tag) const
-{
-    if (tag.isEmpty()) {
-        return;
-    }
-
-    painter.save();
-    Font f(painter.font());
-    f.setPointSizeF(12.0);
-    painter.setFont(f);
-
-    if (tag == "ShowMore") {
-        painter.drawText(rect, Qt::AlignCenter, "???");
-    } else {
-        painter.drawText(rect, Qt::AlignLeft | Qt::AlignTop, tag);
-    }
-
-    painter.restore();
 }
 
 /// Paint a 5 line staff centered within a QRect and return the distance from the

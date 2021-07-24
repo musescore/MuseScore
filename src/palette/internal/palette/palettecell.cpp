@@ -175,8 +175,6 @@ bool PaletteCell::read(XmlReader& e)
             yoffset = e.readDouble();
         } else if (s == "mag") {
             mag = e.readDouble();
-        } else if (s == "tag") {
-            tag = e.readElementText();
         }
         // added on palettes rework
         // TODO: remove or leave to switch from using attributes later?
@@ -234,9 +232,6 @@ void PaletteCell::write(XmlWriter& xml) const
     }
     if (yoffset) {
         xml.tag("yoffset", yoffset);
-    }
-    if (!tag.isEmpty()) {
-        xml.tag("tag", tag);
     }
     if (mag != 1.0) {
         xml.tag("mag", mag);

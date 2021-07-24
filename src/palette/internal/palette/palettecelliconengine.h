@@ -44,7 +44,6 @@ public:
 private:
     void paintCell(draw::Painter& painter, const RectF& rect, bool selected, bool current) const;
     void paintBackground(draw::Painter& painter, const RectF& rect, bool selected, bool current) const;
-    void paintTag(draw::Painter& painter, const RectF& rect, QString tag) const;
     qreal paintStaff(draw::Painter& painter, const RectF& rect, qreal spatium) const;
     void paintScoreElement(draw::Painter& painter, Ms::Element* element, qreal spatium, bool alignToStaff) const;
     void paintActionIcon(draw::Painter& painter, const RectF& rect, Ms::Element* element) const;

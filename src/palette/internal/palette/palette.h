@@ -78,7 +78,6 @@ class Palette : public QWidget
 signals:
     void boxClicked(int);
     void changed();
-    void displayMore(const QString& paletteName);
 
 public:
     Palette(QWidget* parent = nullptr);
@@ -88,8 +87,8 @@ public:
     void prevPaletteElement();
     void applyPaletteElement();
     static bool applyPaletteElement(ElementPtr element, Qt::KeyboardModifiers modifiers = {});
-    mu::palette::PaletteCellPtr append(ElementPtr element, const QString& name, QString tag = QString(), qreal mag = 1.0);
-    mu::palette::PaletteCellPtr add(int idx, ElementPtr element, const QString& name, const QString tag = QString(), qreal mag = 1.0);
+    mu::palette::PaletteCellPtr append(ElementPtr element, const QString& name, qreal mag = 1.0);
+    mu::palette::PaletteCellPtr add(int idx, ElementPtr element, const QString& name, qreal mag = 1.0);
 
     void emitChanged() { emit changed(); }
     void setGrid(int, int);
@@ -129,8 +128,6 @@ public:
     void setName(const QString& name);
     int gridWidth() const;
     int gridHeight() const;
-    bool moreElements() const;
-    void setMoreElements(bool val);
     bool filter(const QString& text);
     void setShowContextMenu(bool val);
 
@@ -195,7 +192,6 @@ private:
     qreal m_yOffsetSpatium = 0;
     bool m_filterActive = false; // bool if filter is active
 
-    bool m_moreElements = false;
     bool m_showContextMenu = true;
 };
 } // namespace Ms
