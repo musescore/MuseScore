@@ -241,7 +241,6 @@ bool PalettePanel::read(XmlReader& e)
             m_isEditable = e.readBool();
         } else if (tag == "Cell") {
             PaletteCellPtr cell = std::make_shared<PaletteCell>();
-            cell->id = PaletteCell::makeId();
             if (!cell->read(e)) {
                 continue;
             }
