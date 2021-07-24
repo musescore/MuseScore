@@ -44,6 +44,7 @@
 #include "../palette_config.h"
 
 using namespace mu;
+using namespace mu::palette;
 
 namespace Ms {
 extern bool useFactorySettings;

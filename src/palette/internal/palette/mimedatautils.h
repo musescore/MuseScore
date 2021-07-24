@@ -19,55 +19,43 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#include "palettetree.h"
+#ifndef MU_PALETTE_MIMEDATAUTILS_H
+#define MU_PALETTE_MIMEDATAUTILS_H
 
 #include <QBuffer>
 
-#include "engraving/io/xml.h"
-
-using namespace mu::palette;
-
-void PaletteTree::insert(size_t idx, PalettePanelPtr palette)
+namespace Ms {
+template<class T>
+QByteArray toMimeData(T* t)
 {
-    palettes.emplace(palettes.begin() + idx, palette);
+    QBuffer buffer;
+    buffer.open(QIODevice::WriteOnly);
+    XmlWriter xml(/* score */ nullptr, &buffer);
+    xml.setClipboardmode(true);
+    t->write(xml);
+    buffer.close();
+    return buffer.buffer();
 }
 
-void PaletteTree::append(PalettePanelPtr palette)
+template<class T>
+std::shared_ptr<T> fromMimeData(const QByteArray& data, const QString& tagName)
 {
-    palettes.emplace_back(palette);
-}
-
-bool PaletteTree::read(Ms::XmlReader& e)
-{
+    XmlReader e(data);
+    e.setPasteMode(true);
     while (e.readNextStartElement()) {
         const QStringRef tag(e.name());
-        if (tag == "Palette") {
-            PalettePanelPtr p = std::make_shared<PalettePanel>();
-            p->read(e);
-            palettes.push_back(p);
+        if (tag == tagName) {
+            std::shared_ptr<T> t(new T);
+            if (!t->read(e)) {
+                return nullptr;
+            }
+            return t;
         } else {
-            e.unknown();
+            return nullptr;
         }
     }
-
-    return true;
+    return nullptr;
+}
 }
 
-void PaletteTree::write(Ms::XmlWriter& xml) const
-{
-    xml.stag("PaletteBox"); // for compatibility with old palettes file format
-
-    for (PalettePanelPtr palette : palettes) {
-        palette->write(xml);
-    }
-
-    xml.etag();
-}
-
-void PaletteTree::retranslate()
-{
-    for (PalettePanelPtr palette : palettes) {
-        palette->retranslate();
-    }
-}
+#endif // MU_PALETTE_MIMEDATAUTILS_H
