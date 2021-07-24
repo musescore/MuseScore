@@ -79,6 +79,7 @@ using namespace mu;
 using namespace mu::framework;
 using namespace mu::palette;
 using namespace mu::actions;
+using namespace mu::draw;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -138,9 +139,9 @@ Palette::Palette(PalettePanelPtr palettePanel, QWidget* parent)
     setGrid(gridSize.width(), gridSize.height());
     setMag(palettePanel->mag());
     setDrawGrid(palettePanel->drawGrid());
-    setMoreElements(palettePanel->moreElements());
+    setMoreElements(palettePanel->hasMoreElements());
 
-    const auto allCells = palettePanel->takeCells(0, palettePanel->ncells());
+    const auto allCells = palettePanel->takeCells(0, palettePanel->cellsCount());
     for (const PaletteCellPtr& cell : allCells) {
         if (!cell->element) {
             continue;

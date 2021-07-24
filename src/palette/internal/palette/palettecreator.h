@@ -31,79 +31,79 @@
 
 namespace Ms {
 class Palette;
-class PalettePanel;
-struct PaletteTree;
+}
 
+namespace mu::palette {
 struct PaletteActionIcon
 {
-    ActionIconType actionType = ActionIconType::UNDEFINED;
-    mu::actions::ActionCode actionCode;
+    Ms::ActionIconType actionType = Ms::ActionIconType::UNDEFINED;
+    actions::ActionCode actionCode;
 };
 using PaletteActionIconList = std::vector<PaletteActionIcon>;
 
 class PaletteCreator
 {
-    INJECT_STATIC(palette, mu::palette::IPaletteConfiguration, configuration)
-    INJECT_STATIC(palette, mu::ui::IUiActionsRegister, actionsRegister)
+    INJECT_STATIC(palette, IPaletteConfiguration, configuration)
+    INJECT_STATIC(palette, ui::IUiActionsRegister, actionsRegister)
 
 public:
-    static Palette* newTempoPalette(bool defaultPalette = false);
-    static Palette* newTextPalette(bool defaultPalette = false);
-    static Palette* newTimePalette();
-    static Palette* newRepeatsPalette();
-    static Palette* newBeamPalette();
-    static Palette* newDynamicsPalette(bool defaultPalette = false);
-    static Palette* newFingeringPalette();
-    static Palette* newTremoloPalette();
-    static Palette* newNoteHeadsPalette();
-    static Palette* newArticulationsPalette();
-    static Palette* newOrnamentsPalette();
-    static Palette* newAccordionPalette();
-    static Palette* newBracketsPalette();
-    static Palette* newBreathPalette();
-    static Palette* newArpeggioPalette();
-    static Palette* newClefsPalette(bool defaultPalette = false);
-    static Palette* newGraceNotePalette();
-    static Palette* newBagpipeEmbellishmentPalette();
-    static Palette* newKeySigPalette();
-    static Palette* newAccidentalsPalette(bool defaultPalette = false);
-    static Palette* newBarLinePalette();
-    static Palette* newLayoutPalette();
-    static Palette* newLinesPalette();
-    static Palette* newFretboardDiagramPalette();
+    static Ms::Palette* newTempoPalette(bool defaultPalette = false);
+    static Ms::Palette* newTextPalette(bool defaultPalette = false);
+    static Ms::Palette* newTimePalette();
+    static Ms::Palette* newRepeatsPalette();
+    static Ms::Palette* newBeamPalette();
+    static Ms::Palette* newDynamicsPalette(bool defaultPalette = false);
+    static Ms::Palette* newFingeringPalette();
+    static Ms::Palette* newTremoloPalette();
+    static Ms::Palette* newNoteHeadsPalette();
+    static Ms::Palette* newArticulationsPalette();
+    static Ms::Palette* newOrnamentsPalette();
+    static Ms::Palette* newAccordionPalette();
+    static Ms::Palette* newBracketsPalette();
+    static Ms::Palette* newBreathPalette();
+    static Ms::Palette* newArpeggioPalette();
+    static Ms::Palette* newClefsPalette(bool defaultPalette = false);
+    static Ms::Palette* newGraceNotePalette();
+    static Ms::Palette* newBagpipeEmbellishmentPalette();
+    static Ms::Palette* newKeySigPalette();
+    static Ms::Palette* newAccidentalsPalette(bool defaultPalette = false);
+    static Ms::Palette* newBarLinePalette();
+    static Ms::Palette* newLayoutPalette();
+    static Ms::Palette* newLinesPalette();
+    static Ms::Palette* newFretboardDiagramPalette();
 
-    static PalettePanel* newTempoPalettePanel(bool defaultPalette = false);
-    static PalettePanel* newTextPalettePanel(bool defaultPalette = false);
-    static PalettePanel* newTimePalettePanel();
-    static PalettePanel* newRepeatsPalettePanel();
-    static PalettePanel* newBeamPalettePanel();
-    static PalettePanel* newDynamicsPalettePanel(bool defaultPalette = false);
-    static PalettePanel* newLayoutPalettePanel();
-    static PalettePanel* newFingeringPalettePanel();
-    static PalettePanel* newTremoloPalettePanel();
-    static PalettePanel* newNoteHeadsPalettePanel();
-    static PalettePanel* newArticulationsPalettePanel();
-    static PalettePanel* newOrnamentsPalettePanel();
-    static PalettePanel* newAccordionPalettePanel();
-    static PalettePanel* newBracketsPalettePanel();
-    static PalettePanel* newBreathPalettePanel();
-    static PalettePanel* newArpeggioPalettePanel();
-    static PalettePanel* newClefsPalettePanel(bool defaultPalette = false);
-    static PalettePanel* newGraceNotePalettePanel();
-    static PalettePanel* newBagpipeEmbellishmentPalettePanel();
-    static PalettePanel* newKeySigPalettePanel();
-    static PalettePanel* newAccidentalsPalettePanel(bool defaultPalette = false);
-    static PalettePanel* newBarLinePalettePanel();
-    static PalettePanel* newLinesPalettePanel();
-    static PalettePanel* newFretboardDiagramPalettePanel();
+    static PalettePanelPtr newTempoPalettePanel(bool defaultPalette = false);
+    static PalettePanelPtr newTextPalettePanel(bool defaultPalette = false);
+    static PalettePanelPtr newTimePalettePanel();
+    static PalettePanelPtr newRepeatsPalettePanel();
+    static PalettePanelPtr newBeamPalettePanel();
+    static PalettePanelPtr newDynamicsPalettePanel(bool defaultPalette = false);
+    static PalettePanelPtr newLayoutPalettePanel();
+    static PalettePanelPtr newFingeringPalettePanel();
+    static PalettePanelPtr newTremoloPalettePanel();
+    static PalettePanelPtr newNoteHeadsPalettePanel();
+    static PalettePanelPtr newArticulationsPalettePanel();
+    static PalettePanelPtr newOrnamentsPalettePanel();
+    static PalettePanelPtr newAccordionPalettePanel();
+    static PalettePanelPtr newBracketsPalettePanel();
+    static PalettePanelPtr newBreathPalettePanel();
+    static PalettePanelPtr newArpeggioPalettePanel();
+    static PalettePanelPtr newClefsPalettePanel(bool defaultPalette = false);
+    static PalettePanelPtr newGraceNotePalettePanel();
+    static PalettePanelPtr newBagpipeEmbellishmentPalettePanel();
+    static PalettePanelPtr newKeySigPalettePanel();
+    static PalettePanelPtr newAccidentalsPalettePanel(bool defaultPalette = false);
+    static PalettePanelPtr newBarLinePalettePanel();
+    static PalettePanelPtr newLinesPalettePanel();
+    static PalettePanelPtr newFretboardDiagramPalettePanel();
 
-    static Ms::PaletteTreePtr newMasterPaletteTree();
-    static PaletteTree* newDefaultPaletteTree();
+    static PaletteTreePtr newMasterPaletteTree();
+    static PaletteTreePtr newDefaultPaletteTree();
 
-    static void populateIconPalettePanel(PalettePanel* palettePanel, const PaletteActionIconList& actions);
+    static void populateIconPalettePanel(PalettePanelPtr palettePanel, const PaletteActionIconList& actions);
 
     // Used in NoteGroups widget
-    static void populateIconPalette(Palette* palette, const PaletteActionIconList& actions);
+    static void populateIconPalette(Ms::Palette* palette, const PaletteActionIconList& actions);
 };
 } // namespace Ms
 

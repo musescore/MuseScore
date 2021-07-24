@@ -49,7 +49,7 @@ class PaletteElementEditor : public QObject
 
     AbstractPaletteController* _controller = nullptr;
     QPersistentModelIndex _paletteIndex;
-    PalettePanel::Type _type = PalettePanel::Type::Unknown;
+    mu::palette::PalettePanel::Type _type = mu::palette::PalettePanel::Type::Unknown;
 
     Q_PROPERTY(bool valid READ valid CONSTANT)
     Q_PROPERTY(QString actionName READ actionName CONSTANT) // TODO: make NOTIFY instead of CONSTANT for retranslations
@@ -61,7 +61,7 @@ public:
     PaletteElementEditor(QObject* parent = nullptr)
         : QObject(parent) {}
     PaletteElementEditor(AbstractPaletteController* controller, QPersistentModelIndex paletteIndex,
-                         PalettePanel::Type type, QObject* parent = nullptr)
+                         mu::palette::PalettePanel::Type type, QObject* parent = nullptr)
         : QObject(parent), _controller(controller), _paletteIndex(paletteIndex), _type(type) {}
 
     bool valid() const;
@@ -213,11 +213,11 @@ public:
     void init() override;
 
     PaletteTreeModel* userPaletteModel() const { return m_userPaletteModel; }
-    PaletteTreePtr userPaletteTree() const override { return m_userPaletteModel->paletteTreePtr(); }
+    mu::palette::PaletteTreePtr userPaletteTree() const override { return m_userPaletteModel->paletteTreePtr(); }
     mu::async::Notification userPaletteTreeChanged() const override { return m_userPaletteChanged; }
-    void setUserPaletteTree(PaletteTreePtr tree) override;
+    void setUserPaletteTree(mu::palette::PaletteTreePtr tree) override;
 
-    void setDefaultPaletteTree(PaletteTreePtr tree) override;
+    void setDefaultPaletteTree(mu::palette::PaletteTreePtr tree) override;
 
     Q_INVOKABLE QModelIndex poolPaletteIndex(const QModelIndex& index, Ms::FilterPaletteTreeModel* poolPalette) const;
     Q_INVOKABLE QModelIndex customElementsPaletteIndex(const QModelIndex& index);
