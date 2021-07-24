@@ -30,12 +30,14 @@
 #include "libmscore/select.h"
 #include "palettetree.h"
 #include "palette/palette.h"
+#include "palette/palettecelliconengine.h"
 
 #include "commonscene/commonscenetypes.h"
 
 #include "translation.h"
 
 using namespace mu;
+using namespace mu::palette;
 
 namespace Ms {
 //---------------------------------------------------------
