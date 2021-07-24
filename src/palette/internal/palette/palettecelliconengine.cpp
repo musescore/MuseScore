@@ -47,23 +47,23 @@ void PaletteCellIconEngine::paint(QPainter* qp, const QRect& rect, QIcon::Mode m
 
 void PaletteCellIconEngine::paintCell(mu::draw::Painter& painter, const RectF& rect, bool selected, bool current) const
 {
-    const qreal _yOffset = 0.0; // TODO
-
     paintBackground(painter, rect, selected, current);
 
     if (!m_cell) {
         return;
     }
 
+    painter.setPen(configuration()->elementsColor());
+
     paintTag(painter, rect, m_cell->tag);
 
-    Element* el = m_cell->element.get();
-    if (!el) {
+    Element* element = m_cell->element.get();
+    if (!element) {
         return;
     }
 
-    if (el->isActionIcon()) {
-        paintIconElement(painter, rect, el);
+    if (element->isActionIcon()) {
+        paintActionIcon(painter, rect, element);
         return; // never draw staff for icon elements
     }
 
@@ -71,8 +71,6 @@ void PaletteCellIconEngine::paintCell(mu::draw::Painter& painter, const RectF& r
     const qreal spatium = PALETTE_SPATIUM * m_extraMag * m_cell->mag;
 
     PointF origin = rect.center(); // draw element at center of cell by default
-    painter.translate(0, _yOffset * spatium); // offset both element and staff
-
     if (drawStaff) {
         const qreal topLinePos = paintStaff(painter, rect, spatium); // draw dummy staff lines onto rect.
         origin.setY(topLinePos); // vertical position relative to staff instead of cell center.
@@ -80,9 +78,8 @@ void PaletteCellIconEngine::paintCell(mu::draw::Painter& painter, const RectF& r
 
     painter.translate(origin);
     painter.translate(m_cell->xoffset * spatium, m_cell->yoffset * spatium); // additional offset for element onlym
-    painter.setPen(Pen(configuration()->elementsColor()));
 
-    paintScoreElement(painter, el, spatium, drawStaff);
+    paintScoreElement(painter, element, spatium, drawStaff);
 }
 
 void PaletteCellIconEngine::paintBackground(Painter& painter, const RectF& rect, bool selected, bool current) const
@@ -101,7 +98,6 @@ void PaletteCellIconEngine::paintTag(Painter& painter, const RectF& rect, QStrin
     }
 
     painter.save();
-    painter.setPen(configuration()->elementsColor());
     Font f(painter.font());
     f.setPointSizeF(12.0);
     painter.setFont(f);
@@ -178,7 +174,7 @@ void PaletteCellIconEngine::paintScoreElement(mu::draw::Painter& painter, Elemen
 
 /// Paint an icon element so that it fills a QRect, preserving aspect ratio, and
 /// leaving a small margin around the edges.
-void PaletteCellIconEngine::paintIconElement(mu::draw::Painter& painter, const RectF& rect, Element* element) const
+void PaletteCellIconEngine::paintActionIcon(mu::draw::Painter& painter, const RectF& rect, Element* element) const
 {
     IF_ASSERT_FAILED(element && element->isActionIcon()) {
         return;
