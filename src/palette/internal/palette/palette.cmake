@@ -11,4 +11,6 @@ set(PALETTE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/palette.cpp
     ${CMAKE_CURRENT_LIST_DIR}/palettecreator.cpp
     ${CMAKE_CURRENT_LIST_DIR}/palettecreator.h
+    ${CMAKE_CURRENT_LIST_DIR}/palettecelliconengine.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/palettecelliconengine.h
     )

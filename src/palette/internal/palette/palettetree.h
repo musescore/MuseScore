@@ -24,14 +24,12 @@
 #define __PALETTETREE_H__
 
 #include <functional>
-#include <QIconEngine>
 
 #include "engraving/io/xml.h"
 #include "libmscore/element.h"
 
 #include "modularity/ioc.h"
 #include "ui/iuiactionsregister.h"
-#include "ipaletteconfiguration.h"
 #include "iinteractive.h"
 
 namespace Ms {
@@ -80,36 +78,6 @@ struct PaletteCell
     static PaletteCellPtr readMimeData(const QByteArray& data);
     static PaletteCellPtr readElementMimeData(const QByteArray& data);
     static QString makeId();
-};
-
-//---------------------------------------------------------
-//   PaletteCellIconEngine
-//---------------------------------------------------------
-
-class PaletteCellIconEngine : public QIconEngine
-{
-    PaletteCellConstPtr _cell;
-    qreal _extraMag = 1.0;
-
-    PaletteCellConstPtr cell() const { return _cell; }
-
-    INJECT_STATIC(palette, mu::palette::IPaletteConfiguration, configuration)
-
-private:
-    void paintCell(mu::draw::Painter& painter, const mu::RectF& rect, bool selected, bool current) const;
-    void paintScoreElement(mu::draw::Painter& painter, Element* element, qreal spatium, bool alignToStaff) const;
-
-    static qreal paintStaff(mu::draw::Painter& painter, const mu::RectF& rect, qreal spatium);
-    static void paintTag(mu::draw::Painter& painter, const mu::RectF& rect, QString tag);
-    static void paintBackground(mu::draw::Painter& painter, const mu::RectF& rect, bool selected, bool current);
-
-public:
-    PaletteCellIconEngine(PaletteCellConstPtr cell, qreal extraMag = 1.0)
-        : _cell(cell), _extraMag(extraMag) {}
-
-    QIconEngine* clone() const override { return new PaletteCellIconEngine(cell(), _extraMag); }
-
-    void paint(QPainter* painter, const QRect& rect, QIcon::Mode mode, QIcon::State state) override;
 };
 
 //---------------------------------------------------------
