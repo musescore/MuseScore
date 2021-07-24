@@ -353,32 +353,25 @@ PalettePanelPtr PaletteCreator::newDynamicsPalettePanel(bool defaultPalettePanel
     sp->setMag(.8);
     sp->setDrawGrid(true);
 
-    static const std::vector<const char*> array1 = {
+    static const std::vector<const char*> defaultArray = {
+        "ppp", "pp", "p", "mp", "mf", "f", "ff", "fff",
+        "fp", "pf", "sf", "sfz", "sff", "sffz", "sfp", "sfpp",
+        "rfz", "rf", "fz", "m", "r", "s", "z", "n"
+    };
+
+    static const std::vector<const char*> fullArray = {
         "pppppp", "ppppp", "pppp",
         "ppp", "pp", "p", "mp", "mf", "f", "ff", "fff",
         "ffff", "fffff", "ffffff",
         "fp", "pf", "sf", "sfz", "sff", "sffz", "sfp", "sfpp",
         "rfz", "rf", "fz", "m", "r", "s", "z", "n"
     };
-    static const std::vector<const char*> arrayDefault = {
-        "ppp", "pp", "p", "mp", "mf", "f", "ff", "fff",
-        "fp", "pf", "sf", "sfz", "sff", "sffz", "sfp", "sfpp",
-        "rfz", "rf", "fz", "m", "r", "s", "z", "n"
-    };
 
-    const std::vector<const char*>* array = nullptr;
-    if (defaultPalettePanel) {
-        array = &arrayDefault;
-        sp->setGrid(42, 28);
-        sp->setHasMoreElements(true);
-    } else {
-        array = &array1;
-        sp->setGrid(60, 28);
-    }
+    sp->setGrid(defaultPalettePanel ? 42 : 60, 28);
 
-    for (const char* c :  *array) {
+    for (const char* dynamicType : (defaultPalettePanel ? defaultArray : fullArray)) {
         auto dynamic = makeElement<Dynamic>(Ms::gscore);
-        dynamic->setDynamicType(c);
+        dynamic->setDynamicType(dynamicType);
         sp->appendElement(dynamic, dynamic->dynamicTypeName());
     }
     return sp;
@@ -438,10 +431,6 @@ PalettePanelPtr PaletteCreator::newAccidentalsPalettePanel(bool defaultPalettePa
         if (ac->symbol() != SymId::noSym) {
             sp->appendElement(ac, ac->subtypeUserName());
         }
-    }
-
-    if (defaultPalettePanel) {
-        sp->setHasMoreElements(true);
     }
 
     static const PaletteActionIconList actions {
@@ -1058,19 +1047,10 @@ PalettePanelPtr PaletteCreator::newClefsPalettePanel(bool defaultPalettePanel)
         ClefType::PERC2, ClefType::TAB, ClefType::TAB4, ClefType::TAB_SERIF, ClefType::TAB4_SERIF
     };
 
-    std::vector<ClefType>* items = nullptr;
-    if (defaultPalettePanel) {
-        items = &clefsDefault;
-        sp->setHasMoreElements(true);
-    } else {
-        items = &clefsMaster;
-        sp->setHasMoreElements(false);
-    }
-
-    for (ClefType j : *items) {
-        auto k = makeElement<Ms::Clef>(gscore);
-        k->setClefType(ClefTypeList(j, j));
-        sp->appendElement(k, ClefInfo::name(j));
+    for (ClefType clefType : defaultPalettePanel ? clefsDefault : clefsMaster) {
+        auto clef = makeElement<Ms::Clef>(gscore);
+        clef->setClefType(ClefTypeList(clefType, clefType));
+        sp->appendElement(clef, ClefInfo::name(clefType));
     }
     return sp;
 }
@@ -1410,7 +1390,6 @@ PalettePanelPtr PaletteCreator::newTempoPalettePanel(bool defaultPalettePanel)
             sp->appendElement(tt, mu::qtrc("palette", tp.name), 1.5);
         }
     }
-    sp->setHasMoreElements(false);
 
     return sp;
 }
