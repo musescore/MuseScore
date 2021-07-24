@@ -31,23 +31,11 @@ using namespace mu::audio;
 MixerPanelModel::MixerPanelModel(QObject* parent)
     : QAbstractListModel(parent)
 {
-    controller()->currentTrackSequenceIdChanged().onNotify(this, [this]() {
-        load();
-    });
 }
 
 void MixerPanelModel::load()
 {
-    TrackSequenceId sequenceId = controller()->currentTrackSequenceId();
-
-    playback()->tracks()->trackIdList(sequenceId)
-    .onResolve(this, [this, sequenceId](const TrackIdList& trackIdList) {
-        loadItems(sequenceId, trackIdList);
-    })
-    .onReject(this, [sequenceId](int errCode, std::string text) {
-        LOGE() << "unable to find track sequence:" << sequenceId << ", error code: " << errCode
-               << ", " << text;
-    });
+    m_mixerChannelList.append(buildMasterChannelItem());
 
     playback()->tracks()->trackAdded().onReceive(this, [this](const TrackSequenceId sequenceId, const TrackId trackId) {
         addItem(sequenceId, trackId);
@@ -81,22 +69,6 @@ QHash<int, QByteArray> MixerPanelModel::roleNames() const
     return roles;
 }
 
-void MixerPanelModel::loadItems(const TrackSequenceId sequenceId, const TrackIdList& trackIdList)
-{
-    beginResetModel();
-
-    clear();
-
-    for (TrackId trackId : trackIdList) {
-        m_mixerChannelList.append(buildChannelItem(sequenceId, trackId));
-    }
-
-    m_mixerChannelList.append(buildMasterChannelItem());
-    sortItems();
-
-    endResetModel();
-}
-
 void MixerPanelModel::addItem(const audio::TrackSequenceId sequenceId, const audio::TrackId trackId)
 {
     beginResetModel();
@@ -111,9 +83,11 @@ void MixerPanelModel::removeItem(const audio::TrackId trackId)
 {
     beginResetModel();
 
-    (void)std::remove_if(m_mixerChannelList.begin(), m_mixerChannelList.end(), [&trackId](const MixerChannelItem* item) {
-        return item->id() == trackId;
-    });
+    for (int i = m_mixerChannelList.count() - 1; i >= 0; i--) {
+        if (m_mixerChannelList[i]->id() == trackId) {
+            m_mixerChannelList.removeAt(i);
+        }
+    }
 
     sortItems();
 

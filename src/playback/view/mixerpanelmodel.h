@@ -31,7 +31,6 @@
 #include "audio/itracks.h"
 #include "audio/iplayback.h"
 
-#include "iplaybackcontroller.h"
 #include "internal/mixerchannelitem.h"
 
 namespace mu::playback {
@@ -40,7 +39,6 @@ class MixerPanelModel : public QAbstractListModel, public async::Asyncable
     Q_OBJECT
 
     INJECT(playback, audio::IPlayback, playback)
-    INJECT(playback, IPlaybackController, controller)
 
 public:
     explicit MixerPanelModel(QObject* parent = nullptr);
@@ -56,7 +54,6 @@ private:
         ItemRole = Qt::UserRole + 1
     };
 
-    void loadItems(const audio::TrackSequenceId sequenceId, const audio::TrackIdList& trackIdList);
     void addItem(const audio::TrackSequenceId sequenceId, const audio::TrackId trackId);
     void removeItem(const audio::TrackId trackId);
     void sortItems();
