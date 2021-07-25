@@ -31,7 +31,7 @@
 #include "engraving/style/defaultstyle.h"
 #include "engraving/io/xml.h"
 
-#include "palette/palette.h"
+#include "palettewidget.h"
 #include "palette/palettecreator.h"
 #include "keyedit.h"
 #include "libmscore/keysig.h"
@@ -47,10 +47,6 @@ using namespace mu;
 using namespace mu::palette;
 
 namespace Ms {
-extern bool useFactorySettings;
-extern Palette* newAccidentalsPalette();
-extern Palette* newKeySigPalette();
-
 static const qreal editScale = 1.0;
 
 //---------------------------------------------------------

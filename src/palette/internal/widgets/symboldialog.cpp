@@ -30,9 +30,11 @@
 #include "libmscore/element.h"
 #include "libmscore/symbol.h"
 
-#include "palette/palette.h"
+#include "palettewidget.h"
 
 #include "smuflranges.h"
+
+using namespace mu::palette;
 
 namespace Ms {
 extern MasterScore* gscore;
@@ -43,7 +45,7 @@ extern MasterScore* gscore;
 
 void SymbolDialog::createSymbolPalette()
 {
-    sp = new Palette();
+    sp = new PaletteWidget();
     createSymbols();
 }
 

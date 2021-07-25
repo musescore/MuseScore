@@ -31,14 +31,12 @@
 
 class QListWidget;
 
+namespace mu::palette {
+class PaletteWidget;
+}
+
 namespace Ms {
 class TextBase;
-class Palette;
-
-//---------------------------------------------------------
-//   SpecialCharactersDialog
-//---------------------------------------------------------
-
 class SpecialCharactersDialog : public QDialog, public Ui::SpecialCharactersDialog
 {
     Q_OBJECT
@@ -62,9 +60,9 @@ private:
     void populateCommon();
 
     mu::draw::Font m_font;
-    Palette* m_pCommon = nullptr;
-    Palette* m_pSmufl = nullptr;
-    Palette* m_pUnicode = nullptr;
+    mu::palette::PaletteWidget* m_pCommon = nullptr;
+    mu::palette::PaletteWidget* m_pSmufl = nullptr;
+    mu::palette::PaletteWidget* m_pUnicode = nullptr;
     QListWidget* m_lws = nullptr;
     QListWidget* m_lwu = nullptr;
 };

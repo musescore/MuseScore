@@ -20,12 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __PALETTE_H__
-#define __PALETTE_H__
+#ifndef MU_PALETTE_PALETTEWIDGET_H
+#define MU_PALETTE_PALETTEWIDGET_H
 
 #include <QScrollArea>
 
-#include "palettetree.h"
+#include "palette/palettetree.h"
 
 #include "modularity/ioc.h"
 #include "ipaletteconfiguration.h"
@@ -38,67 +38,39 @@ namespace Ms {
 class Element;
 class XmlWriter;
 class XmlReader;
-class Palette;
+}
 
-//---------------------------------------------------------
-//    PaletteScrollArea
-//---------------------------------------------------------
-
-class PaletteScrollArea : public QScrollArea
+namespace mu::palette {
+class PaletteWidget : public QWidget
 {
     Q_OBJECT
 
-public:
-    PaletteScrollArea(Palette* w, QWidget* parent = nullptr);
-
-    bool restrictHeight() const;
-    void setRestrictHeight(bool val);
-
-private:
-    void keyPressEvent(QKeyEvent*) override;
-    void resizeEvent(QResizeEvent*) override;
-
-    bool m_restrictHeight = false;
-};
-
-//---------------------------------------------------------
-//   Palette
-//---------------------------------------------------------
-
-class Palette : public QWidget
-{
-    Q_OBJECT
-
-    INJECT_STATIC(palette, mu::palette::IPaletteConfiguration, configuration)
-    INJECT_STATIC(palette, mu::ui::IUiActionsRegister, actionsRegister)
-    INJECT_STATIC(palette, mu::actions::IActionsDispatcher, dispatcher)
-    INJECT_STATIC(palette, mu::context::IGlobalContext, globalContext)
-    INJECT(palette, mu::framework::IInteractive, interactive)
-
-signals:
-    void boxClicked(int);
-    void changed();
+    INJECT_STATIC(palette, IPaletteConfiguration, configuration)
+    INJECT_STATIC(palette, ui::IUiActionsRegister, actionsRegister)
+    INJECT_STATIC(palette, actions::IActionsDispatcher, dispatcher)
+    INJECT_STATIC(palette, context::IGlobalContext, globalContext)
+    INJECT(palette, framework::IInteractive, interactive)
 
 public:
-    Palette(QWidget* parent = nullptr);
-    Palette(mu::palette::PalettePanelPtr palettePanel, QWidget* parent = nullptr);
+    PaletteWidget(QWidget* parent = nullptr);
+    PaletteWidget(PalettePanelPtr palettePanel, QWidget* parent = nullptr);
 
     void nextPaletteElement();
     void prevPaletteElement();
     void applyPaletteElement();
-    static bool applyPaletteElement(ElementPtr element, Qt::KeyboardModifiers modifiers = {});
-    mu::palette::PaletteCellPtr append(ElementPtr element, const QString& name, qreal mag = 1.0);
-    mu::palette::PaletteCellPtr add(int idx, ElementPtr element, const QString& name, qreal mag = 1.0);
+    static bool applyPaletteElement(Ms::ElementPtr element, Qt::KeyboardModifiers modifiers = {});
+    PaletteCellPtr append(Ms::ElementPtr element, const QString& name, qreal mag = 1.0);
+    PaletteCellPtr add(int idx, Ms::ElementPtr element, const QString& name, qreal mag = 1.0);
 
     void emitChanged() { emit changed(); }
     void setGrid(int, int);
-    ElementPtr element(int idx) const;
+    Ms::ElementPtr element(int idx) const;
     void setDrawGrid(bool val);
     bool drawGrid() const;
-    bool read(const QString& path);   // TODO: remove/reuse PalettePanel code
-    void write(const QString& path);   // TODO: remove/reuse PalettePanel code
-    void read(XmlReader&);
-    void write(XmlWriter&) const;
+    bool read(const QString& path); // TODO: remove/reuse PalettePanel code
+    void write(const QString& path); // TODO: remove/reuse PalettePanel code
+    void read(Ms::XmlReader&);
+    void write(Ms::XmlWriter&) const;
     void clear();
     void setSelectable(bool val);
     bool selectable() const;
@@ -122,7 +94,7 @@ public:
     int columns() const;
     int rows() const;
     int size() const;
-    mu::palette::PaletteCellPtr cellAt(int index) const;
+    PaletteCellPtr cellAt(int index) const;
     void setCellReadOnly(int cellIndex, bool readonly);
     QString name() const;
     void setName(const QString& name);
@@ -132,7 +104,7 @@ public:
     void setShowContextMenu(bool val);
 
     static qreal paletteScaling();
-    static void paintPaletteElement(void* data, Element* element);
+    static void paintPaletteElement(void* data, Ms::Element* element);
 
     int gridWidthM() const;
     int gridHeightM() const;
@@ -140,10 +112,14 @@ public:
     int getCurrentIdx() const;
     void setCurrentIdx(int i);
     bool isFilterActive();
-    QList<mu::palette::PaletteCellPtr> getDragCells();
+    QList<PaletteCellPtr> getDragCells();
     int heightForWidth(int) const override;
     QSize sizeHint() const override;
     int idx(const QPoint&) const;
+
+signals:
+    void boxClicked(int);
+    void changed();
 
 private:
     void paintEvent(QPaintEvent*) override;
@@ -164,15 +140,15 @@ private:
     int idx2(const QPoint&) const;
     QRect idxRect(int) const;
 
-    const QList<mu::palette::PaletteCellPtr>& ccp() const;
+    const QList<PaletteCellPtr>& ccp() const;
     QPixmap pixmap(int cellIdx) const;
 
     bool notationHasSelection() const;
     void applyElementAtPosition(QPoint pos, Qt::KeyboardModifiers modifiers);
 
     QString m_name;
-    QList<mu::palette::PaletteCellPtr> m_cells;
-    QList<mu::palette::PaletteCellPtr> m_dragCells; // used for filter & backup
+    QList<PaletteCellPtr> m_cells;
+    QList<PaletteCellPtr> m_dragCells; // used for filter & backup
 
     int m_hgrid = -1;
     int m_vgrid = -1;
@@ -194,6 +170,23 @@ private:
 
     bool m_showContextMenu = true;
 };
-} // namespace Ms
 
-#endif
+class PaletteScrollArea : public QScrollArea
+{
+    Q_OBJECT
+
+public:
+    explicit PaletteScrollArea(PaletteWidget* w, QWidget* parent = nullptr);
+
+    bool restrictHeight() const;
+    void setRestrictHeight(bool val);
+
+private:
+    void keyPressEvent(QKeyEvent*) override;
+    void resizeEvent(QResizeEvent*) override;
+
+    bool m_restrictHeight = false;
+};
+}
+
+#endif // MU_PALETTE_PALETTEWIDGET_H

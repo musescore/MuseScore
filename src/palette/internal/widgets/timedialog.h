@@ -29,16 +29,15 @@
 #include "modularity/ioc.h"
 #include "../ipaletteconfiguration.h"
 
-namespace Ms {
-class Palette;
+namespace mu::palette {
+class PaletteWidget;
 class PaletteScrollArea;
+}
+
+namespace Ms {
 class TimeSig;
 class Score;
 class Chord;
-
-//---------------------------------------------------------
-//   TimeDialog
-//---------------------------------------------------------
 
 class TimeDialog : public QWidget, Ui::TimeDialogBase
 {
@@ -46,8 +45,8 @@ class TimeDialog : public QWidget, Ui::TimeDialogBase
 
     INJECT(palette, mu::palette::IPaletteConfiguration, configuration)
 
-    PaletteScrollArea* _timePalette = nullptr;
-    Palette* sp = nullptr;
+    mu::palette::PaletteScrollArea* _timePalette = nullptr;
+    mu::palette::PaletteWidget* sp = nullptr;
     bool _dirty = false;
 
     int denominator() const;

@@ -31,8 +31,11 @@
 #include "framework/ui/imainwindow.h"
 #include "ui/view/widgetdialog.h"
 
+namespace mu::palette {
+class PaletteWidget;
+}
+
 namespace Ms {
-class Palette;
 class TimeDialog;
 class KeyEditor;
 
@@ -71,8 +74,8 @@ private slots:
     void closeEvent(QCloseEvent* event) override;
 
 private:
-    Palette* createPalette(int w, int h, bool grid, double mag = 1.0);
-    void addPalette(Palette* sp);
+    mu::palette::PaletteWidget* createPalette(int w, int h, bool grid, double mag = 1.0);
+    void addPalette(mu::palette::PaletteWidget* sp);
     void retranslate(bool firstTime = false);
 
     TimeDialog* m_timeDialog = nullptr;

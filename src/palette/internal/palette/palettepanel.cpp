@@ -27,6 +27,7 @@
 #include "thirdparty/qzip/qzipwriter_p.h"
 
 #include "mimedatautils.h"
+#include "widgets/palettewidget.h"
 
 #include "engraving/draw/geometry.h"
 #include "engraving/io/xml.h"
@@ -203,7 +204,7 @@ int PalettePanel::indexOfCell(const PaletteCell& cell, bool matchName) const
 
 QSize PalettePanel::scaledGridSize() const
 {
-    return gridSize() * Palette::paletteScaling();
+    return gridSize() * PaletteWidget::paletteScaling();
 }
 
 bool PalettePanel::read(XmlReader& e)

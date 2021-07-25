@@ -33,7 +33,7 @@
 #include "libmscore/timesig.h"
 
 #include "keyedit.h"
-#include "palette/palette.h"
+#include "widgets/palettewidget.h"
 #include "palettecreator.h"
 #include "timedialog.h"
 
@@ -555,7 +555,7 @@ bool UserPaletteController::applyPaletteElement(const QModelIndex& index, Qt::Ke
 {
     const PaletteCell* cell = model()->data(index, PaletteTreeModel::PaletteCellRole).value<const PaletteCell*>();
     if (cell && cell->element) {
-        return Palette::applyPaletteElement(cell->element, modifiers);
+        return PaletteWidget::applyPaletteElement(cell->element, modifiers);
     }
     return false;
 }

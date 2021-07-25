@@ -1,5 +1,7 @@
 
 set(WIDGETS_SRC
+    ${CMAKE_CURRENT_LIST_DIR}/palettewidget.h
+    ${CMAKE_CURRENT_LIST_DIR}/palettewidget.cpp
     ${CMAKE_CURRENT_LIST_DIR}/masterpalette.h
     ${CMAKE_CURRENT_LIST_DIR}/masterpalette.cpp
     ${CMAKE_CURRENT_LIST_DIR}/timedialog.h

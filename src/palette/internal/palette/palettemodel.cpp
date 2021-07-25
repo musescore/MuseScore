@@ -29,7 +29,7 @@
 #include "libmscore/actionicon.h"
 #include "libmscore/select.h"
 #include "palettetree.h"
-#include "palette/palette.h"
+#include "widgets/palettewidget.h"
 #include "palette/palettecelliconengine.h"
 
 #include "commonscene/commonscenetypes.h"
@@ -340,7 +340,7 @@ QVariant PaletteTreeModel::data(const QModelIndex& index, int role) const
             if (const PalettePanel* pp = iptrToPalettePanel(index.internalPointer())) {
                 extraMag = pp->mag();
             }
-            return QIcon(new PaletteCellIconEngine(cell, extraMag * Palette::paletteScaling()));
+            return QIcon(new PaletteCellIconEngine(cell, extraMag * PaletteWidget::paletteScaling()));
         }
         case PaletteCellRole:
             return QVariant::fromValue(cell.get());

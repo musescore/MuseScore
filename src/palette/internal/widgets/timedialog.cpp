@@ -24,7 +24,7 @@
 
 #include "timedialog.h"
 #include "libmscore/timesig.h"
-#include "palette/palette.h"
+#include "palettewidget.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/mcursor.h"
 #include "libmscore/chord.h"

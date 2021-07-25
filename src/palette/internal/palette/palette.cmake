@@ -15,7 +15,5 @@ set(PALETTE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/palettecelliconengine.h
     ${CMAKE_CURRENT_LIST_DIR}/palettemodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/palettemodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/palette.h
-    ${CMAKE_CURRENT_LIST_DIR}/palette.cpp
     ${CMAKE_CURRENT_LIST_DIR}/mimedatautils.h
     )
