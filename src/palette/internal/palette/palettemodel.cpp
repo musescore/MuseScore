@@ -24,13 +24,13 @@
 
 #include <QMimeData>
 
-#include "libmscore/beam.h"
-#include "libmscore/chordrest.h"
-#include "libmscore/actionicon.h"
-#include "libmscore/select.h"
+#include "palettecelliconengine.h"
 #include "palettetree.h"
-#include "widgets/palettewidget.h"
-#include "palette/palettecelliconengine.h"
+
+#include "engraving/libmscore/actionicon.h"
+#include "engraving/libmscore/beam.h"
+#include "engraving/libmscore/chordrest.h"
+#include "engraving/libmscore/select.h"
 
 #include "commonscene/commonscenetypes.h"
 
@@ -340,7 +340,7 @@ QVariant PaletteTreeModel::data(const QModelIndex& index, int role) const
             if (const PalettePanel* pp = iptrToPalettePanel(index.internalPointer())) {
                 extraMag = pp->mag();
             }
-            return QIcon(new PaletteCellIconEngine(cell, extraMag * PaletteWidget::paletteScaling()));
+            return QIcon(new PaletteCellIconEngine(cell, extraMag * configuration()->paletteScaling()));
         }
         case PaletteCellRole:
             return QVariant::fromValue(cell.get());
@@ -823,7 +823,7 @@ bool PaletteTreeModel::insertRows(int row, int count, const QModelIndex& parent)
         for (int i = 0; i < count; ++i) {
             PalettePanelPtr p = std::make_shared<PalettePanel>(PalettePanel::Type::Custom);
             p->setName(QT_TRANSLATE_NOOP("palette", "Custom"));
-            p->setGrid(QSize(48, 48));
+            p->setGridSize(QSize(48, 48));
             p->setExpanded(true);
             palettes().insert(palettes().begin() + row, p);
         }

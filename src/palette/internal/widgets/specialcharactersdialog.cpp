@@ -551,17 +551,17 @@ SpecialCharactersDialog::SpecialCharactersDialog(QWidget* parent)
 
     m_pCommon = new PaletteWidget;
     m_pCommon->setMag(0.8);
-    m_pCommon->setGrid(33, 60);
+    m_pCommon->setGridSize(33, 60);
     m_pCommon->setReadOnly(true);
 
     m_pSmufl = new PaletteWidget;
     m_pSmufl->setMag(0.8);
-    m_pSmufl->setGrid(33, 60);
+    m_pSmufl->setGridSize(33, 60);
     m_pSmufl->setReadOnly(true);
 
     m_pUnicode = new PaletteWidget;
     m_pUnicode->setMag(0.8);
-    m_pUnicode->setGrid(33, 60);
+    m_pUnicode->setGridSize(33, 60);
     m_pUnicode->setReadOnly(true);
 
     PaletteScrollArea* psa = new PaletteScrollArea(m_pCommon);
@@ -799,20 +799,20 @@ void SpecialCharactersDialog::populateCommon()
         std::shared_ptr<FSymbol> fs = std::make_shared<FSymbol>(gscore);
         fs->setCode(id);
         fs->setFont(m_font);
-        m_pCommon->append(fs, QString(id));
+        m_pCommon->appendElement(fs, QString(id));
     }
 
     for (auto id : Sym::commonScoreSymbols) {
         std::shared_ptr<Symbol> s = std::make_shared<Symbol>(gscore);
         s->setSym(id, gscore->scoreFont());
-        m_pCommon->append(s, Sym::id2userName(id));
+        m_pCommon->appendElement(s, Sym::id2userName(id));
     }
 
     for (auto id : commonTextSymbols) {
         std::shared_ptr<FSymbol> fs = std::make_shared<FSymbol>(gscore);
         fs->setCode(id);
         fs->setFont(m_font);
-        m_pCommon->append(fs, QString(id));
+        m_pCommon->appendElement(fs, QString(id));
     }
 }
 
@@ -830,7 +830,7 @@ void SpecialCharactersDialog::populateSmufl()
     for (QString name : smuflNames) {
         std::shared_ptr<Symbol> s = std::make_shared<Symbol>(gscore);
         s->setSym(Sym::name2id(name), gscore->scoreFont());
-        m_pSmufl->append(s, Sym::id2userName(Sym::name2id(name)));
+        m_pSmufl->appendElement(s, Sym::id2userName(Sym::name2id(name)));
     }
 }
 
@@ -847,7 +847,7 @@ void SpecialCharactersDialog::populateUnicode()
         std::shared_ptr<FSymbol> fs = std::make_shared<FSymbol>(gscore);
         fs->setCode(code);
         fs->setFont(m_font);
-        m_pUnicode->append(fs, QString("0x%1").arg(code, 5, 16, QLatin1Char('0')));
+        m_pUnicode->appendElement(fs, QString("0x%1").arg(code, 5, 16, QLatin1Char('0')));
     }
 }
 

@@ -27,8 +27,6 @@
 
 #include "ui_masterpalette.h"
 
-#include "modularity/ioc.h"
-#include "framework/ui/imainwindow.h"
 #include "ui/view/widgetdialog.h"
 
 namespace mu::palette {
@@ -39,15 +37,9 @@ namespace Ms {
 class TimeDialog;
 class KeyEditor;
 
-//---------------------------------------------------------
-//   MasterPalette
-//---------------------------------------------------------
-
 class MasterPalette : public mu::ui::WidgetDialog, Ui::MasterPalette
 {
     Q_OBJECT
-
-    INJECT(palette, mu::ui::IMainWindow, mainWindow)
 
     Q_PROPERTY(QString selectedPaletteName READ selectedPaletteName WRITE setSelectedPaletteName NOTIFY selectedPaletteNameChanged)
 
@@ -74,7 +66,6 @@ private slots:
     void closeEvent(QCloseEvent* event) override;
 
 private:
-    mu::palette::PaletteWidget* createPalette(int w, int h, bool grid, double mag = 1.0);
     void addPalette(mu::palette::PaletteWidget* sp);
     void retranslate(bool firstTime = false);
 

@@ -56,23 +56,6 @@
 
 namespace Ms {
 //---------------------------------------------------------
-//   createPalette
-//---------------------------------------------------------
-
-PaletteWidget* MasterPalette::createPalette(int w, int h, bool grid, double mag)
-{
-    PaletteWidget* sp = new PaletteWidget;
-    PaletteScrollArea* psa = new PaletteScrollArea(sp);
-    psa->setRestrictHeight(false);
-    sp->setMag(mag);
-    sp->setGrid(w, h);
-    sp->setDrawGrid(grid);
-    sp->setReadOnly(true);
-    stack->addWidget(psa);
-    return sp;
-}
-
-//---------------------------------------------------------
 //   keyPressEvent
 //---------------------------------------------------------
 
@@ -130,7 +113,7 @@ MasterPalette::MasterPalette(QWidget* parent)
 
     treeWidget->clear();
 
-    addPalette(PaletteCreator::newClefsPalette());
+    addPalette(new PaletteWidget(PaletteCreator::newClefsPalettePanel(), this));
     m_keyEditor = new KeyEditor;
 
     m_keyItem = new QTreeWidgetItem();
@@ -144,27 +127,27 @@ MasterPalette::MasterPalette(QWidget* parent)
     stack->addWidget(m_timeDialog);
     treeWidget->addTopLevelItem(m_timeItem);
 
-    addPalette(PaletteCreator::newBracketsPalette());
-    addPalette(PaletteCreator::newAccidentalsPalette());
-    addPalette(PaletteCreator::newArticulationsPalette());
-    addPalette(PaletteCreator::newOrnamentsPalette());
-    addPalette(PaletteCreator::newBreathPalette());
-    addPalette(PaletteCreator::newGraceNotePalette());
-    addPalette(PaletteCreator::newNoteHeadsPalette());
-    addPalette(PaletteCreator::newLinesPalette());
-    addPalette(PaletteCreator::newBarLinePalette());
-    addPalette(PaletteCreator::newArpeggioPalette());
-    addPalette(PaletteCreator::newTremoloPalette());
-    addPalette(PaletteCreator::newTextPalette());
-    addPalette(PaletteCreator::newTempoPalette());
-    addPalette(PaletteCreator::newDynamicsPalette());
-    addPalette(PaletteCreator::newFingeringPalette());
-    addPalette(PaletteCreator::newRepeatsPalette());
-    addPalette(PaletteCreator::newFretboardDiagramPalette());
-    addPalette(PaletteCreator::newAccordionPalette());
-    addPalette(PaletteCreator::newBagpipeEmbellishmentPalette());
-    addPalette(PaletteCreator::newLayoutPalette());
-    addPalette(PaletteCreator::newBeamPalette());
+    addPalette(new PaletteWidget(PaletteCreator::newBracketsPalettePanel(), this));
+    addPalette(new PaletteWidget(PaletteCreator::newAccidentalsPalettePanel(), this));
+    addPalette(new PaletteWidget(PaletteCreator::newArticulationsPalettePanel(), this));
+    addPalette(new PaletteWidget(PaletteCreator::newOrnamentsPalettePanel(), this));
+    addPalette(new PaletteWidget(PaletteCreator::newBreathPalettePanel(), this));
+    addPalette(new PaletteWidget(PaletteCreator::newGraceNotePalettePanel(), this));
+    addPalette(new PaletteWidget(PaletteCreator::newNoteHeadsPalettePanel(), this));
+    addPalette(new PaletteWidget(PaletteCreator::newLinesPalettePanel(), this));
+    addPalette(new PaletteWidget(PaletteCreator::newBarLinePalettePanel(), this));
+    addPalette(new PaletteWidget(PaletteCreator::newArpeggioPalettePanel(), this));
+    addPalette(new PaletteWidget(PaletteCreator::newTremoloPalettePanel(), this));
+    addPalette(new PaletteWidget(PaletteCreator::newTextPalettePanel(), this));
+    addPalette(new PaletteWidget(PaletteCreator::newTempoPalettePanel(), this));
+    addPalette(new PaletteWidget(PaletteCreator::newDynamicsPalettePanel(), this));
+    addPalette(new PaletteWidget(PaletteCreator::newFingeringPalettePanel(), this));
+    addPalette(new PaletteWidget(PaletteCreator::newRepeatsPalettePanel(), this));
+    addPalette(new PaletteWidget(PaletteCreator::newFretboardDiagramPalettePanel(), this));
+    addPalette(new PaletteWidget(PaletteCreator::newAccordionPalettePanel(), this));
+    addPalette(new PaletteWidget(PaletteCreator::newBagpipeEmbellishmentPalettePanel(), this));
+    addPalette(new PaletteWidget(PaletteCreator::newLayoutPalettePanel(), this));
+    addPalette(new PaletteWidget(PaletteCreator::newBeamPalettePanel(), this));
 
     m_symbolItem = new QTreeWidgetItem();
     m_idxAllSymbols = stack->count();
