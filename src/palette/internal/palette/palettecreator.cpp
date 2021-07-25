@@ -85,16 +85,16 @@
 #include "libmscore/fermata.h"
 #include "libmscore/measurenumber.h"
 
-#include "palette/palette.h"
+#include "widgets/palettewidget.h"
 #include "translation.h"
 
 using namespace mu::palette;
 using namespace mu::actions;
 using namespace Ms;
 
-static Palette* toPalette(PalettePanelPtr palettePanel)
+static PaletteWidget* toPalette(PalettePanelPtr palettePanel)
 {
-    return new Palette(palettePanel);
+    return new PaletteWidget(palettePanel);
 }
 
 void PaletteCreator::populateIconPalettePanel(PalettePanelPtr palettePanel, const PaletteActionIconList& actions)
@@ -108,7 +108,7 @@ void PaletteCreator::populateIconPalettePanel(PalettePanelPtr palettePanel, cons
     }
 }
 
-void PaletteCreator::populateIconPalette(Palette* palette, const PaletteActionIconList& actions)
+void PaletteCreator::populateIconPalette(PaletteWidget* palette, const PaletteActionIconList& actions)
 {
     for (const PaletteActionIcon& paletteAction : actions) {
         const mu::ui::UiAction& action = actionsRegister()->action(paletteAction.actionCode);
@@ -119,102 +119,102 @@ void PaletteCreator::populateIconPalette(Palette* palette, const PaletteActionIc
     }
 }
 
-Palette* PaletteCreator::newBeamPalette()
+PaletteWidget* PaletteCreator::newBeamPalette()
 {
     return toPalette(newBeamPalettePanel());
 }
 
-Palette* PaletteCreator::newDynamicsPalette(bool defaultPalette)
+PaletteWidget* PaletteCreator::newDynamicsPalette(bool defaultPalette)
 {
     return toPalette(newDynamicsPalettePanel(defaultPalette));
 }
 
-Palette* PaletteCreator::newKeySigPalette()
+PaletteWidget* PaletteCreator::newKeySigPalette()
 {
     return toPalette(newKeySigPalettePanel());
 }
 
-Palette* PaletteCreator::newAccidentalsPalette(bool defaultPalette)
+PaletteWidget* PaletteCreator::newAccidentalsPalette(bool defaultPalette)
 {
     return toPalette(newAccidentalsPalettePanel(defaultPalette));
 }
 
-Palette* PaletteCreator::newBarLinePalette()
+PaletteWidget* PaletteCreator::newBarLinePalette()
 {
     return toPalette(newBarLinePalettePanel());
 }
 
-Palette* PaletteCreator::newLayoutPalette()
+PaletteWidget* PaletteCreator::newLayoutPalette()
 {
     return toPalette(newLayoutPalettePanel());
 }
 
-Palette* PaletteCreator::newRepeatsPalette()
+PaletteWidget* PaletteCreator::newRepeatsPalette()
 {
     return toPalette(newRepeatsPalettePanel());
 }
 
-Palette* PaletteCreator::newFingeringPalette()
+PaletteWidget* PaletteCreator::newFingeringPalette()
 {
     return toPalette(newFingeringPalettePanel());
 }
 
-Palette* PaletteCreator::newTremoloPalette()
+PaletteWidget* PaletteCreator::newTremoloPalette()
 {
     return toPalette(newTremoloPalettePanel());
 }
 
-Palette* PaletteCreator::newNoteHeadsPalette()
+PaletteWidget* PaletteCreator::newNoteHeadsPalette()
 {
     return toPalette(newNoteHeadsPalettePanel());
 }
 
-Palette* PaletteCreator::newArticulationsPalette()
+PaletteWidget* PaletteCreator::newArticulationsPalette()
 {
     return toPalette(newArticulationsPalettePanel());
 }
 
-Palette* PaletteCreator::newOrnamentsPalette()
+PaletteWidget* PaletteCreator::newOrnamentsPalette()
 {
     return toPalette(newOrnamentsPalettePanel());
 }
 
-Palette* PaletteCreator::newAccordionPalette()
+PaletteWidget* PaletteCreator::newAccordionPalette()
 {
     return toPalette(newAccordionPalettePanel());
 }
 
-Palette* PaletteCreator::newBracketsPalette()
+PaletteWidget* PaletteCreator::newBracketsPalette()
 {
     return toPalette(newBracketsPalettePanel());
 }
 
-Palette* PaletteCreator::newBreathPalette()
+PaletteWidget* PaletteCreator::newBreathPalette()
 {
     return toPalette(newBreathPalettePanel());
 }
 
-Palette* PaletteCreator::newArpeggioPalette()
+PaletteWidget* PaletteCreator::newArpeggioPalette()
 {
     return toPalette(newArpeggioPalettePanel());
 }
 
-Palette* PaletteCreator::newClefsPalette(bool defaultPalette)
+PaletteWidget* PaletteCreator::newClefsPalette(bool defaultPalette)
 {
     return toPalette(newClefsPalettePanel(defaultPalette));
 }
 
-Palette* PaletteCreator::newGraceNotePalette()
+PaletteWidget* PaletteCreator::newGraceNotePalette()
 {
     return toPalette(newGraceNotePalettePanel());
 }
 
-Palette* PaletteCreator::newBagpipeEmbellishmentPalette()
+PaletteWidget* PaletteCreator::newBagpipeEmbellishmentPalette()
 {
     return toPalette(newBagpipeEmbellishmentPalettePanel());
 }
 
-Palette* PaletteCreator::newLinesPalette()
+PaletteWidget* PaletteCreator::newLinesPalette()
 {
     return toPalette(newLinesPalettePanel());
 }
@@ -234,12 +234,12 @@ struct TempoPattern {
         name(n), f(v), relative(r), italian(i), followText(f), basic(b), masterOnly(m) {}
 };
 
-Palette* PaletteCreator::newTempoPalette(bool defaultPalette)
+PaletteWidget* PaletteCreator::newTempoPalette(bool defaultPalette)
 {
     return toPalette(newTempoPalettePanel(defaultPalette));
 }
 
-Palette* PaletteCreator::newTextPalette(bool defaultPalette)
+PaletteWidget* PaletteCreator::newTextPalette(bool defaultPalette)
 {
     return toPalette(newTextPalettePanel(defaultPalette));
 }
@@ -249,12 +249,12 @@ Palette* PaletteCreator::newTextPalette(bool defaultPalette)
 //    create default time signature palette
 //---------------------------------------------------------
 
-Palette* PaletteCreator::newTimePalette()
+PaletteWidget* PaletteCreator::newTimePalette()
 {
     return toPalette(newTimePalettePanel());
 }
 
-Palette* PaletteCreator::newFretboardDiagramPalette()
+PaletteWidget* PaletteCreator::newFretboardDiagramPalette()
 {
     return toPalette(newFretboardDiagramPalettePanel());
 }
@@ -573,7 +573,7 @@ PalettePanelPtr PaletteCreator::newLayoutPalettePanel()
 
     lb = makeElement<LayoutBreak>(gscore);
     lb->setLayoutBreakType(LayoutBreak::Type::NOBREAK);
-    cell = sp->appendElement(lb, QT_TRANSLATE_NOOP("Palette", "Group measures"));
+    cell = sp->appendElement(lb, QT_TRANSLATE_NOOP("palette", "Group measures"));
     cell->mag = 1.2;
 
     qreal _spatium = gscore->spatium();
@@ -1341,11 +1341,11 @@ PalettePanelPtr PaletteCreator::newTempoPalettePanel(bool defaultPalettePanel)
 
         TempoPattern(
             "<sym>metNoteQuarterUp</sym> = <sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym>", QT_TRANSLATE_NOOP(
-                "palette",
+                "PaletteWidget*",
                 "Quarter note = dotted quarter note metric modulation"), 3.0 / 2.0, true, false, true, false, false),
         TempoPattern(
             "<sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = <sym>metNoteQuarterUp</sym>", QT_TRANSLATE_NOOP(
-                "palette",
+                "PaletteWidget*",
                 "Dotted quarter note = quarter note metric modulation"), 2.0 / 3.0, true, false, true, false, false),
         TempoPattern("<sym>metNoteHalfUp</sym> = <sym>metNoteQuarterUp</sym>",
                      QT_TRANSLATE_NOOP("palette",
@@ -1365,7 +1365,7 @@ PalettePanelPtr PaletteCreator::newTempoPalettePanel(bool defaultPalettePanel)
                      false),
         TempoPattern(
             "<sym>metNote8thUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = <sym>metNoteQuarterUp</sym>",     QT_TRANSLATE_NOOP(
-                "palette",
+                "PaletteWidget*",
                 "Dotted eighth note = quarter note metric modulation"),  2.0 / 3.0, true, false, true, false, false),
     };
 
@@ -1381,13 +1381,13 @@ PalettePanelPtr PaletteCreator::newTempoPalettePanel(bool defaultPalettePanel)
         tt->setXmlText(tp.pattern);
         if (tp.relative) {
             tt->setRelative(tp.f);
-            sp->appendElement(tt, mu::qtrc("palette", tp.name), 1.5);
+            sp->appendElement(tt, mu::qtrc("PaletteWidget*", tp.name), 1.5);
         } else if (tp.italian) {
             tt->setTempo(tp.f);
             sp->appendElement(tt, tp.name, 1.3);
         } else {
             tt->setTempo(tp.f);
-            sp->appendElement(tt, mu::qtrc("palette", tp.name), 1.5);
+            sp->appendElement(tt, mu::qtrc("PaletteWidget*", tp.name), 1.5);
         }
     }
 

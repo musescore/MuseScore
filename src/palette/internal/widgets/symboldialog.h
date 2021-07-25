@@ -25,8 +25,11 @@
 
 #include "ui_symboldialog.h"
 
+namespace mu::palette {
+class PaletteWidget;
+}
+
 namespace Ms {
-class Palette;
 class Element;
 
 //---------------------------------------------------------
@@ -38,7 +41,7 @@ class SymbolDialog : public QWidget, Ui::SymbolDialogBase
     Q_OBJECT
 
     QString range;
-    Palette* sp;
+    mu::palette::PaletteWidget* sp;
     void createSymbolPalette();
     void createSymbols();
 

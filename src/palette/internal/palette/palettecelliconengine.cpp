@@ -22,6 +22,7 @@
 #include "palettecelliconengine.h"
 
 #include "palette_config.h"
+#include "widgets/palettewidget.h"
 
 #include "engraving/draw/geometry.h"
 #include "engraving/draw/painter.h"
@@ -156,7 +157,7 @@ void PaletteCellIconEngine::paintScoreElement(Painter& painter, Element* element
 
     painter.translate(-1.0 * origin); // shift coordinates so element is drawn at correct position
 
-    element->scanElements(&painter, Palette::paintPaletteElement);
+    element->scanElements(&painter, PaletteWidget::paintPaletteElement);
     painter.restore();
 }
 

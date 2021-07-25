@@ -23,6 +23,8 @@
 #ifndef __KEYCANVAS_H__
 #define __KEYCANVAS_H__
 
+#include <QFrame>
+
 #include "modularity/ioc.h"
 #include "../ipaletteconfiguration.h"
 #include "iengravingconfiguration.h"

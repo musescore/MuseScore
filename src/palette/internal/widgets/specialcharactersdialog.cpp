@@ -21,7 +21,7 @@
  */
 #include "specialcharactersdialog.h"
 
-#include "palette/internal/palette/palette.h"
+#include "palettewidget.h"
 
 #include "translation.h"
 #include "smuflranges.h"
@@ -41,6 +41,7 @@
 static const QString SPECIAL_CHARACTERS_DIALOG_NAME("SpecialCharactersDialog");
 
 using namespace mu::notation;
+using namespace mu::palette;
 
 namespace Ms {
 const QPoint rangeInfo[] = {
@@ -548,17 +549,17 @@ SpecialCharactersDialog::SpecialCharactersDialog(QWidget* parent)
     setWindowFlags(Qt::Tool);
     setupUi(this);
 
-    m_pCommon = new Palette;
+    m_pCommon = new PaletteWidget;
     m_pCommon->setMag(0.8);
     m_pCommon->setGrid(33, 60);
     m_pCommon->setReadOnly(true);
 
-    m_pSmufl = new Palette;
+    m_pSmufl = new PaletteWidget;
     m_pSmufl->setMag(0.8);
     m_pSmufl->setGrid(33, 60);
     m_pSmufl->setReadOnly(true);
 
-    m_pUnicode = new Palette;
+    m_pUnicode = new PaletteWidget;
     m_pUnicode->setMag(0.8);
     m_pUnicode->setGrid(33, 60);
     m_pUnicode->setReadOnly(true);

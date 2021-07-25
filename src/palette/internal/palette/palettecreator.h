@@ -29,11 +29,8 @@
 #include "ipaletteconfiguration.h"
 #include "ui/iuiactionsregister.h"
 
-namespace Ms {
-class Palette;
-}
-
 namespace mu::palette {
+class PaletteWidget;
 struct PaletteActionIcon
 {
     Ms::ActionIconType actionType = Ms::ActionIconType::UNDEFINED;
@@ -47,30 +44,30 @@ class PaletteCreator
     INJECT_STATIC(palette, ui::IUiActionsRegister, actionsRegister)
 
 public:
-    static Ms::Palette* newTempoPalette(bool defaultPalette = false);
-    static Ms::Palette* newTextPalette(bool defaultPalette = false);
-    static Ms::Palette* newTimePalette();
-    static Ms::Palette* newRepeatsPalette();
-    static Ms::Palette* newBeamPalette();
-    static Ms::Palette* newDynamicsPalette(bool defaultPalette = false);
-    static Ms::Palette* newFingeringPalette();
-    static Ms::Palette* newTremoloPalette();
-    static Ms::Palette* newNoteHeadsPalette();
-    static Ms::Palette* newArticulationsPalette();
-    static Ms::Palette* newOrnamentsPalette();
-    static Ms::Palette* newAccordionPalette();
-    static Ms::Palette* newBracketsPalette();
-    static Ms::Palette* newBreathPalette();
-    static Ms::Palette* newArpeggioPalette();
-    static Ms::Palette* newClefsPalette(bool defaultPalette = false);
-    static Ms::Palette* newGraceNotePalette();
-    static Ms::Palette* newBagpipeEmbellishmentPalette();
-    static Ms::Palette* newKeySigPalette();
-    static Ms::Palette* newAccidentalsPalette(bool defaultPalette = false);
-    static Ms::Palette* newBarLinePalette();
-    static Ms::Palette* newLayoutPalette();
-    static Ms::Palette* newLinesPalette();
-    static Ms::Palette* newFretboardDiagramPalette();
+    static PaletteWidget* newTempoPalette(bool defaultPalette = false);
+    static PaletteWidget* newTextPalette(bool defaultPalette = false);
+    static PaletteWidget* newTimePalette();
+    static PaletteWidget* newRepeatsPalette();
+    static PaletteWidget* newBeamPalette();
+    static PaletteWidget* newDynamicsPalette(bool defaultPalette = false);
+    static PaletteWidget* newFingeringPalette();
+    static PaletteWidget* newTremoloPalette();
+    static PaletteWidget* newNoteHeadsPalette();
+    static PaletteWidget* newArticulationsPalette();
+    static PaletteWidget* newOrnamentsPalette();
+    static PaletteWidget* newAccordionPalette();
+    static PaletteWidget* newBracketsPalette();
+    static PaletteWidget* newBreathPalette();
+    static PaletteWidget* newArpeggioPalette();
+    static PaletteWidget* newClefsPalette(bool defaultPalette = false);
+    static PaletteWidget* newGraceNotePalette();
+    static PaletteWidget* newBagpipeEmbellishmentPalette();
+    static PaletteWidget* newKeySigPalette();
+    static PaletteWidget* newAccidentalsPalette(bool defaultPalette = false);
+    static PaletteWidget* newBarLinePalette();
+    static PaletteWidget* newLayoutPalette();
+    static PaletteWidget* newLinesPalette();
+    static PaletteWidget* newFretboardDiagramPalette();
 
     static PalettePanelPtr newTempoPalettePanel(bool defaultPalette = false);
     static PalettePanelPtr newTextPalettePanel(bool defaultPalette = false);
@@ -103,7 +100,7 @@ public:
     static void populateIconPalettePanel(PalettePanelPtr palettePanel, const PaletteActionIconList& actions);
 
     // Used in NoteGroups widget
-    static void populateIconPalette(Ms::Palette* palette, const PaletteActionIconList& actions);
+    static void populateIconPalette(PaletteWidget* palette, const PaletteActionIconList& actions);
 };
 } // namespace Ms
 
