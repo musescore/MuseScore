@@ -23,7 +23,7 @@
 #include "masterpalette.h"
 #include "symboldialog.h"
 
-#include "palette/palette.h"
+#include "palettewidget.h"
 #include "keyedit.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/clef.h"
@@ -59,9 +59,9 @@ namespace Ms {
 //   createPalette
 //---------------------------------------------------------
 
-Palette* MasterPalette::createPalette(int w, int h, bool grid, double mag)
+PaletteWidget* MasterPalette::createPalette(int w, int h, bool grid, double mag)
 {
-    Palette* sp = new Palette;
+    PaletteWidget* sp = new PaletteWidget;
     PaletteScrollArea* psa = new PaletteScrollArea(sp);
     psa->setRestrictHeight(false);
     sp->setMag(mag);
@@ -105,7 +105,7 @@ QString MasterPalette::selectedPaletteName() const
 //   addPalette
 //---------------------------------------------------------
 
-void MasterPalette::addPalette(Palette* sp)
+void MasterPalette::addPalette(PaletteWidget* sp)
 {
     sp->setReadOnly(true);
     PaletteScrollArea* psa = new PaletteScrollArea(sp);

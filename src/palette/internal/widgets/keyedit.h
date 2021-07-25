@@ -28,24 +28,22 @@
 #include "modularity/ioc.h"
 #include "../ipaletteconfiguration.h"
 
-namespace Ms {
-class Palette;
+namespace mu::palette {
+class PaletteWidget;
 class PaletteScrollArea;
+}
+
+namespace Ms {
 class KeySig;
-
-//---------------------------------------------------------
-//   KeyEditor
-//---------------------------------------------------------
-
 class KeyEditor : public QWidget, Ui::KeyEdit
 {
     Q_OBJECT
 
     INJECT(palette, mu::palette::IPaletteConfiguration, configuration)
 
-    PaletteScrollArea* _keyPalette = nullptr;
-    Palette* sp = nullptr;
-    Palette* sp1 = nullptr;
+    mu::palette::PaletteScrollArea* _keyPalette = nullptr;
+    mu::palette::PaletteWidget* sp = nullptr;
+    mu::palette::PaletteWidget* sp1 = nullptr;
     bool _dirty = false;
 
 private slots:
