@@ -334,7 +334,7 @@ const UiActionList NotationUiActions::m_actions = {
              ),
     UiAction("find",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Find")
+             QT_TRANSLATE_NOOP("action", "Find / Go To")
              ),
     UiAction("staff-properties",
              mu::context::UiCtxNotationOpened,
