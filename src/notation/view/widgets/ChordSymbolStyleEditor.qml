@@ -51,7 +51,7 @@ Rectangle {
 
                 opacity: 0.7
 
-                text: fileName
+                text: styleName
 
                 onClicked: {
                     chordSymbolEditorModel.setChordStyle(styleName)

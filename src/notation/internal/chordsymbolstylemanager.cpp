@@ -44,11 +44,16 @@ mu::io::paths ChordSymbolStyleManager::scanFileSystemForChordStyles()
 {
     mu::io::paths result;
 
-    // Are there any other share paths?
+    // Styles inside installation folder
     mu::io::path dirPath = Ms::MScore::globalShare();
     mu::RetVal<mu::io::paths> files = fileSystem()->scanFiles(dirPath, { "*.xml" });
-
     result.insert(result.end(), files.val.begin(), files.val.end());
+
+    // Styles inside user styles folder
+    dirPath = configuration()->userStylesPath();
+    files = fileSystem()->scanFiles(dirPath, { "*.xml" });
+    result.insert(result.end(), files.val.begin(), files.val.end());
+
     return result;
 }
 
@@ -133,7 +138,7 @@ void ChordSymbolStyleManager::extractChordStyleInfo(mu::io::path& f)
         }
     }
 
-    _chordStyles.push_back({ styleName, fi.fileName(), usePresets, description });
+    _chordStyles.push_back({ styleName, fi.filePath(), usePresets, description });
 }
 
 // TODO: Rewrite the XML format

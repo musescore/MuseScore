@@ -24,6 +24,7 @@
 
 #include "modularity/ioc.h"
 #include "system/ifilesystem.h"
+#include "notation/inotationconfiguration.h"
 #include "engraving/infrastructure/io/xml.h"
 
 namespace mu::notation {
@@ -48,6 +49,7 @@ struct QualitySymbol {
 class ChordSymbolStyleManager
 {
     INJECT(notation, mu::system::IFileSystem, fileSystem)
+    INJECT(notation, mu::notation::INotationConfiguration, configuration)
 
 public:
     ChordSymbolStyleManager();
