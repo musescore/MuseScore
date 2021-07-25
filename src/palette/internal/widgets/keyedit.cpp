@@ -294,7 +294,7 @@ KeyEditor::KeyEditor(QWidget* parent)
     l->setContentsMargins(0, 0, 0, 0);
     frame->setLayout(l);
 
-    sp = PaletteCreator::newKeySigPalette();
+    sp = new PaletteWidget(PaletteCreator::newKeySigPalettePanel(), this);
     sp->setReadOnly(false);
 
     _keyPalette = new PaletteScrollArea(sp);
@@ -309,9 +309,9 @@ KeyEditor::KeyEditor(QWidget* parent)
     l = new QVBoxLayout();
     l->setContentsMargins(0, 0, 0, 0);
     frame_3->setLayout(l);
-    sp1 = PaletteCreator::newAccidentalsPalette();
+    sp1 = new PaletteWidget(PaletteCreator::newAccidentalsPalettePanel(), this);
     qreal adj = sp1->mag();
-    sp1->setGrid(sp1->gridWidth() * editScale / adj, sp1->gridHeight() * editScale / adj);
+    sp1->setGridSize(sp1->gridWidth() * editScale / adj, sp1->gridHeight() * editScale / adj);
     sp1->setMag(editScale);
     PaletteScrollArea* accPalette = new PaletteScrollArea(sp1);
     QSizePolicy policy1(QSizePolicy::Expanding, QSizePolicy::Expanding);
@@ -327,13 +327,13 @@ KeyEditor::KeyEditor(QWidget* parent)
     //
     // set all "buildin" key signatures to read only
     //
-    int n = sp->size();
+    int n = sp->actualCellCount();
     for (int i = 0; i < n; ++i) {
         sp->setCellReadOnly(i, true);
     }
 
     if (!configuration()->useFactorySettings()) {
-        sp->read(configuration()->keySignaturesDirPath().toQString());
+        sp->readFromFile(configuration()->keySignaturesDirPath().toQString());
     }
 }
 
@@ -369,7 +369,7 @@ void KeyEditor::addClicked()
     }
     auto ks = makeElement<KeySig>(gscore);
     ks->setKeySigEvent(e);
-    sp->append(ks, "custom");
+    sp->appendElement(ks, "custom");
     _dirty = true;
     emit keySigAdded(ks);
 }
@@ -400,6 +400,6 @@ void KeyEditor::save()
 {
     QDir dir;
     dir.mkpath(configuration()->keySignaturesDirPath().toQString());
-    sp->write(configuration()->keySignaturesDirPath().toQString());
+    sp->writeToFile(configuration()->keySignaturesDirPath().toQString());
 }
 }

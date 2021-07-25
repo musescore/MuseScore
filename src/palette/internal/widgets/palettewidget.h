@@ -25,12 +25,11 @@
 
 #include <QScrollArea>
 
-#include "palette/palettetree.h"
+#include "palette/palettepanel.h"
 
 #include "modularity/ioc.h"
 #include "ipaletteconfiguration.h"
 #include "ui/iuiactionsregister.h"
-#include "actions/iactionsdispatcher.h"
 #include "context/iglobalcontext.h"
 #include "iinteractive.h"
 
@@ -47,128 +46,138 @@ class PaletteWidget : public QWidget
 
     INJECT_STATIC(palette, IPaletteConfiguration, configuration)
     INJECT_STATIC(palette, ui::IUiActionsRegister, actionsRegister)
-    INJECT_STATIC(palette, actions::IActionsDispatcher, dispatcher)
     INJECT_STATIC(palette, context::IGlobalContext, globalContext)
     INJECT(palette, framework::IInteractive, interactive)
 
 public:
     PaletteWidget(QWidget* parent = nullptr);
-    PaletteWidget(PalettePanelPtr palettePanel, QWidget* parent = nullptr);
+    PaletteWidget(PalettePanelPtr palette, QWidget* parent = nullptr);
+
+    QString name() const;
+    void setName(const QString& name);
+
+    // Elements & Cells
+    int actualCellCount() const;
+    PaletteCellPtr cellAt(size_t index) const;
+    Ms::ElementPtr elementForCellAt(int idx) const;
+
+    PaletteCellPtr insertElement(int idx, Ms::ElementPtr element, const QString& name, qreal mag = 1.0);
+    PaletteCellPtr appendElement(Ms::ElementPtr element, const QString& name, qreal mag = 1.0);
+
+    void clear();
+
+    // Drawing
+    static void paintPaletteElement(void* data, Ms::Element* element);
+
+    qreal mag() const;
+    void setMag(qreal val);
+
+    qreal yOffset() const;
+    void setYOffset(qreal val);
+
+    // Grid
+    bool drawGrid() const;
+    void setDrawGrid(bool val);
+
+    int gridWidth() const;
+    int gridHeight() const;
+    void setGridSize(int width, int height);
+
+    int gridWidthScaled() const;
+    int gridHeightScaled() const;
+
+    // Filter
+    bool isFilterActive();
+    bool setFilterText(const QString& text);
+
+    // Selection
+    bool isSelectable() const;
+    void setSelectable(bool val);
+
+    int selectedIdx() const;
+    void setSelected(int idx);
+
+    int currentIdx() const;
+    void setCurrentIdx(int idx);
 
     void nextPaletteElement();
     void prevPaletteElement();
+
+    // Applying elements
+    bool isApplyingElementsDisabled() const;
+    void setApplyingElementsDisabled(bool val);
+
     void applyPaletteElement();
     static bool applyPaletteElement(Ms::ElementPtr element, Qt::KeyboardModifiers modifiers = {});
-    PaletteCellPtr append(Ms::ElementPtr element, const QString& name, qreal mag = 1.0);
-    PaletteCellPtr add(int idx, Ms::ElementPtr element, const QString& name, qreal mag = 1.0);
 
-    void emitChanged() { emit changed(); }
-    void setGrid(int, int);
-    Ms::ElementPtr element(int idx) const;
-    void setDrawGrid(bool val);
-    bool drawGrid() const;
-    bool read(const QString& path); // TODO: remove/reuse PalettePanel code
-    void write(const QString& path); // TODO: remove/reuse PalettePanel code
-    void read(Ms::XmlReader&);
-    void write(Ms::XmlWriter&) const;
-    void clear();
-    void setSelectable(bool val);
-    bool selectable() const;
-    int getSelectedIdx() const;
-    void setSelected(int idx);
+    // Settings
     bool readOnly() const;
     void setReadOnly(bool val);
-    bool disableElementsApply() const;
-    void setDisableElementsApply(bool val);
-
-    bool useDoubleClickToActivate() const;
-    void setUseDoubleClickToActivate(bool val);
-
-    bool systemPalette() const { return m_systemPalette; }
-    void setSystemPalette(bool val);
-
-    void setMag(qreal val);
-    qreal mag() const;
-    void setYOffset(qreal val);
-    qreal yOffset() const;
-    int columns() const;
-    int rows() const;
-    int size() const;
-    PaletteCellPtr cellAt(int index) const;
     void setCellReadOnly(int cellIndex, bool readonly);
-    QString name() const;
-    void setName(const QString& name);
-    int gridWidth() const;
-    int gridHeight() const;
-    bool filter(const QString& text);
+
     void setShowContextMenu(bool val);
 
-    static qreal paletteScaling();
-    static void paintPaletteElement(void* data, Ms::Element* element);
-
-    int gridWidthM() const;
-    int gridHeightM() const;
-
-    int getCurrentIdx() const;
-    void setCurrentIdx(int i);
-    bool isFilterActive();
-    QList<PaletteCellPtr> getDragCells();
+    // Sizing
     int heightForWidth(int) const override;
     QSize sizeHint() const override;
-    int idx(const QPoint&) const;
+
+    // Read/write
+    void read(Ms::XmlReader&);
+    void write(Ms::XmlWriter&) const;
+    bool readFromFile(const QString& path);
+    void writeToFile(const QString& path) const;
 
 signals:
-    void boxClicked(int);
     void changed();
+    void boxClicked(int index);
 
 private:
-    void paintEvent(QPaintEvent*) override;
+    bool event(QEvent*) override;
+
     void mousePressEvent(QMouseEvent*) override;
     void mouseReleaseEvent(QMouseEvent*) override;
-    void mouseDoubleClickEvent(QMouseEvent*) override;
     void mouseMoveEvent(QMouseEvent*) override;
     void leaveEvent(QEvent*) override;
-    bool event(QEvent*) override;
-    void resizeEvent(QResizeEvent*) override;
+
     void dragEnterEvent(QDragEnterEvent*) override;
     void dragMoveEvent(QDragMoveEvent*) override;
     void dropEvent(QDropEvent*) override;
+
+    void resizeEvent(QResizeEvent*) override;
+    void paintEvent(QPaintEvent*) override;
     void contextMenuEvent(QContextMenuEvent*) override;
 
-    void showWritingFailedError(const QString& path) const;
+    qreal paletteScaling() const;
+    const std::vector<PaletteCellPtr>& cells() const;
 
-    int idx2(const QPoint&) const;
-    QRect idxRect(int) const;
+    int rows() const;
+    int columns() const;
 
-    const QList<PaletteCellPtr>& ccp() const;
-    QPixmap pixmap(int cellIdx) const;
+    int cellIndexForPoint(const QPoint&) const; // Only indices of actual cells
+    int theoreticalCellIndexForPoint(const QPoint&) const; // Also indices greater than cells.size() - 1
+    QRect rectForCellAt(int idx) const;
+    QPixmap pixmapForCellAt(int cellIdx) const;
+
+    const std::vector<PaletteCellPtr>& actualCellsList() const;
 
     bool notationHasSelection() const;
     void applyElementAtPosition(QPoint pos, Qt::KeyboardModifiers modifiers);
 
-    QString m_name;
-    QList<PaletteCellPtr> m_cells;
-    QList<PaletteCellPtr> m_dragCells; // used for filter & backup
+    PalettePanelPtr m_palette;
 
-    int m_hgrid = -1;
-    int m_vgrid = -1;
+    std::vector<PaletteCellPtr> m_filteredCells; // used for filter & backup
+
+    bool m_isFilterActive = false;
+    bool m_selectable = false;
+    bool m_isReadOnly = false;
+    bool m_isApplyingElementsDisabled = false;
+    bool m_showContextMenu = true;
+
     int m_currentIdx = -1;
     int m_pressedIndex = -1;
     int m_dragIdx = -1;
     int m_selectedIdx = -1;
     QPoint m_dragStartPosition;
-
-    qreal m_extraMag = 0;
-    bool m_drawGrid = false;
-    bool m_selectable = false;
-    bool m_disableElementsApply = false;
-    bool m_useDoubleClickToActivate = false;
-    bool m_readOnly = false;
-    bool m_systemPalette = false;
-    qreal m_yOffsetSpatium = 0;
-    bool m_filterActive = false; // bool if filter is active
-
-    bool m_showContextMenu = true;
 };
 
 class PaletteScrollArea : public QScrollArea

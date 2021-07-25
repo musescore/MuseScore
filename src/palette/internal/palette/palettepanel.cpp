@@ -27,7 +27,6 @@
 #include "thirdparty/qzip/qzipwriter_p.h"
 
 #include "mimedatautils.h"
-#include "widgets/palettewidget.h"
 
 #include "engraving/draw/geometry.h"
 #include "engraving/io/xml.h"
@@ -141,6 +140,15 @@ bool PalettePanel::insertCells(size_t idx, std::vector<PaletteCellPtr> cells)
     return true;
 }
 
+PaletteCellPtr PalettePanel::takeCell(size_t idx)
+{
+    if (idx < 0 || idx >= m_cells.size()) {
+        return nullptr;
+    }
+
+    return *m_cells.erase(m_cells.begin() + idx);
+}
+
 std::vector<PaletteCellPtr> PalettePanel::takeCells(size_t idx, size_t count)
 {
     std::vector<PaletteCellPtr> removedCells;
@@ -204,7 +212,7 @@ int PalettePanel::indexOfCell(const PaletteCell& cell, bool matchName) const
 
 QSize PalettePanel::scaledGridSize() const
 {
-    return gridSize() * PaletteWidget::paletteScaling();
+    return gridSize() * configuration()->paletteScaling();
 }
 
 bool PalettePanel::read(XmlReader& e)
@@ -376,7 +384,7 @@ bool PalettePanel::readFromFile(const QString& p)
             QString version = e.attribute("version");
             QStringList sl = version.split('.');
             int versionId = sl[0].toInt() * 100 + sl[1].toInt();
-            gscore->setMscVersion(versionId);       // TODO: what is this?
+            gscore->setMscVersion(versionId); // TODO: what is this?
 
             while (e.readNextStartElement()) {
                 if (e.name() == "Palette") {

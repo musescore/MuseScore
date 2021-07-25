@@ -94,13 +94,12 @@ NoteGroups::NoteGroups(QWidget* parent)
         { ActionIconType::BEAM_MID, "beam-mid" },
         { ActionIconType::BEAM_BEGIN_32, "beam32" },
         { ActionIconType::BEAM_BEGIN_64, "beam64" },
-        { ActionIconType::UNDEFINED, "" }
     };
 
     iconPalette->setName(QT_TRANSLATE_NOOP("palette", "Beam Properties"));
     iconPalette->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
-    iconPalette->setGrid(27, 40);
-    iconPalette->setMinimumWidth(27 * 4 * mu::palette::PaletteWidget::paletteScaling() + 1); // enough room for all icons, with roundoff
+    iconPalette->setGridSize(27, 40);
+    iconPalette->setMinimumWidth(27 * 4 * paletteConfiguration()->paletteScaling() + 1); // enough room for all icons, with roundoff
     iconPalette->setDrawGrid(true);
     PaletteCreator::populateIconPalette(iconPalette, actions);
     iconPalette->setReadOnly(true);

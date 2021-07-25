@@ -29,6 +29,7 @@
 #include "libmscore/element.h"
 
 #include "modularity/ioc.h"
+#include "ipaletteconfiguration.h"
 #include "iinteractive.h"
 
 namespace Ms {
@@ -44,7 +45,8 @@ class PalettePanel
 {
     Q_GADGET
 
-    INJECT(palette, mu::framework::IInteractive, interactive)
+    INJECT_STATIC(palette, IPaletteConfiguration, configuration)
+    INJECT(palette, framework::IInteractive, interactive)
 
 public:
     enum class Type {
@@ -97,8 +99,8 @@ public:
 
     bool insertCell(size_t idx, PaletteCellPtr cell);
     bool insertCells(size_t idx, std::vector<PaletteCellPtr> cells);
-    std::vector<PaletteCellPtr> takeCells(size_t idx, size_t count);
 
+    const std::vector<PaletteCellPtr>& cells() const { return m_cells; }
     int cellsCount() const { return int(m_cells.size()); }
     bool empty() const { return m_cells.empty(); }
 
@@ -108,6 +110,10 @@ public:
     PaletteCellConstPtr cellAt(size_t idx) const { return m_cells.at(idx); }
 
     int indexOfCell(const PaletteCell& cell, bool matchName = true) const;
+
+    PaletteCellPtr takeCell(size_t idx);
+    std::vector<PaletteCellPtr> takeCells(size_t idx, size_t count);
+    void clear() { m_cells.clear(); }
 
     qreal yOffset() const { return m_yOffset; }
     void setYOffset(qreal val) { m_yOffset = val; }
@@ -119,8 +125,8 @@ public:
     void setDrawGrid(bool val) { m_drawGrid = val; }
 
     QSize gridSize() const { return m_gridSize; }
-    void setGrid(QSize s) { m_gridSize = s; }
-    void setGrid(int w, int h) { m_gridSize = QSize(w, h); }
+    void setGridSize(QSize s) { m_gridSize = s; }
+    void setGridSize(int w, int h) { m_gridSize = QSize(w, h); }
 
     QSize scaledGridSize() const;
 

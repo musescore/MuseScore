@@ -23,23 +23,19 @@
 #include <QDir>
 
 #include "timedialog.h"
-#include "libmscore/timesig.h"
-#include "palettewidget.h"
-#include "libmscore/masterscore.h"
-#include "libmscore/mcursor.h"
-#include "libmscore/chord.h"
-#include "libmscore/part.h"
 
 #include "palette/palettecreator.h"
+#include "palettewidget.h"
+
+#include "engraving/libmscore/chord.h"
+#include "engraving/libmscore/masterscore.h"
+#include "engraving/libmscore/mcursor.h"
+#include "engraving/libmscore/part.h"
+#include "engraving/libmscore/timesig.h"
+
 #include "translation.h"
 
 namespace Ms {
-extern bool useFactorySettings;
-
-//---------------------------------------------------------
-//   TimeDialog
-//---------------------------------------------------------
-
 TimeDialog::TimeDialog(QWidget* parent)
     : QWidget(parent, Qt::WindowFlags(Qt::Dialog | Qt::Window))
 {
@@ -50,7 +46,7 @@ TimeDialog::TimeDialog(QWidget* parent)
     l->setContentsMargins(0, 0, 0, 0);
     frame->setLayout(l);
 
-    sp = PaletteCreator::newTimePalette();
+    sp = new PaletteWidget(PaletteCreator::newTimePalettePanel(), this);
     sp->setReadOnly(false);
     sp->setSelectable(true);
 
@@ -71,15 +67,15 @@ TimeDialog::TimeDialog(QWidget* parent)
 
     _dirty = false;
 
-    if (configuration()->useFactorySettings() || !sp->read(configuration()->timeSignaturesDirPath().toQString())) {
+    if (configuration()->useFactorySettings() || !sp->readFromFile(configuration()->timeSignaturesDirPath().toQString())) {
         Fraction sig(4, 4);
         groups->setSig(sig, Groups::endings(sig), zText->text(), nText->text());
     }
-    for (int i = 0; i < sp->size(); ++i) {      // cells can be changed
+    for (int i = 0; i < sp->actualCellCount(); ++i) { // cells can be changed
         sp->setCellReadOnly(i, false);
     }
 
-    sp->element(2)->layout();
+    sp->elementForCellAt(2)->layout();
     sp->setSelected(2);
     paletteChanged(2);
 }
@@ -101,8 +97,8 @@ void TimeDialog::addClicked()
         ts->setDenominatorString(nText->text());
     }
     // extend palette:
-    sp->append(ts, "");
-    sp->setSelected(sp->size() - 1);
+    sp->appendElement(ts, "");
+    sp->setSelected(sp->actualCellCount() - 1);
     _dirty = true;
     emit timeSigAdded(ts);
 }
@@ -124,7 +120,7 @@ void TimeDialog::save()
 {
     QDir dir;
     dir.mkpath(configuration()->timeSignaturesDirPath().toQString());
-    sp->write(configuration()->timeSignaturesDirPath().toQString());
+    sp->writeToFile(configuration()->timeSignaturesDirPath().toQString());
 }
 
 //---------------------------------------------------------
@@ -207,7 +203,7 @@ int TimeDialog::denominator() const
 
 void TimeDialog::paletteChanged(int idx)
 {
-    ElementPtr element = sp->element(idx);
+    ElementPtr element = sp->elementForCellAt(idx);
     const std::shared_ptr<TimeSig> timeSig = std::dynamic_pointer_cast<TimeSig>(element);
 
     if (!timeSig || timeSig->type() != ElementType::TIMESIG) {

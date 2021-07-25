@@ -27,6 +27,9 @@
 #include "libmscore/fraction.h"
 #include "libmscore/groups.h"
 
+#include "modularity/ioc.h"
+#include "ipaletteconfiguration.h"
+
 namespace Ms {
 class Chord;
 class Score;
@@ -38,6 +41,8 @@ class Score;
 class NoteGroups : public QGroupBox, Ui::NoteGroups
 {
     Q_OBJECT
+
+    INJECT(palette, mu::palette::IPaletteConfiguration, paletteConfiguration)
 
     std::vector<Chord*> chords8;
     std::vector<Chord*> chords16;
