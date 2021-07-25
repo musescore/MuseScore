@@ -66,7 +66,7 @@ void SymbolDialog::createSymbols()
             || Sym::id2userName(id).contains(search->text(), Qt::CaseInsensitive)) {
             auto s = makeElement<Symbol>(gscore);
             s->setSym(SymId(id), f);
-            sp->append(s, Sym::id2userName(SymId(id)));
+            sp->appendElement(s, Sym::id2userName(SymId(id)));
         }
     }
 }
@@ -115,8 +115,8 @@ SymbolDialog::SymbolDialog(const QString& s, QWidget* parent)
 void SymbolDialog::systemFlagChanged(int state)
 {
     bool sysFlag = state == Qt::Checked;
-    for (int i = 0; i < sp->size(); ++i) {
-        ElementPtr e = sp->element(i);
+    for (int i = 0; i < sp->actualCellCount(); ++i) {
+        ElementPtr e = sp->elementForCellAt(i);
         if (e && e->type() == ElementType::SYMBOL) {
             std::dynamic_pointer_cast<Symbol>(e)->setSystemFlag(sysFlag);
         }

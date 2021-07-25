@@ -23,57 +23,40 @@
 #include "palettewidget.h"
 
 #include <cmath>
-#include <QMenu>
-#include <QResizeEvent>
-#include <QContextMenuEvent>
-#include <QAction>
-#include <QDrag>
-#include <QMimeData>
+
 #include <QAccessible>
 #include <QAccessibleEvent>
+#include <QAction>
+#include <QContextMenuEvent>
+#include <QDrag>
+#include <QMenu>
+#include <QMimeData>
+#include <QResizeEvent>
 #include <QToolTip>
-#include <QBuffer>
 
-#include "actions/actiontypes.h"
-
-#include "engraving/style/style.h"
-#include "engraving/style/defaultstyle.h"
-#include "engraving/io/xml.h"
-#include "engraving/draw/color.h"
-
-#include "libmscore/element.h"
-#include "libmscore/symbol.h"
-#include "libmscore/masterscore.h"
-#include "libmscore/image.h"
-#include "libmscore/note.h"
-#include "libmscore/chord.h"
-#include "libmscore/clef.h"
-#include "libmscore/segment.h"
-#include "libmscore/measure.h"
-#include "libmscore/staff.h"
-#include "libmscore/system.h"
-#include "libmscore/page.h"
-#include "libmscore/keysig.h"
-#include "libmscore/timesig.h"
-#include "libmscore/part.h"
-#include "libmscore/textline.h"
-#include "libmscore/measure.h"
-#include "libmscore/actionicon.h"
-#include "libmscore/mscore.h"
-#include "libmscore/imageStore.h"
 #include "thirdparty/qzip/qzipreader_p.h"
 #include "thirdparty/qzip/qzipwriter_p.h"
-#include "libmscore/slur.h"
-#include "libmscore/fret.h"
 
-#include "translation.h"
-
-#include "widgetstatestore.h"
+#include "actions/actiontypes.h"
 #include "commonscene/commonscenetypes.h"
 
-#include "../palette_config.h"
+#include "engraving/draw/color.h"
+#include "engraving/draw/pen.h"
+#include "engraving/io/xml.h"
+#include "engraving/libmscore/actionicon.h"
+#include "engraving/libmscore/chord.h"
+#include "engraving/libmscore/element.h"
+#include "engraving/libmscore/fret.h"
+#include "engraving/libmscore/image.h"
+#include "engraving/libmscore/masterscore.h"
+#include "engraving/libmscore/note.h"
+#include "engraving/libmscore/symbol.h"
+#include "engraving/style/defaultstyle.h"
+#include "engraving/style/style.h"
 
-#include "draw/pen.h"
+#include "palette_config.h"
+
+#include "translation.h"
 
 using namespace mu;
 using namespace mu::framework;
@@ -82,117 +65,221 @@ using namespace mu::actions;
 using namespace mu::draw;
 using namespace Ms;
 
-//---------------------------------------------------------
-//   paletteNeedsStaff
-//    should a staff been drawn if e is used as icon in
-//    a palette
-//---------------------------------------------------------
-
-static bool paletteNeedsStaff(const ElementPtr element)
-{
-    if (!element) {
-        return false;
-    }
-
-    switch (element->type()) {
-    case ElementType::CHORD:
-    case ElementType::BAR_LINE:
-    case ElementType::CLEF:
-    case ElementType::KEYSIG:
-    case ElementType::TIMESIG:
-    case ElementType::REST:
-    case ElementType::BAGPIPE_EMBELLISHMENT:
-        return true;
-    default:
-        return false;
-    }
-}
-
-//---------------------------------------------------------
-//   PaletteWidget
-//---------------------------------------------------------
-
-PaletteWidget::PaletteWidget(QWidget* parent)
+PaletteWidget::PaletteWidget(PalettePanelPtr palette, QWidget* parent)
     : QWidget(parent)
 {
-    m_extraMag = 1.0;
-    m_currentIdx = -1;
-    m_dragIdx = -1;
-    m_selectedIdx = -1;
-    m_yOffsetSpatium = 0.0;
-    setGrid(50, 60);
-    m_drawGrid = false;
-    m_selectable = false;
+    m_palette = palette;
+
+    setObjectName("PaletteWidget_" + name());
     setMouseTracking(true);
-    setReadOnly(false);
-    setSystemPalette(false);
     setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Ignored);
-    setObjectName("palette-cells");
+
+    setReadOnly(false);
 }
 
-PaletteWidget::PaletteWidget(PalettePanelPtr palettePanel, QWidget* parent)
-    : PaletteWidget(parent)
+PaletteWidget::PaletteWidget(QWidget* parent)
+    : PaletteWidget(std::make_shared<PalettePanel>(), parent)
 {
-    setName(palettePanel->name());
-    const QSize gridSize = palettePanel->gridSize();
-    setGrid(gridSize.width(), gridSize.height());
-    setMag(palettePanel->mag());
-    setDrawGrid(palettePanel->drawGrid());
+}
 
-    const auto allCells = palettePanel->takeCells(0, palettePanel->cellsCount());
-    for (const PaletteCellPtr& cell : allCells) {
-        if (!cell->element) {
-            continue;
-        }
+QString PaletteWidget::name() const
+{
+    return m_palette->name();
+}
 
-        ElementPtr elementCopy(cell->element->clone());
-        PaletteCellPtr newCell = append(elementCopy, cell->name, cell->mag);
+void PaletteWidget::setName(const QString& name)
+{
+    m_palette->setName(name);
+}
 
-        newCell->drawStaff = cell->drawStaff;
-        newCell->xoffset = cell->xoffset;
-        newCell->yoffset = cell->yoffset;
-        newCell->readOnly = cell->readOnly;
+// ====================================================
+// Cells & Elements
+// ====================================================
+
+const std::vector<PaletteCellPtr>& PaletteWidget::cells() const
+{
+    return m_palette->cells();
+}
+
+const std::vector<PaletteCellPtr>& PaletteWidget::actualCellsList() const
+{
+    return m_isFilterActive ? m_filteredCells : cells();
+}
+
+int PaletteWidget::actualCellCount() const
+{
+    return m_isFilterActive ? m_filteredCells.size() : cells().size();
+}
+
+PaletteCellPtr PaletteWidget::cellAt(size_t index) const
+{
+    if (index < 0 || index >= actualCellsList().size()) {
+        return nullptr;
     }
+
+    return actualCellsList().at(index);
 }
 
-//---------------------------------------------------------
-//   resizeEvent
-//---------------------------------------------------------
-
-void PaletteWidget::resizeEvent(QResizeEvent* e)
+ElementPtr PaletteWidget::elementForCellAt(int idx) const
 {
-    setFixedHeight(heightForWidth(e->size().width()));
+    PaletteCellPtr cell = cellAt(idx);
+    return cell ? cell->element : nullptr;
 }
 
-//---------------------------------------------------------
-//   filter
-///  return true if all filtered
-//---------------------------------------------------------
-
-bool PaletteWidget::filter(const QString& text)
+PaletteCellPtr PaletteWidget::insertElement(int idx, ElementPtr element, const QString& name, qreal mag)
 {
-    m_filterActive = false;
+    PaletteCellPtr cell = m_palette->insertElement(idx, element, name, mag);
+
+    update();
+    updateGeometry();
+
+    return cell;
+}
+
+PaletteCellPtr PaletteWidget::appendElement(ElementPtr element, const QString& name, qreal mag)
+{
+    PaletteCellPtr cell = m_palette->appendElement(element, name, mag);
+
+    setFixedHeight(heightForWidth(width()));
+    updateGeometry();
+
+    return cell;
+}
+
+void PaletteWidget::clear()
+{
+    m_palette->clear();
+}
+
+// ====================================================
+// Drawing
+// ====================================================
+
+void PaletteWidget::paintPaletteElement(void* data, Element* element)
+{
+    using namespace mu::draw;
+    Painter* painter = static_cast<Painter*>(data);
+    painter->save();
+    painter->translate(element->pos()); // necessary for drawing child elements
+
+    auto colorBackup = Color::fromQColor(element->getProperty(Pid::COLOR).value<QColor>());
+    auto frameColorBackup = Color::fromQColor(element->getProperty(Pid::FRAME_FG_COLOR).value<QColor>());
+
+    auto color = Color::fromQColor(configuration()->elementsColor());
+    element->setProperty(Pid::COLOR, QVariant::fromValue(color));
+    element->setProperty(Pid::FRAME_FG_COLOR, QVariant::fromValue(color));
+
+    element->draw(painter);
+
+    element->setProperty(Pid::COLOR, QVariant::fromValue(colorBackup));
+    element->setProperty(Pid::FRAME_FG_COLOR, QVariant::fromValue(frameColorBackup));
+
+    painter->restore();
+}
+
+qreal PaletteWidget::mag() const
+{
+    return m_palette->mag();
+}
+
+void PaletteWidget::setMag(qreal val)
+{
+    m_palette->setMag(val);
+}
+
+qreal PaletteWidget::yOffset() const
+{
+    return m_palette->yOffset();
+}
+
+void PaletteWidget::setYOffset(qreal val)
+{
+    m_palette->setYOffset(val);
+}
+
+// ====================================================
+// Grid
+// ====================================================
+
+bool PaletteWidget::drawGrid() const
+{
+    return m_palette->drawGrid();
+}
+
+void PaletteWidget::setDrawGrid(bool val)
+{
+    m_palette->setDrawGrid(val);
+}
+
+int PaletteWidget::gridWidth() const
+{
+    return m_palette->gridSize().width();
+}
+
+int PaletteWidget::gridHeight() const
+{
+    return m_palette->gridSize().height();
+}
+
+void PaletteWidget::setGridSize(int width, int height)
+{
+    m_palette->setGridSize(width, height);
+    QSize s = QSize(width, height) * paletteScaling();
+    setSizeIncrement(s);
+    setBaseSize(s);
+    setMinimumSize(s);
+    updateGeometry();
+}
+
+int PaletteWidget::gridWidthScaled() const
+{
+    return gridWidth() * paletteScaling();
+}
+
+int PaletteWidget::gridHeightScaled() const
+{
+    return gridHeight() * paletteScaling();
+}
+
+qreal PaletteWidget::paletteScaling() const
+{
+    return configuration()->paletteScaling();
+}
+
+// ====================================================
+// Filter
+// ====================================================
+
+bool PaletteWidget::isFilterActive()
+{
+    return m_isFilterActive;
+}
+
+/// Returns `true` if all cells are filtered.
+bool PaletteWidget::setFilterText(const QString& text)
+{
+    m_isFilterActive = false;
     setMouseTracking(true);
     QString t = text.toLower();
     bool res = true;
-    m_dragCells.clear();
+    m_filteredCells.clear();
     // if palette name is searched for, display all elements in the palette
-    if (m_name.startsWith(t, Qt::CaseInsensitive)) {
-        PaletteCellPtr c  = m_cells.first();
-        for (PaletteCellPtr cell : m_cells) {
-            m_dragCells.append(cell);
+    if (name().startsWith(t, Qt::CaseInsensitive)) {
+        PaletteCellPtr c = cells().front();
+        for (PaletteCellPtr cell : cells()) {
+            m_filteredCells.push_back(cell);
         }
 
         bool contains = t.isEmpty() || c;
         if (!contains) {
-            m_filterActive = true;
+            m_isFilterActive = true;
         }
         if (contains && res) {
             res = false;
         }
     }
 
-    for (PaletteCellPtr cell : m_cells) {
+    for (PaletteCellPtr cell : cells()) {
         QStringList h = cell->name.toLower().split(" ");
         bool c        = false;
         QStringList n = t.split(" ");
@@ -207,11 +294,11 @@ bool PaletteWidget::filter(const QString& text)
             }
         }
         if (t.isEmpty() || c) {
-            m_dragCells.append(cell);
+            m_filteredCells.push_back(cell);
         }
         bool contains = t.isEmpty() || c;
         if (!contains) {
-            m_filterActive = true;
+            m_isFilterActive = true;
         }
         if (contains && res) {
             res = false;
@@ -222,145 +309,13 @@ bool PaletteWidget::filter(const QString& text)
     return res;
 }
 
-//---------------------------------------------------------
-//   setSystemPalette
-//---------------------------------------------------------
+// ====================================================
+// Selection
+// ====================================================
 
-void PaletteWidget::setSystemPalette(bool val)
+bool PaletteWidget::isSelectable() const
 {
-    m_systemPalette = val;
-    if (val) {
-        setReadOnly(true);
-    }
-}
-
-//---------------------------------------------------------
-//   setReadOnly
-//---------------------------------------------------------
-
-void PaletteWidget::setReadOnly(bool val)
-{
-    m_readOnly = val;
-    setAcceptDrops(!val);
-}
-
-//---------------------------------------------------------
-//   setMag
-//---------------------------------------------------------
-
-void PaletteWidget::setMag(qreal val)
-{
-    m_extraMag = val;
-}
-
-//---------------------------------------------------------
-//   guiMag
-//---------------------------------------------------------
-
-qreal PaletteWidget::paletteScaling()
-{
-    return configuration()->paletteScaling();
-}
-
-//---------------------------------------------------------
-//   contextMenuEvent
-//---------------------------------------------------------
-
-void PaletteWidget::contextMenuEvent(QContextMenuEvent* event)
-{
-    if (!m_showContextMenu) {
-        return;
-    }
-    int i = idx(event->pos());
-    if (i == -1) {
-        // palette context menu
-        return;
-    }
-
-    QMenu menu;
-    QAction* deleteCellAction   = menu.addAction(mu::qtrc("palette", "Delete"));
-    QAction* contextAction = menu.addAction(mu::qtrc("palette", "Properties…"));
-    deleteCellAction->setEnabled(!m_readOnly);
-    contextAction->setEnabled(!m_readOnly);
-
-    if (m_filterActive || (cellAt(i) && cellAt(i)->readOnly)) {
-        deleteCellAction->setEnabled(false);
-    }
-
-    if (!deleteCellAction->isEnabled() && !contextAction->isEnabled()) {
-        return;
-    }
-
-    const QAction* action = menu.exec(mapToGlobal(event->pos()));
-
-    if (action == deleteCellAction) {
-        PaletteCellPtr cell = cellAt(i);
-        if (cell) {
-            std::string title = mu::trc("palette", "Delete palette cell");
-            std::string question
-                = mu::qtrc("palette", "Are you sure you want to delete palette cell \"%1\"?").arg(cell->name).toStdString();
-
-            IInteractive::Result result = interactive()->question(title, question, {
-                IInteractive::Button::Yes,
-                IInteractive::Button::No
-            }, IInteractive::Button::Yes);
-
-            if (result.standartButton() != IInteractive::Button::Yes) {
-                return;
-            }
-            m_cells.removeAt(i);
-        }
-        emit changed();
-    }
-
-    bool sizeChanged = false;
-    for (int j = 0; j < m_cells.size(); ++j) {
-        if (!cellAt(j)) {
-            m_cells.removeAt(j);
-            sizeChanged = true;
-        }
-    }
-    if (sizeChanged) {
-        setFixedHeight(heightForWidth(width()));
-        updateGeometry();
-    }
-    update();
-}
-
-//---------------------------------------------------------
-//   setGrid
-//---------------------------------------------------------
-
-void PaletteWidget::setGrid(int hh, int vv)
-{
-    m_hgrid = hh;
-    m_vgrid = vv;
-    QSize s(m_hgrid, m_vgrid);
-    s *= paletteScaling();
-    setSizeIncrement(s);
-    setBaseSize(s);
-    setMinimumSize(s);
-    updateGeometry();
-}
-
-//---------------------------------------------------------
-//   element
-//---------------------------------------------------------
-
-ElementPtr PaletteWidget::element(int idx) const
-{
-    PaletteCellPtr cell = cellAt(idx);
-    return cell ? cell->element : nullptr;
-}
-
-void PaletteWidget::setDrawGrid(bool val)
-{
-    m_drawGrid = val;
-}
-
-bool PaletteWidget::drawGrid() const
-{
-    return m_drawGrid;
+    return m_selectable;
 }
 
 void PaletteWidget::setSelectable(bool val)
@@ -368,12 +323,7 @@ void PaletteWidget::setSelectable(bool val)
     m_selectable = val;
 }
 
-bool PaletteWidget::selectable() const
-{
-    return m_selectable;
-}
-
-int PaletteWidget::getSelectedIdx() const
+int PaletteWidget::selectedIdx() const
 {
     return m_selectedIdx;
 }
@@ -383,263 +333,64 @@ void PaletteWidget::setSelected(int idx)
     m_selectedIdx = idx;
 }
 
-bool PaletteWidget::readOnly() const
+int PaletteWidget::currentIdx() const
 {
-    return m_readOnly;
+    return m_currentIdx;
 }
 
-bool PaletteWidget::disableElementsApply() const
+void PaletteWidget::setCurrentIdx(int idx)
 {
-    return m_disableElementsApply;
+    m_currentIdx = idx;
 }
 
-void PaletteWidget::setDisableElementsApply(bool val)
+void PaletteWidget::nextPaletteElement()
 {
-    m_disableElementsApply = val;
-}
-
-bool PaletteWidget::useDoubleClickToActivate() const
-{
-    return m_useDoubleClickToActivate;
-}
-
-void PaletteWidget::setUseDoubleClickToActivate(bool val)
-{
-    m_useDoubleClickToActivate = val;
-}
-
-qreal PaletteWidget::mag() const
-{
-    return m_extraMag;
-}
-
-void PaletteWidget::setYOffset(qreal val)
-{
-    m_yOffsetSpatium = val;
-}
-
-qreal PaletteWidget::yOffset() const
-{
-    return m_yOffsetSpatium;
-}
-
-int PaletteWidget::size() const
-{
-    return m_filterActive ? m_dragCells.size() : m_cells.size();
-}
-
-PaletteCellPtr PaletteWidget::cellAt(int index) const
-{
-    if (index < 0 || index >= ccp().size()) {
-        return nullptr;
-    }
-
-    return ccp().value(index);
-}
-
-void PaletteWidget::setCellReadOnly(int cellIndex, bool readonly)
-{
-    m_cells[cellIndex]->readOnly = readonly;
-}
-
-QString PaletteWidget::name() const
-{
-    return m_name;
-}
-
-void PaletteWidget::setName(const QString& name)
-{
-    m_name = name;
-}
-
-int PaletteWidget::gridWidth() const
-{
-    return m_hgrid;
-}
-
-int PaletteWidget::gridHeight() const
-{
-    return m_vgrid;
-}
-
-void PaletteWidget::setShowContextMenu(bool val)
-{
-    m_showContextMenu = val;
-}
-
-const QList<PaletteCellPtr>& PaletteWidget::ccp() const
-{
-    return m_filterActive ? m_dragCells : m_cells;
-}
-
-//---------------------------------------------------------
-//   mousePressEvent
-//---------------------------------------------------------
-
-void PaletteWidget::mousePressEvent(QMouseEvent* ev)
-{
-    m_dragStartPosition = ev->pos();
-    m_dragIdx           = idx(m_dragStartPosition);
-
-    m_pressedIndex = m_dragIdx;
-
-    if (m_dragIdx == -1) {
+    int i = m_currentIdx;
+    if (i == -1) {
         return;
     }
-
-    if (m_selectable) {
-        if (m_dragIdx != m_selectedIdx) {
-            update(idxRect(m_dragIdx) | idxRect(m_selectedIdx));
-            m_selectedIdx = m_dragIdx;
-        }
-        emit boxClicked(m_dragIdx);
+    i++;
+    if (i < actualCellCount() && cellAt(i)) {
+        m_currentIdx = i;
     }
+
+    // TODO: screenreader support
+    //QString name = qApp->translate("palette", cellAt(i)->name.toUtf8());
+    //ScoreAccessibility::makeReadable(name);
 
     update();
 }
 
-//---------------------------------------------------------
-//   mouseMoveEvent
-//---------------------------------------------------------
-
-void PaletteWidget::mouseMoveEvent(QMouseEvent* ev)
+void PaletteWidget::prevPaletteElement()
 {
-    if ((m_currentIdx != -1) && (m_dragIdx == m_currentIdx) && (ev->buttons() & Qt::LeftButton)
-        && (ev->pos() - m_dragStartPosition).manhattanLength() > QApplication::startDragDistance()) {
-        PaletteCellPtr cell = cellAt(m_currentIdx);
-        if (cell && cell->element) {
-            QDrag* drag         = new QDrag(this);
-            QMimeData* mimeData = new QMimeData;
-            const ElementPtr el   = cell->element;
-
-            mimeData->setData(mu::commonscene::MIME_SYMBOL_FORMAT, el->mimeData(PointF()));
-            drag->setMimeData(mimeData);
-
-            drag->setPixmap(pixmap(m_currentIdx));
-
-            QPoint hotsp(drag->pixmap().rect().bottomRight());
-            drag->setHotSpot(hotsp);
-
-            Qt::DropActions da;
-            if (!(m_readOnly || m_filterActive) && (ev->modifiers() & Qt::ShiftModifier)) {
-                m_dragCells = m_cells;              // backup
-                da = Qt::MoveAction;
-            } else {
-                da = Qt::CopyAction;
-            }
-            Qt::DropAction a = drag->exec(da);
-            if (da == Qt::MoveAction && a != da) {
-                m_cells = m_dragCells;              // restore on a failed move action
-            }
-            update();
-        }
-    } else {
-        m_currentIdx = idx(ev->pos());
-        if (m_currentIdx != -1 && cellAt(m_currentIdx) == 0) {
-            m_currentIdx = -1;
-        }
-        update();
+    int i = m_currentIdx;
+    if (i == -1) {
+        return;
     }
-}
-
-//---------------------------------------------------------
-//   applyPaletteElement
-//---------------------------------------------------------
-
-bool PaletteWidget::applyPaletteElement(ElementPtr element, Qt::KeyboardModifiers modifiers)
-{
-    auto notation = globalContext()->currentNotation();
-    if (!notation) {
-        return false;
+    i--;
+    if (i >= 0 && cellAt(i)) {
+        m_currentIdx = i;
     }
 
-    return notation->interaction()->applyPaletteElement(element.get(), modifiers);
-}
-
-//---------------------------------------------------------
-//   keyPressEvent
-//---------------------------------------------------------
-
-void PaletteScrollArea::keyPressEvent(QKeyEvent* event)
-{
-    QWidget* w = this->widget();
-    PaletteWidget* p = static_cast<PaletteWidget*>(w);
-    int pressedKey = event->key();
-    switch (pressedKey) {
-    case Qt::Key_Right:
-    case Qt::Key_Left:
-    case Qt::Key_Up:
-    case Qt::Key_Down:
-    {
-        int idx = p->getSelectedIdx();
-        if (pressedKey == Qt::Key_Left || pressedKey == Qt::Key_Up) {
-            idx--;
-        } else {
-            idx++;
-        }
-        if (idx < 0) {
-            idx = p->size() - 1;
-        } else if (idx >= p->size()) {
-            idx = 0;
-        }
-        p->setSelected(idx);
-        p->setCurrentIdx(idx);
-        // set widget name to name of selected element
-        // we could set the description, but some screen readers ignore it
-        QString name = p->cellAt(idx)->translatedName();
-        //ScoreAccessibility::makeReadable(name); //! TODO
-        setAccessibleName(name);
-        QAccessibleEvent aev(this, QAccessible::NameChanged);
-        QAccessible::updateAccessibility(&aev);
-        p->update();
-        break;
-    }
-    case Qt::Key_Enter:
-    case Qt::Key_Return:
-        if (!p->disableElementsApply()) {
-            p->applyPaletteElement();
-        }
-        break;
-    default:
-        break;
-    }
-    QScrollArea::keyPressEvent(event);
-}
-
-bool PaletteScrollArea::restrictHeight() const
-{
-    return m_restrictHeight;
-}
-
-void PaletteScrollArea::setRestrictHeight(bool val)
-{
-    m_restrictHeight = val;
-}
-
-//---------------------------------------------------------
-//   mouseDoubleClickEvent
-//---------------------------------------------------------
-
-void PaletteWidget::mouseDoubleClickEvent(QMouseEvent* event)
-{
-    if (m_useDoubleClickToActivate) {
-        applyElementAtPosition(event->pos(), event->modifiers());
-    }
-}
-
-//---------------------------------------------------------
-//   mouseReleaseEvent
-//---------------------------------------------------------
-
-void PaletteWidget::mouseReleaseEvent(QMouseEvent* event)
-{
-    m_pressedIndex = -1;
+    // TODO: screenreader support
+    //QString name = qApp->translate("palette", cellAt(i)->name.toUtf8());
+    //ScoreAccessibility::makeReadable(name);
 
     update();
+}
 
-    if (!m_useDoubleClickToActivate) {
-        applyElementAtPosition(event->pos(), event->modifiers());
-    }
+// ====================================================
+// Applying elements
+// ====================================================
+
+bool PaletteWidget::isApplyingElementsDisabled() const
+{
+    return m_isApplyingElementsDisabled;
+}
+
+void PaletteWidget::setApplyingElementsDisabled(bool val)
+{
+    m_isApplyingElementsDisabled = val;
 }
 
 bool PaletteWidget::notationHasSelection() const
@@ -652,13 +403,26 @@ bool PaletteWidget::notationHasSelection() const
     return !notation->interaction()->selection()->isNone();
 }
 
-void PaletteWidget::applyElementAtPosition(QPoint pos, Qt::KeyboardModifiers modifiers)
+void PaletteWidget::applyPaletteElement()
 {
-    if (m_disableElementsApply) {
+    if (!notationHasSelection()) {
         return;
     }
 
-    int index = idx(pos);
+    // apply currently selected palette symbol to selected score elements
+    int i = m_currentIdx;
+    if (i < actualCellCount() && cellAt(i)) {
+        applyPaletteElement(cellAt(i)->element);
+    }
+}
+
+void PaletteWidget::applyElementAtPosition(QPoint pos, Qt::KeyboardModifiers modifiers)
+{
+    if (m_isApplyingElementsDisabled) {
+        return;
+    }
+
+    int index = cellIndexForPoint(pos);
 
     if (index == -1) {
         return;
@@ -675,14 +439,63 @@ void PaletteWidget::applyElementAtPosition(QPoint pos, Qt::KeyboardModifiers mod
     }
 }
 
-//---------------------------------------------------------
-//   idx
-//---------------------------------------------------------
-
-int PaletteWidget::idx(const QPoint& p) const
+bool PaletteWidget::applyPaletteElement(ElementPtr element, Qt::KeyboardModifiers modifiers)
 {
-    int hgridM = gridWidthM();
-    int vgridM = gridHeightM();
+    auto notation = globalContext()->currentNotation();
+    if (!notation) {
+        return false;
+    }
+
+    return notation->interaction()->applyPaletteElement(element.get(), modifiers);
+}
+
+// ====================================================
+// Settings
+// ====================================================
+
+bool PaletteWidget::readOnly() const
+{
+    return m_isReadOnly;
+}
+
+void PaletteWidget::setReadOnly(bool val)
+{
+    m_isReadOnly = val;
+    setAcceptDrops(!val);
+}
+
+void PaletteWidget::setCellReadOnly(int cellIndex, bool readonly)
+{
+    cells()[cellIndex]->readOnly = readonly;
+}
+
+void PaletteWidget::setShowContextMenu(bool val)
+{
+    m_showContextMenu = val;
+}
+
+// ====================================================
+// Helpers
+// ====================================================
+
+int PaletteWidget::columns() const
+{
+    return width() / gridWidthScaled();
+}
+
+int PaletteWidget::rows() const
+{
+    int c = columns();
+    if (c == 0) {
+        return 0;
+    }
+    return (actualCellCount() + c - 1) / c;
+}
+
+int PaletteWidget::cellIndexForPoint(const QPoint& p) const
+{
+    int hgridM = gridWidthScaled();
+    int vgridM = gridHeightScaled();
     if (columns() == 0) {
         return -1;
     }
@@ -701,21 +514,16 @@ int PaletteWidget::idx(const QPoint& p) const
     }
 
     int idx = row * nc + col;
-    if (idx < 0 || idx >= size()) {
+    if (idx < 0 || idx >= actualCellCount()) {
         return -1;
     }
     return idx;
 }
 
-//---------------------------------------------------------
-//   idx2
-//   returns indexes outside of cells.size()
-//---------------------------------------------------------
-
-int PaletteWidget::idx2(const QPoint& p) const
+int PaletteWidget::theoreticalCellIndexForPoint(const QPoint& p) const
 {
-    int hgridM = gridWidthM();
-    int vgridM = gridHeightM();
+    int hgridM = gridWidthScaled();
+    int vgridM = gridHeightScaled();
     if (columns() == 0) {
         return -1;
     }
@@ -740,15 +548,11 @@ int PaletteWidget::idx2(const QPoint& p) const
     return idx;
 }
 
-//---------------------------------------------------------
-//   idxRect
-//---------------------------------------------------------
-
-QRect PaletteWidget::idxRect(int i) const
+QRect PaletteWidget::rectForCellAt(int idx) const
 {
-    int hgridM = gridWidthM();
-    int vgridM = gridHeightM();
-    if (i == -1) {
+    int hgridM = gridWidthScaled();
+    int vgridM = gridHeightScaled();
+    if (idx == -1) {
         return QRect();
     }
     if (columns() == 0) {
@@ -758,346 +562,15 @@ QRect PaletteWidget::idxRect(int i) const
     int rightBorder = width() % hgridM;
     int hhgrid = hgridM + (rightBorder / columns());
 
-    int cc = i % columns();
-    int cr = i / columns();
+    int cc = idx % columns();
+    int cr = idx / columns();
     return QRect(cc * hhgrid, cr * vgridM, hhgrid, vgridM);
 }
 
-//---------------------------------------------------------
-//   leaveEvent
-//---------------------------------------------------------
-
-void PaletteWidget::leaveEvent(QEvent*)
-{
-    if (m_currentIdx != -1) {
-        QRect r = idxRect(m_currentIdx);
-        if (!(QGuiApplication::keyboardModifiers() & Qt::ShiftModifier)) {
-            m_currentIdx = -1;
-        }
-        update(r);
-    }
-}
-
-//---------------------------------------------------------
-//   nextPaletteElement
-//---------------------------------------------------------
-
-void PaletteWidget::nextPaletteElement()
-{
-    int i = m_currentIdx;
-    if (i == -1) {
-        return;
-    }
-    i++;
-    if (i < size() && cellAt(i)) {
-        m_currentIdx = i;
-    }
-
-    // TODO: screenreader support
-    //QString name = qApp->translate("palette", cellAt(i)->name.toUtf8());
-    //ScoreAccessibility::makeReadable(name);
-
-    update();
-}
-
-//---------------------------------------------------------
-//   prevPaletteElement
-//---------------------------------------------------------
-
-void PaletteWidget::prevPaletteElement()
-{
-    int i = m_currentIdx;
-    if (i == -1) {
-        return;
-    }
-    i--;
-    if (i >= 0 && cellAt(i)) {
-        m_currentIdx = i;
-    }
-
-    // TODO: screenreader support
-    //QString name = qApp->translate("palette", cellAt(i)->name.toUtf8());
-    //ScoreAccessibility::makeReadable(name);
-
-    update();
-}
-
-//---------------------------------------------------------
-//   applyPaletteElement
-//---------------------------------------------------------
-
-void PaletteWidget::applyPaletteElement()
-{
-    if (!notationHasSelection()) {
-        return;
-    }
-
-    // apply currently selected palette symbol to selected score elements
-    int i = m_currentIdx;
-    if (i < size() && cellAt(i)) {
-        applyPaletteElement(cellAt(i)->element);
-    }
-}
-
-//---------------------------------------------------------
-//   append
-//    append element to palette
-//---------------------------------------------------------
-
-PaletteCellPtr PaletteWidget::append(ElementPtr element, const QString& name, qreal mag)
-{
-    if (!element) {
-        m_cells.append(nullptr);
-        return nullptr;
-    }
-
-    PaletteCellPtr cell = std::make_shared<PaletteCell>();
-
-    m_cells.append(cell);
-    PaletteCellPtr pc = add(m_cells.size() - 1, element, name, mag);
-    setFixedHeight(heightForWidth(width()));
-    updateGeometry();
-    return pc;
-}
-
-//---------------------------------------------------------
-//   add
-//---------------------------------------------------------
-
-PaletteCellPtr PaletteWidget::add(int idx, ElementPtr element, const QString& name, qreal mag)
-{
-    if (element) {
-        element->setPos(0.0, 0.0);
-        element->setOffset(PointF());
-    }
-
-    PaletteCellPtr cell = std::make_shared<PaletteCell>();
-
-    if (idx < m_cells.size()) {
-        m_cells.removeAt(idx);
-    } else {
-        for (int i = m_cells.size(); i <= idx; ++i) {
-            m_cells.append(0);
-        }
-    }
-
-    m_cells.insert(idx, cell);
-
-    cell->element   = element;
-    cell->name      = name;
-    cell->drawStaff = paletteNeedsStaff(element);
-    cell->xoffset   = 0;
-    cell->yoffset   = 0;
-    cell->mag       = mag;
-    cell->readOnly  = false;
-
-    update();
-    updateGeometry();
-
-    return cell;
-}
-
-//---------------------------------------------------------
-//   paintPaletteElement
-//---------------------------------------------------------
-
-void PaletteWidget::paintPaletteElement(void* data, Element* element)
-{
-    using namespace mu::draw;
-    Painter* painter = static_cast<Painter*>(data);
-    painter->save();
-    painter->translate(element->pos()); // necessary for drawing child elements
-
-    auto colorBackup = Color::fromQColor(element->getProperty(Pid::COLOR).value<QColor>());
-    auto frameColorBackup = Color::fromQColor(element->getProperty(Pid::FRAME_FG_COLOR).value<QColor>());
-
-    auto color = Color::fromQColor(configuration()->elementsColor());
-    element->setProperty(Pid::COLOR, QVariant::fromValue(color));
-    element->setProperty(Pid::FRAME_FG_COLOR, QVariant::fromValue(color));
-
-    element->draw(painter);
-
-    element->setProperty(Pid::COLOR, QVariant::fromValue(colorBackup));
-    element->setProperty(Pid::FRAME_FG_COLOR, QVariant::fromValue(frameColorBackup));
-
-    painter->restore();
-}
-
-int PaletteWidget::gridWidthM() const
-{
-    return m_hgrid * paletteScaling();
-}
-
-int PaletteWidget::gridHeightM() const
-{
-    return m_vgrid * paletteScaling();
-}
-
-int PaletteWidget::getCurrentIdx() const
-{
-    return m_currentIdx;
-}
-
-void PaletteWidget::setCurrentIdx(int i)
-{
-    m_currentIdx = i;
-}
-
-bool PaletteWidget::isFilterActive()
-{
-    return m_filterActive;
-}
-
-QList<PaletteCellPtr> PaletteWidget::getDragCells()
-{
-    return m_dragCells;
-}
-
-//---------------------------------------------------------
-//   paintEvent
-//---------------------------------------------------------
-
-void PaletteWidget::paintEvent(QPaintEvent* /*event*/)
+QPixmap PaletteWidget::pixmapForCellAt(int paletteIdx) const
 {
     qreal _spatium = gscore->spatium();
-    qreal magS     = PALETTE_SPATIUM * m_extraMag * paletteScaling();
-    qreal mag      = magS / _spatium;
-    gscore->setSpatium(SPATIUM20);
-
-    mu::draw::Painter painter(this, "palette");
-    painter.setAntialiasing(true);
-
-    painter.setPen(configuration()->gridColor());
-    painter.drawRoundedRect(RectF(0, 0, width(), height()), 2, 2);
-
-    //
-    // draw grid
-    //
-    int hgridM = gridWidthM();
-    int vgridM = gridHeightM();
-
-    if (columns() == 0) {
-        return;
-    }
-    int rightBorder = width() % hgridM;
-    int hhgrid = hgridM + (rightBorder / columns());
-
-    if (m_drawGrid) {
-        for (int row = 1; row < rows(); ++row) {
-            int x2 = row < rows() - 1 ? columns() * hhgrid : width();
-            int y  = row * vgridM;
-            painter.drawLine(0, y, x2, y);
-        }
-        for (int column = 1; column < columns(); ++column) {
-            int x = hhgrid * column;
-            painter.drawLine(x, 0, x, rows() * vgridM);
-        }
-    }
-
-    qreal dy = lrint(2 * magS);
-
-    //
-    // draw symbols
-    //
-    for (int idx = 0; idx < ccp().size(); ++idx) {
-        RectF r = RectF::fromQRectF(idxRect(idx));
-        QColor c(configuration()->accentColor());
-
-        if (idx == m_selectedIdx) {
-            c.setAlphaF(0.5);
-            painter.fillRect(r, c);
-        } else if (idx == m_pressedIndex) {
-            c.setAlphaF(0.75);
-            painter.fillRect(r, c);
-        } else if (idx == m_currentIdx) {
-            c.setAlphaF(0.2);
-            painter.fillRect(r, c);
-        }
-
-        PaletteCellPtr currentCell = ccp().at(idx);
-        if (!currentCell) {
-            continue;
-        }
-
-        draw::Pen pen(configuration()->elementsColor());
-        pen.setWidthF(engraving::DefaultStyle::defaultStyle().value(Sid::staffLineWidth).toDouble() * magS);
-        painter.setPen(pen);
-
-        ElementPtr el = currentCell->element;
-        if (!el) {
-            continue;
-        }
-
-        bool drawStaff = currentCell->drawStaff;
-        int row    = idx / columns();
-        int column = idx % columns();
-
-        qreal cellMag = currentCell->mag * mag;
-        if (el->isActionIcon()) {
-            toActionIcon(el.get())->setExtent((hhgrid < vgridM ? hhgrid : vgridM) - 4);
-            cellMag = 1.0;
-        }
-        el->layout();
-
-        if (drawStaff) {
-            qreal y = r.y() + vgridM * .5 - dy + m_yOffsetSpatium * _spatium * cellMag;
-            qreal x = r.x() + 3;
-            qreal w = hhgrid - 6;
-            for (int i = 0; i < 5; ++i) {
-                qreal yy = y + i * magS;
-                painter.setPen(configuration()->elementsColor());
-                painter.drawLine(LineF(x, yy, x + w, yy));
-            }
-        }
-        painter.save();
-        painter.scale(cellMag, cellMag);
-
-        double gw = hhgrid / cellMag;
-        double gh = vgridM / cellMag;
-        double gx = column * gw + currentCell->xoffset * _spatium;
-        double gy = row * gh + currentCell->yoffset * _spatium;
-
-        double sw = el->width();
-        double sh = el->height();
-        double sy = 0;
-
-        if (drawStaff) {
-            sy = gy + gh * .5 - 2.0 * _spatium;
-        } else {
-            sy  = gy + (gh - sh) * .5 - el->bbox().y();
-        }
-        double sx  = gx + (gw - sw) * .5 - el->bbox().x();
-
-        sy += m_yOffsetSpatium * _spatium;
-
-        painter.translate(sx, sy);
-
-        QColor color;
-        if (idx != m_selectedIdx) {
-            // show voice colors for notes
-            if (el->isChord()) {
-                color = el->curColor().toQColor();
-            } else {
-                color = palette().color(QPalette::Normal, QPalette::Text);
-            }
-        } else {
-            color = palette().color(QPalette::Normal, QPalette::HighlightedText);
-        }
-
-        painter.setPen(Pen(color));
-        el->scanElements(&painter, paintPaletteElement);
-        painter.restore();
-    }
-}
-
-//---------------------------------------------------------
-//   pixmap
-//---------------------------------------------------------
-
-QPixmap PaletteWidget::pixmap(int paletteIdx) const
-{
-    qreal _spatium = gscore->spatium();
-    qreal magS     = PALETTE_SPATIUM * m_extraMag * paletteScaling();
+    qreal magS     = PALETTE_SPATIUM * mag() * paletteScaling();
     qreal mag      = magS / _spatium;
 
     PaletteCellPtr cell = cellAt(paletteIdx);
@@ -1152,17 +625,45 @@ QPixmap PaletteWidget::pixmap(int paletteIdx) const
     return pm;
 }
 
-//---------------------------------------------------------
-//   event
-//---------------------------------------------------------
+// ====================================================
+// Sizing
+// ====================================================
+
+int PaletteWidget::heightForWidth(int w) const
+{
+    int hgridM = gridWidthScaled();
+    int vgridM = gridHeightScaled();
+    int c = w / hgridM;
+    if (c <= 0) {
+        c = 1;
+    }
+    int rows = (actualCellCount() + c - 1) / c;
+    if (rows <= 0) {
+        rows = 1;
+    }
+    qreal magS = PALETTE_SPATIUM * mag() * paletteScaling();
+    int h = lrint(yOffset() * 2 * magS);
+    return rows * vgridM + h;
+}
+
+QSize PaletteWidget::sizeHint() const
+{
+    int h = heightForWidth(width());
+    int hgridM = gridWidthScaled();
+    return QSize((width() / hgridM) * hgridM, h);
+}
+
+// ====================================================
+// Event handling
+// ====================================================
 
 bool PaletteWidget::event(QEvent* ev)
 {
-    int hgridM = gridWidthM();
-    int vgridM = gridHeightM();
+    int hgridM = gridWidthScaled();
+    int vgridM = gridHeightScaled();
     // disable mouse hover when keyboard navigation is enabled
-    if (m_filterActive && (ev->type() == QEvent::MouseMove || ev->type() == QEvent::ToolTip
-                           || ev->type() == QEvent::WindowDeactivate)) {
+    if (m_isFilterActive && (ev->type() == QEvent::MouseMove || ev->type() == QEvent::ToolTip
+                             || ev->type() == QEvent::WindowDeactivate)) {
         return true;
     } else if (columns() && (ev->type() == QEvent::ToolTip)) {
         int rightBorder = width() % hgridM;
@@ -1181,7 +682,7 @@ bool PaletteWidget::event(QEvent* ev)
             return false;
         }
         int idx = row * columns() + col;
-        if (idx >= m_cells.size()) {
+        if (idx >= int(cells().size())) {
             return false;
         }
         if (cellAt(idx) == 0) {
@@ -1193,395 +694,88 @@ bool PaletteWidget::event(QEvent* ev)
     return QWidget::event(ev);
 }
 
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void PaletteWidget::write(XmlWriter& xml) const
+void PaletteWidget::mousePressEvent(QMouseEvent* ev)
 {
-    xml.stag(QString("Palette name=\"%1\"").arg(XmlWriter::xmlString(m_name)));
-    xml.tag("gridWidth", m_hgrid);
-    xml.tag("gridHeight", m_vgrid);
-    xml.tag("mag", m_extraMag);
-    if (m_drawGrid) {
-        xml.tag("grid", m_drawGrid);
-    }
+    m_dragStartPosition = ev->pos();
+    m_dragIdx           = cellIndexForPoint(m_dragStartPosition);
 
-    if (m_yOffsetSpatium != 0.0) {
-        xml.tag("yoffset", m_yOffsetSpatium);
-    }
+    m_pressedIndex = m_dragIdx;
 
-    int n = m_cells.size();
-    for (int i = 0; i < n; ++i) {
-        if (m_cells[i] == 0 || m_cells[i]->element == 0) {
-            xml.tagE("Cell");
-            continue;
-        }
-        if (!m_cells[i]->name.isEmpty()) {
-            xml.stag(QString("Cell name=\"%1\"").arg(XmlWriter::xmlString(m_cells[i]->name)));
-        } else {
-            xml.stag("Cell");
-        }
-        if (m_cells[i]->drawStaff) {
-            xml.tag("staff", m_cells[i]->drawStaff);
-        }
-        if (m_cells[i]->xoffset) {
-            xml.tag("xoffset", m_cells[i]->xoffset);
-        }
-        if (m_cells[i]->yoffset) {
-            xml.tag("yoffset", m_cells[i]->yoffset);
-        }
-        if (m_cells[i]->mag != 1.0) {
-            xml.tag("mag", m_cells[i]->mag);
-        }
-        m_cells[i]->element->write(xml);
-        xml.etag();
-    }
-    xml.etag();
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-bool PaletteWidget::read(const QString& p)
-{
-    QString path(p);
-    if (!path.endsWith(".mpal")) {
-        path += ".mpal";
-    }
-
-    MQZipReader f(path);
-    if (!f.exists()) {
-        qDebug("palette <%s> not found", qPrintable(path));
-        return false;
-    }
-    clear();
-
-    QByteArray ba = f.fileData("META-INF/container.xml");
-
-    XmlReader e(ba);
-    // extract first rootfile
-    QString rootfile = "";
-    QList<QString> images;
-    while (e.readNextStartElement()) {
-        if (e.name() != "container") {
-            e.unknown();
-            break;
-        }
-        while (e.readNextStartElement()) {
-            if (e.name() != "rootfiles") {
-                e.unknown();
-                break;
-            }
-            while (e.readNextStartElement()) {
-                const QStringRef& tag(e.name());
-
-                if (tag == "rootfile") {
-                    if (rootfile.isEmpty()) {
-                        rootfile = e.attribute("full-path");
-                    }
-                    e.readNext();
-                } else if (tag == "file") {
-                    images.append(e.readElementText());
-                } else {
-                    e.unknown();
-                }
-            }
-        }
-    }
-    //
-    // load images
-    //
-    foreach (const QString& s, images) {
-        imageStore.add(s, f.fileData(s));
-    }
-
-    if (rootfile.isEmpty()) {
-        qDebug("can't find rootfile in: %s", qPrintable(path));
-        return false;
-    }
-
-    ba = f.fileData(rootfile);
-    e.clear();
-    e.addData(ba);
-    while (e.readNextStartElement()) {
-        if (e.name() == "museScore") {
-            QString version = e.attribute("version");
-            QStringList sl = version.split('.');
-            int versionId = sl[0].toInt() * 100 + sl[1].toInt();
-            gscore->setMscVersion(versionId);
-
-            while (e.readNextStartElement()) {
-                if (e.name() == "Palette") {
-                    QString name = e.attribute("name");
-                    setName(name);
-                    read(e);
-                } else {
-                    e.unknown();
-                }
-            }
-        } else {
-            e.unknown();
-        }
-    }
-    return true;
-}
-
-//---------------------------------------------------------
-//   writeFailed
-//---------------------------------------------------------
-
-void PaletteWidget::showWritingFailedError(const QString& path) const
-{
-    std::string title = mu::trc("palette", "Writing Palette File");
-    std::string message = mu::qtrc("palette", "Writing Palette File\n%1\nfailed: ").arg(path).toStdString();
-    interactive()->error(title, message);
-}
-
-//---------------------------------------------------------
-//   write
-//    write as compressed zip file and include
-//    images as needed
-//---------------------------------------------------------
-
-void PaletteWidget::write(const QString& p)
-{
-    QSet<ImageStoreItem*> images;
-    int n = m_cells.size();
-    for (int i = 0; i < n; ++i) {
-        if (m_cells[i] == 0 || m_cells[i]->element == 0 || m_cells[i]->element->type() != ElementType::IMAGE) {
-            continue;
-        }
-        images.insert(static_cast<Image*>(m_cells[i]->element.get())->storeItem());
-    }
-
-    QString path(p);
-    if (!path.endsWith(".mpal")) {
-        path += ".mpal";
-    }
-
-    MQZipWriter f(path);
-    // f.setCompressionPolicy(QZipWriter::NeverCompress);
-    f.setCreationPermissions(
-        QFile::ReadOwner | QFile::WriteOwner | QFile::ExeOwner
-        | QFile::ReadUser | QFile::WriteUser | QFile::ExeUser
-        | QFile::ReadGroup | QFile::WriteGroup | QFile::ExeGroup
-        | QFile::ReadOther | QFile::WriteOther | QFile::ExeOther);
-
-    if (f.status() != MQZipWriter::NoError) {
-        showWritingFailedError(path);
+    if (m_dragIdx == -1) {
         return;
     }
-    QBuffer cbuf;
-    cbuf.open(QIODevice::ReadWrite);
-    XmlWriter xml(gscore, &cbuf);
-    xml.header();
-    xml.stag("container");
-    xml.stag("rootfiles");
-    xml.stag(QString("rootfile full-path=\"%1\"").arg(XmlWriter::xmlString("palette.xml")));
-    xml.etag();
-    foreach (ImageStoreItem* ip, images) {
-        QString ipath = QString("Pictures/") + ip->hashName();
-        xml.tag("file", ipath);
-    }
-    xml.etag();
-    xml.etag();
-    cbuf.seek(0);
-    //f.addDirectory("META-INF");
-    //f.addDirectory("Pictures");
-    f.addFile("META-INF/container.xml", cbuf.data());
 
-    // save images
-    foreach (ImageStoreItem* ip, images) {
-        QString ipath = QString("Pictures/") + ip->hashName();
-        f.addFile(ipath, ip->buffer());
-    }
-    {
-        QBuffer cbuf1;
-        cbuf1.open(QIODevice::ReadWrite);
-        XmlWriter xml1(gscore, &cbuf1);
-        xml1.header();
-        xml1.stag("museScore version=\"" MSC_VERSION "\"");
-        write(xml1);
-        xml1.etag();
-        cbuf1.close();
-        f.addFile("palette.xml", cbuf1.data());
-    }
-    f.close();
-    if (f.status() != MQZipWriter::NoError) {
-        showWritingFailedError(path);
-    }
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void PaletteWidget::read(XmlReader& e)
-{
-    while (e.readNextStartElement()) {
-        const QStringRef& t(e.name());
-        if (t == "gridWidth") {
-            m_hgrid = e.readDouble();
-        } else if (t == "gridHeight") {
-            m_vgrid = e.readDouble();
-        } else if (t == "mag") {
-            m_extraMag = e.readDouble();
-        } else if (t == "grid") {
-            m_drawGrid = e.readInt();
-        } else if (t == "yoffset") {
-            m_yOffsetSpatium = e.readDouble();
-        } else if (t == "drumPalette") {      // obsolete
-            e.skipCurrentElement();
-        } else if (t == "Cell") {
-            PaletteCellPtr cell = std::make_shared<PaletteCell>();
-            cell->name = e.attribute("name");
-            bool add = true;
-            while (e.readNextStartElement()) {
-                const QStringRef& t1(e.name());
-                if (t1 == "staff") {
-                    cell->drawStaff = e.readInt();
-                } else if (t1 == "xoffset") {
-                    cell->xoffset = e.readDouble();
-                } else if (t1 == "yoffset") {
-                    cell->yoffset = e.readDouble();
-                } else if (t1 == "mag") {
-                    cell->mag = e.readDouble();
-                } else {
-                    cell->element.reset(Element::name2Element(t1, gscore));
-                    if (!cell->element) {
-                        e.unknown();
-                        return;
-                    } else {
-                        cell->element->read(e);
-                        cell->element->styleChanged();
-
-                        if (cell->element->type() == ElementType::ACTION_ICON) {
-                            ActionIcon* icon = static_cast<ActionIcon*>(cell->element.get());
-                            const mu::ui::UiAction& actionItem = actionsRegister()->action(icon->actionCode());
-                            if (actionItem.isValid()) {
-                                icon->setAction(icon->actionCode(), static_cast<char16_t>(actionItem.iconCode));
-                            } else {
-                                add = false;
-                            }
-                        }
-                    }
-                }
-            }
-            if (add) {
-                m_cells.append(cell);
-            }
-        } else {
-            e.unknown();
+    if (m_selectable) {
+        if (m_dragIdx != m_selectedIdx) {
+            update(rectForCellAt(m_dragIdx) | rectForCellAt(m_selectedIdx));
+            m_selectedIdx = m_dragIdx;
         }
+        emit boxClicked(m_dragIdx);
     }
-    // make sure hgrid and vgrid are not 0, we divide by them later
-    if (m_hgrid <= 0) {
-        m_hgrid = 28;
-    }
-    if (m_vgrid <= 0) {
-        m_vgrid = 28;
-    }
+
+    update();
 }
 
-//---------------------------------------------------------
-//   clear
-//---------------------------------------------------------
-
-void PaletteWidget::clear()
+void PaletteWidget::mouseMoveEvent(QMouseEvent* ev)
 {
-    m_cells.clear();
-}
+    if ((m_currentIdx != -1) && (m_dragIdx == m_currentIdx) && (ev->buttons() & Qt::LeftButton)
+        && (ev->pos() - m_dragStartPosition).manhattanLength() > QApplication::startDragDistance()) {
+        PaletteCellPtr cell = cellAt(m_currentIdx);
+        if (cell && cell->element) {
+            QDrag* drag         = new QDrag(this);
+            QMimeData* mimeData = new QMimeData;
+            const ElementPtr el   = cell->element;
 
-//---------------------------------------------------------
-//   columns
-//---------------------------------------------------------
+            mimeData->setData(mu::commonscene::MIME_SYMBOL_FORMAT, el->mimeData(PointF()));
+            drag->setMimeData(mimeData);
 
-int PaletteWidget::columns() const
-{
-    return width() / gridWidthM();
-}
+            drag->setPixmap(pixmapForCellAt(m_currentIdx));
 
-//---------------------------------------------------------
-//   rows
-//---------------------------------------------------------
+            QPoint hotsp(drag->pixmap().rect().bottomRight());
+            drag->setHotSpot(hotsp);
 
-int PaletteWidget::rows() const
-{
-    int c = columns();
-    if (c == 0) {
-        return 0;
-    }
-    return (size() + c - 1) / c;
-}
-
-//---------------------------------------------------------
-//   heightForWidth
-//---------------------------------------------------------
-
-int PaletteWidget::heightForWidth(int w) const
-{
-    int hgridM = gridWidthM();
-    int vgridM = gridHeightM();
-    int c = w / hgridM;
-    if (c <= 0) {
-        c = 1;
-    }
-    int rows = (size() + c - 1) / c;
-    if (rows <= 0) {
-        rows = 1;
-    }
-    qreal magS = PALETTE_SPATIUM * m_extraMag * paletteScaling();
-    int h = lrint(m_yOffsetSpatium * 2 * magS);
-    return rows * vgridM + h;
-}
-
-//---------------------------------------------------------
-//   sizeHint
-//---------------------------------------------------------
-
-QSize PaletteWidget::sizeHint() const
-{
-    int h = heightForWidth(width());
-    int hgridM = gridWidthM();
-    return QSize((width() / hgridM) * hgridM, h);
-}
-
-//---------------------------------------------------------
-// PaletteScrollArea
-//---------------------------------------------------------
-
-PaletteScrollArea::PaletteScrollArea(PaletteWidget* w, QWidget* parent)
-    : QScrollArea(parent)
-{
-    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    setWidget(w);
-    setWidgetResizable(false);
-    m_restrictHeight = true;
-    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
-}
-
-//---------------------------------------------------------
-// resizeEvent
-//---------------------------------------------------------
-
-void PaletteScrollArea::resizeEvent(QResizeEvent* re)
-{
-    QScrollArea::resizeEvent(re);   // necessary?
-
-    PaletteWidget* palette = static_cast<PaletteWidget*>(widget());
-    int h = palette->heightForWidth(width());
-    palette->resize(QSize(width() - 6, h));
-    if (m_restrictHeight) {
-        setMaximumHeight(h + 6);
+            Qt::DropActions da;
+            if (!(m_isReadOnly || m_isFilterActive) && (ev->modifiers() & Qt::ShiftModifier)) {
+                m_filteredCells = cells(); // backup
+                da = Qt::MoveAction;
+            } else {
+                da = Qt::CopyAction;
+            }
+            Qt::DropAction a = drag->exec(da);
+            if (da == Qt::MoveAction && a != da) {
+                // restore on a failed move action
+                m_palette->clear();
+                m_palette->insertCells(0, m_filteredCells);
+            }
+            update();
+        }
+    } else {
+        m_currentIdx = cellIndexForPoint(ev->pos());
+        if (m_currentIdx != -1 && cellAt(m_currentIdx) == 0) {
+            m_currentIdx = -1;
+        }
+        update();
     }
 }
 
-//---------------------------------------------------------
-//   dragEnterEvent
-//---------------------------------------------------------
+void PaletteWidget::mouseReleaseEvent(QMouseEvent* event)
+{
+    m_pressedIndex = -1;
+
+    update();
+    applyElementAtPosition(event->pos(), event->modifiers());
+}
+
+void PaletteWidget::leaveEvent(QEvent*)
+{
+    if (m_currentIdx != -1) {
+        QRect r = rectForCellAt(m_currentIdx);
+        if (!(QGuiApplication::keyboardModifiers() & Qt::ShiftModifier)) {
+            m_currentIdx = -1;
+        }
+        update(r);
+    }
+}
 
 void PaletteWidget::dragEnterEvent(QDragEnterEvent* event)
 {
@@ -1589,10 +783,7 @@ void PaletteWidget::dragEnterEvent(QDragEnterEvent* event)
     if (dta->hasUrls()) {
         QList<QUrl> ul = event->mimeData()->urls();
         QUrl u = ul.front();
-        if (MScore::debugMode) {
-            qDebug("dragEnterEvent: Url: %s", qPrintable(u.toString()));
-            qDebug("   scheme <%s> path <%s>", qPrintable(u.scheme()), qPrintable(u.path()));
-        }
+
         if (u.scheme() == "file") {
             QFileInfo fi(u.path());
             QString suffix(fi.suffix().toLower());
@@ -1618,35 +809,25 @@ void PaletteWidget::dragEnterEvent(QDragEnterEvent* event)
     }
 }
 
-//---------------------------------------------------------
-//   dragMoveEvent
-//---------------------------------------------------------
-
 void PaletteWidget::dragMoveEvent(QDragMoveEvent* event)
 {
-    int i = idx(event->pos());
     if (event->source() == this) {
-        if (i != -1) {
-            if (m_currentIdx != -1 && event->proposedAction() == Qt::MoveAction) {
-                if (i != m_currentIdx) {
-                    PaletteCellPtr c = m_cells.takeAt(m_currentIdx);
-                    m_cells.insert(i, c);
-                    m_currentIdx = i;
-                    update();
-                }
-                event->accept();
-                return;
+        if (m_currentIdx != -1 && event->proposedAction() == Qt::MoveAction) {
+            int targetIdx = cellIndexForPoint(event->pos());
+            if (targetIdx != -1 && targetIdx != m_currentIdx) {
+                PaletteCellPtr cell = m_palette->takeCell(m_currentIdx);
+                m_palette->insertCell(targetIdx, cell);
+                m_currentIdx = targetIdx;
+                update();
             }
+            event->accept();
+            return;
         }
         event->ignore();
     } else {
         event->accept();
     }
 }
-
-//---------------------------------------------------------
-//   dropEvent
-//---------------------------------------------------------
 
 void PaletteWidget::dropEvent(QDropEvent* event)
 {
@@ -1713,18 +894,322 @@ void PaletteWidget::dropEvent(QDropEvent* event)
     }
 
     element->setSelected(false);
-    int i = idx(event->pos());
-    if (i == -1 || m_cells[i]) {
-        append(element, name);
+    int i = cellIndexForPoint(event->pos());
+    if (i == -1 || cells()[i]) {
+        appendElement(element, name);
     } else {
-        add(i, element, name);
+        insertElement(i, element, name);
     }
     event->accept();
-    while (!m_cells.isEmpty() && m_cells.back() == 0) {
-        m_cells.removeLast();
-    }
+
     setFixedHeight(heightForWidth(width()));
     updateGeometry();
     update();
     emit changed();
+}
+
+void PaletteWidget::resizeEvent(QResizeEvent* e)
+{
+    setFixedHeight(heightForWidth(e->size().width()));
+}
+
+void PaletteWidget::paintEvent(QPaintEvent* /*event*/)
+{
+    qreal _spatium = gscore->spatium();
+    qreal magS     = PALETTE_SPATIUM * mag() * paletteScaling();
+    qreal mag      = magS / _spatium;
+    gscore->setSpatium(SPATIUM20);
+
+    mu::draw::Painter painter(this, "palette");
+    painter.setAntialiasing(true);
+
+    painter.setPen(configuration()->gridColor());
+    painter.drawRoundedRect(RectF(0, 0, width(), height()), 2, 2);
+
+    //
+    // draw grid
+    //
+    int hgridM = gridWidthScaled();
+    int vgridM = gridHeightScaled();
+
+    if (columns() == 0) {
+        return;
+    }
+    int rightBorder = width() % hgridM;
+    int hhgrid = hgridM + (rightBorder / columns());
+
+    if (drawGrid()) {
+        for (int row = 1; row < rows(); ++row) {
+            int x2 = row < rows() - 1 ? columns() * hhgrid : width();
+            int y  = row * vgridM;
+            painter.drawLine(0, y, x2, y);
+        }
+        for (int column = 1; column < columns(); ++column) {
+            int x = hhgrid * column;
+            painter.drawLine(x, 0, x, rows() * vgridM);
+        }
+    }
+
+    qreal dy = lrint(2 * magS);
+
+    //
+    // draw symbols
+    //
+    for (int idx = 0; idx < int(actualCellsList().size()); ++idx) {
+        RectF r = RectF::fromQRectF(rectForCellAt(idx));
+        QColor c(configuration()->accentColor());
+
+        if (idx == m_selectedIdx) {
+            c.setAlphaF(0.5);
+            painter.fillRect(r, c);
+        } else if (idx == m_pressedIndex) {
+            c.setAlphaF(0.75);
+            painter.fillRect(r, c);
+        } else if (idx == m_currentIdx) {
+            c.setAlphaF(0.2);
+            painter.fillRect(r, c);
+        }
+
+        PaletteCellPtr currentCell = actualCellsList().at(idx);
+        if (!currentCell) {
+            continue;
+        }
+
+        draw::Pen pen(configuration()->elementsColor());
+        pen.setWidthF(engraving::DefaultStyle::defaultStyle().value(Sid::staffLineWidth).toDouble() * magS);
+        painter.setPen(pen);
+
+        ElementPtr el = currentCell->element;
+        if (!el) {
+            continue;
+        }
+
+        bool drawStaff = currentCell->drawStaff;
+        int row    = idx / columns();
+        int column = idx % columns();
+
+        qreal cellMag = currentCell->mag * mag;
+        if (el->isActionIcon()) {
+            toActionIcon(el.get())->setExtent((hhgrid < vgridM ? hhgrid : vgridM) - 4);
+            cellMag = 1.0;
+        }
+        el->layout();
+
+        if (drawStaff) {
+            qreal y = r.y() + vgridM * .5 - dy + yOffset() * _spatium * cellMag;
+            qreal x = r.x() + 3;
+            qreal w = hhgrid - 6;
+            for (int i = 0; i < 5; ++i) {
+                qreal yy = y + i * magS;
+                painter.setPen(configuration()->elementsColor());
+                painter.drawLine(LineF(x, yy, x + w, yy));
+            }
+        }
+        painter.save();
+        painter.scale(cellMag, cellMag);
+
+        double gw = hhgrid / cellMag;
+        double gh = vgridM / cellMag;
+        double gx = column * gw + currentCell->xoffset * _spatium;
+        double gy = row * gh + currentCell->yoffset * _spatium;
+
+        double sw = el->width();
+        double sh = el->height();
+        double sy = 0;
+
+        if (drawStaff) {
+            sy = gy + gh * .5 - 2.0 * _spatium;
+        } else {
+            sy  = gy + (gh - sh) * .5 - el->bbox().y();
+        }
+        double sx  = gx + (gw - sw) * .5 - el->bbox().x();
+
+        sy += yOffset() * _spatium;
+
+        painter.translate(sx, sy);
+
+        QColor color;
+        if (idx != m_selectedIdx) {
+            // show voice colors for notes
+            if (el->isChord()) {
+                color = el->curColor().toQColor();
+            } else {
+                color = palette().color(QPalette::Normal, QPalette::Text);
+            }
+        } else {
+            color = palette().color(QPalette::Normal, QPalette::HighlightedText);
+        }
+
+        painter.setPen(Pen(color));
+        el->scanElements(&painter, paintPaletteElement);
+        painter.restore();
+    }
+}
+
+void PaletteWidget::contextMenuEvent(QContextMenuEvent* event)
+{
+    if (!m_showContextMenu) {
+        return;
+    }
+    int i = cellIndexForPoint(event->pos());
+    if (i == -1) {
+        // palette context menu
+        return;
+    }
+
+    QMenu menu;
+    QAction* deleteCellAction = menu.addAction(mu::qtrc("palette", "Delete"));
+    QAction* contextAction = menu.addAction(mu::qtrc("palette", "Properties…"));
+    deleteCellAction->setEnabled(!m_isReadOnly);
+    contextAction->setEnabled(!m_isReadOnly);
+
+    if (m_isFilterActive || (cellAt(i) && cellAt(i)->readOnly)) {
+        deleteCellAction->setEnabled(false);
+    }
+
+    if (!deleteCellAction->isEnabled() && !contextAction->isEnabled()) {
+        return;
+    }
+
+    const QAction* action = menu.exec(mapToGlobal(event->pos()));
+
+    if (action == deleteCellAction) {
+        PaletteCellPtr cell = cellAt(i);
+        if (cell) {
+            std::string title = mu::trc("palette", "Delete palette cell");
+            std::string question
+                = mu::qtrc("palette", "Are you sure you want to delete palette cell \"%1\"?").arg(cell->name).toStdString();
+
+            IInteractive::Result result = interactive()->question(title, question, {
+                IInteractive::Button::Yes,
+                IInteractive::Button::No
+            }, IInteractive::Button::Yes);
+
+            if (result.standartButton() != IInteractive::Button::Yes) {
+                return;
+            }
+            m_palette->takeCell(i);
+            emit changed();
+        }
+    }
+
+    bool sizeChanged = false;
+    for (size_t j = 0; j < cells().size(); ++j) {
+        if (!cellAt(j)) {
+            m_palette->takeCells(i, 1);
+            sizeChanged = true;
+        }
+    }
+    if (sizeChanged) {
+        setFixedHeight(heightForWidth(width()));
+        updateGeometry();
+    }
+    update();
+}
+
+// ====================================================
+// Read/write
+// ====================================================
+
+void PaletteWidget::read(XmlReader& e)
+{
+    m_palette->read(e);
+}
+
+void PaletteWidget::write(XmlWriter& xml) const
+{
+    m_palette->write(xml);
+}
+
+bool PaletteWidget::readFromFile(const QString& path)
+{
+    return m_palette->readFromFile(path);
+}
+
+/// Write as compressed zip file and include images as needed
+void PaletteWidget::writeToFile(const QString& path) const
+{
+    m_palette->writeToFile(path);
+}
+
+// ====================================================
+// PaletteScrollArea
+// ====================================================
+
+PaletteScrollArea::PaletteScrollArea(PaletteWidget* w, QWidget* parent)
+    : QScrollArea(parent)
+{
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    setWidget(w);
+    setWidgetResizable(false);
+    m_restrictHeight = true;
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Minimum);
+}
+
+bool PaletteScrollArea::restrictHeight() const
+{
+    return m_restrictHeight;
+}
+
+void PaletteScrollArea::setRestrictHeight(bool val)
+{
+    m_restrictHeight = val;
+}
+
+void PaletteScrollArea::keyPressEvent(QKeyEvent* event)
+{
+    PaletteWidget* p = qobject_cast<PaletteWidget*>(widget());
+    int pressedKey = event->key();
+    switch (pressedKey) {
+    case Qt::Key_Right:
+    case Qt::Key_Left:
+    case Qt::Key_Up:
+    case Qt::Key_Down:
+    {
+        int idx = p->selectedIdx();
+        if (pressedKey == Qt::Key_Left || pressedKey == Qt::Key_Up) {
+            idx--;
+        } else {
+            idx++;
+        }
+        if (idx < 0) {
+            idx = p->actualCellCount() - 1;
+        } else if (idx >= p->actualCellCount()) {
+            idx = 0;
+        }
+        p->setSelected(idx);
+        p->setCurrentIdx(idx);
+        // set widget name to name of selected element
+        // we could set the description, but some screen readers ignore it
+        QString name = p->cellAt(idx)->translatedName();
+        //ScoreAccessibility::makeReadable(name); //! TODO
+        setAccessibleName(name);
+        QAccessibleEvent aev(this, QAccessible::NameChanged);
+        QAccessible::updateAccessibility(&aev);
+        p->update();
+        break;
+    }
+    case Qt::Key_Enter:
+    case Qt::Key_Return:
+        if (!p->isApplyingElementsDisabled()) {
+            p->applyPaletteElement();
+        }
+        break;
+    default:
+        break;
+    }
+    QScrollArea::keyPressEvent(event);
+}
+
+void PaletteScrollArea::resizeEvent(QResizeEvent* re)
+{
+    QScrollArea::resizeEvent(re);
+
+    PaletteWidget* palette = qobject_cast<PaletteWidget*>(widget());
+    int h = palette->heightForWidth(width());
+    palette->resize(QSize(width() - 6, h));
+    if (m_restrictHeight) {
+        setMaximumHeight(h + 6);
+    }
 }

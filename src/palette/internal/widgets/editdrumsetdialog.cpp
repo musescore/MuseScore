@@ -144,7 +144,7 @@ EditDrumsetDialog::EditDrumsetDialog(QWidget* parent)
     setupUi(this);
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    drumNote->setGrid(70, 80);
+    drumNote->setGridSize(70, 80);
     drumNote->setDrawGrid(false);
     drumNote->setReadOnly(true);
 
@@ -564,9 +564,9 @@ void EditDrumsetDialog::valueChanged()
 //---------------------------------------------------------
 void EditDrumsetDialog::updateExample()
 {
+    drumNote->clear();
     int pitch = pitchList->currentItem()->data(0, Qt::UserRole).toInt();
     if (!m_editedDrumset.isValid(pitch)) {
-        drumNote->add(0,  0, "");
         return;
     }
     int line      = m_editedDrumset.line(pitch);
@@ -593,7 +593,7 @@ void EditDrumsetDialog::updateExample()
     Stem* stem = new Stem(gscore);
     stem->setLen((up ? -3.0 : 3.0) * gscore->spatium());
     chord->add(stem);
-    drumNote->add(0,  chord, mu::qtrc("drumset", m_editedDrumset.name(pitch).toUtf8().constData()));
+    drumNote->appendElement(chord, mu::qtrc("drumset", m_editedDrumset.name(pitch).toUtf8().constData()));
 }
 
 //---------------------------------------------------------

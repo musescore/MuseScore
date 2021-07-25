@@ -20,8 +20,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __PALETTECREATER_H__
-#define __PALETTECREATER_H__
+#ifndef MU_PALETTE_PALETTECREATOR_H
+#define MU_PALETTE_PALETTECREATOR_H
+
+#include "palettetree.h"
 
 #include "libmscore/actionicon.h"
 
@@ -44,31 +46,6 @@ class PaletteCreator
     INJECT_STATIC(palette, ui::IUiActionsRegister, actionsRegister)
 
 public:
-    static PaletteWidget* newTempoPalette(bool defaultPalette = false);
-    static PaletteWidget* newTextPalette(bool defaultPalette = false);
-    static PaletteWidget* newTimePalette();
-    static PaletteWidget* newRepeatsPalette();
-    static PaletteWidget* newBeamPalette();
-    static PaletteWidget* newDynamicsPalette(bool defaultPalette = false);
-    static PaletteWidget* newFingeringPalette();
-    static PaletteWidget* newTremoloPalette();
-    static PaletteWidget* newNoteHeadsPalette();
-    static PaletteWidget* newArticulationsPalette();
-    static PaletteWidget* newOrnamentsPalette();
-    static PaletteWidget* newAccordionPalette();
-    static PaletteWidget* newBracketsPalette();
-    static PaletteWidget* newBreathPalette();
-    static PaletteWidget* newArpeggioPalette();
-    static PaletteWidget* newClefsPalette(bool defaultPalette = false);
-    static PaletteWidget* newGraceNotePalette();
-    static PaletteWidget* newBagpipeEmbellishmentPalette();
-    static PaletteWidget* newKeySigPalette();
-    static PaletteWidget* newAccidentalsPalette(bool defaultPalette = false);
-    static PaletteWidget* newBarLinePalette();
-    static PaletteWidget* newLayoutPalette();
-    static PaletteWidget* newLinesPalette();
-    static PaletteWidget* newFretboardDiagramPalette();
-
     static PalettePanelPtr newTempoPalettePanel(bool defaultPalette = false);
     static PalettePanelPtr newTextPalettePanel(bool defaultPalette = false);
     static PalettePanelPtr newTimePalettePanel();
@@ -102,6 +79,6 @@ public:
     // Used in NoteGroups widget
     static void populateIconPalette(PaletteWidget* palette, const PaletteActionIconList& actions);
 };
-} // namespace Ms
+}
 
-#endif
+#endif // MU_PALETTE_PALETTECREATOR_H

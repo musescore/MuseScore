@@ -481,7 +481,7 @@ void UserPaletteController::editPaletteProperties(const QModelIndex& index)
     configuration()->paletteConfig(panel->id()).ch.onReceive(this,
                                                              [this, srcIndex, panel](const IPaletteConfiguration::PaletteConfig& config) {
         panel->setName(config.name);
-        panel->setGrid(config.size);
+        panel->setGridSize(config.size);
         panel->setMag(config.scale);
         panel->setYOffset(config.elementOffset);
         panel->setDrawGrid(config.showGrid);
