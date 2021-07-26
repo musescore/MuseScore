@@ -24,7 +24,6 @@
 #define __MSCOREVIEW_H__
 
 #include <QList>
-#include <QCursor>
 
 #include "draw/painter.h"
 
@@ -68,8 +67,6 @@ public:
     virtual void removeScore() {}
 
     virtual void changeEditElement(Element*) {}
-    virtual QCursor cursor() const { return QCursor(); }
-    virtual void setCursor(const QCursor&) {}
     virtual void setDropRectangle(const mu::RectF&) {}
     virtual void addSlur(ChordRest*, ChordRest*, const Slur* /* slurTemplate */) {}
     virtual void startEdit(Element*, Grip /*startGrip*/) {}
