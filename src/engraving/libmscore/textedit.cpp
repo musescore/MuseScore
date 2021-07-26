@@ -20,8 +20,6 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <QInputMethodEvent>
-
 #include "log.h"
 #include "textedit.h"
 #include "score.h"
@@ -264,7 +262,7 @@ bool TextBase::edit(EditData& ed)
     bool shiftPressed = ed.modifiers & Qt::ShiftModifier;
     bool altPressed = ed.modifiers & Qt::AltModifier;
 
-    QTextCursor::MoveMode mm = shiftPressed ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor;
+    TextCursor::MoveMode mm = shiftPressed ? TextCursor::MoveMode::KeepAnchor : TextCursor::MoveMode::MoveAnchor;
 
     bool wasHex = false;
     if (hexState >= 0) {
@@ -327,9 +325,9 @@ bool TextBase::edit(EditData& ed)
                 // check for move down
                 if (cursor->column() == cursor->columns()) {               // if you are on the end of the line, delete the newline char
                     int cursorRow = cursor->row();
-                    cursor->movePosition(QTextCursor::Down);
+                    cursor->movePosition(TextCursor::MoveOperation::Down);
                     if (cursor->row() != cursorRow) {
-                        cursor->movePosition(QTextCursor::StartOfLine);
+                        cursor->movePosition(TextCursor::MoveOperation::StartOfLine);
                         score()->undo(new JoinText(cursor), &ed);
                     }
                 } else {
@@ -341,7 +339,7 @@ bool TextBase::edit(EditData& ed)
         case Qt::Key_Backspace:
             if (ctrlPressed) {
                 // delete last word
-                cursor->movePosition(QTextCursor::WordLeft, QTextCursor::MoveMode::KeepAnchor);
+                cursor->movePosition(TextCursor::MoveOperation::WordLeft, TextCursor::MoveMode::KeepAnchor);
                 s.clear();
                 deleteSelectedText(ed);
             } else {
@@ -349,7 +347,7 @@ bool TextBase::edit(EditData& ed)
                     if (cursor->column() == 0 && _cursor->row() != 0) {
                         score()->undo(new JoinText(cursor), &ed);
                     } else {
-                        if (!cursor->movePosition(QTextCursor::Left)) {
+                        if (!cursor->movePosition(TextCursor::MoveOperation::Left)) {
                             return false;
                         }
                         score()->undo(new RemoveText(cursor, QString(cursor->currentCharacter())), &ed);
@@ -359,7 +357,7 @@ bool TextBase::edit(EditData& ed)
             return true;
 
         case Qt::Key_Left:
-            if (!_cursor->movePosition(ctrlPressed ? QTextCursor::WordLeft : QTextCursor::Left,
+            if (!_cursor->movePosition(ctrlPressed ? TextCursor::MoveOperation::WordLeft : TextCursor::MoveOperation::Left,
                                        mm) && type() == ElementType::LYRICS) {
                 return false;
             }
@@ -367,7 +365,7 @@ bool TextBase::edit(EditData& ed)
             break;
 
         case Qt::Key_Right:
-            if (!_cursor->movePosition(ctrlPressed ? QTextCursor::NextWord : QTextCursor::Right,
+            if (!_cursor->movePosition(ctrlPressed ? TextCursor::MoveOperation::NextWord : TextCursor::MoveOperation::Right,
                                        mm) && type() == ElementType::LYRICS) {
                 return false;
             }
@@ -376,31 +374,31 @@ bool TextBase::edit(EditData& ed)
 
         case Qt::Key_Up:
 #if defined(Q_OS_MAC)
-            if (!cursor->movePosition(QTextCursor::Up, mm)) {
-                cursor->movePosition(QTextCursor::StartOfLine, mm);
+            if (!cursor->movePosition(TextCursor::MoveOperation::Up, mm)) {
+                cursor->movePosition(TextCursor::MoveOperation::StartOfLine, mm);
             }
 #else
-            cursor->movePosition(QTextCursor::Up, mm);
+            cursor->movePosition(TextCursor::MoveOperation::Up, mm);
 #endif
             s.clear();
             break;
 
         case Qt::Key_Down:
 #if defined(Q_OS_MAC)
-            if (!cursor->movePosition(QTextCursor::Down, mm)) {
-                cursor->movePosition(QTextCursor::EndOfLine, mm);
+            if (!cursor->movePosition(TextCursor::MoveOperation::Down, mm)) {
+                cursor->movePosition(TextCursor::MoveOperation::EndOfLine, mm);
             }
 #else
-            cursor->movePosition(QTextCursor::Down, mm);
+            cursor->movePosition(TextCursor::MoveOperation::Down, mm);
 #endif
             s.clear();
             break;
 
         case Qt::Key_Home:
             if (ctrlPressed) {
-                cursor->movePosition(QTextCursor::Start, mm);
+                cursor->movePosition(TextCursor::MoveOperation::Start, mm);
             } else {
-                cursor->movePosition(QTextCursor::StartOfLine, mm);
+                cursor->movePosition(TextCursor::MoveOperation::StartOfLine, mm);
             }
 
             s.clear();
@@ -408,9 +406,9 @@ bool TextBase::edit(EditData& ed)
 
         case Qt::Key_End:
             if (ctrlPressed) {
-                cursor->movePosition(QTextCursor::End, mm);
+                cursor->movePosition(TextCursor::MoveOperation::End, mm);
             } else {
-                cursor->movePosition(QTextCursor::EndOfLine, mm);
+                cursor->movePosition(TextCursor::MoveOperation::EndOfLine, mm);
             }
 
             s.clear();
@@ -449,8 +447,8 @@ bool TextBase::edit(EditData& ed)
 
         case Qt::Key_A:
             if (ctrlPressed) {
-                cursor->movePosition(QTextCursor::Start, QTextCursor::MoveMode::MoveAnchor);
-                cursor->movePosition(QTextCursor::End, QTextCursor::MoveMode::KeepAnchor);
+                cursor->movePosition(TextCursor::MoveOperation::Start, TextCursor::MoveMode::MoveAnchor);
+                cursor->movePosition(TextCursor::MoveOperation::End, TextCursor::MoveMode::KeepAnchor);
                 s.clear();
             }
             break;
@@ -525,7 +523,7 @@ bool TextBase::edit(EditData& ed)
 //   movePosition
 //---------------------------------------------------------
 
-void TextBase::movePosition(EditData& ed, QTextCursor::MoveOperation op)
+void TextBase::movePosition(EditData& ed, TextCursor::MoveOperation op)
 {
     TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
     TextCursor* cursor = ted->cursor();
@@ -756,70 +754,6 @@ void TextBase::paste(EditData& ed, const QString& txt)
 }
 
 //---------------------------------------------------------
-//   inputTransition
-//    - preedit string should not influence then undo/redo stack
-//    - commit string goes onto the undo/redo stack
-//---------------------------------------------------------
-
-void TextBase::inputTransition(EditData& ed, QInputMethodEvent* ie)
-{
-    TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
-    TextCursor* cursor = ted->cursor();
-
-    // remove preedit string
-    int n = preEdit.size();
-    while (n--) {
-        if (_cursor->movePosition(QTextCursor::Left)) {
-            TextBlock& l  = cursor->curLine();
-            l.remove(_cursor->column(), cursor);
-            _cursor->text()->triggerLayout();
-            _cursor->text()->setTextInvalid();
-        }
-    }
-
-    qDebug("<%s><%s> len %d start %d, preEdit size %d",
-           qPrintable(ie->commitString()),
-           qPrintable(ie->preeditString()),
-           ie->replacementLength(), ie->replacementStart(), preEdit.size());
-
-    if (!ie->commitString().isEmpty()) {
-        cursor->format()->setPreedit(false);
-        score()->startCmd();
-        insertText(ed, ie->commitString());
-        score()->endCmd();
-        preEdit.clear();
-    } else {
-        preEdit = ie->preeditString();
-        if (!preEdit.isEmpty()) {
-#if 0
-            for (auto a : ie->attributes()) {
-                switch (a.type) {
-                case QInputMethodEvent::TextFormat:
-                {
-                    qDebug("   attribute TextFormat: %d-%d", a.start, a.length);
-                    QTextFormat tf = a.value.value<QTextFormat>();
-                }
-                break;
-                case QInputMethodEvent::Cursor:
-                    qDebug("   attribute Cursor at %d", a.start);
-                    break;
-                default:
-                    qDebug("   attribute %d", a.type);
-                }
-            }
-#endif
-            cursor->format()->setPreedit(true);
-            cursor->updateCursorFormat();
-            editInsertText(cursor, preEdit);
-            setTextInvalid();
-            layout1();
-            score()->update();
-        }
-    }
-    ie->accept();
-}
-
-//---------------------------------------------------------
 //   endHexState
 //---------------------------------------------------------
 
@@ -882,7 +816,7 @@ bool TextBase::deleteSelectedText(EditData& ed)
             score()->undo(new JoinText(cursor), &ed);
         } else {
             // move cursor left:
-            if (!_cursor->movePosition(QTextCursor::Left)) {
+            if (!_cursor->movePosition(TextCursor::MoveOperation::Left)) {
                 break;
             }
             Ms::TextCursor undoCursor(*_cursor);

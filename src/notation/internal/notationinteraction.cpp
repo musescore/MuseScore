@@ -3143,8 +3143,8 @@ void NotationInteraction::nextLyrics(bool back, bool moveOnly, bool end)
     if (end) {
         nextLyrics->selectAll(cursor);
     } else {
-        cursor->movePosition(QTextCursor::End, QTextCursor::MoveAnchor);
-        cursor->movePosition(QTextCursor::Start, QTextCursor::KeepAnchor);
+        cursor->movePosition(Ms::TextCursor::MoveOperation::End, Ms::TextCursor::MoveMode::MoveAnchor);
+        cursor->movePosition(Ms::TextCursor::MoveOperation::Start, Ms::TextCursor::MoveMode::KeepAnchor);
     }
 }
 

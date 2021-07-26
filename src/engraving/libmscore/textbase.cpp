@@ -398,7 +398,7 @@ void TextCursor::setFormat(FormatId id, QVariant val)
 //   movePosition
 //---------------------------------------------------------
 
-bool TextCursor::movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMode mode, int count)
+bool TextCursor::movePosition(TextCursor::MoveOperation op, TextCursor::MoveMode mode, int count)
 {
     QString accMsg;
     int oldRow = _row;
@@ -411,8 +411,8 @@ bool TextCursor::movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMo
 
     for (int i = 0; i < count; i++) {
         switch (op) {
-        case QTextCursor::Left:
-            if (hasSelection() && mode == QTextCursor::MoveAnchor) {
+        case TextCursor::MoveOperation::Left:
+            if (hasSelection() && mode == TextCursor::MoveMode::MoveAnchor) {
                 int r1 = _selectLine;
                 int r2 = _row;
                 int c1 = _selectColumn;
@@ -432,14 +432,14 @@ bool TextCursor::movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMo
                 --_column;
             }
 #if !defined(Q_OS_MAC)
-            if (mode == QTextCursor::MoveAnchor) {
+            if (mode == TextCursor::MoveMode::MoveAnchor) {
                 accMsg += accessibleCurrentCharacter();
             }
 #endif
             break;
 
-        case QTextCursor::Right:
-            if (hasSelection() && mode == QTextCursor::MoveAnchor) {
+        case TextCursor::MoveOperation::Right:
+            if (hasSelection() && mode == TextCursor::MoveMode::MoveAnchor) {
                 int r1 = _selectLine;
                 int r2 = _row;
                 int c1 = _selectColumn;
@@ -459,13 +459,13 @@ bool TextCursor::movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMo
                 ++_column;
             }
 #if !defined(Q_OS_MAC)
-            if (mode == QTextCursor::MoveAnchor) {
+            if (mode == TextCursor::MoveMode::MoveAnchor) {
                 accMsg += accessibleCurrentCharacter();
             }
 #endif
             break;
 
-        case QTextCursor::Up:
+        case TextCursor::MoveOperation::Up:
             if (_row == 0) {
                 return false;
             }
@@ -474,13 +474,13 @@ bool TextCursor::movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMo
                 _column = curLine().columns();
             }
 #if !defined(Q_OS_MAC)
-            if (mode == QTextCursor::MoveAnchor) {
+            if (mode == TextCursor::MoveMode::MoveAnchor) {
                 accMsg += accessibleCharacter(currentLine()) + "\n";
             }
 #endif
             break;
 
-        case QTextCursor::Down:
+        case TextCursor::MoveOperation::Down:
             if (_row >= _text->rows() - 1) {
                 return false;
             }
@@ -489,51 +489,51 @@ bool TextCursor::movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMo
                 _column = curLine().columns();
             }
 #if !defined(Q_OS_MAC)
-            if (mode == QTextCursor::MoveAnchor) {
+            if (mode == TextCursor::MoveMode::MoveAnchor) {
                 accMsg += accessibleCharacter(currentLine()) + "\n";
             }
 #endif
             break;
 
-        case QTextCursor::Start:
+        case TextCursor::MoveOperation::Start:
             _row    = 0;
             _column = 0;
 #if !defined(Q_OS_MAC)
-            if (mode == QTextCursor::MoveAnchor) {
+            if (mode == TextCursor::MoveMode::MoveAnchor) {
                 accMsg = accessibleCharacter(currentLine());
             }
 #endif
             break;
 
-        case QTextCursor::End:
+        case TextCursor::MoveOperation::End:
             _row    = _text->rows() - 1;
             _column = curLine().columns();
 #if !defined(Q_OS_MAC)
-            if (mode == QTextCursor::MoveAnchor) {
+            if (mode == TextCursor::MoveMode::MoveAnchor) {
                 accMsg = accessibleCharacter(currentLine());
             }
 #endif
             break;
 
-        case QTextCursor::StartOfLine:
+        case TextCursor::MoveOperation::StartOfLine:
             _column = 0;
 #if !defined(Q_OS_MAC)
-            if (mode == QTextCursor::MoveAnchor) {
+            if (mode == TextCursor::MoveMode::MoveAnchor) {
                 accMsg = accessibleCurrentCharacter();
             }
 #endif
             break;
 
-        case QTextCursor::EndOfLine:
+        case TextCursor::MoveOperation::EndOfLine:
             _column = curLine().columns();
 #if !defined(Q_OS_MAC)
-            if (mode == QTextCursor::MoveAnchor) {
+            if (mode == TextCursor::MoveMode::MoveAnchor) {
                 accMsg = accessibleCurrentCharacter();
             }
 #endif
             break;
 
-        case QTextCursor::WordLeft:
+        case TextCursor::MoveOperation::WordLeft:
             if (_column > 0) {
                 --_column;
                 while (_column > 0 && currentCharacter().isSpace()) {
@@ -547,13 +547,13 @@ bool TextCursor::movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMo
                 }
             }
 #if !defined(Q_OS_MAC)
-            if (mode == QTextCursor::MoveAnchor) {
+            if (mode == TextCursor::MoveMode::MoveAnchor) {
                 accMsg += accessibleCharacter(currentWord()) + " ";
             }
 #endif
             break;
 
-        case QTextCursor::NextWord: {
+        case TextCursor::MoveOperation::NextWord: {
             int cols =  columns();
             if (_column < cols) {
                 ++_column;
@@ -566,7 +566,7 @@ bool TextCursor::movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMo
             }
         }
 #if !defined(Q_OS_MAC)
-            if (mode == QTextCursor::MoveAnchor) {
+            if (mode == TextCursor::MoveMode::MoveAnchor) {
                 accMsg += accessibleCharacter(currentWord()) + " ";
             }
 #endif
@@ -576,7 +576,7 @@ bool TextCursor::movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMo
             qDebug("Text::movePosition: not implemented");
             return false;
         }
-        if (mode == QTextCursor::MoveAnchor) {
+        if (mode == TextCursor::MoveMode::MoveAnchor) {
             clearSelection();
         }
     }
@@ -625,7 +625,7 @@ void TextCursor::doubleClickSelect()
 //   set
 //---------------------------------------------------------
 
-bool TextCursor::set(const PointF& p, QTextCursor::MoveMode mode)
+bool TextCursor::set(const PointF& p, TextCursor::MoveMode mode)
 {
     PointF pt  = p - _text->canvasPos();
     if (!_text->bbox().contains(pt)) {
@@ -648,7 +648,7 @@ bool TextCursor::set(const PointF& p, QTextCursor::MoveMode mode)
 
     if (oldRow != _row || oldColumn != _column) {
         _text->score()->setUpdateAll();
-        if (mode == QTextCursor::MoveAnchor) {
+        if (mode == TextCursor::MoveMode::MoveAnchor) {
             clearSelection();
         }
     }
@@ -731,7 +731,7 @@ QString TextCursor::accessibleCurrentCharacter() const
 /// this message cannot be overridden.
 //---------------------------------------------------------
 
-void TextCursor::accessibileMessage(QString& accMsg, int oldRow, int oldCol, QString oldSelection, QTextCursor::MoveMode mode) const
+void TextCursor::accessibileMessage(QString& accMsg, int oldRow, int oldCol, QString oldSelection, TextCursor::MoveMode mode) const
 {
     int r1 = oldRow;
     int c1 = oldCol;
@@ -745,7 +745,7 @@ void TextCursor::accessibileMessage(QString& accMsg, int oldRow, int oldCol, QSt
         swap(r1, c1, r2, c2);
     }
 
-    if (mode == QTextCursor::MoveAnchor) {
+    if (mode == TextCursor::MoveMode::MoveAnchor) {
         if (accMsg.isEmpty()) {
             // Provide a default message based on skipped characters.
             accMsg = accessibleCharacter(extractText(r1, c1, r2, c2));
@@ -2324,8 +2324,8 @@ void TextBase::selectAll(TextCursor* cursor)
         return;
     }
 
-    cursor->movePosition(QTextCursor::Start, QTextCursor::MoveMode::MoveAnchor);
-    cursor->movePosition(QTextCursor::End, QTextCursor::MoveMode::KeepAnchor);
+    cursor->movePosition(TextCursor::MoveOperation::Start, TextCursor::MoveMode::MoveAnchor);
+    cursor->movePosition(TextCursor::MoveOperation::End, TextCursor::MoveMode::KeepAnchor);
 }
 
 //---------------------------------------------------------
@@ -2518,7 +2518,7 @@ void TextBase::dragTo(EditData& ed)
 {
     TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
     TextCursor* cursor = ted->cursor();
-    cursor->set(ed.pos, QTextCursor::KeepAnchor);
+    cursor->set(ed.pos, TextCursor::MoveMode::KeepAnchor);
     score()->setUpdateAll();
     score()->update();
 }
@@ -2548,7 +2548,7 @@ bool TextBase::mousePress(EditData& ed)
 {
     bool shift = ed.modifiers & Qt::ShiftModifier;
     TextEditData* ted = static_cast<TextEditData*>(ed.getData(this));
-    if (!ted->cursor()->set(ed.startMove, shift ? QTextCursor::KeepAnchor : QTextCursor::MoveAnchor)) {
+    if (!ted->cursor()->set(ed.startMove, shift ? TextCursor::MoveMode::KeepAnchor : TextCursor::MoveMode::MoveAnchor)) {
         return false;
     }
 
