@@ -2309,40 +2309,39 @@ void Timeline::mouseMoveEvent(QMouseEvent* event)
 
     /*! FIXME
     if (state == ViewState::NORMAL) {
-          if (event->modifiers() == Qt::ShiftModifier) {
-                // Slight wiggle room for selection (Same as score)
-                if (abs(newLoc.x() - _oldLoc.x()) > 2 ||
-                    abs(newLoc.y() - _oldLoc.y()) > 2) {
-                      score()->deselectAll();
-                      updateGrid();
-                      state = ViewState::LASSO;
-                      _selectionBox = new QGraphicsRectItem();
-                      _selectionBox->setRect(_oldLoc.x(), _oldLoc.y(), 0, 0);
-                      _selectionBox->setPen(QPen(QColor(0, 0, 255), 2));
-                      _selectionBox->setBrush(QBrush(QColor(0, 0, 255, 50)));
-                      scene()->addItem(_selectionBox);
-                      }
-                }
-          else {
-                state = ViewState::DRAG;
-                setCursor(Qt::SizeAllCursor);
-                }
-          }
+        if (event->modifiers() == Qt::ShiftModifier) {
+            // Slight wiggle room for selection (Same as score)
+            if (abs(newLoc.x() - _oldLoc.x()) > 2
+                || abs(newLoc.y() - _oldLoc.y()) > 2) {
+                score()->deselectAll();
+                updateGrid();
+                state = ViewState::LASSO;
+                _selectionBox = new QGraphicsRectItem();
+                _selectionBox->setRect(_oldLoc.x(), _oldLoc.y(), 0, 0);
+                _selectionBox->setPen(QPen(QColor(0, 0, 255), 2));
+                _selectionBox->setBrush(QBrush(QColor(0, 0, 255, 50)));
+                scene()->addItem(_selectionBox);
+            }
+        } else {
+            state = ViewState::DRAG;
+            setCursor(Qt::SizeAllCursor);
+        }
+    }
 
     if (state == ViewState::LASSO) {
-          QRect tmp = QRect((_oldLoc.x() < newLoc.x())? _oldLoc.x() : newLoc.x(),
-                            (_oldLoc.y() < newLoc.y())? _oldLoc.y() : newLoc.y(),
-                            abs(newLoc.x() - _oldLoc.x()),
-                            abs(newLoc.y() - _oldLoc.y()));
-          _selectionBox->setRect(tmp);
-          }
-    else if (state == ViewState::DRAG) {
-          int x_offset = int(_oldLoc.x()) - int(newLoc.x());
-          int yOffset = int(_oldLoc.y()) - int(newLoc.y());
-          horizontalScrollBar()->setValue(horizontalScrollBar()->value() + x_offset);
-          verticalScrollBar()->setValue(verticalScrollBar()->value() + yOffset);
-          }
+        QRect tmp = QRect((_oldLoc.x() < newLoc.x()) ? _oldLoc.x() : newLoc.x(),
+                          (_oldLoc.y() < newLoc.y()) ? _oldLoc.y() : newLoc.y(),
+                          abs(newLoc.x() - _oldLoc.x()),
+                          abs(newLoc.y() - _oldLoc.y()));
+        _selectionBox->setRect(tmp);
+    } else if (state == ViewState::DRAG) {
+        int x_offset = int(_oldLoc.x()) - int(newLoc.x());
+        int yOffset = int(_oldLoc.y()) - int(newLoc.y());
+        horizontalScrollBar()->setValue(horizontalScrollBar()->value() + x_offset);
+        verticalScrollBar()->setValue(verticalScrollBar()->value() + yOffset);
+    }
     */
+
     emit moved(QPointF(-1, -1));
 }
 
@@ -2354,74 +2353,82 @@ void Timeline::mouseReleaseEvent(QMouseEvent*)
 {
     _mousePressed = false;
 
-    /*! FIXME
+    /*
     if (state == ViewState::LASSO) {
-          scene()->removeItem(_selectionBox);
-          score()->deselectAll();
+        scene()->removeItem(_selectionBox);
+        score()->deselectAll();
 
-          int width, height;
-          QPoint loc = mapFromScene(_selectionBox->rect().topLeft());
-          width = int(_selectionBox->rect().width());
-          height = int(_selectionBox->rect().height());
+        int width, height;
+        QPoint loc = mapFromScene(_selectionBox->rect().topLeft());
+        width = int(_selectionBox->rect().width());
+        height = int(_selectionBox->rect().height());
 
-          QList<QGraphicsItem*> graphicsItemList = items(QRect(loc.x(), loc.y(), width, height));
-          // Find top left and bottom right to create selection
-          QGraphicsItem* tlGraphicsItem = nullptr;
-          QGraphicsItem* brGraphicsItem = nullptr;
-          for (QGraphicsItem* graphicsItem : graphicsItemList) {
-                Measure* currMeasure = static_cast<Measure*>(graphicsItem->data(2).value<void*>());
-                if (!currMeasure) continue;
-                int stave = graphicsItem->data(0).value<int>();
-                if (stave == -1) continue;
+        QList<QGraphicsItem*> graphicsItemList = items(QRect(loc.x(), loc.y(), width, height));
+        // Find top left and bottom right to create selection
+        QGraphicsItem* tlGraphicsItem = nullptr;
+        QGraphicsItem* brGraphicsItem = nullptr;
+        for (QGraphicsItem* graphicsItem : graphicsItemList) {
+            Measure* currMeasure = static_cast<Measure*>(graphicsItem->data(2).value<void*>());
+            if (!currMeasure) {
+                continue;
+            }
+            int stave = graphicsItem->data(0).value<int>();
+            if (stave == -1) {
+                continue;
+            }
 
-                if (!tlGraphicsItem && !brGraphicsItem) {
-                      tlGraphicsItem = graphicsItem;
-                      brGraphicsItem = graphicsItem;
-                      continue;
-                      }
+            if (!tlGraphicsItem && !brGraphicsItem) {
+                tlGraphicsItem = graphicsItem;
+                brGraphicsItem = graphicsItem;
+                continue;
+            }
 
-                if (graphicsItem->boundingRect().top() < tlGraphicsItem->boundingRect().top())
-                      tlGraphicsItem = graphicsItem;
-                if (graphicsItem->boundingRect().left() < tlGraphicsItem->boundingRect().left())
-                      tlGraphicsItem = graphicsItem;
+            if (graphicsItem->boundingRect().top() < tlGraphicsItem->boundingRect().top()) {
+                tlGraphicsItem = graphicsItem;
+            }
+            if (graphicsItem->boundingRect().left() < tlGraphicsItem->boundingRect().left()) {
+                tlGraphicsItem = graphicsItem;
+            }
 
-                if (graphicsItem->boundingRect().bottom() > brGraphicsItem->boundingRect().bottom())
-                      brGraphicsItem = graphicsItem;
-                if (graphicsItem->boundingRect().right() > brGraphicsItem->boundingRect().right())
-                      brGraphicsItem = graphicsItem;
+            if (graphicsItem->boundingRect().bottom() > brGraphicsItem->boundingRect().bottom()) {
+                brGraphicsItem = graphicsItem;
+            }
+            if (graphicsItem->boundingRect().right() > brGraphicsItem->boundingRect().right()) {
+                brGraphicsItem = graphicsItem;
+            }
+        }
 
+        // Select single tlGraphicsItem and then range brGraphicsItem
+        if (tlGraphicsItem && brGraphicsItem) {
+            Measure* tlMeasure = static_cast<Measure*>(tlGraphicsItem->data(2).value<void*>());
+            int tlStave = tlGraphicsItem->data(0).value<int>();
+            Measure* brMeasure = static_cast<Measure*>(brGraphicsItem->data(2).value<void*>());
+            int brStave = brGraphicsItem->data(0).value<int>();
+            if (tlMeasure && brMeasure) {
+                // Focus selection of mmRests here
+                if (tlMeasure->mmRest()) {
+                    tlMeasure = tlMeasure->mmRest();
+                } else if (tlMeasure->mmRestCount() == -1) {
+                    tlMeasure = tlMeasure->prevMeasureMM();
+                }
+                if (brMeasure->mmRest()) {
+                    brMeasure = brMeasure->mmRest();
+                } else if (brMeasure->mmRestCount() == -1) {
+                    brMeasure = brMeasure->prevMeasureMM();
                 }
 
-          // Select single tlGraphicsItem and then range brGraphicsItem
-          if (tlGraphicsItem && brGraphicsItem) {
-                Measure* tlMeasure = static_cast<Measure*>(tlGraphicsItem->data(2).value<void*>());
-                int tlStave = tlGraphicsItem->data(0).value<int>();
-                Measure* brMeasure = static_cast<Measure*>(brGraphicsItem->data(2).value<void*>());
-                int brStave = brGraphicsItem->data(0).value<int>();
-                if (tlMeasure && brMeasure) {
-                      // Focus selection of mmRests here
-                      if (tlMeasure->mmRest())
-                            tlMeasure = tlMeasure->mmRest();
-                      else if (tlMeasure->mmRestCount() == -1)
-                            tlMeasure = tlMeasure->prevMeasureMM();
-                      if (brMeasure->mmRest())
-                            brMeasure = brMeasure->mmRest();
-                      else if (brMeasure->mmRestCount() == -1)
-                            brMeasure = brMeasure->prevMeasureMM();
+                score()->select(tlMeasure, SelectType::SINGLE, tlStave);
+                score()->select(brMeasure, SelectType::RANGE, brStave);
+            }
+            _cv->adjustCanvasPosition(tlMeasure, false, tlStave);
+        }
 
-                      score()->select(tlMeasure, SelectType::SINGLE, tlStave);
-                      score()->select(brMeasure, SelectType::RANGE, brStave);
-                      }
-                _cv->adjustCanvasPosition(tlMeasure, false, tlStave);
-                }
-
-          score()->update();
-          mscore->endCmd();
-          }
-    else if (state == ViewState::DRAG) {
-          setCursor(Qt::ArrowCursor);
-          mscore->endCmd();
-          }
+        score()->update();
+        mscore->endCmd();
+    } else if (state == ViewState::DRAG) {
+        setCursor(Qt::ArrowCursor);
+        mscore->endCmd();
+    }
     state = ViewState::NORMAL;
     */
 }
@@ -2515,7 +2522,6 @@ void Timeline::changeEvent(QEvent* event)
 
 void Timeline::updateGrid(int startMeasure, int endMeasure)
 {
-
     if (score() && score()->firstMeasure()) {
         drawGrid(nstaves(), score()->nmeasures(), startMeasure, endMeasure);
         updateView();
@@ -2597,72 +2603,54 @@ void Timeline::setNotation(mu::notation::INotationPtr notation)
 
 void Timeline::updateView()
 {
-    if (score()) {
-        TRACEFUNC;
+    if (!score()) {
+        return;
+    }
 
-        //! FIXME
-        mu::RectF canvas;    // = QRectF(_cv->matrix().inverted().mapRect(_cv->geometry()));
+    TRACEFUNC;
 
-        // Find visible elements in timeline
-        QPainterPath visiblePainterPath = QPainterPath();
-        visiblePainterPath.setFillRule(Qt::WindingFill);
+    //! FIXME
+    mu::RectF canvas;        // = QRectF(_cv->matrix().inverted().mapRect(_cv->geometry()));
 
-        // Find visible measures of score
-        int measureIndex = 0;
-        const int numMetas = nmetas();
+    // Find visible elements in timeline
+    QPainterPath visiblePainterPath = QPainterPath();
+    visiblePainterPath.setFillRule(Qt::WindingFill);
 
-        for (Measure* currMeasure = score()->firstMeasure(); currMeasure; currMeasure = currMeasure->nextMeasure(), ++measureIndex) {
-            System* system = currMeasure->system();
+    // Find visible measures of score
+    int measureIndex = 0;
+    const int numMetas = nmetas();
 
-            if (currMeasure->mmRest() && score()->styleB(Sid::createMultiMeasureRests)) {
-                // Handle mmRests
-                Measure* mmrestMeasure = currMeasure->mmRest();
-                system = mmrestMeasure->system();
-                if (!system) {
-                    measureIndex += currMeasure->mmRestCount();
-                    continue;
-                }
+    for (Measure* currMeasure = score()->firstMeasure(); currMeasure; currMeasure = currMeasure->nextMeasure(), ++measureIndex) {
+        System* system = currMeasure->system();
 
-                // Add all measures within mmRest to visibleItemsSet if mmRest_visible
-                for (; currMeasure != mmrestMeasure->mmRestLast(); currMeasure = currMeasure->nextMeasure(), ++measureIndex) {
-                    for (int staff = 0; staff < score()->staves().length(); staff++) {
-                        if (!score()->staff(staff)->show()) {
-                            continue;
-                        }
-                        mu::RectF staveRect = mu::RectF(system->canvasBoundingRect().left(),
-                                                  system->staffCanvasYpage(staff),
-                                                  system->width(),
-                                                  system->staff(staff)->bbox().height());
-                        mu::RectF showRect = mmrestMeasure->canvasBoundingRect().intersected(staveRect);
+        if (currMeasure->mmRest() && score()->styleB(Sid::createMultiMeasureRests)) {
+            // Handle mmRests
+            Measure* mmrestMeasure = currMeasure->mmRest();
+            system = mmrestMeasure->system();
+            if (!system) {
+                measureIndex += currMeasure->mmRestCount();
+                continue;
+            }
 
-                        if (canvas.intersects(showRect)) {
-                            visiblePainterPath.addRect(getMeasureRect(measureIndex, staff, numMetas));
-                        }
-                    }
-                }
-
-                // Handle last measure in mmRest
+            // Add all measures within mmRest to visibleItemsSet if mmRest_visible
+            for (; currMeasure != mmrestMeasure->mmRestLast(); currMeasure = currMeasure->nextMeasure(), ++measureIndex) {
                 for (int staff = 0; staff < score()->staves().length(); staff++) {
                     if (!score()->staff(staff)->show()) {
                         continue;
                     }
                     mu::RectF staveRect = mu::RectF(system->canvasBoundingRect().left(),
-                                              system->staffCanvasYpage(staff),
-                                              system->width(),
-                                              system->staff(staff)->bbox().height());
+                                                    system->staffCanvasYpage(staff),
+                                                    system->width(),
+                                                    system->staff(staff)->bbox().height());
                     mu::RectF showRect = mmrestMeasure->canvasBoundingRect().intersected(staveRect);
 
                     if (canvas.intersects(showRect)) {
                         visiblePainterPath.addRect(getMeasureRect(measureIndex, staff, numMetas));
                     }
                 }
-                continue;
             }
 
-            if (!system) {
-                continue;
-            }
-
+            // Handle last measure in mmRest
             for (int staff = 0; staff < score()->staves().length(); staff++) {
                 if (!score()->staff(staff)->show()) {
                     continue;
@@ -2671,49 +2659,69 @@ void Timeline::updateView()
                                                 system->staffCanvasYpage(staff),
                                                 system->width(),
                                                 system->staff(staff)->bbox().height());
-                mu::RectF showRect = currMeasure->canvasBoundingRect().intersected(staveRect);
+                mu::RectF showRect = mmrestMeasure->canvasBoundingRect().intersected(staveRect);
 
                 if (canvas.intersects(showRect)) {
                     visiblePainterPath.addRect(getMeasureRect(measureIndex, staff, numMetas));
                 }
             }
+            continue;
         }
 
-        if (nonVisiblePathItem) {
-            scene()->removeItem(nonVisiblePathItem);
-            delete nonVisiblePathItem;
-            nonVisiblePathItem = nullptr;
-        }
-        if (visiblePathItem) {
-            scene()->removeItem(visiblePathItem);
-            delete visiblePathItem;
-            visiblePathItem = nullptr;
+        if (!system) {
+            continue;
         }
 
-        QPainterPath nonVisiblePainterPath = QPainterPath();
-        nonVisiblePainterPath.setFillRule(Qt::WindingFill);
+        for (int staff = 0; staff < score()->staves().length(); staff++) {
+            if (!score()->staff(staff)->show()) {
+                continue;
+            }
+            mu::RectF staveRect = mu::RectF(system->canvasBoundingRect().left(),
+                                            system->staffCanvasYpage(staff),
+                                            system->width(),
+                                            system->staff(staff)->bbox().height());
+            mu::RectF showRect = currMeasure->canvasBoundingRect().intersected(staveRect);
 
-        QRectF timelineRect = QRectF(0, 0, getWidth(), getHeight());
-        nonVisiblePainterPath.addRect(timelineRect);
-
-        nonVisiblePainterPath = nonVisiblePainterPath.subtracted(visiblePainterPath);
-
-        nonVisiblePathItem = new QGraphicsPathItem(nonVisiblePainterPath.simplified());
-
-        QPen nonVisiblePen = QPen(activeTheme().nonVisiblePenColor);
-        QBrush nonVisibleBrush = QBrush(activeTheme().nonVisibleBrushColor);
-        nonVisiblePathItem->setPen(QPen(nonVisibleBrush.color()));
-        nonVisiblePathItem->setBrush(nonVisibleBrush);
-        nonVisiblePathItem->setZValue(-3);
-
-        visiblePathItem = new QGraphicsPathItem(visiblePainterPath.simplified());
-        visiblePathItem->setPen(nonVisiblePen);
-        visiblePathItem->setBrush(Qt::NoBrush);
-        visiblePathItem->setZValue(-2);
-
-        scene()->addItem(nonVisiblePathItem);
-        scene()->addItem(visiblePathItem);
+            if (canvas.intersects(showRect)) {
+                visiblePainterPath.addRect(getMeasureRect(measureIndex, staff, numMetas));
+            }
+        }
     }
+
+    if (nonVisiblePathItem) {
+        scene()->removeItem(nonVisiblePathItem);
+        delete nonVisiblePathItem;
+        nonVisiblePathItem = nullptr;
+    }
+    if (visiblePathItem) {
+        scene()->removeItem(visiblePathItem);
+        delete visiblePathItem;
+        visiblePathItem = nullptr;
+    }
+
+    QPainterPath nonVisiblePainterPath = QPainterPath();
+    nonVisiblePainterPath.setFillRule(Qt::WindingFill);
+
+    QRectF timelineRect = QRectF(0, 0, getWidth(), getHeight());
+    nonVisiblePainterPath.addRect(timelineRect);
+
+    nonVisiblePainterPath = nonVisiblePainterPath.subtracted(visiblePainterPath);
+
+    nonVisiblePathItem = new QGraphicsPathItem(nonVisiblePainterPath.simplified());
+
+    QPen nonVisiblePen = QPen(activeTheme().nonVisiblePenColor);
+    QBrush nonVisibleBrush = QBrush(activeTheme().nonVisibleBrushColor);
+    nonVisiblePathItem->setPen(QPen(nonVisibleBrush.color()));
+    nonVisiblePathItem->setBrush(nonVisibleBrush);
+    nonVisiblePathItem->setZValue(-3);
+
+    visiblePathItem = new QGraphicsPathItem(visiblePainterPath.simplified());
+    visiblePathItem->setPen(nonVisiblePen);
+    visiblePathItem->setBrush(Qt::NoBrush);
+    visiblePathItem->setZValue(-2);
+
+    scene()->addItem(nonVisiblePathItem);
+    scene()->addItem(visiblePathItem);
 }
 
 //---------------------------------------------------------
@@ -2760,6 +2768,7 @@ std::vector<std::pair<QString, bool> > Timeline::getLabels()
         std::vector<std::pair<QString, bool> > noLabels;
         return noLabels;
     }
+
     QList<Part*> partList = getParts();
     // Transfer them into a vector of qstrings and then add the meta row names
     std::vector<std::pair<QString, bool> > rowLabels;
@@ -2807,6 +2816,7 @@ void Timeline::handleScroll(int value)
     if (!score()) {
         return;
     }
+
     for (auto it = _metaRows.begin(); it != _metaRows.end(); ++it) {
         std::pair<QGraphicsItem*, int> pairGraphicsInt = *it;
 
@@ -2976,8 +2986,9 @@ void Timeline::swapMeta(unsigned row, bool switchUp)
 Staff* Timeline::numToStaff(int staff)
 {
     if (!score()) {
-        return 0;
+        return nullptr;
     }
+
     QList<Staff*> staves = score()->staves();
     if (staves.size() > staff && staff >= 0) {
         return staves.at(staff);
@@ -2995,6 +3006,7 @@ void Timeline::toggleShow(int staff)
     if (!score()) {
         return;
     }
+
     QList<Part*> parts = getParts();
     if (parts.size() > staff && staff >= 0) {
         m_notation->undoStack()->prepareChanges();
@@ -3047,35 +3059,37 @@ void Timeline::contextMenuEvent(QContextMenuEvent*)
 void Timeline::toggleMetaRow()
 {
     QAction* action = qobject_cast<QAction*>(QObject::sender());
-    if (action) {
-        QString targetText = action->text();
+    if (!action) {
+        return;
+    }
 
-        if (targetText == tr("Hide all")) {
-            for (auto it = _metas.begin(); it != _metas.end(); ++it) {
-                QString metaText = std::get<0>(*it);
-                if (metaText != tr("Measures")) {
-                    std::get<2>(*it) = false;
-                }
-            }
-            updateGrid();
-            return;
-        } else if (targetText == tr("Show all")) {
-            for (auto it = _metas.begin(); it != _metas.end(); ++it) {
-                std::get<2>(*it) = true;
-            }
-            updateGrid();
-            return;
-        }
+    QString targetText = action->text();
 
-        bool checked = action->isChecked();
-        // Find target text in metas and toggle visibility to the checked status of action
+    if (targetText == tr("Hide all")) {
         for (auto it = _metas.begin(); it != _metas.end(); ++it) {
             QString metaText = std::get<0>(*it);
-            if (metaText == targetText) {
-                std::get<2>(*it) = checked;
-                updateGrid();
-                break;
+            if (metaText != tr("Measures")) {
+                std::get<2>(*it) = false;
             }
+        }
+        updateGrid();
+        return;
+    } else if (targetText == tr("Show all")) {
+        for (auto it = _metas.begin(); it != _metas.end(); ++it) {
+            std::get<2>(*it) = true;
+        }
+        updateGrid();
+        return;
+    }
+
+    bool checked = action->isChecked();
+    // Find target text in metas and toggle visibility to the checked status of action
+    for (auto it = _metas.begin(); it != _metas.end(); ++it) {
+        QString metaText = std::get<0>(*it);
+        if (metaText == targetText) {
+            std::get<2>(*it) = checked;
+            updateGrid();
+            break;
         }
     }
 }
@@ -3125,30 +3139,29 @@ QString Timeline::cursorIsOn()
 {
     QPointF scenePos = mapToScene(mapFromGlobal(QCursor::pos()));
     QGraphicsItem* graphicsItem = scene()->itemAt(scenePos, transform());
-    if (graphicsItem) {
-        auto it = _metaRows.begin();
-        for (; it != _metaRows.end(); ++it) {
-            if ((*it).first == graphicsItem) {
-                break;
-            }
-        }
-        if (it != _metaRows.end()) {
-            return "meta";
-        } else {
-            QList<QGraphicsItem*> graphicsItemList = scene()->items(scenePos);
-            for (QGraphicsItem* currGraphicsItem : graphicsItemList) {
-                Measure* currMeasure = static_cast<Measure*>(currGraphicsItem->data(2).value<void*>());
-                int stave = currGraphicsItem->data(0).value<int>();
-                const Staff* st = numToStaff(stave);
-                if (currMeasure && !(st && st->show())) {
-                    return "invalid";
-                }
-            }
-            return "instrument";
-        }
-    } else {
+    if (!graphicsItem) {
         return "";
     }
+
+    auto it = _metaRows.begin();
+    for (; it != _metaRows.end(); ++it) {
+        if ((*it).first == graphicsItem) {
+            break;
+        }
+    }
+    if (it != _metaRows.end()) {
+        return "meta";
+    }
+    QList<QGraphicsItem*> graphicsItemList = scene()->items(scenePos);
+    for (QGraphicsItem* currGraphicsItem : graphicsItemList) {
+        Measure* currMeasure = static_cast<Measure*>(currGraphicsItem->data(2).value<void*>());
+        int stave = currGraphicsItem->data(0).value<int>();
+        const Staff* st = numToStaff(stave);
+        if (currMeasure && !(st && st->show())) {
+            return "invalid";
+        }
+    }
+    return "instrument";
 }
 
 //---------------------------------------------------------
@@ -3182,12 +3195,13 @@ void Timeline::updateTimelineTheme()
 
 void Timeline::requestInstrumentDialog()
 {
-    /*! FIXME
-      QAction* act = getAction("instruments");
-      mscore->cmd(act);
-      if (mscore->getMixer())
-            mscore->getMixer()->setScore(score());
-            */
+    /*
+     *! FIXME
+    QAction* act = getAction("instruments");
+    mscore->cmd(act);
+    if (mscore->getMixer()) {
+        mscore->getMixer()->setScore(score());
+    }*/
 }
 
 mu::notation::INotationInteractionPtr Timeline::interaction() const
