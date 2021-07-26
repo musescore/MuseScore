@@ -2075,6 +2075,19 @@ void ParsedChord::respellQualitySymbols(const ChordList* cl)
             }
         }
 
+        if (tok.tokenClass == ChordTokenClass::EXTENSION && cl) {
+            if (tok.names.contains("69") || tok.names.contains("6,9") || tok.names.contains("6/9")) {
+                QString sym = cl->qualitySymbols.value("sixNine");
+                if (sym != "-1") {
+                    ChordToken sixNineTok;
+                    sixNineTok.names += sym;
+                    sixNineTok.tokenClass = ChordTokenClass::EXTENSION;
+                    _tokenList.removeAt(index);
+                    _tokenList.insert(index, sixNineTok);
+                }
+            }
+        }
+
         // For omit/no modifier
         if (tok.tokenClass == ChordTokenClass::MODIFIER && cl) {
             if (tok.names.contains("omit") || tok.names.contains("no")) {
@@ -2085,6 +2098,32 @@ void ParsedChord::respellQualitySymbols(const ChordList* cl)
                     omitTok.tokenClass = ChordTokenClass::MODIFIER;
                     _tokenList.removeAt(index);
                     _tokenList.insert(index, omitTok);
+                }
+            } else if (tok.names.contains("sus")) {
+                QString sym = cl->qualitySymbols.value("suspension");
+                if (sym == "raised") {
+                    QStringList allModifiers
+                        = { "b", "bb", "#", "##", "natural", "sus", "alt", "alt#", "altb", "omit", "no", "add", "maj", "/" };
+                    bool foundNextModifier = false;
+                    while (!foundNextModifier) {
+                        ChordToken susTok = _tokenList.at(index);
+                        if (susTok.names.first() != "sus") {
+                            ChordToken newTok;
+                            newTok.tokenClass = ChordTokenClass::MODIFIER;
+                            newTok.names += "su" + susTok.names.first();
+                            _tokenList.removeAt(index);
+                            _tokenList.insert(index, newTok);
+                        }
+                        index++;
+                        if (index >= _tokenList.size()) {
+                            break;
+                        }
+                        susTok = _tokenList.at(index);
+                        if (allModifiers.contains(susTok.names.first())) {
+                            foundNextModifier = true;
+                        }
+                    }
+                    index--;
                 }
             }
         }

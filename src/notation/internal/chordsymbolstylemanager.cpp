@@ -186,9 +186,24 @@ QHash<QString, QList<QualitySymbol> > ChordSymbolStyleManager::getQualitySymbols
                             }
                         }
                         qualitySymbols.insert(qual, rep);
+                    } else if (e.name() == "extension") {
+                        QString ext = e.attribute("e");
+                        QList<QualitySymbol> rep;
+                        while (e.readNextStartElement()) {
+                            if (e.name() == "sym") {
+                                QualitySymbol extSym;
+                                extSym.qualMag = e.hasAttribute("qMag") ? e.doubleAttribute("qMag") : extSym.qualMag;
+                                extSym.qualAdjust = e.hasAttribute("qAdj") ? e.doubleAttribute("qAdj") : extSym.qualAdjust;
+                                extSym.extMag = e.hasAttribute("eMag") ? e.doubleAttribute("eMag") : extSym.extMag;
+                                extSym.extAdjust = e.hasAttribute("eAdj") ? e.doubleAttribute("eAdj") : extSym.extAdjust;
+                                extSym.modMag = e.hasAttribute("mMag") ? e.doubleAttribute("mMag") : extSym.modMag;
+                                extSym.modAdjust = e.hasAttribute("mAdj") ? e.doubleAttribute("mAdj") : extSym.modAdjust;
+                                extSym.qualitySymbol = e.readElementText();
+                                rep << extSym;
+                            }
+                        }
+                        qualitySymbols.insert(ext, rep);
                     } else if (e.name() == "modifier") {
-                        // Created a separate tag for omit just in case
-                        // in the future, if modifiers are handled differently
                         QString mod = e.attribute("m");
                         QList<QualitySymbol> rep;
                         while (e.readNextStartElement()) {
@@ -212,7 +227,7 @@ QHash<QString, QList<QualitySymbol> > ChordSymbolStyleManager::getQualitySymbols
     }
 
     // The choices that do not have even a single quality symbol will be represented with an empty list
-    QStringList choices = { "major7th", "minor", "augmented", "diminished", "half-diminished", "omit" };
+    QStringList choices = { "major7th", "minor", "augmented", "diminished", "half-diminished", "sixNine", "omit", "suspension" };
     for (QString s: choices) {
         if (qualitySymbols.find(s) == qualitySymbols.end()) {
             QList<QualitySymbol> emptyList;

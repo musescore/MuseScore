@@ -267,6 +267,42 @@ Flickable {
         }
 
         StyledTextLabel {
+            text: qsTrc("notation","Six-nine")
+            font: ui.theme.bodyFont
+            visible: (root.editorModel.sixNineIndex != -1)
+        }
+
+        ListView {
+            id: sixNineListView
+            anchors.left: parent.left
+            anchors.right: parent.right
+
+            height: prv.listCellHeight
+            spacing: prv.listCellSpacing
+            orientation: ListView.Horizontal
+            boundsBehavior: Flickable.StopAtBounds
+
+            model: root.editorModel.sixNineList
+            currentIndex: root.editorModel.sixNineIndex
+            visible: (root.editorModel.sixNineIndex != -1)
+
+            delegate: FlatButton {
+                height: prv.listCellHeight
+                width: prv.listCellWidth
+                text: modelData
+
+                onClicked: {
+                    root.editorModel.setQualitySymbol("sixNine", modelData);
+                }
+            }
+
+            highlight: Rectangle {
+                color: ui.theme.accentColor
+                radius: 3
+            }
+        }
+
+        StyledTextLabel {
             text: qsTrc("notation","Omissions")
             font: ui.theme.bodyFont
             visible: (root.editorModel.omitIndex != -1)
@@ -293,6 +329,42 @@ Flickable {
 
                 onClicked: {
                     root.editorModel.setQualitySymbol("omit", modelData);
+                }
+            }
+
+            highlight: Rectangle {
+                color: ui.theme.accentColor
+                radius: 3
+            }
+        }
+
+        StyledTextLabel {
+            text: qsTrc("notation","Suspensions")
+            font: ui.theme.bodyFont
+            visible: (root.editorModel.suspensionIndex != -1)
+        }
+
+        ListView {
+            id: suspensionListView
+            anchors.left: parent.left
+            anchors.right: parent.right
+
+            height: prv.listCellHeight
+            spacing: prv.listCellSpacing
+            orientation: ListView.Horizontal
+            boundsBehavior: Flickable.StopAtBounds
+
+            model: root.editorModel.suspensionList
+            currentIndex: root.editorModel.suspensionIndex
+            visible: (root.editorModel.suspensionIndex != -1)
+
+            delegate: FlatButton {
+                height: prv.listCellHeight
+                width: prv.listCellWidth
+                text: modelData
+
+                onClicked: {
+                    root.editorModel.setQualitySymbol("suspension", modelData);
                 }
             }
 

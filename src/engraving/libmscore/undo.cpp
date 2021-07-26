@@ -1828,7 +1828,9 @@ void ChangeStyleVal::flip(EditData*)
         case Sid::chordQualityMinor:
         case Sid::chordQualityAugmented:
         case Sid::chordQualityDiminished:
+        case Sid::chordExtensionSixNine:
         case Sid::chordModifierOmit:
+        case Sid::chordModifierSuspension:
         case Sid::stackModifiers: {
             score->chordList()->unload();
             qreal qmag = score->styleD(Sid::chordQualityMag);

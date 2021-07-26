@@ -164,8 +164,14 @@ void ChordSymbolStylesModel::setQualitySymbolsOnStyleChange()
         previousSelectedSymbol = m_selectionHistory.value(currentStyle).value("dim").toString();
         globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityDiminished, previousSelectedSymbol);
 
+        previousSelectedSymbol = m_selectionHistory.value(currentStyle).value("sixNine").toString();
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordExtensionSixNine, previousSelectedSymbol);
+
         previousSelectedSymbol = m_selectionHistory.value(currentStyle).value("omit").toString();
         globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordModifierOmit, previousSelectedSymbol);
+
+        previousSelectedSymbol = m_selectionHistory.value(currentStyle).value("sus").toString();
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordModifierSuspension, previousSelectedSymbol);
     } else {
         // Get quality symbols
         QString descriptionFile = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::chordDescriptionFile).toString();
@@ -189,8 +195,14 @@ void ChordSymbolStylesModel::setQualitySymbolsOnStyleChange()
         defaultSymbol = (qualitySymbols.value("diminished").size() != 0) ? qualitySymbols.value("diminished").at(0).qualitySymbol : "-1";
         globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityDiminished, defaultSymbol);
 
+        defaultSymbol = (qualitySymbols.value("sixNine").size() != 0) ? qualitySymbols.value("sixNine").at(0).qualitySymbol : "-1";
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordExtensionSixNine, defaultSymbol);
+
         defaultSymbol = (qualitySymbols.value("omit").size() != 0) ? qualitySymbols.value("omit").at(0).qualitySymbol : "-1";
         globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordModifierOmit, defaultSymbol);
+
+        defaultSymbol = (qualitySymbols.value("suspension").size() != 0) ? qualitySymbols.value("suspension").at(0).qualitySymbol : "-1";
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordModifierSuspension, defaultSymbol);
     }
 }
 
@@ -290,7 +302,7 @@ void ChordSymbolStylesModel::extractSelectionHistory(QString selectionHistory)
     QStringList selectionHistoryList = selectionHistory.split("\n");
     for (auto style: selectionHistoryList) {
         QStringList selectionHistoryOfStyle = style.split("|"); // { styleName, comma-separated properties }
-        QStringList properties = selectionHistoryOfStyle[1].split(",");
+        QStringList properties = selectionHistoryOfStyle[1].split(";");
         QHash<QString, QVariant> propHash;
         for (auto prop: properties) {
             QStringList keyValue = prop.split(":"); // {propValue, value}

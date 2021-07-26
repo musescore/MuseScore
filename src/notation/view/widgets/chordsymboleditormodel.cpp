@@ -124,10 +124,28 @@ QStringList ChordSymbolEditorModel::diminishedList() const
     return qualitySymbolsList;
 }
 
+QStringList ChordSymbolEditorModel::sixNineList() const
+{
+    QStringList qualitySymbolsList;
+    for (auto qS: m_sixNineList) {
+        qualitySymbolsList << qS.qualitySymbol;
+    }
+    return qualitySymbolsList;
+}
+
 QStringList ChordSymbolEditorModel::omitList() const
 {
     QStringList qualitySymbolsList;
     for (auto qS: m_omitList) {
+        qualitySymbolsList << qS.qualitySymbol;
+    }
+    return qualitySymbolsList;
+}
+
+QStringList ChordSymbolEditorModel::suspensionList() const
+{
+    QStringList qualitySymbolsList;
+    for (auto qS: m_suspensionList) {
         qualitySymbolsList << qS.qualitySymbol;
     }
     return qualitySymbolsList;
@@ -173,9 +191,19 @@ int ChordSymbolEditorModel::diminishedIndex() const
     return m_diminishedIndex;
 }
 
+int ChordSymbolEditorModel::sixNineIndex() const
+{
+    return m_sixNineIndex;
+}
+
 int ChordSymbolEditorModel::omitIndex() const
 {
     return m_omitIndex;
+}
+
+int ChordSymbolEditorModel::suspensionIndex() const
+{
+    return m_suspensionIndex;
 }
 
 qreal ChordSymbolEditorModel::qualityMag() const
@@ -419,6 +447,21 @@ void ChordSymbolEditorModel::setQualitySymbolsOnStyleChange()
         }
         globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityDiminished, previousSelectedSymbol);
 
+        // SixNine
+        previousSelectedSymbol = m_selectionHistory.value(currentStyle).value("sixNine").toString();
+        if (previousSelectedSymbol == "-1") {
+            m_sixNineIndex = -1;
+        } else {
+            for (int i = 0; i < m_sixNineList.size(); i++) {
+                QualitySymbol qS = m_sixNineList.at(i);
+                if (qS.qualitySymbol == previousSelectedSymbol) {
+                    m_sixNineIndex = i;
+                    break;
+                }
+            }
+        }
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordExtensionSixNine, previousSelectedSymbol);
+
         // Omit
         previousSelectedSymbol = m_selectionHistory.value(currentStyle).value("omit").toString();
         if (previousSelectedSymbol == "-1") {
@@ -433,6 +476,21 @@ void ChordSymbolEditorModel::setQualitySymbolsOnStyleChange()
             }
         }
         globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordModifierOmit, previousSelectedSymbol);
+
+        // Suspension
+        previousSelectedSymbol = m_selectionHistory.value(currentStyle).value("sus").toString();
+        if (previousSelectedSymbol == "-1") {
+            m_suspensionIndex = -1;
+        } else {
+            for (int i = 0; i < m_suspensionList.size(); i++) {
+                QualitySymbol qS = m_suspensionList.at(i);
+                if (qS.qualitySymbol == previousSelectedSymbol) {
+                    m_suspensionIndex = i;
+                    break;
+                }
+            }
+        }
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordModifierSuspension, previousSelectedSymbol);
     } else {
         // Set the default values
         if (m_majorSeventhList.size() == 0) {
@@ -480,6 +538,16 @@ void ChordSymbolEditorModel::setQualitySymbolsOnStyleChange()
             m_diminishedIndex = 0;
             globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityDiminished, m_diminishedList[0].qualitySymbol);
         }
+
+        // SixNine
+        if (m_sixNineList.size() == 0) {
+            m_sixNineIndex = -1;
+            globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordExtensionSixNine, "-1");
+        } else {
+            m_sixNineIndex = 0;
+            globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordExtensionSixNine, m_sixNineList[0].qualitySymbol);
+        }
+
         // Omit
         if (m_omitList.size() == 0) {
             m_omitIndex = -1;
@@ -488,13 +556,23 @@ void ChordSymbolEditorModel::setQualitySymbolsOnStyleChange()
             m_omitIndex = 0;
             globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordModifierOmit, m_omitList[0].qualitySymbol);
         }
+        // Suspension
+        if (m_suspensionList.size() == 0) {
+            m_suspensionIndex = -1;
+            globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordModifierSuspension, "-1");
+        } else {
+            m_suspensionIndex = 0;
+            globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordModifierSuspension, m_suspensionList[0].qualitySymbol);
+        }
     }
     emit majorSeventhIndexChanged();
     emit halfDiminishedIndexChanged();
     emit minorIndexChanged();
     emit augmentedIndexChanged();
     emit diminishedIndexChanged();
+    emit sixNineIndexChanged();
     emit omitIndexChanged();
+    emit suspensionIndexChanged();
 }
 
 void ChordSymbolEditorModel::setPropertiesOnStyleChange()
@@ -640,7 +718,9 @@ void ChordSymbolEditorModel::setQualitySymbolsLists()
         m_minorList = m_qualitySymbols["minor"];
         m_augmentedList = m_qualitySymbols["augmented"];
         m_diminishedList = m_qualitySymbols["diminished"];
+        m_sixNineList = m_qualitySymbols["sixNine"];
         m_omitList = m_qualitySymbols["omit"];
+        m_suspensionList = m_qualitySymbols["suspension"];
     } else {
         // Set empty lists
         m_majorSeventhList = {};
@@ -648,7 +728,9 @@ void ChordSymbolEditorModel::setQualitySymbolsLists()
         m_minorList = {};
         m_augmentedList = {};
         m_diminishedList = {};
+        m_sixNineList = {};
         m_omitList = {};
+        m_suspensionList = {};
     }
 
     // Notify QML ListViews about the change
@@ -658,7 +740,9 @@ void ChordSymbolEditorModel::setQualitySymbolsLists()
     emit minorListChanged();
     emit augmentedListChanged();
     emit diminishedListChanged();
+    emit sixNineListChanged();
     emit omitListChanged();
+    emit suspensionListChanged();
 }
 
 void ChordSymbolEditorModel::setPropertiesOfQualitySymbol(QualitySymbol qS)
@@ -757,6 +841,17 @@ void ChordSymbolEditorModel::setQualitySymbol(QString quality, QString symbol)
             }
         }
         emit diminishedIndexChanged();
+    } else if (quality == "sixNine") {
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordExtensionSixNine, symbol);
+        for (int i = 0; i < m_sixNineList.size(); i++) {
+            QualitySymbol qS = m_sixNineList.at(i);
+            if (qS.qualitySymbol == symbol) {
+                m_sixNineIndex = i;
+                setPropertiesOfQualitySymbol(qS);
+                break;
+            }
+        }
+        emit sixNineIndexChanged();
     } else if (quality == "omit") {
         globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordModifierOmit, symbol);
         for (int i = 0; i < m_omitList.size(); i++) {
@@ -768,6 +863,17 @@ void ChordSymbolEditorModel::setQualitySymbol(QString quality, QString symbol)
             }
         }
         emit omitIndexChanged();
+    } else if (quality == "suspension") {
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordModifierSuspension, symbol);
+        for (int i = 0; i < m_suspensionList.size(); i++) {
+            QualitySymbol qS = m_suspensionList.at(i);
+            if (qS.qualitySymbol == symbol) {
+                m_suspensionIndex = i;
+                setPropertiesOfQualitySymbol(qS);
+                break;
+            }
+        }
+        emit suspensionIndexChanged();
     }
     updateSelectionHistory(m_styles[m_currentStyleIndex].styleName);
 }
@@ -1037,7 +1143,7 @@ void ChordSymbolEditorModel::stringifyAndSaveSelectionHistory()
         for (auto j = i.value().begin(); j != i.value().end(); j++) {
             propStringList += j.key() + ":" + j.value().toString();
         }
-        selectionHistoryList << i.key() + "|" + propStringList.join(",");
+        selectionHistoryList << i.key() + "|" + propStringList.join(";");
     }
     selectionHist = selectionHistoryList.join("\n");
     globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualitySelectionHistory, selectionHist);
@@ -1054,7 +1160,7 @@ void ChordSymbolEditorModel::extractSelectionHistory(QString selectionHistory)
     QStringList selectionHistoryList = selectionHistory.split("\n");
     for (auto style: selectionHistoryList) {
         QStringList selectionHistoryOfStyle = style.split("|"); // { styleName, comma-separated properties }
-        QStringList properties = selectionHistoryOfStyle[1].split(",");
+        QStringList properties = selectionHistoryOfStyle[1].split(";");
         QHash<QString, QVariant> propMap;
         for (auto prop: properties) {
             QStringList keyValue = prop.split(":");
@@ -1095,10 +1201,20 @@ void ChordSymbolEditorModel::updateSelectionHistory(QString currentStyle)
         } else {
             propMap.insert("dim", QVariant(m_diminishedList.at(m_diminishedIndex).qualitySymbol));
         }
+        if (m_sixNineIndex == -1 || m_sixNineList.size() == 0) {
+            propMap.insert("sixNine", QVariant("-1"));
+        } else {
+            propMap.insert("sixNine", QVariant(m_sixNineList.at(m_sixNineIndex).qualitySymbol));
+        }
         if (m_omitIndex == -1 || m_omitList.size() == 0) {
             propMap.insert("omit", QVariant("-1"));
         } else {
             propMap.insert("omit", QVariant(m_omitList.at(m_omitIndex).qualitySymbol));
+        }
+        if (m_suspensionIndex == -1 || m_suspensionList.size() == 0) {
+            propMap.insert("sus", QVariant("-1"));
+        } else {
+            propMap.insert("sus", QVariant(m_suspensionList.at(m_suspensionIndex).qualitySymbol));
         }
     } else {
         propMap.insert("maj7th", QVariant(""));
@@ -1106,7 +1222,9 @@ void ChordSymbolEditorModel::updateSelectionHistory(QString currentStyle)
         propMap.insert("min", QVariant(""));
         propMap.insert("aug", QVariant(""));
         propMap.insert("dim", QVariant(""));
+        propMap.insert("sixNine", QVariant(""));
         propMap.insert("omit", QVariant(""));
+        propMap.insert("sus", QVariant(""));
     }
 
     // Properties

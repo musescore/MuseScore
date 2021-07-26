@@ -438,7 +438,9 @@ const StyleDef::StyleValue StyleDef::styleValues[int(Sid::STYLES)] = {
     { Sid::chordQualityMinor,       "chordQualityMinor",       QVariant(QString("mi")) },
     { Sid::chordQualityAugmented,   "chordQualityAugmented",   QVariant(QString("aug")) },
     { Sid::chordQualityDiminished,  "chordQualityDiminished",  QVariant(QString("dim")) },
+    { Sid::chordExtensionSixNine,   "chordExtensionSixNine",   QVariant(QString("69")) },
     { Sid::chordModifierOmit,       "chordModifierOmit",       QVariant(QString("omit")) },
+    { Sid::chordModifierSuspension, "chordModifierSuspension", QVariant(QString("raised")) },
 
     { Sid::concertPitch,            "concertPitch",            QVariant(false) },
     { Sid::createMultiMeasureRests, "createMultiMeasureRests", QVariant(false) },

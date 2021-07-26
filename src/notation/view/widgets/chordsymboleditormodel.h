@@ -43,7 +43,9 @@ class ChordSymbolEditorModel : public QAbstractListModel
     Q_PROPERTY(QStringList minorList READ minorList NOTIFY minorListChanged)
     Q_PROPERTY(QStringList augmentedList READ augmentedList NOTIFY augmentedListChanged)
     Q_PROPERTY(QStringList diminishedList READ diminishedList NOTIFY diminishedListChanged)
+    Q_PROPERTY(QStringList sixNineList READ sixNineList NOTIFY sixNineListChanged)
     Q_PROPERTY(QStringList omitList READ omitList NOTIFY omitListChanged)
+    Q_PROPERTY(QStringList suspensionList READ suspensionList NOTIFY suspensionListChanged)
 
     Q_PROPERTY(int chordSpellingIndex READ chordSpellingIndex NOTIFY chordSpellingIndexChanged)
     Q_PROPERTY(int currentStyleIndex READ currentStyleIndex NOTIFY currentStyleIndexChanged)
@@ -53,7 +55,9 @@ class ChordSymbolEditorModel : public QAbstractListModel
     Q_PROPERTY(int minorIndex READ minorIndex NOTIFY minorIndexChanged)
     Q_PROPERTY(int augmentedIndex READ augmentedIndex NOTIFY augmentedIndexChanged)
     Q_PROPERTY(int diminishedIndex READ diminishedIndex NOTIFY diminishedIndexChanged)
+    Q_PROPERTY(int sixNineIndex READ sixNineIndex NOTIFY sixNineIndexChanged)
     Q_PROPERTY(int omitIndex READ omitIndex NOTIFY omitIndexChanged)
+    Q_PROPERTY(int suspensionIndex READ suspensionIndex NOTIFY suspensionIndexChanged)
 
     Q_PROPERTY(qreal qualityMag READ qualityMag NOTIFY qualityMagChanged)
     Q_PROPERTY(qreal qualityAdjust READ qualityAdjust NOTIFY qualityAdjustChanged)
@@ -97,7 +101,9 @@ public:
     QStringList minorList() const;
     QStringList augmentedList() const;
     QStringList diminishedList() const;
+    QStringList sixNineList() const;
     QStringList omitList() const;
+    QStringList suspensionList() const;
 
     int chordSpellingIndex() const;
     int currentStyleIndex() const;
@@ -107,7 +113,9 @@ public:
     int minorIndex() const;
     int augmentedIndex() const;
     int diminishedIndex() const;
+    int sixNineIndex() const;
     int omitIndex() const;
+    int suspensionIndex() const;
 
     qreal qualityMag() const;
     qreal qualityAdjust() const;
@@ -162,7 +170,9 @@ signals:
     void minorListChanged();
     void augmentedListChanged();
     void diminishedListChanged();
+    void sixNineListChanged();
     void omitListChanged();
+    void suspensionListChanged();
 
     void chordSpellingIndexChanged();
     void currentStyleIndexChanged();
@@ -172,7 +182,9 @@ signals:
     void minorIndexChanged();
     void augmentedIndexChanged();
     void diminishedIndexChanged();
+    void sixNineIndexChanged();
     void omitIndexChanged();
+    void suspensionIndexChanged();
 
     void qualityMagChanged();
     void qualityAdjustChanged();
@@ -221,7 +233,9 @@ private:
     QList<QualitySymbol> m_minorList;
     QList<QualitySymbol> m_augmentedList;
     QList<QualitySymbol> m_diminishedList;
+    QList<QualitySymbol> m_sixNineList;
     QList<QualitySymbol> m_omitList;
+    QList<QualitySymbol> m_suspensionList;
 
     int m_chordSpellingIndex;
     int m_currentStyleIndex;
@@ -231,7 +245,9 @@ private:
     int m_minorIndex;
     int m_augmentedIndex;
     int m_diminishedIndex;
+    int m_sixNineIndex;
     int m_omitIndex;
+    int m_suspensionIndex;
 
     qreal m_qualityMag;
     qreal m_qualityAdjust;

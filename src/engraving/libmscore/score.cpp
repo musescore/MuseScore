@@ -4955,7 +4955,9 @@ void Score::updateChordList()
     _chordList.qualitySymbols.insert("major7th", style().value(Sid::chordQualityMajorSeventh).toString());
     _chordList.qualitySymbols.insert("diminished", style().value(Sid::chordQualityDiminished).toString());
     _chordList.qualitySymbols.insert("augmented", style().value(Sid::chordQualityAugmented).toString());
+    _chordList.qualitySymbols.insert("sixNine", style().value(Sid::chordExtensionSixNine).toString());
     _chordList.qualitySymbols.insert("omit", style().value(Sid::chordModifierOmit).toString());
+    _chordList.qualitySymbols.insert("suspension", style().value(Sid::chordModifierSuspension).toString());
 
     _chordList.usePresets = style().value(Sid::useChordSymbolPresets).toBool();
     _chordList.stackModifiers = style().value(Sid::stackModifiers).toBool();
