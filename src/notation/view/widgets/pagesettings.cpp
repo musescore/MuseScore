@@ -310,7 +310,7 @@ void PageSettings::applyToAllParts()
     if (!_changeFlag) {
         return;
     }
-    for (Excerpt* e : score()->excerpts()) {
+    for (Excerpt* e : score()->masterScore()->excerpts()) {
         applyToScore(e->partScore());
     }
     _changeFlag = false;
