@@ -1753,6 +1753,47 @@ void ParsedChord::stripParentheses()
 }
 
 //---------------------------------------------------------
+//   respellRenderListBase
+//---------------------------------------------------------
+void ChordList::respellRenderListBase()
+{
+    QList<RenderAction> rl;
+    QList<ChordToken> definedTokens;
+    QString sym = qualitySymbols.value("bassNote");
+    // potential definitions for token
+    for (const ChordToken& ct : chordTokenList) {
+        for (const QString& ctn : qAsConst(ct.names)) {
+            if (ctn == sym) {
+                definedTokens += ct;
+                break;
+            }
+        }
+    }
+    // find matching class, fallback on ChordTokenClass::ALL
+    bool found = false;
+    for (const ChordToken& matchingTok : qAsConst(definedTokens)) {
+        rl = matchingTok.renderList;
+        found = true;
+        break;
+    }
+    if (found) {
+        // Remove render actions related to /
+        for (int index = 0; index < renderListBase.size(); index++) {
+            if (renderListBase.at(index).type == RenderAction::RenderActionType::NOTE) {
+                break;
+            } else {
+                renderListBase.removeAt(index);
+                index--;
+            }
+        }
+        // Adding the new render actions for
+        for (int index = rl.size() - 1; index >= 0; index--) {
+            renderListBase.insert(0, rl.at(index));
+        }
+    }
+}
+
+//---------------------------------------------------------
 //   respellQualitySymbols (also omit symbol)
 //---------------------------------------------------------
 
@@ -2073,9 +2114,7 @@ void ParsedChord::respellQualitySymbols(const ChordList* cl)
                     _tokenList.insert(index, qualTok);
                 }
             }
-        }
-
-        if (tok.tokenClass == ChordTokenClass::EXTENSION && cl) {
+        } else if (tok.tokenClass == ChordTokenClass::EXTENSION && cl) {
             if (tok.names.contains("69") || tok.names.contains("6,9") || tok.names.contains("6/9")) {
                 QString sym = cl->qualitySymbols.value("sixNine");
                 if (sym != "-1") {
@@ -2086,10 +2125,7 @@ void ParsedChord::respellQualitySymbols(const ChordList* cl)
                     _tokenList.insert(index, sixNineTok);
                 }
             }
-        }
-
-        // For omit/no modifier
-        if (tok.tokenClass == ChordTokenClass::MODIFIER && cl) {
+        } else if (tok.tokenClass == ChordTokenClass::MODIFIER && cl) {
             if (tok.names.contains("omit") || tok.names.contains("no")) {
                 QString sym = cl->qualitySymbols.value("omit");
                 if (sym != "-1") {

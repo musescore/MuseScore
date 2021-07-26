@@ -151,6 +151,15 @@ QStringList ChordSymbolEditorModel::suspensionList() const
     return qualitySymbolsList;
 }
 
+QStringList ChordSymbolEditorModel::bassNoteList() const
+{
+    QStringList qualitySymbolsList;
+    for (auto qS: m_bassNoteList) {
+        qualitySymbolsList << qS.qualitySymbol;
+    }
+    return qualitySymbolsList;
+}
+
 int ChordSymbolEditorModel::chordSpellingIndex() const
 {
     return m_chordSpellingIndex;
@@ -204,6 +213,11 @@ int ChordSymbolEditorModel::omitIndex() const
 int ChordSymbolEditorModel::suspensionIndex() const
 {
     return m_suspensionIndex;
+}
+
+int ChordSymbolEditorModel::bassNoteIndex() const
+{
+    return m_bassNoteIndex;
 }
 
 qreal ChordSymbolEditorModel::qualityMag() const
@@ -491,6 +505,21 @@ void ChordSymbolEditorModel::setQualitySymbolsOnStyleChange()
             }
         }
         globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordModifierSuspension, previousSelectedSymbol);
+
+        // Bass Note
+        previousSelectedSymbol = m_selectionHistory.value(currentStyle).value("bass").toString();
+        if (previousSelectedSymbol == "-1") {
+            m_bassNoteIndex = -1;
+        } else {
+            for (int i = 0; i < m_bassNoteList.size(); i++) {
+                QualitySymbol qS = m_bassNoteList.at(i);
+                if (qS.qualitySymbol == previousSelectedSymbol) {
+                    m_bassNoteIndex = i;
+                    break;
+                }
+            }
+        }
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordBassNote, previousSelectedSymbol);
     } else {
         // Set the default values
         if (m_majorSeventhList.size() == 0) {
@@ -564,6 +593,14 @@ void ChordSymbolEditorModel::setQualitySymbolsOnStyleChange()
             m_suspensionIndex = 0;
             globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordModifierSuspension, m_suspensionList[0].qualitySymbol);
         }
+        // Bass Note
+        if (m_bassNoteList.size() == 0) {
+            m_bassNoteIndex = -1;
+            globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordBassNote, "-1");
+        } else {
+            m_bassNoteIndex = 0;
+            globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordBassNote, m_bassNoteList[0].qualitySymbol);
+        }
     }
     emit majorSeventhIndexChanged();
     emit halfDiminishedIndexChanged();
@@ -573,6 +610,7 @@ void ChordSymbolEditorModel::setQualitySymbolsOnStyleChange()
     emit sixNineIndexChanged();
     emit omitIndexChanged();
     emit suspensionIndexChanged();
+    emit bassNoteIndexChanged();
 }
 
 void ChordSymbolEditorModel::setPropertiesOnStyleChange()
@@ -721,6 +759,7 @@ void ChordSymbolEditorModel::setQualitySymbolsLists()
         m_sixNineList = m_qualitySymbols["sixNine"];
         m_omitList = m_qualitySymbols["omit"];
         m_suspensionList = m_qualitySymbols["suspension"];
+        m_bassNoteList = m_qualitySymbols["bassNote"];
     } else {
         // Set empty lists
         m_majorSeventhList = {};
@@ -731,6 +770,7 @@ void ChordSymbolEditorModel::setQualitySymbolsLists()
         m_sixNineList = {};
         m_omitList = {};
         m_suspensionList = {};
+        m_bassNoteList = {};
     }
 
     // Notify QML ListViews about the change
@@ -743,6 +783,7 @@ void ChordSymbolEditorModel::setQualitySymbolsLists()
     emit sixNineListChanged();
     emit omitListChanged();
     emit suspensionListChanged();
+    emit bassNoteListChanged();
 }
 
 void ChordSymbolEditorModel::setPropertiesOfQualitySymbol(QualitySymbol qS)
@@ -874,6 +915,17 @@ void ChordSymbolEditorModel::setQualitySymbol(QString quality, QString symbol)
             }
         }
         emit suspensionIndexChanged();
+    } else if (quality == "bassNote") {
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordBassNote, symbol);
+        for (int i = 0; i < m_bassNoteList.size(); i++) {
+            QualitySymbol qS = m_bassNoteList.at(i);
+            if (qS.qualitySymbol == symbol) {
+                m_bassNoteIndex = i;
+                setPropertiesOfQualitySymbol(qS);
+                break;
+            }
+        }
+        emit bassNoteIndexChanged();
     }
     updateSelectionHistory(m_styles[m_currentStyleIndex].styleName);
 }
@@ -1216,6 +1268,11 @@ void ChordSymbolEditorModel::updateSelectionHistory(QString currentStyle)
         } else {
             propMap.insert("sus", QVariant(m_suspensionList.at(m_suspensionIndex).qualitySymbol));
         }
+        if (m_bassNoteIndex == -1 || m_bassNoteList.size() == 0) {
+            propMap.insert("bass", QVariant("-1"));
+        } else {
+            propMap.insert("bass", QVariant(m_bassNoteList.at(m_bassNoteIndex).qualitySymbol));
+        }
     } else {
         propMap.insert("maj7th", QVariant(""));
         propMap.insert("half-dim", QVariant(""));
@@ -1225,6 +1282,7 @@ void ChordSymbolEditorModel::updateSelectionHistory(QString currentStyle)
         propMap.insert("sixNine", QVariant(""));
         propMap.insert("omit", QVariant(""));
         propMap.insert("sus", QVariant(""));
+        propMap.insert("bass", QVariant(""));
     }
 
     // Properties

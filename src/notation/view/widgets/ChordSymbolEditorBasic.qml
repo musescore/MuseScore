@@ -87,6 +87,42 @@ Flickable {
         }
 
         StyledTextLabel {
+            text: qsTrc("notation","Bass Note")
+            font: ui.theme.bodyFont
+            visible: (root.editorModel.bassNoteIndex != -1)
+        }
+
+        ListView {
+            id: bassNoteListView
+            anchors.left: parent.left
+            anchors.right: parent.right
+
+            height: prv.listCellHeight
+            spacing: prv.listCellSpacing
+            orientation: ListView.Horizontal
+            boundsBehavior: Flickable.StopAtBounds
+
+            model: root.editorModel.bassNoteList
+            currentIndex: root.editorModel.bassNoteIndex
+            visible: (root.editorModel.bassNoteIndex != -1)
+
+            delegate: FlatButton {
+                height: prv.listCellHeight
+                width: prv.listCellWidth
+                text: modelData
+
+                onClicked: {
+                    root.editorModel.setQualitySymbol("bassNote", modelData);
+                }
+            }
+
+            highlight: Rectangle {
+                color: ui.theme.accentColor
+                radius: 3
+            }
+        }
+
+        StyledTextLabel {
             text: qsTrc("notation","Major seventh")
             font: ui.theme.bodyFont
             visible: (root.editorModel.majorSeventhIndex != -1)

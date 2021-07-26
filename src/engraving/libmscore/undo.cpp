@@ -1831,6 +1831,7 @@ void ChangeStyleVal::flip(EditData*)
         case Sid::chordExtensionSixNine:
         case Sid::chordModifierOmit:
         case Sid::chordModifierSuspension:
+        case Sid::chordBassNote:
         case Sid::stackModifiers: {
             score->chordList()->unload();
             qreal qmag = score->styleD(Sid::chordQualityMag);
@@ -1846,6 +1847,7 @@ void ChangeStyleVal::flip(EditData*)
             score->chordList()->read(score->styleSt(Sid::chordDescriptionFile));
             score->chordList()->setCustomChordList(score->styleSt(Sid::chordStyle) == "custom");
             score->updateChordList();
+            score->chordList()->respellRenderListBase();
         }
         break;
         case Sid::spatium:

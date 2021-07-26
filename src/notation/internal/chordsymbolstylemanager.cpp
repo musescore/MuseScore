@@ -227,7 +227,8 @@ QHash<QString, QList<QualitySymbol> > ChordSymbolStyleManager::getQualitySymbols
     }
 
     // The choices that do not have even a single quality symbol will be represented with an empty list
-    QStringList choices = { "major7th", "minor", "augmented", "diminished", "half-diminished", "sixNine", "omit", "suspension" };
+    QStringList choices
+        = { "major7th", "minor", "augmented", "diminished", "half-diminished", "sixNine", "omit", "suspension", "bassNote" };
     for (QString s: choices) {
         if (qualitySymbols.find(s) == qualitySymbols.end()) {
             QList<QualitySymbol> emptyList;

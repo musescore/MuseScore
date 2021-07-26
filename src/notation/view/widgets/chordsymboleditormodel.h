@@ -46,6 +46,7 @@ class ChordSymbolEditorModel : public QAbstractListModel
     Q_PROPERTY(QStringList sixNineList READ sixNineList NOTIFY sixNineListChanged)
     Q_PROPERTY(QStringList omitList READ omitList NOTIFY omitListChanged)
     Q_PROPERTY(QStringList suspensionList READ suspensionList NOTIFY suspensionListChanged)
+    Q_PROPERTY(QStringList bassNoteList READ bassNoteList NOTIFY bassNoteListChanged)
 
     Q_PROPERTY(int chordSpellingIndex READ chordSpellingIndex NOTIFY chordSpellingIndexChanged)
     Q_PROPERTY(int currentStyleIndex READ currentStyleIndex NOTIFY currentStyleIndexChanged)
@@ -58,6 +59,7 @@ class ChordSymbolEditorModel : public QAbstractListModel
     Q_PROPERTY(int sixNineIndex READ sixNineIndex NOTIFY sixNineIndexChanged)
     Q_PROPERTY(int omitIndex READ omitIndex NOTIFY omitIndexChanged)
     Q_PROPERTY(int suspensionIndex READ suspensionIndex NOTIFY suspensionIndexChanged)
+    Q_PROPERTY(int bassNoteIndex READ bassNoteIndex NOTIFY bassNoteIndexChanged)
 
     Q_PROPERTY(qreal qualityMag READ qualityMag NOTIFY qualityMagChanged)
     Q_PROPERTY(qreal qualityAdjust READ qualityAdjust NOTIFY qualityAdjustChanged)
@@ -104,6 +106,7 @@ public:
     QStringList sixNineList() const;
     QStringList omitList() const;
     QStringList suspensionList() const;
+    QStringList bassNoteList() const;
 
     int chordSpellingIndex() const;
     int currentStyleIndex() const;
@@ -116,6 +119,7 @@ public:
     int sixNineIndex() const;
     int omitIndex() const;
     int suspensionIndex() const;
+    int bassNoteIndex() const;
 
     qreal qualityMag() const;
     qreal qualityAdjust() const;
@@ -173,6 +177,7 @@ signals:
     void sixNineListChanged();
     void omitListChanged();
     void suspensionListChanged();
+    void bassNoteListChanged();
 
     void chordSpellingIndexChanged();
     void currentStyleIndexChanged();
@@ -185,6 +190,7 @@ signals:
     void sixNineIndexChanged();
     void omitIndexChanged();
     void suspensionIndexChanged();
+    void bassNoteIndexChanged();
 
     void qualityMagChanged();
     void qualityAdjustChanged();
@@ -236,6 +242,7 @@ private:
     QList<QualitySymbol> m_sixNineList;
     QList<QualitySymbol> m_omitList;
     QList<QualitySymbol> m_suspensionList;
+    QList<QualitySymbol> m_bassNoteList;
 
     int m_chordSpellingIndex;
     int m_currentStyleIndex;
@@ -248,6 +255,7 @@ private:
     int m_sixNineIndex;
     int m_omitIndex;
     int m_suspensionIndex;
+    int m_bassNoteIndex;
 
     qreal m_qualityMag;
     qreal m_qualityAdjust;

@@ -304,6 +304,7 @@ public:
     void configureAutoAdjust(qreal qmag = 1.0, qreal qadjust = 0.0, qreal emag = 1.0, qreal eadjust = 0.0, qreal mmag = 1.0,
                              qreal madjust = 0.0);
     qreal position(const QStringList& names, ChordTokenClass ctc) const;
+    void respellRenderListBase();
 
     bool read(const QString&);
     bool read(QIODevice* device);

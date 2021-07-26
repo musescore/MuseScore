@@ -172,6 +172,9 @@ void ChordSymbolStylesModel::setQualitySymbolsOnStyleChange()
 
         previousSelectedSymbol = m_selectionHistory.value(currentStyle).value("sus").toString();
         globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordModifierSuspension, previousSelectedSymbol);
+
+        previousSelectedSymbol = m_selectionHistory.value(currentStyle).value("bass").toString();
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordBassNote, previousSelectedSymbol);
     } else {
         // Get quality symbols
         QString descriptionFile = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::chordDescriptionFile).toString();
@@ -203,6 +206,9 @@ void ChordSymbolStylesModel::setQualitySymbolsOnStyleChange()
 
         defaultSymbol = (qualitySymbols.value("suspension").size() != 0) ? qualitySymbols.value("suspension").at(0).qualitySymbol : "-1";
         globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordModifierSuspension, defaultSymbol);
+
+        defaultSymbol = (qualitySymbols.value("bassNote").size() != 0) ? qualitySymbols.value("bassNote").at(0).qualitySymbol : "-1";
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordBassNote, defaultSymbol);
     }
 }
 

@@ -441,6 +441,7 @@ const StyleDef::StyleValue StyleDef::styleValues[int(Sid::STYLES)] = {
     { Sid::chordExtensionSixNine,   "chordExtensionSixNine",   QVariant(QString("69")) },
     { Sid::chordModifierOmit,       "chordModifierOmit",       QVariant(QString("omit")) },
     { Sid::chordModifierSuspension, "chordModifierSuspension", QVariant(QString("raised")) },
+    { Sid::chordBassNote,           "chordBassNote",           QVariant(QString("/")) },
 
     { Sid::concertPitch,            "concertPitch",            QVariant(false) },
     { Sid::createMultiMeasureRests, "createMultiMeasureRests", QVariant(false) },

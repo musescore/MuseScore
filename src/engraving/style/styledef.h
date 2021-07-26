@@ -442,6 +442,7 @@ enum class Sid {
     chordExtensionSixNine,
     chordModifierOmit,
     chordModifierSuspension,
+    chordBassNote,
     concertPitch,
     createMultiMeasureRests,
     minEmptyMeasures,
