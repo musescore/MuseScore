@@ -32,12 +32,15 @@
 #include "libmscore/text.h"
 #include "libmscore/utils.h"
 #include "libmscore/undo.h"
+#include "libmscore/iname.h"
 
 #include "log.h"
 #include "translation.h"
 
 #include "ui/view/iconcodes.h"
 #include "widgetstatestore.h"
+
+#include "internal/instrumentsconverter.h"
 
 using namespace mu::notation;
 using namespace mu::ui;
@@ -54,10 +57,10 @@ EditStaff::EditStaff(QWidget* parent)
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
     setModal(true);
 
+    initStaff();
+
     editStaffTypeDialog = new EditStaffType(this);
     editStaffTypeDialog->setWindowModality(Qt::WindowModal);
-
-    WidgetStateStore::restoreGeometry(this);
 
     connect(buttonBox,        &QDialogButtonBox::clicked, this, &EditStaff::bboxClicked);
     connect(changeInstrument, &QPushButton::clicked, this, &EditStaff::showReplaceInstrumentDialog);
@@ -89,6 +92,8 @@ EditStaff::EditStaff(QWidget* parent)
     maxPitchASelect->setText(EDIT_ICON);
     minPitchPSelect->setText(EDIT_ICON);
     maxPitchPSelect->setText(EDIT_ICON);
+
+    WidgetStateStore::restoreGeometry(this);
 }
 
 EditStaff::EditStaff(const EditStaff& other)
@@ -109,11 +114,14 @@ void EditStaff::setStaff(Staff* s, const Fraction& tick)
 
     m_orgStaff = s;
 
-    m_instrument = instrument();
-    m_orgInstrument = m_instrument;
-
     Part* part = m_orgStaff->part();
     Ms::Score* score = part->score();
+
+    m_instrument = InstrumentsConverter::convertInstrument(*part->instrument(tick));
+    m_orgInstrument = m_instrument;
+
+    m_partId = part->id();
+    m_instrumentId = m_instrument.id;
 
     m_staff = new Ms::Staff(score);
     Ms::StaffType* stt = m_staff->setStaffType(Fraction(0, 1), *m_orgStaff->staffType(Fraction(0, 1)));
@@ -262,9 +270,9 @@ void EditStaff::gotoNextStaff()
 {
     int nextStaffIndex = m_orgStaff->idx() + 1;
     Staff* nextStaff = m_orgStaff->score()->staff(nextStaffIndex);
+
     if (nextStaff) {
-        m_staffIdx = nextStaffIndex;
-        updateCurrentStaff();
+        setStaff(nextStaff, m_tickStart);
     }
 }
 
@@ -272,9 +280,9 @@ void EditStaff::gotoPreviousStaff()
 {
     int previousStaffIndex = m_orgStaff->idx() - 1;
     Staff* prevStaff = m_orgStaff->score()->staff(previousStaffIndex);
+
     if (prevStaff) {
-        m_staffIdx = previousStaffIndex;
-        updateCurrentStaff();
+        setStaff(prevStaff, m_tickStart);
     }
 }
 
@@ -395,63 +403,44 @@ void EditStaff::transpositionChanged()
     }
 }
 
-void EditStaff::setStaffIdx(int staffIdx)
+INotationPtr EditStaff::notation() const
 {
-    if (m_staffIdx == staffIdx) {
-        return;
-    }
-
-    m_staffIdx = staffIdx;
-
-    updateCurrentStaff();
-
-    emit staffIdxChanged(m_staffIdx);
+    return globalContext()->currentNotation();
 }
 
 INotationPartsPtr EditStaff::notationParts() const
 {
-    return globalContext()->currentNotation()->parts();
+    return notation() ? notation()->parts() : nullptr;
 }
 
-int EditStaff::staffIdx() const
+void EditStaff::initStaff()
 {
-    return m_staffIdx;
-}
+    const INotationPtr notation = this->notation();
+    const INotationInteractionPtr interaction = notation ? notation->interaction() : nullptr;
+    auto context = interaction ? interaction->hitElementContext() : INotationInteraction::HitElementContext();
+    const Element* element = Ms::toMeasure(context.element);
 
-void EditStaff::updateCurrentStaff()
-{
-    Staff* staff = this->staff(m_staffIdx);
-
-    if (staff) {
-        m_partId = staff->part()->id();
-        m_instrumentId = staff->part()->instrumentId();
-        setStaff(staff, staff->tick());
-    }
-}
-
-Staff* EditStaff::staff(int staffIndex) const
-{
-    INotationPartsPtr notationParts = this->notationParts();
-    if (!notationParts) {
-        return nullptr;
+    if (!element || !context.staff) {
+        return;
     }
 
-    async::NotifyList<const Part*> parts = notationParts->partList();
-    for (const Part* part: parts) {
-        async::NotifyList<Instrument> instruments = notationParts->instrumentList(part->id());
+    Fraction tick = { -1, 1 };
+    if (element->isChordRest()) {
+        tick = Ms::toChordRest(element)->tick();
+    } else if (element->isNote()) {
+        tick = Ms::toNote(element)->chord()->tick();
+    } else if (element->isMeasure()) {
+        tick = Ms::toMeasure(element)->tick();
+    } else if (element->isInstrumentName()) {
+        const Ms::System* system = Ms::toSystem(Ms::toInstrumentName(element)->parent());
+        const Measure* measure = system ? system->firstMeasure() : nullptr;
 
-        for (const Instrument& instrument: instruments) {
-            async::NotifyList<const Staff*> staves = notationParts->staffList(part->id(), instrument.id);
-
-            for (const Staff* staff: staves) {
-                if (staff->idx() == staffIndex) {
-                    return const_cast<Staff*>(staff);
-                }
-            }
+        if (measure) {
+            tick = measure->tick();
         }
     }
 
-    return nullptr;
+    setStaff(context.staff, tick);
 }
 
 Instrument EditStaff::instrument() const

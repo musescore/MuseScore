@@ -54,10 +54,6 @@ static QString formatInstrumentTitleOnScore(const QString& instrumentName, const
 NotationParts::NotationParts(IGetScore* getScore, INotationInteractionPtr interaction, INotationUndoStackPtr undoStack)
     : m_getScore(getScore), m_undoStack(undoStack), m_partsNotifier(new ChangedNotifier<const Part*>())
 {
-    interaction->selectionChanged().onNotify(this, [this]() {
-        updateCanChangeInstrumentsVisibility();
-    });
-
     interaction->dropChanged().onNotify(this, [this]() {
         updatePartTitles();
     });
@@ -130,7 +126,7 @@ NotifyList<Instrument> NotationParts::instrumentList(const ID& partId) const
     return result;
 }
 
-NotifyList<const Staff*> NotationParts::staffList(const ID& partId, const ID& instrumentId) const
+NotifyList<const Staff*> NotationParts::staffList(const ID& partId) const
 {
     Part* part = this->part(partId);
     if (!part) {
@@ -138,13 +134,14 @@ NotifyList<const Staff*> NotationParts::staffList(const ID& partId, const ID& in
     }
 
     NotifyList<const Staff*> result;
-    std::vector<const Staff*> staves = this->staves(part, instrumentId);
+    std::vector<const Staff*> staves = this->staves(part);
     for (const Staff* staff: staves) {
         result.push_back(staff);
     }
 
-    ChangedNotifier<const Staff*>* notifier = instrumentNotifier(instrumentId, partId);
+    ChangedNotifier<const Staff*>* notifier = instrumentNotifier(part->instrumentId(), partId);
     result.setNotify(notifier->notify());
+
     return result;
 }
 
@@ -274,8 +271,7 @@ void NotationParts::setInstrumentVisible(const ID& instrumentId, const ID& fromP
         return;
     }
 
-    std::vector<const Staff*> instrumentStaves = staves(part, instrumentId);
-    for (const Staff* staff: instrumentStaves) {
+    for (const Staff* staff: staves(part)) {
         Staff* _staff = score()->staff(staff->idx());
         doSetStaffVisible(_staff, visible);
     }
@@ -295,24 +291,6 @@ Ms::ChordRest* NotationParts::selectedChord() const
     }
 
     return chord;
-}
-
-void NotationParts::updateCanChangeInstrumentsVisibility()
-{
-    for (const InstrumentKey& key: m_canChangeInstrumentsVisibilityHash.keys()) {
-        bool canChangeVisibility = resolveCanChangeInstrumentVisibility(key.partId, key.instrumentId);
-        m_canChangeInstrumentsVisibilityHash[key].ch.send(canChangeVisibility);
-    }
-}
-
-bool NotationParts::resolveCanChangeInstrumentVisibility(const ID& instrumentId, const ID& fromPartId) const
-{
-    if (!needAssignInstrumentToChord(instrumentId, fromPartId)) {
-        return true;
-    }
-
-    const Ms::ChordRest* chord = selectedChord();
-    return chord && chord->part()->id() == fromPartId;
 }
 
 bool NotationParts::needAssignInstrumentToChord(const ID& instrumentId, const ID& fromPartId) const
@@ -776,6 +754,24 @@ void NotationParts::replaceInstrument(const ID& instrumentId, const ID& fromPart
     notifyAboutPartChanged(fromPartId);
 }
 
+void NotationParts::replaceDrumset(const ID& instrumentId, const ID& fromPartId, const Drumset& newDrumset)
+{
+    Part* part = this->part(fromPartId);
+    if (!part) {
+        return;
+    }
+
+    Ms::Instrument* instrument = this->instrumentInfo(instrumentId, part).instrument;
+    if (!instrument) {
+        return;
+    }
+
+    score()->undo(new Ms::ChangeDrumset(instrument, &newDrumset));
+    updateScore();
+
+    notifyAboutPartChanged(fromPartId);
+}
+
 Notification NotationParts::partsChanged() const
 {
     return m_partsChanged;
@@ -946,37 +942,6 @@ void NotationParts::moveParts(const IDList& sourcePartsIds, const ID& destinatio
     m_partsNotifier->changed();
 }
 
-void NotationParts::moveInstruments(const IDList& sourceInstrumentsIds, const ID& sourcePartId, const ID& destinationPartId,
-                                    const ID& destinationInstrumentId, InsertMode mode)
-{
-    TRACEFUNC;
-
-    Part* fromPart = part(sourcePartId);
-    Part* toPart = part(destinationPartId);
-
-    if (!fromPart || !toPart) {
-        return;
-    }
-
-    QMap<Ms::Fraction, Ms::Instrument*> movingInstruments = instruments(fromPart, sourceInstrumentsIds);
-
-    doRemoveInstruments(sourceInstrumentsIds, fromPart);
-    doInsertInstruments(movingInstruments, destinationPartId, destinationInstrumentId, mode);
-
-    doSetPartName(fromPart, formatPartName(fromPart));
-    if (fromPart != toPart) {
-        doSetPartName(toPart, formatPartName(toPart));
-    }
-    updateScore();
-
-    notifyAboutPartChanged(sourcePartId);
-    notifyAboutInstrumentsChanged(fromPart->id());
-    if (fromPart != toPart) {
-        notifyAboutInstrumentsChanged(toPart->id());
-        notifyAboutPartChanged(destinationPartId);
-    }
-}
-
 QMap<Ms::Fraction, Ms::InstrumentChange*> NotationParts::instrumentChangeElements(const QString& partId) const
 {
     QMap<Ms::Fraction, Ms::InstrumentChange*> result;
@@ -1004,35 +969,7 @@ QMap<Ms::Fraction, Ms::InstrumentChange*> NotationParts::instrumentChangeElement
     return result;
 }
 
-Ms::ChordRest* NotationParts::chordRest(const Ms::Fraction& fraction, const Part* fromPart) const
-{
-    Ms::ChordRest* chord = nullptr;
-    Ms::SegmentType segmentType = Ms::SegmentType::ChordRest;
-    for (const Ms::Segment* segment = score()->firstSegment(segmentType); segment; segment = segment->next1(segmentType)) {
-        for (Ms::Element* element: segment->elist()) {
-            if (!element) {
-                continue;
-            }
-
-            if (element->part()->id() != fromPart->id()) {
-                continue;
-            }
-
-            auto elementChord = dynamic_cast<Ms::ChordRest*>(element);
-            if (elementChord && elementChord->tick() == fraction) {
-                chord = elementChord;
-                break;
-            }
-        }
-        if (chord) {
-            break;
-        }
-    }
-
-    return chord;
-}
-
-QMap<Ms::Fraction, Ms::Instrument*> NotationParts::instruments(const Part* fromPart, const IDList& filterInstrumentsIds) const
+QMap<Ms::Fraction, Ms::Instrument*> NotationParts::instruments(const Part* fromPart) const
 {
     QMap<Ms::Fraction, Ms::Instrument*> result;
 
@@ -1040,92 +977,10 @@ QMap<Ms::Fraction, Ms::Instrument*> NotationParts::instruments(const Part* fromP
     for (auto it = partInstruments->begin(); it != partInstruments->end(); it++) {
         Ms::Fraction fraction = Ms::Fraction::fromTicks(it->first);
         Ms::Instrument* instrument = it->second;
-
-        bool acceptedByFilter = !filterInstrumentsIds.isEmpty() ? filterInstrumentsIds.contains(instrument->getId()) : true;
-        if (acceptedByFilter) {
-            result.insert(fraction, instrument);
-        }
+        result.insert(fraction, instrument);
     }
 
     return result;
-}
-
-void NotationParts::doInsertInstruments(const QMap<Ms::Fraction, Ms::Instrument*>& instruments,
-                                        const ID& destinationPartId, const ID& destinationInstrumentId,
-                                        INotationParts::InsertMode mode)
-{
-    TRACEFUNC;
-
-    Part* destinationPart = part(destinationPartId);
-    if (!destinationPart) {
-        return;
-    }
-
-    QMap<Ms::Fraction, Ms::Instrument*> partInstrumentsMap = this->instruments(destinationPart);
-    QList<Ms::Fraction> partInstrumentsFractions = partInstrumentsMap.keys();
-    QList<Ms::Instrument*> partInstruments = partInstrumentsMap.values();
-
-    int destinationIndex = 0;
-    for (int i = 0; i < partInstruments.size(); i++) {
-        if (partInstruments[i]->getId() == destinationInstrumentId) {
-            destinationIndex = i;
-            break;
-        }
-    }
-
-    int newInstrumentIndex = (mode == InsertMode::Before ? destinationIndex : destinationIndex + 1);
-
-    for (Ms::Instrument* instrument: instruments.values()) {
-        partInstruments.insert(newInstrumentIndex++, new Ms::Instrument(*instrument));
-    }
-
-    for (const Ms::Fraction& fraction: instruments.keys()) {
-        if (partInstrumentsFractions.contains(fraction)) {
-            partInstrumentsFractions << Ms::Fraction::fromTicks(partInstrumentsFractions.last().ticks() + 1);
-            continue;
-        }
-
-        partInstrumentsFractions << fraction;
-    }
-
-    std::sort(partInstrumentsFractions.begin(), partInstrumentsFractions.end(), [](const Ms::Fraction& l, const Ms::Fraction& r) {
-        return l < r;
-    });
-
-    if (partInstrumentsFractions.size() > 0) {
-        destinationPart->setInstrument(partInstruments[0]);
-    }
-
-    QMap<Ms::Fraction, Ms::InstrumentChange*> instrumentChangeElements = this->instrumentChangeElements(destinationPart->id());
-    for (int i = 1; i < partInstrumentsFractions.size(); i++) {
-        Ms::Instrument* instrument = partInstruments[i];
-        Ms::Fraction fraction = partInstrumentsFractions[i];
-
-        Ms::InstrumentChange* instrumentChange = nullptr;
-        if (instrumentChangeElements.contains(fraction)) {
-            instrumentChange = instrumentChangeElements[fraction];
-            score()->undoRemoveElement(instrumentChange);
-        } else {
-            Ms::ChordRest* chordRest = this->chordRest(fraction, destinationPart);
-
-            if (chordRest) {
-                instrumentChange = new Ms::InstrumentChange(*instrument, score());
-                instrumentChange->setInit(true);
-                instrumentChange->setParent(chordRest->segment());
-                instrumentChange->setTrack((chordRest->track() / VOICES) * VOICES);
-            } else {
-                LOGE() << "Not found chord rest for instrument";
-            }
-        }
-
-        destinationPart->setInstrument(instrument, fraction);
-        if (instrumentChange) {
-            instrumentChange->setupInstrument(instrument);
-            score()->undoAddElement(instrumentChange);
-        }
-    }
-
-    doSetPartName(destinationPart, formatPartName(destinationPart));
 }
 
 void NotationParts::moveStaves(const IDList& sourceStavesIds, const ID& destinationStaffId, InsertMode mode)
@@ -1151,17 +1006,6 @@ void NotationParts::moveStaves(const IDList& sourceStavesIds, const ID& destinat
     masterScore()->setBracketsAndBarlines();
 
     updateScore();
-}
-
-mu::ValCh<bool> NotationParts::canChangeInstrumentVisibility(const ID& instrumentId, const ID& fromPartId) const
-{
-    InstrumentKey key { fromPartId, instrumentId };
-
-    if (!m_canChangeInstrumentsVisibilityHash.contains(key)) {
-        m_canChangeInstrumentsVisibilityHash[key].val = resolveCanChangeInstrumentVisibility(fromPartId, instrumentId);
-    }
-
-    return m_canChangeInstrumentsVisibilityHash[key];
 }
 
 std::vector<Part*> NotationParts::availableParts(const Ms::Score* score) const
@@ -1261,11 +1105,8 @@ Staff* NotationParts::staff(const ID& staffId) const
     return score()->staff(staffId);
 }
 
-std::vector<const Staff*> NotationParts::staves(const Part* part, const ID& instrumentId) const
+std::vector<const Staff*> NotationParts::staves(const Part* part) const
 {
-    // TODO: configure staves by instrumentId
-    Q_UNUSED(instrumentId)
-
     std::vector<const Staff*> result;
 
     for (const Staff* staff: *part->staves()) {
@@ -1523,21 +1364,6 @@ int NotationParts::resolveInstrumentNumber(const Instruments& newInstruments,
     return count > 1 ? 1 : 0;
 }
 
-IDList NotationParts::allInstrumentsIds() const
-{
-    IDList result;
-
-    for (const Part* part: partList()) {
-        auto partInstruments = instruments(part);
-
-        for (const Ms::Instrument* instrument: partInstruments.values()) {
-            result << instrument->getId();
-        }
-    }
-
-    return result;
-}
-
 int NotationParts::lastStaffIndex() const
 {
     return !score()->staves().isEmpty() ? score()->staves().last()->idx() : 0;
@@ -1584,15 +1410,6 @@ void NotationParts::notifyAboutStaffChanged(const ID& staffId) const
     InstrumentInfo instrumentInfo = this->instrumentInfo(staff);
     ChangedNotifier<const Staff*>* notifier = instrumentNotifier(instrumentInfo.instrument->getId(), staff->part()->id());
     notifier->itemChanged(staff);
-}
-
-void NotationParts::notifyAboutInstrumentsChanged(const ID& partId) const
-{
-    auto instruments = instrumentList(partId);
-    ChangedNotifier<Instrument>* notifier = partNotifier(partId);
-    for (const Instrument& instrument: instruments) {
-        notifier->itemChanged(instrument);
-    }
 }
 
 ChangedNotifier<Instrument>* NotationParts::partNotifier(const ID& partId) const

@@ -64,9 +64,9 @@ StaffTextPropertiesDialog::StaffTextPropertiesDialog(QWidget* parent)
     setupUi(this);
 
     const INotationPtr notation = globalContext()->currentNotation();
-    const INotationSelectionPtr selection = notation ? notation->interaction()->selection() : nullptr;
-    Element* selectedElement = selection ? selection->element() : nullptr;
-    StaffTextBase* st = selectedElement && selectedElement->isStaffTextBase() ? Ms::toStaffTextBase(selectedElement) : nullptr;
+    const INotationInteractionPtr interaction = notation ? notation->interaction() : nullptr;
+    Element* element = interaction ? interaction->hitElementContext().element : nullptr;
+    StaffTextBase* st = element && element->isStaffTextBase() ? Ms::toStaffTextBase(element) : nullptr;
 
     if (!st) {
         return;

@@ -44,8 +44,6 @@ class EditStaff : public QDialog, private Ui::EditStaffBase
     INJECT(notation, framework::IInteractive, interactive)
     INJECT(notation, ISelectInstrumentsScenario, selectInstrumentsScenario)
 
-    Q_PROPERTY(int staffIdx READ staffIdx WRITE setStaffIdx NOTIFY staffIdxChanged)
-
 public:
     EditStaff(QWidget* parent = nullptr);
     EditStaff(const EditStaff&);
@@ -53,7 +51,7 @@ public:
     static int metaTypeId();
 
 private:
-    virtual void hideEvent(QHideEvent*);
+    void hideEvent(QHideEvent*) override;
     void apply();
     void setStaff(Ms::Staff*, const Ms::Fraction& tick);
     void updateInterval(const Ms::Interval&);
@@ -79,17 +77,15 @@ private slots:
     void gotoPreviousStaff();
     void invisibleChanged();
     void transpositionChanged();
-    void setStaffIdx(int staffIdx);
 
 signals:
     void instrumentChanged();
-    void staffIdxChanged(int staffIdx);
 
 private:
+    INotationPtr notation() const;
     INotationPartsPtr notationParts() const;
 
-    int staffIdx() const;
-    void updateCurrentStaff();
+    void initStaff();
 
     Staff* staff(int staffIndex) const;
     Instrument instrument() const;
@@ -101,7 +97,6 @@ private:
 
     QString midiCodeToStr(int midiCode);
 
-    int m_staffIdx = -1;
     Ms::Staff* m_staff = nullptr;
     Ms::Staff* m_orgStaff = nullptr;
     ID m_partId;

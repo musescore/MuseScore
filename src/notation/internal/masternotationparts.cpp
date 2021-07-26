@@ -220,20 +220,6 @@ void MasterNotationParts::moveParts(const IDList& sourcePartsIds, const ID& dest
     apply();
 }
 
-void MasterNotationParts::moveInstruments(const IDList& sourceInstrumentIds, const ID& sourcePartId, const ID& destinationPartId,
-                                          const ID& destinationInstrumentId, InsertMode mode)
-{
-    startEdit();
-
-    NotationParts::moveInstruments(sourceInstrumentIds, sourcePartId, destinationPartId, destinationInstrumentId, mode);
-
-    for (INotationPartsPtr parts : excerptsParts()) {
-        parts->moveInstruments(sourceInstrumentIds, sourcePartId, destinationPartId, destinationInstrumentId, mode);
-    }
-
-    apply();
-}
-
 void MasterNotationParts::moveStaves(const IDList& sourceStavesIds, const ID& destinationStaffId, InsertMode mode)
 {
     startEdit();
@@ -294,6 +280,19 @@ void MasterNotationParts::replaceInstrument(const ID& instrumentId, const ID& fr
 
     for (INotationPartsPtr parts : excerptsParts()) {
         parts->replaceInstrument(instrumentId, fromPartId, newInstrument);
+    }
+
+    apply();
+}
+
+void MasterNotationParts::replaceDrumset(const ID& instrumentId, const ID& fromPartId, const Drumset& newDrumset)
+{
+    startEdit();
+
+    NotationParts::replaceDrumset(instrumentId, fromPartId, newDrumset);
+
+    for (INotationPartsPtr parts : excerptsParts()) {
+        parts->replaceDrumset(instrumentId, fromPartId, newDrumset);
     }
 
     apply();

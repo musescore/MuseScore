@@ -45,6 +45,7 @@ private:
     void toggleMasterPalette(const actions::ActionData& args);
     void openSpecialCharactersDialog();
     void openTimeSignaturePropertiesDialog();
+    void openEditDrumsetDialog();
 
     ValCh<bool> m_masterPaletteOpened;
     async::Channel<actions::ActionCodeList> m_actionsReceiveAvailableChanged;

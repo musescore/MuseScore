@@ -176,6 +176,7 @@ private:
     void openPartsDialog();
     void openTupletOtherDialog();
     void openStaffTextPropertiesDialog();
+    void openMeasurePropertiesDialog();
 
     void toggleScoreConfig(ScoreConfigType configType);
     void toggleNavigator();
