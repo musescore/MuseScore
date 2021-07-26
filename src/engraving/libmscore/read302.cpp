@@ -157,9 +157,10 @@ bool Score::read(XmlReader& e, compat::ReadScoreHook& hooks)
                 e.skipCurrentElement();
             } else {
                 if (isMaster()) {
-                    Excerpt* ex = new Excerpt(static_cast<MasterScore*>(this));
+                    MasterScore* mScore = static_cast<MasterScore*>(this);
+                    Excerpt* ex = new Excerpt(mScore);
                     ex->read(e);
-                    excerpts().append(ex);
+                    mScore->excerpts().append(ex);
                 } else {
                     qDebug("Score::read(): part cannot have parts");
                     e.skipCurrentElement();

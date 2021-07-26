@@ -613,9 +613,6 @@ public:
     int treeChildCount() const override;
     void dumpScoreTree();  // for debugging purposes
 
-    virtual QList<Excerpt*>& excerpts();
-    virtual const QList<Excerpt*>& excerpts() const;
-
     virtual ElementType type() const override { return ElementType::SCORE; }
 
     void rebuildBspTree();

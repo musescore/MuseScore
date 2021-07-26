@@ -1044,7 +1044,7 @@ std::vector<Part*> NotationParts::excerptParts(const Ms::Score* score) const
 
     std::vector<Part*> result;
 
-    for (const Ms::Excerpt* excerpt: score->excerpts()) {
+    for (const Ms::Excerpt* excerpt: score->masterScore()->excerpts()) {
         for (Part* part: excerpt->parts()) {
             result.push_back(part);
         }
