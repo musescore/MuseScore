@@ -2772,7 +2772,7 @@ void Score::sortStaves(QList<int>& dst)
 
 void Score::mapExcerptTracks(QList<int>& dst)
 {
-    for (Excerpt* e : excerpts()) {
+    for (Excerpt* e : masterScore()->excerpts()) {
         QMultiMap<int, int> tr = e->tracks();
         QMultiMap<int, int> tracks;
         for (QMap<int, int>::iterator it = tr.begin(); it != tr.end(); ++it) {
@@ -3959,7 +3959,7 @@ void Score::linkId(int val)
 QList<Score*> Score::scoreList()
 {
     QList<Score*> scores;
-    Score* root = masterScore();
+    MasterScore* root = masterScore();
     scores.append(root);
     for (const Excerpt* ex : root->excerpts()) {
         if (ex->partScore()) {
@@ -5127,8 +5127,6 @@ const RepeatList& Score::repeatList()  const { return _masterScore->repeatList()
 const RepeatList& Score::repeatList2()  const { return _masterScore->repeatList2(); }
 TempoMap* Score::tempomap() const { return _masterScore->tempomap(); }
 TimeSigMap* Score::sigmap() const { return _masterScore->sigmap(); }
-QList<Excerpt*>& Score::excerpts() { return _masterScore->excerpts(); }
-const QList<Excerpt*>& Score::excerpts() const { return _masterScore->excerpts(); }
 QQueue<MidiInputEvent>* Score::midiInputQueue() { return _masterScore->midiInputQueue(); }
 std::list<MidiInputEvent>* Score::activeMidiPitches() { return _masterScore->activeMidiPitches(); }
 

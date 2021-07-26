@@ -999,7 +999,7 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx)
     LayoutBreak* sectionBreak = nullptr;
 
     // disable local time sig modifications in linked staves
-    if (staffIdx != -1 && excerpts().size() > 0) {
+    if (staffIdx != -1 && masterScore()->excerpts().size() > 0) {
         MScore::setError(MsError::CANNOT_CHANGE_LOCAL_TIMESIG);
         return false;
     }
@@ -1318,7 +1318,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
 
 void Score::cmdRemoveTimeSig(TimeSig* ts)
 {
-    if (ts->isLocal() && excerpts().size() > 0) {
+    if (ts->isLocal() && masterScore()->excerpts().size() > 0) {
         MScore::setError(MsError::CANNOT_CHANGE_LOCAL_TIMESIG);
         return;
     }

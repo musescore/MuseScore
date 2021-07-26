@@ -270,7 +270,8 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
     xml.setCurTrack(-1);
     if (isMaster()) {
         if (!selectionOnly) {
-            for (const Excerpt* excerpt : excerpts()) {
+            MasterScore* mScore = static_cast<MasterScore*>(this);
+            for (const Excerpt* excerpt : mScore->excerpts()) {
                 if (excerpt->partScore() != this) {
                     excerpt->partScore()->write(xml, false, hook);                 // recursion
                 }
