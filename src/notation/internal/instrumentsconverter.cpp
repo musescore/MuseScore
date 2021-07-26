@@ -90,7 +90,9 @@ Instrument InstrumentsConverter::convertInstrument(const Ms::Instrument& instrum
     result.id = instrument.getId();
     result.musicXMLid = instrument.instrumentId();
     result.useDrumset = instrument.useDrumset();
-    result.drumset = instrument.drumset();
+    if (instrument.drumset()) {
+        result.drumset = new Drumset(*instrument.drumset());
+    }
 
     result.staves = instrument.cleffTypeCount();
     for (int i = 0; i < instrument.cleffTypeCount(); ++i) {
