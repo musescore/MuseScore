@@ -42,10 +42,10 @@ bool NotationPageState::isPanelVisible(PanelType type) const
     case PanelType::PlaybackToolBar:
     case PanelType::NotationStatusBar:
     case PanelType::Mixer:
+    case PanelType::Timeline:
         return m_panelVisibleMap[type];
     case PanelType::NotationNavigator:
         return configuration()->isNotationNavigatorVisible();
-    case PanelType::TimeLine:
     case PanelType::Synthesizer:
     case PanelType::SelectionFilter:
     case PanelType::Piano:
@@ -82,18 +82,16 @@ void NotationPageState::setIsPanelVisible(PanelType type, bool visible)
     case PanelType::NotationToolBar:
     case PanelType::NoteInputBar:
     case PanelType::UndoRedoToolBar:
-    case PanelType::PlaybackToolBar: {
+    case PanelType::PlaybackToolBar:
     case PanelType::NotationStatusBar:
     case PanelType::Mixer:
+    case PanelType::Timeline:
         m_panelVisibleMap[type] = visible;
         break;
-    }
-    case PanelType::NotationNavigator: {
+    case PanelType::NotationNavigator:
         configuration()->setIsNotationNavigatorVisible(visible);
         break;
-    }
-    default: {
+    default:
         break;
-    }
     }
 }

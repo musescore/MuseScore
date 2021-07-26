@@ -29,7 +29,7 @@ Rectangle {
 
     color: ui.theme.backgroundPrimaryColor
 
-    TimeLineView {
+    TimelineView {
         anchors.fill: parent
     }
 }

@@ -183,7 +183,7 @@ const std::vector<std::pair<mu::actions::ActionCode, PanelType> > ApplicationUiA
     { "toggle-statusbar", PanelType::NotationStatusBar },
     { "toggle-transport", PanelType::PlaybackToolBar },
     { "toggle-mixer", PanelType::Mixer },
-    { "toggle-timeline", PanelType::TimeLine },
+    { "toggle-timeline", PanelType::Timeline },
     { "synth-control", PanelType::Synthesizer },
     { "toggle-piano", PanelType::Piano },
     { "toggle-scorecmp-tool", PanelType::ComparisonTool }

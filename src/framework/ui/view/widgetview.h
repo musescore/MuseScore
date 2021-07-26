@@ -33,11 +33,10 @@ class IDisplayableWidget
 public:
     virtual ~IDisplayableWidget() = default;
 
-    virtual bool handleEvent(QEvent* event) = 0;
-
 private:
     friend class WidgetView;
 
+    virtual bool handleEvent(QEvent* event) = 0;
     virtual QWidget* qWidget() = 0;
 };
 
@@ -47,16 +46,21 @@ class WidgetView : public QQuickPaintedItem
 
 public:
     explicit WidgetView(QQuickItem* parent = nullptr);
-    ~WidgetView() override;
 
 protected:
-    void setWidget(IDisplayableWidget* widget);
+    void componentComplete() override;
+
+    void setWidget(std::shared_ptr<IDisplayableWidget> widget);
 
 private:
     void paint(QPainter* painter) override;
     bool event(QEvent* event) override;
+    bool handleHoverEvent(QHoverEvent* event);
 
-    IDisplayableWidget* m_widget = nullptr;
+    QWidget* qWidget() const;
+    void updateSizeConstraints();
+
+    std::shared_ptr<IDisplayableWidget> m_widget = nullptr;
 };
 }
 

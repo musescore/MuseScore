@@ -173,7 +173,7 @@ void NotationModule::registerUiTypes()
     qmlRegisterType<NotationToolBarModel>("MuseScore.NotationScene", 1, 0, "NotationToolBarModel");
     qmlRegisterType<NotationNavigator>("MuseScore.NotationScene", 1, 0, "NotationNavigator");
     qmlRegisterType<UndoRedoModel>("MuseScore.NotationScene", 1, 0, "UndoRedoModel");
-    qmlRegisterType<TimeLineView>("MuseScore.NotationScene", 1, 0, "TimeLineView");
+    qmlRegisterType<TimelineView>("MuseScore.NotationScene", 1, 0, "TimelineView");
 
     qRegisterMetaType<EditStyle>("EditStyle");
     qRegisterMetaType<EditStaff>("EditStaff");

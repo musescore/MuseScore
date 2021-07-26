@@ -30,14 +30,14 @@
 #include "async/asyncable.h"
 
 namespace mu::notation {
-class TimeLineView : public ui::WidgetView, public async::Asyncable
+class TimelineView : public ui::WidgetView, public async::Asyncable
 {
     Q_OBJECT
 
     INJECT(notation, context::IGlobalContext, globalContext)
 
 public:
-    explicit TimeLineView(QQuickItem* parent = nullptr);
+    explicit TimelineView(QQuickItem* parent = nullptr);
 
 private:
     void componentComplete() override;

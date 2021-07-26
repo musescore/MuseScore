@@ -36,19 +36,12 @@ WidgetView::WidgetView(QQuickItem* parent)
     setAcceptedMouseButtons(Qt::AllButtons);
 }
 
-WidgetView::~WidgetView()
-{
-    delete m_widget;
-}
-
 void WidgetView::paint(QPainter* painter)
 {
-    if (!m_widget || !m_widget->qWidget()) {
-        return;
+    if (qWidget()) {
+        qWidget()->render(painter, QPoint(), QRegion(),
+                          QWidget::DrawWindowBackground | QWidget::DrawChildren);
     }
-
-    m_widget->qWidget()->render(painter, QPoint(), QRegion(),
-                                QWidget::DrawWindowBackground | QWidget::DrawChildren);
 }
 
 bool WidgetView::event(QEvent* event)
@@ -57,19 +50,67 @@ bool WidgetView::event(QEvent* event)
         return QQuickItem::event(event);
     }
 
-    static const QSet<QEvent::Type> clickEvents {
-        QEvent::MouseButtonPress,
-        QEvent::MouseButtonDblClick
-    };
+    bool ok = true;
 
-    if (clickEvents.contains(event->type())) {
+    switch (event->type()) {
+    case QEvent::HoverEnter:
+    case QEvent::HoverMove:
+    case QEvent::HoverLeave:
+        ok = handleHoverEvent(dynamic_cast<QHoverEvent*>(event));
+        break;
+    case QEvent::MouseButtonPress:
+    case QEvent::MouseButtonDblClick:
         setFocus(true);
+        [[fallthrough]];
+    default:
+        ok = m_widget->handleEvent(event);
+        break;
     }
 
-    return m_widget->handleEvent(event);
+    if (ok) {
+        update();
+    }
+
+    return ok;
 }
 
-void WidgetView::setWidget(IDisplayableWidget* widget)
+bool WidgetView::handleHoverEvent(QHoverEvent* event)
+{
+    QMouseEvent mouseEvent(QEvent::MouseMove, event->posF(),
+                           Qt::NoButton, Qt::NoButton, event->modifiers());
+    mouseEvent.setAccepted(event->isAccepted());
+    mouseEvent.setTimestamp(event->timestamp());
+    bool ok = m_widget->handleEvent(&mouseEvent);
+    setCursor(qWidget()->cursor());
+    return ok;
+}
+
+void WidgetView::componentComplete()
+{
+    QQuickItem::componentComplete();
+
+    connect(this, &QQuickItem::widthChanged, [this]() {
+        updateSizeConstraints();
+    });
+
+    connect(this, &QQuickItem::heightChanged, [this]() {
+        updateSizeConstraints();
+    });
+}
+
+QWidget* WidgetView::qWidget() const
+{
+    return m_widget ? m_widget->qWidget() : nullptr;
+}
+
+void WidgetView::updateSizeConstraints()
+{
+    if (qWidget()) {
+        qWidget()->setMinimumSize(width(), height());
+    }
+}
+
+void WidgetView::setWidget(std::shared_ptr<IDisplayableWidget> widget)
 {
     m_widget = widget;
 }
