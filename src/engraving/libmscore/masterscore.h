@@ -108,8 +108,8 @@ public:
     virtual const RepeatList& repeatList() const override;
     virtual const RepeatList& repeatList2() const override;
 
-    virtual QList<Excerpt*>& excerpts() override { return _excerpts; }
-    virtual const QList<Excerpt*>& excerpts() const override { return _excerpts; }
+    QList<Excerpt*>& excerpts() { return _excerpts; }
+    const QList<Excerpt*>& excerpts() const { return _excerpts; }
     virtual QQueue<MidiInputEvent>* midiInputQueue() override { return &_midiInputQueue; }
     virtual std::list<MidiInputEvent>* activeMidiPitches() override { return &_activeMidiPitches; }
 

@@ -506,7 +506,7 @@ mu::RetVal<QByteArray> BackendApi::processWriter(const std::string& writerName, 
 
 Ret BackendApi::doExportScoreParts(const notation::INotationPtr notation, Device& destinationDevice)
 {
-    Ms::Score* score = notation->elements()->msScore();
+    Ms::MasterScore* score = notation->elements()->msScore()->masterScore();
 
     QJsonArray partsObjList;
     QJsonArray partsMetaList;
