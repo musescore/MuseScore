@@ -27,7 +27,9 @@
 #include "libmscore/measurerepeat.h"
 #include "libmscore/undo.h"
 #include "libmscore/range.h"
+
 #include "notation/inotationelements.h"
+#include "global/widgetstatestore.h"
 
 using namespace mu::notation;
 
@@ -39,6 +41,7 @@ MeasurePropertiesDialog::MeasurePropertiesDialog(QWidget* parent)
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     m_notation = context()->currentNotation();
+    initMeasure();
 
     staves->verticalHeader()->hide();
 
@@ -50,6 +53,8 @@ MeasurePropertiesDialog::MeasurePropertiesDialog(QWidget* parent)
         horizontalLayout_2->removeWidget(nextButton);
         horizontalLayout_2->insertWidget(0, nextButton);
     }
+
+    WidgetStateStore::restoreGeometry(this);
 }
 
 MeasurePropertiesDialog::MeasurePropertiesDialog(const MeasurePropertiesDialog& dialog)
@@ -57,27 +62,20 @@ MeasurePropertiesDialog::MeasurePropertiesDialog(const MeasurePropertiesDialog& 
 {
 }
 
-int MeasurePropertiesDialog::index() const
+void MeasurePropertiesDialog::initMeasure()
 {
-    return m_measureIndex;
-}
-
-void MeasurePropertiesDialog::setIndex(int measureIndex)
-{
-    if (m_measureIndex == measureIndex) {
+    if (!m_notation) {
         return;
     }
 
-    Ms::Measure* measure = m_notation->elements()->measure(measureIndex);
+    INotationInteraction::HitElementContext context = m_notation->interaction()->hitElementContext();
+    Ms::Measure* measure = Ms::toMeasure(context.element);
 
     if (!measure) {
         return;
     }
 
     setMeasure(measure);
-
-    m_measureIndex = measureIndex;
-    emit indexChanged(m_measureIndex);
 }
 
 //---------------------------------------------------------
@@ -201,22 +199,12 @@ void MeasurePropertiesDialog::setMeasure(Ms::Measure* measure)
 
 void MeasurePropertiesDialog::bboxClicked(QAbstractButton* button)
 {
-    QDialogButtonBox::ButtonRole br = buttonBox->buttonRole(button);
-    switch (br) {
+    switch (buttonBox->buttonRole(button)) {
     case QDialogButtonBox::ApplyRole:
-        apply();
-        break;
-
     case QDialogButtonBox::AcceptRole:
         apply();
-    // fall through
-
-    case QDialogButtonBox::RejectRole:
-        close();
         break;
-
     default:
-        qDebug("EditStaff: unknown button %d", int(br));
         break;
     }
 }
@@ -274,8 +262,13 @@ int MeasurePropertiesDialog::repeatCount() const
 
 void MeasurePropertiesDialog::apply()
 {
+    if (!m_notation || !m_measure) {
+        return;
+    }
+
     Ms::Score* score = m_measure->score();
 
+    m_notation->undoStack()->prepareChanges();
     bool propertiesChanged = false;
     for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
         bool v = visible(staffIdx);
@@ -302,7 +295,14 @@ void MeasurePropertiesDialog::apply()
     if (propertiesChanged) {
         m_measure->triggerLayout();
     }
+    m_notation->undoStack()->commitChanges();
 
     m_notation->interaction()->select({ m_measure }, Ms::SelectType::SINGLE, 0);
     m_notation->notationChanged().notify();
+}
+
+void MeasurePropertiesDialog::hideEvent(QHideEvent* event)
+{
+    WidgetStateStore::saveGeometry(this);
+    QDialog::hideEvent(event);
 }

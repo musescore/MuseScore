@@ -43,6 +43,11 @@ const UiActionList PaletteUiActions::m_actions = {
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Time Signature Properties…"),
              QT_TRANSLATE_NOOP("action", "Time signature properties")
+             ),
+    UiAction("edit-drumset",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Edit Drumset…"),
+             QT_TRANSLATE_NOOP("action", "Edit drumset")
              )
 };
 

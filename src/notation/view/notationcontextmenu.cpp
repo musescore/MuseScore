@@ -72,8 +72,12 @@ MenuItemList NotationContextMenu::defaultCopyPasteItems() const
 
 MenuItemList NotationContextMenu::measureItems() const
 {
-    MenuItemList items = defaultCopyPasteItems();
+    MenuItemList items = elementItems();
+    items << makeSeparator();
+    items << makeMenuItem("edit-drumset");
     items << makeMenuItem("staff-properties");
+    items << makeSeparator();
+    items << makeMenuItem("measure-properties");
 
     return items;
 }
