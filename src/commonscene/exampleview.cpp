@@ -155,15 +155,6 @@ void ExampleView::changeEditElement(Element*)
 {
 }
 
-QCursor ExampleView::cursor() const
-{
-    return QCursor();
-}
-
-void ExampleView::setCursor(const QCursor&)
-{
-}
-
 void ExampleView::setDropRectangle(const RectF&)
 {
 }

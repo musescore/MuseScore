@@ -23,8 +23,6 @@
 #ifndef __TEXTBASE_H__
 #define __TEXTBASE_H__
 
-#include <QTextCursor>
-
 #include "draw/fontmetrics.h"
 
 #include "draw/color.h"
@@ -34,8 +32,6 @@
 
 #include "iengravingconfiguration.h"
 #include "modularity/ioc.h"
-
-class QInputMethodEvent;
 
 namespace Ms {
 class MuseScoreView;
@@ -132,6 +128,25 @@ class TextCursor
     int _selectColumn  { 0 };
 
 public:
+
+    enum class MoveOperation {
+        Start,
+        Up,
+        StartOfLine,
+        Left,
+        WordLeft,
+        End,
+        Down,
+        EndOfLine,
+        NextWord,
+        Right
+    };
+
+    enum class MoveMode {
+        MoveAnchor,
+        KeepAnchor
+    };
+
     TextCursor(TextBase* t)
         : _text(t) {}
 
@@ -156,14 +171,14 @@ public:
 
     TextBlock& curLine() const;
     mu::RectF cursorRect() const;
-    bool movePosition(QTextCursor::MoveOperation op, QTextCursor::MoveMode mode = QTextCursor::MoveAnchor, int count = 1);
+    bool movePosition(TextCursor::MoveOperation op, TextCursor::MoveMode mode = TextCursor::MoveMode::MoveAnchor, int count = 1);
     void doubleClickSelect();
-    void moveCursorToEnd() { movePosition(QTextCursor::End); }
-    void moveCursorToStart() { movePosition(QTextCursor::Start); }
+    void moveCursorToEnd() { movePosition(TextCursor::MoveOperation::End); }
+    void moveCursorToStart() { movePosition(TextCursor::MoveOperation::Start); }
     QChar currentCharacter() const;
     QString currentWord() const;
     QString currentLine() const;
-    bool set(const mu::PointF& p, QTextCursor::MoveMode mode = QTextCursor::MoveAnchor);
+    bool set(const mu::PointF& p, TextCursor::MoveMode mode = TextCursor::MoveMode::MoveAnchor);
     QString selectedText(bool withFormat = false) const;
     QString extractText(int r1, int c1, int r2, int c2, bool withFormat = false) const;
     void updateCursorFormat();
@@ -173,7 +188,7 @@ public:
 
 private:
     QString accessibleCurrentCharacter() const;
-    void accessibileMessage(QString& accMsg, int oldRow, int oldCol, QString oldSelection, QTextCursor::MoveMode mode) const;
+    void accessibileMessage(QString& accMsg, int oldRow, int oldCol, QString oldSelection, TextCursor::MoveMode mode) const;
 };
 
 //---------------------------------------------------------
@@ -351,7 +366,7 @@ public:
     virtual void editCut(EditData&) override;
     virtual void editCopy(EditData&) override;
     virtual void endEdit(EditData&) override;
-    void movePosition(EditData&, QTextCursor::MoveOperation);
+    void movePosition(EditData&, TextCursor::MoveOperation);
 
     bool deleteSelectedText(EditData&);
 
@@ -395,7 +410,6 @@ public:
     static bool validateText(QString& s);
     bool inHexState() const { return hexState >= 0; }
     void endHexState(EditData&);
-    void inputTransition(EditData&, QInputMethodEvent*);
 
     mu::draw::Font font() const;
     mu::draw::FontMetrics fontMetrics() const;

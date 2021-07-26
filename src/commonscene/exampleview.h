@@ -96,8 +96,6 @@ public:
     virtual void removeScore() override;
 
     virtual void changeEditElement(Element*) override;
-    virtual QCursor cursor() const override;
-    virtual void setCursor(const QCursor&) override;
     virtual void setDropRectangle(const mu::RectF&) override;
     virtual void cmdAddSlur(Note* firstNote, Note* lastNote);
     virtual Element* elementNear(mu::PointF) override;
