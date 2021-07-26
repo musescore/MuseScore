@@ -1,21 +1,24 @@
-//=============================================================================
-//  MuseScore
-//  Linux Music Score Editor
-//
-//  Copyright (C) 2002-2009 Werner Schweer and others
-//
-//  This program is free software; you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License version 2.
-//
-//  This program is distributed in the hope that it will be useful,
-//  but WITHOUT ANY WARRANTY; without even the implied warranty of
-//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
-//
-//  You should have received a copy of the GNU General Public License
-//  along with this program; if not, write to the Free Software
-//  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-//=============================================================================
+/*
+ * SPDX-License-Identifier: GPL-3.0-only
+ * MuseScore-CLA-applies
+ *
+ * MuseScore
+ * Music Composition & Notation
+ *
+ * Copyright (C) 2021 MuseScore BVBA and others
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
 #ifndef __TIMELINE_H__
 #define __TIMELINE_H__
@@ -24,9 +27,9 @@
 
 #include "modularity/ioc.h"
 #include "ui/iuiconfiguration.h"
-#include "ui/view/widgetview.h"
 #include "notation/inotation.h"
 #include "async/asyncable.h"
+#include "actions/iactionsdispatcher.h"
 
 #include <vector>
 #include <QGraphicsView>
@@ -42,9 +45,11 @@ class ViewRect;
 //   TRowLabels
 //---------------------------------------------------------
 
-class TRowLabels : public QGraphicsView, public mu::ui::IDisplayableWidget
+class TRowLabels : public QGraphicsView
 {
     Q_OBJECT
+
+    friend class TimelineAdapter;
 
 public:
     enum class MouseOverValue {
@@ -60,7 +65,7 @@ public:
 
 private:
     QSplitter* _splitter { nullptr };
-    Timeline* parent { nullptr };
+    Timeline* _timeline { nullptr };
 
     QPoint _oldLoc;
 
@@ -89,11 +94,9 @@ signals:
     void requestContextMenu(QContextMenuEvent*);
 
 public:
-    TRowLabels(QSplitter* scrollArea, Timeline* time, QGraphicsView* w = 0);
+    TRowLabels(QSplitter* splitter, Timeline* time);
 
-    // IDisplayableWidget
-    QWidget* qWidget() override;
-    bool handleEvent(QEvent* event) override;
+    bool handleEvent(QEvent* event);
 
     void updateLabels(std::vector<std::pair<QString, bool> > labels, int height);
     QString cursorIsOn();
@@ -113,11 +116,12 @@ struct TimelineTheme {
 //   Timeline
 //---------------------------------------------------------
 
-class Timeline : public QGraphicsView, public mu::ui::IDisplayableWidget, public mu::async::Asyncable
+class Timeline : public QGraphicsView, public mu::async::Asyncable
 {
     Q_OBJECT
 
     INJECT(Ms, mu::ui::IUiConfiguration, uiConfiguration)
+    INJECT(Ms, mu::actions::IActionsDispatcher, dispatcher)
 
 public:
     enum class ItemType {
@@ -127,7 +131,26 @@ public:
     };
     Q_ENUM(ItemType)
 
+    Timeline(QSplitter* splitter);
+
+    bool handleEvent(QEvent* event);
+
+    void updateGridView() { updateGrid(-1, -1); }
+    void setNotation(mu::notation::INotationPtr notation);
+
+    TRowLabels* labelsColumn() const;
+
 private:
+    friend class TRowLabels;
+
+    enum class ViewState {
+        NORMAL,
+        LASSO,
+        DRAG
+    };
+
+    ViewState state = ViewState::NORMAL;
+
     static constexpr int keyItemType = 15;
 
     int _gridWidth = 20;
@@ -187,9 +210,6 @@ private:
     // True if meta value was last clicked
     bool _metaValue = false;
 
-    //! FIXME
-    //ViewState state = ViewState::NORMAL;
-
     void mousePressEvent(QMouseEvent* event) override;
     void mouseMoveEvent(QMouseEvent* event) override;
     void mouseReleaseEvent(QMouseEvent*) override;
@@ -216,33 +236,25 @@ private:
 
 private slots:
     void handleScroll(int value);
-    void updateView();
 
-public slots:
     void changeSelection(SelState);
     void mouseOver(QPointF pos);
     void swapMeta(unsigned row, bool switchUp);
-    virtual void contextMenuEvent(QContextMenuEvent* event) override;
     void requestInstrumentDialog();
     void toggleMetaRow();
     void updateTimelineTheme();
 
+    void contextMenuEvent(QContextMenuEvent* event) override;
+
 signals:
     void moved(QPointF);
 
-public:
-    Timeline(QSplitter* splitter, QWidget* parent = nullptr);
-
-    // IDisplayableWidget
-    QWidget* qWidget() override;
-    bool handleEvent(QEvent* event) override;
-
+private:
     int correctPart(int stave);
 
+    void updateView();
     void drawSelection();
     void drawGrid(int globalRows, int globalCols, int startMeasure = 0, int endMeasure = -1);
-
-    void setNotation(mu::notation::INotationPtr notation);
 
     int nstaves() const;
 
@@ -251,7 +263,6 @@ public:
     const TimelineTheme& activeTheme() const;
 
     void updateGridFull() { updateGrid(0, -1); }
-    void updateGridView() { updateGrid(-1, -1); }
     void updateGridFromCmdState();
 
     QColor colorBox(QGraphicsRectItem* item);
@@ -265,7 +276,7 @@ public:
 
     Staff* numToStaff(int staff);
     void toggleShow(int staff);
-    QString cursorIsOn();
+    QString cursorIsOn(const QPoint& cursorPos);
 };
 } // namespace Ms
 

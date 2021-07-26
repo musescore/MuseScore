@@ -26,11 +26,13 @@
 
 #include <QSplitter>
 
+#include "log.h"
+
 namespace mu::notation {
-class TimeLineAdapter : public QSplitter, public ui::IDisplayableWidget
+class TimelineAdapter : public QSplitter, public ui::IDisplayableWidget
 {
 public:
-    TimeLineAdapter()
+    TimelineAdapter()
         : QSplitter(nullptr)
     {
         setFocusPolicy(Qt::NoFocus);
@@ -38,7 +40,12 @@ public:
         setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         setObjectName("TimeLineAdapter");
 
-        m_msTimeline = new Ms::Timeline(this, this);
+        m_msTimeline = new Ms::Timeline(this);
+    }
+
+    void updateView()
+    {
+        m_msTimeline->updateGridView();
     }
 
     void setNotation(INotationPtr notation)
@@ -54,7 +61,28 @@ private:
 
     bool handleEvent(QEvent* e) override
     {
+        QMouseEvent* me = dynamic_cast<QMouseEvent*>(e);
+        if (me) {
+            return handleMouseEvent(me);
+        }
+
         return m_msTimeline->handleEvent(e);
+    }
+
+    bool handleMouseEvent(QMouseEvent* event)
+    {
+        QPoint pos = event ? event->pos() : QPoint();
+        Ms::TRowLabels* labelsColumn = m_msTimeline->labelsColumn();
+
+        if (m_msTimeline->geometry().contains(pos)) {
+            event->setLocalPos(m_msTimeline->mapFrom(this, pos));
+            return m_msTimeline->handleEvent(event);
+        } else if (labelsColumn->geometry().contains(pos)) {
+            event->setLocalPos(labelsColumn->mapFrom(this, pos));
+            return labelsColumn->handleEvent(event);
+        }
+
+        return false;
     }
 
     Ms::Timeline* m_msTimeline = nullptr;
@@ -63,28 +91,42 @@ private:
 
 using namespace mu::notation;
 
-TimeLineView::TimeLineView(QQuickItem* parent)
+TimelineView::TimelineView(QQuickItem* parent)
     : WidgetView(parent)
 {
 }
 
-void TimeLineView::componentComplete()
+void TimelineView::componentComplete()
 {
     WidgetView::componentComplete();
 
-    //TimeLineAdapter* timeline = new TimeLineAdapter();
-    Ms::Timeline* timeline = new Ms::Timeline(new QSplitter);
+    auto timeline = std::make_shared<TimelineAdapter>();
 
-    globalContext()->currentNotationChanged().onNotify(this, [this, timeline]() {
-        timeline->setNotation(globalContext()->currentNotation());
-    });
+    auto updateView = [this, timeline]() {
+        update();
 
-    connect(this, &QQuickItem::widthChanged, [timeline, this]() {
-        timeline->setMinimumSize(width(), height());
-    });
+        if (timeline) {
+            timeline->updateView();
+        }
+    };
 
-    connect(this, &QQuickItem::heightChanged, [timeline, this]() {
-        timeline->setMinimumSize(width(), height());
+    globalContext()->currentNotationChanged().onNotify(this, [this, timeline, updateView]() {
+        INotationPtr notation = globalContext()->currentNotation();
+        timeline->setNotation(notation);
+
+        updateView();
+
+        if (!notation) {
+            return;
+        }
+
+        notation->notationChanged().onNotify(this, [=] {
+            updateView();
+        });
+
+        notation->interaction()->selectionChanged().onNotify(this, [=] {
+            updateView();
+        });
     });
 
     setWidget(timeline);

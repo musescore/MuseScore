@@ -1,14 +1,24 @@
-//=============================================================================
-//  MuseScore
-//  Music Composition & Notation
-//
-//  Copyright (C) 2002-2013 Werner Schweer
-//
-//  This program is free software; you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License version 2
-//  as published by the Free Software Foundation and appearing in
-//  the file LICENCE.GPL
-//=============================================================================
+/*
+ * SPDX-License-Identifier: GPL-3.0-only
+ * MuseScore-CLA-applies
+ *
+ * MuseScore
+ * Music Composition & Notation
+ *
+ * Copyright (C) 2021 MuseScore BVBA and others
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
 #include "timeline.h"
 
@@ -44,8 +54,8 @@ namespace Ms {
 //   TRowLabels
 //---------------------------------------------------------
 
-TRowLabels::TRowLabels(QSplitter* splitter, Timeline* time, QGraphicsView* w)
-    : QGraphicsView(w)
+TRowLabels::TRowLabels(QSplitter* splitter, Timeline* time)
+    : QGraphicsView(splitter)
 {
     TRACEFUNC;
 
@@ -53,7 +63,7 @@ TRowLabels::TRowLabels(QSplitter* splitter, Timeline* time, QGraphicsView* w)
     setObjectName("TRowLabels");
 
     _splitter = splitter;
-    parent = time;
+    _timeline = time;
     setScene(new QGraphicsScene);
     scene()->setBackgroundBrush(time->activeTheme().backgroundColor);
     setSceneRect(0, 0, 50, time->height());
@@ -254,12 +264,7 @@ TRowLabels::TRowLabels(QSplitter* splitter, Timeline* time, QGraphicsView* w)
     std::tuple<QGraphicsPixmapItem*, MouseOverValue, unsigned> tmp(nullptr, MouseOverValue::NONE, -1);
     _oldItemInfo = tmp;
 
-    connect(this, SIGNAL(requestContextMenu(QContextMenuEvent*)), parent, SLOT(contextMenuEvent(QContextMenuEvent*)));
-}
-
-QWidget* TRowLabels::qWidget()
-{
-    return this;
+    connect(this, SIGNAL(requestContextMenu(QContextMenuEvent*)), _timeline, SLOT(contextMenuEvent(QContextMenuEvent*)));
 }
 
 bool TRowLabels::handleEvent(QEvent* e)
@@ -275,8 +280,8 @@ void TRowLabels::restrictScroll(int value)
 {
     TRACEFUNC;
 
-    if (value > parent->verticalScrollBar()->maximum()) {
-        verticalScrollBar()->setValue(parent->verticalScrollBar()->maximum());
+    if (value > _timeline->verticalScrollBar()->maximum()) {
+        verticalScrollBar()->setValue(_timeline->verticalScrollBar()->maximum());
     }
     for (std::vector<std::pair<QGraphicsItem*, int> >::iterator it = _metaLabels.begin();
          it != _metaLabels.end(); ++it) {
@@ -322,7 +327,7 @@ void TRowLabels::updateLabels(std::vector<std::pair<QString, bool> > labels, int
         return;
     }
 
-    unsigned numMetas = parent->nmetas();
+    unsigned numMetas = _timeline->nmetas();
     int maxWidth = -1;
     int measureWidth = 0;
     for (unsigned row = 0; row < labels.size(); row++) {
@@ -342,12 +347,12 @@ void TRowLabels::updateLabels(std::vector<std::pair<QString, bool> > labels, int
         graphicsTextItem->setX(0);
         graphicsTextItem->setY(ypos);
         if (labels[row].second) {
-            graphicsTextItem->setDefaultTextColor(parent->activeTheme().labelsColor1);
+            graphicsTextItem->setDefaultTextColor(_timeline->activeTheme().labelsColor1);
         } else {
-            graphicsTextItem->setDefaultTextColor(parent->activeTheme().labelsColor2);
+            graphicsTextItem->setDefaultTextColor(_timeline->activeTheme().labelsColor2);
         }
-        graphicsRectItem->setPen(QPen(parent->activeTheme().labelsColor2));
-        graphicsRectItem->setBrush(QBrush(parent->activeTheme().labelsColor3));
+        graphicsRectItem->setPen(QPen(_timeline->activeTheme().labelsColor2));
+        graphicsRectItem->setBrush(QBrush(_timeline->activeTheme().labelsColor3));
         graphicsTextItem->setZValue(-1);
         graphicsRectItem->setZValue(-1);
 
@@ -355,9 +360,9 @@ void TRowLabels::updateLabels(std::vector<std::pair<QString, bool> > labels, int
         graphicsTextItem->setData(0, QVariant::fromValue<bool>(false));
 
         MouseOverValue mouseOverArrow = MouseOverValue::NONE;
-        if (numMetas - 1 == row && (numMetas > 2 || parent->collapsed())) {
+        if (numMetas - 1 == row && (numMetas > 2 || _timeline->collapsed())) {
             // Measures meta
-            if (parent->collapsed()) {
+            if (_timeline->collapsed()) {
                 mouseOverArrow = MouseOverValue::COLLAPSE_DOWN_ARROW;
             } else {
                 mouseOverArrow = MouseOverValue::COLLAPSE_UP_ARROW;
@@ -371,8 +376,8 @@ void TRowLabels::updateLabels(std::vector<std::pair<QString, bool> > labels, int
                 mouseOverArrow = MouseOverValue::MOVE_UP_ARROW;
             }
         } else if (numMetas <= row) {
-            if (parent->numToStaff(row - numMetas)
-                && parent->numToStaff(row - numMetas)->show()) {
+            if (_timeline->numToStaff(row - numMetas)
+                && _timeline->numToStaff(row - numMetas)->show()) {
                 mouseOverArrow = MouseOverValue::OPEN_EYE;
             } else {
                 mouseOverArrow = MouseOverValue::CLOSED_EYE;
@@ -407,7 +412,7 @@ void TRowLabels::updateLabels(std::vector<std::pair<QString, bool> > labels, int
     std::pair<QGraphicsItem*, int> graphicsLineItemPair = std::make_pair(graphicsLineItem, numMetas);
     _metaLabels.push_back(graphicsLineItemPair);
 
-    setSceneRect(0, 0, maxWidth, parent->getHeight() + parent->horizontalScrollBar()->height());
+    setSceneRect(0, 0, maxWidth, _timeline->getHeight() + _timeline->horizontalScrollBar()->height());
 
     std::tuple<QGraphicsPixmapItem*, MouseOverValue, unsigned> tmp(nullptr, MouseOverValue::NONE, -1);
     _oldItemInfo = tmp;
@@ -423,7 +428,7 @@ void TRowLabels::updateLabels(std::vector<std::pair<QString, bool> > labels, int
 
 void TRowLabels::resizeEvent(QResizeEvent*)
 {
-    std::vector<std::pair<QString, bool> > labels = parent->getLabels();
+    std::vector<std::pair<QString, bool> > labels = _timeline->getLabels();
     updateLabels(labels, 20);
 }
 
@@ -440,12 +445,12 @@ void TRowLabels::mousePressEvent(QMouseEvent* event)
     TRACEFUNC;
 
     QPointF scenePt = mapToScene(event->pos());
-    unsigned numMetas = parent->nmetas();
+    unsigned numMetas = _timeline->nmetas();
 
     // Check if mouse position in scene is on the last meta
     QPointF measureMetaTl = QPointF(0, (numMetas - 1) * 20 + verticalScrollBar()->value());
     QPointF measureMetaBr = QPointF(width(), numMetas * 20 + verticalScrollBar()->value());
-    if (QRectF(measureMetaTl, measureMetaBr).contains(scenePt) && (numMetas > 2 || parent->collapsed())) {
+    if (QRectF(measureMetaTl, measureMetaBr).contains(scenePt) && (numMetas > 2 || _timeline->collapsed())) {
         if (std::get<0>(_oldItemInfo)) {
             std::pair<QGraphicsItem*, int> p = std::make_pair(std::get<0>(_oldItemInfo), std::get<2>(_oldItemInfo));
             std::vector<std::pair<QGraphicsItem*, int> >::iterator it = std::find(_metaLabels.begin(), _metaLabels.end(), p);
@@ -458,8 +463,8 @@ void TRowLabels::mousePressEvent(QMouseEvent* event)
         _oldItemInfo = tmp;
         mouseOver(mapToScene(mapFromGlobal(QCursor::pos())));
 
-        parent->setCollapsed(!parent->collapsed());
-        parent->updateGridView();
+        _timeline->setCollapsed(!_timeline->collapsed());
+        _timeline->updateGridView();
     } else {
         // Check if pixmap was selected
         if (QGraphicsItem* graphicsItem = scene()->itemAt(scenePt, transform())) {
@@ -477,7 +482,7 @@ void TRowLabels::mousePressEvent(QMouseEvent* event)
                         emit swapMeta(row, true);
                     }
                 } else if (row >= numMetas) {
-                    parent->toggleShow(row - numMetas);
+                    _timeline->toggleShow(row - numMetas);
                 }
             } else {
                 _dragging = true;
@@ -608,7 +613,7 @@ void TRowLabels::mouseOver(QPointF scenePt)
             graphicsPixmapItemArrow->setData(2, QVariant::fromValue<unsigned>(row));
 
             // Draw arrow at correct location
-            if (row < parent->nmetas()) {
+            if (row < _timeline->nmetas()) {
                 graphicsPixmapItemArrow->setPos(width() - 12, verticalScrollBar()->value() + 1 + row * 20);
                 graphicsPixmapItemArrow->setZValue(3);
             } else {
@@ -695,8 +700,8 @@ QString TRowLabels::cursorIsOn()
 //   Timeline
 //---------------------------------------------------------
 
-Timeline::Timeline(QSplitter* splitter, QWidget* parent)
-    : QGraphicsView(parent)
+Timeline::Timeline(QSplitter* splitter)
+    : QGraphicsView(splitter)
 {
     TRACEFUNC;
 
@@ -932,11 +937,6 @@ Timeline::Timeline(QSplitter* splitter, QWidget* parent)
     uiConfiguration()->currentThemeChanged().onNotify(this, [this]() {
         updateTimelineTheme();
     });
-}
-
-QWidget* Timeline::qWidget()
-{
-    return this;
 }
 
 bool Timeline::handleEvent(QEvent* e)
@@ -2294,10 +2294,10 @@ void Timeline::mouseMoveEvent(QMouseEvent* event)
 {
     QPointF newLoc = mapToScene(event->pos());
     if (!_mousePressed) {
-        if (cursorIsOn() == "meta") {
+        if (cursorIsOn(event->pos()) == "meta") {
             setCursor(Qt::ArrowCursor);
             mouseOver(newLoc);
-        } else if (cursorIsOn() == "invalid") {
+        } else if (cursorIsOn(event->pos()) == "invalid") {
             setCursor(Qt::ForbiddenCursor);
         } else {
             setCursor(Qt::ArrowCursor);
@@ -2307,13 +2307,12 @@ void Timeline::mouseMoveEvent(QMouseEvent* event)
         return;
     }
 
-    /*! FIXME
     if (state == ViewState::NORMAL) {
         if (event->modifiers() == Qt::ShiftModifier) {
             // Slight wiggle room for selection (Same as score)
             if (abs(newLoc.x() - _oldLoc.x()) > 2
                 || abs(newLoc.y() - _oldLoc.y()) > 2) {
-                score()->deselectAll();
+                interaction()->clearSelection();
                 updateGrid();
                 state = ViewState::LASSO;
                 _selectionBox = new QGraphicsRectItem();
@@ -2340,7 +2339,6 @@ void Timeline::mouseMoveEvent(QMouseEvent* event)
         horizontalScrollBar()->setValue(horizontalScrollBar()->value() + x_offset);
         verticalScrollBar()->setValue(verticalScrollBar()->value() + yOffset);
     }
-    */
 
     emit moved(QPointF(-1, -1));
 }
@@ -2353,10 +2351,9 @@ void Timeline::mouseReleaseEvent(QMouseEvent*)
 {
     _mousePressed = false;
 
-    /*
     if (state == ViewState::LASSO) {
         scene()->removeItem(_selectionBox);
-        score()->deselectAll();
+        interaction()->clearSelection();
 
         int width, height;
         QPoint loc = mapFromScene(_selectionBox->rect().topLeft());
@@ -2417,20 +2414,14 @@ void Timeline::mouseReleaseEvent(QMouseEvent*)
                     brMeasure = brMeasure->prevMeasureMM();
                 }
 
-                score()->select(tlMeasure, SelectType::SINGLE, tlStave);
-                score()->select(brMeasure, SelectType::RANGE, brStave);
+                interaction()->select({ tlMeasure }, SelectType::SINGLE, tlStave);
+                interaction()->select({ brMeasure }, SelectType::RANGE, brStave);
             }
-            _cv->adjustCanvasPosition(tlMeasure, false, tlStave);
         }
-
-        score()->update();
-        mscore->endCmd();
     } else if (state == ViewState::DRAG) {
         setCursor(Qt::ArrowCursor);
-        mscore->endCmd();
     }
     state = ViewState::NORMAL;
-    */
 }
 
 //---------------------------------------------------------
@@ -2522,6 +2513,8 @@ void Timeline::changeEvent(QEvent* event)
 
 void Timeline::updateGrid(int startMeasure, int endMeasure)
 {
+    TRACEFUNC;
+
     if (score() && score()->firstMeasure()) {
         drawGrid(nstaves(), score()->nmeasures(), startMeasure, endMeasure);
         updateView();
@@ -2578,10 +2571,6 @@ void Timeline::setNotation(mu::notation::INotationPtr notation)
         drawSelection();
         changeSelection(SelState::NONE);
         _rowNames->updateLabels(getLabels(), _gridHeight);
-
-        m_notation->notationChanged().onNotify(this, [this]() {
-            updateView();
-        });
     } else {
         // Clear timeline if no score is present
         if (_splitter && _splitter->count() > 0) {
@@ -2592,9 +2581,6 @@ void Timeline::setNotation(mu::notation::INotationPtr notation)
         _metaRows.clear();
         setSceneRect(0, 0, 0, 0);
     }
-
-    viewport()->update();
-    updateView();
 }
 
 //---------------------------------------------------------
@@ -3021,7 +3007,7 @@ void Timeline::toggleShow(int staff)
 //   Timeline::showContextMenu
 //---------------------------------------------------------
 
-void Timeline::contextMenuEvent(QContextMenuEvent*)
+void Timeline::contextMenuEvent(QContextMenuEvent* event)
 {
     QMenu* contextMenu = new QMenu(tr("Context menu"), this);
     if (_rowNames->cursorIsOn() == "instrument") {
@@ -3029,7 +3015,7 @@ void Timeline::contextMenuEvent(QContextMenuEvent*)
         connect(edit_instruments, SIGNAL(triggered()), this, SLOT(requestInstrumentDialog()));
         contextMenu->addAction(edit_instruments);
         contextMenu->exec(QCursor::pos());
-    } else if (_rowNames->cursorIsOn() == "meta" || cursorIsOn() == "meta") {
+    } else if (_rowNames->cursorIsOn() == "meta" || cursorIsOn(event->pos()) == "meta") {
         for (auto it = _metas.begin(); it != _metas.end(); ++it) {
             std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> meta = *it;
             QString row_name = std::get<0>(meta);
@@ -3135,10 +3121,9 @@ unsigned Timeline::correctMetaRow(unsigned row)
 //   Timeline::correctMetaRow
 //---------------------------------------------------------
 
-QString Timeline::cursorIsOn()
+QString Timeline::cursorIsOn(const QPoint& cursorPos)
 {
-    QPointF scenePos = mapToScene(mapFromGlobal(QCursor::pos()));
-    QGraphicsItem* graphicsItem = scene()->itemAt(scenePos, transform());
+    QGraphicsItem* graphicsItem = scene()->itemAt(cursorPos, transform());
     if (!graphicsItem) {
         return "";
     }
@@ -3152,7 +3137,7 @@ QString Timeline::cursorIsOn()
     if (it != _metaRows.end()) {
         return "meta";
     }
-    QList<QGraphicsItem*> graphicsItemList = scene()->items(scenePos);
+    QList<QGraphicsItem*> graphicsItemList = scene()->items(cursorPos);
     for (QGraphicsItem* currGraphicsItem : graphicsItemList) {
         Measure* currMeasure = static_cast<Measure*>(currGraphicsItem->data(2).value<void*>());
         int stave = currGraphicsItem->data(0).value<int>();
@@ -3195,13 +3180,7 @@ void Timeline::updateTimelineTheme()
 
 void Timeline::requestInstrumentDialog()
 {
-    /*
-     *! FIXME
-    QAction* act = getAction("instruments");
-    mscore->cmd(act);
-    if (mscore->getMixer()) {
-        mscore->getMixer()->setScore(score());
-    }*/
+    dispatcher()->dispatch("instruments");
 }
 
 mu::notation::INotationInteractionPtr Timeline::interaction() const
@@ -3212,5 +3191,10 @@ mu::notation::INotationInteractionPtr Timeline::interaction() const
 Ms::Score* Timeline::score() const
 {
     return m_notation ? m_notation->elements()->msScore() : nullptr;
+}
+
+TRowLabels* Timeline::labelsColumn() const
+{
+    return _rowNames;
 }
 }

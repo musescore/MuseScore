@@ -8,4 +8,4 @@ ConcertPitchControl 1.0 ConcertPitchControl.qml
 NoteInputBar 1.0 NoteInputBar.qml
 NoteInputBarCustomizationDialog 1.0 NoteInputBarCustomizationDialog.qml
 UndoRedoToolBar 1.0 UndoRedoToolBar.qml
-TimeLine 1.0 TimeLine.qml
+Timeline 1.0 Timeline.qml

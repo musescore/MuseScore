@@ -82,7 +82,7 @@ DockPage {
         pageModel.setPalettePanelDockName(palettePanel.objectName)
         pageModel.setPianoRollDockName(pianoRollPanel.objectName)
         pageModel.setMixerDockName(mixerPanel.objectName)
-        pageModel.setTimelineDockName(timelinePanel.objectNme)
+        pageModel.setTimelineDockName(timelinePanel.objectName)
         pageModel.setStatusBarDockName(notationStatusBar.objectName)
 
         Qt.callLater(pageModel.init, root.dockWindow)
@@ -288,7 +288,7 @@ DockPage {
             minimumHeight: 100
             maximumHeight: 300
 
-            TimeLine {
+            Timeline {
                 anchors.fill: parent
             }
         }

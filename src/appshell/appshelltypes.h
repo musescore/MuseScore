@@ -37,7 +37,7 @@ enum class PanelType
     NotationStatusBar,
     PlaybackToolBar,
     Mixer,
-    TimeLine,
+    Timeline,
     Synthesizer,
     SelectionFilter,
     Piano,
