@@ -120,6 +120,7 @@ Inspector::Inspector(QWidget* parent)
       ie             = 0;
       oe             = 0;
       oSameTypes     = true;
+      oSameSubtypes  = true;
       _score         = 0;
 //      retranslate();
       setWindowTitle(tr("Inspector"));
@@ -201,11 +202,13 @@ void Inspector::update(Score* s)
                         sameSubtypes = false;
                   }
             }
-      if (oe != element() || oSameTypes != sameTypes || (sameTypes && !sameSubtypes)) {
-            delete ie;
+      if (oe != element() ||
+          (oSameTypes != sameTypes) ||
+          (oSameSubtypes != sameSubtypes)) {
             ie  = 0;
             oe  = element();
             oSameTypes = sameTypes;
+            oSameSubtypes = sameSubtypes;
             if (!element())
                   ie = new InspectorEmpty(this);
             else if (!sameTypes)
@@ -324,6 +327,7 @@ void Inspector::update(Score* s)
                               else
                                     ie = new InspectorBreak(this);
 #endif
+                              //FIX: it looks as we might end up with ie = 0
                               break;
                         case ElementType::BEND:
                               ie = new InspectorBend(this);
@@ -399,8 +403,13 @@ void Inspector::update(Score* s)
                               break;
                         }
                   }
+            Q_ASSERT(ie);
             connect(ie, &InspectorBase::elementChanged, this, QOverload<>::of(&Inspector::update), Qt::QueuedConnection);
-            sa->setWidget(ie);      // will destroy previous set widget
+            if (sa->widget()) { // If old inspector exist
+                  QWidget *q = sa->takeWidget();
+                  q->deleteLater();
+                  }
+            sa->setWidget(ie);      // will destroy previous set widget, unless takeWidget() call
 
             //focus policies were set by hand in each inspector_*.ui. this code just helps keeping them like they are
             //also fixes mac problem. on Mac Qt::TabFocus doesn't work, but Qt::StrongFocus works
