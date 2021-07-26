@@ -72,7 +72,8 @@ void TimeLineView::componentComplete()
 {
     WidgetView::componentComplete();
 
-    TimeLineAdapter* timeline = new TimeLineAdapter();
+    //TimeLineAdapter* timeline = new TimeLineAdapter();
+    Ms::Timeline* timeline = new Ms::Timeline(new QSplitter);
 
     globalContext()->currentNotationChanged().onNotify(this, [this, timeline]() {
         timeline->setNotation(globalContext()->currentNotation());
