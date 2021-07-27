@@ -193,7 +193,7 @@ bool Read302::readScore302(Ms::Score* score, XmlReader& e)
                 ex->setPartScore(s);
                 e.setLastMeasure(nullptr);
 
-                readScore302(score, e);
+                readScore302(s, e);
 
                 s->linkMeasures(m);
                 ex->setTracks(e.tracks());
@@ -253,6 +253,10 @@ bool Read302::readScore302(Ms::Score* score, XmlReader& e)
     score->masterScore()->rebuildMidiMapping();
     score->masterScore()->updateChannel();
 
+    for (Staff* staff : score->staves()) {
+        staff->updateOttava();
+    }
+
 //      createPlayEvents();
     return true;
 }
@@ -279,5 +283,6 @@ Score::FileError Read302::read302(Ms::MasterScore* masterScore, XmlReader& e)
             masterScore->revisions()->add(revision);
         }
     }
+
     return Score::FileError::FILE_NO_ERROR;
 }

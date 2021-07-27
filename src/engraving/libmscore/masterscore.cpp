@@ -32,6 +32,7 @@
 #include "compat/read114.h"
 #include "compat/read206.h"
 #include "compat/read302.h"
+#include "compat/readstyle.h"
 
 #include "engravingproject.h"
 
@@ -236,14 +237,39 @@ Score::FileError MasterScore::loadMscz(const mu::engraving::MscReader& mscReader
     {
         QByteArray scoreData = mscReader.readScoreFile();
         QString completeBaseName = masterScore()->fileInfo()->completeBaseName();
-        XmlReader e(scoreData);
-        e.setDocName(completeBaseName);
 
-        retval = read(e, ignoreVersionError);
+        compat::ReadStyleHook styleHook(this, scoreData, completeBaseName);
+
+        XmlReader xml(scoreData);
+        xml.setDocName(completeBaseName);
+        retval = read(xml, ignoreVersionError, &styleHook);
     }
 
     // Read excerpts
-    {
+    if (mscVersion() >= 400) {
+        std::vector<QString> excerptNames = mscReader.excerptNames();
+        for (const QString& excerptName : excerptNames) {
+            Score* partScore = this->createScore();
+
+            compat::ReadStyleHook::setupDefaultStyle(partScore);
+
+            Excerpt* ex = new Excerpt(this);
+            ex->setPartScore(partScore);
+
+            QByteArray excerptStyleData = mscReader.readExcerptStyleFile(excerptName);
+            QBuffer excerptStyleBuf(&excerptStyleData);
+            excerptStyleBuf.open(QIODevice::ReadOnly);
+            partScore->style().read(&excerptStyleBuf);
+
+            QByteArray excerptData = mscReader.readExcerptFile(excerptName);
+            XmlReader xml(excerptData);
+            xml.setDocName(excerptName);
+            partScore->read400(xml);
+
+            partScore->linkMeasures(this);
+            ex->setTracks(xml.tracks());
+            this->addExcerpt(ex);
+        }
     }
 
     // Read ChordList
@@ -474,7 +500,7 @@ void MasterScore::parseVersion(const QString& val)
 //    return true on success
 //---------------------------------------------------------
 
-Score::FileError MasterScore::read(XmlReader& e, bool ignoreVersionError)
+Score::FileError MasterScore::read(XmlReader& e, bool ignoreVersionError, mu::engraving::compat::ReadStyleHook* styleHook)
 {
     while (e.readNextStartElement()) {
         if (e.name() == "museScore") {
@@ -494,6 +520,19 @@ Score::FileError MasterScore::read(XmlReader& e, bool ignoreVersionError)
                 }
             }
 
+            if (styleHook) {
+                styleHook->setupDefaultStyle();
+            }
+
+            {
+                static int counter = 0;
+                ++counter;
+
+                if (style().defaultStyleVersion() == 400) {
+                    int k =1;
+                }
+            }
+
             Score::FileError error;
             if (mscVersion() <= 114) {
                 error = compat::Read114::read114(this, e);
@@ -504,6 +543,8 @@ Score::FileError MasterScore::read(XmlReader& e, bool ignoreVersionError)
             } else {
                 error = doRead(e);
             }
+
+            setCreated(false);
             setExcerptsChanged(false);
             return error;
         } else {
@@ -529,11 +570,6 @@ Score::FileError MasterScore::doRead(XmlReader& e)
                 }
                 return FileError::FILE_BAD_FORMAT;
             }
-
-            for (Staff* s : staves()) {
-                s->updateOttava();
-            }
-            setCreated(false);
         } else if (tag == "Revision") {
             Revision* revision = new Revision;
             revision->read(e);
