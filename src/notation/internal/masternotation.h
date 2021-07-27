@@ -61,10 +61,11 @@ public:
 
     IExcerptNotationPtr newExcerptNotation() const override;
     ValCh<ExcerptNotationList> excerpts() const override;
-    void setExcerpts(const ExcerptNotationList& excerpts) override;
+    ExcerptNotationList availableExcerpts() const override;
+
+    void initExcerpts(const ExcerptNotationList& excerpts) override;
 
     INotationPartsPtr parts() const override;
-    INotationPtr clone() const override;
 
 private:
 
@@ -74,13 +75,6 @@ private:
     Ms::MasterScore* masterScore() const;
 
     void doSetExcerpts(ExcerptNotationList excerpts);
-
-    void initExcerpts(const QList<Ms::Excerpt*>& scoreExcerpts = QList<Ms::Excerpt*>());
-
-    void createNonexistentExcerpts(const ExcerptNotationList& newExcerpts);
-
-    void updateExcerpts();
-    IExcerptNotationPtr createExcerpt(Ms::Part* part);
 
     ValCh<ExcerptNotationList> m_excerpts;
 };

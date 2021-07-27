@@ -1367,6 +1367,7 @@ QList<Excerpt*> Excerpt::createExcerptsFromParts(const QList<Part*>& parts)
     for (Part* part : parts) {
         Excerpt* excerpt = new Excerpt(part->masterScore());
 
+        excerpt->setPartScore(part->score());
         excerpt->parts().append(part);
 
         for (int i = part->startTrack(), j = 0; i < part->endTrack(); ++i, ++j) {

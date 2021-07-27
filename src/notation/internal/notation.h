@@ -55,8 +55,6 @@ public:
 
     ScoreOrder scoreOrder() const override;
 
-    INotationPtr clone() const override;
-
     void setViewSize(const QSizeF& vs) override;
     void setViewMode(const ViewMode& viewMode) override;
     ViewMode viewMode() const override;
