@@ -27,6 +27,7 @@
 #include "part.h"
 #include "spanner.h"
 #include "excerpt.h"
+#include "staff.h"
 
 using namespace Ms;
 
@@ -132,19 +133,8 @@ bool Score::read400(XmlReader& e)
             s->read(e);
             addSpanner(s);
         } else if (tag == "Excerpt") {
-            if (MScore::noExcerpts) {
-                e.skipCurrentElement();
-            } else {
-                if (isMaster()) {
-                    MasterScore* mScore = static_cast<MasterScore*>(this);
-                    Excerpt* ex = new Excerpt(mScore);
-                    ex->read(e);
-                    mScore->excerpts().append(ex);
-                } else {
-                    qDebug("Score::read(): part cannot have parts");
-                    e.skipCurrentElement();
-                }
-            }
+            // Since version 400, the Excerpts are stored in a separate file
+            e.skipCurrentElement();
         } else if (e.name() == "Tracklist") {
             int strack = e.intAttribute("sTrack",   -1);
             int dtrack = e.intAttribute("dstTrack", -1);
@@ -208,6 +198,10 @@ bool Score::read400(XmlReader& e)
 
     masterScore()->rebuildMidiMapping();
     masterScore()->updateChannel();
+
+    for (Staff* staff : staves()) {
+        staff->updateOttava();
+    }
 
 //      createPlayEvents();
     return true;
