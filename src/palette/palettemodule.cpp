@@ -40,6 +40,7 @@
 #include "view/paletterootmodel.h"
 #include "view/palettepropertiesmodel.h"
 #include "view/palettecellpropertiesmodel.h"
+#include "view/drumsetpanelview.h"
 
 #include "view/widgets/masterpalette.h"
 #include "view/widgets/specialcharactersdialog.h"
@@ -119,6 +120,7 @@ void PaletteModule::registerUiTypes()
     qmlRegisterType<PaletteRootModel>("MuseScore.Palette", 1, 0, "PaletteRootModel");
     qmlRegisterType<PalettePropertiesModel>("MuseScore.Palette", 1, 0, "PalettePropertiesModel");
     qmlRegisterType<PaletteCellPropertiesModel>("MuseScore.Palette", 1, 0, "PaletteCellPropertiesModel");
+    qmlRegisterType<DrumsetPanelView>("MuseScore.Palette", 1, 0, "DrumsetPanelView");
 
     qRegisterMetaType<SpecialCharactersDialog>("SpecialCharactersDialog");
     qRegisterMetaType<TimeSignaturePropertiesDialog>("TimeSignaturePropertiesDialog");
