@@ -24,6 +24,8 @@
 
 #include <QBuffer>
 
+#include "engraving/libmscore/xml.h"
+
 namespace Ms {
 template<class T>
 QByteArray toMimeData(T* t)

@@ -54,16 +54,13 @@
 #include "engraving/style/defaultstyle.h"
 #include "engraving/style/style.h"
 
-#include "palette_config.h"
-
 #include "translation.h"
 
-//using namespace mu;
-//using namespace mu::framework;
+using namespace mu;
 using namespace mu::palette;
-//using namespace mu::actions;
-//using namespace mu::draw;
-//using namespace Ms;
+using namespace mu::framework;
+using namespace mu::draw;
+using namespace Ms;
 
 PaletteWidget::PaletteWidget(PalettePtr palette, QWidget* parent)
     : QWidget(parent)
@@ -580,7 +577,7 @@ QRect PaletteWidget::rectForCellAt(int idx) const
 QPixmap PaletteWidget::pixmapForCellAt(int paletteIdx) const
 {
     qreal _spatium = gscore->spatium();
-    qreal magS     = PALETTE_SPATIUM * mag() * paletteScaling();
+    qreal magS     = configuration()->paletteSpatium() * mag() * paletteScaling();
     qreal mag      = magS / _spatium;
 
     PaletteCellPtr cell = cellAt(paletteIdx);
@@ -651,7 +648,7 @@ int PaletteWidget::heightForWidth(int w) const
     if (rows <= 0) {
         rows = 1;
     }
-    qreal magS = PALETTE_SPATIUM * mag() * paletteScaling();
+    qreal magS = configuration()->paletteSpatium() * mag() * paletteScaling();
     int h = lrint(yOffset() * 2 * magS);
     return rows * vgridM + h;
 }
@@ -926,7 +923,7 @@ void PaletteWidget::resizeEvent(QResizeEvent* e)
 void PaletteWidget::paintEvent(QPaintEvent* /*event*/)
 {
     qreal _spatium = gscore->spatium();
-    qreal magS     = PALETTE_SPATIUM * mag() * paletteScaling();
+    qreal magS     = configuration()->paletteSpatium() * mag() * paletteScaling();
     qreal mag      = magS / _spatium;
     gscore->setSpatium(SPATIUM20);
 

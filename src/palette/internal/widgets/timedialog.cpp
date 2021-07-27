@@ -35,7 +35,9 @@
 
 #include "translation.h"
 
-namespace Ms {
+using namespace mu::palette;
+using namespace Ms;
+
 TimeDialog::TimeDialog(QWidget* parent)
     : QWidget(parent, Qt::WindowFlags(Qt::Dialog | Qt::Window))
 {
@@ -244,5 +246,4 @@ void TimeDialog::textChanged()
 {
     Fraction sig(zNominal->value(), denominator());
     groups->setSig(sig, Groups::endings(sig), zText->text(), nText->text());
-}
 }
