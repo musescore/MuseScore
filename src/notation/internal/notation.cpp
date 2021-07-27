@@ -246,11 +246,6 @@ mu::notation::ScoreOrder Notation::scoreOrder() const
     return m_score ? ScoreOrderConverter::convertScoreOrder(m_score->scoreOrder()) : ScoreOrder();
 }
 
-INotationPtr Notation::clone() const
-{
-    return std::make_shared<Notation>(score()->clone());
-}
-
 void Notation::setViewSize(const QSizeF& vs)
 {
     m_viewSize = vs;
