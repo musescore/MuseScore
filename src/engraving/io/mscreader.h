@@ -56,10 +56,17 @@ public:
 
     QByteArray readStyleFile() const;
     QByteArray readScoreFile() const;
+
+    std::vector<QString> excerptNames() const;
+    QByteArray readExcerptStyleFile(const QString& name) const;
+    QByteArray readExcerptFile(const QString& name) const;
+
     QByteArray readChordListFile() const;
     QByteArray readThumbnailFile() const;
-    QByteArray readImageFile(const QString& fileName) const;
+
     std::vector<QString> imageFileNames() const;
+    QByteArray readImageFile(const QString& fileName) const;
+
     QByteArray readAudioFile() const;
     QByteArray readAudioSettingsJsonFile() const;
 
@@ -112,20 +119,11 @@ private:
         bool m_selfDeviceOwner = false;
     };
 
-    struct Meta {
-        QString mscxFileName;
-        std::vector<QString> imageFilePaths;
-
-        bool isValid() const { return !mscxFileName.isEmpty(); }
-    };
-
     IReader* reader() const;
-    const Meta& meta() const;
     QByteArray fileData(const QString& fileName) const;
 
     Params m_params;
     mutable IReader* m_reader = nullptr;
-    mutable Meta m_meta;
 };
 }
 

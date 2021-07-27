@@ -107,24 +107,6 @@ MscReader::IReader* MscReader::reader() const
     return m_reader;
 }
 
-const MscReader::Meta& MscReader::meta() const
-{
-    if (m_meta.isValid()) {
-        return m_meta;
-    }
-
-    QStringList files = reader()->fileList();
-    for (const QString& filePath : files) {
-        if (filePath.endsWith(".mscx")) {
-            m_meta.mscxFileName = filePath;
-        } else if (filePath.startsWith("Pictures/")) {
-            m_meta.imageFilePaths.push_back(filePath);
-        }
-    }
-
-    return m_meta;
-}
-
 QByteArray MscReader::fileData(const QString& fileName) const
 {
     return reader()->fileData(fileName);
@@ -137,7 +119,41 @@ QByteArray MscReader::readStyleFile() const
 
 QByteArray MscReader::readScoreFile() const
 {
-    return fileData(meta().mscxFileName);
+    QString mscxFileName;
+    QStringList files = reader()->fileList();
+    for (const QString& name : files) {
+        // mscx file in the root dir
+        if (!name.contains("/") && name.endsWith(".mscx")) {
+            mscxFileName = name;
+            break;
+        }
+    }
+
+    return fileData(mscxFileName);
+}
+
+std::vector<QString> MscReader::excerptNames() const
+{
+    std::vector<QString> names;
+    QStringList files = reader()->fileList();
+    for (const QString& filePath : files) {
+        if (filePath.startsWith("Excerpts/") && filePath.endsWith(".mscx")) {
+            names.push_back(QFileInfo(filePath).completeBaseName());
+        }
+    }
+    return names;
+}
+
+QByteArray MscReader::readExcerptStyleFile(const QString& name) const
+{
+    QString fileName = name + ".mss";
+    return fileData("Excerpts/" + fileName);
+}
+
+QByteArray MscReader::readExcerptFile(const QString& name) const
+{
+    QString fileName = name + ".mscx";
+    return fileData("Excerpts/" + fileName);
 }
 
 QByteArray MscReader::readChordListFile() const
@@ -158,8 +174,11 @@ QByteArray MscReader::readImageFile(const QString& fileName) const
 std::vector<QString> MscReader::imageFileNames() const
 {
     std::vector<QString> names;
-    for (const QString& path : meta().imageFilePaths) {
-        names.push_back(QFileInfo(path).fileName());
+    QStringList files = reader()->fileList();
+    for (const QString& filePath : files) {
+        if (filePath.startsWith("Pictures/")) {
+            names.push_back(QFileInfo(filePath).fileName());
+        }
     }
     return names;
 }
@@ -292,7 +311,7 @@ QStringList MscReader::DirReader::fileList() const
 
     while (it.hasNext()) {
         QString filePath = it.next();
-        files << filePath.mid(m_rootPath.length());
+        files << filePath.mid(m_rootPath.length() + 1);
     }
 
     return files;
