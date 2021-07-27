@@ -63,6 +63,7 @@ private slots:
       void arpGliss2() { mxmlIoTest("testArpGliss2"); }
       void arpGliss3() { mxmlIoTest("testArpGliss3"); }
       void articulationsCombined() { mxmlImportTestRef("testArticulationsCombined"); }
+      void backupRoundingError() { mxmlImportTestRef("testBackupRoundingError"); }
       void barlineFermatas() { mxmlMscxExportTestRef("testBarlineFermatas"); }
       void barStyles() { mxmlIoTest("testBarStyles"); }
       void barStyles2() { mxmlIoTest("testBarStyles2"); }
