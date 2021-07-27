@@ -33,7 +33,7 @@
         </Staff>
       <trackName>Horn in D</trackName>
       <preferSharpFlat>flats</preferSharpFlat>
-      <Instrument id="c-horn-alto">
+      <Instrument id="d-horn">
         <longName>Horn in D</longName>
         <shortName>D Hn.</shortName>
         <trackName>Horn in D</trackName>
