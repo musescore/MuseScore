@@ -28,6 +28,7 @@ namespace mu::engraving::compat {
 class Read114;
 class Read206;
 class Read302;
+class ReadStyleHook;
 }
 
 namespace Ms {
@@ -76,7 +77,7 @@ class MasterScore : public Score
     QFileInfo _sessionStartBackupInfo;
     QFileInfo info;
 
-    FileError read(XmlReader&, bool ignoreVersionError);
+    FileError read(XmlReader&, bool ignoreVersionError, mu::engraving::compat::ReadStyleHook* styleHook = nullptr);
     FileError doRead(XmlReader& e);
 
     friend class mu::engraving::EngravingProject;
