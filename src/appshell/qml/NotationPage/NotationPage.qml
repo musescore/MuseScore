@@ -79,7 +79,7 @@ DockPage {
         pageModel.setNoteInputBarDockName(noteInputBar.objectName)
         pageModel.setInspectorPanelDockName(inspectorPanel.objectName)
         pageModel.setInstrumentsPanelDockName(instrumentsPanel.objectName)
-        pageModel.setPalettePanelDockName(palettePanel.objectName)
+        pageModel.setPalettesPanelDockName(palettesPanel.objectName)
         pageModel.setPianoRollDockName(pianoRollPanel.objectName)
         pageModel.setMixerDockName(mixerPanel.objectName)
         pageModel.setTimelineDockName(timelinePanel.objectName)
@@ -163,7 +163,7 @@ DockPage {
             contentComponent: NoteInputBar {
                 orientation: noteInputBar.orientation
 
-                navigation.section: noteInputKeyNavSec
+                navigation.section: root.noteInputKeyNavSec
                 navigation.order: 1
             }
         }
@@ -171,12 +171,12 @@ DockPage {
 
     panels: [
         DockPanel {
-            id: palettePanel
+            id: palettesPanel
 
-            objectName: "palettePanel"
-            title: qsTrc("appshell", "Palette")
+            objectName: "palettesPanel"
+            title: qsTrc("appshell", "Palettes")
 
-            navigationSection: root.navigationPanelSec(palettePanel.location)
+            navigationSection: root.navigationPanelSec(palettesPanel.location)
 
             width: root.defaultPanelWidth
             minimumWidth: root.defaultPanelWidth
@@ -185,7 +185,7 @@ DockPage {
             tabifyPanel: instrumentsPanel
 
             PalettesPanel {
-                navigationSection: palettePanel.navigationSection
+                navigationSection: palettesPanel.navigationSection
             }
         },
 
@@ -195,7 +195,7 @@ DockPage {
             objectName: "instrumentsPanel"
             title: qsTrc("appshell", "Instruments")
 
-            navigationSection: root.navigationPanelSec(palettePanel.location)
+            navigationSection: root.navigationPanelSec(instrumentsPanel.location)
 
             width: root.defaultPanelWidth
             minimumWidth: root.defaultPanelWidth
@@ -214,7 +214,7 @@ DockPage {
             objectName: "inspectorPanel"
             title: qsTrc("appshell", "Properties")
 
-            navigationSection: root.navigationPanelSec(palettePanel.location)
+            navigationSection: root.navigationPanelSec(inspectorPanel.location)
 
             width: root.defaultPanelWidth
             minimumWidth: root.defaultPanelWidth

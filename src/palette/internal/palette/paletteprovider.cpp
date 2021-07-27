@@ -52,7 +52,7 @@ namespace Ms {
 
 bool PaletteElementEditor::valid() const
 {
-    using Type = PalettePanel::Type;
+    using Type = Palette::Type;
     switch (_type) {
     case Type::KeySig:
     case Type::TimeSig:
@@ -65,7 +65,7 @@ bool PaletteElementEditor::valid() const
 
 QString PaletteElementEditor::actionName() const
 {
-    using Type = PalettePanel::Type;
+    using Type = Palette::Type;
     switch (_type) {
     case Type::KeySig:
         return mu::qtrc("palette", "Create Key Signature");
@@ -97,7 +97,7 @@ void PaletteElementEditor::open()
 
     QWidget* editor = nullptr;
 
-    using Type = PalettePanel::Type;
+    using Type = Palette::Type;
     switch (_type) {
     case Type::KeySig: {
         KeyEditor* keyEditor = new KeyEditor();
@@ -129,7 +129,7 @@ void PaletteElementEditor::open()
 // Model indices
 // ========================================================
 
-static QModelIndex findPaletteIndex(const QAbstractItemModel* model, PalettePanel::Type type)
+static QModelIndex findPaletteIndex(const QAbstractItemModel* model, Palette::Type type)
 {
     constexpr int role = PaletteTreeModel::PaletteTypeRole;
     const QModelIndex start = model->index(0, 0);
@@ -148,7 +148,7 @@ static QModelIndex convertIndex(const QModelIndex& index, const QAbstractItemMod
     }
 
     constexpr int typeRole = PaletteTreeModel::PaletteTypeRole;
-    const auto type = index.model()->data(index, typeRole).value<PalettePanel::Type>();
+    const auto type = index.model()->data(index, typeRole).value<Palette::Type>();
 
     return findPaletteIndex(targetModel, type);
 }
@@ -179,7 +179,7 @@ PaletteElementEditor* AbstractPaletteController::elementEditor(const QModelIndex
     PaletteElementEditor* ed
         = new PaletteElementEditor(this, paletteIndex,
                                    paletteIndex.data(
-                                       PaletteTreeModel::PaletteTypeRole).value<PalettePanel::Type>(), this);
+                                       PaletteTreeModel::PaletteTypeRole).value<Palette::Type>(), this);
     QQmlEngine::setObjectOwnership(ed, QQmlEngine::JavaScriptOwnership);
     return ed;
 }
@@ -473,29 +473,30 @@ void UserPaletteController::editPaletteProperties(const QModelIndex& index)
     }
 
     QModelIndex srcIndex = convertProxyIndex(index, _userPalette);
-    PalettePanel* panel = _userPalette->findPalettePanel(srcIndex);
-    if (!panel) {
+    Palette* palette = _userPalette->findPalette(srcIndex);
+    if (!palette) {
         return;
     }
 
-    configuration()->paletteConfig(panel->id()).ch.onReceive(this,
-                                                             [this, srcIndex, panel](const IPaletteConfiguration::PaletteConfig& config) {
-        panel->setName(config.name);
-        panel->setGridSize(config.size);
-        panel->setMag(config.scale);
-        panel->setYOffset(config.elementOffset);
-        panel->setDrawGrid(config.showGrid);
+    configuration()->paletteConfig(palette->id()).ch.onReceive(this,
+                                                               [this, srcIndex, palette](
+                                                                   const IPaletteConfiguration::PaletteConfig& config) {
+        palette->setName(config.name);
+        palette->setGridSize(config.size);
+        palette->setMag(config.scale);
+        palette->setYOffset(config.elementOffset);
+        palette->setDrawGrid(config.showGrid);
         _userPalette->itemDataChanged(srcIndex);
     });
 
     QVariantMap properties;
-    properties["paletteId"] = panel->id();
-    properties["name"] = panel->translatedName();
-    properties["cellWidth"] = panel->gridSize().width();
-    properties["cellHeight"] = panel->gridSize().height();
-    properties["scale"] = panel->mag();
-    properties["elementOffset"] = panel->yOffset();
-    properties["showGrid"] = panel->drawGrid();
+    properties["paletteId"] = palette->id();
+    properties["name"] = palette->translatedName();
+    properties["cellWidth"] = palette->gridSize().width();
+    properties["cellHeight"] = palette->gridSize().height();
+    properties["scale"] = palette->mag();
+    properties["elementOffset"] = palette->yOffset();
+    properties["showGrid"] = palette->drawGrid();
 
     QJsonDocument document = QJsonDocument::fromVariant(properties);
     QString uri = QString("musescore://palette/properties?sync=true&properties=%1")
@@ -650,7 +651,7 @@ QModelIndex PaletteProvider::poolPaletteIndex(const QModelIndex& index, Ms::Filt
     if (poolPaletteIndex.isValid()) {
         return poolPaletteIndex;
     }
-    const auto contentType = index.data(PaletteTreeModel::PaletteContentTypeRole).value<PalettePanel::Type>();
+    const auto contentType = index.data(PaletteTreeModel::PaletteContentTypeRole).value<Palette::Type>();
     return findPaletteIndex(poolPalette, contentType);
 }
 
@@ -878,7 +879,7 @@ QString PaletteProvider::getPaletteFilename(bool open, const QString& name) cons
 bool PaletteProvider::savePalette(const QModelIndex& index)
 {
     const QModelIndex srcIndex = convertProxyIndex(index, m_userPaletteModel);
-    const PalettePanel* pp = m_userPaletteModel->findPalettePanel(srcIndex);
+    const Palette* pp = m_userPaletteModel->findPalette(srcIndex);
     if (!pp) {
         return false;
     }
@@ -898,18 +899,18 @@ bool PaletteProvider::loadPalette(const QModelIndex& index)
         return false;
     }
 
-    PalettePanelPtr pp = std::make_shared<PalettePanel>();
+    PalettePtr pp = std::make_shared<Palette>();
     if (!pp->readFromFile(path)) {
         return false;
     }
-    pp->setType(PalettePanel::Type::Custom);   // mark the loaded palette custom
+    pp->setType(Palette::Type::Custom);   // mark the loaded palette custom
 
     const QModelIndex srcIndex = convertProxyIndex(index, m_userPaletteModel);
 
     const int row = srcIndex.row();
     const QModelIndex parent = srcIndex.parent();
 
-    return m_userPaletteModel->insertPalettePanel(pp, row, parent);
+    return m_userPaletteModel->insertPalette(pp, row, parent);
 }
 
 void PaletteProvider::setUserPaletteTree(PaletteTreePtr tree)

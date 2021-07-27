@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "palettepanel.h"
+#include "palette.h"
 
 #include <QMetaEnum>
 
@@ -43,24 +43,24 @@
 using namespace mu;
 using namespace mu::palette;
 
-PalettePanel::PalettePanel(Type t)
+Palette::Palette(Type t)
     : m_type(t)
 {
     static int id = 0;
     m_id = QString::number(++id);
 }
 
-QString PalettePanel::id() const
+QString Palette::id() const
 {
     return m_id;
 }
 
-QString PalettePanel::translatedName() const
+QString Palette::translatedName() const
 {
     return qtrc("palette", m_name.toUtf8());
 }
 
-void PalettePanel::retranslate()
+void Palette::retranslate()
 {
     for (PaletteCellPtr cell : m_cells) {
         cell->retranslate();
@@ -69,7 +69,7 @@ void PalettePanel::retranslate()
 
 /// Returns palette type if it is defined or deduces it from the palette content for
 /// custom palettes.
-PalettePanel::Type PalettePanel::contentType() const
+Palette::Type Palette::contentType() const
 {
     Type t = type();
     if (t == Type::Unknown || t == Type::Custom) {
@@ -82,7 +82,7 @@ PalettePanel::Type PalettePanel::contentType() const
     return t;
 }
 
-PaletteCellPtr PalettePanel::insertElement(size_t idx, ElementPtr element, const QString& name, qreal mag)
+PaletteCellPtr Palette::insertElement(size_t idx, ElementPtr element, const QString& name, qreal mag)
 {
     if (element) {
         // layout may be important for comparing cells, e.g. filtering "More" popup content
@@ -100,7 +100,7 @@ PaletteCellPtr PalettePanel::insertElement(size_t idx, ElementPtr element, const
     return cell;
 }
 
-PaletteCellPtr PalettePanel::appendElement(ElementPtr element, const QString& name, qreal mag)
+PaletteCellPtr Palette::appendElement(ElementPtr element, const QString& name, qreal mag)
 {
     if (element) {
         // layout may be important for comparing cells, e.g. filtering "More" popup content
@@ -118,7 +118,7 @@ PaletteCellPtr PalettePanel::appendElement(ElementPtr element, const QString& na
     return cell;
 }
 
-PaletteCellPtr PalettePanel::appendActionIcon(Ms::ActionIconType type, actions::ActionCode code)
+PaletteCellPtr Palette::appendActionIcon(Ms::ActionIconType type, actions::ActionCode code)
 {
     const ui::UiAction& action = actionsRegister()->action(code);
     auto icon = makeElement<ActionIcon>(gscore);
@@ -127,7 +127,7 @@ PaletteCellPtr PalettePanel::appendActionIcon(Ms::ActionIconType type, actions::
     return appendElement(icon, action.title);
 }
 
-bool PalettePanel::insertCell(size_t idx, PaletteCellPtr cell)
+bool Palette::insertCell(size_t idx, PaletteCellPtr cell)
 {
     if (idx < 0 || idx > m_cells.size()) {
         return false;
@@ -138,7 +138,7 @@ bool PalettePanel::insertCell(size_t idx, PaletteCellPtr cell)
     return true;
 }
 
-bool PalettePanel::insertCells(size_t idx, std::vector<PaletteCellPtr> cells)
+bool Palette::insertCells(size_t idx, std::vector<PaletteCellPtr> cells)
 {
     if (idx < 0 || idx > m_cells.size()) {
         return false;
@@ -150,7 +150,7 @@ bool PalettePanel::insertCells(size_t idx, std::vector<PaletteCellPtr> cells)
     return true;
 }
 
-PaletteCellPtr PalettePanel::takeCell(size_t idx)
+PaletteCellPtr Palette::takeCell(size_t idx)
 {
     if (idx < 0 || idx >= m_cells.size()) {
         return nullptr;
@@ -159,7 +159,7 @@ PaletteCellPtr PalettePanel::takeCell(size_t idx)
     return *m_cells.erase(m_cells.begin() + idx);
 }
 
-std::vector<PaletteCellPtr> PalettePanel::takeCells(size_t idx, size_t count)
+std::vector<PaletteCellPtr> Palette::takeCells(size_t idx, size_t count)
 {
     std::vector<PaletteCellPtr> removedCells;
     removedCells.reserve(count);
@@ -185,7 +185,7 @@ static bool isEquivalent(const Element& e1, const Element& e2)
            && e1.mimeData(PointF()) == e2.mimeData(PointF());
 }
 
-int PalettePanel::indexOfCell(const PaletteCell& cell, bool matchName) const
+int Palette::indexOfCell(const PaletteCell& cell, bool matchName) const
 {
     const Element* el = cell.element.get();
     if (!el) {
@@ -220,12 +220,12 @@ int PalettePanel::indexOfCell(const PaletteCell& cell, bool matchName) const
     return -1;
 }
 
-QSize PalettePanel::scaledGridSize() const
+QSize Palette::scaledGridSize() const
 {
     return gridSize() * configuration()->paletteScaling();
 }
 
-bool PalettePanel::read(XmlReader& e)
+bool Palette::read(XmlReader& e)
 {
     m_name = e.attribute("name");
     m_type = Type::Unknown;
@@ -286,12 +286,12 @@ bool PalettePanel::read(XmlReader& e)
     return true;
 }
 
-QByteArray PalettePanel::toMimeData() const
+QByteArray Palette::toMimeData() const
 {
     return Ms::toMimeData(this);
 }
 
-void PalettePanel::write(XmlWriter& xml) const
+void Palette::write(XmlWriter& xml) const
 {
     xml.stag(QString("Palette name=\"%1\"").arg(XmlWriter::xmlString(m_name)));
     xml.tag("type", QMetaEnum::fromType<Type>().valueToKey(int(m_type)));
@@ -323,12 +323,12 @@ void PalettePanel::write(XmlWriter& xml) const
     xml.etag();
 }
 
-PalettePanelPtr PalettePanel::fromMimeData(const QByteArray& data)
+PalettePtr Palette::fromMimeData(const QByteArray& data)
 {
-    return Ms::fromMimeData<PalettePanel>(data, "Palette");
+    return Ms::fromMimeData<Palette>(data, "Palette");
 }
 
-bool PalettePanel::readFromFile(const QString& p)
+bool Palette::readFromFile(const QString& p)
 {
     QString path(p);
     if (!path.endsWith(".mpal")) {
@@ -410,7 +410,7 @@ bool PalettePanel::readFromFile(const QString& p)
     return true;
 }
 
-bool PalettePanel::writeToFile(const QString& p) const
+bool Palette::writeToFile(const QString& p) const
 {
     QSet<ImageStoreItem*> images;
     size_t n = m_cells.size();
@@ -481,14 +481,14 @@ bool PalettePanel::writeToFile(const QString& p) const
     return true;
 }
 
-void PalettePanel::showWritingPaletteError(const QString& path) const
+void Palette::showWritingPaletteError(const QString& path) const
 {
     std::string title = trc("palette", "Writing Palette File");
     std::string message = qtrc("palette", "Writing Palette File\n%1\nfailed: ").arg(path).toStdString();
     interactive()->error(title, message);
 }
 
-PalettePanel::Type PalettePanel::guessType() const
+Palette::Type Palette::guessType() const
 {
     if (m_cells.empty()) {
         return Type::Custom;
@@ -581,7 +581,7 @@ PalettePanel::Type PalettePanel::guessType() const
     return Type::Custom;
 }
 
-std::function<void(PaletteCellPtr)> PalettePanel::cellHandlerByPaletteType(const PalettePanel::Type& type) const
+std::function<void(PaletteCellPtr)> Palette::cellHandlerByPaletteType(const Palette::Type& type) const
 {
     switch (type) {
     case Type::Bracket:

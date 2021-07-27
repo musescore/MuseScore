@@ -57,9 +57,9 @@ void NotationPageModel::setUndoRedoToolBarDockName(const QString& dockName)
     setPanelDockName(PanelType::UndoRedoToolBar, dockName);
 }
 
-void NotationPageModel::setPalettePanelDockName(const QString& dockName)
+void NotationPageModel::setPalettesPanelDockName(const QString& dockName)
 {
-    setPanelDockName(PanelType::Palette, dockName);
+    setPanelDockName(PanelType::Palettes, dockName);
 }
 
 void NotationPageModel::setInstrumentsPanelDockName(const QString& dockName)
@@ -119,7 +119,7 @@ void NotationPageModel::init(QQuickItem* dockWindow)
         { "toggle-navigator", PanelType::NotationNavigator },
         { "toggle-mixer", PanelType::Mixer },
         { "toggle-timeline", PanelType::Timeline },
-        { "toggle-palette", PanelType::Palette },
+        { "toggle-palettes", PanelType::Palettes },
         { "toggle-instruments", PanelType::Instruments },
         { "inspector", PanelType::Inspector },
         { "toggle-statusbar", PanelType::NotationStatusBar },

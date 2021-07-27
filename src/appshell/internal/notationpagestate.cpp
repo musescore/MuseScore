@@ -33,7 +33,7 @@ void NotationPageState::init()
 bool NotationPageState::isPanelVisible(PanelType type) const
 {
     switch (type) {
-    case PanelType::Palette:
+    case PanelType::Palettes:
     case PanelType::Instruments:
     case PanelType::Inspector:
     case PanelType::NotationToolBar:
@@ -76,7 +76,7 @@ mu::async::Channel<PanelTypeList> NotationPageState::panelsVisibleChanged() cons
 void NotationPageState::setIsPanelVisible(PanelType type, bool visible)
 {
     switch (type) {
-    case PanelType::Palette:
+    case PanelType::Palettes:
     case PanelType::Instruments:
     case PanelType::Inspector:
     case PanelType::NotationToolBar:

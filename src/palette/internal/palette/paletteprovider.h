@@ -49,7 +49,7 @@ class PaletteElementEditor : public QObject
 
     AbstractPaletteController* _controller = nullptr;
     QPersistentModelIndex _paletteIndex;
-    mu::palette::PalettePanel::Type _type = mu::palette::PalettePanel::Type::Unknown;
+    mu::palette::Palette::Type _type = mu::palette::Palette::Type::Unknown;
 
     Q_PROPERTY(bool valid READ valid CONSTANT)
     Q_PROPERTY(QString actionName READ actionName CONSTANT) // TODO: make NOTIFY instead of CONSTANT for retranslations
@@ -61,7 +61,7 @@ public:
     PaletteElementEditor(QObject* parent = nullptr)
         : QObject(parent) {}
     PaletteElementEditor(AbstractPaletteController* controller, QPersistentModelIndex paletteIndex,
-                         mu::palette::PalettePanel::Type type, QObject* parent = nullptr)
+                         mu::palette::Palette::Type type, QObject* parent = nullptr)
         : QObject(parent), _controller(controller), _paletteIndex(paletteIndex), _type(type) {}
 
     bool valid() const;
