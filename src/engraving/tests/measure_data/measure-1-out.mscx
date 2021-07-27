@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.00">
+<museScore version="3.02">
+  <programVersion>3.6.2</programVersion>
+  <programRevision>3224f34</programRevision>
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -14,9 +16,12 @@
     <metaTag name="arranger"></metaTag>
     <metaTag name="composer"></metaTag>
     <metaTag name="copyright"></metaTag>
+    <metaTag name="creationDate">2021-07-28</metaTag>
     <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
+    <metaTag name="mscVersion">3.02</metaTag>
+    <metaTag name="platform">Microsoft Windows</metaTag>
     <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
@@ -63,6 +68,7 @@
           </Articulation>
         <Channel>
           <program value="0"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -99,7 +105,9 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
+          <controller ctrl="32" value="17"/>
           <program value="73"/>
+          <synti>Fluid</synti>
           </Channel>
         </Instrument>
       </Part>
@@ -122,20 +130,12 @@
             <transposingClefType>G</transposingClefType>
             </Clef>
           <TimeSig>
+            <linkedMain/>
             <sigN>2</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <Rest>
-            <linkedMain/>
-            <durationType>measure</durationType>
-            <duration>2/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
           <Tempo>
-            <tempo>1.66667</tempo>
+            <tempo>1.6666700000000001</tempo>
             <text>𝅘𝅥 = 100</text>
             </Tempo>
           <Chord>
@@ -220,18 +220,10 @@
             <transposingClefType>F</transposingClefType>
             </Clef>
           <TimeSig>
+            <linkedMain/>
             <sigN>2</sigN>
             <sigD>4</sigD>
             </TimeSig>
-          <Rest>
-            <linkedMain/>
-            <durationType>measure</durationType>
-            <duration>2/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
           <Rest>
             <linkedMain/>
             <durationType>measure</durationType>
@@ -275,22 +267,22 @@
             <transposingClefType>G</transposingClefType>
             </Clef>
           <TimeSig>
+            <linkedMain/>
             <sigN>2</sigN>
             <sigD>4</sigD>
             </TimeSig>
+          <Chord>
+            <linkedMain/>
+            <durationType>quarter</durationType>
+            <Note>
+              <linkedMain/>
+              <pitch>84</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
           <Rest>
             <linkedMain/>
-            <durationType>measure</durationType>
-            <duration>2/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Rest>
-            <linkedMain/>
-            <durationType>measure</durationType>
-            <duration>2/4</duration>
+            <durationType>quarter</durationType>
             </Rest>
           </voice>
         </Measure>
@@ -383,6 +375,7 @@
             </Articulation>
           <Channel>
             <program value="0"/>
+            <synti>Fluid</synti>
             </Channel>
           </Instrument>
         </Part>
@@ -403,28 +396,20 @@
             </Text>
           </VBox>
         <Measure>
+          <breakMultiMeasureRest>1</breakMultiMeasureRest>
           <voice>
             <Clef>
               <concertClefType>G</concertClefType>
               <transposingClefType>G</transposingClefType>
               </Clef>
             <TimeSig>
+              <linked>
+                </linked>
               <sigN>2</sigN>
               <sigD>4</sigD>
               </TimeSig>
-            <Rest>
-              <linked>
-                </linked>
-              <durationType>measure</durationType>
-              <duration>2/4</duration>
-              </Rest>
-            </voice>
-          </Measure>
-        <Measure>
-          <breakMultiMeasureRest>1</breakMultiMeasureRest>
-          <voice>
             <Tempo>
-              <tempo>1.66667</tempo>
+              <tempo>1.6666700000000001</tempo>
               <text>𝅘𝅥 = 100</text>
               </Tempo>
             <Chord>
@@ -522,19 +507,11 @@
               <transposingClefType>G</transposingClefType>
               </Clef>
             <TimeSig>
+              <linked>
+                </linked>
               <sigN>2</sigN>
               <sigD>4</sigD>
               </TimeSig>
-            <Rest>
-              <linked>
-                </linked>
-              <durationType>measure</durationType>
-              <duration>2/4</duration>
-              </Rest>
-            </voice>
-          </Measure>
-        <Measure>
-          <voice>
             <Rest>
               <linked>
                 </linked>
@@ -629,6 +606,7 @@
             </Articulation>
           <Channel>
             <program value="73"/>
+            <synti>Fluid</synti>
             </Channel>
           </Instrument>
         </Part>
@@ -649,44 +627,20 @@
             </Text>
           </VBox>
         <Measure>
+          <breakMultiMeasureRest>1</breakMultiMeasureRest>
           <voice>
             <Clef>
               <concertClefType>G</concertClefType>
               <transposingClefType>G</transposingClefType>
               </Clef>
             <TimeSig>
+              <linked>
+                </linked>
               <sigN>2</sigN>
               <sigD>4</sigD>
               </TimeSig>
-            <Rest>
-              <linked>
-                </linked>
-              <durationType>measure</durationType>
-              <duration>2/4</duration>
-              </Rest>
-            </voice>
-          </Measure>
-        <Measure>
-          <breakMultiMeasureRest>1</breakMultiMeasureRest>
-          <voice>
             <Tempo>
-              <tempo>1.66667</tempo>
-              <linkedMain/>
-              <text>𝅘𝅥 = 100</text>
-              </Tempo>
-            <Rest>
-              <linked>
-                </linked>
-              <durationType>measure</durationType>
-              <duration>2/4</duration>
-              </Rest>
-            </voice>
-          </Measure>
-        <Measure len="8/4">
-          <multiMeasureRest>4</multiMeasureRest>
-          <voice>
-            <Tempo>
-              <tempo>1.66667</tempo>
+              <tempo>1.6666700000000001</tempo>
               <linked>
                 <score>same</score>
                 <location>
@@ -695,9 +649,23 @@
                 </linked>
               <text>𝅘𝅥 = 100</text>
               </Tempo>
+            <Chord>
+              <linked>
+                <indexDiff>1</indexDiff>
+                </linked>
+              <durationType>quarter</durationType>
+              <Note>
+                <linked>
+                  <indexDiff>1</indexDiff>
+                  </linked>
+                <pitch>84</pitch>
+                <tpc>14</tpc>
+                </Note>
+              </Chord>
             <Rest>
-              <durationType>measure</durationType>
-              <duration>8/4</duration>
+              <linked>
+                </linked>
+              <durationType>quarter</durationType>
               </Rest>
             </voice>
           </Measure>
@@ -708,6 +676,15 @@
                 </linked>
               <durationType>measure</durationType>
               <duration>2/4</duration>
+              </Rest>
+            </voice>
+          </Measure>
+        <Measure len="6/4">
+          <multiMeasureRest>3</multiMeasureRest>
+          <voice>
+            <Rest>
+              <durationType>measure</durationType>
+              <duration>6/4</duration>
               </Rest>
             </voice>
           </Measure>
