@@ -58,6 +58,7 @@ namespace mu::engraving::compat {
 class ScoreAccess;
 class ReadScoreHook;
 class WriteScoreHook;
+class Read302;
 }
 
 namespace mu::score {
@@ -434,6 +435,7 @@ public:
 private:
 
     friend class mu::engraving::compat::ReadScoreHook;
+    friend class mu::engraving::compat::Read302;
 
     static std::set<Score*> validScores;
     int _linkId { 0 };
@@ -624,7 +626,6 @@ public:
     void removeStaff(Staff*);
     void addMeasure(MeasureBase*, MeasureBase*);
     void readStaff(XmlReader&);
-    bool read(XmlReader&, mu::engraving::compat::ReadScoreHook& hooks);
     void linkMeasures(Score* score);
 
     Excerpt* excerpt() { return _excerpt; }
@@ -680,6 +681,8 @@ public:
 
     void write(XmlWriter&, bool onlySelection, mu::engraving::compat::WriteScoreHook& hook);
     bool writeScore(QIODevice* f, bool msczFormat, bool onlySelection, mu::engraving::compat::WriteScoreHook& hook);
+
+    bool read400(XmlReader& e);
 
     QList<Staff*>& staves() { return _staves; }
     const QList<Staff*>& staves() const { return _staves; }

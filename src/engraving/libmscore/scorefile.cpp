@@ -28,7 +28,6 @@
 #include "style/defaultstyle.h"
 
 #include "compat/chordlist.h"
-#include "compat/readscorehook.h"
 #include "compat/writescorehook.h"
 
 #include "config.h"
@@ -275,6 +274,29 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
 
     if (unhide) {
         endCmd(true);
+    }
+}
+
+//---------------------------------------------------------
+// linkMeasures
+//---------------------------------------------------------
+
+void Score::linkMeasures(Score* score)
+{
+    MeasureBase* mbMaster = score->first();
+    for (MeasureBase* mb = first(); mb; mb = mb->next()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        while (mbMaster && !mbMaster->isMeasure()) {
+            mbMaster = mbMaster->next();
+        }
+        if (!mbMaster) {
+            qDebug("Measures in MasterScore and Score are not in sync.");
+            break;
+        }
+        mb->linkTo(mbMaster);
+        mbMaster = mbMaster->next();
     }
 }
 

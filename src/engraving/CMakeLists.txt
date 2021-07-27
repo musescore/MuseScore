@@ -96,12 +96,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/compat/pageformat.h
     ${CMAKE_CURRENT_LIST_DIR}/compat/chordlist.cpp
     ${CMAKE_CURRENT_LIST_DIR}/compat/chordlist.h
-    ${CMAKE_CURRENT_LIST_DIR}/compat/readstyle.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/compat/readstyle.h
-    ${CMAKE_CURRENT_LIST_DIR}/compat/readscorehook.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/compat/readscorehook.h
     ${CMAKE_CURRENT_LIST_DIR}/compat/writescorehook.cpp
     ${CMAKE_CURRENT_LIST_DIR}/compat/writescorehook.h
+    ${CMAKE_CURRENT_LIST_DIR}/compat/readstyle.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/compat/readstyle.h
     ${CMAKE_CURRENT_LIST_DIR}/compat/read114.cpp
     ${CMAKE_CURRENT_LIST_DIR}/compat/read114.h
     ${CMAKE_CURRENT_LIST_DIR}/compat/read206.cpp
