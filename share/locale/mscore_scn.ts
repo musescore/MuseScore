@@ -414,7 +414,7 @@
     <message>
         <location filename="../../mscore/harmonyedit.ui" line="48"/>
         <source>Name</source>
-        <translation type="unfinished"/>
+        <translation>Nomu</translation>
     </message>
     <message>
         <location filename="../../mscore/harmonyedit.ui" line="96"/>
@@ -620,7 +620,7 @@
     <message>
         <location filename="../../mscore/editdrumset.ui" line="92"/>
         <source>Name:</source>
-        <translation type="unfinished"/>
+        <translation>Nomu:</translation>
     </message>
     <message>
         <location filename="../../mscore/editdrumset.ui" line="119"/>
@@ -651,7 +651,7 @@
     <message>
         <location filename="../../mscore/editdrumset.ui" line="68"/>
         <source>Name</source>
-        <translation type="unfinished"/>
+        <translation>Nomu</translation>
     </message>
     <message>
         <location filename="../../mscore/editdrumset.ui" line="108"/>
@@ -759,7 +759,7 @@
     <message>
         <location filename="../../mscore/editinstrument.ui" line="26"/>
         <source>Name:</source>
-        <translation type="unfinished"/>
+        <translation>Nomu:</translation>
     </message>
     <message>
         <location filename="../../mscore/editinstrument.ui" line="36"/>
@@ -4922,7 +4922,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/editstyle.ui" line="12267"/>
         <source>Name:</source>
-        <translation type="unfinished"/>
+        <translation>Nomu:</translation>
     </message>
     <message>
         <location filename="../../mscore/editstyle.ui" line="12126"/>
@@ -5481,7 +5481,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../audio/midi/fluid/fluid_gui.ui" line="171"/>
         <source>Add</source>
-        <translation type="unfinished"/>
+        <translation>Iùnci</translation>
     </message>
     <message>
         <location filename="../../audio/midi/fluid/fluidgui.cpp" line="122"/>
@@ -10840,7 +10840,7 @@ By default, they will be placed such as that their right end are at the same lev
         <location filename="../../mscore/instrwizard.ui" line="115"/>
         <location filename="../../mscore/instrwizard.ui" line="118"/>
         <source>Add</source>
-        <translation type="unfinished"/>
+        <translation>Iùnci</translation>
     </message>
     <message>
         <location filename="../../mscore/instrwizard.ui" line="131"/>
@@ -10936,7 +10936,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/instrwidget.ui" line="113"/>
         <source>Add</source>
-        <translation type="unfinished"/>
+        <translation>Iùnci</translation>
     </message>
     <message>
         <location filename="../../mscore/instrwidget.ui" line="138"/>
@@ -11056,7 +11056,7 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../mscore/keyedit.ui" line="128"/>
         <source>Add</source>
-        <translation type="unfinished"/>
+        <translation>Iùnci</translation>
     </message>
 </context>
 <context>
@@ -11869,7 +11869,7 @@ tuplet would cross measure</source>
     <message>
         <location filename="../../mscore/mixer/mixerdetails.ui" line="412"/>
         <source>Name:</source>
-        <translation type="unfinished"/>
+        <translation>Nomu:</translation>
     </message>
     <message>
         <location filename="../../mscore/mixer/mixerdetails.ui" line="291"/>
@@ -13379,7 +13379,7 @@ failed: %2</source>
     <message>
         <location filename="../../mscore/metaedit.cpp" line="110"/>
         <source>Name</source>
-        <translation type="unfinished"/>
+        <translation>Nomu</translation>
     </message>
     <message>
         <location filename="../../mscore/metaedit.cpp" line="144"/>
@@ -15888,7 +15888,7 @@ failed: %2</source>
         <location filename="../../mscore/propertymenu.cpp" line="142"/>
         <location filename="../../mscore/scoreview.cpp" line="443"/>
         <source>Add</source>
-        <translation type="unfinished"/>
+        <translation>Iùnci</translation>
     </message>
     <message>
         <location filename="../../mscore/propertymenu.cpp" line="163"/>
@@ -17873,7 +17873,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/paletteCellProperties.ui" line="26"/>
         <source>Name:</source>
-        <translation type="unfinished"/>
+        <translation>Nomu:</translation>
     </message>
     <message>
         <location filename="../../mscore/paletteCellProperties.ui" line="33"/>
@@ -17917,7 +17917,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/paletteProperties.ui" line="22"/>
         <source>Name:</source>
-        <translation type="unfinished"/>
+        <translation>Nomu:</translation>
     </message>
     <message>
         <location filename="../../mscore/paletteProperties.ui" line="49"/>
@@ -17995,7 +17995,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/qml/palettes/PalettesListPopup.qml" line="132"/>
         <source>Add</source>
-        <translation type="unfinished"/>
+        <translation>Iùnci</translation>
     </message>
     <message>
         <location filename="../../mscore/qml/palettes/PalettesListPopup.qml" line="134"/>
@@ -18231,7 +18231,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/pathlistdialog.ui" line="36"/>
         <source>Add</source>
-        <translation type="unfinished"/>
+        <translation>Iùnci</translation>
     </message>
 </context>
 <context>
@@ -18490,7 +18490,7 @@ volume</source>
     <message>
         <location filename="../../mscore/plugin/pluginManager.ui" line="47"/>
         <source>Name:</source>
-        <translation type="unfinished"/>
+        <translation>Nomu:</translation>
     </message>
     <message>
         <location filename="../../mscore/plugin/pluginManager.ui" line="91"/>
@@ -21893,7 +21893,7 @@ Do you want to overwrite it?</source>
     <message>
         <location filename="../../mscore/scorePreview.ui" line="123"/>
         <source>Name:</source>
-        <translation type="unfinished"/>
+        <translation>Nomu:</translation>
     </message>
 </context>
 <context>
@@ -22196,7 +22196,7 @@ Note: this last shortcut would be noted &quot;Ctrl+A,Ctrl+B,Ctrl+C,Ctrl+D&quot;<
     <message>
         <location filename="../../mscore/shortcutcapturedialog.ui" line="151"/>
         <source>Add</source>
-        <translation type="unfinished"/>
+        <translation>Iùnci</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcutcapturedialog.ui" line="164"/>
@@ -22348,7 +22348,7 @@ Note: &quot;Ctrl+Shift+1&quot; is one key combination.</source>
         <location filename="../../mscore/stafftext.ui" line="345"/>
         <location filename="../../mscore/stafftext.ui" line="385"/>
         <source>Name</source>
-        <translation type="unfinished"/>
+        <translation>Nomu</translation>
     </message>
     <message>
         <location filename="../../mscore/stafftext.ui" line="350"/>
@@ -23173,7 +23173,7 @@ Note: &quot;Ctrl+Shift+1&quot; is one key combination.</source>
     <message>
         <location filename="../../mscore/timedialog.ui" line="276"/>
         <source>Add</source>
-        <translation type="unfinished"/>
+        <translation>Iùnci</translation>
     </message>
 </context>
 <context>
@@ -24162,7 +24162,7 @@ failed</source>
     <message>
         <location filename="../../audio/midi/zerberus/zerberus_gui.ui" line="170"/>
         <source>Add</source>
-        <translation type="unfinished"/>
+        <translation>Iùnci</translation>
     </message>
     <message>
         <location filename="../../audio/midi/zerberus/zerberusgui.cpp" line="106"/>

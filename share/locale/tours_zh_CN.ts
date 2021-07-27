@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="zh_CN" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="zh_CN">
 <context>
     <name>TourXML</name>
     <message>
@@ -273,10 +275,11 @@
     Tip: if you press the &quot;Alt&quot; key (&quot;Option&quot; on macOS) along with the cursor keys you can move through other elements too,
     and also move up and down from staff to staff.</source>
         <comment>select-tour</comment>
-        <translation>若要单选，单击您要选择的元素即可。
-选中的元素会高亮显示以表明其被选中。
-你可以使用左/右箭头来（在音符及休止符间）移动所选元素。
-小技巧：如果在按箭头时一并按下Alt键（macOS上的Option键），则所选元素也可在其他元素之中移动，还能够在谱表与谱表间上下移动。</translation>
+        <translation>单击希望选择的元素即可进行单选。
+该元素会高亮显示以示其被选中。
+可以用左/右箭头键在音符及休止符间移动所作的选择。
+小技巧：如果在按下Alt键（macOS上的Option键）的同时点击箭头键，则所作的选择也能移动至其他类型的元素，
+还能够在谱表间上下移动。</translation>
     </message>
     <message>
         <source>A list selection is a combination of single selections.
@@ -295,9 +298,9 @@
     To make a range selection, click the first note, rest, or measure you want to select, then &quot;Shift&quot;+click the last.
     You can also extend range selections by holding the &quot;Shift&quot; key while moving the cursor.</source>
         <comment>select-tour</comment>
-        <translation>框选囊括了同一时间点到点选中的一切。
+        <translation>点击框选囊括了一个或多个谱表中从某一时间点到点选中的一切。
 框选由一个蓝色矩形框来提示，框内即为选距。
-要进行框选，单击您想要选中部分的第一个音符、休止符或小节，然后在最后一个要选中的元素上单击并按下Shift。
+要进行框选，单击您想要选点击中部分的第一个音符、休止符或小节，然后按下Shift并单击最后一个想被选中的元素。
 您也可在按下Shift的同时使用键盘上的箭头来进行框选。</translation>
     </message>
     <message>
@@ -306,7 +309,7 @@
     otherwise it will be made as a list selection.</source>
         <comment>select-tour</comment>
         <translation>另一种框选方法是：按住Shift键的同时进行拖拽。
-若您的选择囊括了音符，系统就会自动将其生成一个选区。
+若您的选择囊括了音符，将会自动生成选区。
 否则，它将被视为列选。</translation>
     </message>
     <message>
@@ -356,7 +359,7 @@
 除此之外，许多操作都可以通过在乐谱界面中键入快捷键或使用右键菜单（macOS：Ctrl + 单击）来完成。</translation>
     </message>
     <message>
-        <source>That's the end of this tour!
+        <source>That&apos;s the end of this tour!
     As you use MuseScore, more tours will pop up to further explain functionality.
     To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
     You can also enable/disable and reset tours in Help &gt; Tours.</source>

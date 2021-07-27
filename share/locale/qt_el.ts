@@ -461,7 +461,7 @@ to
     </message>
     <message>
         <source>Customize...</source>
-        <translation type="unfinished">Προσαρμογή...</translation>
+        <translation type="unfinished">Προσαρμογή…</translation>
     </message>
 </context>
 <context>
@@ -591,7 +591,7 @@ to
     <name>Q3ToolBar</name>
     <message>
         <source>More...</source>
-        <translation type="unfinished">Περισσότερα...</translation>
+        <translation type="unfinished">Περισσότερα…</translation>
     </message>
 </context>
 <context>
@@ -2212,11 +2212,11 @@ Do you want to delete it anyway?</source>
     </message>
     <message>
         <source>Show Details...</source>
-        <translation type="unfinished">Εμφάνιση λεπτομερειών...</translation>
+        <translation type="unfinished">Εμφάνιση λεπτομερειών…</translation>
     </message>
     <message>
         <source>Hide Details...</source>
-        <translation type="unfinished">Απόκρυψη πληροφοριών...</translation>
+        <translation type="unfinished">Απόκρυψη πληροφοριών…</translation>
     </message>
     <message>
         <source>&lt;p&gt;This program uses Qt Open Source Edition version %1.&lt;/p&gt;&lt;p&gt;Qt Open Source Edition is intended for the development of Open Source applications. You need a commercial Qt license for development of proprietary (closed source) applications.&lt;/p&gt;&lt;p&gt;Please see &lt;a href=&quot;http://www.trolltech.com/company/model/&quot;&gt;www.trolltech.com/company/model/&lt;/a&gt; for an overview of Qt licensing.&lt;/p&gt;</source>
@@ -2728,7 +2728,7 @@ Do you want to delete it anyway?</source>
     </message>
     <message>
         <source>Print To File ...</source>
-        <translation type="unfinished">Εκτύπωση σε αρχείο ...</translation>
+        <translation type="unfinished">Εκτύπωση σε αρχείο …</translation>
     </message>
     <message>
         <source>File %1 is not writable.

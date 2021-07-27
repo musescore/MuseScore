@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="nb" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="nb">
 <context>
     <name>TourXML</name>
     <message>
@@ -29,7 +31,7 @@
     <message>
         <source>Welcome to the Palettes, where you will add various elements to your score. Click &quot;Next&quot; to learn more.</source>
         <comment>show-palette</comment>
-        <translation>Velkommen til Palettene, hvor du kan finne forskjellige elementer til partituret ditt. Trykk &quot;Neste&quot; for å lære mer.</translation>
+        <translation>Velkommen til Palettene, hvor du kan finne forskjellige elementer til partituret ditt. Trykk «Neste» for å lære mer.</translation>
     </message>
     <message>
         <source>To enter notes with different rhythms in the same measure, use multiple voices.
@@ -38,9 +40,9 @@
     To enter notes into a different voice, click one of these icons.</source>
         <comment>note-input</comment>
         <translation>For å legge til noter med forskjellig rytme i samme takt, bruk flere stemmer.
-Hver stav kan ha opptil fire stemmer.
+Hvert notesystem kan ha opptil fire stemmer.
 Standard er stemme 1, og den bør brukes først i hver takt.
-For å legge inn noter i en annen stemme, klikk en av disse ikonene.</translation>
+For å legge inn noter i en annen stemme, trykk på en av disse ikonene.</translation>
     </message>
     <message>
         <source>These are the toolbars.
@@ -70,43 +72,43 @@ Du kan også dra et element fra paletten og slippe det på et spesifikt element 
         <comment>mmrest</comment>
         <translation>Du har slått på flertaktspauser i dette partituret.
 Dette kombinerer flere takter pause til en enkelt flertaktspause.
-For å slå dette av eller på, trykk hurtigtasten M.</translation>
+For å slå dette av eller på, trykk hurtigtasten «M».</translation>
     </message>
     <message>
         <source>Welcome to note input, where you will enter notes and rests into your score.
     Click &quot;Next&quot; to learn more.</source>
         <comment>note-input</comment>
         <translation>Velkommen til noteskriving, hvor du legger inn noter og pauser i partituret ditt.
-Klikk &quot;Neste&quot; for å lære mer.</translation>
+Trykk på «Neste» for å lære mer.</translation>
     </message>
     <message>
         <source>To enable note input mode, click the &quot;Note input&quot; icon or press the shortcut &quot;N&quot;.</source>
         <comment>note-input</comment>
-        <translation>For å slå på noteskrivingsmodus, trykk på noteskrivings-symbolet eller bruk hurtigtasten &quot;N&quot;.</translation>
+        <translation>For å slå på noteskrivingsmodus, trykk på noteskrivings-symbolet eller bruk hurtigtasten «N»</translation>
     </message>
     <message>
         <source>Select a duration by clicking one of these icons or pressing the shortcuts &quot;1&quot; - &quot;9&quot;.
     To include an augmentation dot, click the appropriate icon or press the shortcut &quot;.&quot;.</source>
         <comment>note-input</comment>
         <translation>Velg en varighet ved å klikke en av de ikonene eller trykk hurtigtastene 1 - 9.
-For å legge til en punktert note, klikk symbolet eller trykk &quot;.&quot; (punktum).</translation>
+For å gjøre noten punkter, trykk på den tilsvarende knappen eller trykk «.» (punktum).</translation>
     </message>
     <message>
         <source>To enter a rest of the selected duration, press the shortcut &quot;0&quot;, or select this icon then click on the staff.</source>
         <comment>note-input</comment>
-        <translation>For å legge inn en pause med valgt varighet, trykk hurtigtasten &quot;0&quot;, eller velg dette symbolet og trykk så på notelinjene.</translation>
+        <translation>For å legge inn en pause med valgt varighet, trykk hurtigtasten «0», eller velg dette symbolet og trykk så på notelinjene.</translation>
     </message>
     <message>
         <source>To extend a note by adding a tied note, select the duration to extend by, then press &quot;+&quot; or click this button.</source>
         <comment>note-input</comment>
-        <translation>For å utvide en note ved å legge til en bindebue, velg varigheten å utvide med, og trykk &quot;+&quot; eller denne knappen.</translation>
+        <translation>For å utvide en note ved å legge til en bindebue, velg varigheten å utvide med, og trykk «+» eller denne knappen.</translation>
     </message>
     <message>
         <source>MuseScore provides many ways to navigate through your score.
     Click &quot;Next&quot; to learn more.</source>
         <comment>navigate-tour</comment>
         <translation>MuseScore gir deg mange måter å navigere gjennom partituret.
-Klikk &quot;Neste&quot; for å lære mer.</translation>
+Klikk «Neste» for å lære mer.</translation>
     </message>
     <message>
         <source>Additional navigation tools include the Timeline and Navigator, both found in the View menu.</source>
@@ -118,7 +120,7 @@ Klikk &quot;Neste&quot; for å lære mer.</translation>
     Click &quot;Next&quot; to learn more.</source>
         <comment>inspector-tour</comment>
         <translation>Velkommen til Inspektøren, hvor du kan endre egenskapene til valgte elementer.
-Klikk &quot;Neste&quot; for å lære mer.</translation>
+Trykk på «Neste» for å lære mer.</translation>
     </message>
     <message>
         <source>Begin by selecting one or more elements in your score, then use the check boxes, spin boxes, dropdown menus, and other controls to change values for the various properties.
@@ -132,7 +134,7 @@ Hvilke egenskaper du kan justere varierer med typen element du har valgt.</trans
     You can click the &quot;Notes&quot; and other buttons at the bottom of the Inspector to limit the selection to just the elements of the specified type.</source>
         <comment>inspector-tour</comment>
         <translation>Hvis du har valgt elementer av ulike typer, vil det bare være felles egenskaper som er tilgjengelig.
-Du kan klikke &quot;Noter&quot; og andre knapper på bunnen av Inspektøren for å begrense hva du velger.</translation>
+Du kan trykke på «Noter» og andre knapper på bunnen av Inspektøren for å begrense hva du velger.</translation>
     </message>
     <message>
         <source>The Inspector allows you to control various properties of the elements in your score.</source>
@@ -146,7 +148,7 @@ Du kan klikke &quot;Noter&quot; og andre knapper på bunnen av Inspektøren for 
         <comment>autoplace-tour</comment>
         <translation>Autoplassering er en ny funksjon som automatisk rydder opp i plasseringen av elementene, slik at kollisjoner kan unngås.
 Du kan også manuelt justere posisjonen til autoplasserte elementer, eller skru av autoplassering for valgte elementer.
-Klikk &quot;Neste&quot; for å lære mer.</translation>
+Klikk «Neste» for å lære mer.</translation>
     </message>
     <message>
         <source>Autoplace positions most elements according to standard music engraving practice,
@@ -178,7 +180,7 @@ Da vil elementene ikke lenger tas hensyn til ved autoplassering, og du kan plass
     Click &quot;Next&quot; to learn more.</source>
         <comment>timeline-tour</comment>
         <translation>Velkommen til Tidslinjen, hvor du kan se en oversikt over partituret for å kunne navigere enklere.
-Klikk &quot;Neste&quot; for å lære mer.</translation>
+Trykk på «Neste» for å lære mer.</translation>
     </message>
     <message>
         <source>The timeline shows rehearsal marks, changes of tempo, key, and time signature, and other points of interest.
@@ -203,7 +205,7 @@ Bokser med en tynn blå ramme er de som vises akkurat nå.</translation>
     Click &quot;Next&quot; to learn more.</source>
         <comment>select-tour</comment>
         <translation>MuseScore støtter ulike typer utvalg: enkelt, liste og område.
-Klikk &quot;Neste&quot; for å lære mer.</translation>
+Trykk på «Neste» for å lære mer.</translation>
     </message>
     <message>
         <source>Finally, the Selection Filter (found in the View menu) allows you to exclude elements of a given type from a range selection.</source>
@@ -215,52 +217,54 @@ Klikk &quot;Neste&quot; for å lære mer.</translation>
     If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
     You can also set style defaults using Format &gt; Style….</source>
         <comment>inspector-tour</comment>
-        <translation>Hvis du har endret en verdi kan du trykke &quot;Resett&quot;-knappen for å få den tilbake til standard.
-Hvis verdien er styrt av en stil-innstilling kan du trykke &quot;Bruk som stil&quot;-knappen for å sette verdien som den nye standarden for stilen.
-Du kan også sette standardstiler ved å bruke Format &gt; Stil...</translation>
+        <translation>Hvis du har endret en verdi kan du trykke «Tilbakestill»-knappen for å få den tilbake til standard.
+Hvis verdien er styrt av en stil-innstilling kan du trykke «Bruk som stil»-knappen for å sette verdien som den nye standarden for stilen.
+Du kan også sette standardstiler ved å bruke «Format → Stil»</translation>
     </message>
     <message>
         <source>The quickest way to scroll up and down is to use your mouse wheel or equivalent touch gesture (for example, two-finger swipe).
     To scroll horizontally, hold &quot;Shift&quot; while using the mouse wheel or touch gesture.</source>
         <comment>navigate-tour</comment>
-        <translation>Den raskeste måten å rulle opp og ned er å bruke rullehjulet på musa di eller tilsvarende (for eksempel to-finger sveip). For å rulle horisontalt, hold &quot;shift&quot;-tasten mens du ruller.</translation>
+        <translation>Den raskeste måten å rulle opp og ned er å bruke rullehjulet på musa di eller tilsvarende (for eksempel to-finger sveip). For å rulle horisontalt, hold «Shift» mens du ruller.</translation>
     </message>
     <message>
         <source>The navigation keys on your keyboard such as &quot;PgUp&quot;, &quot;PgDn&quot;, &quot;Home&quot;, and &quot;End&quot; function as in other applications
     to move between pages.
     Keyboards that lack these keys often provide equivalents such as &quot;Fn+Up/Down/Left/Right&quot;.</source>
         <comment>navigate-tour</comment>
-        <translation>Navigasjonstaster på tastaturet ditt, så sp, &quot;PgUp&quot;. &quot;PgDn&quot;, &quot;Home&quot; og &quot;End&quot; virker akkurat som i andre programmer for å forflytte deg mellom sider. Tastaturer som mangler disse tastene har ofte andre alternativer, som &quot;Fn+Opp/Ned/Høyre/Venstre&quot;.</translation>
+        <translation>Navigasjonstaster på tastaturet ditt, sånn som «Page Up», «Page Down», «Home» og «End» virker akkurat som i andre programmer
+    for å forflytte deg mellom sider. 
+    Tastaturer som mangler disse tastene har ofte andre alternativer, som «Fn + Pil Opp/Ned/Høyre/Venstre».</translation>
     </message>
     <message>
         <source>You can move the score short distances by clicking an empty area of the page and dragging.
     By the way, you can also select regions by holding &quot;Shift&quot; while dragging.</source>
         <comment>navigate-tour</comment>
         <translation>Du kan flytte partituret ved å klikke i et tomt område og trekke i partituret. 
-Du kan også velge områder ved å holde &quot;Shift&quot; mens du trekker.</translation>
+    Du kan også velge områder ved å holde «Shift» mens du trekker.</translation>
     </message>
     <message>
         <source>To enter a note of the selected duration, type its letter name or click on the staff.
     Press &quot;Ctrl+Up/Down&quot; (macOS: &quot;Cmd+Up/Down&quot;) to change octave.</source>
         <comment>note-input</comment>
-        <translation>For å skrive inn en note med den valgte noteverdien, tast inn notenavnet eller klikk i staven.
-Trykk &quot;Ctrl+Opp/Ned&quot; (i mac OS: &quot;Cmnd+Opp/Ned&quot;) for å skifte oktav.</translation>
+        <translation>For å skrive inn en note med den valgte noteverdien, tast inn notenavnet eller klikk i notesystemet.
+Trykk «Ctrl + Pil Opp/Ned» (i mac OS: «Kommando + Pil Opp/Ned») for å skifte oktav.</translation>
     </message>
     <message>
         <source>To add an accidental to a note, press the shortcut &quot;Up&quot; or &quot;Down&quot; to raise or lower its pitch,
     or click one of these icons.</source>
         <comment>note-input</comment>
-        <translation>For å legge et tilfeldig fortegn til en note, trykk &quot;Opp&quot; eller &quot;Ned&quot; for å heve eller senke tonehøyden, eller klikk et av disse symbolene</translation>
+        <translation>For å legge et tilfeldig fortegn til en note, trykk «Pil Opp» eller «Pil Ned» for å heve eller senke tonehøyden, eller trykk på et av disse symbolene.</translation>
     </message>
     <message>
         <source>To add a note to a chord, press &quot;Shift&quot; while typing its letter name, or click on the staff.</source>
         <comment>note-input</comment>
-        <translation>For å legge til en note i en akkord, press &quot;Shift&quot; mens du taster inn notenavnet eller klikker på staven.</translation>
+        <translation>For å legge til en note i en akkord, press «Shift» mens du taster inn notenavnet, eller klikk i notesystemet.</translation>
     </message>
     <message>
         <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press &quot;Ctrl+number&quot; or use Add &gt; Tuplets.</source>
         <comment>note-input</comment>
-        <translation>For å lage en triol eller en annen ol, velg noteverdien som representerer den totale verdien av olen, og trykk så &quot;Cntrl+tall&quot; eller bruk Legg til &gt; Oler.</translation>
+        <translation>For å lage en triol eller en annen ol, velg noteverdien som representerer den totale verdien av olen, og trykk så «Ctrl + tall» eller bruk «Legg til → Oler».</translation>
     </message>
     <message>
         <source>To make a single selection, click the element you want to select.
@@ -269,7 +273,11 @@ Trykk &quot;Ctrl+Opp/Ned&quot; (i mac OS: &quot;Cmnd+Opp/Ned&quot;) for å skift
     Tip: if you press the &quot;Alt&quot; key (&quot;Option&quot; on macOS) along with the cursor keys you can move through other elements too,
     and also move up and down from staff to staff.</source>
         <comment>select-tour</comment>
-        <translation type="unfinished"/>
+        <translation>For å velg ett enkelt element, trykk på elementet.
+    Det blir markert for å indikere at det er valgt.
+    Du kan bruke høyre og venstre piltast for å flytte utvalget til andre noter eller pauser.
+    Tips: hvis du trykker på «Alt» («Tilvalg» på macOS) samtidig med piltastene, kan du også flytte deg til andre elementer,
+    samt flytte deg opp og ned mellom notesystemer.</translation>
     </message>
     <message>
         <source>A list selection is a combination of single selections.
@@ -277,7 +285,10 @@ Trykk &quot;Ctrl+Opp/Ned&quot; (i mac OS: &quot;Cmnd+Opp/Ned&quot;) for å skift
     You can also quickly select similar elements by right-clicking (macOS: &quot;Ctrl&quot;+clicking) one
     and then choosing one of the &quot;Select&quot; options from the resulting popup menu.</source>
         <comment>select-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Et listeutvalg er en kombinasjon av enkeltutvalg.
+    Trykk «Ctrl» (macOS: «Kommando») mens du trykker for å legge til eller fjerne valgte elementer.
+    Du kan også raskt velge lignende elementer ved å høyreklikke (macOS: «Ctrl + klikk») på et element
+    og så angi et av alternativene fra utvalgsmenyen som dukker opp.</translation>
     </message>
     <message>
         <source>A range selection includes everything from one point in time to another across one or more staves.
@@ -285,14 +296,19 @@ Trykk &quot;Ctrl+Opp/Ned&quot; (i mac OS: &quot;Cmnd+Opp/Ned&quot;) for å skift
     To make a range selection, click the first note, rest, or measure you want to select, then &quot;Shift&quot;+click the last.
     You can also extend range selections by holding the &quot;Shift&quot; key while moving the cursor.</source>
         <comment>select-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Et områdeutvalg inkluderer alt fra et punkt til et annet på tvers av notesystemer.
+    Det indikeres med et blått rektangel rundt det valgte området.
+    For å opprette et områdeutvalg, trykk på den første noten, pausen eller takten du vil velge, så «Shift + klikk» på den siste.
+    Du kan også utvide et områdeutvalg ved å holde «Shift» mens du bruker piltastene.</translation>
     </message>
     <message>
         <source>Another way to make selections is to hold &quot;Shift&quot; while dragging.
     If your selection includes notes, it will automatically be made as a range selection;
     otherwise it will be made as a list selection.</source>
         <comment>select-tour</comment>
-        <translation type="unfinished"/>
+        <translation>En annen måte å opprette utvalg på er å holde «Shift» mens du drar.
+    Hvis utvalget omfatter noter, blir det automatisk gjort til et områdeutvalg;
+    ellers blir det til et listeutvalg.</translation>
     </message>
     <message>
         <source>Most elements on the lines palette span a range from a start element to an end element.
@@ -303,45 +319,54 @@ Trykk &quot;Ctrl+Opp/Ned&quot; (i mac OS: &quot;Cmnd+Opp/Ned&quot;) for å skift
 
     - Press &quot;Shift+Left&quot; to move that handle backward.</source>
         <comment>spanner-drop-apply</comment>
-        <translation type="unfinished"/>
+        <translation>De fleste elementene i «Linjer»-paletten spenner fra et startelement til et sluttelement.
+
+    For å endre spennet, dobbelklikk på linjen (som automatisk velger linjens slutthåndtak) og:
+
+    - Trykk «Shift + Pil Høyre» for å flytte håndtaket framover.
+
+    - Trykk «Shift + Pil Venstre» for å flytte håndtaket bakover.</translation>
     </message>
     <message>
         <source>Alternatively, first selecting a range of elements in the score and then double-clicking a line element in the palette will add that new element across the selected range.</source>
         <comment>spanner-drop-apply</comment>
-        <translation type="unfinished"/>
+        <translation>Alternativt, ved først å velge et område i partituret, for så å dobbelklikke på linjen i palletten, blir linjen lagt til med spenn over hele områdeutvalget.</translation>
     </message>
     <message>
         <source>This is the score view, where you can view and edit your score.
     Use your mouse wheel or touchpad to scroll (with &quot;Shift&quot; to scroll horizontally).
     If you have multiple scores open, you can switch between them using tabs at the top of your score view.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>Dette er partiturvisningen, hvor du leser og redigerer partituret.
+    Bruk hjulet på musen eller styreflaten for å rulle (med «Shift» for å rulle horisontalt).
+    Hvis du har flere partitur åpne, kan du bytte mellom dem med fanene på toppen.</translation>
     </message>
     <message>
         <source>The File Operations toolbar allows you to create/save/open/print files and undo/redo changes.
     You can also save to your musescore.com account if you go to File &gt; Save Online.
     The controls at the right of this toolbar control the display of your score.</source>
         <comment>welcome</comment>
-        <translation>Verktøylinjen &quot;Filoperasjoner&quot; lar deg opprette, lagre, åpne, skrive ut filer og angre operasjoner.
-Du kan også lagre til din musescore.com-konto hvis du velger Fil &gt; &quot;Lagre online...&quot;
-Kontrollene på høyresiden av denne verktøylinjen har å gjøre med visningen av partituret.</translation>
+        <translation>Verktøylinjen «Filoperasjoner» lar deg opprette, lagre, åpne, skrive ut filer og angre operasjoner.
+    Du kan også lagre til din musescore.com-konto hvis du velger «Fil → Lagre på nett».
+    Kontrollene på høyresiden av denne verktøylinjen har å gjøre med visningen av partituret.</translation>
     </message>
     <message>
         <source>The main menu contains most other commands.
     In addition, many commands can be accessed via keyboard shortcuts or by right-clicking (macOS: &quot;Ctrl&quot;+clicking) within the score view.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>Hovedmenyen inneholder de fleste andre kommandoene.
+    I tillegg er mange kommandoer tilgjengelig via hurtigtaster, eller ved å høyreklikke i partituret (macOS: «Ctrl + klikk»).</translation>
     </message>
     <message>
-        <source>That's the end of this tour!
+        <source>That&apos;s the end of this tour!
     As you use MuseScore, more tours will pop up to further explain functionality.
     To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
     You can also enable/disable and reset tours in Help &gt; Tours.</source>
         <comment>welcome</comment>
         <translation>Det var slutten av denne omvisningen!
-Etterhvert som du bruker MuseScore vil det dukke opp flere omvisninger for å forklare ytterligere funksjonalitet.
-For å slå av disse, fjern avkryssingen på &quot;Fortsett å tilby omvisning&quot; før du lukker dette vinduet.
-Du kan også slå av eller på omvisning i Hjelp &gt; Omvisning.</translation>
+    Etterhvert som du bruker MuseScore vil det dukke opp flere omvisninger for å forklare ytterligere funksjonalitet.
+     For å slå av disse, fjern avkryssingen på «Fortsett å tilby omvisning» før du lukker dette vinduet.
+Du kan også slå av eller på omvisning i «Hjelp → Veiledninger».</translation>
     </message>
 </context>
 </TS>

@@ -17,7 +17,7 @@
     <message>
         <location filename="../../mscore/aboutmusicxmlbox.ui" line="6"/>
         <source>About MusicXML</source>
-        <translation type="unfinished"/>
+        <translation>Ɣef MusicXML</translation>
     </message>
 </context>
 <context>

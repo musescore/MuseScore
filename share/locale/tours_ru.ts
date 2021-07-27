@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="ru" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="ru">
 <context>
     <name>TourXML</name>
     <message>
@@ -39,7 +41,7 @@
         <comment>note-input</comment>
         <translation>Чтобы добавить в один такт ноты с разным ритмом, используйте разные голоса.
 На одном нотном стане можно расположить до четырёх голосов.
-Голос по умолчанию — «Голос 1». Он должен использоваться первым на каждом нотном стане.
+Голос по умолчанию&#xa0;— «Голос&#xa0;1». Он должен использоваться первым на каждом нотном стане.
 Для ввода нот в других голосах щёлкните по одному из этих значков.</translation>
     </message>
     <message>
@@ -194,9 +196,9 @@
     Boxes with a thin blue outline represent measures that are currently in view.</source>
         <comment>timeline-tour</comment>
         <translation>В разделе ниже каждому инструменту соответствует одна строка.
-Каждая клетка в строке — это такт для соответствующего инструмента.
+Каждая клетка в строке&#xa0;— это такт для соответствующего инструмента.
 Если клетка выделена, в этом такте есть ноты.
-Клетки, заключённые в тонкую синюю рамку, — это такты, которые в данный момент видны на экране.</translation>
+Клетки, заключённые в тонкую синюю рамку,&#xa0;— это такты, которые в данный момент видны на экране.</translation>
     </message>
     <message>
         <source>MuseScore supports different types of selections: single, list, and range.
@@ -284,7 +286,7 @@
     You can also quickly select similar elements by right-clicking (macOS: &quot;Ctrl&quot;+clicking) one
     and then choosing one of the &quot;Select&quot; options from the resulting popup menu.</source>
         <comment>select-tour</comment>
-        <translation>Выделение списка — это выделение ряда элементов.
+        <translation>Выделение списка&#xa0;— это выделение ряда элементов.
 Для добавления или удаления элементов щёлкайте на них, удерживая клавишу «Ctrl» (в macOS используйте клавишу «Cmd»).
 Чтобы выбрать все элементы одного типа, щёлкните по одному из них правой кнопкой мыши (в macOS используйте «Ctrl+щелчок»),
 а затем выберите подходящий вариант в разделе «Выбрать» открывшегося меню.</translation>
@@ -305,7 +307,7 @@
     If your selection includes notes, it will automatically be made as a range selection;
     otherwise it will be made as a list selection.</source>
         <comment>select-tour</comment>
-        <translation>Ещё один способ выбора элементов — удерживать клавишу «Shift» при перетаскивании.
+        <translation>Ещё один способ выбора элементов&#xa0;— удерживать клавишу «Shift» при перетаскивании.
 Если среди выбранных элементов есть ноты, при выборе будет использоваться режим «диапазон»;
 в остальных случаях будет использоваться режим «список».</translation>
     </message>
@@ -357,7 +359,7 @@
 Многие команды можно выполнить, используя сочетания клавиш или щёлкнув правой кнопкой мыши в области просмотра партитуры (в macOS используйте «Ctrl+щелчок»).</translation>
     </message>
     <message>
-        <source>That's the end of this tour!
+        <source>That&apos;s the end of this tour!
     As you use MuseScore, more tours will pop up to further explain functionality.
     To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
     You can also enable/disable and reset tours in Help &gt; Tours.</source>

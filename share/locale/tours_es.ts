@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="es" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="es">
 <context>
     <name>TourXML</name>
     <message>
@@ -106,7 +108,7 @@ Pulse &quot;Siguiente&quot; para saber más.</translation>
     Click &quot;Next&quot; to learn more.</source>
         <comment>navigate-tour</comment>
         <translation>MuseScore le da distintas maneras de navegar por su partitura.
- Haga clic para saber mas.</translation>
+ Haga clic para saber más.</translation>
     </message>
     <message>
         <source>Additional navigation tools include the Timeline and Navigator, both found in the View menu.</source>
@@ -274,9 +276,9 @@ Pulse &quot;Siguiente&quot; para saber más.</translation>
     and also move up and down from staff to staff.</source>
         <comment>select-tour</comment>
         <translation>Para hacer una selección individual, haga clic en el elemento que desea seleccionar.
-  Este se resaltara para indicar que esta seleccionado.
+  Este se resaltará para indicar que esta seleccionado.
   Puede usar los cursores de izquierda y derecha para mover la selección entre notas y silencios de la partitura.
-  Tip: si mantiene presionada la tecla Alt (Option para macOS) mientras usa las flechas del teclado puede moverse entre otros elementos,
+  Tip: si mantiene presionada la tecla Alt (Option para macOS) mientras usa las flechas del teclado, puede moverse entre otros elementos,
   y también moverse hacia arriba o abajo de pentagrama en pentagrama.</translation>
     </message>
     <message>
@@ -285,7 +287,7 @@ Pulse &quot;Siguiente&quot; para saber más.</translation>
     You can also quickly select similar elements by right-clicking (macOS: &quot;Ctrl&quot;+clicking) one
     and then choosing one of the &quot;Select&quot; options from the resulting popup menu.</source>
         <comment>select-tour</comment>
-        <translation>Una lista de seleccione es una combinación de selecciones individuales.
+        <translation>Una lista de selección es una combinación de selecciones individuales.
   Presione &quot;Ctrl&quot; (macOS: &quot;Cmd&quot;) mientras hace clic para agregar o remover elementos de la selección de lista.
   También puede seleccionar elementos similares rápidamente haciendo clic derecho (macOS; &quot;Ctrl&quot;+clic) sobre uno
 y luego eligiendo uno de las opciones &quot;Seleccionar&quot; del menú desplegable.</translation>
@@ -338,8 +340,8 @@ Pulse Mayus-Izquierda para mover este handler backward. </translation>
     If you have multiple scores open, you can switch between them using tabs at the top of your score view.</source>
         <comment>welcome</comment>
         <translation>Esta es la vista de partituras, donde puede ver y editar sus partituras.
-     Use la rueda del mouse o el panel táctil para desplazarse (con &quot;Shift&quot; para desplazarse horizontalmente).
-     Si tiene varias partituras abiertas, puede cambiar entre ellas usando las pestañas en la parte superior de su vista de partituras.</translation>
+&#xa0;&#xa0;&#xa0;&#xa0; Use la rueda del mouse o el panel táctil para desplazarse (con &quot;Shift&quot; para desplazarse horizontalmente).
+&#xa0;&#xa0;&#xa0;&#xa0; Si tiene varias partituras abiertas, puede cambiar entre ellas usando las pestañas en la parte superior de su vista de partituras.</translation>
     </message>
     <message>
         <source>The File Operations toolbar allows you to create/save/open/print files and undo/redo changes.
@@ -358,7 +360,7 @@ Pulse Mayus-Izquierda para mover este handler backward. </translation>
    Adicionalmente, muchos comandos puede ser accedidos desde atajos de teclado o haciendo clic derecho (macOS: &quot;Ctrl&quot;+clic), en la vista de partitura.</translation>
     </message>
     <message>
-        <source>That's the end of this tour!
+        <source>That&apos;s the end of this tour!
     As you use MuseScore, more tours will pop up to further explain functionality.
     To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
     You can also enable/disable and reset tours in Help &gt; Tours.</source>

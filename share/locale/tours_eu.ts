@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="eu" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="eu">
 <context>
     <name>TourXML</name>
     <message>
@@ -355,7 +357,7 @@ Tresna-barra honen eskuinaldeko kontrolek zure partituraren ikuspegia kontrolatz
 Gainera, agindu askora partitura ikuspegiaren barne laster-teklen bidez edo ezkerreko botoiarekin sakatuz (MacOS: &quot;Ktrl&quot;+klik) iris daiteke.</translation>
     </message>
     <message>
-        <source>That's the end of this tour!
+        <source>That&apos;s the end of this tour!
     As you use MuseScore, more tours will pop up to further explain functionality.
     To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
     You can also enable/disable and reset tours in Help &gt; Tours.</source>

@@ -14681,7 +14681,7 @@ connection enabled</source>
     <message>
         <location filename="../../mscore/palette.cpp" line="293"/>
         <source>Properties…</source>
-        <translation>Akọrọngwa gasị...</translation>
+        <translation>Akọrọngwa gasị…</translation>
     </message>
 </context>
 <context>
@@ -17840,7 +17840,7 @@ failed: </source>
     <message>
         <location filename="../../mscore/qml/palettes/Palette.qml" line="787"/>
         <source>Properties…</source>
-        <translation>Akọrọngwa gasị...</translation>
+        <translation>Akọrọngwa gasị…</translation>
     </message>
     <message>
         <location filename="../../mscore/palette/palettemodel.cpp" line="758"/>

@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="fo" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="fo">
 <context>
     <name>TourXML</name>
     <message>
@@ -9,7 +11,7 @@
     <message>
         <source>The Playback Controls toolbar allows you to play/pause your score and control various aspects of playback.</source>
         <comment>welcome</comment>
-        <translation>Spælamboðið loyvir tær at spæla/steðga nótablaðnum, og stýra ymsum viðurskiftum viðv. spæli.</translation>
+        <translation>Við spæliknøttinum kanst tú spæla/steðga nótablaðnum, og stýra ymsum viðurskiftum viðv. spæli.</translation>
     </message>
     <message>
         <source>The Note Input toolbar allows you to enter notes and rests into your score.</source>
@@ -68,7 +70,7 @@ Til ber eisini at hála lutin úr palettini, og seta inn á nótablaðið.</tran
     This combines multiple measures of rests into a single multimeasure rest.
     To toggle this setting again, press the shortcut &quot;M&quot;.</source>
         <comment>mmrest</comment>
-        <translation>Tú kanst sláa fleirtakta íhald til og frá á nótablaðnum.
+        <translation>Tú kanst sláa fleirtakta pausur til og frá á nótablaðnum.
 Hetta setur saman fleiri taktir við íhaldi í eina íhalds takt.
 Brúka sniðvegin &quot;M&quot; fyri at sløkkja og tendra hesa funku.</translation>
     </message>
@@ -217,7 +219,7 @@ Trýst á &quot;Víðari&quot; og lær meira.</translation>
         <comment>inspector-tour</comment>
         <translation>Hevur tú broytt eitt virði, ber til at fara aftur til forsett við at trýsta á &quot;Nullstilla&quot;.
 Um virðið verður umsiti av ávísari sniðseting, ber til at trýsta á &quot;Set sum snið&quot; knappin, og verður tá nýggja virðið forsett fyri sniðið.
-Til ber eisini at broyta snið forsetingar við Forsnið&gt;Snið....</translation>
+Til ber eisini at broyta snið forsetingar við Forsnið&gt;Snið….</translation>
     </message>
     <message>
         <source>The quickest way to scroll up and down is to use your mouse wheel or equivalent touch gesture (for example, two-finger swipe).
@@ -358,7 +360,7 @@ Um fleiri nótabløð eru frammi, ber til at skifta millum tey við teigum ovast
     Afturat hesum er atgongd til nógv stýriboð við sniðvegum á knappaborðinum, ella við at høgra klikkja (macOS: &quot;Ctrl&quot;+klikk) í sýningina av nótablaðnum.</translation>
     </message>
     <message>
-        <source>That's the end of this tour!
+        <source>That&apos;s the end of this tour!
     As you use MuseScore, more tours will pop up to further explain functionality.
     To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
     You can also enable/disable and reset tours in Help &gt; Tours.</source>

@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="sl" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="sl">
 <context>
     <name>TourXML</name>
     <message>
@@ -38,7 +40,7 @@
     To enter notes into a different voice, click one of these icons.</source>
         <comment>note-input</comment>
         <translation>Za vnašanje not z različnimi trajanji v isto črtovje uporabite več glasov.
-  V vsakem črtovju so lahko največ štirje glasovi.
+&#xa0; V vsakem črtovju so lahko največ štirje glasovi.
   Privzet je 1. glas, ki ga v vsakem črtovju najprej uporabite.
   Za vnos not v različne glasove kliknite eno izmed teh ikon.</translation>
     </message>
@@ -216,7 +218,7 @@ To pomeni, da v mnogih primerih ne bo treba ničesar ročno premikati.</translat
         <comment>inspector-tour</comment>
         <translation>Če ste spremenili vrednost, lahko kliknete gumb &quot;Ponastavi&quot;, da jo ponastavite na privzeto.
       Če vrednost določa nastavitev sloga, lahko klinknete gumb &quot;Privzemi za slog&quot; in trenutno vrednost nastavite za novo privzeto v slogu.
-      Privzete vrednosti sloga lahko nastavite tudi v Oblikovanje &gt; Slog ...</translation>
+      Privzete vrednosti sloga lahko nastavite tudi v Oblikovanje &gt; Slog….</translation>
     </message>
     <message>
         <source>The quickest way to scroll up and down is to use your mouse wheel or equivalent touch gesture (for example, two-finger swipe).
@@ -356,7 +358,7 @@ Namig: če med pritiskanje na smerne tipke tiščite tipko &quot;Alt&quot; (&quo
    Dodatno lahko do mnogih ukazov dostopate tudi preko tipkovnih bližnic ali preko desnega klika (macOS: &quot;Ctrl&quot; + klik) v pogled notnega zapisa.</translation>
     </message>
     <message>
-        <source>That's the end of this tour!
+        <source>That&apos;s the end of this tour!
     As you use MuseScore, more tours will pop up to further explain functionality.
     To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
     You can also enable/disable and reset tours in Help &gt; Tours.</source>

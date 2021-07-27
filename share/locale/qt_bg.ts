@@ -21,7 +21,7 @@
     </message>
     <message>
         <source>Preferences...</source>
-        <translation>Предпочитания...</translation>
+        <translation>Предпочитания…</translation>
     </message>
     <message>
         <source>Quit %1</source>
@@ -468,7 +468,7 @@ to
     </message>
     <message>
         <source>Customize...</source>
-        <translation>Персонализиране...</translation>
+        <translation>Персонализиране…</translation>
     </message>
 </context>
 <context>
@@ -598,7 +598,7 @@ to
     <name>Q3ToolBar</name>
     <message>
         <source>More...</source>
-        <translation>Повече...</translation>
+        <translation>Повече…</translation>
     </message>
 </context>
 <context>
@@ -2218,11 +2218,11 @@ Do you want to delete it anyway?</source>
     </message>
     <message>
         <source>Show Details...</source>
-        <translation>Показване на детайли...</translation>
+        <translation>Показване на детайли…</translation>
     </message>
     <message>
         <source>Hide Details...</source>
-        <translation>Скриване на детайли...</translation>
+        <translation>Скриване на детайли…</translation>
     </message>
     <message>
         <source>&lt;p&gt;This program uses Qt Open Source Edition version %1.&lt;/p&gt;&lt;p&gt;Qt Open Source Edition is intended for the development of Open Source applications. You need a commercial Qt license for development of proprietary (closed source) applications.&lt;/p&gt;&lt;p&gt;Please see &lt;a href=&quot;http://www.trolltech.com/company/model/&quot;&gt;www.trolltech.com/company/model/&lt;/a&gt; for an overview of Qt licensing.&lt;/p&gt;</source>
@@ -2733,7 +2733,7 @@ Do you want to delete it anyway?</source>
     </message>
     <message>
         <source>Print To File ...</source>
-        <translation>Принтиране към файл...</translation>
+        <translation>Принтиране към файл…</translation>
     </message>
     <message>
         <source>File %1 is not writable.
@@ -3111,7 +3111,7 @@ Please choose a different file name.</source>
     </message>
     <message>
         <source>...</source>
-        <translation>...</translation>
+        <translation>…</translation>
     </message>
 </context>
 <context>
@@ -4112,7 +4112,7 @@ Please choose a different file name.</source>
     <message>
         <source>Save Link...</source>
         <comment>Download Linked File context menu item</comment>
-        <translation>Запазване на връзката...</translation>
+        <translation>Запазване на връзката…</translation>
     </message>
     <message>
         <source>Copy Link</source>

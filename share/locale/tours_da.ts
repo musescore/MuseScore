@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="da" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="da">
 <context>
     <name>TourXML</name>
     <message>
@@ -216,7 +218,7 @@ For at skifte kan du bruge genvejstasten &quot;M&quot;.</translation>
         <comment>inspector-tour</comment>
         <translation>Når du har ændret en værdi, kan du klikke på &quot;Nulstil&quot;-knappen for at nulstille til standard.
  Hvis værdien er styret af en layoutindstilling, kan du også klikke på &quot;Anvend som layoutstandard&quot;-knappen for at indsætte den aktuelle værdi som ny layoutstandard.
- Du kan også sætte layoutstandarden med Layout&gt;Layoutstandard....</translation>
+ Du kan også sætte layoutstandarden med Layout&gt;Layoutstandard….</translation>
     </message>
     <message>
         <source>The quickest way to scroll up and down is to use your mouse wheel or equivalent touch gesture (for example, two-finger swipe).
@@ -356,7 +358,7 @@ Hvis du har flere nodeark åbne, kan du skifte mellem dem ved at vælge fane øv
  Samtidig kan mange kommandoer udføres med genvejstaster eller ved at højreklikke (macOS: &quot;Ctrl&quot;+klikke) på nodearket.</translation>
     </message>
     <message>
-        <source>That's the end of this tour!
+        <source>That&apos;s the end of this tour!
     As you use MuseScore, more tours will pop up to further explain functionality.
     To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
     You can also enable/disable and reset tours in Help &gt; Tours.</source>

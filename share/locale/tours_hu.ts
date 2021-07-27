@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="hu" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="hu">
 <context>
     <name>TourXML</name>
     <message>
@@ -152,8 +154,8 @@ Nyomja meg a „Tovább” gombot, ha többet szeretne tudni.</translation>
     such as by moving tempo markings above other text or by shortening hairpins to avoid dynamics.
     In many cases, this means that no further adjustments will be required at all.</source>
         <comment>autoplace-tour</comment>
-        <translation>Az automatikus elhelyezés a legtöbb elemet a hagyományos kottagrafikai gyakorlat szerint magától a megfelelő helyre rajzol,
-például a tempójelzést a többi szöveg fölém, vagy a crescendo vonalakat lerövidíti, hogy elférjen a dinamikai jel.
+        <translation>Az automatikus elhelyezés a legtöbb elemet a hagyományos kottagrafikai gyakorlat szerint igazítja,
+például a tempójelzést a többi szöveg fölé helyezi, vagy a crescendo-villákat lerövidíti, hogy elkerüljék a többi dinamikai jelet.
 Emiatt sokszor egyáltalán nincs szükség további változtatásokra.</translation>
     </message>
     <message>
@@ -215,7 +217,7 @@ Nyomja meg a „Tovább” gombot, ha többet szeretne tudni.</translation>
         <comment>inspector-tour</comment>
         <translation>Ha módosított egy értéket, az „Alaphelyzet” gomb megnyomásával visszaállíthatja az alapértelmezett értékre.
 Ha az értéket egy stílusbeállítás befolyásolja, a „Beállítás stílusként” gomb megnyomásával megadhatja, hogy a stílusban a jelenlegi érték legyen az alapértelmezés.
-A stílusok alapértékeit a Formátum &gt; Stílus... menüpontban is beállíthatja.</translation>
+A stílusok alapértékeit a Formátum &gt; Stílus… menüpontban is beállíthatja.</translation>
     </message>
     <message>
         <source>The quickest way to scroll up and down is to use your mouse wheel or equivalent touch gesture (for example, two-finger swipe).
@@ -316,13 +318,13 @@ egyébként többszörös kijelölés.</translation>
 
     - Press &quot;Shift+Left&quot; to move that handle backward.</source>
         <comment>spanner-drop-apply</comment>
-        <translation>A legtöbb zenei elem a „vonalak” palettán az első kijelölt hangtól az utolsó kijelölt hangig tart.
+        <translation>A „vonalak” palettán található legtöbb zenei elem hatása egy adott elemtől egy másik adott elemig terjed.
 
-Ha meg szeretnéd változtatni a tartományt, akkor kattints kétszer a vonalra (ami automatikusan kijelöli a vonal végét) és:
+A tartomány megváltoztatásához kattintson duplán a vonalra (ez automatikusan kijelöli a végén lévő fogantyút), és:
 
--Nyomd le a „Shift+jobbra nyíl” gombokat, hogy jobbra told a vonal végét.
+– nyomja le a „Shift+jobbra nyíl” kombinációt a fogantyú előre mozgatásához, vagy
 
--Nyomd le a „Shift+balra nyíl” gombokat, hogy balra told a vonal végét.</translation>
+– nyomja le a „Shift+balra nyíl” kombinációt a fogantyú visszafelé mozgatásához.</translation>
     </message>
     <message>
         <source>Alternatively, first selecting a range of elements in the score and then double-clicking a line element in the palette will add that new element across the selected range.</source>
@@ -355,7 +357,7 @@ Az innen jobbra látható eszköztár vezérli a kotta megjelenítését.</trans
 Ezen kívül sok parancs van, amit gyorsbillentyűkkel vagy az egér jobb gombjával (macOs: „Ctrl”+kattintás) érhet el a kottanézetben.</translation>
     </message>
     <message>
-        <source>That's the end of this tour!
+        <source>That&apos;s the end of this tour!
     As you use MuseScore, more tours will pop up to further explain functionality.
     To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
     You can also enable/disable and reset tours in Help &gt; Tours.</source>

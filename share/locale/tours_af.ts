@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="af" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="af">
 <context>
     <name>TourXML</name>
     <message>
@@ -231,7 +233,7 @@
     to move between pages.
     Keyboards that lack these keys often provide equivalents such as &quot;Fn+Up/Down/Left/Right&quot;.</source>
         <comment>navigate-tour</comment>
-        <translation>Die navigasiesleutels op jou sleutelbord soos PgUp&quot;, &quot;PgDn&quot;, &quot;Home&quot;, and &quot;End&quot; werk soos in ander toepassings
+        <translation>Die navigasiesleutels op jou sleutelbord soos PgUp&quot;, &quot;PgDn&quot;, &quot;Home&quot;, and &quot;End&quot;&#xa0;werk soos in ander toepassings
     om tussen bladsye te beweeg.
     Toetsborde wat nie hierdie toetse het nie, verskaf dikwels ekwivalente soos &quot;Fn+Up/Down/Left/Right&quot;.</translation>
     </message>
@@ -276,7 +278,7 @@
         <translation>Om &apos;n enkele seleksie te maak, kliek die element wat jy wil kies.
     Dit word verlig om aan te dui dat dit gekies is. 
     Jy kan die linker- en regterpyltoetse gebruik om die seleksie deur die note en rustekens van jou partituur te beweeg.
-   Wenk: As jy die &quot;Alt&quot;-sleutel (&quot;Option&quot; op macOS) druk saam met die pyltoetse, kan jy deur die ander elemente beweeg,
+   Wenk: As jy die &quot;Alt&quot;-sleutel (&quot;Option&quot; op macOS)&#xa0;druk saam met die pyltoetse, kan jy deur die ander elemente beweeg,
    en ook op en af van note balk na notebalk beweeg. </translation>
     </message>
     <message>
@@ -358,7 +360,7 @@
     Daarbenewens kan mens toegang verkry tot baie opdragte via toetsbord-kortpaaie of deur te regsklik (macOS: &quot;Ctrl&quot;+klik) binne die partituur-aansig.</translation>
     </message>
     <message>
-        <source>That's the end of this tour!
+        <source>That&apos;s the end of this tour!
     As you use MuseScore, more tours will pop up to further explain functionality.
     To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
     You can also enable/disable and reset tours in Help &gt; Tours.</source>
