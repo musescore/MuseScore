@@ -34,6 +34,7 @@ public:
     WriteScoreHook() = default;
 
     void onWriteStyle302(Ms::Score* score, Ms::XmlWriter& xml);
+    void onWriteExcerpts302(Ms::Score* score, Ms::XmlWriter& xml, bool selectionOnly);
 };
 }
 #endif // MU_ENGRAVING_WRITESCOREHOOK_H

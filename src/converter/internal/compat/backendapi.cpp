@@ -31,11 +31,13 @@
 #include <QJsonValue>
 #include <QRandomGenerator>
 
+#include "engraving/compat/scoreaccess.h"
 #include "libmscore/excerpt.h"
 
-#include "log.h"
 #include "backendjsonwriter.h"
 #include "notationmeta.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::converter;
@@ -614,14 +616,14 @@ RetVal<QByteArray> BackendApi::scorePartJson(Ms::Score* score, const std::string
     params.filePath = QString::fromStdString(fileName);
     params.mode = MscIoMode::Zip;
 
-    MscWriter msczWriter(params);
-    msczWriter.open();
+    MscWriter mscWriter(params);
+    mscWriter.open();
 
-    bool ok = score->writeMscz(msczWriter);
+    bool ok = compat::ScoreAccess::exportPart(mscWriter, score);
     if (!ok) {
         LOGW() << "Error save mscz file";
     }
-    msczWriter.close();
+    mscWriter.close();
 
     RetVal<QByteArray> result;
     result.ret = ok ? make_ret(Ret::Code::Ok) : make_ret(Ret::Code::InternalError);
