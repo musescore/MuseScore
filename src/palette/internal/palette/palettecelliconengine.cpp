@@ -30,6 +30,8 @@
 #include "engraving/libmscore/element.h"
 #include "engraving/style/defaultstyle.h"
 
+#include <QApplication>
+
 #include "log.h"
 
 using namespace mu::palette;
@@ -57,6 +59,9 @@ void PaletteCellIconEngine::paint(QPainter* qp, const QRect& rect, QIcon::Mode m
 
 void PaletteCellIconEngine::paintCell(Painter& painter, const RectF& rect, bool selected, bool current) const
 {
+    double guiScaling = uiConfiguration()->guiScaling();
+    painter.scale(guiScaling, guiScaling);
+
     paintBackground(painter, rect, selected, current);
 
     if (!m_cell) {

@@ -28,11 +28,13 @@
 
 #include "modularity/ioc.h"
 #include "ipaletteconfiguration.h"
+#include "ui/iuiconfiguration.h"
 
 namespace mu::palette {
 class PaletteCellIconEngine : public QIconEngine
 {
-    INJECT_STATIC(palette, mu::palette::IPaletteConfiguration, configuration)
+    INJECT_STATIC(palette, IPaletteConfiguration, configuration)
+    INJECT_STATIC(palette, ui::IUiConfiguration, uiConfiguration)
 
 public:
     explicit PaletteCellIconEngine(PaletteCellConstPtr cell, qreal extraMag = 1.0);

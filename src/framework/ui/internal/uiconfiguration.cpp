@@ -475,18 +475,18 @@ Notification UiConfiguration::musicalFontChanged() const
     return m_musicalFontChanged;
 }
 
-float UiConfiguration::guiScaling() const
+double UiConfiguration::guiScaling() const
 {
     const QScreen* screen = mainWindow()->screen();
     return screen ? screen->devicePixelRatio() : 1;
 }
 
-void UiConfiguration::setPhysicalDotsPerInch(std::optional<float> dpi)
+void UiConfiguration::setPhysicalDotsPerInch(std::optional<double> dpi)
 {
     m_customDPI = dpi;
 }
 
-float UiConfiguration::physicalDotsPerInch() const
+double UiConfiguration::physicalDotsPerInch() const
 {
     if (m_customDPI) {
         return m_customDPI.value();
