@@ -25,7 +25,7 @@
 
 #include <QScrollArea>
 
-#include "palette/palettepanel.h"
+#include "palette/palette.h"
 
 #include "engraving/libmscore/element.h"
 
@@ -53,7 +53,7 @@ class PaletteWidget : public QWidget
 
 public:
     PaletteWidget(QWidget* parent = nullptr);
-    PaletteWidget(PalettePanelPtr palette, QWidget* parent = nullptr);
+    PaletteWidget(PalettePtr palette, QWidget* parent = nullptr);
 
     QString name() const;
     void setName(const QString& name);
@@ -166,7 +166,7 @@ private:
     bool notationHasSelection() const;
     void applyElementAtPosition(QPoint pos, Qt::KeyboardModifiers modifiers);
 
-    PalettePanelPtr m_palette;
+    PalettePtr m_palette;
 
     std::vector<PaletteCellPtr> m_filteredCells; // used for filter & backup
 

@@ -294,7 +294,7 @@ KeyEditor::KeyEditor(QWidget* parent)
     l->setContentsMargins(0, 0, 0, 0);
     frame->setLayout(l);
 
-    sp = new PaletteWidget(PaletteCreator::newKeySigPalettePanel(), this);
+    sp = new PaletteWidget(PaletteCreator::newKeySigPalette(), this);
     sp->setReadOnly(false);
 
     _keyPalette = new PaletteScrollArea(sp);
@@ -309,7 +309,7 @@ KeyEditor::KeyEditor(QWidget* parent)
     l = new QVBoxLayout();
     l->setContentsMargins(0, 0, 0, 0);
     frame_3->setLayout(l);
-    sp1 = new PaletteWidget(PaletteCreator::newAccidentalsPalettePanel(), this);
+    sp1 = new PaletteWidget(PaletteCreator::newAccidentalsPalette(), this);
     qreal adj = sp1->mag();
     sp1->setGridSize(sp1->gridWidth() * editScale / adj, sp1->gridHeight() * editScale / adj);
     sp1->setMag(editScale);

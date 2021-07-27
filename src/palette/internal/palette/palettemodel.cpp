@@ -112,14 +112,12 @@ bool PaletteTreeModel::blockTreeChanged(bool block)
 }
 
 //---------------------------------------------------------
-//   PaletteTreeModel::iptrToPalettePanel
+//   PaletteTreeModel::iptrToPalette
 //---------------------------------------------------------
 
-PalettePanel* PaletteTreeModel::iptrToPalettePanel(void* iptr, int* idx)
+Palette* PaletteTreeModel::iptrToPalette(void* iptr, int* idx)
 {
-    const auto palette = std::find_if(
-        palettes().begin(), palettes().end(),
-        [iptr](const PalettePanelPtr& p) {
+    const auto palette = std::find_if(palettes().begin(), palettes().end(), [iptr](const PalettePtr& p) {
         return iptr == p.get();
     });
 
@@ -128,7 +126,7 @@ PalettePanel* PaletteTreeModel::iptrToPalettePanel(void* iptr, int* idx)
     }
 
     if (palette != palettes().end()) {
-        return static_cast<PalettePanel*>(iptr);
+        return static_cast<Palette*>(iptr);
     }
     return nullptr;
 }
@@ -137,7 +135,7 @@ void PaletteTreeModel::notifyAboutCellsChanged(int changedRole)
 {
     const size_t npalettes = palettes().size();
     for (size_t row = 0; row < npalettes; ++row) {
-        PalettePanel* palette = palettes()[row].get();
+        Palette* palette = palettes()[row].get();
 
         const QModelIndex parent = index(int(row), 0, QModelIndex());
         const QModelIndex first = index(0, 0, parent);
@@ -147,10 +145,10 @@ void PaletteTreeModel::notifyAboutCellsChanged(int changedRole)
 }
 
 //---------------------------------------------------------
-//   PaletteTreeModel::findPalettePanel
+//   PaletteTreeModel::findPalette
 //---------------------------------------------------------
 
-const PalettePanel* PaletteTreeModel::findPalettePanel(const QModelIndex& index) const
+const Palette* PaletteTreeModel::findPalette(const QModelIndex& index) const
 {
     if (index.internalPointer() != _paletteTree.get()) {
         return nullptr;
@@ -165,12 +163,12 @@ const PalettePanel* PaletteTreeModel::findPalettePanel(const QModelIndex& index)
 }
 
 //---------------------------------------------------------
-//   PaletteTreeModel::findPalettePanel
+//   PaletteTreeModel::findPalette
 //---------------------------------------------------------
 
-PalettePanel* PaletteTreeModel::findPalettePanel(const QModelIndex& index)
+Palette* PaletteTreeModel::findPalette(const QModelIndex& index)
 {
-    return const_cast<PalettePanel*>(const_cast<const PaletteTreeModel*>(this)->findPalettePanel(index));
+    return const_cast<Palette*>(const_cast<const PaletteTreeModel*>(this)->findPalette(index));
 }
 
 //---------------------------------------------------------
@@ -179,7 +177,7 @@ PalettePanel* PaletteTreeModel::findPalettePanel(const QModelIndex& index)
 
 PaletteCellConstPtr PaletteTreeModel::findCell(const QModelIndex& index) const
 {
-    if (const PalettePanel* pp = iptrToPalettePanel(index.internalPointer())) {
+    if (const Palette* pp = iptrToPalette(index.internalPointer())) {
         const int row = index.row();
         if (index.column() != 0 || row < 0 || row >= pp->cellsCount()) {
             return nullptr;
@@ -248,7 +246,7 @@ QModelIndex PaletteTreeModel::parent(const QModelIndex& modelIndex) const
     }
 
     int row;
-    if (iptrToPalettePanel(iptr, &row)) {
+    if (iptrToPalette(iptr, &row)) {
         return index(row, /* column */ 0, QModelIndex());
     }
 
@@ -294,7 +292,7 @@ int PaletteTreeModel::columnCount(const QModelIndex& parent) const
 
 QVariant PaletteTreeModel::data(const QModelIndex& index, int role) const
 {
-    if (const PalettePanel* pp = findPalettePanel(index)) {
+    if (const Palette* pp = findPalette(index)) {
         switch (role) {
         case Qt::DisplayRole:
         case Qt::ToolTipRole:
@@ -337,7 +335,7 @@ QVariant PaletteTreeModel::data(const QModelIndex& index, int role) const
         }
         case Qt::DecorationRole: {
             qreal extraMag = 1.0;
-            if (const PalettePanel* pp = iptrToPalettePanel(index.internalPointer())) {
+            if (const Palette* pp = iptrToPalette(index.internalPointer())) {
                 extraMag = pp->mag();
             }
             return QIcon(new PaletteCellIconEngine(cell, extraMag * configuration()->paletteScaling()));
@@ -349,7 +347,7 @@ QVariant PaletteTreeModel::data(const QModelIndex& index, int role) const
         case CustomRole:
             return cell->custom;
         case EditableRole: {
-            if (const PalettePanel* pp = iptrToPalettePanel(index.internalPointer())) {
+            if (const Palette* pp = iptrToPalette(index.internalPointer())) {
                 return pp->isEditable();
             }
             return false;
@@ -387,7 +385,7 @@ QVariant PaletteTreeModel::data(const QModelIndex& index, int role) const
 
 bool PaletteTreeModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
-    if (PalettePanel* pp = findPalettePanel(index)) {
+    if (Palette* pp = findPalette(index)) {
         switch (role) {
         case VisibleRole:
             if (value.canConvert<bool>()) {
@@ -576,8 +574,8 @@ QMimeData* PaletteTreeModel::mimeData(const QModelIndexList& indexes) const
         return mime;
     }
 
-    if (const PalettePanel* pp = findPalettePanel(indexes[0])) {
-        mime->setData(PalettePanel::mimeDataFormat, pp->toMimeData());
+    if (const Palette* pp = findPalette(indexes[0])) {
+        mime->setData(Palette::mimeDataFormat, pp->toMimeData());
     } else if (PaletteCellConstPtr cell = findCell(indexes[0])) {
         mime->setData(mu::commonscene::MIME_SYMBOL_FORMAT, cell->element->mimeData(PointF()));
     }
@@ -606,10 +604,10 @@ bool PaletteTreeModel::canDropMimeData(const QMimeData* data, Qt::DropAction act
     Q_UNUSED(column);
 
     if (!parent.isValid()) {
-        return (action == Qt::CopyAction) && data->hasFormat(PalettePanel::mimeDataFormat);
+        return (action == Qt::CopyAction) && data->hasFormat(Palette::mimeDataFormat);
     }
 
-    if (const PalettePanel* pp = findPalettePanel(parent)) {
+    if (const Palette* pp = findPalette(parent)) {
         if (row < 0 || row > int(pp->cellsCount())) {
             return false;
         }
@@ -633,25 +631,25 @@ bool PaletteTreeModel::dropMimeData(const QMimeData* data, Qt::DropAction action
     Q_UNUSED(column);   // when dropping at the end of palette, column == -1. Probably an effect of proxy models
 
     if (!parent.isValid()) {
-        if (action != Qt::CopyAction || !data->hasFormat(PalettePanel::mimeDataFormat)) {
+        if (action != Qt::CopyAction || !data->hasFormat(Palette::mimeDataFormat)) {
             return false;
         }
         if (row < 0 || row > int(palettes().size())) {
             return false;
         }
 
-        auto panel = PalettePanel::fromMimeData(data->data(PalettePanel::mimeDataFormat));
-        if (!panel) {
+        auto palette = Palette::fromMimeData(data->data(Palette::mimeDataFormat));
+        if (!palette) {
             return false;
         }
 
         beginInsertRows(parent, row, row);
-        palettes().insert(palettes().begin() + row, panel);
+        palettes().insert(palettes().begin() + row, palette);
         endInsertRows();
         return true;
     }
 
-    if (PalettePanel* pp = findPalettePanel(parent)) {
+    if (Palette* pp = findPalette(parent)) {
         if (row < 0 || row > int(pp->cellsCount())) {
             return false;
         }
@@ -690,7 +688,7 @@ bool PaletteTreeModel::moveRows(const QModelIndex& sourceParent, int sourceRow, 
     const bool sameParent = sourceParent == destinationParent;
 
     if (!sourceParent.isValid()) {
-        // moving palette panels
+        // moving palettes
         if (sourceRow + count > int(palettes().size()) || destinationChild >= int(palettes().size())) {
             return false;
         }
@@ -710,7 +708,7 @@ bool PaletteTreeModel::moveRows(const QModelIndex& sourceParent, int sourceRow, 
             return false;
         }
 
-        std::vector<PalettePanelPtr> movedPanels;
+        std::vector<PalettePtr> movedPalettes;
 
         auto srcBegin = palettes().begin() + sourceRow;
         auto srcEnd = srcBegin + count;
@@ -719,8 +717,8 @@ bool PaletteTreeModel::moveRows(const QModelIndex& sourceParent, int sourceRow, 
         // layoutChanged() gets emitted (i.e. if begin/endMoveRows() gets called).
         // Performance is much better when doing remove + insert rows instead.
         beginRemoveRows(sourceParent, sourceRow, sourceRow + count - 1);
-        movedPanels.reserve(count);
-        movedPanels.insert(movedPanels.end(), std::make_move_iterator(srcBegin), std::make_move_iterator(srcEnd));
+        movedPalettes.reserve(count);
+        movedPalettes.insert(movedPalettes.end(), std::make_move_iterator(srcBegin), std::make_move_iterator(srcEnd));
         palettes().erase(srcBegin, srcEnd);
         endRemoveRows();
 
@@ -728,18 +726,18 @@ bool PaletteTreeModel::moveRows(const QModelIndex& sourceParent, int sourceRow, 
         auto dest = palettes().begin() + destIdx;
 
         beginInsertRows(destinationParent, destIdx, destIdx + count - 1);
-        palettes().insert(dest, std::make_move_iterator(movedPanels.begin()),
-                          std::make_move_iterator(movedPanels.end()));
+        palettes().insert(dest, std::make_move_iterator(movedPalettes.begin()),
+                          std::make_move_iterator(movedPalettes.end()));
         endInsertRows();
 
         return true;
     }
 
-    PalettePanel* sourcePanel = findPalettePanel(sourceParent);
-    PalettePanel* destPanel = sameParent ? sourcePanel : findPalettePanel(destinationParent);
-    if (sourcePanel && destPanel) {
+    Palette* sourcePalette = findPalette(sourceParent);
+    Palette* destPalette = sameParent ? sourcePalette : findPalette(destinationParent);
+    if (sourcePalette && destPalette) {
         // moving palette cells
-        if (sourceRow + count > int(sourcePanel->cellsCount()) || destinationChild > int(destPanel->cellsCount())) {
+        if (sourceRow + count > int(sourcePalette->cellsCount()) || destinationChild > int(destPalette->cellsCount())) {
             return false;
         }
 
@@ -757,13 +755,13 @@ bool PaletteTreeModel::moveRows(const QModelIndex& sourceParent, int sourceRow, 
         // layoutChanged() gets emitted (i.e. if begin/endMoveRows() gets called).
         // Performance is much better when doing remove + insert rows instead.
         beginRemoveRows(sourceParent, sourceRow, sourceRow + count - 1);
-        auto movedCells(sourcePanel->takeCells(sourceRow, count));
+        auto movedCells(sourcePalette->takeCells(sourceRow, count));
         endRemoveRows();
 
         const int destIdx = (sameParent && destinationRow >= sourceRow) ? (destinationRow - count) : destinationRow;
 
         beginInsertRows(destinationParent, destIdx, destIdx + count - 1);
-        destPanel->insertCells(destIdx, movedCells);
+        destPalette->insertCells(destIdx, movedCells);
         endInsertRows();
 
         return true;
@@ -779,7 +777,7 @@ bool PaletteTreeModel::moveRows(const QModelIndex& sourceParent, int sourceRow, 
 bool PaletteTreeModel::removeRows(int row, int count, const QModelIndex& parent)
 {
     if (!parent.isValid()) {
-        // removing palette panels
+        // removing palettes
         if (row < 0 || row + count > int(palettes().size())) {
             return false;
         }
@@ -792,14 +790,14 @@ bool PaletteTreeModel::removeRows(int row, int count, const QModelIndex& parent)
         return true;
     }
 
-    if (PalettePanel* panel = findPalettePanel(parent)) {
+    if (Palette* palette = findPalette(parent)) {
         // removing palette cells
-        if (row < 0 || row + count > panel->cellsCount()) {
+        if (row < 0 || row + count > palette->cellsCount()) {
             return false;
         }
 
         beginRemoveRows(parent, row, row + count - 1);
-        panel->takeCells(row, count);
+        palette->takeCells(row, count);
         endRemoveRows();
         return true;
     }
@@ -814,14 +812,14 @@ bool PaletteTreeModel::removeRows(int row, int count, const QModelIndex& parent)
 bool PaletteTreeModel::insertRows(int row, int count, const QModelIndex& parent)
 {
     if (!parent.isValid()) {
-        // inserting palette panels
+        // inserting palettes
         if (row < 0 || row > int(palettes().size())) {
             return false;
         }
 
         beginInsertRows(parent, row, row + count - 1);
         for (int i = 0; i < count; ++i) {
-            PalettePanelPtr p = std::make_shared<PalettePanel>(PalettePanel::Type::Custom);
+            PalettePtr p = std::make_shared<Palette>(Palette::Type::Custom);
             p->setName(QT_TRANSLATE_NOOP("palette", "Custom"));
             p->setGridSize(QSize(48, 48));
             p->setExpanded(true);
@@ -831,16 +829,16 @@ bool PaletteTreeModel::insertRows(int row, int count, const QModelIndex& parent)
         return true;
     }
 
-    if (PalettePanel* panel = findPalettePanel(parent)) {
+    if (Palette* palette = findPalette(parent)) {
         // inserting palette cells
-        if (row < 0 || row > panel->cellsCount()) {
+        if (row < 0 || row > palette->cellsCount()) {
             return false;
         }
 
         beginInsertRows(parent, row, row + count - 1);
         for (int i = 0; i < count; ++i) {
             PaletteCellPtr cell = std::make_shared<PaletteCell>();
-            panel->insertCell(row, cell);
+            palette->insertCell(row, cell);
         }
         endInsertRows();
         return true;
@@ -850,10 +848,10 @@ bool PaletteTreeModel::insertRows(int row, int count, const QModelIndex& parent)
 }
 
 //---------------------------------------------------------
-//   PaletteTreeModel::insertPalettePanel
+//   PaletteTreeModel::insertPalette
 //---------------------------------------------------------
 
-bool PaletteTreeModel::insertPalettePanel(PalettePanelPtr pp, int row, const QModelIndex& parent)
+bool PaletteTreeModel::insertPalette(PalettePtr pp, int row, const QModelIndex& parent)
 {
     if (row < 0 || row > int(palettes().size()) || parent != QModelIndex()) {
         return false;
@@ -888,9 +886,9 @@ void PaletteTreeModel::updateCellsState(const Selection& sel)
 
     const size_t npalettes = palettes().size();
     for (size_t row = 0; row < npalettes; ++row) {
-        PalettePanel* palette = palettes()[row].get();
+        Palette* palette = palettes()[row].get();
         // TODO: should this be turned on for all palettes?
-        if (palette->type() != PalettePanel::Type::Beam) {
+        if (palette->type() != Palette::Type::Beam) {
             continue;
         }
 
@@ -923,7 +921,7 @@ void PaletteTreeModel::retranslate()
 
 QModelIndex PaletteTreeModel::findPaletteCell(const PaletteCell& cell, const QModelIndex& parent) const
 {
-    if (const PalettePanel* pp = findPalettePanel(parent)) {
+    if (const Palette* pp = findPalette(parent)) {
         const int idx = pp->indexOfCell(cell);
         if (idx == -1) {
             return QModelIndex();
@@ -945,7 +943,7 @@ QModelIndexList PaletteTreeModel::match(const QModelIndex& start, int role, cons
 {
     if (role != PaletteCellRole || flags != Qt::MatchExactly || hits != 1
         || !value.canConvert<const PaletteCell*>()
-        || !findPalettePanel(start.parent())
+        || !findPalette(start.parent())
         ) {
         return QAbstractItemModel::match(start, role, value, hits, flags);
     }
@@ -965,7 +963,7 @@ QModelIndexList PaletteTreeModel::match(const QModelIndex& start, int role, cons
 void PaletteTreeModel::itemDataChanged(const QModelIndex& idx)
 {
     emit dataChanged(idx, idx);
-    if (findPalettePanel(idx)) {
+    if (findPalette(idx)) {
         // palette cells appearance depends on palette settings
         const QModelIndex childFirstIndex = index(0, 0, idx);
         const int rows = rowCount(idx);
@@ -1038,16 +1036,16 @@ void PaletteCellFilter::connectToModel(const QAbstractItemModel* model)
 
 class ExcludePaletteCellFilter : public PaletteCellFilter
 {
-    const PalettePanel* excludePanel;
-    const QPersistentModelIndex panelIndex; // filter is valid as long as this index is valid too
+    const Palette* excludePalette;
+    const QPersistentModelIndex paletteIndex; // filter is valid as long as this index is valid too
 
 public:
-    ExcludePaletteCellFilter(const PalettePanel* p, QPersistentModelIndex index, QObject* parent = nullptr)
-        : PaletteCellFilter(parent), excludePanel(p), panelIndex(index) {}
+    ExcludePaletteCellFilter(const Palette* p, QPersistentModelIndex index, QObject* parent = nullptr)
+        : PaletteCellFilter(parent), excludePalette(p), paletteIndex(index) {}
 
     bool acceptCell(const PaletteCell& cell) const override
     {
-        return panelIndex.isValid() && -1 == excludePanel->indexOfCell(cell, /* matchName */ false);
+        return paletteIndex.isValid() && -1 == excludePalette->indexOfCell(cell, /* matchName */ false);
     }
 };
 
@@ -1059,7 +1057,7 @@ public:
 
 PaletteCellFilter* PaletteTreeModel::getFilter(const QModelIndex& index) const
 {
-    if (const PalettePanel* pp = findPalettePanel(index)) {
+    if (const Palette* pp = findPalette(index)) {
         ExcludePaletteCellFilter* filter = new ExcludePaletteCellFilter(pp, index);
         filter->connectToModel(this);
         return filter;
@@ -1093,7 +1091,7 @@ bool FilterPaletteTreeModel::filterAcceptsRow(int sourceRow, const QModelIndex& 
     const QModelIndex& cellIndex = sourceModel()->index(sourceRow, /* column */ 0, sourceParent);
     const QVariant cellData = sourceModel()->data(cellIndex, PaletteTreeModel::PaletteCellRole);
     const PaletteCell* cell = cellData.value<const PaletteCell*>();
-    if (!cell) { // a palette panel or just an unrelated model
+    if (!cell) { // a palette or just an unrelated model
         return true;
     }
     return cellFilter->accept(*cell);
