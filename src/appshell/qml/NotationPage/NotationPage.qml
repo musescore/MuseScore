@@ -304,6 +304,23 @@ DockPage {
             Timeline {
                 anchors.fill: parent
             }
+        },
+
+        DockPanel {
+            id: drumsetPanel
+
+            objectName: "drumsetPanel"
+            title: qsTrc("appshell", "Drumset Tools")
+
+            allowedAreas: Qt.TopDockWidgetArea | Qt.BottomDockWidgetArea
+
+            height: 100
+            minimumHeight: 100
+            maximumHeight: 100
+
+            DrumsetPanel {
+                anchors.fill: parent
+            }
         }
     ]
 
