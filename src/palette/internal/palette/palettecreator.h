@@ -25,25 +25,13 @@
 
 #include "palettetree.h"
 
-#include "libmscore/actionicon.h"
-
 #include "modularity/ioc.h"
 #include "ipaletteconfiguration.h"
-#include "ui/iuiactionsregister.h"
 
 namespace mu::palette {
-class PaletteWidget;
-struct PaletteActionIcon
-{
-    Ms::ActionIconType actionType = Ms::ActionIconType::UNDEFINED;
-    actions::ActionCode actionCode;
-};
-using PaletteActionIconList = std::vector<PaletteActionIcon>;
-
 class PaletteCreator
 {
     INJECT_STATIC(palette, IPaletteConfiguration, configuration)
-    INJECT_STATIC(palette, ui::IUiActionsRegister, actionsRegister)
 
 public:
     static PalettePanelPtr newTempoPalettePanel(bool defaultPalette = false);
@@ -73,11 +61,6 @@ public:
 
     static PaletteTreePtr newMasterPaletteTree();
     static PaletteTreePtr newDefaultPaletteTree();
-
-    static void populateIconPalettePanel(PalettePanelPtr palettePanel, const PaletteActionIconList& actions);
-
-    // Used in NoteGroups widget
-    static void populateIconPalette(PaletteWidget* palette, const PaletteActionIconList& actions);
 };
 }
 

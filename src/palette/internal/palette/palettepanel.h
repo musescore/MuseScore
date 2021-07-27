@@ -28,11 +28,14 @@
 
 #include "libmscore/element.h"
 
+#include "actions/actiontypes.h"
+
 #include "modularity/ioc.h"
 #include "ipaletteconfiguration.h"
 #include "iinteractive.h"
 
 namespace Ms {
+enum class ActionIconType;
 class XmlWriter;
 class XMLReader;
 }
@@ -46,6 +49,7 @@ class PalettePanel
     Q_GADGET
 
     INJECT_STATIC(palette, IPaletteConfiguration, configuration)
+    INJECT_STATIC(palette, ui::IUiActionsRegister, actionsRegister)
     INJECT(palette, framework::IInteractive, interactive)
 
 public:
@@ -96,6 +100,7 @@ public:
 
     PaletteCellPtr insertElement(size_t idx, Ms::ElementPtr element, const QString& name, qreal mag = 1.0);
     PaletteCellPtr appendElement(Ms::ElementPtr element, const QString& name, qreal mag = 1.0);
+    PaletteCellPtr appendActionIcon(Ms::ActionIconType type, actions::ActionCode code);
 
     bool insertCell(size_t idx, PaletteCellPtr cell);
     bool insertCells(size_t idx, std::vector<PaletteCellPtr> cells);
