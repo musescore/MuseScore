@@ -621,7 +621,7 @@ QRect NotationPlayback::loopBoundaryRectByTick(LoopBoundaryType boundaryType, in
     }
 
     Ms::System* system = measure->system();
-    if (system == nullptr || system->page() == nullptr) {
+    if (system == nullptr || system->page() == nullptr || system->staves()->empty()) {
         return QRect();
     }
 
