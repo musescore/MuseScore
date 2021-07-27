@@ -118,7 +118,6 @@ StyledDialogView {
                 text: qsTrc("global", "Close")
 
                 onClicked: {
-                    partsModel.apply()
                     root.hide()
                 }
             }
@@ -130,7 +129,6 @@ StyledDialogView {
 
                 onClicked: {
                     partsModel.openSelectedParts()
-                    partsModel.apply()
                     root.hide()
                 }
             }

@@ -19,8 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import QtQuick.Controls 2.12
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -29,17 +30,12 @@ ListItemBlank {
     id: root
 
     property string title: ""
-    property int maxTitleWidth: 0
-    property bool isMain: false
     property int currentPartIndex: -1
-    property alias voicesVisibility: voicesPopup.voicesVisibility
-    property alias voicesTitle: voicesLabel.text
 
-    property int sidePadding: 0
+    property int sideMargin: 0
 
     signal copyPartRequested()
     signal removePartRequested()
-    signal voicesVisibilityChangeRequested(var voiceIndex, var voiceVisible)
     signal partClicked()
     signal titleEdited()
     signal titleEditingFinished()
@@ -60,7 +56,6 @@ ListItemBlank {
     height: 42
 
     onClicked: {
-        voicesPopup.close()
         endEditTitle()
         root.partClicked()
     }
@@ -69,118 +64,76 @@ ListItemBlank {
         root.startEditTitle()
     }
 
-    StyledIconLabel {
-        id: partIcon
+    RowLayout {
+        anchors.fill: parent
+        anchors.leftMargin: root.sideMargin - partIcon.width/3
+        anchors.rightMargin: root.sideMargin
 
-        anchors.left: parent.left
-        anchors.leftMargin: root.sidePadding
+        spacing: 4
 
-        height: parent.height
-        width: height
+        StyledIconLabel {
+            id: partIcon
 
-        iconCode: root.isMain ? IconCode.PAGE : IconCode.NEW_FILE
-    }
-
-    Component {
-        id: partTitle
-
-        StyledTextLabel {
-            text: root.title
-
-            horizontalAlignment: Qt.AlignLeft
-            font: ui.theme.bodyBoldFont
+            iconCode: IconCode.NEW_FILE
         }
-    }
 
-    Component {
-        id: editPartTitleField
+        Loader {
+            id: titleLoader
 
-        TextInputField {
-            Component.onCompleted: {
-                forceActiveFocus()
+            sourceComponent: partTitle
+
+            Connections {
+                target: root
+
+                function onCurrentPartIndexChanged(currentPartIndex) {
+                    root.endEditTitle()
+                }
             }
 
-            currentText: root.title
+            Component {
+                id: partTitle
 
-            onCurrentTextEdited: {
-                root.titleEdited(newTextValue)
+                StyledTextLabel {
+                    text: root.title
+
+                    horizontalAlignment: Qt.AlignLeft
+                    font: ui.theme.bodyBoldFont
+                }
             }
 
-            onTextEditingFinished: {
-                Qt.callLater(root.endEditTitle)
+            Component {
+                id: editPartTitleField
+
+                TextInputField {
+                    Component.onCompleted: {
+                        forceActiveFocus()
+                    }
+
+                    currentText: root.title
+
+                    onCurrentTextEdited: {
+                        root.titleEdited(newTextValue)
+                    }
+
+                    onTextEditingFinished: {
+                        Qt.callLater(root.endEditTitle)
+                    }
+                }
             }
         }
-    }
 
-    Loader {
-        id: titleLoader
-
-        anchors.left: partIcon.right
-        anchors.verticalCenter: parent.verticalCenter
-
-        width: root.maxTitleWidth - partIcon.width
-
-        sourceComponent: partTitle
-
-        Connections {
-            target: root
-
-            function onCurrentPartIndexChanged(currentPartIndex) {
-                root.endEditTitle()
-            }
-        } 
-    }
-
-    FlatButton {
-        id: showVoicesPopupButton
-
-        anchors.left: titleLoader.right
-        anchors.verticalCenter: parent.verticalCenter
-
-        normalStateColor: "transparent"
-        icon: IconCode.SMALL_ARROW_DOWN
-
-        onClicked: {
-            if (voicesPopup.opened) {
-                voicesPopup.close()
-                return
-            }
-
-            voicesPopup.open()
+        Item {
+            Layout.fillHeight: true
+            Layout.fillWidth: true
         }
-    }
 
-    StyledTextLabel {
-        id: voicesLabel
+        FlatButton {
+            normalStateColor: "transparent"
+            icon: IconCode.MENU_THREE_DOTS
 
-        anchors.left: showVoicesPopupButton.right
-        anchors.leftMargin: 8
-        height: parent.height
-
-        horizontalAlignment: Qt.AlignLeft
-    }
-
-    FlatButton {
-        anchors.right: parent.right
-        anchors.rightMargin: root.sidePadding
-        anchors.verticalCenter: parent.verticalCenter
-
-        normalStateColor: "transparent"
-        icon: IconCode.MENU_THREE_DOTS
-
-        onClicked: {
-            contextMenu.popup()
-        }
-    }
-
-    VoicesPopup {
-        id: voicesPopup
-
-        x: showVoicesPopupButton.x + showVoicesPopupButton.width / 2 - width / 2
-        y: showVoicesPopupButton.y + showVoicesPopupButton.height
-
-        onVoiceVisibilityChangeRequested: {
-            root.voicesVisibilityChangeRequested(voiceIndex, voiceVisible)
+            onClicked: {
+                contextMenu.popup()
+            }
         }
     }
 
@@ -214,12 +167,6 @@ ListItemBlank {
 
             onTriggered: {
                 root.startEditTitle()
-            }
-        }
-
-        Component.onCompleted: {
-            if (root.isMain) {
-                removeItem(deleteItem)
             }
         }
     }
