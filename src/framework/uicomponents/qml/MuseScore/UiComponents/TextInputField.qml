@@ -49,6 +49,7 @@ FocusScope {
 
     signal currentTextEdited(var newTextValue)
     signal textCleared()
+    signal textEditingFinished()
 
     function selectAll() {
         valueInput.selectAll()
@@ -144,9 +145,13 @@ FocusScope {
 
             text: root.currentText === undefined ? "" : root.currentText
 
+            Keys.onShortcutOverride: {
+                event.accepted = true
+            }
+
             Keys.onPressed: {
                 if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return) {
-                    valueInput.focus = false
+                    root.focus = false
                 }
             }
 
@@ -155,6 +160,7 @@ FocusScope {
                     selectAll()
                 } else {
                     deselect()
+                    root.textEditingFinished()
                 }
             }
 
