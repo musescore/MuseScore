@@ -27,6 +27,10 @@
 #include "instrument.h"
 #include "text.h"
 
+namespace mu::engraving::compat {
+class Read206;
+}
+
 namespace Ms {
 class XmlWriter;
 class Staff;
@@ -74,6 +78,8 @@ class Part final : public ScoreElement
     int _color;                     ///User specified color for helping to label parts
 
     PreferSharpFlat _preferSharpFlat;
+
+    friend class mu::engraving::compat::Read206;
 
 public:
     Part(Score* = 0);

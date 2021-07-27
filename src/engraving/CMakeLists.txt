@@ -104,6 +104,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/compat/writescorehook.h
     ${CMAKE_CURRENT_LIST_DIR}/compat/read114.cpp
     ${CMAKE_CURRENT_LIST_DIR}/compat/read114.h
+    ${CMAKE_CURRENT_LIST_DIR}/compat/read206.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/compat/read206.h
 
     ${CMAKE_CURRENT_LIST_DIR}/style/styledef.cpp
     ${CMAKE_CURRENT_LIST_DIR}/style/styledef.h
