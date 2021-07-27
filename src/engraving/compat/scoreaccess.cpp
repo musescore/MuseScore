@@ -49,3 +49,8 @@ Ms::Score::FileError ScoreAccess::loadMscz(Ms::MasterScore* masterScore, mu::eng
 {
     return masterScore->loadMscz(msczFile, ignoreVersionError);
 }
+
+bool ScoreAccess::exportPart(mu::engraving::MscWriter& mscWriter, Ms::Score* partScore)
+{
+    return partScore->masterScore()->exportPart(mscWriter, partScore);
+}
