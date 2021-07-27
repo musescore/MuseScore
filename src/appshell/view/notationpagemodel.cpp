@@ -82,6 +82,11 @@ void NotationPageModel::setMixerDockName(const QString& dockName)
     setPanelDockName(PanelType::Mixer, dockName);
 }
 
+void NotationPageModel::setTimelineDockName(const QString& dockName)
+{
+    setPanelDockName(PanelType::Timeline, dockName);
+}
+
 void NotationPageModel::setStatusBarDockName(const QString& dockName)
 {
     setPanelDockName(PanelType::NotationStatusBar, dockName);
@@ -113,6 +118,7 @@ void NotationPageModel::init(QQuickItem* dockWindow)
     static const QMap<std::string, PanelType> actionToPanelType {
         { "toggle-navigator", PanelType::NotationNavigator },
         { "toggle-mixer", PanelType::Mixer },
+        { "toggle-timeline", PanelType::Timeline },
         { "toggle-palette", PanelType::Palette },
         { "toggle-instruments", PanelType::Instruments },
         { "inspector", PanelType::Inspector },

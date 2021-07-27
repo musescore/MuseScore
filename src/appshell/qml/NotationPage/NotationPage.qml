@@ -82,6 +82,7 @@ DockPage {
         pageModel.setPalettePanelDockName(palettePanel.objectName)
         pageModel.setPianoRollDockName(pianoRollPanel.objectName)
         pageModel.setMixerDockName(mixerPanel.objectName)
+        pageModel.setTimelineDockName(timelinePanel.objectName)
         pageModel.setStatusBarDockName(notationStatusBar.objectName)
 
         Qt.callLater(pageModel.init, root.dockWindow)
@@ -242,6 +243,10 @@ DockPage {
 
             tabifyPanel: pianoRollPanel
 
+            // TODO: temporary disabled on startup, but can be enabled via the app menu, see:
+            // https://github.com/musescore/MuseScore/pull/8593
+            visible: false
+
             Loader {
                 asynchronous: true
                 sourceComponent: MixerPanel {}
@@ -260,7 +265,7 @@ DockPage {
             minimumHeight: 100
             maximumHeight: 300
 
-            visible: false
+            tabifyPanel: timelinePanel
 
             Rectangle {
                 anchors.fill: parent
@@ -270,6 +275,27 @@ DockPage {
                     anchors.centerIn: parent
                     text: pianoRollPanel.title
                 }
+            }
+        },
+
+        DockPanel {
+            id: timelinePanel
+
+            objectName: "timelinePanel"
+            title: qsTrc("appshell", "Timeline")
+
+            allowedAreas: Qt.TopDockWidgetArea | Qt.BottomDockWidgetArea
+
+            height: 200
+            minimumHeight: 100
+            maximumHeight: 300
+
+            // TODO: temporary disabled on startup, but can be enabled via the app menu, see:
+            // https://github.com/musescore/MuseScore/pull/8593
+            visible: false
+
+            Timeline {
+                anchors.fill: parent
             }
         }
     ]
