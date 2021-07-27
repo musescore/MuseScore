@@ -45,6 +45,9 @@ public:
     void setupDefaultStyle();
     void onReadStyleTag302(Ms::Score* score, Ms::XmlReader& xml);
 
+    // Excerpt
+    void onReadExcerptTag302(Ms::Score* score, Ms::XmlReader& xml);
+
 private:
     std::shared_ptr<ReadStyleHook> m_readStyle = nullptr;
 };
