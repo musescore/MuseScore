@@ -44,16 +44,20 @@ public:
     Ms::Excerpt* excerpt() const;
     void setExcerpt(Ms::Excerpt* excerpt);
 
+    void init() override;
+    bool isInited() const override;
+
     Meta metaInfo() const override;
     void setMetaInfo(const Meta& meta) override;
 
-    INotationPtr clone() const override;
+    IExcerptNotationPtr clone() const override;
 
 private:
-    bool isInited() const;
 
     Ms::Excerpt* m_excerpt = nullptr;
     Meta m_metaInfo;
+
+    bool m_isInited = false;
 };
 }
 
