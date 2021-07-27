@@ -88,6 +88,15 @@ void CommandLineController::apply()
         return std::nullopt;
     };
 
+    auto doubleValue = [this](const QString& name) -> std::optional<double> {
+        bool ok = true;
+        double val = m_parser.value(name).toDouble(&ok);
+        if (ok) {
+            return val;
+        }
+        return std::nullopt;
+    };
+
     auto intValue = [this](const QString& name) -> std::optional<int> {
         bool ok = true;
         int val = m_parser.value(name).toInt(&ok);
@@ -109,7 +118,7 @@ void CommandLineController::apply()
     }
 
     if (m_parser.isSet("D")) {
-        std::optional<float> val = floatValue("D");
+        std::optional<double> val = doubleValue("D");
         if (val) {
             uiConfiguration()->setPhysicalDotsPerInch(val);
         } else {

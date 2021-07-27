@@ -493,12 +493,12 @@ void NotationConfiguration::setIsCountInEnabled(bool enabled)
     settings()->setSharedValue(IS_COUNT_IN_ENABLED, Val(enabled));
 }
 
-float NotationConfiguration::guiScaling() const
+double NotationConfiguration::guiScaling() const
 {
     return uiConfiguration()->guiScaling();
 }
 
-float NotationConfiguration::notationScaling() const
+double NotationConfiguration::notationScaling() const
 {
     return uiConfiguration()->physicalDotsPerInch() / Ms::DPI;
 }
