@@ -43,6 +43,7 @@ bool NotationPageState::isPanelVisible(PanelType type) const
     case PanelType::NotationStatusBar:
     case PanelType::Mixer:
     case PanelType::Timeline:
+    case PanelType::DrumsetPanel:
         return m_panelVisibleMap[type];
     case PanelType::NotationNavigator:
         return configuration()->isNotationNavigatorVisible();
@@ -86,6 +87,7 @@ void NotationPageState::setIsPanelVisible(PanelType type, bool visible)
     case PanelType::NotationStatusBar:
     case PanelType::Mixer:
     case PanelType::Timeline:
+    case PanelType::DrumsetPanel:
         m_panelVisibleMap[type] = visible;
         break;
     case PanelType::NotationNavigator:

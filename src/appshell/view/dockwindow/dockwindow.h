@@ -74,8 +74,9 @@ public:
 
     Q_INVOKABLE void loadPage(const QString& uri);
 
-    bool isDockShown(const QString& dockName) const;
-    void toggleDockVisibility(const QString& dockName);
+    bool isDockOpened(const QString& dockName) const;
+    void toggleDock(const QString& dockName);
+    void setDockOpened(const QString& dockName, bool opened);
 
 public slots:
     void setMainToolBarDockingHolder(DockToolBarHolder* mainToolBarDockingHolder);

@@ -199,7 +199,7 @@ void DockBase::init()
     applySizeConstraints();
 }
 
-bool DockBase::isShown() const
+bool DockBase::isOpen() const
 {
     IF_ASSERT_FAILED(m_dockWidget) {
         return false;
@@ -208,7 +208,7 @@ bool DockBase::isShown() const
     return m_dockWidget->isOpen();
 }
 
-void DockBase::show()
+void DockBase::open()
 {
     IF_ASSERT_FAILED(m_dockWidget) {
         return;
@@ -217,22 +217,13 @@ void DockBase::show()
     m_dockWidget->show();
 }
 
-void DockBase::hide()
+void DockBase::close()
 {
     IF_ASSERT_FAILED(m_dockWidget) {
         return;
     }
 
     m_dockWidget->forceClose();
-}
-
-void DockBase::toggle()
-{
-    if (isShown()) {
-        hide();
-    } else {
-        show();
-    }
 }
 
 DockBase::DockLocation DockBase::location() const

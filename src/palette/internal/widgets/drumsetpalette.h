@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_PALETTE_DRUMSETPANEL_H
-#define MU_PALETTE_DRUMSETPANEL_H
+#ifndef MU_PALETTE_DRUMSETPALETTE_H
+#define MU_PALETTE_DRUMSETPALETTE_H
 
 #include "palette/palette.h"
 #include "notation/inotation.h"
@@ -34,14 +34,14 @@ class Score;
 class Drumset;
 class Staff;
 
-class DrumsetPanel : public PaletteScrollArea
+class DrumsetPalette : public PaletteScrollArea
 {
     Q_OBJECT
 
     INJECT(Ms, mu::actions::IActionsDispatcher, dispatcher)
 
 public:
-    explicit DrumsetPanel(QWidget* parent = nullptr);
+    explicit DrumsetPalette(QWidget* parent = nullptr);
 
     void setNotation(mu::notation::INotationPtr notation);
     void updateDrumset();
@@ -60,15 +60,14 @@ private:
     int selectedDrumNote();
     void retranslate();
 
-    Score* score() const;
+    mu::notation::INotationNoteInputPtr noteInput() const;
 
-    Staff* staff = nullptr;
-    Palette* drumPalette = nullptr;
-    const Drumset* drumset = nullptr;
+    Palette* m_drumPalette = nullptr;
+    const Drumset* m_drumset = nullptr;
 
     mu::notation::INotationPtr m_notation;
     mu::async::Channel<QString> m_pitchNameChanged;
 };
 } // namespace Ms
 
-#endif // MU_PALETTE_DRUMSETPANEL_H
+#endif // MU_PALETTE_DRUMSETPALETTE_H
