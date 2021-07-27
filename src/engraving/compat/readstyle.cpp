@@ -99,6 +99,17 @@ void ReadStyleHook::setupDefaultStyle()
     }
 }
 
+void ReadStyleHook::setupDefaultStyle(Ms::Score* score)
+{
+    IF_ASSERT_FAILED(!score->isMaster()) {
+        return;
+    }
+
+    int defaultsVersion = score->masterScore()->style().defaultStyleVersion();
+    score->setStyle(DefaultStyle::resolveStyleDefaults(defaultsVersion));
+    score->style().setDefaultStyleVersion(defaultsVersion);
+}
+
 void ReadStyleHook::readStyleTag(Ms::XmlReader& e)
 {
     readStyleTag(m_score, e);

@@ -34,7 +34,6 @@
 #include "style/style.h"
 #include "style/defaultstyle.h"
 
-#include "compat/readscorehook.h"
 #include "compat/writescorehook.h"
 
 #include "fermata.h"
