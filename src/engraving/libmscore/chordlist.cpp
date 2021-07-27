@@ -1610,7 +1610,7 @@ void ParsedChord::sortModifiers()
 
     QList<ChordToken> suspension;
 
-    QList<ChordToken> maj7;
+    QList<ChordToken> maj;
 
     QList<ChordToken> addOmit;
     QStringList addOmitList = { "omit", "no", "add" };
@@ -1642,7 +1642,7 @@ void ParsedChord::sortModifiers()
             } else if (tok.names.first() == "maj") {
                 bool foundNextModifier = false;
                 while (!foundNextModifier) {
-                    maj7.push_back(tok);
+                    maj.push_back(tok);
                     _tokenList.removeAt(index);
                     if (index >= _tokenList.size()) {
                         break;
@@ -1729,8 +1729,8 @@ void ParsedChord::sortModifiers()
     for (int index = suspension.size() - 1; index >= 0; index--) {
         _tokenList.insert(firstModifierIndex, suspension.at(index));
     }
-    for (int index = maj7.size() - 1; index >= 0; index--) {
-        _tokenList.insert(firstModifierIndex, maj7.at(index));
+    for (int index = maj.size() - 1; index >= 0; index--) {
+        _tokenList.insert(firstModifierIndex, maj.at(index));
     }
 }
 
@@ -1808,23 +1808,13 @@ void ParsedChord::respellQualitySymbols(const ChordList* cl)
     // Major seventh chords
     bool isMajorSeventh = false;
     bool hasSeven = true;
-    if ((_quality == "major" || _quality == "dominant") && (_extension.contains("7") || _modifierList.contains("7"))) {
+    if (_quality == "major" && (_extension.contains("7") || _modifierList.contains("7"))) {
         if (_modifierList.contains("7")) {
             // moving extension 7 to the correct place
             _extension += "7";
             _modifierList.removeAll("7");
         }
         isMajorSeventh = true;
-    }
-
-    if (_quality == "dominant") {
-        // Case of implicit major
-        // a symbol added just for respelling purpose
-        // to be removed after
-        ChordToken majTok;
-        majTok.names += "Ma";
-        majTok.tokenClass = ChordTokenClass::QUALITY;
-        _tokenList.insert(0, majTok);
     }
 
     // Diminished chords with input: <minor>b5
