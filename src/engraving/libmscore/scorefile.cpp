@@ -268,18 +268,9 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
         }
     }
     xml.setCurTrack(-1);
-    if (isMaster()) {
-        if (!selectionOnly) {
-            MasterScore* mScore = static_cast<MasterScore*>(this);
-            for (const Excerpt* excerpt : mScore->excerpts()) {
-                if (excerpt->partScore() != this) {
-                    excerpt->partScore()->write(xml, false, hook);                 // recursion
-                }
-            }
-        }
-    } else {
-        xml.tag("name", excerpt()->title());
-    }
+
+    hook.onWriteExcerpts302(this, xml, selectionOnly);
+
     xml.etag();
 
     if (unhide) {
@@ -376,57 +367,6 @@ void Score::readStaff(XmlReader& e)
             }
         }
     }
-}
-
-bool Score::writeMscz(engraving::MscWriter& msczWriter, bool onlySelection, bool doCreateThumbnail)
-{
-    IF_ASSERT_FAILED(msczWriter.isOpened()) {
-        return false;
-    }
-
-    // Write score
-    {
-        QByteArray scoreData;
-        QBuffer scoreBuf(&scoreData);
-        scoreBuf.open(QIODevice::ReadWrite);
-
-        compat::WriteScoreHook hook;
-        Score::writeScore(&scoreBuf, false, onlySelection, hook);
-
-        msczWriter.writeScoreFile(scoreData);
-    }
-
-    // Write images
-    {
-        for (ImageStoreItem* ip : imageStore) {
-            if (!ip->isUsed(this)) {
-                continue;
-            }
-            msczWriter.addImageFile(ip->hashName(), ip->buffer());
-        }
-    }
-
-    // Write thumbnail
-    {
-        if (doCreateThumbnail && !pages().isEmpty()) {
-            QImage pm = createThumbnail();
-
-            QByteArray ba;
-            QBuffer b(&ba);
-            b.open(QIODevice::WriteOnly);
-            pm.save(&b, "PNG");
-            msczWriter.writeThumbnailFile(ba);
-        }
-    }
-
-    // Write audio
-    {
-        if (_audio) {
-            msczWriter.writeAudioFile(_audio->data());
-        }
-    }
-
-    return true;
 }
 
 //---------------------------------------------------------

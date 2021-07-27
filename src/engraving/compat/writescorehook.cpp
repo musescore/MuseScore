@@ -23,6 +23,7 @@
 
 #include "libmscore/masterscore.h"
 #include "libmscore/xml.h"
+#include "libmscore/excerpt.h"
 
 #include "config.h"
 
@@ -48,5 +49,29 @@ void WriteScoreHook::onWriteStyle302(Ms::Score* score, Ms::XmlWriter& xml)
 
     if (isWriteStyle) {
         score->style().save(xml, true);     // save only differences to buildin style (logic from 3.)
+    }
+}
+
+void WriteScoreHook::onWriteExcerpts302(Ms::Score* score, Ms::XmlWriter& xml, bool selectionOnly)
+{
+    bool isWriteExcerpts = false;
+    //! NOTE Write the Excerpts to the score file if the compatibility define is set
+#ifdef ENGRAVING_COMPAT_WRITEEXCERPTS_302
+    isWriteExcerpts = true;
+#endif
+
+    if (isWriteExcerpts) {
+        if (score->isMaster()) {
+            if (!selectionOnly) {
+                Ms::MasterScore* mScore = static_cast<Ms::MasterScore*>(score);
+                for (const Ms::Excerpt* excerpt : mScore->excerpts()) {
+                    if (excerpt->partScore() != score) {
+                        excerpt->partScore()->write(xml, selectionOnly, *this); // recursion write
+                    }
+                }
+            }
+        } else {
+            xml.tag("name", score->excerpt()->title());
+        }
     }
 }

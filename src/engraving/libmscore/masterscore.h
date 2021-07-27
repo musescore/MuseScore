@@ -83,6 +83,7 @@ class MasterScore : public Score
 
     FileError loadMscz(const mu::engraving::MscReader& mscReader, bool ignoreVersionError);
     bool writeMscz(mu::engraving::MscWriter& mscWriter, bool onlySelection = false, bool createThumbnail = true);
+    bool exportPart(mu::engraving::MscWriter& mscWriter, Score* partScore);
 
 public:
 

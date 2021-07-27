@@ -56,6 +56,8 @@ public:
 
     void writeStyleFile(const QByteArray& data);
     void writeScoreFile(const QByteArray& data);
+    void addExcerptStyleFile(const QString& name, const QByteArray& data);
+    void addExcerptFile(const QString& name, const QByteArray& data);
     void writeChordListFile(const QByteArray& data);
     void writeThumbnailFile(const QByteArray& data);
     void addImageFile(const QString& fileName, const QByteArray& data);
