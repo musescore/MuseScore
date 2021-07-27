@@ -121,8 +121,8 @@ public:
     virtual bool isCountInEnabled() const = 0;
     virtual void setIsCountInEnabled(bool enabled) = 0;
 
-    virtual float guiScaling() const = 0;
-    virtual float notationScaling() const = 0;
+    virtual double guiScaling() const = 0;
+    virtual double notationScaling() const = 0;
 
     virtual std::string notationRevision() const = 0;
     virtual int notationDivision() const = 0;
