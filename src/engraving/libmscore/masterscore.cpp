@@ -243,6 +243,10 @@ Score::FileError MasterScore::loadMscz(const mu::engraving::MscReader& mscReader
         retval = read1(e, ignoreVersionError, hooks);
     }
 
+    // Read excerpts
+    {
+    }
+
     // Read ChordList
     {
         QByteArray styleData = mscReader.readChordListFile();
