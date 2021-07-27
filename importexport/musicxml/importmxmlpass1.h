@@ -145,7 +145,10 @@ public:
       void notations(MxmlStartStop& tupletStartStop);
       void note(const QString& partId, const Fraction cTime, Fraction& missingPrev, Fraction& dura, Fraction& missingCurr, VoiceOverlapDetector& vod, MxmlTupletStates& tupletStates);
       void notePrintSpacingNo(Fraction& dura);
-      void duration(Fraction& dura);
+      Fraction calcTicks(const int& intTicks, const QXmlStreamReader* const xmlReader);
+      Fraction calcTicks(const int& intTicks) { return calcTicks(intTicks, &_e); }
+      void duration(Fraction& dura, QXmlStreamReader& e);
+      void duration(Fraction& dura) { duration(dura, _e); }
       void forward(Fraction& dura);
       void backup(Fraction& dura);
       void timeModification(Fraction& timeMod);
@@ -177,6 +180,10 @@ public:
                               const std::set<int>& pageStartMeasureNrs,
                               const CreditWordsList& crWords,
                               const QSize pageSize);
+      const int maxDiff() { return _maxDiff; }
+      void insertAdjustedDuration(Fraction key, Fraction value) { _adjustedDurations.insert(key, value); }
+      QMap<Fraction, Fraction>& adjustedDurations() { return _adjustedDurations; }
+      void insertSeenDenominator(int val) { _seenDenominators.emplace(val); }
       QString supportsTranspose() const { return _supportsTranspose; }
       void addInferredTranspose(const QString& partId);
       void setHasInferredHeaderText(bool b) { _hasInferredHeaderText = b; }
@@ -202,6 +209,9 @@ private:
       bool _hasBeamingInfo;                     ///< Whether the score supports or contains beaming info
       QString _supportsTranspose;               ///< Whether the score supports transposition info
       bool _hasInferredHeaderText;
+      const int _maxDiff = 5;                   ///< Duration rounding tick threshold;
+      QMap<Fraction, Fraction> _adjustedDurations;  ///< Rounded durations
+      std::set<int> _seenDenominators;          ///< Denominators seen. Used for rounding errors.
 
       // part specific data (TODO: move to part-specific class)
       Fraction _timeSigDura;                    ///< Measure duration according to last timesig read

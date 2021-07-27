@@ -121,9 +121,9 @@ QString mxmlNoteDuration::checkTiming(const QString& type, const bool rest, cons
                         errorStr = "";
                         }
                   else {
-                        const int maxDiff = 3;       // maximum difference considered a rounding error
-                        if (qAbs(calcDura.ticks() - _dura.ticks()) <= maxDiff) {
+                        if (qAbs(calcDura.ticks() - _dura.ticks()) <= _pass1->maxDiff()) {
                               errorStr += " -> assuming rounding error";
+                              _pass1->insertAdjustedDuration(_dura, calcDura);
                               _dura = calcDura;
                               }
                         }
@@ -157,6 +157,7 @@ QString mxmlNoteDuration::checkTiming(const QString& type, const bool rest, cons
             _dura = Fraction(4, 4);
             }
 
+      _pass1->insertSeenDenominator(_dura.reduced().denominator());
       return errorStr;
       }
 
@@ -173,19 +174,9 @@ void mxmlNoteDuration::duration(QXmlStreamReader& e)
       Q_ASSERT(e.isStartElement() && e.name() == "duration");
       _logger->logDebugTrace("MusicXMLParserPass1::duration", &e);
 
-      _dura.set(0, 0);        // invalid unless set correctly
+      _dura.set(0, 0);  // invalid unless set correctly
       int intDura = e.readElementText().toInt();
-      if (intDura > 0) {
-            if (_divs > 0) {
-                  _dura.set(intDura, 4 * _divs);
-                  _dura.reduce();       // prevent overflow in later Fraction operations
-                  }
-            else
-                  _logger->logError("illegal or uninitialized divisions", &e);
-            }
-      else
-            _logger->logError("illegal duration", &e);
-      //qDebug("duration %s valid %d", qPrintable(dura.print()), dura.isValid());
+      _dura = _pass1->calcTicks(intDura, &e); // Duration reading (and rounding) code consolidated to pass1
       }
 
 //---------------------------------------------------------
