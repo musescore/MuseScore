@@ -20,79 +20,81 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <cmath>
+#include "read206.h"
 
+#include <cmath>
 #include <QRegularExpression>
 
 #include "style/style.h"
 #include "style/defaultstyle.h"
-#include "compat/pageformat.h"
-#include "compat/chordlist.h"
-#include "compat/readstyle.h"
 
-#include "xml.h"
-#include "score.h"
-#include "staff.h"
-#include "revisions.h"
-#include "part.h"
-#include "page.h"
-#include "sym.h"
-#include "scorefont.h"
-#include "arpeggio.h"
-#include "audio.h"
-#include "sig.h"
-#include "barline.h"
-#include "measure.h"
-#include "ambitus.h"
-#include "bend.h"
-#include "chordline.h"
-#include "hook.h"
-#include "tuplet.h"
-#include "systemdivider.h"
-#include "spacer.h"
-#include "keysig.h"
-#include "stafftext.h"
-#include "dynamic.h"
-#include "drumset.h"
-#include "timesig.h"
-#include "slur.h"
-#include "tie.h"
-#include "chord.h"
-#include "rest.h"
-#include "mmrest.h"
-#include "breath.h"
-#include "measurerepeat.h"
-#include "utils.h"
-#include "read206.h"
-#include "excerpt.h"
-#include "articulation.h"
-#include "volta.h"
-#include "pedal.h"
-#include "hairpin.h"
-#include "glissando.h"
-#include "ottava.h"
-#include "trill.h"
-#include "rehearsalmark.h"
-#include "box.h"
-#include "textframe.h"
-#include "textline.h"
-#include "fingering.h"
-#include "fermata.h"
-#include "image.h"
-#include "stem.h"
-#include "stemslash.h"
-#include "undo.h"
-#include "lyrics.h"
-#include "tempotext.h"
-#include "measurenumber.h"
-#include "marker.h"
+#include "pageformat.h"
+#include "chordlist.h"
+#include "readstyle.h"
 
-#include "masterscore.h"
+#include "libmscore/xml.h"
+#include "libmscore/score.h"
+#include "libmscore/staff.h"
+#include "libmscore/revisions.h"
+#include "libmscore/part.h"
+#include "libmscore/page.h"
+#include "libmscore/sym.h"
+#include "libmscore/scorefont.h"
+#include "libmscore/arpeggio.h"
+#include "libmscore/audio.h"
+#include "libmscore/sig.h"
+#include "libmscore/barline.h"
+#include "libmscore/measure.h"
+#include "libmscore/ambitus.h"
+#include "libmscore/bend.h"
+#include "libmscore/chordline.h"
+#include "libmscore/hook.h"
+#include "libmscore/tuplet.h"
+#include "libmscore/systemdivider.h"
+#include "libmscore/spacer.h"
+#include "libmscore/keysig.h"
+#include "libmscore/stafftext.h"
+#include "libmscore/dynamic.h"
+#include "libmscore/drumset.h"
+#include "libmscore/timesig.h"
+#include "libmscore/slur.h"
+#include "libmscore/tie.h"
+#include "libmscore/chord.h"
+#include "libmscore/rest.h"
+#include "libmscore/mmrest.h"
+#include "libmscore/breath.h"
+#include "libmscore/measurerepeat.h"
+#include "libmscore/utils.h"
+#include "libmscore/excerpt.h"
+#include "libmscore/articulation.h"
+#include "libmscore/volta.h"
+#include "libmscore/pedal.h"
+#include "libmscore/hairpin.h"
+#include "libmscore/glissando.h"
+#include "libmscore/ottava.h"
+#include "libmscore/trill.h"
+#include "libmscore/rehearsalmark.h"
+#include "libmscore/box.h"
+#include "libmscore/textframe.h"
+#include "libmscore/textline.h"
+#include "libmscore/fingering.h"
+#include "libmscore/fermata.h"
+#include "libmscore/image.h"
+#include "libmscore/stem.h"
+#include "libmscore/stemslash.h"
+#include "libmscore/undo.h"
+#include "libmscore/lyrics.h"
+#include "libmscore/tempotext.h"
+#include "libmscore/measurenumber.h"
+#include "libmscore/marker.h"
+#include "libmscore/masterscore.h"
+#include "libmscore/xml.h"
 
 using namespace mu;
 using namespace mu::engraving;
+using namespace mu::engraving::compat;
+using namespace Ms;
 
-namespace Ms {
 static void readText206(XmlReader& e, TextBase* t, Element* be);
 
 //---------------------------------------------------------
@@ -104,11 +106,7 @@ static void readText206(XmlReader& e, TextBase* t, Element* be);
 
 static std::map<QString, std::map<Sid, QVariant> > excessTextStyles206;
 
-//---------------------------------------------------------
-//   readTextStyle206
-//---------------------------------------------------------
-
-void readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, std::map<Sid, QVariant> >& excessStyles)
+void Read206::readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, std::map<Sid, QVariant> >& excessStyles)
 {
     QString family = "FreeSerif";
     double size = 10;
@@ -443,11 +441,7 @@ void readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, std::map<Si
     }
 }
 
-//---------------------------------------------------------
-//   readAccidental206
-//---------------------------------------------------------
-
-void readAccidental206(Accidental* a, XmlReader& e)
+void Read206::readAccidental206(Accidental* a, XmlReader& e)
 {
     while (e.readNextStartElement()) {
         const QStringRef& tag(e.name());
@@ -629,11 +623,7 @@ static struct ArticulationNames {
     { SymId::ornamentPrecompMordentUpperPrefix, "ornamentDownPrall" },
 };
 
-//---------------------------------------------------------
-//   oldArticulationNames2SymId
-//---------------------------------------------------------
-
-SymId oldArticulationNames2SymId(const QString& s)
+SymId Read206::articulationNames2SymId206(const QString& s)
 {
     for (auto i : articulationNames) {
         if (i.name == s) {
@@ -668,7 +658,7 @@ static void readDrumset(Drumset* ds, XmlReader& e)
                         const QStringRef& taga(e.name());
                         if (taga == "articulation") {
                             QString oldArticulationName = e.readElementText();
-                            SymId oldId = oldArticulationNames2SymId(oldArticulationName);
+                            SymId oldId = Read206::articulationNames2SymId206(oldArticulationName);
                             div.articulationName = Articulation::symId2ArticulationName(oldId);
                         } else if (taga == "tremolo") {
                             div.tremolo = Tremolo::name2Type(e.readElementText());
@@ -775,7 +765,7 @@ static void readStaff(Staff* staff, XmlReader& e)
 //   readPart
 //---------------------------------------------------------
 
-void readPart206(Part* part, XmlReader& e)
+void Read206::readPart206(Part* part, XmlReader& e)
 {
     while (e.readNextStartElement()) {
         const QStringRef& tag(e.name());
@@ -836,7 +826,7 @@ static void readNote(Note* note, XmlReader& e)
         if (tag == "Accidental") {
             Accidental* a = new Accidental(note->score());
             a->setTrack(note->track());
-            readAccidental206(a, e);
+            Read206::readAccidental206(a, e);
             note->add(a);
         } else if (tag == "head") {
             int i = e.readInt();
@@ -846,7 +836,7 @@ static void readNote(Note* note, XmlReader& e)
             int i = e.readInt();
             NoteHead::Type val = convertHeadType(i);
             note->setHeadType(val);
-        } else if (readNoteProperties206(note, e)) {
+        } else if (Read206::readNoteProperties206(note, e)) {
         } else {
             e.unknown();
         }
@@ -1020,11 +1010,7 @@ static void adjustPlacement(Element* e)
     }
 }
 
-//---------------------------------------------------------
-//   readNoteProperties206
-//---------------------------------------------------------
-
-bool readNoteProperties206(Note* note, XmlReader& e)
+bool Read206::readNoteProperties206(Note* note, XmlReader& e)
 {
     const QStringRef& tag(e.name());
 
@@ -1531,7 +1517,7 @@ static void readTuplet(Tuplet* tuplet, XmlReader& e)
             for (auto p : { Pid::FONT_FACE, Pid::FONT_SIZE, Pid::FONT_STYLE, Pid::ALIGN, Pid::SIZE_SPATIUM_DEPENDENT }) {
                 tuplet->setPropertyFlags(p, _number->propertyFlags(p));
             }
-        } else if (!readTupletProperties206(e, tuplet)) {
+        } else if (!Read206::readTupletProperties206(e, tuplet)) {
             e.unknown();
         }
     }
@@ -1587,11 +1573,7 @@ static void readLyrics(Lyrics* lyrics, XmlReader& e)
     }
 }
 
-//---------------------------------------------------------
-//   readDurationProperties206
-//---------------------------------------------------------
-
-bool readDurationProperties206(XmlReader& e, DurationElement* de)
+bool Read206::readDurationProperties206(XmlReader& e, DurationElement* de)
 {
     if (e.name() == "Tuplet") {
         int i = e.readInt();
@@ -1617,11 +1599,7 @@ bool readDurationProperties206(XmlReader& e, DurationElement* de)
     return false;
 }
 
-//---------------------------------------------------------
-//   readTupletProperties206
-//---------------------------------------------------------
-
-bool readTupletProperties206(XmlReader& e, Tuplet* de)
+bool Read206::readTupletProperties206(XmlReader& e, Tuplet* de)
 {
     const QStringRef& tag(e.name());
 
@@ -1659,11 +1637,7 @@ bool readTupletProperties206(XmlReader& e, Tuplet* de)
     return true;
 }
 
-//---------------------------------------------------------
-//   readChordRestProperties206
-//---------------------------------------------------------
-
-bool readChordRestProperties206(XmlReader& e, ChordRest* ch)
+bool Read206::readChordRestProperties206(XmlReader& e, ChordRest* ch)
 {
     const QStringRef& tag(e.name());
 
@@ -1857,11 +1831,7 @@ bool readChordRestProperties206(XmlReader& e, ChordRest* ch)
     return true;
 }
 
-//---------------------------------------------------------
-//   readChordProperties206
-//---------------------------------------------------------
-
-bool readChordProperties206(XmlReader& e, Chord* ch)
+bool Read206::readChordProperties206(XmlReader& e, Chord* ch)
 {
     const QStringRef& tag(e.name());
 
@@ -2076,7 +2046,7 @@ static void readChord(Chord* chord, XmlReader& e)
             lyrics->setTrack(e.track());
             readLyrics(lyrics, e);
             chord->add(lyrics);
-        } else if (readChordProperties206(e, chord)) {
+        } else if (Read206::readChordProperties206(e, chord)) {
         } else {
             e.unknown();
         }
@@ -2092,7 +2062,7 @@ static void readChord(Chord* chord, XmlReader& e)
 static void readRest(Rest* rest, XmlReader& e)
 {
     while (e.readNextStartElement()) {
-        if (!readChordRestProperties206(e, rest)) {
+        if (!Read206::readChordRestProperties206(e, rest)) {
             e.unknown();
         }
     }
@@ -2210,11 +2180,7 @@ static void readOttava(XmlReader& e, Ottava* ottava)
     adjustPlacement(ottava);
 }
 
-//---------------------------------------------------------
-//   readHairpin206
-//---------------------------------------------------------
-
-void readHairpin206(XmlReader& e, Hairpin* h)
+void Read206::readHairpin206(XmlReader& e, Hairpin* h)
 {
     bool useText = false;
     while (e.readNextStartElement()) {
@@ -2256,11 +2222,7 @@ void readHairpin206(XmlReader& e, Hairpin* h)
     adjustPlacement(h);
 }
 
-//---------------------------------------------------------
-//   readTrill206
-//---------------------------------------------------------
-
-void readTrill206(XmlReader& e, Trill* t)
+void Read206::readTrill206(XmlReader& e, Trill* t)
 {
     while (e.readNextStartElement()) {
         const QStringRef& tag(e.name());
@@ -2282,11 +2244,7 @@ void readTrill206(XmlReader& e, Trill* t)
     adjustPlacement(t);
 }
 
-//---------------------------------------------------------
-//   readTextLine206
-//---------------------------------------------------------
-
-void readTextLine206(XmlReader& e, TextLineBase* tlb)
+void Read206::readTextLine206(XmlReader& e, TextLineBase* tlb)
 {
     while (e.readNextStartElement()) {
         if (!readTextLineProperties(e, tlb)) {
@@ -2328,11 +2286,7 @@ static void setFermataPlacement(Element* el, ArticulationAnchor anchor, Directio
     }
 }
 
-//---------------------------------------------------------
-//   readArticulation
-//---------------------------------------------------------
-
-Element* readArticulation(Element* parent, XmlReader& e)
+Element* Read206::readArticulation(Element* parent, XmlReader& e)
 {
     Element* el = nullptr;
     SymId sym = SymId::fermataAbove;            // default -- backward compatibility (no type = ufermata in 1.2)
@@ -2351,7 +2305,7 @@ Element* readArticulation(Element* parent, XmlReader& e)
                 int oldType = s.toInt();
                 sym = articulationNames[oldType].id;
             } else {
-                sym = oldArticulationNames2SymId(s);
+                sym = articulationNames2SymId206(s);
                 if (sym == SymId::noSym) {
                     struct {
                         const char* name;
@@ -2484,11 +2438,7 @@ static bool readSlurTieProperties(XmlReader& e, SlurTie* st)
     return true;
 }
 
-//---------------------------------------------------------
-//   readSlur206
-//---------------------------------------------------------
-
-void readSlur206(XmlReader& e, Slur* s)
+void Read206::readSlur206(XmlReader& e, Slur* s)
 {
     s->setTrack(e.track());        // set staff
     e.addSpanner(e.intAttribute("id"), s);
@@ -2509,11 +2459,7 @@ void readSlur206(XmlReader& e, Slur* s)
     }
 }
 
-//---------------------------------------------------------
-//   readTie206
-//---------------------------------------------------------
-
-void readTie206(XmlReader& e, Tie* t)
+void Read206::readTie206(XmlReader& e, Tie* t)
 {
     e.addSpanner(e.intAttribute("id"), t);
     while (e.readNextStartElement()) {
@@ -2611,7 +2557,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                 } else if (t == "spanToOffset") {
                     bl->setSpanTo(e.readInt());
                 } else if (t == "Articulation") {
-                    Element* el = readArticulation(bl, e);
+                    Element* el = Read206::readArticulation(bl, e);
                     if (el->isFermata()) {
                         if (el->placement() == Placement::ABOVE) {
                             fermataAbove = toFermata(el);
@@ -2747,7 +2693,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
         } else if (tag == "Slur") {
             Slur* sl = new Slur(score);
             sl->setTick(e.tick());
-            readSlur206(e, sl);
+            Read206::readSlur206(e, sl);
             //
             // check if we already saw "endSpanner"
             //
@@ -2777,11 +2723,11 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             } else if (tag == "Ottava") {
                 readOttava(e, toOttava(sp));
             } else if (tag == "HairPin") {
-                readHairpin206(e, toHairpin(sp));
+                Read206::readHairpin206(e, toHairpin(sp));
             } else if (tag == "Trill") {
-                readTrill206(e, toTrill(sp));
+                Read206::readTrill206(e, toTrill(sp));
             } else {
-                readTextLine206(e, toTextLineBase(sp));
+                Read206::readTextLine206(e, toTextLineBase(sp));
             }
             score->addSpanner(sp);
             //
@@ -3320,17 +3266,17 @@ static void readStaffContent(Score* score, XmlReader& e)
 //   readStyle
 //---------------------------------------------------------
 
-static void readStyle(MStyle* style, XmlReader& e, compat::ReadChordListHook& readChordListHook)
+static void readStyle(MStyle* style, XmlReader& e, ReadChordListHook& readChordListHook)
 {
     excessTextStyles206.clear();
     while (e.readNextStartElement()) {
         QString tag = e.name().toString();
         if (tag == "TextStyle") {
-            readTextStyle206(style, e, excessTextStyles206);
+            Read206::readTextStyle206(style, e, excessTextStyles206);
         } else if (tag == "Spatium") {
             style->set(Sid::spatium, e.readDouble() * DPMM);
         } else if (tag == "page-layout") {
-            compat::readPageFormat206(style, e);
+            readPageFormat206(style, e);
         } else if (tag == "displayInConcertPitch") {
             style->set(Sid::concertPitch, QVariant(bool(e.readInt())));
         } else if (tag == "pedalY") {
@@ -3364,7 +3310,7 @@ static void readStyle(MStyle* style, XmlReader& e, compat::ReadChordListHook& re
                 style->set(Sid::chordSymbolAPosBelow,  PointF(.0, val));
             }
         } else {
-            if (!compat::ReadStyleHook::readStyleProperties(style, e)) {
+            if (!ReadStyleHook::readStyleProperties(style, e)) {
                 e.skipCurrentElement();
             }
         }
@@ -3378,11 +3324,7 @@ static void readStyle(MStyle* style, XmlReader& e, compat::ReadChordListHook& re
     readChordListHook.validate();
 }
 
-//---------------------------------------------------------
-//   readScore
-//---------------------------------------------------------
-
-static bool readScore(Score* score, XmlReader& e)
+bool Read206::readScore206(Score* score, XmlReader& e)
 {
     while (e.readNextStartElement()) {
         e.setTrack(-1);
@@ -3432,7 +3374,7 @@ static bool readScore(Score* score, XmlReader& e)
             score->setShowPageborders(e.readInt());
         } else if (tag == "Style") {
             qreal sp = score->style().value(Sid::spatium).toDouble();
-            compat::ReadChordListHook clhook(score);
+            ReadChordListHook clhook(score);
             readStyle(&score->style(), e, clhook);
             if (score->style().value(Sid::MusicalTextFont).toString() == "MuseJazz") {
                 score->style().set(Sid::MusicalTextFont, "MuseJazz Text");
@@ -3464,7 +3406,7 @@ static bool readScore(Score* score, XmlReader& e)
             score->setMetaTag(name, e.readElementText());
         } else if (tag == "Part") {
             Part* part = new Part(score);
-            readPart206(part, e);
+            Read206::readPart206(part, e);
             score->parts().push_back(part);
         } else if ((tag == "HairPin")     // TODO: do this elements exist here?
                    || (tag == "Ottava")
@@ -3479,11 +3421,11 @@ static bool readScore(Score* score, XmlReader& e)
             } else if (tag == "Ottava") {
                 readOttava(e, toOttava(s));
             } else if (tag == "TextLine") {
-                readTextLine206(e, toTextLine(s));
+                Read206::readTextLine206(e, toTextLine(s));
             } else if (tag == "Volta") {
                 readVolta206(e, toVolta(s));
             } else if (tag == "Trill") {
-                readTrill206(e, toTrill(s));
+                Read206::readTrill206(e, toTrill(s));
             } else if (tag == "Slur") {
                 readSlur206(e, toSlur(s));
             } else {
@@ -3521,7 +3463,7 @@ static bool readScore(Score* score, XmlReader& e)
 
                 ex->setPartScore(s);
                 e.setLastMeasure(nullptr);
-                readScore(s, e);
+                readScore206(s, e);
                 ex->setTracks(e.tracks());
                 m->addExcerpt(ex);
             }
@@ -3558,63 +3500,6 @@ static bool readScore(Score* score, XmlReader& e)
 
     score->setFileDivision(MScore::division);
 
-    //
-    //    sanity check for barLineSpan
-    //
-#if 0 // TODO:barline
-    for (Staff* st : score->staves()) {
-        int barLineSpan = st->barLineSpan();
-        int idx = st->idx();
-        int n = score->nstaves();
-        if (idx + barLineSpan > n) {
-            qDebug("bad span: idx %d  span %d staves %d", idx, barLineSpan, n);
-            // span until last staff
-            barLineSpan = n - idx;
-            st->setBarLineSpan(barLineSpan);
-        } else if (idx == 0 && barLineSpan == 0) {
-            qDebug("bad span: idx %d  span %d staves %d", idx, barLineSpan, n);
-            // span from the first staff until the start of the next span
-            barLineSpan = 1;
-            for (int i = 1; i < n; ++i) {
-                if (score->staff(i)->barLineSpan() == 0) {
-                    ++barLineSpan;
-                } else {
-                    break;
-                }
-            }
-            st->setBarLineSpan(barLineSpan);
-        }
-        // check spanFrom
-        int minBarLineFrom = st->lines(0) == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : MIN_BARLINE_SPAN_FROMTO;
-        if (st->barLineFrom() < minBarLineFrom) {
-            st->setBarLineFrom(minBarLineFrom);
-        }
-        if (st->barLineFrom() > st->lines(0) * 2) {
-            st->setBarLineFrom(st->lines(0) * 2);
-        }
-        // check spanTo
-        Staff* stTo = st->barLineSpan() <= 1 ? st : score->staff(idx + st->barLineSpan() - 1);
-        // 1-line staves have special bar line spans
-        int maxBarLineTo        = stTo->lines(0) == 1 ? BARLINE_SPAN_1LINESTAFF_TO : stTo->lines(0) * 2;
-        int defaultBarLineTo    = stTo->lines(0) == 1 ? BARLINE_SPAN_1LINESTAFF_TO : (stTo->lines(0) - 1) * 2;
-        if (st->barLineTo() == UNKNOWN_BARLINE_TO) {
-            st->setBarLineTo(defaultBarLineTo);
-        }
-        if (st->barLineTo() < MIN_BARLINE_SPAN_FROMTO) {
-            st->setBarLineTo(MIN_BARLINE_SPAN_FROMTO);
-        }
-        if (st->barLineTo() > maxBarLineTo) {
-            st->setBarLineTo(maxBarLineTo);
-        }
-        // on single staff span, check spanFrom and spanTo are distant enough
-        if (st->barLineSpan() == 1) {
-            if (st->barLineTo() - st->barLineFrom() < MIN_BARLINE_FROMTO_DIST) {
-                st->setBarLineFrom(0);
-                st->setBarLineTo(defaultBarLineTo);
-            }
-        }
-    }
-#endif
     score->fixTicks();
 
     for (Part* p : score->parts()) {
@@ -3631,46 +3516,41 @@ static bool readScore(Score* score, XmlReader& e)
     return true;
 }
 
-//---------------------------------------------------------
-//   read206
-//    import old version > 1.3  and < 3.x files
-//---------------------------------------------------------
-
-Score::FileError MasterScore::read206(XmlReader& e)
+Score::FileError Read206::read206(Ms::MasterScore* masterScore, XmlReader& e)
 {
     while (e.readNextStartElement()) {
         const QStringRef& tag(e.name());
         if (tag == "programVersion") {
-            setMscoreVersion(e.readElementText());
-            parseVersion(mscoreVersion());
+            masterScore->setMscoreVersion(e.readElementText());
+            masterScore->parseVersion(masterScore->mscoreVersion());
         } else if (tag == "programRevision") {
-            setMscoreRevision(e.readIntHex());
+            masterScore->setMscoreRevision(e.readIntHex());
         } else if (tag == "Score") {
-            if (!readScore(this, e)) {
-                return FileError::FILE_BAD_FORMAT;
+            if (!readScore206(masterScore, e)) {
+                return Score::FileError::FILE_BAD_FORMAT;
             }
         } else if (tag == "Revision") {
             Revision* revision = new Revision;
             revision->read(e);
-            revisions()->add(revision);
+            masterScore->revisions()->add(revision);
         }
     }
 
-    setEnableVerticalSpread(false);
+    masterScore->setEnableVerticalSpread(false);
 
     int id = 1;
     for (LinkedElements* le : e.linkIds()) {
-        le->setLid(this, id++);
+        le->setLid(masterScore, id++);
     }
 
-    for (Staff* s : staves()) {
+    for (Staff* s : masterScore->staves()) {
         s->updateOttava();
     }
 
     // fix segment span
     SegmentType st = SegmentType::BarLineType;
-    for (Segment* s = firstSegment(st); s; s = s->next1(st)) {
-        for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
+    for (Segment* s = masterScore->firstSegment(st); s; s = s->next1(st)) {
+        for (int staffIdx = 0; staffIdx < masterScore->nstaves(); ++staffIdx) {
             BarLine* b = toBarLine(s->element(staffIdx * VOICES));
             if (!b) {
                 continue;
@@ -3691,14 +3571,14 @@ Score::FileError MasterScore::read206(XmlReader& e)
             staffIdx += sp;
         }
     }
-    for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
-        Staff* s = staff(staffIdx);
+    for (int staffIdx = 0; staffIdx < masterScore->nstaves(); ++staffIdx) {
+        Staff* s = masterScore->staff(staffIdx);
         int sp = s->barLineSpan();
         if (sp <= 0) {
             continue;
         }
         for (int span = 1; span <= sp; ++span) {
-            Staff* ns = staff(staffIdx + span);
+            Staff* ns = masterScore->staff(staffIdx + span);
             ns->setBarLineSpan(sp - span);
         }
         staffIdx += sp;
@@ -3706,17 +3586,16 @@ Score::FileError MasterScore::read206(XmlReader& e)
 
     // fix positions
     //    offset = saved offset - layout position
-    doLayout();
+    masterScore->doLayout();
     for (auto i : e.fixOffsets()) {
         i.first->setOffset(i.second - i.first->pos());
     }
 
     // treat reading a 2.06 file as import
     // on save warn if old file will be overwritten
-    setCreated(true);
+    masterScore->setCreated(true);
     // don't autosave (as long as there's no change to the score)
-    setAutosaveDirty(false);
+    masterScore->setAutosaveDirty(false);
 
-    return FileError::FILE_NO_ERROR;
-}
+    return Score::FileError::FILE_NO_ERROR;
 }

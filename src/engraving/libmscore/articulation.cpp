@@ -21,6 +21,9 @@
  */
 
 #include "articulation.h"
+
+#include "compat/read206.h"
+
 #include "score.h"
 #include "chordrest.h"
 #include "system.h"
@@ -36,6 +39,7 @@
 #include "masterscore.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -133,8 +137,6 @@ void Articulation::read(XmlReader& e)
     }
 }
 
-extern SymId oldArticulationNames2SymId(const QString&);
-
 //---------------------------------------------------------
 //   readProperties
 //---------------------------------------------------------
@@ -147,7 +149,7 @@ bool Articulation::readProperties(XmlReader& e)
         QString s = e.readElementText();
         SymId id = Sym::name2id(s);
         if (id == SymId::noSym) {
-            id = oldArticulationNames2SymId(s);             // compatibility hack for "old" 3.0 scores
+            id = compat::Read206::articulationNames2SymId206(s); // compatibility hack for "old" 3.0 scores
         }
         if (id == SymId::noSym || s == "ornamentMordentInverted") {   // SMuFL < 1.30
             id = SymId::ornamentMordent;

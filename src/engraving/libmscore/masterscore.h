@@ -24,6 +24,11 @@
 
 #include "score.h"
 
+namespace mu::engraving::compat {
+class Read114;
+class Read206;
+}
+
 namespace Ms {
 //---------------------------------------------------------
 //   MasterScore
@@ -78,6 +83,9 @@ class MasterScore : public Score
 
     friend class mu::engraving::EngravingProject;
     friend class mu::engraving::compat::ScoreAccess;
+    friend class mu::engraving::compat::Read114;
+    friend class mu::engraving::compat::Read206;
+
     MasterScore(std::shared_ptr<mu::engraving::EngravingProject> project);
     MasterScore(const MStyle&, std::shared_ptr<mu::engraving::EngravingProject> project);
 

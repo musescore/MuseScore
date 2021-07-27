@@ -20,6 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "read114.h"
+
 #include <cmath>
 
 #include "style/style.h"
@@ -76,6 +78,11 @@
 #include "libmscore/jump.h"
 #include "libmscore/textline.h"
 #include "libmscore/pedal.h"
+
+#include "pageformat.h"
+#include "chordlist.h"
+#include "readstyle.h"
+#include "read206.h"
 
 using namespace mu;
 using namespace mu::engraving::compat;
@@ -870,7 +877,7 @@ static void readNote(Note* note, XmlReader& e)
                 val = NoteHead::Type::HEAD_AUTO;
             }
             note->setHeadType(val);
-        } else if (readNoteProperties206(note, e)) {
+        } else if (Read206::readNoteProperties206(note, e)) {
         } else {
             e.unknown();
         }
@@ -1039,7 +1046,7 @@ static void readTuplet(Tuplet* tuplet, XmlReader& e)
             bl = e.readInt();
         } else if (tag == "tick") {
             tuplet->setTick(Fraction::fromTicks(e.readInt()));
-        } else if (!readTupletProperties206(e, tuplet)) {
+        } else if (!Read206::readTupletProperties206(e, tuplet)) {
             e.unknown();
         }
     }
@@ -1113,7 +1120,7 @@ static void readChord(Measure* m, Chord* chord, XmlReader& e)
             readNote(note, e);
             chord->add(note);
         } else if (tag == "Attribute" || tag == "Articulation") {
-            Element* el = readArticulation(chord, e);
+            Element* el = Read206::readArticulation(chord, e);
             if (el->isFermata()) {
                 if (!chord->segment()) {
                     chord->setParent(m->getSegment(SegmentType::ChordRest, e.tick()));
@@ -1129,7 +1136,7 @@ static void readChord(Measure* m, Chord* chord, XmlReader& e)
             tremolo->setTrack(chord->track());
             readTremolo(tremolo, e);
             tremolo->setParent(chord);
-        } else if (readChordProperties206(e, chord)) {
+        } else if (Read206::readChordProperties206(e, chord)) {
         } else {
             e.unknown();
         }
@@ -1145,7 +1152,7 @@ static void readRest(Measure* m, Rest* rest, XmlReader& e)
     while (e.readNextStartElement()) {
         const QStringRef& tag(e.name());
         if (tag == "Attribute" || tag == "Articulation") {
-            Element* el = readArticulation(rest, e);
+            Element* el = Read206::readArticulation(rest, e);
             if (el->isFermata()) {
                 if (!rest->segment()) {
                     rest->setParent(m->getSegment(SegmentType::ChordRest, e.tick()));
@@ -1154,7 +1161,7 @@ static void readRest(Measure* m, Rest* rest, XmlReader& e)
             } else {
                 rest->add(el);
             }
-        } else if (readChordRestProperties206(e, rest)) {
+        } else if (Read206::readChordRestProperties206(e, rest)) {
         } else {
             e.unknown();
         }
@@ -1799,7 +1806,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
         } else if (tag == "Slur") {
             Slur* sl = new Slur(m->score());
             sl->setTick(e.tick());
-            readSlur206(e, sl);
+            Read206::readSlur206(e, sl);
             //
             // check if we already saw "endSpanner"
             //
@@ -1823,7 +1830,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             if (tag == "Volta") {
                 readVolta114(e, toVolta(sp));
             } else {
-                readTextLine206(e, toTextLineBase(sp));
+                Read206::readTextLine206(e, toTextLineBase(sp));
             }
             m->score()->addSpanner(sp);
             //
@@ -2655,7 +2662,7 @@ static void readPart(Part* part, XmlReader& e)
 //   readPageFormat
 //---------------------------------------------------------
 
-static void readPageFormat(compat::PageFormat* pf, XmlReader& e)
+static void readPageFormat(PageFormat* pf, XmlReader& e)
 {
     qreal _oddRightMargin  = 0.0;
     qreal _evenRightMargin = 0.0;
@@ -2722,7 +2729,7 @@ static void readPageFormat(compat::PageFormat* pf, XmlReader& e)
 //   readStyle
 //---------------------------------------------------------
 
-static void readStyle(MStyle* style, XmlReader& e, compat::ReadChordListHook& readChordListHook)
+static void readStyle(MStyle* style, XmlReader& e, ReadChordListHook& readChordListHook)
 {
     while (e.readNextStartElement()) {
         QString tag = e.name().toString();
@@ -2743,7 +2750,7 @@ static void readStyle(MStyle* style, XmlReader& e, compat::ReadChordListHook& re
         } else if (tag == "Spatium") {
             style->set(Sid::spatium, e.readDouble() * DPMM);
         } else if (tag == "page-layout") {
-            compat::readPageFormat206(style, e);
+            readPageFormat206(style, e);
         } else if (tag == "displayInConcertPitch") {
             style->set(Sid::concertPitch, QVariant(bool(e.readInt())));
         } else if (tag == "ChordList") {
@@ -2769,7 +2776,7 @@ static void readStyle(MStyle* style, XmlReader& e, compat::ReadChordListHook& re
         else if (tag == "oddHeader" || tag == "evenHeader" || tag == "oddFooter" || tag == "evenFooter") {
             tag += "C";
         } else {
-            if (!compat::ReadStyleHook::readStyleProperties(style, e)) {
+            if (!ReadStyleHook::readStyleProperties(style, e)) {
                 e.skipCurrentElement();
             }
         }
@@ -2809,25 +2816,25 @@ static void readStyle(MStyle* style, XmlReader& e, compat::ReadChordListHook& re
 //    import old version <= 1.3 files
 //---------------------------------------------------------
 
-Score::FileError Read114::read(MasterScore* masterScore, XmlReader& e)
+Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e)
 {
     TempoMap tm;
     while (e.readNextStartElement()) {
         e.setTrack(-1);
         const QStringRef& tag(e.name());
         if (tag == "Staff") {
-            readStaffContent(this, e);
+            readStaffContent(masterScore, e);
         } else if (tag == "KeySig") {                 // not supported
-            KeySig* ks = new KeySig(this);
+            KeySig* ks = new KeySig(masterScore);
             ks->read(e);
             delete ks;
         } else if (tag == "siglist") {
-            _sigmap->read(e, _fileDivision);
+            masterScore->_sigmap->read(e, masterScore->_fileDivision);
         } else if (tag == "programVersion") {
-            setMscoreVersion(e.readElementText());
-            parseVersion(mscoreVersion());
+            masterScore->setMscoreVersion(e.readElementText());
+            masterScore->parseVersion(masterScore->mscoreVersion());
         } else if (tag == "programRevision") {
-            setMscoreRevision(e.readInt());
+            masterScore->setMscoreRevision(e.readInt());
         } else if (tag == "Mag"
                    || tag == "MagIdx"
                    || tag == "xoff"
@@ -2843,7 +2850,7 @@ Score::FileError Read114::read(MasterScore* masterScore, XmlReader& e)
                 if (e.name() == "tempo") {
                     int tick   = e.attribute("tick").toInt();
                     double tmp = e.readElementText().toDouble();
-                    tick       = (tick * MScore::division + _fileDivision / 2) / _fileDivision;
+                    tick       = (tick * MScore::division + masterScore->_fileDivision / 2) / masterScore->_fileDivision;
                     auto pos   = tm.find(tick);
                     if (pos != tm.end()) {
                         tm.erase(pos);
@@ -2856,96 +2863,72 @@ Score::FileError Read114::read(MasterScore* masterScore, XmlReader& e)
                 }
             }
         } else if (tag == "playMode") {
-            setPlayMode(PlayMode(e.readInt()));
+            masterScore->setPlayMode(PlayMode(e.readInt()));
         } else if (tag == "SyntiSettings") {
-            _synthesizerState.read(e);
+            masterScore->_synthesizerState.read(e);
         } else if (tag == "Spatium") {
-            setSpatium(e.readDouble() * DPMM);
+            masterScore->setSpatium(e.readDouble() * DPMM);
         } else if (tag == "Division") {
-            _fileDivision = e.readInt();
+            masterScore->_fileDivision = e.readInt();
         } else if (tag == "showInvisible") {
-            setShowInvisible(e.readInt());
+            masterScore->setShowInvisible(e.readInt());
         } else if (tag == "showFrames") {
-            setShowFrames(e.readInt());
+            masterScore->setShowFrames(e.readInt());
         } else if (tag == "showMargins") {
-            setShowPageborders(e.readInt());
+            masterScore->setShowPageborders(e.readInt());
         } else if (tag == "Style") {
-            qreal sp = spatium();
-            compat::ReadChordListHook clhook(this);
-            readStyle(&style(), e, clhook);
+            qreal sp = masterScore->spatium();
+            compat::ReadChordListHook clhook(masterScore);
+            readStyle(&masterScore->style(), e, clhook);
             //style()->load(e);
             // adjust this now so chords render properly on read
             // other style adjustments can wait until reading is finished
-            if (styleB(Sid::useGermanNoteNames)) {
-                style().set(Sid::useStandardNoteNames, false);
+            if (masterScore->styleB(Sid::useGermanNoteNames)) {
+                masterScore->style().set(Sid::useStandardNoteNames, false);
             }
-            if (_layoutMode == LayoutMode::FLOAT) {
+            if (masterScore->_layoutMode == LayoutMode::FLOAT) {
                 // style should not change spatium in
                 // float mode
-                setSpatium(sp);
+                masterScore->setSpatium(sp);
             }
         } else if (tag == "TextStyle") {
             e.skipCurrentElement();
-#if 0 // TODO
-            TextStyle s;
-            s.read(e);
-
-            qreal spMM = spatium() / DPMM;
-            if (s.frameWidthMM() != 0.0) {
-                s.setFrameWidth(Spatium(s.frameWidthMM() / spMM));
-            }
-            if (s.paddingWidthMM() != 0.0) {
-                s.setPaddingWidth(Spatium(s.paddingWidthMM() / spMM));
-            }
-
-            // convert 1.2 text styles
-            s.setName(convertOldTextStyleNames(s.name()));
-            if (s.family() == "MuseJazz") {
-                s.setFamily("MuseJazz Text");
-            }
-
-            if (s.name() == "Lyrics Odd Lines" || s.name() == "Lyrics Even Lines") {
-                s.setAlign(Align(int(s.align()) & int(~Align::VMASK)) | Align::BASELINE);
-            }
-
-            style().setTextStyle(s);
-#endif
         } else if (tag == "page-layout") {
             compat::PageFormat pf;
             readPageFormat(&pf, e);
         } else if (tag == "copyright" || tag == "rights") {
-            Text* text = new Text(this);
+            Text* text = new Text(masterScore);
             readText114(e, text, text);
-            setMetaTag("copyright", text->plainText());
+            masterScore->setMetaTag("copyright", text->plainText());
             delete text;
         } else if (tag == "movement-number") {
-            setMetaTag("movementNumber", e.readElementText());
+            masterScore->setMetaTag("movementNumber", e.readElementText());
         } else if (tag == "movement-title") {
-            setMetaTag("movementTitle", e.readElementText());
+            masterScore->setMetaTag("movementTitle", e.readElementText());
         } else if (tag == "work-number") {
-            setMetaTag("workNumber", e.readElementText());
+            masterScore->setMetaTag("workNumber", e.readElementText());
         } else if (tag == "work-title") {
-            setMetaTag("workTitle", e.readElementText());
+            masterScore->setMetaTag("workTitle", e.readElementText());
         } else if (tag == "source") {
-            setMetaTag("source", e.readElementText());
+            masterScore->setMetaTag("source", e.readElementText());
         } else if (tag == "metaTag") {
             QString name = e.attribute("name");
-            setMetaTag(name, e.readElementText());
+            masterScore->setMetaTag(name, e.readElementText());
         } else if (tag == "Part") {
-            Part* part = new Part(this);
+            Part* part = new Part(masterScore);
             readPart(part, e);
-            parts().push_back(part);
+            masterScore->parts().push_back(part);
         } else if (tag == "Slur") {
-            Slur* slur = new Slur(this);
-            readSlur206(e, slur);
-            addSpanner(slur);
+            Slur* slur = new Slur(masterScore);
+            Read206::readSlur206(e, slur);
+            masterScore->addSpanner(slur);
         } else if ((tag == "HairPin")
                    || (tag == "Ottava")
                    || (tag == "TextLine")
                    || (tag == "Volta")
                    || (tag == "Trill")
                    || (tag == "Pedal")) {
-            Spanner* s = toSpanner(Element::name2Element(tag, this));
+            Spanner* s = toSpanner(Element::name2Element(tag, masterScore));
             if (tag == "Volta") {
                 readVolta114(e, toVolta(s));
             } else if (tag == "Ottava") {
@@ -2955,10 +2938,10 @@ Score::FileError Read114::read(MasterScore* masterScore, XmlReader& e)
             } else if (tag == "Pedal") {
                 readPedal114(e, toPedal(s));
             } else if (tag == "Trill") {
-                readTrill206(e, toTrill(s));
+                Read206::readTrill206(e, toTrill(s));
             } else {
                 Q_ASSERT(tag == "HairPin");
-                readHairpin206(e, toHairpin(s));
+                Read206::readHairpin206(e, toHairpin(s));
             }
             if (s->track() == -1) {
                 s->setTrack(e.track());
@@ -2977,24 +2960,24 @@ Score::FileError Read114::read(MasterScore* masterScore, XmlReader& e)
                 qDebug("zero spanner %s ticks: %d", s->name(), s->ticks().ticks());
                 delete s;
             } else {
-                addSpanner(s);
+                masterScore->addSpanner(s);
             }
         } else if (tag == "Excerpt") {
             if (MScore::noExcerpts) {
                 e.skipCurrentElement();
             } else {
-                Excerpt* ex = new Excerpt(this);
+                Excerpt* ex = new Excerpt(masterScore);
                 ex->read(e);
-                _excerpts.append(ex);
+                masterScore->_excerpts.append(ex);
             }
         } else if (tag == "Beam") {
-            Beam* beam = new Beam(this);
+            Beam* beam = new Beam(masterScore);
             beam->read(e);
             beam->setParent(0);
             // _beams.append(beam);
             delete beam;
         } else if (tag == "name") {
-            setName(e.readElementText());
+            masterScore->setName(e.readElementText());
         } else {
             e.unknown();
         }
@@ -3002,25 +2985,25 @@ Score::FileError Read114::read(MasterScore* masterScore, XmlReader& e)
 
     if (e.error() != QXmlStreamReader::NoError) {
         qDebug("%lld %lld: %s ", e.lineNumber(), e.columnNumber(), qPrintable(e.errorString()));
-        return FileError::FILE_BAD_FORMAT;
+        return Score::FileError::FILE_BAD_FORMAT;
     }
 
-    setEnableVerticalSpread(false);
+    masterScore->setEnableVerticalSpread(false);
 
-    for (Staff* s : staves()) {
+    for (Staff* s : masterScore->staves()) {
         int idx   = s->idx();
         int track = idx * VOICES;
 
         // check barLineSpan
-        if (s->barLineSpan() > (nstaves() - idx)) {
+        if (s->barLineSpan() > (masterScore->nstaves() - idx)) {
             qDebug("read114: invalid barline span %d (max %d)",
-                   s->barLineSpan(), nstaves() - idx);
-            s->setBarLineSpan(nstaves() - idx);
+                   s->barLineSpan(), masterScore->nstaves() - idx);
+            s->setBarLineSpan(masterScore->nstaves() - idx);
         }
         for (auto i : s->clefList()) {
             Fraction tick   = Fraction::fromTicks(i.first);
             ClefType clefId = i.second._concertClef;
-            Measure* m      = tick2measure(tick);
+            Measure* m      = masterScore->tick2measure(tick);
             if (!m) {
                 continue;
             }
@@ -3036,7 +3019,7 @@ Score::FileError Read114::read(MasterScore* masterScore, XmlReader& e)
             if (seg->element(track)) {
                 seg->element(track)->setGenerated(false);
             } else {
-                Clef* clef = new Clef(this);
+                Clef* clef = new Clef(masterScore);
                 clef->setClefType(clefId);
                 clef->setTrack(track);
                 clef->setParent(seg);
@@ -3056,7 +3039,7 @@ Score::FileError Read114::read(MasterScore* masterScore, XmlReader& e)
             if (tick.isZero() && i->second.key() == Key::C) {
                 continue;
             }
-            Measure* m = tick2measure(tick);
+            Measure* m = masterScore->tick2measure(tick);
             if (!m) {               //empty score
                 break;
             }
@@ -3065,7 +3048,7 @@ Score::FileError Read114::read(MasterScore* masterScore, XmlReader& e)
                 toKeySig(seg->element(track))->setGenerated(false);
             } else {
                 KeySigEvent ke = i->second;
-                KeySig* ks = new KeySig(this);
+                KeySig* ks = new KeySig(masterScore);
                 ks->setKeySigEvent(ke);
                 ks->setParent(seg);
                 ks->setTrack(track);
@@ -3075,7 +3058,7 @@ Score::FileError Read114::read(MasterScore* masterScore, XmlReader& e)
         }
     }
 
-    for (std::pair<int, Spanner*> p : spanner()) {
+    for (std::pair<int, Spanner*> p : masterScore->spanner()) {
         Spanner* s = p.second;
         if (!s->isSlur()) {
             if (s->isVolta()) {
@@ -3088,16 +3071,16 @@ Score::FileError Read114::read(MasterScore* masterScore, XmlReader& e)
             qreal yo = 0;
             if (s->isOttava()) {
                 // fix ottava position
-                yo = styleValue(Pid::OFFSET, Sid::ottavaPosAbove).value<PointF>().y();
+                yo = masterScore->styleValue(Pid::OFFSET, Sid::ottavaPosAbove).value<PointF>().y();
                 if (s->placeBelow()) {
                     yo = -yo + s->staff()->height();
                 }
             } else if (s->isPedal()) {
-                yo = styleValue(Pid::OFFSET, Sid::pedalPosBelow).value<PointF>().y();
+                yo = masterScore->styleValue(Pid::OFFSET, Sid::pedalPosBelow).value<PointF>().y();
             } else if (s->isTrill()) {
-                yo = styleValue(Pid::OFFSET, Sid::trillPosAbove).value<PointF>().y();
+                yo = masterScore->styleValue(Pid::OFFSET, Sid::trillPosAbove).value<PointF>().y();
             } else if (s->isTextLine()) {
-                yo = -5.0 * spatium();
+                yo = -5.0 * masterScore->spatium();
             }
             if (!s->spannerSegments().empty()) {
                 for (SpannerSegment* seg : s->spannerSegments()) {
@@ -3111,14 +3094,14 @@ Score::FileError Read114::read(MasterScore* masterScore, XmlReader& e)
         }
     }
 
-    connectTies();
+    masterScore->connectTies();
 
     //
     // remove "middle beam" flags from first ChordRest in
     // measure
     //
-    for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
-        int tracks = nstaves() * VOICES;
+    for (Measure* m = masterScore->firstMeasure(); m; m = m->nextMeasure()) {
+        int tracks = masterScore->nstaves() * VOICES;
         bool first = true;
         for (int track = 0; track < tracks; ++track) {
             for (Segment* s = m->first(); s; s = s->next()) {
@@ -3163,23 +3146,23 @@ Score::FileError Read114::read(MasterScore* masterScore, XmlReader& e)
             }
         }
     }
-    for (MeasureBase* mb = first(); mb; mb = mb->next()) {
+    for (MeasureBase* mb = masterScore->first(); mb; mb = mb->next()) {
         if (mb->isVBox()) {
             VBox* b  = toVBox(mb);
-            qreal y = styleP(Sid::staffUpperBorder);
+            qreal y = masterScore->styleP(Sid::staffUpperBorder);
             b->setBottomGap(y);
         }
     }
 
-    _fileDivision = MScore::division;
+    masterScore->_fileDivision = MScore::division;
 
     //
     //    sanity check for barLineSpan and update ottavas
     //
-    for (Staff* staff : staves()) {
+    for (Staff* staff : masterScore->staves()) {
         int barLineSpan = staff->barLineSpan();
         int idx = staff->idx();
-        int n = nstaves();
+        int n = masterScore->nstaves();
         if (idx + barLineSpan > n) {
             qDebug("bad span: idx %d  span %d staves %d", idx, barLineSpan, n);
             staff->setBarLineSpan(n - idx);
@@ -3188,38 +3171,38 @@ Score::FileError Read114::read(MasterScore* masterScore, XmlReader& e)
     }
 
     // adjust some styles
-    if (styleB(Sid::hideEmptyStaves)) {        // http://musescore.org/en/node/16228
-        style().set(Sid::dontHideStavesInFirstSystem, false);
+    if (masterScore->styleB(Sid::hideEmptyStaves)) {        // http://musescore.org/en/node/16228
+        masterScore->style().set(Sid::dontHideStavesInFirstSystem, false);
     }
-    if (styleB(Sid::showPageNumberOne)) {      // http://musescore.org/en/node/21207
-        style().set(Sid::evenFooterL, QString("$P"));
-        style().set(Sid::oddFooterR, QString("$P"));
+    if (masterScore->styleB(Sid::showPageNumberOne)) {      // http://musescore.org/en/node/21207
+        masterScore->style().set(Sid::evenFooterL, QString("$P"));
+        masterScore->style().set(Sid::oddFooterR, QString("$P"));
     }
-    if (styleI(Sid::minEmptyMeasures) == 0) {
-        style().set(Sid::minEmptyMeasures, 1);
+    if (masterScore->styleI(Sid::minEmptyMeasures) == 0) {
+        masterScore->style().set(Sid::minEmptyMeasures, 1);
     }
-    style().set(Sid::frameSystemDistance, styleS(Sid::frameSystemDistance) + Spatium(6.0));
+    masterScore->style().set(Sid::frameSystemDistance, masterScore->styleS(Sid::frameSystemDistance) + Spatium(6.0));
     // hack: net overall effect of layout changes has been for things to take slightly more room
-    qreal adjustedSpacing = qMax(styleD(Sid::measureSpacing) * 0.95, 1.0);
-    style().set(Sid::measureSpacing, adjustedSpacing);
+    qreal adjustedSpacing = qMax(masterScore->styleD(Sid::measureSpacing) * 0.95, 1.0);
+    masterScore->style().set(Sid::measureSpacing, adjustedSpacing);
 
     // add invisible tempo text if necessary
     // some 1.3 scores have tempolist but no tempo text
-    fixTicks();
+    masterScore->fixTicks();
     for (const auto& i : tm) {
         Fraction tick = Fraction::fromTicks(i.first);
         qreal tempo   = i.second.tempo;
-        if (tempomap()->tempo(tick.ticks()) != tempo) {
-            TempoText* tt = new TempoText(this);
+        if (masterScore->tempomap()->tempo(tick.ticks()) != tempo) {
+            TempoText* tt = new TempoText(masterScore);
             tt->setXmlText(QString("<sym>metNoteQuarterUp</sym> = %1").arg(qRound(tempo * 60)));
             tt->setTempo(tempo);
             tt->setTrack(0);
             tt->setVisible(false);
-            Measure* m = tick2measure(tick);
+            Measure* m = masterScore->tick2measure(tick);
             if (m) {
                 Segment* seg = m->getSegment(SegmentType::ChordRest, tick);
                 seg->add(tt);
-                setTempo(tick, tempo);
+                masterScore->setTempo(tick, tempo);
             } else {
                 delete tt;
             }
@@ -3229,14 +3212,14 @@ Score::FileError Read114::read(MasterScore* masterScore, XmlReader& e)
     // create excerpts
 
     QList<Excerpt*> readExcerpts;
-    readExcerpts.swap(_excerpts);
+    readExcerpts.swap(masterScore->_excerpts);
     for (Excerpt* excerpt : readExcerpts) {
         if (excerpt->parts().isEmpty()) {             // ignore empty parts
             continue;
         }
         if (!excerpt->parts().isEmpty()) {
-            _excerpts.push_back(excerpt);
-            Score* nscore = new Score(this);
+            masterScore->_excerpts.push_back(excerpt);
+            Score* nscore = masterScore->createScore();
             nscore->setEnableVerticalSpread(false);
             excerpt->setPartScore(nscore);
             nscore->style().set(Sid::createMultiMeasureRests, true);
@@ -3248,24 +3231,24 @@ Score::FileError Read114::read(MasterScore* masterScore, XmlReader& e)
     // we'll force this and live with it for the score
     // but we wait until now to do it so parts don't have this issue
 
-    if (styleV(Sid::voltaPosAbove) == DefaultStyle::baseStyle().value(Sid::voltaPosAbove)) {
-        style().set(Sid::voltaPosAbove, PointF(0.0, -2.0f));
+    if (masterScore->styleV(Sid::voltaPosAbove) == DefaultStyle::baseStyle().value(Sid::voltaPosAbove)) {
+        masterScore->style().set(Sid::voltaPosAbove, PointF(0.0, -2.0f));
     }
 
-    fixTicks();
+    masterScore->fixTicks();
 
-    for (Part* p : parts()) {
+    for (Part* p : masterScore->parts()) {
         p->updateHarmonyChannels(false);
     }
 
-    rebuildMidiMapping();
-    updateChannel();
+    masterScore->rebuildMidiMapping();
+    masterScore->updateChannel();
 
     // treat reading a 1.14 file as import
     // on save warn if old file will be overwritten
-    setCreated(true);
+    masterScore->setCreated(true);
     // don't autosave (as long as there's no change to the score)
-    setAutosaveDirty(false);
+    masterScore->setAutosaveDirty(false);
 
-    return FileError::FILE_NO_ERROR;
+    return Score::FileError::FILE_NO_ERROR;
 }
