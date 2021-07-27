@@ -159,8 +159,8 @@ MenuItem AppMenuModel::viewItem() const
         makeMenuItem("masterpalette"),
         makeMenuItem("inspector"),
         makeMenuItem("toggle-navigator"),
-        makeMenuItem("toggle-timeline"), // need implement
-        makeMenuItem("toggle-mixer"), // need implement
+        makeMenuItem("toggle-timeline"),
+        makeMenuItem("toggle-mixer"),
         makeMenuItem("synth-control"), // need implement
         makeMenuItem("toggle-piano"), // need implement
         makeMenuItem("toggle-scorecmp-tool"), // need implement

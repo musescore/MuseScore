@@ -20,38 +20,28 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_APPSHELL_APPSHELLTYPES_H
-#define MU_APPSHELL_APPSHELLTYPES_H
+#ifndef MU_NOTATION_TIMELINEVIEW_H
+#define MU_NOTATION_TIMELINEVIEW_H
 
-namespace mu::appshell {
-enum class PanelType
-{
-    Undefined = 0,
-    Palette,
-    Instruments,
-    Inspector,
-    NotationToolBar,
-    NoteInputBar,
-    UndoRedoToolBar,
-    NotationNavigator,
-    NotationStatusBar,
-    PlaybackToolBar,
-    Mixer,
-    Timeline,
-    Synthesizer,
-    SelectionFilter,
-    Piano,
-    ComparisonTool
-};
-using PanelTypeList = std::vector<PanelType>;
+#include "ui/view/widgetview.h"
 
-enum class StartupSessionType
+#include "modularity/ioc.h"
+#include "context/iglobalcontext.h"
+#include "async/asyncable.h"
+
+namespace mu::notation {
+class TimelineView : public ui::WidgetView, public async::Asyncable
 {
-    StartEmpty,
-    ContinueLastSession,
-    StartWithNewScore,
-    StartWithScore
+    Q_OBJECT
+
+    INJECT(notation, context::IGlobalContext, globalContext)
+
+public:
+    explicit TimelineView(QQuickItem* parent = nullptr);
+
+private:
+    void componentComplete() override;
 };
 }
 
-#endif // MU_APPSHELL_APPSHELLTYPES_H
+#endif // MU_NOTATION_TIMELINEVIEW_H

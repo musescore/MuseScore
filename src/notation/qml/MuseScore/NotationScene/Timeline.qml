@@ -20,38 +20,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_APPSHELL_APPSHELLTYPES_H
-#define MU_APPSHELL_APPSHELLTYPES_H
+import QtQuick 2.15
 
-namespace mu::appshell {
-enum class PanelType
-{
-    Undefined = 0,
-    Palette,
-    Instruments,
-    Inspector,
-    NotationToolBar,
-    NoteInputBar,
-    UndoRedoToolBar,
-    NotationNavigator,
-    NotationStatusBar,
-    PlaybackToolBar,
-    Mixer,
-    Timeline,
-    Synthesizer,
-    SelectionFilter,
-    Piano,
-    ComparisonTool
-};
-using PanelTypeList = std::vector<PanelType>;
+import MuseScore.NotationScene 1.0
 
-enum class StartupSessionType
-{
-    StartEmpty,
-    ContinueLastSession,
-    StartWithNewScore,
-    StartWithScore
-};
+Rectangle {
+    id: root
+
+    color: ui.theme.backgroundPrimaryColor
+
+    TimelineView {
+        anchors.fill: parent
+    }
 }
-
-#endif // MU_APPSHELL_APPSHELLTYPES_H
