@@ -28,10 +28,10 @@
 #include "io/mscreader.h"
 #include "io/mscwriter.h"
 #include "style/defaultstyle.h"
-#include "compat/readscorehook.h"
 #include "compat/writescorehook.h"
 #include "compat/read114.h"
 #include "compat/read206.h"
+#include "compat/read302.h"
 
 #include "engravingproject.h"
 
@@ -239,10 +239,7 @@ Score::FileError MasterScore::loadMscz(const mu::engraving::MscReader& mscReader
         XmlReader e(scoreData);
         e.setDocName(completeBaseName);
 
-        compat::ReadScoreHook hooks;
-        hooks.installReadStyleHook(this, scoreData, completeBaseName);
-
-        retval = read1(e, ignoreVersionError, hooks);
+        retval = read(e, ignoreVersionError);
     }
 
     // Read excerpts
@@ -477,7 +474,7 @@ void MasterScore::parseVersion(const QString& val)
 //    return true on success
 //---------------------------------------------------------
 
-Score::FileError MasterScore::read1(XmlReader& e, bool ignoreVersionError, mu::engraving::compat::ReadScoreHook& hook)
+Score::FileError MasterScore::read(XmlReader& e, bool ignoreVersionError)
 {
     while (e.readNextStartElement()) {
         if (e.name() == "museScore") {
@@ -497,15 +494,15 @@ Score::FileError MasterScore::read1(XmlReader& e, bool ignoreVersionError, mu::e
                 }
             }
 
-            hook.setupDefaultStyle();
-
             Score::FileError error;
             if (mscVersion() <= 114) {
                 error = compat::Read114::read114(this, e);
             } else if (mscVersion() <= 207) {
                 error = compat::Read206::read206(this, e);
+            } else if (mscVersion() <= 400) {
+                error = compat::Read302::read302(this, e);
             } else {
-                error = read302(e, hook);
+                error = doRead(e);
             }
             setExcerptsChanged(false);
             return error;
@@ -514,6 +511,37 @@ Score::FileError MasterScore::read1(XmlReader& e, bool ignoreVersionError, mu::e
         }
     }
     return FileError::FILE_CORRUPTED;
+}
+
+Score::FileError MasterScore::doRead(XmlReader& e)
+{
+    while (e.readNextStartElement()) {
+        const QStringRef& tag(e.name());
+        if (tag == "programVersion") {
+            setMscoreVersion(e.readElementText());
+            parseVersion(mscoreVersion());
+        } else if (tag == "programRevision") {
+            setMscoreRevision(e.readIntHex());
+        } else if (tag == "Score") {
+            if (!Score::read400(e)) {
+                if (e.error() == QXmlStreamReader::CustomError) {
+                    return FileError::FILE_CRITICALLY_CORRUPTED;
+                }
+                return FileError::FILE_BAD_FORMAT;
+            }
+
+            for (Staff* s : staves()) {
+                s->updateOttava();
+            }
+            setCreated(false);
+        } else if (tag == "Revision") {
+            Revision* revision = new Revision;
+            revision->read(e);
+            revisions()->add(revision);
+        }
+    }
+
+    return FileError::FILE_NO_ERROR;
 }
 
 //---------------------------------------------------------
@@ -605,14 +633,9 @@ MasterScore* MasterScore::clone()
     buffer.close();
 
     QByteArray scoreData = buffer.buffer();
-    QString completeBaseName = masterScore()->fileInfo()->completeBaseName();
-
-    compat::ReadScoreHook hooks;
-    hooks.installReadStyleHook(this, scoreData, completeBaseName);
-
     XmlReader r(scoreData);
     MasterScore* score = new MasterScore(style(), m_project);
-    score->read1(r, true, hooks);
+    score->read(r, true);
 
     score->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
     score->doLayout();
