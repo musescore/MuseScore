@@ -851,8 +851,6 @@ public:
     void setShowInstrumentNames(bool v) { _showInstrumentNames = v; }
     void setShowVBox(bool v) { _showVBox = v; }
 
-    bool writeMscz(mu::engraving::MscWriter& msczWriter, bool onlySelection = false, bool createThumbnail = true);
-
     void print(mu::draw::Painter* printer, int page);
     ChordRest* getSelectedChordRest() const;
     QSet<ChordRest*> getSelectedChordRests() const;

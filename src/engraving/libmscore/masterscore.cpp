@@ -278,7 +278,7 @@ bool MasterScore::writeMscz(MscWriter& mscWriter, bool onlySelection, bool doCre
         return false;
     }
 
-    // Write style
+    // Write style of MasterScore
     {
         //! NOTE The style is writing to a separate file only for the master score.
         //! At the moment, the style for the parts is still writing to the score file.
@@ -289,8 +289,49 @@ bool MasterScore::writeMscz(MscWriter& mscWriter, bool onlySelection, bool doCre
         mscWriter.writeStyleFile(styleData);
     }
 
-    // Write Score
-    Score::writeMscz(mscWriter, onlySelection, doCreateThumbnail);
+    // Write MasterScore
+    {
+        QByteArray scoreData;
+        QBuffer scoreBuf(&scoreData);
+        scoreBuf.open(QIODevice::ReadWrite);
+
+        compat::WriteScoreHook hook;
+        Score::writeScore(&scoreBuf, false, onlySelection, hook);
+
+        mscWriter.writeScoreFile(scoreData);
+    }
+
+    // Write Excerpts
+    {
+        if (!onlySelection) {
+            for (const Excerpt* excerpt : qAsConst(this->excerpts())) {
+                Score* partScore = excerpt->partScore();
+                if (partScore != this) {
+                    // Write excerpt style
+                    {
+                        QByteArray excerptStyleData;
+                        QBuffer styleStyleBuf(&excerptStyleData);
+                        styleStyleBuf.open(QIODevice::WriteOnly);
+                        partScore->style().write(&styleStyleBuf);
+
+                        mscWriter.addExcerptStyleFile(excerpt->title(), excerptStyleData);
+                    }
+
+                    // Write excerpt
+                    {
+                        QByteArray excerptData;
+                        QBuffer excerptBuf(&excerptData);
+                        excerptBuf.open(QIODevice::ReadWrite);
+
+                        compat::WriteScoreHook hook;
+                        excerpt->partScore()->writeScore(&excerptBuf, false, onlySelection, hook);
+
+                        mscWriter.addExcerptFile(excerpt->title(), excerptData);
+                    }
+                }
+            }
+        }
+    }
 
     // Write ChordList
     {
@@ -301,6 +342,76 @@ bool MasterScore::writeMscz(MscWriter& mscWriter, bool onlySelection, bool doCre
             chlBuf.open(QIODevice::WriteOnly);
             chordList->write(&chlBuf);
             mscWriter.writeChordListFile(chlData);
+        }
+    }
+
+    // Write images
+    {
+        for (ImageStoreItem* ip : imageStore) {
+            if (!ip->isUsed(this)) {
+                continue;
+            }
+            mscWriter.addImageFile(ip->hashName(), ip->buffer());
+        }
+    }
+
+    // Write thumbnail
+    {
+        if (doCreateThumbnail && !pages().isEmpty()) {
+            QImage pm = createThumbnail();
+
+            QByteArray ba;
+            QBuffer b(&ba);
+            b.open(QIODevice::WriteOnly);
+            pm.save(&b, "PNG");
+            mscWriter.writeThumbnailFile(ba);
+        }
+    }
+
+    // Write audio
+    {
+        if (_audio) {
+            mscWriter.writeAudioFile(_audio->data());
+        }
+    }
+
+    return true;
+}
+
+bool MasterScore::exportPart(mu::engraving::MscWriter& mscWriter, Score* partScore)
+{
+    // Write excerpt style as main
+    {
+        QByteArray excerptStyleData;
+        QBuffer styleStyleBuf(&excerptStyleData);
+        styleStyleBuf.open(QIODevice::WriteOnly);
+        partScore->style().write(&styleStyleBuf);
+
+        mscWriter.writeStyleFile(excerptStyleData);
+    }
+
+    // Write excerpt as main score
+    {
+        QByteArray excerptData;
+        QBuffer excerptBuf(&excerptData);
+        excerptBuf.open(QIODevice::WriteOnly);
+
+        compat::WriteScoreHook hook;
+        partScore->writeScore(&excerptBuf, false, false, hook);
+
+        mscWriter.writeScoreFile(excerptData);
+    }
+
+    // Write thumbnail
+    {
+        if (!partScore->pages().isEmpty()) {
+            QImage pm = partScore->createThumbnail();
+
+            QByteArray ba;
+            QBuffer b(&ba);
+            b.open(QIODevice::WriteOnly);
+            pm.save(&b, "PNG");
+            mscWriter.writeThumbnailFile(ba);
         }
     }
 

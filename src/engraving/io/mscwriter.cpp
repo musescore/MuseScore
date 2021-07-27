@@ -134,6 +134,18 @@ void MscWriter::writeScoreFile(const QByteArray& data)
     addFileData(fileName, data);
 }
 
+void MscWriter::addExcerptStyleFile(const QString& name, const QByteArray& data)
+{
+    QString fileName = name + ".mss";
+    addFileData("Excerpts/" + fileName, data);
+}
+
+void MscWriter::addExcerptFile(const QString& name, const QByteArray& data)
+{
+    QString fileName = name + ".mscx";
+    addFileData("Excerpts/" + fileName, data);
+}
+
 void MscWriter::writeChordListFile(const QByteArray& data)
 {
     addFileData("chordlist.xml", data);
