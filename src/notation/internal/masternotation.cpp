@@ -90,7 +90,6 @@ void MasterNotation::setMasterScore(Ms::MasterScore* score)
     }
 
     setScore(score);
-    initExcerpts();
 }
 
 Ms::MasterScore* MasterNotation::masterScore() const
@@ -405,7 +404,6 @@ mu::Ret MasterNotation::setupNewScore(Ms::MasterScore* score, Ms::MasterScore* t
     }
 
     setScore(score);
-    initExcerpts(excerpts);
 
     score->setExcerptsChanged(true);
 
