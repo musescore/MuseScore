@@ -29,42 +29,32 @@ Item {
 
     property var model
 
+    QtObject {
+        id: prv
+
+        readonly property int sideMargin: 36
+    }
+
     Column {
         id: header
 
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
-        anchors.leftMargin: 36
+        anchors.leftMargin: prv.sideMargin
 
         spacing: 16
 
-        Row {
+        StyledTextLabel {
             width: parent.width
-            height: childrenRect.height
 
-            StyledTextLabel {
-                width: parent.width * 2/3
+            text: qsTrc("notation", "NAME")
 
-                text: qsTrc("notation", "NAME")
-
-                horizontalAlignment: Qt.AlignLeft
-                font.capitalization: Font.AllUppercase
-            }
-
-            StyledTextLabel {
-                id: voicesVisibilityHeader
-
-                width: parent.width * 1/3
-
-                text: qsTrc("notation", "VISIBLE VOICES")
-
-                horizontalAlignment: Qt.AlignLeft
-                font.capitalization: Font.AllUppercase
-            }
+            horizontalAlignment: Qt.AlignLeft
+            font.capitalization: Font.AllUppercase
         }
 
-        SeparatorLine { anchors.margins: -36 }
+        SeparatorLine { anchors.margins: -prv.sideMargin }
     }
 
     ListView {
@@ -100,16 +90,10 @@ Item {
         }
 
         delegate: PartDelegate {
-            readonly property int sideMargin: 24
-
             title: model.title
-            maxTitleWidth: voicesVisibilityHeader.x
             currentPartIndex: view.currentIndex
             isSelected: model.isSelected
-            isMain: model.isMain
-            voicesVisibility: model.voicesVisibility
-            voicesTitle: model.voicesTitle
-            sidePadding: 24
+            sideMargin: prv.sideMargin
 
             onPartClicked: {
                 root.model.selectPart(model.index)
@@ -122,10 +106,6 @@ Item {
 
             onTitleEditingFinished: {
                 root.model.validatePartTitle(model.index)
-            }
-
-            onVoicesVisibilityChangeRequested: {
-                root.model.setVoiceVisible(model.index, voiceIndex, voiceVisible)
             }
 
             onRemovePartRequested: {
