@@ -41,13 +41,9 @@
 #include "libmscore/clef.h"
 #include "libmscore/mscore.h"
 
-#include "../palette_config.h"
-
 using namespace mu;
 using namespace mu::palette;
-
-namespace Ms {
-static const qreal editScale = 1.0;
+using namespace Ms;
 
 //---------------------------------------------------------
 //   KeyCanvas
@@ -57,10 +53,9 @@ KeyCanvas::KeyCanvas(QWidget* parent)
     : QFrame(parent)
 {
     setAcceptDrops(true);
-    extraMag   = editScale * configuration()->paletteScaling();
-    qreal mag  = mu::palette::PALETTE_SPATIUM * extraMag / gscore->spatium();
-    _matrix    = QTransform(mag, 0.0, 0.0, mag, 0.0, 0.0);
-    imatrix    = _matrix.inverted();
+    qreal mag = configuration()->paletteSpatium() * configuration()->paletteScaling() / gscore->spatium();
+    _matrix = QTransform(mag, 0.0, 0.0, mag, 0.0, 0.0);
+    imatrix = _matrix.inverted();
     dragElement = 0;
     setFocusPolicy(Qt::StrongFocus);
     QAction* a = new QAction("delete", this);
@@ -110,9 +105,9 @@ void KeyCanvas::paintEvent(QPaintEvent*)
     painter.setAntialiasing(true);
     qreal wh = double(height());
     qreal ww = double(width());
-    double y = wh * .5 - 2 * mu::palette::PALETTE_SPATIUM * extraMag;
+    double y = wh * .5 - 2 * configuration()->paletteSpatium() * extraMag;
 
-    qreal mag  = mu::palette::PALETTE_SPATIUM * extraMag / gscore->spatium();
+    qreal mag  = configuration()->paletteSpatium() * extraMag / gscore->spatium();
     _matrix    = QTransform(mag, 0.0, 0.0, mag, 0.0, y);
     imatrix    = _matrix.inverted();
 
@@ -311,8 +306,8 @@ KeyEditor::KeyEditor(QWidget* parent)
     frame_3->setLayout(l);
     sp1 = new PaletteWidget(PaletteCreator::newAccidentalsPalette(), this);
     qreal adj = sp1->mag();
-    sp1->setGridSize(sp1->gridWidth() * editScale / adj, sp1->gridHeight() * editScale / adj);
-    sp1->setMag(editScale);
+    sp1->setGridSize(sp1->gridWidth() / adj, sp1->gridHeight() / adj);
+    sp1->setMag(1.0);
     PaletteScrollArea* accPalette = new PaletteScrollArea(sp1);
     QSizePolicy policy1(QSizePolicy::Expanding, QSizePolicy::Expanding);
     accPalette->setSizePolicy(policy1);
@@ -343,10 +338,7 @@ KeyEditor::KeyEditor(QWidget* parent)
 
 void KeyEditor::addClicked()
 {
-    // double extraMag = 2.0;
     const QList<Accidental*> al = canvas->getAccidentals();
-    // qreal mag  = PALETTE_SPATIUM * extraMag / gscore->spatium();
-    // double spatium = 2.0 * PALETTE_SPATIUM / extraMag;
     double spatium = gscore->spatium();
     double xoff = 10000000.0;
 
@@ -401,5 +393,4 @@ void KeyEditor::save()
     QDir dir;
     dir.mkpath(configuration()->keySignaturesDirPath().toQString());
     sp->writeToFile(configuration()->keySignaturesDirPath().toQString());
-}
 }

@@ -27,6 +27,7 @@
 #include "engraving/libmscore/actionicon.h"
 #include "engraving/libmscore/element.h"
 #include "engraving/libmscore/fret.h"
+#include "engraving/libmscore/masterscore.h"
 #include "engraving/libmscore/textbase.h"
 
 #include "translation.h"

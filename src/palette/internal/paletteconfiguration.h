@@ -40,6 +40,8 @@ public:
     double paletteScaling() const override;
     void setPaletteScaling(double scale) override;
 
+    double paletteSpatium() const override;
+
     bool isSinglePalette() const override;
     void setIsSinglePalette(bool isSingle) override;
 

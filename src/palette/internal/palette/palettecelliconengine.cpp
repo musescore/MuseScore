@@ -21,7 +21,6 @@
  */
 #include "palettecelliconengine.h"
 
-#include "palette_config.h"
 #include "widgets/palettewidget.h"
 
 #include "engraving/draw/geometry.h"
@@ -77,7 +76,7 @@ void PaletteCellIconEngine::paintCell(Painter& painter, const RectF& rect, bool 
     }
 
     const bool drawStaff = m_cell->drawStaff;
-    const qreal spatium = PALETTE_SPATIUM * m_extraMag * m_cell->mag;
+    const qreal spatium = configuration()->paletteSpatium() * m_extraMag * m_cell->mag;
 
     PointF origin = rect.center(); // draw element at center of cell by default
     if (drawStaff) {

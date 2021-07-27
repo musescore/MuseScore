@@ -52,6 +52,15 @@ void PaletteConfiguration::setPaletteScaling(double scale)
     settings()->setSharedValue(PALETTE_SCALE, Val(scale));
 }
 
+double PaletteConfiguration::paletteSpatium() const
+{
+    static constexpr const double DPI_DISPLAY = 96.0;  // 96 DPI nominal resolution
+    static constexpr const double DPMM_DISPLAY = DPI_DISPLAY / 25.4;
+    static constexpr const double PALETTE_SPATIUM = 1.764 * DPMM_DISPLAY;
+
+    return PALETTE_SPATIUM;
+}
+
 bool PaletteConfiguration::isSinglePalette() const
 {
     return settings()->value(PALETTE_USE_SINGLE).toBool();
