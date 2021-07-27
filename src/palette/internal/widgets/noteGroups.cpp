@@ -30,15 +30,10 @@
 #include "libmscore/key.h"
 #include "libmscore/actionicon.h"
 #include "libmscore/staff.h"
-#include "palette/palettecreator.h"
 
 #include "translation.h"
 
 namespace Ms {
-//---------------------------------------------------------
-//   createScore
-//---------------------------------------------------------
-
 Score* NoteGroups::createScore(int n, TDuration::DurationType t, std::vector<Chord*>* chords)
 {
     MCursor c;
@@ -80,44 +75,36 @@ Score* NoteGroups::createScore(int n, TDuration::DurationType t, std::vector<Cho
     return c.score();
 }
 
-//---------------------------------------------------------
-//   NoteGroups
-//---------------------------------------------------------
-
 NoteGroups::NoteGroups(QWidget* parent)
     : QGroupBox(parent)
 {
     setupUi(this);
 
-    static const PaletteActionIconList actions {
-        { ActionIconType::BEAM_START, "beam-start" },
-        { ActionIconType::BEAM_MID, "beam-mid" },
-        { ActionIconType::BEAM_BEGIN_32, "beam32" },
-        { ActionIconType::BEAM_BEGIN_64, "beam64" },
-    };
-
     iconPalette->setName(QT_TRANSLATE_NOOP("palette", "Beam Properties"));
-    iconPalette->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
     iconPalette->setGridSize(27, 40);
-    iconPalette->setMinimumWidth(27 * 4 * paletteConfiguration()->paletteScaling() + 1); // enough room for all icons, with roundoff
     iconPalette->setDrawGrid(true);
-    PaletteCreator::populateIconPalette(iconPalette, actions);
+
+    iconPalette->appendActionIcon(ActionIconType::BEAM_START, "beam-start");
+    iconPalette->appendActionIcon(ActionIconType::BEAM_MID, "beam-mid");
+    iconPalette->appendActionIcon(ActionIconType::BEAM_BEGIN_32, "beam32");
+    iconPalette->appendActionIcon(ActionIconType::BEAM_BEGIN_64, "beam64");
+
     iconPalette->setReadOnly(true);
+    iconPalette->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
     iconPalette->setFixedHeight(iconPalette->heightForWidth(iconPalette->width()));
+    iconPalette->setMinimumWidth(27 * 4 * paletteConfiguration()->paletteScaling() + 1); // enough room for all icons, with roundoff
     iconPalette->updateGeometry();
 
-    connect(resetGroups, SIGNAL(clicked()), SLOT(resetClicked()));
-    connect(view8,  SIGNAL(noteClicked(Note*)), SLOT(noteClicked(Note*)));
-    connect(view16, SIGNAL(noteClicked(Note*)), SLOT(noteClicked(Note*)));
-    connect(view32, SIGNAL(noteClicked(Note*)), SLOT(noteClicked(Note*)));
-    connect(view8,  SIGNAL(beamPropertyDropped(Chord*,Icon*)), SLOT(beamPropertyDropped(Chord*,Icon*)));
-    connect(view16, SIGNAL(beamPropertyDropped(Chord*,Icon*)), SLOT(beamPropertyDropped(Chord*,Icon*)));
-    connect(view32, SIGNAL(beamPropertyDropped(Chord*,Icon*)), SLOT(beamPropertyDropped(Chord*,Icon*)));
-}
+    connect(resetGroups, &QPushButton::clicked, this, &NoteGroups::resetClicked);
 
-//---------------------------------------------------------
-//   setSig
-//---------------------------------------------------------
+    connect(view8, &ExampleView::noteClicked, this, &NoteGroups::noteClicked);
+    connect(view16, &ExampleView::noteClicked, this, &NoteGroups::noteClicked);
+    connect(view32, &ExampleView::noteClicked, this, &NoteGroups::noteClicked);
+
+    connect(view8, &ExampleView::beamPropertyDropped, this, &NoteGroups::beamPropertyDropped);
+    connect(view16, &ExampleView::beamPropertyDropped, this, &NoteGroups::beamPropertyDropped);
+    connect(view32, &ExampleView::beamPropertyDropped, this, &NoteGroups::beamPropertyDropped);
+}
 
 void NoteGroups::setSig(Fraction sig, const Groups& g, const QString& z, const QString& n)
 {
@@ -140,10 +127,6 @@ void NoteGroups::setSig(Fraction sig, const Groups& g, const QString& z, const Q
     view32->resetMatrix();
 }
 
-//---------------------------------------------------------
-//   groups
-//---------------------------------------------------------
-
 Groups NoteGroups::groups()
 {
     Groups g;
@@ -159,18 +142,10 @@ Groups NoteGroups::groups()
     return g;
 }
 
-//---------------------------------------------------------
-//   resetClicked
-//---------------------------------------------------------
-
 void NoteGroups::resetClicked()
 {
     setSig(_sig, _groups, _z, _n);
 }
-
-//---------------------------------------------------------
-//   noteClicked
-//---------------------------------------------------------
 
 void NoteGroups::noteClicked(Note* note)
 {
@@ -181,10 +156,6 @@ void NoteGroups::noteClicked(Note* note)
         updateBeams(chord, Beam::Mode::AUTO);
     }
 }
-
-//---------------------------------------------------------
-//   beamPropertyDropped
-//---------------------------------------------------------
 
 void NoteGroups::beamPropertyDropped(Chord* chord, ActionIcon* icon)
 {
@@ -206,11 +177,7 @@ void NoteGroups::beamPropertyDropped(Chord* chord, ActionIcon* icon)
     }
 }
 
-//---------------------------------------------------------
-//   updateBeams
-//     takes into account current state of changeShorterCheckBox to update smaller valued notes as well
-//---------------------------------------------------------
-
+/// takes into account current state of changeShorterCheckBox to update smaller valued notes as well
 void NoteGroups::updateBeams(Chord* chord, Beam::Mode m)
 {
     chord->setBeamMode(m);

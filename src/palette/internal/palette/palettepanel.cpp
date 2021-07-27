@@ -103,7 +103,8 @@ PaletteCellPtr PalettePanel::insertElement(size_t idx, ElementPtr element, const
 PaletteCellPtr PalettePanel::appendElement(ElementPtr element, const QString& name, qreal mag)
 {
     if (element) {
-        element->layout(); // layout may be important for comparing cells, e.g. filtering "More" popup content
+        // layout may be important for comparing cells, e.g. filtering "More" popup content
+        element->layout();
     }
 
     PaletteCellPtr cell = std::make_shared<PaletteCell>(element, name, mag);
@@ -115,6 +116,15 @@ PaletteCellPtr PalettePanel::appendElement(ElementPtr element, const QString& na
 
     m_cells.emplace_back(cell);
     return cell;
+}
+
+PaletteCellPtr PalettePanel::appendActionIcon(Ms::ActionIconType type, actions::ActionCode code)
+{
+    const ui::UiAction& action = actionsRegister()->action(code);
+    auto icon = makeElement<ActionIcon>(gscore);
+    icon->setActionType(type);
+    icon->setAction(code, static_cast<char16_t>(action.iconCode));
+    return appendElement(icon, action.title);
 }
 
 bool PalettePanel::insertCell(size_t idx, PaletteCellPtr cell)

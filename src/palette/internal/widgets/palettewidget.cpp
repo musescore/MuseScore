@@ -58,12 +58,12 @@
 
 #include "translation.h"
 
-using namespace mu;
-using namespace mu::framework;
+//using namespace mu;
+//using namespace mu::framework;
 using namespace mu::palette;
-using namespace mu::actions;
-using namespace mu::draw;
-using namespace Ms;
+//using namespace mu::actions;
+//using namespace mu::draw;
+//using namespace Ms;
 
 PaletteWidget::PaletteWidget(PalettePanelPtr palette, QWidget* parent)
     : QWidget(parent)
@@ -139,6 +139,16 @@ PaletteCellPtr PaletteWidget::insertElement(int idx, ElementPtr element, const Q
 PaletteCellPtr PaletteWidget::appendElement(ElementPtr element, const QString& name, qreal mag)
 {
     PaletteCellPtr cell = m_palette->appendElement(element, name, mag);
+
+    setFixedHeight(heightForWidth(width()));
+    updateGeometry();
+
+    return cell;
+}
+
+PaletteCellPtr PaletteWidget::appendActionIcon(Ms::ActionIconType type, actions::ActionCode code)
+{
+    PaletteCellPtr cell = m_palette->appendActionIcon(type, code);
 
     setFixedHeight(heightForWidth(width()));
     updateGeometry();

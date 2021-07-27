@@ -20,143 +20,98 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-// For menus in the menu bar, like File, Edit, and View, see mscore/musescore.cpp
-
 #include "palettecreator.h"
 
-#include <QAction>
-
-#include "actions/actiontypes.h"
-
-#include "libmscore/masterscore.h"
-#include "libmscore/note.h"
-#include "libmscore/chordrest.h"
-#include "libmscore/dynamic.h"
-#include "libmscore/slur.h"
-#include "libmscore/sym.h"
-#include "libmscore/hairpin.h"
-#include "libmscore/select.h"
-#include "libmscore/tempo.h"
-#include "libmscore/segment.h"
-#include "libmscore/undo.h"
-#include "libmscore/bracket.h"
-#include "libmscore/ottava.h"
-#include "libmscore/textline.h"
-#include "libmscore/trill.h"
-#include "libmscore/pedal.h"
-#include "libmscore/clef.h"
-#include "libmscore/timesig.h"
-#include "libmscore/barline.h"
-#include "libmscore/layoutbreak.h"
-#include "libmscore/volta.h"
-#include "libmscore/keysig.h"
-#include "libmscore/breath.h"
-#include "libmscore/arpeggio.h"
-#include "libmscore/tremolo.h"
-#include "libmscore/measurerepeat.h"
-#include "libmscore/tempotext.h"
-#include "libmscore/glissando.h"
-#include "libmscore/articulation.h"
-#include "libmscore/chord.h"
-#include "libmscore/drumset.h"
-#include "libmscore/spacer.h"
-#include "libmscore/measure.h"
-#include "libmscore/fret.h"
-#include "libmscore/staffstate.h"
-#include "libmscore/fingering.h"
-#include "libmscore/bend.h"
-#include "libmscore/tremolobar.h"
-#include "libmscore/chordline.h"
-#include "libmscore/stafftext.h"
-#include "libmscore/systemtext.h"
-#include "libmscore/instrchange.h"
-#include "libmscore/actionicon.h"
 #include "libmscore/accidental.h"
-#include "libmscore/harmony.h"
-#include "libmscore/rehearsalmark.h"
-#include "libmscore/marker.h"
-#include "libmscore/jump.h"
-#include "libmscore/bagpembell.h"
+#include "libmscore/actionicon.h"
 #include "libmscore/ambitus.h"
-#include "libmscore/stafftypechange.h"
-#include "libmscore/letring.h"
-#include "libmscore/vibrato.h"
-#include "libmscore/palmmute.h"
+#include "libmscore/arpeggio.h"
+#include "libmscore/articulation.h"
+#include "libmscore/bagpembell.h"
+#include "libmscore/barline.h"
+#include "libmscore/bend.h"
+#include "libmscore/bracket.h"
+#include "libmscore/breath.h"
+#include "libmscore/chord.h"
+#include "libmscore/chordline.h"
+#include "libmscore/chordrest.h"
+#include "libmscore/clef.h"
+#include "libmscore/drumset.h"
+#include "libmscore/dynamic.h"
 #include "libmscore/fermata.h"
+#include "libmscore/fingering.h"
+#include "libmscore/fret.h"
+#include "libmscore/glissando.h"
+#include "libmscore/hairpin.h"
+#include "libmscore/harmony.h"
+#include "libmscore/instrchange.h"
+#include "libmscore/jump.h"
+#include "libmscore/keysig.h"
+#include "libmscore/layoutbreak.h"
+#include "libmscore/letring.h"
+#include "libmscore/marker.h"
+#include "libmscore/masterscore.h"
+#include "libmscore/measure.h"
 #include "libmscore/measurenumber.h"
+#include "libmscore/measurerepeat.h"
+#include "libmscore/note.h"
+#include "libmscore/ottava.h"
+#include "libmscore/palmmute.h"
+#include "libmscore/pedal.h"
+#include "libmscore/rehearsalmark.h"
+#include "libmscore/segment.h"
+#include "libmscore/select.h"
+#include "libmscore/slur.h"
+#include "libmscore/spacer.h"
+#include "libmscore/staffstate.h"
+#include "libmscore/stafftext.h"
+#include "libmscore/stafftypechange.h"
+#include "libmscore/sym.h"
+#include "libmscore/systemtext.h"
+#include "libmscore/tempo.h"
+#include "libmscore/tempotext.h"
+#include "libmscore/textline.h"
+#include "libmscore/timesig.h"
+#include "libmscore/tremolo.h"
+#include "libmscore/tremolobar.h"
+#include "libmscore/trill.h"
+#include "libmscore/undo.h"
+#include "libmscore/vibrato.h"
+#include "libmscore/volta.h"
 
-#include "widgets/palettewidget.h"
 #include "translation.h"
 
 using namespace mu::palette;
-using namespace mu::actions;
 using namespace Ms;
-
-void PaletteCreator::populateIconPalettePanel(PalettePanelPtr palettePanel, const PaletteActionIconList& actions)
-{
-    for (const PaletteActionIcon& paletteAction : actions) {
-        const mu::ui::UiAction& action = actionsRegister()->action(paletteAction.actionCode);
-        auto icon = makeElement<ActionIcon>(gscore);
-        icon->setActionType(paletteAction.actionType);
-        icon->setAction(paletteAction.actionCode, static_cast<char16_t>(action.iconCode));
-        palettePanel->appendElement(icon, action.title);
-    }
-}
-
-void PaletteCreator::populateIconPalette(PaletteWidget* palette, const PaletteActionIconList& actions)
-{
-    for (const PaletteActionIcon& paletteAction : actions) {
-        const mu::ui::UiAction& action = actionsRegister()->action(paletteAction.actionCode);
-        auto icon = makeElement<ActionIcon>(gscore);
-        icon->setActionType(paletteAction.actionType);
-        icon->setAction(paletteAction.actionCode, static_cast<char16_t>(action.iconCode));
-        palette->appendElement(icon, action.title);
-    }
-}
-
-struct TempoPattern {
-    QString pattern;
-    const char* name;
-    double f;
-    bool relative;
-    bool italian;
-    bool followText;
-    bool basic;
-    bool masterOnly;
-
-    TempoPattern(const QString& s, const char* n, double v, bool r, bool i, bool f, bool b, bool m)
-        : pattern(s),
-        name(n), f(v), relative(r), italian(i), followText(f), basic(b), masterOnly(m) {}
-};
 
 PaletteTreePtr PaletteCreator::newMasterPaletteTree()
 {
     PaletteTreePtr tree = std::make_shared<PaletteTree>();
 
-    tree->append(PaletteCreator::newClefsPalettePanel());
-    tree->append(PaletteCreator::newKeySigPalettePanel());
-    tree->append(PaletteCreator::newTimePalettePanel());
-    tree->append(PaletteCreator::newBracketsPalettePanel());
-    tree->append(PaletteCreator::newAccidentalsPalettePanel());
-    tree->append(PaletteCreator::newArticulationsPalettePanel());
-    tree->append(PaletteCreator::newOrnamentsPalettePanel());
-    tree->append(PaletteCreator::newBreathPalettePanel());
-    tree->append(PaletteCreator::newGraceNotePalettePanel());
-    tree->append(PaletteCreator::newNoteHeadsPalettePanel());
-    tree->append(PaletteCreator::newLinesPalettePanel());
-    tree->append(PaletteCreator::newBarLinePalettePanel());
-    tree->append(PaletteCreator::newArpeggioPalettePanel());
-    tree->append(PaletteCreator::newTremoloPalettePanel());
-    tree->append(PaletteCreator::newTextPalettePanel());
-    tree->append(PaletteCreator::newTempoPalettePanel());
-    tree->append(PaletteCreator::newDynamicsPalettePanel());
-    tree->append(PaletteCreator::newFingeringPalettePanel());
-    tree->append(PaletteCreator::newRepeatsPalettePanel());
-    tree->append(PaletteCreator::newFretboardDiagramPalettePanel());
-    tree->append(PaletteCreator::newAccordionPalettePanel());
-    tree->append(PaletteCreator::newBagpipeEmbellishmentPalettePanel());
-    tree->append(PaletteCreator::newLayoutPalettePanel());
-    tree->append(PaletteCreator::newBeamPalettePanel());
+    tree->append(newClefsPalettePanel());
+    tree->append(newKeySigPalettePanel());
+    tree->append(newTimePalettePanel());
+    tree->append(newBracketsPalettePanel());
+    tree->append(newAccidentalsPalettePanel());
+    tree->append(newArticulationsPalettePanel());
+    tree->append(newOrnamentsPalettePanel());
+    tree->append(newBreathPalettePanel());
+    tree->append(newGraceNotePalettePanel());
+    tree->append(newNoteHeadsPalettePanel());
+    tree->append(newLinesPalettePanel());
+    tree->append(newBarLinePalettePanel());
+    tree->append(newArpeggioPalettePanel());
+    tree->append(newTremoloPalettePanel());
+    tree->append(newTextPalettePanel());
+    tree->append(newTempoPalettePanel());
+    tree->append(newDynamicsPalettePanel());
+    tree->append(newFingeringPalettePanel());
+    tree->append(newRepeatsPalettePanel());
+    tree->append(newFretboardDiagramPalettePanel());
+    tree->append(newAccordionPalettePanel());
+    tree->append(newBagpipeEmbellishmentPalettePanel());
+    tree->append(newLayoutPalettePanel());
+    tree->append(newBeamPalettePanel());
 
     return tree;
 }
@@ -165,30 +120,30 @@ PaletteTreePtr PaletteCreator::newDefaultPaletteTree()
 {
     PaletteTreePtr defaultPalette = std::make_shared<PaletteTree>();
 
-    defaultPalette->append(PaletteCreator::newClefsPalettePanel(true));
-    defaultPalette->append(PaletteCreator::newKeySigPalettePanel());
-    defaultPalette->append(PaletteCreator::newTimePalettePanel());
-    defaultPalette->append(PaletteCreator::newBracketsPalettePanel());
-    defaultPalette->append(PaletteCreator::newAccidentalsPalettePanel(true));
-    defaultPalette->append(PaletteCreator::newArticulationsPalettePanel());
-    defaultPalette->append(PaletteCreator::newOrnamentsPalettePanel());
-    defaultPalette->append(PaletteCreator::newBreathPalettePanel());
-    defaultPalette->append(PaletteCreator::newGraceNotePalettePanel());
-    defaultPalette->append(PaletteCreator::newNoteHeadsPalettePanel());
-    defaultPalette->append(PaletteCreator::newLinesPalettePanel());
-    defaultPalette->append(PaletteCreator::newBarLinePalettePanel());
-    defaultPalette->append(PaletteCreator::newArpeggioPalettePanel());
-    defaultPalette->append(PaletteCreator::newTremoloPalettePanel());
-    defaultPalette->append(PaletteCreator::newTextPalettePanel(true));
-    defaultPalette->append(PaletteCreator::newTempoPalettePanel(true));
-    defaultPalette->append(PaletteCreator::newDynamicsPalettePanel(true));
-    defaultPalette->append(PaletteCreator::newFingeringPalettePanel());
-    defaultPalette->append(PaletteCreator::newRepeatsPalettePanel());
-    defaultPalette->append(PaletteCreator::newFretboardDiagramPalettePanel());
-    defaultPalette->append(PaletteCreator::newAccordionPalettePanel());
-    defaultPalette->append(PaletteCreator::newBagpipeEmbellishmentPalettePanel());
-    defaultPalette->append(PaletteCreator::newLayoutPalettePanel());
-    defaultPalette->append(PaletteCreator::newBeamPalettePanel());
+    defaultPalette->append(newClefsPalettePanel(true));
+    defaultPalette->append(newKeySigPalettePanel());
+    defaultPalette->append(newTimePalettePanel());
+    defaultPalette->append(newBracketsPalettePanel());
+    defaultPalette->append(newAccidentalsPalettePanel(true));
+    defaultPalette->append(newArticulationsPalettePanel());
+    defaultPalette->append(newOrnamentsPalettePanel());
+    defaultPalette->append(newBreathPalettePanel());
+    defaultPalette->append(newGraceNotePalettePanel());
+    defaultPalette->append(newNoteHeadsPalettePanel());
+    defaultPalette->append(newLinesPalettePanel());
+    defaultPalette->append(newBarLinePalettePanel());
+    defaultPalette->append(newArpeggioPalettePanel());
+    defaultPalette->append(newTremoloPalettePanel());
+    defaultPalette->append(newTextPalettePanel(true));
+    defaultPalette->append(newTempoPalettePanel(true));
+    defaultPalette->append(newDynamicsPalettePanel(true));
+    defaultPalette->append(newFingeringPalettePanel());
+    defaultPalette->append(newRepeatsPalettePanel());
+    defaultPalette->append(newFretboardDiagramPalettePanel());
+    defaultPalette->append(newAccordionPalettePanel());
+    defaultPalette->append(newBagpipeEmbellishmentPalettePanel());
+    defaultPalette->append(newLayoutPalettePanel());
+    defaultPalette->append(newBeamPalettePanel());
 
     return defaultPalette;
 }
@@ -200,19 +155,15 @@ PalettePanelPtr PaletteCreator::newBeamPalettePanel()
     sp->setGridSize(27, 40);
     sp->setDrawGrid(true);
 
-    static const PaletteActionIconList actions = {
-        { ActionIconType::BEAM_START, "beam-start" },
-        { ActionIconType::BEAM_MID, "beam-mid" },
-        { ActionIconType::BEAM_NONE, "no-beam" },
-        { ActionIconType::BEAM_BEGIN_32, "beam32" },
-        { ActionIconType::BEAM_BEGIN_64, "beam64" },
-        { ActionIconType::BEAM_AUTO, "auto-beam" },
-        { ActionIconType::BEAM_FEATHERED_SLOWER, "fbeam1" },
-        { ActionIconType::BEAM_FEATHERED_FASTER, "fbeam2" },
-        { ActionIconType::UNDEFINED, "" }
-    };
+    sp->appendActionIcon(ActionIconType::BEAM_START, "beam-start");
+    sp->appendActionIcon(ActionIconType::BEAM_MID, "beam-mid");
+    sp->appendActionIcon(ActionIconType::BEAM_NONE, "no-beam");
+    sp->appendActionIcon(ActionIconType::BEAM_BEGIN_32, "beam32");
+    sp->appendActionIcon(ActionIconType::BEAM_BEGIN_64, "beam64");
+    sp->appendActionIcon(ActionIconType::BEAM_AUTO, "auto-beam");
+    sp->appendActionIcon(ActionIconType::BEAM_FEATHERED_SLOWER, "fbeam1");
+    sp->appendActionIcon(ActionIconType::BEAM_FEATHERED_FASTER, "fbeam2");
 
-    populateIconPalettePanel(sp, actions);
     return sp;
 }
 
@@ -303,12 +254,9 @@ PalettePanelPtr PaletteCreator::newAccidentalsPalettePanel(bool defaultPalettePa
         }
     }
 
-    static const PaletteActionIconList actions {
-        { ActionIconType::BRACKETS, "add-brackets" },
-        { ActionIconType::PARENTHESES, "add-parentheses" },
-        { ActionIconType::BRACES, "add-braces" },
-    };
-    populateIconPalettePanel(sp, actions);
+    sp->appendActionIcon(ActionIconType::BRACKETS, "add-brackets");
+    sp->appendActionIcon(ActionIconType::PARENTHESES, "add-parentheses");
+    sp->appendActionIcon(ActionIconType::BRACES, "add-braces");
 
     return sp;
 }
@@ -468,24 +416,13 @@ PalettePanelPtr PaletteCreator::newLayoutPalettePanel()
     auto stc = makeElement<StaffTypeChange>(gscore);
     sp->appendElement(stc, QT_TRANSLATE_NOOP("palette", "Staff type change"));
 
+    sp->appendActionIcon(ActionIconType::VFRAME, "insert-vbox");
+    sp->appendActionIcon(ActionIconType::HFRAME, "insert-hbox");
+    sp->appendActionIcon(ActionIconType::TFRAME, "insert-textframe");
     if (configuration()->enableExperimental()) {
-        static const PaletteActionIconList actions {
-            { ActionIconType::VFRAME, "insert-vbox" },
-            { ActionIconType::HFRAME, "insert-hbox" },
-            { ActionIconType::TFRAME, "insert-textframe" },
-            { ActionIconType::FFRAME, "insert-fretframe" },
-            { ActionIconType::MEASURE, "insert-measure" },
-        };
-        populateIconPalettePanel(sp, actions);
-    } else {
-        static const PaletteActionIconList actions {
-            { ActionIconType::VFRAME, "insert-vbox" },
-            { ActionIconType::HFRAME, "insert-hbox" },
-            { ActionIconType::TFRAME, "insert-textframe" },
-            { ActionIconType::MEASURE, "insert-measure" },
-        };
-        populateIconPalettePanel(sp, actions);
+        sp->appendActionIcon(ActionIconType::FFRAME, "insert-fretframe");
     }
+    sp->appendActionIcon(ActionIconType::MEASURE, "insert-measure");
 
     return sp;
 }
@@ -576,10 +513,7 @@ PalettePanelPtr PaletteCreator::newNoteHeadsPalettePanel()
         sp->appendElement(nh, NoteHead::group2userName(NoteHead::Group(i)));
     }
 
-    static const PaletteActionIconList actions {
-        { ActionIconType::PARENTHESES, "add-parentheses" },
-    };
-    populateIconPalettePanel(sp, actions);
+    sp->appendActionIcon(ActionIconType::PARENTHESES, "add-parentheses");
 
     return sp;
 }
@@ -933,17 +867,14 @@ PalettePanelPtr PaletteCreator::newGraceNotePalettePanel()
     sp->setDrawGrid(true);
     sp->setVisible(false);
 
-    static const PaletteActionIconList actions {
-        { ActionIconType::ACCIACCATURA,  "acciaccatura" },
-        { ActionIconType::APPOGGIATURA,  "appoggiatura" },
-        { ActionIconType::GRACE4,        "grace4" },
-        { ActionIconType::GRACE16,       "grace16" },
-        { ActionIconType::GRACE32,       "grace32" },
-        { ActionIconType::GRACE8_AFTER,  "grace8after" },
-        { ActionIconType::GRACE16_AFTER, "grace16after" },
-        { ActionIconType::GRACE32_AFTER, "grace32after" },
-    };
-    populateIconPalettePanel(sp, actions);
+    sp->appendActionIcon(ActionIconType::ACCIACCATURA,  "acciaccatura");
+    sp->appendActionIcon(ActionIconType::APPOGGIATURA,  "appoggiatura");
+    sp->appendActionIcon(ActionIconType::GRACE4,        "grace4");
+    sp->appendActionIcon(ActionIconType::GRACE16,       "grace16");
+    sp->appendActionIcon(ActionIconType::GRACE32,       "grace32");
+    sp->appendActionIcon(ActionIconType::GRACE8_AFTER,  "grace8after");
+    sp->appendActionIcon(ActionIconType::GRACE16_AFTER, "grace16after");
+    sp->appendActionIcon(ActionIconType::GRACE32_AFTER, "grace32after");
 
     return sp;
 }
@@ -1173,26 +1104,39 @@ PalettePanelPtr PaletteCreator::newTempoPalettePanel(bool defaultPalettePanel)
     }
     sp->setDrawGrid(true);
 
+    struct TempoPattern {
+        QString pattern;
+        const char* name;
+        double f;
+        bool relative;
+        bool italian;
+        bool followText;
+        bool basic;
+        bool masterOnly;
+
+        TempoPattern(const QString& s, const char* n, double v, bool r, bool i, bool f, bool b, bool m)
+            : pattern(s), name(n), f(v), relative(r), italian(i), followText(f), basic(b), masterOnly(m) {}
+    };
+
     static const TempoPattern tps[] = {
-        TempoPattern("<sym>metNoteHalfUp</sym> = 80",    QT_TRANSLATE_NOOP("palette",
-                                                                           "Half note = 80 BPM"),    80.0 / 30.0, false, false, true, true,
-                     false),                                                                                                                                                     // 1/2
-        TempoPattern("<sym>metNoteQuarterUp</sym> = 80", QT_TRANSLATE_NOOP("palette",
-                                                                           "Quarter note = 80 BPM"), 80.0 / 60.0, false, false, true, true,
-                     false),                                                                                                                                                     // 1/4
-        TempoPattern("<sym>metNote8thUp</sym> = 80",     QT_TRANSLATE_NOOP("palette",
-                                                                           "Eighth note = 80 BPM"),  80.0 / 120.0, false, false, true, true,
-                     false),                                                                                                                                                     // 1/8
+        TempoPattern("<sym>metNoteHalfUp</sym> = 80",
+                     QT_TRANSLATE_NOOP("palette", "Half note = 80 BPM"),
+                     80.0 / 30.0, false, false, true, true, false),
+        TempoPattern("<sym>metNoteQuarterUp</sym> = 80",
+                     QT_TRANSLATE_NOOP("palette", "Quarter note = 80 BPM"),
+                     80.0 / 60.0, false, false, true, true, false),
+        TempoPattern("<sym>metNote8thUp</sym> = 80",
+                     QT_TRANSLATE_NOOP("palette", "Eighth note = 80 BPM"),
+                     80.0 / 120.0, false, false, true, true, false),
         TempoPattern("<sym>metNoteHalfUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80",
-                     QT_TRANSLATE_NOOP("palette",
-                                       "Dotted half note = 80 BPM"),    120 / 30.0, false, false, true, false, false),                                                                                                  // dotted 1/2
+                     QT_TRANSLATE_NOOP("palette", "Dotted half note = 80 BPM"),
+                     120 / 30.0, false, false, true, false, false),
         TempoPattern("<sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80",
-                     QT_TRANSLATE_NOOP("palette",
-                                       "Dotted quarter note = 80 BPM"), 120 / 60.0, false, false, true, true,  false),                                                                                                  // dotted 1/4
+                     QT_TRANSLATE_NOOP("palette", "Dotted quarter note = 80 BPM"),
+                     120 / 60.0, false, false, true, true,  false),
         TempoPattern("<sym>metNote8thUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80",
-                     QT_TRANSLATE_NOOP("palette",
-                                       "Dotted eighth note = 80 BPM"),  120 / 120.0, false, false, true, false,
-                     false),                                                                                                                                                                                            // dotted 1/8
+                     QT_TRANSLATE_NOOP("palette", "Dotted eighth note = 80 BPM"),
+                     120 / 120.0, false, false, true, false, false),
 
         TempoPattern("Grave",            "Grave",             35.0 / 60.0, false, true, false, false, false),
         TempoPattern("Largo",            "Largo",             50.0 / 60.0, false, true, false, false, false),
@@ -1209,34 +1153,27 @@ PalettePanelPtr PaletteCreator::newTempoPalettePanel(bool defaultPalettePanel)
         TempoPattern("Presto",           "Presto",           187.0 / 60.0, false, true, false, false, false),
         TempoPattern("Prestissimo",      "Prestissimo",      200.0 / 60.0, false, true, false, false, true),
 
-        TempoPattern(
-            "<sym>metNoteQuarterUp</sym> = <sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym>", QT_TRANSLATE_NOOP(
-                "PaletteWidget*",
-                "Quarter note = dotted quarter note metric modulation"), 3.0 / 2.0, true, false, true, false, false),
-        TempoPattern(
-            "<sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = <sym>metNoteQuarterUp</sym>", QT_TRANSLATE_NOOP(
-                "PaletteWidget*",
-                "Dotted quarter note = quarter note metric modulation"), 2.0 / 3.0, true, false, true, false, false),
+        TempoPattern("<sym>metNoteQuarterUp</sym> = <sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym>",
+                     QT_TRANSLATE_NOOP("palette", "Quarter note = dotted quarter note metric modulation"),
+                     3.0 / 2.0, true, false, true, false, false),
+        TempoPattern("<sym>metNoteQuarterUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = <sym>metNoteQuarterUp</sym>",
+                     QT_TRANSLATE_NOOP("palette", "Dotted quarter note = quarter note metric modulation"),
+                     2.0 / 3.0, true, false, true, false, false),
         TempoPattern("<sym>metNoteHalfUp</sym> = <sym>metNoteQuarterUp</sym>",
-                     QT_TRANSLATE_NOOP("palette",
-                                       "Half note = quarter note metric modulation"),    1.0 / 2.0, true, false, true, false,
-                     false),
+                     QT_TRANSLATE_NOOP("palette", "Half note = quarter note metric modulation"),
+                     1.0 / 2.0, true, false, true, false, false),
         TempoPattern("<sym>metNoteQuarterUp</sym> = <sym>metNoteHalfUp</sym>",
-                     QT_TRANSLATE_NOOP("palette",
-                                       "Quarter note = half note metric modulation"),    2.0 / 1.0, true, false, true, false,
-                     false),
+                     QT_TRANSLATE_NOOP("palette", "Quarter note = half note metric modulation"),
+                     2.0 / 1.0, true, false, true, false, false),
         TempoPattern("<sym>metNote8thUp</sym> = <sym>metNote8thUp</sym>",
-                     QT_TRANSLATE_NOOP("palette",
-                                       "Eighth note = eighth note metric modulation"),   1.0 / 1.0, true, false, true, false,
-                     false),
+                     QT_TRANSLATE_NOOP("palette", "Eighth note = eighth note metric modulation"),
+                     1.0 / 1.0, true, false, true, false, false),
         TempoPattern("<sym>metNoteQuarterUp</sym> = <sym>metNoteQuarterUp</sym>",
-                     QT_TRANSLATE_NOOP("palette",
-                                       "Quarter note = quarter note metric modulation"), 1.0 / 1.0, true, false, true, false,
-                     false),
-        TempoPattern(
-            "<sym>metNote8thUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = <sym>metNoteQuarterUp</sym>",     QT_TRANSLATE_NOOP(
-                "PaletteWidget*",
-                "Dotted eighth note = quarter note metric modulation"),  2.0 / 3.0, true, false, true, false, false),
+                     QT_TRANSLATE_NOOP("palette", "Quarter note = quarter note metric modulation"),
+                     1.0 / 1.0, true, false, true, false, false),
+        TempoPattern("<sym>metNote8thUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = <sym>metNoteQuarterUp</sym>",
+                     QT_TRANSLATE_NOOP("palette", "Dotted eighth note = quarter note metric modulation"),
+                     2.0 / 3.0, true, false, true, false, false),
     };
 
     auto stxt = makeElement<SystemText>(gscore);
@@ -1251,13 +1188,13 @@ PalettePanelPtr PaletteCreator::newTempoPalettePanel(bool defaultPalettePanel)
         tt->setXmlText(tp.pattern);
         if (tp.relative) {
             tt->setRelative(tp.f);
-            sp->appendElement(tt, mu::qtrc("PaletteWidget*", tp.name), 1.5);
+            sp->appendElement(tt, mu::qtrc("palette", tp.name), 1.5);
         } else if (tp.italian) {
             tt->setTempo(tp.f);
             sp->appendElement(tt, tp.name, 1.3);
         } else {
             tt->setTempo(tp.f);
-            sp->appendElement(tt, mu::qtrc("PaletteWidget*", tp.name), 1.5);
+            sp->appendElement(tt, mu::qtrc("palette", tp.name), 1.5);
         }
     }
 

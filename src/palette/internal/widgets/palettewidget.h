@@ -27,6 +27,8 @@
 
 #include "palette/palettepanel.h"
 
+#include "engraving/libmscore/element.h"
+
 #include "modularity/ioc.h"
 #include "ipaletteconfiguration.h"
 #include "ui/iuiactionsregister.h"
@@ -34,7 +36,7 @@
 #include "iinteractive.h"
 
 namespace Ms {
-class Element;
+enum class ActionIconType;
 class XmlWriter;
 class XmlReader;
 }
@@ -63,6 +65,7 @@ public:
 
     PaletteCellPtr insertElement(int idx, Ms::ElementPtr element, const QString& name, qreal mag = 1.0);
     PaletteCellPtr appendElement(Ms::ElementPtr element, const QString& name, qreal mag = 1.0);
+    PaletteCellPtr appendActionIcon(Ms::ActionIconType type, actions::ActionCode code);
 
     void clear();
 
