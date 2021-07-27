@@ -392,6 +392,7 @@ class Inspector : public QDockWidget {
                               // within the inspector itself
       Element* oe;
       bool oSameTypes;
+      bool oSameSubtypes;
 
    public slots:
       void update();
