@@ -21,7 +21,6 @@
  */
 #include "readscorehook.h"
 #include "readstyle.h"
-#include "read114.h"
 
 #include "libmscore/masterscore.h"
 #include "libmscore/scorefont.h"
@@ -31,11 +30,6 @@
 
 using namespace mu::engraving::compat;
 using namespace Ms;
-
-Ms::Score::FileError ReadScoreHook::read114(Ms::MasterScore* masterScore, Ms::XmlReader& e)
-{
-    return Read114::read(masterScore, e);
-}
 
 void ReadScoreHook::installReadStyleHook(Ms::MasterScore* score, const QByteArray& scoreData, const QString& completeBaseName)
 {

@@ -20,30 +20,64 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __READ206_H__
-#define __READ206_H__
+#ifndef MU_ENGRAVING_READ206_H
+#define MU_ENGRAVING_READ206_H
 
+#include "style/styledef.h"
 #include "draw/geometry.h"
+#include "libmscore/score.h"
 
 namespace Ms {
+class XmlReader;
+class Element;
+class Accidental;
 class MStyle;
-
-extern Element* readArticulation(Element*, XmlReader&);
-extern void readAccidental206(Accidental*, XmlReader&);
-extern void readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, std::map<Sid, QVariant> >& excessStyles);
-//extern void readText206(XmlReader& e, TextBase* t, Element* be);
-// extern void readVolta206(XmlReader& e, Volta* volta);
-extern void readTextLine206(XmlReader& e, TextLineBase* tlb);
-extern void readTrill206(XmlReader& e, Trill* t);
-extern void readHairpin206(XmlReader& e, Hairpin* h);
-extern void readSlur206(XmlReader& e, Slur* s);
-extern void readTie206(XmlReader& e, Tie* t);
-
-extern bool readNoteProperties206(Note* note, XmlReader& e);
-extern bool readDurationProperties206(XmlReader& e, DurationElement* de);
-extern bool readTupletProperties206(XmlReader& e, Tuplet* t);
-extern bool readChordRestProperties206(XmlReader& e, ChordRest* cr);
-extern bool readChordProperties206(XmlReader& e, Chord* ch);
+class TextLineBase;
+class Trill;
+class Hairpin;
+class Slur;
+class Tie;
+class Note;
+class DurationElement;
+class Tuplet;
+class ChordRest;
+class Chord;
+class Part;
+class Score;
 }
 
-#endif
+namespace mu::engraving::compat {
+class Read206
+{
+public:
+
+    //---------------------------------------------------------
+    //   read206
+    //    import old version > 1.3  and < 3.x files
+    //---------------------------------------------------------
+    static Ms::Score::FileError read206(Ms::MasterScore* masterScore, Ms::XmlReader& e);
+
+    static Ms::Element* readArticulation(Ms::Element*, Ms::XmlReader&);
+    static void readAccidental206(Ms::Accidental*, Ms::XmlReader&);
+    static void readTextStyle206(Ms::MStyle* style, Ms::XmlReader& e, std::map<QString, std::map<Ms::Sid, QVariant> >& excessStyles);
+    static void readTextLine206(Ms::XmlReader& e, Ms::TextLineBase* tlb);
+    static void readTrill206(Ms::XmlReader& e, Ms::Trill* t);
+    static void readHairpin206(Ms::XmlReader& e, Ms::Hairpin* h);
+    static void readSlur206(Ms::XmlReader& e, Ms::Slur* s);
+    static void readTie206(Ms::XmlReader& e, Ms::Tie* t);
+
+    static bool readNoteProperties206(Ms::Note* note, Ms::XmlReader& e);
+    static bool readDurationProperties206(Ms::XmlReader& e, Ms::DurationElement* de);
+    static bool readTupletProperties206(Ms::XmlReader& e, Ms::Tuplet* t);
+    static bool readChordRestProperties206(Ms::XmlReader& e, Ms::ChordRest* cr);
+    static bool readChordProperties206(Ms::XmlReader& e, Ms::Chord* ch);
+
+    static Ms::SymId articulationNames2SymId206(const QString& s);
+
+private:
+    static bool readScore206(Ms::Score* score, Ms::XmlReader& e);
+    static void readPart206(Ms::Part* part, Ms::XmlReader& e);
+};
+}
+
+#endif // MU_ENGRAVING_READ206_H
