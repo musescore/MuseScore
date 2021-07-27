@@ -37,7 +37,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/ipaletteconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/palettetypes.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/internal/palette_config.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/paletteconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/paletteconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/paletteworkspacesetup.cpp

@@ -21,40 +21,22 @@
  */
 
 #include "masterpalette.h"
-#include "symboldialog.h"
 
 #include "palettewidget.h"
 #include "keyedit.h"
-#include "libmscore/masterscore.h"
-#include "libmscore/clef.h"
-#include "libmscore/fingering.h"
-#include "libmscore/spacer.h"
-#include "libmscore/layoutbreak.h"
-#include "libmscore/dynamic.h"
-#include "libmscore/bracket.h"
-#include "libmscore/arpeggio.h"
-#include "libmscore/glissando.h"
-#include "libmscore/measurerepeat.h"
-#include "libmscore/breath.h"
-#include "libmscore/harmony.h"
-#include "libmscore/text.h"
-#include "libmscore/tempotext.h"
-#include "libmscore/instrchange.h"
-#include "libmscore/rehearsalmark.h"
-#include "libmscore/stafftext.h"
-#include "libmscore/note.h"
-#include "libmscore/tremolo.h"
-#include "libmscore/chordline.h"
-
 #include "timedialog.h"
+#include "symboldialog.h"
 
 #include "palette/palettecreator.h"
+
 #include "smuflranges.h"
 #include "widgetstatestore.h"
 
 #include "translation.h"
 
-namespace Ms {
+using namespace mu::palette;
+using namespace Ms;
+
 //---------------------------------------------------------
 //   keyPressEvent
 //---------------------------------------------------------
@@ -180,7 +162,7 @@ MasterPalette::MasterPalette(QWidget* parent)
 
 int MasterPalette::static_metaTypeId()
 {
-    return qRegisterMetaType<Ms::MasterPalette>("MasterPallette");
+    return qRegisterMetaType<Ms::MasterPalette>("MasterPalette");
 }
 
 int MasterPalette::metaTypeId() const
@@ -256,5 +238,4 @@ void MasterPalette::changeEvent(QEvent* event)
     if (event->type() == QEvent::LanguageChange) {
         retranslate();
     }
-}
 }

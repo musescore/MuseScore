@@ -42,6 +42,7 @@
 
 using namespace mu;
 using namespace mu::palette;
+using namespace Ms;
 
 Palette::Palette(Type t)
     : m_type(t)

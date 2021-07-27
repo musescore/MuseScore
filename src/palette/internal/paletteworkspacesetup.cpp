@@ -26,6 +26,8 @@
 #include "palette/paletteprovider.h"
 #include "palette/palettecreator.h"
 
+#include "engraving/libmscore/xml.h"
+
 #include "log.h"
 
 using namespace mu::palette;
