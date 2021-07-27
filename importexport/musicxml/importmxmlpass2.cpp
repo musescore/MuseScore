@@ -2290,8 +2290,8 @@ void MusicXMLParserPass2::measure(const QString& partId,
                                   const Fraction time)
       {
       Q_ASSERT(_e.isStartElement() && _e.name() == "measure");
-      int number = _e.attributes().value("number").toInt();
-      //qDebug("measure %d start", number);
+      //QString number = _e.attributes().value("number").toString();
+      //qDebug("measure %s start", qPrintable(number));
 
       Measure* measure = findMeasure(_score, time);
       if (!measure) {
@@ -2299,8 +2299,6 @@ void MusicXMLParserPass2::measure(const QString& partId,
             skipLogCurrElem();
             return;
             }
-
-      measure->setNoOffset(measure->no() - number);
 
       // handle implicit measure
       if (_e.attributes().value("implicit") == "yes")
