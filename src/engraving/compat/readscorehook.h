@@ -27,6 +27,8 @@
 #include <QByteArray>
 #include <QString>
 
+#include "libmscore/masterscore.h"
+
 namespace Ms {
 class MasterScore;
 class Score;
@@ -38,6 +40,9 @@ struct ReadStyleHook;
 class ReadScoreHook
 {
 public:
+
+    // read114
+    Ms::Score::FileError read114(Ms::MasterScore* masterScore, Ms::XmlReader& e);
 
     // Style
     void installReadStyleHook(Ms::MasterScore* score, const QByteArray& scoreData, const QString& completeBaseName);

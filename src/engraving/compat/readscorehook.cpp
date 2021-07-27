@@ -21,14 +21,21 @@
  */
 #include "readscorehook.h"
 #include "readstyle.h"
+#include "read114.h"
 
 #include "libmscore/masterscore.h"
 #include "libmscore/scorefont.h"
+#include "libmscore/excerpt.h"
 
 #include "log.h"
 
 using namespace mu::engraving::compat;
 using namespace Ms;
+
+Ms::Score::FileError ReadScoreHook::read114(Ms::MasterScore* masterScore, Ms::XmlReader& e)
+{
+    return Read114::read(masterScore, e);
+}
 
 void ReadScoreHook::installReadStyleHook(Ms::MasterScore* score, const QByteArray& scoreData, const QString& completeBaseName)
 {
@@ -76,9 +83,9 @@ void ReadScoreHook::onReadExcerptTag302(Ms::Score* score, Ms::XmlReader& xml)
         xml.skipCurrentElement();
     } else {
         if (score->isMaster()) {
-            MasterScore* mScore = static_cast<MasterScore*>(this);
+            MasterScore* mScore = static_cast<MasterScore*>(score);
             Excerpt* ex = new Excerpt(mScore);
-            ex->read(e);
+            ex->read(xml);
             mScore->excerpts().append(ex);
         } else {
             LOGE() << "part cannot have parts";

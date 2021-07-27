@@ -499,7 +499,7 @@ Score::FileError MasterScore::read1(XmlReader& e, bool ignoreVersionError, mu::e
 
             Score::FileError error;
             if (mscVersion() <= 114) {
-                error = read114(e);
+                error = hook.read114(this, e);
             } else if (mscVersion() <= 207) {
                 error = read206(e);
             } else {
