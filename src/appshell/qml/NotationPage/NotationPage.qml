@@ -243,6 +243,10 @@ DockPage {
 
             tabifyPanel: pianoRollPanel
 
+            // TODO: temporary disabled on startup, but can be enabled via the app menu, see:
+            // https://github.com/musescore/MuseScore/pull/8593
+            visible: false
+
             Loader {
                 asynchronous: true
                 sourceComponent: MixerPanel {}
@@ -260,8 +264,6 @@ DockPage {
             height: 200
             minimumHeight: 100
             maximumHeight: 300
-
-            visible: false
 
             tabifyPanel: timelinePanel
 
@@ -287,6 +289,10 @@ DockPage {
             height: 200
             minimumHeight: 100
             maximumHeight: 300
+
+            // TODO: temporary disabled on startup, but can be enabled via the app menu, see:
+            // https://github.com/musescore/MuseScore/pull/8593
+            visible: false
 
             Timeline {
                 anchors.fill: parent

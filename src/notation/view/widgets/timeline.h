@@ -227,6 +227,7 @@ private:
     {
         return QRectF(measureIndex * _gridWidth, _gridHeight * (row + numMetas) + 3, _gridWidth, _gridHeight);
     }
+
     void clearScene();
 
     void updateGrid(int startMeasure = -1, int endMeasure = -1);
