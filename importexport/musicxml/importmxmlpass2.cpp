@@ -2748,7 +2748,11 @@ void MusicXMLParserDirection::direction(const QString& partId,
                         t = new TempoText(_score);
                         QString rawWordsText = _wordsText;
                         rawWordsText.remove(QRegularExpression("(<.*?>)"));
-                        QString sep = _metroText != "" && _wordsText != "" && rawWordsText.back() != ' ' ? " " : "";
+                        #if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+                              QString sep = _metroText != "" && _wordsText != "" && rawWordsText.back() != ' ' ? " " : "";
+                        #else
+                              QString sep = _metroText != "" && _wordsText != "" && rawWordsText.at(rawWordsText.size() - 1) != ' ' ? " " : "";
+                        #endif
                         t->setXmlText(_wordsText + sep + _metroText);
                         if (_tpoSound > 0.1) {
                               _tpoSound /= 60;
