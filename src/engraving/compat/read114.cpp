@@ -27,64 +27,60 @@
 #include "compat/pageformat.h"
 #include "compat/chordlist.h"
 #include "compat/readstyle.h"
-
 #include "io/htmlparser.h"
 
-#include "score.h"
-#include "slur.h"
-#include "staff.h"
-#include "excerpt.h"
-#include "chord.h"
-#include "rest.h"
-#include "mmrest.h"
-#include "keysig.h"
-#include "volta.h"
-#include "measure.h"
-#include "beam.h"
-#include "segment.h"
-#include "ottava.h"
-#include "stafftype.h"
-#include "text.h"
-#include "measurenumber.h"
-#include "part.h"
-#include "sig.h"
-#include "box.h"
-#include "dynamic.h"
-#include "drumset.h"
-#include "symid.h"
-#include "xml.h"
-#include "stringdata.h"
-#include "tempo.h"
-#include "tempotext.h"
-#include "clef.h"
-#include "barline.h"
-#include "timesig.h"
-#include "tuplet.h"
-#include "spacer.h"
-#include "stafftext.h"
-#include "measurerepeat.h"
-#include "breath.h"
-#include "tremolo.h"
-#include "utils.h"
-#include "accidental.h"
-#include "fingering.h"
-#include "marker.h"
-#include "read206.h"
-#include "bracketItem.h"
-#include "harmony.h"
-#include "lyrics.h"
-#include "image.h"
-#include "textframe.h"
-#include "jump.h"
-#include "textline.h"
-#include "pedal.h"
-
-#include "masterscore.h"
+#include "libmscore/masterscore.h"
+#include "libmscore/slur.h"
+#include "libmscore/staff.h"
+#include "libmscore/excerpt.h"
+#include "libmscore/chord.h"
+#include "libmscore/rest.h"
+#include "libmscore/mmrest.h"
+#include "libmscore/keysig.h"
+#include "libmscore/volta.h"
+#include "libmscore/measure.h"
+#include "libmscore/beam.h"
+#include "libmscore/segment.h"
+#include "libmscore/ottava.h"
+#include "libmscore/stafftype.h"
+#include "libmscore/text.h"
+#include "libmscore/measurenumber.h"
+#include "libmscore/part.h"
+#include "libmscore/sig.h"
+#include "libmscore/box.h"
+#include "libmscore/dynamic.h"
+#include "libmscore/drumset.h"
+#include "libmscore/symid.h"
+#include "libmscore/xml.h"
+#include "libmscore/stringdata.h"
+#include "libmscore/tempo.h"
+#include "libmscore/tempotext.h"
+#include "libmscore/clef.h"
+#include "libmscore/barline.h"
+#include "libmscore/timesig.h"
+#include "libmscore/tuplet.h"
+#include "libmscore/spacer.h"
+#include "libmscore/stafftext.h"
+#include "libmscore/measurerepeat.h"
+#include "libmscore/breath.h"
+#include "libmscore/tremolo.h"
+#include "libmscore/utils.h"
+#include "libmscore/accidental.h"
+#include "libmscore/fingering.h"
+#include "libmscore/marker.h"
+#include "libmscore/bracketItem.h"
+#include "libmscore/harmony.h"
+#include "libmscore/lyrics.h"
+#include "libmscore/image.h"
+#include "libmscore/textframe.h"
+#include "libmscore/jump.h"
+#include "libmscore/textline.h"
+#include "libmscore/pedal.h"
 
 using namespace mu;
-using namespace mu::engraving;
+using namespace mu::engraving::compat;
+using namespace Ms;
 
-namespace Ms {
 static int g_guitarStrings[] = { 40, 45, 50, 55, 59, 64 };
 static int g_bassStrings[]   = { 28, 33, 38, 43 };
 static int g_violinStrings[] = { 55, 62, 69, 76 };
@@ -2813,7 +2809,7 @@ static void readStyle(MStyle* style, XmlReader& e, compat::ReadChordListHook& re
 //    import old version <= 1.3 files
 //---------------------------------------------------------
 
-Score::FileError MasterScore::read114(XmlReader& e)
+Score::FileError Read114::read(MasterScore* masterScore, XmlReader& e)
 {
     TempoMap tm;
     while (e.readNextStartElement()) {
@@ -3272,5 +3268,4 @@ Score::FileError MasterScore::read114(XmlReader& e)
     setAutosaveDirty(false);
 
     return FileError::FILE_NO_ERROR;
-}
 }
