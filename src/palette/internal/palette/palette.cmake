@@ -7,8 +7,8 @@ set(PALETTE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/palettecreator.h
     ${CMAKE_CURRENT_LIST_DIR}/palettetree.cpp
     ${CMAKE_CURRENT_LIST_DIR}/palettetree.h
-    ${CMAKE_CURRENT_LIST_DIR}/palettepanel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/palettepanel.h
+    ${CMAKE_CURRENT_LIST_DIR}/palette.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/palette.h
     ${CMAKE_CURRENT_LIST_DIR}/palettecell.cpp
     ${CMAKE_CURRENT_LIST_DIR}/palettecell.h
     ${CMAKE_CURRENT_LIST_DIR}/palettecelliconengine.cpp

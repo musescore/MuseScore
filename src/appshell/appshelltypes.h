@@ -27,7 +27,7 @@ namespace mu::appshell {
 enum class PanelType
 {
     Undefined = 0,
-    Palette,
+    Palettes,
     Instruments,
     Inspector,
     NotationToolBar,

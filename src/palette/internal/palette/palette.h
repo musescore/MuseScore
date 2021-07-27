@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PALETTE_PALETTEPANEL_H
-#define MU_PALETTE_PALETTEPANEL_H
+#ifndef MU_PALETTE_PALETTE_H
+#define MU_PALETTE_PALETTE_H
 
 #include <functional>
 
@@ -41,10 +41,10 @@ class XMLReader;
 }
 
 namespace mu::palette {
-class PalettePanel;
-using PalettePanelPtr = std::shared_ptr<PalettePanel>;
+class Palette;
+using PalettePtr = std::shared_ptr<Palette>;
 
-class PalettePanel
+class Palette
 {
     Q_GADGET
 
@@ -83,7 +83,7 @@ public:
     };
     Q_ENUM(Type)
 
-    explicit PalettePanel(Type t = Type::Custom);
+    explicit Palette(Type t = Type::Custom);
 
     QString id() const;
 
@@ -148,13 +148,13 @@ public:
 
     bool read(Ms::XmlReader&);
     void write(Ms::XmlWriter&) const;
-    static PalettePanelPtr fromMimeData(const QByteArray& data);
+    static PalettePtr fromMimeData(const QByteArray& data);
     QByteArray toMimeData() const;
 
     bool readFromFile(const QString& path);
     bool writeToFile(const QString& path) const;
 
-    static constexpr const char* mimeDataFormat = "application/musescore/palette/panel";
+    static constexpr const char* mimeDataFormat = "application/musescore/palette";
 
 private:
     void showWritingPaletteError(const QString& path) const;
@@ -180,4 +180,4 @@ private:
 };
 }
 
-#endif // MU_PALETTE_PALETTEPANEL_H
+#endif // MU_PALETTE_PALETTE_H

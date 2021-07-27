@@ -23,7 +23,7 @@
 #ifndef MU_PALETTE_PALETTETREE_H
 #define MU_PALETTE_PALETTETREE_H
 
-#include "palettepanel.h"
+#include "palette.h"
 
 namespace Ms {
 class XmlWriter;
@@ -33,10 +33,10 @@ class XMLReader;
 namespace mu::palette {
 struct PaletteTree
 {
-    std::vector<PalettePanelPtr> palettes;
+    std::vector<PalettePtr> palettes;
 
-    void insert(size_t idx, PalettePanelPtr palette);
-    void append(PalettePanelPtr palette);
+    void insert(size_t idx, PalettePtr palette);
+    void append(PalettePtr palette);
 
     bool read(Ms::XmlReader&);
     void write(Ms::XmlWriter&) const;

@@ -28,12 +28,12 @@
 
 using namespace mu::palette;
 
-void PaletteTree::insert(size_t idx, PalettePanelPtr palette)
+void PaletteTree::insert(size_t idx, PalettePtr palette)
 {
     palettes.emplace(palettes.begin() + idx, palette);
 }
 
-void PaletteTree::append(PalettePanelPtr palette)
+void PaletteTree::append(PalettePtr palette)
 {
     palettes.emplace_back(palette);
 }
@@ -43,7 +43,7 @@ bool PaletteTree::read(Ms::XmlReader& e)
     while (e.readNextStartElement()) {
         const QStringRef tag(e.name());
         if (tag == "Palette") {
-            PalettePanelPtr p = std::make_shared<PalettePanel>();
+            PalettePtr p = std::make_shared<Palette>();
             p->read(e);
             palettes.push_back(p);
         } else {
@@ -58,7 +58,7 @@ void PaletteTree::write(Ms::XmlWriter& xml) const
 {
     xml.stag("PaletteBox"); // for compatibility with old palettes file format
 
-    for (PalettePanelPtr palette : palettes) {
+    for (PalettePtr palette : palettes) {
         palette->write(xml);
     }
 
@@ -67,7 +67,7 @@ void PaletteTree::write(Ms::XmlWriter& xml) const
 
 void PaletteTree::retranslate()
 {
-    for (PalettePanelPtr palette : palettes) {
+    for (PalettePtr palette : palettes) {
         palette->retranslate();
     }
 }

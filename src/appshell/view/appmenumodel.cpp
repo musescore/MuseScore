@@ -174,7 +174,7 @@ MenuItem AppMenuModel::editItem() const
 MenuItem AppMenuModel::viewItem() const
 {
     MenuItemList viewItems {
-        makeMenuItem("toggle-palette"),
+        makeMenuItem("toggle-palettes"),
         makeMenuItem("toggle-instruments"),
         makeMenuItem("masterpalette"),
         makeMenuItem("inspector"),

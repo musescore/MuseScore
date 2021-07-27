@@ -65,7 +65,7 @@ using namespace mu::palette;
 //using namespace mu::draw;
 //using namespace Ms;
 
-PaletteWidget::PaletteWidget(PalettePanelPtr palette, QWidget* parent)
+PaletteWidget::PaletteWidget(PalettePtr palette, QWidget* parent)
     : QWidget(parent)
 {
     m_palette = palette;
@@ -78,7 +78,7 @@ PaletteWidget::PaletteWidget(PalettePanelPtr palette, QWidget* parent)
 }
 
 PaletteWidget::PaletteWidget(QWidget* parent)
-    : PaletteWidget(std::make_shared<PalettePanel>(), parent)
+    : PaletteWidget(std::make_shared<Palette>(), parent)
 {
 }
 

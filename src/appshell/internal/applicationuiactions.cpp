@@ -88,7 +88,7 @@ const UiActionList ApplicationUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Toggle 'Navigator'"),
              Checkable::Yes
              ),
-    UiAction("toggle-palette",
+    UiAction("toggle-palettes",
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Palettes"),
              QT_TRANSLATE_NOOP("action", "Toggle 'Palettes'"),
@@ -173,7 +173,7 @@ const UiActionList ApplicationUiActions::m_actions = {
 };
 
 const std::vector<std::pair<mu::actions::ActionCode, PanelType> > ApplicationUiActions::m_panels = {
-    { "toggle-palette", PanelType::Palette },
+    { "toggle-palettes", PanelType::Palettes },
     { "toggle-instruments", PanelType::Instruments },
     { "inspector", PanelType::Inspector },
     { "toggle-notationtoolbar", PanelType::NotationToolBar },
