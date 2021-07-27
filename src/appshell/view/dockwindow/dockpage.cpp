@@ -196,17 +196,28 @@ DockPanelHolder* DockPage::panelHolderByLocation(DockBase::DockLocation location
     return nullptr;
 }
 
-bool DockPage::isDockShown(const QString& dockName) const
+bool DockPage::isDockOpened(const QString& dockName) const
 {
     const DockBase* dock = dockByName(dockName);
-    return dock ? dock->isShown() : false;
+    return dock ? dock->isOpen() : false;
 }
 
-void DockPage::toggleDockVisibility(const QString& dockName)
+void DockPage::toggleDock(const QString& dockName)
+{
+    setDockOpened(dockName, !isDockOpened(dockName));
+}
+
+void DockPage::setDockOpened(const QString &dockName, bool opened)
 {
     DockBase* dock = dockByName(dockName);
-    if (dock) {
-        dock->toggle();
+    if (!dock) {
+        return;
+    }
+
+    if (opened) {
+        dock->open();
+    } else {
+        dock->close();
     }
 }
 
@@ -245,7 +256,7 @@ void DockPage::close()
     TRACEFUNC;
 
     for (DockBase* dock : allDocks()) {
-        dock->hide();
+        dock->close();
     }
 }
 

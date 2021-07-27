@@ -1,50 +1,50 @@
 #include "drumsetpanelview.h"
 
-#include "internal/widgets/drumsetpanel.h"
+#include "internal/widgets/drumsetpalette.h"
 
 using namespace mu::notation;
 
 namespace mu::palette {
-class DrumsetPanelAdapter : public ui::IDisplayableWidget
+class DrumsetPaletteAdapter : public ui::IDisplayableWidget
 {
 public:
-    DrumsetPanelAdapter()
-        : m_msDrumsetPanel(new Ms::DrumsetPanel())
+    DrumsetPaletteAdapter()
+        : m_msDrumsetPalette(new Ms::DrumsetPalette())
     {
     }
 
-    ~DrumsetPanelAdapter() override
+    ~DrumsetPaletteAdapter() override
     {
-        delete m_msDrumsetPanel;
+        delete m_msDrumsetPalette;
     }
 
     void setNotation(INotationPtr notation)
     {
-        m_msDrumsetPanel->setNotation(notation);
+        m_msDrumsetPalette->setNotation(notation);
     }
 
     void updateDrumset()
     {
-        m_msDrumsetPanel->updateDrumset();
+        m_msDrumsetPalette->updateDrumset();
     }
 
     async::Channel<QString> pitchNameChanged() const
     {
-        return m_msDrumsetPanel->pitchNameChanged();
+        return m_msDrumsetPalette->pitchNameChanged();
     }
 
 private:
     QWidget* qWidget() override
     {
-        return m_msDrumsetPanel;
+        return m_msDrumsetPalette;
     }
 
     bool handleEvent(QEvent* event) override
     {
-        return m_msDrumsetPanel->handleEvent(event);
+        return m_msDrumsetPalette->handleEvent(event);
     }
 
-    Ms::DrumsetPanel* m_msDrumsetPanel = nullptr;
+    Ms::DrumsetPalette* m_msDrumsetPalette = nullptr;
 };
 }
 
@@ -69,16 +69,16 @@ void DrumsetPanelView::componentComplete()
 {
     WidgetView::componentComplete();
 
-    auto drumsetPanel = std::make_shared<DrumsetPanelAdapter>();
+    auto drumsetPalette = std::make_shared<DrumsetPaletteAdapter>();
 
-    auto updateView = [this, drumsetPanel]() {
-        drumsetPanel->updateDrumset();
+    auto updateView = [this, drumsetPalette]() {
+        drumsetPalette->updateDrumset();
         update();
     };
 
-    globalContext()->currentNotationChanged().onNotify(this, [this, drumsetPanel, updateView]() {
+    globalContext()->currentNotationChanged().onNotify(this, [this, drumsetPalette, updateView]() {
         INotationPtr notation = globalContext()->currentNotation();
-        drumsetPanel->setNotation(notation);
+        drumsetPalette->setNotation(notation);
         updateView();
 
         if (!notation) {
@@ -90,10 +90,10 @@ void DrumsetPanelView::componentComplete()
         });
     });
 
-    drumsetPanel->pitchNameChanged().onReceive(this, [this](const QString& pitchName) {
+    drumsetPalette->pitchNameChanged().onReceive(this, [this](const QString& pitchName) {
         m_pitchName = pitchName;
         emit pitchNameChanged();
     });
 
-    setWidget(drumsetPanel);
+    setWidget(drumsetPalette);
 }

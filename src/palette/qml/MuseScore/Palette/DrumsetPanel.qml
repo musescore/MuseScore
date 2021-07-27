@@ -31,22 +31,28 @@ Rectangle {
 
     RowLayout {
         anchors.fill: parent
+        anchors.leftMargin: 26
+        anchors.rightMargin: 26
 
-        spacing: 6
+        spacing: 26
 
         Column {
             Layout.alignment: Qt.AlignVCenter
-            Layout.preferredWidth: 175
-
-            Layout.leftMargin: 26
 
             spacing: 6
 
             StyledTextLabel {
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                height: 20
+                width: editDrumsetButton.width
+
                 text: drumsetView.pitchName
             }
 
             FlatButton {
+                id: editDrumsetButton
+
                 text: qsTrc("palette", "Edit drumset")
 
                 onClicked: {

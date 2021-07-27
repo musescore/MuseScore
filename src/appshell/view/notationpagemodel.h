@@ -28,6 +28,7 @@
 #include "async/asyncable.h"
 #include "actions/actionable.h"
 #include "actions/iactionsdispatcher.h"
+#include "context/iglobalcontext.h"
 #include "inotationpagestate.h"
 
 namespace mu::dock {
@@ -41,6 +42,7 @@ class NotationPageModel : public QObject, public async::Asyncable, public action
 
     INJECT(appshell, INotationPageState, pageState)
     INJECT(appshell, actions::IActionsDispatcher, dispatcher)
+    INJECT(appshell, context::IGlobalContext, globalContext)
 
     Q_PROPERTY(bool isNavigatorVisible READ isNavigatorVisible NOTIFY isNavigatorVisibleChanged)
 
@@ -61,6 +63,7 @@ public:
     Q_INVOKABLE void setPianoRollDockName(const QString& dockName);
     Q_INVOKABLE void setMixerDockName(const QString& dockName);
     Q_INVOKABLE void setTimelineDockName(const QString& dockName);
+    Q_INVOKABLE void setDrumsetPanelDockName(const QString& dockName);
 
     Q_INVOKABLE void setStatusBarDockName(const QString& dockName);
 
@@ -72,6 +75,8 @@ signals:
 private:
     void setPanelDockName(PanelType type, const QString& dockName);
     void togglePanel(PanelType type);
+
+    void updateDrumsetPanelVisibility();
 
     QMap<PanelType, QString /* dockName */> m_panelTypeToDockName;
     dock::DockWindow* m_window = nullptr;

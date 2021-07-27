@@ -41,7 +41,8 @@ enum class PanelType
     Synthesizer,
     SelectionFilter,
     Piano,
-    ComparisonTool
+    ComparisonTool,
+    DrumsetPanel
 };
 using PanelTypeList = std::vector<PanelType>;
 

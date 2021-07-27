@@ -75,10 +75,9 @@ public:
 
     virtual void init();
 
-    bool isShown() const;
-    void show();
-    void hide();
-    void toggle();
+    bool isOpen() const;
+    void open();
+    void close();
 
     DockLocation location() const;
 

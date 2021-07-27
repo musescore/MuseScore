@@ -83,6 +83,7 @@ DockPage {
         pageModel.setPianoRollDockName(pianoRollPanel.objectName)
         pageModel.setMixerDockName(mixerPanel.objectName)
         pageModel.setTimelineDockName(timelinePanel.objectName)
+        pageModel.setDrumsetPanelDockName(drumsetPanel.objectName)
         pageModel.setStatusBarDockName(notationStatusBar.objectName)
 
         Qt.callLater(pageModel.init, root.dockWindow)
@@ -314,9 +315,8 @@ DockPage {
 
             allowedAreas: Qt.TopDockWidgetArea | Qt.BottomDockWidgetArea
 
-            height: 100
-            minimumHeight: 100
-            maximumHeight: 100
+            minimumHeight: 30
+            maximumHeight: 30
 
             DrumsetPanel {
                 anchors.fill: parent

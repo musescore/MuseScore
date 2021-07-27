@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "drumsetpanel.h"
+#include "drumsetpalette.h"
 
 #include "translation.h"
 #include "log.h"
@@ -35,72 +35,70 @@
 #include "libmscore/mscore.h"
 #include "libmscore/undo.h"
 
+using namespace mu::notation;
+
 namespace Ms {
-DrumsetPanel::DrumsetPanel(QWidget* parent)
+DrumsetPalette::DrumsetPalette(QWidget* parent)
     : PaletteScrollArea(nullptr, parent)
 {
-    setObjectName("DrumsetPanel");
+    setObjectName("DrumsetPalette");
     setFocusPolicy(Qt::NoFocus);
 
-    drumPalette = new Palette(this);
-    drumPalette->setMag(0.8);
-    drumPalette->setSelectable(true);
-    drumPalette->setUseDoubleClickToActivate(true);
-    drumPalette->setGrid(28, 60);
-    drumPalette->setContextMenuPolicy(Qt::PreventContextMenu);
+    m_drumPalette = new Palette(this);
+    m_drumPalette->setMag(0.8);
+    m_drumPalette->setSelectable(true);
+    m_drumPalette->setUseDoubleClickToActivate(true);
+    m_drumPalette->setGrid(28, 60);
+    m_drumPalette->setContextMenuPolicy(Qt::PreventContextMenu);
 
-    setWidget(drumPalette);
+    setWidget(m_drumPalette);
     retranslate();
 
-    connect(drumPalette, SIGNAL(boxClicked(int)), SLOT(drumNoteSelected(int)));
+    connect(m_drumPalette, SIGNAL(boxClicked(int)), SLOT(drumNoteSelected(int)));
 }
 
-void DrumsetPanel::setNotation(mu::notation::INotationPtr notation)
+void DrumsetPalette::setNotation(INotationPtr notation)
 {
     m_notation = notation;
     updateDrumset();
 }
 
-Score* DrumsetPanel::score() const
+void DrumsetPalette::retranslate()
 {
-    return m_notation ? m_notation->elements()->msScore() : nullptr;
+    m_drumPalette->setName(mu::qtrc("palette", "Drumset"));
 }
 
-void DrumsetPanel::retranslate()
+void DrumsetPalette::updateDrumset()
 {
-    drumPalette->setName(mu::qtrc("palette", "Drumset"));
-}
-
-void DrumsetPanel::updateDrumset()
-{
-    Score* score = this->score();
-
-    if (!score) {
+    INotationNoteInputPtr noteInput = this->noteInput();
+    if (!noteInput) {
         return;
     }
 
-    drumPalette->clear();
+    m_drumPalette->clear();
 
-    const InputState& inputState = score->inputState();
-    drumset = inputState.drumset();
-    staff = score->staff(inputState.track() / VOICES);
+    NoteInputState state = noteInput->state();
+    m_drumset = state.drumset;
 
-    if (!drumset) {
+    if (!m_drumset) {
         return;
     }
+
+    TRACEFUNC;
 
     double _spatium = gscore->spatium();
 
     for (int pitch = 0; pitch < 128; ++pitch) {
-        if (!drumset->isValid(pitch)) {
+        if (!m_drumset->isValid(pitch)) {
             continue;
         }
 
-        bool up;
-        int line      = drumset->line(pitch);
-        NoteHead::Group noteHead  = drumset->noteHead(pitch);
-        int voice     = drumset->voice(pitch);
-        Direction dir = drumset->stemDirection(pitch);
+        bool up = false;
+        int line = m_drumset->line(pitch);
+        NoteHead::Group noteHead = m_drumset->noteHead(pitch);
+        int voice = m_drumset->voice(pitch);
+        Direction dir = m_drumset->stemDirection(pitch);
+
         if (dir == Direction::UP) {
             up = true;
         } else if (dir == Direction::DOWN) {
@@ -128,63 +126,63 @@ void DrumsetPanel::updateDrumset()
         note->setHeadGroup(noteHead);
         SymId noteheadSym = SymId::noteheadBlack;
         if (noteHead == NoteHead::Group::HEAD_CUSTOM) {
-            noteheadSym = drumset->noteHeads(pitch, NoteHead::Type::HEAD_QUARTER);
+            noteheadSym = m_drumset->noteHeads(pitch, NoteHead::Type::HEAD_QUARTER);
         } else {
             noteheadSym = note->noteHead(true, noteHead, NoteHead::Type::HEAD_QUARTER);
         }
 
         note->setCachedNoteheadSym(noteheadSym);     // we use the cached notehead so we don't recompute it at each layout
         chord->add(note);
-        int sc = drumset->shortcut(pitch);
+        int sc = m_drumset->shortcut(pitch);
         QString shortcut;
         if (sc) {
             shortcut = QChar(sc);
         }
-        drumPalette->append(chord, mu::qtrc("drumset", drumset->name(pitch).toUtf8().data()), shortcut);
+        m_drumPalette->append(chord, mu::qtrc("drumset", m_drumset->name(pitch).toUtf8().data()), shortcut);
     }
 }
 
-void DrumsetPanel::drumNoteSelected(int val)
+void DrumsetPalette::drumNoteSelected(int val)
 {
-    Score* score = this->score();
-
-    if (!score) {
+    INotationNoteInputPtr noteInput = this->noteInput();
+    if (!noteInput) {
         return;
     }
 
-    ElementPtr element = drumPalette->element(val);
+    ElementPtr element = m_drumPalette->element(val);
     if (!element || element->type() != ElementType::CHORD) {
         return;
     }
 
+    TRACEFUNC;
+
     const Chord* ch = dynamic_cast<Chord*>(element.get());
     const Note* note = ch->downNote();
     int pitch = note->pitch();
+    int voice = element->voice();
 
-    int track = (score->inputState().track() / VOICES) * VOICES + element->track();
-    score->inputState().setTrack(track);
-    score->inputState().setDrumNote(pitch);
-    m_notation->interaction()->noteInput()->stateChanged().notify();
+    noteInput->setCurrentVoiceIndex(voice);
+    noteInput->setDrumNote(pitch);
 
-    QString voiceActionCode = QString("voice-%1").arg(element->voice() + 1);
+    QString voiceActionCode = QString("voice-%1").arg(voice + 1);
     dispatcher()->dispatch(voiceActionCode.toStdString());
 
-    auto pitchCell = drumPalette->cellAt(val);
+    auto pitchCell = m_drumPalette->cellAt(val);
     m_pitchNameChanged.send(pitchCell->name);
 }
 
-int DrumsetPanel::selectedDrumNote()
+int DrumsetPalette::selectedDrumNote()
 {
-    int idx = drumPalette->getSelectedIdx();
+    int idx = m_drumPalette->getSelectedIdx();
     if (idx < 0) {
         return -1;
     }
 
-    ElementPtr element = drumPalette->element(idx);
+    ElementPtr element = m_drumPalette->element(idx);
     if (element && element->type() == ElementType::CHORD) {
         const Chord* ch = dynamic_cast<Chord*>(element.get());
         const Note* note = ch->downNote();
-        auto pitchCell = drumPalette->cellAt(idx);
+        auto pitchCell = m_drumPalette->cellAt(idx);
         m_pitchNameChanged.send(pitchCell->name);
         return note->pitch();
     }
@@ -192,7 +190,7 @@ int DrumsetPanel::selectedDrumNote()
     return -1;
 }
 
-void DrumsetPanel::changeEvent(QEvent* event)
+void DrumsetPalette::changeEvent(QEvent* event)
 {
     QWidget::changeEvent(event);
     if (event->type() == QEvent::LanguageChange) {
@@ -200,23 +198,28 @@ void DrumsetPanel::changeEvent(QEvent* event)
     }
 }
 
-void DrumsetPanel::mousePressEvent(QMouseEvent* event)
+void DrumsetPalette::mousePressEvent(QMouseEvent* event)
 {
-    drumPalette->handleEvent(event);
+    m_drumPalette->handleEvent(event);
 }
 
-void DrumsetPanel::mouseMoveEvent(QMouseEvent* event)
+void DrumsetPalette::mouseMoveEvent(QMouseEvent* event)
 {
-    drumPalette->handleEvent(event);
+    m_drumPalette->handleEvent(event);
 }
 
-bool DrumsetPanel::handleEvent(QEvent* e)
+bool DrumsetPalette::handleEvent(QEvent* e)
 {
     return QWidget::event(e);
 }
 
-mu::async::Channel<QString> DrumsetPanel::pitchNameChanged() const
+mu::async::Channel<QString> DrumsetPalette::pitchNameChanged() const
 {
     return m_pitchNameChanged;
+}
+
+INotationNoteInputPtr DrumsetPalette::noteInput() const
+{
+    return m_notation ? m_notation->interaction()->noteInput() : nullptr;
 }
 }

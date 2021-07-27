@@ -223,6 +223,8 @@ struct NoteInputState
     bool isRest = false;
     bool withSlur = false;
     int currentVoiceIndex = 0;
+    int currentTrack = 0;
+    const Drumset* drumset = nullptr;
 };
 
 enum class NoteFilter
