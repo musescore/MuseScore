@@ -72,7 +72,7 @@ class MasterScore : public Score
 
     bool read(XmlReader&, mu::engraving::compat::ReadScoreHook& hooks);
     FileError read1(XmlReader&, bool ignoreVersionError, mu::engraving::compat::ReadScoreHook& hooks);
-    FileError read114(XmlReader&);
+
     FileError read206(XmlReader&);
     FileError read302(XmlReader&, mu::engraving::compat::ReadScoreHook& hooks);
 

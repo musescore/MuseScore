@@ -69,3 +69,20 @@ void ReadScoreHook::onReadStyleTag302(Ms::Score* score, Ms::XmlReader& xml)
     }
     score->_scoreFont = ScoreFont::fontByName(score->style().value(Sid::MusicalSymbolFont).toString());
 }
+
+void ReadScoreHook::onReadExcerptTag302(Ms::Score* score, Ms::XmlReader& xml)
+{
+    if (MScore::noExcerpts) {
+        xml.skipCurrentElement();
+    } else {
+        if (score->isMaster()) {
+            MasterScore* mScore = static_cast<MasterScore*>(this);
+            Excerpt* ex = new Excerpt(mScore);
+            ex->read(e);
+            mScore->excerpts().append(ex);
+        } else {
+            LOGE() << "part cannot have parts";
+            xml.skipCurrentElement();
+        }
+    }
+}
