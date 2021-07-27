@@ -30,6 +30,8 @@
 #include "style/defaultstyle.h"
 #include "compat/readscorehook.h"
 #include "compat/writescorehook.h"
+#include "compat/read114.h"
+#include "compat/read206.h"
 
 #include "engravingproject.h"
 
@@ -499,9 +501,9 @@ Score::FileError MasterScore::read1(XmlReader& e, bool ignoreVersionError, mu::e
 
             Score::FileError error;
             if (mscVersion() <= 114) {
-                error = hook.read114(this, e);
+                error = compat::Read114::read114(this, e);
             } else if (mscVersion() <= 207) {
-                error = read206(e);
+                error = compat::Read206::read206(this, e);
             } else {
                 error = read302(e, hook);
             }

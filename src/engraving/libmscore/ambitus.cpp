@@ -21,9 +21,12 @@
  */
 
 #include "ambitus.h"
+
+#include "draw/pen.h"
+#include "compat/read206.h"
+
 #include "chord.h"
 #include "measure.h"
-#include "read206.h"
 #include "score.h"
 #include "segment.h"
 #include "staff.h"
@@ -31,9 +34,9 @@
 #include "system.h"
 #include "utils.h"
 #include "xml.h"
-#include "draw/pen.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 static const NoteHead::Group NOTEHEADGROUP_DEFAULT = NoteHead::Group::HEAD_NORMAL;
@@ -277,7 +280,7 @@ bool Ambitus::readProperties(XmlReader& e)
         while (e.readNextStartElement()) {
             if (e.name() == "Accidental") {
                 if (score()->mscVersion() < 301) {
-                    readAccidental206(&_topAccid, e);
+                    compat::Read206::readAccidental206(&_topAccid, e);
                 } else {
                     _topAccid.read(e);
                 }
@@ -289,7 +292,7 @@ bool Ambitus::readProperties(XmlReader& e)
         while (e.readNextStartElement()) {
             if (e.name() == "Accidental") {
                 if (score()->mscVersion() < 301) {
-                    readAccidental206(&_bottomAccid, e);
+                    compat::Read206::readAccidental206(&_bottomAccid, e);
                 } else {
                     _bottomAccid.read(e);
                 }

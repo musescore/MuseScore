@@ -41,9 +41,6 @@ class ReadScoreHook
 {
 public:
 
-    // read114
-    Ms::Score::FileError read114(Ms::MasterScore* masterScore, Ms::XmlReader& e);
-
     // Style
     void installReadStyleHook(Ms::MasterScore* score, const QByteArray& scoreData, const QString& completeBaseName);
     void installReadStyleHook(Ms::Score* score);
