@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="pt" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="pt">
 <context>
     <name>TourXML</name>
     <message>
@@ -357,7 +359,7 @@ Pressione &quot;Seguinte&quot; para saber mais. </translation>
     Para além disso, muitos dos comandos podem ser acedidos através de atalhos de teclado ou clicando na partitura com o botão direito do rato (macOS: &quot;Ctrl&quot; + clique).</translation>
     </message>
     <message>
-        <source>That's the end of this tour!
+        <source>That&apos;s the end of this tour!
     As you use MuseScore, more tours will pop up to further explain functionality.
     To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
     You can also enable/disable and reset tours in Help &gt; Tours.</source>

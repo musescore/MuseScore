@@ -462,7 +462,7 @@ to
     </message>
     <message>
         <source>Customize...</source>
-        <translation>Özelleştir...</translation>
+        <translation>Özelleştir…</translation>
     </message>
 </context>
 <context>
@@ -592,7 +592,7 @@ to
     <name>Q3ToolBar</name>
     <message>
         <source>More...</source>
-        <translation>Daha Fazlası...</translation>
+        <translation>Daha Fazlası…</translation>
     </message>
 </context>
 <context>
@@ -2212,11 +2212,11 @@ Yine de silmek istiyor musunuz?</translation>
     </message>
     <message>
         <source>Show Details...</source>
-        <translation>Ayrıntıları Göster...</translation>
+        <translation>Ayrıntıları Göster…</translation>
     </message>
     <message>
         <source>Hide Details...</source>
-        <translation>Ayrıntıları Gizle...</translation>
+        <translation>Ayrıntıları Gizle…</translation>
     </message>
     <message>
         <source>&lt;p&gt;This program uses Qt Open Source Edition version %1.&lt;/p&gt;&lt;p&gt;Qt Open Source Edition is intended for the development of Open Source applications. You need a commercial Qt license for development of proprietary (closed source) applications.&lt;/p&gt;&lt;p&gt;Please see &lt;a href=&quot;http://www.trolltech.com/company/model/&quot;&gt;www.trolltech.com/company/model/&lt;/a&gt; for an overview of Qt licensing.&lt;/p&gt;</source>
@@ -2727,7 +2727,7 @@ Yine de silmek istiyor musunuz?</translation>
     </message>
     <message>
         <source>Print To File ...</source>
-        <translation>Dosyaya Yazdır...</translation>
+        <translation>Dosyaya Yazdır…</translation>
     </message>
     <message>
         <source>File %1 is not writable.

@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="tr" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="tr">
 <context>
     <name>TourXML</name>
     <message>
@@ -67,7 +69,9 @@ Ayrıca paletten bir öğeyi sürükleyebilir ve partisyonunuzdaki belirli bir �
     This combines multiple measures of rests into a single multimeasure rest.
     To toggle this setting again, press the shortcut &quot;M&quot;.</source>
         <comment>mmrest</comment>
-        <translation type="unfinished"/>
+        <translation>Bu partisyonda çoklu ölçü sus işaretlerini(baton) aç/kapa yapabilirsiniz.
+   Bu, birden fazla sus olan ölçüleri çok ölçülü sus(baton) alanında birleştirir. 
+   Bu ayara tekrar geçmek için &quot;M&quot; kısayoluna basın.</translation>
     </message>
     <message>
         <source>Welcome to note input, where you will enter notes and rests into your score.
@@ -95,7 +99,7 @@ Bir uzatma noktası eklemek için, uygun simgeye tıklayın veya &quot;.&quot; k
     <message>
         <source>To extend a note by adding a tied note, select the duration to extend by, then press &quot;+&quot; or click this button.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>Bir notaya uzatma bağı eklemek için önce uzatılacak notayı seçin ve ardından &quot;+&quot; ya basın veya bu düğmeyi tıklayın.</translation>
     </message>
     <message>
         <source>MuseScore provides many ways to navigate through your score.
@@ -173,13 +177,15 @@ Bu, onları çarpışma tespitinden çıkaracak ve onları daha özgürce yerle�
         <source>Welcome to the Timeline, where you can view a high-level reduction of the score for easier navigation.
     Click &quot;Next&quot; to learn more.</source>
         <comment>timeline-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Zaman Çizelgesine hoş geldiniz. Daha kolay gezinme için üst seviye düzeyden partisyonu görebileceğiniz bir yer. 
+Daha fazla bilgi edinmek için &quot;İleri&quot; yi tıklayın.</translation>
     </message>
     <message>
         <source>The timeline shows rehearsal marks, changes of tempo, key, and time signature, and other points of interest.
     You can click anywhere to jump to the corresponding location in your score.</source>
         <comment>timeline-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Zaman çizelgesi prova işaretlerini, tempo değişikliklerini, açkıları, ölçü sayısını ve diğer ilgi çekici noktaları gösterir. 
+Partisyonunuza karşılık gelen konuma atlamak için herhangi bir yere tıklayabilirsiniz.</translation>
     </message>
     <message>
         <source>The section below contains a row for each instrument.
@@ -187,66 +193,77 @@ Bu, onları çarpışma tespitinden çıkaracak ve onları daha özgürce yerle�
     If the box is highlighted, then there are notes in that measure.
     Boxes with a thin blue outline represent measures that are currently in view.</source>
         <comment>timeline-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Aşağıdaki bölüm, her enstrüman için bir sıra içerir.
+   Satırdaki her kutu, o enstrüman için bir ölçüyü temsil eder.
+   Kutu vurgulanmışsa, o ölçü içinde notalar vardır.
+   İnce mavi çerçeveli kutular, şu anda görünümde olan ölçüleri temsil eder.</translation>
     </message>
     <message>
         <source>MuseScore supports different types of selections: single, list, and range.
     Click &quot;Next&quot; to learn more.</source>
         <comment>select-tour</comment>
-        <translation type="unfinished"/>
+        <translation>MuseScore farklı türdeki seçimleri destekler: tekli, liste ve aralık. 
+Daha fazla bilgi edinmek için &quot;İleri&quot; yi tıklayın.</translation>
     </message>
     <message>
         <source>Finally, the Selection Filter (found in the View menu) allows you to exclude elements of a given type from a range selection.</source>
         <comment>select-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Son olarak, Seçim Filtresi (Görünüm menüsünde bulunur), belirli bir türdeki öğeleri bir aralıktaki seçimden hariç tutmanıza olanak tanır.</translation>
     </message>
     <message>
         <source>If you have modified a value, you can click the &quot;Reset&quot; button to reset it to the default.
     If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
     You can also set style defaults using Format &gt; Style….</source>
         <comment>inspector-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Bir değeri değiştirdiyseniz, varsayılana sıfırlamak için &quot;Sıfırla&quot; düğmesini tıklayabilirsiniz. 
+   Değer bir stil ayarı tarafından kontrol ediliyorsa, mevcut değeri bir stil olarak ayarlamak için &quot;Stil olarak ayarla&quot; düğmesini tıklayabilirsiniz. 
+   Biçim&gt; Stil… öğesini kullanarak stil varsayılanlarını da ayarlayabilirsiniz.</translation>
     </message>
     <message>
         <source>The quickest way to scroll up and down is to use your mouse wheel or equivalent touch gesture (for example, two-finger swipe).
     To scroll horizontally, hold &quot;Shift&quot; while using the mouse wheel or touch gesture.</source>
         <comment>navigate-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Yukarı ve aşağı kaydırmanın en hızlı yolu, fare tekerleğinizi veya eşdeğer dokunma hareketini kullanmaktır (örneğin, iki parmakla kaydırma). 
+   Yatay olarak kaydırmak için, fare tekerleğini veya dokunma hareketini kullanırken &quot;Shift&quot; tuşunu basılı tutun.</translation>
     </message>
     <message>
         <source>The navigation keys on your keyboard such as &quot;PgUp&quot;, &quot;PgDn&quot;, &quot;Home&quot;, and &quot;End&quot; function as in other applications
     to move between pages.
     Keyboards that lack these keys often provide equivalents such as &quot;Fn+Up/Down/Left/Right&quot;.</source>
         <comment>navigate-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Klavyenizdeki &quot;PgUp&quot;, &quot;PgDn&quot;, &quot;Home&quot; ve &quot;End&quot; gibi gezinme tuşları, diğer uygulamalardaki gibi sayfalar arasında hareket etme işlevi görür. 
+   Bu tuşların bulunmadığı klavyeler genellikle &quot;Fn+Yukarı/Aşağı/Sol/Sağ&quot; gibi eşdeğerlerini sağlar.</translation>
     </message>
     <message>
         <source>You can move the score short distances by clicking an empty area of the page and dragging.
     By the way, you can also select regions by holding &quot;Shift&quot; while dragging.</source>
         <comment>navigate-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Sayfanın boş bir alanına tıklayıp sürükleyerek partisyonu ekranda taşıyabilirsiniz.
+   Bu arada, sürüklerken &quot;Shift&quot; tuşunu basılı tutarak da bölgeleri seçebilirsiniz.</translation>
     </message>
     <message>
         <source>To enter a note of the selected duration, type its letter name or click on the staff.
     Press &quot;Ctrl+Up/Down&quot; (macOS: &quot;Cmd+Up/Down&quot;) to change octave.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>Seçilen süreye ilişkin bir nota girmek için, ilgili harfe basın veya dizeğe tıklayın.
+  Oktavı değiştirmek için &quot;Ctrl+Yukarı/Aşağı&quot; (macOS: &quot;Cmd+Yukarı/Aşağı&quot;) tuşlarına basın.</translation>
     </message>
     <message>
         <source>To add an accidental to a note, press the shortcut &quot;Up&quot; or &quot;Down&quot; to raise or lower its pitch,
     or click one of these icons.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>Değiştirici işaret almış bir nota eklemek isterseniz, notanın perdesini yükseltmek veya düşürmek için &quot;Yukarı&quot; veya &quot;Aşağı&quot; kısayoluna basın
+   veya bu simgelerden birini tıklayın.</translation>
     </message>
     <message>
         <source>To add a note to a chord, press &quot;Shift&quot; while typing its letter name, or click on the staff.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>Bir akora nota eklemek için, notanın harfini yazarken &quot;Shift&quot; tuşuna basın veya dizeğe tıklayın.</translation>
     </message>
     <message>
         <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press &quot;Ctrl+number&quot; or use Add &gt; Tuplets.</source>
         <comment>note-input</comment>
-        <translation type="unfinished"/>
+        <translation>Bir üçleme veya başka bir tuplet oluşturmak için, tupletin toplam uzunluğunu temsil eden süreyi seçin, ardından &quot;Ctrl+sayı&quot; tuşlarından birine basın veya Ekle&gt; Tuplet&apos;i kullanın.</translation>
     </message>
     <message>
         <source>To make a single selection, click the element you want to select.
@@ -255,7 +272,10 @@ Bu, onları çarpışma tespitinden çıkaracak ve onları daha özgürce yerle�
     Tip: if you press the &quot;Alt&quot; key (&quot;Option&quot; on macOS) along with the cursor keys you can move through other elements too,
     and also move up and down from staff to staff.</source>
         <comment>select-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Tekli bir seçim yapmak için, seçmek istediğiniz öğeyi tıklayın.
+  Öğe seçildiğini belirtmek için vurgulanır. 
+   Sol ve sağ imleç tuşlarını kullananarak partisyonunuzdaki notalar ve suslar arasında hareket edebilirsiniz.
+   İpucu: İmleç tuşlarıyla birlikte &quot;Alt&quot; tuşuna (macOS&apos;ta &quot;Option&quot;) basarsanız, diğer öğeler arasında da hareket edebilirsiniz ve ayrıca yukarı/aşağı dizekten dizeğe de hareket edebilirsiniz.</translation>
     </message>
     <message>
         <source>A list selection is a combination of single selections.
@@ -263,7 +283,10 @@ Bu, onları çarpışma tespitinden çıkaracak ve onları daha özgürce yerle�
     You can also quickly select similar elements by right-clicking (macOS: &quot;Ctrl&quot;+clicking) one
     and then choosing one of the &quot;Select&quot; options from the resulting popup menu.</source>
         <comment>select-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Bir liste seçimi, tekli seçimlerin birleşimidir.
+   Liste seçimine öğe eklemek veya kaldırmak için tıklarken &quot;Ctrl&quot; (macOS: &quot;Cmd&quot;) tuşuna basın.
+   Ayrıca, sağ tıklayarak (macOS: &quot;Ctrl&quot; + tıklama) benzer öğeleri hızlı bir şekilde seçebilirsiniz
+   ve sonra açılır menüden &quot;Seçiniz&gt; Daha&quot; bölümündeki tercihlerinden birini seçin.</translation>
     </message>
     <message>
         <source>A range selection includes everything from one point in time to another across one or more staves.
@@ -271,14 +294,19 @@ Bu, onları çarpışma tespitinden çıkaracak ve onları daha özgürce yerle�
     To make a range selection, click the first note, rest, or measure you want to select, then &quot;Shift&quot;+click the last.
     You can also extend range selections by holding the &quot;Shift&quot; key while moving the cursor.</source>
         <comment>select-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Bir aralık seçimi,  bir noktadan diğerine veya çerçeve boyunca her şeyi içerir.
+   Tüm aralığı kapsayan mavi bir dikdörtgenle gösterilir.
+   Bir aralık seçimi yapmak için seçmek istediğiniz ilk notaya, sus işaretine veya ölçüye tıklayın, ardından &quot;Shift&quot;+ sonuncuyu tıklayın.
+   İmleci hareket ettirirken &quot;Shift&quot; tuşunu basılı tutarak da aralık seçimlerini genişletebilirsiniz.</translation>
     </message>
     <message>
         <source>Another way to make selections is to hold &quot;Shift&quot; while dragging.
     If your selection includes notes, it will automatically be made as a range selection;
     otherwise it will be made as a list selection.</source>
         <comment>select-tour</comment>
-        <translation type="unfinished"/>
+        <translation>Seçim yapmanın başka bir yolu da sürüklerken &quot;Shift&quot; tuşunu basılı tutmaktır.
+  Seçiminiz notalar içeriyorsa, otomatik olarak aralık seçimi yapılacaktır; 
+   aksi takdirde liste seçimi olarak yapılacaktır.</translation>
     </message>
     <message>
         <source>Most elements on the lines palette span a range from a start element to an end element.
@@ -289,40 +317,54 @@ Bu, onları çarpışma tespitinden çıkaracak ve onları daha özgürce yerle�
 
     - Press &quot;Shift+Left&quot; to move that handle backward.</source>
         <comment>spanner-drop-apply</comment>
-        <translation type="unfinished"/>
+        <translation>Çizgi paletindeki çoğu öğe, bir başlangıç ​​öğesinden bitiş öğesine kadar bir aralığı kapsar.
+
+   Aralığını düzenlemek için (bitiş tutamacı otomatik olarak seçilir) çizgiye çift tıklayın ve:
+
+   - Aralığı ilerletmek için &quot;Shift + Sağ&quot; tuşlarına basın.
+
+   - Aralığı geri hareket ettirmek için &quot;Shift + Sol&quot; tuşlarına basın.</translation>
     </message>
     <message>
         <source>Alternatively, first selecting a range of elements in the score and then double-clicking a line element in the palette will add that new element across the selected range.</source>
         <comment>spanner-drop-apply</comment>
-        <translation type="unfinished"/>
+        <translation>Alternatif olarak, önce partisyondaki bir kaç öğeyi seçmek ve ardından paletteki bir çizgi öğesine çift tıklamak, bu yeni öğeyi seçilen aralığa ekleyecektir.</translation>
     </message>
     <message>
         <source>This is the score view, where you can view and edit your score.
     Use your mouse wheel or touchpad to scroll (with &quot;Shift&quot; to scroll horizontally).
     If you have multiple scores open, you can switch between them using tabs at the top of your score view.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>Bu, partisyonunuzu görüntüleyebileceğiniz ve düzenleyebileceğiniz partisyon görünümüdür.
+   Kaydırmak için fare tekerleğinizi veya dokunmatik yüzeyinizi kullanın (yatay olarak kaydırmak için &quot;Shift&quot; ile).
+   Açık birden fazla partisyonunuz varsa, partisyon görünümünüzün üst kısmındaki sekmeleri kullanarak bunlar arasında geçiş yapabilirsiniz.</translation>
     </message>
     <message>
         <source>The File Operations toolbar allows you to create/save/open/print files and undo/redo changes.
     You can also save to your musescore.com account if you go to File &gt; Save Online.
     The controls at the right of this toolbar control the display of your score.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>Dosya İşlemleri araç çubuğu, dosyaları oluşturmanıza/kaydetmenize/açmanıza/yazdırmanıza ve değişiklikleri geri almanıza/yinelemenize olanak tanır.
+   Dosya&gt; Çevrimiçi Kaydet&apos;e giderseniz musescore.com hesabınıza da kaydedebilirsiniz.
+   Bu araç çubuğunun sağındaki kontroller partisyonunuzun görüntülenmesini kontrol eder.</translation>
     </message>
     <message>
         <source>The main menu contains most other commands.
     In addition, many commands can be accessed via keyboard shortcuts or by right-clicking (macOS: &quot;Ctrl&quot;+clicking) within the score view.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>Ana menü diğer komutların çoğunu içerir.
+   Ek olarak, birçok komuta klavye kısayolları aracılığıyla veya partisyon görünümünde sağ tıklanarak (macOS: &quot;Ctrl&quot; + tıklama) erişilebilir.</translation>
     </message>
     <message>
-        <source>That's the end of this tour!
+        <source>That&apos;s the end of this tour!
     As you use MuseScore, more tours will pop up to further explain functionality.
     To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
     You can also enable/disable and reset tours in Help &gt; Tours.</source>
         <comment>welcome</comment>
-        <translation type="unfinished"/>
+        <translation>Tur sona erdi! 
+   MuseScore&apos;u kullanırken, işlevselliği daha ayrıntılı açıklamak için daha fazla tur açılır. 
+   Bunları devre dışı bırakmak için, bu pencereyi kapatmadan önce &quot;Turları göstermeye devam et&quot; seçeneğinin işaretini kaldırın.
+   Ayrıca, Yardım&gt; Turlar&apos;dan turları etkinleştirebilir/devre dışı bırakabilir ve sıfırlayabilirsiniz.</translation>
     </message>
 </context>
 </TS>

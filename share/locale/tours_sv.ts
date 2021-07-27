@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="sv" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="sv">
 <context>
     <name>TourXML</name>
     <message>
@@ -217,7 +219,7 @@
         <comment>inspector-tour</comment>
         <translation>Om du har ändrat ett värde kan du klicka på &quot;Återställ&quot;-knappen för att återställa den till förvalet.
     Om värdet styrs av en stilinställning kan du klicka på knappen &quot;Ange som stil&quot; för att ange nuvarande värde som det nya förvalet för stilen.
-    Du kan också ange stilförval genom Format &gt; Stil....</translation>
+    Du kan också ange stilförval genom Format &gt; Stil….</translation>
     </message>
     <message>
         <source>The quickest way to scroll up and down is to use your mouse wheel or equivalent touch gesture (for example, two-finger swipe).
@@ -264,7 +266,7 @@
     <message>
         <source>To create a triplet or other tuplet, select the duration representing the total length of the tuplet, then press &quot;Ctrl+number&quot; or use Add &gt; Tuplets.</source>
         <comment>note-input</comment>
-        <translation>För att skapa en triol eller en annan annandelning, klicka på notvärdet som motsvarar annandelningens totala längd, och tryck sedan &quot;Ctrl+siffra&quot; eller använd Lägg till &gt; Annandelningar.</translation>
+        <translation>För att skapa en triol eller en annat oregelbundet notvärde, klicka på notvärdet som motsvarar total längd, och tryck sedan &quot;Ctrl+siffra&quot; eller använd Lägg till &gt; Oregelbundna notvärden.</translation>
     </message>
     <message>
         <source>To make a single selection, click the element you want to select.
@@ -358,7 +360,7 @@
     Dessutom kan många kommandon kommas åt via tangentbordsgenvägar eller genom att högerklicka (macOS: &quot;Ctrl&quot;+klick) i partiturvyn.</translation>
     </message>
     <message>
-        <source>That's the end of this tour!
+        <source>That&apos;s the end of this tour!
     As you use MuseScore, more tours will pop up to further explain functionality.
     To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
     You can also enable/disable and reset tours in Help &gt; Tours.</source>

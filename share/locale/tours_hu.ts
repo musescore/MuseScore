@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="hu" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="hu">
 <context>
     <name>TourXML</name>
     <message>
@@ -215,7 +217,7 @@ Nyomja meg a „Tovább” gombot, ha többet szeretne tudni.</translation>
         <comment>inspector-tour</comment>
         <translation>Ha módosított egy értéket, az „Alaphelyzet” gomb megnyomásával visszaállíthatja az alapértelmezett értékre.
 Ha az értéket egy stílusbeállítás befolyásolja, a „Beállítás stílusként” gomb megnyomásával megadhatja, hogy a stílusban a jelenlegi érték legyen az alapértelmezés.
-A stílusok alapértékeit a Formátum &gt; Stílus... menüpontban is beállíthatja.</translation>
+A stílusok alapértékeit a Formátum &gt; Stílus… menüpontban is beállíthatja.</translation>
     </message>
     <message>
         <source>The quickest way to scroll up and down is to use your mouse wheel or equivalent touch gesture (for example, two-finger swipe).
@@ -355,7 +357,7 @@ Az innen jobbra látható eszköztár vezérli a kotta megjelenítését.</trans
 Ezen kívül sok parancs van, amit gyorsbillentyűkkel vagy az egér jobb gombjával (macOs: „Ctrl”+kattintás) érhet el a kottanézetben.</translation>
     </message>
     <message>
-        <source>That's the end of this tour!
+        <source>That&apos;s the end of this tour!
     As you use MuseScore, more tours will pop up to further explain functionality.
     To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
     You can also enable/disable and reset tours in Help &gt; Tours.</source>

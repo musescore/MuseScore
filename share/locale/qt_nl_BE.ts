@@ -21,7 +21,7 @@
     </message>
     <message>
         <source>Preferences...</source>
-        <translation>Voorkeuren...</translation>
+        <translation>Voorkeuren…</translation>
     </message>
     <message>
         <source>Quit %1</source>
@@ -467,7 +467,7 @@ niet hernoemen naar
     </message>
     <message>
         <source>Customize...</source>
-        <translation>Aanpassen...</translation>
+        <translation>Aanpassen…</translation>
     </message>
 </context>
 <context>
@@ -597,7 +597,7 @@ niet hernoemen naar
     <name>Q3ToolBar</name>
     <message>
         <source>More...</source>
-        <translation>Meer...</translation>
+        <translation>Meer…</translation>
     </message>
 </context>
 <context>
@@ -2221,11 +2221,11 @@ Wilt u het toch verwijderen?</translation>
     </message>
     <message>
         <source>Show Details...</source>
-        <translation>Details weergeven...</translation>
+        <translation>Details weergeven…</translation>
     </message>
     <message>
         <source>Hide Details...</source>
-        <translation>Details verbergen...</translation>
+        <translation>Details verbergen…</translation>
     </message>
     <message>
         <source>&lt;p&gt;This program uses Qt Open Source Edition version %1.&lt;/p&gt;&lt;p&gt;Qt Open Source Edition is intended for the development of Open Source applications. You need a commercial Qt license for development of proprietary (closed source) applications.&lt;/p&gt;&lt;p&gt;Please see &lt;a href=&quot;http://www.trolltech.com/company/model/&quot;&gt;www.trolltech.com/company/model/&lt;/a&gt; for an overview of Qt licensing.&lt;/p&gt;</source>
@@ -2738,7 +2738,7 @@ Wilt u het toch verwijderen?</translation>
     </message>
     <message>
         <source>Print To File ...</source>
-        <translation>Afdrukken naar een bestand ...</translation>
+        <translation>Afdrukken naar een bestand …</translation>
     </message>
     <message>
         <source>File %1 is not writable.
@@ -3117,7 +3117,7 @@ Kies een andere bestandsnaam.</translation>
     </message>
     <message>
         <source>...</source>
-        <translation>...</translation>
+        <translation>…</translation>
     </message>
 </context>
 <context>
@@ -4113,7 +4113,7 @@ Kies een andere bestandsnaam.</translation>
     <message>
         <source>Save Link...</source>
         <comment>Download Linked File context menu item</comment>
-        <translation>Link opslaan...</translation>
+        <translation>Link opslaan…</translation>
     </message>
     <message>
         <source>Copy Link</source>

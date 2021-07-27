@@ -21,7 +21,7 @@
     </message>
     <message>
         <source>Preferences...</source>
-        <translation>Innstillinger...</translation>
+        <translation>Innstillinger…</translation>
     </message>
     <message>
         <source>Quit %1</source>
@@ -2194,11 +2194,11 @@ Vil du slette den allikevel?</translation>
     </message>
     <message>
         <source>Show Details...</source>
-        <translation>Vis detaljer...</translation>
+        <translation>Vis detaljer…</translation>
     </message>
     <message>
         <source>Hide Details...</source>
-        <translation>Skjul detaljer...</translation>
+        <translation>Skjul detaljer…</translation>
     </message>
     <message>
         <source>&lt;p&gt;This program uses Qt Open Source Edition version %1.&lt;/p&gt;&lt;p&gt;Qt Open Source Edition is intended for the development of Open Source applications. You need a commercial Qt license for development of proprietary (closed source) applications.&lt;/p&gt;&lt;p&gt;Please see &lt;a href=&quot;http://www.trolltech.com/company/model/&quot;&gt;www.trolltech.com/company/model/&lt;/a&gt; for an overview of Qt licensing.&lt;/p&gt;</source>

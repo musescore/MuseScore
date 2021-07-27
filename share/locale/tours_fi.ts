@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="fi" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="fi">
 <context>
     <name>TourXML</name>
     <message>
@@ -217,7 +219,7 @@
         <comment>inspector-tour</comment>
         <translation>Jos olet muokannut arvoa, voit klikata &quot;Palauta&quot;-painiketta palauttaaksesi sen oletukseen.
     Jos arvo on tyyliasetuksen hallitsema, voit klikata &quot;Aseta tyyliksi&quot;-painiketta asettaaksesi nykyisen arvon uudeksi oletustyyliksi.
-    Voit myös säätää oletustyylejä menemällä kohteeseen Muotoilu &gt; Tyyli....</translation>
+    Voit myös säätää oletustyylejä menemällä kohteeseen Muotoilu &gt; Tyyli….</translation>
     </message>
     <message>
         <source>The quickest way to scroll up and down is to use your mouse wheel or equivalent touch gesture (for example, two-finger swipe).
@@ -358,7 +360,7 @@ muuten siitä tehdään listavalinta.</translation>
     Lisäksi moniin komentoihin pääsee käsiksi pikanäppäimillä tai napsauttamalla hiiren kakkospainiketta (macOS: &quot;Ctrl&quot;+klikkaus) partituurinäkymässä.</translation>
     </message>
     <message>
-        <source>That's the end of this tour!
+        <source>That&apos;s the end of this tour!
     As you use MuseScore, more tours will pop up to further explain functionality.
     To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
     You can also enable/disable and reset tours in Help &gt; Tours.</source>

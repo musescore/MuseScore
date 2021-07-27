@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="it" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="it">
 <context>
     <name>TourXML</name>
     <message>
@@ -217,7 +219,7 @@ Clicca su &quot;Avanti&quot; per saperne di più.</translation>
         <comment>inspector-tour</comment>
         <translation>Se si è modificato un valore, è possibile fare clic sul pulsante &quot;Ripristina&quot; per ripristinare il valore predefinito.
 Se il valore è controllato da un&apos;impostazione di stile, è possibile fare clic sul pulsante &quot;Imposta come stile&quot; per impostare il valore corrente come nuovo valore predefinito per lo stile.
-È inoltre possibile impostare i valori predefiniti dello stile utilizzando Formato &gt; Stile...</translation>
+È inoltre possibile impostare i valori predefiniti dello stile utilizzando Formato &gt; Stile….</translation>
     </message>
     <message>
         <source>The quickest way to scroll up and down is to use your mouse wheel or equivalent touch gesture (for example, two-finger swipe).
@@ -359,7 +361,7 @@ I comandi alla destra di questa barra degli strumenti controllano la visualizzaz
 Inoltre, molti comandi sono accessibili tramite scorciatoie da tastiera o facendo clic con il tasto destro del mouse (macOS: &quot;Ctrl&quot;+clic) all&apos;interno della vista partitura.</translation>
     </message>
     <message>
-        <source>That's the end of this tour!
+        <source>That&apos;s the end of this tour!
     As you use MuseScore, more tours will pop up to further explain functionality.
     To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
     You can also enable/disable and reset tours in Help &gt; Tours.</source>

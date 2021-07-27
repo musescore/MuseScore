@@ -437,7 +437,7 @@ thành
     </message>
     <message>
         <source>Customize...</source>
-        <translation>Tùy chỉnh...</translation>
+        <translation>Tùy chỉnh…</translation>
     </message>
 </context>
 <context>
@@ -567,7 +567,7 @@ thành
     <name>Q3ToolBar</name>
     <message>
         <source>More...</source>
-        <translation>Thêm nữa...</translation>
+        <translation>Thêm nữa…</translation>
     </message>
 </context>
 <context>
@@ -2187,11 +2187,11 @@ Bạn muốn xóa nó bằng mọi cách?</translation>
     </message>
     <message>
         <source>Show Details...</source>
-        <translation>Hiện chi tiết...</translation>
+        <translation>Hiện chi tiết…</translation>
     </message>
     <message>
         <source>Hide Details...</source>
-        <translation>Ẩn chi tiết...</translation>
+        <translation>Ẩn chi tiết…</translation>
     </message>
     <message>
         <source>&lt;p&gt;This program uses Qt Open Source Edition version %1.&lt;/p&gt;&lt;p&gt;Qt Open Source Edition is intended for the development of Open Source applications. You need a commercial Qt license for development of proprietary (closed source) applications.&lt;/p&gt;&lt;p&gt;Please see &lt;a href=&quot;http://www.trolltech.com/company/model/&quot;&gt;www.trolltech.com/company/model/&lt;/a&gt; for an overview of Qt licensing.&lt;/p&gt;</source>
@@ -2702,7 +2702,7 @@ Bạn muốn xóa nó bằng mọi cách?</translation>
     </message>
     <message>
         <source>Print To File ...</source>
-        <translation>In thành tập tin...</translation>
+        <translation>In thành tập tin…</translation>
     </message>
     <message>
         <source>File %1 is not writable.
@@ -3080,7 +3080,7 @@ Vui lòng chọn một tên tập tin khác.</translation>
     </message>
     <message>
         <source>...</source>
-        <translation>...</translation>
+        <translation>…</translation>
     </message>
 </context>
 <context>
@@ -4081,7 +4081,7 @@ Vui lòng chọn một tên tập tin khác.</translation>
     <message>
         <source>Save Link...</source>
         <comment>Download Linked File context menu item</comment>
-        <translation>Lưu liên kết mạng...</translation>
+        <translation>Lưu liên kết mạng…</translation>
     </message>
     <message>
         <source>Copy Link</source>

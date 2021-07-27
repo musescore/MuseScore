@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="ja" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="ja">
 <context>
     <name>TourXML</name>
     <message>
@@ -216,7 +218,7 @@
     If the value is controlled by a style setting, you can click the &quot;Set as style&quot; button to set the current value as the new default for the style.
     You can also set style defaults using Format &gt; Style….</source>
         <comment>inspector-tour</comment>
-        <translation>値を変更したのであれば、&quot;リセット&quot; ボタンをクリックすればデフォルトに戻せます。値がスタイル設定に依るのであれば、&quot;スタイルに設定&quot;ボタンをクリックすればその値を新たなデフォルトとしてスタイルに設定できます。フォーマット＞スタイル...を使ってもスタイルのデフォルトを設定できます。</translation>
+        <translation>値を変更したのであれば、&quot;リセット&quot; ボタンをクリックすればデフォルトに戻せます。値がスタイル設定に依るのであれば、&quot;スタイルに設定&quot;ボタンをクリックすればその値を新たなデフォルトとしてスタイルに設定できます。フォーマット＞スタイル…を使ってもスタイルのデフォルトを設定できます。</translation>
     </message>
     <message>
         <source>The quickest way to scroll up and down is to use your mouse wheel or equivalent touch gesture (for example, two-finger swipe).
@@ -280,7 +282,7 @@
         <translation>リスト選択とは一つづつの選択を組み合わせたものです。
 リスト選択に加えたり削除したりするには、&quot;Ctrl&quot; (macOS: &quot;Cmd&quot;) を押しながらクリックします。
 類似の要素を素早く選択するには、最初の一つを右クリック (macOS: &quot;Ctrl&quot;+クリック) し、
-表示されるポップアップ・メニューの &quot;選択&quot; オプションの中で選んでゆきます。</translation>
+表示されるポップアップ・メニューの &quot;選択&quot; オプションの中で選んでいきます。</translation>
     </message>
     <message>
         <source>A range selection includes everything from one point in time to another across one or more staves.
@@ -295,7 +297,7 @@
     If your selection includes notes, it will automatically be made as a range selection;
     otherwise it will be made as a list selection.</source>
         <comment>select-tour</comment>
-        <translation>もう1つの選択方法は、Shiftキーを押しながらのドラッグです。選択範囲に音符が含まれている場合は自動的に範囲選択となり、それ以外の場合は、リスト選択なります。</translation>
+        <translation>もう1つの選択方法は、Shiftキーを押しながらのドラッグです。選択範囲に音符が含まれている場合は自動的に範囲選択となり、それ以外の場合はリスト選択となります。</translation>
     </message>
     <message>
         <source>Most elements on the lines palette span a range from a start element to an end element.
@@ -339,7 +341,7 @@ musescore.com のアカウントを持っている場合、 &quot; ファイル(
 さらに、キーボードショートカットや、楽譜の中を右クリックすることで多くのコマンドにアクセスすることができます。</translation>
     </message>
     <message>
-        <source>That's the end of this tour!
+        <source>That&apos;s the end of this tour!
     As you use MuseScore, more tours will pop up to further explain functionality.
     To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
     You can also enable/disable and reset tours in Help &gt; Tours.</source>

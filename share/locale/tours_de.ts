@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="de" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="de">
 <context>
     <name>TourXML</name>
     <message>
@@ -229,9 +231,9 @@ Sie können an eine beliebige Stelle klicken, um an die entsprechende Position i
     to move between pages.
     Keyboards that lack these keys often provide equivalents such as &quot;Fn+Up/Down/Left/Right&quot;.</source>
         <comment>navigate-tour</comment>
-        <translation>Die Navigationstasten auf Ihrer Tastatur wie &quot;Bild rauf&quot;, &quot;Bild runter&quot;, &quot;Pos 1&quot; und &quot;Ende&quot; funktionieren so wie in anderen Anwendungen auch,
+        <translation>Die Navigationstasten auf Ihrer Tastatur wie &quot;Bild &amp;uarr;&quot;, &quot;Bild &amp;darr;&quot;, &quot;Pos 1&quot; und &quot;Ende&quot; funktionieren so wie in anderen Anwendungen auch,
     um sich zwischen Seiten zu bewegen.
-    Tastaturen, denen diese Tasten fehlen, bieten meistens Alternativen wie &quot;Fn&quot;+&quot;Hoch/Runter/Links/Rechts&quot;.</translation>
+    Tastaturen, denen diese Tasten fehlen, bieten meistens Alternativen wie &quot;Fn&quot;+&quot;&amp;uarr;/&amp;darr;/&amp;larr;/&amp;rarr;&quot;.</translation>
     </message>
     <message>
         <source>You can move the score short distances by clicking an empty area of the page and dragging.
@@ -336,8 +338,8 @@ oder klicken auf eines der Symbole.</translation>
     If you have multiple scores open, you can switch between them using tabs at the top of your score view.</source>
         <comment>welcome</comment>
         <translation>Das ist die Partituransicht. In dieser kann die Partitur angesehen und bearbeitet werden.
-  Zum Scrollen verwenden Sie Touchpad oder Mausrad (für horizontal mit &quot;Umschalt&quot;).
-  Wenn Sie mehrere Partituren geöffnet haben, können Sie zwischen diesen wechseln, indem Sie in der Partituransicht in der oberen Hälfte des Fensters die Tabs auswählen.</translation>
+&#xa0; Zum Scrollen verwenden Sie Touchpad oder Mausrad (für horizontal mit &quot;Umschalt&quot;).
+&#xa0; Wenn Sie mehrere Partituren geöffnet haben, können Sie zwischen diesen wechseln, indem Sie in der Partituransicht in der oberen Hälfte des Fensters die Tabs auswählen.</translation>
     </message>
     <message>
         <source>The File Operations toolbar allows you to create/save/open/print files and undo/redo changes.
@@ -356,7 +358,7 @@ oder klicken auf eines der Symbole.</translation>
 Außerdem können viele Befehle mittels Tastenkürzel oder durch Rechtsklick (macOS: &quot;Strg&quot;+Klick) direkt innerhalb der Partituransicht getätigt werden.</translation>
     </message>
     <message>
-        <source>That's the end of this tour!
+        <source>That&apos;s the end of this tour!
     As you use MuseScore, more tours will pop up to further explain functionality.
     To disable these, deselect &quot;Continue showing tours&quot; before closing this window.
     You can also enable/disable and reset tours in Help &gt; Tours.</source>
