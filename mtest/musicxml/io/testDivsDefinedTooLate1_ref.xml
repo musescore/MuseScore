@@ -46,9 +46,17 @@
           </clef>
         </attributes>
       <note>
-        <rest measure="yes"/>
-        <duration>4</duration>
+        <rest/>
+        <duration>3</duration>
         <voice>1</voice>
+        <type>half</type>
+        <dot/>
+        </note>
+      <note print-object="no">
+        <rest/>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
         </note>
       </measure>
     <measure number="2">
