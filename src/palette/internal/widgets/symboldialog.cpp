@@ -102,8 +102,8 @@ SymbolDialog::SymbolDialog(const QString& s, QWidget* parent)
     sp->setDrawGrid(true);
     sp->setSelectable(true);
 
-    connect(systemFlag, SIGNAL(stateChanged(int)), SLOT(systemFlagChanged(int)));
-    connect(fontList, SIGNAL(currentIndexChanged(int)), SLOT(systemFontChanged(int)));
+    connect(systemFlag, &QCheckBox::stateChanged, this, &SymbolDialog::systemFlagChanged);
+    connect(fontList, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &SymbolDialog::systemFontChanged);
 
     sa->setWidget(sp);
 }

@@ -81,9 +81,9 @@ TRowLabels::TRowLabels(QSplitter* splitter, Timeline* time)
     setContentsMargins(0, 0, 0, 0);
     setAlignment(Qt::Alignment((Qt::AlignLeft | Qt::AlignTop)));
 
-    connect(verticalScrollBar(), SIGNAL(valueChanged(int)), time->verticalScrollBar(), SLOT(setValue(int)));
-    connect(verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(restrictScroll(int)));
-    connect(this, SIGNAL(moved(QPointF)), time, SLOT(mouseOver(QPointF)));
+    connect(verticalScrollBar(), &QScrollBar::valueChanged, time->verticalScrollBar(), &QScrollBar::setValue);
+    connect(verticalScrollBar(), &QScrollBar::valueChanged, this, &TRowLabels::restrictScroll);
+    connect(this, &TRowLabels::moved, time, &Timeline::mouseOver);
 
     static const char* udArrow[] = {
         "10 18 2 1",
@@ -264,7 +264,7 @@ TRowLabels::TRowLabels(QSplitter* splitter, Timeline* time)
     std::tuple<QGraphicsPixmapItem*, MouseOverValue, unsigned> tmp(nullptr, MouseOverValue::NONE, -1);
     _oldItemInfo = tmp;
 
-    connect(this, SIGNAL(requestContextMenu(QContextMenuEvent*)), _timeline, SLOT(contextMenuEvent(QContextMenuEvent*)));
+    connect(this, &TRowLabels::requestContextMenu, _timeline, &Timeline::contextMenuEvent);
 }
 
 bool TRowLabels::handleEvent(QEvent* e)
@@ -753,10 +753,10 @@ Timeline::Timeline(QSplitter* splitter)
     setSceneRect(0, 0, 100, 100);
     scene()->setBackgroundBrush(QBrush(activeTheme().backgroundColor));
 
-    connect(verticalScrollBar(), SIGNAL(valueChanged(int)), _rowNames->verticalScrollBar(), SLOT(setValue(int)));
-    connect(verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(handleScroll(int)));
-    connect(_rowNames, SIGNAL(swapMeta(uint,bool)), this, SLOT(swapMeta(uint,bool)));
-    connect(this, SIGNAL(moved(QPointF)), _rowNames, SLOT(mouseOver(QPointF)));
+    connect(verticalScrollBar(), &QScrollBar::valueChanged, _rowNames->verticalScrollBar(), &QScrollBar::setValue);
+    connect(verticalScrollBar(), &QScrollBar::valueChanged, this, &Timeline::handleScroll);
+    connect(_rowNames, &TRowLabels::swapMeta, this, &Timeline::swapMeta);
+    connect(this, &Timeline::moved, _rowNames, &TRowLabels::mouseOver);
 
     std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> t1(tr("Tempo"), &Ms::Timeline::tempoMeta, true);
     std::tuple<QString, void (Timeline::*)(Segment*, int*, int), bool> t2(tr("Time Signature"), &Ms::Timeline::timeMeta, true);
@@ -3012,7 +3012,7 @@ void Timeline::contextMenuEvent(QContextMenuEvent* event)
     QMenu* contextMenu = new QMenu(tr("Context menu"), this);
     if (_rowNames->cursorIsOn() == "instrument") {
         QAction* edit_instruments = new QAction(tr("Edit Instruments"), this);
-        connect(edit_instruments, SIGNAL(triggered()), this, SLOT(requestInstrumentDialog()));
+        connect(edit_instruments, &QAction::triggered, this, &Timeline::requestInstrumentDialog);
         contextMenu->addAction(edit_instruments);
         contextMenu->exec(QCursor::pos());
     } else if (_rowNames->cursorIsOn() == "meta" || cursorIsOn(event->pos()) == "meta") {
@@ -3023,16 +3023,16 @@ void Timeline::contextMenuEvent(QContextMenuEvent* event)
                 QAction* action = new QAction(row_name, this);
                 action->setCheckable(true);
                 action->setChecked(std::get<2>(meta));
-                connect(action, SIGNAL(triggered()), this, SLOT(toggleMetaRow()));
+                connect(action, &QAction::triggered, this, &Timeline::toggleMetaRow);
                 contextMenu->addAction(action);
             }
         }
         contextMenu->addSeparator();
         QAction* hide_all = new QAction(tr("Hide all"), this);
-        connect(hide_all, SIGNAL(triggered()), this, SLOT(toggleMetaRow()));
+        connect(hide_all, &QAction::triggered, this, &Timeline::toggleMetaRow);
         contextMenu->addAction(hide_all);
         QAction* show_all = new QAction(tr("Show all"), this);
-        connect(show_all, SIGNAL(triggered()), this, SLOT(toggleMetaRow()));
+        connect(show_all, &QAction::triggered, this, &Timeline::toggleMetaRow);
         contextMenu->addAction(show_all);
         contextMenu->exec(QCursor::pos());
     }

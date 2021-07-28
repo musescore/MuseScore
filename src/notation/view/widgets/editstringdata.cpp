@@ -71,11 +71,13 @@ EditStringData::EditStringData(QWidget* parent, QList<Ms::instrString>* strings,
     _frets = frets;
     numOfFrets->setValue(*_frets);
 
-    connect(deleteString, SIGNAL(clicked()), SLOT(deleteStringClicked()));
-    connect(editString,   SIGNAL(clicked()), SLOT(editStringClicked()));
-    connect(newString,    SIGNAL(clicked()), SLOT(newStringClicked()));
-    connect(stringList,   SIGNAL(doubleClicked(QModelIndex)),     SLOT(editStringClicked()));
-    connect(stringList,   SIGNAL(itemClicked(QTableWidgetItem*)), SLOT(listItemClicked(QTableWidgetItem*)));
+    connect(deleteString, &QPushButton::clicked, this, &EditStringData::deleteStringClicked);
+    connect(editString,   &QPushButton::clicked, this, &EditStringData::editStringClicked);
+    connect(newString,    &QPushButton::clicked, this, &EditStringData::newStringClicked);
+
+    connect(stringList,   &QTableWidget::itemClicked,       this, &EditStringData::listItemClicked);
+    connect(stringList,   &QTableWidget::itemDoubleClicked, this, &EditStringData::editStringClicked);
+
     _modified = false;
 
     WidgetStateStore::restoreGeometry(this);

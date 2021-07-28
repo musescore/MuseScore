@@ -156,7 +156,7 @@ StaffTextPropertiesDialog::StaffTextPropertiesDialog(QWidget* parent)
     QSignalMapper* mapper = new QSignalMapper(this);
     for (int row = 0; row < 4; ++row) {
         for (int col = 0; col < 4; ++col) {
-            connect(m_vb[col][row], SIGNAL(clicked()), mapper, SLOT(map()));
+            connect(m_vb[col][row], &QToolButton::clicked, mapper, QOverload<>::of(&QSignalMapper::map));
             mapper->setMapping(m_vb[col][row], (col << 8) + row);
         }
     }
@@ -178,10 +178,10 @@ StaffTextPropertiesDialog::StaffTextPropertiesDialog(QWidget* parent)
         }
     }
 
-    connect(mapper, SIGNAL(mapped(int)), SLOT(voiceButtonClicked(int)));
-    connect(swingOff, SIGNAL(toggled(bool)), SLOT(setSwingControls(bool)));
-    connect(swingEighth, SIGNAL(toggled(bool)), SLOT(setSwingControls(bool)));
-    connect(swingSixteenth, SIGNAL(toggled(bool)), SLOT(setSwingControls(bool)));
+    connect(mapper, &QSignalMapper::mappedInt, this, &StaffTextPropertiesDialog::voiceButtonClicked);
+    connect(swingOff, &QRadioButton::toggled, this, &StaffTextPropertiesDialog::setSwingControls);
+    connect(swingEighth, &QRadioButton::toggled, this, &StaffTextPropertiesDialog::setSwingControls);
+    connect(swingSixteenth, &QRadioButton::toggled, this, &StaffTextPropertiesDialog::setSwingControls);
 
     //---------------------------------------------------
     //    setup capo
@@ -214,9 +214,9 @@ StaffTextPropertiesDialog::StaffTextPropertiesDialog(QWidget* parent)
             selectedItem = item;
         }
     }
-    connect(channelList, SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
-            SLOT(channelItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)));
-    connect(this, SIGNAL(accepted()), SLOT(saveValues()));
+    connect(channelList, &QTreeWidget::currentItemChanged,
+            this, &StaffTextPropertiesDialog::channelItemChanged);
+    connect(this, &QDialog::accepted, this, &StaffTextPropertiesDialog::saveValues);
     channelList->setCurrentItem(selectedItem);
 
     //---------------------------------------------------
@@ -292,7 +292,7 @@ StaffTextPropertiesDialog::StaffTextPropertiesDialog(QWidget* parent)
     m_stops[3][15] = stop_p_15;
 
     m_curTabIndex = tabWidget->currentIndex();
-    connect(tabWidget, SIGNAL(currentChanged(int)), SLOT(tabChanged(int)));
+    connect(tabWidget, &QTabWidget::currentChanged, this, &StaffTextPropertiesDialog::tabChanged);
 
     WidgetStateStore::restoreGeometry(this);
 }

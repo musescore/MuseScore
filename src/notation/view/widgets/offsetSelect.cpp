@@ -51,8 +51,8 @@ OffsetSelect::OffsetSelect(QWidget* parent)
 //    }
     //!---
 
-    connect(xVal, SIGNAL(valueChanged(double)), SLOT(_offsetChanged()));
-    connect(yVal, SIGNAL(valueChanged(double)), SLOT(_offsetChanged()));
+    connect(xVal, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &OffsetSelect::_offsetChanged);
+    connect(yVal, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &OffsetSelect::_offsetChanged);
 }
 
 void OffsetSelect::setSuffix(const QString& s)

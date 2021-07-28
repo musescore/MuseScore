@@ -60,7 +60,7 @@ SelectNoteDialog::SelectNoteDialog(QWidget* parent)
     name->setText(tpc2name(m_note->tpc(), Ms::NoteSpellingType::STANDARD, Ms::NoteCaseType::AUTO, false));
     inSelection->setEnabled(m_note->score()->selection().isRange());
 
-    connect(buttonBox, SIGNAL(clicked(QAbstractButton*)), SLOT(buttonClicked(QAbstractButton*)));
+    connect(buttonBox, &QDialogButtonBox::clicked, this, &SelectNoteDialog::buttonClicked);
 
     WidgetStateStore::restoreGeometry(this);
 }
