@@ -45,9 +45,9 @@ MeasurePropertiesDialog::MeasurePropertiesDialog(QWidget* parent)
 
     staves->verticalHeader()->hide();
 
-    connect(buttonBox, SIGNAL(clicked(QAbstractButton*)), this, SLOT(bboxClicked(QAbstractButton*)));
-    connect(nextButton, SIGNAL(clicked()), SLOT(gotoNextMeasure()));
-    connect(previousButton, SIGNAL(clicked()), SLOT(gotoPreviousMeasure()));
+    connect(buttonBox, &QDialogButtonBox::clicked, this, &MeasurePropertiesDialog::bboxClicked);
+    connect(nextButton, &QToolButton::clicked, this, &MeasurePropertiesDialog::gotoNextMeasure);
+    connect(previousButton, &QToolButton::clicked, this, &MeasurePropertiesDialog::gotoPreviousMeasure);
 
     if (qApp->layoutDirection() == Qt::LayoutDirection::RightToLeft) {
         horizontalLayout_2->removeWidget(nextButton);

@@ -36,9 +36,9 @@ FontStyleSelect::FontStyleSelect(QWidget* parent)
     italic->setText(iconCodeToChar(IconCode::Code::TEXT_ITALIC));
     underline->setText(iconCodeToChar(IconCode::Code::TEXT_UNDERLINE));
 
-    connect(bold, SIGNAL(toggled(bool)), SLOT(_fontStyleChanged()));
-    connect(italic, SIGNAL(toggled(bool)), SLOT(_fontStyleChanged()));
-    connect(underline, SIGNAL(toggled(bool)), SLOT(_fontStyleChanged()));
+    connect(bold, &QPushButton::toggled, this, &FontStyleSelect::_fontStyleChanged);
+    connect(italic, &QPushButton::toggled, this, &FontStyleSelect::_fontStyleChanged);
+    connect(underline, &QPushButton::toggled, this, &FontStyleSelect::_fontStyleChanged);
 }
 
 void FontStyleSelect::_fontStyleChanged()
