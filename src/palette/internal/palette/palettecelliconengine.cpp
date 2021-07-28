@@ -21,16 +21,12 @@
  */
 #include "palettecelliconengine.h"
 
-#include "widgets/palettewidget.h"
-
 #include "engraving/draw/geometry.h"
 #include "engraving/draw/painter.h"
 #include "engraving/draw/pen.h"
 #include "engraving/libmscore/actionicon.h"
 #include "engraving/libmscore/element.h"
 #include "engraving/style/defaultstyle.h"
-
-#include <QApplication>
 
 #include "log.h"
 
@@ -104,6 +100,30 @@ void PaletteCellIconEngine::paintBackground(Painter& painter, const RectF& rect,
     }
 }
 
+/// Paint an icon element so that it fills a QRect, preserving aspect ratio, and
+/// leaving a small margin around the edges.
+void PaletteCellIconEngine::paintActionIcon(Painter& painter, const RectF& rect, Element* element) const
+{
+    IF_ASSERT_FAILED(element && element->isActionIcon()) {
+        return;
+    }
+
+    painter.save();
+
+    constexpr qreal margin = 4.0;
+    qreal extent = qMin(rect.height(), rect.width()) - margin;
+
+    ActionIcon* action = toActionIcon(element);
+    action->setExtent(extent);
+
+    extent /= 2.0;
+    PointF iconCenter(extent, extent);
+
+    painter.translate(rect.center() - iconCenter);
+    action->draw(&painter);
+    painter.restore();
+}
+
 /// Paint a 5 line staff centered within a QRect and return the distance from the
 /// top of the QRect to the uppermost staff line.
 qreal PaletteCellIconEngine::paintStaff(Painter& painter, const RectF& rect, qreal spatium) const
@@ -161,30 +181,27 @@ void PaletteCellIconEngine::paintScoreElement(Painter& painter, Element* element
 
     painter.translate(-1.0 * origin); // shift coordinates so element is drawn at correct position
 
-    element->scanElements(&painter, PaletteWidget::paintPaletteElement);
+    element->scanElements(&painter, paintPaletteElement);
     painter.restore();
 }
 
-/// Paint an icon element so that it fills a QRect, preserving aspect ratio, and
-/// leaving a small margin around the edges.
-void PaletteCellIconEngine::paintActionIcon(Painter& painter, const RectF& rect, Element* element) const
+void PaletteCellIconEngine::paintPaletteElement(void* data, Element* element)
 {
-    IF_ASSERT_FAILED(element && element->isActionIcon()) {
-        return;
-    }
+    Painter* painter = static_cast<Painter*>(data);
+    painter->save();
+    painter->translate(element->pos()); // necessary for drawing child elements
 
-    painter.save();
+    auto colorBackup = Color::fromQColor(element->getProperty(Pid::COLOR).value<QColor>());
+    auto frameColorBackup = Color::fromQColor(element->getProperty(Pid::FRAME_FG_COLOR).value<QColor>());
 
-    constexpr qreal margin = 4.0;
-    qreal extent = qMin(rect.height(), rect.width()) - margin;
+    auto color = Color::fromQColor(configuration()->elementsColor());
+    element->setProperty(Pid::COLOR, QVariant::fromValue(color));
+    element->setProperty(Pid::FRAME_FG_COLOR, QVariant::fromValue(color));
 
-    ActionIcon* action = toActionIcon(element);
-    action->setExtent(extent);
+    element->draw(painter);
 
-    extent /= 2.0;
-    PointF iconCenter(extent, extent);
+    element->setProperty(Pid::COLOR, QVariant::fromValue(colorBackup));
+    element->setProperty(Pid::FRAME_FG_COLOR, QVariant::fromValue(frameColorBackup));
 
-    painter.translate(rect.center() - iconCenter);
-    action->draw(&painter);
-    painter.restore();
+    painter->restore();
 }
