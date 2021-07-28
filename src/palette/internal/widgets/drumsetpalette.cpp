@@ -208,9 +208,19 @@ void DrumsetPalette::mouseMoveEvent(QMouseEvent* event)
     m_drumPalette->handleEvent(event);
 }
 
-bool DrumsetPalette::handleEvent(QEvent* e)
+void DrumsetPalette::enterEvent(QEvent* event)
 {
-    return QWidget::event(e);
+    m_drumPalette->handleEvent(event);
+}
+
+void DrumsetPalette::leaveEvent(QEvent* event)
+{
+    m_drumPalette->handleEvent(event);
+}
+
+bool DrumsetPalette::handleEvent(QEvent* event)
+{
+    return QWidget::event(event);
 }
 
 mu::async::Channel<QString> DrumsetPalette::pitchNameChanged() const
