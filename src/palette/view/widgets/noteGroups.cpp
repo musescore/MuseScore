@@ -90,6 +90,7 @@ NoteGroups::NoteGroups(QWidget* parent)
     iconPalette->appendActionIcon(ActionIconType::BEAM_BEGIN_64, "beam64");
 
     iconPalette->setReadOnly(true);
+    iconPalette->setApplyingElementsDisabled(true);
     iconPalette->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
     iconPalette->setFixedHeight(iconPalette->heightForWidth(iconPalette->width()));
     iconPalette->setMinimumWidth(27 * 4 * paletteConfiguration()->paletteScaling() + 1); // enough room for all icons, with roundoff
