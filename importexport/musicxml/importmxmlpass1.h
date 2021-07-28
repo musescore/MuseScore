@@ -104,6 +104,7 @@ using MxmlTupletStates = std::map<QString, MxmlTupletState>;
 
 void determineTupletFractionAndFullDuration(const Fraction duration, Fraction& fraction, Fraction& fullDuration);
 Fraction missingTupletDuration(const Fraction duration);
+bool isLikelyCreditText(const QString& text, const bool caseInsensitive);
 bool isLikelySubtitleText(const QString& text, const bool caseInsensitive);
 
 
@@ -169,8 +170,17 @@ public:
       bool hasBeamingInfo() const { return _hasBeamingInfo; }
       bool isVocalStaff(const QString& id) const { return _parts[id].isVocalStaff(); }
       static VBox* createAndAddVBoxForCreditWords(Score* const score, const int miny = 0, const int maxy = 75);
+      void createDefaultHeader(Score* const score);
+      void createMeasuresAndVboxes(Score* const score,
+                              const QVector<Fraction>& ml, const QVector<Fraction>& ms,
+                              const std::set<int>& systemStartMeasureNrs,
+                              const std::set<int>& pageStartMeasureNrs,
+                              const CreditWordsList& crWords,
+                              const QSize pageSize);
       QString supportsTranspose() const { return _supportsTranspose; }
       void addInferredTranspose(const QString& partId);
+      void setHasInferredHeaderText(bool b) { _hasInferredHeaderText = b; }
+      bool hasInferredHeaderText() const { return _hasInferredHeaderText; }
 
 private:
       // functions
@@ -191,6 +201,7 @@ private:
       MxmlLogger* _logger;                      ///< Error logger
       bool _hasBeamingInfo;                     ///< Whether the score supports or contains beaming info
       QString _supportsTranspose;               ///< Whether the score supports transposition info
+      bool _hasInferredHeaderText;
 
       // part specific data (TODO: move to part-specific class)
       Fraction _timeSigDura;                    ///< Measure duration according to last timesig read

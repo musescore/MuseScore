@@ -1317,7 +1317,7 @@ static void handleSpannerStop(SLine* cur_sp, int track2, const Fraction& tick, M
 //---------------------------------------------------------
 
 MusicXMLParserPass2::MusicXMLParserPass2(Score* score, MusicXMLParserPass1& pass1, MxmlLogger* logger)
-      : _divs(0), _score(score), _pass1(pass1), _logger(logger), _hasInferredHeaderText(false)
+      : _divs(0), _score(score), _pass1(pass1), _logger(logger)
       {
       // nothing
       }
@@ -1898,7 +1898,7 @@ void MusicXMLParserPass2::scorePartwise()
       _score->connectArpeggios();
       _score->fixupLaissezVibrer();
       cleanFretDiagrams(_score->firstMeasure());
-      if (_hasInferredHeaderText)
+      if (_pass1.hasInferredHeaderText())
             reformatHeaderVBox(_score->measures()->first());
       cleanUpLayoutBreaks(_score, _logger);
       }
@@ -2923,14 +2923,14 @@ void MusicXMLParserDirection::direction(const QString& partId,
       else if (isLikelyCredit(tick)) {
             Text* inferredText = addTextToHeader(Tid::COMPOSER);
             if (inferredText) {
-                  _pass2.setHasInferredHeaderText(true);
+                  _pass1.setHasInferredHeaderText(true);
                   hideRedundantHeaderText(inferredText, {"lyricist", "composer", "poet"});
                   }
             }
       else if (isLikelySubtitle(tick)) {
             Text* inferredText = addTextToHeader(Tid::SUBTITLE);
             if (inferredText) {
-                  _pass2.setHasInferredHeaderText(true);
+                  _pass1.setHasInferredHeaderText(true);
                   if (_score->metaTag("source").isEmpty())
                         _score->setMetaTag("source", inferredText->plainText());
                   hideRedundantHeaderText(inferredText, {"source"});
@@ -3439,7 +3439,7 @@ bool MusicXMLParserDirection::isLikelyCredit(const Fraction& tick) const
             && _rehearsalText == ""
             && _metroText == ""
             && _tpoSound < 0.1
-            && _wordsText.contains(QRegularExpression("^\\s*((Words|Music|Lyrics),?(\\sand|\\s&amp;)?\\s)*[Bb]y\\s+(?!$)"));
+            && isLikelyCreditText(_wordsText, false);
       }
 
 //---------------------------------------------------------
@@ -7604,7 +7604,7 @@ void MusicXMLParserNotations::tuplet()
 
 MusicXMLParserDirection::MusicXMLParserDirection(QXmlStreamReader& e,
                                                  Score* score,
-                                                 const MusicXMLParserPass1& pass1,
+                                                 MusicXMLParserPass1& pass1,
                                                  MusicXMLParserPass2& pass2,
                                                  MxmlLogger* logger)
       : _e(e), _score(score), _pass1(pass1), _pass2(pass2), _logger(logger),
