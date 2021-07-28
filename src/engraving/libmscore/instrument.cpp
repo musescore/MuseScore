@@ -21,9 +21,6 @@
  */
 
 #include "instrument.h"
-
-#include <QTextDocumentFragment>
-
 #include "xml.h"
 #include "drumset.h"
 #include "articulation.h"
@@ -33,6 +30,7 @@
 #include "mscore.h"
 #include "part.h"
 #include "score.h"
+#include "io/htmlparser.h"
 
 #include "masterscore.h"
 
@@ -267,7 +265,7 @@ void StaffName::read(XmlReader& e)
     _name = e.readXml();
     if (_name.startsWith("<html>")) {
         // compatibility to old html implementation:
-        _name = QTextDocumentFragment::fromHtml(_name).toPlainText();
+        _name = mu::engraving::HtmlParser::parse(_name);
     }
 }
 
