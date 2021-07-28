@@ -23,9 +23,9 @@
 #include "marker.h"
 
 #include "translation.h"
+#include "io/xml.h"
 
 #include "score.h"
-#include "xml.h"
 #include "measure.h"
 
 using namespace mu;

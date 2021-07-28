@@ -24,6 +24,7 @@
 
 #include "draw/pen.h"
 #include "compat/read206.h"
+#include "io/xml.h"
 
 #include "chord.h"
 #include "measure.h"
@@ -33,7 +34,6 @@
 #include "stafftype.h"
 #include "system.h"
 #include "utils.h"
-#include "xml.h"
 
 using namespace mu;
 using namespace mu::engraving;

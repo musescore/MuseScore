@@ -28,10 +28,10 @@
 #include "clef.h"
 
 #include "translation.h"
+#include "io/xml.h"
 
 #include "measure.h"
 #include "ambitus.h"
-#include "xml.h"
 #include "symbol.h"
 #include "system.h"
 #include "score.h"

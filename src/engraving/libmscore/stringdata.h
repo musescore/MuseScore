@@ -23,11 +23,13 @@
 #ifndef __TABLATURE_H__
 #define __TABLATURE_H__
 
-#include "xml.h"
-
 namespace Ms {
 class Chord;
 class Note;
+class XmlReader;
+class XmlWriter;
+class Staff;
+class Fraction;
 
 //---------------------------------------------------------
 //   StringData

@@ -25,12 +25,12 @@
 #include <QClipboard>
 
 #include "testbase.h"
+#include "engraving/io/xml.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/measure.h"
 #include "libmscore/segment.h"
 #include "libmscore/chordrest.h"
 #include "libmscore/chord.h"
-#include "libmscore/xml.h"
 #include "libmscore/durationtype.h"
 
 static const QString COPYPASTE_DATA_DIR("copypaste_data/");

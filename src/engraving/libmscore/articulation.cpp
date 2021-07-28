@@ -23,6 +23,7 @@
 #include "articulation.h"
 
 #include "compat/read206.h"
+#include "io/xml.h"
 
 #include "score.h"
 #include "chordrest.h"
@@ -34,8 +35,6 @@
 #include "page.h"
 #include "barline.h"
 #include "sym.h"
-#include "xml.h"
-
 #include "masterscore.h"
 
 using namespace mu;

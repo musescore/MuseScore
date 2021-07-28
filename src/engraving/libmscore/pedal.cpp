@@ -21,7 +21,7 @@
  */
 
 #include "pedal.h"
-#include "xml.h"
+#include "io/xml.h"
 #include "system.h"
 #include "measure.h"
 #include "chordrest.h"

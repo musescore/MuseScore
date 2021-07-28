@@ -25,6 +25,7 @@
 #include <algorithm>
 
 #include "style/style.h"
+#include "io/xml.h"
 
 #include "changeMap.h"
 #include "measure.h"
@@ -33,7 +34,6 @@
 #include "system.h"
 #include "tempo.h"
 #include "text.h"
-#include "xml.h"
 
 using namespace mu;
 

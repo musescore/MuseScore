@@ -21,6 +21,8 @@
  */
 
 #include "measurerepeat.h"
+#include "draw/pen.h"
+#include "io/xml.h"
 #include "barline.h"
 #include "measure.h"
 #include "mscore.h"
@@ -28,7 +30,6 @@
 #include "staff.h"
 #include "symid.h"
 #include "system.h"
-#include "draw/pen.h"
 
 using namespace mu;
 

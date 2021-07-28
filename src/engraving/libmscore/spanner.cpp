@@ -19,10 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include "spanner.h"
+
+#include "io/xml.h"
 
 #include "connector.h"
 #include "score.h"
-#include "spanner.h"
 #include "system.h"
 #include "chordrest.h"
 #include "chord.h"

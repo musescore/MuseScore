@@ -25,6 +25,11 @@
 #include <QStack>
 #include <QRegularExpression>
 
+#include "draw/fontmetrics.h"
+#include "draw/brush.h"
+#include "draw/pen.h"
+#include "io/xml.h"
+
 #include "chordlist.h"
 #include "fret.h"
 #include "measure.h"
@@ -37,11 +42,6 @@
 #include "staff.h"
 #include "system.h"
 #include "utils.h"
-#include "xml.h"
-
-#include "draw/fontmetrics.h"
-#include "draw/brush.h"
-#include "draw/pen.h"
 
 using namespace mu;
 

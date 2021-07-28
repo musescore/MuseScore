@@ -21,12 +21,11 @@
  */
 
 #include "location.h"
-
+#include "io/xml.h"
 #include "chord.h"
 #include "element.h"
 #include "measure.h"
 #include "mscore.h"
-#include "xml.h"
 
 using namespace mu;
 

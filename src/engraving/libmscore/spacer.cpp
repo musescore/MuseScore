@@ -21,12 +21,12 @@
  */
 
 #include "spacer.h"
+#include "draw/pen.h"
+#include "io/xml.h"
 #include "score.h"
 #include "staff.h"
 #include "mscore.h"
-#include "xml.h"
 #include "measure.h"
-#include "draw/pen.h"
 
 using namespace mu;
 using namespace mu::draw;

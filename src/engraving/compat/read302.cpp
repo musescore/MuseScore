@@ -23,11 +23,11 @@
 
 #include "style/style.h"
 #include "style/defaultstyle.h"
+#include "io/xml.h"
 
 #include "chordlist.h"
 #include "readstyle.h"
 
-#include "libmscore/xml.h"
 #include "libmscore/score.h"
 #include "libmscore/staff.h"
 #include "libmscore/revisions.h"

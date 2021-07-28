@@ -21,12 +21,12 @@
  */
 
 #include "style/style.h"
+#include "io/xml.h"
 
 #include "mscore.h"
 #include "staff.h"
 #include "part.h"
 #include "clef.h"
-#include "xml.h"
 #include "score.h"
 #include "bracket.h"
 #include "keysig.h"
@@ -43,7 +43,6 @@
 #include "harmony.h"
 #include "bracketItem.h"
 #include "chord.h"
-
 #include "masterscore.h"
 
 // #define DEBUG_CLEFS

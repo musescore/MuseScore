@@ -25,6 +25,8 @@
 
 #include "score.h"
 
+#include "io/xml.h"
+
 #include "rest.h"
 #include "staff.h"
 #include "measure.h"
@@ -40,7 +42,6 @@
 #include "tie.h"
 #include "tuplet.h"
 #include "utils.h"
-#include "xml.h"
 #include "image.h"
 #include "measurerepeat.h"
 #include "chord.h"

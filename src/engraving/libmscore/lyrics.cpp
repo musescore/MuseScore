@@ -24,16 +24,16 @@
 
 #include <QRegularExpression>
 
+#include "io/xml.h"
+
 #include "chord.h"
 #include "score.h"
 #include "system.h"
-#include "xml.h"
 #include "staff.h"
 #include "segment.h"
 #include "undo.h"
 #include "textedit.h"
 #include "measure.h"
-
 #include "masterscore.h"
 
 using namespace mu;

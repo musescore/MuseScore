@@ -21,8 +21,9 @@
  */
 
 #include <cmath>
-
 #include <QRegularExpression>
+
+#include "io/xml.h"
 
 #include "measure.h"
 #include "musescoreCore.h"
@@ -32,7 +33,6 @@
 #include "tempo.h"
 #include "tempotext.h"
 #include "undo.h"
-#include "xml.h"
 
 using namespace mu;
 

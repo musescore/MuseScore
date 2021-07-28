@@ -21,9 +21,9 @@
  */
 
 #include "notedot.h"
+#include "io/xml.h"
 #include "score.h"
 #include "staff.h"
-#include "xml.h"
 #include "chord.h"
 #include "rest.h"
 

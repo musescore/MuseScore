@@ -30,6 +30,10 @@
 
 #include "ptrutils.h"
 
+#include "engraving/io/xml.h"
+#include "engraving/draw/pen.h"
+#include "engraving/draw/painterpath.h"
+
 #include "libmscore/masterscore.h"
 #include "libmscore/page.h"
 #include "libmscore/shadownote.h"
@@ -60,9 +64,6 @@
 #include "notationselection.h"
 
 #include "instrumentsconverter.h"
-
-#include "draw/pen.h"
-#include "draw/painterpath.h"
 
 using namespace mu::notation;
 

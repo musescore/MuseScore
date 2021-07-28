@@ -32,6 +32,7 @@
 
 #include "draw/pen.h"
 #include "style/style.h"
+#include "io/xml.h"
 
 #include "accidental.h"
 #include "ambitus.h"
@@ -106,7 +107,6 @@
 #include "undo.h"
 #include "utils.h"
 #include "volta.h"
-#include "xml.h"
 #include "systemdivider.h"
 #include "stafftypechange.h"
 #include "stafflines.h"

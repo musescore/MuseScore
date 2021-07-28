@@ -25,6 +25,7 @@
 #include "translation.h"
 #include "draw/font.h"
 #include "draw/fontmetrics.h"
+#include "io/xml.h"
 
 #include "score.h"
 #include "scorefont.h"
@@ -36,7 +37,6 @@
 #include "segment.h"
 #include "articulation.h"
 #include "stafftype.h"
-#include "xml.h"
 #include "marker.h"
 #include "stafflines.h"
 #include "spanner.h"

@@ -21,12 +21,14 @@
  */
 
 #include "breath.h"
+
+#include "io/xml.h"
+
 #include "sym.h"
 #include "system.h"
 #include "segment.h"
 #include "measure.h"
 #include "score.h"
-#include "xml.h"
 #include "staff.h"
 
 using namespace mu;

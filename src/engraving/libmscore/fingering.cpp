@@ -21,10 +21,12 @@
  */
 
 #include "fingering.h"
+
+#include "io/xml.h"
+
 #include "score.h"
 #include "staff.h"
 #include "undo.h"
-#include "xml.h"
 #include "chord.h"
 #include "part.h"
 #include "measure.h"

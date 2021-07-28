@@ -19,16 +19,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include "slurtie.h"
+
+#include "draw/pen.h"
+#include "io/xml.h"
 
 #include "measure.h"
 #include "score.h"
 #include "system.h"
 #include "undo.h"
-#include "slurtie.h"
 #include "tie.h"
 #include "chord.h"
 #include "page.h"
-#include "draw/pen.h"
 
 #include "log.h"
 

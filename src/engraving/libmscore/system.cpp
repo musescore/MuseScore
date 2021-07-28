@@ -28,13 +28,13 @@
 #include "system.h"
 
 #include "style/style.h"
+#include "io/xml.h"
 
 #include "measure.h"
 #include "segment.h"
 #include "score.h"
 #include "sig.h"
 #include "key.h"
-#include "xml.h"
 #include "clef.h"
 #include "text.h"
 #include "navigate.h"
