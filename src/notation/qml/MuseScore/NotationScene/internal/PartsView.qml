@@ -101,7 +101,7 @@ Item {
             }
 
             onTitleEdited: {
-                root.model.setPartTitle(model.index, title)
+                root.model.setPartTitle(model.index, newTitle)
             }
 
             onTitleEditingFinished: {
