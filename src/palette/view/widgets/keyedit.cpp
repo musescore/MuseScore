@@ -26,20 +26,22 @@
 #include <QDragEnterEvent>
 #include <QMimeData>
 
-#include "translation.h"
-#include "commonscene/commonscenetypes.h"
-#include "engraving/style/defaultstyle.h"
-#include "engraving/io/xml.h"
-
-#include "palettewidget.h"
-#include "palette/palettecreator.h"
 #include "keyedit.h"
-#include "libmscore/keysig.h"
-#include "libmscore/masterscore.h"
-#include "libmscore/accidental.h"
+
+#include "commonscene/commonscenetypes.h"
+#include "translation.h"
+
+#include "engraving/io/xml.h"
+#include "engraving/libmscore/accidental.h"
+#include "engraving/libmscore/clef.h"
+#include "engraving/libmscore/keysig.h"
+#include "engraving/libmscore/masterscore.h"
+#include "engraving/libmscore/mscore.h"
+#include "engraving/style/defaultstyle.h"
+
 #include "keycanvas.h"
-#include "libmscore/clef.h"
-#include "libmscore/mscore.h"
+#include "palettewidget.h"
+#include "internal/palettecreator.h"
 
 using namespace mu;
 using namespace mu::palette;

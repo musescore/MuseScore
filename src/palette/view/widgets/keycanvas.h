@@ -26,7 +26,7 @@
 #include <QFrame>
 
 #include "modularity/ioc.h"
-#include "../ipaletteconfiguration.h"
+#include "ipaletteconfiguration.h"
 #include "iengravingconfiguration.h"
 
 namespace Ms {

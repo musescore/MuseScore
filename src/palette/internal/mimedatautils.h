@@ -24,7 +24,7 @@
 
 #include <QBuffer>
 
-#include "engraving/libmscore/xml.h"
+#include "engraving/io/xml.h"
 
 namespace Ms {
 template<class T>

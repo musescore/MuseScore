@@ -28,7 +28,7 @@
 #include "async/asyncable.h"
 
 #include "modularity/ioc.h"
-#include "internal/palette/paletteprovider.h"
+#include "internal/paletteprovider.h"
 #include "actions/iactionsdispatcher.h"
 
 namespace mu::palette {

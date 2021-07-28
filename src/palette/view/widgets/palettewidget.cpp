@@ -54,7 +54,7 @@
 #include "engraving/style/defaultstyle.h"
 #include "engraving/style/style.h"
 
-#include "palette/palettecelliconengine.h"
+#include "internal/palettecelliconengine.h"
 
 #include "translation.h"
 

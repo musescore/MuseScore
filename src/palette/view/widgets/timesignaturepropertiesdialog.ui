@@ -329,7 +329,7 @@
   <customwidget>
    <class>Ms::NoteGroups</class>
    <extends>QGroupBox</extends>
-   <header>noteGroups.h</header>
+   <header>palette/view/widgets/noteGroups.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

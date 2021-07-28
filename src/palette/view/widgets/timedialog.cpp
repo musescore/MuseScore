@@ -24,8 +24,8 @@
 
 #include "timedialog.h"
 
-#include "palette/palettecreator.h"
 #include "palettewidget.h"
+#include "internal/palettecreator.h"
 
 #include "engraving/libmscore/chord.h"
 #include "engraving/libmscore/masterscore.h"

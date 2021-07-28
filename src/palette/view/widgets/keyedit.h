@@ -26,7 +26,7 @@
 #include "ui_keyedit.h"
 
 #include "modularity/ioc.h"
-#include "../ipaletteconfiguration.h"
+#include "ipaletteconfiguration.h"
 
 namespace mu::palette {
 class PaletteWidget;
