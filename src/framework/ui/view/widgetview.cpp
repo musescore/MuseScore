@@ -76,13 +76,32 @@ bool WidgetView::event(QEvent* event)
 
 bool WidgetView::handleHoverEvent(QHoverEvent* event)
 {
-    QMouseEvent mouseEvent(QEvent::MouseMove, event->posF(),
-                           Qt::NoButton, Qt::NoButton, event->modifiers());
-    mouseEvent.setAccepted(event->isAccepted());
-    mouseEvent.setTimestamp(event->timestamp());
-    bool ok = m_widget->handleEvent(&mouseEvent);
-    setCursor(qWidget()->cursor());
-    return ok;
+    auto convertEventType = [](QEvent::Type type) {
+        static const QMap<QEvent::Type, QEvent::Type> types {
+            { QEvent::HoverLeave, QEvent::Leave },
+            { QEvent::HoverEnter, QEvent::Enter },
+            { QEvent::HoverMove, QEvent::MouseMove }
+        };
+
+        return types[type];
+    };
+
+    QEvent::Type convertedType = convertEventType(event->type());
+
+    if (convertedType == QEvent::MouseMove) {
+        QMouseEvent mouseEvent(convertedType, event->posF(),
+                               Qt::NoButton, Qt::NoButton, event->modifiers());
+        mouseEvent.setAccepted(event->isAccepted());
+        mouseEvent.setTimestamp(event->timestamp());
+        bool ok = m_widget->handleEvent(&mouseEvent);
+        setCursor(qWidget()->cursor());
+        return ok;
+    }
+
+    QEvent newEvent(convertedType);
+    newEvent.setAccepted(event->isAccepted());
+
+    return m_widget->handleEvent(&newEvent);
 }
 
 void WidgetView::componentComplete()
