@@ -60,7 +60,6 @@ DrumsetPalette::DrumsetPalette(QWidget* parent)
 void DrumsetPalette::setNotation(INotationPtr notation)
 {
     m_notation = notation;
-    updateDrumset();
 }
 
 void DrumsetPalette::retranslate()
@@ -72,12 +71,16 @@ void DrumsetPalette::updateDrumset()
 {
     INotationNoteInputPtr noteInput = this->noteInput();
     if (!noteInput) {
+        clear();
         return;
     }
 
-    m_drumPalette->clear();
-
     NoteInputState state = noteInput->state();
+    if (m_drumset == state.drumset) {
+        return;
+    }
+
+    clear();
     m_drumset = state.drumset;
 
     if (!m_drumset) {
@@ -140,6 +143,14 @@ void DrumsetPalette::updateDrumset()
         }
         m_drumPalette->append(chord, mu::qtrc("drumset", m_drumset->name(pitch).toUtf8().data()), shortcut);
     }
+
+    noteInput->setDrumNote(selectedDrumNote());
+}
+
+void DrumsetPalette::clear()
+{
+    m_drumset = nullptr;
+    m_drumPalette->clear();
 }
 
 void DrumsetPalette::drumNoteSelected(int val)
