@@ -54,6 +54,8 @@
 #include "engraving/style/defaultstyle.h"
 #include "engraving/style/style.h"
 
+#include "palette/palettecelliconengine.h"
+
 #include "translation.h"
 
 using namespace mu;
@@ -161,28 +163,6 @@ void PaletteWidget::clear()
 // ====================================================
 // Drawing
 // ====================================================
-
-void PaletteWidget::paintPaletteElement(void* data, Element* element)
-{
-    using namespace mu::draw;
-    Painter* painter = static_cast<Painter*>(data);
-    painter->save();
-    painter->translate(element->pos()); // necessary for drawing child elements
-
-    auto colorBackup = Color::fromQColor(element->getProperty(Pid::COLOR).value<QColor>());
-    auto frameColorBackup = Color::fromQColor(element->getProperty(Pid::FRAME_FG_COLOR).value<QColor>());
-
-    auto color = Color::fromQColor(configuration()->elementsColor());
-    element->setProperty(Pid::COLOR, QVariant::fromValue(color));
-    element->setProperty(Pid::FRAME_FG_COLOR, QVariant::fromValue(color));
-
-    element->draw(painter);
-
-    element->setProperty(Pid::COLOR, QVariant::fromValue(colorBackup));
-    element->setProperty(Pid::FRAME_FG_COLOR, QVariant::fromValue(frameColorBackup));
-
-    painter->restore();
-}
 
 qreal PaletteWidget::mag() const
 {
@@ -626,7 +606,7 @@ QPixmap PaletteWidget::pixmapForCellAt(int paletteIdx) const
     }
 
     painter.setPen(Pen(color));
-    element->scanElements(&painter, paintPaletteElement);
+    element->scanElements(&painter, PaletteCellIconEngine::paintPaletteElement);
 
     element->setPos(pos);
     return pm;
@@ -1048,7 +1028,7 @@ void PaletteWidget::paintEvent(QPaintEvent* /*event*/)
         }
 
         painter.setPen(Pen(color));
-        el->scanElements(&painter, paintPaletteElement);
+        el->scanElements(&painter, PaletteCellIconEngine::paintPaletteElement);
         painter.restore();
     }
 }

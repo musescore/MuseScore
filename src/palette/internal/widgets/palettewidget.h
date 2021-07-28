@@ -69,9 +69,7 @@ public:
 
     void clear();
 
-    // Drawing
-    static void paintPaletteElement(void* data, Ms::Element* element);
-
+    // Geometry
     qreal mag() const;
     void setMag(qreal val);
 
