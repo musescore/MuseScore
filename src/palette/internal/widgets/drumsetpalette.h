@@ -53,6 +53,8 @@ private slots:
     void drumNoteSelected(int val);
 
 private:
+    void clear();
+
     void changeEvent(QEvent* event) override;
     void mouseMoveEvent(QMouseEvent* event) override;
     void mousePressEvent(QMouseEvent* event) override;

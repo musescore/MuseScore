@@ -207,7 +207,7 @@ void DockPage::toggleDock(const QString& dockName)
     setDockOpened(dockName, !isDockOpened(dockName));
 }
 
-void DockPage::setDockOpened(const QString &dockName, bool opened)
+void DockPage::setDockOpened(const QString& dockName, bool opened)
 {
     DockBase* dock = dockByName(dockName);
     if (!dock) {
