@@ -31,6 +31,11 @@ using namespace mu::notation;
 using namespace mu::workspace;
 using namespace mu::actions;
 
+static QString makeId(const ActionCode& actionCode, int itemIndex)
+{
+    return QString::fromStdString(actionCode) + QString::number(itemIndex);
+}
+
 AppMenuModel::AppMenuModel(QObject* parent)
     : AbstractMenuModel(parent)
 {
@@ -79,19 +84,29 @@ void AppMenuModel::onActionsStateChanges(const actions::ActionCodeList& codes)
 void AppMenuModel::setupConnections()
 {
     userScoresService()->recentScoreList().ch.onReceive(this, [this](const MetaList&) {
-        MenuItem& recentScoreListItem = findMenu("file-open");
-        recentScoreListItem.subitems = recentScores();
+        MenuItem& recentScoreListItem = findMenu("menu-file-open");
+
+        MenuItemList recentScoresList = recentScores();
+        bool openRecentEnabled = !recentScoresList.empty();
+
+        if (!recentScoresList.empty()) {
+            recentScoresList = appendClearRecentSection(recentScoresList);
+        }
+
+        recentScoreListItem.state.enabled = openRecentEnabled;
+        recentScoreListItem.subitems = recentScoresList;
+
         emit itemsChanged();
     });
 
     workspacesManager()->currentWorkspaceChanged().onNotify(this, [this]() {
-        MenuItem& workspacesItem = findMenu("select-workspace");
+        MenuItem& workspacesItem = findMenu("menu-select-workspace");
         workspacesItem.subitems = workspacesItems();
         emit itemsChanged();
     });
 
     workspacesManager()->workspacesListChanged().onNotify(this, [this]() {
-        MenuItem& workspacesItem = findMenu("select-workspace");
+        MenuItem& workspacesItem = findMenu("menu-select-workspace");
         workspacesItem.subitems = workspacesItems();
         emit itemsChanged();
     });
@@ -100,11 +115,16 @@ void AppMenuModel::setupConnections()
 MenuItem AppMenuModel::fileItem() const
 {
     MenuItemList recentScoresList = recentScores();
+    bool openRecentEnabled = true;
+
+    if (!recentScoresList.empty()) {
+        recentScoresList = appendClearRecentSection(recentScoresList);
+    }
 
     MenuItemList fileItems {
         makeMenuItem("file-new"),
         makeMenuItem("file-open"),
-        makeMenu(qtrc("appshell", "Open &Recent"), recentScoresList, !recentScoresList.empty(), "file-open"),
+        makeMenu(qtrc("appshell", "Open &Recent"), recentScoresList, openRecentEnabled, "menu-file-open"),
         makeSeparator(),
         makeMenuItem("file-close"),
         makeMenuItem("file-save"),
@@ -169,7 +189,7 @@ MenuItem AppMenuModel::viewItem() const
         makeMenuItem("zoomout"),
         makeSeparator(),
         makeMenu(qtrc("appshell", "&Toolbars"), toolbarsItems()),
-        makeMenu(qtrc("appshell", "W&orkspaces"), workspacesItems(), true, "select-workspace"),
+        makeMenu(qtrc("appshell", "W&orkspaces"), workspacesItems(), true, "menu-select-workspace"),
         makeMenuItem("toggle-statusbar"),
         makeSeparator(),
         makeMenuItem("split-h"), // need implement
@@ -282,9 +302,9 @@ MenuItem AppMenuModel::helpItem() const
         makeMenuItem("online-handbook"),
         makeMenu(qtrc("appshell", "&Tours"), toursItems),
         makeSeparator(),
-        makeMenuItem("about"), // need implement
+        makeMenuItem("about"),
         makeMenuItem("about-qt"),
-        makeMenuItem("about-musicxml"), // need implement
+        makeMenuItem("about-musicxml")
     };
 
     if (configuration()->isAppUpdatable()) {
@@ -296,7 +316,7 @@ MenuItem AppMenuModel::helpItem() const
               << makeMenuItem("report-bug")
               << makeMenuItem("leave-feedback")
               << makeSeparator()
-              << makeMenuItem("revert-factory"); // need implement
+              << makeMenuItem("revert-factory");
 
     return makeMenu(qtrc("appshell", "&Help"), helpItems);
 }
@@ -306,8 +326,11 @@ MenuItemList AppMenuModel::recentScores() const
     MenuItemList items;
     MetaList recentScores = userScoresService()->recentScoreList().val;
 
+    int index = 0;
     for (const Meta& meta : recentScores) {
-        MenuItem item = uiactionsRegister()->action("file-open");
+        MenuItem item;
+        item.id = makeId(item.code, index++);
+        item.code = "file-open";
         item.title = !meta.title.isEmpty() ? meta.title : meta.fileName.toQString();
         item.args = ActionData::make_arg1<io::path>(meta.filePath);
         item.state.enabled = true;
@@ -316,10 +339,16 @@ MenuItemList AppMenuModel::recentScores() const
         items << item;
     }
 
-    items << makeSeparator()
-          << makeMenuItem("clear-recent");
-
     return items;
+}
+
+MenuItemList AppMenuModel::appendClearRecentSection(const ui::MenuItemList& recentScores) const
+{
+    MenuItemList result = recentScores;
+    result << makeSeparator()
+           << makeMenuItem("clear-recent");
+
+    return result;
 }
 
 MenuItemList AppMenuModel::notesItems() const
@@ -483,8 +512,10 @@ MenuItemList AppMenuModel::workspacesItems() const
         return workspace1->name() < workspace2->name();
     });
 
+    int index = 0;
     for (const IWorkspacePtr& workspace : workspaces) {
         MenuItem item = uiactionsRegister()->action("select-workspace");
+        item.id = makeId(item.code, index++);
         item.title = QString::fromStdString(workspace->title());
         item.args = ActionData::make_arg1<std::string>(workspace->name());
 

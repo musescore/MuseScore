@@ -77,7 +77,7 @@ public:
 
     Q_INVOKABLE int minZoomPercentage() const;
     Q_INVOKABLE int maxZoomPercentage() const;
-    Q_INVOKABLE void setCurrentZoomIndex(int zoomIndex);
+    Q_INVOKABLE void setCurrentZoom(const QString& zoomId);
     Q_INVOKABLE void zoomIn();
     Q_INVOKABLE void zoomOut();
 

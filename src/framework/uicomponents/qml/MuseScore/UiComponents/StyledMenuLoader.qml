@@ -22,10 +22,9 @@
 import QtQuick 2.15
 
 Loader {
-
     id: loader
 
-    signal handleAction(string actionCode, int actionIndex)
+    signal handleMenuItem(string itemId)
 
     property alias menu: loader.item
     property var menuAnchorItem: null
@@ -114,8 +113,8 @@ Loader {
         StyledMenu {
             id: itemMenu
 
-            onHandleAction: {
-                Qt.callLater(loader.handleAction, actionCode, actionIndex)
+            onHandleMenuItem: {
+                Qt.callLater(loader.handleMenuItem, itemId)
                 itemMenu.close()
             }
 

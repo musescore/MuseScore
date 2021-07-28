@@ -164,8 +164,8 @@ FocusScope {
                 StyledMenuLoader {
                     id: contextMenuLoader
 
-                    onHandleAction: function (actionCode) {
-                        notationView.handleAction(actionCode)
+                    onHandleMenuItem: function (itemId) {
+                        notationView.handleContextMenuItem(itemId)
                     }
                 }
             }

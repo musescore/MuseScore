@@ -243,6 +243,7 @@ struct UiActionState
 
 struct MenuItem : public UiAction
 {
+    QString id;
     QString section;
     UiActionState state;
     bool selectable = false;
@@ -252,7 +253,10 @@ struct MenuItem : public UiAction
 
     MenuItem() = default;
     MenuItem(const UiAction& a)
-        : UiAction(a) {}
+        : UiAction(a)
+    {
+        id = QString::fromStdString(a.code);
+    }
 
     QVariantMap toMap() const
     {
@@ -262,6 +266,7 @@ struct MenuItem : public UiAction
         }
 
         return {
+            { "id", id },
             { "code", QString::fromStdString(code) },
             { "shortcut", QString::fromStdString(shortcut) },
             { "title", title },
@@ -275,6 +280,11 @@ struct MenuItem : public UiAction
             { "selected", selected },
             { "subitems", subitemsVariantList }
         };
+    }
+
+    bool isValid() const
+    {
+        return !id.isEmpty();
     }
 };
 using MenuItemList = QList<MenuItem>;
