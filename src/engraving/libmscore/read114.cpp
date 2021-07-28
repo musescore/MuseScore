@@ -21,15 +21,14 @@
  */
 
 #include <cmath>
-#include <QTextFragment>
-#include <QTextDocument>
-#include <QTextDocumentFragment>
 
 #include "style/style.h"
 #include "style/defaultstyle.h"
 #include "compat/pageformat.h"
 #include "compat/chordlist.h"
 #include "compat/readstyle.h"
+
+#include "io/htmlparser.h"
 
 #include "score.h"
 #include "slur.h"
@@ -665,7 +664,7 @@ static void readFingering114(XmlReader& e, Fingering* fing)
         const QStringRef& tag(e.name());
 
         if (tag == "html-data") {
-            auto htmlDdata = QTextDocumentFragment::fromHtml(e.readXml()).toPlainText();
+            auto htmlDdata = mu::engraving::HtmlParser::parse(e.readXml());
             htmlDdata.replace(" ", "");
             fing->setPlainText(htmlDdata);
         } else if (tag == "subtype") {
