@@ -25,7 +25,6 @@
 #include <QBuffer>
 #include <QRegularExpression>
 
-#include "draw/qpainterprovider.h"
 #include "style/defaultstyle.h"
 
 #include "compat/chordlist.h"

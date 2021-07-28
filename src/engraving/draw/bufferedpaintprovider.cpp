@@ -22,7 +22,6 @@
 #include "bufferedpaintprovider.h"
 
 #include "utils/drawlogger.h"
-#include "fontcompat.h"
 #include "log.h"
 #include "config.h"
 

@@ -26,6 +26,7 @@
 #include <QMultiMap>
 #include <QXmlStreamReader>
 #include <QTextStream>
+#include <QFile>
 
 #include "draw/color.h"
 #include "connector.h"

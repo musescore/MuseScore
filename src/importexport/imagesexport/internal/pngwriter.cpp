@@ -28,8 +28,6 @@
 #include "libmscore/masterscore.h"
 #include "libmscore/page.h"
 
-#include "engraving/draw/qpainterprovider.h"
-
 #include "log.h"
 
 using namespace mu::iex::imagesexport;
