@@ -52,7 +52,8 @@ add_definitions(
     -DNO_ENGRAVING_INTERACTIVE
     -DNO_ENGRAVING_QSVGRENDER
 )
-set(NO_ENGRAVING_QFONTENGINE ON)
+
+set(NO_ENGRAVING_INTERNAL ON)
 add_subdirectory(${MU_ROOT}/src/engraving engraving)
 
 include(${MU_ROOT}/src/framework/global/modularity/modularity.cmake)

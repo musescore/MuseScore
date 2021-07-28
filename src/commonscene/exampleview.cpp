@@ -33,8 +33,6 @@
 #include "libmscore/chord.h"
 #include "libmscore/xml.h"
 
-#include "engraving/draw/qpainterprovider.h"
-
 #include "commonscenetypes.h"
 
 using namespace mu;
