@@ -72,12 +72,12 @@ AppWindow {
     function makeMenuItem(parentMenu, itemInfo) {
         var menuItem = menuItemComponent.createObject(parentMenu)
 
+        menuItem.id = itemInfo.id
         menuItem.text = itemInfo.title
         menuItem.enabled = itemInfo.enabled
         menuItem.checked = itemInfo.checked
         menuItem.checkable = itemInfo.checkable
         menuItem.shortcut = itemInfo.shortcut
-        menuItem.actionCode = itemInfo.code
         menuItem.separator = !Boolean(itemInfo.title)
 
         return menuItem
@@ -102,7 +102,6 @@ AppWindow {
                         addMenu(subMenu)
                     } else {
                         var menuItem = makeMenuItem(this, item)
-                        menuItem.actionIndex = i
 
                         addItem(menuItem)
                     }
@@ -115,11 +114,10 @@ AppWindow {
         id: menuItemComponent
 
         PLATFORM.MenuItem {
-            property string actionCode: ""
-            property int actionIndex: -1
+            property string id: ""
 
             onTriggered: {
-                Qt.callLater(menuModel.handleAction, actionCode, actionIndex)
+                Qt.callLater(menuModel.handleMenuItem, id)
             }
         }
     }

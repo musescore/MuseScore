@@ -165,7 +165,7 @@ Rectangle {
             }
 
             onChangeZoomRequested: {
-                model.setCurrentZoomIndex(newZoomIndex)
+                model.setCurrentZoom(zoomId)
             }
 
             onZoomInRequested: {
@@ -204,8 +204,15 @@ Rectangle {
                 return result
             }
 
-            onHandleAction: {
-                model.handleAction(actionCode)
+            onHandleMenuItem: {
+                switch (itemId) {
+                case model.concertPitchAction.id:
+                    model.handleAction(model.concertPitchAction.code)
+                    break
+                case model.currentWorkspaceAction.id:
+                    model.handleAction(model.concertPitchAction.code)
+                    break
+                }
             }
         }
     }

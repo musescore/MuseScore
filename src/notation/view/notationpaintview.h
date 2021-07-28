@@ -36,6 +36,7 @@
 #include "playback/iplaybackcontroller.h"
 #include "shortcuts/ishortcutsregister.h"
 #include "ui/iuiactionsregister.h"
+#include "ui/view/abstractmenumodel.h"
 
 #include "notationviewinputcontroller.h"
 #include "noteinputcursor.h"
@@ -92,7 +93,7 @@ public:
     void showContextMenu(const ElementType& elementType, const QPoint& pos) override;
     void hideContextMenu() override;
 
-    Q_INVOKABLE void handleAction(const QString& actionCode);
+    Q_INVOKABLE void handleContextMenuItem(const QString& itemId);
 
     INotationInteractionPtr notationInteraction() const override;
     INotationPlaybackPtr notationPlayback() const override;
@@ -203,6 +204,8 @@ private:
 
     qreal m_previousVerticalScrollPosition = 0;
     qreal m_previousHorizontalScrollPosition = 0;
+
+    ui::AbstractMenuModel m_currentContextMenuModel;
 };
 }
 

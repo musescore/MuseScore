@@ -42,7 +42,7 @@ ListItemBlank {
 
     property int padding: 0
 
-    signal handleAction(string actionCode, int actionIndex)
+    signal handleMenuItem(string itemId)
 
     signal subMenuShowed()
     signal subMenuClosed()
@@ -119,8 +119,8 @@ ListItemBlank {
 
             menu.model = modelData.subitems
 
-            menu.handleAction.connect(function(actionCode, actionIndex) {
-                Qt.callLater(root.handleAction, actionCode, actionIndex)
+            menu.handleMenuItem.connect(function(itemId) {
+                Qt.callLater(root.handleMenuItem, itemId)
                 menu.close()
             })
 
@@ -279,6 +279,6 @@ ListItemBlank {
             return
         }
 
-        root.handleAction(modelData.code, prv.isSelectable ? index : -1)
+        root.handleMenuItem(modelData.id)
     }
 }

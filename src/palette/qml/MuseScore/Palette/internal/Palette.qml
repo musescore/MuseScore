@@ -624,12 +624,12 @@ GridView {
                 property bool canEdit: true
 
                 property var items: [
-                    { code: "delete", title: qsTrc("palette", "Delete"), icon: IconCode.DELETE_TANK, enabled: contextMenu.canEdit },
-                    { code: "properties", title: qsTrc("palette", "Properties…"), enabled: contextMenu.canEdit }
+                    { id: "delete", title: qsTrc("palette", "Delete"), icon: IconCode.DELETE_TANK, enabled: contextMenu.canEdit },
+                    { id: "properties", title: qsTrc("palette", "Properties…"), enabled: contextMenu.canEdit }
                 ]
 
-                onHandleAction: {
-                    switch(actionCode) {
+                onHandleMenuItem: {
+                    switch(itemId) {
                     case "delete":
                         paletteView.paletteController.remove(contextMenu.modelIndex)
                         break

@@ -52,8 +52,6 @@ private:
         OrderRole
     };
 
-    void onActionsStateChanges(const actions::ActionCodeList& codes) override;
-
     INotationPtr notation() const;
 
     void onNotationChanged();
@@ -69,13 +67,14 @@ private:
     void updateVoicesState();
     void updateArticulationsState();
     void updateRestState();
+    void updateTupletState();
+    void updateAddState();
 
     bool isNoteInputModeAction(const actions::ActionCode& actionCode) const;
-    bool isTupletChooseAction(const actions::ActionCode& actionCode) const;
 
     ui::UiAction currentNoteInputModeAction() const;
 
-    ui::MenuItem makeActionItem(const ui::UiAction& action, const QString& section);
+    ui::MenuItem makeActionItem(const ui::UiAction& action, const QString& section, const ui::MenuItemList& subitems = {});
     ui::MenuItem makeAddItem(const QString& section);
 
     QVariantList subitems(const actions::ActionCode& actionCode) const;
@@ -90,9 +89,6 @@ private:
     ui::MenuItemList linesItems() const;
 
     bool isMenuSecondary(const actions::ActionCode& actionCode) const;
-
-    void notifyAboutTupletItemChanged();
-    void notifyAboutAddItemChanged();
 
     int findNoteInputModeItemIndex() const;
 

@@ -68,11 +68,11 @@ Column {
                 menuModel: {
                     var result = []
 
-                    result.push({ title: qsTrc("inspector", "Reset"), enabled: root.isModified, icon: IconCode.NONE, code: "reset" })
+                    result.push({ title: qsTrc("inspector", "Reset"), enabled: root.isModified, icon: IconCode.NONE, id: "reset" })
 
                     if (root.isStyled) {
                         if (root.isModified) {
-                            result.push({ title: qsTrc("inspector", "Save as default style for this score"), enabled: true, icon: IconCode.SAVE, code: "save" })
+                            result.push({ title: qsTrc("inspector", "Save as default style for this score"), enabled: true, icon: IconCode.SAVE, id: "save" })
                         } else {
                             result.push({ title: qsTrc("inspector", "This is set as the default style for this score"), enabled: false, icon: IconCode.TICK_RIGHT_ANGLE })
                         }
@@ -83,8 +83,8 @@ Column {
 
                 menuAlign: Qt.AlignHCenter
 
-                onHandleAction: {
-                    switch (actionCode) {
+                onHandleMenuItem: {
+                    switch (id) {
                     case "reset":
                         propertyItem.resetToDefault()
                         break
