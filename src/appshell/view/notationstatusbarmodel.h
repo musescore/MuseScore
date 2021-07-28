@@ -81,7 +81,7 @@ public:
     Q_INVOKABLE void zoomIn();
     Q_INVOKABLE void zoomOut();
 
-    Q_INVOKABLE void handleMenuItem(const QString& itemId);
+    Q_INVOKABLE void handleAction(const QString& actionCode);
 
 public slots:
     void setCurrentZoomPercentage(int zoomPercentage);
