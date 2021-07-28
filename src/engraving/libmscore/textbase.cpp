@@ -23,8 +23,6 @@
 #include <cmath>
 
 #include <QStack>
-#include <QTextFragment>
-#include <QTextDocument>
 #include <QRegularExpression>
 
 #include "draw/fontmetrics.h"
