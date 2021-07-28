@@ -28,7 +28,7 @@ namespace mu::engraving::compat {
 class Read114;
 class Read206;
 class Read302;
-class ReadStyleHook;
+struct ReadStyleHook;
 }
 
 namespace Ms {
