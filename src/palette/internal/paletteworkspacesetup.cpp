@@ -23,10 +23,10 @@
 
 #include <QBuffer>
 
-#include "palette/paletteprovider.h"
-#include "palette/palettecreator.h"
+#include "paletteprovider.h"
+#include "palettecreator.h"
 
-#include "engraving/libmscore/xml.h"
+#include "engraving/io/xml.h"
 
 #include "log.h"
 

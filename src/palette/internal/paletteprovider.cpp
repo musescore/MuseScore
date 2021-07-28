@@ -32,10 +32,10 @@
 #include "libmscore/keysig.h"
 #include "libmscore/timesig.h"
 
-#include "keyedit.h"
-#include "widgets/palettewidget.h"
 #include "palettecreator.h"
-#include "timedialog.h"
+#include "view/widgets/keyedit.h"
+#include "view/widgets/palettewidget.h"
+#include "view/widgets/timedialog.h"
 
 #include "io/path.h"
 #include "commonscene/commonscenetypes.h"

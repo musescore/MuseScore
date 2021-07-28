@@ -24,8 +24,8 @@
 
 #include <QMimeData>
 
-#include "palettecelliconengine.h"
-#include "palettetree.h"
+#include "internal/palettetree.h"
+#include "internal/palettecelliconengine.h"
 
 #include "engraving/libmscore/actionicon.h"
 #include "engraving/libmscore/beam.h"

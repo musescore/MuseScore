@@ -27,7 +27,7 @@
 #include "libmscore/fraction.h"
 
 #include "modularity/ioc.h"
-#include "../ipaletteconfiguration.h"
+#include "ipaletteconfiguration.h"
 
 namespace mu::palette {
 class PaletteWidget;
