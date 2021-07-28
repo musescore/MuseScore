@@ -21,6 +21,8 @@
  */
 
 #include "figuredbass.h"
+#include "draw/fontmetrics.h"
+#include "io/xml.h"
 #include "score.h"
 #include "note.h"
 #include "measure.h"
@@ -30,9 +32,6 @@
 #include "chord.h"
 #include "rest.h"
 #include "score.h"
-#include "xml.h"
-
-#include "draw/fontmetrics.h"
 
 using namespace mu;
 

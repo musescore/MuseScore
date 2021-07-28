@@ -21,12 +21,12 @@
  */
 
 #include "duration.h"
+#include "io/xml.h"
 #include "measure.h"
 #include "tuplet.h"
 #include "score.h"
 #include "undo.h"
 #include "staff.h"
-#include "xml.h"
 #include "property.h"
 
 using namespace mu;

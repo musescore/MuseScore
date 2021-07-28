@@ -22,20 +22,19 @@
 
 #include "scorediff.h"
 
+#include <algorithm>
+#include <utility>
 #include <QRegularExpression>
 
 #include "compat/writescorehook.h"
+#include "io/xml.h"
 
 #include "duration.h"
 #include "measure.h"
 #include "score.h"
 #include "staff.h"
-#include "xml.h"
 
 #include "dtl/dtl.hpp"
-
-#include <algorithm>
-#include <utility>
 
 using namespace mu;
 using namespace mu::engraving;

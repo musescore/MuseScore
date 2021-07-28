@@ -23,12 +23,12 @@
 #include "styledef.h"
 
 #include "draw/geometry.h"
+#include "io/xml.h"
 
 #include "libmscore/mscore.h"
 #include "libmscore/types.h"
 #include "libmscore/spatium.h"
 #include "libmscore/mscore.h"
-#include "libmscore/xml.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/articulation.h"
 #include "libmscore/harmony.h"

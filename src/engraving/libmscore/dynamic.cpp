@@ -21,15 +21,14 @@
  */
 #include "dynamic.h"
 #include "style/style.h"
+#include "io/xml.h"
 
 #include "dynamichairpingroup.h"
-#include "xml.h"
 #include "score.h"
 #include "measure.h"
 #include "system.h"
 #include "segment.h"
 #include "utils.h"
-
 #include "mscore.h"
 #include "chord.h"
 #include "undo.h"

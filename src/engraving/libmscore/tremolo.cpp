@@ -27,6 +27,7 @@
 #include "draw/pen.h"
 #include "draw/brush.h"
 #include "style/style.h"
+#include "io/xml.h"
 
 #include "score.h"
 #include "staff.h"
@@ -36,7 +37,6 @@
 #include "segment.h"
 #include "stem.h"
 #include "symid.h"
-#include "xml.h"
 
 using namespace mu;
 

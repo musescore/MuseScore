@@ -21,16 +21,16 @@
  */
 
 #include "image.h"
-#include "xml.h"
-#include "score.h"
-#include "undo.h"
-#include "mscore.h"
-#include "imageStore.h"
 
 #include "draw/pixmap.h"
 #include "draw/transform.h"
 #include "draw/svgrenderer.h"
+#include "io/xml.h"
 
+#include "score.h"
+#include "undo.h"
+#include "mscore.h"
+#include "imageStore.h"
 #include "masterscore.h"
 
 using namespace mu;

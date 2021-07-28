@@ -21,7 +21,7 @@
  */
 
 #include "chordline.h"
-#include "xml.h"
+#include "io/xml.h"
 #include "chord.h"
 #include "measure.h"
 #include "system.h"

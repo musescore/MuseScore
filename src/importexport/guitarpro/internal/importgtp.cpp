@@ -29,6 +29,8 @@
 
 #include "importptb.h"
 
+#include "engraving/io/xml.h"
+
 #include <libmscore/measurebase.h>
 #include <libmscore/text.h>
 #include <libmscore/box.h>

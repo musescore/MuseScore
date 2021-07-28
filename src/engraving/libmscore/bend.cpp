@@ -21,16 +21,17 @@
  */
 
 #include "bend.h"
+
+#include "draw/pen.h"
+#include "draw/brush.h"
+#include "draw/fontmetrics.h"
+#include "io/xml.h"
+
 #include "score.h"
 #include "undo.h"
 #include "staff.h"
 #include "chord.h"
 #include "note.h"
-#include "xml.h"
-#include "draw/pen.h"
-#include "draw/brush.h"
-
-#include "draw/fontmetrics.h"
 
 using namespace mu;
 using namespace mu::draw;

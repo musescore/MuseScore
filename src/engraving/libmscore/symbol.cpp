@@ -21,17 +21,18 @@
  */
 
 #include "symbol.h"
+
+#include "draw/fontmetrics.h"
+#include "io/xml.h"
+
 #include "sym.h"
 #include "scorefont.h"
-#include "xml.h"
 #include "system.h"
 #include "staff.h"
 #include "measure.h"
 #include "page.h"
 #include "score.h"
 #include "image.h"
-
-#include "draw/fontmetrics.h"
 
 using namespace mu;
 

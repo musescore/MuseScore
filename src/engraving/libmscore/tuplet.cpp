@@ -24,11 +24,11 @@
 
 #include "draw/pen.h"
 #include "style/style.h"
+#include "io/xml.h"
 
 #include "score.h"
 #include "chord.h"
 #include "note.h"
-#include "xml.h"
 #include "staff.h"
 #include "text.h"
 #include "element.h"

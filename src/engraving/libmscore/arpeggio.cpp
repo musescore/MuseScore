@@ -25,6 +25,7 @@
 #include <cmath>
 
 #include "translation.h"
+#include "io/xml.h"
 
 #include "scorefont.h"
 #include "chord.h"
@@ -35,7 +36,6 @@
 #include "page.h"
 #include "segment.h"
 #include "property.h"
-#include "xml.h"
 
 using namespace mu;
 

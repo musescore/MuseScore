@@ -25,8 +25,8 @@
  */
 
 #include "style/style.h"
+#include "io/xml.h"
 
-#include "xml.h"
 #include "element.h"
 #include "note.h"
 #include "chord.h"

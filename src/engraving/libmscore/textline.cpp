@@ -19,9 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include "textline.h"
+
+#include "io/xml.h"
 
 #include "score.h"
-#include "textline.h"
 #include "staff.h"
 #include "system.h"
 #include "undo.h"

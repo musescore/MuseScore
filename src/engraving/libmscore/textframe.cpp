@@ -19,6 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include "textframe.h"
+
+#include "draw/fontmetrics.h"
+#include "io/xml.h"
 
 #include "box.h"
 #include "text.h"
@@ -31,10 +35,6 @@
 #include "layoutbreak.h"
 #include "fret.h"
 #include "mscore.h"
-#include "textframe.h"
-#include "xml.h"
-
-#include "draw/fontmetrics.h"
 
 using namespace mu;
 

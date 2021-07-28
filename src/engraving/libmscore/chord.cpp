@@ -25,9 +25,9 @@
 #include <cmath>
 
 #include "style/style.h"
+#include "io/xml.h"
 
 #include "note.h"
-#include "xml.h"
 #include "segment.h"
 #include "text.h"
 #include "measure.h"

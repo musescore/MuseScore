@@ -21,6 +21,7 @@
  */
 
 #include "accidental.h"
+#include "io/xml.h"
 #include "note.h"
 #include "symbol.h"
 #include "sym.h"
@@ -29,7 +30,6 @@
 #include "actionicon.h"
 #include "staff.h"
 #include "undo.h"
-#include "xml.h"
 
 using namespace mu;
 

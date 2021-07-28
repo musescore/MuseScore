@@ -27,7 +27,7 @@
 
 #include <QBuffer>
 
-#include "log.h"
+#include "io/xml.h"
 
 #include "mscore.h"
 #include "arpeggio.h"
@@ -63,13 +63,14 @@
 #include "tremolo.h"
 #include "tuplet.h"
 #include "utils.h"
-#include "xml.h"
 #include "staff.h"
 #include "part.h"
 #include "accidental.h"
 #include "articulation.h"
 #include "stafftext.h"
 #include "sticking.h"
+
+#include "log.h"
 
 using namespace mu;
 

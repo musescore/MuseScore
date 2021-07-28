@@ -20,8 +20,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "mscore.h"
 #include "segment.h"
+
+#include "io/xml.h"
+
+#include "mscore.h"
 #include "element.h"
 #include "chord.h"
 #include "note.h"
@@ -44,7 +47,6 @@
 #include "clef.h"
 #include "timesig.h"
 #include "system.h"
-#include "xml.h"
 #include "undo.h"
 #include "harmony.h"
 #include "hook.h"

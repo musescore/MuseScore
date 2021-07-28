@@ -21,6 +21,7 @@
  */
 
 #include "measurebase.h"
+#include "io/xml.h"
 #include "measure.h"
 #include "staff.h"
 #include "score.h"
@@ -30,7 +31,6 @@
 #include "image.h"
 #include "segment.h"
 #include "tempo.h"
-#include "xml.h"
 #include "system.h"
 #include "stafftypechange.h"
 

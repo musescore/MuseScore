@@ -19,8 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include "slur.h"
 
 #include <cmath>
+
+#include "draw/transform.h"
+#include "draw/pen.h"
+#include "draw/brush.h"
+#include "io/xml.h"
 
 #include "measure.h"
 #include "score.h"
@@ -28,15 +34,10 @@
 #include "undo.h"
 #include "chord.h"
 #include "stem.h"
-#include "slur.h"
 #include "tie.h"
 #include "part.h"
 #include "navigate.h"
 #include "articulation.h"
-
-#include "draw/transform.h"
-#include "draw/pen.h"
-#include "draw/brush.h"
 
 using namespace mu;
 using namespace mu::draw;

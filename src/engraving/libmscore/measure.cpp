@@ -28,6 +28,7 @@
 #include <cmath>
 
 #include "style/style.h"
+#include "io/xml.h"
 
 #include "measure.h"
 #include "accidental.h"
@@ -88,12 +89,10 @@
 #include "undo.h"
 #include "utils.h"
 #include "volta.h"
-#include "xml.h"
 #include "systemdivider.h"
 #include "stafftypechange.h"
 #include "stafflines.h"
 #include "bracketItem.h"
-
 #include "masterscore.h"
 
 #include "log.h"

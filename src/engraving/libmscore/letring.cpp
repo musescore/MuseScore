@@ -21,11 +21,10 @@
  */
 
 #include "letring.h"
-#include "xml.h"
+#include "io/xml.h"
 #include "system.h"
 #include "measure.h"
 #include "chordrest.h"
-
 #include "score.h"
 
 using namespace mu;

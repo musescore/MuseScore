@@ -20,11 +20,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "score.h"
 #include "stafftext.h"
+#include "io/xml.h"
+#include "score.h"
 #include "system.h"
 #include "staff.h"
-#include "xml.h"
 #include "measure.h"
 
 using namespace mu;

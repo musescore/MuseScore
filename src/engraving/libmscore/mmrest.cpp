@@ -21,12 +21,15 @@
  */
 
 #include "mmrest.h"
+
+#include "draw/pen.h"
+#include "io/xml.h"
+
 #include "measure.h"
 #include "score.h"
 #include "symid.h"
 #include "undo.h"
 #include "utils.h"
-#include "draw/pen.h"
 
 using namespace mu;
 
