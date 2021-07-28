@@ -228,7 +228,7 @@
             <Articulation>
               <subtype>articLaissezVibrerBelow</subtype>
               <autoplace>0</autoplace>
-              <offset x="1.17797" y="-0.21"/>
+              <offset x="0.975938" y="-0.214063"/>
               </Articulation>
             <StemDirection>up</StemDirection>
             <Note>
@@ -245,7 +245,7 @@
             <Articulation>
               <subtype>articLaissezVibrerAbove</subtype>
               <autoplace>0</autoplace>
-              <offset x="1.17797" y="0.23"/>
+              <offset x="0.975937" y="0.23"/>
               </Articulation>
             <StemDirection>down</StemDirection>
             <Note>
@@ -268,7 +268,7 @@
             <Articulation>
               <subtype>articLaissezVibrerAbove</subtype>
               <autoplace>0</autoplace>
-              <offset x="1.17797" y="0.23"/>
+              <offset x="0.975937" y="0.23"/>
               </Articulation>
             <StemDirection>down</StemDirection>
             <Note>
@@ -395,7 +395,7 @@
             <Articulation>
               <subtype>articLaissezVibrerBelow</subtype>
               <autoplace>0</autoplace>
-              <offset x="1.17797" y="-0.21"/>
+              <offset x="0.975937" y="-0.214062"/>
               </Articulation>
             <StemDirection>up</StemDirection>
             <Note>
