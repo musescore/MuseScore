@@ -325,9 +325,9 @@ void NotationStatusBarModel::zoomOut()
     dispatch("zoomout");
 }
 
-void NotationStatusBarModel::handleMenuItem(const QString& itemId)
+void NotationStatusBarModel::handleAction(const QString& actionCode)
 {
-    dispatch(codeFromQString(itemId));
+    dispatch(codeFromQString(actionCode));
 }
 
 INotationPtr NotationStatusBarModel::notation() const

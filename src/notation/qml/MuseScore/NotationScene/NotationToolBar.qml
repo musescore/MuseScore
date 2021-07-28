@@ -88,7 +88,7 @@ Rectangle {
             orientation: Qt.Horizontal
 
             onClicked: {
-                toolbarModel.handleMenuItem(model.id)
+                toolbarModel.handleAction(model.code)
             }
         }
     }
