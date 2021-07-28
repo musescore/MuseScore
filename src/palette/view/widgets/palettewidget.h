@@ -25,7 +25,7 @@
 
 #include <QScrollArea>
 
-#include "palette/palette.h"
+#include "internal/palette.h"
 
 #include "engraving/libmscore/element.h"
 

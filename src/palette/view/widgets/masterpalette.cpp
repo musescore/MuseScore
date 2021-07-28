@@ -27,7 +27,7 @@
 #include "timedialog.h"
 #include "symboldialog.h"
 
-#include "palette/palettecreator.h"
+#include "internal/palettecreator.h"
 
 #include "smuflranges.h"
 #include "widgetstatestore.h"

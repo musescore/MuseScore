@@ -32,19 +32,19 @@
 #include "ui/iuiactionsregister.h"
 
 #include "internal/paletteconfiguration.h"
-#include "internal/widgets/masterpalette.h"
-#include "internal/widgets/specialcharactersdialog.h"
-#include "internal/paletteactionscontroller.h"
 #include "internal/paletteuiactions.h"
-#include "internal/palette/paletteprovider.h"
-#include "internal/widgets/editdrumsetdialog.h"
+#include "internal/paletteactionscontroller.h"
+#include "internal/paletteworkspacesetup.h"
+#include "internal/paletteprovider.h"
 
 #include "view/paletterootmodel.h"
 #include "view/palettepropertiesmodel.h"
 #include "view/palettecellpropertiesmodel.h"
 
-#include "internal/paletteworkspacesetup.h"
-#include "internal/widgets/timesignaturepropertiesdialog.h"
+#include "view/widgets/masterpalette.h"
+#include "view/widgets/specialcharactersdialog.h"
+#include "view/widgets/editdrumsetdialog.h"
+#include "view/widgets/timesignaturepropertiesdialog.h"
 
 using namespace mu::palette;
 using namespace mu::modularity;
