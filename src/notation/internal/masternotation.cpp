@@ -436,11 +436,34 @@ mu::ValNt<bool> MasterNotation::needSave() const
 
 void MasterNotation::initExcerpts(const ExcerptNotationList& excerpts)
 {
+    ExcerptNotationList result = m_excerpts.val;
     for (IExcerptNotationPtr excerptNotation : excerpts) {
+        ExcerptNotation* excerptNotationImpl = get_impl(excerptNotation);
+        if (excerptNotationImpl && !excerptNotationImpl->excerpt()) {
+            excerptNotationImpl->setExcerpt(new Ms::Excerpt(masterScore()));
+        }
+
         excerptNotation->init();
+        result.push_back(excerptNotation);
     }
 
-    doSetExcerpts(excerpts);
+    doSetExcerpts(result);
+}
+
+void MasterNotation::removeExcerpts(const ExcerptNotationList& excerpts)
+{
+    for (IExcerptNotationPtr excerptNotation : excerpts) {
+        auto it = std::find(m_excerpts.val.begin(), m_excerpts.val.end(), excerptNotation);
+        if (it == m_excerpts.val.end()) {
+            continue;
+        }
+
+        Ms::Excerpt* excerpt = get_impl(excerptNotation)->excerpt();
+        masterScore()->undo(new Ms::RemoveExcerpt(excerpt));
+        m_excerpts.val.erase(it);
+    }
+
+    doSetExcerpts(m_excerpts.val);
 }
 
 void MasterNotation::doSetExcerpts(ExcerptNotationList excerpts)
@@ -466,7 +489,29 @@ INotationPartsPtr MasterNotation::parts() const
 
 ExcerptNotationList MasterNotation::availableExcerpts() const
 {
-    QList<Ms::Excerpt*> excerpts = Ms::Excerpt::createExcerptsFromParts(score()->parts());
+    QStringList availableInstruments;
+    for (IExcerptNotationPtr excerpt : excerpts().val) {
+        async::NotifyList<const Part*> parts = excerpt->notation()->parts()->partList();
+        if (parts.size() != 1) {
+            continue;
+        }
+
+        async::NotifyList<Instrument> instruments = excerpt->notation()->parts()->instrumentList(parts.front()->id());
+        if (instruments.size() != 1) {
+            continue;
+        }
+
+        availableInstruments << instruments.front().id;
+    }
+
+    QList<Part*> parts;
+    for (Part* part : score()->parts()) {
+        if (part->instruments()->size() == 1 && !availableInstruments.contains(part->instrumentId())) {
+            parts << part;
+        }
+    }
+
+    QList<Ms::Excerpt*> excerpts = Ms::Excerpt::createExcerptsFromParts(parts);
 
     ExcerptNotationList result;
 

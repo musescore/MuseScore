@@ -48,6 +48,7 @@ public:
     virtual ExcerptNotationList availableExcerpts() const = 0;
 
     virtual void initExcerpts(const ExcerptNotationList& excerpts) = 0;
+    virtual void removeExcerpts(const ExcerptNotationList& excerpts) = 0;
 
     virtual INotationPartsPtr parts() const = 0;
 };
