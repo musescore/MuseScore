@@ -28,7 +28,6 @@
 
 #include "translation.h"
 #include "commonscene/commonscenetypes.h"
-#include "engraving/draw/qpainterprovider.h"
 #include "engraving/style/defaultstyle.h"
 
 #include "palette/palette.h"

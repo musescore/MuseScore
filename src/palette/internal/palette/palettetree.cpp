@@ -31,7 +31,6 @@
 #include "modularity/ioc.h"
 #include "actions/actiontypes.h"
 #include "engraving/draw/pen.h"
-#include "engraving/draw/qpainterprovider.h"
 #include "engraving/style/defaultstyle.h"
 
 #include "libmscore/articulation.h"

@@ -32,9 +32,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/engravingproject.h
     ${CMAKE_CURRENT_LIST_DIR}/iengravingconfiguration.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/internal/engravingconfiguration.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/engravingconfiguration.h
-
     ${LIBMSCORE_SRC}
 
     ${CMAKE_CURRENT_LIST_DIR}/draw/color.cpp
@@ -54,8 +51,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/draw/painter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/draw/painter.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/ipaintprovider.h
-    ${CMAKE_CURRENT_LIST_DIR}/draw/qpainterprovider.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/draw/qpainterprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/buffereddrawtypes.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/bufferedpaintprovider.cpp
     ${CMAKE_CURRENT_LIST_DIR}/draw/bufferedpaintprovider.h
@@ -63,14 +58,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/draw/svgrenderer.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/ifontprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/iimageconverter.h
-    ${CMAKE_CURRENT_LIST_DIR}/draw/qimageconverter.h
-    ${CMAKE_CURRENT_LIST_DIR}/draw/qimageconverter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/draw/font.cpp
     ${CMAKE_CURRENT_LIST_DIR}/draw/font.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/fontmetrics.cpp
     ${CMAKE_CURRENT_LIST_DIR}/draw/fontmetrics.h
-    ${CMAKE_CURRENT_LIST_DIR}/draw/fontcompat.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/draw/fontcompat.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/rgba.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/utils/drawlogger.cpp
     ${CMAKE_CURRENT_LIST_DIR}/draw/utils/drawlogger.h
@@ -122,14 +113,20 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/style/defaultstyle.h
     )
 
-if (NO_ENGRAVING_QFONTENGINE)
-    set(MODULE_DEF ${MODULE_DEF} -DNO_ENGRAVING_QFONTENGINE)
+if (NO_ENGRAVING_INTERNAL)
+    set(MODULE_DEF ${MODULE_DEF} -DNO_ENGRAVING_INTERNAL)
 else()
     set(MODULE_SRC ${MODULE_SRC}
-        ${CMAKE_CURRENT_LIST_DIR}/draw/qfontprovider.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/draw/qfontprovider.h
-        ${CMAKE_CURRENT_LIST_DIR}/draw/fontengineft.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/draw/fontengineft.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/engravingconfiguration.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/engravingconfiguration.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/qpainterprovider.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/qpainterprovider.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/qimageconverter.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/qimageconverter.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/qfontprovider.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/qfontprovider.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/fontengineft.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/fontengineft.h
         )
 
     set(FREETYPE_LIB )

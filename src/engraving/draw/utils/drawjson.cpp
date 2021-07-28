@@ -177,7 +177,7 @@ static QJsonObject toObj(const PainterPath& path)
     obj["fillRule"] = static_cast<int>(path.fillRule());
 
     QJsonArray elsArr;
-    for (int i = 0; i < path.elementCount(); ++i) {
+    for (size_t i = 0; i < path.elementCount(); ++i) {
         PainterPath::Element e = path.elementAt(i);
         elsArr.append(QJsonArray({ static_cast<int>(e.type), rtoi(e.x), rtoi(e.y) }));
     }

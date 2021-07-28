@@ -25,6 +25,7 @@
 #include <cmath>
 #include <QtMath>
 #include <QRegularExpression>
+#include <QDebug>
 
 #include "translation.h"
 
