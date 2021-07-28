@@ -22,11 +22,12 @@
 #include "painter.h"
 #include "brush.h"
 #include "painterpath.h"
-#include "log.h"
 
 #ifndef NO_QT_SUPPORT
-#include "qpainterprovider.h"
+#include "internal/qpainterprovider.h"
 #endif
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::draw;

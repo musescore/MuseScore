@@ -23,11 +23,10 @@
 
 #include <QQuickWindow>
 #include <QPainter>
-#include "engraving/draw/qpainterprovider.h"
 
-#include "log.h"
 #include "actions/actiontypes.h"
 #include "stringutils.h"
+#include "log.h"
 
 using namespace mu::notation;
 using namespace mu::ui;

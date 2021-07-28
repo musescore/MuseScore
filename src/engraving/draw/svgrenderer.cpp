@@ -25,7 +25,7 @@
 #include <QPainter>
 #include <QSvgRenderer>
 
-#include "qpainterprovider.h"
+#include "internal/qpainterprovider.h"
 #endif
 
 #include "log.h"

@@ -22,10 +22,7 @@
 #ifndef MU_DRAW_QIMAGECONVERTER_H
 #define MU_DRAW_QIMAGECONVERTER_H
 
-#include <QPixmap>
-#include <QBuffer>
-
-#include "iimageconverter.h"
+#include "draw/iimageconverter.h"
 
 namespace mu::draw {
 class QImageConverter : public IImageConverter

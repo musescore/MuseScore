@@ -21,6 +21,8 @@
  */
 #include "defaultstyle.h"
 
+#include <QFile>
+
 #include "log.h"
 
 using namespace mu::engraving;

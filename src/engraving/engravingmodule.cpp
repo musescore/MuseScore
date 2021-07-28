@@ -23,10 +23,11 @@
 
 #include "modularity/ioc.h"
 
-#ifndef NO_ENGRAVING_QFONTENGINE
-#include "engraving/draw/qfontprovider.h"
+#ifndef NO_ENGRAVING_INTERNAL
+#include "engraving/internal/engravingconfiguration.h"
+#include "engraving/internal/qfontprovider.h"
+#include "engraving/internal/qimageconverter.h"
 #endif
-#include "engraving/draw/qimageconverter.h"
 
 #include "engraving/style/defaultstyle.h"
 
@@ -36,12 +37,10 @@
 
 #include "compat/scoreaccess.h"
 
-#include "engraving/internal/engravingconfiguration.h"
-
 using namespace mu::engraving;
 using namespace mu::modularity;
 
-static std::shared_ptr<EngravingConfiguration> s_configuration = std::make_shared<EngravingConfiguration>();
+static std::shared_ptr<IEngravingConfiguration> s_configuration;
 
 static void engraving_init_qrc()
 {
@@ -55,12 +54,11 @@ std::string EngravingModule::moduleName() const
 
 void EngravingModule::registerExports()
 {
-#ifndef NO_ENGRAVING_QFONTENGINE
+#ifndef NO_ENGRAVING_INTERNAL
     ioc()->registerExport<draw::IFontProvider>(moduleName(), new draw::QFontProvider());
-#endif
-
     ioc()->registerExport<draw::IImageConverter>(moduleName(), new draw::QImageConverter());
-    ioc()->registerExport<IEngravingConfiguration>(moduleName(), s_configuration);
+    ioc()->registerExport<IEngravingConfiguration>(moduleName(), new EngravingConfiguration());
+#endif
 }
 
 void EngravingModule::resolveImports()
@@ -81,8 +79,13 @@ void EngravingModule::onInit(const framework::IApplication::RunMode&)
 {
     Ms::MScore::init(); // initialize libmscore
 
-    DefaultStyle::instance()->init(s_configuration->defaultStyleFilePath(),
-                                   s_configuration->partStyleFilePath());
+    auto configuration = ioc()->resolve<IEngravingConfiguration>(moduleName());
+    if (configuration) {
+        DefaultStyle::instance()->init(configuration->defaultStyleFilePath(),
+                                       configuration->partStyleFilePath());
+    } else {
+        DefaultStyle::instance()->init(QString(), QString());
+    }
 
     Ms::MScore::setNudgeStep(0.1); // cursor key (default 0.1)
     Ms::MScore::setNudgeStep10(1.0); // Ctrl + cursor key (default 1.0)

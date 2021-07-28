@@ -31,8 +31,6 @@
 #include "libmscore/measure.h"
 #include "libmscore/stafflines.h"
 
-#include "engraving/draw/qpainterprovider.h"
-
 #include "log.h"
 
 using namespace mu::iex::imagesexport;
