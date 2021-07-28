@@ -22,9 +22,10 @@
 
 #include <cmath>
 
+#include "io/xml.h"
+
 #include "score.h"
 #include "image.h"
-#include "xml.h"
 #include "staff.h"
 #include "segment.h"
 #include "page.h"

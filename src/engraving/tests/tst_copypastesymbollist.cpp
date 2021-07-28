@@ -25,11 +25,11 @@
 #include <QClipboard>
 
 #include "testbase.h"
+#include "engraving/io/xml.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/system.h"
 #include "libmscore/measure.h"
 #include "libmscore/chord.h"
-#include "libmscore/xml.h"
 
 static const QString CPSYMBOLLIST_DATA_DIR("copypastesymbollist_data/");
 

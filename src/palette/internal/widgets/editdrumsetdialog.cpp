@@ -22,7 +22,7 @@
 
 #include "editdrumsetdialog.h"
 
-#include "libmscore/xml.h"
+#include "engraving/io/xml.h"
 #include "libmscore/utils.h"
 #include "libmscore/chord.h"
 #include "libmscore/score.h"

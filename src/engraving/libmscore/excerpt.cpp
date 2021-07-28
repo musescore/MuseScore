@@ -25,6 +25,7 @@
 #include <QRegularExpression>
 
 #include "style/style.h"
+#include "io/xml.h"
 
 #include "barline.h"
 #include "beam.h"
@@ -56,8 +57,6 @@
 #include "tupletmap.h"
 #include "undo.h"
 #include "utils.h"
-#include "xml.h"
-
 #include "masterscore.h"
 
 using namespace mu;

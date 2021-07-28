@@ -21,12 +21,14 @@
  */
 
 #include "ledgerline.h"
+
+#include "io/xml.h"
+
 #include "chord.h"
 #include "measure.h"
 #include "staff.h"
 #include "system.h"
 #include "score.h"
-#include "xml.h"
 
 using namespace mu;
 

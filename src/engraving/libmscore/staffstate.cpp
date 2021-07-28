@@ -21,14 +21,14 @@
  */
 
 #include "staffstate.h"
+#include "draw/pen.h"
+#include "io/xml.h"
 #include "score.h"
 #include "instrtemplate.h"
 #include "segment.h"
 #include "staff.h"
 #include "part.h"
 #include "mscore.h"
-#include "xml.h"
-#include "draw/pen.h"
 
 using namespace mu;
 using namespace mu::draw;

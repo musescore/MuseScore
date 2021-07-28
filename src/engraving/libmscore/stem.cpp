@@ -19,10 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include "stem.h"
 
 #include <cmath>
 
-#include "stem.h"
+#include "io/xml.h"
+#include "draw/brush.h"
+
 #include "staff.h"
 #include "chord.h"
 #include "score.h"
@@ -30,8 +33,6 @@
 #include "hook.h"
 #include "tremolo.h"
 #include "note.h"
-#include "xml.h"
-#include "draw/brush.h"
 
 // TEMPORARY HACK!!
 #include "symid.h"

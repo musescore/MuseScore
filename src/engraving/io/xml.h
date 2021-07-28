@@ -29,11 +29,11 @@
 #include <QFile>
 
 #include "draw/color.h"
-#include "connector.h"
-#include "stafftype.h"
-#include "interval.h"
-#include "element.h"
-#include "select.h"
+#include "libmscore/connector.h"
+#include "libmscore/stafftype.h"
+#include "libmscore/interval.h"
+#include "libmscore/element.h"
+#include "libmscore/select.h"
 
 namespace Ms {
 enum class PlaceText : char;

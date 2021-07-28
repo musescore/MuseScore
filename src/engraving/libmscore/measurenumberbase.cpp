@@ -20,8 +20,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "score.h"
 #include "measurenumberbase.h"
+#include "io/xml.h"
+#include "score.h"
 #include "measure.h"
 #include "staff.h"
 

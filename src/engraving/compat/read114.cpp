@@ -30,6 +30,7 @@
 #include "compat/chordlist.h"
 #include "compat/readstyle.h"
 #include "io/htmlparser.h"
+#include "io/xml.h"
 
 #include "libmscore/masterscore.h"
 #include "libmscore/slur.h"
@@ -53,7 +54,6 @@
 #include "libmscore/dynamic.h"
 #include "libmscore/drumset.h"
 #include "libmscore/symid.h"
-#include "libmscore/xml.h"
 #include "libmscore/stringdata.h"
 #include "libmscore/tempo.h"
 #include "libmscore/tempotext.h"

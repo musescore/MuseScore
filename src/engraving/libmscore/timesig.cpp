@@ -24,8 +24,8 @@
 
 #include "translation.h"
 #include "style/style.h"
+#include "io/xml.h"
 
-#include "xml.h"
 #include "score.h"
 #include "scorefont.h"
 #include "symbol.h"
@@ -33,7 +33,6 @@
 #include "stafftype.h"
 #include "segment.h"
 #include "utils.h"
-
 #include "masterscore.h"
 
 using namespace mu;

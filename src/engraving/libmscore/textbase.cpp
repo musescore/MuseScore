@@ -29,6 +29,7 @@
 #include "draw/pen.h"
 #include "draw/brush.h"
 #include "style/defaultstyle.h"
+#include "io/xml.h"
 
 #include "text.h"
 #include "textedit.h"
@@ -43,7 +44,6 @@
 #include "textframe.h"
 #include "scorefont.h"
 #include "sym.h"
-#include "xml.h"
 #include "undo.h"
 #include "mscore.h"
 

@@ -23,6 +23,7 @@
 #include "keysig.h"
 
 #include "translation.h"
+#include "io/xml.h"
 
 #include "sym.h"
 #include "staff.h"
@@ -32,8 +33,6 @@
 #include "score.h"
 #include "system.h"
 #include "undo.h"
-#include "xml.h"
-
 #include "masterscore.h"
 
 using namespace mu;

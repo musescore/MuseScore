@@ -24,11 +24,13 @@
 
 #include <QRegularExpression>
 
-#include "config.h"
+#include "io/xml.h"
+
 #include "mscore.h"
 #include "pitchspelling.h"
 #include "score.h"
-#include "xml.h"
+
+#include "config.h"
 
 using namespace mu;
 

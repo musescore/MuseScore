@@ -23,17 +23,16 @@
 #include "scoreElement.h"
 
 #include "translation.h"
+#include "io/xml.h"
 
 #include "score.h"
 #include "undo.h"
-#include "xml.h"
 #include "bracket.h"
 #include "bracketItem.h"
 #include "measure.h"
 #include "spanner.h"
 #include "musescoreCore.h"
 #include "sym.h"
-
 #include "masterscore.h"
 
 using namespace mu;

@@ -26,8 +26,8 @@
 #include <functional>
 #include <QIconEngine>
 
+#include "engraving/io/xml.h"
 #include "libmscore/element.h"
-#include "libmscore/xml.h"
 
 #include "modularity/ioc.h"
 #include "ui/iuiactionsregister.h"

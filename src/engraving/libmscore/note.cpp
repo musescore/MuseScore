@@ -28,16 +28,16 @@
 #include "note.h"
 
 #include <assert.h>
+#include <QtMath>
 
-#include "config.h"
 #include "translation.h"
 #include "draw/brush.h"
+#include "io/xml.h"
 
 #include "score.h"
 #include "chord.h"
 #include "sym.h"
 #include "scorefont.h"
-#include "xml.h"
 #include "slur.h"
 #include "tie.h"
 #include "text.h"
@@ -71,9 +71,9 @@
 #include "bagpembell.h"
 #include "hairpin.h"
 #include "textline.h"
-#include <QtMath>
 
 #include "log.h"
+#include "config.h"
 
 #ifdef USE_SCORE_ACCESSIBLE_TREE
 #include "accessibility/accessiblenote.h"

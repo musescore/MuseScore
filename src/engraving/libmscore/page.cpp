@@ -25,10 +25,10 @@
 #include <QDateTime>
 
 #include "style/style.h"
+#include "io/xml.h"
 
 #include "score.h"
 #include "text.h"
-#include "xml.h"
 #include "measure.h"
 #include "chord.h"
 #include "beam.h"
@@ -43,7 +43,6 @@
 #include "system.h"
 #include "mscore.h"
 #include "segment.h"
-
 #include "masterscore.h"
 
 using namespace mu;

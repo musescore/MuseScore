@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "xml.h"
 #include "actionicon.h"
+#include "io/xml.h"
 #include "property.h"
 
 using namespace mu;

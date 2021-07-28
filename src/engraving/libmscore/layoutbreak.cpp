@@ -21,9 +21,9 @@
  */
 
 #include "layoutbreak.h"
+#include "io/xml.h"
 #include "score.h"
 #include "mscore.h"
-#include "xml.h"
 
 using namespace mu;
 using namespace mu::draw;

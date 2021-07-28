@@ -25,10 +25,10 @@
 
 #include "translation.h"
 #include "style/style.h"
+#include "io/xml.h"
 
 #include "system.h"
 #include "measure.h"
-#include "xml.h"
 #include "utils.h"
 #include "score.h"
 #include "scorefont.h"

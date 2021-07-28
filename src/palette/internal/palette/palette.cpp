@@ -38,12 +38,13 @@
 
 #include "engraving/style/style.h"
 #include "engraving/style/defaultstyle.h"
+#include "engraving/io/xml.h"
+#include "engraving/draw/color.h"
 
 #include "libmscore/element.h"
 #include "libmscore/symbol.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/image.h"
-#include "libmscore/xml.h"
 #include "libmscore/note.h"
 #include "libmscore/chord.h"
 #include "libmscore/clef.h"
@@ -64,8 +65,6 @@
 #include "thirdparty/qzip/qzipwriter_p.h"
 #include "libmscore/slur.h"
 #include "libmscore/fret.h"
-
-#include "engraving/draw/color.h"
 
 #include "translation.h"
 

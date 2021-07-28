@@ -21,12 +21,13 @@
  */
 
 #include "xml.h"
-#include "measure.h"
-#include "score.h"
-#include "spanner.h"
-#include "staff.h"
-#include "beam.h"
-#include "tuplet.h"
+
+#include "libmscore/measure.h"
+#include "libmscore/score.h"
+#include "libmscore/spanner.h"
+#include "libmscore/staff.h"
+#include "libmscore/beam.h"
+#include "libmscore/tuplet.h"
 
 using namespace mu;
 

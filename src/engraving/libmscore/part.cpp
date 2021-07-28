@@ -23,9 +23,9 @@
 #include "part.h"
 
 #include "style/style.h"
+#include "io/xml.h"
 
 #include "staff.h"
-#include "xml.h"
 #include "score.h"
 #include "note.h"
 #include "drumset.h"
@@ -36,7 +36,6 @@
 #include "stafftype.h"
 #include "chordrest.h"
 #include "fret.h"
-
 #include "masterscore.h"
 
 using namespace mu;

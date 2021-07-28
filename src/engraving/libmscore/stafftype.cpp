@@ -22,16 +22,16 @@
 
 #include "stafftype.h"
 
+#include "draw/fontmetrics.h"
+#include "draw/pen.h"
+#include "io/xml.h"
+
 #include "chord.h"
 #include "measure.h"
 #include "mscore.h"
 #include "navigate.h"
 #include "staff.h"
-#include "xml.h"
 #include "score.h"
-
-#include "draw/fontmetrics.h"
-#include "draw/pen.h"
 
 using namespace mu;
 

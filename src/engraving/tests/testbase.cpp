@@ -32,13 +32,13 @@
 #include "libmscore/instrtemplate.h"
 #include "libmscore/page.h"
 #include "libmscore/musescoreCore.h"
-#include "libmscore/xml.h"
 #include "libmscore/excerpt.h"
 #include "thirdparty/qzip/qzipreader_p.h"
 
 #include "engraving/compat/mscxcompat.h"
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/compat/writescorehook.h"
+#include "engraving/io/xml.h"
 
 #include "framework/global/globalmodule.h"
 #include "framework/fonts/fontsmodule.h"

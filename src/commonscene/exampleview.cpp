@@ -25,13 +25,14 @@
 #include <cmath>
 #include <QMimeData>
 
+#include "engraving/io/xml.h"
+
 #include "libmscore/masterscore.h"
 #include "libmscore/element.h"
 #include "libmscore/page.h"
 #include "libmscore/system.h"
 #include "libmscore/actionicon.h"
 #include "libmscore/chord.h"
-#include "libmscore/xml.h"
 
 #include "commonscenetypes.h"
 

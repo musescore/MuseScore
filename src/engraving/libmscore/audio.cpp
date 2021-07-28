@@ -21,7 +21,7 @@
  */
 
 #include "audio.h"
-#include "xml.h"
+#include "io/xml.h"
 
 using namespace mu;
 

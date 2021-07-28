@@ -26,6 +26,7 @@
 
 #include "draw/brush.h"
 #include "style/style.h"
+#include "io/xml.h"
 
 #include "segment.h"
 #include "score.h"
@@ -45,7 +46,6 @@
 #include "actionicon.h"
 #include "stemslash.h"
 #include "groups.h"
-#include "xml.h"
 #include "spanner.h"
 
 using namespace mu;

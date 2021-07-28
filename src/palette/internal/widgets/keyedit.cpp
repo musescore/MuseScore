@@ -29,6 +29,7 @@
 #include "translation.h"
 #include "commonscene/commonscenetypes.h"
 #include "engraving/style/defaultstyle.h"
+#include "engraving/io/xml.h"
 
 #include "palette/palette.h"
 #include "palette/palettecreator.h"
@@ -39,7 +40,6 @@
 #include "keycanvas.h"
 #include "libmscore/clef.h"
 #include "libmscore/mscore.h"
-#include "libmscore/xml.h"
 
 #include "../palette_config.h"
 

@@ -27,9 +27,9 @@
 #include "draw/transform.h"
 #include "draw/pen.h"
 #include "style/style.h"
+#include "io/xml.h"
 
 #include "dynamichairpingroup.h"
-#include "xml.h"
 #include "utils.h"
 #include "score.h"
 #include "measure.h"

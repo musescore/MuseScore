@@ -29,10 +29,9 @@
 
 #include "compat/chordlist.h"
 #include "compat/writescorehook.h"
+#include "io/xml.h"
 
-#include "config.h"
 #include "score.h"
-#include "xml.h"
 #include "element.h"
 #include "measure.h"
 #include "segment.h"
@@ -73,6 +72,7 @@
 #include "masterscore.h"
 
 #include "log.h"
+#include "config.h"
 
 using namespace mu;
 using namespace mu::engraving;
