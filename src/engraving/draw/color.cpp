@@ -121,7 +121,7 @@ Color Color::fromQColor(const QColor& color)
 
 QColor Color::toQColor() const
 {
-    return QColor(m_rgba);
+    return QColor::fromRgba(m_rgba);
 }
 
 #endif
