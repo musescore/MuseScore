@@ -604,8 +604,8 @@ SpecialCharactersDialog::SpecialCharactersDialog(QWidget* parent)
 
     tabWidget->addTab(wu, mu::qtrc("palette", "Unicode Symbols"));
 
-    connect(m_lws, SIGNAL(currentRowChanged(int)), SLOT(populateSmufl()));
-    connect(m_lwu, SIGNAL(currentRowChanged(int)), SLOT(populateUnicode()));
+    connect(m_lws, &QListWidget::currentRowChanged, this, &SpecialCharactersDialog::populateSmufl);
+    connect(m_lwu, &QListWidget::currentRowChanged, this, &SpecialCharactersDialog::populateUnicode);
 
     // others are done in setFont
     populateSmufl();

@@ -105,51 +105,57 @@ EditStaffType::EditStaffType(QWidget* parent)
     }
     tabPreview->adjustSize();
 
-    connect(name,           SIGNAL(textEdited(const QString&)), SLOT(nameEdited(const QString&)));
-    connect(lines,          SIGNAL(valueChanged(int)),          SLOT(updatePreview()));
-    connect(lineDistance,   SIGNAL(valueChanged(double)),       SLOT(updatePreview()));
-    connect(showBarlines,   SIGNAL(toggled(bool)),              SLOT(updatePreview()));
-    connect(genClef,        SIGNAL(toggled(bool)),              SLOT(updatePreview()));
-    connect(genTimesig,     SIGNAL(toggled(bool)),              SLOT(updatePreview()));
-    connect(noteHeadScheme, SIGNAL(currentIndexChanged(int)),   SLOT(updatePreview()));
+    connect(name, &QLineEdit::textEdited, this, &EditStaffType::nameEdited);
 
-    connect(genKeysigPitched,           SIGNAL(toggled(bool)),  SLOT(updatePreview()));
-    connect(showLedgerLinesPitched,     SIGNAL(toggled(bool)),  SLOT(updatePreview()));
-    connect(stemlessPitched,            SIGNAL(toggled(bool)),  SLOT(updatePreview()));
-    connect(genKeysigPercussion,        SIGNAL(toggled(bool)),  SLOT(updatePreview()));
-    connect(showLedgerLinesPercussion,  SIGNAL(toggled(bool)),  SLOT(updatePreview()));
-    connect(stemlessPercussion,         SIGNAL(toggled(bool)),  SLOT(updatePreview()));
+    connect(lines,        QOverload<int>::of(&QSpinBox::valueChanged),          this, &EditStaffType::updatePreview);
+    connect(lineDistance, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &EditStaffType::updatePreview);
 
-    connect(noteValuesSymb,       SIGNAL(toggled(bool)),              SLOT(tabStemsToggled(bool)));
-    connect(noteValuesStems,      SIGNAL(toggled(bool)),              SLOT(tabStemsToggled(bool)));
-    connect(valuesRepeatNever,    SIGNAL(toggled(bool)),              SLOT(updatePreview()));
-    connect(valuesRepeatSystem,   SIGNAL(toggled(bool)),              SLOT(updatePreview()));
-    connect(valuesRepeatMeasure,  SIGNAL(toggled(bool)),              SLOT(updatePreview()));
-    connect(valuesRepeatAlways,   SIGNAL(toggled(bool)),              SLOT(updatePreview()));
-    connect(stemBesideRadio,      SIGNAL(toggled(bool)),              SLOT(updatePreview()));
-    connect(stemThroughRadio,     SIGNAL(toggled(bool)),              SLOT(tabStemThroughToggled(bool)));
-    connect(stemAboveRadio,       SIGNAL(toggled(bool)),              SLOT(updatePreview()));
-    connect(stemBelowRadio,       SIGNAL(toggled(bool)),              SLOT(updatePreview()));
-    connect(minimShortRadio,      SIGNAL(toggled(bool)),              SLOT(tabMinimShortToggled(bool)));
-    connect(minimSlashedRadio,    SIGNAL(toggled(bool)),              SLOT(updatePreview()));
-    connect(showRests,            SIGNAL(toggled(bool)),              SLOT(updatePreview()));
-    connect(durFontName,          SIGNAL(currentIndexChanged(int)),   SLOT(durFontNameChanged(int)));
-    connect(durFontSize,          SIGNAL(valueChanged(double)),       SLOT(updatePreview()));
-    connect(durY,                 SIGNAL(valueChanged(double)),       SLOT(updatePreview()));
-    connect(fretFontName,         SIGNAL(currentIndexChanged(int)),   SLOT(fretFontNameChanged(int)));
-    connect(fretFontSize,         SIGNAL(valueChanged(double)),       SLOT(updatePreview()));
-    connect(fretY,                SIGNAL(valueChanged(double)),       SLOT(updatePreview()));
+    connect(showBarlines, &QCheckBox::toggled, this, &EditStaffType::updatePreview);
+    connect(genClef,      &QCheckBox::toggled, this, &EditStaffType::updatePreview);
+    connect(genTimesig,   &QCheckBox::toggled, this, &EditStaffType::updatePreview);
 
-    connect(linesThroughRadio,    SIGNAL(toggled(bool)),              SLOT(updatePreview()));
-    connect(onLinesRadio,         SIGNAL(toggled(bool)),              SLOT(updatePreview()));
-    connect(showTabFingering,     SIGNAL(toggled(bool)),              SLOT(updatePreview()));
-    connect(upsideDown,           SIGNAL(toggled(bool)),              SLOT(updatePreview()));
-    connect(numbersRadio,         SIGNAL(toggled(bool)),              SLOT(updatePreview()));
-    connect(showBackTied,         SIGNAL(toggled(bool)),              SLOT(updatePreview()));
+    connect(noteHeadScheme, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &EditStaffType::updatePreview);
 
-    connect(templateReset,        SIGNAL(clicked()),                  SLOT(resetToTemplateClicked()));
-    connect(addToTemplates,       SIGNAL(clicked()),                  SLOT(addToTemplatesClicked()));
-//      connect(groupCombo,           SIGNAL(currentIndexChanged(int)),   SLOT(staffGroupChanged(int)));
+    connect(genKeysigPitched,          &QCheckBox::toggled, this, &EditStaffType::updatePreview);
+    connect(showLedgerLinesPitched,    &QCheckBox::toggled, this, &EditStaffType::updatePreview);
+    connect(stemlessPitched,           &QCheckBox::toggled, this, &EditStaffType::updatePreview);
+    connect(genKeysigPercussion,       &QCheckBox::toggled, this, &EditStaffType::updatePreview);
+    connect(showLedgerLinesPercussion, &QCheckBox::toggled, this, &EditStaffType::updatePreview);
+    connect(stemlessPercussion,        &QCheckBox::toggled, this, &EditStaffType::updatePreview);
+
+    connect(noteValuesSymb,      &QRadioButton::toggled, this, &EditStaffType::tabStemsToggled);
+    connect(noteValuesStems,     &QRadioButton::toggled, this, &EditStaffType::tabStemsToggled);
+    connect(valuesRepeatNever,   &QRadioButton::toggled, this, &EditStaffType::updatePreview);
+    connect(valuesRepeatSystem,  &QRadioButton::toggled, this, &EditStaffType::updatePreview);
+    connect(valuesRepeatMeasure, &QRadioButton::toggled, this, &EditStaffType::updatePreview);
+    connect(valuesRepeatAlways,  &QRadioButton::toggled, this, &EditStaffType::updatePreview);
+    connect(stemBesideRadio,     &QRadioButton::toggled, this, &EditStaffType::updatePreview);
+    connect(stemThroughRadio,    &QRadioButton::toggled, this, &EditStaffType::tabStemThroughToggled);
+    connect(stemAboveRadio,      &QRadioButton::toggled, this, &EditStaffType::updatePreview);
+    connect(stemBelowRadio,      &QRadioButton::toggled, this, &EditStaffType::updatePreview);
+    connect(minimShortRadio,     &QRadioButton::toggled, this, &EditStaffType::tabMinimShortToggled);
+    connect(minimSlashedRadio,   &QRadioButton::toggled, this, &EditStaffType::updatePreview);
+    connect(showRests,           &QRadioButton::toggled, this, &EditStaffType::updatePreview);
+
+    connect(durFontName, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &EditStaffType::durFontNameChanged);
+    connect(durFontSize, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &EditStaffType::updatePreview);
+    connect(durY,        QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &EditStaffType::updatePreview);
+    connect(fretFontName, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &EditStaffType::fretFontNameChanged);
+    connect(fretFontSize, QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &EditStaffType::updatePreview);
+    connect(fretY,        QOverload<double>::of(&QDoubleSpinBox::valueChanged), this, &EditStaffType::updatePreview);
+
+    connect(linesThroughRadio, &QRadioButton::toggled, this, &EditStaffType::updatePreview);
+    connect(onLinesRadio,      &QRadioButton::toggled, this, &EditStaffType::updatePreview);
+    connect(showTabFingering,  &QCheckBox::toggled, this, &EditStaffType::updatePreview);
+    connect(upsideDown,        &QCheckBox::toggled, this, &EditStaffType::updatePreview);
+    connect(numbersRadio,      &QCheckBox::toggled, this, &EditStaffType::updatePreview);
+    connect(showBackTied,      &QCheckBox::toggled, this, &EditStaffType::updatePreview);
+
+    connect(templateReset,  &QPushButton::clicked, this, &EditStaffType::resetToTemplateClicked);
+    connect(addToTemplates, &QPushButton::clicked, this, &EditStaffType::addToTemplatesClicked);
+
+    //connect(groupCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &EditStaffType::staffGroupChanged);
+
     addToTemplates->setVisible(false);
 
     WidgetStateStore::restoreGeometry(this);

@@ -63,7 +63,7 @@ KeyCanvas::KeyCanvas(QWidget* parent)
     addAction(a);
     clef = new Clef(gscore);
     clef->setClefType(ClefType::G);
-    connect(a, SIGNAL(triggered()), SLOT(deleteElement()));
+    connect(a, &QAction::triggered, this, &KeyCanvas::deleteElement);
 }
 
 //---------------------------------------------------------
@@ -315,9 +315,9 @@ KeyEditor::KeyEditor(QWidget* parent)
 
     l->addWidget(accPalette);
 
-    connect(addButton,   SIGNAL(clicked()), SLOT(addClicked()));
-    connect(clearButton, SIGNAL(clicked()), SLOT(clearClicked()));
-    connect(sp,          SIGNAL(changed()), SLOT(setDirty()));
+    connect(addButton, &QPushButton::clicked, this, &KeyEditor::addClicked);
+    connect(clearButton, &QPushButton::clicked, this, &KeyEditor::clearClicked);
+    connect(sp, &PaletteWidget::changed, this, &KeyEditor::setDirty);
 
     //
     // set all "buildin" key signatures to read only

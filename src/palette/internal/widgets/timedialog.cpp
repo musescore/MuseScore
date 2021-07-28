@@ -52,13 +52,13 @@ TimeDialog::TimeDialog(QWidget* parent)
     sp->setReadOnly(false);
     sp->setSelectable(true);
 
-    connect(zNominal,  SIGNAL(valueChanged(int)), SLOT(zChanged(int)));
-    connect(nNominal,  SIGNAL(currentIndexChanged(int)), SLOT(nChanged(int)));
-    connect(sp,        SIGNAL(boxClicked(int)),   SLOT(paletteChanged(int)));
-    connect(sp,        SIGNAL(changed()),         SLOT(setDirty()));
-    connect(addButton, SIGNAL(clicked()),         SLOT(addClicked()));
-    connect(zText,     SIGNAL(textChanged(const QString&)),    SLOT(textChanged()));
-    connect(nText,     SIGNAL(textChanged(const QString&)),    SLOT(textChanged()));
+    connect(zNominal, QOverload<int>::of(&QSpinBox::valueChanged), this, &TimeDialog::zChanged);
+    connect(nNominal, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &TimeDialog::nChanged);
+    connect(sp, &PaletteWidget::boxClicked, this, &TimeDialog::paletteChanged);
+    connect(sp, &PaletteWidget::changed, this, &TimeDialog::setDirty);
+    connect(addButton, &QPushButton::clicked, this, &TimeDialog::addClicked);
+    connect(zText, &QLineEdit::textChanged, this, &TimeDialog::textChanged);
+    connect(nText, &QLineEdit::textChanged, this, &TimeDialog::textChanged);
 
     _timePalette = new PaletteScrollArea(sp);
     QSizePolicy policy(QSizePolicy::Expanding, QSizePolicy::Expanding);

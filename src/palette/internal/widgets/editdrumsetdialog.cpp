@@ -154,17 +154,16 @@ EditDrumsetDialog::EditDrumsetDialog(QWidget* parent)
         noteHead->addItem(NoteHead::group2userName(g), int(g));
     }
 
-    connect(pitchList, SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)),
-            SLOT(itemChanged(QTreeWidgetItem*,QTreeWidgetItem*)));
-    connect(buttonBox, SIGNAL(clicked(QAbstractButton*)), this, SLOT(bboxClicked(QAbstractButton*)));
-    connect(name, SIGNAL(textChanged(const QString&)), SLOT(nameChanged(const QString&)));
-    connect(noteHead, SIGNAL(currentIndexChanged(int)), SLOT(valueChanged()));
-    connect(staffLine, SIGNAL(valueChanged(int)), SLOT(valueChanged()));
-    connect(voice, SIGNAL(currentIndexChanged(int)), SLOT(valueChanged()));
-    connect(stemDirection, SIGNAL(currentIndexChanged(int)), SLOT(valueChanged()));
-    connect(shortcut, SIGNAL(currentIndexChanged(int)), SLOT(shortcutChanged()));
-    connect(loadButton, SIGNAL(clicked()), SLOT(load()));
-    connect(saveButton, SIGNAL(clicked()), SLOT(save()));
+    connect(pitchList, &QTreeWidget::currentItemChanged, this, &EditDrumsetDialog::itemChanged);
+    connect(buttonBox, &QDialogButtonBox::clicked, this, &EditDrumsetDialog::bboxClicked);
+    connect(name, &QLineEdit::textChanged, this, &EditDrumsetDialog::nameChanged);
+    connect(noteHead, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &EditDrumsetDialog::valueChanged);
+    connect(staffLine, QOverload<int>::of(&QSpinBox::valueChanged), this, &EditDrumsetDialog::valueChanged);
+    connect(voice, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &EditDrumsetDialog::valueChanged);
+    connect(stemDirection, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &EditDrumsetDialog::valueChanged);
+    connect(shortcut, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &EditDrumsetDialog::shortcutChanged);
+    connect(loadButton, &QPushButton::clicked, this, &EditDrumsetDialog::load);
+    connect(saveButton, &QPushButton::clicked, this, &EditDrumsetDialog::save);
     pitchList->setColumnWidth(0, 40);
     pitchList->setColumnWidth(1, 60);
     pitchList->setColumnWidth(2, 30);
@@ -242,8 +241,8 @@ EditDrumsetDialog::EditDrumsetDialog(QWidget* parent)
     quarterCmb->setCurrentIndex(quarterCmb->findData(Sym::id2name(SymId::noteheadBlack)));
     doubleWholeCmb->setCurrentIndex(quarterCmb->findData(Sym::id2name(SymId::noteheadDoubleWhole)));
 
-    connect(customGbox, SIGNAL(toggled(bool)), this, SLOT(customGboxToggled(bool)));
-    connect(quarterCmb, SIGNAL(currentIndexChanged(int)), SLOT(customQuarterChanged(int)));
+    connect(customGbox, &QGroupBox::toggled, this, &EditDrumsetDialog::customGboxToggled);
+    connect(quarterCmb, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &EditDrumsetDialog::customQuarterChanged);
 
     Q_ASSERT(pitchList->topLevelItemCount() > 0);
     pitchList->setCurrentItem(pitchList->topLevelItem(0));
