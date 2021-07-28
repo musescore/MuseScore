@@ -20,11 +20,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "score.h"
-#include "xml.h"
 #include "bagpembell.h"
-#include "scorefont.h"
+
 #include "draw/pen.h"
+#include "io/xml.h"
+
+#include "score.h"
+#include "scorefont.h"
 
 using namespace mu;
 

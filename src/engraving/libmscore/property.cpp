@@ -23,6 +23,7 @@
 #include "property.h"
 
 #include "style/style.h"
+#include "io/xml.h"
 
 #include "accidental.h"
 #include "bracket.h"
@@ -35,7 +36,6 @@
 #include "vibrato.h"
 #include "layoutbreak.h"
 #include "groups.h"
-#include "xml.h"
 #include "note.h"
 #include "barline.h"
 #include "sym.h"

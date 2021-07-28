@@ -24,8 +24,8 @@
 
 #include "draw/brush.h"
 #include "style/style.h"
+#include "io/xml.h"
 
-#include "xml.h"
 #include "utils.h"
 #include "measure.h"
 #include "staff.h"

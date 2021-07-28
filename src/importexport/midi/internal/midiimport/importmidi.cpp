@@ -24,6 +24,7 @@
 
 #include "framework/midi_old/midifile.h"
 #include "engraving/style/style.h"
+#include "engraving/io/xml.h"
 
 #include "libmscore/masterscore.h"
 #include "libmscore/key.h"

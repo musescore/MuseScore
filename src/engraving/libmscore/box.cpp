@@ -24,6 +24,8 @@
 
 #include <cmath>
 
+#include "io/xml.h"
+
 #include "textframe.h"
 #include "text.h"
 #include "score.h"
@@ -37,7 +39,6 @@
 #include "mscore.h"
 #include "stafftext.h"
 #include "actionicon.h"
-#include "xml.h"
 #include "measure.h"
 #include "undo.h"
 

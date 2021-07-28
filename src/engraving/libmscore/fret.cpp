@@ -21,6 +21,11 @@
  */
 
 #include "fret.h"
+
+#include "draw/fontmetrics.h"
+#include "draw/brush.h"
+#include "io/xml.h"
+
 #include "measure.h"
 #include "system.h"
 #include "score.h"
@@ -33,9 +38,6 @@
 #include "staff.h"
 #include "draw/pen.h"
 #include "undo.h"
-
-#include "draw/fontmetrics.h"
-#include "draw/brush.h"
 
 using namespace mu;
 

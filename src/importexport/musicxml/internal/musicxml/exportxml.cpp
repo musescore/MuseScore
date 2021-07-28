@@ -47,6 +47,7 @@
 #include "thirdparty/qzip/qzipwriter_p.h"
 
 #include "engraving/style/style.h"
+#include "engraving/io/xml.h"
 
 #include "libmscore/masterscore.h"
 #include "libmscore/rest.h"
@@ -56,7 +57,6 @@
 #include "libmscore/clef.h"
 #include "libmscore/note.h"
 #include "libmscore/segment.h"
-#include "libmscore/xml.h"
 #include "libmscore/beam.h"
 #include "libmscore/staff.h"
 #include "libmscore/part.h"

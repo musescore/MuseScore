@@ -21,11 +21,11 @@
  */
 
 #include "groups.h"
+#include "io/xml.h"
 #include "durationtype.h"
 #include "chordrest.h"
 #include "staff.h"
 #include "tuplet.h"
-#include "xml.h"
 
 using namespace mu;
 

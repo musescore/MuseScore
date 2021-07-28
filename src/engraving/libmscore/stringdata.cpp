@@ -21,6 +21,9 @@
  */
 
 #include "stringdata.h"
+
+#include "io/xml.h"
+
 #include "chord.h"
 #include "note.h"
 #include "part.h"

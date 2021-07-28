@@ -21,7 +21,6 @@
  */
 
 #include "midifile.h"
-#include "libmscore/xml.h"
 #include "libmscore/part.h"
 #include "libmscore/note.h"
 #include "libmscore/drumset.h"

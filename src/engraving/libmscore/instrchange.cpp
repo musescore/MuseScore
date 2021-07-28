@@ -21,13 +21,15 @@
  */
 
 #include "instrchange.h"
+
+#include "io/xml.h"
+
 #include "score.h"
 #include "segment.h"
 #include "staff.h"
 #include "part.h"
 #include "undo.h"
 #include "mscore.h"
-#include "xml.h"
 #include "measure.h"
 #include "system.h"
 #include "chord.h"

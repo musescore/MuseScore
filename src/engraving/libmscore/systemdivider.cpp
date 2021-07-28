@@ -20,9 +20,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "score.h"
 #include "systemdivider.h"
-#include "xml.h"
+#include "io/xml.h"
+#include "score.h"
 #include "measure.h"
 #include "sym.h"
 #include "system.h"

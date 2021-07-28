@@ -87,6 +87,9 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/io/mscwriter.h
     ${CMAKE_CURRENT_LIST_DIR}/io/htmlparser.cpp
     ${CMAKE_CURRENT_LIST_DIR}/io/htmlparser.h
+    ${CMAKE_CURRENT_LIST_DIR}/io/xml.h
+    ${CMAKE_CURRENT_LIST_DIR}/io/xmlreader.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/io/xmlwriter.cpp
 
     ${CMAKE_CURRENT_LIST_DIR}/compat/scoreaccess.cpp
     ${CMAKE_CURRENT_LIST_DIR}/compat/scoreaccess.h

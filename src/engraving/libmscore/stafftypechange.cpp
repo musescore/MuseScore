@@ -21,9 +21,9 @@
  */
 
 #include "stafftypechange.h"
+#include "io/xml.h"
 #include "score.h"
 #include "mscore.h"
-#include "xml.h"
 #include "measure.h"
 #include "system.h"
 #include "staff.h"

@@ -24,11 +24,11 @@
 
 #include "compat/pageformat.h"
 #include "compat/chordlist.h"
+#include "io/xml.h"
+
+#include "libmscore/mscore.h"
 
 #include "defaultstyle.h"
-
-#include "libmscore/xml.h"
-#include "libmscore/mscore.h"
 
 #include "log.h"
 

@@ -22,10 +22,11 @@
 
 #include "drumset.h"
 
+#include "io/xml.h"
+
 #include "articulation.h"
 #include "note.h"
 #include "sym.h"
-#include "xml.h"
 
 using namespace mu;
 

@@ -19,10 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include "scoreorder.h"
+
 #include <iostream>
 
-#include "scoreorder.h"
 #include "translation.h"
+#include "io/xml.h"
 
 #include "libmscore/masterscore.h"
 #include "libmscore/part.h"
@@ -30,7 +32,6 @@
 #include "libmscore/bracketItem.h"
 #include "libmscore/instrtemplate.h"
 #include "libmscore/undo.h"
-#include "libmscore/xml.h"
 
 using namespace mu;
 

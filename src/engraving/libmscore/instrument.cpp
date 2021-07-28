@@ -21,7 +21,10 @@
  */
 
 #include "instrument.h"
-#include "xml.h"
+
+#include "io/xml.h"
+#include "io/htmlparser.h"
+
 #include "drumset.h"
 #include "articulation.h"
 #include "utils.h"
@@ -30,8 +33,6 @@
 #include "mscore.h"
 #include "part.h"
 #include "score.h"
-#include "io/htmlparser.h"
-
 #include "masterscore.h"
 
 #include "framework/midi_old/midipatch.h"

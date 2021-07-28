@@ -27,6 +27,7 @@
 
 #include "io/mscreader.h"
 #include "io/mscwriter.h"
+#include "io/xml.h"
 #include "style/defaultstyle.h"
 #include "compat/writescorehook.h"
 #include "compat/read114.h"
@@ -522,15 +523,6 @@ Score::FileError MasterScore::read(XmlReader& e, bool ignoreVersionError, mu::en
 
             if (styleHook) {
                 styleHook->setupDefaultStyle();
-            }
-
-            {
-                static int counter = 0;
-                ++counter;
-
-                if (style().defaultStyleVersion() == 400) {
-                    //int k =1;
-                }
             }
 
             Score::FileError error;

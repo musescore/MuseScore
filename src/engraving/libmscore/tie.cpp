@@ -19,19 +19,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include "tie.h"
 
 #include <cmath>
+
+#include "draw/transform.h"
+#include "draw/pen.h"
+#include "draw/brush.h"
+#include "io/xml.h"
 
 #include "measure.h"
 #include "score.h"
 #include "system.h"
 #include "undo.h"
 #include "chord.h"
-#include "tie.h"
-
-#include "draw/transform.h"
-#include "draw/pen.h"
-#include "draw/brush.h"
 
 using namespace mu;
 

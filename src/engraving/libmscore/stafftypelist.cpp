@@ -21,7 +21,7 @@
  */
 
 #include "stafftypelist.h"
-#include "xml.h"
+#include "io/xml.h"
 #include "score.h"
 
 using namespace mu;

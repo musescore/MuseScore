@@ -33,8 +33,8 @@
 
 #include "style/style.h"
 #include "style/defaultstyle.h"
-
 #include "compat/writescorehook.h"
+#include "io/xml.h"
 
 #include "fermata.h"
 #include "imageStore.h"
@@ -48,7 +48,6 @@
 #include "system.h"
 #include "select.h"
 #include "segment.h"
-#include "xml.h"
 #include "text.h"
 #include "note.h"
 #include "chord.h"

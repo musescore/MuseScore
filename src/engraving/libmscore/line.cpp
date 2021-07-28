@@ -22,6 +22,8 @@
 
 #include "line.h"
 
+#include "io/xml.h"
+
 #include "barline.h"
 #include "chord.h"
 #include "lyrics.h"
@@ -36,7 +38,6 @@
 #include "system.h"
 #include "textline.h"
 #include "utils.h"
-#include "xml.h"
 
 using namespace mu;
 

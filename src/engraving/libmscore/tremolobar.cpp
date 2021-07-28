@@ -21,13 +21,13 @@
  */
 
 #include "tremolobar.h"
+#include "draw/pen.h"
+#include "io/xml.h"
 #include "score.h"
 #include "undo.h"
 #include "staff.h"
 #include "chord.h"
 #include "note.h"
-#include "xml.h"
-#include "draw/pen.h"
 
 using namespace mu;
 

@@ -21,6 +21,7 @@
  */
 
 #include "fermata.h"
+#include "io/xml.h"
 #include "score.h"
 #include "chordrest.h"
 #include "system.h"
@@ -31,7 +32,6 @@
 #include "page.h"
 #include "barline.h"
 #include "sym.h"
-#include "xml.h"
 
 using namespace mu;
 

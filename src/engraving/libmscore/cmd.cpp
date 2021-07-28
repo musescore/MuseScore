@@ -30,6 +30,7 @@
 #include "translation.h"
 #include "interactive/messagebox.h"
 #include "style/style.h"
+#include "io/xml.h"
 
 #include "types.h"
 #include "musescoreCore.h"
@@ -50,7 +51,6 @@
 #include "page.h"
 #include "barline.h"
 #include "tuplet.h"
-#include "xml.h"
 #include "ottava.h"
 #include "trill.h"
 #include "pedal.h"

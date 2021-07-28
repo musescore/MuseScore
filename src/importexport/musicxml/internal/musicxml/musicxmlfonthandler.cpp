@@ -24,8 +24,8 @@
  MusicXML font handling support.
  */
 
+#include "engraving/io/xml.h"
 #include "libmscore/sym.h"
-#include "libmscore/xml.h"
 #include "musicxmlfonthandler.h"
 
 namespace Ms {

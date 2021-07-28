@@ -24,13 +24,13 @@
 
 #include "translation.h"
 #include "style/style.h"
+#include "io/xml.h"
 
 #include "bracket.h"
 #include "drumset.h"
 #include "stafftype.h"
 #include "stringdata.h"
 #include "utils.h"
-#include "xml.h"
 #include "scoreorder.h"
 
 using namespace mu;

@@ -22,16 +22,17 @@
 
 #include "lyrics.h"
 
+#include "draw/pen.h"
+#include "io/xml.h"
+
 #include "chord.h"
 #include "score.h"
 #include "system.h"
-#include "xml.h"
 #include "staff.h"
 #include "segment.h"
 #include "undo.h"
 #include "textedit.h"
 #include "measure.h"
-#include "draw/pen.h"
 
 using namespace mu;
 

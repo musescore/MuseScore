@@ -27,12 +27,12 @@
 
 #include "style/style.h"
 #include "style/defaultstyle.h"
+#include "io/xml.h"
 
 #include "pageformat.h"
 #include "chordlist.h"
 #include "readstyle.h"
 
-#include "libmscore/xml.h"
 #include "libmscore/score.h"
 #include "libmscore/staff.h"
 #include "libmscore/revisions.h"
@@ -88,7 +88,6 @@
 #include "libmscore/measurenumber.h"
 #include "libmscore/marker.h"
 #include "libmscore/masterscore.h"
-#include "libmscore/xml.h"
 
 using namespace mu;
 using namespace mu::engraving;

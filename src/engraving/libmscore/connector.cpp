@@ -21,11 +21,10 @@
  */
 
 #include "connector.h"
-
+#include "io/xml.h"
 #include "element.h"
 #include "score.h"
 #include "scoreElement.h"
-#include "xml.h"
 
 using namespace mu;
 

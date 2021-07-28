@@ -21,8 +21,9 @@
  */
 
 #include "xml.h"
-#include "property.h"
-#include "scoreElement.h"
+
+#include "libmscore/property.h"
+#include "libmscore/scoreElement.h"
 
 #include "log.h"
 
