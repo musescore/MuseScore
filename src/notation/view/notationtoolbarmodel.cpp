@@ -84,7 +84,7 @@ void NotationToolBarModel::load()
 
     endResetModel();
 
-    context()->currentNotationChanged().onNotify(this, [this]() {
+    context()->currentMasterNotationChanged().onNotify(this, [this]() {
         load();
     });
 }

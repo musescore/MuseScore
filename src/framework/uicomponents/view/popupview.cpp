@@ -108,7 +108,9 @@ void PopupView::componentComplete()
         }
     });
 
-    m_contentItem->setObjectName(POPUP_VIEW_CONTENT_OBJECT_NAME);
+    if (!isDialog()) {
+        m_contentItem->setObjectName(POPUP_VIEW_CONTENT_OBJECT_NAME);
+    }
 }
 
 bool PopupView::eventFilter(QObject* watched, QEvent* event)
