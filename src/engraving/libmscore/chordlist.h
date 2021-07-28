@@ -27,7 +27,7 @@
 #include "style/style.h"
 
 namespace mu::engraving::compat {
-struct ReadChordListHook;
+class ReadChordListHook;
 }
 
 namespace Ms {
