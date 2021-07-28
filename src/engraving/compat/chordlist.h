@@ -31,8 +31,9 @@ class Score;
 }
 
 namespace mu::engraving::compat {
-struct ReadChordListHook
+class ReadChordListHook
 {
+public:
     ReadChordListHook(Ms::Score* score);
 
     void read(Ms::XmlReader& e);

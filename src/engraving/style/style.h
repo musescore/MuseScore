@@ -37,8 +37,8 @@
 #include "styledef.h"
 
 namespace mu::engraving::compat {
-struct ReadChordListHook;
-struct ReadStyleHook;
+class ReadChordListHook;
+class ReadStyleHook;
 }
 
 namespace Ms {
