@@ -105,6 +105,7 @@ Flickable {
             model: root.editorModel.bassNoteList
             currentIndex: root.editorModel.bassNoteIndex
             visible: (root.editorModel.bassNoteIndex != -1)
+            enabled: root.editorModel.usePresets
 
             delegate: FlatButton {
                 height: prv.listCellHeight
@@ -119,6 +120,7 @@ Flickable {
             highlight: Rectangle {
                 color: ui.theme.accentColor
                 radius: 3
+                visible: root.editorModel.usePresets
             }
         }
 
@@ -141,6 +143,7 @@ Flickable {
             model: root.editorModel.majorSeventhList
             currentIndex: root.editorModel.majorSeventhIndex
             visible: (root.editorModel.majorSeventhIndex != -1)
+            enabled: root.editorModel.usePresets
 
             delegate: FlatButton {
                 height: prv.listCellHeight
@@ -155,6 +158,7 @@ Flickable {
             highlight: Rectangle {
                 color: ui.theme.accentColor
                 radius: 3
+                visible: root.editorModel.usePresets
             }
         }
 
@@ -176,7 +180,8 @@ Flickable {
 
             model: root.editorModel.halfDiminishedList
             currentIndex: root.editorModel.halfDiminishedIndex
-            visible: (root.editorModel.halfDiminishedIndex != -1)
+            visible: (root.editorModel.halfDiminishedIndex != -1)            
+            enabled: root.editorModel.usePresets
 
             delegate: FlatButton {
                 height: prv.listCellHeight
@@ -191,6 +196,7 @@ Flickable {
             highlight: Rectangle {
                 color: ui.theme.accentColor
                 radius: 3
+                visible: root.editorModel.usePresets
             }
         }
 
@@ -213,6 +219,7 @@ Flickable {
             model: root.editorModel.minorList
             currentIndex: root.editorModel.minorIndex
             visible: (root.editorModel.minorIndex != -1)
+            enabled: root.editorModel.usePresets
 
             delegate: FlatButton {
                 height: prv.listCellHeight
@@ -227,6 +234,7 @@ Flickable {
             highlight: Rectangle {
                 color: ui.theme.accentColor
                 radius: 3
+                visible: root.editorModel.usePresets
             }
         }
 
@@ -249,6 +257,7 @@ Flickable {
             model: root.editorModel.augmentedList
             currentIndex: root.editorModel.augmentedIndex
             visible: (root.editorModel.augmentedIndex != -1)
+            enabled: root.editorModel.usePresets
 
             delegate: FlatButton {
                 height: prv.listCellHeight
@@ -263,6 +272,7 @@ Flickable {
             highlight: Rectangle {
                 color: ui.theme.accentColor
                 radius: 3
+                visible: root.editorModel.usePresets
             }
         }
 
@@ -285,6 +295,7 @@ Flickable {
             model: root.editorModel.diminishedList
             currentIndex: root.editorModel.diminishedIndex
             visible: (root.editorModel.diminishedIndex != -1)
+            enabled: root.editorModel.usePresets
 
             delegate: FlatButton {
                 height: prv.listCellHeight
@@ -299,6 +310,7 @@ Flickable {
             highlight: Rectangle {
                 color: ui.theme.accentColor
                 radius: 3
+                visible: root.editorModel.usePresets
             }
         }
 
@@ -321,6 +333,7 @@ Flickable {
             model: root.editorModel.sixNineList
             currentIndex: root.editorModel.sixNineIndex
             visible: (root.editorModel.sixNineIndex != -1)
+            enabled: root.editorModel.usePresets
 
             delegate: FlatButton {
                 height: prv.listCellHeight
@@ -335,6 +348,7 @@ Flickable {
             highlight: Rectangle {
                 color: ui.theme.accentColor
                 radius: 3
+                visible: root.editorModel.usePresets
             }
         }
 
@@ -357,6 +371,7 @@ Flickable {
             model: root.editorModel.omitList
             currentIndex: root.editorModel.omitIndex
             visible: (root.editorModel.omitIndex != -1)
+            enabled: root.editorModel.usePresets
 
             delegate: FlatButton {
                 height: prv.listCellHeight
@@ -371,6 +386,7 @@ Flickable {
             highlight: Rectangle {
                 color: ui.theme.accentColor
                 radius: 3
+                visible: root.editorModel.usePresets
             }
         }
 
@@ -393,6 +409,7 @@ Flickable {
             model: root.editorModel.suspensionList
             currentIndex: root.editorModel.suspensionIndex
             visible: (root.editorModel.suspensionIndex != -1)
+            enabled: root.editorModel.usePresets
 
             delegate: FlatButton {
                 height: prv.listCellHeight
@@ -407,18 +424,22 @@ Flickable {
             highlight: Rectangle {
                 color: ui.theme.accentColor
                 radius: 3
+                visible: root.editorModel.usePresets
             }
         }
 
         StyledTextLabel {
             text: qsTrc("notation","Alterations")
             font: ui.theme.bodyFont
+            opacity: root.editorModel.usePresets ? 1 : 0.5
         }
 
         RadioButtonGroup {
             id: stackModifiers
 
             height: prv.listCellHeight
+
+            enabled: root.editorModel.usePresets
 
             model: [
                 { name: "Stacked", value: 1.0 },
@@ -440,6 +461,9 @@ Flickable {
                 onToggled: {
                     editorModel.setProperty("stackModifiers", modelData["value"])
                 }
+            }
+            highlight: {
+                visible: root.editorModel.usePresets
             }
         }
 

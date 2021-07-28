@@ -423,6 +423,7 @@ enum class Sid {
     chordsXmlFile,
     useChordSymbolPresets,
     chordDescriptionFile,
+    chordDescriptionFileWithPresets,
     chordQualityMag,
     chordQualityAdjust,
     chordExtensionMag,

@@ -175,6 +175,11 @@ QString ChordSymbolEditorModel::styleDescription() const
     return m_styleDescription;
 }
 
+bool ChordSymbolEditorModel::usePresets() const
+{
+    return m_usePresets;
+}
+
 int ChordSymbolEditorModel::majorSeventhIndex() const
 {
     return m_majorSeventhIndex;
@@ -368,6 +373,7 @@ void ChordSymbolEditorModel::initCurrentStyleIndex()
 
     globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::useChordSymbolPresets, m_styles.at(m_currentStyleIndex).usePresets);
     m_styleDescription = m_styles.at(m_currentStyleIndex).description;
+    m_usePresets = m_styles.at(m_currentStyleIndex).usePresets;
 
     // Get and extract the selection History
     QString selectionHistory = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::chordQualitySelectionHistory).toString();
@@ -375,6 +381,7 @@ void ChordSymbolEditorModel::initCurrentStyleIndex()
 
     emit currentStyleIndexChanged();
     emit styleDescriptionChanged();
+    emit usePresetsChanged();
 }
 
 void ChordSymbolEditorModel::setQualitySymbolsOnStyleChange()
@@ -748,30 +755,22 @@ void ChordSymbolEditorModel::setPropertiesOnStyleChange()
 void ChordSymbolEditorModel::setQualitySymbolsLists()
 {
     if (m_styles.at(m_currentStyleIndex).usePresets) {
-        // Get the symbols from the file
         m_qualitySymbols = styleManager->getQualitySymbols(m_styles.at(m_currentStyleIndex).fileName);
-        // Set the respective lists
-        m_majorSeventhList = m_qualitySymbols["major7th"];
-        m_halfDiminishedList = m_qualitySymbols["half-diminished"];
-        m_minorList = m_qualitySymbols["minor"];
-        m_augmentedList = m_qualitySymbols["augmented"];
-        m_diminishedList = m_qualitySymbols["diminished"];
-        m_sixNineList = m_qualitySymbols["sixNine"];
-        m_omitList = m_qualitySymbols["omit"];
-        m_suspensionList = m_qualitySymbols["suspension"];
-        m_bassNoteList = m_qualitySymbols["bassNote"];
     } else {
-        // Set empty lists
-        m_majorSeventhList = {};
-        m_halfDiminishedList = {};
-        m_minorList = {};
-        m_augmentedList = {};
-        m_diminishedList = {};
-        m_sixNineList = {};
-        m_omitList = {};
-        m_suspensionList = {};
-        m_bassNoteList = {};
+        QString descFileWithPresets
+            = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::chordDescriptionFileWithPresets).toString();
+        m_qualitySymbols = styleManager->getQualitySymbols(descFileWithPresets);
     }
+
+    m_majorSeventhList = m_qualitySymbols["major7th"];
+    m_halfDiminishedList = m_qualitySymbols["half-diminished"];
+    m_minorList = m_qualitySymbols["minor"];
+    m_augmentedList = m_qualitySymbols["augmented"];
+    m_diminishedList = m_qualitySymbols["diminished"];
+    m_sixNineList = m_qualitySymbols["sixNine"];
+    m_omitList = m_qualitySymbols["omit"];
+    m_suspensionList = m_qualitySymbols["suspension"];
+    m_bassNoteList = m_qualitySymbols["bassNote"];
 
     // Notify QML ListViews about the change
 
@@ -947,6 +946,11 @@ void ChordSymbolEditorModel::setChordStyle(QString styleName)
     globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordDescriptionFile, descriptionFileName);
     globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::useChordSymbolPresets, m_styles.at(m_currentStyleIndex).usePresets);
     m_styleDescription = m_styles.at(m_currentStyleIndex).description;
+    m_usePresets = m_styles.at(m_currentStyleIndex).usePresets;
+
+    if (m_styles.at(m_currentStyleIndex).usePresets) {
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordDescriptionFileWithPresets, descriptionFileName);
+    }
 
     // Get and extract the selection History
     QString selectionHistory = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::chordQualitySelectionHistory).toString();
@@ -959,6 +963,7 @@ void ChordSymbolEditorModel::setChordStyle(QString styleName)
 
     emit currentStyleIndexChanged();
     emit styleDescriptionChanged();
+    emit usePresetsChanged();
 }
 
 void ChordSymbolEditorModel::setChordSpelling(QString newSpelling)

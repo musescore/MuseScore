@@ -51,6 +51,8 @@ class ChordSymbolEditorModel : public QAbstractListModel
     Q_PROPERTY(int chordSpellingIndex READ chordSpellingIndex NOTIFY chordSpellingIndexChanged)
     Q_PROPERTY(int currentStyleIndex READ currentStyleIndex NOTIFY currentStyleIndexChanged)
     Q_PROPERTY(QString styleDescription READ styleDescription NOTIFY styleDescriptionChanged)
+    Q_PROPERTY(bool usePresets READ usePresets NOTIFY usePresetsChanged)
+
     Q_PROPERTY(int majorSeventhIndex READ majorSeventhIndex NOTIFY majorSeventhIndexChanged)
     Q_PROPERTY(int halfDiminishedIndex READ halfDiminishedIndex NOTIFY halfDiminishedIndexChanged)
     Q_PROPERTY(int minorIndex READ minorIndex NOTIFY minorIndexChanged)
@@ -111,6 +113,8 @@ public:
     int chordSpellingIndex() const;
     int currentStyleIndex() const;
     QString styleDescription() const;
+    bool usePresets() const;
+
     int majorSeventhIndex() const;
     int halfDiminishedIndex() const;
     int minorIndex() const;
@@ -182,6 +186,8 @@ signals:
     void chordSpellingIndexChanged();
     void currentStyleIndexChanged();
     void styleDescriptionChanged();
+    void usePresetsChanged();
+
     void majorSeventhIndexChanged();
     void halfDiminishedIndexChanged();
     void minorIndexChanged();
@@ -247,6 +253,8 @@ private:
     int m_chordSpellingIndex;
     int m_currentStyleIndex;
     QString m_styleDescription;
+    bool m_usePresets;
+
     int m_majorSeventhIndex;
     int m_halfDiminishedIndex;
     int m_minorIndex;

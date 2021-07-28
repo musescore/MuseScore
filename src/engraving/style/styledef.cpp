@@ -420,6 +420,7 @@ const StyleDef::StyleValue StyleDef::styleValues[int(Sid::STYLES)] = {
     { Sid::chordsXmlFile,           "chordsXmlFile",           QVariant(false) },
     { Sid::useChordSymbolPresets,   "useChordSymbolPresets",   QVariant(false) },
     { Sid::chordDescriptionFile,    "chordDescriptionFile",    QVariant(QString("chords_std.xml")) },
+    { Sid::chordDescriptionFileWithPresets, "chordDescriptionFileWithPresets", QVariant(QString("chords_std.xml")) },
     { Sid::chordQualityMag,         "chordQualityMag",         QVariant(1.0) },
     { Sid::chordQualityAdjust,      "chordQualityAdjust",      QVariant(0.0) },
     { Sid::chordExtensionMag,       "chordExtensionMag",       QVariant(1.0) },
