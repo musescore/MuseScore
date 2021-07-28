@@ -25,6 +25,10 @@
 #include "color.h"
 #include "drawtypes.h"
 
+#ifndef NO_QT_SUPPORT
+#include <QBrush>
+#endif
+
 namespace mu::draw {
 class Brush
 {

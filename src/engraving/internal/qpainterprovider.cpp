@@ -30,10 +30,9 @@
 #include <QStaticText>
 #include <QPainterPath>
 
-#include "fontcompat.h"
-#include "utils/drawlogger.h"
-#include "transform.h"
-#include "painterpath.h"
+#include "draw/utils/drawlogger.h"
+#include "draw/transform.h"
+#include "draw/painterpath.h"
 
 #include "log.h"
 
@@ -41,7 +40,7 @@ using namespace mu::draw;
 
 QPainterProvider::QPainterProvider(QPainter* painter, bool overship)
     : m_painter(painter), m_overship(overship), m_drawObjectsLogger(new DrawObjectsLogger()),
-    m_font(mu::draw::fromQFont(m_painter->font())),
+    m_font(Font::fromQFont(m_painter->font())),
     m_pen(Pen::fromQPen(m_painter->pen())),
     m_brush(Brush::fromQBrush(m_painter->brush()))
 {
@@ -123,7 +122,7 @@ void QPainterProvider::setCompositionMode(CompositionMode mode)
 void QPainterProvider::setFont(const Font& font)
 {
     if (m_font != font) {
-        m_painter->setFont(mu::draw::toQFont(font));
+        m_painter->setFont(font.toQFont());
         m_font = font;
     }
 }
@@ -169,7 +168,7 @@ void QPainterProvider::save()
 void QPainterProvider::restore()
 {
     m_painter->restore();
-    m_font = mu::draw::fromQFont(m_painter->font());
+    m_font = Font::fromQFont(m_painter->font());
     m_pen = Pen::fromQPen(m_painter->pen());
     m_brush = Brush::fromQBrush(m_painter->brush());
 }
@@ -235,10 +234,10 @@ void QPainterProvider::drawTextWorkaround(const Font& f, const PointF& pos, cons
 
     // correction factor for bold text drawing, due to the change of the diagonal elements
     qreal factor = 1.0 / mm;
-    QFont fnew(mu::draw::toQFont(f), m_painter->device());
+    QFont fnew(f.toQFont(), m_painter->device());
     fnew.setPointSizeF(f.pointSizeF() / factor);
     QRawFont fRaw = QRawFont::fromFont(fnew);
-    QTextLayout textLayout(text, mu::draw::toQFont(f), m_painter->device());
+    QTextLayout textLayout(text, f.toQFont(), m_painter->device());
     textLayout.beginLayout();
     while (true) {
         QTextLine line = textLayout.createLine();

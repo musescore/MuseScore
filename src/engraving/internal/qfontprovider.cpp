@@ -25,7 +25,6 @@
 #include <QFontMetricsF>
 
 #include "libmscore/mscore.h"
-#include "fontcompat.h"
 #include "fontengineft.h"
 
 using namespace mu;
@@ -66,67 +65,67 @@ void QFontProvider::insertSubstitution(const QString& familyName, const QString&
 
 qreal QFontProvider::lineSpacing(const Font& f) const
 {
-    return QFontMetricsF(toQFont(f), &device).lineSpacing();
+    return QFontMetricsF(f.toQFont(), &device).lineSpacing();
 }
 
 qreal QFontProvider::xHeight(const Font& f) const
 {
-    return QFontMetricsF(toQFont(f), &device).xHeight();
+    return QFontMetricsF(f.toQFont(), &device).xHeight();
 }
 
 qreal QFontProvider::height(const Font& f) const
 {
-    return QFontMetricsF(toQFont(f), &device).height();
+    return QFontMetricsF(f.toQFont(), &device).height();
 }
 
 qreal QFontProvider::ascent(const Font& f) const
 {
-    return QFontMetricsF(toQFont(f), &device).ascent();
+    return QFontMetricsF(f.toQFont(), &device).ascent();
 }
 
 qreal QFontProvider::descent(const Font& f) const
 {
-    return QFontMetricsF(toQFont(f), &device).descent();
+    return QFontMetricsF(f.toQFont(), &device).descent();
 }
 
 bool QFontProvider::inFont(const Font& f, QChar ch) const
 {
-    return QFontMetricsF(toQFont(f), &device).inFont(ch);
+    return QFontMetricsF(f.toQFont(), &device).inFont(ch);
 }
 
 bool QFontProvider::inFontUcs4(const Font& f, uint ucs4) const
 {
-    return QFontMetricsF(toQFont(f), &device).inFontUcs4(ucs4);
+    return QFontMetricsF(f.toQFont(), &device).inFontUcs4(ucs4);
 }
 
 qreal QFontProvider::horizontalAdvance(const Font& f, const QString& string) const
 {
-    return QFontMetricsF(toQFont(f), &device).horizontalAdvance(string);
+    return QFontMetricsF(f.toQFont(), &device).horizontalAdvance(string);
 }
 
 qreal QFontProvider::horizontalAdvance(const Font& f, const QChar& ch) const
 {
-    return QFontMetricsF(toQFont(f), &device).horizontalAdvance(ch);
+    return QFontMetricsF(f.toQFont(), &device).horizontalAdvance(ch);
 }
 
 RectF QFontProvider::boundingRect(const Font& f, const QString& string) const
 {
-    return RectF::fromQRectF(QFontMetricsF(toQFont(f), &device).boundingRect(string));
+    return RectF::fromQRectF(QFontMetricsF(f.toQFont(), &device).boundingRect(string));
 }
 
 RectF QFontProvider::boundingRect(const Font& f, const QChar& ch) const
 {
-    return RectF::fromQRectF(QFontMetricsF(toQFont(f), &device).boundingRect(ch));
+    return RectF::fromQRectF(QFontMetricsF(f.toQFont(), &device).boundingRect(ch));
 }
 
 RectF QFontProvider::boundingRect(const Font& f, const RectF& r, int flags, const QString& string) const
 {
-    return RectF::fromQRectF(QFontMetricsF(toQFont(f), &device).boundingRect(r.toQRectF(), flags, string));
+    return RectF::fromQRectF(QFontMetricsF(f.toQFont(), &device).boundingRect(r.toQRectF(), flags, string));
 }
 
 RectF QFontProvider::tightBoundingRect(const Font& f, const QString& string) const
 {
-    return RectF::fromQRectF(QFontMetricsF(toQFont(f), &device).tightBoundingRect(string));
+    return RectF::fromQRectF(QFontMetricsF(f.toQFont(), &device).tightBoundingRect(string));
 }
 
 // Score symbols

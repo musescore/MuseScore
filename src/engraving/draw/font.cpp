@@ -118,3 +118,40 @@ void Font::setHinting(Hinting hinting)
 {
     m_hinting = hinting;
 }
+
+#ifndef NO_QT_SUPPORT
+QFont Font::toQFont() const
+{
+    QFont qf(family());
+
+    if (pointSizeF() > 0) {
+        qf.setPointSizeF(pointSizeF());
+    }
+    qf.setWeight(static_cast<QFont::Weight>(weight()));
+    qf.setBold(bold());
+    qf.setItalic(italic());
+    qf.setUnderline(underline());
+    if (noFontMerging()) {
+        qf.setStyleStrategy(QFont::NoFontMerging);
+    }
+    qf.setHintingPreference(static_cast<QFont::HintingPreference>(hinting()));
+
+    return qf;
+}
+
+Font Font::fromQFont(const QFont& qf)
+{
+    mu::draw::Font f(qf.family());
+    f.setPointSizeF(qf.pointSizeF());
+    f.setWeight(static_cast<Font::Weight>(qf.weight()));
+    f.setBold(qf.bold());
+    f.setItalic(qf.italic());
+    f.setUnderline(qf.underline());
+    if (qf.styleStrategy() == QFont::NoFontMerging) {
+        f.setNoFontMerging(true);
+    }
+    f.setHinting(static_cast<Font::Hinting>(qf.hintingPreference()));
+    return f;
+}
+
+#endif

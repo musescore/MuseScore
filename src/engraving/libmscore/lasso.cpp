@@ -60,41 +60,43 @@ void Lasso::draw(mu::draw::Painter* painter) const
 
 void Lasso::editDrag(EditData& ed)
 {
-    Qt::CursorShape cursorShape = Qt::ArrowCursor;
+    //Qt::CursorShape cursorShape = Qt::ArrowCursor;
     switch (int(ed.curGrip)) {
     case 0:
-        cursorShape = Qt::SizeFDiagCursor;
+        //cursorShape = Qt::SizeFDiagCursor;
         bbox().setTopLeft(bbox().topLeft() + ed.delta);
         break;
     case 1:
-        cursorShape = Qt::SizeBDiagCursor;
+        //cursorShape = Qt::SizeBDiagCursor;
         bbox().setTopRight(bbox().topRight() + ed.delta);
         break;
     case 2:
-        cursorShape = Qt::SizeFDiagCursor;
+        //cursorShape = Qt::SizeFDiagCursor;
         bbox().setBottomRight(bbox().bottomRight() + ed.delta);
         break;
     case 3:
-        cursorShape = Qt::SizeBDiagCursor;
+        //cursorShape = Qt::SizeBDiagCursor;
         bbox().setBottomLeft(bbox().bottomLeft() + ed.delta);
         break;
     case 4:
-        cursorShape = Qt::SizeVerCursor;
+        //cursorShape = Qt::SizeVerCursor;
         bbox().setTop(bbox().top() + ed.delta.y());
         break;
     case 5:
-        cursorShape = Qt::SizeHorCursor;
+        //cursorShape = Qt::SizeHorCursor;
         bbox().setRight(bbox().right() + ed.delta.x());
         break;
     case 6:
-        cursorShape = Qt::SizeVerCursor;
+        //cursorShape = Qt::SizeVerCursor;
         bbox().setBottom(bbox().bottom() + ed.delta.y());
         break;
     case 7:
-        cursorShape = Qt::SizeHorCursor;
+        //cursorShape = Qt::SizeHorCursor;
         bbox().setLeft(bbox().left() + ed.delta.x());
         break;
     }
+
+    // ed.view()->setCursor(QCursor(cursorShape));
 }
 
 //---------------------------------------------------------

@@ -149,7 +149,7 @@ size_t PainterPath::elementCount() const
 
 PainterPath::Element PainterPath::elementAt(size_t i) const
 {
-    assert(i >= 0 && i < elementCount());
+    assert(i < elementCount());
     return m_elements.at(i);
 }
 
@@ -294,7 +294,7 @@ QPainterPath PainterPath::toQPainterPath(const PainterPath& path)
     
     qpath.setFillRule(static_cast<Qt::FillRule>(path.fillRule()));
 
-    for (int i = 0; i < path.elementCount(); i++) {
+    for (size_t i = 0; i < path.elementCount(); i++) {
         auto elem = path.elementAt(i);
         
         QPainterPath::ElementType type = static_cast<QPainterPath::ElementType>(elem.type);

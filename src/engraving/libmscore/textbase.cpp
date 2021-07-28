@@ -28,7 +28,6 @@
 #include <QRegularExpression>
 
 #include "draw/fontmetrics.h"
-#include "draw/fontcompat.h"
 #include "draw/pen.h"
 #include "draw/brush.h"
 #include "style/defaultstyle.h"

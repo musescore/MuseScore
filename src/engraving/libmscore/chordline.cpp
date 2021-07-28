@@ -316,7 +316,7 @@ void ChordLine::editDrag(EditData& ed)
 
     qreal dx = ed.delta.x() / sp;
     qreal dy = ed.delta.y() / sp;
-    for (int i = 0; i < n; ++i) {
+    for (size_t i = 0; i < n; ++i) {
         const PainterPath::Element& e = (_straight ? path.elementAt(1) : path.elementAt(i));
         if (_straight) {
             if (i > 0) {
@@ -399,7 +399,7 @@ std::vector<PointF> ChordLine::gripsPositions(const EditData&) const
         return { p };
     } else {
         std::vector<PointF> grips(n);
-        for (int i = 0; i < n; ++i) {
+        for (size_t i = 0; i < n; ++i) {
             grips[i] = cp + PointF(path.elementAt(i).x * sp, path.elementAt(i).y * sp);
         }
         return grips;

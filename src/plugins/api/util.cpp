@@ -33,8 +33,6 @@
 #include "libmscore/system.h"
 #include "libmscore/staff.h"
 
-#include "engraving/draw/qpainterprovider.h"
-
 using namespace mu;
 
 namespace Ms {

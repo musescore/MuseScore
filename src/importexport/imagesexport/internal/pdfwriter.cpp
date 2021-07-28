@@ -25,7 +25,6 @@
 #include <QPdfWriter>
 
 #include "libmscore/masterscore.h"
-#include "engraving/draw/qpainterprovider.h"
 
 #include "log.h"
 
