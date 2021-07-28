@@ -108,8 +108,7 @@ public:
     bool isApplyingElementsDisabled() const;
     void setApplyingElementsDisabled(bool val);
 
-    void applyPaletteElement();
-    static bool applyPaletteElement(Ms::ElementPtr element, Qt::KeyboardModifiers modifiers = {});
+    void applyCurrentElementToScore();
 
     // Settings
     bool readOnly() const;
@@ -161,8 +160,8 @@ private:
 
     const std::vector<PaletteCellPtr>& actualCellsList() const;
 
-    bool notationHasSelection() const;
     void applyElementAtPosition(QPoint pos, Qt::KeyboardModifiers modifiers);
+    void applyElementAtIndex(int index, Qt::KeyboardModifiers modifiers = {});
 
     PalettePtr m_palette;
 
