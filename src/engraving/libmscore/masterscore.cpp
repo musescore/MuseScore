@@ -529,7 +529,7 @@ Score::FileError MasterScore::read(XmlReader& e, bool ignoreVersionError, mu::en
                 ++counter;
 
                 if (style().defaultStyleVersion() == 400) {
-                    int k =1;
+                    //int k =1;
                 }
             }
 
