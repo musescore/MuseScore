@@ -64,6 +64,7 @@ public:
     ExcerptNotationList availableExcerpts() const override;
 
     void initExcerpts(const ExcerptNotationList& excerpts) override;
+    void removeExcerpts(const ExcerptNotationList& excerpts) override;
 
     INotationPartsPtr parts() const override;
 

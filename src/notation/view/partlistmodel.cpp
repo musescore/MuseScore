@@ -107,6 +107,12 @@ bool PartListModel::isRemovingAvailable() const
         return false;
     }
 
+    for (int index : selectedRows()) {
+        if (!m_excerpts[index]->isInited()) {
+            return false;
+        }
+    }
+
     return true;
 }
 
@@ -161,10 +167,20 @@ void PartListModel::doRemovePart(int partIndex)
         return;
     }
 
+    bool isCurrentContation = context()->currentNotation() == m_excerpts[partIndex]->notation();
+
     beginRemoveRows(QModelIndex(), partIndex, partIndex);
-    m_excerpts[partIndex]->notation()->setOpened(false);
+
+    masterNotation()->notation()->undoStack()->prepareChanges();
+    masterNotation()->removeExcerpts({ m_excerpts[partIndex] });
+    masterNotation()->notation()->undoStack()->commitChanges();
+
     m_excerpts.removeAt(partIndex);
     endRemoveRows();
+
+    if (isCurrentContation) {
+        context()->setCurrentNotation(context()->currentMasterNotation()->notation());
+    }
 }
 
 void PartListModel::setPartTitle(int partIndex, const QString& title)
@@ -294,10 +310,11 @@ void PartListModel::openSelectedParts()
     ExcerptNotationList newExcerpts;
     for (int index : rows) {
         newExcerpts.push_back(m_excerpts[index]);
-        m_excerpts[index]->notation()->setOpened(true);
     }
 
+    masterNotation()->notation()->undoStack()->prepareChanges();
     masterNotation()->initExcerpts(newExcerpts);
+    masterNotation()->notation()->undoStack()->commitChanges();
 
     context()->setCurrentNotation(m_excerpts[rows.last()]->notation());
 }

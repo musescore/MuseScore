@@ -126,13 +126,13 @@ ListItemBlank {
 
         MenuButton {
             menuModel: [
-                { "code": "duplicate", "title": qsTrc("notation", "Duplicate") },
-                { "code": "delete", "title": qsTrc("notation", "Delete") },
-                { "code": "rename", "title": qsTrc("notation", "Rename") },
+                { "id": "duplicate", "title": qsTrc("notation", "Duplicate") },
+                { "id": "delete", "title": qsTrc("notation", "Delete") },
+                { "id": "rename", "title": qsTrc("notation", "Rename") },
             ]
 
-            onHandleAction: {
-                switch(actionCode) {
+            onHandleMenuItem: {
+                switch(itemId) {
                 case "duplicate":
                     root.copyPartRequested()
                     break

@@ -61,8 +61,6 @@ Ms::Excerpt* ExcerptNotation::excerpt() const
 void ExcerptNotation::setExcerpt(Ms::Excerpt* excerpt)
 {
     m_excerpt = excerpt;
-    setScore(m_excerpt->partScore());
-    setMetaInfo(m_metaInfo);
 }
 
 void ExcerptNotation::init()
@@ -71,8 +69,12 @@ void ExcerptNotation::init()
         return;
     }
 
-    score()->masterScore()->initExcerpt(m_excerpt, false);
+    m_excerpt->setTitle(m_metaInfo.title);
+
+    m_excerpt->oscore()->initExcerpt(m_excerpt, false);
     setScore(m_excerpt->partScore());
+
+    Notation::setMetaInfo(m_metaInfo);
 
     m_isInited = true;
 }
