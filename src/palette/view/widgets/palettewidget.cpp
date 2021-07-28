@@ -380,60 +380,33 @@ void PaletteWidget::setApplyingElementsDisabled(bool val)
     m_isApplyingElementsDisabled = val;
 }
 
-bool PaletteWidget::notationHasSelection() const
+void PaletteWidget::applyCurrentElementToScore()
 {
-    auto notation = globalContext()->currentNotation();
-    if (!notation) {
-        return false;
-    }
-
-    return !notation->interaction()->selection()->isNone();
-}
-
-void PaletteWidget::applyPaletteElement()
-{
-    if (!notationHasSelection()) {
-        return;
-    }
-
-    // apply currently selected palette symbol to selected score elements
-    int i = m_currentIdx;
-    if (i < actualCellCount() && cellAt(i)) {
-        applyPaletteElement(cellAt(i)->element);
-    }
+    applyElementAtIndex(m_currentIdx);
 }
 
 void PaletteWidget::applyElementAtPosition(QPoint pos, Qt::KeyboardModifiers modifiers)
+{
+    applyElementAtIndex(cellIndexForPoint(pos), modifiers);
+}
+
+void PaletteWidget::applyElementAtIndex(int index, Qt::KeyboardModifiers modifiers)
 {
     if (m_isApplyingElementsDisabled) {
         return;
     }
 
-    int index = cellIndexForPoint(pos);
-
-    if (index == -1) {
-        return;
-    }
-
-    if (!notationHasSelection()) {
+    auto notation = globalContext()->currentNotation();
+    if (!notation) {
         return;
     }
 
     const PaletteCellPtr cell = cellAt(index);
-
-    if (cell) {
-        applyPaletteElement(cell->element, modifiers);
-    }
-}
-
-bool PaletteWidget::applyPaletteElement(ElementPtr element, Qt::KeyboardModifiers modifiers)
-{
-    auto notation = globalContext()->currentNotation();
-    if (!notation) {
-        return false;
+    if (!cell || !cell->element) {
+        return;
     }
 
-    return notation->interaction()->applyPaletteElement(element.get(), modifiers);
+    notation->interaction()->applyPaletteElement(cell->element.get(), modifiers);
 }
 
 // ====================================================
@@ -1180,7 +1153,7 @@ void PaletteScrollArea::keyPressEvent(QKeyEvent* event)
     case Qt::Key_Enter:
     case Qt::Key_Return:
         if (!p->isApplyingElementsDisabled()) {
-            p->applyPaletteElement();
+            p->applyCurrentElementToScore();
         }
         break;
     default:

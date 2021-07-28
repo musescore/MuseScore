@@ -34,7 +34,6 @@
 
 #include "palettecreator.h"
 #include "view/widgets/keyedit.h"
-#include "view/widgets/palettewidget.h"
 #include "view/widgets/timedialog.h"
 
 #include "io/path.h"
@@ -555,10 +554,16 @@ bool UserPaletteController::canEdit(const QModelIndex& index) const
 bool UserPaletteController::applyPaletteElement(const QModelIndex& index, Qt::KeyboardModifiers modifiers)
 {
     const PaletteCell* cell = model()->data(index, PaletteTreeModel::PaletteCellRole).value<const PaletteCell*>();
-    if (cell && cell->element) {
-        return PaletteWidget::applyPaletteElement(cell->element, modifiers);
+    if (!cell || !cell->element) {
+        return false;
     }
-    return false;
+
+    auto notation = globalContext()->currentNotation();
+    if (!notation) {
+        return false;
+    }
+
+    return notation->interaction()->applyPaletteElement(cell->element.get(), modifiers);
 }
 
 // ========================================================

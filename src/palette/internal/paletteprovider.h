@@ -32,6 +32,7 @@
 #include "modularity/ioc.h"
 #include "iinteractive.h"
 #include "ipaletteconfiguration.h"
+#include "context/iglobalcontext.h"
 
 namespace Ms {
 class AbstractPaletteController;
@@ -134,6 +135,7 @@ class UserPaletteController : public AbstractPaletteController, public mu::async
 {
     Q_OBJECT
 
+    INJECT(palette, mu::context::IGlobalContext, globalContext)
     INJECT(palette, mu::framework::IInteractive, interactive)
     INJECT(palette, mu::palette::IPaletteConfiguration, configuration)
 
