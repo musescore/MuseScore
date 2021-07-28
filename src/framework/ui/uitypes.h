@@ -281,6 +281,11 @@ struct MenuItem : public UiAction
             { "subitems", subitemsVariantList }
         };
     }
+
+    bool isValid() const
+    {
+        return !id.isEmpty();
+    }
 };
 using MenuItemList = QList<MenuItem>;
 

@@ -65,6 +65,8 @@ private:
     ui::MenuItem helpItem() const;
 
     ui::MenuItemList recentScores() const;
+    ui::MenuItemList appendClearRecentSection(const ui::MenuItemList& recentScores) const;
+
     ui::MenuItemList notesItems() const;
     ui::MenuItemList intervalsItems() const;
     ui::MenuItemList tupletsItems() const;

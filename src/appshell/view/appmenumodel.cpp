@@ -85,7 +85,17 @@ void AppMenuModel::setupConnections()
 {
     userScoresService()->recentScoreList().ch.onReceive(this, [this](const MetaList&) {
         MenuItem& recentScoreListItem = findMenu("menu-file-open");
-        recentScoreListItem.subitems = recentScores();
+
+        MenuItemList recentScoresList = recentScores();
+        bool openRecentEnabled = !recentScoresList.empty();
+
+        if (!recentScoresList.empty()) {
+            recentScoresList = appendClearRecentSection(recentScoresList);
+        }
+
+        recentScoreListItem.state.enabled = openRecentEnabled;
+        recentScoreListItem.subitems = recentScoresList;
+
         emit itemsChanged();
     });
 
@@ -105,11 +115,16 @@ void AppMenuModel::setupConnections()
 MenuItem AppMenuModel::fileItem() const
 {
     MenuItemList recentScoresList = recentScores();
+    bool openRecentEnabled = true;
+
+    if (!recentScoresList.empty()) {
+        recentScoresList = appendClearRecentSection(recentScoresList);
+    }
 
     MenuItemList fileItems {
         makeMenuItem("file-new"),
         makeMenuItem("file-open"),
-        makeMenu(qtrc("appshell", "Open &Recent"), recentScoresList, !recentScoresList.empty(), "menu-file-open"),
+        makeMenu(qtrc("appshell", "Open &Recent"), recentScoresList, openRecentEnabled, "menu-file-open"),
         makeSeparator(),
         makeMenuItem("file-close"),
         makeMenuItem("file-save"),
@@ -287,9 +302,9 @@ MenuItem AppMenuModel::helpItem() const
         makeMenuItem("online-handbook"),
         makeMenu(qtrc("appshell", "&Tours"), toursItems),
         makeSeparator(),
-        makeMenuItem("about"), // need implement
+        makeMenuItem("about"),
         makeMenuItem("about-qt"),
-        makeMenuItem("about-musicxml"), // need implement
+        makeMenuItem("about-musicxml")
     };
 
     if (configuration()->isAppUpdatable()) {
@@ -301,7 +316,7 @@ MenuItem AppMenuModel::helpItem() const
               << makeMenuItem("report-bug")
               << makeMenuItem("leave-feedback")
               << makeSeparator()
-              << makeMenuItem("revert-factory"); // need implement
+              << makeMenuItem("revert-factory");
 
     return makeMenu(qtrc("appshell", "&Help"), helpItems);
 }
@@ -324,10 +339,16 @@ MenuItemList AppMenuModel::recentScores() const
         items << item;
     }
 
-    items << makeSeparator()
-          << makeMenuItem("clear-recent");
-
     return items;
+}
+
+MenuItemList AppMenuModel::appendClearRecentSection(const ui::MenuItemList& recentScores) const
+{
+    MenuItemList result = recentScores;
+    result << makeSeparator()
+           << makeMenuItem("clear-recent");
+
+    return result;
 }
 
 MenuItemList AppMenuModel::notesItems() const
