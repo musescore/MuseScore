@@ -205,7 +205,14 @@ Rectangle {
             }
 
             onHandleMenuItem: {
-                model.handleMenuItem(itemId)
+                switch (itemId) {
+                case model.concertPitchAction.id:
+                    model.handleAction(model.concertPitchAction.code)
+                    break
+                case model.currentWorkspaceAction.id:
+                    model.handleAction(model.concertPitchAction.code)
+                    break
+                }
             }
         }
     }

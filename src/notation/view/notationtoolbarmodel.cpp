@@ -49,7 +49,6 @@ QVariant NotationToolBarModel::data(const QModelIndex& index, int role) const
 
     switch (role) {
     case TitleRole: return item.title;
-    case IdRole: return item.id;
     case CodeRole: return QString::fromStdString(item.code);
     case IconRole: return static_cast<int>(item.iconCode);
     case EnabledRole: return item.state.enabled;
@@ -64,7 +63,6 @@ QHash<int, QByteArray> NotationToolBarModel::roleNames() const
 {
     static const QHash<int, QByteArray> roles {
         { TitleRole, "title" },
-        { IdRole, "id" },
         { CodeRole, "code" },
         { IconRole, "icon" },
         { EnabledRole, "enabled" },
@@ -91,9 +89,9 @@ void NotationToolBarModel::load()
     });
 }
 
-void NotationToolBarModel::handleMenuItem(const QString& itemId)
+void NotationToolBarModel::handleAction(const QString& actionCode)
 {
-    dispatcher()->dispatch(actions::codeFromQString(itemId));
+    dispatcher()->dispatch(actions::codeFromQString(actionCode));
 }
 
 MenuItem NotationToolBarModel::makeItem(const actions::ActionCode& actionCode) const

@@ -50,12 +50,11 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     Q_INVOKABLE void load();
-    Q_INVOKABLE void handleMenuItem(const QString& itemId);
+    Q_INVOKABLE void handleAction(const QString& actionCode);
 
 private:
     enum Roles {
         TitleRole = Qt::UserRole + 1,
-        IdRole,
         CodeRole,
         IconRole,
         EnabledRole,
