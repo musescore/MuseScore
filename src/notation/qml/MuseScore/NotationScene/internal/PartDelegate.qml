@@ -37,7 +37,7 @@ ListItemBlank {
     signal copyPartRequested()
     signal removePartRequested()
     signal partClicked()
-    signal titleEdited()
+    signal titleEdited(string newTitle)
     signal titleEditingFinished()
 
     function startEditTitle() {
@@ -79,6 +79,8 @@ ListItemBlank {
 
         Loader {
             id: titleLoader
+
+            Layout.fillWidth: true
 
             sourceComponent: partTitle
 
@@ -122,58 +124,30 @@ ListItemBlank {
             }
         }
 
-        Item {
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-        }
+        MenuButton {
+            menuModel: [
+                { "code": "duplicate", "title": qsTrc("notation", "Duplicate") },
+                { "code": "delete", "title": qsTrc("notation", "Delete") },
+                { "code": "rename", "title": qsTrc("notation", "Rename") },
+            ]
 
-        FlatButton {
-            normalStateColor: "transparent"
-            icon: IconCode.MENU_THREE_DOTS
-
-            onClicked: {
-                contextMenu.popup()
-            }
-        }
-    }
-
-    ContextMenu {
-        id: contextMenu
-
-        StyledContextMenuItem {
-            id: duplicateItem
-
-            text: qsTrc("notation", "Duplicate")
-
-            onTriggered: {
-                root.copyPartRequested()
-            }
-        }
-
-        StyledContextMenuItem {
-            id: deleteItem
-
-            text: qsTrc("notation", "Delete")
-
-            onTriggered: {
-                root.removePartRequested()
-            }
-        }
-
-        StyledContextMenuItem {
-            id: renameItem
-
-            text: qsTrc("notation", "Rename")
-
-            onTriggered: {
-                root.startEditTitle()
+            onHandleAction: {
+                switch(actionCode) {
+                case "duplicate":
+                    root.copyPartRequested()
+                    break
+                case "delete":
+                    root.removePartRequested()
+                    break
+                case "rename":
+                    root.startEditTitle()
+                    break;
+                }
             }
         }
     }
 
     SeparatorLine {
-        anchors.leftMargin: -root.anchors.leftMargin
-        anchors.rightMargin: -root.anchors.rightMargin
         anchors.bottom: parent.bottom
     }
 }
