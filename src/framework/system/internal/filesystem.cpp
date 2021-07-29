@@ -25,7 +25,12 @@
 #include <QDir>
 #include <QDirIterator>
 
+#ifdef Q_OS_WIN
+#include <windows.h>
+#endif
+
 #include "systemerrors.h"
+#include "log.h"
 
 using namespace mu;
 using namespace mu::system;
@@ -72,6 +77,38 @@ Ret FileSystem::copy(const io::path& src, const io::path& dst, bool replace) con
 
     Ret ret = copyRecursively(src, dst);
     return ret;
+}
+
+Ret FileSystem::move(const io::path& src, const io::path& dst, bool replace) const
+{
+    QFileInfo srcFileInfo(src.toQString());
+    if (!srcFileInfo.exists()) {
+        return make_ret(Err::FSNotExist);
+    }
+
+    QFileInfo dstFileInfo(dst.toQString());
+    if (dstFileInfo.exists()) {
+        if (!replace) {
+            return make_ret(Err::FSIsExist);
+        }
+
+        Ret ret = remove(dst);
+        if (!ret) {
+            return ret;
+        }
+    }
+
+    if (srcFileInfo.isDir()) {
+        if (!QDir().rename(src.toQString(), dst.toQString())) {
+            return make_ret(Err::FSMoveErrors);
+        }
+    } else {
+        if (!QFile::rename(src.toQString(), dst.toQString())) {
+            return make_ret(Err::FSMoveErrors);
+        }
+    }
+
+    return make_ret(Ret::Code::Ok);
 }
 
 RetVal<QByteArray> FileSystem::readFile(const io::path& filePath) const
@@ -191,4 +228,17 @@ Ret FileSystem::copyRecursively(const io::path& src, const io::path& dst) const
     }
 
     return make_ret(Err::NoError);
+}
+
+void FileSystem::setAttribute(const io::path& path, Attribute attribute) const
+{
+    switch (attribute) {
+    case Attribute::Hidden: {
+#ifdef Q_OS_WIN
+        const QString nativePath = QDir::toNativeSeparators(path.toQString());
+        SetFileAttributes((LPCTSTR)nativePath.unicode(), FILE_ATTRIBUTE_HIDDEN);
+#endif
+    } break;
+    }
+    UNUSED(path);
 }
