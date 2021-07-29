@@ -61,9 +61,9 @@ public:
 
     IExcerptNotationPtr newExcerptNotation() const override;
     ValCh<ExcerptNotationList> excerpts() const override;
-    ExcerptNotationList availableExcerpts() const override;
+    ExcerptNotationList potentialExcerpts() const override;
 
-    void initExcerpts(const ExcerptNotationList& excerpts) override;
+    void addExcerpts(const ExcerptNotationList& excerpts) override;
     void removeExcerpts(const ExcerptNotationList& excerpts) override;
 
     INotationPartsPtr parts() const override;

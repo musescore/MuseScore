@@ -434,24 +434,35 @@ mu::ValNt<bool> MasterNotation::needSave() const
     return needSave;
 }
 
-void MasterNotation::initExcerpts(const ExcerptNotationList& excerpts)
+void MasterNotation::addExcerpts(const ExcerptNotationList& excerpts)
 {
+    undoStack()->prepareChanges();
+
     ExcerptNotationList result = m_excerpts.val;
     for (IExcerptNotationPtr excerptNotation : excerpts) {
+        auto it = std::find(result.begin(), result.end(), excerptNotation);
+        if (it != result.end()) {
+            continue;
+        }
+
         ExcerptNotation* excerptNotationImpl = get_impl(excerptNotation);
-        if (excerptNotationImpl && !excerptNotationImpl->excerpt()) {
+        if (!excerptNotationImpl->excerpt()) {
             excerptNotationImpl->setExcerpt(new Ms::Excerpt(masterScore()));
         }
 
-        excerptNotation->init();
+        excerptNotationImpl->init();
         result.push_back(excerptNotation);
     }
+
+    undoStack()->commitChanges();
 
     doSetExcerpts(result);
 }
 
 void MasterNotation::removeExcerpts(const ExcerptNotationList& excerpts)
 {
+    undoStack()->prepareChanges();
+
     for (IExcerptNotationPtr excerptNotation : excerpts) {
         auto it = std::find(m_excerpts.val.begin(), m_excerpts.val.end(), excerptNotation);
         if (it == m_excerpts.val.end()) {
@@ -462,6 +473,8 @@ void MasterNotation::removeExcerpts(const ExcerptNotationList& excerpts)
         masterScore()->undo(new Ms::RemoveExcerpt(excerpt));
         m_excerpts.val.erase(it);
     }
+
+    undoStack()->commitChanges();
 
     doSetExcerpts(m_excerpts.val);
 }
@@ -487,7 +500,7 @@ INotationPartsPtr MasterNotation::parts() const
     return m_parts;
 }
 
-ExcerptNotationList MasterNotation::availableExcerpts() const
+ExcerptNotationList MasterNotation::potentialExcerpts() const
 {
     QStringList availableInstruments;
     for (IExcerptNotationPtr excerpt : excerpts().val) {
