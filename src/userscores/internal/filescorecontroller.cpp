@@ -351,7 +351,7 @@ void FileScoreController::exportScore()
 io::path FileScoreController::selectScoreOpeningFile()
 {
     QString allExt = "*.mscz *.mxl *.musicxml *.xml *.mid *.midi *.kar *.md *.mgu *.sgu *.cap *.capx"
-                     "*.ove *.scw *.bmw *.bww *.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp *.ptb *.mscx *.mscs *.mscz,";
+                     "*.ove *.scw *.bmw *.bww *.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp *.ptb *.mscx *.mscs *.mscz~";
 
     QStringList filter;
     filter << QObject::tr("All Supported Files") + " (" + allExt + ")"
@@ -367,7 +367,7 @@ io::path FileScoreController::selectScoreOpeningFile()
            << QObject::tr("Power Tab Editor Files (experimental)") + " (*.ptb)"
            << QObject::tr("MuseScore Unpack Files") + " (*.mscx)"
            << QObject::tr("MuseScore Dev Files") + " (*.mscs)"
-           << QObject::tr("MuseScore Backup Files") + " (*.mscz,)";
+           << QObject::tr("MuseScore Backup Files") + " (*.mscz~)";
 
     return interactive()->selectOpeningFile(qtrc("userscores", "Score"), "", filter.join(";;"));
 }

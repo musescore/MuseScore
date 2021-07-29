@@ -31,6 +31,7 @@ public:
     Ret exists(const io::path& path) const override;
     Ret remove(const io::path& path) const override;
     Ret copy(const io::path& src, const io::path& dst, bool replace = false) const override;
+    Ret move(const io::path& src, const io::path& dst, bool replace = false) const override;
 
     Ret makePath(const io::path& path) const override;
 
@@ -39,6 +40,8 @@ public:
 
     RetVal<QByteArray> readFile(const io::path& filePath) const override;
     Ret writeToFile(const io::path& filePath, const QByteArray& data) const override;
+
+    void setAttribute(const io::path& path, Attribute attribute) const override;
 
 private:
     Ret removeFile(const io::path& path) const;
