@@ -21,8 +21,6 @@ TabPanel 1.0 TabPanel.qml
 TabItem 1.0 TabItem.qml
 TextInputField 1.0 TextInputField.qml
 ValueAdjustControl 1.0 ValueAdjustControl.qml
-ContextMenu 1.0 ContextMenu.qml
-StyledContextMenuItem 1.0 StyledContextMenuItem.qml
 RoundedRectangle 1.0 RoundedRectangle.qml
 SearchField 1.0 SearchField.qml
 StyledTabButton 1.0 StyledTabButton.qml

@@ -19,8 +19,6 @@
         <file>qml/MuseScore/UiComponents/SeparatorLine.qml</file>
         <file>qml/MuseScore/UiComponents/FlatRadioButton.qml</file>
         <file>qml/MuseScore/UiComponents/ColorPicker.qml</file>
-        <file>qml/MuseScore/UiComponents/ContextMenu.qml</file>
-        <file>qml/MuseScore/UiComponents/StyledContextMenuItem.qml</file>
         <file>qml/MuseScore/UiComponents/RoundedRectangle.qml</file>
         <file>qml/MuseScore/UiComponents/SearchField.qml</file>
         <file>qml/MuseScore/UiComponents/StyledTabButton.qml</file>
