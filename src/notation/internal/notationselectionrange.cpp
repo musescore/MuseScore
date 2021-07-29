@@ -140,11 +140,11 @@ Ms::Segment* NotationSelectionRange::rangeStartSegment() const
 {
     Ms::Segment* startSegment = score()->selection().startSegment();
 
-    startSegment->measure()->firstEnabled();
-
     if (!startSegment) {
         return nullptr;
     }
+
+    startSegment->measure()->firstEnabled();
 
     if (!startSegment->enabled()) {
         startSegment = startSegment->next1MMenabled();

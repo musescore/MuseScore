@@ -62,7 +62,7 @@ bool areDurationsEqual(
         sum += ReducedFraction(d.second.fraction()) / d.first;
     }
 
-    return desiredLen == desiredLen;
+    return sum == desiredLen;
 }
 
 #endif

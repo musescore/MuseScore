@@ -4459,6 +4459,8 @@ bool OvscParse::parse()
     }
     m_ove->setShowColor(placeHolder.toBoolean());
 
+    m_handle = nullptr;
+
     return true;
 }
 
