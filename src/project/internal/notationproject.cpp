@@ -28,6 +28,7 @@
 #include "engraving/engravingproject.h"
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/compat/mscxcompat.h"
+#include "engraving/io/mscio.h"
 #include "engraving/engravingerrors.h"
 #include "engraving/style/defaultstyle.h"
 
@@ -301,8 +302,7 @@ mu::Ret NotationProject::doSave(bool generateBackup)
 {
     // Step 1: create backup if need
     if (generateBackup) {
-        //! TODO Make backup
-        NOT_IMPLEMENTED << "generate backup";
+        makeCurrentFileAsBackup();
     }
 
     // Step 2: check writable
@@ -335,6 +335,37 @@ mu::Ret NotationProject::doSave(bool generateBackup)
 
     LOGI() << "success save file: " << info.filePath();
     return make_ret(Ret::Code::Ok);
+}
+
+mu::Ret NotationProject::makeCurrentFileAsBackup()
+{
+    if (!created().val) {
+        LOGD() << "project just created";
+        return make_ret(Ret::Code::Ok);
+    }
+
+    io::path filePath = m_engravingProject->path();
+    if (io::suffix(filePath) != engraving::MSCZ) {
+        LOGW() << "backup allowed only for MSCZ, currently: " << filePath;
+        return make_ret(Ret::Code::Ok);
+    }
+
+    Ret ret = fileSystem()->exists(filePath);
+    if (ret) {
+        LOGE() << "project file does not exist";
+        return ret;
+    }
+
+    io::path backupFilePath = filePath + "~";
+    ret = fileSystem()->move(filePath, backupFilePath, true);
+    if (!ret) {
+        LOGE() << "failed to move from: " << filePath << ", to: " << backupFilePath;
+        return ret;
+    }
+
+    fileSystem()->setAttribute(backupFilePath, system::IFileSystem::Attribute::Hidden);
+
+    return ret;
 }
 
 mu::Ret NotationProject::writeProject(MscWriter& msczWriter, bool onlySelection)

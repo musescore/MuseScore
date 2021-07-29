@@ -75,6 +75,7 @@ private:
     Ret saveSelectionOnScore(const io::path& path = io::path());
     Ret exportProject(const io::path& path, const std::string& suffix);
     Ret doSave(bool generateBackup);
+    Ret makeCurrentFileAsBackup();
     Ret writeProject(engraving::MscWriter& msczWriter, bool onlySelection);
 
     mu::engraving::EngravingProjectPtr m_engravingProject = nullptr;
