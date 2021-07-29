@@ -47,15 +47,12 @@ public:
     void setStaffConfig(const ID& staffId, const StaffConfig& config) override;
 
     void removeParts(const IDList& partsIds) override;
-    void removeInstruments(const IDList& instrumentsIds, const ID& fromPartId) override;
     void removeStaves(const IDList& stavesIds) override;
 
     void moveParts(const IDList& sourcePartsIds, const ID& destinationPartId, InsertMode mode = InsertMode::Before) override;
     void moveStaves(const IDList& sourceStavesIds, const ID& destinationStaffId, InsertMode mode = InsertMode::Before) override;
 
-    void appendDoublingInstrument(const Instrument& instrument, const ID& destinationPartId) override;
     void appendStaff(Staff* staff, const ID& destinationPartId) override;
-
     void cloneStaff(const ID& sourceStaffId, const ID& destinationStaffId) override;
 
     void replaceInstrument(const ID& instrumentId, const ID& fromPartId, const Instrument& newInstrument) override;
