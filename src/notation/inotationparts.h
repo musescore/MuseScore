@@ -41,15 +41,11 @@ public:
     virtual async::NotifyList<Instrument> instrumentList(const ID& partId) const = 0;
     virtual async::NotifyList<const Staff*> staffList(const ID& partId) const = 0;
 
-    virtual bool voiceVisible(int voiceIndex) const = 0;
-
     virtual void setParts(const PartInstrumentList& instruments) = 0;
     virtual void setScoreOrder(const ScoreOrder& order) = 0;
     virtual void setPartVisible(const ID& partId, bool visible) = 0;
-    virtual void setInstrumentVisible(const ID& instrumentId, const ID& fromPartId, bool visible) = 0;
-    virtual void setStaffVisible(const ID& staffId, bool visible) = 0;
-    virtual void setVoiceVisible(int voiceIndex, bool visible) = 0;
     virtual void setVoiceVisible(const ID& staffId, int voiceIndex, bool visible) = 0;
+    virtual void setStaffVisible(const ID& staffId, bool visible) = 0;
     virtual void setPartName(const ID& partId, const QString& name) = 0;
     virtual void setPartSharpFlat(const ID& partId, const SharpFlat& sharpFlat) = 0;
     virtual void setPartTransposition(const ID& partId, const Interval& transpose) = 0;
@@ -61,7 +57,6 @@ public:
     virtual void setStaffConfig(const ID& staffId, const StaffConfig& config) = 0;
 
     virtual void removeParts(const IDList& partsIds) = 0;
-    virtual void removeInstruments(const IDList& instrumentsIds, const ID& fromPartId) = 0;
     virtual void removeStaves(const IDList& stavesIds) = 0;
 
     enum class InsertMode {
@@ -72,9 +67,7 @@ public:
     virtual void moveParts(const IDList& sourcePartsIds, const ID& destinationPartId, InsertMode mode = InsertMode::Before) = 0;
     virtual void moveStaves(const IDList& sourceStavesIds, const ID& destinationStaffId, InsertMode mode = InsertMode::Before) = 0;
 
-    virtual void appendDoublingInstrument(const Instrument& instrument, const ID& destinationPartId) = 0;
     virtual void appendStaff(Staff* staff, const ID& destinationPartId) = 0;
-
     virtual void cloneStaff(const ID& sourceStaffId, const ID& destinationStaffId) = 0;
 
     virtual void replaceInstrument(const ID& instrumentId, const ID& fromPartId, const Instrument& newInstrument) = 0;

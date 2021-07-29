@@ -185,19 +185,6 @@ void MasterNotationParts::removeParts(const IDList& partsIds)
     apply();
 }
 
-void MasterNotationParts::removeInstruments(const IDList& instrumentsIds, const ID& fromPartId)
-{
-    startEdit();
-
-    NotationParts::removeInstruments(instrumentsIds, fromPartId);
-
-    for (INotationPartsPtr parts : excerptsParts()) {
-        parts->removeInstruments(instrumentsIds, fromPartId);
-    }
-
-    apply();
-}
-
 void MasterNotationParts::removeStaves(const IDList& stavesIds)
 {
     startEdit();
@@ -228,19 +215,6 @@ void MasterNotationParts::moveStaves(const IDList& sourceStavesIds, const ID& de
 
     for (INotationPartsPtr parts : excerptsParts()) {
         parts->moveStaves(sourceStavesIds, destinationStaffId, mode);
-    }
-
-    apply();
-}
-
-void MasterNotationParts::appendDoublingInstrument(const Instrument& instrument, const ID& destinationPartId)
-{
-    startEdit();
-
-    NotationParts::appendDoublingInstrument(instrument, destinationPartId);
-
-    for (INotationPartsPtr parts : excerptsParts()) {
-        parts->appendDoublingInstrument(instrument, destinationPartId);
     }
 
     apply();
