@@ -11,6 +11,7 @@ class NotifyList : public std::vector<T>
 {
 public:
     NotifyList() {}
+    NotifyList(const NotifyList&) = default;
     NotifyList(ChangedNotify<T>* n)
         : m_notify(n) {}
     NotifyList(const std::vector<T>& l, ChangedNotify<T>* n)
