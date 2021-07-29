@@ -65,11 +65,11 @@ public:
     virtual int musicalFontSize() const = 0;
     virtual async::Notification musicalFontChanged() const = 0;
 
-    virtual float guiScaling() const = 0;
-    virtual float physicalDotsPerInch() const = 0;
+    virtual double guiScaling() const = 0;
+    virtual double physicalDotsPerInch() const = 0;
 
     //! NOTE Maybe set from command line
-    virtual void setPhysicalDotsPerInch(std::optional<float> dpi) = 0;
+    virtual void setPhysicalDotsPerInch(std::optional<double> dpi) = 0;
 
     virtual QByteArray pageState(const QString& pageName) const = 0;
     virtual void setPageState(const QString& pageName, const QByteArray& state) = 0;

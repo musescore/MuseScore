@@ -54,7 +54,7 @@ public:
     Q_INVOKABLE void setUndoRedoToolBarDockName(const QString& dockName);
     Q_INVOKABLE void setNoteInputBarDockName(const QString& dockName);
 
-    Q_INVOKABLE void setPalettePanelDockName(const QString& dockName);
+    Q_INVOKABLE void setPalettesPanelDockName(const QString& dockName);
     Q_INVOKABLE void setInstrumentsPanelDockName(const QString& dockName);
     Q_INVOKABLE void setInspectorPanelDockName(const QString& dockName);
 

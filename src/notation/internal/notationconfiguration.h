@@ -126,8 +126,8 @@ public:
     bool isCountInEnabled() const override;
     void setIsCountInEnabled(bool enabled) override;
 
-    float guiScaling() const override;
-    float notationScaling() const override;
+    double guiScaling() const override;
+    double notationScaling() const override;
 
     std::string notationRevision() const override;
     int notationDivision() const override;

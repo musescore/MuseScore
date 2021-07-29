@@ -74,7 +74,7 @@ SelectDialog::SelectDialog(QWidget* parent)
     inSelection->setEnabled(m_element->score()->selection().isRange());
     sameDuration->setEnabled(m_element->isRest());
 
-    connect(buttonBox, SIGNAL(clicked(QAbstractButton*)), SLOT(buttonClicked(QAbstractButton*)));
+    connect(buttonBox, &QDialogButtonBox::clicked, this, &SelectDialog::buttonClicked);
 
     WidgetStateStore::restoreGeometry(this);
 }

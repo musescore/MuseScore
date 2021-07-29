@@ -678,7 +678,7 @@
     <seq>Ctrl+Alt+4</seq>
     </SC>
   <SC>
-    <key>toggle-palette</key>
+    <key>toggle-palettes</key>
     <seq>F9</seq>
     </SC>
   <SC>
