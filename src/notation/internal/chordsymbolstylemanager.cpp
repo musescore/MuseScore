@@ -138,7 +138,7 @@ void ChordSymbolStyleManager::extractChordStyleInfo(mu::io::path& f)
         }
     }
 
-    _chordStyles.push_back({ styleName, fi.filePath(), usePresets, description });
+    _chordStyles.push_back({ styleName, fi.fileName(), usePresets, description });
 }
 
 // TODO: Rewrite the XML format
@@ -146,6 +146,7 @@ QHash<QString, QList<QualitySymbol> > ChordSymbolStyleManager::getQualitySymbols
 {
     QHash<QString, QList<QualitySymbol> > qualitySymbols;
 
+    QString fileName = path;
     QFileInfo ftest(path);
     if (!ftest.isAbsolute()) {
 #if defined(Q_OS_IOS)
@@ -153,8 +154,20 @@ QHash<QString, QList<QualitySymbol> > ChordSymbolStyleManager::getQualitySymbols
 #elif defined(Q_OS_ANDROID)
         path = QString(":/styles/%1").arg(path);
 #else
-        path = QString("%1styles/%2").arg(Ms::MScore::globalShare(), path);
+        path = QString("%1styles/%2").arg(Ms::MScore::globalShare(), fileName);
 #endif
+    }
+
+    QFileInfo ftest2(path);
+    // If the file is not found in the installation folder, check in the user style folder
+    if (!ftest2.exists()) {
+        path = QString("%1/%2").arg(configuration()->userStylesPath().toQString(), fileName);
+    }
+
+    QFileInfo ftest3(path);
+    // If the file is not found anywhere, default to chords_std.xml
+    if (!ftest3.exists()) {
+        path = QString("%1styles/%2").arg(Ms::MScore::globalShare(), "chords_std.xml");
     }
 
     QFile file(path);

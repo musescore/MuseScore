@@ -458,6 +458,8 @@ Flickable {
                 height: prv.buttonHeight
                 spacing: 21
 
+                enabled: root.editorModel.usePresets
+
                 model: [
                     { name: "(b5)", value: 1.0 },
                     { name: "b5", value: 0.0 },
@@ -489,6 +491,8 @@ Flickable {
 
                 height: prv.buttonHeight
                 spacing: 21
+
+                enabled: root.editorModel.usePresets
 
                 model: [
                     { name: "(sus)", value: 1.0 },
@@ -522,6 +526,8 @@ Flickable {
                 height: prv.buttonHeight
                 spacing: 21
 
+                enabled: root.editorModel.usePresets
+
                 model: [
                     { name: "m(maj7)", value: 1.0 },
                     { name: "mmaj7", value: 0.0 },
@@ -553,6 +559,8 @@ Flickable {
 
                 height: prv.buttonHeight
                 spacing: 21
+
+                enabled: root.editorModel.usePresets
 
                 model: [
                     { name: "(add)", value: 1.0 },
