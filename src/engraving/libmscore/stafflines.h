@@ -20,6 +20,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#ifndef MU_LIBMSCORE_STAFFLINES_H
+#define MU_LIBMSCORE_STAFFLINES_H
+
 #include <vector>
 
 #include "element.h"
@@ -54,4 +57,6 @@ public:
     void layoutForWidth(qreal width);
     void layoutPartialWidth(qreal w, qreal wPartial, bool alignLeft);
 };
-}     // namespace Ms
+}
+
+#endif // MU_LIBMSCORE_STAFFLINES_H
