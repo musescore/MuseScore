@@ -27,6 +27,7 @@
 #include "internal/projectcreator.h"
 #include "internal/notationreadersregister.h"
 #include "internal/notationwritersregister.h"
+#include "internal/projectautosaver.h"
 
 using namespace mu::project;
 using namespace mu::modularity;
@@ -51,6 +52,12 @@ void ProjectModule::registerUiTypes()
 {
 }
 
-void ProjectModule::onInit(const framework::IApplication::RunMode&)
+void ProjectModule::onInit(const framework::IApplication::RunMode& mode)
 {
+    if (framework::IApplication::RunMode::Editor != mode) {
+        return;
+    }
+
+    static ProjectAutoSaver autoSaver;
+    autoSaver.init();
 }
