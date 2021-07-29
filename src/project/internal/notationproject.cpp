@@ -245,6 +245,7 @@ mu::Ret NotationProject::createNew(const ProjectCreateOptions& projectOptions)
 
 mu::Ret NotationProject::save(const io::path& path, SaveMode saveMode)
 {
+    TRACEFUNC;
     switch (saveMode) {
     case SaveMode::SaveSelection:
         return saveSelectionOnScore(path);
