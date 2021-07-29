@@ -34,7 +34,6 @@ class IExcerptNotation
 public:
     virtual INotationPtr notation() = 0;
 
-    virtual void init() = 0;
     virtual bool isInited() const = 0;
 
     virtual Meta metaInfo() const = 0;

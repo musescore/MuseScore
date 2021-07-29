@@ -45,9 +45,9 @@ public:
 
     virtual IExcerptNotationPtr newExcerptNotation() const = 0;
     virtual ValCh<ExcerptNotationList> excerpts() const = 0;
-    virtual ExcerptNotationList availableExcerpts() const = 0;
+    virtual ExcerptNotationList potentialExcerpts() const = 0;
 
-    virtual void initExcerpts(const ExcerptNotationList& excerpts) = 0;
+    virtual void addExcerpts(const ExcerptNotationList& excerpts) = 0;
     virtual void removeExcerpts(const ExcerptNotationList& excerpts) = 0;
 
     virtual INotationPartsPtr parts() const = 0;

@@ -89,13 +89,13 @@ StyledDialogView {
             acceptedButtons: Qt.RightButton
             onClicked: {
                 var items = [
-                            {code: "undo", title: "Undo", shortcut: "Ctrl+Z", icon: IconCode.UNDO},
-                            {code: "redo", title: "Redo", shortcut: "Shift+Ctrl+Z", enabled: false, icon: IconCode.REDO},
+                            {id: "undo", title: "Undo", shortcut: "Ctrl+Z", icon: IconCode.UNDO},
+                            {id: "redo", title: "Redo", shortcut: "Shift+Ctrl+Z", enabled: false, icon: IconCode.REDO},
                             {},
-                            {code: "zoomin", title: "Zoom in", icon: IconCode.ZOOM_IN},
-                            {code: "zoomout", title: "Zoom out", icon: IconCode.ZOOM_OUT},
+                            {id: "zoomin", title: "Zoom in", icon: IconCode.ZOOM_IN},
+                            {id: "zoomout", title: "Zoom out", icon: IconCode.ZOOM_OUT},
                             {},
-                            {code: "checkable", title: "Checkable", checkable: true, checked: false}
+                            {id: "checkable", title: "Checkable", checkable: true, checked: false}
                         ]
 
                 menuLoader.toggleOpened(items, null, mouseX, mouseY)
@@ -104,8 +104,8 @@ StyledDialogView {
 
         StyledMenuLoader {
             id: menuLoader
-            onHandleAction: {
-                console.log("selected " + actionCode + " index " + actionIndex)
+            onHandleMenuItem: {
+                console.log("selected " + itemId)
             }
         }
     }
