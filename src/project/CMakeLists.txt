@@ -50,6 +50,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationreadersregister.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationwritersregister.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationwritersregister.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/projectautosaver.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/projectautosaver.h
     )
 
 set(MODULE_LINK notation)
