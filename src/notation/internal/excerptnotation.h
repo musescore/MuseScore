@@ -44,7 +44,7 @@ public:
     Ms::Excerpt* excerpt() const;
     void setExcerpt(Ms::Excerpt* excerpt);
 
-    void init() override;
+    void init();
     bool isInited() const override;
 
     Meta metaInfo() const override;
