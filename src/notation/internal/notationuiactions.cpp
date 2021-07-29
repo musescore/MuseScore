@@ -1661,6 +1661,8 @@ const mu::ui::ToolConfig& NotationUiActions::defaultNoteInputBarConfig()
     if (!config.isValid()) {
         config.items = {
             { "note-input", true },
+            { "note-longa", false },
+            { "note-breve", false },
             { "pad-note-1", true },
             { "pad-note-2", true },
             { "pad-note-4", true },
@@ -1668,14 +1670,23 @@ const mu::ui::ToolConfig& NotationUiActions::defaultNoteInputBarConfig()
             { "pad-note-16", true },
             { "pad-note-32", true },
             { "pad-note-64", true },
+            { "pad-note-128", false },
+            { "pad-note-256", false },
+            { "pad-note-512", false },
+            { "pad-note-1024", false },
             { "", true },
             { "pad-dot", true },
+            { "pad-dotdot", false },
+            { "pad-dot3", false },
+            { "pad-dot4", false },
             { "", true },
             { "pad-rest", true },
             { "", true },
+            { "flat2", false },
             { "flat", true },
             { "nat", true },
             { "sharp", true },
+            { "sharp2", false },
             { "tie", true },
             { "add-slur", true },
             { "", true },
@@ -1687,8 +1698,11 @@ const mu::ui::ToolConfig& NotationUiActions::defaultNoteInputBarConfig()
             { "tuplet", true },
             { "", true },
             { "voice-1", true },
+            { "voice-2", false },
+            { "voice-3", false },
+            { "voice-4", false },
             { "", true },
-            { "flip", true },
+            { "flip", true }
         };
     }
     return config;
