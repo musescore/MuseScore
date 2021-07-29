@@ -24,7 +24,7 @@
 
 #include "modularity/ioc.h"
 #include "workspace/iworkspacesdataprovider.h"
-#include "palette/ipaletteprovider.h"
+#include "ipaletteprovider.h"
 #include "async/asyncable.h"
 
 namespace mu::palette {

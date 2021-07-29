@@ -26,6 +26,7 @@
 #include "log.h"
 
 #include <QQmlComponent>
+//#include <QQuickCloseEvent>
 
 using namespace mu::plugins;
 using namespace mu::framework;
@@ -96,6 +97,11 @@ void PluginView::run()
     m_view->setTitle(name());
     m_view->setResizeMode(QQuickView::SizeRootObjectToView);
 
+    // TODO: Can't use new `connect` syntax because the QQuickView::closing
+    // has a parameter of type QQuickCloseEvent, which is not public, so we
+    // can't include any header for it and it will always be an incomplete
+    // type, which is not allowed for the new `connect` syntax.
+    //connect(m_view, &QQuickView::closing, this, &PluginView::finished);
     connect(m_view, SIGNAL(closing(QQuickCloseEvent*)), this, SIGNAL(finished()));
 
     m_qmlPlugin->runPlugin();

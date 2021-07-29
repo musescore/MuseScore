@@ -31,6 +31,6 @@ Rectangle {
 
     StyledTextLabel {
         anchors.centerIn: parent
-        text: "Palette Panel Stub"
+        text: "Palettes Panel Stub"
     }
 }
