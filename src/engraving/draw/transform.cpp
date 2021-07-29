@@ -368,7 +368,7 @@ PainterPath Transform::map(const PainterPath& path) const
         copy.translate(m_affine.m_dx, m_affine.m_dy);
     } else {
         // Full xform
-        for (int i = 0; i < path.elementCount(); ++i) {
+        for (size_t i = 0; i < path.elementCount(); ++i) {
             PainterPath::Element& e = copy.m_elements[i];
             mapElement(e.x, e.y, t);
         }
