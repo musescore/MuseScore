@@ -61,8 +61,22 @@ Ms::Excerpt* ExcerptNotation::excerpt() const
 void ExcerptNotation::setExcerpt(Ms::Excerpt* excerpt)
 {
     m_excerpt = excerpt;
+}
+
+void ExcerptNotation::init()
+{
+    if (!m_excerpt) {
+        return;
+    }
+
+    m_excerpt->setTitle(m_metaInfo.title);
+
+    m_excerpt->oscore()->initExcerpt(m_excerpt, false);
     setScore(m_excerpt->partScore());
-    setMetaInfo(m_metaInfo);
+
+    Notation::setMetaInfo(m_metaInfo);
+
+    m_isInited = true;
 }
 
 Meta ExcerptNotation::metaInfo() const
@@ -82,10 +96,10 @@ void ExcerptNotation::setMetaInfo(const Meta& meta)
 
 bool ExcerptNotation::isInited() const
 {
-    return m_excerpt;
+    return m_isInited;
 }
 
-INotationPtr ExcerptNotation::clone() const
+IExcerptNotationPtr ExcerptNotation::clone() const
 {
     Ms::Excerpt* copy = new Ms::Excerpt(*m_excerpt);
     return std::make_shared<ExcerptNotation>(copy);

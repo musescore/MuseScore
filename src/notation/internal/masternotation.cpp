@@ -90,7 +90,6 @@ void MasterNotation::setMasterScore(Ms::MasterScore* score)
     }
 
     setScore(score);
-    initExcerpts();
 }
 
 Ms::MasterScore* MasterNotation::masterScore() const
@@ -405,7 +404,6 @@ mu::Ret MasterNotation::setupNewScore(Ms::MasterScore* score, Ms::MasterScore* t
     }
 
     setScore(score);
-    initExcerpts(excerpts);
 
     score->setExcerptsChanged(true);
 
@@ -436,29 +434,49 @@ mu::ValNt<bool> MasterNotation::needSave() const
     return needSave;
 }
 
-void MasterNotation::initExcerpts(const QList<Ms::Excerpt*>& scoreExcerpts)
+void MasterNotation::addExcerpts(const ExcerptNotationList& excerpts)
 {
-    QList<Ms::Excerpt*> excerpts = scoreExcerpts;
+    undoStack()->prepareChanges();
 
-    if (scoreExcerpts.empty()) {
-        excerpts = Ms::Excerpt::createExcerptsFromParts(score()->parts());
+    ExcerptNotationList result = m_excerpts.val;
+    for (IExcerptNotationPtr excerptNotation : excerpts) {
+        auto it = std::find(result.begin(), result.end(), excerptNotation);
+        if (it != result.end()) {
+            continue;
+        }
+
+        ExcerptNotation* excerptNotationImpl = get_impl(excerptNotation);
+        if (!excerptNotationImpl->excerpt()) {
+            excerptNotationImpl->setExcerpt(new Ms::Excerpt(masterScore()));
+        }
+
+        excerptNotationImpl->init();
+        result.push_back(excerptNotation);
     }
 
-    ExcerptNotationList notationExcerpts;
+    undoStack()->commitChanges();
 
-    for (Ms::Excerpt* excerpt : excerpts) {
-        masterScore()->initExcerpt(excerpt, true);
-        notationExcerpts.push_back(std::make_shared<ExcerptNotation>(excerpt));
+    doSetExcerpts(result);
+}
+
+void MasterNotation::removeExcerpts(const ExcerptNotationList& excerpts)
+{
+    undoStack()->prepareChanges();
+
+    for (IExcerptNotationPtr excerptNotation : excerpts) {
+        auto it = std::find(m_excerpts.val.begin(), m_excerpts.val.end(), excerptNotation);
+        if (it == m_excerpts.val.end()) {
+            continue;
+        }
+
+        Ms::Excerpt* excerpt = get_impl(excerptNotation)->excerpt();
+        masterScore()->undo(new Ms::RemoveExcerpt(excerpt));
+        m_excerpts.val.erase(it);
     }
 
-    doSetExcerpts(notationExcerpts);
+    undoStack()->commitChanges();
 
-    updateExcerpts();
-
-    m_parts->partsChanged().onNotify(this, [this]() {
-        notifyAboutNotationChanged();
-        updateExcerpts();
-    });
+    doSetExcerpts(m_excerpts.val);
 }
 
 void MasterNotation::doSetExcerpts(ExcerptNotationList excerpts)
@@ -482,76 +500,45 @@ INotationPartsPtr MasterNotation::parts() const
     return m_parts;
 }
 
-INotationPtr MasterNotation::clone() const
+ExcerptNotationList MasterNotation::potentialExcerpts() const
 {
-    return std::make_shared<ExcerptNotation>(score()->clone()->excerpt());
-}
-
-void MasterNotation::setExcerpts(const ExcerptNotationList& excerpts)
-{
-    if (m_excerpts.val == excerpts) {
-        return;
-    }
-
-    createNonexistentExcerpts(excerpts);
-
-    doSetExcerpts(excerpts);
-}
-
-void MasterNotation::createNonexistentExcerpts(const ExcerptNotationList& newExcerpts)
-{
-    for (IExcerptNotationPtr excerptNotation : newExcerpts) {
-        bool isNewExcerpt = std::find(m_excerpts.val.begin(), m_excerpts.val.end(), excerptNotation) == m_excerpts.val.end();
-        bool isEmpty = excerptNotation->notation()->parts()->partList().empty();
-
-        if (isNewExcerpt && isEmpty) {
-            Ms::Excerpt* excerpt = new Ms::Excerpt(masterScore());
-            masterScore()->initExcerpt(excerpt, false);
-            get_impl(excerptNotation)->setExcerpt(excerpt);
+    QStringList availableInstruments;
+    for (IExcerptNotationPtr excerpt : excerpts().val) {
+        async::NotifyList<const Part*> parts = excerpt->notation()->parts()->partList();
+        if (parts.size() != 1) {
+            continue;
         }
+
+        async::NotifyList<Instrument> instruments = excerpt->notation()->parts()->instrumentList(parts.front()->id());
+        if (instruments.size() != 1) {
+            continue;
+        }
+
+        availableInstruments << instruments.front().id;
     }
-}
 
-void MasterNotation::updateExcerpts()
-{
-    ExcerptNotationList newExcerpts;
-
-    for (IExcerptNotationPtr excerpt : m_excerpts.val) {
-        Ms::Excerpt* ex = get_impl(excerpt)->excerpt();
-        if (!ex->isEmpty()) {
-            newExcerpts.push_back(excerpt);
-        } else {
-            if (masterScore()->excerpts().contains(ex)) {
-                masterScore()->undo(new Ms::RemoveExcerpt(ex));
-            }
+    QList<Part*> parts;
+    for (Part* part : score()->parts()) {
+        if (part->instruments()->size() == 1 && !availableInstruments.contains(part->instrumentId())) {
+            parts << part;
         }
     }
 
-    QList<Ms::Excerpt*> excerpts = score()->masterScore()->excerpts();
+    QList<Ms::Excerpt*> excerpts = Ms::Excerpt::createExcerptsFromParts(parts);
 
-    for (Part* part: score()->parts()) {
-        bool isNewPart = true;
+    ExcerptNotationList result;
 
-        for (Ms::Excerpt* exceprt: excerpts) {
-            isNewPart &= !exceprt->containsPart(part);
-        }
+    for (Ms::Excerpt* excerpt : excerpts) {
+        IExcerptNotationPtr excerptNotation = std::make_shared<ExcerptNotation>(excerpt);
 
-        if (isNewPart) {
-            newExcerpts.push_back(createExcerpt(part));
-        }
+        Meta meta;
+        meta.title = excerpt->title();
+        excerptNotation->setMetaInfo(meta);
+
+        result.push_back(excerptNotation);
     }
 
-    if (newExcerpts != m_excerpts.val) {
-        doSetExcerpts(newExcerpts);
-    }
-}
-
-IExcerptNotationPtr MasterNotation::createExcerpt(Part* part)
-{
-    Ms::Excerpt* excerpt = Ms::Excerpt::createExcerptFromPart(part);
-    masterScore()->initExcerpt(excerpt, false);
-
-    return std::make_shared<ExcerptNotation>(excerpt);
+    return result;
 }
 
 void MasterNotation::onSaveCopy()

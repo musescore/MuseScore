@@ -45,10 +45,12 @@ public:
 
     virtual IExcerptNotationPtr newExcerptNotation() const = 0;
     virtual ValCh<ExcerptNotationList> excerpts() const = 0;
-    virtual void setExcerpts(const ExcerptNotationList& excerpts) = 0;
+    virtual ExcerptNotationList potentialExcerpts() const = 0;
+
+    virtual void addExcerpts(const ExcerptNotationList& excerpts) = 0;
+    virtual void removeExcerpts(const ExcerptNotationList& excerpts) = 0;
 
     virtual INotationPartsPtr parts() const = 0;
-    virtual INotationPtr clone() const = 0;
 };
 
 using IMasterNotationPtr = std::shared_ptr<IMasterNotation>;
