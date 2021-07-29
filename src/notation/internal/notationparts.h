@@ -39,15 +39,11 @@ public:
     async::NotifyList<Instrument> instrumentList(const ID& partId) const override;
     async::NotifyList<const Staff*> staffList(const ID& partId) const override;
 
-    bool voiceVisible(int voiceIndex) const override;
-
     void setParts(const PartInstrumentList& parts) override;
     void setScoreOrder(const ScoreOrder& order) override;
     void setPartVisible(const ID& partId, bool visible) override;
-    void setInstrumentVisible(const ID& instrumentId, const ID& fromPartId, bool visible) override;
-    void setStaffVisible(const ID& staffId, bool visible) override;
-    void setVoiceVisible(int voiceIndex, bool visible) override;
     void setVoiceVisible(const ID& staffId, int voiceIndex, bool visible) override;
+    void setStaffVisible(const ID& staffId, bool visible) override;
     void setPartName(const ID& partId, const QString& name) override;
     void setPartSharpFlat(const ID& partId, const SharpFlat& sharpFlat) override;
     void setPartTransposition(const ID& partId, const Interval& transpose) override;
@@ -59,15 +55,12 @@ public:
     void setStaffConfig(const ID& staffId, const StaffConfig& config) override;
 
     void removeParts(const IDList& partsIds) override;
-    void removeInstruments(const IDList& instrumentsIds, const ID& fromPartId) override;
     void removeStaves(const IDList& stavesIds) override;
 
     void moveParts(const IDList& sourcePartsIds, const ID& destinationPartId, InsertMode mode = InsertMode::Before) override;
     void moveStaves(const IDList& sourceStavesIds, const ID& destinationStaffId, InsertMode mode = InsertMode::Before) override;
 
-    void appendDoublingInstrument(const Instrument& instrument, const ID& destinationPartId) override;
     void appendStaff(Staff* staff, const ID& destinationPartId) override;
-
     void cloneStaff(const ID& sourceStaffId, const ID& destinationStaffId) override;
 
     void replaceInstrument(const ID& instrumentId, const ID& fromPartId, const Instrument& newInstrument) override;
@@ -112,18 +105,12 @@ private:
     Ms::MasterScore* masterScore() const;
     void updateScore();
 
-    Ms::ChordRest* selectedChord() const;
-    bool needAssignInstrumentToChord(const ID& instrumentId, const ID& fromPartId) const;
-    void assignIstrumentToSelectedChord(Ms::Instrument* instrument);
-
     void updatePartTitles();
 
-    void doMovePart(const ID& sourcePartId, const ID& destinationPartId, InsertMode mode = InsertMode::Before);
     void doMoveStaves(const std::vector<Staff*>& staves, int destinationStaffIndex, Part* destinationPart = nullptr);
     void doSetStaffVisible(Staff* staff, bool visible);
     void doSetStaffVoiceVisible(Staff* staff, int voiceIndex, bool visible);
     void doRemoveParts(const IDList& partsIds);
-    void doRemoveInstruments(const IDList& instrumentsIds, Part* fromPart);
     void doSetPartName(Part* part, const QString& name);
 
     void insertStaff(Staff* staff, int destinationStaffIndex);
@@ -163,7 +150,6 @@ private:
     async::ChangedNotifier<const Staff*>* instrumentNotifier(const ID& instrumentId, const ID& fromPartId) const;
 
     QString formatPartName(const Part* part) const;
-    QMap<Ms::Fraction, Ms::InstrumentChange*> instrumentChangeElements(const QString& partId) const;
 
     QMap<Ms::Fraction, Ms::Instrument*> instruments(const Part* fromPart) const;
 
