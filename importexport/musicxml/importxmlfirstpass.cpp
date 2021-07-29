@@ -201,6 +201,30 @@ void MusicXmlOctaveShiftList::calcOctaveShiftShifts()
 
       }
 
+//---------------------------------------------------------
+//   staffNumberToIndex
+//---------------------------------------------------------
+
+/**
+ This handles the mapping from MusicXML staff number to the index
+ in a Part's Staff list.
+ In most cases, this is a simple decrement from the 1-based staff number
+ to the 0-based index.
+ However, in some parts some MusicXML staves are discarded, and a mapping
+ must be stored from MusicXML staff number to index. When this mapping is
+ defined (i.e. size() != 0), it is used. See MusicXMLParserPass1::attributes()
+ for more information.
+ */
+
+int MusicXmlPart::staffNumberToIndex(const int staffNumber) const
+      {
+      if (_staffNumberToIndex.size() == 0)
+            return staffNumber - 1;
+      else if (_staffNumberToIndex.contains(staffNumber))
+            return  _staffNumberToIndex[staffNumber];
+      else
+            return -1;
+      }
 
 //---------------------------------------------------------
 //   LyricNumberHandler
