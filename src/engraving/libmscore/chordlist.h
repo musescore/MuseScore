@@ -297,7 +297,7 @@ public:
 
 private:
 
-    friend struct mu::engraving::compat::ReadChordListHook;
+    friend class mu::engraving::compat::ReadChordListHook;
 
     void read(XmlReader&);
     void write(XmlWriter& xml) const;
