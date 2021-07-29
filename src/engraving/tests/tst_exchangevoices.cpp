@@ -135,7 +135,6 @@ void TestExchangevoices::undoChangeVoice()
     score->startCmd();
     score->changeSelectedNotesVoice(1);
     score->endCmd();
-    QSKIP("TODO: Need to confirm beam length difference here");
     QVERIFY(saveCompareScore(score, writeFile1, reference1));
 
     // undo

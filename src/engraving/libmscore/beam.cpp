@@ -74,19 +74,6 @@ struct BeamFragment {
 Beam::Beam(Score* s)
     : Element(s)
 {
-    _direction       = Direction::AUTO;
-    _up              = true;
-    _distribute      = false;
-    _userModified[0] = false;
-    _userModified[1] = false;
-    _grow1           = 1.0;
-    _grow2           = 1.0;
-    _beamDist        = 0.;
-    _id              = 0;
-    minMove          = 0;
-    maxMove          = 0;
-    _isGrace         = false;
-    _cross           = false;
     initElementStyle(&beamStyle);
 }
 
@@ -267,9 +254,7 @@ void Beam::draw(mu::draw::Painter* painter) const
 
 bool Beam::isNoSlope() const
 {
-    PointF currentBeamPos = beamPos();
-
-    return qFuzzyCompare(currentBeamPos.x(), currentBeamPos.y());
+    return _userModified[0] && qFuzzyCompare(beamPos().first, beamPos().second);
 }
 
 //---------------------------------------------------------
@@ -278,17 +263,17 @@ bool Beam::isNoSlope() const
 
 void Beam::alignBeamPosition()
 {
-    PointF currentBeamPos = beamPos();
+    BeamPos currentBeamPos = beamPos();
 
-    qreal currentX = currentBeamPos.x();
-    qreal currentY = currentBeamPos.y();
+    qreal currentY1 = currentBeamPos.first;
+    qreal currentY2 = currentBeamPos.second;
 
-    qreal maxValue = qMax(qAbs(currentX), qAbs(currentY));
+    qreal maxValue = qMax(qAbs(currentY1), qAbs(currentY2));
 
-    if (qFuzzyCompare(qAbs(currentX), maxValue)) {
-        setBeamPos(PointF(currentX, currentX));
+    if (qFuzzyCompare(qAbs(currentY1), maxValue)) {
+        setBeamPos(qMakePair(currentY1, currentY1));
     } else {
-        setBeamPos(PointF(currentY, currentY));
+        setBeamPos(qMakePair(currentY2, currentY2));
     }
 }
 
@@ -2451,25 +2436,24 @@ Element* Beam::drop(EditData& data)
 
 //---------------------------------------------------------
 //   beamPos
-//    misuse PointF for y1-y2 real values
 //---------------------------------------------------------
 
-PointF Beam::beamPos() const
+BeamPos Beam::beamPos() const
 {
     if (fragments.empty()) {
-        return PointF(0.0, 0.0);
+        return BeamPos(0.0, 0.0);
     }
     BeamFragment* f = fragments.back();
     int idx = (_direction == Direction::AUTO || _direction == Direction::DOWN) ? 0 : 1;
     qreal _spatium = spatium();
-    return PointF(f->py1[idx] / _spatium, f->py2[idx] / _spatium);
+    return BeamPos(f->py1[idx] / _spatium, f->py2[idx] / _spatium);
 }
 
 //---------------------------------------------------------
 //   setBeamPos
 //---------------------------------------------------------
 
-void Beam::setBeamPos(const PointF& bp)
+void Beam::setBeamPos(const BeamPos& bp)
 {
     if (fragments.empty()) {
         fragments.append(new BeamFragment);
@@ -2479,8 +2463,8 @@ void Beam::setBeamPos(const PointF& bp)
     _userModified[idx] = true;
     setGenerated(false);
     qreal _spatium = spatium();
-    f->py1[idx] = bp.x() * _spatium;
-    f->py2[idx] = bp.y() * _spatium;
+    f->py1[idx] = bp.first * _spatium;
+    f->py2[idx] = bp.second * _spatium;
 }
 
 //---------------------------------------------------------
@@ -2546,7 +2530,7 @@ bool Beam::setProperty(Pid propertyId, const QVariant& v)
         break;
     case Pid::BEAM_POS:
         if (userModified()) {
-            setBeamPos(v.value<PointF>());
+            setBeamPos(v.value<BeamPos>());
         }
         break;
     case Pid::BEAM_NO_SLOPE:
