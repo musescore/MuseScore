@@ -80,6 +80,9 @@ public:
       bool getPrintAbbr() const { return printAbbr; }
       bool hasTab() const { return _hasTab; }
       void hasTab(const bool b) { _hasTab = b; }
+      QMap<int, int> staffNumberToIndex() const { return _staffNumberToIndex; }
+      int staffNumberToIndex(const int staffNumber) const;
+      void insertStaffNumberToIndex(const int staffNumber, const int staffIndex) { _staffNumberToIndex.insert(staffNumber, staffIndex); }
       LyricNumberHandler& lyricNumberHandler() { return _lyricNumberHandler; }
       const LyricNumberHandler& lyricNumberHandler() const { return _lyricNumberHandler; }
       void setMaxStaff(const int staff);
@@ -97,8 +100,10 @@ private:
       QList<Fraction> measureDurations;       // duration in fraction for every measure
       QVector<MusicXmlOctaveShiftList> octaveShifts; // octave shift list for every staff
       LyricNumberHandler _lyricNumberHandler;
-      int _maxStaff = 0;                      // maximum staff value found (1 based), 0 = none
+      int _maxStaff = -1;                      // maximum staff value found (0 based), -1 = none
       bool _hasLyrics = false;
+      QMap<int, int> _staffNumberToIndex;       // Mapping from staff number to index in staff list.
+                                                // Only for when staves are discarded in MusicXMLParserPass1::attributes.
       };
 
 } // namespace Ms

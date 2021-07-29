@@ -138,7 +138,6 @@ public:
       void time(const Fraction cTime);
       void transpose(const QString& partId, const Fraction& tick);
       void divisions();
-      void staves(const QString& partId);
       void direction(const QString& partId, const Fraction cTime);
       void directionType(const Fraction cTime, QList<MxmlOctaveShiftDesc>& starts, QList<MxmlOctaveShiftDesc>& stops);
       void handleOctaveShift(const Fraction cTime, const QString& type, short size, MxmlOctaveShiftDesc& desc);

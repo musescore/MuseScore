@@ -2684,16 +2684,15 @@ void MusicXMLParserPass2::staffDetails(const QString& partId)
       Q_ASSERT(part);
       int staves = part->nstaves();
 
-      QString number = _e.attributes().value("number").toString();
-      int n = 1;  // default
-      if (number != "") {
-            n = number.toInt();
-            if (n <= 0 || n > staves) {
-                  _logger->logError(QString("invalid staff-details number %1").arg(number), &_e);
-                  n = 1;
+      QString strNumber = _e.attributes().value("number").toString();
+      int n = 0;  // default
+      if (strNumber != "") {
+            n = _pass1.getMusicXmlPart(partId).staffNumberToIndex(strNumber.toInt());
+            if (n < 0 || n >= staves) {
+                  _logger->logError(QString("invalid staff-details number %1 (may be hidden)").arg(strNumber), &_e);
+                  n = 0;
                   }
             }
-      n--;         // make zero-based
 
       int staffIdx = _score->staffIdx(part) + n;
 
@@ -2964,11 +2963,10 @@ void MusicXMLParserDirection::direction(const QString& partId,
             else if (_e.name() == "sound")
                   sound();
             else if (_e.name() == "staff") {
-                  int nstaves = _pass1.getPart(partId)->nstaves();
                   QString strStaff = _e.readElementText();
-                  int staff = strStaff.toInt();
-                  if (0 < staff && staff <= nstaves)
-                        track += (staff - 1) * VOICES;
+                  int staff = _pass1.getMusicXmlPart(partId).staffNumberToIndex(strStaff.toInt());
+                  if (staff >= 0)
+                        track += staff * VOICES;
                   else
                         _logger->logError(QString("invalid staff %1").arg(strStaff), &_e);
                   }
@@ -4614,14 +4612,12 @@ void MusicXMLParserPass2::key(const QString& partId, Measure* measure, const Fra
       QString strKeyno = _e.attributes().value("number").toString();
       int keyno = -1; // assume no number (see below)
       if (strKeyno != "") {
-            keyno = strKeyno.toInt();
-            if (keyno == 0) {
-                  // conversion error (0), assume staff 1
+            keyno = _pass1.getMusicXmlPart(partId).staffNumberToIndex(strKeyno.toInt());
+            if (keyno < 0) {
+                  // conversion error (-1), assume staff 0
                   _logger->logError(QString("invalid key number '%1'").arg(strKeyno), &_e);
-                  keyno = 1;
+                  keyno = 0;
                   }
-            // convert to 0-based
-            keyno--;
             }
       bool printObject = _e.attributes().value("print-object") != "no";
 
@@ -4711,18 +4707,16 @@ void MusicXMLParserPass2::clef(const QString& partId, Measure* measure, const Fr
       // - multi-staff with same clef
       QString strClefno = _e.attributes().value("number").toString();
       const bool afterBarline = _e.attributes().value("after-barline") == "yes";
-      int clefno = 1; // default
+      int clefno = 0; // default
       if (strClefno != "")
-            clefno = strClefno.toInt();
-      if (clefno <= 0 || clefno > part->nstaves()) {
+            clefno = _pass1.getMusicXmlPart(partId).staffNumberToIndex(strClefno.toInt());
+      if (clefno < 0 || clefno >= part->nstaves()) {
             // conversion error (0) or other issue, assume staff 1
             // Also for Cubase 6.5.5 which generates clef number="2" in a single staff part
             // Same fix is required in pass 1 and pass 2
             _logger->logError(QString("invalid clef number '%1'").arg(strClefno), &_e);
-            clefno = 1;
+            clefno = 0;
             }
-      // convert to 0-based
-      clefno--;
 
       ClefType clef   = ClefType::G;
       StaffTypes st = StaffTypes::STANDARD;
@@ -5432,7 +5426,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
       bool isSmall = false;
       bool grace = false;
       bool rest = false;
-      int staff = 1;
+      int staff = 0;
       QString type;
       QString voice;
       Direction stemDir = Direction::AUTO;
@@ -5507,10 +5501,10 @@ Note* MusicXMLParserPass2::note(const QString& partId,
             else if (_e.name() == "staff") {
                   auto ok = false;
                   auto strStaff = _e.readElementText();
-                  staff = strStaff.toInt(&ok);
+                  staff = _pass1.getMusicXmlPart(partId).staffNumberToIndex(strStaff.toInt(&ok));
                   if (!ok) {
                         // error already reported in pass 1
-                        staff = 1;
+                        staff = -1;
                         }
                   }
             else if (_e.name() == "stem")
@@ -5524,9 +5518,6 @@ Note* MusicXMLParserPass2::note(const QString& partId,
             else
                   skipLogCurrElem();
             }
-
-      // convert staff to zero-based (in case of error, staff will be -1)
-      staff--;
 
       // Bug fix for Sibelius 7.1.3 which does not write <voice> for notes with <chord>
       if (!chord)
@@ -6331,9 +6322,9 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
             else if (_e.name() == "staff") {
                   int nstaves = _pass1.getPart(partId)->nstaves();
                   QString strStaff = _e.readElementText();
-                  int staff = strStaff.toInt();
-                  if (0 < staff && staff <= nstaves)
-                        track += (staff - 1) * VOICES;
+                  int staff = _pass1.getMusicXmlPart(partId).staffNumberToIndex(strStaff.toInt());
+                  if (staff >= 0 && staff < nstaves)
+                        track += staff * VOICES;
                   else
                         _logger->logError(QString("invalid staff %1").arg(strStaff), &_e);
                   }
