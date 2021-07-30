@@ -297,7 +297,7 @@ class StaffType {
       void setShowBarlines(bool val)           { _showBarlines = val;     }
       bool showBarlines() const                { return _showBarlines;    }
       qreal userMag() const                    { return _userMag;         }
-      bool small() const                       { return _small;           }
+      bool isSmall() const                     { return _small;           }
       bool invisible() const                   { return _invisible;       }
       const QColor& color() const              { return _color;           }
       void setUserMag(qreal val)               { _userMag = val;          }

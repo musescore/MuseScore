@@ -175,7 +175,7 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <widget class="QCheckBox" name="small">
+         <widget class="QCheckBox" name="isSmallCheckbox">
           <property name="text">
            <string notr="true">small</string>
           </property>

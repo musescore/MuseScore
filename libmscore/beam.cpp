@@ -366,7 +366,7 @@ void Beam::layout1()
 
             int staffIdx = -1;
             for (ChordRest* cr : qAsConst(_elements)) {
-                  qreal m = cr->small() ? score()->styleD(Sid::smallNoteMag) : 1.0;
+                  qreal m = cr->isSmall() ? score()->styleD(Sid::smallNoteMag) : 1.0;
                   mag     = qMax(mag, m);
                   if (cr->isChord()) {
                         c2 = toChord(cr);
@@ -1503,11 +1503,11 @@ void Beam::computeStemLen(const std::vector<ChordRest*>& cl, qreal& py1, int bea
       qreal firstStemLenPoints = bm.l * _spStaff4;
       const qreal sgn = (firstStemLenPoints < 0 ? -1.0 : 1.0);
       const QPointF p1 = cl[0]->stemPosBeam();
-      bool small = true;
+      bool isSmall = true;
       for (const ChordRest* cr : cl) {
             if (cr->isChord()) {
-                  if (!cr->small())
-                        small = false;
+                  if (!cr->isSmall())
+                        isSmall = false;
 
                   const qreal minAbsLen = toChord(cr)->minAbsStemLength();
 
@@ -1524,7 +1524,7 @@ void Beam::computeStemLen(const std::vector<ChordRest*>& cl, qreal& py1, int bea
             }
 
       py1 += (dy + bm.l) * _spStaff4;
-      if (small && !staff()->isTabStaff(Fraction(0,1))) {
+      if (isSmall && !staff()->isTabStaff(Fraction(0,1))) {
             const qreal offset = (beamLevels == 4) ? _beamDist/2.0 : 0.0;
 
             if (bm.l > 0)

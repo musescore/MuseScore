@@ -634,7 +634,7 @@ static const QString unknownFret = QString("?");
 
 QString StaffType::fretString(int fret, int string, bool ghost) const
       {
-      if (fret == FRET_NONE)
+      if (fret == INVALID_FRET_INDEX)
             return unknownFret;
       if (ghost)
             return _fretFonts[_fretFontIdx].ghostChar;
@@ -1385,7 +1385,7 @@ void StaffType::initStaffTypes()
 
 qreal StaffType::spatium(Score* score) const
       {
-      return score->spatium() * (small() ? score->styleD(Sid::smallStaffMag) : 1.0) * userMag();
+      return score->spatium() * (isSmall() ? score->styleD(Sid::smallStaffMag) : 1.0) * userMag();
       }
 
 } // namespace Ms

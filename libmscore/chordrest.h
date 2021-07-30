@@ -60,7 +60,7 @@ class ChordRest : public DurationElement {
       Beam* _beam;
       Beam::Mode _beamMode;
       bool _up;                           // actual stem direction
-      bool _small;
+      bool m_isSmall;
       std::set<Lyrics*> _melismaEnds;     // lyrics ending on this ChordRest, used for spacing
 
       // CrossMeasure: combine 2 tied notes if across a bar line and can be combined in a single duration
@@ -109,7 +109,7 @@ class ChordRest : public DurationElement {
       void setUp(bool val)                      { _up = val; }
 
 
-      bool small() const                        { return _small; }
+      bool isSmall() const                      { return m_isSmall; }
       void setSmall(bool val);
       void undoSetSmall(bool val);
 

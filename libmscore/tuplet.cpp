@@ -199,14 +199,14 @@ void Tuplet::layout()
             else
                   _number->setXmlText(QString("%1:%2").arg(_ratio.numerator()).arg(_ratio.denominator()));
 
-            bool small = true;
+            bool isSmall = true;
             for (const DurationElement* e : _elements) {
-                  if (e->isChordRest() && !toChordRest(e)->small()) {
-                        small = false;
+                  if (e->isChordRest() && !toChordRest(e)->isSmall()) {
+                        isSmall = false;
                         break;
                         }
                   }
-            _number->setMag(small ? score()->styleD(Sid::smallNoteMag) : 1.0);
+            _number->setMag(isSmall ? score()->styleD(Sid::smallNoteMag) : 1.0);
 
             }
       else {

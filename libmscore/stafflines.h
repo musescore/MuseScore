@@ -10,6 +10,9 @@
 //  the file LICENCE.GPL
 //=============================================================================
 
+#ifndef __STAFFLINES_H__
+#define __STAFFLINES_H__
+
 #include "element.h"
 
 namespace Ms {
@@ -42,4 +45,5 @@ class StaffLines final : public Element {
       };
 
 }     // namespace Ms
+#endif
 

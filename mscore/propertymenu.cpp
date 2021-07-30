@@ -368,7 +368,7 @@ void ScoreView::elementPropertyAction(const QString& cmd, Element* e)
             editTimeSigProperties(toTimeSig(e));
             }
       else if (cmd == "smallNote")
-            e->undoChangeProperty(Pid::SMALL, !toNote(e)->small());
+            e->undoChangeProperty(Pid::SMALL, !toNote(e)->isSmall());
       else if (cmd == "clef-courtesy") {
             Clef* clef = toClef(e);
             bool show = !clef->showCourtesy();

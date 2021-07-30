@@ -632,7 +632,7 @@ Note::Note(const Note& n, bool link)
       _headType          = n._headType;
       _mirror            = n._mirror;
       _userMirror        = n._userMirror;
-      _small             = n._small;
+      m_isSmall          = n.m_isSmall;
       _userDotPosition   = n._userDotPosition;
       _fixed             = n._fixed;
       _fixedLine         = n._fixedLine;
@@ -988,7 +988,7 @@ qreal Note::noteheadCenterX() const
 qreal Note::tabHeadWidth(const StaffType* tab) const
       {
       qreal val;
-      if (tab && _fret != FRET_NONE && _string != STRING_NONE) {
+      if (tab && _fret != INVALID_FRET_INDEX && _string != INVALID_STRING_INDEX) {
             QFont f    = tab->fretFont();
             f.setPointSizeF(tab->fretFontSize());
             QFontMetricsF fm(f, MScore::paintDevice());
@@ -1017,7 +1017,7 @@ qreal Note::headHeight() const
 
 qreal Note::tabHeadHeight(const StaffType* tab) const
       {
-      if (tab && _fret != FRET_NONE && _string != STRING_NONE)
+      if (tab && _fret != INVALID_FRET_INDEX && _string != INVALID_STRING_INDEX)
             return tab->fretBoxH() * magS();
       return headHeight();
       }
@@ -2353,7 +2353,7 @@ void Note::reset()
 qreal Note::mag() const
       {
       qreal m = chord()->mag();
-      if (_small)
+      if (m_isSmall)
             m *= score()->styleD(Sid::smallNoteMag);
       return m;
       }
@@ -2364,7 +2364,7 @@ qreal Note::mag() const
 
 void Note::setSmall(bool val)
       {
-      _small = val;
+      m_isSmall = val;
       }
 
 //---------------------------------------------------------
@@ -2794,7 +2794,7 @@ QVariant Note::getProperty(Pid propertyId) const
             case Pid::TPC2:
                   return _tpc[1];
             case Pid::SMALL:
-                  return small();
+                  return isSmall();
             case Pid::MIRROR_HEAD:
                   return int(userMirror());
             case Pid::DOT_POSITION:

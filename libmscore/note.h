@@ -187,8 +187,8 @@ struct NoteVal {
       int pitch                 { -1 };
       int tpc1                  { Tpc::TPC_INVALID };
       int tpc2                  { Tpc::TPC_INVALID };
-      int fret                  { FRET_NONE };
-      int string                { STRING_NONE };
+      int fret                  { INVALID_FRET_INDEX };
+      int string                { INVALID_STRING_INDEX };
       NoteHead::Group headGroup { NoteHead::Group::HEAD_NORMAL };
 
       NoteVal() {}
@@ -217,7 +217,7 @@ static const int INVALID_LINE = -10000;
 //   @P pitch            int              midi pitch
 //   @P play             bool             play note
 //   @P ppitch           int              actual played midi pitch (honoring ottavas) (read only)
-//   @P small            bool             small notehead
+//   @P isSmall          bool             small notehead
 //   @P string           int              string number in tablature
 //   @P subchannel       int              midi subchannel (for midi articulation) (read only)
 //   @P tieBack          Tie              note backward tie (null if none, read only)
@@ -249,7 +249,7 @@ class Note final : public Element {
                                           ///< two or more notes on the same string
       bool dragMode       { false };
       bool _mirror        { false };      ///< True if note is mirrored at stem.
-      bool _small         { false };
+      bool m_isSmall      { false };
       bool _play          { true  };      // note is not played if false
       mutable bool _mark  { false };      // for use in sequencer
       bool _fixed         { false };      // for slash notation
@@ -409,7 +409,7 @@ class Note final : public Element {
       bool mirror() const             { return _mirror;  }
       void setMirror(bool val)        { _mirror = val;   }
 
-      bool small() const              { return _small;   }
+      bool isSmall() const            { return m_isSmall; }
       void setSmall(bool val);
 
       bool play() const               { return _play;    }

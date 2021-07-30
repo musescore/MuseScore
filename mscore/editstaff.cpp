@@ -100,7 +100,7 @@ void EditStaff::setStaff(Staff* s, const Fraction& tick)
       Score* score      = part->score();
       staff             = new Staff(score);
       StaffType* stt = staff->setStaffType(Fraction(0,1), *orgStaff->staffType(Fraction(0,1)));
-      stt->setSmall(orgStaff->staffType(Fraction(0,1))->small());
+      stt->setSmall(orgStaff->staffType(Fraction(0,1))->isSmall());
       stt->setInvisible(orgStaff->staffType(Fraction(0,1))->invisible());
       staff->setUserDist(orgStaff->userDist());
       stt->setColor(orgStaff->staffType(Fraction(0,1))->color());
@@ -127,7 +127,7 @@ void EditStaff::setStaff(Staff* s, const Fraction& tick)
       // set dlg controls
       spinExtraDistance->setValue(s->userDist() / score->spatium());
       invisible->setChecked(staff->invisible(Fraction(0,1)));
-      small->setChecked(stt->small());
+      isSmallCheckbox->setChecked(stt->isSmall());
       color->setColor(stt->color());
       partName->setText(part->partName());
       cutaway->setChecked(staff->cutaway());
@@ -407,7 +407,7 @@ void EditStaff::apply()
 
       orgStaff->undoChangeProperty(Pid::MAG, mag->value() / 100.0);
       orgStaff->undoChangeProperty(Pid::STAFF_COLOR, color->color());
-      orgStaff->undoChangeProperty(Pid::SMALL, small->isChecked());
+      orgStaff->undoChangeProperty(Pid::SMALL, isSmallCheckbox->isChecked());
 
       if (inv != orgStaff->invisible(Fraction(0,1))
          || clefType != orgStaff->defaultClefType()

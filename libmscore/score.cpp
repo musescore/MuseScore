@@ -1073,7 +1073,7 @@ bool Score::getPosition(Position* pos, const QPointF& p, int voice) const
       if (measure == 0)
             return false;
 
-      pos->fret = FRET_NONE;
+      pos->fret = INVALID_FRET_INDEX;
       //
       //    search staff
       //
@@ -3382,7 +3382,7 @@ void Score::collectNoteMatch(void* data, Element* e)
             return;
       if (p->pitch != -1 && p->pitch != n->pitch())
             return;
-      if (p->string != STRING_NONE && p->string != n->string())
+      if (p->string != INVALID_STRING_INDEX && p->string != n->string())
             return;
       if (p->tpc != Tpc::TPC_INVALID && p->tpc != n->tpc())
             return;

@@ -514,7 +514,7 @@ InspectorStaffTypeChange::InspectorStaffTypeChange(QWidget* parent)
 
       iList = {
             { Pid::STAFF_YOFFSET,          0, sl.yoffset,         sl.resetYoffset         },
-            { Pid::SMALL,                  0, sl.small,           sl.resetSmall           },
+            { Pid::SMALL,                  0, sl.isSmall,         sl.resetSmall           },
             { Pid::MAG,                    0, sl.scale,           sl.resetScale           },
             { Pid::STAFF_LINES,            0, sl.lines,           sl.resetLines           },
             { Pid::STEP_OFFSET,            0, sl.stepOffset,      sl.resetStepOffset      },
@@ -751,7 +751,7 @@ InspectorRest::InspectorRest(QWidget* parent)
 
       const std::vector<InspectorItem> iiList = {
             { Pid::LEADING_SPACE,  1, s.leadingSpace,  s.resetLeadingSpace  },
-            { Pid::SMALL,          0, r.small,         r.resetSmall         },
+            { Pid::SMALL,          0, r.isSmall,       r.resetSmall         },
             };
       const std::vector<InspectorPanel> ppList = {
             { s.title, s.panel },
@@ -1046,7 +1046,7 @@ InspectorAccidental::InspectorAccidental(QWidget* parent)
       a.setupUi(addWidget());
 
       const std::vector<InspectorItem> iiList = {
-            { Pid::SMALL,               0, a.small,    a.resetSmall    },
+            { Pid::SMALL,               0, a.isSmall,  a.resetSmall    },
             { Pid::ACCIDENTAL_BRACKET,  0, a.bracket,  a.resetBracket  }
             };
       a.bracket->clear();

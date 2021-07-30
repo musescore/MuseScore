@@ -790,7 +790,7 @@ void Rest::reset()
 qreal Rest::mag() const
       {
       qreal m = staff() ? staff()->mag(this) : 1.0;
-      if (small())
+      if (isSmall())
             m *= score()->styleD(Sid::smallNoteMag);
       return m;
       }
@@ -868,7 +868,7 @@ qreal Rest::rightEdge() const
 
 bool Rest::accent()
       {
-      return (voice() >= 2 && small());
+      return (voice() >= 2 && isSmall());
       }
 
 //---------------------------------------------------------

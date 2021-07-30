@@ -54,7 +54,7 @@ struct ElementPattern {
 struct NotePattern {
       QList<Note*> el;
       int pitch = -1;
-      int string = STRING_NONE;
+      int string = INVALID_STRING_INDEX;
       int tpc = Tpc::TPC_INVALID;
       NoteHead::Group notehead = NoteHead::Group::HEAD_INVALID;
       TDuration durationType = TDuration();

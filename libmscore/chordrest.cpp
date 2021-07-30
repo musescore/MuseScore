@@ -63,7 +63,7 @@ ChordRest::ChordRest(Score* s)
       _tabDur      = 0;
       _up          = true;
       _beamMode    = Beam::Mode::AUTO;
-      _small       = false;
+      m_isSmall    = false;
       _crossMeasure = CrossMeasure::UNKNOWN;
       }
 
@@ -78,7 +78,7 @@ ChordRest::ChordRest(const ChordRest& cr, bool link)
 
       _beamMode     = cr._beamMode;
       _up           = cr._up;
-      _small        = cr._small;
+      m_isSmall     = cr.m_isSmall;
       _melismaEnds   = cr._melismaEnds;
       _crossMeasure = cr._crossMeasure;
 
@@ -268,7 +268,7 @@ bool ChordRest::readProperties(XmlReader& e)
             e.skipCurrentElement();
             }
       else if (tag == "small")
-            _small = e.readInt();
+            m_isSmall = e.readInt();
       else if (tag == "duration")
             setTicks(e.readFraction());
       else if (tag == "ticklen") {      // obsolete (version < 1.12)
@@ -387,7 +387,7 @@ void ChordRest::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
 
 void ChordRest::setSmall(bool val)
       {
-      _small = val;
+      m_isSmall = val;
       }
 
 //---------------------------------------------------------
@@ -845,7 +845,7 @@ void ChordRest::localSpatiumChanged(qreal oldValue, qreal newValue)
 QVariant ChordRest::getProperty(Pid propertyId) const
       {
       switch (propertyId) {
-            case Pid::SMALL:      return QVariant(small());
+            case Pid::SMALL:      return QVariant(isSmall());
             case Pid::BEAM_MODE:  return int(beamMode());
             case Pid::STAFF_MOVE: return staffMove();
             case Pid::DURATION_TYPE: return QVariant::fromValue(actualDurationType());
