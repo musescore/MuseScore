@@ -685,7 +685,7 @@ static const QString unknownFret = QString("?");
 
 QString StaffType::fretString(int fret, int string, bool ghost) const
 {
-    if (fret == FRET_NONE) {
+    if (fret == INVALID_FRET_INDEX) {
         return unknownFret;
     }
     if (ghost) {

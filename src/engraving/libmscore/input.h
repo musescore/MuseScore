@@ -52,21 +52,27 @@ enum class NoteEntryMethod : char {
 
 class InputState
 {
-    TDuration _duration    { TDuration::DurationType::V_INVALID };      // currently duration
-    int _drumNote    { -1 };
-    int _track       { 0 };
-    int _prevTrack   { 0 };                                 // used for navigation
-    Segment* _lastSegment { 0 };
-    Segment* _segment     { 0 };                            // current segment
-    int _string      { VISUAL_STRING_NONE };                // visual string selected for input (TAB staves only)
-    bool _rest               { false };                // rest mode
-    NoteType _noteType       { NoteType::NORMAL };
-    Beam::Mode _beamMode       { Beam::Mode::AUTO };
-    bool _noteEntryMode      { false };
+    int _track     { 0 };
+    int _prevTrack { 0 }; // used for navigation
+
+    int _drumNote { -1 };
+    int _string   { VISUAL_INVALID_STRING_INDEX }; // visual string selected for input (TAB staves only)
+
+    Segment* _lastSegment = nullptr;
+    Segment* _segment = nullptr; // current segment
+
+    bool _noteEntryMode { false };
     NoteEntryMethod _noteEntryMethod { NoteEntryMethod::STEPTIME };
+
+    TDuration _duration { TDuration::DurationType::V_INVALID }; // currently duration
+    bool _rest { false }; // rest mode
+
+    NoteType _noteType { NoteType::NORMAL };
+    Beam::Mode _beamMode { Beam::Mode::AUTO };
+
     AccidentalType _accidentalType { AccidentalType::NONE };
-    Slur* _slur              { 0 };
-    bool _insertMode         { false };
+    Slur* _slur = nullptr;
+    bool _insertMode { false };
 
     std::set<SymId> _articulationIds;
 

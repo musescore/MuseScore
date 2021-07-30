@@ -507,7 +507,7 @@ struct FilterElementsOptions
 struct FilterNotesOptions : FilterElementsOptions
 {
     int pitch = -1;
-    int string = Ms::STRING_NONE;
+    int string = Ms::INVALID_STRING_INDEX;
     int tpc = Ms::Tpc::TPC_INVALID;
     NoteHead::Group notehead = NoteHead::Group::HEAD_INVALID;
     Ms::TDuration durationType = Ms::TDuration();
