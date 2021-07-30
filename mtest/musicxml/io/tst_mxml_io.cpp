@@ -266,6 +266,7 @@ private slots:
       void volta1() { mxmlIoTest("testVolta1"); }
       void voltaHiding1() { mxmlImportTestRef("testVoltaHiding"); }
       void voltaHiding2() { mxmlIoTestRef("testVoltaHiding"); }
+      void wedgeOffset() { mxmlImportTestRef("testWedgeOffset"); }
       void wedge1() { mxmlIoTest("testWedge1"); }
       void wedge2() { mxmlIoTest("testWedge2"); }
       void wedge3() { mxmlIoTest("testWedge3"); }
