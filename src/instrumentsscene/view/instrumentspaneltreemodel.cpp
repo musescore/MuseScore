@@ -553,7 +553,7 @@ void InstrumentsPanelTreeModel::updateStaffItem(StaffTreeItem* item, const Staff
     item->setTitle(title);
     item->setIsVisible(staff->show());
     item->setCutawayEnabled(staff->cutaway());
-    item->setIsSmall(staff->staffType()->small());
+    item->setIsSmall(staff->staffType()->isSmall());
     item->setStaffType(static_cast<int>(staff->staffType()->type()));
 
     QVariantList visibility;

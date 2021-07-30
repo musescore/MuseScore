@@ -734,7 +734,7 @@ Note::Note(const Note& n, bool link)
     _headType          = n._headType;
     _mirror            = n._mirror;
     _userMirror        = n._userMirror;
-    _small             = n._small;
+    m_isSmall          = n.m_isSmall;
     _userDotPosition   = n._userDotPosition;
     _fixed             = n._fixed;
     _fixedLine         = n._fixedLine;
@@ -2496,7 +2496,7 @@ void Note::reset()
 qreal Note::mag() const
 {
     qreal m = chord()->mag();
-    if (_small) {
+    if (m_isSmall) {
         m *= score()->styleD(Sid::smallNoteMag);
     }
     return m;
@@ -2516,7 +2516,7 @@ Element* Note::elementBase() const
 
 void Note::setSmall(bool val)
 {
-    _small = val;
+    m_isSmall = val;
 }
 
 //---------------------------------------------------------
@@ -2967,7 +2967,7 @@ QVariant Note::getProperty(Pid propertyId) const
     case Pid::TPC2:
         return _tpc[1];
     case Pid::SMALL:
-        return small();
+        return isSmall();
     case Pid::MIRROR_HEAD:
         return int(userMirror());
     case Pid::DOT_POSITION:
