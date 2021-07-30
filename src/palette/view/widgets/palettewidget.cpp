@@ -107,7 +107,7 @@ const std::vector<PaletteCellPtr>& PaletteWidget::actualCellsList() const
 
 int PaletteWidget::actualCellCount() const
 {
-    return m_isFilterActive ? m_filteredCells.size() : cells().size();
+    return static_cast<int>(m_isFilterActive ? m_filteredCells.size() : cells().size());
 }
 
 PaletteCellPtr PaletteWidget::cellAt(size_t index) const
