@@ -3091,7 +3091,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
             }
 
       // handle the spanner stops first
-      foreach (auto desc, stops) {
+      for (auto desc : stops) {
             auto& spdesc = _pass2.getSpanner({ desc._tp, desc._nr });
             if (spdesc._isStopped) {
                   _logger->logError("spanner already stopped", &_e);
@@ -3099,12 +3099,12 @@ void MusicXMLParserDirection::direction(const QString& partId,
                   }
             else {
                   if (spdesc._isStarted) {
-                        handleSpannerStop(spdesc._sp, track, tick, spanners);
+                        handleSpannerStop(spdesc._sp, track, tick + _offset, spanners);
                         _pass2.clearSpanner(desc);
                         }
                   else {
                         spdesc._sp = desc._sp;
-                        spdesc._tick2 = tick;
+                        spdesc._tick2 = tick + _offset;
                         spdesc._track2 = track;
                         spdesc._isStopped = true;
                         }
@@ -3113,7 +3113,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
 
       // then handle the spanner starts
       // TBD handle offset ?
-      foreach (auto desc, starts) {
+      for (auto desc : starts) {
             auto& spdesc = _pass2.getSpanner({ desc._tp, desc._nr });
             if (spdesc._isStarted) {
                   _logger->logError("spanner already started", &_e);
@@ -3124,13 +3124,13 @@ void MusicXMLParserDirection::direction(const QString& partId,
                         _pass2.addSpanner(desc);
                         // handleSpannerStart and handleSpannerStop must be called in order
                         // due to allocation of elements in the map
-                        handleSpannerStart(desc._sp, track, placement(), tick, spanners);
+                        handleSpannerStart(desc._sp, track, placement(), tick + _offset, spanners);
                         handleSpannerStop(spdesc._sp, spdesc._track2, spdesc._tick2, spanners);
                         _pass2.clearSpanner(desc);
                         }
                   else {
                         _pass2.addSpanner(desc);
-                        handleSpannerStart(desc._sp, track, placement(), tick, spanners);
+                        handleSpannerStart(desc._sp, track, placement(), tick + _offset, spanners);
                         spdesc._isStarted = true;
                         }
                   }
