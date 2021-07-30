@@ -450,7 +450,7 @@ class Note : public Element {
 //       Q_PROPERTY(int                            pitch             READ pitch              WRITE undoSetPitch)
 //       Q_PROPERTY(bool                           play              READ play               WRITE undoSetPlay)
 //       Q_PROPERTY(int                            ppitch            READ ppitch)
-//       Q_PROPERTY(bool                           small             READ small              WRITE undoSetSmall)
+//       Q_PROPERTY(bool                           small             READ isSmall            WRITE undoSetSmall)
 //       Q_PROPERTY(int                            string            READ string             WRITE undoSetString)
 //       Q_PROPERTY(int                            subchannel        READ subchannel)
       /// Backward tie for this Note.

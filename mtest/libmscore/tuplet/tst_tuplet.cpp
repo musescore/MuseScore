@@ -144,7 +144,7 @@ void TestTuplet::split(const char* p1, const char* p2)
       score->startCmd();
       EditData dd(0);
       dd.dropElement = ts;
-      dd.modifiers = 0;
+      dd.modifiers = {};
       dd.dragOffset = QPointF();
       dd.pos = m->pagePos();
       m->drop(dd);

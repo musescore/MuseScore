@@ -60,7 +60,7 @@
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QCheckBox" name="small">
+       <widget class="QCheckBox" name="isSmallCheckbox">
         <property name="text">
          <string notr="true">small</string>
         </property>

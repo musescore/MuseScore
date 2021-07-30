@@ -3191,7 +3191,7 @@ void Score::cmdSlashFill()
                         p.segment = s;
                         p.staffIdx = staffIdx;
                         p.line = line;
-                        p.fret = FRET_NONE;
+                        p.fret = INVALID_FRET_INDEX;
                         _is.setRest(false);     // needed for tab
                         nv = noteValForPosition(p, AccidentalType::NONE, error);
                         }

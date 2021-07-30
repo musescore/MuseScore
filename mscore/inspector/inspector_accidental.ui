@@ -103,7 +103,7 @@
        </widget>
       </item>
       <item row="0" column="1" colspan="2">
-       <widget class="QCheckBox" name="small">
+       <widget class="QCheckBox" name="isSmall">
         <property name="focusPolicy">
          <enum>Qt::TabFocus</enum>
         </property>
@@ -153,7 +153,7 @@
  </customwidgets>
  <tabstops>
   <tabstop>title</tabstop>
-  <tabstop>small</tabstop>
+  <tabstop>isSmall</tabstop>
   <tabstop>bracket</tabstop>
  </tabstops>
  <resources/>

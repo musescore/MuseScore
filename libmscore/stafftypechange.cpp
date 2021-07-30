@@ -161,7 +161,7 @@ QVariant StaffTypeChange::getProperty(Pid propertyId) const
             case Pid::MAG:
                   return _staffType->userMag();
             case Pid::SMALL:
-                  return _staffType->small();
+                  return _staffType->isSmall();
             case Pid::STAFF_INVISIBLE:
                   return _staffType->invisible();
             case Pid::STAFF_COLOR:

@@ -2248,7 +2248,7 @@ static void markUserAccidentals(const int firstStaff,
 
 static void coerceGraceCue(Chord* mainChord, Chord* graceChord)
       {
-      if (mainChord->small())
+      if (mainChord->isSmall())
             graceChord->setSmall(true);
       bool anyPlays = false;
       for (auto n : mainChord->notes()) {
@@ -4949,7 +4949,7 @@ static TDuration determineDuration(const bool rest, const QString& type, const i
 static Chord* findOrCreateChord(Score* score, Measure* m,
                                 const Fraction& tick, const int track, const int move,
                                 const TDuration duration, const Fraction dura,
-                                Beam::Mode bm, bool small)
+                                Beam::Mode bm, bool isSmall)
       {
       //qDebug("findOrCreateChord tick %d track %d dur ticks %d ticks %s bm %hhd",
       //       tick, track, duration.ticks(), qPrintable(dura.print()), bm);
@@ -4965,7 +4965,7 @@ static Chord* findOrCreateChord(Score* score, Measure* m,
             c->setTrack(track);
             // Chord is initialized with the smallness of its first note.
             // If a non-small note is added later, this is handled in handleSmallness.
-            c->setSmall(small);
+            c->setSmall(isSmall);
 
             setChordRestDuration(c, duration, dura);
             Segment* s = m->getSegment(SegmentType::ChordRest, tick);
@@ -5009,14 +5009,14 @@ NoteType graceNoteType(const TDuration duration, const bool slash)
  */
 
 static Chord* createGraceChord(Score* score, const int track,
-                               const TDuration duration, const bool slash, const bool small)
+                               const TDuration duration, const bool slash, const bool isSmall)
       {
       Chord* c = new Chord(score);
       c->setNoteType(graceNoteType(duration, slash));
       c->setTrack(track);
       // Chord is initialized with the smallness of its first note.
       // If a non-small note is added later, this is handled in handleSmallness.
-      c->setSmall(small);
+      c->setSmall(isSmall);
       // note grace notes have no durations, use default fraction 0/1
       setChordRestDuration(c, duration, Fraction());
       return c;
@@ -5058,11 +5058,11 @@ static void handleDisplayStep(ChordRest* cr, int step, int octave, const Fractio
 static void handleSmallness(bool cueOrSmall, Note* note, Chord* c)
       {
       if (cueOrSmall) {
-            note->setSmall(!c->small()); // Avoid redundant smallness
+            note->setSmall(!c->isSmall()); // Avoid redundant smallness
             }
       else {
             note->setSmall(false);
-            if (c->small()) {
+            if (c->isSmall()) {
                   // What was a small chord becomes small notes in a non-small chord
                   c->setSmall(false);
                   for (Note* otherNote : c->notes()) {
@@ -5329,7 +5329,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
 
       bool chord = false;
       bool cue = false;
-      bool small = false;
+      bool isSmall = false;
       bool grace = false;
       bool rest = false;
       int staff = 1;
@@ -5416,7 +5416,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
             else if (_e.name() == "stem")
                   stem(stemDir, noStem);
             else if (_e.name() == "type") {
-                  small = (_e.attributes().value("size") == "cue" || _e.attributes().value("size") == "grace-cue");
+                  isSmall = (_e.attributes().value("size") == "cue" || _e.attributes().value("size") == "grace-cue");
                   type = _e.readElementText();
                   }
             else if (_e.name() == "voice")
@@ -5521,14 +5521,14 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                   c = findOrCreateChord(_score, measure,
                                         noteStartTime,
                                         msTrack + msVoice, msMove,
-                                        duration, dura, bm, small || cue);
+                                        duration, dura, bm, isSmall || cue);
                   }
             else {
                   // grace note
                   // TODO: check if explicit stem direction should also be set for grace notes
                   // (the DOM parser does that, but seems to have no effect on the autotester)
                   if (!chord || gcl.isEmpty()) {
-                        c = createGraceChord(_score, msTrack + msVoice, duration, graceSlash, small || cue);
+                        c = createGraceChord(_score, msTrack + msVoice, duration, graceSlash, isSmall || cue);
                         // TODO FIX
                         // the setStaffMove() below results in identical behaviour as 2.0:
                         // grace note will be at the wrong staff with the wrong pitch,
@@ -5570,7 +5570,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                         }
                   else
                         cr->setBeamMode(Beam::Mode::NONE);
-                  cr->setSmall(small);
+                  cr->setSmall(isSmall);
                   if (noteColor != QColor::Invalid)
                         cr->setColor(noteColor);
                   cr->setVisible(printObject);
@@ -5578,7 +5578,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                   }
             }
       else {
-            handleSmallness(cue || small, note, c);
+            handleSmallness(cue || isSmall, note, c);
             note->setPlay(!cue);          // cue notes don't play
             note->setHeadGroup(headGroup);
             if (noteColor != QColor::Invalid)

@@ -65,7 +65,6 @@ static constexpr int MSCVERSION = 302;
 //    3.02  Engraving improvements for 3.6
 
 
-class MStyle;
 class Sequencer;
 
 enum class HairpinType : signed char;
@@ -74,15 +73,15 @@ enum class HairpinType : signed char;
 #define VOICES 4
 #endif
 
-inline int staff2track(int staffIdx) { return staffIdx << 2; }
-inline int track2staff(int voice)    { return voice >> 2;    }
-inline int track2voice(int track)    { return track & 3;     }
-inline int trackZeroVoice(int track) { return track & ~3;    }
+inline constexpr int staff2track(int staffIdx) { return staffIdx << 2; }
+inline constexpr int track2staff(int voice)    { return voice >> 2;    }
+inline constexpr int track2voice(int track)    { return track & 3;     }
+inline constexpr int trackZeroVoice(int track) { return track & ~3;    }
 
-static const int MAX_TAGS = 32;
+static constexpr int MAX_TAGS = 32;
 
-static const int MAX_HEADERS = 3;
-static const int MAX_FOOTERS = 3;
+static constexpr int MAX_HEADERS = 3;
+static constexpr int MAX_FOOTERS = 3;
 
 static constexpr qreal INCH      = 25.4;
 static constexpr qreal PPI       = 72.0;           // printer points per inch
@@ -93,16 +92,16 @@ static constexpr qreal DPMM      = DPI / INCH;
 
 static constexpr int MAX_STAVES  = 4;
 
-static const int  SHADOW_NOTE_LIGHT       = 135;
+static constexpr int SHADOW_NOTE_LIGHT        = 135;
 
-static const char mimeSymbolFormat[]      = "application/musescore/symbol";
-static const char mimeSymbolListFormat[]  = "application/musescore/symbollist";
-static const char mimeStaffListFormat[]   = "application/musescore/stafflist";
+static constexpr char mimeSymbolFormat[]      = "application/musescore/symbol";
+static constexpr char mimeSymbolListFormat[]  = "application/musescore/symbollist";
+static constexpr char mimeStaffListFormat[]   = "application/musescore/stafflist";
 
-static const int  VISUAL_STRING_NONE      = -100;     // no ordinal for the visual repres. of string (topmost in TAB
-                                                      // varies according to visual order and presence of bass strings)
-static const int  STRING_NONE             = -1;       // no ordinal for a physical string (0 = topmost in instrument)
-static const int  FRET_NONE               = -1;       // no ordinal for a fret
+static constexpr int  VISUAL_STRING_NONE      = -100;     // no ordinal for the visual repres. of string (topmost in TAB
+                                                          // varies according to visual order and presence of bass strings)
+static constexpr int  INVALID_STRING_INDEX    = -1;       // no ordinal for a physical string (0 = topmost in instrument)
+static constexpr int  INVALID_FRET_INDEX      = -1;       // no ordinal for a fret
 
 //---------------------------------------------------------
 //   BracketType

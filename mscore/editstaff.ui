@@ -61,7 +61,7 @@
          </widget>
         </item>
         <item row="1" column="2">
-         <widget class="QCheckBox" name="small">
+         <widget class="QCheckBox" name="isSmallCheckbox">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -1007,7 +1007,7 @@
   <tabstop>showTimesig</tabstop>
   <tabstop>showBarlines</tabstop>
   <tabstop>hideSystemBarLine</tabstop>
-  <tabstop>small</tabstop>
+  <tabstop>isSmallCheckbox</tabstop>
   <tabstop>invisible</tabstop>
   <tabstop>color</tabstop>
   <tabstop>cutaway</tabstop>

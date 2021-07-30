@@ -2531,7 +2531,7 @@ void AccidentalView::setElement(Element* e)
 //TODO      acc.hasBracket->setChecked(s->hasBracket());
       acc.accAuto->setChecked(s->role() == AccidentalRole::AUTO);
       acc.accUser->setChecked(s->role() == AccidentalRole::USER);
-      acc.small->setChecked(s->small());
+      acc.isSmallCheckbox->setChecked(s->isSmall());
       }
 
 //---------------------------------------------------------
@@ -2555,7 +2555,7 @@ void ClefView::setElement(Element* e)
 
       clef.clefType->setValue(int(c->clefType()));
       clef.showCourtesy->setChecked(c->showCourtesy());
-      clef.small->setChecked(c->small());
+      clef.isSmallCheckbox->setChecked(c->isSmall());
 
       clef.concertClef->setValue(int(c->concertClef()));
       clef.transposingClef->setValue(int(c->transposingClef()));

@@ -4003,7 +4003,7 @@ void Score::undoChangeClef(Staff* ostaff, Element* e, ClefType ct, bool forInstr
       Clef* gclef = 0;
       Fraction tick = e->tick();
       Fraction rtick = e->rtick();
-      bool small = (st == SegmentType::Clef);
+      bool isSmall = (st == SegmentType::Clef);
       for (Staff* staff : ostaff->staffList()) {
       //      if (staff->staffType(tick)->group() != ClefInfo::staffGroup(ct))
       //            continue;
@@ -4086,7 +4086,7 @@ void Score::undoChangeClef(Staff* ostaff, Element* e, ClefType ct, bool forInstr
             if (forInstrumentChange) {
                   clef->setForInstrumentChange(true);
                   }
-            clef->setSmall(small);
+            clef->setSmall(isSmall);
             }
       }
 

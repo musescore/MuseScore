@@ -1275,9 +1275,9 @@ void Chord::setScore(Score* s)
 //    Adjustment to the length of the stem in order to accommodate hooks
 //    This function replaces this bit of code:
 //      switch (hookIdx) {
-//            case 3: normalStemLen += small() ? .5  : 0.75; break; //32nd notes
-//            case 4: normalStemLen += small() ? 1.0 : 1.5;  break; //64th notes
-//            case 5: normalStemLen += small() ? 1.5 : 2.25; break; //128th notes
+//            case 3: normalStemLen += isSmall() ? .5  : 0.75; break; //32nd notes
+//            case 4: normalStemLen += isSmall() ? 1.0 : 1.5;  break; //64th notes
+//            case 5: normalStemLen += isSmall() ? 1.5 : 2.25; break; //128th notes
 //            }
 //    which was not sufficient for two reasons:
 //      1. It only lengthened the stem for 3, 4, or 5 hooks.
@@ -1285,39 +1285,39 @@ void Chord::setScore(Score* s)
 //    This provides a way to take a number of factors into account. Further tweaking may be in order.
 //-----------------------------------------------------------------------------
 
-qreal hookAdjustment(QString font, int hooks, bool up, bool small)
+qreal hookAdjustment(QString font, int hooks, bool up, bool isSmall)
       {
       bool fallback = MScore::useFallbackFont && (hooks > 5);
 
       if (font == "Emmentaler" && !fallback) {
             if (up) {
                   if (hooks > 2)
-                        return (hooks - 2) * (small ? .75 : 1);
+                        return (hooks - 2) * (isSmall ? .75 : 1);
                   }
             else {
                   if (hooks == 3)
-                        return (small ? .75 : 1);
+                        return (isSmall ? .75 : 1);
                   else if (hooks > 3)
-                        return (hooks - 2) * (small ? .5 : .75);
+                        return (hooks - 2) * (isSmall ? .5 : .75);
                   }
             }
       else if (font == "Gonville" && !fallback) {
             if (up) {
                   if (hooks > 2)
-                        return (hooks - 2) * (small ? .5 : .75);
+                        return (hooks - 2) * (isSmall ? .5 : .75);
                   }
             else {
                   if (hooks > 1)
-                        return (hooks - 1) * (small ? .5 : .75);
+                        return (hooks - 1) * (isSmall ? .5 : .75);
                   }
             }
       else if (font == "MuseJazz") {
             if (hooks > 2)
-                  return (hooks - 2) * (small ? .75 : 1);
+                  return (hooks - 2) * (isSmall ? .75 : 1);
             }
       else {
             if (hooks > 2)
-                  return (hooks - 2) * (small ? .5 : .75);
+                  return (hooks - 2) * (isSmall ? .5 : .75);
             }
       return 0;
       }
@@ -1369,12 +1369,12 @@ qreal Chord::defaultStemLength() const
       qreal shortest      = score()->styleS(Sid::shortestStem).val();
       if (hookIdx) {
             if (up())
-                  shortest = qMax(shortest, small() ? 2.0 : 3.0);
+                  shortest = qMax(shortest, isSmall() ? 2.0 : 3.0);
             else
-                  shortest = qMax(shortest, small() ? 2.25 : 3.5);
+                  shortest = qMax(shortest, isSmall() ? 2.25 : 3.5);
             }
 
-      qreal normalStemLen = small() ? 2.5 : 3.5;
+      qreal normalStemLen = isSmall() ? 2.5 : 3.5;
       if (hookIdx && tab == 0) {
             if (up() && durationType().dots()) {
                   //
@@ -2769,7 +2769,7 @@ QVariant Chord::getProperty(Pid propertyId) const
       {
       switch (propertyId) {
             case Pid::NO_STEM:        return noStem();
-            case Pid::SMALL:          return small();
+            case Pid::SMALL:          return isSmall();
             case Pid::STEM_DIRECTION: return QVariant::fromValue<Direction>(stemDirection());
             default:
                   return ChordRest::getProperty(propertyId);
@@ -2982,7 +2982,7 @@ void Chord::removeMarkings(bool keepTremolo)
 qreal Chord::chordMag() const
       {
       qreal m = 1.0;
-      if (small())
+      if (isSmall())
             m *= score()->styleD(Sid::smallNoteMag);
       if (_noteType != NoteType::NORMAL)
             m *= score()->styleD(Sid::graceNoteMag);
@@ -3445,7 +3445,7 @@ void Chord::layoutArticulations()
             return;
       const Staff* st = staff();
       const StaffType* staffType = st->staffTypeForElement(this);
-      qreal mag            = (staffType->small() ? score()->styleD(Sid::smallStaffMag) : 1.0) * staffType->userMag();
+      qreal mag            = (staffType->isSmall() ? score()->styleD(Sid::smallStaffMag) : 1.0) * staffType->userMag();
       qreal _spatium       = score()->spatium() * mag;
       qreal _spStaff       = _spatium * staffType->lineDistance().val();
 

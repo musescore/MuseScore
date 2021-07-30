@@ -131,7 +131,7 @@ int StringData::getPitch(int string, int fret, Staff* staff, const Fraction& tic
 //   fret
 //    Returns the fret corresponding to the pitch / string combination
 //    at given tick of given staff.
-//    Returns FRET_NONE if not possible
+//    Returns INVALID_FRET_INDEX if not possible
 //---------------------------------------------------------
 
 int StringData::fret(int pitch, int string, Staff* staff, const Fraction& tick) const
@@ -196,11 +196,11 @@ void StringData::fretChords(Chord * chord) const
       minFret = INT32_MAX;
       maxFret = INT32_MIN;
       foreach(Note* note, sortedNotes) {
-            if (note->string() != STRING_NONE)
+            if (note->string() != INVALID_STRING_INDEX)
                   bUsed[note->string()]++;
-            if (note->fret() != FRET_NONE && note->fret() < minFret)
+            if (note->fret() != INVALID_FRET_INDEX && note->fret() < minFret)
                   minFret = note->fret();
-            if (note->fret() != FRET_NONE && note->fret() > maxFret)
+            if (note->fret() != INVALID_FRET_INDEX && note->fret() > maxFret)
                   maxFret = note->fret();
       }
 
@@ -210,7 +210,7 @@ void StringData::fretChords(Chord * chord) const
             nFret       = nNewFret      = note->fret();
             note->setFretConflict(false);       // assume no conflicts on this note
             // if no fretting (any invalid fretting has been erased by sortChordNotes() )
-            if (nString == STRING_NONE /*|| nFret == FRET_NONE || getPitch(nString, nFret) != note->pitch()*/) {
+            if (nString == INVALID_STRING_INDEX /*|| nFret == INVALID_FRET_INDEX || getPitch(nString, nFret) != note->pitch()*/) {
                   // get a new fretting
                   if (!convertPitch(note->pitch(), pitchOffset, &nNewString, &nNewFret) ) {
                         // no way to fit this note in this tab:
@@ -234,7 +234,7 @@ void StringData::fretChords(Chord * chord) const
                   // attempt to find a suitable string, from topmost
                   for (nTempString=0; nTempString < strings(); nTempString++) {
                         if (bUsed[nTempString] < 1
-                                    && (nTempFret=fret(note->pitch(), nTempString, pitchOffset)) != FRET_NONE) {
+                                    && (nTempFret=fret(note->pitch(), nTempString, pitchOffset)) != INVALID_FRET_INDEX) {
                               bUsed[nNewString]--;    // free previous string
                               bUsed[nTempString]++;   // and occupy new string
                               nNewFret   = nTempFret;
@@ -387,17 +387,17 @@ int StringData::getPitch(int string, int fret, int pitchOffset) const
 //---------------------------------------------------------
 //   fret
 //    Returns the fret corresponding to the pitch / string / pitchOffset combination.
-//    returns FRET_NONE if not possible
+//    returns INVALID_FRET_INDEX if not possible
 //---------------------------------------------------------
 
 int StringData::fret(int pitch, int string, int pitchOffset) const
       {
       int strings = stringTable.size();
       if (strings < 1)                          // no strings at all!
-            return FRET_NONE;
+            return INVALID_FRET_INDEX;
 
       if (string < 0 || string >= strings)      // no such a string
-            return FRET_NONE;
+            return INVALID_FRET_INDEX;
 
       pitch += pitchOffset;
 
@@ -408,7 +408,7 @@ int StringData::fret(int pitch, int string, int pitchOffset) const
 
       // fret number is invalid or string cannot be fretted
       if (fret < 0 || fret >= _frets || (fret > 0 && strg.open))
-            return FRET_NONE;
+            return INVALID_FRET_INDEX ;
       return fret;
       }
 
@@ -432,10 +432,10 @@ void StringData::sortChordNotes(QMap<int, Note *>& sortedNotes, const Chord *cho
             fret        = note->fret();
             // if note not fretted yet or current fretting no longer valid,
             // use most convenient string as key
-            if (string <= STRING_NONE || fret <= FRET_NONE
+            if (string <= INVALID_STRING_INDEX || fret <= INVALID_FRET_INDEX
                         || getPitch(string, fret, pitchOffset) != note->pitch()) {
-                  note->setString(STRING_NONE);
-                  note->setFret(FRET_NONE);
+                  note->setString(INVALID_STRING_INDEX);
+                  note->setFret(INVALID_FRET_INDEX);
                   convertPitch(note->pitch(), pitchOffset, &string, &fret);
                   }
             key = string * 100000;

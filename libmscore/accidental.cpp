@@ -252,7 +252,7 @@ void Accidental::read(XmlReader& e)
                         _role = r;
                   }
             else if (tag == "small")
-                  _small = e.readInt();
+                  m_isSmall = e.readInt();
             else if (Element::readProperties(e))
                   ;
             else
@@ -365,7 +365,7 @@ void Accidental::layout()
             }
 
       qreal m = parent() ? parent()->mag() : 1.0;
-      if (_small)
+      if (m_isSmall)
             m *= score()->styleD(Sid::smallNoteMag);
       setMag(m);
 
@@ -572,7 +572,7 @@ QVariant Accidental::getProperty(Pid propertyId) const
       {
       switch (propertyId) {
             case Pid::ACCIDENTAL_TYPE:    return int(_accidentalType);
-            case Pid::SMALL:              return _small;
+            case Pid::SMALL:              return m_isSmall;
             case Pid::ACCIDENTAL_BRACKET: return int(bracket());
             case Pid::ROLE:               return int(role());
             default:
@@ -607,7 +607,7 @@ bool Accidental::setProperty(Pid propertyId, const QVariant& v)
                   setAccidentalType(AccidentalType(v.toInt()));
                   break;
             case Pid::SMALL:
-                  _small = v.toBool();
+                  m_isSmall = v.toBool();
                   break;
             case Pid::ACCIDENTAL_BRACKET:
                   _bracket = AccidentalBracket(v.toInt());

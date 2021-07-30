@@ -81,7 +81,7 @@ NoteVal Score::noteValForPosition(Position pos, AccidentalType at, bool &error)
                         }
                   // build a default NoteVal for that string
                   nval.string = line;
-                  if (pos.fret != FRET_NONE)          // if a fret is given, use it
+                  if (pos.fret != INVALID_FRET_INDEX)          // if a fret is given, use it
                         nval.fret = pos.fret;
                   else {                              // if no fret, use 0 as default
                         _is.setString(line);

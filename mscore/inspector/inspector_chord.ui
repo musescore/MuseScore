@@ -152,7 +152,7 @@
       <item row="2" column="0" colspan="2">
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <widget class="QCheckBox" name="small">
+         <widget class="QCheckBox" name="isSmall">
           <property name="focusPolicy">
            <enum>Qt::TabFocus</enum>
           </property>
@@ -275,7 +275,7 @@
  </customwidgets>
  <tabstops>
   <tabstop>title</tabstop>
-  <tabstop>small</tabstop>
+  <tabstop>isSmall</tabstop>
   <tabstop>stemless</tabstop>
   <tabstop>stemDirection</tabstop>
  </tabstops>
