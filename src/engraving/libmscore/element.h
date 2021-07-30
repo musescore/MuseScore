@@ -53,7 +53,9 @@ namespace Ms {
 #endif
 
 // Defined in Windows headers, conflicts with member functions named small().
+#if (defined (_MSCVER) || defined (_MSC_VER))
 #undef small
+#endif
 
 enum class Pid;
 enum class SmuflAnchorId;

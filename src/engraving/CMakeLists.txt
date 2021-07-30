@@ -147,6 +147,14 @@ else()
 
 endif()
 
+set_source_files_properties( # For these files, Unity Build does not work
+    ${CMAKE_CURRENT_LIST_DIR}/libmscore/chordlist.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/compat/chordlist.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/compat/read114.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/compat/read206.cpp
+    PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON
+    )
+
 set(MODULE_INCLUDE
     ${PROJECT_SOURCE_DIR}/thirdparty/dtl
     )
@@ -154,7 +162,6 @@ set(MODULE_INCLUDE
 set(MODULE_LINK ${MODULE_LINK} midi_old qzip)
 
 set(MODULE_NOT_LINK_GLOBAL ON)
-set(MODULE_USE_UNITY_NONE ON) # not work
 include(SetupModule)
 
 set_property(TARGET ${MODULE} APPEND PROPERTY AUTOMOC_MACRO_NAMES "BEGIN_QT_REGISTERED_ENUM")

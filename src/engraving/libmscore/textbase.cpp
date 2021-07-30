@@ -2393,7 +2393,7 @@ void TextBase::writeProperties(XmlWriter& xml, bool writeText, bool /*writeStyle
     }
 }
 
-static constexpr std::array<Pid, 18> pids { {
+static constexpr std::array<Pid, 18> textbasePids { {
     Pid::SUB_STYLE,
     Pid::FONT_FACE,
     Pid::FONT_SIZE,
@@ -2416,7 +2416,7 @@ static constexpr std::array<Pid, 18> pids { {
 bool TextBase::readProperties(XmlReader& e)
 {
     const QStringRef& tag(e.name());
-    for (Pid i :pids) {
+    for (Pid i : textbasePids) {
         if (readProperty(tag, e, i)) {
             return true;
         }
@@ -2468,7 +2468,7 @@ Pid TextBase::propertyId(const QStringRef& name) const
     if (name == "text") {
         return Pid::TEXT;
     }
-    for (Pid pid : pids) {
+    for (Pid pid : textbasePids) {
         if (propertyName(pid) == name) {
             return pid;
         }

@@ -37,6 +37,11 @@
 #include "symid.h"
 
 namespace Ms {
+// Defined in Windows headers, conflicts with member functions named small().
+#if (defined (_MSCVER) || defined (_MSC_VER))
+#undef small
+#endif
+
 class Note;
 enum class AccidentalVal : signed char;
 
