@@ -705,7 +705,7 @@
               </HairPin>
             <next>
               <location>
-                <fractions>11/24</fractions>
+                <fractions>1/6</fractions>
                 </location>
               </next>
             </Spanner>
@@ -745,6 +745,13 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
+          <Spanner type="HairPin">
+            <prev>
+              <location>
+                <fractions>-1/6</fractions>
+                </location>
+              </prev>
+            </Spanner>
           <Chord>
             <BeamMode>mid</BeamMode>
             <small>1</small>
@@ -783,19 +790,6 @@
               <tpc>20</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/4</fractions>
-            </location>
-          <Spanner type="HairPin">
-            <prev>
-              <location>
-                <fractions>-11/24</fractions>
-                </location>
-              </prev>
-            </Spanner>
-          <location>
-            <fractions>1/4</fractions>
-            </location>
           <Chord>
             <BeamMode>no</BeamMode>
             <small>1</small>
@@ -1757,10 +1751,9 @@
               <tpc>20</tpc>
               </Note>
             </Chord>
-          <Fermata>
-            <subtype>fermataBelow</subtype>
-            <placement>below</placement>
-            </Fermata>
+          <location>
+            <fractions>-1/8</fractions>
+            </location>
           <Spanner type="Pedal">
             <Pedal>
               <endHookType>1</endHookType>
@@ -1768,9 +1761,23 @@
               </Pedal>
             <next>
               <location>
-                <fractions>1/4</fractions>
+                <fractions>1/8</fractions>
                 </location>
               </next>
+            </Spanner>
+          <location>
+            <fractions>1/8</fractions>
+            </location>
+          <Fermata>
+            <subtype>fermataBelow</subtype>
+            <placement>below</placement>
+            </Fermata>
+          <Spanner type="Pedal">
+            <prev>
+              <location>
+                <fractions>-1/8</fractions>
+                </location>
+              </prev>
             </Spanner>
           <Chord>
             <durationType>quarter</durationType>
@@ -1800,13 +1807,6 @@
           <Fermata>
             <subtype>fermataAbove</subtype>
             </Fermata>
-          <Spanner type="Pedal">
-            <prev>
-              <location>
-                <fractions>-1/4</fractions>
-                </location>
-              </prev>
-            </Spanner>
           <Rest>
             <durationType>eighth</durationType>
             </Rest>
