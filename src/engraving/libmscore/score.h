@@ -247,7 +247,7 @@ struct Position {
     Segment* segment { 0 };
     int staffIdx     { -1 };
     int line         { 0 };
-    int fret         { FRET_NONE };
+    int fret         { INVALID_FRET_INDEX };
     mu::PointF pos;
 };
 

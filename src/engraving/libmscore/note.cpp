@@ -1135,7 +1135,7 @@ qreal Note::noteheadCenterX() const
 qreal Note::tabHeadWidth(const StaffType* tab) const
 {
     qreal val;
-    if (tab && _fret != FRET_NONE && _string != STRING_NONE) {
+    if (tab && _fret != INVALID_FRET_INDEX && _string != INVALID_STRING_INDEX) {
         mu::draw::Font f    = tab->fretFont();
         f.setPointSizeF(tab->fretFontSize());
         val  = mu::draw::FontMetrics::width(f, _fretString) * magS();
@@ -1163,7 +1163,7 @@ qreal Note::headHeight() const
 
 qreal Note::tabHeadHeight(const StaffType* tab) const
 {
-    if (tab && _fret != FRET_NONE && _string != STRING_NONE) {
+    if (tab && _fret != INVALID_FRET_INDEX && _string != INVALID_STRING_INDEX) {
         return tab->fretBoxH() * magS();
     }
     return headHeight();

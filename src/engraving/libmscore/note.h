@@ -200,8 +200,8 @@ struct NoteVal {
     int pitch                 { -1 };
     int tpc1                  { Tpc::TPC_INVALID };
     int tpc2                  { Tpc::TPC_INVALID };
-    int fret                  { FRET_NONE };
-    int string                { STRING_NONE };
+    int fret                  { INVALID_FRET_INDEX };
+    int string                { INVALID_STRING_INDEX };
     NoteHead::Group headGroup { NoteHead::Group::HEAD_NORMAL };
 
     NoteVal() {}
