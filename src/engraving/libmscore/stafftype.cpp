@@ -1418,6 +1418,6 @@ void StaffType::initStaffTypes()
 
 qreal StaffType::spatium(Score* score) const
 {
-    return score->spatium() * (small() ? score->styleD(Sid::smallStaffMag) : 1.0) * userMag();
+    return score->spatium() * (isSmall() ? score->styleD(Sid::smallStaffMag) : 1.0) * userMag();
 }
 } // namespace Ms

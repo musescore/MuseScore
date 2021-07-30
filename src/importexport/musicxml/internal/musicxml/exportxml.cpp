@@ -3361,7 +3361,7 @@ static int tremoloCorrection(const Note* const note)
 
 static bool isSmallNote(const Note* const note)
 {
-    return note->small() || note->chord()->small();
+    return note->isSmall() || note->chord()->isSmall();
 }
 
 //---------------------------------------------------------
@@ -3808,7 +3808,7 @@ void ExportMusicXml::rest(Rest* rest, int staff)
     if (d.type() != TDuration::DurationType::V_MEASURE) {
         QString s = d.name();
         int dots  = rest->dots();
-        if (rest->small()) {
+        if (rest->isSmall()) {
             _xml.tag("type size=\"cue\"", s);
         } else {
             _xml.tag("type", s);

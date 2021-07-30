@@ -475,7 +475,7 @@ void NotationParts::setStaffConfig(const ID& staffId, const StaffConfig& config)
     staff->setHideWhenEmpty(config.hideMode);
     staff->setDefaultClefType(config.clefTypeList);
     staff->setCutaway(config.cutaway);
-    staff->undoChangeProperty(Ms::Pid::SMALL, config.small);
+    staff->undoChangeProperty(Ms::Pid::SMALL, config.isSmall);
 
     score()->undo(new Ms::ChangeStaff(staff));
 

@@ -149,7 +149,7 @@ Clef::Clef(Score* s)
 qreal Clef::mag() const
 {
     qreal mag = staff() ? staff()->staffMag(tick()) : 1.0;
-    if (_small) {
+    if (m_isSmall) {
         mag *= score()->styleD(Sid::smallClefMag);
     }
     return mag;
@@ -327,8 +327,8 @@ Element* Clef::drop(EditData& data)
 
 void Clef::setSmall(bool val)
 {
-    if (val != _small) {
-        _small = val;
+    if (val != m_isSmall) {
+        m_isSmall = val;
     }
 }
 
@@ -525,7 +525,7 @@ QVariant Clef::getProperty(Pid propertyId) const
     case Pid::CLEF_TYPE_CONCERT:     return int(_clefTypes._concertClef);
     case Pid::CLEF_TYPE_TRANSPOSING: return int(_clefTypes._transposingClef);
     case Pid::SHOW_COURTESY: return showCourtesy();
-    case Pid::SMALL:         return small();
+    case Pid::SMALL:         return isSmall();
     default:
         return Element::getProperty(propertyId);
     }
