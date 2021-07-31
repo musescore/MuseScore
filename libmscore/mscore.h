@@ -91,7 +91,7 @@ static constexpr qreal DPI       = 72.0 * DPI_F;
 static constexpr qreal SPATIUM20 = 5.0 * (DPI / 72.0);
 static constexpr qreal DPMM      = DPI / INCH;
 
-static constexpr int MAX_STAVES  = 4;
+static constexpr int MAX_STAVES  = 10;
 
 static const int  SHADOW_NOTE_LIGHT       = 135;
 
