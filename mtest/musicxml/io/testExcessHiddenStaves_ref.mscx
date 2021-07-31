@@ -92,6 +92,7 @@
       <Staff id="8">
         <StaffType group="pitched">
           <name>stdNormal</name>
+          <mag>0.75</mag>
           </StaffType>
         </Staff>
       <Staff id="9">

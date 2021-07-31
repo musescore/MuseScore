@@ -108,6 +108,9 @@
       <staff-details number="6" print-object="no"/>
       <staff-details number="7" print-object="no"/>
       <staff-details number="8" print-object="no"/>
+      <staff-details number="8">
+        <staff-size>75</staff-size>
+      </staff-details>
       </attributes>
     <note default-x="83.49" default-y="-35.00">
       <pitch>
@@ -607,6 +610,65 @@
         </note>
       </measure>
     <measure number="3" width="166.93">
+      <attributes>
+        <staff-details number="8" print-object="yes"/>
+      </attributes>
+      <note default-x="13.00" default-y="-15.00">
+        <pitch>
+          <step>C</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>32nd</type>
+        <stem>down</stem>
+        <staff>8</staff>
+        <beam number="1">begin</beam>
+        <beam number="2">begin</beam>
+        <beam number="3">begin</beam>
+        </note>
+      <note default-x="30.06" default-y="5.00">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>32nd</type>
+        <stem>down</stem>
+        <staff>8</staff>
+        <beam number="1">continue</beam>
+        <beam number="2">continue</beam>
+        <beam number="3">end</beam>
+        </note>
+      <note default-x="47.12" default-y="5.00">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>16th</type>
+        <stem>down</stem>
+        <staff>8</staff>
+        <beam number="1">continue</beam>
+        <beam number="2">end</beam>
+        </note>
+      <note default-x="74.42" default-y="5.00">
+        <pitch>
+          <step>G</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <stem>down</stem>
+        <staff>8</staff>
+        <beam number="1">end</beam>
+        </note>
+      <backup>
+        <duration>8</duration>
+        </backup>
       <note default-x="16.50" default-y="-75.00">
         <pitch>
           <step>E</step>
@@ -706,6 +768,9 @@
         </note>
       </measure>
     <measure number="4" width="217.00">
+      <attributes>
+        <staff-details number="8" print-object="no"/>
+      </attributes>
       <note default-x="61.36" default-y="-10.00">
         <pitch>
           <step>D</step>
