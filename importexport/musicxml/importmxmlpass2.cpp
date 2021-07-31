@@ -2689,16 +2689,16 @@ void MusicXMLParserPass2::staffDetails(const QString& partId)
       int staves = part->nstaves();
 
       QString strNumber = _e.attributes().value("number").toString();
-      int n = 0;  // default
+      int staffIndex = 0;  // default
       if (strNumber != "") {
-            n = _pass1.getMusicXmlPart(partId).staffNumberToIndex(strNumber.toInt());
-            if (n < 0 || n >= staves) {
+            staffIndex = _pass1.getMusicXmlPart(partId).staffNumberToIndex(strNumber.toInt());
+            if (staffIndex < 0 || staffIndex >= staves) {
                   _logger->logError(QString("invalid staff-details number %1 (may be hidden)").arg(strNumber), &_e);
-                  n = 0;
+                  staffIndex = 0;
                   }
             }
 
-      int staffIdx = _score->staffIdx(part) + n;
+      int staffIdx = _score->staffIdx(part) + staffIndex;
 
       StringData* t = nullptr;
       if (_score->staff(staffIdx)->isTabStaff(Fraction(0,1))) {
@@ -2721,6 +2721,11 @@ void MusicXMLParserPass2::staffDetails(const QString& partId)
                   }
             else if (_e.name() == "staff-tuning")
                   staffTuning(t);
+            else if (_e.name() == "staff-size") {
+                  int staffScale = _e.readElementText().toInt();
+                  part->staff(staffIndex)->setProperty(Pid::MAG, staffScale / 100.0);
+                  part->staff(staffIndex)->setPropertyFlags(Pid::MAG, PropertyFlags::UNSTYLED);
+                  }
             else
                   skipLogCurrElem();
             }
