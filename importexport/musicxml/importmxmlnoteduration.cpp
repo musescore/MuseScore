@@ -136,6 +136,7 @@ QString mxmlNoteDuration::checkTiming(const QString& type, const bool rest, cons
                         if (qAbs(_calcDura.ticks() - _specDura.ticks()) <= maxDiff) {
                               errorStr += " -> assuming rounding error";
                               _dura = _calcDura;
+                              _specDura = _calcDura; // prevent changing off time
                               }
                         else
                               errorStr += " -> using calculated duration";
