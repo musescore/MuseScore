@@ -2328,6 +2328,16 @@ bool Note::dotIsUp() const
     }
 }
 
+static bool hasAlteredUnison(Note* note)
+{
+    const auto& chordNotes = note->chord()->notes();
+    AccidentalVal accVal = tpc2alter(note->tpc());
+    int relLine = absStep(note->tpc(), note->epitch());
+    return std::find_if(chordNotes.begin(), chordNotes.end(), [note, accVal, relLine](Note* n) {
+        return n != note && !n->hidden() && absStep(n->tpc(), n->epitch()) == relLine && tpc2alter(n->tpc()) != accVal;
+    }) != chordNotes.end();
+}
+
 //---------------------------------------------------------
 //   updateAccidental
 //    set _accidental and _line depending on tpc
@@ -2358,6 +2368,10 @@ void Note::updateAccidental(AccidentalState* as)
             if (_tieBack && _tieBack->startNote()->tpc1() == tpc1()) {
                 acci = AccidentalType::NONE;
             } else if (acci == AccidentalType::NONE) {
+                acci = AccidentalType::NATURAL;
+            }
+        } else if (hasAlteredUnison(this)) {
+            if ((acci = Accidental::value2subtype(accVal)) == AccidentalType::NONE) {
                 acci = AccidentalType::NATURAL;
             }
         }

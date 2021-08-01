@@ -58,6 +58,7 @@ private slots:
     void tpcTranspose2();
     void noteLimits();
     void tpcDegrees();
+    void alteredUnison();
     void LongNoteAfterShort_183746();
 };
 
@@ -511,6 +512,18 @@ void TestNote::tpcDegrees()
     QCOMPARE(tpc2degree(Tpc::TPC_B,   Key::C_S), 6);
     QCOMPARE(tpc2degree(Tpc::TPC_B_B, Key::C_S), 6);
     //QCOMPARE(tpc2degree(Tpc::TPC_B_S, Key::C_S), 7);
+}
+
+void TestNote::alteredUnison()
+{
+    MasterScore* score = readScore(NOTE_DATA_DIR + "altered-unison.mscx");
+    Measure* m = score->firstMeasure();
+    Chord* c = m->findChord(Fraction(0, 1), 0);
+    QVERIFY(c->downNote()->accidental() && c->downNote()->accidental()->accidentalType() == Ms::AccidentalType::FLAT);
+    QVERIFY(c->upNote()->accidental() && c->upNote()->accidental()->accidentalType() == Ms::AccidentalType::NATURAL);
+    c = m->findChord(Fraction(1, 4), 0);
+    QVERIFY(c->downNote()->accidental() && c->downNote()->accidental()->accidentalType() == Ms::AccidentalType::NATURAL);
+    QVERIFY(c->upNote()->accidental() && c->upNote()->accidental()->accidentalType() == Ms::AccidentalType::SHARP);
 }
 
 //---------------------------------------------------------
