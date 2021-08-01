@@ -113,7 +113,7 @@ Flickable {
                 text: modelData
 
                 onClicked: {
-                    root.editorModel.setQualitySymbol("bassNote", modelData);
+                    root.editorModel.setQualitySymbol("bassNote", index);
                 }
             }
 
@@ -151,7 +151,7 @@ Flickable {
                 text: modelData
 
                 onClicked: {
-                    root.editorModel.setQualitySymbol("major7th", modelData);
+                    root.editorModel.setQualitySymbol("major7th", index);
                 }
             }
 
@@ -189,7 +189,7 @@ Flickable {
                 text: modelData
 
                 onClicked: {
-                    root.editorModel.setQualitySymbol("half-diminished", modelData);
+                    root.editorModel.setQualitySymbol("half-diminished", index);
                 }
             }
 
@@ -227,7 +227,7 @@ Flickable {
                 text: modelData
 
                 onClicked: {
-                    root.editorModel.setQualitySymbol("minor", modelData);
+                    root.editorModel.setQualitySymbol("minor", index);
                 }
             }
 
@@ -265,7 +265,7 @@ Flickable {
                 text: modelData
 
                 onClicked: {
-                    root.editorModel.setQualitySymbol("augmented", modelData);
+                    root.editorModel.setQualitySymbol("augmented", index);
                 }
             }
 
@@ -303,7 +303,7 @@ Flickable {
                 text: modelData
 
                 onClicked: {
-                    root.editorModel.setQualitySymbol("diminished", modelData);
+                    root.editorModel.setQualitySymbol("diminished", index);
                 }
             }
 
@@ -341,7 +341,7 @@ Flickable {
                 text: modelData
 
                 onClicked: {
-                    root.editorModel.setQualitySymbol("sixNine", modelData);
+                    root.editorModel.setQualitySymbol("sixNine", index);
                 }
             }
 
@@ -379,7 +379,7 @@ Flickable {
                 text: modelData
 
                 onClicked: {
-                    root.editorModel.setQualitySymbol("omit", modelData);
+                    root.editorModel.setQualitySymbol("omit", index);
                 }
             }
 
@@ -417,7 +417,7 @@ Flickable {
                 text: modelData
 
                 onClicked: {
-                    root.editorModel.setQualitySymbol("suspension", modelData);
+                    root.editorModel.setQualitySymbol("suspension", index);
                 }
             }
 

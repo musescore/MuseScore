@@ -368,7 +368,7 @@ void ChordSymbolEditorModel::initCurrentStyleIndex()
     // If the current style is not found in m_styles(i.e. no curresponding file),
     // set the first style available
     if (!foundCurrentStyle && (m_styles.size() > 0)) {
-        setChordStyle(m_styles[0].styleName);
+        setChordStyle(0);
     }
 
     globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::useChordSymbolPresets, m_styles.at(m_currentStyleIndex).usePresets);
@@ -394,139 +394,67 @@ void ChordSymbolEditorModel::setQualitySymbolsOnStyleChange()
 
     if (m_selectionHistory.find(currentStyle) != m_selectionHistory.end()) {
         // Major 7th
-        QString previousSelectedSymbol = m_selectionHistory.value(currentStyle).value("maj7th").toString();
-        if (previousSelectedSymbol == "-1") {
-            m_majorSeventhIndex = -1;
-        } else {
-            for (int i = 0; i < m_majorSeventhList.size(); i++) {
-                QualitySymbol qS = m_majorSeventhList.at(i);
-                if (qS.qualitySymbol == previousSelectedSymbol) {
-                    m_majorSeventhIndex = i;
-                    break;
-                }
-            }
+        m_majorSeventhIndex = m_selectionHistory.value(currentStyle).value("maj7th").toInt();
+        if (m_majorSeventhIndex != -1) {
+            globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityMajorSeventh,
+                                                                       m_majorSeventhList.at(m_majorSeventhIndex).qualitySymbol);
         }
-        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityMajorSeventh, previousSelectedSymbol);
 
         // Half-Diminished
-        previousSelectedSymbol = m_selectionHistory.value(currentStyle).value("half-dim").toString();
-        if (previousSelectedSymbol == "-1") {
-            m_halfDiminishedIndex = -1;
-        } else {
-            for (int i = 0; i < m_halfDiminishedList.size(); i++) {
-                QualitySymbol qS = m_halfDiminishedList.at(i);
-                if (qS.qualitySymbol == previousSelectedSymbol) {
-                    m_halfDiminishedIndex = i;
-                    break;
-                }
-            }
+        m_halfDiminishedIndex = m_selectionHistory.value(currentStyle).value("half-dim").toInt();
+        if (m_halfDiminishedIndex != -1) {
+            globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityHalfDiminished,
+                                                                       m_halfDiminishedList.at(m_halfDiminishedIndex).qualitySymbol);
         }
-        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityHalfDiminished, previousSelectedSymbol);
 
         // Minor
-        previousSelectedSymbol = m_selectionHistory.value(currentStyle).value("min").toString();
-        if (previousSelectedSymbol == "-1") {
-            m_minorIndex = -1;
-        } else {
-            for (int i = 0; i < m_minorList.size(); i++) {
-                QualitySymbol qS = m_minorList.at(i);
-                if (qS.qualitySymbol == previousSelectedSymbol) {
-                    m_minorIndex = i;
-                    break;
-                }
-            }
+        m_minorIndex= m_selectionHistory.value(currentStyle).value("min").toInt();
+        if (m_minorIndex != -1) {
+            globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityMinor, m_minorList.at(
+                                                                           m_minorIndex).qualitySymbol);
         }
-        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityMinor, previousSelectedSymbol);
 
         // Augmented
-        previousSelectedSymbol = m_selectionHistory.value(currentStyle).value("aug").toString();
-        if (previousSelectedSymbol == "-1") {
-            m_augmentedIndex = -1;
-        } else {
-            for (int i = 0; i < m_augmentedList.size(); i++) {
-                QualitySymbol qS = m_augmentedList.at(i);
-                if (qS.qualitySymbol == previousSelectedSymbol) {
-                    m_augmentedIndex = i;
-                    break;
-                }
-            }
+        m_augmentedIndex = m_selectionHistory.value(currentStyle).value("aug").toInt();
+        if (m_augmentedIndex != -1) {
+            globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityAugmented, m_augmentedList.at(
+                                                                           m_augmentedIndex).qualitySymbol);
         }
-        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityAugmented, previousSelectedSymbol);
 
         // Diminished
-        previousSelectedSymbol = m_selectionHistory.value(currentStyle).value("dim").toString();
-        if (previousSelectedSymbol == "-1") {
-            m_diminishedIndex= -1;
-        } else {
-            for (int i = 0; i < m_diminishedList.size(); i++) {
-                QualitySymbol qS = m_diminishedList.at(i);
-                if (qS.qualitySymbol == previousSelectedSymbol) {
-                    m_diminishedIndex = i;
-                    break;
-                }
-            }
+        m_diminishedIndex = m_selectionHistory.value(currentStyle).value("dim").toInt();
+        if (m_diminishedIndex != -1) {
+            globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityDiminished, m_diminishedList.at(
+                                                                           m_diminishedIndex).qualitySymbol);
         }
-        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityDiminished, previousSelectedSymbol);
 
         // SixNine
-        previousSelectedSymbol = m_selectionHistory.value(currentStyle).value("sixNine").toString();
-        if (previousSelectedSymbol == "-1") {
-            m_sixNineIndex = -1;
-        } else {
-            for (int i = 0; i < m_sixNineList.size(); i++) {
-                QualitySymbol qS = m_sixNineList.at(i);
-                if (qS.qualitySymbol == previousSelectedSymbol) {
-                    m_sixNineIndex = i;
-                    break;
-                }
-            }
+        m_sixNineIndex = m_selectionHistory.value(currentStyle).value("sixNine").toInt();
+        if (m_sixNineIndex != -1) {
+            globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordExtensionSixNine, m_sixNineList.at(
+                                                                           m_sixNineIndex).qualitySymbol);
         }
-        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordExtensionSixNine, previousSelectedSymbol);
 
         // Omit
-        previousSelectedSymbol = m_selectionHistory.value(currentStyle).value("omit").toString();
-        if (previousSelectedSymbol == "-1") {
-            m_omitIndex = -1;
-        } else {
-            for (int i = 0; i < m_omitList.size(); i++) {
-                QualitySymbol qS = m_omitList.at(i);
-                if (qS.qualitySymbol == previousSelectedSymbol) {
-                    m_omitIndex = i;
-                    break;
-                }
-            }
+        m_omitIndex = m_selectionHistory.value(currentStyle).value("omit").toInt();
+        if (m_omitIndex != -1) {
+            globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordModifierOmit,
+                                                                       m_omitList.at(m_omitIndex).qualitySymbol);
         }
-        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordModifierOmit, previousSelectedSymbol);
 
         // Suspension
-        previousSelectedSymbol = m_selectionHistory.value(currentStyle).value("sus").toString();
-        if (previousSelectedSymbol == "-1") {
-            m_suspensionIndex = -1;
-        } else {
-            for (int i = 0; i < m_suspensionList.size(); i++) {
-                QualitySymbol qS = m_suspensionList.at(i);
-                if (qS.qualitySymbol == previousSelectedSymbol) {
-                    m_suspensionIndex = i;
-                    break;
-                }
-            }
+        m_suspensionIndex = m_selectionHistory.value(currentStyle).value("sus").toInt();
+        if (m_suspensionIndex != -1) {
+            globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordModifierSuspension,
+                                                                       m_suspensionList.at(m_suspensionIndex).qualitySymbol);
         }
-        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordModifierSuspension, previousSelectedSymbol);
 
         // Bass Note
-        previousSelectedSymbol = m_selectionHistory.value(currentStyle).value("bass").toString();
-        if (previousSelectedSymbol == "-1") {
-            m_bassNoteIndex = -1;
-        } else {
-            for (int i = 0; i < m_bassNoteList.size(); i++) {
-                QualitySymbol qS = m_bassNoteList.at(i);
-                if (qS.qualitySymbol == previousSelectedSymbol) {
-                    m_bassNoteIndex = i;
-                    break;
-                }
-            }
+        m_bassNoteIndex = m_selectionHistory.value(currentStyle).value("bass").toInt();
+        if (m_bassNoteIndex != -1) {
+            globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordBassNote,
+                                                                       m_bassNoteList.at(m_bassNoteIndex).qualitySymbol);
         }
-        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordBassNote, previousSelectedSymbol);
     } else {
         // Set the default values
         if (m_majorSeventhList.size() == 0) {
@@ -824,132 +752,83 @@ void ChordSymbolEditorModel::setPropertiesOfQualitySymbol(QualitySymbol qS)
     }
 }
 
-void ChordSymbolEditorModel::setQualitySymbol(QString quality, QString symbol)
+void ChordSymbolEditorModel::setQualitySymbol(QString quality, int index)
 {
+    qDebug() << index;
     if (quality == "major7th") {
-        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityMajorSeventh, symbol);
-        for (int i = 0; i < m_majorSeventhList.size(); i++) {
-            QualitySymbol qS = m_majorSeventhList.at(i);
-            if (qS.qualitySymbol == symbol) {
-                m_majorSeventhIndex = i;
-                setPropertiesOfQualitySymbol(qS);
-                break;
-            }
-        }
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityMajorSeventh,
+                                                                   m_majorSeventhList.at(index).qualitySymbol);
+        m_majorSeventhIndex = index;
+        setPropertiesOfQualitySymbol(m_majorSeventhList.at(index));
         emit majorSeventhIndexChanged();
     } else if (quality == "half-diminished") {
-        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityHalfDiminished, symbol);
-        for (int i = 0; i < m_halfDiminishedList.size(); i++) {
-            QualitySymbol qS = m_halfDiminishedList.at(i);
-            if (qS.qualitySymbol == symbol) {
-                m_halfDiminishedIndex = i;
-                setPropertiesOfQualitySymbol(qS);
-                break;
-            }
-        }
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityHalfDiminished,
+                                                                   m_halfDiminishedList.at(index).qualitySymbol);
+        m_halfDiminishedIndex = index;
+        setPropertiesOfQualitySymbol(m_halfDiminishedList.at(index));
         emit halfDiminishedIndexChanged();
     } else if (quality == "minor") {
-        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityMinor, symbol);
-        for (int i = 0; i < m_minorList.size(); i++) {
-            QualitySymbol qS = m_minorList.at(i);
-            if (qS.qualitySymbol == symbol) {
-                m_minorIndex = i;
-                setPropertiesOfQualitySymbol(qS);
-                break;
-            }
-        }
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityMinor, m_minorList.at(index).qualitySymbol);
+        m_minorIndex = index;
+        setPropertiesOfQualitySymbol(m_minorList.at(index));
         emit minorIndexChanged();
     } else if (quality == "augmented") {
-        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityAugmented, symbol);
-        for (int i = 0; i < m_augmentedList.size(); i++) {
-            QualitySymbol qS = m_augmentedList.at(i);
-            if (qS.qualitySymbol == symbol) {
-                m_augmentedIndex = i;
-                setPropertiesOfQualitySymbol(qS);
-                break;
-            }
-        }
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityAugmented, m_augmentedList.at(index).qualitySymbol);
+        m_augmentedIndex = index;
+        setPropertiesOfQualitySymbol(m_augmentedList.at(index));
         emit augmentedIndexChanged();
     } else if (quality == "diminished") {
-        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityDiminished, symbol);
-        for (int i = 0; i < m_diminishedList.size(); i++) {
-            QualitySymbol qS = m_diminishedList.at(i);
-            if (qS.qualitySymbol == symbol) {
-                m_diminishedIndex = i;
-                setPropertiesOfQualitySymbol(qS);
-                break;
-            }
-        }
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityDiminished,
+                                                                   m_diminishedList.at(index).qualitySymbol);
+        m_diminishedIndex = index;
+        setPropertiesOfQualitySymbol(m_diminishedList.at(index));
         emit diminishedIndexChanged();
     } else if (quality == "sixNine") {
-        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordExtensionSixNine, symbol);
-        for (int i = 0; i < m_sixNineList.size(); i++) {
-            QualitySymbol qS = m_sixNineList.at(i);
-            if (qS.qualitySymbol == symbol) {
-                m_sixNineIndex = i;
-                setPropertiesOfQualitySymbol(qS);
-                break;
-            }
-        }
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordExtensionSixNine, m_sixNineList.at(index).qualitySymbol);
+        m_sixNineIndex = index;
+        setPropertiesOfQualitySymbol(m_sixNineList.at(index));
         emit sixNineIndexChanged();
     } else if (quality == "omit") {
-        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordModifierOmit, symbol);
-        for (int i = 0; i < m_omitList.size(); i++) {
-            QualitySymbol qS = m_omitList.at(i);
-            if (qS.qualitySymbol == symbol) {
-                m_omitIndex = i;
-                setPropertiesOfQualitySymbol(qS);
-                break;
-            }
-        }
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordModifierOmit, m_omitList.at(index).qualitySymbol);
+        m_omitIndex = index;
+        setPropertiesOfQualitySymbol(m_omitList.at(index));
         emit omitIndexChanged();
     } else if (quality == "suspension") {
-        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordModifierSuspension, symbol);
-        for (int i = 0; i < m_suspensionList.size(); i++) {
-            QualitySymbol qS = m_suspensionList.at(i);
-            if (qS.qualitySymbol == symbol) {
-                m_suspensionIndex = i;
-                setPropertiesOfQualitySymbol(qS);
-                break;
-            }
-        }
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordModifierSuspension, m_suspensionList.at(
+                                                                       index).qualitySymbol);
+        m_suspensionIndex = index;
+        setPropertiesOfQualitySymbol(m_suspensionList.at(index));
         emit suspensionIndexChanged();
     } else if (quality == "bassNote") {
-        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordBassNote, symbol);
-        for (int i = 0; i < m_bassNoteList.size(); i++) {
-            QualitySymbol qS = m_bassNoteList.at(i);
-            if (qS.qualitySymbol == symbol) {
-                m_bassNoteIndex = i;
-                setPropertiesOfQualitySymbol(qS);
-                break;
-            }
-        }
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordBassNote, m_bassNoteList.at(index).qualitySymbol);
+        m_bassNoteIndex = index;
+        setPropertiesOfQualitySymbol(m_bassNoteList.at(index));
         emit bassNoteIndexChanged();
     }
     updateSelectionHistory(m_styles[m_currentStyleIndex].styleName);
 }
 
-void ChordSymbolEditorModel::setChordStyle(QString styleName)
+void ChordSymbolEditorModel::setChordStyle(int index)
 {
-    QString descriptionFileName = "chords_std.xml"; // Fall back
+//    int index = 0;
+//    for (auto& chordStyle: m_styles) {
+//        if (chordStyle.styleName == styleName) {
+//            descriptionFileName = chordStyle.fileName;
+//            m_currentStyleIndex = index;
+//            break;
+//        }
+//        index++;
+//    }
+    m_currentStyleIndex = index;
 
-    int index = 0;
-    for (auto& chordStyle: m_styles) {
-        if (chordStyle.styleName == styleName) {
-            descriptionFileName = chordStyle.fileName;
-            m_currentStyleIndex = index;
-            break;
-        }
-        index++;
-    }
-
-    globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordDescriptionFile, descriptionFileName);
+    globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordDescriptionFile, m_styles.at(m_currentStyleIndex).fileName);
     globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::useChordSymbolPresets, m_styles.at(m_currentStyleIndex).usePresets);
     m_styleDescription = m_styles.at(m_currentStyleIndex).description;
     m_usePresets = m_styles.at(m_currentStyleIndex).usePresets;
 
     if (m_styles.at(m_currentStyleIndex).usePresets) {
-        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordDescriptionFileWithPresets, descriptionFileName);
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordDescriptionFileWithPresets, m_styles.at(
+                                                                       m_currentStyleIndex).fileName);
     }
 
     // Get and extract the selection History
@@ -1236,47 +1115,56 @@ void ChordSymbolEditorModel::updateSelectionHistory(QString currentStyle)
         if (m_majorSeventhIndex == -1 || m_majorSeventhList.size() == 0) {
             propMap.insert("maj7th", QVariant("-1"));
         } else {
-            propMap.insert("maj7th", QVariant(m_majorSeventhList.at(m_majorSeventhIndex).qualitySymbol));
+            propMap.insert("maj7th", QVariant(m_majorSeventhIndex));
+//            propMap.insert("maj7th", QVariant(m_majorSeventhList.at(m_majorSeventhIndex).qualitySymbol));
         }
         if (m_halfDiminishedIndex == -1 || m_halfDiminishedList.size() == 0) {
             propMap.insert("half-dim", QVariant("-1"));
         } else {
-            propMap.insert("half-dim", QVariant(m_halfDiminishedList.at(m_halfDiminishedIndex).qualitySymbol));
+            propMap.insert("half-dim", QVariant(m_halfDiminishedIndex));
+//            propMap.insert("half-dim", QVariant(m_halfDiminishedList.at(m_halfDiminishedIndex).qualitySymbol));
         }
         if (m_minorIndex == -1 || m_minorList.size() == 0) {
             propMap.insert("min", QVariant("-1"));
         } else {
-            propMap.insert("min", QVariant(m_minorList.at(m_minorIndex).qualitySymbol));
+            propMap.insert("min", QVariant(m_minorIndex));
+//            propMap.insert("min", QVariant(m_minorList.at(m_minorIndex).qualitySymbol));
         }
         if (m_augmentedIndex == -1 || m_augmentedList.size() == 0) {
             propMap.insert("aug", QVariant("-1"));
         } else {
-            propMap.insert("aug", QVariant(m_augmentedList.at(m_augmentedIndex).qualitySymbol));
+            propMap.insert("aug", QVariant(m_augmentedIndex));
+//            propMap.insert("aug", QVariant(m_augmentedList.at(m_augmentedIndex).qualitySymbol));
         }
         if (m_diminishedIndex == -1 || m_diminishedList.size() == 0) {
             propMap.insert("dim", QVariant("-1"));
         } else {
-            propMap.insert("dim", QVariant(m_diminishedList.at(m_diminishedIndex).qualitySymbol));
+            propMap.insert("dim", QVariant(m_diminishedIndex));
+//            propMap.insert("dim", QVariant(m_diminishedList.at(m_diminishedIndex).qualitySymbol));
         }
         if (m_sixNineIndex == -1 || m_sixNineList.size() == 0) {
             propMap.insert("sixNine", QVariant("-1"));
         } else {
-            propMap.insert("sixNine", QVariant(m_sixNineList.at(m_sixNineIndex).qualitySymbol));
+            propMap.insert("sixNine", QVariant(m_sixNineIndex));
+//            propMap.insert("sixNine", QVariant(m_sixNineList.at(m_sixNineIndex).qualitySymbol));
         }
         if (m_omitIndex == -1 || m_omitList.size() == 0) {
             propMap.insert("omit", QVariant("-1"));
         } else {
-            propMap.insert("omit", QVariant(m_omitList.at(m_omitIndex).qualitySymbol));
+            propMap.insert("omit", QVariant(m_omitIndex));
+//            propMap.insert("omit", QVariant(m_omitList.at(m_omitIndex).qualitySymbol));
         }
         if (m_suspensionIndex == -1 || m_suspensionList.size() == 0) {
             propMap.insert("sus", QVariant("-1"));
         } else {
-            propMap.insert("sus", QVariant(m_suspensionList.at(m_suspensionIndex).qualitySymbol));
+            propMap.insert("sus", QVariant(m_suspensionIndex));
+//            propMap.insert("sus", QVariant(m_suspensionList.at(m_suspensionIndex).qualitySymbol));
         }
         if (m_bassNoteIndex == -1 || m_bassNoteList.size() == 0) {
             propMap.insert("bass", QVariant("-1"));
         } else {
-            propMap.insert("bass", QVariant(m_bassNoteList.at(m_bassNoteIndex).qualitySymbol));
+            propMap.insert("bass", QVariant(m_bassNoteIndex));
+//            propMap.insert("bass", QVariant(m_bassNoteList.at(m_bassNoteIndex).qualitySymbol));
         }
     } else {
         propMap.insert("maj7th", QVariant(""));

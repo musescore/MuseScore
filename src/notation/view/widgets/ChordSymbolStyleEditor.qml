@@ -54,7 +54,7 @@ Rectangle {
                 text: fileName
 
                 onClicked: {
-                    chordSymbolEditorModel.setChordStyle(styleName)
+                    chordSymbolEditorModel.setChordStyle(index)
                 }
             }
             StyledTextLabel{

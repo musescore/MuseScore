@@ -54,7 +54,7 @@ public:
     void setStyleR(Ms::Sid id, qreal val);
     void setStyleB(Ms::Sid id, bool val);
 
-    Q_INVOKABLE void setChordStyle(QString styleName);
+    Q_INVOKABLE void setChordStyle(int index);
 
 signals:
     void currentStyleIndexChanged();

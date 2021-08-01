@@ -165,9 +165,9 @@ public:
     void setStyleR(Ms::Sid id, qreal val);
     void setStyleB(Ms::Sid id, bool val);
 
-    Q_INVOKABLE void setChordStyle(QString styleName);
+    Q_INVOKABLE void setChordStyle(int index);
     Q_INVOKABLE void setChordSpelling(QString spelling);
-    Q_INVOKABLE void setQualitySymbol(QString quality, QString symbol);
+    Q_INVOKABLE void setQualitySymbol(QString quality, int index);
     Q_INVOKABLE void setProperty(QString property, qreal val);
     Q_INVOKABLE void resetProperties();
 

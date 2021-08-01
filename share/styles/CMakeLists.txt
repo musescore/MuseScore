@@ -23,6 +23,9 @@ install(FILES
       MuseJazz.mss
       chords_std.xml
       chords_jazz.xml
+      chordsV4_pop.xml
+      chordsV4_jazz.xml
+      chordsV4_symbols.xml
       chords.xml
       stdchords.xml
       jazzchords.xml

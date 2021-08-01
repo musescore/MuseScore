@@ -43,7 +43,7 @@ FocusableItem {
                 text: styleName
 
                 onClicked: {
-                    chordStylesModel.setChordStyle(styleName)
+                    chordStylesModel.setChordStyle(index)
                 }
             }
         }
