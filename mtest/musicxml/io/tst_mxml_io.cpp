@@ -105,8 +105,10 @@ private slots:
       void drumset2() { mxmlIoTest("testDrumset2"); }
       void dsalCoda() { mxmlImportTestRef("testDSalCoda"); }
       void dsalCodaMisplaced() { mxmlImportTestRef("testDSalCodaMisplaced"); }
-      void durationLargeError() { mxmlIoTestRef("testDurationLargeError"); }
-      void durationRoundingError() { mxmlIoTestRef("testDurationRoundingError"); }
+      void durationLargeErrorMscx() { mxmlImportTestRef("testDurationLargeError"); }
+      void durationLargeErrorXml() { mxmlIoTestRef("testDurationLargeError"); }
+      void durationRoundingErrorMscx() { mxmlImportTestRef("testDurationRoundingError"); }
+      void durationRoundingErrorXml() { mxmlIoTestRef("testDurationRoundingError"); }
       void dynamics1() { mxmlIoTest("testDynamics1"); }
       void dynamics2() { mxmlIoTest("testDynamics2"); }
       void dynamics3() { mxmlIoTestRef("testDynamics3"); }
