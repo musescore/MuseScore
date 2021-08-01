@@ -65,7 +65,7 @@ public:
         center = other.center;
         intervals = other.intervals;
         if (other.left) {
-            left = (intervalTree*) malloc(sizeof(intervalTree));
+            left = new intervalTree();
             *left = *other.left;
         } else {
             left = NULL;

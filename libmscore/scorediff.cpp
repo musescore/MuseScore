@@ -423,7 +423,7 @@ int MscxModeDiff::performShiftDiff(std::vector<TextDiff>& diffs, int index, int 
 
 QString MscxModeDiff::getOuterLines(const QString& str, int lines, bool start) {
       lines = qAbs(lines);
-      const int secIdxStart = start ? 0 : (-1 - (lines - 1));
+      const int secIdxStart = start ? 0 : -lines;
       const int secIdxEnd = start ? (lines - 1) : -1;
       constexpr auto secFlags = QString::SectionIncludeTrailingSep | QString::SectionSkipEmpty;
       return str.section('\n', secIdxStart, secIdxEnd, secFlags);
