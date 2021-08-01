@@ -31,9 +31,6 @@ class ChordSymbolSettingsModel : public AbstractInspectorModel
     Q_OBJECT
 
     Q_PROPERTY(ChordSymbolStylesModel * chordStylesModel READ chordStylesModel CONSTANT)
-    Q_PROPERTY(PropertyItem * isLiteral READ isLiteral CONSTANT)
-    Q_PROPERTY(PropertyItem * voicingType READ voicingType CONSTANT)
-    Q_PROPERTY(PropertyItem * durationType READ durationType CONSTANT)
 
 public:
     explicit ChordSymbolSettingsModel(QObject* parent, IElementRepositoryService* repository);
@@ -44,15 +41,9 @@ public:
     void resetProperties() override;
 
     ChordSymbolStylesModel* chordStylesModel() const;
-    PropertyItem* isLiteral() const;
-    PropertyItem* voicingType() const;
-    PropertyItem* durationType() const;
 
 private:
     ChordSymbolStylesModel* m_chordStylesModel = nullptr;
-    PropertyItem* m_isLiteral = nullptr;
-    PropertyItem* m_voicingType = nullptr;
-    PropertyItem* m_durationType = nullptr;
 };
 }
 

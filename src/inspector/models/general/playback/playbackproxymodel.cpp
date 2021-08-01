@@ -28,6 +28,7 @@
 #include "internal_models/glissandoplaybackmodel.h"
 #include "internal_models/dynamicplaybackmodel.h"
 #include "internal_models/hairpinplaybackmodel.h"
+#include "internal_models/chordsymbolsplaybackmodel.h"
 
 using namespace mu::inspector;
 
@@ -41,4 +42,5 @@ PlaybackProxyModel::PlaybackProxyModel(QObject* parent, IElementRepositoryServic
     addModel(new GlissandoPlaybackModel(this, repository));
     addModel(new DynamicPlaybackModel(this, repository));
     addModel(new HairpinPlaybackModel(this, repository));
+    addModel(new ChordSymbolsPlaybackModel(this, repository));
 }
