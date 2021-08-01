@@ -2502,11 +2502,11 @@ void GuitarPro6::readGpif(QByteArray* data)
                   if (c) {
                         slur->setTick2(c->tick());
                         score->addElement(slur);
-                        legatos[slur->track()] = 0;
+                        legatos[slur->track()] = nullptr;
                         }
                   else {
+                        legatos[slur->track()] = nullptr;
                         delete slur;
-                        legatos[slur->track()] = 0;
                         }
                   }
             }

@@ -19,6 +19,25 @@
 
 #include "ove.h"
 
+namespace {
+template<typename T>
+struct ResetToNull {
+      T** value;
+      explicit ResetToNull(T** value)
+         : value(value) {}
+      ~ResetToNull()
+            {
+            *value = nullptr;
+            }
+      };
+
+template<typename T>
+ResetToNull<T> resetToNull(T** value)
+      {
+      return ResetToNull<T>(value);
+      }
+}
+
 namespace OVE {
 
 /*template <class T>
@@ -3786,6 +3805,7 @@ bool OvscParse::parse() {
       Block placeHolder;
 
       handle_ = &handle;
+      auto _ = resetToNull(&handle_);
 
       // version
       if (!readBuffer(placeHolder, 1)) { return false; }
@@ -3856,6 +3876,7 @@ bool TrackParse::parse() {
       Block placeHolder;
 
       handle_ = &handle;
+      auto _ = resetToNull(&handle_);
 
       Track* oveTrack = new Track();
       ove_->addTrack(oveTrack);
@@ -4104,6 +4125,7 @@ bool PageGroupParse::parsePage(SizeChunk* chunk, Page* page) {
       StreamHandle handle(chunk->getDataBlock()->data(), chunk->getSizeBlock()->toSize());
 
       handle_ = &handle;
+      auto _ = resetToNull(&handle_);
 
       // begin line
       if( !readBuffer(placeHolder, 2) ) { return false; }
@@ -4159,8 +4181,6 @@ bool PageGroupParse::parsePage(SizeChunk* chunk, Page* page) {
       if( !readBuffer(placeHolder, 4) ) { return false; }
       page->setPageHeight(placeHolder.toUnsignedInt());
 
-      handle_ = NULL;
-
       return true;
       }
 
@@ -4174,6 +4194,7 @@ unsigned int StaffCountGetter::getStaffCount(SizeChunk* chunk) {
       Block placeHolder;
 
       handle_ = &handle;
+      auto _ = resetToNull(&handle_);
 
       if( !jump(6) ) { return false; }
 
@@ -4237,6 +4258,7 @@ bool LineGroupParse::parseLine(SizeChunk* chunk, Line* line) {
       StreamHandle handle(chunk->getDataBlock()->data(), chunk->getSizeBlock()->toSize());
 
       handle_ = &handle;
+      auto _ = resetToNull(&handle_);
 
       if( !jump(2) ) { return false; }
 
@@ -4264,8 +4286,6 @@ bool LineGroupParse::parseLine(SizeChunk* chunk, Line* line) {
 
       if( !jump(4) ) { return false; }
 
-      handle_ = NULL;
-
       return true;
       }
 
@@ -4275,6 +4295,7 @@ bool LineGroupParse::parseStaff(SizeChunk* chunk, Staff* staff) {
       StreamHandle handle(chunk->getDataBlock()->data(), chunk->getSizeBlock()->toSize());
 
       handle_ = &handle;
+      auto _ = resetToNull(&handle_);
 
       if( !jump(7) ) { return false; }
 
@@ -4314,8 +4335,6 @@ bool LineGroupParse::parseStaff(SizeChunk* chunk, Staff* staff) {
       // group staff count
       if( !readBuffer(placeHolder, 1) ) { return false; }
       staff->setGroupStaffCount(placeHolder.toUnsignedInt());
-
-      handle_ = NULL;
 
       return true;
       }
@@ -4426,6 +4445,7 @@ bool BarsParse::parseMeas(Measure* measure, SizeChunk* chunk) {
       StreamHandle measureHandle(chunk->getDataBlock()->data(), chunk->getSizeBlock()->toSize());
 
       handle_ = &measureHandle;
+      auto _ = resetToNull(&handle_);
 
       if( !jump(2) ) { return false; }
 
@@ -4470,8 +4490,6 @@ bool BarsParse::parseMeas(Measure* measure, SizeChunk* chunk) {
       if( !readBuffer(placeHolder, 2) ) { return false; }
       measure->setMultiMeasureRestCount(placeHolder.toUnsignedInt());
 
-      handle_ = NULL;
-
       return true;
       }
 
@@ -4481,6 +4499,7 @@ bool BarsParse::parseCond(Measure* measure, MeasureData* measureData, SizeChunk*
       StreamHandle handle(chunk->getDataBlock()->data(), chunk->getSizeBlock()->toSize());
 
       handle_ = &handle;
+      auto _ = resetToNull(&handle_);
 
       // item count
       if( !readBuffer(placeHolder, 2) ) { return false; }
@@ -4564,8 +4583,6 @@ bool BarsParse::parseCond(Measure* measure, MeasureData* measureData, SizeChunk*
                         }
                   }
             }
-
-      handle_ = NULL;
 
       return true;
       }
@@ -5041,6 +5058,7 @@ bool BarsParse::parseBdat(Measure* /*measure*/, MeasureData* measureData, SizeCh
       StreamHandle handle(chunk->getDataBlock()->data(), chunk->getSizeBlock()->toSize());
 
       handle_ = &handle;
+      auto _ = resetToNull(&handle_);
 
       // parse here
       if( !readBuffer(placeHolder, 2) ) { return false; }
@@ -5184,8 +5202,6 @@ bool BarsParse::parseBdat(Measure* /*measure*/, MeasureData* measureData, SizeCh
 
             // if i==count-1 then is bar end place holder
             }
-
-      handle_ = NULL;
 
       return true;
       }
@@ -7191,6 +7207,7 @@ bool LyricChunkParse::parse() {
       Block placeHolder;
 
       handle_ = &handle;
+      auto _ = resetToNull(&handle_);
 
       if( !jump(4) ) { return false; }
 
@@ -7358,6 +7375,7 @@ bool TitleChunkParse::parse() {
       unsigned int titleType;
 
       handle_ = &handle;
+      auto _ = resetToNull(&handle_);
 
       if( !readBuffer(typeBlock, 4) ) { return false; }
 
