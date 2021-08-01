@@ -5450,7 +5450,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
       // check for timing error(s) and set dura
       // keep in this order as checkTiming() might change dura
       auto errorStr = mnd.checkTiming(type, rest, grace);
-      dura = mnd.dura();
+      dura = mnd.duration();
       if (errorStr != "")
             _logger->logError(errorStr, &_e);
 
@@ -5481,7 +5481,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
       if (!chord && !grace) {
             auto& tuplet = tuplets[voice];
             auto& tupletState = tupletStates[voice];
-            tupletAction = tupletState.determineTupletAction(mnd.dura(), timeMod, notations.tupletDesc().type, mnd.normalType(), missingPrev, missingCurr);
+            tupletAction = tupletState.determineTupletAction(mnd.duration(), timeMod, notations.tupletDesc().type, mnd.normalType(), missingPrev, missingCurr);
             if (tupletAction & MxmlTupletFlag::STOP_PREVIOUS) {
                   // tuplet start while already in tuplet
                   if (missingPrev.isValid() && missingPrev > Fraction(0, 1)) {

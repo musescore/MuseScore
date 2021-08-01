@@ -102,30 +102,43 @@ QString mxmlNoteDuration::checkTiming(const QString& type, const bool rest, cons
       QString errorStr;
 
       // normalize duration
-      if (_dura.isValid())
-            _dura.reduce();
+      if (_specDura.isValid())
+            _specDura.reduce();
 
-      const auto calcDura = calculateFraction(type, _dots, _timeMod);
-      if (_dura.isValid() && calcDura.isValid()) {
-            if (_dura != calcDura) {
+      // default: use calculated duration
+      _calcDura = calculateFraction(type, _dots, _timeMod);
+      if (_calcDura.isValid()) {
+            _dura = _calcDura;
+            }
+
+      if (_specDura.isValid() && _calcDura.isValid()) {
+            if (_specDura != _calcDura) {
                   errorStr = QString("calculated duration (%1) not equal to specified duration (%2)")
-                        .arg(calcDura.print(), _dura.print());
+                        .arg(_calcDura.print(), _specDura.print());
                   //qDebug("rest %d type '%s' timemod %s", rest, qPrintable(type), qPrintable(_timeMod.print()));
 
-                  if (rest && type == "whole" && _dura.isValid()) {
+                  if (rest && type == "whole" && _specDura.isValid()) {
                         // Sibelius whole measure rest (not an error)
                         errorStr = "";
+                        _dura = _specDura;
                         }
-                  else if (grace && _dura == Fraction(0, 1)) {
+                  else if (grace && _specDura == Fraction(0, 1)) {
                         // grace note (not an error)
                         errorStr = "";
+                        _dura = _specDura;
                         }
                   else {
-                        const int maxDiff = 3;       // maximum difference considered a rounding error
-                        if (qAbs(calcDura.ticks() - _dura.ticks()) <= maxDiff) {
+                        // note:
+                        // rounding error detection may conflict with changed duration detection (Overture).
+                        // exporters that intentionally change note duration typically produce a large difference,
+                        // most likely in practice this will not be an issue
+                        const int maxDiff = 2;       // maximum difference considered a rounding error
+                        if (qAbs(_calcDura.ticks() - _specDura.ticks()) <= maxDiff) {
                               errorStr += " -> assuming rounding error";
-                              _dura = calcDura;
+                              _dura = _calcDura;
                               }
+                        else
+                              errorStr += " -> using calculated duration";
                         }
 
                   // Special case:
@@ -134,22 +147,25 @@ QString mxmlNoteDuration::checkTiming(const QString& type, const bool rest, cons
                   // based on note type. If actual is 2/3 of expected, the rest is part
                   // of a tuplet.
                   if (rest) {
-                        if (2 * calcDura.ticks() == 3 * _dura.ticks()) {
+                        if (2 * _calcDura.ticks() == 3 * _specDura.ticks()) {
                               _timeMod = Fraction(2, 3);
-                              errorStr += " -> assuming triplet";
+                              errorStr += errorStr.isEmpty() ? " ->" : ",";
+                              errorStr += " assuming triplet";
+                              _dura = _specDura;
                               }
                         }
                   }
             }
-      else if (_dura.isValid()) {
+      else if (_specDura.isValid() && !_calcDura.isValid()) {
             // do not report an error for typeless (whole measure) rests
-            if (!(rest && type == ""))
+            if (!(rest && type == "")) {
                   errorStr = "calculated duration invalid, using specified duration";
+                  }
+            _dura = _specDura;
             }
-      else if (calcDura.isValid()) {
+      else if (!_specDura.isValid() && _calcDura.isValid()) {
             if (!grace) {
                   errorStr = "specified duration invalid, using calculated duration";
-                  _dura = calcDura;       // overrule dura
                   }
             }
       else {
@@ -173,19 +189,19 @@ void mxmlNoteDuration::duration(QXmlStreamReader& e)
       Q_ASSERT(e.isStartElement() && e.name() == "duration");
       _logger->logDebugTrace("MusicXMLParserPass1::duration", &e);
 
-      _dura.set(0, 0);        // invalid unless set correctly
+      _specDura.set(0, 0);        // invalid unless set correctly
       int intDura = e.readElementText().toInt();
       if (intDura > 0) {
             if (_divs > 0) {
-                  _dura.set(intDura, 4 * _divs);
-                  _dura.reduce();       // prevent overflow in later Fraction operations
+                  _specDura.set(intDura, 4 * _divs);
+                  _specDura.reduce();       // prevent overflow in later Fraction operations
                   }
             else
                   _logger->logError("illegal or uninitialized divisions", &e);
             }
       else
             _logger->logError("illegal duration", &e);
-      //qDebug("duration %s valid %d", qPrintable(dura.print()), dura.isValid());
+      //qDebug("specified duration %s valid %d", qPrintable(_specDura.print()), _specDura.isValid());
       }
 
 //---------------------------------------------------------
