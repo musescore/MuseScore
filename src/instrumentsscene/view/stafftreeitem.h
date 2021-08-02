@@ -32,9 +32,7 @@ class StaffTreeItem : public AbstractInstrumentsPanelTreeItem
     Q_OBJECT
 
 public:
-    explicit StaffTreeItem(notation::IMasterNotationPtr masterNotation,
-                           notation::INotationPtr notation,
-                           QObject* parent = nullptr);
+    explicit StaffTreeItem(notation::IMasterNotationPtr masterNotation, notation::INotationPtr notation, QObject* parent = nullptr);
 
     Q_INVOKABLE bool isSmall() const;
     Q_INVOKABLE bool cutawayEnabled() const;

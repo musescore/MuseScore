@@ -46,8 +46,8 @@ public:
     void appendStaff(Staff* staff, const ID& destinationPartId) override;
     void cloneStaff(const ID& sourceStaffId, const ID& destinationStaffId) override;
 
-    void replaceInstrument(const ID& instrumentId, const ID& fromPartId, const Instrument& newInstrument) override;
-    void replaceDrumset(const ID& instrumentId, const ID& fromPartId, const Drumset& newDrumset) override;
+    void replaceInstrument(const InstrumentKey& instrumentKey, const Instrument& newInstrument) override;
+    void replaceDrumset(const InstrumentKey& instrumentKey, const Drumset& newDrumset) override;
 
 private:
     void startGlobalEdit();

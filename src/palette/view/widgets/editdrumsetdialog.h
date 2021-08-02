@@ -74,8 +74,7 @@ private:
     void fillNoteheadsComboboxes(bool customGroup, int pitch);
 
     mu::notation::INotationPtr m_notation;
-    mu::notation::ID m_partId;
-    mu::notation::ID m_instrumentId;
+    mu::notation::InstrumentKey m_instrumentKey;
     Drumset m_editedDrumset;
 };
 } // namespace Ms

@@ -134,27 +134,27 @@ void MasterNotationParts::cloneStaff(const ID& sourceStaffId, const ID& destinat
     apply();
 }
 
-void MasterNotationParts::replaceInstrument(const ID& instrumentId, const ID& fromPartId, const Instrument& newInstrument)
+void MasterNotationParts::replaceInstrument(const InstrumentKey& instrumentKey, const Instrument& newInstrument)
 {
     startEdit();
 
-    NotationParts::replaceInstrument(instrumentId, fromPartId, newInstrument);
+    NotationParts::replaceInstrument(instrumentKey, newInstrument);
 
     for (INotationPartsPtr parts : excerptsParts()) {
-        parts->replaceInstrument(instrumentId, fromPartId, newInstrument);
+        parts->replaceInstrument(instrumentKey, newInstrument);
     }
 
     apply();
 }
 
-void MasterNotationParts::replaceDrumset(const ID& instrumentId, const ID& fromPartId, const Drumset& newDrumset)
+void MasterNotationParts::replaceDrumset(const InstrumentKey& instrumentKey, const Drumset& newDrumset)
 {
     startEdit();
 
-    NotationParts::replaceDrumset(instrumentId, fromPartId, newDrumset);
+    NotationParts::replaceDrumset(instrumentKey, newDrumset);
 
     for (INotationPartsPtr parts : excerptsParts()) {
-        parts->replaceDrumset(instrumentId, fromPartId, newDrumset);
+        parts->replaceDrumset(instrumentKey, newDrumset);
     }
 
     apply();

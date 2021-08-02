@@ -49,25 +49,35 @@ static QString formatInstrumentTitleOnScore(const QString& instrumentName, const
     return qtrc("notation", "%1 in %2%3").arg(instrumentName).arg(trait.name).arg(numberPart);
 }
 
+static QString formatPartTitle(const Part* part)
+{
+    QStringList instrumentsNames;
+    for (auto it = part->instruments()->begin(); it != part->instruments()->end(); ++it) {
+        instrumentsNames << it->second->trackName();
+    }
+
+    return instrumentsNames.join(" & ");
+}
+
 NotationParts::NotationParts(IGetScore* getScore, INotationInteractionPtr interaction, INotationUndoStackPtr undoStack)
-    : m_getScore(getScore), m_undoStack(undoStack), m_partsNotifier(new ChangedNotifier<const Part*>())
+    : m_getScore(getScore), m_undoStack(undoStack), m_partChangedNotifier(new ChangedNotifier<const Part*>())
 {
     interaction->dropChanged().onNotify(this, [this]() {
         updatePartTitles();
     });
 
     m_undoStack->undoNotification().onNotify(this, [this]() {
-        m_partsNotifier->changed();
+        m_partChangedNotifier->changed();
     });
 
     m_undoStack->redoNotification().onNotify(this, [this]() {
-        m_partsNotifier->changed();
+        m_partChangedNotifier->changed();
     });
 }
 
 NotationParts::~NotationParts()
 {
-    delete m_partsNotifier;
+    delete m_partChangedNotifier;
 }
 
 Ms::Score* NotationParts::score() const
@@ -90,37 +100,11 @@ NotifyList<const Part*> NotationParts::partList() const
 {
     NotifyList<const Part*> result;
 
-    std::vector<Part*> parts = availableParts(score());
-
-    QSet<ID> partIds;
-    for (const Part* part: parts) {
-        if (partIds.contains(part->id())) {
-            continue;
-        }
-
+    for (const Part* part: score()->parts()) {
         result.push_back(part);
-        partIds.insert(part->id());
     }
 
-    result.setNotify(m_partsNotifier->notify());
-    return result;
-}
-
-NotifyList<Instrument> NotationParts::instrumentList(const ID& partId) const
-{
-    Part* part = this->part(partId);
-    if (!part) {
-        return NotifyList<Instrument>();
-    }
-
-    NotifyList<Instrument> result;
-
-    for (const Ms::Instrument* instrument: instruments(part).values()) {
-        result.push_back(InstrumentsConverter::convertInstrument(*instrument));
-    }
-
-    ChangedNotifier<Instrument>* notifier = partNotifier(partId);
-    result.setNotify(notifier->notify());
+    result.setNotify(m_partChangedNotifier->notify());
     return result;
 }
 
@@ -132,12 +116,11 @@ NotifyList<const Staff*> NotationParts::staffList(const ID& partId) const
     }
 
     NotifyList<const Staff*> result;
-    std::vector<const Staff*> staves = this->staves(part);
-    for (const Staff* staff: staves) {
+    for (const Staff* staff: *part->staves()) {
         result.push_back(staff);
     }
 
-    ChangedNotifier<const Staff*>* notifier = instrumentNotifier(part->instrumentId(), partId);
+    ChangedNotifier<const Staff*>* notifier = staffChangedNotifier(partId);
     result.setNotify(notifier->notify());
 
     return result;
@@ -159,7 +142,7 @@ void NotationParts::setParts(const PartInstrumentList& parts)
 
     updateScore();
 
-    m_partsNotifier->changed();
+    m_partChangedNotifier->changed();
 }
 
 void NotationParts::setScoreOrder(const ScoreOrder& order)
@@ -198,7 +181,7 @@ void NotationParts::setPartVisible(const ID& partId, bool visible)
     part->undoChangeProperty(Ms::Pid::VISIBLE, visible);
     updateScore();
 
-    notifyAboutPartChanged(partId);
+    notifyAboutPartChanged(part);
 }
 
 void NotationParts::setPartName(const ID& partId, const QString& name)
@@ -213,7 +196,7 @@ void NotationParts::setPartName(const ID& partId, const QString& name)
     doSetPartName(part, name);
     updateScore();
 
-    notifyAboutPartChanged(partId);
+    notifyAboutPartChanged(part);
 }
 
 void NotationParts::setPartSharpFlat(const ID& partId, const SharpFlat& sharpFlat)
@@ -228,7 +211,7 @@ void NotationParts::setPartSharpFlat(const ID& partId, const SharpFlat& sharpFla
     part->undoChangeProperty(Ms::Pid::PREFER_SHARP_FLAT, static_cast<int>(sharpFlat));
     updateScore();
 
-    notifyAboutPartChanged(partId);
+    notifyAboutPartChanged(part);
 }
 
 void NotationParts::setPartTransposition(const ID& partId, const Interval& transpose)
@@ -243,13 +226,13 @@ void NotationParts::setPartTransposition(const ID& partId, const Interval& trans
     score()->transpositionChanged(part, transpose);
     updateScore();
 
-    notifyAboutPartChanged(partId);
+    notifyAboutPartChanged(part);
 }
 
 void NotationParts::updatePartTitles()
 {
     for (const Part* part: score()->parts()) {
-        setPartName(part->id(), formatPartName(part));
+        setPartName(part->id(), formatPartTitle(part));
     }
 }
 
@@ -281,44 +264,34 @@ void NotationParts::doMoveStaves(const std::vector<Staff*>& staves, int destinat
     }
 }
 
-void NotationParts::setInstrumentName(const ID& instrumentId, const ID& fromPartId, const QString& name)
+void NotationParts::setInstrumentName(const InstrumentKey& instrumentKey, const QString& name)
 {
     TRACEFUNC;
 
-    Part* part = this->part(fromPartId);
+    Part* part = this->part(instrumentKey.partId);
     if (!part) {
         return;
     }
 
-    InstrumentInfo instrumentInfo = this->instrumentInfo(instrumentId, part);
-    if (!instrumentInfo.isValid()) {
-        return;
-    }
-
-    score()->undo(new Ms::ChangeInstrumentLong(instrumentInfo.fraction, part, { StaffName(name, 0) }));
+    score()->undo(new Ms::ChangeInstrumentLong(instrumentKey.tick, part, { StaffName(name, 0) }));
     updateScore();
 
-    notifyAboutPartChanged(fromPartId);
+    notifyAboutPartChanged(part);
 }
 
-void NotationParts::setInstrumentAbbreviature(const ID& instrumentId, const ID& fromPartId, const QString& abbreviature)
+void NotationParts::setInstrumentAbbreviature(const InstrumentKey& instrumentKey, const QString& abbreviature)
 {
     TRACEFUNC;
 
-    Part* part = this->part(fromPartId);
+    Part* part = this->part(instrumentKey.partId);
     if (!part) {
         return;
     }
 
-    InstrumentInfo instrumentInfo = this->instrumentInfo(instrumentId, part);
-    if (!instrumentInfo.isValid()) {
-        return;
-    }
-
-    score()->undo(new Ms::ChangeInstrumentShort(instrumentInfo.fraction, part, { StaffName(abbreviature, 0) }));
+    score()->undo(new Ms::ChangeInstrumentShort(instrumentKey.tick, part, { StaffName(abbreviature, 0) }));
     updateScore();
 
-    notifyAboutPartChanged(fromPartId);
+    notifyAboutPartChanged(part);
 }
 
 void NotationParts::setVoiceVisible(const ID& staffId, int voiceIndex, bool visible)
@@ -333,7 +306,7 @@ void NotationParts::setVoiceVisible(const ID& staffId, int voiceIndex, bool visi
     doSetStaffVoiceVisible(staff, voiceIndex, visible);
     updateScore();
 
-    notifyAboutStaffChanged(staffId);
+    notifyAboutStaffChanged(staff);
 }
 
 void NotationParts::setStaffVisible(const ID& staffId, bool visible)
@@ -352,7 +325,7 @@ void NotationParts::setStaffVisible(const ID& staffId, bool visible)
     doSetStaffVisible(staff, visible);
     updateScore();
 
-    notifyAboutStaffChanged(staffId);
+    notifyAboutStaffChanged(staff);
 }
 
 void NotationParts::doSetStaffVisible(Staff* staff, bool visible)
@@ -381,7 +354,7 @@ void NotationParts::setStaffType(const ID& staffId, StaffType type)
     score()->undo(new Ms::ChangeStaffType(staff, *staffType));
     updateScore();
 
-    notifyAboutStaffChanged(staffId);
+    notifyAboutStaffChanged(staff);
 }
 
 void NotationParts::setCutawayEnabled(const ID& staffId, bool enabled)
@@ -397,7 +370,7 @@ void NotationParts::setCutawayEnabled(const ID& staffId, bool enabled)
     score()->undo(new Ms::ChangeStaff(staff));
     updateScore();
 
-    notifyAboutStaffChanged(staffId);
+    notifyAboutStaffChanged(staff);
 }
 
 void NotationParts::setSmallStaff(const ID& staffId, bool smallStaff)
@@ -418,7 +391,7 @@ void NotationParts::setSmallStaff(const ID& staffId, bool smallStaff)
     score()->undo(new Ms::ChangeStaffType(staff, *staffType));
     updateScore();
 
-    notifyAboutStaffChanged(staffId);
+    notifyAboutStaffChanged(staff);
 }
 
 void NotationParts::setStaffConfig(const ID& staffId, const StaffConfig& config)
@@ -460,7 +433,7 @@ void NotationParts::setStaffConfig(const ID& staffId, const StaffConfig& config)
     score()->undo(new Ms::ChangeStaff(staff));
     updateScore();
 
-    notifyAboutStaffChanged(staffId);
+    notifyAboutStaffChanged(staff);
 }
 
 void NotationParts::doSetStaffVoiceVisible(Staff* staff, int voiceIndex, bool visible)
@@ -509,11 +482,6 @@ void NotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
         return;
     }
 
-    InstrumentInfo instrumentInfo = this->instrumentInfo(destinationPart->instrumentId(), destinationPart);
-    if (!instrumentInfo.isValid()) {
-        return;
-    }
-
     int staffIndex = destinationPart->nstaves();
 
     staff->setScore(score());
@@ -525,10 +493,9 @@ void NotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
 
     updateScore();
 
-    Ms::Instrument* instrument = instrumentInfo.instrument;
-    instrument->setClefType(staffIndex, staff->defaultClefType());
+    destinationPart->instrument()->setClefType(staffIndex, staff->defaultClefType());
 
-    ChangedNotifier<const Staff*>* notifier = instrumentNotifier(instrument->getId(), destinationPartId);
+    ChangedNotifier<const Staff*>* notifier = staffChangedNotifier(destinationPartId);
     notifier->itemAdded(staff);
 }
 
@@ -547,38 +514,30 @@ void NotationParts::cloneStaff(const ID& sourceStaffId, const ID& destinationSta
     updateScore();
 }
 
-void NotationParts::replaceInstrument(const ID& instrumentId, const ID& fromPartId, const Instrument& newInstrument)
+void NotationParts::replaceInstrument(const InstrumentKey& instrumentKey, const Instrument& newInstrument)
 {
     TRACEFUNC;
 
-    Part* part = this->part(fromPartId);
+    Part* part = this->part(instrumentKey.partId);
     if (!part) {
-        return;
-    }
-
-    InstrumentInfo oldInstrumentInfo = this->instrumentInfo(instrumentId, part);
-    if (!oldInstrumentInfo.isValid()) {
         return;
     }
 
     score()->undo(new Ms::ChangePart(part, new Ms::Instrument(InstrumentsConverter::convertInstrument(newInstrument)),
-                                     formatPartName(part)));
+                                     formatPartTitle(part)));
     updateScore();
 
-    ChangedNotifier<Instrument>* notifier = partNotifier(part->id());
-    notifier->itemReplaced(InstrumentsConverter::convertInstrument(*oldInstrumentInfo.instrument), newInstrument);
-
-    notifyAboutPartChanged(fromPartId);
+    notifyAboutPartChanged(part);
 }
 
-void NotationParts::replaceDrumset(const ID& instrumentId, const ID& fromPartId, const Drumset& newDrumset)
+void NotationParts::replaceDrumset(const InstrumentKey& instrumentKey, const Drumset& newDrumset)
 {
-    Part* part = this->part(fromPartId);
+    Part* part = this->part(instrumentKey.partId);
     if (!part) {
         return;
     }
 
-    Ms::Instrument* instrument = this->instrumentInfo(instrumentId, part).instrument;
+    Ms::Instrument* instrument = part->instrument(instrumentKey.tick);
     if (!instrument) {
         return;
     }
@@ -586,7 +545,7 @@ void NotationParts::replaceDrumset(const ID& instrumentId, const ID& fromPartId,
     score()->undo(new Ms::ChangeDrumset(instrument, &newDrumset));
     updateScore();
 
-    notifyAboutPartChanged(fromPartId);
+    notifyAboutPartChanged(part);
 }
 
 Notification NotationParts::partsChanged() const
@@ -638,7 +597,7 @@ void NotationParts::doRemoveParts(const IDList& partsIds)
 
     for (const ID& partId: partsIds) {
         Part* p = part(partId);
-        m_partsNotifier->itemRemoved(p);
+        m_partChangedNotifier->itemRemoved(p);
         score()->cmdRemovePart(p);
     }
 }
@@ -664,22 +623,6 @@ void NotationParts::doSetPartName(Part* part, const QString& name)
     TRACEFUNC;
 
     score()->undo(new Ms::ChangePart(part, new Ms::Instrument(*part->instrument()), name));
-}
-
-void NotationParts::insertStaff(Staff* staff, int destinationStaffIndex)
-{
-    TRACEFUNC;
-
-    if (score()->excerpt()) {
-        int globalDestinationStaffIndex = score()->staffIdx(staff->part()) + destinationStaffIndex;
-
-        for (int voiceIndex = 0; voiceIndex < VOICES; ++voiceIndex) {
-            int track = globalDestinationStaffIndex * VOICES + voiceIndex % VOICES;
-            score()->excerpt()->tracks().insert(track, track);
-        }
-    }
-
-    score()->undoInsertStaff(staff, destinationStaffIndex);
 }
 
 void NotationParts::moveParts(const IDList& sourcePartsIds, const ID& destinationPartId, InsertMode mode)
@@ -713,21 +656,7 @@ void NotationParts::moveParts(const IDList& sourcePartsIds, const ID& destinatio
 
     updateScore();
 
-    m_partsNotifier->changed();
-}
-
-QMap<Ms::Fraction, Ms::Instrument*> NotationParts::instruments(const Part* fromPart) const
-{
-    QMap<Ms::Fraction, Ms::Instrument*> result;
-
-    auto partInstruments = fromPart->instruments();
-    for (auto it = partInstruments->begin(); it != partInstruments->end(); it++) {
-        Ms::Fraction fraction = Ms::Fraction::fromTicks(it->first);
-        Ms::Instrument* instrument = it->second;
-        result.insert(fraction, instrument);
-    }
-
-    return result;
+    m_partChangedNotifier->changed();
 }
 
 void NotationParts::moveStaves(const IDList& sourceStavesIds, const ID& destinationStaffId, InsertMode mode)
@@ -817,50 +746,9 @@ Part* NotationParts::part(const ID& partId, const Ms::Score* score) const
     return nullptr;
 }
 
-NotationParts::InstrumentInfo NotationParts::instrumentInfo(const ID& instrumentId, const Part* fromPart) const
-{
-    if (!fromPart) {
-        return InstrumentInfo();
-    }
-
-    auto partInstruments = instruments(fromPart);
-    if (partInstruments.isEmpty()) {
-        return InstrumentInfo();
-    }
-
-    for (const Ms::Fraction& fraction: partInstruments.keys()) {
-        Ms::Instrument* instrument = partInstruments.value(fraction);
-        if (instrument->getId() == instrumentId) {
-            return InstrumentInfo(fraction, instrument);
-        }
-    }
-
-    return InstrumentInfo();
-}
-
-NotationParts::InstrumentInfo NotationParts::instrumentInfo(const Staff* staff) const
-{
-    if (!staff || !staff->part()) {
-        return InstrumentInfo();
-    }
-
-    return InstrumentInfo(Ms::Fraction(-1, 1), staff->part()->instrument());
-}
-
 Staff* NotationParts::staff(const ID& staffId) const
 {
     return score()->staff(staffId);
-}
-
-std::vector<const Staff*> NotationParts::staves(const Part* part) const
-{
-    std::vector<const Staff*> result;
-
-    for (const Staff* staff: *part->staves()) {
-        result.push_back(staff);
-    }
-
-    return result;
 }
 
 std::vector<Staff*> NotationParts::staves(const IDList& stavesIds) const
@@ -911,7 +799,7 @@ void NotationParts::appendPart(Part* part)
 
     updateScore();
 
-    m_partsNotifier->itemChanged(part);
+    m_partChangedNotifier->itemChanged(part);
 }
 
 int NotationParts::resolvePartIndex(Part* part) const
@@ -956,7 +844,7 @@ void NotationParts::appendStaves(Part* part, const Instrument& instrument)
     TRACEFUNC;
 
     for (int staffIndex = 0; staffIndex < instrument.staves; ++staffIndex) {
-        int lastStaffIndex = this->lastStaffIndex();
+        int lastStaffIndex = !score()->staves().isEmpty() ? score()->staves().last()->idx() : 0;
 
         Staff* staff = new Staff(score());
         staff->setPart(part);
@@ -972,9 +860,47 @@ void NotationParts::appendStaves(Part* part, const Instrument& instrument)
     if (!part->nstaves()) {
         return;
     }
+
     int firstStaffIndex = part->staff(0)->idx();
     int endStaffIndex = firstStaffIndex + part->nstaves();
     masterScore()->adjustKeySigs(firstStaffIndex, endStaffIndex, masterScore()->keyList());
+}
+
+void NotationParts::insertStaff(Staff* staff, int destinationStaffIndex)
+{
+    TRACEFUNC;
+
+    if (score()->excerpt()) {
+        int globalDestinationStaffIndex = score()->staffIdx(staff->part()) + destinationStaffIndex;
+
+        for (int voiceIndex = 0; voiceIndex < VOICES; ++voiceIndex) {
+            int track = globalDestinationStaffIndex * VOICES + voiceIndex % VOICES;
+            score()->excerpt()->tracks().insert(track, track);
+        }
+    }
+
+    score()->undoInsertStaff(staff, destinationStaffIndex);
+}
+
+void NotationParts::initStaff(Staff* staff, const Instrument& instrument, const Ms::StaffType* staffType, int cleffIndex)
+{
+    TRACEFUNC;
+
+    const Ms::StaffType* staffTypePreset = staffType ? staffType : instrument.staffTypePreset;
+    if (!staffTypePreset) {
+        staffTypePreset = Ms::StaffType::getDefaultPreset(instrument.staffGroup);
+    }
+
+    Ms::StaffType* stt = staff->setStaffType(DEFAULT_TICK, *staffTypePreset);
+    if (cleffIndex >= MAX_STAVES) {
+        stt->setSmall(false);
+    } else {
+        stt->setSmall(instrument.smallStaff[cleffIndex]);
+        staff->setBracketType(0, instrument.bracket[cleffIndex]);
+        staff->setBracketSpan(0, instrument.bracketSpan[cleffIndex]);
+        staff->setBarLineSpan(instrument.barlineSpan[cleffIndex]);
+    }
+    staff->setDefaultClefType(instrument.clefs[cleffIndex]);
 }
 
 void NotationParts::removeMissingParts(const PartInstrumentList& parts)
@@ -1039,7 +965,7 @@ void NotationParts::appendNewParts(const PartInstrumentList& parts)
         appendStaves(part, pi.instrument);
         staffCount += part->nstaves();
 
-        m_partsNotifier->itemAdded(part);
+        m_partChangedNotifier->itemAdded(part);
     }
 }
 
@@ -1111,88 +1037,33 @@ int NotationParts::resolveInstrumentNumber(const Instruments& newInstruments,
     return count > 1 ? 1 : 0;
 }
 
-int NotationParts::lastStaffIndex() const
+void NotationParts::notifyAboutPartChanged(Part* part) const
 {
-    return !score()->staves().isEmpty() ? score()->staves().last()->idx() : 0;
-}
-
-void NotationParts::initStaff(Staff* staff, const Instrument& instrument, const Ms::StaffType* staffType, int cleffIndex)
-{
-    TRACEFUNC;
-
-    const Ms::StaffType* staffTypePreset = staffType ? staffType : instrument.staffTypePreset;
-    if (!staffTypePreset) {
-        staffTypePreset = Ms::StaffType::getDefaultPreset(instrument.staffGroup);
-    }
-
-    Ms::StaffType* stt = staff->setStaffType(DEFAULT_TICK, *staffTypePreset);
-    if (cleffIndex >= MAX_STAVES) {
-        stt->setSmall(false);
-    } else {
-        stt->setSmall(instrument.smallStaff[cleffIndex]);
-        staff->setBracketType(0, instrument.bracket[cleffIndex]);
-        staff->setBracketSpan(0, instrument.bracketSpan[cleffIndex]);
-        staff->setBarLineSpan(instrument.barlineSpan[cleffIndex]);
-    }
-    staff->setDefaultClefType(instrument.clefs[cleffIndex]);
-}
-
-void NotationParts::notifyAboutPartsChanged() const
-{
-    partsChanged().notify();
-}
-
-void NotationParts::notifyAboutPartChanged(const ID& partId) const
-{
-    Part* part = this->part(partId);
-    if (!part) {
+    IF_ASSERT_FAILED(part) {
         return;
     }
 
-    m_partsNotifier->itemChanged(part);
+    m_partChangedNotifier->itemChanged(part);
 }
 
-void NotationParts::notifyAboutStaffChanged(const ID& staffId) const
+void NotationParts::notifyAboutStaffChanged(Staff* staff) const
 {
-    Staff* staff = this->staff(staffId);
-    if (!staff) {
+    IF_ASSERT_FAILED(staff && staff->part()) {
         return;
     }
 
-    InstrumentInfo instrumentInfo = this->instrumentInfo(staff);
-    ChangedNotifier<const Staff*>* notifier = instrumentNotifier(instrumentInfo.instrument->getId(), staff->part()->id());
+    ChangedNotifier<const Staff*>* notifier = staffChangedNotifier(staff->part()->id());
     notifier->itemChanged(staff);
 }
 
-ChangedNotifier<Instrument>* NotationParts::partNotifier(const ID& partId) const
+ChangedNotifier<const Staff*>* NotationParts::staffChangedNotifier(const ID& partId) const
 {
-    if (m_partsNotifiersMap.find(partId) != m_partsNotifiersMap.end()) {
-        return m_partsNotifiersMap[partId];
+    if (m_staffChangedNotifierMap.find(partId) != m_staffChangedNotifierMap.end()) {
+        return m_staffChangedNotifierMap[partId];
     }
 
-    ChangedNotifier<Instrument>* notifier = new ChangedNotifier<Instrument>();
-    auto value = std::pair<ID, ChangedNotifier<Instrument>*>(partId, notifier);
-    m_partsNotifiersMap.insert(value);
+    ChangedNotifier<const Staff*>* notifier = new ChangedNotifier<const Staff*>();
+    auto value = std::pair<ID, ChangedNotifier<const Staff*>*>(partId, notifier);
+    m_staffChangedNotifierMap.insert(value);
     return notifier;
-}
-
-ChangedNotifier<const Staff*>* NotationParts::instrumentNotifier(const ID& instrumentId, const ID& fromPartId) const
-{
-    InstrumentKey key { fromPartId, instrumentId };
-
-    if (!m_instrumentsNotifiersHash.contains(key)) {
-        m_instrumentsNotifiersHash[key] = new ChangedNotifier<const Staff*>();
-    }
-
-    return m_instrumentsNotifiersHash[key];
-}
-
-QString NotationParts::formatPartName(const Part* part) const
-{
-    QStringList instrumentsNames;
-    for (const Ms::Instrument* instrument: instruments(part).values()) {
-        instrumentsNames << instrument->trackName();
-    }
-
-    return instrumentsNames.join(" & ");
 }
