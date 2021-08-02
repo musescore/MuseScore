@@ -67,7 +67,6 @@ private:
     notation::INotationSelectionPtr currentNotationSelection() const;
 
     void openProject(const actions::ActionData& args);
-    void importScore();
     void newProject();
 
     bool checkCanIgnoreError(const Ret& ret, const io::path& filePath);

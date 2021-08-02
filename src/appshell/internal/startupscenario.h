@@ -37,14 +37,18 @@ class StartupScenario : public IStartupScenario
     INJECT(appshell, actions::IActionsDispatcher, dispatcher)
 
 public:
+
+    void setSessionType(const QString& sessionType) override;
     void setStartupScorePath(const io::path& path) override;
     void run() override;
 
 private:
-    std::string startupPageUri() const;
+    StartupSessionType sessionTypeTromString(const QString& str) const;
+    std::string startupPageUri(StartupSessionType sessionType) const;
 
     void openScore(const io::path& path);
 
+    QString m_sessionType;
     io::path m_startupScorePath;
 };
 }

@@ -22,11 +22,39 @@
 
 #include "startupscenario.h"
 
+#include "async/async.h"
+
 using namespace mu::appshell;
 using namespace mu::actions;
 
 static const std::string HOME_URI("musescore://home");
 static const std::string NOTATION_URI("musescore://notation");
+
+StartupSessionType StartupScenario::sessionTypeTromString(const QString& str) const
+{
+    if ("start-empty" == str) {
+        return StartupSessionType::StartEmpty;
+    }
+
+    if ("continue-last" == str) {
+        return StartupSessionType::ContinueLastSession;
+    }
+
+    if ("start-with-new" == str) {
+        return StartupSessionType::StartWithNewScore;
+    }
+
+    if ("start-with-file" == str) {
+        return StartupSessionType::StartWithScore;
+    }
+
+    return StartupSessionType::StartEmpty;
+}
+
+void StartupScenario::setSessionType(const QString& sessionType)
+{
+    m_sessionType = sessionType;
+}
 
 void StartupScenario::setStartupScorePath(const io::path& path)
 {
@@ -40,9 +68,16 @@ void StartupScenario::run()
         return;
     }
 
-    interactive()->open(startupPageUri());
+    StartupSessionType sessionType;
+    if (!m_sessionType.isEmpty()) {
+        sessionType = sessionTypeTromString(m_sessionType);
+    } else {
+        sessionType = configuration()->startupSessionType();
+    }
 
-    switch (configuration()->startupSessionType()) {
+    interactive()->open(startupPageUri(sessionType));
+
+    switch (sessionType) {
     case StartupSessionType::StartEmpty:
         break;
     case StartupSessionType::StartWithNewScore:
@@ -57,9 +92,9 @@ void StartupScenario::run()
     }
 }
 
-std::string StartupScenario::startupPageUri() const
+std::string StartupScenario::startupPageUri(StartupSessionType sessionType) const
 {
-    switch (configuration()->startupSessionType()) {
+    switch (sessionType) {
     case StartupSessionType::StartEmpty:
     case StartupSessionType::StartWithNewScore:
         return HOME_URI;

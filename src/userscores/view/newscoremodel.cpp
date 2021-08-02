@@ -51,7 +51,7 @@ bool NewScoreModel::createScore(const QVariant& info)
 {
     ProjectCreateOptions options = parseOptions(info.toMap());
 
-    auto project = notationCreator()->newNotationProject();
+    auto project = notationCreator()->newProject();
     Ret ret = project->createNew(options);
 
     if (!ret) {
@@ -59,11 +59,7 @@ bool NewScoreModel::createScore(const QVariant& info)
         return false;
     }
 
-    if (!globalContext()->containsNotationProject(project->path())) {
-        globalContext()->addNotationProject(project);
-    }
-
-    globalContext()->setCurrentNotationProject(project);
+    globalContext()->setCurrentProject(project);
 
     bool isScoreCreatedFromInstruments = options.templatePath.empty();
     updatePreferredScoreCreationMode(isScoreCreatedFromInstruments);
