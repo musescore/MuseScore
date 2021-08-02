@@ -130,7 +130,7 @@ PaletteCellPtr Palette::appendActionIcon(Ms::ActionIconType type, actions::Actio
 
 bool Palette::insertCell(size_t idx, PaletteCellPtr cell)
 {
-    if (idx < 0 || idx > m_cells.size()) {
+    if (idx > m_cells.size()) {
         return false;
     }
 
@@ -141,7 +141,7 @@ bool Palette::insertCell(size_t idx, PaletteCellPtr cell)
 
 bool Palette::insertCells(size_t idx, std::vector<PaletteCellPtr> cells)
 {
-    if (idx < 0 || idx > m_cells.size()) {
+    if (idx > m_cells.size()) {
         return false;
     }
 
@@ -153,7 +153,7 @@ bool Palette::insertCells(size_t idx, std::vector<PaletteCellPtr> cells)
 
 PaletteCellPtr Palette::takeCell(size_t idx)
 {
-    if (idx < 0 || idx >= m_cells.size()) {
+    if (idx >= m_cells.size()) {
         return nullptr;
     }
 
@@ -165,7 +165,7 @@ std::vector<PaletteCellPtr> Palette::takeCells(size_t idx, size_t count)
     std::vector<PaletteCellPtr> removedCells;
     removedCells.reserve(count);
 
-    if (idx < 0 || idx + count > m_cells.size()) {
+    if (idx + count > m_cells.size()) {
         return removedCells;
     }
 

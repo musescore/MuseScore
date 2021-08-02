@@ -427,8 +427,8 @@ Transform& Transform::rotate(double a)
         double tm23 = -sina * m_13 + cosa * m_23;
         m_13 = tm13;
         m_23 = tm23;
-        // fallthrough
     }
+    // fallthrough
     case TransformationType::Rotate:
     case TransformationType::Shear: {
         double tm11 = cosa * m_affine.m_11 + sina * m_affine.m_21;
@@ -483,8 +483,8 @@ Transform& Transform::rotateRadians(double a)
         double tm23 = -sina * m_13 + cosa * m_23;
         m_13 = tm13;
         m_23 = tm23;
-        // fallthrough
     }
+    // fallthrough
     case TransformationType::Rotate:
     case TransformationType::Shear: {
         double tm11 = cosa * m_affine.m_11 + sina * m_affine.m_21;
@@ -564,6 +564,7 @@ Transform& Transform::scale(double sx, double sy)
     case TransformationType::Project:
         m_13 *= sx;
         m_23 *= sy;
+    // fall through
     case TransformationType::Rotate:
     case TransformationType::Shear:
         m_affine.m_12 *= sx;
