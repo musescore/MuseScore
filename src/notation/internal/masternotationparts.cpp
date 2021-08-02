@@ -34,15 +34,16 @@ void MasterNotationParts::setExcerpts(ExcerptNotationList excerpts)
     m_excerpts = excerpts;
 }
 
-void MasterNotationParts::startEdit()
+void MasterNotationParts::startGlobalEdit()
 {
-    undoStack()->prepareChanges();
+    NotationParts::startEdit();
+    undoStack()->lock();
 }
 
-void MasterNotationParts::apply()
+void MasterNotationParts::endGlobalEdit()
 {
-    undoStack()->commitChanges();
-    partsChanged().notify();
+    undoStack()->unlock();
+    NotationParts::apply();
 }
 
 void MasterNotationParts::setParts(const PartInstrumentList& instruments)
@@ -178,11 +179,15 @@ void MasterNotationParts::setStaffConfig(const ID& staffId, const StaffConfig& c
 
 void MasterNotationParts::removeParts(const IDList& partsIds)
 {
-    startEdit();
+    startGlobalEdit();
 
     NotationParts::removeParts(partsIds);
 
-    apply();
+    for (INotationPartsPtr parts : excerptsParts()) {
+        parts->removeParts(partsIds);
+    }
+
+    endGlobalEdit();
 }
 
 void MasterNotationParts::removeStaves(const IDList& stavesIds)

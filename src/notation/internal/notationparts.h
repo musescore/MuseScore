@@ -71,6 +71,9 @@ public:
 protected:
     INotationUndoStackPtr undoStack() const;
 
+    virtual void startEdit();
+    virtual void apply();
+
 private:
     struct InstrumentInfo
     {
@@ -143,6 +146,7 @@ private:
 
     void initStaff(Staff* staff, const Instrument& instrument, const Ms::StaffType* staffType, int cleffIndex);
 
+    void notifyAboutPartsChanged() const;
     void notifyAboutPartChanged(const ID& partId) const;
     void notifyAboutStaffChanged(const ID& staffId) const;
 
