@@ -48,6 +48,7 @@ class TestNote : public QObject, public MTest
       void tpcTranspose2();
       void noteLimits();
       void tpcDegrees();
+      void alteredUnison();
       void LongNoteAfterShort_183746();
       };
 
@@ -486,6 +487,18 @@ void TestNote::noteLimits()
             score->cmdAddInterval(8, nl);
             }
       QVERIFY(saveCompareScore(score, "notelimits-test.mscx", DIR + "notelimits-ref.mscx"));
+      }
+
+void TestNote::alteredUnison()
+      {
+      MasterScore* score = readScore(DIR + "altered-unison.mscx");
+      Measure* m = score->firstMeasure();
+      Chord* c = m->findChord(Fraction(0, 1), 0);
+      QVERIFY(c->downNote()->accidental() && c->downNote()->accidental()->accidentalType() == Ms::AccidentalType::FLAT);
+      QVERIFY(c->upNote()->accidental() && c->upNote()->accidental()->accidentalType() == Ms::AccidentalType::NATURAL);
+      c = m->findChord(Fraction(1, 4), 0);
+      QVERIFY(c->downNote()->accidental() && c->downNote()->accidental()->accidentalType() == Ms::AccidentalType::NATURAL);
+      QVERIFY(c->upNote()->accidental() && c->upNote()->accidental()->accidentalType() == Ms::AccidentalType::SHARP);
       }
 
 void TestNote::tpcDegrees()
