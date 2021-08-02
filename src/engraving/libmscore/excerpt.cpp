@@ -117,7 +117,7 @@ bool Excerpt::isEmpty() const
 void Excerpt::removePart(const QString& id)
 {
     int index = 0;
-    for (Part* part: parts()) {
+    for (const Part* part: parts()) {
         if (part->id() == id) {
             break;
         }
