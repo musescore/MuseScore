@@ -32,7 +32,9 @@ class RootTreeItem : public AbstractInstrumentsPanelTreeItem
     Q_OBJECT
 
 public:
-    explicit RootTreeItem(notation::INotationPartsPtr notationParts, QObject* parent = nullptr);
+    explicit RootTreeItem(notation::IMasterNotationPtr masterNotation,
+                          notation::INotationPtr notation,
+                          QObject* parent = nullptr);
 
     void moveChildren(const int sourceRow, const int count, AbstractInstrumentsPanelTreeItem* destinationParent,
                       const int destinationRow) override;
