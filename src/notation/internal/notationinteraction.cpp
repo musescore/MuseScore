@@ -438,11 +438,11 @@ bool NotationInteraction::elementIsLess(const Ms::Element* e1, const Ms::Element
             }
         }
         // different types, or same type but nothing hidden - use track
-        return e1->track() <= e2->track();
+        return e1->track() < e2->track();
     }
 
     // default case, use stacking order
-    return e1->z() <= e2->z();
+    return e1->z() < e2->z();
 }
 
 const NotationInteraction::HitElementContext& NotationInteraction::hitElementContext() const
@@ -2827,6 +2827,15 @@ void NotationInteraction::replaceSelectedNotesWithSlashes()
 
     startEdit();
     score()->cmdSlashRhythm();
+    apply();
+
+    notifyAboutNotationChanged();
+}
+
+void mu::notation::NotationInteraction::changeEnharmonicSpelling(bool both)
+{
+    startEdit();
+    score()->changeEnharmonicSpelling(both);
     apply();
 
     notifyAboutNotationChanged();
