@@ -152,7 +152,7 @@ bool ExportScoreScenario::isMainNotation(INotationPtr notation) const
 mu::io::path ExportScoreScenario::askExportPath(const INotationPtrList& notations, const ExportType& exportType,
                                                 INotationWriter::UnitType unitType) const
 {
-    INotationProjectPtr currentNotationProject = context()->currentNotationProject();
+    INotationProjectPtr currentNotationProject = context()->currentProject();
 
     io::path suggestedPath = configuration()->userProjectsPath();
     io::path notationProjectDirPath = io::dirpath(currentNotationProject->path());
