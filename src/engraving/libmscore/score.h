@@ -923,6 +923,8 @@ public:
     void spell();
     void spell(int startStaff, int endStaff, Segment* startSegment, Segment* endSegment);
     void spell(Note*);
+    void changeEnharmonicSpelling(bool both);
+
     Fraction nextSeg(const Fraction& tick, int track);
 
     ChordList* chordList() { return &_chordList; }

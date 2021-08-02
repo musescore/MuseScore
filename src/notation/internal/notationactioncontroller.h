@@ -160,6 +160,8 @@ private:
     void unrollRepeats();
     void copyLyrics();
     void addGraceNotesToSelectedNotes(GraceNoteType type);
+    void changeEnharmonicSpellingBoth();
+    void changeEnharmonicSpellingCurrent();
 
     void resetState();
     void resetStretch();

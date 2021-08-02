@@ -1317,6 +1317,18 @@ const UiActionList NotationUiActions::m_noteInputActions = {
              QT_TRANSLATE_NOOP("action", "Voice 4"),
              IconCode::Code::VOICE_4
              ),
+    UiAction("enh-both",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Change enharmonic spelling (both modes)"),
+             QT_TRANSLATE_NOOP("action", "Change enharmonic spelling (both modes)"),
+             IconCode::Code::NONE
+             ),
+    UiAction("enh-current",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Change enharmonic spelling (both modes)"),
+             QT_TRANSLATE_NOOP("action", "Change enharmonic spelling (current mode)"),
+             IconCode::Code::NONE
+             ),
     UiAction("flip",
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Flip direction"),

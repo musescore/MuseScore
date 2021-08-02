@@ -170,6 +170,7 @@ public:
     virtual void fillSelectionWithSlashes() = 0;
     virtual void replaceSelectedNotesWithSlashes() = 0;
 
+    virtual void changeEnharmonicSpelling(bool both) = 0;
     virtual void spellPitches() = 0;
     virtual void regroupNotesAndRests() = 0;
     virtual void resequenceRehearsalMarks() = 0;
