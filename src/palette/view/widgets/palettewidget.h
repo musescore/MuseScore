@@ -107,6 +107,8 @@ public:
     // Applying elements
     bool isApplyingElementsDisabled() const;
     void setApplyingElementsDisabled(bool val);
+    bool useDoubleClickForApplyingElements() const;
+    void setUseDoubleClickForApplyingElements(bool val);
 
     void applyCurrentElementToScore();
 
@@ -127,6 +129,9 @@ public:
     bool readFromFile(const QString& path);
     void writeToFile(const QString& path) const;
 
+    // events
+    bool handleEvent(QEvent* event);
+
 signals:
     void changed();
     void boxClicked(int index);
@@ -135,6 +140,7 @@ private:
     bool event(QEvent*) override;
 
     void mousePressEvent(QMouseEvent*) override;
+    void mouseDoubleClickEvent(QMouseEvent*) override;
     void mouseReleaseEvent(QMouseEvent*) override;
     void mouseMoveEvent(QMouseEvent*) override;
     void leaveEvent(QEvent*) override;
@@ -171,6 +177,7 @@ private:
     bool m_selectable = false;
     bool m_isReadOnly = false;
     bool m_isApplyingElementsDisabled = false;
+    bool m_useDoubleClickForApplyingElements = false;
     bool m_showContextMenu = true;
 
     int m_currentIdx = -1;

@@ -25,30 +25,30 @@
 #include "translation.h"
 #include "log.h"
 
-#include "libmscore/chord.h"
-#include "libmscore/note.h"
-#include "libmscore/drumset.h"
-#include "libmscore/score.h"
-#include "libmscore/staff.h"
-#include "libmscore/part.h"
-#include "libmscore/stem.h"
-#include "libmscore/mscore.h"
-#include "libmscore/undo.h"
+#include "engraving/libmscore/chord.h"
+#include "engraving/libmscore/note.h"
+#include "engraving/libmscore/drumset.h"
+#include "engraving/libmscore/score.h"
+#include "engraving/libmscore/staff.h"
+#include "engraving/libmscore/part.h"
+#include "engraving/libmscore/stem.h"
+#include "engraving/libmscore/mscore.h"
+#include "engraving/libmscore/undo.h"
 
 using namespace mu::notation;
+using namespace mu::palette;
 
-namespace Ms {
 DrumsetPalette::DrumsetPalette(QWidget* parent)
     : PaletteScrollArea(nullptr, parent)
 {
     setObjectName("DrumsetPalette");
     setFocusPolicy(Qt::NoFocus);
 
-    m_drumPalette = new Palette(this);
+    m_drumPalette = new PaletteWidget(this);
     m_drumPalette->setMag(0.8);
     m_drumPalette->setSelectable(true);
-    m_drumPalette->setUseDoubleClickToActivate(true);
-    m_drumPalette->setGrid(28, 60);
+    m_drumPalette->setUseDoubleClickForApplyingElements(true);
+    m_drumPalette->setGridSize(28, 60);
     m_drumPalette->setContextMenuPolicy(Qt::PreventContextMenu);
 
     setWidget(m_drumPalette);
@@ -136,12 +136,7 @@ void DrumsetPalette::updateDrumset()
 
         note->setCachedNoteheadSym(noteheadSym);     // we use the cached notehead so we don't recompute it at each layout
         chord->add(note);
-        int sc = m_drumset->shortcut(pitch);
-        QString shortcut;
-        if (sc) {
-            shortcut = QChar(sc);
-        }
-        m_drumPalette->append(chord, mu::qtrc("drumset", m_drumset->name(pitch).toUtf8().data()), shortcut);
+        m_drumPalette->appendElement(chord, mu::qtrc("drumset", m_drumset->name(pitch).toUtf8().data()));
     }
 
     noteInput->setDrumNote(selectedDrumNote());
@@ -160,7 +155,7 @@ void DrumsetPalette::drumNoteSelected(int val)
         return;
     }
 
-    ElementPtr element = m_drumPalette->element(val);
+    Ms::ElementPtr element = m_drumPalette->elementForCellAt(val);
     if (!element || element->type() != ElementType::CHORD) {
         return;
     }
@@ -184,12 +179,12 @@ void DrumsetPalette::drumNoteSelected(int val)
 
 int DrumsetPalette::selectedDrumNote()
 {
-    int idx = m_drumPalette->getSelectedIdx();
+    int idx = m_drumPalette->selectedIdx();
     if (idx < 0) {
         return -1;
     }
 
-    ElementPtr element = m_drumPalette->element(idx);
+    Ms::ElementPtr element = m_drumPalette->elementForCellAt(idx);
     if (element && element->type() == ElementType::CHORD) {
         const Chord* ch = dynamic_cast<Chord*>(element.get());
         const Note* note = ch->downNote();
@@ -242,5 +237,4 @@ mu::async::Channel<QString> DrumsetPalette::pitchNameChanged() const
 INotationNoteInputPtr DrumsetPalette::noteInput() const
 {
     return m_notation ? m_notation->interaction()->noteInput() : nullptr;
-}
 }

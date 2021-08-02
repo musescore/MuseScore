@@ -196,7 +196,7 @@ DockPanelHolder* DockPage::panelHolderByLocation(DockBase::DockLocation location
     return nullptr;
 }
 
-bool DockPage::isDockOpened(const QString& dockName) const
+bool DockPage::isDockOpen(const QString& dockName) const
 {
     const DockBase* dock = dockByName(dockName);
     return dock ? dock->isOpen() : false;
@@ -204,17 +204,17 @@ bool DockPage::isDockOpened(const QString& dockName) const
 
 void DockPage::toggleDock(const QString& dockName)
 {
-    setDockOpened(dockName, !isDockOpened(dockName));
+    setDockOpen(dockName, !isDockOpen(dockName));
 }
 
-void DockPage::setDockOpened(const QString& dockName, bool opened)
+void DockPage::setDockOpen(const QString& dockName, bool open)
 {
     DockBase* dock = dockByName(dockName);
     if (!dock) {
         return;
     }
 
-    if (opened) {
+    if (open) {
         dock->open();
     } else {
         dock->close();

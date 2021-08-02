@@ -1,6 +1,27 @@
+/*
+ * SPDX-License-Identifier: GPL-3.0-only
+ * MuseScore-CLA-applies
+ *
+ * MuseScore
+ * Music Composition & Notation
+ *
+ * Copyright (C) 2021 MuseScore BVBA and others
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 #include "drumsetpanelview.h"
 
-#include "internal/widgets/drumsetpalette.h"
+#include "widgets/drumsetpalette.h"
 
 using namespace mu::notation;
 
@@ -9,42 +30,42 @@ class DrumsetPaletteAdapter : public ui::IDisplayableWidget
 {
 public:
     DrumsetPaletteAdapter()
-        : m_msDrumsetPalette(new Ms::DrumsetPalette())
+        : m_drumsetPaletteWidget(new DrumsetPalette())
     {
     }
 
     ~DrumsetPaletteAdapter() override
     {
-        delete m_msDrumsetPalette;
+        delete m_drumsetPaletteWidget;
     }
 
     void setNotation(INotationPtr notation)
     {
-        m_msDrumsetPalette->setNotation(notation);
+        m_drumsetPaletteWidget->setNotation(notation);
     }
 
     void updateDrumset()
     {
-        m_msDrumsetPalette->updateDrumset();
+        m_drumsetPaletteWidget->updateDrumset();
     }
 
     async::Channel<QString> pitchNameChanged() const
     {
-        return m_msDrumsetPalette->pitchNameChanged();
+        return m_drumsetPaletteWidget->pitchNameChanged();
     }
 
 private:
     QWidget* qWidget() override
     {
-        return m_msDrumsetPalette;
+        return m_drumsetPaletteWidget;
     }
 
     bool handleEvent(QEvent* event) override
     {
-        return m_msDrumsetPalette->handleEvent(event);
+        return m_drumsetPaletteWidget->handleEvent(event);
     }
 
-    Ms::DrumsetPalette* m_msDrumsetPalette = nullptr;
+    DrumsetPalette* m_drumsetPaletteWidget = nullptr;
 };
 }
 
