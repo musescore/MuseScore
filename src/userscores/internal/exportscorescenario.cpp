@@ -154,7 +154,7 @@ mu::io::path ExportScoreScenario::askExportPath(const INotationPtrList& notation
 {
     INotationProjectPtr currentNotationProject = context()->currentNotationProject();
 
-    io::path suggestedPath = configuration()->userScoresPath();
+    io::path suggestedPath = configuration()->userProjectsPath();
     io::path notationProjectDirPath = io::dirpath(currentNotationProject->path());
     if (notationProjectDirPath != "") {
         suggestedPath = notationProjectDirPath;

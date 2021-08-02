@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "filescorecontroller.h"
+#include "projectfilescontroller.h"
 
 #include <QObject>
 #include <QBuffer>
@@ -36,57 +36,57 @@ using namespace mu::notation;
 using namespace mu::framework;
 using namespace mu::actions;
 
-void FileScoreController::init()
+void ProjectFilesController::init()
 {
-    dispatcher()->reg(this, "file-open", this, &FileScoreController::openProject);
-    dispatcher()->reg(this, "file-new", this, &FileScoreController::newProject);
+    dispatcher()->reg(this, "file-open", this, &ProjectFilesController::openProject);
+    dispatcher()->reg(this, "file-new", this, &ProjectFilesController::newProject);
     dispatcher()->reg(this, "file-close", [this]() { closeOpenedProject(); });
 
-    dispatcher()->reg(this, "file-save", this, &FileScoreController::saveScore);
-    dispatcher()->reg(this, "file-save-as", this, &FileScoreController::saveScoreAs);
-    dispatcher()->reg(this, "file-save-a-copy", this, &FileScoreController::saveScoreCopy);
-    dispatcher()->reg(this, "file-save-selection", this, &FileScoreController::saveSelection);
-    dispatcher()->reg(this, "file-save-online", this, &FileScoreController::saveOnline);
+    dispatcher()->reg(this, "file-save", this, &ProjectFilesController::saveScore);
+    dispatcher()->reg(this, "file-save-as", this, &ProjectFilesController::saveScoreAs);
+    dispatcher()->reg(this, "file-save-a-copy", this, &ProjectFilesController::saveScoreCopy);
+    dispatcher()->reg(this, "file-save-selection", this, &ProjectFilesController::saveSelection);
+    dispatcher()->reg(this, "file-save-online", this, &ProjectFilesController::saveOnline);
 
-    dispatcher()->reg(this, "file-export", this, &FileScoreController::exportScore);
-    dispatcher()->reg(this, "file-import-pdf", this, &FileScoreController::importPdf);
+    dispatcher()->reg(this, "file-export", this, &ProjectFilesController::exportScore);
+    dispatcher()->reg(this, "file-import-pdf", this, &ProjectFilesController::importPdf);
 
-    dispatcher()->reg(this, "clear-recent", this, &FileScoreController::clearRecentScores);
+    dispatcher()->reg(this, "clear-recent", this, &ProjectFilesController::clearRecentScores);
 
-    dispatcher()->reg(this, "continue-last-session", this, &FileScoreController::continueLastSession);
+    dispatcher()->reg(this, "continue-last-session", this, &ProjectFilesController::continueLastSession);
 }
 
-INotationProjectPtr FileScoreController::currentNotationProject() const
+INotationProjectPtr ProjectFilesController::currentNotationProject() const
 {
     return globalContext()->currentNotationProject();
 }
 
-IMasterNotationPtr FileScoreController::currentMasterNotation() const
+IMasterNotationPtr ProjectFilesController::currentMasterNotation() const
 {
     return currentNotationProject() ? currentNotationProject()->masterNotation() : nullptr;
 }
 
-INotationPtr FileScoreController::currentNotation() const
+INotationPtr ProjectFilesController::currentNotation() const
 {
     return currentMasterNotation() ? currentMasterNotation()->notation() : nullptr;
 }
 
-INotationInteractionPtr FileScoreController::currentInteraction() const
+INotationInteractionPtr ProjectFilesController::currentInteraction() const
 {
     return currentNotation() ? currentNotation()->interaction() : nullptr;
 }
 
-INotationSelectionPtr FileScoreController::currentNotationSelection() const
+INotationSelectionPtr ProjectFilesController::currentNotationSelection() const
 {
     return currentNotation() ? currentInteraction()->selection() : nullptr;
 }
 
-Ret FileScoreController::openProject(const io::path& projectPath)
+Ret ProjectFilesController::openProject(const io::path& projectPath)
 {
     return doOpenProject(projectPath);
 }
 
-bool FileScoreController::isProjectOpened(const io::path& scorePath) const
+bool ProjectFilesController::isProjectOpened(const io::path& scorePath) const
 {
     auto project = globalContext()->currentNotationProject();
     if (!project) {
@@ -101,7 +101,7 @@ bool FileScoreController::isProjectOpened(const io::path& scorePath) const
     return false;
 }
 
-void FileScoreController::openProject(const actions::ActionData& args)
+void ProjectFilesController::openProject(const actions::ActionData& args)
 {
     io::path scorePath = args.count() > 0 ? args.arg<io::path>(0) : "";
 
@@ -116,7 +116,7 @@ void FileScoreController::openProject(const actions::ActionData& args)
     doOpenProject(scorePath);
 }
 
-void FileScoreController::newProject()
+void ProjectFilesController::newProject()
 {
     Ret ret = interactive()->open("musescore://userscores/newscore").ret;
 
@@ -129,7 +129,7 @@ void FileScoreController::newProject()
     }
 }
 
-bool FileScoreController::closeOpenedProject()
+bool ProjectFilesController::closeOpenedProject()
 {
     INotationProjectPtr project = currentNotationProject();
     if (!project) {
@@ -150,7 +150,7 @@ bool FileScoreController::closeOpenedProject()
     return true;
 }
 
-IInteractive::Button FileScoreController::askAboutSavingScore(const io::path& filePath)
+IInteractive::Button ProjectFilesController::askAboutSavingScore(const io::path& filePath)
 {
     if (!configuration()->needShowWarningAboutUnsavedScore()) {
         return IInteractive::Button::DontSave;
@@ -176,7 +176,7 @@ IInteractive::Button FileScoreController::askAboutSavingScore(const io::path& fi
     return result.standartButton();
 }
 
-void FileScoreController::saveScore()
+void ProjectFilesController::saveScore()
 {
     if (!currentNotationProject()->created().val) {
         doSaveScore();
@@ -197,7 +197,7 @@ void FileScoreController::saveScore()
     doSaveScore(filePath);
 }
 
-void FileScoreController::saveScoreAs()
+void ProjectFilesController::saveScoreAs()
 {
     io::path defaultFilePath = defaultSavingFilePath();
     io::path selectedFilePath = selectScoreSavingFile(defaultFilePath, qtrc("userscores", "Save score"));
@@ -208,7 +208,7 @@ void FileScoreController::saveScoreAs()
     doSaveScore(selectedFilePath, SaveMode::SaveAs);
 }
 
-void FileScoreController::saveScoreCopy()
+void ProjectFilesController::saveScoreCopy()
 {
     io::path defaultFilePath = defaultSavingFilePath();
     io::path selectedFilePath = selectScoreSavingFile(defaultFilePath, qtrc("userscores", "Save a copy"));
@@ -219,7 +219,7 @@ void FileScoreController::saveScoreCopy()
     doSaveScore(selectedFilePath, SaveMode::SaveCopy);
 }
 
-void FileScoreController::saveSelection()
+void ProjectFilesController::saveSelection()
 {
     io::path defaultFilePath = defaultSavingFilePath();
     io::path selectedFilePath = selectScoreSavingFile(defaultFilePath, qtrc("userscores", "Save selection"));
@@ -233,7 +233,7 @@ void FileScoreController::saveSelection()
     }
 }
 
-void FileScoreController::saveOnline()
+void ProjectFilesController::saveOnline()
 {
     INotationProjectPtr project = globalContext()->currentNotationProject();
     if (!project) {
@@ -283,7 +283,7 @@ void FileScoreController::saveOnline()
     uploadingService()->uploadScore(*projectData, meta.title, meta.source);
 }
 
-bool FileScoreController::checkCanIgnoreError(const Ret& ret, const io::path& filePath)
+bool ProjectFilesController::checkCanIgnoreError(const Ret& ret, const io::path& filePath)
 {
     static const QList<notation::Err> ignorableErrors {
         notation::Err::FileTooOld,
@@ -318,20 +318,20 @@ bool FileScoreController::checkCanIgnoreError(const Ret& ret, const io::path& fi
     return result.standartButton() == IInteractive::Button::Ignore;
 }
 
-void FileScoreController::importPdf()
+void ProjectFilesController::importPdf()
 {
     interactive()->openUrl("https://musescore.com/import");
 }
 
-void FileScoreController::clearRecentScores()
+void ProjectFilesController::clearRecentScores()
 {
-    configuration()->setRecentScorePaths({});
+    configuration()->setRecentProjectPaths({});
     platformRecentFilesController()->clearRecentFiles();
 }
 
-void FileScoreController::continueLastSession()
+void ProjectFilesController::continueLastSession()
 {
-    io::paths recentScorePaths = configuration()->recentScorePaths().val;
+    io::paths recentScorePaths = configuration()->recentProjectPaths();
 
     if (recentScorePaths.empty()) {
         return;
@@ -341,12 +341,12 @@ void FileScoreController::continueLastSession()
     openProject(lastScorePath);
 }
 
-void FileScoreController::exportScore()
+void ProjectFilesController::exportScore()
 {
     interactive()->open("musescore://userscores/export");
 }
 
-io::path FileScoreController::selectScoreOpeningFile()
+io::path ProjectFilesController::selectScoreOpeningFile()
 {
     QString allExt = "*.mscz *.mxl *.musicxml *.xml *.mid *.midi *.kar *.md *.mgu *.sgu *.cap *.capx"
                      "*.ove *.scw *.bmw *.bww *.gtp *.gp3 *.gp4 *.gp5 *.gpx *.gp *.ptb *.mscx *.mscs *.mscz~";
@@ -370,7 +370,7 @@ io::path FileScoreController::selectScoreOpeningFile()
     return interactive()->selectOpeningFile(qtrc("userscores", "Score"), "", filter.join(";;"));
 }
 
-io::path FileScoreController::selectScoreSavingFile(const io::path& defaultFilePath, const QString& saveTitle)
+io::path ProjectFilesController::selectScoreSavingFile(const io::path& defaultFilePath, const QString& saveTitle)
 {
     QString filter = QObject::tr("MuseScore File") + " (*.mscz)";
     io::path filePath = interactive()->selectSavingFile(saveTitle, defaultFilePath, filter);
@@ -378,7 +378,7 @@ io::path FileScoreController::selectScoreSavingFile(const io::path& defaultFileP
     return filePath;
 }
 
-Ret FileScoreController::doOpenProject(const io::path& filePath)
+Ret ProjectFilesController::doOpenProject(const io::path& filePath)
 {
     TRACEFUNC;
 
@@ -417,7 +417,7 @@ Ret FileScoreController::doOpenProject(const io::path& filePath)
     return make_ret(Ret::Code::Ok);
 }
 
-void FileScoreController::doSaveScore(const io::path& filePath, project::SaveMode saveMode)
+void ProjectFilesController::doSaveScore(const io::path& filePath, project::SaveMode saveMode)
 {
     io::path oldPath = currentNotationProject()->metaInfo().filePath;
 
@@ -434,7 +434,7 @@ void FileScoreController::doSaveScore(const io::path& filePath, project::SaveMod
     prependToRecentScoreList(filePath);
 }
 
-io::path FileScoreController::defaultSavingFilePath() const
+io::path ProjectFilesController::defaultSavingFilePath() const
 {
     Meta scoreMetaInfo = currentNotationProject()->metaInfo();
 
@@ -446,13 +446,13 @@ io::path FileScoreController::defaultSavingFilePath() const
     return configuration()->defaultSavingFilePath(fileName);
 }
 
-void FileScoreController::prependToRecentScoreList(const io::path& filePath)
+void ProjectFilesController::prependToRecentScoreList(const io::path& filePath)
 {
     if (filePath.empty()) {
         return;
     }
 
-    io::paths recentScorePaths = configuration()->recentScorePaths().val;
+    io::paths recentScorePaths = configuration()->recentProjectPaths();
 
     auto it = std::find(recentScorePaths.begin(), recentScorePaths.end(), filePath);
     if (it != recentScorePaths.end()) {
@@ -460,21 +460,21 @@ void FileScoreController::prependToRecentScoreList(const io::path& filePath)
     }
 
     recentScorePaths.insert(recentScorePaths.begin(), filePath);
-    configuration()->setRecentScorePaths(recentScorePaths);
+    configuration()->setRecentProjectPaths(recentScorePaths);
     platformRecentFilesController()->addRecentFile(filePath);
 }
 
-bool FileScoreController::isProjectOpened() const
+bool ProjectFilesController::isProjectOpened() const
 {
     return currentNotationProject() != nullptr;
 }
 
-bool FileScoreController::isNeedSaveScore() const
+bool ProjectFilesController::isNeedSaveScore() const
 {
     return currentNotationProject() && currentNotationProject()->needSave().val;
 }
 
-bool FileScoreController::hasSelection() const
+bool ProjectFilesController::hasSelection() const
 {
     return currentNotationSelection() ? !currentNotationSelection()->isNone() : false;
 }

@@ -34,7 +34,7 @@
 #include "actions/actionable.h"
 #include "iinteractive.h"
 #include "async/asyncable.h"
-#include "project/ifilescorecontroller.h"
+#include "project/iprojectfilescontroller.h"
 #include "ui/imainwindow.h"
 
 namespace mu::mi {
@@ -42,7 +42,7 @@ class MultiInstancesProvider : public IMultiInstancesProvider, public actions::A
 {
     INJECT(mi, actions::IActionsDispatcher, dispatcher)
     INJECT(mi, framework::IInteractive, interactive)
-    INJECT(mi, project::IFileScoreController, fileScoreController)
+    INJECT(mi, project::IProjectFilesController, projectFilesController)
     INJECT(mi, ui::IMainWindow, mainWindow)
 
 public:

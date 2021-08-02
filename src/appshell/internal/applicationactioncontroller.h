@@ -34,7 +34,7 @@
 #include "iinteractive.h"
 #include "iappshellconfiguration.h"
 #include "multiinstances/imultiinstancesprovider.h"
-#include "project/ifilescorecontroller.h"
+#include "project/iprojectfilescontroller.h"
 
 namespace mu::appshell {
 class ApplicationActionController : public QObject, public actions::Actionable, public async::Asyncable
@@ -46,7 +46,7 @@ class ApplicationActionController : public QObject, public actions::Actionable, 
     INJECT(appshell, framework::IInteractive, interactive)
     INJECT(appshell, IAppShellConfiguration, configuration)
     INJECT(appshell, mi::IMultiInstancesProvider, multiInstancesProvider)
-    INJECT(appshell, project::IFileScoreController, fileScoreController)
+    INJECT(appshell, project::IProjectFilesController, projectFilesController)
 
 public:
     void init();

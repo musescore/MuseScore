@@ -67,8 +67,6 @@ public:
     std::string museScoreVersion() const override;
     std::string museScoreRevision() const override;
 
-    ValCh<io::paths> recentScorePaths() const override;
-
     bool isNotationNavigatorVisible() const override;
     void setIsNotationNavigatorVisible(bool visible) const override;
     async::Notification isNotationNavigatorVisibleChanged() const override;

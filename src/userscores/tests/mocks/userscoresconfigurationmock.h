@@ -30,10 +30,11 @@ namespace mu::userscores {
 class UserScoresConfigurationMock : public project::IProjectConfiguration
 {
 public:
-    MOCK_METHOD(ValCh<io::paths>, recentScorePaths, (), (const, override));
-    MOCK_METHOD(void, setRecentScorePaths, (const io::paths&), (override));
+    MOCK_METHOD(io::paths, recentProjectPaths, (), (const, override));
+    MOCK_METHOD(void, setRecentProjectPaths, (const io::paths&), (override));
+    MOCK_METHOD(async::Channel<io::paths>, recentProjectPathsChanged, (), (const, override));
 
-    MOCK_METHOD(io::path, myFirstScorePath, (), (const, override));
+    MOCK_METHOD(io::path, myFirstProjectPath, (), (const, override));
 
     MOCK_METHOD(io::paths, availableTemplatesPaths, (), (const, override));
 
@@ -41,9 +42,9 @@ public:
     MOCK_METHOD(void, setUserTemplatesPath, (const io::path&), (override));
     MOCK_METHOD(async::Channel<io::path>, userTemplatesPathChanged, (), (const, override));
 
-    MOCK_METHOD(io::path, userScoresPath, (), (const, override));
-    MOCK_METHOD(void, setUserScoresPath, (const io::path&), (override));
-    MOCK_METHOD(async::Channel<io::path>, userScoresPathChanged, (), (const, override));
+    MOCK_METHOD(io::path, userProjectsPath, (), (const, override));
+    MOCK_METHOD(void, setUserProjectsPath, (const io::path&), (override));
+    MOCK_METHOD(async::Channel<io::path>, userProjectsPathChanged, (), (const, override));
 
     MOCK_METHOD(io::path, defaultSavingFilePath, (const io::path&), (const, override));
 

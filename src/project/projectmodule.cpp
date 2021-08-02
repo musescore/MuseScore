@@ -28,7 +28,7 @@
 #include "internal/notationreadersregister.h"
 #include "internal/notationwritersregister.h"
 #include "internal/projectautosaver.h"
-#include "internal/filescorecontroller.h"
+#include "internal/projectfilescontroller.h"
 #include "internal/projectuiactions.h"
 #include "internal/projectconfiguration.h"
 
@@ -46,7 +46,7 @@ using namespace mu::project;
 using namespace mu::modularity;
 
 static std::shared_ptr<ProjectConfiguration> s_configuration = std::make_shared<ProjectConfiguration>();
-static std::shared_ptr<FileScoreController> s_fileController = std::make_shared<FileScoreController>();
+static std::shared_ptr<ProjectFilesController> s_fileController = std::make_shared<ProjectFilesController>();
 
 std::string ProjectModule::moduleName() const
 {
@@ -59,7 +59,7 @@ void ProjectModule::registerExports()
     ioc()->registerExport<IProjectCreator>(moduleName(), new ProjectCreator());
     ioc()->registerExport<INotationReadersRegister>(moduleName(), new NotationReadersRegister());
     ioc()->registerExport<INotationWritersRegister>(moduleName(), new NotationWritersRegister());
-    ioc()->registerExport<IFileScoreController>(moduleName(), s_fileController);
+    ioc()->registerExport<IProjectFilesController>(moduleName(), s_fileController);
 
 #ifdef Q_OS_MAC
     ioc()->registerExport<IPlatformRecentFilesController>(moduleName(), new MacOSRecentFilesController());
@@ -88,8 +88,9 @@ void ProjectModule::onInit(const framework::IApplication::RunMode& mode)
         return;
     }
 
+    s_configuration->init();
+    s_fileController->init();
+
     static ProjectAutoSaver autoSaver;
     autoSaver.init();
-
-    s_fileController->init();
 }

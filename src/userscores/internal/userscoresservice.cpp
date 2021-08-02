@@ -31,14 +31,14 @@ void UserScoresService::init()
 {
     updateRecentScoreList();
 
-    configuration()->recentScorePaths().ch.onReceive(this, [this](const io::paths&) {
+    configuration()->recentProjectPathsChanged().onReceive(this, [this](const io::paths&) {
         updateRecentScoreList();
     });
 }
 
 void UserScoresService::updateRecentScoreList()
 {
-    io::paths paths = configuration()->recentScorePaths().val;
+    io::paths paths = configuration()->recentProjectPaths();
     MetaList metaList = msczMetaReader()->readMetaList(paths);
     m_recentScoreList.set(metaList);
 }

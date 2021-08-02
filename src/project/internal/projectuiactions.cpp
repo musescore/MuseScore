@@ -88,7 +88,7 @@ const UiActionList UserScoresUiActions::m_actions = {
              )
 };
 
-UserScoresUiActions::UserScoresUiActions(std::shared_ptr<FileScoreController> controller)
+UserScoresUiActions::UserScoresUiActions(std::shared_ptr<ProjectFilesController> controller)
     : m_controller(controller)
 {
 }

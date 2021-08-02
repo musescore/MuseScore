@@ -19,10 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PROJECT_FILESCORECONTROLLER_H
-#define MU_PROJECT_FILESCORECONTROLLER_H
+#ifndef MU_PROJECT_PROJECTFILESCONTROLLER_H
+#define MU_PROJECT_PROJECTFILESCONTROLLER_H
 
-#include "ifilescorecontroller.h"
+#include "iprojectfilescontroller.h"
 
 #include "modularity/ioc.h"
 #include "iinteractive.h"
@@ -39,7 +39,7 @@
 #include "iplatformrecentfilescontroller.h"
 
 namespace mu::project {
-class FileScoreController : public IFileScoreController, public actions::Actionable, public async::Asyncable
+class ProjectFilesController : public IProjectFilesController, public actions::Actionable, public async::Asyncable
 {
     INJECT(userscores, actions::IActionsDispatcher, dispatcher)
     INJECT(userscores, framework::IInteractive, interactive)
@@ -103,4 +103,4 @@ private:
 };
 }
 
-#endif // MU_PROJECT_FILESCORECONTROLLER_H
+#endif // MU_PROJECT_PROJECTFILESCONTROLLER_H
