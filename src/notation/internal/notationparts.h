@@ -68,6 +68,7 @@ public:
     async::Notification partsChanged() const override;
 
 protected:
+    Ms::MasterScore* masterScore() const;
     INotationUndoStackPtr undoStack() const;
 
     virtual void startEdit();
@@ -75,7 +76,6 @@ protected:
 
 private:
     Ms::Score* score() const;
-    Ms::MasterScore* masterScore() const;
     void updateScore();
 
     void updatePartTitles();

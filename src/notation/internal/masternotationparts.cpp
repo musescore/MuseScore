@@ -22,6 +22,11 @@
 
 #include "masternotationparts.h"
 
+#include "scoreorderconverter.h"
+#include "libmscore/scoreorder.h"
+
+#include "log.h"
+
 using namespace mu::notation;
 
 MasterNotationParts::MasterNotationParts(IGetScore* getScore, INotationInteractionPtr interaction, INotationUndoStackPtr undoStack)
@@ -55,13 +60,21 @@ void MasterNotationParts::setParts(const PartInstrumentList& instruments)
 
 void MasterNotationParts::setScoreOrder(const ScoreOrder& order)
 {
+    TRACEFUNC;
+
     startEdit();
-    NotationParts::setScoreOrder(order);
+
+    Ms::ScoreOrder so = ScoreOrderConverter::convertScoreOrder(order);
+    masterScore()->undo(new Ms::ChangeScoreOrder(masterScore(), so));
+    masterScore()->setBracketsAndBarlines();
+
     apply();
 }
 
 void MasterNotationParts::removeParts(const IDList& partsIds)
 {
+    TRACEFUNC;
+
     startGlobalEdit();
 
     NotationParts::removeParts(partsIds);
@@ -75,6 +88,8 @@ void MasterNotationParts::removeParts(const IDList& partsIds)
 
 void MasterNotationParts::removeStaves(const IDList& stavesIds)
 {
+    TRACEFUNC;
+
     startEdit();
 
     NotationParts::removeStaves(stavesIds);
@@ -86,30 +101,10 @@ void MasterNotationParts::removeStaves(const IDList& stavesIds)
     apply();
 }
 
-void MasterNotationParts::moveParts(const IDList& sourcePartsIds, const ID& destinationPartId, InsertMode mode)
-{
-    startEdit();
-
-    NotationParts::moveParts(sourcePartsIds, destinationPartId, mode);
-
-    apply();
-}
-
-void MasterNotationParts::moveStaves(const IDList& sourceStavesIds, const ID& destinationStaffId, InsertMode mode)
-{
-    startEdit();
-
-    NotationParts::moveStaves(sourceStavesIds, destinationStaffId, mode);
-
-    for (INotationPartsPtr parts : excerptsParts()) {
-        parts->moveStaves(sourceStavesIds, destinationStaffId, mode);
-    }
-
-    apply();
-}
-
 void MasterNotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
 {
+    TRACEFUNC;
+
     startEdit();
 
     NotationParts::appendStaff(staff, destinationPartId);
@@ -123,6 +118,8 @@ void MasterNotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
 
 void MasterNotationParts::cloneStaff(const ID& sourceStaffId, const ID& destinationStaffId)
 {
+    TRACEFUNC;
+
     startEdit();
 
     NotationParts::cloneStaff(sourceStaffId, destinationStaffId);
@@ -136,6 +133,8 @@ void MasterNotationParts::cloneStaff(const ID& sourceStaffId, const ID& destinat
 
 void MasterNotationParts::replaceInstrument(const InstrumentKey& instrumentKey, const Instrument& newInstrument)
 {
+    TRACEFUNC;
+
     startEdit();
 
     NotationParts::replaceInstrument(instrumentKey, newInstrument);
@@ -149,6 +148,8 @@ void MasterNotationParts::replaceInstrument(const InstrumentKey& instrumentKey, 
 
 void MasterNotationParts::replaceDrumset(const InstrumentKey& instrumentKey, const Drumset& newDrumset)
 {
+    TRACEFUNC;
+
     startEdit();
 
     NotationParts::replaceDrumset(instrumentKey, newDrumset);
