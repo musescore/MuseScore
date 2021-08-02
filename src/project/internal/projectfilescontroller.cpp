@@ -81,9 +81,81 @@ INotationSelectionPtr ProjectFilesController::currentNotationSelection() const
     return currentNotation() ? currentInteraction()->selection() : nullptr;
 }
 
-Ret ProjectFilesController::openProject(const io::path& projectPath)
+void ProjectFilesController::openProject(const actions::ActionData& args)
 {
+    io::path projectPath = args.count() > 0 ? args.arg<io::path>(0) : "";
+    openProject(projectPath);
+}
+
+Ret ProjectFilesController::openProject(const io::path& projectPath_)
+{
+    //! Step 1. If no path is specified, ask the user to select a project
+    io::path projectPath = projectPath_;
+    if (projectPath.empty()) {
+        projectPath = selectScoreOpeningFile();
+
+        if (projectPath.empty()) {
+            return make_ret(Ret::Code::Cancel);
+        }
+    }
+
+    //! Sеep 2. If the project is already open in the current window, then just switch to showing the notation
+    if (isProjectOpened(projectPath)) {
+        if (!interactive()->isOpened("musescore://notation").val) {
+            interactive()->open("musescore://notation");
+        }
+        return make_ret(Ret::Code::Ok);
+    }
+
+    //! Step 3. Check, if the project already opened in another window, then activate the window with the project
+    if (multiInstancesProvider()->isProjectAlreadyOpened(projectPath)) {
+        multiInstancesProvider()->activateWindowWithProject(projectPath);
+        return make_ret(Ret::Code::Ok);
+    }
+
+    //! Step 4. Check, if a any project already opened in the current window,
+    //! then we open new window
+    if (globalContext()->currentNotationProject()) {
+        multiInstancesProvider()->openNewAppInstance(projectPath);
+        return make_ret(Ret::Code::Ok);
+    }
+
+    //! Step 5. Open project in the current window
     return doOpenProject(projectPath);
+}
+
+Ret ProjectFilesController::doOpenProject(const io::path& filePath)
+{
+    TRACEFUNC;
+
+    auto project = projectCreator()->newProject();
+    IF_ASSERT_FAILED(project) {
+        return make_ret(Ret::Code::InternalError);
+    }
+
+    Ret ret = project->load(filePath);
+
+    if (!ret && checkCanIgnoreError(ret, filePath)) {
+        constexpr auto NO_STYLE = "";
+        constexpr bool FORCE_MODE = true;
+        ret = project->load(filePath, NO_STYLE, FORCE_MODE);
+    }
+
+    if (!ret) {
+        return ret;
+    }
+
+    if (!globalContext()->containsNotationProject(filePath)) {
+        globalContext()->addNotationProject(project);
+    }
+
+    globalContext()->setCurrentNotationProject(project);
+
+    prependToRecentScoreList(filePath);
+
+    interactive()->open("musescore://notation");
+
+    return make_ret(Ret::Code::Ok);
 }
 
 bool ProjectFilesController::isProjectOpened(const io::path& scorePath) const
@@ -99,21 +171,6 @@ bool ProjectFilesController::isProjectOpened(const io::path& scorePath) const
     }
 
     return false;
-}
-
-void ProjectFilesController::openProject(const actions::ActionData& args)
-{
-    io::path scorePath = args.count() > 0 ? args.arg<io::path>(0) : "";
-
-    if (scorePath.empty()) {
-        scorePath = selectScoreOpeningFile();
-
-        if (scorePath.empty()) {
-            return;
-        }
-    }
-
-    doOpenProject(scorePath);
 }
 
 void ProjectFilesController::newProject()
@@ -376,45 +433,6 @@ io::path ProjectFilesController::selectScoreSavingFile(const io::path& defaultFi
     io::path filePath = interactive()->selectSavingFile(saveTitle, defaultFilePath, filter);
 
     return filePath;
-}
-
-Ret ProjectFilesController::doOpenProject(const io::path& filePath)
-{
-    TRACEFUNC;
-
-    if (multiInstancesProvider()->isScoreAlreadyOpened(filePath)) {
-        multiInstancesProvider()->activateWindowWithScore(filePath);
-        return make_ret(Ret::Code::Ok);
-    }
-
-    auto project = projectCreator()->newNotationProject();
-    IF_ASSERT_FAILED(project) {
-        return make_ret(Ret::Code::InternalError);
-    }
-
-    Ret ret = project->load(filePath);
-
-    if (!ret && checkCanIgnoreError(ret, filePath)) {
-        constexpr auto NO_STYLE = "";
-        constexpr bool FORCE_MODE = true;
-        ret = project->load(filePath, NO_STYLE, FORCE_MODE);
-    }
-
-    if (!ret) {
-        return ret;
-    }
-
-    if (!globalContext()->containsNotationProject(filePath)) {
-        globalContext()->addNotationProject(project);
-    }
-
-    globalContext()->setCurrentNotationProject(project);
-
-    prependToRecentScoreList(filePath);
-
-    interactive()->open("musescore://notation");
-
-    return make_ret(Ret::Code::Ok);
 }
 
 void ProjectFilesController::doSaveScore(const io::path& filePath, project::SaveMode saveMode)

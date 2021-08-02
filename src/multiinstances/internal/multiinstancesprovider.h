@@ -51,9 +51,10 @@ public:
 
     void init();
 
-    // Score opening
-    bool isScoreAlreadyOpened(const io::path& scorePath) const override;
-    void activateWindowWithScore(const io::path& scorePath) override;
+    // Project opening
+    bool isProjectAlreadyOpened(const io::path& projectPath) const override;
+    void activateWindowWithProject(const io::path& projectPath) override;
+    bool openNewAppInstance(const io::path& projectPath) override;
 
     // Settings
     bool isPreferencesAlreadyOpened() const override;

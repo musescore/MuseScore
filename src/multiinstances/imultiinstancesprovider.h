@@ -38,9 +38,10 @@ class IMultiInstancesProvider : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IMultiInstancesProvider() = default;
 
-    // Score opening
-    virtual bool isScoreAlreadyOpened(const io::path& scorePath) const = 0;
-    virtual void activateWindowWithScore(const io::path& scorePath) = 0;
+    // Project opening
+    virtual bool isProjectAlreadyOpened(const io::path& projectPath) const = 0;
+    virtual void activateWindowWithProject(const io::path& projectPath) = 0;
+    virtual bool openNewAppInstance(const io::path& projectPath) = 0;
 
     // Settings
     virtual bool isPreferencesAlreadyOpened() const = 0;
