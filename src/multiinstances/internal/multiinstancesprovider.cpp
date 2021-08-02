@@ -146,15 +146,13 @@ void MultiInstancesProvider::activateWindowWithProject(const io::path& projectPa
     m_ipcChannel->broadcast(METHOD_ACTIVATE_WINDOW_WITH_PROJECT, { projectPath.toQString() });
 }
 
-bool MultiInstancesProvider::openNewAppInstance(const io::path& projectPath)
+bool MultiInstancesProvider::openNewAppInstance(const QStringList& args)
 {
     if (!isInited()) {
         return false;
     }
 
     QString appPath = QCoreApplication::applicationFilePath();
-    QStringList args;
-    args << projectPath.toQString();
     bool ok = QProcess::startDetached(appPath, args);
     if (ok) {
         LOGI() << "success start: " << appPath << ", args: " << args;
