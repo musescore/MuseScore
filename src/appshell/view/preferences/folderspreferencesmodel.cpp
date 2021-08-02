@@ -81,7 +81,7 @@ void FoldersPreferencesModel::load()
     beginResetModel();
 
     m_folders = {
-        { FolderType::Scores, qtrc("appshell", "Scores"), projectConfiguration()->userScoresPath().toQString() },
+        { FolderType::Scores, qtrc("appshell", "Scores"), projectConfiguration()->userProjectsPath().toQString() },
         { FolderType::Styles, qtrc("appshell", "Styles"), notationConfiguration()->userStylesPath().toQString() },
         { FolderType::Templates, qtrc("appshell", "Templates"), projectConfiguration()->userTemplatesPath().toQString() },
         { FolderType::Plugins, qtrc("appshell", "Plugins"), pluginsConfiguration()->userPluginsPath().toQString() },
@@ -97,7 +97,7 @@ void FoldersPreferencesModel::load()
 
 void FoldersPreferencesModel::setupConnections()
 {
-    projectConfiguration()->userScoresPathChanged().onReceive(this, [this](const io::path& path) {
+    projectConfiguration()->userProjectsPathChanged().onReceive(this, [this](const io::path& path) {
         setPath(FolderType::Scores, path.toQString());
     });
 
@@ -124,7 +124,7 @@ void FoldersPreferencesModel::savePath(FoldersPreferencesModel::FolderType folde
 
     switch (folderType) {
     case FolderType::Scores:
-        projectConfiguration()->setUserScoresPath(folderPath);
+        projectConfiguration()->setUserProjectsPath(folderPath);
         break;
     case FolderType::Styles:
         notationConfiguration()->setUserStylesPath(folderPath);

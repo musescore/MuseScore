@@ -21,8 +21,9 @@
  */
 #include "projectconfiguration.h"
 
-#include "log.h"
 #include "settings.h"
+#include "async/async.h"
+#include "log.h"
 
 using namespace mu;
 using namespace mu::framework;
@@ -31,9 +32,9 @@ using namespace mu::notation;
 
 static const std::string module_name("project");
 
-static const Settings::Key RECENT_SCORE_PATHS(module_name, "userscores/recentList");
+static const Settings::Key RECENT_PROJECTS_PATHS(module_name, "userscores/recentList");
 static const Settings::Key USER_TEMPLATES_PATH(module_name, "application/paths/myTemplates");
-static const Settings::Key USER_SCORES_PATH(module_name, "application/paths/myScores");
+static const Settings::Key USER_PROJECTS_PATH(module_name, "application/paths/myScores");
 static const Settings::Key PREFERRED_SCORE_CREATION_MODE_KEY(module_name, "userscores/preferredScoreCreationMode");
 static const Settings::Key NEED_SHOW_WARNING_ABOUT_UNSAVED_SCORE_KEY(module_name, "userscores/unsavedScoreWarning");
 
@@ -47,29 +48,28 @@ void ProjectConfiguration::init()
     });
     fileSystem()->makePath(userTemplatesPath());
 
-    settings()->setDefaultValue(USER_SCORES_PATH, Val(globalConfiguration()->userDataPath() + "/Scores"));
-    settings()->valueChanged(USER_SCORES_PATH).onReceive(nullptr, [this](const Val& val) {
+    settings()->setDefaultValue(USER_PROJECTS_PATH, Val(globalConfiguration()->userDataPath() + "/Scores"));
+    settings()->valueChanged(USER_PROJECTS_PATH).onReceive(nullptr, [this](const Val& val) {
         m_userScoresPathChanged.send(val.toPath());
     });
-    fileSystem()->makePath(userScoresPath());
+    fileSystem()->makePath(userProjectsPath());
 
-    settings()->valueChanged(RECENT_SCORE_PATHS).onReceive(nullptr, [this](const Val& val) {
+    settings()->valueChanged(RECENT_PROJECTS_PATHS).onReceive(nullptr, [this](const Val& val) {
         io::paths paths = parsePaths(val);
-        m_recentScorePathsChanged.send(paths);
+        m_recentProjectPathsChanged.send(paths);
     });
 
     Val preferredScoreCreationMode = Val(static_cast<int>(PreferredScoreCreationMode::FromInstruments));
     settings()->setDefaultValue(PREFERRED_SCORE_CREATION_MODE_KEY, preferredScoreCreationMode);
 
-    io::paths paths = actualRecentScorePaths();
-    setRecentScorePaths(paths);
-
     settings()->setDefaultValue(NEED_SHOW_WARNING_ABOUT_UNSAVED_SCORE_KEY, Val(true));
 }
 
-io::paths ProjectConfiguration::actualRecentScorePaths() const
+io::paths ProjectConfiguration::recentProjectPaths() const
 {
-    io::paths allPaths = parsePaths(settings()->value(RECENT_SCORE_PATHS));
+    TRACEFUNC;
+
+    io::paths allPaths = parsePaths(settings()->value(RECENT_PROJECTS_PATHS));
     io::paths actualPaths;
 
     for (const io::path& path: allPaths) {
@@ -78,21 +78,18 @@ io::paths ProjectConfiguration::actualRecentScorePaths() const
         }
     }
 
+    //! NOTE Save actual recent project paths
+    if (allPaths != actualPaths) {
+        ProjectConfiguration* self = const_cast<ProjectConfiguration*>(this);
+        async::Async::call(nullptr, [self, actualPaths]() {
+            self->setRecentProjectPaths(actualPaths);
+        });
+    }
+
     return actualPaths;
 }
 
-ValCh<io::paths> ProjectConfiguration::recentScorePaths() const
-{
-    TRACEFUNC;
-
-    ValCh<io::paths> result;
-    result.ch = m_recentScorePathsChanged;
-    result.val = actualRecentScorePaths();
-
-    return result;
-}
-
-void ProjectConfiguration::setRecentScorePaths(const io::paths& recentScorePaths)
+void ProjectConfiguration::setRecentProjectPaths(const io::paths& recentScorePaths)
 {
     QStringList paths;
 
@@ -101,7 +98,12 @@ void ProjectConfiguration::setRecentScorePaths(const io::paths& recentScorePaths
     }
 
     Val value(paths.join(",").toStdString());
-    settings()->setSharedValue(RECENT_SCORE_PATHS, value);
+    settings()->setSharedValue(RECENT_PROJECTS_PATHS, value);
+}
+
+async::Channel<io::paths> ProjectConfiguration::recentProjectPathsChanged() const
+{
+    return m_recentProjectPathsChanged;
 }
 
 io::paths ProjectConfiguration::parsePaths(const Val& value) const
@@ -114,7 +116,7 @@ io::paths ProjectConfiguration::parsePaths(const Val& value) const
     return io::pathsFromStrings(paths);
 }
 
-io::path ProjectConfiguration::myFirstScorePath() const
+io::path ProjectConfiguration::myFirstProjectPath() const
 {
     return appTemplatesPath() + "/My_First_Score.mscx";
 }
@@ -157,24 +159,24 @@ async::Channel<io::path> ProjectConfiguration::userTemplatesPathChanged() const
     return m_userTemplatesPathChanged;
 }
 
-io::path ProjectConfiguration::userScoresPath() const
+io::path ProjectConfiguration::userProjectsPath() const
 {
-    return settings()->value(USER_SCORES_PATH).toPath();
+    return settings()->value(USER_PROJECTS_PATH).toPath();
 }
 
-void ProjectConfiguration::setUserScoresPath(const io::path& path)
+void ProjectConfiguration::setUserProjectsPath(const io::path& path)
 {
-    settings()->setSharedValue(USER_SCORES_PATH, Val(path));
+    settings()->setSharedValue(USER_PROJECTS_PATH, Val(path));
 }
 
-async::Channel<io::path> ProjectConfiguration::userScoresPathChanged() const
+async::Channel<io::path> ProjectConfiguration::userProjectsPathChanged() const
 {
     return m_userScoresPathChanged;
 }
 
 io::path ProjectConfiguration::defaultSavingFilePath(const io::path& fileName) const
 {
-    return userScoresPath() + "/" + fileName + DEFAULT_FILE_SUFFIX;
+    return userProjectsPath() + "/" + fileName + DEFAULT_FILE_SUFFIX;
 }
 
 QColor ProjectConfiguration::templatePreviewBackgroundColor() const

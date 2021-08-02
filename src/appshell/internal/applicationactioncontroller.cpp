@@ -73,7 +73,7 @@ mu::ValCh<bool> ApplicationActionController::isFullScreen() const
 
 void ApplicationActionController::quit()
 {
-    if (fileScoreController()->closeOpenedProject()) {
+    if (projectFilesController()->closeOpenedProject()) {
         QCoreApplication::quit();
     }
 }

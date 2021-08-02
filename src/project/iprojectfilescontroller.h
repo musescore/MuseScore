@@ -19,20 +19,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PROJECT_IFILESCORECONTROLLER_H
-#define MU_PROJECT_IFILESCORECONTROLLER_H
+#ifndef MU_PROJECT_IPROJECTFILESCONTROLLER_H
+#define MU_PROJECT_IPROJECTFILESCONTROLLER_H
 
 #include "modularity/imoduleexport.h"
 #include "ret.h"
 #include "io/path.h"
 
 namespace mu::project {
-class IFileScoreController : MODULE_EXPORT_INTERFACE
+class IProjectFilesController : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(IFileScoreController)
+    INTERFACE_ID(IProjectFilesController)
 
 public:
-    virtual ~IFileScoreController() = default;
+    virtual ~IProjectFilesController() = default;
 
     virtual Ret openProject(const io::path& scorePath) = 0;
     virtual bool closeOpenedProject() = 0;
@@ -40,4 +40,4 @@ public:
 };
 }
 
-#endif // MU_PROJECT_IFILESCORECONTROLLER_H
+#endif // MU_PROJECT_IPROJECTFILESCONTROLLER_H

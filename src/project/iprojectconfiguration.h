@@ -26,9 +26,9 @@
 #include <QColor>
 
 #include "modularity/imoduleexport.h"
-#include "retval.h"
 #include "io/path.h"
 #include "async/channel.h"
+#include "async/notification.h"
 
 namespace mu::project {
 class IProjectConfiguration : MODULE_EXPORT_INTERFACE
@@ -38,10 +38,11 @@ class IProjectConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IProjectConfiguration() = default;
 
-    virtual ValCh<io::paths> recentScorePaths() const = 0;
-    virtual void setRecentScorePaths(const io::paths& recentScorePaths) = 0;
+    virtual io::paths recentProjectPaths() const = 0;
+    virtual void setRecentProjectPaths(const io::paths& recentScorePaths) = 0;
+    virtual async::Channel<io::paths> recentProjectPathsChanged() const = 0;
 
-    virtual io::path myFirstScorePath() const = 0;
+    virtual io::path myFirstProjectPath() const = 0;
 
     virtual io::paths availableTemplatesPaths() const = 0;
 
@@ -49,9 +50,9 @@ public:
     virtual void setUserTemplatesPath(const io::path& path) = 0;
     virtual async::Channel<io::path> userTemplatesPathChanged() const = 0;
 
-    virtual io::path userScoresPath() const = 0;
-    virtual void setUserScoresPath(const io::path& path) = 0;
-    virtual async::Channel<io::path> userScoresPathChanged() const = 0;
+    virtual io::path userProjectsPath() const = 0;
+    virtual void setUserProjectsPath(const io::path& path) = 0;
+    virtual async::Channel<io::path> userProjectsPathChanged() const = 0;
 
     virtual io::path defaultSavingFilePath(const io::path& fileName) const = 0;
 
