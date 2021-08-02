@@ -51,7 +51,7 @@ bool NewScoreModel::createScore(const QVariant& info)
 {
     ProjectCreateOptions options = parseOptions(info.toMap());
 
-    auto project = notationCreator()->newNotationProject();
+    auto project = notationCreator()->newProject();
     Ret ret = project->createNew(options);
 
     if (!ret) {
