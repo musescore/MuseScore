@@ -52,5 +52,5 @@ void ContextModule::onInit(const framework::IApplication::RunMode& mode)
 
 void ContextModule::onDeinit()
 {
-    s_globalContext->setCurrentNotationProject(nullptr);
+    s_globalContext->setCurrentProject(nullptr);
 }

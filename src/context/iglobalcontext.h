@@ -35,14 +35,9 @@ class IGlobalContext : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IGlobalContext() = default;
 
-    virtual void addNotationProject(const project::INotationProjectPtr& project) = 0;
-    virtual void removeNotationProject(const project::INotationProjectPtr& project) = 0;
-    virtual const std::vector<project::INotationProjectPtr>& notationProjects() const = 0;
-    virtual bool containsNotationProject(const io::path& path) const = 0;
-
-    virtual void setCurrentNotationProject(const project::INotationProjectPtr& project) = 0;
-    virtual project::INotationProjectPtr currentNotationProject() const = 0;
-    virtual async::Notification currentNotationProjectChanged() const = 0;
+    virtual void setCurrentProject(const project::INotationProjectPtr& project) = 0;
+    virtual project::INotationProjectPtr currentProject() const = 0;
+    virtual async::Notification currentProjectChanged() const = 0;
 
     virtual notation::IMasterNotationPtr currentMasterNotation() const = 0;
     virtual async::Notification currentMasterNotationChanged() const = 0;

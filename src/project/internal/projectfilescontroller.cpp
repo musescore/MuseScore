@@ -58,7 +58,7 @@ void ProjectFilesController::init()
 
 INotationProjectPtr ProjectFilesController::currentNotationProject() const
 {
-    return globalContext()->currentNotationProject();
+    return globalContext()->currentProject();
 }
 
 IMasterNotationPtr ProjectFilesController::currentMasterNotation() const
@@ -115,7 +115,7 @@ Ret ProjectFilesController::openProject(const io::path& projectPath_)
 
     //! Step 4. Check, if a any project already opened in the current window,
     //! then we open new window
-    if (globalContext()->currentNotationProject()) {
+    if (globalContext()->currentProject()) {
         multiInstancesProvider()->openNewAppInstance(projectPath);
         return make_ret(Ret::Code::Ok);
     }
@@ -145,11 +145,7 @@ Ret ProjectFilesController::doOpenProject(const io::path& filePath)
         return ret;
     }
 
-    if (!globalContext()->containsNotationProject(filePath)) {
-        globalContext()->addNotationProject(project);
-    }
-
-    globalContext()->setCurrentNotationProject(project);
+    globalContext()->setCurrentProject(project);
 
     prependToRecentScoreList(filePath);
 
@@ -160,7 +156,7 @@ Ret ProjectFilesController::doOpenProject(const io::path& filePath)
 
 bool ProjectFilesController::isProjectOpened(const io::path& scorePath) const
 {
-    auto project = globalContext()->currentNotationProject();
+    auto project = globalContext()->currentProject();
     if (!project) {
         return false;
     }
@@ -203,7 +199,7 @@ bool ProjectFilesController::closeOpenedProject()
         }
     }
 
-    globalContext()->setCurrentNotationProject(nullptr);
+    globalContext()->setCurrentProject(nullptr);
     return true;
 }
 
@@ -292,7 +288,7 @@ void ProjectFilesController::saveSelection()
 
 void ProjectFilesController::saveOnline()
 {
-    INotationProjectPtr project = globalContext()->currentNotationProject();
+    INotationProjectPtr project = globalContext()->currentProject();
     if (!project) {
         return;
     }
