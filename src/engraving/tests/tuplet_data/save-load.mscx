@@ -138,6 +138,7 @@
               <text>3</text>
               </Number>
             <size>12</size>
+            <italic>0</italic>
             <underline>1</underline>
             </Tuplet>
           <Beam>
@@ -214,7 +215,6 @@
               </Number>
             <numberType>1</numberType>
             <bracketType>1</bracketType>
-            <family>EB Garamond SC</family>
             <size>15</size>
             </Tuplet>
           <Beam>
