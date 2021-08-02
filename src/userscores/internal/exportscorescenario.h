@@ -25,7 +25,7 @@
 #include "modularity/ioc.h"
 
 #include "iexportscorescenario.h"
-#include "iuserscoresconfiguration.h"
+#include "project/iprojectconfiguration.h"
 #include "iinteractive.h"
 #include "project/inotationwritersregister.h"
 #include "importexport/imagesexport/iimagesexportconfiguration.h"
@@ -35,7 +35,7 @@
 namespace mu::userscores {
 class ExportScoreScenario : public IExportScoreScenario
 {
-    INJECT(userscores, IUserScoresConfiguration, configuration)
+    INJECT(userscores, project::IProjectConfiguration, configuration)
     INJECT(userscores, framework::IInteractive, interactive)
     INJECT(userscores, project::INotationWritersRegister, writers)
     INJECT(userscores, iex::imagesexport::IImagesExportConfiguration, imagesExportConfiguration)

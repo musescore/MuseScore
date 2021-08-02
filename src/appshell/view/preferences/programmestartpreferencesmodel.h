@@ -26,7 +26,7 @@
 
 #include "modularity/ioc.h"
 #include "iappshellconfiguration.h"
-#include "userscores/iuserscoresconfiguration.h"
+#include "project/iprojectconfiguration.h"
 
 namespace mu::appshell {
 class ProgrammeStartPreferencesModel : public QObject

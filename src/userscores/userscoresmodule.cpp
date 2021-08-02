@@ -33,30 +33,17 @@
 #include "view/templatesmodel.h"
 #include "view/templatepaintview.h"
 #include "view/exportdialogmodel.h"
-#include "internal/filescorecontroller.h"
-#include "internal/userscoresconfiguration.h"
+
 #include "internal/userscoresservice.h"
 #include "internal/exportscorescenario.h"
 #include "internal/templatesrepository.h"
-#include "internal/userscoresuiactions.h"
-
-#ifdef Q_OS_MAC
-#include "internal/platform/macos/macosrecentfilescontroller.h"
-#elif defined (Q_OS_WIN)
-#include "internal/platform/windows/windowsrecentfilescontroller.h"
-#else
-#include "internal/platform/stub/stubrecentfilescontroller.h"
-#endif
 
 #include "ui/iinteractiveuriregister.h"
-#include "ui/iuiactionsregister.h"
 
 using namespace mu::userscores;
 using namespace mu::modularity;
 using namespace mu::ui;
 
-static std::shared_ptr<FileScoreController> s_fileController = std::make_shared<FileScoreController>();
-static std::shared_ptr<UserScoresConfiguration> s_userScoresConfiguration = std::make_shared<UserScoresConfiguration>();
 static std::shared_ptr<UserScoresService> s_userScoresService = std::make_shared<UserScoresService>();
 static std::shared_ptr<ExportScoreScenario> s_exportScoreScenario = std::make_shared<ExportScoreScenario>();
 
@@ -72,28 +59,13 @@ std::string UserScoresModule::moduleName() const
 
 void UserScoresModule::registerExports()
 {
-    ioc()->registerExport<IUserScoresConfiguration>(moduleName(), s_userScoresConfiguration);
     ioc()->registerExport<IUserScoresService>(moduleName(), s_userScoresService);
     ioc()->registerExport<ITemplatesRepository>(moduleName(), new TemplatesRepository());
-    ioc()->registerExport<IFileScoreController>(moduleName(), s_fileController);
     ioc()->registerExport<IExportScoreScenario>(moduleName(), s_exportScoreScenario);
-
-#ifdef Q_OS_MAC
-    ioc()->registerExport<IPlatformRecentFilesController>(moduleName(), new MacOSRecentFilesController());
-#elif defined (Q_OS_WIN)
-    ioc()->registerExport<IPlatformRecentFilesController>(moduleName(), new WindowsRecentFilesController());
-#else
-    ioc()->registerExport<IPlatformRecentFilesController>(moduleName(), new StubRecentFilesController());
-#endif
 }
 
 void UserScoresModule::resolveImports()
 {
-    auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
-    if (ar) {
-        ar->reg(std::make_shared<UserScoresUiActions>(s_fileController));
-    }
-
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerUri(Uri("musescore://userscores/newscore"),
@@ -128,7 +100,6 @@ void UserScoresModule::onInit(const framework::IApplication::RunMode& mode)
     if (framework::IApplication::RunMode::Converter == mode) {
         return;
     }
-    s_userScoresConfiguration->init();
+
     s_userScoresService->init();
-    s_fileController->init();
 }

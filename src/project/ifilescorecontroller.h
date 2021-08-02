@@ -19,22 +19,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "windowsrecentfilescontroller.h"
+#ifndef MU_PROJECT_IFILESCORECONTROLLER_H
+#define MU_PROJECT_IFILESCORECONTROLLER_H
 
-#include <Windows.h>
-#include <shlobj.h>
+#include "modularity/imoduleexport.h"
+#include "ret.h"
+#include "io/path.h"
 
-using namespace mu::userscores;
-
-void WindowsRecentFilesController::addRecentFile(const io::path& path)
+namespace mu::project {
+class IFileScoreController : MODULE_EXPORT_INTERFACE
 {
-    std::wstring pathString = path.toStdWString();
-    SHAddToRecentDocs(SHARD_PATHW, pathString.c_str());
+    INTERFACE_ID(IFileScoreController)
+
+public:
+    virtual ~IFileScoreController() = default;
+
+    virtual Ret openProject(const io::path& scorePath) = 0;
+    virtual bool closeOpenedProject() = 0;
+    virtual bool isProjectOpened(const io::path& scorePath) const = 0;
+};
 }
 
-void WindowsRecentFilesController::clearRecentFiles()
-{
-    // The "docs" seem to say that this should clear the recent files list
-    // But in practice it's not sure if that's the case
-    SHAddToRecentDocs(0, NULL);
-}
+#endif // MU_PROJECT_IFILESCORECONTROLLER_H

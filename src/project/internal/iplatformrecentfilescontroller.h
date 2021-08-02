@@ -19,14 +19,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "stubrecentfilescontroller.h"
 
-using namespace mu::userscores;
+#ifndef MU_PROJECT_IPLATFORMRECENTFILESCONTROLLER_H
+#define MU_PROJECT_IPLATFORMRECENTFILESCONTROLLER_H
 
-void StubRecentFilesController::addRecentFile(const io::path&)
+#include "modularity/imoduleexport.h"
+#include "io/path.h"
+
+namespace mu::project {
+class IPlatformRecentFilesController : MODULE_EXPORT_INTERFACE
 {
+    INTERFACE_ID(IPlatformRecentFilesController)
+
+public:
+    virtual ~IPlatformRecentFilesController() = default;
+
+    virtual void addRecentFile(const io::path& path) = 0;
+    virtual void clearRecentFiles() = 0;
+};
 }
 
-void StubRecentFilesController::clearRecentFiles()
-{
-}
+#endif // MU_PROJECT_IPLATFORMRECENTFILESCONTROLLER_H

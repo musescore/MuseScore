@@ -28,6 +28,31 @@ set(MODULE project)
 
 #set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml )
 
+include(GetPlatformInfo)
+
+if (OS_IS_MAC)
+    set(PLATFORM_SRC
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosrecentfilescontroller.mm
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosrecentfilescontroller.h
+    )
+    # Don't mix C++ and Objective-C++ in Unity Build
+    set_source_files_properties(${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosrecentfilescontroller.mm
+                                PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON)
+
+    set_source_files_properties(${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosrecentfilescontroller.mm
+                                PROPERTIES SKIP_PRECOMPILE_HEADERS ON)
+elseif(OS_IS_WIN)
+    set(PLATFORM_SRC
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/windows/windowsrecentfilescontroller.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/windows/windowsrecentfilescontroller.h
+    )
+else()
+    set(PLATFORM_SRC
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/stub/stubrecentfilescontroller.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/stub/stubrecentfilescontroller.h
+    )
+endif()
+
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/projectmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/projectmodule.h
@@ -39,7 +64,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/inotationwriter.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationwritersregister.h
     ${CMAKE_CURRENT_LIST_DIR}/iprojectaudiosettings.h
+    ${CMAKE_CURRENT_LIST_DIR}/ifilescorecontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/iprojectconfiguration.h
 
+    ${CMAKE_CURRENT_LIST_DIR}/internal/iplatformrecentfilescontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationproject.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationproject.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/projectcreator.cpp
@@ -52,6 +80,14 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationwritersregister.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/projectautosaver.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/projectautosaver.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/filescorecontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/filescorecontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/projectuiactions.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/projectuiactions.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/projectconfiguration.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/projectconfiguration.h
+
+    ${PLATFORM_SRC}
     )
 
 set(MODULE_LINK notation)

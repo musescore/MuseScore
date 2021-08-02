@@ -26,14 +26,14 @@
 #include "modularity/ioc.h"
 
 #include "itemplatesrepository.h"
-#include "userscores/iuserscoresconfiguration.h"
+#include "project/iprojectconfiguration.h"
 #include "notation/imsczmetareader.h"
 #include "system/ifilesystem.h"
 
 namespace mu::userscores {
 class TemplatesRepository : public ITemplatesRepository
 {
-    INJECT(userscores, IUserScoresConfiguration, configuration)
+    INJECT(userscores, project::IProjectConfiguration, configuration)
     INJECT(userscores, notation::IMsczMetaReader, msczReader)
     INJECT(userscores, system::IFileSystem, fileSystem)
 

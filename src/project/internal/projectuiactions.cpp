@@ -19,9 +19,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "userscoresuiactions.h"
+#include "projectuiactions.h"
 
-using namespace mu::userscores;
+using namespace mu::project;
 using namespace mu::ui;
 
 const UiActionList UserScoresUiActions::m_actions = {
