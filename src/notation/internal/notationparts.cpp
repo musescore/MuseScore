@@ -27,7 +27,6 @@
 #include "libmscore/page.h"
 
 #include "instrumentsconverter.h"
-#include "scoreorderconverter.h"
 
 #include "igetscore.h"
 
@@ -145,13 +144,9 @@ void NotationParts::setParts(const PartInstrumentList& parts)
     m_partChangedNotifier->changed();
 }
 
-void NotationParts::setScoreOrder(const ScoreOrder& order)
+void NotationParts::setScoreOrder(const ScoreOrder&)
 {
-    TRACEFUNC;
-
-    Ms::ScoreOrder so = ScoreOrderConverter::convertScoreOrder(order);
-    masterScore()->undo(new Ms::ChangeScoreOrder(masterScore(), so));
-    masterScore()->setBracketsAndBarlines();
+    NOT_SUPPORTED;
 }
 
 void NotationParts::setPartVisible(const ID& partId, bool visible)
@@ -588,7 +583,7 @@ void NotationParts::removeParts(const IDList& partsIds)
 
     apply();
 
-    notifyAboutPartsChanged();
+    m_partsChanged.notify();
 }
 
 void NotationParts::doRemoveParts(const IDList& partsIds)

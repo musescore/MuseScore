@@ -40,9 +40,6 @@ public:
     void removeParts(const IDList& partsIds) override;
     void removeStaves(const IDList& stavesIds) override;
 
-    void moveParts(const IDList& sourcePartsIds, const ID& destinationPartId, InsertMode mode = InsertMode::Before) override;
-    void moveStaves(const IDList& sourceStavesIds, const ID& destinationStaffId, InsertMode mode = InsertMode::Before) override;
-
     void appendStaff(Staff* staff, const ID& destinationPartId) override;
     void cloneStaff(const ID& sourceStaffId, const ID& destinationStaffId) override;
 
