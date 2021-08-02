@@ -27,7 +27,9 @@
 #include <QList>
 
 #include "instrumentsscenetypes.h"
-#include "notation/inotationparts.h"
+
+#include "notation/imasternotation.h"
+#include "notation/iexcerptnotation.h"
 
 namespace mu::instrumentsscene {
 class AbstractInstrumentsPanelTreeItem : public QObject
@@ -41,7 +43,9 @@ class AbstractInstrumentsPanelTreeItem : public QObject
     Q_PROPERTY(bool isSelectable READ isSelectable NOTIFY isSelectableChanged)
 
 public:
-    explicit AbstractInstrumentsPanelTreeItem(const InstrumentsTreeItemType::ItemType& type, notation::INotationPartsPtr notationParts,
+    explicit AbstractInstrumentsPanelTreeItem(const InstrumentsTreeItemType::ItemType& type,
+                                              notation::IMasterNotationPtr masterNotation,
+                                              notation::INotationPtr notation,
                                               QObject* parent = nullptr);
     virtual ~AbstractInstrumentsPanelTreeItem();
 
@@ -92,7 +96,8 @@ signals:
     void isSelectableChanged(bool isSelectable);
 
 protected:
-    notation::INotationPartsPtr notationParts() const;
+    notation::IMasterNotationPtr masterNotation() const;
+    notation::INotationPtr notation() const;
 
 private:
     QList<AbstractInstrumentsPanelTreeItem*> m_children;
@@ -104,7 +109,8 @@ private:
     bool m_isVisible = false;
     bool m_canChangeVisibility = false;
 
-    notation::INotationPartsPtr m_notationParts = nullptr;
+    notation::IMasterNotationPtr m_masterNotation = nullptr;
+    notation::INotationPtr m_notation = nullptr;
 };
 }
 

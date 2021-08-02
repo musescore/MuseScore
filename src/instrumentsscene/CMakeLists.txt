@@ -40,8 +40,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/roottreeitem.h
     ${CMAKE_CURRENT_LIST_DIR}/view/parttreeitem.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/parttreeitem.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/instrumenttreeitem.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/instrumenttreeitem.h
     ${CMAKE_CURRENT_LIST_DIR}/view/stafftreeitem.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/stafftreeitem.h
     ${CMAKE_CURRENT_LIST_DIR}/view/staffcontroltreeitem.cpp

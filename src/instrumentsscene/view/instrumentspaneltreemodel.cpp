@@ -41,20 +41,13 @@ InstrumentsPanelTreeModel::InstrumentsPanelTreeModel(QObject* parent)
     : QAbstractItemModel(parent)
 {
     context()->currentMasterNotationChanged().onNotify(this, [this]() {
-        IMasterNotationPtr masterNotation = context()->currentMasterNotation();
-
-        m_masterNotationParts = nullptr;
-
-        if (masterNotation) {
-            m_masterNotationParts = masterNotation->parts();
-        }
+        m_masterNotation = context()->currentMasterNotation();
     });
 
     context()->currentNotationChanged().onNotify(this, [this]() {
-        INotationPtr notation = context()->currentNotation();
-        m_notationParts = notation ? notation->parts() : nullptr;
+        m_notation = context()->currentNotation();
 
-        if (notation) {
+        if (m_notation) {
             load();
         } else {
             clear();
@@ -81,7 +74,7 @@ InstrumentsPanelTreeModel::~InstrumentsPanelTreeModel()
 
 bool InstrumentsPanelTreeModel::canReceiveAction(const actions::ActionCode&) const
 {
-    return m_masterNotationParts != nullptr;
+    return m_masterNotation != nullptr && m_notation != nullptr;
 }
 
 void InstrumentsPanelTreeModel::clear()
@@ -110,9 +103,9 @@ void InstrumentsPanelTreeModel::load()
     TRACEFUNC;
     beginResetModel();
 
-    m_rootItem = new RootTreeItem(m_masterNotationParts);
+    m_rootItem = new RootTreeItem(m_masterNotation, m_notation);
 
-    async::NotifyList<const Part*> allParts = m_masterNotationParts->partList();
+    async::NotifyList<const Part*> allParts = m_masterNotation->parts()->partList();
     IDList notationPartIdList = currentNotationPartIdList();
 
     for (const Part* part : allParts) {
@@ -145,7 +138,7 @@ IDList InstrumentsPanelTreeModel::currentNotationPartIdList() const
 {
     IDList result;
 
-    for (const Part* part : m_notationParts->partList()) {
+    for (const Part* part : m_notation->parts()->partList()) {
         result << part->id();
     }
 
@@ -166,8 +159,8 @@ void InstrumentsPanelTreeModel::addInstruments()
         return;
     }
 
-    m_masterNotationParts->setScoreOrder(selectedInstruments.val.scoreOrder);
-    m_masterNotationParts->setParts(selectedInstruments.val.instruments);
+    m_masterNotation->parts()->setScoreOrder(selectedInstruments.val.scoreOrder);
+    m_masterNotation->parts()->setParts(selectedInstruments.val.instruments);
 
     emit isEmptyChanged();
 }
@@ -424,7 +417,7 @@ bool InstrumentsPanelTreeModel::isRemovingAvailable() const
 
 bool InstrumentsPanelTreeModel::isAddingAvailable() const
 {
-    return m_notationParts != nullptr;
+    return m_notation != nullptr;
 }
 
 bool InstrumentsPanelTreeModel::isEmpty() const
@@ -510,7 +503,7 @@ AbstractInstrumentsPanelTreeItem* InstrumentsPanelTreeModel::loadPart(const Part
     auto partItem = buildPartItem(part);
     QString partId = part->id();
 
-    async::NotifyList<const Staff*> staves = m_masterNotationParts->staffList(partId);
+    async::NotifyList<const Staff*> staves = m_masterNotation->parts()->staffList(partId);
 
     for (const Staff* staff : staves) {
         auto staffItem = buildStaffItem(staff);
@@ -574,13 +567,8 @@ void InstrumentsPanelTreeModel::updateStaffItem(StaffTreeItem* item, const Staff
 
 AbstractInstrumentsPanelTreeItem* InstrumentsPanelTreeModel::buildPartItem(const Part* part)
 {
-    auto result = new PartTreeItem(m_masterNotationParts, this);
+    auto result = new PartTreeItem(m_masterNotation, m_notation, this);
     updatePartItem(result, part);
-
-    connect(result, &AbstractInstrumentsPanelTreeItem::isVisibleChanged, this, [this, part](const bool isVisible) {
-        //! NOTE: need to change a visibility only in a current notation
-        m_notationParts->setPartVisible(part->id(), isVisible);
-    });
 
     return result;
 }
@@ -597,20 +585,15 @@ void InstrumentsPanelTreeModel::updatePartItem(PartTreeItem* item, const Part* p
 
 AbstractInstrumentsPanelTreeItem* InstrumentsPanelTreeModel::buildStaffItem(const Staff* staff)
 {
-    auto result = new StaffTreeItem(m_masterNotationParts, this);
+    auto result = new StaffTreeItem(m_masterNotation, m_notation, this);
     updateStaffItem(result, staff);
-
-    connect(result, &AbstractInstrumentsPanelTreeItem::isVisibleChanged, [this, staff](const bool isVisible) {
-        //! NOTE: need to change a visibility only in a current notation
-        m_notationParts->setStaffVisible(staff->id(), isVisible);
-    });
 
     return result;
 }
 
 AbstractInstrumentsPanelTreeItem* InstrumentsPanelTreeModel::buildAddStaffControlItem(const QString& partId)
 {
-    auto result = new StaffControlTreeItem(m_masterNotationParts, this);
+    auto result = new StaffControlTreeItem(m_masterNotation, m_notation, this);
     result->setTitle(qtrc("instruments", "Add staff"));
     result->setPartId(partId);
 
