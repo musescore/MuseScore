@@ -26,13 +26,11 @@
 
 #include "translation.h"
 #include "notation/notationerrors.h"
-
-#include "userscoresconfiguration.h"
+#include "projectconfiguration.h"
 
 #include "log.h"
 
 using namespace mu;
-using namespace mu::userscores;
 using namespace mu::project;
 using namespace mu::notation;
 using namespace mu::framework;
@@ -193,7 +191,7 @@ void FileScoreController::saveScore()
     }
 
     if (io::suffix(filePath).empty()) {
-        filePath = filePath + UserScoresConfiguration::DEFAULT_FILE_SUFFIX;
+        filePath = filePath + ProjectConfiguration::DEFAULT_FILE_SUFFIX;
     }
 
     doSaveScore(filePath);
@@ -287,11 +285,11 @@ void FileScoreController::saveOnline()
 
 bool FileScoreController::checkCanIgnoreError(const Ret& ret, const io::path& filePath)
 {
-    static const QList<Err> ignorableErrors {
-        Err::FileTooOld,
-        Err::FileTooNew,
-        Err::FileCorrupted,
-        Err::FileOld300Format
+    static const QList<notation::Err> ignorableErrors {
+        notation::Err::FileTooOld,
+        notation::Err::FileTooNew,
+        notation::Err::FileCorrupted,
+        notation::Err::FileOld300Format
     };
 
     std::string title = trc("userscores", "Open Error");
@@ -302,7 +300,7 @@ bool FileScoreController::checkCanIgnoreError(const Ret& ret, const io::path& fi
     IInteractive::Options options;
     options.setFlag(IInteractive::Option::WithIcon);
 
-    bool canIgnore = ignorableErrors.contains(static_cast<Err>(ret.code()));
+    bool canIgnore = ignorableErrors.contains(static_cast<notation::Err>(ret.code()));
 
     if (!canIgnore) {
         interactive()->error(title, body, {
@@ -389,7 +387,7 @@ Ret FileScoreController::doOpenProject(const io::path& filePath)
         return make_ret(Ret::Code::Ok);
     }
 
-    auto project = notationCreator()->newNotationProject();
+    auto project = projectCreator()->newNotationProject();
     IF_ASSERT_FAILED(project) {
         return make_ret(Ret::Code::InternalError);
     }

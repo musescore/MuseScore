@@ -23,7 +23,7 @@
 
 #include "macosrecentfilescontroller.h"
 
-using namespace mu::userscores;
+using namespace mu::project;
 
 void MacOSRecentFilesController::addRecentFile(const io::path& path)
 {

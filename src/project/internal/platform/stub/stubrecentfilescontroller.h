@@ -19,11 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_USERSCORES_STUBRECENTFILESCONTROLLER_H
-#define MU_USERSCORES_STUBRECENTFILESCONTROLLER_H
+#ifndef MU_PROJECT_STUBRECENTFILESCONTROLLER_H
+#define MU_PROJECT_STUBRECENTFILESCONTROLLER_H
 
-namespace mu::userscores {
-class WindowsRecentFilesController : public IPlatformRecentFilesController
+#include "internal/iplatformrecentfilescontroller.h"
+
+namespace mu::project {
+class StubRecentFilesController : public IPlatformRecentFilesController
 {
 public:
     void addRecentFile(const io::path& path) override;
@@ -31,4 +33,4 @@ public:
 };
 }
 
-#endif // MU_USERSCORES_STUBRECENTFILESCONTROLLER_H
+#endif // MU_PROJECT_STUBRECENTFILESCONTROLLER_H

@@ -24,7 +24,7 @@
 
 #include "modularity/ioc.h"
 #include "iappshellconfiguration.h"
-#include "userscores/iuserscoresconfiguration.h"
+#include "project/iprojectconfiguration.h"
 #include "notation/inotationconfiguration.h"
 #include "playback/iplaybackconfiguration.h"
 #include "languages/ilanguagesconfiguration.h"
@@ -34,7 +34,7 @@
 namespace mu::appshell {
 class AppShellConfiguration : public IAppShellConfiguration, public async::Asyncable
 {
-    INJECT(appshell, userscores::IUserScoresConfiguration, userScoresConfiguration)
+    INJECT(appshell, project::IProjectConfiguration, projectConfiguration)
     INJECT(appshell, notation::INotationConfiguration, notationConfiguration)
     INJECT(appshell, playback::IPlaybackConfiguration, playbackConfiguration)
     INJECT(appshell, languages::ILanguagesConfiguration, languagesConfiguration)

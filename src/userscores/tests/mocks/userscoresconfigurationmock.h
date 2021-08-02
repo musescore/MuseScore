@@ -24,10 +24,10 @@
 
 #include <gmock/gmock.h>
 
-#include "userscores/iuserscoresconfiguration.h"
+#include "project/iprojectconfiguration.h"
 
 namespace mu::userscores {
-class UserScoresConfigurationMock : public IUserScoresConfiguration
+class UserScoresConfigurationMock : public project::IProjectConfiguration
 {
 public:
     MOCK_METHOD(ValCh<io::paths>, recentScorePaths, (), (const, override));
@@ -54,7 +54,7 @@ public:
     MOCK_METHOD(void, setPreferredScoreCreationMode, (PreferredScoreCreationMode), (override));
 
     MOCK_METHOD(bool, needShowWarningAboutUnsavedScore, (), (const, override));
-    MOCK_METHOD(void, setNeedShowWarningAboutUnsavedScore, (bool), (override));
+    MOCK_METHOD(void, setNeedShowWarningAboutUnsavedScore, (bool value), (override));
 };
 }
 

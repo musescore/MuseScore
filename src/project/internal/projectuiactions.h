@@ -19,18 +19,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_USERSCORES_USERSCORESUIACTIONS_H
-#define MU_USERSCORES_USERSCORESUIACTIONS_H
+#ifndef MU_PROJECT_PROJECTUIACTIONS_H
+#define MU_PROJECT_PROJECTUIACTIONS_H
 
 #include "ui/iuiactionsmodule.h"
 #include "filescorecontroller.h"
 #include "modularity/ioc.h"
 #include "context/iuicontextresolver.h"
 
-namespace mu::userscores {
+namespace mu::project {
 class UserScoresUiActions : public ui::IUiActionsModule
 {
-    INJECT(userscores, context::IUiContextResolver, uicontextResolver)
+    INJECT(project, context::IUiContextResolver, uicontextResolver)
 public:
 
     UserScoresUiActions(std::shared_ptr<FileScoreController> controller);
@@ -51,4 +51,4 @@ private:
 };
 }
 
-#endif // MU_USERSCORES_USERSCORESUIACTIONS_H
+#endif // MU_PROJECT_PROJECTUIACTIONS_H

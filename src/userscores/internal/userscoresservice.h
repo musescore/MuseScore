@@ -25,13 +25,13 @@
 #include "iuserscoresservice.h"
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
-#include "iuserscoresconfiguration.h"
+#include "project/iprojectconfiguration.h"
 #include "notation/imsczmetareader.h"
 
 namespace mu::userscores {
 class UserScoresService : public IUserScoresService, public async::Asyncable
 {
-    INJECT(userscores, IUserScoresConfiguration, configuration)
+    INJECT(userscores, project::IProjectConfiguration, configuration)
     INJECT(userscores, notation::IMsczMetaReader, msczMetaReader)
 
 public:

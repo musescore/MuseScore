@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_USERSCORES_IUSERSCORESCONFIGURATION_H
-#define MU_USERSCORES_IUSERSCORESCONFIGURATION_H
+#ifndef MU_PROJECT_IPROJECTCONFIGURATION_H
+#define MU_PROJECT_IPROJECTCONFIGURATION_H
 
 #include <QStringList>
 #include <QColor>
@@ -28,17 +28,15 @@
 #include "modularity/imoduleexport.h"
 #include "retval.h"
 #include "io/path.h"
-#include "userscorestypes.h"
-#include "notation/inotation.h"
 #include "async/channel.h"
 
-namespace mu::userscores {
-class IUserScoresConfiguration : MODULE_EXPORT_INTERFACE
+namespace mu::project {
+class IProjectConfiguration : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(IUserScoresConfiguration)
+    INTERFACE_ID(IProjectConfiguration)
 
 public:
-    virtual ~IUserScoresConfiguration() = default;
+    virtual ~IProjectConfiguration() = default;
 
     virtual ValCh<io::paths> recentScorePaths() const = 0;
     virtual void setRecentScorePaths(const io::paths& recentScorePaths) = 0;
@@ -73,4 +71,4 @@ public:
 };
 }
 
-#endif // MU_USERSCORES_IUSERSCORESCONFIGURATION_H
+#endif // MU_PROJECT_IPROJECTCONFIGURATION_H

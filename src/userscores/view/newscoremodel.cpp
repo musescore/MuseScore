@@ -30,7 +30,7 @@ using namespace mu::project;
 using namespace mu::notation;
 using namespace mu::ui;
 
-using PreferredScoreCreationMode = IUserScoresConfiguration::PreferredScoreCreationMode;
+using PreferredScoreCreationMode = IProjectConfiguration::PreferredScoreCreationMode;
 
 NewScoreModel::NewScoreModel(QObject* parent)
     : QObject(parent)
