@@ -27,7 +27,7 @@
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 #include "actions/iactionsdispatcher.h"
-#include "iuserscoresconfiguration.h"
+#include "project/iprojectconfiguration.h"
 #include "iuserscoresservice.h"
 
 namespace mu::userscores {
@@ -36,7 +36,7 @@ class RecentScoresModel : public QAbstractListModel, public async::Asyncable
     Q_OBJECT
 
     INJECT(userscores, actions::IActionsDispatcher, dispatcher)
-    INJECT(userscores, IUserScoresConfiguration, configuration)
+    INJECT(userscores, project::IProjectConfiguration, configuration)
     INJECT(userscores, IUserScoresService, userScoresService)
 
 public:

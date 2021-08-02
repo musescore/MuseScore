@@ -19,17 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "userscoresconfiguration.h"
+#include "projectconfiguration.h"
 
 #include "log.h"
 #include "settings.h"
 
 using namespace mu;
 using namespace mu::framework;
-using namespace mu::userscores;
+using namespace mu::project;
 using namespace mu::notation;
 
-static const std::string module_name("userscores");
+static const std::string module_name("project");
 
 static const Settings::Key RECENT_SCORE_PATHS(module_name, "userscores/recentList");
 static const Settings::Key USER_TEMPLATES_PATH(module_name, "application/paths/myTemplates");
@@ -37,9 +37,9 @@ static const Settings::Key USER_SCORES_PATH(module_name, "application/paths/mySc
 static const Settings::Key PREFERRED_SCORE_CREATION_MODE_KEY(module_name, "userscores/preferredScoreCreationMode");
 static const Settings::Key NEED_SHOW_WARNING_ABOUT_UNSAVED_SCORE_KEY(module_name, "userscores/unsavedScoreWarning");
 
-const QString UserScoresConfiguration::DEFAULT_FILE_SUFFIX(".mscz");
+const QString ProjectConfiguration::DEFAULT_FILE_SUFFIX(".mscz");
 
-void UserScoresConfiguration::init()
+void ProjectConfiguration::init()
 {
     settings()->setDefaultValue(USER_TEMPLATES_PATH, Val(globalConfiguration()->userDataPath() + "/Templates"));
     settings()->valueChanged(USER_TEMPLATES_PATH).onReceive(nullptr, [this](const Val& val) {
@@ -67,7 +67,7 @@ void UserScoresConfiguration::init()
     settings()->setDefaultValue(NEED_SHOW_WARNING_ABOUT_UNSAVED_SCORE_KEY, Val(true));
 }
 
-io::paths UserScoresConfiguration::actualRecentScorePaths() const
+io::paths ProjectConfiguration::actualRecentScorePaths() const
 {
     io::paths allPaths = parsePaths(settings()->value(RECENT_SCORE_PATHS));
     io::paths actualPaths;
@@ -81,7 +81,7 @@ io::paths UserScoresConfiguration::actualRecentScorePaths() const
     return actualPaths;
 }
 
-ValCh<io::paths> UserScoresConfiguration::recentScorePaths() const
+ValCh<io::paths> ProjectConfiguration::recentScorePaths() const
 {
     TRACEFUNC;
 
@@ -92,7 +92,7 @@ ValCh<io::paths> UserScoresConfiguration::recentScorePaths() const
     return result;
 }
 
-void UserScoresConfiguration::setRecentScorePaths(const io::paths& recentScorePaths)
+void ProjectConfiguration::setRecentScorePaths(const io::paths& recentScorePaths)
 {
     QStringList paths;
 
@@ -104,7 +104,7 @@ void UserScoresConfiguration::setRecentScorePaths(const io::paths& recentScorePa
     settings()->setSharedValue(RECENT_SCORE_PATHS, value);
 }
 
-io::paths UserScoresConfiguration::parsePaths(const Val& value) const
+io::paths ProjectConfiguration::parsePaths(const Val& value) const
 {
     if (value.isNull()) {
         return io::paths();
@@ -114,17 +114,17 @@ io::paths UserScoresConfiguration::parsePaths(const Val& value) const
     return io::pathsFromStrings(paths);
 }
 
-io::path UserScoresConfiguration::myFirstScorePath() const
+io::path ProjectConfiguration::myFirstScorePath() const
 {
     return appTemplatesPath() + "/My_First_Score.mscx";
 }
 
-io::path UserScoresConfiguration::appTemplatesPath() const
+io::path ProjectConfiguration::appTemplatesPath() const
 {
     return globalConfiguration()->appDataPath() + "/templates";
 }
 
-io::paths UserScoresConfiguration::availableTemplatesPaths() const
+io::paths ProjectConfiguration::availableTemplatesPaths() const
 {
     io::paths dirs;
 
@@ -142,67 +142,67 @@ io::paths UserScoresConfiguration::availableTemplatesPaths() const
     return dirs;
 }
 
-io::path UserScoresConfiguration::userTemplatesPath() const
+io::path ProjectConfiguration::userTemplatesPath() const
 {
     return settings()->value(USER_TEMPLATES_PATH).toPath();
 }
 
-void UserScoresConfiguration::setUserTemplatesPath(const io::path& path)
+void ProjectConfiguration::setUserTemplatesPath(const io::path& path)
 {
     settings()->setSharedValue(USER_TEMPLATES_PATH, Val(path));
 }
 
-async::Channel<io::path> UserScoresConfiguration::userTemplatesPathChanged() const
+async::Channel<io::path> ProjectConfiguration::userTemplatesPathChanged() const
 {
     return m_userTemplatesPathChanged;
 }
 
-io::path UserScoresConfiguration::userScoresPath() const
+io::path ProjectConfiguration::userScoresPath() const
 {
     return settings()->value(USER_SCORES_PATH).toPath();
 }
 
-void UserScoresConfiguration::setUserScoresPath(const io::path& path)
+void ProjectConfiguration::setUserScoresPath(const io::path& path)
 {
     settings()->setSharedValue(USER_SCORES_PATH, Val(path));
 }
 
-async::Channel<io::path> UserScoresConfiguration::userScoresPathChanged() const
+async::Channel<io::path> ProjectConfiguration::userScoresPathChanged() const
 {
     return m_userScoresPathChanged;
 }
 
-io::path UserScoresConfiguration::defaultSavingFilePath(const io::path& fileName) const
+io::path ProjectConfiguration::defaultSavingFilePath(const io::path& fileName) const
 {
     return userScoresPath() + "/" + fileName + DEFAULT_FILE_SUFFIX;
 }
 
-QColor UserScoresConfiguration::templatePreviewBackgroundColor() const
+QColor ProjectConfiguration::templatePreviewBackgroundColor() const
 {
     return notationConfiguration()->backgroundColor();
 }
 
-async::Notification UserScoresConfiguration::templatePreviewBackgroundChanged() const
+async::Notification ProjectConfiguration::templatePreviewBackgroundChanged() const
 {
     return notationConfiguration()->backgroundChanged();
 }
 
-UserScoresConfiguration::PreferredScoreCreationMode UserScoresConfiguration::preferredScoreCreationMode() const
+ProjectConfiguration::PreferredScoreCreationMode ProjectConfiguration::preferredScoreCreationMode() const
 {
     return static_cast<PreferredScoreCreationMode>(settings()->value(PREFERRED_SCORE_CREATION_MODE_KEY).toInt());
 }
 
-void UserScoresConfiguration::setPreferredScoreCreationMode(PreferredScoreCreationMode mode)
+void ProjectConfiguration::setPreferredScoreCreationMode(PreferredScoreCreationMode mode)
 {
     settings()->setSharedValue(PREFERRED_SCORE_CREATION_MODE_KEY, Val(static_cast<int>(mode)));
 }
 
-bool UserScoresConfiguration::needShowWarningAboutUnsavedScore() const
+bool ProjectConfiguration::needShowWarningAboutUnsavedScore() const
 {
     return settings()->value(NEED_SHOW_WARNING_ABOUT_UNSAVED_SCORE_KEY).toBool();
 }
 
-void UserScoresConfiguration::setNeedShowWarningAboutUnsavedScore(bool value)
+void ProjectConfiguration::setNeedShowWarningAboutUnsavedScore(bool value)
 {
     settings()->setSharedValue(NEED_SHOW_WARNING_ABOUT_UNSAVED_SCORE_KEY, Val(value));
 }

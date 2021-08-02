@@ -28,9 +28,25 @@
 #include "internal/notationreadersregister.h"
 #include "internal/notationwritersregister.h"
 #include "internal/projectautosaver.h"
+#include "internal/filescorecontroller.h"
+#include "internal/projectuiactions.h"
+#include "internal/projectconfiguration.h"
+
+#ifdef Q_OS_MAC
+#include "internal/platform/macos/macosrecentfilescontroller.h"
+#elif defined (Q_OS_WIN)
+#include "internal/platform/windows/windowsrecentfilescontroller.h"
+#else
+#include "internal/platform/stub/stubrecentfilescontroller.h"
+#endif
+
+#include "ui/iuiactionsregister.h"
 
 using namespace mu::project;
 using namespace mu::modularity;
+
+static std::shared_ptr<ProjectConfiguration> s_configuration = std::make_shared<ProjectConfiguration>();
+static std::shared_ptr<FileScoreController> s_fileController = std::make_shared<FileScoreController>();
 
 std::string ProjectModule::moduleName() const
 {
@@ -39,13 +55,27 @@ std::string ProjectModule::moduleName() const
 
 void ProjectModule::registerExports()
 {
+    ioc()->registerExport<IProjectConfiguration>(moduleName(), s_configuration);
     ioc()->registerExport<IProjectCreator>(moduleName(), new ProjectCreator());
     ioc()->registerExport<INotationReadersRegister>(moduleName(), new NotationReadersRegister());
     ioc()->registerExport<INotationWritersRegister>(moduleName(), new NotationWritersRegister());
+    ioc()->registerExport<IFileScoreController>(moduleName(), s_fileController);
+
+#ifdef Q_OS_MAC
+    ioc()->registerExport<IPlatformRecentFilesController>(moduleName(), new MacOSRecentFilesController());
+#elif defined (Q_OS_WIN)
+    ioc()->registerExport<IPlatformRecentFilesController>(moduleName(), new WindowsRecentFilesController());
+#else
+    ioc()->registerExport<IPlatformRecentFilesController>(moduleName(), new StubRecentFilesController());
+#endif
 }
 
 void ProjectModule::resolveImports()
 {
+    auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
+    if (ar) {
+        ar->reg(std::make_shared<UserScoresUiActions>(s_fileController));
+    }
 }
 
 void ProjectModule::registerUiTypes()
@@ -60,4 +90,6 @@ void ProjectModule::onInit(const framework::IApplication::RunMode& mode)
 
     static ProjectAutoSaver autoSaver;
     autoSaver.init();
+
+    s_fileController->init();
 }

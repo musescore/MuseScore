@@ -27,7 +27,7 @@
 
 #include "iinteractive.h"
 #include "context/iglobalcontext.h"
-#include "iuserscoresconfiguration.h"
+#include "project/iprojectconfiguration.h"
 #include "project/inotationwritersregister.h"
 #include "importexport/imagesexport/iimagesexportconfiguration.h"
 #include "importexport/musicxml/imusicxmlconfiguration.h"
@@ -44,7 +44,7 @@ class ExportDialogModel : public QAbstractListModel
 
     INJECT(userscores, framework::IInteractive, interactive)
     INJECT(userscores, context::IGlobalContext, context)
-    INJECT(userscores, IUserScoresConfiguration, configuration)
+    INJECT(userscores, project::IProjectConfiguration, configuration)
     INJECT(userscores, project::INotationWritersRegister, writers)
     INJECT(userscores, iex::imagesexport::IImagesExportConfiguration, imageExportConfiguration)
     INJECT(userscores, iex::musicxml::IMusicXmlConfiguration, musicXmlConfiguration)

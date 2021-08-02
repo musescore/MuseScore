@@ -19,18 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_USERSCORES_MACOSRECENTFILESCONTROLLER_H
-#define MU_USERSCORES_MACOSRECENTFILESCONTROLLER_H
+#include "windowsrecentfilescontroller.h"
 
-#include "internal/iplatformrecentfilescontroller.h"
+#include <Windows.h>
+#include <shlobj.h>
 
-namespace mu::userscores {
-class MacOSRecentFilesController : public IPlatformRecentFilesController
+using namespace mu::project;
+
+void WindowsRecentFilesController::addRecentFile(const io::path& path)
 {
-public:
-    void addRecentFile(const io::path& path) override;
-    void clearRecentFiles() override;
-};
+    std::wstring pathString = path.toStdWString();
+    SHAddToRecentDocs(SHARD_PATHW, pathString.c_str());
 }
 
-#endif // MU_USERSCORES_MACOSRECENTFILESCONTROLLER_H
+void WindowsRecentFilesController::clearRecentFiles()
+{
+    // The "docs" seem to say that this should clear the recent files list
+    // But in practice it's not sure if that's the case
+    SHAddToRecentDocs(0, NULL);
+}

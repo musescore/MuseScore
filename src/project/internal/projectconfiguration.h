@@ -19,10 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_USERSCORES_USERSCORECONFIGURATION_H
-#define MU_USERSCORES_USERSCORECONFIGURATION_H
+#ifndef MU_PROJECT_PROJECTCONFIGURATION_H
+#define MU_PROJECT_PROJECTCONFIGURATION_H
 
-#include "iuserscoresconfiguration.h"
+#include "../iprojectconfiguration.h"
 #include "modularity/ioc.h"
 #include "iglobalconfiguration.h"
 #include "extensions/iextensionsconfiguration.h"
@@ -30,13 +30,13 @@
 #include "global/val.h"
 #include "system/ifilesystem.h"
 
-namespace mu::userscores {
-class UserScoresConfiguration : public IUserScoresConfiguration
+namespace mu::project {
+class ProjectConfiguration : public IProjectConfiguration
 {
-    INJECT(userscores, framework::IGlobalConfiguration, globalConfiguration)
-    INJECT(userscores, extensions::IExtensionsConfiguration, extensionsConfiguration)
-    INJECT(userscores, notation::INotationConfiguration, notationConfiguration)
-    INJECT(userscores, system::IFileSystem, fileSystem)
+    INJECT(project, framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(project, extensions::IExtensionsConfiguration, extensionsConfiguration)
+    INJECT(project, notation::INotationConfiguration, notationConfiguration)
+    INJECT(project, system::IFileSystem, fileSystem)
 
 public:
     static const QString DEFAULT_FILE_SUFFIX;
@@ -83,4 +83,4 @@ private:
 };
 }
 
-#endif // MU_USERSCORES_USERSCORECONFIGURATION_H
+#endif // MU_PROJECT_PROJECTCONFIGURATION_H

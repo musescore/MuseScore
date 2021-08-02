@@ -19,25 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_USERSCORES_IFILESCORECONTROLLER_H
-#define MU_USERSCORES_IFILESCORECONTROLLER_H
+#include "stubrecentfilescontroller.h"
 
-#include "modularity/imoduleexport.h"
-#include "ret.h"
-#include "io/path.h"
+using namespace mu::project;
 
-namespace mu::userscores {
-class IFileScoreController : MODULE_EXPORT_INTERFACE
+void StubRecentFilesController::addRecentFile(const io::path&)
 {
-    INTERFACE_ID(IFileScoreController)
-
-public:
-    virtual ~IFileScoreController() = default;
-
-    virtual Ret openProject(const io::path& scorePath) = 0;
-    virtual bool closeOpenedProject() = 0;
-    virtual bool isProjectOpened(const io::path& scorePath) const = 0;
-};
 }
 
-#endif // MU_USERSCORES_IFILESCORECONTROLLER_H
+void StubRecentFilesController::clearRecentFiles()
+{
+}

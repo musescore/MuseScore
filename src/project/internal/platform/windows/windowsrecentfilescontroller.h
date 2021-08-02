@@ -19,24 +19,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#ifndef MU_PROJECT_STUBRECENTFILESCONTROLLER_H
+#define MU_PROJECT_STUBRECENTFILESCONTROLLER_H
 
-#ifndef MU_USERSCORES_IPLATFORMRECENTFILESCONTROLLER_H
-#define MU_USERSCORES_IPLATFORMRECENTFILESCONTROLLER_H
+#include "internal/iplatformrecentfilescontroller.h"
 
-#include "modularity/imoduleexport.h"
-#include "io/path.h"
-
-namespace mu::userscores {
-class IPlatformRecentFilesController : MODULE_EXPORT_INTERFACE
+namespace mu::project {
+class WindowsRecentFilesController : public IPlatformRecentFilesController
 {
-    INTERFACE_ID(IPlatformRecentFilesController)
-
 public:
-    virtual ~IPlatformRecentFilesController() = default;
-
-    virtual void addRecentFile(const io::path& path) = 0;
-    virtual void clearRecentFiles() = 0;
+    void addRecentFile(const io::path& path) override;
+    void clearRecentFiles() override;
 };
 }
 
-#endif // MU_USERSCORES_IPLATFORMRECENTFILESCONTROLLER_H
+#endif // MU_PROJECT_STUBRECENTFILESCONTROLLER_H

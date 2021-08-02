@@ -26,8 +26,7 @@
 
 #include "modularity/ioc.h"
 
-#include "iuserscoresconfiguration.h"
-
+#include "project/iprojectconfiguration.h"
 #include "project/iprojectcreator.h"
 #include "notation/notationtypes.h"
 #include "context/iglobalcontext.h"
@@ -37,7 +36,7 @@ class NewScoreModel : public QObject
 {
     Q_OBJECT
 
-    INJECT(scores, IUserScoresConfiguration, configuration)
+    INJECT(scores, project::IProjectConfiguration, configuration)
     INJECT(scores, project::IProjectCreator, notationCreator)
     INJECT(scores, context::IGlobalContext, globalContext)
 

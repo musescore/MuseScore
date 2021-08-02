@@ -19,30 +19,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_USERSCORES_FILESCORECONTROLLER_H
-#define MU_USERSCORES_FILESCORECONTROLLER_H
+#ifndef MU_PROJECT_FILESCORECONTROLLER_H
+#define MU_PROJECT_FILESCORECONTROLLER_H
 
-#include "../ifilescorecontroller.h"
-#include "iuserscoresconfiguration.h"
+#include "ifilescorecontroller.h"
+
 #include "modularity/ioc.h"
 #include "iinteractive.h"
+#include "context/iglobalcontext.h"
 #include "actions/actionable.h"
 #include "actions/iactionsdispatcher.h"
-#include "async/asyncable.h"
-#include "project/iprojectcreator.h"
-#include "context/iglobalcontext.h"
-#include "iplatformrecentfilescontroller.h"
 #include "multiinstances/imultiinstancesprovider.h"
 #include "cloud/iuploadingservice.h"
 
-namespace mu::userscores {
+#include "async/asyncable.h"
+
+#include "iprojectconfiguration.h"
+#include "iprojectcreator.h"
+#include "iplatformrecentfilescontroller.h"
+
+namespace mu::project {
 class FileScoreController : public IFileScoreController, public actions::Actionable, public async::Asyncable
 {
     INJECT(userscores, actions::IActionsDispatcher, dispatcher)
     INJECT(userscores, framework::IInteractive, interactive)
-    INJECT(userscores, project::IProjectCreator, notationCreator)
+    INJECT(userscores, IProjectCreator, projectCreator)
     INJECT(userscores, context::IGlobalContext, globalContext)
-    INJECT(userscores, IUserScoresConfiguration, configuration)
+    INJECT(userscores, IProjectConfiguration, configuration)
     INJECT(userscores, IPlatformRecentFilesController, platformRecentFilesController)
     INJECT(userscores, mi::IMultiInstancesProvider, multiInstancesProvider)
     INJECT(userscores, cloud::IUploadingService, uploadingService)
@@ -100,4 +103,4 @@ private:
 };
 }
 
-#endif // MU_USERSCORES_FILESCORECONTROLLER_H
+#endif // MU_PROJECT_FILESCORECONTROLLER_H
