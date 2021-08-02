@@ -245,5 +245,6 @@ void MTest::initMTest()
     root = rootPath();
     loadInstrumentTemplates(":/data/instruments.xml");
     score = readScore("test.mscx");
+    MScore::_error = Ms::MsError::MS_NO_ERROR;
 }
 }
