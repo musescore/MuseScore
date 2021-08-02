@@ -23,17 +23,17 @@
 #ifndef MU_PALETTE_DRUMSETPALETTE_H
 #define MU_PALETTE_DRUMSETPALETTE_H
 
-#include "palette/palette.h"
+#include "palettewidget.h"
 #include "notation/inotation.h"
 
 #include "modularity/ioc.h"
 #include "actions/iactionsdispatcher.h"
 
 namespace Ms {
-class Score;
 class Drumset;
-class Staff;
+}
 
+namespace mu::palette {
 class DrumsetPalette : public PaletteScrollArea
 {
     Q_OBJECT
@@ -66,12 +66,11 @@ private:
 
     mu::notation::INotationNoteInputPtr noteInput() const;
 
-    Palette* m_drumPalette = nullptr;
-    const Drumset* m_drumset = nullptr;
-
+    PaletteWidget* m_drumPalette = nullptr;
+    const Ms::Drumset* m_drumset = nullptr;
     mu::notation::INotationPtr m_notation;
     mu::async::Channel<QString> m_pitchNameChanged;
 };
-} // namespace Ms
+}
 
 #endif // MU_PALETTE_DRUMSETPALETTE_H

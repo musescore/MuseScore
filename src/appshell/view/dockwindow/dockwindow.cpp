@@ -203,10 +203,10 @@ void DockWindow::loadPage(const QString& uri)
     emit currentPageUriChanged(uri);
 }
 
-bool DockWindow::isDockOpened(const QString& dockName) const
+bool DockWindow::isDockOpen(const QString& dockName) const
 {
     const DockPage* currPage = currentPage();
-    return currPage ? currPage->isDockOpened(dockName) : false;
+    return currPage ? currPage->isDockOpen(dockName) : false;
 }
 
 void DockWindow::toggleDock(const QString& dockName)
@@ -217,11 +217,11 @@ void DockWindow::toggleDock(const QString& dockName)
     }
 }
 
-void DockWindow::setDockOpened(const QString& dockName, bool opened)
+void DockWindow::setDockOpen(const QString& dockName, bool open)
 {
     DockPage* currPage = currentPage();
     if (currPage) {
-        currPage->setDockOpened(dockName, opened);
+        currPage->setDockOpen(dockName, open);
     }
 }
 

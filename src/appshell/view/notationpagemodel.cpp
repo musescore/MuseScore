@@ -116,7 +116,7 @@ void NotationPageModel::init(QQuickItem* dockWindow)
 
     std::map<PanelType, bool> initialState;
     for (PanelType type : m_panelTypeToDockName.keys()) {
-        initialState[type] = m_window->isDockOpened(m_panelTypeToDockName[type]);
+        initialState[type] = m_window->isDockOpen(m_panelTypeToDockName[type]);
     }
 
     pageState()->setIsPanelsVisible(initialState);
@@ -132,7 +132,7 @@ void NotationPageModel::init(QQuickItem* dockWindow)
         { "toggle-noteinput", PanelType::NoteInputBar },
         { "toggle-notationtoolbar", PanelType::NotationToolBar },
         { "toggle-undoredo", PanelType::UndoRedoToolBar },
-        { "toggle-transport", PanelType::PlaybackToolBar },
+        { "toggle-transport", PanelType::PlaybackToolBar }
     };
 
     for (const std::string& actionCode : actionToPanelType.keys()) {
@@ -168,7 +168,7 @@ void NotationPageModel::togglePanel(PanelType type)
 void NotationPageModel::updateDrumsetPanelVisibility()
 {
     auto setDrumsetPanelVisible = [this](bool visible) {
-        m_window->setDockOpened(m_panelTypeToDockName[PanelType::DrumsetPanel], visible);
+        m_window->setDockOpen(m_panelTypeToDockName[PanelType::DrumsetPanel], visible);
         pageState()->setIsPanelsVisible({ { PanelType::DrumsetPanel, visible } });
     };
 
