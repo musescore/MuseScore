@@ -850,9 +850,8 @@ void Score::spell()
             for (int track = strack; track < etrack; ++track) {
                 Element* e = s->element(track);
                 if (e && e->type() == ElementType::CHORD) {
-                    notes.insert(notes.end(),
-                                 toChord(e)->notes().begin(),
-                                 toChord(e)->notes().end());
+                    std::copy_if(toChord(e)->notes().begin(), toChord(e)->notes().end(),
+                                 std::back_inserter(notes), [this](Element* ce) { return selection().isNone() || ce->selected(); });
                 }
             }
         }
@@ -877,6 +876,65 @@ void Score::spell(int startStaff, int endStaff, Segment* startSegment, Segment* 
             }
         }
         spellNotelist(notes);
+    }
+}
+
+void Score::changeEnharmonicSpelling(bool both)
+{
+    QList<Note*> notes = selection().uniqueNotes();
+    for (Note* n : notes) {
+        Staff* staff = n->staff();
+        if (staff->part()->instrument(n->tick())->useDrumset()) {
+            continue;
+        }
+        if (staff->isTabStaff(n->tick())) {
+            int string = n->line() + (both ? 1 : -1);
+            int fret = staff->part()->instrument(n->tick())->stringData()->fret(n->pitch(), string, staff, n->chord()->tick());
+            if (fret != -1) {
+                n->undoChangeProperty(Pid::FRET, fret);
+                n->undoChangeProperty(Pid::STRING, string);
+            }
+        } else {
+            static const int tab[36] = {
+                26, 14,  2,    // 60  B#   C   Dbb
+                21, 21,  9,    // 61  C#   C#  Db
+                28, 16,  4,    // 62  C##  D   Ebb
+                23, 23, 11,    // 63  D#   D#  Eb
+                30, 18,  6,    // 64  D##  E   Fb
+                25, 13,  1,    // 65  E#   F   Gbb
+                20, 20,  8,    // 66  F#   F#  Gb
+                27, 15,  3,    // 67  F##  G   Abb
+                22, 22, 10,    // 68  G#   G#  Ab
+                29, 17,  5,    // 69  G##  A   Bbb
+                24, 24, 12,    // 70  A#   A#  Bb
+                31, 19,  7,    // 71  A##  B   Cb
+            };
+            int tpc = n->tpc();
+            for (int i = 0; i < 36; ++i) {
+                if (tab[i] == tpc) {
+                    if ((i % 3) < 2) {
+                        if (tab[i] == tab[i + 1]) {
+                            tpc = tab[i + 2];
+                        } else {
+                            tpc = tab[i + 1];
+                        }
+                    } else {
+                        tpc = tab[i - 2];
+                    }
+                    break;
+                }
+            }
+            n->undoSetTpc(tpc);
+            if (both || staff->part()->instrument(n->chord()->tick())->transpose().isZero()) {
+                // change both spellings
+                int t = n->transposeTpc(tpc);
+                if (n->concertPitch()) {
+                    n->undoChangeProperty(Pid::TPC2, t);
+                } else {
+                    n->undoChangeProperty(Pid::TPC1, t);
+                }
+            }
+        }
     }
 }
 
