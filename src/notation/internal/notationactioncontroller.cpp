@@ -287,6 +287,9 @@ void NotationActionController::init()
     dispatcher()->reg(this, "add-parentheses", [this]() { addBracketsToSelection(BracketsType::Parentheses); });
     dispatcher()->reg(this, "add-braces", [this]() { addBracketsToSelection(BracketsType::Braces); });
 
+    registerAction("enh-both", &NotationActionController::changeEnharmonicSpellingBoth, &NotationActionController::isNotEditingText);
+    registerAction("enh-current", &NotationActionController::changeEnharmonicSpellingCurrent, &NotationActionController::isNotEditingText);
+
     for (int i = MIN_NOTES_INTERVAL; i <= MAX_NOTES_INTERVAL; ++i) {
         if (isNotesIntervalValid(i)) {
             dispatcher()->reg(this, "interval" + std::to_string(i), [this, i]() { addInterval(i); });
@@ -1343,6 +1346,26 @@ void NotationActionController::addGraceNotesToSelectedNotes(GraceNoteType type)
     }
 
     interaction->addGraceNotesToSelectedNotes(type);
+}
+
+void NotationActionController::changeEnharmonicSpellingBoth()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->changeEnharmonicSpelling(true);
+}
+
+void NotationActionController::changeEnharmonicSpellingCurrent()
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->changeEnharmonicSpelling(false);
 }
 
 void NotationActionController::addStretch(qreal value)

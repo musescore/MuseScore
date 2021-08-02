@@ -178,6 +178,7 @@ public:
     void fillSelectionWithSlashes() override;
     void replaceSelectedNotesWithSlashes() override;
 
+    void changeEnharmonicSpelling(bool) override;
     void spellPitches() override;
     void regroupNotesAndRests() override;
     void resequenceRehearsalMarks() override;
