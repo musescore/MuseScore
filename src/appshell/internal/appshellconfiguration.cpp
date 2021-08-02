@@ -52,7 +52,7 @@ static const Settings::Key TOURS_VISIBLE_KEY(module_name, "ui/application/startu
 void AppShellConfiguration::init()
 {
     settings()->setDefaultValue(STARTUP_SESSION_TYPE, Val(static_cast<int>(StartupSessionType::StartEmpty)));
-    settings()->setDefaultValue(STARTUP_SCORE_PATH, Val(projectConfiguration()->myFirstScorePath().toStdString()));
+    settings()->setDefaultValue(STARTUP_SCORE_PATH, Val(projectConfiguration()->myFirstProjectPath().toStdString()));
 
     settings()->setDefaultValue(CHECK_FOR_UPDATE_KEY, Val(isAppUpdatable()));
 }
@@ -159,11 +159,6 @@ std::string AppShellConfiguration::museScoreVersion() const
 std::string AppShellConfiguration::museScoreRevision() const
 {
     return MUSESCORE_REVISION;
-}
-
-mu::ValCh<mu::io::paths> AppShellConfiguration::recentScorePaths() const
-{
-    return projectConfiguration()->recentScorePaths();
 }
 
 bool AppShellConfiguration::isNotationNavigatorVisible() const

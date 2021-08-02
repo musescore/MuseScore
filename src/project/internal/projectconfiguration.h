@@ -44,10 +44,11 @@ public:
 
     void init();
 
-    ValCh<io::paths> recentScorePaths() const override;
-    void setRecentScorePaths(const io::paths& recentScorePaths) override;
+    io::paths recentProjectPaths() const override;
+    void setRecentProjectPaths(const io::paths& recentScorePaths) override;
+    async::Channel<io::paths> recentProjectPathsChanged() const override;
 
-    io::path myFirstScorePath() const override;
+    io::path myFirstProjectPath() const override;
 
     io::paths availableTemplatesPaths() const override;
 
@@ -55,9 +56,9 @@ public:
     void setUserTemplatesPath(const io::path& path) override;
     async::Channel<io::path> userTemplatesPathChanged() const override;
 
-    io::path userScoresPath() const override;
-    void setUserScoresPath(const io::path& path) override;
-    async::Channel<io::path> userScoresPathChanged() const override;
+    io::path userProjectsPath() const override;
+    void setUserProjectsPath(const io::path& path) override;
+    async::Channel<io::path> userProjectsPathChanged() const override;
 
     io::path defaultSavingFilePath(const io::path& fileName) const override;
 
@@ -72,12 +73,11 @@ public:
 
 private:
 
-    io::paths actualRecentScorePaths() const;
     io::paths parsePaths(const mu::Val& value) const;
 
     io::path appTemplatesPath() const;
 
-    async::Channel<io::paths> m_recentScorePathsChanged;
+    async::Channel<io::paths> m_recentProjectPathsChanged;
     async::Channel<io::path> m_userTemplatesPathChanged;
     async::Channel<io::path> m_userScoresPathChanged;
 };

@@ -64,7 +64,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/inotationwriter.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationwritersregister.h
     ${CMAKE_CURRENT_LIST_DIR}/iprojectaudiosettings.h
-    ${CMAKE_CURRENT_LIST_DIR}/ifilescorecontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/iprojectfilescontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/iprojectconfiguration.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/iplatformrecentfilescontroller.h
@@ -80,8 +80,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationwritersregister.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/projectautosaver.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/projectautosaver.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/filescorecontroller.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/filescorecontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/projectfilescontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/projectfilescontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/projectuiactions.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/projectuiactions.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/projectconfiguration.cpp
