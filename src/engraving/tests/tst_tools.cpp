@@ -52,6 +52,10 @@ private slots:
     void undoResequenceNumeric();
     void undoResequenceMeasure();
     void undoResequencePart();
+    void changeEnharmonicBoth();
+    void changeEnharmonicCurrent();
+private:
+    void changeEnharmonic(bool);
 };
 
 //---------------------------------------------------------
@@ -315,6 +319,32 @@ void TestTools::undoResequencePart()
     QVERIFY(saveCompareScore(score, writeFile2, reference2));
 
     delete score;
+}
+
+void TestTools::changeEnharmonic(bool both)
+{
+    QString readFile(TOOLS_DATA_DIR + "change-enharmonic.mscx");
+    MasterScore* score = readScore(readFile);
+    QString mode = both ? "both" : "current";
+    score->doLayout();
+    score->cmdSelectAll();
+    for (int i = 1; i < 6; ++i) {
+        score->startCmd();
+        score->changeEnharmonicSpelling(both);
+        score->endCmd();
+        QString prefix = "change-enharmonic-" + mode + "-0" + ('0' + i);
+        QVERIFY(saveCompareScore(score, prefix + "-test.mscx", TOOLS_DATA_DIR + prefix + "-ref.mscx"));
+    }
+}
+
+void TestTools::changeEnharmonicBoth()
+{
+    changeEnharmonic(true);
+}
+
+void TestTools::changeEnharmonicCurrent()
+{
+    changeEnharmonic(false);
 }
 
 QTEST_MAIN(TestTools)
