@@ -63,8 +63,8 @@ void PlaybackController::init()
         onNotationChanged();
     });
 
-    globalContext()->currentNotationProjectChanged().onNotify(this, [this]() {
-        project::INotationProjectPtr project = globalContext()->currentNotationProject();
+    globalContext()->currentProjectChanged().onNotify(this, [this]() {
+        project::INotationProjectPtr project = globalContext()->currentProject();
 
         if (!project) {
             return;
@@ -75,7 +75,7 @@ void PlaybackController::init()
     });
 
     playback()->audioOutput()->masterOutputParamsChanged().onReceive(this, [this](const audio::AudioOutputParams& params) {
-        project::INotationProjectPtr project = globalContext()->currentNotationProject();
+        project::INotationProjectPtr project = globalContext()->currentProject();
 
         if (!project) {
             return;

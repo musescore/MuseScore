@@ -21,6 +21,9 @@
  */
 #include "multiinstancesprovider.h"
 
+#include <QProcess>
+#include <QCoreApplication>
+
 #include "uri.h"
 #include "settings.h"
 #include "log.h"
@@ -30,8 +33,8 @@ using namespace mu::ipc;
 using namespace mu::framework;
 
 static const mu::UriQuery DEV_SHOW_INFO_URI("musescore://devtools/multiinstances/info?sync=false&modal=false");
-static const QString METHOD_SCORE_IS_OPENED("SCORE_IS_OPENED");
-static const QString METHOD_ACTIVATE_WINDOW_WITH_SCORE("ACTIVATE_WINDOW_WITH_SCORE");
+static const QString METHOD_PROJECT_IS_OPENED("PROJECT_IS_OPENED");
+static const QString METHOD_ACTIVATE_WINDOW_WITH_PROJECT("ACTIVATE_WINDOW_WITH_PROJECT");
 
 static const mu::Uri PREFERENCES_URI("musescore://preferences");
 static const QString METHOD_PREFERENCES_IS_OPENED("PREFERENCES_IS_OPENED");
@@ -75,12 +78,12 @@ void MultiInstancesProvider::onMsg(const Msg& msg)
 #define CHECK_ARGS_COUNT(c) IF_ASSERT_FAILED(msg.args.count() >= c) { return; }
 
     // Score opening
-    if (msg.type == MsgType::Request && msg.method == METHOD_SCORE_IS_OPENED) {
+    if (msg.type == MsgType::Request && msg.method == METHOD_PROJECT_IS_OPENED) {
         CHECK_ARGS_COUNT(1);
         io::path scorePath = io::path(msg.args.at(0));
         bool isOpened = projectFilesController()->isProjectOpened(scorePath);
-        m_ipcChannel->response(METHOD_SCORE_IS_OPENED, { QString::number(isOpened) }, msg.srcID);
-    } else if (msg.method == METHOD_ACTIVATE_WINDOW_WITH_SCORE) {
+        m_ipcChannel->response(METHOD_PROJECT_IS_OPENED, { QString::number(isOpened) }, msg.srcID);
+    } else if (msg.method == METHOD_ACTIVATE_WINDOW_WITH_PROJECT) {
         CHECK_ARGS_COUNT(1);
         io::path scorePath = io::path(msg.args.at(0));
         bool isOpened = projectFilesController()->isProjectOpened(scorePath);
@@ -112,14 +115,14 @@ void MultiInstancesProvider::onMsg(const Msg& msg)
     }
 }
 
-bool MultiInstancesProvider::isScoreAlreadyOpened(const io::path& scorePath) const
+bool MultiInstancesProvider::isProjectAlreadyOpened(const io::path& projectPath) const
 {
     if (!isInited()) {
         return false;
     }
 
     int ret = 0;
-    m_ipcChannel->syncRequestToAll(METHOD_SCORE_IS_OPENED, { scorePath.toQString() }, [&ret](const QStringList& args) {
+    m_ipcChannel->syncRequestToAll(METHOD_PROJECT_IS_OPENED, { projectPath.toQString() }, [&ret](const QStringList& args) {
         IF_ASSERT_FAILED(args.count() > 0) {
             return false;
         }
@@ -133,14 +136,30 @@ bool MultiInstancesProvider::isScoreAlreadyOpened(const io::path& scorePath) con
     return ret;
 }
 
-void MultiInstancesProvider::activateWindowWithScore(const io::path& scorePath)
+void MultiInstancesProvider::activateWindowWithProject(const io::path& projectPath)
 {
     if (!isInited()) {
         return;
     }
 
     mainWindow()->requestShowOnBack();
-    m_ipcChannel->broadcast(METHOD_ACTIVATE_WINDOW_WITH_SCORE, { scorePath.toQString() });
+    m_ipcChannel->broadcast(METHOD_ACTIVATE_WINDOW_WITH_PROJECT, { projectPath.toQString() });
+}
+
+bool MultiInstancesProvider::openNewAppInstance(const QStringList& args)
+{
+    if (!isInited()) {
+        return false;
+    }
+
+    QString appPath = QCoreApplication::applicationFilePath();
+    bool ok = QProcess::startDetached(appPath, args);
+    if (ok) {
+        LOGI() << "success start: " << appPath << ", args: " << args;
+    } else {
+        LOGE() << "failed start: " << appPath << ", args: " << args;
+    }
+    return ok;
 }
 
 bool MultiInstancesProvider::isPreferencesAlreadyOpened() const

@@ -197,7 +197,7 @@ RetVal<project::INotationProjectPtr> BackendApi::openProject(const io::path& pat
 {
     TRACEFUNC
 
-    auto notationProject = notationCreator()->newNotationProject();
+    auto notationProject = notationCreator()->newProject();
     IF_ASSERT_FAILED(notationProject) {
         return make_ret(Ret::Code::InternalError);
     }

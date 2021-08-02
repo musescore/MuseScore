@@ -25,7 +25,7 @@
 
 using namespace mu::project;
 
-INotationProjectPtr ProjectCreator::newNotationProject() const
+INotationProjectPtr ProjectCreator::newProject() const
 {
     return std::make_shared<NotationProject>();
 }

@@ -480,7 +480,7 @@ void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem, std::f
 
 bool AbstractInspectorModel::isNotationExisting() const
 {
-    return !context()->notationProjects().empty();
+    return context()->currentProject() != nullptr;
 }
 
 bool AbstractInspectorModel::hasAcceptableElements() const

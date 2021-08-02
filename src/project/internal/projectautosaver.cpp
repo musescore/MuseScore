@@ -36,7 +36,7 @@ void ProjectAutoSaver::init()
 
 void ProjectAutoSaver::onTrySave()
 {
-    INotationProjectPtr project = globalContext()->currentNotationProject();
+    INotationProjectPtr project = globalContext()->currentProject();
     if (!project) {
         LOGD() << "[autosave] no project";
         return;

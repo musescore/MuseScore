@@ -34,7 +34,7 @@ class IProjectCreator : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IProjectCreator() = default;
 
-    virtual INotationProjectPtr newNotationProject() const = 0;
+    virtual INotationProjectPtr newProject() const = 0;
 };
 }
 

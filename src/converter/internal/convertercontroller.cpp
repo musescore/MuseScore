@@ -66,7 +66,7 @@ mu::Ret ConverterController::fileConvert(const io::path& in, const io::path& out
     TRACEFUNC;
 
     LOGI() << "in: " << in << ", out: " << out;
-    auto notationProject = notationCreator()->newNotationProject();
+    auto notationProject = notationCreator()->newProject();
     IF_ASSERT_FAILED(notationProject) {
         return make_ret(Err::UnknownError);
     }
@@ -97,7 +97,7 @@ mu::Ret ConverterController::convertScoreParts(const mu::io::path& in, const mu:
 {
     TRACEFUNC;
 
-    auto notationProject = notationCreator()->newNotationProject();
+    auto notationProject = notationCreator()->newProject();
     IF_ASSERT_FAILED(notationProject) {
         return make_ret(Err::UnknownError);
     }

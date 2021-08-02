@@ -94,7 +94,7 @@ void TemplatePaintView::onViewSizeChanged()
 
 void TemplatePaintView::onNotationSetup()
 {
-    INotationProjectPtr notationProject = notationCreator()->newNotationProject();
+    INotationProjectPtr notationProject = notationCreator()->newProject();
     Ret ret = notationProject->load(m_templatePath);
 
     if (!ret) {
