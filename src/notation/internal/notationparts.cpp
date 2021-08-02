@@ -619,22 +619,9 @@ void NotationParts::removeParts(const IDList& partsIds)
 
     startEdit();
 
-    PartInstrumentList parts;
-    for (Ms::Part* currentPart: masterScore()->parts()) {
-        if (partsIds.contains(currentPart->id())) {
-            continue;
-        }
-        PartInstrument pi;
-        pi.isExistingPart = true;
-        pi.partId = currentPart->id();
-        parts << pi;
-    }
+    doRemoveParts(partsIds);
 
-    QList<Ms::Staff*> originalStaves = masterScore()->staves();
-
-    removeMissingParts(parts);
-
-    sortParts(parts, masterScore(), originalStaves);
+//  sortParts(parts, masterScore(), originalStaves); // todo: temporary solution, need implement according new spec, see issue #8727
 
     masterScore()->setBracketsAndBarlines();
 
@@ -650,15 +637,6 @@ void NotationParts::doRemoveParts(const IDList& partsIds)
     TRACEFUNC;
 
     for (const ID& partId: partsIds) {
-        for (Ms::Excerpt* currentExcerpt: masterScore()->excerpts()) {
-            for (Ms::Part* currentPart: currentExcerpt->parts()) {
-                if (currentPart->id() == partId) {
-                    currentExcerpt->removePart(partId);
-                    break;
-                }
-            }
-        }
-
         Part* p = part(partId);
         m_partsNotifier->itemRemoved(p);
         score()->cmdRemovePart(p);
