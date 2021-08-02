@@ -14,5 +14,6 @@
         <file>qml/MuseScore/Palette/internal/utils.js</file>
         <file>qml/MuseScore/Palette/PaletteCellPropertiesDialog.qml</file>
         <file>qml/MuseScore/Palette/PalettePropertiesDialog.qml</file>
+        <file>qml/MuseScore/Palette/DrumsetPanel.qml</file>
     </qresource>
 </RCC>
