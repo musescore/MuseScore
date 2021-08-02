@@ -32,9 +32,7 @@ class StaffControlTreeItem : public AbstractInstrumentsPanelTreeItem
     Q_OBJECT
 
 public:
-    explicit StaffControlTreeItem(notation::IMasterNotationPtr masterNotation,
-                                  notation::INotationPtr notation,
-                                  QObject* parent = nullptr);
+    explicit StaffControlTreeItem(notation::IMasterNotationPtr masterNotation, notation::INotationPtr notation, QObject* parent = nullptr);
 
     Q_INVOKABLE void appendNewItem() override;
 

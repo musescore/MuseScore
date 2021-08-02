@@ -32,9 +32,7 @@ class PartTreeItem : public AbstractInstrumentsPanelTreeItem
     Q_OBJECT
 
 public:
-    explicit PartTreeItem(notation::IMasterNotationPtr masterNotation,
-                          notation::INotationPtr notation,
-                          QObject* parent = nullptr);
+    explicit PartTreeItem(notation::IMasterNotationPtr masterNotation, notation::INotationPtr notation, QObject* parent = nullptr);
 
     Q_INVOKABLE QString instrumentId() const;
     Q_INVOKABLE QString instrumentName() const;

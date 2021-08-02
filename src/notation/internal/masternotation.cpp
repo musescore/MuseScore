@@ -502,24 +502,25 @@ INotationPartsPtr MasterNotation::parts() const
 
 ExcerptNotationList MasterNotation::potentialExcerpts() const
 {
-    QStringList availableInstruments;
-    for (IExcerptNotationPtr excerpt : excerpts().val) {
-        async::NotifyList<const Part*> parts = excerpt->notation()->parts()->partList();
-        if (parts.size() != 1) {
-            continue;
+    auto excerptExists = [this](const Ms::InstrumentList* content) {
+        for (const Ms::Excerpt* excerpt : masterScore()->excerpts()) {
+            for (const Part* part : excerpt->parts()) {
+                const Ms::InstrumentList* partInstruments = part->instruments();
+
+                if (partInstruments && (*partInstruments == *content)) {
+                    return true;
+                }
+            }
         }
 
-        async::NotifyList<Instrument> instruments = excerpt->notation()->parts()->instrumentList(parts.front()->id());
-        if (instruments.size() != 1) {
-            continue;
-        }
-
-        availableInstruments << instruments.front().id;
-    }
+        return false;
+    };
 
     QList<Part*> parts;
     for (Part* part : score()->parts()) {
-        if (part->instruments()->size() == 1 && !availableInstruments.contains(part->instrumentId())) {
+        const Ms::InstrumentList* content = part->instruments();
+
+        if (content && !excerptExists(content)) {
             parts << part;
         }
     }

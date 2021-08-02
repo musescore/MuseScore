@@ -29,16 +29,12 @@
 #include "retval.h"
 
 namespace mu::notation {
-using ID = QString;
-using IDList = QList<ID>;
-
 class INotationParts
 {
 public:
     virtual ~INotationParts() = default;
 
     virtual async::NotifyList<const Part*> partList() const = 0;
-    virtual async::NotifyList<Instrument> instrumentList(const ID& partId) const = 0;
     virtual async::NotifyList<const Staff*> staffList(const ID& partId) const = 0;
 
     virtual void setParts(const PartInstrumentList& instruments) = 0;
@@ -49,8 +45,8 @@ public:
     virtual void setPartName(const ID& partId, const QString& name) = 0;
     virtual void setPartSharpFlat(const ID& partId, const SharpFlat& sharpFlat) = 0;
     virtual void setPartTransposition(const ID& partId, const Interval& transpose) = 0;
-    virtual void setInstrumentName(const ID& instrumentId, const ID& fromPartId, const QString& name) = 0;
-    virtual void setInstrumentAbbreviature(const ID& instrumentId, const ID& fromPartId, const QString& abbreviature) = 0;
+    virtual void setInstrumentName(const InstrumentKey& instrumentKey, const QString& name) = 0;
+    virtual void setInstrumentAbbreviature(const InstrumentKey& instrumentKey, const QString& abbreviature) = 0;
     virtual void setStaffType(const ID& staffId, StaffType type) = 0;
     virtual void setCutawayEnabled(const ID& staffId, bool enabled) = 0;
     virtual void setSmallStaff(const ID& staffId, bool smallStaff) = 0;
@@ -70,8 +66,8 @@ public:
     virtual void appendStaff(Staff* staff, const ID& destinationPartId) = 0;
     virtual void cloneStaff(const ID& sourceStaffId, const ID& destinationStaffId) = 0;
 
-    virtual void replaceInstrument(const ID& instrumentId, const ID& fromPartId, const Instrument& newInstrument) = 0;
-    virtual void replaceDrumset(const ID& intrumentId, const ID& fromPartId, const Drumset& newDrumset) = 0;
+    virtual void replaceInstrument(const InstrumentKey& instrumentKey, const Instrument& newInstrument) = 0;
+    virtual void replaceDrumset(const InstrumentKey& instrumentKey, const Drumset& newDrumset) = 0;
 
     virtual async::Notification partsChanged() const = 0;
 };
