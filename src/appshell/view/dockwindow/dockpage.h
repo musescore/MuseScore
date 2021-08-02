@@ -77,8 +77,9 @@ public:
     DockToolBarHolder* toolBarHolderByLocation(DockBase::DockLocation location) const;
     DockPanelHolder* panelHolderByLocation(DockBase::DockLocation location) const;
 
-    bool isDockShown(const QString& dockName) const;
-    void toggleDockVisibility(const QString& dockName);
+    bool isDockOpen(const QString& dockName) const;
+    void toggleDock(const QString& dockName);
+    void setDockOpen(const QString& dockName, bool open);
 
 public slots:
     void setUri(const QString& uri);

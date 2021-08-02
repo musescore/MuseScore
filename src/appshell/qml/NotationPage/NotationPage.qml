@@ -83,6 +83,7 @@ DockPage {
         pageModel.setPianoRollDockName(pianoRollPanel.objectName)
         pageModel.setMixerDockName(mixerPanel.objectName)
         pageModel.setTimelineDockName(timelinePanel.objectName)
+        pageModel.setDrumsetPanelDockName(drumsetPanel.objectName)
         pageModel.setStatusBarDockName(notationStatusBar.objectName)
 
         Qt.callLater(pageModel.init, root.dockWindow)
@@ -302,6 +303,22 @@ DockPage {
             visible: false
 
             Timeline {
+                anchors.fill: parent
+            }
+        },
+
+        DockPanel {
+            id: drumsetPanel
+
+            objectName: "drumsetPanel"
+            title: qsTrc("appshell", "Drumset Tools")
+
+            allowedAreas: Qt.TopDockWidgetArea | Qt.BottomDockWidgetArea
+
+            minimumHeight: 30
+            maximumHeight: 30
+
+            DrumsetPanel {
                 anchors.fill: parent
             }
         }

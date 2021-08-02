@@ -60,7 +60,7 @@ bool NotationNoteInput::isNoteInputMode() const
 
 NoteInputState NotationNoteInput::state() const
 {
-    Ms::InputState& inputState = score()->inputState();
+    const Ms::InputState& inputState = score()->inputState();
 
     NoteInputState noteInputState;
     noteInputState.method = inputState.noteEntryMethod();
@@ -69,6 +69,8 @@ NoteInputState NotationNoteInput::state() const
     noteInputState.articulationIds = articulationIds();
     noteInputState.withSlur = inputState.slur() != nullptr;
     noteInputState.currentVoiceIndex = inputState.voice();
+    noteInputState.currentTrack = inputState.track();
+    noteInputState.drumset = inputState.drumset();
     noteInputState.isRest = inputState.rest();
 
     return noteInputState;
@@ -209,6 +211,7 @@ void NotationNoteInput::putNote(const QPointF& pos, bool replace, bool insert)
     apply();
 
     notifyNoteAddedChanged();
+    notifyAboutStateChanged();
 }
 
 void NotationNoteInput::setAccidental(AccidentalType accidentalType)
@@ -228,6 +231,12 @@ void NotationNoteInput::setArticulation(SymbolId articulationSymbolId)
         inputState.articulationIds(), articulationSymbolId, Ms::ArticulationsUpdateMode::Remove);
     inputState.setArticulationIds(articulations);
 
+    notifyAboutStateChanged();
+}
+
+void NotationNoteInput::setDrumNote(int note)
+{
+    score()->inputState().setDrumNote(note);
     notifyAboutStateChanged();
 }
 

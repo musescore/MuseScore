@@ -380,6 +380,16 @@ void PaletteWidget::setApplyingElementsDisabled(bool val)
     m_isApplyingElementsDisabled = val;
 }
 
+bool PaletteWidget::useDoubleClickForApplyingElements() const
+{
+    return m_useDoubleClickForApplyingElements;
+}
+
+void PaletteWidget::setUseDoubleClickForApplyingElements(bool val)
+{
+    m_useDoubleClickForApplyingElements = val;
+}
+
 void PaletteWidget::applyCurrentElementToScore()
 {
     applyElementAtIndex(m_currentIdx);
@@ -676,6 +686,13 @@ void PaletteWidget::mousePressEvent(QMouseEvent* ev)
     update();
 }
 
+void PaletteWidget::mouseDoubleClickEvent(QMouseEvent* ev)
+{
+    if (m_useDoubleClickForApplyingElements) {
+        applyElementAtPosition(ev->pos(), ev->modifiers());
+    }
+}
+
 void PaletteWidget::mouseMoveEvent(QMouseEvent* ev)
 {
     if ((m_currentIdx != -1) && (m_dragIdx == m_currentIdx) && (ev->buttons() & Qt::LeftButton)
@@ -723,7 +740,10 @@ void PaletteWidget::mouseReleaseEvent(QMouseEvent* event)
     m_pressedIndex = -1;
 
     update();
-    applyElementAtPosition(event->pos(), event->modifiers());
+
+    if (!m_useDoubleClickForApplyingElements) {
+        applyElementAtPosition(event->pos(), event->modifiers());
+    }
 }
 
 void PaletteWidget::leaveEvent(QEvent*)
@@ -1090,6 +1110,11 @@ bool PaletteWidget::readFromFile(const QString& path)
 void PaletteWidget::writeToFile(const QString& path) const
 {
     m_palette->writeToFile(path);
+}
+
+bool PaletteWidget::handleEvent(QEvent* event)
+{
+    return QWidget::event(event);
 }
 
 // ====================================================

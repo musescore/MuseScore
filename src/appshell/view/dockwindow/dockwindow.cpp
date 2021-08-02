@@ -98,7 +98,7 @@ void DockWindow::componentComplete()
             hideCurrentToolBarDockingHolder();
 
             if (holder) {
-                holder->show();
+                holder->open();
             }
         }
 
@@ -124,7 +124,7 @@ void DockWindow::componentComplete()
 
             if (holder) {
                 qDebug() << holder->location();
-                holder->show();
+                holder->open();
             }
         }
 
@@ -195,7 +195,7 @@ void DockWindow::loadPage(const QString& uri)
 
     for (DockBase* dock : newPage->allDocks()) {
         if (!dock->isVisible()) {
-            dock->hide();
+            dock->close();
         }
     }
 
@@ -203,17 +203,25 @@ void DockWindow::loadPage(const QString& uri)
     emit currentPageUriChanged(uri);
 }
 
-bool DockWindow::isDockShown(const QString& dockName) const
+bool DockWindow::isDockOpen(const QString& dockName) const
 {
     const DockPage* currPage = currentPage();
-    return currPage ? currPage->isDockShown(dockName) : false;
+    return currPage ? currPage->isDockOpen(dockName) : false;
 }
 
-void DockWindow::toggleDockVisibility(const QString& dockName)
+void DockWindow::toggleDock(const QString& dockName)
 {
     DockPage* currPage = currentPage();
     if (currPage) {
-        currPage->toggleDockVisibility(dockName);
+        currPage->toggleDock(dockName);
+    }
+}
+
+void DockWindow::setDockOpen(const QString& dockName, bool open)
+{
+    DockPage* currPage = currentPage();
+    if (currPage) {
+        currPage->setDockOpen(dockName, open);
     }
 }
 
@@ -258,7 +266,7 @@ void DockWindow::loadPageContent(const DockPage* page)
     }
 
     addDock(m_mainToolBarDockingHolder, KDDockWidgets::Location_OnTop);
-    m_mainToolBarDockingHolder->hide();
+    m_mainToolBarDockingHolder->close();
 
     unitePanelsToTabs(page);
 }
@@ -562,7 +570,7 @@ void DockWindow::hideCurrentToolBarDockingHolder()
         return;
     }
 
-    m_currentToolBarDockingHolder->hide();
+    m_currentToolBarDockingHolder->close();
     m_currentToolBarDockingHolder = nullptr;
 }
 
@@ -572,7 +580,7 @@ void DockWindow::hideCurrentPanelDockingHolder()
         return;
     }
 
-    m_currentPanelDockingHolder->hide();
+    m_currentPanelDockingHolder->close();
     m_currentPanelDockingHolder = nullptr;
 }
 

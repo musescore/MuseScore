@@ -26,6 +26,7 @@
 #include "dockwindow/dockwindow.h"
 
 using namespace mu::appshell;
+using namespace mu::notation;
 
 NotationPageModel::NotationPageModel(QObject* parent)
     : QObject(parent)
@@ -87,6 +88,11 @@ void NotationPageModel::setTimelineDockName(const QString& dockName)
     setPanelDockName(PanelType::Timeline, dockName);
 }
 
+void NotationPageModel::setDrumsetPanelDockName(const QString& dockName)
+{
+    setPanelDockName(PanelType::DrumsetPanel, dockName);
+}
+
 void NotationPageModel::setStatusBarDockName(const QString& dockName)
 {
     setPanelDockName(PanelType::NotationStatusBar, dockName);
@@ -110,7 +116,7 @@ void NotationPageModel::init(QQuickItem* dockWindow)
 
     std::map<PanelType, bool> initialState;
     for (PanelType type : m_panelTypeToDockName.keys()) {
-        initialState[type] = m_window->isDockShown(m_panelTypeToDockName[type]);
+        initialState[type] = m_window->isDockOpen(m_panelTypeToDockName[type]);
     }
 
     pageState()->setIsPanelsVisible(initialState);
@@ -140,6 +146,11 @@ void NotationPageModel::init(QQuickItem* dockWindow)
             }
         }
     });
+
+    updateDrumsetPanelVisibility();
+    globalContext()->currentNotationChanged().onNotify(this, [=]() {
+        updateDrumsetPanelVisibility();
+    });
 }
 
 void NotationPageModel::togglePanel(PanelType type)
@@ -151,5 +162,26 @@ void NotationPageModel::togglePanel(PanelType type)
     bool visible = pageState()->isPanelVisible(type);
     pageState()->setIsPanelsVisible({ { type, !visible } });
 
-    m_window->toggleDockVisibility(m_panelTypeToDockName[type]);
+    m_window->toggleDock(m_panelTypeToDockName[type]);
+}
+
+void NotationPageModel::updateDrumsetPanelVisibility()
+{
+    auto setDrumsetPanelVisible = [this](bool visible) {
+        m_window->setDockOpen(m_panelTypeToDockName[PanelType::DrumsetPanel], visible);
+        pageState()->setIsPanelsVisible({ { PanelType::DrumsetPanel, visible } });
+    };
+
+    setDrumsetPanelVisible(false);
+
+    INotationPtr notation = globalContext()->currentNotation();
+    if (!notation) {
+        return;
+    }
+
+    INotationNoteInputPtr noteInput = notation->interaction()->noteInput();
+    noteInput->stateChanged().onNotify(this, [noteInput, setDrumsetPanelVisible]() {
+        bool visible = noteInput->isNoteInputMode() && noteInput->state().drumset != nullptr;
+        setDrumsetPanelVisible(visible);
+    });
 }
