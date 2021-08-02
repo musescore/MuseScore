@@ -770,9 +770,8 @@ void Score::spell()
                   for (int track = strack; track < etrack; ++track) {
                         Element* e = s->element(track);
                         if (e && e->type() == ElementType::CHORD)
-                              notes.insert(notes.end(),
-                                 toChord(e)->notes().begin(),
-                                 toChord(e)->notes().end());
+                              std::copy_if(toChord(e)->notes().begin(), toChord(e)->notes().end(),
+                                           std::back_inserter(notes), [this](Element* ce) { return selection().isNone() || ce->selected(); });
                         }
                   }
             spellNotelist(notes);
