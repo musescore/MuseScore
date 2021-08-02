@@ -599,6 +599,16 @@ INotationUndoStackPtr NotationParts::undoStack() const
     return m_undoStack;
 }
 
+void NotationParts::startEdit()
+{
+    undoStack()->prepareChanges();
+}
+
+void NotationParts::apply()
+{
+    undoStack()->commitChanges();
+}
+
 void NotationParts::removeParts(const IDList& partsIds)
 {
     TRACEFUNC;
@@ -607,26 +617,19 @@ void NotationParts::removeParts(const IDList& partsIds)
         return;
     }
 
-    PartInstrumentList parts;
-    for (Ms::Part* currentPart: masterScore()->parts()) {
-        if (partsIds.contains(currentPart->id())) {
-            continue;
-        }
-        PartInstrument pi;
-        pi.isExistingPart = true;
-        pi.partId = currentPart->id();
-        parts << pi;
-    }
+    startEdit();
 
-    QList<Ms::Staff*> originalStaves = masterScore()->staves();
+    doRemoveParts(partsIds);
 
-    removeMissingParts(parts);
-
-    sortParts(parts, masterScore(), originalStaves);
+//  sortParts(parts, masterScore(), originalStaves); // todo: temporary solution, need implement according new spec, see issue #8727
 
     masterScore()->setBracketsAndBarlines();
 
     updateScore();
+
+    apply();
+
+    notifyAboutPartsChanged();
 }
 
 void NotationParts::doRemoveParts(const IDList& partsIds)
@@ -634,15 +637,6 @@ void NotationParts::doRemoveParts(const IDList& partsIds)
     TRACEFUNC;
 
     for (const ID& partId: partsIds) {
-        for (Ms::Excerpt* currentExcerpt: masterScore()->excerpts()) {
-            for (Ms::Part* currentPart: currentExcerpt->parts()) {
-                if (currentPart->id() == partId) {
-                    currentExcerpt->removePart(partId);
-                    break;
-                }
-            }
-        }
-
         Part* p = part(partId);
         m_partsNotifier->itemRemoved(p);
         score()->cmdRemovePart(p);
@@ -1141,6 +1135,11 @@ void NotationParts::initStaff(Staff* staff, const Instrument& instrument, const 
         staff->setBarLineSpan(instrument.barlineSpan[cleffIndex]);
     }
     staff->setDefaultClefType(instrument.clefs[cleffIndex]);
+}
+
+void NotationParts::notifyAboutPartsChanged() const
+{
+    partsChanged().notify();
 }
 
 void NotationParts::notifyAboutPartChanged(const ID& partId) const

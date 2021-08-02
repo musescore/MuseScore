@@ -2444,13 +2444,6 @@ void Score::cmdRemovePart(Part* part)
         return;
     }
 
-    QList<Excerpt*> excerpts;
-    for (Excerpt* excerpt: masterScore()->excerpts()) {
-        if (excerpt->containsPart(part)) {
-            excerpts.append(excerpt);
-        }
-    }
-
     int sidx   = staffIdx(part);
     int n      = part->nstaves();
 
@@ -2459,12 +2452,6 @@ void Score::cmdRemovePart(Part* part)
     }
 
     undoRemovePart(part, sidx);
-
-    for (Excerpt* excerpt: excerpts) {
-        if (excerpt->isEmpty()) {
-            masterScore()->undo(new RemoveExcerpt(excerpt));
-        }
-    }
 }
 
 //---------------------------------------------------------
@@ -2508,6 +2495,17 @@ void Score::removePart(Part* part)
     }
 
     _parts.removeAt(index);
+
+    if (_excerpt) {
+        for (Part* excerptPart : _excerpt->parts()) {
+            if (excerptPart->id() != part->id()) {
+                continue;
+            }
+
+            _excerpt->parts().removeOne(excerptPart);
+            break;
+        }
+    }
 
     masterScore()->rebuildMidiMapping();
     setInstrumentsChanged(true);

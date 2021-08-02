@@ -59,8 +59,8 @@ public:
     void replaceDrumset(const ID& instrumentId, const ID& fromPartId, const Drumset& newDrumset) override;
 
 private:
-    void startEdit();
-    void apply();
+    void startGlobalEdit();
+    void endGlobalEdit();
 
     std::vector<INotationPartsPtr> excerptsParts() const;
 
