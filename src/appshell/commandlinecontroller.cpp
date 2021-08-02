@@ -49,6 +49,8 @@ void CommandLineController::parse(const QStringList& args)
     m_parser.addOption(QCommandLineOption("template-mode", "Save template mode, no page size")); // and no platform and creationDate tags
     m_parser.addOption(QCommandLineOption({ "t", "test-mode" }, "Set test mode flag for all files")); // this includes --template-mode
 
+    m_parser.addOption(QCommandLineOption("session-type", "Startup with given session type", "type")); // see StartupScenario::sessionTypeTromString
+
     // Converter mode
     m_parser.addOption(QCommandLineOption({ "r", "image-resolution" }, "Set output resolution for image export", "DPI"));
     m_parser.addOption(QCommandLineOption({ "j", "job" }, "Process a conversion job", "file"));
@@ -151,6 +153,11 @@ void CommandLineController::apply()
     notationConfiguration()->setTemplateModeEnalbed(m_parser.isSet("template-mode"));
     notationConfiguration()->setTestModeEnabled(m_parser.isSet("t"));
 
+    QString sessionType;
+    if (m_parser.isSet("session-type")) {
+        sessionType = m_parser.value("session-type");
+    }
+
     // Converter mode
     if (m_parser.isSet("r")) {
         std::optional<float> val = floatValue("r");
@@ -249,8 +256,12 @@ void CommandLineController::apply()
         m_converterTask.params[CommandLineController::ParamKey::StylePath] = m_parser.value("S");
     }
 
-    if (application()->runMode() == IApplication::RunMode::Editor && !scorefiles.isEmpty()) {
-        startupScenario()->setStartupScorePath(scorefiles[0]);
+    if (application()->runMode() == IApplication::RunMode::Editor) {
+        startupScenario()->setSessionType(sessionType);
+
+        if (!scorefiles.isEmpty()) {
+            startupScenario()->setStartupScorePath(scorefiles[0]);
+        }
     }
 }
 

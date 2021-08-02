@@ -116,7 +116,9 @@ Ret ProjectFilesController::openProject(const io::path& projectPath_)
     //! Step 4. Check, if a any project already opened in the current window,
     //! then we open new window
     if (globalContext()->currentProject()) {
-        multiInstancesProvider()->openNewAppInstance(projectPath);
+        QStringList args;
+        args << projectPath.toQString();
+        multiInstancesProvider()->openNewAppInstance(args);
         return make_ret(Ret::Code::Ok);
     }
 
@@ -171,6 +173,15 @@ bool ProjectFilesController::isProjectOpened(const io::path& scorePath) const
 
 void ProjectFilesController::newProject()
 {
+    //! Check, if a any project already opened in the current window,
+    //! then we open new window
+    if (globalContext()->currentProject()) {
+        QStringList args;
+        args << "--session-type" << "start-with-new";
+        multiInstancesProvider()->openNewAppInstance(args);
+        return;
+    }
+
     Ret ret = interactive()->open("musescore://userscores/newscore").ret;
 
     if (ret) {

@@ -41,7 +41,7 @@ public:
     // Project opening
     virtual bool isProjectAlreadyOpened(const io::path& projectPath) const = 0;
     virtual void activateWindowWithProject(const io::path& projectPath) = 0;
-    virtual bool openNewAppInstance(const io::path& projectPath) = 0;
+    virtual bool openNewAppInstance(const QStringList& args) = 0;
 
     // Settings
     virtual bool isPreferencesAlreadyOpened() const = 0;
