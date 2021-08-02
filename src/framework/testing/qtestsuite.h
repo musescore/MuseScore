@@ -91,7 +91,7 @@ public:
         }
         int ret = 0;
         for (QObject* test : testList()) {
-            if (argc > 0 && test->objectName() == argv[1]) {
+            if (argc > 0 && std::find(argv + 1, argv + argc, test->objectName()) != argv + argc) {
                 ret += QTest::qExec(test, 1, argv);
             } else if (shouldExecute(test, argc, argv)) {
                 ret += QTest::qExec(test, argc, argv);
