@@ -1945,6 +1945,18 @@ void ParsedChord::respellQualitySymbols(const ChordList* cl)
                     hasSeven = halfDiminishedTokens.contains("7");
                     hasFlatFive = halfDiminishedTokens.contains("b5");
                 }
+
+                // If of form <minor>7b5, switch the minor symbol to match the quality minor
+                if (halfDiminishedTokens.contains("7") && halfDiminishedTokens.contains("b5")) {
+                    QString sym = cl->qualitySymbols.value("minor");
+                    if (sym != "-1") {
+                        ChordToken qualTok;
+                        qualTok.names += sym;
+                        qualTok.tokenClass = ChordTokenClass::QUALITY;
+                        _tokenList.removeAt(index);
+                        _tokenList.insert(index, qualTok);
+                    }
+                }
             } else if (_quality == "half-diminished") {
                 // This part of code is encountered when the input is 0.
                 QStringList halfDiminishedTokens = cl->qualitySymbols.value("half-diminished").split(" ");
@@ -1974,6 +1986,18 @@ void ParsedChord::respellQualitySymbols(const ChordList* cl)
                         fiveToken.names += "5";
                         fiveToken.tokenClass = ChordTokenClass::MODIFIER;
                         _tokenList.insert(index + 3, fiveToken);
+                    }
+                }
+
+                // If of form <minor>7b5, switch the minor symbol to match the quality minor
+                if (halfDiminishedTokens.contains("7") && halfDiminishedTokens.contains("b5")) {
+                    QString sym = cl->qualitySymbols.value("minor");
+                    if (sym != "-1") {
+                        ChordToken qualTok;
+                        qualTok.names += sym;
+                        qualTok.tokenClass = ChordTokenClass::QUALITY;
+                        _tokenList.removeAt(index);
+                        _tokenList.insert(index, qualTok);
                     }
                 }
             } else if (isDiminished) {
