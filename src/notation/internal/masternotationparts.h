@@ -36,15 +36,6 @@ public:
 
     void setParts(const PartInstrumentList& instruments) override;
     void setScoreOrder(const ScoreOrder& order) override;
-    void setInstrumentName(const ID& instrumentId, const ID& fromPartId, const QString& name) override;
-    void setPartName(const ID& partId, const QString& name) override;
-    void setPartSharpFlat(const ID& partId, const SharpFlat& sharpFlat) override;
-    void setPartTransposition(const ID& partId, const Interval& transpose) override;
-    void setInstrumentAbbreviature(const ID& instrumentId, const ID& fromPartId, const QString& abbreviature) override;
-    void setStaffType(const ID& staffId, StaffType type) override;
-    void setCutawayEnabled(const ID& staffId, bool enabled) override;
-    void setSmallStaff(const ID& staffId, bool smallStaff) override;
-    void setStaffConfig(const ID& staffId, const StaffConfig& config) override;
 
     void removeParts(const IDList& partsIds) override;
     void removeStaves(const IDList& stavesIds) override;
