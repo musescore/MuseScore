@@ -112,7 +112,7 @@ int PaletteWidget::actualCellCount() const
 
 PaletteCellPtr PaletteWidget::cellAt(size_t index) const
 {
-    if (index < 0 || index >= actualCellsList().size()) {
+    if (index >= actualCellsList().size()) {
         return nullptr;
     }
 
