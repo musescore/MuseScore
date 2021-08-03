@@ -19,38 +19,39 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_USERSCORES_EXPORTDIALOGMODEL_H
-#define MU_USERSCORES_EXPORTDIALOGMODEL_H
+#ifndef MU_PROJECT_EXPORTDIALOGMODEL_H
+#define MU_PROJECT_EXPORTDIALOGMODEL_H
 
-#include "userscorestypes.h"
 #include "modularity/ioc.h"
 
 #include "iinteractive.h"
 #include "context/iglobalcontext.h"
-#include "project/iprojectconfiguration.h"
-#include "project/inotationwritersregister.h"
 #include "importexport/imagesexport/iimagesexportconfiguration.h"
 #include "importexport/musicxml/imusicxmlconfiguration.h"
 #include "importexport/midi/imidiconfiguration.h"
 #include "importexport/audioexport/iaudioexportconfiguration.h"
-#include "iexportscorescenario.h"
+
+#include "projecttypes.h"
+#include "iprojectconfiguration.h"
+#include "inotationwritersregister.h"
+#include "internal/iexportprojectscenario.h"
 
 class QItemSelectionModel;
 
-namespace mu::userscores {
+namespace mu::project {
 class ExportDialogModel : public QAbstractListModel
 {
     Q_OBJECT
 
-    INJECT(userscores, framework::IInteractive, interactive)
-    INJECT(userscores, context::IGlobalContext, context)
-    INJECT(userscores, project::IProjectConfiguration, configuration)
-    INJECT(userscores, project::INotationWritersRegister, writers)
-    INJECT(userscores, iex::imagesexport::IImagesExportConfiguration, imageExportConfiguration)
-    INJECT(userscores, iex::musicxml::IMusicXmlConfiguration, musicXmlConfiguration)
-    INJECT(userscores, iex::midi::IMidiImportExportConfiguration, midiImportExportConfiguration)
-    INJECT(userscores, iex::audioexport::IAudioExportConfiguration, audioExportConfiguration)
-    INJECT(userscores, IExportScoreScenario, exportScoreScenario)
+    INJECT(project, framework::IInteractive, interactive)
+    INJECT(project, context::IGlobalContext, context)
+    INJECT(project, IProjectConfiguration, configuration)
+    INJECT(project, INotationWritersRegister, writers)
+    INJECT(project, iex::imagesexport::IImagesExportConfiguration, imageExportConfiguration)
+    INJECT(project, iex::musicxml::IMusicXmlConfiguration, musicXmlConfiguration)
+    INJECT(project, iex::midi::IMidiImportExportConfiguration, midiImportExportConfiguration)
+    INJECT(project, iex::audioexport::IAudioExportConfiguration, audioExportConfiguration)
+    INJECT(project, IExportProjectScenario, exportProjectScenario)
 
     Q_PROPERTY(int selectionLength READ selectionLength NOTIFY selectionChanged)
 
@@ -180,4 +181,4 @@ private:
 };
 }
 
-#endif // MU_USERSCORES_EXPORTDIALOGMODEL_H
+#endif // MU_PROJECT_EXPORTDIALOGMODEL_H

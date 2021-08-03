@@ -21,7 +21,7 @@
  */
 #include "exporttype.h"
 
-using namespace mu::userscores;
+using namespace mu::project;
 
 ExportTypeList::ExportTypeList()
     : QList()
