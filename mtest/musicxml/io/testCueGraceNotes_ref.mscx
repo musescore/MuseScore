@@ -153,6 +153,11 @@
             <durationType>eighth</durationType>
             <acciaccatura/>
             <Note>
+              <Events>
+                <Event>
+                  <len>0</len>
+                  </Event>
+                </Events>
               <pitch>65</pitch>
               <tpc>13</tpc>
               <play>0</play>
@@ -233,6 +238,11 @@
             <durationType>eighth</durationType>
             <acciaccatura/>
             <Note>
+              <Events>
+                <Event>
+                  <len>0</len>
+                  </Event>
+                </Events>
               <pitch>69</pitch>
               <tpc>17</tpc>
               <play>0</play>
@@ -300,6 +310,11 @@
             <durationType>eighth</durationType>
             <acciaccatura/>
             <Note>
+              <Events>
+                <Event>
+                  <len>0</len>
+                  </Event>
+                </Events>
               <pitch>69</pitch>
               <tpc>17</tpc>
               <play>0</play>
@@ -386,6 +401,11 @@
             <durationType>eighth</durationType>
             <acciaccatura/>
             <Note>
+              <Events>
+                <Event>
+                  <len>0</len>
+                  </Event>
+                </Events>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
@@ -449,6 +469,11 @@
             <durationType>eighth</durationType>
             <appoggiatura/>
             <Note>
+              <Events>
+                <Event>
+                  <len>0</len>
+                  </Event>
+                </Events>
               <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
@@ -493,6 +518,11 @@
               <Accidental>
                 <subtype>accidentalNatural</subtype>
                 </Accidental>
+              <Events>
+                <Event>
+                  <len>0</len>
+                  </Event>
+                </Events>
               <pitch>74</pitch>
               <tpc>16</tpc>
               </Note>
@@ -645,6 +675,11 @@
               <Accidental>
                 <subtype>accidentalFlat</subtype>
                 </Accidental>
+              <Events>
+                <Event>
+                  <len>0</len>
+                  </Event>
+                </Events>
               <pitch>70</pitch>
               <tpc>12</tpc>
               <play>0</play>
@@ -743,6 +778,11 @@
               <Accidental>
                 <subtype>accidentalSharp</subtype>
                 </Accidental>
+              <Events>
+                <Event>
+                  <len>0</len>
+                  </Event>
+                </Events>
               <pitch>66</pitch>
               <tpc>20</tpc>
               <play>0</play>
@@ -807,6 +847,11 @@
             <durationType>eighth</durationType>
             <acciaccatura/>
             <Note>
+              <Events>
+                <Event>
+                  <len>0</len>
+                  </Event>
+                </Events>
               <pitch>65</pitch>
               <tpc>13</tpc>
               <play>0</play>
