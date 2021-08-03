@@ -32,10 +32,8 @@
 #include "view/scorethumbnail.h"
 #include "view/templatesmodel.h"
 #include "view/templatepaintview.h"
-#include "view/exportdialogmodel.h"
 
 #include "internal/userscoresservice.h"
-#include "internal/exportscorescenario.h"
 #include "internal/templatesrepository.h"
 
 #include "ui/iinteractiveuriregister.h"
@@ -45,7 +43,6 @@ using namespace mu::modularity;
 using namespace mu::ui;
 
 static std::shared_ptr<UserScoresService> s_userScoresService = std::make_shared<UserScoresService>();
-static std::shared_ptr<ExportScoreScenario> s_exportScoreScenario = std::make_shared<ExportScoreScenario>();
 
 static void userscores_init_qrc()
 {
@@ -61,7 +58,6 @@ void UserScoresModule::registerExports()
 {
     ioc()->registerExport<IUserScoresService>(moduleName(), s_userScoresService);
     ioc()->registerExport<ITemplatesRepository>(moduleName(), new TemplatesRepository());
-    ioc()->registerExport<IExportScoreScenario>(moduleName(), s_exportScoreScenario);
 }
 
 void UserScoresModule::resolveImports()
@@ -86,7 +82,6 @@ void UserScoresModule::registerUiTypes()
     qmlRegisterType<RecentScoresModel>("MuseScore.UserScores", 1, 0, "RecentScoresModel");
     qmlRegisterType<NewScoreModel>("MuseScore.UserScores", 1, 0, "NewScoreModel");
     qmlRegisterType<AdditionalInfoModel>("MuseScore.UserScores", 1, 0, "AdditionalInfoModel");
-    qmlRegisterType<ExportDialogModel>("MuseScore.UserScores", 1, 0, "ExportDialogModel");
 
     qmlRegisterType<ScoreThumbnail>("MuseScore.UserScores", 1, 0, "ScoreThumbnail");
     qmlRegisterType<TemplatesModel>("MuseScore.UserScores", 1, 0, "TemplatesModel");

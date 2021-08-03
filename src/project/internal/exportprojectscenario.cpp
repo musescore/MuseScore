@@ -19,17 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "exportscorescenario.h"
+#include "exportprojectscenario.h"
 
-#include "log.h"
 #include "translation.h"
+#include "log.h"
 
-using namespace mu::userscores;
 using namespace mu::project;
 using namespace mu::notation;
 using namespace mu::framework;
 
-std::vector<INotationWriter::UnitType> ExportScoreScenario::supportedUnitTypes(const ExportType& exportType) const
+std::vector<INotationWriter::UnitType> ExportProjectScenario::supportedUnitTypes(const ExportType& exportType) const
 {
     IF_ASSERT_FAILED(!exportType.suffixes.isEmpty()) {
         return {};
@@ -43,8 +42,8 @@ std::vector<INotationWriter::UnitType> ExportScoreScenario::supportedUnitTypes(c
     return writer->supportedUnitTypes();
 }
 
-bool ExportScoreScenario::exportScores(const INotationPtrList& notations, const ExportType& exportType,
-                                       INotationWriter::UnitType unitType) const
+bool ExportProjectScenario::exportScores(const INotationPtrList& notations, const ExportType& exportType,
+                                         INotationWriter::UnitType unitType) const
 {
     IF_ASSERT_FAILED(!exportType.suffixes.isEmpty()) {
         return false;
@@ -130,7 +129,7 @@ bool ExportScoreScenario::exportScores(const INotationPtrList& notations, const 
     return true;
 }
 
-bool ExportScoreScenario::isCreatingOnlyOneFile(const INotationPtrList& notations, INotationWriter::UnitType unitType) const
+bool ExportProjectScenario::isCreatingOnlyOneFile(const INotationPtrList& notations, INotationWriter::UnitType unitType) const
 {
     switch (unitType) {
     case INotationWriter::UnitType::PER_PAGE:
@@ -144,13 +143,13 @@ bool ExportScoreScenario::isCreatingOnlyOneFile(const INotationPtrList& notation
     return false;
 }
 
-bool ExportScoreScenario::isMainNotation(INotationPtr notation) const
+bool ExportProjectScenario::isMainNotation(INotationPtr notation) const
 {
     return context()->currentMasterNotation()->notation() == notation;
 }
 
-mu::io::path ExportScoreScenario::askExportPath(const INotationPtrList& notations, const ExportType& exportType,
-                                                INotationWriter::UnitType unitType) const
+mu::io::path ExportProjectScenario::askExportPath(const INotationPtrList& notations, const ExportType& exportType,
+                                                  INotationWriter::UnitType unitType) const
 {
     INotationProjectPtr currentNotationProject = context()->currentProject();
 
@@ -196,7 +195,7 @@ mu::io::path ExportScoreScenario::askExportPath(const INotationPtrList& notation
                                            exportType.filter(), isCreatingOnlyOneFile);
 }
 
-mu::io::path ExportScoreScenario::completeExportPath(const io::path& basePath, INotationPtr notation, bool isMain, int pageIndex) const
+mu::io::path ExportProjectScenario::completeExportPath(const io::path& basePath, INotationPtr notation, bool isMain, int pageIndex) const
 {
     io::path result = io::dirpath(basePath) + "/" + io::basename(basePath);
 
@@ -213,7 +212,7 @@ mu::io::path ExportScoreScenario::completeExportPath(const io::path& basePath, I
     return result;
 }
 
-bool ExportScoreScenario::shouldReplaceFile(const QString& filename) const
+bool ExportProjectScenario::shouldReplaceFile(const QString& filename) const
 {
     switch (m_fileConflictPolicy) {
     case FileConflictPolicy::ReplaceAll:
@@ -253,7 +252,7 @@ bool ExportScoreScenario::shouldReplaceFile(const QString& filename) const
     return false;
 }
 
-bool ExportScoreScenario::askForRetry(const QString& filename) const
+bool ExportProjectScenario::askForRetry(const QString& filename) const
 {
     IInteractive::Result result = interactive()->question(
         trc("userscores", "Error"),
@@ -263,7 +262,7 @@ bool ExportScoreScenario::askForRetry(const QString& filename) const
     return result.standartButton() == IInteractive::Button::Retry;
 }
 
-bool ExportScoreScenario::doExportLoop(const io::path& scorePath, std::function<bool(io::Device&)> exportFunction) const
+bool ExportProjectScenario::doExportLoop(const io::path& scorePath, std::function<bool(io::Device&)> exportFunction) const
 {
     IF_ASSERT_FAILED(exportFunction) {
         return false;

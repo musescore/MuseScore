@@ -19,18 +19,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_USERSCORES_IEXPORTSCORESERVICE_H
-#define MU_USERSCORES_IEXPORTSCORESERVICE_H
+#ifndef MU_PROJECT_IEXPORTPROJECTSCENARIO_H
+#define MU_PROJECT_IEXPORTPROJECTSCENARIO_H
 
 #include "modularity/imoduleexport.h"
 #include "notation/inotation.h"
-#include "project/inotationwriter.h"
-#include "internal/exporttype.h"
+#include "inotationwriter.h"
+#include "exporttype.h"
 
-namespace mu::userscores {
-class IExportScoreScenario : MODULE_EXPORT_INTERFACE
+namespace mu::project {
+class IExportProjectScenario : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(IExportScoreScenario)
+    INTERFACE_ID(IExportProjectScenario)
 
 public:
     virtual std::vector<project::INotationWriter::UnitType> supportedUnitTypes(const ExportType& exportType) const = 0;
@@ -40,4 +40,4 @@ public:
 };
 }
 
-#endif // MU_USERSCORES_IEXPORTSCORESERVICE_H
+#endif // MU_PROJECT_IEXPORTPROJECTSCENARIO_H

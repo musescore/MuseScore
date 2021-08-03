@@ -25,7 +25,7 @@
 
 using namespace mu::project;
 
-constexpr int SAVE_INTERVAL_MS(1000 * 30);
+constexpr int SAVE_INTERVAL_MS(1000 * 60 * 3);
 
 void ProjectAutoSaver::init()
 {

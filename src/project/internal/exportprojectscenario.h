@@ -19,28 +19,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_USERSCORES_EXPORTSCORESERVICE_H
-#define MU_USERSCORES_EXPORTSCORESERVICE_H
+#ifndef MU_PROJECT_EXPORTPROJECTSCENARIO_H
+#define MU_PROJECT_EXPORTPROJECTSCENARIO_H
 
 #include "modularity/ioc.h"
 
-#include "iexportscorescenario.h"
-#include "project/iprojectconfiguration.h"
+#include "iexportprojectscenario.h"
+#include "iprojectconfiguration.h"
 #include "iinteractive.h"
-#include "project/inotationwritersregister.h"
+#include "inotationwritersregister.h"
 #include "importexport/imagesexport/iimagesexportconfiguration.h"
 #include "context/iglobalcontext.h"
 #include "system/ifilesystem.h"
 
-namespace mu::userscores {
-class ExportScoreScenario : public IExportScoreScenario
+namespace mu::project {
+class ExportProjectScenario : public IExportProjectScenario
 {
-    INJECT(userscores, project::IProjectConfiguration, configuration)
-    INJECT(userscores, framework::IInteractive, interactive)
-    INJECT(userscores, project::INotationWritersRegister, writers)
-    INJECT(userscores, iex::imagesexport::IImagesExportConfiguration, imagesExportConfiguration)
-    INJECT(userscores, context::IGlobalContext, context)
-    INJECT(userscores, system::IFileSystem, fileSystem)
+    INJECT(project, IProjectConfiguration, configuration)
+    INJECT(project, framework::IInteractive, interactive)
+    INJECT(project, INotationWritersRegister, writers)
+    INJECT(project, iex::imagesexport::IImagesExportConfiguration, imagesExportConfiguration)
+    INJECT(project, context::IGlobalContext, context)
+    INJECT(project, system::IFileSystem, fileSystem)
 
 public:
     std::vector<project::INotationWriter::UnitType> supportedUnitTypes(const ExportType& exportType) const override;
@@ -72,4 +72,4 @@ private:
 };
 }
 
-#endif // MU_USERSCORES_EXPORTSCORESERVICE_H
+#endif // MU_PROJECT_EXPORTPROJECTSCENARIO_H

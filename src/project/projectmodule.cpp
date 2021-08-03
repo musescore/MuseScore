@@ -31,6 +31,9 @@
 #include "internal/projectfilescontroller.h"
 #include "internal/projectuiactions.h"
 #include "internal/projectconfiguration.h"
+#include "internal/exportprojectscenario.h"
+
+#include "view/exportdialogmodel.h"
 
 #ifdef Q_OS_MAC
 #include "internal/platform/macos/macosrecentfilescontroller.h"
@@ -60,6 +63,7 @@ void ProjectModule::registerExports()
     ioc()->registerExport<INotationReadersRegister>(moduleName(), new NotationReadersRegister());
     ioc()->registerExport<INotationWritersRegister>(moduleName(), new NotationWritersRegister());
     ioc()->registerExport<IProjectFilesController>(moduleName(), s_fileController);
+    ioc()->registerExport<IExportProjectScenario>(moduleName(), new ExportProjectScenario());
 
 #ifdef Q_OS_MAC
     ioc()->registerExport<IPlatformRecentFilesController>(moduleName(), new MacOSRecentFilesController());
@@ -80,6 +84,7 @@ void ProjectModule::resolveImports()
 
 void ProjectModule::registerUiTypes()
 {
+    qmlRegisterType<ExportDialogModel>("MuseScore.UserScores", 1, 0, "ExportDialogModel");
 }
 
 void ProjectModule::onInit(const framework::IApplication::RunMode& mode)
