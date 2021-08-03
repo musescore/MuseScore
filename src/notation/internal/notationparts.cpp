@@ -166,6 +166,8 @@ void NotationParts::setParts(const PartInstrumentList& parts)
 
     QList<Ms::Staff*> originalStaves = score()->staves();
 
+    startEdit();
+
     removeMissingParts(parts);
     appendNewParts(parts);
     updateSoloist(parts);
@@ -173,6 +175,8 @@ void NotationParts::setParts(const PartInstrumentList& parts)
     sortParts(parts, originalStaves);
 
     setBracketsAndBarlines();
+
+    apply();
 
     updateScore();
 
@@ -194,8 +198,12 @@ void NotationParts::setPartVisible(const ID& partId, bool visible)
         return;
     }
 
+    startEdit();
+
     part->undoChangeProperty(Ms::Pid::VISIBLE, visible);
     updateScore();
+
+    apply();
 
     notifyAboutPartChanged(part);
 }
@@ -209,8 +217,12 @@ void NotationParts::setPartName(const ID& partId, const QString& name)
         return;
     }
 
+    startEdit();
+
     doSetPartName(part, name);
     updateScore();
+
+    apply();
 
     notifyAboutPartChanged(part);
 }
@@ -224,8 +236,12 @@ void NotationParts::setPartSharpFlat(const ID& partId, const SharpFlat& sharpFla
         return;
     }
 
+    startEdit();
+
     part->undoChangeProperty(Ms::Pid::PREFER_SHARP_FLAT, static_cast<int>(sharpFlat));
     updateScore();
+
+    apply();
 
     notifyAboutPartChanged(part);
 }
@@ -239,8 +255,12 @@ void NotationParts::setPartTransposition(const ID& partId, const Interval& trans
         return;
     }
 
+    startEdit();
+
     score()->transpositionChanged(part, transpose);
     updateScore();
+
+    apply();
 
     notifyAboutPartChanged(part);
 }
@@ -289,8 +309,12 @@ void NotationParts::setInstrumentName(const InstrumentKey& instrumentKey, const 
         return;
     }
 
+    startEdit();
+
     score()->undo(new Ms::ChangeInstrumentLong(instrumentKey.tick, part, { StaffName(name, 0) }));
     updateScore();
+
+    apply();
 
     notifyAboutPartChanged(part);
 }
@@ -304,8 +328,12 @@ void NotationParts::setInstrumentAbbreviature(const InstrumentKey& instrumentKey
         return;
     }
 
+    startEdit();
+
     score()->undo(new Ms::ChangeInstrumentShort(instrumentKey.tick, part, { StaffName(abbreviature, 0) }));
     updateScore();
+
+    apply();
 
     notifyAboutPartChanged(part);
 }
@@ -319,8 +347,12 @@ void NotationParts::setVoiceVisible(const ID& staffId, int voiceIndex, bool visi
         return;
     }
 
+    startEdit();
+
     doSetStaffVoiceVisible(staff, voiceIndex, visible);
     updateScore();
+
+    apply();
 
     notifyAboutStaffChanged(staff);
 }
@@ -338,8 +370,12 @@ void NotationParts::setStaffVisible(const ID& staffId, bool visible)
         return;
     }
 
+    startEdit();
+
     doSetStaffVisible(staff, visible);
     updateScore();
+
+    apply();
 
     notifyAboutStaffChanged(staff);
 }
@@ -367,8 +403,12 @@ void NotationParts::setStaffType(const ID& staffId, StaffType type)
         return;
     }
 
+    startEdit();
+
     score()->undo(new Ms::ChangeStaffType(staff, *staffType));
     updateScore();
+
+    apply();
 
     notifyAboutStaffChanged(staff);
 }
@@ -382,9 +422,13 @@ void NotationParts::setCutawayEnabled(const ID& staffId, bool enabled)
         return;
     }
 
+    startEdit();
+
     staff->setCutaway(enabled);
     score()->undo(new Ms::ChangeStaff(staff));
     updateScore();
+
+    apply();
 
     notifyAboutStaffChanged(staff);
 }
@@ -403,9 +447,13 @@ void NotationParts::setSmallStaff(const ID& staffId, bool smallStaff)
         return;
     }
 
+    startEdit();
+
     staffType->setSmall(smallStaff);
     score()->undo(new Ms::ChangeStaffType(staff, *staffType));
     updateScore();
+
+    apply();
 
     notifyAboutStaffChanged(staff);
 }
@@ -423,6 +471,8 @@ void NotationParts::setStaffConfig(const ID& staffId, const StaffConfig& config)
     if (!staffType) {
         return;
     }
+
+    startEdit();
 
     staff->setVisible(config.visible);
     staff->undoChangeProperty(Ms::Pid::STAFF_COLOR, config.linesColor);
@@ -448,6 +498,8 @@ void NotationParts::setStaffConfig(const ID& staffId, const StaffConfig& config)
 
     score()->undo(new Ms::ChangeStaff(staff));
     updateScore();
+
+    apply();
 
     notifyAboutStaffChanged(staff);
 }
@@ -498,6 +550,8 @@ void NotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
         return;
     }
 
+    startEdit();
+
     int staffIndex = destinationPart->nstaves();
 
     staff->setScore(score());
@@ -509,7 +563,7 @@ void NotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
 
     updateScore();
 
-    destinationPart->instrument()->setClefType(staffIndex, staff->defaultClefType());
+    apply();
 
     notifyAboutStaffAdded(staff, destinationPartId);
 }
@@ -561,9 +615,14 @@ void NotationParts::linkStaves(const ID& sourceStaffId, const ID& destinationSta
         return;
     }
 
+    startEdit();
+
     Ms::Excerpt::cloneStaff(sourceStaff, destinationStaff);
 
     updateScore();
+
+    apply();
+    
     notifyAboutStaffChanged(destinationStaff);
 }
 
@@ -576,9 +635,13 @@ void NotationParts::replaceInstrument(const InstrumentKey& instrumentKey, const 
         return;
     }
 
+    startEdit();
+
     score()->undo(new Ms::ChangePart(part, new Ms::Instrument(InstrumentsConverter::convertInstrument(newInstrument)),
                                      formatPartTitle(part)));
     updateScore();
+
+    apply();
 
     notifyAboutPartChanged(part);
 }
@@ -595,8 +658,12 @@ void NotationParts::replaceDrumset(const InstrumentKey& instrumentKey, const Dru
         return;
     }
 
+    startEdit();
+
     score()->undo(new Ms::ChangeDrumset(instrument, &newDrumset));
     updateScore();
+
+    apply();
 
     notifyAboutPartChanged(part);
 }
@@ -668,6 +735,8 @@ void NotationParts::removeStaves(const IDList& stavesIds)
         return;
     }
 
+    startEdit();
+
     for (Staff* staff: staves(stavesIds)) {
         notifyAboutStaffRemoved(staff);
         score()->cmdRemoveStaff(staff->idx());
@@ -675,6 +744,8 @@ void NotationParts::removeStaves(const IDList& stavesIds)
 
     setBracketsAndBarlines();
     updateScore();
+
+    apply();
 }
 
 void NotationParts::doSetPartName(Part* part, const QString& name)
@@ -709,11 +780,15 @@ void NotationParts::moveParts(const IDList& sourcePartsIds, const ID& destinatio
         parts << pi;
     }
 
+    startEdit();
+
     sortParts(parts, score()->staves());
 
     setBracketsAndBarlines();
 
     updateScore();
+
+    apply();
 
     m_partChangedNotifier->changed();
 }
@@ -736,11 +811,15 @@ void NotationParts::moveStaves(const IDList& sourceStavesIds, const ID& destinat
     int destinationStaffIndex = (mode == InsertMode::Before ? destinationStaff->idx() : destinationStaff->idx() + 1);
     destinationStaffIndex -= score()->staffIdx(destinationPart); // NOTE: convert to local part's staff index
 
+    startEdit();
+
     doMoveStaves(staves, destinationStaffIndex, destinationPart);
 
     setBracketsAndBarlines();
 
     updateScore();
+
+    apply();
 }
 
 void NotationParts::appendStaves(Part* part, const Instrument& instrument)
