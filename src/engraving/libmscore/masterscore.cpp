@@ -391,12 +391,12 @@ bool MasterScore::writeMscz(MscWriter& mscWriter, bool onlySelection, bool doCre
     // Write thumbnail
     {
         if (doCreateThumbnail && !pages().isEmpty()) {
-            QImage pm = createThumbnail();
+            auto pixmap = createThumbnail();
 
             QByteArray ba;
             QBuffer b(&ba);
             b.open(QIODevice::WriteOnly);
-            pm.save(&b, "PNG");
+            imageProvider()->saveAsPng(pixmap, &b);
             mscWriter.writeThumbnailFile(ba);
         }
     }
@@ -438,12 +438,12 @@ bool MasterScore::exportPart(mu::engraving::MscWriter& mscWriter, Score* partSco
     // Write thumbnail
     {
         if (!partScore->pages().isEmpty()) {
-            QImage pm = partScore->createThumbnail();
+            auto pixmap = partScore->createThumbnail();
 
             QByteArray ba;
             QBuffer b(&ba);
             b.open(QIODevice::WriteOnly);
-            pm.save(&b, "PNG");
+            imageProvider()->saveAsPng(pixmap, &b);
             mscWriter.writeThumbnailFile(ba);
         }
     }

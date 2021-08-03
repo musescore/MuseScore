@@ -47,6 +47,7 @@
 
 #include "io/mscwriter.h"
 #include "io/mscreader.h"
+#include "engraving/draw/iimageprovider.h"
 
 class QMimeData;
 
@@ -414,6 +415,8 @@ class MasterScore;
 class Score : public QObject, public ScoreElement
 {
     Q_OBJECT
+
+    INJECT(engraving, mu::draw::IImageProvider, imageProvider)
 public:
     enum class FileError : char {
         FILE_NO_ERROR,
@@ -1267,7 +1270,7 @@ public:
     void setAccessibleMessage(QString s) { accMessage = s; } // retain ':' and ';'
     QString accessibleMessage() const { return accMessage; }
 
-    QImage createThumbnail();
+    std::shared_ptr<mu::draw::Pixmap> createThumbnail();
     QString createRehearsalMarkText(RehearsalMark* current) const;
     QString nextRehearsalMarkText(RehearsalMark* previous, RehearsalMark* current) const;
 

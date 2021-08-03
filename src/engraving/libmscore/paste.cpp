@@ -1162,11 +1162,12 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
             pasteSymbols(e, cr);
         }
     } else if (ms->hasImage()) {
-        QImage im = qvariant_cast<QImage>(ms->imageData());
         QByteArray ba;
         QBuffer buffer(&ba);
         buffer.open(QIODevice::WriteOnly);
-        im.save(&buffer, "PNG");
+
+        auto px = imageProvider()->pixmapFromQVariant(ms->imageData());
+        imageProvider()->saveAsPng(px, &buffer);
 
         Image* image = new Image(this);
         image->setImageType(ImageType::RASTER);

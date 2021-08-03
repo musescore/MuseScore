@@ -26,6 +26,7 @@
 #include <QPainterPath>
 #include <QMimeType>
 #include <QMimeDatabase>
+#include <QPaintEngine>
 
 #include "svggenerator.h"
 #include "libmscore/element.h"

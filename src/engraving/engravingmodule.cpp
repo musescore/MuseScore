@@ -26,7 +26,7 @@
 #ifndef NO_ENGRAVING_INTERNAL
 #include "engraving/internal/engravingconfiguration.h"
 #include "engraving/internal/qfontprovider.h"
-#include "engraving/internal/qimageconverter.h"
+#include "engraving/internal/qimageprovider.h"
 #endif
 
 #include "engraving/style/defaultstyle.h"
@@ -56,7 +56,7 @@ void EngravingModule::registerExports()
 {
 #ifndef NO_ENGRAVING_INTERNAL
     ioc()->registerExport<draw::IFontProvider>(moduleName(), new draw::QFontProvider());
-    ioc()->registerExport<draw::IImageConverter>(moduleName(), new draw::QImageConverter());
+    ioc()->registerExport<draw::IImageProvider>(moduleName(), new draw::QImageProvider());
     ioc()->registerExport<IEngravingConfiguration>(moduleName(), new EngravingConfiguration());
 #endif
 }

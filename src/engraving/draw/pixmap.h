@@ -24,6 +24,11 @@
 
 #include <QByteArray>
 
+#ifndef NO_QT_SUPPORT
+#include <QPixmap>
+#include <QBuffer>
+#endif
+
 #include "geometry.h"
 
 namespace mu::draw {
@@ -50,11 +55,37 @@ public:
 
     uint key() const { return m_key; }
 
+#ifndef NO_QT_SUPPORT
+    static Pixmap fromQPixmap(const QPixmap& qtPixmap)
+    {
+        QByteArray bytes;
+        QBuffer buffer(&bytes);
+        buffer.open(QIODevice::WriteOnly);
+        qtPixmap.save(&buffer, "PNG");
+
+        Pixmap result({ qtPixmap.width(), qtPixmap.height() });
+        result.setData(bytes);
+
+        return result;
+    }
+
+    static QPixmap toQPixmap(const Pixmap& pixmap)
+    {
+        QPixmap qtPixMap;
+        qtPixMap.loadFromData(pixmap.data());
+
+        return qtPixMap;
+    }
+
+#endif
+
 private:
     Size m_size;
     QByteArray m_data; //! usually png
     uint m_key;
 };
 }
+
+Q_DECLARE_METATYPE(mu::draw::Pixmap)
 
 #endif // MU_DRAW_PIXMAP_H

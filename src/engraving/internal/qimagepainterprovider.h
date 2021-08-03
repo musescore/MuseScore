@@ -19,17 +19,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DRAW_QIMAGECONVERTER_H
-#define MU_DRAW_QIMAGECONVERTER_H
+#ifndef MU_DRAW_QIMAGEPAINTERPROVIDER_H
+#define MU_DRAW_QIMAGEPAINTERPROVIDER_H
 
-#include "draw/iimageconverter.h"
+#include "qpainterprovider.h"
+#include <QImage>
+#include "draw/pixmap.h"
 
 namespace mu::draw {
-class QImageConverter : public IImageConverter
+class QImagePainterProvider : public QPainterProvider
 {
 public:
-    Pixmap scaled(const Pixmap& origin, const Size& s) const override;
+    QImagePainterProvider(std::shared_ptr<Pixmap> px);
+    ~QImagePainterProvider();
+    bool endTarget(bool endDraw) override;
+
+    static IPaintProviderPtr make(std::shared_ptr<Pixmap> px);
+
+private:
+    std::shared_ptr<Pixmap> m_px;
+    QImage m_image;
 };
 }
 
-#endif // MU_DRAW_QIMAGECONVERTER_H
+#endif // MU_DRAW_QIMAGEPAINTERPROVIDER_H

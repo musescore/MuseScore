@@ -57,7 +57,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/draw/svgrenderer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/draw/svgrenderer.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/ifontprovider.h
-    ${CMAKE_CURRENT_LIST_DIR}/draw/iimageconverter.h
+    ${CMAKE_CURRENT_LIST_DIR}/draw/iimageprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/font.cpp
     ${CMAKE_CURRENT_LIST_DIR}/draw/font.h
     ${CMAKE_CURRENT_LIST_DIR}/draw/fontmetrics.cpp
@@ -130,12 +130,14 @@ else()
         ${CMAKE_CURRENT_LIST_DIR}/internal/engravingconfiguration.h
         ${CMAKE_CURRENT_LIST_DIR}/internal/qpainterprovider.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/qpainterprovider.h
-        ${CMAKE_CURRENT_LIST_DIR}/internal/qimageconverter.h
-        ${CMAKE_CURRENT_LIST_DIR}/internal/qimageconverter.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/qimageprovider.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/qimageprovider.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/qfontprovider.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/qfontprovider.h
         ${CMAKE_CURRENT_LIST_DIR}/internal/fontengineft.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/fontengineft.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/qimagepainterprovider.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/qimagepainterprovider.h
         )
 
     set(FREETYPE_LIB )
