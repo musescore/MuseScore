@@ -124,7 +124,7 @@ const Staff* NotationParts::staff(const ID& staffId) const
     return staffModifiable(staffId);
 }
 
-bool NotationParts::partExists(const ID &partId) const
+bool NotationParts::partExists(const ID& partId) const
 {
     return part(partId) != nullptr;
 }
@@ -511,30 +511,29 @@ void NotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
 
     destinationPart->instrument()->setClefType(staffIndex, staff->defaultClefType());
 
-    ChangedNotifier<const Staff*>* notifier = staffChangedNotifier(destinationPartId);
-    notifier->itemAdded(staff);
+    notifyAboutStaffAdded(staff, destinationPartId);
 }
 
 void NotationParts::appendPart(Part* part)
 {
     TRACEFUNC;
 
-    Part* partCopy = new Part(*part);
-    partCopy->staves()->clear();
+    QList<Staff*> stavesCopy = *part->staves();
+    part->staves()->clear();
 
     int partIndex = score()->parts().size();
-    score()->parts().insert(partIndex, partCopy);
+    score()->parts().insert(partIndex, part);
 
     if (score()->excerpt()) {
         score()->excerpt()->parts().append(part);
     }
 
-    for (int staffIndex = 0; staffIndex < part->nstaves(); ++staffIndex) {
-        Staff* staff = part->staff(staffIndex);
+    for (int staffIndex = 0; staffIndex < stavesCopy.size(); ++staffIndex) {
+        Staff* staff = stavesCopy[staffIndex];
 
         Staff* staffCopy = new Staff(score());
         staffCopy->setId(staff->id());
-        staffCopy->setPart(partCopy);
+        staffCopy->setPart(part);
         staffCopy->init(staff);
 
         insertStaff(staffCopy, staffIndex);
@@ -544,14 +543,14 @@ void NotationParts::appendPart(Part* part)
         Ms::Excerpt::cloneStaff2(staff, staffCopy, startTick, endTick);
     }
 
-    partCopy->setScore(score());
+    part->setScore(score());
 
     updateScore();
 
-    m_partChangedNotifier->itemChanged(part);
+    notifyAboutPartAdded(part);
 }
 
-void NotationParts::cloneStaff(const ID& sourceStaffId, const ID& destinationStaffId)
+void NotationParts::linkStaves(const ID& sourceStaffId, const ID& destinationStaffId)
 {
     TRACEFUNC;
 
@@ -563,7 +562,9 @@ void NotationParts::cloneStaff(const ID& sourceStaffId, const ID& destinationSta
     }
 
     Ms::Excerpt::cloneStaff(sourceStaff, destinationStaff);
+
     updateScore();
+    notifyAboutStaffChanged(destinationStaff);
 }
 
 void NotationParts::replaceInstrument(const InstrumentKey& instrumentKey, const Instrument& newInstrument)
@@ -653,9 +654,9 @@ void NotationParts::doRemoveParts(const IDList& partsIds)
     TRACEFUNC;
 
     for (const ID& partId: partsIds) {
-        Part* p = partModifiable(partId);
-        m_partChangedNotifier->itemRemoved(p);
-        score()->cmdRemovePart(p);
+        Part* part = partModifiable(partId);
+        notifyAboutPartRemoved(part);
+        score()->cmdRemovePart(part);
     }
 }
 
@@ -668,6 +669,7 @@ void NotationParts::removeStaves(const IDList& stavesIds)
     }
 
     for (Staff* staff: staves(stavesIds)) {
+        notifyAboutStaffRemoved(staff);
         score()->cmdRemoveStaff(staff->idx());
     }
 
@@ -955,6 +957,24 @@ void NotationParts::notifyAboutPartChanged(Part* part) const
     m_partChangedNotifier->itemChanged(part);
 }
 
+void NotationParts::notifyAboutPartAdded(Part* part) const
+{
+    IF_ASSERT_FAILED(part) {
+        return;
+    }
+
+    m_partChangedNotifier->itemAdded(part);
+}
+
+void NotationParts::notifyAboutPartRemoved(Part* part) const
+{
+    IF_ASSERT_FAILED(part) {
+        return;
+    }
+
+    m_partChangedNotifier->itemRemoved(part);
+}
+
 void NotationParts::notifyAboutStaffChanged(Staff* staff) const
 {
     IF_ASSERT_FAILED(staff && staff->part()) {
@@ -962,7 +982,36 @@ void NotationParts::notifyAboutStaffChanged(Staff* staff) const
     }
 
     ChangedNotifier<const Staff*>* notifier = staffChangedNotifier(staff->part()->id());
-    notifier->itemChanged(staff);
+
+    if (notifier) {
+        notifier->itemChanged(staff);
+    }
+}
+
+void NotationParts::notifyAboutStaffAdded(Staff* staff, const ID& partId) const
+{
+    IF_ASSERT_FAILED(staff) {
+        return;
+    }
+
+    ChangedNotifier<const Staff*>* notifier = staffChangedNotifier(partId);
+
+    if (notifier) {
+        notifier->itemAdded(staff);
+    }
+}
+
+void NotationParts::notifyAboutStaffRemoved(Staff* staff) const
+{
+    IF_ASSERT_FAILED(staff) {
+        return;
+    }
+
+    ChangedNotifier<const Staff*>* notifier = staffChangedNotifier(staff->part()->id());
+
+    if (notifier) {
+        notifier->itemRemoved(staff);
+    }
 }
 
 ChangedNotifier<const Staff*>* NotationParts::staffChangedNotifier(const ID& partId) const
@@ -974,5 +1023,6 @@ ChangedNotifier<const Staff*>* NotationParts::staffChangedNotifier(const ID& par
     ChangedNotifier<const Staff*>* notifier = new ChangedNotifier<const Staff*>();
     auto value = std::pair<ID, ChangedNotifier<const Staff*>*>(partId, notifier);
     m_staffChangedNotifierMap.insert(value);
+
     return notifier;
 }

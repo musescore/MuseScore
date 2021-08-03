@@ -123,16 +123,16 @@ void MasterNotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
     apply();
 }
 
-void MasterNotationParts::cloneStaff(const ID& sourceStaffId, const ID& destinationStaffId)
+void MasterNotationParts::linkStaves(const ID& sourceStaffId, const ID& destinationStaffId)
 {
     TRACEFUNC;
 
     startEdit();
 
-    NotationParts::cloneStaff(sourceStaffId, destinationStaffId);
+    NotationParts::linkStaves(sourceStaffId, destinationStaffId);
 
     for (INotationPartsPtr parts : excerptsParts()) {
-        parts->cloneStaff(sourceStaffId, destinationStaffId);
+        parts->linkStaves(sourceStaffId, destinationStaffId);
     }
 
     apply();
