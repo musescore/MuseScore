@@ -24,8 +24,8 @@
 using namespace mu::instrumentsscene;
 using namespace mu::notation;
 
-RootTreeItem::RootTreeItem(INotationPartsPtr notationParts, QObject* parent)
-    : AbstractInstrumentsPanelTreeItem(InstrumentsTreeItemType::ItemType::ROOT, notationParts, parent)
+RootTreeItem::RootTreeItem(IMasterNotationPtr masterNotation, INotationPtr notation, QObject* parent)
+    : AbstractInstrumentsPanelTreeItem(InstrumentsTreeItemType::ItemType::ROOT, masterNotation, notation, parent)
 {
 }
 
@@ -51,7 +51,7 @@ void RootTreeItem::moveChildren(const int sourceRow, const int count, AbstractIn
         return;
     }
 
-    notationParts()->moveParts(partIds, destinationPartItem->id(), moveMode);
+    notation()->parts()->moveParts(partIds, destinationPartItem->id(), moveMode);
 
     AbstractInstrumentsPanelTreeItem::moveChildren(sourceRow, count, destinationParent, destinationRow);
 }
@@ -65,7 +65,7 @@ void RootTreeItem::removeChildren(const int row, const int count, const bool del
     }
 
     if (deleteChild) {
-        notationParts()->removeParts(partIds);
+        notation()->parts()->removeParts(partIds);
     }
 
     AbstractInstrumentsPanelTreeItem::removeChildren(row, count, deleteChild);

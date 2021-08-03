@@ -36,7 +36,6 @@ public:
     ~NotationParts() override;
 
     async::NotifyList<const Part*> partList() const override;
-    async::NotifyList<Instrument> instrumentList(const ID& partId) const override;
     async::NotifyList<const Staff*> staffList(const ID& partId) const override;
 
     void setParts(const PartInstrumentList& parts) override;
@@ -47,8 +46,8 @@ public:
     void setPartName(const ID& partId, const QString& name) override;
     void setPartSharpFlat(const ID& partId, const SharpFlat& sharpFlat) override;
     void setPartTransposition(const ID& partId, const Interval& transpose) override;
-    void setInstrumentName(const ID& instrumentId, const ID& fromPartId, const QString& name) override;
-    void setInstrumentAbbreviature(const ID& instrumentId, const ID& fromPartId, const QString& abbreviature) override;
+    void setInstrumentName(const InstrumentKey& instrumentKey, const QString& name) override;
+    void setInstrumentAbbreviature(const InstrumentKey& instrumentKey, const QString& abbreviature) override;
     void setStaffType(const ID& staffId, StaffType type) override;
     void setCutawayEnabled(const ID& staffId, bool enabled) override;
     void setSmallStaff(const ID& staffId, bool smallStaff) override;
@@ -63,49 +62,20 @@ public:
     void appendStaff(Staff* staff, const ID& destinationPartId) override;
     void cloneStaff(const ID& sourceStaffId, const ID& destinationStaffId) override;
 
-    void replaceInstrument(const ID& instrumentId, const ID& fromPartId, const Instrument& newInstrument) override;
-    void replaceDrumset(const ID& instrumentId, const ID& fromPartId, const Drumset& newDrumset) override;
+    void replaceInstrument(const InstrumentKey& instrumentKey, const Instrument& newInstrument) override;
+    void replaceDrumset(const InstrumentKey& instrumentKey, const Drumset& newDrumset) override;
 
     async::Notification partsChanged() const override;
 
 protected:
+    Ms::MasterScore* masterScore() const;
     INotationUndoStackPtr undoStack() const;
 
     virtual void startEdit();
     virtual void apply();
 
 private:
-    struct InstrumentInfo
-    {
-        Ms::Fraction fraction = { -1, -1 };
-        Ms::Instrument* instrument = nullptr;
-
-        InstrumentInfo() = default;
-
-        InstrumentInfo(const Ms::Fraction& fraction, Ms::Instrument* instrument)
-            : fraction(fraction), instrument(instrument) {}
-
-        bool isValid() const { return instrument != nullptr; }
-    };
-
-    struct InstrumentKey
-    {
-        ID partId;
-        ID instrumentId;
-
-        bool operator==(const InstrumentKey& key) const
-        {
-            return partId == key.partId && instrumentId == key.instrumentId;
-        }
-
-        friend uint qHash(const InstrumentKey& key)
-        {
-            return qHash(QString(key.partId + key.instrumentId));
-        }
-    };
-
     Ms::Score* score() const;
-    Ms::MasterScore* masterScore() const;
     void updateScore();
 
     void updatePartTitles();
@@ -116,14 +86,8 @@ private:
     void doRemoveParts(const IDList& partsIds);
     void doSetPartName(Part* part, const QString& name);
 
-    void insertStaff(Staff* staff, int destinationStaffIndex);
-
     Part* part(const ID& partId, const Ms::Score* score = nullptr) const;
-    InstrumentInfo instrumentInfo(const ID& instrumentId, const Part* fromPart) const;
-    InstrumentInfo instrumentInfo(const Staff* staff) const;
-
     Staff* staff(const ID& staffId) const;
-    std::vector<const Staff*> staves(const Part* part) const;
     std::vector<Staff*> staves(const IDList& stavesIds) const;
 
     std::vector<Part*> availableParts(const Ms::Score* score) const;
@@ -132,8 +96,9 @@ private:
 
     void appendPart(Part* part);
     int resolvePartIndex(Part* part) const;
-
     void appendStaves(Part* part, const Instrument& instrument);
+    void insertStaff(Staff* staff, int destinationStaffIndex);
+    void initStaff(Staff* staff, const Instrument& instrument, const Ms::StaffType* staffType, int cleffIndex);
 
     void removeMissingParts(const PartInstrumentList& parts);
     void appendNewParts(const PartInstrumentList& parts);
@@ -142,36 +107,17 @@ private:
 
     int resolveInstrumentNumber(const Instruments& newInstruments, const Instrument& currentInstrument) const;
 
-    int lastStaffIndex() const;
-
-    void initStaff(Staff* staff, const Instrument& instrument, const Ms::StaffType* staffType, int cleffIndex);
-
-    void notifyAboutPartsChanged() const;
-    void notifyAboutPartChanged(const ID& partId) const;
-    void notifyAboutStaffChanged(const ID& staffId) const;
-
-    async::ChangedNotifier<Instrument>* partNotifier(const ID& partId) const;
-    async::ChangedNotifier<const Staff*>* instrumentNotifier(const ID& instrumentId, const ID& fromPartId) const;
-
-    QString formatPartName(const Part* part) const;
-
-    QMap<Ms::Fraction, Ms::Instrument*> instruments(const Part* fromPart) const;
+    void notifyAboutPartChanged(Part* part) const;
+    void notifyAboutStaffChanged(Staff* staff) const;
+    async::ChangedNotifier<const Staff*>* staffChangedNotifier(const ID& partId) const;
 
     IGetScore* m_getScore = nullptr;
     INotationUndoStackPtr m_undoStack;
     async::Notification m_partsChanged;
 
-    mutable async::ChangedNotifier<const Part*>* m_partsNotifier = nullptr;
-    mutable std::map<ID, async::ChangedNotifier<Instrument>*> m_partsNotifiersMap;
-    mutable QHash<InstrumentKey, async::ChangedNotifier<const Staff*>*> m_instrumentsNotifiersHash;
+    mutable async::ChangedNotifier<const Part*>* m_partChangedNotifier = nullptr;
+    mutable std::map<ID, async::ChangedNotifier<const Staff*>*> m_staffChangedNotifierMap;
 };
-}
-
-namespace Ms {
-inline uint qHash(const Ms::Fraction& fraction)
-{
-    return qHash(QString::number(fraction.ticks()));
-}
 }
 
 #endif // MU_NOTATION_NOTATIONPARTS_H

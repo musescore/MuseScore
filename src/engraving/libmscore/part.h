@@ -145,8 +145,6 @@ public:
     void removeInstrument(const QString&);
     const InstrumentList* instruments() const;
 
-    bool isDoublingInstrument(const QString& instrumentId) const;
-
     void insertTime(const Fraction& tick, const Fraction& len);
 
     QString partName() const { return _partName; }

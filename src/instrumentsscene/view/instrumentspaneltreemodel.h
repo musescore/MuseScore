@@ -133,8 +133,8 @@ private:
     AbstractInstrumentsPanelTreeItem* m_rootItem = nullptr;
     uicomponents::ItemMultiSelectionModel* m_selectionModel = nullptr;
 
-    mu::notation::INotationPartsPtr m_masterNotationParts = nullptr;
-    mu::notation::INotationPartsPtr m_notationParts = nullptr;
+    mu::notation::IMasterNotationPtr m_masterNotation = nullptr;
+    mu::notation::INotationPtr m_notation = nullptr;
 
     bool m_isMovingUpAvailable = false;
     bool m_isMovingDownAvailable = false;

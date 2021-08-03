@@ -121,6 +121,9 @@ using PageList = std::vector<const Page*>;
 using StaffList = QList<const Staff*>;
 using PartList = QList<const Part*>;
 
+using ID = QString;
+using IDList = QList<ID>;
+
 enum class DragMode
 {
     BothXY = 0,
@@ -400,6 +403,13 @@ struct Instrument
 };
 
 using Instruments = QList<Instrument>;
+
+struct InstrumentKey
+{
+    ID instrumentId;
+    ID partId;
+    Fraction tick = Ms::Fraction(0, 1);
+};
 
 inline QString formatInstrumentTitle(const Instrument& instrument, int instrumentNumber = 0)
 {

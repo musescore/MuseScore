@@ -63,9 +63,8 @@ signals:
 private:
     notation::INotationPartsPtr parts() const;
 
-    QString m_partId;
+    notation::InstrumentKey m_instrumentKey;
     QString m_partName;
-    QString m_instrumentId;
     QString m_instrumentName;
     QString m_instrumentAbbreviature;
 };

@@ -24,9 +24,12 @@
 using namespace mu::instrumentsscene;
 using namespace mu::notation;
 
-StaffTreeItem::StaffTreeItem(INotationPartsPtr notationParts, QObject* parent)
-    : AbstractInstrumentsPanelTreeItem(InstrumentsTreeItemType::ItemType::STAFF, notationParts, parent)
+StaffTreeItem::StaffTreeItem(IMasterNotationPtr masterNotation, INotationPtr notation, QObject* parent)
+    : AbstractInstrumentsPanelTreeItem(InstrumentsTreeItemType::ItemType::STAFF, masterNotation, notation, parent)
 {
+    connect(this, &AbstractInstrumentsPanelTreeItem::isVisibleChanged, [this](const bool isVisible) {
+        this->notation()->parts()->setStaffVisible(id(), isVisible);
+    });
 }
 
 bool StaffTreeItem::isSmall() const
