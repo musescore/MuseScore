@@ -265,11 +265,9 @@ else()
     qt5_import_qml_plugins(mscore PATH_TO_SCAN ${CMAKE_SOURCE_DIR})
 endif()
 
-if (OS_IS_MAC)
-  target_link_libraries(mscore ${OsxFrameworks})
-else (OS_IS_MAC)
-#    target_link_libraries(mscore rt) # TODO What is it?
-endif (OS_IS_MAC)
+if (OS_IS_MAC AND SPARKLE_ENABLED)
+    target_link_libraries(mscore ${SPARKLE_LIBRARY})
+endif()
 
 
 ###########################################

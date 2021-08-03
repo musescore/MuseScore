@@ -31,12 +31,4 @@ set(MODULE_TEST_LINK
     ui
     )
 
-if (OS_IS_MAC)
-    set(MODULE_TEST_LINK
-        ${MODULE_TEST_LINK}
-        ${OsxFrameworks}
-        )
-endif()
-
 include(${PROJECT_SOURCE_DIR}/src/framework/testing/gtest.cmake)
-
