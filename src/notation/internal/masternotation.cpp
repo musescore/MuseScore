@@ -55,6 +55,10 @@ MasterNotation::MasterNotation()
     : Notation()
 {
     m_parts = std::make_shared<MasterNotationParts>(this, interaction(), undoStack());
+
+    m_parts->partsChanged().onNotify(this, [this]() {
+        notifyAboutNotationChanged();
+    });
 }
 
 MasterNotation::~MasterNotation()
