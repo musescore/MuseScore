@@ -33,13 +33,6 @@ set(MODULE_TEST_LINK
     iex_musicxml
     )
 
-if (OS_IS_MAC)
-    set(MODULE_TEST_LINK
-        ${MODULE_TEST_LINK}
-        ${OsxFrameworks}
-        )
-endif()
-
 set(MODULE_TEST_DATA_ROOT ${CMAKE_CURRENT_LIST_DIR})
 
 include(${PROJECT_SOURCE_DIR}/src/framework/testing/qtest.cmake)

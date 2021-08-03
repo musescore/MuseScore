@@ -28,15 +28,15 @@
 #define SCRIPT_INTERFACE
 /* #undef HAS_AUDIOFILE */
 
-#define CRASH_REPORT_URL        ""
-#define MUSESCORE_NAME_VERSION  "MuseScore 4 (4.0.0 unstable)"
-#define MUSESCORE_REVISION      ""
-#define INSTALL_NAME            "mscore-4.0/"
-#define INSTPREFIX              "/home/igor/Dev/MuseScore/build.debug/install"
-#define VERSION                 "4.0.0"
-#define VERSION_LABEL           "Development"
-#define BUILD_NUMBER            ""
-#define WIN_SPARKLE_APPCAST_URL ""
+#define CRASH_REPORT_URL       ""
+#define MUSESCORE_NAME_VERSION "MuseScore 4 (4.0.0 unstable)"
+#define MUSESCORE_REVISION     ""
+#define INSTALL_NAME           "mscore-4.0/"
+#define INSTPREFIX             "/home/igor/Dev/MuseScore/build.debug/install"
+#define VERSION                "4.0.0"
+#define VERSION_LABEL          "Development"
+#define BUILD_NUMBER           ""
+#define SPARKLE_APPCAST_URL    ""
 
 #define BUILD_TELEMETRY_MODULE
 #define TELEMETRY_TRACK_ID ""
@@ -62,8 +62,7 @@
 
 /* #undef USE_SCORE_ACCESSIBLE_TREE */
 
-/* #undef WIN_SPARKLE_ENABLED */
-/* #undef MAC_SPARKLE_ENABLED */
+/* #undef SPARKLE_ENABLED */
 /* #undef OPENGL */
 #define SOUNDFONT3
 /* #undef WIN_PORTABLE */
