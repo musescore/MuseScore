@@ -24,13 +24,18 @@
 using namespace mu::mi;
 
 // Score opening
-bool MultiInstancesStubProvider::isScoreAlreadyOpened(const io::path&) const
+bool MultiInstancesStubProvider::isProjectAlreadyOpened(const io::path&) const
 {
     return false;
 }
 
-void MultiInstancesStubProvider::activateWindowWithScore(const io::path&)
+void MultiInstancesStubProvider::activateWindowWithProject(const io::path&)
 {
+}
+
+bool MultiInstancesStubProvider::openNewAppInstance(const QStringList&)
+{
+    return false;
 }
 
 // Settings
