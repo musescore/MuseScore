@@ -27,14 +27,14 @@
 
 #include "itemplatesrepository.h"
 #include "project/iprojectconfiguration.h"
-#include "notation/imsczmetareader.h"
+#include "project/imscmetareader.h"
 #include "system/ifilesystem.h"
 
 namespace mu::userscores {
 class TemplatesRepository : public ITemplatesRepository
 {
     INJECT(userscores, project::IProjectConfiguration, configuration)
-    INJECT(userscores, notation::IMsczMetaReader, msczReader)
+    INJECT(userscores, project::IMscMetaReader, mscReader)
     INJECT(userscores, system::IFileSystem, fileSystem)
 
 public:

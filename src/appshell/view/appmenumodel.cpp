@@ -27,7 +27,7 @@
 
 using namespace mu::appshell;
 using namespace mu::ui;
-using namespace mu::notation;
+using namespace mu::project;
 using namespace mu::workspace;
 using namespace mu::actions;
 
@@ -83,7 +83,7 @@ void AppMenuModel::onActionsStateChanges(const actions::ActionCodeList& codes)
 
 void AppMenuModel::setupConnections()
 {
-    userScoresService()->recentScoreList().ch.onReceive(this, [this](const MetaList&) {
+    recentProjectsProvider()->recentProjectListChanged().onNotify(this, [this]() {
         MenuItem& recentScoreListItem = findMenu("menu-file-open");
 
         MenuItemList recentScoresList = recentScores();
@@ -324,10 +324,10 @@ MenuItem AppMenuModel::helpItem() const
 MenuItemList AppMenuModel::recentScores() const
 {
     MenuItemList items;
-    MetaList recentScores = userScoresService()->recentScoreList().val;
+    ProjectMetaList recentProjects = recentProjectsProvider()->recentProjectList();
 
     int index = 0;
-    for (const Meta& meta : recentScores) {
+    for (const ProjectMeta& meta : recentProjects) {
         MenuItem item;
         item.id = makeId(item.code, index++);
         item.code = "file-open";

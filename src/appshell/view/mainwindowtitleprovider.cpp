@@ -93,16 +93,17 @@ void MainWindowTitleProvider::setFileModified(bool fileModified)
 
 void MainWindowTitleProvider::update()
 {
-    IMasterNotationPtr masterNotation = context()->currentMasterNotation();
+    project::INotationProjectPtr project = context()->currentProject();
 
-    if (!masterNotation) {
+    if (!project) {
         setTitle(qtrc("appshell", "MuseScore 4"));
         setFilePath("");
         setFileModified(false);
         return;
     }
 
-    setTitle(masterNotation->metaInfo().title);
-    setFilePath(masterNotation->created().val ? "" : masterNotation->metaInfo().filePath.toQString());
-    setFileModified(masterNotation->needSave().val);
+    project::ProjectMeta meta = project->metaInfo();
+    setTitle(meta.title);
+    setFilePath(project->created().val ? "" : meta.filePath.toQString());
+    setFileModified(project->needSave().val);
 }

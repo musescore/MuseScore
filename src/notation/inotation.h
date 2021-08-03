@@ -47,8 +47,7 @@ class INotation
 public:
     virtual ~INotation() = default;
 
-    virtual Meta metaInfo() const = 0;
-    virtual void setMetaInfo(const Meta& meta) = 0;
+    virtual QString title() const = 0;
 
     virtual ScoreOrder scoreOrder() const = 0;
 

@@ -27,11 +27,8 @@ set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/userscoresmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/userscoresmodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/iuserscoresservice.h
 
     ${CMAKE_CURRENT_LIST_DIR}/userscorestypes.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/recentscoresmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/recentscoresmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/newscoremodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/newscoremodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/additionalinfomodel.cpp
@@ -43,9 +40,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/templatepaintview.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/templatepaintview.h
 
-
-    ${CMAKE_CURRENT_LIST_DIR}/internal/userscoresservice.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/userscoresservice.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/itemplatesrepository.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/templatesrepository.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/templatesrepository.h

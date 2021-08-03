@@ -33,7 +33,6 @@
 #include "internal/notationconfiguration.h"
 #include "internal/midiinputcontroller.h"
 #include "internal/notationuiactions.h"
-#include "internal/msczmetareader.h"
 #include "internal/positionswriter.h"
 #include "internal/instrumentsrepository.h"
 
@@ -93,7 +92,6 @@ void NotationModule::registerExports()
 {
     ioc()->registerExport<INotationConfiguration>(moduleName(), s_configuration);
     ioc()->registerExport<IInstrumentsRepository>(moduleName(), s_instrumentsRepository);
-    ioc()->registerExport<IMsczMetaReader>(moduleName(), new MsczMetaReader());
     ioc()->registerExport<INotationContextMenu>(moduleName(), new NotationContextMenu());
 }
 

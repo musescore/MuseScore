@@ -558,7 +558,7 @@ Ret BackendApi::doExportScorePartsPdfs(const IMasterNotationPtr masterNotation, 
     QJsonArray partsArray;
     QJsonArray partsNamesArray;
     for (IExcerptNotationPtr e : masterNotation->excerpts().val) {
-        QJsonValue partNameVal(e->metaInfo().title);
+        QJsonValue partNameVal(e->title());
         partsNamesArray.append(partNameVal);
 
         QByteArray partBin = processWriter(PDF_WRITER_NAME, e->notation()).val;
@@ -722,15 +722,15 @@ Ret BackendApi::applyTranspose(const INotationPtr notation, const std::string& o
 
 Ret BackendApi::updateSource(const io::path& in, const std::string& newSource, bool forceMode)
 {
-    RetVal<INotationProjectPtr> notation = openProject(in, NO_STYLE, forceMode);
-    if (!notation.ret) {
-        return notation.ret;
+    RetVal<INotationProjectPtr> project = openProject(in, NO_STYLE, forceMode);
+    if (!project.ret) {
+        return project.ret;
     }
 
-    Meta meta = notation.val->masterNotation()->metaInfo();
+    ProjectMeta meta = project.val->metaInfo();
     meta.source = QString::fromStdString(newSource);
 
-    notation.val->masterNotation()->setMetaInfo(meta);
+    project.val->setMetaInfo(meta);
 
-    return notation.val->save();
+    return project.val->save();
 }

@@ -28,7 +28,7 @@
 #include "actions/iactionsdispatcher.h"
 #include "workspace/iworkspacemanager.h"
 #include "iappshellconfiguration.h"
-#include "userscores/iuserscoresservice.h"
+#include "project/irecentprojectsprovider.h"
 
 namespace mu::appshell {
 class AppMenuModel : public ui::AbstractMenuModel
@@ -38,7 +38,7 @@ class AppMenuModel : public ui::AbstractMenuModel
     INJECT(appshell, actions::IActionsDispatcher, actionsDispatcher)
     INJECT(appshell, workspace::IWorkspaceManager, workspacesManager)
     INJECT(appshell, IAppShellConfiguration, configuration)
-    INJECT(appshell, userscores::IUserScoresService, userScoresService)
+    INJECT(appshell, project::IRecentProjectsProvider, recentProjectsProvider)
 
     Q_PROPERTY(QVariantList items READ items NOTIFY itemsChanged)
 

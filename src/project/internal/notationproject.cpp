@@ -37,6 +37,43 @@
 
 #include "log.h"
 
+static const QString WORK_TITLE_TAG("workTitle");
+static const QString WORK_NUMBER_TAG("workNumber");
+static const QString SUBTITLE_TAG("subtitle");
+static const QString COMPOSER_TAG("composer");
+static const QString LYRICIST_TAG("lyricist");
+static const QString POET_TAG("poet");
+static const QString SOURCE_TAG("source");
+static const QString COPYRIGHT_TAG("copyright");
+static const QString TRANSLATOR_TAG("translator");
+static const QString ARRANGER_TAG("arranger");
+static const QString CREATION_DATE_TAG("creationDate");
+static const QString PLATFORM_TAG("platform");
+static const QString MOVEMENT_TITLE_TAG("movementTitle");
+static const QString MOVEMENT_NUMBER_TAG("movementNumber");
+
+static bool isStandardTag(const QString& tag)
+{
+    static const QSet<QString> standardTags {
+        WORK_TITLE_TAG,
+        WORK_NUMBER_TAG,
+        SUBTITLE_TAG,
+        COMPOSER_TAG,
+        LYRICIST_TAG,
+        POET_TAG,
+        SOURCE_TAG,
+        COPYRIGHT_TAG,
+        TRANSLATOR_TAG,
+        ARRANGER_TAG,
+        CREATION_DATE_TAG,
+        PLATFORM_TAG,
+        MOVEMENT_NUMBER_TAG,
+        MOVEMENT_TITLE_TAG
+    };
+
+    return standardTags.contains(tag);
+}
+
 using namespace mu::project;
 using namespace mu::notation;
 using namespace mu::engraving;
@@ -262,7 +299,7 @@ mu::Ret NotationProject::save(const io::path& path, SaveMode saveMode)
 mu::Ret NotationProject::writeToDevice(io::Device* device)
 {
     if (m_engravingProject->path().isEmpty()) {
-        m_engravingProject->setPath(m_masterNotation->metaInfo().title + ".mscz");
+        m_engravingProject->setPath(m_masterNotation->title() + ".mscz");
     }
 
     MscWriter::Params params;
@@ -460,14 +497,64 @@ mu::ValNt<bool> NotationProject::needSave() const
     return m_masterNotation->needSave();
 }
 
-Meta NotationProject::metaInfo() const
+ProjectMeta NotationProject::metaInfo() const
 {
-    return m_masterNotation->metaInfo();
+    TRACEFUNC;
+
+    Ms::MasterScore* score = m_masterNotation->masterScore();
+
+    ProjectMeta meta;
+    auto allTags = score->metaTags();
+
+    meta.title = score->title();
+    meta.subtitle = allTags[SUBTITLE_TAG];
+    meta.composer = allTags[COMPOSER_TAG];
+    meta.lyricist = allTags[LYRICIST_TAG];
+    meta.copyright = allTags[COPYRIGHT_TAG];
+    meta.translator = allTags[TRANSLATOR_TAG];
+    meta.arranger = allTags[ARRANGER_TAG];
+    meta.source = allTags[SOURCE_TAG];
+    meta.creationDate = QDate::fromString(allTags[CREATION_DATE_TAG], Qt::ISODate);
+    meta.platform = allTags[PLATFORM_TAG];
+    meta.musescoreVersion = score->mscoreVersion();
+    meta.musescoreRevision = score->mscoreRevision();
+    meta.mscVersion = score->mscVersion();
+
+    for (const QString& tag : allTags.keys()) {
+        if (isStandardTag(tag)) {
+            continue;
+        }
+
+        meta.additionalTags[tag] = allTags[tag];
+    }
+
+    meta.fileName = score->fileInfo()->fileName();
+    meta.filePath = score->fileInfo()->filePath();
+    meta.partsCount = score->excerpts().count();
+
+    return meta;
 }
 
-void NotationProject::setMetaInfo(const Meta& meta)
+void NotationProject::setMetaInfo(const ProjectMeta& meta)
 {
-    m_masterNotation->setMetaInfo(meta);
+    QMap<QString, QString> tags {
+        { SUBTITLE_TAG, meta.subtitle },
+        { COMPOSER_TAG, meta.composer },
+        { LYRICIST_TAG, meta.lyricist },
+        { COPYRIGHT_TAG, meta.copyright },
+        { TRANSLATOR_TAG, meta.translator },
+        { ARRANGER_TAG, meta.arranger },
+        { SOURCE_TAG, meta.source },
+        { PLATFORM_TAG, meta.platform },
+        { CREATION_DATE_TAG, meta.creationDate.toString(Qt::ISODate) }
+    };
+
+    for (const QString& tag : meta.additionalTags.keys()) {
+        tags[tag] = meta.additionalTags[tag].toString();
+    }
+
+    Ms::MasterScore* score = m_masterNotation->masterScore();
+    score->setMetaTags(tags);
 }
 
 IProjectAudioSettingsPtr NotationProject::audioSettings() const

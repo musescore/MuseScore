@@ -29,6 +29,7 @@
 #include "translation.h"
 
 using namespace mu::notation;
+using namespace mu::project;
 using namespace mu::framework;
 using namespace mu::ui;
 
@@ -57,7 +58,7 @@ ScorePropertiesDialog::ScorePropertiesDialog(QWidget* parent)
     QDialog::setWindowFlag(Qt::WindowContextHelpButtonHint, false);
     QDialog::setWindowFlag(Qt::WindowMinMaxButtonsHint);
 
-    Meta meta = notation()->metaInfo();
+    ProjectMeta meta = project()->metaInfo();
 
     version->setText(meta.musescoreVersion);
     level->setText(QString::number(meta.mscVersion));
@@ -202,7 +203,7 @@ void ScorePropertiesDialog::setDirty(const bool dirty)
 
     saveButton->setEnabled(dirty);
 
-    QString title = notation() ? notation()->metaInfo().title : QString();
+    QString title = project() ? project()->metaInfo().title : QString();
     setWindowTitle(qtrc("notation", "Score properties: %1%2").arg(title).arg((dirty ? "*" : "")));
 
     m_dirty = dirty;
@@ -326,18 +327,18 @@ void ScorePropertiesDialog::closeEvent(QCloseEvent* event)
     apply();
 }
 
-INotationPtr ScorePropertiesDialog::notation() const
+mu::project::INotationProjectPtr ScorePropertiesDialog::project() const
 {
-    return context()->currentNotation();
+    return context()->currentProject();
 }
 
 void ScorePropertiesDialog::initTags()
 {
-    if (!notation()) {
+    if (!project()) {
         return;
     }
 
-    Meta meta = notation()->metaInfo();
+    ProjectMeta meta = project()->metaInfo();
 
     addTag(SP_WORK_TITLE_TAG, meta.title);
     addTag(SP_ARRANGER_TAG, meta.arranger);
@@ -356,11 +357,11 @@ void ScorePropertiesDialog::initTags()
 
 void ScorePropertiesDialog::saveMetaTags(const QVariantMap& tagsMap)
 {
-    if (!notation()) {
+    if (!project()) {
         return;
     }
 
-    Meta meta;
+    ProjectMeta meta;
 
     meta.title = tagsMap[SP_WORK_TITLE_TAG].toString();
     meta.arranger = tagsMap[SP_ARRANGER_TAG].toString();
@@ -380,5 +381,5 @@ void ScorePropertiesDialog::saveMetaTags(const QVariantMap& tagsMap)
         meta.additionalTags[key] = tagsMap[key];
     }
 
-    notation()->setMetaInfo(meta);
+    project()->setMetaInfo(meta);
 }

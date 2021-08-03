@@ -64,7 +64,7 @@ class ScorePropertiesDialog : public QDialog, public Ui::ScorePropertiesDialog
     void setDirty(const bool dirty = true);
     void openFileLocation();
 
-    INotationPtr notation() const;
+    project::INotationProjectPtr project() const;
 
     void initTags();
     void saveMetaTags(const QVariantMap& tagsMap);

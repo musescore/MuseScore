@@ -32,8 +32,11 @@
 #include "internal/projectuiactions.h"
 #include "internal/projectconfiguration.h"
 #include "internal/exportprojectscenario.h"
+#include "internal/recentprojectsprovider.h"
+#include "internal/mscmetareader.h"
 
 #include "view/exportdialogmodel.h"
+#include "view/recentprojectsmodel.h"
 
 #ifdef Q_OS_MAC
 #include "internal/platform/macos/macosrecentfilescontroller.h"
@@ -50,6 +53,7 @@ using namespace mu::modularity;
 
 static std::shared_ptr<ProjectConfiguration> s_configuration = std::make_shared<ProjectConfiguration>();
 static std::shared_ptr<ProjectFilesController> s_fileController = std::make_shared<ProjectFilesController>();
+static std::shared_ptr<RecentProjectsProvider> s_recentProjectsProvider = std::make_shared<RecentProjectsProvider>();
 
 std::string ProjectModule::moduleName() const
 {
@@ -64,6 +68,8 @@ void ProjectModule::registerExports()
     ioc()->registerExport<INotationWritersRegister>(moduleName(), new NotationWritersRegister());
     ioc()->registerExport<IProjectFilesController>(moduleName(), s_fileController);
     ioc()->registerExport<IExportProjectScenario>(moduleName(), new ExportProjectScenario());
+    ioc()->registerExport<IRecentProjectsProvider>(moduleName(), s_recentProjectsProvider);
+    ioc()->registerExport<IMscMetaReader>(moduleName(), new MscMetaReader());
 
 #ifdef Q_OS_MAC
     ioc()->registerExport<IPlatformRecentFilesController>(moduleName(), new MacOSRecentFilesController());
@@ -85,6 +91,7 @@ void ProjectModule::resolveImports()
 void ProjectModule::registerUiTypes()
 {
     qmlRegisterType<ExportDialogModel>("MuseScore.UserScores", 1, 0, "ExportDialogModel");
+    qmlRegisterType<RecentProjectsModel>("MuseScore.UserScores", 1, 0, "RecentScoresModel");
 }
 
 void ProjectModule::onInit(const framework::IApplication::RunMode& mode)
@@ -95,6 +102,7 @@ void ProjectModule::onInit(const framework::IApplication::RunMode& mode)
 
     s_configuration->init();
     s_fileController->init();
+    s_recentProjectsProvider->init();
 
     static ProjectAutoSaver autoSaver;
     autoSaver.init();

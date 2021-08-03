@@ -37,9 +37,6 @@ class IMasterNotation
 public:
     virtual INotationPtr notation() = 0;
 
-    virtual Meta metaInfo() const = 0;
-    virtual void setMetaInfo(const Meta& meta) = 0;
-
     virtual RetVal<bool> created() const = 0;
     virtual ValNt<bool> needSave() const = 0;
 

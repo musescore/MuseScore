@@ -26,14 +26,12 @@
 #include "modularity/ioc.h"
 #include "ui/iuiengine.h"
 
-#include "view/recentscoresmodel.h"
 #include "view/newscoremodel.h"
 #include "view/additionalinfomodel.h"
 #include "view/scorethumbnail.h"
 #include "view/templatesmodel.h"
 #include "view/templatepaintview.h"
 
-#include "internal/userscoresservice.h"
 #include "internal/templatesrepository.h"
 
 #include "ui/iinteractiveuriregister.h"
@@ -41,8 +39,6 @@
 using namespace mu::userscores;
 using namespace mu::modularity;
 using namespace mu::ui;
-
-static std::shared_ptr<UserScoresService> s_userScoresService = std::make_shared<UserScoresService>();
 
 static void userscores_init_qrc()
 {
@@ -56,7 +52,6 @@ std::string UserScoresModule::moduleName() const
 
 void UserScoresModule::registerExports()
 {
-    ioc()->registerExport<IUserScoresService>(moduleName(), s_userScoresService);
     ioc()->registerExport<ITemplatesRepository>(moduleName(), new TemplatesRepository());
 }
 
@@ -79,7 +74,6 @@ void UserScoresModule::registerResources()
 
 void UserScoresModule::registerUiTypes()
 {
-    qmlRegisterType<RecentScoresModel>("MuseScore.UserScores", 1, 0, "RecentScoresModel");
     qmlRegisterType<NewScoreModel>("MuseScore.UserScores", 1, 0, "NewScoreModel");
     qmlRegisterType<AdditionalInfoModel>("MuseScore.UserScores", 1, 0, "AdditionalInfoModel");
 
@@ -95,6 +89,4 @@ void UserScoresModule::onInit(const framework::IApplication::RunMode& mode)
     if (framework::IApplication::RunMode::Converter == mode) {
         return;
     }
-
-    s_userScoresService->init();
 }

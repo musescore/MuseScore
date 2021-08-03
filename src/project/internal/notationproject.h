@@ -60,8 +60,8 @@ public:
     Ret save(const io::path& path = io::path(), SaveMode saveMode = SaveMode::Save) override;
     Ret writeToDevice(io::Device* device) override;
 
-    notation::Meta metaInfo() const override;
-    void setMetaInfo(const notation::Meta& meta) override;
+    ProjectMeta metaInfo() const override;
+    void setMetaInfo(const ProjectMeta& meta) override;
 
     notation::IMasterNotationPtr masterNotation() const override;
     IProjectAudioSettingsPtr audioSettings() const override;

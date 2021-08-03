@@ -19,31 +19,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_USERSCORES_USERSCORESSERVICE_H
-#define MU_USERSCORES_USERSCORESSERVICE_H
+#ifndef MU_PROJECT_RECENTPROJECTSPROVIDER_H
+#define MU_PROJECT_RECENTPROJECTSPROVIDER_H
 
-#include "iuserscoresservice.h"
+#include "irecentprojectsprovider.h"
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
-#include "project/iprojectconfiguration.h"
-#include "notation/imsczmetareader.h"
+#include "iprojectconfiguration.h"
+#include "imscmetareader.h"
 
-namespace mu::userscores {
-class UserScoresService : public IUserScoresService, public async::Asyncable
+namespace mu::project {
+class RecentProjectsProvider : public IRecentProjectsProvider, public async::Asyncable
 {
-    INJECT(userscores, project::IProjectConfiguration, configuration)
-    INJECT(userscores, notation::IMsczMetaReader, msczMetaReader)
+    INJECT(project, IProjectConfiguration, configuration)
+    INJECT(project, IMscMetaReader, mscMetaReader)
 
 public:
     void init();
 
-    ValCh<notation::MetaList> recentScoreList() const override;
+    ProjectMetaList recentProjectList() const override;
+    async::Notification recentProjectListChanged() const override;
 
 private:
-    void updateRecentScoreList();
 
-    ValCh<notation::MetaList> m_recentScoreList;
+    mutable bool m_dirty = true;
+    mutable ProjectMetaList m_recentList;
+    async::Notification m_recentListChanged;
 };
 }
 
-#endif // MU_USERSCORES_USERSCORESSERVICE_H
+#endif // MU_PROJECT_RECENTPROJECTSPROVIDER_H
