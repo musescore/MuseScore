@@ -119,7 +119,7 @@ void PartTreeItem::removeChildren(const int row, const int count, const bool del
     }
 
     if (deleteChild) {
-        notation()->parts()->removeStaves(stavesIds);
+        masterNotation()->parts()->removeStaves(stavesIds);
     }
 
     AbstractInstrumentsPanelTreeItem::removeChildren(row, count, deleteChild);
