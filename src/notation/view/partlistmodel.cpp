@@ -73,7 +73,7 @@ QVariant PartListModel::data(const QModelIndex& index, int role) const
 
     switch (role) {
     case RoleTitle:
-        return excerpt->metaInfo().title;
+        return excerpt->title();
     case RoleIsSelected:
         return m_selectionModel->isSelected(index);
     }
@@ -118,11 +118,8 @@ bool PartListModel::isRemovingAvailable() const
 
 void PartListModel::createNewPart()
 {
-    Meta meta;
-    meta.title = defaultPartTitle();
-
     IExcerptNotationPtr excerpt = masterNotation()->newExcerptNotation();
-    excerpt->setMetaInfo(meta);
+    excerpt->setTitle(defaultPartTitle());
 
     int index = m_excerpts.size();
     insertExcerpt(index, excerpt);
@@ -188,14 +185,11 @@ void PartListModel::setPartTitle(int partIndex, const QString& title)
     }
 
     IExcerptNotationPtr excerpt = m_excerpts[partIndex];
-    Meta meta = excerpt->metaInfo();
-
-    if (meta.title == title) {
+    if (excerpt->title() == title) {
         return;
     }
 
-    meta.title = title;
-    excerpt->setMetaInfo(meta);
+    excerpt->setTitle(title);
 
     notifyAboutNotationChanged(partIndex);
 }
@@ -207,14 +201,11 @@ void PartListModel::validatePartTitle(int partIndex)
     }
 
     IExcerptNotationPtr excerpt = m_excerpts[partIndex];
-    Meta meta = excerpt->metaInfo();
-
-    if (!meta.title.isEmpty()) {
+    if (!excerpt->title().isEmpty()) {
         return;
     }
 
-    meta.title = defaultPartTitle();
-    excerpt->setMetaInfo(meta);
+    excerpt->setTitle(defaultPartTitle());
 
     notifyAboutNotationChanged(partIndex);
 }
@@ -232,10 +223,10 @@ void PartListModel::copyPart(int partIndex)
     }
 
     IExcerptNotationPtr copy = m_excerpts[partIndex]->clone();
-    Meta meta = copy->metaInfo();
-    meta.title += qtrc("notation", " (copy)");
+    QString title = copy->title();
+    title += qtrc("notation", " (copy)");
 
-    copy->setMetaInfo(meta);
+    copy->setTitle(title);
 
     insertExcerpt(partIndex + 1, copy);
 }

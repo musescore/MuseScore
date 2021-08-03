@@ -27,7 +27,7 @@
 #include "io/path.h"
 
 using namespace mu;
-using namespace mu::notation;
+using namespace mu::project;
 using namespace mu::userscores;
 
 RetVal<Templates> TemplatesRepository::templates() const
@@ -52,11 +52,15 @@ RetVal<Templates> TemplatesRepository::templates() const
 Templates TemplatesRepository::loadTemplates(const io::paths& filePaths) const
 {
     Templates result;
-    MetaList metaList = msczReader()->readMetaList(filePaths);
 
-    for (const Meta& meta: metaList) {
-        Template templ(meta);
-        templ.categoryTitle = correctedTitle(io::dirname(meta.filePath).toQString());
+    for (const io::path& path : filePaths) {
+        RetVal<ProjectMeta> meta = mscReader()->readMeta(path);
+        if (!meta.ret) {
+            LOGE() << "failed read template: " << path;
+            continue;
+        }
+        Template templ(meta.val);
+        templ.categoryTitle = correctedTitle(io::dirname(meta.val.filePath).toQString());
 
         result << templ;
     }

@@ -32,6 +32,7 @@ using ::testing::_;
 using ::testing::Return;
 
 using namespace mu;
+using namespace mu::project;
 using namespace mu::notation;
 using namespace mu::userscores;
 using namespace mu::system;
@@ -47,13 +48,13 @@ protected:
         m_configuration = std::make_shared<UserScoresConfigurationMock>();
 
         m_repository->setconfiguration(m_configuration);
-        m_repository->setmsczReader(m_msczReader);
+        m_repository->setmscReader(m_msczReader);
         m_repository->setfileSystem(m_fileSystem);
     }
 
-    Meta createMeta(const io::path& path) const
+    ProjectMeta createMeta(const io::path& path) const
     {
-        Meta meta;
+        ProjectMeta meta;
 
         meta.title = path.toQString();
         meta.filePath = path;
@@ -112,12 +113,13 @@ TEST_F(TemplatesRepositoryTest, Templates)
     Templates expectedTemplates;
 
     for (const io::path& path: allPathsToMsczFiles) {
-        Meta meta = createMeta(path.toQString());
+        RetVal<ProjectMeta> meta(make_ret(Ret::Code::Ok));
+        meta.val = createMeta(path.toQString());
 
-        ON_CALL(*m_msczReader, readMetaList(io::paths { path }))
-        .WillByDefault(Return(MetaList { meta }));
+        ON_CALL(*m_msczReader, readMeta(path))
+        .WillByDefault(Return(meta));
 
-        Template templ(meta);
+        Template templ(meta.val);
         templ.categoryTitle = io::dirname(path).toQString();
         expectedTemplates << templ;
     }

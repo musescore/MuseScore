@@ -25,15 +25,15 @@
 
 #include <QList>
 
-#include "notation/notationtypes.h"
+#include "project/projecttypes.h"
 
 namespace mu::userscores {
-struct Template : public notation::Meta {
+struct Template : public project::ProjectMeta {
     QString categoryTitle;
 
     Template() = default;
-    Template(const notation::Meta& meta)
-        : Meta(meta) {}
+    Template(const project::ProjectMeta& meta)
+        : ProjectMeta(meta) {}
 };
 
 using Templates = QList<Template>;

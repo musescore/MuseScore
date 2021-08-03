@@ -39,24 +39,21 @@ public:
 
     ~ExcerptNotation() override;
 
+    bool isInited() const override;
+    void init();
+
+    void setTitle(const QString& title) override;
+    QString title() const override;
+
     INotationPtr notation() override;
+    IExcerptNotationPtr clone() const override;
 
     Ms::Excerpt* excerpt() const;
     void setExcerpt(Ms::Excerpt* excerpt);
 
-    void init();
-    bool isInited() const override;
-
-    Meta metaInfo() const override;
-    void setMetaInfo(const Meta& meta) override;
-
-    IExcerptNotationPtr clone() const override;
-
 private:
 
     Ms::Excerpt* m_excerpt = nullptr;
-    Meta m_metaInfo;
-
     bool m_isInited = false;
 };
 }

@@ -19,31 +19,43 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "userscoresservice.h"
+#include "recentprojectsprovider.h"
 
 #include "log.h"
-#include "settings.h"
 
-using namespace mu::userscores;
+using namespace mu::project;
 using namespace mu::notation;
 
-void UserScoresService::init()
+void RecentProjectsProvider::init()
 {
-    updateRecentScoreList();
+    m_dirty = true;
 
     configuration()->recentProjectPathsChanged().onReceive(this, [this](const io::paths&) {
-        updateRecentScoreList();
+        m_dirty = true;
+        m_recentListChanged.notify();
     });
 }
 
-void UserScoresService::updateRecentScoreList()
+ProjectMetaList RecentProjectsProvider::recentProjectList() const
 {
-    io::paths paths = configuration()->recentProjectPaths();
-    MetaList metaList = msczMetaReader()->readMetaList(paths);
-    m_recentScoreList.set(metaList);
+    if (m_dirty) {
+        io::paths paths = configuration()->recentProjectPaths();
+        m_recentList.clear();
+        for (const io::path& path : paths) {
+            RetVal<ProjectMeta> meta = mscMetaReader()->readMeta(path);
+            if (!meta.ret) {
+                LOGE() << "failed read meta, path: " << path;
+                continue;
+            }
+            m_recentList.push_back(std::move(meta.val));
+        }
+        m_dirty = false;
+    }
+
+    return m_recentList;
 }
 
-mu::ValCh<MetaList> UserScoresService::recentScoreList() const
+mu::async::Notification RecentProjectsProvider::recentProjectListChanged() const
 {
-    return m_recentScoreList;
+    return m_recentListChanged;
 }

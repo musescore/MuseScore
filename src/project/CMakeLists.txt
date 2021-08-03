@@ -66,6 +66,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/iprojectaudiosettings.h
     ${CMAKE_CURRENT_LIST_DIR}/iprojectfilescontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/iprojectconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/irecentprojectsprovider.h
+    ${CMAKE_CURRENT_LIST_DIR}/imscmetareader.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/iplatformrecentfilescontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationproject.cpp
@@ -91,11 +93,17 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/iexportprojectscenario.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/exportprojectscenario.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/exportprojectscenario.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/recentprojectsprovider.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/recentprojectsprovider.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/mscmetareader.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/mscmetareader.h
 
     ${PLATFORM_SRC}
 
     ${CMAKE_CURRENT_LIST_DIR}/view/exportdialogmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/exportdialogmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/recentprojectsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/recentprojectsmodel.h
 
     )
 
