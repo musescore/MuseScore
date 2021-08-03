@@ -119,13 +119,16 @@ QByteArray MscReader::readStyleFile() const
 
 QByteArray MscReader::readScoreFile() const
 {
-    QString mscxFileName;
-    QStringList files = reader()->fileList();
-    for (const QString& name : files) {
-        // mscx file in the root dir
-        if (!name.contains("/") && name.endsWith(".mscx")) {
-            mscxFileName = name;
-            break;
+    QString mscxFileName = QFileInfo(m_params.filePath).completeBaseName() + ".mscx";
+    QByteArray data = fileData(mscxFileName);
+    if (data.isEmpty() && reader()->isContainer()) {
+        QStringList files = reader()->fileList();
+        for (const QString& name : files) {
+            // mscx file in the root dir
+            if (!name.contains("/") && name.endsWith(".mscx")) {
+                mscxFileName = name;
+                break;
+            }
         }
     }
 
@@ -134,6 +137,11 @@ QByteArray MscReader::readScoreFile() const
 
 std::vector<QString> MscReader::excerptNames() const
 {
+    if (!reader()->isContainer()) {
+        NOT_SUPPORTED << " not container";
+        return std::vector<QString>();
+    }
+
     std::vector<QString> names;
     QStringList files = reader()->fileList();
     for (const QString& filePath : files) {
@@ -173,6 +181,11 @@ QByteArray MscReader::readImageFile(const QString& fileName) const
 
 std::vector<QString> MscReader::imageFileNames() const
 {
+    if (!reader()->isContainer()) {
+        NOT_SUPPORTED << " not container";
+        return std::vector<QString>();
+    }
+
     std::vector<QString> names;
     QStringList files = reader()->fileList();
     for (const QString& filePath : files) {
@@ -241,6 +254,11 @@ bool MscReader::ZipReader::isOpened() const
     return m_device ? m_device->isOpen() : false;
 }
 
+bool MscReader::ZipReader::isContainer() const
+{
+    return true;
+}
+
 QStringList MscReader::ZipReader::fileList() const
 {
     IF_ASSERT_FAILED(m_zip) {
@@ -303,6 +321,13 @@ bool MscReader::DirReader::isOpened() const
     return QFileInfo::exists(m_rootPath);
 }
 
+bool MscReader::DirReader::isContainer() const
+{
+    //! NOTE We will assume that if there is `/META-INF/container.xml` in the root directory,
+    //! then we read from the container (a directory with a certain structure)
+    return QFileInfo::exists(m_rootPath + "/META-INF/container.xml");
+}
+
 QStringList MscReader::DirReader::fileList() const
 {
     QStringList files;
@@ -358,6 +383,11 @@ void MscReader::XmlFileReader::close()
 bool MscReader::XmlFileReader::isOpened() const
 {
     return m_device ? m_device->isOpen() : false;
+}
+
+bool MscReader::XmlFileReader::isContainer() const
+{
+    return true;
 }
 
 QStringList MscReader::XmlFileReader::fileList() const
