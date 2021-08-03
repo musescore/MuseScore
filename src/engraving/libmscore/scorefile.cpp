@@ -55,20 +55,12 @@
 #include "stafftype.h"
 #include "sym.h"
 #include "scoreorder.h"
-
 #include "utils.h"
-
 #include "sig.h"
 #include "undo.h"
 #include "imageStore.h"
 #include "audio.h"
 #include "barline.h"
-#include "thirdparty/qzip/qzipreader_p.h"
-#include "thirdparty/qzip/qzipwriter_p.h"
-#ifdef Q_OS_WIN
-#include <windows.h>
-#endif
-
 #include "masterscore.h"
 
 #include "log.h"
