@@ -269,6 +269,9 @@ Score::FileError MasterScore::loadMscz(const mu::engraving::MscReader& mscReader
 
             partScore->linkMeasures(this);
             ex->setTracks(xml.tracks());
+
+            ex->setTitle(excerptName);
+
             this->addExcerpt(ex);
         }
     }
