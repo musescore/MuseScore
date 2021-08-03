@@ -48,9 +48,6 @@ namespace Ms {
 Part::Part(Score* s)
     : ScoreElement(s)
 {
-    static std::atomic_int currentId { 0 };
-    _id = QString::number(++currentId);
-
     _color   = DEFAULT_COLOR;
     _show    = true;
     _soloist = false;
@@ -178,6 +175,8 @@ bool Part::readProperties(XmlReader& e)
 
 void Part::read(XmlReader& e)
 {
+    _id = e.attribute("id");
+
     while (e.readNextStartElement()) {
         if (!readProperties(e)) {
             e.unknown();
@@ -194,7 +193,8 @@ void Part::read(XmlReader& e)
 
 void Part::write(XmlWriter& xml) const
 {
-    xml.stag(this);
+    xml.stag(this, QString("id=\"%1\"").arg(_id));
+
     for (const Staff* staff : _staves) {
         staff->write(xml);
     }
@@ -213,6 +213,7 @@ void Part::write(XmlWriter& xml) const
                 _preferSharpFlat == PreferSharpFlat::SHARPS ? "sharps" : "flats");
     }
     instrument()->write(xml, this);
+
     xml.etag();
 }
 

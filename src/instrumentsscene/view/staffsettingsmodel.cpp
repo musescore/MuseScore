@@ -163,8 +163,6 @@ void StaffSettingsModel::createLinkedStaff()
     }
 
     Staff* linkedStaff = sourceStaff->clone();
-    linkedStaff->setId(Staff::makeId());
-
     masterNotationParts()->appendStaff(linkedStaff, sourceStaff->part()->id());
     masterNotationParts()->linkStaves(sourceStaff->id(), linkedStaff->id());
 }

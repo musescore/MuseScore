@@ -63,7 +63,6 @@ namespace Ms {
 Staff::Staff(Score* score)
     : Element(score)
 {
-    setId(makeId());
     initFromStaffType(0);
 }
 
@@ -720,8 +719,8 @@ Fraction Staff::currentKeyTick(const Fraction& tick) const
 
 void Staff::write(XmlWriter& xml) const
 {
-    int idx = this->idx();
-    xml.stag(this, QString("id=\"%1\"").arg(idx + 1));
+    xml.stag(this, QString("id=\"%1\"").arg(_id));
+
     if (links()) {
         Score* s = masterScore();
         for (auto le : *links()) {
@@ -800,6 +799,8 @@ void Staff::write(XmlWriter& xml) const
 
 void Staff::read(XmlReader& e)
 {
+    _id = e.attribute("id");
+
     while (e.readNextStartElement()) {
         if (!readProperties(e)) {
             e.unknown();
@@ -940,12 +941,6 @@ qreal Staff::staffMag(const StaffType* stt) const
 void Staff::setId(const QString& id)
 {
     _id = id;
-}
-
-QString Staff::makeId()
-{
-    static std::atomic_int currentId { 0 };
-    return QString::number(++currentId);
 }
 
 qreal Staff::staffMag(const Fraction& tick) const

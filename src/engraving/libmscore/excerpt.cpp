@@ -228,6 +228,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
     // Set instruments and create linked staves
     for (const Part* part : parts) {
         Part* p = new Part(score);
+        p->setId(part->id());
         p->setInstrument(*part->instrument());
         p->setPartName(part->partName());
 
