@@ -57,49 +57,57 @@
           <name>stdNormal</name>
           </StaffType>
         <bracket type="1" span="10" col="1"/>
-        <barLineSpan>10</barLineSpan>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff id="2">
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff id="3">
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff id="4">
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff id="5">
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff id="6">
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff id="7">
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff id="8">
         <StaffType group="pitched">
           <name>stdNormal</name>
           <mag>0.75</mag>
           </StaffType>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff id="9">
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
         <hideWhenEmpty>3</hideWhenEmpty>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff id="10">
         <StaffType group="pitched">
@@ -368,7 +376,6 @@
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
