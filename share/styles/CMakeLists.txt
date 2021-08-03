@@ -21,11 +21,10 @@
 install(FILES
       Leland.mss
       MuseJazz.mss
-      chords_std.xml
-      chords_jazz.xml
-      chordsV4_pop.xml
-      chordsV4_jazz.xml
-      chordsV4_symbols.xml
+      chordsV41_pop.xml
+      chordsV42_jazz.xml
+      chordsV43_symbols.xml
+      chordsV44_noPresets.xml
       chords.xml
       stdchords.xml
       jazzchords.xml

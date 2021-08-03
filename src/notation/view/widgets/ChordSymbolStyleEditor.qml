@@ -98,6 +98,10 @@ Rectangle {
 
             delegate: chordStyleDelegate
 
+            ScrollBar.horizontal: StyledScrollBar{
+                anchors.bottom: chordSymbolStyleList.bottom
+            }
+
             highlight: Rectangle {
                 color: ui.theme.accentColor
                 height: 76

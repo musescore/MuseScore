@@ -29,7 +29,7 @@ FocusableItem {
 
     property alias chordStylesModel: chordSymbolStylesGrid.model
 
-    height: grid.height
+    height: chordSymbolStylesGrid.height
 
         Component {
             id: styleDelegate
@@ -54,11 +54,11 @@ FocusableItem {
             anchors.left: root.left
             anchors.right: root.right
 
-            height: cellHeight
-            width: cellWidth
+            height: 2 * cellHeight
+            width: 2 * cellWidth
 
-            cellWidth: 120
-            cellHeight: 60
+            cellWidth: 124
+            cellHeight: 56
 
             currentIndex: chordStylesModel.currentStyleIndex
 
