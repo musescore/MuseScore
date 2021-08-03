@@ -19,25 +19,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DRAW_IIMAGECONVERTER_H
-#define MU_DRAW_IIMAGECONVERTER_H
+#ifndef MU_DRAW_QIMAGEPROVIDER_H
+#define MU_DRAW_QIMAGEPROVIDER_H
 
-#include <QByteArray>
-
-#include "modularity/ioc.h"
-
-#include "geometry.h"
-#include "pixmap.h"
+#include "draw/iimageprovider.h"
 
 namespace mu::draw {
-class IImageConverter : MODULE_EXPORT_INTERFACE
+class QImageProvider : public IImageProvider
 {
-    INTERFACE_ID(IImageConverter)
 public:
-    virtual ~IImageConverter() = default;
+    Pixmap scaled(const Pixmap& origin, const Size& s) const override;
 
-    virtual Pixmap scaled(const Pixmap& origin, const Size& s) const = 0;
+    std::shared_ptr<Pixmap> createPixmap(int w, int h, int dpm, const Color& color) override;
+
+    IPaintProviderPtr painterForImage(std::shared_ptr<Pixmap> pixmap) override;
+    void saveAsPng(std::shared_ptr<Pixmap> px, QIODevice* device) override;
+    std::shared_ptr<Pixmap> pixmapFromQVariant(const QVariant& val) override;
 };
 }
 
-#endif // MU_DRAW_IIMAGECONVERTER_H
+#endif // MU_DRAW_QIMAGEPROVIDER_H

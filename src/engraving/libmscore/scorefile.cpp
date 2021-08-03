@@ -387,7 +387,7 @@ void Score::readStaff(XmlReader& e)
 //   createThumbnail
 //---------------------------------------------------------
 
-QImage Score::createThumbnail()
+std::shared_ptr<mu::draw::Pixmap> Score::createThumbnail()
 {
     LayoutMode mode = layoutMode();
     setLayoutMode(LayoutMode::PAGE);
@@ -399,17 +399,16 @@ QImage Score::createThumbnail()
     int w      = int(fr.width() * mag);
     int h      = int(fr.height() * mag);
 
-    QImage pm(w, h, QImage::Format_ARGB32_Premultiplied);
-
     int dpm = lrint(DPMM * 1000.0);
-    pm.setDotsPerMeterX(dpm);
-    pm.setDotsPerMeterY(dpm);
-    pm.fill(0xffffffff);
+
+    auto pixmap = imageProvider()->createPixmap(w, h, dpm, mu::draw::Color(255, 255, 255, 255));
 
     double pr = MScore::pixelRatio;
     MScore::pixelRatio = 1.0;
 
-    mu::draw::Painter p(&pm, "thumbnail");
+    auto painterProvider = imageProvider()->painterForImage(pixmap);
+    mu::draw::Painter p(painterProvider, "thumbnail");
+
     p.setAntialiasing(true);
     p.scale(mag, mag);
     print(&p, 0);
@@ -421,7 +420,7 @@ QImage Score::createThumbnail()
         setLayoutMode(mode);
         doLayout();
     }
-    return pm;
+    return pixmap;
 }
 
 //---------------------------------------------------------

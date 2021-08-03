@@ -23,8 +23,6 @@
 #ifndef __MSCORE_H__
 #define __MSCORE_H__
 
-#include <QPaintEngine>
-
 #include "draw/color.h"
 #include "config.h"
 #include "style/style.h"
