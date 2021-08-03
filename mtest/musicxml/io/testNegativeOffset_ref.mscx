@@ -58,7 +58,7 @@
           </StaffType>
         <hideWhenEmpty>3</hideWhenEmpty>
         <bracket type="1" span="2" col="1"/>
-        <barLineSpan>2</barLineSpan>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff id="2">
         <StaffType group="pitched">
@@ -333,7 +333,6 @@
             </Rest>
           <BarLine>
             <subtype>end</subtype>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>

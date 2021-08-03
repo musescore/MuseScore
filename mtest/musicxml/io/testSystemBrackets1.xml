@@ -114,9 +114,6 @@
         </midi-instrument>
       </score-part>
     <part-group type="stop" number="1"/>
-    <part-group type="start" number="1">
-      <group-symbol>none</group-symbol>
-      </part-group>
     <score-part id="P7">
       <part-name>Piano</part-name>
       <part-abbreviation>Pno.</part-abbreviation>
@@ -131,7 +128,6 @@
         <pan>0</pan>
         </midi-instrument>
       </score-part>
-    <part-group type="stop" number="1"/>
     <part-group type="start" number="1">
       <group-symbol>square</group-symbol>
       </part-group>

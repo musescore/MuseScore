@@ -29,7 +29,7 @@
           </StaffType>
         <hideWhenEmpty>3</hideWhenEmpty>
         <bracket type="1" span="2" col="1"/>
-        <barLineSpan>2</barLineSpan>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff id="2">
         <StaffType group="pitched">
@@ -900,7 +900,6 @@
             </Chord>
           <endTuplet/>
           <BarLine>
-            <span>1</span>
             <visible>0</visible>
             </BarLine>
           </voice>
@@ -1306,7 +1305,6 @@
           <endTuplet/>
           <BarLine>
             <subtype>end</subtype>
-            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -1758,6 +1756,7 @@
             <Pedal>
               <endHookType>1</endHookType>
               <beginText>&lt;sym&gt;keyboardPedalPed&lt;/sym&gt;</beginText>
+              <continueText>(&lt;sym&gt;keyboardPedalPed&lt;/sym&gt;)</continueText>
               </Pedal>
             <next>
               <location>
