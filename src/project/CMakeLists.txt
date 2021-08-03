@@ -86,8 +86,17 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/projectuiactions.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/projectconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/projectconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/exporttype.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/exporttype.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/iexportprojectscenario.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/exportprojectscenario.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/exportprojectscenario.h
 
     ${PLATFORM_SRC}
+
+    ${CMAKE_CURRENT_LIST_DIR}/view/exportdialogmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/exportdialogmodel.h
+
     )
 
 set(MODULE_LINK notation)

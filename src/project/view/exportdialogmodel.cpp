@@ -21,12 +21,12 @@
  */
 #include "exportdialogmodel.h"
 
-#include "log.h"
-#include "translation.h"
-
 #include <QItemSelectionModel>
 
-using namespace mu::userscores;
+#include "translation.h"
+#include "log.h"
+
+using namespace mu::project;
 using namespace mu::notation;
 using namespace mu::iex::musicxml;
 
@@ -222,7 +222,7 @@ void ExportDialogModel::setExportType(const ExportType& type)
     m_selectedExportType = type;
     emit selectedExportTypeChanged(type.toMap());
 
-    std::vector<UnitType> unitTypes = exportScoreScenario()->supportedUnitTypes(type);
+    std::vector<UnitType> unitTypes = exportProjectScenario()->supportedUnitTypes(type);
 
     IF_ASSERT_FAILED(!unitTypes.empty()) {
         return;
@@ -266,7 +266,7 @@ QVariantList ExportDialogModel::availableUnitTypes() const
 
     QVariantList result;
 
-    for (UnitType type : exportScoreScenario()->supportedUnitTypes(m_selectedExportType)) {
+    for (UnitType type : exportProjectScenario()->supportedUnitTypes(m_selectedExportType)) {
         QVariantMap obj;
         obj["text"] = unitTypeNames[type];
         obj["value"] = static_cast<int>(type);
@@ -308,7 +308,7 @@ bool ExportDialogModel::exportScores()
         return false;
     }
 
-    return exportScoreScenario()->exportScores(notations, m_selectedExportType, m_selectedUnitType);
+    return exportProjectScenario()->exportScores(notations, m_selectedExportType, m_selectedUnitType);
 }
 
 int ExportDialogModel::pdfResolution() const

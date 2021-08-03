@@ -19,10 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_USERSCORES_EXPORTTYPE_H
-#define MU_USERSCORES_EXPORTTYPE_H
+#ifndef MU_PROJECT_EXPORTTYPE_H
+#define MU_PROJECT_EXPORTTYPE_H
 
-namespace mu::userscores {
+namespace mu::project {
 struct ExportType;
 class ExportTypeList : public QList<ExportType>
 {
@@ -58,4 +58,4 @@ struct ExportType
 };
 }
 
-#endif // MU_USERSCORES_EXPORTTYPE_H
+#endif // MU_PROJECT_EXPORTTYPE_H
