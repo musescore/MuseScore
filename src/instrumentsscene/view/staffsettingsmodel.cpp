@@ -157,7 +157,7 @@ void StaffSettingsModel::createLinkedStaff()
         return;
     }
 
-    Staff* sourceStaff = staff();
+    const Staff* sourceStaff = parts()->staff(m_staffId);
     if (!sourceStaff) {
         return;
     }
@@ -167,19 +167,6 @@ void StaffSettingsModel::createLinkedStaff()
 
     parts()->appendStaff(linkedStaff, sourceStaff->part()->id());
     parts()->cloneStaff(sourceStaff->id(), linkedStaff->id());
-}
-
-Staff* StaffSettingsModel::staff() const
-{
-    for (const Part* part : parts()->partList()) {
-        for (Staff* staff : *part->staves()) {
-            if (staff->id() == m_staffId) {
-                return staff;
-            }
-        }
-    }
-
-    return nullptr;
 }
 
 INotationPartsPtr StaffSettingsModel::parts() const

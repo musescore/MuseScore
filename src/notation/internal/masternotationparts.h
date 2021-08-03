@@ -47,6 +47,8 @@ public:
     void replaceDrumset(const InstrumentKey& instrumentKey, const Drumset& newDrumset) override;
 
 private:
+    Ms::MasterScore* masterScore() const;
+
     void startGlobalEdit();
     void endGlobalEdit();
 

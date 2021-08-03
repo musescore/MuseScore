@@ -65,7 +65,6 @@ signals:
     void cutawayEnabledChanged();
 
 private:
-    notation::Staff* staff() const;
     notation::INotationPartsPtr parts() const;
 
     notation::ID m_staffId;

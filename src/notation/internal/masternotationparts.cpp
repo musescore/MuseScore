@@ -23,6 +23,8 @@
 #include "masternotationparts.h"
 
 #include "scoreorderconverter.h"
+
+#include "libmscore/masterscore.h"
 #include "libmscore/scoreorder.h"
 
 #include "log.h"
@@ -37,6 +39,11 @@ MasterNotationParts::MasterNotationParts(IGetScore* getScore, INotationInteracti
 void MasterNotationParts::setExcerpts(ExcerptNotationList excerpts)
 {
     m_excerpts = excerpts;
+}
+
+Ms::MasterScore* MasterNotationParts::masterScore() const
+{
+    return dynamic_cast<Ms::MasterScore*>(score());
 }
 
 void MasterNotationParts::startGlobalEdit()

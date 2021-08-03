@@ -47,6 +47,9 @@ public:
     void removeChildren(const int row, const int count, const bool deleteChild) override;
 
 private:
+    void listenVisibilityChanged();
+    void createAndAppendPart(const notation::ID& masterPartId);
+
     QString m_instrumentId;
     QString m_instrumentName;
     QString m_instrumentAbbreviature;
