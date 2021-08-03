@@ -86,8 +86,10 @@ public:
     void setClipRect(const RectF& rect) override;
     void setClipping(bool enable) override;
 
-private:
+protected:
     QPainter* m_painter = nullptr;
+
+private:
     bool m_overship = false;
     DrawObjectsLogger* m_drawObjectsLogger = nullptr;
     Font m_font;

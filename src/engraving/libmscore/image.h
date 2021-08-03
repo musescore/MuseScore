@@ -25,7 +25,7 @@
 
 #include "modularity/ioc.h"
 
-#include "engraving/draw/iimageconverter.h"
+#include "engraving/draw/iimageprovider.h"
 #include "bsymbol.h"
 
 namespace mu::draw {
@@ -46,7 +46,7 @@ enum class ImageType : char {
 
 class Image final : public BSymbol
 {
-    INJECT(engraving, mu::draw::IImageConverter, imageConverter)
+    INJECT(engraving, mu::draw::IImageProvider, imageProvider)
     union {
         mu::draw::Pixmap* rasterDoc;
         mu::draw::SvgRenderer* svgDoc;

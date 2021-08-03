@@ -25,9 +25,6 @@
 #include <vector>
 #include <stack>
 
-#include <QBrush>
-#include <QFont>
-
 #include "ipaintprovider.h"
 #include "buffereddrawtypes.h"
 #include "pen.h"
