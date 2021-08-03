@@ -26,7 +26,6 @@
 #include "config.h"
 
 #include "draw/color.h"
-#include "style/style.h"
 
 namespace Ms {
 #define MSC_VERSION     "4.00"
@@ -79,7 +78,6 @@ static constexpr int MSCVERSION = 400;
 //       - The style is stored in a separate file (inside mscz)
 //       - The ChordList is stored in a separate file (inside mscz)
 
-class MStyle;
 class Sequencer;
 
 enum class HairpinType : signed char;
