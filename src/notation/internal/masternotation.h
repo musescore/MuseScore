@@ -75,6 +75,8 @@ private:
 
     Ms::MasterScore* masterScore() const;
 
+    void initExcerpts(const QList<Ms::Excerpt*>& excerpts);
+
     void doSetExcerpts(ExcerptNotationList excerpts);
 
     ValCh<ExcerptNotationList> m_excerpts;

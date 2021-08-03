@@ -90,6 +90,8 @@ void MasterNotation::setMasterScore(Ms::MasterScore* score)
     }
 
     setScore(score);
+
+    initExcerpts(masterScore()->excerpts());
 }
 
 Ms::MasterScore* MasterNotation::masterScore() const
@@ -404,6 +406,7 @@ mu::Ret MasterNotation::setupNewScore(Ms::MasterScore* score, Ms::MasterScore* t
     }
 
     setScore(score);
+    initExcerpts(excerpts);
 
     score->setExcerptsChanged(true);
 
@@ -545,4 +548,24 @@ void MasterNotation::onSaveCopy()
 {
     score()->setCreated(false);
     undoStack()->stackChanged().notify();
+}
+
+void MasterNotation::initExcerpts(const QList<Ms::Excerpt*>& excerpts)
+{
+    ExcerptNotationList notationExcerpts;
+
+    for (Ms::Excerpt* excerpt : excerpts) {
+        IExcerptNotationPtr excerptNotation = std::make_shared<ExcerptNotation>(excerpt);
+
+        Meta meta;
+        meta.title = excerpt->title();
+        excerptNotation->setMetaInfo(meta);
+
+        get_impl(excerptNotation)->init();
+        excerptNotation->notation()->setOpened(true);
+
+        notationExcerpts.push_back(excerptNotation);
+    }
+
+    doSetExcerpts(notationExcerpts);
 }
