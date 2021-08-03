@@ -45,6 +45,65 @@ bool Score::read400(XmlReader& e)
         style().set(Sid::harmonyPlay, false);
     }
 
+    if (!e.readNextStartElement()) {
+        qDebug("%s: xml file is empty", qPrintable(e.getDocName()));
+        return false;
+    }
+
+    if (e.name() == "museScore") {
+        while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "programVersion") {
+                e.skipCurrentElement();
+            } else if (tag == "programRevision") {
+                e.skipCurrentElement();
+            } else if (tag == "Revision") {
+                e.skipCurrentElement();
+            } else if (tag == "Score") {
+                if (!readScore400(e)) {
+                    return false;
+                }
+            } else {
+                e.skipCurrentElement();
+            }
+        }
+    } else {
+        qDebug("%s: invalid structure of xml file", qPrintable(e.getDocName()));
+        return false;
+    }
+
+    connectTies();
+    relayoutForStyles(); // force relayout if certain style settings are enabled
+
+    _fileDivision = MScore::division;
+
+    // Make sure every instrument has an instrumentId set.
+    for (Part* part : parts()) {
+        const InstrumentList* il = part->instruments();
+        for (auto it = il->begin(); it != il->end(); it++) {
+            static_cast<Instrument*>(it->second)->updateInstrumentId();
+        }
+    }
+
+    fixTicks();
+
+    for (Part* p : qAsConst(_parts)) {
+        p->updateHarmonyChannels(false);
+    }
+
+    masterScore()->rebuildMidiMapping();
+    masterScore()->updateChannel();
+
+    for (Staff* staff : staves()) {
+        staff->updateOttava();
+    }
+
+//      createPlayEvents();
+    return true;
+}
+
+bool Score::readScore400(XmlReader& e)
+{
     while (e.readNextStartElement()) {
         e.setTrack(-1);
         const QStringRef& tag(e.name());
@@ -177,32 +236,5 @@ bool Score::read400(XmlReader& e)
         return false;
     }
 
-    connectTies();
-    relayoutForStyles(); // force relayout if certain style settings are enabled
-
-    _fileDivision = MScore::division;
-
-    // Make sure every instrument has an instrumentId set.
-    for (Part* part : parts()) {
-        const InstrumentList* il = part->instruments();
-        for (auto it = il->begin(); it != il->end(); it++) {
-            static_cast<Instrument*>(it->second)->updateInstrumentId();
-        }
-    }
-
-    fixTicks();
-
-    for (Part* p : qAsConst(_parts)) {
-        p->updateHarmonyChannels(false);
-    }
-
-    masterScore()->rebuildMidiMapping();
-    masterScore()->updateChannel();
-
-    for (Staff* staff : staves()) {
-        staff->updateOttava();
-    }
-
-//      createPlayEvents();
     return true;
 }

@@ -683,6 +683,7 @@ public:
     bool writeScore(QIODevice* f, bool msczFormat, bool onlySelection, mu::engraving::compat::WriteScoreHook& hook);
 
     bool read400(XmlReader& e);
+    bool readScore400(XmlReader& e);
 
     QList<Staff*>& staves() { return _staves; }
     const QList<Staff*>& staves() const { return _staves; }
