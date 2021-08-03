@@ -260,6 +260,28 @@ void NotationParts::updatePartTitles()
     }
 }
 
+ID NotationParts::newPartId() const
+{
+    ID maxId = ID();
+
+    for (const Part* part : score()->parts()) {
+        maxId = std::max(maxId, part->id());
+    }
+
+    return maxId + QString::number(1);
+}
+
+ID NotationParts::newStaffId() const
+{
+    ID maxId = ID();
+
+    for (const Staff* staff : score()->staves()) {
+        maxId = std::max(maxId, staff->id());
+    }
+
+    return maxId + QString::number(1);
+}
+
 void NotationParts::doMoveStaves(const std::vector<Staff*>& staves, int destinationStaffIndex, Part* destinationPart)
 {
     TRACEFUNC;
@@ -552,6 +574,14 @@ void NotationParts::appendPart(Part* part)
 {
     TRACEFUNC;
 
+    IF_ASSERT_FAILED(part) {
+        return;
+    }
+
+    if (part->id().isNull()) {
+        part->setId(newPartId());
+    }
+
     QList<Staff*> stavesCopy = *part->staves();
     part->staves()->clear();
 
@@ -798,10 +828,16 @@ void NotationParts::appendStaves(Part* part, const Instrument& instrument)
 {
     TRACEFUNC;
 
+    IF_ASSERT_FAILED(part) {
+        return;
+    }
+
     for (int staffIndex = 0; staffIndex < instrument.staves; ++staffIndex) {
         int lastStaffIndex = !score()->staves().isEmpty() ? score()->staves().last()->idx() : 0;
 
         Staff* staff = new Staff(score());
+        staff->setId(newStaffId());
+
         staff->setPart(part);
         initStaff(staff, instrument, Ms::StaffType::preset(StaffType::STANDARD), staffIndex);
 
@@ -899,8 +935,9 @@ void NotationParts::appendNewParts(const PartInstrumentList& parts)
         }
 
         Part* part = new Part(score());
-        const Instrument& instrument = pi.instrument;
+        part->setId(newPartId());
 
+        const Instrument& instrument = pi.instrument;
         part->setSoloist(pi.isSoloist);
         part->setInstrument(InstrumentsConverter::convertInstrument(instrument));
 

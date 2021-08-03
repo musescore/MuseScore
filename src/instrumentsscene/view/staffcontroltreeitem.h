@@ -39,8 +39,6 @@ public:
     void setPartId(const QString& id);
 
 private:
-    const notation::Part* part() const;
-
     QString m_partId;
 };
 }

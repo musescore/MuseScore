@@ -137,7 +137,6 @@ public:
     int rstaff() const;
     QString id() const;
     void setId(const QString& id);
-    static QString makeId();
     int idx() const;
     void read(XmlReader&) override;
     bool readProperties(XmlReader&) override;

@@ -83,6 +83,9 @@ protected:
 private:
     void updatePartTitles();
 
+    ID newPartId() const;
+    ID newStaffId() const;
+
     void doMoveStaves(const std::vector<Staff*>& staves, int destinationStaffIndex, Part* destinationPart = nullptr);
     void doSetStaffVisible(Staff* staff, bool visible);
     void doSetStaffVoiceVisible(Staff* staff, int voiceIndex, bool visible);
