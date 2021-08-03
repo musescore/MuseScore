@@ -38,6 +38,10 @@ public:
     async::NotifyList<const Part*> partList() const override;
     async::NotifyList<const Staff*> staffList(const ID& partId) const override;
 
+    const Part* part(const ID& partId) const override;
+    const Staff* staff(const ID& staffId) const override;
+    bool partExists(const ID& partId) const override;
+
     void setParts(const PartInstrumentList& parts) override;
     void setScoreOrder(const ScoreOrder& order) override;
     void setPartVisible(const ID& partId, bool visible) override;
@@ -60,7 +64,9 @@ public:
     void moveStaves(const IDList& sourceStavesIds, const ID& destinationStaffId, InsertMode mode = InsertMode::Before) override;
 
     void appendStaff(Staff* staff, const ID& destinationPartId) override;
-    void cloneStaff(const ID& sourceStaffId, const ID& destinationStaffId) override;
+    void appendPart(Part* part) override;
+
+    void linkStaves(const ID& sourceStaffId, const ID& destinationStaffId) override;
 
     void replaceInstrument(const InstrumentKey& instrumentKey, const Instrument& newInstrument) override;
     void replaceDrumset(const InstrumentKey& instrumentKey, const Drumset& newDrumset) override;
@@ -68,14 +74,13 @@ public:
     async::Notification partsChanged() const override;
 
 protected:
-    Ms::MasterScore* masterScore() const;
+    Ms::Score* score() const;
     INotationUndoStackPtr undoStack() const;
 
     virtual void startEdit();
     virtual void apply();
 
 private:
-    Ms::Score* score() const;
     void updateScore();
 
     void updatePartTitles();
@@ -86,16 +91,10 @@ private:
     void doRemoveParts(const IDList& partsIds);
     void doSetPartName(Part* part, const QString& name);
 
-    Part* part(const ID& partId, const Ms::Score* score = nullptr) const;
-    Staff* staff(const ID& staffId) const;
+    Part* partModifiable(const ID& partId) const;
+    Staff* staffModifiable(const ID& staffId) const;
     std::vector<Staff*> staves(const IDList& stavesIds) const;
 
-    std::vector<Part*> availableParts(const Ms::Score* score) const;
-    std::vector<Part*> scoreParts(const Ms::Score* score) const;
-    std::vector<Part*> excerptParts(const Ms::Score* score) const;
-
-    void appendPart(Part* part);
-    int resolvePartIndex(Part* part) const;
     void appendStaves(Part* part, const Instrument& instrument);
     void insertStaff(Staff* staff, int destinationStaffIndex);
     void initStaff(Staff* staff, const Instrument& instrument, const Ms::StaffType* staffType, int cleffIndex);
@@ -103,12 +102,18 @@ private:
     void removeMissingParts(const PartInstrumentList& parts);
     void appendNewParts(const PartInstrumentList& parts);
     void updateSoloist(const PartInstrumentList& parts);
-    void sortParts(const PartInstrumentList& parts, const Ms::Score* score, const QList<Ms::Staff*>& originalStaves);
+    void sortParts(const PartInstrumentList& parts, const QList<Ms::Staff*>& originalStaves);
 
     int resolveInstrumentNumber(const Instruments& newInstruments, const Instrument& currentInstrument) const;
 
+    void setBracketsAndBarlines();
+
     void notifyAboutPartChanged(Part* part) const;
+    void notifyAboutPartAdded(Part* part) const;
+    void notifyAboutPartRemoved(Part* part) const;
     void notifyAboutStaffChanged(Staff* staff) const;
+    void notifyAboutStaffAdded(Staff* staff, const ID& partId) const;
+    void notifyAboutStaffRemoved(Staff* staff) const;
     async::ChangedNotifier<const Staff*>* staffChangedNotifier(const ID& partId) const;
 
     IGetScore* m_getScore = nullptr;

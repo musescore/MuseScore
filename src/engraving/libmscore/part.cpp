@@ -68,6 +68,11 @@ void Part::initFromInstrTemplate(const InstrumentTemplate* t)
     setInstrument(Instrument::fromTemplate(t));
 }
 
+Part* Part::clone() const
+{
+    return new Part(*this);
+}
+
 //---------------------------------------------------------
 //   staff
 //---------------------------------------------------------

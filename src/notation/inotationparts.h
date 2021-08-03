@@ -37,6 +37,10 @@ public:
     virtual async::NotifyList<const Part*> partList() const = 0;
     virtual async::NotifyList<const Staff*> staffList(const ID& partId) const = 0;
 
+    virtual const Part* part(const ID& partId) const = 0;
+    virtual const Staff* staff(const ID& staffId) const = 0;
+    virtual bool partExists(const ID& partId) const = 0;
+
     virtual void setParts(const PartInstrumentList& instruments) = 0;
     virtual void setScoreOrder(const ScoreOrder& order) = 0;
     virtual void setPartVisible(const ID& partId, bool visible) = 0;
@@ -64,7 +68,9 @@ public:
     virtual void moveStaves(const IDList& sourceStavesIds, const ID& destinationStaffId, InsertMode mode = InsertMode::Before) = 0;
 
     virtual void appendStaff(Staff* staff, const ID& destinationPartId) = 0;
-    virtual void cloneStaff(const ID& sourceStaffId, const ID& destinationStaffId) = 0;
+    virtual void appendPart(Part* part) = 0;
+
+    virtual void linkStaves(const ID& sourceStaffId, const ID& destinationStaffId) = 0;
 
     virtual void replaceInstrument(const InstrumentKey& instrumentKey, const Instrument& newInstrument) = 0;
     virtual void replaceDrumset(const InstrumentKey& instrumentKey, const Drumset& newDrumset) = 0;
