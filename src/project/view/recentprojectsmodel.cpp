@@ -19,14 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "recentscoresmodel.h"
+#include "recentprojectsmodel.h"
 
-#include "log.h"
 #include "translation.h"
 #include "actions/actiontypes.h"
 #include "dataformatter.h"
 
-using namespace mu::userscores;
+#include "log.h"
+
+using namespace mu::project;
 using namespace mu::actions;
 using namespace mu::notation;
 
@@ -38,21 +39,22 @@ const QString SCORE_TIME_SINCE_MODIFIED_KEY("timeSinceModified");
 const QString SCORE_ADD_NEW_KEY("isAddNew");
 }
 
-RecentScoresModel::RecentScoresModel(QObject* parent)
+RecentProjectsModel::RecentProjectsModel(QObject* parent)
     : QAbstractListModel(parent)
 {
     m_roles.insert(RoleTitle, "title");
     m_roles.insert(RoleScore, "score");
 
-    ValCh<MetaList> recentScores = userScoresService()->recentScoreList();
-    updateRecentScores(recentScores.val);
+    ProjectMetaList recentProjects = recentProjectsProvider()->recentProjectList();
+    updateRecentScores(recentProjects);
 
-    recentScores.ch.onReceive(this, [this](const MetaList& list) {
-        updateRecentScores(list);
+    recentProjectsProvider()->recentProjectListChanged().onNotify(this, [this]() {
+        ProjectMetaList recentProjects = recentProjectsProvider()->recentProjectList();
+        updateRecentScores(recentProjects);
     });
 }
 
-QVariant RecentScoresModel::data(const QModelIndex& index, int role) const
+QVariant RecentProjectsModel::data(const QModelIndex& index, int role) const
 {
     if (!index.isValid()) {
         return QVariant();
@@ -68,32 +70,32 @@ QVariant RecentScoresModel::data(const QModelIndex& index, int role) const
     return QVariant();
 }
 
-int RecentScoresModel::rowCount(const QModelIndex&) const
+int RecentProjectsModel::rowCount(const QModelIndex&) const
 {
     return m_recentScores.size();
 }
 
-QHash<int, QByteArray> RecentScoresModel::roleNames() const
+QHash<int, QByteArray> RecentProjectsModel::roleNames() const
 {
     return m_roles;
 }
 
-void RecentScoresModel::addNewScore()
+void RecentProjectsModel::addNewScore()
 {
     dispatcher()->dispatch("file-new");
 }
 
-void RecentScoresModel::openScore()
+void RecentProjectsModel::openScore()
 {
     dispatcher()->dispatch("file-open");
 }
 
-void RecentScoresModel::openRecentScore(const QString& scorePath)
+void RecentProjectsModel::openRecentScore(const QString& scorePath)
 {
     dispatcher()->dispatch("file-open", ActionData::make_arg1<io::path>(io::path(scorePath)));
 }
 
-void RecentScoresModel::setRecentScores(const QVariantList& recentScores)
+void RecentProjectsModel::setRecentScores(const QVariantList& recentScores)
 {
     if (m_recentScores == recentScores) {
         return;
@@ -104,11 +106,11 @@ void RecentScoresModel::setRecentScores(const QVariantList& recentScores)
     endResetModel();
 }
 
-void RecentScoresModel::updateRecentScores(const MetaList& recentScoresList)
+void RecentProjectsModel::updateRecentScores(const ProjectMetaList& recentProjectsList)
 {
     QVariantList recentScores;
 
-    for (const Meta& meta : recentScoresList) {
+    for (const ProjectMeta& meta : recentProjectsList) {
         QVariantMap obj;
 
         obj[SCORE_TITLE_KEY] = !meta.title.isEmpty() ? meta.title : meta.fileName.toQString();

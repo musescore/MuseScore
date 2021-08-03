@@ -19,28 +19,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_USERSCORES_RECENTSCORESMODEL_H
-#define MU_USERSCORES_RECENTSCORESMODEL_H
+#ifndef MU_PROJECT_RECENTPROJECTSMODEL_H
+#define MU_PROJECT_RECENTPROJECTSMODEL_H
 
 #include <QAbstractListModel>
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 #include "actions/iactionsdispatcher.h"
-#include "project/iprojectconfiguration.h"
-#include "iuserscoresservice.h"
+#include "iprojectconfiguration.h"
+#include "irecentprojectsprovider.h"
 
-namespace mu::userscores {
-class RecentScoresModel : public QAbstractListModel, public async::Asyncable
+namespace mu::project {
+class RecentProjectsModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(userscores, actions::IActionsDispatcher, dispatcher)
-    INJECT(userscores, project::IProjectConfiguration, configuration)
-    INJECT(userscores, IUserScoresService, userScoresService)
+    INJECT(project, actions::IActionsDispatcher, dispatcher)
+    INJECT(project, IProjectConfiguration, configuration)
+    INJECT(project, IRecentProjectsProvider, recentProjectsProvider)
 
 public:
-    RecentScoresModel(QObject* parent = nullptr);
+    RecentProjectsModel(QObject* parent = nullptr);
 
     QVariant data(const QModelIndex& index, int role) const override;
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
@@ -56,7 +56,7 @@ private:
         RoleScore
     };
 
-    void updateRecentScores(const notation::MetaList& recentScoresList);
+    void updateRecentScores(const ProjectMetaList& recentProjectsList);
     void setRecentScores(const QVariantList& recentScores);
 
     QVariantList m_recentScores;
@@ -64,4 +64,4 @@ private:
 };
 }
 
-#endif // MU_USERSCORES_RECENTSCORESMODEL_H
+#endif // MU_PROJECT_RECENTPROJECTSMODEL_H

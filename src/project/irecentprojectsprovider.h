@@ -19,26 +19,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_IMSCZMETAREADER_H
-#define MU_NOTATION_IMSCZMETAREADER_H
-
-#include <QString>
+#ifndef MU_PROJECT_IRECENTPROJECTSPROVIDER_H
+#define MU_PROJECT_IRECENTPROJECTSPROVIDER_H
 
 #include "modularity/imoduleexport.h"
-#include "io/path.h"
-#include "retval.h"
-#include "notationtypes.h"
+#include "projecttypes.h"
+#include "async/notification.h"
 
-namespace mu::notation {
-class IMsczMetaReader : MODULE_EXPORT_INTERFACE
+namespace mu::project {
+class IRecentProjectsProvider : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(IMsczMetaReader)
+    INTERFACE_ID(IRecentProjectsProvider)
 
 public:
-    virtual ~IMsczMetaReader() = default;
+    virtual ~IRecentProjectsProvider() = default;
 
-    virtual MetaList readMetaList(const io::paths& filePaths) const = 0;
+    virtual ProjectMetaList recentProjectList() const = 0;
+    virtual async::Notification recentProjectListChanged() const = 0;
 };
 }
 
-#endif // MU_NOTATION_IMSCZMETAREADER_H
+#endif // MU_PROJECT_IRECENTPROJECTSPROVIDER_H

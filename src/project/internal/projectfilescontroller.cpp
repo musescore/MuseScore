@@ -330,7 +330,7 @@ void ProjectFilesController::saveOnline()
         LOGD() << "Source url received: " << url;
         QString newSource = url.toString();
 
-        Meta meta = project->metaInfo();
+        ProjectMeta meta = project->metaInfo();
         if (meta.source == newSource) {
             return;
         }
@@ -343,7 +343,7 @@ void ProjectFilesController::saveOnline()
         }
     }, Asyncable::AsyncMode::AsyncSetRepeat);
 
-    Meta meta = project->metaInfo();
+    ProjectMeta meta = project->metaInfo();
     uploadingService()->uploadScore(*projectData, meta.title, meta.source);
 }
 
@@ -461,7 +461,7 @@ void ProjectFilesController::doSaveScore(const io::path& filePath, project::Save
 
 io::path ProjectFilesController::defaultSavingFilePath() const
 {
-    Meta scoreMetaInfo = currentNotationProject()->metaInfo();
+    ProjectMeta scoreMetaInfo = currentNotationProject()->metaInfo();
 
     io::path fileName = scoreMetaInfo.title;
     if (fileName.empty()) {

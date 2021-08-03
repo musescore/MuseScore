@@ -48,6 +48,18 @@ ExcerptNotation::~ExcerptNotation()
     setScore(nullptr);
 }
 
+void ExcerptNotation::setTitle(const QString& title)
+{
+    if (m_excerpt) {
+        m_excerpt->setTitle(title);
+    }
+}
+
+QString ExcerptNotation::title() const
+{
+    return m_excerpt ? m_excerpt->title() : QString();
+}
+
 INotationPtr ExcerptNotation::notation()
 {
     return shared_from_this();
@@ -69,29 +81,10 @@ void ExcerptNotation::init()
         return;
     }
 
-    m_excerpt->setTitle(m_metaInfo.title);
-
     m_excerpt->oscore()->initExcerpt(m_excerpt, false);
     setScore(m_excerpt->partScore());
 
-    Notation::setMetaInfo(m_metaInfo);
-
     m_isInited = true;
-}
-
-Meta ExcerptNotation::metaInfo() const
-{
-    return isInited() ? Notation::metaInfo() : m_metaInfo;
-}
-
-void ExcerptNotation::setMetaInfo(const Meta& meta)
-{
-    m_metaInfo = meta;
-
-    if (isInited()) {
-        m_excerpt->setTitle(meta.title);
-        Notation::setMetaInfo(meta);
-    }
 }
 
 bool ExcerptNotation::isInited() const

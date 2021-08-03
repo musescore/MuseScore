@@ -256,32 +256,6 @@ inline QString zoomTypeTitle(ZoomType type)
     return QString();
 }
 
-struct Meta
-{
-    io::path fileName;
-    io::path filePath;
-    QString title;
-    QString subtitle;
-    QString composer;
-    QString lyricist;
-    QString copyright;
-    QString translator;
-    QString arranger;
-    size_t partsCount = 0;
-    QPixmap thumbnail;
-    QDate creationDate;
-
-    QString source;
-    QString platform;
-    QString musescoreVersion;
-    int musescoreRevision = 0;
-    int mscVersion = 0;
-
-    QVariantMap additionalTags;
-};
-
-using MetaList = QList<Meta>;
-
 struct Tempo
 {
     int valueBpm = 0;

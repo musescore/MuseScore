@@ -19,23 +19,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_USERSCORES_IUSERSCORESSERVICE_H
-#define MU_USERSCORES_IUSERSCORESSERVICE_H
+#ifndef MU_PROJECT_IMSCMETAREADER_H
+#define MU_PROJECT_IMSCMETAREADER_H
+
+#include <QString>
 
 #include "modularity/imoduleexport.h"
+#include "io/path.h"
 #include "retval.h"
-#include "notation/notationtypes.h"
+#include "projecttypes.h"
 
-namespace mu::userscores {
-class IUserScoresService : MODULE_EXPORT_INTERFACE
+namespace mu::project {
+class IMscMetaReader : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(IUserScoresService)
+    INTERFACE_ID(IMscMetaReader)
 
 public:
-    virtual ~IUserScoresService() = default;
+    virtual ~IMscMetaReader() = default;
 
-    virtual ValCh<notation::MetaList> recentScoreList() const = 0;
+    virtual RetVal<ProjectMeta> readMeta(const io::path& filePath) const = 0;
 };
 }
 
-#endif // MU_USERSCORES_IUSERSCORESSERVICE_H
+#endif // MU_PROJECT_IMSCMETAREADER_H

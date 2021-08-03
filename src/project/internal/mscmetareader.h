@@ -19,10 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_MSCZMETAREADER_H
-#define MU_NOTATION_MSCZMETAREADER_H
+#ifndef MU_PROJECT_MSCMETAREADER_H
+#define MU_PROJECT_MSCMETAREADER_H
 
-#include "imsczmetareader.h"
+#include "imscmetareader.h"
 
 #include "system/ifilesystem.h"
 #include "modularity/ioc.h"
@@ -31,18 +31,15 @@ namespace mu::framework {
 class XmlReader;
 }
 
-class MQZipReader;
-
-namespace mu::notation {
-class MsczMetaReader : public IMsczMetaReader
+namespace mu::project {
+class MscMetaReader : public IMscMetaReader
 {
-    INJECT(notation, system::IFileSystem, fileSystem)
+    INJECT(project, system::IFileSystem, fileSystem)
 
 public:
-    MetaList readMetaList(const io::paths& filePaths) const override;
+    RetVal<ProjectMeta> readMeta(const io::path& filePath) const;
 
 private:
-    RetVal<Meta> readMeta(const io::path& filePath) const;
 
     struct RawMeta {
         QString titleTag;
@@ -70,9 +67,8 @@ private:
         size_t partsCount = 0;
     };
 
-    RetVal<Meta> doReadMeta(framework::XmlReader& xmlReader) const;
+    void doReadMeta(framework::XmlReader& xmlReader, ProjectMeta& meta) const;
     RawMeta doReadBox(framework::XmlReader& xmlReader) const;
-    RetVal<Meta> readMetaFromMscx(const io::path& filePath) const;
     RawMeta doReadRawMeta(framework::XmlReader& xmlReader) const;
     QString formatFromXml(const std::string& xml) const;
 
@@ -86,4 +82,4 @@ private:
 };
 }
 
-#endif // MU_NOTATION_MSCZMETAREADER_H
+#endif // MU_PROJECT_MSCMETAREADER_H

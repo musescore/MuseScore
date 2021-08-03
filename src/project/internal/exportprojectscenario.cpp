@@ -180,7 +180,7 @@ mu::io::path ExportProjectScenario::askExportPath(const INotationPtrList& notati
         }
     } else if (isExportingOnlyOneScore) {
         if (!isMainNotation(notations.front())) {
-            suggestedPath += "-" + io::escapeFileName(notations.front()->metaInfo().title);
+            suggestedPath += "-" + io::escapeFileName(notations.front()->title());
         }
 
         if (unitType == INotationWriter::UnitType::PER_PAGE && isCreatingOnlyOneFile) {
@@ -200,7 +200,7 @@ mu::io::path ExportProjectScenario::completeExportPath(const io::path& basePath,
     io::path result = io::dirpath(basePath) + "/" + io::basename(basePath);
 
     if (!isMain) {
-        result += "-" + io::escapeFileName(notation->metaInfo().title).toStdString();
+        result += "-" + io::escapeFileName(notation->title()).toStdString();
     }
 
     if (pageIndex > -1) {

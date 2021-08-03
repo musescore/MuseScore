@@ -67,22 +67,6 @@ INotationPtr MasterNotation::notation()
     return shared_from_this();
 }
 
-Meta MasterNotation::metaInfo() const
-{
-    Meta meta = Notation::metaInfo();
-
-    meta.fileName = masterScore()->fileInfo()->fileName();
-    meta.filePath = masterScore()->fileInfo()->filePath();
-    meta.partsCount = masterScore()->excerpts().count();
-
-    return meta;
-}
-
-void MasterNotation::setMetaInfo(const Meta& meta)
-{
-    Notation::setMetaInfo(meta);
-}
-
 void MasterNotation::setMasterScore(Ms::MasterScore* score)
 {
     if (masterScore() == score) {
@@ -534,11 +518,6 @@ ExcerptNotationList MasterNotation::potentialExcerpts() const
 
     for (Ms::Excerpt* excerpt : excerpts) {
         IExcerptNotationPtr excerptNotation = std::make_shared<ExcerptNotation>(excerpt);
-
-        Meta meta;
-        meta.title = excerpt->title();
-        excerptNotation->setMetaInfo(meta);
-
         result.push_back(excerptNotation);
     }
 
@@ -557,10 +536,6 @@ void MasterNotation::initExcerpts(const QList<Ms::Excerpt*>& excerpts)
 
     for (Ms::Excerpt* excerpt : excerpts) {
         IExcerptNotationPtr excerptNotation = std::make_shared<ExcerptNotation>(excerpt);
-
-        Meta meta;
-        meta.title = excerpt->title();
-        excerptNotation->setMetaInfo(meta);
 
         get_impl(excerptNotation)->init();
         excerptNotation->notation()->setOpened(true);

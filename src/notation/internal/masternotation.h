@@ -52,9 +52,6 @@ public:
 
     INotationPtr notation() override;
 
-    Meta metaInfo() const override;
-    void setMetaInfo(const Meta& meta) override;
-
     RetVal<bool> created() const override;
 
     mu::ValNt<bool> needSave() const override;

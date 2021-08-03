@@ -217,7 +217,12 @@ void PlaybackController::onNotationChanged()
         return;
     }
 
-    io::path notationKey = m_notation->metaInfo().filePath;
+    project::INotationProjectPtr project = globalContext()->currentProject();
+    IF_ASSERT_FAILED(project) {
+        return;
+    }
+
+    io::path notationKey = project->path();
 
     auto search = m_sequenceIdMap.find(notationKey.toStdString());
 

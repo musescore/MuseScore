@@ -124,10 +124,9 @@ QVariant NotationSwitchListModel::data(const QModelIndex& index, int role) const
     }
 
     INotationPtr notation = m_notations[index.row()];
-    Meta meta = notation->metaInfo();
 
     switch (role) {
-    case RoleTitle: return QVariant::fromValue(meta.title);
+    case RoleTitle: return QVariant::fromValue(notation->title());
     case RoleNeedSave: return QVariant::fromValue(masterNotation()->needSave().val);
     }
 
