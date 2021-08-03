@@ -40,7 +40,7 @@ public:
 
     const Part* part(const ID& partId) const override;
     const Staff* staff(const ID& staffId) const override;
-    bool partExists(const ID &partId) const override;
+    bool partExists(const ID& partId) const override;
 
     void setParts(const PartInstrumentList& parts) override;
     void setScoreOrder(const ScoreOrder& order) override;
@@ -64,8 +64,9 @@ public:
     void moveStaves(const IDList& sourceStavesIds, const ID& destinationStaffId, InsertMode mode = InsertMode::Before) override;
 
     void appendStaff(Staff* staff, const ID& destinationPartId) override;
-    void appendPart(Part *part) override;
-    void cloneStaff(const ID& sourceStaffId, const ID& destinationStaffId) override;
+    void appendPart(Part* part) override;
+
+    void linkStaves(const ID& sourceStaffId, const ID& destinationStaffId) override;
 
     void replaceInstrument(const InstrumentKey& instrumentKey, const Instrument& newInstrument) override;
     void replaceDrumset(const InstrumentKey& instrumentKey, const Drumset& newDrumset) override;
@@ -108,7 +109,11 @@ private:
     void setBracketsAndBarlines();
 
     void notifyAboutPartChanged(Part* part) const;
+    void notifyAboutPartAdded(Part* part) const;
+    void notifyAboutPartRemoved(Part* part) const;
     void notifyAboutStaffChanged(Staff* staff) const;
+    void notifyAboutStaffAdded(Staff* staff, const ID& partId) const;
+    void notifyAboutStaffRemoved(Staff* staff) const;
     async::ChangedNotifier<const Staff*>* staffChangedNotifier(const ID& partId) const;
 
     IGetScore* m_getScore = nullptr;

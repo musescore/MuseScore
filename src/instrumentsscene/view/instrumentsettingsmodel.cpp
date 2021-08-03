@@ -47,7 +47,7 @@ void InstrumentSettingsModel::load(const QVariant& instrument)
 
 void InstrumentSettingsModel::replaceInstrument()
 {
-    if (!parts()) {
+    if (!masterNotationParts()) {
         return;
     }
 
@@ -58,7 +58,7 @@ void InstrumentSettingsModel::replaceInstrument()
     }
 
     Instrument newInstrument = selectedInstrument.val;
-    parts()->replaceInstrument(m_instrumentKey, newInstrument);
+    masterNotationParts()->replaceInstrument(m_instrumentKey, newInstrument);
 
     m_instrumentKey.instrumentId = newInstrument.id;
     m_instrumentName = newInstrument.name;
@@ -84,35 +84,44 @@ QString InstrumentSettingsModel::abbreviature() const
 
 void InstrumentSettingsModel::setInstrumentName(const QString& name)
 {
-    if (m_instrumentName == name || !parts()) {
+    if (m_instrumentName == name || !notationParts()) {
         return;
     }
 
     m_instrumentName = name;
-    parts()->setInstrumentName(m_instrumentKey, name);
+    notationParts()->setInstrumentName(m_instrumentKey, name);
 }
 
 void InstrumentSettingsModel::setPartName(const QString& name)
 {
-    if (m_partName == name || !parts()) {
+    if (m_partName == name || !notationParts()) {
         return;
     }
 
     m_partName = name;
-    parts()->setPartName(m_instrumentKey.partId, name);
+    notationParts()->setPartName(m_instrumentKey.partId, name);
 }
 
 void InstrumentSettingsModel::setAbbreviature(const QString& abbreviature)
 {
-    if (m_instrumentAbbreviature == abbreviature || !parts()) {
+    if (m_instrumentAbbreviature == abbreviature || !notationParts()) {
         return;
     }
 
     m_instrumentAbbreviature = abbreviature;
-    parts()->setInstrumentAbbreviature(m_instrumentKey, abbreviature);
+    notationParts()->setInstrumentAbbreviature(m_instrumentKey, abbreviature);
 }
 
-INotationPartsPtr InstrumentSettingsModel::parts() const
+INotationPartsPtr InstrumentSettingsModel::notationParts() const
+{
+    if (context()->currentNotation()) {
+        return context()->currentNotation()->parts();
+    }
+
+    return nullptr;
+}
+
+INotationPartsPtr InstrumentSettingsModel::masterNotationParts() const
 {
     if (context()->currentMasterNotation()) {
         return context()->currentMasterNotation()->parts();

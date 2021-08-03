@@ -61,7 +61,8 @@ signals:
     void dataChanged();
 
 private:
-    notation::INotationPartsPtr parts() const;
+    notation::INotationPartsPtr notationParts() const;
+    notation::INotationPartsPtr masterNotationParts() const;
 
     notation::InstrumentKey m_instrumentKey;
     QString m_partName;

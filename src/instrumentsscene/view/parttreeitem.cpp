@@ -54,8 +54,7 @@ void PartTreeItem::createAndAppendPart(const ID& masterPartId)
         return;
     }
 
-    Part* newPart = new Part(*masterPart);
-    notation()->parts()->appendPart(newPart);
+    notation()->parts()->appendPart(masterPart->clone());
 }
 
 QString PartTreeItem::instrumentId() const

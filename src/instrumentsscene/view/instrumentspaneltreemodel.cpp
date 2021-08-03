@@ -101,18 +101,15 @@ void InstrumentsPanelTreeModel::load()
     }
 
     TRACEFUNC;
+
     beginResetModel();
 
     m_rootItem = new RootTreeItem(m_masterNotation, m_notation);
 
     async::NotifyList<const Part*> allParts = m_masterNotation->parts()->partList();
-    IDList notationPartIdList = currentNotationPartIdList();
 
     for (const Part* part : allParts) {
-        AbstractInstrumentsPanelTreeItem* partItem = loadPart(part);
-        bool visible = part->show() && notationPartIdList.contains(part->id());
-        partItem->setIsVisible(visible);
-        m_rootItem->appendChild(partItem);
+        m_rootItem->appendChild(loadPart(part));
     }
 
     allParts.onChanged(this, [this]() {
@@ -500,6 +497,8 @@ void InstrumentsPanelTreeModel::updateRemovingAvailability()
 
 AbstractInstrumentsPanelTreeItem* InstrumentsPanelTreeModel::loadPart(const Part* part)
 {
+    TRACEFUNC;
+
     auto partItem = buildPartItem(part);
     QString partId = part->id();
 
@@ -575,9 +574,12 @@ AbstractInstrumentsPanelTreeItem* InstrumentsPanelTreeModel::buildPartItem(const
 
 void InstrumentsPanelTreeModel::updatePartItem(PartTreeItem* item, const Part* part)
 {
+    IDList notationPartIdList = currentNotationPartIdList();
+    bool visible = part->show() && notationPartIdList.contains(part->id());
+
     item->setId(part->id());
     item->setTitle(part->partName().isEmpty() ? part->instrument()->name() : part->partName());
-    item->setIsVisible(part->show());
+    item->setIsVisible(visible);
     item->setInstrumentId(part->instrumentId());
     item->setInstrumentName(part->instrument()->name());
     item->setInstrumentAbbreviature(part->instrument()->abbreviature());

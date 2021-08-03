@@ -69,7 +69,8 @@ public:
 
     virtual void appendStaff(Staff* staff, const ID& destinationPartId) = 0;
     virtual void appendPart(Part* part) = 0;
-    virtual void cloneStaff(const ID& sourceStaffId, const ID& destinationStaffId) = 0;
+
+    virtual void linkStaves(const ID& sourceStaffId, const ID& destinationStaffId) = 0;
 
     virtual void replaceInstrument(const InstrumentKey& instrumentKey, const Instrument& newInstrument) = 0;
     virtual void replaceDrumset(const InstrumentKey& instrumentKey, const Drumset& newDrumset) = 0;
