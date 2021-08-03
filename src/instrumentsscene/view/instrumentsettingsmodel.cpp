@@ -36,9 +36,9 @@ void InstrumentSettingsModel::load(const QVariant& instrument)
 {
     QVariantMap map = instrument.toMap();
 
-    m_partId = map["partId"].toString();
+    m_instrumentKey.partId = map["partId"].toString();
+    m_instrumentKey.instrumentId = map["instrumentId"].toString();
     m_partName = map["partName"].toString();
-    m_instrumentId = map["instrumentId"].toString();
     m_instrumentName = map["instrumentName"].toString();
     m_instrumentAbbreviature = map["abbreviature"].toString();
 
@@ -51,16 +51,16 @@ void InstrumentSettingsModel::replaceInstrument()
         return;
     }
 
-    RetVal<Instrument> selectedInstrument = selectInstrumentsScenario()->selectInstrument(m_instrumentId.toStdString());
+    RetVal<Instrument> selectedInstrument = selectInstrumentsScenario()->selectInstrument(m_instrumentKey.instrumentId.toStdString());
     if (!selectedInstrument.ret) {
         LOGE() << selectedInstrument.ret.toString();
         return;
     }
 
     Instrument newInstrument = selectedInstrument.val;
-    parts()->replaceInstrument(m_instrumentId, m_partId, newInstrument);
+    parts()->replaceInstrument(m_instrumentKey, newInstrument);
 
-    m_instrumentId = newInstrument.id;
+    m_instrumentKey.instrumentId = newInstrument.id;
     m_instrumentName = newInstrument.name;
     m_instrumentAbbreviature = newInstrument.abbreviature();
 
@@ -89,7 +89,7 @@ void InstrumentSettingsModel::setInstrumentName(const QString& name)
     }
 
     m_instrumentName = name;
-    parts()->setInstrumentName(m_instrumentId, m_partId, name);
+    parts()->setInstrumentName(m_instrumentKey, name);
 }
 
 void InstrumentSettingsModel::setPartName(const QString& name)
@@ -99,7 +99,7 @@ void InstrumentSettingsModel::setPartName(const QString& name)
     }
 
     m_partName = name;
-    parts()->setPartName(m_partId, name);
+    parts()->setPartName(m_instrumentKey.partId, name);
 }
 
 void InstrumentSettingsModel::setAbbreviature(const QString& abbreviature)
@@ -109,7 +109,7 @@ void InstrumentSettingsModel::setAbbreviature(const QString& abbreviature)
     }
 
     m_instrumentAbbreviature = abbreviature;
-    parts()->setInstrumentAbbreviature(m_instrumentId, m_partId, abbreviature);
+    parts()->setInstrumentAbbreviature(m_instrumentKey, abbreviature);
 }
 
 INotationPartsPtr InstrumentSettingsModel::parts() const

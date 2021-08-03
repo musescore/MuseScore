@@ -416,11 +416,6 @@ const InstrumentList* Part::instruments() const
     return &_instruments;
 }
 
-bool Part::isDoublingInstrument(const QString& instrumentId) const
-{
-    return instrument()->getId() != instrumentId;
-}
-
 //---------------------------------------------------------
 //   instrumentId
 //---------------------------------------------------------

@@ -25,9 +25,12 @@ using namespace mu::instrumentsscene;
 using namespace mu::notation;
 using ItemType = InstrumentsTreeItemType::ItemType;
 
-PartTreeItem::PartTreeItem(INotationPartsPtr notationParts, QObject* parent)
-    : AbstractInstrumentsPanelTreeItem(ItemType::PART, notationParts, parent)
+PartTreeItem::PartTreeItem(IMasterNotationPtr masterNotation, INotationPtr notation, QObject* parent)
+    : AbstractInstrumentsPanelTreeItem(ItemType::PART, masterNotation, notation, parent)
 {
+    connect(this, &AbstractInstrumentsPanelTreeItem::isVisibleChanged, this, [this](const bool isVisible) {
+        this->notation()->parts()->setPartVisible(id(), isVisible);
+    });
 }
 
 QString PartTreeItem::instrumentId() const
@@ -79,8 +82,7 @@ void PartTreeItem::moveChildren(const int sourceRow, const int count, AbstractIn
     }
 
     AbstractInstrumentsPanelTreeItem* destinationStaffItem = destinationParent->childAtRow(destinationRowLast);
-    notationParts()->moveStaves(stavesIds, destinationStaffItem->id(), moveMode);
-
+    notation()->parts()->moveStaves(stavesIds, destinationStaffItem->id(), moveMode);
     AbstractInstrumentsPanelTreeItem::moveChildren(sourceRow, count, destinationParent, destinationRow);
 }
 
@@ -93,7 +95,7 @@ void PartTreeItem::removeChildren(const int row, const int count, const bool del
     }
 
     if (deleteChild) {
-        notationParts()->removeStaves(stavesIds);
+        notation()->parts()->removeStaves(stavesIds);
     }
 
     AbstractInstrumentsPanelTreeItem::removeChildren(row, count, deleteChild);

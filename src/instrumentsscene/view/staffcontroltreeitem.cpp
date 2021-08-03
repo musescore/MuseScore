@@ -24,8 +24,8 @@
 using namespace mu::instrumentsscene;
 using namespace mu::notation;
 
-StaffControlTreeItem::StaffControlTreeItem(INotationPartsPtr notationParts, QObject* parent)
-    : AbstractInstrumentsPanelTreeItem(InstrumentsTreeItemType::ItemType::CONTROL_ADD_STAFF, notationParts, parent)
+StaffControlTreeItem::StaffControlTreeItem(IMasterNotationPtr masterNotation, INotationPtr notation, QObject* parent)
+    : AbstractInstrumentsPanelTreeItem(InstrumentsTreeItemType::ItemType::CONTROL_ADD_STAFF, masterNotation, notation, parent)
 {
 }
 
@@ -41,12 +41,12 @@ void StaffControlTreeItem::appendNewItem()
     Staff* staff = new Staff();
     staff->setDefaultClefType(part->instrument()->clefType(lastStaffIndex));
 
-    notationParts()->appendStaff(staff, m_partId);
+    masterNotation()->parts()->appendStaff(staff, m_partId);
 }
 
 const Part* StaffControlTreeItem::part() const
 {
-    for (const Part* part : notationParts()->partList()) {
+    for (const Part* part : notation()->parts()->partList()) {
         if (part->id() == m_partId) {
             return part;
         }

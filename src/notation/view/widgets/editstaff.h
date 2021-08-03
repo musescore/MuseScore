@@ -99,10 +99,9 @@ private:
 
     Ms::Staff* m_staff = nullptr;
     Ms::Staff* m_orgStaff = nullptr;
-    ID m_partId;
-    ID m_instrumentId;
     Instrument m_instrument;
     Instrument m_orgInstrument;
+    InstrumentKey m_instrumentKey;
     int m_minPitchA, m_maxPitchA, m_minPitchP, m_maxPitchP;
     Ms::Fraction m_tickStart, m_tickEnd;
 

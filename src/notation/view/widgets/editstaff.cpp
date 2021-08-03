@@ -120,8 +120,9 @@ void EditStaff::setStaff(Staff* s, const Fraction& tick)
     m_instrument = InstrumentsConverter::convertInstrument(*part->instrument(tick));
     m_orgInstrument = m_instrument;
 
-    m_partId = part->id();
-    m_instrumentId = m_instrument.id;
+    m_instrumentKey.instrumentId = m_instrument.id;
+    m_instrumentKey.partId = part->id();
+    m_instrumentKey.tick = tick;
 
     m_staff = new Ms::Staff(score);
     Ms::StaffType* stt = m_staff->setStaffType(Fraction(0, 1), *m_orgStaff->staffType(Fraction(0, 1)));
@@ -452,14 +453,8 @@ Instrument EditStaff::instrument() const
 
     async::NotifyList<const Part*> parts = notationParts->partList();
     for (const Part* part: parts) {
-        if (part->id() == m_partId) {
-            async::NotifyList<Instrument> instruments = notationParts->instrumentList(part->id());
-
-            for (const Instrument& instrument: instruments) {
-                if (instrument.id == m_instrumentId) {
-                    return instrument;
-                }
-            }
+        if (part->id() == m_instrumentKey.partId) {
+            return InstrumentsConverter::convertInstrument(*part->instrument(m_instrumentKey.tick));
         }
     }
 
@@ -545,23 +540,23 @@ void EditStaff::applyPartProperties()
     Ms::Interval v2 = m_orgInstrument.transpose;
 
     if (isInstrumentChanged()) {
-        notationParts()->replaceInstrument(m_instrumentId, m_partId, m_instrument);
+        notationParts()->replaceInstrument(m_instrumentKey, m_instrument);
     }
 
     if (part->partName() != newPartName) {
-        notationParts()->setPartName(m_partId, newPartName);
+        notationParts()->setPartName(m_instrumentKey.partId, newPartName);
     }
 
     bool preferSharpFlatChanged = (part->preferSharpFlat() != SharpFlat(preferSharpFlat->currentIndex()));
     // instrument becomes non/octave-transposing, preferSharpFlat isn't useful anymore
     if ((iList->currentIndex() == 0) || (iList->currentIndex() == 25)) {
-        notationParts()->setPartSharpFlat(m_partId, SharpFlat::DEFAULT);
+        notationParts()->setPartSharpFlat(m_instrumentKey.partId, SharpFlat::DEFAULT);
     } else {
-        notationParts()->setPartSharpFlat(m_partId, SharpFlat(preferSharpFlat->currentIndex()));
+        notationParts()->setPartSharpFlat(m_instrumentKey.partId, SharpFlat(preferSharpFlat->currentIndex()));
     }
 
     if (v1 != v2 || preferSharpFlatChanged) {
-        notationParts()->setPartTransposition(m_partId, v2);
+        notationParts()->setPartTransposition(m_instrumentKey.partId, v2);
     }
 }
 
@@ -578,7 +573,7 @@ bool EditStaff::isInstrumentChanged()
 
 void EditStaff::showReplaceInstrumentDialog()
 {
-    RetVal<Instrument> selectedInstrument = selectInstrumentsScenario()->selectInstrument(m_instrumentId.toStdString());
+    RetVal<Instrument> selectedInstrument = selectInstrumentsScenario()->selectInstrument(m_instrumentKey.instrumentId.toStdString());
     if (!selectedInstrument.ret) {
         LOGE() << selectedInstrument.ret.toString();
         return;
