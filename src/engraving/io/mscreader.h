@@ -78,6 +78,10 @@ private:
         virtual bool open(QIODevice* device, const QString& filePath) = 0;
         virtual void close() = 0;
         virtual bool isOpened() const = 0;
+        //! NOTE In the case of reading from a directory,
+        //! it may happen that we are not reading a container (a directory with a certain structure),
+        //! but only one file among others (`.mscx` from MU 3.x)
+        virtual bool isContainer() const = 0;
         virtual QStringList fileList() const = 0;
         virtual QByteArray fileData(const QString& fileName) const = 0;
     };
@@ -88,6 +92,7 @@ private:
         bool open(QIODevice* device, const QString& filePath) override;
         void close() override;
         bool isOpened() const override;
+        bool isContainer() const override;
         QStringList fileList() const override;
         QByteArray fileData(const QString& fileName) const override;
     private:
@@ -101,6 +106,7 @@ private:
         bool open(QIODevice* device, const QString& filePath) override;
         void close() override;
         bool isOpened() const override;
+        bool isContainer() const override;
         QStringList fileList() const override;
         QByteArray fileData(const QString& fileName) const override;
     private:
@@ -112,6 +118,7 @@ private:
         bool open(QIODevice* device, const QString& filePath) override;
         void close() override;
         bool isOpened() const override;
+        bool isContainer() const override;
         QStringList fileList() const override;
         QByteArray fileData(const QString& fileName) const override;
     private:
