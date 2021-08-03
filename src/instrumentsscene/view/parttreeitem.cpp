@@ -28,9 +28,33 @@ using ItemType = InstrumentsTreeItemType::ItemType;
 PartTreeItem::PartTreeItem(IMasterNotationPtr masterNotation, INotationPtr notation, QObject* parent)
     : AbstractInstrumentsPanelTreeItem(ItemType::PART, masterNotation, notation, parent)
 {
+    listenVisibilityChanged();
+}
+
+void PartTreeItem::listenVisibilityChanged()
+{
     connect(this, &AbstractInstrumentsPanelTreeItem::isVisibleChanged, this, [this](const bool isVisible) {
-        this->notation()->parts()->setPartVisible(id(), isVisible);
+        INotationPartsPtr parts = notation()->parts();
+        if (!parts) {
+            return;
+        }
+
+        if (parts->partExists(id())) {
+            parts->setPartVisible(id(), isVisible);
+        } else if (isVisible) {
+            createAndAppendPart(id());
+        }
     });
+}
+
+void PartTreeItem::createAndAppendPart(const ID& masterPartId)
+{
+    const Part* masterPart = masterNotation()->parts()->part(masterPartId);
+    if (!masterPart) {
+        return;
+    }
+
+    notation()->parts()->appendPart(masterPart->clone());
 }
 
 QString PartTreeItem::instrumentId() const

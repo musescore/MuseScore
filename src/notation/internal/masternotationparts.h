@@ -41,12 +41,14 @@ public:
     void removeStaves(const IDList& stavesIds) override;
 
     void appendStaff(Staff* staff, const ID& destinationPartId) override;
-    void cloneStaff(const ID& sourceStaffId, const ID& destinationStaffId) override;
+    void linkStaves(const ID& sourceStaffId, const ID& destinationStaffId) override;
 
     void replaceInstrument(const InstrumentKey& instrumentKey, const Instrument& newInstrument) override;
     void replaceDrumset(const InstrumentKey& instrumentKey, const Drumset& newDrumset) override;
 
 private:
+    Ms::MasterScore* masterScore() const;
+
     void startGlobalEdit();
     void endGlobalEdit();
 

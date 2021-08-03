@@ -23,6 +23,8 @@
 #include "masternotationparts.h"
 
 #include "scoreorderconverter.h"
+
+#include "libmscore/masterscore.h"
 #include "libmscore/scoreorder.h"
 
 #include "log.h"
@@ -37,6 +39,11 @@ MasterNotationParts::MasterNotationParts(IGetScore* getScore, INotationInteracti
 void MasterNotationParts::setExcerpts(ExcerptNotationList excerpts)
 {
     m_excerpts = excerpts;
+}
+
+Ms::MasterScore* MasterNotationParts::masterScore() const
+{
+    return dynamic_cast<Ms::MasterScore*>(score());
 }
 
 void MasterNotationParts::startGlobalEdit()
@@ -116,16 +123,16 @@ void MasterNotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
     apply();
 }
 
-void MasterNotationParts::cloneStaff(const ID& sourceStaffId, const ID& destinationStaffId)
+void MasterNotationParts::linkStaves(const ID& sourceStaffId, const ID& destinationStaffId)
 {
     TRACEFUNC;
 
     startEdit();
 
-    NotationParts::cloneStaff(sourceStaffId, destinationStaffId);
+    NotationParts::linkStaves(sourceStaffId, destinationStaffId);
 
     for (INotationPartsPtr parts : excerptsParts()) {
-        parts->cloneStaff(sourceStaffId, destinationStaffId);
+        parts->linkStaves(sourceStaffId, destinationStaffId);
     }
 
     apply();

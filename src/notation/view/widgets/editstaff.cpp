@@ -451,14 +451,8 @@ Instrument EditStaff::instrument() const
         return Instrument();
     }
 
-    async::NotifyList<const Part*> parts = notationParts->partList();
-    for (const Part* part: parts) {
-        if (part->id() == m_instrumentKey.partId) {
-            return InstrumentsConverter::convertInstrument(*part->instrument(m_instrumentKey.tick));
-        }
-    }
-
-    return Instrument();
+    const Part* part = notationParts->part(m_instrumentKey.partId);
+    return part ? InstrumentsConverter::convertInstrument(*part->instrument(m_instrumentKey.tick)) : Instrument();
 }
 
 void EditStaff::applyStaffProperties()

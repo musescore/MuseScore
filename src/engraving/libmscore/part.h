@@ -85,6 +85,8 @@ public:
     Part(Score* = 0);
     void initFromInstrTemplate(const InstrumentTemplate*);
 
+    Part* clone() const;
+
     ElementType type() const override { return ElementType::PART; }
 
     void read(XmlReader&);
