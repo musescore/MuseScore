@@ -125,18 +125,12 @@ bool NotationParts::partExists(const ID& partId) const
 
 Part* NotationParts::partModifiable(const ID& partId) const
 {
-    for (Part* part: score()->parts()) {
-        if (part->id() == partId) {
-            return part;
-        }
-    }
-
-    return nullptr;
+    return score()->part(partId.toUint64());
 }
 
 Staff* NotationParts::staffModifiable(const ID& staffId) const
 {
-    return score()->staff(staffId);
+    return score()->staff(staffId.toUint64());
 }
 
 std::vector<Staff*> NotationParts::staves(const IDList& stavesIds) const
@@ -210,7 +204,7 @@ void NotationParts::setPartName(const ID& partId, const QString& name)
 
     startEdit();
 
-    doSetPartName(part, name);
+    score()->undo(new Ms::ChangePart(part, new Ms::Instrument(*part->instrument()), name));
 
     apply();
 
@@ -260,26 +254,26 @@ void NotationParts::updatePartTitles()
     }
 }
 
-ID NotationParts::newPartId() const
+Ms::ID NotationParts::newPartId() const
 {
-    ID maxId = ID();
+    Ms::ID maxId = 0;
 
     for (const Part* part : score()->parts()) {
         maxId = std::max(maxId, part->id());
     }
 
-    return maxId + QString::number(1);
+    return maxId + 1;
 }
 
-ID NotationParts::newStaffId() const
+Ms::ID NotationParts::newStaffId() const
 {
-    ID maxId = ID();
+    Ms::ID maxId = 0;
 
     for (const Staff* staff : score()->staves()) {
         maxId = std::max(maxId, staff->id());
     }
 
-    return maxId + QString::number(1);
+    return maxId + 1;
 }
 
 void NotationParts::doMoveStaves(const std::vector<Staff*>& staves, int destinationStaffIndex, Part* destinationPart)
@@ -578,7 +572,7 @@ void NotationParts::appendPart(Part* part)
         return;
     }
 
-    if (part->id().isNull()) {
+    if (!ID(part->id()).isValid()) {
         part->setId(newPartId());
     }
 
@@ -754,21 +748,14 @@ void NotationParts::removeStaves(const IDList& stavesIds)
     apply();
 }
 
-void NotationParts::doSetPartName(Part* part, const QString& name)
-{
-    TRACEFUNC;
-
-    score()->undo(new Ms::ChangePart(part, new Ms::Instrument(*part->instrument()), name));
-}
-
 void NotationParts::moveParts(const IDList& sourcePartsIds, const ID& destinationPartId, InsertMode mode)
 {
     TRACEFUNC;
 
-    IDList partIds;
+    QList<ID> partIds;
 
     for (Ms::Part* currentPart: score()->parts()) {
-        partIds << currentPart->id();
+        partIds.push_back(currentPart->id());
     }
 
     for (const ID& sourcePartId: sourcePartsIds) {
@@ -779,7 +766,7 @@ void NotationParts::moveParts(const IDList& sourcePartsIds, const ID& destinatio
     }
 
     PartInstrumentList parts;
-    for (ID& partId: partIds) {
+    for (const ID& partId: partIds) {
         PartInstrument pi;
         pi.isExistingPart = true;
         pi.partId = partId;
@@ -903,15 +890,15 @@ void NotationParts::removeMissingParts(const PartInstrumentList& parts)
     IDList partIds;
     for (const PartInstrument& pi: parts) {
         if (pi.isExistingPart) {
-            partIds << pi.partId;
+            partIds.push_back(pi.partId);
         }
     }
 
     for (const Part* part: partList()) {
-        if (partIds.contains(part->id())) {
+        if (containsId(partIds, part->id())) {
             continue;
         }
-        partsToRemove << part->id();
+        partsToRemove.push_back(part->id());
     }
 
     doRemoveParts(partsToRemove);

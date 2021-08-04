@@ -360,7 +360,7 @@ Item {
 
                     popup = popupLoader.createPopup(instrumentSettingsComp, this)
 
-                    item["partId"] = model.itemRole.id()
+                    item["partId"] = model.itemRole.id
                     item["partName"] = model.itemRole.title
                     item["instrumentId"] = model.itemRole.instrumentId()
                     item["instrumentName"] = model.itemRole.instrumentName()
@@ -370,7 +370,7 @@ Item {
 
                     popup = popupLoader.createPopup(staffSettingsComp, this)
 
-                    item["staffId"] = model.itemRole.id()
+                    item["staffId"] = model.itemRole.id
                     item["isSmall"] = model.itemRole.isSmall()
                     item["cutawayEnabled"] = model.itemRole.cutawayEnabled()
                     item["type"] = model.itemRole.staffType()

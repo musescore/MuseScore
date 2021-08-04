@@ -567,7 +567,7 @@ bool EditStaff::isInstrumentChanged()
 
 void EditStaff::showReplaceInstrumentDialog()
 {
-    RetVal<Instrument> selectedInstrument = selectInstrumentsScenario()->selectInstrument(m_instrumentKey.instrumentId.toStdString());
+    RetVal<Instrument> selectedInstrument = selectInstrumentsScenario()->selectInstrument(m_instrumentKey);
     if (!selectedInstrument.ret) {
         LOGE() << selectedInstrument.ret.toString();
         return;

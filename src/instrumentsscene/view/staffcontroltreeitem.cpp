@@ -44,7 +44,7 @@ void StaffControlTreeItem::appendNewItem()
     masterNotation()->parts()->appendStaff(staff, m_partId);
 }
 
-void StaffControlTreeItem::setPartId(const QString& id)
+void StaffControlTreeItem::setPartId(const ID& id)
 {
     m_partId = id;
 }

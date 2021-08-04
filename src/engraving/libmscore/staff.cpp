@@ -96,15 +96,6 @@ Staff* Staff::clone() const
 }
 
 //---------------------------------------------------------
-//   id
-//---------------------------------------------------------
-
-QString Staff::id() const
-{
-    return _id;
-}
-
-//---------------------------------------------------------
 //   idx
 //---------------------------------------------------------
 
@@ -719,7 +710,9 @@ Fraction Staff::currentKeyTick(const Fraction& tick) const
 
 void Staff::write(XmlWriter& xml) const
 {
-    xml.stag(this, QString("id=\"%1\"").arg(_id));
+    if (_id != INVALID_ID) {
+        xml.stag(this, QString("id=\"%1\"").arg(_id));
+    }
 
     if (links()) {
         Score* s = masterScore();
@@ -799,7 +792,9 @@ void Staff::write(XmlWriter& xml) const
 
 void Staff::read(XmlReader& e)
 {
-    _id = e.attribute("id");
+    if (e.hasAttribute("id")) {
+        _id = e.attribute("id").toULongLong();
+    }
 
     while (e.readNextStartElement()) {
         if (!readProperties(e)) {
@@ -936,11 +931,6 @@ qreal Staff::spatium(const Element* e) const
 qreal Staff::staffMag(const StaffType* stt) const
 {
     return (stt->small() ? score()->styleD(Sid::smallStaffMag) : 1.0) * stt->userMag();
-}
-
-void Staff::setId(const QString& id)
-{
-    _id = id;
 }
 
 qreal Staff::staffMag(const Fraction& tick) const
@@ -1235,6 +1225,7 @@ void Staff::init(const InstrumentTemplate* t, const StaffType* staffType, int ci
 
 void Staff::init(const Staff* s)
 {
+    _id                = s->_id;
     _staffTypeList     = s->_staffTypeList;
     setDefaultClefType(s->defaultClefType());
     for (BracketItem* i : s->_brackets) {
@@ -1254,6 +1245,16 @@ void Staff::init(const Staff* s)
     _mergeMatchingRests = s->_mergeMatchingRests;
     _color             = s->_color;
     _userDist          = s->_userDist;
+}
+
+ID Staff::id() const
+{
+    return _id;
+}
+
+void Staff::setId(const ID& id)
+{
+    _id = id;
 }
 
 void Staff::setScore(Score* score)

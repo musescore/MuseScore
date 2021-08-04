@@ -48,7 +48,7 @@ public:
 
 private:
     void listenVisibilityChanged();
-    void createAndAppendPart(const notation::ID& masterPartId);
+    void createAndAppendPart(const ID& masterPartId);
 
     QString m_instrumentId;
     QString m_instrumentName;

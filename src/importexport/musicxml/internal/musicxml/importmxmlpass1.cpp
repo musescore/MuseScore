@@ -1712,7 +1712,6 @@ static void createPart(Score* score, const QString& id, PartMap& pm)
 {
     Part* part = new Part(score);
     pm.insert(id, part);
-    part->setId(id);
     score->appendPart(part);
     Staff* staff = new Staff(score);
     staff->setPart(part);

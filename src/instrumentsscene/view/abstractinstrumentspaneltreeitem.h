@@ -36,6 +36,7 @@ class AbstractInstrumentsPanelTreeItem : public QObject
 {
     Q_OBJECT
 
+    Q_PROPERTY(QString id READ idStr CONSTANT)
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
     Q_PROPERTY(int type READ type NOTIFY typeChanged)
     Q_PROPERTY(bool canChangeVisibility READ canChangeVisibility NOTIFY canChangeVisibilityChanged)
@@ -50,8 +51,8 @@ public:
     Q_INVOKABLE virtual bool canAcceptDrop(const int type) const;
     Q_INVOKABLE virtual void appendNewItem();
 
-    Q_INVOKABLE QString id() const;
-
+    ID id() const;
+    QString idStr() const;
     QString title() const;
     int type() const;
     bool isVisible() const;
@@ -66,7 +67,7 @@ public:
     QList<AbstractInstrumentsPanelTreeItem*> childrenItems() const;
     bool isEmpty() const;
 
-    AbstractInstrumentsPanelTreeItem* childAtId(const QString& id) const;
+    AbstractInstrumentsPanelTreeItem* childAtId(const ID& id) const;
     AbstractInstrumentsPanelTreeItem* childAtRow(const int row) const;
 
     void appendChild(AbstractInstrumentsPanelTreeItem* child);
@@ -84,7 +85,7 @@ public slots:
     void setType(InstrumentsTreeItemType::ItemType type);
     void setTitle(QString title);
     void setIsVisible(bool isVisible);
-    void setId(const QString& id);
+    void setId(const ID& id);
 
 signals:
     void typeChanged(InstrumentsTreeItemType::ItemType type);
@@ -101,7 +102,7 @@ private:
     QList<AbstractInstrumentsPanelTreeItem*> m_children;
     AbstractInstrumentsPanelTreeItem* m_parent = nullptr;
 
-    QString m_id;
+    ID m_id;
     QString m_title;
     InstrumentsTreeItemType::ItemType m_type = InstrumentsTreeItemType::ItemType::UNDEFINED;
     bool m_isVisible = false;

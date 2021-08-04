@@ -53,9 +53,14 @@ void AbstractInstrumentsPanelTreeItem::appendNewItem()
 {
 }
 
-QString AbstractInstrumentsPanelTreeItem::id() const
+mu::ID AbstractInstrumentsPanelTreeItem::id() const
 {
     return m_id;
+}
+
+QString AbstractInstrumentsPanelTreeItem::idStr() const
+{
+    return m_id.toQString();
 }
 
 bool AbstractInstrumentsPanelTreeItem::canChangeVisibility() const
@@ -105,7 +110,7 @@ bool AbstractInstrumentsPanelTreeItem::isEmpty() const
     return m_children.isEmpty();
 }
 
-AbstractInstrumentsPanelTreeItem* AbstractInstrumentsPanelTreeItem::childAtId(const QString& id) const
+AbstractInstrumentsPanelTreeItem* AbstractInstrumentsPanelTreeItem::childAtId(const ID& id) const
 {
     for (AbstractInstrumentsPanelTreeItem* item: m_children) {
         if (item->id() == id) {
@@ -244,7 +249,7 @@ void AbstractInstrumentsPanelTreeItem::setIsVisible(bool isVisible)
     }
 }
 
-void AbstractInstrumentsPanelTreeItem::setId(const QString& id)
+void AbstractInstrumentsPanelTreeItem::setId(const ID& id)
 {
     m_id = id;
 }

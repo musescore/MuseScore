@@ -83,14 +83,13 @@ protected:
 private:
     void updatePartTitles();
 
-    ID newPartId() const;
-    ID newStaffId() const;
+    Ms::ID newPartId() const;
+    Ms::ID newStaffId() const;
 
     void doMoveStaves(const std::vector<Staff*>& staves, int destinationStaffIndex, Part* destinationPart = nullptr);
     void doSetStaffVisible(Staff* staff, bool visible);
     void doSetStaffVoiceVisible(Staff* staff, int voiceIndex, bool visible);
     void doRemoveParts(const IDList& partsIds);
-    void doSetPartName(Part* part, const QString& name);
 
     Part* partModifiable(const ID& partId) const;
     Staff* staffModifiable(const ID& staffId) const;

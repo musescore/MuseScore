@@ -65,6 +65,16 @@ void Part::initFromInstrTemplate(const InstrumentTemplate* t)
     setInstrument(Instrument::fromTemplate(t));
 }
 
+ID Part::id() const
+{
+    return _id;
+}
+
+void Part::setId(const ID& id)
+{
+    _id = id;
+}
+
 Part* Part::clone() const
 {
     return new Part(*this);
@@ -175,7 +185,9 @@ bool Part::readProperties(XmlReader& e)
 
 void Part::read(XmlReader& e)
 {
-    _id = e.attribute("id");
+    if (e.hasAttribute("id")) {
+        _id = e.attribute("id").toULongLong();
+    }
 
     while (e.readNextStartElement()) {
         if (!readProperties(e)) {
@@ -193,7 +205,9 @@ void Part::read(XmlReader& e)
 
 void Part::write(XmlWriter& xml) const
 {
-    xml.stag(this, QString("id=\"%1\"").arg(_id));
+    if (_id != INVALID_ID) {
+        xml.stag(this, QString("id=\"%1\"").arg(_id));
+    }
 
     for (const Staff* staff : _staves) {
         staff->write(xml);
