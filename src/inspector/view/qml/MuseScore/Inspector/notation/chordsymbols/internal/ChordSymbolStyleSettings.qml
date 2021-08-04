@@ -57,7 +57,7 @@ FocusableItem {
             height: 2 * cellHeight
             width: 2 * cellWidth
 
-            cellWidth: 124
+            cellWidth: root.width/2
             cellHeight: 56
 
             currentIndex: chordStylesModel.currentStyleIndex

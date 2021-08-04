@@ -146,54 +146,72 @@ void ChordSymbolStylesModel::setQualitySymbolsOnStyleChange()
         if (index != -1) {
             previousSelectedSymbol = qualitySymbols.value("major7th").at(index).qualitySymbol;
             globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityMajorSeventh, previousSelectedSymbol);
+        } else {
+            globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityMajorSeventh, "-1");
         }
 
         index = m_selectionHistory.value(currentStyle).value("half-dim").toInt();
         if (index != -1) {
             previousSelectedSymbol = qualitySymbols.value("half-diminished").at(index).qualitySymbol;
             globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityHalfDiminished, previousSelectedSymbol);
+        } else {
+            globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityHalfDiminished, "-1");
         }
 
         index = m_selectionHistory.value(currentStyle).value("min").toInt();
         if (index != -1) {
             previousSelectedSymbol = qualitySymbols.value("minor").at(index).qualitySymbol;
             globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityMinor, previousSelectedSymbol);
+        } else {
+            globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityMinor, "-1");
         }
 
         index = m_selectionHistory.value(currentStyle).value("aug").toInt();
         if (index != -1) {
             previousSelectedSymbol = qualitySymbols.value("augmented").at(index).qualitySymbol;
             globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityAugmented, previousSelectedSymbol);
+        } else {
+            globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityAugmented, "-1");
         }
 
         index = m_selectionHistory.value(currentStyle).value("dim").toInt();
         if (index != -1) {
             previousSelectedSymbol = qualitySymbols.value("diminished").at(index).qualitySymbol;
             globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityDiminished, previousSelectedSymbol);
+        } else {
+            globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityDiminished, "-1");
         }
 
         index = m_selectionHistory.value(currentStyle).value("sixNine").toInt();
         if (index != -1) {
             previousSelectedSymbol = qualitySymbols.value("sixNine").at(index).qualitySymbol;
             globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordExtensionSixNine, previousSelectedSymbol);
+        } else {
+            globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordExtensionSixNine, "-1");
         }
 
         index = m_selectionHistory.value(currentStyle).value("omit").toInt();
         if (index != -1) {
             previousSelectedSymbol = qualitySymbols.value("omit").at(index).qualitySymbol;
             globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordModifierOmit, previousSelectedSymbol);
+        } else {
+            globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordModifierOmit, "-1");
         }
 
         index = m_selectionHistory.value(currentStyle).value("sus").toInt();
         if (index != -1) {
             previousSelectedSymbol = qualitySymbols.value("suspension").at(index).qualitySymbol;
             globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordModifierSuspension, previousSelectedSymbol);
+        } else {
+            globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordModifierSuspension, "-1");
         }
 
         index = m_selectionHistory.value(currentStyle).value("bass").toInt();
         if (index != -1) {
             previousSelectedSymbol = qualitySymbols.value("bassNote").at(index).qualitySymbol;
             globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordBassNote, previousSelectedSymbol);
+        } else {
+            globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordBassNote, "-1");
         }
     } else {
         //set the default

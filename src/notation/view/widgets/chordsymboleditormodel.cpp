@@ -398,6 +398,8 @@ void ChordSymbolEditorModel::setQualitySymbolsOnStyleChange()
         if (m_majorSeventhIndex != -1) {
             globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityMajorSeventh,
                                                                        m_majorSeventhList.at(m_majorSeventhIndex).qualitySymbol);
+        } else {
+            globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityMajorSeventh, "-1");
         }
 
         // Half-Diminished
@@ -405,6 +407,8 @@ void ChordSymbolEditorModel::setQualitySymbolsOnStyleChange()
         if (m_halfDiminishedIndex != -1) {
             globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityHalfDiminished,
                                                                        m_halfDiminishedList.at(m_halfDiminishedIndex).qualitySymbol);
+        } else {
+            globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityHalfDiminished, "-1");
         }
 
         // Minor
@@ -412,6 +416,8 @@ void ChordSymbolEditorModel::setQualitySymbolsOnStyleChange()
         if (m_minorIndex != -1) {
             globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityMinor, m_minorList.at(
                                                                            m_minorIndex).qualitySymbol);
+        } else {
+            globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityMinor, "-1");
         }
 
         // Augmented
@@ -419,6 +425,8 @@ void ChordSymbolEditorModel::setQualitySymbolsOnStyleChange()
         if (m_augmentedIndex != -1) {
             globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityAugmented, m_augmentedList.at(
                                                                            m_augmentedIndex).qualitySymbol);
+        } else {
+            globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityAugmented, "-1");
         }
 
         // Diminished
@@ -426,6 +434,8 @@ void ChordSymbolEditorModel::setQualitySymbolsOnStyleChange()
         if (m_diminishedIndex != -1) {
             globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityDiminished, m_diminishedList.at(
                                                                            m_diminishedIndex).qualitySymbol);
+        } else {
+            globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityDiminished, "-1");
         }
 
         // SixNine
@@ -433,6 +443,8 @@ void ChordSymbolEditorModel::setQualitySymbolsOnStyleChange()
         if (m_sixNineIndex != -1) {
             globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordExtensionSixNine, m_sixNineList.at(
                                                                            m_sixNineIndex).qualitySymbol);
+        } else {
+            globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordExtensionSixNine, "-1");
         }
 
         // Omit
@@ -440,6 +452,8 @@ void ChordSymbolEditorModel::setQualitySymbolsOnStyleChange()
         if (m_omitIndex != -1) {
             globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordModifierOmit,
                                                                        m_omitList.at(m_omitIndex).qualitySymbol);
+        } else {
+            globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordModifierOmit, "-1");
         }
 
         // Suspension
@@ -447,6 +461,8 @@ void ChordSymbolEditorModel::setQualitySymbolsOnStyleChange()
         if (m_suspensionIndex != -1) {
             globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordModifierSuspension,
                                                                        m_suspensionList.at(m_suspensionIndex).qualitySymbol);
+        } else {
+            globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordModifierSuspension, "-1");
         }
 
         // Bass Note
@@ -454,6 +470,8 @@ void ChordSymbolEditorModel::setQualitySymbolsOnStyleChange()
         if (m_bassNoteIndex != -1) {
             globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordBassNote,
                                                                        m_bassNoteList.at(m_bassNoteIndex).qualitySymbol);
+        } else {
+            globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordBassNote, "-1");
         }
     } else {
         // Set the default values
@@ -754,7 +772,6 @@ void ChordSymbolEditorModel::setPropertiesOfQualitySymbol(QualitySymbol qS)
 
 void ChordSymbolEditorModel::setQualitySymbol(QString quality, int index)
 {
-    qDebug() << index;
     if (quality == "major7th") {
         globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordQualityMajorSeventh,
                                                                    m_majorSeventhList.at(index).qualitySymbol);
@@ -810,15 +827,6 @@ void ChordSymbolEditorModel::setQualitySymbol(QString quality, int index)
 
 void ChordSymbolEditorModel::setChordStyle(int index)
 {
-//    int index = 0;
-//    for (auto& chordStyle: m_styles) {
-//        if (chordStyle.styleName == styleName) {
-//            descriptionFileName = chordStyle.fileName;
-//            m_currentStyleIndex = index;
-//            break;
-//        }
-//        index++;
-//    }
     m_currentStyleIndex = index;
 
     globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordDescriptionFile, m_styles.at(m_currentStyleIndex).fileName);
@@ -1116,55 +1124,46 @@ void ChordSymbolEditorModel::updateSelectionHistory(QString currentStyle)
             propMap.insert("maj7th", QVariant("-1"));
         } else {
             propMap.insert("maj7th", QVariant(m_majorSeventhIndex));
-//            propMap.insert("maj7th", QVariant(m_majorSeventhList.at(m_majorSeventhIndex).qualitySymbol));
         }
         if (m_halfDiminishedIndex == -1 || m_halfDiminishedList.size() == 0) {
             propMap.insert("half-dim", QVariant("-1"));
         } else {
             propMap.insert("half-dim", QVariant(m_halfDiminishedIndex));
-//            propMap.insert("half-dim", QVariant(m_halfDiminishedList.at(m_halfDiminishedIndex).qualitySymbol));
         }
         if (m_minorIndex == -1 || m_minorList.size() == 0) {
             propMap.insert("min", QVariant("-1"));
         } else {
             propMap.insert("min", QVariant(m_minorIndex));
-//            propMap.insert("min", QVariant(m_minorList.at(m_minorIndex).qualitySymbol));
         }
         if (m_augmentedIndex == -1 || m_augmentedList.size() == 0) {
             propMap.insert("aug", QVariant("-1"));
         } else {
             propMap.insert("aug", QVariant(m_augmentedIndex));
-//            propMap.insert("aug", QVariant(m_augmentedList.at(m_augmentedIndex).qualitySymbol));
         }
         if (m_diminishedIndex == -1 || m_diminishedList.size() == 0) {
             propMap.insert("dim", QVariant("-1"));
         } else {
             propMap.insert("dim", QVariant(m_diminishedIndex));
-//            propMap.insert("dim", QVariant(m_diminishedList.at(m_diminishedIndex).qualitySymbol));
         }
         if (m_sixNineIndex == -1 || m_sixNineList.size() == 0) {
             propMap.insert("sixNine", QVariant("-1"));
         } else {
             propMap.insert("sixNine", QVariant(m_sixNineIndex));
-//            propMap.insert("sixNine", QVariant(m_sixNineList.at(m_sixNineIndex).qualitySymbol));
         }
         if (m_omitIndex == -1 || m_omitList.size() == 0) {
             propMap.insert("omit", QVariant("-1"));
         } else {
             propMap.insert("omit", QVariant(m_omitIndex));
-//            propMap.insert("omit", QVariant(m_omitList.at(m_omitIndex).qualitySymbol));
         }
         if (m_suspensionIndex == -1 || m_suspensionList.size() == 0) {
             propMap.insert("sus", QVariant("-1"));
         } else {
             propMap.insert("sus", QVariant(m_suspensionIndex));
-//            propMap.insert("sus", QVariant(m_suspensionList.at(m_suspensionIndex).qualitySymbol));
         }
         if (m_bassNoteIndex == -1 || m_bassNoteList.size() == 0) {
             propMap.insert("bass", QVariant("-1"));
         } else {
             propMap.insert("bass", QVariant(m_bassNoteIndex));
-//            propMap.insert("bass", QVariant(m_bassNoteList.at(m_bassNoteIndex).qualitySymbol));
         }
     } else {
         propMap.insert("maj7th", QVariant(""));

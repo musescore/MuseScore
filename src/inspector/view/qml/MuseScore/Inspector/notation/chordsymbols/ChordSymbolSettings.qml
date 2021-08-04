@@ -36,13 +36,22 @@ Column {
 
     spacing: 16
 
-    InspectorPropertyView {
-        titleText: qsTrc("inspector", "Chord symbol style")
+    StyledTextLabel{
+        text: qsTrc("inspector", "Chord symbol style")
+    }
 
-        ChordSymbolStyleSettings {
-            id: styleSettings
-            width: parent.width
-            chordStylesModel: root.model ? root.model.chordStylesModel : null
-        }
+    ChordSymbolStyleSettings {
+        id: styleSettings
+        width: parent.width
+        chordStylesModel: root.model ? root.model.chordStylesModel : null
+    }
+
+    FlatButton {
+        width: parent.width
+        height: 30
+
+        text: qsTrc("inspector", "Edit styles NW")
+
+        onClicked: root.model.openStylesDialog()
     }
 }

@@ -39,6 +39,11 @@ ChordSymbolStylesModel* ChordSymbolSettingsModel::chordStylesModel() const
     return m_chordStylesModel;
 }
 
+void ChordSymbolSettingsModel::openStylesDialog()
+{
+    dispatcher()->dispatch("edit-style");
+}
+
 // Must be overridden
 void ChordSymbolSettingsModel::createProperties()
 {

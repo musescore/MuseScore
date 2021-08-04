@@ -42,6 +42,8 @@ public:
 
     ChordSymbolStylesModel* chordStylesModel() const;
 
+    Q_INVOKABLE void openStylesDialog();
+
 private:
     ChordSymbolStylesModel* m_chordStylesModel = nullptr;
 };
