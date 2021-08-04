@@ -2350,7 +2350,11 @@ qreal Segment::minHorizontalCollidingDistance(Segment* ns) const
 qreal Segment::elementsTopOffsetFromSkyline(int staffIndex) const
 {
     System* segmentSystem = measure()->system();
-    SysStaff* staffSystem = segmentSystem->staff(staffIndex);
+    SysStaff* staffSystem = segmentSystem ? segmentSystem->staff(staffIndex) : nullptr;
+
+    if (!staffSystem) {
+        return 0;
+    }
 
     Ms::SkylineLine north = staffSystem->skyline().north();
     int topOffset = INT_MAX;
@@ -2379,7 +2383,11 @@ qreal Segment::elementsTopOffsetFromSkyline(int staffIndex) const
 qreal Segment::elementsBottomOffsetFromSkyline(int staffIndex) const
 {
     System* segmentSystem = measure()->system();
-    SysStaff* staffSystem = segmentSystem->staff(staffIndex);
+    SysStaff* staffSystem = segmentSystem ? segmentSystem->staff(staffIndex) : nullptr;
+
+    if (!staffSystem) {
+        return 0;
+    }
 
     Ms::SkylineLine south = staffSystem->skyline().south();
     int bottomOffset = INT_MIN;
