@@ -3964,72 +3964,73 @@ void MusicXMLParserDirection::pedal(const QString& type, const int /* number */,
       const int number { 0 };
       QStringRef line = _e.attributes().value("line");
       QString sign = _e.attributes().value("sign").toString();
+      if (_placement == "") _placement = "below";
+
       // We have found that many exporters omit "sign" even when one is originally present,
       // therefore we will default to "yes", even though this is technically against the spec.
       bool overrideDefaultSign = true; // TODO: set this flag based on the exporting software
       if (sign == "") {
-            if (line != "yes" || overrideDefaultSign) sign = "yes";     // MusicXML 2.0 compatibility
-            else if (line == "yes") sign = "no";                        // MusicXML 2.0 compatibility
+            if (line != "yes" || (overrideDefaultSign && type == "start"))
+                  sign = "yes";                       // MusicXML 2.0 compatibility
+            else if (line == "yes")
+                  sign = "no";                        // MusicXML 2.0 compatibility
             }
-      if (line == "yes") {
-            auto& spdesc = _pass2.getSpanner({ ElementType::PEDAL, number });
-            if (type == "start" || type == "resume") {
-                  if (spdesc._isStarted && !spdesc._isStopped) {
-                        // Previous pedal unterminated—likely an unrecorded "discontinue", so delete the line.
-                        // TODO: if "change", create 0-length spanner rather than delete
-                        _pass2.deleteHandledSpanner(spdesc._sp);
-                        spdesc._isStarted = false;
+      auto& spdesc = _pass2.getSpanner({ ElementType::PEDAL, number });
+      if (type == "start" || type == "resume") {
+            if (spdesc._isStarted && !spdesc._isStopped) {
+                  // Previous pedal unterminated—likely an unrecorded "discontinue", so delete the line.
+                  // TODO: if "change", create 0-length spanner rather than delete
+                  _pass2.deleteHandledSpanner(spdesc._sp);
+                  spdesc._isStarted = false;
+            }
+            auto p = spdesc._isStopped ? toPedal(spdesc._sp) : new Pedal(_score);
+            if (line == "yes") p->setLineVisible(true);
+            else p->setLineVisible(false);
+            if (!p->lineVisible() || sign == "yes") {
+                  p->setBeginText("<sym>keyboardPedalPed</sym>");
+                  p->setContinueText("(<sym>keyboardPedalPed</sym>)");
                   }
-                  auto p = spdesc._isStopped ? toPedal(spdesc._sp) : new Pedal(_score);
-                  if (type == "resume")
-                        p->setBeginHookType(HookType::NONE);
-                  else
-                        if (sign == "yes") p->setBeginText("<sym>keyboardPedalPed</sym>");
-                        else p->setBeginHookType(HookType::HOOK_90);
-                  p->setEndHookType(HookType::NONE);
-                  // if (placement == "") placement = "below";  // TODO ? set default
-                  starts.append(MusicXmlSpannerDesc(p, ElementType::PEDAL, number));
+            else {
+                  p->setBeginHookType(type == "resume" ? HookType::NONE : HookType::HOOK_90);
                   }
-            else if (type == "stop" || type == "discontinue") {
-                  auto p = spdesc._isStarted ? toPedal(spdesc._sp) : new Pedal(_score);
+            p->setEndHookType(HookType::NONE);
+            starts.append(MusicXmlSpannerDesc(p, ElementType::PEDAL, number));
+            }
+      else if (type == "stop" || type == "discontinue") {
+            auto p = spdesc._isStarted ? toPedal(spdesc._sp) : new Pedal(_score);
+            if (line == "yes") p->setLineVisible(true);
+            else if (line == "no") p->setLineVisible(false);
+            if (!p->lineVisible() || sign == "yes")
+                  p->setEndText("<sym>keyboardPedalUp</sym>");
+            else
                   p->setEndHookType(type == "discontinue" ? HookType::NONE : HookType::HOOK_90);
+            stops.append(MusicXmlSpannerDesc(p, ElementType::PEDAL, number));
+            }
+      else if (type == "change") {
+            // pedal change is implemented as two separate pedals
+            // first stop the first one
+            if (spdesc._isStarted && !spdesc._isStopped) {
+                  auto p = toPedal(spdesc._sp);
+                  p->setEndHookType(HookType::HOOK_45);
+                  if (line == "yes") p->setLineVisible(true);
+                  else if (line == "no") p->setLineVisible(false);
                   stops.append(MusicXmlSpannerDesc(p, ElementType::PEDAL, number));
                   }
-            else if (type == "change") {
-                  // pedal change is implemented as two separate pedals
-                  // first stop the first one
-                  if (spdesc._isStarted && !spdesc._isStopped) {
-                        auto p = toPedal(spdesc._sp);
-                        p->setEndHookType(HookType::HOOK_45);
-                        stops.append(MusicXmlSpannerDesc(p, ElementType::PEDAL, number));
-                        }
-                  else
-                        _logger->logError(QString("\"change\" type pedal created without existing pedal"), &_e);
-                  // then start a new one
-                  auto p = new Pedal(_score);
-                  p->setBeginHookType(HookType::HOOK_45);
-                  p->setEndHookType(HookType::HOOK_90);
-                  starts.append(MusicXmlSpannerDesc(p, ElementType::PEDAL, number));
-                  }
-            else if (type == "continue") {
-                  // ignore
-                  }
             else
-                  qDebug("unknown pedal type %s", qPrintable(type));
+                  _logger->logError(QString("\"change\" type pedal created without existing pedal"), &_e);
+            // then start a new one
+            auto p = new Pedal(_score);
+            p->setBeginHookType(HookType::HOOK_45);
+            p->setEndHookType(HookType::HOOK_90);
+            if (line == "yes") p->setLineVisible(true);
+            else p->setLineVisible(false);
+            starts.append(MusicXmlSpannerDesc(p, ElementType::PEDAL, number));
             }
-      else {
-            // TBD: what happens when an unknown pedal type is found ?
-            Symbol* s = new Symbol(_score);
-            s->setAlign(Align::LEFT | Align::BASELINE);
-            //s->setOffsetType(OffsetType::SPATIUM);
-            if (type == "start")
-                  s->setSym(SymId::keyboardPedalPed);
-            else if (type == "stop")
-                  s->setSym(SymId::keyboardPedalUp);
-            else
-                  _logger->logError(QString("unknown pedal type %1").arg(type), &_e);
-            _elems.append(s);
+      else if (type == "continue") {
+            // ignore
             }
+      else
+            qDebug("unknown pedal type %s", qPrintable(type));
 
       _e.skipCurrentElement();
       }
