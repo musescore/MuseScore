@@ -1946,8 +1946,7 @@ void ParsedChord::respellQualitySymbols(const ChordList* cl)
                     hasFlatFive = halfDiminishedTokens.contains("b5");
                 }
 
-                // If of form <minor>7b5, switch the minor symbol to match the quality minor
-                if (halfDiminishedTokens.contains("7") && halfDiminishedTokens.contains("b5")) {
+                if (hasSeven && hasFlatFive) {
                     QString sym = cl->qualitySymbols.value("minor");
                     if (sym != "-1") {
                         ChordToken qualTok;
@@ -1987,17 +1986,17 @@ void ParsedChord::respellQualitySymbols(const ChordList* cl)
                         fiveToken.tokenClass = ChordTokenClass::MODIFIER;
                         _tokenList.insert(index + 3, fiveToken);
                     }
-                }
 
-                // If of form <minor>7b5, switch the minor symbol to match the quality minor
-                if (halfDiminishedTokens.contains("7") && halfDiminishedTokens.contains("b5")) {
-                    QString sym = cl->qualitySymbols.value("minor");
-                    if (sym != "-1") {
-                        ChordToken qualTok;
-                        qualTok.names += sym;
-                        qualTok.tokenClass = ChordTokenClass::QUALITY;
-                        _tokenList.removeAt(index);
-                        _tokenList.insert(index, qualTok);
+                    // If of form <minor>7b5, switch the minor symbol to match the quality minor
+                    if (halfDiminishedTokens.contains("7") && halfDiminishedTokens.contains("b5")) {
+                        QString sym = cl->qualitySymbols.value("minor");
+                        if (sym != "-1") {
+                            ChordToken qualTok;
+                            qualTok.names += sym;
+                            qualTok.tokenClass = ChordTokenClass::QUALITY;
+                            _tokenList.removeAt(index);
+                            _tokenList.insert(index, qualTok);
+                        }
                     }
                 }
             } else if (isDiminished) {
