@@ -77,12 +77,10 @@ protected:
     Ms::Score* score() const;
     INotationUndoStackPtr undoStack() const;
 
-    virtual void startEdit();
-    virtual void apply();
+    void startEdit();
+    void apply();
 
 private:
-    void updateScore();
-
     void updatePartTitles();
 
     void doMoveStaves(const std::vector<Staff*>& staves, int destinationStaffIndex, Part* destinationPart = nullptr);
