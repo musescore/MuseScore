@@ -202,12 +202,32 @@ void MusicXmlOctaveShiftList::calcOctaveShiftShifts()
       }
 
 //---------------------------------------------------------
+//   printStaff
+//---------------------------------------------------------
+
+/**
+ Return the latest explicit print-object value for this staff.
+ Technically this should be defined for every measure, but
+ Dolet's implementation specifies it only when it changes.
+ */
+
+bool MusicXmlPart::printStaff(int mxStaff, Fraction time) const
+      {
+      auto printStaffList = _printStaffMap[mxStaff];
+      if (printStaffList.size() <= 0)
+            return true;
+      auto upperBound = printStaffList.upperBound(time);
+      if (upperBound == printStaffList.begin())
+            return true;
+      return (upperBound - 1).value();
+      }
+//---------------------------------------------------------
 //   staffNumberToIndex
 //---------------------------------------------------------
 
 /**
- This handles the mapping from MusicXML staff number to the index
- in a Part's Staff list.
+ This handles the mapping from MusicXML staff number (mxmlStaff) to the index
+ in a Part's Staff list (msStaff).
  In most cases, this is a simple decrement from the 1-based staff number
  to the 0-based index.
  However, in some parts some MusicXML staves are discarded, and a mapping
