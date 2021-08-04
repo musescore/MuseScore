@@ -149,6 +149,7 @@
             <Pedal>
               <endHookType>1</endHookType>
               <beginText>&lt;sym&gt;keyboardPedalPed&lt;/sym&gt;</beginText>
+              <continueText>(&lt;sym&gt;keyboardPedalPed&lt;/sym&gt;)</continueText>
               </Pedal>
             <next>
               <location>
@@ -219,6 +220,7 @@
             <Pedal>
               <endHookType>1</endHookType>
               <beginText>&lt;sym&gt;keyboardPedalPed&lt;/sym&gt;</beginText>
+              <continueText>(&lt;sym&gt;keyboardPedalPed&lt;/sym&gt;)</continueText>
               </Pedal>
             <next>
               <location>
@@ -295,6 +297,7 @@
             <Pedal>
               <endHookType>2</endHookType>
               <beginText>&lt;sym&gt;keyboardPedalPed&lt;/sym&gt;</beginText>
+              <continueText>(&lt;sym&gt;keyboardPedalPed&lt;/sym&gt;)</continueText>
               </Pedal>
             <next>
               <location>
@@ -441,6 +444,7 @@
             <Pedal>
               <endHookType>1</endHookType>
               <beginText>&lt;sym&gt;keyboardPedalPed&lt;/sym&gt;</beginText>
+              <continueText>(&lt;sym&gt;keyboardPedalPed&lt;/sym&gt;)</continueText>
               </Pedal>
             <next>
               <location>
