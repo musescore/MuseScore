@@ -869,6 +869,12 @@
         </note>
       </measure>
     <measure number="5" width="136.15">
+			<direction>
+				<direction-type>
+					<words default-y='20' relative-x='86'>Piano</words>
+				</direction-type>
+				<staff>2</staff>
+			</direction>
       <note default-x="16.50" default-y="-20.00">
         <pitch>
           <step>B</step>

@@ -2462,6 +2462,8 @@ void MusicXMLParserPass1::attributes(const QString& partId, const Fraction cTime
       _logger->logDebugTrace("MusicXMLParserPass1::attributes", &_e);
 
       int staves = 0;
+      MusicXmlPart& mxmlPart = _parts[partId];
+      Part* msPart = _partMap.value(partId);
       std::set<int> hiddenStaves = {};
 
       while (_e.readNextStartElement()) {
@@ -2474,8 +2476,14 @@ void MusicXMLParserPass1::attributes(const QString& partId, const Fraction cTime
             else if (_e.name() == "instruments")
                   _e.skipCurrentElement();  // skip but don't log
             else if (_e.name() == "staff-details") {
-                  if (_e.attributes().value("print-object") == "no")
-                        hiddenStaves.emplace(_e.attributes().value("number").toInt());
+                  QStringRef strNumber = _e.attributes().value("number");
+                  QStringRef printObject = _e.attributes().value("print-object");
+                  if (printObject == "no") {
+                        hiddenStaves.emplace(strNumber.toInt());
+                        mxmlPart.addPrintStaff(strNumber.toInt(), cTime, false);
+                        }
+                  else if (printObject == "yes")
+                        mxmlPart.addPrintStaff(strNumber.toInt(), cTime, true);
                   _e.skipCurrentElement();
                   }
             else if (_e.name() == "staves")
@@ -2494,11 +2502,11 @@ void MusicXMLParserPass1::attributes(const QString& partId, const Fraction cTime
             }
       else if (staves > MAX_STAVES
             && static_cast<int>(hiddenStaves.size()) > 0
-            && _parts[partId].staffNumberToIndex().size() == 0) {
+            && mxmlPart.staffNumberToIndex().size() == 0) {
             _logger->logError("staves exceed MAX_STAVES, but hidden staves can be discarded", &_e);
             // Some scores have parts with many staves (~10), but most are hidden
             // When this occurs, we can discard hidden staves
-            // and store a QMap between staffNumber and staffIndex.
+            // and store a QMap between mxmlStaff and msStaff.
             int staffNumber = 1;
             int staffIndex = 0;
             for (; staffNumber <= staves; ++staffNumber) {
@@ -2506,12 +2514,12 @@ void MusicXMLParserPass1::attributes(const QString& partId, const Fraction cTime
                         _logger->logError(QString("removing hidden staff %1").arg(staffNumber), &_e);
                         continue;
                         }
-                  _parts[partId].insertStaffNumberToIndex(staffNumber, staffIndex);
+                  mxmlPart.insertStaffNumberToIndex(staffNumber, staffIndex);
                   ++staffIndex;
                   }
-            Q_ASSERT(staffIndex == _parts[partId].staffNumberToIndex().size());
+            Q_ASSERT(staffIndex == mxmlPart.staffNumberToIndex().size());
 
-            setNumberOfStavesForPart(_partMap.value(partId), staves - static_cast<int>(hiddenStaves.size()));
+            setNumberOfStavesForPart(msPart, staves - static_cast<int>(hiddenStaves.size()));
             }
       else {
             // Otherwise, don't discard any staves
@@ -2519,11 +2527,11 @@ void MusicXMLParserPass1::attributes(const QString& partId, const Fraction cTime
             // (MuseScore doesn't currently have a mechanism
             // for hiding non-empty staves, so this is an approximation
             // of the correct implementation)
-            setNumberOfStavesForPart(_partMap.value(partId), staves);
+            setNumberOfStavesForPart(msPart, staves);
             for (int hiddenStaff : hiddenStaves) {
-                  int hiddenStaffIndex = _parts.value(partId).staffNumberToIndex(hiddenStaff);
+                  int hiddenStaffIndex = mxmlPart.staffNumberToIndex(hiddenStaff);
                   if (hiddenStaffIndex >= 0)
-                        _partMap.value(partId)->staff(hiddenStaffIndex)->setHideWhenEmpty(Staff::HideMode::AUTO); 
+                        msPart->staff(hiddenStaffIndex)->setHideWhenEmpty(Staff::HideMode::AUTO); 
                   }
             }
       }
@@ -2731,20 +2739,20 @@ void MusicXMLParserPass1::direction(const QString& partId, const Fraction cTime)
 
       QList<MxmlOctaveShiftDesc> starts;
       QList<MxmlOctaveShiftDesc> stops;
-      int staff = 0;
+      int msStaff = 0;
 
       while (_e.readNextStartElement()) {
             if (_e.name() == "direction-type")
                   directionType(cTime, starts, stops);
             else if (_e.name() == "staff") {
                   int nstaves = getPart(partId)->nstaves();
-                  QString strStaff = _e.readElementText();
-                  staff = _parts[partId].staffNumberToIndex(strStaff.toInt());
-                  if (0 <= staff && staff < nstaves)
+                  QString mxmlStaff = _e.readElementText();
+                  msStaff = _parts[partId].staffNumberToIndex(mxmlStaff.toInt());
+                  if (0 <= msStaff && msStaff < nstaves)
                         ;  //qDebug("direction staff %d", staff + 1);
                   else {
-                        _logger->logError(QString("invalid staff %1").arg(strStaff), &_e);
-                        staff = 0;
+                        _logger->logError(QString("invalid staff %1").arg(mxmlStaff), &_e);
+                        msStaff = 0;
                         }
                   }
             else
@@ -2758,8 +2766,8 @@ void MusicXMLParserPass1::direction(const QString& partId, const Fraction cTime)
                   if (prevDesc.tp == MxmlOctaveShiftDesc::Type::UP
                       || prevDesc.tp == MxmlOctaveShiftDesc::Type::DOWN) {
                         // a complete pair
-                        _parts[partId].addOctaveShift(staff, prevDesc.size, prevDesc.time);
-                        _parts[partId].addOctaveShift(staff, -prevDesc.size, desc.time);
+                        _parts[partId].addOctaveShift(msStaff, prevDesc.size, prevDesc.time);
+                        _parts[partId].addOctaveShift(msStaff, -prevDesc.size, desc.time);
                         }
                   else
                         _logger->logError("double octave-shift stop", &_e);
@@ -2775,8 +2783,8 @@ void MusicXMLParserPass1::direction(const QString& partId, const Fraction cTime)
                   MxmlOctaveShiftDesc prevDesc = _octaveShifts.value(desc.num);
                   if (prevDesc.tp == MxmlOctaveShiftDesc::Type::STOP) {
                         // a complete pair
-                        _parts[partId].addOctaveShift(staff, desc.size, desc.time);
-                        _parts[partId].addOctaveShift(staff, -desc.size, prevDesc.time);
+                        _parts[partId].addOctaveShift(msStaff, desc.size, desc.time);
+                        _parts[partId].addOctaveShift(msStaff, -desc.size, prevDesc.time);
                         }
                   else
                         _logger->logError("double octave-shift start", &_e);
@@ -3288,7 +3296,7 @@ void MusicXMLParserPass1::note(const QString& partId,
       bool grace = false;
       //int octave = -1;
       bool bRest = false;
-      int staff = 0;
+      int msStaff = 0;
       //int step = 0;
       QString type;
       QString voice = "1";
@@ -3339,13 +3347,13 @@ void MusicXMLParserPass1::note(const QString& partId,
                   }
             else if (_e.name() == "staff") {
                   auto ok = false;
-                  auto strStaff = _e.readElementText();
-                  staff = _parts[partId].staffNumberToIndex(strStaff.toInt(&ok));
-                  _parts[partId].setMaxStaff(staff);
+                  auto mxmlStaff = _e.readElementText();
+                  msStaff = _parts[partId].staffNumberToIndex(mxmlStaff.toInt(&ok));
+                  _parts[partId].setMaxStaff(msStaff);
                   Part* part = _partMap.value(partId);
                   Q_ASSERT(part);
-                  if (!ok || staff < 0 || staff >= part->nstaves())
-                        _logger->logError(QString("illegal or hidden staff '%1'").arg(strStaff), &_e);
+                  if (!ok || msStaff < 0 || msStaff >= part->nstaves())
+                        _logger->logError(QString("illegal or hidden staff '%1'").arg(mxmlStaff), &_e);
                   }
             else if (_e.name() == "stem")
                   _e.skipCurrentElement();  // skip but don't log
@@ -3406,9 +3414,9 @@ void MusicXMLParserPass1::note(const QString& partId,
                   VoiceDesc vs;
                   _parts[partId].voicelist.insert(voice, vs);
                   }
-            _parts[partId].voicelist[voice].incrChordRests(staff);
+            _parts[partId].voicelist[voice].incrChordRests(msStaff);
             // determine note length for voice overlap detection
-            vod.addNote((sTime + missingPrev).ticks(), (sTime + missingPrev + dura).ticks(), voice, staff);
+            vod.addNote((sTime + missingPrev).ticks(), (sTime + missingPrev + dura).ticks(), voice, msStaff);
             }
 
       if (!(_e.isEndElement() && _e.name() == "note"))

@@ -20,6 +20,7 @@
 namespace Ms {
 
 typedef QMap<QString, VoiceDesc> VoiceList;
+typedef QMap<Fraction, bool> PrintStaffList;   // Mapping from time to print-object for a staff
 //using Intervals = std::map<Fraction, Interval>;
 
 class MusicXmlIntervalList : public std::map<Fraction, Interval> {
@@ -80,6 +81,8 @@ public:
       bool getPrintAbbr() const { return printAbbr; }
       bool hasTab() const { return _hasTab; }
       void hasTab(const bool b) { _hasTab = b; }
+      void addPrintStaff(int mxStaff, Fraction time, bool printObject) { _printStaffMap[mxStaff].insert(time, printObject); }
+      bool printStaff(int mxStaff, Fraction time) const; 
       QMap<int, int> staffNumberToIndex() const { return _staffNumberToIndex; }
       int staffNumberToIndex(const int staffNumber) const;
       void insertStaffNumberToIndex(const int staffNumber, const int staffIndex) { _staffNumberToIndex.insert(staffNumber, staffIndex); }
@@ -102,7 +105,8 @@ private:
       LyricNumberHandler _lyricNumberHandler;
       int _maxStaff = -1;                      // maximum staff value found (0 based), -1 = none
       bool _hasLyrics = false;
-      QMap<int, int> _staffNumberToIndex;       // Mapping from staff number to index in staff list.
+      QMap<int, PrintStaffList> _printStaffMap; // Mapping from mxStaff to list of print-objects
+      QMap<int, int> _staffNumberToIndex;       // Mapping from mxStaff  to msStaff (index in staff list).
                                                 // Only for when staves are discarded in MusicXMLParserPass1::attributes.
       };
 

@@ -2688,17 +2688,17 @@ void MusicXMLParserPass2::staffDetails(const QString& partId)
       Q_ASSERT(part);
       int staves = part->nstaves();
 
-      QString strNumber = _e.attributes().value("number").toString();
-      int staffIndex = 0;  // default
-      if (strNumber != "") {
-            staffIndex = _pass1.getMusicXmlPart(partId).staffNumberToIndex(strNumber.toInt());
-            if (staffIndex < 0 || staffIndex >= staves) {
-                  _logger->logError(QString("invalid staff-details number %1 (may be hidden)").arg(strNumber), &_e);
-                  staffIndex = 0;
+      QString mxmlStaff = _e.attributes().value("number").toString();
+      int msStaff = 0;  // default
+      if (mxmlStaff != "") {
+            msStaff = _pass1.getMusicXmlPart(partId).staffNumberToIndex(mxmlStaff.toInt());
+            if (msStaff < 0 || msStaff >= staves) {
+                  _logger->logError(QString("invalid staff-details number %1 (may be hidden)").arg(mxmlStaff), &_e);
+                  msStaff = 0;
                   }
             }
 
-      int staffIdx = _score->staffIdx(part) + staffIndex;
+      int staffIdx = _score->staffIdx(part) + msStaff;
 
       StringData* t = nullptr;
       if (_score->staff(staffIdx)->isTabStaff(Fraction(0,1))) {
@@ -2723,8 +2723,8 @@ void MusicXMLParserPass2::staffDetails(const QString& partId)
                   staffTuning(t);
             else if (_e.name() == "staff-size") {
                   int staffScale = _e.readElementText().toInt();
-                  part->staff(staffIndex)->setProperty(Pid::MAG, staffScale / 100.0);
-                  part->staff(staffIndex)->setPropertyFlags(Pid::MAG, PropertyFlags::UNSTYLED);
+                  part->staff(msStaff)->setProperty(Pid::MAG, staffScale / 100.0);
+                  part->staff(msStaff)->setPropertyFlags(Pid::MAG, PropertyFlags::UNSTYLED);
                   }
             else
                   skipLogCurrElem();
@@ -2928,7 +2928,9 @@ void MusicXMLParserDirection::direction(const QString& partId,
       _placement = _e.attributes().value("placement").toString();
       int track = _pass1.trackForPart(partId);
       bool isVocalStaff = _pass1.isVocalStaff(partId);
+      const MusicXmlPart mxmlPart = _pass1.getMusicXmlPart(partId);
       bool isExpressionText = false;
+      bool isHiddenStaff = false;
       //qDebug("direction track %d", track);
       QList<MusicXmlSpannerDesc> starts;
       QList<MusicXmlSpannerDesc> stops;
@@ -2952,16 +2954,24 @@ void MusicXMLParserDirection::direction(const QString& partId,
             else if (_e.name() == "sound")
                   sound();
             else if (_e.name() == "staff") {
-                  QString strStaff = _e.readElementText();
-                  int staff = _pass1.getMusicXmlPart(partId).staffNumberToIndex(strStaff.toInt());
-                  if (staff >= 0)
-                        track += staff * VOICES;
+                  QString mxmlStaff = _e.readElementText();
+                  if (!mxmlPart.printStaff(mxmlStaff.toInt(), tick)) {
+                        isHiddenStaff = true;
+                        _logger->logError(QString("hidden staff %1").arg(mxmlStaff), &_e); 
+                        continue;
+                        }
+                  int msStaff = mxmlPart.staffNumberToIndex(mxmlStaff.toInt());
+                  if (msStaff >= 0)
+                        track += msStaff * VOICES;
                   else
-                        _logger->logError(QString("invalid staff %1").arg(strStaff), &_e);
+                        _logger->logError(QString("invalid or hidden staff %1").arg(mxmlStaff), &_e); 
                   }
             else
                   skipLogCurrElem();
             }
+
+      if (isHiddenStaff)
+            return;
 
       handleRepeats(measure, track, tick + _offset);
       handleNmiCmi(measure, track, tick + _offset, delayedDirections);
@@ -4599,14 +4609,14 @@ void MusicXMLParserPass2::key(const QString& partId, Measure* measure, const Fra
       {
       Q_ASSERT(_e.isStartElement() && _e.name() == "key");
 
-      QString strKeyno = _e.attributes().value("number").toString();
-      int keyno = -1; // assume no number (see below)
-      if (strKeyno != "") {
-            keyno = _pass1.getMusicXmlPart(partId).staffNumberToIndex(strKeyno.toInt());
-            if (keyno < 0) {
+      QString mxmlStaff = _e.attributes().value("number").toString();
+      int msStaff = -1; // assume no number (see below)
+      if (mxmlStaff != "") {
+            msStaff = _pass1.getMusicXmlPart(partId).staffNumberToIndex(mxmlStaff.toInt());
+            if (msStaff < 0) {
                   // conversion error (-1), assume staff 0
-                  _logger->logError(QString("invalid key number '%1'").arg(strKeyno), &_e);
-                  keyno = 0;
+                  _logger->logError(QString("invalid key number '%1'").arg(mxmlStaff), &_e);
+                  msStaff = 0;
                   }
             }
       bool printObject = _e.attributes().value("print-object") != "no";
@@ -4667,14 +4677,14 @@ void MusicXMLParserPass2::key(const QString& partId, Measure* measure, const Fra
 
       int nstaves = _pass1.getPart(partId)->nstaves();
       int staffIdx = _pass1.trackForPart(partId) / VOICES;
-      if (keyno == -1) {
+      if (msStaff == -1) {
             // apply key to all staves in the part
             for (int i = 0; i < nstaves; ++i) {
                   addKey(key, printObject, _score, measure, staffIdx + i, tick);
                   }
             }
-      else if (keyno < nstaves)
-            addKey(key, printObject, _score, measure, staffIdx + keyno, tick);
+      else if (msStaff < nstaves)
+            addKey(key, printObject, _score, measure, staffIdx + msStaff, tick);
       }
 
 //---------------------------------------------------------
@@ -4695,17 +4705,17 @@ void MusicXMLParserPass2::clef(const QString& partId, Measure* measure, const Fr
       // TODO: check error handling for
       // - single staff
       // - multi-staff with same clef
-      QString strClefno = _e.attributes().value("number").toString();
+      QString mxmlStaff = _e.attributes().value("number").toString();
       const bool afterBarline = _e.attributes().value("after-barline") == "yes";
-      int clefno = 0; // default
-      if (strClefno != "")
-            clefno = _pass1.getMusicXmlPart(partId).staffNumberToIndex(strClefno.toInt());
-      if (clefno < 0 || clefno >= part->nstaves()) {
+      int msStaff = 0; // default
+      if (mxmlStaff != "")
+            msStaff = _pass1.getMusicXmlPart(partId).staffNumberToIndex(mxmlStaff.toInt());
+      if (msStaff < 0 || msStaff >= part->nstaves()) {
             // conversion error (0) or other issue, assume staff 1
             // Also for Cubase 6.5.5 which generates clef number="2" in a single staff part
             // Same fix is required in pass 1 and pass 2
-            _logger->logError(QString("invalid clef number '%1'").arg(strClefno), &_e);
-            clefno = 0;
+            _logger->logError(QString("invalid clef number '%1'").arg(mxmlStaff), &_e);
+            msStaff = 0;
             }
 
       ClefType clef   = ClefType::G;
@@ -4791,7 +4801,7 @@ void MusicXMLParserPass2::clef(const QString& partId, Measure* measure, const Fr
 
       Clef* clefs = new Clef(_score);
       clefs->setClefType(clef);
-      int track = _pass1.trackForPart(partId) + clefno * VOICES;
+      int track = _pass1.trackForPart(partId) + msStaff * VOICES;
       clefs->setTrack(track);
       Segment* s;
       // check if the clef change needs to be in the previous measure
@@ -4803,7 +4813,7 @@ void MusicXMLParserPass2::clef(const QString& partId, Measure* measure, const Fr
 
       // set the correct staff type
       // note that clef handling should probably done in pass1
-      int staffIdx = _score->staffIdx(part) + clefno;
+      int staffIdx = _score->staffIdx(part) + msStaff;
       int lines = _score->staff(staffIdx)->lines(Fraction(0,1));
       if (tick.isZero()) { // changing staff type not supported (yet ?)
             _score->staff(staffIdx)->setStaffType(tick, *StaffType::preset(st));
@@ -5416,7 +5426,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
       bool small = false;
       bool grace = false;
       bool rest = false;
-      int staff = 0;
+      int msStaff = 0;
       QString type;
       QString voice;
       Direction stemDir = Direction::AUTO;
@@ -5490,11 +5500,11 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                   }
             else if (_e.name() == "staff") {
                   auto ok = false;
-                  auto strStaff = _e.readElementText();
-                  staff = _pass1.getMusicXmlPart(partId).staffNumberToIndex(strStaff.toInt(&ok));
+                  auto mxmlStaff = _e.readElementText();
+                  msStaff = _pass1.getMusicXmlPart(partId).staffNumberToIndex(mxmlStaff.toInt(&ok));
                   if (!ok) {
                         // error already reported in pass 1
-                        staff = -1;
+                        msStaff = -1;
                         }
                   }
             else if (_e.name() == "stem")
@@ -5543,8 +5553,8 @@ Note* MusicXMLParserPass2::note(const QString& partId,
       int msTrack = 0;
       int msVoice = 0;
 
-      if (!_pass1.determineStaffMoveVoice(partId, staff, voice, msMove, msTrack, msVoice)) {
-            _logger->logDebugInfo(QString("could not map staff %1 voice '%2'").arg(staff + 1).arg(voice), &_e);
+      if (!_pass1.determineStaffMoveVoice(partId, msStaff, voice, msMove, msTrack, msVoice)) {
+            _logger->logDebugInfo(QString("could not map staff %1 voice '%2'").arg(msStaff + 1).arg(voice), &_e);
             Q_ASSERT(_e.isEndElement() && _e.name() == "note");
             return 0;
             }
@@ -6292,12 +6302,12 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
                   }
             else if (_e.name() == "staff") {
                   int nstaves = _pass1.getPart(partId)->nstaves();
-                  QString strStaff = _e.readElementText();
-                  int staff = _pass1.getMusicXmlPart(partId).staffNumberToIndex(strStaff.toInt());
-                  if (staff >= 0 && staff < nstaves)
-                        track += staff * VOICES;
+                  QString mxmlStaff = _e.readElementText();
+                  int msStaff = _pass1.getMusicXmlPart(partId).staffNumberToIndex(mxmlStaff.toInt());
+                  if (msStaff >= 0 && msStaff < nstaves)
+                        track += msStaff * VOICES;
                   else
-                        _logger->logError(QString("invalid staff %1").arg(strStaff), &_e);
+                        _logger->logError(QString("invalid staff %1").arg(mxmlStaff), &_e);
                   }
             else
                   skipLogCurrElem();
