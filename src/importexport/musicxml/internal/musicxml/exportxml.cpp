@@ -4100,25 +4100,6 @@ static void partGroupStart(XmlWriter& xml, int number, BracketType bracket)
 }
 
 //---------------------------------------------------------
-//   findUnit
-//---------------------------------------------------------
-
-static bool findUnit(DurationType val, QString& unit)
-{
-    unit = "";
-    switch (val) {
-    case DurationType::V_HALF: unit = "half";
-        break;
-    case DurationType::V_QUARTER: unit = "quarter";
-        break;
-    case DurationType::V_EIGHTH: unit = "eighth";
-        break;
-    default: LOGD("findUnit: unknown DurationType %d", int(val));
-    }
-    return true;
-}
-
-//---------------------------------------------------------
 //   findMetronome
 //---------------------------------------------------------
 
@@ -4244,9 +4225,7 @@ static bool findMetronome(const std::list<TextFragment>& list,
 static void beatUnit(XmlWriter& xml, const TDuration dur)
 {
     int dots = dur.dots();
-    QString unit;
-    findUnit(dur.type(), unit);
-    xml.tag("beat-unit", unit);
+    xml.tag("beat-unit", TConv::toXml(dur.type()));
     while (dots > 0) {
         xml.tagE("beat-unit-dot");
         --dots;
