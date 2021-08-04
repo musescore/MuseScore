@@ -114,7 +114,7 @@ bool Excerpt::isEmpty() const
     return partScore() ? partScore()->parts().empty() : true;
 }
 
-void Excerpt::removePart(const QString& id)
+void Excerpt::removePart(const ID& id)
 {
     int index = 0;
     for (const Part* part: parts()) {

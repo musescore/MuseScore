@@ -36,10 +36,10 @@ public:
 
     Q_INVOKABLE void appendNewItem() override;
 
-    void setPartId(const QString& id);
+    void setPartId(const ID& id);
 
 private:
-    QString m_partId;
+    ID m_partId;
 };
 }
 

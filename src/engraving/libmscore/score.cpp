@@ -5162,11 +5162,22 @@ int Score::staffIdx(const Part* part) const
     return idx;
 }
 
-Staff* Score::staff(const QString& staffId) const
+Staff* Score::staff(const ID& staffId) const
 {
     for (Staff* staff : _staves) {
         if (staff->id() == staffId) {
             return staff;
+        }
+    }
+
+    return nullptr;
+}
+
+Part* Score::part(const ID& partId) const
+{
+    for (Part* part : _parts) {
+        if (part->id() == partId) {
+            return part;
         }
     }
 

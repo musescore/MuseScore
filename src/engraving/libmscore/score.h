@@ -695,7 +695,8 @@ public:
 
     int staffIdx(const Part*) const;
     Staff* staff(int n) const { return ((n >= 0) && (n < _staves.size())) ? _staves.at(n) : nullptr; }
-    Staff* staff(const QString& staffId) const;
+    Staff* staff(const ID& staffId) const;
+    Part* part(const ID& partId) const;
 
     Measure* pos2measure(const mu::PointF&, int* staffIdx, int* pitch, Segment**, mu::PointF* offset) const;
     void dragPosition(const mu::PointF&, int* staffIdx, Segment**, qreal spacingFactor = 0.5) const;

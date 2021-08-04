@@ -36,13 +36,14 @@ class SelectInstrumentsScenario : public notation::ISelectInstrumentsScenario
 public:
     RetVal<notation::PartInstrumentListScoreOrder> selectInstruments(SelectInstrumentsMode mode = SelectInstrumentsMode::None) const
     override;
-    RetVal<notation::Instrument> selectInstrument(const std::string& currentInstrumentId = "") const override;
+    RetVal<notation::Instrument> selectInstrument(const notation::InstrumentKey& currentInstrumentId = notation::InstrumentKey()) const
+    override;
 
 private:
     RetVal<notation::PartInstrumentListScoreOrder> selectInstruments(const QStringList& params) const;
 
     notation::INotationPartsPtr notationParts() const;
-    notation::IDList partsIds() const;
+    QStringList partsIds() const;
     notation::ScoreOrder scoreOrder() const;
 };
 }

@@ -135,6 +135,9 @@ static const int VISUAL_STRING_NONE      = -100;      // no ordinal for the visu
 static const int STRING_NONE             = -1;        // no ordinal for a physical string (0 = topmost in instrument)
 static const int FRET_NONE               = -1;        // no ordinal for a fret
 
+using ID = uint64_t;
+static constexpr ID INVALID_ID = 0;
+
 //---------------------------------------------------------
 //   BracketType
 //    System Brackets

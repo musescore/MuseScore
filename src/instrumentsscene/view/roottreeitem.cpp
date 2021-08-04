@@ -35,7 +35,7 @@ void RootTreeItem::moveChildren(const int sourceRow, const int count, AbstractIn
     IDList partIds;
 
     for (int i = sourceRow; i < sourceRow + count; ++i) {
-        partIds << childAtRow(i)->id();
+        partIds.push_back(childAtRow(i)->id());
     }
 
     int destinationRow_ = destinationRow;
@@ -61,7 +61,7 @@ void RootTreeItem::removeChildren(const int row, const int count, const bool del
     IDList partIds;
 
     for (int i = row; i < row + count; ++i) {
-        partIds << childAtRow(i)->id();
+        partIds.push_back(childAtRow(i)->id());
     }
 
     if (deleteChild) {
