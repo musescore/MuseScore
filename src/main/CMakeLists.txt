@@ -429,7 +429,7 @@ elseif(OS_IS_LIN)
        DESTINATION share/icons/hicolor/scalable/mimetypes) # SVG icon for .XML (MusicXML) files
     install( FILES   ${PROJECT_SOURCE_DIR}/assets/xml-icon-48.png RENAME application-vnd.recordare.musicxml${MSCORE_INSTALL_SUFFIX}+xml.png
        DESTINATION share/icons/hicolor/48x48/mimetypes) # PNG icon for .XML (MusicXML) files
-    # Note: Must now run "gtk-update-icon-cache" to set the new icons. This is done in the Makefile.
+    # Note: Must now run "gtk-update-icon-cache" to set the new icons.
 
 ###########################################
 # MacOS
