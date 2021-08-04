@@ -97,7 +97,7 @@ void MasterNotationParts::removeStaves(const IDList& stavesIds)
 {
     TRACEFUNC;
 
-    startEdit();
+    startGlobalEdit();
 
     NotationParts::removeStaves(stavesIds);
 
@@ -105,14 +105,14 @@ void MasterNotationParts::removeStaves(const IDList& stavesIds)
         parts->removeStaves(stavesIds);
     }
 
-    apply();
+    endGlobalEdit();
 }
 
 void MasterNotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
 {
     TRACEFUNC;
 
-    startEdit();
+    startGlobalEdit();
 
     NotationParts::appendStaff(staff, destinationPartId);
 
@@ -120,14 +120,14 @@ void MasterNotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
         parts->appendStaff(staff->clone(), destinationPartId);
     }
 
-    apply();
+    endGlobalEdit();
 }
 
 void MasterNotationParts::linkStaves(const ID& sourceStaffId, const ID& destinationStaffId)
 {
     TRACEFUNC;
 
-    startEdit();
+    startGlobalEdit();
 
     NotationParts::linkStaves(sourceStaffId, destinationStaffId);
 
@@ -135,14 +135,14 @@ void MasterNotationParts::linkStaves(const ID& sourceStaffId, const ID& destinat
         parts->linkStaves(sourceStaffId, destinationStaffId);
     }
 
-    apply();
+    endGlobalEdit();
 }
 
 void MasterNotationParts::replaceInstrument(const InstrumentKey& instrumentKey, const Instrument& newInstrument)
 {
     TRACEFUNC;
 
-    startEdit();
+    startGlobalEdit();
 
     NotationParts::replaceInstrument(instrumentKey, newInstrument);
 
@@ -150,14 +150,14 @@ void MasterNotationParts::replaceInstrument(const InstrumentKey& instrumentKey, 
         parts->replaceInstrument(instrumentKey, newInstrument);
     }
 
-    apply();
+    endGlobalEdit();
 }
 
 void MasterNotationParts::replaceDrumset(const InstrumentKey& instrumentKey, const Drumset& newDrumset)
 {
     TRACEFUNC;
 
-    startEdit();
+    startGlobalEdit();
 
     NotationParts::replaceDrumset(instrumentKey, newDrumset);
 
@@ -165,7 +165,7 @@ void MasterNotationParts::replaceDrumset(const InstrumentKey& instrumentKey, con
         parts->replaceDrumset(instrumentKey, newDrumset);
     }
 
-    apply();
+    endGlobalEdit();
 }
 
 std::vector<INotationPartsPtr> MasterNotationParts::excerptsParts() const
