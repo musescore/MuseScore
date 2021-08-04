@@ -184,7 +184,7 @@
         </note>
       <direction placement="below">
         <direction-type>
-          <pedal type="stop" line="yes" sign="yes" relative-x="7.76"/>
+          <pedal type="stop" line="yes" sign="no" relative-x="7.76"/>
           </direction-type>
         <staff>2</staff>
         </direction>
@@ -291,7 +291,7 @@
         </note>
       <direction placement="below">
         <direction-type>
-          <pedal type="stop" line="yes" sign="yes"/>
+          <pedal type="stop" line="yes" sign="no"/>
           </direction-type>
         <staff>2</staff>
         </direction>
@@ -588,7 +588,7 @@
         </note>
       <direction placement="below">
         <direction-type>
-          <pedal type="stop" line="yes" sign="yes"/>
+          <pedal type="stop" line="yes" sign="no"/>
           </direction-type>
         <staff>2</staff>
         </direction>

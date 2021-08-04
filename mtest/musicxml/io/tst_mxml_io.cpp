@@ -98,7 +98,7 @@ private slots:
       void dalSegno() { mxmlIoTest("testDalSegno"); }
       void dcalCoda() { mxmlIoTest("testDCalCoda"); }
       void dcalFine() { mxmlIoTest("testDCalFine"); }
-      void directions1() { mxmlIoTest("testDirections1"); }
+      void directions1() { mxmlIoTestRef("testDirections1"); }
       void directions2() { mxmlIoTest("testDirections2"); }
       void divisionsDefinedTooLate1() { mxmlIoTestRef("testDivsDefinedTooLate1"); }
       void divisionsDefinedTooLate2() { mxmlIoTestRef("testDivsDefinedTooLate2"); }
