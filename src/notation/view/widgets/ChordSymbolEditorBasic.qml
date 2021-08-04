@@ -68,21 +68,22 @@ Flickable {
             boundsBehavior: Flickable.StopAtBounds
 
             model: root.editorModel.chordSpellingList
-            currentIndex: root.editorModel.chordSpellingIndex
 
-            delegate: FlatButton {
+            delegate: FlatRadioButton {
                 height: prv.listCellHeight
                 width: prv.listCellWidth
-                text: modelData
+
+                ButtonGroup.group: chordSpellingListView.children
+
+                StyledTextLabel {
+                    text: modelData
+                }
+
+                checked: root.editorModel.chordSpellingIndex === index
 
                 onClicked: {
                     root.editorModel.setChordSpelling(modelData);
                 }
-            }
-
-            highlight: Rectangle {
-                color: ui.theme.accentColor
-                radius: 3
             }
         }
 
@@ -103,24 +104,24 @@ Flickable {
             boundsBehavior: Flickable.StopAtBounds
 
             model: root.editorModel.bassNoteList
-            currentIndex: root.editorModel.bassNoteIndex
             visible: (root.editorModel.bassNoteIndex != -1)
             enabled: root.editorModel.usePresets
 
-            delegate: FlatButton {
+            delegate: FlatRadioButton {
                 height: prv.listCellHeight
                 width: prv.listCellWidth
-                text: modelData
+
+                ButtonGroup.group: bassNoteListView.children
+
+                StyledTextLabel {
+                    text: modelData
+                }
+
+                checked: (root.editorModel.bassNoteIndex === index) && root.editorModel.usePresets
 
                 onClicked: {
                     root.editorModel.setQualitySymbol("bassNote", index);
                 }
-            }
-
-            highlight: Rectangle {
-                color: ui.theme.accentColor
-                radius: 3
-                visible: root.editorModel.usePresets
             }
         }
 
@@ -141,24 +142,24 @@ Flickable {
             boundsBehavior: Flickable.StopAtBounds
 
             model: root.editorModel.majorSeventhList
-            currentIndex: root.editorModel.majorSeventhIndex
             visible: (root.editorModel.majorSeventhIndex != -1)
             enabled: root.editorModel.usePresets
 
-            delegate: FlatButton {
+            delegate: FlatRadioButton {
                 height: prv.listCellHeight
                 width: prv.listCellWidth
-                text: modelData
+
+                ButtonGroup.group: majorSeventhListView.children
+
+                StyledTextLabel {
+                    text: modelData
+                }
+
+                checked: (root.editorModel.majorSeventhIndex === index) && root.editorModel.usePresets
 
                 onClicked: {
                     root.editorModel.setQualitySymbol("major7th", index);
                 }
-            }
-
-            highlight: Rectangle {
-                color: ui.theme.accentColor
-                radius: 3
-                visible: root.editorModel.usePresets
             }
         }
 
@@ -179,24 +180,24 @@ Flickable {
             boundsBehavior: Flickable.StopAtBounds
 
             model: root.editorModel.halfDiminishedList
-            currentIndex: root.editorModel.halfDiminishedIndex
             visible: (root.editorModel.halfDiminishedIndex != -1)            
             enabled: root.editorModel.usePresets
 
-            delegate: FlatButton {
+            delegate: FlatRadioButton {
                 height: prv.listCellHeight
                 width: prv.listCellWidth
-                text: modelData
+
+                ButtonGroup.group: halfDiminishedListView.children
+
+                StyledTextLabel {
+                    text: modelData
+                }
+
+                checked: (root.editorModel.halfDiminishedIndex === index) && root.editorModel.usePresets
 
                 onClicked: {
                     root.editorModel.setQualitySymbol("half-diminished", index);
                 }
-            }
-
-            highlight: Rectangle {
-                color: ui.theme.accentColor
-                radius: 3
-                visible: root.editorModel.usePresets
             }
         }
 
@@ -217,24 +218,24 @@ Flickable {
             boundsBehavior: Flickable.StopAtBounds
 
             model: root.editorModel.minorList
-            currentIndex: root.editorModel.minorIndex
             visible: (root.editorModel.minorIndex != -1)
             enabled: root.editorModel.usePresets
 
-            delegate: FlatButton {
+            delegate: FlatRadioButton {
                 height: prv.listCellHeight
                 width: prv.listCellWidth
-                text: modelData
+
+                ButtonGroup.group: minorListView.children
+
+                StyledTextLabel {
+                    text: modelData
+                }
+
+                checked: (root.editorModel.minorIndex === index) && root.editorModel.usePresets
 
                 onClicked: {
                     root.editorModel.setQualitySymbol("minor", index);
                 }
-            }
-
-            highlight: Rectangle {
-                color: ui.theme.accentColor
-                radius: 3
-                visible: root.editorModel.usePresets
             }
         }
 
@@ -255,24 +256,24 @@ Flickable {
             boundsBehavior: Flickable.StopAtBounds
 
             model: root.editorModel.augmentedList
-            currentIndex: root.editorModel.augmentedIndex
             visible: (root.editorModel.augmentedIndex != -1)
             enabled: root.editorModel.usePresets
 
-            delegate: FlatButton {
+            delegate: FlatRadioButton {
                 height: prv.listCellHeight
                 width: prv.listCellWidth
-                text: modelData
+
+                ButtonGroup.group: augmentedListView.children
+
+                StyledTextLabel {
+                    text: modelData
+                }
+
+                checked: (root.editorModel.augmentedIndex === index) && root.editorModel.usePresets
 
                 onClicked: {
                     root.editorModel.setQualitySymbol("augmented", index);
                 }
-            }
-
-            highlight: Rectangle {
-                color: ui.theme.accentColor
-                radius: 3
-                visible: root.editorModel.usePresets
             }
         }
 
@@ -293,24 +294,24 @@ Flickable {
             boundsBehavior: Flickable.StopAtBounds
 
             model: root.editorModel.diminishedList
-            currentIndex: root.editorModel.diminishedIndex
             visible: (root.editorModel.diminishedIndex != -1)
             enabled: root.editorModel.usePresets
 
-            delegate: FlatButton {
+            delegate: FlatRadioButton {
                 height: prv.listCellHeight
                 width: prv.listCellWidth
-                text: modelData
+
+                ButtonGroup.group: diminishedListView.children
+
+                StyledTextLabel {
+                    text: modelData
+                }
+
+                checked: (root.editorModel.diminishedIndex === index) && root.editorModel.usePresets
 
                 onClicked: {
                     root.editorModel.setQualitySymbol("diminished", index);
                 }
-            }
-
-            highlight: Rectangle {
-                color: ui.theme.accentColor
-                radius: 3
-                visible: root.editorModel.usePresets
             }
         }
 
@@ -331,24 +332,24 @@ Flickable {
             boundsBehavior: Flickable.StopAtBounds
 
             model: root.editorModel.sixNineList
-            currentIndex: root.editorModel.sixNineIndex
             visible: (root.editorModel.sixNineIndex != -1)
             enabled: root.editorModel.usePresets
 
-            delegate: FlatButton {
+            delegate: FlatRadioButton {
                 height: prv.listCellHeight
                 width: prv.listCellWidth
-                text: modelData
+
+                ButtonGroup.group: sixNineListView.children
+
+                StyledTextLabel {
+                    text: modelData
+                }
+
+                checked: (root.editorModel.sixNineIndex === index) && root.editorModel.usePresets
 
                 onClicked: {
                     root.editorModel.setQualitySymbol("sixNine", index);
                 }
-            }
-
-            highlight: Rectangle {
-                color: ui.theme.accentColor
-                radius: 3
-                visible: root.editorModel.usePresets
             }
         }
 
@@ -369,24 +370,24 @@ Flickable {
             boundsBehavior: Flickable.StopAtBounds
 
             model: root.editorModel.omitList
-            currentIndex: root.editorModel.omitIndex
             visible: (root.editorModel.omitIndex != -1)
             enabled: root.editorModel.usePresets
 
-            delegate: FlatButton {
+            delegate: FlatRadioButton {
                 height: prv.listCellHeight
                 width: prv.listCellWidth
-                text: modelData
+
+                ButtonGroup.group: omitListView.children
+
+                StyledTextLabel {
+                    text: modelData
+                }
+
+                checked: (root.editorModel.omitIndex === index) && root.editorModel.usePresets
 
                 onClicked: {
                     root.editorModel.setQualitySymbol("omit", index);
                 }
-            }
-
-            highlight: Rectangle {
-                color: ui.theme.accentColor
-                radius: 3
-                visible: root.editorModel.usePresets
             }
         }
 
@@ -407,24 +408,24 @@ Flickable {
             boundsBehavior: Flickable.StopAtBounds
 
             model: root.editorModel.suspensionList
-            currentIndex: root.editorModel.suspensionIndex
             visible: (root.editorModel.suspensionIndex != -1)
             enabled: root.editorModel.usePresets
 
-            delegate: FlatButton {
+            delegate: FlatRadioButton {
                 height: prv.listCellHeight
                 width: prv.listCellWidth
-                text: modelData
+
+                ButtonGroup.group: suspensionListView.children
+
+                StyledTextLabel {
+                    text: modelData
+                }
+
+                checked: (root.editorModel.suspensionIndex === index) && root.editorModel.usePresets
 
                 onClicked: {
                     root.editorModel.setQualitySymbol("suspension", index);
                 }
-            }
-
-            highlight: Rectangle {
-                color: ui.theme.accentColor
-                radius: 3
-                visible: root.editorModel.usePresets
             }
         }
 
@@ -438,6 +439,8 @@ Flickable {
             id: stackModifiers
 
             height: prv.listCellHeight
+
+            spacing: prv.listCellSpacing
 
             enabled: root.editorModel.usePresets
 
@@ -456,14 +459,11 @@ Flickable {
                 StyledTextLabel{
                     text: qsTrc("notation",modelData["name"])
                 }
-                checked: editorModel.stackModifiers === modelData["value"]
+                checked: (root.editorModel.stackModifiers === modelData["value"]) && root.editorModel.usePresets
 
                 onToggled: {
                     editorModel.setProperty("stackModifiers", modelData["value"])
                 }
-            }
-            highlight: {
-                visible: root.editorModel.usePresets
             }
         }
 

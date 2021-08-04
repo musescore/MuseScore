@@ -37,36 +37,6 @@ Rectangle {
 
     anchors.fill: parent
 
-    Component {
-        id: chordStyleDelegate
-
-        Column {
-            FlatButton {
-                id: button
-
-                width: 170
-                height: 76
-
-                anchors.bottomMargin: 8
-
-                opacity: 0.7
-
-                text: fileName
-
-                onClicked: {
-                    chordSymbolEditorModel.setChordStyle(index)
-                }
-            }
-            StyledTextLabel{
-                anchors.topMargin: 8
-                width: 170
-                height: 14
-                horizontalAlignment: Text.AlignHCenter
-                text: styleName
-            }
-        }
-    }
-
     ColumnLayout {
         anchors.fill: parent
         // TODO: margins 24
@@ -96,16 +66,40 @@ Rectangle {
             model: chordSymbolEditorModel
             currentIndex: chordSymbolEditorModel.currentStyleIndex
 
-            delegate: chordStyleDelegate
+            delegate: Column {
+                FlatRadioButton {
+                    id: button
+
+                    width: 170
+                    height: 76
+
+                    anchors.bottomMargin: 8
+
+                    ButtonGroup.group: chordSymbolStyleList.children
+
+                    opacity: 0.7
+
+                    StyledTextLabel {
+                        text: fileName
+                    }
+
+                    checked: chordSymbolEditorModel.currentStyleIndex === index
+
+                    onClicked: {
+                        chordSymbolEditorModel.setChordStyle(index)
+                    }
+                }
+                StyledTextLabel{
+                    anchors.topMargin: 8
+                    width: 170
+                    height: 14
+                    horizontalAlignment: Text.AlignHCenter
+                    text: styleName
+                }
+            }
 
             ScrollBar.horizontal: StyledScrollBar{
                 anchors.bottom: chordSymbolStyleList.bottom
-            }
-
-            highlight: Rectangle {
-                color: ui.theme.accentColor
-                height: 76
-                radius: 2
             }
         }
 

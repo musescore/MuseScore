@@ -31,43 +31,37 @@ FocusableItem {
 
     height: chordSymbolStylesGrid.height
 
-        Component {
-            id: styleDelegate
+    GridView {
+        id: chordSymbolStylesGrid
 
-            FlatButton {
-                id: button
+        anchors.left: root.left
+        anchors.right: root.right
 
-                width: chordSymbolStylesGrid.cellWidth-5
-                height: chordSymbolStylesGrid.cellHeight-5
+        height: 2 * cellHeight
+        width: 2 * cellWidth
 
+        cellWidth: root.width/2
+        cellHeight: 56
+
+        clip: true
+
+        delegate: FlatRadioButton {
+            id: button
+
+            ButtonGroup.group: chordSymbolStylesGrid.children
+
+            width: chordSymbolStylesGrid.cellWidth-5
+            height: chordSymbolStylesGrid.cellHeight-5
+
+            checked: chordStylesModel.currentStyleIndex === index
+
+            StyledTextLabel {
                 text: styleName
+            }
 
-                onClicked: {
-                    chordStylesModel.setChordStyle(index)
-                }
+            onClicked: {
+                chordStylesModel.setChordStyle(index)
             }
         }
-
-        GridView {
-            id: chordSymbolStylesGrid
-
-            anchors.left: root.left
-            anchors.right: root.right
-
-            height: 2 * cellHeight
-            width: 2 * cellWidth
-
-            cellWidth: root.width/2
-            cellHeight: 56
-
-            currentIndex: chordStylesModel.currentStyleIndex
-
-            delegate: styleDelegate
-            clip: true
-
-            highlight: Rectangle {
-                color: ui.theme.accentColor
-                radius: 3
-            }
-        }
+    }
 }
