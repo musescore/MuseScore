@@ -100,7 +100,7 @@
         <sign>F</sign>
         <line>4</line>
         </clef>
-      <staff-details number="1" print-object="no"/>
+      <staff-details print-object="no"/>
       <staff-details number="2" print-object="no"/>
       <staff-details number="3" print-object="no"/>
       <staff-details number="4" print-object="no"/>
