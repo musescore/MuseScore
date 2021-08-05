@@ -59,8 +59,23 @@ FocusScope {
 
         anchors.fill: parent
 
-        border.width: navCtrl.active ? 2 : 0
-        border.color: ui.theme.focusColor
+        Rectangle {
+            id: navCtrlBorderRect
+
+            anchors.fill: parent
+            anchors.margins: -ui.theme.navCtrlBorderWidth
+
+            visible: navCtrl.active
+
+            color: "transparent"
+            radius: parent.radius + navCtrlBorderRect.border.width
+
+            border.width: ui.theme.navCtrlBorderWidth
+            border.color: ui.theme.fontPrimaryColor
+        }
+
+        border.width: ui.theme.borderWidth
+        border.color: ui.theme.strokeColor
 
         color: ui.theme.buttonColor
         opacity: ui.theme.buttonOpacityNormal

@@ -51,10 +51,18 @@ FocusScope {
     }
 
     Rectangle {
+        id: navCtrlBorderRect
+
         anchors.fill: parent
-        border.width: navCtrl.active ? 2 : 0
-        border.color: ui.theme.focusColor
+        anchors.margins: -ui.theme.navCtrlBorderWidth
+
+        visible: navCtrl.active
+
         color: "transparent"
+        radius: parent.radius + navCtrlBorderRect.border.width
+
+        border.width: ui.theme.navCtrlBorderWidth
+        border.color: ui.theme.fontPrimaryColor
     }
 
     Row {

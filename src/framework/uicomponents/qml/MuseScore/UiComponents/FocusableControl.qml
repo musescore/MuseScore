@@ -66,8 +66,24 @@ FocusScope {
     Rectangle {
         id: focusRectItem
         anchors.fill: parent
-        border.color: keynavItem.active ? ui.theme.focusColor : root.itemBorderColor
-        border.width: keynavItem.active ? 2 : root.itemBorderWidth
+
+        Rectangle {
+            id: navCtrlBorderRect
+
+            anchors.fill: parent
+            anchors.margins: -ui.theme.navCtrlBorderWidth
+
+            visible: keynavItem.active
+
+            color: "transparent"
+            radius: parent.radius + navCtrlBorderRect.border.width
+
+            border.width: ui.theme.navCtrlBorderWidth
+            border.color: ui.theme.fontPrimaryColor
+        }
+
+        border.color: root.itemBorderColor
+        border.width: root.itemBorderWidth
     }
 
     MouseArea {

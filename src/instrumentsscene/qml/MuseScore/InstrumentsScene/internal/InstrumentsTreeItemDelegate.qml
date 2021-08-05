@@ -118,12 +118,25 @@ Item {
         id: background
 
         anchors.fill: parent
+        //anchors.margins: keynavItem.active ? ui.theme.navCtrlBorderWidth : 0
 
         color: ui.theme.backgroundPrimaryColor
         opacity: 1
 
-        border.color: ui.theme.focusColor
-        border.width: keynavItem.active ? 2 : 0
+        Rectangle {
+            id: navCtrlBorderRect
+
+            anchors.fill: parent
+            anchors.margins: -ui.theme.navCtrlBorderWidth
+
+            visible: keynavItem.active
+
+            color: "transparent"
+            radius: parent.radius + navCtrlBorderRect.border.width
+
+            border.width: ui.theme.navCtrlBorderWidth
+            border.color: ui.theme.fontPrimaryColor
+        }
 
         states: [
             State {
@@ -148,16 +161,16 @@ Item {
                 }
             },
 
-            State {
-                name: "SELECTED"
-                when: root.isSelected
+//            State {
+//                name: "SELECTED"
+//                when: root.isSelected
 
-                PropertyChanges {
-                    target: background
-                    color: ui.theme.accentColor
-                    opacity: 0.5
-                }
-            },
+//                PropertyChanges {
+//                    target: background
+//                    color: ui.theme.accentColor
+//                    opacity: 0.5
+//                }
+//            },
 
             State {
                 name: "PART_EXPANDED"

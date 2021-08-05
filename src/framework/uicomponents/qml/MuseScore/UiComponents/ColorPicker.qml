@@ -41,8 +41,23 @@ Rectangle {
     radius: 3
     color: "#000000"
 
-    border.width: navCtrl.active ? 2 : 1
-    border.color: navCtrl.active ? ui.theme.focusColor : "#000000"
+    Rectangle {
+        id: navCtrlBorderRect
+
+        anchors.fill: parent
+        anchors.margins: -ui.theme.navCtrlBorderWidth
+
+        visible: navCtrl.active
+
+        color: "transparent"
+        radius: parent.radius + navCtrlBorderRect.border.width
+
+        border.width: ui.theme.navCtrlBorderWidth
+        border.color: ui.theme.fontPrimaryColor
+    }
+
+    border.width: ui.theme.borderWidth
+    border.color: ui.theme.strokeColor
 
     NavigationControl {
         id: navCtrl
@@ -79,13 +94,6 @@ Rectangle {
     }
 
     states: [
-        State {
-            name: "NORMAL"
-            when: !clickableArea.containsMouse && !colorDialog.visible
-
-            PropertyChanges { target: root; border.color: ui.theme.strokeColor }
-        },
-
         State {
             name: "HOVERED"
             when: clickableArea.containsMouse && !clickableArea.pressed && !colorDialog.visible
