@@ -22,6 +22,7 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.3
 
+import MuseScore.Preferences 1.0
 import MuseScore.UiComponents 1.0
 
 Column {
@@ -30,13 +31,12 @@ Column {
 
     property int firstColumnWidth: 0
 
-    signal colorChangeRequested(var newColor, var propertyName)
+    signal colorChangeRequested(var newColor, var propertyType)
 
     StyledTextLabel {
         text: qsTrc("appshell", "UI Colors")
         font: ui.theme.bodyBoldFont
     }
-
 
     GridLayout {
         columnSpacing: parent.width/8
@@ -45,10 +45,10 @@ Column {
         Repeater {
 
             model: [
-                { textRole: "Accent Color:", colorRole: ui.theme.accentColor},
-                { textRole: "Text and Icons:", colorRole: ui.theme.fontPrimaryColor},
-                { textRole: "Disabled Text:", colorRole: "#000000"},
-                { textRole: "Border Color:", colorRole: ui.theme.strokeColor}
+                { textRole: "Accent Color:", colorRole: ui.theme.accentColor, typeRole: AppearancePreferencesModel.AccentColor},
+                { textRole: "Text and Icons:", colorRole: ui.theme.fontPrimaryColor, typeRole: AppearancePreferencesModel.TextAndIconsColor},
+                { textRole: "Disabled Text:", colorRole: "#000000", typeRole: AppearancePreferencesModel.DisabledColor},
+                { textRole: "Border Color:", colorRole: ui.theme.strokeColor, typeRole: AppearancePreferencesModel.BorderColor}
             ]
 
             delegate: Row {
@@ -65,7 +65,7 @@ Column {
                     color: modelData["colorRole"]
 
                     onNewColorSelected: {
-                        root.colorChangeRequested(newColor, modelData.textRole)
+                        root.colorChangeRequested(newColor, modelData.typeRole)
                     }
                 }
             }

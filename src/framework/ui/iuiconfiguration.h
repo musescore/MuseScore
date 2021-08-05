@@ -46,6 +46,9 @@ public:
     virtual QStringList possibleFontFamilies() const = 0;
     virtual QStringList possibleAccentColors() const = 0;
 
+    virtual bool isCurrentThemeHighContrast() const = 0;
+    virtual bool isCurrentThemeGeneral() const = 0;
+
     virtual void resetCurrentThemeToDefault(const ThemeCode& codeKey) = 0;
 
     virtual const ThemeInfo& currentTheme() const = 0;

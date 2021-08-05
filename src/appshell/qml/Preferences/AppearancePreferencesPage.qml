@@ -42,12 +42,17 @@ PreferencesPage {
     Column {
         id: content
 
+        QtObject {
+            id: prv
+
+            readonly property int firstColumnWidth: 212
+            readonly property int spacing: 24
+        }
+
         width: parent.width
         height: childrenRect.height
 
-        spacing: 24
-
-        readonly property int firstColumnWidth: 212
+        spacing: prv.spacing
 
         StyledTextLabel {
             text: highContrastEnable.checked ? qsTrc("appshell", "High Contrast Themes") : qsTrc("appshell", "Themes")
@@ -59,7 +64,7 @@ PreferencesPage {
             width: 200
             checked: appearanceModel.enableHighContrastChecked()
 
-            text: "Enable High-Contrast"
+            text: qsTrc("appshell", "Enable High-Contrast")
             onClicked: {
                 checked = !checked
                 highContrastEnable.checked ? appearanceModel.loadLastUsedHighContrastTheme() : appearanceModel.loadLastUsedGeneralTheme()
@@ -74,7 +79,7 @@ PreferencesPage {
             id: generalThemesModel
 
             Column {
-                spacing: 24
+                spacing: prv.spacing
 
                 ThemesSection {
                     width: content.width
@@ -92,7 +97,7 @@ PreferencesPage {
 
                     colors: appearanceModel.accentColors
                     currentColorIndex: appearanceModel.currentAccentColorIndex
-                    firstColumnWidth: content.firstColumnWidth
+                    firstColumnWidth: prv.firstColumnWidth
 
                     onAccentColorChangeRequested: {
                         appearanceModel.currentAccentColorIndex = newColorIndex
@@ -105,7 +110,7 @@ PreferencesPage {
             id: highContrastThemesModel
 
             Column {
-                spacing: 24
+                spacing: prv.spacing
 
                 ThemesSection {
                     width: content.width
@@ -122,10 +127,10 @@ PreferencesPage {
 
                 UiColorsSection {
                     width: content.width
-                    firstColumnWidth: content.firstColumnWidth
+                    firstColumnWidth: prv.firstColumnWidth
 
                     onColorChangeRequested: {
-                        appearanceModel.setNewColor(newColor, propertyName)
+                        appearanceModel.setNewColor(newColor, propertyType)
                     }
                 }
             }
@@ -137,7 +142,7 @@ PreferencesPage {
             allFonts: appearanceModel.allFonts()
             currentFontIndex: appearanceModel.currentFontIndex
             bodyTextSize: appearanceModel.bodyTextSize
-            firstColumnWidth: parent.firstColumnWidth
+            firstColumnWidth: prv.firstColumnWidth
 
             onFontChangeRequested: {
                 appearanceModel.currentFontIndex = newFontIndex
@@ -160,7 +165,7 @@ PreferencesPage {
             wallpaperPath: appearanceModel.backgroundWallpaperPath
             wallpapersDir: appearanceModel.wallpapersDir()
             wallpaperFilter: appearanceModel.wallpaperPathFilter()
-            firstColumnWidth: parent.firstColumnWidth
+            firstColumnWidth: prv.firstColumnWidth
 
             onUseColorChangeRequested: {
                 appearanceModel.backgroundUseColor = newValue
@@ -187,7 +192,7 @@ PreferencesPage {
             wallpaperPath: appearanceModel.foregroundWallpaperPath
             wallpapersDir: appearanceModel.wallpapersDir()
             wallpaperFilter: appearanceModel.wallpaperPathFilter()
-            firstColumnWidth: parent.firstColumnWidth
+            firstColumnWidth: prv.firstColumnWidth
 
             onUseColorChangeRequested: {
                 appearanceModel.foregroundUseColor = newValue
@@ -208,7 +213,6 @@ PreferencesPage {
             onClicked: {
                 appearanceModel.resetThemeToDefault()
             }
-
         }
     }
 }

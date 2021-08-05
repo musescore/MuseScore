@@ -48,6 +48,9 @@ public:
     QStringList possibleFontFamilies() const override;
     QStringList possibleAccentColors() const override;
 
+    bool isCurrentThemeHighContrast() const override;
+    bool isCurrentThemeGeneral() const override;
+
     void resetCurrentThemeToDefault(const ThemeCode& codeKey) override;
 
     const ThemeInfo& currentTheme() const override;
@@ -101,8 +104,6 @@ private:
     void updateCurrentTheme();
     void updateThemes();
 
-    bool isCurrentThemeHighContrast() const;
-    bool isCurrentThemeGeneral() const;
     ThemeCode currentThemeCodeKey() const;
     ThemeInfo makeStandardTheme(const ThemeCode& codeKey) const;
 

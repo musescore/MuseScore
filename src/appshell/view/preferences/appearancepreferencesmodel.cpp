@@ -103,11 +103,7 @@ void AppearancePreferencesModel::resetThemeToDefault()
 
 bool AppearancePreferencesModel::enableHighContrastChecked()
 {
-    if (isCurrentThemeHighContrast()) {
-        return true;
-    } else {
-        return false;
-    }
+    return uiConfiguration()->isCurrentThemeHighContrast();
 }
 
 void AppearancePreferencesModel::loadLastUsedGeneralTheme()
@@ -120,20 +116,21 @@ void AppearancePreferencesModel::loadLastUsedHighContrastTheme()
     uiConfiguration()->loadLastUsedHighContrastTheme();
 }
 
-void AppearancePreferencesModel::setNewColor(const QColor& newColor, const QString& propertyName)
+void AppearancePreferencesModel::setNewColor(const QColor& newColor, ColorType colorType)
 {
-    //! NOTE: Considered using a "switch()" statement here, but it would require a type conversion
-    //! from std::string to some form of a primitive literal. This has a workaround by implementing
-    //! a hash function, but I went for the "if/else if" ladder instead since we don't have that many cases anyway.
+    switch (colorType) {
+    case AccentColor: uiConfiguration()->setCurrentThemeStyleValue(ThemeStyleKey::ACCENT_COLOR, Val(newColor));
+        break;
 
-    if (propertyName.toStdString() == "Accent Color:") {
-        uiConfiguration()->setCurrentThemeStyleValue(ThemeStyleKey::ACCENT_COLOR, Val(newColor));
-    } else if (propertyName.toStdString() == "Text and Icons:") {
-        uiConfiguration()->setCurrentThemeStyleValue(ThemeStyleKey::FONT_PRIMARY_COLOR, Val(newColor));
-    } else if (propertyName.toStdString() == "Disabled Text:") {
-        return;
-    } else if (propertyName.toStdString() == "Border Color:") {
-        uiConfiguration()->setCurrentThemeStyleValue(ThemeStyleKey::STROKE_COLOR, Val(newColor));
+    case TextAndIconsColor: uiConfiguration()->setCurrentThemeStyleValue(ThemeStyleKey::FONT_PRIMARY_COLOR, Val(newColor));
+        break;
+
+    case DisabledColor: return;
+
+    case BorderColor: uiConfiguration()->setCurrentThemeStyleValue(ThemeStyleKey::STROKE_COLOR, Val(newColor));
+        break;
+
+    default: qDebug("INVALID COLORTYPE RECEIVED!");
     }
     emit themesChanged();
 }
@@ -181,17 +178,6 @@ ThemeInfo AppearancePreferencesModel::currentTheme() const
 ThemeList AppearancePreferencesModel::allThemes() const
 {
     return uiConfiguration()->themes();
-}
-
-bool AppearancePreferencesModel::isCurrentThemeHighContrast() const
-{
-    return uiConfiguration()->currentTheme().codeKey == HIGH_CONTRAST_BLACK_THEME_CODE
-           || uiConfiguration()->currentTheme().codeKey == HIGH_CONTRAST_WHITE_THEME_CODE;
-}
-
-bool AppearancePreferencesModel::isCurrentThemeGeneral() const
-{
-    return uiConfiguration()->currentTheme().codeKey == LIGHT_THEME_CODE || uiConfiguration()->currentTheme().codeKey == DARK_THEME_CODE;
 }
 
 int AppearancePreferencesModel::currentFontIndex() const
@@ -244,6 +230,7 @@ void AppearancePreferencesModel::setCurrentThemeCode(const QString& themeCode)
     for (const ThemeInfo& theme : allThemes()) {
         if (themeCode == QString::fromStdString(theme.codeKey)) {
             uiConfiguration()->setCurrentTheme(theme.codeKey);
+            break;
         }
     }
     emit themesChanged();

@@ -62,6 +62,14 @@ public:
 
     Q_INVOKABLE void init();
 
+    enum ColorType {
+        AccentColor,
+        TextAndIconsColor,
+        DisabledColor,
+        BorderColor
+    };
+    Q_ENUM(ColorType)
+
     QVariantList generalThemes() const;
     QVariantList highContrastThemes() const;
 
@@ -85,7 +93,7 @@ public:
     Q_INVOKABLE bool enableHighContrastChecked();
     Q_INVOKABLE void loadLastUsedGeneralTheme();
     Q_INVOKABLE void loadLastUsedHighContrastTheme();
-    Q_INVOKABLE void setNewColor(const QColor& newColor, const QString& propertyName);
+    Q_INVOKABLE void setNewColor(const QColor& newColor, ColorType colorType);
     Q_INVOKABLE QStringList allFonts() const;
     Q_INVOKABLE QString wallpaperPathFilter() const;
     Q_INVOKABLE QString wallpapersDir() const;
@@ -116,8 +124,6 @@ signals:
 private:
     ui::ThemeInfo currentTheme() const;
     ui::ThemeList allThemes() const;
-    bool isCurrentThemeHighContrast() const;
-    bool isCurrentThemeGeneral() const;
 };
 }
 
