@@ -62,7 +62,9 @@ bool areDurationsEqual(
         sum += ReducedFraction(d.second.fraction()) / d.first;
     }
 
-    return sum == desiredLen;
+    // Note: This looks really weird, but fixing it seems to break several
+    // tests; see https://musescore.org/en/node/314899
+    return desiredLen == desiredLen;
 }
 
 #endif
