@@ -25,6 +25,19 @@
 #include <QTextCodec>
 #include <QMap>
 
+namespace {
+template<typename T>
+struct ResetToNull {
+    T** value;
+    explicit ResetToNull(T** value)
+        : value(value) {}
+    ~ResetToNull()
+    {
+        *value = nullptr;
+    }
+};
+}
+
 namespace ovebase {
 /*
 template <class T>
@@ -4392,6 +4405,7 @@ bool OvscParse::parse()
     Block placeHolder;
 
     m_handle = &handle;
+    auto _ = ResetToNull(&m_handle);
 
     // version
     if (!readBuffer(placeHolder, 1)) {
@@ -4404,39 +4418,33 @@ bool OvscParse::parse()
     messageOut(str);
 
     if (!jump(6)) {
-        m_handle = nullptr;
         return false;
     }
 
     // show page margin
     if (!readBuffer(placeHolder, 1)) {
-        m_handle = nullptr;
         return false;
     }
     m_ove->setShowPageMargin(placeHolder.toBoolean());
 
     if (!jump(1)) {
-        m_handle = nullptr;
         return false;
     }
 
     // transpose track
     if (!readBuffer(placeHolder, 1)) {
-        m_handle = nullptr;
         return false;
     }
     m_ove->setShowTransposeTrack(placeHolder.toBoolean());
 
     // play repeat
     if (!readBuffer(placeHolder, 1)) {
-        m_handle = nullptr;
         return false;
     }
     m_ove->setPlayRepeat(placeHolder.toBoolean());
 
     // play style
     if (!readBuffer(placeHolder, 1)) {
-        m_handle = nullptr;
         return false;
     }
     OveSong::PlayStyle style = OveSong::PlayStyle::Record;
@@ -4449,26 +4457,21 @@ bool OvscParse::parse()
 
     // show line break
     if (!readBuffer(placeHolder, 1)) {
-        m_handle = nullptr;
         return false;
     }
     m_ove->setShowLineBreak(placeHolder.toBoolean());
 
     // show ruler
     if (!readBuffer(placeHolder, 1)) {
-        m_handle = nullptr;
         return false;
     }
     m_ove->setShowRuler(placeHolder.toBoolean());
 
     // show color
     if (!readBuffer(placeHolder, 1)) {
-        m_handle = nullptr;
         return false;
     }
     m_ove->setShowColor(placeHolder.toBoolean());
-
-    m_handle = nullptr;
 
     return true;
 }
@@ -4495,35 +4498,31 @@ bool TrackParse::parse()
     Block placeHolder;
 
     m_handle = &handle;
+    auto _ = ResetToNull(&m_handle);
 
     Track* oveTrack = new Track();
     m_ove->addTrack(oveTrack);
 
     // 2 32bytes long track name buffer
     if (!readBuffer(placeHolder, 32)) {
-        m_handle = nullptr;
         return false;
     }
     oveTrack->setName(m_ove->getCodecString(placeHolder.fixedSizeBufferToStrByteArray()));
 
     if (!readBuffer(placeHolder, 32)) {
-        m_handle = nullptr;
         return false;
     }
     oveTrack->setBriefName(m_ove->getCodecString(placeHolder.fixedSizeBufferToStrByteArray()));
 
     if (!jump(8)) {
-        m_handle = nullptr;
         return false;
     } // 0xfffa0012 fffa0012
     if (!jump(1)) {
-        m_handle = nullptr;
         return false;
     }
 
     // patch
     if (!readBuffer(placeHolder, 1)) {
-        m_handle = nullptr;
         return false;
     }
     unsigned int thisByte = placeHolder.toInt();
@@ -4531,171 +4530,145 @@ bool TrackParse::parse()
 
     // show name
     if (!readBuffer(placeHolder, 1)) {
-        m_handle = nullptr;
         return false;
     }
     oveTrack->setShowName(placeHolder.toBoolean());
 
     // show brief name
     if (!readBuffer(placeHolder, 1)) {
-        m_handle = nullptr;
         return false;
     }
     oveTrack->setShowBriefName(placeHolder.toBoolean());
 
     if (!jump(1)) {
-        m_handle = nullptr;
         return false;
     }
 
     // show transpose
     if (!readBuffer(placeHolder, 1)) {
-        m_handle = nullptr;
         return false;
     }
     oveTrack->setShowTranspose(placeHolder.toBoolean());
 
     if (!jump(1)) {
-        m_handle = nullptr;
         return false;
     }
 
     // mute
     if (!readBuffer(placeHolder, 1)) {
-        m_handle = nullptr;
         return false;
     }
     oveTrack->setMute(placeHolder.toBoolean());
 
     // solo
     if (!readBuffer(placeHolder, 1)) {
-        m_handle = nullptr;
         return false;
     }
     oveTrack->setSolo(placeHolder.toBoolean());
 
     if (!jump(1)) {
-        m_handle = nullptr;
         return false;
     }
 
     // show key each line
     if (!readBuffer(placeHolder, 1)) {
-        m_handle = nullptr;
         return false;
     }
     oveTrack->setShowKeyEachLine(placeHolder.toBoolean());
 
     // voice count
     if (!readBuffer(placeHolder, 1)) {
-        m_handle = nullptr;
         return false;
     }
     oveTrack->setVoiceCount(placeHolder.toUnsignedInt());
 
     if (!jump(3)) {
-        m_handle = nullptr;
         return false;
     }
 
     // transpose value [-127, 127]
     if (!readBuffer(placeHolder, 1)) {
-        m_handle = nullptr;
         return false;
     }
     oveTrack->setTranspose(placeHolder.toInt());
 
     if (!jump(2)) {
-        m_handle = nullptr;
         return false;
     }
 
     // start clef
     if (!readBuffer(placeHolder, 1)) {
-        m_handle = nullptr;
         return false;
     }
     oveTrack->setStartClef(placeHolder.toUnsignedInt());
 
     // transpose celf
     if (!readBuffer(placeHolder, 1)) {
-        m_handle = nullptr;
         return false;
     }
     oveTrack->setTransposeClef(placeHolder.toUnsignedInt());
 
     // start key
     if (!readBuffer(placeHolder, 1)) {
-        m_handle = nullptr;
         return false;
     }
     oveTrack->setStartKey(placeHolder.toUnsignedInt());
 
     // display percent
     if (!readBuffer(placeHolder, 1)) {
-        m_handle = nullptr;
         return false;
     }
     oveTrack->setDisplayPercent(placeHolder.toUnsignedInt());
 
     // show leger line
     if (!readBuffer(placeHolder, 1)) {
-        m_handle = nullptr;
         return false;
     }
     oveTrack->setShowLegerLine(placeHolder.toBoolean());
 
     // show clef
     if (!readBuffer(placeHolder, 1)) {
-        m_handle = nullptr;
         return false;
     }
     oveTrack->setShowClef(placeHolder.toBoolean());
 
     // show time signature
     if (!readBuffer(placeHolder, 1)) {
-        m_handle = nullptr;
         return false;
     }
     oveTrack->setShowTimeSignature(placeHolder.toBoolean());
 
     // show key signature
     if (!readBuffer(placeHolder, 1)) {
-        m_handle = nullptr;
         return false;
     }
     oveTrack->setShowKeySignature(placeHolder.toBoolean());
 
     // show barline
     if (!readBuffer(placeHolder, 1)) {
-        m_handle = nullptr;
         return false;
     }
     oveTrack->setShowBarline(placeHolder.toBoolean());
 
     // fill with rest
     if (!readBuffer(placeHolder, 1)) {
-        m_handle = nullptr;
         return false;
     }
     oveTrack->setFillWithRest(placeHolder.toBoolean());
 
     // flat tail
     if (!readBuffer(placeHolder, 1)) {
-        m_handle = nullptr;
         return false;
     }
     oveTrack->setFlatTail(placeHolder.toBoolean());
 
     // show clef each line
     if (!readBuffer(placeHolder, 1)) {
-        m_handle = nullptr;
         return false;
     }
     oveTrack->setShowClefEachLine(placeHolder.toBoolean());
 
     if (!jump(12)) {
-        m_handle = nullptr;
         return false;
     }
 
@@ -4706,46 +4679,39 @@ bool TrackParse::parse()
         Voice* voicePtr = new Voice();
 
         if (!jump(5)) {
-            m_handle = nullptr;
             return false;
         }
 
         // channel
         if (!readBuffer(placeHolder, 1)) {
-            m_handle = nullptr;
             return false;
         }
         voicePtr->setChannel(placeHolder.toUnsignedInt());
 
         // volume
         if (!readBuffer(placeHolder, 1)) {
-            m_handle = nullptr;
             return false;
         }
         voicePtr->setVolume(placeHolder.toInt());
 
         // pitch shift
         if (!readBuffer(placeHolder, 1)) {
-            m_handle = nullptr;
             return false;
         }
         voicePtr->setPitchShift(placeHolder.toInt());
 
         // pan
         if (!readBuffer(placeHolder, 1)) {
-            m_handle = nullptr;
             return false;
         }
         voicePtr->setPan(placeHolder.toInt());
 
         if (!jump(6)) {
-            m_handle = nullptr;
             return false;
         }
 
         // patch
         if (!readBuffer(placeHolder, 1)) {
-            m_handle = nullptr;
             return false;
         }
         voicePtr->setPatch(placeHolder.toInt());
@@ -4756,7 +4722,6 @@ bool TrackParse::parse()
     // stem type
     for (i = 0; i < 8; ++i) {
         if (!readBuffer(placeHolder, 1)) {
-            m_handle = nullptr;
             return false;
         }
         voices[i]->setStemType(placeHolder.toUnsignedInt());
@@ -4773,7 +4738,6 @@ bool TrackParse::parse()
     // line
     for (i = 0; i < 16; ++i) {
         if (!readBuffer(placeHolder, 1)) {
-            m_handle = nullptr;
             return false;
         }
         nodes[i].m_line = placeHolder.toInt();
@@ -4782,7 +4746,6 @@ bool TrackParse::parse()
     // head type
     for (i = 0; i < 16; ++i) {
         if (!readBuffer(placeHolder, 1)) {
-            m_handle = nullptr;
             return false;
         }
         nodes[i].m_headType = placeHolder.toUnsignedInt();
@@ -4791,7 +4754,6 @@ bool TrackParse::parse()
     // pitch
     for (i = 0; i < 16; ++i) {
         if (!readBuffer(placeHolder, 1)) {
-            m_handle = nullptr;
             return false;
         }
         nodes[i].m_pitch = placeHolder.toUnsignedInt();
@@ -4800,7 +4762,6 @@ bool TrackParse::parse()
     // voice
     for (i = 0; i < 16; ++i) {
         if (!readBuffer(placeHolder, 1)) {
-            m_handle = nullptr;
             return false;
         }
         nodes[i].m_voice = placeHolder.toUnsignedInt();
@@ -4822,8 +4783,6 @@ bool TrackParse::parse()
     oveTrack->setChannel(placeHolder.toUnsignedInt());
 
     // to be continued. if anything important...*/
-
-    m_handle = nullptr;
 
     return true;
 }
@@ -4888,104 +4847,89 @@ bool PageGroupParse::parsePage(SizeChunk* chunk, Page* page)
     StreamHandle handle(chunk->getDataBlock()->data(), chunk->getSizeBlock()->toSize());
 
     m_handle = &handle;
+    auto _ = ResetToNull(&m_handle);
 
     // begin line
     if (!readBuffer(placeHolder, 2)) {
-        m_handle = nullptr;
         return false;
     }
     page->setBeginLine(placeHolder.toUnsignedInt());
 
     // line count
     if (!readBuffer(placeHolder, 2)) {
-        m_handle = nullptr;
         return false;
     }
     page->setLineCount(placeHolder.toUnsignedInt());
 
     if (!jump(4)) {
-        m_handle = nullptr;
         return false;
     }
 
     // staff interval
     if (!readBuffer(placeHolder, 2)) {
-        m_handle = nullptr;
         return false;
     }
     page->setStaffInterval(placeHolder.toUnsignedInt());
 
     // line interval
     if (!readBuffer(placeHolder, 2)) {
-        m_handle = nullptr;
         return false;
     }
     page->setLineInterval(placeHolder.toUnsignedInt());
 
     // staff inline interval
     if (!readBuffer(placeHolder, 2)) {
-        m_handle = nullptr;
         return false;
     }
     page->setStaffInlineInterval(placeHolder.toUnsignedInt());
 
     // line bar count
     if (!readBuffer(placeHolder, 2)) {
-        m_handle = nullptr;
         return false;
     }
     page->setLineBarCount(placeHolder.toUnsignedInt());
 
     // page line count
     if (!readBuffer(placeHolder, 2)) {
-        m_handle = nullptr;
         return false;
     }
     page->setPageLineCount(placeHolder.toUnsignedInt());
 
     // left margin
     if (!readBuffer(placeHolder, 4)) {
-        m_handle = nullptr;
         return false;
     }
     page->setLeftMargin(placeHolder.toUnsignedInt());
 
     // top margin
     if (!readBuffer(placeHolder, 4)) {
-        m_handle = nullptr;
         return false;
     }
     page->setTopMargin(placeHolder.toUnsignedInt());
 
     // right margin
     if (!readBuffer(placeHolder, 4)) {
-        m_handle = nullptr;
         return false;
     }
     page->setRightMargin(placeHolder.toUnsignedInt());
 
     // bottom margin
     if (!readBuffer(placeHolder, 4)) {
-        m_handle = nullptr;
         return false;
     }
     page->setBottomMargin(placeHolder.toUnsignedInt());
 
     // page width
     if (!readBuffer(placeHolder, 4)) {
-        m_handle = nullptr;
         return false;
     }
     page->setPageWidth(placeHolder.toUnsignedInt());
 
     // page height
     if (!readBuffer(placeHolder, 4)) {
-        m_handle = nullptr;
         return false;
     }
     page->setPageHeight(placeHolder.toUnsignedInt());
-
-    m_handle = NULL;
 
     return true;
 }
@@ -5001,18 +4945,16 @@ unsigned int StaffCountGetter::getStaffCount(SizeChunk* chunk)
     Block placeHolder;
 
     m_handle = &handle;
+    auto _ = ResetToNull(&m_handle);
 
     if (!jump(6)) {
-        m_handle = nullptr;
         return false;
     }
 
     // staff count
     if (!readBuffer(placeHolder, 2)) {
-        m_handle = nullptr;
         return false;
     }
-    m_handle = nullptr;
     return placeHolder.toUnsignedInt();
 }
 
@@ -5083,58 +5025,49 @@ bool LineGroupParse::parseLine(SizeChunk* chunk, Line* line)
     StreamHandle handle(chunk->getDataBlock()->data(), chunk->getSizeBlock()->toSize());
 
     m_handle = &handle;
+    auto _ = ResetToNull(&m_handle);
 
     if (!jump(2)) {
-        m_handle = nullptr;
         return false;
     }
 
     // begin bar
     if (!readBuffer(placeHolder, 2)) {
-        m_handle = nullptr;
         return false;
     }
     line->setBeginBar(placeHolder.toUnsignedInt());
 
     // bar count
     if (!readBuffer(placeHolder, 2)) {
-        m_handle = nullptr;
         return false;
     }
     line->setBarCount(placeHolder.toUnsignedInt());
 
     if (!jump(6)) {
-        m_handle = nullptr;
         return false;
     }
 
     // y offset
     if (!readBuffer(placeHolder, 2)) {
-        m_handle = nullptr;
         return false;
     }
     line->setYOffset(placeHolder.toInt());
 
     // left x offset
     if (!readBuffer(placeHolder, 2)) {
-        m_handle = nullptr;
         return false;
     }
     line->setLeftXOffset(placeHolder.toInt());
 
     // right x offset
     if (!readBuffer(placeHolder, 2)) {
-        m_handle = nullptr;
         return false;
     }
     line->setRightXOffset(placeHolder.toInt());
 
     if (!jump(4)) {
-        m_handle = nullptr;
         return false;
     }
-
-    m_handle = NULL;
 
     return true;
 }
@@ -5146,59 +5079,51 @@ bool LineGroupParse::parseStaff(SizeChunk* chunk, Staff* staff)
     StreamHandle handle(chunk->getDataBlock()->data(), chunk->getSizeBlock()->toSize());
 
     m_handle = &handle;
+    auto _ = ResetToNull(&m_handle);
 
     if (!jump(7)) {
-        m_handle = nullptr;
         return false;
     }
 
     // clef
     if (!readBuffer(placeHolder, 1)) {
-        m_handle = nullptr;
         return false;
     }
     staff->setClefType(placeHolder.toUnsignedInt());
 
     // key
     if (!readBuffer(placeHolder, 1)) {
-        m_handle = nullptr;
         return false;
     }
     staff->setKeyType(oveKeyToKey(placeHolder.toUnsignedInt()));
 
     if (!jump(2)) {
-        m_handle = nullptr;
         return false;
     }
 
     // visible
     if (!readBuffer(placeHolder, 1)) {
-        m_handle = nullptr;
         return false;
     }
     staff->setVisible(placeHolder.toBoolean());
 
     if (!jump(12)) {
-        m_handle = nullptr;
         return false;
     }
 
     // y offset
     if (!readBuffer(placeHolder, 2)) {
-        m_handle = nullptr;
         return false;
     }
     staff->setYOffset(placeHolder.toInt());
 
     int jumpAmount = m_ove->getIsVersion4() ? 26 : 18;
     if (!jump(jumpAmount)) {
-        m_handle = nullptr;
         return false;
     }
 
     // group type
     if (!readBuffer(placeHolder, 1)) {
-        m_handle = nullptr;
         return false;
     }
     GroupType groupType = GroupType::None;
@@ -5211,12 +5136,9 @@ bool LineGroupParse::parseStaff(SizeChunk* chunk, Staff* staff)
 
     // group staff count
     if (!readBuffer(placeHolder, 1)) {
-        m_handle = nullptr;
         return false;
     }
     staff->setGroupStaffCount(placeHolder.toUnsignedInt());
-
-    m_handle = NULL;
 
     return true;
 }
@@ -5333,48 +5255,42 @@ bool BarsParse::parseMeas(Measure* measure, SizeChunk* chunk)
     StreamHandle measureHandle(chunk->getDataBlock()->data(), chunk->getSizeBlock()->toSize());
 
     m_handle = &measureHandle;
+    auto _ = ResetToNull(&m_handle);
 
     if (!jump(2)) {
-        m_handle = nullptr;
         return false;
     }
 
     // multi-measure rest
     if (!readBuffer(placeHolder, 1)) {
-        m_handle = nullptr;
         return false;
     }
     measure->setIsMultiMeasureRest(placeHolder.toBoolean());
 
     // pickup
     if (!readBuffer(placeHolder, 1)) {
-        m_handle = nullptr;
         return false;
     }
     measure->setIsPickup(placeHolder.toBoolean());
 
     if (!jump(4)) {
-        m_handle = nullptr;
         return false;
     }
 
     // left barline
     if (!readBuffer(placeHolder, 1)) {
-        m_handle = nullptr;
         return false;
     }
     measure->setLeftBarline(placeHolder.toUnsignedInt());
 
     // right barline
     if (!readBuffer(placeHolder, 1)) {
-        m_handle = nullptr;
         return false;
     }
     measure->setRightBarline(placeHolder.toUnsignedInt());
 
     // tempo
     if (!readBuffer(placeHolder, 2)) {
-        m_handle = nullptr;
         return false;
     }
     double tempo = ((double)placeHolder.toUnsignedInt());
@@ -5385,35 +5301,28 @@ bool BarsParse::parseMeas(Measure* measure, SizeChunk* chunk)
 
     // bar length(tick)
     if (!readBuffer(placeHolder, 2)) {
-        m_handle = nullptr;
         return false;
     }
     measure->setLength(placeHolder.toUnsignedInt());
 
     if (!jump(6)) {
-        m_handle = nullptr;
         return false;
     }
 
     // bar number offset
     if (!parseOffsetElement(measure->getBarNumber())) {
-        m_handle = nullptr;
         return false;
     }
 
     if (!jump(2)) {
-        m_handle = nullptr;
         return false;
     }
 
     // multi-measure rest count
     if (!readBuffer(placeHolder, 2)) {
-        m_handle = nullptr;
         return false;
     }
     measure->setMultiMeasureRestCount(placeHolder.toUnsignedInt());
-
-    m_handle = NULL;
 
     return true;
 }
@@ -5425,22 +5334,20 @@ bool BarsParse::parseCond(Measure* measure, MeasureData* measureData, SizeChunk*
     StreamHandle handle(chunk->getDataBlock()->data(), chunk->getSizeBlock()->toSize());
 
     m_handle = &handle;
+    auto _ = ResetToNull(&m_handle);
 
     // item count
     if (!readBuffer(placeHolder, 2)) {
-        m_handle = nullptr;
         return false;
     }
     unsigned int cnt = placeHolder.toUnsignedInt();
 
     if (!parseTimeSignature(measure, 36)) {
-        m_handle = nullptr;
         return false;
     }
 
     for (unsigned int i = 0; i < cnt; ++i) {
         if (!readBuffer(placeHolder, 2)) {
-            m_handle = nullptr;
             return false;
         }
         unsigned int twoByte = placeHolder.toUnsignedInt();
@@ -5449,92 +5356,78 @@ bool BarsParse::parseCond(Measure* measure, MeasureData* measureData, SizeChunk*
 
         // type id
         if (!readBuffer(placeHolder, 1)) {
-            m_handle = nullptr;
             return false;
         }
         unsigned int thisByte = placeHolder.toUnsignedInt();
         CondType type;
 
         if (!getCondElementType(thisByte, type)) {
-            m_handle = nullptr;
             return false;
         }
 
         switch (type) {
         case CondType::Bar_Number: {
             if (!parseBarNumber(measure, twoByte - 1)) {
-                m_handle = nullptr;
                 return false;
             }
             break;
         }
         case CondType::Repeat: {
             if (!parseRepeatSymbol(measureData, oldBlockSize)) {
-                m_handle = nullptr;
                 return false;
             }
             break;
         }
         case CondType::Numeric_Ending: {
             if (!parseNumericEndings(measureData, oldBlockSize)) {
-                m_handle = nullptr;
                 return false;
             }
             break;
         }
         case CondType::Decorator: {
             if (!parseDecorators(measureData, newBlockSize)) {
-                m_handle = nullptr;
                 return false;
             }
             break;
         }
         case CondType::Tempo: {
             if (!parseTempo(measureData, newBlockSize)) {
-                m_handle = nullptr;
                 return false;
             }
             break;
         }
         case CondType::Text: {
             if (!parseText(measureData, newBlockSize)) {
-                m_handle = nullptr;
                 return false;
             }
             break;
         }
         case CondType::Expression: {
             if (!parseExpressions(measureData, newBlockSize)) {
-                m_handle = nullptr;
                 return false;
             }
             break;
         }
         case CondType::Time_Parameters: {
             if (!parseTimeSignatureParameters(measure, newBlockSize)) {
-                m_handle = nullptr;
                 return false;
             }
             break;
         }
         case CondType::Barline_Parameters: {
             if (!parseBarlineParameters(measure, newBlockSize)) {
-                m_handle = nullptr;
                 return false;
             }
             break;
         }
         default: {
             if (!jump(newBlockSize)) {
-                m_handle = nullptr;
                 return false;
             }
             break;
         }
         }
     }
-
-    m_handle = NULL;
 
     return true;
 }
@@ -6209,10 +6102,10 @@ bool BarsParse::parseBdat(Measure* /* measure */, MeasureData* measureData, Size
     StreamHandle handle(chunk->getDataBlock()->data(), chunk->getSizeBlock()->toSize());
 
     m_handle = &handle;
+    auto _ = ResetToNull(&m_handle);
 
     // parse here
     if (!readBuffer(placeHolder, 2)) {
-        m_handle = nullptr;
         return false;
     }
     unsigned int cnt = placeHolder.toUnsignedInt();
@@ -6220,21 +6113,18 @@ bool BarsParse::parseBdat(Measure* /* measure */, MeasureData* measureData, Size
     for (unsigned int i = 0; i < cnt; ++i) {
         // 0x0028 or 0x0016 or 0x002C
         if (!readBuffer(placeHolder, 2)) {
-            m_handle = nullptr;
             return false;
         }
         unsigned int count = placeHolder.toUnsignedInt() - 7;
 
         // type id
         if (!readBuffer(placeHolder, 1)) {
-            m_handle = nullptr;
             return false;
         }
         unsigned int thisByte = placeHolder.toUnsignedInt();
         BdatType type;
 
         if (!getBdatElementType(thisByte, type)) {
-            m_handle = nullptr;
             return false;
         }
 
@@ -6243,105 +6133,90 @@ bool BarsParse::parseBdat(Measure* /* measure */, MeasureData* measureData, Size
         case BdatType::Rest:
         case BdatType::Note: {
             if (!parseNoteRest(measureData, count, type)) {
-                m_handle = nullptr;
                 return false;
             }
             break;
         }
         case BdatType::Beam: {
             if (!parseBeam(measureData, count)) {
-                m_handle = nullptr;
                 return false;
             }
             break;
         }
         case BdatType::Harmony: {
             if (!parseHarmony(measureData, count)) {
-                m_handle = nullptr;
                 return false;
             }
             break;
         }
         case BdatType::Clef: {
             if (!parseClef(measureData, count)) {
-                m_handle = nullptr;
                 return false;
             }
             break;
         }
         case BdatType::Dynamics: {
             if (!parseDynamics(measureData, count)) {
-                m_handle = nullptr;
                 return false;
             }
             break;
         }
         case BdatType::Wedge: {
             if (!parseWedge(measureData, count)) {
-                m_handle = nullptr;
                 return false;
             }
             break;
         }
         case BdatType::Glissando: {
             if (!parseGlissando(measureData, count)) {
-                m_handle = nullptr;
                 return false;
             }
             break;
         }
         case BdatType::Decorator: {
             if (!parseDecorators(measureData, count)) {
-                m_handle = nullptr;
                 return false;
             }
             break;
         }
         case BdatType::Key: {
             if (!parseKey(measureData, count)) {
-                m_handle = nullptr;
                 return false;
             }
             break;
         }
         case BdatType::Lyric: {
             if (!parseLyric(measureData, count)) {
-                m_handle = nullptr;
                 return false;
             }
             break;
         }
         case BdatType::Octave_Shift: {
             if (!parseOctaveShift(measureData, count)) {
-                m_handle = nullptr;
                 return false;
             }
             break;
         }
         case BdatType::Slur: {
             if (!parseSlur(measureData, count)) {
-                m_handle = nullptr;
                 return false;
             }
             break;
         }
         case BdatType::Text: {
             if (!parseText(measureData, count)) {
-                m_handle = nullptr;
                 return false;
             }
             break;
         }
         case BdatType::Tie: {
             if (!parseTie(measureData, count)) {
-                m_handle = nullptr;
                 return false;
             }
             break;
         }
         case BdatType::Tuplet: {
             if (!parseTuplet(measureData, count)) {
-                m_handle = nullptr;
                 return false;
             }
             break;
@@ -6349,21 +6224,18 @@ bool BarsParse::parseBdat(Measure* /* measure */, MeasureData* measureData, Size
         case BdatType::Guitar_Bend:
         case BdatType::Guitar_Barre: {
             if (!parseSizeBlock(count)) {
-                m_handle = nullptr;
                 return false;
             }
             break;
         }
         case BdatType::Pedal: {
             if (!parsePedal(measureData, count)) {
-                m_handle = nullptr;
                 return false;
             }
             break;
         }
         case BdatType::KuoHao: {
             if (!parseKuohao(measureData, count)) {
-                m_handle = nullptr;
                 return false;
             }
             break;
@@ -6376,21 +6248,18 @@ bool BarsParse::parseBdat(Measure* /* measure */, MeasureData* measureData, Size
         }
         case BdatType::Harp_Pedal: {
             if (!parseHarpPedal(measureData, count)) {
-                m_handle = nullptr;
                 return false;
             }
             break;
         }
         case BdatType::Multi_Measure_Rest: {
             if (!parseMultiMeasureRest(measureData, count)) {
-                m_handle = nullptr;
                 return false;
             }
             break;
         }
         case BdatType::Harmony_GuitarFrame: {
             if (!parseHarmonyGuitarFrame(measureData, count)) {
-                m_handle = nullptr;
                 return false;
             }
             break;
@@ -6403,42 +6272,36 @@ bool BarsParse::parseBdat(Measure* /* measure */, MeasureData* measureData, Size
         case BdatType::Graphics_Curve:
         case BdatType::Graphics_WedgeSymbol: {
             if (!parseSizeBlock(count)) {
-                m_handle = nullptr;
                 return false;
             }
             break;
         }
         case BdatType::Midi_Controller: {
             if (!parseMidiController(measureData, count)) {
-                m_handle = nullptr;
                 return false;
             }
             break;
         }
         case BdatType::Midi_Program_Change: {
             if (!parseMidiProgramChange(measureData, count)) {
-                m_handle = nullptr;
                 return false;
             }
             break;
         }
         case BdatType::Midi_Channel_Pressure: {
             if (!parseMidiChannelPressure(measureData, count)) {
-                m_handle = nullptr;
                 return false;
             }
             break;
         }
         case BdatType::Midi_Pitch_Wheel: {
             if (!parseMidiPitchWheel(measureData, count)) {
-                m_handle = nullptr;
                 return false;
             }
             break;
         }
         default: {
             if (!jump(count)) {
-                m_handle = nullptr;
                 return false;
             }
             break;
@@ -6447,8 +6310,6 @@ bool BarsParse::parseBdat(Measure* /* measure */, MeasureData* measureData, Size
 
         // if i == count - 1 then is bar end place holder
     }
-
-    m_handle = NULL;
 
     return true;
 }
@@ -9441,15 +9302,14 @@ bool LyricChunkParse::parse()
     Block placeHolder;
 
     m_handle = &handle;
+    auto _ = ResetToNull(&m_handle);
 
     if (!jump(4)) {
-        m_handle = nullptr;
         return false;
     }
 
     // Lyric count
     if (!readBuffer(placeHolder, 2)) {
-        m_handle = nullptr;
         return false;
     }
     unsigned int count = placeHolder.toUnsignedInt();
@@ -9458,72 +9318,61 @@ bool LyricChunkParse::parse()
         LyricInfo info;
 
         if (!readBuffer(placeHolder, 2)) {
-            m_handle = nullptr;
             return false;
         }
         // unsigned int size = placeHolder.toUnsignedInt();
 
         // 0x0D00
         if (!jump(2)) {
-            m_handle = nullptr;
             return false;
         }
 
         // voice
         if (!readBuffer(placeHolder, 1)) {
-            m_handle = nullptr;
             return false;
         }
         info.m_voice = placeHolder.toUnsignedInt();
 
         // verse
         if (!readBuffer(placeHolder, 1)) {
-            m_handle = nullptr;
             return false;
         }
         info.m_verse = placeHolder.toUnsignedInt();
 
         // track
         if (!readBuffer(placeHolder, 1)) {
-            m_handle = nullptr;
             return false;
         }
         info.m_track = placeHolder.toUnsignedInt();
 
         if (!jump(1)) {
-            m_handle = nullptr;
             return false;
         }
 
         // measure
         if (!readBuffer(placeHolder, 2)) {
-            m_handle = nullptr;
             return false;
         }
         info.m_measure = placeHolder.toUnsignedInt();
 
         // word count
         if (!readBuffer(placeHolder, 2)) {
-            m_handle = nullptr;
             return false;
         }
         info.m_wordCount = placeHolder.toUnsignedInt();
 
         // lyric size
         if (!readBuffer(placeHolder, 2)) {
-            m_handle = nullptr;
             return false;
         }
         info.m_lyricSize = placeHolder.toUnsignedInt();
 
         if (!jump(6)) {
-            m_handle = nullptr;
             return false;
         }
 
         // name
         if (!readBuffer(placeHolder, 32)) {
-            m_handle = nullptr;
             return false;
         }
         info.m_name = m_ove->getCodecString(placeHolder.fixedSizeBufferToStrByteArray());
@@ -9531,50 +9380,42 @@ bool LyricChunkParse::parse()
         if (info.m_lyricSize > 0) {
             // lyric
             if (!readBuffer(placeHolder, info.m_lyricSize)) {
-                m_handle = nullptr;
                 return false;
             }
             info.m_lyric = m_ove->getCodecString(placeHolder.fixedSizeBufferToStrByteArray());
 
             if (!jump(4)) {
-                m_handle = nullptr;
                 return false;
             }
 
             // font
             if (!readBuffer(placeHolder, 2)) {
-                m_handle = nullptr;
                 return false;
             }
             info.m_font = placeHolder.toUnsignedInt();
 
             if (!jump(1)) {
-                m_handle = nullptr;
                 return false;
             }
 
             // font size
             if (!readBuffer(placeHolder, 1)) {
-                m_handle = nullptr;
                 return false;
             }
             info.m_fontSize = placeHolder.toUnsignedInt();
 
             // font style
             if (!readBuffer(placeHolder, 1)) {
-                m_handle = nullptr;
                 return false;
             }
             info.m_fontStyle = placeHolder.toUnsignedInt();
 
             if (!jump(1)) {
-                m_handle = nullptr;
                 return false;
             }
 
             for (int j = 0; j < info.m_wordCount; ++j) {
                 if (!jump(8)) {
-                    m_handle = nullptr;
                     return false;
                 }
             }
@@ -9583,7 +9424,6 @@ bool LyricChunkParse::parse()
         processLyricInfo(info);
     }
 
-    m_handle = nullptr;
     return true;
 }
 
@@ -9679,6 +9519,7 @@ bool TitleChunkParse::parse()
     unsigned int titleType;
 
     m_handle = &handle;
+    auto _ = ResetToNull(&m_handle);
 
     if (!readBuffer(typeBlock, 4)) {
         return false;
@@ -9691,7 +9532,6 @@ bool TitleChunkParse::parse()
         Block offsetBlock;
 
         if (!readBuffer(offsetBlock, 4)) {
-            m_handle = nullptr;
             return false;
         }
 
@@ -9702,21 +9542,18 @@ bool TitleChunkParse::parse()
             if (i > 0) {
                 // 0x00 AB 00 0C 00 00
                 if (!jump(6)) {
-                    m_handle = nullptr;
                     return false;
                 }
             }
 
             Block countBlock;
             if (!readBuffer(countBlock, 2)) {
-                m_handle = nullptr;
                 return false;
             }
             unsigned int titleSize = countBlock.toUnsignedInt();
 
             Block dataBlock;
             if (!readBuffer(dataBlock, titleSize)) {
-                m_handle = nullptr;
                 return false;
             }
 
@@ -9726,26 +9563,22 @@ bool TitleChunkParse::parse()
             }
         }
 
-        m_handle = nullptr;
         return true;
     }
 
     if (titleType == m_headerType || titleType == m_footerType) {
         if (!jump(10)) {
-            m_handle = nullptr;
             return false;
         }
 
         Block countBlock;
         if (!readBuffer(countBlock, 2)) {
-            m_handle = nullptr;
             return false;
         }
         unsigned int titleSize = countBlock.toUnsignedInt();
 
         Block dataBlock;
         if (!readBuffer(dataBlock, titleSize)) {
-            m_handle = nullptr;
             return false;
         }
 
@@ -9754,15 +9587,12 @@ bool TitleChunkParse::parse()
 
         // 0x00 AB 00 0C 00 00
         if (!jump(6)) {
-            m_handle = nullptr;
             return false;
         }
 
-        m_handle = nullptr;
         return true;
     }
 
-    m_handle = nullptr;
     return false;
 }
 
