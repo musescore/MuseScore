@@ -56,6 +56,10 @@ StyledTabButton {
         }
 
         MenuButton {
+
+            height: 20
+            width: 20
+
             anchors.verticalCenter: parent.verticalCenter
             visible: root.isCurrent
 
