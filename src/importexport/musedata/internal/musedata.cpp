@@ -681,10 +681,9 @@ bool MuseData::read(const QString& name)
             Part* mpart = new Part(score);
             int staves  = countStaves(part);
             for (int i = 0; i < staves; ++i) {
-                Staff* staff = new Staff(score);
-                staff->setPart(mpart);
-                mpart->insertStaff(staff, i);
-                score->staves().push_back(staff);
+                Staff* staff = createStaff(score, mpart);
+                score->appendStaff(staff);
+
                 if ((staves == 2) && (i == 0)) {
                     staff->setBracketType(0, BracketType::BRACE);
                     staff->setBracketSpan(0, 2);

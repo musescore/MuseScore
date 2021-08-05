@@ -1031,15 +1031,6 @@ void Score::spell(Note* note)
 }
 
 //---------------------------------------------------------
-//   appendPart
-//---------------------------------------------------------
-
-void Score::appendPart(Part* p)
-{
-    _parts.append(p);
-}
-
-//---------------------------------------------------------
 //   searchPage
 //    p is in canvas coordinates
 //---------------------------------------------------------
@@ -2460,8 +2451,15 @@ void Score::cmdRemovePart(Part* part)
 
 void Score::insertPart(Part* part, int idx)
 {
+    if (!part) {
+        return;
+    }
+
     bool inserted = false;
     int staff = 0;
+
+    assignIdIfNeed(*part);
+
     for (QList<Part*>::iterator i = _parts.begin(); i != _parts.end(); ++i) {
         if (staff >= idx) {
             _parts.insert(i, part);
@@ -2475,6 +2473,16 @@ void Score::insertPart(Part* part, int idx)
     }
     masterScore()->rebuildMidiMapping();
     setInstrumentsChanged(true);
+}
+
+void Score::appendPart(Part* part)
+{
+    if (!part) {
+        return;
+    }
+
+    assignIdIfNeed(*part);
+    _parts.push_back(part);
 }
 
 //---------------------------------------------------------
@@ -2517,6 +2525,11 @@ void Score::removePart(Part* part)
 
 void Score::insertStaff(Staff* staff, int ridx)
 {
+    if (!staff || !staff->part()) {
+        return;
+    }
+
+    assignIdIfNeed(*staff);
     staff->part()->insertStaff(staff, ridx);
 
     int idx = staffIdx(staff->part()) + ridx;
@@ -2542,21 +2555,53 @@ void Score::insertStaff(Staff* staff, int ridx)
             }
         }
     }
-#if 0
-    for (Spanner* s : staff->score()->unmanagedSpanners()) {
-        if (s->systemFlag()) {
-            continue;
-        }
-        if (s->staffIdx() >= idx) {
-            int t = s->track() + VOICES;
-            s->setTrack(t < ntracks() ? t : ntracks() - 1);
-            if (s->track2() != -1) {
-                t = s->track2() + VOICES;
-                s->setTrack2(t < ntracks() ? t : s->track());
-            }
-        }
+}
+
+void Score::appendStaff(Staff* staff)
+{
+    if (!staff || !staff->part()) {
+        return;
     }
-#endif
+
+    assignIdIfNeed(*staff);
+    staff->part()->appendStaff(staff);
+    _staves.push_back(staff);
+}
+
+void Score::assignIdIfNeed(Staff& staff) const
+{
+    if (staff.id() == INVALID_ID) {
+        staff.setId(newStaffId());
+    }
+}
+
+void Score::assignIdIfNeed(Part& part) const
+{
+    if (part.id() == INVALID_ID) {
+        part.setId(newPartId());
+    }
+}
+
+ID Score::newStaffId() const
+{
+    ID maxId = 0;
+
+    for (const Staff* staff : score()->staves()) {
+        maxId = std::max(maxId, staff->id());
+    }
+
+    return maxId + 1;
+}
+
+ID Score::newPartId() const
+{
+    ID maxId = 0;
+
+    for (const Part* part : score()->parts()) {
+        maxId = std::max(maxId, part->id());
+    }
+
+    return maxId + 1;
 }
 
 //---------------------------------------------------------
@@ -2785,10 +2830,10 @@ void Score::sortStaves(QList<int>& dst)
         Staff* staff = _staves[idx];
         if (staff->part() != curPart) {
             curPart = staff->part();
-            curPart->staves()->clear();
+            curPart->clearStaves();
             _parts.push_back(curPart);
         }
-        curPart->staves()->push_back(staff);
+        curPart->appendStaff(staff);
         dl.push_back(staff);
         for (int itrack = 0; itrack < VOICES; ++itrack) {
             trackMap.insert(idx * VOICES + itrack, track++);
@@ -4050,8 +4095,7 @@ void Score::appendPart(const InstrumentTemplate* t)
     part->initFromInstrTemplate(t);
     int n = nstaves();
     for (int i = 0; i < t->nstaves(); ++i) {
-        Staff* staff = new Staff(this);
-        staff->setPart(part);
+        Staff* staff = createStaff(this, part);
         StaffType* stt = staff->staffType(Fraction(0, 1));
         stt->setLines(t->staffLines[i]);
         stt->setSmall(t->smallStaff[i]);
@@ -5162,7 +5206,7 @@ int Score::staffIdx(const Part* part) const
     return idx;
 }
 
-Staff* Score::staff(const ID& staffId) const
+Staff* Score::staffById(const ID& staffId) const
 {
     for (Staff* staff : _staves) {
         if (staff->id() == staffId) {
@@ -5173,7 +5217,7 @@ Staff* Score::staff(const ID& staffId) const
     return nullptr;
 }
 
-Part* Score::part(const ID& partId) const
+Part* Score::partById(const ID& partId) const
 {
     for (Part* part : _parts) {
         if (part->id() == partId) {
