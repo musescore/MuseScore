@@ -38,8 +38,6 @@ namespace Ms {
 
 static Accidental* accidental(QXmlStreamReader& e, Score* score)
 {
-    Q_ASSERT(e.isStartElement() && e.name() == "accidental");
-
     bool cautionary = e.attributes().value("cautionary") == "yes";
     bool editorial = e.attributes().value("editorial") == "yes";
     bool parentheses = e.attributes().value("parentheses") == "yes";
@@ -70,9 +68,6 @@ static Accidental* accidental(QXmlStreamReader& e, Score* score)
 
 void mxmlNotePitch::displayStepOctave(QXmlStreamReader& e)
 {
-    Q_ASSERT(e.isStartElement()
-             && (e.name() == "rest" || e.name() == "unpitched"));
-
     while (e.readNextStartElement()) {
         if (e.name() == "display-step") {
             const auto step = e.readElementText();
@@ -108,8 +103,6 @@ void mxmlNotePitch::displayStepOctave(QXmlStreamReader& e)
 
 void mxmlNotePitch::pitch(QXmlStreamReader& e)
 {
-    Q_ASSERT(e.isStartElement() && e.name() == "pitch");
-
     // defaults
     _step = -1;
     _alter = 0;

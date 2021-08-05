@@ -243,5 +243,7 @@ extern SymId mxmlString2accSymId(const QString mxmlName);
 extern AccidentalType microtonalGuess(double val);
 extern bool isLaissezVibrer(const SymId id);
 extern const Articulation* findLaissezVibrer(const Chord* const chord);
+extern QString xmlReaderLocation(const QXmlStreamReader& e);
+extern QString checkAtEndElement(const QXmlStreamReader& e, const QString& expName);
 } // namespace Ms
 #endif

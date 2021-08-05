@@ -120,6 +120,7 @@
 #include "engraving/iengravingconfiguration.h"
 
 #include "config.h"
+#include "log.h"
 
 using namespace mu::iex::musicxml;
 
@@ -5956,7 +5957,9 @@ static MeasureBase* lastMeasureBase(const System* const system)
     MeasureBase* mb = nullptr;
     if (system) {
         const auto& measures = system->measures();
-        Q_ASSERT(!(measures.empty()));
+        IF_ASSERT_FAILED(!(measures.empty())) {
+            return nullptr;
+        }
         mb = measures.back();
     }
     return mb;
@@ -5971,7 +5974,9 @@ static bool hasPageBreak(const System* const system)
     const MeasureBase* mb = nullptr;
     if (system) {
         const auto& measures = system->measures();
-        Q_ASSERT(!(measures.empty()));
+        IF_ASSERT_FAILED(!(measures.empty())) {
+            return false;
+        }
         mb = measures.back();
     }
 
@@ -6864,7 +6869,10 @@ void ExportMusicXml::writeMeasureStaves(const Measure* m,
     _tboxesBelowWritten = false;
 
     for (int staffIdx = startStaff; staffIdx < endStaff; ++staffIdx) {
-        Q_ASSERT(m == origM); // some staves may need to make m point somewhere else, so just in case, ensure start in same place
+        // some staves may need to make m point somewhere else, so just in case, ensure start in same place
+        IF_ASSERT_FAILED(m == origM) {
+            return;
+        }
         moveToTick(m->tick());
 
         int partRelStaffNo = (nstaves > 1 ? staffIdx - startStaff + 1 : 0); // xml staff number, counting from 1 for this instrument

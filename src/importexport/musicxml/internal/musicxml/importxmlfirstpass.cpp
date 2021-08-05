@@ -171,7 +171,9 @@ int MusicXmlOctaveShiftList::octaveShift(const Fraction f) const
 
 void MusicXmlOctaveShiftList::addOctaveShift(const int shift, const Fraction f)
 {
-    Q_ASSERT(Fraction(0, 1) <= f);
+    IF_ASSERT_FAILED(Fraction(0, 1) <= f) {
+        return;
+    }
 
     //qDebug("addOctaveShift(shift %d f %s)", shift, qPrintable(f.print()));
     auto i = find(f);
