@@ -2669,7 +2669,7 @@ void MusicXMLParserPass2::attributes(const QString& partId, Measure* measure, co
             else if (_e.name() == "measure-style")
                   measureStyle(measure);
             else if (_e.name() == "staff-details")
-                  staffDetails(partId);
+                  staffDetails(partId, tick);
             else if (_e.name() == "time")
                   time(partId, measure, tick);
             else if (_e.name() == "transpose")
@@ -2701,7 +2701,7 @@ static void setStaffLines(Score* score, int staffIdx, int stafflines)
  Parse the /score-partwise/part/measure/attributes/staff-details node.
  */
 
-void MusicXMLParserPass2::staffDetails(const QString& partId)
+void MusicXMLParserPass2::staffDetails(const QString& partId, const Fraction& tick)
       {
       Q_ASSERT(_e.isStartElement() && _e.name() == "staff-details");
       //logDebugTrace("MusicXMLParserPass2::staffDetails");
@@ -2743,8 +2743,12 @@ void MusicXMLParserPass2::staffDetails(const QString& partId)
                   staffTuning(t);
             else if (_e.name() == "staff-size") {
                   int staffScale = _e.readElementText().toInt();
-                  part->staff(msStaff)->setProperty(Pid::MAG, staffScale / 100.0);
-                  part->staff(msStaff)->setPropertyFlags(Pid::MAG, PropertyFlags::UNSTYLED);
+                  if (part->staff(msStaff)->isTabStaff(tick) && staffScale > 100)
+                        _logger->logError("trying to increase scale of tab staff (not supported)", &_e);
+                  else {
+                        part->staff(msStaff)->setProperty(Pid::MAG, staffScale / 100.0);
+                        part->staff(msStaff)->setPropertyFlags(Pid::MAG, PropertyFlags::UNSTYLED);
+                        }
                   }
             else
                   skipLogCurrElem();
