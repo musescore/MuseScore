@@ -233,18 +233,15 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
         p->setPartName(part->partName());
 
         for (Staff* staff : *part->staves()) {
-            Staff* s = new Staff(score);
+            Staff* s = createStaff(score, p);
             s->setId(staff->id());
-            s->setPart(p);
-//                  s->setStaffType(0, *staff->staffType(0));              // TODO
             s->init(staff);
             s->setDefaultClefType(staff->defaultClefType());
             // the order of staff - s matters as staff should be the first entry in the
             // created link list to make primaryStaff() work
             // TODO: change implementation, maybe create an explicit "primary" flag
             score->undo(new Link(s, staff));
-            p->staves()->append(s);
-            score->staves().append(s);
+            score->appendStaff(s);
             srcStaves.append(staff->idx());
         }
         score->appendPart(p);

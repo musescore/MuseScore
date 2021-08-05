@@ -149,10 +149,8 @@ bool Part::readProperties(XmlReader& e)
 {
     const QStringRef& tag(e.name());
     if (tag == "Staff") {
-        Staff* staff = new Staff(score());
-        staff->setPart(this);
-        score()->staves().push_back(staff);
-        _staves.push_back(staff);
+        Staff* staff = createStaff(score(), this);
+        score()->appendStaff(staff);
         staff->read(e);
     } else if (tag == "Instrument") {
         Instrument* instr = new Instrument;
@@ -185,10 +183,6 @@ bool Part::readProperties(XmlReader& e)
 
 void Part::read(XmlReader& e)
 {
-    if (e.hasAttribute("id")) {
-        _id = e.attribute("id").toULongLong();
-    }
-
     while (e.readNextStartElement()) {
         if (!readProperties(e)) {
             e.unknown();
@@ -205,9 +199,7 @@ void Part::read(XmlReader& e)
 
 void Part::write(XmlWriter& xml) const
 {
-    if (_id != INVALID_ID) {
-        xml.stag(this, QString("id=\"%1\"").arg(_id));
-    }
+    xml.stag(this);
 
     for (const Staff* staff : _staves) {
         staff->write(xml);
@@ -229,6 +221,26 @@ void Part::write(XmlWriter& xml) const
     instrument()->write(xml, this);
 
     xml.etag();
+}
+
+int Part::nstaves() const
+{
+    return _staves.size();
+}
+
+const QList<Staff*>* Part::staves() const
+{
+    return &_staves;
+}
+
+void Part::appendStaff(Staff* staff)
+{
+    _staves.push_back(staff);
+}
+
+void Part::clearStaves()
+{
+    _staves.clear();
 }
 
 //---------------------------------------------------------
@@ -256,12 +268,13 @@ void Part::setStaves(int n)
         qDebug("Part::setStaves(): remove staves not implemented!");
         return;
     }
+
     int staffIdx = score()->staffIdx(this) + ns;
     for (int i = ns; i < n; ++i) {
-        Staff* staff = new Staff(score());
-        staff->setPart(this);
+        Staff* staff = createStaff(score(), this);
         _staves.push_back(staff);
-        score()->staves().insert(staffIdx, staff);
+        const_cast<QList<Staff*>&>(score()->staves()).insert(staffIdx, staff);
+
         for (Measure* m = score()->firstMeasure(); m; m = m->nextMeasure()) {
             m->insertStaff(staff, staffIdx);
             if (m->hasMMRest()) {

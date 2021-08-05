@@ -96,9 +96,11 @@ public:
     bool readProperties(XmlReader&);
     void write(XmlWriter& xml) const;
 
-    int nstaves() const { return _staves.size(); }
-    QList<Staff*>* staves() { return &_staves; }
-    const QList<Staff*>* staves() const { return &_staves; }
+    int nstaves() const;
+    const QList<Staff*>* staves() const;
+    void appendStaff(Staff* staff);
+    void clearStaves();
+
     Staff* staff(int idx) const;
     QString familyId() const;
 

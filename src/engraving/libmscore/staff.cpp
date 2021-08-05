@@ -710,9 +710,7 @@ Fraction Staff::currentKeyTick(const Fraction& tick) const
 
 void Staff::write(XmlWriter& xml) const
 {
-    if (_id != INVALID_ID) {
-        xml.stag(this, QString("id=\"%1\"").arg(_id));
-    }
+    xml.stag(this, QString("id=\"%1\"").arg(idx() + 1));
 
     if (links()) {
         Score* s = masterScore();
@@ -792,10 +790,6 @@ void Staff::write(XmlWriter& xml) const
 
 void Staff::read(XmlReader& e)
 {
-    if (e.hasAttribute("id")) {
-        _id = e.attribute("id").toULongLong();
-    }
-
     while (e.readNextStartElement()) {
         if (!readProperties(e)) {
             e.unknown();

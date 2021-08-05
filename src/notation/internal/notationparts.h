@@ -83,9 +83,6 @@ protected:
 private:
     void updatePartTitles();
 
-    Ms::ID newPartId() const;
-    Ms::ID newStaffId() const;
-
     void doMoveStaves(const std::vector<Staff*>& staves, int destinationStaffIndex, Part* destinationPart = nullptr);
     void doSetStaffVisible(Staff* staff, bool visible);
     void doSetStaffVoiceVisible(Staff* staff, int voiceIndex, bool visible);
@@ -108,12 +105,12 @@ private:
 
     void setBracketsAndBarlines();
 
-    void notifyAboutPartChanged(Part* part) const;
-    void notifyAboutPartAdded(Part* part) const;
-    void notifyAboutPartRemoved(Part* part) const;
-    void notifyAboutStaffChanged(Staff* staff) const;
-    void notifyAboutStaffAdded(Staff* staff, const ID& partId) const;
-    void notifyAboutStaffRemoved(Staff* staff) const;
+    void notifyAboutPartChanged(const Part* part) const;
+    void notifyAboutPartAdded(const Part* part) const;
+    void notifyAboutPartRemoved(const Part* part) const;
+    void notifyAboutStaffChanged(const Staff* staff) const;
+    void notifyAboutStaffAdded(const Staff* staff, const ID& partId) const;
+    void notifyAboutStaffRemoved(const Staff* staff) const;
     async::ChangedNotifier<const Staff*>* staffChangedNotifier(const ID& partId) const;
 
     IGetScore* m_getScore = nullptr;

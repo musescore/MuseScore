@@ -1713,11 +1713,8 @@ static void createPart(Score* score, const QString& id, PartMap& pm)
     Part* part = new Part(score);
     pm.insert(id, part);
     score->appendPart(part);
-    Staff* staff = new Staff(score);
-    staff->setPart(part);
-    part->staves()->push_back(staff);
-    score->staves().push_back(staff);
-    // TODO TBD tuplets.resize(VOICES); // part now contains one staff, thus VOICES voices
+    Staff* staff = createStaff(score, part);
+    score->appendStaff(staff);
 }
 
 //---------------------------------------------------------

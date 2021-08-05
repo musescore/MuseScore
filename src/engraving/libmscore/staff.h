@@ -314,5 +314,13 @@ public:
     void triggerLayout() const override;
     void triggerLayout(const Fraction& tick);
 };
+
+inline Staff* createStaff(Score* score, Part* part)
+{
+    Staff* staff = new Staff(score);
+    staff->setPart(part);
+
+    return staff;
+}
 }     // namespace Ms
 #endif
