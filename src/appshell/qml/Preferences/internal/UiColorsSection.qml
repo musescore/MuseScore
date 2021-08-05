@@ -34,7 +34,7 @@ Column {
     signal colorChangeRequested(var newColor, var propertyType)
 
     StyledTextLabel {
-        text: qsTrc("appshell", "UI Colors")
+        text: qsTrc("appshell", "UI colors")
         font: ui.theme.bodyBoldFont
     }
 
@@ -45,10 +45,10 @@ Column {
         Repeater {
 
             model: [
-                { textRole: "Accent Color:", colorRole: ui.theme.accentColor, typeRole: AppearancePreferencesModel.AccentColor},
-                { textRole: "Text and Icons:", colorRole: ui.theme.fontPrimaryColor, typeRole: AppearancePreferencesModel.TextAndIconsColor},
-                { textRole: "Disabled Text:", colorRole: "#000000", typeRole: AppearancePreferencesModel.DisabledColor},
-                { textRole: "Border Color:", colorRole: ui.theme.strokeColor, typeRole: AppearancePreferencesModel.BorderColor}
+                { textRole: "Accent color:", colorRole: ui.theme.accentColor, typeRole: AppearancePreferencesModel.AccentColor},
+                { textRole: "Text and icons:", colorRole: ui.theme.fontPrimaryColor, typeRole: AppearancePreferencesModel.TextAndIconsColor},
+                { textRole: "Disabled text:", colorRole: "#000000", typeRole: AppearancePreferencesModel.DisabledColor},
+                { textRole: "Border color:", colorRole: ui.theme.strokeColor, typeRole: AppearancePreferencesModel.BorderColor}
             ]
 
             delegate: Row {

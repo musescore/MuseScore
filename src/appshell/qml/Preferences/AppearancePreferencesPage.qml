@@ -64,7 +64,7 @@ PreferencesPage {
             width: 200
             checked: appearanceModel.enableHighContrastChecked()
 
-            text: qsTrc("appshell", "Enable High-Contrast")
+            text: qsTrc("appshell", "Enable high-contrast")
             onClicked: {
                 checked = !checked
                 highContrastEnable.checked ? appearanceModel.loadLastUsedHighContrastTheme() : appearanceModel.loadLastUsedGeneralTheme()
@@ -208,7 +208,7 @@ PreferencesPage {
         }
 
         FlatButton {
-            text: qsTrc("appshell", "Reset Theme to Default")
+            text: qsTrc("appshell", "Reset theme to default")
 
             onClicked: {
                 appearanceModel.resetThemeToDefault()
