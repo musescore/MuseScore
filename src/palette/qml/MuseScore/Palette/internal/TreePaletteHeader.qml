@@ -130,6 +130,11 @@ Item {
 
         z: 1000
 
+        height: 20
+        width: 20
+
+        anchors.verticalCenter: parent.verticalCenter
+
         visible: (root.expanded || root.hovered || isMenuOpened || navigation.active) && root.isInVisibleArea
 
         navigation.panel: root.navigationPanel
