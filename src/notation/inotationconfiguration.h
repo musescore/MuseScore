@@ -41,6 +41,7 @@ public:
 
     virtual QColor backgroundColor() const = 0;
     virtual void setBackgroundColor(const QColor& color) = 0;
+    virtual void resetCurrentBackgroundColorToDefault() = 0;
 
     virtual io::path backgroundWallpaperPath() const = 0;
     virtual void setBackgroundWallpaperPath(const io::path& path) = 0;

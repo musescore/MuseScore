@@ -38,14 +38,16 @@ using ThemeCode = std::string;
 
 static const ThemeCode DARK_THEME_CODE("dark");
 static const ThemeCode LIGHT_THEME_CODE("light");
-static const ThemeCode HIGH_CONTRAST_THEME_CODE("high_contrast");
+static const ThemeCode HIGH_CONTRAST_BLACK_THEME_CODE("high_contrast_black");
+static const ThemeCode HIGH_CONTRAST_WHITE_THEME_CODE("high_contrast_white");
 
 inline std::vector<ThemeCode> allStandardThemeCodes()
 {
     return {
         LIGHT_THEME_CODE,
         DARK_THEME_CODE,
-        HIGH_CONTRAST_THEME_CODE
+        HIGH_CONTRAST_BLACK_THEME_CODE,
+        HIGH_CONTRAST_WHITE_THEME_CODE
     };
 }
 
@@ -60,6 +62,7 @@ enum ThemeStyleKey
     ACCENT_COLOR,
     STROKE_COLOR,
     BUTTON_COLOR,
+    BORDER_WIDTH,
     FONT_PRIMARY_COLOR,
     FONT_SECONDARY_COLOR,
     LINK_COLOR,
@@ -232,12 +235,12 @@ struct UiActionState
 
     static UiActionState make_disabled(bool checked = false)
     {
-        return UiActionState{ false, checked };
+        return UiActionState { false, checked };
     }
 
     static UiActionState make_enabled(bool checked = false)
     {
-        return UiActionState{ true, checked };
+        return UiActionState { true, checked };
     }
 };
 

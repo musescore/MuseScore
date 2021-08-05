@@ -75,12 +75,17 @@ bool MacOSPlatformTheme::isFollowSystemThemeAvailable() const
 
 ThemeCode MacOSPlatformTheme::themeCode() const
 {
-    if (isSystemDarkMode()) {
-        if (isSystemHighContrast()) {
-            return HIGH_CONTRAST_THEME_CODE;
+    if (isSystemHighContrast()) {
+        if (isSystemDarkMode()) {
+            return HIGH_CONTRAST_BLACK_THEME_CODE;
         }
+        return HIGH_CONTRAST_WHITE_THEME_CODE;
+    }
+
+    if (isSystemDarkMode()) {
         return DARK_THEME_CODE;
     }
+
     //! NOTE When system is in light mode, don't automatically use
     //! high contrast theme, because it is too dark.
     //! Light high contrast theme would be nice.

@@ -48,9 +48,16 @@ public:
     QStringList possibleFontFamilies() const override;
     QStringList possibleAccentColors() const override;
 
+    bool isCurrentThemeHighContrast() const override;
+    bool isCurrentThemeGeneral() const override;
+
+    void resetCurrentThemeToDefault(const ThemeCode& codeKey) override;
+
     const ThemeInfo& currentTheme() const override;
     void setCurrentTheme(const ThemeCode& codeKey) override;
     void setCurrentThemeStyleValue(ThemeStyleKey key, const Val& val) override;
+    void loadLastUsedGeneralTheme() override;
+    void loadLastUsedHighContrastTheme() override;
     async::Notification currentThemeChanged() const override;
 
     std::string fontFamily() const override;

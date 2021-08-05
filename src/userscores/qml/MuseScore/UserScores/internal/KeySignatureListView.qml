@@ -45,6 +45,9 @@ GridView {
         height: root.cellHeight
         width: root.cellWidth
 
+        itemBorderColor: ui.theme.strokeColor
+        itemBorderWidth: ui.theme.borderWidth
+
         radius: 3
         isSelected: modelData.titleMajor === currentSignature.titleMajor
 

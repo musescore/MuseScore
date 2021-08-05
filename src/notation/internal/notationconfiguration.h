@@ -46,6 +46,7 @@ public:
 
     QColor backgroundColor() const override;
     void setBackgroundColor(const QColor& color) override;
+    void resetCurrentBackgroundColorToDefault() override;
 
     io::path backgroundWallpaperPath() const override;
     void setBackgroundWallpaperPath(const io::path& path) override;

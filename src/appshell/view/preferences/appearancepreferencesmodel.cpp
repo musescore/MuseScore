@@ -62,12 +62,27 @@ void AppearancePreferencesModel::init()
     });
 }
 
-QVariantList AppearancePreferencesModel::themes() const
+QVariantList AppearancePreferencesModel::generalThemes() const
 {
     QVariantList result;
 
     for (const ThemeInfo& theme: allThemes()) {
-        result << ThemeConverter::toMap(theme);
+        if (theme.codeKey == LIGHT_THEME_CODE || theme.codeKey == DARK_THEME_CODE) {
+            result << ThemeConverter::toMap(theme);
+        }
+    }
+
+    return result;
+}
+
+QVariantList AppearancePreferencesModel::highContrastThemes() const
+{
+    QVariantList result;
+
+    for (const ThemeInfo& theme : allThemes()) {
+        if (theme.codeKey == HIGH_CONTRAST_BLACK_THEME_CODE || theme.codeKey == HIGH_CONTRAST_WHITE_THEME_CODE) {
+            result << ThemeConverter::toMap(theme);
+        }
     }
 
     return result;
@@ -76,6 +91,46 @@ QVariantList AppearancePreferencesModel::themes() const
 QStringList AppearancePreferencesModel::accentColors() const
 {
     return uiConfiguration()->possibleAccentColors();
+}
+
+void AppearancePreferencesModel::resetThemeToDefault()
+{
+    uiConfiguration()->resetCurrentThemeToDefault(currentTheme().codeKey);
+    notationConfiguration()->resetCurrentBackgroundColorToDefault();
+    emit backgroundColorChanged();
+    emit themesChanged();
+}
+
+bool AppearancePreferencesModel::enableHighContrastChecked()
+{
+    return uiConfiguration()->isCurrentThemeHighContrast();
+}
+
+void AppearancePreferencesModel::loadLastUsedGeneralTheme()
+{
+    uiConfiguration()->loadLastUsedGeneralTheme();
+}
+
+void AppearancePreferencesModel::loadLastUsedHighContrastTheme()
+{
+    uiConfiguration()->loadLastUsedHighContrastTheme();
+}
+
+void AppearancePreferencesModel::setNewColor(const QColor& newColor, ColorType colorType)
+{
+    switch (colorType) {
+    case AccentColor: uiConfiguration()->setCurrentThemeStyleValue(ThemeStyleKey::ACCENT_COLOR, Val(newColor));
+        break;
+
+    case TextAndIconsColor: uiConfiguration()->setCurrentThemeStyleValue(ThemeStyleKey::FONT_PRIMARY_COLOR, Val(newColor));
+        break;
+
+    case DisabledColor: return;
+
+    case BorderColor: uiConfiguration()->setCurrentThemeStyleValue(ThemeStyleKey::STROKE_COLOR, Val(newColor));
+        break;
+    }
+    emit themesChanged();
 }
 
 QStringList AppearancePreferencesModel::allFonts() const
@@ -94,17 +149,9 @@ QString AppearancePreferencesModel::wallpapersDir() const
     return notationConfiguration()->wallpapersDefaultDirPath().toQString();
 }
 
-int AppearancePreferencesModel::currentThemeIndex() const
+QString AppearancePreferencesModel::currentThemeCode() const
 {
-    ThemeList themes = allThemes();
-
-    for (int i = 0; i < static_cast<int>(themes.size()); ++i) {
-        if (themes[i].codeKey == currentTheme().codeKey) {
-            return i;
-        }
-    }
-
-    return INVALID_INDEX;
+    return QString::fromStdString(currentTheme().codeKey);
 }
 
 int AppearancePreferencesModel::currentAccentColorIndex() const
@@ -172,19 +219,18 @@ QString AppearancePreferencesModel::foregroundWallpaperPath() const
     return notationConfiguration()->foregroundWallpaperPath().toQString();
 }
 
-void AppearancePreferencesModel::setCurrentThemeIndex(int index)
+void AppearancePreferencesModel::setCurrentThemeCode(const QString& themeCode)
 {
-    ThemeList themes = allThemes();
-
-    if (index < 0 || index >= static_cast<int>(themes.size())) {
+    if (themeCode == currentThemeCode()) {
         return;
     }
 
-    if (index == currentThemeIndex()) {
-        return;
+    for (const ThemeInfo& theme : allThemes()) {
+        if (themeCode == QString::fromStdString(theme.codeKey)) {
+            uiConfiguration()->setCurrentTheme(theme.codeKey);
+            break;
+        }
     }
-
-    uiConfiguration()->setCurrentTheme(themes[index].codeKey);
     emit themesChanged();
 }
 
