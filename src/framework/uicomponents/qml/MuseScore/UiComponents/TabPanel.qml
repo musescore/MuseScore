@@ -82,8 +82,26 @@ TabView {
                 color:  ui.theme.backgroundPrimaryColor
                 radius: 4
                 anchors.margins: 1
-                border.width: (tab.tabItem.navigation && tab.tabItem.navigation.active) ? 2 : ui.theme.borderWidth
-                border.color: (tab.tabItem.navigation && tab.tabItem.navigation.active) ? ui.theme.focusColor : ui.theme.strokeColor
+
+                Rectangle {
+                    id: navCtrlBorderRect
+
+                    property bool visibleOrNot: (tab.tabItem.navigation && tab.tabItem.navigation.active) //evaluating this condition directly in the `visible` variable leads to strange behaviour
+
+                    anchors.fill: parent
+                    anchors.margins: -ui.theme.navCtrlBorderWidth
+
+                    visible: visibleOrNot
+
+                    color: "transparent"
+                    radius: parent.radius + navCtrlBorderRect.border.width
+
+                    border.width: ui.theme.navCtrlBorderWidth
+                    border.color: ui.theme.fontPrimaryColor
+                }
+
+                border.width: ui.theme.borderWidth
+                border.color: ui.theme.strokeColor
                 opacity: styleData.selected ? ui.theme.buttonOpacityHit : ui.theme.buttonOpacityNormal
 
                 StyledTextLabel {

@@ -82,8 +82,23 @@ TabButton {
 
         color: root.backgroundColor
 
-        border.width: navCtrl.active ? 2 : ui.theme.borderWidth
-        border.color: navCtrl.active ? ui.theme.focusColor : ui.theme.strokeColor
+        Rectangle {
+            id: navCtrlBorderRect
+
+            anchors.fill: parent
+            anchors.margins: -ui.theme.navCtrlBorderWidth
+
+            visible: navCtrl.active
+
+            color: "transparent"
+            radius: parent.radius + navCtrlBorderRect.border.width
+
+            border.width: ui.theme.navCtrlBorderWidth
+            border.color: ui.theme.fontPrimaryColor
+        }
+
+        border.width: ui.theme.borderWidth
+        border.color: ui.theme.strokeColor
 
         Rectangle {
             id: selectedRect

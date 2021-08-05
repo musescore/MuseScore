@@ -100,8 +100,24 @@ FocusScope {
         anchors.fill: parent
         color: ui.theme.textFieldColor
         radius: 4
-        border.color: navCtrl.active ? ui.theme.focusColor : ui.theme.strokeColor
-        border.width: navCtrl.active ? 2 : ui.theme.borderWidth
+
+        Rectangle {
+            id: navCtrlBorderRect
+
+            anchors.fill: parent
+            anchors.margins: -ui.theme.navCtrlBorderWidth
+
+            visible: navCtrl.active
+
+            color: "transparent"
+            radius: parent.radius + navCtrlBorderRect.border.width
+
+            border.width: ui.theme.navCtrlBorderWidth
+            border.color: ui.theme.fontPrimaryColor
+        }
+
+        border.color: ui.theme.strokeColor
+        border.width: ui.theme.borderWidth
     }
 
     RowLayout {

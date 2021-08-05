@@ -60,10 +60,24 @@ RadioDelegate {
         id: backgroundRect
 
         anchors.fill: parent
-        anchors.margins: navCtrl.active ? 1 : 0
 
-        border.width: navCtrl.active ? 2 : ui.theme.borderWidth
-        border.color: navCtrl.active ? ui.theme.focusColor : ui.theme.strokeColor
+        Rectangle {
+            id: navCtrlBorderRect
+
+            anchors.fill: parent
+            anchors.margins: -ui.theme.navCtrlBorderWidth
+
+            visible: navCtrl.active
+
+            color: "transparent"
+            radius: parent.radius + navCtrlBorderRect.border.width
+
+            border.width: ui.theme.navCtrlBorderWidth
+            border.color: ui.theme.fontPrimaryColor
+        }
+
+        border.width: ui.theme.borderWidth
+        border.color: ui.theme.strokeColor
 
         color: normalStateColor
         opacity: ui.theme.buttonOpacityNormal

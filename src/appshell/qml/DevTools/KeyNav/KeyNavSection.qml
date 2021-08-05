@@ -34,8 +34,20 @@ Rectangle {
 
     default property alias content: contentItem.data
 
-    border.color: "#75507b"
-    border.width: keynavsec.active ? 4 : 0
+    Rectangle {
+        id: navCtrlBorderRect
+
+        anchors.fill: parent
+        anchors.margins: -ui.theme.navCtrlBorderWidth
+
+        visible: keynavsec.active
+
+        color: "transparent"
+        radius: parent.radius + navCtrlBorderRect.border.width
+
+        border.width: ui.theme.navCtrlBorderWidth
+        border.color: ui.theme.fontPrimaryColor
+    }
 
     NavigationSection {
         id: keynavsec
