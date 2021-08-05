@@ -77,8 +77,8 @@ RadioDelegate {
             color: ui.theme.backgroundPrimaryColor
             opacity: ui.theme.buttonOpacityNormal
 
-            border.color: ui.theme.focusColor
-            border.width: keynavCtrl.active ? 2 : 0
+            border.color: keynavCtrl.active ? ui.theme.focusColor : ui.theme.strokeColor
+            border.width: keynavCtrl.active ? 2 : ui.theme.borderWidth
             radius: 2
         }
 

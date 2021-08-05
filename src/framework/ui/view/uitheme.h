@@ -49,6 +49,8 @@ class UiTheme : public QProxyStyle, public async::Asyncable
     Q_PROPERTY(QColor linkColor READ linkColor NOTIFY themeChanged)
     Q_PROPERTY(QColor focusColor READ focusColor NOTIFY themeChanged)
 
+    Q_PROPERTY(qreal borderWidth READ borderWidth NOTIFY themeChanged)
+    //Q_PROPERTY(qreal navCtrlBorderWidth READ navCtrlBorderWidth NOTIFY themeChanged)
     Q_PROPERTY(qreal accentOpacityNormal READ accentOpacityNormal NOTIFY themeChanged)
     Q_PROPERTY(qreal accentOpacityHit READ accentOpacityHit NOTIFY themeChanged)
     Q_PROPERTY(qreal accentOpacityHover READ accentOpacityHover NOTIFY themeChanged)
@@ -106,6 +108,8 @@ public:
     QFont toolbarIconsFont() const;
     QFont musicalFont() const;
 
+    qreal borderWidth() const;
+    //qreal navCtrlBorderWidth() const;
     qreal accentOpacityNormal() const;
     qreal accentOpacityHover() const;
     qreal accentOpacityHit() const;
@@ -120,6 +124,8 @@ public:
     void unpolish(QWidget* widget) override;
 
     void drawPrimitive(PrimitiveElement element, const QStyleOption* option, QPainter* painter, const QWidget* widget) const override;
+    void drawComplexControl(ComplexControl control, const QStyleOptionComplex* option, QPainter* painter,
+                            const QWidget* widget = nullptr) const override;
     QRect subControlRect(QStyle::ComplexControl control, const QStyleOptionComplex* option, QStyle::SubControl subControl,
                          const QWidget* widget = nullptr) const override;
     int pixelMetric(PixelMetric metric, const QStyleOption* option, const QWidget* widget) const override;
@@ -180,6 +186,8 @@ private:
     QColor m_linkColor;
     QColor m_focusColor;
 
+    qreal m_borderWidth = 0;
+    //qreal m_navCtrlBorderWidth = 0;
     qreal m_accentOpacityNormal = 0;
     qreal m_accentOpacityHover = 0;
     qreal m_accentOpacityHit = 0;

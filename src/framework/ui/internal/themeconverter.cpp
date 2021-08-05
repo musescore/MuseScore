@@ -38,6 +38,7 @@ static const std::vector<std::pair<ThemeStyleKey, QString > > s_keys = {
     { ACCENT_COLOR, "accentColor" },
     { STROKE_COLOR, "strokeColor" },
     { BUTTON_COLOR, "buttonColor" },
+    { BORDER_WIDTH, "borderWidth" },
     { FONT_PRIMARY_COLOR, "fontPrimaryColor" },
     { FONT_SECONDARY_COLOR, "fontSecondaryColor" },
     { LINK_COLOR, "linkColor" },

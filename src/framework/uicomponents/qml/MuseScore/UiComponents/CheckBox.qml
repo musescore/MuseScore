@@ -73,8 +73,8 @@ FocusScope {
             height: 20
             width: 20
 
-            border.width: 1
-            border.color: "#00000000"
+            border.width: ui.theme.borderWidth
+            border.color: ui.theme.strokeColor
             color: ui.theme.buttonColor
 
             radius: 2

@@ -37,10 +37,11 @@ class AppearancePreferencesModel : public QObject, public async::Asyncable
     INJECT(appshell, ui::IUiConfiguration, uiConfiguration)
     INJECT(appshell, notation::INotationConfiguration, notationConfiguration)
 
-    Q_PROPERTY(QVariantList themes READ themes NOTIFY themesChanged)
+    Q_PROPERTY(QVariantList generalThemes READ generalThemes NOTIFY themesChanged)
+    Q_PROPERTY(QVariantList highContrastThemes READ highContrastThemes NOTIFY themesChanged)
     Q_PROPERTY(QStringList accentColors READ accentColors NOTIFY themesChanged)
 
-    Q_PROPERTY(int currentThemeIndex READ currentThemeIndex WRITE setCurrentThemeIndex NOTIFY themesChanged)
+    Q_PROPERTY(QString currentThemeCode READ currentThemeCode WRITE setCurrentThemeCode NOTIFY themesChanged)
     Q_PROPERTY(int currentAccentColorIndex READ currentAccentColorIndex WRITE setCurrentAccentColorIndex NOTIFY themesChanged)
 
     Q_PROPERTY(int currentFontIndex READ currentFontIndex WRITE setCurrentFontIndex NOTIFY currentFontIndexChanged)
@@ -61,10 +62,20 @@ public:
 
     Q_INVOKABLE void init();
 
-    QVariantList themes() const;
+    enum ColorType {
+        AccentColor,
+        TextAndIconsColor,
+        DisabledColor,
+        BorderColor
+    };
+    Q_ENUM(ColorType)
+
+    QVariantList generalThemes() const;
+    QVariantList highContrastThemes() const;
+
     QStringList accentColors() const;
 
-    int currentThemeIndex() const;
+    QString currentThemeCode() const;
     int currentAccentColorIndex() const;
 
     int currentFontIndex() const;
@@ -78,12 +89,17 @@ public:
     QColor foregroundColor() const;
     QString foregroundWallpaperPath() const;
 
+    Q_INVOKABLE void resetThemeToDefault();
+    Q_INVOKABLE bool enableHighContrastChecked();
+    Q_INVOKABLE void loadLastUsedGeneralTheme();
+    Q_INVOKABLE void loadLastUsedHighContrastTheme();
+    Q_INVOKABLE void setNewColor(const QColor& newColor, ColorType colorType);
     Q_INVOKABLE QStringList allFonts() const;
     Q_INVOKABLE QString wallpaperPathFilter() const;
     Q_INVOKABLE QString wallpapersDir() const;
 
 public slots:
-    void setCurrentThemeIndex(int index);
+    void setCurrentThemeCode(const QString& themeCode);
     void setCurrentAccentColorIndex(int index);
     void setCurrentFontIndex(int index);
     void setBodyTextSize(int size);

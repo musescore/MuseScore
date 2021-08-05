@@ -53,7 +53,6 @@ Item {
     height: 30
     width: 126
 
-
     //! NOTE We should not just bind to the current values, because when the component is created,
     //! the `onCurrentValueChanged` slot will be called, often in the handlers of which there are not yet initialized values
     Component.onCompleted: prv.updateCurrent()
@@ -144,6 +143,9 @@ Item {
         anchors.fill: parent
         text: root.displayText
 
+        background.border.width: ui.theme.borderWidth
+        background.border.color: ui.theme.strokeColor
+
         onClicked: {
             popup.navigationParentControl = root.navigation
             popup.open()
@@ -184,7 +186,7 @@ Item {
 
         contentWidth: root.popupWidth
         contentHeight: root.height * Math.min(root.count, root.popupItemsCount)
-        padding: 0
+        padding: ui.theme.borderWidth
         margins: 0
 
         x: 0
@@ -236,6 +238,8 @@ Item {
                 anchors.fill: parent
                 color: mainItem.background.color
                 radius: 4
+                border.width: ui.theme.borderWidth
+                border.color: ui.theme.strokeColor
             }
 
             StyledDropShadow {
@@ -293,6 +297,8 @@ Item {
 
                         height: root.height
                         width: popup.contentWidth
+
+                        //insideDropdownList: true
 
                         navigation.name: item.text
                         navigation.panel: popupNavPanel
