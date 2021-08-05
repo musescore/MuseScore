@@ -131,7 +131,7 @@ Item {
         z: 1000
 
         height: 20
-        width: 20
+        width: height
 
         anchors.verticalCenter: parent.verticalCenter
 

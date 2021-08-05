@@ -66,7 +66,7 @@ Column {
                 id: menuButton
 
                 height: 20
-                width: 20
+                width: height
 
                 menuModel: {
                     var result = []
