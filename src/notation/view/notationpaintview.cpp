@@ -392,12 +392,6 @@ void NotationPaintView::paintBackground(const RectF& rect, draw::Painter* painte
 {
     QString wallpaperPath = configuration()->backgroundWallpaperPath().toQString();
 
-    qDebug("NotationPaintView::paintBackground ACCESSED!");
-    qDebug("NotationPaintView::paintBackground ACCESSED!");
-    qDebug("NotationPaintView::paintBackground ACCESSED!");
-    qDebug("NotationPaintView::paintBackground ACCESSED!");
-    qDebug("NotationPaintView::paintBackground ACCESSED!");
-
     if (configuration()->backgroundUseColor() || wallpaperPath.isEmpty()) {
         painter->fillRect(rect, configuration()->backgroundColor());
     } else {

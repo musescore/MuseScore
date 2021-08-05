@@ -142,6 +142,7 @@ Item {
         id: mainItem
         anchors.fill: parent
         text: root.displayText
+
         background.border.width: ui.theme.borderWidth
         background.border.color: ui.theme.strokeColor
 
@@ -185,7 +186,7 @@ Item {
 
         contentWidth: root.popupWidth
         contentHeight: root.height * Math.min(root.count, root.popupItemsCount)
-        padding: 1
+        padding: ui.theme.borderWidth
         margins: 0
 
         x: 0
@@ -296,6 +297,8 @@ Item {
 
                         height: root.height
                         width: popup.contentWidth
+
+                        //insideDropdownList: true
 
                         navigation.name: item.text
                         navigation.panel: popupNavPanel

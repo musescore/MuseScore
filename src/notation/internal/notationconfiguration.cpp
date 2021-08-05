@@ -43,11 +43,10 @@ QString revision;
 
 static const std::string module_name("notation");
 
-//static const Settings::Key BACKGROUND_COLOR(module_name, "ui/canvas/background/color");
-static const Settings::Key LIGHT_SCORE_BACKGROUND_COLOR(module_name, "ui/canvas/background/light_color");
-static const Settings::Key DARK_SCORE_BACKGROUND_COLOR(module_name, "ui/canvas/background/dark_color");
-static const Settings::Key HC_BLACK_SCORE_BACKGROUND_COLOR(module_name, "ui/canvas/background/hc_black_color");
-static const Settings::Key HC_WHITE_SCORE_BACKGROUND_COLOR(module_name, "ui/canvas/background/hc_white_color");
+static const Settings::Key LIGHT_SCORE_BACKGROUND_COLOR(module_name, "ui/canvas/background/lightTheme_score_background_color");
+static const Settings::Key DARK_SCORE_BACKGROUND_COLOR(module_name, "ui/canvas/background/darkTheme_score_background_color");
+static const Settings::Key HC_BLACK_SCORE_BACKGROUND_COLOR(module_name, "ui/canvas/background/hc_black_score_background_color");
+static const Settings::Key HC_WHITE_SCORE_BACKGROUND_COLOR(module_name, "ui/canvas/background/hc_white_score_background_color");
 static const Settings::Key BACKGROUND_WALLPAPER_PATH(module_name, "ui/canvas/background/wallpaper");
 static const Settings::Key BACKGROUND_USE_COLOR(module_name, "ui/canvas/background/useColor");
 
@@ -103,11 +102,6 @@ void NotationConfiguration::init()
     settings()->valueChanged(BACKGROUND_USE_COLOR).onReceive(nullptr, [this](const Val&) {
         m_backgroundChanged.notify();
     });
-
-//    settings()->setDefaultValue(BACKGROUND_COLOR, Val(QColor("#385f94")));
-//    settings()->valueChanged(BACKGROUND_COLOR).onReceive(nullptr, [this](const Val&) {
-//        m_backgroundChanged.notify();
-//    });
 
     uiConfiguration()->currentThemeChanged().onNotify(this, [this]()
     {
@@ -238,7 +232,6 @@ QColor NotationConfiguration::anchorLineColor() const
 
 QColor NotationConfiguration::backgroundColor() const
 {
-    //return settings()->value(BACKGROUND_COLOR).toQColor();
     if (uiConfiguration()->currentTheme().codeKey == LIGHT_THEME_CODE) {
         return settings()->value(LIGHT_SCORE_BACKGROUND_COLOR).toQColor();
     } else if (uiConfiguration()->currentTheme().codeKey == DARK_THEME_CODE) {
@@ -252,7 +245,6 @@ QColor NotationConfiguration::backgroundColor() const
 
 void NotationConfiguration::setBackgroundColor(const QColor& color)
 {
-    //settings()->setSharedValue(BACKGROUND_COLOR, Val(color));
     if (uiConfiguration()->currentTheme().codeKey == LIGHT_THEME_CODE) {
         settings()->setSharedValue(LIGHT_SCORE_BACKGROUND_COLOR, Val(color));
     } else if (uiConfiguration()->currentTheme().codeKey == DARK_THEME_CODE) {

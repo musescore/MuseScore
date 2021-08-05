@@ -44,12 +44,13 @@ class UiTheme : public QProxyStyle, public async::Asyncable
     Q_PROPERTY(QColor strokeColor READ strokeColor NOTIFY themeChanged)
     Q_PROPERTY(QColor accentColor READ accentColor NOTIFY themeChanged)
     Q_PROPERTY(QColor buttonColor READ buttonColor NOTIFY themeChanged)
-    Q_PROPERTY(qreal borderWidth READ borderWidth NOTIFY themeChanged)
     Q_PROPERTY(QColor fontPrimaryColor READ fontPrimaryColor NOTIFY themeChanged)
     Q_PROPERTY(QColor fontSecondaryColor READ fontSecondaryColor NOTIFY themeChanged)
     Q_PROPERTY(QColor linkColor READ linkColor NOTIFY themeChanged)
     Q_PROPERTY(QColor focusColor READ focusColor NOTIFY themeChanged)
 
+    Q_PROPERTY(qreal borderWidth READ borderWidth NOTIFY themeChanged)
+    //Q_PROPERTY(qreal navCtrlBorderWidth READ navCtrlBorderWidth NOTIFY themeChanged)
     Q_PROPERTY(qreal accentOpacityNormal READ accentOpacityNormal NOTIFY themeChanged)
     Q_PROPERTY(qreal accentOpacityHit READ accentOpacityHit NOTIFY themeChanged)
     Q_PROPERTY(qreal accentOpacityHover READ accentOpacityHover NOTIFY themeChanged)
@@ -108,6 +109,7 @@ public:
     QFont musicalFont() const;
 
     qreal borderWidth() const;
+    //qreal navCtrlBorderWidth() const;
     qreal accentOpacityNormal() const;
     qreal accentOpacityHover() const;
     qreal accentOpacityHit() const;
@@ -150,9 +152,6 @@ private:
 
     void notifyAboutThemeChanged();
 
-    bool isCurrentThemeHighContrast() const;
-    bool isCurrentThemeGeneral() const;
-
     void drawButtonBackground(QPainter* painter, const QRect& rect, bool enabled, bool hovered, bool pressed, bool accentButton,
                               bool flat) const;
     void drawCheckboxIndicator(QPainter* painter, const QRect& rect, bool enabled, bool hovered, bool pressed, bool checked,
@@ -188,6 +187,7 @@ private:
     QColor m_focusColor;
 
     qreal m_borderWidth = 0;
+    //qreal m_navCtrlBorderWidth = 0;
     qreal m_accentOpacityNormal = 0;
     qreal m_accentOpacityHover = 0;
     qreal m_accentOpacityHit = 0;

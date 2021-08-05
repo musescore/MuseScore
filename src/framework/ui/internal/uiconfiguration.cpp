@@ -423,12 +423,16 @@ ThemeCode UiConfiguration::currentThemeCodeKey() const
 
 bool UiConfiguration::isCurrentThemeHighContrast() const
 {
-    return currentThemeCodeKey() == HIGH_CONTRAST_BLACK_THEME_CODE || currentThemeCodeKey() == HIGH_CONTRAST_WHITE_THEME_CODE;
+    ThemeCode currentThemeCode = currentThemeCodeKey();
+
+    return currentThemeCode == HIGH_CONTRAST_BLACK_THEME_CODE || currentThemeCode == HIGH_CONTRAST_WHITE_THEME_CODE;
 }
 
 bool UiConfiguration::isCurrentThemeGeneral() const
 {
-    return currentThemeCodeKey() == LIGHT_THEME_CODE || currentThemeCodeKey() == DARK_THEME_CODE;
+    ThemeCode currentThemeCode = currentThemeCodeKey();
+
+    return currentThemeCode == DARK_THEME_CODE || currentThemeCode == LIGHT_THEME_CODE;
 }
 
 void UiConfiguration::setCurrentTheme(const ThemeCode& codeKey)

@@ -30,6 +30,7 @@
 #include <QStyleFactory>
 #include <QStyleOption>
 #include <QToolBar>
+#include <QTextEdit>
 #include <QVariant>
 
 #include "log.h"
@@ -124,6 +125,7 @@ void UiTheme::initThemeValues()
     m_focusColor = themeValues[FOCUS_COLOR].toString();
 
     m_borderWidth = themeValues[BORDER_WIDTH].toReal();
+    //m_navCtrlBorderWidth = 2;
     m_accentOpacityNormal = themeValues[ACCENT_OPACITY_NORMAL].toReal();
     m_accentOpacityHover = themeValues[ACCENT_OPACITY_HOVER].toReal();
     m_accentOpacityHit = themeValues[ACCENT_OPACITY_HIT].toReal();
@@ -259,6 +261,11 @@ qreal UiTheme::borderWidth() const
 {
     return m_borderWidth;
 }
+
+//qreal UiTheme::navCtrlBorderWidth() const
+//{
+//    return m_navCtrlBorderWidth;
+//}
 
 qreal UiTheme::accentOpacityNormal() const
 {
@@ -428,17 +435,6 @@ void UiTheme::notifyAboutThemeChanged()
     emit themeChanged();
 }
 
-bool UiTheme::isCurrentThemeHighContrast() const
-{
-    return configuration()->currentTheme().codeKey == HIGH_CONTRAST_BLACK_THEME_CODE
-           || configuration()->currentTheme().codeKey == HIGH_CONTRAST_WHITE_THEME_CODE;
-}
-
-bool UiTheme::isCurrentThemeGeneral() const
-{
-    return configuration()->currentTheme().codeKey == LIGHT_THEME_CODE || configuration()->currentTheme().codeKey == DARK_THEME_CODE;
-}
-
 // ====================================================
 // QStyle
 // ====================================================
@@ -532,10 +528,22 @@ void UiTheme::drawPrimitive(QStyle::PrimitiveElement element, const QStyleOption
 
     // Menu
     case QStyle::PE_PanelMenu: {
-        drawRoundedRect(painter, option->rect, 3, backgroundPrimaryColor());
+        drawRoundedRect(painter, option->rect, 1, backgroundPrimaryColor(), QPen(strokeColor(), borderWidth()));
     } break;
     case QStyle::PE_FrameMenu: {
-        drawRoundedRect(painter, option->rect, 3, NO_FILL, QPen(strokeColor(), borderWidth()));
+        drawRoundedRect(painter, option->rect, 1, NO_FILL, QPen(strokeColor(), borderWidth()));
+    } break;
+
+    case QStyle::PE_Frame: {
+        if (qobject_cast<const QTextEdit*>(widget) != nullptr) {
+            if (enabled) {
+                drawRoundedRect(painter, option->rect, 3, NO_FILL, QPen(strokeColor(), borderWidth()));
+            } else {
+                QColor penBorderColor = strokeColor();
+                penBorderColor.setAlphaF(itemOpacityDisabled());
+                drawRoundedRect(painter, option->rect, 3, NO_FILL, QPen(penBorderColor, borderWidth()));
+            }
+        }
     } break;
 
     default:
@@ -556,9 +564,9 @@ void UiTheme::drawComplexControl(ComplexControl control, const QStyleOptionCompl
     case CC_ScrollBar: {
         QProxyStyle::drawComplexControl(control, option, painter, widget);
 
-        QRect scrollBarHandle = QProxyStyle::subControlRect(CC_ScrollBar, option, SC_ScrollBarSlider, widget);
+        if (configuration()->isCurrentThemeHighContrast()) {
+            QRect scrollBarHandle = QProxyStyle::subControlRect(CC_ScrollBar, option, SC_ScrollBarSlider, widget);
 
-        if (isCurrentThemeHighContrast()) {
             QColor handleColor = fontPrimaryColor();
             handleColor.setAlphaF(
                 !enabled ? buttonOpacityNormal()
@@ -763,7 +771,7 @@ void UiTheme::drawButtonBackground(QPainter* painter, const QRect& rect, bool en
                               : 0);
 
     if (enabled) {
-        if (isCurrentThemeHighContrast()) {
+        if (configuration()->isCurrentThemeHighContrast()) {
             QColor penBorderColor(strokeColor());
             penBorderColor.setAlphaF(pressed ? buttonOpacityHit() : hovered ? buttonOpacityHover() : buttonOpacityNormal());
 
@@ -786,7 +794,7 @@ void UiTheme::drawCheckboxIndicator(QPainter* painter, const QRect& rect, bool e
                                   : hovered ? buttonOpacityHover()
                                   : buttonOpacityNormal());
 
-        if (isCurrentThemeGeneral()) {
+        if (configuration()->isCurrentThemeGeneral()) {
             QColor penBorderColor;
             penBorderColor.setAlphaF(pressed ? buttonOpacityHit() : hovered ? buttonOpacityHover() : buttonOpacityNormal());
 
@@ -894,7 +902,7 @@ void UiTheme::drawListViewItemBackground(QPainter* painter, const QRect& rect, b
 
     painter->fillRect(rect, backgroundColor);
 
-    if (isCurrentThemeHighContrast()) {
+    if (configuration()->isCurrentThemeHighContrast()) {
         drawRoundedRect(painter, rect, 1, NO_FILL, QPen(strokeColor(), borderWidth()));
     }
 }
