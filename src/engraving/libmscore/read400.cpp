@@ -33,18 +33,6 @@ using namespace Ms;
 
 bool Score::read400(XmlReader& e)
 {
-    // HACK
-    // style setting compatibility settings for minor versions
-    // this allows new style settings to be added
-    // with different default values for older vs newer scores
-    // note: older templates get the default values for older scores
-    // these can be forced back in MuseScore::getNewFile() if necessary
-    QString programVersion = masterScore()->mscoreVersion();
-    bool disableHarmonyPlay = MScore::harmonyPlayDisableCompatibility && !MScore::testMode;
-    if (!programVersion.isEmpty() && programVersion < "3.5" && disableHarmonyPlay) {
-        style().set(Sid::harmonyPlay, false);
-    }
-
     if (!e.readNextStartElement()) {
         qDebug("%s: xml file is empty", qPrintable(e.getDocName()));
         return false;
@@ -72,38 +60,23 @@ bool Score::read400(XmlReader& e)
         return false;
     }
 
-    connectTies();
-    relayoutForStyles(); // force relayout if certain style settings are enabled
-
-    _fileDivision = MScore::division;
-
-    // Make sure every instrument has an instrumentId set.
-    for (Part* part : parts()) {
-        const InstrumentList* il = part->instruments();
-        for (auto it = il->begin(); it != il->end(); it++) {
-            static_cast<Instrument*>(it->second)->updateInstrumentId();
-        }
-    }
-
-    fixTicks();
-
-    for (Part* p : qAsConst(_parts)) {
-        p->updateHarmonyChannels(false);
-    }
-
-    masterScore()->rebuildMidiMapping();
-    masterScore()->updateChannel();
-
-    for (Staff* staff : staves()) {
-        staff->updateOttava();
-    }
-
-//      createPlayEvents();
     return true;
 }
 
 bool Score::readScore400(XmlReader& e)
 {
+    // HACK
+    // style setting compatibility settings for minor versions
+    // this allows new style settings to be added
+    // with different default values for older vs newer scores
+    // note: older templates get the default values for older scores
+    // these can be forced back in MuseScore::getNewFile() if necessary
+    QString programVersion = masterScore()->mscoreVersion();
+    bool disableHarmonyPlay = MScore::harmonyPlayDisableCompatibility && !MScore::testMode;
+    if (!programVersion.isEmpty() && programVersion < "3.5" && disableHarmonyPlay) {
+        style().set(Sid::harmonyPlay, false);
+    }
+
     while (e.readNextStartElement()) {
         e.setTrack(-1);
         const QStringRef& tag(e.name());
@@ -235,6 +208,34 @@ bool Score::readScore400(XmlReader& e)
         }
         return false;
     }
+
+    connectTies();
+    relayoutForStyles(); // force relayout if certain style settings are enabled
+
+    _fileDivision = MScore::division;
+
+    // Make sure every instrument has an instrumentId set.
+    for (Part* part : parts()) {
+        const InstrumentList* il = part->instruments();
+        for (auto it = il->begin(); it != il->end(); it++) {
+            static_cast<Instrument*>(it->second)->updateInstrumentId();
+        }
+    }
+
+    fixTicks();
+
+    for (Part* p : qAsConst(_parts)) {
+        p->updateHarmonyChannels(false);
+    }
+
+    masterScore()->rebuildMidiMapping();
+    masterScore()->updateChannel();
+
+    for (Staff* staff : staves()) {
+        staff->updateOttava();
+    }
+
+//      createPlayEvents();
 
     return true;
 }
