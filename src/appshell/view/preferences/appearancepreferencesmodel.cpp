@@ -129,8 +129,6 @@ void AppearancePreferencesModel::setNewColor(const QColor& newColor, ColorType c
 
     case BorderColor: uiConfiguration()->setCurrentThemeStyleValue(ThemeStyleKey::STROKE_COLOR, Val(newColor));
         break;
-
-    default: qDebug("INVALID COLORTYPE RECEIVED!");
     }
     emit themesChanged();
 }
