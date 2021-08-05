@@ -455,7 +455,7 @@
 	<key>ATSApplicationFontsPath</key>
 	<string>fonts/</string>
 	<key>SUFeedURL</key>
-	<string>${MAC_APPCAST_URL}</string>
+	<string>${SPARKLE_APPCAST_URL}</string>
 	<key>SUAllowsAutomaticUpdates</key>
 	<false/>
 	<key>CFBundleLocalizations</key>

@@ -141,4 +141,9 @@ set(MODULE_LINK
     accessibility
     )
 
+if (OS_IS_MAC)
+    find_library(AppKit NAMES AppKit)
+    set(MODULE_LINK ${MODULE_LINK} ${AppKit})
+endif()
+
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

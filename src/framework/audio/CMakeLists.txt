@@ -173,17 +173,20 @@ set (MODULE_INCLUDE
     ${FLUIDSYNTH_INC}
     )
 
-if(OS_IS_WIN)
-    set(MODULE_LINK winmm )
-endif()
+set(MODULE_LINK
+    fluidsynth
+    )
 
-if(OS_IS_LIN)
+if (OS_IS_MAC)
+    find_library(AudioToolbox NAMES AudioToolbox)
+    set(MODULE_LINK ${MODULE_LINK} ${AudioToolbox})
+elseif (OS_IS_WIN)
+    set(MODULE_LINK ${MODULE_LINK} winmm )
+elseif (OS_IS_LIN)
     find_package(ALSA REQUIRED)
-    set(MODULE_LINK ${ALSA_LIBRARIES} pthread )
     set(MODULE_INCLUDE ${MODULE_INCLUDE} ${ALSA_INCLUDE_DIRS} )
+    set(MODULE_LINK ${MODULE_LINK} ${ALSA_LIBRARIES} pthread )
 endif()
-
-set(MODULE_LINK ${MODULE_LINK} fluidsynth )
 
 set(MODULE_QRC audio.qrc)
 
