@@ -577,6 +577,8 @@ void NotationParts::appendPart(Part* part)
         Ms::Fraction startTick = score()->firstMeasure()->tick();
         Ms::Fraction endTick = score()->lastMeasure()->tick();
         Ms::Excerpt::cloneStaff2(staff, staffCopy, startTick, endTick);
+
+        score()->undo(new Ms::Link(staffCopy, staff));
     }
 
     part->setScore(score());
