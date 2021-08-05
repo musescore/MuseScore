@@ -155,7 +155,11 @@ void DockFrameModel::listenChangesInFrame()
         emit currentDockChanged();
     });
 
-    connect(qApp, &QApplication::aboutToQuit, [numDocksChangedCon, currentDockWidgetChangedCon, this]() {
+    connect(qApp, &QApplication::aboutToQuit, [numDocksChangedCon, currentDockWidgetChangedCon
+#if (defined (_MSCVER) || defined (_MSC_VER)) // prevent bogus compiler warning with MSVC
+                                               , this
+#endif
+            ]() {
         disconnect(numDocksChangedCon);
         disconnect(currentDockWidgetChangedCon);
     });
