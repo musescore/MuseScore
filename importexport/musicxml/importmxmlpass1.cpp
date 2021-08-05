@@ -2477,13 +2477,14 @@ void MusicXMLParserPass1::attributes(const QString& partId, const Fraction cTime
                   _e.skipCurrentElement();  // skip but don't log
             else if (_e.name() == "staff-details") {
                   QStringRef strNumber = _e.attributes().value("number");
+                  int mxmlStaff = strNumber.isEmpty() ? 1 : strNumber.toInt();
                   QStringRef printObject = _e.attributes().value("print-object");
                   if (printObject == "no") {
-                        hiddenStaves.emplace(strNumber.toInt());
-                        mxmlPart.addPrintStaff(strNumber.toInt(), cTime, false);
+                        hiddenStaves.emplace(mxmlStaff);
+                        mxmlPart.addPrintStaff(mxmlStaff, cTime, false);
                         }
                   else if (printObject == "yes")
-                        mxmlPart.addPrintStaff(strNumber.toInt(), cTime, true);
+                        mxmlPart.addPrintStaff(mxmlStaff, cTime, true);
                   _e.skipCurrentElement();
                   }
             else if (_e.name() == "staves")

@@ -2689,13 +2689,11 @@ void MusicXMLParserPass2::staffDetails(const QString& partId)
       int staves = part->nstaves();
 
       QString mxmlStaff = _e.attributes().value("number").toString();
-      int msStaff = 0;  // default
-      if (mxmlStaff != "") {
-            msStaff = _pass1.getMusicXmlPart(partId).staffNumberToIndex(mxmlStaff.toInt());
-            if (msStaff < 0 || msStaff >= staves) {
-                  _logger->logError(QString("invalid staff-details number %1 (may be hidden)").arg(mxmlStaff), &_e);
-                  msStaff = 0;
-                  }
+      if (mxmlStaff.isEmpty()) mxmlStaff = "1";  // default
+      int msStaff = _pass1.getMusicXmlPart(partId).staffNumberToIndex(mxmlStaff.toInt());
+      if (msStaff < 0 || msStaff >= staves) {
+            _logger->logError(QString("invalid staff-details number %1 (may be hidden)").arg(mxmlStaff), &_e);
+            msStaff = 0;
             }
 
       int staffIdx = _score->staffIdx(part) + msStaff;
