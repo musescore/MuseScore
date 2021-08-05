@@ -623,7 +623,7 @@ static void setPartInstruments(MxmlLogger* logger, const QXmlStreamReader* const
       }
       
 //---------------------------------------------------------
-//   addCopyrightVBox
+//   findFirstPageBreak
 //---------------------------------------------------------
 
 static MeasureBase* findFirstPageBreak(Score* score)
@@ -650,7 +650,8 @@ static MeasureBase* findFirstPageBreak(Score* score)
 
 void MusicXMLParserPass2::addCopyrightVBox()
       {
-      if (_score->metaTag("copyright").isEmpty())
+      if (_score->metaTag("copyright").isEmpty()
+       || _score->pages().first()->systems().back()->measure(0)->isVBox())
             return;
       Text* copyrightText = new Text(_score);
       VBox* copyrightVBox = new VBox(_score);
@@ -658,7 +659,6 @@ void MusicXMLParserPass2::addCopyrightVBox()
       copyrightText->setAlign(Align::BASELINE | Align::HCENTER);
       copyrightText->setPropertyFlags(Pid::ALIGN, PropertyFlags::UNSTYLED);
       copyrightVBox->add(copyrightText);
-      copyrightVBox->setAutoSizeEnabled(true);
       MeasureBase* mb = findFirstPageBreak(_score);
       _score->addMeasure(copyrightVBox, mb->next());
       copyrightVBox->setPageBreak(true);
@@ -1722,7 +1722,12 @@ static bool cleanUpLayoutBreaks(Score* score, MxmlLogger* logger)
       bool hasExplicitPageBreaks = false;
       bool hasLineOverflow;
       bool hasPageOverflow;
-      
+
+      std::map<Sid, QVariant> initialStyles;
+      VBox* copyrightVBox = 0;
+      bool copyrightVBoxAutoSizeEnabledInitial = true;
+      Spatium copyrightVBoxBoxHeightInitial = Spatium(10);
+
       for (auto system : score->systems()) {
             if (!system->lastMeasure())
                   continue;
@@ -1748,7 +1753,6 @@ static bool cleanUpLayoutBreaks(Score* score, MxmlLogger* logger)
 
       // First compromise margins: reduce to 80%
       const qreal marginReductionFactor = 0.8;  // Possible TODO: make this incremental and customizable
-      std::map<Sid, QVariant> initialStyles;
       if (hasLineOverflow) {
             const std::vector<Sid> horizontalMarginSids({Sid::pageEvenLeftMargin, Sid::pageOddLeftMargin});
             for (Sid marginSid : horizontalMarginSids) {
@@ -1775,6 +1779,20 @@ static bool cleanUpLayoutBreaks(Score* score, MxmlLogger* logger)
             detectLayoutOverflow(score, hasLineOverflow, hasPageOverflow);
             }
       
+      // Next: collapse copyright VBox to 20% of height, if present
+      MeasureBase* copyrightVBoxCandidate = score->pages().begin() != score->pages().end() && score->pages().begin() + 1 != score->pages().end() ? (*(score->pages().begin() + 1))->systems().first()->measure(0) : 0;
+      if (hasPageOverflow && copyrightVBoxCandidate && copyrightVBoxCandidate->isVBox()) {
+            copyrightVBox = toVBox(copyrightVBoxCandidate);
+            copyrightVBoxAutoSizeEnabledInitial = copyrightVBox->isAutoSizeEnabled();
+            copyrightVBox->setAutoSizeEnabled(false);
+            copyrightVBoxBoxHeightInitial = copyrightVBox->boxHeight();
+            copyrightVBox->setBoxHeight(copyrightVBoxBoxHeightInitial * 0.2);
+            copyrightVBox->setPropertyFlags(Pid::BOX_HEIGHT, PropertyFlags::UNSTYLED);
+            score->styleChanged();
+            score->doLayout();
+            detectLayoutOverflow(score, hasLineOverflow, hasPageOverflow);
+            }
+
       // If that doesn't fix it, compromise lyric font size: reduce by 95%
       if (hasLineOverflow) {
             const qreal lyricFontSizeReductionFactor = 0.95;
@@ -1796,6 +1814,10 @@ static bool cleanUpLayoutBreaks(Score* score, MxmlLogger* logger)
       else {
             for (auto initialStyle : initialStyles) {
                   score->style().set(initialStyle.first, initialStyle.second);
+                  }
+            if (copyrightVBox) {
+                  copyrightVBox->setAutoSizeEnabled(copyrightVBoxAutoSizeEnabledInitial);
+                  copyrightVBox->setBoxHeight(copyrightVBoxBoxHeightInitial);
                   }
             score->styleChanged();
             score->doLayout();
