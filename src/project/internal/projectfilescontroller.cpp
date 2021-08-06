@@ -216,10 +216,6 @@ bool ProjectFilesController::closeOpenedProject()
 
 IInteractive::Button ProjectFilesController::askAboutSavingScore(const io::path& filePath)
 {
-    if (!configuration()->needShowWarningAboutUnsavedScore()) {
-        return IInteractive::Button::DontSave;
-    }
-
     std::string title = qtrc("userscores", "Do you want to save changes to the score “%1” before closing?")
                         .arg(io::completebasename(filePath).toQString()).toStdString();
 
@@ -234,8 +230,6 @@ IInteractive::Button ProjectFilesController::askAboutSavingScore(const io::path&
         IInteractive::Button::Cancel,
         IInteractive::Button::Save
     }, IInteractive::Button::Save, options);
-
-    configuration()->setNeedShowWarningAboutUnsavedScore(result.showAgain());
 
     return result.standartButton();
 }

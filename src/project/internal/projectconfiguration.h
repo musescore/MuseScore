@@ -68,9 +68,6 @@ public:
     PreferredScoreCreationMode preferredScoreCreationMode() const override;
     void setPreferredScoreCreationMode(PreferredScoreCreationMode mode) override;
 
-    bool needShowWarningAboutUnsavedScore() const override;
-    void setNeedShowWarningAboutUnsavedScore(bool value) override;
-
 private:
 
     io::paths parsePaths(const mu::Val& value) const;

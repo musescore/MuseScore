@@ -36,7 +36,6 @@ static const Settings::Key RECENT_PROJECTS_PATHS(module_name, "userscores/recent
 static const Settings::Key USER_TEMPLATES_PATH(module_name, "application/paths/myTemplates");
 static const Settings::Key USER_PROJECTS_PATH(module_name, "application/paths/myScores");
 static const Settings::Key PREFERRED_SCORE_CREATION_MODE_KEY(module_name, "userscores/preferredScoreCreationMode");
-static const Settings::Key NEED_SHOW_WARNING_ABOUT_UNSAVED_SCORE_KEY(module_name, "userscores/unsavedScoreWarning");
 
 const QString ProjectConfiguration::DEFAULT_FILE_SUFFIX(".mscz");
 
@@ -61,8 +60,6 @@ void ProjectConfiguration::init()
 
     Val preferredScoreCreationMode = Val(static_cast<int>(PreferredScoreCreationMode::FromInstruments));
     settings()->setDefaultValue(PREFERRED_SCORE_CREATION_MODE_KEY, preferredScoreCreationMode);
-
-    settings()->setDefaultValue(NEED_SHOW_WARNING_ABOUT_UNSAVED_SCORE_KEY, Val(true));
 }
 
 io::paths ProjectConfiguration::recentProjectPaths() const
@@ -197,14 +194,4 @@ ProjectConfiguration::PreferredScoreCreationMode ProjectConfiguration::preferred
 void ProjectConfiguration::setPreferredScoreCreationMode(PreferredScoreCreationMode mode)
 {
     settings()->setSharedValue(PREFERRED_SCORE_CREATION_MODE_KEY, Val(static_cast<int>(mode)));
-}
-
-bool ProjectConfiguration::needShowWarningAboutUnsavedScore() const
-{
-    return settings()->value(NEED_SHOW_WARNING_ABOUT_UNSAVED_SCORE_KEY).toBool();
-}
-
-void ProjectConfiguration::setNeedShowWarningAboutUnsavedScore(bool value)
-{
-    settings()->setSharedValue(NEED_SHOW_WARNING_ABOUT_UNSAVED_SCORE_KEY, Val(value));
 }
