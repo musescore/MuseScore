@@ -163,11 +163,11 @@ public:
             }
         }
         assert(is_valid().first);
-            }
+    }
 
-            // Call f on all intervals near the range [start, stop]:
-            template <class UnaryFunction>
-                    void visit_near(const Scalar& start, const Scalar& stop, UnaryFunction f) const {
+    // Call f on all intervals near the range [start, stop]:
+    template <class UnaryFunction>
+    void visit_near(const Scalar& start, const Scalar& stop, UnaryFunction f) const {
         if (!intervals.empty() && ! (stop < intervals.front().start)) {
             for (auto & i : intervals) {
                 f(i);
