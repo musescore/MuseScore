@@ -19,41 +19,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "audiosanitizer.h"
 
-#include <thread>
+#include "audiothreadsecurer.h"
+
+#include "audiosanitizer.h"
 
 using namespace mu::audio;
 
-static std::thread::id s_as_mainThreadID;
-static std::thread::id s_as_workerThreadID;
-
-void AudioSanitizer::setupMainThread()
+bool AudioThreadSecurer::isMainThread() const
 {
-    s_as_mainThreadID = std::this_thread::get_id();
+    return AudioSanitizer::isMainThread();
 }
 
-std::thread::id AudioSanitizer::mainThread()
+std::thread::id AudioThreadSecurer::mainThreadId() const
 {
-    return s_as_mainThreadID;
+    return AudioSanitizer::mainThread();
 }
 
-bool AudioSanitizer::isMainThread()
+bool AudioThreadSecurer::isAudioWorkerThread() const
 {
-    return std::this_thread::get_id() == s_as_mainThreadID;
+    return AudioSanitizer::isWorkerThread();
 }
 
-void AudioSanitizer::setupWorkerThread()
+std::thread::id AudioThreadSecurer::workerThreadId() const
 {
-    s_as_workerThreadID = std::this_thread::get_id();
-}
-
-std::thread::id AudioSanitizer::workerThread()
-{
-    return s_as_workerThreadID;
-}
-
-bool AudioSanitizer::isWorkerThread()
-{
-    return std::this_thread::get_id() == s_as_workerThreadID;
+    return AudioSanitizer::workerThread();
 }

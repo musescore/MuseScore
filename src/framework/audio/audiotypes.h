@@ -64,19 +64,27 @@ enum class AudioFxType {
 
 struct AudioFxParams {
     AudioFxType type = AudioFxType::Undefined;
-    AudioResourceId resourceName;
+    AudioResourceId resourceId;
     bool active = false;
 
     bool operator ==(const AudioFxParams& other) const
     {
         return type == other.type
-               && resourceName == other.resourceName
+               && resourceId == other.resourceId
                && active == other.active;
+    }
+
+    bool isValid() const
+    {
+        return type != AudioFxType::Undefined
+               && !resourceId.empty();
     }
 };
 
+using AudioFxParamsMap = std::map<AudioFxType, std::vector<AudioFxParams> >;
+
 struct AudioOutputParams {
-    AudioFxParams fxParams;
+    AudioFxParamsMap fxParams;
     volume_db_t volume = 1.f;
     balance_t balance = 0.f;
     bool muted = false;
