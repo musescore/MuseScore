@@ -116,7 +116,8 @@ private slots:
       void emptyVoice1() { mxmlIoTestRef("testEmptyVoice1"); }
       void excessiveFretDiagrams1() { mxmlImportTestRef("testExcessiveFretDiagrams1"); }
       void excessiveFretDiagrams2() { mxmlImportTestRef("testExcessiveFretDiagrams2"); }
-      void excessHiddenStaves() { mxmlImportTestRef("testExcessHiddenStaves"); }
+      void excessHiddenStaves1() { mxmlImportTestRef("testExcessHiddenStaves1"); }
+      void excessHiddenStaves2() { mxmlImportTestRef("testExcessHiddenStaves2"); }
       void extendedLyrics() { mxmlIoTestRef("testExtendedLyrics"); }
       void figuredBass1() { mxmlIoTest("testFiguredBass1"); }
       void figuredBass2() { mxmlIoTest("testFiguredBass2"); }

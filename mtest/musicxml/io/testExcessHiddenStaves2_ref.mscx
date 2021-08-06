@@ -56,7 +56,6 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <bracket type="1" span="10" col="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff id="2">
@@ -92,14 +91,15 @@
       <Staff id="7">
         <StaffType group="pitched">
           <name>stdNormal</name>
+          <mag>0.75</mag>
           </StaffType>
-        <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff id="8">
         <StaffType group="pitched">
           <name>stdNormal</name>
-          <mag>0.75</mag>
           </StaffType>
+        <hideWhenEmpty>3</hideWhenEmpty>
+        <bracket type="1" span="2" col="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff id="9">
@@ -112,6 +112,7 @@
       <Staff id="10">
         <StaffType group="pitched">
           <name>stdNormal</name>
+          <mag>0.75</mag>
           </StaffType>
         <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
