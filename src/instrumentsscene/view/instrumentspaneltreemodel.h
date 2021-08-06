@@ -117,8 +117,6 @@ private:
 
     bool removeRows(int row, int count, const QModelIndex& parent) override;
 
-    notation::IDList currentNotationPartIdList() const;
-
     AbstractInstrumentsPanelTreeItem* loadPart(const notation::Part* part);
 
     AbstractInstrumentsPanelTreeItem* modelIndexToItem(const QModelIndex& index) const;
@@ -128,7 +126,7 @@ private:
 
     AbstractInstrumentsPanelTreeItem* buildPartItem(const mu::notation::Part* part);
     AbstractInstrumentsPanelTreeItem* buildStaffItem(const mu::notation::Staff* staff);
-    AbstractInstrumentsPanelTreeItem* buildAddStaffControlItem(const QString& partId);
+    AbstractInstrumentsPanelTreeItem* buildAddStaffControlItem(const ID& partId);
 
     AbstractInstrumentsPanelTreeItem* m_rootItem = nullptr;
     uicomponents::ItemMultiSelectionModel* m_selectionModel = nullptr;

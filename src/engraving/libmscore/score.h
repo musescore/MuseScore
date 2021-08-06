@@ -571,6 +571,12 @@ private:
 
     void update(bool resetCmdState);
 
+    ID newStaffId() const;
+    ID newPartId() const;
+
+    void assignIdIfNeed(Staff& staff) const;
+    void assignIdIfNeed(Part& part) const;
+
 protected:
     int _fileDivision;   ///< division of current loading *.msc file
     LayoutMode _layoutMode { LayoutMode::PAGE };
@@ -623,8 +629,10 @@ public:
     void rebuildBspTree();
     bool noStaves() const { return _staves.empty(); }
     void insertPart(Part*, int);
+    void appendPart(Part*);
     void removePart(Part*);
     void insertStaff(Staff*, int);
+    void appendStaff(Staff*);
     void cmdRemoveStaff(int staffIdx);
     void removeStaff(Staff*);
     void addMeasure(MeasureBase*, MeasureBase*);
@@ -688,14 +696,14 @@ public:
     bool read400(XmlReader& e);
     bool readScore400(XmlReader& e);
 
-    QList<Staff*>& staves() { return _staves; }
     const QList<Staff*>& staves() const { return _staves; }
     int nstaves() const { return _staves.size(); }
     int ntracks() const { return _staves.size() * VOICES; }
 
     int staffIdx(const Part*) const;
     Staff* staff(int n) const { return ((n >= 0) && (n < _staves.size())) ? _staves.at(n) : nullptr; }
-    Staff* staff(const QString& staffId) const;
+    Staff* staffById(const ID& staffId) const;
+    Part* partById(const ID& partId) const;
 
     Measure* pos2measure(const mu::PointF&, int* staffIdx, int* pitch, Segment**, mu::PointF* offset) const;
     void dragPosition(const mu::PointF&, int* staffIdx, Segment**, qreal spacingFactor = 0.5) const;
@@ -834,10 +842,8 @@ public:
 
     void changeSelectedNotesVoice(int);
 
-    QList<Part*>& parts() { return _parts; }
     const QList<Part*>& parts() const { return _parts; }
 
-    void appendPart(Part* p);
     void appendPart(const InstrumentTemplate*);
     void updateStaffIndex();
     void sortStaves(QList<int>& dst);

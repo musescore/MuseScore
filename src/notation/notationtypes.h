@@ -27,6 +27,7 @@
 
 #include "io/path.h"
 #include "translation.h"
+#include "id.h"
 #include "midi/midievent.h"
 
 #include "libmscore/element.h"
@@ -120,9 +121,6 @@ using InstrumentChannelList = QList<InstrumentChannel>;
 using PageList = std::vector<const Page*>;
 using StaffList = QList<const Staff*>;
 using PartList = QList<const Part*>;
-
-using ID = QString;
-using IDList = QList<ID>;
 
 enum class DragMode
 {
@@ -414,7 +412,7 @@ inline QString formatInstrumentTitle(const Instrument& instrument, int instrumen
 
 struct PartInstrument
 {
-    QString partId;
+    ID partId;
     Instrument instrument;
 
     bool isExistingPart = false;

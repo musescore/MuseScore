@@ -39,9 +39,9 @@ public:
         ShowCurrentInstruments
     };
 
-    virtual RetVal<notation::PartInstrumentListScoreOrder> selectInstruments(SelectInstrumentsMode mode = SelectInstrumentsMode::None) const
+    virtual RetVal<PartInstrumentListScoreOrder> selectInstruments(SelectInstrumentsMode mode = SelectInstrumentsMode::None) const
     = 0;
-    virtual RetVal<notation::Instrument> selectInstrument(const std::string& currentInstrumentId = "") const = 0;
+    virtual RetVal<Instrument> selectInstrument(const InstrumentKey& currentInstrumentKey = InstrumentKey()) const = 0;
 };
 }
 

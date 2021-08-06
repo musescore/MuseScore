@@ -93,7 +93,7 @@ void PartTreeItem::moveChildren(const int sourceRow, const int count, AbstractIn
     IDList stavesIds;
 
     for (int i = sourceRow; i < sourceRow + count; ++i) {
-        stavesIds << childAtRow(i)->id();
+        stavesIds.push_back(childAtRow(i)->id());
     }
 
     int destinationRowLast = destinationRow;
@@ -115,7 +115,7 @@ void PartTreeItem::removeChildren(const int row, const int count, const bool del
     IDList stavesIds;
 
     for (int i = row; i < row + count; ++i) {
-        stavesIds << childAtRow(i)->id();
+        stavesIds.push_back(childAtRow(i)->id());
     }
 
     if (deleteChild) {

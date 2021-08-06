@@ -414,10 +414,8 @@ Score::FileError importBB(MasterScore* score, const QString& name)
     }
     for (int i = 0; i < ntracks; ++i) {
         Part* part = new Part(score);
-        Staff* s   = new Staff(score);
-        s->setPart(part);
-        part->insertStaff(s, 0);
-        score->staves().append(s);
+        Staff* s = createStaff(score, part);
+        score->appendStaff(s);
         score->appendPart(part);
     }
 

@@ -31,7 +31,7 @@ StaffControlTreeItem::StaffControlTreeItem(IMasterNotationPtr masterNotation, IN
 
 void StaffControlTreeItem::appendNewItem()
 {
-    const Part* part = this->part();
+    const Part* part = masterNotation()->parts()->part(m_partId);
     if (!part) {
         return;
     }
@@ -44,18 +44,7 @@ void StaffControlTreeItem::appendNewItem()
     masterNotation()->parts()->appendStaff(staff, m_partId);
 }
 
-const Part* StaffControlTreeItem::part() const
-{
-    for (const Part* part : notation()->parts()->partList()) {
-        if (part->id() == m_partId) {
-            return part;
-        }
-    }
-
-    return nullptr;
-}
-
-void StaffControlTreeItem::setPartId(const QString& id)
+void StaffControlTreeItem::setPartId(const ID& id)
 {
     m_partId = id;
 }

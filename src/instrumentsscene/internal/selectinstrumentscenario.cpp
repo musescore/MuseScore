@@ -35,13 +35,13 @@ mu::RetVal<PartInstrumentListScoreOrder> SelectInstrumentsScenario::selectInstru
     return selectInstruments(params);
 }
 
-mu::RetVal<Instrument> SelectInstrumentsScenario::selectInstrument(const std::string& currentInstrumentId) const
+mu::RetVal<Instrument> SelectInstrumentsScenario::selectInstrument(const InstrumentKey& currentInstrumentKey) const
 {
     RetVal<Instrument> result;
 
     QStringList params {
         "canSelectMultipleInstruments=false",
-        "currentInstrumentId=" + QString::fromStdString(currentInstrumentId)
+        "currentInstrumentId=" + currentInstrumentKey.instrumentId.toQString()
     };
 
     RetVal<PartInstrumentListScoreOrder> selectedInstruments = selectInstruments(params);
@@ -101,18 +101,18 @@ INotationPartsPtr SelectInstrumentsScenario::notationParts() const
     return notation->parts();
 }
 
-IDList SelectInstrumentsScenario::partsIds() const
+QStringList SelectInstrumentsScenario::partsIds() const
 {
     auto _notationParts = notationParts();
     if (!_notationParts) {
-        return IDList();
+        return QStringList();
     }
 
     async::NotifyList<const Part*> parts = _notationParts->partList();
 
-    IDList result;
+    QStringList result;
     for (const Part* part: parts) {
-        result << part->id();
+        result << ID(part->id()).toQString();
     }
 
     return result;

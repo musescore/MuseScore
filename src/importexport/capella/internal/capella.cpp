@@ -1287,10 +1287,9 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
         }
         midiPatch = cl->sound;
 
-        Staff* s = new Staff(score);
+        Staff* s = createStaff(score, part);
         s->initFromStaffType(0);
 
-        s->setPart(part);
         if (cl->bPercussion) {
             part->setMidiProgram(0, 128);
         } else {
@@ -1314,14 +1313,13 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
         }
 
         s->staffType(Fraction(0, 1))->setSmall(cl->bSmall);
-        part->insertStaff(s, -1);
         Interval interval;
         // guess diatonic transposition from chromatic transposition for the instrument
         int values[23] = { -6, -6, -5, -5, -4, -3, -3, -2, -2, -1, -1, 0, 1, 1, 2, 2, 3, 4, 4, 5, 5, 6, 6 };
         interval.diatonic = values[(cl->transp % 12) + 11] + (cl->transp / 12) * 7;
         interval.chromatic = cl->transp;
         s->part()->instrument()->setTranspose(interval);
-        score->staves().push_back(s);
+        score->appendStaff(s);
     }
     if (bstaff) {
         bstaff->setBarLineSpan(span != 0);

@@ -114,15 +114,13 @@ mu::Ret MasterNotation::setupNewScore(Ms::MasterScore* score, Ms::MasterScore* t
             part->setPartName(tpart->partName());
 
             for (Ms::Staff* tstaff : *tpart->staves()) {
-                Ms::Staff* staff = new Ms::Staff(score);
-                staff->setPart(part);
+                Ms::Staff* staff = Ms::createStaff(score, part);
                 staff->init(tstaff);
                 if (tstaff->links() && !part->staves()->isEmpty()) {
                     Staff* linkedStaff = part->staves()->back();
                     staff->linkTo(linkedStaff);
                 }
-                part->insertStaff(staff, -1);
-                score->staves().append(staff);
+                score->appendStaff(staff);
             }
             score->appendPart(part);
         }

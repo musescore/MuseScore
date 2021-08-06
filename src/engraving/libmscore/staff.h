@@ -78,8 +78,8 @@ public:
     };
 
 private:
-    QString _id;
-    Part* _part       { 0 };
+    ID _id = INVALID_ID;
+    Part* _part = nullptr;
 
     ClefList clefs;
     ClefTypeList _defaultClefType;
@@ -120,13 +120,17 @@ private:
     qreal staffMag(const StaffType*) const;
 
 public:
-    Staff(Score* score = 0);
+    Staff(Score* score = nullptr);
     Staff(const Staff& staff);
     Staff* clone() const override;
     ~Staff();
+
     void init(const InstrumentTemplate*, const StaffType* staffType, int);
     void initFromStaffType(const StaffType* staffType);
     void init(const Staff*);
+
+    ID id() const;
+    void setId(const ID& id);
 
     ElementType type() const override { return ElementType::STAFF; }
 
@@ -135,9 +139,6 @@ public:
     bool isTop() const;
     QString partName() const;
     int rstaff() const;
-    QString id() const;
-    void setId(const QString& id);
-    static QString makeId();
     int idx() const;
     void read(XmlReader&) override;
     bool readProperties(XmlReader&) override;
@@ -313,5 +314,13 @@ public:
     void triggerLayout() const override;
     void triggerLayout(const Fraction& tick);
 };
+
+inline Staff* createStaff(Score* score, Part* part)
+{
+    Staff* staff = new Staff(score);
+    staff->setPart(part);
+
+    return staff;
+}
 }     // namespace Ms
 #endif
