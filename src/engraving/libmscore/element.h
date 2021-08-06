@@ -52,9 +52,6 @@ namespace Ms {
 #define VOICES 4
 #endif
 
-// Defined in Windows headers, conflicts with member functions named small().
-#undef small
-
 enum class Pid;
 enum class SmuflAnchorId;
 class StaffType;

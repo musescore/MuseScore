@@ -70,7 +70,7 @@ protected:
     Beam* _beam;
     Beam::Mode _beamMode;
     bool _up;                             // actual stem direction
-    bool _small;
+    bool m_isSmall;
     bool _melismaEnd;
 
     // CrossMeasure: combine 2 tied notes if across a bar line and can be combined in a single duration
@@ -119,7 +119,7 @@ public:
     bool up() const { return _up; }
     void setUp(bool val) { _up = val; }
 
-    bool small() const { return _small; }
+    bool isSmall() const { return m_isSmall; }
     void setSmall(bool val);
     void undoSetSmall(bool val);
 

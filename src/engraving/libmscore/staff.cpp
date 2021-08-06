@@ -924,7 +924,7 @@ qreal Staff::spatium(const Element* e) const
 
 qreal Staff::staffMag(const StaffType* stt) const
 {
-    return (stt->small() ? score()->styleD(Sid::smallStaffMag) : 1.0) * stt->userMag();
+    return (stt->isSmall() ? score()->styleD(Sid::smallStaffMag) : 1.0) * stt->userMag();
 }
 
 qreal Staff::staffMag(const Fraction& tick) const
@@ -1473,7 +1473,7 @@ QVariant Staff::getProperty(Pid id) const
 {
     switch (id) {
     case Pid::SMALL:
-        return staffType(Fraction(0, 1))->small();
+        return staffType(Fraction(0, 1))->isSmall();
     case Pid::MAG:
         return staffType(Fraction(0, 1))->userMag();
     case Pid::STAFF_INVISIBLE:

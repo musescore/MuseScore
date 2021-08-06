@@ -185,7 +185,7 @@
          </widget>
         </item>
         <item row="1" column="4">
-         <widget class="QCheckBox" name="small">
+         <widget class="QCheckBox" name="isSmallCheckbox">
           <property name="text">
            <string>Small staff</string>
           </property>
