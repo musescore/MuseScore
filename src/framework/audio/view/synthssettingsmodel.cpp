@@ -32,7 +32,7 @@ SynthsSettingsModel::SynthsSettingsModel(QObject* parent)
 
 void SynthsSettingsModel::load()
 {
-    resourceProvider()->resourceIdList(AudioSourceType::Fluid).onResolve(this, [this](const AudioResourceIdList& resources) {
+    playback()->tracks()->availableInputResources(AudioSourceType::Fluid).onResolve(this, [this](const AudioResourceIdList& resources) {
         QString name("Fluid");
 
         for (const AudioResourceId& resourceId : resources) {

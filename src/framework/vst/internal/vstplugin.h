@@ -23,36 +23,40 @@
 #ifndef MU_VST_VSTPLUGIN_H
 #define MU_VST_VSTPLUGIN_H
 
+#include <mutex>
+
+#include "modularity/ioc.h"
 #include "io/path.h"
+#include "async/asyncable.h"
+#include "audio/iaudiothreadsecurer.h"
 
 #include "vsttypes.h"
 #include "vsterrors.h"
 
 namespace mu::vst {
-class VstPlugin
+class VstPlugin : public async::Asyncable
 {
+    INJECT_STATIC(vst, audio::IAudioThreadSecurer, threadSecurer)
+
 public:
+    VstPlugin(PluginModulePtr module);
 
-    VstPlugin();
-    Ret load(const io::path& pluginPath);
+    const std::string& name() const;
 
-    PluginId id() const;
-    VstPluginMeta meta() const;
     PluginViewPtr view() const;
     PluginComponentPtr component() const;
 
     bool isValid() const;
 
 private:
+    void load();
 
     PluginModulePtr m_module = nullptr;
-    PluginFactory m_factory;
     PluginProviderPtr m_pluginProvider = nullptr;
-    PluginControllerPtr m_pluginController = nullptr;
     mutable PluginComponentPtr m_pluginComponent = nullptr;
     mutable PluginViewPtr m_pluginView = nullptr;
 
-    PluginContext m_pluginContext;
+    mutable std::mutex m_mutex;
 };
 }
 

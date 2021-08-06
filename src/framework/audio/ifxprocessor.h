@@ -32,17 +32,13 @@ class IFxProcessor
 public:
     virtual ~IFxProcessor() = default;
 
-    virtual FxProcessorId id() const = 0;
-
+    virtual AudioFxType type() const = 0;
     virtual void setSampleRate(unsigned int sampleRate) = 0;
 
     virtual bool active() const = 0;
     virtual void setActive(bool active) = 0;
 
-    //! return streams count for this insert: 1 for mono, 2 for stereo
-    virtual unsigned int streamCount() const = 0;
-
-    virtual void process(float* input, float* output, unsigned int sampleCount) = 0;
+    virtual void process(float* buffer, unsigned int sampleCount) = 0;
 };
 
 using IFxProcessorPtr = std::shared_ptr<IFxProcessor>;

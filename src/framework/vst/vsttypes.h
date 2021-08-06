@@ -23,6 +23,8 @@
 #define MU_VST_VSTTYPES_H
 
 #include <memory>
+#include <vector>
+
 #include "public.sdk/source/vst/hosting/module.h"
 #include "public.sdk/source/vst/hosting/plugprovider.h"
 #include "public.sdk/source/vst/hosting/hostclasses.h"
@@ -42,7 +44,9 @@ using ClassInfo = VST3::Hosting::ClassInfo;
 using PluginId = std::string;
 using PluginModulePtr = VST3::Hosting::Module::Ptr;
 using PluginModule = VST3::Hosting::Module;
+using PluginModuleList = std::vector<PluginModulePtr>;
 using PluginFactory = VST3::Hosting::PluginFactory;
+using PluginSubcategories = ClassInfo::SubCategories;
 using PluginContextFactory = Steinberg::Vst::PluginContextFactory;
 using PluginContext = Steinberg::Vst::HostApplication;
 using PluginProviderPtr = Steinberg::IPtr<Steinberg::Vst::PlugProvider>;
@@ -53,8 +57,15 @@ using PluginViewPtr = Steinberg::IPtr<Steinberg::IPlugView>;
 using IAudioProcessorPtr = Steinberg::FUnknownPtr<Steinberg::Vst::IAudioProcessor>;
 using FIDString = Steinberg::FIDString;
 
+enum class VstPluginType {
+    Undefined,
+    Instrument,
+    Fx
+};
+
 struct VstPluginMeta {
     PluginId id;
+    VstPluginType type = VstPluginType::Undefined;
     std::string name;
     std::string path;
 };
