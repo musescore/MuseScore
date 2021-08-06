@@ -533,7 +533,7 @@ Score::FileError MasterScore::read(XmlReader& e, bool ignoreVersionError, mu::en
                 error = compat::Read114::read114(this, e);
             } else if (mscVersion() <= 207) {
                 error = compat::Read206::read206(this, e);
-            } else if (mscVersion() <= 400) {
+            } else if (mscVersion() < 400 || MScore::testMode) {
                 error = compat::Read302::read302(this, e);
             } else {
                 error = doRead(e);
@@ -559,7 +559,7 @@ Score::FileError MasterScore::doRead(XmlReader& e)
         } else if (tag == "programRevision") {
             setMscoreRevision(e.readIntHex());
         } else if (tag == "Score") {
-            if (!Score::read400(e)) {
+            if (!Score::readScore400(e)) {
                 if (e.error() == QXmlStreamReader::CustomError) {
                     return FileError::FILE_CRITICALLY_CORRUPTED;
                 }
