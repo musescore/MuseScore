@@ -38,8 +38,10 @@ public:
     virtual async::NotifyList<const Staff*> staffList(const ID& partId) const = 0;
 
     virtual const Part* part(const ID& partId) const = 0;
-    virtual const Staff* staff(const ID& staffId) const = 0;
     virtual bool partExists(const ID& partId) const = 0;
+
+    virtual const Staff* staff(const ID& staffId) const = 0;
+    virtual bool staffExists(const ID& staffId) const = 0;
 
     virtual void setParts(const PartInstrumentList& instruments) = 0;
     virtual void setScoreOrder(const ScoreOrder& order) = 0;

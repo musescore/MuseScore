@@ -108,6 +108,9 @@ private:
         ItemRole = Qt::UserRole + 1
     };
 
+    void setupPartsConnections();
+    void setupStavesConnections(const ID& stavesPartId);
+
     void clear();
     void deleteItems();
 
@@ -117,15 +120,18 @@ private:
 
     bool removeRows(int row, int count, const QModelIndex& parent) override;
 
-    AbstractInstrumentsPanelTreeItem* loadPart(const notation::Part* part);
+    bool isPartExsistsOnCurrentNotation(const ID& partId) const;
+    bool isStaffExsistsOnCurrentNotation(const ID& staffId) const;
+
+    AbstractInstrumentsPanelTreeItem* loadMasterPart(const notation::Part* masterPart);
 
     AbstractInstrumentsPanelTreeItem* modelIndexToItem(const QModelIndex& index) const;
 
-    void updatePartItem(PartTreeItem* item, const notation::Part* part);
-    void updateStaffItem(StaffTreeItem* item, const mu::notation::Staff* staff);
+    void updatePartItem(PartTreeItem* item, const notation::Part* masterPart);
+    void updateStaffItem(StaffTreeItem* item, const mu::notation::Staff* masterStaff);
 
-    AbstractInstrumentsPanelTreeItem* buildPartItem(const mu::notation::Part* part);
-    AbstractInstrumentsPanelTreeItem* buildStaffItem(const mu::notation::Staff* staff);
+    AbstractInstrumentsPanelTreeItem* buildPartItem(const mu::notation::Part* masterPart);
+    AbstractInstrumentsPanelTreeItem* buildMasterStaffItem(const mu::notation::Staff* masterStaff);
     AbstractInstrumentsPanelTreeItem* buildAddStaffControlItem(const ID& partId);
 
     AbstractInstrumentsPanelTreeItem* m_rootItem = nullptr;
@@ -138,6 +144,8 @@ private:
     bool m_isMovingDownAvailable = false;
     bool m_isRemovingAvailable = false;
     bool m_isLoadingBlocked = false;
+
+    std::shared_ptr<async::Asyncable> m_partsNotifyReceiver = nullptr;
 };
 }
 

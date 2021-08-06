@@ -81,29 +81,29 @@ NotationParts::~NotationParts()
 NotifyList<const Part*> NotationParts::partList() const
 {
     NotifyList<const Part*> result;
+    result.setNotify(m_partChangedNotifier->notify());
 
     for (const Part* part: score()->parts()) {
         result.push_back(part);
     }
 
-    result.setNotify(m_partChangedNotifier->notify());
     return result;
 }
 
 NotifyList<const Staff*> NotationParts::staffList(const ID& partId) const
 {
+    NotifyList<const Staff*> result;
+    ChangedNotifier<const Staff*>* notifier = staffChangedNotifier(partId);
+    result.setNotify(notifier->notify());
+
     const Part* part = this->part(partId);
     if (!part) {
-        return NotifyList<const Staff*>();
+        return result;
     }
 
-    NotifyList<const Staff*> result;
     for (const Staff* staff: *part->staves()) {
         result.push_back(staff);
     }
-
-    ChangedNotifier<const Staff*>* notifier = staffChangedNotifier(partId);
-    result.setNotify(notifier->notify());
 
     return result;
 }
@@ -113,14 +113,19 @@ const Part* NotationParts::part(const ID& partId) const
     return partModifiable(partId);
 }
 
+bool NotationParts::partExists(const ID& partId) const
+{
+    return part(partId) != nullptr;
+}
+
 const Staff* NotationParts::staff(const ID& staffId) const
 {
     return staffModifiable(staffId);
 }
 
-bool NotationParts::partExists(const ID& partId) const
+bool NotationParts::staffExists(const ID& staffId) const
 {
-    return part(partId) != nullptr;
+    return staff(staffId) != nullptr;
 }
 
 Part* NotationParts::partModifiable(const ID& partId) const
@@ -530,9 +535,6 @@ void NotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
 
     staff->setScore(score());
     staff->setPart(destinationPart);
-
-    //! NOTE: will be generated later after adding to the score
-    staff->setId(Ms::INVALID_ID);
 
     insertStaff(staff, staffIndex);
 
