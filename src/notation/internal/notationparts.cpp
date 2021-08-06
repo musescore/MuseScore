@@ -536,9 +536,6 @@ void NotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
     staff->setScore(score());
     staff->setPart(destinationPart);
 
-    //! NOTE: will be generated later after adding to the score
-    staff->setId(Ms::INVALID_ID);
-
     insertStaff(staff, staffIndex);
 
     setBracketsAndBarlines();
