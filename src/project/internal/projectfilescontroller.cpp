@@ -216,10 +216,10 @@ bool ProjectFilesController::closeOpenedProject()
 
 IInteractive::Button ProjectFilesController::askAboutSavingScore(const io::path& filePath)
 {
-    std::string title = qtrc("userscores", "Do you want to save changes to the score “%1” before closing?")
+    std::string title = qtrc("project", "Do you want to save changes to the score “%1” before closing?")
                         .arg(io::completebasename(filePath).toQString()).toStdString();
 
-    std::string body = trc("userscores", "Your changes will be lost if you don’t save them.");
+    std::string body = trc("project", "Your changes will be lost if you don’t save them.");
 
     IInteractive::Options options {
         IInteractive::Option::WithIcon | IInteractive::Option::WithShowAgain
@@ -243,7 +243,7 @@ void ProjectFilesController::saveScore()
 
     io::path defaultFilePath = defaultSavingFilePath();
 
-    io::path filePath = selectScoreSavingFile(defaultFilePath, qtrc("userscores", "Save score"));
+    io::path filePath = selectScoreSavingFile(defaultFilePath, qtrc("project", "Save score"));
     if (filePath.empty()) {
         return;
     }
@@ -258,7 +258,7 @@ void ProjectFilesController::saveScore()
 void ProjectFilesController::saveScoreAs()
 {
     io::path defaultFilePath = defaultSavingFilePath();
-    io::path selectedFilePath = selectScoreSavingFile(defaultFilePath, qtrc("userscores", "Save score"));
+    io::path selectedFilePath = selectScoreSavingFile(defaultFilePath, qtrc("project", "Save score"));
     if (selectedFilePath.empty()) {
         return;
     }
@@ -269,7 +269,7 @@ void ProjectFilesController::saveScoreAs()
 void ProjectFilesController::saveScoreCopy()
 {
     io::path defaultFilePath = defaultSavingFilePath();
-    io::path selectedFilePath = selectScoreSavingFile(defaultFilePath, qtrc("userscores", "Save a copy"));
+    io::path selectedFilePath = selectScoreSavingFile(defaultFilePath, qtrc("project", "Save a copy"));
     if (selectedFilePath.empty()) {
         return;
     }
@@ -280,7 +280,7 @@ void ProjectFilesController::saveScoreCopy()
 void ProjectFilesController::saveSelection()
 {
     io::path defaultFilePath = defaultSavingFilePath();
-    io::path selectedFilePath = selectScoreSavingFile(defaultFilePath, qtrc("userscores", "Save selection"));
+    io::path selectedFilePath = selectScoreSavingFile(defaultFilePath, qtrc("project", "Save selection"));
     if (selectedFilePath.empty()) {
         return;
     }
@@ -350,8 +350,8 @@ bool ProjectFilesController::checkCanIgnoreError(const Ret& ret, const io::path&
         notation::Err::FileOld300Format
     };
 
-    std::string title = trc("userscores", "Open Error");
-    std::string body = qtrc("userscores", "Cannot open file %1:\n%2")
+    std::string title = trc("project", "Open Error");
+    std::string body = qtrc("project", "Cannot open file %1:\n%2")
                        .arg(filePath.toQString())
                        .arg(QString::fromStdString(ret.text())).toStdString();
 
@@ -425,7 +425,7 @@ io::path ProjectFilesController::selectScoreOpeningFile()
            << QObject::tr("MuseScore Dev Files") + " (*.mscs)"
            << QObject::tr("MuseScore Backup Files") + " (*.mscz~)";
 
-    return interactive()->selectOpeningFile(qtrc("userscores", "Score"), "", filter.join(";;"));
+    return interactive()->selectOpeningFile(qtrc("project", "Score"), "", filter.join(";;"));
 }
 
 io::path ProjectFilesController::selectScoreSavingFile(const io::path& defaultFilePath, const QString& saveTitle)
