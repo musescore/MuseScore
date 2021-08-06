@@ -788,8 +788,7 @@ void PowerTab::addToScore(ptSection& sec)
         //int lastStaff = sec.staffMap.back() + 1;
         for (int i = 0; i < staves; ++i) {
             Part* part = new Part(score);
-            Staff* s = new Staff(score);
-            s->setPart(part);
+            Staff* s = createStaff(score, part);
             part->insertStaff(s, -1);
             auto info = &curTrack->infos[i];
             std::string ss = info->name;
@@ -805,7 +804,7 @@ void PowerTab::addToScore(ptSection& sec)
 
             part->setMidiProgram(info->instrument);
 
-            score->staves().push_back(s);
+            score->appendStaff(s);
             score->appendPart(part);
         }
     }
@@ -1308,14 +1307,12 @@ Score::FileError PowerTab::read()
 
         Staff* staff = part->staves()->front();
 
-        Staff* s = new Staff(pscore);
-        s->setPart(p);
+        Staff* s = createStaff(score, p);
         const StaffType* st = staff->staffType(Fraction(0, 1));
         s->setStaffType(Fraction(0, 1), *st);
 
         s->linkTo(staff);
-        p->staves()->append(s);
-        pscore->staves().append(s);
+        pscore->appendStaff(s);
         stavesMap.append(staff->idx());
         for (int i = staff->idx() * VOICES, j = 0; i < staff->idx() * VOICES + VOICES; i++, j++) {
             tracks.insert(i, j);

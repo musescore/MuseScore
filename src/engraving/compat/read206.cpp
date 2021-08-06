@@ -780,10 +780,8 @@ void Read206::readPart206(Part* part, XmlReader& e)
                 }
             }
         } else if (tag == "Staff") {
-            Staff* staff = new Staff(part->score());
-            staff->setPart(part);
-            part->score()->staves().push_back(staff);
-            part->staves()->push_back(staff);
+            Staff* staff = createStaff(part->score(), part);
+            part->score()->appendStaff(staff);
             readStaff(staff, e);
         } else if (part->readProperties(e)) {
         } else {
@@ -3406,7 +3404,7 @@ bool Read206::readScore206(Score* score, XmlReader& e)
         } else if (tag == "Part") {
             Part* part = new Part(score);
             Read206::readPart206(part, e);
-            score->parts().push_back(part);
+            score->appendPart(part);
         } else if ((tag == "HairPin")     // TODO: do this elements exist here?
                    || (tag == "Ottava")
                    || (tag == "TextLine")

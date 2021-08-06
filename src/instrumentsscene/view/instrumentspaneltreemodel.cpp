@@ -131,17 +131,6 @@ void InstrumentsPanelTreeModel::load()
     emit isAddingAvailableChanged(true);
 }
 
-IDList InstrumentsPanelTreeModel::currentNotationPartIdList() const
-{
-    IDList result;
-
-    for (const Part* part : m_notation->parts()->partList()) {
-        result << part->id();
-    }
-
-    return result;
-}
-
 void InstrumentsPanelTreeModel::selectRow(const QModelIndex& rowIndex)
 {
     m_selectionModel->select(rowIndex);
@@ -500,7 +489,7 @@ AbstractInstrumentsPanelTreeItem* InstrumentsPanelTreeModel::loadPart(const Part
     TRACEFUNC;
 
     auto partItem = buildPartItem(part);
-    QString partId = part->id();
+    ID partId = part->id();
 
     async::NotifyList<const Staff*> staves = m_masterNotation->parts()->staffList(partId);
 
@@ -574,8 +563,7 @@ AbstractInstrumentsPanelTreeItem* InstrumentsPanelTreeModel::buildPartItem(const
 
 void InstrumentsPanelTreeModel::updatePartItem(PartTreeItem* item, const Part* part)
 {
-    IDList notationPartIdList = currentNotationPartIdList();
-    bool visible = part->show() && notationPartIdList.contains(part->id());
+    bool visible = part->show() && m_notation->parts()->partExists(part->id());
 
     item->setId(part->id());
     item->setTitle(part->partName().isEmpty() ? part->instrument()->name() : part->partName());
@@ -593,7 +581,7 @@ AbstractInstrumentsPanelTreeItem* InstrumentsPanelTreeModel::buildStaffItem(cons
     return result;
 }
 
-AbstractInstrumentsPanelTreeItem* InstrumentsPanelTreeModel::buildAddStaffControlItem(const QString& partId)
+AbstractInstrumentsPanelTreeItem* InstrumentsPanelTreeModel::buildAddStaffControlItem(const ID& partId)
 {
     auto result = new StaffControlTreeItem(m_masterNotation, m_notation, this);
     result->setTitle(qtrc("instruments", "Add staff"));

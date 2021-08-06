@@ -2572,11 +2572,9 @@ static void readPart(Part* part, XmlReader& e)
     while (e.readNextStartElement()) {
         const QStringRef& tag(e.name());
         if (tag == "Staff") {
-            Staff* staff = new Staff(_score);
-            staff->setPart(part);
+            Staff* staff = createStaff(_score, part);
             staff->setStaffType(Fraction(0, 1), StaffType());       // will reset later if needed
-            _score->staves().push_back(staff);
-            part->staves()->push_back(staff);
+            _score->appendStaff(staff);
             readStaff(staff, e);
         } else if (tag == "Instrument") {
             Instrument* i = part->instrument();
@@ -2917,7 +2915,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e)
         } else if (tag == "Part") {
             Part* part = new Part(masterScore);
             readPart(part, e);
-            masterScore->parts().push_back(part);
+            masterScore->appendPart(part);
         } else if (tag == "Slur") {
             Slur* slur = new Slur(masterScore);
             Read206::readSlur206(e, slur);

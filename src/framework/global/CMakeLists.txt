@@ -49,6 +49,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/logstream.h
     ${CMAKE_CURRENT_LIST_DIR}/dataformatter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dataformatter.h
+    ${CMAKE_CURRENT_LIST_DIR}/id.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/id.h
     ${CMAKE_CURRENT_LIST_DIR}/val.cpp
     ${CMAKE_CURRENT_LIST_DIR}/val.h
     ${CMAKE_CURRENT_LIST_DIR}/settings.cpp

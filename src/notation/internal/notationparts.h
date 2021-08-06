@@ -87,7 +87,6 @@ private:
     void doSetStaffVisible(Staff* staff, bool visible);
     void doSetStaffVoiceVisible(Staff* staff, int voiceIndex, bool visible);
     void doRemoveParts(const IDList& partsIds);
-    void doSetPartName(Part* part, const QString& name);
 
     Part* partModifiable(const ID& partId) const;
     Staff* staffModifiable(const ID& staffId) const;
@@ -106,12 +105,12 @@ private:
 
     void setBracketsAndBarlines();
 
-    void notifyAboutPartChanged(Part* part) const;
-    void notifyAboutPartAdded(Part* part) const;
-    void notifyAboutPartRemoved(Part* part) const;
-    void notifyAboutStaffChanged(Staff* staff) const;
-    void notifyAboutStaffAdded(Staff* staff, const ID& partId) const;
-    void notifyAboutStaffRemoved(Staff* staff) const;
+    void notifyAboutPartChanged(const Part* part) const;
+    void notifyAboutPartAdded(const Part* part) const;
+    void notifyAboutPartRemoved(const Part* part) const;
+    void notifyAboutStaffChanged(const Staff* staff) const;
+    void notifyAboutStaffAdded(const Staff* staff, const ID& partId) const;
+    void notifyAboutStaffRemoved(const Staff* staff) const;
     async::ChangedNotifier<const Staff*>* staffChangedNotifier(const ID& partId) const;
 
     IGetScore* m_getScore = nullptr;

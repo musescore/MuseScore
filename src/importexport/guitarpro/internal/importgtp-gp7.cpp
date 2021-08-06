@@ -42,10 +42,8 @@ void GuitarPro7::readTracks(QDomNode* track)
         QDomNode currentNode = nextTrack.firstChild();
         Part* part           = new Part(score);
         bool hasTuning       = false;
-        Staff* s             = new Staff(score);
-        s->setPart(part);
-        part->insertStaff(s, -1);
-        score->staves().push_back(s);
+        Staff* s = createStaff(score, part);
+        score->appendStaff(s);
         while (!currentNode.isNull()) {
             QString nodeName = currentNode.nodeName();
             if (nodeName == "Name") {
@@ -70,10 +68,8 @@ void GuitarPro7::readTracks(QDomNode* track)
                     qDebug() << "Unknown instrument: " << ref;
                 }
                 if (ref.endsWith("-gs") || ref.startsWith("2")) {         // grand staff
-                    Staff* s2 = new Staff(score);
-                    s2->setPart(part);
-                    part->insertStaff(s2, -1);
-                    score->staves().push_back(s2);
+                    Staff* s2 = createStaff(score, part);
+                    score->appendStaff(s2);
                     s->addBracket(new BracketItem(s->score(), BracketType::BRACE, 2));
                     s->setBarLineSpan(2);
                 }

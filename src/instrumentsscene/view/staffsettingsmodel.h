@@ -68,7 +68,7 @@ private:
     notation::INotationPartsPtr notationParts() const;
     notation::INotationPartsPtr masterNotationParts() const;
 
-    notation::ID m_staffId;
+    ID m_staffId;
     bool m_isSmallStaff = false;
     bool m_cutawayEnabled = false;
     QList<bool> m_voicesVisibility;
