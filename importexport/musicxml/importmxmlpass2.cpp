@@ -2049,28 +2049,29 @@ void MusicXMLParserPass2::part()
 
       const auto& instruments = _pass1.getInstruments(id);
       _hasDrumset = hasDrumset(instruments);
+      auto mxmlPart = _pass1.getMusicXmlPart(id);
+      auto msPart = _pass1.getPart(id);
 
       // set the parts first instrument
       
       if (_pass1.supportsTranspose() == "no")
             _pass1.addInferredTranspose(id);
-      setPartInstruments(_logger, &_e, _pass1.getPart(id), id, _score, _pass1.getInstrList(id), _pass1.getIntervals(id), instruments);
+      setPartInstruments(_logger, &_e, msPart, id, _score, _pass1.getInstrList(id), _pass1.getIntervals(id), instruments);
 
       // set the part name
-      auto mxmlPart = _pass1.getMusicXmlPart(id);
-      _pass1.getPart(id)->setPartName(mxmlPart.getName());
+      msPart->setPartName(mxmlPart.getName());
       if (mxmlPart.getPrintName() && !isLikelyIncorrectPartName(mxmlPart.getName()))
-            _pass1.getPart(id)->setLongName(mxmlPart.getName());
+            msPart->setLongNameAll(mxmlPart.getName());
       else
-            _pass1.getPart(id)->setLongName("");
+            msPart->setLongNameAll(""); // Delete possibly inferred names in setPartInstruments
       if (mxmlPart.getPrintAbbr())
-            _pass1.getPart(id)->setPlainShortName(mxmlPart.getAbbr());
+            msPart->setPlainShortNameAll(mxmlPart.getAbbr());
       else
-            _pass1.getPart(id)->setPlainShortName("");
+            msPart->setPlainShortNameAll(""); // Delete possibly inferred names in setPartInstruments
       // try to prevent an empty track name
-      if (_pass1.getPart(id)->partName() == "") {
+      if (msPart->partName() == "") {
             QString instrId = _pass1.getInstrList(id).instrument(Fraction(0, 1));
-            _pass1.getPart(id)->setPartName(instruments[instrId].name);
+            msPart->setPartName(instruments[instrId].name);
             }
 
 #ifdef DEBUG_VOICE_MAPPER
@@ -2101,10 +2102,10 @@ void MusicXMLParserPass2::part()
             }
 
       // stop all remaining extends for this part
-      Measure* lm = _pass1.getPart(id)->score()->lastMeasure();
+      Measure* lm = msPart->score()->lastMeasure();
       if (lm) {
             int strack = _pass1.trackForPart(id);
-            int etrack = strack + _pass1.getPart(id)->nstaves() * VOICES;
+            int etrack = strack + msPart->nstaves() * VOICES;
             Fraction lastTick = lm->endTick();
             for (int trk = strack; trk < etrack; trk++)
                   _extendedLyrics.setExtend(-1, trk, lastTick);
@@ -2121,7 +2122,7 @@ void MusicXMLParserPass2::part()
                   // Handle pedal change end tick (slightly hacky)
                   // Find CR on the end tick of 
                   ChordRest* terminatingCR = _score->findCR(tick2, sp->effectiveTrack2());
-                  for (int track = _pass1.getPart(id)->startTrack(); track <= _pass1.getPart(id)->endTrack(); ++track) {
+                  for (int track = msPart->startTrack(); track <= msPart->endTrack(); ++track) {
                         ChordRest* tempCR = _score->findCR(tick2, track);
                         if (!terminatingCR
                         || (tempCR && tempCR->tick() > terminatingCR->tick())
@@ -2163,7 +2164,7 @@ void MusicXMLParserPass2::part()
             // set staff type to percussion if incorrectly imported as pitched staff
             // Note: part has been read, staff type already set based on clef type and staff-details
             // but may be incorrect for a percussion staff that does not use a percussion clef
-            setStaffTypePercussion(_pass1.getPart(id), drumset);
+            setStaffTypePercussion(msPart, drumset);
             }
       }
 
