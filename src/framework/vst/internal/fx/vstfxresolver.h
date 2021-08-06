@@ -59,12 +59,12 @@ private:
     void updateMasterFxMap(const audio::AudioResourceIdList& newResourceIdList);
     void updateTrackFxMap(FxMap& fxMap, const audio::TrackId trackId, const audio::AudioResourceIdList& newResourceIdList);
 
-    void fxListToRemove(const audio::AudioResourceIdList& currentResourceIdList,
-                        const audio::AudioResourceIdList& newResourceIdList, audio::AudioResourceIdList &resultList);
+    void fxListToRemove(const audio::AudioResourceIdList& currentResourceIdList, const audio::AudioResourceIdList& newResourceIdList,
+                        audio::AudioResourceIdList& resultList);
     void removeUnusedMasterFx(const audio::AudioResourceIdList& currentResourceIdList, const audio::AudioResourceIdList& newResourceIdList);
 
-    void fxListToCreate(const audio::AudioResourceIdList& currentResourceIdList,
-                         const audio::AudioResourceIdList& newResourceIdList, audio::AudioResourceIdList &resultList);
+    void fxListToCreate(const audio::AudioResourceIdList& currentResourceIdList, const audio::AudioResourceIdList& newResourceIdList,
+                        audio::AudioResourceIdList& resultList);
     void createMissingMasterFx(const audio::AudioResourceIdList& currentResourceIdList,
                                const audio::AudioResourceIdList& newResourceIdList);
 
