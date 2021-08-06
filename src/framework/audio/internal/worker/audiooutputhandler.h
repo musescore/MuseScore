@@ -26,6 +26,7 @@
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 
+#include "ifxresolver.h"
 #include "iaudiooutput.h"
 #include "igettracksequence.h"
 
@@ -33,6 +34,8 @@ namespace mu::audio {
 class Mixer;
 class AudioOutputHandler : public IAudioOutput, public async::Asyncable
 {
+    INJECT(audio, fx::IFxResolver, fxResolver)
+
 public:
     explicit AudioOutputHandler(IGetTrackSequence* getSequence);
 
@@ -43,6 +46,8 @@ public:
     async::Promise<AudioOutputParams> masterOutputParams() const override;
     void setMasterOutputParams(const AudioOutputParams& params) override;
     async::Channel<AudioOutputParams> masterOutputParamsChanged() const override;
+
+    async::Promise<AudioResourceIdList> availableOutputResources(const AudioFxType type) const override;
 
     async::Promise<AudioSignalChanges> signalChanges(const TrackSequenceId sequenceId, const TrackId trackId) const override;
     async::Promise<AudioSignalChanges> masterSignalChanges() const override;

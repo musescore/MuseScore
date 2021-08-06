@@ -41,7 +41,7 @@ public:
 
     IAudioSourcePtr mixedSource();
 
-    RetVal<IMixerChannelPtr> addChannel(IAudioSourcePtr source, const AudioOutputParams& params,
+    RetVal<IMixerChannelPtr> addChannel(const TrackId trackId, IAudioSourcePtr source, const AudioOutputParams& params,
                                         async::Channel<AudioOutputParams> paramsChanged);
     Ret removeChannel(const MixerChannelId id);
 

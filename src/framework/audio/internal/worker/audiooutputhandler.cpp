@@ -119,6 +119,20 @@ Channel<AudioOutputParams> AudioOutputHandler::masterOutputParamsChanged() const
     return m_masterOutputParamsChanged;
 }
 
+Promise<AudioResourceIdList> AudioOutputHandler::availableOutputResources(const AudioFxType type) const
+{
+    return Promise<AudioResourceIdList>([this, type](Promise<AudioResourceIdList>::Resolve resolve,
+                                                     Promise<AudioResourceIdList>::Reject reject) {
+        ONLY_AUDIO_WORKER_THREAD;
+
+        if (type == AudioFxType::Undefined) {
+            reject(static_cast<int>(Err::InvalidFxParams), "unable to get resources for undefined fx type");
+        }
+
+        resolve(fxResolver()->resolveAvailableResources(type));
+    }, AudioThread::ID);
+}
+
 Promise<AudioSignalChanges> AudioOutputHandler::signalChanges(const TrackSequenceId sequenceId, const TrackId trackId) const
 {
     return Promise<AudioSignalChanges>([this, sequenceId, trackId](Promise<AudioSignalChanges>::Resolve resolve,
