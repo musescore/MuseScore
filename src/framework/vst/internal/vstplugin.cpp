@@ -23,100 +23,90 @@
 #include "vstplugin.h"
 
 #include "log.h"
+#include "async/async.h"
 
 using namespace mu;
 using namespace mu::vst;
+using namespace mu::async;
 
-VstPlugin::VstPlugin()
-    : m_factory(nullptr)
+VstPlugin::VstPlugin(PluginModulePtr module)
+    : m_module(std::move(module))
 {
+    ONLY_AUDIO_THREAD(threadSecurer);
+
+    load();
 }
 
-Ret VstPlugin::load(const io::path& pluginPath)
+const std::string& VstPlugin::name() const
 {
-    PluginContextFactory::instance().setPluginContext(&m_pluginContext);
+    ONLY_AUDIO_THREAD(threadSecurer);
 
-    std::string errorString;
+    std::lock_guard lock(m_mutex);
 
-    m_module = PluginModule::create(pluginPath.toStdString(), errorString);
+    return m_module->getName();
+}
 
-    if (!m_module) {
-        LOGE() << errorString;
-        return make_ret(Err::NoPluginModule);
-    }
+/**
+ * @brief VstPlugin::load
+ * @note Some Vst plugins might not support loading in the background threads.
+ *       So we have to ensure that this function being executed in the main thread
+ */
+void VstPlugin::load()
+{
+    Async::call(this, [this]() {
+        ONLY_MAIN_THREAD(threadSecurer);
 
-    m_factory = m_module->getFactory();
+        std::lock_guard lock(m_mutex);
 
-    if (!m_factory.get()) {
-        return make_ret(Err::NoPluginFactory);
-    }
+        const auto& factory = m_module->getFactory();
 
-    for (const ClassInfo& classInfo : m_factory.classInfos()) {
-        if (classInfo.category() != kVstAudioEffectClass) {
-            LOGI() << "Non-audio plugins are not supported, plugin path: "
-                   << pluginPath;
-            continue;
+        for (const ClassInfo& classInfo : factory.classInfos()) {
+            if (classInfo.category() != kVstAudioEffectClass) {
+                LOGI() << "Non-audio plugins are not supported";
+                continue;
+            }
+
+            m_pluginProvider = owned(new PluginProvider(factory, classInfo));
+            break;
         }
 
-        m_pluginProvider = owned(new PluginProvider(m_factory, classInfo));
-        break;
-    }
-
-    if (!m_pluginProvider) {
-        return make_ret(Err::NoPluginProvider);
-    }
-
-    m_pluginController = owned(m_pluginProvider->getController());
-
-    if (!m_pluginController) {
-        return make_ret(Err::NoPluginController);
-    }
-
-    return Ret(true);
-}
-
-PluginId VstPlugin::id() const
-{
-    if (!m_pluginProvider) {
-        return "";
-    }
-
-    Steinberg::FUID id;
-    m_pluginProvider->getComponentUID(id);
-
-    VST3::UID uid = VST3::UID::fromTUID(id.toTUID());
-
-    return uid.toString(false);
-}
-
-VstPluginMeta VstPlugin::meta() const
-{
-    VstPluginMeta result;
-
-    if (!isValid()) {
-        return result;
-    }
-
-    result.id = id();
-    result.name = m_module->getName();
-    result.path = m_module->getPath();
-
-    return result;
+        if (!m_pluginProvider) {
+            LOGE() << "Unable to load vst plugin provider";
+        }
+    }, threadSecurer()->mainThreadId());
 }
 
 PluginViewPtr VstPlugin::view() const
 {
+    ONLY_MAIN_THREAD(threadSecurer);
+
+    std::lock_guard lock(m_mutex);
+
     if (m_pluginView) {
         return m_pluginView;
     }
 
-    m_pluginView = owned(m_pluginController->createView(PluginEditorViewType::kEditor));
+    auto controller = m_pluginProvider->getController();
+
+    if (!controller) {
+        return nullptr;
+    }
+
+    m_pluginView = owned(controller->createView(PluginEditorViewType::kEditor));
 
     return m_pluginView;
 }
 
 PluginComponentPtr VstPlugin::component() const
 {
+    ONLY_AUDIO_THREAD(threadSecurer);
+
+    std::lock_guard lock(m_mutex);
+
+    if (!m_pluginProvider) {
+        return nullptr;
+    }
+
     if (m_pluginComponent) {
         return m_pluginComponent;
     }
@@ -128,10 +118,12 @@ PluginComponentPtr VstPlugin::component() const
 
 bool VstPlugin::isValid() const
 {
+    ONLY_AUDIO_THREAD(threadSecurer);
+
+    std::lock_guard lock(m_mutex);
+
     if (!m_module
-        || !m_factory.get()
-        || !m_pluginProvider
-        || !m_pluginController) {
+        || !m_pluginProvider) {
         return false;
     }
 
