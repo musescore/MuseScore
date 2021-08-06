@@ -22,8 +22,11 @@
 #ifndef MU_AUDIO_MIXERCHANNEL_H
 #define MU_AUDIO_MIXERCHANNEL_H
 
+#include "modularity/ioc.h"
+
 #include "async/asyncable.h"
 
+#include "ifxresolver.h"
 #include "iaudiosource.h"
 #include "ifxprocessor.h"
 #include "imixerchannel.h"
@@ -31,8 +34,10 @@
 namespace mu::audio {
 class MixerChannel : public IMixerChannel, public IAudioSource, public async::Asyncable
 {
+    INJECT(audio, fx::IFxResolver, fxResolver)
+
 public:
-    explicit MixerChannel(const MixerChannelId id, IAudioSourcePtr source, AudioOutputParams params,
+    explicit MixerChannel(const TrackId trackId, const MixerChannelId id, IAudioSourcePtr source, AudioOutputParams params,
                           async::Channel<AudioOutputParams> paramsChanged, const unsigned int sampleRate);
 
     MixerChannelId id() const override;
@@ -52,8 +57,10 @@ private:
     void setOutputParams(const AudioOutputParams& params);
     void completeOutput(float* buffer, unsigned int samplesCount) const;
 
+    TrackId m_trackId = -1;
     MixerChannelId m_id = -1;
 
+    unsigned int m_sampleRate = 0;
     AudioOutputParams m_params;
 
     IAudioSourcePtr m_audioSource = nullptr;

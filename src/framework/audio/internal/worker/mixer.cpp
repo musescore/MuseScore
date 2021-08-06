@@ -51,7 +51,7 @@ IAudioSourcePtr Mixer::mixedSource()
     return shared_from_this();
 }
 
-RetVal<IMixerChannelPtr> Mixer::addChannel(IAudioSourcePtr source, const AudioOutputParams& params,
+RetVal<IMixerChannelPtr> Mixer::addChannel(const TrackId trackId, IAudioSourcePtr source, const AudioOutputParams& params,
                                            async::Channel<AudioOutputParams> paramsChanged)
 {
     ONLY_AUDIO_WORKER_THREAD;
@@ -65,7 +65,7 @@ RetVal<IMixerChannelPtr> Mixer::addChannel(IAudioSourcePtr source, const AudioOu
     }
 
     MixerChannelId newId = static_cast<MixerChannelId>(m_mixerChannels.size());
-    m_mixerChannels.emplace(newId, std::make_shared<MixerChannel>(newId, std::move(source), params, paramsChanged, m_sampleRate));
+    m_mixerChannels.emplace(newId, std::make_shared<MixerChannel>(trackId, newId, std::move(source), params, paramsChanged, m_sampleRate));
 
     result.val = m_mixerChannels[newId];
     result.ret = make_ret(Ret::Code::Ok);
@@ -134,7 +134,7 @@ void Mixer::process(float* outBuffer, unsigned int samplesPerChannel)
 
     for (IFxProcessorPtr& fxProcessor : m_globalFxProcessors) {
         if (fxProcessor->active()) {
-            fxProcessor->process(m_writeCacheBuff.data(), outBuffer, samplesPerChannel);
+            fxProcessor->process(outBuffer, samplesPerChannel);
         }
     }
 }
