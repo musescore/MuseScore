@@ -54,7 +54,6 @@ FocusScope {
         id: navCtrlBorderRect
 
         anchors.fill: parent
-        anchors.margins: -ui.theme.navCtrlBorderWidth
 
         visible: navCtrl.active
 

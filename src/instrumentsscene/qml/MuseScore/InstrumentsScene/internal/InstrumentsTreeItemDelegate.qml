@@ -118,7 +118,7 @@ Item {
         id: background
 
         anchors.fill: parent
-        //anchors.margins: keynavItem.active ? ui.theme.navCtrlBorderWidth : 0
+        anchors.margins: keynavItem.active ? ui.theme.navCtrlBorderWidth : 0
 
         color: ui.theme.backgroundPrimaryColor
         opacity: 1
@@ -161,16 +161,16 @@ Item {
                 }
             },
 
-//            State {
-//                name: "SELECTED"
-//                when: root.isSelected
+            State {
+                name: "SELECTED"
+                when: root.isSelected
 
-//                PropertyChanges {
-//                    target: background
-//                    color: ui.theme.accentColor
-//                    opacity: 0.5
-//                }
-//            },
+                PropertyChanges {
+                    target: background
+                    color: ui.theme.accentColor
+                    opacity: 0.5
+                }
+            },
 
             State {
                 name: "PART_EXPANDED"

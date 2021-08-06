@@ -77,7 +77,6 @@ StyledTabButton {
             id: navCtrlBorderRect
 
             anchors.fill: parent
-            //anchors.margins: -ui.theme.navCtrlBorderWidth
 
             visible: root.navigation.active
 

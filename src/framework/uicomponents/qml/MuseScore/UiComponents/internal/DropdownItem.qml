@@ -101,7 +101,7 @@ Item {
 
             PropertyChanges {
                 target: backgroundItem
-                anchors.margins: ui.theme.navCtrlBorderWidth //this effectively cancels the child's margins and draws everything inside
+                anchors.margins: ui.theme.navCtrlBorderWidth //this effectively cancels its child's margins and draws everything inside
             }
         },
 
