@@ -33,17 +33,17 @@
 #include "async/asyncable.h"
 #include "midi/imidioutport.h"
 
-#include "isynthfactory.h"
+#include "isynthresolver.h"
 #include "audiotypes.h"
 
 namespace mu::audio {
 class MidiAudioSource : public IAudioSource, public async::Asyncable
 {
-    INJECT(audio, synth::ISynthFactory, synthFactory)
+    INJECT(audio, synth::ISynthResolver, synthResolver)
     INJECT(audio, midi::IMidiOutPort, midiOutPort)
 
 public:
-    explicit MidiAudioSource(const midi::MidiData& midiData, const AudioInputParams& params,
+    explicit MidiAudioSource(const TrackId trackId, const midi::MidiData& midiData, const AudioInputParams& params,
                              async::Channel<AudioInputParams> paramsChanged);
     ~MidiAudioSource() = default;
 
@@ -119,7 +119,9 @@ private:
 
     bool m_hasActiveRequest = false;
 
+    TrackId m_trackId = -1;
     synth::ISynthesizerPtr m_synth = nullptr;
+    AudioInputParams m_params;
 
     midi::MidiStream m_stream;
     midi::MidiMapping m_mapping;
