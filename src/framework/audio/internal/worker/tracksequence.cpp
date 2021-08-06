@@ -95,8 +95,8 @@ RetVal<TrackId> TrackSequence::addTrack(const std::string& trackName, const midi
     track.setPlaybackData(midiData);
     track.setInputParams(params.in);
     track.setOutputParams(params.out);
-    track.audioSource = std::make_shared<MidiAudioSource>(midiData, params.in, track.inputParamsChanged);
-    track.mixerChannel = mixer()->addChannel(track.audioSource, params.out, track.outputParamsChanged).val;
+    track.audioSource = std::make_shared<MidiAudioSource>(track.id, midiData, params.in, track.inputParamsChanged);
+    track.mixerChannel = mixer()->addChannel(track.id, track.audioSource, params.out, track.outputParamsChanged).val;
 
     m_tracks.emplace(newId, std::make_shared<MidiTrack>(std::move(track)));
 
