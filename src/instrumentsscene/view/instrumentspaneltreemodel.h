@@ -109,7 +109,7 @@ private:
     };
 
     void setupPartsConnections();
-    void setupStavesConnections(const QString& stavesPartId);
+    void setupStavesConnections(const ID& stavesPartId);
 
     void clear();
     void deleteItems();
@@ -120,7 +120,6 @@ private:
 
     bool removeRows(int row, int count, const QModelIndex& parent) override;
 
-    bool isMasterNotation() const;
     bool isPartExsistsOnCurrentNotation(const ID& partId) const;
     bool isStaffExsistsOnCurrentNotation(const ID& staffId) const;
 
@@ -132,7 +131,7 @@ private:
     void updateStaffItem(StaffTreeItem* item, const mu::notation::Staff* masterStaff);
 
     AbstractInstrumentsPanelTreeItem* buildPartItem(const mu::notation::Part* masterPart);
-    AbstractInstrumentsPanelTreeItem* buildStaffItem(const mu::notation::Staff* masterStaff);
+    AbstractInstrumentsPanelTreeItem* buildMasterStaffItem(const mu::notation::Staff* masterStaff);
     AbstractInstrumentsPanelTreeItem* buildAddStaffControlItem(const ID& partId);
 
     AbstractInstrumentsPanelTreeItem* m_rootItem = nullptr;
@@ -145,6 +144,8 @@ private:
     bool m_isMovingDownAvailable = false;
     bool m_isRemovingAvailable = false;
     bool m_isLoadingBlocked = false;
+
+    std::shared_ptr<async::Asyncable> m_partsNotifyReceiver = nullptr;
 };
 }
 
