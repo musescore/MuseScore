@@ -4963,7 +4963,8 @@ void Score::updateChordList()
     _chordList.usePresets = style().value(Sid::useChordSymbolPresets).toBool();
     _chordList.stackModifiers = style().value(Sid::stackModifiers).toBool();
     _chordList.autoCapitalization = style().value(Sid::automaticCapitalization).toBool();
-    _chordList.lowerCaseQualitySymbols = style().value(Sid::lowerCaseQualitySymbols).toBool();
+    _chordList.lowerCaseMajorSymbols = style().value(Sid::lowerCaseMajorSymbols).toBool();
+    _chordList.lowerCaseMinorSymbols = style().value(Sid::lowerCaseMinorSymbols).toBool();
     _chordList.alterationsParentheses = style().value(Sid::chordAlterationsParentheses).toBool();
     _chordList.suspensionsParentheses = style().value(Sid::chordSuspensionsParentheses).toBool();
     _chordList.minMajParentheses = style().value(Sid::chordMinMajParentheses).toBool();

@@ -271,7 +271,8 @@ void ChordSymbolStylesModel::setPropertiesOnStyleChange()
 
         setStyleB(Ms::Sid::automaticCapitalization, (m_selectionHistory.value(currentStyle).value("autoCap").toReal() == 1));
         setStyleB(Ms::Sid::lowerCaseMinorChords, !(m_selectionHistory.value(currentStyle).value("minRtCap").toReal() == 1));
-        setStyleB(Ms::Sid::lowerCaseQualitySymbols, !(m_selectionHistory.value(currentStyle).value("qualCap").toReal() == 1));
+        setStyleB(Ms::Sid::lowerCaseMajorSymbols, !(m_selectionHistory.value(currentStyle).value("qualMajCap").toReal() == 1));
+        setStyleB(Ms::Sid::lowerCaseMinorSymbols, !(m_selectionHistory.value(currentStyle).value("qualMinCap").toReal() == 1));
         setStyleB(Ms::Sid::lowerCaseBassNotes, !(m_selectionHistory.value(currentStyle).value("bsNtCap").toReal() == 1));
         setStyleB(Ms::Sid::allCapsNoteNames, (m_selectionHistory.value(currentStyle).value("solNtCap").toReal() == 1));
 
@@ -301,7 +302,8 @@ void ChordSymbolStylesModel::setPropertiesOnStyleChange()
 
         setStyleB(Ms::Sid::automaticCapitalization, true);
         setStyleB(Ms::Sid::lowerCaseMinorChords, false);
-        setStyleB(Ms::Sid::lowerCaseQualitySymbols, false);
+        setStyleB(Ms::Sid::lowerCaseMajorSymbols, false);
+        setStyleB(Ms::Sid::lowerCaseMinorSymbols, true);
         setStyleB(Ms::Sid::lowerCaseBassNotes, false);
         setStyleB(Ms::Sid::allCapsNoteNames, false);
 

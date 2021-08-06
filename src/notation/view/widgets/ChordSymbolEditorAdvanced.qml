@@ -348,11 +348,11 @@ Flickable {
             }
 
             StyledTextLabel {
-                text: qsTrc("notation", "Chord quality")
+                text: qsTrc("notation", "Chord quality (major)")
             }
 
             RadioButtonGroup {
-                id: qualitySymbolsCapitalization
+                id: qualityMajorCapitalization
 
                 height: prv.buttonHeight
                 spacing: 21
@@ -366,15 +366,47 @@ Flickable {
                     height: prv.buttonHeight
                     width: prv.buttonWidth
 
-                    ButtonGroup.group: qualitySymbolsCapitalization.radioButtonGroup
+                    ButtonGroup.group: qualityMajorCapitalization.radioButtonGroup
 
                     StyledTextLabel{
                         text: qsTrc("notation", modelData["name"])
                     }
-                    checked: editorModel.qualitySymbolsCapitalization === modelData["value"]
+                    checked: editorModel.qualityMajorCapitalization === modelData["value"]
 
                     onToggled: {
-                        editorModel.setProperty("qualitySymbolsCapitalization", modelData["value"])
+                        editorModel.setProperty("qualityMajorCapitalization", modelData["value"])
+                    }
+                }
+            }
+
+            StyledTextLabel {
+                text: qsTrc("notation", "Chord quality (minor)")
+            }
+
+            RadioButtonGroup {
+                id: qualityMinorCapitalization
+
+                height: prv.buttonHeight
+                spacing: 21
+
+                model: [
+                    { name: "min", value: 0.0 },
+                    { name: "Min", value: 1.0 },
+                ]
+
+                delegate: FlatRadioButton {
+                    height: prv.buttonHeight
+                    width: prv.buttonWidth
+
+                    ButtonGroup.group: qualityMinorCapitalization.radioButtonGroup
+
+                    StyledTextLabel{
+                        text: qsTrc("notation", modelData["name"])
+                    }
+                    checked: editorModel.qualityMinorCapitalization === modelData["value"]
+
+                    onToggled: {
+                        editorModel.setProperty("qualityMinorCapitalization", modelData["value"])
                     }
                 }
             }

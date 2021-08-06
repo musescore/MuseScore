@@ -81,7 +81,8 @@ class ChordSymbolEditorModel : public QAbstractListModel
 
     Q_PROPERTY(qreal autoCapitalization READ autoCapitalization NOTIFY autoCapitalizationChanged)
     Q_PROPERTY(qreal minorRootCapitalization READ minorRootCapitalization NOTIFY minorRootCapitalizationChanged)
-    Q_PROPERTY(qreal qualitySymbolsCapitalization READ qualitySymbolsCapitalization NOTIFY qualitySymbolsCapitalizationChanged)
+    Q_PROPERTY(qreal qualityMajorCapitalization READ qualityMajorCapitalization NOTIFY qualityMajorCapitalizationChanged)
+    Q_PROPERTY(qreal qualityMinorCapitalization READ qualityMinorCapitalization NOTIFY qualityMinorCapitalizationChanged)
     Q_PROPERTY(qreal bassNotesCapitalization READ bassNotesCapitalization NOTIFY bassNotesCapitalizationChanged)
     Q_PROPERTY(qreal solfegeNotesCapitalization READ solfegeNotesCapitalization NOTIFY solfegeNotesCapitalizationChanged)
 
@@ -143,7 +144,8 @@ public:
 
     qreal autoCapitalization() const;
     qreal minorRootCapitalization() const;
-    qreal qualitySymbolsCapitalization() const;
+    qreal qualityMajorCapitalization() const;
+    qreal qualityMinorCapitalization() const;
     qreal bassNotesCapitalization() const;
     qreal solfegeNotesCapitalization() const;
 
@@ -216,7 +218,8 @@ signals:
 
     void autoCapitalizationChanged();
     void minorRootCapitalizationChanged();
-    void qualitySymbolsCapitalizationChanged();
+    void qualityMajorCapitalizationChanged();
+    void qualityMinorCapitalizationChanged();
     void bassNotesCapitalizationChanged();
     void solfegeNotesCapitalizationChanged();
 
@@ -283,7 +286,8 @@ private:
 
     qreal m_autoCapitalization;
     qreal m_minorRootCapitalization;
-    qreal m_qualitySymbolsCapitalization;
+    qreal m_qualityMajorCapitalization;
+    qreal m_qualityMinorCapitalization;
     qreal m_bassNotesCapitalization;
     qreal m_solfegeNotesCapitalization;
 

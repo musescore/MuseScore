@@ -1820,7 +1820,8 @@ void ChangeStyleVal::flip(EditData*)
         case Sid::chordMinMajParentheses:
         case Sid::chordAddOmitParentheses:
         case Sid::automaticCapitalization:
-        case Sid::lowerCaseQualitySymbols:
+        case Sid::lowerCaseMajorSymbols:
+        case Sid::lowerCaseMinorSymbols:
         case Sid::chordDescriptionFile:
         case Sid::useChordSymbolPresets:
         case Sid::chordQualityMajorSeventh:

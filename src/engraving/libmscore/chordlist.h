@@ -291,7 +291,8 @@ public:
     bool usePresets = false;
     bool stackModifiers = false;
     bool autoCapitalization = false;
-    bool lowerCaseQualitySymbols = false;
+    bool lowerCaseMajorSymbols = false;
+    bool lowerCaseMinorSymbols = true;
     bool alterationsParentheses = true;
     bool suspensionsParentheses = true;
     bool minMajParentheses = true;

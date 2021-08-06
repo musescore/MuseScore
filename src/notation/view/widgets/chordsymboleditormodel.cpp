@@ -300,9 +300,14 @@ qreal ChordSymbolEditorModel::minorRootCapitalization() const
     return m_minorRootCapitalization;
 }
 
-qreal ChordSymbolEditorModel::qualitySymbolsCapitalization() const
+qreal ChordSymbolEditorModel::qualityMajorCapitalization() const
 {
-    return m_qualitySymbolsCapitalization;
+    return m_qualityMajorCapitalization;
+}
+
+qreal ChordSymbolEditorModel::qualityMinorCapitalization() const
+{
+    return m_qualityMinorCapitalization;
 }
 
 qreal ChordSymbolEditorModel::bassNotesCapitalization() const
@@ -591,7 +596,8 @@ void ChordSymbolEditorModel::setPropertiesOnStyleChange()
 
         m_autoCapitalization = m_selectionHistory.value(currentStyle).value("autoCap").toReal();
         m_minorRootCapitalization = m_selectionHistory.value(currentStyle).value("minRtCap").toReal();
-        m_qualitySymbolsCapitalization = m_selectionHistory.value(currentStyle).value("qualCap").toReal();
+        m_qualityMajorCapitalization = m_selectionHistory.value(currentStyle).value("qualMajCap").toReal();
+        m_qualityMinorCapitalization = m_selectionHistory.value(currentStyle).value("qualMinCap").toReal();
         m_bassNotesCapitalization = m_selectionHistory.value(currentStyle).value("bsNtCap").toReal();
         m_solfegeNotesCapitalization = m_selectionHistory.value(currentStyle).value("solNtCap").toReal();
 
@@ -623,7 +629,8 @@ void ChordSymbolEditorModel::setPropertiesOnStyleChange()
 
         m_autoCapitalization = 1.0;
         m_minorRootCapitalization = 1.0;
-        m_qualitySymbolsCapitalization = 1.0;
+        m_qualityMajorCapitalization = 1.0;
+        m_qualityMinorCapitalization = 0.0;
         m_bassNotesCapitalization = 1.0;
         m_solfegeNotesCapitalization = 0.0;
 
@@ -654,7 +661,8 @@ void ChordSymbolEditorModel::setPropertiesOnStyleChange()
 
     setStyleB(Ms::Sid::automaticCapitalization, (m_autoCapitalization == 1));
     setStyleB(Ms::Sid::lowerCaseMinorChords, !(m_minorRootCapitalization == 1));
-    setStyleB(Ms::Sid::lowerCaseQualitySymbols, !(m_qualitySymbolsCapitalization == 1));
+    setStyleB(Ms::Sid::lowerCaseMajorSymbols, !(m_qualityMajorCapitalization == 1));
+    setStyleB(Ms::Sid::lowerCaseMinorSymbols, !(m_qualityMinorCapitalization == 1));
     setStyleB(Ms::Sid::lowerCaseBassNotes, !(m_bassNotesCapitalization == 1));
     setStyleB(Ms::Sid::allCapsNoteNames, (m_solfegeNotesCapitalization == 1));
 
@@ -686,7 +694,8 @@ void ChordSymbolEditorModel::setPropertiesOnStyleChange()
 
     emit autoCapitalizationChanged();
     emit minorRootCapitalizationChanged();
-    emit qualitySymbolsCapitalizationChanged();
+    emit qualityMajorCapitalizationChanged();
+    emit qualityMinorCapitalizationChanged();
     emit bassNotesCapitalizationChanged();
     emit solfegeNotesCapitalizationChanged();
 
@@ -935,11 +944,16 @@ void ChordSymbolEditorModel::setProperty(QString property, qreal val)
         globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::lowerCaseMinorChords, !minorRootCapital);
         m_minorRootCapitalization = val;
         emit minorRootCapitalizationChanged();
-    } else if (property == "qualitySymbolsCapitalization") {
-        bool qualitySymbolsCapital = (val == 1);
-        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::lowerCaseQualitySymbols, !qualitySymbolsCapital);
-        m_qualitySymbolsCapitalization = val;
-        emit qualitySymbolsCapitalizationChanged();
+    } else if (property == "qualityMajorCapitalization") {
+        bool qualityMajorCapital = (val == 1);
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::lowerCaseMajorSymbols, !qualityMajorCapital);
+        m_qualityMajorCapitalization = val;
+        emit qualityMajorCapitalizationChanged();
+    } else if (property == "qualityMinorCapitalization") {
+        bool qualityMinorCapital = (val == 1);
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::lowerCaseMinorSymbols, !qualityMinorCapital);
+        m_qualityMinorCapitalization = val;
+        emit qualityMinorCapitalizationChanged();
     } else if (property == "bassNotesCapitalization") {
         bool bassCapital = (val == 1);
         globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::lowerCaseBassNotes, !bassCapital);
@@ -1003,7 +1017,8 @@ void ChordSymbolEditorModel::resetProperties()
 
     m_autoCapitalization = 1.0;
     m_minorRootCapitalization = 1.0;
-    m_qualitySymbolsCapitalization = 1.0;
+    m_qualityMajorCapitalization = 1.0;
+    m_qualityMinorCapitalization = 0.0;
     m_bassNotesCapitalization = 1.0;
     m_solfegeNotesCapitalization = 0.0;
 
@@ -1032,7 +1047,8 @@ void ChordSymbolEditorModel::resetProperties()
 
     setStyleB(Ms::Sid::automaticCapitalization, (m_autoCapitalization == 1));
     setStyleB(Ms::Sid::lowerCaseMinorChords, !(m_minorRootCapitalization == 1));
-    setStyleB(Ms::Sid::lowerCaseQualitySymbols, !(m_qualitySymbolsCapitalization == 1));
+    setStyleB(Ms::Sid::lowerCaseMajorSymbols, !(m_qualityMajorCapitalization == 1));
+    setStyleB(Ms::Sid::lowerCaseMinorSymbols, !(m_qualityMinorCapitalization == 1));
     setStyleB(Ms::Sid::lowerCaseBassNotes, !(m_bassNotesCapitalization == 1));
     setStyleB(Ms::Sid::allCapsNoteNames, (m_solfegeNotesCapitalization == 1));
 
@@ -1066,7 +1082,8 @@ void ChordSymbolEditorModel::resetProperties()
 
     emit autoCapitalizationChanged();
     emit minorRootCapitalizationChanged();
-    emit qualitySymbolsCapitalizationChanged();
+    emit qualityMajorCapitalizationChanged();
+    emit qualityMinorCapitalizationChanged();
     emit bassNotesCapitalizationChanged();
     emit solfegeNotesCapitalizationChanged();
 
@@ -1198,7 +1215,8 @@ void ChordSymbolEditorModel::updateSelectionHistory(QString currentStyle)
 
     propMap.insert("autoCap", QVariant(m_autoCapitalization));
     propMap.insert("minRtCap", QVariant(m_minorRootCapitalization));
-    propMap.insert("qualCap", QVariant(m_qualitySymbolsCapitalization));
+    propMap.insert("qualMajCap", QVariant(m_qualityMajorCapitalization));
+    propMap.insert("qualMinCap", QVariant(m_qualityMinorCapitalization));
     propMap.insert("bsNtCap", QVariant(m_bassNotesCapitalization));
     propMap.insert("solNtCap", QVariant(m_solfegeNotesCapitalization));
 

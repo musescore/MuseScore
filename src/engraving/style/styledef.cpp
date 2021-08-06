@@ -411,8 +411,9 @@ const StyleDef::StyleValue StyleDef::styleValues[int(Sid::STYLES)] = {
     { Sid::useSolfeggioNoteNames,   "useSolfeggioNoteNames",   QVariant(false) },
     { Sid::useFrenchNoteNames,      "useFrenchNoteNames",      QVariant(false) },
     { Sid::automaticCapitalization, "automaticCapitalization", QVariant(true) },
-    { Sid::lowerCaseMinorChords,    "lowerCaseMinorChords",    QVariant(false) },
-    { Sid::lowerCaseQualitySymbols, "lowerCaseQualitySymbols", QVariant(false) },
+    { Sid::lowerCaseMinorChords,    "lowerCaseMinorChords",    QVariant(false) }, // For chord root
+    { Sid::lowerCaseMajorSymbols,   "lowerCaseMajorSymbols",   QVariant(false) },
+    { Sid::lowerCaseMinorSymbols,   "lowerCaseMinorSymbols",   QVariant(true) }, // For minor symbol itself
     { Sid::lowerCaseBassNotes,      "lowerCaseBassNotes",      QVariant(false) },
     { Sid::allCapsNoteNames,        "allCapsNoteNames",        QVariant(false) },
     { Sid::stackModifiers,          "stackModifiers",          QVariant(false) },

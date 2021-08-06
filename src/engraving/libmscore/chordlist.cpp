@@ -1481,25 +1481,47 @@ void ParsedChord::checkQualitySymbolsLetterCase(const ChordList* cl)
     // Leaves untouched if there is no other replacement
     if (cl->autoCapitalization) {
         // It is important to have the lists synced
-        QStringList upperCase = { "Maj", "Ma", "Min", "Mi", "Aug", "Dim" };
-        QStringList lowerCase = { "maj", "ma", "min", "mi", "aug", "dim" };
+        QStringList majorUpperCase = { "Maj", "Ma" };
+        QStringList majorLowerCase = { "maj", "ma" };
+        QStringList minorUpperCase = { "Min", "Mi" };
+        QStringList minorLowerCase = { "min", "mi" };
         for (int index = 0; index < _tokenList.size(); index++) {
             const ChordToken& tok = _tokenList.at(index);
             if (tok.tokenClass == ChordTokenClass::QUALITY) {
-                if (cl->lowerCaseQualitySymbols) {
-                    if (upperCase.contains(tok.names.first())) {
+                if (cl->lowerCaseMajorSymbols) {
+                    if (majorUpperCase.contains(tok.names.first())) {
                         // Replace by lowercase version
                         ChordToken qualTok;
-                        qualTok.names += lowerCase.at(upperCase.indexOf(tok.names.first()));
+                        qualTok.names += majorLowerCase.at(majorUpperCase.indexOf(tok.names.first()));
                         qualTok.tokenClass = ChordTokenClass::QUALITY;
                         _tokenList.removeAt(index);
                         _tokenList.insert(index, qualTok);
                     }
                 } else {
-                    if (lowerCase.contains(tok.names.first())) {
+                    if (majorLowerCase.contains(tok.names.first())) {
                         // Replace by uppercase version
                         ChordToken qualTok;
-                        qualTok.names += upperCase.at(lowerCase.indexOf(tok.names.first()));
+                        qualTok.names += majorUpperCase.at(majorLowerCase.indexOf(tok.names.first()));
+                        qualTok.tokenClass = ChordTokenClass::QUALITY;
+                        _tokenList.removeAt(index);
+                        _tokenList.insert(index, qualTok);
+                    }
+                }
+
+                if (cl->lowerCaseMinorSymbols) {
+                    if (minorUpperCase.contains(tok.names.first())) {
+                        // Replace by lowercase version
+                        ChordToken qualTok;
+                        qualTok.names += minorLowerCase.at(minorUpperCase.indexOf(tok.names.first()));
+                        qualTok.tokenClass = ChordTokenClass::QUALITY;
+                        _tokenList.removeAt(index);
+                        _tokenList.insert(index, qualTok);
+                    }
+                } else {
+                    if (minorLowerCase.contains(tok.names.first())) {
+                        // Replace by uppercase version
+                        ChordToken qualTok;
+                        qualTok.names += minorUpperCase.at(minorLowerCase.indexOf(tok.names.first()));
                         qualTok.tokenClass = ChordTokenClass::QUALITY;
                         _tokenList.removeAt(index);
                         _tokenList.insert(index, qualTok);

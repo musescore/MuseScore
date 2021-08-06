@@ -45,6 +45,7 @@
   </quality>
 
   <quality q = "minor">
+    <sym>MI</sym>
     <sym>Mi</sym>
     <sym>m</sym>
     <sym>min</sym>
@@ -123,7 +124,8 @@
   <!-- Minor chords -->
     <sym value="min" name="min"/>
     <sym value="mi" name="mi"/>
-    <sym code="0xe181" name="Mi"/>
+    <sym value="Mi" name="Mi"/>
+    <sym code="0xe181" name="MI"/>
     <sym value="m" name="m"/>
     <sym value="-" name="-"/>
   <!-- Augmented chords -->
@@ -270,6 +272,11 @@
   <token class="quality">
     <name>Mi</name>
     <render>Mi</render>
+    </token>
+
+  <token class="quality">
+    <name>MI</name>
+    <render>MI</render>
     </token>
 
   <token class="quality">
