@@ -56,15 +56,29 @@ std::string VSTModule::moduleName() const
 void VSTModule::registerExports()
 {
     ioc()->registerExport<IVstConfiguration>(moduleName(), s_configuration);
-    ioc()->registerExport<IVstPluginRepository>(moduleName(), s_pluginRepo);
+    ioc()->registerExport<IVstModulesRepository>(moduleName(), s_pluginModulesRepo);
+    ioc()->registerExport<IVstPluginsRegister>(moduleName(), s_pluginsRegister);
 }
 
 void VSTModule::resolveImports()
 {
     auto ir = ioc()->resolve<IInteractiveUriRegister>(moduleName());
     if (ir) {
-        ir->registerUri(Uri("musescore://vst/editor"),
-                        ContainerMeta(ContainerType::QWidgetDialog, qRegisterMetaType<VstPluginEditorView>("VstPluginEditorView")));
+        ir->registerUri(Uri("musescore://vsti/editor"),
+                        ContainerMeta(ContainerType::QWidgetDialog, qRegisterMetaType<VstiEditorView>("VstiEditorView")));
+
+        ir->registerUri(Uri("musescore://vstfx/editor"),
+                        ContainerMeta(ContainerType::QWidgetDialog, qRegisterMetaType<VstFxEditorView>("VstFxEditorView")));
+    }
+
+    auto synthResolver = ioc()->resolve<ISynthResolver>(moduleName());
+    if (synthResolver) {
+        synthResolver->registerResolver(AudioSourceType::Vsti, std::make_shared<VstiResolver>());
+    }
+
+    auto fxResolver = ioc()->resolve<IFxResolver>(moduleName());
+    if (fxResolver) {
+        fxResolver->registerResolver(AudioFxType::Vst, std::make_shared<VstFxResolver>());
     }
 }
 
