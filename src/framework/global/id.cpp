@@ -111,5 +111,4 @@ QString ID::toQString() const
 {
     return QString::number(m_id);
 }
-
 #endif

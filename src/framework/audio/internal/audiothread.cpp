@@ -83,7 +83,7 @@ void AudioThread::main()
     }
 
     while (m_running) {
-        mu::async::processEvents();
+        //mu::async::processEvents();
 
         if (m_mainLoopBody) {
             m_mainLoopBody();

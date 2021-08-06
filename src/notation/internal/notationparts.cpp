@@ -58,9 +58,9 @@ static QString formatPartTitle(const Part* part)
 }
 
 NotationParts::NotationParts(IGetScore* getScore, INotationInteractionPtr interaction, INotationUndoStackPtr undoStack)
-    : m_getScore(getScore), m_undoStack(undoStack), m_partChangedNotifier(new ChangedNotifier<const Part*>())
+    : m_getScore(getScore), m_undoStack(undoStack), m_interaction(interaction), m_partChangedNotifier(new ChangedNotifier<const Part*>())
 {
-    interaction->dropChanged().onNotify(this, [this]() {
+    m_interaction->dropChanged().onNotify(this, [this]() {
         updatePartTitles();
     });
 
@@ -698,6 +698,7 @@ void NotationParts::removeParts(const IDList& partsIds)
     setBracketsAndBarlines();
 
     apply();
+    deselectAll();
 }
 
 void NotationParts::doRemoveParts(const IDList& partsIds)
@@ -729,6 +730,7 @@ void NotationParts::removeStaves(const IDList& stavesIds)
     setBracketsAndBarlines();
 
     apply();
+    deselectAll();
 }
 
 void NotationParts::moveParts(const IDList& sourcePartsIds, const ID& destinationPartId, InsertMode mode)
@@ -766,8 +768,7 @@ void NotationParts::moveParts(const IDList& sourcePartsIds, const ID& destinatio
     setBracketsAndBarlines();
 
     apply();
-
-    m_partChangedNotifier->changed();
+    deselectAll();
 }
 
 void NotationParts::moveStaves(const IDList& sourceStavesIds, const ID& destinationStaffId, InsertMode mode)
@@ -795,6 +796,7 @@ void NotationParts::moveStaves(const IDList& sourceStavesIds, const ID& destinat
     setBracketsAndBarlines();
 
     apply();
+    deselectAll();
 }
 
 void NotationParts::appendStaves(Part* part, const Instrument& instrument)
@@ -1004,6 +1006,11 @@ int NotationParts::resolveInstrumentNumber(const Instruments& newInstruments,
 void NotationParts::setBracketsAndBarlines()
 {
     score()->setBracketsAndBarlines();
+}
+
+void NotationParts::deselectAll()
+{
+    m_interaction->clearSelection();
 }
 
 void NotationParts::notifyAboutPartChanged(const Part* part) const
