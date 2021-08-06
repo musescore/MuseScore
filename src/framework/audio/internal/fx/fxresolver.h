@@ -19,40 +19,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUDIO_EQUALISER_H
-#define MU_AUDIO_EQUALISER_H
 
-#include "ifxprocessor.h"
+#ifndef MU_AUDIO_FXRESOLVER_H
+#define MU_AUDIO_FXRESOLVER_H
 
-namespace mu::audio {
-class Equaliser : public IFxProcessor
+#include <map>
+#include <mutex>
+
+#include "ifxresolver.h"
+
+namespace mu::audio::fx {
+class FxResolver : public IFxResolver
 {
 public:
-    Equaliser();
-
-    void setSampleRate(unsigned int sampleRate) override;
-
-    bool active() const override;
-    void setActive(bool active) override;
-
-    void setFrequency(float value);
-    void setGain(float value);
-    void setQ(float value);
-
-    void process(float* buffer, unsigned int sampleCount) override;
+    std::vector<IFxProcessorPtr> resolveMasterFxList(const AudioFxParamsMap& fxParams) override;
+    std::vector<IFxProcessorPtr> resolveFxList(const TrackId trackId, const AudioFxParamsMap& fxParams) override;
+    AudioResourceIdList resolveAvailableResources(const AudioFxType type) const override;
+    void registerResolver(const AudioFxType type, IResolverPtr resolver) override;
 
 private:
-    void calculate();
-
-    unsigned int m_sampleRate = 0;
-    bool m_active = true;
-
-    float m_gain = 0, m_frequency = 1'000.f, m_q = 1.f;
-    float m_a[3] = { 0, 0, 0 };
-    float m_b[3] = { 0, 0, 0 };
-    float m_x[3] = { 0, 0, 0 };
-    float m_y[3] = { 0, 0, 0 };
+    std::map<AudioFxType, IResolverPtr> m_resolvers;
+    mutable std::mutex m_mutex;
 };
 }
 
-#endif // MU_AUDIO_EQUALISER_H
+#endif // MU_AUDIO_FXRESOLVER_H

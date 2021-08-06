@@ -30,9 +30,9 @@ using namespace mu;
 using namespace mu::audio;
 using namespace mu::async;
 
-MixerChannel::MixerChannel(const MixerChannelId id, IAudioSourcePtr source, AudioOutputParams params,
+MixerChannel::MixerChannel(const TrackId trackId, const MixerChannelId id, IAudioSourcePtr source, AudioOutputParams params,
                            async::Channel<AudioOutputParams> paramsChanged, const unsigned int sampleRate)
-    : m_id(id), m_params(std::move(params)), m_audioSource(std::move(source))
+    : m_trackId(trackId), m_id(id), m_sampleRate(sampleRate), m_params(std::move(params)), m_audioSource(std::move(source))
 {
     ONLY_AUDIO_WORKER_THREAD;
 
@@ -69,11 +69,13 @@ void MixerChannel::setOutputParams(const AudioOutputParams& params)
     }
 
     m_params = params;
-    m_fxProcessors.clear();
 
-    // TODO fulfill fxProcessors using fxProvider
-    //for (const FxProcessorId& fxId : m_params.fxProcessors.val) {
-    //}
+    m_fxProcessors.clear();
+    m_fxProcessors = fxResolver()->resolveFxList(m_trackId, params.fxParams);
+
+    for (IFxProcessorPtr fx : m_fxProcessors) {
+        fx->setSampleRate(m_sampleRate);
+    }
 }
 
 bool MixerChannel::isActive() const
@@ -142,9 +144,9 @@ void MixerChannel::process(float* buffer, unsigned int sampleCount)
 
     m_audioSource->process(buffer, sampleCount);
 
-    /*for (IFxProcessorPtr fx : m_fxProcessors) {
-        fx->process(buffer, buffer, sampleCount);
-    }*/
+    for (IFxProcessorPtr fx : m_fxProcessors) {
+        fx->process(buffer, sampleCount);
+    }
 
     completeOutput(buffer, sampleCount);
 }
