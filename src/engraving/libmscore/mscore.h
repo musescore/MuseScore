@@ -23,9 +23,9 @@
 #ifndef __MSCORE_H__
 #define __MSCORE_H__
 
-#include "draw/color.h"
 #include "config.h"
-#include "style/style.h"
+
+#include "draw/color.h"
 
 namespace Ms {
 #define MSC_VERSION     "4.00"
@@ -78,7 +78,6 @@ static constexpr int MSCVERSION = 400;
 //       - The style is stored in a separate file (inside mscz)
 //       - The ChordList is stored in a separate file (inside mscz)
 
-class MStyle;
 class Sequencer;
 
 enum class HairpinType : signed char;
@@ -89,51 +88,52 @@ enum class HairpinType : signed char;
 
 static constexpr int INVALID_INDEX = -1;
 
-inline int staff2track(int staffIdx, int voiceIdx = 0)
+inline constexpr int staff2track(int staffIdx, int voiceIdx = 0)
 {
     return staffIdx >= 0 ? staffIdx * VOICES + voiceIdx : INVALID_INDEX;
 }
 
-inline int track2staff(int track)
+inline constexpr int track2staff(int track)
 {
     return track >= 0 ? track / VOICES : INVALID_INDEX;
 }
 
-inline int track2voice(int track)
+inline constexpr int track2voice(int track)
 {
     return track >= 0 ? track % VOICES : INVALID_INDEX;
 }
 
-inline int trackZeroVoice(int track)
+inline constexpr int trackZeroVoice(int track)
 {
     return track >= 0 ? (track / VOICES) * VOICES : INVALID_INDEX;
 }
 
-static const int MAX_TAGS = 32;
+static constexpr int MAX_TAGS = 32;
 
-static const int MAX_HEADERS = 3;
-static const int MAX_FOOTERS = 3;
+static constexpr int MAX_HEADERS = 3;
+static constexpr int MAX_FOOTERS = 3;
 
 static constexpr qreal INCH      = 25.4;
-static constexpr qreal PPI       = 72.0;           // printer points per inch
+static constexpr qreal PPI       = 72.0; // printer points per inch
 static constexpr qreal DPI_F     = 5;
 static constexpr qreal DPI       = 72.0 * DPI_F;
 static constexpr qreal SPATIUM20 = 5.0 * (DPI / 72.0);
 static constexpr qreal DPMM      = DPI / INCH;
 
-static constexpr int MAX_STAVES  = 4;
+static constexpr int MAX_STAVES = 4;
 
-static const int SHADOW_NOTE_LIGHT       = 135;
+static constexpr int SHADOW_NOTE_LIGHT = 135;
 
-static const char mimeSymbolFormat[]      = "application/musescore/symbol";
-static const char mimeSymbolListFormat[]  = "application/musescore/symbollist";
-static const char mimeStaffListFormat[]   = "application/musescore/stafflist";
+static constexpr char mimeSymbolFormat[]     = "application/musescore/symbol";
+static constexpr char mimeSymbolListFormat[] = "application/musescore/symbollist";
+static constexpr char mimeStaffListFormat[]  = "application/musescore/stafflist";
 
-static const int VISUAL_STRING_NONE      = -100;      // no ordinal for the visual repres. of string (topmost in TAB
-                                                      // varies according to visual order and presence of bass strings)
-#undef STRING_NONE
-static const int STRING_NONE             = -1;        // no ordinal for a physical string (0 = topmost in instrument)
-static const int FRET_NONE               = -1;        // no ordinal for a fret
+static constexpr int INVALID_STRING_INDEX = -1; // no ordinal for a physical string (0 = topmost in instrument)
+static constexpr int INVALID_FRET_INDEX   = -1; // no ordinal for a fret
+
+// no ordinal for the visual repres. of string
+// (topmost in TAB varies according to visual order and presence of bass strings)
+static constexpr int VISUAL_INVALID_STRING_INDEX = -100;
 
 using ID = uint64_t;
 static constexpr ID INVALID_ID = 0;

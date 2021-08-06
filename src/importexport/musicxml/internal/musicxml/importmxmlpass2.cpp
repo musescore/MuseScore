@@ -4498,7 +4498,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
 
     bool chord = false;
     bool cue = false;
-    bool small = false;
+    bool isSmall = false;
     bool grace = false;
     bool rest = false;
     int staff = 1;
@@ -4572,7 +4572,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
         } else if (_e.name() == "stem") {
             stem(stemDir, noStem);
         } else if (_e.name() == "type") {
-            small = _e.attributes().value("size") == "cue";
+            isSmall = _e.attributes().value("size") == "cue";
             type = _e.readElementText();
         } else if (_e.name() == "voice") {
             voice = _e.readElementText();
@@ -4720,7 +4720,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
             } else {
                 cr->setBeamMode(Beam::Mode::NONE);
             }
-            cr->setSmall(small);
+            cr->setSmall(isSmall);
             if (noteColor != QColor::Invalid) {
                 cr->setColor(noteColor);
             }
@@ -4745,8 +4745,8 @@ Note* MusicXMLParserPass2::note(const QString& partId,
             addGraceChordsBefore(c, gcl);
         }
 
-        note->setSmall(cue || small);     // cue notes are always small, normal notes only if size=cue
-        note->setPlay(!cue);              // cue notes don't play
+        note->setSmall(cue || isSmall); // cue notes are always small, normal notes only if size=cue
+        note->setPlay(!cue); // cue notes don't play
         note->setHeadGroup(headGroup);
         if (noteColor != QColor::Invalid) {
             note->setColor(noteColor);

@@ -103,7 +103,7 @@ void TestNote::note()
     // small
     note->setSmall(true);
     n = static_cast<Note*>(writeReadElement(note));
-    QVERIFY(n->small());
+    QVERIFY(n->isSmall());
     delete n;
 
     // mirror
@@ -219,12 +219,12 @@ void TestNote::note()
     // small
     note->setProperty(Pid::SMALL, false);
     n = static_cast<Note*>(writeReadElement(note));
-    QVERIFY(!n->small());
+    QVERIFY(!n->isSmall());
     delete n;
 
     note->setProperty(Pid::SMALL, true);
     n = static_cast<Note*>(writeReadElement(note));
-    QVERIFY(n->small());
+    QVERIFY(n->isSmall());
     delete n;
 
     // mirror

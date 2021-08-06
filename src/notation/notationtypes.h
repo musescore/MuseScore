@@ -505,7 +505,7 @@ struct FilterElementsOptions
 struct FilterNotesOptions : FilterElementsOptions
 {
     int pitch = -1;
-    int string = Ms::STRING_NONE;
+    int string = Ms::INVALID_STRING_INDEX;
     int tpc = Ms::Tpc::TPC_INVALID;
     NoteHead::Group notehead = NoteHead::Group::HEAD_INVALID;
     Ms::TDuration durationType = Ms::TDuration();
@@ -528,7 +528,7 @@ struct StaffConfig
     bool visibleLines = false;
     qreal userDistance = 0.0;
     double scale = 0.0;
-    bool small = false;
+    bool isSmall = false;
     bool cutaway = false;
     bool showIfEmpty = false;
     bool showClef = false;
