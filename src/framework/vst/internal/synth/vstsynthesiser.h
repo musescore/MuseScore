@@ -23,23 +23,27 @@
 #ifndef MU_VST_VSTSYNTHESISER_H
 #define MU_VST_VSTSYNTHESISER_H
 
+#include <memory>
+
 #include "audio/isynthesizer.h"
 #include "audio/iaudioconfiguration.h"
 #include "audio/audiotypes.h"
 #include "modularity/ioc.h"
 
+#include "internal/vstaudioclient.h"
+#include "ivstpluginsregister.h"
+#include "ivstmodulesrepository.h"
 #include "vsttypes.h"
-#include "ivstpluginrepository.h"
-#include "vstaudioclient.h"
 
 namespace mu::vst {
 class VstSynthesiser : public audio::synth::ISynthesizer
 {
-    INJECT(vst, IVstPluginRepository, repository)
+    INJECT(vst, IVstPluginsRegister, pluginsRegister)
+    INJECT(vst, IVstModulesRepository, modulesRepo)
     INJECT(vst, audio::IAudioConfiguration, config)
 
 public:
-    explicit VstSynthesiser(const VstPluginMeta& meta);
+    explicit VstSynthesiser(VstPluginPtr&& pluginPtr);
 
     Ret init() override;
 
@@ -72,8 +76,6 @@ public:
     void process(float* buffer, unsigned int sampleCount) override;
 
 private:
-
-    VstPluginMeta m_pluginMeta;
     VstPluginPtr m_pluginPtr = nullptr;
 
     std::unique_ptr<VstAudioClient> m_vstAudioClient = nullptr;
@@ -82,6 +84,8 @@ private:
 
     async::Channel<unsigned int> m_streamsCountChanged;
 };
+
+using VstSynthPtr = std::shared_ptr<VstSynthesiser>;
 }
 
 #endif // MU_VST_VSTSYNTHESISER_H

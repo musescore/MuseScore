@@ -28,20 +28,30 @@
 #include "log.h"
 #include "settings.h"
 #include "modularity/ioc.h"
+#include "audio/isynthresolver.h"
+#include "audio/ifxresolver.h"
 
 #include "internal/vstconfiguration.h"
-#include "internal/vstpluginrepository.h"
+#include "internal/vstpluginsregister.h"
+#include "internal/vstmodulesrepository.h"
 #include "internal/synth/vstsynthesiser.h"
+#include "internal/synth/vstiresolver.h"
+#include "internal/fx/vstfxresolver.h"
 
 #include "devtools/vstpluginlistmodelexample.h"
-#include "view/vstplugineditorview.h"
+#include "view/vstieditorview.h"
+#include "view/vstfxeditorview.h"
 
 using namespace mu::vst;
 using namespace mu::modularity;
+using namespace mu::audio::synth;
+using namespace mu::audio::fx;
+using namespace mu::audio;
 using namespace mu::ui;
 
-static std::shared_ptr<IVstConfiguration> s_configuration = std::make_shared<VstConfiguration>();
-static std::shared_ptr<IVstPluginRepository> s_pluginRepo = std::make_shared<VstPluginRepository>();
+static std::shared_ptr<VstConfiguration> s_configuration = std::make_shared<VstConfiguration>();
+static std::shared_ptr<VstModulesRepository> s_pluginModulesRepo = std::make_shared<VstModulesRepository>();
+static std::shared_ptr<VstPluginsRegister> s_pluginsRegister = std::make_shared<VstPluginsRegister>();
 
 static void vst_init_qrc()
 {
@@ -100,12 +110,5 @@ void VSTModule::onInit(const framework::IApplication::RunMode& mode)
         return;
     }
 
-    s_pluginRepo->loadAvailablePlugins();
-
-    //!Note Please, don't remove this code, needed for tests of VST implementation
-    /*auto sreg = ioc()->resolve<audio::synth::ISynthesizersRegister>(moduleName());
-
-    if (sreg) {
-        sreg->registerSynthesizer("Vst", std::make_shared<VstSynthesiser>(s_pluginRepo->pluginsMetaList().val.at(0)));
-    }*/
+    s_pluginModulesRepo->init();
 }
