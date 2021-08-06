@@ -25,6 +25,7 @@
 #include <QWindow>
 #include <QResizeEvent>
 
+#include "log.h"
 #include "async/async.h"
 
 #include "vsttypes.h"
@@ -86,6 +87,8 @@ void VstFxEditorView::wrapPluginView()
     Steinberg::tresult attached;
     attached = m_view->attached(reinterpret_cast<void*>(windowHandle()->winId()), currentPlatformUiType());
     if (attached != kResultOk) {
+        LOGE() << "Unable to attach vst plugin view to window"
+               << ", resourceId: " << m_resourceId;
         return;
     }
 }

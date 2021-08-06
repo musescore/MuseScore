@@ -104,7 +104,7 @@ void VstAudioClient::setSampleRate(unsigned int sampleRate)
 
 IAudioProcessorPtr VstAudioClient::pluginProcessor() const
 {
-    return static_cast<IAudioProcessorPtr>(m_pluginComponent);
+    return static_cast<IAudioProcessorPtr>(pluginComponent());
 }
 
 PluginComponentPtr VstAudioClient::pluginComponent() const

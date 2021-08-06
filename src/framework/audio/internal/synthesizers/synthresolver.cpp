@@ -86,10 +86,10 @@ AudioResourceIdList SynthResolver::resolveAvailableResources(const AudioSourceTy
 
     if (search != m_resolvers.end()) {
         return search->second->resolveResources();
-    } else {
-        LOGE() << "Unable to find a resolver for type: " << static_cast<int>(type);
-        return {};
     }
+
+    LOGE() << "Unable to find a resolver for type: " << static_cast<int>(type);
+    return {};
 }
 
 void SynthResolver::registerResolver(const AudioSourceType type, IResolverPtr resolver)

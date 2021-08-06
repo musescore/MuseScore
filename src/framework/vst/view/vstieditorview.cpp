@@ -25,6 +25,8 @@
 #include <QWindow>
 #include <QResizeEvent>
 
+#include "log.h"
+
 #include "vsttypes.h"
 #include "internal/vstplugin.h"
 
@@ -84,12 +86,10 @@ void VstiEditorView::wrapPluginView()
     Steinberg::tresult attached;
     attached = m_view->attached(reinterpret_cast<void*>(windowHandle()->winId()), currentPlatformUiType());
     if (attached != kResultOk) {
+        LOGE() << "Unable to attach vst plugin view to window"
+               << ", resourceId: " << m_resourceId;
         return;
     }
-
-    ViewRect size;
-    m_view->getSize(&size);
-    resizeView(m_view, &size);
 }
 
 FIDString VstiEditorView::currentPlatformUiType() const
