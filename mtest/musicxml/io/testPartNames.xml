@@ -71,6 +71,11 @@
       <part-name>Voice</part-name>
       <score-instrument id="P2-I1">
         <instrument-name>Voice</instrument-name>
+        <instrument-abbreviation>Vce. (shouldn't show)</instrument-abbreviation>
+        </score-instrument>
+      <score-instrument id="P2-I2">
+        <instrument-name>Voice</instrument-name>
+        <instrument-abbreviation>Vce. (shouldn't show)</instrument-abbreviation>
         </score-instrument>
       <midi-device id="P2-I1" port="1"></midi-device>
       <midi-instrument id="P2-I1">
@@ -903,6 +908,7 @@
           <octave>5</octave>
           </pitch>
         <duration>4</duration>
+        <instrument id='P2-I2'/>
         <tie type="stop"/>
         <tie type="start"/>
         <voice>1</voice>

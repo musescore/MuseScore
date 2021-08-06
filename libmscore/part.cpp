@@ -393,6 +393,26 @@ QString Part::shortName(const Fraction& tick) const
       }
 
 //---------------------------------------------------------
+//   setLongNameAll
+//---------------------------------------------------------
+
+void Part::setLongNameAll(const QString& s)
+      {
+      for (auto instrument : _instruments)
+            instrument.second->setLongName(s);
+      }
+
+//---------------------------------------------------------
+//   setShortNameAll
+//---------------------------------------------------------
+
+void Part::setShortNameAll(const QString& s)
+      {
+      for (auto instrument : _instruments)
+            instrument.second->setShortName(s);
+      }
+
+//---------------------------------------------------------
 //   setLongName
 //---------------------------------------------------------
 
@@ -408,6 +428,24 @@ void Part::setLongName(const QString& s)
 void Part::setShortName(const QString& s)
       {
       instrument()->setShortName(s);
+      }
+
+//---------------------------------------------------------
+//   setPlainLongNameAll
+//---------------------------------------------------------
+
+void Part::setPlainLongNameAll(const QString& s)
+      {
+      setLongNameAll(XmlWriter::xmlString(s));
+      }
+
+//---------------------------------------------------------
+//   setPlainShortNameAll
+//---------------------------------------------------------
+
+void Part::setPlainShortNameAll(const QString& s)
+      {
+      setShortNameAll(XmlWriter::xmlString(s));
       }
 
 //---------------------------------------------------------
