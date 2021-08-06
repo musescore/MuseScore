@@ -19,31 +19,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUDIO_AUDIOSANITIZER_H
-#define MU_AUDIO_AUDIOSANITIZER_H
 
-//! NOTE This is dev tools
+#ifndef MU_AUDIO_IAUDIOTHREADSECURER_H
+#define MU_AUDIO_IAUDIOTHREADSECURER_H
 
 #include <cassert>
 #include <thread>
 
+#include "modularity/ioc.h"
+
 namespace mu::audio {
-class AudioSanitizer
+class IAudioThreadSecurer : MODULE_EXPORT_INTERFACE
 {
+    INTERFACE_ID(IAudioThreadSecurer)
 public:
-
-    static void setupMainThread();
-    static std::thread::id mainThread();
-    static bool isMainThread();
-
-    static void setupWorkerThread();
-    static std::thread::id workerThread();
-    static bool isWorkerThread();
+    virtual ~IAudioThreadSecurer() = default;
+    virtual bool isMainThread() const = 0;
+    virtual std::thread::id mainThreadId() const = 0;
+    virtual bool isAudioWorkerThread() const = 0;
+    virtual std::thread::id workerThreadId() const = 0;
 };
 }
 
-#define ONLY_AUDIO_WORKER_THREAD assert(mu::audio::AudioSanitizer::isWorkerThread())
-#define ONLY_AUDIO_MAIN_THREAD assert(mu::audio::AudioSanitizer::isMainThread())
-#define ONLY_AUDIO_MAIN_OR_WORKER_THREAD assert((mu::audio::AudioSanitizer::isWorkerThread() || mu::audio::AudioSanitizer::isMainThread()))
+#define ONLY_AUDIO_THREAD(securer) assert(securer()->isAudioWorkerThread())
+#define ONLY_MAIN_THREAD(securer) assert(securer()->isMainThread())
+#define ONLY_AUDIO_OR_MAIN_THREAD(securer) assert(securer()->isMainThread() || securer()->isAudioWorkerThread())
 
-#endif // MU_AUDIO_AUDIOSANITIZER_H
+#endif // MU_AUDIO_IAUDIOTHREADSECURER_H
