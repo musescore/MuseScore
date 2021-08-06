@@ -47,7 +47,7 @@ void SpannerMap::update() const
     for (auto i : *this) {
         intervals.push_back(interval_tree::Interval<Spanner*>(i.second->tick().ticks(), i.second->tick2().ticks(), i.second));
     }
-    tree = interval_tree::IntervalTree<Spanner*>(intervals);
+    tree = interval_tree::IntervalTree<Spanner*>(std::move(intervals));
     dirty = false;
 }
 
@@ -60,8 +60,7 @@ const std::vector<interval_tree::Interval<Spanner*> >& SpannerMap::findContained
     if (dirty) {
         update();
     }
-    results.clear();
-    tree.findContained(start, stop, results);
+    results = tree.findContained(start, stop);
     return results;
 }
 
@@ -74,8 +73,7 @@ const std::vector<interval_tree::Interval<Spanner*> >& SpannerMap::findOverlappi
     if (dirty) {
         update();
     }
-    results.clear();
-    tree.findOverlapping(start, stop, results);
+    results = tree.findContained(start, stop);
     return results;
 }
 
