@@ -112,7 +112,12 @@ io::paths ProjectConfiguration::parsePaths(const Val& value) const
         return io::paths();
     }
 
-    QStringList paths = value.toQString().split(",");
+    QString pathsStr = value.toQString();
+    if (pathsStr.isEmpty()) {
+        return {};
+    }
+
+    QStringList paths = pathsStr.split(",");
     return io::pathsFromStrings(paths);
 }
 
