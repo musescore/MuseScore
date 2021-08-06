@@ -39,8 +39,10 @@ public:
     async::NotifyList<const Staff*> staffList(const ID& partId) const override;
 
     const Part* part(const ID& partId) const override;
-    const Staff* staff(const ID& staffId) const override;
     bool partExists(const ID& partId) const override;
+
+    const Staff* staff(const ID& staffId) const override;
+    bool staffExists(const ID& staffId) const override;
 
     void setParts(const PartInstrumentList& parts) override;
     void setScoreOrder(const ScoreOrder& order) override;
