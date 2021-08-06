@@ -584,8 +584,8 @@ void MasterScore::addExcerpt(Excerpt* ex, int index)
     Score* score = ex->partScore();
 
     int nstaves { 1 }; // Initialise to 1 to force writing of the first part.
-    for (Staff* s : score->staves()) {
-        const LinkedElements* ls = s->links();
+    for (Staff* excerptStaff : score->staves()) {
+        const LinkedElements* ls = excerptStaff->links();
         if (ls == 0) {
             continue;
         }
@@ -595,13 +595,21 @@ void MasterScore::addExcerpt(Excerpt* ex, int index)
                 continue;
             }
 
+            Staff* linkedMasterStaff = toStaff(le);
+            Part* excerptPart = excerptStaff->part();
+            Part* masterPart = linkedMasterStaff->part();
+
+            //! NOTE: parts/staves of excerpt must have the same ID as parts/staves of the master score
+            //! In fact, excerpts are just viewers for the master score
+            excerptStaff->setId(linkedMasterStaff->id());
+            excerptPart->setId(masterPart->id());
+
             // For instruments with multiple staves, every staff will point to the
             // same part. To prevent adding the same part several times to the excerpt,
             // add only the part of the first staff pointing to the part.
-            Staff* ps = toStaff(le);
             if (!(--nstaves)) {
-                ex->parts().append(ps->part());
-                nstaves = ps->part()->nstaves();
+                ex->parts().append(linkedMasterStaff->part());
+                nstaves = linkedMasterStaff->part()->nstaves();
             }
             break;
         }

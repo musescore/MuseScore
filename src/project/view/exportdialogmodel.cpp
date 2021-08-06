@@ -43,54 +43,54 @@ ExportDialogModel::ExportDialogModel(QObject* parent)
 
     ExportTypeList musicXmlTypes {
         ExportType::makeWithSuffixes({ "mxl" },
-                                     qtrc("userscores", "Compressed") + " (*.mxl)",
-                                     qtrc("userscores", "Compressed MusicXML Files"),
+                                     qtrc("project", "Compressed") + " (*.mxl)",
+                                     qtrc("project", "Compressed MusicXML Files"),
                                      "MusicXmlSettingsPage.qml"),
         ExportType::makeWithSuffixes({ "musicxml" },
-                                     qtrc("userscores", "Uncompressed") + " (*.musicxml)",
-                                     qtrc("userscores", "Uncompressed MusicXML Files"),
+                                     qtrc("project", "Uncompressed") + " (*.musicxml)",
+                                     qtrc("project", "Uncompressed MusicXML Files"),
                                      "MusicXmlSettingsPage.qml"),
         ExportType::makeWithSuffixes({ "xml" },
-                                     qtrc("userscores", "Uncompressed (outdated)") + " (*.xml)",
-                                     qtrc("userscores", "Uncompressed MusicXML Files"),
+                                     qtrc("project", "Uncompressed (outdated)") + " (*.xml)",
+                                     qtrc("project", "Uncompressed MusicXML Files"),
                                      "MusicXmlSettingsPage.qml"),
     };
 
     m_exportTypeList = {
         ExportType::makeWithSuffixes({ "pdf" },
-                                     qtrc("userscores", "PDF File"),
-                                     qtrc("userscores", "PDF Files"),
+                                     qtrc("project", "PDF File"),
+                                     qtrc("project", "PDF Files"),
                                      "PdfSettingsPage.qml"),
         ExportType::makeWithSuffixes({ "png" },
-                                     qtrc("userscores", "PNG Images"),
-                                     qtrc("userscores", "PNG Images"),
+                                     qtrc("project", "PNG Images"),
+                                     qtrc("project", "PNG Images"),
                                      "PngSettingsPage.qml"),
         ExportType::makeWithSuffixes({ "svg" },
-                                     qtrc("userscores", "SVG Images"),
-                                     qtrc("userscores", "SVG Images"),
+                                     qtrc("project", "SVG Images"),
+                                     qtrc("project", "SVG Images"),
                                      "SvgSettingsPage.qml"),
         ExportType::makeWithSuffixes({ "mp3" },
-                                     qtrc("userscores", "MP3 Audio"),
-                                     qtrc("userscores", "MP3 Audio Files"),
+                                     qtrc("project", "MP3 Audio"),
+                                     qtrc("project", "MP3 Audio Files"),
                                      "Mp3SettingsPage.qml"),
         ExportType::makeWithSuffixes({ "wav" },
-                                     qtrc("userscores", "WAV Audio"),
-                                     qtrc("userscores", "WAV Audio Files"),
+                                     qtrc("project", "WAV Audio"),
+                                     qtrc("project", "WAV Audio Files"),
                                      "AudioSettingsPage.qml"),
         ExportType::makeWithSuffixes({ "ogg" },
-                                     qtrc("userscores", "OGG Audio"),
-                                     qtrc("userscores", "OGG Audio Files"),
+                                     qtrc("project", "OGG Audio"),
+                                     qtrc("project", "OGG Audio Files"),
                                      "AudioSettingsPage.qml"),
         ExportType::makeWithSuffixes({ "flac" },
-                                     qtrc("userscores", "FLAC Audio"),
-                                     qtrc("userscores", "FLAC Audio Files"),
+                                     qtrc("project", "FLAC Audio"),
+                                     qtrc("project", "FLAC Audio Files"),
                                      "AudioSettingsPage.qml"),
         ExportType::makeWithSuffixes({ "mid", "midi", "kar" },
-                                     qtrc("userscores", "MIDI File"),
-                                     qtrc("userscores", "MIDI Files"),
+                                     qtrc("project", "MIDI File"),
+                                     qtrc("project", "MIDI Files"),
                                      "MidiSettingsPage.qml"),
         ExportType::makeWithSubtypes(musicXmlTypes,
-                                     qtrc("userscores", "MusicXML"))
+                                     qtrc("project", "MusicXML"))
     };
 
     m_selectedExportType = m_exportTypeList.front();
@@ -259,9 +259,9 @@ void ExportDialogModel::selectExportTypeById(const QString& id)
 QVariantList ExportDialogModel::availableUnitTypes() const
 {
     QMap<UnitType, QString> unitTypeNames {
-        { UnitType::PER_PAGE, qtrc("userscores", "Each page to a separate file") },
-        { UnitType::PER_PART, qtrc("userscores", "Each part to a separate file") },
-        { UnitType::MULTI_PART, qtrc("userscores", "All parts combined in one file") },
+        { UnitType::PER_PAGE, qtrc("project", "Each page to a separate file") },
+        { UnitType::PER_PART, qtrc("project", "Each part to a separate file") },
+        { UnitType::MULTI_PART, qtrc("project", "All parts combined in one file") },
     };
 
     QVariantList result;
@@ -449,10 +449,10 @@ void ExportDialogModel::setMidiExportRpns(bool exportRpns)
 QVariantList ExportDialogModel::musicXmlLayoutTypes() const
 {
     QMap<MusicXmlLayoutType, QString> musicXmlLayoutTypeNames {
-        { MusicXmlLayoutType::AllLayout, qtrc("userscores", "All layout") },
-        { MusicXmlLayoutType::AllBreaks, qtrc("userscores", "System and page breaks") },
-        { MusicXmlLayoutType::ManualBreaks, qtrc("userscores", "Manually added system and page breaks only") },
-        { MusicXmlLayoutType::None, qtrc("userscores", "No system or page breaks") },
+        { MusicXmlLayoutType::AllLayout, qtrc("project", "All layout") },
+        { MusicXmlLayoutType::AllBreaks, qtrc("project", "System and page breaks") },
+        { MusicXmlLayoutType::ManualBreaks, qtrc("project", "Manually added system and page breaks only") },
+        { MusicXmlLayoutType::None, qtrc("project", "No system or page breaks") },
     };
 
     QVariantList result;

@@ -742,7 +742,10 @@ void NotationParts::moveParts(const IDList& sourcePartsIds, const ID& destinatio
         int srcIndex = partIds.indexOf(sourcePartId);
         int dstIndex = partIds.indexOf(destinationPartId);
         dstIndex += (mode == InsertMode::Before) && (srcIndex < dstIndex) ? -1 : 0;
-        partIds.move(srcIndex, dstIndex);
+
+        if (dstIndex >= 0 && dstIndex < partIds.size()) {
+            partIds.move(srcIndex, dstIndex);
+        }
     }
 
     PartInstrumentList parts;

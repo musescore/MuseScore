@@ -153,7 +153,7 @@ bool Score::readScore400(XmlReader& e)
         } else if (tag == "Part") {
             Part* part = new Part(this);
             part->read(e);
-            _parts.push_back(part);
+            appendPart(part);
         } else if ((tag == "HairPin")
                    || (tag == "Ottava")
                    || (tag == "TextLine")

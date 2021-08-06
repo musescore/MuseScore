@@ -147,7 +147,7 @@ bool Read302::readScore302(Ms::Score* score, XmlReader& e)
         } else if (tag == "Part") {
             Part* part = new Part(score);
             part->read(e);
-            score->_parts.push_back(part);
+            score->appendPart(part);
         } else if ((tag == "HairPin")
                    || (tag == "Ottava")
                    || (tag == "TextLine")

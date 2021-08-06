@@ -123,7 +123,7 @@ void RecentProjectsModel::updateRecentScores(const ProjectMetaList& recentProjec
     }
 
     QVariantMap obj;
-    obj[SCORE_TITLE_KEY] = qtrc("userscores", "New score");
+    obj[SCORE_TITLE_KEY] = qtrc("project", "New score");
     obj[SCORE_ADD_NEW_KEY] = true;
 
     recentScores.prepend(QVariant::fromValue(obj));

@@ -174,9 +174,9 @@ mu::io::path ExportProjectScenario::askExportPath(const INotationPtrList& notati
         }) != notations.cend();
 
         if (containsMaster) {
-            suggestedPath += "-" + qtrc("userscores", "Score_and_Parts", "Used in export filename suggestion");
+            suggestedPath += "-" + qtrc("project", "Score_and_Parts", "Used in export filename suggestion");
         } else {
-            suggestedPath += "-" + qtrc("userscores", "Parts", "Used in export filename suggestion");
+            suggestedPath += "-" + qtrc("project", "Parts", "Used in export filename suggestion");
         }
     } else if (isExportingOnlyOneScore) {
         if (!isMainNotation(notations.front())) {
@@ -191,7 +191,7 @@ mu::io::path ExportProjectScenario::askExportPath(const INotationPtrList& notati
 
     suggestedPath += "." + exportType.suffixes.front();
 
-    return interactive()->selectSavingFile(qtrc("userscores", "Export"), suggestedPath,
+    return interactive()->selectSavingFile(qtrc("project", "Export"), suggestedPath,
                                            exportType.filter(), isCreatingOnlyOneFile);
 }
 
@@ -226,13 +226,13 @@ bool ExportProjectScenario::shouldReplaceFile(const QString& filename) const
         static const int SkipAll = static_cast<int>(IInteractive::Button::CustomButton) + 4;
 
         IInteractive::Result result = interactive()->question(
-            trc("userscores", "File already exists"),
-            qtrc("userscores", "A file already exists with the filename %1. Do you want to replace it?")
+            trc("project", "File already exists"),
+            qtrc("project", "A file already exists with the filename %1. Do you want to replace it?")
             .arg(filename).toStdString(), {
-                IInteractive::ButtonData(Replace, trc("userscores", "Replace")),
-                IInteractive::ButtonData(ReplaceAll, trc("userscores", "Replace all")),
-                IInteractive::ButtonData(Skip, trc("userscores", "Skip")),
-                IInteractive::ButtonData(SkipAll, trc("userscores", "Skip all"))
+                IInteractive::ButtonData(Replace, trc("project", "Replace")),
+                IInteractive::ButtonData(ReplaceAll, trc("project", "Replace all")),
+                IInteractive::ButtonData(Skip, trc("project", "Skip")),
+                IInteractive::ButtonData(SkipAll, trc("project", "Skip all"))
             });
 
         switch (result.button()) {
@@ -255,8 +255,8 @@ bool ExportProjectScenario::shouldReplaceFile(const QString& filename) const
 bool ExportProjectScenario::askForRetry(const QString& filename) const
 {
     IInteractive::Result result = interactive()->question(
-        trc("userscores", "Error"),
-        qtrc("userscores", "An error occured while writing the file %1. Do you want to retry?")
+        trc("project", "Error"),
+        qtrc("project", "An error occured while writing the file %1. Do you want to retry?")
         .arg(filename).toStdString(), { IInteractive::Button::Retry, IInteractive::Button::Abort });
 
     return result.standartButton() == IInteractive::Button::Retry;
