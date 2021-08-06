@@ -135,6 +135,7 @@ public:
       void print(const int measureNr);
       void attributes(const QString& partId, const Fraction cTime);
       void clef(const QString& partId);
+      void staffDetails(const QString& partId, const Fraction& ctime, std::set<int>& hiddenStaves);
       void time(const Fraction cTime);
       void transpose(const QString& partId, const Fraction& tick);
       void divisions();
@@ -161,6 +162,7 @@ public:
       int trackForPart(const QString& id) const;
       bool hasPart(const QString& id) const;
       Part* getPart(const QString& id) const { return _partMap.value(id); }
+      QString getPartId(const Part* part) const;
       MusicXmlPart getMusicXmlPart(const QString& id) const { return _parts.value(id); }
       MusicXMLInstruments getInstruments(const QString& id) const { return _instruments.value(id); }
       void setDrumsetDefault(const QString& id, const QString& instrId, const NoteHead::Group hg, const int line, const Direction sd);
@@ -172,6 +174,7 @@ public:
       bool hasBeamingInfo() const { return _hasBeamingInfo; }
       bool isVocalStaff(const QString& id) const { return _parts[id].isVocalStaff(); }
       static VBox* createAndAddVBoxForCreditWords(Score* const score, const int miny = 0, const int maxy = 75);
+      std::pair<int, int> findContiguousNormalStaves(const QString& partId);
       void createDefaultHeader(Score* const score);
       void createMeasuresAndVboxes(Score* const score,
                               const QVector<Fraction>& ml, const QVector<Fraction>& ms,

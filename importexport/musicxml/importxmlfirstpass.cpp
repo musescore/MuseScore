@@ -221,8 +221,26 @@ bool MusicXmlPart::printStaff(int mxStaff, Fraction time) const
             return true;
       return (upperBound - 1).value();
       }
+
 //---------------------------------------------------------
-//   staffNumberToIndex
+//   isSmallStaff
+//---------------------------------------------------------
+
+/**
+ Whether this staff has a staff-size less than the default
+ */
+
+bool MusicXmlPart::isSmallStaff(const int msStaff) const
+      {
+      for (int smallMxmlStaff : _smallMxmlStaves) {
+            if (mxmlToMsStaff(smallMxmlStaff) == msStaff)
+                  return true;
+            }
+      return false;
+      }
+
+//---------------------------------------------------------
+//   mxmlToMsStaff
 //---------------------------------------------------------
 
 /**
@@ -236,14 +254,33 @@ bool MusicXmlPart::printStaff(int mxStaff, Fraction time) const
  for more information.
  */
 
-int MusicXmlPart::staffNumberToIndex(const int staffNumber) const
+int MusicXmlPart::mxmlToMsStaff(const int mxmlStaff) const
       {
-      if (_staffNumberToIndex.size() == 0)
-            return staffNumber - 1;
-      else if (_staffNumberToIndex.contains(staffNumber))
-            return  _staffNumberToIndex[staffNumber];
+      if (_mxmlToMsStaff.size() == 0)
+            return mxmlStaff - 1;
+      else if (_mxmlToMsStaff.contains(mxmlStaff))
+            return  _mxmlToMsStaff[mxmlStaff];
       else
             return -1;
+      }
+
+//---------------------------------------------------------
+//   msToMxmlStaff
+//---------------------------------------------------------
+
+/**
+ This is an inversion of the mapping in mxmlToMsStaff.
+ */
+
+int MusicXmlPart::msToMxmlStaff(const int msStaff) const
+      {
+      if (_mxmlToMsStaff.size() == 0)
+            return msStaff + 1;
+      for (auto staffI = _mxmlToMsStaff.begin(); staffI != _mxmlToMsStaff.end(); ++staffI) {
+            if (staffI.value() == msStaff)
+                  return staffI.key();
+            }
+      return 0;
       }
 
 //---------------------------------------------------------

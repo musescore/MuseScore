@@ -83,11 +83,14 @@ public:
       void hasTab(const bool b) { _hasTab = b; }
       void addPrintStaff(int mxStaff, Fraction time, bool printObject) { _printStaffMap[mxStaff].insert(time, printObject); }
       bool printStaff(int mxStaff, Fraction time) const; 
-      QMap<int, int> staffNumberToIndex() const { return _staffNumberToIndex; }
-      int staffNumberToIndex(const int staffNumber) const;
-      void insertStaffNumberToIndex(const int staffNumber, const int staffIndex) { _staffNumberToIndex.insert(staffNumber, staffIndex); }
+      QMap<int, int> staffNumberToIndex() const { return _mxmlToMsStaff; }
+      int mxmlToMsStaff(const int mxmlStaff) const;
+      int msToMxmlStaff(const int msStaff) const;
+      void insertMxmlToMsStaff(const int mxmlStaff, const int msStaff) { _mxmlToMsStaff.insert(mxmlStaff, msStaff); }
       LyricNumberHandler& lyricNumberHandler() { return _lyricNumberHandler; }
       const LyricNumberHandler& lyricNumberHandler() const { return _lyricNumberHandler; }
+      void addSmallMxmlStaff(const int mxmlStaff) { _smallMxmlStaves.append(mxmlStaff); }
+      bool isSmallStaff(const int msStaff) const;
       void setMaxStaff(const int staff);
       int maxStaff() const { return _maxStaff; }
       bool isVocalStaff() const;
@@ -99,14 +102,15 @@ private:
       QString abbr;
       bool _printAbbr = false;
       bool _hasTab = false;
+      QList<int> _smallMxmlStaves;
       QStringList measureNumbers;             // MusicXML measure number attribute
       QList<Fraction> measureDurations;       // duration in fraction for every measure
       QVector<MusicXmlOctaveShiftList> octaveShifts; // octave shift list for every staff
       LyricNumberHandler _lyricNumberHandler;
       int _maxStaff = -1;                      // maximum staff value found (0 based), -1 = none
       bool _hasLyrics = false;
-      QMap<int, PrintStaffList> _printStaffMap; // Mapping from mxStaff to list of print-objects
-      QMap<int, int> _staffNumberToIndex;       // Mapping from mxStaff  to msStaff (index in staff list).
+      QMap<int, PrintStaffList> _printStaffMap; // Mapping from mxmlStaff to list of print-objects
+      QMap<int, int> _mxmlToMsStaff;            // Mapping from mxmlStaff to msStaff (index in staff list).
                                                 // Only for when staves are discarded in MusicXMLParserPass1::attributes.
       };
 

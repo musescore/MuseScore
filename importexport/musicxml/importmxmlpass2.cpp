@@ -24,6 +24,7 @@
 #include "libmscore/accidental.h"
 #include "libmscore/box.h"
 #include "libmscore/breath.h"
+#include "libmscore/bracketItem.h"
 #include "libmscore/chord.h"
 #include "libmscore/chordline.h"
 #include "libmscore/chordlist.h"
@@ -2713,7 +2714,7 @@ void MusicXMLParserPass2::staffDetails(const QString& partId, const Fraction& ti
 
       QString mxmlStaff = _e.attributes().value("number").toString();
       if (mxmlStaff.isEmpty()) mxmlStaff = "1";  // default
-      int msStaff = _pass1.getMusicXmlPart(partId).staffNumberToIndex(mxmlStaff.toInt());
+      int msStaff = _pass1.getMusicXmlPart(partId).mxmlToMsStaff(mxmlStaff.toInt());
       if (msStaff < 0 || msStaff >= staves) {
             _logger->logError(QString("invalid staff-details number %1 (may be hidden)").arg(mxmlStaff), &_e);
             msStaff = 0;
@@ -2744,11 +2745,14 @@ void MusicXMLParserPass2::staffDetails(const QString& partId, const Fraction& ti
                   staffTuning(t);
             else if (_e.name() == "staff-size") {
                   int staffScale = _e.readElementText().toInt();
-                  if (part->staff(msStaff)->isTabStaff(tick) && staffScale > 100)
+                  Staff* currentStaff = part->staff(msStaff);
+                  if (currentStaff->isTabStaff(tick) && staffScale > 100)
                         _logger->logError("trying to increase scale of tab staff (not supported)", &_e);
                   else {
-                        part->staff(msStaff)->setProperty(Pid::MAG, staffScale / 100.0);
-                        part->staff(msStaff)->setPropertyFlags(Pid::MAG, PropertyFlags::UNSTYLED);
+                        currentStaff->setProperty(Pid::MAG, staffScale / 100.0);
+                        currentStaff->setPropertyFlags(Pid::MAG, PropertyFlags::UNSTYLED);
+                        if (staffScale < 100)
+                              currentStaff->setBarLineSpan(false);
                         }
                   }
             else
@@ -2985,7 +2989,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
                         _logger->logError(QString("hidden staff %1").arg(mxmlStaff), &_e); 
                         continue;
                         }
-                  int msStaff = mxmlPart.staffNumberToIndex(mxmlStaff.toInt());
+                  int msStaff = mxmlPart.mxmlToMsStaff(mxmlStaff.toInt());
                   if (msStaff >= 0)
                         track += msStaff * VOICES;
                   else
@@ -4623,7 +4627,7 @@ void MusicXMLParserPass2::key(const QString& partId, Measure* measure, const Fra
       QString mxmlStaff = _e.attributes().value("number").toString();
       int msStaff = -1; // assume no number (see below)
       if (mxmlStaff != "") {
-            msStaff = _pass1.getMusicXmlPart(partId).staffNumberToIndex(mxmlStaff.toInt());
+            msStaff = _pass1.getMusicXmlPart(partId).mxmlToMsStaff(mxmlStaff.toInt());
             if (msStaff < 0) {
                   // conversion error (-1), assume staff 0
                   _logger->logError(QString("invalid key number '%1'").arg(mxmlStaff), &_e);
@@ -4720,7 +4724,7 @@ void MusicXMLParserPass2::clef(const QString& partId, Measure* measure, const Fr
       const bool afterBarline = _e.attributes().value("after-barline") == "yes";
       int msStaff = 0; // default
       if (mxmlStaff != "")
-            msStaff = _pass1.getMusicXmlPart(partId).staffNumberToIndex(mxmlStaff.toInt());
+            msStaff = _pass1.getMusicXmlPart(partId).mxmlToMsStaff(mxmlStaff.toInt());
       if (msStaff < 0 || msStaff >= part->nstaves()) {
             // conversion error (0) or other issue, assume staff 1
             // Also for Cubase 6.5.5 which generates clef number="2" in a single staff part
@@ -5512,7 +5516,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
             else if (_e.name() == "staff") {
                   auto ok = false;
                   auto mxmlStaff = _e.readElementText();
-                  msStaff = _pass1.getMusicXmlPart(partId).staffNumberToIndex(mxmlStaff.toInt(&ok));
+                  msStaff = _pass1.getMusicXmlPart(partId).mxmlToMsStaff(mxmlStaff.toInt(&ok));
                   if (!ok) {
                         // error already reported in pass 1
                         msStaff = -1;
@@ -6314,7 +6318,7 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
             else if (_e.name() == "staff") {
                   int nstaves = _pass1.getPart(partId)->nstaves();
                   QString mxmlStaff = _e.readElementText();
-                  int msStaff = _pass1.getMusicXmlPart(partId).staffNumberToIndex(mxmlStaff.toInt());
+                  int msStaff = _pass1.getMusicXmlPart(partId).mxmlToMsStaff(mxmlStaff.toInt());
                   if (msStaff >= 0 && msStaff < nstaves)
                         track += msStaff * VOICES;
                   else

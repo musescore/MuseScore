@@ -415,6 +415,23 @@ int MusicXMLParserPass1::trackForPart(const QString& id) const
       }
 
 //---------------------------------------------------------
+//   getPartId
+//---------------------------------------------------------
+
+/**
+ Return the partId for a Part. Returns empty string if not found.
+ */
+
+QString MusicXMLParserPass1::getPartId(const Part* part) const
+      {
+      for (auto partI = _partMap.begin(); partI != _partMap.end(); ++partI) {
+            if (partI.value() == part)  
+                  return partI.key();
+            }
+      return "";
+      }
+
+//---------------------------------------------------------
 //   getMeasureStart
 //---------------------------------------------------------
 
@@ -1047,6 +1064,44 @@ static bool allStaffGroupsIdentical(Part const* const p)
       }
 
 //---------------------------------------------------------
+//   findContiguousNormalStaves
+//---------------------------------------------------------
+
+/**
+ Return boundaries (inclusive)
+ of largest contiguous section
+ of non-hidden, non-small staves in a part.
+ */
+
+std::pair<int, int> MusicXMLParserPass1::findContiguousNormalStaves(const QString& partId) 
+      {
+      MusicXmlPart& mxmlPart = _parts[partId];
+      Part* msPart = _partMap[partId];
+      std::set<std::pair<int, int>> pairCandidates;
+      int currentLowerBound = 0;
+      int maxCandidateSize = 0;
+      std::pair<int, int> maxCandidate;
+
+      for (int i = 0; i < msPart->nstaves(); ++i) {
+            if (mxmlPart.isSmallStaff(i) || !mxmlPart.printStaff(mxmlPart.msToMxmlStaff(i), Fraction(0, 1))) {
+                  if (currentLowerBound != i)
+                        pairCandidates.insert({currentLowerBound, i - 1});
+                  currentLowerBound = i + 1;
+                  }
+            }
+      pairCandidates.insert({currentLowerBound, msPart->nstaves() - 1});
+
+      for (auto pairCandidate : pairCandidates) {
+            if ((pairCandidate.second - pairCandidate.first) > maxCandidateSize) {
+                  maxCandidate = pairCandidate;
+                  maxCandidateSize = pairCandidate.second - pairCandidate.first;            
+                  }
+            }
+      
+      return maxCandidate;
+      }
+
+//---------------------------------------------------------
 //   isRedundantBracket
 //---------------------------------------------------------
 
@@ -1161,11 +1216,16 @@ void MusicXMLParserPass1::scorePartwise()
 
       // handle the implicit brackets:
       // multi-staff parts w/o explicit brackets get a brace
+      // This brace is placed on the largest contiguous span of
+      // normal (non-hidden and non-small) staves.
       for (Part const* const p : il) {
             if (p->nstaves() > 1 && !partSet.contains(p)) {
-                  const int column = p->staff(0)->bracketLevels() + 1;
-                  p->staff(0)->setBracketType(column, BracketType::BRACE);
-                  p->staff(0)->setBracketSpan(column, p->nstaves());
+                  std::pair<int, int> contiguousNormalStaves = findContiguousNormalStaves(getPartId(p));
+                  int firstStaff = contiguousNormalStaves.first;
+                  int lastStaff = contiguousNormalStaves.second;
+                  const int column = p->staff(firstStaff)->bracketLevels() + 1;
+                  p->staff(firstStaff)->setBracketType(column, BracketType::BRACE);
+                  p->staff(firstStaff)->setBracketSpan(column, lastStaff - firstStaff + 1);
                   if (allStaffGroupsIdentical(p)) {
                         // span only if the same types
                         for (auto spannedStaff : *(p->staves()))
@@ -2476,16 +2536,7 @@ void MusicXMLParserPass1::attributes(const QString& partId, const Fraction cTime
             else if (_e.name() == "instruments")
                   _e.skipCurrentElement();  // skip but don't log
             else if (_e.name() == "staff-details") {
-                  QStringRef strNumber = _e.attributes().value("number");
-                  int mxmlStaff = strNumber.isEmpty() ? 1 : strNumber.toInt();
-                  QStringRef printObject = _e.attributes().value("print-object");
-                  if (printObject == "no") {
-                        hiddenStaves.emplace(mxmlStaff);
-                        mxmlPart.addPrintStaff(mxmlStaff, cTime, false);
-                        }
-                  else if (printObject == "yes")
-                        mxmlPart.addPrintStaff(mxmlStaff, cTime, true);
-                  _e.skipCurrentElement();
+                  staffDetails(partId, cTime, hiddenStaves);
                   }
             else if (_e.name() == "staves")
                   staves = _e.readElementText().toInt();
@@ -2515,7 +2566,7 @@ void MusicXMLParserPass1::attributes(const QString& partId, const Fraction cTime
                         _logger->logError(QString("removing hidden staff %1").arg(staffNumber), &_e);
                         continue;
                         }
-                  mxmlPart.insertStaffNumberToIndex(staffNumber, staffIndex);
+                  mxmlPart.insertMxmlToMsStaff(staffNumber, staffIndex);
                   ++staffIndex;
                   }
             Q_ASSERT(staffIndex == mxmlPart.staffNumberToIndex().size());
@@ -2530,7 +2581,7 @@ void MusicXMLParserPass1::attributes(const QString& partId, const Fraction cTime
             // of the correct implementation)
             setNumberOfStavesForPart(msPart, staves);
             for (int hiddenStaff : hiddenStaves) {
-                  int hiddenStaffIndex = mxmlPart.staffNumberToIndex(hiddenStaff);
+                  int hiddenStaffIndex = mxmlPart.mxmlToMsStaff(hiddenStaff);
                   if (hiddenStaffIndex >= 0)
                         msPart->staff(hiddenStaffIndex)->setHideWhenEmpty(Staff::HideMode::AUTO); 
                   }
@@ -2562,6 +2613,42 @@ void MusicXMLParserPass1::clef(const QString& partId)
             else
                   skipLogCurrElem();
             }
+      }
+
+//---------------------------------------------------------
+//   staffDetails
+//---------------------------------------------------------
+
+/**
+ Parse the /score-partwise/part/measure/attributes/staffDetails node.
+ */
+
+void MusicXMLParserPass1::staffDetails(const QString& partId, const Fraction& cTime, std::set<int>& hiddenStaves)
+      {
+      Q_ASSERT(_e.isStartElement() && _e.name() == "staff-details");
+      _logger->logDebugTrace("MusicXMLParserPass1::staffDetails", &_e);
+      
+      MusicXmlPart& mxmlPart = _parts[partId];
+      QStringRef strNumber = _e.attributes().value("number");
+      int mxmlStaff = strNumber.isEmpty() ? 1 : strNumber.toInt();
+      QStringRef printObject = _e.attributes().value("print-object");
+      if (printObject == "no") {
+            hiddenStaves.emplace(mxmlStaff);
+            mxmlPart.addPrintStaff(mxmlStaff, cTime, false);
+            }
+      else if (printObject == "yes")
+            mxmlPart.addPrintStaff(mxmlStaff, cTime, true);
+
+      while (_e.readNextStartElement()) {
+            if (_e.name() == "staff-size") {
+                  if (_e.readElementText().toInt() < 100)
+                        mxmlPart.addSmallMxmlStaff(mxmlStaff);
+                  }
+            else
+                  skipLogCurrElem();
+            }
+      
+      Q_ASSERT(_e.isEndElement() && _e.name() == "staff-details");
       }
 
 //---------------------------------------------------------
@@ -2748,7 +2835,7 @@ void MusicXMLParserPass1::direction(const QString& partId, const Fraction cTime)
             else if (_e.name() == "staff") {
                   int nstaves = getPart(partId)->nstaves();
                   QString mxmlStaff = _e.readElementText();
-                  msStaff = _parts[partId].staffNumberToIndex(mxmlStaff.toInt());
+                  msStaff = _parts[partId].mxmlToMsStaff(mxmlStaff.toInt());
                   if (0 <= msStaff && msStaff < nstaves)
                         ;  //qDebug("direction staff %d", staff + 1);
                   else {
@@ -3349,7 +3436,7 @@ void MusicXMLParserPass1::note(const QString& partId,
             else if (_e.name() == "staff") {
                   auto ok = false;
                   auto mxmlStaff = _e.readElementText();
-                  msStaff = _parts[partId].staffNumberToIndex(mxmlStaff.toInt(&ok));
+                  msStaff = _parts[partId].mxmlToMsStaff(mxmlStaff.toInt(&ok));
                   _parts[partId].setMaxStaff(msStaff);
                   Part* part = _partMap.value(partId);
                   Q_ASSERT(part);
