@@ -125,7 +125,7 @@ void UiTheme::initThemeValues()
     m_focusColor = themeValues[FOCUS_COLOR].toString();
 
     m_borderWidth = themeValues[BORDER_WIDTH].toReal();
-    //m_navCtrlBorderWidth = 2;
+    m_navCtrlBorderWidth = 2.0;
     m_accentOpacityNormal = themeValues[ACCENT_OPACITY_NORMAL].toReal();
     m_accentOpacityHover = themeValues[ACCENT_OPACITY_HOVER].toReal();
     m_accentOpacityHit = themeValues[ACCENT_OPACITY_HIT].toReal();
@@ -262,10 +262,10 @@ qreal UiTheme::borderWidth() const
     return m_borderWidth;
 }
 
-//qreal UiTheme::navCtrlBorderWidth() const
-//{
-//    return m_navCtrlBorderWidth;
-//}
+qreal UiTheme::navCtrlBorderWidth() const
+{
+    return m_navCtrlBorderWidth;
+}
 
 qreal UiTheme::accentOpacityNormal() const
 {
@@ -462,7 +462,8 @@ void UiTheme::unpolish(QWidget* widget)
     }
 }
 
-void UiTheme::drawPrimitive(QStyle::PrimitiveElement element, const QStyleOption* option, QPainter* painter, const QWidget* widget) const
+void UiTheme::drawPrimitive(QStyle::PrimitiveElement element, const QStyleOption* option, QPainter* painter,
+                            const QWidget* widget) const
 {
     const bool enabled = option->state & State_Enabled;
     const bool hovered = option->state & State_MouseOver;
