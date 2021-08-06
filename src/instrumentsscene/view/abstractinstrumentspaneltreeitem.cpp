@@ -100,11 +100,6 @@ void AbstractInstrumentsPanelTreeItem::setParentItem(AbstractInstrumentsPanelTre
     m_parent = parent;
 }
 
-QList<AbstractInstrumentsPanelTreeItem*> AbstractInstrumentsPanelTreeItem::childrenItems() const
-{
-    return m_children;
-}
-
 bool AbstractInstrumentsPanelTreeItem::isEmpty() const
 {
     return m_children.isEmpty();
@@ -128,6 +123,15 @@ AbstractInstrumentsPanelTreeItem* AbstractInstrumentsPanelTreeItem::childAtRow(c
     }
 
     return m_children.at(row);
+}
+
+int AbstractInstrumentsPanelTreeItem::indexOf(const AbstractInstrumentsPanelTreeItem* item) const
+{
+    IF_ASSERT_FAILED(item) {
+        return -1;
+    }
+
+    return m_children.indexOf(const_cast<AbstractInstrumentsPanelTreeItem*>(item));
 }
 
 void AbstractInstrumentsPanelTreeItem::appendChild(AbstractInstrumentsPanelTreeItem* child)
@@ -211,7 +215,7 @@ int AbstractInstrumentsPanelTreeItem::row() const
         return 0;
     }
 
-    return parentItem()->childrenItems().indexOf(const_cast<AbstractInstrumentsPanelTreeItem*>(this));
+    return parentItem()->indexOf(this);
 }
 
 void AbstractInstrumentsPanelTreeItem::setType(InstrumentsTreeItemType::ItemType type)

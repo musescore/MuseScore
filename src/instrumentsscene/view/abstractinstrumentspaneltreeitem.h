@@ -64,11 +64,11 @@ public:
     AbstractInstrumentsPanelTreeItem* parentItem() const;
     void setParentItem(AbstractInstrumentsPanelTreeItem* parent);
 
-    QList<AbstractInstrumentsPanelTreeItem*> childrenItems() const;
     bool isEmpty() const;
 
     AbstractInstrumentsPanelTreeItem* childAtId(const ID& id) const;
     AbstractInstrumentsPanelTreeItem* childAtRow(const int row) const;
+    int indexOf(const AbstractInstrumentsPanelTreeItem* item) const;
 
     void appendChild(AbstractInstrumentsPanelTreeItem* child);
     void insertChild(AbstractInstrumentsPanelTreeItem* child, const int beforeRow);

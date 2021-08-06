@@ -110,6 +110,7 @@ private:
 
     void setupPartsConnections();
     void setupStavesConnections(const ID& stavesPartId);
+    void listenSelectionChanged();
 
     void clear();
     void deleteItems();
