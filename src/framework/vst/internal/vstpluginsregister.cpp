@@ -164,5 +164,7 @@ void VstPluginsRegister::unregisterMasterFxPlugin(const audio::AudioResourceId& 
 {
     ONLY_AUDIO_THREAD(threadSecurer);
 
+    std::lock_guard lock(m_mutex);
+
     m_masterPluginsMap.erase(resourceId);
 }
