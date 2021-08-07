@@ -96,7 +96,7 @@ mu::Ret SvgWriter::write(INotationPtr notation, Device& destinationDevice, const
     Ms::MScore::pixelRatio = Ms::DPI / printer.logicalDpiX();
 
     if (!options[OptionKey::TRANSPARENT_BACKGROUND].toBool()) {
-        painter.fillRect(pageRect, engravingConfiguration()->whiteColor());
+        painter.fillRect(pageRect, mu::draw::Color::white);
     }
 
     // 1st pass: StaffLines

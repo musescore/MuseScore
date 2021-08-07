@@ -337,7 +337,7 @@ void SlurTieSegment::undoChangeProperty(Pid pid, const QVariant& val, PropertyFl
 void SlurTieSegment::writeSlur(XmlWriter& xml, int no) const
 {
     if (visible() && autoplace()
-        && (color() == Ms::MScore::defaultColor)
+        && (color() == engravingConfiguration()->defaultColor())
         && offset().isNull()
         && ups(Grip::START).off.isNull()
         && ups(Grip::BEZIER1).off.isNull()
@@ -404,21 +404,14 @@ void SlurTieSegment::drawEditMode(mu::draw::Painter* p, EditData& ed)
     polygon[4] = PointF(ed.grip[int(Grip::END)].center());
     polygon[5] = PointF(ed.grip[int(Grip::DRAG)].center());
     polygon[6] = PointF(ed.grip[int(Grip::START)].center());
-    p->setPen(Pen(MScore::frameMarginColor, 0.0));
+    p->setPen(Pen(engravingConfiguration()->formattingMarksColor(), 0.0));
     p->drawPolyline(polygon);
 
-    p->setPen(Pen(MScore::defaultColor, 0.0));
+    p->setPen(Pen(engravingConfiguration()->defaultColor(), 0.0));
     for (int i = 0; i < ed.grips; ++i) {
-        // This must be done with an if-else statement rather than a ternary operator.
-        // This is because there are two setBrush methods that take different types
-        // of argument, either a Qt::BrushStyle or a QBrush. Since a QBrush can be
-        // constructed from a QColour, passing Mscore::frameMarginColor works.
-        // BrushStyle::NoBrush is a Qt::BrushStyle, however, so if it is passed in a ternary
-        // operator with a QColor, a new QColor will be created from it, and from that
-        // a QBrush. Instead, what we really want to do is pass BrushStyle::NoBrush as a
-        // Qt::BrushStyle, therefore this requires two separate function calls:
+        // Can't use ternary operator, because we want different overloads of `setBrush`
         if (Grip(i) == ed.curGrip) {
-            p->setBrush(MScore::frameMarginColor);
+            p->setBrush(engravingConfiguration()->formattingMarksColor());
         } else {
             p->setBrush(BrushStyle::NoBrush);
         }

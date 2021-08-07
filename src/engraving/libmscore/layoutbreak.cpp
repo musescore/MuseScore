@@ -23,7 +23,6 @@
 #include "layoutbreak.h"
 #include "io/xml.h"
 #include "score.h"
-#include "mscore.h"
 
 using namespace mu;
 using namespace mu::draw;
@@ -126,7 +125,7 @@ void LayoutBreak::draw(mu::draw::Painter* painter) const
     }
 
     Pen pen;
-    pen.setColor(selected() ? MScore::selectColor[0] : MScore::layoutBreakColor);
+    pen.setColor(selected() ? engravingConfiguration()->selectionColor() : engravingConfiguration()->formattingMarksColor());
     pen.setWidthF(lw / 2);
     pen.setJoinStyle(PenJoinStyle::MiterJoin);
     pen.setCapStyle(PenCapStyle::SquareCap);

@@ -68,6 +68,8 @@ public:
     void setBlue(int value);
     void setAlpha(int value);
 
+    Color withAlpha(int value) const;
+
     bool operator==(const Color& other) const;
     bool operator!=(const Color& other) const;
 
@@ -84,6 +86,13 @@ public:
 #endif
 
     static constexpr int DEFAULT_ALPHA = 255;
+
+    static const Color black;
+    static const Color white;
+    static const Color transparent;
+    static const Color redColor;
+    static const Color greenColor;
+    static const Color blueColor;
 
 private:
 

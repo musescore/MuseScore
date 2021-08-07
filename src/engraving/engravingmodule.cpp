@@ -40,7 +40,7 @@
 using namespace mu::engraving;
 using namespace mu::modularity;
 
-static std::shared_ptr<IEngravingConfiguration> s_configuration;
+static std::shared_ptr<EngravingConfiguration> s_configuration = std::make_shared<EngravingConfiguration>();
 
 static void engraving_init_qrc()
 {
@@ -57,7 +57,7 @@ void EngravingModule::registerExports()
 #ifndef NO_ENGRAVING_INTERNAL
     ioc()->registerExport<draw::IFontProvider>(moduleName(), new draw::QFontProvider());
     ioc()->registerExport<draw::IImageProvider>(moduleName(), new draw::QImageProvider());
-    ioc()->registerExport<IEngravingConfiguration>(moduleName(), new EngravingConfiguration());
+    ioc()->registerExport<IEngravingConfiguration>(moduleName(), s_configuration);
 #endif
 }
 
@@ -77,15 +77,12 @@ void EngravingModule::registerUiTypes()
 
 void EngravingModule::onInit(const framework::IApplication::RunMode&)
 {
+    s_configuration->init();
+
     Ms::MScore::init(); // initialize libmscore
 
-    auto configuration = ioc()->resolve<IEngravingConfiguration>(moduleName());
-    if (configuration) {
-        DefaultStyle::instance()->init(configuration->defaultStyleFilePath(),
-                                       configuration->partStyleFilePath());
-    } else {
-        DefaultStyle::instance()->init(QString(), QString());
-    }
+    DefaultStyle::instance()->init(s_configuration->defaultStyleFilePath(),
+                                   s_configuration->partStyleFilePath());
 
     Ms::MScore::setNudgeStep(0.1); // cursor key (default 0.1)
     Ms::MScore::setNudgeStep10(1.0); // Ctrl + cursor key (default 1.0)

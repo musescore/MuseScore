@@ -94,7 +94,7 @@ private:
 class SLine : public Spanner
 {
     qreal _lineWidth;
-    mu::draw::Color _lineColor       { MScore::defaultColor };
+    mu::draw::Color _lineColor { engravingConfiguration()->defaultColor() };
     mu::draw::PenStyle _lineStyle { mu::draw::PenStyle::SolidLine };
     qreal _dashLineLen      { 5.0 };
     qreal _dashGapLen       { 5.0 };

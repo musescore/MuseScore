@@ -80,28 +80,28 @@ class HDegree;
 
 class Harmony final : public TextBase
 {
-    int _rootTpc;                         // root note for chord
-    int _baseTpc;                         // bass note or chord base; used for "slash" chords
-                                          // or notation of base note in chord
-    int _id;                              // >0 = id of matched chord from chord list, if applicable
-                                          // -1 = invalid chord
-                                          // <-10000 = private id of generated chord or matched chord with no id
-    QString _function;                    // numeric representation of root for RNA or Nashville
-    QString _userName;                    // name as typed by user if applicable
-    QString _textName;                    // name recognized from chord list, read from score file, or constructed from imported source
-    ParsedChord* _parsedForm;             // parsed form of chord
-    bool showSpell = false;               // show spell check warning
-    HarmonyType _harmonyType;             // used to control rendering, transposition, export, etc.
-    qreal _harmonyHeight;                 // used for calculating the the height is frame while editing.
+    int _rootTpc;               // root note for chord
+    int _baseTpc;               // bass note or chord base; used for "slash" chords
+                                // or notation of base note in chord
+    int _id;                    // >0 = id of matched chord from chord list, if applicable
+                                // -1 = invalid chord
+                                // <-10000 = private id of generated chord or matched chord with no id
+    QString _function;          // numeric representation of root for RNA or Nashville
+    QString _userName;          // name as typed by user if applicable
+    QString _textName;          // name recognized from chord list, read from score file, or constructed from imported source
+    ParsedChord* _parsedForm;   // parsed form of chord
+    bool _isMisspelled = false; // show spell check warning
+    HarmonyType _harmonyType;   // used to control rendering, transposition, export, etc.
+    qreal _harmonyHeight;       // used for calculating the the height is frame while editing.
 
-    mutable RealizedHarmony _realizedHarmony;      //the realized harmony used for playback
+    mutable RealizedHarmony _realizedHarmony; // the realized harmony used for playback
 
     QList<HDegree> _degreeList;
-    QList<mu::draw::Font> fontList;                // temp values used in render()
-    QList<TextSegment*> textList;         // rendered chord
+    QList<mu::draw::Font> fontList; // temp values used in render()
+    QList<TextSegment*> textList;   // rendered chord
 
-    bool _leftParen, _rightParen;         // include opening and/or closing parenthesis
-    bool _play;                           // whether or not to play back the harmony
+    bool _leftParen, _rightParen;   // include opening and/or closing parenthesis
+    bool _play;                     // whether or not to play back the harmony
 
     mutable mu::RectF _tbbox;
 

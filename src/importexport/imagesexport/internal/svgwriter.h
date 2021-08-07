@@ -27,13 +27,11 @@
 
 #include "modularity/ioc.h"
 #include "iimagesexportconfiguration.h"
-#include "iengravingconfiguration.h"
 
 namespace mu::iex::imagesexport {
 class SvgWriter : public AbstractImageWriter
 {
     INJECT(iex, IImagesExportConfiguration, configuration)
-    INJECT(notation, mu::engraving::IEngravingConfiguration, engravingConfiguration)
 
 public:
     std::vector<project::INotationWriter::UnitType> supportedUnitTypes() const override;
