@@ -190,7 +190,7 @@ mu::Ret MasterNotation::setupNewScore(Ms::MasterScore* score, Ms::MasterScore* t
                 int staffIdx = staff->idx();
                 if (tick.isZero()) {
                     Ms::TimeSig* ts = new Ms::TimeSig(_score);
-                    ts->setTrack(staffIdx * VOICES);
+                    ts->setTrack(staffIdx * Ms::VOICES);
                     ts->setSig(timesig, scoreOptions.timesigType);
                     Ms::Measure* m = _score->firstMeasure();
                     Ms::Segment* s = m->getSegment(Ms::SegmentType::TimeSig, Ms::Fraction(0, 1));
@@ -210,7 +210,7 @@ mu::Ret MasterNotation::setupNewScore(Ms::MasterScore* score, Ms::MasterScore* t
                         if (nKey.custom() || nKey.isAtonal() || nKey.key() != Key::C) {
                             staff->setKey(Ms::Fraction(0, 1), nKey);
                             Ms::KeySig* keysig = new Ms::KeySig(score);
-                            keysig->setTrack(staffIdx * VOICES);
+                            keysig->setTrack(staffIdx * Ms::VOICES);
                             keysig->setKeySigEvent(nKey);
                             Ms::Segment* ss = measure->getSegment(Ms::SegmentType::KeySig, Ms::Fraction(0, 1));
                             ss->add(keysig);
@@ -237,7 +237,7 @@ mu::Ret MasterNotation::setupNewScore(Ms::MasterScore* score, Ms::MasterScore* t
                             }
                             rest->setScore(_score);
                             rest->setTicks(d.fraction());
-                            rest->setTrack(staffIdx * VOICES);
+                            rest->setTrack(staffIdx * Ms::VOICES);
                             Ms::Segment* seg = measure->getSegment(Ms::SegmentType::ChordRest, ltick);
                             seg->add(rest);
                             ltick += rest->actualTicks();
@@ -252,7 +252,7 @@ mu::Ret MasterNotation::setupNewScore(Ms::MasterScore* score, Ms::MasterScore* t
                     }
                     rest->setScore(_score);
                     rest->setTicks(measure->ticks());
-                    rest->setTrack(staffIdx * VOICES);
+                    rest->setTrack(staffIdx * Ms::VOICES);
                     Ms::Segment* seg = measure->getSegment(Ms::SegmentType::ChordRest, tick);
                     seg->add(rest);
                 }

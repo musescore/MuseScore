@@ -80,9 +80,7 @@ static constexpr int MSCVERSION = 400;
 
 enum class HairpinType : signed char;
 
-#ifndef VOICES
-#define VOICES 4
-#endif
+static constexpr int VOICES = 4;
 
 static constexpr int INVALID_INDEX = -1;
 
