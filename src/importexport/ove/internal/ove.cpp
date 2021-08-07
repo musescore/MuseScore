@@ -4405,7 +4405,7 @@ bool OvscParse::parse()
     Block placeHolder;
 
     m_handle = &handle;
-    auto _ = ResetToNull(&m_handle);
+    auto _ = ResetToNull<StreamHandle>(&m_handle);
 
     // version
     if (!readBuffer(placeHolder, 1)) {
@@ -4498,7 +4498,7 @@ bool TrackParse::parse()
     Block placeHolder;
 
     m_handle = &handle;
-    auto _ = ResetToNull(&m_handle);
+    auto _ = ResetToNull<StreamHandle>(&m_handle);
 
     Track* oveTrack = new Track();
     m_ove->addTrack(oveTrack);
@@ -4847,7 +4847,7 @@ bool PageGroupParse::parsePage(SizeChunk* chunk, Page* page)
     StreamHandle handle(chunk->getDataBlock()->data(), chunk->getSizeBlock()->toSize());
 
     m_handle = &handle;
-    auto _ = ResetToNull(&m_handle);
+    auto _ = ResetToNull<StreamHandle>(&m_handle);
 
     // begin line
     if (!readBuffer(placeHolder, 2)) {
@@ -4945,7 +4945,7 @@ unsigned int StaffCountGetter::getStaffCount(SizeChunk* chunk)
     Block placeHolder;
 
     m_handle = &handle;
-    auto _ = ResetToNull(&m_handle);
+    auto _ = ResetToNull<StreamHandle>(&m_handle);
 
     if (!jump(6)) {
         return false;
@@ -5025,7 +5025,7 @@ bool LineGroupParse::parseLine(SizeChunk* chunk, Line* line)
     StreamHandle handle(chunk->getDataBlock()->data(), chunk->getSizeBlock()->toSize());
 
     m_handle = &handle;
-    auto _ = ResetToNull(&m_handle);
+    auto _ = ResetToNull<StreamHandle>(&m_handle);
 
     if (!jump(2)) {
         return false;
@@ -5079,7 +5079,7 @@ bool LineGroupParse::parseStaff(SizeChunk* chunk, Staff* staff)
     StreamHandle handle(chunk->getDataBlock()->data(), chunk->getSizeBlock()->toSize());
 
     m_handle = &handle;
-    auto _ = ResetToNull(&m_handle);
+    auto _ = ResetToNull<StreamHandle>(&m_handle);
 
     if (!jump(7)) {
         return false;
@@ -5255,7 +5255,7 @@ bool BarsParse::parseMeas(Measure* measure, SizeChunk* chunk)
     StreamHandle measureHandle(chunk->getDataBlock()->data(), chunk->getSizeBlock()->toSize());
 
     m_handle = &measureHandle;
-    auto _ = ResetToNull(&m_handle);
+    auto _ = ResetToNull<StreamHandle>(&m_handle);
 
     if (!jump(2)) {
         return false;
@@ -5334,7 +5334,7 @@ bool BarsParse::parseCond(Measure* measure, MeasureData* measureData, SizeChunk*
     StreamHandle handle(chunk->getDataBlock()->data(), chunk->getSizeBlock()->toSize());
 
     m_handle = &handle;
-    auto _ = ResetToNull(&m_handle);
+    auto _ = ResetToNull<StreamHandle>(&m_handle);
 
     // item count
     if (!readBuffer(placeHolder, 2)) {
@@ -6102,7 +6102,7 @@ bool BarsParse::parseBdat(Measure* /* measure */, MeasureData* measureData, Size
     StreamHandle handle(chunk->getDataBlock()->data(), chunk->getSizeBlock()->toSize());
 
     m_handle = &handle;
-    auto _ = ResetToNull(&m_handle);
+    auto _ = ResetToNull<StreamHandle>(&m_handle);
 
     // parse here
     if (!readBuffer(placeHolder, 2)) {
@@ -9302,7 +9302,7 @@ bool LyricChunkParse::parse()
     Block placeHolder;
 
     m_handle = &handle;
-    auto _ = ResetToNull(&m_handle);
+    auto _ = ResetToNull<StreamHandle>(&m_handle);
 
     if (!jump(4)) {
         return false;
@@ -9519,7 +9519,7 @@ bool TitleChunkParse::parse()
     unsigned int titleType;
 
     m_handle = &handle;
-    auto _ = ResetToNull(&m_handle);
+    auto _ = ResetToNull<StreamHandle>(&m_handle);
 
     if (!readBuffer(typeBlock, 4)) {
         return false;
