@@ -40,8 +40,9 @@
 <museScore version="1.24" type="chordStyle" styleName="Jazz" usePresets="true" description="This is Jazz">
 
   <quality q = "major7th">
-    <sym eAdj = "-2">Ma 7</sym>
-    <sym>maj 7</sym>
+    <sym eAdj = "-2">MA 7</sym>
+    <sym eAdj = "-2">ma 7</sym>
+    <sym eAdj = "-2">maj 7</sym>
   </quality>
 
   <quality q = "minor">
@@ -55,6 +56,7 @@
   <quality q = "augmented">
     <sym qMag = "0.6" qAdj = "-4">+</sym>
     <sym>aug</sym>
+    <sym>Aug</sym>
   </quality>
 
   <quality q = "diminished">
@@ -117,7 +119,8 @@
   <!-- Major chords -->
     <sym value="maj" name="maj"/>
     <sym value="Maj" name="Maj"/>
-    <sym code="0xe180" name="Ma"/>
+    <sym code="0xe180" name="MA"/>
+    <sym value="Ma" name="Ma"/>
     <sym value="ma" name="ma"/>
     <sym value="M" name="M"/>
     <sym code="0xe18a" name="triangle"/>
@@ -235,6 +238,11 @@
   <token class="quality">
     <name>Maj</name>
     <render>Maj</render>
+    </token>
+
+  <token class="quality">
+    <name>MA</name>
+    <render>MA</render>
     </token>
 
   <token class="quality">
