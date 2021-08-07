@@ -153,6 +153,8 @@ else()
 endif()
 
 set_source_files_properties( # For these files, Unity Build does not work
+    ${CMAKE_CURRENT_LIST_DIR}/libmscore/chordlist.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/compat/chordlist.cpp
     ${CMAKE_CURRENT_LIST_DIR}/compat/read114.cpp
     ${CMAKE_CURRENT_LIST_DIR}/compat/read206.cpp
     PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON
