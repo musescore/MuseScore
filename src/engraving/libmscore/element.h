@@ -26,6 +26,7 @@
 #include "elementgroup.h"
 #include "spatium.h"
 #include "fraction.h"
+#include "mscore.h"
 #include "scoreElement.h"
 #include "shape.h"
 #include "sig.h"
@@ -49,10 +50,6 @@ namespace Ms {
 #define CONTROL_MODIFIER Qt::AltModifier
 #else
 #define CONTROL_MODIFIER Qt::ControlModifier
-#endif
-
-#ifndef VOICES
-#define VOICES 4
 #endif
 
 enum class Pid;

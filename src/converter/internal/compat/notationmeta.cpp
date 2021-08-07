@@ -147,7 +147,7 @@ QString NotationMeta::poet(const Ms::Score* score)
 QString NotationMeta::timesig(const Ms::Score* score)
 {
     int staves = score->nstaves();
-    int tracks = staves * VOICES;
+    int tracks = staves * Ms::VOICES;
     const Ms::Segment* timeSigSegment = score->firstSegmentMM(Ms::SegmentType::TimeSig);
     if (!timeSigSegment) {
         return QString();

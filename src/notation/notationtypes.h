@@ -679,18 +679,18 @@ static constexpr int MAX_NOTES_INTERVAL = 9;
 
 static constexpr int MAX_FRET = 14;
 
-inline bool isNotesIntervalValid(int interval)
+constexpr bool isNotesIntervalValid(int interval)
 {
     return interval >= MIN_NOTES_INTERVAL && interval <= MAX_NOTES_INTERVAL
            && interval != 0 && interval != -1;
 }
 
-inline bool isVoiceIndexValid(int voiceIndex)
+constexpr bool isVoiceIndexValid(int voiceIndex)
 {
-    return 0 <= voiceIndex && voiceIndex < VOICES;
+    return 0 <= voiceIndex && voiceIndex < Ms::VOICES;
 }
 
-inline bool isFretIndexValid(int fretIndex)
+constexpr bool isFretIndexValid(int fretIndex)
 {
     return 0 <= fretIndex && fretIndex < MAX_FRET;
 }

@@ -23,6 +23,7 @@
 
 #include "global/settings.h"
 #include "draw/color.h"
+#include "libmscore/mscore.h"
 
 #include "log.h"
 
@@ -38,18 +39,18 @@ struct VoiceColorKey {
     Color color;
 };
 
-static VoiceColorKey voiceColorKeys[VOICES];
+static VoiceColorKey voiceColorKeys[Ms::VOICES];
 
 void EngravingConfiguration::init()
 {
-    Color defaultVoiceColors[VOICES] {
+    Color defaultVoiceColors[Ms::VOICES] {
         "#0065BF",
         "#007F00",
         "#C53F00",
         "#C31989"
     };
 
-    for (int voice = 0; voice < VOICES; ++voice) {
+    for (int voice = 0; voice < Ms::VOICES; ++voice) {
         Settings::Key key("engraving", "engraving/colors/voice" + std::to_string(voice + 1));
 
         settings()->setDefaultValue(key, Val(defaultVoiceColors[voice].toQColor()));
