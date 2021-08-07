@@ -65,12 +65,7 @@ void Sticking::write(XmlWriter& xml) const
 
 void Sticking::read(XmlReader& e)
 {
-    while (e.readNextStartElement()) {
-        if (!TextBase::readProperties(e)) {
-            e.unknown();
-        }
-    }
-    styleChanged();
+    TextBase::read(e);
 }
 
 //---------------------------------------------------------

@@ -1440,6 +1440,24 @@ const UiActionList NotationUiActions::m_scoreConfigActions = {
              QT_TRANSLATE_NOOP("action", "Add lyric verse"),
              QT_TRANSLATE_NOOP("action", "Adds a new verse and starts editing"),
              Checkable::Yes
+             ),
+    UiAction("text-b",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Bold face"),
+             QT_TRANSLATE_NOOP("action", "Bold face"),
+             Checkable::Yes
+             ),
+    UiAction("text-i",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Italic"),
+             QT_TRANSLATE_NOOP("action", "Italic"),
+             Checkable::Yes
+             ),
+    UiAction("text-u",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Underline"),
+             QT_TRANSLATE_NOOP("action", "Underline"),
+             Checkable::Yes
              )
 };
 

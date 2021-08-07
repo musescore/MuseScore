@@ -128,6 +128,10 @@ private:
     void addMelisma();
     void addLyricsVerse();
 
+    void toggleBold();
+    void toggleItalic();
+    void toggleUnderline();
+
     void toggleLayoutBreak(LayoutBreakType breakType);
 
     void splitMeasure();
@@ -204,12 +208,18 @@ private:
     bool isNotationPage() const;
     bool isStandardStaff() const;
     bool isTablatureStaff() const;
-    void registerAction(const mu::actions::ActionCode&, void (NotationActionController::*)(), bool (NotationActionController::*)() const);
-    void registerAction(const mu::actions::ActionCode&, std::function<void()>, bool (NotationActionController::*)() const);
+    void registerAction(const mu::actions::ActionCode&, void (NotationActionController::*)(const actions::ActionData& data),
+                        bool (NotationActionController::*)() const = &NotationActionController::isNotEditingText);
+    void registerAction(const mu::actions::ActionCode&, void (NotationActionController::*)(),
+                        bool (NotationActionController::*)() const = &NotationActionController::isNotEditingText);
+    void registerAction(const mu::actions::ActionCode&, std::function<void()>,
+                        bool (NotationActionController::*)() const = &NotationActionController::isNotEditingText);
     void registerNoteInputAction(const mu::actions::ActionCode&, NoteInputMethod inputMethod);
     void registerNoteAction(const mu::actions::ActionCode&, NoteName, NoteAddingMode addingMode = NoteAddingMode::NextChord);
     void registerPadNoteAction(const mu::actions::ActionCode&, Pad padding);
     void registerLyricsAction(const mu::actions::ActionCode&, void (NotationActionController::*)());
+    void registerTextAction(const mu::actions::ActionCode&, void (NotationActionController::*)());
+    void registerMoveAction(const mu::actions::ActionCode&);
 
     async::Notification m_currentNotationNoteInputChanged;
 };

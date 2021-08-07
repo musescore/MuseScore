@@ -73,7 +73,7 @@
         <stem>up</stem>
         <lyric number="1">
           <syllabic>single</syllabic>
-          <text font-family="Edwin">dyn</text>
+          <text>dyn</text>
           </lyric>
         </note>
       <note>
@@ -87,7 +87,7 @@
         <stem>up</stem>
         <lyric number="1">
           <syllabic>single</syllabic>
-          <text font-family="Edwin">hairpin</text>
+          <text>hairpin</text>
           </lyric>
         </note>
       <note>
@@ -138,7 +138,7 @@
         <stem>up</stem>
         <lyric number="1">
           <syllabic>single</syllabic>
-          <text font-family="Edwin">combined</text>
+          <text>combined</text>
           </lyric>
         </note>
       <note>

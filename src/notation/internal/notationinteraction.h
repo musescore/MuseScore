@@ -196,6 +196,10 @@ public:
     void addMelisma() override;
     void addLyricsVerse() override;
 
+    void toggleBold() override;
+    void toggleItalic() override;
+    void toggleUnderline() override;
+
 private:
     Ms::Score* score() const;
 
@@ -211,6 +215,7 @@ private:
     void notifyAboutTextEditingChanged();
     void doDragLasso(const PointF& p);
     void endLasso();
+    void toggleFontStyle(Ms::FontStyle);
 
     Ms::Page* point2page(const PointF& p) const;
     QList<Element*> hitElements(const PointF& p_in, float w) const;

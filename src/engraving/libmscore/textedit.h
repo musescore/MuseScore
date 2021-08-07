@@ -60,13 +60,75 @@ struct TextEditData : public ElementEditData {
 class TextEditUndoCommand : public UndoCommand
 {
 protected:
-    TextCursor c;
+    TextCursor _cursor;
 public:
     TextEditUndoCommand(const TextCursor& tc)
-        : c(tc) {}
+        : _cursor(tc) {}
     bool isFiltered(UndoCommand::Filter f, const Element* target) const override
     {
-        return f == UndoCommand::Filter::TextEdit && c.text() == target;
+        return f == UndoCommand::Filter::TextEdit && _cursor.text() == target;
+    }
+
+    TextCursor& cursor() { return _cursor; }
+};
+
+//---------------------------------------------------------
+//   ChangeText
+//---------------------------------------------------------
+
+class ChangeTextProperties : public TextEditUndoCommand
+{
+    QString xmlText;
+    Pid propertyId;
+    QVariant propertyVal;
+    FontStyle existingStyle;
+
+    void restoreSelection()
+    {
+        TextCursor& tc = cursor();
+        tc.text()->cursor()->setSelectLine(tc.selectLine());
+        tc.text()->cursor()->setSelectColumn(tc.selectColumn());
+        tc.text()->cursor()->setRow(tc.row());
+        tc.text()->cursor()->setColumn(tc.column());
+    }
+
+public:
+    ChangeTextProperties(const TextCursor* tc, Ms::Pid propId, const QVariant& propVal)
+        : TextEditUndoCommand(*tc)
+    {
+        propertyId = propId;
+        propertyVal = propVal;
+        if (propertyId == Pid::FONT_STYLE) {
+            existingStyle = static_cast<FontStyle>(cursor().text()->getProperty(propId).toInt());
+        }
+    }
+
+    virtual void undo(EditData*) override
+    {
+        cursor().text()->resetFormatting();
+        cursor().text()->setXmlText(xmlText);
+        restoreSelection();
+        cursor().text()->layout();
+    }
+
+    virtual void redo(EditData*) override
+    {
+        xmlText = cursor().text()->xmlText();
+        restoreSelection();
+        if (propertyId == Pid::FONT_STYLE) {
+            FontStyle setStyle = static_cast<FontStyle>(propertyVal.toInt());
+            if ((setStyle& FontStyle::Bold) != (existingStyle & FontStyle::Bold)) {
+                cursor().setFormat(FormatId::Bold, setStyle & FontStyle::Bold);
+            }
+            if ((setStyle& FontStyle::Italic) != (existingStyle & FontStyle::Italic)) {
+                cursor().setFormat(FormatId::Italic, setStyle & FontStyle::Italic);
+            }
+            if ((setStyle& FontStyle::Underline) != (existingStyle & FontStyle::Underline)) {
+                cursor().setFormat(FormatId::Underline, setStyle & FontStyle::Underline);
+            }
+        } else {
+            cursor().text()->setProperty(propertyId, propertyVal);
+        }
     }
 };
 
@@ -87,7 +149,6 @@ public:
         : TextEditUndoCommand(*tc), s(t) {}
     virtual void undo(EditData*) override = 0;
     virtual void redo(EditData*) override = 0;
-    const TextCursor& cursor() const { return c; }
     const QString& string() const { return s; }
 };
 
@@ -116,7 +177,7 @@ public:
         : ChangeText(tc, t) {}
     virtual void redo(EditData* ed) override { removeText(ed); }
     virtual void undo(EditData* ed) override { insertText(ed); }
-    UNDO_NAME("InsertText")
+    UNDO_NAME("RemoveText")
 };
 
 //---------------------------------------------------------

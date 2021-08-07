@@ -2016,6 +2016,7 @@ void NotationInteraction::endEditText()
     m_textEditData.clearData();
 
     notifyAboutTextEditingChanged();
+    notifyAboutSelectionChanged();
 }
 
 void NotationInteraction::changeTextCursorPosition(const PointF& newCursorPos)
@@ -2050,11 +2051,13 @@ const TextBase* NotationInteraction::editedText() const
 void NotationInteraction::undo()
 {
     m_undoStack->undo(&m_textEditData);
+    notifyAboutSelectionChanged();
 }
 
 void NotationInteraction::redo()
 {
     m_undoStack->redo(&m_textEditData);
+    notifyAboutSelectionChanged();
 }
 
 mu::async::Notification NotationInteraction::textEditingStarted() const
@@ -3457,4 +3460,33 @@ void NotationInteraction::addLyricsVerse()
 
     score()->select(lyrics, SelectType::SINGLE, 0);
     startEditText(lyrics, PointF());
+}
+
+void NotationInteraction::toggleFontStyle(Ms::FontStyle style)
+{
+    if (!m_textEditData.element || !m_textEditData.element->isTextBase()) {
+        qWarning("toggleFontStyle called with invalid current element");
+        return;
+    }
+    Ms::TextBase* text = toTextBase(m_textEditData.element);
+    int currentStyle = text->getProperty(Ms::Pid::FONT_STYLE).toInt();
+    score()->startCmd();
+    text->undoChangeProperty(Ms::Pid::FONT_STYLE, QVariant::fromValue(currentStyle ^ static_cast<int>(style)), Ms::PropertyFlags::UNSTYLED);
+    score()->endCmd();
+    notifyAboutTextEditingChanged();
+}
+
+void NotationInteraction::toggleBold()
+{
+    toggleFontStyle(Ms::FontStyle::Bold);
+}
+
+void NotationInteraction::toggleItalic()
+{
+    toggleFontStyle(Ms::FontStyle::Italic);
+}
+
+void NotationInteraction::toggleUnderline()
+{
+    toggleFontStyle(Ms::FontStyle::Underline);
 }
