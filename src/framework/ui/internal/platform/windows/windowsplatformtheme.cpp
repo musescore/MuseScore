@@ -40,12 +40,16 @@ HANDLE hStopListeningEvent = nullptr;
 WindowsPlatformTheme::WindowsPlatformTheme()
 {
     using fnRtlGetNtVersionNumbers = void(WINAPI*)(LPDWORD major, LPDWORD minor, LPDWORD build);
+
+    // The (void*) cast silences an unnecessary MinGW warning about incompatible function cast
     auto rtlGetNtVersionNumbers
-        = reinterpret_cast<fnRtlGetNtVersionNumbers>(GetProcAddress(GetModuleHandleW(L"ntdll.dll"), "RtlGetNtVersionNumbers"));
+        = reinterpret_cast<fnRtlGetNtVersionNumbers>((void*)GetProcAddress(GetModuleHandleW(L"ntdll.dll"), "RtlGetNtVersionNumbers"));
     if (rtlGetNtVersionNumbers) {
-        DWORD major, minor, buildNumber;
-        rtlGetNtVersionNumbers(&major, &minor, &buildNumber);
+        DWORD buildNumber;
+        rtlGetNtVersionNumbers(NULL, NULL, &buildNumber);
         m_buildNumber = buildNumber & ~0xF0000000;
+    } else {
+        LOGE() << "Could not get Windows build number";
     }
 }
 
