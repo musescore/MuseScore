@@ -1468,6 +1468,37 @@ static void resetTuplets(Tuplets& tuplets)
       }
 
 //---------------------------------------------------------
+//   hideInstrumentChanges
+//---------------------------------------------------------
+/**
+ Dolet sometimes exports staff text where instrument changes should
+ be. Hide this staff text.
+ */
+
+static void hideInstrumentChanges(Score* score)
+      {
+      for (auto segment = score->firstSegment(SegmentType::ChordRest); segment; segment = segment->next1(SegmentType::ChordRest)) {
+            for (auto annotation : segment->annotations()) {                  
+                  if (annotation->visible() && annotation->isStaffText()) {
+                        StaffText* staffText = toStaffText(annotation);
+                        if (staffText->plainText() == "Instrument change") {
+                              staffText->setVisible(false);
+                              break;      
+                              }      
+                        else {
+                              for (auto instrument : *(annotation->part()->instruments())) {
+                                    if (staffText->plainText() == instrument.second->trackName()) {
+                                          staffText->setVisible(false);
+                                          break;
+                                          }
+                                    }
+                              }
+                        }
+                  }
+            }
+      }
+
+//---------------------------------------------------------
 //   cleanFretDiagrams
 //---------------------------------------------------------
 /**
@@ -1978,6 +2009,7 @@ void MusicXMLParserPass2::scorePartwise()
 
       _score->connectArpeggios();
       _score->fixupLaissezVibrer(); 
+      hideInstrumentChanges(_score);
       cleanFretDiagrams(_score->firstMeasure());
       if (_pass1.hasInferredHeaderText())
             reformatHeaderVBox(_score->measures()->first());
