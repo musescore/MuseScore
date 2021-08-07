@@ -1733,6 +1733,13 @@
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
+          <location>
+            <fractions>-7/8</fractions>
+            </location>
+          <StaffText>
+            <visible>0</visible>
+            <text>Piano</text>
+            </StaffText>
           </voice>
         </Measure>
       <Measure>

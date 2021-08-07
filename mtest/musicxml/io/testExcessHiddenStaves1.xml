@@ -921,6 +921,12 @@
         <stem>down</stem>
         <staff>10</staff>
         </note>
+			<direction>
+				<direction-type>
+					<words default-y='20' relative-x='-39'>Piano</words>
+				</direction-type>
+				<staff>9</staff>
+			</direction>
       <note default-x="16.50" default-y="-95.00">
         <chord/>
         <pitch>
