@@ -26,13 +26,13 @@ class Spanner;
 
 class SpannerMap : std::multimap<int, Spanner*> {
       mutable bool dirty;
-      mutable IntervalTree<Spanner*> tree;
-      std::vector< ::Interval<Spanner*> > results;
+      mutable interval_tree::IntervalTree<Spanner*> tree;
+      std::vector< interval_tree::Interval<Spanner*> > results;
 
    public:
       SpannerMap();
-      const std::vector< ::Interval<Spanner*> >& findContained(int start, int stop);
-      const std::vector< ::Interval<Spanner*> >& findOverlapping(int start, int stop);
+      const std::vector< interval_tree::Interval<Spanner*> >& findContained(int start, int stop);
+      const std::vector< interval_tree::Interval<Spanner*> >& findOverlapping(int start, int stop);
       const std::multimap<int, Spanner*>& map() const { return *this; }
       std::multimap<int,Spanner*>::const_reverse_iterator crbegin() const { return std::multimap<int, Spanner*>::crbegin(); }
       std::multimap<int,Spanner*>::const_reverse_iterator crend() const   { return std::multimap<int, Spanner*>::crend(); }
