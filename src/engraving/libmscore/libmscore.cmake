@@ -247,7 +247,6 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/segmentlist.h
     ${CMAKE_CURRENT_LIST_DIR}/select.cpp
     ${CMAKE_CURRENT_LIST_DIR}/select.h
-    ${CMAKE_CURRENT_LIST_DIR}/sequencer.h
     ${CMAKE_CURRENT_LIST_DIR}/shadownote.cpp
     ${CMAKE_CURRENT_LIST_DIR}/shadownote.h
     ${CMAKE_CURRENT_LIST_DIR}/shape.cpp

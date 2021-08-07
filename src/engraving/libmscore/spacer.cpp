@@ -25,7 +25,6 @@
 #include "io/xml.h"
 #include "score.h"
 #include "staff.h"
-#include "mscore.h"
 #include "measure.h"
 
 using namespace mu;
@@ -61,7 +60,7 @@ void Spacer::draw(mu::draw::Painter* painter) const
     if (score()->printing() || !score()->showUnprintable()) {
         return;
     }
-    Pen pen(selected() ? MScore::selectColor[0] : MScore::layoutBreakColor,
+    Pen pen(selected() ? engravingConfiguration()->selectionColor() : engravingConfiguration()->formattingMarksColor(),
             spatium() * 0.3);
     painter->setPen(pen);
     painter->setBrush(BrushStyle::NoBrush);

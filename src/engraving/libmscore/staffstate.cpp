@@ -28,7 +28,6 @@
 #include "segment.h"
 #include "staff.h"
 #include "part.h"
-#include "mscore.h"
 
 using namespace mu;
 using namespace mu::draw;
@@ -99,7 +98,7 @@ void StaffState::draw(mu::draw::Painter* painter) const
     if (score()->printing() || !score()->showUnprintable()) {
         return;
     }
-    Pen pen(selected() ? MScore::selectColor[0] : MScore::layoutBreakColor,
+    Pen pen(selected() ? engravingConfiguration()->selectionColor() : engravingConfiguration()->formattingMarksColor(),
             lw, PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
     painter->setPen(pen);
     painter->setBrush(BrushStyle::NoBrush);

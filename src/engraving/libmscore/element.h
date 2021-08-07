@@ -35,6 +35,9 @@
 #include "draw/geometry.h"
 #include "draw/painter.h"
 
+#include "modularity/ioc.h"
+#include "iengravingconfiguration.h"
+
 namespace mu {
 namespace score {
 class AccessibleElement;
@@ -186,6 +189,8 @@ public:
 
 class Element : public ScoreElement
 {
+    INJECT(engraving, mu::engraving::IEngravingConfiguration, engravingConfiguration)
+
     Element* _parent { 0 };
     mutable mu::RectF _bbox;  ///< Bounding box relative to _pos + _offset
     qreal _mag;                     ///< standard magnification (derived value)

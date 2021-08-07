@@ -72,10 +72,6 @@ public:
     virtual int cursorOpacity() const = 0;
 
     virtual QColor selectionColor(int voiceIndex = 0) const = 0;
-    virtual void setSelectionColor(int voiceIndex, const QColor& color) = 0;
-    virtual async::Channel<int> selectionColorChanged() = 0;
-
-    virtual QColor layoutBreakColor() const = 0;
 
     virtual int selectionProximity() const = 0;
     virtual void setSelectionProximity(int proxymity) = 0;

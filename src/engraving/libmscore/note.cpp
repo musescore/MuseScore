@@ -1392,7 +1392,7 @@ void Note::draw(mu::draw::Painter* painter) const
                     view->drawBackground(painter, bb);
                 }
             } else {
-                painter->fillRect(bb, engravingConfiguration()->whiteColor());
+                painter->fillRect(bb, mu::draw::Color::white);
             }
 
             if (fretConflict() && !score()->printing() && score()->showUnprintable()) {                //on fret conflict, draw on red background
@@ -1430,7 +1430,7 @@ void Note::draw(mu::draw::Painter* painter) const
         // draw blank notehead to avoid staff and ledger lines
         if (_cachedSymNull != SymId::noSym) {
             painter->save();
-            painter->setPen(engravingConfiguration()->whiteColor());
+            painter->setPen(mu::draw::Color::white);
             drawSymbol(_cachedSymNull, painter);
             painter->restore();
         }
@@ -1453,7 +1453,8 @@ void Note::write(XmlWriter& xml) const
     _el.write(xml);
     bool write_dots = false;
     for (NoteDot* dot : _dots) {
-        if (!dot->offset().isNull() || !dot->visible() || dot->color() != MScore::defaultColor || dot->visible() != visible()) {
+        if (!dot->offset().isNull() || !dot->visible() || dot->color() != engravingConfiguration()->defaultColor()
+            || dot->visible() != visible()) {
             write_dots = true;
             break;
         }

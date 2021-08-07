@@ -26,7 +26,6 @@
 #include "drumset.h"
 #include "sym.h"
 #include "rest.h"
-#include "mscore.h"
 #include "accidental.h"
 #include "articulation.h"
 #include "draw/pen.h"
@@ -150,7 +149,7 @@ void ShadowNote::draw(mu::draw::Painter* painter) const
     PointF ap(pagePos());
     painter->translate(ap);
     qreal lw = score()->styleP(Sid::stemWidth);
-    Pen pen(engravingConfiguration()->shadowNoteColor(), lw, PenStyle::SolidLine, PenCapStyle::FlatCap);
+    Pen pen(engravingConfiguration()->shadowNoteColor(voice()), lw, PenStyle::SolidLine, PenCapStyle::FlatCap);
     painter->setPen(pen);
 
     // Draw the accidental

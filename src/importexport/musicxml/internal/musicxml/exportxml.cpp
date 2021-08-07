@@ -115,8 +115,9 @@
 #include "musicxmlfonthandler.h"
 #include "musicxmlsupport.h"
 
-#include "../../imusicxmlconfiguration.h"
 #include "modularity/ioc.h"
+#include "../../imusicxmlconfiguration.h"
+#include "engraving/iengravingconfiguration.h"
 
 #include "config.h"
 
@@ -632,6 +633,11 @@ void Technical::etag(XmlWriter& xml)
     technicalPrinted = false;
 }
 
+static std::shared_ptr<mu::engraving::IEngravingConfiguration> engravingConfiguration()
+{
+    return mu::modularity::ioc()->resolve<mu::engraving::IEngravingConfiguration>("iex_musicxml");
+}
+
 //---------------------------------------------------------
 //   color2xml
 //---------------------------------------------------------
@@ -642,7 +648,7 @@ void Technical::etag(XmlWriter& xml)
 
 static QString color2xml(const Element* el)
 {
-    if (el->color() != MScore::defaultColor) {
+    if (el->color() != engravingConfiguration()->defaultColor()) {
         return QString(" color=\"%1\"").arg(QString::fromStdString(el->color().toString()).toUpper());
     } else {
         return "";
@@ -3232,7 +3238,7 @@ static void writeNotehead(XmlWriter& xml, const Note* const note)
         xml.tag(noteheadTagname, "ti");
     } else if (note->headGroup() == NoteHead::Group::HEAD_SOL) {
         xml.tag(noteheadTagname, "so");
-    } else if (note->color() != MScore::defaultColor) {
+    } else if (note->color() != engravingConfiguration()->defaultColor()) {
         xml.tag(noteheadTagname, "normal");
     } else if (rightParenthesis && leftParenthesis) {
         xml.tag(noteheadTagname, "normal");

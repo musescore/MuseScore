@@ -1500,7 +1500,7 @@ QVariant SLine::propertyDefault(Pid pid) const
     case Pid::DIAGONAL:
         return false;
     case Pid::COLOR:
-        return QVariant::fromValue(MScore::defaultColor);
+        return QVariant::fromValue(engravingConfiguration()->defaultColor());
     case Pid::LINE_WIDTH:
         if (propertyFlags(pid) != PropertyFlags::NOSTYLE) {
             return Spanner::propertyDefault(pid);

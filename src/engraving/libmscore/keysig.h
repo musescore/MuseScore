@@ -25,8 +25,6 @@
 
 #include "key.h"
 #include "element.h"
-#include "iengravingconfiguration.h"
-#include "modularity/ioc.h"
 
 namespace Ms {
 class Sym;
@@ -41,8 +39,6 @@ class Segment;
 
 class KeySig final : public Element
 {
-    INJECT(notation, mu::engraving::IEngravingConfiguration, engravingConfiguration)
-
     bool _showCourtesy;
     bool _hideNaturals;       // used in layout to override score style (needed for the Continuous panel)
     KeySigEvent _sig;
