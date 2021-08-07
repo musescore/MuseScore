@@ -390,8 +390,10 @@ void XmlReader::htmlToString(int level, QString* s)
             --level;
             return;
         case QXmlStreamReader::Characters:
-            if (!isWhitespace()) {
+            if (!s->isEmpty() || !isWhitespace()) {
                 *s += text().toString().toHtmlEscaped();
+            } else {
+                qDebug() << "ignoring whitespace";
             }
             break;
         case QXmlStreamReader::Comment:

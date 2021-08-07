@@ -64,6 +64,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/tst_spanners.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_split.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_splitstaff.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/tst_textbase.cpp
     # ${CMAKE_CURRENT_LIST_DIR}/tst_text.cpp not actual, not compile
     ${CMAKE_CURRENT_LIST_DIR}/tst_timesig.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_tools.cpp

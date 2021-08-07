@@ -186,6 +186,10 @@ public:
     virtual void nextSyllable() = 0;
     virtual void addMelisma() = 0;
     virtual void addLyricsVerse() = 0;
+
+    virtual void toggleBold() = 0;
+    virtual void toggleItalic() = 0;
+    virtual void toggleUnderline() = 0;
 };
 
 using INotationInteractionPtr = std::shared_ptr<INotationInteraction>;

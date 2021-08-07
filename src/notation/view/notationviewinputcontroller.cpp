@@ -363,7 +363,7 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
     }
 
     if (viewInteraction()->isTextEditingStarted()) {
-        if (!hitElement || !hitElement->isText()) {
+        if (!hitElement || !hitElement->isTextBase()) {
             viewInteraction()->endEditText();
         } else {
             viewInteraction()->changeTextCursorPosition(m_beginPoint);

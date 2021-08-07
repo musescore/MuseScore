@@ -292,5 +292,12 @@ void InspectorListModel::subscribeOnSelectionChanges()
             auto elements = m_notation->interaction()->selection()->elements();
             setElementList(QList(elements.cbegin(), elements.cend()));
         });
+
+        m_notation->interaction()->textEditingChanged().onNotify(this, [this]() {
+            auto element = m_notation->interaction()->selection()->element();
+            if (element != nullptr) {
+                setElementList(QList { element });
+            }
+        });
     });
 }

@@ -581,12 +581,18 @@ uint ScoreFont::symCode(SymId id) const
     const Sym& s = sym(id);
     uint code;
     if (s.isValid()) {
-        code = s.code();
+        code = static_cast<uint>(s.code());
     } else {
         // fallback: search in the common SMuFL table
         code = s_mainSymCodeTable[size_t(id)];
     }
     return code;
+}
+
+SymId ScoreFont::fromCode(uint code) const
+{
+    auto it = std::find_if(m_symbols.begin(), m_symbols.end(), [code](const Ms::Sym& s) { return s.code() == static_cast<int>(code); });
+    return static_cast<SymId>(it == m_symbols.end() ? 0 : it - m_symbols.begin());
 }
 
 static QString codeToString(uint code)
