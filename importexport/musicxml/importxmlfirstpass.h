@@ -19,7 +19,7 @@
 
 namespace Ms {
 
-typedef QMap<QString, VoiceDesc> VoiceList;
+typedef QMap<int, VoiceDesc> VoiceList;
 typedef QMap<Fraction, bool> PrintStaffList;   // Mapping from time to print-object for a staff
 //using Intervals = std::map<Fraction, Interval>;
 

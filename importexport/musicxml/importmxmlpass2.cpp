@@ -5600,7 +5600,8 @@ Note* MusicXMLParserPass2::note(const QString& partId,
       int msTrack = 0;
       int msVoice = 0;
 
-      if (!_pass1.determineStaffMoveVoice(partId, msStaff, voice, msMove, msTrack, msVoice)) {
+      int voiceInt = _pass1.voiceToInt(voice);
+      if (!_pass1.determineStaffMoveVoice(partId, msStaff, voiceInt, msMove, msTrack, msVoice)) {
             _logger->logDebugInfo(QString("could not map staff %1 voice '%2'").arg(msStaff + 1).arg(voice), &_e);
             Q_ASSERT(_e.isEndElement() && _e.name() == "note");
             return 0;

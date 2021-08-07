@@ -59,7 +59,7 @@ QString MusicXmlPart::toString() const
 
       for (VoiceList::const_iterator i = voicelist.constBegin(); i != voicelist.constEnd(); ++i) {
             res += QString("voice %1 map staff data %2\n")
-                  .arg(i.key() + 1, i.value().toString());
+                  .arg(QString(i.key() + 1), i.value().toString());
             }
 
       for (int i = 0; i < measureNumbers.size(); ++i) {
