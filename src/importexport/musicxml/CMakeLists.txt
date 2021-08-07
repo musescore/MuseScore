@@ -45,9 +45,7 @@ else()
         ${CMAKE_CURRENT_LIST_DIR}/internal/mxlwriter.h
         )
 
-    if (NOT MUE_COMPILE_QT5_COMPAT)
-        set(MODULE_DEF ${MODULE_DEF} -DMUSICXML_NO_VALIDATION)
-    endif()
+    set(MODULE_DEF ${MODULE_DEF} -DMUSICXML_NO_VALIDATION) # TODO
 endif()
 
 set(MODULE_LINK
