@@ -147,11 +147,7 @@ if (NOT OS_IS_MAC)
     )
 
     # we use QKeyMapper to fix https://github.com/musescore/MuseScore/issues/10181
-    if (MUE_COMPILE_QT5_COMPAT)
-        set(MODULE_INCLUDE ${Qt5Gui_PRIVATE_INCLUDE_DIRS} )
-    else()
-        set(MODULE_INCLUDE ${Qt6Gui_PRIVATE_INCLUDE_DIRS} )
-    endif()
+    set(MODULE_INCLUDE ${Qt6Gui_PRIVATE_INCLUDE_DIRS} )
 endif(NOT OS_IS_MAC)
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
