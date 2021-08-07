@@ -53,7 +53,9 @@ public:
 #endif
 
     //! NOTE Needs for QVariant support
+#ifndef NO_QT_SUPPORT
     QString toQString() const;
+#endif
     bool operator<(const Color& other) const;
     //! -----
 
