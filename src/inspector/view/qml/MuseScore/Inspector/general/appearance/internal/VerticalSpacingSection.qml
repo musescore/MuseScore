@@ -51,9 +51,9 @@ InspectorPropertyView {
         navigation.panel: root.navigationPanel
         navigation.row: root.navigationRowOffset + 2
 
-        isIndeterminate: minimumDistance ? minimumDistance.isUndefined : false
-        currentValue: minimumDistance ? minimumDistance.value : 0
+        isIndeterminate: root.minimumDistance ? root.minimumDistance.isUndefined : false
+        currentValue: root.minimumDistance ? root.minimumDistance.value : 0
 
-        onValueEdited: { minimumDistance.value = newValue }
+        onValueEdited: { root.minimumDistance.value = newValue }
     }
 }

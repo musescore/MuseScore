@@ -45,23 +45,21 @@ ExpandableBlank {
         navigation.row: root.navigation.row + 1
 
         titleText: qsTrc("inspector", "Spread delay")
-        propertyItem: model ? model.stretch : null
+        propertyItem: root.model ? root.model.stretch : null
 
         IncrementalPropertyControl {
-            iconMode: iconModeEnum.hidden
-
             navigation.name: "Stretch Value"
             navigation.panel: root.navigation.panel
             navigation.column: root.navigation.column
             navigation.row: root.navigation.row + 2
 
-            isIndeterminate: model ? model.stretch.isUndefined : false
-            currentValue: model ? model.stretch.value : 0
+            isIndeterminate: root.model ? root.model.stretch.isUndefined : false
+            currentValue: root.model ? root.model.stretch.value : 0
 
             maxValue: 100
             minValue: 0
 
-            onValueEdited: { model.stretch.value = newValue }
+            onValueEdited: { root.model.stretch.value = newValue }
         }
     }
 }

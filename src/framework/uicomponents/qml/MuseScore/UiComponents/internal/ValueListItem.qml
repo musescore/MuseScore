@@ -176,15 +176,10 @@ ListItemBlank {
             property int val
             signal changed(int newVal)
 
-            iconMode: iconModeEnum.hidden
-
             currentValue: val
 
             step: 1
-            validator: IntInputValidator {
-                top: intControl.maxValue
-                bottom: intControl.minValue
-            }
+            decimals: 0
 
             onValueEdited: {
                 intControl.changed(newValue)
@@ -200,11 +195,8 @@ ListItemBlank {
             property double val
             signal changed(double newVal)
 
-            iconMode: iconModeEnum.hidden
-
             currentValue: val
-
-            step: 1
+            step: 1.0
 
             onValueEdited: {
                 doubleControl.changed(newValue)

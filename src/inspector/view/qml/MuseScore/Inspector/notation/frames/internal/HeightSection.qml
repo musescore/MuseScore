@@ -39,9 +39,9 @@ InspectorPropertyView {
     IncrementalPropertyControl {
         icon: IconCode.VERTICAL
 
-        isIndeterminate: heightProperty ? heightProperty.isUndefined : false
-        currentValue: heightProperty ? heightProperty.value : 0
+        isIndeterminate: root.heightProperty ? root.heightProperty.isUndefined : false
+        currentValue: root.heightProperty ? root.heightProperty.value : 0
 
-        onValueEdited: { heightProperty.value = newValue }
+        onValueEdited: { root.heightProperty.value = newValue }
     }
 }

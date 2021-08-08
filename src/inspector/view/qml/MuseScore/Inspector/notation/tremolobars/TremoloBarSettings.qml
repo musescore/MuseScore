@@ -118,7 +118,6 @@ Item {
                 IncrementalPropertyControl {
                     isIndeterminate: root.model ? root.model.lineThickness.isUndefined : false
                     currentValue: root.model ? root.model.lineThickness.value : 0
-                    iconMode: iconModeEnum.hidden
 
                     maxValue: 10
                     minValue: 0.1
@@ -140,7 +139,6 @@ Item {
                 IncrementalPropertyControl {
                     isIndeterminate: root.model ? root.model.scale.isUndefined : false
                     currentValue: root.model ? root.model.scale.value : 0
-                    iconMode: iconModeEnum.hidden
 
                     maxValue: 5
                     minValue: 0.1

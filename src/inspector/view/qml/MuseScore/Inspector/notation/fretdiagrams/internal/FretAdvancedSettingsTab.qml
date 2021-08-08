@@ -55,8 +55,6 @@ FocusableItem {
                 IncrementalPropertyControl {
                     id: scaleControl
 
-                    iconMode: iconModeEnum.hidden
-
                     isIndeterminate: root.model ? root.model.scale.isUndefined : false
                     currentValue: root.model ? root.model.scale.value : 0
                     measureUnitsSymbol: "%"
@@ -64,10 +62,6 @@ FocusableItem {
                     decimals: 0
                     maxValue: 300
                     minValue: 1
-                    validator: IntInputValidator {
-                        top: scaleControl.maxValue
-                        bottom: scaleControl.minValue
-                    }
 
                     onValueEdited: { root.model.scale.value = newValue }
                 }
@@ -84,18 +78,12 @@ FocusableItem {
                 IncrementalPropertyControl {
                     id: stringsCountControl
 
-                    iconMode: iconModeEnum.hidden
-
                     isIndeterminate: root.model ? root.model.stringsCount.isUndefined : false
                     currentValue: root.model ? root.model.stringsCount.value : 0
                     step: 1
                     decimals: 0
                     maxValue: 12
                     minValue: 4
-                    validator: IntInputValidator {
-                        top: stringsCountControl.maxValue
-                        bottom: stringsCountControl.minValue
-                    }
 
                     onValueEdited: { root.model.stringsCount.value = newValue }
                 }
@@ -117,18 +105,12 @@ FocusableItem {
                 IncrementalPropertyControl {
                     id: visibleFretsCountControl
 
-                    iconMode: iconModeEnum.hidden
-
                     isIndeterminate: root.model ? root.model.fretsCount.isUndefined : false
                     currentValue: root.model ? root.model.fretsCount.value : 0
                     step: 1
                     decimals: 0
                     maxValue: 6
                     minValue: 3
-                    validator: IntInputValidator {
-                        top: visibleFretsCountControl.maxValue
-                        bottom: visibleFretsCountControl.minValue
-                    }
 
                     onValueEdited: { root.model.fretsCount.value = newValue }
                 }
@@ -145,18 +127,12 @@ FocusableItem {
                 IncrementalPropertyControl {
                     id: startingFretNumberControl
 
-                    iconMode: iconModeEnum.hidden
-
                     isIndeterminate: root.model ? root.model.startingFretNumber.isUndefined : false
                     currentValue: root.model ? root.model.startingFretNumber.value : 0
                     step: 1
                     decimals: 0
                     maxValue: 12
                     minValue: 1
-                    validator: IntInputValidator {
-                        top: startingFretNumberControl.maxValue
-                        bottom: startingFretNumberControl.minValue
-                    }
 
                     onValueEdited: { root.model.startingFretNumber.value = newValue }
                 }

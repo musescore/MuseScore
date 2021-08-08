@@ -39,9 +39,9 @@ InspectorPropertyView {
     IncrementalPropertyControl {
         icon: IconCode.HORIZONTAL
 
-        isIndeterminate: widthProperty ? widthProperty.isUndefined : false
-        currentValue: widthProperty ? widthProperty.value : 0
+        isIndeterminate: root.widthProperty ? root.widthProperty.isUndefined : false
+        currentValue: root.widthProperty ? root.widthProperty.value : 0
 
-        onValueEdited: { widthProperty.value = newValue }
+        onValueEdited: { root.widthProperty.value = newValue }
     }
 }

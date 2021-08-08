@@ -133,8 +133,6 @@ FocusableItem {
                 height: visible ? implicitHeight : 0
 
                 IncrementalPropertyControl {
-                    iconMode: iconModeEnum.hidden
-
                     isIndeterminate: root.model ? root.model.dashLineLength.isUndefined : false
                     currentValue: root.model ? root.model.dashLineLength.value : 0
                     step: 0.1
@@ -158,8 +156,6 @@ FocusableItem {
                 height: visible ? implicitHeight : 0
 
                 IncrementalPropertyControl {
-                    iconMode: iconModeEnum.hidden
-
                     isIndeterminate: root.model && enabled ? root.model.dashGapLength.isUndefined : false
                     currentValue: root.model ? root.model.dashGapLength.value : 0
                     step: 0.1
@@ -200,8 +196,6 @@ FocusableItem {
                         enabled: root.model && root.model.thickness.isEnabled
 
                         IncrementalPropertyControl {
-                            iconMode: iconModeEnum.hidden
-
                             isIndeterminate: root.model ? root.model.thickness.isUndefined : false
                             currentValue: root.model ? root.model.thickness.value : 0
                             step: 0.1
@@ -224,9 +218,6 @@ FocusableItem {
                         enabled: root.model && root.model.hookHeight.isEnabled
 
                         IncrementalPropertyControl {
-
-                            iconMode: iconModeEnum.hidden
-
                             isIndeterminate: root.model ? root.model.hookHeight.isUndefined : false
                             currentValue: root.model ? root.model.hookHeight.value : 0
                             step: 0.1

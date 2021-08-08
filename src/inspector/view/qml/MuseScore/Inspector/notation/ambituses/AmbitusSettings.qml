@@ -37,45 +37,43 @@ Column {
 
     spacing: 12
 
-    function tpcListModel() {
-        return [
-                    { text: "C♭♭", value: AmbitusTypes.TPC_C_BB },
-                    { text: "C♭", value: AmbitusTypes.TPC_C_B },
-                    { text: "C", value: AmbitusTypes.TPC_C },
-                    { text: "C♯", value: AmbitusTypes.TPC_C_S },
-                    { text: "C♯♯", value: AmbitusTypes.TPC_C_SS },
-                    { text: "D♭♭", value: AmbitusTypes.TPC_D_BB },
-                    { text: "D♭", value: AmbitusTypes.TPC_D_B },
-                    { text: "D", value: AmbitusTypes.TPC_D },
-                    { text: "D♯", value: AmbitusTypes.TPC_D_S },
-                    { text: "D♯♯", value: AmbitusTypes.TPC_D_SS },
-                    { text: "E♭♭", value: AmbitusTypes.TPC_E_BB },
-                    { text: "E♭", value: AmbitusTypes.TPC_E_B },
-                    { text: "E", value: AmbitusTypes.TPC_E },
-                    { text: "E♯", value: AmbitusTypes.TPC_E_S },
-                    { text: "E♯♯", value: AmbitusTypes.TPC_E_SS },
-                    { text: "F♭♭", value: AmbitusTypes.TPC_F_BB },
-                    { text: "F♭", value: AmbitusTypes.TPC_F_B },
-                    { text: "F", value: AmbitusTypes.TPC_F },
-                    { text: "F♯", value: AmbitusTypes.TPC_F_S },
-                    { text: "F♯♯", value: AmbitusTypes.TPC_F_SS },
-                    { text: "G♭♭", value: AmbitusTypes.TPC_G_BB },
-                    { text: "G♭", value: AmbitusTypes.TPC_G_B },
-                    { text: "G", value: AmbitusTypes.TPC_G },
-                    { text: "G♯", value: AmbitusTypes.TPC_G_S },
-                    { text: "G♯♯", value: AmbitusTypes.TPC_G_SS },
-                    { text: "A♭♭", value: AmbitusTypes.TPC_A_BB },
-                    { text: "A♭", value: AmbitusTypes.TPC_A_B },
-                    { text: "A", value: AmbitusTypes.TPC_A },
-                    { text: "A♯", value: AmbitusTypes.TPC_A_S },
-                    { text: "A♯♯", value: AmbitusTypes.TPC_A_SS },
-                    { text: "B♭♭", value: AmbitusTypes.TPC_B_BB },
-                    { text: "B♭", value: AmbitusTypes.TPC_B_B },
-                    { text: "B", value: AmbitusTypes.TPC_B },
-                    { text: "B♯", value: AmbitusTypes.TPC_B_S },
-                    { text: "B♯♯", value: AmbitusTypes.TPC_B_SS }
-                ]
-    }
+    property var tpcListModel: [
+        { text: "C♭♭", value: AmbitusTypes.TPC_C_BB },
+        { text: "C♭", value: AmbitusTypes.TPC_C_B },
+        { text: "C", value: AmbitusTypes.TPC_C },
+        { text: "C♯", value: AmbitusTypes.TPC_C_S },
+        { text: "C♯♯", value: AmbitusTypes.TPC_C_SS },
+        { text: "D♭♭", value: AmbitusTypes.TPC_D_BB },
+        { text: "D♭", value: AmbitusTypes.TPC_D_B },
+        { text: "D", value: AmbitusTypes.TPC_D },
+        { text: "D♯", value: AmbitusTypes.TPC_D_S },
+        { text: "D♯♯", value: AmbitusTypes.TPC_D_SS },
+        { text: "E♭♭", value: AmbitusTypes.TPC_E_BB },
+        { text: "E♭", value: AmbitusTypes.TPC_E_B },
+        { text: "E", value: AmbitusTypes.TPC_E },
+        { text: "E♯", value: AmbitusTypes.TPC_E_S },
+        { text: "E♯♯", value: AmbitusTypes.TPC_E_SS },
+        { text: "F♭♭", value: AmbitusTypes.TPC_F_BB },
+        { text: "F♭", value: AmbitusTypes.TPC_F_B },
+        { text: "F", value: AmbitusTypes.TPC_F },
+        { text: "F♯", value: AmbitusTypes.TPC_F_S },
+        { text: "F♯♯", value: AmbitusTypes.TPC_F_SS },
+        { text: "G♭♭", value: AmbitusTypes.TPC_G_BB },
+        { text: "G♭", value: AmbitusTypes.TPC_G_B },
+        { text: "G", value: AmbitusTypes.TPC_G },
+        { text: "G♯", value: AmbitusTypes.TPC_G_S },
+        { text: "G♯♯", value: AmbitusTypes.TPC_G_SS },
+        { text: "A♭♭", value: AmbitusTypes.TPC_A_BB },
+        { text: "A♭", value: AmbitusTypes.TPC_A_B },
+        { text: "A", value: AmbitusTypes.TPC_A },
+        { text: "A♯", value: AmbitusTypes.TPC_A_S },
+        { text: "A♯♯", value: AmbitusTypes.TPC_A_SS },
+        { text: "B♭♭", value: AmbitusTypes.TPC_B_BB },
+        { text: "B♭", value: AmbitusTypes.TPC_B_B },
+        { text: "B", value: AmbitusTypes.TPC_B },
+        { text: "B♯", value: AmbitusTypes.TPC_B_S },
+        { text: "B♯♯", value: AmbitusTypes.TPC_B_SS }
+    ]
 
     FlatButton {
         width: parent.width
@@ -116,7 +114,7 @@ Column {
                     anchors.rightMargin: 2
                     width: parent.width
 
-                    model: tpcListModel()
+                    model: root.tpcListModel
 
                     currentIndex: root.model && !root.model.topTpc.isUndefined ? ttpcs.indexOfValue(root.model.topTpc.value) : -1
 
@@ -141,7 +139,6 @@ Column {
                     anchors.leftMargin: 2
                     anchors.right: parent.right
 
-                    iconMode: iconModeEnum.hidden
                     isIndeterminate: root.model ? root.model.topOctave.isUndefined : false
                     currentValue: root.model ? root.model.topOctave.value : 0
 
@@ -149,10 +146,6 @@ Column {
                     decimals: 0
                     maxValue: 8
                     minValue: -1
-                    validator: IntInputValidator {
-                        top: topOctaveControl.maxValue
-                        bottom: topOctaveControl.minValue
-                    }
 
                     onValueEdited: { root.model.topOctave.value = newValue }
                 }
@@ -170,7 +163,7 @@ Column {
                 anchors.rightMargin: 2
                 width: parent.width
 
-                model: tpcListModel()
+                model: root.tpcListModel
 
                 currentIndex: root.model && !root.model.bottomTpc.isUndefined ? tpcs.indexOfValue(root.model.bottomTpc.value) : -1
 
@@ -190,7 +183,6 @@ Column {
                 anchors.leftMargin: 2
                 anchors.right: parent.right
 
-                iconMode: iconModeEnum.hidden
                 isIndeterminate: root.model ? root.model.bottomOctave.isUndefined : false
                 currentValue: root.model ? root.model.bottomOctave.value : 0
 
@@ -198,10 +190,6 @@ Column {
                 decimals: 0
                 maxValue: 8
                 minValue: -1
-                validator: IntInputValidator {
-                    top: bottomOctaveControl.maxValue
-                    bottom: bottomOctaveControl.minValue
-                }
 
                 onValueEdited: { root.model.bottomOctave.value = newValue }
             }
@@ -289,8 +277,6 @@ Column {
                     propertyItem: root.model ? root.model.lineThickness : null
 
                     IncrementalPropertyControl {
-                        iconMode: iconModeEnum.hidden
-
                         isIndeterminate: root.model ? root.model.lineThickness.isUndefined : false
                         currentValue: root.model ? root.model.lineThickness.value : 0
                         step: 0.1

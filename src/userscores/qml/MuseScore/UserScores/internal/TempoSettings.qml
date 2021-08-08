@@ -144,16 +144,11 @@ FlatButton {
 
                     implicitWidth: 126
 
-                    iconMode: iconModeEnum.hidden
                     currentValue: root.model.tempo.value
                     step: 1
-
+                    decimals: 0
                     maxValue: root.model.tempoValueRange().max
                     minValue: root.model.tempoValueRange().min
-                    validator: IntInputValidator {
-                        top: control.maxValue
-                        bottom: control.minValue
-                    }
 
                     onValueEdited: {
                         var tempo = root.model.tempo

@@ -78,14 +78,11 @@ PreferencesPage {
                     IncrementalPropertyControl {
                         id: defaultZoomControl
                         width: 64
-                        iconMode: iconModeEnum.hidden
+
                         maxValue: 1600
                         minValue: 10
                         step: 10
-                        validator: IntInputValidator {
-                            top: defaultZoomControl.maxValue
-                            bottom: defaultZoomControl.minValue
-                        }
+                        decimals: 0
 
                         measureUnitsSymbol: "%"
 

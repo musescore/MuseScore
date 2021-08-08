@@ -40,19 +40,17 @@ FocusableItem {
         id: contentColumn
 
         width: parent.width
-
         spacing: 12
 
         InspectorPropertyView {
-
             titleText: qsTrc("inspector", "Beam types")
-            propertyItem: beamModesModel ? beamModesModel.mode : null
+            propertyItem: root.beamModesModel ? root.beamModesModel.mode : null
 
             BeamTypesGrid {
                 id: beamTypesGridView
 
-                beamTypesModel: beamModesModel ? beamModesModel.modeListModel : null
-                enabled: beamModesModel ? !beamModesModel.isEmpty : false
+                beamTypesModel: root.beamModesModel ? root.beamModesModel.modeListModel : null
+                enabled: root.beamModesModel ? !root.beamModesModel.isEmpty : false
             }
         }
 
@@ -62,7 +60,7 @@ FocusableItem {
             height: implicitHeight
             width: parent.width
 
-            enabled: model ? !model.isEmpty : false
+            enabled: root.model ? !root.model.isEmpty : false
 
             SeparatorLine {
                 anchors.margins: -10
@@ -120,18 +118,18 @@ FocusableItem {
                         anchors.rightMargin: 4
 
                         titleText: qsTrc("inspector", "Feathering left")
-                        propertyItem: model ? model.featheringHeightLeft : null
+                        propertyItem: root.model ? root.model.featheringHeightLeft : null
 
                         IncrementalPropertyControl {
                             icon: IconCode.FEATHERED_LEFT_HEIGHT
-                            enabled: beamModesModel ? beamModesModel.isFeatheringAvailable : false
-                            isIndeterminate: model ? model.featheringHeightLeft.isUndefined : false
-                            currentValue: model ? model.featheringHeightLeft.value : 0
+                            enabled: root.beamModesModel ? root.beamModesModel.isFeatheringAvailable : false
+                            isIndeterminate: root.model ? root.model.featheringHeightLeft.isUndefined : false
+                            currentValue: root.model ? root.model.featheringHeightLeft.value : 0
                             maxValue: 4
                             minValue: 0
                             step: 0.1
 
-                            onValueEdited: { model.featheringHeightLeft.value = newValue }
+                            onValueEdited: { root.model.featheringHeightLeft.value = newValue }
                         }
                     }
 
@@ -141,19 +139,19 @@ FocusableItem {
                         anchors.right: parent.right
 
                         titleText: qsTrc("inspector", "Feathering right")
-                        propertyItem: model ? model.featheringHeightRight : null
+                        propertyItem: root.model ? root.model.featheringHeightRight : null
 
                         IncrementalPropertyControl {
                             icon: IconCode.FEATHERED_RIGHT_HEIGHT
-                            enabled: beamModesModel ? beamModesModel.isFeatheringAvailable : false
-                            isIndeterminate: model ? model.featheringHeightRight.isUndefined : false
-                            iconMode: iconModeEnum.right
-                            currentValue: model ? model.featheringHeightRight.value : 0
+                            enabled: root.beamModesModel ? root.beamModesModel.isFeatheringAvailable : false
+                            isIndeterminate: root.model ? root.model.featheringHeightRight.isUndefined : false
+                            iconMode: IncrementalPropertyControl.Right
+                            currentValue: root.model ? root.model.featheringHeightRight.value : 0
                             maxValue: 4
                             minValue: 0
                             step: 0.1
 
-                            onValueEdited: { model.featheringHeightRight.value = newValue }
+                            onValueEdited: { root.model.featheringHeightRight.value = newValue }
                         }
                     }
                 }
@@ -170,10 +168,11 @@ FocusableItem {
                 text: qsTrc("inspector", "Force horizontal")
 
                 onClicked: {
-                    if (!model)
+                    if (!root.model) {
                         return
+                    }
 
-                    model.forceHorizontal()
+                    root.model.forceHorizontal()
                 }
             }
 
@@ -193,7 +192,7 @@ FocusableItem {
                     InspectorPropertyView {
 
                         titleText: qsTrc("inspector", "Beam height")
-                        propertyItem: model ? model.beamVectorX : null
+                        propertyItem: root.model ? root.model.beamVectorX : null
 
                         Item {
                             height: childrenRect.height
@@ -207,10 +206,10 @@ FocusableItem {
                                 anchors.rightMargin: 6
 
                                 icon: IconCode.BEAM_RIGHT_Y_POSITION
-                                isIndeterminate: model ? model.beamVectorX.isUndefined : false
-                                currentValue: model ? model.beamVectorX.value : 0
+                                isIndeterminate: root.model ? root.model.beamVectorX.isUndefined : false
+                                currentValue: root.model ? root.model.beamVectorX.value : 0
 
-                                onValueEdited: { model.beamVectorX.value = newValue }
+                                onValueEdited: { root.model.beamVectorX.value = newValue }
                             }
 
                             FlatToggleButton {
@@ -224,10 +223,10 @@ FocusableItem {
 
                                 icon: checked ? IconCode.LOCK_CLOSED : IconCode.LOCK_OPEN
 
-                                checked: model ? model.isBeamHeightLocked : false
+                                checked: root.model ? root.model.isBeamHeightLocked : false
 
                                 onToggled: {
-                                    model.isBeamHeightLocked = !model.isBeamHeightLocked
+                                    root.model.isBeamHeightLocked = !root.model.isBeamHeightLocked
                                 }
                             }
 
@@ -237,11 +236,11 @@ FocusableItem {
                                 anchors.right: parent.right
 
                                 icon: IconCode.BEAM_LEFT_Y_POSITION
-                                iconMode: iconModeEnum.right
-                                isIndeterminate: model ? model.beamVectorY.isUndefined : false
-                                currentValue: model ? model.beamVectorY.value : 0
+                                iconMode: IncrementalPropertyControl.Right
+                                isIndeterminate: root.model ? root.model.beamVectorY.isUndefined : false
+                                currentValue: root.model ? root.model.beamVectorY.value : 0
 
-                                onValueEdited: { model.beamVectorY.value = newValue }
+                                onValueEdited: { root.model.beamVectorY.value = newValue }
                             }
                         }
                     }

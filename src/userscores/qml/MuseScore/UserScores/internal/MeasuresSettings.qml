@@ -137,16 +137,11 @@ FlatButton {
 
                     implicitWidth: 68
 
-                    iconMode: iconModeEnum.hidden
                     currentValue: root.model.measureCount
                     step: 1
-
+                    decimals: 0
                     maxValue: root.model.measureCountRange().max
                     minValue: root.model.measureCountRange().min
-                    validator: IntInputValidator {
-                        top: measuresCountControl.maxValue
-                        bottom: measuresCountControl.minValue
-                    }
 
                     onValueEdited: {
                         root.model.measureCount = newValue

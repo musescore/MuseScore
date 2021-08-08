@@ -54,7 +54,7 @@ StyledDialogView {
             spacing: 12
 
             StyledTextLabel {
-                text: privateProperties.capitalizeFirstLetter(operation) + " " + qsTrc("notation", "empty measures")
+                text: privateProperties.capitalizeFirstLetter(root.operation) + " " + qsTrc("notation", "empty measures")
                 font: ui.theme.bodyBoldFont
             }
 
@@ -65,7 +65,7 @@ StyledDialogView {
 
                 StyledTextLabel {
                     Layout.fillWidth: true
-                    text: qsTrc("notation", "Number of measures to ") + operation.toLowerCase() + ":"
+                    text: qsTrc("notation", "Number of measures to ") + root.operation.toLowerCase() + ":"
                 }
 
                 IncrementalPropertyControl {
@@ -74,19 +74,14 @@ StyledDialogView {
                     Layout.alignment: Qt.AlignRight
                     Layout.preferredWidth: 100
 
-                    iconMode: iconModeEnum.hidden
-                    currentValue: content.measuresCount
+                    currentValue: root.measuresCount
                     step: 1
-
+                    decimals: 0
                     maxValue: 1000
                     minValue: 1
-                    validator: IntInputValidator {
-                        top: countMeasuresInputField.maxValue
-                        bottom: countMeasuresInputField.minValue
-                    }
 
                     onValueEdited: {
-                        content.measuresCount = newValue
+                        root.measuresCount = newValue
                     }
                 }
             }
@@ -110,7 +105,7 @@ StyledDialogView {
                 text: qsTrc("global", "OK")
 
                 onClicked: {
-                    root.ret = {errcode: 0, value: content.measuresCount}
+                    root.ret = {errcode: 0, value: root.measuresCount}
                     root.hide()
                 }
             }
