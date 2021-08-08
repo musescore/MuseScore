@@ -187,27 +187,18 @@ ExpandableBlank {
                 ]
 
                 delegate: FlatRadioButton {
-                    id: radioButtonDelegate
+                    ButtonGroup.group: radioButtonList.radioButtonGroup
 
                     navigation.name: "Change speed Value " + model.index
                     navigation.panel: root.navigation.panel
                     navigation.column: root.navigation.column
                     navigation.row: root.navigation.row + 8 + model.index
 
-                    ButtonGroup.group: radioButtonList.radioButtonGroup
-
+                    text: modelData["textRole"]
                     checked: root.model && !root.model.velocityChangeSpeed.isUndefined ? root.model.velocityChangeSpeed.value === modelData["valueRole"]
                                                                                        : false
                     onToggled: {
                         root.model.velocityChangeSpeed.value = modelData["valueRole"]
-                    }
-
-                    StyledTextLabel {
-                        text: modelData["textRole"]
-
-                        elide: Text.ElideRight
-                        verticalAlignment: Text.AlignVCenter
-                        horizontalAlignment: Text.AlignHCenter
                     }
                 }
             }

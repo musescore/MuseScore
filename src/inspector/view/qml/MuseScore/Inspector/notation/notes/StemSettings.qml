@@ -77,18 +77,13 @@ FocusableItem {
                 ]
 
                 delegate: FlatRadioButton {
-
                     ButtonGroup.group: radioButtonList.radioButtonGroup
 
+                    iconCode: modelData["iconRole"]
                     checked: root.stemModel && !root.stemModel.stemDirection.isUndefined ? root.stemModel.stemDirection.value === modelData["typeRole"]
                                                                                          : false
-
                     onToggled: {
                         root.stemModel.stemDirection.value = modelData["typeRole"]
-                    }
-
-                    StyledIconLabel {
-                        iconCode: modelData["iconRole"]
                     }
                 }
             }

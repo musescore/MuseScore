@@ -179,21 +179,13 @@ FocusableItem {
                 ]
 
                 delegate: FlatRadioButton {
-
                     ButtonGroup.group: positionButtonList.radioButtonGroup
 
+                    text: modelData["textRole"]
                     checked: root.model && !root.model.placement.isUndefined ? root.model.placement.value === modelData["valueRole"]
                                                                              : false
                     onToggled: {
                         root.model.placement.value = modelData["valueRole"]
-                    }
-
-                    StyledTextLabel {
-                        text: modelData["textRole"]
-
-                        elide: Text.ElideRight
-                        verticalAlignment: Text.AlignVCenter
-                        horizontalAlignment: Text.AlignHCenter
                     }
                 }
             }
@@ -212,4 +204,3 @@ FocusableItem {
         }
     }
 }
-

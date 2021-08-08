@@ -77,30 +77,24 @@ Column {
             ]
 
             delegate: FlatRadioButton {
-
-                width: 30
+                ButtonGroup.group: subscriptOptionsButtonList.radioButtonGroup
 
                 navigation.name: "ScriptOptions" + model.index
                 navigation.panel: root.navigationPanel
                 navigation.row: 2 + model.index
 
-                normalStateColor: "#00000000"
+                width: 30
+                normalStateColor: "transparent"
 
-                ButtonGroup.group: subscriptOptionsButtonList.radioButtonGroup
-
+                iconCode: modelData["iconRole"]
                 checked: root.model && !root.model.textScriptAlignment.isUndefined ? root.model.textScriptAlignment.value === modelData["typeRole"]
                                                                                    : false
-
                 onClicked: {
                     if (root.model.textScriptAlignment.value === modelData["typeRole"]) {
                         root.model.textScriptAlignment.value = TextTypes.TEXT_SUBSCRIPT_NORMAL
                     } else {
                         root.model.textScriptAlignment.value = modelData["typeRole"]
                     }
-                }
-
-                StyledIconLabel {
-                    iconCode: modelData["iconRole"]
                 }
             }
         }
@@ -127,22 +121,17 @@ Column {
             ]
 
             delegate: FlatRadioButton {
-
                 ButtonGroup.group: frameType.radioButtonGroup
 
                 navigation.name: "FrameType" + model.index
                 navigation.panel: root.navigationPanel
                 navigation.row: 5 + model.index
 
+                iconCode: modelData["iconRole"]
                 checked: root.model && !root.model.frameType.isUndefined ? root.model.frameType.value === modelData["typeRole"]
                                                                          : false
-
                 onToggled: {
                     root.model.frameType.value = modelData["typeRole"]
-                }
-
-                StyledIconLabel {
-                    iconCode: modelData["iconRole"]
                 }
             }
         }
@@ -400,25 +389,17 @@ Column {
         ]
 
         delegate: FlatRadioButton {
+            ButtonGroup.group: textPositionButtonList.radioButtonGroup
 
             navigation.name: "Position" + model.index
             navigation.panel: root.navigationPanel
             navigation.row: 21 + model.index
 
-            ButtonGroup.group: textPositionButtonList.radioButtonGroup
-
+            text: modelData["textRole"]
             checked: root.model && !root.model.textPlacement.isUndefined ? root.model.textPlacement.value === modelData["valueRole"]
                                                                          : false
             onToggled: {
                 root.model.textPlacement.value = modelData["valueRole"]
-            }
-
-            StyledTextLabel {
-                text: modelData["textRole"]
-
-                elide: Text.ElideRight
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
             }
         }
     }

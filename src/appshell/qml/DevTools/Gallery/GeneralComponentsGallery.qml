@@ -479,7 +479,7 @@ Rectangle {
             RadioButtonGroup {
                 id: iconButtonList
 
-                property var currentValue: -1
+                property int currentValue: -1
 
                 height: 30
 
@@ -492,14 +492,11 @@ Rectangle {
                 delegate: FlatRadioButton {
                     ButtonGroup.group: iconButtonList.radioButtonGroup
 
-                    checked: iconButtonList.currentValue === modelData["valueRole"]
+                    iconCode: modelData["iconRole"]
 
+                    checked: iconButtonList.currentValue === modelData["valueRole"]
                     onToggled: {
                         iconButtonList.currentValue = modelData["valueRole"]
-                    }
-
-                    StyledIconLabel {
-                        iconCode: modelData["iconRole"]
                     }
                 }
             }
@@ -507,7 +504,7 @@ Rectangle {
             RadioButtonGroup {
                 id: textButtonList
 
-                property var currentValue: -1
+                property int currentValue: -1
 
                 height: 30
 
@@ -520,14 +517,11 @@ Rectangle {
                 delegate: FlatRadioButton {
                     ButtonGroup.group: textButtonList.radioButtonGroup
 
-                    checked: textButtonList.currentValue === modelData["valueRole"]
+                    text: modelData["textRole"]
 
+                    checked: textButtonList.currentValue === modelData["valueRole"]
                     onToggled: {
                         textButtonList.currentValue = modelData["valueRole"]
-                    }
-
-                    StyledTextLabel {
-                        text: modelData["textRole"]
                     }
                 }
             }

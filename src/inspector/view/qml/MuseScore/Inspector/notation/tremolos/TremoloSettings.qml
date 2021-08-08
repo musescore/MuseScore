@@ -52,15 +52,11 @@ InspectorPropertyView {
         delegate: FlatRadioButton {
             ButtonGroup.group: radioButtonList.radioButtonGroup
 
+            iconCode: modelData["iconRole"]
             checked: root.model && !root.model.style.isUndefined ? root.model.style.value === modelData["typeRole"]
                                                                  : false
-
             onToggled: {
                 root.model.style.value = modelData["typeRole"]
-            }
-
-            StyledIconLabel {
-                iconCode: modelData["iconRole"]
             }
         }
     }
