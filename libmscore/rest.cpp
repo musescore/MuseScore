@@ -229,7 +229,8 @@ bool Rest::acceptDrop(EditData& data) const
          ) {
             return true;
             }
-      return type != ElementType::SLUR && e->isSpanner();
+      // prevent 'hanging' slurs, avoid crash on tie
+      return type != ElementType::SLUR && type != ElementType::TIE && e->isSpanner();
       }
 
 //---------------------------------------------------------
