@@ -196,6 +196,9 @@ QRectF Rest::drag(EditData& ed)
 
 bool Rest::acceptDrop(EditData& data) const
       {
+      if (measure()->isMMRest()) { // avoid crash
+            return false;
+            }
       Element* e = data.dropElement;
       ElementType type = e->type();
       if (
