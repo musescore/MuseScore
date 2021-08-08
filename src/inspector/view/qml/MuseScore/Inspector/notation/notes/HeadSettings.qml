@@ -43,11 +43,11 @@ FocusableItem {
         spacing: 16
 
         CheckBox {
-            isIndeterminate: model ? model.isHeadHidden.isUndefined : false
-            checked: model && !isIndeterminate ? model.isHeadHidden.value : false
+            isIndeterminate: root.model ? root.model.isHeadHidden.isUndefined : false
+            checked: root.model && !isIndeterminate ? root.model.isHeadHidden.value : false
             text: qsTrc("inspector", "Hide notehead")
 
-            onClicked: { model.isHeadHidden.value = !checked }
+            onClicked: { root.model.isHeadHidden.value = !checked }
         }
 
         InspectorPropertyView {
@@ -180,7 +180,7 @@ FocusableItem {
                     width: parent.width
 
                     titleText: qsTrc("inspector", "Notehead offset")
-                    propertyItem: model ? model.horizontalOffset : null
+                    propertyItem: root.model ? root.model.horizontalOffset : null
 
                     Item {
                         height: childrenRect.height
@@ -192,11 +192,11 @@ FocusableItem {
                             anchors.rightMargin: 4
 
                             icon: IconCode.HORIZONTAL
-                            enabled: model ? !model.isEmpty : false
-                            isIndeterminate: model ? model.horizontalOffset.isUndefined : false
-                            currentValue: model ? model.horizontalOffset.value : 0
+                            enabled: root.model ? !root.model.isEmpty : false
+                            isIndeterminate: root.model ? root.model.horizontalOffset.isUndefined : false
+                            currentValue: root.model ? root.model.horizontalOffset.value : 0
 
-                            onValueEdited: { model.horizontalOffset.value = newValue }
+                            onValueEdited: { root.model.horizontalOffset.value = newValue }
                         }
 
                         IncrementalPropertyControl {
@@ -205,11 +205,11 @@ FocusableItem {
                             anchors.right: parent.right
 
                             icon: IconCode.VERTICAL
-                            enabled: model ? !model.isEmpty : false
-                            isIndeterminate: model ? model.verticalOffset.isUndefined : false
-                            currentValue: model ? model.verticalOffset.value : 0
+                            enabled: root.model ? !root.model.isEmpty : false
+                            isIndeterminate: root.model ? root.model.verticalOffset.isUndefined : false
+                            currentValue: root.model ? root.model.verticalOffset.value : 0
 
-                            onValueEdited: { model.verticalOffset.value = newValue }
+                            onValueEdited: { root.model.verticalOffset.value = newValue }
                         }
                     }
                 }

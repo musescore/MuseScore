@@ -81,7 +81,6 @@ Column {
 
             IncrementalPropertyControl {
                 id: thicknessControl
-                iconMode: iconModeEnum.hidden
 
                 isIndeterminate: root.model ? root.model.thickness.isUndefined : false
                 currentValue: root.model ? root.model.thickness.value : 0
@@ -100,8 +99,6 @@ Column {
 
             IncrementalPropertyControl {
                 id: hookHeightControl
-
-                iconMode: iconModeEnum.hidden
 
                 enabled: root.model ? root.model.hookHeight.isEnabled : false
                 isIndeterminate: root.model && enabled ? root.model.hookHeight.isUndefined : false
@@ -163,7 +160,6 @@ Column {
 
             IncrementalPropertyControl {
                 id: dashControl
-                iconMode: iconModeEnum.hidden
 
                 isIndeterminate: root.model ? root.model.dashLineLength.isUndefined : false
                 currentValue: root.model ? root.model.dashLineLength.value : 0
@@ -182,8 +178,6 @@ Column {
 
             IncrementalPropertyControl {
                 id: gapControl
-
-                iconMode: iconModeEnum.hidden
 
                 enabled: root.model ? root.model.dashGapLength.isEnabled : false
                 isIndeterminate: root.model && enabled ? root.model.dashGapLength.isUndefined : false

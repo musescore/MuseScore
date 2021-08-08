@@ -58,11 +58,11 @@ Column {
             navigation.panel: root.navigationPanel
             navigation.row: 1
 
-            isIndeterminate: model ? model.isSizeSpatiumDependent.isUndefined : false
-            checked: model && !isIndeterminate ? model.isSizeSpatiumDependent.value : false
+            isIndeterminate: root.model ? root.model.isSizeSpatiumDependent.isUndefined : false
+            checked: root.model && !isIndeterminate ? root.model.isSizeSpatiumDependent.value : false
             text: qsTrc("inspector", "Match staff size")
 
-            onClicked: { model.isSizeSpatiumDependent.value = !checked }
+            onClicked: { root.model.isSizeSpatiumDependent.value = !checked }
         }
 
         RadioButtonGroup {
@@ -230,8 +230,6 @@ Column {
             propertyItem: root.model ? root.model.frameThickness : null
 
             IncrementalPropertyControl {
-                iconMode: iconModeEnum.hidden
-
                 navigation.name: "ThicknessValue"
                 navigation.panel: root.navigationPanel
                 navigation.row: 14
@@ -265,8 +263,6 @@ Column {
             propertyItem: root.model ? root.model.frameMargin : null
 
             IncrementalPropertyControl {
-                iconMode: iconModeEnum.hidden
-
                 navigation.name: "MarginValue"
                 navigation.panel: root.navigationPanel
                 navigation.row: 16
@@ -299,8 +295,6 @@ Column {
         propertyItem: root.model ? root.model.frameCornerRadius : null
 
         IncrementalPropertyControl {
-            iconMode: iconModeEnum.hidden
-
             navigation.name: "Corner radius Value"
             navigation.panel: root.navigationPanel
             navigation.row: 18

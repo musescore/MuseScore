@@ -45,24 +45,22 @@ ExpandableBlank {
         navigation.row: root.navigation.row + 1
 
         titleText: qsTrc("inspector", "Pause time")
-        propertyItem: model ? model.pauseTime : null
+        propertyItem: root.model ? root.model.pauseTime : null
 
         IncrementalPropertyControl {
-            iconMode: iconModeEnum.hidden
-
             navigation.name: "Pause time Value"
             navigation.panel: root.navigation.panel
             navigation.column: root.navigation.column
             navigation.row: root.navigation.row + 2
 
             measureUnitsSymbol: "s"
-            isIndeterminate: model ? model.pauseTime.isUndefined : false
-            currentValue: model ? model.pauseTime.value : 0
+            isIndeterminate: root.model ? root.model.pauseTime.isUndefined : false
+            currentValue: root.model ? root.model.pauseTime.value : 0
 
             minValue: 0.0
             maxValue: 60.0
 
-            onValueEdited: { model.pauseTime.value = newValue }
+            onValueEdited: { root.model.pauseTime.value = newValue }
         }
     }
 }

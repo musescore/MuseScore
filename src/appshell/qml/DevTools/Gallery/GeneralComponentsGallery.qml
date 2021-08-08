@@ -557,7 +557,20 @@ Rectangle {
             width: 200
 
             IncrementalPropertyControl {
-                iconMode: iconModeEnum.hidden
+                currentValue: 0
+
+                maxValue: 999
+                minValue: 0
+                step: 0.5
+
+                onValueEdited: {
+                    currentValue = newValue
+                }
+            }
+
+            IncrementalPropertyControl {
+                icon: IconCode.AUDIO
+                iconMode: IncrementalPropertyControl.Right
 
                 currentValue: 0
 
@@ -572,22 +585,6 @@ Rectangle {
 
             IncrementalPropertyControl {
                 icon: IconCode.AUDIO
-                iconMode: iconModeEnum.right
-
-                currentValue: 0
-
-                maxValue: 999
-                minValue: 0
-                step: 0.5
-
-                onValueEdited: {
-                    currentValue = newValue
-                }
-            }
-
-            IncrementalPropertyControl {
-                icon: IconCode.AUDIO
-                iconMode: iconModeEnum.left
 
                 currentValue: 0
 
