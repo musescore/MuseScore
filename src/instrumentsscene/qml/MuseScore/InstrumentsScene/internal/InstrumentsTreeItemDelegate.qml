@@ -123,20 +123,7 @@ Item {
         color: ui.theme.backgroundPrimaryColor
         opacity: 1
 
-        Rectangle {
-            id: navCtrlBorderRect
-
-            anchors.fill: parent
-            anchors.margins: -ui.theme.navCtrlBorderWidth
-
-            visible: keynavItem.active
-
-            color: "transparent"
-            radius: parent.radius + navCtrlBorderRect.border.width
-
-            border.width: ui.theme.navCtrlBorderWidth
-            border.color: ui.theme.fontPrimaryColor
-        }
+        NavigationFocusBorder { navigationCtrl: keynavItem }
 
         states: [
             State {

@@ -125,7 +125,7 @@ void UiTheme::initThemeValues()
     m_focusColor = themeValues[FOCUS_COLOR].toString();
 
     m_borderWidth = themeValues[BORDER_WIDTH].toReal();
-    m_navCtrlBorderWidth = 2.0;
+    m_navCtrlBorderWidth = themeValues[NAVIGATION_CONTROL_BORDER_WIDTH].toReal();
     m_accentOpacityNormal = themeValues[ACCENT_OPACITY_NORMAL].toReal();
     m_accentOpacityHover = themeValues[ACCENT_OPACITY_HOVER].toReal();
     m_accentOpacityHit = themeValues[ACCENT_OPACITY_HIT].toReal();

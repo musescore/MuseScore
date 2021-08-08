@@ -98,20 +98,7 @@ FocusScope {
         color: prv.inProgress ? ui.theme.backgroundPrimaryColor : ui.theme.accentColor
         opacity: ui.theme.buttonOpacityNormal
 
-        Rectangle {
-            id: navCtrlBorderRect
-
-            anchors.fill: parent
-            anchors.margins: -ui.theme.navCtrlBorderWidth
-
-            visible: navCtrl.active
-
-            color: "transparent"
-            radius: parent.radius + navCtrlBorderRect.border.width
-
-            border.width: ui.theme.navCtrlBorderWidth
-            border.color: ui.theme.fontPrimaryColor
-        }
+        NavigationFocusBorder { navigationCtrl: navCtrl }
 
         border.color: ui.theme.strokeColor
         border.width: ui.theme.borderWidth

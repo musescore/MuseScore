@@ -69,20 +69,7 @@ FocusScope {
         anchors.fill: parent
         anchors.margins: keynavItem.active ? root.navCtrlBorderOverride : 0
 
-        Rectangle {
-            id: navCtrlBorderRect
-
-            anchors.fill: parent
-            anchors.margins: -ui.theme.navCtrlBorderWidth
-
-            visible: keynavItem.active
-
-            color: "transparent"
-            radius: parent.radius + navCtrlBorderRect.border.width
-
-            border.width: ui.theme.navCtrlBorderWidth
-            border.color: ui.theme.fontPrimaryColor
-        }
+        NavigationFocusBorder { navigationCtrl: keynavItem }
 
         border.color: root.itemBorderColor
         border.width: root.itemBorderWidth

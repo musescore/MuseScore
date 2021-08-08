@@ -83,21 +83,11 @@ TabView {
                 radius: 4
                 anchors.margins: 1
 
-                Rectangle {
-                    id: navCtrlBorderRect
+                NavigationFocusBorder {
 
                     property bool visibleOrNot: (tab.tabItem.navigation && tab.tabItem.navigation.active) //evaluating this condition directly in the `visible` variable leads to strange behaviour
 
-                    anchors.fill: parent
-                    anchors.margins: -ui.theme.navCtrlBorderWidth
-
                     visible: visibleOrNot
-
-                    color: "transparent"
-                    radius: parent.radius + navCtrlBorderRect.border.width
-
-                    border.width: ui.theme.navCtrlBorderWidth
-                    border.color: ui.theme.fontPrimaryColor
                 }
 
                 border.width: ui.theme.borderWidth
