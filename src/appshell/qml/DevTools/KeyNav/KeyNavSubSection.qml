@@ -34,21 +34,7 @@ Rectangle {
     height: 40
     width: btns.childrenRect.width
 
-    Rectangle {
-        id: navCtrlBorderRect
-
-        anchors.fill: parent
-        anchors.margins: -ui.theme.navCtrlBorderWidth
-        opacity: 1
-
-        visible: keynavsec.active
-
-        color: "transparent"
-        radius: parent.radius + navCtrlBorderRect.border.width
-
-        border.width: ui.theme.navCtrlBorderWidth
-        border.color: ui.theme.fontPrimaryColor
-    }
+    NavigationFocusBorder { navigationCtrl: keynavsec }
 
     signal clicked(string info)
 

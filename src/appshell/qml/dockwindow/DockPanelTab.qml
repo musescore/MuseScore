@@ -73,18 +73,9 @@ StyledTabButton {
     background: Rectangle {
         id: backgroundRect
 
-        Rectangle {
-            id: navCtrlBorderRect
-
-            anchors.fill: parent
-
-            visible: root.navigation.active
-
-            color: "transparent"
-            radius: parent.radius + navCtrlBorderRect.border.width
-
-            border.width: ui.theme.navCtrlBorderWidth
-            border.color: ui.theme.fontPrimaryColor
+        NavigationFocusBorder{
+            navigationCtrl: root.navigation
+            anchors.margins: 0
         }
 
         color: ui.theme.backgroundSecondaryColor

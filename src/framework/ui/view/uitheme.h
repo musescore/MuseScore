@@ -51,6 +51,7 @@ class UiTheme : public QProxyStyle, public async::Asyncable
 
     Q_PROPERTY(qreal borderWidth READ borderWidth NOTIFY themeChanged)
     Q_PROPERTY(qreal navCtrlBorderWidth READ navCtrlBorderWidth NOTIFY themeChanged)
+
     Q_PROPERTY(qreal accentOpacityNormal READ accentOpacityNormal NOTIFY themeChanged)
     Q_PROPERTY(qreal accentOpacityHit READ accentOpacityHit NOTIFY themeChanged)
     Q_PROPERTY(qreal accentOpacityHover READ accentOpacityHover NOTIFY themeChanged)

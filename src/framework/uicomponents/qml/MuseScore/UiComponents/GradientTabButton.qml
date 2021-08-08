@@ -72,25 +72,12 @@ RadioDelegate {
         Rectangle {
             id: backgroundRect
             anchors.fill: parent
-            anchors.bottomMargin: 2  //what is happening...
+            anchors.bottomMargin: 2
 
             color: ui.theme.backgroundPrimaryColor
             opacity: ui.theme.buttonOpacityNormal
 
-            Rectangle {
-                id: navCtrlBorderRect
-
-                anchors.fill: parent
-                anchors.margins: -ui.theme.navCtrlBorderWidth
-
-                visible: keynavCtrl.active
-
-                color: "transparent"
-                radius: parent.radius + navCtrlBorderRect.border.width
-
-                border.width: ui.theme.navCtrlBorderWidth
-                border.color: ui.theme.fontPrimaryColor
-            }
+            NavigationFocusBorder { navigationCtrl: keynavCtrl }
 
             border.color: ui.theme.strokeColor
             border.width: ui.theme.borderWidth

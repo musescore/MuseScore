@@ -61,20 +61,7 @@ RadioDelegate {
 
         anchors.fill: parent
 
-        Rectangle {
-            id: navCtrlBorderRect
-
-            anchors.fill: parent
-            anchors.margins: -ui.theme.navCtrlBorderWidth
-
-            visible: navCtrl.active
-
-            color: "transparent"
-            radius: parent.radius + navCtrlBorderRect.border.width
-
-            border.width: ui.theme.navCtrlBorderWidth
-            border.color: ui.theme.fontPrimaryColor
-        }
+        NavigationFocusBorder { navigationCtrl: navCtrl }
 
         border.width: ui.theme.borderWidth
         border.color: ui.theme.strokeColor
