@@ -237,18 +237,13 @@ Column {
                         ]
 
                         delegate: FlatRadioButton {
-
                             ButtonGroup.group: directionButtonList.radioButtonGroup
 
+                            iconCode: modelData["iconRole"]
                             checked: root.model && !root.model.direction.isUndefined ? root.model.direction.value === modelData["typeRole"]
                                                                                      : false
-
                             onToggled: {
                                 root.model.direction.value = modelData["typeRole"]
-                            }
-
-                            StyledIconLabel {
-                                iconCode: modelData["iconRole"]
                             }
                         }
                     }
@@ -273,20 +268,13 @@ Column {
                         ]
 
                         delegate: FlatRadioButton {
-
                             ButtonGroup.group: headTypeButtonList.radioButtonGroup
 
+                            iconCode: modelData["iconRole"]
                             checked: root.model && !root.model.noteheadType.isUndefined ? root.model.noteheadType.value === modelData["typeRole"]
                                                                                         : false
-
                             onToggled: {
                                 root.model.noteheadType.value = modelData["typeRole"]
-                            }
-
-                            StyledIconLabel {
-                                anchors.fill: parent
-
-                                iconCode: modelData["iconRole"]
                             }
                         }
                     }

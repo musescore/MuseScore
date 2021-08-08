@@ -55,18 +55,13 @@ Column {
             ]
 
             delegate: FlatRadioButton {
-
                 ButtonGroup.group: lineTypeButtonList.radioButtonGroup
 
+                iconCode: modelData["iconRole"]
                 checked: root.model && !root.model.hookType.isUndefined ? root.model.hookType.value === modelData["typeRole"]
                                                                         : false
-
                 onToggled: {
                     root.model.hookType.value = modelData["typeRole"]
-                }
-
-                StyledIconLabel {
-                    iconCode: modelData["iconRole"]
                 }
             }
         }
@@ -143,18 +138,13 @@ Column {
         ]
 
         delegate: FlatRadioButton {
-
             ButtonGroup.group: lineStyleButtonList.radioButtonGroup
 
+            iconCode: modelData["iconRole"]
             checked: root.model && !root.model.lineStyle.isUndefined ? root.model.lineStyle.value === modelData["typeRole"]
                                                                      : false
-
             onToggled: {
                 root.model.lineStyle.value = modelData["typeRole"]
-            }
-
-            StyledIconLabel {
-                iconCode: modelData["iconRole"]
             }
         }
     }
@@ -216,21 +206,13 @@ Column {
         ]
 
         delegate: FlatRadioButton {
-
             ButtonGroup.group: pedalPositionButtonList.radioButtonGroup
 
+            text: modelData["textRole"]
             checked: root.model && !root.model.placement.isUndefined ? root.model.placement.value === modelData["valueRole"]
                                                                      : false
             onToggled: {
                 root.model.placement.value = modelData["valueRole"]
-            }
-
-            StyledTextLabel {
-                text: modelData["textRole"]
-
-                elide: Text.ElideRight
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
             }
         }
     }

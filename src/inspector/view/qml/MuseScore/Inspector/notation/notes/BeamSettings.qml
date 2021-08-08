@@ -97,20 +97,15 @@ FocusableItem {
                     ]
 
                     delegate: FlatRadioButton {
-
                         ButtonGroup.group: radioButtonList.radioButtonGroup
 
+                        iconCode: modelData["iconRole"]
                         checked: root.beamModesModel &&
                                  !(root.model.featheringHeightLeft.isUndefined
                                    ||root.model.featheringHeightRight.isUndefined) ? root.model.featheringMode === modelData["typeRole"]
                                                                                    : false
-
                         onToggled: {
                             root.model.featheringMode = modelData["typeRole"]
-                        }
-
-                        StyledIconLabel {
-                            iconCode: modelData["iconRole"]
                         }
                     }
                 }

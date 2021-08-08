@@ -80,18 +80,13 @@ FocusableItem {
                 ]
 
                 delegate: FlatRadioButton {
-
                     ButtonGroup.group: notePositionButtonList.radioButtonGroup
 
+                    iconCode: modelData["iconRole"]
                     checked: root.model && !root.model.dotPosition.isUndefined ? root.model.dotPosition.value === modelData["typeRole"]
                                                                                : false
-
                     onToggled: {
                         root.model.dotPosition.value = modelData["typeRole"]
-                    }
-
-                    StyledIconLabel {
-                        iconCode: modelData["iconRole"]
                     }
                 }
             }
@@ -132,19 +127,16 @@ FocusableItem {
                         ]
 
                         delegate: FlatRadioButton {
-
                             ButtonGroup.group: headTypeButtonList.radioButtonGroup
 
                             checked: root.model && !root.model.headType.isUndefined ? root.model.headType.value === modelData["typeRole"]
                                                                                     : false
-
                             onToggled: {
                                 root.model.headType.value = modelData["typeRole"]
                             }
 
                             Icon {
                                 anchors.fill: parent
-
                                 icon: modelData["iconRole"]
                             }
                         }
@@ -171,18 +163,13 @@ FocusableItem {
                         ]
 
                         delegate: FlatRadioButton {
-
                             ButtonGroup.group: noteDirectionButtonList.radioButtonGroup
 
+                            iconCode: modelData["iconRole"]
                             checked: root.model && !root.model.headDirection.isUndefined ? root.model.headDirection.value === modelData["typeRole"]
                                                                                          : false
-
                             onToggled: {
                                 root.model.headDirection.value = modelData["typeRole"]
-                            }
-
-                            StyledIconLabel {
-                                iconCode: modelData["iconRole"]
                             }
                         }
                     }

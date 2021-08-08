@@ -93,20 +93,15 @@ Column {
             ]
 
             delegate: FlatRadioButton {
-
                 ButtonGroup.group: repeatStyle.radioButtonGroup
 
+                iconCode: modelData["iconRole"]
                 checked: root.barlineSettingsModel && !root.barlineSettingsModel.hasToShowTips.isUndefined ? root.barlineSettingsModel.hasToShowTips.value === modelData["valueRole"]
                                                                                                            : false
-
                 onToggled: {
                     if (root.barlineSettingsModel) {
                         root.barlineSettingsModel.hasToShowTips.value = modelData["valueRole"]
                     }
-                }
-
-                StyledIconLabel {
-                    iconCode: modelData["iconRole"]
                 }
             }
         }
