@@ -119,6 +119,9 @@ public:
 
     bool singleNoteDynamics;
 
+    QString groupId;
+    QStringList genreIds;
+
     InstrumentTemplate();
     InstrumentTemplate(const InstrumentTemplate&);
     ~InstrumentTemplate();
@@ -135,6 +138,7 @@ public:
     int nstaves() const { return staves; }
     void setStaves(int val) { staves = val; }
     ClefTypeList clefType(int staffIdx) const;
+    QString familyId() const;
 };
 
 //---------------------------------------------------------

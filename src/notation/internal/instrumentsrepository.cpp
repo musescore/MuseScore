@@ -27,8 +27,6 @@
 #include "libmscore/instrtemplate.h"
 #include "libmscore/articulation.h"
 
-#include "instrumentsconverter.h"
-
 using namespace mu::notation;
 
 void InstrumentsRepository::init()
@@ -93,14 +91,12 @@ void InstrumentsRepository::fillInstrumentsMeta(InstrumentsMeta& meta)
 
         meta.groups << group;
 
-        for (const Ms::InstrumentTemplate* msTemplate : msGroup->instrumentTemplates) {
-            if (msTemplate->trackName.isEmpty() || msTemplate->longNames.isEmpty()) {
+        for (InstrumentTemplate* templ : msGroup->instrumentTemplates) {
+            if (templ->trackName.isEmpty() || templ->longNames.isEmpty()) {
                 continue;
             }
 
-            Instrument templ = notation::InstrumentsConverter::convertInstrument(*msTemplate);
-            templ.groupId = msGroup->id;
-
+            templ->groupId = msGroup->id;
             meta.instrumentTemplates << templ;
         }
     }

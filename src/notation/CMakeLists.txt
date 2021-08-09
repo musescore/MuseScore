@@ -100,8 +100,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/inotationmidievents.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationmidievents.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationmidievents.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/instrumentsconverter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/instrumentsconverter.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/instrumentsrepository.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/instrumentsrepository.h
 

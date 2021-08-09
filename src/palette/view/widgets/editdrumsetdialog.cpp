@@ -139,7 +139,7 @@ EditDrumsetDialog::EditDrumsetDialog(QWidget* parent)
 
     if (measure && context.staff) {
         Ms::Instrument* instrument = context.staff->part()->instrument(measure->tick());
-        m_instrumentKey.instrumentId = instrument->getId();
+        m_instrumentKey.instrumentId = instrument->id();
         m_instrumentKey.partId = context.staff->part()->id();
         m_instrumentKey.tick = measure->tick();
         m_editedDrumset = *instrument->drumset();
