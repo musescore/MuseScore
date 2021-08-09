@@ -523,7 +523,7 @@ mu::draw::Color Element::curColor(bool isVisible, mu::draw::Color normalColor) c
     }
 
     if (flag(ElementFlag::DROP_TARGET)) {
-        return engravingConfiguration()->dropTargetColor();
+        return engravingConfiguration()->highlightSelectionColor(track() == -1 ? 0 : voice());
     }
     bool marked = false;
     if (isNote()) {
