@@ -39,16 +39,16 @@ Item {
         anchors.rightMargin: 4
 
         titleText: qsTrc("inspector", "Gap above")
-        propertyItem: gapAbove
+        propertyItem: root.gapAbove
 
         IncrementalPropertyControl {
             icon: IconCode.GAP_ABOVE
 
-            enabled: gapAbove ? gapAbove.isEnabled : false
-            isIndeterminate: gapAbove && enabled ? gapAbove.isUndefined : false
-            currentValue: gapAbove ? gapAbove.value : 0
+            enabled: root.gapAbove ? root.gapAbove.isEnabled : false
+            isIndeterminate: root.gapAbove && enabled ? root.gapAbove.isUndefined : false
+            currentValue: root.gapAbove ? root.gapAbove.value : 0
 
-            onValueEdited: { gapAbove.value = newValue }
+            onValueEdited: { root.gapAbove.value = newValue }
         }
     }
 
@@ -58,16 +58,16 @@ Item {
         anchors.right: parent.right
 
         titleText: qsTrc("inspector", "Gap below")
-        propertyItem: gapBelow
+        propertyItem: root.gapBelow
 
         IncrementalPropertyControl {
             icon: IconCode.GAP_BELOW
 
-            enabled: gapBelow ? gapBelow.isEnabled : false
-            isIndeterminate: gapBelow && enabled ? gapBelow.isUndefined : false
-            currentValue: gapBelow ? gapBelow.value : 0
+            enabled: root.gapBelow ? root.gapBelow.isEnabled : false
+            isIndeterminate: root.gapBelow && enabled ? root.gapBelow.isUndefined : false
+            currentValue: root.gapBelow ? root.gapBelow.value : 0
 
-            onValueEdited: { gapBelow.value = newValue }
+            onValueEdited: { root.gapBelow.value = newValue }
         }
     }
 }

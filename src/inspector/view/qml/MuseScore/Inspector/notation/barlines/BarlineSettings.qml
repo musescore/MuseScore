@@ -93,20 +93,15 @@ Column {
             ]
 
             delegate: FlatRadioButton {
-
                 ButtonGroup.group: repeatStyle.radioButtonGroup
 
+                iconCode: modelData["iconRole"]
                 checked: root.barlineSettingsModel && !root.barlineSettingsModel.hasToShowTips.isUndefined ? root.barlineSettingsModel.hasToShowTips.value === modelData["valueRole"]
                                                                                                            : false
-
                 onToggled: {
                     if (root.barlineSettingsModel) {
                         root.barlineSettingsModel.hasToShowTips.value = modelData["valueRole"]
                     }
-                }
-
-                StyledIconLabel {
-                    iconCode: modelData["iconRole"]
                 }
             }
         }
@@ -144,9 +139,10 @@ Column {
 
             IncrementalPropertyControl {
                 id: spanFromControl
-                iconMode: iconModeEnum.hidden
 
-                isIndeterminate: root.barlineSettingsModel ? root.barlineSettingsModel.spanFrom.isUndefined : false
+                enabled: root.barlineSettingsModel ? root.barlineSettingsModel.spanFrom.isEnabled : false
+
+                isIndeterminate: root.barlineSettingsModel && enabled ? root.barlineSettingsModel.spanFrom.isUndefined : false
                 currentValue: root.barlineSettingsModel ? root.barlineSettingsModel.spanFrom.value : 0
 
                 onValueEdited: { root.barlineSettingsModel.spanFrom.value = newValue }
@@ -163,8 +159,6 @@ Column {
 
             IncrementalPropertyControl {
                 id: spanToControl
-
-                iconMode: iconModeEnum.hidden
 
                 enabled: root.barlineSettingsModel ? root.barlineSettingsModel.spanTo.isEnabled : false
 

@@ -40,16 +40,16 @@ Item {
         anchors.rightMargin: 4
 
         titleText: qsTrc("inspector", "Left gap")
-        propertyItem: leftGap
+        propertyItem: root.leftGap
 
         IncrementalPropertyControl {
             icon: IconCode.LEFT_GAP
 
-            enabled: leftGap ? leftGap.isEnabled : false
-            isIndeterminate: leftGap && enabled ? leftGap.isUndefined : false
-            currentValue: leftGap ? leftGap.value : 0
+            enabled: root.leftGap ? lroot.eftGap.isEnabled : false
+            isIndeterminate: root.leftGap && enabled ? root.leftGap.isUndefined : false
+            currentValue: root.leftGap ? root.leftGap.value : 0
 
-            onValueEdited: { leftGap.value = newValue }
+            onValueEdited: { root.leftGap.value = newValue }
         }
     }
 
@@ -59,16 +59,16 @@ Item {
         anchors.right: parent.right
 
         titleText: qsTrc("inspector", "Right gap")
-        propertyItem: rightGap
+        propertyItem: root.rightGap
 
         IncrementalPropertyControl {
             icon: IconCode.RIGHT_GAP
 
-            enabled: rightGap ? rightGap.isEnabled : false
-            isIndeterminate: rightGap && enabled ? rightGap.isUndefined : false
-            currentValue: rightGap ? rightGap.value : 0
+            enabled: root.rightGap ? root.rightGap.isEnabled : false
+            isIndeterminate: root.rightGap && enabled ? root.rightGap.isUndefined : false
+            currentValue: root.rightGap ? root.rightGap.value : 0
 
-            onValueEdited: { rightGap.value = newValue }
+            onValueEdited: { root.rightGap.value = newValue }
         }
     }
 }

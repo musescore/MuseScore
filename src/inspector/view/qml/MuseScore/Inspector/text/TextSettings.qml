@@ -58,11 +58,11 @@ Column {
             navigation.panel: root.navigationPanel
             navigation.row: 1
 
-            isIndeterminate: model ? model.isSizeSpatiumDependent.isUndefined : false
-            checked: model && !isIndeterminate ? model.isSizeSpatiumDependent.value : false
+            isIndeterminate: root.model ? root.model.isSizeSpatiumDependent.isUndefined : false
+            checked: root.model && !isIndeterminate ? root.model.isSizeSpatiumDependent.value : false
             text: qsTrc("inspector", "Match staff size")
 
-            onClicked: { model.isSizeSpatiumDependent.value = !checked }
+            onClicked: { root.model.isSizeSpatiumDependent.value = !checked }
         }
 
         RadioButtonGroup {
@@ -77,30 +77,24 @@ Column {
             ]
 
             delegate: FlatRadioButton {
-
-                width: 30
+                ButtonGroup.group: subscriptOptionsButtonList.radioButtonGroup
 
                 navigation.name: "ScriptOptions" + model.index
                 navigation.panel: root.navigationPanel
                 navigation.row: 2 + model.index
 
-                normalStateColor: "#00000000"
+                width: 30
+                normalStateColor: "transparent"
 
-                ButtonGroup.group: subscriptOptionsButtonList.radioButtonGroup
-
+                iconCode: modelData["iconRole"]
                 checked: root.model && !root.model.textScriptAlignment.isUndefined ? root.model.textScriptAlignment.value === modelData["typeRole"]
                                                                                    : false
-
                 onClicked: {
                     if (root.model.textScriptAlignment.value === modelData["typeRole"]) {
                         root.model.textScriptAlignment.value = TextTypes.TEXT_SUBSCRIPT_NORMAL
                     } else {
                         root.model.textScriptAlignment.value = modelData["typeRole"]
                     }
-                }
-
-                StyledIconLabel {
-                    iconCode: modelData["iconRole"]
                 }
             }
         }
@@ -127,22 +121,17 @@ Column {
             ]
 
             delegate: FlatRadioButton {
-
                 ButtonGroup.group: frameType.radioButtonGroup
 
                 navigation.name: "FrameType" + model.index
                 navigation.panel: root.navigationPanel
                 navigation.row: 5 + model.index
 
+                iconCode: modelData["iconRole"]
                 checked: root.model && !root.model.frameType.isUndefined ? root.model.frameType.value === modelData["typeRole"]
                                                                          : false
-
                 onToggled: {
                     root.model.frameType.value = modelData["typeRole"]
-                }
-
-                StyledIconLabel {
-                    iconCode: modelData["iconRole"]
                 }
             }
         }
@@ -241,8 +230,6 @@ Column {
             propertyItem: root.model ? root.model.frameThickness : null
 
             IncrementalPropertyControl {
-                iconMode: iconModeEnum.hidden
-
                 navigation.name: "ThicknessValue"
                 navigation.panel: root.navigationPanel
                 navigation.row: 14
@@ -276,8 +263,6 @@ Column {
             propertyItem: root.model ? root.model.frameMargin : null
 
             IncrementalPropertyControl {
-                iconMode: iconModeEnum.hidden
-
                 navigation.name: "MarginValue"
                 navigation.panel: root.navigationPanel
                 navigation.row: 16
@@ -310,8 +295,6 @@ Column {
         propertyItem: root.model ? root.model.frameCornerRadius : null
 
         IncrementalPropertyControl {
-            iconMode: iconModeEnum.hidden
-
             navigation.name: "Corner radius Value"
             navigation.panel: root.navigationPanel
             navigation.row: 18
@@ -400,25 +383,17 @@ Column {
         ]
 
         delegate: FlatRadioButton {
+            ButtonGroup.group: textPositionButtonList.radioButtonGroup
 
             navigation.name: "Position" + model.index
             navigation.panel: root.navigationPanel
             navigation.row: 21 + model.index
 
-            ButtonGroup.group: textPositionButtonList.radioButtonGroup
-
+            text: modelData["textRole"]
             checked: root.model && !root.model.textPlacement.isUndefined ? root.model.textPlacement.value === modelData["valueRole"]
                                                                          : false
             onToggled: {
                 root.model.textPlacement.value = modelData["valueRole"]
-            }
-
-            StyledTextLabel {
-                text: modelData["textRole"]
-
-                elide: Text.ElideRight
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
             }
         }
     }
