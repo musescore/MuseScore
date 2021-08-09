@@ -27,7 +27,7 @@
 using namespace mu::notation;
 
 ExcerptNotation::ExcerptNotation(Ms::Excerpt* excerpt)
-    : Notation(excerpt->partScore()), m_excerpt(excerpt)
+    : Notation(), m_excerpt(excerpt)
 {
 }
 
