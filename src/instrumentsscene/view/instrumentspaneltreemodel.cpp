@@ -609,7 +609,7 @@ void InstrumentsPanelTreeModel::updateStaffItem(StaffTreeItem* item, const Staff
     }
 
     QString staffName = staff->staffName();
-    QString title = staff->isLinked() ? qtrc("instruments", "[LINK] %1").arg(staffName) : staffName;
+    QString title = masterStaff->isLinked() ? qtrc("instruments", "[LINK] %1").arg(staffName) : staffName;
 
     item->setId(staff->id());
     item->setTitle(title);
