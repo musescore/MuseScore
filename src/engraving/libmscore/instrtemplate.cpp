@@ -955,6 +955,17 @@ QString InstrumentTemplate::familyId() const
     return family ? family->id : QString();
 }
 
+bool InstrumentTemplate::containsGenre(const QString& genreId) const
+{
+    for (const InstrumentGenre* genre : genres) {
+        if (genre->id == genreId) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 //---------------------------------------------------------
 //   defaultClef
 //    traverse the instrument list for first instrument

@@ -148,6 +148,10 @@ void InstrumentsPanelTreeModel::listenSelectionChanged()
 
         QSet<ID> selectedPartIdSet;
         for (const Element* element : selectedElements) {
+            if (!element->part()) {
+                continue;
+            }
+
             selectedPartIdSet << element->part()->id();
         }
 
