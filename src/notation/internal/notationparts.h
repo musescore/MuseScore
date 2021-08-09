@@ -103,6 +103,8 @@ private:
     void updateSoloist(const PartInstrumentList& parts);
     void sortParts(const PartInstrumentList& parts, const QList<Ms::Staff*>& originalStaves);
 
+    void updateTracks();
+
     int resolveInstrumentNumber(const Instruments& newInstruments, const Instrument& currentInstrument) const;
 
     void setBracketsAndBarlines();

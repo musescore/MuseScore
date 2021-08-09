@@ -82,6 +82,8 @@ public:
     QString title() const { return _title; }
     void setTitle(const QString& s) { _title = s; }
 
+    void updateTracks();
+
     static QList<Excerpt*> createExcerptsFromParts(const QList<Part*>& parts);
     static Excerpt* createExcerptFromPart(Part* part);
 

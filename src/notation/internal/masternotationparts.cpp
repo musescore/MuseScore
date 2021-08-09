@@ -120,7 +120,8 @@ void MasterNotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
     NotationParts::appendStaff(staff, destinationPartId);
 
     for (INotationPartsPtr parts : excerptsParts()) {
-        parts->appendStaff(staff->clone(), destinationPartId);
+        Staff* excerptStaff = Ms::toStaff(staff->linkedClone());
+        parts->appendStaff(excerptStaff, destinationPartId);
     }
 
     endGlobalEdit();
