@@ -168,8 +168,7 @@ void MCursor::move(int t, const Fraction& tick)
 void MCursor::addPart(const QString& instrument)
 {
     Part* part   = new Part(_score);
-    Staff* staff = new Staff(_score);
-    staff->setPart(part);
+    Staff* staff = createStaff(_score, part);
     InstrumentTemplate* it = searchTemplate(instrument);
     if (it == 0) {
         qFatal("Did not find instrument <%s>", qPrintable(instrument));

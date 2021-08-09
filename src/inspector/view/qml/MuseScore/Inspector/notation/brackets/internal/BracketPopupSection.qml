@@ -26,6 +26,7 @@ import MuseScore.UiComponents 1.0
 import "../../../common"
 
 InspectorPropertyView {
+    id: root
 
     property QtObject intBracketProperty: undefined
 
@@ -33,19 +34,14 @@ InspectorPropertyView {
 
     IncrementalPropertyControl {
         id: columnsPositionControl
-        iconMode: iconModeEnum.hidden
 
         step: 1
         decimals: 0
         maxValue: 127
         minValue: 0
-        validator: IntInputValidator {
-            top: columnsPositionControl.maxValue
-            bottom: columnsPositionControl.minValue
-        }
 
-        isIndeterminate: intBracketProperty ? intBracketProperty.isUndefined : false
-        currentValue: intBracketProperty ? intBracketProperty.value : -1
+        isIndeterminate: root.intBracketProperty ? root.intBracketProperty.isUndefined : false
+        currentValue: root.intBracketProperty ? root.intBracketProperty.value : -1
 
         onValueEdited: {
             if (newValue === -1) {

@@ -89,18 +89,13 @@ FocusableItem {
                 ]
 
                 delegate: FlatRadioButton {
-
                     ButtonGroup.group: lineStyleButtonList.radioButtonGroup
 
+                    iconCode: modelData["iconRole"]
                     checked: root.model && !root.model.lineStyle.isUndefined ? root.model.lineStyle.value === modelData["typeRole"]
                                                                              : false
-
                     onToggled: {
                         root.model.lineStyle.value = modelData["typeRole"]
-                    }
-
-                    StyledIconLabel {
-                        iconCode: modelData["iconRole"]
                     }
                 }
             }
@@ -122,8 +117,6 @@ FocusableItem {
                 propertyItem: root.model ? root.model.dashLineLength : null
 
                 IncrementalPropertyControl {
-                    iconMode: iconModeEnum.hidden
-
                     isIndeterminate: root.model ? root.model.dashLineLength.isUndefined : false
                     currentValue: root.model ? root.model.dashLineLength.value : 0
                     step: 0.1
@@ -147,8 +140,6 @@ FocusableItem {
                 propertyItem: root.model ? root.model.dashGapLength : null
 
                 IncrementalPropertyControl {
-                    iconMode: iconModeEnum.hidden
-
                     isIndeterminate: root.model && enabled ? root.model.dashGapLength.isUndefined : false
                     currentValue: root.model ? root.model.dashGapLength.value : 0
                     step: 0.1
@@ -176,8 +167,6 @@ FocusableItem {
                 propertyItem: root.model ? root.model.thickness : null
 
                 IncrementalPropertyControl {
-                    iconMode: iconModeEnum.hidden
-
                     isIndeterminate: root.model ? root.model.thickness.isUndefined : false
                     currentValue: root.model ? root.model.thickness.value : 0
                     step: 0.1
@@ -198,9 +187,6 @@ FocusableItem {
                 propertyItem: root.model ? root.model.height : null
 
                 IncrementalPropertyControl {
-
-                    iconMode: iconModeEnum.hidden
-
                     isIndeterminate: root.model ? root.model.height.isUndefined : false
                     currentValue: root.model ? root.model.height.value : 0
                     step: 0.1
@@ -226,8 +212,6 @@ FocusableItem {
                 propertyItem: root.model ? root.model.continiousHeight : null
 
                 IncrementalPropertyControl {
-                    iconMode: iconModeEnum.hidden
-
                     isIndeterminate: root.model ? root.model.continiousHeight.isUndefined : false
                     currentValue: root.model ? root.model.continiousHeight.value : 0
                     step: 0.1
@@ -256,21 +240,13 @@ FocusableItem {
                 ]
 
                 delegate: FlatRadioButton {
-
                     ButtonGroup.group: positionButtonList.radioButtonGroup
 
+                    text: modelData["textRole"]
                     checked: root.model && !root.model.placement.isUndefined ? root.model.placement.value === modelData["valueRole"]
                                                                              : false
                     onToggled: {
                         root.model.placement.value = modelData["valueRole"]
-                    }
-
-                    StyledTextLabel {
-                        text: modelData["textRole"]
-
-                        elide: Text.ElideRight
-                        verticalAlignment: Text.AlignVCenter
-                        horizontalAlignment: Text.AlignHCenter
                     }
                 }
             }

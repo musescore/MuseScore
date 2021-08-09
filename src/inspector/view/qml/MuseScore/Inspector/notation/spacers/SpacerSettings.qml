@@ -41,7 +41,6 @@ Column {
         IncrementalPropertyControl {
             isIndeterminate: root.model ? root.model.spacerHeight.isUndefined : false
             currentValue: root.model ? root.model.spacerHeight.value : 0
-            iconMode: iconModeEnum.hidden
             maxValue: 999
             minValue: 0
             step: 0.5

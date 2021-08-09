@@ -90,7 +90,7 @@ private:
     {
         QString id;
         QString name;
-        QString familyId;
+        QString familyCode;
         bool isSoloist = false;
         bool isExistingPart = false;
         notation::Instrument config;
@@ -107,7 +107,7 @@ private:
         bool operator==(const ScoreOrderInfo& orderInfo) const { return id == orderInfo.id; }
     };
 
-    void initSelectedInstruments(const notation::IDList& selectedPartIds);
+    void initSelectedInstruments(const IDList& selectedPartIds);
     notation::INotationPartsPtr notationParts() const;
     void initScoreOrders(const QString& currentId);
 

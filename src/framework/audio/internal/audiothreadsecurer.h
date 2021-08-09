@@ -20,28 +20,20 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __SEQUENCER_H__
-#define __SEQUENCER_H__
+#ifndef MU_AUDIO_AUDIOTHREADSECURER_H
+#define MU_AUDIO_AUDIOTHREADSECURER_H
 
-namespace Ms {
-class NPlayEvent;
+#include "iaudiothreadsecurer.h"
 
-enum class BeatType : char;
-
-//---------------------------------------------------------
-//   Sequencer
-//---------------------------------------------------------
-
-class Sequencer
+namespace mu::audio {
+class AudioThreadSecurer : public IAudioThreadSecurer
 {
 public:
-    Sequencer() {}
-    virtual ~Sequencer() {}
-
-    virtual void sendEvent(const NPlayEvent&) = 0;
-    virtual void startNote(int channel, int, int, double nt) = 0;
-    virtual void startNote(int channel, int, int, int, double nt) = 0;
-    virtual void playMetronomeBeat(BeatType type) = 0;
+    bool isMainThread() const override;
+    std::thread::id mainThreadId() const override;
+    bool isAudioWorkerThread() const override;
+    std::thread::id workerThreadId() const override;
 };
-}     // namespace Ms
-#endif
+}
+
+#endif // MU_AUDIO_AUDIOTHREADSECURER_H

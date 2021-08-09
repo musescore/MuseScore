@@ -21,7 +21,6 @@
  */
 #include "notationpaintview.h"
 
-#include <QQuickWindow>
 #include <QPainter>
 
 #include "actions/actiontypes.h"

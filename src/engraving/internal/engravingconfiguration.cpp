@@ -23,12 +23,48 @@
 
 #include "global/settings.h"
 #include "draw/color.h"
+#include "libmscore/mscore.h"
+
+#include "log.h"
 
 using namespace mu::engraving;
 using namespace mu::framework;
+using namespace mu::draw;
 
 static const Settings::Key DEFAULT_STYLE_FILE_PATH("engraving", "engraving/style/defaultStyleFile");
 static const Settings::Key PART_STYLE_FILE_PATH("engraving", "engraving/style/partStyleFile");
+
+struct VoiceColorKey {
+    Settings::Key key;
+    Color color;
+};
+
+static VoiceColorKey voiceColorKeys[Ms::VOICES];
+
+void EngravingConfiguration::init()
+{
+    Color defaultVoiceColors[Ms::VOICES] {
+        "#0065BF",
+        "#007F00",
+        "#C53F00",
+        "#C31989"
+    };
+
+    for (int voice = 0; voice < Ms::VOICES; ++voice) {
+        Settings::Key key("engraving", "engraving/colors/voice" + std::to_string(voice + 1));
+
+        settings()->setDefaultValue(key, Val(defaultVoiceColors[voice].toQColor()));
+        settings()->setCanBeMannualyEdited(key, true);
+        settings()->valueChanged(key).onReceive(this, [this, voice](const Val& val) {
+            Color color = val.toQColor();
+            voiceColorKeys[voice].color = color;
+            m_voiceColorChanged.send(voice, color);
+        });
+
+        Color currentColor = settings()->value(key).toQColor();
+        voiceColorKeys[voice] = VoiceColorKey { std::move(key), currentColor };
+    }
+}
 
 QString EngravingConfiguration::defaultStyleFilePath() const
 {
@@ -50,93 +86,68 @@ void EngravingConfiguration::setPartStyleFilePath(const QString& path)
     settings()->setSharedValue(PART_STYLE_FILE_PATH, Val(path.toStdString()));
 }
 
-mu::draw::Color EngravingConfiguration::keysigColor() const
+Color EngravingConfiguration::defaultColor() const
+{
+    return Color::black;
+}
+
+Color EngravingConfiguration::invisibleColor() const
 {
     return "#808080";
 }
 
-mu::draw::Color EngravingConfiguration::defaultColor() const
-{
-    return "#000000";
-}
-
-mu::draw::Color EngravingConfiguration::whiteColor() const
-{
-    return "#FFFFFF";
-}
-
-mu::draw::Color EngravingConfiguration::blackColor() const
-{
-    return "#000000";
-}
-
-mu::draw::Color EngravingConfiguration::redColor() const
-{
-    return "#FF0000";
-}
-
-mu::draw::Color EngravingConfiguration::invisibleColor() const
-{
-    return "#808080";
-}
-
-mu::draw::Color EngravingConfiguration::lassoColor() const
+Color EngravingConfiguration::lassoColor() const
 {
     return "#00323200";
 }
 
-mu::draw::Color EngravingConfiguration::figuredBassColor() const
-{
-    return "#D3D3D3";
-}
-
-mu::draw::Color EngravingConfiguration::selectionColor() const
-{
-    return "#4682B4";
-}
-
-mu::draw::Color EngravingConfiguration::warningColor() const
+Color EngravingConfiguration::warningColor() const
 {
     return "#808000";
 }
 
-mu::draw::Color EngravingConfiguration::warningSelectedColor() const
+Color EngravingConfiguration::warningSelectedColor() const
 {
     return "#565600";
 }
 
-mu::draw::Color EngravingConfiguration::criticalColor() const
+Color EngravingConfiguration::criticalColor() const
 {
-    return redColor();
+    return Color::redColor;
 }
 
-mu::draw::Color EngravingConfiguration::criticalSelectedColor() const
+Color EngravingConfiguration::criticalSelectedColor() const
 {
     return "#8B0000";
 }
 
-mu::draw::Color EngravingConfiguration::editColor() const
+Color EngravingConfiguration::formattingMarksColor() const
 {
-    return "#C0C0C0";
+    return "#A0A0A4";
 }
 
-mu::draw::Color EngravingConfiguration::harmonyColor() const
+Color EngravingConfiguration::dropTargetColor() const
 {
-    return redColor();
+    return "#1778db";
 }
 
-mu::draw::Color EngravingConfiguration::textBaseFrameColor() const
+Color EngravingConfiguration::selectionColor(int voice) const
 {
-    return blackColor();
+    return voiceColorKeys[voice].color;
 }
 
-mu::draw::Color EngravingConfiguration::textBaseBgColor() const
+void EngravingConfiguration::setSelectionColor(int voiceIndex, Color color)
 {
-    return "#00FFFFFF";
+    settings()->setSharedValue(voiceColorKeys[voiceIndex].key, Val(color.toQColor()));
 }
 
-mu::draw::Color EngravingConfiguration::shadowNoteColor() const
+mu::async::Channel<int, Color> EngravingConfiguration::selectionColorChanged() const
 {
-    // value of QColor::lighter(SHADOW_NOTE_LIGHT) for MScore::selectColor[voice()] when SHADOW_NOTE_LIGHT = 135
-    return "#03FF88";
+    return m_voiceColorChanged;
+}
+
+Color EngravingConfiguration::shadowNoteColor(int voice) const
+{
+    return selectionColor(voice).withAlpha(127);
+    // return Color::fromQColor(voiceColor(voice).toQColor().lighter(135));
 }

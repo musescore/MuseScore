@@ -83,7 +83,6 @@
 #include "chordlist.h"
 #include "mscore.h"
 #include "accidental.h"
-#include "sequencer.h"
 #include "tremolo.h"
 #include "rehearsalmark.h"
 #include "sym.h"
@@ -2069,7 +2068,7 @@ void Score::moveUp(ChordRest* cr)
         return;
     }
 
-    QList<Staff*>* staves = part->staves();
+    const QList<Staff*>* staves = part->staves();
     // we know that staffMove+rstaff-1 index exists due to the previous condition.
     if (staff->staffType(cr->tick())->group() != StaffGroup::STANDARD
         || staves->at(rstaff + staffMove - 1)->staffType(cr->tick())->group() != StaffGroup::STANDARD) {
@@ -2098,7 +2097,7 @@ void Score::moveDown(ChordRest* cr)
         return;
     }
 
-    QList<Staff*>* staves = part->staves();
+    const QList<Staff*>* staves = part->staves();
     // we know that staffMove+rstaff+1 index exists due to the previous condition.
     if (staff->staffType(cr->tick())->group() != StaffGroup::STANDARD
         || staves->at(staffMove + rstaff + 1)->staffType(cr->tick())->group() != StaffGroup::STANDARD) {
@@ -3344,7 +3343,7 @@ void Score::cmdSlashFill()
                 p.segment = s;
                 p.staffIdx = staffIdx;
                 p.line = line;
-                p.fret = FRET_NONE;
+                p.fret = INVALID_FRET_INDEX;
                 _is.setRest(false);             // needed for tab
                 nv = noteValForPosition(p, AccidentalType::NONE, error);
             }

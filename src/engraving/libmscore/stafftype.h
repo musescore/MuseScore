@@ -186,6 +186,8 @@ static const int STAFF_GROUP_NAME_MAX_LENGTH   = 32;
 
 class StaffType
 {
+    INJECT_STATIC(engraving, mu::engraving::IEngravingConfiguration, engravingConfiguration)
+
     friend class TabDurationSymbol;
 
     StaffGroup _group = StaffGroup::STANDARD;
@@ -198,7 +200,7 @@ class StaffType
     Spatium _yoffset         { 0.0 };
     bool _small              { false };
     bool _invisible          { false };
-    mu::draw::Color _color   { MScore::defaultColor };
+    mu::draw::Color _color   { engravingConfiguration()->defaultColor() };
 
     int _lines            = 5;
     int _stepOffset       = 0;
@@ -310,7 +312,7 @@ public:
     void setShowBarlines(bool val) { _showBarlines = val; }
     bool showBarlines() const { return _showBarlines; }
     qreal userMag() const { return _userMag; }
-    bool small() const { return _small; }
+    bool isSmall() const { return _small; }
     bool invisible() const { return _invisible; }
     const mu::draw::Color& color() const { return _color; }
     void setUserMag(qreal val) { _userMag = val; }

@@ -49,7 +49,7 @@ Column {
 
     InspectorPropertyView {
         titleText: qsTrc("inspector", "Offset")
-        propertyItem: horizontalOffset
+        propertyItem: root.horizontalOffset
 
         navigation.name: "OffsetMenu"
         navigation.panel: root.navigationPanel
@@ -70,11 +70,11 @@ Column {
 
                 icon: IconCode.HORIZONTAL
 
-                enabled: horizontalOffset ? horizontalOffset.isEnabled : false
-                isIndeterminate: horizontalOffset && enabled ? horizontalOffset.isUndefined : false
-                currentValue: horizontalOffset ? horizontalOffset.value : 0
+                enabled: root.horizontalOffset ? root.horizontalOffset.isEnabled : false
+                isIndeterminate: root.horizontalOffset && enabled ? root.horizontalOffset.isUndefined : false
+                currentValue: root.horizontalOffset ? root.horizontalOffset.value : 0
 
-                onValueEdited: { horizontalOffset.value = newValue }
+                onValueEdited: { root.horizontalOffset.value = newValue }
             }
 
             IncrementalPropertyControl {
@@ -88,11 +88,11 @@ Column {
 
                 icon: IconCode.VERTICAL
 
-                enabled: verticalOffset ? verticalOffset.isEnabled : false
-                isIndeterminate: verticalOffset && enabled ? verticalOffset.isUndefined : false
-                currentValue: verticalOffset ? verticalOffset.value : 0
+                enabled: root.verticalOffset ? root.verticalOffset.isEnabled : false
+                isIndeterminate: root.verticalOffset && enabled ? root.verticalOffset.isUndefined : false
+                currentValue: root.verticalOffset ? root.verticalOffset.value : 0
 
-                onValueEdited: { verticalOffset.value = newValue }
+                onValueEdited: { root.verticalOffset.value = newValue }
             }
         }
     }

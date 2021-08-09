@@ -57,11 +57,10 @@ ExpandableBlank {
                 navigation.row: root.navigation.row + 1
 
                 titleText: qsTrc("inspector", "Velocity")
-                propertyItem: model ? model.velocity : null
+                propertyItem: root.model ? root.model.velocity : null
 
                 IncrementalPropertyControl {
                     id: velocityControl
-                    iconMode: iconModeEnum.hidden
 
                     navigation.name: "VelocityValue"
                     navigation.panel: root.navigation.panel
@@ -72,15 +71,11 @@ ExpandableBlank {
                     decimals: 0
                     maxValue: 127
                     minValue: -127
-                    validator: IntInputValidator {
-                        top: velocityControl.maxValue
-                        bottom: velocityControl.minValue
-                    }
 
-                    isIndeterminate: model ? model.velocity.isUndefined : false
-                    currentValue: model ? model.velocity.value : 0
+                    isIndeterminate: root.model ? root.model.velocity.isUndefined : false
+                    currentValue: root.model ? root.model.velocity.value : 0
 
-                    onValueEdited: { model.velocity.value = newValue }
+                    onValueEdited: { root.model.velocity.value = newValue }
                 }
             }
 
@@ -95,26 +90,23 @@ ExpandableBlank {
                 navigation.row: root.navigation.row + 3
 
                 titleText: qsTrc("inspector", "Tunings (cents)")
-                propertyItem: model ? model.tuning : null
+                propertyItem: root.model ? root.model.tuning : null
 
                 IncrementalPropertyControl {
-                    iconMode: iconModeEnum.hidden
-
                     navigation.name: "TuningsValue"
                     navigation.panel: root.navigation.panel
                     navigation.column: root.navigation.column
                     navigation.row: root.navigation.row + 4
 
-                    isIndeterminate: model ? model.tuning.isUndefined : false
-                    currentValue: model ? model.tuning.value : 0
+                    isIndeterminate: root.model ? root.model.tuning.isUndefined : false
+                    currentValue: root.model ? root.model.tuning.value : 0
 
-                    onValueEdited: { model.tuning.value = newValue }
+                    onValueEdited: { root.model.tuning.value = newValue }
                 }
             }
         }
 
         CheckBox {
-
             navigation.name: "Override dynamics"
             navigation.panel: root.navigation.panel
             navigation.column: root.navigation.column
@@ -122,10 +114,10 @@ ExpandableBlank {
 
             text: qsTrc("inspector", "Override dynamics")
 
-            isIndeterminate: model ? model.overrideDynamics.isUndefined : false
-            checked: model && !isIndeterminate ? model.overrideDynamics.value : false
+            isIndeterminate: root.model ? root.model.overrideDynamics.isUndefined : false
+            checked: root.model && !isIndeterminate ? root.model.overrideDynamics.value : false
 
-            onClicked: { model.overrideDynamics.value = !checked }
+            onClicked: { root.model.overrideDynamics.value = !checked }
         }
     }
 }

@@ -717,7 +717,7 @@ void Rest::reset()
 qreal Rest::mag() const
 {
     qreal m = staff() ? staff()->staffMag(this) : 1.0;
-    if (small()) {
+    if (isSmall()) {
         m *= score()->styleD(Sid::smallNoteMag);
     }
     return m;
@@ -798,7 +798,7 @@ qreal Rest::rightEdge() const
 
 bool Rest::accent()
 {
-    return voice() >= 2 && small();
+    return voice() >= 2 && isSmall();
 }
 
 //---------------------------------------------------------
@@ -905,7 +905,8 @@ void Rest::write(XmlWriter& xml) const
     el().write(xml);
     bool write_dots = false;
     for (NoteDot* dot : m_dots) {
-        if (!dot->offset().isNull() || !dot->visible() || dot->color() != Ms::MScore::defaultColor || dot->visible() != visible()) {
+        if (!dot->offset().isNull() || !dot->visible() || dot->color() != engravingConfiguration()->defaultColor()
+            || dot->visible() != visible()) {
             write_dots = true;
             break;
         }

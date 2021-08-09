@@ -415,7 +415,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                         // noteheads must be unmirrored and of same group
                         // and chords must be same size (or else sharing code won't work)
                         if (n->headGroup() != p->headGroup() || n->tpc() != p->tpc() || n->mirror() || p->mirror()
-                            || nchord->small() != pchord->small()) {
+                            || nchord->isSmall() != pchord->isSmall()) {
                             shareHeads = false;
                         } else {
                             // noteheads are potentially shareable
@@ -428,7 +428,7 @@ void Score::layoutChords1(Segment* segment, int staffIdx)
                             // by setting one of the notehead types to match the other or by making one notehead invisible
                             // TODO: consider adding a style option, staff properties, or note property to control sharing
                             if ((nchord->dots() != pchord->dots() || !nchord->stem() || !pchord->stem() || nHeadType != pHeadType
-                                 || n->small() || p->small())
+                                 || n->isSmall() || p->isSmall())
                                 && ((n->headType() == NoteHead::Type::HEAD_AUTO && p->headType() == NoteHead::Type::HEAD_AUTO)
                                     || nHeadType != pHeadType)
                                 && (n->visible() == p->visible())) {
@@ -3163,7 +3163,7 @@ void Score::getNextMeasure(LayoutContext& lc)
                         continue;
                     }
                     qreal m = staff->staffMag(&segment);
-                    if (cr->small()) {
+                    if (cr->isSmall()) {
                         m *= score()->styleD(Sid::smallNoteMag);
                     }
 

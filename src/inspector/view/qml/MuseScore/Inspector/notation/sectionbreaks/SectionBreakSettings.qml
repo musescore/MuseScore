@@ -42,7 +42,6 @@ Column {
         IncrementalPropertyControl {
             isIndeterminate: root.model ? root.model.pauseDuration.isUndefined : false
             currentValue: root.model ? root.model.pauseDuration.value : 0
-            iconMode: iconModeEnum.hidden
             maxValue: 999
             minValue: 0
             step: 0.5

@@ -138,7 +138,6 @@ PreferencesPage {
 
                 IncrementalPropertyControl {
                     width: 96
-                    iconMode: iconModeEnum.hidden
 
                     enabled: preferencesModel.isAutoSave
 
@@ -146,6 +145,7 @@ PreferencesPage {
                     minValue: 1
                     maxValue: 100
                     step: 1
+                    decimals: 0
 
                     measureUnitsSymbol: qsTrc("appshell", "min")
 
@@ -186,7 +186,6 @@ PreferencesPage {
 
                 IncrementalPropertyControl {
                     width: 96
-                    iconMode: iconModeEnum.hidden
 
                     enabled: preferencesModel.isOSCRemoteControl
 
@@ -194,6 +193,7 @@ PreferencesPage {
                     minValue: 1
                     maxValue: 65535
                     step: 1
+                    decimals: 0
 
                     onValueEdited: {
                         preferencesModel.oscPort = newValue

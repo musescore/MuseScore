@@ -33,6 +33,11 @@ void AudioSanitizer::setupMainThread()
     s_as_mainThreadID = std::this_thread::get_id();
 }
 
+std::thread::id AudioSanitizer::mainThread()
+{
+    return s_as_mainThreadID;
+}
+
 bool AudioSanitizer::isMainThread()
 {
     return std::this_thread::get_id() == s_as_mainThreadID;

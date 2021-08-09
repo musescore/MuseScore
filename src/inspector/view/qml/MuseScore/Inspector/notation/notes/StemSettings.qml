@@ -26,7 +26,6 @@ import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
 import "../../common"
 
-
 FocusableItem {
     id: root
 
@@ -48,14 +47,14 @@ FocusableItem {
         spacing: 16
 
         CheckBox {
-            isIndeterminate: stemModel && beamModel ? stemModel.isStemHidden.isUndefined || beamModel.isBeamHidden.isUndefined : false
-            checked: stemModel && !isIndeterminate && beamModel ? stemModel.isStemHidden.value && beamModel.isBeamHidden.value : false
+            isIndeterminate: root.stemModel && root.beamModel ? root.stemModel.isStemHidden.isUndefined || root.beamModel.isBeamHidden.isUndefined : false
+            checked: root.stemModel && !isIndeterminate && root.beamModel ? root.stemModel.isStemHidden.value && root.beamModel.isBeamHidden.value : false
             text: qsTrc("inspector", "Hide stem (also hides beam)")
 
             onClicked: {
                 var isHidden = !checked
-                stemModel.isStemHidden.value = isHidden
-                beamModel.isBeamHidden.value = isHidden
+                root.stemModel.isStemHidden.value = isHidden
+                root.beamModel.isBeamHidden.value = isHidden
             }
         }
 
@@ -77,18 +76,13 @@ FocusableItem {
                 ]
 
                 delegate: FlatRadioButton {
-
                     ButtonGroup.group: radioButtonList.radioButtonGroup
 
+                    iconCode: modelData["iconRole"]
                     checked: root.stemModel && !root.stemModel.stemDirection.isUndefined ? root.stemModel.stemDirection.value === modelData["typeRole"]
                                                                                          : false
-
                     onToggled: {
                         root.stemModel.stemDirection.value = modelData["typeRole"]
-                    }
-
-                    StyledIconLabel {
-                        iconCode: modelData["iconRole"]
                     }
                 }
             }
@@ -117,19 +111,18 @@ FocusableItem {
                         anchors.rightMargin: 2
 
                         titleText: qsTrc("inspector", "Thickness")
-                        propertyItem: stemModel ? stemModel.thickness : null
+                        propertyItem: root.stemModel ? root.stemModel.thickness : null
 
                         IncrementalPropertyControl {
-                            enabled: stemModel ? !stemModel.isEmpty : false
-                            isIndeterminate: stemModel ? stemModel.thickness.isUndefined : false
-                            currentValue: stemModel ? stemModel.thickness.value : 0
-                            iconMode: iconModeEnum.hidden
+                            enabled: root.stemModel ? !root.stemModel.isEmpty : false
+                            isIndeterminate: root.stemModel ? root.stemModel.thickness.isUndefined : false
+                            currentValue: root.stemModel ? root.stemModel.thickness.value : 0
 
                             maxValue: 4
                             minValue: 0.01
                             step: 0.01
 
-                            onValueEdited: { stemModel.thickness.value = newValue }
+                            onValueEdited: { root.stemModel.thickness.value = newValue }
                         }
                     }
 
@@ -139,18 +132,17 @@ FocusableItem {
                         anchors.right: parent.right
 
                         titleText: qsTrc("inspector", "Length")
-                        propertyItem: stemModel ? stemModel.length : null
+                        propertyItem: root.stemModel ? root.stemModel.length : null
 
                         IncrementalPropertyControl {
-                            enabled: stemModel ? !stemModel.isEmpty : false
-                            isIndeterminate: stemModel ? stemModel.length.isUndefined : false
-                            currentValue: stemModel ? stemModel.length.value : 0
-                            iconMode: iconModeEnum.hidden
+                            enabled: root.stemModel ? !root.stemModel.isEmpty : false
+                            isIndeterminate: root.stemModel ? root.stemModel.length.isUndefined : false
+                            currentValue: root.stemModel ? root.stemModel.length.value : 0
 
                             maxValue: 10
                             minValue: 0.01
 
-                            onValueEdited: { stemModel.length.value = newValue }
+                            onValueEdited: { root.stemModel.length.value = newValue }
                         }
                     }
                 }
@@ -159,7 +151,7 @@ FocusableItem {
                     height: implicitHeight
 
                     titleText: qsTrc("inspector", "Stem offset")
-                    propertyItem: stemModel ? stemModel.horizontalOffset : null
+                    propertyItem: root.stemModel ? root.stemModel.horizontalOffset : null
 
                     Item {
                         height: childrenRect.height
@@ -171,11 +163,11 @@ FocusableItem {
                             anchors.rightMargin: 4
 
                             icon: IconCode.HORIZONTAL
-                            enabled: stemModel ? !stemModel.isEmpty : false
-                            isIndeterminate: stemModel ? stemModel.horizontalOffset.isUndefined : false
-                            currentValue: stemModel ? stemModel.horizontalOffset.value : 0
+                            enabled: root.stemModel ? !root.stemModel.isEmpty : false
+                            isIndeterminate: root.stemModel ? root.stemModel.horizontalOffset.isUndefined : false
+                            currentValue: root.stemModel ? root.stemModel.horizontalOffset.value : 0
 
-                            onValueEdited: { stemModel.horizontalOffset.value = newValue }
+                            onValueEdited: { root.stemModel.horizontalOffset.value = newValue }
                         }
 
                         IncrementalPropertyControl {
@@ -184,11 +176,11 @@ FocusableItem {
                             anchors.right: parent.right
 
                             icon: IconCode.VERTICAL
-                            enabled: stemModel ? !stemModel.isEmpty : false
-                            isIndeterminate: stemModel ? stemModel.verticalOffset.isUndefined : false
-                            currentValue: stemModel ? stemModel.verticalOffset.value : 0
+                            enabled: root.stemModel ? !root.stemModel.isEmpty : false
+                            isIndeterminate: root.stemModel ? root.stemModel.verticalOffset.isUndefined : false
+                            currentValue: root.stemModel ? root.stemModel.verticalOffset.value : 0
 
-                            onValueEdited: { stemModel.verticalOffset.value = newValue }
+                            onValueEdited: { root.stemModel.verticalOffset.value = newValue }
                         }
                     }
                 }
@@ -197,7 +189,7 @@ FocusableItem {
                     height: childrenRect.height
 
                     titleText: qsTrc("inspector", "Flag offset")
-                    propertyItem: hookModel ? hookModel.horizontalOffset : null
+                    propertyItem: root.hookModel ? root.hookModel.horizontalOffset : null
 
                     Item {
                         height: childrenRect.height
@@ -208,12 +200,12 @@ FocusableItem {
                             anchors.right: parent.horizontalCenter
                             anchors.rightMargin: 4
 
-                            enabled: hookModel ? !hookModel.isEmpty : false
-                            isIndeterminate: hookModel ? hookModel.horizontalOffset.isUndefined : false
+                            enabled: root.hookModel ? !root.hookModel.isEmpty : false
+                            isIndeterminate: root.hookModel ? root.hookModel.horizontalOffset.isUndefined : false
                             icon: IconCode.HORIZONTAL
-                            currentValue: hookModel ? hookModel.horizontalOffset.value : 0.00
+                            currentValue: root.hookModel ? root.hookModel.horizontalOffset.value : 0.00
 
-                            onValueEdited: { hookModel.horizontalOffset.value = newValue }
+                            onValueEdited: { root.hookModel.horizontalOffset.value = newValue }
                         }
 
                         IncrementalPropertyControl {
@@ -221,12 +213,12 @@ FocusableItem {
                             anchors.leftMargin: 4
                             anchors.right: parent.right
 
-                            enabled: hookModel ? !hookModel.isEmpty : false
-                            isIndeterminate: hookModel ? hookModel.verticalOffset.isUndefined : false
+                            enabled: root.hookModel ? !root.hookModel.isEmpty : false
+                            isIndeterminate: root.hookModel ? root.hookModel.verticalOffset.isUndefined : false
                             icon: IconCode.VERTICAL
-                            currentValue: hookModel ? hookModel.verticalOffset.value : 0.00
+                            currentValue: root.hookModel ? root.hookModel.verticalOffset.value : 0.00
 
-                            onValueEdited: { hookModel.verticalOffset.value = newValue }
+                            onValueEdited: { root.hookModel.verticalOffset.value = newValue }
                         }
                     }
                 }

@@ -114,6 +114,9 @@ void MasterNotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
 
     startGlobalEdit();
 
+    //! NOTE: will be generated later after adding to the score
+    staff->setId(Ms::INVALID_ID);
+
     NotationParts::appendStaff(staff, destinationPartId);
 
     for (INotationPartsPtr parts : excerptsParts()) {

@@ -48,9 +48,6 @@ namespace Ms {
 Part::Part(Score* s)
     : ScoreElement(s)
 {
-    static std::atomic_int currentId { 0 };
-    _id = QString::number(++currentId);
-
     _color   = DEFAULT_COLOR;
     _show    = true;
     _soloist = false;
@@ -66,6 +63,16 @@ void Part::initFromInstrTemplate(const InstrumentTemplate* t)
 {
     _partName = t->trackName;
     setInstrument(Instrument::fromTemplate(t));
+}
+
+ID Part::id() const
+{
+    return _id;
+}
+
+void Part::setId(const ID& id)
+{
+    _id = id;
 }
 
 Part* Part::clone() const
@@ -142,10 +149,8 @@ bool Part::readProperties(XmlReader& e)
 {
     const QStringRef& tag(e.name());
     if (tag == "Staff") {
-        Staff* staff = new Staff(score());
-        staff->setPart(this);
-        score()->staves().push_back(staff);
-        _staves.push_back(staff);
+        Staff* staff = createStaff(score(), this);
+        score()->appendStaff(staff);
         staff->read(e);
     } else if (tag == "Instrument") {
         Instrument* instr = new Instrument;
@@ -195,6 +200,7 @@ void Part::read(XmlReader& e)
 void Part::write(XmlWriter& xml) const
 {
     xml.stag(this);
+
     for (const Staff* staff : _staves) {
         staff->write(xml);
     }
@@ -213,7 +219,28 @@ void Part::write(XmlWriter& xml) const
                 _preferSharpFlat == PreferSharpFlat::SHARPS ? "sharps" : "flats");
     }
     instrument()->write(xml, this);
+
     xml.etag();
+}
+
+int Part::nstaves() const
+{
+    return _staves.size();
+}
+
+const QList<Staff*>* Part::staves() const
+{
+    return &_staves;
+}
+
+void Part::appendStaff(Staff* staff)
+{
+    _staves.push_back(staff);
+}
+
+void Part::clearStaves()
+{
+    _staves.clear();
 }
 
 //---------------------------------------------------------
@@ -241,12 +268,13 @@ void Part::setStaves(int n)
         qDebug("Part::setStaves(): remove staves not implemented!");
         return;
     }
+
     int staffIdx = score()->staffIdx(this) + ns;
     for (int i = ns; i < n; ++i) {
-        Staff* staff = new Staff(score());
-        staff->setPart(this);
+        Staff* staff = createStaff(score(), this);
         _staves.push_back(staff);
-        score()->staves().insert(staffIdx, staff);
+        const_cast<QList<Staff*>&>(score()->staves()).insert(staffIdx, staff);
+
         for (Measure* m = score()->firstMeasure(); m; m = m->nextMeasure()) {
             m->insertStaff(staff, staffIdx);
             if (m->hasMMRest()) {

@@ -23,12 +23,15 @@
 #define MU_ENGRAVING_ENGRAVINGCONFIGURATION_H
 
 #include "../iengravingconfiguration.h"
+#include "async/asyncable.h"
 
 namespace mu::engraving {
-class EngravingConfiguration : public IEngravingConfiguration
+class EngravingConfiguration : public IEngravingConfiguration, public async::Asyncable
 {
 public:
     EngravingConfiguration() = default;
+
+    void init() override;
 
     QString defaultStyleFilePath() const override;
     void setDefaultStyleFilePath(const QString& path) override;
@@ -36,24 +39,24 @@ public:
     QString partStyleFilePath() const override;
     void setPartStyleFilePath(const QString& path) override;
 
-    mu::draw::Color keysigColor() const override;
-    mu::draw::Color defaultColor() const override;
-    mu::draw::Color whiteColor() const override;
-    mu::draw::Color blackColor() const override;
-    mu::draw::Color redColor() const override;
-    mu::draw::Color invisibleColor() const override;
-    mu::draw::Color lassoColor() const override;
-    mu::draw::Color figuredBassColor() const override;
-    mu::draw::Color selectionColor() const override;
-    mu::draw::Color warningColor() const override;
-    mu::draw::Color warningSelectedColor() const override;
-    mu::draw::Color criticalColor() const override;
-    mu::draw::Color criticalSelectedColor() const override;
-    mu::draw::Color editColor() const override;
-    mu::draw::Color harmonyColor() const override;
-    mu::draw::Color textBaseFrameColor() const override;
-    mu::draw::Color textBaseBgColor() const override;
-    mu::draw::Color shadowNoteColor() const override;
+    draw::Color defaultColor() const override;
+    draw::Color invisibleColor() const override;
+    draw::Color lassoColor() const override;
+    draw::Color warningColor() const override;
+    draw::Color warningSelectedColor() const override;
+    draw::Color criticalColor() const override;
+    draw::Color criticalSelectedColor() const override;
+    draw::Color formattingMarksColor() const override;
+    draw::Color dropTargetColor() const override;
+
+    draw::Color selectionColor(int voiceIndex = 0) const override;
+    void setSelectionColor(int voiceIndex, draw::Color color) override;
+    async::Channel<int, draw::Color> selectionColorChanged() const override;
+
+    draw::Color shadowNoteColor(int voice = 0) const override;
+
+private:
+    async::Channel<int, draw::Color> m_voiceColorChanged;
 };
 }
 

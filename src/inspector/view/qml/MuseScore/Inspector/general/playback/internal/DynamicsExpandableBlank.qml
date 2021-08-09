@@ -96,11 +96,10 @@ ExpandableBlank {
                 navigation.row: root.navigation.row + 3
 
                 titleText: qsTrc("inspector", "Velocity")
-                propertyItem: model ? model.velocity : null
+                propertyItem: root.model ? root.model.velocity : null
 
                 IncrementalPropertyControl {
                     id: velocityControl
-                    iconMode: iconModeEnum.hidden
 
                     navigation.name: "Velocity Value"
                     navigation.panel: root.navigation.panel
@@ -111,15 +110,11 @@ ExpandableBlank {
                     decimals: 0
                     maxValue: 127
                     minValue: 0
-                    validator: IntInputValidator {
-                        top: velocityControl.maxValue
-                        bottom: velocityControl.minValue
-                    }
 
-                    isIndeterminate: model ? model.velocity.isUndefined : false
-                    currentValue: model ? model.velocity.value : 0
+                    isIndeterminate: root.model ? root.model.velocity.isUndefined : false
+                    currentValue: root.model ? root.model.velocity.value : 0
 
-                    onValueEdited: { model.velocity.value = newValue }
+                    onValueEdited: { root.model.velocity.value = newValue }
                 }
             }
 
@@ -134,32 +129,27 @@ ExpandableBlank {
                 navigation.row: root.navigation.row + 5
 
                 titleText: qsTrc("inspector", "Velocity change")
-                propertyItem: model ? model.velocityChange : null
+                propertyItem: root.model ? root.model.velocityChange : null
 
                 IncrementalPropertyControl {
                     id: velocityChangeControl
-                    iconMode: iconModeEnum.hidden
 
                     navigation.name: "Velocity change Value"
                     navigation.panel: root.navigation.panel
                     navigation.column: root.navigation.column
                     navigation.row: root.navigation.row + 6
 
-                    enabled: model ? model.velocityChange.isEnabled : false
+                    enabled: root.model ? root.model.velocityChange.isEnabled : false
 
                     step: 1
                     decimals: 0
                     maxValue: 127
                     minValue: -127
-                    validator: IntInputValidator {
-                        top: velocityChangeControl.maxValue
-                        bottom: velocityChangeControl.minValue
-                    }
 
-                    isIndeterminate: model && enabled ? model.velocityChange.isUndefined : false
-                    currentValue: model ? model.velocityChange.value : 0
+                    isIndeterminate: root.model && enabled ? root.model.velocityChange.isUndefined : false
+                    currentValue: root.model ? root.model.velocityChange.value : 0
 
-                    onValueEdited: { model.velocityChange.value = newValue }
+                    onValueEdited: { root.model.velocityChange.value = newValue }
                 }
             }
         }
@@ -187,27 +177,18 @@ ExpandableBlank {
                 ]
 
                 delegate: FlatRadioButton {
-                    id: radioButtonDelegate
-
-                    navigation.name: "Change speed Value " + model.index
-                    navigation.panel: root.navigation.panel
-                    navigation.column: root.navigation.column
-                    navigation.row: root.navigation.row + 8 + model.index
-
                     ButtonGroup.group: radioButtonList.radioButtonGroup
 
+                    navigation.name: "Change speed Value " + root.model.index
+                    navigation.panel: root.navigation.panel
+                    navigation.column: root.navigation.column
+                    navigation.row: root.navigation.row + 8 + root.model.index
+
+                    text: modelData["textRole"]
                     checked: root.model && !root.model.velocityChangeSpeed.isUndefined ? root.model.velocityChangeSpeed.value === modelData["valueRole"]
                                                                                        : false
                     onToggled: {
                         root.model.velocityChangeSpeed.value = modelData["valueRole"]
-                    }
-
-                    StyledTextLabel {
-                        text: modelData["textRole"]
-
-                        elide: Text.ElideRight
-                        verticalAlignment: Text.AlignVCenter
-                        horizontalAlignment: Text.AlignHCenter
                     }
                 }
             }

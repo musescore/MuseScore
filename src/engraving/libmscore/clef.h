@@ -137,14 +137,14 @@ public:
 ///    Graphic representation of a clef.
 //
 //   @P showCourtesy  bool    show/hide courtesy clef when applicable
-//   @P small         bool    small, mid-staff clef (read only, set by layout)
+//   @P isSmall       bool    small, mid-staff clef (read only, set by layout)
 //---------------------------------------------------------
 
 class Clef final : public Element
 {
     SymId symId;
     bool _showCourtesy = true;
-    bool _small = false;
+    bool m_isSmall = false;
     bool _forInstrumentChange = false;
 
     ClefTypeList _clefTypes { ClefType::INVALID };
@@ -167,7 +167,7 @@ public:
 
     bool isEditable() const override { return false; }
 
-    bool small() const { return _small; }
+    bool isSmall() const { return m_isSmall; }
     void setSmall(bool val);
 
     bool showCourtesy() const { return _showCourtesy; }

@@ -27,6 +27,7 @@
 
 #include "io/path.h"
 #include "translation.h"
+#include "id.h"
 #include "midi/midievent.h"
 
 #include "libmscore/element.h"
@@ -120,9 +121,6 @@ using InstrumentChannelList = QList<InstrumentChannel>;
 using PageList = std::vector<const Page*>;
 using StaffList = QList<const Staff*>;
 using PartList = QList<const Part*>;
-
-using ID = QString;
-using IDList = QList<ID>;
 
 enum class DragMode
 {
@@ -414,7 +412,7 @@ inline QString formatInstrumentTitle(const Instrument& instrument, int instrumen
 
 struct PartInstrument
 {
-    QString partId;
+    ID partId;
     Instrument instrument;
 
     bool isExistingPart = false;
@@ -507,7 +505,7 @@ struct FilterElementsOptions
 struct FilterNotesOptions : FilterElementsOptions
 {
     int pitch = -1;
-    int string = Ms::STRING_NONE;
+    int string = Ms::INVALID_STRING_INDEX;
     int tpc = Ms::Tpc::TPC_INVALID;
     NoteHead::Group notehead = NoteHead::Group::HEAD_INVALID;
     Ms::TDuration durationType = Ms::TDuration();
@@ -530,7 +528,7 @@ struct StaffConfig
     bool visibleLines = false;
     qreal userDistance = 0.0;
     double scale = 0.0;
-    bool small = false;
+    bool isSmall = false;
     bool cutaway = false;
     bool showIfEmpty = false;
     bool showClef = false;
@@ -681,18 +679,18 @@ static constexpr int MAX_NOTES_INTERVAL = 9;
 
 static constexpr int MAX_FRET = 14;
 
-inline bool isNotesIntervalValid(int interval)
+constexpr bool isNotesIntervalValid(int interval)
 {
     return interval >= MIN_NOTES_INTERVAL && interval <= MAX_NOTES_INTERVAL
            && interval != 0 && interval != -1;
 }
 
-inline bool isVoiceIndexValid(int voiceIndex)
+constexpr bool isVoiceIndexValid(int voiceIndex)
 {
-    return 0 <= voiceIndex && voiceIndex < VOICES;
+    return 0 <= voiceIndex && voiceIndex < Ms::VOICES;
 }
 
-inline bool isFretIndexValid(int fretIndex)
+constexpr bool isFretIndexValid(int fretIndex)
 {
     return 0 <= fretIndex && fretIndex < MAX_FRET;
 }

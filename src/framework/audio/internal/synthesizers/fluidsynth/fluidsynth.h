@@ -95,6 +95,8 @@ private:
     unsigned int m_sampleRate = 0;
     async::Channel<unsigned int> m_streamsCountChanged;
 };
+
+using FluidSynthPtr = std::shared_ptr<FluidSynth>;
 }
 
 #endif //MU_AUDIO_FLUIDSYNTH_H

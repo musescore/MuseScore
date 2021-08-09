@@ -33,6 +33,7 @@ Item {
 
     property bool selected: false
 
+    property bool insideDropdownList: false
     property alias background: backgroundItem
     property alias label: labelItem
     property alias mouseArea: mouseAreaItem
@@ -62,8 +63,8 @@ Item {
         color: ui.theme.buttonColor
         radius: 4
         opacity: 0.7
-        border.color: ui.theme.focusColor
-        border.width: navCtrl.active ? 2 : 0
+
+        NavigationFocusBorder { navigationCtrl: navCtrl }
     }
 
     StyledTextLabel {
@@ -81,6 +82,16 @@ Item {
     }
 
     states: [
+        State {
+            name: "FOCUSED_INSIDE_DROPDOWN"
+            when: root.insideDropdownList && navCtrl.active
+
+            PropertyChanges {
+                target: backgroundItem
+                anchors.margins: ui.theme.navCtrlBorderWidth //this effectively cancels its child's margins and draws everything inside
+            }
+        },
+
         State {
             name: "HOVERED"
             when: mouseAreaItem.containsMouse && !mouseAreaItem.pressed

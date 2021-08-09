@@ -90,7 +90,7 @@ Notation::Notation(Ms::Score* score)
         notifyAboutNotationChanged();
     });
 
-    configuration()->selectionColorChanged().onReceive(this, [this](int) {
+    engravingConfiguration()->selectionColorChanged().onReceive(this, [this](int, const mu::draw::Color&) {
         notifyAboutNotationChanged();
     });
 
@@ -132,10 +132,6 @@ void Notation::init()
 
     Ms::MScore::panPlayback = configuration()->isAutomaticallyPanEnabled();
     Ms::MScore::playRepeats = configuration()->isPlayRepeatsEnabled();
-
-    for (int i = 0; i < VOICES; ++i) {
-        Ms::MScore::selectColor[i] = configuration()->selectionColor(i);
-    }
 }
 
 void Notation::setScore(Ms::Score* score)
@@ -257,7 +253,7 @@ void Notation::paintPageBorder(draw::Painter* painter, const Ms::Page* page) con
     }
 
     painter->setBrush(BrushStyle::NoBrush);
-    painter->setPen(Ms::MScore::frameMarginColor);
+    painter->setPen(engravingConfiguration()->formattingMarksColor());
     boundingRect.adjust(page->lm(), page->tm(), -page->rm(), -page->bm());
     painter->drawRect(boundingRect);
 
@@ -269,7 +265,7 @@ void Notation::paintPageBorder(draw::Painter* painter, const Ms::Page* page) con
 void Notation::paintForeground(mu::draw::Painter* painter, const RectF& pageRect) const
 {
     if (score()->printing()) {
-        painter->fillRect(pageRect, engravingConfiguration()->whiteColor());
+        painter->fillRect(pageRect, mu::draw::Color::white);
         return;
     }
 

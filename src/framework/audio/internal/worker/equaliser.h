@@ -30,9 +30,6 @@ class Equaliser : public IFxProcessor
 public:
     Equaliser();
 
-    FxProcessorId id() const override;
-
-    unsigned int streamCount() const override;
     void setSampleRate(unsigned int sampleRate) override;
 
     bool active() const override;
@@ -42,7 +39,7 @@ public:
     void setGain(float value);
     void setQ(float value);
 
-    void process(float* input, float* output, unsigned int sampleCount) override;
+    void process(float* buffer, unsigned int sampleCount) override;
 
 private:
     void calculate();

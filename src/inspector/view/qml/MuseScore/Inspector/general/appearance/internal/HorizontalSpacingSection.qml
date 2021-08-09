@@ -55,7 +55,7 @@ Item {
         navigation.row: root.navigationRow(1)
 
         titleText: qsTrc("inspector", "Leading")
-        propertyItem: leadingSpace
+        propertyItem: root.leadingSpace
 
         IncrementalPropertyControl {
             id: leadingValue
@@ -65,11 +65,11 @@ Item {
             navigation.panel: root.navigationPanel
             navigation.row: root.navigationRow(2)
 
-            enabled: leadingSpace ? leadingSpace.isEnabled : false
-            isIndeterminate: leadingSpace && enabled ? leadingSpace.isUndefined : false
-            currentValue: leadingSpace ? leadingSpace.value : 0
+            enabled: root.leadingSpace ? root.leadingSpace.isEnabled : false
+            isIndeterminate: root.leadingSpace && enabled ? root.leadingSpace.isUndefined : false
+            currentValue: root.leadingSpace ? root.leadingSpace.value : 0
 
-            onValueEdited: { leadingSpace.value = newValue }
+            onValueEdited: { root.leadingSpace.value = newValue }
         }
     }
 
@@ -83,7 +83,7 @@ Item {
         navigation.row: root.navigationRow(3)
 
         titleText: qsTrc("inspector", "Bar width")
-        propertyItem: barWidth
+        propertyItem: root.barWidth
 
         IncrementalPropertyControl {
             icon: IconCode.HORIZONTAL
@@ -92,11 +92,11 @@ Item {
             navigation.panel: root.navigationPanel
             navigation.row: root.navigationRow(4)
 
-            enabled: barWidth ? barWidth.isEnabled : false
-            isIndeterminate: barWidth && enabled ? barWidth.isUndefined : false
-            currentValue: barWidth ? barWidth.value : 0
+            enabled: root.barWidth ? root.barWidth.isEnabled : false
+            isIndeterminate: root.barWidth && enabled ? root.barWidth.isUndefined : false
+            currentValue: root.barWidth ? root.barWidth.value : 0
 
-            onValueEdited: { barWidth.value = newValue }
+            onValueEdited: { root.barWidth.value = newValue }
         }
     }
 }

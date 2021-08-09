@@ -104,8 +104,10 @@ FocusScope {
                 color: "transparent"
                 radius: parent.radius
 
-                border.color: navCtrl.active ? ui.theme.focusColor : ui.theme.strokeColor
-                border.width: navCtrl.active ? 2 : parent.borderWidth
+                NavigationFocusBorder { navigationCtrl: navCtrl }
+
+                border.color: ui.theme.strokeColor
+                border.width: parent.borderWidth
             }
 
             states: [

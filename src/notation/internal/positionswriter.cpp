@@ -184,7 +184,7 @@ void PositionsWriter::writeSegmentsPositions(XmlWriter& writer, const Ms::Score*
     for (Ms::Segment* segment = (measure ? measure->first(Ms::SegmentType::ChordRest) : nullptr);
          segment; segment = segment->next1MM(Ms::SegmentType::ChordRest)) {
         qreal sx = 0;
-        int tracks = score->nstaves() * VOICES;
+        int tracks = score->nstaves() * Ms::VOICES;
         for (int track = 0; track < tracks; track++) {
             Element* e = segment->element(track);
             if (e) {

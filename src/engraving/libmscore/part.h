@@ -70,20 +70,23 @@ class Part final : public ScoreElement
     QString _partName;              ///< used in tracklist (mixer)
     InstrumentList _instruments;
     QList<Staff*> _staves;
-    QString _id;                    ///< used for MusicXml import
-    bool _show;                     ///< show part in partitur if true
-    bool _soloist;                  ///< used in score ordering
+    ID _id = INVALID_ID;             ///< used for MusicXml import
+    bool _show = false;              ///< show part in partitur if true
+    bool _soloist = false;           ///< used in score ordering
 
     static const int DEFAULT_COLOR = 0x3399ff;
-    int _color;                     ///User specified color for helping to label parts
+    int _color = 0;                  ///User specified color for helping to label parts
 
-    PreferSharpFlat _preferSharpFlat;
+    PreferSharpFlat _preferSharpFlat = PreferSharpFlat::DEFAULT;
 
     friend class mu::engraving::compat::Read206;
 
 public:
-    Part(Score* = 0);
+    Part(Score* score = nullptr);
     void initFromInstrTemplate(const InstrumentTemplate*);
+
+    ID id() const;
+    void setId(const ID& id);
 
     Part* clone() const;
 
@@ -93,12 +96,12 @@ public:
     bool readProperties(XmlReader&);
     void write(XmlWriter& xml) const;
 
-    int nstaves() const { return _staves.size(); }
-    QList<Staff*>* staves() { return &_staves; }
-    const QList<Staff*>* staves() const { return &_staves; }
+    int nstaves() const;
+    const QList<Staff*>* staves() const;
+    void appendStaff(Staff* staff);
+    void clearStaves();
+
     Staff* staff(int idx) const;
-    void setId(const QString& s) { _id = s; }
-    QString id() const { return _id; }
     QString familyId() const;
 
     int startTrack() const;

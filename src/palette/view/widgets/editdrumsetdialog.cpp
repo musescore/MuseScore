@@ -147,7 +147,7 @@ EditDrumsetDialog::EditDrumsetDialog(QWidget* parent)
         NoteInputState state = m_notation->interaction()->noteInput()->state();
         const Staff* staff = m_notation->elements()->msScore()->staff(track2staff(state.currentTrack));
         m_instrumentKey.instrumentId = staff ? staff->part()->instrumentId() : QString();
-        m_instrumentKey.partId = staff ? staff->part()->id() : QString();
+        m_instrumentKey.partId = staff ? staff->part()->id() : ID();
         m_editedDrumset = state.drumset ? *state.drumset : Drumset();
     }
 

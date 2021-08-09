@@ -300,7 +300,7 @@ void NotationActionController::init()
         }
     }
 
-    for (int i = 0; i < VOICES; ++i) {
+    for (int i = 0; i < Ms::VOICES; ++i) {
         registerAction("voice-" + std::to_string(i + 1), [this, i]() { changeVoice(i); });
     }
 

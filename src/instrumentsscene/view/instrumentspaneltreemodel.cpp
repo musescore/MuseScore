@@ -40,11 +40,15 @@ using ItemType = InstrumentsTreeItemType::ItemType;
 InstrumentsPanelTreeModel::InstrumentsPanelTreeModel(QObject* parent)
     : QAbstractItemModel(parent)
 {
+    m_partsNotifyReceiver = std::make_shared<async::Asyncable>();
+
     context()->currentMasterNotationChanged().onNotify(this, [this]() {
         m_masterNotation = context()->currentMasterNotation();
     });
 
     context()->currentNotationChanged().onNotify(this, [this]() {
+        m_partsNotifyReceiver->disconnectAll();
+
         m_notation = context()->currentNotation();
 
         if (m_notation) {
@@ -77,6 +81,61 @@ bool InstrumentsPanelTreeModel::canReceiveAction(const actions::ActionCode&) con
     return m_masterNotation != nullptr && m_notation != nullptr;
 }
 
+void InstrumentsPanelTreeModel::setupPartsConnections()
+{
+    async::NotifyList<const Part*> notationParts = m_notation->parts()->partList();
+
+    notationParts.onChanged(m_partsNotifyReceiver.get(), [this]() {
+        load();
+    });
+
+    notationParts.onItemChanged(m_partsNotifyReceiver.get(), [this](const Part* part) {
+        auto partItem = dynamic_cast<PartTreeItem*>(m_rootItem->childAtId(part->id()));
+        if (!partItem) {
+            return;
+        }
+
+        const Part* masterPart = m_masterNotation->parts()->part(part->id());
+        updatePartItem(partItem, masterPart);
+    });
+}
+
+void InstrumentsPanelTreeModel::setupStavesConnections(const ID& stavesPartId)
+{
+    async::NotifyList<const Staff*> notationStaves = m_notation->parts()->staffList(stavesPartId);
+
+    notationStaves.onItemChanged(m_partsNotifyReceiver.get(), [this, stavesPartId](const Staff* staff) {
+        auto partItem = m_rootItem->childAtId(stavesPartId);
+        if (!partItem) {
+            return;
+        }
+
+        auto staffItem = dynamic_cast<StaffTreeItem*>(partItem->childAtId(staff->id()));
+        if (!staffItem) {
+            return;
+        }
+
+        const Staff* masterStaff = m_masterNotation->parts()->staff(staff->id());
+        updateStaffItem(staffItem, masterStaff);
+    });
+
+    notationStaves.onItemAdded(m_partsNotifyReceiver.get(), [this, stavesPartId](const Staff* staff) {
+        auto partItem = m_rootItem->childAtId(stavesPartId);
+        if (!partItem) {
+            return;
+        }
+
+        const Staff* masterStaff = m_masterNotation->parts()->staff(staff->id());
+        auto staffItem = buildMasterStaffItem(masterStaff);
+
+        QModelIndex partIndex = index(partItem->row(), 0, QModelIndex());
+
+        beginInsertRows(partIndex, partItem->childCount() - 1, partItem->childCount() - 1);
+        partItem->insertChild(staffItem, partItem->childCount() - 1);
+        endInsertRows();
+    });
+}
+
 void InstrumentsPanelTreeModel::clear()
 {
     beginResetModel();
@@ -106,40 +165,28 @@ void InstrumentsPanelTreeModel::load()
 
     m_rootItem = new RootTreeItem(m_masterNotation, m_notation);
 
-    async::NotifyList<const Part*> allParts = m_masterNotation->parts()->partList();
+    async::NotifyList<const Part*> masterParts = m_masterNotation->parts()->partList();
 
-    for (const Part* part : allParts) {
-        m_rootItem->appendChild(loadPart(part));
+    for (const Part* part : masterParts) {
+        m_rootItem->appendChild(loadMasterPart(part));
     }
 
-    allParts.onChanged(this, [this]() {
-        load();
-    });
-
-    allParts.onItemChanged(this, [this](const Part* part) {
-        auto partItem = dynamic_cast<PartTreeItem*>(m_rootItem->childAtId(part->id()));
-        if (!partItem) {
-            return;
-        }
-
-        updatePartItem(partItem, part);
-    });
-
     endResetModel();
+
+    setupPartsConnections();
 
     emit isEmptyChanged();
     emit isAddingAvailableChanged(true);
 }
 
-IDList InstrumentsPanelTreeModel::currentNotationPartIdList() const
+bool InstrumentsPanelTreeModel::isPartExsistsOnCurrentNotation(const ID& partId) const
 {
-    IDList result;
+    return m_notation->parts()->partExists(partId);
+}
 
-    for (const Part* part : m_notation->parts()->partList()) {
-        result << part->id();
-    }
-
-    return result;
+bool InstrumentsPanelTreeModel::isStaffExsistsOnCurrentNotation(const ID& staffId) const
+{
+    return m_notation->parts()->staffExists(staffId);
 }
 
 void InstrumentsPanelTreeModel::selectRow(const QModelIndex& rowIndex)
@@ -495,65 +542,80 @@ void InstrumentsPanelTreeModel::updateRemovingAvailability()
     setIsRemovingAvailable(m_selectionModel->hasSelection());
 }
 
-AbstractInstrumentsPanelTreeItem* InstrumentsPanelTreeModel::loadPart(const Part* part)
+AbstractInstrumentsPanelTreeItem* InstrumentsPanelTreeModel::loadMasterPart(const Part* masterPart)
 {
     TRACEFUNC;
 
-    auto partItem = buildPartItem(part);
-    QString partId = part->id();
+    auto partItem = buildPartItem(masterPart);
+    ID partId = masterPart->id();
 
-    async::NotifyList<const Staff*> staves = m_masterNotation->parts()->staffList(partId);
+    async::NotifyList<const Staff*> masterStaves = m_masterNotation->parts()->staffList(partId);
 
-    for (const Staff* staff : staves) {
-        auto staffItem = buildStaffItem(staff);
+    for (const Staff* staff : masterStaves) {
+        auto staffItem = buildMasterStaffItem(staff);
         partItem->appendChild(staffItem);
     }
 
     auto addStaffControlItem = buildAddStaffControlItem(partId);
     partItem->appendChild(addStaffControlItem);
 
-    staves.onItemChanged(this, [this, partId](const Staff* staff) {
-        auto partItem = m_rootItem->childAtId(partId);
-        if (!partItem) {
-            return;
-        }
-
-        auto staffItem = dynamic_cast<StaffTreeItem*>(partItem->childAtId(staff->id()));
-        if (!staffItem) {
-            return;
-        }
-
-        updateStaffItem(staffItem, staff);
-    });
-
-    staves.onItemAdded(this, [this, partId](const Staff* staff) {
-        auto partItem = m_rootItem->childAtId(partId);
-        if (!partItem) {
-            return;
-        }
-
-        auto staffItem = buildStaffItem(staff);
-
-        QModelIndex partIndex = index(partItem->row(), 0, QModelIndex());
-
-        beginInsertRows(partIndex, partItem->childCount() - 1, partItem->childCount() - 1);
-        partItem->insertChild(staffItem, partItem->childCount() - 1);
-        endInsertRows();
-    });
+    setupStavesConnections(partId);
 
     return partItem;
 }
 
-void InstrumentsPanelTreeModel::updateStaffItem(StaffTreeItem* item, const Staff* staff)
+AbstractInstrumentsPanelTreeItem* InstrumentsPanelTreeModel::buildPartItem(const Part* masterPart)
 {
+    auto result = new PartTreeItem(m_masterNotation, m_notation, this);
+    updatePartItem(result, masterPart);
+
+    return result;
+}
+
+void InstrumentsPanelTreeModel::updatePartItem(PartTreeItem* item, const Part* masterPart)
+{
+    const Part* part = masterPart;
+    bool visible = false;
+
+    if (isPartExsistsOnCurrentNotation(masterPart->id())) {
+        part = m_notation->parts()->part(masterPart->id());
+        visible = part->show();
+    }
+
+    item->setId(part->id());
+    item->setTitle(part->partName().isEmpty() ? part->instrument()->name() : part->partName());
+    item->setIsVisible(visible);
+    item->setInstrumentId(part->instrumentId());
+    item->setInstrumentName(part->instrument()->name());
+    item->setInstrumentAbbreviature(part->instrument()->abbreviature());
+}
+
+AbstractInstrumentsPanelTreeItem* InstrumentsPanelTreeModel::buildMasterStaffItem(const Staff* masterStaff)
+{
+    auto result = new StaffTreeItem(m_masterNotation, m_notation, this);
+    updateStaffItem(result, masterStaff);
+
+    return result;
+}
+
+void InstrumentsPanelTreeModel::updateStaffItem(StaffTreeItem* item, const Staff* masterStaff)
+{
+    const Staff* staff = masterStaff;
+    bool visible = false;
+
+    if (isStaffExsistsOnCurrentNotation(masterStaff->id())) {
+        staff = m_notation->parts()->staff(masterStaff->id());
+        visible = staff->show();
+    }
+
     QString staffName = staff->staffName();
     QString title = staff->isLinked() ? qtrc("instruments", "[LINK] %1").arg(staffName) : staffName;
 
     item->setId(staff->id());
     item->setTitle(title);
-    item->setIsVisible(staff->show());
+    item->setIsVisible(visible);
     item->setCutawayEnabled(staff->cutaway());
-    item->setIsSmall(staff->staffType()->small());
+    item->setIsSmall(staff->staffType()->isSmall());
     item->setStaffType(static_cast<int>(staff->staffType()->type()));
 
     QVariantList visibility;
@@ -564,36 +626,7 @@ void InstrumentsPanelTreeModel::updateStaffItem(StaffTreeItem* item, const Staff
     item->setVoicesVisibility(visibility);
 }
 
-AbstractInstrumentsPanelTreeItem* InstrumentsPanelTreeModel::buildPartItem(const Part* part)
-{
-    auto result = new PartTreeItem(m_masterNotation, m_notation, this);
-    updatePartItem(result, part);
-
-    return result;
-}
-
-void InstrumentsPanelTreeModel::updatePartItem(PartTreeItem* item, const Part* part)
-{
-    IDList notationPartIdList = currentNotationPartIdList();
-    bool visible = part->show() && notationPartIdList.contains(part->id());
-
-    item->setId(part->id());
-    item->setTitle(part->partName().isEmpty() ? part->instrument()->name() : part->partName());
-    item->setIsVisible(visible);
-    item->setInstrumentId(part->instrumentId());
-    item->setInstrumentName(part->instrument()->name());
-    item->setInstrumentAbbreviature(part->instrument()->abbreviature());
-}
-
-AbstractInstrumentsPanelTreeItem* InstrumentsPanelTreeModel::buildStaffItem(const Staff* staff)
-{
-    auto result = new StaffTreeItem(m_masterNotation, m_notation, this);
-    updateStaffItem(result, staff);
-
-    return result;
-}
-
-AbstractInstrumentsPanelTreeItem* InstrumentsPanelTreeModel::buildAddStaffControlItem(const QString& partId)
+AbstractInstrumentsPanelTreeItem* InstrumentsPanelTreeModel::buildAddStaffControlItem(const ID& partId)
 {
     auto result = new StaffControlTreeItem(m_masterNotation, m_notation, this);
     result->setTitle(qtrc("instruments", "Add staff"));

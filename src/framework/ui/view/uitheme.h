@@ -50,7 +50,8 @@ class UiTheme : public QProxyStyle, public async::Asyncable
     Q_PROPERTY(QColor focusColor READ focusColor NOTIFY themeChanged)
 
     Q_PROPERTY(qreal borderWidth READ borderWidth NOTIFY themeChanged)
-    //Q_PROPERTY(qreal navCtrlBorderWidth READ navCtrlBorderWidth NOTIFY themeChanged)
+    Q_PROPERTY(qreal navCtrlBorderWidth READ navCtrlBorderWidth NOTIFY themeChanged)
+
     Q_PROPERTY(qreal accentOpacityNormal READ accentOpacityNormal NOTIFY themeChanged)
     Q_PROPERTY(qreal accentOpacityHit READ accentOpacityHit NOTIFY themeChanged)
     Q_PROPERTY(qreal accentOpacityHover READ accentOpacityHover NOTIFY themeChanged)
@@ -109,7 +110,7 @@ public:
     QFont musicalFont() const;
 
     qreal borderWidth() const;
-    //qreal navCtrlBorderWidth() const;
+    qreal navCtrlBorderWidth() const;
     qreal accentOpacityNormal() const;
     qreal accentOpacityHover() const;
     qreal accentOpacityHit() const;
@@ -187,7 +188,7 @@ private:
     QColor m_focusColor;
 
     qreal m_borderWidth = 0;
-    //qreal m_navCtrlBorderWidth = 0;
+    qreal m_navCtrlBorderWidth = 0;
     qreal m_accentOpacityNormal = 0;
     qreal m_accentOpacityHover = 0;
     qreal m_accentOpacityHit = 0;

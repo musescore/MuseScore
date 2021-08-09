@@ -479,7 +479,7 @@ Rectangle {
             RadioButtonGroup {
                 id: iconButtonList
 
-                property var currentValue: -1
+                property int currentValue: -1
 
                 height: 30
 
@@ -492,14 +492,11 @@ Rectangle {
                 delegate: FlatRadioButton {
                     ButtonGroup.group: iconButtonList.radioButtonGroup
 
-                    checked: iconButtonList.currentValue === modelData["valueRole"]
+                    iconCode: modelData["iconRole"]
 
+                    checked: iconButtonList.currentValue === modelData["valueRole"]
                     onToggled: {
                         iconButtonList.currentValue = modelData["valueRole"]
-                    }
-
-                    StyledIconLabel {
-                        iconCode: modelData["iconRole"]
                     }
                 }
             }
@@ -507,7 +504,7 @@ Rectangle {
             RadioButtonGroup {
                 id: textButtonList
 
-                property var currentValue: -1
+                property int currentValue: -1
 
                 height: 30
 
@@ -520,14 +517,11 @@ Rectangle {
                 delegate: FlatRadioButton {
                     ButtonGroup.group: textButtonList.radioButtonGroup
 
-                    checked: textButtonList.currentValue === modelData["valueRole"]
+                    text: modelData["textRole"]
 
+                    checked: textButtonList.currentValue === modelData["valueRole"]
                     onToggled: {
                         textButtonList.currentValue = modelData["valueRole"]
-                    }
-
-                    StyledTextLabel {
-                        text: modelData["textRole"]
                     }
                 }
             }
@@ -563,7 +557,20 @@ Rectangle {
             width: 200
 
             IncrementalPropertyControl {
-                iconMode: iconModeEnum.hidden
+                currentValue: 0
+
+                maxValue: 999
+                minValue: 0
+                step: 0.5
+
+                onValueEdited: {
+                    currentValue = newValue
+                }
+            }
+
+            IncrementalPropertyControl {
+                icon: IconCode.AUDIO
+                iconMode: IncrementalPropertyControl.Right
 
                 currentValue: 0
 
@@ -578,22 +585,6 @@ Rectangle {
 
             IncrementalPropertyControl {
                 icon: IconCode.AUDIO
-                iconMode: iconModeEnum.right
-
-                currentValue: 0
-
-                maxValue: 999
-                minValue: 0
-                step: 0.5
-
-                onValueEdited: {
-                    currentValue = newValue
-                }
-            }
-
-            IncrementalPropertyControl {
-                icon: IconCode.AUDIO
-                iconMode: iconModeEnum.left
 
                 currentValue: 0
 

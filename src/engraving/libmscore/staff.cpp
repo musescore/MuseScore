@@ -63,7 +63,6 @@ namespace Ms {
 Staff::Staff(Score* score)
     : Element(score)
 {
-    setId(makeId());
     initFromStaffType(0);
 }
 
@@ -94,15 +93,6 @@ Staff::~Staff()
 Staff* Staff::clone() const
 {
     return new Staff(*this);
-}
-
-//---------------------------------------------------------
-//   id
-//---------------------------------------------------------
-
-QString Staff::id() const
-{
-    return _id;
 }
 
 //---------------------------------------------------------
@@ -720,8 +710,8 @@ Fraction Staff::currentKeyTick(const Fraction& tick) const
 
 void Staff::write(XmlWriter& xml) const
 {
-    int idx = this->idx();
-    xml.stag(this, QString("id=\"%1\"").arg(idx + 1));
+    xml.stag(this, QString("id=\"%1\"").arg(idx() + 1));
+
     if (links()) {
         Score* s = masterScore();
         for (auto le : *links()) {
@@ -934,18 +924,7 @@ qreal Staff::spatium(const Element* e) const
 
 qreal Staff::staffMag(const StaffType* stt) const
 {
-    return (stt->small() ? score()->styleD(Sid::smallStaffMag) : 1.0) * stt->userMag();
-}
-
-void Staff::setId(const QString& id)
-{
-    _id = id;
-}
-
-QString Staff::makeId()
-{
-    static std::atomic_int currentId { 0 };
-    return QString::number(++currentId);
+    return (stt->isSmall() ? score()->styleD(Sid::smallStaffMag) : 1.0) * stt->userMag();
 }
 
 qreal Staff::staffMag(const Fraction& tick) const
@@ -1240,6 +1219,7 @@ void Staff::init(const InstrumentTemplate* t, const StaffType* staffType, int ci
 
 void Staff::init(const Staff* s)
 {
+    _id                = s->_id;
     _staffTypeList     = s->_staffTypeList;
     setDefaultClefType(s->defaultClefType());
     for (BracketItem* i : s->_brackets) {
@@ -1259,6 +1239,16 @@ void Staff::init(const Staff* s)
     _mergeMatchingRests = s->_mergeMatchingRests;
     _color             = s->_color;
     _userDist          = s->_userDist;
+}
+
+ID Staff::id() const
+{
+    return _id;
+}
+
+void Staff::setId(const ID& id)
+{
+    _id = id;
 }
 
 void Staff::setScore(Score* score)
@@ -1483,7 +1473,7 @@ QVariant Staff::getProperty(Pid id) const
 {
     switch (id) {
     case Pid::SMALL:
-        return staffType(Fraction(0, 1))->small();
+        return staffType(Fraction(0, 1))->isSmall();
     case Pid::MAG:
         return staffType(Fraction(0, 1))->userMag();
     case Pid::STAFF_INVISIBLE:
@@ -1601,7 +1591,7 @@ QVariant Staff::propertyDefault(Pid id) const
     case Pid::MAG:
         return 1.0;
     case Pid::STAFF_COLOR:
-        return QVariant::fromValue(MScore::defaultColor);
+        return QVariant::fromValue(engravingConfiguration()->defaultColor());
     case Pid::PLAYBACK_VOICE1:
     case Pid::PLAYBACK_VOICE2:
     case Pid::PLAYBACK_VOICE3:

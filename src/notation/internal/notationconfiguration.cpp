@@ -79,22 +79,10 @@ static const Settings::Key COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE(module_name
 static const Settings::Key REALTIME_DELAY(module_name, "io/midi/realtimeDelay");
 static const Settings::Key NOTE_DEFAULT_PLAY_DURATION(module_name, "score/note/defaultPlayDuration");
 
-static const Settings::Key VOICE1_COLOR_KEY(module_name, "ui/score/voice1/color");
-static const Settings::Key VOICE2_COLOR_KEY(module_name, "ui/score/voice2/color");
-static const Settings::Key VOICE3_COLOR_KEY(module_name, "ui/score/voice3/color");
-static const Settings::Key VOICE4_COLOR_KEY(module_name, "ui/score/voice4/color");
-
 static const Settings::Key FIRST_INSTRUMENT_LIST_KEY(module_name, "application/paths/instrumentList1");
 static const Settings::Key SECOND_INSTRUMENT_LIST_KEY(module_name, "application/paths/instrumentList2");
 static const Settings::Key FIRST_SCORE_ORDER_LIST_KEY(module_name, "application/paths/scoreOrderList1");
 static const Settings::Key SECOND_SCORE_ORDER_LIST_KEY(module_name, "application/paths/scoreOrderList2");
-
-static std::map<int, Settings::Key> voicesKeys {
-    { 0, VOICE1_COLOR_KEY },
-    { 1, VOICE2_COLOR_KEY },
-    { 2, VOICE3_COLOR_KEY },
-    { 3, VOICE4_COLOR_KEY }
-};
 
 void NotationConfiguration::init()
 {
@@ -180,24 +168,6 @@ void NotationConfiguration::init()
     settings()->setDefaultValue(COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE, Val(true));
     settings()->setDefaultValue(REALTIME_DELAY, Val(750));
     settings()->setDefaultValue(NOTE_DEFAULT_PLAY_DURATION, Val(300));
-
-    std::vector<std::pair<Settings::Key, QColor> > voicesColors {
-        { VOICE1_COLOR_KEY, QColor(0x0065BF) },
-        { VOICE2_COLOR_KEY, QColor(0x007F00) },
-        { VOICE3_COLOR_KEY, QColor(0xC53F00) },
-        { VOICE4_COLOR_KEY, QColor(0xC31989) }
-    };
-
-    for (int i = 0; i < static_cast<int>(voicesColors.size()); ++i) {
-        Settings::Key key = voicesColors[i].first;
-        QColor color = voicesColors[i].second;
-        settings()->setDefaultValue(key, Val(color));
-        settings()->setCanBeMannualyEdited(key, true);
-        settings()->valueChanged(key).onReceive(nullptr, [this, i](const Val& color) {
-            Ms::MScore::selectColor[i] = color.toQColor();
-            m_selectionColorChanged.send(i);
-        });
-    }
 
     settings()->setDefaultValue(FIRST_INSTRUMENT_LIST_KEY,
                                 Val(globalConfiguration()->appDataPath().toStdString() + "instruments/instruments.xml"));
@@ -359,32 +329,9 @@ QColor NotationConfiguration::loopMarkerColor() const
     return QColor(0x2456AA);
 }
 
-QColor NotationConfiguration::layoutBreakColor() const
-{
-    return QColor(0xA0A0A4);
-}
-
 QColor NotationConfiguration::selectionColor(int voiceIndex) const
 {
-    if (!isVoiceIndexValid(voiceIndex)) {
-        return QColor();
-    }
-
-    return settings()->value(voicesKeys[voiceIndex]).toQColor();
-}
-
-void NotationConfiguration::setSelectionColor(int voiceIndex, const QColor& color)
-{
-    if (!isVoiceIndexValid(voiceIndex)) {
-        return;
-    }
-
-    settings()->setSharedValue(voicesKeys[voiceIndex], Val(color));
-}
-
-async::Channel<int> NotationConfiguration::selectionColorChanged()
-{
-    return m_selectionColorChanged;
+    return engravingConfiguration()->selectionColor(voiceIndex).toQColor();
 }
 
 int NotationConfiguration::selectionProximity() const
