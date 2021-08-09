@@ -30,12 +30,12 @@ import MuseScore.InstrumentsScene 1.0
 Item {
     id: root
 
-    property alias families: familiesBox.model
+    property alias genres: genreBox.model
     property alias groups: groupsView.model
 
     property alias navigation: navPanel
 
-    signal familySelected(string familyId)
+    signal genreSelected(string genreId)
     signal groupSelected(string groupId)
 
     QtObject {
@@ -48,8 +48,8 @@ Item {
         prv.currentGroupIndex = -1
     }
 
-    function setFamily(familyId) {
-        familiesBox.currentIndex = familiesBox.indexOfValue(familyId)
+    function setGenre(genreId) {
+        genreBox.currentIndex = genreBox.indexOfValue(genreId)
     }
 
     function focusGroup(groupId) {
@@ -70,7 +70,7 @@ Item {
     }
 
     StyledTextLabel {
-        id: familyLabel
+        id: titleLabel
 
         anchors.top: parent.top
         anchors.left: parent.left
@@ -80,14 +80,14 @@ Item {
     }
 
     Dropdown {
-        id: familiesBox
+        id: genreBox
 
-        anchors.top: familyLabel.bottom
+        anchors.top: titleLabel.bottom
         anchors.topMargin: 16
         anchors.left: parent.left
         anchors.right: parent.right
 
-        navigation.name: "familiesBox"
+        navigation.name: "genreBox"
         navigation.panel: navPanel
         navigation.row: 1
 
@@ -95,14 +95,14 @@ Item {
         valueRole: "id"
 
         onCurrentValueChanged: {
-            root.familySelected(familiesBox.currentValue)
+            root.genreSelected(genreBox.currentValue)
         }
     }
 
     ListView {
         id: groupsView
 
-        anchors.top: familiesBox.bottom
+        anchors.top: genreBox.bottom
         anchors.topMargin: 8
         anchors.bottom: parent.bottom
         anchors.left: parent.left

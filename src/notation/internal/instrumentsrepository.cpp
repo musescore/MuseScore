@@ -25,7 +25,6 @@
 #include "translation.h"
 
 #include "libmscore/instrtemplate.h"
-#include "libmscore/articulation.h"
 
 using namespace mu::notation;
 
@@ -56,8 +55,8 @@ void InstrumentsRepository::load()
 {
     TRACEFUNC;
 
-    Ms::clearInstrumentTemplates();
     m_instrumentsMeta.clear();
+    Ms::clearInstrumentTemplates();
 
     for (const io::path& filePath: configuration()->instrumentListPaths()) {
         if (!Ms::loadInstrumentTemplates(filePath.toQString())) {
@@ -100,6 +99,6 @@ void InstrumentsRepository::fillInstrumentsMeta(InstrumentsMeta& meta)
 
     static ScoreOrder custom;
     custom.id = "custom";
-    custom.name = qApp->translate("OrderXML", "Custom");
+    custom.name = qtrc("OrderXML", "Custom");
     meta.scoreOrders << &custom;
 }
