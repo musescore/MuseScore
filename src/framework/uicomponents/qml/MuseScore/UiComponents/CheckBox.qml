@@ -73,11 +73,15 @@ FocusScope {
             height: 20
             width: 20
 
+            opacity: ui.theme.buttonOpacityNormal
+
             border.width: ui.theme.borderWidth
             border.color: ui.theme.strokeColor
             color: ui.theme.buttonColor
 
             radius: 2
+
+            NavigationFocusBorder { navigationCtrl: navCtrl }
 
             StyledIconLabel {
                 anchors.fill: parent
@@ -115,24 +119,12 @@ FocusScope {
 
     states: [
         State {
-            name: "FOCUSED"
-            when: navCtrl.active
-
-            PropertyChanges {
-                target: box
-                border.color: ui.theme.focusColor
-                border.width: 2
-            }
-        },
-
-        State {
             name: "HOVERED"
             when: clickableArea.containsMouse && !clickableArea.pressed
 
             PropertyChanges {
                 target: box
                 opacity: ui.theme.buttonOpacityHover
-                border.color: navCtrl.active ? ui.theme.focusColor : ui.theme.strokeColor
             }
         },
 
@@ -143,7 +135,6 @@ FocusScope {
             PropertyChanges {
                 target: box
                 opacity: ui.theme.buttonOpacityHit
-                border.color: navCtrl.active ? ui.theme.focusColor : ui.theme.strokeColor
             }
         }
     ]

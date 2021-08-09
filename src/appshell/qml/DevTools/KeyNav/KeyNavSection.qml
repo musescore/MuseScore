@@ -34,8 +34,7 @@ Rectangle {
 
     default property alias content: contentItem.data
 
-    border.color: "#75507b"
-    border.width: keynavsec.active ? 4 : 0
+    NavigationFocusBorder { navigationCtrl: keynavsec }
 
     NavigationSection {
         id: keynavsec

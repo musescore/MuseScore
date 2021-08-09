@@ -73,8 +73,10 @@ StyledTabButton {
     background: Rectangle {
         id: backgroundRect
 
-        border.width: root.navigation.active ? 2 : 0
-        border.color: ui.theme.focusColor
+        NavigationFocusBorder{
+            navigationCtrl: root.navigation
+            anchors.margins: 0
+        }
 
         color: ui.theme.backgroundSecondaryColor
         opacity: 1
