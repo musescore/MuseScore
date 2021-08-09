@@ -32,11 +32,12 @@ using IExcerptNotationPtr = std::shared_ptr<IExcerptNotation>;
 class IExcerptNotation
 {
 public:
+    virtual ~IExcerptNotation() = default;
 
     virtual bool isInited() const = 0;
 
-    virtual void setTitle(const QString& title) = 0;
     virtual QString title() const = 0;
+    virtual void setTitle(const QString& title) = 0;
 
     virtual INotationPtr notation() = 0;
     virtual IExcerptNotationPtr clone() const = 0;

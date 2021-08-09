@@ -222,7 +222,7 @@ IInteractive::Button ProjectFilesController::askAboutSavingScore(const io::path&
     std::string body = trc("project", "Your changes will be lost if you don’t save them.");
 
     IInteractive::Options options {
-        IInteractive::Option::WithIcon | IInteractive::Option::WithShowAgain
+        IInteractive::Option::WithIcon
     };
 
     IInteractive::Result result = interactive()->warning(title, body, {
