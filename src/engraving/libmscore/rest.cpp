@@ -905,7 +905,8 @@ void Rest::write(XmlWriter& xml) const
     el().write(xml);
     bool write_dots = false;
     for (NoteDot* dot : m_dots) {
-        if (!dot->offset().isNull() || !dot->visible() || dot->color() != Ms::MScore::defaultColor || dot->visible() != visible()) {
+        if (!dot->offset().isNull() || !dot->visible() || dot->color() != engravingConfiguration()->defaultColor()
+            || dot->visible() != visible()) {
             write_dots = true;
             break;
         }

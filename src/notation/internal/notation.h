@@ -42,7 +42,7 @@ class NotationPlayback;
 class Notation : virtual public INotation, public IGetScore, public async::Asyncable
 {
     INJECT_STATIC(notation, INotationConfiguration, configuration)
-    INJECT(notation, mu::engraving::IEngravingConfiguration, engravingConfiguration)
+    INJECT(notation, engraving::IEngravingConfiguration, engravingConfiguration)
 
 public:
     explicit Notation(Ms::Score* score = nullptr);

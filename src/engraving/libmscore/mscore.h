@@ -78,13 +78,9 @@ static constexpr int MSCVERSION = 400;
 //       - The style is stored in a separate file (inside mscz)
 //       - The ChordList is stored in a separate file (inside mscz)
 
-class Sequencer;
-
 enum class HairpinType : signed char;
 
-#ifndef VOICES
-#define VOICES 4
-#endif
+static constexpr int VOICES = 4;
 
 static constexpr int INVALID_INDEX = -1;
 
@@ -220,7 +216,7 @@ enum class UpDownMode : char {
 enum class StaffGroup : char {
     STANDARD, PERCUSSION, TAB
 };
-const int STAFF_GROUP_MAX = int(StaffGroup::TAB) + 1;      // out of enum to avoid compiler complains about not handled switch cases
+constexpr int STAFF_GROUP_MAX = int(StaffGroup::TAB) + 1; // out of enum to avoid compiler complains about not handled switch cases
 
 //---------------------------------------------------------
 //   BarLineType
@@ -337,12 +333,6 @@ public:
     static bool verticalOrientation() { return _verticalOrientation; }
     static void setVerticalOrientation(bool val) { _verticalOrientation = val; }
 
-    static mu::draw::Color selectColor[VOICES];
-    static mu::draw::Color defaultColor;
-    static mu::draw::Color dropColor;
-    static mu::draw::Color layoutBreakColor;
-    static mu::draw::Color frameMarginColor;
-    static mu::draw::Color bgColor;
     static bool warnPitchRange;
     static int pedalEventsMinTicks;
 
@@ -374,7 +364,6 @@ public:
     static int division;
     static int sampleRate;
     static int mtcType;
-    static Sequencer* seq;
 
     static bool saveTemplateMode;
     static bool noGui;
@@ -399,7 +388,7 @@ public:
 //   center
 //---------------------------------------------------------
 
-inline static qreal center(qreal x1, qreal x2)
+static constexpr qreal center(qreal x1, qreal x2)
 {
     return x1 + (x2 - x1) * .5;
 }
@@ -408,7 +397,7 @@ inline static qreal center(qreal x1, qreal x2)
 //   limit
 //---------------------------------------------------------
 
-inline static int limit(int val, int min, int max)
+static constexpr int limit(int val, int min, int max)
 {
     if (val > max) {
         return max;
@@ -418,7 +407,7 @@ inline static int limit(int val, int min, int max)
     }
     return val;
 }
-}     // namespace Ms
+} // namespace Ms
 
 Q_DECLARE_METATYPE(Ms::BarLineType);
 

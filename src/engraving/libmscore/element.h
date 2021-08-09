@@ -26,6 +26,7 @@
 #include "elementgroup.h"
 #include "spatium.h"
 #include "fraction.h"
+#include "mscore.h"
 #include "scoreElement.h"
 #include "shape.h"
 #include "sig.h"
@@ -34,6 +35,9 @@
 #include "draw/color.h"
 #include "draw/geometry.h"
 #include "draw/painter.h"
+
+#include "modularity/ioc.h"
+#include "iengravingconfiguration.h"
 
 namespace mu {
 namespace score {
@@ -46,10 +50,6 @@ namespace Ms {
 #define CONTROL_MODIFIER Qt::AltModifier
 #else
 #define CONTROL_MODIFIER Qt::ControlModifier
-#endif
-
-#ifndef VOICES
-#define VOICES 4
 #endif
 
 enum class Pid;
@@ -186,6 +186,8 @@ public:
 
 class Element : public ScoreElement
 {
+    INJECT(engraving, mu::engraving::IEngravingConfiguration, engravingConfiguration)
+
     Element* _parent { 0 };
     mutable mu::RectF _bbox;  ///< Bounding box relative to _pos + _offset
     qreal _mag;                     ///< standard magnification (derived value)

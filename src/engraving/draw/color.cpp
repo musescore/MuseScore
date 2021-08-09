@@ -16,6 +16,13 @@ static constexpr bool isValidComp(int num);
 static constexpr bool isRgbaValid(int r, int g, int b, int a = Color::DEFAULT_ALPHA);
 static void insertHexComponent(int num, std::stringstream& ss);
 
+const Color Color::black { 0, 0, 0 };
+const Color Color::white { 255, 255, 255 };
+const Color Color::transparent { 0, 0, 0, 0 };
+const Color Color::redColor { 255, 0, 0 };
+const Color Color::greenColor { 0, 255, 0 };
+const Color Color::blueColor { 0, 0, 255 };
+
 Color::Color()
 {
     m_isValid = false;
@@ -75,10 +82,13 @@ bool Color::operator<(const Color& other) const
     return m_rgba < other.m_rgba;
 }
 
+#ifndef NO_QT_SUPPORT
 QString Color::toQString() const
 {
     return QString::fromStdString(toString());
 }
+
+#endif
 
 std::string Color::toString() const
 {
@@ -137,11 +147,9 @@ void Color::setNamedColor(const std::string& color)
     if (color[0] == '#') {
         if (getHexRgb(color.data(), color.size(), &rgba)) {
             setRgba(rgba);
-        } else {
-            m_isValid = false;
+            m_isValid = true;
+            return;
         }
-
-        return;
     }
 
     m_isValid = false;
@@ -170,6 +178,13 @@ void Color::setBlue(int value)
 void Color::setAlpha(int value)
 {
     setRgba(red(), green(), blue(), value);
+}
+
+Color Color::withAlpha(int value) const
+{
+    Color copy(*this);
+    copy.setAlpha(value);
+    return copy;
 }
 
 void Color::setRgba(int r, int g, int b, int a)
@@ -219,7 +234,7 @@ static int hex2int(const char* s, int n)
     return result;
 }
 
-static bool getHexRgb(const char* name, size_t len, mu::draw::Rgba* rgba)
+static bool getHexRgb(const char* name, size_t len, Rgba* rgba)
 {
     if (name[0] != '#') {
         return false;
@@ -227,41 +242,29 @@ static bool getHexRgb(const char* name, size_t len, mu::draw::Rgba* rgba)
     name++;
     --len;
     int a, r, g, b;
-    a = 65535;
-    if (len == 12) {
-        r = hex2int(name + 0, 4);
-        g = hex2int(name + 4, 4);
-        b = hex2int(name + 8, 4);
-    } else if (len == 9) {
-        r = hex2int(name + 0, 3);
-        g = hex2int(name + 3, 3);
-        b = hex2int(name + 6, 3);
-        if (r == -1 || g == -1 || b == -1) {
-            return false;
-        }
-        r = (r << 4) | (r >> 8);
-        g = (g << 4) | (g >> 8);
-        b = (b << 4) | (b >> 8);
-    } else if (len == 8) {
-        a = hex2int(name + 0, 2) * 0x101;
-        r = hex2int(name + 2, 2) * 0x101;
-        g = hex2int(name + 4, 2) * 0x101;
-        b = hex2int(name + 6, 2) * 0x101;
+    a = 255;
+    if (len == 8) {
+        a = hex2int(name + 0, 2);
+        r = hex2int(name + 2, 2);
+        g = hex2int(name + 4, 2);
+        b = hex2int(name + 6, 2);
     } else if (len == 6) {
-        r = hex2int(name + 0, 2) * 0x101;
-        g = hex2int(name + 2, 2) * 0x101;
-        b = hex2int(name + 4, 2) * 0x101;
+        r = hex2int(name + 0, 2);
+        g = hex2int(name + 2, 2);
+        b = hex2int(name + 4, 2);
     } else if (len == 3) {
-        r = hex2int(name + 0, 1) * 0x1111;
-        g = hex2int(name + 1, 1) * 0x1111;
-        b = hex2int(name + 2, 1) * 0x1111;
+        r = hex2int(name + 0, 1) * 0x11;
+        g = hex2int(name + 1, 1) * 0x11;
+        b = hex2int(name + 2, 1) * 0x11;
     } else {
         r = g = b = -1;
     }
-    if ((uint)r > 65535 || (uint)g > 65535 || (uint)b > 65535 || (uint)a > 65535) {
+
+    if (!isRgbaValid(r, g, b, a)) {
         *rgba = 0;
         return false;
     }
+
     *rgba = mu::draw::rgba(r, g, b, a);
     return true;
 }

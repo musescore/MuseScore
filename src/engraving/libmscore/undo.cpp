@@ -73,7 +73,6 @@
 #include "accidental.h"
 #include "layoutbreak.h"
 #include "spanner.h"
-#include "sequencer.h"
 #include "breath.h"
 #include "fingering.h"
 #include "rehearsalmark.h"
@@ -1591,32 +1590,33 @@ void ChangePatch::flip(EditData*)
 
     patch            = op;
 
-    if (MScore::seq == 0) {
-        qWarning("no seq");
-        return;
-    }
-
-    NPlayEvent event;
-    event.setType(ME_CONTROLLER);
-    event.setChannel(channel->channel());
-
-    int hbank = (channel->bank() >> 7) & 0x7f;
-    int lbank = channel->bank() & 0x7f;
-
-    event.setController(CTRL_HBANK);
-    event.setValue(hbank);
-    MScore::seq->sendEvent(event);
-
-    event.setController(CTRL_LBANK);
-    event.setValue(lbank);
-    MScore::seq->sendEvent(event);
-
-    event.setController(CTRL_PROGRAM);
-    event.setValue(channel->program());
-
+    //! TODO Needs porting for MU4
+//    if (MScore::seq == 0) {
+//        qWarning("no seq");
+//        return;
+//    }
+//
+//    NPlayEvent event;
+//    event.setType(ME_CONTROLLER);
+//    event.setChannel(channel->channel());
+//
+//    int hbank = (channel->bank() >> 7) & 0x7f;
+//    int lbank = channel->bank() & 0x7f;
+//
+//    event.setController(CTRL_HBANK);
+//    event.setValue(hbank);
+//    MScore::seq->sendEvent(event);
+//
+//    event.setController(CTRL_LBANK);
+//    event.setValue(lbank);
+//    MScore::seq->sendEvent(event);
+//
+//    event.setController(CTRL_PROGRAM);
+//    event.setValue(channel->program());
+//
     score->setInstrumentsChanged(true);
-
-    MScore::seq->sendEvent(event);
+//
+//    MScore::seq->sendEvent(event);
 }
 
 //---------------------------------------------------------

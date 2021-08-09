@@ -109,8 +109,8 @@ void Box::draw(mu::draw::Painter* painter) const
         return;
     }
 
-    const bool showBlueFrame = selected() || dropTarget();
-    const bool showFrame = showBlueFrame || (score() ? score()->showFrames() : false);
+    const bool showHighlightedFrame = selected() || dropTarget();
+    const bool showFrame = showHighlightedFrame || (score() ? score()->showFrames() : false);
 
     if (showFrame) {
         qreal lineWidth = spatium() * .15;
@@ -118,7 +118,7 @@ void Box::draw(mu::draw::Painter* painter) const
         pen.setWidthF(lineWidth);
         pen.setJoinStyle(PenJoinStyle::MiterJoin);
         pen.setCapStyle(PenCapStyle::SquareCap);
-        pen.setColor(showBlueFrame ? MScore::selectColor[0] : MScore::frameMarginColor);
+        pen.setColor(showHighlightedFrame ? engravingConfiguration()->selectionColor() : engravingConfiguration()->formattingMarksColor());
         pen.setDashPattern({ 1, 3 });
 
         painter->setBrush(BrushStyle::NoBrush);

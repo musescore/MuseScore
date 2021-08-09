@@ -23,7 +23,6 @@
 #include "stafftypechange.h"
 #include "io/xml.h"
 #include "score.h"
-#include "mscore.h"
 #include "measure.h"
 #include "system.h"
 #include "staff.h"
@@ -121,7 +120,7 @@ void StaffTypeChange::draw(mu::draw::Painter* painter) const
     qreal w  = _spatium * 2.5;
     qreal lineDist = 0.35;           // line distance for the icon 'staff lines'
     // draw icon rectangle
-    painter->setPen(Pen(selected() ? MScore::selectColor[0] : MScore::layoutBreakColor,
+    painter->setPen(Pen(selected() ? engravingConfiguration()->selectionColor() : engravingConfiguration()->formattingMarksColor(),
                         lw, PenStyle::SolidLine, PenCapStyle::SquareCap, PenJoinStyle::MiterJoin));
     painter->setBrush(BrushStyle::NoBrush);
     painter->drawRect(0, 0, w, h);
@@ -140,7 +139,7 @@ void StaffTypeChange::draw(mu::draw::Painter* painter) const
     }
     // calculate starting point Y for the lines from half the icon height (2.5) so staff lines appear vertically centered
     qreal startY = 1.25 - (lines - 1) * lineDist * 0.5;
-    painter->setPen(Pen(selected() ? MScore::selectColor[0] : MScore::layoutBreakColor,
+    painter->setPen(Pen(selected() ? engravingConfiguration()->selectionColor() : engravingConfiguration()->formattingMarksColor(),
                         2.5, PenStyle::SolidLine, PenCapStyle::SquareCap, PenJoinStyle::MiterJoin));
     for (int i=0; i < lines; i++) {
         int y = (startY + i * lineDist) * _spatium;
@@ -300,7 +299,7 @@ QVariant StaffTypeChange::propertyDefault(Pid id) const
     case Pid::STAFF_INVISIBLE:
         return false;
     case Pid::STAFF_COLOR:
-        return QVariant::fromValue(MScore::defaultColor);
+        return QVariant::fromValue(engravingConfiguration()->defaultColor());
     case Pid::STAFF_YOFFSET:
         return Spatium(0.0);
     default:

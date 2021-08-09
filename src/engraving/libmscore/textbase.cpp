@@ -1648,8 +1648,8 @@ TextBase::TextBase(Score* s, Tid tid, ElementFlags f)
     _textLineSpacing        = 1.0;
 
     _tid                    = tid;
-    _bgColor                = engravingConfiguration()->textBaseBgColor();
-    _frameColor             = engravingConfiguration()->textBaseFrameColor();
+    _bgColor                = mu::draw::Color::transparent;
+    _frameColor             = mu::draw::Color::black;
     _align                  = Align::LEFT;
     _frameType              = FrameType::NO_FRAME;
     _frameWidth             = Spatium(0.1);
@@ -3371,15 +3371,14 @@ void TextBase::drawEditMode(mu::draw::Painter* p, EditData& ed)
 
     Transform transform = p->worldTransform();
     p->translate(-pos);
-    p->setPen(Pen(engravingConfiguration()->editColor(), 4.0 / transform.m11()));    // 4 pixel pen size
+    p->setPen(Pen(engravingConfiguration()->formattingMarksColor(), 2.0 / transform.m11())); // 2 pixel pen size
     p->setBrush(BrushStyle::NoBrush);
 
     qreal m = spatium();
     RectF r = canvasBoundingRect().adjusted(-m, -m, m, m);
-//      qDebug("%f %f %f %f\n", r.x(), r.y(), r.width(), r.height());
 
     p->drawRect(r);
-    pen = Pen(MScore::defaultColor, 0.0);
+    pen = Pen(engravingConfiguration()->defaultColor(), 0.0);
 }
 
 //---------------------------------------------------------

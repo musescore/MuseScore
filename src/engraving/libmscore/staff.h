@@ -29,7 +29,6 @@
 */
 
 #include "draw/color.h"
-#include "mscore.h"
 #include "changeMap.h"
 #include "pitch.h"
 #include "cleflist.h"
@@ -99,7 +98,7 @@ private:
     bool _mergeMatchingRests { false };         // merge matching rests in multiple voices
     HideMode _hideWhenEmpty  { HideMode::AUTO };      // hide empty staves
 
-    mu::draw::Color _color            { MScore::defaultColor };
+    mu::draw::Color _color   { engravingConfiguration()->defaultColor() };
     qreal _userDist          { 0.0 };           ///< user edited extra distance
 
     StaffTypeList _staffTypeList;
