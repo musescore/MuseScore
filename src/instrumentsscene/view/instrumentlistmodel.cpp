@@ -126,15 +126,15 @@ INotationPartsPtr InstrumentListModel::notationParts() const
 
 void InstrumentListModel::InstrumentListModel::initScoreOrders(const QString& currentId)
 {
-    auto toList = [](const ScoreOrder& order) {
+    auto toList = [](const ScoreOrder* order) {
         ScoreOrderInfo info;
-        info.id = order.id;
+        info.id = order->id;
         info.customized = false;
-        info.info = order;
+        info.info = *order;
         return info;
     };
 
-    for (const ScoreOrder& order: m_instrumentsMeta.scoreOrders) {
+    for (const ScoreOrder* order: m_instrumentsMeta.scoreOrders) {
         m_scoreOrders << toList(order);
     }
 
@@ -157,18 +157,18 @@ void InstrumentListModel::InstrumentListModel::initScoreOrders(const QString& cu
 
 QVariantList InstrumentListModel::families() const
 {
-    auto toMap = [](const InstrumentGenre& genre) {
+    auto toMap = [](const InstrumentGenre* genre) {
         return QVariantMap {
-            { ID_KEY, genre.id },
-            { NAME_KEY, genre.name }
+            { ID_KEY, genre->id },
+            { NAME_KEY, genre->name }
         };
     };
 
     QVariantList result;
     result << allInstrumentsItem();
 
-    for (const InstrumentGenre& genre: m_instrumentsMeta.genres) {
-        if (genre.id == COMMON_GENRE_ID) {
+    for (const InstrumentGenre* genre: m_instrumentsMeta.genres) {
+        if (genre->id == COMMON_GENRE_ID) {
             result.prepend(toMap(genre));
             continue;
         }
@@ -196,14 +196,14 @@ QVariantList InstrumentListModel::groups() const
 
     QVariantList result;
 
-    for (const InstrumentGroup& group: m_instrumentsMeta.groups) {
-        if (!availableGroups.contains(group.id)) {
+    for (const InstrumentGroup* group: m_instrumentsMeta.groups) {
+        if (!availableGroups.contains(group->id)) {
             continue;
         }
 
         QVariantMap obj;
-        obj[ID_KEY] = group.id;
-        obj[NAME_KEY] = group.name;
+        obj[ID_KEY] = group->id;
+        obj[NAME_KEY] = group->name;
 
         result << obj;
     }

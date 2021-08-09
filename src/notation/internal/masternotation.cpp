@@ -26,7 +26,6 @@
 
 #include "excerptnotation.h"
 #include "masternotationparts.h"
-#include "scoreorderconverter.h"
 #include "excerptnotation.h"
 #include "../notationerrors.h"
 
@@ -152,7 +151,7 @@ mu::Ret MasterNotation::setupNewScore(Ms::MasterScore* score, Ms::MasterScore* t
             nvb->setAutoSizeEnabled(tvb->isAutoSizeEnabled());
         }
     } else {
-        score->setScoreOrder(ScoreOrderConverter::convertScoreOrder(scoreOptions.order));
+        score->setScoreOrder(scoreOptions.order);
     }
 
     score->setName(qtrc("notation", "Untitled"));

@@ -42,7 +42,6 @@
 #include "notationmidiinput.h"
 #include "notationparts.h"
 #include "notationtypes.h"
-#include "scoreorderconverter.h"
 #include "draw/pen.h"
 
 using namespace mu::notation;
@@ -156,7 +155,7 @@ QString Notation::title() const
 
 mu::notation::ScoreOrder Notation::scoreOrder() const
 {
-    return m_score ? ScoreOrderConverter::convertScoreOrder(m_score->scoreOrder()) : ScoreOrder();
+    return m_score ? m_score->scoreOrder() : ScoreOrder();
 }
 
 void Notation::setViewSize(const QSizeF& vs)

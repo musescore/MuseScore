@@ -119,6 +119,12 @@ using InstrumentChannel = Ms::Channel;
 using Instrument = Ms::Instrument;
 using InstrumentTemplate = Ms::InstrumentTemplate;
 using InstrumentTrait = Ms::Trait;
+using ScoreOrder = Ms::ScoreOrder;
+using ScoreOrderGroup = Ms::ScoreGroup;
+using InstrumentOverwrite = Ms::InstrumentOverwrite;
+using InstrumentGenre = Ms::InstrumentGenre;
+using InstrumentGroup = Ms::InstrumentGroup;
+using MidiArticulation = Ms::MidiArticulation;
 
 using InstrumentChannelList = QList<InstrumentChannel>;
 using PageList = std::vector<const Page*>;
@@ -126,6 +132,10 @@ using StaffList = QList<const Staff*>;
 using PartList = QList<const Part*>;
 using InstrumentList = QList<Instrument>;
 using InstrumentTemplateList = QList<const InstrumentTemplate*>;
+using InstrumentGenreList = QList<const InstrumentGenre*>;
+using ScoreOrderList = QList<const ScoreOrder*>;
+using InstrumentGroupList = QList<const InstrumentGroup*>;
+using MidiArticulationList = QList<MidiArticulation>;
 
 enum class DragMode
 {
@@ -299,33 +309,6 @@ struct PitchRange
     }
 };
 
-struct MidiAction
-{
-    QString name;
-    QString description;
-    std::vector<midi::Event> events;
-};
-using MidiActionList = QList<MidiAction>;
-
-using MidiArticulations = QList<Ms::MidiArticulation>;
-
-struct InstrumentGroup
-{
-    QString id;
-    QString name;
-    bool extended = false;
-    int sequenceOrder = 0;
-};
-
-using InstrumentGroups = QList<InstrumentGroup>;
-
-struct InstrumentGenre
-{
-    QString id;
-    QString name;
-};
-using InstrumentGenres = QList<InstrumentGenre>;
-
 static const QString COMMON_GENRE_ID("common");
 
 struct InstrumentKey
@@ -371,32 +354,6 @@ struct PartInstrument
 
 using PartInstrumentList = QList<PartInstrument>;
 
-struct ScoreOrderGroup
-{
-    QString family;
-    QString section;
-    QString unsorted;
-
-    bool bracket = false;
-    bool showSystemMarkings = false;
-    bool barLineSpan = false;
-    bool thinBracket = false;
-};
-
-using InstrumentOverwrite = Ms::InstrumentOverwrite;
-
-struct ScoreOrder
-{
-    QString id;
-    QString name;
-    QMap<QString, InstrumentOverwrite> instrumentMap;
-    QList<ScoreOrderGroup> groups;
-
-    bool isValid() { return !groups.empty(); }
-};
-
-using ScoreOrders = QList<ScoreOrder>;
-
 struct PartInstrumentListScoreOrder
 {
     PartInstrumentList instruments;
@@ -406,10 +363,10 @@ struct PartInstrumentListScoreOrder
 struct InstrumentsMeta
 {
     InstrumentTemplateList instrumentTemplates;
-    InstrumentGroups groups;
-    InstrumentGenres genres;
-    MidiArticulations articulations;
-    ScoreOrders scoreOrders;
+    InstrumentGroupList groups;
+    InstrumentGenreList genres;
+    MidiArticulationList articulations;
+    ScoreOrderList scoreOrders;
 
     void clear()
     {
@@ -462,7 +419,8 @@ struct FilterNotesOptions : FilterElementsOptions
     Ms::NoteType noteType = Ms::NoteType::INVALID;
 };
 
-struct SelectionRange {
+struct SelectionRange
+{
     int startStaffIndex = 0;
     int endStaffIndex = 0;
     Fraction startTick;
