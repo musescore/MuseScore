@@ -141,7 +141,7 @@ void InstrumentsPanelTreeModel::listenSelectionChanged()
     m_notation->interaction()->selectionChanged().onNotify(this, [this]() {
         std::vector<Element*> selectedElements = m_notation->interaction()->selection()->elements();
 
-        if (selectedElements.empty())  {
+        if (selectedElements.empty()) {
             m_selectionModel->clear();
             return;
         }
