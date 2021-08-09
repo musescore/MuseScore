@@ -148,6 +148,5 @@ mu::async::Channel<int, Color> EngravingConfiguration::selectionColorChanged() c
 
 Color EngravingConfiguration::shadowNoteColor(int voice) const
 {
-    return selectionColor(voice).withAlpha(127);
-    // return Color::fromQColor(voiceColor(voice).toQColor().lighter(135));
+    return Color::fromQColor(selectionColor(voice).toQColor().lighter(135));
 }
