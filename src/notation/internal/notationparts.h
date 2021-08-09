@@ -94,9 +94,9 @@ private:
     Staff* staffModifiable(const ID& staffId) const;
     std::vector<Staff*> staves(const IDList& stavesIds) const;
 
-    void appendStaves(Part* part, const Instrument& instrument);
+    void appendStaves(Part* part, const InstrumentTemplate& templ);
     void insertStaff(Staff* staff, int destinationStaffIndex);
-    void initStaff(Staff* staff, const Instrument& instrument, const Ms::StaffType* staffType, int cleffIndex);
+    void initStaff(Staff* staff, const InstrumentTemplate& templ, const Ms::StaffType* staffType, int cleffIndex);
 
     void removeMissingParts(const PartInstrumentList& parts);
     void appendNewParts(const PartInstrumentList& parts);
@@ -105,7 +105,7 @@ private:
 
     void updateTracks();
 
-    int resolveInstrumentNumber(const Instruments& newInstruments, const Instrument& currentInstrument) const;
+    int resolveInstrumentNumber(const InstrumentList& newInstruments, const Instrument& currentInstrument) const;
 
     void setBracketsAndBarlines();
 

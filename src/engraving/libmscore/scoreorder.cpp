@@ -238,7 +238,7 @@ void ScoreOrder::setBracketsAndBarlines(Score* score)
     int thnBracketSpan { 0 };
 
     for (Part* part : score->parts()) {
-        InstrumentIndex ii = searchTemplateIndexForId(part->instrument()->getId());
+        InstrumentIndex ii = searchTemplateIndexForId(part->instrument()->id());
         if (!ii.instrTemplate) {
             continue;
         }
@@ -424,7 +424,7 @@ void ScoreOrder::write(Ms::XmlWriter& xml) const
 void ScoreOrder::updateInstruments(const Score* score)
 {
     for (Part* part : score->parts()) {
-        InstrumentIndex ii = searchTemplateIndexForId(part->instrument()->getId());
+        InstrumentIndex ii = searchTemplateIndexForId(part->instrument()->id());
         if (!ii.instrTemplate || !ii.instrTemplate->family) {
             continue;
         }

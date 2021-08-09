@@ -1372,6 +1372,11 @@ bool Instrument::operator==(const Instrument& i) const
            && i._singleNoteDynamics == _singleNoteDynamics;
 }
 
+bool Instrument::operator!=(const Instrument& i) const
+{
+    return !(*this == i);
+}
+
 //---------------------------------------------------------
 //   isDifferentInstrument
 ///   Checks if the passed instrument is a different instrument.
@@ -1685,36 +1690,46 @@ QString Instrument::abbreviature() const
 //   fromTemplate
 //---------------------------------------------------------
 
-Instrument Instrument::fromTemplate(const InstrumentTemplate* t)
+Instrument Instrument::fromTemplate(const InstrumentTemplate* templ)
 {
-    Instrument instr(t->id);
-    instr.setAmateurPitchRange(t->minPitchA, t->maxPitchA);
-    instr.setProfessionalPitchRange(t->minPitchP, t->maxPitchP);
-    for (const StaffName& sn : t->longNames) {
-        instr.addLongName(StaffName(sn.name(), sn.pos()));
+    Instrument instrument(templ->id);
+    instrument.setAmateurPitchRange(templ->minPitchA, templ->maxPitchA);
+    instrument.setProfessionalPitchRange(templ->minPitchP, templ->maxPitchP);
+
+    for (const StaffName& sn : templ->longNames) {
+        instrument.addLongName(StaffName(sn.name(), sn.pos()));
     }
-    for (const StaffName& sn : t->shortNames) {
-        instr.addShortName(StaffName(sn.name(), sn.pos()));
+
+    for (const StaffName& sn : templ->shortNames) {
+        instrument.addShortName(StaffName(sn.name(), sn.pos()));
     }
-    instr.setTrackName(t->trackName);
-    instr.setTranspose(t->transpose);
-    instr.setInstrumentId(t->musicXMLid);
-    if (t->useDrumset) {
-        instr.setDrumset(t->drumset ? t->drumset : smDrumset);
+
+    instrument.setTrackName(templ->trackName);
+    instrument.setTranspose(templ->transpose);
+    instrument.setInstrumentId(templ->musicXMLid);
+    instrument._useDrumset = templ->useDrumset;
+
+    if (templ->useDrumset) {
+        instrument.setDrumset(templ->drumset ? templ->drumset : smDrumset);
     }
-    for (int i = 0; i < t->nstaves(); ++i) {
-        instr.setClefType(i, t->clefTypes[i]);
+
+    for (int i = 0; i < templ->nstaves(); ++i) {
+        instrument.setClefType(i, templ->clefTypes[i]);
     }
-    instr.setMidiActions(t->midiActions);
-    instr.setArticulation(t->articulation);
-    instr._channel.clear();
-    for (const Channel& c : t->channel) {
-        instr._channel.append(new Channel(c));
+
+    instrument.setMidiActions(templ->midiActions);
+    instrument.setArticulation(templ->articulation);
+    instrument._channel.clear();
+
+    for (const Channel& c : templ->channel) {
+        instrument._channel.append(new Channel(c));
     }
-    instr.setStringData(t->stringData);
-    instr.setSingleNoteDynamics(t->singleNoteDynamics);
-    instr.setTrait(t->trait);
-    return instr;
+
+    instrument.setStringData(templ->stringData);
+    instrument.setSingleNoteDynamics(templ->singleNoteDynamics);
+    instrument.setTrait(templ->trait);
+
+    return instrument;
 }
 
 Trait Instrument::trait() const

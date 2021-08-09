@@ -93,7 +93,7 @@ private:
         QString familyCode;
         bool isSoloist = false;
         bool isExistingPart = false;
-        notation::Instrument config;
+        notation::InstrumentTemplate config;
 
         bool operator==(const SelectedInstrumentInfo& info) const { return id == info.id; }
     };
@@ -120,9 +120,9 @@ private:
 
     void updateFamilyStateBySearch();
 
-    bool isInstrumentAccepted(const notation::Instrument& instrument, bool compareWithSelectedGroup = true) const;
+    bool isInstrumentAccepted(const notation::InstrumentTemplate &instrument, bool compareWithSelectedGroup = true) const;
 
-    notation::Instrument instrumentById(const QString& instrumentId) const;
+    notation::InstrumentTemplate instrumentTemplateById(const QString& instrumentTemplateId) const;
 
     int indexOfScoreOrderId(const QString& id) const;
     void sortSelectedInstruments();

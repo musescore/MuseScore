@@ -63,8 +63,6 @@
 #include "notationnoteinput.h"
 #include "notationselection.h"
 
-#include "instrumentsconverter.h"
-
 using namespace mu::notation;
 
 NotationInteraction::NotationInteraction(Notation* notation, INotationUndoStackPtr undoStack)
@@ -1068,9 +1066,8 @@ void NotationInteraction::selectInstrument(Ms::InstrumentChange* instrumentChang
         return;
     }
 
-    Ms::Instrument instrument = InstrumentsConverter::convertInstrument(selectedInstrument.val);
     instrumentChange->setInit(true);
-    instrumentChange->setupInstrument(&instrument);
+    instrumentChange->setupInstrument(&selectedInstrument.val);
 }
 
 //! NOTE Copied from Palette::applyPaletteElement

@@ -73,8 +73,8 @@ void InstrumentListModel::load(bool canSelectMultipleInstruments, const QString&
     initSelectedInstruments(parseIdList(selectedPartIds));
 
     if (!currentInstrumentId.isEmpty()) {
-        Instrument instrument = instrumentById(currentInstrumentId);
-        selectGroup(instrument.groupId);
+        InstrumentTemplate templ = instrumentTemplateById(currentInstrumentId);
+        selectGroup(templ.groupId);
     }
 
     initScoreOrders(currentScoreOrderId);
@@ -107,7 +107,6 @@ void InstrumentListModel::initSelectedInstruments(const IDList& selectedPartIds)
         info.name = part->partName();
         info.isSoloist = part->soloist();
         info.familyCode = part->familyId();
-        info.config = Instrument();
 
         m_selectedInstruments << info;
     }
@@ -184,14 +183,14 @@ QVariantList InstrumentListModel::groups() const
 {
     QStringList availableGroups;
 
-    for (const Instrument& instrument: m_instrumentsMeta.instrumentTemplates) {
+    for (const InstrumentTemplate* templ: m_instrumentsMeta.instrumentTemplates) {
         constexpr bool compareWithSelectedGroup = false;
-        if (!isInstrumentAccepted(instrument, compareWithSelectedGroup)) {
+        if (!isInstrumentAccepted(*templ, compareWithSelectedGroup)) {
             continue;
         }
 
-        if (!availableGroups.contains(instrument.groupId)) {
-            availableGroups << instrument.groupId;
+        if (!availableGroups.contains(templ->groupId)) {
+            availableGroups << templ->groupId;
         }
     }
 
@@ -217,31 +216,32 @@ QVariantList InstrumentListModel::instruments() const
     QHash<QString, QStringList> traits;
     QVariantMap availableInstruments;
 
-    for (const Instrument& instrument: m_instrumentsMeta.instrumentTemplates) {
-        const Trait& trait = instrument.trait;
+    for (const InstrumentTemplate* templ: m_instrumentsMeta.instrumentTemplates) {
+        const Trait& trait = templ->trait;
+        const QString& instrumentName = templ->trackName;
 
-        if (!isInstrumentAccepted(instrument)) {
+        if (!isInstrumentAccepted(*templ)) {
             continue;
         }
 
         if (!trait.name.isEmpty()) {
             if (trait.isDefault) {
-                traits[instrument.name].prepend(trait.name);
+                traits[instrumentName].prepend(trait.name);
             } else {
-                traits[instrument.name] << trait.name;
+                traits[instrumentName] << trait.name;
             }
         }
 
         QVariantMap instrumentObj;
-        instrumentObj[ID_KEY] = instrument.id;
-        instrumentObj[NAME_KEY] = instrument.name;
-        instrumentObj[GROUP_ID] = instrument.groupId;
+        instrumentObj[ID_KEY] = templ->id;
+        instrumentObj[NAME_KEY] = instrumentName;
+        instrumentObj[GROUP_ID] = templ->groupId;
 
-        if (traits.contains(instrument.name)) {
-            instrumentObj[TRAITS_KEY] = traits[instrument.name];
+        if (traits.contains(instrumentName)) {
+            instrumentObj[TRAITS_KEY] = traits[instrumentName];
         }
 
-        availableInstruments[instrument.name] = instrumentObj;
+        availableInstruments[instrumentName] = instrumentObj;
     }
 
     QVariantList result = availableInstruments.values();
@@ -294,16 +294,16 @@ void InstrumentListModel::selectGroup(const QString& groupId)
 
 void InstrumentListModel::selectInstrument(const QString& instrumentName, const QString& traitName)
 {
-    Instrument suitedInstrument;
+    const InstrumentTemplate* suitedTemplate = nullptr;
 
-    for (const Instrument& instrument : m_instrumentsMeta.instrumentTemplates) {
-        if (instrument.name == instrumentName && instrument.trait.name == traitName) {
-            suitedInstrument = instrument;
+    for (const InstrumentTemplate* templ : m_instrumentsMeta.instrumentTemplates) {
+        if (templ->trackName == instrumentName && templ->trait.name == traitName) {
+            suitedTemplate = templ;
             break;
         }
     }
 
-    if (!suitedInstrument.isValid()) {
+    if (!suitedTemplate) {
         LOGE() << QString("Instrument %1 with trait %2 does not exist")
             .arg(instrumentName)
             .arg(traitName);
@@ -313,10 +313,10 @@ void InstrumentListModel::selectInstrument(const QString& instrumentName, const 
     SelectedInstrumentInfo info;
     info.isExistingPart = false;
     info.isSoloist = false;
-    info.id = suitedInstrument.templateId;
-    info.name = formatInstrumentTitle(suitedInstrument);
-    info.familyCode = suitedInstrument.familyId;
-    info.config = suitedInstrument;
+    info.id = suitedTemplate->id;
+    info.name = formatInstrumentTitle(suitedTemplate->trackName, suitedTemplate->trait);
+    info.familyCode = suitedTemplate->familyId();
+    info.config = *suitedTemplate;
 
     if (!m_canSelectMultipleInstruments) {
         m_selectedInstruments.clear();
@@ -580,10 +580,10 @@ void InstrumentListModel::updateFamilyStateBySearch()
     }
 }
 
-bool InstrumentListModel::isInstrumentAccepted(const Instrument& instrument, bool compareWithSelectedGroup) const
+bool InstrumentListModel::isInstrumentAccepted(const InstrumentTemplate& instrument, bool compareWithSelectedGroup) const
 {
     if (isSearching()) {
-        return instrument.name.contains(m_searchText, Qt::CaseInsensitive);
+        return instrument.trackName.contains(m_searchText, Qt::CaseInsensitive);
     }
 
     if (instrument.groupId != m_selectedGroupId && compareWithSelectedGroup) {
@@ -601,15 +601,15 @@ bool InstrumentListModel::isInstrumentAccepted(const Instrument& instrument, boo
     return false;
 }
 
-Instrument InstrumentListModel::instrumentById(const QString& instrumentId) const
+InstrumentTemplate InstrumentListModel::instrumentTemplateById(const QString& instrumentTemplateId) const
 {
-    for (const Instrument& instrument: m_instrumentsMeta.instrumentTemplates) {
-        if (instrument.id == instrumentId) {
-            return instrument;
+    for (const InstrumentTemplate* templ: m_instrumentsMeta.instrumentTemplates) {
+        if (templ->id == instrumentTemplateId) {
+            return *templ;
         }
     }
 
-    return Instrument();
+    return InstrumentTemplate();
 }
 
 void InstrumentListModel::checkScoreOrderMatching(bool block)

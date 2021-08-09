@@ -25,7 +25,6 @@
 #include "libmscore/excerpt.h"
 #include "libmscore/page.h"
 
-#include "instrumentsconverter.h"
 
 #include "igetscore.h"
 
@@ -624,7 +623,7 @@ void NotationParts::replaceInstrument(const InstrumentKey& instrumentKey, const 
 
     startEdit();
 
-    score()->undo(new Ms::ChangePart(part, new Ms::Instrument(InstrumentsConverter::convertInstrument(newInstrument)),
+    score()->undo(new Ms::ChangePart(part, new Ms::Instrument(newInstrument),
                                      formatPartTitle(part)));
 
     apply();
@@ -799,7 +798,7 @@ void NotationParts::moveStaves(const IDList& sourceStavesIds, const ID& destinat
     deselectAll();
 }
 
-void NotationParts::appendStaves(Part* part, const Instrument& instrument)
+void NotationParts::appendStaves(Part* part, const InstrumentTemplate& templ)
 {
     TRACEFUNC;
 
@@ -807,11 +806,11 @@ void NotationParts::appendStaves(Part* part, const Instrument& instrument)
         return;
     }
 
-    for (int staffIndex = 0; staffIndex < instrument.staves; ++staffIndex) {
+    for (int staffIndex = 0; staffIndex < templ.nstaves(); ++staffIndex) {
         int lastStaffIndex = !score()->staves().isEmpty() ? score()->staves().last()->idx() : 0;
 
         Staff* staff = Ms::createStaff(score(), part);
-        initStaff(staff, instrument, Ms::StaffType::preset(StaffType::STANDARD), staffIndex);
+        initStaff(staff, templ, Ms::StaffType::preset(StaffType::STANDARD), staffIndex);
 
         if (lastStaffIndex > 0) {
             staff->setBarLineSpan(score()->staff(lastStaffIndex - 1)->barLineSpan());
@@ -836,25 +835,25 @@ void NotationParts::insertStaff(Staff* staff, int destinationStaffIndex)
     score()->undoInsertStaff(staff, destinationStaffIndex);
 }
 
-void NotationParts::initStaff(Staff* staff, const Instrument& instrument, const Ms::StaffType* staffType, int cleffIndex)
+void NotationParts::initStaff(Staff* staff, const InstrumentTemplate& templ, const Ms::StaffType* staffType, int cleffIndex)
 {
     TRACEFUNC;
 
-    const Ms::StaffType* staffTypePreset = staffType ? staffType : instrument.staffTypePreset;
+    const Ms::StaffType* staffTypePreset = staffType ? staffType : templ.staffTypePreset;
     if (!staffTypePreset) {
-        staffTypePreset = Ms::StaffType::getDefaultPreset(instrument.staffGroup);
+        staffTypePreset = Ms::StaffType::getDefaultPreset(templ.staffGroup);
     }
 
     Ms::StaffType* stt = staff->setStaffType(DEFAULT_TICK, *staffTypePreset);
     if (cleffIndex >= MAX_STAVES) {
         stt->setSmall(false);
     } else {
-        stt->setSmall(instrument.smallStaff[cleffIndex]);
-        staff->setBracketType(0, instrument.bracket[cleffIndex]);
-        staff->setBracketSpan(0, instrument.bracketSpan[cleffIndex]);
-        staff->setBarLineSpan(instrument.barlineSpan[cleffIndex]);
+        stt->setSmall(templ.smallStaff[cleffIndex]);
+        staff->setBracketType(0, templ.bracket[cleffIndex]);
+        staff->setBracketSpan(0, templ.bracketSpan[cleffIndex]);
+        staff->setBarLineSpan(templ.barlineSpan[cleffIndex]);
     }
-    staff->setDefaultClefType(instrument.clefs[cleffIndex]);
+    staff->setDefaultClefType(templ.clefType(cleffIndex));
 }
 
 void NotationParts::removeMissingParts(const PartInstrumentList& parts)
@@ -884,10 +883,10 @@ void NotationParts::appendNewParts(const PartInstrumentList& parts)
 {
     TRACEFUNC;
 
-    Instruments newInstruments;
+    InstrumentList newInstruments;
 
     for (const PartInstrument& pi: parts) {
-        newInstruments << pi.instrument;
+        newInstruments << Instrument::fromTemplate(&pi.instrumentTemplate);
     }
 
     int staffCount = 0;
@@ -897,25 +896,28 @@ void NotationParts::appendNewParts(const PartInstrumentList& parts)
             continue;
         }
 
-        const Instrument& instrument = pi.instrument;
+        Instrument instrument = Instrument::fromTemplate(&pi.instrumentTemplate);
+        const QList<StaffName>& longNames = instrument.longNames();
+        const QList<StaffName>& shortNames = instrument.shortNames();
+
         Part* part = new Part(score());
         part->setSoloist(pi.isSoloist);
-        part->setInstrument(InstrumentsConverter::convertInstrument(instrument));
+        part->setInstrument(instrument);
 
         int instrumentNumber = resolveInstrumentNumber(newInstruments, instrument);
 
-        QString formattedPartName = formatInstrumentTitle(instrument, instrumentNumber);
-        QString longName = !instrument.longNames.empty() ? instrument.longNames.first().name() : QString();
-        QString formattedLongName = formatInstrumentTitleOnScore(longName, instrument.trait, instrumentNumber);
-        QString shortName = !instrument.shortNames.empty() ? instrument.shortNames.first().name() : QString();
-        QString formattedShortName = formatInstrumentTitleOnScore(shortName, instrument.trait, instrumentNumber);
+        QString formattedPartName = formatInstrumentTitle(instrument.trackName(), instrument.trait(), instrumentNumber);
+        QString longName = !longNames.isEmpty() ? longNames.first().name() : QString();
+        QString formattedLongName = formatInstrumentTitleOnScore(longName, instrument.trait(), instrumentNumber);
+        QString shortName = !shortNames.isEmpty() ? shortNames.first().name() : QString();
+        QString formattedShortName = formatInstrumentTitleOnScore(shortName, instrument.trait(), instrumentNumber);
 
         part->setPartName(formattedPartName);
         part->setLongName(formattedLongName);
         part->setShortName(formattedShortName);
 
         score()->undo(new Ms::InsertPart(part, staffCount));
-        appendStaves(part, pi.instrument);
+        appendStaves(part, pi.instrumentTemplate);
         staffCount += part->nstaves();
 
         m_partChangedNotifier->itemAdded(part);
@@ -975,16 +977,16 @@ void NotationParts::updateTracks()
     score()->excerpt()->updateTracks();
 }
 
-int NotationParts::resolveInstrumentNumber(const Instruments& newInstruments,
+int NotationParts::resolveInstrumentNumber(const InstrumentList& newInstruments,
                                            const Instrument& currentInstrument) const
 {
     int count = 0;
 
     for (const Part* part : score()->parts()) {
-        const Ms::Instrument* partInstrument = part->instrument();
+        const Instrument* partInstrument = part->instrument();
 
-        if (partInstrument->getId() == currentInstrument.id
-            && partInstrument->trait().name == currentInstrument.trait.name) {
+        if (partInstrument->id() == currentInstrument.id()
+            && partInstrument->trait().name == currentInstrument.trait().name) {
             ++count;
         }
     }
@@ -994,8 +996,8 @@ int NotationParts::resolveInstrumentNumber(const Instruments& newInstruments,
     }
 
     for (const Instrument& newInstrument: newInstruments) {
-        if (newInstrument.id == currentInstrument.id
-            && newInstrument.trait.name == currentInstrument.trait.name) {
+        if (newInstrument.id() == currentInstrument.id()
+            && newInstrument.trait().name == currentInstrument.trait().name) {
             ++count;
         }
     }
