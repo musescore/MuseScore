@@ -136,6 +136,31 @@ void InstrumentsPanelTreeModel::setupStavesConnections(const ID& stavesPartId)
     });
 }
 
+void InstrumentsPanelTreeModel::listenSelectionChanged()
+{
+    m_notation->interaction()->selectionChanged().onNotify(this, [this]() {
+        std::vector<Element*> selectedElements = m_notation->interaction()->selection()->elements();
+
+        if (selectedElements.empty()) {
+            m_selectionModel->clear();
+            return;
+        }
+
+        QSet<ID> selectedPartIdSet;
+        for (const Element* element : selectedElements) {
+            selectedPartIdSet << element->part()->id();
+        }
+
+        for (const ID& selectedPartId : selectedPartIdSet) {
+            AbstractInstrumentsPanelTreeItem* item = m_rootItem->childAtId(selectedPartId);
+
+            if (item) {
+                m_selectionModel->select(createIndex(item->row(), 0, item));
+            }
+        }
+    });
+}
+
 void InstrumentsPanelTreeModel::clear()
 {
     beginResetModel();
@@ -174,6 +199,7 @@ void InstrumentsPanelTreeModel::load()
     endResetModel();
 
     setupPartsConnections();
+    listenSelectionChanged();
 
     emit isEmptyChanged();
     emit isAddingAvailableChanged(true);

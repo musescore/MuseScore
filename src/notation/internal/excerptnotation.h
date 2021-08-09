@@ -42,17 +42,15 @@ public:
     bool isInited() const override;
     void init();
 
-    void setTitle(const QString& title) override;
+    Ms::Excerpt* excerpt() const;
+
     QString title() const override;
+    void setTitle(const QString& title) override;
 
     INotationPtr notation() override;
     IExcerptNotationPtr clone() const override;
 
-    Ms::Excerpt* excerpt() const;
-    void setExcerpt(Ms::Excerpt* excerpt);
-
 private:
-
     Ms::Excerpt* m_excerpt = nullptr;
     bool m_isInited = false;
 };

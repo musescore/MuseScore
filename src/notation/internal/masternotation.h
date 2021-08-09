@@ -72,7 +72,8 @@ private:
 
     Ms::MasterScore* masterScore() const;
 
-    void initExcerpts(const QList<Ms::Excerpt*>& excerpts);
+    void initExcerptNotations(const QList<Ms::Excerpt*>& excerpts);
+    void addExcerptsToMasterScore(const QList<Ms::Excerpt*>& excerpts);
 
     void doSetExcerpts(ExcerptNotationList excerpts);
 
