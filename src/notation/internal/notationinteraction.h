@@ -31,7 +31,7 @@
 #include "inotationinteraction.h"
 #include "inotationconfiguration.h"
 #include "inotationundostack.h"
-#include "iinteractive.h"
+#include "iselectinstrumentscenario.h"
 
 #include "libmscore/element.h"
 #include "libmscore/elementgroup.h"
@@ -47,7 +47,7 @@ class Notation;
 class NotationInteraction : public INotationInteraction, public async::Asyncable
 {
     INJECT(notation, INotationConfiguration, configuration)
-    INJECT(notation, framework::IInteractive, interactive)
+    INJECT(notation, ISelectInstrumentsScenario, selectInstrumentScenario)
 
 public:
     NotationInteraction(Notation* notation, INotationUndoStackPtr undoStack);

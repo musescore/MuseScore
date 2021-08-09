@@ -1062,18 +1062,13 @@ void NotationInteraction::selectInstrument(Ms::InstrumentChange* instrumentChang
         return;
     }
 
-    RetVal<Val> retVal = interactive()->open("musescore://instruments/select?canSelectMultipleInstruments=false");
-    if (!retVal.ret) {
+
+    RetVal<Instrument> selectedInstrument = selectInstrumentScenario()->selectInstrument();
+    if (!selectedInstrument.ret) {
         return;
     }
 
-    Instrument selectedIstrument = retVal.val.toQVariant().value<Instrument>();
-    if (!selectedIstrument.isValid()) {
-        return;
-    }
-
-    Ms::Instrument instrument = InstrumentsConverter::convertInstrument(selectedIstrument);
-
+    Ms::Instrument instrument = InstrumentsConverter::convertInstrument(selectedInstrument.val);
     instrumentChange->setInit(true);
     instrumentChange->setupInstrument(&instrument);
 }
