@@ -22,8 +22,6 @@
 
 #include "masternotationparts.h"
 
-#include "scoreorderconverter.h"
-
 #include "libmscore/masterscore.h"
 #include "libmscore/scoreorder.h"
 
@@ -71,8 +69,7 @@ void MasterNotationParts::setScoreOrder(const ScoreOrder& order)
 
     startEdit();
 
-    Ms::ScoreOrder so = ScoreOrderConverter::convertScoreOrder(order);
-    masterScore()->undo(new Ms::ChangeScoreOrder(masterScore(), so));
+    masterScore()->undo(new Ms::ChangeScoreOrder(masterScore(), order));
     masterScore()->setBracketsAndBarlines();
 
     apply();

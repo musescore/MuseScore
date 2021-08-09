@@ -73,59 +73,33 @@ void InstrumentsRepository::fillInstrumentsMeta(InstrumentsMeta& meta)
 {
     TRACEFUNC;
 
-    meta.articulations = Ms::articulation;
+    for (const MidiArticulation& artic : Ms::articulation) {
+        meta.articulations << artic;
+    }
 
-    for (const Ms::InstrumentGenre* msGenre : Ms::instrumentGenres) {
-        InstrumentGenre genre;
-        genre.id = msGenre->id;
-        genre.name = msGenre->name;
-
+    for (const InstrumentGenre* genre : Ms::instrumentGenres) {
         meta.genres << genre;
     }
 
-    for (const Ms::InstrumentGroup* msGroup : Ms::instrumentGroups) {
-        InstrumentGroup group;
-        group.id = msGroup->id;
-        group.name = msGroup->name;
-        group.extended = msGroup->extended;
-
+    for (const InstrumentGroup* group : Ms::instrumentGroups) {
         meta.groups << group;
 
-        for (InstrumentTemplate* templ : msGroup->instrumentTemplates) {
+        for (InstrumentTemplate* templ : group->instrumentTemplates) {
             if (templ->trackName.isEmpty() || templ->longNames.isEmpty()) {
                 continue;
             }
 
-            templ->groupId = msGroup->id;
+            templ->groupId = group->id;
             meta.instrumentTemplates << templ;
         }
     }
 
-    for (const Ms::ScoreOrder* msOrder : Ms::instrumentOrders) {
-        ScoreOrder order;
-        order.id = msOrder->id;
-        order.name = msOrder->name;
-        order.instrumentMap = msOrder->instrumentMap;
-
-        for (const Ms::ScoreGroup& msGroup : msOrder->groups) {
-            ScoreOrderGroup group;
-            group.family = msGroup.family;
-            group.section = msGroup.section;
-            group.unsorted = msGroup.unsorted;
-
-            group.bracket = msGroup.bracket;
-            group.showSystemMarkings = msGroup.showSystemMarkings;
-            group.barLineSpan = msGroup.barLineSpan;
-            group.thinBracket = msGroup.thinBracket;
-
-            order.groups << group;
-        }
-
+    for (const ScoreOrder* order : Ms::instrumentOrders) {
         meta.scoreOrders << order;
     }
 
-    ScoreOrder custom;
+    static ScoreOrder custom;
     custom.id = "custom";
     custom.name = qApp->translate("OrderXML", "Custom");
-    meta.scoreOrders << custom;
+    meta.scoreOrders << &custom;
 }
