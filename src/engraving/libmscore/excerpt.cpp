@@ -437,7 +437,7 @@ void MasterScore::deleteExcerpt(Excerpt* excerpt)
     undo(new RemoveExcerpt(excerpt));
 }
 
-void MasterScore::initExcerpt(Excerpt* excerpt, bool fakeUndo)
+void MasterScore::initAndAddExcerpt(Excerpt* excerpt, bool fakeUndo)
 {
     Score* score = new Score(masterScore());
     excerpt->setPartScore(score);
@@ -1371,7 +1371,6 @@ QList<Excerpt*> Excerpt::createExcerptsFromParts(const QList<Part*>& parts)
 
     for (Part* part : parts) {
         Excerpt* excerpt = new Excerpt(part->masterScore());
-
         excerpt->parts().append(part);
 
         for (int i = part->startTrack(), j = 0; i < part->endTrack(); ++i, ++j) {
