@@ -95,8 +95,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/searchcommandsparser.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/searchcommandsparser.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/inotationselectionrange.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/scoreorderconverter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/scoreorderconverter.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/inotationmidievents.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationmidievents.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationmidievents.h
