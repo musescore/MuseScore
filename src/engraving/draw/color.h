@@ -68,8 +68,6 @@ public:
     void setBlue(int value);
     void setAlpha(int value);
 
-    Color withAlpha(int value) const;
-
     bool operator==(const Color& other) const;
     bool operator!=(const Color& other) const;
 
