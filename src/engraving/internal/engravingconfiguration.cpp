@@ -126,11 +126,6 @@ Color EngravingConfiguration::formattingMarksColor() const
     return "#A0A0A4";
 }
 
-Color EngravingConfiguration::dropTargetColor() const
-{
-    return "#1778db";
-}
-
 Color EngravingConfiguration::selectionColor(int voice) const
 {
     return voiceColorKeys[voice].color;
@@ -146,7 +141,7 @@ mu::async::Channel<int, Color> EngravingConfiguration::selectionColorChanged() c
     return m_voiceColorChanged;
 }
 
-Color EngravingConfiguration::shadowNoteColor(int voice) const
+Color EngravingConfiguration::highlightSelectionColor(int voice) const
 {
     return Color::fromQColor(selectionColor(voice).toQColor().lighter(135));
 }
