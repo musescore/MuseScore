@@ -48,21 +48,19 @@ ExcerptNotation::~ExcerptNotation()
     setScore(nullptr);
 }
 
-void ExcerptNotation::setTitle(const QString& title)
+bool ExcerptNotation::isInited() const
 {
-    if (m_excerpt) {
-        m_excerpt->setTitle(title);
+    return m_isInited;
+}
+
+void ExcerptNotation::init()
+{
+    if (m_isInited) {
+        return;
     }
-}
 
-QString ExcerptNotation::title() const
-{
-    return m_excerpt ? m_excerpt->title() : QString();
-}
-
-INotationPtr ExcerptNotation::notation()
-{
-    return shared_from_this();
+    setScore(m_excerpt->partScore());
+    m_isInited = true;
 }
 
 Ms::Excerpt* ExcerptNotation::excerpt() const
@@ -70,30 +68,29 @@ Ms::Excerpt* ExcerptNotation::excerpt() const
     return m_excerpt;
 }
 
-void ExcerptNotation::setExcerpt(Ms::Excerpt* excerpt)
+QString ExcerptNotation::title() const
 {
-    m_excerpt = excerpt;
+    return m_excerpt ? m_excerpt->title() : QString();
 }
 
-void ExcerptNotation::init()
+void ExcerptNotation::setTitle(const QString& title)
 {
-    if (!m_excerpt) {
-        return;
+    if (m_excerpt) {
+        m_excerpt->setTitle(title);
     }
-
-    m_excerpt->oscore()->initExcerpt(m_excerpt, false);
-    setScore(m_excerpt->partScore());
-
-    m_isInited = true;
 }
 
-bool ExcerptNotation::isInited() const
+INotationPtr ExcerptNotation::notation()
 {
-    return m_isInited;
+    return shared_from_this();
 }
 
 IExcerptNotationPtr ExcerptNotation::clone() const
 {
+    if (!m_excerpt) {
+        return nullptr;
+    }
+
     Ms::Excerpt* copy = new Ms::Excerpt(*m_excerpt);
     return std::make_shared<ExcerptNotation>(copy);
 }

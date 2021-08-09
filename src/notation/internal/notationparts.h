@@ -109,6 +109,8 @@ private:
 
     void setBracketsAndBarlines();
 
+    void deselectAll();
+
     void notifyAboutPartChanged(const Part* part) const;
     void notifyAboutPartAdded(const Part* part) const;
     void notifyAboutPartRemoved(const Part* part) const;
@@ -119,6 +121,7 @@ private:
 
     IGetScore* m_getScore = nullptr;
     INotationUndoStackPtr m_undoStack;
+    INotationInteractionPtr m_interaction;
     async::Notification m_partsChanged;
 
     mutable async::ChangedNotifier<const Part*>* m_partChangedNotifier = nullptr;

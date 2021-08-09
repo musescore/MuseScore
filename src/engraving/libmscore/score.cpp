@@ -441,7 +441,7 @@ Score* Score::clone()
         }
     }
 
-    masterScore()->initExcerpt(excerpt, true);
+    masterScore()->initAndAddExcerpt(excerpt, true);
     masterScore()->removeExcerpt(excerpt);
 
     return excerpt->partScore();
