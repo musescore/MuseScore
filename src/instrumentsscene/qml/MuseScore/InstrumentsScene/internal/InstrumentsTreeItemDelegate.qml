@@ -118,12 +118,12 @@ Item {
         id: background
 
         anchors.fill: parent
+        anchors.margins: keynavItem.active ? ui.theme.navCtrlBorderWidth : 0
 
         color: ui.theme.backgroundPrimaryColor
         opacity: 1
 
-        border.color: ui.theme.focusColor
-        border.width: keynavItem.active ? 2 : 0
+        NavigationFocusBorder { navigationCtrl: keynavItem }
 
         states: [
             State {

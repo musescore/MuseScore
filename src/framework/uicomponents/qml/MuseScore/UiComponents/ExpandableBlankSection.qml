@@ -50,11 +50,9 @@ FocusScope {
         }
     }
 
-    Rectangle {
-        anchors.fill: parent
-        border.width: navCtrl.active ? 2 : 0
-        border.color: ui.theme.focusColor
-        color: "transparent"
+    NavigationFocusBorder{
+        navigationCtrl: navCtrl
+        anchors.margins: 0
     }
 
     Row {

@@ -29,6 +29,7 @@ FocusScope {
     property alias contentItem: contentItemContaner
     property alias background: focusRectItem
 
+    property int navCtrlBorderOverride: 0
     property int itemBorderWidth: 0
     property color itemBorderColor: ui.theme.focusColor
 
@@ -66,8 +67,12 @@ FocusScope {
     Rectangle {
         id: focusRectItem
         anchors.fill: parent
-        border.color: keynavItem.active ? ui.theme.focusColor : root.itemBorderColor
-        border.width: keynavItem.active ? 2 : root.itemBorderWidth
+        anchors.margins: keynavItem.active ? root.navCtrlBorderOverride : 0
+
+        NavigationFocusBorder { navigationCtrl: keynavItem }
+
+        border.color: root.itemBorderColor
+        border.width: root.itemBorderWidth
     }
 
     MouseArea {

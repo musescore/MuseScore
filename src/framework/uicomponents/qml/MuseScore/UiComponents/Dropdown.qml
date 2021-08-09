@@ -298,7 +298,7 @@ Item {
                         height: root.height
                         width: popup.contentWidth
 
-                        //insideDropdownList: true
+                        insideDropdownList: true
 
                         navigation.name: item.text
                         navigation.panel: popupNavPanel

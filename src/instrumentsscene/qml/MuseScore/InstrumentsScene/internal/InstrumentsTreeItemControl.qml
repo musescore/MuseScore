@@ -39,8 +39,7 @@ Item {
         color: root.isHighlighted ? ui.theme.accentColor : ui.theme.textFieldColor
         opacity: root.isHighlighted ? 0.5 : 1
 
-        border.color: ui.theme.focusColor
-        border.width: keynavItem.active ? 2 : 0
+        NavigationFocusBorder { navigationCtrl: keynavItem }
     }
 
     signal clicked()
