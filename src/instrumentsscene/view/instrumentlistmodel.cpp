@@ -37,6 +37,17 @@ static const QString CONFIG_KEY("config");
 static const QString SOLOIST_KEY("isSoloist");
 static const QString IS_EXISTING_PART_KEY("isExistingPart");
 
+static mu::IDList parseIdList(const QString& str)
+{
+    mu::IDList result;
+
+    for (const QString& idStr : str.split(',')) {
+        result.push_back(mu::ID(idStr));
+    }
+
+    return result;
+}
+
 InstrumentListModel::InstrumentListModel(QObject* parent)
     : QObject(parent)
 {
@@ -59,7 +70,7 @@ void InstrumentListModel::load(bool canSelectMultipleInstruments, const QString&
     m_canSelectMultipleInstruments = canSelectMultipleInstruments;
     setInstrumentsMeta(instrumentsMeta.val);
 
-    initSelectedInstruments(selectedPartIds.split(','));
+    initSelectedInstruments(parseIdList(selectedPartIds));
 
     if (!currentInstrumentId.isEmpty()) {
         Instrument instrument = instrumentById(currentInstrumentId);
@@ -78,8 +89,8 @@ void InstrumentListModel::initSelectedInstruments(const IDList& selectedPartIds)
 
     auto parts = _notationParts->partList();
     for (const ID& partId: selectedPartIds) {
-        auto compareId = [partId](auto p) {
-            return p->id() == partId;
+        auto compareId = [partId](const Part* part) {
+            return ID(part->id()) == partId;
         };
 
         auto pi = find_if(begin(parts), end(parts), compareId);
@@ -91,11 +102,11 @@ void InstrumentListModel::initSelectedInstruments(const IDList& selectedPartIds)
 
         SelectedInstrumentInfo info;
 
-        info.id = partId;
+        info.id = partId.toQString();
         info.isExistingPart = true;
         info.name = part->partName();
         info.isSoloist = part->soloist();
-        info.familyId = part->familyId();
+        info.familyCode = part->familyId();
         info.config = Instrument();
 
         m_selectedInstruments << info;
@@ -304,7 +315,7 @@ void InstrumentListModel::selectInstrument(const QString& instrumentName, const 
     info.isSoloist = false;
     info.id = suitedInstrument.templateId;
     info.name = formatInstrumentTitle(suitedInstrument);
-    info.familyId = suitedInstrument.familyId;
+    info.familyCode = suitedInstrument.familyId;
     info.config = suitedInstrument;
 
     if (!m_canSelectMultipleInstruments) {
@@ -469,8 +480,7 @@ int InstrumentListModel::sortInstrumentsIndex(const SelectedInstrumentInfo& info
     };
 
     ScoreOrder order = m_scoreOrders[m_selectedScoreOrderIndex].info;
-
-    const QString family = order.instrumentMap.contains(info.id) ? order.instrumentMap[info.id].id : info.familyId;
+    QString family = order.instrumentMap.contains(info.id) ? order.instrumentMap[info.id].id : info.familyCode;
 
     int index = order.groups.size();
     Priority priority = Priority::Undefined;

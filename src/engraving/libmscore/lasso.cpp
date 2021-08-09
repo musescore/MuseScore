@@ -21,8 +21,6 @@
  */
 
 #include "lasso.h"
-#include "mscore.h"
-#include "mscoreview.h"
 #include "score.h"
 #include "draw/brush.h"
 
@@ -50,7 +48,7 @@ void Lasso::draw(mu::draw::Painter* painter) const
     painter->setBrush(Brush(engravingConfiguration()->lassoColor()));
     // always 2 pixel width
     qreal w = 2.0 / painter->worldTransform().m11();
-    painter->setPen(Pen(MScore::selectColor[0], w));
+    painter->setPen(Pen(engravingConfiguration()->selectionColor(), w));
     painter->drawRect(bbox());
 }
 

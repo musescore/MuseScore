@@ -50,7 +50,6 @@ Column {
             propertyItem: root.model ? root.model.height : null
 
             IncrementalPropertyControl {
-
                 icon: IconCode.VERTICAL
                 measureUnitsSymbol: staffSpaceUnitsCheckbox.checked ? qsTrc("inspector", "sp") : qsTrc("inspector", "mm")
                 isIndeterminate: root.model ? root.model.height.isUndefined : false
@@ -72,9 +71,8 @@ Column {
             icon: checked ? IconCode.LOCK_CLOSED : IconCode.LOCK_OPEN
 
             checked: root.model ? root.model.isAspectRatioLocked.value : false
-
             onToggled: {
-                root.model.isAspectRatioLocked.value = !model.isAspectRatioLocked.value
+                root.model.isAspectRatioLocked.value = !root.model.isAspectRatioLocked.value
             }
         }
 
@@ -88,7 +86,7 @@ Column {
 
             IncrementalPropertyControl {
                 icon: IconCode.HORIZONTAL
-                iconMode: iconModeEnum.right
+                iconMode: IncrementalPropertyControl.Right
                 measureUnitsSymbol: staffSpaceUnitsCheckbox.checked ? qsTrc("inspector", "sp") : qsTrc("inspector", "mm")
                 isIndeterminate: root.model ? root.model.width.isUndefined : false
                 currentValue: root.model ? root.model.width.value : 0

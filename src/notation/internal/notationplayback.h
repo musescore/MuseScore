@@ -105,7 +105,7 @@ private:
     async::Channel<int> m_playPositionTickChanged;
     ValCh<LoopBoundaries> m_loopBoundaries;
 
-    std::unordered_map<std::string, midi::MidiData> m_instrumentsMidiData;
+    std::unordered_map<InstrumentTrackId, midi::MidiData> m_instrumentsMidiData;
     async::Channel<InstrumentTrackId> m_instrumentTrackRemoved;
     async::Channel<InstrumentTrackId> m_instrumentTrackAdded;
 };

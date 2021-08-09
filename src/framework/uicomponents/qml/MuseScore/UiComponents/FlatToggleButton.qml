@@ -59,8 +59,10 @@ FocusScope {
 
         anchors.fill: parent
 
-        border.width: navCtrl.active ? 2 : 0
-        border.color: ui.theme.focusColor
+        NavigationFocusBorder { navigationCtrl: navCtrl }
+
+        border.width: ui.theme.borderWidth
+        border.color: ui.theme.strokeColor
 
         color: ui.theme.buttonColor
         opacity: ui.theme.buttonOpacityNormal

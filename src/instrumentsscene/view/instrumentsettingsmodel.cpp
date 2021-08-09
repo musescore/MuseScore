@@ -36,8 +36,8 @@ void InstrumentSettingsModel::load(const QVariant& instrument)
 {
     QVariantMap map = instrument.toMap();
 
-    m_instrumentKey.partId = map["partId"].toString();
-    m_instrumentKey.instrumentId = map["instrumentId"].toString();
+    m_instrumentKey.partId = ID(map["partId"]);
+    m_instrumentKey.instrumentId = ID(map["instrumentId"]);
     m_partName = map["partName"].toString();
     m_instrumentName = map["instrumentName"].toString();
     m_instrumentAbbreviature = map["abbreviature"].toString();
@@ -51,7 +51,7 @@ void InstrumentSettingsModel::replaceInstrument()
         return;
     }
 
-    RetVal<Instrument> selectedInstrument = selectInstrumentsScenario()->selectInstrument(m_instrumentKey.instrumentId.toStdString());
+    RetVal<Instrument> selectedInstrument = selectInstrumentsScenario()->selectInstrument(m_instrumentKey);
     if (!selectedInstrument.ret) {
         LOGE() << selectedInstrument.ret.toString();
         return;

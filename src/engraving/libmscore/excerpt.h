@@ -60,7 +60,7 @@ public:
     const QList<Part*>& parts() const { return _parts; }
     bool containsPart(const Part* part) const;
 
-    void removePart(const QString& id);
+    void removePart(const ID& id);
 
     void setParts(const QList<Part*>& p) { _parts = p; }
 

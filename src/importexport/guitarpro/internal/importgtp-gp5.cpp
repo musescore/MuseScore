@@ -919,10 +919,9 @@ bool GuitarPro5::read(QFile* fp)
     //
     for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
         Part* part = new Part(score);
-        Staff* s = new Staff(score);
-        s->setPart(part);
-        part->insertStaff(s, -1);
-        score->staves().push_back(s);
+        Staff* s = createStaff(score, part);
+
+        score->appendStaff(s);
         score->appendPart(part);
     }
 

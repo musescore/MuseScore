@@ -734,7 +734,7 @@ Note::Note(const Note& n, bool link)
     _headType          = n._headType;
     _mirror            = n._mirror;
     _userMirror        = n._userMirror;
-    _small             = n._small;
+    m_isSmall          = n.m_isSmall;
     _userDotPosition   = n._userDotPosition;
     _fixed             = n._fixed;
     _fixedLine         = n._fixedLine;
@@ -1135,7 +1135,7 @@ qreal Note::noteheadCenterX() const
 qreal Note::tabHeadWidth(const StaffType* tab) const
 {
     qreal val;
-    if (tab && _fret != FRET_NONE && _string != STRING_NONE) {
+    if (tab && _fret != INVALID_FRET_INDEX && _string != INVALID_STRING_INDEX) {
         mu::draw::Font f    = tab->fretFont();
         f.setPointSizeF(tab->fretFontSize());
         val  = mu::draw::FontMetrics::width(f, _fretString) * magS();
@@ -1163,7 +1163,7 @@ qreal Note::headHeight() const
 
 qreal Note::tabHeadHeight(const StaffType* tab) const
 {
-    if (tab && _fret != FRET_NONE && _string != STRING_NONE) {
+    if (tab && _fret != INVALID_FRET_INDEX && _string != INVALID_STRING_INDEX) {
         return tab->fretBoxH() * magS();
     }
     return headHeight();
@@ -1392,7 +1392,7 @@ void Note::draw(mu::draw::Painter* painter) const
                     view->drawBackground(painter, bb);
                 }
             } else {
-                painter->fillRect(bb, engravingConfiguration()->whiteColor());
+                painter->fillRect(bb, mu::draw::Color::white);
             }
 
             if (fretConflict() && !score()->printing() && score()->showUnprintable()) {                //on fret conflict, draw on red background
@@ -1430,7 +1430,7 @@ void Note::draw(mu::draw::Painter* painter) const
         // draw blank notehead to avoid staff and ledger lines
         if (_cachedSymNull != SymId::noSym) {
             painter->save();
-            painter->setPen(engravingConfiguration()->whiteColor());
+            painter->setPen(mu::draw::Color::white);
             drawSymbol(_cachedSymNull, painter);
             painter->restore();
         }
@@ -1453,7 +1453,8 @@ void Note::write(XmlWriter& xml) const
     _el.write(xml);
     bool write_dots = false;
     for (NoteDot* dot : _dots) {
-        if (!dot->offset().isNull() || !dot->visible() || dot->color() != MScore::defaultColor || dot->visible() != visible()) {
+        if (!dot->offset().isNull() || !dot->visible() || dot->color() != engravingConfiguration()->defaultColor()
+            || dot->visible() != visible()) {
             write_dots = true;
             break;
         }
@@ -2496,7 +2497,7 @@ void Note::reset()
 qreal Note::mag() const
 {
     qreal m = chord()->mag();
-    if (_small) {
+    if (m_isSmall) {
         m *= score()->styleD(Sid::smallNoteMag);
     }
     return m;
@@ -2516,7 +2517,7 @@ Element* Note::elementBase() const
 
 void Note::setSmall(bool val)
 {
-    _small = val;
+    m_isSmall = val;
 }
 
 //---------------------------------------------------------
@@ -2967,7 +2968,7 @@ QVariant Note::getProperty(Pid propertyId) const
     case Pid::TPC2:
         return _tpc[1];
     case Pid::SMALL:
-        return small();
+        return isSmall();
     case Pid::MIRROR_HEAD:
         return int(userMirror());
     case Pid::DOT_POSITION:

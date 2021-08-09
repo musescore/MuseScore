@@ -37,14 +37,14 @@ using namespace mu::midi;
 
 static tick_t MINIMAL_REQUIRED_LOOKAHEAD = 480 * 4 * 10; // about 10 measures of 4/4 time signature
 
-MidiAudioSource::MidiAudioSource(const MidiData& midiData, const AudioInputParams& params, async::Channel<AudioInputParams> paramsChanged)
-    : m_stream(midiData.stream), m_mapping(midiData.mapping)
+MidiAudioSource::MidiAudioSource(const TrackId trackId, const MidiData& midiData, const AudioInputParams& params,
+                                 async::Channel<AudioInputParams> paramsChanged)
+    : m_trackId(trackId), m_stream(midiData.stream), m_mapping(midiData.mapping)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
     paramsChanged.onReceive(this, [this](const AudioInputParams& params) {
         resolveSynth(params);
-        setupChannels();
     });
 
     resolveSynth(params);
@@ -63,7 +63,6 @@ MidiAudioSource::MidiAudioSource(const MidiData& midiData, const AudioInputParam
         m_hasActiveRequest = false;
     });
 
-    setupChannels();
     buildTempoMap();
 
     requestNextEvents(MINIMAL_REQUIRED_LOOKAHEAD);
@@ -73,7 +72,7 @@ bool MidiAudioSource::isActive() const
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    IF_ASSERT_FAILED(m_synth) {
+    if (!m_synth) {
         return false;
     }
 
@@ -191,11 +190,12 @@ void MidiAudioSource::setSampleRate(unsigned int sampleRate)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    IF_ASSERT_FAILED(m_synth) {
+    m_sampleRate = sampleRate;
+
+    if (!m_synth) {
         return;
     }
 
-    m_sampleRate = sampleRate;
     m_synth->setSampleRate(sampleRate);
 }
 
@@ -225,7 +225,7 @@ void MidiAudioSource::process(float* buffer, unsigned int sampleCount)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    IF_ASSERT_FAILED(m_synth) {
+    if (!m_synth) {
         return;
     }
 
@@ -250,20 +250,19 @@ bool MidiAudioSource::sendEvents(const std::vector<Event>& events)
 
 void MidiAudioSource::resolveSynth(const AudioInputParams& inputParams)
 {
-    if (m_synth && m_synth->type() == inputParams.type) {
+    if (!inputParams.isValid()) {
+        m_synth = synthResolver()->resolveDefaultSynth(m_trackId);
+        m_synth->setSampleRate(m_sampleRate);
+        setupChannels();
+
         return;
     }
 
-    /* TODO
-    m_synth = synthFactory()->createNew(inputParams);
+    m_synth = synthResolver()->resolveSynth(m_trackId, inputParams);
+    m_synth->setSampleRate(m_sampleRate);
+    setupChannels();
 
-    IF_ASSERT_FAILED(m_synth) {
-       m_synth = synthFactory()->createDefault();
-       return;
-    }
-    */
-
-    m_synth = synthFactory()->createDefault();
+    //TODO FALLBACK TO DEFAULT ONE AND NOTIFY TRACK ABOUT THAT CHANGES
 }
 
 void MidiAudioSource::seek(const msecs_t newPositionMsecs)

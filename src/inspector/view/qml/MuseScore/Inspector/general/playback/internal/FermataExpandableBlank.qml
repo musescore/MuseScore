@@ -46,12 +46,10 @@ ExpandableBlank {
         navigation.row: root.navigation.row + 1
 
         titleText: qsTrc("inspector", "Time stretch")
-        propertyItem: model ? model.timeStretch : null
+        propertyItem: root.model ? root.model.timeStretch : null
 
         IncrementalPropertyControl {
             id: timeStretchControl
-
-            iconMode: iconModeEnum.hidden
 
             navigation.name: "Time stretch Value"
             navigation.panel: root.navigation.panel
@@ -59,19 +57,15 @@ ExpandableBlank {
             navigation.row: root.navigation.row + 2
 
             measureUnitsSymbol: "%"
-            isIndeterminate: model ? model.timeStretch.isUndefined : false
-            currentValue: model ? model.timeStretch.value : 0
+            isIndeterminate: root.model ? root.model.timeStretch.isUndefined : false
+            currentValue: root.model ? root.model.timeStretch.value : 0
 
             step: 1
             decimals: 0
             maxValue: 400
             minValue: 0
-            validator: IntInputValidator {
-                top: timeStretchControl.maxValue
-                bottom: timeStretchControl.minValue
-            }
 
-            onValueEdited: { model.timeStretch.value = newValue }
+            onValueEdited: { root.model.timeStretch.value = newValue }
         }
     }
 }

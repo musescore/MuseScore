@@ -853,8 +853,11 @@ bool Harmony::edit(EditData& ed)
     int root = TPC_INVALID;
     int base = TPC_INVALID;
     QString str = xmlText();
-    showSpell = !str.isEmpty() && !parseHarmony(str, &root, &base, true) && root == TPC_INVALID && _harmonyType == HarmonyType::STANDARD;
-    if (showSpell) {
+    _isMisspelled = !str.isEmpty()
+                    && !parseHarmony(str, &root, &base, true)
+                    && root == TPC_INVALID
+                    && _harmonyType == HarmonyType::STANDARD;
+    if (_isMisspelled) {
         qDebug("bad spell");
     }
 
@@ -913,7 +916,7 @@ void Harmony::endEdit(EditData& ed)
     score()->endCmd();
 
     // disable spell check
-    showSpell = false;
+    _isMisspelled = false;
 
     if (links()) {
         for (ScoreElement* e : *links()) {
@@ -1583,15 +1586,15 @@ void Harmony::drawEditMode(mu::draw::Painter* p, EditData& ed)
     TextBase::drawEditMode(p, ed);
 
     mu::draw::Color originalColor = color();
-    if (showSpell) {
-        setColor(engravingConfiguration()->harmonyColor());
+    if (_isMisspelled) {
+        setColor(engravingConfiguration()->criticalColor());
         setSelected(false);
     }
     PointF pos(canvasPos());
     p->translate(pos);
     TextBase::draw(p);
     p->translate(-pos);
-    if (showSpell) {
+    if (_isMisspelled) {
         setColor(originalColor);
         setSelected(true);
     }

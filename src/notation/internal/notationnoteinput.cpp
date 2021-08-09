@@ -91,7 +91,7 @@ void NotationNoteInput::startNoteInput()
     if (el == nullptr
         || (el->type() != ElementType::CHORD && el->type() != ElementType::REST && el->type() != ElementType::NOTE)) {
         // if no note/rest is selected, start with voice 0
-        int track = is.track() == -1 ? 0 : (is.track() / VOICES) * VOICES;
+        int track = is.track() == -1 ? 0 : (is.track() / Ms::VOICES) * Ms::VOICES;
         // try to find an appropriate measure to start in
         Fraction tick = el ? el->tick() : Fraction(0, 1);
         el = score()->searchNote(tick, track);
@@ -135,7 +135,7 @@ void NotationNoteInput::startNoteInput()
     score()->update();
     //! ---
 
-    Staff* staff = score()->staff(is.track() / VOICES);
+    Staff* staff = score()->staff(is.track() / Ms::VOICES);
     switch (staff->staffType(is.tick())->group()) {
     case Ms::StaffGroup::STANDARD:
         break;
@@ -291,7 +291,7 @@ QRectF NotationNoteInput::cursorRect() const
     }
 
     int track = inputState.track() == -1 ? 0 : inputState.track();
-    int staffIdx = track / VOICES;
+    int staffIdx = track / Ms::VOICES;
 
     Staff* staff = score()->staff(staffIdx);
     if (!staff) {

@@ -1350,7 +1350,7 @@ void FiguredBass::draw(mu::draw::Painter* painter) const
     if (!score()->printing() && score()->showUnprintable()) {
         for (qreal len : _lineLengths) {
             if (len > 0) {
-                painter->setPen(Pen(engravingConfiguration()->figuredBassColor(), 3));
+                painter->setPen(Pen(engravingConfiguration()->formattingMarksColor(), 3));
                 painter->drawLine(0.0, -2, len, -2);              // -2: 2 rast. un. above digits
             }
         }

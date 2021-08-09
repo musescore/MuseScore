@@ -26,7 +26,13 @@ import MuseScore.Ui 1.0
 RadioDelegate {
     id: root
 
-    default property Component contentComponent
+    default property Component contentComponent: null
+
+    //! NOTE Don't use the `icon` property.
+    //!      It's a property of the ancestor of RadioDelegate
+    //!      and has the wrong type (QQuickIcon).
+    //!      It can't be overridden either, as it is marked `FINAL`.
+    property int iconCode: IconCode.NONE
 
     property alias radius: backgroundRect.radius
 
@@ -60,26 +66,48 @@ RadioDelegate {
         id: backgroundRect
 
         anchors.fill: parent
-        anchors.margins: navCtrl.active ? 1 : 0
 
-        border.width: navCtrl.active ? 2 : ui.theme.borderWidth
-        border.color: navCtrl.active ? ui.theme.focusColor : ui.theme.strokeColor
+        NavigationFocusBorder { navigationCtrl: navCtrl }
 
-        color: normalStateColor
+        border.width: ui.theme.borderWidth
+        border.color: ui.theme.strokeColor
+
+        color: root.normalStateColor
         opacity: ui.theme.buttonOpacityNormal
 
         radius: 2
     }
 
-    contentItem: Item {
+    contentItem: Loader {
+        id: contentLoader
         anchors.fill: parent
 
-        Loader {
-            id: contentLoader
+        sourceComponent: {
+            if (root.contentComponent) {
+                return root.contentComponent
+            }
 
-            anchors.fill: parent
+            if (root.iconCode && root.iconCode !== IconCode.NONE) {
+                return iconComponent
+            }
 
-            sourceComponent: contentComponent
+            return textComponent
+        }
+
+        Component {
+            id: iconComponent
+
+            StyledIconLabel {
+                iconCode: root.iconCode
+            }
+        }
+
+        Component {
+            id: textComponent
+
+            StyledTextLabel {
+                text: root.text
+            }
         }
     }
 
@@ -92,7 +120,7 @@ RadioDelegate {
 
             PropertyChanges {
                 target: backgroundRect
-                color: hoverStateColor
+                color: root.hoverStateColor
                 opacity: ui.theme.buttonOpacityHover
             }
         },
@@ -103,7 +131,7 @@ RadioDelegate {
 
             PropertyChanges {
                 target: backgroundRect
-                color: pressedStateColor
+                color: root.pressedStateColor
                 opacity: ui.theme.buttonOpacityHit
             }
         },
@@ -114,7 +142,7 @@ RadioDelegate {
 
             PropertyChanges {
                 target: backgroundRect
-                color: selectedStateColor
+                color: root.selectedStateColor
                 opacity: ui.theme.buttonOpacityNormal
             }
         }

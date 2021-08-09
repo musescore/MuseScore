@@ -549,14 +549,10 @@ Score::FileError importBww(MasterScore* score, const QString& path)
         return Score::FileError::FILE_OPEN_ERROR;
     }
 
-    QString id("importBww");
     Part* part = new Part(score);
-    part->setId(id);
     score->appendPart(part);
-    Staff* staff = new Staff(score);
-    staff->setPart(part);
-    part->staves()->push_back(staff);
-    score->staves().push_back(staff);
+    Staff* staff = createStaff(score, part);
+    score->appendStaff(staff);
 
     Bww::Lexer lex(&fp);
     Bww::MsScWriter wrt;

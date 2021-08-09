@@ -28,22 +28,14 @@
 using namespace mu;
 using namespace mu::vst;
 
-VstSynthesiser::VstSynthesiser(const VstPluginMeta& meta)
-    : m_pluginMeta(meta), m_vstAudioClient(std::make_unique<VstAudioClient>())
+VstSynthesiser::VstSynthesiser(VstPluginPtr&& pluginPtr)
+    : m_pluginPtr(pluginPtr), m_vstAudioClient(std::make_unique<VstAudioClient>())
 {
 }
 
 Ret VstSynthesiser::init()
 {
-    RetVal plugin = repository()->findPluginById(m_pluginMeta.id);
-
-    if (!plugin.ret) {
-        return plugin.ret;
-    }
-
-    m_pluginPtr = plugin.val;
-
-    m_vstAudioClient->init(m_pluginPtr->component());
+    m_vstAudioClient->init(m_pluginPtr);
 
     return make_ret(Ret::Code::Ok);
 }
@@ -74,7 +66,11 @@ audio::AudioSourceType VstSynthesiser::type() const
 
 std::string VstSynthesiser::name() const
 {
-    return m_pluginMeta.name;
+    if (!m_pluginPtr) {
+        return std::string();
+    }
+
+    return m_pluginPtr->name();
 }
 
 audio::synth::SoundFontFormats VstSynthesiser::soundFontFormats() const

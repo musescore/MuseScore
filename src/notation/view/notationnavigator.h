@@ -30,6 +30,7 @@
 #include "inotationconfiguration.h"
 #include "context/iglobalcontext.h"
 #include "ui/iuiconfiguration.h"
+#include "engraving/iengravingconfiguration.h"
 #include "notationpaintview.h"
 
 namespace mu::notation {
@@ -40,6 +41,7 @@ class NotationNavigator : public NotationPaintView
     INJECT(notation, context::IGlobalContext, globalContext)
     INJECT(notation, INotationConfiguration, configuration)
     INJECT(notation, ui::IUiConfiguration, uiConfiguration)
+    INJECT(notation, engraving::IEngravingConfiguration, engravingConfiguration)
 
     Q_PROPERTY(int orientation READ orientation NOTIFY orientationChanged)
 

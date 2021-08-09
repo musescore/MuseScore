@@ -1354,13 +1354,13 @@ qreal Chord::defaultStemLength() const
     qreal shortest      = score()->styleS(Sid::shortestStem).val();
     if (hookIdx) {
         if (up()) {
-            shortest = qMax(shortest, small() ? 2.0 : 3.0);
+            shortest = qMax(shortest, isSmall() ? 2.0 : 3.0);
         } else {
-            shortest = qMax(shortest, small() ? 2.25 : 3.5);
+            shortest = qMax(shortest, isSmall() ? 2.25 : 3.5);
         }
     }
 
-    qreal normalStemLen = small() ? 2.5 : 3.5;
+    qreal normalStemLen = isSmall() ? 2.5 : 3.5;
     if (hookIdx && tab == 0) {
         if (up() && durationType().dots()) {
             //
@@ -2878,7 +2878,7 @@ QVariant Chord::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::NO_STEM:        return noStem();
-    case Pid::SMALL:          return small();
+    case Pid::SMALL:          return isSmall();
     case Pid::STEM_DIRECTION: return QVariant::fromValue<Direction>(stemDirection());
     case Pid::PLAY: return isChordPlayable();
     default:
@@ -3128,7 +3128,7 @@ void Chord::removeMarkings(bool keepTremolo)
 qreal Chord::chordMag() const
 {
     qreal m = 1.0;
-    if (small()) {
+    if (isSmall()) {
         m *= score()->styleD(Sid::smallNoteMag);
     }
     if (_noteType != NoteType::NORMAL) {
@@ -3655,7 +3655,7 @@ void Chord::layoutArticulations()
     }
     const Staff* st = staff();
     const StaffType* staffType = st->staffTypeForElement(this);
-    qreal mag            = (staffType->small() ? score()->styleD(Sid::smallStaffMag) : 1.0) * staffType->userMag();
+    qreal mag            = (staffType->isSmall() ? score()->styleD(Sid::smallStaffMag) : 1.0) * staffType->userMag();
     qreal _spatium       = score()->spatium() * mag;
     qreal _spStaff       = _spatium * staffType->lineDistance().val();
 

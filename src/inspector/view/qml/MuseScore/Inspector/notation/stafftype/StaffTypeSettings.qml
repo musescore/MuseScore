@@ -83,7 +83,6 @@ Column {
 
                 isIndeterminate: root.model ? root.model.scale.isUndefined : false
                 currentValue: root.model ? root.model.scale.value : 0
-                iconMode: iconModeEnum.hidden
 
                 measureUnitsSymbol: "%"
                 step: 20
@@ -115,16 +114,11 @@ Column {
 
                 isIndeterminate: root.model ? root.model.lineCount.isUndefined : false
                 currentValue: root.model ? root.model.lineCount.value : 0
-                iconMode: iconModeEnum.hidden
 
                 step: 1
                 decimals: 0
                 maxValue: 14
                 minValue: 1
-                validator: IntInputValidator {
-                    top: lineCountControl.maxValue
-                    bottom: lineCountControl.minValue
-                }
 
                 onValueEdited: { root.model.lineCount.value = newValue }
             }
@@ -143,7 +137,6 @@ Column {
 
                 isIndeterminate: root.model ? root.model.lineDistance.isUndefined : false
                 currentValue: root.model ? root.model.lineDistance.value : 0
-                iconMode: iconModeEnum.hidden
 
                 step: 0.25
                 maxValue: 3
@@ -167,16 +160,11 @@ Column {
 
             isIndeterminate: root.model ? root.model.stepOffset.isUndefined : false
             currentValue: root.model ? root.model.stepOffset.value : 0
-            iconMode: iconModeEnum.hidden
 
             step: 1
             decimals: 0
             maxValue: 8
             minValue: -8
-            validator: IntInputValidator {
-                top: stepOffsetControl.maxValue
-                bottom: stepOffsetControl.minValue
-            }
 
             onValueEdited: { root.model.stepOffset.value = newValue }
         }
@@ -202,7 +190,7 @@ Column {
         propertyItem: root.model ? root.model.noteheadSchemeType : null
 
         Dropdown {
-            id: shemes
+            id: schemes
 
             width: parent.width
 
@@ -219,14 +207,14 @@ Column {
                 { text: qsTrc("inspector", "7-shape (Walker)"), value: NoteHead.SCHEME_SHAPE_NOTE_7_WALKER }
             ]
 
-            currentIndex: root.model && !root.model.noteheadSchemeType.isUndefined ? shemes.indexOfValue(root.model.noteheadSchemeType.value) : -1
+            currentIndex: root.model && !root.model.noteheadSchemeType.isUndefined ? schemes.indexOfValue(root.model.noteheadSchemeType.value) : -1
 
             onCurrentValueChanged: {
                 if (currentIndex === -1) {
                     return
                 }
 
-                root.model.noteheadSchemeType.value = shemes.currentValue
+                root.model.noteheadSchemeType.value = schemes.currentValue
             }
         }
     }

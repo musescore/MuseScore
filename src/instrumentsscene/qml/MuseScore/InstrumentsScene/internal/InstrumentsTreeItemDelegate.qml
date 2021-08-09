@@ -118,12 +118,12 @@ Item {
         id: background
 
         anchors.fill: parent
+        anchors.margins: keynavItem.active ? ui.theme.navCtrlBorderWidth : 0
 
         color: ui.theme.backgroundPrimaryColor
         opacity: 1
 
-        border.color: ui.theme.focusColor
-        border.width: keynavItem.active ? 2 : 0
+        NavigationFocusBorder { navigationCtrl: keynavItem }
 
         states: [
             State {
@@ -360,7 +360,7 @@ Item {
 
                     popup = popupLoader.createPopup(instrumentSettingsComp, this)
 
-                    item["partId"] = model.itemRole.id()
+                    item["partId"] = model.itemRole.id
                     item["partName"] = model.itemRole.title
                     item["instrumentId"] = model.itemRole.instrumentId()
                     item["instrumentName"] = model.itemRole.instrumentName()
@@ -370,7 +370,7 @@ Item {
 
                     popup = popupLoader.createPopup(staffSettingsComp, this)
 
-                    item["staffId"] = model.itemRole.id()
+                    item["staffId"] = model.itemRole.id
                     item["isSmall"] = model.itemRole.isSmall()
                     item["cutawayEnabled"] = model.itemRole.cutawayEnabled()
                     item["type"] = model.itemRole.staffType()
