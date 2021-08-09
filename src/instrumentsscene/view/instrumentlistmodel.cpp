@@ -66,7 +66,7 @@ void InstrumentListModel::load(bool canSelectMultipleInstruments, const QString&
         setInstrumentsMeta(newInstrumentsMeta);
     });
 
-    m_selectedFamilyId = COMMON_GENRE_ID;
+    m_selectedGenreId = COMMON_GENRE_ID;
     m_canSelectMultipleInstruments = canSelectMultipleInstruments;
     setInstrumentsMeta(instrumentsMeta.val);
 
@@ -155,7 +155,7 @@ void InstrumentListModel::InstrumentListModel::initScoreOrders(const QString& cu
     emit scoreOrdersChanged();
 }
 
-QVariantList InstrumentListModel::families() const
+QVariantList InstrumentListModel::genres() const
 {
     auto toMap = [](const InstrumentGenre* genre) {
         return QVariantMap {
@@ -164,8 +164,12 @@ QVariantList InstrumentListModel::families() const
         };
     };
 
+    QVariantMap allInstrumentsGenre;
+    allInstrumentsGenre[ID_KEY] = ALL_INSTRUMENTS_GENRE_ID;
+    allInstrumentsGenre[NAME_KEY] = qtrc("instruments", "All instruments");
+
     QVariantList result;
-    result << allInstrumentsItem();
+    result << allInstrumentsGenre;
 
     for (const InstrumentGenre* genre: m_instrumentsMeta.genres) {
         if (genre->id == COMMON_GENRE_ID) {
@@ -268,16 +272,16 @@ void InstrumentListModel::sortInstruments(QVariantList& instruments) const
     });
 }
 
-void InstrumentListModel::selectFamily(const QString& familyId)
+void InstrumentListModel::selectGenre(const QString& genreId)
 {
-    if (m_selectedFamilyId == familyId) {
+    if (m_selectedGenreId == genreId) {
         return;
     }
 
-    m_selectedFamilyId = familyId;
+    m_selectedGenreId = genreId;
 
     emit dataChanged();
-    emit selectedFamilyChanged(m_selectedFamilyId);
+    emit selectedGenreChanged(m_selectedGenreId);
 }
 
 void InstrumentListModel::selectGroup(const QString& groupId)
@@ -356,7 +360,7 @@ void InstrumentListModel::setSearchText(const QString& text)
     m_searchText = text;
     emit dataChanged();
 
-    updateFamilyStateBySearch();
+    updateGenreStateBySearch();
 }
 
 QVariantList InstrumentListModel::scoreOrders() const
@@ -558,25 +562,17 @@ void InstrumentListModel::setInstrumentsMeta(const InstrumentsMeta& meta)
     emit dataChanged();
 }
 
-QVariantMap InstrumentListModel::allInstrumentsItem() const
+void InstrumentListModel::updateGenreStateBySearch()
 {
-    QVariantMap obj;
-    obj[ID_KEY] = ALL_INSTRUMENTS_GENRE_ID;
-    obj[NAME_KEY] = qtrc("instruments", "All instruments");
-    return obj;
-}
+    bool genreSaved = !m_savedGenreId.isEmpty();
 
-void InstrumentListModel::updateFamilyStateBySearch()
-{
-    bool familySaved = !m_savedFamilyId.isEmpty();
-
-    if (isSearching() && !familySaved) {
-        m_savedFamilyId = m_selectedFamilyId;
-        selectFamily(ALL_INSTRUMENTS_GENRE_ID);
+    if (isSearching() && !genreSaved) {
+        m_savedGenreId = m_selectedGenreId;
+        selectGenre(ALL_INSTRUMENTS_GENRE_ID);
         selectGroup(QString());
-    } else if (!isSearching() && familySaved) {
-        selectFamily(m_savedFamilyId);
-        m_savedFamilyId.clear();
+    } else if (!isSearching() && genreSaved) {
+        selectGenre(m_savedGenreId);
+        m_savedGenreId.clear();
     }
 }
 
@@ -590,11 +586,11 @@ bool InstrumentListModel::isInstrumentAccepted(const InstrumentTemplate& instrum
         return false;
     }
 
-    if (m_selectedFamilyId == ALL_INSTRUMENTS_GENRE_ID) {
+    if (m_selectedGenreId == ALL_INSTRUMENTS_GENRE_ID) {
         return true;
     }
 
-    if (instrument.genreIds.contains(m_selectedFamilyId)) {
+    if (instrument.containsGenre(m_selectedGenreId)) {
         return true;
     }
 

@@ -94,11 +94,11 @@ Rectangle {
             navigation.section: root.navigationSection
             navigation.order: 2
 
-            families: instrumentsModel.families
+            genres: instrumentsModel.genres
             groups: instrumentsModel.groups
 
-            onFamilySelected: {
-                instrumentsModel.selectFamily(familyId)
+            onGenreSelected: {
+                instrumentsModel.selectGenre(genreId)
                 instrumentsView.clearSearch()
             }
 
@@ -110,8 +110,8 @@ Rectangle {
             Connections {
                 target: instrumentsModel
 
-                function onSelectedFamilyChanged(familyId) {
-                    Qt.callLater(familyView.setFamily, familyId)
+                function onSelectedGenreChanged(genreId) {
+                    Qt.callLater(familyView.setGenre, genreId)
                 }
 
                 function onSelectedGroupChanged(groupId) {

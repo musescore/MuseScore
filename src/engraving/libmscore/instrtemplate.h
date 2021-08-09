@@ -120,7 +120,6 @@ public:
     bool singleNoteDynamics;
 
     QString groupId;
-    QStringList genreIds;
 
     InstrumentTemplate();
     InstrumentTemplate(const InstrumentTemplate&);
@@ -139,6 +138,7 @@ public:
     void setStaves(int val) { staves = val; }
     ClefTypeList clefType(int staffIdx) const;
     QString familyId() const;
+    bool containsGenre(const QString& genreId) const;
 };
 
 //---------------------------------------------------------

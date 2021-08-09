@@ -37,7 +37,7 @@ class InstrumentListModel : public QObject, public async::Asyncable
     INJECT(instruments, notation::IInstrumentsRepository, repository)
     INJECT(instruments, context::IGlobalContext, globalContext)
 
-    Q_PROPERTY(QVariantList families READ families NOTIFY dataChanged)
+    Q_PROPERTY(QVariantList genres READ genres NOTIFY dataChanged)
     Q_PROPERTY(QVariantList groups READ groups NOTIFY dataChanged)
     Q_PROPERTY(QVariantList instruments READ instruments NOTIFY dataChanged)
     Q_PROPERTY(QVariantList scoreOrders READ scoreOrders NOTIFY scoreOrdersChanged)
@@ -50,7 +50,7 @@ public:
     Q_INVOKABLE void load(bool canSelectMultipleInstruments, const QString& currentInstrumentId, const QString& currentScoreOrderId,
                           const QString& selectedPartIds);
 
-    QVariantList families() const;
+    QVariantList genres() const;
     QVariantList groups() const;
     QVariantList instruments() const;
     QVariantList scoreOrders() const;
@@ -60,7 +60,7 @@ public:
 
     Q_INVOKABLE QString selectedGroupId() const;
 
-    Q_INVOKABLE void selectFamily(const QString& familyId);
+    Q_INVOKABLE void selectGenre(const QString& genreId);
     Q_INVOKABLE void selectGroup(const QString& groupId);
 
     Q_INVOKABLE void selectInstrument(const QString& instrumentName, const QString& traitName = QString());
@@ -75,7 +75,7 @@ public:
 signals:
     void dataChanged();
 
-    void selectedFamilyChanged(QString familyId);
+    void selectedGenreChanged(QString genreId);
     void selectedGroupChanged(QString groupId);
 
     void searchStringChanged(QString searchString);
@@ -116,9 +116,8 @@ private:
     bool isSearching() const;
 
     void setInstrumentsMeta(const notation::InstrumentsMeta& meta);
-    QVariantMap allInstrumentsItem() const;
 
-    void updateFamilyStateBySearch();
+    void updateGenreStateBySearch();
 
     bool isInstrumentAccepted(const notation::InstrumentTemplate &instrument, bool compareWithSelectedGroup = true) const;
 
@@ -138,9 +137,9 @@ private:
 
     bool m_blockSortingInstruments = false;
 
-    QString m_selectedFamilyId;
+    QString m_selectedGenreId;
     QString m_selectedGroupId;
-    QString m_savedFamilyId;
+    QString m_savedGenreId;
     int m_selectedScoreOrderIndex = -1;
 
     notation::InstrumentsMeta m_instrumentsMeta;
