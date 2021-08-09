@@ -70,6 +70,11 @@ inline bool containsId(const IDList& list, const ID& id)
 {
     return std::find(list.cbegin(), list.cend(), id) != list.cend();
 }
+
+inline uint qHash(const ID& id)
+{
+    return ::qHash(id.toUint64());
+}
 }
 
 #endif // MU_FRAMEWORK_ID_H
