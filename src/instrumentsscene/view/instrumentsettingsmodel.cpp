@@ -60,8 +60,8 @@ void InstrumentSettingsModel::replaceInstrument()
     Instrument newInstrument = selectedInstrument.val;
     masterNotationParts()->replaceInstrument(m_instrumentKey, newInstrument);
 
-    m_instrumentKey.instrumentId = newInstrument.id;
-    m_instrumentName = newInstrument.name;
+    m_instrumentKey.instrumentId = newInstrument.id();
+    m_instrumentName = newInstrument.name();
     m_instrumentAbbreviature = newInstrument.abbreviature();
 
     emit dataChanged();

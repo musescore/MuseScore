@@ -116,11 +116,16 @@ using MidiArticulation = Ms::MidiArticulation;
 using Trait = Ms::Trait;
 using TraitType = Ms::TraitType;
 using InstrumentChannel = Ms::Channel;
+using Instrument = Ms::Instrument;
+using InstrumentTemplate = Ms::InstrumentTemplate;
+using InstrumentTrait = Ms::Trait;
 
 using InstrumentChannelList = QList<InstrumentChannel>;
 using PageList = std::vector<const Page*>;
 using StaffList = QList<const Staff*>;
 using PartList = QList<const Part*>;
+using InstrumentList = QList<Instrument>;
+using InstrumentTemplateList = QList<const InstrumentTemplate*>;
 
 enum class DragMode
 {
@@ -323,59 +328,6 @@ using InstrumentGenres = QList<InstrumentGenre>;
 
 static const QString COMMON_GENRE_ID("common");
 
-struct Instrument
-{
-    QString id;
-    StaffNameList longNames;
-    StaffNameList shortNames;
-    QString name;
-    QString musicXMLid;
-    QString templateId;
-    QString description;
-    int sequenceOrder = 0;
-
-    bool extended = false;
-    int staves = 1;
-
-    QString groupId;
-    QStringList genreIds;
-    QString familyId;
-
-    PitchRange amateurPitchRange;
-    PitchRange professionalPitchRange;
-
-    ClefTypeList clefs[MAX_STAVES];
-    int staffLines[MAX_STAVES] = { 0 };
-    BracketType bracket[MAX_STAVES] = { BracketType::NO_BRACKET };
-    int bracketSpan[MAX_STAVES] = { 0 };
-    int barlineSpan[MAX_STAVES] = { 0 };
-    bool smallStaff[MAX_STAVES] = { false };
-
-    Interval transpose;
-
-    StaffGroup staffGroup = StaffGroup::STANDARD;
-    const StaffTypePreset* staffTypePreset = nullptr;
-
-    bool useDrumset = false;
-    const Drumset* drumset = nullptr;
-
-    StringData stringData;
-
-    bool singleNoteDynamics = false;
-
-    MidiActionList midiActions;
-    QList<MidiArticulation> midiArticulations;
-
-    InstrumentChannelList channels;
-
-    Trait trait;
-
-    bool isValid() const { return !id.isEmpty(); }
-    QString abbreviature() const { return !shortNames.isEmpty() ? shortNames.first().name() : QString(); }
-};
-
-using Instruments = QList<Instrument>;
-
 struct InstrumentKey
 {
     ID instrumentId;
@@ -383,21 +335,19 @@ struct InstrumentKey
     Fraction tick = Ms::Fraction(0, 1);
 };
 
-inline QString formatInstrumentTitle(const Instrument& instrument, int instrumentNumber = 0)
+inline QString formatInstrumentTitle(const QString& instrumentName, const InstrumentTrait& trait, int instrumentNumber = 0)
 {
-    const QString& traitName = instrument.trait.name;
-    const QString& instrumentName = instrument.name;
     QString result = instrumentName;
 
-    switch (instrument.trait.type) {
+    switch (trait.type) {
     case TraitType::Tuning:
-        result = mu::qtrc("notation", "%1 %2").arg(traitName).arg(instrumentName);
+        result = mu::qtrc("notation", "%1 %2").arg(trait.name).arg(instrumentName);
         break;
     case TraitType::Course:
-        result = mu::qtrc("notation", "%1 (%2)").arg(instrumentName).arg(traitName);
+        result = mu::qtrc("notation", "%1 (%2)").arg(instrumentName).arg(trait.name);
         break;
     case TraitType::Transposition:
-        result = mu::qtrc("notation", "%1 in %2").arg(instrumentName).arg(traitName);
+        result = mu::qtrc("notation", "%1 in %2").arg(instrumentName).arg(trait.name);
         break;
     case TraitType::Unknown:
         break;
@@ -413,7 +363,7 @@ inline QString formatInstrumentTitle(const Instrument& instrument, int instrumen
 struct PartInstrument
 {
     ID partId;
-    Instrument instrument;
+    InstrumentTemplate instrumentTemplate;
 
     bool isExistingPart = false;
     bool isSoloist = false;
@@ -455,7 +405,7 @@ struct PartInstrumentListScoreOrder
 
 struct InstrumentsMeta
 {
-    Instruments instrumentTemplates;
+    InstrumentTemplateList instrumentTemplates;
     InstrumentGroups groups;
     InstrumentGenres genres;
     MidiArticulations articulations;
@@ -696,7 +646,7 @@ constexpr bool isFretIndexValid(int fretIndex)
 }
 }
 
-Q_DECLARE_METATYPE(mu::notation::Instrument)
+Q_DECLARE_METATYPE(mu::notation::InstrumentTemplate)
 Q_DECLARE_METATYPE(mu::notation::ScoreOrder)
 
 #endif // MU_NOTATION_NOTATIONTYPES_H

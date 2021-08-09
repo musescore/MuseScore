@@ -950,6 +950,11 @@ ClefTypeList InstrumentTemplate::clefType(int staffIdx) const
     return clefTypes[0];
 }
 
+QString InstrumentTemplate::familyId() const
+{
+    return family ? family->id : QString();
+}
+
 //---------------------------------------------------------
 //   defaultClef
 //    traverse the instrument list for first instrument
