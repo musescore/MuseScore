@@ -200,6 +200,29 @@ bool Excerpt::operator==(const Excerpt& e) const
     return true;
 }
 
+void Excerpt::updateTracks()
+{
+    QMultiMap<int, int> tracks;
+    for (Staff* s : partScore()->staves()) {
+        const Ms::LinkedElements* ls = s->links();
+        if (ls == nullptr) {
+            continue;
+        }
+        for (auto le : *ls) {
+            Staff* ps = toStaff(le);
+            if (ps->primaryStaff()) {
+                for (int i = 0; i < VOICES; i++) {
+                    tracks.insert(ps->idx() * VOICES + i % VOICES, s->idx() * VOICES + i % VOICES);
+                }
+
+                break;
+            }
+        }
+    }
+
+    setTracks(tracks);
+}
+
 //---------------------------------------------------------
 //   createExcerpt
 //---------------------------------------------------------
@@ -249,23 +272,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
 
     // Fill tracklist (map all tracks of a stave)
     if (excerpt->tracks().isEmpty()) {
-        QMultiMap<int, int> tracks;
-        for (Staff* s : score->staves()) {
-            const LinkedElements* ls = s->links();
-            if (ls == 0) {
-                continue;
-            }
-            for (auto le : *ls) {
-                Staff* ps = toStaff(le);
-                if (ps->primaryStaff()) {
-                    for (int i = 0; i < VOICES; i++) {
-                        tracks.insert(ps->idx() * VOICES + i % VOICES, s->idx() * VOICES + i % VOICES);
-                    }
-                    break;
-                }
-            }
-        }
-        excerpt->setTracks(tracks);
+        excerpt->updateTracks();
     }
 
     cloneStaves(oscore, score, srcStaves, excerpt->tracks());
@@ -1365,7 +1372,6 @@ QList<Excerpt*> Excerpt::createExcerptsFromParts(const QList<Part*>& parts)
     for (Part* part : parts) {
         Excerpt* excerpt = new Excerpt(part->masterScore());
 
-        excerpt->setPartScore(part->score());
         excerpt->parts().append(part);
 
         for (int i = part->startTrack(), j = 0; i < part->endTrack(); ++i, ++j) {

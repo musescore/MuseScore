@@ -538,6 +538,8 @@ void NotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
 
     insertStaff(staff, staffIndex);
 
+    updateTracks();
+
     setBracketsAndBarlines();
 
     destinationPart->instrument()->setClefType(staffIndex, staff->defaultClefType());
@@ -575,15 +577,16 @@ void NotationParts::appendPart(Part* part)
         staffCopy->init(staff);
 
         insertStaff(staffCopy, staffIndex);
-
-        Ms::Fraction startTick = score()->firstMeasure()->tick();
-        Ms::Fraction endTick = score()->lastMeasure()->tick();
-        Ms::Excerpt::cloneStaff2(staff, staffCopy, startTick, endTick);
-
         score()->undo(new Ms::Link(staffCopy, staff));
+
+        Ms::Fraction startTick = staff->score()->firstMeasure()->tick();
+        Ms::Fraction endTick = staff->score()->lastMeasure()->tick();
+        Ms::Excerpt::cloneStaff2(staff, staffCopy, startTick, endTick);
     }
 
     part->setScore(score());
+
+    updateTracks();
 
     apply();
 
@@ -672,9 +675,9 @@ void NotationParts::startEdit()
 
 void NotationParts::apply()
 {
-    score()->doLayout();
     undoStack()->commitChanges();
 
+    score()->doLayout();
     m_partsChanged.notify();
 }
 
@@ -828,15 +831,6 @@ void NotationParts::insertStaff(Staff* staff, int destinationStaffIndex)
 {
     TRACEFUNC;
 
-    if (score()->excerpt()) {
-        int globalDestinationStaffIndex = score()->staffIdx(staff->part()) + destinationStaffIndex;
-
-        for (int voiceIndex = 0; voiceIndex < Ms::VOICES; ++voiceIndex) {
-            int track = Ms::staff2track(globalDestinationStaffIndex, voiceIndex);
-            score()->excerpt()->tracks().insert(track, track);
-        }
-    }
-
     score()->undoInsertStaff(staff, destinationStaffIndex);
 }
 
@@ -968,6 +962,15 @@ void NotationParts::sortParts(const PartInstrumentList& parts, const QList<Ms::S
     }
 
     score()->undo(new Ms::MapExcerptTracks(score(), trackMapping));
+}
+
+void NotationParts::updateTracks()
+{
+    if (!score()->excerpt()) {
+        return;
+    }
+
+    score()->excerpt()->updateTracks();
 }
 
 int NotationParts::resolveInstrumentNumber(const Instruments& newInstruments,
