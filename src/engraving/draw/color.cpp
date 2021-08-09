@@ -180,13 +180,6 @@ void Color::setAlpha(int value)
     setRgba(red(), green(), blue(), value);
 }
 
-Color Color::withAlpha(int value) const
-{
-    Color copy(*this);
-    copy.setAlpha(value);
-    return copy;
-}
-
 void Color::setRgba(int r, int g, int b, int a)
 {
     if (!isRgbaValid(r, g, b, a)) {
