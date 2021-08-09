@@ -310,7 +310,7 @@ void TestSpanners::spanners05()
     parts.append(score->parts().at(0));
 
     Excerpt* ex = new Excerpt(score);
-    score->initExcerpt(ex, false);
+    score->initAndAddExcerpt(ex, false);
     ex->setTitle(parts.front()->longName());
     ex->setParts(parts);
 
@@ -621,7 +621,7 @@ void TestSpanners::spanners14()
     parts.append(score->parts().at(0));
 
     Excerpt* ex = new Excerpt(score);
-    score->initExcerpt(ex, false);
+    score->initAndAddExcerpt(ex, false);
 
     ex->setTitle(parts.front()->longName());
     ex->setParts(parts);
