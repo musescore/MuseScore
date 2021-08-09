@@ -48,22 +48,13 @@ InspectorPropertyView {
         ]
 
         delegate: FlatRadioButton {
-            id: radioButtonDelegate
-
             ButtonGroup.group: radioButtonList.radioButtonGroup
 
+            text: modelData["textRole"]
             checked: root.model && !root.model.placementType.isUndefined ? root.model.placementType.value === modelData["valueRole"]
                                                                          : false
             onToggled: {
                 root.model.placementType.value = modelData["valueRole"]
-            }
-
-            StyledTextLabel {
-                text: modelData["textRole"]
-
-                elide: Text.ElideRight
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
             }
         }
     }

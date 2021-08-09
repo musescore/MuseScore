@@ -86,7 +86,7 @@ Rectangle {
             navigation.row: 1
             navigation.column: 1
 
-            title: model.title
+            text: model.title
             needSave: model.needSave
 
             ButtonGroup.group: notationsView.radioButtonGroup

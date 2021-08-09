@@ -52,11 +52,10 @@ ExpandableBlank {
             navigation.row: root.navigation.row + 1
 
             titleText: qsTrc("inspector", "Velocity change")
-            propertyItem: model ? model.velocityChange : null
+            propertyItem: root.model ? root.model.velocityChange : null
 
             IncrementalPropertyControl {
                 id: velocityChangeControl
-                iconMode: iconModeEnum.hidden
 
                 navigation.name: "Velocity change Value"
                 navigation.panel: root.navigation.panel
@@ -67,15 +66,11 @@ ExpandableBlank {
                 decimals: 0
                 maxValue: 127
                 minValue: 0
-                validator: IntInputValidator {
-                    top: velocityChangeControl.maxValue
-                    bottom: velocityChangeControl.minValue
-                }
 
-                isIndeterminate: model ? model.velocityChange.isUndefined : false
-                currentValue: model ? model.velocityChange.value : 0
+                isIndeterminate: root.model ? root.model.velocityChange.isUndefined : false
+                currentValue: root.model ? root.model.velocityChange.value : 0
 
-                onValueEdited: { model.velocityChange.value = newValue }
+                onValueEdited: { root.model.velocityChange.value = newValue }
             }
         }
 

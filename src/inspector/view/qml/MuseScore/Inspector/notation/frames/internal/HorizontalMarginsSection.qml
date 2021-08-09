@@ -39,18 +39,18 @@ Item {
         anchors.rightMargin: 4
 
         titleText: qsTrc("inspector", "Left margin")
-        propertyItem: frameLeftMargin
+        propertyItem: root.frameLeftMargin
 
         IncrementalPropertyControl {
             icon: IconCode.LEFT_MARGIN
 
             measureUnitsSymbol: qsTrc("inspector", "mm")
 
-            enabled: frameLeftMargin ? frameLeftMargin.isEnabled : false
-            isIndeterminate: frameLeftMargin && enabled ? frameLeftMargin.isUndefined : false
-            currentValue: frameLeftMargin ? frameLeftMargin.value : 0
+            enabled: root.frameLeftMargin ? root.frameLeftMargin.isEnabled : false
+            isIndeterminate: root.frameLeftMargin && enabled ? root.frameLeftMargin.isUndefined : false
+            currentValue: root.frameLeftMargin ? root.frameLeftMargin.value : 0
 
-            onValueEdited: { frameLeftMargin.value = newValue }
+            onValueEdited: { root.frameLeftMargin.value = newValue }
         }
     }
 
@@ -60,18 +60,18 @@ Item {
         anchors.right: parent.right
 
         titleText: qsTrc("inspector", "Right margin")
-        propertyItem: frameRightMargin
+        propertyItem: root.frameRightMargin
 
         IncrementalPropertyControl {
             icon: IconCode.RIGHT_MARGIN
 
             measureUnitsSymbol: qsTrc("inspector", "mm")
 
-            enabled: frameRightMargin ? frameRightMargin.isEnabled : false
-            isIndeterminate: frameRightMargin && enabled ? frameRightMargin.isUndefined : false
-            currentValue: frameRightMargin ? frameRightMargin.value : 0
+            enabled: root.frameRightMargin ? root.frameRightMargin.isEnabled : false
+            isIndeterminate: root.frameRightMargin && enabled ? root.frameRightMargin.isUndefined : false
+            currentValue: root.frameRightMargin ? root.frameRightMargin.value : 0
 
-            onValueEdited: { frameRightMargin.value = newValue }
+            onValueEdited: { root.frameRightMargin.value = newValue }
         }
     }
 }

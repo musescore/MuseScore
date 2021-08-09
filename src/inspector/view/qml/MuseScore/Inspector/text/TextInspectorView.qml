@@ -210,26 +210,20 @@ InspectorSectionView {
                     ]
 
                     delegate: FlatRadioButton {
+                        ButtonGroup.group: horizontalAlignmentButtonList.radioButtonGroup
 
                         navigation.panel: root.navigationPanel
                         navigation.name: "HAlign"+model.index
                         navigation.row: root.navigationRow(model.index + 10)
 
                         width: 30
-
-                        ButtonGroup.group: horizontalAlignmentButtonList.radioButtonGroup
-
-                        checked: root.model && !root.model.horizontalAlignment.isUndefined ? root.model.horizontalAlignment.value === modelData["typeRole"]
-                                                                                           : false
-
                         normalStateColor: ui.theme.backgroundPrimaryColor
 
+                        iconCode: modelData["iconRole"]
+                        checked: root.model && !root.model.horizontalAlignment.isUndefined ? root.model.horizontalAlignment.value === modelData["typeRole"]
+                                                                                           : false
                         onToggled: {
                             root.model.horizontalAlignment.value = modelData["typeRole"]
-                        }
-
-                        StyledIconLabel {
-                            iconCode: modelData["iconRole"]
                         }
                     }
                 }
@@ -251,26 +245,20 @@ InspectorSectionView {
                     ]
 
                     delegate: FlatRadioButton {
+                        ButtonGroup.group: verticalAlignmentButtonList.radioButtonGroup
 
                         navigation.panel: root.navigationPanel
                         navigation.name: "VAlign"+model.index
                         navigation.row: root.navigationRow(model.index + 13)
 
                         width: 30
-
-                        ButtonGroup.group: verticalAlignmentButtonList.radioButtonGroup
-
-                        checked: root.model && !root.model.verticalAlignment.isUndefined ? root.model.verticalAlignment.value === modelData["typeRole"]
-                                                                                         : false
-
                         normalStateColor: ui.theme.backgroundPrimaryColor
 
+                        iconCode: modelData["iconRole"]
+                        checked: root.model && !root.model.verticalAlignment.isUndefined ? root.model.verticalAlignment.value === modelData["typeRole"]
+                                                                                         : false
                         onToggled: {
                             root.model.verticalAlignment.value = modelData["typeRole"]
-                        }
-
-                        StyledIconLabel {
-                            iconCode: modelData["iconRole"]
                         }
                     }
                 }

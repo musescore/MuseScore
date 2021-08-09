@@ -54,18 +54,13 @@ Column {
             ]
 
             delegate: FlatRadioButton {
-
                 ButtonGroup.group: radioButtonList.radioButtonGroup
 
+                iconCode: modelData["iconRole"]
                 checked: root.model && !root.model.direction.isUndefined ? root.model.direction.value === modelData["typeRole"]
                                                                          : false
-
                 onToggled: {
                     root.model.direction.value = modelData["typeRole"]
-                }
-
-                StyledIconLabel {
-                    iconCode: modelData["iconRole"]
                 }
             }
         }

@@ -51,18 +51,13 @@ Column {
             ]
 
             delegate: FlatRadioButton {
-
                 ButtonGroup.group: interpretationTypeList.radioButtonGroup
 
+                text: modelData["textRole"]
                 checked: root.model && !root.model.isLiteral.isUndefined ? root.model.isLiteral.value === modelData["valueRole"]
                                                                          : false
-
                 onToggled: {
                     root.model.isLiteral.value = modelData["valueRole"]
-                }
-
-                StyledTextLabel {
-                    text: modelData["textRole"]
                 }
             }
         }

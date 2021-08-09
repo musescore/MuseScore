@@ -61,10 +61,6 @@ Column {
                 decimals: 0
                 maxValue: 300
                 minValue: 1
-                validator: IntInputValidator {
-                    top: horizontalScaleControl.maxValue
-                    bottom: horizontalScaleControl.minValue
-                }
 
                 onValueEdited: { root.model.horizontalScale.value = newValue }
             }
@@ -85,10 +81,6 @@ Column {
                 decimals: 0
                 maxValue: 300
                 minValue: 1
-                validator: IntInputValidator {
-                    top: verticalScaleControl.maxValue
-                    bottom: verticalScaleControl.minValue
-                }
 
                 onValueEdited: { root.model.verticalScale.value = newValue }
             }

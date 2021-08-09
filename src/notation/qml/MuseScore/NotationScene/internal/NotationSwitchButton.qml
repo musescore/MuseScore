@@ -28,7 +28,6 @@ import MuseScore.Ui 1.0
 FlatRadioButton {
     id: root
 
-    property string title: ""
     property bool needSave: false
 
     signal closeRequested()
@@ -52,7 +51,7 @@ FlatRadioButton {
 
             horizontalAlignment: Text.AlignLeft
 
-            text: root.title + (root.needSave ? "*" : "")
+            text: root.text + (root.needSave ? "*" : "")
         }
 
         FlatButton {

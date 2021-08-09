@@ -41,16 +41,11 @@ Row {
         implicitWidth: 68
         anchors.verticalCenter: parent.verticalCenter
 
-        iconMode: iconModeEnum.hidden
         currentValue: root.numerator
         step: 1
-
+        decimals: 0
         maxValue: 63
         minValue: 1
-        validator: IntInputValidator {
-            top: control.maxValue
-            bottom: control.minValue
-        }
 
         onValueEdited: {
             root.numeratorSelected(newValue)
