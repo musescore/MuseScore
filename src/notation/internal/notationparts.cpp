@@ -831,8 +831,8 @@ void NotationParts::insertStaff(Staff* staff, int destinationStaffIndex)
     if (score()->excerpt()) {
         int globalDestinationStaffIndex = score()->staffIdx(staff->part()) + destinationStaffIndex;
 
-        for (int voiceIndex = 0; voiceIndex < VOICES; ++voiceIndex) {
-            int track = globalDestinationStaffIndex * VOICES + voiceIndex % VOICES;
+        for (int voiceIndex = 0; voiceIndex < Ms::VOICES; ++voiceIndex) {
+            int track = Ms::staff2track(globalDestinationStaffIndex, voiceIndex);
             score()->excerpt()->tracks().insert(track, track);
         }
     }

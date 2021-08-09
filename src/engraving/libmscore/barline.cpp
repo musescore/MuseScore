@@ -782,7 +782,7 @@ void BarLine::draw(mu::draw::Painter* painter) const
     if (s && s->isEndBarLineType() && !score()->printing() && score()->showUnprintable()) {
         Measure* m = s->measure();
         if (m->isIrregular() && score()->markIrregularMeasures() && !m->isMMRest()) {
-            painter->setPen(MScore::layoutBreakColor);
+            painter->setPen(engravingConfiguration()->formattingMarksColor());
             mu::draw::Font f("Edwin");
             f.setPointSizeF(12 * spatium() * MScore::pixelRatio / SPATIUM20);
             f.setBold(true);

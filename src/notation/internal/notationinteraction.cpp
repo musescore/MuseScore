@@ -928,7 +928,7 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
             PointF offset;
             el = score()->pos2measure(pos, &staffIdx, 0, &seg, &offset);
             if (el && el->isMeasure()) {
-                m_dropData.ed.dropElement->setTrack(staffIdx * VOICES);
+                m_dropData.ed.dropElement->setTrack(staffIdx * Ms::VOICES);
                 if (m_dropData.ed.dropElement->isImage()) {
                     m_dropData.ed.dropElement->setParent(el);
                     offset = pos - el->canvasPos();
@@ -1127,7 +1127,7 @@ bool NotationInteraction::applyPaletteElement(Ms::Element* element, Qt::Keyboard
 
         auto isEntryDrumStaff = [score]() {
             const Ms::InputState& is = score->inputState();
-            Ms::Staff* staff = score->staff(is.track() / VOICES);
+            Ms::Staff* staff = score->staff(is.track() / Ms::VOICES);
             return staff->staffType(is.tick())->group() == Ms::StaffGroup::PERCUSSION;
         };
 
@@ -1253,7 +1253,7 @@ bool NotationInteraction::applyPaletteElement(Ms::Element* element, Qt::Keyboard
                 // use mid-measure clef changes as appropriate
                 if (element->type() == ElementType::CLEF) {
                     if (sel.startSegment()->isChordRestType() && sel.startSegment()->rtick().isNotZero()) {
-                        ChordRest* cr = static_cast<ChordRest*>(sel.startSegment()->nextChordRest(i * VOICES));
+                        ChordRest* cr = static_cast<ChordRest*>(sel.startSegment()->nextChordRest(i * Ms::VOICES));
                         if (cr && cr->isChord()) {
                             e1 = static_cast<Ms::Chord*>(cr)->upNote();
                         } else {
@@ -1261,7 +1261,7 @@ bool NotationInteraction::applyPaletteElement(Ms::Element* element, Qt::Keyboard
                         }
                     }
                     if (sel.endSegment() && sel.endSegment()->segmentType() == Ms::SegmentType::ChordRest) {
-                        ChordRest* cr = static_cast<ChordRest*>(sel.endSegment()->nextChordRest(i * VOICES));
+                        ChordRest* cr = static_cast<ChordRest*>(sel.endSegment()->nextChordRest(i * Ms::VOICES));
                         if (cr && cr->isChord()) {
                             e2 = static_cast<Ms::Chord*>(cr)->upNote();
                         } else {
@@ -1343,8 +1343,8 @@ bool NotationInteraction::applyPaletteElement(Ms::Element* element, Qt::Keyboard
                 score->cmdAddSpanner(spanner, i, startSegment, endSegment);
             }
         } else {
-            int track1 = sel.staffStart() * VOICES;
-            int track2 = sel.staffEnd() * VOICES;
+            int track1 = sel.staffStart() * Ms::VOICES;
+            int track2 = sel.staffEnd() * Ms::VOICES;
             Ms::Segment* startSegment = sel.startSegment();
             Ms::Segment* endSegment = sel.endSegment();       //keep it, it could change during the loop
 
@@ -1443,8 +1443,8 @@ void NotationInteraction::doAddSlur(const Ms::Slur* slurTemplate)
     auto el = sel.uniqueElements();
 
     if (sel.isRange()) {
-        int startTrack = sel.staffStart() * VOICES;
-        int endTrack = sel.staffEnd() * VOICES;
+        int startTrack = sel.staffStart() * Ms::VOICES;
+        int endTrack = sel.staffEnd() * Ms::VOICES;
         for (int track = startTrack; track < endTrack; ++track) {
             firstChordRest = nullptr;
             secondChordRest = nullptr;
@@ -1619,7 +1619,7 @@ bool NotationInteraction::dragMeasureAnchorElement(const PointF& pos)
     if (!(m_dropData.ed.modifiers & Qt::ControlModifier)) {
         staffIdx = 0;
     }
-    int track = staffIdx * VOICES;
+    int track = staffIdx * Ms::VOICES;
 
     if (mb && mb->isMeasure()) {
         Ms::Measure* m = Ms::toMeasure(mb);
@@ -1649,7 +1649,7 @@ bool NotationInteraction::dragTimeAnchorElement(const PointF& pos)
     int staffIdx;
     Ms::Segment* seg;
     Ms::MeasureBase* mb = score()->pos2measure(pos, &staffIdx, 0, &seg, 0);
-    int track  = staffIdx * VOICES;
+    int track = staffIdx * Ms::VOICES;
 
     if (mb && mb->isMeasure() && seg->element(track)) {
         Ms::Measure* m = Ms::toMeasure(mb);

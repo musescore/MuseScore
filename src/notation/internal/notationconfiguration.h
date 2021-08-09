@@ -77,10 +77,6 @@ public:
     int cursorOpacity() const override;
 
     QColor selectionColor(int voiceIndex = 0) const override;
-    void setSelectionColor(int voiceIndex, const QColor& color) override;
-    async::Channel<int> selectionColorChanged() override;
-
-    QColor layoutBreakColor() const override;
 
     int selectionProximity() const override;
     void setSelectionProximity(int proxymity) override;
@@ -181,7 +177,6 @@ private:
     async::Channel<int> m_currentZoomChanged;
     async::Channel<framework::Orientation> m_canvasOrientationChanged;
     async::Channel<io::path> m_userStylesPathChanged;
-    async::Channel<int> m_selectionColorChanged;
     async::Notification m_instrumentListPathsChanged;
     async::Notification m_scoreOrderListPathsChanged;
 };

@@ -28,7 +28,6 @@
 
 #include "musescoreCore.h"
 #include "mscore.h"
-#include "sequencer.h"
 #include "element.h"
 #include "dynamic.h"
 #include "accidental.h"
@@ -60,7 +59,6 @@
 #include "keysig.h"
 #include "harmony.h"
 #include "stafftext.h"
-#include "mscoreview.h"
 #include "chord.h"
 #include "hook.h"
 #include "stem.h"
@@ -103,12 +101,6 @@ qreal MScore::verticalPageGap = 5.0;
 qreal MScore::horizontalPageGapEven = 1.0;
 qreal MScore::horizontalPageGapOdd = 50.0;
 
-mu::draw::Color MScore::selectColor[VOICES];
-mu::draw::Color MScore::defaultColor;
-mu::draw::Color MScore::layoutBreakColor;
-mu::draw::Color MScore::frameMarginColor;
-mu::draw::Color MScore::bgColor;
-mu::draw::Color MScore::dropColor;
 bool MScore::warnPitchRange;
 int MScore::pedalEventsMinTicks;
 
@@ -133,8 +125,6 @@ bool MScore::pdfPrinting = false;
 bool MScore::svgPrinting = false;
 
 double MScore::pixelRatio  = 0.8;         // DPI / logicalDPI
-
-Sequencer* MScore::seq = 0;
 
 extern void initDrumset();
 extern QString mscoreGlobalShare;
@@ -283,8 +273,6 @@ void MScore::init()
     }
 #endif
 
-    defaultColor        = mu::draw::Color("#000000");
-    dropColor           = mu::draw::Color("#1778db");
     defaultPlayDuration = 300;        // ms
     warnPitchRange      = true;
     pedalEventsMinTicks = 1;
@@ -293,10 +281,6 @@ void MScore::init()
     playbackSpeedIncrement = 5;
 
     lastError           = "";
-
-    layoutBreakColor    = mu::draw::Color("#A0A0A4");
-    frameMarginColor    = mu::draw::Color("#A0A0A4");
-    bgColor.setNamedColor("#dddddd");
 
     //
     //  initialize styles

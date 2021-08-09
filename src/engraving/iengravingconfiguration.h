@@ -25,6 +25,7 @@
 #include <QString>
 
 #include "modularity/imoduleexport.h"
+#include "async/channel.h"
 
 namespace mu::draw {
 class Color;
@@ -37,30 +38,29 @@ class IEngravingConfiguration : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IEngravingConfiguration() = default;
 
+    virtual void init() = 0;
+
     virtual QString defaultStyleFilePath() const = 0;
     virtual void setDefaultStyleFilePath(const QString& path) = 0;
 
     virtual QString partStyleFilePath() const = 0;
     virtual void setPartStyleFilePath(const QString& path) = 0;
 
-    virtual mu::draw::Color defaultColor() const = 0;
-    virtual mu::draw::Color blackColor() const = 0;
-    virtual mu::draw::Color whiteColor() const = 0;
-    virtual mu::draw::Color redColor() const = 0;
-    virtual mu::draw::Color invisibleColor() const = 0;
-    virtual mu::draw::Color lassoColor() const = 0;
-    virtual mu::draw::Color keysigColor() const = 0;
-    virtual mu::draw::Color figuredBassColor() const = 0;
-    virtual mu::draw::Color selectionColor() const = 0;
-    virtual mu::draw::Color warningColor() const = 0;
-    virtual mu::draw::Color warningSelectedColor() const = 0;
-    virtual mu::draw::Color criticalColor() const = 0;
-    virtual mu::draw::Color criticalSelectedColor() const = 0;
-    virtual mu::draw::Color editColor() const = 0;
-    virtual mu::draw::Color harmonyColor() const = 0;
-    virtual mu::draw::Color textBaseFrameColor() const = 0;
-    virtual mu::draw::Color textBaseBgColor() const = 0;
-    virtual mu::draw::Color shadowNoteColor() const = 0;
+    virtual draw::Color defaultColor() const = 0;
+    virtual draw::Color invisibleColor() const = 0;
+    virtual draw::Color lassoColor() const = 0;
+    virtual draw::Color warningColor() const = 0;
+    virtual draw::Color warningSelectedColor() const = 0;
+    virtual draw::Color criticalColor() const = 0;
+    virtual draw::Color criticalSelectedColor() const = 0;
+    virtual draw::Color formattingMarksColor() const = 0;
+    virtual draw::Color dropTargetColor() const = 0;
+
+    virtual draw::Color selectionColor(int voiceIndex = 0) const = 0;
+    virtual void setSelectionColor(int voiceIndex, draw::Color color) = 0;
+    virtual async::Channel<int, draw::Color> selectionColorChanged() const = 0;
+
+    virtual draw::Color shadowNoteColor(int voiceIndex = 0) const = 0;
 };
 }
 

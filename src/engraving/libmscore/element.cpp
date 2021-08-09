@@ -216,7 +216,7 @@ Element::Element(Score* s, ElementFlags f, mu::score::AccessibleElement* access)
 {
     _flags         = f;
     _track         = -1;
-    _color         = MScore::defaultColor;
+    _color         = engravingConfiguration()->defaultColor();
     _mag           = 1.0;
     _tag           = 1;
     _z             = -1;
@@ -517,15 +517,13 @@ mu::draw::Color Element::curColor(bool isVisible) const
 
 mu::draw::Color Element::curColor(bool isVisible, mu::draw::Color normalColor) const
 {
-    // the default element color is always interpreted as black in
-    // printing
+    // the default element color is always interpreted as black in printing
     if (score() && score()->printing()) {
-        // TODO: fix crash when INJECT is present and replace with the comment
-        return MScore::defaultColor; //(normalColor == engravingConfiguration()->defaultColor()) ? engravingConfiguration()->blackColor() : normalColor;
+        return (normalColor == engravingConfiguration()->defaultColor()) ? mu::draw::Color::black : normalColor;
     }
 
     if (flag(ElementFlag::DROP_TARGET)) {
-        return MScore::dropColor;
+        return engravingConfiguration()->dropTargetColor();
     }
     bool marked = false;
     if (isNote()) {
@@ -533,24 +531,20 @@ mu::draw::Color Element::curColor(bool isVisible, mu::draw::Color normalColor) c
         marked = toNote(this)->mark();
     }
     if (selected() || marked) {
-        mu::draw::Color originalColor;
-        if (track() == -1) {
-            originalColor = MScore::selectColor[0];
-        } else {
-            originalColor = MScore::selectColor[voice()];
-        }
+        mu::draw::Color originalColor = engravingConfiguration()->selectionColor(track() == -1 ? 0 : voice());
+
         if (isVisible) {
             return originalColor;
         } else {
             int red = originalColor.red();
             int green = originalColor.green();
             int blue = originalColor.blue();
-            float tint = .6f;        // Between 0 and 1. Higher means lighter, lower means darker
+            float tint = .6f; // Between 0 and 1. Higher means lighter, lower means darker
             return mu::draw::Color(red + tint * (255 - red), green + tint * (255 - green), blue + tint * (255 - blue));
         }
     }
     if (!isVisible) {
-        return mu::draw::Color(128, 128, 128);// engravingConfiguration()->invisibleColor();
+        return engravingConfiguration()->invisibleColor();
     }
     return normalColor;
 }
@@ -1550,7 +1544,7 @@ QVariant Element::propertyDefault(Pid pid) const
     case Pid::VISIBLE:
         return true;
     case Pid::COLOR:
-        return QVariant::fromValue(MScore::defaultColor);
+        return QVariant::fromValue(engravingConfiguration()->defaultColor());
     case Pid::PLACEMENT: {
         QVariant v = ScoreElement::propertyDefault(pid);
         if (v.isValid()) {        // if it's a styled property
@@ -2168,11 +2162,11 @@ void EditData::addData(ElementEditData* ed)
 void Element::drawEditMode(mu::draw::Painter* p, EditData& ed)
 {
     using namespace mu::draw;
-    Pen pen(MScore::defaultColor, 0.0);
+    Pen pen(engravingConfiguration()->defaultColor(), 0.0);
     p->setPen(pen);
     for (int i = 0; i < ed.grips; ++i) {
         if (Grip(i) == ed.curGrip) {
-            p->setBrush(MScore::frameMarginColor);
+            p->setBrush(engravingConfiguration()->formattingMarksColor());
         } else {
             p->setBrush(BrushStyle::NoBrush);
         }

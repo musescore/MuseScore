@@ -83,7 +83,6 @@
 #include "chordlist.h"
 #include "mscore.h"
 #include "accidental.h"
-#include "sequencer.h"
 #include "tremolo.h"
 #include "rehearsalmark.h"
 #include "sym.h"
