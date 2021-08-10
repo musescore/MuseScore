@@ -33,7 +33,6 @@ class NotationParts : public INotationParts, public async::Asyncable
 {
 public:
     NotationParts(IGetScore* getScore, INotationInteractionPtr interaction, INotationUndoStackPtr undoStack);
-    ~NotationParts() override;
 
     async::NotifyList<const Part*> partList() const override;
     async::NotifyList<const Staff*> staffList(const ID& partId) const override;
@@ -117,15 +116,14 @@ private:
     void notifyAboutStaffChanged(const Staff* staff) const;
     void notifyAboutStaffAdded(const Staff* staff, const ID& partId) const;
     void notifyAboutStaffRemoved(const Staff* staff) const;
-    async::ChangedNotifier<const Staff*>* staffChangedNotifier(const ID& partId) const;
 
     IGetScore* m_getScore = nullptr;
     INotationUndoStackPtr m_undoStack;
     INotationInteractionPtr m_interaction;
     async::Notification m_partsChanged;
 
-    mutable async::ChangedNotifier<const Part*>* m_partChangedNotifier = nullptr;
-    mutable std::map<ID, async::ChangedNotifier<const Staff*>*> m_staffChangedNotifierMap;
+    mutable async::ChangedNotifier<const Part*> m_partChangedNotifier;
+    mutable std::map<ID, async::ChangedNotifier<const Staff*>> m_staffChangedNotifierMap;
 };
 }
 
