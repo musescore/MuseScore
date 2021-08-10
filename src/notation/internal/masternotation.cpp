@@ -59,6 +59,10 @@ MasterNotation::MasterNotation()
     m_parts->partsChanged().onNotify(this, [this]() {
         notifyAboutNotationChanged();
     });
+
+    undoStack()->stackChanged().onNotify(this, [this]() {
+        notifyAboutNeedSaveChanged();
+    });
 }
 
 MasterNotation::~MasterNotation()
@@ -156,6 +160,7 @@ mu::Ret MasterNotation::setupNewScore(Ms::MasterScore* score, Ms::MasterScore* t
     }
 
     score->setName(qtrc("notation", "Untitled"));
+    score->setSaved(true);
     score->setCreated(true);
 
     score->checkChordList();
@@ -421,7 +426,7 @@ mu::ValNt<bool> MasterNotation::needSave() const
 {
     ValNt<bool> needSave;
     needSave.val = !masterScore()->saved();
-    needSave.notification = undoStack()->stackChanged();
+    needSave.notification = m_needSaveNotification;
 
     return needSave;
 }
@@ -484,6 +489,17 @@ void MasterNotation::doSetExcerpts(ExcerptNotationList excerpts)
 {
     m_excerpts.set(excerpts);
     static_cast<MasterNotationParts*>(m_parts.get())->setExcerpts(excerpts);
+
+    for (auto excerpt : excerpts) {
+        excerpt->notation()->undoStack()->stackChanged().onNotify(this, [this]() {
+            notifyAboutNeedSaveChanged();
+        });
+    }
+}
+
+void MasterNotation::notifyAboutNeedSaveChanged()
+{
+    m_needSaveNotification.notify();
 }
 
 IExcerptNotationPtr MasterNotation::newExcerptNotation() const

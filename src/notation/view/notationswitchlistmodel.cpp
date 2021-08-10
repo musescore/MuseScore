@@ -127,7 +127,10 @@ QVariant NotationSwitchListModel::data(const QModelIndex& index, int role) const
 
     switch (role) {
     case RoleTitle: return QVariant::fromValue(notation->title());
-    case RoleNeedSave: return QVariant::fromValue(masterNotation()->needSave().val && isMasterNotation(notation));
+    case RoleNeedSave: {
+        bool needSave = context()->currentProject()->needSave().val && isMasterNotation(notation);
+        return QVariant::fromValue(needSave);
+    }
     }
 
     return QVariant();
