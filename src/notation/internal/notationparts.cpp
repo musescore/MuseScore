@@ -25,7 +25,6 @@
 #include "libmscore/excerpt.h"
 #include "libmscore/page.h"
 
-
 #include "igetscore.h"
 
 #include "log.h"
@@ -883,13 +882,8 @@ void NotationParts::appendNewParts(const PartInstrumentList& parts)
 {
     TRACEFUNC;
 
-    InstrumentList newInstruments;
-
-    for (const PartInstrument& pi: parts) {
-        newInstruments << Instrument::fromTemplate(&pi.instrumentTemplate);
-    }
-
     int staffCount = 0;
+
     for (const PartInstrument& pi: parts) {
         if (pi.isExistingPart) {
             staffCount += part(pi.partId)->nstaves();
@@ -904,7 +898,7 @@ void NotationParts::appendNewParts(const PartInstrumentList& parts)
         part->setSoloist(pi.isSoloist);
         part->setInstrument(instrument);
 
-        int instrumentNumber = resolveInstrumentNumber(newInstruments, instrument);
+        int instrumentNumber = resolveNewInstrumentNumber(pi.instrumentTemplate, parts);
 
         QString formattedPartName = formatInstrumentTitle(instrument.trackName(), instrument.trait(), instrumentNumber);
         QString longName = !longNames.isEmpty() ? longNames.first().name() : QString();
@@ -977,16 +971,16 @@ void NotationParts::updateTracks()
     score()->excerpt()->updateTracks();
 }
 
-int NotationParts::resolveInstrumentNumber(const InstrumentList& newInstruments,
-                                           const Instrument& currentInstrument) const
+int NotationParts::resolveNewInstrumentNumber(const InstrumentTemplate& instrument,
+                                              const PartInstrumentList& allNewInstruments) const
 {
     int count = 0;
 
     for (const Part* part : score()->parts()) {
         const Instrument* partInstrument = part->instrument();
 
-        if (partInstrument->id() == currentInstrument.id()
-            && partInstrument->trait().name == currentInstrument.trait().name) {
+        if (partInstrument->id() == instrument.id
+            && partInstrument->trait().name == instrument.trait.name) {
             ++count;
         }
     }
@@ -995,9 +989,10 @@ int NotationParts::resolveInstrumentNumber(const InstrumentList& newInstruments,
         return count + 1;
     }
 
-    for (const Instrument& newInstrument: newInstruments) {
-        if (newInstrument.id() == currentInstrument.id()
-            && newInstrument.trait().name == currentInstrument.trait().name) {
+    for (const PartInstrument& partInstrument: allNewInstruments) {
+        const InstrumentTemplate& templ = partInstrument.instrumentTemplate;
+
+        if (templ.id == instrument.id && templ.trait.name == instrument.trait.name) {
             ++count;
         }
     }

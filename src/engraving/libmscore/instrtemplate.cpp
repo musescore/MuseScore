@@ -261,6 +261,13 @@ void InstrumentTemplate::init(const InstrumentTemplate& t)
 InstrumentTemplate::~InstrumentTemplate()
 {
     delete drumset;
+    drumset = nullptr;
+}
+
+InstrumentTemplate& InstrumentTemplate::operator=(const InstrumentTemplate& templ)
+{
+    init(templ);
+    return *this;
 }
 
 //---------------------------------------------------------
