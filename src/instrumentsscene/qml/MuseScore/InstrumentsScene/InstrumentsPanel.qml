@@ -36,6 +36,9 @@ Item {
     id: root
 
     property NavigationSection navigationSection: null
+    property alias contextMenuModel: contextMenuModel
+
+    signal contextMenuLoaded()
 
     Rectangle {
         id: background
@@ -60,6 +63,18 @@ Item {
         direction: NavigationPanel.Both
         enabled: root.visible
         order: 3
+    }
+
+    InstrumentsPanelContextMenuModel {
+        id: contextMenuModel
+
+        onLoaded: {
+            root.contextMenuLoaded()
+        }
+    }
+
+    Component.onCompleted: {
+        contextMenuModel.load()
     }
 
     ColumnLayout {

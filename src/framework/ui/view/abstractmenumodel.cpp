@@ -144,6 +144,11 @@ void AbstractMenuModel::setItems(const MenuItemList& items)
     emit countChanged(items.size());
 }
 
+void AbstractMenuModel::clear()
+{
+    setItems(MenuItemList());
+}
+
 int AbstractMenuModel::itemIndex(const actions::ActionCode& actionCode) const
 {
     for (int i = 0; i < m_items.size(); ++i) {
