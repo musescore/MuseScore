@@ -1060,7 +1060,6 @@ void NotationInteraction::selectInstrument(Ms::InstrumentChange* instrumentChang
         return;
     }
 
-
     RetVal<Instrument> selectedInstrument = selectInstrumentScenario()->selectInstrument();
     if (!selectedInstrument.ret) {
         return;

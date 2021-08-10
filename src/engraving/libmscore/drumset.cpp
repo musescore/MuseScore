@@ -31,8 +31,8 @@
 using namespace mu;
 
 namespace Ms {
-Drumset* smDrumset;           // standard midi drumset
-Drumset* gpDrumset;           // guitar pro drumset
+Drumset* smDrumset = nullptr;           // standard midi drumset
+Drumset* gpDrumset = nullptr;           // guitar pro drumset
 
 //---------------------------------------------------------
 //   save

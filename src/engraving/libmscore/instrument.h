@@ -311,12 +311,15 @@ class Instrument
     QString _trackName;
     QString _id;
 
-    char _minPitchA, _maxPitchA, _minPitchP, _maxPitchP;
+    char _minPitchA = 0;
+    char _maxPitchA = 0;
+    char _minPitchP = 0;
+    char _maxPitchP = 0;
     Interval _transpose;
     QString _instrumentId;
 
-    bool _useDrumset;
-    Drumset* _drumset;
+    bool _useDrumset = false;
+    Drumset* _drumset = nullptr;
     StringData _stringData;
 
     QList<NamedEventList> _midiActions;
@@ -324,7 +327,7 @@ class Instrument
     QList<Channel*> _channel;        // at least one entry
     QList<ClefTypeList> _clefType;
 
-    bool _singleNoteDynamics;
+    bool _singleNoteDynamics = false;
 
     Trait _trait;
 

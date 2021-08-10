@@ -105,7 +105,7 @@ private:
 
     void updateTracks();
 
-    int resolveInstrumentNumber(const InstrumentList& newInstruments, const Instrument& currentInstrument) const;
+    int resolveNewInstrumentNumber(const InstrumentTemplate& instrument, const PartInstrumentList& allNewInstruments) const;
 
     void setBracketsAndBarlines();
 
