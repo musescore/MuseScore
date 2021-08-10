@@ -74,7 +74,7 @@ public:
 
 class InstrumentTemplate
 {
-    int staves;               // 1 <= MAX_STAVES
+    int staves = 0;
 
 public:
     QString id;
@@ -88,17 +88,17 @@ public:
 
     Trait trait;
 
-    char minPitchA;           // pitch range playable by an amateur
-    char maxPitchA;
-    char minPitchP;           // pitch range playable by professional
-    char maxPitchP;
+    char minPitchA = 0;           // pitch range playable by an amateur
+    char maxPitchA = 0;
+    char minPitchP = 0;           // pitch range playable by professional
+    char maxPitchP = 0;
 
     Interval transpose;       // for transposing instruments
 
     StaffGroup staffGroup;
-    const StaffType* staffTypePreset;
-    bool useDrumset;
-    Drumset* drumset;
+    const StaffType* staffTypePreset = nullptr;
+    bool useDrumset = false;
+    Drumset* drumset = nullptr;
 
     StringData stringData;
 
@@ -106,7 +106,7 @@ public:
     QList<MidiArticulation> articulation;
     QList<Channel> channel;
     QList<InstrumentGenre*> genres;       //; list of genres this instrument belongs to
-    InstrumentFamily* family;             //; family the instrument belongs to
+    InstrumentFamily* family = nullptr;   //; family the instrument belongs to
 
     ClefTypeList clefTypes[MAX_STAVES];
     int staffLines[MAX_STAVES];
@@ -115,15 +115,17 @@ public:
     int barlineSpan[MAX_STAVES];
     bool smallStaff[MAX_STAVES];
 
-    bool extended;            // belongs to extended instrument set if true
+    bool extended = false;            // belongs to extended instrument set if true
 
-    bool singleNoteDynamics;
+    bool singleNoteDynamics = false;
 
     QString groupId;
 
     InstrumentTemplate();
     InstrumentTemplate(const InstrumentTemplate&);
     ~InstrumentTemplate();
+    InstrumentTemplate& operator=(const InstrumentTemplate&);
+
     void init(const InstrumentTemplate&);
     void linkGenre(const QString&);
     void addGenre(QList<InstrumentGenre*>);

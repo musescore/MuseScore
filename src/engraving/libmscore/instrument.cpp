@@ -229,6 +229,7 @@ Instrument::~Instrument()
 {
     qDeleteAll(_channel);
     delete _drumset;
+    _drumset = nullptr;
 }
 
 //---------------------------------------------------------

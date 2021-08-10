@@ -119,7 +119,7 @@ private:
 
     void updateGenreStateBySearch();
 
-    bool isInstrumentAccepted(const notation::InstrumentTemplate &instrument, bool compareWithSelectedGroup = true) const;
+    bool isInstrumentAccepted(const notation::InstrumentTemplate& instrument, bool compareWithSelectedGroup = true) const;
 
     notation::InstrumentTemplate instrumentTemplateById(const QString& instrumentTemplateId) const;
 
