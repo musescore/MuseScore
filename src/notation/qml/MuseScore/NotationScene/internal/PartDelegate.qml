@@ -32,6 +32,8 @@ ListItemBlank {
     property string title: ""
     property int currentPartIndex: -1
 
+    property bool isCreated: false
+
     property int sideMargin: 0
 
     signal copyPartRequested()
@@ -126,8 +128,8 @@ ListItemBlank {
 
         MenuButton {
             menuModel: [
-                { "id": "duplicate", "title": qsTrc("notation", "Duplicate") },
-                { "id": "delete", "title": qsTrc("notation", "Delete") },
+                { "id": "duplicate", "title": qsTrc("notation", "Duplicate"), "enabled": root.isCreated },
+                { "id": "delete", "title": qsTrc("notation", "Delete"), "enabled": root.isCreated },
                 { "id": "rename", "title": qsTrc("notation", "Rename") },
             ]
 
