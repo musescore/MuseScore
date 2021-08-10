@@ -22,14 +22,13 @@
 #ifndef MU_NOTATION_NOTATION_H
 #define MU_NOTATION_NOTATION_H
 
+#include "async/asyncable.h"
+#include "modularity/ioc.h"
+#include "iengravingconfiguration.h"
+
 #include "../inotation.h"
 #include "igetscore.h"
-#include "inotationmidievents.h"
-#include "async/asyncable.h"
-
-#include "modularity/ioc.h"
 #include "../inotationconfiguration.h"
-#include "iengravingconfiguration.h"
 
 namespace Ms {
 class MScore;
@@ -80,6 +79,7 @@ protected:
     void notifyAboutNotationChanged();
 
     INotationPartsPtr m_parts = nullptr;
+    async::Notification m_notationChanged;
 
 private:
     friend class NotationInteraction;
@@ -96,15 +96,12 @@ private:
     ValCh<bool> m_opened;
 
     INotationInteractionPtr m_interaction = nullptr;
-    INotationMidiEventsPtr m_midiEventsProvider = nullptr;
     INotationPlaybackPtr m_playback = nullptr;
     INotationUndoStackPtr m_undoStack = nullptr;
     INotationStylePtr m_style = nullptr;
     INotationMidiInputPtr m_midiInput = nullptr;
     INotationAccessibilityPtr m_accessibility = nullptr;
     INotationElementsPtr m_elements = nullptr;
-
-    async::Notification m_notationChanged;
 };
 }
 

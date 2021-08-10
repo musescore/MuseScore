@@ -23,11 +23,13 @@
 #define MU_NOTATION_IMASTERNOTATION_H
 
 #include "modularity/imoduleexport.h"
-#include "inotation.h"
-#include "iexcerptnotation.h"
 #include "retval.h"
 #include "io/path.h"
 #include "io/device.h"
+
+#include "inotation.h"
+#include "iexcerptnotation.h"
+#include "imasternotationmididata.h"
 
 namespace mu::notation {
 using ExcerptNotationList = std::vector<IExcerptNotationPtr>;
@@ -48,6 +50,7 @@ public:
     virtual void removeExcerpts(const ExcerptNotationList& excerpts) = 0;
 
     virtual INotationPartsPtr parts() const = 0;
+    virtual IMasterNotationMidiDataPtr midiData() const = 0;
 };
 
 using IMasterNotationPtr = std::shared_ptr<IMasterNotation>;

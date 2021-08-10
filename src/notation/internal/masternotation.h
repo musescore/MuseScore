@@ -24,13 +24,12 @@
 
 #include <memory>
 
-#include "../imasternotation.h"
-
 #include "modularity/ioc.h"
-#include "notation.h"
 #include "retval.h"
-
 #include "project/projecttypes.h"
+
+#include "notation.h"
+#include "../imasternotation.h"
 
 namespace Ms {
 class MasterScore;
@@ -64,6 +63,7 @@ public:
     void removeExcerpts(const ExcerptNotationList& excerpts) override;
 
     INotationPartsPtr parts() const override;
+    IMasterNotationMidiDataPtr midiData() const override;
 
 private:
 
@@ -78,6 +78,7 @@ private:
     void doSetExcerpts(ExcerptNotationList excerpts);
 
     ValCh<ExcerptNotationList> m_excerpts;
+    IMasterNotationMidiDataPtr m_notationMidiData = nullptr;
 };
 
 using MasterNotationPtr = std::shared_ptr<MasterNotation>;

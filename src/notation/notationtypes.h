@@ -136,6 +136,7 @@ using InstrumentGenreList = QList<const InstrumentGenre*>;
 using ScoreOrderList = QList<const ScoreOrder*>;
 using InstrumentGroupList = QList<const InstrumentGroup*>;
 using MidiArticulationList = QList<MidiArticulation>;
+using PartId = ID;
 
 enum class DragMode
 {
