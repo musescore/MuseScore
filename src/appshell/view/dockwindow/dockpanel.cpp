@@ -75,6 +75,7 @@ void DockPanel::componentComplete()
     }
 
     w->setProperty("dockPanel", QVariant::fromValue(this));
+    w->setProperty("contextMenuModel", m_contextMenuModel);
 }
 
 QObject* DockPanel::navigationSection() const
@@ -87,6 +88,22 @@ void DockPanel::setNavigationSection(QObject* newNavigation)
     if (m_navigationSection == newNavigation) {
         return;
     }
+
     m_navigationSection = newNavigation;
     emit navigationSectionChanged();
+}
+
+QVariant DockPanel::contextMenuModel() const
+{
+    return m_contextMenuModel;
+}
+
+void DockPanel::setContextMenuModel(const QVariant& model)
+{
+    if (m_contextMenuModel == model) {
+        return;
+    }
+
+    m_contextMenuModel = model;
+    emit contextMenuModelChanged();
 }

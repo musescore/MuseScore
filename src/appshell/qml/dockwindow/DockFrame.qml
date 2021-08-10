@@ -82,6 +82,7 @@ Rectangle {
 
         titleBarCpp: root.titleBarCpp
 
+        contextMenuModel: frameModel.currentDockContextMenuModel
         visible: frameModel.titleBarVisible
     }
 
@@ -142,16 +143,25 @@ Rectangle {
             spacing: 0
 
             currentIndex: tabsPanel.currentIndex
-            model: Boolean(root.frameCpp) ? root.frameCpp.tabWidget.dockWidgetModel : 0
+            model: frameModel.tabs
 
             delegate: DockPanelTab {
-                navigation.name: title
+                navigation.name: text
                 navigation.panel: navPanel
                 navigation.order: model.index * 2 // NOTE '...' button will have +1 order
-                onNavigationTriggered: tabsPanel.currentIndex = model.index
 
-                text: title
+                onNavigationTriggered: {
+                    tabsPanel.currentIndex = model.index
+                }
+
+                onClicked: {
+                    tabsPanel.currentIndex = model.index
+                }
+
+                text: modelData.title
                 isCurrent: tabsPanel && (tabsPanel.currentIndex === model.index)
+
+                contextMenuModel: modelData.contextMenuModel
             }
         }
 

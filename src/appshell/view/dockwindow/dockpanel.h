@@ -35,6 +35,7 @@ class DockPanel : public DockBase
     Q_PROPERTY(DockPanel * tabifyPanel READ tabifyPanel WRITE setTabifyPanel NOTIFY tabifyPanelChanged)
 
     Q_PROPERTY(QObject * navigationSection READ navigationSection WRITE setNavigationSection NOTIFY navigationSectionChanged)
+    Q_PROPERTY(QVariant contextMenuModel READ contextMenuModel WRITE setContextMenuModel NOTIFY contextMenuModelChanged)
 
 public:
     explicit DockPanel(QQuickItem* parent = nullptr);
@@ -42,14 +43,17 @@ public:
 
     DockPanel* tabifyPanel() const;
     QObject* navigationSection() const;
+    QVariant contextMenuModel() const;
 
 public slots:
     void setTabifyPanel(DockPanel* panel);
     void setNavigationSection(QObject* newNavigation);
+    void setContextMenuModel(const QVariant& model);
 
 signals:
     void tabifyPanelChanged(DockPanel* panel);
     void navigationSectionChanged();
+    void contextMenuModelChanged();
 
 private:
     DockType type() const override;
@@ -57,6 +61,7 @@ private:
 
     DockPanel* m_tabifyPanel = nullptr;
     QObject* m_navigationSection = nullptr;
+    QVariant m_contextMenuModel;
 };
 }
 

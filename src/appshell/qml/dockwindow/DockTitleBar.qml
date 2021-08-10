@@ -33,6 +33,7 @@ Item {
 
     required property QtObject titleBarCpp
 
+    property alias contextMenuModel: contextMenuButton.menuModel
     property alias heightWhenVisible: titleBar.heightWhenVisible
 
     width: parent.width
@@ -66,15 +67,9 @@ Item {
             }
 
             MenuButton {
-                Layout.margins: 2
+                id: contextMenuButton
 
-                //! TODO: only for testing
-                // We should get data for this model from c++
-                menuModel: [
-                    { "code": "close", "title": "Close tab" },
-                    { "code": "undock", "title": "Undock" },
-                    { "code": "move", "title": "Move panel to right side" },
-                ]
+                Layout.margins: 2
             }
         }
     }

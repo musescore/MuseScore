@@ -29,13 +29,7 @@ import MuseScore.UiComponents 1.0
 StyledTabButton {
     id: root
 
-    //! TODO: only for testing
-    // We should get data for this model from c++
-    property var menuModel: [
-        { "code": "close", "title": "Close tab" },
-        { "code": "undock", "title": "Undock" },
-        { "code": "move", "title": "Move panel to right side" },
-    ]
+    property alias contextMenuModel: contextMenuButton.menuModel
 
     height: 36
     width: implicitWidth
@@ -56,6 +50,7 @@ StyledTabButton {
         }
 
         MenuButton {
+            id: contextMenuButton
 
             height: 20
             width: height
@@ -65,8 +60,6 @@ StyledTabButton {
 
             navigation.panel: root.navigation.panel
             navigation.order: root.navigation.order + 1
-
-            menuModel: root.menuModel
         }
     }
 
