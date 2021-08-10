@@ -77,8 +77,12 @@ private:
 
     void doSetExcerpts(ExcerptNotationList excerpts);
 
+    void notifyAboutNeedSaveChanged();
+
     ValCh<ExcerptNotationList> m_excerpts;
     IMasterNotationMidiDataPtr m_notationMidiData = nullptr;
+
+    async::Notification m_needSaveNotification;
 };
 
 using MasterNotationPtr = std::shared_ptr<MasterNotation>;
