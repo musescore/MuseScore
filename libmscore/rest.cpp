@@ -214,7 +214,7 @@ bool Rest::acceptDrop(EditData& data) const
          || (type == ElementType::BAR_LINE)
          || (type == ElementType::BREATH)
          || (type == ElementType::CHORD)
-         || (type == ElementType::NOTE)
+         || (type == ElementType::NOTE && !measure()->isMMRest()) // avoid crash
          || (type == ElementType::STAFF_STATE)
          || (type == ElementType::INSTRUMENT_CHANGE)
          || (type == ElementType::DYNAMIC)
