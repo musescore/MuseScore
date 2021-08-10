@@ -73,351 +73,40 @@
 #include "log.h"
 
 using namespace mu;
+using namespace Ms;
 
-namespace Ms {
-//---------------------------------------------------------
-//   Selection
-//---------------------------------------------------------
+// ====================================================
+// SelectionFilter
+// ====================================================
 
-Selection::Selection(Score* s)
+SelectionFilter::SelectionFilter(SelectionFilterType type)
+    : m_filteredTypes(static_cast<int>(type))
 {
-    _score         = s;
-    _state         = SelState::NONE;
-    _startSegment  = 0;
-    _endSegment    = 0;
-    _activeSegment = 0;
-    _staffStart    = 0;
-    _staffEnd      = 0;
-    _activeTrack   = 0;
-    _currentTick   = Fraction(-1, 1);
-    _currentTrack  = 0;
 }
 
-//---------------------------------------------------------
-//   tickStart
-//---------------------------------------------------------
-
-Fraction Selection::tickStart() const
+int SelectionFilter::filteredTypes() const
 {
-    switch (_state) {
-    case SelState::RANGE:
-        return _startSegment ? _startSegment->tick() : Fraction(-1, 1);
-    case SelState::LIST: {
-        ChordRest* cr = firstChordRest();
-        return (cr) ? cr->tick() : Fraction(-1, 1);
-    }
-    default:
-        return Fraction(-1, 1);
-    }
+    return m_filteredTypes;
 }
 
-//---------------------------------------------------------
-//   tickEnd
-//---------------------------------------------------------
-
-Fraction Selection::tickEnd() const
+bool SelectionFilter::isFiltered(SelectionFilterType type) const
 {
-    switch (_state) {
-    case SelState::RANGE: {
-        if (_endSegment) {
-            return _endSegment->tick();
-        } else {         // endsegment == 0 if end of score
-            Measure* m = _score->lastMeasure();
-            return m->endTick();
-        }
-        break;
-    }
-    case SelState::LIST: {
-        ChordRest* cr = lastChordRest();
-        return (cr) ? cr->segment()->tick() : Fraction(-1, 1);
-        break;
-    }
-    default:
-        return Fraction(-1, 1);
-    }
+    return m_filteredTypes & static_cast<int>(type);
 }
 
-//---------------------------------------------------------
-//   isStartActive
-//---------------------------------------------------------
-
-bool Selection::isStartActive() const
+void SelectionFilter::setFiltered(SelectionFilterType type, bool filtered)
 {
-    return activeSegment() && activeSegment()->tick() == tickStart();
-}
-
-//---------------------------------------------------------
-//   isEndActive
-//---------------------------------------------------------
-
-bool Selection::isEndActive() const
-{
-    return activeSegment() && activeSegment()->tick() == tickEnd();
-}
-
-//---------------------------------------------------------
-//   element
-//---------------------------------------------------------
-
-Element* Selection::element() const
-{
-    return ((state() != SelState::RANGE) && (_el.size() == 1)) ? _el[0] : 0;
-}
-
-//---------------------------------------------------------
-//   cr
-//---------------------------------------------------------
-
-ChordRest* Selection::cr() const
-{
-    Element* e = element();
-    if (!e) {
-        return 0;
-    }
-    if (e->isNote()) {
-        e = e->parent();
-    }
-    if (e->isChordRest()) {
-        return toChordRest(e);
-    }
-    return 0;
-}
-
-//---------------------------------------------------------
-//   currentCR
-//---------------------------------------------------------
-
-ChordRest* Selection::currentCR() const
-{
-    // no selection yet - start at very beginning, not first cr
-    if (_currentTick == Fraction(-1, 1)) {
-        return nullptr;
-    }
-    Segment* s = score()->tick2rightSegment(_currentTick, true);
-    if (!s) {
-        return nullptr;
-    }
-    int track = _currentTrack;
-    // staff may have been removed - start at top
-    if (track < 0 || track >= score()->ntracks()) {
-        track = 0;
-    }
-    Element* e = s->element(track);
-    if (e && e->isChordRest()) {
-        return toChordRest(e);
+    if (filtered) {
+        m_filteredTypes |= static_cast<int>(type);
     } else {
-        return nullptr;
+        m_filteredTypes &= ~static_cast<int>(type);
     }
 }
 
-//---------------------------------------------------------
-//   activeCR
-//---------------------------------------------------------
-
-ChordRest* Selection::activeCR() const
+void SelectionFilter::setAllFiltered(bool filtered)
 {
-    if ((_state != SelState::RANGE) || !_activeSegment) {
-        return 0;
-    }
-    if (_activeSegment == _startSegment) {
-        return firstChordRest(_activeTrack);
-    } else {
-        return lastChordRest(_activeTrack);
-    }
+    m_filteredTypes = filtered ? ~0 : 0;
 }
-
-Segment* Selection::firstChordRestSegment() const
-{
-    if (!isRange()) {
-        return 0;
-    }
-
-    for (Segment* s = _startSegment; s && (s != _endSegment); s = s->next1MM()) {
-        if (!s->enabled()) {
-            continue;
-        }
-        if (s->isChordRestType()) {
-            return s;
-        }
-    }
-    return 0;
-}
-
-//---------------------------------------------------------
-//   firstChordRest
-//---------------------------------------------------------
-
-ChordRest* Selection::firstChordRest(int track) const
-{
-    if (_el.size() == 1) {
-        Element* el = _el[0];
-        if (el->isNote()) {
-            return toChordRest(el->parent());
-        } else if (el->isChordRest()) {
-            return toChordRest(el);
-        }
-        return 0;
-    }
-    ChordRest* cr = 0;
-    for (Element* el : _el) {
-        if (el->isNote()) {
-            el = el->parent();
-        }
-        if (el->isChordRest()) {
-            if (track != -1 && el->track() != track) {
-                continue;
-            }
-            if (cr) {
-                if (toChordRest(el)->tick() < cr->tick()) {
-                    cr = toChordRest(el);
-                }
-            } else {
-                cr = toChordRest(el);
-            }
-        }
-    }
-    return cr;
-}
-
-//---------------------------------------------------------
-//   lastChordRest
-//---------------------------------------------------------
-
-ChordRest* Selection::lastChordRest(int track) const
-{
-    if (_el.size() == 1) {
-        Element* el = _el[0];
-        if (el) {
-            if (el->isNote()) {
-                return toChordRest(el->parent());
-            } else if (el->isChordRest()) {
-                return toChordRest(el);
-            }
-        }
-        return nullptr;
-    }
-    ChordRest* cr = nullptr;
-    for (auto el : _el) {
-        if (el->isNote()) {
-            el = toNote(el)->chord();
-        }
-        if (el->isChordRest() && toChordRest(el)->segment()->isChordRestType()) {
-            if (track != -1 && el->track() != track) {
-                continue;
-            }
-            if (cr) {
-                if (toChordRest(el)->tick() >= cr->tick()) {
-                    cr = toChordRest(el);
-                }
-            } else {
-                cr = toChordRest(el);
-            }
-        }
-    }
-    return cr;
-}
-
-//---------------------------------------------------------
-//   findMeasure
-//---------------------------------------------------------
-
-Measure* Selection::findMeasure() const
-{
-    Measure* m = 0;
-    if (_el.size() > 0) {
-        Element* el = _el[0];
-        m = toMeasure(el->findMeasure());
-    }
-    return m;
-}
-
-//---------------------------------------------------------
-//   deselectAll
-//---------------------------------------------------------
-
-void Selection::deselectAll()
-{
-    if (_state == SelState::RANGE) {
-        _score->setUpdateAll();
-    }
-    clear();
-    updateState();
-}
-
-//---------------------------------------------------------
-//   changeSelection
-//---------------------------------------------------------
-
-static RectF changeSelection(Element* e, bool b)
-{
-    RectF r = e->canvasBoundingRect();
-    e->setSelected(b);
-    r.unite(e->canvasBoundingRect());
-    return r;
-}
-
-//---------------------------------------------------------
-//   clear
-//---------------------------------------------------------
-
-void Selection::clear()
-{
-    IF_ASSERT_FAILED(!isLocked()) {
-        LOGE() << "selection locked, reason: " << lockReason();
-        return;
-    }
-
-    for (Element* e : qAsConst(_el)) {
-        if (e->isSpanner()) {       // TODO: only visible elements should be selectable?
-            Spanner* sp = toSpanner(e);
-            for (auto s : sp->spannerSegments()) {
-                e->score()->addRefresh(changeSelection(s, false));
-            }
-        } else {
-            e->score()->addRefresh(changeSelection(e, false));
-        }
-    }
-    _el.clear();
-    _startSegment  = 0;
-    _endSegment    = 0;
-    _activeSegment = 0;
-    _staffStart    = 0;
-    _staffEnd      = 0;
-    _activeTrack   = 0;
-    setState(SelState::NONE);
-}
-
-//---------------------------------------------------------
-//   remove
-//---------------------------------------------------------
-
-void Selection::remove(Element* el)
-{
-    const bool removed = _el.removeOne(el);
-    el->setSelected(false);
-    if (removed) {
-        updateState();
-    }
-}
-
-//---------------------------------------------------------
-//   add
-//---------------------------------------------------------
-
-void Selection::add(Element* el)
-{
-    IF_ASSERT_FAILED(!isLocked()) {
-        LOGE() << "selection locked, reason: " << lockReason();
-        return;
-    }
-    _el.append(el);
-    update();
-}
-
-//---------------------------------------------------------
-//   canSelect
-//   see also `static const char* labels[]` in selectionwindow.cpp
-//---------------------------------------------------------
 
 bool SelectionFilter::canSelect(const Element* e) const
 {
@@ -481,10 +170,6 @@ bool SelectionFilter::canSelect(const Element* e) const
     return true;
 }
 
-//---------------------------------------------------------
-//   canSelectVoice
-//---------------------------------------------------------
-
 bool SelectionFilter::canSelectVoice(int track) const
 {
     int voice = track % VOICES;
@@ -501,9 +186,280 @@ bool SelectionFilter::canSelectVoice(int track) const
     return true;
 }
 
-//---------------------------------------------------------
-//   appendFiltered
-//---------------------------------------------------------
+// ====================================================
+// Selection
+// ====================================================
+
+Selection::Selection(Score* s)
+{
+    _score         = s;
+    _state         = SelState::NONE;
+    _startSegment  = 0;
+    _endSegment    = 0;
+    _activeSegment = 0;
+    _staffStart    = 0;
+    _staffEnd      = 0;
+    _activeTrack   = 0;
+    _currentTick   = Fraction(-1, 1);
+    _currentTrack  = 0;
+}
+
+Fraction Selection::tickStart() const
+{
+    switch (_state) {
+    case SelState::RANGE:
+        return _startSegment ? _startSegment->tick() : Fraction(-1, 1);
+    case SelState::LIST: {
+        ChordRest* cr = firstChordRest();
+        return (cr) ? cr->tick() : Fraction(-1, 1);
+    }
+    default:
+        return Fraction(-1, 1);
+    }
+}
+
+Fraction Selection::tickEnd() const
+{
+    switch (_state) {
+    case SelState::RANGE: {
+        if (_endSegment) {
+            return _endSegment->tick();
+        } else {         // endsegment == 0 if end of score
+            Measure* m = _score->lastMeasure();
+            return m->endTick();
+        }
+        break;
+    }
+    case SelState::LIST: {
+        ChordRest* cr = lastChordRest();
+        return (cr) ? cr->segment()->tick() : Fraction(-1, 1);
+        break;
+    }
+    default:
+        return Fraction(-1, 1);
+    }
+}
+
+bool Selection::isStartActive() const
+{
+    return activeSegment() && activeSegment()->tick() == tickStart();
+}
+
+bool Selection::isEndActive() const
+{
+    return activeSegment() && activeSegment()->tick() == tickEnd();
+}
+
+Element* Selection::element() const
+{
+    return ((state() != SelState::RANGE) && (_el.size() == 1)) ? _el[0] : 0;
+}
+
+ChordRest* Selection::cr() const
+{
+    Element* e = element();
+    if (!e) {
+        return 0;
+    }
+    if (e->isNote()) {
+        e = e->parent();
+    }
+    if (e->isChordRest()) {
+        return toChordRest(e);
+    }
+    return 0;
+}
+
+ChordRest* Selection::currentCR() const
+{
+    // no selection yet - start at very beginning, not first cr
+    if (_currentTick == Fraction(-1, 1)) {
+        return nullptr;
+    }
+    Segment* s = score()->tick2rightSegment(_currentTick, true);
+    if (!s) {
+        return nullptr;
+    }
+    int track = _currentTrack;
+    // staff may have been removed - start at top
+    if (track < 0 || track >= score()->ntracks()) {
+        track = 0;
+    }
+    Element* e = s->element(track);
+    if (e && e->isChordRest()) {
+        return toChordRest(e);
+    } else {
+        return nullptr;
+    }
+}
+
+ChordRest* Selection::activeCR() const
+{
+    if ((_state != SelState::RANGE) || !_activeSegment) {
+        return 0;
+    }
+    if (_activeSegment == _startSegment) {
+        return firstChordRest(_activeTrack);
+    } else {
+        return lastChordRest(_activeTrack);
+    }
+}
+
+Segment* Selection::firstChordRestSegment() const
+{
+    if (!isRange()) {
+        return 0;
+    }
+
+    for (Segment* s = _startSegment; s && (s != _endSegment); s = s->next1MM()) {
+        if (!s->enabled()) {
+            continue;
+        }
+        if (s->isChordRestType()) {
+            return s;
+        }
+    }
+    return 0;
+}
+
+ChordRest* Selection::firstChordRest(int track) const
+{
+    if (_el.size() == 1) {
+        Element* el = _el[0];
+        if (el->isNote()) {
+            return toChordRest(el->parent());
+        } else if (el->isChordRest()) {
+            return toChordRest(el);
+        }
+        return 0;
+    }
+    ChordRest* cr = 0;
+    for (Element* el : _el) {
+        if (el->isNote()) {
+            el = el->parent();
+        }
+        if (el->isChordRest()) {
+            if (track != -1 && el->track() != track) {
+                continue;
+            }
+            if (cr) {
+                if (toChordRest(el)->tick() < cr->tick()) {
+                    cr = toChordRest(el);
+                }
+            } else {
+                cr = toChordRest(el);
+            }
+        }
+    }
+    return cr;
+}
+
+ChordRest* Selection::lastChordRest(int track) const
+{
+    if (_el.size() == 1) {
+        Element* el = _el[0];
+        if (el) {
+            if (el->isNote()) {
+                return toChordRest(el->parent());
+            } else if (el->isChordRest()) {
+                return toChordRest(el);
+            }
+        }
+        return nullptr;
+    }
+    ChordRest* cr = nullptr;
+    for (auto el : _el) {
+        if (el->isNote()) {
+            el = toNote(el)->chord();
+        }
+        if (el->isChordRest() && toChordRest(el)->segment()->isChordRestType()) {
+            if (track != -1 && el->track() != track) {
+                continue;
+            }
+            if (cr) {
+                if (toChordRest(el)->tick() >= cr->tick()) {
+                    cr = toChordRest(el);
+                }
+            } else {
+                cr = toChordRest(el);
+            }
+        }
+    }
+    return cr;
+}
+
+Measure* Selection::findMeasure() const
+{
+    Measure* m = 0;
+    if (_el.size() > 0) {
+        Element* el = _el[0];
+        m = toMeasure(el->findMeasure());
+    }
+    return m;
+}
+
+void Selection::deselectAll()
+{
+    if (_state == SelState::RANGE) {
+        _score->setUpdateAll();
+    }
+    clear();
+    updateState();
+}
+
+static RectF changeSelection(Element* e, bool b)
+{
+    RectF r = e->canvasBoundingRect();
+    e->setSelected(b);
+    r.unite(e->canvasBoundingRect());
+    return r;
+}
+
+void Selection::clear()
+{
+    IF_ASSERT_FAILED(!isLocked()) {
+        LOGE() << "selection locked, reason: " << lockReason();
+        return;
+    }
+
+    for (Element* e : qAsConst(_el)) {
+        if (e->isSpanner()) {       // TODO: only visible elements should be selectable?
+            Spanner* sp = toSpanner(e);
+            for (auto s : sp->spannerSegments()) {
+                e->score()->addRefresh(changeSelection(s, false));
+            }
+        } else {
+            e->score()->addRefresh(changeSelection(e, false));
+        }
+    }
+    _el.clear();
+    _startSegment  = 0;
+    _endSegment    = 0;
+    _activeSegment = 0;
+    _staffStart    = 0;
+    _staffEnd      = 0;
+    _activeTrack   = 0;
+    setState(SelState::NONE);
+}
+
+void Selection::remove(Element* el)
+{
+    const bool removed = _el.removeOne(el);
+    el->setSelected(false);
+    if (removed) {
+        updateState();
+    }
+}
+
+void Selection::add(Element* el)
+{
+    IF_ASSERT_FAILED(!isLocked()) {
+        LOGE() << "selection locked, reason: " << lockReason();
+        return;
+    }
+    _el.append(el);
+    update();
+}
 
 void Selection::appendFiltered(Element* e)
 {
@@ -515,10 +471,6 @@ void Selection::appendFiltered(Element* e)
         _el.append(e);
     }
 }
-
-//---------------------------------------------------------
-//   appendChord
-//---------------------------------------------------------
 
 void Selection::appendChord(Chord* chord)
 {
@@ -576,10 +528,6 @@ void Selection::appendChord(Chord* chord)
         }
     }
 }
-
-//---------------------------------------------------------
-//   updateSelectedElements
-//---------------------------------------------------------
 
 void Selection::updateSelectedElements()
 {
@@ -713,10 +661,6 @@ void Selection::updateSelectedElements()
     update();
 }
 
-//---------------------------------------------------------
-//   setRange
-//---------------------------------------------------------
-
 void Selection::setRange(Segment* startSegment, Segment* endSegment, int staffStart, int staffEnd)
 {
     Q_ASSERT(staffEnd > staffStart && staffStart >= 0 && staffEnd >= 0 && staffEnd <= _score->nstaves());
@@ -764,10 +708,6 @@ void Selection::update()
     updateState();
 }
 
-//---------------------------------------------------------
-//   dump
-//---------------------------------------------------------
-
 void Selection::dump()
 {
     qDebug("Selection dump: ");
@@ -811,19 +751,11 @@ void Selection::updateState()
     }
 }
 
-//---------------------------------------------------------
-//   setState
-//---------------------------------------------------------
-
 void Selection::setState(SelState s)
 {
     _state = s;
     _score->setSelectionChanged(true);
 }
-
-//---------------------------------------------------------
-//   mimeType
-//---------------------------------------------------------
 
 QString Selection::mimeType() const
 {
@@ -837,10 +769,6 @@ QString Selection::mimeType() const
         return mimeStaffListFormat;
     }
 }
-
-//---------------------------------------------------------
-//   mimeData
-//---------------------------------------------------------
 
 QByteArray Selection::mimeData() const
 {
@@ -862,10 +790,6 @@ QByteArray Selection::mimeData() const
     return a;
 }
 
-//---------------------------------------------------------
-//   hasElementInTrack
-//---------------------------------------------------------
-
 bool hasElementInTrack(Segment* startSeg, Segment* endSeg, int track)
 {
     for (Segment* seg = startSeg; seg != endSeg; seg = seg->next1MM()) {
@@ -879,10 +803,6 @@ bool hasElementInTrack(Segment* startSeg, Segment* endSeg, int track)
     return false;
 }
 
-//---------------------------------------------------------
-//   firstElementInTrack
-//---------------------------------------------------------
-
 static Fraction firstElementInTrack(Segment* startSeg, Segment* endSeg, int track)
 {
     for (Segment* seg = startSeg; seg != endSeg; seg = seg->next1MM()) {
@@ -895,10 +815,6 @@ static Fraction firstElementInTrack(Segment* startSeg, Segment* endSeg, int trac
     }
     return Fraction(-1, 1);
 }
-
-//---------------------------------------------------------
-//   staffMimeData
-//---------------------------------------------------------
 
 QByteArray Selection::staffMimeData() const
 {
@@ -957,10 +873,6 @@ QByteArray Selection::staffMimeData() const
     buffer.close();
     return buffer.buffer();
 }
-
-//---------------------------------------------------------
-//   symbolListMimeData
-//---------------------------------------------------------
 
 QByteArray Selection::symbolListMimeData() const
 {
@@ -1195,10 +1107,6 @@ QByteArray Selection::symbolListMimeData() const
     buffer.close();
     return buffer.buffer();
 }
-
-//---------------------------------------------------------
-//   noteList
-//---------------------------------------------------------
 
 std::vector<Note*> Selection::noteList(int selTrack) const
 {
@@ -1513,25 +1421,7 @@ void Selection::extendRangeSelection(Segment* seg, Segment* segAfter, int staffI
     Q_ASSERT(!(_endSegment && !_startSegment));
 }
 
-//---------------------------------------------------------
-//   selectionFilter
-//---------------------------------------------------------
-
 SelectionFilter Selection::selectionFilter() const
 {
     return _score->selectionFilter();
-}
-
-//---------------------------------------------------------
-//   setFiltered
-//---------------------------------------------------------
-
-void SelectionFilter::setFiltered(SelectionFilterType type, bool set)
-{
-    if (set) {
-        _filtered = _filtered | (int)type;
-    } else {
-        _filtered = _filtered & ~(int)type;
-    }
-}
 }

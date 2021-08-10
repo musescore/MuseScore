@@ -119,8 +119,10 @@ enum class SelectionFilterType {
     BREATH                  = 1 << 20,
     TREMOLO                 = 1 << 21,
     GRACE_NOTE              = 1 << 22,
-    ALL                     = -1
+    ALL                     = ~0
 };
+
+static constexpr int NUMBER_OF_SELECTION_FILTER_TYPES = 23;
 
 //---------------------------------------------------------
 //   SelectionFilter
@@ -128,19 +130,20 @@ enum class SelectionFilterType {
 
 class SelectionFilter
 {
-    Score* _score;
-    int _filtered;
-
 public:
-    SelectionFilter() { _score = 0; _filtered = (int)SelectionFilterType::ALL; }
-    SelectionFilter(SelectionFilterType f)
-        : _score(nullptr), _filtered(int(f)) {}
-    SelectionFilter(Score* score) { _score = score; _filtered = (int)SelectionFilterType::ALL; }
-    int& filtered() { return _filtered; }
-    void setFiltered(SelectionFilterType type, bool set);
-    bool isFiltered(SelectionFilterType type) const { return _filtered & (int)type; }
-    bool canSelect(const Element*) const;
+    SelectionFilter() = default;
+    SelectionFilter(SelectionFilterType type);
+
+    int filteredTypes() const;
+    bool isFiltered(SelectionFilterType type) const;
+    void setFiltered(SelectionFilterType type, bool filtered);
+    void setAllFiltered(bool filtered);
+
+    bool canSelect(const Element* element) const;
     bool canSelectVoice(int track) const;
+
+private:
+    int m_filteredTypes = static_cast<int>(SelectionFilterType::ALL);
 };
 
 //-------------------------------------------------------------------

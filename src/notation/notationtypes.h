@@ -79,6 +79,7 @@ using TransposeMode = Ms::TransposeMode;
 using TransposeDirection = Ms::TransposeDirection;
 using Fraction = Ms::Fraction;
 using ElementPattern = Ms::ElementPattern;
+using SelectionFilterType = Ms::SelectionFilterType;
 using Chord = Ms::Chord;
 using ChordRest = Ms::ChordRest;
 using Harmony = Ms::Harmony;
