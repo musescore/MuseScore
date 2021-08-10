@@ -59,6 +59,10 @@ void ExcerptNotation::init()
         return;
     }
 
+    if (!m_title.isEmpty()) {
+        m_excerpt->setTitle(m_title);
+    }
+
     setScore(m_excerpt->partScore());
     m_isInited = true;
 }
@@ -70,13 +74,15 @@ Ms::Excerpt* ExcerptNotation::excerpt() const
 
 QString ExcerptNotation::title() const
 {
-    return m_excerpt ? m_excerpt->title() : QString();
+    return m_excerpt ? m_excerpt->title() : m_title;
 }
 
 void ExcerptNotation::setTitle(const QString& title)
 {
     if (m_excerpt) {
         m_excerpt->setTitle(title);
+    } else {
+        m_title = title;
     }
 }
 
