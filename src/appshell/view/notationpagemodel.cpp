@@ -73,6 +73,11 @@ void NotationPageModel::setInspectorPanelDockName(const QString& dockName)
     setPanelDockName(PanelType::Inspector, dockName);
 }
 
+void NotationPageModel::setSelectionFilterPanelDockName(const QString& dockName)
+{
+    setPanelDockName(PanelType::SelectionFilter, dockName);
+}
+
 void NotationPageModel::setPianoRollDockName(const QString& dockName)
 {
     setPanelDockName(PanelType::Piano, dockName);
@@ -128,6 +133,7 @@ void NotationPageModel::init(QQuickItem* dockWindow)
         { "toggle-palettes", PanelType::Palettes },
         { "toggle-instruments", PanelType::Instruments },
         { "inspector", PanelType::Inspector },
+        { "toggle-selection-filter", PanelType::SelectionFilter },
         { "toggle-statusbar", PanelType::NotationStatusBar },
         { "toggle-noteinput", PanelType::NoteInputBar },
         { "toggle-notationtoolbar", PanelType::NotationToolBar },
