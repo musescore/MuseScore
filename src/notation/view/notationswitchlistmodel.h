@@ -60,6 +60,8 @@ private:
     void listenNotationSavingStatus(IMasterNotationPtr masterNotation);
     bool isIndexValid(int index) const;
 
+    bool isMasterNotation(const INotationPtr notation) const;
+
     enum Roles {
         RoleTitle = Qt::UserRole + 1,
         RoleNeedSave
