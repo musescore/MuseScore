@@ -128,6 +128,7 @@ void Mixer::process(float* outBuffer, unsigned int samplesPerChannel)
     for (auto& channel : m_mixerChannels) {
         channel.second->process(m_writeCacheBuff.data(), samplesPerChannel);
         mixOutput(outBuffer, m_writeCacheBuff.data(), samplesPerChannel);
+        std::fill(m_writeCacheBuff.begin(), m_writeCacheBuff.end(), 0.f);
     }
 
     // TODO add limiter
