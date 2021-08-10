@@ -72,6 +72,11 @@ public:
     virtual void clearSelection() = 0;
     virtual async::Notification selectionChanged() const = 0;
 
+    // SelectionFilter
+    virtual bool isSelectionTypeFiltered(SelectionFilterType type) const = 0;
+    virtual void setSelectionTypeFiltered(SelectionFilterType type, bool filtered) = 0;
+    virtual void setAllSelectionTypesFiltered(bool filtered) = 0;
+
     // Drag
     using IsDraggable = std::function<bool (const Element*)>;
     virtual bool isDragStarted() const = 0;

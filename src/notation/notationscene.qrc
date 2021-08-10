@@ -23,5 +23,6 @@
         <file>qml/MuseScore/NotationScene/SelectMeasuresCountDialog.qml</file>
         <file>qml/MuseScore/NotationScene/UndoRedoToolBar.qml</file>
         <file>qml/MuseScore/NotationScene/Timeline.qml</file>
+        <file>qml/MuseScore/NotationScene/SelectionFilterPanel.qml</file>
     </qresource>
 </RCC>

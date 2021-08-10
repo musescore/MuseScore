@@ -220,12 +220,35 @@ DockPage {
             width: root.defaultPanelWidth
             minimumWidth: root.defaultPanelWidth
             maximumWidth: root.defaultPanelWidth
+            
+            tabifyPanel: selectionFilterPanel
 
             InspectorForm {
                 navigationSection: inspectorPanel.navigationSection
             }
         },
 
+        DockPanel {
+            id: selectionFilterPanel
+
+            objectName: "selectionFilterPanel"
+            title: qsTrc("appshell", "Selection Filter")
+
+            navigationSection: root.navigationPanelSec(selectionFilterPanel.location)
+
+            width: root.defaultPanelWidth
+            minimumWidth: root.defaultPanelWidth
+            maximumWidth: root.defaultPanelWidth
+
+//            // TODO: Temporarily disabled on startup, but can be enabled via the app menu, see:
+//            // https://github.com/musescore/MuseScore/pull/8593
+//            visible: false
+
+            SelectionFilterPanel {
+                navigationSection: selectionFilterPanel.navigationSection
+            }
+        },
+        
         // =============================================
         // Horizontal Panels
         // =============================================

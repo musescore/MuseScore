@@ -574,6 +574,29 @@ mu::async::Notification NotationInteraction::selectionChanged() const
     return m_selectionChanged;
 }
 
+bool NotationInteraction::isSelectionTypeFiltered(SelectionFilterType type) const
+{
+    return score()->selectionFilter().isFiltered(type);
+}
+
+void NotationInteraction::setSelectionTypeFiltered(SelectionFilterType type, bool filtered)
+{
+    score()->selectionFilter().setFiltered(type, filtered);
+    if (selection()->isRange()) {
+        score()->selection().updateSelectedElements();
+        notifyAboutSelectionChanged();
+    }
+}
+
+void NotationInteraction::setAllSelectionTypesFiltered(bool filtered)
+{
+    score()->selectionFilter().setAllFiltered(filtered);
+    if (selection()->isRange()) {
+        score()->selection().updateSelectedElements();
+        notifyAboutSelectionChanged();
+    }
+}
+
 bool NotationInteraction::isDragStarted() const
 {
     return m_dragData.dragGroups.size() > 0 || !m_lasso->bbox().isEmpty();
