@@ -41,7 +41,7 @@ public:
     void removeStaves(const IDList& stavesIds) override;
 
     void appendStaff(Staff* staff, const ID& destinationPartId) override;
-    void linkStaves(const ID& sourceStaffId, const ID& destinationStaffId) override;
+    void appendLinkedStaff(Staff* staff, const ID& sourceStaffId, const ID& destinationPartId) override;
 
     void replaceInstrument(const InstrumentKey& instrumentKey, const Instrument& newInstrument) override;
     void replaceDrumset(const InstrumentKey& instrumentKey, const Drumset& newDrumset) override;
