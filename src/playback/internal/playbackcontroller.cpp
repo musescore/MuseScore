@@ -562,7 +562,7 @@ void PlaybackController::setupSequenceTracks()
         addTrack(part->id(), part->partName().toStdString());
     });
 
-    partList.onItemAdded(this, [this](const Part* part) {
+    partList.onItemRemoved(this, [this](const Part* part) {
         removeTrack(part->id());
     });
 }

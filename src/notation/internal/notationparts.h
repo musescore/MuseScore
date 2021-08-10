@@ -123,7 +123,7 @@ private:
     async::Notification m_partsChanged;
 
     mutable async::ChangedNotifier<const Part*> m_partChangedNotifier;
-    mutable std::map<ID, async::ChangedNotifier<const Staff*>> m_staffChangedNotifierMap;
+    mutable std::map<ID, async::ChangedNotifier<const Staff*> > m_staffChangedNotifierMap;
 };
 }
 
