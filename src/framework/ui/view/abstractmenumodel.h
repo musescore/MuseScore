@@ -72,6 +72,7 @@ public:
     const MenuItemList& items() const;
     MenuItemList& items();
     void setItems(const MenuItemList& items);
+    void clear();
 
     static const int INVALID_ITEM_INDEX;
     int itemIndex(const actions::ActionCode& actionCode) const;

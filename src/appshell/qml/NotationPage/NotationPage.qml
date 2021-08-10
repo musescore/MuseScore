@@ -186,12 +186,6 @@ DockPage {
 
             tabifyPanel: instrumentsPanel
 
-            contextMenuModel: [
-                { "code": "close", "title": "Close tab" },
-                { "code": "undock", "title": "Undock" },
-                { "code": "move", "title": "Move panel to right side" },
-            ]
-
             PalettesPanel {
                 navigationSection: palettesPanel.navigationSection
             }
@@ -211,13 +205,17 @@ DockPage {
 
             tabifyPanel: inspectorPanel
 
-            contextMenuModel: [
-                { "code": "ordering1", "title": "Ordering 1" },
-                { "code": "ordering2", "title": "Ordering 2" },
-                { "code": "test", "title": "Hello, world!" },
-            ]
+            Connections {
+                target: instrumentsPanelContent
+
+                onContextMenuLoaded: {
+                    instrumentsPanel.contextMenuModel = instrumentsPanelContent.contextMenuModel
+                }
+            }
 
             InstrumentsPanel {
+                id: instrumentsPanelContent
+
                 navigationSection: instrumentsPanel.navigationSection
             }
         },
