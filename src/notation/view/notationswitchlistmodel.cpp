@@ -127,7 +127,7 @@ QVariant NotationSwitchListModel::data(const QModelIndex& index, int role) const
 
     switch (role) {
     case RoleTitle: return QVariant::fromValue(notation->title());
-    case RoleNeedSave: return QVariant::fromValue(masterNotation()->needSave().val);
+    case RoleNeedSave: return QVariant::fromValue(masterNotation()->needSave().val && isMasterNotation(notation));
     }
 
     return QVariant();
@@ -165,7 +165,7 @@ void NotationSwitchListModel::closeNotation(int index)
 
     INotationPtr notation = m_notations[index];
 
-    if (context()->currentNotation() == notation) {
+    if (isMasterNotation(notation)) {
         dispatcher()->dispatch("file-close");
     } else {
         notation->setOpened(false);
@@ -175,4 +175,9 @@ void NotationSwitchListModel::closeNotation(int index)
 bool NotationSwitchListModel::isIndexValid(int index) const
 {
     return index >= 0 && index < m_notations.size();
+}
+
+bool NotationSwitchListModel::isMasterNotation(const INotationPtr notation) const
+{
+    return context()->currentMasterNotation()->notation() == notation;
 }
