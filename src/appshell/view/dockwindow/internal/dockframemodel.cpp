@@ -44,6 +44,26 @@ QQuickItem* DockFrameModel::frame() const
     return m_frame;
 }
 
+QVariantList DockFrameModel::tabs() const
+{
+    QVariantList result;
+
+    auto frame = dynamic_cast<KDDockWidgets::Frame*>(m_frame);
+    if (!frame || frame->hasSingleDockWidget()) {
+        return result;
+    }
+
+    for (const KDDockWidgets::DockWidgetBase* dock : frame->dockWidgets()) {
+        QVariantMap tab;
+        tab["title"] = dock->title();
+        tab["contextMenuModel"] = dock->property("contextMenuModel").value<QVariant>();
+
+        result << tab;
+    }
+
+    return result;
+}
+
 bool DockFrameModel::titleBarVisible() const
 {
     return m_titleBarVisible;
@@ -70,6 +90,8 @@ void DockFrameModel::listenChangesInFrame()
     }
 
     auto numDocksChangedCon = connect(frame, &KDDockWidgets::Frame::numDockWidgetsChanged, [this, frame]() {
+        emit tabsChanged();
+
         auto currentDock = frame->currentDockWidget();
         auto allDocks = frame->dockWidgets();
 
@@ -92,7 +114,7 @@ void DockFrameModel::listenChangesInFrame()
     auto currentDockWidgetChangedCon = connect(frame, &KDDockWidgets::Frame::currentDockWidgetChanged, [this]() {
         updateNavigationSection();
 
-        emit currentDockUniqueNameChanged();
+        emit currentDockChanged();
     });
 
     connect(qApp, &QApplication::aboutToQuit, [numDocksChangedCon, currentDockWidgetChangedCon, this]() {
@@ -153,4 +175,15 @@ QString DockFrameModel::currentDockUniqueName() const
     }
 
     return QString();
+}
+
+QVariant DockFrameModel::currentDockContextMenuModel() const
+{
+    auto frame = dynamic_cast<KDDockWidgets::Frame*>(m_frame);
+    if (!frame) {
+        return QVariant();
+    }
+
+    const KDDockWidgets::DockWidgetBase* w = frame->currentDockWidget();
+    return w ? w->property("contextMenuModel").value<QVariant>() : QVariant();
 }
