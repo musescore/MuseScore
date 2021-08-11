@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_NOTATION_NOTATIONMIDEVENTS_H
-#define MU_NOTATION_NOTATIONMIDEVENTS_H
+#ifndef MU_NOTATION_MASTERNOTATIONMIDIDATA_H
+#define MU_NOTATION_MASTERNOTATIONMIDIDATA_H
 
 #include <map>
 #include <unordered_map>
@@ -31,18 +31,24 @@
 #include "libmscore/rendermidi.h"
 
 #include "igetscore.h"
-#include "inotationmidievents.h"
+#include "notation/imasternotationmididata.h"
+#include "inotationparts.h"
 #include "inotationconfiguration.h"
 
 namespace mu::notation {
-class NotationMidiEvents : public INotationMidiEvents, public async::Asyncable
+class MasterNotationMidiData : public IMasterNotationMidiData, public async::Asyncable
 {
     INJECT(notation, INotationConfiguration, configuration)
 
 public:
-    explicit NotationMidiEvents(IGetScore* getScore, async::Notification notationChanged);
+    explicit MasterNotationMidiData(IGetScore* getScore, async::Notification notationChanged);
+    ~MasterNotationMidiData();
 
-    void init() override;
+    void init(INotationPartsPtr parts) override;
+
+    midi::MidiData trackMidiData(const ID& partId) const override;
+    Ret triggerElementMidiData(const Element* element) override;
+
     midi::Events retrieveEvents(const midi::channel_t midiChannel, const midi::tick_t fromTick, const midi::tick_t toTick) const override;
     midi::Events retrieveEventsForElement(const Element* element, const midi::channel_t midiChannel) const override;
     std::vector<midi::Event> retrieveSetupEvents(const std::list<InstrumentChannel*> instrChannel) const override;
@@ -83,6 +89,16 @@ private:
     Ms::Score* score() const;
     Ms::MasterScore* masterScore() const;
 
+    midi::MidiData buildMidiData(const Ms::Part* part) const;
+    midi::MidiMapping buildMidiMapping(const Ms::Part* part) const;
+    midi::MidiStream buildMidiStream(const Ms::Part* part) const;
+    midi::TempoMap makeTempoMap() const;
+
+    // play element
+    Ret playNoteMidiData(const Ms::Note* note) const;
+    Ret playChordMidiData(const Ms::Chord* chord) const;
+    Ret playHarmonyMidiData(const Ms::Harmony* harmony) const;
+
     void loadEvents(const midi::tick_t fromTick, const midi::tick_t toTick) const;
     midi::Events eventsFromRange(const midi::channel_t midiChannel, const midi::tick_t fromTick, const midi::tick_t toTick) const;
     bool hasCachedEvents(const midi::channel_t midiChannel) const;
@@ -97,9 +113,14 @@ private:
     mutable RenderRangeMap m_renderRanges;
     mutable std::unordered_map<midi::channel_t, midi::Events> m_eventsCache = {};
 
+    std::map<ID /*partId*/, midi::MidiData> m_midiDataMap;
+
     std::unique_ptr<Ms::MidiRenderer> m_midiRenderImpl = nullptr;
     IGetScore* m_getScore = nullptr;
+    INotationPartsPtr m_parts = nullptr;
 };
+
+using MasterNotationMidiDataPtr = std::shared_ptr<MasterNotationMidiData>;
 }
 
-#endif // MU_NOTATION_NOTATIONMIDEVENTS_H
+#endif // MU_NOTATION_MASTERNOTATIONMIDIDATA_H

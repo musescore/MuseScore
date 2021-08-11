@@ -22,12 +22,9 @@
 #include "masternotation.h"
 
 #include <QFileInfo>
-#include "translation.h"
 
-#include "excerptnotation.h"
-#include "masternotationparts.h"
-#include "excerptnotation.h"
-#include "../notationerrors.h"
+#include "log.h"
+#include "translation.h"
 
 #include "libmscore/masterscore.h"
 #include "libmscore/part.h"
@@ -40,7 +37,10 @@
 #include "libmscore/tempotext.h"
 #include "libmscore/undo.h"
 
-#include "log.h"
+#include "excerptnotation.h"
+#include "masternotationparts.h"
+#include "masternotationmididata.h"
+#include "../notationerrors.h"
 
 using namespace mu::notation;
 using namespace mu::async;
@@ -54,6 +54,7 @@ MasterNotation::MasterNotation()
     : Notation()
 {
     m_parts = std::make_shared<MasterNotationParts>(this, interaction(), undoStack());
+    m_notationMidiData = std::make_shared<MasterNotationMidiData>(this, m_notationChanged);
 
     m_parts->partsChanged().onNotify(this, [this]() {
         notifyAboutNotationChanged();
@@ -77,8 +78,8 @@ void MasterNotation::setMasterScore(Ms::MasterScore* score)
     }
 
     setScore(score);
-
     initExcerptNotations(masterScore()->excerpts());
+    m_notationMidiData->init(m_parts);
 }
 
 Ms::MasterScore* MasterNotation::masterScore() const
@@ -400,6 +401,8 @@ mu::Ret MasterNotation::setupNewScore(Ms::MasterScore* score, Ms::MasterScore* t
         parts()->setParts(scoreOptions.parts);
     }
 
+    m_notationMidiData->init(m_parts);
+
     return make_ret(Err::NoError);
 }
 
@@ -496,6 +499,11 @@ mu::ValCh<ExcerptNotationList> MasterNotation::excerpts() const
 INotationPartsPtr MasterNotation::parts() const
 {
     return m_parts;
+}
+
+IMasterNotationMidiDataPtr MasterNotation::midiData() const
+{
+    return m_notationMidiData;
 }
 
 ExcerptNotationList MasterNotation::potentialExcerpts() const

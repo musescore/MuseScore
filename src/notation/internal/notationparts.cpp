@@ -56,30 +56,25 @@ static QString formatPartTitle(const Part* part)
 }
 
 NotationParts::NotationParts(IGetScore* getScore, INotationInteractionPtr interaction, INotationUndoStackPtr undoStack)
-    : m_getScore(getScore), m_undoStack(undoStack), m_interaction(interaction), m_partChangedNotifier(new ChangedNotifier<const Part*>())
+    : m_getScore(getScore), m_undoStack(undoStack), m_interaction(interaction)
 {
     m_interaction->dropChanged().onNotify(this, [this]() {
         updatePartTitles();
     });
 
     m_undoStack->undoNotification().onNotify(this, [this]() {
-        m_partChangedNotifier->changed();
+        m_partChangedNotifier.changed();
     });
 
     m_undoStack->redoNotification().onNotify(this, [this]() {
-        m_partChangedNotifier->changed();
+        m_partChangedNotifier.changed();
     });
-}
-
-NotationParts::~NotationParts()
-{
-    delete m_partChangedNotifier;
 }
 
 NotifyList<const Part*> NotationParts::partList() const
 {
     NotifyList<const Part*> result;
-    result.setNotify(m_partChangedNotifier->notify());
+    result.setNotify(m_partChangedNotifier.notify());
 
     for (const Part* part: score()->parts()) {
         result.push_back(part);
@@ -91,8 +86,8 @@ NotifyList<const Part*> NotationParts::partList() const
 NotifyList<const Staff*> NotationParts::staffList(const ID& partId) const
 {
     NotifyList<const Staff*> result;
-    ChangedNotifier<const Staff*>* notifier = staffChangedNotifier(partId);
-    result.setNotify(notifier->notify());
+    ChangedNotifier<const Staff*>& notifier = m_staffChangedNotifierMap[partId];
+    result.setNotify(notifier.notify());
 
     const Part* part = this->part(partId);
     if (!part) {
@@ -169,7 +164,7 @@ void NotationParts::setParts(const PartInstrumentList& parts)
 
     apply();
 
-    m_partChangedNotifier->changed();
+    m_partChangedNotifier.changed();
 }
 
 void NotationParts::setScoreOrder(const ScoreOrder&)
@@ -914,7 +909,7 @@ void NotationParts::appendNewParts(const PartInstrumentList& parts)
         appendStaves(part, pi.instrumentTemplate);
         staffCount += part->nstaves();
 
-        m_partChangedNotifier->itemAdded(part);
+        m_partChangedNotifier.itemAdded(part);
     }
 }
 
@@ -1016,7 +1011,7 @@ void NotationParts::notifyAboutPartChanged(const Part* part) const
         return;
     }
 
-    m_partChangedNotifier->itemChanged(part);
+    m_partChangedNotifier.itemChanged(part);
 }
 
 void NotationParts::notifyAboutPartAdded(const Part* part) const
@@ -1025,7 +1020,7 @@ void NotationParts::notifyAboutPartAdded(const Part* part) const
         return;
     }
 
-    m_partChangedNotifier->itemAdded(part);
+    m_partChangedNotifier.itemAdded(part);
 }
 
 void NotationParts::notifyAboutPartRemoved(const Part* part) const
@@ -1034,7 +1029,7 @@ void NotationParts::notifyAboutPartRemoved(const Part* part) const
         return;
     }
 
-    m_partChangedNotifier->itemRemoved(part);
+    m_partChangedNotifier.itemRemoved(part);
 }
 
 void NotationParts::notifyAboutStaffChanged(const Staff* staff) const
@@ -1043,11 +1038,8 @@ void NotationParts::notifyAboutStaffChanged(const Staff* staff) const
         return;
     }
 
-    ChangedNotifier<const Staff*>* notifier = staffChangedNotifier(staff->part()->id());
-
-    if (notifier) {
-        notifier->itemChanged(staff);
-    }
+    ChangedNotifier<const Staff*>& notifier = m_staffChangedNotifierMap[staff->part()->id()];
+    notifier.itemChanged(staff);
 }
 
 void NotationParts::notifyAboutStaffAdded(const Staff* staff, const ID& partId) const
@@ -1056,11 +1048,8 @@ void NotationParts::notifyAboutStaffAdded(const Staff* staff, const ID& partId) 
         return;
     }
 
-    ChangedNotifier<const Staff*>* notifier = staffChangedNotifier(partId);
-
-    if (notifier) {
-        notifier->itemAdded(staff);
-    }
+    ChangedNotifier<const Staff*>& notifier = m_staffChangedNotifierMap[partId];
+    notifier.itemAdded(staff);
 }
 
 void NotationParts::notifyAboutStaffRemoved(const Staff* staff) const
@@ -1069,22 +1058,6 @@ void NotationParts::notifyAboutStaffRemoved(const Staff* staff) const
         return;
     }
 
-    ChangedNotifier<const Staff*>* notifier = staffChangedNotifier(staff->part()->id());
-
-    if (notifier) {
-        notifier->itemRemoved(staff);
-    }
-}
-
-ChangedNotifier<const Staff*>* NotationParts::staffChangedNotifier(const ID& partId) const
-{
-    if (m_staffChangedNotifierMap.find(partId) != m_staffChangedNotifierMap.end()) {
-        return m_staffChangedNotifierMap[partId];
-    }
-
-    ChangedNotifier<const Staff*>* notifier = new ChangedNotifier<const Staff*>();
-    auto value = std::pair<ID, ChangedNotifier<const Staff*>*>(partId, notifier);
-    m_staffChangedNotifierMap.insert(value);
-
-    return notifier;
+    ChangedNotifier<const Staff*>& notifier = m_staffChangedNotifierMap[staff->part()->id()];
+    notifier.itemRemoved(staff);
 }
