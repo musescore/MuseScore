@@ -1845,6 +1845,11 @@ Element* Note::drop(EditData& data)
                   n->setTpc2(Ms::transposeTpc(n->tpc1(), v, true));
                   // replace this note with new note
                   n->setParent(ch);
+                  if (this->tieBack()) {
+                        n->setTieBack(this->tieBack());
+                        n->tieBack()->setEndNote(n);
+                        this->setTieBack(nullptr);
+                        }
                   score()->undoRemoveElement(this);
                   score()->undoAddElement(n);
                   }

@@ -982,6 +982,59 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
             }                             // inner while readNextstartElement()
       }                                   // pasteSymbolList()
 
+static ChordRest* replaceWithRest(ChordRest* target)
+      {
+      target->score()->undoRemoveElement(target);
+      return target->score()->addRest(target->segment(), target->track(), target->ticks(), target->tuplet());
+      }
+
+static Note* prepareTarget(ChordRest* target, Note* with, const Fraction& duration)
+      {
+      if (!target->segment()->element(target->track()))
+           return nullptr; // target was removed by previous operation, ignore this
+      if (target->isChord() && target->ticks() > duration)
+            target = replaceWithRest(target); // prevent unexpected note splitting
+      Segment* segment = target->segment();
+      if (segment->measure()->isMMRest()) {
+            Measure* m = segment->measure()->mmRestFirst();
+            segment = m->findSegment(SegmentType::ChordRest, m->tick());
+            }
+      segment = target->score()->setNoteRest(segment, target->track(),
+                                             with->noteVal(), duration, Direction::AUTO, false, false, &target->score()->inputState());
+      return toChord(segment->nextChordRest(target->track()))->upNote();
+      }
+
+static Element* prepareTarget(Element* target, Note* with, const Fraction& duration)
+      {
+      if (target->isNote() && toNote(target)->chord()->ticks() != duration)
+            return prepareTarget(toNote(target)->chord(), with, duration);
+      if (target->isChordRest() && toChordRest(target)->ticks() != duration)
+            return prepareTarget(toChordRest(target), with, duration);
+      return target;
+      }
+
+static bool canPasteStaff(XmlReader& reader, const Fraction& scale)
+      {
+      if (scale != Fraction(1, 1)) {
+            while (reader.readNext() && reader.tokenType() != XmlReader::TokenType::EndDocument) {
+                  QString tag(reader.name().toString());
+                  int len = reader.intAttribute("len", 0);
+                  if (len && !TDuration(Fraction::fromTicks(len) * scale).isValid())
+                        return false;
+                  if (tag == "durationType")
+                        if (!TDuration(TDuration(reader.readElementText()).fraction() * scale).isValid())
+                              return false;
+                  }
+            }
+      return true;
+      }
+
+inline static bool canPasteStaff(const QByteArray& mimeData, const Fraction& scale)
+{
+    XmlReader reader(mimeData);
+    return canPasteStaff(reader, scale);
+}
+
 //---------------------------------------------------------
 //   cmdPaste
 //---------------------------------------------------------
@@ -1002,45 +1055,33 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
 
             if (!el)
                   return;
+            duration *= scale;
+            if (!TDuration(duration).isValid())
+                return;
 
             QList<Element*> els;
             if (_selection.isSingle())
                   els.append(_selection.element());
             else
                   els.append(_selection.elements());
-
+            Element* nel = 0;
             for (Element* target : els) {
                   el->setTrack(target->track());
-                  Element* nel = el->clone();
                   addRefresh(target->abbox());   // layout() ?!
                   EditData ddata(view);
                   ddata.view        = view;
-                  ddata.dropElement = nel;
+                  ddata.dropElement = el.get();
                   if (target->acceptDrop(ddata)) {
-                        if (el->isNote()) {
-                              // dropping a note replaces and invalidates the target,
-                              // so we need to deselect it
-                              ElementType targetType = target->type();
-                              deselect(target);
-
-                              // perform the drop
-                              target->drop(ddata);
-
-                              // if the target is a rest rather than a note,
-                              // a new note is generated, and nel becomes invalid as well
-                              // (ChordRest::drop() will select it for us)
-                              if (targetType == ElementType::NOTE)
-                                    select(nel);
+                        if (!el->isNote() || (target = prepareTarget(target, toNote(el.get()), duration))) {
+                              ddata.dropElement = nel = el->clone();
+                              Element* dropped = target->drop(ddata);
+                              if (dropped)
+                                    nel = dropped;
                               }
-                        else {
-                              target->drop(ddata);
-                              }
-                        if (_selection.element())
-                              addRefresh(_selection.element()->abbox());
                         }
-                  else
-                        delete nel;
                   }
+            if (nel)
+                  select(nel);
             }
       else if ((_selection.isRange() || _selection.isList()) && ms->hasFormat(mimeStaffListFormat)) {
             ChordRest* cr = 0;
@@ -1069,10 +1110,12 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
                   QByteArray data(ms->data(mimeStaffListFormat));
                   if (MScore::debugMode)
                         qDebug("paste <%s>", data.data());
-                  XmlReader e(data);
-                  e.setPasteMode(true);
-                  if (!pasteStaff(e, cr->segment(), cr->staffIdx(), scale))
-                        return;
+                  if (canPasteStaff(data, scale)) {
+                        XmlReader e(data);
+                        e.setPasteMode(true);
+                        if (!pasteStaff(e, cr->segment(), cr->staffIdx(), scale))
+                            return;
+                        }
                   }
             }
       else if (ms->hasFormat(mimeSymbolListFormat)) {
