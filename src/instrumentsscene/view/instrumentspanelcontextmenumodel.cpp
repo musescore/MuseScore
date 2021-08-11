@@ -28,10 +28,9 @@ void InstrumentsPanelContextMenuModel::load()
 
         if (!m_masterNotation || !notation || m_masterNotation->notation() != notation) {
             clear();
-            return;
+        } else {
+            loadItems();
         }
-
-        loadItems();
 
         emit loaded();
     });
@@ -41,7 +40,15 @@ void InstrumentsPanelContextMenuModel::loadItems()
 {
     TRACEFUNC;
 
-    loadOrders();
+    m_orders.clear();
+
+    RetValCh<InstrumentsMeta> meta = instrumentsRepository()->instrumentsMeta();
+    if (!meta.ret) {
+        LOGE() << meta.ret.toString();
+        return;
+    }
+
+    m_orders = meta.val.scoreOrders;
 
     MenuItemList orderItems;
 
@@ -51,6 +58,7 @@ void InstrumentsPanelContextMenuModel::loadItems()
         orderItem.id = order->id;
         orderItem.title = order->name;
         orderItem.code = SET_ORDER_ACTION;
+        orderItem.args = ActionData::make_arg1<QString>(order->id);
         orderItem.checkable = Checkable::Yes;
         orderItem.state.enabled = true;
         orderItem.state.checked = m_masterNotation->notation()->scoreOrder().id == order->id;
@@ -65,26 +73,9 @@ void InstrumentsPanelContextMenuModel::loadItems()
     setItems(items);
 }
 
-void InstrumentsPanelContextMenuModel::loadOrders()
-{
-    m_orders.clear();
-
-    RetValCh<InstrumentsMeta> meta = instrumentsRepository()->instrumentsMeta();
-    if (!meta.ret) {
-        LOGE() << meta.ret.toString();
-        return;
-    }
-
-    m_orders = meta.val.scoreOrders;
-}
-
 void InstrumentsPanelContextMenuModel::setOrder(const ActionData& args)
 {
-    if (args.count() == 0) {
-        return;
-    }
-
-    QString newOrderId = args.arg<QString>(0);
+    QString newOrderId = args.count() > 0 ? args.arg<QString>(0) : QString();
     const ScoreOrder* newOrder = nullptr;
 
     for (const ScoreOrder* order : m_orders) {
