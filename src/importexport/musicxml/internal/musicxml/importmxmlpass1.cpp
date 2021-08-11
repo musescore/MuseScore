@@ -3108,15 +3108,15 @@ void MusicXMLParserPass1::note(const QString& partId,
             _e.skipCurrentElement();        // skip but don't log
         } else if (_e.name() == "chord") {
             chord = true;
-            _e.readNext();
+            _e.skipCurrentElement();  // skip but don't log
         } else if (_e.name() == "cue") {
             _e.skipCurrentElement();        // skip but don't log
         } else if (_e.name() == "grace") {
             grace = true;
-            _e.readNext();
+            _e.skipCurrentElement();  // skip but don't log
         } else if (_e.name() == "instrument") {
             instrId = _e.attributes().value("id").toString();
-            _e.readNext();
+            _e.skipCurrentElement();  // skip but don't log
         } else if (_e.name() == "lyric") {
             const auto number = _e.attributes().value("number").toString();
             _parts[partId].lyricNumberHandler().addNumber(number);
@@ -3235,12 +3235,12 @@ void MusicXMLParserPass1::notePrintSpacingNo(Fraction& dura)
     while (_e.readNextStartElement()) {
         if (_e.name() == "chord") {
             chord = true;
-            _e.readNext();
+            _e.skipCurrentElement();  // skip but don't log
         } else if (_e.name() == "duration") {
             duration(dura);
         } else if (_e.name() == "grace") {
             grace = true;
-            _e.readNext();
+            _e.skipCurrentElement();  // skip but don't log
         } else {
             _e.skipCurrentElement();              // skip but don't log
         }
