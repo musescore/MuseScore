@@ -59,11 +59,12 @@ void ExcerptNotation::init()
         return;
     }
 
+    setScore(m_excerpt->partScore());
+
     if (!m_title.isEmpty()) {
-        m_excerpt->setTitle(m_title);
+        setTitle(m_title);
     }
 
-    setScore(m_excerpt->partScore());
     m_isInited = true;
 }
 
@@ -81,6 +82,13 @@ void ExcerptNotation::setTitle(const QString& title)
 {
     if (m_excerpt) {
         m_excerpt->setTitle(title);
+
+        Ms::Text* excerptTitle = score()->getText(Ms::Tid::INSTRUMENT_EXCERPT);
+        excerptTitle->setPlainText(title);
+        score()->setMetaTag("partName", title);
+        score()->doLayout();
+
+        notifyAboutNotationChanged();
     } else {
         m_title = title;
     }

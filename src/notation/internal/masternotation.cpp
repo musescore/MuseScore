@@ -296,24 +296,20 @@ mu::Ret MasterNotation::setupNewScore(Ms::MasterScore* score, Ms::MasterScore* t
                 delete nvb;
             }
             if (!title.isEmpty()) {
-                Ms::Text* s = new Ms::Text(score, Ms::Tid::TITLE);
+                Ms::TextBase* s = score->addText(Ms::Tid::TITLE);
                 s->setPlainText(title);
-                measure->add(s);
             }
             if (!subtitle.isEmpty()) {
-                Ms::Text* s = new Ms::Text(score, Ms::Tid::SUBTITLE);
+                Ms::TextBase* s = score->addText(Ms::Tid::SUBTITLE);
                 s->setPlainText(subtitle);
-                measure->add(s);
             }
             if (!composer.isEmpty()) {
-                Ms::Text* s = new Ms::Text(score, Ms::Tid::COMPOSER);
+                Ms::TextBase* s = score->addText(Ms::Tid::COMPOSER);
                 s->setPlainText(composer);
-                measure->add(s);
             }
             if (!lyricist.isEmpty()) {
-                Ms::Text* s = new Ms::Text(score, Ms::Tid::POET);
+                Ms::TextBase* s = score->addText(Ms::Tid::POET);
                 s->setPlainText(lyricist);
-                measure->add(s);
             }
         } else if (nvb) {
             delete nvb;
@@ -502,9 +498,27 @@ void MasterNotation::notifyAboutNeedSaveChanged()
     m_needSaveNotification.notify();
 }
 
-IExcerptNotationPtr MasterNotation::newExcerptNotation() const
+IExcerptNotationPtr MasterNotation::newExcerptBlankNotation() const
 {
-    return std::make_shared<ExcerptNotation>();
+    Ms::Excerpt* excerpt = new Ms::Excerpt(masterScore());
+    excerpt->setTitle(qtrc("notation", "Part"));
+    masterScore()->initAndAddExcerpt(excerpt, false);
+
+    auto excerptNotation = std::make_shared<ExcerptNotation>(excerpt);
+    excerptNotation->init();
+
+    Ms::Score* excerptScore = excerpt->partScore();
+    auto setText = [&excerptScore](Ms::Tid textId, const QString& text) {
+        Ms::TextBase* textBox = excerptScore->getText(textId);
+        textBox->setPlainText(text);
+    };
+
+    setText(Ms::Tid::TITLE, qtrc("notation", "Title"));
+    setText(Ms::Tid::COMPOSER, qtrc("notation", "Composer"));
+
+    excerptScore->doLayout();
+
+    return excerptNotation;
 }
 
 mu::ValCh<ExcerptNotationList> MasterNotation::excerpts() const

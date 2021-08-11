@@ -71,6 +71,7 @@ void NotationSwitchListModel::loadNotations()
 
     m_notations << masterNotation->notation();
     listenNotationOpeningStatus(masterNotation->notation());
+    listenNotationTitleChanged(masterNotation->notation());
 
     for (IExcerptNotationPtr excerpt: masterNotation->excerpts().val) {
         if (excerpt->notation()->opened().val) {
@@ -78,6 +79,7 @@ void NotationSwitchListModel::loadNotations()
         }
 
         listenNotationOpeningStatus(excerpt->notation());
+        listenNotationTitleChanged(excerpt->notation());
     }
 
     endResetModel();
@@ -103,12 +105,21 @@ void NotationSwitchListModel::listenNotationOpeningStatus(INotationPtr notation)
     });
 }
 
+void NotationSwitchListModel::listenNotationTitleChanged(INotationPtr notation)
+{
+    notation->notationChanged().onNotify(this, [this, notation]() {
+        int index = m_notations.indexOf(notation);
+        QModelIndex modelIndex = this->index(index);
+        emit dataChanged(modelIndex, modelIndex, { RoleTitle });
+    });
+}
+
 void NotationSwitchListModel::listenNotationSavingStatus(IMasterNotationPtr masterNotation)
 {
     masterNotation->needSave().notification.onNotify(this, [this, masterNotation]() {
         int index = m_notations.indexOf(masterNotation->notation());
         QModelIndex modelIndex = this->index(index);
-        emit dataChanged(modelIndex, modelIndex);
+        emit dataChanged(modelIndex, modelIndex, { RoleNeedSave });
     });
 }
 
