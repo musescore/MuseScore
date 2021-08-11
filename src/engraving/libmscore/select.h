@@ -90,11 +90,11 @@ enum class SelState : char {
 
 //---------------------------------------------------------
 //   SelectionFilterType
-//   see also `static const char* labels[]` in mscore/selectionwindow.cpp
-//   need to keep those in sync!
 //---------------------------------------------------------
 
-enum class SelectionFilterType {
+static constexpr size_t NUMBER_OF_SELECTION_FILTER_TYPES = 23;
+
+enum class SelectionFilterType : unsigned int {
     NONE                    = 0,
     FIRST_VOICE             = 1 << 0,
     SECOND_VOICE            = 1 << 1,
@@ -119,10 +119,8 @@ enum class SelectionFilterType {
     BREATH                  = 1 << 20,
     TREMOLO                 = 1 << 21,
     GRACE_NOTE              = 1 << 22,
-    ALL                     = ~0
+    ALL                     = ~(~0u << NUMBER_OF_SELECTION_FILTER_TYPES)
 };
-
-static constexpr int NUMBER_OF_SELECTION_FILTER_TYPES = 23;
 
 //---------------------------------------------------------
 //   SelectionFilter
@@ -137,13 +135,12 @@ public:
     int filteredTypes() const;
     bool isFiltered(SelectionFilterType type) const;
     void setFiltered(SelectionFilterType type, bool filtered);
-    void setAllFiltered(bool filtered);
 
     bool canSelect(const Element* element) const;
     bool canSelectVoice(int track) const;
 
 private:
-    int m_filteredTypes = static_cast<int>(SelectionFilterType::ALL);
+    unsigned int m_filteredTypes = static_cast<unsigned int>(SelectionFilterType::ALL);
 };
 
 //-------------------------------------------------------------------

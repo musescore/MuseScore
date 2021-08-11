@@ -75,7 +75,6 @@ public:
     // SelectionFilter
     virtual bool isSelectionTypeFiltered(SelectionFilterType type) const = 0;
     virtual void setSelectionTypeFiltered(SelectionFilterType type, bool filtered) = 0;
-    virtual void setAllSelectionTypesFiltered(bool filtered) = 0;
 
     // Drag
     using IsDraggable = std::function<bool (const Element*)>;
