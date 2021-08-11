@@ -44,9 +44,6 @@ public:
 
     Q_INVOKABLE void load() override;
 
-signals:
-    void loaded();
-
 private:
     void loadItems();
 

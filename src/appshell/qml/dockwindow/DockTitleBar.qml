@@ -36,6 +36,8 @@ Item {
     property alias contextMenuModel: contextMenuButton.menuModel
     property alias heightWhenVisible: titleBar.heightWhenVisible
 
+    signal handleContextMenuItemRequested(var itemId)
+
     width: parent.width
     height: visible ? heightWhenVisible : 0
 
@@ -70,6 +72,10 @@ Item {
                 id: contextMenuButton
 
                 Layout.margins: 2
+
+                onHandleMenuItem: function(itemId) {
+                    root.handleContextMenuItemRequested(itemId)
+                }
             }
         }
     }

@@ -31,8 +31,6 @@ void InstrumentsPanelContextMenuModel::load()
         } else {
             loadItems();
         }
-
-        emit loaded();
     });
 }
 

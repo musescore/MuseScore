@@ -31,6 +31,8 @@ StyledTabButton {
 
     property alias contextMenuModel: contextMenuButton.menuModel
 
+    signal handleContextMenuItemRequested(var itemId)
+
     height: 36
     width: implicitWidth
 
@@ -60,6 +62,10 @@ StyledTabButton {
 
             navigation.panel: root.navigation.panel
             navigation.order: root.navigation.order + 1
+
+            onHandleMenuItem: function(itemId) {
+                root.handleContextMenuItemRequested(itemId)
+            }
         }
     }
 

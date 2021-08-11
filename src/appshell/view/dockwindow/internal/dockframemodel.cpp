@@ -187,3 +187,9 @@ QVariant DockFrameModel::currentDockContextMenuModel() const
     const KDDockWidgets::DockWidgetBase* w = frame->currentDockWidget();
     return w ? w->property("contextMenuModel").value<QVariant>() : QVariant();
 }
+
+void DockFrameModel::handleMenuItem(const QString& itemId)
+{
+    NOT_IMPLEMENTED;
+    Q_UNUSED(itemId);
+}

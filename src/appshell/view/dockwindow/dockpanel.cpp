@@ -25,12 +25,79 @@
 #include "thirdparty/KDDockWidgets/src/DockWidgetQuick.h"
 
 #include "log.h"
+#include "translation.h"
+#include "ui/uitypes.h"
+
+#include "ui/view/abstractmenumodel.h"
 
 using namespace mu::dock;
 using namespace mu::uicomponents;
+using namespace mu::ui;
+using namespace mu::actions;
+
+class DockPanel::DockPanelMenuModel : public ui::AbstractMenuModel
+{
+public:
+    explicit DockPanelMenuModel(QObject* parent = nullptr)
+        : AbstractMenuModel(parent)
+    {
+    }
+
+    void load() override
+    {
+        //! TODO: temporary solution for testing
+        MenuItem close;
+        close.code = "close";
+        close.title = "Close tab";
+        close.state.enabled = true;
+
+        MenuItem undock;
+        undock.code = "undock";
+        undock.title = "Undock";
+        undock.state.enabled = true;
+
+        MenuItem move;
+        move.code = "move";
+        move.title = "Move panel to right side";
+        move.state.enabled = true;
+
+        MenuItemList standardItems {
+            close,
+            undock,
+            move
+        };
+
+        setItems(standardItems);
+    }
+
+    QVariant customMenuModel() const
+    {
+        return m_customMenuModel;
+    }
+
+    void setCustomMenuModel(const QVariant& model)
+    {
+        m_customMenuModel = model;
+    }
+
+    QVariant toVariant() const
+    {
+        QVariantList result = m_customMenuModel.toList();
+        if (!result.isEmpty()) {
+            result << makeSeparator().toMap();
+        }
+
+        result << itemsProperty();
+
+        return result;
+    }
+
+private:
+    QVariant m_customMenuModel;
+};
 
 DockPanel::DockPanel(QQuickItem* parent)
-    : DockBase(parent)
+    : DockBase(parent), m_menuModel(new DockPanelMenuModel(this))
 {
     setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
 }
@@ -74,12 +141,14 @@ void DockPanel::componentComplete()
         return;
     }
 
+    m_menuModel->load();
+
     w->setProperty("dockPanel", QVariant::fromValue(this));
-    w->setProperty("contextMenuModel", m_contextMenuModel);
+    w->setProperty("contextMenuModel", m_menuModel->toVariant());
 
     connect(this, &DockPanel::contextMenuModelChanged, [this, w]() {
         if (w) {
-            w->setProperty("contextMenuModel", m_contextMenuModel);
+            w->setProperty("contextMenuModel", m_menuModel->toVariant());
         }
     });
 }
@@ -101,15 +170,15 @@ void DockPanel::setNavigationSection(QObject* newNavigation)
 
 QVariant DockPanel::contextMenuModel() const
 {
-    return m_contextMenuModel;
+    return m_menuModel->customMenuModel();
 }
 
 void DockPanel::setContextMenuModel(const QVariant& model)
 {
-    if (m_contextMenuModel == model) {
+    if (m_menuModel->customMenuModel() == model) {
         return;
     }
 
-    m_contextMenuModel = model;
+    m_menuModel->setCustomMenuModel(model);
     emit contextMenuModelChanged();
 }
