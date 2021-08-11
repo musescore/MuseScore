@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_NOTATION_INOTATIONMIDIDATA_H
-#define MU_NOTATION_INOTATIONMIDIDATA_H
+#ifndef MU_NOTATION_IMASTERNOTATIONMIDIDATA_H
+#define MU_NOTATION_IMASTERNOTATIONMIDIDATA_H
 
 #include <memory>
 
@@ -39,7 +39,7 @@ public:
 
     virtual void init(INotationPartsPtr parts) = 0;
 
-    virtual midi::MidiData trackMidiData(const PartId& id) const = 0;
+    virtual midi::MidiData trackMidiData(const ID& partId) const = 0;
     virtual Ret triggerElementMidiData(const Element* element) = 0;
 
     virtual midi::Events retrieveEvents(const midi::channel_t midiChannel, const midi::tick_t fromTick,
@@ -51,4 +51,4 @@ public:
 using IMasterNotationMidiDataPtr = std::shared_ptr<IMasterNotationMidiData>;
 }
 
-#endif // MU_NOTATION_INOTATIONMIDIDATA_H
+#endif // MU_NOTATION_IMASTERNOTATIONMIDIDATA_H

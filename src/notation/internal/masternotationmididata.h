@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_NOTATION_NOTATIONMIDEVENTS_H
-#define MU_NOTATION_NOTATIONMIDEVENTS_H
+#ifndef MU_NOTATION_MASTERNOTATIONMIDIDATA_H
+#define MU_NOTATION_MASTERNOTATIONMIDIDATA_H
 
 #include <map>
 #include <unordered_map>
@@ -46,7 +46,7 @@ public:
 
     void init(INotationPartsPtr parts) override;
 
-    midi::MidiData trackMidiData(const PartId& id) const override;
+    midi::MidiData trackMidiData(const ID& partId) const override;
     Ret triggerElementMidiData(const Element* element) override;
 
     midi::Events retrieveEvents(const midi::channel_t midiChannel, const midi::tick_t fromTick, const midi::tick_t toTick) const override;
@@ -113,7 +113,7 @@ private:
     mutable RenderRangeMap m_renderRanges;
     mutable std::unordered_map<midi::channel_t, midi::Events> m_eventsCache = {};
 
-    std::map<PartId, midi::MidiData> m_midiDataMap;
+    std::map<ID /*partId*/, midi::MidiData> m_midiDataMap;
 
     std::unique_ptr<Ms::MidiRenderer> m_midiRenderImpl = nullptr;
     IGetScore* m_getScore = nullptr;
@@ -123,4 +123,4 @@ private:
 using MasterNotationMidiDataPtr = std::shared_ptr<MasterNotationMidiData>;
 }
 
-#endif // MU_NOTATION_NOTATIONMIDEVENTS_H
+#endif // MU_NOTATION_MASTERNOTATIONMIDIDATA_H

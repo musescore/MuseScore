@@ -468,29 +468,29 @@ void PlaybackController::setCurrentTick(const tick_t tick)
     m_playbackPositionChanged.notify();
 }
 
-void PlaybackController::addTrack(const notation::PartId& id, const std::string& title)
+void PlaybackController::addTrack(const ID& partId, const std::string& title)
 {
     IF_ASSERT_FAILED(notationPlayback() && playback()) {
         return;
     }
 
     playback()->tracks()->addTrack(m_currentSequenceId, title, masterNotationMidiData()->trackMidiData(
-                                       id), AudioParams())
-    .onResolve(this, [this, id](const TrackId trackId) {
-        m_trackIdMap.insert({ id, trackId });
+                                       partId), AudioParams())
+    .onResolve(this, [this, partId](const TrackId trackId) {
+        m_trackIdMap.insert({ partId, trackId });
     })
     .onReject(this, [](int code, const std::string& msg) {
         LOGE() << "can't add a new track, code: [" << code << "] " << msg;
     });
 }
 
-void PlaybackController::removeTrack(const notation::PartId& id)
+void PlaybackController::removeTrack(const ID& partId)
 {
     IF_ASSERT_FAILED(notationPlayback() && playback()) {
         return;
     }
 
-    auto search = m_trackIdMap.find(id);
+    auto search = m_trackIdMap.find(partId);
 
     if (search == m_trackIdMap.end()) {
         return;
