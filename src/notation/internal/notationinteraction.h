@@ -84,6 +84,10 @@ public:
     void clearSelection() override;
     async::Notification selectionChanged() const override;
 
+    // SelectionFilter
+    bool isSelectionTypeFiltered(SelectionFilterType type) const override;
+    void setSelectionTypeFiltered(SelectionFilterType type, bool filtered) override;
+
     // Drag
     bool isDragStarted() const override;
     void startDrag(const std::vector<Element*>& elems, const PointF& eoffset, const IsDraggable& isDraggable) override;

@@ -46,6 +46,7 @@
 #include "view/internal/undoredomodel.h"
 #include "view/notationtoolbarmodel.h"
 #include "view/notationnavigator.h"
+#include "view/selectionfiltermodel.h"
 
 #include "ui/iinteractiveuriregister.h"
 #include "ui/uitypes.h"
@@ -172,6 +173,7 @@ void NotationModule::registerUiTypes()
     qmlRegisterType<NotationNavigator>("MuseScore.NotationScene", 1, 0, "NotationNavigator");
     qmlRegisterType<UndoRedoModel>("MuseScore.NotationScene", 1, 0, "UndoRedoModel");
     qmlRegisterType<TimelineView>("MuseScore.NotationScene", 1, 0, "TimelineView");
+    qmlRegisterType<SelectionFilterModel>("MuseScore.NotationScene", 1, 0, "SelectionFilterModel");
 
     qRegisterMetaType<EditStyle>("EditStyle");
     qRegisterMetaType<EditStaff>("EditStaff");

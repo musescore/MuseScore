@@ -175,9 +175,10 @@ MenuItem AppMenuModel::viewItem() const
 {
     MenuItemList viewItems {
         makeMenuItem("toggle-palettes"),
-        makeMenuItem("toggle-instruments"),
         makeMenuItem("masterpalette"),
+        makeMenuItem("toggle-instruments"),
         makeMenuItem("inspector"),
+        makeMenuItem("toggle-selection-filter"),
         makeMenuItem("toggle-navigator"),
         makeMenuItem("toggle-timeline"),
         makeMenuItem("toggle-mixer"),

@@ -77,9 +77,10 @@ DockPage {
         pageModel.setPlaybackToolBarDockName(playbackToolBar.objectName)
         pageModel.setUndoRedoToolBarDockName(undoRedoToolBar.objectName)
         pageModel.setNoteInputBarDockName(noteInputBar.objectName)
+        pageModel.setPalettesPanelDockName(palettesPanel.objectName)
         pageModel.setInspectorPanelDockName(inspectorPanel.objectName)
         pageModel.setInstrumentsPanelDockName(instrumentsPanel.objectName)
-        pageModel.setPalettesPanelDockName(palettesPanel.objectName)
+        pageModel.setSelectionFilterPanelDockName(selectionFilterPanel.objectName)
         pageModel.setPianoRollDockName(pianoRollPanel.objectName)
         pageModel.setMixerDockName(mixerPanel.objectName)
         pageModel.setTimelineDockName(timelinePanel.objectName)
@@ -220,12 +221,35 @@ DockPage {
             width: root.defaultPanelWidth
             minimumWidth: root.defaultPanelWidth
             maximumWidth: root.defaultPanelWidth
+            
+            tabifyPanel: selectionFilterPanel
 
             InspectorForm {
                 navigationSection: inspectorPanel.navigationSection
             }
         },
 
+        DockPanel {
+            id: selectionFilterPanel
+
+            objectName: "selectionFilterPanel"
+            title: qsTrc("appshell", "Selection Filter")
+
+            navigationSection: root.navigationPanelSec(selectionFilterPanel.location)
+
+            width: root.defaultPanelWidth
+            minimumWidth: root.defaultPanelWidth
+            maximumWidth: root.defaultPanelWidth
+
+            // TODO: Temporarily disabled on startup, but can be enabled via the app menu, see:
+            // https://github.com/musescore/MuseScore/pull/8593
+            visible: false
+
+            SelectionFilterPanel {
+                navigationSection: selectionFilterPanel.navigationSection
+            }
+        },
+        
         // =============================================
         // Horizontal Panels
         // =============================================

@@ -36,6 +36,7 @@ bool NotationPageState::isPanelVisible(PanelType type) const
     case PanelType::Palettes:
     case PanelType::Instruments:
     case PanelType::Inspector:
+    case PanelType::SelectionFilter:
     case PanelType::NotationToolBar:
     case PanelType::NoteInputBar:
     case PanelType::UndoRedoToolBar:
@@ -48,7 +49,6 @@ bool NotationPageState::isPanelVisible(PanelType type) const
     case PanelType::NotationNavigator:
         return configuration()->isNotationNavigatorVisible();
     case PanelType::Synthesizer:
-    case PanelType::SelectionFilter:
     case PanelType::Piano:
     case PanelType::ComparisonTool:
     case PanelType::Undefined:
@@ -80,6 +80,7 @@ void NotationPageState::setIsPanelVisible(PanelType type, bool visible)
     case PanelType::Palettes:
     case PanelType::Instruments:
     case PanelType::Inspector:
+    case PanelType::SelectionFilter:
     case PanelType::NotationToolBar:
     case PanelType::NoteInputBar:
     case PanelType::UndoRedoToolBar:
@@ -93,7 +94,10 @@ void NotationPageState::setIsPanelVisible(PanelType type, bool visible)
     case PanelType::NotationNavigator:
         configuration()->setIsNotationNavigatorVisible(visible);
         break;
-    default:
+    case PanelType::Piano:
+    case PanelType::ComparisonTool:
+    case PanelType::Synthesizer:
+    case PanelType::Undefined:
         break;
     }
 }
