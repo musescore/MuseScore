@@ -48,7 +48,6 @@ signals:
     void loaded();
 
 private:
-    void loadOrders();
     void loadItems();
 
     void setOrder(const actions::ActionData& args);

@@ -40,17 +40,10 @@ class AppMenuModel : public ui::AbstractMenuModel
     INJECT(appshell, IAppShellConfiguration, configuration)
     INJECT(appshell, project::IRecentProjectsProvider, recentProjectsProvider)
 
-    Q_PROPERTY(QVariantList items READ items NOTIFY itemsChanged)
-
 public:
     explicit AppMenuModel(QObject* parent = nullptr);
 
-    QVariantList items() const;
-
     Q_INVOKABLE void load() override;
-
-signals:
-    void itemsChanged();
 
 private:
     void setupConnections();

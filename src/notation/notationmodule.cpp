@@ -62,7 +62,7 @@
 #include "view/widgets/tupletdialog.h"
 #include "view/widgets/stafftextpropertiesdialog.h"
 #include "view/widgets/timelineview.h"
-#include "view/notationcontextmenu.h"
+#include "view/notationcontextmenumodel.h"
 #include "view/internal/undoredomodel.h"
 
 #include "diagnostics/idiagnosticspathsregister.h"
@@ -93,7 +93,6 @@ void NotationModule::registerExports()
 {
     ioc()->registerExport<INotationConfiguration>(moduleName(), s_configuration);
     ioc()->registerExport<IInstrumentsRepository>(moduleName(), s_instrumentsRepository);
-    ioc()->registerExport<INotationContextMenu>(moduleName(), new NotationContextMenu());
 }
 
 void NotationModule::resolveImports()
@@ -163,12 +162,12 @@ void NotationModule::registerResources()
 void NotationModule::registerUiTypes()
 {
     qmlRegisterType<NotationPaintView>("MuseScore.NotationScene", 1, 0, "NotationPaintView");
+    qmlRegisterType<NotationContextMenuModel>("MuseScore.NotationScene", 1, 0, "NotationContextMenuModel");
     qmlRegisterType<NotationSwitchListModel>("MuseScore.NotationScene", 1, 0, "NotationSwitchListModel");
     qmlRegisterType<PartListModel>("MuseScore.NotationScene", 1, 0, "PartListModel");
     qmlRegisterType<SearchPopupModel>("MuseScore.NotationScene", 1, 0, "SearchPopupModel");
     qmlRegisterType<NoteInputBarModel>("MuseScore.NotationScene", 1, 0, "NoteInputBarModel");
     qmlRegisterType<NoteInputBarCustomiseModel>("MuseScore.NotationScene", 1, 0, "NoteInputBarCustomiseModel");
-    qmlRegisterUncreatableType<NoteInputBarCustomiseItem>("MuseScore.NotationScene", 1, 0, "NoteInputBarCustomiseItem", "Cannot create");
     qmlRegisterType<NotationToolBarModel>("MuseScore.NotationScene", 1, 0, "NotationToolBarModel");
     qmlRegisterType<NotationNavigator>("MuseScore.NotationScene", 1, 0, "NotationNavigator");
     qmlRegisterType<UndoRedoModel>("MuseScore.NotationScene", 1, 0, "UndoRedoModel");
@@ -180,6 +179,8 @@ void NotationModule::registerUiTypes()
     qRegisterMetaType<SelectNoteDialog>("SelectNoteDialog");
     qRegisterMetaType<SelectDialog>("SelectDialog");
     qRegisterMetaType<Ms::StaffTextPropertiesDialog>("StaffTextPropertiesDialog");
+
+    qmlRegisterUncreatableType<NoteInputBarCustomiseItem>("MuseScore.NotationScene", 1, 0, "NoteInputBarCustomiseItem", "Cannot create");
 
     auto ui = ioc()->resolve<IUiEngine>(moduleName());
     if (ui) {

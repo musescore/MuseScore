@@ -208,8 +208,8 @@ DockPage {
             Connections {
                 target: instrumentsPanelContent
 
-                onContextMenuLoaded: {
-                    instrumentsPanel.contextMenuModel = instrumentsPanelContent.contextMenuModel
+                onContextMenuModelLoaded: {
+                    instrumentsPanel.contextMenuModel = model
                 }
             }
 

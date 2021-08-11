@@ -19,21 +19,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_NOTATIONCONTEXTMENU_H
-#define MU_NOTATION_NOTATIONCONTEXTMENU_H
+#ifndef MU_NOTATION_NOTATIONCONTEXTMENUMODEL_H
+#define MU_NOTATION_NOTATIONCONTEXTMENUMODEL_H
 
 #include "ui/view/abstractmenumodel.h"
-#include "inotationcontextmenu.h"
+#include "notation/notationtypes.h"
 
 namespace mu::notation {
-class NotationContextMenu : public ui::AbstractMenuModel, public INotationContextMenu
+class NotationContextMenuModel : public ui::AbstractMenuModel
 {
     Q_OBJECT
 
 public:
-    ui::MenuItemList items(const ElementType& elementType) const override;
+    Q_INVOKABLE void loadItems(int elementType);
 
 private:
+    ui::MenuItemList itemsByElementType(ElementType type) const;
+
     ui::MenuItemList pageItems() const;
     ui::MenuItemList defaultCopyPasteItems() const;
     ui::MenuItemList measureItems() const;
@@ -45,4 +47,4 @@ private:
 };
 }
 
-#endif // MU_NOTATION_NOTATIONCONTEXTMENU_H
+#endif // MU_NOTATION_NOTATIONCONTEXTMENUMODEL_H
