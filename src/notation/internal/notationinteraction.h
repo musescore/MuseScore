@@ -87,7 +87,6 @@ public:
     // SelectionFilter
     bool isSelectionTypeFiltered(SelectionFilterType type) const override;
     void setSelectionTypeFiltered(SelectionFilterType type, bool filtered) override;
-    void setAllSelectionTypesFiltered(bool filtered) override;
 
     // Drag
     bool isDragStarted() const override;

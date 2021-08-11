@@ -28,11 +28,6 @@
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
-#include "inotationinteraction.h"
-
-namespace Ms {
-enum class SelectionFilterType;
-}
 
 namespace mu::notation {
 class SelectionFilterModel : public QAbstractListModel, public async::Asyncable
@@ -68,10 +63,9 @@ private:
     INotationPtr currentNotation() const;
     INotationInteractionPtr currentNotationInteraction() const;
 
-    void updateIsAllSelected();
+    bool isFiltered(SelectionFilterType type) const;
+    void setFiltered(SelectionFilterType type, bool filtered);
 
-    bool m_isAllSelected = false;
-    bool m_isNoneSelected = false;
     QString titleForType(SelectionFilterType type) const;
 
     QList<SelectionFilterType> m_types;

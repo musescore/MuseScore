@@ -50,6 +50,7 @@ Rectangle {
         anchors.fill: parent
         anchors.margins: 12
         boundsBehavior: Flickable.StopAtBounds
+        clip: true
         spacing: 12
 
         ScrollBar.vertical: StyledScrollBar {}

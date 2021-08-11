@@ -91,21 +91,25 @@ int SelectionFilter::filteredTypes() const
 
 bool SelectionFilter::isFiltered(SelectionFilterType type) const
 {
-    return m_filteredTypes & static_cast<int>(type);
+    if (type == SelectionFilterType::NONE || type == SelectionFilterType::ALL) {
+        return m_filteredTypes == static_cast<unsigned int>(type);
+    }
+
+    return m_filteredTypes & static_cast<unsigned int>(type);
 }
 
 void SelectionFilter::setFiltered(SelectionFilterType type, bool filtered)
 {
-    if (filtered) {
-        m_filteredTypes |= static_cast<int>(type);
-    } else {
-        m_filteredTypes &= ~static_cast<int>(type);
+    if (type == SelectionFilterType::NONE) {
+        setFiltered(SelectionFilterType::ALL, !filtered);
+        return;
     }
-}
 
-void SelectionFilter::setAllFiltered(bool filtered)
-{
-    m_filteredTypes = filtered ? ~0 : 0;
+    if (filtered) {
+        m_filteredTypes |= static_cast<unsigned int>(type);
+    } else {
+        m_filteredTypes &= ~static_cast<unsigned int>(type);
+    }
 }
 
 bool SelectionFilter::canSelect(const Element* e) const

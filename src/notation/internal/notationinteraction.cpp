@@ -588,15 +588,6 @@ void NotationInteraction::setSelectionTypeFiltered(SelectionFilterType type, boo
     }
 }
 
-void NotationInteraction::setAllSelectionTypesFiltered(bool filtered)
-{
-    score()->selectionFilter().setAllFiltered(filtered);
-    if (selection()->isRange()) {
-        score()->selection().updateSelectedElements();
-        notifyAboutSelectionChanged();
-    }
-}
-
 bool NotationInteraction::isDragStarted() const
 {
     return m_dragData.dragGroups.size() > 0 || !m_lasso->bbox().isEmpty();

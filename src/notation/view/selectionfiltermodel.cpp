@@ -23,6 +23,7 @@
 
 #include "engraving/libmscore/select.h"
 
+#include "log.h"
 #include "translation.h"
 
 using namespace mu::notation;
@@ -34,52 +35,26 @@ SelectionFilterModel::SelectionFilterModel(QObject* parent)
 
 void SelectionFilterModel::load()
 {
+    TRACEFUNC;
+
     beginResetModel();
 
     m_types.clear();
     m_types << SelectionFilterType::ALL;
 
-    for (int i = 0; i < Ms::NUMBER_OF_SELECTION_FILTER_TYPES; i++) {
+    for (size_t i = 0; i < Ms::NUMBER_OF_SELECTION_FILTER_TYPES; i++) {
         m_types << static_cast<SelectionFilterType>(1 << i);
     }
 
-    updateIsAllSelected();
     endResetModel();
 
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         emit enabledChanged();
 
         if (currentNotation()) {
-            updateIsAllSelected();
-            emit dataChanged(index(1), index(rowCount() - 1), { IsSelectedRole });
+            emit dataChanged(index(0), index(rowCount() - 1), { IsSelectedRole, IsIndeterminateRole });
         }
     });
-}
-
-void SelectionFilterModel::updateIsAllSelected()
-{
-    if (!currentNotationInteraction()) {
-        return;
-    }
-
-    m_isNoneSelected = true;
-    m_isAllSelected = true;
-
-    // Skip "All" type
-    for (auto type : m_types.mid(1)) {
-        const bool selected = currentNotationInteraction()->isSelectionTypeFiltered(type);
-        if (selected) {
-            m_isNoneSelected = false;
-        } else {
-            m_isAllSelected = false;
-        }
-
-        if (!m_isAllSelected && !m_isNoneSelected) {
-            break;
-        }
-    }
-
-    emit dataChanged(index(0), index(0), { IsSelectedRole, IsIndeterminateRole });
 }
 
 QVariant SelectionFilterModel::data(const QModelIndex& index, int role) const
@@ -96,15 +71,11 @@ QVariant SelectionFilterModel::data(const QModelIndex& index, int role) const
         return titleForType(type);
 
     case IsSelectedRole:
-        if (type == SelectionFilterType::ALL) {
-            return m_isAllSelected;
-        }
-
-        return currentNotationInteraction() ? currentNotationInteraction()->isSelectionTypeFiltered(type) : false;
+        return isFiltered(type);
 
     case IsIndeterminateRole:
         if (type == SelectionFilterType::ALL) {
-            return !m_isAllSelected && !m_isNoneSelected;
+            return !isFiltered(SelectionFilterType::ALL) && !isFiltered(SelectionFilterType::NONE);
         }
 
         return false;
@@ -131,15 +102,12 @@ bool SelectionFilterModel::setData(const QModelIndex& index, const QVariant& dat
     auto type = m_types[row];
     const bool filtered = data.toBool();
 
+    setFiltered(type, filtered);
     if (type == SelectionFilterType::ALL) {
-        currentNotationInteraction()->setAllSelectionTypesFiltered(filtered);
-        m_isAllSelected = filtered;
-        m_isNoneSelected = !filtered;
         emit dataChanged(this->index(0), this->index(rowCount() - 1), { IsSelectedRole, IsIndeterminateRole });
     } else {
-        currentNotationInteraction()->setSelectionTypeFiltered(type, filtered);
-        emit dataChanged(index, index, { IsSelectedRole, IsIndeterminateRole });
-        updateIsAllSelected();
+        emit dataChanged(this->index(0), this->index(0), { IsSelectedRole, IsIndeterminateRole });
+        emit dataChanged(index, index, { IsSelectedRole });
     }
 
     return true;
@@ -161,7 +129,7 @@ QHash<int, QByteArray> SelectionFilterModel::roleNames() const
 
 bool SelectionFilterModel::enabled() const
 {
-    return globalContext()->currentNotation() != nullptr;
+    return currentNotation() != nullptr;
 }
 
 INotationPtr SelectionFilterModel::currentNotation() const
@@ -172,6 +140,18 @@ INotationPtr SelectionFilterModel::currentNotation() const
 INotationInteractionPtr SelectionFilterModel::currentNotationInteraction() const
 {
     return currentNotation() ? currentNotation()->interaction() : nullptr;
+}
+
+bool SelectionFilterModel::isFiltered(SelectionFilterType type) const
+{
+    return currentNotationInteraction() ? currentNotationInteraction()->isSelectionTypeFiltered(type) : false;
+}
+
+void SelectionFilterModel::setFiltered(SelectionFilterType type, bool filtered)
+{
+    if (currentNotationInteraction()) {
+        currentNotationInteraction()->setSelectionTypeFiltered(type, filtered);
+    }
 }
 
 QString SelectionFilterModel::titleForType(SelectionFilterType type) const
