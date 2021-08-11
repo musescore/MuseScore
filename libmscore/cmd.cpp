@@ -720,14 +720,18 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
       Element* nr   = 0;
       Tie* tie      = 0;
       ChordRest* cr = toChordRest(segment->element(track));
-
+      Tuplet* tuplet = cr && cr->tuplet() && sd <= cr->tuplet()->ticks() ? cr->tuplet() : nullptr;
       Measure* measure = 0;
+      bool targetIsRest = cr && cr->isRest();
       for (;;) {
             if (track % VOICES)
                   expandVoice(segment, track);
-
+            if (targetIsRest && !cr->isRest()) {
+                  undoRemoveElement(cr);
+                  segment = addRest(segment, track, cr->ticks(), cr->tuplet())->segment();
+                  }
             // the returned gap ends at the measure boundary or at tuplet end
-            Fraction dd = makeGap(segment, track, sd, cr ? cr->tuplet() : 0);
+            Fraction dd = makeGap(segment, track, sd, tuplet);
 
             if (dd.isZero()) {
                   qDebug("cannot get gap at %d type: %d/%d", tick.ticks(), sd.numerator(),
@@ -787,7 +791,9 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
                               note->setTieFor(tie);
                               }
                         }
-                  ncr->setTuplet(cr ? cr->tuplet() : 0);
+                  if (tuplet && sd <= tuplet->ticks())
+                        ncr->setTuplet(tuplet);
+                  tuplet = 0;
                   undoAddCR(ncr, measure, tick);
                   if (addTie)
                         undoAddElement(addTie);
