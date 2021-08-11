@@ -123,8 +123,8 @@ private:
     void setupNewCurrentSequence(const audio::TrackSequenceId sequenceId);
     void setupSequenceTracks();
     void setCurrentTick(const midi::tick_t tick);
-    void addTrack(const notation::PartId& id, const std::string& title);
-    void removeTrack(const notation::PartId& id);
+    void addTrack(const ID& partId, const std::string& title);
+    void removeTrack(const ID& partId);
 
     notation::INotationPtr m_notation;
     notation::IMasterNotationPtr m_masterNotation;
@@ -144,7 +144,7 @@ private:
     audio::PlaybackStatus m_currentPlaybackStatus = audio::PlaybackStatus::Stopped;
     midi::tick_t m_currentTick = 0;
 
-    std::map<notation::PartId, audio::TrackId> m_trackIdMap;
+    std::map<ID /*partId*/, audio::TrackId> m_trackIdMap;
 };
 }
 

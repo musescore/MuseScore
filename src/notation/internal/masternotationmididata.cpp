@@ -68,9 +68,9 @@ void MasterNotationMidiData::init(INotationPartsPtr parts)
     });
 }
 
-MidiData MasterNotationMidiData::trackMidiData(const PartId& id) const
+MidiData MasterNotationMidiData::trackMidiData(const ID& partId) const
 {
-    auto search = m_midiDataMap.find(id);
+    auto search = m_midiDataMap.find(partId);
 
     if (search != m_midiDataMap.end()) {
         return search->second;
@@ -307,6 +307,10 @@ Ret MasterNotationMidiData::playNoteMidiData(const Ms::Note* note) const
 
 Ret MasterNotationMidiData::playChordMidiData(const Ms::Chord* chord) const
 {
+    IF_ASSERT_FAILED(!chord->notes().empty()) {
+        return make_ret(Err::UnableToPlaybackElement);
+    }
+
     Ms::Part* part = chord->part();
     Ms::Fraction tick = chord->segment() ? chord->segment()->tick() : Ms::Fraction(0, 1);
     Ms::Instrument* instr = part->instrument(tick);
