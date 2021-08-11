@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_NOTATION_INOTATIONMIDIDATA_H
-#define MU_NOTATION_INOTATIONMIDIDATA_H
+#ifndef MU_NOTATION_IMASTERNOTATIONMIDIDATA_H
+#define MU_NOTATION_IMASTERNOTATIONMIDIDATA_H
 
 #include <memory>
 
@@ -29,22 +29,26 @@
 #include "midi/miditypes.h"
 
 #include "notation/notationtypes.h"
-#include "notation/internal/igetscore.h"
+#include "notation/inotationparts.h"
 
 namespace mu::notation {
-class INotationMidiEvents
+class IMasterNotationMidiData
 {
 public:
-    virtual ~INotationMidiEvents() = default;
+    virtual ~IMasterNotationMidiData() = default;
 
-    virtual void init() = 0;
+    virtual void init(INotationPartsPtr parts) = 0;
+
+    virtual midi::MidiData trackMidiData(const ID& partId) const = 0;
+    virtual Ret triggerElementMidiData(const Element* element) = 0;
+
     virtual midi::Events retrieveEvents(const midi::channel_t midiChannel, const midi::tick_t fromTick,
                                         const midi::tick_t toTick) const = 0;
     virtual midi::Events retrieveEventsForElement(const Element* element, const midi::channel_t midiChannel) const = 0;
     virtual std::vector<midi::Event> retrieveSetupEvents(const std::list<InstrumentChannel*> instrChannel) const = 0;
 };
 
-using INotationMidiEventsPtr = std::shared_ptr<INotationMidiEvents>;
+using IMasterNotationMidiDataPtr = std::shared_ptr<IMasterNotationMidiData>;
 }
 
-#endif // MU_NOTATION_INOTATIONMIDIDATA_H
+#endif // MU_NOTATION_IMASTERNOTATIONMIDIDATA_H

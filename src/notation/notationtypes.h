@@ -125,7 +125,6 @@ using InstrumentOverwrite = Ms::InstrumentOverwrite;
 using InstrumentGenre = Ms::InstrumentGenre;
 using InstrumentGroup = Ms::InstrumentGroup;
 using MidiArticulation = Ms::MidiArticulation;
-
 using InstrumentChannelList = QList<InstrumentChannel>;
 using PageList = std::vector<const Page*>;
 using StaffList = QList<const Staff*>;
