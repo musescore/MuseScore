@@ -61,7 +61,9 @@ private:
 
     DockPanel* m_tabifyPanel = nullptr;
     QObject* m_navigationSection = nullptr;
-    QVariant m_contextMenuModel;
+
+    class DockPanelMenuModel;
+    DockPanelMenuModel* m_menuModel = nullptr;
 };
 }
 

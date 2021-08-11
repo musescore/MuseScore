@@ -204,14 +204,7 @@ DockPage {
             maximumWidth: root.defaultPanelWidth
 
             tabifyPanel: inspectorPanel
-
-            Connections {
-                target: instrumentsPanelContent
-
-                onContextMenuModelLoaded: {
-                    instrumentsPanel.contextMenuModel = model
-                }
-            }
+            contextMenuModel: instrumentsPanelContent.contextMenuModel
 
             InstrumentsPanel {
                 id: instrumentsPanelContent

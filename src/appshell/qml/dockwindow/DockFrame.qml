@@ -84,6 +84,10 @@ Rectangle {
 
         contextMenuModel: frameModel.currentDockContextMenuModel
         visible: frameModel.titleBarVisible
+
+        onHandleContextMenuItemRequested: {
+            frameModel.handleMenuItem(itemId)
+        }
     }
 
     MouseArea {
@@ -146,6 +150,10 @@ Rectangle {
             model: frameModel.tabs
 
             delegate: DockPanelTab {
+                text: modelData.title
+                isCurrent: tabsPanel && (tabsPanel.currentIndex === model.index)
+                contextMenuModel: modelData.contextMenuModel
+
                 navigation.name: text
                 navigation.panel: navPanel
                 navigation.order: model.index * 2 // NOTE '...' button will have +1 order
@@ -158,10 +166,9 @@ Rectangle {
                     tabsPanel.currentIndex = model.index
                 }
 
-                text: modelData.title
-                isCurrent: tabsPanel && (tabsPanel.currentIndex === model.index)
-
-                contextMenuModel: modelData.contextMenuModel
+                onHandleContextMenuItemRequested: {
+                    frameModel.handleMenuItem(itemId)
+                }
             }
         }
 

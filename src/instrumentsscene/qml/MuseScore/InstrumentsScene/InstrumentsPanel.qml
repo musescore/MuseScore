@@ -36,9 +36,7 @@ Item {
     id: root
 
     property NavigationSection navigationSection: null
-    property alias contextMenuModel: contextMenuModel
-
-    signal contextMenuModelLoaded(var model)
+    property alias contextMenuModel: contextMenuModel.items
 
     Rectangle {
         id: background
@@ -67,10 +65,6 @@ Item {
 
     InstrumentsPanelContextMenuModel {
         id: contextMenuModel
-
-        onLoaded: {
-            root.contextMenuModelLoaded(contextMenuModel.items)
-        }
     }
 
     Component.onCompleted: {

@@ -25,10 +25,15 @@
 
 #include <QQuickItem>
 
+#include "modularity/ioc.h"
+#include "actions/iactionsdispatcher.h"
+
 namespace mu::dock {
 class DockFrameModel : public QObject
 {
     Q_OBJECT
+
+    INJECT(dock, actions::IActionsDispatcher, dispatcher)
 
     Q_PROPERTY(QQuickItem * frame READ frame WRITE setFrame NOTIFY frameChanged)
     Q_PROPERTY(QVariantList tabs READ tabs NOTIFY tabsChanged)
@@ -48,6 +53,8 @@ public:
     QObject* navigationSection() const;
     QString currentDockUniqueName() const;
     QVariant currentDockContextMenuModel() const;
+
+    Q_INVOKABLE void handleMenuItem(const QString& itemId);
 
 public slots:
     void setFrame(QQuickItem* item);
