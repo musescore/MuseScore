@@ -57,6 +57,7 @@ private:
 
     void loadNotations();
     void listenNotationOpeningStatus(INotationPtr notation);
+    void listenNotationTitleChanged(INotationPtr notation);
     void listenNotationSavingStatus(IMasterNotationPtr masterNotation);
     bool isIndexValid(int index) const;
 

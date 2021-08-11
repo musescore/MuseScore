@@ -121,8 +121,7 @@ bool PartListModel::isRemovingAvailable() const
 
 void PartListModel::createNewPart()
 {
-    IExcerptNotationPtr excerpt = masterNotation()->newExcerptNotation();
-    excerpt->setTitle(defaultPartTitle());
+    IExcerptNotationPtr excerpt = masterNotation()->newExcerptBlankNotation();
 
     int index = m_excerpts.size();
     insertExcerpt(index, excerpt);
