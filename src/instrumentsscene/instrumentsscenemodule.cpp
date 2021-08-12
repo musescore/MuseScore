@@ -33,6 +33,7 @@
 #include "view/instrumentlistmodel.h"
 #include "view/instrumentsettingsmodel.h"
 #include "view/staffsettingsmodel.h"
+#include "view/instrumentspanelcontextmenumodel.h"
 #include "ui/iinteractiveuriregister.h"
 #include "ui/iuiactionsregister.h"
 
@@ -82,6 +83,8 @@ void InstrumentsSceneModule::registerUiTypes()
     qmlRegisterType<InstrumentSettingsModel>("MuseScore.InstrumentsScene", 1, 0, "InstrumentSettingsModel");
     qmlRegisterType<StaffSettingsModel>("MuseScore.InstrumentsScene", 1, 0, "StaffSettingsModel");
     qmlRegisterType<InstrumentsPanelTreeModel>("MuseScore.InstrumentsScene", 1, 0, "InstrumentsPanelTreeModel");
+    qmlRegisterType<InstrumentsPanelContextMenuModel>("MuseScore.InstrumentsScene", 1, 0, "InstrumentsPanelContextMenuModel");
+
     qmlRegisterUncreatableType<InstrumentsTreeItemType>("MuseScore.InstrumentsScene", 1, 0, "InstrumentsTreeItemType",
                                                         "Cannot create a ContainerType");
 

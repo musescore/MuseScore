@@ -42,6 +42,8 @@ class InstrumentSettingsModel : public QObject, public async::Asyncable
     Q_PROPERTY(QString partName READ partName WRITE setPartName NOTIFY dataChanged)
     Q_PROPERTY(QString abbreviature READ abbreviature WRITE setAbbreviature NOTIFY dataChanged)
 
+    Q_PROPERTY(bool isMainScore READ isMainScore NOTIFY isMainScoreChanged)
+
 public:
     explicit InstrumentSettingsModel(QObject* parent = nullptr);
 
@@ -52,6 +54,8 @@ public:
     QString partName() const;
     QString abbreviature() const;
 
+    bool isMainScore() const;
+
 public slots:
     void setInstrumentName(const QString& name);
     void setPartName(const QString& name);
@@ -59,8 +63,11 @@ public slots:
 
 signals:
     void dataChanged();
+    bool isMainScoreChanged();
 
 private:
+    notation::INotationPtr currentNotation() const;
+    notation::INotationPtr currentMasterNotation() const;
     notation::INotationPartsPtr notationParts() const;
     notation::INotationPartsPtr masterNotationParts() const;
 

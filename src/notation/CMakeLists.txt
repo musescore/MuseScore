@@ -41,6 +41,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/inotationstyle.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationaccessibility.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationmidiinput.h
+    ${CMAKE_CURRENT_LIST_DIR}/imasternotationmididata.h
     ${CMAKE_CURRENT_LIST_DIR}/notationtypes.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/notationerrors.h
@@ -95,17 +96,11 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/searchcommandsparser.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/searchcommandsparser.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/inotationselectionrange.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/scoreorderconverter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/scoreorderconverter.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/inotationmidievents.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/notationmidievents.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/notationmidievents.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/instrumentsconverter.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/instrumentsconverter.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/masternotationmididata.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/masternotationmididata.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/instrumentsrepository.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/instrumentsrepository.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/view/inotationcontextmenu.h
     ${CMAKE_CURRENT_LIST_DIR}/view/notationpaintview.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/notationpaintview.h
     ${CMAKE_CURRENT_LIST_DIR}/view/notationviewinputcontroller.cpp
@@ -128,14 +123,16 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/noteinputbarcustomisemodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/notationtoolbarmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/notationtoolbarmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/notationcontextmenu.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/notationcontextmenu.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/notationcontextmenumodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/notationcontextmenumodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/notationnavigator.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/notationnavigator.h
     ${CMAKE_CURRENT_LIST_DIR}/view/noteinputbarcustomiseitem.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/noteinputbarcustomiseitem.h
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/undoredomodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/undoredomodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/selectionfiltermodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/selectionfiltermodel.h
     )
 
 set(MODULE_UI

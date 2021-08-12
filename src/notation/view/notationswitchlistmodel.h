@@ -57,8 +57,11 @@ private:
 
     void loadNotations();
     void listenNotationOpeningStatus(INotationPtr notation);
+    void listenNotationTitleChanged(INotationPtr notation);
     void listenNotationSavingStatus(IMasterNotationPtr masterNotation);
     bool isIndexValid(int index) const;
+
+    bool isMasterNotation(const INotationPtr notation) const;
 
     enum Roles {
         RoleTitle = Qt::UserRole + 1,

@@ -228,21 +228,23 @@ void TracksHandler::ensureSubscriptions(const ITrackSequencePtr s) const
         return;
     }
 
+    TrackSequenceId sequenceId = s->id();
+
     if (!s->audioIO()->inputParamsChanged().isConnected()) {
-        s->audioIO()->inputParamsChanged().onReceive(this, [this, s](const TrackId trackId, const AudioInputParams& params) {
-            m_inputParamsChanged.send(s->id(), trackId, params);
+        s->audioIO()->inputParamsChanged().onReceive(this, [this, sequenceId](const TrackId trackId, const AudioInputParams& params) {
+            m_inputParamsChanged.send(sequenceId, trackId, params);
         });
     }
 
     if (!s->trackAdded().isConnected()) {
-        s->trackAdded().onReceive(this, [this, s](const TrackId trackId) {
-            m_trackAdded.send(s->id(), trackId);
+        s->trackAdded().onReceive(this, [this, sequenceId](const TrackId trackId) {
+            m_trackAdded.send(sequenceId, trackId);
         });
     }
 
     if (!s->trackRemoved().isConnected()) {
-        s->trackRemoved().onReceive(this, [this, s](const TrackId trackId) {
-            m_trackRemoved.send(s->id(), trackId);
+        s->trackRemoved().onReceive(this, [this, sequenceId](const TrackId trackId) {
+            m_trackRemoved.send(sequenceId, trackId);
         });
     }
 }

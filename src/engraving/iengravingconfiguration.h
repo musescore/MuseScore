@@ -54,13 +54,12 @@ public:
     virtual draw::Color criticalColor() const = 0;
     virtual draw::Color criticalSelectedColor() const = 0;
     virtual draw::Color formattingMarksColor() const = 0;
-    virtual draw::Color dropTargetColor() const = 0;
 
     virtual draw::Color selectionColor(int voiceIndex = 0) const = 0;
     virtual void setSelectionColor(int voiceIndex, draw::Color color) = 0;
     virtual async::Channel<int, draw::Color> selectionColorChanged() const = 0;
 
-    virtual draw::Color shadowNoteColor(int voiceIndex = 0) const = 0;
+    virtual draw::Color highlightSelectionColor(int voiceIndex = 0) const = 0;
 };
 }
 

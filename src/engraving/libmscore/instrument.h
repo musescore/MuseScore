@@ -311,12 +311,15 @@ class Instrument
     QString _trackName;
     QString _id;
 
-    char _minPitchA, _maxPitchA, _minPitchP, _maxPitchP;
+    char _minPitchA = 0;
+    char _maxPitchA = 0;
+    char _minPitchP = 0;
+    char _maxPitchP = 0;
     Interval _transpose;
     QString _instrumentId;
 
-    bool _useDrumset;
-    Drumset* _drumset;
+    bool _useDrumset = false;
+    Drumset* _drumset = nullptr;
     StringData _stringData;
 
     QList<NamedEventList> _midiActions;
@@ -324,14 +327,13 @@ class Instrument
     QList<Channel*> _channel;        // at least one entry
     QList<ClefTypeList> _clefType;
 
-    bool _singleNoteDynamics;
+    bool _singleNoteDynamics = false;
 
     Trait _trait;
 
 public:
-    Instrument(QString id="");
+    Instrument(QString id = "");
     Instrument(const Instrument&);
-    void operator=(const Instrument&);
     ~Instrument();
 
     void read(XmlReader&, Part* part);
@@ -346,10 +348,13 @@ public:
     QString recognizeInstrumentId() const;
     int recognizeMidiProgram() const;
 
+    void operator=(const Instrument&);
     bool operator==(const Instrument&) const;
+    bool operator!=(const Instrument&) const;
+
     bool isDifferentInstrument(const Instrument& i) const;
 
-    QString getId() const { return _id; }
+    QString id() const { return _id; }
     void setId(const QString& id) { _id = id; }
     void setMinPitchP(int v) { _minPitchP = v; }
     void setMaxPitchP(int v) { _maxPitchP = v; }

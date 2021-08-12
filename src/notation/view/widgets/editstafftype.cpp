@@ -174,14 +174,14 @@ void EditStaffType::setInstrument(const Instrument& instrument)
 
     templateCombo->clear();
     // standard group also as fall-back (but excluded by percussion)
-    bool bStandard    = !(instrument.drumset != nullptr);
-    bool bPerc        = (instrument.drumset != nullptr);
-    bool bTab = (instrument.stringData.frettedStrings() > 0);
+    bool bStandard    = !(instrument.drumset() != nullptr);
+    bool bPerc        = (instrument.drumset() != nullptr);
+    bool bTab = (instrument.stringData()->frettedStrings() > 0);
     int idx           = 0;
     for (const Ms::StaffType& t : Ms::StaffType::presets()) {
         if ((t.group() == Ms::StaffGroup::STANDARD && bStandard)
             || (t.group() == Ms::StaffGroup::PERCUSSION && bPerc)
-            || (t.group() == Ms::StaffGroup::TAB && bTab && t.lines() <= instrument.stringData.frettedStrings())) {
+            || (t.group() == Ms::StaffGroup::TAB && bTab && t.lines() <= instrument.stringData()->frettedStrings())) {
             templateCombo->addItem(t.name(), idx);
         }
         idx++;

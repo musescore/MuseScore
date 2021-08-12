@@ -41,17 +41,6 @@ AppMenuModel::AppMenuModel(QObject* parent)
 {
 }
 
-QVariantList AppMenuModel::items() const
-{
-    QVariantList menuItems;
-
-    for (const MenuItem& menuItem: AbstractMenuModel::items()) {
-        menuItems << menuItem.toMap();
-    }
-
-    return menuItems;
-}
-
 void AppMenuModel::load()
 {
     TRACEFUNC;
@@ -71,8 +60,6 @@ void AppMenuModel::load()
     setItems(items);
 
     setupConnections();
-
-    emit itemsChanged();
 }
 
 void AppMenuModel::onActionsStateChanges(const actions::ActionCodeList& codes)
@@ -175,9 +162,10 @@ MenuItem AppMenuModel::viewItem() const
 {
     MenuItemList viewItems {
         makeMenuItem("toggle-palettes"),
-        makeMenuItem("toggle-instruments"),
         makeMenuItem("masterpalette"),
+        makeMenuItem("toggle-instruments"),
         makeMenuItem("inspector"),
+        makeMenuItem("toggle-selection-filter"),
         makeMenuItem("toggle-navigator"),
         makeMenuItem("toggle-timeline"),
         makeMenuItem("toggle-mixer"),

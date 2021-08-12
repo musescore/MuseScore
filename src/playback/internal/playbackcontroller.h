@@ -85,6 +85,8 @@ public:
 
 private:
     notation::INotationPlaybackPtr notationPlayback() const;
+    notation::IMasterNotationMidiDataPtr masterNotationMidiData() const;
+    notation::INotationPartsPtr masterNotationParts() const;
     notation::INotationSelectionPtr selection() const;
 
     int currentTick() const;
@@ -118,12 +120,18 @@ private:
 
     void notifyActionCheckedChanged(const actions::ActionCode& actionCode);
 
-    void setCurrentSequence(const audio::TrackSequenceId sequenceId);
+    void resetCurrentSequence();
+    void setupNewCurrentSequence(const audio::TrackSequenceId sequenceId);
+    void setupSequenceTracks();
+    void setupSequencePlayer();
+
     void setCurrentTick(const midi::tick_t tick);
-    void addTrack(const notation::INotationPlayback::InstrumentTrackId& id);
-    void removeTrack(const notation::INotationPlayback::InstrumentTrackId& id);
+    void addTrack(const ID& partId, const std::string& title);
+    void removeTrack(const ID& partId);
 
     notation::INotationPtr m_notation;
+    notation::IMasterNotationPtr m_masterNotation;
+
     async::Notification m_isPlayAllowedChanged;
     async::Notification m_isPlayingChanged;
     async::Notification m_playbackPositionChanged;
@@ -138,8 +146,8 @@ private:
     async::Notification m_currentSequenceIdChanged;
     audio::PlaybackStatus m_currentPlaybackStatus = audio::PlaybackStatus::Stopped;
     midi::tick_t m_currentTick = 0;
-    std::unordered_map<std::string /* score file path*/, audio::TrackSequenceId> m_sequenceIdMap;
-    std::unordered_map<notation::INotationPlayback::InstrumentTrackId, audio::TrackId> m_trackIdMap;
+
+    std::map<ID /*partId*/, audio::TrackId> m_trackIdMap;
 };
 }
 

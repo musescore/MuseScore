@@ -56,6 +56,8 @@ public:
     virtual void setStaffType(const ID& staffId, StaffType type) = 0;
     virtual void setCutawayEnabled(const ID& staffId, bool enabled) = 0;
     virtual void setSmallStaff(const ID& staffId, bool smallStaff) = 0;
+
+    virtual StaffConfig staffConfig(const ID& staffId) const = 0;
     virtual void setStaffConfig(const ID& staffId, const StaffConfig& config) = 0;
 
     virtual void removeParts(const IDList& partsIds) = 0;
@@ -70,9 +72,8 @@ public:
     virtual void moveStaves(const IDList& sourceStavesIds, const ID& destinationStaffId, InsertMode mode = InsertMode::Before) = 0;
 
     virtual void appendStaff(Staff* staff, const ID& destinationPartId) = 0;
+    virtual void appendLinkedStaff(Staff* staff, const ID& sourceStaffId, const ID& destinationPartId) = 0;
     virtual void appendPart(Part* part) = 0;
-
-    virtual void linkStaves(const ID& sourceStaffId, const ID& destinationStaffId) = 0;
 
     virtual void replaceInstrument(const InstrumentKey& instrumentKey, const Instrument& newInstrument) = 0;
     virtual void replaceDrumset(const InstrumentKey& instrumentKey, const Drumset& newDrumset) = 0;

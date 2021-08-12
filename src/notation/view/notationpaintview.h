@@ -27,7 +27,6 @@
 #include "modularity/ioc.h"
 
 #include "notation/inotationconfiguration.h"
-#include "inotationcontextmenu.h"
 
 #include "actions/iactionsdispatcher.h"
 #include "actions/actionable.h"
@@ -52,7 +51,6 @@ class NotationPaintView : public QQuickPaintedItem, public IControlledView, publ
     INJECT(notation, actions::IActionsDispatcher, dispatcher)
     INJECT(notation, context::IGlobalContext, globalContext)
     INJECT(notation, playback::IPlaybackController, playbackController)
-    INJECT(notation, INotationContextMenu, notationContextMenu)
     INJECT(notation, mu::shortcuts::IShortcutsRegister, shortcutsRegister)
     INJECT(notation, ui::IUiActionsRegister, actionsRegister)
 
@@ -93,8 +91,6 @@ public:
     void showContextMenu(const ElementType& elementType, const QPoint& pos) override;
     void hideContextMenu() override;
 
-    Q_INVOKABLE void handleContextMenuItem(const QString& itemId);
-
     INotationInteractionPtr notationInteraction() const override;
     INotationPlaybackPtr notationPlayback() const override;
 
@@ -107,7 +103,7 @@ public:
     QRect viewport() const;
 
 signals:
-    void showContextMenuRequested(const QVariantList& items, const QPoint& pos);
+    void showContextMenuRequested(int elementType, const QPoint& pos);
     void hideContextMenuRequested();
 
     void textEdittingStarted();
@@ -204,8 +200,6 @@ private:
 
     qreal m_previousVerticalScrollPosition = 0;
     qreal m_previousHorizontalScrollPosition = 0;
-
-    ui::AbstractMenuModel m_currentContextMenuModel;
 };
 }
 

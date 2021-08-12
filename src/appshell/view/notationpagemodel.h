@@ -59,6 +59,7 @@ public:
     Q_INVOKABLE void setPalettesPanelDockName(const QString& dockName);
     Q_INVOKABLE void setInstrumentsPanelDockName(const QString& dockName);
     Q_INVOKABLE void setInspectorPanelDockName(const QString& dockName);
+    Q_INVOKABLE void setSelectionFilterPanelDockName(const QString& dockName);
 
     Q_INVOKABLE void setPianoRollDockName(const QString& dockName);
     Q_INVOKABLE void setMixerDockName(const QString& dockName);

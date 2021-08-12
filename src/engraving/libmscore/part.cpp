@@ -455,7 +455,7 @@ const InstrumentList* Part::instruments() const
 
 QString Part::instrumentId(const Fraction& tick) const
 {
-    return instrument(tick)->getId();
+    return instrument(tick)->id();
 }
 
 //---------------------------------------------------------

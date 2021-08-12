@@ -1637,7 +1637,7 @@ void SetUserBankController::flip(EditData*)
 ChangeStaff::ChangeStaff(Staff* _staff)
     : staff(_staff)
 {
-    invisible = staff->invisible(Fraction(0, 1));
+    visible = staff->visible();
     clefType = staff->defaultClefType();
     userDist = staff->userDist();
     hideMode = staff->hideWhenEmpty();
@@ -1647,12 +1647,12 @@ ChangeStaff::ChangeStaff(Staff* _staff)
     mergeMatchingRests = staff->mergeMatchingRests();
 }
 
-ChangeStaff::ChangeStaff(Staff* _staff,  bool _invisible, ClefTypeList _clefType,
+ChangeStaff::ChangeStaff(Staff* _staff, bool _visible, ClefTypeList _clefType,
                          qreal _userDist, Staff::HideMode _hideMode, bool _showIfEmpty, bool _cutaway,
                          bool _hideSystemBarLine, bool _mergeMatchingRests)
 {
     staff       = _staff;
-    invisible   = _invisible;
+    visible     = _visible;
     clefType    = _clefType;
     userDist    = _userDist;
     hideMode    = _hideMode;
@@ -1668,9 +1668,8 @@ ChangeStaff::ChangeStaff(Staff* _staff,  bool _invisible, ClefTypeList _clefType
 
 void ChangeStaff::flip(EditData*)
 {
-    bool invisibleChanged = staff->invisible(Fraction(0, 1)) != invisible;
+    bool oldVisible = staff->visible();
     ClefTypeList oldClefType = staff->defaultClefType();
-    bool oldInvisible   = staff->invisible(Fraction(0, 1));
     qreal oldUserDist   = staff->userDist();
     Staff::HideMode oldHideMode    = staff->hideWhenEmpty();
     bool oldShowIfEmpty = staff->showIfEmpty();
@@ -1678,7 +1677,7 @@ void ChangeStaff::flip(EditData*)
     bool oldHideSystemBarLine  = staff->hideSystemBarLine();
     bool oldMergeMatchingRests = staff->mergeMatchingRests();
 
-    staff->setInvisible(Fraction(0, 1), invisible);
+    staff->setVisible(visible);
     staff->setDefaultClefType(clefType);
     staff->setUserDist(userDist);
     staff->setHideWhenEmpty(hideMode);
@@ -1687,7 +1686,7 @@ void ChangeStaff::flip(EditData*)
     staff->setHideSystemBarLine(hideSystemBarLine);
     staff->setMergeMatchingRests(mergeMatchingRests);
 
-    invisible   = oldInvisible;
+    visible     = oldVisible;
     clefType    = oldClefType;
     userDist    = oldUserDist;
     hideMode    = oldHideMode;
@@ -1696,13 +1695,6 @@ void ChangeStaff::flip(EditData*)
     hideSystemBarLine  = oldHideSystemBarLine;
     mergeMatchingRests = oldMergeMatchingRests;
 
-    Score* score = staff->score();
-    if (invisibleChanged) {
-        int staffIdx = staff->idx();
-        for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
-            m->staffLines(staffIdx)->setVisible(!staff->invisible(Fraction(0, 1)));
-        }
-    }
     staff->triggerLayout();
     staff->masterScore()->rebuildMidiMapping();
     staff->score()->setPlaylistDirty();
@@ -1714,11 +1706,21 @@ void ChangeStaff::flip(EditData*)
 
 void ChangeStaffType::flip(EditData*)
 {
-    StaffType st = *staff->staffType(Fraction(0, 1));        // TODO
+    StaffType oldStaffType = *staff->staffType(Fraction(0, 1));        // TODO
 
     staff->setStaffType(Fraction(0, 1), staffType);
 
-    staffType = st;
+    bool invisibleChanged = oldStaffType.invisible() != staffType.invisible();
+
+    staffType = oldStaffType;
+
+    Score* score = staff->score();
+    if (invisibleChanged) {
+        int staffIdx = staff->idx();
+        for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
+            m->staffLines(staffIdx)->setVisible(!staff->isLinesInvisible(Fraction(0, 1)));
+        }
+    }
 
     staff->triggerLayout();
 }

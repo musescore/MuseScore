@@ -90,10 +90,12 @@ Item {
         }
 
         delegate: PartDelegate {
+            sideMargin: prv.sideMargin
+
             title: model.title
             currentPartIndex: view.currentIndex
             isSelected: model.isSelected
-            sideMargin: prv.sideMargin
+            isCreated: model.isCreated
 
             onPartClicked: {
                 root.model.selectPart(model.index)
