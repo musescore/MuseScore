@@ -190,9 +190,11 @@ void AudioOutputHandler::ensureSeqSubscriptions(const ITrackSequencePtr s) const
         return;
     }
 
+    TrackSequenceId sequenceId = s->id();
+
     if (!s->audioIO()->outputParamsChanged().isConnected()) {
-        s->audioIO()->outputParamsChanged().onReceive(this, [this, s](const TrackId trackId, const AudioOutputParams& params) {
-            m_outputParamsChanged.send(s->id(), trackId, params);
+        s->audioIO()->outputParamsChanged().onReceive(this, [this, sequenceId](const TrackId trackId, const AudioOutputParams& params) {
+            m_outputParamsChanged.send(sequenceId, trackId, params);
         });
     }
 }

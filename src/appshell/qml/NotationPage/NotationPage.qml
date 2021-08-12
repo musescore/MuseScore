@@ -268,14 +268,9 @@ DockPage {
 
             tabifyPanel: pianoRollPanel
 
-            // TODO: Temporarily disabled on startup, but can be enabled via the app menu, see:
-            // https://github.com/musescore/MuseScore/pull/8593
             visible: false
 
             Loader {
-                //!Note Temporarily disabled the mixer panel,
-                // since it's waiting for a couple of important tasks in the instruments/parts workflow
-                active: false
                 asynchronous: true
                 sourceComponent: MixerPanel {}
             }
