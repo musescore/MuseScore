@@ -432,7 +432,7 @@ struct StaffConfig
     bool visible = false;
     int linesCount = 0;
     double lineDistance = 0.0;
-    QColor linesColor;
+    mu::draw::Color linesColor;
     bool visibleLines = false;
     qreal userDistance = 0.0;
     double scale = 0.0;
