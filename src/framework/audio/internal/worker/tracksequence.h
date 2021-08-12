@@ -51,6 +51,7 @@ public:
     TrackIdList trackIdList() const override;
 
     Ret removeTrack(const TrackId id) override;
+    void removeAllTracks() override;
 
     async::Channel<TrackId> trackAdded() const override;
     async::Channel<TrackId> trackRemoved() const override;

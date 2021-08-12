@@ -171,11 +171,13 @@ void PlayerHandler::ensureSubscriptions(const ITrackSequencePtr s) const
         return;
     }
 
-    s->player()->playbackPositionMSecs().onReceive(this, [this, s](const msecs_t newPosMsecs) {
-        m_playbackPositionMsecsChanged.send(s->id(), newPosMsecs);
+    TrackSequenceId sequenceId = s->id();
+
+    s->player()->playbackPositionMSecs().onReceive(this, [this, sequenceId](const msecs_t newPosMsecs) {
+        m_playbackPositionMsecsChanged.send(sequenceId, newPosMsecs);
     });
 
-    s->player()->playbackStatusChanged().onReceive(this, [this, s](const PlaybackStatus newStatus) {
-        m_playbackStatusChanged.send(s->id(), newStatus);
+    s->player()->playbackStatusChanged().onReceive(this, [this, sequenceId](const PlaybackStatus newStatus) {
+        m_playbackStatusChanged.send(sequenceId, newStatus);
     });
 }
