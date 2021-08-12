@@ -72,6 +72,11 @@ Rectangle {
                 privateProperties.hide()
             }
         }
+        
+        StyledTextLabel {
+            anchors.verticalCenter: parent.verticalCenter 
+            text: qsTrc("notation", "Find / Go to:")
+        }
 
         TextInputField {
             id: textInputField
