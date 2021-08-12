@@ -805,7 +805,7 @@ void NotationParts::appendStaves(Part* part, const InstrumentTemplate& templ)
         return;
     }
 
-    for (int staffIndex = 0; staffIndex < templ.nstaves(); ++staffIndex) {
+    for (int staffIndex = 0; staffIndex < templ.staffCount; ++staffIndex) {
         int lastStaffIndex = !score()->staves().isEmpty() ? score()->staves().last()->idx() : 0;
 
         Staff* staff = Ms::createStaff(score(), part);
