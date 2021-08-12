@@ -65,13 +65,12 @@ void PlaybackController::init()
     globalContext()->currentProjectChanged().onNotify(this, [this]() {
         project::INotationProjectPtr project = globalContext()->currentProject();
 
-        if (!project) {
-            return;
+        if (m_currentSequenceId != -1) {
+            resetCurrentSequence();
         }
 
-        if (m_currentSequenceId != -1) {
-            stop();
-            playback()->removeSequence(m_currentSequenceId);
+        if (!project) {
+            return;
         }
 
         playback()->addSequence().onResolve(this, [this](const TrackSequenceId& sequenceId) {
@@ -432,7 +431,6 @@ void PlaybackController::setLoop(const LoopBoundaries& boundaries)
 
     msecs_t fromMilliseconds = secondsToMilliseconds(notationPlayback()->tickToSec(boundaries.loopInTick));
     msecs_t toMilliseconds = secondsToMilliseconds(notationPlayback()->tickToSec(boundaries.loopOutTick));
-
     playback()->player()->setLoop(m_currentSequenceId, fromMilliseconds, toMilliseconds);
     showLoop();
 
@@ -460,6 +458,17 @@ void PlaybackController::hideLoop()
 void PlaybackController::notifyActionCheckedChanged(const ActionCode& actionCode)
 {
     m_actionCheckedChanged.send(actionCode);
+}
+
+void PlaybackController::resetCurrentSequence()
+{
+    playback()->player()->playbackPositionMsecs().resetOnReceive(this);
+    playback()->player()->playbackStatusChanged().resetOnReceive(this);
+
+    stop();
+
+    playback()->removeSequence(m_currentSequenceId);
+    m_currentSequenceId = -1;
 }
 
 void PlaybackController::setCurrentTick(const tick_t tick)
@@ -501,8 +510,6 @@ void PlaybackController::removeTrack(const ID& partId)
 
 void PlaybackController::setupNewCurrentSequence(const TrackSequenceId sequenceId)
 {
-    PlaybackCursorType cursorType = configuration()->cursorType();
-
     playback()->tracks()->removeAllTracks(m_currentSequenceId);
 
     m_currentSequenceId = sequenceId;
@@ -513,35 +520,7 @@ void PlaybackController::setupNewCurrentSequence(const TrackSequenceId sequenceI
     }
 
     setupSequenceTracks();
-
-    playback()->player()->playbackPositionMsecs().onReceive(this, [this, cursor = std::move(cursorType)]
-                                                                (const TrackSequenceId id, const audio::msecs_t& msecs) {
-        if (m_currentSequenceId != id) {
-            return;
-        }
-
-        tick_t tick = notationPlayback()->secToTick(msecs / 1000.);
-
-        if (cursor == PlaybackCursorType::STEPPED) {
-            MeasureBeat newBeat = notationPlayback()->beat(tick);
-
-            if (currentBeat().beatIndex == newBeat.beatIndex) {
-                setCurrentTick(tick);
-                return;
-            }
-        }
-
-        setCurrentTick(tick);
-        m_tickPlayed.send(std::move(tick));
-    });
-
-    playback()->player()->playbackStatusChanged().onReceive(this, [this](const TrackSequenceId id, const PlaybackStatus status) {
-        if (m_currentSequenceId != id) {
-            return;
-        }
-
-        m_currentPlaybackStatus = status;
-    });
+    setupSequencePlayer();
 }
 
 void PlaybackController::setupSequenceTracks()
@@ -567,6 +546,42 @@ void PlaybackController::setupSequenceTracks()
     });
 }
 
+void PlaybackController::setupSequencePlayer()
+{
+    PlaybackCursorType cursorType = configuration()->cursorType();
+
+    playback()->player()->playbackPositionMsecs().onReceive(this, [this, cursor = std::move(cursorType)]
+                                                                (const TrackSequenceId id, const audio::msecs_t& msecs) {
+        if (m_currentSequenceId != id) {
+            return;
+        }
+
+        tick_t tick = notationPlayback()->secToTick(msecs / 1000.);
+
+        if (cursor == PlaybackCursorType::STEPPED) {
+            MeasureBeat newBeat = notationPlayback()->beat(tick);
+
+            if (currentBeat().beatIndex == newBeat.beatIndex) {
+                setCurrentTick(tick);
+                return;
+            }
+        }
+
+        setCurrentTick(tick);
+        m_tickPlayed.send(std::move(tick));
+    });
+
+    playback()->player()->setDuration(m_currentSequenceId, notationPlayback()->totalPlayTime());
+
+    playback()->player()->playbackStatusChanged().onReceive(this, [this](const TrackSequenceId id, const PlaybackStatus status) {
+        if (m_currentSequenceId != id) {
+            return;
+        }
+
+        m_currentPlaybackStatus = status;
+    });
+}
+
 bool PlaybackController::actionChecked(const ActionCode& actionCode) const
 {
     QMap<std::string, bool> isChecked {
@@ -588,7 +603,13 @@ Channel<ActionCode> PlaybackController::actionCheckedChanged() const
 
 QTime PlaybackController::totalPlayTime() const
 {
-    return notationPlayback() ? notationPlayback()->totalPlayTime() : ZERO_TIME;
+    QTime result = ZERO_TIME;
+
+    if (!notationPlayback()) {
+        return result;
+    }
+
+    return result.addMSecs(notationPlayback()->totalPlayTime());
 }
 
 Tempo PlaybackController::currentTempo() const

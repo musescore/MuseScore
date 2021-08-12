@@ -120,8 +120,11 @@ private:
 
     void notifyActionCheckedChanged(const actions::ActionCode& actionCode);
 
+    void resetCurrentSequence();
     void setupNewCurrentSequence(const audio::TrackSequenceId sequenceId);
     void setupSequenceTracks();
+    void setupSequencePlayer();
+
     void setCurrentTick(const midi::tick_t tick);
     void addTrack(const ID& partId, const std::string& title);
     void removeTrack(const ID& partId);

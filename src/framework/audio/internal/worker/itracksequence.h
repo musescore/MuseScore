@@ -45,6 +45,7 @@ public:
     virtual TrackIdList trackIdList() const = 0;
 
     virtual Ret removeTrack(const TrackId id) = 0;
+    virtual void removeAllTracks() = 0;
 
     virtual async::Channel<TrackId> trackAdded() const = 0;
     virtual async::Channel<TrackId> trackRemoved() const = 0;

@@ -273,9 +273,6 @@ DockPage {
             visible: false
 
             Loader {
-                //!Note Temporarily disabled the mixer panel,
-                // since it's waiting for a couple of important tasks in the instruments/parts workflow
-                active: false
                 asynchronous: true
                 sourceComponent: MixerPanel {}
             }

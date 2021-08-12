@@ -27,6 +27,7 @@
 #include "retval.h"
 #include "midi/miditypes.h"
 
+#include "audio/audiotypes.h"
 #include "notationtypes.h"
 
 namespace mu::notation {
@@ -35,7 +36,7 @@ class INotationPlayback
 public:
     virtual ~INotationPlayback() = default;
 
-    virtual QTime totalPlayTime() const = 0;
+    virtual audio::msecs_t totalPlayTime() const = 0;
 
     virtual float tickToSec(midi::tick_t tick) const = 0;
     virtual midi::tick_t secToTick(float sec) const = 0;
