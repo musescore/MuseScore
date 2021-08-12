@@ -2676,58 +2676,16 @@ void MidiRenderer::updateChunksPartition()
     }
 }
 
-//---------------------------------------------------------
-//   MidiRenderer::getChunkAt
-//---------------------------------------------------------
-
-MidiRenderer::Chunk MidiRenderer::getChunkAt(int utick)
-{
-    updateState();
-
-    auto it = std::upper_bound(chunks.begin(), chunks.end(), utick, [](int utick, const Chunk& ch) {
-        return utick < ch.utick1();
-    });
-    if (it == chunks.begin()) {
-        return Chunk();
-    }
-    --it;
-    const Chunk& ch = *it;
-    if (ch.utick2() <= utick) {
-        return Chunk();
-    }
-    return ch;
-}
-
-MidiRenderer::Chunk MidiRenderer::chunkAt(int utick)
-{
-    updateState();
-    auto it = std::upper_bound(chunks.begin(), chunks.end(), utick, [](int utick, const Chunk& ch) {
-        return utick <= ch.utick1();
-    });
-
-    if (it == chunks.end()) {
-        return Chunk();
-    }
-
-    const Chunk& ch = *it;
-    return ch;
-}
-
 std::vector<MidiRenderer::Chunk> MidiRenderer::chunksFromRange(const int fromTick, const int toTick)
 {
     std::vector<Chunk> result;
 
-    Chunk currentChunk = chunkAt(fromTick);
+    updateState();
 
-    if (fromTick == toTick) {
-        result.push_back(std::move(currentChunk));
-        return result;
-    }
-
-    while (currentChunk.utick2() <= toTick) {
-        result.push_back(currentChunk);
-
-        currentChunk = chunkAt(currentChunk.utick2());
+    for (const Chunk& chunk : chunks) {
+        if (chunk.utick2() >= fromTick && chunk.utick1() <= toTick) {
+            result.push_back(chunk);
+        }
     }
 
     return result;

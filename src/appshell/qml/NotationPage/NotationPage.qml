@@ -268,6 +268,8 @@ DockPage {
 
             tabifyPanel: pianoRollPanel
 
+            // TODO: Temporarily disabled on startup, but can be enabled via the app menu, see:
+            // https://github.com/musescore/MuseScore/pull/8593
             visible: false
 
             Loader {
