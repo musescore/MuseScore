@@ -52,7 +52,8 @@ StyledPopupView {
         spacing: 12
 
         StyledTextLabel {
-            text: qsTrc("instruments", "Name on main score")
+            text: settingsModel.isMainScore ? qsTrc("instruments", "Name on main score") :
+                                              qsTrc("instruments", "Name on part score")
         }
 
         TextInputField {
