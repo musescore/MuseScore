@@ -33,15 +33,74 @@
 #include "log.h"
 
 using namespace mu::dock;
+using namespace mu::actions;
+
+static QVariantMap findMenuItem(const QVariantList& menuItems, const QString& itemId)
+{
+    for (const QVariant& obj : menuItems) {
+        QVariantMap item = obj.toMap();
+
+        if (item["id"].toString() == itemId) {
+            return item;
+        }
+
+        item = findMenuItem(item["subitems"].toList(), itemId);
+
+        if (!item.isEmpty()) {
+            return item;
+        }
+    }
+
+    return QVariantMap();
+}
 
 DockFrameModel::DockFrameModel(QObject* parent)
     : QObject(parent)
 {
+    qApp->installEventFilter(this);
+}
+
+bool DockFrameModel::eventFilter(QObject* watched, QEvent* event)
+{
+    auto propertyChangeEvent = dynamic_cast<QDynamicPropertyChangeEvent*>(event);
+    if (!propertyChangeEvent) {
+        return QObject::eventFilter(watched, event);
+    }
+
+    if (propertyChangeEvent->propertyName() == CONTEXT_MENU_MODEL_PROPERTY) {
+        emit tabsChanged();
+
+        if (watched == currentDockObject()) {
+            emit currentDockChanged();
+        }
+    }
+
+    return QObject::eventFilter(watched, event);
 }
 
 QQuickItem* DockFrameModel::frame() const
 {
     return m_frame;
+}
+
+QVariantList DockFrameModel::tabs() const
+{
+    QVariantList result;
+
+    auto frame = dynamic_cast<KDDockWidgets::Frame*>(m_frame);
+    if (!frame || frame->hasSingleDockWidget()) {
+        return result;
+    }
+
+    for (const KDDockWidgets::DockWidgetBase* dock : frame->dockWidgets()) {
+        QVariantMap tab;
+        tab["title"] = dock->title();
+        tab[CONTEXT_MENU_MODEL_PROPERTY] = dock->property(CONTEXT_MENU_MODEL_PROPERTY).value<QVariant>();
+
+        result << tab;
+    }
+
+    return result;
 }
 
 bool DockFrameModel::titleBarVisible() const
@@ -64,12 +123,13 @@ void DockFrameModel::setFrame(QQuickItem* frame)
 void DockFrameModel::listenChangesInFrame()
 {
     auto frame = dynamic_cast<KDDockWidgets::Frame*>(m_frame);
-
     if (!frame) {
         return;
     }
 
     auto numDocksChangedCon = connect(frame, &KDDockWidgets::Frame::numDockWidgetsChanged, [this, frame]() {
+        emit tabsChanged();
+
         auto currentDock = frame->currentDockWidget();
         auto allDocks = frame->dockWidgets();
 
@@ -92,7 +152,7 @@ void DockFrameModel::listenChangesInFrame()
     auto currentDockWidgetChangedCon = connect(frame, &KDDockWidgets::Frame::currentDockWidgetChanged, [this]() {
         updateNavigationSection();
 
-        emit currentDockUniqueNameChanged();
+        emit currentDockChanged();
     });
 
     connect(qApp, &QApplication::aboutToQuit, [numDocksChangedCon, currentDockWidgetChangedCon, this]() {
@@ -113,22 +173,8 @@ void DockFrameModel::setTitleBarVisible(bool visible)
 
 QObject* DockFrameModel::currentNavigationSection() const
 {
-    auto frame = dynamic_cast<KDDockWidgets::Frame*>(m_frame);
-    if (!frame) {
-        return nullptr;
-    }
-
-    KDDockWidgets::DockWidgetBase* w = frame->currentDockWidget();
-    if (!w) {
-        return nullptr;
-    }
-
-    DockPanel* dockPanel = w->property("dockPanel").value<DockPanel*>();
-    if (!dockPanel) {
-        return nullptr;
-    }
-
-    return dockPanel->navigationSection();
+    auto dockPanel = currentDockProperty(DOCK_PANEL_PROPERY).value<DockPanel*>();
+    return dockPanel ? dockPanel->navigationSection() : nullptr;
 }
 
 void DockFrameModel::updateNavigationSection()
@@ -153,4 +199,30 @@ QString DockFrameModel::currentDockUniqueName() const
     }
 
     return QString();
+}
+
+QVariant DockFrameModel::currentDockContextMenuModel() const
+{
+    return currentDockProperty(CONTEXT_MENU_MODEL_PROPERTY).value<QVariant>();
+}
+
+const QObject* DockFrameModel::currentDockObject() const
+{
+    auto frame = dynamic_cast<KDDockWidgets::Frame*>(m_frame);
+    return frame ? frame->currentDockWidget() : nullptr;
+}
+
+QVariant DockFrameModel::currentDockProperty(const char* propertyName) const
+{
+    const QObject* obj = currentDockObject();
+    return obj ? obj->property(propertyName) : QVariant();
+}
+
+void DockFrameModel::handleMenuItem(const QString& itemId)
+{
+    QVariantList menuItems = currentDockContextMenuModel().toList();
+    QVariantMap item = findMenuItem(menuItems, itemId);
+    ActionCode code = codeFromQString(item["code"].toString());
+
+    dispatcher()->dispatch(code);
 }
