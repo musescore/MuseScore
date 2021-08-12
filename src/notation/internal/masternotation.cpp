@@ -510,6 +510,10 @@ IExcerptNotationPtr MasterNotation::newExcerptBlankNotation() const
     Ms::Score* excerptScore = excerpt->partScore();
     auto setText = [&excerptScore](Ms::Tid textId, const QString& text) {
         Ms::TextBase* textBox = excerptScore->getText(textId);
+        if (!textBox) {
+            textBox = excerptScore->addText(textId);
+        }
+
         textBox->setPlainText(text);
     };
 
