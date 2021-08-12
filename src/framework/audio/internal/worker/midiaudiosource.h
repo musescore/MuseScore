@@ -45,7 +45,7 @@ class MidiAudioSource : public IAudioSource, public async::Asyncable
 public:
     explicit MidiAudioSource(const TrackId trackId, const midi::MidiData& midiData, const AudioInputParams& params,
                              async::Channel<AudioInputParams> paramsChanged);
-    ~MidiAudioSource() = default;
+    ~MidiAudioSource() override;
 
     bool isActive() const override;
     void setIsActive(const bool active) override;
@@ -110,6 +110,7 @@ private:
     void findAndSendNextEvents(EventsBuffer& eventsBuffer, const midi::tick_t nextTicks);
     bool sendEvents(const std::vector<midi::Event>& events);
     void requestNextEvents(const midi::tick_t nextTicksNumber);
+    void sendRequestFromTick(const midi::tick_t from);
 
     void resolveSynth(const AudioInputParams& inputParams);
     void buildTempoMap();
@@ -126,8 +127,8 @@ private:
     midi::MidiStream m_stream;
     midi::MidiMapping m_mapping;
 
-    EventsBuffer m_mainStreamEvents;
-    EventsBuffer m_backgroundStreamEvents;
+    EventsBuffer m_mainStreamEventsBuffer;
+    EventsBuffer m_backgroundStreamEventsBuffer;
 
     unsigned int m_sampleRate = 0;
 
