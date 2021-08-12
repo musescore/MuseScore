@@ -11,8 +11,6 @@ using namespace mu::notation;
 using namespace mu::ui;
 using namespace mu::actions;
 
-static const ActionCode SET_ORDER_ACTION("set-order");
-
 InstrumentsPanelContextMenuModel::InstrumentsPanelContextMenuModel(QObject* parent)
     : AbstractMenuModel(parent)
 {
@@ -20,8 +18,6 @@ InstrumentsPanelContextMenuModel::InstrumentsPanelContextMenuModel(QObject* pare
 
 void InstrumentsPanelContextMenuModel::load()
 {
-    dispatcher()->reg(this, SET_ORDER_ACTION, this, &InstrumentsPanelContextMenuModel::setOrder);
-
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         INotationPtr notation = globalContext()->currentNotation();
         m_masterNotation = globalContext()->currentMasterNotation();
@@ -47,21 +43,26 @@ void InstrumentsPanelContextMenuModel::loadItems()
     }
 
     m_orders = meta.val.scoreOrders;
-
     MenuItemList orderItems;
+
+    dispatcher()->unReg(this);
 
     for (const ScoreOrder* order : m_orders) {
         MenuItem orderItem;
 
         orderItem.id = order->id;
         orderItem.title = order->name;
-        orderItem.code = SET_ORDER_ACTION;
+        orderItem.code = codeFromQString("set-order-" + order->id);
         orderItem.args = ActionData::make_arg1<QString>(order->id);
         orderItem.checkable = Checkable::Yes;
         orderItem.state.enabled = true;
         orderItem.state.checked = m_masterNotation->notation()->scoreOrder().id == order->id;
 
         orderItems << orderItem;
+
+        dispatcher()->reg(this, orderItem.code, [this, order]() {
+            m_masterNotation->parts()->setScoreOrder(*order);
+        });
     }
 
     MenuItemList items {
@@ -69,21 +70,4 @@ void InstrumentsPanelContextMenuModel::loadItems()
     };
 
     setItems(items);
-}
-
-void InstrumentsPanelContextMenuModel::setOrder(const ActionData& args)
-{
-    QString newOrderId = args.count() > 0 ? args.arg<QString>(0) : QString();
-    const ScoreOrder* newOrder = nullptr;
-
-    for (const ScoreOrder* order : m_orders) {
-        if (order->id == newOrderId) {
-            newOrder = order;
-            break;
-        }
-    }
-
-    if (newOrder) {
-        m_masterNotation->parts()->setScoreOrder(*newOrder);
-    }
 }
