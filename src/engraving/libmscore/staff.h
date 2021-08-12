@@ -91,7 +91,6 @@ private:
     int _barLineFrom         { 0 };          ///< line of start staff to draw the barline from (0 = staff top line, ...)
     int _barLineTo           { 0 };          ///< line of end staff to draw the bar line to (0= staff bottom line, ...)
 
-    bool _invisible          { false };
     bool _cutaway            { false };
     bool _showIfEmpty        { false };         ///< show this staff if system is empty and hideEmptyStaves is true
     bool _hideSystemBarLine  { false };         // no system barline if not preceded by staff with barline
@@ -249,8 +248,8 @@ public:
     void setLines(const Fraction&, int lines);
     qreal lineDistance(const Fraction&) const;
 
-    bool invisible(const Fraction&) const;
-    void setInvisible(const Fraction&, bool val);
+    bool isLinesInvisible(const Fraction&) const;
+    void setIsLinesInvisible(const Fraction&, bool val);
 
     void setSlashStyle(const Fraction&, bool val);
     int middleLine(const Fraction&) const;

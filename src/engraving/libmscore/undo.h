@@ -692,23 +692,24 @@ public:
 
 class ChangeStaff : public UndoCommand
 {
-    Staff* staff;
-    bool invisible;
+    Staff* staff = nullptr;
+
+    bool visible = false;
     ClefTypeList clefType;
-    qreal userDist;
-    Staff::HideMode hideMode;
-    bool showIfEmpty;
-    bool cutaway;
-    bool hideSystemBarLine;
-    bool mergeMatchingRests;
+    qreal userDist = 0;
+    Staff::HideMode hideMode = Staff::HideMode::AUTO;
+    bool showIfEmpty = false;
+    bool cutaway = false;
+    bool hideSystemBarLine = false;
+    bool mergeMatchingRests = false;
 
     void flip(EditData*) override;
 
 public:
     ChangeStaff(Staff*);
 
-    ChangeStaff(Staff*, bool invisible, ClefTypeList _clefType, qreal userDist, Staff::HideMode _hideMode, bool _showIfEmpty, bool _cutaway,
-                bool hide, bool mergeRests);
+    ChangeStaff(Staff*, bool _visible, ClefTypeList _clefType, qreal userDist, Staff::HideMode _hideMode, bool _showIfEmpty, bool _cutaway,
+                bool _hideSystemBarLine, bool _mergeRests);
     UNDO_NAME("ChangeStaff")
 };
 
