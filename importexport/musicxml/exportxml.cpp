@@ -5668,7 +5668,8 @@ static MeasureBase* lastMeasureBase(const System* const system)
       MeasureBase* mb = nullptr;
       if (system) {
             const auto& measures = system->measures();
-            Q_ASSERT(!(measures.empty()));
+            if (measures.empty())
+                  return nullptr;
             mb = measures.back();
             }
       return mb;
@@ -5683,7 +5684,8 @@ static bool hasPageBreak(const System* const system)
       const MeasureBase* mb = nullptr;
       if (system) {
             const auto& measures = system->measures();
-            Q_ASSERT(!(measures.empty()));
+            if (measures.empty())
+                  return false;
             mb = measures.back();
             }
 

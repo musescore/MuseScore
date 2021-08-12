@@ -187,7 +187,6 @@ QString mxmlNoteDuration::checkTiming(const QString& type, const bool rest, cons
 
 void mxmlNoteDuration::duration(QXmlStreamReader& e)
       {
-      Q_ASSERT(e.isStartElement() && e.name() == "duration");
       _logger->logDebugTrace("MusicXMLParserPass1::duration", &e);
 
       _specDura.set(0, 0);        // invalid unless set correctly
@@ -244,7 +243,6 @@ bool mxmlNoteDuration::readProperties(QXmlStreamReader& e)
 
 void mxmlNoteDuration::timeModification(QXmlStreamReader& e)
       {
-      Q_ASSERT(e.isStartElement() && e.name() == "time-modification");
       _logger->logDebugTrace("MusicXMLParserPass1::timeModification", &e);
 
       int intActual = 0;
