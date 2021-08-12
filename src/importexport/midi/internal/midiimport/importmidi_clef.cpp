@@ -434,7 +434,7 @@ bool hasGFclefs(const InstrumentTemplate* templ)
     if (!templ) {
         return false;
     }
-    const int staveCount = templ->nstaves();
+    const int staveCount = templ->staffCount;
     bool hasG = false;
     bool hasF = false;
     for (int i = 0; i != staveCount; ++i) {

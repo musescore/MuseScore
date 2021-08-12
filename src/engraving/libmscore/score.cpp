@@ -4069,14 +4069,14 @@ void Score::appendPart(const InstrumentTemplate* t)
     Part* part = new Part(this);
     part->initFromInstrTemplate(t);
     int n = nstaves();
-    for (int i = 0; i < t->nstaves(); ++i) {
+    for (int i = 0; i < t->staffCount; ++i) {
         Staff* staff = createStaff(this, part);
         StaffType* stt = staff->staffType(Fraction(0, 1));
         stt->setLines(t->staffLines[i]);
         stt->setSmall(t->smallStaff[i]);
         if (i == 0) {
             staff->setBracketType(0, t->bracket[0]);
-            staff->setBracketSpan(0, t->nstaves());
+            staff->setBracketSpan(0, t->staffCount);
         }
         undoInsertStaff(staff, i);
     }

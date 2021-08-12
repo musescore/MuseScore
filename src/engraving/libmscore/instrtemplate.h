@@ -74,9 +74,12 @@ public:
 
 class InstrumentTemplate
 {
-    int staves = 0;
-
 public:
+    InstrumentTemplate();
+    InstrumentTemplate(const InstrumentTemplate&);
+    ~InstrumentTemplate();
+    InstrumentTemplate& operator=(const InstrumentTemplate&);
+
     QString id;
     QString trackName;
     StaffNameList longNames;     ///< shown on first system
@@ -84,6 +87,7 @@ public:
     QString musicXMLid;          ///< used in MusicXML 3.0
     QString description;         ///< a longer description of the instrument
 
+    int staffCount = 0;
     int sequenceOrder = 0;
 
     Trait trait;
@@ -116,31 +120,21 @@ public:
     bool smallStaff[MAX_STAVES];
 
     bool extended = false;            // belongs to extended instrument set if true
-
     bool singleNoteDynamics = false;
 
     QString groupId;
 
-    InstrumentTemplate();
-    InstrumentTemplate(const InstrumentTemplate&);
-    ~InstrumentTemplate();
-    InstrumentTemplate& operator=(const InstrumentTemplate&);
-
-    void init(const InstrumentTemplate&);
-    void linkGenre(const QString&);
-    void addGenre(QList<InstrumentGenre*>);
-    bool genreMember(const QString&);
-    bool familyMember(const QString&);
-
-    void setPitchRange(const QString& s, char* a, char* b) const;
     void write(XmlWriter& xml) const;
     void write1(XmlWriter& xml) const;
     void read(XmlReader&);
-    int nstaves() const { return staves; }
-    void setStaves(int val) { staves = val; }
     ClefTypeList clefType(int staffIdx) const;
     QString familyId() const;
     bool containsGenre(const QString& genreId) const;
+
+private:
+    void init(const InstrumentTemplate&);
+    void setPitchRange(const QString& s, char* a, char* b) const;
+    void linkGenre(const QString&);
 };
 
 //---------------------------------------------------------
