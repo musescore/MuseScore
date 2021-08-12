@@ -58,9 +58,7 @@ void MidiInputController::connectCurrentInputDevice()
     }
 
     Ret ret = midiInPort()->connect(deviceId);
-    if (ret) {
-        ret = midiInPort()->run();
-    } else {
+    if (!ret) {
         LOGW() << "failed connect to input device, deviceID: " << deviceId << ", err: " << ret.text();
     }
 }

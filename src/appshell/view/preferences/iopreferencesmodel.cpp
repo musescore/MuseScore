@@ -87,12 +87,6 @@ void IOPreferencesModel::setCurrentMidiInputDeviceIndex(int index)
         return;
     }
 
-    ret = midiInPort()->run();
-    if (!ret) {
-        showMidiError(deviceId, ret.text());
-        return;
-    }
-
     midiConfiguration()->setMidiInputDeviceId(deviceId);
 
     emit currentMidiInputDeviceIndexChanged();

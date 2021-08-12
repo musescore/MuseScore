@@ -159,7 +159,8 @@ mu::Ret AlsaMidiInPort::connect(const MidiDeviceID& deviceID)
     }
 
     m_deviceID = deviceID;
-    return Ret(true);
+
+    return run();
 }
 
 void AlsaMidiInPort::disconnect()
@@ -203,6 +204,18 @@ mu::Ret AlsaMidiInPort::run()
     m_running.store(true);
     m_thread = std::make_shared<std::thread>(process, this);
     return Ret(true);
+}
+
+void AlsaMidiInPort::stop()
+{
+    if (!m_thread) {
+        LOGW() << "already stoped";
+        return;
+    }
+
+    m_running.store(false);
+    m_thread->join();
+    m_thread = nullptr;
 }
 
 void AlsaMidiInPort::process(AlsaMidiInPort* self)
@@ -290,26 +303,6 @@ void AlsaMidiInPort::doProcess()
 
         sleep();
     }
-}
-
-void AlsaMidiInPort::stop()
-{
-    if (!m_thread) {
-        LOGW() << "already stoped";
-        return;
-    }
-
-    m_running.store(false);
-    m_thread->join();
-    m_thread = nullptr;
-}
-
-bool AlsaMidiInPort::isRunning() const
-{
-    if (m_thread) {
-        return true;
-    }
-    return false;
 }
 
 mu::async::Channel<tick_t, Event> AlsaMidiInPort::eventReceived() const
