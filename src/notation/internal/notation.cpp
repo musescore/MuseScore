@@ -33,7 +33,7 @@
 #include "engraving/accessibility/accessibleelement.h"
 
 #include "notationinteraction.h"
-#include "notationmidievents.h"
+#include "masternotationmididata.h"
 #include "notationplayback.h"
 #include "notationundostack.h"
 #include "notationstyle.h"
@@ -42,7 +42,6 @@
 #include "notationmidiinput.h"
 #include "notationparts.h"
 #include "notationtypes.h"
-#include "scoreorderconverter.h"
 #include "draw/pen.h"
 
 using namespace mu::notation;
@@ -57,8 +56,7 @@ Notation::Notation(Ms::Score* score)
     m_midiInput = std::make_shared<NotationMidiInput>(this, m_undoStack);
     m_accessibility = std::make_shared<NotationAccessibility>(this, m_interaction->selectionChanged());
     m_parts = std::make_shared<NotationParts>(this, m_interaction, m_undoStack);
-    m_midiEventsProvider = std::make_shared<NotationMidiEvents>(this, m_notationChanged);
-    m_playback = std::make_shared<NotationPlayback>(this, m_notationChanged, m_midiEventsProvider);
+    m_playback = std::make_shared<NotationPlayback>(this, m_notationChanged);
     m_style = std::make_shared<NotationStyle>(this);
     m_elements = std::make_shared<NotationElements>(this);
 
@@ -114,9 +112,6 @@ Notation::~Notation()
     m_interaction = nullptr;
     m_midiInput = nullptr;
     m_accessibility = nullptr;
-    m_parts = nullptr;
-    m_midiEventsProvider = nullptr;
-    m_playback = nullptr;
     m_style = nullptr;
     m_elements = nullptr;
 
@@ -140,7 +135,7 @@ void Notation::setScore(Ms::Score* score)
 
     if (score) {
         static_cast<NotationInteraction*>(m_interaction.get())->init();
-        static_cast<NotationPlayback*>(m_playback.get())->init(m_parts);
+        static_cast<NotationPlayback*>(m_playback.get())->init();
     }
 }
 
@@ -156,7 +151,7 @@ QString Notation::title() const
 
 mu::notation::ScoreOrder Notation::scoreOrder() const
 {
-    return m_score ? ScoreOrderConverter::convertScoreOrder(m_score->scoreOrder()) : ScoreOrder();
+    return m_score ? m_score->scoreOrder() : ScoreOrder();
 }
 
 void Notation::setViewSize(const QSizeF& vs)

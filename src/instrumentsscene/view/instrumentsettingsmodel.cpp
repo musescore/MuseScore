@@ -42,6 +42,10 @@ void InstrumentSettingsModel::load(const QVariant& instrument)
     m_instrumentName = map["instrumentName"].toString();
     m_instrumentAbbreviature = map["abbreviature"].toString();
 
+    context()->currentNotationChanged().onNotify(this, [this]() {
+        emit isMainScoreChanged();
+    });
+
     emit dataChanged();
 }
 
@@ -60,8 +64,8 @@ void InstrumentSettingsModel::replaceInstrument()
     Instrument newInstrument = selectedInstrument.val;
     masterNotationParts()->replaceInstrument(m_instrumentKey, newInstrument);
 
-    m_instrumentKey.instrumentId = newInstrument.id;
-    m_instrumentName = newInstrument.name;
+    m_instrumentKey.instrumentId = newInstrument.id();
+    m_instrumentName = newInstrument.name();
     m_instrumentAbbreviature = newInstrument.abbreviature();
 
     emit dataChanged();
@@ -80,6 +84,11 @@ QString InstrumentSettingsModel::partName() const
 QString InstrumentSettingsModel::abbreviature() const
 {
     return m_instrumentAbbreviature;
+}
+
+bool InstrumentSettingsModel::isMainScore() const
+{
+    return currentNotation() == currentMasterNotation();
 }
 
 void InstrumentSettingsModel::setInstrumentName(const QString& name)
@@ -112,20 +121,25 @@ void InstrumentSettingsModel::setAbbreviature(const QString& abbreviature)
     notationParts()->setInstrumentAbbreviature(m_instrumentKey, abbreviature);
 }
 
+INotationPtr InstrumentSettingsModel::currentNotation() const
+{
+    return context()->currentNotation();
+}
+
+INotationPtr InstrumentSettingsModel::currentMasterNotation() const
+{
+    IMasterNotationPtr master = context()->currentMasterNotation();
+    return master ? master->notation() : nullptr;
+}
+
 INotationPartsPtr InstrumentSettingsModel::notationParts() const
 {
-    if (context()->currentNotation()) {
-        return context()->currentNotation()->parts();
-    }
-
-    return nullptr;
+    INotationPtr notation = currentNotation();
+    return notation ? notation->parts() : nullptr;
 }
 
 INotationPartsPtr InstrumentSettingsModel::masterNotationParts() const
 {
-    if (context()->currentMasterNotation()) {
-        return context()->currentMasterNotation()->parts();
-    }
-
-    return nullptr;
+    INotationPtr notation = currentMasterNotation();
+    return notation ? notation->parts() : nullptr;
 }

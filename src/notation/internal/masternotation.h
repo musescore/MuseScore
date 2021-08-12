@@ -24,13 +24,12 @@
 
 #include <memory>
 
-#include "../imasternotation.h"
-
 #include "modularity/ioc.h"
-#include "notation.h"
 #include "retval.h"
-
 #include "project/projecttypes.h"
+
+#include "notation.h"
+#include "../imasternotation.h"
 
 namespace Ms {
 class MasterScore;
@@ -56,7 +55,7 @@ public:
 
     mu::ValNt<bool> needSave() const override;
 
-    IExcerptNotationPtr newExcerptNotation() const override;
+    IExcerptNotationPtr newExcerptBlankNotation() const override;
     ValCh<ExcerptNotationList> excerpts() const override;
     ExcerptNotationList potentialExcerpts() const override;
 
@@ -64,6 +63,7 @@ public:
     void removeExcerpts(const ExcerptNotationList& excerpts) override;
 
     INotationPartsPtr parts() const override;
+    IMasterNotationMidiDataPtr midiData() const override;
 
 private:
 
@@ -72,11 +72,17 @@ private:
 
     Ms::MasterScore* masterScore() const;
 
-    void initExcerpts(const QList<Ms::Excerpt*>& excerpts);
+    void initExcerptNotations(const QList<Ms::Excerpt*>& excerpts);
+    void addExcerptsToMasterScore(const QList<Ms::Excerpt*>& excerpts);
 
     void doSetExcerpts(ExcerptNotationList excerpts);
 
+    void notifyAboutNeedSaveChanged();
+
     ValCh<ExcerptNotationList> m_excerpts;
+    IMasterNotationMidiDataPtr m_notationMidiData = nullptr;
+
+    async::Notification m_needSaveNotification;
 };
 
 using MasterNotationPtr = std::shared_ptr<MasterNotation>;

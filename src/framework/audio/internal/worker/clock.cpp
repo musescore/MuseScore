@@ -33,7 +33,7 @@ Clock::Clock()
 
 msecs_t Clock::currentTime() const
 {
-    return m_time;
+    return m_currentTime;
 }
 
 void Clock::forward(const msecs_t nextMsecs)
@@ -42,13 +42,20 @@ void Clock::forward(const msecs_t nextMsecs)
         return;
     }
 
-    m_time += nextMsecs;
+    msecs_t newTime = m_currentTime + nextMsecs;
 
-    if (m_timeLoopStart < m_timeLoopEnd && m_time >= m_timeLoopEnd) {
+    if (m_timeLoopStart < m_timeLoopEnd && newTime >= m_timeLoopEnd) {
         seek(m_timeLoopStart);
+        return;
     }
 
-    m_timeChanged.send(m_time);
+    if (newTime > m_timeDuration) {
+        pause();
+        return;
+    }
+
+    m_currentTime = newTime;
+    m_timeChanged.send(m_currentTime);
 }
 
 void Clock::start()
@@ -76,14 +83,19 @@ void Clock::pause()
 void Clock::resume()
 {
     m_status.set(PlaybackStatus::Running);
-    seek(m_time);
+    seek(m_currentTime);
 }
 
 void Clock::seek(const msecs_t msecs)
 {
-    m_time = msecs;
-    m_timeChanged.send(m_time);
+    m_currentTime = msecs;
+    m_timeChanged.send(m_currentTime);
     m_seekOccurred.notify();
+}
+
+void Clock::setTimeDuration(const msecs_t duration)
+{
+    m_timeDuration = duration;
 }
 
 Ret Clock::setTimeLoop(const msecs_t fromMsec, const msecs_t toMsec)

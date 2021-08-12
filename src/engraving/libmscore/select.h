@@ -90,11 +90,11 @@ enum class SelState : char {
 
 //---------------------------------------------------------
 //   SelectionFilterType
-//   see also `static const char* labels[]` in mscore/selectionwindow.cpp
-//   need to keep those in sync!
 //---------------------------------------------------------
 
-enum class SelectionFilterType {
+static constexpr size_t NUMBER_OF_SELECTION_FILTER_TYPES = 23;
+
+enum class SelectionFilterType : unsigned int {
     NONE                    = 0,
     FIRST_VOICE             = 1 << 0,
     SECOND_VOICE            = 1 << 1,
@@ -119,7 +119,7 @@ enum class SelectionFilterType {
     BREATH                  = 1 << 20,
     TREMOLO                 = 1 << 21,
     GRACE_NOTE              = 1 << 22,
-    ALL                     = -1
+    ALL                     = ~(~0u << NUMBER_OF_SELECTION_FILTER_TYPES)
 };
 
 //---------------------------------------------------------
@@ -128,19 +128,19 @@ enum class SelectionFilterType {
 
 class SelectionFilter
 {
-    Score* _score;
-    int _filtered;
-
 public:
-    SelectionFilter() { _score = 0; _filtered = (int)SelectionFilterType::ALL; }
-    SelectionFilter(SelectionFilterType f)
-        : _score(nullptr), _filtered(int(f)) {}
-    SelectionFilter(Score* score) { _score = score; _filtered = (int)SelectionFilterType::ALL; }
-    int& filtered() { return _filtered; }
-    void setFiltered(SelectionFilterType type, bool set);
-    bool isFiltered(SelectionFilterType type) const { return _filtered & (int)type; }
-    bool canSelect(const Element*) const;
+    SelectionFilter() = default;
+    SelectionFilter(SelectionFilterType type);
+
+    int filteredTypes() const;
+    bool isFiltered(SelectionFilterType type) const;
+    void setFiltered(SelectionFilterType type, bool filtered);
+
+    bool canSelect(const Element* element) const;
     bool canSelectVoice(int track) const;
+
+private:
+    unsigned int m_filteredTypes = static_cast<unsigned int>(SelectionFilterType::ALL);
 };
 
 //-------------------------------------------------------------------

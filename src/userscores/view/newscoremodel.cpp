@@ -109,11 +109,7 @@ ProjectCreateOptions NewScoreModel::parseOptions(const QVariantMap& info) const
         Q_ASSERT(!objMap["isExistingPart"].toBool());
 
         PartInstrument pi;
-
-        pi.isExistingPart = false;
-        pi.isSoloist = false;
-        pi.partId = QString();
-        pi.instrument = objMap["instrument"].value<Instrument>();
+        pi.instrumentTemplate = objMap["instrument"].value<InstrumentTemplate>();
 
         scoreOptions.parts << pi;
     }

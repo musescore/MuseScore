@@ -183,8 +183,8 @@ enum class LayoutMode : char {
 class MeasureBaseList
 {
     int _size;
-    MeasureBase* _first;
-    MeasureBase* _last;
+    MeasureBase* _first = nullptr;
+    MeasureBase* _last = nullptr;
 
     void push_back(MeasureBase* e);
     void push_front(MeasureBase* e);

@@ -84,10 +84,7 @@ TabView {
                 anchors.margins: 1
 
                 NavigationFocusBorder {
-
-                    property bool visibleOrNot: (tab.tabItem.navigation && tab.tabItem.navigation.active) //evaluating this condition directly in the `visible` variable leads to strange behaviour
-
-                    visible: visibleOrNot
+                    visible: Boolean(tab.tabItem.navigation) && Boolean(tab.tabItem.navigation.active)
                 }
 
                 border.width: ui.theme.borderWidth

@@ -238,7 +238,7 @@ void ScoreOrder::setBracketsAndBarlines(Score* score)
     int thnBracketSpan { 0 };
 
     for (Part* part : score->parts()) {
-        InstrumentIndex ii = searchTemplateIndexForId(part->instrument()->getId());
+        InstrumentIndex ii = searchTemplateIndexForId(part->instrument()->id());
         if (!ii.instrTemplate) {
             continue;
         }
@@ -277,13 +277,13 @@ void ScoreOrder::setBracketsAndBarlines(Score* score)
                 }
             }
 
-            if (ii.instrTemplate->nstaves() > 1) {
+            if (ii.instrTemplate->staffCount > 1) {
                 blockThinBracket = true;
                 if (ii.instrTemplate->bracket[staffIdx] != BracketType::NO_BRACKET) {
                     score->undoAddBracket(staff, 2, ii.instrTemplate->bracket[staffIdx], ii.instrTemplate->bracketSpan[staffIdx]);
                 }
                 staff->undoChangeProperty(Pid::STAFF_BARLINE_SPAN, ii.instrTemplate->barlineSpan[staffIdx]);
-                if (staffIdx < ii.instrTemplate->nstaves()) {
+                if (staffIdx < ii.instrTemplate->staffCount) {
                     ++staffIdx;
                 }
                 prvStaff = nullptr;
@@ -424,7 +424,7 @@ void ScoreOrder::write(Ms::XmlWriter& xml) const
 void ScoreOrder::updateInstruments(const Score* score)
 {
     for (Part* part : score->parts()) {
-        InstrumentIndex ii = searchTemplateIndexForId(part->instrument()->getId());
+        InstrumentIndex ii = searchTemplateIndexForId(part->instrument()->id());
         if (!ii.instrTemplate || !ii.instrTemplate->family) {
             continue;
         }

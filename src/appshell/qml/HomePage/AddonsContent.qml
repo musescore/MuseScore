@@ -130,7 +130,7 @@ FocusScope {
 
                 visible: bar.canFilterByCategories
 
-                property string selectedCategory: Boolean(value) ? value : ""
+                property string selectedCategory: Boolean(currentValue) ? currentValue : ""
 
                 displayText: qsTrc("appshell", "Category: ") + categoryComboBox.currentText
 

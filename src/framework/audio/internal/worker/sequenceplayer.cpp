@@ -95,6 +95,13 @@ void SequencePlayer::resume()
     }
 }
 
+void SequencePlayer::setDuration(const msecs_t duration)
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    m_clock->setTimeDuration(duration);
+}
+
 Ret SequencePlayer::setLoop(const msecs_t fromMsec, const msecs_t toMsec)
 {
     ONLY_AUDIO_WORKER_THREAD;

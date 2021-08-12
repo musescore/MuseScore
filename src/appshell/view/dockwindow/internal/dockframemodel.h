@@ -25,38 +25,55 @@
 
 #include <QQuickItem>
 
+#include "modularity/ioc.h"
+#include "actions/iactionsdispatcher.h"
+
 namespace mu::dock {
 class DockFrameModel : public QObject
 {
     Q_OBJECT
 
+    INJECT(dock, actions::IActionsDispatcher, dispatcher)
+
     Q_PROPERTY(QQuickItem * frame READ frame WRITE setFrame NOTIFY frameChanged)
+    Q_PROPERTY(QVariantList tabs READ tabs NOTIFY tabsChanged)
+
     Q_PROPERTY(bool titleBarVisible READ titleBarVisible NOTIFY titleBarVisibleChanged)
     Q_PROPERTY(QObject * navigationSection READ navigationSection NOTIFY navigationSectionChanged)
-    Q_PROPERTY(QString currentDockUniqueName READ currentDockUniqueName NOTIFY currentDockUniqueNameChanged)
+    Q_PROPERTY(QString currentDockUniqueName READ currentDockUniqueName NOTIFY currentDockChanged)
+    Q_PROPERTY(QVariant currentDockContextMenuModel READ currentDockContextMenuModel NOTIFY currentDockChanged)
 
 public:
     explicit DockFrameModel(QObject* parent = nullptr);
 
     QQuickItem* frame() const;
+    QVariantList tabs() const;
+
     bool titleBarVisible() const;
-
     QObject* navigationSection() const;
-
     QString currentDockUniqueName() const;
+    QVariant currentDockContextMenuModel() const;
+
+    Q_INVOKABLE void handleMenuItem(const QString& itemId);
 
 public slots:
     void setFrame(QQuickItem* item);
 
 signals:
     void frameChanged(QQuickItem* frame);
+    void tabsChanged();
     void titleBarVisibleChanged(bool visible);
     void navigationSectionChanged();
-    void currentDockUniqueNameChanged();
+    void currentDockChanged();
 
 private:
+    bool eventFilter(QObject* watched, QEvent* event);
+
     void listenChangesInFrame();
     void setTitleBarVisible(bool visible);
+
+    const QObject* currentDockObject() const;
+    QVariant currentDockProperty(const char* propertyName) const;
 
     QObject* currentNavigationSection() const;
     void updateNavigationSection();

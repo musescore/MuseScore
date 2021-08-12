@@ -22,8 +22,6 @@
 
 #include "masternotationparts.h"
 
-#include "scoreorderconverter.h"
-
 #include "libmscore/masterscore.h"
 #include "libmscore/scoreorder.h"
 
@@ -71,8 +69,7 @@ void MasterNotationParts::setScoreOrder(const ScoreOrder& order)
 
     startEdit();
 
-    Ms::ScoreOrder so = ScoreOrderConverter::convertScoreOrder(order);
-    masterScore()->undo(new Ms::ChangeScoreOrder(masterScore(), so));
+    masterScore()->undo(new Ms::ChangeScoreOrder(masterScore(), order));
     masterScore()->setBracketsAndBarlines();
 
     apply();
@@ -120,22 +117,26 @@ void MasterNotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
     NotationParts::appendStaff(staff, destinationPartId);
 
     for (INotationPartsPtr parts : excerptsParts()) {
-        parts->appendStaff(staff->clone(), destinationPartId);
+        Staff* excerptStaff = Ms::toStaff(staff->linkedClone());
+        parts->appendStaff(excerptStaff, destinationPartId);
     }
 
     endGlobalEdit();
 }
 
-void MasterNotationParts::linkStaves(const ID& sourceStaffId, const ID& destinationStaffId)
+void MasterNotationParts::appendLinkedStaff(Staff* staff, const mu::ID& sourceStaffId, const mu::ID& destinationPartId)
 {
     TRACEFUNC;
 
     startGlobalEdit();
 
-    NotationParts::linkStaves(sourceStaffId, destinationStaffId);
+    //! NOTE: will be generated later after adding to the score
+    staff->setId(Ms::INVALID_ID);
+
+    NotationParts::appendLinkedStaff(staff, sourceStaffId, destinationPartId);
 
     for (INotationPartsPtr parts : excerptsParts()) {
-        parts->linkStaves(sourceStaffId, destinationStaffId);
+        parts->appendLinkedStaff(staff->clone(), sourceStaffId, destinationPartId);
     }
 
     endGlobalEdit();

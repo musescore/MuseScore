@@ -136,6 +136,35 @@ void InstrumentsPanelTreeModel::setupStavesConnections(const ID& stavesPartId)
     });
 }
 
+void InstrumentsPanelTreeModel::listenSelectionChanged()
+{
+    m_notation->interaction()->selectionChanged().onNotify(this, [this]() {
+        std::vector<Element*> selectedElements = m_notation->interaction()->selection()->elements();
+
+        if (selectedElements.empty()) {
+            m_selectionModel->clear();
+            return;
+        }
+
+        QSet<ID> selectedPartIdSet;
+        for (const Element* element : selectedElements) {
+            if (!element->part()) {
+                continue;
+            }
+
+            selectedPartIdSet << element->part()->id();
+        }
+
+        for (const ID& selectedPartId : selectedPartIdSet) {
+            AbstractInstrumentsPanelTreeItem* item = m_rootItem->childAtId(selectedPartId);
+
+            if (item) {
+                m_selectionModel->select(createIndex(item->row(), 0, item));
+            }
+        }
+    });
+}
+
 void InstrumentsPanelTreeModel::clear()
 {
     beginResetModel();
@@ -174,6 +203,7 @@ void InstrumentsPanelTreeModel::load()
     endResetModel();
 
     setupPartsConnections();
+    listenSelectionChanged();
 
     emit isEmptyChanged();
     emit isAddingAvailableChanged(true);
@@ -609,7 +639,7 @@ void InstrumentsPanelTreeModel::updateStaffItem(StaffTreeItem* item, const Staff
     }
 
     QString staffName = staff->staffName();
-    QString title = staff->isLinked() ? qtrc("instruments", "[LINK] %1").arg(staffName) : staffName;
+    QString title = masterStaff->isLinked() ? qtrc("instruments", "[LINK] %1").arg(staffName) : staffName;
 
     item->setId(staff->id());
     item->setTitle(title);

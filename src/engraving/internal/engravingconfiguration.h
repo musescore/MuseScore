@@ -47,13 +47,12 @@ public:
     draw::Color criticalColor() const override;
     draw::Color criticalSelectedColor() const override;
     draw::Color formattingMarksColor() const override;
-    draw::Color dropTargetColor() const override;
 
     draw::Color selectionColor(int voiceIndex = 0) const override;
     void setSelectionColor(int voiceIndex, draw::Color color) override;
     async::Channel<int, draw::Color> selectionColorChanged() const override;
 
-    draw::Color shadowNoteColor(int voice = 0) const override;
+    draw::Color highlightSelectionColor(int voice = 0) const override;
 
 private:
     async::Channel<int, draw::Color> m_voiceColorChanged;

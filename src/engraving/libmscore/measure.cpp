@@ -194,7 +194,7 @@ Measure::Measure(Score* s)
         ms->setLines(new StaffLines(score()));
         ms->lines()->setTrack(staffIdx * VOICES);
         ms->lines()->setParent(this);
-        ms->lines()->setVisible(!staff->invisible(tick()));
+        ms->lines()->setVisible(!staff->isLinesInvisible(tick()));
         m_mstaves.push_back(ms);
     }
     setIrregular(false);
@@ -262,7 +262,7 @@ void Measure::createStaves(int staffIdx)
         s->setLines(new StaffLines(score()));
         s->lines()->setParent(this);
         s->lines()->setTrack(n * VOICES);
-        s->lines()->setVisible(!staff->invisible(tick()));
+        s->lines()->setVisible(!staff->isLinesInvisible(tick()));
         m_mstaves.push_back(s);
     }
 }
@@ -1292,7 +1292,7 @@ void Measure::cmdAddStaves(int sStaff, int eStaff, bool createRest)
         ms->setLines(new StaffLines(score()));
         ms->lines()->setTrack(i * VOICES);
         ms->lines()->setParent(this);
-        ms->lines()->setVisible(!staff->invisible(tick()));
+        ms->lines()->setVisible(!staff->isLinesInvisible(tick()));
         score()->undo(new InsertMStaff(this, ms, i));
     }
 
@@ -1414,7 +1414,7 @@ void Measure::insertStaff(Staff* staff, int staffIdx)
     ms->setLines(new StaffLines(score()));
     ms->lines()->setParent(this);
     ms->lines()->setTrack(staffIdx * VOICES);
-    ms->lines()->setVisible(!staff->invisible(tick()));
+    ms->lines()->setVisible(!staff->isLinesInvisible(tick()));
     insertMStaff(ms, staffIdx);
 }
 
@@ -2087,7 +2087,7 @@ void Measure::read(XmlReader& e, int staffIdx)
         s->setLines(new StaffLines(score()));
         s->lines()->setParent(this);
         s->lines()->setTrack(n * VOICES);
-        s->lines()->setVisible(!staff->invisible(tick()));
+        s->lines()->setVisible(!staff->isLinesInvisible(tick()));
         m_mstaves.push_back(s);
     }
 

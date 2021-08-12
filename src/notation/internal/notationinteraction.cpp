@@ -63,8 +63,6 @@
 #include "notationnoteinput.h"
 #include "notationselection.h"
 
-#include "instrumentsconverter.h"
-
 using namespace mu::notation;
 
 NotationInteraction::NotationInteraction(Notation* notation, INotationUndoStackPtr undoStack)
@@ -576,6 +574,20 @@ mu::async::Notification NotationInteraction::selectionChanged() const
     return m_selectionChanged;
 }
 
+bool NotationInteraction::isSelectionTypeFiltered(SelectionFilterType type) const
+{
+    return score()->selectionFilter().isFiltered(type);
+}
+
+void NotationInteraction::setSelectionTypeFiltered(SelectionFilterType type, bool filtered)
+{
+    score()->selectionFilter().setFiltered(type, filtered);
+    if (selection()->isRange()) {
+        score()->selection().updateSelectedElements();
+        notifyAboutSelectionChanged();
+    }
+}
+
 bool NotationInteraction::isDragStarted() const
 {
     return m_dragData.dragGroups.size() > 0 || !m_lasso->bbox().isEmpty();
@@ -1062,20 +1074,13 @@ void NotationInteraction::selectInstrument(Ms::InstrumentChange* instrumentChang
         return;
     }
 
-    RetVal<Val> retVal = interactive()->open("musescore://instruments/select?canSelectMultipleInstruments=false");
-    if (!retVal.ret) {
+    RetVal<Instrument> selectedInstrument = selectInstrumentScenario()->selectInstrument();
+    if (!selectedInstrument.ret) {
         return;
     }
-
-    Instrument selectedIstrument = retVal.val.toQVariant().value<Instrument>();
-    if (!selectedIstrument.isValid()) {
-        return;
-    }
-
-    Ms::Instrument instrument = InstrumentsConverter::convertInstrument(selectedIstrument);
 
     instrumentChange->setInit(true);
-    instrumentChange->setupInstrument(&instrument);
+    instrumentChange->setupInstrument(&selectedInstrument.val);
 }
 
 //! NOTE Copied from Palette::applyPaletteElement

@@ -104,7 +104,7 @@ static bool staffHasElements(Score* score, int staffIdx)
 //---------------------------------------------------------
 //   removeStaff
 //    Checks that after a staff removal all elements
-//    belonging to it are removed in all parts.
+//    belonging to it are not removed in excerpts.
 //---------------------------------------------------------
 
 void TestRemove::removeStaff()
@@ -119,7 +119,7 @@ void TestRemove::removeStaff()
     QVERIFY(!staffHasElements(score, 1));
     for (Excerpt* ex : score->excerpts()) {
         Score* s = ex->partScore();
-        QVERIFY(!staffHasElements(s, 1));
+        QVERIFY(staffHasElements(s, 1));
     }
 
     delete score;

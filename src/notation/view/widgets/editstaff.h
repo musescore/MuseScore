@@ -93,8 +93,6 @@ private:
     void applyStaffProperties();
     void applyPartProperties();
 
-    bool isInstrumentChanged();
-
     QString midiCodeToStr(int midiCode);
 
     Ms::Staff* m_staff = nullptr;

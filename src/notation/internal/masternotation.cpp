@@ -22,13 +22,9 @@
 #include "masternotation.h"
 
 #include <QFileInfo>
-#include "translation.h"
 
-#include "excerptnotation.h"
-#include "masternotationparts.h"
-#include "scoreorderconverter.h"
-#include "excerptnotation.h"
-#include "../notationerrors.h"
+#include "log.h"
+#include "translation.h"
 
 #include "libmscore/masterscore.h"
 #include "libmscore/part.h"
@@ -41,7 +37,10 @@
 #include "libmscore/tempotext.h"
 #include "libmscore/undo.h"
 
-#include "log.h"
+#include "excerptnotation.h"
+#include "masternotationparts.h"
+#include "masternotationmididata.h"
+#include "../notationerrors.h"
 
 using namespace mu::notation;
 using namespace mu::async;
@@ -55,9 +54,14 @@ MasterNotation::MasterNotation()
     : Notation()
 {
     m_parts = std::make_shared<MasterNotationParts>(this, interaction(), undoStack());
+    m_notationMidiData = std::make_shared<MasterNotationMidiData>(this, m_notationChanged);
 
     m_parts->partsChanged().onNotify(this, [this]() {
         notifyAboutNotationChanged();
+    });
+
+    undoStack()->stackChanged().onNotify(this, [this]() {
+        notifyAboutNeedSaveChanged();
     });
 }
 
@@ -78,8 +82,8 @@ void MasterNotation::setMasterScore(Ms::MasterScore* score)
     }
 
     setScore(score);
-
-    initExcerpts(masterScore()->excerpts());
+    initExcerptNotations(masterScore()->excerpts());
+    m_notationMidiData->init(m_parts);
 }
 
 Ms::MasterScore* MasterNotation::masterScore() const
@@ -152,10 +156,11 @@ mu::Ret MasterNotation::setupNewScore(Ms::MasterScore* score, Ms::MasterScore* t
             nvb->setAutoSizeEnabled(tvb->isAutoSizeEnabled());
         }
     } else {
-        score->setScoreOrder(ScoreOrderConverter::convertScoreOrder(scoreOptions.order));
+        score->setScoreOrder(scoreOptions.order);
     }
 
     score->setName(qtrc("notation", "Untitled"));
+    score->setSaved(true);
     score->setCreated(true);
 
     score->checkChordList();
@@ -291,24 +296,20 @@ mu::Ret MasterNotation::setupNewScore(Ms::MasterScore* score, Ms::MasterScore* t
                 delete nvb;
             }
             if (!title.isEmpty()) {
-                Ms::Text* s = new Ms::Text(score, Ms::Tid::TITLE);
+                Ms::TextBase* s = score->addText(Ms::Tid::TITLE);
                 s->setPlainText(title);
-                measure->add(s);
             }
             if (!subtitle.isEmpty()) {
-                Ms::Text* s = new Ms::Text(score, Ms::Tid::SUBTITLE);
+                Ms::TextBase* s = score->addText(Ms::Tid::SUBTITLE);
                 s->setPlainText(subtitle);
-                measure->add(s);
             }
             if (!composer.isEmpty()) {
-                Ms::Text* s = new Ms::Text(score, Ms::Tid::COMPOSER);
+                Ms::TextBase* s = score->addText(Ms::Tid::COMPOSER);
                 s->setPlainText(composer);
-                measure->add(s);
             }
             if (!lyricist.isEmpty()) {
-                Ms::Text* s = new Ms::Text(score, Ms::Tid::POET);
+                Ms::TextBase* s = score->addText(Ms::Tid::POET);
                 s->setPlainText(lyricist);
-                measure->add(s);
             }
         } else if (nvb) {
             delete nvb;
@@ -392,13 +393,16 @@ mu::Ret MasterNotation::setupNewScore(Ms::MasterScore* score, Ms::MasterScore* t
     }
 
     setScore(score);
-    initExcerpts(excerpts);
+    initExcerptNotations(excerpts);
+    addExcerptsToMasterScore(excerpts);
 
     score->setExcerptsChanged(true);
 
     if (!templateScore) {
         parts()->setParts(scoreOptions.parts);
     }
+
+    m_notationMidiData->init(m_parts);
 
     return make_ret(Err::NoError);
 }
@@ -418,13 +422,17 @@ mu::ValNt<bool> MasterNotation::needSave() const
 {
     ValNt<bool> needSave;
     needSave.val = !masterScore()->saved();
-    needSave.notification = undoStack()->stackChanged();
+    needSave.notification = m_needSaveNotification;
 
     return needSave;
 }
 
 void MasterNotation::addExcerpts(const ExcerptNotationList& excerpts)
 {
+    if (excerpts.empty()) {
+        return;
+    }
+
     undoStack()->prepareChanges();
 
     ExcerptNotationList result = m_excerpts.val;
@@ -435,11 +443,12 @@ void MasterNotation::addExcerpts(const ExcerptNotationList& excerpts)
         }
 
         ExcerptNotation* excerptNotationImpl = get_impl(excerptNotation);
-        if (!excerptNotationImpl->excerpt()) {
-            excerptNotationImpl->setExcerpt(new Ms::Excerpt(masterScore()));
+
+        if (!excerptNotationImpl->isInited()) {
+            masterScore()->initAndAddExcerpt(excerptNotationImpl->excerpt(), false);
+            excerptNotationImpl->init();
         }
 
-        excerptNotationImpl->init();
         result.push_back(excerptNotation);
     }
 
@@ -450,6 +459,10 @@ void MasterNotation::addExcerpts(const ExcerptNotationList& excerpts)
 
 void MasterNotation::removeExcerpts(const ExcerptNotationList& excerpts)
 {
+    if (excerpts.empty()) {
+        return;
+    }
+
     undoStack()->prepareChanges();
 
     for (IExcerptNotationPtr excerptNotation : excerpts) {
@@ -472,11 +485,44 @@ void MasterNotation::doSetExcerpts(ExcerptNotationList excerpts)
 {
     m_excerpts.set(excerpts);
     static_cast<MasterNotationParts*>(m_parts.get())->setExcerpts(excerpts);
+
+    for (auto excerpt : excerpts) {
+        excerpt->notation()->undoStack()->stackChanged().onNotify(this, [this]() {
+            notifyAboutNeedSaveChanged();
+        });
+    }
 }
 
-IExcerptNotationPtr MasterNotation::newExcerptNotation() const
+void MasterNotation::notifyAboutNeedSaveChanged()
 {
-    return std::make_shared<ExcerptNotation>();
+    m_needSaveNotification.notify();
+}
+
+IExcerptNotationPtr MasterNotation::newExcerptBlankNotation() const
+{
+    Ms::Excerpt* excerpt = new Ms::Excerpt(masterScore());
+    excerpt->setTitle(qtrc("notation", "Part"));
+    masterScore()->initAndAddExcerpt(excerpt, false);
+
+    auto excerptNotation = std::make_shared<ExcerptNotation>(excerpt);
+    excerptNotation->init();
+
+    Ms::Score* excerptScore = excerpt->partScore();
+    auto setText = [&excerptScore](Ms::Tid textId, const QString& text) {
+        Ms::TextBase* textBox = excerptScore->getText(textId);
+        if (!textBox) {
+            textBox = excerptScore->addText(textId);
+        }
+
+        textBox->setPlainText(text);
+    };
+
+    setText(Ms::Tid::TITLE, qtrc("notation", "Title"));
+    setText(Ms::Tid::COMPOSER, qtrc("notation", "Composer"));
+
+    excerptScore->doLayout();
+
+    return excerptNotation;
 }
 
 mu::ValCh<ExcerptNotationList> MasterNotation::excerpts() const
@@ -489,16 +535,23 @@ INotationPartsPtr MasterNotation::parts() const
     return m_parts;
 }
 
+IMasterNotationMidiDataPtr MasterNotation::midiData() const
+{
+    return m_notationMidiData;
+}
+
 ExcerptNotationList MasterNotation::potentialExcerpts() const
 {
-    auto excerptExists = [this](const Ms::InstrumentList* content) {
+    auto excerptExists = [this](const ID& partId) {
         for (const Ms::Excerpt* excerpt : masterScore()->excerpts()) {
-            for (const Part* part : excerpt->parts()) {
-                const Ms::InstrumentList* partInstruments = part->instruments();
+            const QList<Part*>& excerptParts = excerpt->parts();
 
-                if (partInstruments && (*partInstruments == *content)) {
-                    return true;
-                }
+            if (excerptParts.size() != 1) {
+                continue;
+            }
+
+            if (ID(excerptParts.first()->id()) == partId) {
+                return true;
             }
         }
 
@@ -507,9 +560,7 @@ ExcerptNotationList MasterNotation::potentialExcerpts() const
 
     QList<Part*> parts;
     for (Part* part : score()->parts()) {
-        const Ms::InstrumentList* content = part->instruments();
-
-        if (content && !excerptExists(content)) {
+        if (!excerptExists(part->id())) {
             parts << part;
         }
     }
@@ -532,18 +583,24 @@ void MasterNotation::onSaveCopy()
     undoStack()->stackChanged().notify();
 }
 
-void MasterNotation::initExcerpts(const QList<Ms::Excerpt*>& excerpts)
+void MasterNotation::initExcerptNotations(const QList<Ms::Excerpt*>& excerpts)
 {
     ExcerptNotationList notationExcerpts;
 
     for (Ms::Excerpt* excerpt : excerpts) {
-        IExcerptNotationPtr excerptNotation = std::make_shared<ExcerptNotation>(excerpt);
-
-        get_impl(excerptNotation)->init();
+        auto excerptNotation = std::make_shared<ExcerptNotation>(excerpt);
+        excerptNotation->init();
         excerptNotation->notation()->setOpened(true);
 
         notationExcerpts.push_back(excerptNotation);
     }
 
     doSetExcerpts(notationExcerpts);
+}
+
+void MasterNotation::addExcerptsToMasterScore(const QList<Ms::Excerpt*>& excerpts)
+{
+    for (Ms::Excerpt* excerpt : excerpts) {
+        masterScore()->initAndAddExcerpt(excerpt, false);
+    }
 }

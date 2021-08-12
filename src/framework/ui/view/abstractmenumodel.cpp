@@ -123,6 +123,17 @@ void AbstractMenuModel::load()
     });
 }
 
+QVariantList AbstractMenuModel::itemsProperty() const
+{
+    QVariantList items;
+
+    for (const MenuItem& item: m_items) {
+        items << item.toMap();
+    }
+
+    return items;
+}
+
 const MenuItemList& AbstractMenuModel::items() const
 {
     return m_items;
@@ -141,7 +152,12 @@ void AbstractMenuModel::setItems(const MenuItemList& items)
     m_items = items;
     endResetModel();
 
-    emit countChanged(items.size());
+    emit itemsChanged();
+}
+
+void AbstractMenuModel::clear()
+{
+    setItems(MenuItemList());
 }
 
 int AbstractMenuModel::itemIndex(const actions::ActionCode& actionCode) const

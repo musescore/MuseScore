@@ -50,6 +50,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/staffsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/instrumentsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/instrumentsettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/instrumentspanelcontextmenumodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/instrumentspanelcontextmenumodel.h
     )
 
 set(MODULE_LINK

@@ -56,7 +56,9 @@ mu::RetVal<Instrument> SelectInstrumentsScenario::selectInstrument(const Instrum
         return result;
     }
 
-    result.val = selectedInstruments.val.instruments.first().instrument;
+    const InstrumentTemplate& templ = selectedInstruments.val.instruments.first().instrumentTemplate;
+    result.val = Instrument::fromTemplate(&templ);
+
     return result;
 }
 
@@ -83,7 +85,7 @@ mu::RetVal<PartInstrumentListScoreOrder> SelectInstrumentsScenario::selectInstru
         pi.isExistingPart = map["isExistingPart"].toBool();
         pi.isSoloist = map["isSoloist"].toBool();
         pi.partId = map["id"].toString();
-        pi.instrument = map["instrument"].value<Instrument>();
+        pi.instrumentTemplate = map["instrument"].value<InstrumentTemplate>();
 
         result.val.instruments << pi;
     }

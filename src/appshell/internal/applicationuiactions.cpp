@@ -106,6 +106,12 @@ const UiActionList ApplicationUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Toggle 'Properties'"),
              Checkable::Yes
              ),
+    UiAction("toggle-selection-filter",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Selection filter"),
+             QT_TRANSLATE_NOOP("action", "Toggle 'Selection filter'"),
+             Checkable::Yes
+             ),
     UiAction("toggle-statusbar",
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "Status bar"),
@@ -176,6 +182,7 @@ const std::vector<std::pair<mu::actions::ActionCode, PanelType> > ApplicationUiA
     { "toggle-palettes", PanelType::Palettes },
     { "toggle-instruments", PanelType::Instruments },
     { "inspector", PanelType::Inspector },
+    { "toggle-selection-filter", PanelType::SelectionFilter },
     { "toggle-notationtoolbar", PanelType::NotationToolBar },
     { "toggle-noteinput", PanelType::NoteInputBar },
     { "toggle-undoredo", PanelType::UndoRedoToolBar },
