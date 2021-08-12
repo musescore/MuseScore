@@ -19,14 +19,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "notationcontextmenu.h"
+#include "notationcontextmenumodel.h"
 
 #include "ui/view/iconcodes.h"
 
 using namespace mu::notation;
 using namespace mu::ui;
 
-MenuItemList NotationContextMenu::items(const ElementType& elementType) const
+void NotationContextMenuModel::loadItems(int elementType)
+{
+    MenuItemList items = itemsByElementType(static_cast<ElementType>(elementType));
+    setItems(items);
+}
+
+MenuItemList NotationContextMenuModel::itemsByElementType(ElementType elementType) const
 {
     switch (elementType) {
     case ElementType::MEASURE:
@@ -46,7 +52,7 @@ MenuItemList NotationContextMenu::items(const ElementType& elementType) const
     return elementItems();
 }
 
-MenuItemList NotationContextMenu::pageItems() const
+MenuItemList NotationContextMenuModel::pageItems() const
 {
     MenuItemList items {
         makeMenuItem("edit-style"),
@@ -57,7 +63,7 @@ MenuItemList NotationContextMenu::pageItems() const
     return items;
 }
 
-MenuItemList NotationContextMenu::defaultCopyPasteItems() const
+MenuItemList NotationContextMenuModel::defaultCopyPasteItems() const
 {
     MenuItemList items {
         makeMenuItem("cut"),
@@ -70,7 +76,7 @@ MenuItemList NotationContextMenu::defaultCopyPasteItems() const
     return items;
 }
 
-MenuItemList NotationContextMenu::measureItems() const
+MenuItemList NotationContextMenuModel::measureItems() const
 {
     MenuItemList items = elementItems();
     items << makeSeparator();
@@ -82,7 +88,7 @@ MenuItemList NotationContextMenu::measureItems() const
     return items;
 }
 
-MenuItemList NotationContextMenu::staffTextItems() const
+MenuItemList NotationContextMenuModel::staffTextItems() const
 {
     MenuItemList items = elementItems();
     items << makeSeparator();
@@ -91,7 +97,7 @@ MenuItemList NotationContextMenu::staffTextItems() const
     return items;
 }
 
-MenuItemList NotationContextMenu::systemTextItems() const
+MenuItemList NotationContextMenuModel::systemTextItems() const
 {
     MenuItemList items = elementItems();
     items << makeSeparator();
@@ -100,7 +106,7 @@ MenuItemList NotationContextMenu::systemTextItems() const
     return items;
 }
 
-MenuItemList NotationContextMenu::timeSignatureItems() const
+MenuItemList NotationContextMenuModel::timeSignatureItems() const
 {
     MenuItemList items = elementItems();
     items << makeSeparator();
@@ -109,7 +115,7 @@ MenuItemList NotationContextMenu::timeSignatureItems() const
     return items;
 }
 
-MenuItemList NotationContextMenu::selectItems() const
+MenuItemList NotationContextMenuModel::selectItems() const
 {
     MenuItemList items {
         makeMenuItem("select-similar"),
@@ -121,7 +127,7 @@ MenuItemList NotationContextMenu::selectItems() const
     return items;
 }
 
-MenuItemList NotationContextMenu::elementItems() const
+MenuItemList NotationContextMenuModel::elementItems() const
 {
     MenuItemList items = defaultCopyPasteItems();
     items << makeMenu(qtrc("notation", "Select"), selectItems());

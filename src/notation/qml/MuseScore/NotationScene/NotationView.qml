@@ -48,6 +48,10 @@ FocusScope {
         readonly property int scrollbarMargin: 4
     }
 
+    NotationContextMenuModel {
+        id: contextMenuModel
+    }
+
     Component.onCompleted: {
         notationView.load()
         notationNavigator.load()
@@ -86,12 +90,14 @@ FocusScope {
                     root.textEdittingStarted()
                 }
 
-                onShowContextMenuRequested: function (items, pos) {
+                onShowContextMenuRequested: function (elementType, pos) {
+                    contextMenuModel.loadItems(elementType)
+
                     if (contextMenuLoader.isMenuOpened) {
-                        contextMenuLoader.update(items, pos.x, pos.y)
+                        contextMenuLoader.update(contextMenuModel.items, pos.x, pos.y)
                     } else {
                         // TODO: replace `null` with a NavigationControl
-                        contextMenuLoader.open(items, null, pos.x, pos.y)
+                        contextMenuLoader.open(contextMenuModel.items, null, pos.x, pos.y)
                     }
                 }
 
@@ -165,7 +171,7 @@ FocusScope {
                     id: contextMenuLoader
 
                     onHandleMenuItem: function (itemId) {
-                        notationView.handleContextMenuItem(itemId)
+                        contextMenuModel.handleMenuItem(itemId)
                     }
                 }
             }

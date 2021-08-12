@@ -101,7 +101,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/instrumentsrepository.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/instrumentsrepository.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/view/inotationcontextmenu.h
     ${CMAKE_CURRENT_LIST_DIR}/view/notationpaintview.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/notationpaintview.h
     ${CMAKE_CURRENT_LIST_DIR}/view/notationviewinputcontroller.cpp
@@ -124,8 +123,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/noteinputbarcustomisemodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/notationtoolbarmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/notationtoolbarmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/notationcontextmenu.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/notationcontextmenu.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/notationcontextmenumodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/notationcontextmenumodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/notationnavigator.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/notationnavigator.h
     ${CMAKE_CURRENT_LIST_DIR}/view/noteinputbarcustomiseitem.cpp
