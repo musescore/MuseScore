@@ -314,6 +314,9 @@ public:
         ERROR = 0xF3D0,
         QUESTION = 0xF3D1,
 
+        MUTE = 0xF3D5,
+        SOLO = 0xF3D6,
+
         AUTO,
         NONE,
         CUSTOM
