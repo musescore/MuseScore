@@ -338,34 +338,21 @@ void NotationParts::setStaffVisible(const ID& staffId, bool visible)
 {
     TRACEFUNC;
 
-    Staff* staff = this->staffModifiable(staffId);
-    if (!staff) {
-        return;
-    }
-
-    if (staff->show() == visible) {
+    const Staff* staff = this->staff(staffId);
+    StaffConfig config = staffConfig(staffId);
+    if (!staff || config.visible == visible) {
         return;
     }
 
     startEdit();
 
-    doSetStaffVisible(staff, visible);
+    config.visible = visible;
+
+    doSetStaffConfig(staffId, config);
 
     apply();
 
     notifyAboutStaffChanged(staff);
-}
-
-void NotationParts::doSetStaffVisible(Staff* staff, bool visible)
-{
-    TRACEFUNC;
-
-    if (!staff) {
-        return;
-    }
-
-    staff->setInvisible(Fraction(0, 1), !visible);
-    score()->undo(new Ms::ChangeStaff(staff));
 }
 
 void NotationParts::setStaffType(const ID& staffId, StaffType type)
@@ -392,15 +379,17 @@ void NotationParts::setCutawayEnabled(const ID& staffId, bool enabled)
 {
     TRACEFUNC;
 
-    Staff* staff = this->staffModifiable(staffId);
-    if (!staff) {
+    const Staff* staff = this->staff(staffId);
+    StaffConfig config = staffConfig(staffId);
+    if (!staff || config.cutaway == enabled) {
         return;
     }
 
     startEdit();
 
-    staff->setCutaway(enabled);
-    score()->undo(new Ms::ChangeStaff(staff));
+    config.cutaway = enabled;
+
+    doSetStaffConfig(staffId, config);
 
     apply();
 
@@ -411,65 +400,74 @@ void NotationParts::setSmallStaff(const ID& staffId, bool smallStaff)
 {
     TRACEFUNC;
 
-    Staff* staff = this->staffModifiable(staffId);
-    if (!staff) {
-        return;
-    }
-
-    Ms::StaffType* staffType = staff->staffType(DEFAULT_TICK);
-    if (!staffType) {
+    const Staff* staff = this->staff(staffId);
+    StaffConfig config = staffConfig(staffId);
+    if (!staff || config.isSmall == smallStaff) {
         return;
     }
 
     startEdit();
 
-    staffType->setSmall(smallStaff);
-    score()->undo(new Ms::ChangeStaffType(staff, *staffType));
+    config.isSmall = smallStaff;
+
+    doSetStaffConfig(staffId, config);
 
     apply();
 
     notifyAboutStaffChanged(staff);
 }
 
-void NotationParts::setStaffConfig(const ID& staffId, const StaffConfig& config)
+StaffConfig NotationParts::staffConfig(const ID& staffId) const
 {
-    TRACEFUNC;
-
     Staff* staff = this->staffModifiable(staffId);
     if (!staff) {
-        return;
+        return StaffConfig();
     }
 
     Ms::StaffType* staffType = staff->staffType(DEFAULT_TICK);
     if (!staffType) {
+        return StaffConfig();
+    }
+
+    StaffConfig config;
+    config.visible = staff->visible();
+    config.userDistance = staff->userDist();
+    config.cutaway = staff->cutaway();
+    config.showIfEmpty = staff->showIfEmpty();
+    config.hideSystemBarline = staff->hideSystemBarLine();
+    config.mergeMatchingRests = staff->mergeMatchingRests();
+    config.hideMode = staff->hideWhenEmpty();
+    config.clefTypeList = staff->defaultClefType();
+
+    config.visibleLines = staffType->invisible();
+    config.isSmall = staffType->isSmall();
+    config.scale = staffType->userMag();
+    config.linesColor = staffType->color();
+    config.linesCount = staffType->lines();
+    config.lineDistance = staffType->lineDistance().val();
+    config.showClef = staffType->genClef();
+    config.showTimeSignature = staffType->genTimesig();
+    config.showKeySignature = staffType->genKeysig();
+    config.showBarlines = staffType->showBarlines();
+    config.showStemless = staffType->stemless();
+    config.showLedgerLinesPitched = staffType->showLedgerLines();
+    config.noteheadScheme = staffType->noteHeadScheme();
+
+    return config;
+}
+
+void NotationParts::setStaffConfig(const ID& staffId, const StaffConfig& config)
+{
+    TRACEFUNC;
+
+    const Staff* staff = this->staff(staffId);
+    if (!staff) {
         return;
     }
 
     startEdit();
 
-    staff->setVisible(config.visible);
-    staff->undoChangeProperty(Ms::Pid::STAFF_COLOR, config.linesColor);
-    staff->setInvisible(Fraction(0, 1), config.visibleLines);
-    staff->setUserDist(config.userDistance);
-    staff->undoChangeProperty(Ms::Pid::MAG, config.scale);
-    staff->setShowIfEmpty(config.showIfEmpty);
-    staffType->setLines(config.linesCount);
-    staffType->setLineDistance(Ms::Spatium(config.lineDistance));
-    staffType->setGenClef(config.showClef);
-    staffType->setGenTimesig(config.showTimeSignature);
-    staffType->setGenKeysig(config.showKeySignature);
-    staffType->setShowBarlines(config.showBarlines);
-    staffType->setStemless(config.showStemless);
-    staffType->setShowLedgerLines(config.showLedgerLinesPitched);
-    staffType->setNoteHeadScheme(config.noteheadScheme);
-    staff->setHideSystemBarLine(config.hideSystemBarline);
-    staff->setMergeMatchingRests(config.mergeMatchingRests);
-    staff->setHideWhenEmpty(config.hideMode);
-    staff->setDefaultClefType(config.clefTypeList);
-    staff->setCutaway(config.cutaway);
-    staff->undoChangeProperty(Ms::Pid::SMALL, config.isSmall);
-
-    score()->undo(new Ms::ChangeStaff(staff));
+    doSetStaffConfig(staffId, config);
 
     apply();
 
@@ -708,6 +706,39 @@ void NotationParts::doAppendStaff(Staff* staff, const mu::ID& destinationPartId)
     setBracketsAndBarlines();
 
     destinationPart->instrument()->setClefType(staffIndex, staff->defaultClefType());
+}
+
+void NotationParts::doSetStaffConfig(const ID& staffId, const StaffConfig& config)
+{
+    Staff* staff = this->staffModifiable(staffId);
+    if (!staff) {
+        return;
+    }
+
+    Ms::StaffType* staffType = staff->staffType(DEFAULT_TICK);
+    if (!staffType) {
+        return;
+    }
+
+    Ms::StaffType newStaffType = *staffType;
+    newStaffType.setUserMag(config.scale);
+    newStaffType.setColor(config.linesColor);
+    newStaffType.setSmall(config.isSmall);
+    newStaffType.setInvisible(config.visibleLines);
+    newStaffType.setLines(config.linesCount);
+    newStaffType.setLineDistance(Ms::Spatium(config.lineDistance));
+    newStaffType.setGenClef(config.showClef);
+    newStaffType.setGenTimesig(config.showTimeSignature);
+    newStaffType.setGenKeysig(config.showKeySignature);
+    newStaffType.setShowBarlines(config.showBarlines);
+    newStaffType.setStemless(config.showStemless);
+    newStaffType.setShowLedgerLines(config.showLedgerLinesPitched);
+    newStaffType.setNoteHeadScheme(config.noteheadScheme);
+
+    score()->undo(new Ms::ChangeStaff(staff, config.visible, config.clefTypeList, config.userDistance, config.hideMode, config.showIfEmpty,
+                                      config.cutaway, config.hideSystemBarline, config.mergeMatchingRests));
+
+    score()->undo(new Ms::ChangeStaffType(staff, newStaffType));
 }
 
 void NotationParts::removeStaves(const IDList& stavesIds)

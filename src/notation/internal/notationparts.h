@@ -56,6 +56,8 @@ public:
     void setStaffType(const ID& staffId, StaffType type) override;
     void setCutawayEnabled(const ID& staffId, bool enabled) override;
     void setSmallStaff(const ID& staffId, bool smallStaff) override;
+
+    StaffConfig staffConfig(const ID& staffId) const override;
     void setStaffConfig(const ID& staffId, const StaffConfig& config) override;
 
     void removeParts(const IDList& partsIds) override;
@@ -84,10 +86,10 @@ private:
     void updatePartTitles();
 
     void doMoveStaves(const std::vector<Staff*>& staves, int destinationStaffIndex, Part* destinationPart = nullptr);
-    void doSetStaffVisible(Staff* staff, bool visible);
     void doSetStaffVoiceVisible(Staff* staff, int voiceIndex, bool visible);
     void doRemoveParts(const IDList& partsIds);
     void doAppendStaff(Staff* staff, const ID& destinationPartId);
+    void doSetStaffConfig(const ID& staffId, const StaffConfig& config);
 
     Part* partModifiable(const ID& partId) const;
     Staff* staffModifiable(const ID& staffId) const;

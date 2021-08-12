@@ -151,7 +151,7 @@ void EditStaff::setStaff(Staff* s, const Fraction& tick)
 
     // set dlg controls
     spinExtraDistance->setValue(s->userDist() / score->spatium());
-    invisible->setChecked(m_staff->invisible(Fraction(0, 1)));
+    invisible->setChecked(m_staff->isLinesInvisible(Fraction(0, 1)));
     isSmallCheckbox->setChecked(stt->isSmall());
     color->setColor(stt->color().toQColor());
     partName->setText(part->partName());
@@ -456,6 +456,7 @@ Instrument EditStaff::instrument() const
 void EditStaff::applyStaffProperties()
 {
     StaffConfig config;
+    config.visible = m_orgStaff->visible();
     config.linesColor = color->color();
     config.visibleLines = invisible->isChecked();
     config.userDistance = spinExtraDistance->value() * m_orgStaff->score()->spatium();
