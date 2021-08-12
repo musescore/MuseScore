@@ -124,16 +124,19 @@ void MasterNotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
     endGlobalEdit();
 }
 
-void MasterNotationParts::linkStaves(const ID& sourceStaffId, const ID& destinationStaffId)
+void MasterNotationParts::appendLinkedStaff(Staff* staff, const mu::ID& sourceStaffId, const mu::ID& destinationPartId)
 {
     TRACEFUNC;
 
     startGlobalEdit();
 
-    NotationParts::linkStaves(sourceStaffId, destinationStaffId);
+    //! NOTE: will be generated later after adding to the score
+    staff->setId(Ms::INVALID_ID);
+
+    NotationParts::appendLinkedStaff(staff, sourceStaffId, destinationPartId);
 
     for (INotationPartsPtr parts : excerptsParts()) {
-        parts->linkStaves(sourceStaffId, destinationStaffId);
+        parts->appendLinkedStaff(staff->clone(), sourceStaffId, destinationPartId);
     }
 
     endGlobalEdit();

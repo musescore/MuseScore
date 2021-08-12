@@ -55,7 +55,7 @@ public:
 
     mu::ValNt<bool> needSave() const override;
 
-    IExcerptNotationPtr newExcerptNotation() const override;
+    IExcerptNotationPtr newExcerptBlankNotation() const override;
     ValCh<ExcerptNotationList> excerpts() const override;
     ExcerptNotationList potentialExcerpts() const override;
 
@@ -77,8 +77,12 @@ private:
 
     void doSetExcerpts(ExcerptNotationList excerpts);
 
+    void notifyAboutNeedSaveChanged();
+
     ValCh<ExcerptNotationList> m_excerpts;
     IMasterNotationMidiDataPtr m_notationMidiData = nullptr;
+
+    async::Notification m_needSaveNotification;
 };
 
 using MasterNotationPtr = std::shared_ptr<MasterNotation>;

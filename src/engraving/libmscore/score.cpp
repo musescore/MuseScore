@@ -2786,31 +2786,6 @@ void Score::cmdRemoveStaff(int staffIdx)
     adjustBracketsDel(staffIdx, staffIdx + 1);
 
     undoRemoveStaff(s);
-
-    // remove linked staff and measures in linked staves in excerpts
-    // unlink staff in the same score
-
-    if (s->links()) {
-        Staff* sameScoreLinkedStaff = 0;
-        auto staves = s->links();
-        for (auto le : *staves) {
-            Staff* staff = toStaff(le);
-            if (staff == s) {
-                continue;
-            }
-            Score* lscore = staff->score();
-            if (lscore != this) {
-                lscore->undoRemoveStaff(staff);
-                s->score()->undo(new Unlink(staff));
-            } else {   // linked staff in the same score
-                sameScoreLinkedStaff = staff;
-            }
-        }
-        if (sameScoreLinkedStaff) {
-//                  s->score()->undo(new Unlink(sameScoreLinkedStaff)); // once should be enough
-            s->score()->undo(new Unlink(s));       // once should be enough
-        }
-    }
 }
 
 //---------------------------------------------------------

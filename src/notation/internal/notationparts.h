@@ -65,9 +65,8 @@ public:
     void moveStaves(const IDList& sourceStavesIds, const ID& destinationStaffId, InsertMode mode = InsertMode::Before) override;
 
     void appendStaff(Staff* staff, const ID& destinationPartId) override;
+    void appendLinkedStaff(Staff* staff, const ID& sourceStaffId, const ID& destinationPartId) override;
     void appendPart(Part* part) override;
-
-    void linkStaves(const ID& sourceStaffId, const ID& destinationStaffId) override;
 
     void replaceInstrument(const InstrumentKey& instrumentKey, const Instrument& newInstrument) override;
     void replaceDrumset(const InstrumentKey& instrumentKey, const Drumset& newDrumset) override;
@@ -88,6 +87,7 @@ private:
     void doSetStaffVisible(Staff* staff, bool visible);
     void doSetStaffVoiceVisible(Staff* staff, int voiceIndex, bool visible);
     void doRemoveParts(const IDList& partsIds);
+    void doAppendStaff(Staff* staff, const ID& destinationPartId);
 
     Part* partModifiable(const ID& partId) const;
     Staff* staffModifiable(const ID& staffId) const;
@@ -96,6 +96,7 @@ private:
     void appendStaves(Part* part, const InstrumentTemplate& templ);
     void insertStaff(Staff* staff, int destinationStaffIndex);
     void initStaff(Staff* staff, const InstrumentTemplate& templ, const Ms::StaffType* staffType, int cleffIndex);
+    void linkStaves(const ID& sourceStaffId, const ID& destinationStaffId);
 
     void removeMissingParts(const PartInstrumentList& parts);
     void appendNewParts(const PartInstrumentList& parts);

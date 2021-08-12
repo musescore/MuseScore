@@ -76,6 +76,8 @@ QVariant PartListModel::data(const QModelIndex& index, int role) const
         return excerpt->title();
     case RoleIsSelected:
         return m_selectionModel->isSelected(index);
+    case RoleIsCreated:
+        return excerpt->isInited();
     }
 
     return QVariant();
@@ -90,7 +92,8 @@ QHash<int, QByteArray> PartListModel::roleNames() const
 {
     static const QHash<int, QByteArray> roles {
         { RoleTitle, "title" },
-        { RoleIsSelected, "isSelected" }
+        { RoleIsSelected, "isSelected" },
+        { RoleIsCreated, "isCreated" }
     };
 
     return roles;
@@ -118,8 +121,7 @@ bool PartListModel::isRemovingAvailable() const
 
 void PartListModel::createNewPart()
 {
-    IExcerptNotationPtr excerpt = masterNotation()->newExcerptNotation();
-    excerpt->setTitle(defaultPartTitle());
+    IExcerptNotationPtr excerpt = masterNotation()->newExcerptBlankNotation();
 
     int index = m_excerpts.size();
     insertExcerpt(index, excerpt);

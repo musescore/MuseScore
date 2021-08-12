@@ -517,25 +517,31 @@ void NotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
 {
     TRACEFUNC;
 
-    Part* destinationPart = partModifiable(destinationPartId);
+    startEdit();
+
+    doAppendStaff(staff, destinationPartId);
+    updateTracks();
+
+    apply();
+
+    notifyAboutStaffAdded(staff, destinationPartId);
+}
+
+void NotationParts::appendLinkedStaff(Staff* staff, const ID& sourceStaffId, const mu::ID& destinationPartId)
+{
+    TRACEFUNC;
+
+    const Part* destinationPart = part(destinationPartId);
     if (!destinationPart) {
         return;
     }
 
     startEdit();
 
-    int staffIndex = destinationPart->nstaves();
-
-    staff->setScore(score());
-    staff->setPart(destinationPart);
-
-    insertStaff(staff, staffIndex);
+    doAppendStaff(staff, destinationPartId);
+    linkStaves(sourceStaffId, staff->id());
 
     updateTracks();
-
-    setBracketsAndBarlines();
-
-    destinationPart->instrument()->setClefType(staffIndex, staff->defaultClefType());
 
     apply();
 
@@ -584,26 +590,6 @@ void NotationParts::appendPart(Part* part)
     apply();
 
     notifyAboutPartAdded(part);
-}
-
-void NotationParts::linkStaves(const ID& sourceStaffId, const ID& destinationStaffId)
-{
-    TRACEFUNC;
-
-    Staff* sourceStaff = staffModifiable(sourceStaffId);
-    Staff* destinationStaff = staffModifiable(destinationStaffId);
-
-    if (!sourceStaff || !destinationStaff) {
-        return;
-    }
-
-    startEdit();
-
-    Ms::Excerpt::cloneStaff(sourceStaff, destinationStaff);
-
-    apply();
-
-    notifyAboutStaffChanged(destinationStaff);
 }
 
 void NotationParts::replaceInstrument(const InstrumentKey& instrumentKey, const Instrument& newInstrument)
@@ -703,6 +689,25 @@ void NotationParts::doRemoveParts(const IDList& partsIds)
         notifyAboutPartRemoved(part);
         score()->cmdRemovePart(part);
     }
+}
+
+void NotationParts::doAppendStaff(Staff* staff, const mu::ID& destinationPartId)
+{
+    Part* destinationPart = partModifiable(destinationPartId);
+    if (!destinationPart) {
+        return;
+    }
+
+    int staffIndex = destinationPart->nstaves();
+
+    staff->setScore(score());
+    staff->setPart(destinationPart);
+
+    insertStaff(staff, staffIndex);
+
+    setBracketsAndBarlines();
+
+    destinationPart->instrument()->setClefType(staffIndex, staff->defaultClefType());
 }
 
 void NotationParts::removeStaves(const IDList& stavesIds)
@@ -848,6 +853,23 @@ void NotationParts::initStaff(Staff* staff, const InstrumentTemplate& templ, con
         staff->setBarLineSpan(templ.barlineSpan[cleffIndex]);
     }
     staff->setDefaultClefType(templ.clefType(cleffIndex));
+}
+
+void NotationParts::linkStaves(const ID& sourceStaffId, const ID& destinationStaffId)
+{
+    TRACEFUNC;
+
+    Staff* sourceStaff = staffModifiable(sourceStaffId);
+    Staff* destinationStaff = staffModifiable(destinationStaffId);
+
+    if (!sourceStaff || !destinationStaff) {
+        return;
+    }
+
+    ///! NOTE: need to unlink before linking
+    destinationStaff->undoUnlink();
+
+    Ms::Excerpt::cloneStaff(sourceStaff, destinationStaff);
 }
 
 void NotationParts::removeMissingParts(const PartInstrumentList& parts)
