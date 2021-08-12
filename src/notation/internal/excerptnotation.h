@@ -53,6 +53,7 @@ public:
 private:
     Ms::Excerpt* m_excerpt = nullptr;
     bool m_isInited = false;
+    QString m_title;
 };
 }
 
