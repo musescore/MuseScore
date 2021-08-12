@@ -39,6 +39,8 @@ enum class SpannerSegmentType;
 
 struct BeamFragment;
 
+typedef QPair<qreal, qreal> BeamPos;
+
 //---------------------------------------------------------
 //   @@ Beam
 //---------------------------------------------------------
@@ -48,28 +50,27 @@ class Beam final : public Element
     Q_GADGET
     QVector<ChordRest*> _elements;          // must be sorted by tick
     QVector<mu::LineF*> beamSegments;
-    Direction _direction;
+    Direction _direction    { Direction::AUTO };
 
-    bool _up;
-    bool _distribute;                     // equal spacing of elements
-    bool _noSlope;
+    bool _up                { true };
+    bool _distribute        { false };                    // equal spacing of elements
 
-    bool _userModified[2];                // 0: auto/down  1: up
-    bool _isGrace;
-    bool _cross;
+    bool _userModified[2]   { false };                // 0: auto/down  1: up
+    bool _isGrace           { false };
+    bool _cross             { false };
 
-    qreal _grow1;                         // define "feather" beams
-    qreal _grow2;
-    qreal _beamDist;
+    qreal _grow1            { 1.0f };                     // define "feather" beams
+    qreal _grow2            { 1.0f };
+    qreal _beamDist         { 0.0f };
 
     QVector<BeamFragment*> fragments;       // beam splits across systems
 
-    mutable int _id;            // used in read()/write()
+    mutable int _id         { 0 };          // used in read()/write()
 
-    int minMove;                // set in layout1()
-    int maxMove;
+    int minMove             { 0 };                // set in layout1()
+    int maxMove             { 0 };
     TDuration maxDuration;
-    qreal slope { 0.0 };
+    qreal slope             { 0.0 };
 
     void layout2(std::vector<ChordRest*>, SpannerSegmentType, int frag);
     bool twoBeamedNotes();
@@ -164,8 +165,8 @@ public:
     bool userModified() const;
     void setUserModified(bool val);
 
-    mu::PointF beamPos() const;
-    void setBeamPos(const mu::PointF& bp);
+    Ms::BeamPos beamPos() const;
+    void setBeamPos(const Ms::BeamPos& bp);
 
     qreal beamDist() const { return _beamDist; }
 
