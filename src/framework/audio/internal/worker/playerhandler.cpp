@@ -102,6 +102,18 @@ void PlayerHandler::resume(const TrackSequenceId sequenceId)
     }, AudioThread::ID);
 }
 
+void PlayerHandler::setDuration(const TrackSequenceId sequenceId, const msecs_t durationMsec)
+{
+    Async::call(this, [this, sequenceId, durationMsec]() {
+        ONLY_AUDIO_WORKER_THREAD;
+
+        ITrackSequencePtr s = sequence(sequenceId);
+        if (s) {
+            s->player()->setDuration(durationMsec);
+        }
+    }, AudioThread::ID);
+}
+
 Promise<bool> PlayerHandler::setLoop(const TrackSequenceId sequenceId, const msecs_t fromMsec, const msecs_t toMsec)
 {
     return Promise<bool>([this, sequenceId, fromMsec, toMsec](Promise<bool>::Resolve resolve, Promise<bool>::Reject reject) {

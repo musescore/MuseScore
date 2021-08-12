@@ -98,19 +98,17 @@ void NotationPlayback::updateLoopBoundaries()
     }
 }
 
-QTime NotationPlayback::totalPlayTime() const
+audio::msecs_t NotationPlayback::totalPlayTime() const
 {
-    QTime time(0, 0, 0, 0);
-
     Ms::Score* score = m_getScore->score();
     if (!score) {
-        return time;
+        return 0;
     }
 
     int lastTick = score->repeatList().ticks();
-    int secs = score->utick2utime(lastTick);
+    qreal secs = score->utick2utime(lastTick);
 
-    return time.addSecs(secs);
+    return secs * 1000.f;
 }
 
 float NotationPlayback::tickToSec(tick_t tick) const
