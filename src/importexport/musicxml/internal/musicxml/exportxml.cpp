@@ -384,11 +384,11 @@ class ExportMusicXml
     void exportDefaultClef(const Part* const part, const Measure* const m);
     void writeElement(Element* el, const Measure* m, int sstaff, bool useDrumset);
     void writeMeasureTracks(const Measure* const m, const int partIndex, const int strack, const int partRelStaffNo, const bool useDrumset,
-                            const bool isLastStaffOfPart, FigBassMap& fbMap);
+                            const bool isLastStaffOfPart, FigBassMap& fbMap, QSet<const Spanner*>& spannersStopped);
     void writeMeasureStaves(const Measure* m, const int partIndex, const int startStaff, const int nstaves, const bool useDrumset,
-                            FigBassMap& fbMap);
+                            FigBassMap& fbMap, QSet<const Spanner*>& spannersStopped);
     void writeMeasure(const Measure* const m, const int idx, const int staffCount, MeasureNumberStateHandler& mnsh, FigBassMap& fbMap,
-                      const MeasurePrintContext& mpc);
+                      const MeasurePrintContext& mpc, QSet<const Spanner*>& spannersStopped);
     void repeatAtMeasureStart(Attributes& attr, const Measure* const m, int strack, int etrack, int track);
     void repeatAtMeasureStop(const Measure* const m, int strack, int etrack, int track);
     void writeParts();
@@ -6779,14 +6779,11 @@ void ExportMusicXml::writeMeasureTracks(const Measure* const m,
                                         const int partRelStaffNo,
                                         const bool useDrumset,
                                         const bool isLastStaffOfPart,
-                                        FigBassMap& fbMap)
+                                        FigBassMap& fbMap,
+                                        QSet<const Spanner*>& spannersStopped)
 {
     const auto tboxesAbove = findTextFramesToWriteAsWordsAbove(m);
     const auto tboxesBelow = findTextFramesToWriteAsWordsBelow(m);
-
-    // set of spanners already stopped in this measure
-    // required to prevent multiple spanner stops for the same spanner
-    QSet<const Spanner*> spannersStopped;
 
     int etrack = strack + VOICES;
     for (int track = strack; track < etrack; ++track) {
@@ -6879,7 +6876,8 @@ void ExportMusicXml::writeMeasureStaves(const Measure* m,
                                         const int startStaff,
                                         const int nstaves,
                                         const bool useDrumset,
-                                        FigBassMap& fbMap)
+                                        FigBassMap& fbMap,
+                                        QSet<const Spanner*>& spannersStopped)
 {
     const int endStaff = startStaff + nstaves;
     const Measure* const origM = m;
@@ -6910,7 +6908,7 @@ void ExportMusicXml::writeMeasureStaves(const Measure* m,
 
         bool isLastStaffOfPart = (endStaff - 1 <= staffIdx); // for writing tboxes below
 
-        writeMeasureTracks(m, partIndex, staff2track(staffIdx), partRelStaffNo, useDrumset, isLastStaffOfPart, fbMap);
+        writeMeasureTracks(m, partIndex, staff2track(staffIdx), partRelStaffNo, useDrumset, isLastStaffOfPart, fbMap, spannersStopped);
 
         // restore m and _tick before advancing to next staff in part
         m = origM;
@@ -6931,7 +6929,8 @@ void ExportMusicXml::writeMeasure(const Measure* const m,
                                   const int staffCount,
                                   MeasureNumberStateHandler& mnsh,
                                   FigBassMap& fbMap,
-                                  const MeasurePrintContext& mpc)
+                                  const MeasurePrintContext& mpc,
+                                  QSet<const Spanner*>& spannersStopped)
 {
     const auto part = _score->parts().at(partIndex);
     const int staves = part->nstaves();
@@ -7000,7 +6999,7 @@ void ExportMusicXml::writeMeasure(const Measure* const m,
     }
 
     // write data in the staves
-    writeMeasureStaves(m, partIndex, track2staff(strack), staves, part->instrument()->useDrumset(), fbMap);
+    writeMeasureStaves(m, partIndex, track2staff(strack), staves, part->instrument()->useDrumset(), fbMap, spannersStopped);
 
     // write the annotations that could not be attached to notes
     annotationsWithoutNote(this, strack, staves, m);
@@ -7056,6 +7055,10 @@ void ExportMusicXml::writeParts()
         MeasureNumberStateHandler mnsh;
         FigBassMap fbMap;                     // pending figured bass extends
 
+        // set of spanners already stopped in this part
+        // required to prevent multiple spanner stops for the same spanner
+        QSet<const Spanner*> spannersStopped;
+
         const auto& pages = _score->pages();
         MeasurePrintContext mpc;
 
@@ -7079,13 +7082,13 @@ void ExportMusicXml::writeParts()
                         const auto m2 = m->mmRestLast()->nextMeasure();
                         for (auto m1 = m->mmRestFirst(); m1 != m2; m1 = m1->nextMeasure()) {
                             if (m1->isMeasure()) {
-                                writeMeasure(m1, partIndex, staffCount, mnsh, fbMap, mpc);
+                                writeMeasure(m1, partIndex, staffCount, mnsh, fbMap, mpc, spannersStopped);
                                 mpc.measureWritten(m1);
                             }
                         }
                     } else {
                         // write the measure (or, if measure repeat, the "underlying" measure that it indicates for the musician to play)
-                        writeMeasure(m, partIndex, staffCount, mnsh, fbMap, mpc);
+                        writeMeasure(m, partIndex, staffCount, mnsh, fbMap, mpc, spannersStopped);
                         mpc.measureWritten(m);
                     }
                 }
