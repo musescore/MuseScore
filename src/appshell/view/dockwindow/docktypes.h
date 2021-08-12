@@ -27,6 +27,9 @@
 #include <QVariant>
 
 namespace mu::dock {
+static const char* CONTEXT_MENU_MODEL_PROPERTY("contextMenuModel");
+static const char* DOCK_PANEL_PROPERY("dockPanel");
+
 enum class DockType {
     Undefined = -1,
     Panel,

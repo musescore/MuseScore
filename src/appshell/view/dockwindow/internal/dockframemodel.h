@@ -67,8 +67,13 @@ signals:
     void currentDockChanged();
 
 private:
+    bool eventFilter(QObject* watched, QEvent* event);
+
     void listenChangesInFrame();
     void setTitleBarVisible(bool visible);
+
+    const QObject* currentDockObject() const;
+    QVariant currentDockProperty(const char* propertyName) const;
 
     QObject* currentNavigationSection() const;
     void updateNavigationSection();

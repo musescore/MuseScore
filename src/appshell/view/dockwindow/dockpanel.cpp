@@ -109,7 +109,7 @@ DockPanel::~DockPanel()
         return;
     }
 
-    w->setProperty("dockPanel", QVariant::fromValue(nullptr));
+    w->setProperty(DOCK_PANEL_PROPERY, QVariant::fromValue(nullptr));
 }
 
 DockPanel* DockPanel::tabifyPanel() const
@@ -143,12 +143,12 @@ void DockPanel::componentComplete()
 
     m_menuModel->load();
 
-    w->setProperty("dockPanel", QVariant::fromValue(this));
-    w->setProperty("contextMenuModel", m_menuModel->toVariant());
+    w->setProperty(DOCK_PANEL_PROPERY, QVariant::fromValue(this));
+    w->setProperty(CONTEXT_MENU_MODEL_PROPERTY, m_menuModel->toVariant());
 
     connect(this, &DockPanel::contextMenuModelChanged, [this, w]() {
         if (w) {
-            w->setProperty("contextMenuModel", m_menuModel->toVariant());
+            w->setProperty(CONTEXT_MENU_MODEL_PROPERTY, m_menuModel->toVariant());
         }
     });
 }
