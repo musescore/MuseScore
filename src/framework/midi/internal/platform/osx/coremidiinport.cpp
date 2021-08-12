@@ -206,7 +206,7 @@ Ret CoreMidiInPort::connect(const MidiDeviceID& deviceID)
     }
 
     m_deviceID = deviceID;
-    return Ret(true);
+    return run();
 }
 
 void CoreMidiInPort::disconnect()
@@ -215,10 +215,10 @@ void CoreMidiInPort::disconnect()
         return;
     }
 
+    stop();
+
     m_core->sourceId = 0;
     m_deviceID.clear();
-
-    stop();
 }
 
 bool CoreMidiInPort::isConnected() const
@@ -263,11 +263,6 @@ void CoreMidiInPort::stop()
         LOGE() << "can't disconnect midi port " << result;
     }
     m_running = false;
-}
-
-bool CoreMidiInPort::isRunning() const
-{
-    return m_running;
 }
 
 async::Channel<tick_t, Event> CoreMidiInPort::eventReceived() const

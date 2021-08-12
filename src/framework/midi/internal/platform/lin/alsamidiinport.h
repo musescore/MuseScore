@@ -46,12 +46,12 @@ public:
     bool isConnected() const override;
     MidiDeviceID deviceID() const override;
 
-    Ret run() override;
-    void stop() override;
-    bool isRunning() const override;
     async::Channel<tick_t, Event> eventReceived() const override;
 
 private:
+    Ret run();
+    void stop();
+
     static void process(AlsaMidiInPort* self);
     void doProcess();
 
