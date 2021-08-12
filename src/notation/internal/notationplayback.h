@@ -47,7 +47,7 @@ public:
 
     void init();
 
-    QTime totalPlayTime() const override;
+    audio::msecs_t totalPlayTime() const override;
 
     float tickToSec(midi::tick_t tick) const override;
     midi::tick_t secToTick(float sec) const override;
