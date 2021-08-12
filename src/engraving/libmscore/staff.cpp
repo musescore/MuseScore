@@ -744,8 +744,8 @@ void Staff::write(XmlWriter& xml) const
         xml.tag("defaultTransposingClef", ClefInfo::tag(ct._transposingClef));
     }
 
-    if (invisible(Fraction(0, 1))) {
-        xml.tag("invisible", invisible(Fraction(0, 1)));
+    if (isLinesInvisible(Fraction(0, 1))) {
+        xml.tag("invisible", isLinesInvisible(Fraction(0, 1)));
     }
     if (hideWhenEmpty() != HideMode::AUTO) {
         xml.tag("hideWhenEmpty", int(hideWhenEmpty()));
@@ -1231,7 +1231,6 @@ void Staff::init(const Staff* s)
     _barLineSpan       = s->_barLineSpan;
     _barLineFrom       = s->_barLineFrom;
     _barLineTo         = s->_barLineTo;
-    _invisible         = s->_invisible;
     _hideWhenEmpty     = s->_hideWhenEmpty;
     _cutaway           = s->_cutaway;
     _showIfEmpty       = s->_showIfEmpty;
@@ -1290,7 +1289,7 @@ void Staff::spatiumChanged(qreal oldValue, qreal newValue)
 
 bool Staff::show() const
 {
-    return _part->show() && !_invisible;
+    return _part->show() && visible();
 }
 
 //---------------------------------------------------------
@@ -1706,7 +1705,7 @@ qreal Staff::lineDistance(const Fraction& tick) const
 //   invisible
 //---------------------------------------------------------
 
-bool Staff::invisible(const Fraction& tick) const
+bool Staff::isLinesInvisible(const Fraction& tick) const
 {
     return staffType(tick)->invisible();
 }
@@ -1715,7 +1714,7 @@ bool Staff::invisible(const Fraction& tick) const
 //   setInvisible
 //---------------------------------------------------------
 
-void Staff::setInvisible(const Fraction& tick, bool val)
+void Staff::setIsLinesInvisible(const Fraction& tick, bool val)
 {
     staffType(tick)->setInvisible(val);
 }

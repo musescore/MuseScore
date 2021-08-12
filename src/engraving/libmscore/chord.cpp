@@ -774,7 +774,7 @@ void Chord::addLedgerLines()
         lineBelow     = (st->lines(tick) - 1) * 2;
         lineDistance  = st->lineDistance(tick);
         mag           = staff()->staffMag(tick);
-        staffVisible  = !staff()->invisible(tick);
+        staffVisible  = !staff()->isLinesInvisible(tick);
         stepOffset = st->staffType(tick)->stepOffset();
     }
 

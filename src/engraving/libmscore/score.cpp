@@ -2021,7 +2021,7 @@ Text* Score::getText(Tid tid) const
             }
         }
     }
-    return 0;
+    return nullptr;
 }
 
 //---------------------------------------------------------

@@ -56,6 +56,8 @@ public:
     virtual void setStaffType(const ID& staffId, StaffType type) = 0;
     virtual void setCutawayEnabled(const ID& staffId, bool enabled) = 0;
     virtual void setSmallStaff(const ID& staffId, bool smallStaff) = 0;
+
+    virtual StaffConfig staffConfig(const ID& staffId) const = 0;
     virtual void setStaffConfig(const ID& staffId, const StaffConfig& config) = 0;
 
     virtual void removeParts(const IDList& partsIds) = 0;
