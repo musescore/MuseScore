@@ -219,7 +219,7 @@ bool mxmlNoteDuration::readProperties(QXmlStreamReader& e)
       //qDebug("tag %s", qPrintable(tag.toString()));
       if (tag == "dot") {
             _dots++;
-            e.readNext();
+            e.skipCurrentElement();  // skip but don't log
             return true;
             }
       else if (tag == "duration") {
