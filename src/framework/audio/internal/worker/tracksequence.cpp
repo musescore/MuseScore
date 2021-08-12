@@ -56,11 +56,7 @@ TrackSequence::~TrackSequence()
 
     mixer()->removeClock(m_clock);
 
-    for (const auto& pair : m_tracks) {
-        if (pair.second && pair.second->mixerChannel) {
-            mixer()->removeChannel(pair.second->mixerChannel->id());
-        }
-    }
+    removeAllTracks();
 }
 
 TrackSequenceId TrackSequence::id() const
@@ -167,6 +163,15 @@ Ret TrackSequence::removeTrack(const TrackId id)
     }
 
     return make_ret(Err::InvalidTrackId);
+}
+
+void TrackSequence::removeAllTracks()
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    for (const TrackId& id : trackIdList()) {
+        removeTrack(id);
+    }
 }
 
 Channel<TrackId> TrackSequence::trackAdded() const
