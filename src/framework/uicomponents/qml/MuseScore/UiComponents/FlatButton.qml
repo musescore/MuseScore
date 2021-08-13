@@ -52,7 +52,8 @@ FocusScope {
 
     property bool isClickOnKeyNavTriggered: true
 
-    property Component contentItem: defaultComponent
+    property Component contentItem: defaultContentComponent
+    property Component backgroundItem: defaultBackgroundComponent
 
     signal clicked(var mouse)
     signal pressAndHold(var mouse)
@@ -93,17 +94,51 @@ FocusScope {
         }
     }
 
-    Rectangle {
-        id: background
+    Loader {
         anchors.fill: parent
-        color: root.normalStateColor
-        opacity: ui.theme.buttonOpacityNormal
-        radius: 3
 
-        NavigationFocusBorder { navigationCtrl: navCtrl }
+        sourceComponent: root.backgroundItem
+    }
 
-        border.width: ui.theme.borderWidth
-        border.color: ui.theme.strokeColor
+    Component {
+        id: defaultBackgroundComponent
+
+        Rectangle {
+            id: background
+
+            color: root.normalStateColor
+            opacity: ui.theme.buttonOpacityNormal
+
+            radius: 3
+            border.width: ui.theme.borderWidth
+            border.color: ui.theme.strokeColor
+
+            NavigationFocusBorder { navigationCtrl: navCtrl }
+
+            states: [
+                State {
+                    name: "PRESSED"
+                    when: mouseArea.pressed
+
+                    PropertyChanges {
+                        target: background
+                        color: root.pressedStateColor
+                        opacity: ui.theme.buttonOpacityHit
+                    }
+                },
+
+                State {
+                    name: "HOVERED"
+                    when: mouseArea.containsMouse && !mouseArea.pressed
+
+                    PropertyChanges {
+                        target: background
+                        color: root.hoveredStateColor
+                        opacity: ui.theme.buttonOpacityHover
+                    }
+                }
+            ]
+        }
     }
 
     Loader {
@@ -116,7 +151,7 @@ FocusScope {
     }
 
     Component {
-        id: defaultComponent
+        id: defaultContentComponent
 
         Item {
             id: contentWrapper
@@ -182,30 +217,6 @@ FocusScope {
         }
     }
 
-    states: [
-        State {
-            name: "PRESSED"
-            when: mouseArea.pressed
-
-            PropertyChanges {
-                target: background
-                color: root.pressedStateColor
-                opacity: ui.theme.buttonOpacityHit
-            }
-        },
-
-        State {
-            name: "HOVERED"
-            when: mouseArea.containsMouse && !mouseArea.pressed
-
-            PropertyChanges {
-                target: background
-                color: root.hoveredStateColor
-                opacity: ui.theme.buttonOpacityHover
-            }
-        }
-    ]
-
     MouseArea {
         id: mouseArea
         anchors.fill: parent
@@ -213,15 +224,15 @@ FocusScope {
         hoverEnabled: true
 
         onClicked: function (mouse) {
-            root.clicked(mouse) 
+            root.clicked(mouse)
         }
 
         onPressed: {
             ui.tooltip.hide(this)
         }
 
-        onPressAndHold: function (mouse) { 
-            root.pressAndHold(mouse) 
+        onPressAndHold: function (mouse) {
+            root.pressAndHold(mouse)
         }
 
         onContainsMouseChanged: {
