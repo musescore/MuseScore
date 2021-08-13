@@ -224,6 +224,33 @@ void Excerpt::updateTracks()
 }
 
 //---------------------------------------------------------
+//   initExcerptStyle
+//---------------------------------------------------------
+
+void Excerpt::initExcerptStyle(Excerpt* excerpt)
+{
+    MasterScore* masterScore = excerpt->oscore();
+    Score* score = excerpt->partScore();
+
+    // clone layer:
+    for (int i = 0; i < 32; ++i) {
+        score->layerTags()[i] = masterScore->layerTags()[i];
+        score->layerTagComments()[i] = masterScore->layerTagComments()[i];
+    }
+
+    score->setCurrentLayer(masterScore->currentLayer());
+    score->layer().clear();
+
+    for (const Layer& layer : masterScore->layer()) {
+        score->layer().append(layer);
+    }
+
+    score->setPageNumberOffset(masterScore->pageNumberOffset());
+
+    score->doLayout();
+}
+
+//---------------------------------------------------------
 //   createExcerpt
 //---------------------------------------------------------
 
@@ -235,18 +262,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
     QList<Part*>& parts = excerpt->parts();
     QList<int> srcStaves;
 
-    // clone layer:
-    for (int i = 0; i < 32; ++i) {
-        score->layerTags()[i] = oscore->layerTags()[i];
-        score->layerTagComments()[i] = oscore->layerTagComments()[i];
-    }
-    score->setCurrentLayer(oscore->currentLayer());
-    score->layer().clear();
-    foreach (const Layer& l, oscore->layer()) {
-        score->layer().append(l);
-    }
-
-    score->setPageNumberOffset(oscore->pageNumberOffset());
+    initExcerptStyle(excerpt);
 
     // Set instruments and create linked staves
     for (const Part* part : parts) {
@@ -449,6 +465,16 @@ void MasterScore::initAndAddExcerpt(Excerpt* excerpt, bool fakeUndo)
         score->undo(excerptCmd);
     }
     Excerpt::createExcerpt(excerpt);
+}
+
+void MasterScore::initAndAddBlanckExcerpt(Excerpt* excerpt)
+{
+    Score* score = new Score(masterScore());
+    excerpt->setPartScore(score);
+    score->style().set(Sid::createMultiMeasureRests, true);
+    score->undo(new AddExcerpt(excerpt));
+
+    Excerpt::initExcerptStyle(excerpt);
 }
 
 //---------------------------------------------------------

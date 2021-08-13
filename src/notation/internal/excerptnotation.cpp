@@ -61,8 +61,8 @@ void ExcerptNotation::init()
 
     setScore(m_excerpt->partScore());
 
-    QString title = m_title.isEmpty() ? m_title : m_excerpt->title();
-    setTitle(m_title);
+    QString title = !m_title.isEmpty() ? m_title : m_excerpt->title();
+    setTitle(title);
 
     m_isInited = true;
 }

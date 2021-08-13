@@ -501,13 +501,11 @@ void MasterNotation::notifyAboutNeedSaveChanged()
 IExcerptNotationPtr MasterNotation::newExcerptBlankNotation() const
 {
     Ms::Excerpt* excerpt = new Ms::Excerpt(masterScore());
-    excerpt->setTitle(qtrc("notation", "Part"));
-    masterScore()->initAndAddExcerpt(excerpt, false);
-
-    auto excerptNotation = std::make_shared<ExcerptNotation>(excerpt);
-    excerptNotation->init();
+    masterScore()->initAndAddBlanckExcerpt(excerpt);
 
     Ms::Score* excerptScore = excerpt->partScore();
+    excerptScore->insertMeasure(ElementType::VBOX, excerptScore->first());
+
     auto setText = [&excerptScore](Ms::Tid textId, const QString& text) {
         Ms::TextBase* textBox = excerptScore->getText(textId);
         if (!textBox) {
@@ -517,10 +515,16 @@ IExcerptNotationPtr MasterNotation::newExcerptBlankNotation() const
         textBox->setPlainText(text);
     };
 
+    excerpt->setTitle(qtrc("notation", "Part"));
+
+    setText(Ms::Tid::INSTRUMENT_EXCERPT, excerpt->title());
     setText(Ms::Tid::TITLE, qtrc("notation", "Title"));
     setText(Ms::Tid::COMPOSER, qtrc("notation", "Composer"));
 
     excerptScore->doLayout();
+
+    auto excerptNotation = std::make_shared<ExcerptNotation>(excerpt);
+    excerptNotation->init();
 
     return excerptNotation;
 }

@@ -169,6 +169,7 @@ public:
     void removeExcerpt(Excerpt*);
     void deleteExcerpt(Excerpt*);
     void initAndAddExcerpt(Excerpt*, bool);
+    void initAndAddBlanckExcerpt(Excerpt*);
 
     void setPlaybackScore(Score*);
     Score* playbackScore() { return _playbackScore; }

@@ -87,6 +87,7 @@ public:
     static QList<Excerpt*> createExcerptsFromParts(const QList<Part*>& parts);
     static Excerpt* createExcerptFromPart(Part* part);
 
+    static void initExcerptStyle(Excerpt*);
     static void createExcerpt(Excerpt*);
     static void cloneStaves(Score* oscore, Score* score, const QList<int>& sourceStavesIndexes, QMultiMap<int, int>& allTracks);
     static void cloneStaff(Staff* ostaff, Staff* nstaff);
