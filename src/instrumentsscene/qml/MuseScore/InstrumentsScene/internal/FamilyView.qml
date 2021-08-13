@@ -33,33 +33,16 @@ Item {
     property alias genres: genreBox.model
     property alias groups: groupsView.model
 
+    property alias currentGenreIndex: genreBox.currentIndex
+    property alias currentGroupIndex: groupsView.currentIndex
+
     property alias navigation: navPanel
 
-    signal genreSelected(string genreId)
-    signal groupSelected(string groupId)
+    signal genreSelected(int newIndex)
+    signal groupSelected(int newIndex)
 
-    QtObject {
-        id: prv
-
-        property int currentGroupIndex: -1
-    }
-
-    function clearSelection() {
-        prv.currentGroupIndex = -1
-    }
-
-    function setGenre(genreId) {
-        genreBox.currentIndex = genreBox.indexOfValue(genreId)
-    }
-
-    function focusGroup(groupId) {
-        for (var i in root.groups) {
-            if (root.groups[i].id === groupId) {
-                prv.currentGroupIndex = i
-                groupsView.positionViewAtIndex(groupsView.currentGroupIndex, ListView.Beginning)
-                return
-            }
-        }
+    function focusGroup(groupIndex) {
+        groupsView.positionViewAtIndex(groupIndex, ListView.Beginning)
     }
 
     NavigationPanel {
@@ -91,11 +74,8 @@ Item {
         navigation.panel: navPanel
         navigation.row: 1
 
-        textRole: "name"
-        valueRole: "id"
-
-        onCurrentValueChanged: {
-            root.genreSelected(genreBox.currentValue)
+        onActivated: {
+            root.genreSelected(genreBox.currentIndex)
         }
     }
 
@@ -120,9 +100,9 @@ Item {
         delegate: ListItemBlank {
             id: item
 
-            isSelected: prv.currentGroupIndex === index
+            isSelected: groupsView.currentIndex === model.index
 
-            navigation.name: modelData.name
+            navigation.name: modelData
             navigation.panel: navPanel
             navigation.row: 2 + model.index
 
@@ -134,12 +114,11 @@ Item {
 
                 font: ui.theme.bodyBoldFont
                 horizontalAlignment: Text.AlignLeft
-                text: modelData.name
+                text: modelData
             }
 
             onClicked: {
-                prv.currentGroupIndex = index
-                root.groupSelected(modelData.id)
+                root.groupSelected(model.index)
             }
         }
     }

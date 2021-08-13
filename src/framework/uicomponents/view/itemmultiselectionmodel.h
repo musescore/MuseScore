@@ -33,6 +33,9 @@ public:
     explicit ItemMultiSelectionModel(QAbstractItemModel* parent = nullptr);
 
     void setAllowedModifiers(Qt::KeyboardModifiers modifiers);
+    void setSingleItemSelectionMode(bool on);
+
+    QList<int> selectedRows() const;
 
     using QItemSelectionModel::select;
 

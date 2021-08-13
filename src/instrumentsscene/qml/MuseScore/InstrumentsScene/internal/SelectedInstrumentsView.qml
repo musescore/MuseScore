@@ -30,45 +30,38 @@ import MuseScore.InstrumentsScene 1.0
 Item {
     id: root
 
-    property alias instruments: instrumentsView.model
-    property var instrumentsModel: null
-
-    property bool canLiftInstrument: currentInstrumentIndex > 0
-    property bool canLowerInstrument: isInstrumentSelected && (currentInstrumentIndex < instrumentsView.count - 1)
-
-    property bool isInstrumentSelected: currentInstrumentIndex != -1
-    property int currentInstrumentIndex: -1
+    property bool hasInstruments: instrumentsOnScore.count > 0
+    property alias isMovingUpAvailable: instrumentsOnScore.isMovingUpAvailable
+    property alias isMovingDownAvailable: instrumentsOnScore.isMovingDownAvailable
 
     property alias navigation: navPanel
 
-    signal unselectInstrumentRequested(var index)
-    signal orderChanged(string id)
-    signal soloistChanged(string id)
+    function scoreContent() {
+        return instrumentsOnScore.scoreContent()
+    }
 
-    function selectedScoreOrder() {
-        var orders = instrumentsModel.scoreOrders
-        return orders[scoreOrderComboBox.currentIndex].config
+    function addInstruments(instruments) {
+        instrumentsOnScore.addInstruments(instruments)
+    }
+
+    function moveInstrumentsUp() {
+        instrumentsOnScore.moveSelectionUp()
+    }
+
+    function moveInstrumentsDown() {
+        instrumentsOnScore.moveSelectionDown()
     }
 
     function scrollViewToEnd() {
         instrumentsView.positionViewAtEnd()
     }
 
-    function unselectCurrentInstrument() {
-        unselectInstrumentRequested(currentInstrumentIndex)
-        currentInstrumentIndex--
+    InstrumentsOnScoreModel {
+        id: instrumentsOnScore
     }
 
-    function soloistsButtonText(soloist) {
-        return soloist ? qsTrc("instruments", "Undo soloist") : qsTrc("instruments", "Make soloist")
-    }
-
-    function instrumentName(data) {
-        var name = data.name
-        if (data.isSoloist) {
-            name = qsTrc("instruments", "Soloist: ") + name
-        }
-        return name
+    Component.onCompleted: {
+        instrumentsOnScore.load()
     }
 
     NavigationPanel {
@@ -97,23 +90,17 @@ Item {
         anchors.right: parent.right
 
         Dropdown {
-            id: scoreOrderComboBox
-
             Layout.fillWidth: true
 
             navigation.name: "Orders"
             navigation.panel: navPanel
             navigation.row: 1
 
-            textRole: "name"
-            valueRole: "id"
-
-            model: instrumentsModel.scoreOrders
-
-            currentIndex: instrumentsModel.selectedScoreOrderIndex
+            model: instrumentsOnScore.orders
+            currentIndex: instrumentsOnScore.currentOrderIndex
 
             onCurrentValueChanged: {
-                root.orderChanged(scoreOrderComboBox.currentValue)
+                instrumentsOnScore.currentOrderIndex = currentIndex
             }
         }
 
@@ -124,11 +111,12 @@ Item {
             navigation.panel: navPanel
             navigation.row: 3
 
-            enabled: root.isInstrumentSelected
             icon: IconCode.DELETE_TANK
 
+            enabled: instrumentsOnScore.isRemovingAvailable
+
             onClicked: {
-                root.unselectCurrentInstrument()
+                instrumentsOnScore.removeSelection()
             }
         }
     }
@@ -151,15 +139,20 @@ Item {
             anchors.right: parent.right
         }
 
+        model: instrumentsOnScore
+
         delegate: ListItemBlank {
             id: item
 
-            isSelected: root.currentInstrumentIndex === model.index
+            isSelected: model.isSelected
 
-            navigation.name: modelData.name
+            navigation.name: model.name
             navigation.panel: navPanel
             navigation.row: 4 + model.index
-            onNavigationActived: item.clicked()
+
+            onNavigationActived: {
+                item.clicked()
+            }
 
             StyledTextLabel {
                 anchors.left: parent.left
@@ -169,7 +162,7 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
 
                 horizontalAlignment: Text.AlignLeft
-                text: instrumentName(modelData)
+                text:  model.isSoloist ? qsTrc("instruments", "Soloist: ") + model.name : model.name
                 font: ui.theme.bodyBoldFont
             }
 
@@ -181,21 +174,20 @@ Item {
 
                 narrowMargins: true
 
-                visible: root.currentInstrumentIndex === index
-
-                text: soloistsButtonText(modelData.isSoloist)
+                text: model.isSoloist ? qsTrc("instruments", "Undo soloist") : qsTrc("instruments", "Make soloist")
+                visible: model.isSelected
 
                 onClicked: {
-                    soloistChanged(modelData.id)
+                    instrumentsOnScore.toggleSoloist(model.index)
                 }
             }
 
             onClicked: {
-                root.currentInstrumentIndex = model.index
+                instrumentsOnScore.selectInstrument(model.index)
             }
 
             onDoubleClicked: {
-                root.unselectCurrentInstrument()
+                instrumentsOnScore.removeSelection()
             }
         }
     }

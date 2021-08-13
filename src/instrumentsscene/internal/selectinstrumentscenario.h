@@ -24,27 +24,20 @@
 
 #include "notation/iselectinstrumentscenario.h"
 #include "modularity/ioc.h"
-#include "context/iglobalcontext.h"
 #include "iinteractive.h"
 
 namespace mu::instrumentsscene {
 class SelectInstrumentsScenario : public notation::ISelectInstrumentsScenario
 {
-    INJECT(instruments, context::IGlobalContext, globalContext)
     INJECT(instruments, framework::IInteractive, interactive)
 
 public:
-    RetVal<notation::PartInstrumentListScoreOrder> selectInstruments(SelectInstrumentsMode mode = SelectInstrumentsMode::None) const
-    override;
+    RetVal<notation::PartInstrumentListScoreOrder> selectInstruments() const override;
     RetVal<notation::Instrument> selectInstrument(const notation::InstrumentKey& currentInstrumentId = notation::InstrumentKey()) const
     override;
 
 private:
     RetVal<notation::PartInstrumentListScoreOrder> selectInstruments(const QStringList& params) const;
-
-    notation::INotationPartsPtr notationParts() const;
-    QStringList partsIds() const;
-    notation::ScoreOrder scoreOrder() const;
 };
 }
 

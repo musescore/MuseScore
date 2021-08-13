@@ -76,7 +76,6 @@ private:
     void doRemovePart(int partIndex);
 
     IMasterNotationPtr masterNotation() const;
-    QList<int> selectedRows() const;
 
     void insertExcerpt(int destinationIndex, IExcerptNotationPtr excerpt);
     void notifyAboutNotationChanged(int index);

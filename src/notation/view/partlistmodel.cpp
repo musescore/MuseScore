@@ -110,7 +110,7 @@ bool PartListModel::isRemovingAvailable() const
         return false;
     }
 
-    for (int index : selectedRows()) {
+    for (int index : m_selectionModel->selectedRows()) {
         if (!m_excerpts[index]->isCreated()) {
             return false;
         }
@@ -133,18 +133,10 @@ void PartListModel::selectPart(int partIndex)
         return;
     }
 
-    QModelIndexList previousSelectedIndexes = m_selectionModel->selectedIndexes();
     QModelIndex modelIndex = index(partIndex);
     m_selectionModel->select(modelIndex);
-    QModelIndexList newSelectedIndexes = m_selectionModel->selectedIndexes();
 
-    QSet<QModelIndex> indexesToUpdate(previousSelectedIndexes.begin(), previousSelectedIndexes.end());
-    indexesToUpdate = indexesToUpdate.unite(QSet<QModelIndex>(newSelectedIndexes.begin(), newSelectedIndexes.end()));
-    indexesToUpdate << modelIndex;
-
-    for (const QModelIndex& indexToUpdate : indexesToUpdate) {
-        emit dataChanged(indexToUpdate, indexToUpdate);
-    }
+    emit dataChanged(index(0), index(rowCount() - 1), { RoleIsSelected });
 }
 
 void PartListModel::removePart(int partIndex)
@@ -245,7 +237,7 @@ void PartListModel::insertExcerpt(int destinationIndex, IExcerptNotationPtr exce
 
 void PartListModel::removeSelectedParts()
 {
-    QList<int> rows = selectedRows();
+    QList<int> rows = m_selectionModel->selectedRows();
     if (rows.empty()) {
         return;
     }
@@ -280,20 +272,9 @@ bool PartListModel::userAgreesToRemoveParts(int partCount) const
     return result.standartButton() == IInteractive::Button::Yes;
 }
 
-QList<int> PartListModel::selectedRows() const
-{
-    QList<int> result;
-
-    for (const QModelIndex& index: m_selectionModel->selectedIndexes()) {
-        result << index.row();
-    }
-
-    return result;
-}
-
 void PartListModel::openSelectedParts()
 {
-    QList<int> rows = selectedRows();
+    QList<int> rows = m_selectionModel->selectedRows();
     if (rows.empty()) {
         return;
     }

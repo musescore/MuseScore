@@ -226,8 +226,7 @@ void InstrumentsPanelTreeModel::selectRow(const QModelIndex& rowIndex)
 
 void InstrumentsPanelTreeModel::addInstruments()
 {
-    auto mode = ISelectInstrumentsScenario::SelectInstrumentsMode::ShowCurrentInstruments;
-    RetVal<PartInstrumentListScoreOrder> selectedInstruments = selectInstrumentsScenario()->selectInstruments(mode);
+    RetVal<PartInstrumentListScoreOrder> selectedInstruments = selectInstrumentsScenario()->selectInstruments();
     if (!selectedInstruments.ret) {
         LOGE() << selectedInstruments.ret.toString();
         return;
@@ -348,7 +347,7 @@ bool InstrumentsPanelTreeModel::moveRows(const QModelIndex& sourceParent, int so
 
 bool InstrumentsPanelTreeModel::isSelected(const QModelIndex& rowIndex) const
 {
-    if (m_selectionModel->selectedIndexes().isEmpty()) {
+    if (!m_selectionModel->hasSelection()) {
         return false;
     }
 

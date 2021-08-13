@@ -49,9 +49,8 @@ StyledDialogView {
 
             Layout.fillWidth: true
             Layout.fillHeight: true
-            initiallySelectedPartIds: root.initiallySelectedPartIds
+
             canSelectMultipleInstruments: root.canSelectMultipleInstruments
-            currentScoreOrderId: root.currentScoreOrderId
             currentInstrumentId: root.currentInstrumentId
         }
 
@@ -72,11 +71,7 @@ StyledDialogView {
                 enabled: instrumentsPage.hasSelectedInstruments
 
                 onClicked: {
-                    var result = {}
-                    result["instrumentList"] = instrumentsPage.selectedInstruments()
-                    result["scoreOrder"] = instrumentsPage.selectedScoreOrder
-
-                    root.ret = { errcode: 0, value: result }
+                    root.ret = { errcode: 0, value: instrumentsPage.scoreContent() }
                     root.hide()
                 }
             }
