@@ -191,6 +191,7 @@ void TextBase::endEdit(EditData& ed)
     if (textWasEdited) {
         setXmlText(ted->oldXmlText);                        // reset text to value before editing
         undo->reopen();
+        resetFormatting();
         undoChangeProperty(Pid::TEXT, actualXmlText);       // change property to set text to actual value again
                                                             // this also changes text of linked elements
         layout1();
@@ -825,5 +826,59 @@ bool TextBase::deleteSelectedText(EditData& ed)
         }
     }
     return true;
+}
+
+//---------------------------------------------------------
+//   ChangeTextProperties
+//---------------------------------------------------------
+
+void ChangeTextProperties::restoreSelection()
+{
+    TextCursor& tc = cursor();
+    tc.text()->cursor()->setSelectLine(tc.selectLine());
+    tc.text()->cursor()->setSelectColumn(tc.selectColumn());
+    tc.text()->cursor()->setRow(tc.row());
+    tc.text()->cursor()->setColumn(tc.column());
+}
+
+ChangeTextProperties::ChangeTextProperties(const TextCursor* tc, Ms::Pid propId, const QVariant& propVal)
+    : TextEditUndoCommand(*tc)
+{
+    propertyId = propId;
+    propertyVal = propVal;
+    if (propertyId == Pid::FONT_STYLE) {
+        existingStyle = static_cast<FontStyle>(cursor().text()->getProperty(propId).toInt());
+    }
+}
+
+void ChangeTextProperties::undo(EditData*)
+{
+    cursor().text()->resetFormatting();
+    cursor().text()->setXmlText(xmlText);
+    restoreSelection();
+    cursor().text()->layout1();
+}
+
+void ChangeTextProperties::redo(EditData*)
+{
+    xmlText = cursor().text()->xmlText();
+    restoreSelection();
+    if (propertyId == Pid::FONT_STYLE) {
+        FontStyle setStyle = static_cast<FontStyle>(propertyVal.toInt());
+        TextCursor* tc = cursor().text()->cursor();
+        // user turned on bold/italic/underline for text where it's not set, or turned it off for text where it is set,
+        // note this logic only works because the user can only click one at a time
+        if ((setStyle& FontStyle::Bold) != (existingStyle & FontStyle::Bold)) {
+            tc->setFormat(FormatId::Bold, setStyle & FontStyle::Bold);
+        }
+        if ((setStyle& FontStyle::Italic) != (existingStyle & FontStyle::Italic)) {
+            tc->setFormat(FormatId::Italic, setStyle & FontStyle::Italic);
+        }
+        if ((setStyle& FontStyle::Underline) != (existingStyle & FontStyle::Underline)) {
+            tc->setFormat(FormatId::Underline, setStyle & FontStyle::Underline);
+        }
+    } else {
+        cursor().text()->setProperty(propertyId, propertyVal);
+    }
 }
 }  // namespace Ms

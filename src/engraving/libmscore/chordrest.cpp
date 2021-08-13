@@ -519,16 +519,17 @@ Element* ChordRest::drop(EditData& data)
 
     case ElementType::NOTE: {
         Note* note = toNote(e);
-        NoteVal nval;
-        nval.pitch = note->pitch();
-        nval.tpc1 = note->tpc1();
-        nval.headGroup = note->headGroup();
-        nval.fret = note->fret();
-        nval.string = note->string();
-        score()->setNoteRest(segment(), track(), nval, ticks(), Direction::AUTO);
-        delete e;
+        Segment* seg = segment();
+        score()->undoRemoveElement(this);
+        Chord* chord = new Chord(score());
+        chord->setTrack(track());
+        chord->setDurationType(durationType());
+        chord->setTicks(ticks());
+        chord->setTuplet(tuplet());
+        chord->add(note);
+        score()->undoAddCR(chord, seg->measure(), seg->tick());
+        return note;
     }
-    break;
 
     case ElementType::HARMONY:
     {
@@ -1433,7 +1434,7 @@ void ChordRest::removeMarkings(bool /* keepTremolo */)
 bool ChordRest::isBefore(const ChordRest* o) const
 {
     if (!o || this == o) {
-        return true;
+        return false;
     }
     int otick = o->tick().ticks();
     int t     = tick().ticks();

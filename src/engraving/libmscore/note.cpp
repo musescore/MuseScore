@@ -1863,7 +1863,7 @@ bool Note::acceptDrop(EditData& data) const
            || (type == ElementType::FRET_DIAGRAM)
            || (type == ElementType::FIGURED_BASS)
            || (type == ElementType::LYRICS)
-           || e->isSpanner();
+           || (type != ElementType::TIE && e->isSpanner());
 }
 
 //---------------------------------------------------------
@@ -2009,6 +2009,11 @@ Element* Note::drop(EditData& data)
         n->setTpc2(Ms::transposeTpc(n->tpc1(), v, true));
         // replace this note with new note
         n->setParent(ch);
+        if (this->tieBack()) {
+            n->setTieBack(this->tieBack());
+            n->tieBack()->setEndNote(n);
+            this->setTieBack(nullptr);
+        }
         score()->undoRemoveElement(this);
         score()->undoAddElement(n);
     }

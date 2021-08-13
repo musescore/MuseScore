@@ -407,10 +407,12 @@ void TextCursor::setFormat(FormatId id, QVariant val)
     }
     format()->setFormatValue(id, val);
     changeSelectionFormat(id, val);
+    if (hasSelection()) {
+        text()->setTextInvalid();
+    }
     if (!editing()) {
         clearSelection();
     }
-    text()->setTextInvalid();
 }
 
 //---------------------------------------------------------
@@ -1270,7 +1272,7 @@ int TextBlock::column(qreal x, TextBase* t) const
             px = xo;
         }
     }
-    return col;
+    return this->columns();
 }
 
 //---------------------------------------------------------
@@ -1882,7 +1884,7 @@ void TextBase::createLayout()
                     if (id != SymId::noSym) {
                         CharFormat fmt = *cursor.format();  // save format
                                                             // uint code = score()->scoreFont()->sym(id).code();
-                        uint code = ScoreFont::fallbackFont()->sym(id).code();
+                        uint code = id == SymId::space ? static_cast<uint>(' ') : ScoreFont::fallbackFont()->sym(id).code();
                         cursor.format()->setFontFamily("ScoreText");
                         insert(&cursor, code);
                         cursor.setFormat(fmt);  // restore format
