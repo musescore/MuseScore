@@ -325,6 +325,15 @@ QList<Ms::Element*> NotationInteraction::hitElements(const PointF& p_in, float w
 
     PointF p = p_in - page->pos();
 
+    if (isTextEditingStarted()) {
+        auto editW = w * 2;
+        RectF hitRect(p.x() - editW, p.y() - editW, 2.0 * editW, 2.0 * editW);
+        if (m_textEditData.element->intersects(hitRect)) {
+            ll.push_back(m_textEditData.element);
+            return ll;
+        }
+    }
+
     RectF r(p.x() - w, p.y() - w, 3.0 * w, 3.0 * w);
 
     QList<Ms::Element*> elements = page->items(r);
