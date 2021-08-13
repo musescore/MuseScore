@@ -50,6 +50,8 @@ Item {
 
     property alias navigation: mainItem.navigation
 
+    signal activated(int index)
+
     height: 30
     width: 126
 
@@ -312,6 +314,8 @@ Item {
                         onClicked: {
                             root.currentIndex = model.index
                             popup.closeAndReturnFocus()
+
+                            root.activated(root.currentIndex)
                         }
                     }
                 }

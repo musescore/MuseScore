@@ -31,14 +31,12 @@ Item {
     id: root
 
     property alias instruments: instrumentsView.model
-    property alias search: searchField.searchText
-
-    readonly property bool isInstrumentSelected: prv.currentInstrumentIndex !== -1
-
+    property alias searchText: searchField.searchText
     property alias navigation: navPanel
 
-    signal selectInstrumentRequested(var instrumentName, var traitName)
-    signal instrumentClicked()
+    signal selectInstrumentRequested(int instrumentIndex)
+    signal changeActiveTraitRequested(int instrumentIndex, int traitIndex)
+    signal addSelectedInstrumentsToScoreRequested()
 
     NavigationPanel {
         id: navPanel
@@ -47,37 +45,12 @@ Item {
         enabled: root.visible
     }
 
-    QtObject {
-        id: prv
-
-        property int currentInstrumentIndex: -1
-        property var currentInstrument: null
-    }
-
     function clearSearch() {
         searchField.clear()
     }
 
-    function currentInstrument() {
-        if (!isInstrumentSelected) {
-            return null
-        }
-
-        return prv.currentInstrument
-    }
-
-    function resetSelectedInstrument() {
-        prv.currentInstrumentIndex = -1
-    }
-
-    function focusInstrument(instrumentId) {
-        for (var i in root.instruments) {
-            if (root.instruments[i].id === instrumentId) {
-                prv.currentInstrumentIndex = i
-                instrumentsView.positionViewAtIndex(prv.currentInstrumentIndex, ListView.Beginning)
-                return
-            }
-        }
+    function focusInstrument(instrumentIndex) {
+        instrumentsView.positionViewAtIndex(instrumentIndex, ListView.Beginning)
     }
 
     StyledTextLabel {
@@ -101,14 +74,6 @@ Item {
         navigation.name: "SearchInstruments"
         navigation.panel: navPanel
         navigation.row: 1
-
-        onCurrentTextEdited: {
-            root.resetSelectedInstrument()
-        }
-
-        onTextCleared: {
-            root.resetSelectedInstrument()
-        }
     }
 
     ListView {
@@ -132,12 +97,15 @@ Item {
         delegate: ListItemBlank {
             id: item
 
-            navigation.name: modelData.name
+            navigation.name: model.name
             navigation.panel: navPanel
             navigation.row: 2 + model.index
-            onNavigationActived: item.clicked()
 
-            isSelected: prv.currentInstrumentIndex === model.index
+            onNavigationActived: {
+                item.clicked()
+            }
+
+            isSelected: model.isSelected
 
             StyledTextLabel {
                 anchors.left: parent.left
@@ -147,19 +115,20 @@ Item {
                 anchors.verticalCenter: parent.verticalCenter
 
                 horizontalAlignment: Text.AlignLeft
-                text: modelData.name
+                text: model.name
                 font: ui.theme.bodyBoldFont
             }
 
             onClicked: {
-                prv.currentInstrumentIndex = model.index
-                root.instrumentClicked()
+                root.selectInstrumentRequested(model.index)
             }
 
             onDoubleClicked: {
-                var currentSelection = root.currentInstrument()
-                root.selectInstrumentRequested(currentSelection.instrument.name, currentSelection.traitName)
+                root.addSelectedInstrumentsToScoreRequested()
             }
+
+            property var traits: model.traits
+            property int instrumentIndex: model.index
 
             Dropdown {
                 id: traitsBox
@@ -176,40 +145,10 @@ Item {
 
                 visible: traitsBox.count > 1
 
-                onFocusChanged: {
-                    if (focus) {
-                        prv.currentInstrumentIndex = index
-                    }
-                }
-
-                textRole: "name"
-                valueRole: "id"
-                model: modelData.traits
+                model: item.traits
 
                 onCurrentValueChanged: {
-                    if (prv.currentInstrumentIndex !== index) {
-                        prv.currentInstrumentIndex = index
-                    }
-
-                    item.updateCurrentInstrument()
-                }
-            }
-
-            function updateCurrentInstrument() {
-                prv.currentInstrument = {
-                    "instrument": modelData,
-                    "traitName": traitsBox.currentValue
-                }
-
-                root.instrumentClicked()
-            }
-
-            Connections {
-                target: prv
-                function onCurrentInstrumentIndexChanged() {
-                    if (prv.currentInstrumentIndex === model.index) {
-                        item.updateCurrentInstrument()
-                    }
+                    root.changeActiveTraitRequested(item.instrumentIndex, currentIndex)
                 }
             }
         }

@@ -31,31 +31,15 @@ import "internal"
 Rectangle {
     id: root
 
-    property string initiallySelectedPartIds: ""
-    property string currentScoreOrderId: ""
-    property bool hasSelectedInstruments: instrumentsModel.selectedInstruments.length > 0
     property bool canSelectMultipleInstruments: true
     property string currentInstrumentId: ""
-    property var selectedScoreOrder: selectedInstrumentsView.selectedScoreOrder()
+
+    property bool hasSelectedInstruments: selectedInstrumentsView.hasInstruments
 
     property NavigationSection navigationSection: null
 
-    function selectedInstruments() {
-        var instruments = instrumentsModel.selectedInstruments
-        var result = []
-
-        for (var i = 0; i < instruments.length; ++i) {
-            var obj = {}
-            obj["isExistingPart"] = instruments[i].isExistingPart
-            obj["id"] = instruments[i].id
-            obj["name"] = instruments[i].name
-            obj["isSoloist"] = instruments[i].isSoloist
-            obj["instrument"] = instruments[i].config
-
-            result.push(obj)
-        }
-
-        return result
+    function scoreContent() {
+        return selectedInstrumentsView.scoreContent()
     }
 
     color: ui.theme.backgroundPrimaryColor
@@ -64,19 +48,25 @@ Rectangle {
         id: instrumentsModel
     }
 
-    Component.onCompleted: {
-        instrumentsModel.load(canSelectMultipleInstruments, currentInstrumentId, currentScoreOrderId, initiallySelectedPartIds)
+    QtObject {
+        id: prv
 
-        var groupId = instrumentsModel.selectedGroupId()
-        familyView.focusGroup(groupId)
+        function addSelectedInstrumentsToScore() {
+            var selectedInstruments = instrumentsModel.selectedInstruments()
+            selectedInstrumentsView.addInstruments(selectedInstruments)
+        }
+    }
+
+    Component.onCompleted: {
+        instrumentsModel.load(canSelectMultipleInstruments, currentInstrumentId)
+        familyView.focusGroup(instrumentsModel.currentGroupIndex)
 
         focusOnCurrentInstrument()
     }
 
     function focusOnCurrentInstrument() {
-        if (Boolean(currentInstrumentId)) {
-            Qt.callLater(instrumentsView.focusInstrument, currentInstrumentId)
-        }
+        //! FIXME
+        instrumentsView.focusInstrument(0)
     }
 
     RowLayout {
@@ -97,26 +87,17 @@ Rectangle {
             genres: instrumentsModel.genres
             groups: instrumentsModel.groups
 
+            currentGenreIndex: instrumentsModel.currentGenreIndex
+            currentGroupIndex: instrumentsModel.currentGroupIndex
+
             onGenreSelected: {
-                instrumentsModel.selectGenre(genreId)
+                instrumentsModel.currentGenreIndex = newIndex
                 instrumentsView.clearSearch()
             }
 
             onGroupSelected: {
-                instrumentsModel.selectGroup(groupId)
+                instrumentsModel.currentGroupIndex = newIndex
                 instrumentsView.clearSearch()
-            }
-
-            Connections {
-                target: instrumentsModel
-
-                function onSelectedGenreChanged(genreId) {
-                    Qt.callLater(familyView.setGenre, genreId)
-                }
-
-                function onSelectedGroupChanged(groupId) {
-                    Qt.callLater(familyView.focusGroup, groupId)
-                }
             }
         }
 
@@ -132,33 +113,24 @@ Rectangle {
             navigation.section: root.navigationSection
             navigation.order: 3
 
-            instruments: instrumentsModel.instruments
+            instruments: instrumentsModel
 
-            onSearchChanged: {
-                familyView.clearSelection()
-                instrumentsModel.setSearchText(search)
+            onSearchTextChanged: {
+                instrumentsModel.setSearchText(searchText)
             }
 
             onSelectInstrumentRequested: {
-                instrumentsModel.selectInstrument(instrumentName, traitName)
+                instrumentsModel.selectInstrument(instrumentIndex)
+            }
+
+            onChangeActiveTraitRequested: {
+                instrumentsModel.setActiveTrait(instrumentIndex, traitIndex)
+            }
+
+            onAddSelectedInstrumentsToScoreRequested: {
+                prv.addSelectedInstrumentsToScore()
+
                 Qt.callLater(selectedInstrumentsView.scrollViewToEnd)
-            }
-
-            onInstrumentClicked: {
-                var currentSelection = instrumentsView.currentInstrument()
-                familyView.focusGroup(currentSelection.instrument.groupId)
-
-                if (!root.canSelectMultipleInstruments) {
-                    instrumentsModel.selectInstrument(currentSelection.instrument.name, currentSelection.traitName)
-                }
-            }
-
-            Connections {
-                target: familyView
-
-                function onGroupSelected(groupId) {
-                    Qt.callLater(instrumentsView.resetSelectedInstrument)
-                }
             }
         }
 
@@ -168,7 +140,6 @@ Rectangle {
         }
 
         FlatButton {
-
             NavigationPanel {
                 id: navSelectPanel
                 name: "SelectPanel"
@@ -185,13 +156,12 @@ Rectangle {
 
             Layout.preferredWidth: 30
 
-            enabled: instrumentsView.isInstrumentSelected
+            enabled: instrumentsModel.hasSelection
 
             icon: IconCode.ARROW_RIGHT
 
             onClicked: {
-                var currentSelect = instrumentsView.currentInstrument()
-                instrumentsModel.selectInstrument(currentSelect.instrument.name, currentSelect.traitName)
+                prv.addSelectedInstrumentsToScore()
             }
         }
 
@@ -210,21 +180,6 @@ Rectangle {
 
             Layout.fillWidth: true
             Layout.fillHeight: true
-
-            instruments: instrumentsModel.selectedInstruments
-            instrumentsModel: instrumentsModel
-
-            onUnselectInstrumentRequested: {
-                instrumentsModel.unselectInstrument(index)
-            }
-
-            onOrderChanged: {
-                instrumentsModel.selectScoreOrder(id)
-            }
-
-            onSoloistChanged: {
-                instrumentsModel.toggleSoloist(id)
-            }
         }
 
         SeparatorLine {
@@ -250,7 +205,7 @@ Rectangle {
             }
 
             FlatButton {
-                enabled: selectedInstrumentsView.canLiftInstrument
+                enabled: selectedInstrumentsView.isMovingUpAvailable
                 icon: IconCode.ARROW_UP
 
                 navigation.name: "Up"
@@ -258,14 +213,12 @@ Rectangle {
                 navigation.row: 1
 
                 onClicked: {
-                    instrumentsModel.swapSelectedInstruments(selectedInstrumentsView.currentInstrumentIndex,
-                                                             selectedInstrumentsView.currentInstrumentIndex - 1)
-                    selectedInstrumentsView.currentInstrumentIndex--
+                    selectedInstrumentsView.moveInstrumentsUp()
                 }
             }
 
             FlatButton {
-                enabled: selectedInstrumentsView.canLowerInstrument
+                enabled: selectedInstrumentsView.isMovingDownAvailable
                 icon: IconCode.ARROW_DOWN
 
                 navigation.name: "Down"
@@ -273,9 +226,7 @@ Rectangle {
                 navigation.row: 2
 
                 onClicked: {
-                    instrumentsModel.swapSelectedInstruments(selectedInstrumentsView.currentInstrumentIndex,
-                                                             selectedInstrumentsView.currentInstrumentIndex + 1)
-                    selectedInstrumentsView.currentInstrumentIndex++
+                    selectedInstrumentsView.moveInstrumentsDown()
                 }
             }
         }

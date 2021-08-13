@@ -37,6 +37,24 @@ void ItemMultiSelectionModel::setAllowedModifiers(Qt::KeyboardModifiers modifier
     m_allowedModifiers = modifiers;
 }
 
+void ItemMultiSelectionModel::setSingleItemSelectionMode(bool on)
+{
+    if (on) {
+        m_allowedModifiers = {};
+    }
+}
+
+QList<int> ItemMultiSelectionModel::selectedRows() const
+{
+    QList<int> rows;
+
+    for (const QModelIndex& index : selectedIndexes()) {
+        rows << index.row();
+    }
+
+    return rows;
+}
+
 void ItemMultiSelectionModel::select(const QModelIndex& index)
 {
     Qt::KeyboardModifiers modifiers = QApplication::keyboardModifiers();
