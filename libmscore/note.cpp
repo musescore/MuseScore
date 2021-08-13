@@ -1699,7 +1699,7 @@ bool Note::acceptDrop(EditData& data) const
          || (type == ElementType::FRET_DIAGRAM)
          || (type == ElementType::FIGURED_BASS)
          || (type == ElementType::LYRICS)
-         || e->isSpanner());
+         || (type != ElementType::TIE && e->isSpanner()));
       }
 
 //---------------------------------------------------------

@@ -77,12 +77,12 @@ bool TieSegment::edit(EditData& ed)
       {
       SlurTie* sl = tie();
 
-      if (ed.key == Qt::Key_X) {
+      if (ed.key == Qt::Key_X && !ed.modifiers) {
             sl->setSlurDirection(sl->up() ? Direction::DOWN : Direction::UP);
             sl->layout();
             return true;
             }
-      if (ed.key == Qt::Key_Home) {
+      if (ed.key == Qt::Key_Home && !ed.modifiers) {
             ups(ed.curGrip).off = QPointF();
             sl->layout();
             return true;
