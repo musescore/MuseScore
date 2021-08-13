@@ -50,6 +50,7 @@ class TestCopyPaste : public QObject, public MTest
     void copypastevoice(const char*, int);
     void copypastetuplet(const char*);
     void copypastetremolo();
+    void copypastenote(const QString&, Fraction = Fraction(1, 1));
 
 private slots:
     void initTestCase();
@@ -65,15 +66,15 @@ private slots:
     void copypaste10() { copypaste("10"); }         // two slurs
     void copypaste11() { copypaste("11"); }         // grace notes
     void copypaste12() { copypaste("12"); }         // voices
-    void copyPaste2Voice();                         // voices-partial
-    //void copyPaste2Voice2() { copypastevoice("14", 0); }
-    //void copyPaste2Voice3() { copypastevoice("15", 1); }
-    //void copyPaste2Voice4() { copypastevoice("16", 1); }   // shorten last cr
-    void copyPaste2Voice5();                              // cut and move
+    void copypaste2Voice();                         // voices-partial
+    //void copypaste2Voice2() { copypastevoice("14", 0); }
+    //void copypaste2Voice3() { copypastevoice("15", 1); }
+    //void copypaste2Voice4() { copypastevoice("16", 1); }   // shorten last cr
+    void copypaste2Voice5();                              // cut and move
     void copypaste2Voice6();
-    void copyPasteOnlySecondVoice();
+    void copypasteOnlySecondVoice();
     void copypaste19() { copypaste("19"); }         // chord symbols
-    //void copyPasteShortTremolo() { copypastevoice("21", 1); }   // remove tremolo on shorten note #30411
+    //void copypasteShortTremolo() { copypastevoice("21", 1); }   // remove tremolo on shorten note #30411
     void copypaste22() { copypaste("22"); }         // cross-staff slur
     void copypaste23() { copypaste("23"); }         // full measure tuplet 10/8
     void copypaste24() { copypaste("24"); }         // more complex non reduced tuplet
@@ -82,12 +83,22 @@ private slots:
 
     void copypastestaff50() { copypastestaff("50"); }         // staff & slurs
 
-    void copyPastePartial();
+    void copypastePartial();
 
-    void copyPasteTuplet01() { copypastetuplet("01"); }
-    void copyPasteTuplet02() { copypastetuplet("02"); }
-
-    //void copyPasteTremolo01() { copypastetremolo(); }
+    void copypasteTuplet01() { copypastetuplet("01"); }
+    void copypasteTuplet02() { copypastetuplet("02"); }
+    void copypasteQtrNoteOntoWholeRest() { copypastenote("01"); }
+    void copypasteQtrNoteOntoWholeNote() { copypastenote("02"); }
+    void copypasteQtrNoteOntoQtrRest() { copypastenote("03"); }
+    void copypasteQtrNoteOntoQtrNote() { copypastenote("04"); }
+    void copypasteWholeNoteOntoQtrNote() { copypastenote("05"); }
+    void copypasteWholeNoteOntoQtrRest() { copypastenote("06"); }
+    void copypasteQtrNoteOntoTriplet() { copypastenote("07"); }
+    void copypasteWholeNoteOntoTriplet() { copypastenote("08"); }
+    void copypasteQtrNoteIntoChord() { copypastenote("09"); }
+    void copypasteQtrNoteOntoMMRest() { copypastenote("10"); }
+    void copypasteQtrNoteDoubleDuration() { copypastenote("11", Fraction(2, 1)); }
+    //void copypasteTremolo01() { copypastetremolo(); }
 };
 
 //---------------------------------------------------------
@@ -175,7 +186,7 @@ void TestCopyPaste::copypastestaff(const char* idx)
     delete score;
 }
 
-void TestCopyPaste::copyPastePartial()
+void TestCopyPaste::copypastePartial()
 {
     MasterScore* score = readScore(COPYPASTE_DATA_DIR + QString("copypaste_partial_01.mscx"));
 
@@ -205,7 +216,7 @@ void TestCopyPaste::copyPastePartial()
     delete score;
 }
 
-void TestCopyPaste::copyPaste2Voice()
+void TestCopyPaste::copypaste2Voice()
 {
     MasterScore* score = readScore(COPYPASTE_DATA_DIR + QString("copypaste13.mscx"));
     Measure* m1 = score->firstMeasure();
@@ -280,7 +291,7 @@ void TestCopyPaste::copypastevoice(const char* idx, int voice)
     delete score;
 }
 
-void TestCopyPaste::copyPaste2Voice5()
+void TestCopyPaste::copypaste2Voice5()
 {
     MasterScore* score = readScore(COPYPASTE_DATA_DIR + QString("copypaste17.mscx"));
     Measure* m1 = score->firstMeasure();
@@ -318,7 +329,7 @@ void TestCopyPaste::copyPaste2Voice5()
     delete score;
 }
 
-void TestCopyPaste::copyPasteOnlySecondVoice()
+void TestCopyPaste::copypasteOnlySecondVoice()
 {
     MasterScore* score = readScore(COPYPASTE_DATA_DIR + QString("copypaste18.mscx"));
     Measure* m1 = score->firstMeasure();
@@ -484,6 +495,23 @@ void TestCopyPaste::copypastetremolo()
     QVERIFY(saveCompareScore(score, QString("copypaste_tremolo.mscx"),
                              COPYPASTE_DATA_DIR + QString("copypaste_tremolo-ref.mscx")));
     delete score;
+}
+
+void TestCopyPaste::copypastenote(const QString& idx, Fraction scale)
+{
+    score = readScore(COPYPASTE_DATA_DIR + "copypasteNote" + idx + ".mscx");
+    Measure* m1 = score->firstMeasure();
+    Measure* m2 = m1->nextMeasure();
+    Segment* s = m2->first(SegmentType::ChordRest);
+    score->select(toChord(s->element(0))->notes().at(0));
+    QMimeData mimeData;
+    mimeData.setData(score->selection().mimeType(), score->selection().mimeData());
+    ChordRest* cr = m1->first(SegmentType::ChordRest)->nextChordRest(0);
+    score->select(cr->isChord() ? toChord(cr)->upNote() : static_cast<Element*>(cr));
+    score->startCmd();
+    score->cmdPaste(&mimeData, 0, scale);
+    score->endCmd();
+    QVERIFY(saveCompareScore(score, "copypasteNote" + idx + ".mscx", COPYPASTE_DATA_DIR + "copypasteNote" + idx + "-ref.mscx"));
 }
 
 QTEST_MAIN(TestCopyPaste)
