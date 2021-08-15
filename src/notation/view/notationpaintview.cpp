@@ -70,6 +70,8 @@ NotationPaintView::NotationPaintView(QQuickItem* parent)
     dispatcher()->reg(this, "dev-notationview-redraw", [this]() {
         update();
     });
+
+    qApp->installEventFilter(this);
 }
 
 void NotationPaintView::load()
@@ -697,9 +699,21 @@ void NotationPaintView::shortcutOverride(QKeyEvent* event)
 bool NotationPaintView::event(QEvent* ev)
 {
     if (ev->type() == QEvent::Type::ShortcutOverride) {
-        shortcutOverride(static_cast<QKeyEvent*>(ev));
+        shortcutOverride(dynamic_cast<QKeyEvent*>(ev));
     }
     return QQuickPaintedItem::event(ev);
+}
+
+bool NotationPaintView::eventFilter(QObject* obj, QEvent* ev)
+{
+    if (hasFocus() && ev->type() == QEvent::Type::ContextMenu) {
+        if (m_inputController->selectionType() == ElementType::PAGE) {
+            showContextMenu(m_inputController->selectionType(), QPoint(width() / 2, height() / 2));
+        } else {
+            showContextMenu(m_inputController->selectionType(), m_matrix.map(m_inputController->hitElementPos().toQPoint()));
+        }
+    }
+    return QObject::eventFilter(obj, ev);
 }
 
 void NotationPaintView::dragEnterEvent(QDragEnterEvent* event)
