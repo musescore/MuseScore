@@ -96,6 +96,9 @@ public:
     void dragMoveEvent(QDragMoveEvent* event);
     void dropEvent(QDropEvent* event);
 
+    ElementType selectionType() const;
+    mu::PointF hitElementPos() const;
+
 private:
     INotationPtr currentNotation() const;
     INotationStylePtr notationStyle() const;
@@ -119,7 +122,6 @@ private:
     float hitWidth() const;
 
     bool needSelect(const QMouseEvent* event, const PointF& clickLogicPos) const;
-    ElementType selectionType() const;
 
     double guiScalling() const;
 
