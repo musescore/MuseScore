@@ -345,16 +345,16 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
         viewInteraction()->select({ hitElement }, selectType, hitStaffIndex);
     }
 
-    if (viewInteraction()->isHitGrip(logicPos)) {
-        viewInteraction()->startEditGrip(logicPos);
-        return;
-    }
-
     if (event->button() == Qt::MouseButton::RightButton) {
         ElementType type = selectionType();
         m_view->showContextMenu(type, event->pos());
     } else if (event->button() == Qt::MouseButton::LeftButton) {
         m_view->hideContextMenu();
+    }
+
+    if (viewInteraction()->isHitGrip(logicPos)) {
+        viewInteraction()->startEditGrip(logicPos);
+        return;
     }
 
     if (hitElement) {
@@ -613,6 +613,14 @@ ElementType NotationViewInputController::selectionType() const
     }
 
     return type;
+}
+
+mu::PointF NotationViewInputController::hitElementPos() const
+{
+    if (viewInteraction()->hitElementContext().element) {
+        return viewInteraction()->hitElementContext().element->canvasBoundingRect().center();
+    }
+    return mu::PointF();
 }
 
 double NotationViewInputController::guiScalling() const
