@@ -442,7 +442,7 @@ static Instrument createInstrument(const MusicXMLInstrument& mxmlInstr, const In
       }
 
       if (!it) {
-          it = Ms::searchTemplateForInstrNameList({mxmlInstr.name});
+          it = Ms::searchTemplateForInstrNameList({mxmlInstr.name, mxmlInstr.abbreviation});
       }
 
       if (!it) {
