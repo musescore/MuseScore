@@ -19,26 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUTOBOT_ABSCORELOADSTEP_H
-#define MU_AUTOBOT_ABSCORELOADSTEP_H
+import QtQuick 2
+import QtQuick.Layouts 1
 
-#include "../abbasestep.h"
-#include "modularity/ioc.h"
-#include "project/iprojectfilescontroller.h"
-#include "io/path.h"
+import MuseScore.UiComponents 1
+import MuseScore.Project 1
 
-namespace mu::autobot {
-class AbScoreLoadStep : public AbBaseStep
-{
-    INJECT(autobot, project::IFileScoreController, fileScoreController)
-public:
-    AbScoreLoadStep() = default;
-
-    std::string name() const override;
-
-protected:
-    void doRun(IAbContextPtr ctx) override;
-};
+AudioSettingsPage {
+    showBitRateControl: true
 }
-
-#endif // MU_AUTOBOT_ABSCORELOADSTEP_H

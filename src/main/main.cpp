@@ -60,11 +60,6 @@
 
 #include "appshell/appshellmodule.h"
 #include "context/contextmodule.h"
-#ifdef BUILD_USERSCORES_MODULE
-#include "userscores/userscoresmodule.h"
-#else
-#include "stubs/userscores/userscoresstubmodule.h"
-#endif
 
 #ifdef BUILD_LEARN_MODULE
 #include "learn/learnmodule.h"
@@ -212,12 +207,6 @@ int main(int argc, char** argv)
     app.addModule(new mu::audio::AudioStubModule());
 #endif
     app.addModule(new mu::midi::MidiModule());
-
-#ifdef BUILD_USERSCORES_MODULE
-    app.addModule(new mu::userscores::UserScoresModule());
-#else
-    app.addModule(new mu::userscores::UserScoresStubModule());
-#endif
 
     app.addModule(new mu::learn::LearnModule());
 

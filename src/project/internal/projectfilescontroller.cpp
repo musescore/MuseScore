@@ -182,7 +182,7 @@ void ProjectFilesController::newProject()
         return;
     }
 
-    Ret ret = interactive()->open("musescore://userscores/newscore").ret;
+    Ret ret = interactive()->open("musescore://project/newscore").ret;
 
     if (ret) {
         ret = interactive()->open("musescore://notation").ret;
@@ -401,7 +401,7 @@ void ProjectFilesController::continueLastSession()
 
 void ProjectFilesController::exportScore()
 {
-    interactive()->open("musescore://userscores/export");
+    interactive()->open("musescore://project/export");
 }
 
 io::path ProjectFilesController::selectScoreOpeningFile()

@@ -50,7 +50,6 @@
 #cmakedefine BUILD_SYSTEM_MODULE
 #cmakedefine BUILD_NETWORK_MODULE
 #cmakedefine BUILD_AUDIO_MODULE
-#cmakedefine BUILD_USERSCORES_MODULE
 #cmakedefine BUILD_LEARN_MODULE
 #cmakedefine BUILD_WORKSPACE_MODULE
 #cmakedefine BUILD_CLOUD_MODULE

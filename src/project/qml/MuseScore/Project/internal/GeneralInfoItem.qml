@@ -19,26 +19,34 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUTOBOT_ABSCORELOADSTEP_H
-#define MU_AUTOBOT_ABSCORELOADSTEP_H
+import QtQuick 2.9
 
-#include "../abbasestep.h"
-#include "modularity/ioc.h"
-#include "project/iprojectfilescontroller.h"
-#include "io/path.h"
+import MuseScore.UiComponents 1.0
 
-namespace mu::autobot {
-class AbScoreLoadStep : public AbBaseStep
-{
-    INJECT(autobot, project::IFileScoreController, fileScoreController)
-public:
-    AbScoreLoadStep() = default;
+Column {
+    id: root
 
-    std::string name() const override;
+    property string title: ""
+    property alias info: textField.currentText
 
-protected:
-    void doRun(IAbContextPtr ctx) override;
-};
+    spacing: 10
+
+    StyledTextLabel {
+        anchors.left: parent.left
+        anchors.right: parent.right
+
+        font: ui.theme.bodyBoldFont
+        horizontalAlignment: Text.AlignLeft
+        text: title
+    }
+
+    TextInputField {
+        id: textField
+        hint: qsTrc("project", "Optional")
+
+        onCurrentTextEdited: {
+            root.info = newTextValue
+        }
+    }
 }
 
-#endif // MU_AUTOBOT_ABSCORELOADSTEP_H

@@ -24,7 +24,7 @@
 using namespace mu::project;
 using namespace mu::ui;
 
-const UiActionList UserScoresUiActions::m_actions = {
+const UiActionList ProjectUiActions::m_actions = {
     UiAction("file-open",
              mu::context::UiCtxAny,
              QT_TRANSLATE_NOOP("action", "Open..."),
@@ -88,17 +88,17 @@ const UiActionList UserScoresUiActions::m_actions = {
              )
 };
 
-UserScoresUiActions::UserScoresUiActions(std::shared_ptr<ProjectFilesController> controller)
+ProjectUiActions::ProjectUiActions(std::shared_ptr<ProjectFilesController> controller)
     : m_controller(controller)
 {
 }
 
-const UiActionList& UserScoresUiActions::actionsList() const
+const UiActionList& ProjectUiActions::actionsList() const
 {
     return m_actions;
 }
 
-bool UserScoresUiActions::actionEnabled(const UiAction& act) const
+bool ProjectUiActions::actionEnabled(const UiAction& act) const
 {
     if (!m_controller->canReceiveAction(act.code)) {
         return false;
@@ -107,17 +107,17 @@ bool UserScoresUiActions::actionEnabled(const UiAction& act) const
     return true;
 }
 
-bool UserScoresUiActions::actionChecked(const UiAction&) const
+bool ProjectUiActions::actionChecked(const UiAction&) const
 {
     return false;
 }
 
-mu::async::Channel<mu::actions::ActionCodeList> UserScoresUiActions::actionEnabledChanged() const
+mu::async::Channel<mu::actions::ActionCodeList> ProjectUiActions::actionEnabledChanged() const
 {
     return m_actionEnabledChanged;
 }
 
-mu::async::Channel<mu::actions::ActionCodeList> UserScoresUiActions::actionCheckedChanged() const
+mu::async::Channel<mu::actions::ActionCodeList> ProjectUiActions::actionCheckedChanged() const
 {
     return m_actionCheckedChanged;
 }

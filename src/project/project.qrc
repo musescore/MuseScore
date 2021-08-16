@@ -1,0 +1,36 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/MuseScore/Project/qmldir</file>
+        <file>qml/MuseScore/Project/NewScoreDialog.qml</file>
+        <file>qml/MuseScore/Project/ScoresPage.qml</file>
+        <file>qml/MuseScore/Project/ExportDialog.qml</file>
+        <file>qml/MuseScore/Project/internal/AdditionalInfoView.qml</file>
+        <file>qml/MuseScore/Project/internal/GeneralInfoItem.qml</file>
+        <file>qml/MuseScore/Project/internal/KeySignatureListView.qml</file>
+        <file>qml/MuseScore/Project/internal/KeySignatureSettings.qml</file>
+        <file>qml/MuseScore/Project/internal/KeySignature.qml</file>
+        <file>qml/MuseScore/Project/internal/MeasuresSettings.qml</file>
+        <file>qml/MuseScore/Project/internal/RecentScoresView.qml</file>
+        <file>qml/MuseScore/Project/internal/ScoreItem.qml</file>
+        <file>qml/MuseScore/Project/internal/TemplatePreview.qml</file>
+        <file>qml/MuseScore/Project/internal/TempoSettings.qml</file>
+        <file>qml/MuseScore/Project/internal/TimeSignatureFraction.qml</file>
+        <file>qml/MuseScore/Project/internal/TimeSignatureSettings.qml</file>
+        <file>qml/MuseScore/Project/internal/TimeSignatureView.qml</file>
+        <file>qml/MuseScore/Project/internal/TitleListView.qml</file>
+        <file>qml/MuseScore/Project/internal/GeneralInfoView.qml</file>
+        <file>qml/MuseScore/Project/internal/ChooseInstrumentsAndTemplatesPage.qml</file>
+        <file>qml/MuseScore/Project/internal/ChooseTemplatePage.qml</file>
+        <file>qml/MuseScore/Project/internal/ScoreInfoPage.qml</file>
+        <file>qml/MuseScore/Project/internal/Export/ExportScoresListView.qml</file>
+        <file>qml/MuseScore/Project/internal/Export/ExportOptionsView.qml</file>
+        <file>qml/MuseScore/Project/internal/Export/ExportOptionItem.qml</file>
+        <file>qml/MuseScore/Project/internal/Export/PdfSettingsPage.qml</file>
+        <file>qml/MuseScore/Project/internal/Export/PngSettingsPage.qml</file>
+        <file>qml/MuseScore/Project/internal/Export/SvgSettingsPage.qml</file>
+        <file>qml/MuseScore/Project/internal/Export/Mp3SettingsPage.qml</file>
+        <file>qml/MuseScore/Project/internal/Export/AudioSettingsPage.qml</file>
+        <file>qml/MuseScore/Project/internal/Export/MidiSettingsPage.qml</file>
+        <file>qml/MuseScore/Project/internal/Export/MusicXmlSettingsPage.qml</file>
+    </qresource>
+</RCC>
