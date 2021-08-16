@@ -39,95 +39,107 @@
 #include "audio/iplayback.h"
 #include "audio/audiotypes.h"
 
-#include "libmscore/chord.h"
-#include "libmscore/note.h"
-#include "libmscore/measure.h"
-
 #include "../ipianorollcontroller.h"
 #include "../ipianorollconfiguration.h"
 
 namespace mu::pianoroll {
-
-//class ms::Chord;
-
-class NoteBlock
+class PianorollController : public IPianorollController, public actions::Actionable, public async::Asyncable
 {
-    Ms::Note* m_note;
-
-    public:
-    NoteBlock(Ms::Note* note);
-};
-
-//----------------------
-
-static const int PIANO_KEYBOARD_WIDTH = 100;
-static const int BLACK_KEY_WIDTH = PIANO_KEYBOARD_WIDTH * 9 / 14;
-const int MAX_KEY_HEIGHT = 20;
-const int MIN_KEY_HEIGHT = 8;
-const int DEFAULT_KEY_HEIGHT = 14;
-const int BEAT_WIDTH_IN_PIXELS = 50;
-const double X_ZOOM_RATIO = 1.1;
-const double X_ZOOM_INITIAL = 0.1;
-
-class PianorollController : public QObject, public IPianorollController, public actions::Actionable, public async::Asyncable
-{
-    Q_OBJECT
-
-    INJECT(pianoroll, actions::IActionsDispatcher, dispatcher)
-    INJECT(pianoroll, context::IGlobalContext, globalContext)
-    INJECT(pianoroll, IPianorollConfiguration, configuration)
-//    INJECT(pianoroll, notation::INotationConfiguration, notationConfiguration)
-    INJECT(pianoroll, audio::IPlayback, playback)
-
-
-    Q_PROPERTY(double xZoom READ xZoom WRITE setXZoom NOTIFY xZoomChanged)
-    Q_PROPERTY(int noteHeight READ noteHeight WRITE setNoteHeight NOTIFY noteHeightChanged)
-
-    const int MAX_VOICES = 4;
+    INJECT(playback, actions::IActionsDispatcher, dispatcher)
+    INJECT(playback, context::IGlobalContext, globalContext)
+    INJECT(playback, IPianorollConfiguration, configuration)
+    INJECT(playback, notation::INotationConfiguration, notationConfiguration)
+    INJECT(playback, audio::IPlayback, playback)
 
 public:
     void init();
 
-    int getNotes() const;
+//    bool isPlayAllowed() const override;
+//    async::Notification isPlayAllowedChanged() const override;
 
+//    bool isPlaying() const override;
+//    async::Notification isPlayingChanged() const override;
 
-    async::Notification noteLayoutChanged() const override;
+//    void reset() override;
 
-    double xZoom() const { return m_xZoom; }
-    void setXZoom(double value);
-    int noteHeight() const { return m_noteHeight; }
-    void setNoteHeight(int value);
+//    void seek(const midi::tick_t tick) override;
+//    void seek(const audio::msecs_t msecs) override;
 
-    int widthInTicks() const { return m_widthInTicks; }
+//    async::Notification playbackPositionChanged() const override;
+//    async::Channel<uint32_t> midiTickPlayed() const override;
+//    float playbackPositionInSeconds() const override;
 
-signals:
-    void xZoomChanged();
-    void noteHeightChanged();
+//    audio::TrackSequenceId currentTrackSequenceId() const override;
+//    async::Notification currentTrackSequenceIdChanged() const override;
+
+//    void playElement(const notation::Element* element) override;
+
+//    bool actionChecked(const actions::ActionCode& actionCode) const override;
+//    async::Channel<actions::ActionCode> actionCheckedChanged() const override;
+
+//    QTime totalPlayTime() const override;
+
+//    notation::Tempo currentTempo() const override;
+//    notation::MeasureBeat currentBeat() const override;
+//    audio::msecs_t beatToMilliseconds(int measureIndex, int beatIndex) const override;
 
 private:
+//    notation::INotationPlaybackPtr notationPlayback() const;
+//    notation::INotationSelectionPtr selection() const;
 
-    void onNotationChanged();
-    void onSelectionChanged();
+//    int currentTick() const;
+//    bool isPaused() const;
 
-    void buildNoteBlocks();
-    void addChord(Ms::Chord* chrd, int voice);
+//    bool isLoopVisible() const;
+//    bool isPlaybackLooped() const;
 
+//    void onNotationChanged();
+//    void togglePlay();
+//    void rewind(const actions::ActionData& args);
+//    void play();
+//    void pause();
+//    void stop();
+//    void resume();
 
-    Ms::Measure* lastMeasure();
-    Ms::Score* score();
+//    void togglePlayRepeats();
+//    void toggleAutomaticallyPan();
+//    void toggleMetronome();
+//    void toggleMidiInput();
+//    void toggleCountIn();
+//    void toggleLoopPlayback();
 
+//    void addLoopBoundary(notation::LoopBoundaryType type);
+//    void addLoopBoundaryToTick(notation::LoopBoundaryType type, int tick);
 
+//    void setLoop(const notation::LoopBoundaries& boundaries);
 
+//    void showLoop();
+//    void hideLoop();
 
-    std::vector<int> m_selectedStaves;
-    int m_activeStaff = -1;
+//    void notifyActionCheckedChanged(const actions::ActionCode& actionCode);
 
-    std::vector<NoteBlock> m_notes;
+//    void setCurrentSequence(const audio::TrackSequenceId sequenceId);
+//    void setCurrentTick(const midi::tick_t tick);
+//    void addTrack(const notation::INotationPlayback::InstrumentTrackId& id);
+//    void removeTrack(const notation::INotationPlayback::InstrumentTrackId& id);
 
-    async::Notification m_noteLayoutChanged;
-    double m_xZoom = X_ZOOM_INITIAL;
-    int m_widthInTicks;
-    int m_noteHeight = DEFAULT_KEY_HEIGHT;
+//    notation::INotationPtr m_notation;
+//    async::Notification m_isPlayAllowedChanged;
+//    async::Notification m_isPlayingChanged;
+//    async::Notification m_playbackPositionChanged;
+//    async::Channel<uint32_t> m_tickPlayed;
+//    async::Channel<actions::ActionCode> m_actionCheckedChanged;
+
+//    bool m_needRewindBeforePlay = false;
+
+//    bool m_isPlaying = false;
+
+//    audio::TrackSequenceId m_currentSequenceId = -1;
+//    async::Notification m_currentSequenceIdChanged;
+//    audio::PlaybackStatus m_currentPlaybackStatus = audio::PlaybackStatus::Stopped;
+//    midi::tick_t m_currentTick = 0;
+//    std::unordered_map<std::string /* score file path*/, audio::TrackSequenceId> m_sequenceIdMap;
+//    std::unordered_map<notation::INotationPlayback::InstrumentTrackId, audio::TrackId> m_trackIdMap;
 };
 }
 
