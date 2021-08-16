@@ -29,7 +29,6 @@
 #include "notation/notationtypes.h"
 #include "audio/audiotypes.h"
 #include "actions/actiontypes.h"
-#include "libmscore/fraction.h"
 
 namespace mu::pianoroll {
 class IPianorollController : MODULE_EXPORT_INTERFACE
@@ -39,22 +38,32 @@ class IPianorollController : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IPianorollController() = default;
 
-    virtual int getNotes() const = 0;
+//    virtual bool isPlayAllowed() const = 0;
+//    virtual async::Notification isPlayAllowedChanged() const = 0;
 
-    virtual async::Notification noteLayoutChanged() const = 0;
+//    virtual bool isPlaying() const = 0;
+//    virtual async::Notification isPlayingChanged() const = 0;
 
-    virtual double xZoom() const = 0;
-    virtual void setXZoom(double value) = 0;
-    virtual int noteHeight() const = 0;
-    virtual void setNoteHeight(int value) = 0;
+//    virtual void seek(const midi::tick_t tick) = 0;
+//    virtual void seek(const audio::msecs_t msecs) = 0;
+//    virtual void reset() = 0;
 
-    virtual int widthInTicks() const = 0;
-    virtual Ms::Fraction widthInBeats() = 0;
+//    virtual async::Notification playbackPositionChanged() const = 0;
+//    virtual async::Channel<uint32_t> midiTickPlayed() const = 0;
+//    virtual float playbackPositionInSeconds() const = 0;
+//    virtual audio::TrackSequenceId currentTrackSequenceId() const = 0;
+//    virtual async::Notification currentTrackSequenceIdChanged() const = 0;
 
-    virtual async::Notification pitchHighlightChanged() const = 0;
-    virtual bool isPitchHighlight(int pitch) const = 0;
-    virtual void setPitchHighlight(int pitch, bool value) = 0;
+//    virtual void playElement(const notation::Element* element) = 0;
 
+//    virtual bool actionChecked(const actions::ActionCode& actionCode) const = 0;
+//    virtual async::Channel<actions::ActionCode> actionCheckedChanged() const = 0;
+
+//    virtual QTime totalPlayTime() const = 0;
+
+//    virtual notation::Tempo currentTempo() const = 0;
+//    virtual notation::MeasureBeat currentBeat() const = 0;
+//    virtual audio::msecs_t beatToMilliseconds(int measureIndex, int beatIndex) const = 0;
 };
 }
 
