@@ -22,6 +22,7 @@ set(MODULE engraving)
 set(MODULE_QRC engraving.qrc)
 
 include(${CMAKE_CURRENT_LIST_DIR}/libmscore/libmscore.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/compat/midi/compatmidi.cmake)
 
 set(MODULE_SRC
 
@@ -110,6 +111,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/compat/read302.cpp
     ${CMAKE_CURRENT_LIST_DIR}/compat/read302.h
 
+    ${COMPAT_MIDI_SRC}
+
     ${CMAKE_CURRENT_LIST_DIR}/style/styledef.cpp
     ${CMAKE_CURRENT_LIST_DIR}/style/styledef.h
     ${CMAKE_CURRENT_LIST_DIR}/style/textstyle.cpp
@@ -159,7 +162,7 @@ set(MODULE_INCLUDE
     ${PROJECT_SOURCE_DIR}/thirdparty/dtl
     )
 
-set(MODULE_LINK ${MODULE_LINK} midi_old qzip)
+set(MODULE_LINK ${MODULE_LINK} qzip)
 
 set(MODULE_NOT_LINK_GLOBAL ON)
 include(SetupModule)

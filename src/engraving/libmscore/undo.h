@@ -29,6 +29,7 @@
 */
 
 #include "style/style.h"
+#include "compat/midi/midipatch.h"
 
 #include "spatium.h"
 #include "mscore.h"
@@ -52,8 +53,6 @@
 #include "drumset.h"
 #include "rest.h"
 #include "fret.h"
-
-#include "framework/midi_old/midipatch.h"
 
 namespace Ms {
 class ElementList;

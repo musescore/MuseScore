@@ -23,7 +23,8 @@
 #ifndef __BB_H__
 #define __BB_H__
 
-#include "framework/midi_old/midifile.h"
+#include "engraving/compat/midi/event.h"
+#include "engraving/libmscore/sig.h"
 
 namespace Ms {
 const int MAX_BARS = 255;

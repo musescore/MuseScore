@@ -206,6 +206,55 @@ public:
     {
         return e._type == _type && e._channel == _channel && e._a == _a && e._b == _b;
     }
+
+    uint32_t toPackage() const
+    {
+        union {
+            unsigned char data_as_bytes[4];
+            uint32_t data_as_uint32 = 0;
+        } u;
+
+        switch (type()) {
+        case EventType::ME_NOTEOFF:
+            u.data_as_bytes[0] = 0x80 | channel();
+            u.data_as_bytes[1] = pitch();
+            u.data_as_bytes[2] = 0;
+            u.data_as_bytes[3] = 0;
+            break;
+
+        case EventType::ME_NOTEON:
+            u.data_as_bytes[0] = 0x90 | channel();
+            u.data_as_bytes[1] = pitch();
+            u.data_as_bytes[2] = velo();
+            u.data_as_bytes[3] = 0;
+            break;
+
+        case EventType::ME_CONTROLLER:
+            u.data_as_bytes[0] = 0xB0 | channel();
+            u.data_as_bytes[1] = controller();
+            u.data_as_bytes[2] = value();
+            u.data_as_bytes[3] = 0;
+            break;
+
+        case EventType::ME_PROGRAM:
+            u.data_as_bytes[0] = 0xC0 | channel();
+            u.data_as_bytes[1] = value();
+            u.data_as_bytes[2] = 0;
+            u.data_as_bytes[3] = 0;
+            break;
+
+        case EventType::ME_PITCHBEND:
+            u.data_as_bytes[0] = 0xE0 | channel();
+            u.data_as_bytes[1] = pitch() & 0x7F;
+            u.data_as_bytes[2] = pitch() >> 7;
+            u.data_as_bytes[3] = 0;
+            break;
+
+        default:
+            break;
+        }
+        return u.data_as_uint32;
+    }
 };
 
 //---------------------------------------------------------

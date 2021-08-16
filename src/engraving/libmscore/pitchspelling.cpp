@@ -33,7 +33,7 @@
 #include "part.h"
 #include "utils.h"
 
-#include "framework/midi_old/event.h"
+#include "compat/midi/event.h"
 
 namespace Ms {
 //---------------------------------------------------------

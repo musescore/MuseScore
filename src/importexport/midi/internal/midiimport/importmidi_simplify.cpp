@@ -27,11 +27,11 @@
 #include "importmidi_quant.h"
 #include "importmidi_voice.h"
 #include "importmidi_operations.h"
-#include "libmscore/sig.h"
-#include "libmscore/durationtype.h"
 #include "importmidi_tuplet_voice.h"
 
-#include "framework/midi_old/midifile.h"
+#include "engraving/libmscore/sig.h"
+#include "engraving/libmscore/durationtype.h"
+#include "engraving/compat/midi/midifile.h"
 
 namespace Ms {
 namespace Simplify {

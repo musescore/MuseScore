@@ -22,7 +22,7 @@
 
 #include <QMessageBox>
 
-#include "framework/midi_old/midifile.h"
+#include "engraving/compat/midi/midifile.h"
 #include "engraving/style/style.h"
 #include "engraving/io/xml.h"
 

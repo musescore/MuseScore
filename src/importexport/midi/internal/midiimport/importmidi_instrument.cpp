@@ -28,7 +28,7 @@
 #include "libmscore/staff.h"
 #include "libmscore/masterscore.h"
 #include "importmidi_operations.h"
-#include "framework/midi_old/midiinstrument.h"
+#include "engraving/compat/midi/midiinstrument.h"
 
 #include <set>
 
