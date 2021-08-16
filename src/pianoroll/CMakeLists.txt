@@ -29,19 +29,6 @@ set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/qml)
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/pianorollmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/pianorollmodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/ipianorollconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/ipianorollcontroller.h
-
-    ${CMAKE_CURRENT_LIST_DIR}/internal/pianorollconfiguration.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/pianorollconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/pianorollcontroller.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/pianorollcontroller.h
-
-    ${CMAKE_CURRENT_LIST_DIR}/view/pianorolltool.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/pianorollview.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/pianorollview.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/pianorollgeneral.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/pianorollgeneral.h
     )
 
 set(MODULE_LINK
