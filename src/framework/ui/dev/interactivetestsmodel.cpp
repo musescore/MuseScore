@@ -103,7 +103,7 @@ void InteractiveTestsModel::question()
           interactive()->buttonData(IInteractive::Button::Yes) }, 0,
         IInteractive::Option::WithIcon);
 
-    if (result.standartButton() == IInteractive::Button::Yes) {
+    if (result.standardButton() == IInteractive::Button::Yes) {
         LOGI() << "Yes!!";
     } else {
         LOGI() << "No!!";
@@ -129,7 +129,7 @@ void InteractiveTestsModel::information()
 {
     IInteractive::Result result = interactive()->info("Tuplet cannot cross barlines", "", {}, 0,
                                                       IInteractive::Option::WithIcon | IInteractive::Option::WithShowAgain);
-    LOGD() << interactive()->buttonData(result.standartButton()).text;
+    LOGD() << interactive()->buttonData(result.standardButton()).text;
 }
 
 void InteractiveTestsModel::warning()
@@ -158,7 +158,7 @@ void InteractiveTestsModel::critical()
     IInteractive::Result result = interactive()->error("Cannot read file C:/Users/Username/Desktop/Composition.mscz",
                                                        "An error has occured when trying to open this file",  {}, 0,
                                                        IInteractive::Option::WithIcon);
-    LOGD() << interactive()->buttonData(result.standartButton()).text;
+    LOGD() << interactive()->buttonData(result.standardButton()).text;
 }
 
 void InteractiveTestsModel::require()

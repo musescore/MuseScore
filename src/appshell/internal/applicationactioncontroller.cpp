@@ -147,7 +147,7 @@ void ApplicationActionController::revertToFactorySettings()
         IInteractive::Button::No
     });
 
-    if (result.standartButton() == IInteractive::Button::Yes) {
+    if (result.standardButton() == IInteractive::Button::Yes) {
         configuration()->revertToFactorySettings();
     }
 }

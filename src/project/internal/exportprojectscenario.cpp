@@ -259,7 +259,7 @@ bool ExportProjectScenario::askForRetry(const QString& filename) const
         qtrc("project", "An error occured while writing the file %1. Do you want to retry?")
         .arg(filename).toStdString(), { IInteractive::Button::Retry, IInteractive::Button::Abort });
 
-    return result.standartButton() == IInteractive::Button::Retry;
+    return result.standardButton() == IInteractive::Button::Retry;
 }
 
 bool ExportProjectScenario::doExportLoop(const io::path& scorePath, std::function<bool(io::Device&)> exportFunction) const

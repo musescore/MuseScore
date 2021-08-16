@@ -30,7 +30,7 @@ MessageBox::Button MessageBox::warning(const std::string& title, const std::stri
 #ifndef NO_ENGRAVING_INTERACTIVE
     using namespace mu::framework;
     IInteractive::Result res = interactive()->warning(title, text, { IInteractive::Button::Ok, IInteractive::Button::Cancel });
-    if (res.standartButton() == IInteractive::Button::Ok) {
+    if (res.standardButton() == IInteractive::Button::Ok) {
         return MessageBox::Button::Ok;
     }
 
