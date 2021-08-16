@@ -75,6 +75,11 @@ if (BUILD_PLAYBACK_MODULE)
     add_subdirectory(playback)
 endif (BUILD_PLAYBACK_MODULE)
 
+# Pianoroll
+if (BUILD_PIANOROLL_MODULE)
+    add_subdirectory(pianoroll)
+endif (BUILD_PIANOROLL_MODULE)
+
 # Notation
 if (BUILD_PALETTE_MODULE)
     add_subdirectory(palette)
