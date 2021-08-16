@@ -129,6 +129,7 @@ void NotationPageModel::init(QQuickItem* dockWindow)
     static const QMap<std::string, PanelType> actionToPanelType {
         { "toggle-navigator", PanelType::NotationNavigator },
         { "toggle-mixer", PanelType::Mixer },
+        { "toggle-piano", PanelType::Piano },
         { "toggle-timeline", PanelType::Timeline },
         { "toggle-palettes", PanelType::Palettes },
         { "toggle-instruments", PanelType::Instruments },
