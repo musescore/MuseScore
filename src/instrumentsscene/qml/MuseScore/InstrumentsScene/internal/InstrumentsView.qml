@@ -33,7 +33,7 @@ Item {
     property alias instruments: instrumentsView.model
     property alias search: searchField.searchText
 
-    property bool isInstrumentSelected: prv.currentInstrumentIndex != -1
+    readonly property bool isInstrumentSelected: prv.currentInstrumentIndex !== -1
 
     property alias navigation: navPanel
 
@@ -187,9 +187,11 @@ Item {
                 model: modelData.traits
 
                 onCurrentValueChanged: {
-                    if (prv.currentInstrumentIndex === index) {
-                        item.updateCurrentInstrument()
+                    if (prv.currentInstrumentIndex !== index) {
+                        prv.currentInstrumentIndex = index
                     }
+
+                    item.updateCurrentInstrument()
                 }
             }
 
