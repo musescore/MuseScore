@@ -21,6 +21,7 @@
  */
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -32,6 +33,7 @@ import MuseScore.Palette 1.0
 import MuseScore.Inspector 1.0
 import MuseScore.InstrumentsScene 1.0
 import MuseScore.Playback 1.0
+import MuseScore.Pianoroll 1.0
 
 import "../dockwindow"
 
@@ -299,15 +301,7 @@ DockPage {
             // https://github.com/musescore/MuseScore/pull/8593
             visible: false
 
-            Rectangle {
-                anchors.fill: parent
-                color: ui.theme.backgroundPrimaryColor
-
-                StyledTextLabel {
-                    anchors.centerIn: parent
-                    text: pianoRollPanel.title
-                }
-            }
+            PianorollPanel {}
         },
 
         DockPanel {
