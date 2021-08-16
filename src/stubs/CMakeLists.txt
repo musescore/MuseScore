@@ -44,6 +44,10 @@ if (NOT BUILD_PLUGINS_MODULE)
     add_subdirectory(plugins)
 endif (NOT BUILD_PLUGINS_MODULE)
 
+if (NOT BUILD_PIANOROLL_MODULE)
+    add_subdirectory(pianoroll)
+endif (NOT BUILD_PIANOROLL_MODULE)
+
 if (NOT BUILD_PLAYBACK_MODULE)
     add_subdirectory(playback)
 endif (NOT BUILD_PLAYBACK_MODULE)
