@@ -19,26 +19,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUTOBOT_ABSCORELOADSTEP_H
-#define MU_AUTOBOT_ABSCORELOADSTEP_H
+#include "scorethumbnail.h"
 
-#include "../abbasestep.h"
-#include "modularity/ioc.h"
-#include "project/iprojectfilescontroller.h"
-#include "io/path.h"
+#include <QVariant>
 
-namespace mu::autobot {
-class AbScoreLoadStep : public AbBaseStep
+using namespace mu::project;
+
+ScoreThumbnail::ScoreThumbnail(QQuickItem* parent)
+    : QQuickPaintedItem(parent)
 {
-    INJECT(autobot, project::IFileScoreController, fileScoreController)
-public:
-    AbScoreLoadStep() = default;
-
-    std::string name() const override;
-
-protected:
-    void doRun(IAbContextPtr ctx) override;
-};
 }
 
-#endif // MU_AUTOBOT_ABSCORELOADSTEP_H
+void ScoreThumbnail::setThumbnail(QVariant pixmap)
+{
+    if (pixmap.isNull()) {
+        return;
+    }
+
+    m_thumbnail = pixmap.value<QPixmap>();
+    update();
+}
+
+void ScoreThumbnail::paint(QPainter* painter)
+{
+    painter->drawPixmap(0, 0, width(), height(), m_thumbnail);
+}

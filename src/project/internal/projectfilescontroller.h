@@ -41,14 +41,14 @@
 namespace mu::project {
 class ProjectFilesController : public IProjectFilesController, public actions::Actionable, public async::Asyncable
 {
-    INJECT(userscores, actions::IActionsDispatcher, dispatcher)
-    INJECT(userscores, framework::IInteractive, interactive)
-    INJECT(userscores, IProjectCreator, projectCreator)
-    INJECT(userscores, context::IGlobalContext, globalContext)
-    INJECT(userscores, IProjectConfiguration, configuration)
-    INJECT(userscores, IPlatformRecentFilesController, platformRecentFilesController)
-    INJECT(userscores, mi::IMultiInstancesProvider, multiInstancesProvider)
-    INJECT(userscores, cloud::IUploadingService, uploadingService)
+    INJECT(project, actions::IActionsDispatcher, dispatcher)
+    INJECT(project, framework::IInteractive, interactive)
+    INJECT(project, IProjectCreator, projectCreator)
+    INJECT(project, context::IGlobalContext, globalContext)
+    INJECT(project, IProjectConfiguration, configuration)
+    INJECT(project, IPlatformRecentFilesController, platformRecentFilesController)
+    INJECT(project, mi::IMultiInstancesProvider, multiInstancesProvider)
+    INJECT(project, cloud::IUploadingService, uploadingService)
 
 public:
     void init();

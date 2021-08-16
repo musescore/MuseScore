@@ -28,12 +28,12 @@
 #include "context/iuicontextresolver.h"
 
 namespace mu::project {
-class UserScoresUiActions : public ui::IUiActionsModule
+class ProjectUiActions : public ui::IUiActionsModule
 {
     INJECT(project, context::IUiContextResolver, uicontextResolver)
 public:
 
-    UserScoresUiActions(std::shared_ptr<ProjectFilesController> controller);
+    ProjectUiActions(std::shared_ptr<ProjectFilesController> controller);
 
     const ui::UiActionList& actionsList() const override;
 

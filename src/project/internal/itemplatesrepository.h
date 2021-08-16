@@ -19,26 +19,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUTOBOT_ABSCORELOADSTEP_H
-#define MU_AUTOBOT_ABSCORELOADSTEP_H
 
-#include "../abbasestep.h"
-#include "modularity/ioc.h"
-#include "project/iprojectfilescontroller.h"
-#include "io/path.h"
+#ifndef MU_PROJECT_ITEMPLATESREPOSITORY_H
+#define MU_PROJECT_ITEMPLATESREPOSITORY_H
 
-namespace mu::autobot {
-class AbScoreLoadStep : public AbBaseStep
+#include "modularity/imoduleexport.h"
+#include "project/projecttypes.h"
+
+#include "retval.h"
+
+namespace mu::project {
+class ITemplatesRepository : MODULE_EXPORT_INTERFACE
 {
-    INJECT(autobot, project::IFileScoreController, fileScoreController)
+    INTERFACE_ID(ITemplatesRepository)
+
 public:
-    AbScoreLoadStep() = default;
+    virtual ~ITemplatesRepository() = default;
 
-    std::string name() const override;
-
-protected:
-    void doRun(IAbContextPtr ctx) override;
+    virtual RetVal<Templates> templates() const = 0;
 };
 }
 
-#endif // MU_AUTOBOT_ABSCORELOADSTEP_H
+#endif // MU_PROJECT_ITEMPLATESREPOSITORY_H

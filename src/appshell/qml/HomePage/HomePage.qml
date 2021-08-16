@@ -26,7 +26,7 @@ import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Dock 1.0
 
-import MuseScore.UserScores 1.0
+import MuseScore.Project 1.0
 import MuseScore.Cloud 1.0
 import MuseScore.Learn 1.0
 
