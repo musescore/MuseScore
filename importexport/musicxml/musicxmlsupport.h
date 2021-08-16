@@ -132,6 +132,7 @@ struct MusicXMLInstrument {
       int unpitched;                   // midi-unpitched read from MusicXML
       QString name;                    // instrument-name read from MusicXML
       QString sound;                   // instrument-sound read from MusicXML
+      QString abbreviation;            // instrument-abbreviation read from MusicXML
       QString virtLib;                 // virtual-library read from MusicXML
       QString virtName;                // virtual-name read from MusicXML
       int midiChannel;                 // midi-channel read from MusicXML
