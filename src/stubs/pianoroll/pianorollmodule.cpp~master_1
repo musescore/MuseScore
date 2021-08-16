@@ -21,13 +21,7 @@
  */
 #include "pianorollmodule.h"
 
-#include <QQmlEngine>
-
-#include "modularity/ioc.h"
-#include "ui/iuiengine.h"
-
 using namespace mu::pianoroll;
-using namespace mu::modularity;
 
 static void pianoroll_init_qrc()
 {
@@ -36,35 +30,10 @@ static void pianoroll_init_qrc()
 
 std::string PianorollModule::moduleName() const
 {
-    return "pianoroll";
-}
-
-void PianorollModule::registerExports()
-{
-}
-
-void PianorollModule::resolveImports()
-{
+    return "pianoroll_stub";
 }
 
 void PianorollModule::registerResources()
 {
     pianoroll_init_qrc();
-}
-
-void PianorollModule::registerUiTypes()
-{
-    //qmlRegisterType<PianoRollView>("MuseScore.Pianoroll", 1, 0, "PianoRollView");
-
-    auto ui = ioc()->resolve<ui::IUiEngine>(moduleName());
-    if (ui) {
-        ui->addSourceImportPath(pianoroll_QML_IMPORT);
-    }
-}
-
-void PianorollModule::onInit(const framework::IApplication::RunMode& /*mode*/)
-{
-    //if (framework::IApplication::RunMode::Editor != mode) {
-    //    return;
-    //}
 }
