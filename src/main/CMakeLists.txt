@@ -154,6 +154,7 @@ set(LINK_LIB ${LINK_LIB}
     notation
     project
     commonscene
+    pianoroll
     palette
     inspector
     playback
