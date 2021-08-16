@@ -150,19 +150,6 @@ Item {
             popup.navigationParentControl = root.navigation
             popup.open()
         }
-
-        mouseArea.onWheel: {
-            var angleY = wheel.angleDelta.y
-            if (angleY > 0) {
-                if (root.currentIndex > 0) {
-                    root.currentIndex -= 1
-                }
-            } else {
-                if (root.currentIndex < (root.count - 1)) {
-                    root.currentIndex += 1
-                }
-            }
-        }
     }
 
     StyledIconLabel {
