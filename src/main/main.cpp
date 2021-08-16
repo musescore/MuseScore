@@ -88,6 +88,11 @@
 #include "stubs/palette/palettestubmodule.h"
 #endif
 #include "inspector/inspectormodule.h"
+#ifdef BUILD_PIANOROLL_MODULE
+#include "pianoroll/pianorollmodule.h"
+#else
+#include "stubs/pianoroll/pianorollmodule.h"
+#endif
 #ifdef BUILD_PLAYBACK_MODULE
 #include "playback/playbackmodule.h"
 #else
@@ -214,6 +219,8 @@ int main(int argc, char** argv)
     app.addModule(new mu::notation::NotationModule());
     app.addModule(new mu::project::ProjectModule());
     app.addModule(new mu::commonscene::CommonSceneModule());
+    app.addModule(new mu::pianoroll::PianorollModule());
+
 #ifdef BUILD_PLAYBACK_MODULE
     app.addModule(new mu::playback::PlaybackModule());
 #else
