@@ -20,16 +20,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Controls 2.15
-import QtQuick.Layouts 1.15
 
 import MuseScore.UiComponents 1.0
-import MuseScore.Ui 1.0
-import MuseScore.AppShell 1.0
-
-import MuseScore.Pianoroll 1.0
 
 Rectangle {
+    color: ui.theme.backgroundPrimaryColor
+
+    StyledTextLabel {
+        anchors.centerIn: parent
+        text: "Pianoroll"
+    }
+}
+angle {
     color: ui.theme.backgroundPrimaryColor
 
     ColumnLayout {
