@@ -29,6 +29,7 @@
 using namespace mu::notation;
 using namespace mu::actions;
 using namespace mu::context;
+using namespace mu::framework;
 
 static constexpr int INVALID_BOX_INDEX = -1;
 static constexpr qreal STRETCH_STEP = 0.1;
@@ -210,6 +211,8 @@ void NotationActionController::init()
     registerAction("system-text-properties", &NotationActionController::openStaffTextPropertiesDialog);
     registerAction("measure-properties", &NotationActionController::openMeasurePropertiesDialog);
     registerAction("config-raster", &NotationActionController::openEditGridSizeDialog);
+    registerAction("load-style", &NotationActionController::loadStyle);
+    registerAction("save-style", &NotationActionController::saveStyle);
 
     registerAction("voice-x12", [this]() { swapVoices(0, 1); });
     registerAction("voice-x13", [this]() { swapVoices(0, 2); });
@@ -1533,6 +1536,49 @@ void NotationActionController::openTransposeDialog()
 void NotationActionController::openPartsDialog()
 {
     interactive()->open("musescore://notation/parts");
+}
+
+mu::io::path NotationActionController::selectStyleFile(bool forLoad)
+{
+    mu::io::path dir = configuration()->userStylesPath();
+    QString filter = qtrc("notation", "MuseScore Styles") + " (*.mss)";
+    return forLoad
+           ? interactive()->selectOpeningFile(qtrc("notation", "Load Style"), dir, filter)
+           : interactive()->selectSavingFile(qtrc("notation", "Save Style"), dir, filter);
+}
+
+void NotationActionController::loadStyle()
+{
+    auto path = selectStyleFile(true);
+    if (!path.empty()) {
+        QFile f(path.toQString());
+        if (!f.open(QIODevice::ReadOnly) || !Ms::MStyle::isValid(&f)) {
+            interactive()->error(trc("notation", "The style file could not be loaded."),
+                                 f.errorString().toStdString(), { IInteractive::Button::Ok },
+                                 IInteractive::Button::Ok, IInteractive::Option::WithIcon);
+            return;
+        }
+        if (!currentNotationStyle()->loadStyle(path.toQString(), false) && interactive()->warning(
+                trc("notation",
+                    "Since this style file is from a different version of MuseScore, your score is not guaranteed to display correctly."),
+                trc("notation", "Click OK to load anyway."), { IInteractive::Button::Ok, IInteractive::Button::Cancel },
+                IInteractive::Button::Ok, IInteractive::Option::WithIcon).standardButton()
+            == IInteractive::Button::Ok) {
+            currentNotationStyle()->loadStyle(path.toQString(), true);
+        }
+    }
+}
+
+void NotationActionController::saveStyle()
+{
+    auto path = selectStyleFile(false);
+    if (!path.empty()) {
+        if (!currentNotationStyle()->saveStyle(path)) {
+            interactive()->error(trc("notation", "The style file could not be saved."),
+                                 Ms::MScore::lastError.toStdString(), { IInteractive::Button::Ok },
+                                 IInteractive::Button::Ok, IInteractive::Option::WithIcon);
+        }
+    }
 }
 
 FilterElementsOptions NotationActionController::elementsFilterOptions(const EngravingItem* element) const

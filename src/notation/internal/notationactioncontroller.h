@@ -183,6 +183,9 @@ private:
     void openStaffTextPropertiesDialog();
     void openMeasurePropertiesDialog();
     void openEditGridSizeDialog();
+    mu::io::path selectStyleFile(bool forLoad);
+    void loadStyle();
+    void saveStyle();
 
     void toggleScoreConfig(ScoreConfigType configType);
     void toggleNavigator();
