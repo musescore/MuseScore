@@ -29,31 +29,13 @@
 
 #include "async/asyncable.h"
 #include "context/iglobalcontext.h"
-#include "pianoroll/ipianorollcontroller.h"
 
 namespace mu::pianoroll {
-
-class PianorollView;
-
-//class PianoItem {
-//    Note* _note;
-//    PianoView* _pianoView;
-
-//public:
-//   PianoItem(Note*, PianorollView*);
-//   ~PianoItem() {}
-
-//};
-
-//--------------------
-
-class PianorollView : public QQuickPaintedItem, public async::Asyncable
+class PianoRollView : public QQuickPaintedItem, public async::Asyncable
 {
     Q_OBJECT
 
     INJECT(pianoroll, context::IGlobalContext, globalContext)
-    INJECT(pianoroll, IPianorollController, controller)
-
 
 //    Q_PROPERTY(QVariant icon READ icon WRITE setIcon)
 //    Q_PROPERTY(bool selected READ selected WRITE setSelected)
@@ -61,7 +43,7 @@ class PianorollView : public QQuickPaintedItem, public async::Asyncable
     Q_PROPERTY(QColor color READ color WRITE setColor)
 
 public:
-    PianorollView(QQuickItem* parent = nullptr);
+    PianoRollView(QQuickItem* parent = nullptr);
 
 //    QVariant icon() const;
 //    void setIcon(QVariant val);
@@ -80,8 +62,7 @@ public:
     void paint(QPainter*) override;
 
 private:
-    void onNotationChanged();
-    void updateBoundingSize();
+    void onCurrentNotationChanged();
 
     notation::INotationPtr m_notation;
 
