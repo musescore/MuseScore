@@ -26,13 +26,8 @@
 #include "modularity/ioc.h"
 #include "ui/iuiengine.h"
 
-#include "view/pianorollview.h"
-#include "internal/pianorollcontroller.h"
-
 using namespace mu::pianoroll;
 using namespace mu::modularity;
-
-static std::shared_ptr<PianorollController> s_pianorollController = std::make_shared<PianorollController>();
 
 static void pianoroll_init_qrc()
 {
@@ -46,7 +41,6 @@ std::string PianorollModule::moduleName() const
 
 void PianorollModule::registerExports()
 {
-    ioc()->registerExport<IPianorollController>(moduleName(), s_pianorollController);
 }
 
 void PianorollModule::resolveImports()
@@ -60,7 +54,7 @@ void PianorollModule::registerResources()
 
 void PianorollModule::registerUiTypes()
 {
-    qmlRegisterType<PianorollView>("MuseScore.Pianoroll", 1, 0, "PianorollView");
+    //qmlRegisterType<PianoRollView>("MuseScore.Pianoroll", 1, 0, "PianoRollView");
 
     auto ui = ioc()->resolve<ui::IUiEngine>(moduleName());
     if (ui) {
@@ -70,10 +64,7 @@ void PianorollModule::registerUiTypes()
 
 void PianorollModule::onInit(const framework::IApplication::RunMode& /*mode*/)
 {
-//    if (framework::IApplication::RunMode::Editor != mode) {
-//        return;
-//    }
-
-    s_pianorollController->init();
-
+    //if (framework::IApplication::RunMode::Editor != mode) {
+    //    return;
+    //}
 }
