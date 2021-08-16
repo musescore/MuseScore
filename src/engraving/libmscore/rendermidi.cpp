@@ -31,6 +31,7 @@
 #include <cmath>
 
 #include "style/style.h"
+#include "compat/midi/event.h"
 
 #include "score.h"
 #include "volta.h"
@@ -68,8 +69,6 @@
 #include "easeInOut.h"
 
 #include "masterscore.h"
-
-#include "framework/midi_old/event.h"
 
 #include "log.h"
 

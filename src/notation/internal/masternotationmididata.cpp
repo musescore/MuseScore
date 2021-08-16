@@ -416,19 +416,15 @@ Events MasterNotationMidiData::convertMsEvents(Ms::EventMap&& eventMap) const
         for (auto itr = it.first; itr != it.second; ++itr) {
             const Ms::NPlayEvent ev = itr->second;
 
-            midi::EventType etype = static_cast<midi::EventType>(ev.type());
-            static const std::set<EventType> SKIP_EVENTS
-                = { EventType::ME_INVALID, EventType::ME_EOT, EventType::ME_TICK1, EventType::ME_TICK2 };
+            Ms::EventType etype = static_cast<Ms::EventType>(ev.type());
+            static const std::set<Ms::EventType> SKIP_EVENTS
+                = { Ms::EventType::ME_INVALID, Ms::EventType::ME_EOT, Ms::EventType::ME_TICK1, Ms::EventType::ME_TICK2 };
+
             if (SKIP_EVENTS.find(etype) != SKIP_EVENTS.end()) {
                 continue;
             }
-            midi::Event e
-            {
-                static_cast<channel_t>(ev.channel()),
-                etype,
-                static_cast<uint8_t>(ev.dataA()),
-                static_cast<uint8_t>(ev.dataB())
-            };
+
+            midi::Event e = midi::Event::fromMIDI10Package(ev.toPackage());
 
             events.push_back(std::move(e));
         }

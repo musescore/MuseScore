@@ -24,7 +24,7 @@
 
 #include "importmidi_inner.h"
 #include "importmidi_operation.h"
-#include "framework/midi_old/midifile.h"
+#include "engraving/compat/midi/midifile.h"
 
 namespace Ms {
 class ReducedFraction;

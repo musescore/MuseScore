@@ -47,7 +47,14 @@ void NotationMidiInput::onMidiEventReceived(const midi::Event& e)
 {
     LOGI() << e.to_string();
 
-    if (e.type() == midi::EventType::ME_NOTEON || e.type() == midi::EventType::ME_NOTEOFF) {
+    if (e.isChannelVoice20()) {
+        auto events = e.toMIDI10();
+        for (auto& event : events) {
+            onMidiEventReceived(event);
+        }
+    }
+
+    if (e.opcode() == midi::Event::Opcode::NoteOn || e.opcode() == midi::Event::Opcode::NoteOff) {
         onNoteReceived(e);
     }
 }
@@ -67,7 +74,7 @@ void NotationMidiInput::onNoteReceived(const midi::Event& e)
         return inputEv.pitch == val.pitch;
     });
 
-    if (e.type() == midi::EventType::ME_NOTEOFF || e.velocity() == 0) {
+    if (e.opcode() == midi::Event::Opcode::NoteOff || e.velocity() == 0) {
         return;
     }
 

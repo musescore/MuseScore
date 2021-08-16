@@ -150,7 +150,6 @@ set(LINK_LIB ${LINK_LIB}
     workspace
     audio
     midi
-    midi_old
     learn
     notation
     project

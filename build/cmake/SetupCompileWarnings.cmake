@@ -84,22 +84,3 @@ function(target_no_warning TARGET WNAME)
     endif()
 
 endfunction()
-
-# Temporary solution
-# Pavel added the `deprecated` attribute to the old midi event, hoping that the use of deprecated methods will be quickly removed.
-# But! This is not yet true, the methods are used.
-# Displaying warnings is very annoying for all developers.
-# Pavel insists on keep these warnings.
-# So we will keep them only for Pavel until he removes the use of obsolete methods.
-find_program(GIT_EXECUTABLE git PATHS ENV PATH)
-if (GIT_EXECUTABLE)
-    execute_process(
-        COMMAND "${GIT_EXECUTABLE}" config --get user.email
-        OUTPUT_VARIABLE git_email
-        OUTPUT_STRIP_TRAILING_WHITESPACE)
-
-    if (git_email STREQUAL "p.smokotnin@gmail.com")
-        add_definitions(-DSHOW_MIDI_EVENT_DEPRECATED_WARNING)
-    endif()
-
-endif (GIT_EXECUTABLE)

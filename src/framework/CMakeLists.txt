@@ -42,7 +42,6 @@ if (BUILD_AUDIO_MODULE)
 endif (BUILD_AUDIO_MODULE)
 
 add_subdirectory(midi)
-add_subdirectory(midi_old)
 
 if (BUILD_TELEMETRY_MODULE)
       add_subdirectory(telemetry)

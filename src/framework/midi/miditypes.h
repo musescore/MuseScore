@@ -42,9 +42,6 @@ using bank_t = int32_t;
 using tick_t = uint32_t;
 using tempo_t = uint32_t;
 using TempoMap = std::map<tick_t, tempo_t>;
-
-using EventType = Ms::EventType;
-using CntrType = Ms::CntrType;
 using Events = std::map<tick_t, std::vector<Event> >;
 
 struct Program {
