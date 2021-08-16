@@ -2009,6 +2009,11 @@ void MusicXMLParserPass1::scoreInstrument(const QString& partId)
                   if (_instruments[partId].contains(instrId))
                         _instruments[partId][instrId].name = instrName;
                   }
+            else if (_e.name() == "instrument-abbreviation") {
+                  QString abbreviation = _e.readElementText();
+                  if (_instruments[partId].contains(instrId))
+                        _instruments[partId][instrId].abbreviation = abbreviation;
+                  }
             else if (_e.name() == "instrument-sound") {
                   QString instrSound = _e.readElementText();
                   if (_instruments[partId].contains(instrId))

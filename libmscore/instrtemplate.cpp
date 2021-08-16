@@ -756,6 +756,9 @@ InstrumentTemplate* searchTemplateForInstrNameList(const QList<QString>& nameLis
       for (InstrumentGroup* g : qAsConst(instrumentGroups)) {
             for (InstrumentTemplate* it : qAsConst(g->instrumentTemplates)) {
                   for (const QString& name : nameList) {
+                        if (name.isEmpty())
+                              continue;
+
                         if (it->trackName == name ||
                             it->longNames.contains(StaffName(name)) ||
                             it->shortNames.contains(StaffName(name)))
