@@ -26,6 +26,8 @@
 #include "modularity/ioc.h"
 #include "ui/iuiengine.h"
 
+#include "view/pianorollview.h"
+
 using namespace mu::pianoroll;
 using namespace mu::modularity;
 
@@ -54,7 +56,7 @@ void PianorollModule::registerResources()
 
 void PianorollModule::registerUiTypes()
 {
-    //qmlRegisterType<PianoRollView>("MuseScore.Pianoroll", 1, 0, "PianoRollView");
+    qmlRegisterType<PianoRollView>("MuseScore.Pianoroll", 1, 0, "PianoRollView");
 
     auto ui = ioc()->resolve<ui::IUiEngine>(moduleName());
     if (ui) {
