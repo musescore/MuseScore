@@ -23,123 +23,46 @@
 #include "pianorollview.h"
 
 #include "libmscore/element.h"
-#include "libmscore/measure.h"
-#include "libmscore/fraction.h"
 
 #include <QPainter>
 
 using namespace mu::pianoroll;
 
-
-//PianoItem::PianoItem(Note* n, PianorollView* pianoView)
-//   : _note(n), _pianoView(pianoView)
-//      {
-//      }
-
-//--------------------
-
-PianorollView::PianorollView(QQuickItem* parent)
+PianoRollView::PianoRollView(QQuickItem* parent)
     : QQuickPaintedItem(parent)
 {
+}
+
+void PianoRollView::onCurrentNotationChanged()
+{
+    m_notation = globalContext()->currentNotation();
+    if (!m_notation) {
+        return;
+    }
+
+//    auto hh = m_notation->elements();
+    INotationElementsPtr elements = m_notation->elements();
+//    auto list = elements->elements();
+    std::vector<Element*> list = elements->elements();
+    for (Element* ele: list) {
+        bool sel = ele->selected();
+        auto type = ele->type();
+        auto name = ele->name();
+
+        int j = 9;
+    }
     int j = 9;
 }
 
-void PianorollView::onNotationChanged()
+void PianoRollView::load()
 {
-    updateBoundingSize();
-    update();
-}
-
-void PianorollView::setWholeNoteWidth(double value)
-{
-    if (value == m_wholeNoteWidth)
-        return;
-    m_wholeNoteWidth = value;
-    updateBoundingSize();
-
-    emit wholeNoteWidthChanged();
-}
-
-void PianorollView::setNoteHeight(int value)
-{
-    if (value == m_noteHeight)
-        return;
-    m_noteHeight = value;
-    updateBoundingSize();
-
-    emit noteHeightChanged();
-}
-
-void PianorollView::setTool(PianorollTool value)
-{
-    if (value == m_tool)
-        return;
-    m_tool = value;
-    emit toolChanged();
-}
-
-
-void PianorollView::load()
-{
-//    globalContext()->currentNotationChanged().onNotify(this, [this]() {
-//        onCurrentNotationChanged();
-//    });
-
-    controller()->noteLayoutChanged().onNotify(this, [this]() {
-        onNotationChanged();
+    globalContext()->currentNotationChanged().onNotify(this, [this]() {
+        onCurrentNotationChanged();
     });
 }
 
-void PianorollView::updateBoundingSize()
+void PianoRollView::paint(QPainter* p)
 {
-    //    setImplicitSize((int)(32 * m_wholeNoteWidth), m_noteHeight * 128);
-
-//    int ticks = controller()->widthInTicks();
-//    int noteHeight = controller()->noteHeight();
-//    double xZoom = controller()->xZoom();
-
-    //Ms::Measure* lm = _staff->score()->lastMeasure();
-    //Ms::Fraction widthInTicks = lm->tick() + lm->ticks();
-    //int ticks = widthInTicks.ticks();  //Scaled by Mscore::division * 4 (which is 480 * 4)
-    //, pulses per quarter note, ticks per beat
-
-
-    //notation::INotationPtr notation = globalContext()->currentNotation();
-    //if (!notation) {
-    //    return;
-    //}
-
-    //Ms::Score* score = notation->elements()->msScore();
-    //std::vector<Ms::Element*> selectedElements = notation->interaction()->selection()->elements();
-    //m_selectedStaves.clear();
-    //m_activeStaff = -1;
-    //for (Element* e: selectedElements)
-    //{
-    //    int idx = e->staffIdx();
-    //    qDebug() << "ele idx " << idx;
-    //    m_activeStaff = idx;
-    //    if (std::find(m_selectedStaves.begin(), m_selectedStaves.end(), idx) == m_selectedStaves.end())
-    //    {
-    //        m_selectedStaves.push_back(idx);
-
-    //    }
-    //}
-
-    Ms::Fraction beats = controller()->widthInBeats();
-    double beat = beats.numerator() / (double)beats.denominator();
-    setImplicitSize((int)(beat * m_wholeNoteWidth), m_noteHeight * 128);
-
-//    Score* score = controller()->score();
-
-//    Measure* lm = score->lastMeasure();
-//    _ticks = (lm->tick() + lm->ticks()).ticks();
-//    scene()->setSceneRect(0.0, 0.0, double((_ticks + MAP_OFFSET * 2) * _xZoom), _noteHeight * 128);
-
-    update();
-}
-
-void PianorollView::paint(QPainter* p)
-{    
 //    if (m_icon.isNull()) {
     p->fillRect(0, 0, width(), height(), m_color);
 //        return;
@@ -152,7 +75,4 @@ void PianorollView::paint(QPainter* p)
 //    const QIcon::Mode mode = m_selected ? QIcon::Selected : QIcon::Active;
 //    const QIcon::State state = m_active ? QIcon::On : QIcon::Off;
 //    m_icon.paint(p, QRect(0, 0, width(), height()), Qt::AlignCenter, mode, state);
-
-    int value = controller()->getNotes();
-    int j = 9;
 }
