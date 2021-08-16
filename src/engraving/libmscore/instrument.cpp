@@ -24,6 +24,7 @@
 
 #include "io/xml.h"
 #include "io/htmlparser.h"
+#include "compat/midi/midipatch.h"
 
 #include "drumset.h"
 #include "articulation.h"
@@ -35,7 +36,6 @@
 #include "score.h"
 #include "masterscore.h"
 
-#include "framework/midi_old/midipatch.h"
 #include "log.h"
 
 using namespace mu;

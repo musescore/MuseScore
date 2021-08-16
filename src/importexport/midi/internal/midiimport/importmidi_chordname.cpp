@@ -23,12 +23,12 @@
 #include "importmidi_inner.h"
 #include "importmidi_chord.h"
 #include "importmidi_fraction.h"
-#include "libmscore/masterscore.h"
-#include "libmscore/staff.h"
-#include "libmscore/measure.h"
-#include "libmscore/harmony.h"
-#include "framework/midi_old/midifile.h"
 #include "importmidi_operations.h"
+#include "engraving/libmscore/masterscore.h"
+#include "engraving/libmscore/staff.h"
+#include "engraving/libmscore/measure.h"
+#include "engraving/libmscore/harmony.h"
+#include "engraving/compat/midi/midifile.h"
 
 // From XF Format Specifications V 2.01 (January 13, 1999, YAMAHA CORPORATION)
 

@@ -25,13 +25,6 @@
 #include <cstdint>
 #include <array>
 #include <set>
-#include "framework/midi_old/event.h"
-
-#ifdef SHOW_MIDI_EVENT_DEPRECATED_WARNING
-#define ME_DEPRECATED [[deprecated]]
-#else
-#define ME_DEPRECATED
-#endif
 
 #ifndef UNUSED
 #define UNUSED(x) (void)x;
@@ -39,7 +32,6 @@
 
 namespace mu::midi {
 using channel_t = uint8_t;
-using EventType = Ms::EventType;
 
 /*!
  * MIDI Event stored in Universal MIDI Packet Format Message
@@ -91,23 +83,12 @@ struct Event {
 
     Event()
         : m_data({ 0, 0, 0, 0 }) {}
+    Event(const std::array<uint32_t, 4>& d)
+        : m_data(d) {}
     Event(Opcode opcode, MessageType type = MessageType::ChannelVoice20)
     {
         setMessageType(type);
         setOpcode(opcode);
-    }
-
-    ME_DEPRECATED Event(channel_t ch, EventType type)
-    {
-        setType(type);
-        setChannel(ch);
-    }
-
-    ME_DEPRECATED Event(channel_t ch, EventType type, uint8_t a = 0, uint8_t b = 0)
-    {
-        m_data[0] = (a << 8) | b;
-        setType(type);
-        setChannel(ch);
     }
 
     //! 4.8.1 NOOP Utility message
@@ -243,14 +224,6 @@ struct Event {
         default: break;
         }
         return 0;
-    }
-
-    ME_DEPRECATED EventType type() const
-    {
-        if (isChannelVoice()) {
-            return static_cast<EventType>(static_cast<uint32_t>(opcode()) << 4);
-        }
-        return EventType::ME_INVALID;
     }
 
     channel_t channel() const
@@ -1032,23 +1005,8 @@ private:
         return srcVal >> scaleBits;
     }
 
-    //TODO: remove with deprecated constructors
-    void setType(EventType type)
-    {
-        std::set<EventType> supportedTypes
-            = { EventType::ME_NOTEOFF, EventType::ME_NOTEON, EventType::ME_POLYAFTER, EventType::ME_CONTROLLER, EventType::ME_PROGRAM,
-                EventType::ME_AFTERTOUCH, EventType::ME_PITCHBEND };
-        assert(supportedTypes.find(type) != supportedTypes.end());
-
-        Opcode code = static_cast<Opcode>(type >> 4);
-        setMessageType(MessageType::ChannelVoice10);
-        setOpcode(code);
-    }
-
     std::array<uint32_t, 4> m_data = { { 0, 0, 0, 0 } };
 };
 }
-
-#undef ME_DEPRECATED
 
 #endif // MU_MIDI_MIDIEVENT_H

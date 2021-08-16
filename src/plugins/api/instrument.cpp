@@ -22,7 +22,7 @@
 
 #include "instrument.h"
 
-#include "framework/midi_old/midipatch.h"
+#include "engraving/compat/midi/midipatch.h"
 #include "libmscore/part.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/undo.h"

@@ -248,6 +248,10 @@ Ret FluidSynth::setupMidiChannels(const std::vector<Event>& events)
 
 bool FluidSynth::handleEvent(const Event& e)
 {
+    //! NOTE special midi events are mapped to internal controller
+    //! see /engraving/compat/midi/event.h
+    static uint8_t CTRL_PROGRAM = 0x81;
+
     if (e.isChannelVoice20()) {
         auto events = e.toMIDI10();
         bool ret = true;
@@ -270,7 +274,7 @@ bool FluidSynth::handleEvent(const Event& e)
         ret = fluid_synth_noteoff(m_fluid->synth, e.channel(), e.note());
     } break;
     case Event::Opcode::ControlChange: {
-        if (e.index() == CntrType::CTRL_PROGRAM) {
+        if (e.index() == CTRL_PROGRAM) {
             ret = fluid_synth_program_change(m_fluid->synth, e.channel(), e.program());
         } else {
             ret = fluid_synth_cc(m_fluid->synth, e.channel(), e.index(), e.data());

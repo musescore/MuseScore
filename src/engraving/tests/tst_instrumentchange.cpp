@@ -31,7 +31,7 @@
 #include "libmscore/part.h"
 #include "libmscore/undo.h"
 
-#include "framework/midi_old/midipatch.h"
+#include "engraving/compat/midi/midipatch.h"
 
 static const QString INSTRUMENTCHANGE_DATA_DIR("instrumentchange_data/");
 

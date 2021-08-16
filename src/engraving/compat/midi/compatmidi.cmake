@@ -18,9 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set(MODULE midi_old)
-
-set(MODULE_SRC
+set(COMPAT_MIDI_SRC
     ${CMAKE_CURRENT_LIST_DIR}/event.cpp
     ${CMAKE_CURRENT_LIST_DIR}/event.h
     ${CMAKE_CURRENT_LIST_DIR}/midifile.cpp
@@ -28,9 +26,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/midiinstrument.cpp
     ${CMAKE_CURRENT_LIST_DIR}/midiinstrument.h
     )
-
-set(MODULE_NOT_LINK_GLOBAL ON)
-include(SetupModule)
 
 if (NOT MSVC AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 9.0)
    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-deprecated-copy")

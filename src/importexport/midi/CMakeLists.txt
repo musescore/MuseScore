@@ -38,7 +38,6 @@ set(MODULE_SRC
     )
 
 set(MODULE_LINK
-    midi_old    # for midi
     beatroot    # for midi
     engraving
     qzip

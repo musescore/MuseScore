@@ -31,7 +31,7 @@
 #include "libmscore/staff.h"
 #include "libmscore/text.h"
 
-#include "framework/midi_old/midifile.h"
+#include "engraving/compat/midi/midifile.h"
 
 #include <set>
 
