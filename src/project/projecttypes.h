@@ -75,6 +75,16 @@ struct ProjectMeta
 };
 
 using ProjectMetaList = QList<ProjectMeta>;
+
+struct Template : public ProjectMeta {
+    QString categoryTitle;
+
+    Template() = default;
+    Template(const ProjectMeta& meta)
+        : ProjectMeta(meta) {}
+};
+
+using Templates = QList<Template>;
 }
 
 #endif // MU_PROJECT_PROJECTTYPES_H

@@ -151,7 +151,6 @@ set(LINK_LIB ${LINK_LIB}
     audio
     midi
     midi_old
-    userscores
     learn
     notation
     project

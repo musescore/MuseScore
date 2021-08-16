@@ -76,7 +76,7 @@ class PluginAPI : public Ms::QmlPlugin
     Q_OBJECT
 
     INJECT(plugins, mu::shortcuts::IShortcutsController, shortcuts)
-    INJECT(userscores, mu::context::IGlobalContext, context)
+    INJECT(plugins, mu::context::IGlobalContext, context)
 
     /** Path where the plugin is placed in menu */
     Q_PROPERTY(QString menuPath READ menuPath WRITE setMenuPath)

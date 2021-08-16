@@ -30,9 +30,9 @@ FocusScope {
     id: root
 
     property string title: ""
-    property string author: ""
-    property string duration: ""
-    property alias thumbnail: thumbnailItem.source
+    property alias timeSinceModified: timeSinceModified.text
+    property alias thumbnail: loader.thumbnail
+    property bool isAdd: false
 
     property alias navigation: navCtrl
 
@@ -57,22 +57,42 @@ FocusScope {
     Column {
         anchors.fill: parent
 
-        spacing: 8
+        spacing: 16
 
         Item {
             id: scoreRect
 
-            height: 150
-            width: 250
+            height: 224
+            width: 172
 
             opacity: 0.9
 
             property int borderWidth: 0
             readonly property int radius: 3
 
-            Image {
-                id: thumbnailItem
+            Loader {
+                id: loader
+
                 anchors.fill: parent
+
+                property var thumbnail: undefined
+
+                sourceComponent: root.isAdd ? addComp : thumbnailComp
+
+                onLoaded: {
+                    if (!root.isAdd) {
+                        item.setThumbnail(root.thumbnail)
+                    }
+                }
+
+                layer.enabled: true
+                layer.effect: OpacityMask {
+                    maskSource: Rectangle {
+                        width: scoreRect.width
+                        height: scoreRect.height
+                        radius: scoreRect.radius
+                    }
+                }
             }
 
             Rectangle {
@@ -84,11 +104,23 @@ FocusScope {
                 color: "transparent"
                 radius: parent.radius
 
-                border.color: navCtrl.active ? ui.theme.focusColor : ui.theme.strokeColor
-                border.width: navCtrl.active ? 2 : parent.borderWidth
+                NavigationFocusBorder { navigationCtrl: navCtrl }
+
+                border.color: ui.theme.strokeColor
+                border.width: parent.borderWidth
             }
 
             states: [
+                State {
+                    name: "NORMAL"
+                    when: !mouseArea.containsMouse && !mouseArea.pressed
+
+                    PropertyChanges {
+                        target: scoreRect
+                        borderWidth: ui.theme.borderWidth
+                    }
+                },
+
                 State {
                     name: "HOVERED"
                     when: mouseArea.containsMouse && !mouseArea.pressed
@@ -121,43 +153,60 @@ FocusScope {
             }
         }
 
-        StyledTextLabel {
+        Column {
             anchors.left: parent.left
-            width: parent.width
+            anchors.right: parent.right
 
-            text: root.title
+            spacing: 4
 
-            horizontalAlignment: Text.AlignLeft
-            wrapMode: Text.WrapAnywhere
-            maximumLineCount: 1
+            StyledTextLabel {
+                anchors.horizontalCenter: parent.horizontalCenter
 
-            font: ui.theme.tabBoldFont
+                text: root.title
+
+                wrapMode: Text.WrapAnywhere
+                maximumLineCount: 1
+                width: parent.width
+
+                font: ui.theme.largeBodyFont
+            }
+
+            StyledTextLabel {
+                id: timeSinceModified
+
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                font.capitalization: Font.AllUppercase
+
+                visible: !root.isAdd
+            }
         }
+    }
 
-        StyledTextLabel {
-            anchors.left: parent.left
-            width: parent.width
+    Component {
+        id: thumbnailComp
 
-            text: root.author
-
-            horizontalAlignment: Text.AlignLeft
-            wrapMode: Text.WrapAnywhere
-            maximumLineCount: 1
-
-            font: ui.theme.bodyBoldFont
+        ScoreThumbnail {
+            anchors.fill: parent
         }
+    }
 
-        StyledTextLabel {
-            anchors.left: parent.left
-            width: parent.width
+    Component {
+        id: addComp
 
-            text: root.duration
+        Rectangle {
+            anchors.fill: parent
 
-            horizontalAlignment: Text.AlignLeft
-            wrapMode: Text.WrapAnywhere
-            maximumLineCount: 1
+            color: "white"
 
-            font: ui.theme.bodyFont
+            StyledIconLabel {
+                anchors.centerIn: parent
+
+                iconCode: IconCode.PLUS
+
+                font.pixelSize: 50
+                color: "black"
+            }
         }
     }
 

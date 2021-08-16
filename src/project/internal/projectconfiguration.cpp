@@ -32,7 +32,7 @@ using namespace mu::notation;
 
 static const std::string module_name("project");
 
-static const Settings::Key RECENT_PROJECTS_PATHS(module_name, "userscores/recentList");
+static const Settings::Key RECENT_PROJECTS_PATHS(module_name, "project/recentList");
 static const Settings::Key USER_TEMPLATES_PATH(module_name, "application/paths/myTemplates");
 static const Settings::Key USER_PROJECTS_PATH(module_name, "application/paths/myScores");
 static const Settings::Key PREFERRED_SCORE_CREATION_MODE_KEY(module_name, "userscores/preferredScoreCreationMode");

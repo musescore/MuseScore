@@ -1,4 +1,0 @@
-module MuseScore.UserScores
-ScoresPage 1.0 ScoresPage.qml
-NewScoreDialog 1.0 NewScoreDialog.qml
-ExportDialog 1.0 ExportDialog.qml

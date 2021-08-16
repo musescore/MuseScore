@@ -36,10 +36,6 @@ add_subdirectory(context)
 add_subdirectory(notation)
 add_subdirectory(project)
 
-if (BUILD_USERSCORES_MODULE)
-    add_subdirectory(userscores)
-endif (BUILD_USERSCORES_MODULE)
-
 if (BUILD_LEARN_MODULE)
     add_subdirectory(learn)
 endif (BUILD_LEARN_MODULE)
@@ -106,7 +102,7 @@ add_subdirectory(stubs)
 
 if (BUILD_UNIT_TESTS)
 #    add_subdirectory(notation/tests) no tests at moment
-    add_subdirectory(userscores/tests)
+    add_subdirectory(project/tests)
 
     add_subdirectory(engraving/tests)
     add_subdirectory(engraving/utests)
