@@ -1113,7 +1113,7 @@
     </SC>
   <SC>
     <key>text-b</key>
-    <seq>Ctrl+b</seq>
+    <seq>Ctrl+B</seq>
     </SC>
   <SC>
     <key>text-word-left</key>
@@ -1125,11 +1125,11 @@
     </SC>
   <SC>
     <key>text-i</key>
-    <seq>Ctrl+i</seq>
+    <seq>Ctrl+I</seq>
     </SC>
   <SC>
     <key>text-u</key>
-    <seq>Ctrl+u</seq>
+    <seq>Ctrl+U</seq>
     </SC>
   <SC>
     <key>startcenter</key>

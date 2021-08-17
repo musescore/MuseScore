@@ -305,7 +305,6 @@ void Dynamic::read(XmlReader& e)
             e.unknown();
         }
     }
-    styleChanged();
 }
 
 //---------------------------------------------------------

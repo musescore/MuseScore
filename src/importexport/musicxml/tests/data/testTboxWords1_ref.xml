@@ -98,12 +98,12 @@
       <print new-page="yes"/>
       <direction placement="above">
         <direction-type>
-          <words font-family="Edwin">Staff Text</words>
+          <words>Staff Text</words>
           </direction-type>
         </direction>
       <direction placement="below">
         <direction-type>
-          <words font-family="Edwin">Staff Text</words>
+          <words>Staff Text</words>
           </direction-type>
         </direction>
       <note>

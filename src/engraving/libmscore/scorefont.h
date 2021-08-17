@@ -67,6 +67,7 @@ public:
 
     Sym sym(SymId id) const;
     uint symCode(SymId id) const;
+    SymId fromCode(uint code) const;
     QString toString(SymId id) const;
 
     bool isValid(SymId id) const;
