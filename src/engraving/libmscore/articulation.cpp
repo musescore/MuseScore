@@ -34,7 +34,7 @@
 #include "undo.h"
 #include "page.h"
 #include "barline.h"
-#include "sym.h"
+#include "symnames.h"
 #include "masterscore.h"
 
 using namespace mu;
@@ -83,11 +83,11 @@ void Articulation::setSymId(SymId id)
 
 int Articulation::subtype() const
 {
-    QString s = Sym::id2name(_symId);
+    QString s = SymNames::nameForSymId(_symId);
     if (s.endsWith("Below")) {
-        return int(Sym::name2id(s.left(s.size() - 5) + "Above"));
+        return int(SymNames::symIdByName(s.left(s.size() - 5) + "Above"));
     } else if (s.endsWith("Turned")) {
-        return int(Sym::name2id(s.left(s.size() - 6)));
+        return int(SymNames::symIdByName(s.left(s.size() - 6)));
     } else {
         return int(_symId);
     }
@@ -101,16 +101,16 @@ void Articulation::setUp(bool val)
 {
     _up = val;
     bool dup = _direction == Direction::AUTO ? val : _direction == Direction::UP;
-    QString s = Sym::id2name(_symId);
+    QString s = SymNames::nameForSymId(_symId);
     if (s.endsWith(!dup ? "Above" : "Below")) {
         QString s2 = s.left(s.size() - 5) + (dup ? "Above" : "Below");
-        _symId = Sym::name2id(s2);
+        _symId = SymNames::symIdByName(s2);
     } else if (s.endsWith("Turned")) {
         QString s2 = dup ? s.left(s.size() - 6) : s;
-        _symId = Sym::name2id(s2);
+        _symId = SymNames::symIdByName(s2);
     } else if (!dup) {
         QString s2 = s + "Turned";
-        SymId sym = Sym::name2id(s2);
+        SymId sym = SymNames::symIdByName(s2);
         if (sym != SymId::noSym) {
             _symId = sym;
         }
@@ -140,7 +140,7 @@ bool Articulation::readProperties(XmlReader& e)
 
     if (tag == "subtype") {
         QString s = e.readElementText();
-        SymId id = Sym::name2id(s);
+        SymId id = SymNames::symIdByName(s);
         if (id == SymId::noSym) {
             id = compat::Read206::articulationNames2SymId206(s); // compatibility hack for "old" 3.0 scores
         }
@@ -192,7 +192,7 @@ void Articulation::write(XmlWriter& xml) const
         xml.tagE(QString("channel name=\"%1\"").arg(_channelName));
     }
     writeProperty(xml, Pid::DIRECTION);
-    xml.tag("subtype", Sym::id2name(_symId));
+    xml.tag("subtype", SymNames::nameForSymId(_symId));
     writeProperty(xml, Pid::PLAY);
     writeProperty(xml, Pid::ORNAMENT_STYLE);
     for (const StyledProperty& spp : *styledProperties()) {
@@ -208,7 +208,7 @@ void Articulation::write(XmlWriter& xml) const
 
 QString Articulation::userName() const
 {
-    return Sym::id2userName(symId());
+    return SymNames::translatedUserNameForSymId(symId());
 }
 
 //---------------------------------------------------------
@@ -793,9 +793,9 @@ std::set<SymId> splitArticulations(const std::set<SymId>& articulationSymbolIds)
 
 std::set<SymId> joinArticulations(const std::set<SymId>& articulationSymbolIds)
 {
-    std::vector<SymId> result;
+    SymIdList result;
 
-    std::vector<SymId> vsymbolIds(articulationSymbolIds.begin(), articulationSymbolIds.end());
+    SymIdList vsymbolIds(articulationSymbolIds.begin(), articulationSymbolIds.end());
 
     std::sort(vsymbolIds.begin(), vsymbolIds.end(), [](SymId l, SymId r) {
         return l > r;

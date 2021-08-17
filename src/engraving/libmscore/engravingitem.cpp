@@ -1628,14 +1628,14 @@ void EngravingItem::drawSymbol(SymId id, mu::draw::Painter* p, const mu::PointF&
     score()->scoreFont()->draw(id, p, magS(), o, n);
 }
 
-void EngravingItem::drawSymbols(const std::vector<SymId>& s, mu::draw::Painter* p, const PointF& o, qreal scale) const
+void EngravingItem::drawSymbols(const SymIdList& symbols, mu::draw::Painter* p, const PointF& o, qreal scale) const
 {
-    score()->scoreFont()->draw(s, p, magS() * scale, o);
+    score()->scoreFont()->draw(symbols, p, magS() * scale, o);
 }
 
-void EngravingItem::drawSymbols(const std::vector<SymId>& s, mu::draw::Painter* p, const PointF& o, const SizeF& scale) const
+void EngravingItem::drawSymbols(const SymIdList& symbols, mu::draw::Painter* p, const PointF& o, const SizeF& scale) const
 {
-    score()->scoreFont()->draw(s, p, SizeF(magS() * scale), PointF(o));
+    score()->scoreFont()->draw(symbols, p, SizeF(magS() * scale), PointF(o));
 }
 
 //---------------------------------------------------------
@@ -1656,9 +1656,9 @@ qreal EngravingItem::symWidth(SymId id) const
     return score()->scoreFont()->width(id, magS());
 }
 
-qreal EngravingItem::symWidth(const std::vector<SymId>& s) const
+qreal EngravingItem::symWidth(const SymIdList& symbols) const
 {
-    return score()->scoreFont()->width(s, magS());
+    return score()->scoreFont()->width(symbols, magS());
 }
 
 //---------------------------------------------------------
@@ -1679,9 +1679,9 @@ RectF EngravingItem::symBbox(SymId id) const
     return score()->scoreFont()->bbox(id, magS());
 }
 
-RectF EngravingItem::symBbox(const std::vector<SymId>& s) const
+RectF EngravingItem::symBbox(const SymIdList& symbols) const
 {
-    return score()->scoreFont()->bbox(s, magS());
+    return score()->scoreFont()->bbox(symbols, magS());
 }
 
 //---------------------------------------------------------

@@ -48,8 +48,8 @@ public:
     int numMeasures() const { return m_numMeasures; }
     void setSymId(SymId id) { m_symId = id; }
     SymId symId() const { return m_symId; }
-    void setNumberSym(int n) { m_numberSym = toTimeSigString(QString::number(n)); }
-    std::vector<SymId> numberSym() const { return m_numberSym; }
+    void setNumberSym(int n) { m_numberSym = timeSigSymIdsFromString(QString::number(n)); }
+    SymIdList numberSym() const { return m_numberSym; }
     void setNumberPos(qreal d) { m_numberPos = d; }
     qreal numberPos() const { return m_numberPos; }
 
@@ -77,7 +77,7 @@ public:
 private:
     Sid getPropertyStyle(Pid) const override;
     int m_numMeasures;
-    std::vector<SymId> m_numberSym;
+    SymIdList m_numberSym;
     qreal m_numberPos;
     SymId m_symId;
 };

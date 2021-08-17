@@ -53,7 +53,6 @@
 #include "excerpt.h"
 #include "mscore.h"
 #include "stafftype.h"
-#include "sym.h"
 #include "scoreorder.h"
 #include "utils.h"
 #include "sig.h"

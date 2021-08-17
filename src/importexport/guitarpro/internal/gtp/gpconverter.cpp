@@ -34,7 +34,7 @@
 #include "libmscore/spanner.h"
 #include "libmscore/stafftext.h"
 #include "libmscore/staff.h"
-#include "libmscore/sym.h"
+#include "libmscore/symid.h"
 #include "libmscore/tempotext.h"
 #include "libmscore/tie.h"
 #include "libmscore/timesig.h"

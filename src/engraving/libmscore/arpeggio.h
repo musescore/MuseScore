@@ -47,7 +47,7 @@ class Arpeggio final : public EngravingItem
     qreal _userLen2;
     qreal _height;
     int _span;                // spanning staves
-    std::vector<SymId> symbols;
+    SymIdList symbols;
     bool _playArpeggio;
 
     qreal _stretch;

@@ -24,7 +24,7 @@
 #include "io/xml.h"
 #include "score.h"
 #include "measure.h"
-#include "sym.h"
+#include "symnames.h"
 #include "system.h"
 
 using namespace mu;
@@ -62,9 +62,9 @@ void SystemDivider::layout()
     ScoreFont* sf = score()->scoreFont();
 
     if (_dividerType == SystemDivider::Type::LEFT) {
-        sid = Sym::name2id(score()->styleSt(Sid::dividerLeftSym));
+        sid = SymNames::symIdByName(score()->styleSt(Sid::dividerLeftSym));
     } else {
-        sid = Sym::name2id(score()->styleSt(Sid::dividerRightSym));
+        sid = SymNames::symIdByName(score()->styleSt(Sid::dividerRightSym));
     }
     setSym(sid, sf);
     Symbol::layout();
@@ -118,12 +118,12 @@ void SystemDivider::read(XmlReader& e)
     ScoreFont* sf = score()->scoreFont();
     if (e.attribute("type") == "left") {
         _dividerType = SystemDivider::Type::LEFT;
-        SymId sym = Sym::name2id(score()->styleSt(Sid::dividerLeftSym));
+        SymId sym = SymNames::symIdByName(score()->styleSt(Sid::dividerLeftSym));
         setSym(sym, sf);
         setOffset(PointF(score()->styleD(Sid::dividerLeftX), score()->styleD(Sid::dividerLeftY)));
     } else {
         _dividerType = SystemDivider::Type::RIGHT;
-        SymId sym = Sym::name2id(score()->styleSt(Sid::dividerRightSym));
+        SymId sym = SymNames::symIdByName(score()->styleSt(Sid::dividerRightSym));
         setSym(sym, sf);
         setOffset(PointF(score()->styleD(Sid::dividerRightX), score()->styleD(Sid::dividerRightY)));
     }

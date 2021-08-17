@@ -1053,17 +1053,13 @@ Segment* skipTuplet(Tuplet* tuplet)
 }
 
 //---------------------------------------------------------
-//   toTimeSigString
+//   timeSigSymIdsFromString
 //    replace ascii with bravura symbols
 //---------------------------------------------------------
 
-std::vector<SymId> toTimeSigString(const QString& s)
+SymIdList timeSigSymIdsFromString(const QString& string)
 {
-    struct Dict {
-        QChar code;
-        SymId id;
-    };
-    static const std::vector<Dict> dict = {
+    static const QHash<QChar, SymId> dict = {
         { 43,    SymId::timeSigPlusSmall },             // '+'
         { 48,    SymId::timeSig0 },                     // '0'
         { 49,    SymId::timeSig1 },                     // '1'
@@ -1094,16 +1090,14 @@ std::vector<SymId> toTimeSigString(const QString& s)
         { 59674, SymId::mensuralProlation11 },
     };
 
-    std::vector<SymId> d;
-    for (auto c : s) {
-        for (const Dict& e : dict) {
-            if (c == e.code) {
-                d.push_back(e.id);
-                break;
-            }
+    SymIdList list;
+    for (const QChar& c : string) {
+        SymId sym = dict.value(c, SymId::noSym);
+        if (sym != SymId::noSym) {
+            list.push_back(sym);
         }
     }
-    return d;
+    return list;
 }
 
 //---------------------------------------------------------

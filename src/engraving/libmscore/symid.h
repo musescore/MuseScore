@@ -41,6 +41,17 @@
 #endif
 
 namespace Ms {
+enum class SmuflAnchorId {
+    stemDownNW,
+    stemUpSE,
+    stemDownSW,
+    stemUpNW,
+    cutOutNE,
+    cutOutNW,
+    cutOutSE,
+    cutOutSW,
+};
+
 //---------------------------------------------------------
 //   SymId
 //    must be in sync with symNames
@@ -3035,6 +3046,8 @@ enum class SymId {
     ///\}
 };
 END_QT_REGISTERED_ENUM(SymId)
+
+using SymIdList = std::vector<SymId>;
 } // namespace Ms
 
 Q_DECLARE_METATYPE(Ms::SymId);

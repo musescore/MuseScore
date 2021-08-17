@@ -22,12 +22,12 @@
 
 #include "shadownote.h"
 
-#include "score.h"
-#include "drumset.h"
-#include "sym.h"
-#include "rest.h"
 #include "accidental.h"
 #include "articulation.h"
+#include "drumset.h"
+#include "rest.h"
+#include "score.h"
+
 #include "draw/pen.h"
 
 using namespace mu;
