@@ -76,15 +76,11 @@ public:
 
     mu::PointF smuflAnchor(SymId symId, SmuflAnchorId anchorId, qreal mag) const;
 
-    void draw(SymId id,         mu::draw::Painter*, const mu::SizeF& mag, const mu::PointF& pos, qreal scale) const;
-    void draw(SymId id,         mu::draw::Painter*, qreal mag,            const mu::PointF& pos, qreal scale) const;
     void draw(SymId id,         mu::draw::Painter*, qreal mag,            const mu::PointF& pos) const;
     void draw(SymId id,         mu::draw::Painter*, const mu::SizeF& mag, const mu::PointF& pos) const;
     void draw(SymId id,         mu::draw::Painter*, qreal mag,            const mu::PointF& pos, int n) const;
     void draw(const SymIdList&, mu::draw::Painter*, qreal mag,            const mu::PointF& pos) const;
     void draw(const SymIdList&, mu::draw::Painter*, const mu::SizeF& mag, const mu::PointF& pos) const;
-    void draw(const SymIdList&, mu::draw::Painter*, qreal mag,            const mu::PointF& pos, qreal scale) const;
-    void draw(const SymIdList&, mu::draw::Painter*, const mu::SizeF& mag, const mu::PointF& pos, qreal scale) const;
 
 private:
     struct Sym {
