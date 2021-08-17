@@ -1501,7 +1501,7 @@ private:
         const QVariant& defaultValue() const { return _defaultValue; }
     };
 
-    static const StyleValue styleValues[int(Sid::STYLES)];
+    static const std::array<StyleValue, size_t(Sid::STYLES)> styleValues;
 };
 }
 
