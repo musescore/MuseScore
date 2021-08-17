@@ -269,10 +269,10 @@ InspectorSectionView {
             width: parent.width
 
             navigation.panel: root.navigationPanel
-            navigation.name: "Insert special charachters"
+            navigation.name: "Insert special characters"
             navigation.row: root.navigationRow(18)
 
-            text: qsTrc("inspector", "Insert special charachters")
+            text: qsTrc("inspector", "Insert special characters")
 
             visible: root.model ? root.model.isSpecialCharactersInsertionAvailable : false
 

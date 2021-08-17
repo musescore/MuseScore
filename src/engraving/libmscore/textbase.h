@@ -73,7 +73,6 @@ enum class MultiClick : char {
 class CharFormat
 {
     FontStyle _style          { FontStyle::Normal };
-    bool _preedit             { false };
     VerticalAlignment _valign { VerticalAlignment::AlignNormal };
     qreal _fontSize           { 12.0 };
     qreal _textLineSpacing    { 1.0 };
@@ -92,11 +91,9 @@ public:
     void setItalic(bool val) { _style = val ? _style + FontStyle::Italic : _style - FontStyle::Italic; }
     void setUnderline(bool val) { _style = val ? _style + FontStyle::Underline : _style - FontStyle::Underline; }
 
-    bool preedit() const { return _preedit; }
     VerticalAlignment valign() const { return _valign; }
     qreal fontSize() const { return _fontSize; }
     QString fontFamily() const { return _fontFamily; }
-    void setPreedit(bool val) { _preedit = val; }
     void setValign(VerticalAlignment val) { _valign = val; }
     void setFontSize(qreal val) { _fontSize = val; }
     void setFontFamily(const QString& val) { _fontFamily = val; }
@@ -120,6 +117,7 @@ class TextCursor
     int _column        { 0 };
     int _selectLine    { 0 };           // start of selection
     int _selectColumn  { 0 };
+    bool _editing { false };
 
 public:
 
@@ -147,6 +145,9 @@ public:
     TextBase* text() const { return _text; }
     bool hasSelection() const { return (_selectLine != _row) || (_selectColumn != _column); }
     void clearSelection();
+    void endEdit();
+    void startEdit();
+    bool editing() const { return _editing; }
 
     CharFormat* format() { return &_format; }
     const CharFormat* format() const { return &_format; }
@@ -282,7 +283,6 @@ class TextBase : public Element
     bool layoutInvalid            { true };
     Tid _tid;           // text style id
 
-    QString preEdit;                // move to EditData?
     bool _layoutToParentWidth     { false };
 
     int hexState                 { -1 };
@@ -297,9 +297,8 @@ class TextBase : public Element
     QString stripText(bool, bool, bool) const;
     Sid offsetSid() const;
 
-    static QString getHtmlStartTag(qreal newSize, qreal& curSize, const QString& newFamily, QString& curFamily, bool bold, bool italic,
-                                   bool underline);
-    static QString getHtmlEndTag(bool bold, bool italic, bool underline);
+    static QString getHtmlStartTag(qreal, qreal&, const QString&, QString&, Ms::FontStyle, Ms::VerticalAlignment);
+    static QString getHtmlEndTag(Ms::FontStyle, Ms::VerticalAlignment);
 
 protected:
     mu::draw::Color textColor() const;
@@ -330,6 +329,7 @@ public:
     virtual void setXmlText(const QString&);
     QString xmlText() const;
     QString plainText() const;
+    void resetFormatting();
 
     void insertText(EditData&, const QString&);
 

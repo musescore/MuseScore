@@ -60,14 +60,35 @@ struct TextEditData : public ElementEditData {
 class TextEditUndoCommand : public UndoCommand
 {
 protected:
-    TextCursor c;
+    TextCursor _cursor;
 public:
     TextEditUndoCommand(const TextCursor& tc)
-        : c(tc) {}
+        : _cursor(tc) {}
     bool isFiltered(UndoCommand::Filter f, const Element* target) const override
     {
-        return f == UndoCommand::Filter::TextEdit && c.text() == target;
+        return f == UndoCommand::Filter::TextEdit && _cursor.text() == target;
     }
+
+    TextCursor& cursor() { return _cursor; }
+};
+
+//---------------------------------------------------------
+//   ChangeText
+//---------------------------------------------------------
+
+class ChangeTextProperties : public TextEditUndoCommand
+{
+    QString xmlText;
+    Pid propertyId;
+    QVariant propertyVal;
+    FontStyle existingStyle;
+
+    void restoreSelection();
+
+public:
+    ChangeTextProperties(const TextCursor* tc, Ms::Pid propId, const QVariant& propVal);
+    void undo(EditData*) override;
+    void redo(EditData*) override;
 };
 
 //---------------------------------------------------------
@@ -87,7 +108,6 @@ public:
         : TextEditUndoCommand(*tc), s(t) {}
     virtual void undo(EditData*) override = 0;
     virtual void redo(EditData*) override = 0;
-    const TextCursor& cursor() const { return c; }
     const QString& string() const { return s; }
 };
 
@@ -116,7 +136,7 @@ public:
         : ChangeText(tc, t) {}
     virtual void redo(EditData* ed) override { removeText(ed); }
     virtual void undo(EditData* ed) override { insertText(ed); }
-    UNDO_NAME("InsertText")
+    UNDO_NAME("RemoveText")
 };
 
 //---------------------------------------------------------

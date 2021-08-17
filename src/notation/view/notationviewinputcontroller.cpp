@@ -364,10 +364,16 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
     }
 
     if (viewInteraction()->isTextEditingStarted()) {
-        if (!hitElement || !hitElement->isText()) {
+        if (!hitElement || !hitElement->isTextBase()) {
             viewInteraction()->endEditText();
         } else {
-            viewInteraction()->changeTextCursorPosition(m_beginPoint);
+            const mu::RectF& bbox = hitElement->canvasBoundingRect();
+            mu::PointF constrainedPt = mu::PointF(
+                m_beginPoint.x() < bbox.left() ? bbox.left()
+                : m_beginPoint.x() >= bbox.right() ? bbox.right() - 1 : m_beginPoint.x(),
+                m_beginPoint.y() < bbox.top() ? bbox.top()
+                : m_beginPoint.y() >= bbox.bottom() ? bbox.bottom() - 1 : m_beginPoint.y());
+            viewInteraction()->changeTextCursorPosition(constrainedPt);
         }
     }
 }

@@ -85,9 +85,7 @@ void TextBase::startEdit(EditData& ed)
 {
     TextEditData* ted = new TextEditData(this);
     ted->e = this;
-    ted->cursor()->setRow(0);
-    ted->cursor()->setColumn(0);
-    ted->cursor()->clearSelection();
+    ted->cursor()->startEdit();
 
     Q_ASSERT(!score()->undoStack()->active());        // make sure we are not in a Cmd
 
@@ -98,7 +96,7 @@ void TextBase::startEdit(EditData& ed)
         layout();
     }
     if (!ted->cursor()->set(ed.startMove)) {
-        ted->cursor()->init();
+        resetFormatting();
     }
     qreal _spatium = spatium();
     // refresh edit bounding box
@@ -117,9 +115,7 @@ void TextBase::endEdit(EditData& ed)
         return;
     }
 
-    ted->cursor()->setRow(0);
-    ted->cursor()->setColumn(0);
-    ted->cursor()->clearSelection();
+    ted->cursor()->endEdit();
 
     UndoStack* undo = score()->undoStack();
     IF_ASSERT_FAILED(undo) {
@@ -195,6 +191,7 @@ void TextBase::endEdit(EditData& ed)
     if (textWasEdited) {
         setXmlText(ted->oldXmlText);                        // reset text to value before editing
         undo->reopen();
+        resetFormatting();
         undoChangeProperty(Pid::TEXT, actualXmlText);       // change property to set text to actual value again
                                                             // this also changes text of linked elements
         layout1();
@@ -221,8 +218,6 @@ void TextBase::insertSym(EditData& ed, SymId id)
     QString s = score()->scoreFont()->toString(id);
     CharFormat fmt = *cursor->format();    // save format
     cursor->format()->setFontFamily("ScoreText");
-    cursor->format()->setBold(false);
-    cursor->format()->setItalic(false);
     score()->undo(new InsertText(_cursor, s), &ed);
     cursor->setFormat(fmt);    // restore format
 }
@@ -307,13 +302,6 @@ bool TextBase::edit(EditData& ed)
 //printf("======%x\n", s.isEmpty() ? -1 : s[0].unicode());
 
         switch (ed.key) {
-        case Qt::Key_Y:
-        case Qt::Key_Z:                   // happens when the undo stack is empty
-            if (ed.modifiers == Qt::ControlModifier) {
-                return false;
-            }
-            break;
-
         case Qt::Key_Enter:
         case Qt::Key_Return:
             deleteSelectedText(ed);
@@ -446,10 +434,22 @@ bool TextBase::edit(EditData& ed)
             break;
 
         case Qt::Key_A:
-            if (ctrlPressed) {
+            if (ctrlPressed && !shiftPressed) {
                 cursor->movePosition(TextCursor::MoveOperation::Start, TextCursor::MoveMode::MoveAnchor);
                 cursor->movePosition(TextCursor::MoveOperation::End, TextCursor::MoveMode::KeepAnchor);
                 s.clear();
+            }
+            break;
+        case Qt::Key_B:
+        case Qt::Key_C:
+        case Qt::Key_I:
+        case Qt::Key_U:
+        case Qt::Key_V:
+        case Qt::Key_X:
+        case Qt::Key_Y:
+        case Qt::Key_Z:
+            if (ctrlPressed && !shiftPressed) {
+                return false; // handled at application level
             }
             break;
         default:
@@ -538,10 +538,10 @@ void TextBase::movePosition(EditData& ed, TextCursor::MoveOperation op)
 
 void ChangeText::insertText(EditData* ed)
 {
-    TextCursor tc = c;
-    c.text()->editInsertText(&tc, s);
+    TextCursor tc = _cursor;
+    tc.text()->editInsertText(&tc, s);
     if (ed) {
-        TextCursor* ttc = c.text()->cursorFromEditData(*ed);
+        TextCursor* ttc = tc.text()->cursorFromEditData(*ed);
         *ttc = tc;
     }
 }
@@ -552,18 +552,18 @@ void ChangeText::insertText(EditData* ed)
 
 void ChangeText::removeText(EditData* ed)
 {
-    TextCursor tc = c;
-    TextBlock& l  = c.curLine();
-    int column    = c.column();
+    TextCursor tc = _cursor;
+    TextBlock& l  = _cursor.curLine();
+    int column    = _cursor.column();
 
     for (int n = 0; n < s.size(); ++n) {
-        l.remove(column, &c);
+        l.remove(column, &_cursor);
     }
-    c.text()->triggerLayout();
+    _cursor.text()->triggerLayout();
     if (ed) {
-        *c.text()->cursorFromEditData(*ed) = tc;
+        *_cursor.text()->cursorFromEditData(*ed) = tc;
     }
-    c.text()->setTextInvalid();
+    _cursor.text()->setTextInvalid();
 }
 
 //---------------------------------------------------------
@@ -572,12 +572,12 @@ void ChangeText::removeText(EditData* ed)
 
 void SplitJoinText::join(EditData* ed)
 {
-    TextBase* t   = c.text();
-    int line      = c.row();
+    TextBase* t   = _cursor.text();
+    int line      = _cursor.row();
     t->setTextInvalid();
     t->triggerLayout();
 
-    CharFormat* charFmt = c.format();         // take current format
+    CharFormat* charFmt = _cursor.format();         // take current format
     int col             = t->textBlock(line - 1).columns();
     int eol             = t->textBlock(line).eol();
     auto fragmentsList = t->textBlock(line).fragmentsWithoutEmpty();
@@ -590,40 +590,40 @@ void SplitJoinText::join(EditData* ed)
 
     t->textBlockList().removeAt(line);
 
-    c.setRow(line - 1);
-    c.curLine().setEol(eol);
-    c.setColumn(col);
-    c.setFormat(*charFmt);             // restore orig. format at new line
-    c.clearSelection();
+    _cursor.setRow(line - 1);
+    _cursor.curLine().setEol(eol);
+    _cursor.setColumn(col);
+    _cursor.setFormat(*charFmt);             // restore orig. format at new line
+    _cursor.clearSelection();
 
     if (ed) {
-        *t->cursorFromEditData(*ed) = c;
+        *t->cursorFromEditData(*ed) = _cursor;
     }
-    c.text()->setTextInvalid();
+    _cursor.text()->setTextInvalid();
 }
 
 void SplitJoinText::split(EditData* ed)
 {
-    TextBase* t   = c.text();
-    int line      = c.row();
-    bool eol      = c.curLine().eol();
+    TextBase* t   = _cursor.text();
+    int line      = _cursor.row();
+    bool eol      = _cursor.curLine().eol();
     t->setTextInvalid();
     t->triggerLayout();
 
-    CharFormat* charFmt = c.format();           // take current format
-    t->textBlockList().insert(line + 1, c.curLine().split(c.column(), t->cursorFromEditData(*ed)));
-    c.curLine().setEol(eol);
+    CharFormat* charFmt = _cursor.format();           // take current format
+    t->textBlockList().insert(line + 1, _cursor.curLine().split(_cursor.column(), t->cursorFromEditData(*ed)));
+    _cursor.curLine().setEol(eol);
 
-    c.setRow(line + 1);
-    c.curLine().setEol(true);
-    c.setColumn(0);
-    c.setFormat(*charFmt);               // restore orig. format at new line
-    c.clearSelection();
+    _cursor.setRow(line + 1);
+    _cursor.curLine().setEol(true);
+    _cursor.setColumn(0);
+    _cursor.setFormat(*charFmt);               // restore orig. format at new line
+    _cursor.clearSelection();
 
     if (ed) {
-        *t->cursorFromEditData(*ed) = c;
+        *t->cursorFromEditData(*ed) = _cursor;
     }
-    c.text()->setTextInvalid();
+    _cursor.text()->setTextInvalid();
 }
 
 //---------------------------------------------------------
@@ -826,5 +826,59 @@ bool TextBase::deleteSelectedText(EditData& ed)
         }
     }
     return true;
+}
+
+//---------------------------------------------------------
+//   ChangeTextProperties
+//---------------------------------------------------------
+
+void ChangeTextProperties::restoreSelection()
+{
+    TextCursor& tc = cursor();
+    tc.text()->cursor()->setSelectLine(tc.selectLine());
+    tc.text()->cursor()->setSelectColumn(tc.selectColumn());
+    tc.text()->cursor()->setRow(tc.row());
+    tc.text()->cursor()->setColumn(tc.column());
+}
+
+ChangeTextProperties::ChangeTextProperties(const TextCursor* tc, Ms::Pid propId, const QVariant& propVal)
+    : TextEditUndoCommand(*tc)
+{
+    propertyId = propId;
+    propertyVal = propVal;
+    if (propertyId == Pid::FONT_STYLE) {
+        existingStyle = static_cast<FontStyle>(cursor().text()->getProperty(propId).toInt());
+    }
+}
+
+void ChangeTextProperties::undo(EditData*)
+{
+    cursor().text()->resetFormatting();
+    cursor().text()->setXmlText(xmlText);
+    restoreSelection();
+    cursor().text()->layout1();
+}
+
+void ChangeTextProperties::redo(EditData*)
+{
+    xmlText = cursor().text()->xmlText();
+    restoreSelection();
+    if (propertyId == Pid::FONT_STYLE) {
+        FontStyle setStyle = static_cast<FontStyle>(propertyVal.toInt());
+        TextCursor* tc = cursor().text()->cursor();
+        // user turned on bold/italic/underline for text where it's not set, or turned it off for text where it is set,
+        // note this logic only works because the user can only click one at a time
+        if ((setStyle& FontStyle::Bold) != (existingStyle & FontStyle::Bold)) {
+            tc->setFormat(FormatId::Bold, setStyle & FontStyle::Bold);
+        }
+        if ((setStyle& FontStyle::Italic) != (existingStyle & FontStyle::Italic)) {
+            tc->setFormat(FormatId::Italic, setStyle & FontStyle::Italic);
+        }
+        if ((setStyle& FontStyle::Underline) != (existingStyle & FontStyle::Underline)) {
+            tc->setFormat(FormatId::Underline, setStyle & FontStyle::Underline);
+        }
+    } else {
+        cursor().text()->setProperty(propertyId, propertyVal);
+    }
 }
 }  // namespace Ms
