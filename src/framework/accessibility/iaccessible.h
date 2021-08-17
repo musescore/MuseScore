@@ -68,7 +68,8 @@ public:
     enum class Property {
         Undefined = 0,
         Parent,
-        Name
+        Name,
+        Description
     };
 
     virtual const IAccessible* accessibleParent() const = 0;
@@ -77,6 +78,7 @@ public:
 
     virtual IAccessible::Role accessibleRole() const = 0;
     virtual QString accessibleName() const = 0;
+    virtual QString accessibleDescription() const = 0;
     virtual bool accessibleState(State st) const = 0;
     virtual QRect accessibleRect() const = 0;
 

@@ -180,6 +180,11 @@ QString AccessibleElement::accessibleName() const
     return m_element->accessibleInfo();
 }
 
+QString AccessibleElement::accessibleDescription() const
+{
+    return m_element->accessibleExtraInfo();
+}
+
 bool AccessibleElement::accessibleState(State st) const
 {
     if (!isAvalaible()) {
