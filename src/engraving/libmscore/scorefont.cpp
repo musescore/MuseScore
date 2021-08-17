@@ -641,7 +641,7 @@ PointF ScoreFont::smuflAnchor(SymId symId, SmuflAnchorId anchorId, qreal mag) co
 // Draw
 // =============================================
 
-void ScoreFont::draw(SymId id, Painter* painter, const SizeF& mag, const PointF& pos, qreal worldScale) const
+void ScoreFont::draw(SymId id, Painter* painter, const SizeF& mag, const PointF& pos) const
 {
     const Sym& sym = this->sym(id);
     if (sym.isCompound()) { // is this a compound symbol?
@@ -651,7 +651,7 @@ void ScoreFont::draw(SymId id, Painter* painter, const SizeF& mag, const PointF&
 
     if (!sym.isValid()) {
         if (MScore::useFallbackFont && this != ScoreFont::fallbackFont()) {
-            fallbackFont()->draw(id, painter, mag, pos, worldScale);
+            fallbackFont()->draw(id, painter, mag, pos);
         } else {
             LOGE() << "invalid sym: " << static_cast<size_t>(id);
         }
@@ -659,30 +659,18 @@ void ScoreFont::draw(SymId id, Painter* painter, const SizeF& mag, const PointF&
         return;
     }
 
+    painter->save();
     qreal size = 20.0 * MScore::pixelRatio;
     m_font.setPointSizeF(size);
-    SizeF imag = SizeF(1.0 / mag.width(), 1.0 / mag.height());
     painter->scale(mag.width(), mag.height());
     painter->setFont(m_font);
-    painter->drawSymbol(PointF(pos.x() * imag.width(), pos.y() * imag.height()), symCode(id));
-    painter->scale(imag.width(), imag.height());
+    painter->drawSymbol(PointF(pos.x() / mag.width(), pos.y() / mag.height()), symCode(id));
+    painter->restore();
 }
 
 void ScoreFont::draw(SymId id, Painter* painter, qreal mag, const PointF& pos) const
 {
-    qreal worldScale = painter->worldTransform().m11();
-    draw(id, painter, mag, pos, worldScale);
-}
-
-void ScoreFont::draw(SymId id, Painter* painter, const SizeF& mag, const PointF& pos) const
-{
-    qreal worldScale = painter->worldTransform().m11();
-    draw(id, painter, mag, pos, worldScale);
-}
-
-void ScoreFont::draw(SymId id, Painter* painter, qreal mag, const PointF& pos, qreal worldScale) const
-{
-    draw(id, painter, SizeF(mag, mag), pos, worldScale);
+    draw(id, painter, SizeF(mag, mag), pos);
 }
 
 void ScoreFont::draw(SymId id, mu::draw::Painter* painter, qreal mag, const PointF& pos, int n) const
@@ -691,32 +679,20 @@ void ScoreFont::draw(SymId id, mu::draw::Painter* painter, qreal mag, const Poin
     draw(list, painter, mag, pos);
 }
 
-void ScoreFont::draw(const SymIdList& ids, Painter* painter, qreal mag, const PointF& startPos, qreal scale) const
+void ScoreFont::draw(const SymIdList& ids, Painter* painter, qreal mag, const PointF& startPos) const
 {
     PointF pos(startPos);
     for (SymId id : ids) {
-        draw(id, painter, mag, pos, scale);
+        draw(id, painter, mag, pos);
         pos.setX(pos.x() + advance(id, mag));
     }
 }
 
-void ScoreFont::draw(const SymIdList& ids, Painter* painter, const SizeF& mag, const PointF& pos) const
-{
-    qreal scale = painter->worldTransform().m11();
-    draw(ids, painter, mag, pos, scale);
-}
-
-void ScoreFont::draw(const SymIdList& ids, Painter* painter, const SizeF& mag, const PointF& startPos, qreal scale) const
+void ScoreFont::draw(const SymIdList& ids, Painter* painter, const SizeF& mag, const PointF& startPos) const
 {
     PointF pos(startPos);
     for (SymId id : ids) {
-        draw(id, painter, mag, pos, scale);
+        draw(id, painter, mag, pos);
         pos.setX(pos.x() + advance(id, mag.width()));
     }
-}
-
-void ScoreFont::draw(const SymIdList& ids, Painter* painter, qreal mag, const PointF& pos) const
-{
-    qreal scale = painter->worldTransform().m11();
-    draw(ids, painter, mag, pos, scale);
 }

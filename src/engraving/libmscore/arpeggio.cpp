@@ -262,18 +262,16 @@ void Arpeggio::draw(mu::draw::Painter* painter) const
     case ArpeggioType::UP:
     {
         RectF r(symBbox(symbols));
-        qreal scale = painter->worldTransform().m11();
         painter->rotate(-90.0);
-        score()->scoreFont()->draw(symbols, painter, magS(), PointF(-r.right() - y1, -r.bottom() + r.height()), scale);
+        score()->scoreFont()->draw(symbols, painter, magS(), PointF(-r.right() - y1, -r.bottom() + r.height()));
     }
     break;
 
     case ArpeggioType::DOWN:
     {
         RectF r(symBbox(symbols));
-        qreal scale = painter->worldTransform().m11();
         painter->rotate(90.0);
-        score()->scoreFont()->draw(symbols, painter, magS(), PointF(-r.left() + y1, -r.top() - r.height()), scale);
+        score()->scoreFont()->draw(symbols, painter, magS(), PointF(-r.left() + y1, -r.top() - r.height()));
     }
     break;
 
