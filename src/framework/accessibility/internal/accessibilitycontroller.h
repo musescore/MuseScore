@@ -70,6 +70,7 @@ public:
 
     Role accessibleRole() const override;
     QString accessibleName() const override;
+    QString accessibleDescription() const override;
     bool accessibleState(State st) const override;
     QRect accessibleRect() const override;
 

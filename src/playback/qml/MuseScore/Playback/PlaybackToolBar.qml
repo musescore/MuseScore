@@ -102,6 +102,8 @@ Rectangle {
                             toolTipTitle: modelData.title
                             toolTipDescription: modelData.description
                             toolTipShortcut: modelData.shortcut
+                            accessible.name: modelData.title
+                            accessible.description: modelData.description;
 
                             iconFont: ui.theme.toolbarIconsFont
 

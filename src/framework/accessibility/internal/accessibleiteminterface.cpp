@@ -213,6 +213,7 @@ QString AccessibleItemInterface::text(QAccessible::Text textType) const
 {
     switch (textType) {
     case QAccessible::Name: return m_object->item()->accessibleName();
+    case QAccessible::Description: return m_object->item()->accessibleDescription();
     default: break;
     }
 
