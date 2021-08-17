@@ -34,18 +34,35 @@ Rectangle {
     property bool canSelectMultipleInstruments: true
     property string currentInstrumentId: ""
 
-    property bool hasSelectedInstruments: selectedInstrumentsView.hasInstruments
+    property bool hasSelectedInstruments: instrumentsOnScoreView.hasInstruments
 
     property NavigationSection navigationSection: null
 
-    function scoreContent() {
-        return selectedInstrumentsView.scoreContent()
+    function instruments() {
+        if (root.canSelectMultipleInstruments) {
+            return instrumentsOnScoreView.instruments()
+        }
+
+        return instrumentsModel.selectedInstruments()
+    }
+
+    function currentOrder() {
+        if (root.canSelectMultipleInstruments) {
+            return instrumentsOnScoreView.currentOrder()
+        }
+
+        return undefined
     }
 
     color: ui.theme.backgroundPrimaryColor
 
     InstrumentListModel {
         id: instrumentsModel
+
+        onFocusRequested: {
+            familyView.focusGroup(groupIndex)
+            instrumentsView.focusInstrument(instrumentIndex)
+        }
     }
 
     QtObject {
@@ -53,20 +70,14 @@ Rectangle {
 
         function addSelectedInstrumentsToScore() {
             var selectedInstruments = instrumentsModel.selectedInstruments()
-            selectedInstrumentsView.addInstruments(selectedInstruments)
+            instrumentsOnScoreView.addInstruments(selectedInstruments)
+
+            Qt.callLater(instrumentsOnScoreView.scrollViewToEnd)
         }
     }
 
     Component.onCompleted: {
         instrumentsModel.load(canSelectMultipleInstruments, currentInstrumentId)
-        familyView.focusGroup(instrumentsModel.currentGroupIndex)
-
-        focusOnCurrentInstrument()
-    }
-
-    function focusOnCurrentInstrument() {
-        //! FIXME
-        instrumentsView.focusInstrument(0)
     }
 
     RowLayout {
@@ -113,24 +124,10 @@ Rectangle {
             navigation.section: root.navigationSection
             navigation.order: 3
 
-            instruments: instrumentsModel
-
-            onSearchTextChanged: {
-                instrumentsModel.setSearchText(searchText)
-            }
-
-            onSelectInstrumentRequested: {
-                instrumentsModel.selectInstrument(instrumentIndex)
-            }
-
-            onChangeActiveTraitRequested: {
-                instrumentsModel.setActiveTrait(instrumentIndex, traitIndex)
-            }
+            instrumentsModel: instrumentsModel
 
             onAddSelectedInstrumentsToScoreRequested: {
                 prv.addSelectedInstrumentsToScore()
-
-                Qt.callLater(selectedInstrumentsView.scrollViewToEnd)
             }
         }
 
@@ -170,8 +167,8 @@ Rectangle {
             orientation: Qt.Vertical
         }
 
-        SelectedInstrumentsView {
-            id: selectedInstrumentsView
+        InstrumentsOnScoreView {
+            id: instrumentsOnScoreView
 
             navigation.section: root.navigationSection
             navigation.order: 5
@@ -205,7 +202,7 @@ Rectangle {
             }
 
             FlatButton {
-                enabled: selectedInstrumentsView.isMovingUpAvailable
+                enabled: instrumentsOnScoreView.isMovingUpAvailable
                 icon: IconCode.ARROW_UP
 
                 navigation.name: "Up"
@@ -213,12 +210,12 @@ Rectangle {
                 navigation.row: 1
 
                 onClicked: {
-                    selectedInstrumentsView.moveInstrumentsUp()
+                    instrumentsOnScoreView.moveInstrumentsUp()
                 }
             }
 
             FlatButton {
-                enabled: selectedInstrumentsView.isMovingDownAvailable
+                enabled: instrumentsOnScoreView.isMovingDownAvailable
                 icon: IconCode.ARROW_DOWN
 
                 navigation.name: "Down"
@@ -226,7 +223,7 @@ Rectangle {
                 navigation.row: 2
 
                 onClicked: {
-                    selectedInstrumentsView.moveInstrumentsDown()
+                    instrumentsOnScoreView.moveInstrumentsDown()
                 }
             }
         }

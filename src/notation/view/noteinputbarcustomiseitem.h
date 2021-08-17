@@ -22,13 +22,13 @@
 #ifndef MU_NOTATION_NOTEINPUTBARCUSTOMISEITEM_H
 #define MU_NOTATION_NOTEINPUTBARCUSTOMISEITEM_H
 
-#include <QObject>
 #include <QString>
 
 #include "ui/view/iconcodes.h"
+#include "uicomponents/view/selectableitemlistmodel.h"
 
 namespace mu::notation {
-class NoteInputBarCustomiseItem : public QObject
+class NoteInputBarCustomiseItem : public uicomponents::SelectableItemListModel::Item
 {
     Q_OBJECT
 

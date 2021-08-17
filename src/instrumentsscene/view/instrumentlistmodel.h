@@ -50,6 +50,7 @@ public:
     InstrumentListModel(QObject* parent = nullptr);
 
     QVariant data(const QModelIndex& index, int role) const override;
+    bool setData(const QModelIndex& index, const QVariant& value, int role) override;
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QHash<int, QByteArray> roleNames() const override;
 
@@ -66,7 +67,6 @@ public:
     Q_INVOKABLE void setSearchText(const QString& text);
 
     Q_INVOKABLE void selectInstrument(int instrumentIndex);
-    Q_INVOKABLE void setActiveTrait(int instrumentIndex, int traitIndex);
     Q_INVOKABLE QVariantList selectedInstruments() const;
 
 public slots:
@@ -82,33 +82,46 @@ signals:
 
     void selectionChanged();
 
+    void focusRequested(int groupIndex, int instrumentIndex);
+
 private:
     enum Roles {
         RoleName = Qt::UserRole + 1,
         RoleIsSelected,
-        RoleTraits
+        RoleTraits,
+        RoleCurrentTraitIndex
     };
 
     struct CombinedInstrument
     {
         QString name;
         notation::InstrumentTemplateList templates;
-        int activeTemplateIndex = 0;
+        int currentTemplateIndex = 0;
     };
 
+    using Instruments = QList<CombinedInstrument>;
+
+    void setInstrumentsMeta(const notation::InstrumentsMeta& meta);
+
+    void init(const QString& genreId, const QString& groupId);
+
+    QString resolveInstrumentGroupId(const QString& instrumentId) const;
+    void focusOnInstrument(const QString& instrumentId);
+
     void loadInstruments();
-    void sortInstruments(QList<CombinedInstrument>& instruments) const;
+    void sortInstruments(Instruments& instruments) const;
 
     notation::InstrumentGenreList availableGenres() const;
     notation::InstrumentGroupList availableGroups() const;
 
     bool isSearching() const;
     void updateGenreStateBySearch();
-    bool isInstrumentAccepted(const notation::InstrumentTemplate& instrument, bool compareWithSelectedGroup = true) const;
+    bool isInstrumentAccepted(const notation::InstrumentTemplate& instrument, bool compareWithCurrentGroup = true) const;
     bool isInstrumentIndexValid(int index) const;
 
     void setCurrentGenre(const QString& genreId);
     void setCurrentGroup(const QString& groupId);
+    void doSetCurrentGroup(const QString& groupId);
 
     QString m_currentGenreId;
     QString m_savedGenreId;
@@ -116,10 +129,10 @@ private:
     QString m_searchText;
 
     notation::InstrumentsMeta m_instrumentsMeta;
-    QList<CombinedInstrument> m_instruments;
+    Instruments m_instruments;
     uicomponents::ItemMultiSelectionModel* m_selection = nullptr;
 
-    bool m_isInited = false;
+    bool m_instrumentsLoadingAllowed = false;
 };
 }
 

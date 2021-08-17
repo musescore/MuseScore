@@ -100,8 +100,7 @@ ProjectCreateOptions NewScoreModel::parseOptions(const QVariantMap& info) const
     scoreOptions.measureTimesigNumerator = measuresPickup["numerator"].toInt();
     scoreOptions.measureTimesigDenominator = measuresPickup["denominator"].toInt();
 
-    QVariantMap contentMap = info["scoreContent"].toMap();
-    for (const QVariant& obj : contentMap["instruments"].toList()) {
+    for (const QVariant& obj : info["instruments"].toList()) {
         QVariantMap objMap = obj.toMap();
 
         PartInstrument pi;
@@ -112,7 +111,7 @@ ProjectCreateOptions NewScoreModel::parseOptions(const QVariantMap& info) const
         scoreOptions.parts << pi;
     }
 
-    scoreOptions.order = contentMap["scoreOrder"].value<ScoreOrder>();
+    scoreOptions.order = info["scoreOrder"].value<ScoreOrder>();
 
     return projectOptions;
 }

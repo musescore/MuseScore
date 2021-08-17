@@ -10,7 +10,7 @@
         <file>qml/MuseScore/InstrumentsScene/internal/FamilyView.qml</file>
         <file>qml/MuseScore/InstrumentsScene/internal/InstrumentSettingsPopup.qml</file>
         <file>qml/MuseScore/InstrumentsScene/internal/InstrumentsView.qml</file>
-        <file>qml/MuseScore/InstrumentsScene/internal/SelectedInstrumentsView.qml</file>
+        <file>qml/MuseScore/InstrumentsScene/internal/InstrumentsOnScoreView.qml</file>
         <file>qml/MuseScore/InstrumentsScene/internal/StaffSettingsPopup.qml</file>
     </qresource>
 </RCC>

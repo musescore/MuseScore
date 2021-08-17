@@ -21,12 +21,12 @@
  */
 #include "noteinputbarcustomisemodel.h"
 
+#include "noteinputbarcustomiseitem.h"
+
 #include "translation.h"
 
 #include "internal/notationuiactions.h"
 #include "workspace/workspacetypes.h"
-
-#include "uicomponents/view/itemmultiselectionmodel.h"
 
 #include "log.h"
 
@@ -39,29 +39,15 @@ using namespace mu::actions;
 static const QString NOTE_INPUT_TOOLBAR_NAME("noteInput");
 
 NoteInputBarCustomiseModel::NoteInputBarCustomiseModel(QObject* parent)
-    : QAbstractListModel(parent)
+    : SelectableItemListModel(parent)
 {
-    m_selectionModel = new ItemMultiSelectionModel(this);
-
-    connect(m_selectionModel, &ItemMultiSelectionModel::selectionChanged,
-            [this](const QItemSelection& selected, const QItemSelection& deselected) {
-        updateOperationsAvailability();
-
-        QModelIndexList indexes;
-        indexes << selected.indexes() << deselected.indexes();
-        QSet<QModelIndex> indexesSet(indexes.begin(), indexes.end());
-        for (const QModelIndex& index : indexesSet) {
-            emit dataChanged(index, index, { SelectedRole });
-        }
-    });
 }
 
 void NoteInputBarCustomiseModel::load()
 {
-    qDeleteAll(m_items);
-    m_items.clear();
+    TRACEFUNC;
 
-    beginResetModel();
+    QList<Item*> items;
 
     ToolConfig toolConfig = uiConfiguration()->toolConfig(NOTE_INPUT_TOOLBAR_NAME);
     if (!toolConfig.isValid()) {
@@ -70,77 +56,42 @@ void NoteInputBarCustomiseModel::load()
 
     for (const ToolConfig::Item& item : toolConfig.items) {
         UiAction action = actionsRegister()->action(item.action);
-        m_items << makeItem(action, item.show);
+        items << makeItem(action, item.show);
     }
 
-    endResetModel();
+    setItems(items);
 }
 
 QVariant NoteInputBarCustomiseModel::data(const QModelIndex& index, int role) const
 {
-    if (!index.isValid()) {
+    NoteInputBarCustomiseItem* item = modelIndexToItem(index);
+    if (!item) {
         return QVariant();
     }
 
     switch (role) {
-    case ItemRole:
-        return QVariant::fromValue(m_items.at(index.row()));
-    case SelectedRole:
-        return m_selectionModel->isSelected(index);
+    case ItemRole: return QVariant::fromValue(item);
+    default: return SelectableItemListModel::data(index, role);
     }
 
     return QVariant();
 }
 
-int NoteInputBarCustomiseModel::rowCount(const QModelIndex&) const
-{
-    return m_items.count();
-}
-
 QHash<int, QByteArray> NoteInputBarCustomiseModel::roleNames() const
 {
-    static QHash<int, QByteArray> roles = {
-        { ItemRole, "itemRole" },
-        { SelectedRole, "selectedRole" }
-    };
+    QHash<int, QByteArray> roles = SelectableItemListModel::roleNames();
+    roles[ItemRole] = "item";
 
     return roles;
 }
 
-bool NoteInputBarCustomiseModel::moveRows(const QModelIndex& sourceParent,
-                                          int sourceRow,
-                                          int count,
-                                          const QModelIndex& destinationParent,
-                                          int destinationChild)
-{
-    int sourceFirstRow = sourceRow;
-    int sourceLastRow = sourceRow + count - 1;
-    int destinationRow = (sourceLastRow > destinationChild) ? destinationChild : destinationChild + 1;
-
-    beginMoveRows(sourceParent, sourceFirstRow, sourceLastRow, destinationParent, destinationRow);
-
-    int increaseCount = (sourceRow > destinationChild) ? 1 : 0;
-    int moveIndex = 0;
-    for (int i = 0; i < count; i++) {
-        m_items.move(sourceRow + moveIndex, destinationChild + moveIndex);
-        moveIndex += increaseCount;
-    }
-
-    endMoveRows();
-
-    updateOperationsAvailability();
-    saveActions();
-
-    return true;
-}
-
 void NoteInputBarCustomiseModel::addSeparatorLine()
 {
-    if (!m_selectionModel->hasSelection()) {
+    if (!hasSelection()) {
         return;
     }
 
-    QModelIndex selectedItemIndex = m_selectionModel->selectedIndexes().first();
+    QModelIndex selectedItemIndex = selection()->selectedIndexes().first();
     if (!selectedItemIndex.isValid()) {
         return;
     }
@@ -150,139 +101,20 @@ void NoteInputBarCustomiseModel::addSeparatorLine()
         return;
     }
 
-    beginInsertRows(prevItemIndex.parent(), prevItemIndex.row() + 1, prevItemIndex.row() + 1);
-    m_items.insert(prevItemIndex.row() + 1, makeSeparatorItem());
-    endInsertRows();
+    insertItem(prevItemIndex.row() + 1, makeSeparatorItem());
 
-    updateOperationsAvailability();
+    onUpdateOperationsAvailability();
     saveActions();
-}
-
-void NoteInputBarCustomiseModel::selectRow(int row)
-{
-    m_selectionModel->select(index(row));
-}
-
-void NoteInputBarCustomiseModel::moveSelectedRowsUp()
-{
-    QModelIndexList selectedIndexList = m_selectionModel->selectedIndexes();
-
-    if (selectedIndexList.isEmpty()) {
-        return;
-    }
-
-    std::sort(selectedIndexList.begin(), selectedIndexList.end(), [](QModelIndex f, QModelIndex s) -> bool {
-        return f.row() < s.row();
-    });
-
-    QModelIndex sourceRowFirst = selectedIndexList.first();
-
-    moveRows(sourceRowFirst.parent(), sourceRowFirst.row(), selectedIndexList.count(), sourceRowFirst.parent(), sourceRowFirst.row() - 1);
-
-    updateOperationsAvailability();
-}
-
-void NoteInputBarCustomiseModel::moveSelectedRowsDown()
-{
-    QModelIndexList selectedIndexList = m_selectionModel->selectedIndexes();
-
-    if (selectedIndexList.isEmpty()) {
-        return;
-    }
-
-    std::sort(selectedIndexList.begin(), selectedIndexList.end(), [](QModelIndex f, QModelIndex s) -> bool {
-        return f.row() < s.row();
-    });
-
-    QModelIndex sourceRowFirst = selectedIndexList.first();
-    QModelIndex sourceRowLast = selectedIndexList.last();
-
-    moveRows(sourceRowFirst.parent(), sourceRowFirst.row(), selectedIndexList.count(), sourceRowFirst.parent(), sourceRowLast.row() + 1);
-}
-
-void NoteInputBarCustomiseModel::removeSelectedRows()
-{
-    if (!m_selectionModel->hasSelection()) {
-        return;
-    }
-
-    QList<NoteInputBarCustomiseItem*> actionsToRemove;
-
-    for (const QModelIndex& selectedIndex : m_selectionModel->selectedIndexes()) {
-        actionsToRemove << m_items[selectedIndex.row()];
-    }
-
-    for (NoteInputBarCustomiseItem* action : actionsToRemove) {
-        int index = m_items.indexOf(action);
-
-        beginRemoveRows(QModelIndex(), index, index);
-        m_items.removeAt(index);
-        endRemoveRows();
-    }
-
-    updateOperationsAvailability();
-    saveActions();
-}
-
-bool NoteInputBarCustomiseModel::isSelected(int row) const
-{
-    QModelIndex rowIndex = index(row);
-    return m_selectionModel->isSelected(rowIndex);
 }
 
 QItemSelectionModel* NoteInputBarCustomiseModel::selectionModel() const
 {
-    return m_selectionModel;
-}
-
-bool NoteInputBarCustomiseModel::isMovingUpAvailable() const
-{
-    return m_isMovingUpAvailable;
-}
-
-bool NoteInputBarCustomiseModel::isMovingDownAvailable() const
-{
-    return m_isMovingDownAvailable;
-}
-
-bool NoteInputBarCustomiseModel::isRemovingAvailable() const
-{
-    return m_isRemovingAvailable;
+    return selection();
 }
 
 bool NoteInputBarCustomiseModel::isAddSeparatorAvailable() const
 {
     return m_isAddSeparatorAvailable;
-}
-
-void NoteInputBarCustomiseModel::setIsMovingUpAvailable(bool isMovingUpAvailable)
-{
-    if (m_isMovingUpAvailable == isMovingUpAvailable) {
-        return;
-    }
-
-    m_isMovingUpAvailable = isMovingUpAvailable;
-    emit isMovingUpAvailableChanged(m_isMovingUpAvailable);
-}
-
-void NoteInputBarCustomiseModel::setIsMovingDownAvailable(bool isMovingDownAvailable)
-{
-    if (m_isMovingDownAvailable == isMovingDownAvailable) {
-        return;
-    }
-
-    m_isMovingDownAvailable = isMovingDownAvailable;
-    emit isMovingDownAvailableChanged(m_isMovingDownAvailable);
-}
-
-void NoteInputBarCustomiseModel::setIsRemovingAvailable(bool isRemovingAvailable)
-{
-    if (m_isRemovingAvailable == isRemovingAvailable) {
-        return;
-    }
-
-    m_isRemovingAvailable = isRemovingAvailable;
-    emit isRemovingAvailableChanged(m_isRemovingAvailable);
 }
 
 void NoteInputBarCustomiseModel::setIsAddSeparatorAvailable(bool isAddSeparatorAvailable)
@@ -297,48 +129,36 @@ void NoteInputBarCustomiseModel::setIsAddSeparatorAvailable(bool isAddSeparatorA
 
 NoteInputBarCustomiseItem* NoteInputBarCustomiseModel::modelIndexToItem(const QModelIndex& index) const
 {
-    return m_items.at(index.row());
+    return dynamic_cast<NoteInputBarCustomiseItem*>(item(index));
 }
 
-void NoteInputBarCustomiseModel::updateOperationsAvailability()
+void NoteInputBarCustomiseModel::onUpdateOperationsAvailability()
 {
-    updateRearrangementAvailability();
+    TRACEFUNC;
+
+    SelectableItemListModel::onUpdateOperationsAvailability();
     updateRemovingAvailability();
     updateAddSeparatorAvailability();
 }
 
-void NoteInputBarCustomiseModel::updateRearrangementAvailability()
+void NoteInputBarCustomiseModel::onRowsMoved()
 {
-    QModelIndexList selectedIndexList = m_selectionModel->selectedIndexes();
-
-    if (selectedIndexList.isEmpty()) {
-        updateMovingUpAvailability();
-        updateMovingDownAvailability();
-        return;
-    }
-
-    QModelIndex selectedIndex = selectedIndexList.first();
-    updateMovingUpAvailability(selectedIndex);
-    updateMovingDownAvailability(selectedIndex);
+    saveActions();
 }
 
-void NoteInputBarCustomiseModel::updateMovingUpAvailability(const QModelIndex& selectedRowIndex)
+void NoteInputBarCustomiseModel::onRowsRemoved()
 {
-    bool isRowInBoundaries = selectedRowIndex.isValid() ? selectedRowIndex.row() > 0 : false;
-    setIsMovingUpAvailable(isRowInBoundaries);
-}
-
-void NoteInputBarCustomiseModel::updateMovingDownAvailability(const QModelIndex& selectedRowIndex)
-{
-    bool isRowInBoundaries = selectedRowIndex.isValid() ? selectedRowIndex.row() < rowCount() - 1 : false;
-    setIsMovingDownAvailable(isRowInBoundaries);
+    saveActions();
 }
 
 void NoteInputBarCustomiseModel::updateRemovingAvailability()
 {
+    TRACEFUNC;
+
     auto hasActionInSelection = [this](const QModelIndexList& selectedIndexes) {
         for (const QModelIndex& index : selectedIndexes) {
-            NoteInputBarCustomiseItem* item = modelIndexToItem(index);
+            const NoteInputBarCustomiseItem* item = modelIndexToItem(index);
+
             if (item && item->type() == NoteInputBarCustomiseItem::ACTION) {
                 return true;
             }
@@ -347,7 +167,7 @@ void NoteInputBarCustomiseModel::updateRemovingAvailability()
         return false;
     };
 
-    QModelIndexList selectedIndexes = m_selectionModel->selectedIndexes();
+    QModelIndexList selectedIndexes = selection()->selectedIndexes();
     bool removingAvailable = !selectedIndexes.empty();
 
     if (removingAvailable) {
@@ -359,21 +179,23 @@ void NoteInputBarCustomiseModel::updateRemovingAvailability()
 
 void NoteInputBarCustomiseModel::updateAddSeparatorAvailability()
 {
-    bool addingAvailable = !m_selectionModel->selectedIndexes().empty();
+    TRACEFUNC;
+
+    bool addingAvailable = !selection()->selectedIndexes().empty();
     if (!addingAvailable) {
         setIsAddSeparatorAvailable(addingAvailable);
         return;
     }
 
-    addingAvailable = m_selectionModel->selectedIndexes().count() == 1;
+    addingAvailable = selection()->selectedIndexes().count() == 1;
     if (!addingAvailable) {
         setIsAddSeparatorAvailable(addingAvailable);
         return;
     }
 
-    QModelIndex selectedItemIndex = m_selectionModel->selectedIndexes().first();
+    QModelIndex selectedItemIndex = selection()->selectedIndexes().first();
 
-    NoteInputBarCustomiseItem* selectedItem = modelIndexToItem(selectedItemIndex);
+    const NoteInputBarCustomiseItem* selectedItem = modelIndexToItem(selectedItemIndex);
     addingAvailable = selectedItem && selectedItem->type() == NoteInputBarCustomiseItem::ACTION;
 
     if (!addingAvailable) {
@@ -420,11 +242,18 @@ NoteInputBarCustomiseItem* NoteInputBarCustomiseModel::makeSeparatorItem()
 
 void NoteInputBarCustomiseModel::saveActions()
 {
+    TRACEFUNC;
+
     ToolConfig config;
-    for (const NoteInputBarCustomiseItem* item : m_items) {
+    for (const Item* item : items()) {
+        auto customiseItem = dynamic_cast<const NoteInputBarCustomiseItem*>(item);
+        if (!customiseItem) {
+            continue;
+        }
+
         ToolConfig::Item citem;
-        citem.action = item->id().toStdString();
-        citem.show = item->checked();
+        citem.action = customiseItem->id().toStdString();
+        citem.show = customiseItem->checked();
         config.items.append(citem);
     }
 

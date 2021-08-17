@@ -72,9 +72,7 @@ void InstrumentsRepository::fillInstrumentsMeta(InstrumentsMeta& meta)
 {
     TRACEFUNC;
 
-    for (const MidiArticulation& artic : Ms::articulation) {
-        meta.articulations << artic;
-    }
+    meta.articulations = Ms::articulation;
 
     for (const InstrumentGenre* genre : Ms::instrumentGenres) {
         meta.genres << genre;
@@ -96,9 +94,4 @@ void InstrumentsRepository::fillInstrumentsMeta(InstrumentsMeta& meta)
     for (const ScoreOrder* order : Ms::instrumentOrders) {
         meta.scoreOrders << order;
     }
-
-    static ScoreOrder custom;
-    custom.id = "custom";
-    custom.name = qtrc("OrderXML", "Custom");
-    meta.scoreOrders << &custom;
 }

@@ -36,8 +36,12 @@ Item {
 
     property alias navigation: navPanel
 
-    function scoreContent() {
-        return instrumentsOnScore.scoreContent()
+    function instruments() {
+        return instrumentsOnScore.instruments()
+    }
+
+    function currentOrder() {
+        return instrumentsOnScore.currentOrder()
     }
 
     function addInstruments(instruments) {
@@ -56,7 +60,7 @@ Item {
         instrumentsView.positionViewAtEnd()
     }
 
-    InstrumentsOnScoreModel {
+    InstrumentsOnScoreListModel {
         id: instrumentsOnScore
     }
 
@@ -66,7 +70,7 @@ Item {
 
     NavigationPanel {
         id: navPanel
-        name: "SelectedInstrumentsView"
+        name: "InstrumentsOnScoreView"
         direction: NavigationPanel.Vertical
         enabled: root.visible
     }
@@ -90,6 +94,8 @@ Item {
         anchors.right: parent.right
 
         Dropdown {
+            id: ordersDropdown
+
             Layout.fillWidth: true
 
             navigation.name: "Orders"
@@ -97,9 +103,18 @@ Item {
             navigation.row: 1
 
             model: instrumentsOnScore.orders
-            currentIndex: instrumentsOnScore.currentOrderIndex
 
-            onCurrentValueChanged: {
+            Connections {
+                target: instrumentsOnScore
+
+                function onCurrentOrderChanged() {
+                    ordersDropdown.currentIndex = instrumentsOnScore.currentOrderIndex
+                }
+            }
+
+            displayText: qsTrc("instruments", "Order: ") + currentText
+
+            onActivated: {
                 instrumentsOnScore.currentOrderIndex = currentIndex
             }
         }
@@ -178,12 +193,12 @@ Item {
                 visible: model.isSelected
 
                 onClicked: {
-                    instrumentsOnScore.toggleSoloist(model.index)
+                    model.isSoloist = !model.isSoloist
                 }
             }
 
             onClicked: {
-                instrumentsOnScore.selectInstrument(model.index)
+                instrumentsOnScore.selectRow(model.index)
             }
 
             onDoubleClicked: {

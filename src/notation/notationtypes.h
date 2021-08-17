@@ -137,6 +137,8 @@ using ScoreOrderList = QList<const ScoreOrder*>;
 using InstrumentGroupList = QList<const InstrumentGroup*>;
 using MidiArticulationList = QList<MidiArticulation>;
 
+static const QString COMMON_GENRE_ID("common");
+
 enum class DragMode
 {
     BothXY = 0,
@@ -309,11 +311,9 @@ struct PitchRange
     }
 };
 
-static const QString COMMON_GENRE_ID("common");
-
 struct InstrumentKey
 {
-    ID instrumentId;
+    QString instrumentId;
     ID partId;
     Fraction tick = Ms::Fraction(0, 1);
 };
@@ -581,6 +581,15 @@ struct ScoreCreateOptions
     PartInstrumentList parts;
     ScoreOrder order;
 };
+
+inline ScoreOrder makeCustomOrder()
+{
+    ScoreOrder order;
+    order.id = "custom";
+    order.name = qtrc("OrderXML", "Custom");
+
+    return order;
+}
 
 static constexpr int MIN_NOTES_INTERVAL = -9;
 static constexpr int MAX_NOTES_INTERVAL = 9;

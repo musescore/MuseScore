@@ -31,8 +31,6 @@ StyledDialogView {
 
     property bool canSelectMultipleInstruments: true
     property string currentInstrumentId: ""
-    property string initiallySelectedPartIds: ""
-    property var currentScoreOrderId: null
 
     contentHeight: 500
     contentWidth: root.canSelectMultipleInstruments ? 900 : 600
@@ -71,7 +69,11 @@ StyledDialogView {
                 enabled: instrumentsPage.hasSelectedInstruments
 
                 onClicked: {
-                    root.ret = { errcode: 0, value: instrumentsPage.scoreContent() }
+                    var result = {}
+                    result["instruments"] = instrumentsPage.instruments()
+                    result["scoreOrder"] = instrumentsPage.currentOrder()
+
+                    root.ret = { errcode: 0, value: result }
                     root.hide()
                 }
             }
