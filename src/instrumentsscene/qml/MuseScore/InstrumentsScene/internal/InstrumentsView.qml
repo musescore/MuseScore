@@ -30,12 +30,9 @@ import MuseScore.InstrumentsScene 1.0
 Item {
     id: root
 
-    property alias instruments: instrumentsView.model
-    property alias searchText: searchField.searchText
+    property var instrumentsModel
     property alias navigation: navPanel
 
-    signal selectInstrumentRequested(int instrumentIndex)
-    signal changeActiveTraitRequested(int instrumentIndex, int traitIndex)
     signal addSelectedInstrumentsToScoreRequested()
 
     NavigationPanel {
@@ -74,6 +71,10 @@ Item {
         navigation.name: "SearchInstruments"
         navigation.panel: navPanel
         navigation.row: 1
+
+        onSearchTextChanged: {
+            root.instrumentsModel.setSearchText(searchText)
+        }
     }
 
     ListView {
@@ -93,6 +94,8 @@ Item {
             anchors.bottom: parent.bottom
             anchors.right: parent.right
         }
+
+        model: root.instrumentsModel
 
         delegate: ListItemBlank {
             id: item
@@ -120,15 +123,14 @@ Item {
             }
 
             onClicked: {
-                root.selectInstrumentRequested(model.index)
+                root.instrumentsModel.selectInstrument(model.index)
             }
 
             onDoubleClicked: {
                 root.addSelectedInstrumentsToScoreRequested()
             }
 
-            property var traits: model.traits
-            property int instrumentIndex: model.index
+            property var itemModel: model
 
             Dropdown {
                 id: traitsBox
@@ -145,10 +147,11 @@ Item {
 
                 visible: traitsBox.count > 1
 
-                model: item.traits
+                model: item.itemModel.traits
+                currentIndex: item.itemModel.currentTraitIndex
 
-                onCurrentValueChanged: {
-                    root.changeActiveTraitRequested(item.instrumentIndex, currentIndex)
+                onActivated: {
+                    item.itemModel.currentTraitIndex = currentIndex
                 }
             }
         }

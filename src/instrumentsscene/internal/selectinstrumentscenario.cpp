@@ -39,7 +39,7 @@ mu::RetVal<Instrument> SelectInstrumentsScenario::selectInstrument(const Instrum
 
     QStringList params {
         "canSelectMultipleInstruments=false",
-        "currentInstrumentId=" + currentInstrumentKey.instrumentId.toQString()
+        "currentInstrumentId=" + currentInstrumentKey.instrumentId
     };
 
     RetVal<PartInstrumentListScoreOrder> selectedInstruments = selectInstruments(params);
@@ -74,13 +74,13 @@ mu::RetVal<PartInstrumentListScoreOrder> SelectInstrumentsScenario::selectInstru
     result.ret = make_ret(Ret::Code::Ok);
 
     QVariantMap content = retVal.val.toQVariant().toMap();
-    result.val.scoreOrder = content["scoreContent"].value<ScoreOrder>();
+    result.val.scoreOrder = content["scoreOrder"].value<ScoreOrder>();
 
     for (const QVariant& obj: content["instruments"].toList()) {
         QVariantMap map = obj.toMap();
         PartInstrument pi;
 
-        pi.partId = map["id"].toString();
+        pi.partId = ID(map["partId"]);
         pi.isExistingPart = map["isExistingPart"].toBool();
         pi.isSoloist = map["isSoloist"].toBool();
         pi.instrumentTemplate = map["instrumentTemplate"].value<InstrumentTemplate>();

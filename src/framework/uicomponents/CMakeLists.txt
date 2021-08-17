@@ -43,6 +43,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/sortervalue.h
     ${CMAKE_CURRENT_LIST_DIR}/view/itemmultiselectionmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/itemmultiselectionmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/selectableitemlistmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/selectableitemlistmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/qmllistproperty.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/qmllistproperty.h
     ${CMAKE_CURRENT_LIST_DIR}/view/popupview.cpp

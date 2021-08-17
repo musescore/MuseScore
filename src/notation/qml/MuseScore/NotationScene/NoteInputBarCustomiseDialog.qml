@@ -88,7 +88,7 @@ StyledDialogView {
                 enabled: customiseModel.isRemovingAvailable
 
                 onClicked: {
-                    customiseModel.removeSelectedRows()
+                    customiseModel.removeSelection()
                 }
             }
 
@@ -100,7 +100,7 @@ StyledDialogView {
                 enabled: customiseModel.isMovingUpAvailable
 
                 onClicked: {
-                    customiseModel.moveSelectedRowsUp()
+                    customiseModel.moveSelectionUp()
                     Qt.callLater(view.positionViewAtSelectedItems)
                 }
             }
@@ -113,7 +113,7 @@ StyledDialogView {
                 enabled: customiseModel.isMovingDownAvailable
 
                 onClicked: {
-                    customiseModel.moveSelectedRowsDown()
+                    customiseModel.moveSelectionDown()
                     Qt.callLater(view.positionViewAtSelectedItems)
                 }
             }
@@ -151,16 +151,20 @@ StyledDialogView {
             }
 
             delegate: ListItemBlank {
+                id: itemDelegate
+
                 height: 38
 
-                isSelected: selectedRole
+                isSelected: model.isSelected
 
                 onClicked: {
                     customiseModel.selectRow(index)
                 }
 
+                property var item: model.item
+
                 Loader {
-                    property var delegateType: Boolean(itemRole) ? itemRole.type : NoteInputBarCustomiseItem.UNDEFINED
+                    property var delegateType: Boolean(itemDelegate.item) ? itemDelegate.item.type : NoteInputBarCustomiseItem.UNDEFINED
 
                     anchors.fill: parent
                     sourceComponent: delegateType === NoteInputBarCustomiseItem.ACTION ? actionComponent : separatorLineComponent
@@ -168,7 +172,9 @@ StyledDialogView {
                     Component {
                         id: actionComponent
 
-                        NoteInputBarActionDelegate {}
+                        NoteInputBarActionDelegate {
+                            item: itemDelegate.item
+                        }
                     }
 
                     Component {
@@ -176,7 +182,7 @@ StyledDialogView {
 
                         StyledTextLabel {
                             anchors.centerIn: parent
-                            text: Boolean(itemRole) ? itemRole.title : ""
+                            text: Boolean(itemDelegate.item) ? itemDelegate.item.title : ""
                         }
                     }
                 }
