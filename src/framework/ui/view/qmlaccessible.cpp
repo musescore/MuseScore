@@ -85,6 +85,11 @@ QString AccessibleItem::accessibleName() const
     return m_name;
 }
 
+QString AccessibleItem::accessibleDescription() const
+{
+    return m_description;
+}
+
 bool AccessibleItem::accessibleState(State st) const
 {
     return m_state.value(st, false);
@@ -217,9 +222,25 @@ void AccessibleItem::setName(QString name)
     m_accessiblePropertyChanged.send(IAccessible::Property::Name);
 }
 
+void AccessibleItem::setDescription(QString description)
+{
+    if (m_description == description) {
+        return;
+    }
+
+    m_description = description;
+    emit descriptionChanged(m_description);
+    m_accessiblePropertyChanged.send(IAccessible::Property::Description);
+}
+
 QString AccessibleItem::name() const
 {
     return m_name;
+}
+
+QString AccessibleItem::description() const
+{
+    return m_description;
 }
 
 void AccessibleItem::setIgnored(bool ignored)

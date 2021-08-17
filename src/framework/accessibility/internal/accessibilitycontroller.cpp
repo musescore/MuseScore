@@ -326,6 +326,11 @@ QString AccessibilityController::accessibleName() const
     return QString("AccessibilityController");
 }
 
+QString AccessibilityController::accessibleDescription() const
+{
+    return QString();
+}
+
 bool AccessibilityController::accessibleState(State st) const
 {
     switch (st) {
