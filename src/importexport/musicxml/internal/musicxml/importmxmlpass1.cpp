@@ -36,7 +36,8 @@
 #include "engraving/libmscore/timesig.h"
 #include "engraving/libmscore/spanner.h"
 #include "engraving/libmscore/bracketItem.h"
-#include "engraving/libmscore/sym.h"
+#include "engraving/libmscore/symid.h"
+#include "engraving/libmscore/symnames.h"
 
 #include "engraving/style/style.h"
 
@@ -1206,7 +1207,7 @@ static QString text2syms(const QString& t)
         while (maxMatch > 0) {
             QString toBeMatched = in.left(maxMatch);
             if (map.contains(toBeMatched)) {
-                sym = Sym::id2name(map.value(toBeMatched));
+                sym = SymNames::nameForSymId(map.value(toBeMatched));
                 break;
             }
             maxMatch--;

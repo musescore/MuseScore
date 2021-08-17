@@ -112,7 +112,7 @@ void MeasureRepeat::layout()
             }
             if (placeInSeries % score()->styleI(Sid::mrNumberEveryXMeasures) == 0) {
                 if (score()->styleB(Sid::mrNumberSeriesWithParentheses)) {
-                    m_numberSym = toTimeSigString(QString("(%1)").arg(placeInSeries));
+                    m_numberSym = timeSigSymIdsFromString(QString("(%1)").arg(placeInSeries));
                 } else {
                     setNumberSym(placeInSeries);
                 }

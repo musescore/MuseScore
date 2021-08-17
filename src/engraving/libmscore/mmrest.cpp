@@ -80,7 +80,7 @@ void MMRest::draw(mu::draw::Painter* painter) const
 
     // draw number
     painter->setPen(curColor());
-    std::vector<SymId>&& numberSym = toTimeSigString(QString("%1").arg(m_number));
+    SymIdList&& numberSym = timeSigSymIdsFromString(QString("%1").arg(m_number));
     RectF numberBox = symBbox(numberSym);
     qreal x = (m_width - numberBox.width()) * .5;
     qreal y = m_numberPos * spatium() - staff()->height() * .5;
@@ -188,7 +188,7 @@ void MMRest::layout()
 
 RectF MMRest::numberRect() const
 {
-    std::vector<SymId>&& s = toTimeSigString(QString("%1").arg(m_number));
+    SymIdList&& s = timeSigSymIdsFromString(QString("%1").arg(m_number));
 
     RectF r = symBbox(s);
     qreal x = (m_width - r.width()) * .5;

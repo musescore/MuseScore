@@ -26,7 +26,7 @@
 
 #include "articulation.h"
 #include "note.h"
-#include "sym.h"
+#include "symnames.h"
 
 using namespace mu;
 
@@ -51,7 +51,7 @@ void Drumset::save(XmlWriter& xml) const
         if (nh == NoteHead::Group::HEAD_CUSTOM) {
             xml.startObject("noteheads");
             for (int j = 0; j < int(NoteHead::Type::HEAD_TYPES); j++) {
-                xml.tag(NoteHead::type2name(NoteHead::Type(j)), Sym::id2name(noteHeads(i, NoteHead::Type(j))));
+                xml.tag(NoteHead::type2name(NoteHead::Type(j)), SymNames::nameForSymId(noteHeads(i, NoteHead::Type(j))));
             }
             xml.endObject();
         }
@@ -117,7 +117,7 @@ bool Drumset::readProperties(XmlReader& e, int pitch)
                 return false;
             }
 
-            _drum[pitch].noteheads[noteType] = Sym::name2id(e.readElementText());
+            _drum[pitch].noteheads[noteType] = SymNames::symIdByName(e.readElementText());
         }
     } else if (tag == "line") {
         _drum[pitch].line = e.readInt();

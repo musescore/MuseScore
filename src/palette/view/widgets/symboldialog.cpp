@@ -26,7 +26,7 @@
 
 #include "libmscore/masterscore.h"
 #include "libmscore/scorefont.h"
-#include "libmscore/sym.h"
+#include "libmscore/symnames.h"
 #include "libmscore/engravingitem.h"
 #include "libmscore/symbol.h"
 
@@ -61,12 +61,12 @@ void SymbolDialog::createSymbols()
     ScoreFont::fontByName(f->name());
     sp->clear();
     for (auto name : (*mu::smuflRanges())[range]) {
-        SymId id     = Sym::name2id(name);
+        SymId id = SymNames::symIdByName(name);
         if (search->text().isEmpty()
-            || Sym::id2userName(id).contains(search->text(), Qt::CaseInsensitive)) {
+            || SymNames::translatedUserNameForSymId(id).contains(search->text(), Qt::CaseInsensitive)) {
             auto s = std::make_shared<Symbol>(gpaletteScore->dummy());
             s->setSym(SymId(id), f);
-            sp->appendElement(s, Sym::id2userName(SymId(id)));
+            sp->appendElement(s, SymNames::translatedUserNameForSymId(SymId(id)));
         }
     }
 }

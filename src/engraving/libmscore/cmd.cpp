@@ -86,7 +86,7 @@
 #include "accidental.h"
 #include "tremolo.h"
 #include "rehearsalmark.h"
-#include "sym.h"
+#include "symnames.h"
 #include "linkedobjects.h"
 #include "mscoreview.h"
 #include "masterscore.h"
@@ -1776,7 +1776,7 @@ void Score::addArticulation(SymId attr)
         }
     }
 
-    QString msg = Sym::id2userName(attr);
+    QString msg = SymNames::translatedUserNameForSymId(attr);
     if (numAdded == 1 && numRemoved == 0) {
         msg = QObject::tr("%1 added").arg(msg);
     } else if (numAdded == 0 && numRemoved == 1) {

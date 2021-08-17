@@ -54,8 +54,8 @@ class TimeSig final : public EngravingItem
     QString _numeratorString;       // calculated from actualSig() if !customText
     QString _denominatorString;
 
-    std::vector<SymId> ns;
-    std::vector<SymId> ds;
+    SymIdList ns;
+    SymIdList ds;
 
     mu::PointF pz;
     mu::PointF pn;

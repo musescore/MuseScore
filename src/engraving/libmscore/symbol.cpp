@@ -25,7 +25,7 @@
 #include "draw/fontmetrics.h"
 #include "io/xml.h"
 
-#include "sym.h"
+#include "symnames.h"
 #include "scorefont.h"
 #include "system.h"
 #include "staff.h"
@@ -65,7 +65,7 @@ Symbol::Symbol(const Symbol& s)
 
 QString Symbol::symName() const
 {
-    return Sym::id2name(_sym);
+    return SymNames::nameForSymId(_sym);
 }
 
 //---------------------------------------------------------
@@ -121,7 +121,7 @@ void Symbol::draw(mu::draw::Painter* painter) const
 void Symbol::write(XmlWriter& xml) const
 {
     xml.startObject(this);
-    xml.tag("name", Sym::id2name(_sym));
+    xml.tag("name", SymNames::nameForSymId(_sym));
     if (_scoreFont) {
         xml.tag("font", _scoreFont->name());
     }
@@ -140,17 +140,15 @@ void Symbol::read(XmlReader& e)
         const QStringRef& tag(e.name());
         if (tag == "name") {
             QString val(e.readElementText());
-            SymId symId = Sym::name2id(val);
-            if (val != "noSym") {
+            SymId symId = SymNames::symIdByName(val);
+            if (val != "noSym" && symId == SymId::noSym) {
+                // if symbol name not found, fall back to user names
+                // TODO: does it make sense? user names are probably localized
+                symId = SymNames::symIdByUserName(val);
                 if (symId == SymId::noSym) {
-                    // if symbol name not found, fall back to user names
-                    // TODO : does it make sense? user names are probably localized
-                    symId = Sym::userName2id(val);
-                    if (symId == SymId::noSym) {
-                        qDebug("unknown symbol <%s>, falling back to no symbol", qPrintable(val));
-                        // set a default symbol, or layout() will crash
-                        symId = SymId::noSym;
-                    }
+                    qDebug("unknown symbol <%s>, falling back to no symbol", qPrintable(val));
+                    // set a default symbol, or layout() will crash
+                    symId = SymId::noSym;
                 }
             }
             setSym(symId);

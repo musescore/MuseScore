@@ -46,7 +46,6 @@ class Measure;
 class Staff;
 class Part;
 class Score;
-class Sym;
 class MuseScoreView;
 class Segment;
 class EngravingItem;

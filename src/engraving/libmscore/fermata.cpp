@@ -31,7 +31,7 @@
 #include "undo.h"
 #include "page.h"
 #include "barline.h"
-#include "sym.h"
+#include "symnames.h"
 
 using namespace mu;
 
@@ -82,7 +82,7 @@ bool Fermata::readProperties(XmlReader& e)
 
     if (tag == "subtype") {
         QString s = e.readElementText();
-        SymId id = Sym::name2id(s);
+        SymId id = SymNames::symIdByName(s);
         setSymId(id);
     } else if (tag == "play") {
         setPlay(e.readBool());
@@ -112,7 +112,7 @@ void Fermata::write(XmlWriter& xml) const
         return;
     }
     xml.startObject(this);
-    xml.tag("subtype", Sym::id2name(_symId));
+    xml.tag("subtype", SymNames::nameForSymId(_symId));
     writeProperty(xml, Pid::TIME_STRETCH);
     writeProperty(xml, Pid::PLAY);
     writeProperty(xml, Pid::MIN_DISTANCE);
@@ -129,9 +129,9 @@ void Fermata::write(XmlWriter& xml) const
 
 int Fermata::subtype() const
 {
-    QString s = Sym::id2name(_symId);
+    QString s = SymNames::nameForSymId(_symId);
     if (s.endsWith("Below")) {
-        return int(Sym::name2id(s.left(s.size() - 5) + "Above"));
+        return int(SymNames::symIdByName(s.left(s.size() - 5) + "Above"));
     } else {
         return int(_symId);
     }
@@ -143,7 +143,7 @@ int Fermata::subtype() const
 
 QString Fermata::userName() const
 {
-    return Sym::id2userName(symId());
+    return SymNames::translatedUserNameForSymId(symId());
 }
 
 //---------------------------------------------------------
@@ -228,15 +228,15 @@ void Fermata::layout()
         }
     }
 
-    QString name = Sym::id2name(_symId);
+    QString name = SymNames::nameForSymId(_symId);
     if (placeAbove()) {
         if (name.endsWith("Below")) {
-            _symId = Sym::name2id(name.left(name.size() - 5) + "Above");
+            _symId = SymNames::symIdByName(name.left(name.size() - 5) + "Above");
         }
     } else {
         rypos() += staff()->height();
         if (name.endsWith("Above")) {
-            _symId = Sym::name2id(name.left(name.size() - 5) + "Below");
+            _symId = SymNames::symIdByName(name.left(name.size() - 5) + "Below");
         }
     }
     RectF b(symBbox(_symId));
@@ -286,11 +286,11 @@ bool Fermata::setProperty(Pid propertyId, const QVariant& v)
     case Pid::PLACEMENT: {
         Placement p = Placement(v.toInt());
         if (p != placement()) {
-            QString s = Sym::id2name(_symId);
+            QString s = SymNames::nameForSymId(_symId);
             bool up = placeAbove();
             if (s.endsWith(up ? "Above" : "Below")) {
                 QString s2 = s.left(s.size() - 5) + (up ? "Below" : "Above");
-                _symId = Sym::name2id(s2);
+                _symId = SymNames::symIdByName(s2);
             }
             setPlacement(p);
         }

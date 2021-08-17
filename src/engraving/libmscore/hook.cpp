@@ -24,7 +24,7 @@
 #include "chord.h"
 #include "stem.h"
 #include "score.h"
-#include "sym.h"
+#include "symid.h"
 
 using namespace mu;
 using namespace Ms;
