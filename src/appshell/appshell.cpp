@@ -70,6 +70,12 @@ int AppShell::run(int argc, char** argv)
         appName  = "MuseScore4";
     }
 
+#ifdef Q_OS_WIN
+    if (!qEnvironmentVariableIsSet("QT_OPENGL_BUGLIST")) {
+        qputenv("QT_OPENGL_BUGLIST", ":/resources/win_opengl_buglist.json");
+    }
+#endif
+
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication app(argc, argv);
     QCoreApplication::setApplicationName(appName);
