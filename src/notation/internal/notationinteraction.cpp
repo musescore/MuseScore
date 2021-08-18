@@ -2094,56 +2094,52 @@ bool NotationInteraction::isGripEditStarted() const
     return m_gripEditData.element && m_gripEditData.curGrip != Ms::Grip::NO_GRIP;
 }
 
-bool NotationInteraction::isHitGrip(const PointF& pos) const
+static int findGrip(const QVector<mu::RectF>& grips, Ms::Page* page, const mu::PointF& canvasPos)
 {
-    if (!selection()->element() || m_gripEditData.grip.empty()) {
-        return false;
+    if (grips.empty() || page == nullptr) {
+        return -1;
     }
-
-    qreal align = m_gripEditData.grip[0].width() / 2;
-
-    for (int i = 0; i < m_gripEditData.grips; ++i) {
-        if (m_gripEditData.grip[i].adjusted(-align, -align, align, align).contains(pos)) {
-            return true;
+    mu::PointF pos = canvasPos - page->pos();
+    qreal align = grips[0].width() / 2;
+    for (int i = 0; i < grips.size(); ++i) {
+        if (grips[i].adjusted(-align, -align, align, align).contains(pos)) {
+            return i;
         }
     }
+    return -1;
+}
 
-    return false;
+bool NotationInteraction::isHitGrip(const PointF& pos) const
+{
+    return selection()->element() && findGrip(m_gripEditData.grip, point2page(pos), pos) != -1;
 }
 
 void NotationInteraction::startEditGrip(const PointF& pos)
 {
-    if (m_gripEditData.grip.size() == 0) {
+    int grip = findGrip(m_gripEditData.grip, point2page(pos), pos);
+    if (grip == -1) {
         return;
     }
 
-    const qreal align = m_gripEditData.grip[0].width() / 2;
-    for (int i = 0; i < m_gripEditData.grips; ++i) {
-        if (!m_gripEditData.grip[i].adjusted(-align, -align, align, align).contains(pos)) {
-            continue;
+    m_gripEditData.curGrip = Ms::Grip(grip);
+
+    std::vector<LineF> lines;
+    QVector<LineF> anchorLines = m_gripEditData.element->gripAnchorLines(m_gripEditData.curGrip);
+
+    Element* page = m_gripEditData.element->findAncestor(ElementType::PAGE);
+    const PointF pageOffset((page ? page : m_gripEditData.element)->pos());
+    if (!anchorLines.isEmpty()) {
+        for (LineF& line : anchorLines) {
+            line.translate(pageOffset);
+            lines.push_back(line);
         }
-
-        m_gripEditData.curGrip = Ms::Grip(i);
-
-        std::vector<LineF> lines;
-        QVector<LineF> anchorLines = m_gripEditData.element->gripAnchorLines(m_gripEditData.curGrip);
-
-        Element* page = m_gripEditData.element->findAncestor(ElementType::PAGE);
-        const PointF pageOffset((page ? page : m_gripEditData.element)->pos());
-        if (!anchorLines.isEmpty()) {
-            for (LineF& line : anchorLines) {
-                line.translate(pageOffset);
-                lines.push_back(line);
-            }
-        }
-
-        setAnchorLines(lines);
-
-        m_gripEditData.element->startEdit(m_gripEditData);
-
-        notifyAboutNotationChanged();
-        return;
     }
+
+    setAnchorLines(lines);
+
+    m_gripEditData.element->startEdit(m_gripEditData);
+
+    notifyAboutNotationChanged();
 }
 
 void NotationInteraction::endEditGrip()
@@ -2976,15 +2972,10 @@ void NotationInteraction::updateGripEdit(const std::vector<Element*>& elements)
         resetGripEdit();
         return;
     }
-
     m_gripEditData.grips = element->gripsCount();
     m_gripEditData.curGrip = Ms::Grip::NO_GRIP;
     m_gripEditData.element = element;
-    m_gripEditData.grip.resize(m_gripEditData.grips);
-
     m_gripEditData.element->startEdit(m_gripEditData);
-    m_gripEditData.element->updateGrips(m_gripEditData);
-
     resetAnchorLines();
 }
 
