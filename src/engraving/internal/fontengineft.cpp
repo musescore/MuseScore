@@ -97,7 +97,7 @@ bool FontEngineFT::load(const QString& path)
     return true;
 }
 
-QRectF FontEngineFT::bbox(uint ucs4, qreal DPI_F) const
+QRectF FontEngineFT::bbox(uint ucs4, qreal dpi_f) const
 {
     FTGlyphMetrics* gm = glyphMetrics(ucs4);
     if (!gm) {
@@ -106,13 +106,13 @@ QRectF FontEngineFT::bbox(uint ucs4, qreal DPI_F) const
 
     const FT_BBox& bb = gm->bb;
     //! NOTE Moved form sym.cpp ScoreFont::computeMetrics as is
-    double m = 640.0 / DPI_F;
+    double m = 640.0 / dpi_f;
     QRectF bbox;
     bbox.setCoords(bb.xMin / m, -bb.yMax / m, bb.xMax / m, -bb.yMin / m);
     return bbox;
 }
 
-qreal FontEngineFT::advance(uint ucs4, qreal DPI_F) const
+qreal FontEngineFT::advance(uint ucs4, qreal dpi_f) const
 {
     FTGlyphMetrics* gm = glyphMetrics(ucs4);
     if (!gm) {
@@ -120,7 +120,7 @@ qreal FontEngineFT::advance(uint ucs4, qreal DPI_F) const
     }
 
     //! NOTE Moved form sym.cpp ScoreFont::computeMetrics as is
-    return gm->linearHoriAdvance * DPI_F / 655360.0;
+    return gm->linearHoriAdvance * dpi_f / 655360.0;
 }
 
 FTGlyphMetrics* FontEngineFT::glyphMetrics(uint ucs4) const

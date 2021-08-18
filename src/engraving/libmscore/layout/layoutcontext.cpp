@@ -1738,10 +1738,10 @@ System* LayoutContext::collectSystem()
                     }
                 }
                 const MeasureBase* pbmb = lc.prevMeasure->findPotentialSectionBreak();
-                bool firstSystem = pbmb->sectionBreak() && score->_layoutMode != LayoutMode::FLOAT;
+                bool localFirstSystem = pbmb->sectionBreak() && score->_layoutMode != LayoutMode::FLOAT;
                 MeasureBase* nm = breakMeasure ? breakMeasure : m;
                 if (curHeader) {
-                    m->addSystemHeader(firstSystem);
+                    m->addSystemHeader(localFirstSystem);
                 } else {
                     m->removeSystemHeader();
                 }
