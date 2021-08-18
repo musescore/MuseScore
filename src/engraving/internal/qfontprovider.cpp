@@ -129,22 +129,22 @@ RectF QFontProvider::tightBoundingRect(const Font& f, const QString& string) con
 }
 
 // Score symbols
-RectF QFontProvider::symBBox(const Font& f, uint ucs4, qreal DPI_F) const
+RectF QFontProvider::symBBox(const Font& f, uint ucs4, qreal dpi_f) const
 {
     FontEngineFT* engine = symEngine(f);
     if (!engine) {
         return RectF();
     }
-    return RectF::fromQRectF(engine->bbox(ucs4, DPI_F));
+    return RectF::fromQRectF(engine->bbox(ucs4, dpi_f));
 }
 
-qreal QFontProvider::symAdvance(const Font& f, uint ucs4, qreal DPI_F) const
+qreal QFontProvider::symAdvance(const Font& f, uint ucs4, qreal dpi_f) const
 {
     FontEngineFT* engine = symEngine(f);
     if (!engine) {
         return 0.0;
     }
-    return engine->advance(ucs4, DPI_F);
+    return engine->advance(ucs4, dpi_f);
 }
 
 FontEngineFT* QFontProvider::symEngine(const Font& f) const
