@@ -22,6 +22,8 @@
 
 #include "excerptnotation.h"
 
+#include "log.h"
+
 #include "libmscore/excerpt.h"
 
 using namespace mu::notation;
@@ -29,6 +31,7 @@ using namespace mu::notation;
 ExcerptNotation::ExcerptNotation(Ms::Excerpt* excerpt)
     : Notation(), m_excerpt(excerpt)
 {
+    m_title = excerpt ? excerpt->title() : QString();
 }
 
 ExcerptNotation::~ExcerptNotation()
@@ -48,28 +51,62 @@ ExcerptNotation::~ExcerptNotation()
     setScore(nullptr);
 }
 
-bool ExcerptNotation::isInited() const
+bool ExcerptNotation::isCreated() const
 {
-    return m_isInited;
+    return m_isCreated;
 }
 
-void ExcerptNotation::init()
+void ExcerptNotation::setIsCreated(bool created)
 {
-    if (m_isInited) {
+    m_isCreated = created;
+
+    if (!created) {
         return;
     }
 
     setScore(m_excerpt->partScore());
-
-    QString title = m_title.isEmpty() ? m_title : m_excerpt->title();
     setTitle(m_title);
 
-    m_isInited = true;
+    if (isEmpty()) {
+        fillWithDefaultInfo();
+    }
+}
+
+void ExcerptNotation::fillWithDefaultInfo()
+{
+    TRACEFUNC;
+
+    IF_ASSERT_FAILED(m_excerpt || m_excerpt->partScore()) {
+        return;
+    }
+
+    Ms::Score* excerptScore = m_excerpt->partScore();
+
+    auto setText = [&excerptScore](Ms::Tid textId, const QString& text) {
+        Ms::TextBase* textBox = excerptScore->getText(textId);
+
+        if (textBox) {
+            textBox->unlink();
+            textBox->setPlainText(text);
+        }
+    };
+
+    setText(TextType::TITLE, qtrc("notation", "Title"));
+    setText(TextType::COMPOSER, qtrc("notation", "Composer"));
+    setText(TextType::SUBTITLE, "");
+    setText(TextType::POET, "");
+
+    excerptScore->doLayout();
 }
 
 Ms::Excerpt* ExcerptNotation::excerpt() const
 {
     return m_excerpt;
+}
+
+bool ExcerptNotation::isEmpty() const
+{
+    return m_excerpt ? m_excerpt->parts().isEmpty() : true;
 }
 
 QString ExcerptNotation::title() const
@@ -79,24 +116,28 @@ QString ExcerptNotation::title() const
 
 void ExcerptNotation::setTitle(const QString& title)
 {
-    if (m_excerpt) {
-        m_excerpt->setTitle(title);
+    m_title = title;
 
-        if (!score()) {
-            return;
-        }
-
-        Ms::Text* excerptTitle = score()->getText(Ms::Tid::INSTRUMENT_EXCERPT);
-        if (excerptTitle) {
-            excerptTitle->setPlainText(title);
-            score()->setMetaTag("partName", title);
-            score()->doLayout();
-
-            notifyAboutNotationChanged();
-        }
-    } else {
-        m_title = title;
+    if (!m_excerpt) {
+        return;
     }
+
+    m_excerpt->setTitle(title);
+
+    if (!score()) {
+        return;
+    }
+
+    Ms::Text* excerptTitle = score()->getText(Ms::Tid::INSTRUMENT_EXCERPT);
+    if (!excerptTitle) {
+        return;
+    }
+
+    excerptTitle->setPlainText(title);
+    score()->setMetaTag("partName", title);
+    score()->doLayout();
+
+    notifyAboutNotationChanged();
 }
 
 INotationPtr ExcerptNotation::notation()

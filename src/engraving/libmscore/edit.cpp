@@ -578,7 +578,7 @@ TextBase* Score::addText(Tid type)
     case Tid::POET:
     case Tid::INSTRUMENT_EXCERPT: {
         MeasureBase* measure = first();
-        if (!measure->isVBox()) {
+        if (!measure || !measure->isVBox()) {
             insertMeasure(ElementType::VBOX, measure);
             measure = measure->prev();
         }

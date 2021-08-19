@@ -77,7 +77,7 @@ QVariant PartListModel::data(const QModelIndex& index, int role) const
     case RoleIsSelected:
         return m_selectionModel->isSelected(index);
     case RoleIsCreated:
-        return excerpt->isInited();
+        return excerpt->isCreated();
     }
 
     return QVariant();
@@ -111,7 +111,7 @@ bool PartListModel::isRemovingAvailable() const
     }
 
     for (int index : selectedRows()) {
-        if (!m_excerpts[index]->isInited()) {
+        if (!m_excerpts[index]->isCreated()) {
             return false;
         }
     }
