@@ -143,8 +143,8 @@ void NotationActionController::init()
     registerMoveAction("pitch-down");
     registerMoveAction("pitch-up-octave");
     registerMoveAction("pitch-down-octave");
-    registerMoveAction("up-chord");
-    registerMoveAction("down-chord");
+    registerAction("move-up", [this]() { moveChordRestToStaff(MoveDirection::Up); }, &NotationActionController::hasSelection);
+    registerAction("move-down", [this]() { moveChordRestToStaff(MoveDirection::Down); }, &NotationActionController::hasSelection);
 
     registerAction("double-duration", [this]() { increaseDecreaseDuration(-1, /*stepByDots*/ false); });
     registerAction("half-duration", [this]() { increaseDecreaseDuration(1, false); });
@@ -177,6 +177,10 @@ void NotationActionController::init()
     registerAction("select-section", &NotationActionController::selectSection);
     registerAction("first-element", &NotationActionController::firstElement);
     registerAction("last-element", &NotationActionController::lastElement);
+    registerAction("up-chord", [this]() { moveWithinChord(MoveDirection::Up); }, &NotationActionController::hasSelection);
+    registerAction("down-chord", [this]() { moveWithinChord(MoveDirection::Down); }, &NotationActionController::hasSelection);
+    registerAction("top-chord", [this]() { selectTopOrBottomOfChord(MoveDirection::Up); }, &NotationActionController::hasSelection);
+    registerAction("bottom-chord", [this]() { selectTopOrBottomOfChord(MoveDirection::Down); }, &NotationActionController::hasSelection);
 
     registerAction("system-break", [this]() { toggleLayoutBreak(LayoutBreakType::LINE); });
     registerAction("page-break", [this]() { toggleLayoutBreak(LayoutBreakType::PAGE); });
@@ -649,6 +653,15 @@ void NotationActionController::addBracketsToSelection(BracketsType type)
     interaction->addBracketsToSelection(type);
 }
 
+void NotationActionController::moveChordRestToStaff(MoveDirection direction)
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+    interaction->moveChordRestToStaff(direction);
+}
+
 void NotationActionController::moveAction(const actions::ActionCode& actionCode)
 {
     auto interaction = currentNotationInteraction();
@@ -714,7 +727,7 @@ void NotationActionController::moveAction(const actions::ActionCode& actionCode)
     }
 }
 
-void NotationActionController::moveChord(MoveDirection direction)
+void NotationActionController::moveWithinChord(MoveDirection direction)
 {
     auto interaction = currentNotationInteraction();
     if (!interaction) {
@@ -722,6 +735,18 @@ void NotationActionController::moveChord(MoveDirection direction)
     }
 
     interaction->moveChordNoteSelection(direction);
+
+    playSelectedElement(false);
+}
+
+void NotationActionController::selectTopOrBottomOfChord(MoveDirection direction)
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    interaction->selectTopOrBottomOfChord(direction);
 
     playSelectedElement(false);
 }

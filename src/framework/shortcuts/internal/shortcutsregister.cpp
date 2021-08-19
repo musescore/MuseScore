@@ -69,7 +69,7 @@ void ShortcutsRegister::load()
         if (!ok) {
             m_shortcuts = m_defaultShortcuts;
         } else {
-            mergeSortcuts(m_shortcuts, m_defaultShortcuts);
+            mergeShortcuts(m_shortcuts, m_defaultShortcuts);
         }
         ok = true;
     }
@@ -80,7 +80,7 @@ void ShortcutsRegister::load()
     }
 }
 
-void ShortcutsRegister::mergeSortcuts(ShortcutList& shortcuts, const ShortcutList& defaultShortcuts) const
+void ShortcutsRegister::mergeShortcuts(ShortcutList& shortcuts, const ShortcutList& defaultShortcuts) const
 {
     ShortcutList needadd;
     for (const Shortcut& sh : defaultShortcuts) {
@@ -163,7 +163,15 @@ bool ShortcutsRegister::readFromFile(ShortcutList& shortcuts, const io::path& pa
 
         Shortcut shortcut = readShortcut(reader);
         if (shortcut.isValid()) {
-            shortcuts.push_back(shortcut);
+            if (shortcut.sequence.empty()) {
+                shortcuts.push_back(shortcut);
+            } else {
+                auto seqList = QString::fromStdString(shortcut.sequence).split("\n", Qt::SkipEmptyParts);
+                for (QString seq : seqList) {
+                    shortcut.sequence = seq.toStdString();
+                    shortcuts.push_back(shortcut);
+                }
+            }
         }
     }
 
@@ -186,7 +194,7 @@ Shortcut ShortcutsRegister::readShortcut(framework::XmlReader& reader) const
         } else if (tag == STANDARD_KEY_TAG) {
             shortcut.standardKey = QKeySequence::StandardKey(reader.readInt());
         } else if (tag == SEQUENCE_TAG) {
-            shortcut.sequence = reader.readString();
+            shortcut.sequence += reader.readString() + "\n";
         } else {
             reader.skipCurrentElement();
         }
@@ -210,7 +218,7 @@ mu::Ret ShortcutsRegister::setShortcuts(const ShortcutList& shortcuts)
 
     if (ok) {
         m_shortcuts = shortcuts;
-        mergeSortcuts(m_shortcuts, m_defaultShortcuts);
+        mergeShortcuts(m_shortcuts, m_defaultShortcuts);
         m_shortcutsChanged.notify();
     }
 

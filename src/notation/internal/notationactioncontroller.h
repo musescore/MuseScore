@@ -88,8 +88,10 @@ private:
     void addBracketsToSelection(BracketsType type);
 
     void moveAction(const actions::ActionCode& actionCode);
-    void moveChord(MoveDirection direction);
+    void moveWithinChord(MoveDirection direction);
     void moveText(INotationInteractionPtr interaction, const actions::ActionCode& actionCode);
+    void moveChordRestToStaff(MoveDirection direction);
+    void selectTopOrBottomOfChord(MoveDirection direction);
 
     void increaseDecreaseDuration(int steps, bool stepByDots);
 
