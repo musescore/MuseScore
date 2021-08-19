@@ -3142,7 +3142,11 @@ void Score::cmdDeleteSelection()
     deselectAll();
     // make new selection if appropriate
     if (noteEntryMode()) {
-        cr = _is.cr();
+        if (cr) {
+            _is.setSegment(cr->segment());
+        } else {
+            cr = _is.cr();
+        }
     }
     if (cr) {
         if (cr->isChord()) {

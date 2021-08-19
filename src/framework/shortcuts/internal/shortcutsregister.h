@@ -65,7 +65,7 @@ private:
     bool writeToFile(const ShortcutList& shortcuts, const io::path& path) const;
     void writeShortcut(framework::XmlWriter& writer, const Shortcut& shortcut) const;
 
-    void mergeSortcuts(ShortcutList& shortcuts, const ShortcutList& defaultShortcuts) const;
+    void mergeShortcuts(ShortcutList& shortcuts, const ShortcutList& defaultShortcuts) const;
     void expandStandardKeys(ShortcutList& shortcuts) const;
 
     ShortcutList m_shortcuts;

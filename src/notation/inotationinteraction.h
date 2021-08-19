@@ -71,6 +71,7 @@ public:
     virtual INotationSelectionPtr selection() const = 0;
     virtual void clearSelection() = 0;
     virtual async::Notification selectionChanged() const = 0;
+    virtual void selectTopOrBottomOfChord(MoveDirection d) = 0;
 
     // SelectionFilter
     virtual bool isSelectionTypeFiltered(SelectionFilterType type) const = 0;
@@ -101,6 +102,7 @@ public:
     virtual void moveSelection(MoveDirection d, MoveSelectionType type) = 0;
     virtual void movePitch(MoveDirection d, PitchMode mode) = 0;  //! NOTE Requires a note to be selected
     virtual void moveText(MoveDirection d, bool quickly) = 0;     //! NOTE Requires a text element to be selected
+    virtual void moveChordRestToStaff(MoveDirection d) = 0;
 
     // Text edit
     virtual bool isTextEditingStarted() const = 0;
