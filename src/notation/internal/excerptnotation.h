@@ -39,8 +39,8 @@ public:
 
     ~ExcerptNotation() override;
 
-    bool isInited() const override;
-    void init();
+    bool isCreated() const override;
+    void setIsCreated(bool created);
 
     Ms::Excerpt* excerpt() const;
 
@@ -51,8 +51,11 @@ public:
     IExcerptNotationPtr clone() const override;
 
 private:
+    bool isEmpty() const;
+    void fillWithDefaultInfo();
+
     Ms::Excerpt* m_excerpt = nullptr;
-    bool m_isInited = false;
+    bool m_isCreated = false;
     QString m_title;
 };
 }

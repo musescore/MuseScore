@@ -34,7 +34,7 @@ class IExcerptNotation
 public:
     virtual ~IExcerptNotation() = default;
 
-    virtual bool isInited() const = 0;
+    virtual bool isCreated() const = 0;
 
     virtual QString title() const = 0;
     virtual void setTitle(const QString& title) = 0;
