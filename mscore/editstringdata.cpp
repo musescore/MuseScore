@@ -37,7 +37,7 @@ EditStringData::EditStringData(QWidget *parent, QList<instrString> * strings, in
       _strings = strings;
       QStringList hdrLabels;
       int         numOfStrings = _strings->size();
-      hdrLabels << tr("Open", "string data") << tr("Pitch", "string data");
+      hdrLabels << tr("Unfingered", "string data") << tr("Pitch", "string data");
       stringList->setHorizontalHeaderLabels(hdrLabels);
       stringList->setRowCount(numOfStrings);
       // if any string, insert into string list control and select the first one
