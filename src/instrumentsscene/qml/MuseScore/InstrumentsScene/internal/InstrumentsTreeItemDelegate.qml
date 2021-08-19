@@ -41,6 +41,8 @@ Item {
 
     property int sideMargin: 0
 
+    property var popupAnchorItem: null
+
     signal clicked(var mouse)
     signal doubleClicked(var mouse)
     signal focusActived()
@@ -229,6 +231,8 @@ Item {
         id: instrumentSettingsComp
         InstrumentSettingsPopup {
             navigationParentControl: settingsButton.navigation
+            anchorItem: popupAnchorItem
+
             onClosed: {
                 prv.resetOpenedPopup()
                 popupLoader.sourceComponent = null
@@ -240,6 +244,8 @@ Item {
         id: staffSettingsComp
         StaffSettingsPopup {
             navigationParentControl: settingsButton.navigation
+            anchorItem: popupAnchorItem
+
             onClosed: {
                 prv.resetOpenedPopup()
                 popupLoader.sourceComponent = null
