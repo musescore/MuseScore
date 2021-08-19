@@ -240,6 +240,8 @@ Item {
                                 type: treeItemDelegateLoader.delegateType
                                 sideMargin: contentColumn.sideMargin
 
+                                popupAnchorItem: root
+
                                 onClicked: {
                                     instrumentsTreeModel.selectRow(styleData.index)
                                 }
