@@ -714,7 +714,8 @@ QString ChordRest::durationUserName() const
                         tupletType = QObject::tr("Nonuplet");
                         break;
                   default:
-                        tupletType = QObject::tr("Custom tuplet");
+                        //: %1 is tuplet ratio numerator (i.e. the number of notes in the tuplet)
+                        tupletType = QObject::tr("%1 note tuplet").arg(tuplet()->ratio().numerator());
                   }
             }
       QString dotString = "";
