@@ -70,6 +70,16 @@ int AppShell::run(int argc, char** argv)
         appName  = "MuseScore4";
     }
 
+#ifdef Q_OS_WIN
+    // NOTE: There are some problems with rendering the application window on some integrated graphics processors
+    //       see https://github.com/musescore/MuseScore/issues/8270
+    QCoreApplication::setAttribute(Qt::AA_UseOpenGLES);
+
+    if (!qEnvironmentVariableIsSet("QT_OPENGL_BUGLIST")) {
+        qputenv("QT_OPENGL_BUGLIST", ":/resources/win_opengl_buglist.json");
+    }
+#endif
+
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QApplication app(argc, argv);
     QCoreApplication::setApplicationName(appName);
