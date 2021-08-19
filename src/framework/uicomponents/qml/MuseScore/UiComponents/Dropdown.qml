@@ -138,6 +138,12 @@ Item {
         }
     }
 
+    function ensureActiveFocus() {
+        if (mainItem.navigation) {
+            mainItem.navigation.requestActive()
+        }
+    }
+
     DropdownItem {
         id: mainItem
         anchors.fill: parent
