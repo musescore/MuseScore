@@ -6213,7 +6213,7 @@
             <Instrument id="bass-drum">
                   <family>drums</family>
                   <longName>Concert Bass Drum</longName>
-                  <shortName>Con. BD</shortName>
+                  <shortName>Con. B.D.</shortName>
                   <description>Bass Drum</description>
                   <musicXMLid>drum.bass-drum</musicXMLid>
                   <clef>PERC</clef>
