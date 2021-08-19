@@ -383,6 +383,14 @@ void NotationPaintView::onNotationSetup()
     configuration()->foregroundChanged().onNotify(this, [this]() {
         update();
     });
+
+    configuration()->scoreInversionChanged().onNotify(this, [this]() {
+        update();
+    });
+
+    uiConfiguration()->currentThemeChanged().onNotify(this, [this]() {
+        update();
+    });
 }
 
 void NotationPaintView::paintBackground(const RectF& rect, draw::Painter* painter)

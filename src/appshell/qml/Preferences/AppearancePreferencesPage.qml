@@ -96,6 +96,12 @@ PreferencesPage {
             //! NOTE: 3 because ThemesSection have two panels
             navigation.order: root.navigationOrderStart + 3
 
+            scoreInversionChecked: appearanceModel.invertScoreColor
+
+            onScoreInversionRequested: {
+                appearanceModel.invertScoreColor = newValue
+            }
+
             onColorChangeRequested: {
                 appearanceModel.setNewColor(newColor, propertyType)
             }
@@ -135,6 +141,8 @@ PreferencesPage {
         SeparatorLine {}
 
         ColorAndWallpaperSection {
+            id: backgroundSettings
+
             width: parent.width
 
             title: qsTrc("appshell", "Background")
@@ -170,7 +178,12 @@ PreferencesPage {
         SeparatorLine {}
 
         ColorAndWallpaperSection {
+            id: paperSettings
+
             width: parent.width
+
+            enabled: !appearanceModel.invertScoreColor
+            opacityOverride: paperSettings.enabled ? 1.0 : 0.6
 
             title: qsTrc("appshell", "Paper")
             wallpaperDialogTitle: qsTrc("appshell", "Choose Notepaper")

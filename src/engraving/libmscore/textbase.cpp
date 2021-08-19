@@ -1754,7 +1754,8 @@ void TextBase::drawSelection(mu::draw::Painter* p, const RectF& r) const
 
 mu::draw::Color TextBase::textColor() const
 {
-    return curColor();
+    //return curColor();
+    return engravingConfiguration()->defaultColor();
 }
 
 //---------------------------------------------------------

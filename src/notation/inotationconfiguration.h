@@ -60,6 +60,10 @@ public:
     virtual void setForegroundUseColor(bool value) = 0;
     virtual async::Notification foregroundChanged() const = 0;
 
+    virtual bool scoreInversionEnabled() const = 0;
+    virtual void setScoreInversionEnabled(bool value) = 0;
+    virtual async::Notification scoreInversionChanged() const = 0;
+
     virtual io::path wallpapersDefaultDirPath() const = 0;
 
     virtual QColor borderColor() const = 0;
