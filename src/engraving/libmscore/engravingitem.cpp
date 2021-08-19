@@ -127,7 +127,7 @@
 #endif
 
 #include "log.h"
-#define LOG_PROP() if (0) LOGD()
+#define LOG_PROP() if (0) LOGD ()
 
 using namespace mu;
 using namespace mu::engraving;
@@ -140,7 +140,7 @@ EngravingItem::EngravingItem(const ElementType& type, EngravingObject* se, Eleme
 {
     _flags         = f;
     _track         = -1;
-    _color         = engravingConfiguration()->defaultColor();
+    _color         = mu::draw::Color();
     _mag           = 1.0;
     _tag           = 1;
     _z             = -1;
@@ -482,7 +482,7 @@ Fraction EngravingItem::beat() const
     tsm->tickValues(tick().ticks(), &bar, &beat, &ticks);
     int ticksB = ticks_beat(tsm->timesig(tick().ticks()).timesig().denominator());
 
-    Fraction complexFraction((++beat * ticksB) + ticks, ticksB);
+    Fraction complexFraction((++beat* ticksB) + ticks, ticksB);
     return complexFraction.reduced();
 }
 
@@ -494,6 +494,11 @@ Part* EngravingItem::part() const
 {
     Staff* s = staff();
     return s ? s->part() : 0;
+}
+
+draw::Color Element::color() const
+{
+    return _color.isValid() ? _color : engravingConfiguration()->defaultColor();
 }
 
 //---------------------------------------------------------
@@ -512,10 +517,13 @@ mu::draw::Color EngravingItem::curColor() const
 mu::draw::Color EngravingItem::curColor(bool isVisible) const
 {
     return curColor(isVisible, color());
+    //return curColor(isVisible, engravingConfiguration()->defaultColor());
 }
 
 mu::draw::Color EngravingItem::curColor(bool isVisible, mu::draw::Color normalColor) const
 {
+    //return engravingConfiguration()->defaultColor(); //testing
+
     // the default element color is always interpreted as black in printing
     if (score() && score()->printing()) {
         return (normalColor == engravingConfiguration()->defaultColor()) ? mu::draw::Color::black : normalColor;
@@ -546,6 +554,7 @@ mu::draw::Color EngravingItem::curColor(bool isVisible, mu::draw::Color normalCo
         return engravingConfiguration()->invisibleColor();
     }
     return normalColor;
+    //return engravingConfiguration()->defaultColor();
 }
 
 //---------------------------------------------------------

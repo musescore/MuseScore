@@ -88,7 +88,11 @@ void EngravingConfiguration::setPartStyleFilePath(const QString& path)
 
 Color EngravingConfiguration::defaultColor() const
 {
-    return Color::black;
+    if (uiConfiguration()->isCurrentThemeHighContrast() && notationConfiguration()->scoreInversionEnabled()) {
+        return Color(255, 255, 255, 200);
+    } else {
+        return Color::black;
+    }
 }
 
 Color EngravingConfiguration::invisibleColor() const

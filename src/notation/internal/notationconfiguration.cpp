@@ -50,6 +50,8 @@ static const Settings::Key HC_WHITE_SCORE_BACKGROUND_COLOR(module_name, "ui/canv
 static const Settings::Key BACKGROUND_WALLPAPER_PATH(module_name, "ui/canvas/background/wallpaper");
 static const Settings::Key BACKGROUND_USE_COLOR(module_name, "ui/canvas/background/useColor");
 
+static const Settings::Key INVERT_SCORE_COLOR(module_name, "ui/canvas/invertScoreColor");
+
 static const Settings::Key FOREGROUND_COLOR(module_name, "ui/canvas/foreground/color");
 static const Settings::Key FOREGROUND_WALLPAPER_PATH(module_name, "ui/canvas/foreground/wallpaper");
 static const Settings::Key FOREGROUND_USE_COLOR(module_name, "ui/canvas/foreground/useColor");
@@ -86,6 +88,11 @@ static const Settings::Key SECOND_SCORE_ORDER_LIST_KEY(module_name, "application
 
 void NotationConfiguration::init()
 {
+    settings()->setDefaultValue(INVERT_SCORE_COLOR, Val(false));
+    settings()->valueChanged(INVERT_SCORE_COLOR).onReceive(nullptr, [this](const Val&) {
+        m_scoreInversionChanged.notify();
+    });
+
     settings()->setDefaultValue(BACKGROUND_USE_COLOR, Val(true));
     settings()->valueChanged(BACKGROUND_USE_COLOR).onReceive(nullptr, [this](const Val&) {
         m_backgroundChanged.notify();
@@ -299,6 +306,21 @@ async::Notification NotationConfiguration::foregroundChanged() const
     return m_foregroundChanged;
 }
 
+bool NotationConfiguration::scoreInversionEnabled() const
+{
+    return settings()->value(INVERT_SCORE_COLOR).toBool();
+}
+
+void NotationConfiguration::setScoreInversionEnabled(bool value)
+{
+    settings()->setSharedValue(INVERT_SCORE_COLOR, Val(value));
+}
+
+async::Notification NotationConfiguration::scoreInversionChanged() const
+{
+    return m_scoreInversionChanged;
+}
+
 io::path NotationConfiguration::wallpapersDefaultDirPath() const
 {
     return globalConfiguration()->appDataPath() + "/wallpapers";
@@ -306,12 +328,20 @@ io::path NotationConfiguration::wallpapersDefaultDirPath() const
 
 QColor NotationConfiguration::borderColor() const
 {
-    return QColor(0, 0, 0, 102);
+    if (uiConfiguration()->isCurrentThemeHighContrast()) {
+        return QColor(255, 255, 255);
+    } else {
+        return QColor(0, 0, 0, 102);
+    }
 }
 
 int NotationConfiguration::borderWidth() const
 {
-    return 1;
+    if (uiConfiguration()->isCurrentThemeHighContrast()) {
+        return 10;
+    } else {
+        return 1;
+    }
 }
 
 QColor NotationConfiguration::playbackCursorColor() const

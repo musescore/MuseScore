@@ -23,11 +23,17 @@
 #define MU_ENGRAVING_ENGRAVINGCONFIGURATION_H
 
 #include "../iengravingconfiguration.h"
+#include "ui/iuiconfiguration.h"
+#include "notation/inotationconfiguration.h"
+#include "modularity/ioc.h"
 #include "async/asyncable.h"
 
 namespace mu::engraving {
 class EngravingConfiguration : public IEngravingConfiguration, public async::Asyncable
 {
+    INJECT(engraving, ui::IUiConfiguration, uiConfiguration)
+    INJECT(engraving, notation::INotationConfiguration, notationConfiguration)
+
 public:
     EngravingConfiguration() = default;
 

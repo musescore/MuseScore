@@ -437,7 +437,7 @@ public:
     //@ Returns the name of the element type
     virtual Q_INVOKABLE QString _name() const { return QString(name()); }
 
-    virtual mu::draw::Color color() const { return _color; }
+    virtual mu::draw::Color color() const;
     mu::draw::Color curColor() const;
     mu::draw::Color curColor(bool isVisible) const;
     mu::draw::Color curColor(bool isVisible, mu::draw::Color normalColor) const;

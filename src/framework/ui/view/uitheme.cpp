@@ -524,7 +524,7 @@ void UiTheme::drawPrimitive(QStyle::PrimitiveElement element, const QStyleOption
 
     // GroupBox
     case QStyle::PE_FrameGroupBox: {
-        drawRoundedRect(painter, option->rect, 3, QBrush("#03000000"), QPen(strokeColor(), borderWidth()));
+        drawRoundedRect(painter, option->rect, 3, QBrush("#03000000"), QPen(strokeColor(), 1));
     } break;
 
     // Menu

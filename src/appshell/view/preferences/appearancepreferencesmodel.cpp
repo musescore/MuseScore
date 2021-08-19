@@ -49,6 +49,10 @@ void AppearancePreferencesModel::init()
         emit bodyTextSizeChanged();
     });
 
+    notationConfiguration()->scoreInversionChanged().onNotify(this, [this]() {
+        emit invertScoreColorChanged();
+    });
+
     notationConfiguration()->backgroundChanged().onNotify(this, [this]() {
         emit backgroundColorChanged();
         emit backgroundUseColorChanged();
@@ -226,6 +230,11 @@ QString AppearancePreferencesModel::foregroundWallpaperPath() const
     return notationConfiguration()->foregroundWallpaperPath().toQString();
 }
 
+bool AppearancePreferencesModel::invertScoreColor() const
+{
+    return notationConfiguration()->scoreInversionEnabled();
+}
+
 void AppearancePreferencesModel::setCurrentThemeCode(const QString& themeCode)
 {
     if (themeCode == currentThemeCode()) {
@@ -336,4 +345,15 @@ void AppearancePreferencesModel::setForegroundWallpaperPath(const QString& path)
 
     notationConfiguration()->setForegroundWallpaperPath(path);
     emit foregroundWallpaperPathChanged();
+}
+
+void AppearancePreferencesModel::setInvertScoreColor(bool value)
+{
+    if (value == invertScoreColor()) {
+        return;
+    }
+
+    notationConfiguration()->setScoreInversionEnabled(value);
+    emit invertScoreColorChanged();
+    //notationPaintView()->load();
 }

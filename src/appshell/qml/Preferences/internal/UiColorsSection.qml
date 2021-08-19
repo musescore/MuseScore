@@ -32,7 +32,21 @@ BaseSection {
     title: qsTrc("appshell", "UI colors")
     navigation.direction: NavigationPanel.Both
 
+    property alias scoreInversionChecked: scoreInversionEnable.checked
+
+    signal scoreInversionRequested(var newValue)
     signal colorChangeRequested(var newColor, var propertyType)
+
+    CheckBox {
+        id: scoreInversionEnable
+
+        text: qsTrc("appshell", "Invert score colors")
+
+        onClicked: {
+            checked = !checked
+            scoreInversionRequested(checked)
+        }
+    }
 
     GridLayout {
         id: grid
