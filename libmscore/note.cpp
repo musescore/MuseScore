@@ -3092,7 +3092,9 @@ QString Note::screenReaderInfo() const
       else if (staff()->isTabStaff(tick()))
             pitchName = QObject::tr("%1; String: %2; Fret: %3").arg(tpcUserName(true), QString::number(string() + 1), QString::number(fret()));
       else
-            pitchName = tpcUserName(true);
+            pitchName = _headGroup == NoteHead::Group::HEAD_NORMAL
+                        ? tpcUserName(true)
+                        : QObject::tr("%1 head %2").arg(subtypeName()).arg(tpcUserName(true));
       return QString("%1 %2 %3%4").arg(noteTypeUserName(), pitchName, duration, (chord()->isGrace() ? "" : QString("; %1").arg(voice)));
       }
 
