@@ -127,7 +127,7 @@ bool SlurSegment::edit(EditData& ed)
         return true;
     }
     if (ed.key == Qt::Key_Home && !ed.modifiers) {
-        ups(ed.curGrip).off = PointF();              //TODO
+        ups(ed.curGrip).off = PointF();
         sl->layout();
         return true;
     }

@@ -3231,8 +3231,6 @@ void Score::cmdFullMeasureRest()
 
     // selected range is probably empty now and possibly subsumed by an mmrest
     // so updating selection requires forcing mmrests to be updated first
-//TODO-ws      if (styleB(Sid::createMultiMeasureRests))
-//            createMMRests();
     s1 = tick2segmentMM(stick1);
     s2 = tick2segmentMM(stick2, true);
     if (selection().isRange() && s1 && s2) {
@@ -4366,9 +4364,6 @@ void Score::cloneVoice(int strack, int dtrack, Segment* sf, const Fraction& lTic
             }
         }
     }
-
-    //Layout
-//TODO ??      doLayoutRange(start, lTick);
 }
 
 //---------------------------------------------------------

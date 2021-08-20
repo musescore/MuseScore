@@ -768,7 +768,7 @@ AccidentalType microtonalGuess(double val)
     } else if (isAppr(val, 2, eps)) {
         return AccidentalType::SHARP2;
     } else {
-        qDebug("Guess for microtonal accidental corresponding to value %f failed.", val);            // TODO
+        qDebug("Guess for microtonal accidental corresponding to value %f failed.", val);
     }
     // default
     return AccidentalType::NONE;

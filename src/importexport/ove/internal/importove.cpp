@@ -1340,7 +1340,6 @@ void OveToMScore::convertMeasureMisc(Measure* measure, int part, int staff, int 
         if (textPtr->getTextType() == ovebase::Text::Type::Rehearsal) {
             RehearsalMark* text = new RehearsalMark(m_score);
             text->setPlainText(textPtr->getText());
-// TODO:ws  text->setAbove(true);
             text->setTrack(track);
 
             Segment* s = measure->getSegment(SegmentType::ChordRest,
@@ -1415,7 +1414,6 @@ void OveToMScore::convertMeasureMisc(Measure* measure, int part, int staff, int 
             t->setVisible(false);
         }
         t->setXmlText(textTempo);
-// TODO:ws  t->setAbove(true);
         t->setTrack(track);
 
         Segment* s = measure->getSegment(SegmentType::ChordRest, Fraction::fromTicks(absTick));
@@ -1949,7 +1947,6 @@ void OveToMScore::convertArticulation(
         break;
     }
     case ovebase::ArticulationType::Grand_Pause: {
-        // TODO?
         break;
     }
     case ovebase::ArticulationType::Up_Bow: {

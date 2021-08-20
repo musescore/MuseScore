@@ -2063,7 +2063,6 @@ static void readVolta206(XmlReader& e, Volta* volta)
             }
         } else if (tag == "lineWidth") {
             volta->setLineWidth(e.readDouble() * volta->spatium());
-            // TODO lineWidthStyle = PropertyStyle::UNSTYLED;
         } else if (!readTextLineProperties(e, volta)) {
             e.unknown();
         }
@@ -2111,7 +2110,6 @@ static void readOttava(XmlReader& e, Ottava* ottava)
             ottava->setOttavaType(OttavaType(idx));
         } else if (tag == "numbersOnly") {
             ottava->setNumbersOnly(e.readBool());
-            //TODO numbersOnlyStyle = PropertyFlags::UNSTYLED;
         } else if (!readTextLineProperties(e, ottava)) {
             e.unknown();
         }
@@ -2485,8 +2483,6 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                 } else if (t == "customSubtype") {                          // obsolete
                     e.readInt();
                 } else if (t == "span") {
-                    //TODO bl->setSpanFrom(e.intAttribute("from", bl->spanFrom()));  // obsolete
-                    // bl->setSpanTo(e.intAttribute("to", bl->spanTo()));            // obsolete
                     int span = e.readInt();
                     if (span) {
                         span--;

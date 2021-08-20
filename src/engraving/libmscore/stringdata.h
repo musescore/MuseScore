@@ -69,7 +69,7 @@ public:
     int         fret(int pitch, int string, Staff* staff, const Fraction& tick) const;
     void        fretChords(Chord* chord) const;
     int         getPitch(int string, int fret, Staff* staff, const Fraction& tick) const;
-    static int  pitchOffsetAt(Staff* staff, const Fraction& tick);
+    static int  pitchOffsetAt(Staff* staff);
     int         strings() const { return stringTable.size(); }
     int         frettedStrings() const;
     const QList<instrString>& stringList() const { return stringTable; }

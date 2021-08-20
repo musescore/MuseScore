@@ -946,7 +946,6 @@ Element* BarLine::drop(EditData& data)
             if (bl->spanFrom() || bl->spanTo()) {
                 // if dropped spanFrom or spanTo are below the middle of standard staff (5 lines)
                 // adjust to the number of staff lines
-                // TODO:barlines
                 int spanFrom   = bl->spanFrom();
                 int spanTo     = bl->spanTo();
                 undoChangeProperty(Pid::BARLINE_SPAN, false);

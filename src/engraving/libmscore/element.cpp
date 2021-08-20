@@ -2488,8 +2488,6 @@ qreal Element::rebaseOffset(bool nox)
             Placement place = above ? Placement::BELOW : Placement::ABOVE;
             e->undoChangeProperty(Pid::PLACEMENT, int(place), pf);
             undoResetProperty(Pid::MIN_DISTANCE);
-            // TODO
-            //MuseScoreCore::mscoreCore->updateInspector();
             return 0.0;
         }
     }
@@ -2554,8 +2552,6 @@ bool Element::rebaseMinDistance(qreal& md, qreal& yd, qreal sp, qreal rebase, bo
             yd = 0.0;
         }
     }
-    // TODO
-    //MuseScoreCore::mscoreCore->updateInspector();
     return rc;
 }
 
