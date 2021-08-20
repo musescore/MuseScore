@@ -50,6 +50,7 @@ public:
     virtual void setBackgroundUseColor(bool value) = 0;
     virtual async::Notification backgroundChanged() const = 0;
 
+    virtual void loadAppropriateForegroundColor() = 0;
     virtual QColor foregroundColor() const = 0;
     virtual void setForegroundColor(const QColor& color) = 0;
 
