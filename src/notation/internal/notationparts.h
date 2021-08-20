@@ -70,6 +70,7 @@ public:
     void appendLinkedStaff(Staff* staff, const ID& sourceStaffId, const ID& destinationPartId) override;
     void appendPart(Part* part) override;
 
+    void replacePart(const ID& partId, Part* newPart) override;
     void replaceInstrument(const InstrumentKey& instrumentKey, const Instrument& newInstrument) override;
     void replaceDrumset(const InstrumentKey& instrumentKey, const Drumset& newDrumset) override;
 
@@ -97,6 +98,7 @@ private:
 
     void appendStaves(Part* part, const InstrumentTemplate& templ);
     void insertStaff(Staff* staff, int destinationStaffIndex);
+    void insertPart(Part* part, int destinationPartIndex);
     void initStaff(Staff* staff, const InstrumentTemplate& templ, const Ms::StaffType* staffType, int cleffIndex);
     void linkStaves(const ID& sourceStaffId, const ID& destinationStaffId);
 
@@ -116,6 +118,7 @@ private:
     void notifyAboutPartChanged(const Part* part) const;
     void notifyAboutPartAdded(const Part* part) const;
     void notifyAboutPartRemoved(const Part* part) const;
+    void notifyAboutPartReplaced(const Part* oldPart, const Part* newPart) const;
     void notifyAboutStaffChanged(const Staff* staff) const;
     void notifyAboutStaffAdded(const Staff* staff, const ID& partId) const;
     void notifyAboutStaffRemoved(const Staff* staff) const;

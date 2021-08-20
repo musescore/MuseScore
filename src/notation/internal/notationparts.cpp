@@ -555,40 +555,33 @@ void NotationParts::appendPart(Part* part)
         return;
     }
 
-    QList<Staff*> stavesCopy = *part->staves();
-    part->clearStaves();
-
     startEdit();
 
-    score()->appendPart(part);
-
-    if (score()->excerpt()) {
-        score()->excerpt()->parts().append(part);
-    }
-
-    for (int staffIndex = 0; staffIndex < stavesCopy.size(); ++staffIndex) {
-        Staff* staff = stavesCopy[staffIndex];
-
-        Staff* staffCopy = new Staff(score());
-        staffCopy->setId(staff->id());
-        staffCopy->setPart(part);
-        staffCopy->init(staff);
-
-        insertStaff(staffCopy, staffIndex);
-        score()->undo(new Ms::Link(staffCopy, staff));
-
-        Ms::Fraction startTick = staff->score()->firstMeasure()->tick();
-        Ms::Fraction endTick = staff->score()->lastMeasure()->tick();
-        Ms::Excerpt::cloneStaff2(staff, staffCopy, startTick, endTick);
-    }
-
-    part->setScore(score());
-
-    updateTracks();
+    insertPart(part, score()->parts().size());
 
     apply();
 
     notifyAboutPartAdded(part);
+}
+
+void NotationParts::replacePart(const ID& partId, Part* newPart)
+{
+    TRACEFUNC;
+
+    Part* part = partModifiable(partId);
+    IF_ASSERT_FAILED(part && newPart) {
+        return;
+    }
+
+    startEdit();
+
+    int partIndex = score()->parts().indexOf(part);
+    score()->cmdRemovePart(part);
+    insertPart(newPart, partIndex);
+
+    apply();
+
+    notifyAboutPartReplaced(part, newPart);
 }
 
 void NotationParts::replaceInstrument(const InstrumentKey& instrumentKey, const Instrument& newInstrument)
@@ -866,6 +859,39 @@ void NotationParts::insertStaff(Staff* staff, int destinationStaffIndex)
     score()->undoInsertStaff(staff, destinationStaffIndex);
 }
 
+void NotationParts::insertPart(Part* part, int destinationPartIndex)
+{
+    TRACEFUNC;
+
+    QList<Staff*> stavesCopy = *part->staves();
+    part->clearStaves();
+
+    score()->insertPart(part, destinationPartIndex);
+
+    if (score()->excerpt()) {
+        score()->excerpt()->parts().insert(destinationPartIndex, part);
+    }
+
+    for (int staffIndex = 0; staffIndex < stavesCopy.size(); ++staffIndex) {
+        Staff* staff = stavesCopy[staffIndex];
+
+        Staff* staffCopy = new Staff(score());
+        staffCopy->setId(staff->id());
+        staffCopy->setPart(part);
+        staffCopy->init(staff);
+
+        insertStaff(staffCopy, staffIndex);
+        score()->undo(new Ms::Link(staffCopy, staff));
+
+        Ms::Fraction startTick = staff->score()->firstMeasure()->tick();
+        Ms::Fraction endTick = staff->score()->lastMeasure()->tick();
+        Ms::Excerpt::cloneStaff2(staff, staffCopy, startTick, endTick);
+    }
+
+    part->setScore(score());
+    updateTracks();
+}
+
 void NotationParts::initStaff(Staff* staff, const InstrumentTemplate& templ, const Ms::StaffType* staffType, int cleffIndex)
 {
     TRACEFUNC;
@@ -1084,6 +1110,15 @@ void NotationParts::notifyAboutPartRemoved(const Part* part) const
     }
 
     m_partChangedNotifier.itemRemoved(part);
+}
+
+void NotationParts::notifyAboutPartReplaced(const Part* oldPart, const Part* newPart) const
+{
+    IF_ASSERT_FAILED(oldPart && newPart) {
+        return;
+    }
+
+    m_partChangedNotifier.itemReplaced(oldPart, newPart);
 }
 
 void NotationParts::notifyAboutStaffChanged(const Staff* staff) const
