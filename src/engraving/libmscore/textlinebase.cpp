@@ -110,14 +110,6 @@ void TextLineBaseSegment::draw(mu::draw::Painter* painter) const
     }
 
     // color for line (text color comes from the text properties)
-#if 0
-    Color color;
-    if ((selected() && !(score() && score()->printing())) || !tl->visible() || !tl->lineVisible()) {
-        color = curColor(tl->visible() && tl->lineVisible());
-    } else {
-        color = tl->lineColor();
-    }
-#endif
     Color color = curColor(tl->visible() && tl->lineVisible(), tl->lineColor());
 
     qreal textlineLineWidth = tl->lineWidth();

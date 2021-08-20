@@ -218,25 +218,6 @@ void Page::drawHeaderFooter(mu::draw::Painter* p, int area, const QString& ss) c
     text->setParent(0);
 }
 
-#if 0
-//---------------------------------------------------------
-//   styleChanged
-//---------------------------------------------------------
-
-void Page::styleChanged()
-{
-    Text* t = score()->headerText();
-    if (t) {
-        t->styleChanged();
-    }
-    t = score()->footerText();
-    if (t) {
-        t->styleChanged();
-    }
-}
-
-#endif
-
 //---------------------------------------------------------
 //   scanElements
 //---------------------------------------------------------

@@ -488,14 +488,6 @@ void HairpinSegment::draw(mu::draw::Painter* painter) const
     using namespace mu::draw;
     TextLineBaseSegment::draw(painter);
 
-#if 0
-    Color color;
-    if ((selected() && !(score() && score()->printing())) || !hairpin()->visible()) {
-        color = curColor();
-    } else {
-        color = hairpin()->lineColor();
-    }
-#endif
     Color color = curColor(hairpin()->visible(), hairpin()->lineColor());
     qreal w = hairpin()->lineWidth();
     if (staff()) {
@@ -638,28 +630,6 @@ void Hairpin::setHairpinType(HairpinType val)
         return;
     }
     _hairpinType = val;
-#if 0
-    switch (_hairpinType) {
-    case HairpinType::CRESC_HAIRPIN:
-    case HairpinType::DECRESC_HAIRPIN:
-        setBeginText("");
-        setContinueText("");
-        setLineStyle(PenStyle::SolidLine);
-        break;
-    case HairpinType::CRESC_LINE:
-        setBeginText("cresc.");
-        setContinueText("(cresc.)");
-        setLineStyle(PenStyle::CustomDashLine);
-        break;
-    case HairpinType::DECRESC_LINE:
-        setBeginText("dim.");
-        setContinueText("(dim.)");
-        setLineStyle(PenStyle::CustomDashLine);
-        break;
-    case HairpinType::INVALID:
-        break;
-    }
-#endif
     styleChanged();
 }
 

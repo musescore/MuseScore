@@ -2356,23 +2356,6 @@ void ChangeClefType::flip(EditData*)
 }
 
 //---------------------------------------------------------
-//   flip
-//---------------------------------------------------------
-#if 0 // MoveStaff is commented out in mscore/instrwidget.cpp, not used anywhere else
-void MoveStaff::flip(EditData*)
-{
-    Part* oldPart = staff->part();
-    int idx = staff->rstaff();
-    oldPart->removeStaff(staff);
-    part->insertStaff(staff, rstaff);
-    part = oldPart;
-    rstaff = idx;
-    staff->score()->setLayoutAll();
-}
-
-#endif
-
-//---------------------------------------------------------
 //   ChangeProperty::flip
 //---------------------------------------------------------
 

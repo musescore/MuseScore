@@ -45,7 +45,6 @@ public:
     const StaffType& staffType(const Fraction& f) const;
     StaffType* setStaffType(const Fraction&, const StaffType&);
     bool removeStaffType(const Fraction&);
-    void read(XmlReader&, Score*);
 
     bool uniqueStaffType() const { return staffTypeChanges.empty(); }
     std::pair<int, int> staffTypeRange(const Fraction&) const;

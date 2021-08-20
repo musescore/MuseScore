@@ -326,23 +326,6 @@ void Tremolo::layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal spatium)
 
     y += (h - bbox().height()) * .5;
 
-#if 0 // Needs to be done earlier, see connectTremolo in layout.cpp
-    Segment* s = _chord1->segment()->next();
-    while (s) {
-        if (s->element(track()) && (s->element(track())->isChord())) {
-            break;
-        }
-        s = s->next();
-    }
-    if (s == 0) {
-        qDebug("no second note of tremolo found");
-        return;
-    }
-
-    _chord2 = toChord(s->element(track()));
-    _chord2->setTremolo(this);
-#endif
-
     Stem* stem1 = _chord1->stem();
     Stem* stem2 = _chord2->stem();
 

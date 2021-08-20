@@ -49,12 +49,6 @@ static bool elementLower(const Element* e1, const Element* e2)
 Element* MuseScoreView::elementAt(const mu::PointF& p)
 {
     QList<Element*> el = elementsAt(p);
-#if 0
-    qDebug("elementAt");
-    for (const Element* e : el) {
-        qDebug("  %s %d", e->name(), e->selected());
-    }
-#endif
     Element* e = el.value(0);
     if (e && e->isPage()) {
         e = el.value(1);

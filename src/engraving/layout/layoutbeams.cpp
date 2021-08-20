@@ -331,13 +331,7 @@ void LayoutBeams::createBeams(Score* score, LayoutContext& lc, Measure* measure)
                     }
                 }
             }
-#if 0
-            for (Lyrics* l : cr->lyrics()) {
-                if (l) {
-                    l->layout();
-                }
-            }
-#endif
+
             // handle grace notes and cross-measure beaming
             // (tied chords?)
             if (cr->isChord()) {

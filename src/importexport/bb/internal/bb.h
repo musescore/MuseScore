@@ -138,9 +138,6 @@ class BBFile
     int _startChorus;
     int _endChorus;
     int _repeats;
-#if 0 // yet(?) unused
-    int _flags;
-#endif
     char* _styleName;
     QList<BBTrack*> _tracks;
     int _measures;

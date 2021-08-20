@@ -2681,28 +2681,6 @@ void Score::deleteItem(Element* el)
 
 void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preserveTies)
 {
-// qDebug("deleteMeasures %p %p", is, ie);
-
-#if 0
-    if (!selection().isRange()) {
-        return;
-    }
-
-    MeasureBase* mbStart = selection().startSegment()->measure();
-    if (mbStart->isMeasure() && toMeasure(mbStart)->isMMRest()) {
-        mbStart = toMeasure(mbStart)->mmRestFirst();
-    }
-    Segment* seg    = selection().endSegment();
-    MeasureBase* mbEnd;
-
-    // choose the correct last measure based on the end segment
-    // this depends on whether a whole measure is selected or only a few notes within it
-    if (seg) {
-        mbEnd = seg->prev() ? seg->measure() : seg->measure()->prev();
-    } else {
-        mbEnd = lastMeasure();
-    }
-#endif
 
     select(0, SelectType::SINGLE, 0);
 
@@ -2713,7 +2691,6 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
         if (mbEndMeasure->isMMRest()) {
             mbEnd = mbEndMeasure->mmRestLast();
         }
-//TODO            createEndBar = (iem == lastMeasureMM()) && (iem->endBarLineType() == BarLineType::END);
         createEndBar = false;
     }
 
@@ -2768,12 +2745,6 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
         Measure* focusOn = startMeasure->prevMeasure() ? startMeasure->prevMeasure() : score->firstMeasure();
         for (MuseScoreView* v : score->viewer) {
             v->adjustCanvasPosition(focusOn, false);
-        }
-
-        if (createEndBar) {
-//                  Measure* lastMeasure = score->lastMeasure();
-//TODO                  if (lastMeasure && lastMeasure->endBarLineType() == BarLineType::NORMAL)
-//                        score->undoChangeEndBarLineType(lastMeasure, BarLineType::END);
         }
 
         // insert correct timesig after deletion
@@ -5474,21 +5445,6 @@ void Score::undoAddElement(Element* element)
                 int diff      = staffIdx2 - staffIdx1;
                 nsp->setTrack2((staffIdx + diff) * VOICES + (tr2 % VOICES));
                 nsp->setTrack(ntrack);
-
-#if 0 //whatdoesitdo?
-                QList<int> tl2;
-                if (staff->score()->excerpt() && element->isSlur()) {
-                    nsp->setTrack(ntrack);
-                    tl2 = staff->score()->excerpt()->tracks().values(sp->track2());
-                    if (tl2.isEmpty()) {
-                        it++;
-                        continue;
-                    }
-                    nsp->setTrack2(tl2.at(it));
-                } else if (!element->isSlur()) {
-                    nsp->setTrack(trackZeroVoice(ntrack));
-                }
-#endif
 
                 // determine start/end element for slurs
                 // this is only necessary if start/end element is

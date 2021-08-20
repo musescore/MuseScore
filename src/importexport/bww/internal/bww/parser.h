@@ -85,7 +85,7 @@ public:
     Parser(Lexer& l, Writer& w);
     void parse();
 private:
-    void errorHandler(QString s);
+    void errorHandler(const QString& err);
     void parseBar(Bww::MeasureEndFlags& mef);
     void parseNote();
     void parseGraces();

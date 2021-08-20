@@ -82,15 +82,6 @@ void TBox::layout()
         h = _text->height();
     }
     qreal y = topMargin() * DPMM;
-#if 0
-    if (_text->align() & Align::BOTTOM) {
-        y += h;
-    } else if (_text->align() & Align::VCENTER) {
-        y +=  h * .5;
-    } else {
-        // y = 0;
-    }
-#endif
     _text->setPos(leftMargin() * DPMM, y);
     h += topMargin() * DPMM + bottomMargin() * DPMM;
     bbox().setRect(0.0, 0.0, system()->width(), h);
