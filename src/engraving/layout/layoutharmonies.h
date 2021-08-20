@@ -19,35 +19,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_LAYOUT_H
-#define MU_ENGRAVING_LAYOUT_H
+#ifndef LAYOUTHARMONIES_H
+#define LAYOUTHARMONIES_H
+
+#include <vector>
 
 namespace Ms {
-class Score;
-class Fraction;
 class System;
-class Tremolo;
+class Segment;
 }
 
 namespace mu::engraving {
-class LayoutContext;
-class Layout
+class LayoutHarmonies
 {
 public:
-    Layout(Ms::Score* score);
 
-    void doLayoutRange(const Ms::Fraction&, const Ms::Fraction&);
-
-    static std::pair<qreal, qreal> extendedStemLenWithTwoNoteTremolo(Ms::Tremolo* tremolo, qreal stemLen1, qreal stemLen2);
-
-private:
-
-    void layoutLinear(bool layoutAll, LayoutContext& lc);
-    void resetSystems(bool layoutAll, LayoutContext& lc);
-    void collectLinearSystem(LayoutContext& lc);
-
-    Ms::Score* m_score = nullptr;
+    static void layoutHarmonies(const std::vector<Ms::Segment*>& sl);
+    static void alignHarmonies(const Ms::System* system, const std::vector<Ms::Segment*>& sl, bool harmony, const double maxShiftAbove,
+                               const double maxShiftBelow);
 };
 }
 
-#endif // MU_ENGRAVING_LAYOUT_H
+#endif // LAYOUTHARMONIES_H

@@ -48,10 +48,6 @@ public:
     int adjustMeasureNo(Ms::MeasureBase*);
     void getNextPage();
     void collectPage();
-    Ms::System* collectSystem();
-    void layoutSystemElements(Ms::System* system);
-    Ms::System* getNextSystem();
-    void hideEmptyStaves(Ms::System* system, bool isFirstSystem);
 
     Ms::Score* score             { 0 };
     bool startWithLongNames  { true };
