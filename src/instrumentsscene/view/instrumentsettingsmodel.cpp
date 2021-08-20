@@ -82,9 +82,10 @@ void InstrumentSettingsModel::resetAllFormatting()
     std::string body = mu::trc("instruments", "This action can not be undone");
 
     IInteractive::Button button = interactive()->question(title, body, {
-                                                              IInteractive::Button::No,
-                                                              IInteractive::Button::Yes
-                                                          }).standartButton();
+        IInteractive::Button::No,
+        IInteractive::Button::Yes
+    }).standartButton();
+
     if (button == IInteractive::Button::No) {
         return;
     }
