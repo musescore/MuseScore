@@ -24,6 +24,8 @@
 
 namespace Ms {
 class Score;
+class Measure;
+class Fraction;
 }
 
 namespace mu::engraving {
@@ -34,6 +36,10 @@ public:
     LayoutMeasure() = default;
 
     static void getNextMeasure(Ms::Score* score, LayoutContext& lc);
+
+private:
+
+    static void createMMRest(Ms::Score* score, Ms::Measure* firstMeasure, Ms::Measure* lastMeasure, const Ms::Fraction& len);
 };
 }
 

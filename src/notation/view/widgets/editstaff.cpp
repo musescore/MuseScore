@@ -33,12 +33,14 @@
 #include "libmscore/utils.h"
 #include "libmscore/undo.h"
 #include "libmscore/iname.h"
+#include "libmscore/system.h"
 
-#include "log.h"
 #include "translation.h"
 
 #include "ui/view/iconcodes.h"
 #include "widgetstatestore.h"
+
+#include "log.h"
 
 using namespace mu::notation;
 using namespace mu::ui;

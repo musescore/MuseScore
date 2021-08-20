@@ -2505,6 +2505,7 @@ Pid TextBase::propertyId(const QStringRef& name) const
     if (name == "text") {
         return Pid::TEXT;
     }
+
     for (Pid pid : TextBasePropertyId) {
         if (propertyName(pid) == name) {
             return pid;

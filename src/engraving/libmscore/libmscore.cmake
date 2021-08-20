@@ -140,9 +140,6 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/lasso.h
     ${CMAKE_CURRENT_LIST_DIR}/layoutbreak.cpp
     ${CMAKE_CURRENT_LIST_DIR}/layoutbreak.h
-    ${CMAKE_CURRENT_LIST_DIR}/layout.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/layout.h
-    ${CMAKE_CURRENT_LIST_DIR}/layoutlinear.cpp
     ${CMAKE_CURRENT_LIST_DIR}/ledgerline.cpp
     ${CMAKE_CURRENT_LIST_DIR}/ledgerline.h
     ${CMAKE_CURRENT_LIST_DIR}/letring.cpp

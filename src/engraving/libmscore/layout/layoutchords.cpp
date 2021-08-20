@@ -29,6 +29,7 @@
 #include "../chord.h"
 #include "../stemslash.h"
 #include "../hook.h"
+#include "../accidental.h"
 
 using namespace mu::engraving;
 using namespace Ms;

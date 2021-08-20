@@ -23,11 +23,13 @@
 
 #include <algorithm>
 
+#include "accessibility/iaccessible.h"
 #include "navigationsection.h"
 #include "translation.h"
 #include "log.h"
 
 using namespace mu::ui;
+using namespace mu::accessibility;
 
 NavigationPanel::NavigationPanel(QObject* parent)
     : AbstractNavigation(parent)

@@ -23,6 +23,15 @@
 
 #include "../score.h"
 #include "../measure.h"
+#include "../undo.h"
+#include "../mmrest.h"
+#include "../ambitus.h"
+#include "../barline.h"
+#include "../keysig.h"
+#include "../stem.h"
+#include "../lyrics.h"
+#include "../marker.h"
+#include "../part.h"
 
 #include "layout.h"
 #include "layoutcontext.h"
@@ -31,6 +40,537 @@
 
 using namespace mu::engraving;
 using namespace Ms;
+
+//---------------------------------------------------------
+//   createMMRest
+//    create a multimeasure rest
+//    from firstMeasure to lastMeasure (inclusive)
+//---------------------------------------------------------
+
+void LayoutMeasure::createMMRest(Score* score, Measure* firstMeasure, Measure* lastMeasure, const Fraction& len)
+{
+    int numMeasuresInMMRest = 1;
+    if (firstMeasure != lastMeasure) {
+        for (Measure* m = firstMeasure->nextMeasure(); m; m = m->nextMeasure()) {
+            ++numMeasuresInMMRest;
+            m->setMMRestCount(-1);
+            if (m->mmRest()) {
+                score->undo(new ChangeMMRest(m, 0));
+            }
+            if (m == lastMeasure) {
+                break;
+            }
+        }
+    }
+
+    // mmrMeasure coexists with n undisplayed measures of rests
+    Measure* mmrMeasure = firstMeasure->mmRest();
+    if (mmrMeasure) {
+        // reuse existing mmrest
+        if (mmrMeasure->ticks() != len) {
+            Segment* s = mmrMeasure->findSegmentR(SegmentType::EndBarLine, mmrMeasure->ticks());
+            // adjust length
+            mmrMeasure->setTicks(len);
+            // move existing end barline
+            if (s) {
+                s->setRtick(len);
+            }
+        }
+        mmrMeasure->removeSystemTrailer();
+    } else {
+        mmrMeasure = new Measure(score);
+        mmrMeasure->setTicks(len);
+        mmrMeasure->setTick(firstMeasure->tick());
+        score->undo(new ChangeMMRest(firstMeasure, mmrMeasure));
+    }
+    mmrMeasure->setTimesig(firstMeasure->timesig());
+    mmrMeasure->setPageBreak(lastMeasure->pageBreak());
+    mmrMeasure->setLineBreak(lastMeasure->lineBreak());
+    mmrMeasure->setMMRestCount(numMeasuresInMMRest);
+    mmrMeasure->setNo(firstMeasure->no());
+
+    //
+    // set mmrMeasure with same barline as last underlying measure
+    //
+    Segment* lastMeasureEndBarlineSeg = lastMeasure->findSegmentR(SegmentType::EndBarLine, lastMeasure->ticks());
+    if (lastMeasureEndBarlineSeg) {
+        Segment* mmrEndBarlineSeg = mmrMeasure->undoGetSegmentR(SegmentType::EndBarLine, mmrMeasure->ticks());
+        for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+            Element* e = lastMeasureEndBarlineSeg->element(staffIdx * VOICES);
+            if (e) {
+                bool generated = e->generated();
+                if (!mmrEndBarlineSeg->element(staffIdx * VOICES)) {
+                    Element* eClone = generated ? e->clone() : e->linkedClone();
+                    eClone->setGenerated(generated);
+                    eClone->setParent(mmrEndBarlineSeg);
+                    score->undoAddElement(eClone);
+                } else {
+                    BarLine* mmrEndBarline = toBarLine(mmrEndBarlineSeg->element(staffIdx * VOICES));
+                    BarLine* lastMeasureEndBarline = toBarLine(e);
+                    if (!generated && !mmrEndBarline->links()) {
+                        score->undo(new Link(mmrEndBarline, lastMeasureEndBarline));
+                    }
+                    if (mmrEndBarline->barLineType() != lastMeasureEndBarline->barLineType()) {
+                        // change directly when generating mmrests, do not change underlying measures or follow links
+                        score->undo(new ChangeProperty(mmrEndBarline, Pid::BARLINE_TYPE,
+                                                       QVariant::fromValue(lastMeasureEndBarline->barLineType()),
+                                                       PropertyFlags::NOSTYLE));
+                        score->undo(new ChangeProperty(mmrEndBarline, Pid::GENERATED, generated, PropertyFlags::NOSTYLE));
+                    }
+                }
+            }
+        }
+    }
+
+    //
+    // if last underlying measure ends with clef change, show same at end of mmrest
+    //
+    Segment* lastMeasureClefSeg = lastMeasure->findSegmentR(SegmentType::Clef | SegmentType::HeaderClef,
+                                                            lastMeasure->ticks());
+    if (lastMeasureClefSeg) {
+        Segment* mmrClefSeg = mmrMeasure->undoGetSegment(lastMeasureClefSeg->segmentType(), lastMeasure->endTick());
+        for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+            const int track = staff2track(staffIdx);
+            Element* e = lastMeasureClefSeg->element(track);
+            if (e && e->isClef()) {
+                Clef* lastMeasureClef = toClef(e);
+                if (!mmrClefSeg->element(track)) {
+                    Clef* mmrClef = lastMeasureClef->generated() ? lastMeasureClef->clone() : toClef(
+                        lastMeasureClef->linkedClone());
+                    mmrClef->setParent(mmrClefSeg);
+                    score->undoAddElement(mmrClef);
+                } else {
+                    Clef* mmrClef = toClef(mmrClefSeg->element(track));
+                    mmrClef->setClefType(lastMeasureClef->clefType());
+                    mmrClef->setShowCourtesy(lastMeasureClef->showCourtesy());
+                }
+            }
+        }
+    }
+
+    mmrMeasure->setRepeatStart(firstMeasure->repeatStart() || lastMeasure->repeatStart());
+    mmrMeasure->setRepeatEnd(firstMeasure->repeatEnd() || lastMeasure->repeatEnd());
+    mmrMeasure->setSectionBreak(lastMeasure->sectionBreak());
+
+    //
+    // copy markers to mmrMeasure
+    //
+    ElementList oldList = mmrMeasure->takeElements();
+    ElementList newList = lastMeasure->el();
+    for (Element* e : firstMeasure->el()) {
+        if (e->isMarker()) {
+            newList.push_back(e);
+        }
+    }
+    for (Element* e : newList) {
+        bool found = false;
+        for (Element* ee : oldList) {
+            if (ee->type() == e->type() && ee->subtype() == e->subtype()) {
+                mmrMeasure->add(ee);
+                auto i = std::find(oldList.begin(), oldList.end(), ee);
+                if (i != oldList.end()) {
+                    oldList.erase(i);
+                }
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            mmrMeasure->add(e->clone());
+        }
+    }
+    for (Element* e : oldList) {
+        delete e;
+    }
+    Segment* s = mmrMeasure->undoGetSegmentR(SegmentType::ChordRest, Fraction(0, 1));
+    for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+        int track = staffIdx * VOICES;
+        if (s->element(track) == 0) {
+            MMRest* mmr = new MMRest(score);
+            mmr->setDurationType(TDuration::DurationType::V_MEASURE);
+            mmr->setTicks(mmrMeasure->ticks());
+            mmr->setTrack(track);
+            mmr->setParent(s);
+            score->undo(new AddElement(mmr));
+        }
+    }
+
+    //
+    // further check for clefs
+    //
+    Segment* underlyingSeg = lastMeasure->findSegmentR(SegmentType::Clef, lastMeasure->ticks());
+    Segment* mmrSeg = mmrMeasure->findSegment(SegmentType::Clef, lastMeasure->endTick());
+    if (underlyingSeg) {
+        if (mmrSeg == 0) {
+            mmrSeg = mmrMeasure->undoGetSegmentR(SegmentType::Clef, lastMeasure->ticks());
+        }
+        mmrSeg->setEnabled(underlyingSeg->enabled());
+        mmrSeg->setTrailer(underlyingSeg->trailer());
+        for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+            int track = staffIdx * VOICES;
+            Clef* clef = toClef(underlyingSeg->element(track));
+            if (clef) {
+                if (mmrSeg->element(track) == 0) {
+                    mmrSeg->add(clef->clone());
+                } else {
+                    //TODO: check if same clef
+                }
+            }
+        }
+    } else if (mmrSeg) {
+        // TODO: remove elements from mmrSeg?
+        score->undo(new RemoveElement(mmrSeg));
+    }
+
+    //
+    // check for time signature
+    //
+    underlyingSeg = firstMeasure->findSegmentR(SegmentType::TimeSig, Fraction(0, 1));
+    mmrSeg = mmrMeasure->findSegment(SegmentType::TimeSig, firstMeasure->tick());
+    if (underlyingSeg) {
+        if (mmrSeg == 0) {
+            mmrSeg = mmrMeasure->undoGetSegmentR(SegmentType::TimeSig, Fraction(0, 1));
+        }
+        mmrSeg->setEnabled(underlyingSeg->enabled());
+        mmrSeg->setHeader(underlyingSeg->header());
+        for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+            int track = staffIdx * VOICES;
+            TimeSig* underlyingTimeSig = toTimeSig(underlyingSeg->element(track));
+            if (underlyingTimeSig) {
+                TimeSig* mmrTimeSig = toTimeSig(mmrSeg->element(track));
+                if (!mmrTimeSig) {
+                    mmrTimeSig = underlyingTimeSig->generated() ? underlyingTimeSig->clone() : toTimeSig(
+                        underlyingTimeSig->linkedClone());
+                    mmrTimeSig->setParent(mmrSeg);
+                    score->undo(new AddElement(mmrTimeSig));
+                } else {
+                    mmrTimeSig->setSig(underlyingTimeSig->sig(), underlyingTimeSig->timeSigType());
+                    mmrTimeSig->layout();
+                }
+            }
+        }
+    } else if (mmrSeg) {
+        // TODO: remove elements from mmrSeg?
+        score->undo(new RemoveElement(mmrSeg));
+    }
+
+    //
+    // check for ambitus
+    //
+    underlyingSeg = firstMeasure->findSegmentR(SegmentType::Ambitus, Fraction(0, 1));
+    mmrSeg = mmrMeasure->findSegment(SegmentType::Ambitus, firstMeasure->tick());
+    if (underlyingSeg) {
+        if (mmrSeg == 0) {
+            mmrSeg = mmrMeasure->undoGetSegmentR(SegmentType::Ambitus, Fraction(0, 1));
+        }
+        for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+            int track = staffIdx * VOICES;
+            Ambitus* underlyingAmbitus = toAmbitus(underlyingSeg->element(track));
+            if (underlyingAmbitus) {
+                Ambitus* mmrAmbitus = toAmbitus(mmrSeg->element(track));
+                if (!mmrAmbitus) {
+                    mmrAmbitus = underlyingAmbitus->clone();
+                    mmrAmbitus->setParent(mmrSeg);
+                    score->undo(new AddElement(mmrAmbitus));
+                } else {
+                    mmrAmbitus->initFrom(underlyingAmbitus);
+                    mmrAmbitus->layout();
+                }
+            }
+        }
+    } else if (mmrSeg) {
+        // TODO: remove elements from mmrSeg?
+        score->undo(new RemoveElement(mmrSeg));
+    }
+
+    //
+    // check for key signature
+    //
+    underlyingSeg = firstMeasure->findSegmentR(SegmentType::KeySig, Fraction(0, 1));
+    mmrSeg = mmrMeasure->findSegmentR(SegmentType::KeySig, Fraction(0, 1));
+    if (underlyingSeg) {
+        if (mmrSeg == 0) {
+            mmrSeg = mmrMeasure->undoGetSegmentR(SegmentType::KeySig, Fraction(0, 1));
+        }
+        mmrSeg->setEnabled(underlyingSeg->enabled());
+        mmrSeg->setHeader(underlyingSeg->header());
+        for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+            int track = staffIdx * VOICES;
+            KeySig* underlyingKeySig  = toKeySig(underlyingSeg->element(track));
+            if (underlyingKeySig) {
+                KeySig* mmrKeySig = toKeySig(mmrSeg->element(track));
+                if (!mmrKeySig) {
+                    mmrKeySig = underlyingKeySig->generated() ? underlyingKeySig->clone() : toKeySig(
+                        underlyingKeySig->linkedClone());
+                    mmrKeySig->setParent(mmrSeg);
+                    mmrKeySig->setGenerated(true);
+                    score->undo(new AddElement(mmrKeySig));
+                } else {
+                    if (!(mmrKeySig->keySigEvent() == underlyingKeySig->keySigEvent())) {
+                        bool addKey = underlyingKeySig->isChange();
+                        score->undo(new ChangeKeySig(mmrKeySig, underlyingKeySig->keySigEvent(), mmrKeySig->showCourtesy(),
+                                                     addKey));
+                    }
+                }
+            }
+        }
+    } else if (mmrSeg) {
+        mmrSeg->setEnabled(false);
+        // TODO: remove elements from mmrSeg, then delete mmrSeg
+        // previously we removed the segment if not empty,
+        // but this resulted in "stale" keysig in mmrest after removed from underlying measure
+        //undo(new RemoveElement(mmrSeg));
+    }
+
+    mmrMeasure->checkHeader();
+    mmrMeasure->checkTrailer();
+
+    //
+    // check for rehearsal mark etc.
+    //
+    underlyingSeg = firstMeasure->findSegmentR(SegmentType::ChordRest, Fraction(0, 1));
+    if (underlyingSeg) {
+        // clone elements from underlying measure to mmr
+        for (Element* e : underlyingSeg->annotations()) {
+            // look at elements in underlying measure
+            if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText() || e->isSystemText()
+                  || e->isInstrumentChange())) {
+                continue;
+            }
+            // try to find a match in mmr
+            bool found = false;
+            for (Element* ee : s->annotations()) {
+                if (e->linkList().contains(ee)) {
+                    found = true;
+                    break;
+                }
+            }
+            // add to mmr if no match found
+            if (!found) {
+                Element* eClone = e->linkedClone();
+                eClone->setParent(s);
+                score->undo(new AddElement(eClone));
+            }
+        }
+
+        // remove stray elements (possibly leftover from a previous layout of this mmr)
+        // this should not happen since the elements are linked?
+        for (Element* e : s->annotations()) {
+            // look at elements in mmr
+            if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText() || e->isSystemText()
+                  || e->isInstrumentChange())) {
+                continue;
+            }
+            // try to find a match in underlying measure
+            bool found = false;
+            for (Element* ee : underlyingSeg->annotations()) {
+                if (e->linkList().contains(ee)) {
+                    found = true;
+                    break;
+                }
+            }
+            // remove from mmr if no match found
+            if (!found) {
+                score->undo(new RemoveElement(e));
+            }
+        }
+    }
+
+    MeasureBase* nm = score->_showVBox ? lastMeasure->next() : lastMeasure->nextMeasure();
+    mmrMeasure->setNext(nm);
+    mmrMeasure->setPrev(firstMeasure->prev());
+}
+
+//---------------------------------------------------------
+// validMMRestMeasure
+//    return true if this might be a measure in a
+//    multi measure rest
+//---------------------------------------------------------
+
+static bool validMMRestMeasure(Measure* m)
+{
+    if (m->irregular()) {
+        return false;
+    }
+
+    int n = 0;
+    for (Segment* s = m->first(); s; s = s->next()) {
+        for (Element* e : s->annotations()) {
+            if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText() || e->isSystemText()
+                  || e->isInstrumentChange())) {
+                return false;
+            }
+        }
+        if (s->isChordRestType()) {
+            bool restFound = false;
+            int tracks = m->score()->ntracks();
+            for (int track = 0; track < tracks; ++track) {
+                if ((track % VOICES) == 0 && !m->score()->staff(track / VOICES)->show()) {
+                    track += VOICES - 1;
+                    continue;
+                }
+                if (s->element(track)) {
+                    if (!s->element(track)->isRest()) {
+                        return false;
+                    }
+                    restFound = true;
+                }
+            }
+            for (Element* e : s->annotations()) {
+                if (e->isFermata()) {
+                    return false;
+                }
+            }
+            if (restFound) {
+                ++n;
+            }
+            // measure is not empty if there is more than one rest
+            if (n > 1) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+//---------------------------------------------------------
+//  breakMultiMeasureRest
+//    return true if this measure should start a new
+//    multi measure rest
+//---------------------------------------------------------
+
+static bool breakMultiMeasureRest(Measure* m)
+{
+    if (m->breakMultiMeasureRest()) {
+        return true;
+    }
+
+    if (m->repeatStart()
+        || (m->prevMeasure() && m->prevMeasure()->repeatEnd())
+        || (m->isIrregular())
+        || (m->prevMeasure() && m->prevMeasure()->isIrregular())
+        || (m->prevMeasure() && (m->prevMeasure()->sectionBreak()))) {
+        return true;
+    }
+
+    auto sl = m->score()->spannerMap().findOverlapping(m->tick().ticks(), m->endTick().ticks());
+    for (auto i : sl) {
+        Spanner* s = i.value;
+        // break for first measure of volta or textline and first measure *after* volta
+        if ((s->isVolta() || s->isTextLine()) && (s->tick() == m->tick() || s->tick2() == m->tick())) {
+            return true;
+        }
+    }
+
+    // break for marker in this measure
+    for (Element* e : m->el()) {
+        if (e->isMarker()) {
+            Marker* mark = toMarker(e);
+            if (!(mark->align() & Align::RIGHT)) {
+                return true;
+            }
+        }
+    }
+
+    // break for marker & jump in previous measure
+    Measure* pm = m->prevMeasure();
+    if (pm) {
+        for (Element* e : pm->el()) {
+            if (e->isJump()) {
+                return true;
+            } else if (e->isMarker()) {
+                Marker* mark = toMarker(e);
+                if (mark->align() & Align::RIGHT) {
+                    return true;
+                }
+            }
+        }
+    }
+
+    // break for MeasureRepeat group
+    for (int staffIdx = 0; staffIdx < m->score()->nstaves(); ++staffIdx) {
+        if (m->isMeasureRepeatGroup(staffIdx)
+            || (m->prevMeasure() && m->prevMeasure()->isMeasureRepeatGroup(staffIdx))) {
+            return true;
+        }
+    }
+
+    for (Segment* s = m->first(); s; s = s->next()) {
+        for (Element* e : s->annotations()) {
+            if (!e->visible()) {
+                continue;
+            }
+            if (e->isRehearsalMark()
+                || e->isTempoText()
+                || ((e->isHarmony() || e->isStaffText() || e->isSystemText() || e->isInstrumentChange())
+                    && (e->systemFlag() || m->score()->staff(e->staffIdx())->show()))) {
+                return true;
+            }
+        }
+        for (int staffIdx = 0; staffIdx < m->score()->nstaves(); ++staffIdx) {
+            if (!m->score()->staff(staffIdx)->show()) {
+                continue;
+            }
+            Element* e = s->element(staffIdx * VOICES);
+            if (!e || e->generated()) {
+                continue;
+            }
+            if (s->isStartRepeatBarLineType()) {
+                return true;
+            }
+            if (s->isType(SegmentType::KeySig | SegmentType::TimeSig) && m->tick().isNotZero()) {
+                return true;
+            }
+            if (s->isClefType()) {
+                if (s->tick() != m->endTick() && m->tick().isNotZero()) {
+                    return true;
+                }
+            }
+        }
+    }
+    if (pm) {
+        Segment* s = pm->findSegmentR(SegmentType::EndBarLine, pm->ticks());
+        if (s) {
+            for (int staffIdx = 0; staffIdx < s->score()->nstaves(); ++staffIdx) {
+                BarLine* bl = toBarLine(s->element(staffIdx * VOICES));
+                if (bl) {
+                    BarLineType t = bl->barLineType();
+                    if (t != BarLineType::NORMAL && t != BarLineType::BROKEN && t != BarLineType::DOTTED && !bl->generated()) {
+                        return true;
+                    } else {
+                        break;
+                    }
+                }
+            }
+        }
+        if (pm->findSegment(SegmentType::Clef, m->tick())) {
+            return true;
+        }
+    }
+    return false;
+}
+
+//---------------------------------------------------------
+//   layoutDrumsetChord
+//---------------------------------------------------------
+
+static void layoutDrumsetChord(Chord* c, const Drumset* drumset, const StaffType* st, qreal spatium)
+{
+    for (Note* note : c->notes()) {
+        int pitch = note->pitch();
+        if (!drumset->isValid(pitch)) {
+            // qDebug("unmapped drum note %d", pitch);
+        } else if (!note->fixed()) {
+            note->undoChangeProperty(Pid::HEAD_GROUP, int(drumset->noteHead(pitch)));
+            int line = drumset->line(pitch);
+            note->setLine(line);
+
+            int off  = st->stepOffset();
+            qreal ld = st->lineDistance().val();
+            note->rypos()  = (line + off * 2.0) * spatium * .5 * ld;
+        }
+    }
+}
 
 void LayoutMeasure::getNextMeasure(Ms::Score* score, LayoutContext& lc)
 {
@@ -72,7 +612,7 @@ void LayoutMeasure::getNextMeasure(Ms::Score* score, LayoutContext& lc)
                 nm = toMeasure(mb);
             }
             if (n >= score->styleI(Sid::minEmptyMeasures)) {
-                score->createMMRest(m, lm, len);
+                createMMRest(score, m, lm, len);
                 lc.curMeasure  = m->mmRest();
                 lc.nextMeasure = score->_showVBox ? lm->next() : lm->nextMeasure();
             } else {

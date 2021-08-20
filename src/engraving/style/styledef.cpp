@@ -38,7 +38,6 @@
 #include "libmscore/clef.h"
 #include "libmscore/textlinebase.h"
 #include "libmscore/tuplet.h"
-#include "libmscore/layout.h"
 #include "libmscore/property.h"
 #include "libmscore/undo.h"
 
