@@ -45,7 +45,6 @@ Rectangle {
 
     Item {
         anchors.fill: parent
-        anchors.margins: 8
 
         AppMenuBar {
             id: menu
