@@ -33,60 +33,6 @@ class Segment;
 class Page;
 
 //---------------------------------------------------------
-//   VerticalStretchData
-//    helper class for spreading staves over a page
-//---------------------------------------------------------
-
-class VerticalGapData
-{
-private:
-    bool _fixedHeight        { false };
-    bool _fixedSpacer        { false };
-    qreal _factor               { 1.0 };
-    qreal _normalisedSpacing    { 0.0 };
-    qreal _maxActualSpacing     { 0.0 };
-    qreal _addedNormalisedSpace { 0.0 };
-    qreal _fillSpacing          { 0.0 };
-    qreal _lastStep             { 0.0 };
-    void  updateFactor(qreal factor);
-
-public:
-    System* system   { nullptr };
-    SysStaff* sysStaff { nullptr };
-    Staff* staff    { nullptr };
-
-    VerticalGapData(bool first, System* sys, Staff* st, SysStaff* sst, Spacer* nextSpacer, qreal y);
-
-    void addSpaceBetweenSections();
-    void addSpaceAroundVBox(bool above);
-    void addSpaceAroundNormalBracket();
-    void addSpaceAroundCurlyBracket();
-    void insideCurlyBracket();
-
-    qreal factor() const;
-    qreal spacing() const;
-    qreal actualAddedSpace() const;
-
-    qreal addSpacing(qreal step);
-    bool isFixedHeight() const;
-    void undoLastAddSpacing();
-    qreal addFillSpacing(qreal step, qreal maxFill);
-};
-
-//---------------------------------------------------------
-//   VerticalStretchDataList
-//    helper class for spreading staves over a page
-//---------------------------------------------------------
-
-class VerticalGapDataList : public QList<VerticalGapData*>
-{
-public:
-    void deleteAll();
-    qreal sumStretchFactor() const;
-    qreal smallest(qreal limit=-1.0) const;
-};
-
-//---------------------------------------------------------
 //   VerticalAlignRange
 //---------------------------------------------------------
 

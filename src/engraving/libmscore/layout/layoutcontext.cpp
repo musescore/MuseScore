@@ -30,6 +30,7 @@
 #include "layoutlyrics.h"
 #include "layoutmeasure.h"
 #include "layoutbeams.h"
+#include "verticalgapdata.h"
 
 using namespace mu::engraving;
 using namespace Ms;
