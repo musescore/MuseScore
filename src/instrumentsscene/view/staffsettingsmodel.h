@@ -61,6 +61,7 @@ public:
 signals:
     void staffTypeChanged();
     void voicesChanged();
+    void voiceVisibilityChanged(int voiceIndex, bool visible);
     void isSmallStaffChanged();
     void cutawayEnabledChanged();
 

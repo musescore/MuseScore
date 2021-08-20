@@ -115,15 +115,7 @@ void StaffSettingsModel::setVoiceVisible(int voiceIndex, bool visible)
     m_voicesVisibility[voiceIndex] = visible;
     notationParts()->setVoiceVisible(m_staffId, voiceIndex, visible);
 
-    //! NOTE Do not send a signal to change the list
-    //! This will lead to the re-creation of the controlы (checkboxes),
-    //! and so we will lose the control with active focus,
-    //! and new controls will be created and added.
-    //! None of the controls will be the active focus.
-    //! The checkbox state changes in the view.
-    //! An alternative solution - we need to make a powerful model
-    //! and not recreate elements when their state changes (do not reset it completely)
-    //emit voicesChanged();
+    emit voiceVisibilityChanged(voiceIndex, visible);
 }
 
 bool StaffSettingsModel::isSmallStaff() const
