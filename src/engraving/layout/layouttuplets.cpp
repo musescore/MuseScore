@@ -21,8 +21,8 @@
  */
 #include "layouttuplets.h"
 
-#include "../chordrest.h"
-#include "../tuplet.h"
+#include "libmscore/chordrest.h"
+#include "libmscore/tuplet.h"
 
 using namespace mu::engraving;
 using namespace Ms;

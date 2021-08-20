@@ -21,10 +21,10 @@
  */
 #include "layoutbeams.h"
 
-#include "../score.h"
-#include "../staff.h"
-#include "../chord.h"
-#include "../timesig.h"
+#include "libmscore/score.h"
+#include "libmscore/staff.h"
+#include "libmscore/chord.h"
+#include "libmscore/timesig.h"
 
 #include "layoutcontext.h"
 

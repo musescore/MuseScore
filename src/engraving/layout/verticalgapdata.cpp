@@ -23,10 +23,10 @@
 
 #include <QtMath>
 
-#include "../system.h"
-#include "../staff.h"
-#include "../spacer.h"
-#include "../score.h"
+#include "libmscore/system.h"
+#include "libmscore/staff.h"
+#include "libmscore/spacer.h"
+#include "libmscore/score.h"
 
 #include "realfn.h"
 
