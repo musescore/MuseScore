@@ -140,6 +140,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/layout/layoutchords.h
     ${CMAKE_CURRENT_LIST_DIR}/layout/verticalgapdata.cpp
     ${CMAKE_CURRENT_LIST_DIR}/layout/verticalgapdata.h
+    ${CMAKE_CURRENT_LIST_DIR}/layout/layoutsystem.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/layout/layoutsystem.h
+    ${CMAKE_CURRENT_LIST_DIR}/layout/layoutharmonies.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/layout/layoutharmonies.h
     )
 
 if (NO_ENGRAVING_INTERNAL)
