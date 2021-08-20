@@ -24,9 +24,8 @@
 
 using namespace mu::appshell;
 
-void FramelessWindowController::init(QWindow* window)
+void FramelessWindowController::init()
 {
-    Q_UNUSED(window)
 }
 
 bool FramelessWindowController::nativeEventFilter(const QByteArray& eventType, void* message, long* result)
