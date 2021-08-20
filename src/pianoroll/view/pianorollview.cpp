@@ -28,12 +28,12 @@
 
 using namespace mu::pianoroll;
 
-PianoRollView::PianoRollView(QQuickItem* parent)
+PianorollView::PianorollView(QQuickItem* parent)
     : QQuickPaintedItem(parent)
 {
 }
 
-void PianoRollView::onCurrentNotationChanged()
+void PianorollView::onCurrentNotationChanged()
 {
     m_notation = globalContext()->currentNotation();
     if (!m_notation) {
@@ -54,14 +54,14 @@ void PianoRollView::onCurrentNotationChanged()
     int j = 9;
 }
 
-void PianoRollView::load()
+void PianorollView::load()
 {
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         onCurrentNotationChanged();
     });
 }
 
-void PianoRollView::paint(QPainter* p)
+void PianorollView::paint(QPainter* p)
 {
 //    if (m_icon.isNull()) {
     p->fillRect(0, 0, width(), height(), m_color);
