@@ -90,6 +90,8 @@ StyledPopupView {
                 delegate: CheckBox {
                     id: item
 
+                    property int index: model.index
+
                     objectName: "Voice" + modelData.title + "CheckBox"
 
                     navigation.panel: root.navigation
@@ -99,8 +101,16 @@ StyledPopupView {
                     checked: modelData.visible
 
                     onClicked: {
-                        item.checked = !item.checked
                         settingsModel.setVoiceVisible(model.index, !checked)
+                    }
+
+                    Connections {
+                        target: settingsModel
+                        function onVoiceVisibilityChanged(voiceIndex, visible) {
+                            if (item.index === voiceIndex) {
+                                item.checked = visible
+                            }
+                        }
                     }
                 }
             }
