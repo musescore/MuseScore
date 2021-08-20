@@ -210,7 +210,7 @@ Rectangle {
                 navigation.row: 1
 
                 onClicked: {
-                    instrumentsOnScoreView.moveInstrumentsUp()
+                    instrumentsOnScoreView.moveSelectedInstrumentsUp()
                 }
             }
 
@@ -223,7 +223,7 @@ Rectangle {
                 navigation.row: 2
 
                 onClicked: {
-                    instrumentsOnScoreView.moveInstrumentsDown()
+                    instrumentsOnScoreView.moveSelectedInstrumentsDown()
                 }
             }
         }

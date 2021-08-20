@@ -35,7 +35,7 @@ Item {
 
     property NavigationSection navigationSection: null
 
-    property bool hasSelection: {
+    readonly property bool hasSelection: {
         if (pagesStack.currentIndex === 0) {
             return instrumentsPage.hasSelectedInstruments
         } else if (pagesStack.currentIndex === 1) {

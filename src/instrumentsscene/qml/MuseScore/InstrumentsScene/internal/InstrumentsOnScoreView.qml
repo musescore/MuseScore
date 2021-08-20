@@ -30,9 +30,9 @@ import MuseScore.InstrumentsScene 1.0
 Item {
     id: root
 
-    property bool hasInstruments: instrumentsOnScore.count > 0
-    property alias isMovingUpAvailable: instrumentsOnScore.isMovingUpAvailable
-    property alias isMovingDownAvailable: instrumentsOnScore.isMovingDownAvailable
+    readonly property bool hasInstruments: instrumentsOnScore.count > 0
+    readonly property alias isMovingUpAvailable: instrumentsOnScore.isMovingUpAvailable
+    readonly property alias isMovingDownAvailable: instrumentsOnScore.isMovingDownAvailable
 
     property alias navigation: navPanel
 
@@ -48,11 +48,11 @@ Item {
         instrumentsOnScore.addInstruments(instruments)
     }
 
-    function moveInstrumentsUp() {
+    function moveSelectedInstrumentsUp() {
         instrumentsOnScore.moveSelectionUp()
     }
 
-    function moveInstrumentsDown() {
+    function moveSelectedInstrumentsDown() {
         instrumentsOnScore.moveSelectionDown()
     }
 
