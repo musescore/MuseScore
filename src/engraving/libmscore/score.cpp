@@ -2587,8 +2587,10 @@ void Score::removeStaff(Staff* staff)
             }
         }
     }
+
     _staves.removeAll(staff);
     staff->part()->removeStaff(staff);
+    staff->unlink();
 }
 
 //---------------------------------------------------------
