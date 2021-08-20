@@ -115,7 +115,7 @@ void BeamSettingsModel::updateBeamHeight(const qreal& x, const qreal& y)
         synchronizeLockedBeamHeight(x, y);
     }
 
-    onPropertyValueChanged(Ms::Pid::USER_MODIFIED, true); // TODO проверить, можно ли это перенести в DOM модель
+    onPropertyValueChanged(Ms::Pid::USER_MODIFIED, true);
     onPropertyValueChanged(Ms::Pid::BEAM_POS, QPointF(m_beamVectorX->value().toDouble(), m_beamVectorY->value().toDouble()));
 
     m_cachedBeamVector.setX(m_beamVectorX->value().toDouble());

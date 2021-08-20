@@ -414,13 +414,13 @@ static bool readTextProperties(XmlReader& e, TextBase* t, Element*)
         }
         t->setAlign(align);
         t->setPropertyFlags(Pid::ALIGN, PropertyFlags::UNSTYLED);
-    } else if (tag == "rxoffset") {       // TODO
+    } else if (tag == "rxoffset") {
         e.readElementText();
-    } else if (tag == "ryoffset") {       // TODO
+    } else if (tag == "ryoffset") {
         e.readElementText();
-    } else if (tag == "yoffset") {       // TODO
+    } else if (tag == "yoffset") {
         e.readElementText();
-    } else if (tag == "systemFlag") {       // TODO
+    } else if (tag == "systemFlag") {
         e.readElementText();
     } else if (!t->readProperties(e)) {
         return false;
@@ -1282,7 +1282,7 @@ static void readVolta114(XmlReader& e, Volta* volta)
                 volta->endings().append(i);
             }
         } else if (tag == "subtype") {
-            e.readInt();          // TODO
+            e.readInt();
         } else if (tag == "lineWidth") {
             volta->setLineWidth(e.readDouble() * volta->spatium());
             volta->setPropertyFlags(Pid::LINE_WIDTH, PropertyFlags::UNSTYLED);
@@ -2091,7 +2091,6 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                 // force the marker type for correct display
                 a->setXmlText("");
                 a->setMarkerType(a->markerType());
-//TODO::ws                        a->initElementStyle(Tid::REPEAT_LEFT);
             }
             m->add(a);
         } else if (tag == "Image") {
@@ -2737,9 +2736,6 @@ static void readStyle(MStyle* style, XmlReader& e, ReadChordListHook& readChordL
         }
 
         if (tag == "TextStyle") {
-//                  TextStyle s;
-//TODO                  s.read(e);
-//                  style->setTextStyle(s);
             e.skipCurrentElement();
         } else if (tag == "lyricsMinBottomDistance") {
             // no longer meaningful since it is now measured from skyline rather than staff
@@ -2778,7 +2774,6 @@ static void readStyle(MStyle* style, XmlReader& e, ReadChordListHook& readChordL
                 e.skipCurrentElement();
             }
         }
-//TODO                  style->convertToUnit(tag, val);
     }
 
     bool disableHarmonyPlay = MScore::harmonyPlayDisableCompatibility && !MScore::testMode;

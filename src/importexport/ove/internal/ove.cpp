@@ -8751,7 +8751,6 @@ bool BarsParse::parseHarmonyGuitarFrame(MeasureData* measureData, int length)
     if (!readBuffer(placeHolder, 1)) {
         return false;
     }
-    // harmony->setHarmonyType((HarmonyType)placeHolder.toUnsignedInt()); // TODO
 
     // bass
     if (!readBuffer(placeHolder, 1)) {

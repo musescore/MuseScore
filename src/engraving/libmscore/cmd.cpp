@@ -4370,7 +4370,6 @@ void Score::cmd(const QString& cmd, EditData& ed)
         { "nat-post",                   [](Score* cs, EditData&) { cs->changeAccidental(AccidentalType::NATURAL); } },
         { "flat-post",                  [](Score* cs, EditData&) { cs->changeAccidental(AccidentalType::FLAT); } },
         { "flat2-post",                 [](Score* cs, EditData&) { cs->changeAccidental(AccidentalType::FLAT2); } },
-        { "add-audio",                  [](Score* cs, EditData&) { cs->addAudioTrack(); } },
         { "transpose-up",               [](Score* cs, EditData&) { cs->transposeSemitone(1); } },
         { "transpose-down",             [](Score* cs, EditData&) { cs->transposeSemitone(-1); } },
         { "pitch-up-diatonic-alterations",   [](Score* cs, EditData&) { cs->transposeDiatonicAlterations(TransposeDirection::UP); } },

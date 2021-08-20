@@ -596,7 +596,6 @@ void Segment::add(Element* el)
         _elist[track] = el;
         if (!el->generated()) {
             el->staff()->setClef(toClef(el));
-//                        updateNoteLines(this, el->track());   TODO::necessary?
         }
         setEmpty(false);
         break;

@@ -1269,9 +1269,6 @@ void Measure::cmdRemoveStaves(int sStaff, int eStaff)
         MStaff* ms = *(m_mstaves.begin() + i);
         score()->undo(new RemoveMStaff(this, ms, i));
     }
-
-    // barLine
-    // TODO
 }
 
 //---------------------------------------------------------
@@ -1537,7 +1534,6 @@ Element* Measure::drop(EditData& data)
         break;
 
     case ElementType::STAFF_LIST:
-//TODO                  score()->pasteStaff(e, this, staffIdx);
         delete e;
         break;
 

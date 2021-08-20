@@ -6352,7 +6352,6 @@ void MusicXMLParserNotations::addToScore(ChordRest* const cr, Note* const note, 
     for (const auto& d : qAsConst(_dynamicsList)) {
         auto dynamic = new Dynamic(_score);
         dynamic->setDynamicType(d);
-//TODO:ws            if (hasYoffset) dyn->textStyle().setYoff(yoffset);
         addElemOffset(dynamic, cr->track(), _dynamicsPlacement, cr->measure(), Fraction::fromTicks(tick));
     }
 }

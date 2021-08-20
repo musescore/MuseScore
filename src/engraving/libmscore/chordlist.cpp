@@ -294,8 +294,6 @@ void HChord::add(const QList<HDegree>& degreeList)
         int dv1 = degreeTable[(d.value() - 1) % 7];
 
         if (d.value() == 7 && d.alter() == 0) {
-            // DEBUG: seventh degree is Bb, not B
-            //        except Maj   (TODO)
             dv -= 1;
         }
 

@@ -2070,7 +2070,6 @@ void EditStyle::endEditUserStyleName()
         textStyles->item(row)->setText(name);
         resetTextStyleName->setEnabled(false);
     }
-//    MuseScoreCore::mscoreCore->updateInspector(); TODO
 }
 
 //---------------------------------------------------------

@@ -129,7 +129,7 @@ void StringData::write(XmlWriter& xml) const
 
 bool StringData::convertPitch(int pitch, Staff* staff, const Fraction& tick, int* string, int* fret) const
 {
-    return convertPitch(pitch, pitchOffsetAt(staff, tick), string, fret);
+    return convertPitch(pitch, pitchOffsetAt(staff), string, fret);
 }
 
 //---------------------------------------------------------
@@ -142,7 +142,7 @@ bool StringData::convertPitch(int pitch, Staff* staff, const Fraction& tick, int
 
 int StringData::getPitch(int string, int fret, Staff* staff, const Fraction& tick) const
 {
-    return getPitch(string, fret, pitchOffsetAt(staff, tick));
+    return getPitch(string, fret, pitchOffsetAt(staff));
 }
 
 //---------------------------------------------------------
@@ -154,7 +154,7 @@ int StringData::getPitch(int string, int fret, Staff* staff, const Fraction& tic
 
 int StringData::fret(int pitch, int string, Staff* staff, const Fraction& tick) const
 {
-    return fret(pitch, string, pitchOffsetAt(staff, tick));
+    return fret(pitch, string, pitchOffsetAt(staff));
 }
 
 //---------------------------------------------------------
@@ -318,10 +318,9 @@ int StringData::frettedStrings() const
 //   For string data calculations, pitch offset may depend on transposition, capos and, possibly, ottavas.
 //---------------------------------------------------------
 
-int StringData::pitchOffsetAt(Staff* staff, const Fraction& /*tick*/)
+int StringData::pitchOffsetAt(Staff* staff)
 {
-    int transp = staff ? staff->part()->instrument()->transpose().chromatic : 0;    // TODO: tick?
-    return /*staff->pitchOffset(tick)*/ -transp;
+    return -(staff ? staff->part()->instrument()->transpose().chromatic : 0);
 }
 
 //********************

@@ -411,7 +411,6 @@ Score::~Score()
 
     qDeleteAll(_parts);
     qDeleteAll(_staves);
-//      qDeleteAll(_pages);         // TODO: check
     _masterScore = 0;
 
     imageStore.clearUnused();
@@ -2844,15 +2843,6 @@ void Score::cmdConcertPitchChanged(bool flag)
             }
         }
     }
-}
-
-//---------------------------------------------------------
-//   addAudioTrack
-//---------------------------------------------------------
-
-void Score::addAudioTrack()
-{
-    // TODO
 }
 
 //---------------------------------------------------------

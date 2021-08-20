@@ -602,7 +602,6 @@ void Beam::layout()
             a[2] = PointF(bs->x2(), bs->y2());
             a[3] = PointF(bs->x1(), bs->y1());
             RectF r(a.boundingRect().adjusted(0.0, -lw2, 0.0, lw2));
-//TODO                  s.add(r.translated(-offset));
             addbbox(r);
         }
     }

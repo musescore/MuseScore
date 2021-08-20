@@ -739,11 +739,6 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
                 ChordRest* cr = toChordRest(e);
                 cr->writeTupletStart(xml);
             }
-//                  if (segment->isEndBarLine() && (m->mmRestCount() < 0 || m->mmRest())) {
-//                        BarLine* bl = toBarLine(e);
-//TODO                        bl->setBarLineType(m->endBarLineType());
-//                        bl->setVisible(m->endBarLineVisible());
-//                        }
             e->write(xml);
 
             if (e->isChordRest()) {
