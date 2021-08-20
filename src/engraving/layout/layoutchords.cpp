@@ -21,15 +21,15 @@
  */
 #include "layoutchords.h"
 
-#include "../sym.h"
-#include "../segment.h"
-#include "../note.h"
-#include "../staff.h"
-#include "../score.h"
-#include "../chord.h"
-#include "../stemslash.h"
-#include "../hook.h"
-#include "../accidental.h"
+#include "libmscore/sym.h"
+#include "libmscore/segment.h"
+#include "libmscore/note.h"
+#include "libmscore/staff.h"
+#include "libmscore/score.h"
+#include "libmscore/chord.h"
+#include "libmscore/stemslash.h"
+#include "libmscore/hook.h"
+#include "libmscore/accidental.h"
 
 using namespace mu::engraving;
 using namespace Ms;
