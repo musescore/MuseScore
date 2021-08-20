@@ -19,39 +19,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_LAYOUT_H
-#define MU_ENGRAVING_LAYOUT_H
-
-#include "../fraction.h"
-#include "../score.h"
-
-#include "layoutcontext.h"
+#ifndef MU_ENGRAVING_LAYOUTMEASURE_H
+#define MU_ENGRAVING_LAYOUTMEASURE_H
 
 namespace Ms {
-class Tremolo;
+class Score;
+class Measure;
+class Fraction;
 }
 
 namespace mu::engraving {
-class Layout
+class LayoutContext;
+class LayoutMeasure
 {
 public:
-    Layout(Ms::Score* score);
+    LayoutMeasure() = default;
 
-    void doLayoutRange(const Ms::Fraction&, const Ms::Fraction&);
-
-    static std::pair<qreal, qreal> extendedStemLenWithTwoNoteTremolo(Ms::Tremolo* tremolo, qreal stemLen1, qreal stemLen2);
+    static void getNextMeasure(Ms::Score* score, LayoutContext& lc);
 
 private:
 
-    void layoutLinear(bool layoutAll, LayoutContext& lc);
-    void resetSystems(bool layoutAll, LayoutContext& lc);
-    void collectLinearSystem(LayoutContext& lc);
-    Ms::System* getNextSystem(LayoutContext& lc);
-
-    Ms::System* collectSystem(LayoutContext&);
-
-    Ms::Score* m_score = nullptr;
+    static void createMMRest(Ms::Score* score, Ms::Measure* firstMeasure, Ms::Measure* lastMeasure, const Ms::Fraction& len);
 };
 }
 
-#endif // MU_ENGRAVING_LAYOUT_H
+#endif // MU_ENGRAVING_LAYOUTMEASURE_H

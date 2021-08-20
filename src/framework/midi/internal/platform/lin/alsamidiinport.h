@@ -58,7 +58,7 @@ private:
     bool deviceExists(const MidiDeviceID& deviceId) const;
 
     struct Alsa;
-    std::unique_ptr<Alsa> m_alsa;
+    std::shared_ptr<Alsa> m_alsa;
     MidiDeviceID m_deviceID;
     std::shared_ptr<std::thread> m_thread;
     std::atomic<bool> m_running{ false };

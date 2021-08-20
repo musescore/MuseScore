@@ -21,11 +21,13 @@
  */
 #include "layoutlyrics.h"
 
-#include "../system.h"
-#include "../segment.h"
-#include "../score.h"
-#include "../chordrest.h"
-#include "../lyrics.h"
+#include "style/styledef.h"
+
+#include "libmscore/system.h"
+#include "libmscore/segment.h"
+#include "libmscore/score.h"
+#include "libmscore/chordrest.h"
+#include "libmscore/lyrics.h"
 
 using namespace mu;
 using namespace mu::engraving;

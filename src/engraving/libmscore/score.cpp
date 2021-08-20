@@ -81,6 +81,7 @@
 #include "mscore.h"
 #include "scorefont.h"
 #include "scoreorder.h"
+#include "glissando.h"
 
 #include "bracket.h"
 #include "audio.h"
@@ -5203,9 +5204,133 @@ Part* Score::partById(const ID& partId) const
     return nullptr;
 }
 
+void Score::rebuildBspTree()
+{
+    for (Page* page : pages()) {
+        page->rebuildBspTree();
+    }
+}
+
+//---------------------------------------------------------
+//   connectTies
+///   Rebuild tie connections.
+//---------------------------------------------------------
+
+void Score::connectTies(bool silent)
+{
+    int tracks = nstaves() * VOICES;
+    Measure* m = firstMeasure();
+    if (!m) {
+        return;
+    }
+
+    SegmentType st = SegmentType::ChordRest;
+    for (Segment* s = m->first(st); s; s = s->next1(st)) {
+        for (int i = 0; i < tracks; ++i) {
+            Element* e = s->element(i);
+            if (e == 0 || !e->isChord()) {
+                continue;
+            }
+            Chord* c = toChord(e);
+            for (Note* n : c->notes()) {
+                // connect a tie without end note
+                Tie* tie = n->tieFor();
+                if (tie && !tie->endNote()) {
+                    Note* nnote;
+                    if (_mscVersion <= 114) {
+                        nnote = searchTieNote114(n);
+                    } else {
+                        nnote = searchTieNote(n);
+                    }
+                    if (nnote == 0) {
+                        if (!silent) {
+                            qDebug("next note at %d track %d for tie not found (version %d)", s->tick().ticks(), i, _mscVersion);
+                            delete tie;
+                            n->setTieFor(0);
+                        }
+                    } else {
+                        tie->setEndNote(nnote);
+                        nnote->setTieBack(tie);
+                    }
+                }
+                // connect a glissando without initial note (old glissando format)
+                for (Spanner* spanner : n->spannerBack()) {
+                    if (spanner->isGlissando() && !spanner->startElement()) {
+                        Note* initialNote = Glissando::guessInitialNote(n->chord());
+                        n->removeSpannerBack(spanner);
+                        if (initialNote) {
+                            spanner->setStartElement(initialNote);
+                            spanner->setEndElement(n);
+                            spanner->setTick(initialNote->chord()->tick());
+                            spanner->setTick2(n->chord()->tick());
+                            spanner->setTrack(n->track());
+                            spanner->setTrack2(n->track());
+                            spanner->setParent(initialNote);
+                            initialNote->add(spanner);
+                        } else {
+                            delete spanner;
+                        }
+                    }
+                }
+                // spanner with no end element can happen during copy/paste
+                for (Spanner* spanner : n->spannerFor()) {
+                    if (spanner->endElement() == nullptr) {
+                        n->removeSpannerFor(spanner);
+                        delete spanner;
+                    }
+                }
+            }
+        }
+    }
+}
+
 mu::score::AccessibleScore* Score::accessible() const
 {
     return m_accessible;
+}
+
+//---------------------------------------------------------
+//   relayoutForStyles
+///   some styles can't properly apply if score hasn't been laid out yet,
+///   so temporarily disable them and then reenable after layout
+///   (called during score load)
+//---------------------------------------------------------
+
+void Score::relayoutForStyles()
+{
+    std::vector<Sid> stylesToTemporarilyDisable;
+
+    for (Sid sid : { Sid::createMultiMeasureRests, Sid::mrNumberSeries }) {
+        // only necessary if boolean style is true
+        if (styleB(sid)) {
+            stylesToTemporarilyDisable.push_back(sid);
+        }
+    }
+
+    if (!stylesToTemporarilyDisable.empty()) {
+        for (Sid sid : stylesToTemporarilyDisable) {
+            style().set(sid, false); // temporarily disable
+        }
+        doLayout();
+        for (Sid sid : stylesToTemporarilyDisable) {
+            style().set(sid, true); // and immediately reenable
+        }
+    }
+}
+
+//---------------------------------------------------------
+//   doLayout
+//    do a complete (re-) layout
+//---------------------------------------------------------
+
+void Score::doLayout()
+{
+    doLayoutRange(Fraction(0, 1), Fraction(-1, 1));
+}
+
+void Score::doLayoutRange(const Fraction& st, const Fraction& et)
+{
+    m_layout.doLayoutRange(st, et);
 }
 
 UndoStack* Score::undoStack() const { return _masterScore->undoStack(); }

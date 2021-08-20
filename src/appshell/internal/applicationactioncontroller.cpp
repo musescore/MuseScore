@@ -23,6 +23,7 @@
 
 #include <QCoreApplication>
 #include <QCloseEvent>
+#include <QWindow>
 
 #include "translation.h"
 

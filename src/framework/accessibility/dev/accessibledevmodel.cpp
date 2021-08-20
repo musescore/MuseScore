@@ -22,6 +22,7 @@
 #include "accessibledevmodel.h"
 
 #include <QAccessible>
+#include <QMetaEnum>
 
 #include "log.h"
 

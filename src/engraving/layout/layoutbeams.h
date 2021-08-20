@@ -19,22 +19,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_LAYOUTMEASURE_H
-#define MU_ENGRAVING_LAYOUTMEASURE_H
+#ifndef MU_ENGRAVING_LAYOUTBEAMS_H
+#define MU_ENGRAVING_LAYOUTBEAMS_H
 
 namespace Ms {
 class Score;
+class Measure;
+class Chord;
+class ChordRest;
 }
 
 namespace mu::engraving {
 class LayoutContext;
-class LayoutMeasure
+class LayoutBeams
 {
 public:
-    LayoutMeasure() = default;
 
-    static void getNextMeasure(Ms::Score* score, LayoutContext& lc);
+    static bool isTopBeam(Ms::ChordRest* cr);
+    static bool notTopBeam(Ms::ChordRest* cr);
+    static void createBeams(Ms::Score* score, LayoutContext& lc, Ms::Measure* measure);
+    static void restoreBeams(Ms::Measure* m);
+    static void breakCrossMeasureBeams(Ms::Measure* measure);
+    static void respace(std::vector<Ms::ChordRest*>* elements);
+
+private:
+    static void beamGraceNotes(Ms::Score* score, Ms::Chord* mainNote, bool after);
 };
 }
 
-#endif // MU_ENGRAVING_LAYOUTMEASURE_H
+#endif // MU_ENGRAVING_LAYOUTBEAMS_H

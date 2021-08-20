@@ -544,8 +544,6 @@ private:
     void cmdMoveRest(Rest*, Direction);
     void cmdMoveLyrics(Lyrics*, Direction);
 
-    void createMMRest(Measure*, Measure*, const Fraction&);
-
     void checkSlurs();
     void checkScore();
 
@@ -1125,10 +1123,6 @@ public:
     void doLayout();
     void doLayoutRange(const Fraction& st, const Fraction& et);
 
-    void layoutChords1(Segment* segment, int staffIdx);
-    qreal layoutChords2(std::vector<Note*>& notes, bool up);
-    void layoutChords3(std::vector<Note*>&, const Staff*, Segment*);
-
     SynthesizerState& synthesizerState() { return _synthesizerState; }
     void setSynthesizerState(const SynthesizerState& s);
 
@@ -1184,7 +1178,6 @@ public:
     Tuplet* searchTuplet(XmlReader& e, int id);
     void cmdSelectAll();
     void cmdSelectSection();
-    void respace(std::vector<ChordRest*>* elements);
     void transposeSemitone(int semitone);
     void transposeDiatonicAlterations(TransposeDirection direction);
 

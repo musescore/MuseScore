@@ -19,30 +19,38 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_LAYOUTBEAMS_H
-#define MU_ENGRAVING_LAYOUTBEAMS_H
+#ifndef MU_ENGRAVING_LAYOUT_H
+#define MU_ENGRAVING_LAYOUT_H
 
 namespace Ms {
 class Score;
-class Measure;
-class Chord;
-class ChordRest;
+class Fraction;
+class System;
+class Tremolo;
 }
 
 namespace mu::engraving {
 class LayoutContext;
-class LayoutBeams
+class Layout
 {
 public:
+    Layout(Ms::Score* score);
 
-    static bool isTopBeam(Ms::ChordRest* cr);
-    static void createBeams(Ms::Score* score, LayoutContext& lc, Ms::Measure* measure);
-    static void restoreBeams(Ms::Measure* m);
-    static void breakCrossMeasureBeams(Ms::Measure* measure);
+    void doLayoutRange(const Ms::Fraction&, const Ms::Fraction&);
+
+    static std::pair<qreal, qreal> extendedStemLenWithTwoNoteTremolo(Ms::Tremolo* tremolo, qreal stemLen1, qreal stemLen2);
 
 private:
-    static void beamGraceNotes(Ms::Score* score, Ms::Chord* mainNote, bool after);
+
+    void layoutLinear(bool layoutAll, LayoutContext& lc);
+    void resetSystems(bool layoutAll, LayoutContext& lc);
+    void collectLinearSystem(LayoutContext& lc);
+    Ms::System* getNextSystem(LayoutContext& lc);
+
+    Ms::System* collectSystem(LayoutContext&);
+
+    Ms::Score* m_score = nullptr;
 };
 }
 
-#endif // MU_ENGRAVING_LAYOUTBEAMS_H
+#endif // MU_ENGRAVING_LAYOUT_H
