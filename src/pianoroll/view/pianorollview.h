@@ -31,7 +31,7 @@
 #include "context/iglobalcontext.h"
 
 namespace mu::pianoroll {
-class PianoRollView : public QQuickPaintedItem, public async::Asyncable
+class PianorollView : public QQuickPaintedItem, public async::Asyncable
 {
     Q_OBJECT
 
@@ -43,7 +43,7 @@ class PianoRollView : public QQuickPaintedItem, public async::Asyncable
     Q_PROPERTY(QColor color READ color WRITE setColor)
 
 public:
-    PianoRollView(QQuickItem* parent = nullptr);
+    PianorollView(QQuickItem* parent = nullptr);
 
 //    QVariant icon() const;
 //    void setIcon(QVariant val);
