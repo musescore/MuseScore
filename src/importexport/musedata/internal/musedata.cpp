@@ -503,11 +503,6 @@ Measure* MuseData::createMeasure()
         }
         if (curTick > st && curTick < (st + l)) {
             // irregular measure
-#if 0 // TODO
-            Fraction f = score->sigmap()->timesig(st).fraction();
-            score->sigmap()->add(st, curTick - st, f);
-            score->sigmap()->add(curTick, f);
-#endif
             break;
         }
         if (curTick < st + l) {
@@ -518,15 +513,6 @@ Measure* MuseData::createMeasure()
     Measure* mes  = new Measure(score);
     mes->setTick(curTick);
 
-#if 0
-    foreach (Staff* s, score->staves()) {
-        if (s->isTop()) {
-            BarLine* barLine = new BarLine(score);
-            barLine->setStaff(s);
-            mes->setEndBarLine(barLine);
-        }
-    }
-#endif
     score->measures()->add(mes);
     return mes;
 }
@@ -716,22 +702,6 @@ void MuseData::convert()
         Part* part = (score->parts())[pn];
         readPart(parts[pn], part);
     }
-#if 0
-    // crash if system does not fit on page (too many instruments)
-
-    Measure* measure = score->tick2measure(0);
-    if (measure) {
-        Text* text = new Text(score);
-        text->setSubtype(TEXT_TITLE);
-        text->setText(parts[0][6]);
-        text->setText("mops");
-        measure->add(text);
-        text = new Text(score);
-        text->setSubtype(TEXT_SUBTITLE);
-        text->setText(parts[0][6]);
-        measure->add(text);
-    }
-#endif
 }
 
 //---------------------------------------------------------

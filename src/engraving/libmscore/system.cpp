@@ -748,7 +748,6 @@ void System::layout2()
             h = staff->height();
         }
         if (ni == visibleStaves.end()) {
-//                  ss->setYOff(staff->lines(0) == 1 ? _spatium * staff->mag(0) : 0.0);
             ss->setYOff(yOffset);
             ss->bbox().setRect(_leftMargin, y - yOffset, width() - _leftMargin, h);
             ss->saveLayout();
@@ -758,7 +757,6 @@ void System::layout2()
         int si2        = ni->first;
         Staff* staff2  = score()->staff(si2);
 
-#if 1
         if (staff->part() == staff2->part()) {
             Measure* m = firstMeasure();
             qreal mag = m ? staff->staffMag(m->tick()) : 1.0;
@@ -766,48 +764,7 @@ void System::layout2()
         } else {
             dist += staffDistance;
         }
-#else
-        // TODO: provide style setting or brace property to allow braces to also define a grand staff
-        switch (staff2->innerBracket()) {
-        case BracketType::BRACE:
-            dist += akkoladeDistance;
-            break;
-        case BracketType::NORMAL:
-        case BracketType::SQUARE:
-        case BracketType::LINE:
-        case BracketType::NO_BRACKET:
-            dist += staffDistance;
-            break;
-        }
-#endif
         dist += staff2->userDist();
-#if 0
-        for (MeasureBase* mb : ml) {
-            if (!mb->isMeasure()) {
-                continue;
-            }
-            Measure* m = toMeasure(mb);
-            Shape& s1  = m->staffShape(si1);
-            Shape& s2  = m->staffShape(si2);
-
-            qreal d    = score()->lineMode() ? 0.0 : s1.minVerticalDistance(s2);
-            dist       = qMax(dist, d + minVerticalDistance);
-
-            Spacer* sp = m->vspacerDown(si1);
-            if (sp) {
-                if (sp->spacerType() == SpacerType::FIXED) {
-                    dist = staff->height() + sp->gap();
-                    break;
-                } else {
-                    dist = qMax(dist, staff->height() + sp->gap());
-                }
-            }
-            sp = m->vspacerUp(si2);
-            if (sp) {
-                dist = qMax(dist, sp->gap());
-            }
-        }
-#else
         bool fixedSpace = false;
         for (MeasureBase* mb : ml) {
             if (!mb->isMeasure()) {
@@ -830,7 +787,6 @@ void System::layout2()
             }
         }
         if (!fixedSpace) {
-#if 1
             // check minimum distance to next staff
             // note that in continuous view, we normally only have a partial skyline for the system
             // a full one is only built when triggering a full layout
@@ -849,28 +805,8 @@ void System::layout2()
                     d = previousDist;
                 }
             }
-#else
-            // the code above does do a partial skyline comparison in continuous view
-            // we hope this does not come at too high a performance penalty for large scores
-            // if necessary, we can replace the code above with this
-            // the principle is the same, but we skip the skyline calculation on all but full layout
-            // the result is space between staves is correct to start but does not grow as needed
-            qreal d;
-            if (score()->lineMode()) {
-                d = ss->continuousDist();
-                if (d < 0.0) {
-                    d = ss->skyline().minDistance(System::staff(si2)->skyline());
-                    ss->setContinuousDist(d);
-                }
-            } else {
-                d = ss->skyline().minDistance(System::staff(si2)->skyline());
-            }
-#endif
             dist = qMax(dist, d + minVerticalDistance);
         }
-#endif
-
-//            ss->setYOff(staff->lines(0) == 1 ? _spatium * staff->mag(0) : 0.0);
         ss->setYOff(yOffset);
         ss->bbox().setRect(_leftMargin, y - yOffset, width() - _leftMargin, h);
         ss->saveLayout();
@@ -1101,22 +1037,6 @@ void System::add(Element* el)
 
     case ElementType::BRACKET: {
         Bracket* b   = toBracket(el);
-#if 0
-        int staffIdx = b->staffIdx();
-        int column   = b->column();
-        if (column == -1) {
-            column = 0;
-            for (const Bracket* bb : _brackets) {
-                if (staffIdx >= bb->firstStaff() && staffIdx <= bb->lastStaff()) {
-                    ++column;
-                }
-            }
-//                        b->setLevel(column);
-//                        b->setSpan(1);
-        }
-//                  b->staff()->setBracket(column,     b->bracketType());
-//                  b->staff()->setBracketSpan(column, b->span());
-#endif
         _brackets.append(b);
     }
     break;
@@ -1731,25 +1651,6 @@ qreal System::firstNoteRestSegmentX(bool leading)
     }
     qDebug("firstNoteRestSegmentX: did not find segment");
     return margin;
-}
-
-//---------------------------------------------------------
-//   moveBracket
-//---------------------------------------------------------
-
-void System::moveBracket(int /*staffIdx*/, int /*srcCol*/, int /*dstCol*/)
-{
-#if 0
-    printf("System::moveBracket\n");
-    if (vbox()) {
-        return;
-    }
-    for (Bracket* b : _brackets) {
-        if (b->staffIdx() == staffIdx && b->column() == srcCol) {
-            b->setLevel(dstCol);
-        }
-    }
-#endif
 }
 
 //---------------------------------------------------------

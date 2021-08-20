@@ -44,9 +44,6 @@ static const NoteHead::Type NOTEHEADTYPE_DEFAULT  = NoteHead::Type::HEAD_AUTO;
 static const MScore::DirectionH DIR_DEFAULT     = MScore::DirectionH::AUTO;
 static const bool HASLINE_DEFAULT         = true;
 static const Spatium LINEWIDTH_DEFAULT(0.12);
-#if 0 // yet(?) unused
-static const qreal LEDGEROFFSET_DEFAULT    = 0.25;
-#endif
 static const qreal LINEOFFSET_DEFAULT      = 0.8;               // the distance between notehead and line
 
 //---------------------------------------------------------

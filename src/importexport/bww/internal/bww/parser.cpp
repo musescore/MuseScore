@@ -36,6 +36,7 @@
 #include "lexer.h"
 #include "parser.h"
 #include "writer.h"
+#include "log.h"
 
 // Duration of a whole measure in ticks
 static const int WHOLE_MEASURE_DURATION = 192;
@@ -570,15 +571,9 @@ void Parser::parse()
    Display error \a s.
    */
 
-void Parser::errorHandler(QString /*s*/)
+void Parser::errorHandler(const QString& err)
 {
-#if 0 // WS
-    std::cerr << "Parse error line "
-              << lex.symLineNumber() + 1
-              << ": "
-              << qPrintable(s)
-              << std::endl;
-#endif
+    LOGE() << err;
 }
 
 /**

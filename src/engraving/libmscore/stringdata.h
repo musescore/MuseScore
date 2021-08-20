@@ -78,7 +78,6 @@ public:
     void        setFrets(int val) { _frets = val; }
     void        read(XmlReader&);
     void        write(XmlWriter&) const;
-    void        writeMusicXML(XmlWriter& xml) const;
     bool operator==(const StringData& d) const { return d._frets == _frets && d.stringTable == stringTable; }
     void        configBanjo5thString();
     int         adjustBanjo5thFret(int fret) const;

@@ -2787,26 +2787,6 @@ static void readStyle(MStyle* style, XmlReader& e, ReadChordListHook& readChordL
     }
 
     readChordListHook.validate();
-
-#if 0 // TODO
-      //
-      //  Compatibility with old scores/styles:
-      //  translate old frameWidthMM and paddingWidthMM
-      //  into spatium units
-      //
-    int n = style->textStyles().size();
-    qreal _spatium = style->value(Sid::spatium).toDouble();
-    qreal spMM = _spatium / DPMM;
-    for (int i = 0; i < n; ++i) {
-        TextStyle* s = &style->textStyle(StyledPropertyListIdx(i));
-        if (s->frameWidthMM() != 0.0) {
-            s->setFrameWidth(Spatium(s->frameWidthMM() / spMM));
-        }
-        if (s->paddingWidthMM() != 0.0) {
-            s->setPaddingWidth(Spatium(s->paddingWidthMM() / spMM));
-        }
-    }
-#endif
 }
 
 //---------------------------------------------------------
@@ -3108,16 +3088,6 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e)
                 }
                 ChordRest* cr = toChordRest(s->element(track));
                 if (cr) {
-#if 0 // TODO
-                    if (cr->isRest()) {
-                        Rest* r = toRest(cr);
-                        if (!r->offset().isNull()) {
-                            int lineOffset = r->computeLineOffset();
-                            qreal lineDist = r->staff() ? r->staff()->staffType(cr->tick())->lineDistance().val() : 1.0;
-                            r->rUserYoffset() -= (lineOffset * .5 * lineDist * r->spatium());
-                        }
-                    }
-#endif
                     if (!first) {
                         switch (cr->beamMode()) {
                         case Beam::Mode::AUTO:

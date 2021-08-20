@@ -1039,13 +1039,6 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                                     }
                                     if (slideKind) {
                                         createSlide(slideKind, note->chord(), staffIdx, note);
-#if 0
-                                        if (slideKind >= 4) {
-                                            slide = slideKind;
-                                        } else {
-                                            slides->insert(staffIdx * VOICES + voiceNum, slideKind);
-                                        }
-#endif
                                     }
                                 } else if (!argument.compare("HopoOrigin")) {
                                     hasSlur = true;
@@ -1166,30 +1159,16 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                                     }
                                     Note* harmonicNote = nullptr;
 
-                                    // natural harmonic = artificial harmonic?
                                     if (harmonicText.length()) {
                                         if (!harmonicText.compare("Natural")) {
                                             harmonicNote = note;
-                                            //note->setHarmonic(true); //TODO
                                         } else {
                                             harmonicNote = new Note(score);
-                                            // harmonicNote->setHarmonic(true);
-                                            //harmonicNote->setTrillFret(11);
                                             chord->add(harmonicNote);
-
-                                            //harmonicNote->setVisible(false);
                                         }
                                     }
 
                                     if (harmonicNote) {
-                                                      #if 0
-                                        if (harmonicNote->harmonic()) {
-                                            value = "";
-                                        }
-                                        if (harmonicText == "A.H.") {
-                                            harmonicNote->setHarmonic(true);
-                                        }
-                                                      #endif
                                         Staff* staff        = note->staff();
                                         int harmonicFret    = fretNum.toInt();
                                         int musescoreString = staff->part()->instrument()->stringData()->strings() - 1 - stringNum.toInt();
@@ -1504,20 +1483,6 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                             if (!letRingNode.isNull()) {
                                 addLetRing(note);
                             }
-#if 0
-                            QDomNode timerNode = currentNode.parentNode().firstChildElement("Timer");
-                            if (!timerNode.isNull()) {
-                                int time = timerNode.toElement().text().toInt();
-                                TextStyle textStyle;
-                                textStyle.setAlign(Align::CENTER);
-                                textStyle.setUnderline(true);
-                                int minutes = time / 60;
-                                int seconds = time % 60;
-                                addTextToNote(QString::number(minutes) + ":"
-                                              + (seconds < 10 ? "0" + QString::number(seconds) : QString::number(seconds)), textStyle,
-                                              note);
-                            }
-#endif
                             QDomNode textNode = currentNode.parentNode().firstChildElement("FreeText");
                             if (!textNode.isNull()) {
                                 QString text      = textNode.toElement().text();
@@ -1544,14 +1509,6 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                             QDomNode ghostNode = currentNote.parentNode().firstChildElement("AntiAccent");
                             if (!ghostNode.isNull()) {
                                 note->setGhost(true);
-                                /*Symbol* leftSym = new Symbol(note->score());
-                                Symbol* rightSym = new Symbol(note->score());
-                                leftSym->setSym(SymId::noteheadParenthesisLeft);
-                                rightSym->setSym(SymId::noteheadParenthesisRight);
-                                leftSym->setParent(note);
-                                rightSym->setParent(note);
-                                note->add(leftSym);
-                                note->add(rightSym);*/
                             }
                             QDomNode swellNode = currentNode.parentNode().firstChildElement("Fadding");
                             if (!swellNode.isNull()) {
@@ -1747,14 +1704,6 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                             Chord* c = toChord(cr1);
                             addTextToNote("rasg.", Align::LEFT, c->upNote());
                         }
-#if 0
-                        StaffText* st = new StaffText(score);
-                        st->setTextStyleType(TextStyleType::STAFF);
-                        st->setXmlText("rasg.");
-                        st->setParent(segment);
-                        st->setTrack(track);
-                        score->addElement(st);
-#endif
                     }
                     currentProperty = currentProperty.nextSibling();
                 }
@@ -1770,7 +1719,6 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
             } else if (currentNode.nodeName() == "Lyrics") {
                 auto lyrNode = currentNode.firstChildElement("Line");
                 auto str     = lyrNode.toElement().text();
-                //if (lyrNote) lyrNote->setLyric(str);
                 auto lyr = new Lyrics(score);
                 lyr->setPlainText(str);
                 if (cr) {
@@ -1779,22 +1727,6 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                     lyric = lyr;
                 }
             } else if (currentNode.nodeName() == "FreeText") {
-                //TODO::
-#if 0
-                auto str = currentNode.toElement().text();
-                auto lyr = new Lyrics(score);
-                lyr->setPlainText(str);
-                cr->add(lyr);
-                if (lyrNote) {
-                    lyrNote->setLyric(str);
-                } else {
-                    auto nt = beat.firstChildElement("Notes");
-                    if (!nt.isNull()) {
-                        auto notelist = nt.toElement().text().split(' ');
-                        lyrics[notelist.first().toInt()] = str;
-                    }
-                }
-#endif
             }
             currentNode = currentNode.nextSibling();
         }
@@ -2289,87 +2221,6 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                     s->add(sym);
                     bars[measureCounter].direction = "";
                 }
-#if 0
-                if (first && measureCounter > max_counter) {
-                    max_counter = measureCounter;
-                    first       = false;
-                    int counter = -1;
-                    for (auto& dir : bars[measureCounter].directions) {
-                        ++counter;
-                        if (!dir.compare("Fine") || !bars[measureCounter].directionStyle.compare("Jump")) {
-                            Segment* s    = measure->getSegment(SegmentType::KeySig, measure->tick());
-                            StaffText* st = new StaffText(score);
-                            if (!dir.compare("Fine")) {
-                                st->setXmlText("fine");
-                            } else if (!dir.compare("DaCapo")) {
-                                st->setXmlText("Da Capo");
-                            } else if (!dir.compare("DaCapoAlCoda")) {
-                                st->setXmlText("D.C. al Coda");
-                            } else if (!dir.compare("DaCapoAlDoubleCoda")) {
-                                st->setXmlText("D.C. al Double Coda");
-                            } else if (!dir.compare("DaCapoAlFine")) {
-                                st->setXmlText("D.C. al Fine");
-                            } else if (!dir.compare("DaSegnoAlCoda")) {
-                                st->setXmlText("D.S. al Coda");
-                            } else if (!dir.compare("DaSegno")) {
-                                st->setXmlText("Da Segno");
-                            } else if (!dir.compare("DaSegnoAlDoubleCoda")) {
-                                st->setXmlText("D.S. al Double Coda");
-                            } else if (!dir.compare("DaSegnoAlFine")) {
-                                st->setXmlText("D.S. al Fine");
-                            } else if (!dir.compare("DaSegnoSegno")) {
-                                st->setXmlText("Da Segno Segno");
-                            } else if (!dir.compare("DaSegnoSegnoAlCoda")) {
-                                st->setXmlText("D.S.S. al Coda");
-                            } else if (!dir.compare("DaSegnoSegnoAlDoubleCoda")) {
-                                st->setXmlText("D.S.S. al Double Coda");
-                            } else if (!dir.compare("DaSegnoSegnoAlFine")) {
-                                st->setXmlText("D.S.S. al Fine");
-                            } else if (!dir.compare("DaCoda")) {
-                                st->setXmlText("Da Coda");
-                            } else if (!dir.compare("DaDoubleCoda")) {
-                                st->setXmlText("Da Double Coda");
-                            }
-                            st->setParent(s);
-                            st->setTrack(stave);
-                            score->addElement(st);
-                            //bars[measureCounter].direction = "";
-                        } else if (!bars[measureCounter].directionStyle.compare("Target")) {
-                            Segment* s  = measure->getSegment(SegmentType::BarLine, measure->tick());
-                            Symbol* sym = new Symbol(score);
-                            if (!dir.compare("Segno")) {
-                                sym->setSym(SymId::segno);
-                            } else if (!dir.compare("SegnoSegno")) {
-                                sym->setSym(SymId::segnoSerpent2);
-                                /* Segment* s2 = measure->getSegment(SegmentType::ChordRest, measure->tick());
-                                 Symbol* sym2 = new Symbol(score);
-                                 sym2->setSym(SymId::segno);
-                                 sym2->setParent(measure);
-                                 sym2->setTrack(stave);
-                                 sym2->setXoffset(5.5f);
-                                 sym2->setElYOffset(-7.0f * counter);
-                                 s2->add(sym2);*/
-                            } else if (!dir.compare("Coda")) {
-                                sym->setSym(SymId::coda);
-                            } else if (!dir.compare("DoubleCoda")) {
-                                sym->setSym(SymId::codaSquare);
-                                /*  Segment* s2 = measure->getSegment(SegmentType::ChordRest, measure->tick());
-                                  Symbol* sym2 = new Symbol(score);
-                                  sym2->setSym(SymId::coda);
-                                  sym2->setParent(measure);
-                                  sym2->setTrack(stave);
-                                  sym2->setXoffset(8.0f);
-                                  sym2->setElYOffset(-7.0f * counter);
-                                  s2->add(sym2);*/
-                            }
-                            sym->setParent(measure);
-                            sym->setTrack(stave);
-                            s->add(sym);
-                            bars[measureCounter].direction = "";
-                        }
-                    }
-                }
-#endif
                 // we no longer set the key here, the gpbar has the information stored in it
                 if (!masterBarElement.nodeName().compare("Fermatas")) {
                     QDomNode currentFermata = masterBarElement.firstChild();
@@ -2603,7 +2454,6 @@ void GuitarPro6::readGpif(QByteArray* data)
 
     // set the starting tempo of the score
     bool zero_set = false;
-//      int linearTemp = -1;
     for (auto iter = tempoMap.begin(); iter != tempoMap.end(); ++iter) {
         if (iter->first == 0) {
             zero_set = true;
@@ -2612,25 +2462,6 @@ void GuitarPro6::readGpif(QByteArray* data)
         if (measure) {
             setTempo(iter->second.first, measure);
         }
-#if 0 // TODO-ws   what's linearTemp ?
-        if (linearTemp != -1) {
-            auto siter = iter;
-            siter--;
-            auto val = iter->second.first - siter->second.first;
-            if (val != 0) {
-                for (int i = linearTemp; i <= iter->first; ++i) {
-                    Measure* ms = toMeasure(score->measure(i));
-                    if (ms) {
-                        ms->setLinearTemp(val);
-                    }
-                }
-            }
-            linearTemp = -1;
-        }
-        if (iter->second.second) {
-            linearTemp = iter->first;
-        }
-#endif
     }
     if (!zero_set) {
         setTempo(120, score->firstMeasure());

@@ -869,13 +869,6 @@ QString ExportBraille::brailleTimeSig(TimeSig* timeSig)
     } else if (timeSig->timeSigType() == TimeSigType::ALLA_BREVE) {
         return QString("_c");
     }
-#if 0 //ToDo
-    else if (timeSig->timeSigType() == TimeSigType::CUT_BACH) {
-        return QString("_c"); // this is basically a Cut time, so ALLA_BREVE, but an alternatove glyph for it
-    } else if (timeSig->timeSigType() == TimeSigType::CUT_TRIPLE) {
-        return QString("#i8 "); // this is an 9/8 timesig with an alternative glyph so "#i8 "?
-    }
-#endif
     QMap<QString, QString> numeratorToBraille;
     numeratorToBraille["1"] = 'a';
     numeratorToBraille["2"] = 'b';

@@ -237,57 +237,6 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                     }
                     if (cr->type() == ElementType::CHORD) {
                         switch (code) {
-#if 0 // TODO-ws
-                        case 't':                           //  trill
-                            addArticulationText(score, cr, track, QString("trill"));
-                            break;
-                        case 'l':                           // (upper) prall
-                            addArticulationText(score, cr, track, QString("prall"));
-                            break;
-                        case 'w':                           // turn
-                            addArticulationText(score, cr, track, QString("turn"));
-                            break;
-                        case 'x':                           // (lower) mordent
-                            addArticulationText(score, cr, track, QString("mordent"));
-                            break;
-                        case 'Y':                           // down bow
-                            addArticulationText(score, cr, track, QString("downbow"));
-                            break;
-                        case 'Z':                           // up bow
-                            addArticulationText(score, cr, track, QString("upbow"));
-                            break;
-                        case 182:                           // plus sign
-                            addArticulationText(score, cr, track, QString("plusstop"));
-                            break;
-                        case 183:                           // ouvert sign
-                            addArticulationText(score, cr, track, QString("ouvert"));
-                            break;
-                        case 184:                           // snap pizzicato
-                            addArticulationText(score, cr, track, QString("snappizzicato"));
-                            break;
-                        case 189:                           // schleifer
-                            addArticulationText(score, cr, track, QString("schleifer"));
-                            break;
-                        case 190:                           // line prall
-                            addArticulationText(score, cr, track, QString("lineprall"));
-                            break;
-                        case 191:                           // prall prall
-                            addArticulationText(score, cr, track, QString("prallprall"));
-                            break;
-                        case 192:                           // down prall
-                            addArticulationText(score, cr, track, QString("downprall"));
-                            break;
-                        case 193:                           // up prall
-                            addArticulationText(score, cr, track, QString("upprall"));
-                            break;
-                        case 194:                           // prall mordent ?
-                            addArticulationText(score, cr, track, QString("prallmordent"));
-                            break;
-                        case 209:                           // reverse turn
-                        case 211:                           // alt. reverse turn
-                            addArticulationText(score, cr, track, QString("reverseturn"));
-                            break;
-#endif
                         case 172:                           // arpeggio (short)
                         case 173:                           // arpeggio (long)
                         {
@@ -851,20 +800,6 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
 
             processBasicDrawObj(o->objects, s, track, chord);
             switch (o->articulation) {
-#if 0 // TODO-ws
-            case 1:   addArticulationText(score, chord, track, QString("staccato"));
-                break;
-            case 2:   addArticulationText(score, chord, track, QString("tenuto"));
-                break;
-            case 3:   addArticulationText(score, chord, track, QString("portato"));
-                break;
-            case 4:   addArticulationText(score, chord, track, QString("staccatissimo"));
-                break;
-            case 5:   addArticulationText(score, chord, track, QString("sforzato"));
-                break;
-            case 6:   addArticulationText(score, chord, track, QString("marcato"));
-                break;
-#endif
             case 7:                     // "weak beat"
             case 8:                     // "strong beat"
             default:  if (o->articulation) {
@@ -981,29 +916,17 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                     // this is a measure with different actual duration
                     Fraction f = ticks;
                     pm->setTicks(f);
-#if 0
-                    AL::SigEvent ne(f);
-                    ne.setNominal(m->timesig());
-                    score->sigmap()->add(m->tick(), ne);
-                    AL::SigEvent ne2(m->timesig());
-                    score->sigmap()->add(m->tick() + m->ticks(), ne2);
-#endif
                 }
             }
-            // qDebug("pm %p", pm);
 
             BarLineType st = o->type();
             if (st == BarLineType::NORMAL) {
                 break;
             }
 
-//TODO                        if (pm && (st == BarLineType::DOUBLE || st == BarLineType::END || st == BarLineType::BROKEN))
-//                              pm->setEndBarLineType(st, false, true);
-
             if (st == BarLineType::START_REPEAT || st == BarLineType::END_START_REPEAT) {
                 Measure* nm = 0;               // the next measure (the one started by this barline)
                 nm = score->getCreateMeasure(tick);
-                // qDebug("nm %p", nm);
                 if (nm) {
                     nm->setRepeatStart(true);
                 }
@@ -1233,9 +1156,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
     score->style().set(Sid::smallStaffMag, cap->smallLineDist / cap->normalLineDist);
     score->style().set(Sid::minSystemDistance, Spatium(8));
     score->style().set(Sid::maxSystemDistance, Spatium(12));
-    // score->style().set(Sid::hideEmptyStaves, true);
 
-#if 1
     foreach (CapSystem* csys, cap->systems) {
         qDebug("System:");
         for (CapStaff* cstaff : csys->staves) {
@@ -1246,7 +1167,6 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
                    cstaff->iLayout, cl->barlineFrom, cl->barlineTo, cl->barlineMode);
         }
     }
-#endif
 
     //
     // find out the maximum number of staves

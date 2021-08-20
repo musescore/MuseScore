@@ -269,19 +269,6 @@ void ScoreFont::load()
     loadEngravingDefaults(metadataJson.value("engravingDefaults").toObject());
 
     m_loaded = true;
-
-#if 0
-    // check for missing symbols
-    ScoreFont* fallback = ScoreFont::fallbackFont();
-    if (fallback && fallback != this) {
-        for (int i = 1; i < int(SymId::lastSym); ++i) {
-            const Sym& sym = m_symbols[i];
-            if (!sym.isValid()) {
-                LOGD() << "symbol missing: " << Sym::id2name(SymId(i));
-            }
-        }
-    }
-#endif
 }
 
 void ScoreFont::loadGlyphsWithAnchors(const QJsonObject& glyphsWithAnchors)
@@ -368,16 +355,6 @@ void ScoreFont::loadComposedGlyphs()
               SymId::ornamentZigZagLineNoRightEnd,
               SymId::ornamentBottomRightConcaveStroke,
           } },
-#if 0
-        {
-            SymId::ornamentDownPrall, {
-                SymId::ornamentTopLeftConvexStroke,
-                SymId::ornamentZigZagLineNoRightEnd,
-                SymId::ornamentZigZagLineNoRightEnd,
-                SymId::ornamentZigZagLineWithRightEnd
-            }
-        },
-#endif
         {
             SymId::ornamentDownMordent, {
                 SymId::ornamentLeftVerticalStroke,

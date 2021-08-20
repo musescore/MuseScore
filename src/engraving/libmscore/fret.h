@@ -232,9 +232,6 @@ public:
     std::vector<FretItem::Dot> dot(int s, int f = 0) const;
     FretItem::Marker marker(int s) const;
     FretItem::Barre barre(int fret) const;
-#if 0 // NOTE:JT possible future feature
-    int fingering(int s) const { return _fingering ? _fingering[s] : 0; }
-#endif
 
     BarreMap barres() const { return _barres; }
     DotMap dots() const { return _dots; }

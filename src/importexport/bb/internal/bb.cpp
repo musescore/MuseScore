@@ -258,15 +258,6 @@ bool BBFile::read(const QString& name)
     }
     qDebug("Measures %d", _measures);
 
-#if 0
-    qDebug("================chords=======================");
-    foreach (BBChord c, _chords) {
-        qDebug("chord beat %3d bass %d root %d extension %d",
-               c.beat, c.bass, c.root, c.extension);
-    }
-    qDebug("================chords=======================");
-#endif
-
     if (a[idx] == 1) {              //??
         qDebug("Skip 0x%02x at 0x%04x", a[idx], idx);
         ++idx;

@@ -2744,16 +2744,6 @@ int GuitarPro3::readBeatEffects(int track, Segment* segment)
     if (fxBits & BEAT_TREMOLO) {
     }
     if (fxBits & BEAT_FADE) {
-#if 0
-        Articulation* art = new Articulation(score);
-        // art->setArticulationType(ArticulationType::FadeOut);
-        art->setSym(SymId::guitarFadeOut);
-        art->setAnchor(ArticulationAnchor::TOP_STAFF);
-        art->setPropertyFlags(Pid::ARTICULATION_ANCHOR, PropertyFlags::UNSTYLED);
-        if (!score->addArticulation(segment->cr(track), art)) {
-            delete art;
-        }
-#endif
         effects += 200;
     }
     if (fxBits & BEAT_DOTTED) {
@@ -2786,13 +2776,6 @@ void GuitarPro::readTremoloBar(int /*track*/, Segment* /*segment*/)
         int vibrato = readUChar();
         points.append(PitchValue(time, pitch, vibrato));
     }
-#if 0
-    //TODO
-    TremoloBar* b = new TremoloBar(segment->score());
-    b->setPoints(points);
-    b->setTrack(track);
-    segment->add(b);
-#endif
 }
 
 //---------------------------------------------------------

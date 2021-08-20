@@ -117,11 +117,6 @@ void Layout::doLayoutRange(const Fraction& st, const Fraction& et)
     if (m_score->cmdState().layoutFlags & LayoutFlag::FIX_PITCH_VELO) {
         m_score->updateVelo();
     }
-#if 0 // TODO: needed? It was introduced in ab9774ec4098512068b8ef708167d9aa6e702c50
-    if (cmdState().layoutFlags & LayoutFlag::PLAY_EVENTS) {
-        createPlayEvents();
-    }
-#endif
 
     //---------------------------------------------------
     //    initialize layout context lc
@@ -149,8 +144,6 @@ void Layout::doLayoutRange(const Fraction& st, const Fraction& et)
         qDebug("  don’t start with mmrest");
         m = toMeasure(m)->mmRest();
     }
-
-//      qDebug("start <%s> tick %d, system %p", m->name(), m->tick(), m->system());
 
     if (m_score->lineMode()) {
         lc.prevMeasure = 0;
@@ -198,13 +191,6 @@ void Layout::doLayoutRange(const Fraction& st, const Fraction& et)
             lc.tick      = lc.nextMeasure->tick();
         }
     } else {
-//  qDebug("layoutAll, systems %p %d", &_systems, int(_systems.size()));
-        //lc.measureNo   = 0;
-        //lc.tick        = 0;
-        // qDeleteAll(_systems);
-        // _systems.clear();
-        // lc.systemList  = _systems;
-        // _systems.clear();
 
         for (System* s : qAsConst(m_score->_systems)) {
             for (Bracket* b : s->brackets()) {
@@ -213,8 +199,6 @@ void Layout::doLayoutRange(const Fraction& st, const Fraction& et)
                     m_score->setSelectionChanged(true);
                 }
             }
-//                  for (SpannerSegment* ss : s->spannerSegments())
-//                        ss->setParent(0);
             s->setParent(nullptr);
         }
         for (MeasureBase* mb = m_score->first(); mb; mb = mb->next()) {
@@ -250,7 +234,6 @@ void Layout::layoutLinear(bool layoutAll, LayoutContext& lc)
     resetSystems(layoutAll, lc);
 
     collectLinearSystem(lc);
-//      hideEmptyStaves(systems().front(), true);     this does not make sense
 
     lc.layoutLinear();
 }
@@ -427,28 +410,6 @@ std::pair<qreal, qreal> Layout::extendedStemLenWithTwoNoteTremolo(Tremolo* tremo
             }
         }
     }
-
-// TODO: cross-staff two-note tremolo. Currently doesn't generate the right result in some cases.
-#if 0
-    // cross-staff & beam between staves: extend both stems by the same length
-    else if (tremolo->crossStaffBeamBetween()) {
-        const qreal sw = tremolo->score()->styleS(Sid::tremoloStrokeWidth).val();
-        const qreal td = tremolo->score()->styleS(Sid::tremoloDistance).val();
-        const qreal tremoloMinHeight = ((tremolo->lines() - 1) * td + sw) * spatium;
-        const qreal dy = c1->up() ? tremoloMinHeight - stemTipDistance : tremoloMinHeight + stemTipDistance;
-        const bool tooShort = dy > 1.0 * spatium;
-        const bool tooLong = dy < -1.0 * spatium;
-        const qreal idealDistance = 1.0 * spatium - tremoloMinHeight;
-
-        if (tooShort) {
-            return { stemLen1 + sgn1 * (std::abs(stemTipDistance) - idealDistance) / 2.0,
-                     stemLen2 + sgn2 * (std::abs(stemTipDistance) - idealDistance) / 2.0 };
-        } else if (tooLong) {
-            return { stemLen1 - sgn1 * (std::abs(stemTipDistance) + idealDistance) / 2.0,
-                     stemLen2 - sgn2 * (std::abs(stemTipDistance) + idealDistance) / 2.0 };
-        }
-    }
-#endif
 
     return { stemLen1, stemLen2 };
 }

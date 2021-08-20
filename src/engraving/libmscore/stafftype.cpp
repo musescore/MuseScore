@@ -1350,18 +1350,6 @@ const StaffType* StaffType::presetFromXmlName(QString& xmlName)
     return 0;
 }
 
-#if 0
-const StaffType* StaffType::presetFromName(QString& name)
-{
-    for (size_t i = 0; i < _presets.size(); ++i) {
-        if (_presets[i].name() == name) {
-            return &_presets[i];
-        }
-    }
-    return 0;
-}
-
-#endif
 const StaffType* StaffType::getDefaultPreset(StaffGroup grp)
 {
     int _idx = _defaultPreset[int(grp)];
