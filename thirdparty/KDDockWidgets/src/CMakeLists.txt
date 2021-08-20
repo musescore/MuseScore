@@ -367,3 +367,9 @@ if(${PROJECT_NAME}_DEVELOPER_MODE)
   endif()
 
 endif()
+
+if (MSVC)
+  set_target_properties(kddockwidgets PROPERTIES
+    COMPILE_FLAGS "/wd4505"
+  )
+endif (MSVC)
