@@ -127,8 +127,8 @@ void InstrumentsOnScoreListModel::load()
 {
     TRACEFUNC;
 
-    INotationPtr notation = context()->currentNotation();
-    auto parts = notation ? notation->parts()->partList() : NotifyList<const Part*>();
+    IMasterNotationPtr master = context()->currentMasterNotation();
+    auto parts = master ? master->parts()->partList() : NotifyList<const Part*>();
 
     QList<Item*> instruments;
 
