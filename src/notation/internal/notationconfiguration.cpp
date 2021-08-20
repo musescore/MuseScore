@@ -53,6 +53,7 @@ static const Settings::Key BACKGROUND_USE_COLOR(module_name, "ui/canvas/backgrou
 static const Settings::Key INVERT_SCORE_COLOR(module_name, "ui/canvas/invertScoreColor");
 
 static const Settings::Key FOREGROUND_COLOR(module_name, "ui/canvas/foreground/color");
+static const Settings::Key LAST_USED_FOREGROUND_COLOR(module_name, "ui/canvas/foreground/last_used_color"); //so that if the user toggles the score inversion setting, toggling back to the normal state restores their original page color
 static const Settings::Key FOREGROUND_WALLPAPER_PATH(module_name, "ui/canvas/foreground/wallpaper");
 static const Settings::Key FOREGROUND_USE_COLOR(module_name, "ui/canvas/foreground/useColor");
 
@@ -135,6 +136,11 @@ void NotationConfiguration::init()
 
     settings()->setDefaultValue(FOREGROUND_COLOR, Val(QColor("#f9f9f9")));
     settings()->valueChanged(FOREGROUND_COLOR).onReceive(nullptr, [this](const Val&) {
+        m_foregroundChanged.notify();
+    });
+
+    settings()->setDefaultValue(LAST_USED_FOREGROUND_COLOR, Val(QColor("#f9f9f9")));
+    settings()->valueChanged(LAST_USED_FOREGROUND_COLOR).onReceive(nullptr, [this](const Val&) {
         m_foregroundChanged.notify();
     });
 
@@ -271,14 +277,30 @@ async::Notification NotationConfiguration::backgroundChanged() const
     return m_backgroundChanged;
 }
 
+void NotationConfiguration::loadAppropriateForegroundColor()
+{
+    if (scoreInversionEnabled()) {
+        setForegroundColor(QColor("#000000"));
+    }
+}
+
 QColor NotationConfiguration::foregroundColor() const
 {
-    return settings()->value(FOREGROUND_COLOR).toQColor();
+    if (scoreInversionEnabled() && uiConfiguration()->isCurrentThemeHighContrast()) {
+        return settings()->value(FOREGROUND_COLOR).toQColor();
+    } else {
+        return settings()->value(LAST_USED_FOREGROUND_COLOR).toQColor();
+    }
 }
 
 void NotationConfiguration::setForegroundColor(const QColor& color)
 {
-    settings()->setSharedValue(FOREGROUND_COLOR, Val(color));
+    if (scoreInversionEnabled()) {
+        settings()->setSharedValue(FOREGROUND_COLOR, Val(color));
+    } else {
+        settings()->setSharedValue(LAST_USED_FOREGROUND_COLOR, Val(color));
+        settings()->setSharedValue(FOREGROUND_COLOR, Val(color));
+    }
 }
 
 io::path NotationConfiguration::foregroundWallpaperPath() const

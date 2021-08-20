@@ -115,6 +115,11 @@ bool AppearancePreferencesModel::enableHighContrastChecked()
     return uiConfiguration()->isHighContrast();
 }
 
+void AppearancePreferencesModel::loadAppropriateForegroundColor()
+{
+    notationConfiguration()->loadAppropriateForegroundColor();
+}
+
 void AppearancePreferencesModel::setNewColor(const QColor& newColor, ColorType colorType)
 {
     switch (colorType) {
