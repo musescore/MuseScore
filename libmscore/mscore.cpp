@@ -143,6 +143,7 @@ std::vector<MScoreError> MScore::errorList {
       { CANNOT_SPLIT_TUPLET,             "t2", QT_TRANSLATE_NOOP("error", "Cannot split tuplet")                                                   },
       { CANNOT_SPLIT_MEASURE_FIRST_BEAT, "m1", QT_TRANSLATE_NOOP("error", "Cannot split measure here:\n" "First beat of measure")                  },
       { CANNOT_SPLIT_MEASURE_TUPLET,     "m2", QT_TRANSLATE_NOOP("error", "Cannot split measure here:\n" "Cannot split tuplet")                    },
+      { CANNOT_SPLIT_MEASURE_TOO_SHORT,  "m3", QT_TRANSLATE_NOOP("error", "Cannot split measure here:\n" "Measure would be too short")             },
 
       { NO_DEST,                         "p1", QT_TRANSLATE_NOOP("error", "No destination to paste")                                               },
       { DEST_TUPLET,                     "p2", QT_TRANSLATE_NOOP("error", "Cannot paste into tuplet")                                              },
