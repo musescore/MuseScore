@@ -19,36 +19,39 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#ifndef MU_ENGRAVING_LAYOUT_H
+#define MU_ENGRAVING_LAYOUT_H
 
-#include "score.h"
-#include "page.h"
-#include "system.h"
-#include "tremolo.h"
-#include "measure.h"
-#include "layout.h"
-#include "bracket.h"
-#include "spanner.h"
-#include "barline.h"
-#include "tie.h"
-#include "chord.h"
-#include "staff.h"
-#include "box.h"
-#include "spacer.h"
-#include "systemdivider.h"
-#include "tuplet.h"
-#include "dynamic.h"
-#include "stafflines.h"
-#include "tempotext.h"
-#include "hairpin.h"
-#include "part.h"
-#include "keysig.h"
-#include "sig.h"
-#include "breath.h"
-#include "tempo.h"
-#include "fermata.h"
-#include "lyrics.h"
+#include "../fraction.h"
+#include "../score.h"
 
-using namespace mu;
+#include "layoutcontext.h"
 
 namespace Ms {
-} // namespace Ms
+class Tremolo;
+}
+
+namespace mu::engraving {
+class Layout
+{
+public:
+    Layout(Ms::Score* score);
+
+    void doLayoutRange(const Ms::Fraction&, const Ms::Fraction&);
+
+    static std::pair<qreal, qreal> extendedStemLenWithTwoNoteTremolo(Ms::Tremolo* tremolo, qreal stemLen1, qreal stemLen2);
+
+private:
+
+    void layoutLinear(bool layoutAll, LayoutContext& lc);
+    void resetSystems(bool layoutAll, LayoutContext& lc);
+    void collectLinearSystem(LayoutContext& lc);
+    Ms::System* getNextSystem(LayoutContext& lc);
+
+    Ms::System* collectSystem(LayoutContext&);
+
+    Ms::Score* m_score = nullptr;
+};
+}
+
+#endif // MU_ENGRAVING_LAYOUT_H
