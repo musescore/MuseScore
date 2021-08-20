@@ -82,8 +82,12 @@ void ExcerptNotation::fillWithDefaultInfo()
 
     Ms::Score* excerptScore = m_excerpt->partScore();
 
-    auto setText = [&excerptScore](Ms::Tid textId, const QString& text) {
-        Ms::TextBase* textBox = excerptScore->getText(textId);
+    auto setText = [&excerptScore](TextType textType, const QString& text) {
+        TextBase* textBox = excerptScore->getText(textType);
+
+        if (!textBox) {
+            textBox = excerptScore->addText(textType);
+        }
 
         if (textBox) {
             textBox->unlink();

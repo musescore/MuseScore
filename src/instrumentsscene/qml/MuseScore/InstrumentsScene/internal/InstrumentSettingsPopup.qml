@@ -125,8 +125,10 @@ StyledPopupView {
 
         FlatButton {
             width: parent.width
+
             navigation.panel: root.navigation
             navigation.row: 4
+
             text: qsTrc("instruments", "Reset all formatting")
 
             visible: !settingsModel.isMainScore
