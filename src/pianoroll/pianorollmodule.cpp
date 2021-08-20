@@ -56,7 +56,7 @@ void PianorollModule::registerResources()
 
 void PianorollModule::registerUiTypes()
 {
-    qmlRegisterType<PianoRollView>("MuseScore.Pianoroll", 1, 0, "PianoRollView");
+    qmlRegisterType<PianorollView>("MuseScore.Pianoroll", 1, 0, "PianorollView");
 
     auto ui = ioc()->resolve<ui::IUiEngine>(moduleName());
     if (ui) {
