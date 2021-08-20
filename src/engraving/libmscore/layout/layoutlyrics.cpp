@@ -21,6 +21,8 @@
  */
 #include "layoutlyrics.h"
 
+#include "style/styledef.h"
+
 #include "../system.h"
 #include "../segment.h"
 #include "../score.h"

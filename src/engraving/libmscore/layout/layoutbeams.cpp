@@ -62,6 +62,37 @@ bool LayoutBeams::isTopBeam(ChordRest* cr)
 }
 
 //---------------------------------------------------------
+//   notTopBeam
+//    returns true for the first CR of a beam that is cross-staff
+//---------------------------------------------------------
+
+bool LayoutBeams::notTopBeam(ChordRest* cr)
+{
+    Beam* b = cr->beam();
+    if (b && b->elements().front() == cr) {
+        // beam already considered cross?
+        if (b->cross()) {
+            return true;
+        }
+
+        // for beams not already considered cross,
+        // consider them so here if any elements were moved up
+        for (ChordRest* cr1 : b->elements()) {
+            // some element moved up?
+            if (cr1->staffMove() < 0) {
+                return true;
+            }
+        }
+
+        // not cross
+        return false;
+    }
+
+    // no beam or not first element
+    return false;
+}
+
+//---------------------------------------------------------
 //   restoreBeams
 //---------------------------------------------------------
 
@@ -425,5 +456,115 @@ void LayoutBeams::createBeams(Score* score, LayoutContext& lc, Measure* measure)
                 a1->removeDeleteBeam(false);
             }
         }
+    }
+}
+
+//---------------------------------------------------------
+//   Spring
+//---------------------------------------------------------
+
+struct Spring {
+    int seg;
+    qreal stretch;
+    qreal fix;
+    Spring(int i, qreal s, qreal f)
+        : seg(i), stretch(s), fix(f) {}
+};
+
+typedef std::multimap<qreal, Spring, std::less<qreal> > SpringMap;
+
+//---------------------------------------------------------
+//   sff2
+//    compute 1/Force for a given Extend
+//---------------------------------------------------------
+
+static qreal sff2(qreal width, qreal xMin, const SpringMap& springs)
+{
+    if (width <= xMin) {
+        return 0.0;
+    }
+    auto i = springs.begin();
+    qreal c  = i->second.stretch;
+    if (c == 0.0) {           //DEBUG
+        c = 1.1;
+    }
+    qreal f = 0.0;
+    for (; i != springs.end();) {
+        xMin -= i->second.fix;
+        f = (width - xMin) / c;
+        ++i;
+        if (i == springs.end() || f <= i->first) {
+            break;
+        }
+        c += i->second.stretch;
+    }
+    return f;
+}
+
+//---------------------------------------------------------
+//   respace
+//---------------------------------------------------------
+
+void LayoutBeams::respace(std::vector<ChordRest*>* elements)
+{
+    ChordRest* cr1 = elements->front();
+    ChordRest* cr2 = elements->back();
+    int n          = int(elements->size());
+    qreal x1       = cr1->segment()->pos().x();
+    qreal x2       = cr2->segment()->pos().x();
+
+#if (!defined (_MSCVER) && !defined (_MSC_VER))
+    qreal width[n - 1];
+    int ticksList[n - 1];
+#else
+    // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
+    //    heap allocation is slow, an optimization might be used.
+    std::vector<qreal> width(n - 1);
+    std::vector<int> ticksList(n - 1);
+#endif
+    int minTick = 100000;
+
+    for (int i = 0; i < n - 1; ++i) {
+        ChordRest* cr  = (*elements)[i];
+        ChordRest* ncr  = (*elements)[i + 1];
+        width[i]       = cr->shape().minHorizontalDistance(ncr->shape());
+        ticksList[i]   = cr->ticks().ticks();
+        minTick = qMin(ticksList[i], minTick);
+    }
+
+    //---------------------------------------------------
+    // compute stretches
+    //---------------------------------------------------
+
+    SpringMap springs;
+    qreal minimum = 0.0;
+    for (int i = 0; i < n - 1; ++i) {
+        qreal w   = width[i];
+        int t     = ticksList[i];
+        qreal str = 1.0 + 0.865617 * log(qreal(t) / qreal(minTick));
+        qreal d   = w / str;
+
+        springs.insert(std::pair<qreal, Spring>(d, Spring(i, str, w)));
+        minimum += w;
+    }
+
+    //---------------------------------------------------
+    //    distribute stretch to elements
+    //---------------------------------------------------
+
+    qreal force = sff2(x2 - x1, minimum, springs);
+    for (auto i = springs.begin(); i != springs.end(); ++i) {
+        qreal stretch = force * i->second.stretch;
+        if (stretch < i->second.fix) {
+            stretch = i->second.fix;
+        }
+        width[i->second.seg] = stretch;
+    }
+    qreal x = x1;
+    for (int i = 1; i < n - 1; ++i) {
+        x += width[i - 1];
+        ChordRest* cr = (*elements)[i];
+        qreal dx = x - cr->segment()->pos().x();
+        cr->rxpos() += dx;
     }
 }

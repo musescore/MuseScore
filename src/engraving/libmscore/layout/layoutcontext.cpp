@@ -30,6 +30,7 @@
 #include "layoutlyrics.h"
 #include "layoutmeasure.h"
 #include "layoutbeams.h"
+#include "layouttuplets.h"
 #include "verticalgapdata.h"
 
 using namespace mu::engraving;
@@ -709,10 +710,10 @@ void LayoutContext::layoutLinear()
                         continue;
                     }
                     ChordRest* cr = toChordRest(e);
-                    if (notTopBeam(cr)) {                           // layout cross staff beams
+                    if (LayoutBeams::notTopBeam(cr)) {                           // layout cross staff beams
                         cr->beam()->layout();
                     }
-                    if (notTopTuplet(cr)) {
+                    if (LayoutTuplets::notTopTuplet(cr)) {
                         // fix layout of tuplets
                         DurationElement* de = cr;
                         while (de->tuplet() && de->tuplet()->elements().front() == de) {
@@ -1320,10 +1321,10 @@ void LayoutContext::collectPage()
                             continue;
                         }
                         ChordRest* cr = toChordRest(e);
-                        if (notTopBeam(cr)) {                           // layout cross staff beams
+                        if (LayoutBeams::notTopBeam(cr)) {                           // layout cross staff beams
                             cr->beam()->layout();
                         }
-                        if (notTopTuplet(cr)) {
+                        if (LayoutTuplets::notTopTuplet(cr)) {
                             // fix layout of tuplets
                             DurationElement* de = cr;
                             while (de->tuplet() && de->tuplet()->elements().front() == de) {

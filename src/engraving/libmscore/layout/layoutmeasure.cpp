@@ -27,6 +27,7 @@
 #include "layout.h"
 #include "layoutcontext.h"
 #include "layoutbeams.h"
+#include "layoutchords.h"
 
 using namespace mu::engraving;
 using namespace Ms;
@@ -208,7 +209,7 @@ void LayoutMeasure::getNextMeasure(Ms::Score* score, LayoutContext& lc)
     for (int staffIdx = 0; staffIdx < score->score()->nstaves(); ++staffIdx) {
         for (Segment& segment : measure->segments()) {
             if (segment.isChordRestType()) {
-                score->layoutChords1(&segment, staffIdx);
+                LayoutChords::layoutChords1(score, &segment, staffIdx);
                 for (int voice = 0; voice < VOICES; ++voice) {
                     ChordRest* cr = segment.cr(staffIdx * VOICES + voice);
                     if (cr) {
