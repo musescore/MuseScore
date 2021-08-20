@@ -45,6 +45,7 @@
 
 #include "layoutcontext.h"
 #include "layoutmeasure.h"
+#include "layoutsystem.h"
 
 using namespace mu::engraving;
 using namespace Ms;
@@ -234,7 +235,7 @@ void Layout::doLayoutRange(const Fraction& st, const Fraction& et)
     lc.prevMeasure = 0;
 
     LayoutMeasure::getNextMeasure(m_score, lc);
-    lc.curSystem = lc.collectSystem();
+    lc.curSystem = LayoutSystem::collectSystem(lc, m_score);
 
     lc.layout();
 }

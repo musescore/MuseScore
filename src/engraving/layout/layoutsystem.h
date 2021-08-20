@@ -19,35 +19,34 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_LAYOUT_H
-#define MU_ENGRAVING_LAYOUT_H
+#ifndef MU_ENGRAVING_LAYOUTSYSTEM_H
+#define MU_ENGRAVING_LAYOUTSYSTEM_H
+
+#include "layoutcontext.h"
 
 namespace Ms {
 class Score;
-class Fraction;
 class System;
-class Tremolo;
+class Spanner;
+class Chord;
+class Fraction;
 }
 
 namespace mu::engraving {
-class LayoutContext;
-class Layout
+class LayoutSystem
 {
 public:
-    Layout(Ms::Score* score);
 
-    void doLayoutRange(const Ms::Fraction&, const Ms::Fraction&);
-
-    static std::pair<qreal, qreal> extendedStemLenWithTwoNoteTremolo(Ms::Tremolo* tremolo, qreal stemLen1, qreal stemLen2);
+    static Ms::System* collectSystem(LayoutContext& lc, Ms::Score* score);
+    static void layoutSystemElements(LayoutContext& lc, Ms::Score* score, Ms::System* system);
 
 private:
 
-    void layoutLinear(bool layoutAll, LayoutContext& lc);
-    void resetSystems(bool layoutAll, LayoutContext& lc);
-    void collectLinearSystem(LayoutContext& lc);
-
-    Ms::Score* m_score = nullptr;
+    static Ms::System* getNextSystem(LayoutContext& lc, Ms::Score* score);
+    static void hideEmptyStaves(Ms::Score* score, Ms::System* system, bool isFirstSystem);
+    static void processLines(Ms::System* system, std::vector<Ms::Spanner*> lines, bool align);
+    static void layoutTies(Ms::Chord* ch, Ms::System* system, const Ms::Fraction& stick);
 };
 }
 
-#endif // MU_ENGRAVING_LAYOUT_H
+#endif // MU_ENGRAVING_LAYOUTSYSTEM_H
