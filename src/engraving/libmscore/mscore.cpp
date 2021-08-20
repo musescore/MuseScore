@@ -150,8 +150,11 @@ std::vector<MScoreError> MScore::errorList {
     { MsError::CANNOT_SPLIT_MEASURE_FIRST_BEAT, "m1", QT_TRANSLATE_NOOP("error", "Cannot split measure here:\n" "First beat of measure") },
     { MsError::CANNOT_SPLIT_MEASURE_TUPLET,     "m2", QT_TRANSLATE_NOOP("error", "Cannot split measure here:\n" "Cannot split tuplet") },
     { MsError::INSUFFICIENT_MEASURES,           "m3", QT_TRANSLATE_NOOP("error",
-                                                                        "Measure repeat cannot be added here:\nInsufficient or unequal measures") },
+                                                                        "Measure repeat cannot be added here:\n"
+                                                                        "Insufficient or unequal measures") },
     { MsError::CANNOT_SPLIT_MEASURE_REPEAT,     "m4", QT_TRANSLATE_NOOP("error", "Cannot split measure repeat") },
+    { MsError::CANNOT_SPLIT_MEASURE_TOO_SHORT,  "m5",
+      QT_TRANSLATE_NOOP("error", "Cannot split measure here:\n" "Measure would be too short") },
 
     { MsError::CANNOT_REMOVE_TIME_TUPLET,       "d1", QT_TRANSLATE_NOOP("error",
                                                                         "Cannot remove time from tuplet:\nPlease select the complete tuplet and retry") },
