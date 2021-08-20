@@ -1195,10 +1195,8 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                                         } else if (!value.compare("1.8")) {
                                             harmonicFret += 40;
                                         }
-                                        //harmonicNote->setFret(harmonicFret);
                                         harmonicNote->setPitch(staff->part()->instrument()->stringData()->getPitch(musescoreString,
-                                                                                                                   harmonicFret, nullptr,
-                                                                                                                   Fraction(0, 1)));
+                                                                                                                   harmonicFret, nullptr));
                                         harmonicNote->setTpcFromPitch();
                                         if (harmonicText.length() && harmonicText.compare("Natural")) {
                                             harmonicNote->setFret(fretNum.toInt());
@@ -1221,7 +1219,7 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                                 int fretNumber      = fretNum.toInt();
                                 int musescoreString = staff->part()->instrument()->stringData()->strings() - 1 - stringNum.toInt();
                                 auto pitch          = staff->part()->instrument()->stringData()->getPitch(musescoreString, fretNumber,
-                                                                                                          nullptr, Fraction(0, 1));
+                                                                                                          nullptr);
                                 note->setFret(fretNumber);
                                 // we need to turn this string number for GP to the correct string number for musescore
                                 note->setString(musescoreString);

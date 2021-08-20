@@ -191,7 +191,6 @@ void Layout::doLayoutRange(const Fraction& st, const Fraction& et)
             lc.tick      = lc.nextMeasure->tick();
         }
     } else {
-
         for (System* s : qAsConst(m_score->_systems)) {
             for (Bracket* b : s->brackets()) {
                 if (b->selected()) {

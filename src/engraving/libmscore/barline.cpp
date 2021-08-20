@@ -1053,7 +1053,6 @@ void BarLine::startEdit(EditData& ed)
     ed.addData(bed);
 }
 
-
 //---------------------------------------------------------
 //   editDrag
 //---------------------------------------------------------
@@ -1130,13 +1129,8 @@ void BarLine::endEditDrag(EditData& ed)
     }
 
     // determine new spanFrom and spanTo values
-    int newSpanFrom, newSpanTo;
-
-//      else {                              // if coarse dragging
-    {                                   // if coarse dragging
-        newSpanFrom = 0;
-        newSpanTo   = 0;
-    }
+    int newSpanFrom = 0;
+    int newSpanTo = 0;
 
     bool localDrag = ed.control() || segment()->isBarLineType();
     if (localDrag) {

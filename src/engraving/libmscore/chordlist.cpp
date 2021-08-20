@@ -967,7 +967,6 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
                     hdl += HDegree(d, 0, HDegreeType::SUBTRACT);
                 }
             } else if (tok1L == "sus") {
-// enable this code to export 7sus4 as suspended-fourth,add7 rather than dominant,sub3,add4 (similar for 9sus4, 13sus4)
                 // convert chords with sus into suspended "kind"
                 // extension then becomes a series of degree adds
                 if (tok2L == "4") {

@@ -127,7 +127,7 @@ void StringData::write(XmlWriter& xml) const
 //          from highest (0) to lowest (strings()-1)
 //---------------------------------------------------------
 
-bool StringData::convertPitch(int pitch, Staff* staff, const Fraction& tick, int* string, int* fret) const
+bool StringData::convertPitch(int pitch, Staff* staff, int* string, int* fret) const
 {
     return convertPitch(pitch, pitchOffsetAt(staff), string, fret);
 }
@@ -140,7 +140,7 @@ bool StringData::convertPitch(int pitch, Staff* staff, const Fraction& tick, int
 //    Note: frets above max fret are accepted.
 //---------------------------------------------------------
 
-int StringData::getPitch(int string, int fret, Staff* staff, const Fraction& tick) const
+int StringData::getPitch(int string, int fret, Staff* staff) const
 {
     return getPitch(string, fret, pitchOffsetAt(staff));
 }
@@ -152,7 +152,7 @@ int StringData::getPitch(int string, int fret, Staff* staff, const Fraction& tic
 //    Returns INVALID_FRET_INDEX if not possible
 //---------------------------------------------------------
 
-int StringData::fret(int pitch, int string, Staff* staff, const Fraction& tick) const
+int StringData::fret(int pitch, int string, Staff* staff) const
 {
     return fret(pitch, string, pitchOffsetAt(staff));
 }

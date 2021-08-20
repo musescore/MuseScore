@@ -1585,7 +1585,7 @@ void Score::upDown(bool up, UpDownMode mode)
                     return;                                 // no next string to move to
                 }
                 string = stt->visualStringToPhys(string);
-                fret = stringData->fret(pitch, string, staff, tick);
+                fret = stringData->fret(pitch, string, staff);
                 if (fret == -1) {                            // can't have that note on that string
                     return;
                 }
@@ -1612,7 +1612,7 @@ void Score::upDown(bool up, UpDownMode mode)
                 }
                 // update pitch and tpc's and check it matches stringData
                 upDownChromatic(up, pitch, oNote, key, tpc1, tpc2, newPitch, newTpc1, newTpc2);
-                if (newPitch != stringData->getPitch(string, fret, staff, tick)) {
+                if (newPitch != stringData->getPitch(string, fret, staff)) {
                     // oh-oh: something went very wrong!
                     qDebug("upDown tab in-string: pitch mismatch");
                     return;
@@ -1842,7 +1842,7 @@ static void changeAccidental2(Note* n, int pitch, int tpc)
             //
             const StringData* stringData = n->part()->instrument(n->tick())->stringData();
             if (stringData) {
-                stringData->convertPitch(pitch, st, chord->tick(), &string, &fret);
+                stringData->convertPitch(pitch, st, &string, &fret);
             }
         }
     }
