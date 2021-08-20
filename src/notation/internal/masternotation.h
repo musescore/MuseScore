@@ -74,7 +74,6 @@ private:
 
     void initExcerptNotations(const QList<Ms::Excerpt*>& excerpts);
     void addExcerptsToMasterScore(const QList<Ms::Excerpt*>& excerpts);
-
     void doSetExcerpts(ExcerptNotationList excerpts);
 
     void notifyAboutNeedSaveChanged();

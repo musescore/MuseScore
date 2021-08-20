@@ -438,16 +438,16 @@ void MasterNotation::addExcerpts(const ExcerptNotationList& excerpts)
 
     ExcerptNotationList result = m_excerpts.val;
     for (IExcerptNotationPtr excerptNotation : excerpts) {
-        auto it = std::find(result.begin(), result.end(), excerptNotation);
+        auto it = std::find(result.cbegin(), result.cend(), excerptNotation);
         if (it != result.end()) {
             continue;
         }
 
         ExcerptNotation* excerptNotationImpl = get_impl(excerptNotation);
 
-        if (!excerptNotationImpl->isInited()) {
+        if (!excerptNotationImpl->isCreated()) {
             masterScore()->initAndAddExcerpt(excerptNotationImpl->excerpt(), false);
-            excerptNotationImpl->init();
+            excerptNotationImpl->setIsCreated(true);
         }
 
         result.push_back(excerptNotation);
@@ -501,27 +501,9 @@ void MasterNotation::notifyAboutNeedSaveChanged()
 
 IExcerptNotationPtr MasterNotation::newExcerptBlankNotation() const
 {
-    Ms::Excerpt* excerpt = new Ms::Excerpt(masterScore());
-    excerpt->setTitle(qtrc("notation", "Part"));
-    masterScore()->initAndAddExcerpt(excerpt, false);
-
-    auto excerptNotation = std::make_shared<ExcerptNotation>(excerpt);
-    excerptNotation->init();
-
-    Ms::Score* excerptScore = excerpt->partScore();
-    auto setText = [&excerptScore](Ms::Tid textId, const QString& text) {
-        Ms::TextBase* textBox = excerptScore->getText(textId);
-        if (!textBox) {
-            textBox = excerptScore->addText(textId);
-        }
-
-        textBox->setPlainText(text);
-    };
-
-    setText(Ms::Tid::TITLE, qtrc("notation", "Title"));
-    setText(Ms::Tid::COMPOSER, qtrc("notation", "Composer"));
-
-    excerptScore->doLayout();
+    auto excerptNotation = std::make_shared<ExcerptNotation>(new Ms::Excerpt(masterScore()));
+    excerptNotation->setTitle(qtrc("notation", "Part"));
+    excerptNotation->setIsCreated(false);
 
     return excerptNotation;
 }
@@ -571,7 +553,8 @@ ExcerptNotationList MasterNotation::potentialExcerpts() const
     ExcerptNotationList result;
 
     for (Ms::Excerpt* excerpt : excerpts) {
-        IExcerptNotationPtr excerptNotation = std::make_shared<ExcerptNotation>(excerpt);
+        auto excerptNotation = std::make_shared<ExcerptNotation>(excerpt);
+        excerptNotation->setIsCreated(false);
         result.push_back(excerptNotation);
     }
 
@@ -590,7 +573,7 @@ void MasterNotation::initExcerptNotations(const QList<Ms::Excerpt*>& excerpts)
 
     for (Ms::Excerpt* excerpt : excerpts) {
         auto excerptNotation = std::make_shared<ExcerptNotation>(excerpt);
-        excerptNotation->init();
+        excerptNotation->setIsCreated(true);
         excerptNotation->notation()->setOpened(true);
 
         notationExcerpts.push_back(excerptNotation);
