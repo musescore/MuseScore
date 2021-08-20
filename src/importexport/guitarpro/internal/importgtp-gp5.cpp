@@ -981,7 +981,7 @@ bool GuitarPro5::readNoteEffects(Note* note)
             note_type = NoteType::APPOGGIATURA;
         }
 
-        int grace_pitch = note->staff()->part()->instrument()->stringData()->getPitch(note->string(), fret, nullptr, Fraction(0, 1));
+        int grace_pitch = note->staff()->part()->instrument()->stringData()->getPitch(note->string(), fret, nullptr);
         auto gnote = score->setGraceNote(note->chord(), grace_pitch, note_type, MScore::division / 2);
         gnote->setString(note->string());
         auto sd = note->part()->instrument()->stringData();
@@ -1122,10 +1122,8 @@ bool GuitarPro5::readNoteEffects(Note* note)
             auto octave = readUChar();
 
             auto harmonicNote = new Note(score);
-//TODO-ws		harmonicNote->setHarmonic(true);
             note->chord()->add(harmonicNote);
             auto staff = note->staff();
-//			int string = staff->part()->instrument()->stringData()->strings() - 1 - note->string();
             int fret = note->fret();
             switch (harmNote) {
             case 0: fret += 24;
@@ -1144,15 +1142,9 @@ bool GuitarPro5::readNoteEffects(Note* note)
             }
             harmonicNote->setString(note->string());
             harmonicNote->setFret(fret);
-            harmonicNote->setPitch(staff->part()->instrument()->stringData()->getPitch(note->string(), fret, nullptr, Fraction(0, 1)));
+            harmonicNote->setPitch(staff->part()->instrument()->stringData()->getPitch(note->string(), fret, nullptr));
             harmonicNote->setTpcFromPitch();
             addTextToNote("A.H.", Align::CENTER, harmonicNote);
-        }
-        if (type == 1 || type == 4 || type == 5) {
-            //TextStyle textStyle;
-            //textStyle.setAlign(Align::CENTER);
-            //addTextToNote("N.H.", textStyle, note);
-//TODO-ws		note->setHarmonic(true);
         }
     }
 
@@ -1161,7 +1153,6 @@ bool GuitarPro5::readNoteEffects(Note* note)
     }
 
     if (modMask2 & EFFECT_TRILL) {
-//TODO-ws            note->setTrillFret(readUChar());      // trill fret
         readUChar();          // trill fret
 
         int period = readUChar();          // trill length
@@ -1306,7 +1297,7 @@ bool GuitarPro5::readNote(int string, Note* note)
         note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
         note->setGhost(true);
     }
-    int pitch = staff->part()->instrument()->stringData()->getPitch(string, fretNumber, nullptr, Fraction(0, 1));
+    int pitch = staff->part()->instrument()->stringData()->getPitch(string, fretNumber, nullptr);
     note->setFret(fretNumber);
     note->setString(string);
     note->setPitch(pitch);

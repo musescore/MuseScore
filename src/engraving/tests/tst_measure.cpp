@@ -150,19 +150,15 @@ void TestMeasure::insertBfClefChange()
     score->startCmd();
     score->insertMeasure(ElementType::MEASURE, m);
     score->endCmd();
-    QVERIFY(score->checkClefs());
     QVERIFY(saveCompareScore(score, "measure-insert_bf_clef.mscx", MEASURE_DATA_DIR + "measure-insert_bf_clef-ref.mscx"));
     score->undoRedo(true, 0);
-    QVERIFY(score->checkClefs());
     QVERIFY(saveCompareScore(score, "measure-insert_bf_clef_undo.mscx", MEASURE_DATA_DIR + "measure-insert_bf_clef.mscx"));
     m = score->firstMeasure()->nextMeasure()->nextMeasure()->nextMeasure()->nextMeasure()->nextMeasure();
     score->startCmd();
     score->insertMeasure(ElementType::MEASURE, m);
     score->endCmd();
-    QVERIFY(score->checkClefs());
     QVERIFY(saveCompareScore(score, "measure-insert_bf_clef-2.mscx", MEASURE_DATA_DIR + "measure-insert_bf_clef-2-ref.mscx"));
     score->undoRedo(true, 0);
-    QVERIFY(score->checkClefs());
     QVERIFY(saveCompareScore(score, "measure-insert_bf_clef_undo.mscx", MEASURE_DATA_DIR + "measure-insert_bf_clef.mscx"));
     delete score;
 }

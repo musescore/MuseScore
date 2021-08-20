@@ -2681,7 +2681,6 @@ void Score::deleteItem(Element* el)
 
 void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preserveTies)
 {
-
     select(0, SelectType::SINGLE, 0);
 
     // createEndBar if last measure is deleted

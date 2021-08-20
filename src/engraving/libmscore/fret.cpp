@@ -269,7 +269,7 @@ void FretDiagram::init(StringData* stringData, Chord* chord)
         for (const Note* note : chord->notes()) {
             int string;
             int fret;
-            if (stringData->convertPitch(note->pitch(), chord->staff(), chord->segment()->tick(), &string, &fret)) {
+            if (stringData->convertPitch(note->pitch(), chord->staff(), &string, &fret)) {
                 setDot(string, fret);
             }
         }

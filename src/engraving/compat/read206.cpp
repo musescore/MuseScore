@@ -2844,15 +2844,14 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             readText206(e, el, el);
             segment = m->getSegment(SegmentType::ChordRest, e.tick());
             segment->add(el);
-        }
-        else if (tag == "Harmony"
-                 || tag == "FretDiagram"
-                 || tag == "TremoloBar"
-                 || tag == "Symbol"
-                 || tag == "InstrumentChange"
-                 || tag == "StaffState"
-                 || tag == "FiguredBass"
-                 ) {
+        } else if (tag == "Harmony"
+                   || tag == "FretDiagram"
+                   || tag == "TremoloBar"
+                   || tag == "Symbol"
+                   || tag == "InstrumentChange"
+                   || tag == "StaffState"
+                   || tag == "FiguredBass"
+                   ) {
             Element* el = Element::name2Element(tag, score);
             // hack - needed because tick tags are unreliable in 1.3 scores
             // for symbols attached to anything but a measure

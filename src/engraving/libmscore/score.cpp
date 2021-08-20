@@ -889,7 +889,7 @@ void Score::changeEnharmonicSpelling(bool both)
         }
         if (staff->isTabStaff(n->tick())) {
             int string = n->line() + (both ? 1 : -1);
-            int fret = staff->part()->instrument(n->tick())->stringData()->fret(n->pitch(), string, staff, n->chord()->tick());
+            int fret = staff->part()->instrument(n->tick())->stringData()->fret(n->pitch(), string, staff);
             if (fret != -1) {
                 n->undoChangeProperty(Pid::FRET, fret);
                 n->undoChangeProperty(Pid::STRING, string);
@@ -2992,7 +2992,7 @@ void Score::padToggle(Pad p, const EditData& ed)
                             nval.string = _is.string();
                             const Instrument* instr = s->part()->instrument(tick);
                             const StringData* stringData = instr->stringData();
-                            nval.pitch = stringData->getPitch(nval.string, nval.fret, s, tick);
+                            nval.pitch = stringData->getPitch(nval.string, nval.fret, s);
                         } else if (s->isDrumStaff(tick)) {
                             // drum - use selected drum palette note
                             int n = _is.drumNote();

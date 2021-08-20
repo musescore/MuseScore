@@ -324,7 +324,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
             }
             gn->setFret(fret);
             gn->setString(string);
-            int grace_pitch = note->part()->instrument()->stringData()->getPitch(string, fret, nullptr, Fraction(0, 1));
+            int grace_pitch = note->part()->instrument()->stringData()->getPitch(string, fret, nullptr);
             gn->setPitch(grace_pitch);
             gn->setTpcFromPitch();
 
@@ -440,7 +440,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
     if (fretNumber > 99 || fretNumber == -1) {
         fretNumber = 0;
     }
-    int pitch = staff->part()->instrument()->stringData()->getPitch(string, fretNumber, nullptr, Fraction(0, 1));
+    int pitch = staff->part()->instrument()->stringData()->getPitch(string, fretNumber, nullptr);
     note->setFret(fretNumber);
     note->setString(string);
     note->setPitch(std::min(pitch, 127));
@@ -463,9 +463,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
             note->chord()->add(harmonicNote);
             harmonicNote->setFret(harmonicFret);
             harmonicNote->setString(note->string());
-            //TODO-ws			harmonicNote->setHarmonic(true);
-            harmonicNote->setPitch(note->staff()->part()->instrument()->stringData()->getPitch(note->string(), harmonicFret, nullptr,
-                                                                                               Fraction(0, 1)));
+            harmonicNote->setPitch(note->staff()->part()->instrument()->stringData()->getPitch(note->string(), harmonicFret, nullptr));
             harmonicNote->setTpcFromPitch();
         }
     }

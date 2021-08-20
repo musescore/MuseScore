@@ -1653,10 +1653,7 @@ Spanner* Segment::firstSpanner(int activeStaff)
                 continue;
             }
             if (s->startSegment() == this) {
-                if (e->staffIdx() == activeStaff) {
-                    return s;
-                }
-                else if (e->isMeasure() && activeStaff == 0) {
+                if (e->staffIdx() == activeStaff || (e->isMeasure() && activeStaff == 0)) {
                     return s;
                 }
             }
@@ -1681,10 +1678,7 @@ Spanner* Segment::lastSpanner(int activeStaff)
                 continue;
             }
             if (s->startSegment() == this) {
-                if (e->staffIdx() == activeStaff) {
-                    return s;
-                }
-                else if (e->isMeasure() && activeStaff == 0) {
+                if (e->staffIdx() == activeStaff || (e->isMeasure() && activeStaff == 0)) {
                     return s;
                 }
             }
