@@ -81,6 +81,7 @@
 #include "mscore.h"
 #include "scorefont.h"
 #include "scoreorder.h"
+#include "glissando.h"
 
 #include "bracket.h"
 #include "audio.h"
@@ -5201,6 +5202,112 @@ Part* Score::partById(const ID& partId) const
     }
 
     return nullptr;
+}
+
+void Score::rebuildBspTree()
+{
+    for (Page* page : pages()) {
+        page->rebuildBspTree();
+    }
+}
+
+//---------------------------------------------------------
+//   connectTies
+///   Rebuild tie connections.
+//---------------------------------------------------------
+
+void Score::connectTies(bool silent)
+{
+    int tracks = nstaves() * VOICES;
+    Measure* m = firstMeasure();
+    if (!m) {
+        return;
+    }
+
+    SegmentType st = SegmentType::ChordRest;
+    for (Segment* s = m->first(st); s; s = s->next1(st)) {
+        for (int i = 0; i < tracks; ++i) {
+            Element* e = s->element(i);
+            if (e == 0 || !e->isChord()) {
+                continue;
+            }
+            Chord* c = toChord(e);
+            for (Note* n : c->notes()) {
+                // connect a tie without end note
+                Tie* tie = n->tieFor();
+                if (tie && !tie->endNote()) {
+                    Note* nnote;
+                    if (_mscVersion <= 114) {
+                        nnote = searchTieNote114(n);
+                    } else {
+                        nnote = searchTieNote(n);
+                    }
+                    if (nnote == 0) {
+                        if (!silent) {
+                            qDebug("next note at %d track %d for tie not found (version %d)", s->tick().ticks(), i, _mscVersion);
+                            delete tie;
+                            n->setTieFor(0);
+                        }
+                    } else {
+                        tie->setEndNote(nnote);
+                        nnote->setTieBack(tie);
+                    }
+                }
+                // connect a glissando without initial note (old glissando format)
+                for (Spanner* spanner : n->spannerBack()) {
+                    if (spanner->isGlissando() && !spanner->startElement()) {
+                        Note* initialNote = Glissando::guessInitialNote(n->chord());
+                        n->removeSpannerBack(spanner);
+                        if (initialNote) {
+                            spanner->setStartElement(initialNote);
+                            spanner->setEndElement(n);
+                            spanner->setTick(initialNote->chord()->tick());
+                            spanner->setTick2(n->chord()->tick());
+                            spanner->setTrack(n->track());
+                            spanner->setTrack2(n->track());
+                            spanner->setParent(initialNote);
+                            initialNote->add(spanner);
+                        } else {
+                            delete spanner;
+                        }
+                    }
+                }
+                // spanner with no end element can happen during copy/paste
+                for (Spanner* spanner : n->spannerFor()) {
+                    if (spanner->endElement() == nullptr) {
+                        n->removeSpannerFor(spanner);
+                        delete spanner;
+                    }
+                }
+            }
+#if 0    // chords are set in tremolo->layout()
+            // connect two note tremolos
+            Tremolo* tremolo = c->tremolo();
+            if (tremolo && tremolo->twoNotes() && !tremolo->chord2()) {
+                for (Segment* ls = s->next1(st); ls; ls = ls->next1(st)) {
+                    Element* element = ls->element(i);
+                    if (!element) {
+                        continue;
+                    }
+                    if (!element->isChord()) {
+                        qDebug("cannot connect tremolo");
+                    } else {
+                        Chord* nc = toChord(element);
+                        nc->setTremolo(tremolo);
+                        tremolo->setChords(c, nc);
+                        // cross-measure tremolos are not supported
+                        // but can accidentally result from copy & paste
+                        // remove them now
+                        if (c->measure() != nc->measure()) {
+                            c->remove(tremolo);
+                        }
+                    }
+                    break;
+                }
+            }
+#endif
+        }
+    }
 }
 
 mu::score::AccessibleScore* Score::accessible() const

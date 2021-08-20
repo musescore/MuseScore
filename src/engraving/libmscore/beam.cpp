@@ -48,7 +48,11 @@
 #include "groups.h"
 #include "spanner.h"
 
+#include "layout/layoutbeams.h"
+#include "layout/layoutchords.h"
+
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 static const ElementStyle beamStyle {
@@ -1619,7 +1623,7 @@ void Beam::computeStemLen(const std::vector<ChordRest*>& cl, qreal& py1, int bea
 void Beam::layout2(std::vector<ChordRest*> crl, SpannerSegmentType, int frag)
 {
     if (_distribute) {
-        score()->respace(&crl);           // fix horizontal spacing of stems
+        LayoutBeams::respace(&crl);           // fix horizontal spacing of stems
     }
     if (crl.empty()) {                  // no beamed Elements
         return;
@@ -1695,14 +1699,14 @@ void Beam::layout2(std::vector<ChordRest*> crl, SpannerSegmentType, int frag)
                     c->setUp(nup);
                     // guess was wrong, have to relayout
                     if (!_isGrace) {
-                        score()->layoutChords1(c->segment(), c->staffIdx());
+                        mu::engraving::LayoutChords::layoutChords1(score(), c->segment(), c->staffIdx());
                         // DEBUG: attempting to layout during beam edit causes crash
                         // probably because ledger lines are deleted and added back
                         // if (editFragment == -1)
                         c->layout();
                     } else {
                         relayoutGrace = true;
-                        score()->layoutChords3(c->notes(), c->staff(), 0);
+                        mu::engraving::LayoutChords::layoutChords3(score(), c->notes(), c->staff(), 0);
                     }
                 }
             }
@@ -1745,7 +1749,7 @@ void Beam::layout2(std::vector<ChordRest*> crl, SpannerSegmentType, int frag)
                 if (c->up() != nup) {
                     c->setUp(nup);
                     // guess was wrong, have to relayout
-                    score()->layoutChords1(c->segment(), c->staffIdx());
+                    mu::engraving::LayoutChords::layoutChords1(score(), c->segment(), c->staffIdx());
                     c->layout();
                     // TODO: this might affect chord space, which might affect segment position
                     // we should relayout entire measure

@@ -19,8 +19,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#ifndef MU_ENGRAVING_LAYOUTTUPLETS_H
+#define MU_ENGRAVING_LAYOUTTUPLETS_H
 
-#ifndef __LAYOUT_H__
-#define __LAYOUT_H__
+namespace Ms {
+class ChordRest;
+}
 
-#endif
+namespace mu::engraving {
+class LayoutTuplets
+{
+public:
+
+    static bool notTopTuplet(Ms::ChordRest* cr);
+};
+}
+
+#endif // MU_ENGRAVING_LAYOUTTUPLETS_H
