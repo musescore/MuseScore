@@ -22,11 +22,11 @@
 #ifndef MU_ENGRAVING_LAYOUTCONTEXT_H
 #define MU_ENGRAVING_LAYOUTCONTEXT_H
 
-#include "../score.h"
-#include "../page.h"
-#include "../fraction.h"
-#include "../system.h"
-#include "../spanner.h"
+#include "libmscore/score.h"
+#include "libmscore/page.h"
+#include "libmscore/fraction.h"
+#include "libmscore/system.h"
+#include "libmscore/spanner.h"
 
 namespace mu::engraving {
 //---------------------------------------------------------

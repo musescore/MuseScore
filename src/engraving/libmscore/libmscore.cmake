@@ -140,9 +140,6 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/lasso.h
     ${CMAKE_CURRENT_LIST_DIR}/layoutbreak.cpp
     ${CMAKE_CURRENT_LIST_DIR}/layoutbreak.h
-    ${CMAKE_CURRENT_LIST_DIR}/layout.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/layout.h
-    ${CMAKE_CURRENT_LIST_DIR}/layoutlinear.cpp
     ${CMAKE_CURRENT_LIST_DIR}/ledgerline.cpp
     ${CMAKE_CURRENT_LIST_DIR}/ledgerline.h
     ${CMAKE_CURRENT_LIST_DIR}/letring.cpp
@@ -346,15 +343,4 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/vibrato.h
     ${CMAKE_CURRENT_LIST_DIR}/volta.cpp
     ${CMAKE_CURRENT_LIST_DIR}/volta.h
-
-    ${CMAKE_CURRENT_LIST_DIR}/layout/layout.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/layout/layout.h
-    ${CMAKE_CURRENT_LIST_DIR}/layout/layoutcontext.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/layout/layoutcontext.h
-    ${CMAKE_CURRENT_LIST_DIR}/layout/layoutlyrics.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/layout/layoutlyrics.h
-    ${CMAKE_CURRENT_LIST_DIR}/layout/layoutmeasure.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/layout/layoutmeasure.h
-    ${CMAKE_CURRENT_LIST_DIR}/layout/layoutbeams.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/layout/layoutbeams.h
 )

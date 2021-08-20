@@ -19,19 +19,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#ifndef MU_ENGRAVING_VERTICALGAPDATALIST_H
+#define MU_ENGRAVING_VERTICALGAPDATALIST_H
 
-#ifndef __LAYOUT_H__
-#define __LAYOUT_H__
-
-#include <set>
 #include <QList>
 
-#include "system.h"
-
 namespace Ms {
-class Segment;
-class Page;
+class System;
+class SysStaff;
+class Staff;
+class Spacer;
+}
 
+namespace mu::engraving {
 //---------------------------------------------------------
 //   VerticalStretchData
 //    helper class for spreading staves over a page
@@ -51,11 +51,11 @@ private:
     void  updateFactor(qreal factor);
 
 public:
-    System* system   { nullptr };
-    SysStaff* sysStaff { nullptr };
-    Staff* staff    { nullptr };
+    Ms::System* system   { nullptr };
+    Ms::SysStaff* sysStaff { nullptr };
+    Ms::Staff* staff    { nullptr };
 
-    VerticalGapData(bool first, System* sys, Staff* st, SysStaff* sst, Spacer* nextSpacer, qreal y);
+    VerticalGapData(bool first, Ms::System* sys, Ms::Staff* st, Ms::SysStaff* sst, Ms::Spacer* nextSpacer, qreal y);
 
     void addSpaceBetweenSections();
     void addSpaceAroundVBox(bool above);
@@ -85,16 +85,6 @@ public:
     qreal sumStretchFactor() const;
     qreal smallest(qreal limit=-1.0) const;
 };
+}
 
-//---------------------------------------------------------
-//   VerticalAlignRange
-//---------------------------------------------------------
-
-enum class VerticalAlignRange {
-    SEGMENT, MEASURE, SYSTEM
-};
-
-extern bool notTopBeam(ChordRest* cr);
-extern bool notTopTuplet(ChordRest* cr);
-}     // namespace Ms
-#endif
+#endif // MU_ENGRAVING_VERTICALGAPDATALIST_H

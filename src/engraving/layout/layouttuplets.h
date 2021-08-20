@@ -19,36 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#include "score.h"
-#include "page.h"
-#include "system.h"
-#include "tremolo.h"
-#include "measure.h"
-#include "layout.h"
-#include "bracket.h"
-#include "spanner.h"
-#include "barline.h"
-#include "tie.h"
-#include "chord.h"
-#include "staff.h"
-#include "box.h"
-#include "spacer.h"
-#include "systemdivider.h"
-#include "tuplet.h"
-#include "dynamic.h"
-#include "stafflines.h"
-#include "tempotext.h"
-#include "hairpin.h"
-#include "part.h"
-#include "keysig.h"
-#include "sig.h"
-#include "breath.h"
-#include "tempo.h"
-#include "fermata.h"
-#include "lyrics.h"
-
-using namespace mu;
+#ifndef MU_ENGRAVING_LAYOUTTUPLETS_H
+#define MU_ENGRAVING_LAYOUTTUPLETS_H
 
 namespace Ms {
-} // namespace Ms
+class ChordRest;
+}
+
+namespace mu::engraving {
+class LayoutTuplets
+{
+public:
+
+    static bool isTopTuplet(Ms::ChordRest* cr);
+    static bool notTopTuplet(Ms::ChordRest* cr);
+};
+}
+
+#endif // MU_ENGRAVING_LAYOUTTUPLETS_H

@@ -30,15 +30,14 @@
 #include "fontStyleSelect.h"
 #include "framework/global/widgetstatestore.h"
 #include "libmscore/figuredbass.h"
-#include "libmscore/layout.h"
 #include "libmscore/scorefont.h"
 #include "libmscore/sym.h"
 #include "libmscore/realizedharmony.h"
-#include "log.h"
 #include "offsetSelect.h"
 #include "settings.h"
 #include "translation.h"
 #include "ui/view/iconcodes.h"
+#include "log.h"
 
 using namespace mu::notation;
 using namespace mu::ui;

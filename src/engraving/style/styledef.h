@@ -1460,6 +1460,14 @@ inline uint qHash(Sid id)
 }
 
 //---------------------------------------------------------
+//   VerticalAlignRange
+//---------------------------------------------------------
+
+enum class VerticalAlignRange {
+    SEGMENT, MEASURE, SYSTEM
+};
+
+//---------------------------------------------------------
 //   StyledProperty
 ///   \cond PLUGIN_API \private \endcond
 //---------------------------------------------------------
