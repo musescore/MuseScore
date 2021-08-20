@@ -5280,32 +5280,6 @@ void Score::connectTies(bool silent)
                     }
                 }
             }
-#if 0    // chords are set in tremolo->layout()
-            // connect two note tremolos
-            Tremolo* tremolo = c->tremolo();
-            if (tremolo && tremolo->twoNotes() && !tremolo->chord2()) {
-                for (Segment* ls = s->next1(st); ls; ls = ls->next1(st)) {
-                    Element* element = ls->element(i);
-                    if (!element) {
-                        continue;
-                    }
-                    if (!element->isChord()) {
-                        qDebug("cannot connect tremolo");
-                    } else {
-                        Chord* nc = toChord(element);
-                        nc->setTremolo(tremolo);
-                        tremolo->setChords(c, nc);
-                        // cross-measure tremolos are not supported
-                        // but can accidentally result from copy & paste
-                        // remove them now
-                        if (c->measure() != nc->measure()) {
-                            c->remove(tremolo);
-                        }
-                    }
-                    break;
-                }
-            }
-#endif
         }
     }
 }
@@ -5313,6 +5287,50 @@ void Score::connectTies(bool silent)
 mu::score::AccessibleScore* Score::accessible() const
 {
     return m_accessible;
+}
+
+//---------------------------------------------------------
+//   relayoutForStyles
+///   some styles can't properly apply if score hasn't been laid out yet,
+///   so temporarily disable them and then reenable after layout
+///   (called during score load)
+//---------------------------------------------------------
+
+void Score::relayoutForStyles()
+{
+    std::vector<Sid> stylesToTemporarilyDisable;
+
+    for (Sid sid : { Sid::createMultiMeasureRests, Sid::mrNumberSeries }) {
+        // only necessary if boolean style is true
+        if (styleB(sid)) {
+            stylesToTemporarilyDisable.push_back(sid);
+        }
+    }
+
+    if (!stylesToTemporarilyDisable.empty()) {
+        for (Sid sid : stylesToTemporarilyDisable) {
+            style().set(sid, false); // temporarily disable
+        }
+        doLayout();
+        for (Sid sid : stylesToTemporarilyDisable) {
+            style().set(sid, true); // and immediately reenable
+        }
+    }
+}
+
+//---------------------------------------------------------
+//   doLayout
+//    do a complete (re-) layout
+//---------------------------------------------------------
+
+void Score::doLayout()
+{
+    doLayoutRange(Fraction(0, 1), Fraction(-1, 1));
+}
+
+void Score::doLayoutRange(const Fraction& st, const Fraction& et)
+{
+    m_layout.doLayoutRange(st, et);
 }
 
 UndoStack* Score::undoStack() const { return _masterScore->undoStack(); }

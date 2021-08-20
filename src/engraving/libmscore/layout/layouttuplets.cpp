@@ -27,6 +27,26 @@
 using namespace mu::engraving;
 using namespace Ms;
 
+bool LayoutTuplets::isTopTuplet(ChordRest* cr)
+{
+    Tuplet* t = cr->tuplet();
+    if (t && t->elements().front() == cr) {
+        // find top level tuplet
+        while (t->tuplet()) {
+            t = t->tuplet();
+        }
+        // consider tuplet cross if anything moved within it
+        if (t->cross()) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    // no tuplet or not first element
+    return false;
+}
+
 bool LayoutTuplets::notTopTuplet(ChordRest* cr)
 {
     Tuplet* t = cr->tuplet();

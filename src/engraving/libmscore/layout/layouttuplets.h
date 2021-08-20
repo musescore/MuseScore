@@ -31,6 +31,7 @@ class LayoutTuplets
 {
 public:
 
+    static bool isTopTuplet(Ms::ChordRest* cr);
     static bool notTopTuplet(Ms::ChordRest* cr);
 };
 }

@@ -21,10 +21,30 @@
  */
 #include "layoutcontext.h"
 
+#include "realfn.h"
+
 #include "../spacer.h"
 #include "../systemdivider.h"
 #include "../measure.h"
 #include "../system.h"
+#include "../volta.h"
+#include "../staff.h"
+#include "../chordrest.h"
+#include "../mmrestrange.h"
+#include "../chord.h"
+#include "../fingering.h"
+#include "../barline.h"
+#include "../tremolo.h"
+#include "../measurenumber.h"
+#include "../stafflines.h"
+#include "../tuplet.h"
+#include "../tie.h"
+#include "../dynamic.h"
+#include "../harmony.h"
+#include "../fret.h"
+#include "../bracketItem.h"
+#include "../box.h"
+#include "../part.h"
 
 #include "layout.h"
 #include "layoutlyrics.h"
@@ -33,6 +53,7 @@
 #include "layouttuplets.h"
 #include "verticalgapdata.h"
 
+using namespace mu;
 using namespace mu::engraving;
 using namespace Ms;
 
@@ -93,6 +114,276 @@ void LayoutContext::layout()
         }
     }
     score->systems().append(systemList);       // TODO
+}
+
+//---------------------------------------------------------
+//   processLines
+//---------------------------------------------------------
+
+static void processLines(System* system, std::vector<Spanner*> lines, bool align)
+{
+    std::vector<SpannerSegment*> segments;
+    for (Spanner* sp : lines) {
+        SpannerSegment* ss = sp->layoutSystem(system);         // create/layout spanner segment for this system
+        if (ss->autoplace()) {
+            segments.push_back(ss);
+        }
+    }
+
+    if (align && segments.size() > 1) {
+        const int nstaves = system->staves()->size();
+        constexpr qreal minY = -1000000.0;
+        const qreal defaultY = segments[0]->rypos();
+        std::vector<qreal> y(nstaves, minY);
+
+        for (SpannerSegment* ss : segments) {
+            if (ss->visible()) {
+                qreal& staffY = y[ss->staffIdx()];
+                staffY = qMax(staffY, ss->rypos());
+            }
+        }
+        for (SpannerSegment* ss : segments) {
+            if (!ss->isStyled(Pid::OFFSET)) {
+                continue;
+            }
+            const qreal staffY = y[ss->staffIdx()];
+            if (staffY > minY) {
+                ss->rypos() = staffY;
+            } else {
+                ss->rypos() = defaultY;
+            }
+        }
+    }
+
+    //
+    // add shapes to skyline
+    //
+    for (SpannerSegment* ss : segments) {
+        if (ss->addToSkyline()) {
+            system->staff(ss->staffIdx())->skyline().add(ss->shape().translated(ss->pos()));
+        }
+    }
+}
+
+//---------------------------------------------------------
+//   layoutTies
+//---------------------------------------------------------
+
+static void layoutTies(Chord* ch, System* system, const Fraction& stick)
+{
+    SysStaff* staff = system->staff(ch->staffIdx());
+    if (!staff->show()) {
+        return;
+    }
+    for (Note* note : ch->notes()) {
+        Tie* t = note->tieFor();
+        if (t) {
+            TieSegment* ts = t->layoutFor(system);
+            if (ts && ts->addToSkyline()) {
+                staff->skyline().add(ts->shape().translated(ts->pos()));
+            }
+        }
+        t = note->tieBack();
+        if (t) {
+            if (t->startNote()->tick() < stick) {
+                TieSegment* ts = t->layoutBack(system);
+                if (ts && ts->addToSkyline()) {
+                    staff->skyline().add(ts->shape().translated(ts->pos()));
+                }
+            }
+        }
+    }
+}
+
+//---------------------------------------------------------
+//   layoutHarmonies
+//---------------------------------------------------------
+
+static void layoutHarmonies(const std::vector<Segment*>& sl)
+{
+    for (const Segment* s : sl) {
+        for (Element* e : s->annotations()) {
+            if (e->isHarmony()) {
+                Harmony* h = toHarmony(e);
+                // For chord symbols that coincide with a chord or rest,
+                // a partial layout can also happen (if needed) during ChordRest layout
+                // in order to calculate a bbox and allocate its shape to the ChordRest.
+                // But that layout (if it happens at all) does not do autoplace,
+                // so we need the full layout here.
+                h->layout();
+                h->autoplaceSegmentElement();
+            }
+        }
+    }
+}
+
+//---------------------------------------------------------
+//   alignHarmonies
+//---------------------------------------------------------
+
+static void alignHarmonies(const System* system, const std::vector<Segment*>& sl, bool harmony, const qreal maxShiftAbove,
+                           const qreal maxShiftBelow)
+{
+    // Help class.
+    // Contains harmonies/fretboard per segment.
+    class HarmonyList : public QList<Element*>
+    {
+        QMap<const Segment*, QList<Element*> > elements;
+        QList<Element*> modified;
+
+        Element* getReferenceElement(const Segment* s, bool above, bool visible) const
+        {
+            // Returns the reference element for aligning.
+            // When a segments contains multiple harmonies/fretboard, the lowest placed
+            // element (for placement above, otherwise the highest placed element) is
+            // used for alignment.
+            Element* element { nullptr };
+            for (Element* e : elements[s]) {
+                // Only chord symbols have styled offset, fretboards don't.
+                if (!e->autoplace() || (e->isHarmony() && !e->isStyled(Pid::OFFSET)) || (visible && !e->visible())) {
+                    continue;
+                }
+                if (!element) {
+                    element = e;
+                } else {
+                    if ((e->placeAbove() && above && (element->y() < e->y()))
+                        || (e->placeBelow() && !above && (element->y() > e->y()))) {
+                        element = e;
+                    }
+                }
+            }
+            return element;
+        }
+
+    public:
+        HarmonyList()
+        {
+            elements.clear();
+            modified.clear();
+        }
+
+        void append(const Segment* s, Element* e)
+        {
+            elements[s].append(e);
+        }
+
+        qreal getReferenceHeight(bool above) const
+        {
+            // The reference height is the height of
+            //    the lowest element if placed above
+            // or
+            //    the highest element if placed below.
+            bool first { true };
+            qreal ref { 0.0 };
+            for (auto s : elements.keys()) {
+                Element* e { getReferenceElement(s, above, true) };
+                if (!e) {
+                    continue;
+                }
+                if (e->placeAbove() && above) {
+                    ref = first ? e->y() : qMin(ref, e->y());
+                    first = false;
+                } else if (e->placeBelow() && !above) {
+                    ref = first ? e->y() : qMax(ref, e->y());
+                    first = false;
+                }
+            }
+            return ref;
+        }
+
+        bool align(bool above, qreal reference, qreal maxShift)
+        {
+            // Align the elements. If a segment contains multiple elements,
+            // only the reference elements is used in the algorithm. All other
+            // elements will remain their original placement with respect to
+            // the reference element.
+            bool moved { false };
+            if (mu::RealIsNull(reference)) {
+                return moved;
+            }
+
+            for (auto s : elements.keys()) {
+                QList<Element*> handled;
+                Element* be = getReferenceElement(s, above, false);
+                if (!be) {
+                    // If there are only invisible elements, we have to use an invisible
+                    // element for alignment reference.
+                    be = getReferenceElement(s, above, true);
+                }
+                if (be && ((above && (be->y() < (reference + maxShift))) || ((!above && (be->y() > (reference - maxShift)))))) {
+                    qreal shift = be->rypos();
+                    be->rypos() = reference - be->ryoffset();
+                    shift -= be->rypos();
+                    for (Element* e : elements[s]) {
+                        if ((above && e->placeBelow()) || (!above && e->placeAbove())) {
+                            continue;
+                        }
+                        modified.append(e);
+                        handled.append(e);
+                        moved = true;
+                        if (e != be) {
+                            e->rypos() -= shift;
+                        }
+                    }
+                    for (auto e : handled) {
+                        elements[s].removeOne(e);
+                    }
+                }
+            }
+            return moved;
+        }
+
+        void addToSkyline(const System* system)
+        {
+            for (Element* e : qAsConst(modified)) {
+                const Segment* s = toSegment(e->parent());
+                const MeasureBase* m = toMeasureBase(s->parent());
+                system->staff(e->staffIdx())->skyline().add(e->shape().translated(e->pos() + s->pos() + m->pos()));
+                if (e->isFretDiagram()) {
+                    FretDiagram* fd = toFretDiagram(e);
+                    Harmony* h = fd->harmony();
+                    if (h) {
+                        system->staff(e->staffIdx())->skyline().add(h->shape().translated(h->pos() + fd->pos() + s->pos() + m->pos()));
+                    } else {
+                        system->staff(e->staffIdx())->skyline().add(fd->shape().translated(fd->pos() + s->pos() + m->pos()));
+                    }
+                }
+            }
+        }
+    };
+
+    if (RealIsNull(maxShiftAbove) && RealIsNull(maxShiftBelow)) {
+        return;
+    }
+
+    // Collect all fret diagrams and chord symbol and store them per staff.
+    // In the same pass, the maximum height is collected.
+    QMap<int, HarmonyList> staves;
+    for (const Segment* s : sl) {
+        for (Element* e : s->annotations()) {
+            if ((harmony && e->isHarmony()) || (!harmony && e->isFretDiagram())) {
+                staves[e->staffIdx()].append(s, e);
+            }
+        }
+    }
+
+    for (int idx: staves.keys()) {
+        // Align the objects.
+        // Algorithm:
+        //    - Find highest placed harmony/fretdiagram.
+        //    - Align all harmony/fretdiagram objects placed between height and height-maxShiftAbove.
+        //    - Repeat for all harmony/fretdiagram objects below heigt-maxShiftAbove.
+        bool moved { true };
+        int pass { 0 };
+        while (moved && (pass++ < 10)) {
+            moved = false;
+            moved |= staves[idx].align(true, staves[idx].getReferenceHeight(true), maxShiftAbove);
+            moved |= staves[idx].align(false, staves[idx].getReferenceHeight(false), maxShiftBelow);
+        }
+
+        // Add all aligned objects to the sky line.
+        staves[idx].addToSkyline(system);
+    }
 }
 
 //---------------------------------------------------------
@@ -343,7 +634,7 @@ void LayoutContext::layoutSystemElements(System* system)
                 continue;
             }
             ChordRest* cr = toChordRest(e);
-            if (!isTopTuplet(cr)) {
+            if (!LayoutTuplets::isTopTuplet(cr)) {
                 continue;
             }
             DurationElement* de = cr;
@@ -908,11 +1199,11 @@ static void distributeStaves(Page* page)
     // Try to make the gaps equal, taking the spread factors and maximum spacing into account.
     static const int maxPasses { 20 };     // Saveguard to prevent endless loops.
     int pass { 0 };
-    while (!almostZero(spaceLeft) && (ngaps > 0) && (++pass < maxPasses)) {
+    while (!RealIsNull(spaceLeft) && (ngaps > 0) && (++pass < maxPasses)) {
         ngaps = 0;
         qreal smallest     { vgdl.smallest() };
         qreal nextSmallest { vgdl.smallest(smallest) };
-        if (almostZero(smallest) || almostZero(nextSmallest)) {
+        if (RealIsNull(smallest) || RealIsNull(nextSmallest)) {
             break;
         }
 
@@ -923,7 +1214,7 @@ static void distributeStaves(Page* page)
         qreal addedSpace { 0.0 };
         VerticalGapDataList modified;
         for (VerticalGapData* vgd : vgdl) {
-            if (!almostZero(vgd->spacing() - smallest)) {
+            if (!RealIsNull(vgd->spacing() - smallest)) {
                 continue;
             }
             qreal step { nextSmallest - vgd->spacing() };
@@ -931,7 +1222,7 @@ static void distributeStaves(Page* page)
                 continue;
             }
             step = vgd->addSpacing(step);
-            if (!almostZero(step)) {
+            if (!RealIsNull(step)) {
                 addedSpace += step * vgd->factor();
                 modified.append(vgd);
                 ++ngaps;
@@ -956,13 +1247,13 @@ static void distributeStaves(Page* page)
     spaceLeft = qMin(maxPageFill * vgdl.length(), spaceLeft);
     pass = 0;
     ngaps = 1;
-    while (!almostZero(spaceLeft) && !almostZero(maxPageFill) && (ngaps > 0) && (++pass < maxPasses)) {
+    while (!RealIsNull(spaceLeft) && !RealIsNull(maxPageFill) && (ngaps > 0) && (++pass < maxPasses)) {
         ngaps = 0;
         qreal addedSpace { 0.0 };
         qreal step { spaceLeft / vgdl.sumStretchFactor() };
         for (VerticalGapData* vgd : vgdl) {
             qreal res { vgd->addFillSpacing(step, maxPageFill) };
-            if (!almostZero(res)) {
+            if (!RealIsNull(res)) {
                 addedSpace += res * vgd->factor();
                 ++ngaps;
             }

@@ -22,16 +22,15 @@
 #ifndef MU_ENGRAVING_LAYOUT_H
 #define MU_ENGRAVING_LAYOUT_H
 
-#include "../fraction.h"
-#include "../score.h"
-
-#include "layoutcontext.h"
-
 namespace Ms {
+class Score;
+class Fraction;
+class System;
 class Tremolo;
 }
 
 namespace mu::engraving {
+class LayoutContext;
 class Layout
 {
 public:

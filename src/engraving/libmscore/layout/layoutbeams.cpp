@@ -24,6 +24,7 @@
 #include "../score.h"
 #include "../staff.h"
 #include "../chord.h"
+#include "../timesig.h"
 
 #include "layoutcontext.h"
 

@@ -55,7 +55,6 @@
 #include "key.h"
 #include "keysig.h"
 #include "layoutbreak.h"
-#include "layout.h"
 #include "note.h"
 #include "ottava.h"
 #include "page.h"

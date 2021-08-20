@@ -43,6 +43,7 @@
 #include "diagnostics/idiagnosticspathsregister.h"
 
 using namespace mu::framework;
+using namespace mu::modularity;
 
 static std::shared_ptr<GlobalConfiguration> s_globalConf = std::make_shared<GlobalConfiguration>();
 

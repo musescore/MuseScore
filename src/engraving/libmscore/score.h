@@ -544,8 +544,6 @@ private:
     void cmdMoveRest(Rest*, Direction);
     void cmdMoveLyrics(Lyrics*, Direction);
 
-    void createMMRest(Measure*, Measure*, const Fraction&);
-
     void checkSlurs();
     void checkScore();
 
