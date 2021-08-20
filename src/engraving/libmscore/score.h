@@ -48,11 +48,14 @@
 #include "io/mscwriter.h"
 #include "io/mscreader.h"
 #include "engraving/draw/iimageprovider.h"
+#include "layout/layout.h"
 
 class QMimeData;
 
 namespace mu::engraving {
 class EngravingProject;
+class LayoutContext;
+class LayoutMeasure;
 }
 
 namespace mu::engraving::compat {
@@ -126,7 +129,6 @@ class XmlWriter;
 class Channel;
 struct Interval;
 struct TEvent;
-struct LayoutContext;
 
 enum class Tid;
 enum class ClefType : signed char;
@@ -439,6 +441,9 @@ private:
 
     friend class mu::engraving::compat::ReadScoreHook;
     friend class mu::engraving::compat::Read302;
+    friend class mu::engraving::Layout;
+    friend class mu::engraving::LayoutContext;
+    friend class mu::engraving::LayoutMeasure;
 
     static std::set<Score*> validScores;
     int _linkId { 0 };
@@ -519,6 +524,8 @@ private:
 
     mu::score::AccessibleScore* m_accessible = nullptr;
 
+    mu::engraving::Layout m_layout;
+
     ChordRest* nextMeasure(ChordRest* element, bool selectBehavior = false, bool mmRest = false);
     ChordRest* prevMeasure(ChordRest* element, bool mmRest = false);
     void cmdResetAllStyle();
@@ -539,8 +546,6 @@ private:
 
     void createMMRest(Measure*, Measure*, const Fraction&);
 
-    void beamGraceNotes(Chord*, bool);
-
     void checkSlurs();
     void checkScore();
 
@@ -560,8 +565,6 @@ private:
 
     void putNote(const Position&, bool replace);
 
-    void resetSystems(bool layoutAll, LayoutContext& lc);
-    void collectLinearSystem(LayoutContext& lc);
     void resetTempo();
     void resetTempoRange(const Fraction& tick1, const Fraction& tick2);
 
@@ -641,10 +644,6 @@ public:
 
     Excerpt* excerpt() { return _excerpt; }
     void setExcerpt(Excerpt* e) { _excerpt = e; }
-
-    System* collectSystem(LayoutContext&);
-    void layoutSystemElements(System* system, LayoutContext& lc);
-    void getNextMeasure(LayoutContext&);        // get next measure for layout
 
     void resetAllPositions();
 
@@ -1124,8 +1123,7 @@ public:
     void removeAudio();
 
     void doLayout();
-    void doLayoutRange(const Fraction&, const Fraction&);
-    void layoutLinear(bool layoutAll, LayoutContext& lc);
+    void doLayoutRange(const Fraction& st, const Fraction& et);
 
     void layoutChords1(Segment* segment, int staffIdx);
     qreal layoutChords2(std::vector<Note*>& notes, bool up);
@@ -1309,11 +1307,6 @@ public:
 
     void cmdAddPitch(int note, bool addFlag, bool insert);
     void forAllLyrics(std::function<void(Lyrics*)> f);
-
-    System* getNextSystem(LayoutContext&);
-    void hideEmptyStaves(System* system, bool isFirstSystem);
-    void layoutLyrics(System*);
-    void createBeams(LayoutContext&, Measure*);
 
     constexpr static double defaultTempo() { return _defaultTempo; }
 
