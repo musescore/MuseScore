@@ -214,6 +214,11 @@
               <string>64</string>
              </property>
             </item>
+            <item>
+             <property name="text">
+              <string>128</string>
+             </property>
+            </item>
            </widget>
           </item>
           <item row="0" column="4" colspan="2">
