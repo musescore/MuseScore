@@ -51,8 +51,14 @@ class PianorollController : public IPianorollController, public actions::Actiona
     INJECT(playback, notation::INotationConfiguration, notationConfiguration)
     INJECT(playback, audio::IPlayback, playback)
 
+    float m_zoomX = 1;
+    float m_zoomY = 1;
+
 public:
     void init();
+
+    int getNotes() const;
+
 
 //    bool isPlayAllowed() const override;
 //    async::Notification isPlayAllowedChanged() const override;
@@ -83,7 +89,12 @@ public:
 //    notation::MeasureBeat currentBeat() const override;
 //    audio::msecs_t beatToMilliseconds(int measureIndex, int beatIndex) const override;
 
+    async::Notification noteLayoutChanged() const override;
+
+
 private:
+    async::Notification m_noteLayoutChanged;
+
 //    notation::INotationPlaybackPtr notationPlayback() const;
 //    notation::INotationSelectionPtr selection() const;
 
@@ -93,7 +104,7 @@ private:
 //    bool isLoopVisible() const;
 //    bool isPlaybackLooped() const;
 
-//    void onNotationChanged();
+    void onNotationChanged();
 //    void togglePlay();
 //    void rewind(const actions::ActionData& args);
 //    void play();
