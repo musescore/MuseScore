@@ -28,41 +28,36 @@
 
 using namespace mu::pianoroll;
 
+
+//PianoItem::PianoItem(Note* n, PianorollView* pianoView)
+//   : _note(n), _pianoView(pianoView)
+//      {
+//      }
+
+//--------------------
+
 PianorollView::PianorollView(QQuickItem* parent)
     : QQuickPaintedItem(parent)
 {
 }
 
-void PianorollView::onCurrentNotationChanged()
+void PianorollView::onNotationChanged()
 {
-    m_notation = globalContext()->currentNotation();
-    if (!m_notation) {
-        return;
-    }
-
-//    auto hh = m_notation->elements();
-    INotationElementsPtr elements = m_notation->elements();
-//    auto list = elements->elements();
-    std::vector<Element*> list = elements->elements();
-    for (Element* ele: list) {
-        bool sel = ele->selected();
-        auto type = ele->type();
-        auto name = ele->name();
-
-        int j = 9;
-    }
-    int j = 9;
 }
 
 void PianorollView::load()
 {
-    globalContext()->currentNotationChanged().onNotify(this, [this]() {
-        onCurrentNotationChanged();
+//    globalContext()->currentNotationChanged().onNotify(this, [this]() {
+//        onCurrentNotationChanged();
+//    });
+
+    controller()->noteLayoutChanged().onNotify(this, [this]() {
+        onNotationChanged();
     });
 }
 
 void PianorollView::paint(QPainter* p)
-{
+{    
 //    if (m_icon.isNull()) {
     p->fillRect(0, 0, width(), height(), m_color);
 //        return;
@@ -75,4 +70,7 @@ void PianorollView::paint(QPainter* p)
 //    const QIcon::Mode mode = m_selected ? QIcon::Selected : QIcon::Active;
 //    const QIcon::State state = m_active ? QIcon::On : QIcon::Off;
 //    m_icon.paint(p, QRect(0, 0, width(), height()), Qt::AlignCenter, mode, state);
+
+    int value = controller()->getNotes();
+    int j = 9;
 }
