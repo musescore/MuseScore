@@ -31,6 +31,8 @@ Rectangle {
     id: root
     color: ui.theme.backgroundPrimaryColor
 
+    property EditStyle editStyleDialog
+
     ChordSymbolEditorModel {
         id: chordSymbolEditorModel
     }
@@ -148,6 +150,7 @@ Rectangle {
 
             ChordSymbolEditorAdvanced {
                 editorModel: chordSymbolEditorModel
+                editStyleInstance: root.editStyleDialog
             }
         }
     }

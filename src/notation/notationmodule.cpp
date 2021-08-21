@@ -180,6 +180,7 @@ void NotationModule::registerUiTypes()
     qmlRegisterType<TimelineView>("MuseScore.NotationScene", 1, 0, "TimelineView");
     qmlRegisterType<SelectionFilterModel>("MuseScore.NotationScene", 1, 0, "SelectionFilterModel");
     qmlRegisterType<EditGridSizeDialogModel>("MuseScore.NotationScene", 1, 0, "EditGridSizeDialogModel");
+    qmlRegisterUncreatableType<EditStyle>("MuseScore.NotationScene", 1, 0, "EditStyle", "Cannot create");
 
     qRegisterMetaType<EditStyle>("EditStyle");
     qRegisterMetaType<EditStaff>("EditStaff");

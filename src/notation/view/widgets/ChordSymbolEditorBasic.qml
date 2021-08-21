@@ -462,7 +462,7 @@ Flickable {
                 checked: (root.editorModel.stackModifiers === modelData["value"]) && root.editorModel.usePresets
 
                 onToggled: {
-                    editorModel.setProperty("stackModifiers", modelData["value"])
+                    root.editorModel.setProperty("stackModifiers", modelData["value"])
                 }
             }
         }

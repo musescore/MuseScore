@@ -47,6 +47,8 @@ public:
     void gotoElement(EngravingItem* e);
     static bool elementHasPage(EngravingItem* e);
 
+    Q_INVOKABLE void goToChordTextSettings();
+
 public slots:
     void accept();
     void reject();

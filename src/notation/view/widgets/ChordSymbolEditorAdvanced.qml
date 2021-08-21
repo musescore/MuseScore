@@ -31,6 +31,7 @@ Flickable {
     id: root
 
     property ChordSymbolEditorModel editorModel: null
+    property EditStyle editStyleInstance
 
     contentWidth: width
     contentHeight: content.height
@@ -265,6 +266,7 @@ Flickable {
                     onValueEdited: root.editorModel.setProperty("maxChordShiftBelow", newValue)
                 }
             }
+
             LabelledSpinBox {
                 id: capoFretSpinBox
                 width: Math.max(126, parent.width / 2)
@@ -278,13 +280,15 @@ Flickable {
 
                 onValueEdited: root.editorModel.setProperty("capoPosition", newValue)
             }
+
             FlatButton{
                 id: chordSymbolFont
                 height: 30
                 width: Math.max(126, parent.width) + 12
-                text: qsTrc("notation","Change chord symbol font NW")
-                onClicked: root.editorModel.resetProperties()
+                text: qsTrc("notation","Change chord symbol font")
+                onClicked: root.editStyleInstance.goToChordTextSettings()
             }
+
             FlatButton{
                 id: resetProperties
                 height: 30

@@ -23,6 +23,7 @@
 #include "editstyle.h"
 
 #include <QButtonGroup>
+#include <QQuickItem>
 #include <QQuickWidget>
 #include <QSignalMapper>
 
@@ -664,6 +665,11 @@ EditStyle::EditStyle(QWidget* parent)
     chordSymbolsQuickWidget->setObjectName("chordSymbolsQuickWidget");
     chordSymbolsQuickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
     chordSymbolsQuickWidget->setSource(QUrl(QString::fromUtf8("qrc:/view/widgets/ChordSymbolStyleEditor.qml")));
+    QQuickItem* rootItem = chordSymbolsQuickWidget->rootObject();
+    Q_ASSERT(rootItem);
+    if (rootItem) {
+        rootItem->setProperty("editStyleDialog", QVariant::fromValue(this));
+    }
     PageChordSymbolsNew->layout()->addWidget(chordSymbolsQuickWidget);
 
     textStyles->clear();
@@ -2092,4 +2098,22 @@ void EditStyle::resetUserStyleName()
 {
     styleName->clear();
     endEditUserStyleName();
+}
+
+//---------------------------------------------------------
+//   goToChordTextSettings
+//   Redirect user from chord symbol settings page
+//   to the text styles page to change font
+//---------------------------------------------------------
+void EditStyle::goToChordTextSettings()
+{
+    if (QWidget* page = this->EditStyle::PageTextStyles) {
+        setPage(pageStack->indexOf(page));
+    }
+    for (int i = 0; i < textStyles->count(); i++) {
+        if (textStyles->item(i)->text() == "Chord Symbol") {
+            textStyles->setCurrentItem(textStyles->item(i));
+            break;
+        }
+    }
 }
