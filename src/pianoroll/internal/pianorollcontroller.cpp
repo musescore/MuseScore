@@ -58,10 +58,10 @@ void PianorollController::init()
 //    dispatcher()->reg(this, MIDI_ON_CODE, this, &PlaybackController::toggleMidiInput);
 //    dispatcher()->reg(this, COUNT_IN_CODE, this, &PlaybackController::toggleCountIn);
 
-//    onNotationChanged();
-//    globalContext()->currentNotationChanged().onNotify(this, [this]() {
-//        onNotationChanged();
-//    });
+    onNotationChanged();
+    globalContext()->currentNotationChanged().onNotify(this, [this]() {
+        onNotationChanged();
+    });
 
 //    globalContext()->currentProjectChanged().onNotify(this, [this]() {
 //        project::INotationProjectPtr project = globalContext()->currentProject();
@@ -85,6 +85,17 @@ void PianorollController::init()
 //    });
 
 //    m_needRewindBeforePlay = true;
+}
+
+int PianorollController::getNotes() const
+{
+    return 49;
+}
+
+
+Notification PianorollController::noteLayoutChanged() const
+{
+    return m_noteLayoutChanged;
 }
 
 //int PlaybackController::currentTick() const
@@ -207,8 +218,27 @@ void PianorollController::init()
 //    return m_notation ? m_notation->interaction()->selection() : nullptr;
 //}
 
-//void PlaybackController::onNotationChanged()
-//{
+void PianorollController::onNotationChanged()
+{
+    notation::INotationPtr notation = globalContext()->currentNotation();
+    if (!notation) {
+        return;
+    }
+
+//    auto hh = m_notation->elements();
+    INotationElementsPtr elements = notation->elements();
+//    auto list = elements->elements();
+    std::vector<Element*> list = elements->elements();
+    for (Element* ele: list) {
+        bool sel = ele->selected();
+        auto type = ele->type();
+        auto name = ele->name();
+
+        int j = 9;
+    }
+
+    m_noteLayoutChanged.notify();
+
 //    playback()->player()->stop(m_currentSequenceId);
 //    playback()->player()->playbackPositionMsecs().resetOnReceive(this);
 
@@ -240,7 +270,7 @@ void PianorollController::init()
 //    });
 
 //    m_isPlayAllowedChanged.notify();
-//}
+}
 
 //void PlaybackController::togglePlay()
 //{

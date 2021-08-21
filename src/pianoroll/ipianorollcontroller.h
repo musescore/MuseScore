@@ -38,6 +38,10 @@ class IPianorollController : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IPianorollController() = default;
 
+    virtual int getNotes() const = 0;
+
+    virtual async::Notification noteLayoutChanged() const = 0;
+
 //    virtual bool isPlayAllowed() const = 0;
 //    virtual async::Notification isPlayAllowedChanged() const = 0;
 
