@@ -48,6 +48,10 @@ Rectangle {
                 RowLayout {
                     id: tools
 
+                    FlatToggleButton {
+                        icon: IconCode.COPY
+                    }
+
                     ToolButton {
                         text: qsTr("Select")
                         icon: IconCode.COPY
