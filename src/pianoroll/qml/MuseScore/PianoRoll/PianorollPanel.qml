@@ -24,6 +24,9 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 
 import MuseScore.UiComponents 1.0
+import MuseScore.Ui 1.0
+import MuseScore.AppShell 1.0
+
 import MuseScore.Pianoroll 1.0
 
 Rectangle {
@@ -32,18 +35,133 @@ Rectangle {
     ColumnLayout {
         anchors.fill: parent
 
-        Row {
-            Layout.fillWidth: true
 
-            FlatButton {
-                text: "Ok"
-                //onClicked
-            }
-            FlatButton {
-                text: "Next"
-                //onClicked
+        ToolBar {
+            RowLayout
+            {
+                anchors.fill: parent
+
+                ButtonGroup {
+                    buttons: tools.children
+                }
+
+                RowLayout {
+                    id: tools
+
+                    ToolButton {
+                        text: qsTr("Select")
+                        icon: IconCode.COPY
+                        ToolTip.text: qsTr("Select")
+                        hoverEnabled: true
+                        checkable: true
+                        checked: true
+
+                        ToolTip.delay: 1000
+                        ToolTip.timeout: 5000
+                        ToolTip.visible: hovered
+                        //onClicked
+                    }
+                    ToolButton {
+                        text: qsTr("Edit")
+                        checkable: true
+
+                    }
+                    ToolButton {
+                        text: qsTr("Cut")
+                        checkable: true
+                    }
+                    ToolButton {
+                        text: qsTr("Erase")
+                        checkable: true
+                    }
+                }
+
+                RowLayout {
+//                    anchors.fill: parent
+
+                    ToolButton {
+                        text: qsTr("Automation")
+                        checkable: true
+                    }
+                }
+
+
+                RowLayout {
+//                    anchors.fill: parent
+
+                    Label {
+                        text: qsTr("Grid:")
+                    }
+
+                    ComboBox {
+                        id: gridCombo
+
+                        model: ListModel {
+                            id: gridModel
+                            ListElement {
+                                text: "1/1"
+                            }
+                            ListElement {
+                                text: "1/2"
+                            }
+                            ListElement {
+                                text: "1/4"
+                            }
+                            ListElement {
+                                text: "1/8"
+                            }
+                        }
+                    }
+
+                    Label {
+                        text: qsTr("Tuplet:")
+                    }
+
+                    ComboBox {
+                        id: tupletCombo
+                        model: ListModel {
+                            ListElement {
+                                text: qsTr("None")
+                            }
+                            ListElement {
+                                text: qsTr("Duplet")
+                            }
+                            ListElement {
+                                text: qsTr("Triplet")
+                            }
+                        }
+                    }
+                }
+
+                RowLayout {
+                    anchors.right: parent.right
+
+                    Label {
+                        text: "V:"
+                    }
+
+                    Slider {
+                        id: vertZoom
+                        from: 1
+                        to: 100
+                        value: 20
+                    }
+
+                    Label {
+                        text: "H:"
+                    }
+
+                    Slider {
+                        id: horizZoom
+                        from: 1
+                        to: 100
+                        value: 20
+                    }
+                }
+
             }
         }
+
 
         ScrollView {
             Layout.fillWidth: true
