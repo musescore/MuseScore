@@ -27,9 +27,12 @@
 #include "ui/iuiengine.h"
 
 #include "view/pianorollview.h"
+#include "internal/pianorollcontroller.h"
 
 using namespace mu::pianoroll;
 using namespace mu::modularity;
+
+static std::shared_ptr<PianorollController> s_pianorollController = std::make_shared<PianorollController>();
 
 static void pianoroll_init_qrc()
 {
@@ -43,6 +46,7 @@ std::string PianorollModule::moduleName() const
 
 void PianorollModule::registerExports()
 {
+    ioc()->registerExport<IPianorollController>(moduleName(), s_pianorollController);
 }
 
 void PianorollModule::resolveImports()
