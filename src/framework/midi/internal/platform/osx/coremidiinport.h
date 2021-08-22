@@ -55,7 +55,7 @@ private:
     void initCore();
 
     struct Core;
-    std::unique_ptr<Core> m_core;
+    std::shared_ptr<Core> m_core;
     MidiDeviceID m_deviceID;
     async::Notification m_devicesChanged;
 

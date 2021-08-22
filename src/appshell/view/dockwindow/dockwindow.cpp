@@ -22,18 +22,20 @@
 
 #include "dockwindow.h"
 
-#include "thirdparty/KDDockWidgets/src/private/quick/MainWindowQuick_p.h"
 #include "thirdparty/KDDockWidgets/src/DockWidgetQuick.h"
 #include "thirdparty/KDDockWidgets/src/LayoutSaver.h"
+#include "thirdparty/KDDockWidgets/src/private/Frame_p.h"
+#include "thirdparty/KDDockWidgets/src/private/quick/MainWindowQuick_p.h"
 
-#include "log.h"
-
-#include "dockpage.h"
-#include "docktoolbar.h"
-#include "docktoolbarholder.h"
 #include "dockcentral.h"
+#include "dockpage.h"
 #include "dockpanel.h"
 #include "dockpanelholder.h"
+#include "dockstatusbar.h"
+#include "docktoolbar.h"
+#include "docktoolbarholder.h"
+
+#include "log.h"
 
 using namespace mu::dock;
 

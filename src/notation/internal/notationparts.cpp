@@ -28,6 +28,7 @@
 #include "igetscore.h"
 
 #include "log.h"
+#include "translation.h"
 
 using namespace mu::async;
 using namespace mu::notation;
@@ -42,7 +43,7 @@ static QString formatInstrumentTitleOnScore(const QString& instrumentName, const
         return instrumentName + numberPart;
     }
 
-    return qtrc("notation", "%1 in %2%3").arg(instrumentName).arg(trait.name).arg(numberPart);
+    return mu::qtrc("notation", "%1 in %2%3").arg(instrumentName).arg(trait.name).arg(numberPart);
 }
 
 static QString formatPartTitle(const Part* part)

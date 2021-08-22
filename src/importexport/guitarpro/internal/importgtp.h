@@ -25,44 +25,32 @@
 
 #include <QDomNode>
 
-#include <libmscore/score.h>
-#include <libmscore/mscore.h>
-#include <libmscore/fraction.h>
-#include <libmscore/fret.h>
-#include <libmscore/chordrest.h>
-#include <libmscore/slur.h>
-#include <libmscore/clef.h>
-#include <libmscore/keysig.h>
-#include <libmscore/chordrest.h>
-#include <libmscore/clef.h>
-#include <libmscore/keysig.h>
-#include <libmscore/hairpin.h>
-#include <libmscore/ottava.h>
-#include <libmscore/vibrato.h>
-#include <libmscore/drumset.h>
+#include "libmscore/score.h"
+#include "libmscore/vibrato.h"
 
 #include "modularity/ioc.h"
-#include "importexport/guitarpro/iguitarproconfiguration.h"
+#include "iguitarproconfiguration.h"
 
 namespace Ms {
-class Score;
 class Chord;
-class Note;
-class Segment;
-class Measure;
-class Tuplet;
-class Volta;
+class Fraction;
 class LetRing;
+class Measure;
+class Note;
 class PalmMute;
+class Score;
+class Segment;
+class Tuplet;
 class Vibrato;
+class Volta;
 
-static const int GP_MAX_LYRIC_LINES = 5;
-static const int GP_MAX_TRACK_NUMBER = 32;
-static const int GP_MAX_STRING_NUMBER = 7;
-static const int GP_DEFAULT_PERCUSSION_CHANNEL = 9;
-static const int GP_INVALID_KEYSIG = 127;
-static const int GP_VOLTA_BINARY = 1;
-static const int GP_VOLTA_FLAGS = 2;
+static constexpr int GP_MAX_LYRIC_LINES = 5;
+static constexpr int GP_MAX_TRACK_NUMBER = 32;
+static constexpr int GP_MAX_STRING_NUMBER = 7;
+static constexpr int GP_DEFAULT_PERCUSSION_CHANNEL = 9;
+static constexpr int GP_INVALID_KEYSIG = 127;
+static constexpr int GP_VOLTA_BINARY = 1;
+static constexpr int GP_VOLTA_FLAGS = 2;
 
 Score::FileError importGTP(Score* score, const QString& filename, const char* data, unsigned int data_len);
 
@@ -121,6 +109,8 @@ struct GpBar {
 
     GpBar();
 };
+
+inline Drumset* gpDrumset = nullptr;
 
 //---------------------------------------------------------
 //   GuitarPro

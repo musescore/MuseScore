@@ -21,8 +21,13 @@
  */
 #include "layoutharmonies.h"
 
-#include "libmscore/system.h"
+#include "realfn.h"
+
+#include "libmscore/fret.h"
+#include "libmscore/harmony.h"
+#include "libmscore/measurebase.h"
 #include "libmscore/segment.h"
+#include "libmscore/system.h"
 
 using namespace mu::engraving;
 using namespace Ms;

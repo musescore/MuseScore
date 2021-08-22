@@ -103,7 +103,6 @@ public:
 };
 
 extern Drumset* smDrumset;
-extern Drumset* gpDrumset;
 extern void initDrumset();
 }     // namespace Ms
 #endif

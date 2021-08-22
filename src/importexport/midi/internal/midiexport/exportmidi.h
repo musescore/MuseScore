@@ -25,11 +25,12 @@
 
 #include <QFile>
 
+#include "engraving/compat/midi/midifile.h"
+
 namespace Ms {
 class Score;
 class TempoMap;
 class SynthesizerState;
-class MidiFile;
 
 //---------------------------------------------------------
 //   ExportMidi

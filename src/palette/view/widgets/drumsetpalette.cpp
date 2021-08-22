@@ -37,6 +37,7 @@
 
 using namespace mu::notation;
 using namespace mu::palette;
+using namespace Ms;
 
 DrumsetPalette::DrumsetPalette(QWidget* parent)
     : PaletteScrollArea(nullptr, parent)
@@ -155,7 +156,7 @@ void DrumsetPalette::drumNoteSelected(int val)
         return;
     }
 
-    Ms::ElementPtr element = m_drumPalette->elementForCellAt(val);
+    ElementPtr element = m_drumPalette->elementForCellAt(val);
     if (!element || element->type() != ElementType::CHORD) {
         return;
     }
@@ -184,7 +185,7 @@ int DrumsetPalette::selectedDrumNote()
         return -1;
     }
 
-    Ms::ElementPtr element = m_drumPalette->elementForCellAt(idx);
+    ElementPtr element = m_drumPalette->elementForCellAt(idx);
     if (element && element->type() == ElementType::CHORD) {
         const Chord* ch = dynamic_cast<Chord*>(element.get());
         const Note* note = ch->downNote();

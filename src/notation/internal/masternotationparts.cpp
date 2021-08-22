@@ -24,6 +24,7 @@
 
 #include "libmscore/masterscore.h"
 #include "libmscore/scoreorder.h"
+#include "libmscore/undo.h"
 
 #include "log.h"
 

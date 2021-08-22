@@ -39,7 +39,7 @@ static QString boolToString(bool b)
     return b ? "true" : "false";
 }
 
-mu::RetVal<std::string> NotationMeta::metaJson(INotationPtr notation)
+mu::RetVal<std::string> NotationMeta::metaJson(notation::INotationPtr notation)
 {
     IF_ASSERT_FAILED(notation) {
         return make_ret(Ret::Code::UnknownError);
@@ -154,7 +154,7 @@ QString NotationMeta::timesig(const Ms::Score* score)
     }
 
     QString timeSig;
-    const Element* element = nullptr;
+    const Ms::Element* element = nullptr;
     for (int track = 0; track < tracks; ++track) {
         element = timeSigSegment->element(track);
         if (element) {
@@ -176,7 +176,7 @@ std::pair<int, QString> NotationMeta::tempo(const Ms::Score* score)
     QString tempoText;
     for (const Ms::Segment* segment = score->firstSegmentMM(Ms::SegmentType::All); segment; segment = segment->next1MM()) {
         auto annotations = segment->annotations();
-        for (const Element* anotation : annotations) {
+        for (const Ms::Element* anotation : annotations) {
             if (anotation && anotation->isTempoText()) {
                 const Ms::TempoText* tt = toTempoText(anotation);
                 tempo = round(tt->tempo() * 60);
@@ -191,7 +191,7 @@ std::pair<int, QString> NotationMeta::tempo(const Ms::Score* score)
 QString NotationMeta::parts(const Ms::Score* score)
 {
     QJsonArray jsonPartsArray;
-    for (const Part* part : score->parts()) {
+    for (const Ms::Part* part : score->parts()) {
         QJsonObject jsonPart;
         jsonPart.insert("name", part->longName().replace("\n", ""));
         int midiProgram = part->midiProgram();
@@ -219,7 +219,7 @@ QString NotationMeta::pageFormat(const Ms::Score* score)
     return QJsonDocument(format).toJson(QJsonDocument::Compact);
 }
 
-static void findTextByType(void* data, Element* element)
+static void findTextByType(void* data, Ms::Element* element)
 {
     if (!element->isTextBase()) {
         return;

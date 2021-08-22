@@ -12,7 +12,7 @@
 #ifndef KD_UTILS_P_H
 #define KD_UTILS_P_H
 
-#include "Config.h"
+#include "../Config.h"
 #include "Frame_p.h"
 #include "QWidgetAdapter.h"
 
@@ -42,9 +42,8 @@ class QWindow;
 QT_END_NAMESPACE
 
 namespace KDDockWidgets {
-
 #ifdef KDDOCKWIDGETS_QTQUICK
-inline QQuickItem* mouseAreaForPos(QQuickItem *item, QPointF globalPos);
+inline QQuickItem* mouseAreaForPos(QQuickItem* item, QPointF globalPos);
 #endif
 
 inline bool isWayland()
@@ -105,8 +104,8 @@ inline bool usesUtilityWindows()
 {
     const auto flags = Config::self().internalFlags();
 
-    const bool dontUse = (flags & Config::InternalFlag_DontUseParentForFloatingWindows) &&
-                         (flags & Config::InternalFlag_DontUseQtToolWindowsForFloatingWindows);
+    const bool dontUse = (flags & Config::InternalFlag_DontUseParentForFloatingWindows)
+                         && (flags & Config::InternalFlag_DontUseQtToolWindowsForFloatingWindows);
 
     return !dontUse;
 }
@@ -124,7 +123,7 @@ inline bool usesFallbackMouseGrabber()
 #endif
 }
 
-inline void activateWindow(QWindow *window)
+inline void activateWindow(QWindow* window)
 {
     window->requestActivate();
 }
@@ -132,18 +131,19 @@ inline void activateWindow(QWindow *window)
 inline bool windowManagerHasTranslucency()
 {
 #ifdef QT_X11EXTRAS_LIB
-    if (qApp->platformName() == QLatin1String("xcb"))
+    if (qApp->platformName() == QLatin1String("xcb")) {
         return QX11Info::isCompositingManagerRunning();
+    }
 #endif
 
     // macOS and Windows are fine
     return true;
 }
 
-inline QSize screenSizeForWindow(const QWindow *window)
+inline QSize screenSizeForWindow(const QWindow* window)
 {
     if (window) {
-        if (QScreen *screen = window->screen()) {
+        if (QScreen* screen = window->screen()) {
             return screen->size();
         }
     }
@@ -151,10 +151,10 @@ inline QSize screenSizeForWindow(const QWindow *window)
     return {};
 }
 
-inline int screenNumberForWindow(const QWindow *window)
+inline int screenNumberForWindow(const QWindow* window)
 {
     if (window) {
-        if (QScreen *screen = window->screen()) {
+        if (QScreen* screen = window->screen()) {
             return qApp->screens().indexOf(screen);
         }
     }
@@ -162,7 +162,7 @@ inline int screenNumberForWindow(const QWindow *window)
     return -1;
 }
 
-inline QMouseEvent *mouseEvent(QEvent *e)
+inline QMouseEvent* mouseEvent(QEvent* e)
 {
     switch (e->type()) {
     case QEvent::MouseButtonPress:
@@ -173,7 +173,7 @@ inline QMouseEvent *mouseEvent(QEvent *e)
     case QEvent::NonClientAreaMouseButtonRelease:
     case QEvent::NonClientAreaMouseMove:
     case QEvent::NonClientAreaMouseButtonDblClick:
-        return static_cast<QMouseEvent *>(e);
+        return static_cast<QMouseEvent*>(e);
     default:
         break;
     }
@@ -181,7 +181,7 @@ inline QMouseEvent *mouseEvent(QEvent *e)
     return nullptr;
 }
 
-inline bool isNonClientMouseEvent(const QEvent *e)
+inline bool isNonClientMouseEvent(const QEvent* e)
 {
     switch (e->type()) {
     case QEvent::NonClientAreaMouseButtonPress:
@@ -195,7 +195,7 @@ inline bool isNonClientMouseEvent(const QEvent *e)
     return false;
 }
 
-inline bool isWindow(const QWindow *w)
+inline bool isWindow(const QWindow* w)
 {
     return w != nullptr;
 }
@@ -217,8 +217,9 @@ inline WidgetType* mouseReceiverAt(QPoint globalPos)
     return qApp->widgetAt(globalPos);
 #else
     auto window = qobject_cast<QQuickWindow*>(qApp->topLevelAt(globalPos));
-    if (!window)
+    if (!window) {
         return nullptr;
+    }
 
     return mouseAreaForPos(window->contentItem(), globalPos);
 #endif
@@ -228,64 +229,65 @@ inline WidgetType* mouseReceiverAt(QPoint globalPos)
 /// Returns true if we're over such controls where we shouldn't drag.
 inline bool inDisallowDragWidget(QPoint globalPos)
 {
-    WidgetType *widget = mouseReceiverAt(globalPos);
-    if (!widget)
+    WidgetType* widget = mouseReceiverAt(globalPos);
+    if (!widget) {
         return false;
+    }
 
 #ifdef KDDOCKWIDGETS_QTWIDGETS
     // User might have a line edit on the toolbar. TODO: Not so elegant fix, we should make the user's tabbar implement some virtual method...
-    return qobject_cast<QAbstractButton*>(widget) ||
-           qobject_cast<QLineEdit*>(widget);
+    return qobject_cast<QAbstractButton*>(widget)
+           || qobject_cast<QLineEdit*>(widget);
 #else
     return widget->objectName() != QLatin1String("draggableMouseArea");
 #endif
 }
 
 #ifdef KDDOCKWIDGETS_QTWIDGETS
-inline int screenNumberForWidget(const QWidget *widget)
+inline int screenNumberForWidget(const QWidget* widget)
 {
     return screenNumberForWindow(widget->window()->windowHandle());
 }
 
-inline QSize screenSizeForWidget(const QWidget *widget)
+inline QSize screenSizeForWidget(const QWidget* widget)
 {
     return screenSizeForWindow(widget->window()->windowHandle());
 }
 
-inline QPoint mapToGlobal(QWidget *w, QPoint p)
+inline QPoint mapToGlobal(QWidget* w, QPoint p)
 {
     return w->mapToGlobal(p);
 }
 
-inline void activateWindow(QWidget *widget)
+inline void activateWindow(QWidget* widget)
 {
     widget->activateWindow();
 }
 
-inline bool isWindow(const QWidget *w)
+inline bool isWindow(const QWidget* w)
 {
     return w && w->isWindow();
 }
 
 #else
 
-inline int screenNumberForWidget(const QQuickItem *w)
+inline int screenNumberForWidget(const QQuickItem* w)
 {
     return screenNumberForWindow(w->window());
 }
 
-inline QSize screenSizeForWidget(const QQuickItem *w)
+inline QSize screenSizeForWidget(const QQuickItem* w)
 {
     return screenSizeForWindow(w->window());
 }
 
-inline QPoint mapToGlobal(QQuickItem *item, QPoint p)
+inline QPoint mapToGlobal(QQuickItem* item, QPoint p)
 {
     Q_ASSERT(item);
     return item->mapToGlobal(p).toPoint();
 }
 
-inline QQuickItem* mouseAreaForPos(QQuickItem *item, QPointF globalPos)
+inline QQuickItem* mouseAreaForPos(QQuickItem* item, QPointF globalPos)
 {
     QRectF rect = item->boundingRect();
     rect.moveTopLeft(item->mapToGlobal(QPointF(0, 0)));
@@ -298,17 +300,19 @@ inline QQuickItem* mouseAreaForPos(QQuickItem *item, QPointF globalPos)
     const QList<QQuickItem*> children = item->childItems();
 
     for (auto it = children.rbegin(), end = children.rend(); it != end; ++it) {
-        if (QQuickItem *receiver = mouseAreaForPos(*it, globalPos))
+        if (QQuickItem* receiver = mouseAreaForPos(*it, globalPos)) {
             return receiver;
+        }
     }
 
-    if (QLatin1String(item->metaObject()->className()) == QLatin1String("QQuickMouseArea"))
+    if (QLatin1String(item->metaObject()->className()) == QLatin1String("QQuickMouseArea")) {
         return item;
+    }
 
     return nullptr;
 }
 
-inline QRect globalGeometry(QQuickItem *item)
+inline QRect globalGeometry(QQuickItem* item)
 {
     QRect geo(QPoint(0, 0), item->size().toSize());
     geo.moveTopLeft(item->mapToGlobal(QPointF(0, 0)).toPoint());
@@ -317,13 +321,13 @@ inline QRect globalGeometry(QQuickItem *item)
 
 #endif
 
-
 /// @brief Returns the widget's geometry, but always in global space.
-inline QRect globalGeometry(QWidgetOrQuick *w)
+inline QRect globalGeometry(QWidgetOrQuick* w)
 {
     QRect geo = w->geometry();
-    if (!w->isTopLevel())
+    if (!w->isTopLevel()) {
         geo.moveTopLeft(w->mapToGlobal(QPoint(0, 0)));
+    }
     return geo;
 }
 
@@ -343,19 +347,19 @@ inline bool scalingFactorIsSupported(qreal factor)
 }
 
 /// @brief Returns the parent frame which the specified object is in, if any
-inline Frame *parentFrame(QObject *from)
+inline Frame* parentFrame(QObject* from)
 {
     auto p = from;
     while (p) {
-        if (auto frame = qobject_cast<Frame *>(p))
+        if (auto frame = qobject_cast<Frame*>(p)) {
             return frame;
+        }
 
         p = p->parent();
     }
 
     return nullptr;
 }
-
-};
+}
 
 #endif
