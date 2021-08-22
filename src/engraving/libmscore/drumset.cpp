@@ -32,7 +32,6 @@ using namespace mu;
 
 namespace Ms {
 Drumset* smDrumset = nullptr;           // standard midi drumset
-Drumset* gpDrumset = nullptr;           // guitar pro drumset
 
 //---------------------------------------------------------
 //   save

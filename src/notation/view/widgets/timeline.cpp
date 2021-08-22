@@ -22,32 +22,33 @@
 
 #include "timeline.h"
 
-#include "libmscore/score.h"
-#include "libmscore/page.h"
-#include "libmscore/mscore.h"
-#include "libmscore/system.h"
-#include "libmscore/measurebase.h"
-#include "libmscore/measure.h"
+#include <QGraphicsTextItem>
+#include <QMenu>
+#include <QScrollBar>
+#include <QTextDocument>
+
+#include "libmscore/barline.h"
 #include "libmscore/chord.h"
-#include "libmscore/staff.h"
-#include "libmscore/rest.h"
-#include "libmscore/part.h"
-#include "libmscore/tempo.h"
-#include "libmscore/keysig.h"
-#include "libmscore/timesig.h"
+#include "libmscore/jump.h"
 #include "libmscore/key.h"
+#include "libmscore/keysig.h"
+#include "libmscore/marker.h"
+#include "libmscore/measure.h"
+#include "libmscore/measurebase.h"
+#include "libmscore/mscore.h"
+#include "libmscore/page.h"
+#include "libmscore/part.h"
+#include "libmscore/rehearsalmark.h"
+#include "libmscore/rest.h"
+#include "libmscore/score.h"
+#include "libmscore/staff.h"
+#include "libmscore/system.h"
+#include "libmscore/tempo.h"
 #include "libmscore/tempotext.h"
 #include "libmscore/text.h"
-#include "libmscore/rehearsalmark.h"
-#include "libmscore/barline.h"
-#include "libmscore/jump.h"
-#include "libmscore/marker.h"
+#include "libmscore/timesig.h"
 
 #include "log.h"
-
-#include <QGraphicsTextItem>
-#include <QTextDocument>
-#include <QMenu>
 
 namespace Ms {
 //---------------------------------------------------------

@@ -22,6 +22,9 @@
 
 #include "masternotationmididata.h"
 
+#include "engraving/libmscore/repeatlist.h"
+#include "engraving/libmscore/tempo.h"
+
 #include "log.h"
 
 #include "notationerrors.h"

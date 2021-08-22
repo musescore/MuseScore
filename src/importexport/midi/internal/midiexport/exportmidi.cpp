@@ -33,8 +33,6 @@
 #include "libmscore/repeatlist.h"
 #include "libmscore/synthesizerstate.h"
 
-#include "engraving/compat/midi/midifile.h"
-
 namespace Ms {
 //---------------------------------------------------------
 //   writeHeader
