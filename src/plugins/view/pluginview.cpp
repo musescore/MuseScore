@@ -22,14 +22,13 @@
 
 #include "pluginview.h"
 
+#include <QQmlComponent>
+
 #include "api/qmlplugin.h"
+
 #include "log.h"
 
-#include <QQmlComponent>
-//#include <QQuickCloseEvent>
-
 using namespace mu::plugins;
-using namespace mu::framework;
 
 PluginView::PluginView(const QUrl& url, QObject* parent)
     : QObject(parent)

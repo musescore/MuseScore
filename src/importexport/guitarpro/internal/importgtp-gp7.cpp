@@ -19,14 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include "importgtp.h"
 
 #include <QDebug>
 
-#include "importgtp.h"
 #include "libmscore/bracketItem.h"
-#include <libmscore/instrtemplate.h>
-#include <libmscore/part.h>
-#include <libmscore/staff.h>
+#include "libmscore/instrtemplate.h"
+#include "libmscore/masterscore.h"
+#include "libmscore/part.h"
+#include "libmscore/staff.h"
+
 #include "thirdparty/qzip/qzipreader_p.h"
 
 namespace Ms {

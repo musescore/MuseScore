@@ -20,12 +20,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <cmath>
 #include <memory>
 #include <utility>
-#include <cmath>
 
-#include "libmscore/arpeggio.h"
+#include <QRegularExpression>
+
 #include "libmscore/accidental.h"
+#include "libmscore/arpeggio.h"
+#include "libmscore/articulation.h"
+#include "libmscore/barline.h"
 #include "libmscore/breath.h"
 #include "libmscore/chord.h"
 #include "libmscore/chordline.h"
@@ -33,6 +37,7 @@
 #include "libmscore/chordrest.h"
 #include "libmscore/drumset.h"
 #include "libmscore/dynamic.h"
+#include "libmscore/fermata.h"
 #include "libmscore/figuredbass.h"
 #include "libmscore/fingering.h"
 #include "libmscore/fret.h"
@@ -50,27 +55,25 @@
 #include "libmscore/measurerepeat.h"
 #include "libmscore/mscore.h"
 #include "libmscore/note.h"
+#include "libmscore/ottava.h"
 #include "libmscore/part.h"
 #include "libmscore/pedal.h"
+#include "libmscore/rehearsalmark.h"
 #include "libmscore/rest.h"
+#include "libmscore/scorefont.h"
 #include "libmscore/slur.h"
 #include "libmscore/staff.h"
 #include "libmscore/stafftext.h"
 #include "libmscore/sym.h"
 #include "libmscore/tempo.h"
 #include "libmscore/tempotext.h"
+#include "libmscore/textline.h"
 #include "libmscore/tie.h"
 #include "libmscore/timesig.h"
 #include "libmscore/tremolo.h"
 #include "libmscore/trill.h"
 #include "libmscore/utils.h"
 #include "libmscore/volta.h"
-#include "libmscore/textline.h"
-#include "libmscore/barline.h"
-#include "libmscore/articulation.h"
-#include "libmscore/ottava.h"
-#include "libmscore/rehearsalmark.h"
-#include "libmscore/fermata.h"
 
 #include "importmxmllogger.h"
 #include "importmxmlnoteduration.h"

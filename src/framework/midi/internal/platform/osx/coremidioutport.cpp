@@ -55,7 +55,7 @@ CoreMidiOutPort::~CoreMidiOutPort()
 
 void CoreMidiOutPort::init()
 {
-    m_core = std::unique_ptr<Core>(new Core());
+    m_core = std::make_shared<Core>();
     initCore();
 }
 
