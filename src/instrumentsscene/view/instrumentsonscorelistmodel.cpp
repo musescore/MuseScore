@@ -111,8 +111,8 @@ QStringList InstrumentsOnScoreListModel::orders() const
 {
     QStringList result;
 
-    for (const ScoreOrder* order: m_scoreOrders) {
-        result << order->name;
+    for (const ScoreOrder& order: m_scoreOrders) {
+        result << order.name;
     }
 
     return result;
@@ -145,28 +145,21 @@ void InstrumentsOnScoreListModel::load()
     }
 
     setItems(instruments);
-    loadInstrumentsMeta();
+    loadOrders();
 }
 
-void InstrumentsOnScoreListModel::loadInstrumentsMeta()
+void InstrumentsOnScoreListModel::loadOrders()
 {
     TRACEFUNC;
 
-    RetValCh<InstrumentsMeta> meta = repository()->instrumentsMeta();
-    if (!meta.ret) {
-        LOGE() << meta.ret.toString();
-    }
-
-    m_scoreOrders = meta.val.scoreOrders;
+    m_scoreOrders = repository()->orders();
     emit ordersChanged();
-
-    m_instrumentTemplates = meta.val.instrumentTemplates;
 
     INotationPtr notation = context()->currentNotation();
     QString currentOrderId = notation ? notation->scoreOrder().id : QString();
 
     for (int i = 0; i < m_scoreOrders.size(); ++i) {
-        if (m_scoreOrders[i]->id == currentOrderId) {
+        if (m_scoreOrders[i].id == currentOrderId) {
             doSetCurrentOrderIndex(i);
             break;
         }
@@ -282,7 +275,8 @@ int InstrumentsOnScoreListModel::sortInstrumentsIndex(const ScoreOrder& order, c
     };
 
     auto calculateIndex = [this, &instrument](int index) {
-        return index * m_instrumentTemplates.size() + instrument.instrumentTemplate.sequenceOrder;
+        const InstrumentTemplateList& templates = repository()->instrumentTemplates();
+        return index * templates.size() + instrument.instrumentTemplate.sequenceOrder;
     };
 
     QString family = order.instrumentMap.contains(instrument.id) ? order.instrumentMap[instrument.id].id : instrument.familyId;
@@ -322,23 +316,15 @@ const ScoreOrder& InstrumentsOnScoreListModel::currentScoreOrder() const
         return dummy;
     }
 
-    return *m_scoreOrders[m_currentOrderIndex];
+    return m_scoreOrders[m_currentOrderIndex];
 }
 
 void InstrumentsOnScoreListModel::onRowsMoved()
 {
-    static ScoreOrder customOrder = makeCustomOrder();
-    bool containsCustomOrder = false;
+    const ScoreOrder& customOrder = notation::customOrder();
 
-    for (const ScoreOrder* order : m_scoreOrders) {
-        if (order->id == customOrder.id) {
-            containsCustomOrder = true;
-            break;
-        }
-    }
-
-    if (!containsCustomOrder) {
-        m_scoreOrders << &customOrder;
+    if (!m_scoreOrders.contains(customOrder)) {
+        m_scoreOrders << customOrder;
         emit ordersChanged();
     }
 

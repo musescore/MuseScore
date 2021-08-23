@@ -43,6 +43,11 @@ static const QString UNSORTED_ID("<unsorted>");
 //   readBoolAttribute
 //---------------------------------------------------------
 
+bool ScoreOrder::operator==(const ScoreOrder& order) const
+{
+    return id == order.id;
+}
+
 bool ScoreOrder::readBoolAttribute(Ms::XmlReader& reader, const char* attrName, bool defvalue)
 {
     if (!reader.hasAttribute(attrName)) {

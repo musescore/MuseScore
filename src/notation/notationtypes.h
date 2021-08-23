@@ -133,7 +133,7 @@ using PartList = QList<const Part*>;
 using InstrumentList = QList<Instrument>;
 using InstrumentTemplateList = QList<const InstrumentTemplate*>;
 using InstrumentGenreList = QList<const InstrumentGenre*>;
-using ScoreOrderList = QList<const ScoreOrder*>;
+using ScoreOrderList = QList<ScoreOrder>;
 using InstrumentGroupList = QList<const InstrumentGroup*>;
 using MidiArticulationList = QList<MidiArticulation>;
 
@@ -360,24 +360,6 @@ struct PartInstrumentListScoreOrder
     ScoreOrder scoreOrder;
 };
 
-struct InstrumentsMeta
-{
-    InstrumentTemplateList instrumentTemplates;
-    InstrumentGroupList groups;
-    InstrumentGenreList genres;
-    MidiArticulationList articulations;
-    ScoreOrderList scoreOrders;
-
-    void clear()
-    {
-        instrumentTemplates.clear();
-        groups.clear();
-        genres.clear();
-        articulations.clear();
-        scoreOrders.clear();
-    }
-};
-
 struct SearchCommand
 {
     ElementType searchElementType = ElementType::INVALID;
@@ -582,9 +564,9 @@ struct ScoreCreateOptions
     ScoreOrder order;
 };
 
-inline ScoreOrder makeCustomOrder()
+inline const ScoreOrder& customOrder()
 {
-    ScoreOrder order;
+    static ScoreOrder order;
     order.id = "custom";
     order.name = qtrc("OrderXML", "Custom");
 
