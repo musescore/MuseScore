@@ -50,6 +50,10 @@ Rectangle {
 
                     FlatToggleButton {
                         icon: IconCode.COPY
+
+//                        onToggled: {
+//                            root.model.isAspectRatioLocked.value = !root.model.isAspectRatioLocked.value
+//                        }
                     }
 
                     ToolButton {
@@ -134,6 +138,9 @@ Rectangle {
                                 text: qsTr("Triplet")
                             }
                         }
+                        onObjectNameChanged: {
+
+                        }
                     }
                 }
 
@@ -175,11 +182,6 @@ Rectangle {
             ScrollBar.vertical.interactive: true
             ScrollBar.horizontal.policy: ScrollBar.AlwaysOn
             ScrollBar.vertical.policy: ScrollBar.AlwaysOn
-
-            Label {
-                text: "ABC"
-                font.pixelSize: 224
-            }
 
             contentWidth: 1500
             contentHeight: 500
