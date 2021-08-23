@@ -30,7 +30,6 @@ using namespace Ms;
 LayoutContext::LayoutContext(Score* s)
     : score(s)
 {
-    firstSystemIndent = score && score->styleB(Sid::enableIndentationOnFirstSystem);
 }
 
 LayoutContext::~LayoutContext()

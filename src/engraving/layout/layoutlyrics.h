@@ -22,6 +22,8 @@
 #ifndef MU_ENGRAVING_LAYOUTLYRICS_H
 #define MU_ENGRAVING_LAYOUTLYRICS_H
 
+#include "layoutoptions.h"
+
 namespace Ms {
 class Score;
 class System;
@@ -33,7 +35,7 @@ class LayoutLyrics
 public:
     LayoutLyrics() = default;
 
-    static void layoutLyrics(Ms::Score* score, Ms::System* system);
+    static void layoutLyrics(const LayoutOptions& options, const Ms::Score* score, Ms::System* system);
 };
 }
 #endif // MU_ENGRAVING_LAYOUTLYRICS_H

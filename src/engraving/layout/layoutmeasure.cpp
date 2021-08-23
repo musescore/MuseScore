@@ -48,7 +48,8 @@ using namespace Ms;
 //    from firstMeasure to lastMeasure (inclusive)
 //---------------------------------------------------------
 
-void LayoutMeasure::createMMRest(Score* score, Measure* firstMeasure, Measure* lastMeasure, const Fraction& len)
+void LayoutMeasure::createMMRest(const LayoutOptions& options, Score* score, Measure* firstMeasure, Measure* lastMeasure,
+                                 const Fraction& len)
 {
     int numMeasuresInMMRest = 1;
     if (firstMeasure != lastMeasure) {
@@ -377,7 +378,7 @@ void LayoutMeasure::createMMRest(Score* score, Measure* firstMeasure, Measure* l
         }
     }
 
-    MeasureBase* nm = score->_showVBox ? lastMeasure->next() : lastMeasure->nextMeasure();
+    MeasureBase* nm = options.showVBox ? lastMeasure->next() : lastMeasure->nextMeasure();
     mmrMeasure->setNext(nm);
     mmrMeasure->setPrev(firstMeasure->prev());
 }
@@ -573,14 +574,14 @@ static void layoutDrumsetChord(Chord* c, const Drumset* drumset, const StaffType
     }
 }
 
-void LayoutMeasure::getNextMeasure(Ms::Score* score, LayoutContext& lc)
+void LayoutMeasure::getNextMeasure(const LayoutOptions& options, Ms::Score* score, LayoutContext& lc)
 {
     lc.prevMeasure = lc.curMeasure;
     lc.curMeasure  = lc.nextMeasure;
     if (!lc.curMeasure) {
-        lc.nextMeasure = score->_showVBox ? score->first() : score->firstMeasure();
+        lc.nextMeasure = options.showVBox ? score->first() : score->firstMeasure();
     } else {
-        lc.nextMeasure = score->_showVBox ? lc.curMeasure->next() : lc.curMeasure->nextMeasure();
+        lc.nextMeasure = options.showVBox ? lc.curMeasure->next() : lc.curMeasure->nextMeasure();
     }
     if (!lc.curMeasure) {
         return;
@@ -597,7 +598,7 @@ void LayoutMeasure::getNextMeasure(Ms::Score* score, LayoutContext& lc)
             Fraction len;
 
             while (validMMRestMeasure(nm)) {
-                MeasureBase* mb = score->_showVBox ? nm->next() : nm->nextMeasure();
+                MeasureBase* mb = options.showVBox ? nm->next() : nm->nextMeasure();
                 if (breakMultiMeasureRest(nm) && n) {
                     break;
                 }
@@ -613,9 +614,9 @@ void LayoutMeasure::getNextMeasure(Ms::Score* score, LayoutContext& lc)
                 nm = toMeasure(mb);
             }
             if (n >= score->styleI(Sid::minEmptyMeasures)) {
-                createMMRest(score, m, lm, len);
+                createMMRest(options, score, m, lm, len);
                 lc.curMeasure  = m->mmRest();
-                lc.nextMeasure = score->_showVBox ? lm->next() : lm->nextMeasure();
+                lc.nextMeasure = options.showVBox ? lm->next() : lm->nextMeasure();
             } else {
                 if (m->mmRest()) {
                     score->undo(new ChangeMMRest(m, 0));
@@ -640,7 +641,7 @@ void LayoutMeasure::getNextMeasure(Ms::Score* score, LayoutContext& lc)
     Measure* measure = toMeasure(lc.curMeasure);
     measure->moveTicks(lc.tick - measure->tick());
 
-    if (score->lineMode() && (measure->tick() < lc.startTick || measure->tick() > lc.endTick)) {
+    if (score->isLayoutMode(LayoutMode::LINE) && (measure->tick() < lc.startTick || measure->tick() > lc.endTick)) {
         // needed to reset segment widths if they can change after measure width is computed
         //for (Segment& s : measure->segments())
         //      s.createShapes();

@@ -22,6 +22,7 @@
 #ifndef MU_ENGRAVING_LAYOUTSYSTEM_H
 #define MU_ENGRAVING_LAYOUTSYSTEM_H
 
+#include "layoutoptions.h"
 #include "layoutcontext.h"
 
 namespace Ms {
@@ -37,8 +38,8 @@ class LayoutSystem
 {
 public:
 
-    static Ms::System* collectSystem(LayoutContext& lc, Ms::Score* score);
-    static void layoutSystemElements(LayoutContext& lc, Ms::Score* score, Ms::System* system);
+    static Ms::System* collectSystem(const LayoutOptions& options, LayoutContext& lc, Ms::Score* score);
+    static void layoutSystemElements(const LayoutOptions& options, LayoutContext& lc, Ms::Score* score, Ms::System* system);
 
 private:
 

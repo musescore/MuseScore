@@ -96,8 +96,6 @@ class EditData;
 
 #define UNDO_NAME(a)  virtual const char* name() const override { return a; }
 
-enum class LayoutMode : char;
-
 //---------------------------------------------------------
 //   UndoCommand
 //---------------------------------------------------------

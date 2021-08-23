@@ -37,6 +37,7 @@
 #include "commonscenetypes.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------

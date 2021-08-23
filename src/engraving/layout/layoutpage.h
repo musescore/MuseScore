@@ -22,6 +22,7 @@
 #ifndef MU_ENGRAVING_LAYOUTPAGE_H
 #define MU_ENGRAVING_LAYOUTPAGE_H
 
+#include "layoutoptions.h"
 #include "layoutcontext.h"
 
 namespace Ms {
@@ -34,8 +35,8 @@ class LayoutPage
 {
 public:
 
-    static void getNextPage(LayoutContext& lc);
-    static void collectPage(LayoutContext& lc);
+    static void getNextPage(const LayoutOptions& options, LayoutContext& lc);
+    static void collectPage(const LayoutOptions& options, LayoutContext& lc);
 
 private:
     static void layoutPage(Ms::Page* page, qreal restHeight);

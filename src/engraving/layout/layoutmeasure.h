@@ -22,6 +22,8 @@
 #ifndef MU_ENGRAVING_LAYOUTMEASURE_H
 #define MU_ENGRAVING_LAYOUTMEASURE_H
 
+#include "layoutoptions.h"
+
 namespace Ms {
 class Score;
 class Measure;
@@ -36,11 +38,12 @@ class LayoutMeasure
 public:
     LayoutMeasure() = default;
 
-    static void getNextMeasure(Ms::Score* score, LayoutContext& lc);
+    static void getNextMeasure(const LayoutOptions& options, Ms::Score* score, LayoutContext& lc);
 
 private:
 
-    static void createMMRest(Ms::Score* score, Ms::Measure* firstMeasure, Ms::Measure* lastMeasure, const Ms::Fraction& len);
+    static void createMMRest(const LayoutOptions& options, Ms::Score* score, Ms::Measure* firstMeasure, Ms::Measure* lastMeasure,
+                             const Ms::Fraction& len);
 
     static int adjustMeasureNo(LayoutContext& lc, Ms::MeasureBase* m);
 };

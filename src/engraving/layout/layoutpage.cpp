@@ -54,7 +54,7 @@ using namespace Ms;
 //   getNextPage
 //---------------------------------------------------------
 
-void LayoutPage::getNextPage(LayoutContext& lc)
+void LayoutPage::getNextPage(const LayoutOptions& options, LayoutContext& lc)
 {
     if (!lc.page || lc.curPage >= lc.score->npages()) {
         lc.page = new Page(lc.score);
@@ -76,7 +76,7 @@ void LayoutPage::getNextPage(LayoutContext& lc)
         }
         lc.prevSystem = systems.empty() ? nullptr : systems.back();
     }
-    lc.page->bbox().setRect(0.0, 0.0, lc.score->loWidth(), lc.score->loHeight());
+    lc.page->bbox().setRect(0.0, 0.0, options.loWidth, options.loHeight);
     lc.page->setNo(lc.curPage);
     qreal x = 0.0;
     qreal y = 0.0;
@@ -97,7 +97,7 @@ void LayoutPage::getNextPage(LayoutContext& lc)
 //   collectPage
 //---------------------------------------------------------
 
-void LayoutPage::collectPage(LayoutContext& lc)
+void LayoutPage::collectPage(const LayoutOptions& options, LayoutContext& lc)
 {
     const qreal slb = lc.score->styleP(Sid::staffLowerBorder);
     bool breakPages = lc.score->layoutMode() != LayoutMode::SYSTEM;
@@ -185,7 +185,7 @@ void LayoutPage::collectPage(LayoutContext& lc)
                 }
             }
         } else {
-            nextSystem = LayoutSystem::collectSystem(lc, lc.score);
+            nextSystem = LayoutSystem::collectSystem(options, lc, lc.score);
             if (nextSystem) {
                 collected = true;
             }
@@ -289,13 +289,13 @@ void LayoutPage::collectPage(LayoutContext& lc)
         }
     }
 
-    if (lc.score->systemMode()) {
+    if (options.isMode(LayoutMode::SYSTEM)) {
         System* s = lc.page->systems().last();
         qreal height = s ? s->pos().y() + s->height() + s->minBottom() : lc.page->tm();
-        lc.page->bbox().setRect(0.0, 0.0, lc.score->loWidth(), height + lc.page->bm());
+        lc.page->bbox().setRect(0.0, 0.0, options.loWidth, height + lc.page->bm());
     }
 
-    lc.page->rebuildBspTree();
+    lc.page->invalidateBspTree();
 }
 
 //---------------------------------------------------------
