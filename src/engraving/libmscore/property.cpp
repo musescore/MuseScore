@@ -590,7 +590,7 @@ QVariant propertyFromString(Pid id, QString value)
         }
     }
     break;
-    case P_TYPE::BEAM_MODE:                     // TODO
+    case P_TYPE::BEAM_MODE:
         return QVariant(int(0));
 
     case P_TYPE::GROUPS:
@@ -705,7 +705,7 @@ QVariant readProperty(Pid id, XmlReader& e)
     case P_TYPE::ORIENTATION:
         return propertyFromString(id, e.readElementText());
 
-    case P_TYPE::BEAM_MODE:                     // TODO
+    case P_TYPE::BEAM_MODE:
         return QVariant(int(0));
 
     case P_TYPE::GROUPS:

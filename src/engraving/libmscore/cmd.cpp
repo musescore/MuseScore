@@ -473,37 +473,6 @@ void Score::cmdAddSpanner(Spanner* spanner, int staffIdx, Segment* startSegment,
         tick2 = endSegment->tick();
     }
     spanner->setTick2(tick2);
-#if 0 // TODO
-    TextLine* tl = toTextLine(spanner);
-    if (tl) {
-        StyledPropertyListIdx st;
-        Text* t;
-        // begin
-        t = tl->beginTextElement();
-        if (t) {
-            st = t->textStyleType();
-            if (st >= StyledPropertyListIdx::DEFAULT) {
-                t->textStyle().restyle(MScore::baseStyle().textStyle(st), textStyle(st));
-            }
-        }
-        // continue
-        t = tl->continueTextElement();
-        if (t) {
-            st = t->textStyleType();
-            if (st >= StyledPropertyListIdx::DEFAULT) {
-                t->textStyle().restyle(MScore::baseStyle().textStyle(st), textStyle(st));
-            }
-        }
-        // end
-        t = tl->endTextElement();
-        if (t) {
-            st = t->textStyleType();
-            if (st >= StyledPropertyListIdx::DEFAULT) {
-                t->textStyle().restyle(MScore::baseStyle().textStyle(st), textStyle(st));
-            }
-        }
-    }
-#endif
     undoAddElement(spanner);
 }
 
@@ -1616,7 +1585,7 @@ void Score::upDown(bool up, UpDownMode mode)
                     return;                                 // no next string to move to
                 }
                 string = stt->visualStringToPhys(string);
-                fret = stringData->fret(pitch, string, staff, tick);
+                fret = stringData->fret(pitch, string, staff);
                 if (fret == -1) {                            // can't have that note on that string
                     return;
                 }
@@ -1643,7 +1612,7 @@ void Score::upDown(bool up, UpDownMode mode)
                 }
                 // update pitch and tpc's and check it matches stringData
                 upDownChromatic(up, pitch, oNote, key, tpc1, tpc2, newPitch, newTpc1, newTpc2);
-                if (newPitch != stringData->getPitch(string, fret, staff, tick)) {
+                if (newPitch != stringData->getPitch(string, fret, staff)) {
                     // oh-oh: something went very wrong!
                     qDebug("upDown tab in-string: pitch mismatch");
                     return;
@@ -1873,7 +1842,7 @@ static void changeAccidental2(Note* n, int pitch, int tpc)
             //
             const StringData* stringData = n->part()->instrument(n->tick())->stringData();
             if (stringData) {
-                stringData->convertPitch(pitch, st, chord->tick(), &string, &fret);
+                stringData->convertPitch(pitch, st, &string, &fret);
             }
         }
     }
@@ -4401,7 +4370,6 @@ void Score::cmd(const QString& cmd, EditData& ed)
         { "nat-post",                   [](Score* cs, EditData&) { cs->changeAccidental(AccidentalType::NATURAL); } },
         { "flat-post",                  [](Score* cs, EditData&) { cs->changeAccidental(AccidentalType::FLAT); } },
         { "flat2-post",                 [](Score* cs, EditData&) { cs->changeAccidental(AccidentalType::FLAT2); } },
-        { "add-audio",                  [](Score* cs, EditData&) { cs->addAudioTrack(); } },
         { "transpose-up",               [](Score* cs, EditData&) { cs->transposeSemitone(1); } },
         { "transpose-down",             [](Score* cs, EditData&) { cs->transposeSemitone(-1); } },
         { "pitch-up-diatonic-alterations",   [](Score* cs, EditData&) { cs->transposeDiatonicAlterations(TransposeDirection::UP); } },

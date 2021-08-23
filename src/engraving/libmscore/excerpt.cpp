@@ -601,13 +601,6 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& sourceS
             for (int dstStaffIdx = 0; dstStaffIdx < sourceStavesIndexes.size(); ++dstStaffIdx) {
                 nm->setStaffStemless(dstStaffIdx, m->stemless(sourceStavesIndexes[dstStaffIdx]));
             }
-//TODO                  nm->setEndBarLineType(
-//                     m->endBarLineType(),
-//                     m->endBarLineGenerated(),
-//                     m->endBarLineVisible(),
-//                     m->endBarLineColor());
-
-            // Fraction ts = nm->len();
             int tracks = oscore->nstaves() * VOICES;
 
             if (sourceStavesIndexes.isEmpty() && trackList.isEmpty()) {

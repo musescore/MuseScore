@@ -127,18 +127,10 @@ void TestBarline::barline01()
             bar = toBarLine(seg->element(0));
             sprintf(msg, "No barline in measure %d of system %d.", msrNo + 1, sysNo + 1);
             QVERIFY2(bar != nullptr, msg);
-
-#if 0 // not valid anymore
-            height      = bar->bbox().height() / spatium;
-            sprintf(msg, "Wrong barline height %f %f %f in measure %d of system %d.",
-                    heightMin, height, heightMax, msrNo + 1, sysNo + 1);
-            QVERIFY2(height > heightMin && height < heightMax, msg);
-#endif
         }
         sysNo++;
     }
 
-//      QVERIFY(saveCompareScore(score, "barline01.mscx", DIR + "barline01-ref.mscx"));
     delete score;
 }
 

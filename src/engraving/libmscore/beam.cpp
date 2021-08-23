@@ -318,25 +318,6 @@ bool Beam::twoBeamedNotes()
     int dist2     = c2->upLine() - upDnLimit;
     if ((dist1 == -dist2) || (-dist1 == dist2)) {
         _up = false;
-#if 0
-        // this code appears to implement a rule
-        // that says two middle-line beamed notes
-        // should follow the same beam direction as a previous beam group
-        // but we don't follow this rule for single notes or for larger beam groups
-        // also, it makes little sense to follow it if the previous group
-        // is in another measure, which may end up on another system or page
-        Segment* s = c1->segment();
-        s = s->prev1(SegmentType::ChordRest);
-        if (s) {
-            Element* e = s->element(c1->track());
-            if (e && e->isChord()) {
-                Chord* c = toChord(e);
-                if (c->beam()) {
-                    _up = c->beam()->up();
-                }
-            }
-        }
-#endif
     } else if (qAbs(dist1) > qAbs(dist2)) {
         _up = dist1 > 0;
     } else {
@@ -621,7 +602,6 @@ void Beam::layout()
             a[2] = PointF(bs->x2(), bs->y2());
             a[3] = PointF(bs->x1(), bs->y1());
             RectF r(a.boundingRect().adjusted(0.0, -lw2, 0.0, lw2));
-//TODO                  s.add(r.translated(-offset));
             addbbox(r);
         }
     }

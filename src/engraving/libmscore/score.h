@@ -544,14 +544,12 @@ private:
     void cmdMoveRest(Rest*, Direction);
     void cmdMoveLyrics(Lyrics*, Direction);
 
-    void checkSlurs();
     void checkScore();
 
     bool rewriteMeasures(Measure* fm, Measure* lm, const Fraction&, int staffIdx);
     bool rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx);
     void swingAdjustParams(Chord*, int&, int&, int, int);
     bool isSubdivided(ChordRest*, int);
-    void addAudioTrack();
     QList<Fraction> splitGapToMeasureBoundaries(ChordRest*, Fraction);
     void pasteChordRest(ChordRest* cr, const Fraction& tick, const Interval&);
 
@@ -1049,9 +1047,6 @@ public:
     bool getPosition(Position* pos, const mu::PointF&, int voice) const;
 
     void cmdDeleteTuplet(Tuplet*, bool replaceWithRest);
-#if 0
-    void moveBracket(int staffIdx, int srcCol, int dstCol);
-#endif
     Measure* getCreateMeasure(const Fraction& tick);
 
     void adjustBracketsDel(int sidx, int eidx);
@@ -1130,7 +1125,6 @@ public:
 
     MasterScore* masterScore() const { return _masterScore; }
     void setMasterScore(MasterScore* s) { _masterScore = s; }
-    void createRevision();
     void writeSegments(XmlWriter& xml, int strack, int etrack, Segment* sseg, Segment* eseg, bool, bool);
 
     const QMap<QString, QString>& metaTags() const { return _metaTags; }
@@ -1271,12 +1265,9 @@ public:
     QString createRehearsalMarkText(RehearsalMark* current) const;
     QString nextRehearsalMarkText(RehearsalMark* previous, RehearsalMark* current) const;
 
-    //@ ??
-//      Q_INVOKABLE void cropPage(qreal margins);
     bool sanityCheck(const QString& name = QString());
 
     bool checkKeys();
-    bool checkClefs();
 
     void switchToPageMode();
 

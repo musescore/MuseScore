@@ -859,36 +859,7 @@ static void addElemOffset(Element* el, int track, const QString& placement, Meas
     if (!measure) {
         return;
     }
-    /*
-     qDebug("addElem el %p track %d placement %s tick %d",
-     el, track, qPrintable(placement), tick);
-     */
 
-#if 0 // ws: use placement for symbols
-      // move to correct position
-      // TODO: handle rx, ry
-    if (el->isSymbol()) {
-        qreal y = 0;
-        // calc y offset assuming five line staff and default style
-        // note that required y offset is element type dependent
-        const qreal stafflines = 5;     // assume five line staff, but works OK-ish for other sizes too
-        qreal offsAbove = 0;
-        qreal offsBelow = 0;
-        offsAbove = -2;
-        offsBelow =  4 + (stafflines - 1);
-        if (placement == "above") {
-            y += offsAbove;
-        }
-        if (placement == "below") {
-            y += offsBelow;
-        }
-        //qDebug("   y = %g", y);
-        y *= el->score()->spatium();
-        el->setUserOff(QPoint(0, y));
-    } else {
-        el->setPlacement(placement == "above" ? Placement::ABOVE : Placement::BELOW);
-    }
-#endif
     el->setPlacement(placement == "above" ? Placement::ABOVE : Placement::BELOW);
     el->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
 
@@ -1257,32 +1228,6 @@ static void addTextToNote(int l, int c, QString txt, QString placement, QString 
 
 static void setSLinePlacement(SLine* sli, const QString placement)
 {
-    /*
-     qDebug("setSLinePlacement sli %p type %d s=%g pl='%s'",
-     sli, sli->type(), sli->score()->spatium(), qPrintable(placement));
-     */
-
-#if 0
-    // calc y offset assuming five line staff and default style
-    // note that required y offset is element type dependent
-    if (sli->type() == ElementType::HAIRPIN) {
-        if (placement == "above") {
-            const qreal stafflines = 5;             // assume five line staff, but works OK-ish for other sizes too
-            qreal offsAbove = -6 - (stafflines - 1);
-            qreal y = 0;
-            y +=  offsAbove;
-            // add linesegment containing the user offset
-            LineSegment* tls= sli->createLineSegment();
-            //qDebug("   y = %g", y);
-            tls->setAutoplace(false);
-            y *= sli->score()->spatium();
-            tls->setUserOff(QPointF(0, y));
-            sli->add(tls);
-        }
-    } else {
-        sli->setPlacement(placement == "above" ? Placement::ABOVE : Placement::BELOW);
-    }
-#endif
     sli->setPlacement(placement == "above" ? Placement::ABOVE : Placement::BELOW);
     sli->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
 }
@@ -1296,7 +1241,6 @@ static void setSLinePlacement(SLine* sli, const QString placement)
 
 static void handleSpannerStart(SLine* new_sp, int track, QString& placement, const Fraction& tick, MusicXmlSpannerMap& spanners)
 {
-    //qDebug("handleSpannerStart(sp %p, track %d, tick %s (%d))", new_sp, track, qPrintable(tick.print()), tick.ticks());
     new_sp->setTrack(track);
     setSLinePlacement(new_sp, placement);
     spanners[new_sp] = QPair<int, int>(tick.ticks(), -1);
@@ -3168,25 +3112,6 @@ void MusicXMLParserDirection::pedal(const QString& type, const int /* number */,
             auto p = spdesc._isStarted ? toPedal(spdesc._sp) : new Pedal(_score);
             stops.append(MusicXmlSpannerDesc(p, ElementType::PEDAL, number));
         } else if (type == "change") {
-#if 0
-            TODO
-            // pedal change is implemented as two separate pedals
-            // first stop the first one
-            if (pedal) {
-                pedal->setEndHookType(HookType::HOOK_45);
-                handleSpannerStop(pedal, "pedal", track, tick, spanners);
-                pedalContinue = pedal;         // mark for later fixup
-                pedal = 0;
-            }
-            // then start a new one
-            pedal = toPedal(checkSpannerOverlap(pedal, new Pedal(score), "pedal"));
-            pedal->setBeginHookType(HookType::HOOK_45);
-            pedal->setEndHookType(HookType::HOOK_90);
-            if (placement == "") {
-                placement = "below";
-            }
-            handleSpannerStart(pedal, "pedal", track, placement, tick, spanners);
-#endif
         } else if (type == "continue") {
             // ignore
         } else {
@@ -5197,41 +5122,13 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
 
     int track = _pass1.trackForPart(partId);
 
-    // placement:
-    // in order to work correctly, this should probably be adjusted to account for spatium
-    // but in any case, we don't support import relative-x/y for other elements
-    // no reason to do so for chord symbols
-#if 0 // TODO:ws
-    double rx = 0.0;          // 0.1 * e.attribute("relative-x", "0").toDouble();
-    double ry = 0.0;          // -0.1 * e.attribute("relative-y", "0").toDouble();
-
-    double styleYOff = _score->textStyle(Tid::HARMONY).offset().y();
-    OffsetType offsetType = _score->textStyle(Tid::HARMONY).offsetType();
-    if (offsetType == OffsetType::ABS) {
-        styleYOff = styleYOff * DPMM / _score->spatium();
-    }
-
-    // TODO: check correct dy handling
-    // previous code: double dy = -0.1 * e.attribute("default-y", QString::number(styleYOff* -10)).toDouble();
-    double dy = -0.1 * _e.attributes().value("default-y").toDouble();
-#endif
     bool printObject = _e.attributes().value("print-object") != "no";
-    //QString printFrame = _e.attributes().value("print-frame").toString();
-    //QString printStyle = _e.attributes().value("print-style").toString();
 
     QString kind, kindText, functionText, symbols, parens;
     QList<HDegree> degreeList;
 
-    /* TODO ?
-    if (harmony) {
-          qDebug("MusicXML::import: more than one harmony");
-          return;
-    }
-     */
-
     FretDiagram* fd = 0;
     Harmony* ha = new Harmony(_score);
-//TODO:ws      ha->setUserOff(QPointF(rx, ry + dy - styleYOff));
     Fraction offset;
     while (_e.readNextStartElement()) {
         if (_e.name() == "root") {
@@ -6458,7 +6355,6 @@ void MusicXMLParserNotations::addToScore(ChordRest* const cr, Note* const note, 
     for (const auto& d : qAsConst(_dynamicsList)) {
         auto dynamic = new Dynamic(_score);
         dynamic->setDynamicType(d);
-//TODO:ws            if (hasYoffset) dyn->textStyle().setYoff(yoffset);
         addElemOffset(dynamic, cr->track(), _dynamicsPlacement, cr->measure(), Fraction::fromTicks(tick));
     }
 }

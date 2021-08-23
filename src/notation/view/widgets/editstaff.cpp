@@ -481,9 +481,6 @@ void EditStaff::applyStaffProperties()
     config.clefTypeList = m_instrument.clefType(m_orgStaff->rstaff());
 
     notationParts()->setStaffConfig(m_orgStaff->id(), config);
-
-    // TODO
-    //    notationParts()->setStaffType(m_staff->id(), *(m_staff->staffType(Fraction(0, 1))));
 }
 
 void EditStaff::applyPartProperties()

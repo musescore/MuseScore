@@ -1589,12 +1589,6 @@ void Chord::layoutStem()
                 }
                 if (hookIdx && _hook) {
                     _hook->setHookType(hookIdx);
-#if 0
-                    _hook->layout();
-                    PointF p(_stem->hookPos());
-                    p.rx() -= _stem->width();
-                    _hook->setPos(p);
-#endif
                 }
             }
             return;
@@ -2061,22 +2055,6 @@ void Chord::layoutPitched()
         }
     }
 
-#if 0
-    if (!_articulations.isEmpty()) {
-        // TODO: allocate space to avoid "staircase" effect
-        // but we would need to determine direction in order to get correct symid & bbox
-        // another alternative is to limit the width contribution of the articulation in layoutArticulations2()
-        //qreal aWidth = 0.0;
-        for (Articulation* a : articulations()) {
-            a->layout();            // aWidth = qMax(aWidth, a->width());
-        }
-        //qreal w = width();
-        //qreal aExtra = (qMax(aWidth, w) - w) * 0.5;
-        //lll = qMax(lll, aExtra);
-        //rrr = qMax(rrr, aExtra);
-    }
-#endif
-
     _spaceLw = lll;
     _spaceRw = rrr;
 
@@ -2449,15 +2427,6 @@ void Chord::layoutTablature()
         rrr = qMax(rrr, x);
     }
 
-#if 0
-    if (!_articulations.isEmpty()) {
-        // TODO: allocate space? see layoutPitched()
-        for (Articulation* a : articulations()) {
-            a->layout();
-        }
-    }
-#endif
-
     _spaceLw = lll;
     _spaceRw = rrr;
 
@@ -2596,33 +2565,6 @@ void Chord::layoutArpeggio2()
     qreal h = dnote->pagePos().y() + dnote->headHeight() * .5 - y;
     _arpeggio->setHeight(h);
     _arpeggio->layout();
-
-#if 0 // collect notes for arpeggio
-    QList<Note*> notes;
-    int n = _notes.size();
-    for (int j = n - 1; j >= 0; --j) {
-        Note* note = _notes[j];
-        if (note->tieBack()) {
-            continue;
-        }
-        notes.prepend(note);
-    }
-
-    for (int i = 1; i < span; ++i) {
-        ChordRest* c = toChordRest(segment()->element(track() + i * VOICES));
-        if (c && c->type() == CHORD) {
-            QList<Note*> nl = toChord(c)->notes();
-            int n = nl.size();
-            for (int j = n - 1; j >= 0; --j) {
-                Note* note = nl[j];
-                if (note->tieBack()) {
-                    continue;
-                }
-                notes.prepend(note);
-            }
-        }
-    }
-#endif
 }
 
 //---------------------------------------------------------

@@ -199,35 +199,6 @@ PointF FretDiagram::pagePos() const
 QVector<LineF> FretDiagram::dragAnchorLines() const
 {
     return genericDragAnchorLines();
-#if 0 // TODOxx
-    if (parent()->isSegment()) {
-        Segment* s     = toSegment(parent());
-        Measure* m     = s->measure();
-        System* system = m->system();
-        qreal yp      = system->staff(staffIdx())->y() + system->y();
-        qreal xp      = m->tick2pos(s->tick()) + m->pagePos().x();
-        PointF p1(xp, yp);
-
-        qreal x  = 0.0;
-        qreal y  = 0.0;
-        qreal tw = width();
-        qreal th = height();
-        if (_align & Align::BOTTOM) {
-            y = th;
-        } else if (_align & Align::VCENTER) {
-            y = (th * .5);
-        } else if (_align & Align::BASELINE) {
-            y = baseLine();
-        }
-        if (_align & Align::RIGHT) {
-            x = tw;
-        } else if (_align & Align::HCENTER) {
-            x = (tw * .5);
-        }
-        return LineF(p1, abbox().topLeft() + PointF(x, y));
-    }
-    return LineF(parent()->pagePos(), abbox().topLeft());
-#endif
 }
 
 //---------------------------------------------------------
@@ -298,7 +269,7 @@ void FretDiagram::init(StringData* stringData, Chord* chord)
         for (const Note* note : chord->notes()) {
             int string;
             int fret;
-            if (stringData->convertPitch(note->pitch(), chord->staff(), chord->segment()->tick(), &string, &fret)) {
+            if (stringData->convertPitch(note->pitch(), chord->staff(), &string, &fret)) {
                 setDot(string, fret);
             }
         }
@@ -957,22 +928,6 @@ void FretDiagram::setMarker(int string, FretMarkerType mtype)
         }
     }
 }
-
-//---------------------------------------------------------
-//   setFingering
-//    NOTE:JT: todo possible future feature
-//---------------------------------------------------------
-
-#if 0
-void FretDiagram::setFingering(int string, int finger)
-{
-    if (_dots.find(string) != _dots.end()) {
-        _dots[string].fingering = finger;
-        qDebug("set finger: s %d finger %d", string, finger);
-    }
-}
-
-#endif
 
 //---------------------------------------------------------
 //   setBarre

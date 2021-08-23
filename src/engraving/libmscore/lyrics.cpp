@@ -182,27 +182,12 @@ void Lyrics::remove(Element* el)
     if (el->isLyricsLine()) {
         // only if separator still exists and is the right one
         if (_separator && el == _separator) {
-#if 0
-            // clear melismaEnd flag from end cr
-            // find end cr from melisma itself, as ticks for lyrics may not be accurate at this point
-            // note this clearing this might be premature, as there may be other lyrics that still end there
-            // also, at this point we can't be sure if this is a melisma or a dash
-            // but the flag will be regenerated on next layout
-            Element* e = _separator->endElement();
-            if (!e) {
-                e = score()->findCRinStaff(_separator->tick2(), track());
-            }
-            if (e && e->isChordRest()) {
-                toChordRest(e)->setMelismaEnd(false);
-            }
-#endif
             // Lyrics::remove() and LyricsLine::removeUnmanaged() call each other;
             // be sure each finds a clean context
             LyricsLine* separ = _separator;
             _separator = 0;
             separ->setParent(0);
             separ->removeUnmanaged();
-//done in undo/redo?                  delete separ;
         }
     } else {
         qDebug("Lyrics::remove: unknown element %s", el->name());
@@ -697,27 +682,6 @@ void Lyrics::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
         TextBase::undoChangeProperty(id, v, ps);
         return;
     }
-#if 0
-    // TODO: create new command to do this
-    if (id == Pid::PLACEMENT) {
-        if (Placement(v.toInt()) == Placement::ABOVE) {
-            // change placment of all verse for the same voice upto this one to ABOVE
-            score()->forAllLyrics([this, id, v, ps](Lyrics* l) {
-                if (l->no() <= no() && l->voice() == voice()) {
-                    l->TextBase::undoChangeProperty(id, v, ps);
-                }
-            });
-        } else {
-            // change placment of all verse for the same voce starting from this one to BELOW
-            score()->forAllLyrics([this, id, v, ps](Lyrics* l) {
-                if (l->no() >= no() && l->voice() == voice()) {
-                    l->TextBase::undoChangeProperty(id, v, ps);
-                }
-            });
-        }
-        return;
-    }
-#endif
 
     TextBase::undoChangeProperty(id, v, ps);
 }

@@ -324,7 +324,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
             }
             gn->setFret(fret);
             gn->setString(string);
-            int grace_pitch = note->part()->instrument()->stringData()->getPitch(string, fret, nullptr, Fraction(0, 1));
+            int grace_pitch = note->part()->instrument()->stringData()->getPitch(string, fret, nullptr);
             gn->setPitch(grace_pitch);
             gn->setTpcFromPitch();
 
@@ -351,16 +351,6 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
                 //TODO: Add a 'slide' guitar effect when implemented
                 //TODO-ws				note->setSlideNote(gn);
             } else if (transition == 2 && fretNumber >= 0 && fretNumber <= 255 && fretNumber != gn->fret()) {
-#if 0
-                QList<PitchValue> points;
-                points.append(PitchValue(0, 0, false));
-                points.append(PitchValue(60, (fretNumber - gn->fret()) * 100, false));
-
-                Bend* b = new Bend(note->score());
-                b->setPoints(points);
-                b->setTrack(gn->track());
-                gn->add(b);
-#endif
             } else if (transition == 3) {
                 // TODO:
                 //     major: replace with a 'hammer-on' guitar effect when implemented
@@ -450,7 +440,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
     if (fretNumber > 99 || fretNumber == -1) {
         fretNumber = 0;
     }
-    int pitch = staff->part()->instrument()->stringData()->getPitch(string, fretNumber, nullptr, Fraction(0, 1));
+    int pitch = staff->part()->instrument()->stringData()->getPitch(string, fretNumber, nullptr);
     note->setFret(fretNumber);
     note->setString(string);
     note->setPitch(std::min(pitch, 127));
@@ -473,9 +463,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
             note->chord()->add(harmonicNote);
             harmonicNote->setFret(harmonicFret);
             harmonicNote->setString(note->string());
-            //TODO-ws			harmonicNote->setHarmonic(true);
-            harmonicNote->setPitch(note->staff()->part()->instrument()->stringData()->getPitch(note->string(), harmonicFret, nullptr,
-                                                                                               Fraction(0, 1)));
+            harmonicNote->setPitch(note->staff()->part()->instrument()->stringData()->getPitch(note->string(), harmonicFret, nullptr));
             harmonicNote->setTpcFromPitch();
         }
     }
@@ -859,17 +847,6 @@ bool GuitarPro4::read(QFile* fp)
                 int tuple = 0;
                 if (beatBits & BEAT_TUPLET) {
                     tuple = readInt();
-#if 0 // TODO: ws
-                    if (tupleKind[staffIdx]) {
-                        --tupleKind[staffIdx];
-                    } else {
-                        tupleKind[staffIdx] = tuple - 1;
-                        curTuple = tuple;
-                    }
-#endif
-                } else if (tupleKind[staffIdx]) {
-                    //TODO: ws                              tuple = curTuple;
-                    //					--tupleKind[staffIdx];
                 }
                 Segment* segment = measure->getSegment(SegmentType::ChordRest, tick);
                 if (beatBits & BEAT_CHORD) {
@@ -912,13 +889,6 @@ bool GuitarPro4::read(QFile* fp)
                     readMixChange(measure);
                     mixChange = true;
                 }
-#if 0
-                else {
-                    if (bar == 0) {
-                        setTempo(tempo, measure);
-                    }
-                }
-#endif
                 int strings = readUChar();           // used strings mask
                 Fraction l  = len2fraction(len);
 
@@ -1138,7 +1108,6 @@ bool GuitarPro4::read(QFile* fp)
                         if (br) {
                             break;
                         }
-#if 1  // TODO-ws: crash
                         Glissando* s = new Glissando(score);
                         s->setAnchor(Spanner::Anchor::NOTE);
                         s->setStartElement(n);
@@ -1150,7 +1119,6 @@ bool GuitarPro4::read(QFile* fp)
                         s->setTick2(nt->chord()->segment()->tick());
                         s->setTrack2(n->track());
                         score->addElement(s);
-#endif
                         br = true;
                         break;
                     }

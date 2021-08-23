@@ -1938,7 +1938,7 @@ bool GuitarPro1::readNote(int string, Note* note)
             }
             gn->setFret(fret);
             gn->setString(string);
-            int grace_pitch = note->staff()->part()->instrument()->stringData()->getPitch(string, fret, nullptr, Fraction(0, 1));
+            int grace_pitch = note->staff()->part()->instrument()->stringData()->getPitch(string, fret, nullptr);
             gn->setPitch(grace_pitch);
             gn->setTpcFromPitch();
 
@@ -2063,7 +2063,7 @@ bool GuitarPro1::readNote(int string, Note* note)
     if (fretNumber > 99 || fretNumber == -1) {
         fretNumber = 0;
     }
-    int pitch = staff->part()->instrument()->stringData()->getPitch(string, fretNumber, nullptr, Fraction(0, 1));
+    int pitch = staff->part()->instrument()->stringData()->getPitch(string, fretNumber, nullptr);
 
     /* it's possible to specify extraordinarily high pitches by
     specifying fret numbers that don't exist. This is an issue that
@@ -2744,16 +2744,6 @@ int GuitarPro3::readBeatEffects(int track, Segment* segment)
     if (fxBits & BEAT_TREMOLO) {
     }
     if (fxBits & BEAT_FADE) {
-#if 0
-        Articulation* art = new Articulation(score);
-        // art->setArticulationType(ArticulationType::FadeOut);
-        art->setSym(SymId::guitarFadeOut);
-        art->setAnchor(ArticulationAnchor::TOP_STAFF);
-        art->setPropertyFlags(Pid::ARTICULATION_ANCHOR, PropertyFlags::UNSTYLED);
-        if (!score->addArticulation(segment->cr(track), art)) {
-            delete art;
-        }
-#endif
         effects += 200;
     }
     if (fxBits & BEAT_DOTTED) {
@@ -2786,13 +2776,6 @@ void GuitarPro::readTremoloBar(int /*track*/, Segment* /*segment*/)
         int vibrato = readUChar();
         points.append(PitchValue(time, pitch, vibrato));
     }
-#if 0
-    //TODO
-    TremoloBar* b = new TremoloBar(segment->score());
-    b->setPoints(points);
-    b->setTrack(track);
-    segment->add(b);
-#endif
 }
 
 //---------------------------------------------------------

@@ -336,7 +336,6 @@ void PowerTab::readGuitarIn(ptTrack& info)
     gin.rhytmSlash = readUChar();
     gin.trackinfo = readUChar();
     info.guitar_ins.push_back(gin);
-    //info.getSection(section).getPosition(position).addComponent(new ptGuitarIn(staff, inf));
 }
 
 void PowerTab::readTempoMarker(ptTrack& info)
@@ -347,16 +346,8 @@ void PowerTab::readTempoMarker(ptTrack& info)
     /*auto data =*/ readShort();
     readString();   //description
 
-#if 0 // TODO-ws
-    int tripletFeel = 0;
-    if (data & 0x01) {
-        tripletFeel = 8;
-    } else if (data & 0x02) {
-        tripletFeel = 16;
-    }
-#endif
     if (tempo > 0) {
-        info.getSection(section).tempo = tempo;    //.getPosition(position).addComponent(new ptTempo(tempo));
+        info.getSection(section).tempo = tempo;
     }
 }
 

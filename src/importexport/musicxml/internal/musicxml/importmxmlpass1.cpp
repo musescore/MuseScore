@@ -887,44 +887,6 @@ static void determineMeasureStart(const QVector<Fraction>& ml, QVector<Fraction>
     for (int i = 1; i < ml.size(); i++) {
         ms[i] = ms.at(i - 1) + ml.at(i - 1);
     }
-    //for (int i = 0; i < ms.size(); i++)
-    //      qDebug("measurestart ms[%d] %s", i + 1, qPrintable(ms.at(i).print()));
-}
-
-//---------------------------------------------------------
-//   dumpPageSize
-//---------------------------------------------------------
-
-static void dumpPageSize(const QSize& pageSize)
-{
-#if 0
-    qDebug("page size width=%d height=%d", pageSize.width(), pageSize.height());
-#else
-    Q_UNUSED(pageSize);
-#endif
-}
-
-//---------------------------------------------------------
-//   dumpCredits
-//---------------------------------------------------------
-
-static void dumpCredits(const CreditWordsList& credits)
-{
-#if 0
-    for (const auto w : credits) {
-        qDebug("credit-words pg=%d tp='%s' defx=%g defy=%g just=%s hal=%s val=%s words='%s'",
-               w->page,
-               qPrintable(w->type),
-               w->defaultX,
-               w->defaultY,
-               qPrintable(w->justify),
-               qPrintable(w->hAlign),
-               qPrintable(w->vAlign),
-               qPrintable(w->words));
-    }
-#else
-    Q_UNUSED(credits);
-#endif
 }
 
 //---------------------------------------------------------
@@ -974,9 +936,6 @@ Score::FileError MusicXMLParserPass1::parse(QIODevice* device)
     determineMeasureStart(_measureLength, _measureStart);
     // Fixup timesig at tick = 0 if necessary
     fixupSigmap(_logger, _score, _measureLength);
-    // Debug: dump gae size and credits read
-    dumpPageSize(_pageSize);
-    dumpCredits(_credits);
     // Create the measures
     createMeasuresAndVboxes(_score, _measureLength, _measureStart, _systemStartMeasureNrs, _pageStartMeasureNrs, _credits, _pageSize);
 
@@ -1840,32 +1799,6 @@ void MusicXMLParserPass1::partGroup(const int scoreParts,
 }
 
 //---------------------------------------------------------
-//   findInstrument
-//---------------------------------------------------------
-
-/**
- Find the first InstrumentTemplate with musicXMLid instrSound
- and a non-empty set of channels.
- */
-
-#if 0 // not used
-static const InstrumentTemplate* findInstrument(const QString& instrSound)
-{
-    const InstrumentTemplate* instr = nullptr;
-
-    for (const InstrumentGroup* group : instrumentGroups) {
-        for (const InstrumentTemplate* templ : group->instrumentTemplates) {
-            if (templ->musicXMLid == instrSound && !templ->channel.isEmpty()) {
-                return templ;
-            }
-        }
-    }
-    return instr;
-}
-
-#endif
-
-//---------------------------------------------------------
 //   scorePart
 //---------------------------------------------------------
 
@@ -2141,47 +2074,6 @@ void MusicXMLParserPass1::part()
     _parts[id].calcOctaveShifts();
     // determine the lyric numbers for this part
     _parts[id].lyricNumberHandler().determineLyricNos();
-
-    // debug: print results
-    //qDebug("%s", qPrintable(_parts[id].toString()));
-
-    //qDebug("lyric numbers: %s", qPrintable(_parts[id].lyricNumberHandler().toString()));
-
-#if 0
-    qDebug("instrument map:");
-    for (auto& instr : _parts[id]._instrList) {
-        qDebug("- %s '%s'", qPrintable(instr.first.print()), qPrintable(instr.second));
-    }
-    qDebug("transpose map:");
-    for (auto& it : _parts[id]._intervals) {
-        qDebug("- %s %d %d", qPrintable(it.first.print()), it.second.diatonic, it.second.chromatic);
-    }
-    qDebug("instrument transpositions:");
-    if (_parts[id]._instrList.empty()) {
-        const Fraction tick { 0, 1 };
-        const QString name { "none" };
-        const auto interval = _parts[id]._intervals.interval(tick);
-        qDebug("- %s '%s' -> %d %d",
-               qPrintable(tick.print()), qPrintable(name), interval.diatonic, interval.chromatic);
-    } else {
-        for (auto& instr : _parts[id]._instrList) {
-            const auto& tick = instr.first;
-            const auto& name = instr.second;
-            const auto interval = _parts[id].interval(tick);
-            qDebug("- %s '%s' -> %d %d",
-                   qPrintable(tick.print()), qPrintable(name), interval.diatonic, interval.chromatic);
-        }
-    }
-#endif
-
-    /*
-    qDebug("voiceMapperStats: new staff");
-    VoiceList& vl = _parts[id].voicelist;
-    for (auto i = vl.constBegin(); i != vl.constEnd(); ++i) {
-          qDebug("voiceMapperStats: voice %s staff data %s",
-                 qPrintable(i.key()), qPrintable(i.value().toString()));
-          }
-    */
 }
 
 //---------------------------------------------------------

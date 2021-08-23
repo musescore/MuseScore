@@ -114,10 +114,11 @@ void LayoutContext::layout()
             p->rebuildBspTree();
         }
     }
-    score->systems().append(systemList);       // TODO
+    score->systems().append(systemList);
 }
 
 //---------------------------------------------------------
+
 //   layoutLinear
 //---------------------------------------------------------
 
@@ -653,11 +654,10 @@ void LayoutContext::collectPage()
             } else {
                 distance = score->styleP(Sid::staffUpperBorder);
                 bool fixedDistance = false;
-                // TODO: curSystem->spacerDistance(true)
                 for (MeasureBase* mb : curSystem->measures()) {
                     if (mb->isMeasure()) {
                         Measure* m = toMeasure(mb);
-                        Spacer* sp = m->vspacerUp(0);                   // TODO: first visible?
+                        Spacer* sp = m->vspacerUp(0);
                         if (sp) {
                             if (sp->spacerType() == SpacerType::FIXED) {
                                 distance = sp->gap();
@@ -667,7 +667,6 @@ void LayoutContext::collectPage()
                                 distance = qMax(distance, sp->gap());
                             }
                         }
-//TODO::ws                                    distance = qMax(distance, -m->staffShape(0).top());
                     }
                 }
                 if (!fixedDistance) {
@@ -675,8 +674,6 @@ void LayoutContext::collectPage()
                 }
             }
         }
-//TODO-ws ??
-//          distance += score->staves().front()->userDist();
 
         y += distance;
         curSystem->setPos(page->lm(), y);

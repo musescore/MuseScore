@@ -159,21 +159,6 @@ QString Fermata::userName() const
 void Fermata::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
-#if 0
-    SymId sym = symId();
-    FermataShowIn flags = articulationList[int(articulationType())].flags;
-    if (staff()) {
-        if (staff()->staffGroup() == StaffGroup::TAB) {
-            if (!(flags & FermataShowIn::TABLATURE)) {
-                return;
-            }
-        } else {
-            if (!(flags & FermataShowIn::PITCHED_STAFF)) {
-                return;
-            }
-        }
-    }
-#endif
     painter->setPen(curColor());
     drawSymbol(_symId, painter, PointF(-0.5 * width(), 0.0));
 }

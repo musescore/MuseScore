@@ -585,10 +585,6 @@ static int penalty(int lof1, int lof2, int k)
 }
 
 static const int WINDOW       = 9;
-#if 0 // yet(?) unused
-static const int WINDOW_SHIFT = 3;
-static const int ASIZE        = 1024;   // 2 ** WINDOW
-#endif
 
 //---------------------------------------------------------
 //   tpc

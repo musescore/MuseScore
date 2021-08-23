@@ -596,7 +596,6 @@ void Segment::add(Element* el)
         _elist[track] = el;
         if (!el->generated()) {
             el->staff()->setClef(toClef(el));
-//                        updateNoteLines(this, el->track());   TODO::necessary?
         }
         setEmpty(false);
         break;
@@ -1654,23 +1653,9 @@ Spanner* Segment::firstSpanner(int activeStaff)
                 continue;
             }
             if (s->startSegment() == this) {
-                if (e->staffIdx() == activeStaff) {
+                if (e->staffIdx() == activeStaff || (e->isMeasure() && activeStaff == 0)) {
                     return s;
                 }
-#if 1
-                else if (e->isMeasure() && activeStaff == 0) {
-                    return s;
-                }
-#else
-                // TODO: see Spanner::nextSpanner()
-                else if (e->isMeasure()) {
-                    SpannerSegment* ss = s->frontSegment();
-                    int top = ss && ss->system() ? ss->system()->firstVisibleStaff() : 0;
-                    if (activeStaff == top) {
-                        return s;
-                    }
-                }
-#endif
             }
         }
     }
@@ -1693,23 +1678,9 @@ Spanner* Segment::lastSpanner(int activeStaff)
                 continue;
             }
             if (s->startSegment() == this) {
-                if (e->staffIdx() == activeStaff) {
+                if (e->staffIdx() == activeStaff || (e->isMeasure() && activeStaff == 0)) {
                     return s;
                 }
-#if 1
-                else if (e->isMeasure() && activeStaff == 0) {
-                    return s;
-                }
-#else
-                // TODO: see Spanner::nextSpanner()
-                else if (e->isMeasure()) {
-                    SpannerSegment* ss = s->frontSegment();
-                    int top = ss && ss->system() ? ss->system()->firstVisibleStaff() : 0;
-                    if (activeStaff == top) {
-                        return s;
-                    }
-                }
-#endif
             }
             if (i == range.first) {
                 break;
@@ -2221,14 +2192,6 @@ void Segment::createShape(int staffIdx)
         s.addHorizontalSpacing(Shape::SPACING_LYRICS, 0, 0);
         return;
     }
-#if 0
-    for (int track = staffIdx * VOICES; track < (staffIdx + 1) * VOICES; ++track) {
-        Element* e = _elist[track];
-        if (e) {
-            s.add(e->shape().translated(e->pos()));
-        }
-    }
-#endif
 
     if (!score()->staff(staffIdx)->show()) {
         return;

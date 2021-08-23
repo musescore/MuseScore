@@ -1108,25 +1108,6 @@ public:
 };
 
 //---------------------------------------------------------
-//   MoveStaff
-//---------------------------------------------------------
-#if 0 // commented out in mscore/instrwidget.cpp, not used anywhere else
-class MoveStaff : public UndoCommand
-{
-    Staff* staff;
-    Part* part;
-    int rstaff;
-
-    void flip(EditData*) override;
-
-public:
-    MoveStaff(Staff* s, Part* p, int idx)
-        : staff(s), part(p), rstaff(idx) {}
-    UNDO_NAME("MoveStaff")
-};
-#endif
-
-//---------------------------------------------------------
 //   ChangeProperty
 //---------------------------------------------------------
 

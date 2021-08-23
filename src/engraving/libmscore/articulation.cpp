@@ -224,21 +224,6 @@ QString Articulation::userName() const
 void Articulation::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
-#if 0 //TODO
-    SymId sym = symId();
-    ArticulationShowIn flags = articulationList[int(articulationType())].flags;
-    if (staff()) {
-        if (staff()->staffGroup() == StaffGroup::TAB) {
-            if (!(flags & ArticulationShowIn::TABLATURE)) {
-                return;
-            }
-        } else {
-            if (!(flags & ArticulationShowIn::PITCHED_STAFF)) {
-                return;
-            }
-        }
-    }
-#endif
 
     painter->setPen(curColor());
     drawSymbol(_symId, painter, PointF(-0.5 * width(), 0.0));

@@ -312,7 +312,6 @@ void Part::removeStaff(Staff* staff)
 
 //---------------------------------------------------------
 //   setMidiProgram
-//    TODO
 //---------------------------------------------------------
 
 void Part::setMidiProgram(int program, int bank)
@@ -320,7 +319,6 @@ void Part::setMidiProgram(int program, int bank)
     Channel* c = instrument()->channel(0);
     c->setProgram(program);
     c->setBank(bank);
-//      instrument()->setChannel(0, c);
 }
 
 //---------------------------------------------------------

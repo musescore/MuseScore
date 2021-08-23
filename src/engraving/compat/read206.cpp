@@ -383,26 +383,6 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, st
         case Pid::ALIGN:
             value = QVariant::fromValue(align);
             break;
-#if 0  //TODO-offset
-        case Pid::OFFSET:
-            if (offsetValid) {
-                if (ss == Tid::TEMPO) {
-                    style->set(Sid::tempoPosAbove, Spatium(offset.y()));
-                    offset = PointF();
-                } else if (ss == Tid::STAFF) {
-                    style->set(Sid::staffTextPosAbove, Spatium(offset.y()));
-                    offset = PointF();
-                } else if (ss == Tid::REHEARSAL_MARK) {
-                    style->set(Sid::rehearsalMarkPosAbove, Spatium(offset.y()));
-                    offset = PointF();
-                }
-                value = offset;
-            }
-            break;
-        case Pid::OFFSET_TYPE:
-            value = int(offsetType);
-            break;
-#endif
         case Pid::SYSTEM_FLAG:
             value = systemFlag;
             break;
@@ -868,43 +848,6 @@ static void readNote(Note* note, XmlReader& e)
             }
         }
     }
-#if 0
-    // TODO - adapt this code
-
-    // check consistency of pitch, tpc1, tpc2, and transposition
-    // see note in InstrumentChange::read() about a known case of tpc corruption produced in 2.0.x
-    // but since there are other causes of tpc corruption (eg, https://musescore.org/en/node/74746)
-    // including perhaps some we don't know about yet,
-    // we will attempt to fix some problems here regardless of version
-
-    if (staff() && !staff()->isDrumStaff(e.tick()) && !e.pasteMode() && !MScore::testMode) {
-        int tpc1Pitch = (tpc2pitch(_tpc[0]) + 12) % 12;
-        int tpc2Pitch = (tpc2pitch(_tpc[1]) + 12) % 12;
-        int soundingPitch = _pitch % 12;
-        if (tpc1Pitch != soundingPitch) {
-            qDebug("bad tpc1 - soundingPitch = %d, tpc1 = %d", soundingPitch, tpc1Pitch);
-            _pitch += tpc1Pitch - soundingPitch;
-        }
-        if (staff()) {
-            Interval v = staff()->part()->instrument(e.tick())->transpose();
-            int writtenPitch = (_pitch - v.chromatic) % 12;
-            if (tpc2Pitch != writtenPitch) {
-                qDebug("bad tpc2 - writtenPitch = %d, tpc2 = %d", writtenPitch, tpc2Pitch);
-                if (concertPitch()) {
-                    // assume we want to keep sounding pitch
-                    // so fix written pitch (tpc only)
-                    v.flip();
-                    _tpc[1] = Ms::transposeTpc(_tpc[0], v, true);
-                } else {
-                    // assume we want to keep written pitch
-                    // so fix sounding pitch (both tpc and pitch)
-                    _tpc[0] = Ms::transposeTpc(_tpc[1], v, true);
-                    _pitch += tpc2Pitch - writtenPitch;
-                }
-            }
-        }
-    }
-#endif
 }
 
 //---------------------------------------------------------
@@ -2120,7 +2063,6 @@ static void readVolta206(XmlReader& e, Volta* volta)
             }
         } else if (tag == "lineWidth") {
             volta->setLineWidth(e.readDouble() * volta->spatium());
-            // TODO lineWidthStyle = PropertyStyle::UNSTYLED;
         } else if (!readTextLineProperties(e, volta)) {
             e.unknown();
         }
@@ -2168,7 +2110,6 @@ static void readOttava(XmlReader& e, Ottava* ottava)
             ottava->setOttavaType(OttavaType(idx));
         } else if (tag == "numbersOnly") {
             ottava->setNumbersOnly(e.readBool());
-            //TODO numbersOnlyStyle = PropertyFlags::UNSTYLED;
         } else if (!readTextLineProperties(e, ottava)) {
             e.unknown();
         }
@@ -2542,8 +2483,6 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                 } else if (t == "customSubtype") {                          // obsolete
                     e.readInt();
                 } else if (t == "span") {
-                    //TODO bl->setSpanFrom(e.intAttribute("from", bl->spanFrom()));  // obsolete
-                    // bl->setSpanTo(e.intAttribute("to", bl->spanTo()));            // obsolete
                     int span = e.readInt();
                     if (span) {
                         span--;
@@ -2887,21 +2826,6 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                     }
                 }
             } else {
-#if 0
-                // This code was added at commit ed5b615
-                // but it seems to no longer be appropriate.
-                // autoplace is usually true,
-                // exception is text within staff,
-                // and in this case offset is already correct without further adjustment.
-                if (!t->autoplace()) {
-                    // adjust position
-                    qreal userY = t->offset().y() / t->spatium();
-                    qreal yo = -(-2.0 - userY) * t->spatium();
-                    t->layout();
-                    t->setAlign(Align::LEFT | Align::TOP);
-                    t->ryoffset() = yo;
-                }
-#endif
                 segment = m->getSegment(SegmentType::ChordRest, ctx.reader().tick());
                 segment->add(t);
             }
@@ -2918,39 +2842,16 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             RehearsalMark* el = new RehearsalMark(score);
             el->setTrack(e.track());
             readText206(e, el, el);
-//                  el->setOffset(el->offset() - el->score()->styleValue(Pid::OFFSET, Sid::rehearsalMarkPosAbove).value<PointF>());
-//                  if (el->offset().isNull())
-//                        el->setAutoplace(true);
             segment = m->getSegment(SegmentType::ChordRest, e.tick());
             segment->add(el);
-        }
-#if 0
-        else if (tag == "StaffText") {
-            StaffText* el = new StaffText(score);
-            el->setTrack(e.track());
-
-            while (e.readNextStartElement()) {
-                const QStringRef& tag(e.name());
-                if (tag == "foregroundColor") {
-                    e.skipCurrentElement();
-                } else if (!el->readProperties(e)) {
-                    e.unknown();
-                }
-            }
-            TextBase* tt = static_cast<TextBase*>(el);
-            tt->setXmlText(tt->xmlText().replace("<sym>unicode", "<sym>met"));
-            segment = m->getSegment(SegmentType::ChordRest, e.tick());
-            segment->add(el);
-        }
-#endif
-        else if (tag == "Harmony"
-                 || tag == "FretDiagram"
-                 || tag == "TremoloBar"
-                 || tag == "Symbol"
-                 || tag == "InstrumentChange"
-                 || tag == "StaffState"
-                 || tag == "FiguredBass"
-                 ) {
+        } else if (tag == "Harmony"
+                   || tag == "FretDiagram"
+                   || tag == "TremoloBar"
+                   || tag == "Symbol"
+                   || tag == "InstrumentChange"
+                   || tag == "StaffState"
+                   || tag == "FiguredBass"
+                   ) {
             Element* el = Element::name2Element(tag, score);
             // hack - needed because tick tags are unreliable in 1.3 scores
             // for symbols attached to anything but a measure
