@@ -29,7 +29,7 @@
 #include "style/style.h"
 #include "io/xml.h"
 
-#include "layout/layout.h"
+#include "layout/layouttremolo.h"
 
 #include "score.h"
 #include "staff.h"
@@ -342,7 +342,8 @@ void Tremolo::layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal spatium)
     } else {
         firstChordStaffY = _chord1->pagePos().y() - _chord1->y();      // y coordinate of the staff of the first chord
         const std::pair<qreal, qreal> extendedLen
-            = mu::engraving::Layout::extendedStemLenWithTwoNoteTremolo(this, _chord1->defaultStemLength(), _chord2->defaultStemLength());
+            = mu::engraving::LayoutTremolo::extendedStemLenWithTwoNoteTremolo(this, _chord1->defaultStemLength(),
+                                                                              _chord2->defaultStemLength());
         y1 = _chord1->stemPos().y() - firstChordStaffY + extendedLen.first;
         y2 = _chord2->stemPos().y() - firstChordStaffY + extendedLen.second;
     }

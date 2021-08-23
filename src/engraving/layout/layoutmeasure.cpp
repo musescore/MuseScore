@@ -37,6 +37,7 @@
 #include "layoutcontext.h"
 #include "layoutbeams.h"
 #include "layoutchords.h"
+#include "layouttremolo.h"
 
 using namespace mu::engraving;
 using namespace Ms;
@@ -718,7 +719,7 @@ void LayoutMeasure::getNextMeasure(Ms::Score* score, LayoutContext& lc)
                             Stem* stem1 = chord->tremolo()->chord1()->stem();
                             Stem* stem2 = chord->tremolo()->chord2()->stem();
                             if (stem1 && stem2) {
-                                std::pair<qreal, qreal> extendedLen = Layout::extendedStemLenWithTwoNoteTremolo(
+                                std::pair<qreal, qreal> extendedLen = LayoutTremolo::extendedStemLenWithTwoNoteTremolo(
                                     chord->tremolo(),
                                     stem1->p2().y(),
                                     stem2->p2().y());

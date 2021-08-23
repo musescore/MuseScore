@@ -38,8 +38,6 @@ public:
 
     void doLayoutRange(const Ms::Fraction&, const Ms::Fraction&);
 
-    static std::pair<qreal, qreal> extendedStemLenWithTwoNoteTremolo(Ms::Tremolo* tremolo, qreal stemLen1, qreal stemLen2);
-
 private:
 
     void layoutLinear(bool layoutAll, LayoutContext& lc);
