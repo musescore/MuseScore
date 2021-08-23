@@ -122,7 +122,7 @@
 
 #include "config.h"
 
-#ifdef USE_SCORE_ACCESSIBLE_TREE
+#ifdef ENGRAVING_BUILD_ACCESSIBLE_TREE
 #include "accessibility/accessibleelement.h"
 #endif
 
@@ -211,7 +211,7 @@ QString Element::subtypeName() const
 //   Element
 //---------------------------------------------------------
 
-Element::Element(Score* s, ElementFlags f, mu::score::AccessibleElement* access)
+Element::Element(Score* s, ElementFlags f, mu::engraving::AccessibleElement* access)
     : ScoreElement(s)
 {
     _flags         = f;
@@ -223,10 +223,10 @@ Element::Element(Score* s, ElementFlags f, mu::score::AccessibleElement* access)
     _offsetChanged = OffsetChange::NONE;
     _minDistance   = Spatium(0.0);
 
-#ifdef USE_SCORE_ACCESSIBLE_TREE
+#ifdef ENGRAVING_BUILD_ACCESSIBLE_TREE
     m_accessible = access;
     if (!m_accessible) {
-        m_accessible = new mu::score::AccessibleElement();
+        m_accessible = new mu::engraving::AccessibleElement();
     }
     m_accessible->setElement(this);
 #else
@@ -252,7 +252,7 @@ Element::Element(const Element& e)
     _minDistance   = e._minDistance;
     itemDiscovered = false;
 
-#ifdef USE_SCORE_ACCESSIBLE_TREE
+#ifdef ENGRAVING_BUILD_ACCESSIBLE_TREE
     m_accessible = e.m_accessible->clone(this);
 #endif
 }
@@ -263,7 +263,7 @@ Element::Element(const Element& e)
 
 Element::~Element()
 {
-#ifdef USE_SCORE_ACCESSIBLE_TREE
+#ifdef ENGRAVING_BUILD_ACCESSIBLE_TREE
     delete m_accessible;
 #endif
     Score::onElementDestruction(this);
@@ -2003,7 +2003,7 @@ Element* Element::prevSegmentElement()
     return score()->firstElement();
 }
 
-mu::score::AccessibleElement* Element::accessible() const
+mu::engraving::AccessibleElement* Element::accessible() const
 {
     return m_accessible;
 }
@@ -2689,7 +2689,7 @@ bool Element::selected() const
 void Element::setSelected(bool f)
 {
     setFlag(ElementFlag::SELECTED, f);
-#ifdef USE_SCORE_ACCESSIBLE_TREE
+#ifdef ENGRAVING_BUILD_ACCESSIBLE_TREE
     if (f) {
         m_accessible->focused();
     }

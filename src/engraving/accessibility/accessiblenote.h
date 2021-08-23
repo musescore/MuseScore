@@ -19,14 +19,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_SCORE_ACCESSIBLENOTE_H
-#define MU_SCORE_ACCESSIBLENOTE_H
+#ifndef MU_ENGRAVING_ACCESSIBLENOTE_H
+#define MU_ENGRAVING_ACCESSIBLENOTE_H
 
 #include "accessibleelement.h"
 #include "libmscore/note.h"
 
 //! NOTE Just for example
-namespace mu::score {
+namespace mu::engraving {
 class AccessibleNote : public AccessibleElement
 {
 public:
@@ -37,4 +37,4 @@ public:
 };
 }
 
-#endif // MU_SCORE_ACCESSIBLENOTE_H
+#endif // MU_ENGRAVING_ACCESSIBLENOTE_H

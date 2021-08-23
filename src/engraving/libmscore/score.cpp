@@ -96,7 +96,7 @@
 
 #include "config.h"
 
-#ifdef USE_SCORE_ACCESSIBLE_TREE
+#ifdef ENGRAVING_BUILD_ACCESSIBLE_TREE
 #include "accessibility/accessiblescore.h"
 #endif
 
@@ -327,8 +327,8 @@ Score::Score()
 //      accInfo = tr("No selection");     // ??
     accInfo = "No selection";
 
-#ifdef USE_SCORE_ACCESSIBLE_TREE
-    m_accessible = new mu::score::AccessibleScore(this);
+#ifdef ENGRAVING_BUILD_ACCESSIBLE_TREE
+    m_accessible = new mu::engraving::AccessibleScore(this);
 #endif
 }
 
@@ -415,7 +415,7 @@ Score::~Score()
 
     imageStore.clearUnused();
 
-#ifdef USE_SCORE_ACCESSIBLE_TREE
+#ifdef ENGRAVING_BUILD_ACCESSIBLE_TREE
     delete m_accessible;
 #endif
 }
@@ -5170,7 +5170,7 @@ void Score::connectTies(bool silent)
     }
 }
 
-mu::score::AccessibleScore* Score::accessible() const
+mu::engraving::AccessibleScore* Score::accessible() const
 {
     return m_accessible;
 }
