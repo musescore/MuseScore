@@ -57,6 +57,7 @@ namespace mu::engraving {
 class EngravingProject;
 class LayoutContext;
 class LayoutMeasure;
+class AccessibleScore;
 }
 
 namespace mu::engraving::compat {
@@ -64,10 +65,6 @@ class ScoreAccess;
 class ReadScoreHook;
 class WriteScoreHook;
 class Read302;
-}
-
-namespace mu::score {
-class AccessibleScore;
 }
 
 namespace Ms {
@@ -510,7 +507,7 @@ private:
     QString accInfo;                      ///< information about selected element(s) for use by screen-readers
     QString accMessage;                   ///< temporary status message for use by screen-readers
 
-    mu::score::AccessibleScore* m_accessible = nullptr;
+    mu::engraving::AccessibleScore* m_accessible = nullptr;
 
     mu::engraving::Layout m_layout;
     mu::engraving::LayoutOptions m_layoutOptions;
@@ -1243,7 +1240,7 @@ public:
     Measure* firstTrailingMeasure(ChordRest** cr = nullptr);
     ChordRest* cmdTopStaff(ChordRest* cr = nullptr);
 
-    mu::score::AccessibleScore* accessible() const;
+    mu::engraving::AccessibleScore* accessible() const;
     void setAccessibleInfo(QString s) { accInfo = s.remove(":").remove(";"); }
     QString accessibleInfo() const { return accInfo; }
 

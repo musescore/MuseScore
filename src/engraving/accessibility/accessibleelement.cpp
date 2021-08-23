@@ -25,7 +25,7 @@
 #include "accessiblescore.h"
 #include "log.h"
 
-using namespace mu::score;
+using namespace mu::engraving;
 using namespace mu::accessibility;
 
 AccessibleElement::AccessibleElement(Ms::Element* e)

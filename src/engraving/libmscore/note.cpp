@@ -75,7 +75,7 @@
 #include "log.h"
 #include "config.h"
 
-#ifdef USE_SCORE_ACCESSIBLE_TREE
+#ifdef ENGRAVING_BUILD_ACCESSIBLE_TREE
 #include "accessibility/accessiblenote.h"
 #endif
 
@@ -688,8 +688,8 @@ NoteHead::Group NoteHead::headGroup() const
 
 Note::Note(Score* s)
     : Element(s, ElementFlag::MOVABLE
-#ifdef USE_SCORE_ACCESSIBLE_TREE
-              , new mu::score::AccessibleNote())
+#ifdef ENGRAVING_BUILD_ACCESSIBLE_TREE
+              , new mu::engraving::AccessibleNote())
 #else
               )
 #endif
