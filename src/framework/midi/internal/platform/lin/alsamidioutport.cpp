@@ -46,7 +46,7 @@ AlsaMidiOutPort::~AlsaMidiOutPort()
 
 void AlsaMidiOutPort::init()
 {
-    m_alsa = std::shared_ptr<Alsa>(new Alsa());
+    m_alsa = std::make_shared<Alsa>();
 
     m_devicesListener.startWithCallback([this]() {
         return devices();
