@@ -49,6 +49,7 @@
 #include "io/mscreader.h"
 #include "engraving/draw/iimageprovider.h"
 #include "layout/layout.h"
+#include "layout/layoutoptions.h"
 
 class QMimeData;
 
@@ -164,18 +165,6 @@ enum class Pad : char {
     DOTDOT,
     DOT3,
     DOT4
-};
-
-//---------------------------------------------------------
-//   LayoutMode
-//    PAGE   The normal page view, honors page and line breaks.
-//    LINE   The panoramic view, one long system
-//    FLOAT  The "reflow" mode, ignore page and line breaks
-//    SYSTEM The "never ending page", page break are turned into line break
-//---------------------------------------------------------
-
-enum class LayoutMode : char {
-    PAGE, FLOAT, LINE, SYSTEM
 };
 
 //---------------------------------------------------------
@@ -496,7 +485,6 @@ private:
     bool _showPageborders       { false };
     bool _markIrregularMeasures { true };
     bool _showInstrumentNames   { true };
-    bool _showVBox              { true };
     bool _printing              { false };        ///< True if we are drawing to a printer
     bool _autosaveDirty         { true };
     bool _savedCapture          { false };        ///< True if we saved an image capture
@@ -525,6 +513,7 @@ private:
     mu::score::AccessibleScore* m_accessible = nullptr;
 
     mu::engraving::Layout m_layout;
+    mu::engraving::LayoutOptions m_layoutOptions;
 
     ChordRest* nextMeasure(ChordRest* element, bool selectBehavior = false, bool mmRest = false);
     ChordRest* prevMeasure(ChordRest* element, bool mmRest = false);
@@ -578,7 +567,6 @@ private:
 
 protected:
     int _fileDivision;   ///< division of current loading *.msc file
-    LayoutMode _layoutMode { LayoutMode::PAGE };
     SynthesizerState _synthesizerState;
 
     void createPlayEvents(Chord*);
@@ -850,14 +838,12 @@ public:
     bool showPageborders() const { return _showPageborders; }
     bool markIrregularMeasures() const { return _markIrregularMeasures; }
     bool showInstrumentNames() const { return _showInstrumentNames; }
-    bool showVBox() const { return _showVBox; }
     void setShowInvisible(bool v);
     void setShowUnprintable(bool v);
     void setShowFrames(bool v);
     void setShowPageborders(bool v);
     void setMarkIrregularMeasures(bool v);
     void setShowInstrumentNames(bool v) { _showInstrumentNames = v; }
-    void setShowVBox(bool v) { _showVBox = v; }
 
     void print(mu::draw::Painter* printer, int page);
     ChordRest* getSelectedChordRest() const;
@@ -1161,13 +1147,19 @@ public:
     void removeViewer(MuseScoreView* v) { viewer.removeAll(v); }
     const QList<MuseScoreView*>& getViewer() const { return viewer; }
 
-    LayoutMode layoutMode() const { return _layoutMode; }
-    void setLayoutMode(LayoutMode lm) { _layoutMode = lm; }
+    //! NOTE Layout
+    const mu::engraving::LayoutOptions& layoutOptions() const { return m_layoutOptions; }
+    void setLayoutMode(mu::engraving::LayoutMode lm) { m_layoutOptions.mode = lm; }
+    void setShowVBox(bool v) { m_layoutOptions.showVBox = v; }
 
-    bool floatMode() const { return layoutMode() == LayoutMode::FLOAT; }
-    bool pageMode() const { return layoutMode() == LayoutMode::PAGE; }
-    bool lineMode() const { return layoutMode() == LayoutMode::LINE; }
-    bool systemMode() const { return layoutMode() == LayoutMode::SYSTEM; }
+    // temporary methods
+    bool isLayoutMode(mu::engraving::LayoutMode lm) const { return m_layoutOptions.isMode(lm); }
+    mu::engraving::LayoutMode layoutMode() const { return m_layoutOptions.mode; }
+    bool floatMode() const { return m_layoutOptions.isMode(mu::engraving::LayoutMode::FLOAT); }
+    bool pageMode() const { return m_layoutOptions.isMode(mu::engraving::LayoutMode::PAGE); }
+    bool lineMode() const { return m_layoutOptions.isMode(mu::engraving::LayoutMode::LINE); }
+    bool systemMode() const { return m_layoutOptions.isMode(mu::engraving::LayoutMode::SYSTEM); }
+    // ----
 
     Tuplet* searchTuplet(XmlReader& e, int id);
     void cmdSelectAll();

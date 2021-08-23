@@ -910,7 +910,7 @@ const Page* NotationPaintView::pointToPage(const PointF& point) const
     }
 
     PageList pages = notationElements()->pages();
-    if (notation()->viewMode() == Ms::LayoutMode::LINE) {
+    if (notation()->viewMode() == engraving::LayoutMode::LINE) {
         return pages.empty() ? nullptr : pages.front();
     }
 

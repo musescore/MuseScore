@@ -53,6 +53,8 @@
 #include "libmscore/realizedharmony.h"
 #include "libmscore/instrument.h"
 
+#include "engraving/layout/layoutoptions.h"
+
 namespace mu::notation {
 using Page = Ms::Page;
 using Element = Ms::Element;
@@ -63,7 +65,7 @@ using DurationType = Ms::TDuration::DurationType;
 using Duration = Ms::TDuration;
 using SelectType = Ms::SelectType;
 using Pad = Ms::Pad;
-using ViewMode = Ms::LayoutMode;
+using ViewMode = engraving::LayoutMode;
 using PitchMode = Ms::UpDownMode;
 using StyleId = Ms::Sid;
 using SymbolId = Ms::SymId;

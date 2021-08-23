@@ -72,7 +72,7 @@ Layout::Layout(Ms::Score* score)
 {
 }
 
-void Layout::doLayoutRange(const Fraction& st, const Fraction& et)
+void Layout::doLayoutRange(const LayoutOptions& options, const Fraction& st, const Fraction& et)
 {
     CmdStateLocker cmdStateLocker(m_score);
     LayoutContext lc(m_score);
@@ -81,7 +81,7 @@ void Layout::doLayoutRange(const Fraction& st, const Fraction& et)
     Fraction etick(et);
     Q_ASSERT(!(stick == Fraction(-1, 1) && etick == Fraction(-1, 1)));
 
-    if (!m_score->last() || (m_score->lineMode() && !m_score->firstMeasure())) {
+    if (!m_score->last() || (options.isMode(LayoutMode::LINE) && !m_score->firstMeasure())) {
         qDebug("empty score");
         qDeleteAll(m_score->_systems);
         m_score->_systems.clear();
@@ -101,8 +101,6 @@ void Layout::doLayoutRange(const Fraction& st, const Fraction& et)
     }
 
     lc.endTick = etick;
-    m_score->_scoreFont = ScoreFont::fontByName(m_score->style().value(Sid::MusicalSymbolFont).toString());
-    m_score->_noteHeadWidth = m_score->_scoreFont->width(SymId::noteheadBlack, m_score->spatium() / SPATIUM20);
 
     if (m_score->cmdState().layoutFlags & LayoutFlag::REBUILD_MIDI_MAPPING) {
         if (m_score->isMaster()) {
@@ -140,13 +138,14 @@ void Layout::doLayoutRange(const Fraction& st, const Fraction& et)
         m = toMeasure(m)->mmRest();
     }
 
-    if (m_score->lineMode()) {
+    if (options.isMode(LayoutMode::LINE)) {
         lc.prevMeasure = 0;
         lc.nextMeasure = m;         //_showVBox ? first() : firstMeasure();
         lc.startTick   = m->tick();
-        layoutLinear(layoutAll, lc);
+        layoutLinear(layoutAll, options, lc);
         return;
     }
+
     if (!layoutAll && m->system()) {
         System* system  = m->system();
         int systemIndex = m_score->_systems.indexOf(system);
@@ -159,7 +158,7 @@ void Layout::doLayoutRange(const Fraction& st, const Fraction& et)
         lc.systemList  = m_score->_systems.mid(systemIndex);
 
         if (systemIndex == 0) {
-            lc.nextMeasure = m_score->_showVBox ? m_score->first() : m_score->firstMeasure();
+            lc.nextMeasure = options.showVBox ? m_score->first() : m_score->firstMeasure();
         } else {
             System* prevSystem = m_score->_systems[systemIndex - 1];
             lc.nextMeasure = prevSystem->measures().back()->next();
@@ -183,7 +182,7 @@ void Layout::doLayoutRange(const Fraction& st, const Fraction& et)
                 lc.measureNo = lc.nextMeasure->prevMeasure()->no()                             // will be adjusted later with respect
                                + (lc.nextMeasure->prevMeasure()->irregular() ? 0 : 1);         // to the user-defined offset.
             }
-            lc.tick      = lc.nextMeasure->tick();
+            lc.tick = lc.nextMeasure->tick();
         }
     } else {
         for (System* s : qAsConst(m_score->_systems)) {
@@ -207,23 +206,23 @@ void Layout::doLayoutRange(const Fraction& st, const Fraction& et)
         qDeleteAll(m_score->pages());
         m_score->pages().clear();
 
-        lc.nextMeasure = m_score->_showVBox ? m_score->first() : m_score->firstMeasure();
+        lc.nextMeasure = options.showVBox ? m_score->first() : m_score->firstMeasure();
     }
 
     lc.prevMeasure = 0;
 
-    LayoutMeasure::getNextMeasure(m_score, lc);
-    lc.curSystem = LayoutSystem::collectSystem(lc, m_score);
+    LayoutMeasure::getNextMeasure(options, m_score, lc);
+    lc.curSystem = LayoutSystem::collectSystem(options, lc, m_score);
 
-    doLayout(lc);
+    doLayout(options, lc);
 }
 
-void Layout::doLayout(LayoutContext& lc)
+void Layout::doLayout(const LayoutOptions& options, LayoutContext& lc)
 {
     MeasureBase* lmb;
     do {
         LayoutPage::getNextPage(lc);
-        LayoutPage::collectPage(lc);
+        LayoutPage::collectPage(options, lc);
 
         if (lc.page && !lc.page->systems().isEmpty()) {
             lmb = lc.page->systems().back()->measures().back();
@@ -264,14 +263,14 @@ void Layout::doLayout(LayoutContext& lc)
 //   layoutLinear
 //---------------------------------------------------------
 
-void Layout::layoutLinear(bool layoutAll, LayoutContext& lc)
+void Layout::layoutLinear(bool layoutAll, const LayoutOptions& options, LayoutContext& lc)
 {
     lc.score = m_score;
     resetSystems(layoutAll, lc);
 
-    collectLinearSystem(lc);
+    collectLinearSystem(options, lc);
 
-    layoutLinear(lc);
+    layoutLinear(options, lc);
 }
 
 //---------------------------------------------------------
@@ -328,7 +327,7 @@ void Layout::resetSystems(bool layoutAll, LayoutContext& lc)
 //   Append all measures to System. VBox is not included to System
 //---------------------------------------------------------
 
-void Layout::collectLinearSystem(LayoutContext& lc)
+void Layout::collectLinearSystem(const LayoutOptions& options, LayoutContext& lc)
 {
     System* system = m_score->systems().front();
     system->setInstrumentNames(/* longNames */ true);
@@ -340,13 +339,13 @@ void Layout::collectLinearSystem(LayoutContext& lc)
     //utilizing in getNextMeasure()
     lc.nextMeasure = m_score->_measures.first();
     lc.tick = Fraction(0, 1);
-    LayoutMeasure::getNextMeasure(m_score, lc);
+    LayoutMeasure::getNextMeasure(options, m_score, lc);
 
     while (lc.curMeasure) {
         qreal ww = 0.0;
         if (lc.curMeasure->isVBox() || lc.curMeasure->isTBox()) {
             lc.curMeasure->setParent(nullptr);
-            LayoutMeasure::getNextMeasure(m_score, lc);
+            LayoutMeasure::getNextMeasure(options, m_score, lc);
             continue;
         }
         system->appendMeasure(lc.curMeasure);
@@ -411,7 +410,7 @@ void Layout::collectLinearSystem(LayoutContext& lc)
         }
         pos.rx() += ww;
 
-        LayoutMeasure::getNextMeasure(m_score, lc);
+        LayoutMeasure::getNextMeasure(options, m_score, lc);
     }
 
     system->setWidth(pos.x());
@@ -421,11 +420,11 @@ void Layout::collectLinearSystem(LayoutContext& lc)
 //   layoutLinear
 //---------------------------------------------------------
 
-void Layout::layoutLinear(LayoutContext& lc)
+void Layout::layoutLinear(const LayoutOptions& options, LayoutContext& lc)
 {
     System* system = lc.score->systems().front();
 
-    LayoutSystem::layoutSystemElements(lc, lc.score, system);
+    LayoutSystem::layoutSystemElements(options, lc, lc.score, system);
 
     system->layout2();     // compute staff distances
 

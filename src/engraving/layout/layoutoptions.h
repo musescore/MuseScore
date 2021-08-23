@@ -19,38 +19,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_LAYOUT_H
-#define MU_ENGRAVING_LAYOUT_H
-
-#include "layoutoptions.h"
-
-namespace Ms {
-class Score;
-class Fraction;
-class System;
-class Tremolo;
-}
+#ifndef MU_ENGRAVING_LAYOUTOPTIONS_H
+#define MU_ENGRAVING_LAYOUTOPTIONS_H
 
 namespace mu::engraving {
-class LayoutContext;
-class Layout
+//---------------------------------------------------------
+//   LayoutMode
+//    PAGE   The normal page view, honors page and line breaks.
+//    LINE   The panoramic view, one long system
+//    FLOAT  The "reflow" mode, ignore page and line breaks
+//    SYSTEM The "never ending page", page break are turned into line break
+//---------------------------------------------------------
+
+enum class LayoutMode : char {
+    PAGE, FLOAT, LINE, SYSTEM
+};
+
+struct LayoutOptions
 {
-public:
-    Layout(Ms::Score* score);
+    LayoutMode mode = LayoutMode::PAGE;
+    bool showVBox = true;
 
-    void doLayoutRange(const LayoutOptions& options, const Ms::Fraction&, const Ms::Fraction&);
-
-private:
-
-    void layoutLinear(const LayoutOptions& options, LayoutContext& lc);
-    void layoutLinear(bool layoutAll, const LayoutOptions& options, LayoutContext& lc);
-    void resetSystems(bool layoutAll, LayoutContext& lc);
-    void collectLinearSystem(const LayoutOptions& options, LayoutContext& lc);
-
-    void doLayout(const LayoutOptions& options, LayoutContext& lc);
-
-    Ms::Score* m_score = nullptr;
+    bool isMode(LayoutMode m) const { return mode == m; }
 };
 }
 
-#endif // MU_ENGRAVING_LAYOUT_H
+#endif // MU_ENGRAVING_LAYOUTOPTIONS_H

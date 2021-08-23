@@ -97,7 +97,7 @@ void LayoutPage::getNextPage(LayoutContext& lc)
 //   collectPage
 //---------------------------------------------------------
 
-void LayoutPage::collectPage(LayoutContext& lc)
+void LayoutPage::collectPage(const LayoutOptions& options, LayoutContext& lc)
 {
     const qreal slb = lc.score->styleP(Sid::staffLowerBorder);
     bool breakPages = lc.score->layoutMode() != LayoutMode::SYSTEM;
@@ -185,7 +185,7 @@ void LayoutPage::collectPage(LayoutContext& lc)
                 }
             }
         } else {
-            nextSystem = LayoutSystem::collectSystem(lc, lc.score);
+            nextSystem = LayoutSystem::collectSystem(options, lc, lc.score);
             if (nextSystem) {
                 collected = true;
             }

@@ -3193,7 +3193,7 @@ void Score::selectSingle(Element* e, int staffIdx)
 
 void Score::switchToPageMode()
 {
-    if (_layoutMode != LayoutMode::PAGE) {
+    if (layoutMode() != LayoutMode::PAGE) {
         setLayoutMode(LayoutMode::PAGE);
         doLayout();
     }
@@ -5216,7 +5216,11 @@ void Score::doLayout()
 
 void Score::doLayoutRange(const Fraction& st, const Fraction& et)
 {
-    m_layout.doLayoutRange(st, et);
+    _scoreFont = ScoreFont::fontByName(style().value(Sid::MusicalSymbolFont).toString());
+    _noteHeadWidth = _scoreFont->width(SymId::noteheadBlack, spatium() / SPATIUM20);
+
+    LayoutOptions options = layoutOptions();
+    m_layout.doLayoutRange(options, st, et);
 }
 
 UndoStack* Score::undoStack() const { return _masterScore->undoStack(); }
