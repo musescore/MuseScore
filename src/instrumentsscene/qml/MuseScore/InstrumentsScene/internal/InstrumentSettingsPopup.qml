@@ -58,10 +58,14 @@ StyledPopupView {
 
         TextInputField {
             id: instrNameField
+
             objectName: "InstrNameField"
+
             navigation.panel: root.navigation
             navigation.row: 1
+
             currentText: settingsModel.instrumentName
+
             onCurrentTextEdited: {
                 settingsModel.instrumentName = newTextValue
             }
@@ -73,9 +77,12 @@ StyledPopupView {
 
         TextInputField {
             objectName: "AbbreviatureField"
+
             navigation.panel: root.navigation
             navigation.row: 2
+
             currentText: settingsModel.abbreviature
+
             onCurrentTextEdited: {
                 settingsModel.abbreviature = newTextValue
             }
@@ -87,28 +94,48 @@ StyledPopupView {
 
         TextInputField {
             objectName: "PartNameField"
+
             navigation.panel: root.navigation
             navigation.row: 3
+
             currentText: settingsModel.partName
+
             onCurrentTextEdited: {
                 settingsModel.partName = newTextValue
             }
         }
 
-        SeparatorLine {
-            anchors.leftMargin: -root.leftPadding + root.borderWidth
-            anchors.rightMargin: -root.rightPadding + root.borderWidth
-        }
+        SeparatorLine {}
 
         FlatButton {
             width: parent.width
+
             navigation.panel: root.navigation
             navigation.row: 4
+
             text: qsTrc("instruments", "Replace instrument")
+
+            visible: settingsModel.isMainScore
 
             onClicked: {
                 root.close()
                 Qt.callLater(settingsModel.replaceInstrument)
+            }
+        }
+
+        FlatButton {
+            width: parent.width
+
+            navigation.panel: root.navigation
+            navigation.row: 4
+
+            text: qsTrc("instruments", "Reset all formatting")
+
+            visible: !settingsModel.isMainScore
+
+            onClicked: {
+                root.close()
+                Qt.callLater(settingsModel.resetAllFormatting)
             }
         }
     }

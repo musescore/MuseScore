@@ -26,6 +26,7 @@
 
 using namespace mu::instrumentsscene;
 using namespace mu::notation;
+using namespace mu::framework;
 
 InstrumentSettingsModel::InstrumentSettingsModel(QObject* parent)
     : QObject(parent)
@@ -69,6 +70,28 @@ void InstrumentSettingsModel::replaceInstrument()
     m_instrumentAbbreviature = newInstrument.abbreviature();
 
     emit dataChanged();
+}
+
+void InstrumentSettingsModel::resetAllFormatting()
+{
+    if (!masterNotationParts() || !notationParts()) {
+        return;
+    }
+
+    std::string title = mu::trc("instruments", "Are you sure you want to reset all formatting?");
+    std::string body = mu::trc("instruments", "This action can not be undone");
+
+    IInteractive::Button button = interactive()->question(title, body, {
+        IInteractive::Button::No,
+        IInteractive::Button::Yes
+    }).standartButton();
+
+    if (button == IInteractive::Button::No) {
+        return;
+    }
+
+    const Part* masterPart = masterNotationParts()->part(m_instrumentKey.partId);
+    notationParts()->replacePart(m_instrumentKey.partId, masterPart->clone());
 }
 
 QString InstrumentSettingsModel::instrumentName() const
