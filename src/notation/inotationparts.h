@@ -49,7 +49,7 @@ public:
     virtual void setParts(const PartInstrumentList& instruments, const ScoreOrder& order) = 0;
     virtual void setScoreOrder(const ScoreOrder& order) = 0;
     virtual void setPartVisible(const ID& partId, bool visible) = 0;
-    virtual void setVoiceVisible(const ID& staffId, int voiceIndex, bool visible) = 0;
+    virtual bool setVoiceVisible(const ID& staffId, int voiceIndex, bool visible) = 0;
     virtual void setStaffVisible(const ID& staffId, bool visible) = 0;
     virtual void setPartName(const ID& partId, const QString& name) = 0;
     virtual void setPartSharpFlat(const ID& partId, const SharpFlat& sharpFlat) = 0;
