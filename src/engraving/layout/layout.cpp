@@ -42,10 +42,15 @@
 #include "libmscore/stafflines.h"
 #include "libmscore/tuplet.h"
 #include "libmscore/tie.h"
+#include "libmscore/system.h"
+#include "libmscore/page.h"
 
 #include "layoutcontext.h"
+#include "layoutpage.h"
 #include "layoutmeasure.h"
 #include "layoutsystem.h"
+#include "layoutbeams.h"
+#include "layouttuplets.h"
 
 using namespace mu::engraving;
 using namespace Ms;
@@ -61,16 +66,6 @@ public:
         : m_score(s) { m_score->cmdState().lock(); }
     ~CmdStateLocker() { m_score->cmdState().unlock(); }
 };
-
-//---------------------------------------------------------
-//   almostZero
-//---------------------------------------------------------
-
-static bool inline almostZero(qreal value)
-{
-    // 1e-3 is close enough to zero to see it as zero.
-    return value > -1e-3 && value < 1e-3;
-}
 
 Layout::Layout(Ms::Score* score)
     : m_score(score)
@@ -92,7 +87,7 @@ void Layout::doLayoutRange(const Fraction& st, const Fraction& et)
         m_score->_systems.clear();
         qDeleteAll(m_score->pages());
         m_score->pages().clear();
-        lc.getNextPage();
+        LayoutPage::getNextPage(lc);
         return;
     }
 //      if (!_systems.isEmpty())
@@ -220,7 +215,49 @@ void Layout::doLayoutRange(const Fraction& st, const Fraction& et)
     LayoutMeasure::getNextMeasure(m_score, lc);
     lc.curSystem = LayoutSystem::collectSystem(lc, m_score);
 
-    lc.layout();
+    doLayout(lc);
+}
+
+void Layout::doLayout(LayoutContext& lc)
+{
+    MeasureBase* lmb;
+    do {
+        LayoutPage::getNextPage(lc);
+        LayoutPage::collectPage(lc);
+
+        if (lc.page && !lc.page->systems().isEmpty()) {
+            lmb = lc.page->systems().back()->measures().back();
+        } else {
+            lmb = nullptr;
+        }
+
+        // we can stop collecting pages when:
+        // 1) we reach the end of score (curSystem is nullptr)
+        // or
+        // 2) we have fully processed the range and reached a point of stability:
+        //    a) we have completed layout for the range (rangeDone is true)
+        //    b) we haven't collected a system that will need to go on the next page
+        //    c) this page ends with the same measure as the previous layout
+        //    pageOldMeasure will be last measure from previous layout if range was completed on or before this page
+        //    it will be nullptr if this page was never laid out or if we collected a system for next page
+    } while (lc.curSystem && !(lc.rangeDone && lmb == lc.pageOldMeasure));
+    // && page->system(0)->measures().back()->tick() > endTick // FIXME: perhaps the first measure was meant? Or last system?
+
+    if (!lc.curSystem) {
+        // The end of the score. The remaining systems are not needed...
+        qDeleteAll(lc.systemList);
+        lc.systemList.clear();
+        // ...and the remaining pages too
+        while (lc.score->npages() > lc.curPage) {
+            delete lc.score->pages().takeLast();
+        }
+    } else {
+        Page* p = lc.curSystem->page();
+        if (p && (p != lc.page)) {
+            p->rebuildBspTree();
+        }
+    }
+    lc.score->systems().append(lc.systemList);
 }
 
 //---------------------------------------------------------
@@ -234,7 +271,7 @@ void Layout::layoutLinear(bool layoutAll, LayoutContext& lc)
 
     collectLinearSystem(lc);
 
-    lc.layoutLinear();
+    layoutLinear(lc);
 }
 
 //---------------------------------------------------------
@@ -378,4 +415,91 @@ void Layout::collectLinearSystem(LayoutContext& lc)
     }
 
     system->setWidth(pos.x());
+}
+
+//---------------------------------------------------------
+//   layoutLinear
+//---------------------------------------------------------
+
+void Layout::layoutLinear(LayoutContext& lc)
+{
+    System* system = lc.score->systems().front();
+
+    LayoutSystem::layoutSystemElements(lc, lc.score, system);
+
+    system->layout2();     // compute staff distances
+
+    for (MeasureBase* mb : system->measures()) {
+        if (!mb->isMeasure()) {
+            continue;
+        }
+        Measure* m = toMeasure(mb);
+
+        for (int track = 0; track < lc.score->ntracks(); ++track) {
+            for (Segment* segment = m->first(); segment; segment = segment->next()) {
+                Element* e = segment->element(track);
+                if (!e) {
+                    continue;
+                }
+                if (e->isChordRest()) {
+                    if (m->tick() < lc.startTick || m->tick() > lc.endTick) {
+                        continue;
+                    }
+                    if (!lc.score->staff(track2staff(track))->show()) {
+                        continue;
+                    }
+                    ChordRest* cr = toChordRest(e);
+                    if (LayoutBeams::notTopBeam(cr)) {                           // layout cross staff beams
+                        cr->beam()->layout();
+                    }
+                    if (LayoutTuplets::notTopTuplet(cr)) {
+                        // fix layout of tuplets
+                        DurationElement* de = cr;
+                        while (de->tuplet() && de->tuplet()->elements().front() == de) {
+                            Tuplet* t = de->tuplet();
+                            t->layout();
+                            de = de->tuplet();
+                        }
+                    }
+
+                    if (cr->isChord()) {
+                        Chord* c = toChord(cr);
+                        for (Chord* cc : c->graceNotes()) {
+                            if (cc->beam() && cc->beam()->elements().front() == cc) {
+                                cc->beam()->layout();
+                            }
+                            cc->layoutSpanners();
+                            for (Element* element : cc->el()) {
+                                if (element->isSlur()) {
+                                    element->layout();
+                                }
+                            }
+                        }
+                        c->layoutArpeggio2();
+                        c->layoutSpanners();
+                        if (c->tremolo()) {
+                            Tremolo* t = c->tremolo();
+                            Chord* c1 = t->chord1();
+                            Chord* c2 = t->chord2();
+                            if (t->twoNotes() && c1 && c2 && (c1->staffMove() || c2->staffMove())) {
+                                t->layout();
+                            }
+                        }
+                    }
+                } else if (e->isBarLine()) {
+                    toBarLine(e)->layout2();
+                }
+            }
+        }
+        m->layout2();
+    }
+    lc.page->setPos(0, 0);
+    system->setPos(lc.page->lm(), lc.page->tm() + lc.score->styleP(Sid::staffUpperBorder));
+    lc.page->setWidth(system->width() + system->pos().x());
+    // Set buffer space after the last system to avoid problems with mouse input.
+    // Mouse input divides space between systems equally (see Score::searchSystem),
+    // hence the choice of the value.
+    const qreal buffer = 0.5 * lc.score->styleS(Sid::maxSystemDistance).val() * lc.score->spatium();
+    lc.page->setHeight(system->height() + system->pos().y() + buffer);
+    lc.page->rebuildBspTree();
 }
