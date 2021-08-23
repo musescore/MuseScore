@@ -23,7 +23,7 @@
 
 #include "log.h"
 
-using namespace mu::score;
+using namespace mu::engraving;
 using namespace mu::accessibility;
 
 AccessibleNote::AccessibleNote(Ms::Element* n)

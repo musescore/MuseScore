@@ -39,10 +39,8 @@
 #include "modularity/ioc.h"
 #include "iengravingconfiguration.h"
 
-namespace mu {
-namespace score {
+namespace mu::engraving {
 class AccessibleElement;
-}
 }
 
 namespace Ms {
@@ -201,7 +199,7 @@ class Element : public ScoreElement
     ///< valid after call to layout()
     uint _tag;                    ///< tag bitmask
 
-    mu::score::AccessibleElement* m_accessible = nullptr;
+    mu::engraving::AccessibleElement* m_accessible = nullptr;
 
 public:
     enum class EditBehavior {
@@ -214,7 +212,7 @@ protected:
     mu::draw::Color _color;                ///< element color attribute
 
 public:
-    Element(Score* = 0, ElementFlags = ElementFlag::NOTHING, mu::score::AccessibleElement* access = nullptr);
+    Element(Score* = 0, ElementFlags = ElementFlag::NOTHING, mu::engraving::AccessibleElement* access = nullptr);
     Element(const Element&);
     virtual ~Element();
 
@@ -554,7 +552,7 @@ public:
     virtual Element* nextSegmentElement();    //< Used for navigation
     virtual Element* prevSegmentElement();    //< next-element and prev-element command
 
-    mu::score::AccessibleElement* accessible() const;
+    mu::engraving::AccessibleElement* accessible() const;
     virtual QString accessibleInfo() const;           //< used to populate the status bar
     virtual QString screenReaderInfo() const          //< by default returns accessibleInfo, but can be overridden
     {
