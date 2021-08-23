@@ -49,10 +49,12 @@ protected:
 
 public:
     virtual ~MuseScoreView() = default;
-    Page* point2page(const mu::PointF&);
-    EngravingItem* elementAt(const mu::PointF& p);
-    const QList<EngravingItem*> elementsAt(const mu::PointF&);
-    virtual EngravingItem* elementNear(mu::PointF) { return 0; }
+    Page* point2page(const mu::PointF&) const;
+    EngravingItem* elementAt(const mu::PointF& p) const;
+    const QList<EngravingItem*> elementsAt(const mu::PointF&) const;
+    EngravingItem* elementNear(const mu::PointF& pos) const;
+    const QList<EngravingItem*> elementsNear(const mu::PointF& pos) const;
+    virtual qreal selectionProximity() const { return 0.0f; }
 
     virtual void layoutChanged() {}
     virtual void dataChanged(const mu::RectF&) = 0;

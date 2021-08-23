@@ -833,7 +833,7 @@
     </SC>
   <SC>
     <key>fullscreen</key>
-    <seq>Ctrl+U</seq>
+    <seq>F11</seq>
     <seq>Meta+Ctrl+F</seq>
     </SC>
   <SC>

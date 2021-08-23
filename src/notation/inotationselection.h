@@ -49,6 +49,8 @@ public:
     virtual RectF canvasBoundingRect() const = 0;
 
     virtual INotationSelectionRangePtr range() const = 0;
+
+    virtual EngravingItem* lastElementHit() const = 0;
 };
 
 using INotationSelectionPtr = std::shared_ptr<INotationSelection>;

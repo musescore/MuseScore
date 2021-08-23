@@ -310,7 +310,7 @@ void NoteInputBarModel::updateTieState()
 
 void NoteInputBarModel::updateSlurState()
 {
-    findItem(ActionCode("add-slur")).state.checked = resolveSlurSelected();
+    findItem(ActionCode("add-slur")).state.checked = notation()->elements()->msScore()->inputState().slur() != nullptr;
 }
 
 void NoteInputBarModel::updateVoicesState()
@@ -510,39 +510,6 @@ DurationType NoteInputBarModel::resolveCurrentDurationType() const
     }
 
     return result;
-}
-
-bool NoteInputBarModel::resolveSlurSelected() const
-{
-    if (!noteInput() || !selection()) {
-        return false;
-    }
-
-    if (isNoteInputMode()) {
-        return noteInputState().withSlur;
-    }
-
-    if (selection()->isNone() || selection()->isRange()) {
-        return false;
-    }
-
-    if (selection()->elements().empty()) {
-        return false;
-    }
-
-    for (const EngravingItem* element: selection()->elements()) {
-        const ChordRest* chordRest = elementToChordRest(element);
-        if (!chordRest) {
-            continue;
-        }
-
-        Ms::Slur* slur = chordRest->slur();
-        if (slur) {
-            return true;
-        }
-    }
-
-    return false;
 }
 
 bool NoteInputBarModel::isNoteInputModeAction(const ActionCode& actionCode) const

@@ -34,6 +34,14 @@ public:
     void updateAll() override;
     void drawBackground(mu::draw::Painter*, const RectF&) const override;
     const mu::Rect geometry() const override;
+    qreal selectionProximity() const override;
+    void setDropTarget(const Ms::EngravingItem* dropTarget) override;
+
+    void setSelectionProximity(qreal proximity);
+    const Ms::EngravingItem* dropTarget() const;
+private:
+    qreal m_selectionProximity = 0.0f;
+    const Ms::EngravingItem* m_dropTarget = nullptr;
 };
 }
 

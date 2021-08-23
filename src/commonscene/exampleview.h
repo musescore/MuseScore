@@ -98,7 +98,6 @@ public:
     virtual void changeEditElement(EngravingItem*) override;
     virtual void setDropRectangle(const mu::RectF&) override;
     virtual void cmdAddSlur(Note* firstNote, Note* lastNote);
-    virtual EngravingItem* elementNear(mu::PointF) override;
     virtual void drawBackground(mu::draw::Painter*, const mu::RectF&) const override;
     void dragExampleView(QMouseEvent* ev);
     const mu::Rect geometry() const override { return mu::Rect(QFrame::geometry()); }

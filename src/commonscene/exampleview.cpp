@@ -164,11 +164,6 @@ void ExampleView::cmdAddSlur(Note* /*firstNote*/, Note* /*lastNote*/)
 {
 }
 
-EngravingItem* ExampleView::elementNear(PointF)
-{
-    return 0;
-}
-
 void ExampleView::drawBackground(mu::draw::Painter* p, const RectF& r) const
 {
     if (_fgPixmap == 0 || _fgPixmap->isNull()) {

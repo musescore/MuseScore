@@ -1163,7 +1163,7 @@ bool GuitarPro5::readNoteEffects(Note* note)
         // add the trill articulation to the note
         Articulation* art = Factory::createArticulation(note->score()->dummy()->chord());
         art->setSymId(SymId::ornamentTrill);
-        if (!note->score()->addArticulation(note, art)) {
+        if (!note->score()->toggleArticulation(note, art)) {
             delete art;
         }
 
@@ -1278,7 +1278,7 @@ bool GuitarPro5::readNote(int string, Note* note)
     if (noteBits & NOTE_MARCATO) {
         Articulation* art = Factory::createArticulation(note->score()->dummy()->chord());
         art->setSymId(SymId::articMarcatoAbove);
-        if (!note->score()->addArticulation(note, art)) {
+        if (!note->score()->toggleArticulation(note, art)) {
             delete art;
         }
     }
@@ -1288,7 +1288,7 @@ bool GuitarPro5::readNote(int string, Note* note)
         Articulation* art = Factory::createArticulation(note->score()->dummy()->chord());
         art->setSymId(SymId::articAccentAbove);
         note->add(art);
-        // if (!note->score()->addArticulation(note, art))
+        // if (!note->score()->toggleArticulation(note, art))
         //      delete art;
     }
 

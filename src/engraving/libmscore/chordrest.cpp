@@ -62,6 +62,7 @@
 #include "hook.h"
 #include "rehearsalmark.h"
 #include "instrchange.h"
+#include "navigate.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -832,28 +833,25 @@ void ChordRest::replaceBeam(Beam* newBeam)
 
 Slur* ChordRest::slur(const ChordRest* secondChordRest) const
 {
+    if (secondChordRest == nullptr) {
+        secondChordRest = Ms::nextChordRest(const_cast<ChordRest*>(this));
+    }
     int currentTick = tick().ticks();
+    Ms::Slur* result = nullptr;
     for (auto it : score()->spannerMap().findOverlapping(currentTick, currentTick + 1)) {
         Ms::Spanner* spanner = it.value;
         if (!spanner->isSlur()) {
             continue;
         }
-
         Ms::Slur* slur = Ms::toSlur(spanner);
-        if (!secondChordRest) {
-            if (slur->endElement()->tick() > tick()) {
+        if (slur->startElement() == this && slur->endElement() == secondChordRest) {
+            if (slur->slurDirection() == DirectionV::AUTO) {
                 return slur;
             }
-
-            continue;
-        }
-
-        if (slur->endElement() == secondChordRest) {
-            return slur;
+            result = slur;
         }
     }
-
-    return nullptr;
+    return result;
 }
 
 //---------------------------------------------------------

@@ -46,6 +46,8 @@ public:
     virtual void setArticulation(SymbolId articulationSymbolId) = 0;
     virtual void setDrumNote(int note) = 0;
     virtual void addTuplet(const TupletOptions& options) = 0;
+    virtual void doubleNoteInputDuration() = 0;
+    virtual void halveNoteInputDuration() = 0;
 
     virtual void addSlur(Ms::Slur* slur) = 0;
     virtual void resetSlur() = 0;

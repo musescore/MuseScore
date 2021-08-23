@@ -355,9 +355,7 @@ void NotationNoteInput::resetSlur()
         return;
     }
 
-    startEdit();
-    score()->removeElement(slur);
-    apply();
+    score()->deselect(slur);
 
     addSlur(nullptr);
 }
@@ -417,4 +415,18 @@ std::set<SymbolId> NotationNoteInput::articulationIds() const
 {
     Ms::InputState& inputState = score()->inputState();
     return Ms::splitArticulations(inputState.articulationIds());
+}
+
+void NotationNoteInput::doubleNoteInputDuration()
+{
+    Ms::EditData editData(m_scoreCallbacks);
+    score()->cmdPadNoteIncreaseTAB(editData);
+    notifyAboutStateChanged();
+}
+
+void NotationNoteInput::halveNoteInputDuration()
+{
+    Ms::EditData editData(m_scoreCallbacks);
+    score()->cmdPadNoteDecreaseTAB(editData);
+    notifyAboutStateChanged();
 }

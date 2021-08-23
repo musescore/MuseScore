@@ -30,6 +30,7 @@
 #include "notationtypes.h"
 #include "inotationnoteinput.h"
 #include "inotationselection.h"
+#include "actions/actiontypes.h"
 
 namespace mu::notation {
 class INotationInteraction
@@ -61,7 +62,6 @@ public:
     virtual void setHitElementContext(const HitElementContext& context) = 0;
 
     // Select
-    virtual void addChordToSelection(MoveDirection d) = 0;
     virtual void moveChordNoteSelection(MoveDirection d) = 0;
     virtual void select(const std::vector<EngravingItem*>& elements, SelectType type = SelectType::REPLACE, int staffIndex = 0) = 0;
     virtual void selectAll() = 0;
@@ -98,12 +98,20 @@ public:
     virtual void undo() = 0;
     virtual void redo() = 0;
 
-    // Move
-    //! NOTE Perform operations on selected elements
+    // Change selection
     virtual void moveSelection(MoveDirection d, MoveSelectionType type) = 0;
-    virtual void movePitch(MoveDirection d, PitchMode mode) = 0;  //! NOTE Requires a note to be selected
-    virtual void moveText(MoveDirection d, bool quickly) = 0;     //! NOTE Requires a text element to be selected
+    virtual void moveLyrics(MoveDirection d) = 0;
+    virtual void expandSelection(ExpandSelectionMode mode) = 0;
+    virtual void addToSelection(MoveDirection d, MoveSelectionType type) = 0;
+    virtual void selectTopStaff() = 0;
+    virtual void selectEmptyTrailingMeasure() = 0;
+    virtual void moveSegmentSelection(MoveDirection d) = 0;
+
+    // Move/nudge elements
+    virtual void movePitch(MoveDirection d, PitchMode mode) = 0;
+    virtual void nudge(MoveDirection d, bool quickly) = 0;
     virtual void moveChordRestToStaff(MoveDirection d) = 0;
+    virtual void swapChordRest(MoveDirection d) = 0;
 
     // Text edit
     virtual bool isTextSelected() const = 0;
@@ -124,7 +132,10 @@ public:
     virtual bool isGripEditStarted() const = 0;
     virtual bool isHitGrip(const PointF& pos) const = 0;
     virtual void startEditGrip(const PointF& pos) = 0;
-    virtual void endEditGrip() = 0;
+
+    virtual bool isElementEditStarted() const = 0;
+    virtual void endEditElement() = 0;
+    virtual void startEditElement() = 0;
 
     virtual void splitSelectedMeasure() = 0;
     virtual void joinSelectedMeasures() = 0;
@@ -179,6 +190,7 @@ public:
     virtual void fillSelectionWithSlashes() = 0;
     virtual void replaceSelectedNotesWithSlashes() = 0;
 
+    virtual void repeatSelection() = 0;
     virtual void changeEnharmonicSpelling(bool both) = 0;
     virtual void spellPitches() = 0;
     virtual void regroupNotesAndRests() = 0;
@@ -193,8 +205,8 @@ public:
     virtual ScoreConfig scoreConfig() const = 0;
     virtual void setScoreConfig(ScoreConfig config) = 0;
 
-    virtual void nextLyrics(bool = false, bool = false, bool = true) = 0;
-    virtual void nextLyricsVerse(bool = false) = 0;
+    virtual void nextLyrics(MoveDirection) = 0;
+    virtual void nextLyricsVerse(MoveDirection) = 0;
     virtual void nextSyllable() = 0;
     virtual void addMelisma() = 0;
     virtual void addLyricsVerse() = 0;
@@ -203,6 +215,16 @@ public:
     virtual void toggleItalic() = 0;
     virtual void toggleUnderline() = 0;
     virtual void toggleStrike() = 0;
+
+    virtual void toggleArticulation(Ms::SymId) = 0;
+    virtual void insertClef(Ms::ClefType) = 0;
+    virtual void changeAccidental(Ms::AccidentalType) = 0;
+    virtual void transposeSemitone(int) = 0;
+    virtual void transposeDiatonicAlterations(Ms::TransposeDirection) = 0;
+    virtual void toggleGlobalOrLocalInsert() = 0;
+    virtual void toggleAutoplace(bool all) = 0;
+    virtual void getLocation() = 0;
+    virtual void execute(void (Ms::Score::*)()) = 0;
 };
 
 using INotationInteractionPtr = std::shared_ptr<INotationInteraction>;

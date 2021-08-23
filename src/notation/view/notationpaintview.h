@@ -36,6 +36,7 @@
 #include "playback/iplaybackcontroller.h"
 #include "ui/iuicontextresolver.h"
 #include "ui/imainwindow.h"
+#include "ui/iuiactionsregister.h"
 #include "ui/view/abstractmenumodel.h"
 
 #include "notationviewinputcontroller.h"
@@ -56,6 +57,7 @@ class NotationPaintView : public QQuickPaintedItem, public IControlledView, publ
     INJECT(notation, playback::IPlaybackController, playbackController)
     INJECT(notation, ui::IUiContextResolver, uiContextResolver)
     INJECT(notation, ui::IMainWindow, mainWindow)
+    INJECT(notation, ui::IUiActionsRegister, actionsRegister)
 
     Q_PROPERTY(qreal startHorizontalScrollPosition READ startHorizontalScrollPosition NOTIFY horizontalScrollChanged)
     Q_PROPERTY(qreal horizontalScrollbarSize READ horizontalScrollbarSize NOTIFY horizontalScrollChanged)
@@ -142,7 +144,7 @@ protected:
     void moveCanvasToCenter();
     void moveCanvasToPosition(const PointF& logicPos);
 
-    RectF notationContentRect() const;
+    RectF notationContentRect() const override;
 
     RectF toLogical(const RectF& rect) const;
 
