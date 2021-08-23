@@ -35,7 +35,7 @@ Item {
 
     property NavigationSection navigationSection: null
 
-    property bool hasSelection: {
+    readonly property bool hasSelection: {
         if (pagesStack.currentIndex === 0) {
             return instrumentsPage.hasSelectedInstruments
         } else if (pagesStack.currentIndex === 1) {
@@ -49,10 +49,8 @@ Item {
         var result = {}
 
         if (pagesStack.currentIndex === 0) {
-            var parts = {}
-            parts["instruments"] = instrumentsPage.selectedInstruments()
-            result["parts"] = parts
-            result["scoreOrder"] = instrumentsPage.selectedScoreOrder
+            result["scoreOrder"] = instrumentsPage.currentOrder()
+            result["instruments"] = instrumentsPage.instruments()
         } else if (pagesStack.currentIndex === 1) {
             result["templatePath"] = templatePage.selectedTemplatePath
         }

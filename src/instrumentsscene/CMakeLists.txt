@@ -52,6 +52,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/instrumentsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/instrumentspanelcontextmenumodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/instrumentspanelcontextmenumodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/instrumentsonscorelistmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/instrumentsonscorelistmodel.h
     )
 
 set(MODULE_LINK

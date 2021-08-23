@@ -38,7 +38,7 @@ void InstrumentSettingsModel::load(const QVariant& instrument)
     QVariantMap map = instrument.toMap();
 
     m_instrumentKey.partId = ID(map["partId"]);
-    m_instrumentKey.instrumentId = ID(map["instrumentId"]);
+    m_instrumentKey.instrumentId = map["instrumentId"].toString();
     m_partName = map["partName"].toString();
     m_instrumentName = map["instrumentName"].toString();
     m_instrumentAbbreviature = map["abbreviature"].toString();
@@ -62,7 +62,7 @@ void InstrumentSettingsModel::replaceInstrument()
         return;
     }
 
-    Instrument newInstrument = selectedInstrument.val;
+    const Instrument& newInstrument = selectedInstrument.val;
     masterNotationParts()->replaceInstrument(m_instrumentKey, newInstrument);
 
     m_instrumentKey.instrumentId = newInstrument.id();

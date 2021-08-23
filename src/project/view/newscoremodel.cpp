@@ -100,13 +100,13 @@ ProjectCreateOptions NewScoreModel::parseOptions(const QVariantMap& info) const
     scoreOptions.measureTimesigNumerator = measuresPickup["numerator"].toInt();
     scoreOptions.measureTimesigDenominator = measuresPickup["denominator"].toInt();
 
-    QVariantMap partMap = info["parts"].toMap();
-    for (const QVariant& obj : partMap["instruments"].toList()) {
+    for (const QVariant& obj : info["instruments"].toList()) {
         QVariantMap objMap = obj.toMap();
-        Q_ASSERT(!objMap["isExistingPart"].toBool());
 
         PartInstrument pi;
-        pi.instrumentTemplate = objMap["instrument"].value<InstrumentTemplate>();
+        pi.instrumentTemplate = objMap["instrumentTemplate"].value<InstrumentTemplate>();
+        pi.isExistingPart = objMap["isExistingPart"].toBool();
+        pi.isSoloist = objMap["isSoloist"].toBool();
 
         scoreOptions.parts << pi;
     }
