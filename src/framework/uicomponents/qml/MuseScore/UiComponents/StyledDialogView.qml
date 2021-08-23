@@ -46,7 +46,7 @@ DialogView {
 
     property NavigationSection navigationSection: NavigationSection {
         id: navSec
-        name: root.objectName != "" ? root.objectName : "StyledDialogView"
+        name: root.objectName !== "" ? root.objectName : "StyledDialogView"
         type: NavigationSection.Exclusive
         enabled: root.isOpened
         order: 1

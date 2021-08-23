@@ -21,10 +21,12 @@
  */
 import QtQuick 2.15
 import MuseScore.Ui 1.0
-import MuseScore.UiComponents 1.0
+import MuseScore.UiComponents 1.0    
 import MuseScore.Diagnostics 1.0
 
 Rectangle {
+
+    anchors.fill: parent
 
     color: ui.theme.backgroundPrimaryColor
 
@@ -34,15 +36,6 @@ Rectangle {
 
     DiagnosticsPathsModel {
         id: pathsModel
-    }
-
-    Item {
-        id: topPanel
-        StyledTextLabel {
-            anchors.fill: parent
-            horizontalAlignment: Text.AlignLeft
-            text: "Paths"
-        }
     }
 
     ListView {
@@ -56,23 +49,23 @@ Rectangle {
 
             property var item: itemData
 
-                StyledTextLabel {
-                    id: nameLabel
-                    anchors.top: parent.top
-                    anchors.bottom: parent.bottom
-                    width: 200
-                    horizontalAlignment: Text.AlignLeft
-                    text: dgate.item.name + ": "
-                }
+            StyledTextLabel {
+                id: nameLabel
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                width: 200
+                horizontalAlignment: Text.AlignLeft
+                text: dgate.item.name + ": "
+            }
 
-                StyledTextLabel {
-                    anchors.top: parent.top
-                    anchors.bottom: parent.bottom
-                    anchors.left: nameLabel.right
-                    anchors.right: parent.right
-                    horizontalAlignment: Text.AlignLeft
-                    text: dgate.item.path
-                }
+            StyledTextLabel {
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                anchors.left: nameLabel.right
+                anchors.right: parent.right
+                horizontalAlignment: Text.AlignLeft
+                text: dgate.item.path
+            }
         }
     }
 }

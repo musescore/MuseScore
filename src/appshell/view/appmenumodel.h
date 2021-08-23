@@ -56,6 +56,7 @@ private:
     ui::MenuItem formatItem() const;
     ui::MenuItem toolsItem() const;
     ui::MenuItem helpItem() const;
+    ui::MenuItem diagnosticItem() const;
 
     ui::MenuItemList recentScores() const;
     ui::MenuItemList appendClearRecentSection(const ui::MenuItemList& recentScores) const;

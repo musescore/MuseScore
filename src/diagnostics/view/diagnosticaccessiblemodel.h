@@ -19,21 +19,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ACCESSIBILITY_ACCESSIBLEDEVMODEL_H
-#define MU_ACCESSIBILITY_ACCESSIBLEDEVMODEL_H
+#ifndef MU_DIAGNOSTICS_DIAGNOSTICACCESSIBLEMODEL_H
+#define MU_DIAGNOSTICS_DIAGNOSTICACCESSIBLEMODEL_H
 
 #include <QAbstractListModel>
 #include <QTimer>
 
+#include "modularity/ioc.h"
+#include "accessibility/iaccessibilitycontroller.h"
+
 class QAccessibleInterface;
-namespace mu::accessibility {
-class AccessibleDevModel : public QAbstractListModel
+namespace mu::diagnostics {
+class DiagnosticAccessibleModel : public QAbstractListModel
 {
     Q_OBJECT
     Q_PROPERTY(bool isAutoRefresh READ isAutoRefresh WRITE setIsAutoRefresh NOTIFY isAutoRefreshChanged)
 
+    INJECT_STATIC(diagnostics, accessibility::IAccessibilityController, accessibilityController)
+
 public:
-    explicit AccessibleDevModel(QObject* parent = nullptr);
+    explicit DiagnosticAccessibleModel(QObject* parent = nullptr);
 
     bool isAutoRefresh() const;
 
@@ -43,7 +48,8 @@ public:
 
     Q_INVOKABLE void reload();
 
-    static void setRootObject(QObject* object);
+    static void init();
+    static void dumpTree();
 
 public slots:
     void setIsAutoRefresh(bool isAutoRefresh);
@@ -70,4 +76,4 @@ private:
 };
 }
 
-#endif // MU_ACCESSIBILITY_ACCESSIBLEDEVMODEL_H
+#endif // MU_DIAGNOSTICS_DIAGNOSTICACCESSIBLEMODEL_H

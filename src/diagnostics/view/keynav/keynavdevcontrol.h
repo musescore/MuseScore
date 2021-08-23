@@ -19,39 +19,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UI_ABSTRACTKEYNAVDEVITEM_H
-#define MU_UI_ABSTRACTKEYNAVDEVITEM_H
+#ifndef MU_DIAGNOSTICS_KEYNAVDEVCONTROL_H
+#define MU_DIAGNOSTICS_KEYNAVDEVCONTROL_H
 
 #include <QObject>
-#include "ui/inavigation.h"
-#include "async/asyncable.h"
+#include "abstractkeynavdevitem.h"
 
-namespace mu::ui {
-class AbstractKeyNavDevItem : public QObject, public async::Asyncable
+namespace mu::diagnostics {
+class KeyNavDevControl : public AbstractKeyNavDevItem
 {
     Q_OBJECT
-    Q_PROPERTY(QString name READ name CONSTANT)
-    Q_PROPERTY(QVariant index READ index NOTIFY indexChanged)
-    Q_PROPERTY(bool enabled READ enabled NOTIFY enabledChanged)
-    Q_PROPERTY(bool active READ active NOTIFY activeChanged)
 
 public:
-    explicit AbstractKeyNavDevItem(INavigation* keynav);
+    KeyNavDevControl(ui::INavigationControl* control);
 
-    QString name() const;
-    QVariant index() const;
-    bool enabled() const;
-    bool active() const;
+    Q_INVOKABLE void requestActive();
+    Q_INVOKABLE void trigger();
 
 signals:
-    void indexChanged();
-    void enabledChanged();
-    void activeChanged();
 
 private:
-
-    INavigation* m_keynav = nullptr;
+    ui::INavigationControl* m_control = nullptr;
 };
 }
 
-#endif // MU_UI_ABSTRACTKEYNAVDEVITEM_H
+#endif // MU_DIAGNOSTICS_KEYNAVDEVCONTROL_H

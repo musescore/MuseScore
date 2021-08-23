@@ -1,8 +1,11 @@
 <RCC>
     <qresource prefix="/">
         <file>qml/MuseScore/Diagnostics/qmldir</file>
-        <file>qml/MuseScore/Diagnostics/DiagnosticsPanel.qml</file>
-        <file>qml/MuseScore/Diagnostics/DiagnosticsDialog.qml</file>
-        <file>qml/MuseScore/Diagnostics/DiagnosticsPaths.qml</file>
+        <file>qml/MuseScore/Diagnostics/DiagnosticPathsDialog.qml</file>
+        <file>qml/MuseScore/Diagnostics/DiagnosticPathsPanel.qml</file>
+        <file>qml/MuseScore/Diagnostics/DiagnosticNavigationDialog.qml</file>
+        <file>qml/MuseScore/Diagnostics/DiagnosticNavigationPanel.qml</file>
+        <file>qml/MuseScore/Diagnostics/DiagnosticAccessibleDialog.qml</file>
+        <file>qml/MuseScore/Diagnostics/DiagnosticAccessiblePanel.qml</file>
     </qresource>
 </RCC>

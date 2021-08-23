@@ -273,8 +273,6 @@ static T* findByIndex(const std::set<T*>& set, const INavigation::Index& idx)
 
 void NavigationController::init()
 {
-    dispatcher()->reg(this, "nav-dev-show-controls", this, &NavigationController::devShowControls);
-
     dispatcher()->reg(this, "nav-next-section", this, &NavigationController::goToNextSection);
     dispatcher()->reg(this, "nav-prev-section", [this]() { goToPrevSection(false); });
     dispatcher()->reg(this, "nav-next-panel", this, &NavigationController::goToNextPanel);
@@ -329,13 +327,6 @@ bool NavigationController::eventFilter(QObject* watched, QEvent* event)
     }
 
     return QObject::eventFilter(watched, event);
-}
-
-void NavigationController::devShowControls()
-{
-    if (!interactive()->isOpened(DEV_SHOW_CONTROLS_URI.uri()).val) {
-        interactive()->open(DEV_SHOW_CONTROLS_URI);
-    }
 }
 
 void NavigationController::resetActive()

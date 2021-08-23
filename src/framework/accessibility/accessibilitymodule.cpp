@@ -27,22 +27,12 @@
 #include "log.h"
 
 #include "internal/accessibilitycontroller.h"
-#include "internal/accessibilityuiactions.h"
 #include "internal/accessibilityconfiguration.h"
-#include "dev/accessibledevmodel.h"
-
-#include "ui/iinteractiveuriregister.h"
-#include "ui/iuiactionsregister.h"
 
 using namespace mu::accessibility;
 using namespace mu::modularity;
 
 static std::shared_ptr<AccessibilityController> s_accessibilityController = std::make_shared<AccessibilityController>();
-
-static void accessibility_init_qrc()
-{
-    Q_INIT_RESOURCE(accessibility);
-}
 
 std::string AccessibilityModule::moduleName() const
 {
@@ -53,29 +43,6 @@ void AccessibilityModule::registerExports()
 {
     ioc()->registerExport<IAccessibilityConfiguration>(moduleName(), new AccessibilityConfiguration());
     ioc()->registerExport<IAccessibilityController>(moduleName(), s_accessibilityController);
-}
-
-void AccessibilityModule::resolveImports()
-{
-    auto ir = ioc()->resolve<ui::IInteractiveUriRegister>(moduleName());
-    if (ir) {
-        ir->registerQmlUri(Uri("musescore://devtools/accessible/tree"), "MuseScore/Accessibility/AccessibleDevDialog.qml");
-    }
-
-    auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
-    if (ar) {
-        ar->reg(std::make_shared<AccessibilityUiActions>());
-    }
-}
-
-void AccessibilityModule::registerResources()
-{
-    accessibility_init_qrc();
-}
-
-void AccessibilityModule::registerUiTypes()
-{
-    qmlRegisterType<AccessibleDevModel>("MuseScore.Accessibility", 1, 0, "AccessibleDevModel");
 }
 
 void AccessibilityModule::onInit(const framework::IApplication::RunMode& mode)

@@ -54,7 +54,8 @@ void AppMenuModel::load()
         addItem(),
         formatItem(),
         toolsItem(),
-        helpItem()
+        helpItem(),
+        diagnosticItem()
     };
 
     setItems(items);
@@ -307,6 +308,26 @@ MenuItem AppMenuModel::helpItem() const
               << makeMenuItem("revert-factory");
 
     return makeMenu(qtrc("appshell", "&Help"), helpItems);
+}
+
+MenuItem AppMenuModel::diagnosticItem() const
+{
+    MenuItemList systemItems {
+        makeMenuItem("diagnostic-show-paths"),
+    };
+
+    MenuItemList accessibilityItems {
+        makeMenuItem("diagnostic-show-navigation-tree"),
+        makeMenuItem("diagnostic-show-accessible-tree"),
+        makeMenuItem("diagnostic-accessible-tree-dump"),
+    };
+
+    MenuItemList items {
+        makeMenu(qtrc("appshell", "System"), systemItems),
+        makeMenu(qtrc("appshell", "Accessibility"), accessibilityItems),
+    };
+
+    return makeMenu(qtrc("appshell", "&Diagnostic"), items);
 }
 
 MenuItemList AppMenuModel::recentScores() const
