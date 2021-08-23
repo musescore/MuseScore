@@ -379,7 +379,7 @@ QVariantMap AdditionalInfoModel::measureCountRange() const
 
 QVariantList AdditionalInfoModel::timeSignatureDenominators() const
 {
-    return QVariantList { 1, 2, 4, 8, 16, 32, 64 };
+    return QVariantList { 1, 2, 4, 8, 16, 32, 64, 128 };
 }
 
 void AdditionalInfoModel::setKeySignature(QVariantMap keySignature)

@@ -61,7 +61,7 @@ QVariantList ImportPreferencesModel::shortestNotes() const
         QVariantMap { { "title", qtrc("appshell", "32nd") }, { "value", division() / 8 } },
         QVariantMap { { "title", qtrc("appshell", "64th") }, { "value", division() / 16 } },
         QVariantMap { { "title", qtrc("appshell", "128th") }, { "value", division() / 32 } },
-        QVariantMap { { "title", qtrc("appshell", "256h") }, { "value", division() / 64 } },
+        QVariantMap { { "title", qtrc("appshell", "256th") }, { "value", division() / 64 } },
         QVariantMap { { "title", qtrc("appshell", "512th") }, { "value", division() / 128 } },
         QVariantMap { { "title", qtrc("appshell", "1024th") }, { "value", division() / 256 } }
     };
