@@ -46,6 +46,7 @@
 #include "masterscore.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //! FIXME
@@ -115,7 +116,7 @@ void Page::appendSystem(System* s)
 void Page::draw(mu::draw::Painter* painter) const
 {
     TRACE_OBJ_DRAW;
-    if (score()->layoutMode() != LayoutMode::PAGE) {
+    if (!score()->isLayoutMode(LayoutMode::PAGE)) {
         return;
     }
     //
@@ -255,7 +256,7 @@ void Page::doRebuildBspTree()
     scanElements(&n, countElements, false);
 
     RectF r;
-    if (score()->layoutMode() == LayoutMode::LINE) {
+    if (score()->isLayoutMode(LayoutMode::LINE)) {
         qreal w = 0.0;
         qreal h = 0.0;
         if (!_systems.empty()) {

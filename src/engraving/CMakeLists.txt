@@ -126,6 +126,7 @@ set(MODULE_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/layout/layout.cpp
     ${CMAKE_CURRENT_LIST_DIR}/layout/layout.h
+    ${CMAKE_CURRENT_LIST_DIR}/layout/layoutoptions.h
     ${CMAKE_CURRENT_LIST_DIR}/layout/layoutcontext.cpp
     ${CMAKE_CURRENT_LIST_DIR}/layout/layoutcontext.h
     ${CMAKE_CURRENT_LIST_DIR}/layout/layoutlyrics.cpp

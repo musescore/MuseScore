@@ -97,6 +97,7 @@
 #include "log.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -3579,7 +3580,7 @@ bool Measure::prevIsOneMeasureRepeat(int staffIdx) const
 
 qreal Measure::userStretch() const
 {
-    return score()->layoutMode() == LayoutMode::FLOAT ? 1.0 : m_userStretch;
+    return score()->layoutOptions().isMode(LayoutMode::FLOAT) ? 1.0 : m_userStretch;
 }
 
 //---------------------------------------------------------
@@ -4411,7 +4412,7 @@ void Measure::addSystemTrailer(Measure* nm)
     TimeSig* ts = nullptr;
     bool showCourtesySig = false;
     Segment* s = findSegmentR(SegmentType::TimeSigAnnounce, _rtick);
-    if (nm && score()->genCourtesyTimesig() && !isFinalMeasure && !score()->floatMode()) {
+    if (nm && score()->genCourtesyTimesig() && !isFinalMeasure && !score()->layoutOptions().isMode(LayoutMode::FLOAT)) {
         Segment* tss = nm->findSegmentR(SegmentType::TimeSig, Fraction(0, 1));
         if (tss) {
             int nstaves = score()->nstaves();

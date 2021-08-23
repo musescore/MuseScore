@@ -187,14 +187,14 @@ void Notation::paint(mu::draw::Painter* painter, const RectF& frameRect)
     }
 
     switch (score()->layoutMode()) {
-    case Ms::LayoutMode::LINE:
-    case Ms::LayoutMode::SYSTEM: {
+    case engraving::LayoutMode::LINE:
+    case engraving::LayoutMode::SYSTEM: {
         bool paintBorders = false;
         paintPages(painter, frameRect, { pages.first() }, paintBorders);
         break;
     }
-    case Ms::LayoutMode::FLOAT:
-    case Ms::LayoutMode::PAGE: {
+    case engraving::LayoutMode::FLOAT:
+    case engraving::LayoutMode::PAGE: {
         bool paintBorders = !score()->printing();
         paintPages(painter, frameRect, pages, paintBorders);
     }

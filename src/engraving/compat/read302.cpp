@@ -114,7 +114,7 @@ bool Read302::readScore302(Ms::Score* score, XmlReader& e)
             ReadStyleHook::readStyleTag(score, e);
 
             // if (_layoutMode == LayoutMode::FLOAT || _layoutMode == LayoutMode::SYSTEM) {
-            if (score->_layoutMode == LayoutMode::FLOAT) {
+            if (score->layoutOptions().isMode(LayoutMode::FLOAT)) {
                 // style should not change spatium in
                 // float mode
                 score->style().set(Sid::spatium, sp);
@@ -207,9 +207,9 @@ bool Read302::readScore302(Ms::Score* score, XmlReader& e)
         } else if (tag == "layoutMode") {
             QString s = e.readElementText();
             if (s == "line") {
-                score->_layoutMode = LayoutMode::LINE;
+                score->setLayoutMode(LayoutMode::LINE);
             } else if (s == "system") {
-                score->_layoutMode = LayoutMode::SYSTEM;
+                score->setLayoutMode(LayoutMode::SYSTEM);
             } else {
                 qDebug("layoutMode: %s", qPrintable(s));
             }

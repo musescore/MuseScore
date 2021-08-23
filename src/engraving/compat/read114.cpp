@@ -2859,7 +2859,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e)
             if (masterScore->styleB(Sid::useGermanNoteNames)) {
                 masterScore->style().set(Sid::useStandardNoteNames, false);
             }
-            if (masterScore->_layoutMode == LayoutMode::FLOAT) {
+            if (masterScore->layoutMode() == LayoutMode::FLOAT) {
                 // style should not change spatium in
                 // float mode
                 masterScore->setSpatium(sp);
