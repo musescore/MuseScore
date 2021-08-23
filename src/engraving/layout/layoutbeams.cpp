@@ -25,6 +25,7 @@
 #include "libmscore/staff.h"
 #include "libmscore/chord.h"
 #include "libmscore/timesig.h"
+#include "libmscore/system.h"
 
 #include "layoutcontext.h"
 

@@ -19,31 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_LAYOUTMEASURE_H
-#define MU_ENGRAVING_LAYOUTMEASURE_H
+#ifndef MU_ENGRAVING_LAYOUTTREMOLO_H
+#define MU_ENGRAVING_LAYOUTTREMOLO_H
+
+#include <utility>
+#include <QtGlobal>
 
 namespace Ms {
-class Score;
-class Measure;
-class Fraction;
-class MeasureBase;
+class Tremolo;
 }
 
 namespace mu::engraving {
-class LayoutContext;
-class LayoutMeasure
+class LayoutTremolo
 {
 public:
-    LayoutMeasure() = default;
-
-    static void getNextMeasure(Ms::Score* score, LayoutContext& lc);
-
-private:
-
-    static void createMMRest(Ms::Score* score, Ms::Measure* firstMeasure, Ms::Measure* lastMeasure, const Ms::Fraction& len);
-
-    static int adjustMeasureNo(LayoutContext& lc, Ms::MeasureBase* m);
+    static std::pair<qreal, qreal> extendedStemLenWithTwoNoteTremolo(Ms::Tremolo* tremolo, qreal stemLen1, qreal stemLen2);
 };
 }
 
-#endif // MU_ENGRAVING_LAYOUTMEASURE_H
+#endif // MU_ENGRAVING_LAYOUTTREMOLO_H

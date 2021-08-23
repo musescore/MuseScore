@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef LAYOUTHARMONIES_H
-#define LAYOUTHARMONIES_H
+#ifndef MU_ENGRAVING_LAYOUTHARMONIES_H
+#define MU_ENGRAVING_LAYOUTHARMONIES_H
 
 #include <vector>
 
@@ -40,4 +40,4 @@ public:
 };
 }
 
-#endif // LAYOUTHARMONIES_H
+#endif // MU_ENGRAVING_LAYOUTHARMONIES_H

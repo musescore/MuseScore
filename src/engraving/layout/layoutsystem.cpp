@@ -37,6 +37,7 @@
 #include "libmscore/tremolo.h"
 #include "libmscore/tuplet.h"
 #include "libmscore/volta.h"
+#include "libmscore/system.h"
 
 #include "layoutbeams.h"
 #include "layoutharmonies.h"
