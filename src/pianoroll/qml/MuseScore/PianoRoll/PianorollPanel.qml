@@ -48,13 +48,6 @@ Rectangle {
                 RowLayout {
                     id: tools
 
-                    FlatToggleButton {
-                        icon: IconCode.COPY
-
-//                        onToggled: {
-//                            root.model.isAspectRatioLocked.value = !root.model.isAspectRatioLocked.value
-//                        }
-                    }
 
                     ToolButton {
                         text: qsTr("Select")
@@ -85,12 +78,26 @@ Rectangle {
                 }
 
                 RowLayout {
-//                    anchors.fill: parent
 
                     ToolButton {
                         text: qsTr("Automation")
                         checkable: true
                     }
+
+//                    FlatToggleButton {
+//                        id: automationButton
+
+//                        icon: checked ? IconCode.LOCK_CLOSED : IconCode.LOCK_OPEN
+//                        height: 20
+//                        width: 20
+
+//                        checked: true
+
+////                        onToggled: {
+////                            root.model.isAspectRatioLocked.value = !root.model.isAspectRatioLocked.value
+////                        }
+//                    }
+
                 }
 
 
@@ -187,6 +194,7 @@ Rectangle {
             contentHeight: 500
 
             PianorollView {
+                anchors.fill: parent
 
                 implicitWidth: 1500
                 implicitHeight: 500
