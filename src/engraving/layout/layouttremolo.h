@@ -19,25 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_LAYOUTHARMONIES_H
-#define MU_ENGRAVING_LAYOUTHARMONIES_H
+#ifndef MU_ENGRAVING_LAYOUTTREMOLO_H
+#define MU_ENGRAVING_LAYOUTTREMOLO_H
 
-#include <vector>
+#include <utility>
+#include <QtGlobal>
 
 namespace Ms {
-class System;
-class Segment;
+class Tremolo;
 }
 
 namespace mu::engraving {
-class LayoutHarmonies
+class LayoutTremolo
 {
 public:
-
-    static void layoutHarmonies(const std::vector<Ms::Segment*>& sl);
-    static void alignHarmonies(const Ms::System* system, const std::vector<Ms::Segment*>& sl, bool harmony, const double maxShiftAbove,
-                               const double maxShiftBelow);
+    static std::pair<qreal, qreal> extendedStemLenWithTwoNoteTremolo(Ms::Tremolo* tremolo, qreal stemLen1, qreal stemLen2);
 };
 }
 
-#endif // MU_ENGRAVING_LAYOUTHARMONIES_H
+#endif // MU_ENGRAVING_LAYOUTTREMOLO_H
