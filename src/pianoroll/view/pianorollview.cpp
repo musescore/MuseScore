@@ -39,10 +39,13 @@ using namespace mu::pianoroll;
 PianorollView::PianorollView(QQuickItem* parent)
     : QQuickPaintedItem(parent)
 {
+    int j = 9;
 }
 
 void PianorollView::onNotationChanged()
 {
+    updateBoundingSize();
+    update();
 }
 
 void PianorollView::load()
@@ -54,6 +57,21 @@ void PianorollView::load()
     controller()->noteLayoutChanged().onNotify(this, [this]() {
         onNotationChanged();
     });
+}
+
+void PianorollView::updateBoundingSize()
+{
+    int ticks = controller()->widthInTicks();
+    int noteHeight = controller()->noteHeight();
+    double xZoom = controller()->xZoom();
+
+    setImplicitSize(ticks * xZoom, noteHeight * 128);
+
+//    Score* score = controller()->score();
+
+//    Measure* lm = score->lastMeasure();
+//    _ticks = (lm->tick() + lm->ticks()).ticks();
+//    scene()->setSceneRect(0.0, 0.0, double((_ticks + MAP_OFFSET * 2) * _xZoom), _noteHeight * 128);
 }
 
 void PianorollView::paint(QPainter* p)
