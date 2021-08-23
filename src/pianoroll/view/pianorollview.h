@@ -81,6 +81,7 @@ public:
 
 private:
     void onNotationChanged();
+    void updateBoundingSize();
 
     notation::INotationPtr m_notation;
 
