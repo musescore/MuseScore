@@ -24,11 +24,14 @@
 
 #include <QObject>
 
-#include "modularity/ioc.h"
 #include "async/asyncable.h"
+
+#include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
-#include "notation/notationtypes.h"
 #include "notation/iselectinstrumentscenario.h"
+#include "global/iinteractive.h"
+
+#include "notation/notationtypes.h"
 
 namespace mu::instrumentsscene {
 class InstrumentSettingsModel : public QObject, public async::Asyncable
@@ -37,6 +40,7 @@ class InstrumentSettingsModel : public QObject, public async::Asyncable
 
     INJECT(instruments, notation::ISelectInstrumentsScenario, selectInstrumentsScenario)
     INJECT(instruments, context::IGlobalContext, context)
+    INJECT(instruments, framework::IInteractive, interactive)
 
     Q_PROPERTY(QString instrumentName READ instrumentName WRITE setInstrumentName NOTIFY dataChanged)
     Q_PROPERTY(QString partName READ partName WRITE setPartName NOTIFY dataChanged)
@@ -49,6 +53,7 @@ public:
 
     Q_INVOKABLE void load(const QVariant& instrument);
     Q_INVOKABLE void replaceInstrument();
+    Q_INVOKABLE void resetAllFormatting();
 
     QString instrumentName() const;
     QString partName() const;

@@ -48,6 +48,7 @@ StyledPopupView {
 
     Column {
         id: contentColumn
+
         anchors.fill: parent
         width: parent.width
 
@@ -71,26 +72,29 @@ StyledPopupView {
             }
         }
 
-        SeparatorLine {
-            anchors.leftMargin: -root.leftPadding + root.borderWidth
-            anchors.rightMargin: -root.rightPadding + root.borderWidth
-        }
+        SeparatorLine {}
 
         StyledTextLabel {
             text: qsTrc("instruments", "Voices visible in the score")
         }
 
         Row {
-            height: 40
+            height: childrenRect.height
             width: parent.width
+
             spacing: 26
+
             Repeater {
                 model: settingsModel.voices
+
                 delegate: CheckBox {
                     id: item
-                    objectName: "Voice"+modelData.title+"CheckBox"
+
+                    objectName: "Voice" + modelData.title + "CheckBox"
+
                     navigation.panel: root.navigation
                     navigation.row: model.index + 2 //! NOTE after staffTypesComboBox
+
                     text: modelData.title
                     checked: modelData.visible
 
@@ -102,16 +106,15 @@ StyledPopupView {
             }
         }
 
-        SeparatorLine {
-            anchors.leftMargin: -root.leftPadding + root.borderWidth
-            anchors.rightMargin: -root.rightPadding + root.borderWidth
-        }
+        SeparatorLine {}
 
         CheckBox {
             navigation.panel: root.navigation
             navigation.row: 20 // Should be more than a voices checkbox
+
             text: qsTrc("instruments", "Small staff")
             checked: settingsModel.isSmallStaff
+
             onClicked: {
                 settingsModel.setIsSmallStaff(!checked)
             }
@@ -135,10 +138,7 @@ StyledPopupView {
             }
         }
 
-        SeparatorLine {
-            anchors.leftMargin: -root.leftPadding + root.borderWidth
-            anchors.rightMargin: -root.rightPadding + root.borderWidth
-        }
+        SeparatorLine {}
 
         FlatButton {
             width: parent.width
