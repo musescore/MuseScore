@@ -265,7 +265,7 @@ static void fillGap(Measure* measure, int track, const Fraction& tstart, const F
       // qDebug("\nfillGIFV     fillGap(measure %p track %d tstart %d tend %d) restLen %d len",
       //        measure, track, tstart, tend, restLen);
       // note: as MScore::division (#ticks in a quarter note) equals 480
-      // MScore::division / 64 (#ticks in a 256th note) uequals 7.5 but is rounded down to 7
+      // MScore::division / 64 (#ticks in a 256th note) equals 7.5 but is rounded down to 7
       while (restLen > Fraction(1,256)) {
             Fraction len = restLen;
             TDuration d(TDuration::DurationType::V_INVALID);

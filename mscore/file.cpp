@@ -965,6 +965,16 @@ MasterScore* MuseScore::getNewFile()
                               bpm *= 16;
                               }
                         break;
+                  case 128:
+                        if (ts.numerator() % 3 == 0) {
+                              text = "<sym>metNote64ndUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = %1";
+                              bpm *= 9;
+                              }
+                        else {
+                              text = "<sym>metNote128thUp</sym> = %1";
+                              bpm *= 32;
+                              }
+                        break;
                   default:
                         break;
                   }
