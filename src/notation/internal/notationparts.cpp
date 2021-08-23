@@ -793,7 +793,7 @@ void NotationParts::moveParts(const IDList& sourcePartsIds, const ID& destinatio
 
     startEdit();
 
-    doSetScoreOrder(makeCustomOrder());
+    doSetScoreOrder(customOrder());
     sortParts(parts, score()->staves());
 
     setBracketsAndBarlines();
