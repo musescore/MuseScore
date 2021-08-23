@@ -58,7 +58,7 @@ WinMidiOutPort::~WinMidiOutPort()
 
 void WinMidiOutPort::init()
 {
-    m_win = std::unique_ptr<Win>(new Win());
+    m_win = std::make_shared<Win>();
 
     m_devicesListener.startWithCallback([this]() {
         return devices();

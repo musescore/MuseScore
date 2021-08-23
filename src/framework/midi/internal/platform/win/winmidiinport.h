@@ -55,7 +55,7 @@ private:
     void stop();
 
     struct Win;
-    std::unique_ptr<Win> m_win;
+    std::shared_ptr<Win> m_win;
     MidiDeviceID m_deviceID;
     bool m_running = false;
     async::Channel<tick_t, Event> m_eventReceived;
