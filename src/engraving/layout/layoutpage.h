@@ -19,31 +19,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_LAYOUTMEASURE_H
-#define MU_ENGRAVING_LAYOUTMEASURE_H
+#ifndef MU_ENGRAVING_LAYOUTPAGE_H
+#define MU_ENGRAVING_LAYOUTPAGE_H
+
+#include "layoutcontext.h"
 
 namespace Ms {
-class Score;
-class Measure;
-class Fraction;
-class MeasureBase;
+class Page;
+class System;
 }
 
 namespace mu::engraving {
-class LayoutContext;
-class LayoutMeasure
+class LayoutPage
 {
 public:
-    LayoutMeasure() = default;
 
-    static void getNextMeasure(Ms::Score* score, LayoutContext& lc);
+    static void getNextPage(LayoutContext& lc);
+    static void collectPage(LayoutContext& lc);
 
 private:
-
-    static void createMMRest(Ms::Score* score, Ms::Measure* firstMeasure, Ms::Measure* lastMeasure, const Ms::Fraction& len);
-
-    static int adjustMeasureNo(LayoutContext& lc, Ms::MeasureBase* m);
+    static void layoutPage(Ms::Page* page, qreal restHeight);
+    static void checkDivider(bool left, Ms::System* s, qreal yOffset, bool remove = false);
+    static void distributeStaves(Ms::Page* page);
 };
 }
 
-#endif // MU_ENGRAVING_LAYOUTMEASURE_H
+#endif // MU_ENGRAVING_LAYOUTPAGE_H

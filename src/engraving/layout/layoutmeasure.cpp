@@ -586,7 +586,7 @@ void LayoutMeasure::getNextMeasure(Ms::Score* score, LayoutContext& lc)
         return;
     }
 
-    int mno = lc.adjustMeasureNo(lc.curMeasure);
+    int mno = adjustMeasureNo(lc, lc.curMeasure);
 
     if (lc.curMeasure->isMeasure()) {
         if (score->score()->styleB(Sid::createMultiMeasureRests)) {
@@ -602,7 +602,7 @@ void LayoutMeasure::getNextMeasure(Ms::Score* score, LayoutContext& lc)
                     break;
                 }
                 if (nm != m) {
-                    lc.adjustMeasureNo(nm);
+                    adjustMeasureNo(lc, nm);
                 }
                 ++n;
                 len += nm->ticks();
@@ -823,4 +823,21 @@ void LayoutMeasure::getNextMeasure(Ms::Score* score, LayoutContext& lc)
     }
 
     lc.tick += measure->ticks();
+}
+
+//---------------------------------------------------------
+//   adjustMeasureNo
+//---------------------------------------------------------
+
+int LayoutMeasure::adjustMeasureNo(LayoutContext& lc, MeasureBase* m)
+{
+    lc.measureNo += m->noOffset();
+    m->setNo(lc.measureNo);
+    if (!m->irregular()) {          // don’t count measure
+        ++lc.measureNo;
+    }
+    if (m->sectionBreakElement() && m->sectionBreakElement()->startWithMeasureOne()) {
+        lc.measureNo = 0;
+    }
+    return lc.measureNo;
 }

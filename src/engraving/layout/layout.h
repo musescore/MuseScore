@@ -40,9 +40,12 @@ public:
 
 private:
 
+    void layoutLinear(LayoutContext& lc);
     void layoutLinear(bool layoutAll, LayoutContext& lc);
     void resetSystems(bool layoutAll, LayoutContext& lc);
     void collectLinearSystem(LayoutContext& lc);
+
+    void doLayout(LayoutContext& lc);
 
     Ms::Score* m_score = nullptr;
 };
