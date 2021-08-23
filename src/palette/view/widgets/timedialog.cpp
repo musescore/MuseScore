@@ -171,6 +171,8 @@ int TimeDialog::denominator2Idx(int denominator) const
         break;
     case 64: val = 6;
         break;
+    case 128: val = 7;
+        break;
     }
     return val;
 }
@@ -196,6 +198,8 @@ int TimeDialog::denominator() const
     case 5: val = 32;
         break;
     case 6: val = 64;
+        break;
+    case 7: val = 128;
         break;
     }
     return val;
