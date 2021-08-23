@@ -146,11 +146,11 @@ void TextLineBaseSegment::draw(QPainter* painter) const
             int end = npoints;
             //draw centered hooks as solid
             painter->setPen(solidPen);
-            if (tl->beginHookType() == HookType::HOOK_90T) {
+            if (tl->beginHookType() == HookType::HOOK_90T && (isSingleType() || isBeginType())) {
                   painter->drawLines(&points[0], 1);
                   start++;
                   }
-            if (tl->endHookType() == HookType::HOOK_90T) {
+            if (tl->endHookType() == HookType::HOOK_90T && (isSingleType() || isEndType())) {
                   painter->drawLines(&points[npoints-1], 1);
                   end--;
                   }
