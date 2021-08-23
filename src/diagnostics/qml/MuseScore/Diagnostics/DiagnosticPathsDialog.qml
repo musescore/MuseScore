@@ -19,28 +19,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UI_KEYNAVDEVCONTROL_H
-#define MU_UI_KEYNAVDEVCONTROL_H
+import QtQuick 2.15
+import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0    
 
-#include <QObject>
-#include "abstractkeynavdevitem.h"
+StyledDialogView {
+    id: root
 
-namespace mu::ui {
-class KeyNavDevControl : public AbstractKeyNavDevItem
-{
-    Q_OBJECT
+    title: "Diagnostic Paths"
 
-public:
-    KeyNavDevControl(INavigationControl* control);
+    contentHeight: 800
+    contentWidth: 600
+    resizable: true
 
-    Q_INVOKABLE void requestActive();
-    Q_INVOKABLE void trigger();
-
-signals:
-
-private:
-    INavigationControl* m_control = nullptr;
-};
+    DiagnosticPathsPanel {
+        anchors.fill: parent
+    }
 }
-
-#endif // MU_UI_KEYNAVDEVCONTROL_H

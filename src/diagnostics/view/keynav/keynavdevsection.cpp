@@ -19,21 +19,39 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "keynavdevcontrol.h"
+#include "keynavdevsection.h"
 
+using namespace mu::diagnostics;
 using namespace mu::ui;
 
-KeyNavDevControl::KeyNavDevControl(INavigationControl* control)
-    : AbstractKeyNavDevItem(control), m_control(control)
+KeyNavDevSection::KeyNavDevSection(INavigationSection* section)
+    : AbstractKeyNavDevItem(section), m_section(section)
 {
 }
 
-void KeyNavDevControl::requestActive()
+QVariantList KeyNavDevSection::subsections() const
 {
-    m_control->activeRequested().send(m_control);
+    return m_subsections;
 }
 
-void KeyNavDevControl::trigger()
+void KeyNavDevSection::setSubsections(const QVariantList& subsections)
 {
-    m_control->trigger();
+    m_subsections = subsections;
+    emit subsectionsChanged();
+    emit panelsCountChanged();
+    emit controlsCountChanged();
+}
+
+int KeyNavDevSection::panelsCount() const
+{
+    return int(m_section->panels().size());
+}
+
+int KeyNavDevSection::controlsCount() const
+{
+    size_t count = 0;
+    for (const INavigationPanel* p : m_section->panels()) {
+        count += p->controls().size();
+    }
+    return int(count);
 }

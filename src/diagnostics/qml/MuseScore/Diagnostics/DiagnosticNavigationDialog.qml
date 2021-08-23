@@ -19,38 +19,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "keynavdevsection.h"
+import QtQuick 2.15
+import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
 
-using namespace mu::ui;
+StyledDialogView {
+    id: root
 
-KeyNavDevSection::KeyNavDevSection(INavigationSection* section)
-    : AbstractKeyNavDevItem(section), m_section(section)
-{
-}
+    title: "Diagnostic Navigation"
 
-QVariantList KeyNavDevSection::subsections() const
-{
-    return m_subsections;
-}
+    contentHeight: 900
+    contentWidth: 600
 
-void KeyNavDevSection::setSubsections(const QVariantList& subsections)
-{
-    m_subsections = subsections;
-    emit subsectionsChanged();
-    emit panelsCountChanged();
-    emit controlsCountChanged();
-}
-
-int KeyNavDevSection::panelsCount() const
-{
-    return int(m_section->panels().size());
-}
-
-int KeyNavDevSection::controlsCount() const
-{
-    size_t count = 0;
-    for (const INavigationPanel* p : m_section->panels()) {
-        count += p->controls().size();
+    DiagnosticNavigationPanel {
+        anchors.fill: parent
+        anchors.margins: 8
     }
-    return int(count);
 }

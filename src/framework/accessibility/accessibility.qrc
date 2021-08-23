@@ -1,7 +1,0 @@
-<RCC>
-    <qresource prefix="/">
-        <file>qml/MuseScore/Accessibility/AccessibleDevDialog.qml</file>
-        <file>qml/MuseScore/Accessibility/AccessibleDevPanel.qml</file>
-        <file>qml/MuseScore/Accessibility/qmldir</file>
-    </qresource>
-</RCC>

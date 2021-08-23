@@ -22,7 +22,7 @@
 import QtQuick 2.15
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
-import MuseScore.Accessibility 1.0
+import MuseScore.Diagnostics 1.0
 
 Rectangle {
 
@@ -34,7 +34,7 @@ Rectangle {
         accessibleModel.reload()
     }
 
-    AccessibleDevModel {
+    DiagnosticAccessibleModel {
         id: accessibleModel
 
         property int savedY: 0

@@ -52,11 +52,6 @@
 
 #include "dev/interactivetestsmodel.h"
 #include "dev/testdialog.h"
-#include "dev/keynav/keynavdevmodel.h"
-#include "dev/keynav/abstractkeynavdevitem.h"
-#include "dev/keynav/keynavdevsection.h"
-#include "dev/keynav/keynavdevsubsection.h"
-#include "dev/keynav/keynavdevcontrol.h"
 
 using namespace mu::ui;
 using namespace mu::modularity;
@@ -106,7 +101,6 @@ void UiModule::resolveImports()
     if (ir) {
         ir->registerWidgetUri(Uri("musescore://devtools/interactive/testdialog"), TestDialog::static_metaTypeId());
         ir->registerQmlUri(Uri("musescore://devtools/interactive/sample"), "DevTools/Interactive/SampleDialog.qml");
-        ir->registerQmlUri(Uri("musescore://devtools/keynav/controls"), "MuseScore/Ui/KeyNavDevDialog.qml");
     }
 }
 
@@ -137,12 +131,6 @@ void UiModule::registerUiTypes()
 
     qmlRegisterType<InteractiveTestsModel>("MuseScore.Ui", 1, 0, "InteractiveTestsModel");
     qRegisterMetaType<TestDialog>("TestDialog");
-
-    qmlRegisterType<KeyNavDevModel>("MuseScore.Ui", 1, 0, "KeyNavDevModel");
-    qmlRegisterUncreatableType<AbstractKeyNavDevItem>("MuseScore.Ui", 1, 0, "AbstractKeyNavDevItem", "Cannot create a Abstract");
-    qmlRegisterUncreatableType<KeyNavDevSubSection>("MuseScore.Ui", 1, 0, "KeyNavDevSubSection", "Cannot create a KeyNavDevSubSection");
-    qmlRegisterUncreatableType<KeyNavDevSection>("MuseScore.Ui", 1, 0, "KeyNavDevSection", "Cannot create a KeyNavDevSection");
-    qmlRegisterUncreatableType<KeyNavDevControl>("MuseScore.Ui", 1, 0, "KeyNavDevControl", "Cannot create a KeyNavDevControl");
 
     modularity::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(ui_QML_IMPORT);
 }

@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UI_KEYNAVDEVMODEL_H
-#define MU_UI_KEYNAVDEVMODEL_H
+#ifndef MU_DIAGNOSTICS_KEYNAVDEVMODEL_H
+#define MU_DIAGNOSTICS_KEYNAVDEVMODEL_H
 
 #include <QObject>
 #include <QTimer>
@@ -28,17 +28,17 @@
 #include "ui/inavigationcontroller.h"
 #include "async/asyncable.h"
 
-namespace mu::ui {
+namespace mu::diagnostics {
 class AbstractKeyNavDevItem;
-class KeyNavDevModel : public QObject, public async::Asyncable
+class DiagnosticNavigationModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
     Q_PROPERTY(QVariantList sections READ sections NOTIFY sectionsChanged)
 
-    INJECT(ui, INavigationController, navigationController)
+    INJECT(diagnostics, ui::INavigationController, navigationController)
 public:
-    explicit KeyNavDevModel(QObject* parent = nullptr);
+    explicit DiagnosticNavigationModel(QObject* parent = nullptr);
 
     QVariantList sections() const;
 
@@ -51,9 +51,9 @@ signals:
 
 private:
 
-    QVariant toWrap(INavigationSection* s);
-    QVariant toWrap(INavigationPanel* sub);
-    QVariant toWrap(INavigationControl* ctrl);
+    QVariant toWrap(ui::INavigationSection* s);
+    QVariant toWrap(ui::INavigationPanel* sub);
+    QVariant toWrap(ui::INavigationControl* ctrl);
 
     QVariantList m_sections;
     mutable QList<AbstractKeyNavDevItem*> m_memstore;
@@ -61,4 +61,4 @@ private:
 };
 }
 
-#endif // MU_UI_KEYNAVDEVMODEL_H
+#endif // MU_DIAGNOSTICS_KEYNAVDEVMODEL_H

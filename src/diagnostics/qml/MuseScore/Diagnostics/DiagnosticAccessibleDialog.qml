@@ -21,18 +21,19 @@
  */
 import QtQuick 2.15
 import MuseScore.Ui 1.0
-import MuseScore.UiComponents 1.0    
+import MuseScore.UiComponents 1.0
 
 StyledDialogView {
     id: root
 
-    title: "Diagnostics"
+    title: "Diagnostic Accessibility"
 
     contentHeight: 800
     contentWidth: 600
     resizable: true
 
-    DiagnosticsPanel {
+    DiagnosticAccessiblePanel {
         anchors.fill: parent
+        anchors.margins: 8
     }
 }

@@ -69,8 +69,6 @@ private:
 
     bool eventFilter(QObject* watched, QEvent* event) override;
 
-    void devShowControls();
-
     void goToNextSection();
     void goToPrevSection(bool isActivateLastPanel = false);
     void goToNextPanel();

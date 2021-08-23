@@ -26,6 +26,7 @@
 #include "actions/iactionsdispatcher.h"
 #include "actions/actionable.h"
 #include "iinteractive.h"
+#include "accessibility/iaccessibilitycontroller.h"
 
 namespace mu::diagnostics {
 class DiagnosticsActionsController : public actions::Actionable
@@ -37,6 +38,9 @@ public:
     DiagnosticsActionsController() = default;
 
     void init();
+
+private:
+    void openUri(const mu::UriQuery& uri);
 };
 }
 

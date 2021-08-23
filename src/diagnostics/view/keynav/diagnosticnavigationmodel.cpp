@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "keynavdevmodel.h"
+#include "diagnosticnavigationmodel.h"
 
 #include <algorithm>
 
@@ -27,6 +27,7 @@
 #include "keynavdevsubsection.h"
 #include "keynavdevcontrol.h"
 
+using namespace mu::diagnostics;
 using namespace mu::ui;
 
 template<class T>
@@ -51,15 +52,15 @@ static void sortByIndex(QList<T*>& list)
     });
 }
 
-KeyNavDevModel::KeyNavDevModel(QObject* parent)
+DiagnosticNavigationModel::DiagnosticNavigationModel(QObject* parent)
     : QObject(parent)
 {
-    connect(&m_reloadDelayer, &QTimer::timeout, this, &KeyNavDevModel::reload);
+    connect(&m_reloadDelayer, &QTimer::timeout, this, &DiagnosticNavigationModel::reload);
     m_reloadDelayer.setInterval(500);
     m_reloadDelayer.setSingleShot(true);
 }
 
-void KeyNavDevModel::reload()
+void DiagnosticNavigationModel::reload()
 {
     emit beforeReload();
     m_sections.clear();
@@ -78,7 +79,7 @@ void KeyNavDevModel::reload()
     emit afterReload();
 }
 
-QVariant KeyNavDevModel::toWrap(INavigationSection* s)
+QVariant DiagnosticNavigationModel::toWrap(INavigationSection* s)
 {
     KeyNavDevSection* qs = new KeyNavDevSection(s);
     m_memstore.append(qs);
@@ -100,7 +101,7 @@ QVariant KeyNavDevModel::toWrap(INavigationSection* s)
     return QVariant::fromValue(qs);
 }
 
-QVariant KeyNavDevModel::toWrap(INavigationPanel* sub)
+QVariant DiagnosticNavigationModel::toWrap(INavigationPanel* sub)
 {
     KeyNavDevSubSection* qsub = new KeyNavDevSubSection(sub);
     m_memstore.append(qsub);
@@ -122,14 +123,14 @@ QVariant KeyNavDevModel::toWrap(INavigationPanel* sub)
     return QVariant::fromValue(qsub);
 }
 
-QVariant KeyNavDevModel::toWrap(INavigationControl* ctrl)
+QVariant DiagnosticNavigationModel::toWrap(INavigationControl* ctrl)
 {
     KeyNavDevControl* qc = new KeyNavDevControl(ctrl);
     m_memstore.append(qc);
     return QVariant::fromValue(qc);
 }
 
-QVariantList KeyNavDevModel::sections() const
+QVariantList DiagnosticNavigationModel::sections() const
 {
     return m_sections;
 }
