@@ -755,34 +755,6 @@ TieSegment* Tie::layoutBack(System* system)
     return segment;
 }
 
-#if 0
-//---------------------------------------------------------
-//   startEdit
-//---------------------------------------------------------
-
-void Tie::startEdit(EditData& ed)
-{
-    printf("tie start edit %p %p\n", editStartNote, editEndNote);
-    editStartNote = startNote();
-    editEndNote   = endNote();
-    SlurTie::startEdit(ed);
-}
-
-//---------------------------------------------------------
-//   endEdit
-//---------------------------------------------------------
-
-void Tie::endEdit(EditData& ed)
-{
-//printf("tie::endEdit\n");
-//      if (editStartNote != startNote() || editEndNote != endNote()) {
-//            score()->undoStack()->push1(new ChangeSpannerElements(this, editStartNote, editEndNote));
-//            }
-    SlurTie::endEdit(ed);
-}
-
-#endif
-
 //---------------------------------------------------------
 //   setStartNote
 //---------------------------------------------------------

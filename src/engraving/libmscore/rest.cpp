@@ -815,10 +815,7 @@ void Rest::setAccent(bool flag)
             if (durationType() >= TDuration::DurationType::V_HALF) {
                 yOffset -= staff()->spatium(tick()) * 0.5;
             }
-            // undoChangeProperty(Pid::OFFSET, PointF(0.0, yOffset));
             rypos() += yOffset;
-        } else {
-            // undoChangeProperty(Pid::OFFSET, PointF());  TODO::check
         }
     }
 }

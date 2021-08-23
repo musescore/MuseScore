@@ -131,31 +131,4 @@ std::pair<int, int> StaffTypeList::staffTypeRange(const Fraction& tick) const
 
     return { start, end };
 }
-
-//---------------------------------------------------------
-//   StaffTypeList::read
-//---------------------------------------------------------
-
-void StaffTypeList::read(XmlReader& /*e*/, Score* /*cs*/)
-{
-#if 0
-    while (e.readNextStartElement()) {
-        if (e.name() == "key") {
-            Key k;
-            int tick = e.intAttribute("tick", 0);
-            if (e.hasAttribute("custom")) {
-                k = Key::C;              // ke.setCustomType(e.intAttribute("custom"));
-            } else {
-                k = Key(e.intAttribute("idx"));
-            }
-            KeySigEvent ke;
-            ke.setKey(k);
-            (*this)[cs->fileDivision(tick)] = ke;
-            e.readNext();
-        } else {
-            e.unknown();
-        }
-    }
-#endif
-}
 }

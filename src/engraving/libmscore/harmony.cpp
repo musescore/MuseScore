@@ -1616,19 +1616,7 @@ TextSegment::TextSegment(const QString& s, const mu::draw::Font& f, qreal x, qre
 
 qreal TextSegment::width() const
 {
-#if 1
     return mu::draw::FontMetrics::width(m_font, text);
-#else
-    qreal w = 0.0;
-    foreach (QChar c, text) {
-        // if we calculate width by character, at least skip high surrogates
-        if (c.isHighSurrogate()) {
-            continue;
-        }
-        w += fm.width(c);
-    }
-    return w;
-#endif
 }
 
 //---------------------------------------------------------

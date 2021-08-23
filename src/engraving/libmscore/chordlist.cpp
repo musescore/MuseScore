@@ -294,8 +294,6 @@ void HChord::add(const QList<HDegree>& degreeList)
         int dv1 = degreeTable[(d.value() - 1) % 7];
 
         if (d.value() == 7 && d.alter() == 0) {
-            // DEBUG: seventh degree is Bb, not B
-            //        except Maj   (TODO)
             dv -= 1;
         }
 
@@ -345,14 +343,6 @@ static void readRenderList(QString val, QList<RenderAction>& renderList)
                 a.movey = ssl[2].toDouble();
                 renderList.append(a);
             }
-#if 0
-            else if (ssl.size() == 2) {
-                // m:keyword
-                RenderAction a;
-                a.type = RenderAction::RenderActionType::MOVE;
-                // TODO: derive offset from keyword
-            }
-#endif
         } else if (s == ":push") {
             renderList.append(RenderAction(RenderAction::RenderActionType::PUSH));
         } else if (s == ":pop") {
@@ -526,10 +516,6 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
     QString trailing = ")],/\\ ";
     QString initial;
     bool take6 = false, take7 = false, take9 = false, take11 = false, take13 = false;
-#if 0
-// enable this to allow quality or extension to be parenthesized
-    int firstLeadingToken;
-#endif
     int lastLeadingToken;
     int len = s.size();
     int i;
@@ -544,15 +530,6 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
     _understandable = true;
     i = 0;
 
-#if 0
-// enable this code to allow quality to be parenthesized
-// otherwise, parentheses will automatically cause contents to be interpreted as extension or modifier
-    // eat leading parens
-    firstLeadingToken = _tokenList.size();
-    while (i < len && leading.contains(s[i])) {
-        addToken(QString(s[i++]), ChordTokenClass::QUALITY);
-    }
-#endif
     lastLeadingToken = _tokenList.size();
     // get quality
     for (tok1 = "", tok1L = "", initial = ""; i < len; ++i) {
@@ -642,16 +619,6 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
     if (tok1 != "") {
         addToken(tok1, ChordTokenClass::QUALITY);
     }
-#if 0
-// enable this code to allow quality to be parenthesized
-// otherwise, parentheses will automatically cause contents to be interpreted as extension or modifier
-    else {
-        // leading tokens were not really ChordTokenClass::QUALITY
-        for (int t = firstLeadingToken; t < lastLeadingToken; ++t) {
-            _tokenList[t].tokenClass = ChordTokenClass::EXTENSION;
-        }
-    }
-#endif
     if (!syntaxOnly) {
         _xmlKind = _quality;
         _xmlParens = "no";
@@ -668,15 +635,6 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
         addToken(QString(s[i++]), ChordTokenClass::QUALITY);
     }
 
-#if 0
-// enable this code to allow extensions to be parenthesized
-// otherwise, parentheses will automatically cause contents to be interpreted as modifier
-    // eat leading parens
-    firstLeadingToken = _tokenList.size();
-    while (i < len && leading.contains(s[i])) {
-        addToken(QString(s[i++]), ChordTokenClass::EXTENSION);
-    }
-#endif
     lastLeadingToken = _tokenList.size();
     // get extension - up to first non-digit other than comma or slash
     for (tok1 = ""; i < len; ++i) {
@@ -711,19 +669,6 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
     if (tok1 != "") {
         addToken(tok1, ChordTokenClass::EXTENSION);
     }
-#if 0
-// enable this code to allow extensions to be parenthesized
-// otherwise, parentheses will automatically cause contents to be interpreted as modifier
-    else {
-        // leading tokens were not really ChordTokenClass::EXTENSION
-        for (int t = firstLeadingToken; t < lastLeadingToken; ++t) {
-            _tokenList[t].tokenClass = ChordTokenClass::MODIFIER;
-            if (!syntaxOnly) {
-                _xmlParens = "yes";
-            }
-        }
-    }
-#endif
     if (!syntaxOnly) {
         if (_quality == "minor") {
             thirdKey = 3;
@@ -1022,23 +967,6 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
                     hdl += HDegree(d, 0, HDegreeType::SUBTRACT);
                 }
             } else if (tok1L == "sus") {
-#if 0
-// enable this code to export 7sus4 as dominant,sub3,add4 rather than suspended-fourth,add7 (similar for 9sus4, 13sus4)
-// should basically work, but not fully tested
-// probably needs corresponding special casing at end of loop
-                if (_extension == "") {
-                    if (tok2L == "4") {
-                        _xmlKind = "suspended-fourth";
-                    } else if (tok2L == "2") {
-                        _xmlKind = "suspended-second";
-                    }
-                    _xmlText = tok1 + tok2;
-                } else {
-                    _xmlDegrees += "sub3";
-                    tok1L = "add";
-                }
-#else
-// enable this code to export 7sus4 as suspended-fourth,add7 rather than dominant,sub3,add4 (similar for 9sus4, 13sus4)
                 // convert chords with sus into suspended "kind"
                 // extension then becomes a series of degree adds
                 if (tok2L == "4") {
@@ -1067,7 +995,6 @@ bool ParsedChord::parse(const QString& s, const ChordList* cl, bool syntaxOnly, 
                 } else if (_extension == "9") {
                     _xmlDegrees += "add9";
                 }
-#endif
                 susChord = true;
                 chord -= thirdKey;
                 if (d) {
@@ -1732,19 +1659,6 @@ void ChordList::configureAutoAdjust(qreal emag, qreal eadjust, qreal mmag, qreal
     _eadjust = eadjust;
     _mmag = mmag;
     _madjust = madjust;
-#if 0
-    // TODO: regenerate all chord descriptions
-    // currently we always reload the entire chordlist
-    if (_autoAdjust) {
-        for (ChordFont cf : fonts) {
-            if (cf.fontClass == "extension") {
-                cf.mag = _emag;
-            } else if (cf.fontClass == "modifier") {
-                cf.mag = _mmag;
-            }
-        }
-    }
-#endif
 }
 
 //---------------------------------------------------------

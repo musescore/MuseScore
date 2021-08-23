@@ -533,35 +533,6 @@ void Score::print(mu::draw::Painter* painter, int pageNo)
 }
 
 //---------------------------------------------------------
-//   createRevision
-//---------------------------------------------------------
-
-void Score::createRevision()
-{
-#if 0
-    qDebug("createRevision");
-    QBuffer dbuf;
-    dbuf.open(QIODevice::ReadWrite);
-    saveFile(&dbuf, false, false);
-    dbuf.close();
-
-    QByteArray ba1 = readToBuffer();
-
-    QString os = QString::fromUtf8(ba1.data(), ba1.size());
-    QString ns = QString::fromUtf8(dbuf.buffer().data(), dbuf.buffer().size());
-
-    diff_match_patch dmp;
-    Revision* r = new Revision();
-    r->setDiff(dmp.patch_toText(dmp.patch_make(ns, os)));
-    r->setId("1");
-    _revisions->add(r);
-
-//      qDebug("patch:\n%s\n==========", qPrintable(patch));
-    //
-#endif
-}
-
-//---------------------------------------------------------
 //   writeVoiceMove
 //    write <move> and starting <voice> tags to denote
 //    change in position.
@@ -638,15 +609,9 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
     }
 
     QList<Spanner*> spanners;
-#if 0
-    auto endIt   = spanner().upper_bound(endTick);
-    for (auto i = spanner().begin(); i != endIt; ++i) {
-        Spanner* s = i->second;
-#else
     auto sl = spannerMap().findOverlapping(sseg->tick().ticks(), endTick.ticks());
     for (auto i : sl) {
         Spanner* s = i.value;
-#endif
         if (s->generated() || !xml.canWrite(s)) {
             continue;
         }
@@ -774,11 +739,6 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
                 ChordRest* cr = toChordRest(e);
                 cr->writeTupletStart(xml);
             }
-//                  if (segment->isEndBarLine() && (m->mmRestCount() < 0 || m->mmRest())) {
-//                        BarLine* bl = toBarLine(e);
-//TODO                        bl->setBarLineType(m->endBarLineType());
-//                        bl->setVisible(m->endBarLineVisible());
-//                        }
             e->write(xml);
 
             if (e->isChordRest()) {

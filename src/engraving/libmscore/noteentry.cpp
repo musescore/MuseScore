@@ -116,7 +116,7 @@ NoteVal Score::noteValForPosition(Position pos, AccidentalType at, bool& error)
         if (nval.fret > 0 && stringData->stringList().at(strgDataIdx).open == true) {
             nval.fret = 0;
         }
-        nval.pitch = stringData->getPitch(line, nval.fret, st, tick);
+        nval.pitch = stringData->getPitch(line, nval.fret, st);
         break;
     }
 
@@ -437,7 +437,7 @@ void Score::putNote(const Position& p, bool replace)
                             int fret = note->fret() * 10 + nval.fret;
                             if (fret <= stringData->frets()) {
                                 nval.fret = fret;
-                                nval.pitch = stringData->getPitch(nval.string, nval.fret, st, s->tick());
+                                nval.pitch = stringData->getPitch(nval.string, nval.fret, st);
                             } else {
                                 qDebug("can't increase fret to %d", fret);
                             }

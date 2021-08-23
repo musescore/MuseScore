@@ -914,58 +914,6 @@ QString FiguredBassItem::Modifier2MusicXML(FiguredBassItem::Modifier prefix) con
 }
 
 //---------------------------------------------------------
-//   Read MusicXML
-//
-// Set the FiguredBassItem state based on the MusicXML <figure> node de.
-// In MusicXML, parentheses is set to "yes" or "no" for the figured-bass
-// node instead of for each individual <figure> node.
-//---------------------------------------------------------
-
-#if 0
-void FiguredBassItem::readMusicXML(XmlReader& e, bool paren)
-{
-    // read the <figure> node de
-    while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
-        if (tag == "figure-number") {
-            // MusicXML spec states figure-number is a number
-            // MuseScore can only handle single digit
-            int iVal = e.readInt();
-            if (1 <= iVal && iVal <= 9) {
-                _digit = iVal;
-            }
-        } else if (tag == "prefix") {
-            _prefix = MusicXML2Modifier(e.readElementText());
-        } else if (tag == "suffix") {
-            _suffix = MusicXML2Modifier(e.readElementText());
-        } else {
-            e.unknown();
-        }
-    }
-    // set parentheses
-    if (paren) {
-        // parenthesis open
-        if (_prefix != Modifier::NONE) {
-            parenth[0] = Parenthesis::ROUNDOPEN;       // before prefix
-        } else if (_digit != FBIDigitNone) {
-            parenth[1] = Parenthesis::ROUNDOPEN;       // before digit
-        } else if (_suffix != Modifier::NONE) {
-            parenth[2] = Parenthesis::ROUNDOPEN;       // before suffix
-        }
-        // parenthesis close
-        if (_suffix != Modifier::NONE) {
-            parenth[3] = Parenthesis::ROUNDCLOSED;       // after suffix
-        } else if (_digit != FBIDigitNone) {
-            parenth[2] = Parenthesis::ROUNDCLOSED;       // after digit
-        } else if (_prefix != Modifier::NONE) {
-            parenth[1] = Parenthesis::ROUNDCLOSED;       // after prefix
-        }
-    }
-}
-
-#endif
-
-//---------------------------------------------------------
 //   Write MusicXML
 //
 // Writes the portion within the <figure> tag.
@@ -1065,19 +1013,6 @@ FiguredBass::FiguredBass(Score* s)
         setProperty(p.pid, styleValue(p.pid, p.sid));
     }
     setOnNote(true);
-#if 0  // TODO
-    TextStyle st(
-        g_FBFonts[0].family,
-        score()->styleD(Sid::figuredBassFontSize),
-        false,
-        false,
-        false,
-        Align::LEFT | Align::TOP,
-        PointF(0, score()->styleD(Sid::figuredBassYOffset)),
-        OffsetType::SPATIUM);
-    st.setSizeIsSpatiumDependent(true);
-    setElementStyle(st);
-#endif
     setTicks(Fraction(0, 1));
     qDeleteAll(items);
     items.clear();
@@ -1197,17 +1132,6 @@ void FiguredBass::read(XmlReader& e)
 
 void FiguredBass::layout()
 {
-    // if 'our' style, force 'our' style data from FiguredBass parameters
-#if 0
-    if (textStyleType() == StyledPropertyListIdx::FIGURED_BASS) {
-        TextStyle st(g_FBFonts[0].family, score()->styleD(Sid::figuredBassFontSize),
-                     false, false, false, Align::LEFT | Align::TOP, PointF(0, yOff),
-                     OffsetType::SPATIUM);
-        st.setSizeIsSpatiumDependent(true);
-        setTextStyle(st);
-    }
-#endif
-
     // VERTICAL POSITION:
     const qreal y = score()->styleD(Sid::figuredBassYOffset) * spatium();
     setPos(PointF(0.0, y));

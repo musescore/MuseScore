@@ -65,11 +65,11 @@ public:
     StringData(int numFrets, int numStrings, int strings[]);
     StringData(int numFrets, QList<instrString>& strings);
     void        set(const StringData& src);
-    bool        convertPitch(int pitch, Staff* staff, const Fraction& tick, int* string, int* fret) const;
-    int         fret(int pitch, int string, Staff* staff, const Fraction& tick) const;
+    bool        convertPitch(int pitch, Staff* staff, int* string, int* fret) const;
+    int         fret(int pitch, int string, Staff* staff) const;
     void        fretChords(Chord* chord) const;
-    int         getPitch(int string, int fret, Staff* staff, const Fraction& tick) const;
-    static int  pitchOffsetAt(Staff* staff, const Fraction& tick);
+    int         getPitch(int string, int fret, Staff* staff) const;
+    static int  pitchOffsetAt(Staff* staff);
     int         strings() const { return stringTable.size(); }
     int         frettedStrings() const;
     const QList<instrString>& stringList() const { return stringTable; }
@@ -78,7 +78,6 @@ public:
     void        setFrets(int val) { _frets = val; }
     void        read(XmlReader&);
     void        write(XmlWriter&) const;
-    void        writeMusicXML(XmlWriter& xml) const;
     bool operator==(const StringData& d) const { return d._frets == _frets && d.stringTable == stringTable; }
     void        configBanjo5thString();
     int         adjustBanjo5thFret(int fret) const;

@@ -88,7 +88,7 @@ typedef std::vector<std::pair<Fraction, Fraction> > EndPointsVector;
 class ChangeMap : public QMultiMap<Fraction, ChangeEvent>
 {
     bool cleanedUp    { false };
-    static const int DEFAULT_VALUE  { 80 };     // TODO
+    static const int DEFAULT_VALUE  { 80 };
 
     struct ChangeMethodItem {
         ChangeMethod method;

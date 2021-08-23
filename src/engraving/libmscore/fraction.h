@@ -65,16 +65,10 @@ class Fraction
 
 public:
 
-#if 0
-    // implicit conversion from int to Fraction: this is convenient but may hide some potential bugs
-    constexpr Fraction(int z=0, int n=1)
-        : _numerator(z), _denominator(n) {}
-#else
     // no implicit conversion from int to Fraction:
     constexpr Fraction() {}
     constexpr Fraction(int z, int n)
         : _numerator{n < 0 ? -z : z}, _denominator{n < 0 ? -n : n} { }
-#endif
     int numerator() const { return _numerator; }
     int denominator() const { return _denominator; }
     int_least64_t& rnumerator() { return _numerator; }

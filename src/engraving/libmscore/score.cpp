@@ -411,7 +411,6 @@ Score::~Score()
 
     qDeleteAll(_parts);
     qDeleteAll(_staves);
-//      qDeleteAll(_pages);         // TODO: check
     _masterScore = 0;
 
     imageStore.clearUnused();
@@ -890,7 +889,7 @@ void Score::changeEnharmonicSpelling(bool both)
         }
         if (staff->isTabStaff(n->tick())) {
             int string = n->line() + (both ? 1 : -1);
-            int fret = staff->part()->instrument(n->tick())->stringData()->fret(n->pitch(), string, staff, n->chord()->tick());
+            int fret = staff->part()->instrument(n->tick())->stringData()->fret(n->pitch(), string, staff);
             if (fret != -1) {
                 n->undoChangeProperty(Pid::FRET, fret);
                 n->undoChangeProperty(Pid::STRING, string);
@@ -1355,21 +1354,6 @@ bool Score::checkHasMeasures() const
     return true;
 }
 
-#if 0
-//---------------------------------------------------------
-//   moveBracket
-//    columns are counted from right to left
-//---------------------------------------------------------
-
-void Score::moveBracket(int staffIdx, int srcCol, int dstCol)
-{
-    for (System* system : systems()) {
-        system->moveBracket(staffIdx, srcCol, dstCol);
-    }
-}
-
-#endif
-
 //---------------------------------------------------------
 //   spatiumHasChanged
 //---------------------------------------------------------
@@ -1552,19 +1536,6 @@ void Score::addElement(Element* element)
     case ElementType::INSTRUMENT_CHANGE: {
         InstrumentChange* ic = toInstrumentChange(element);
         ic->part()->setInstrument(ic->instrument(), ic->segment()->tick());
-#if 0
-        int tickStart = ic->segment()->tick();
-        auto i = ic->part()->instruments()->upper_bound(tickStart);
-        int tickEnd;
-        if (i == ic->part()->instruments()->end()) {
-            tickEnd = -1;
-        } else {
-            tickEnd = i->first;
-        }
-        Interval oldV = ic->part()->instrument(tickStart)->transpose();
-        ic->part()->setInstrument(ic->instrument(), tickStart);
-        transpositionChanged(ic->part(), oldV, tickStart, tickEnd);
-#endif
         addLayoutFlags(LayoutFlag::REBUILD_MIDI_MAPPING);
         cmdState()._instrumentsChanged = true;
     }
@@ -1730,19 +1701,6 @@ void Score::removeElement(Element* element)
     case ElementType::INSTRUMENT_CHANGE: {
         InstrumentChange* ic = toInstrumentChange(element);
         ic->part()->removeInstrument(ic->segment()->tick());
-#if 0
-        int tickStart = ic->segment()->tick();
-        auto i = ic->part()->instruments()->upper_bound(tickStart);
-        int tickEnd;
-        if (i == ic->part()->instruments()->end()) {
-            tickEnd = -1;
-        } else {
-            tickEnd = i->first;
-        }
-        Interval oldV = ic->part()->instrument(tickStart)->transpose();
-        ic->part()->removeInstrument(tickStart);
-        transpositionChanged(ic->part(), oldV, tickStart, tickEnd);
-#endif
         addLayoutFlags(LayoutFlag::REBUILD_MIDI_MAPPING);
         cmdState()._instrumentsChanged = true;
     }
@@ -2629,18 +2587,6 @@ void Score::removeStaff(Staff* staff)
             }
         }
     }
-#if 0
-    for (Spanner* s : staff->score()->unmanagedSpanners()) {
-        if (s->staffIdx() > idx) {
-            int t = s->track() - VOICES;
-            s->setTrack(t >= 0 ? t : 0);
-            if (s->track2() != -1) {
-                t = s->track2() - VOICES;
-                s->setTrack2(t >= 0 ? t : s->track());
-            }
-        }
-    }
-#endif
     _staves.removeAll(staff);
     staff->part()->removeStaff(staff);
 }
@@ -2662,15 +2608,6 @@ void Score::adjustBracketsDel(int sidx, int eidx)
                 bi->undoChangeProperty(Pid::BRACKET_SPAN, span - (eidx - sidx));
             }
         }
-#if 0 // TODO
-        int span = staff->barLineSpan();
-        if ((sidx >= staffIdx) && (eidx <= (staffIdx + span))) {
-            int newSpan = span - (eidx - sidx) + 1;
-            int lastSpannedStaffIdx = staffIdx + newSpan - 1;
-            int tick = 0;
-            undoChangeBarLineSpan(staff, newSpan, 0, (_staves[lastSpannedStaffIdx]->lines(0) - 1) * 2);
-        }
-#endif
     }
 }
 
@@ -2691,16 +2628,6 @@ void Score::adjustBracketsIns(int sidx, int eidx)
                 bi->undoChangeProperty(Pid::BRACKET_SPAN, span + (eidx - sidx));
             }
         }
-#if 0 // TODO
-        int span = staff->barLineSpan();
-        if ((sidx >= staffIdx) && (eidx < (staffIdx + span))) {
-            int idx = staffIdx + span - 1;
-            if (idx >= _staves.size()) {
-                idx = _staves.size() - 1;
-            }
-            undoChangeBarLineSpan(staff, span, 0, (_staves[idx]->lines() - 1) * 2);
-        }
-#endif
     }
 }
 
@@ -2919,15 +2846,6 @@ void Score::cmdConcertPitchChanged(bool flag)
 }
 
 //---------------------------------------------------------
-//   addAudioTrack
-//---------------------------------------------------------
-
-void Score::addAudioTrack()
-{
-    // TODO
-}
-
-//---------------------------------------------------------
 //   padToggle
 //---------------------------------------------------------
 
@@ -3074,7 +2992,7 @@ void Score::padToggle(Pad p, const EditData& ed)
                             nval.string = _is.string();
                             const Instrument* instr = s->part()->instrument(tick);
                             const StringData* stringData = instr->stringData();
-                            nval.pitch = stringData->getPitch(nval.string, nval.fret, s, tick);
+                            nval.pitch = stringData->getPitch(nval.string, nval.fret, s);
                         } else if (s->isDrumStaff(tick)) {
                             // drum - use selected drum palette note
                             int n = _is.drumNote();
@@ -5025,40 +4943,6 @@ void Score::changeSelectedNotesVoice(int voice)
     }
     setLayoutAll();
 }
-
-#if 0
-//---------------------------------------------------------
-//   cropPage - crop a single page score to the content
-///    margins will be applied on the 4 sides
-//---------------------------------------------------------
-
-void Score::cropPage(qreal margins)
-{
-    if (npages() == 1) {
-        Page* page = pages()[0];
-        if (page) {
-            RectF ttbox = page->tbbox();
-
-            qreal margin = margins / INCH;
-            f.setSize(SizeF((ttbox.width() / DPI) + 2 * margin, (ttbox.height() / DPI) + 2 * margin));
-
-            qreal offset = curFormat->oddLeftMargin() - ttbox.x() / DPI;
-            if (offset < 0) {
-                offset = 0.0;
-            }
-            f.setOddLeftMargin(margin + offset);
-            f.setEvenLeftMargin(margin + offset);
-            f.setOddBottomMargin(margin);
-            f.setOddTopMargin(margin);
-            f.setEvenBottomMargin(margin);
-            f.setEvenTopMargin(margin);
-
-            undoChangePageFormat(&f, spatium(), pageNumberOffset());
-        }
-    }
-}
-
-#endif
 
 //---------------------------------------------------------
 //   getProperty

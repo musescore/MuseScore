@@ -663,7 +663,7 @@ QModelIndex PaletteProvider::poolPaletteIndex(const QModelIndex& index, Ms::Filt
 FilterPaletteTreeModel* PaletteProvider::poolPaletteModel(const QModelIndex& index) const
 {
     const QModelIndex filterIndex = convertProxyIndex(index, m_userPaletteModel);
-    PaletteCellFilter* filter = m_userPaletteModel->getFilter(filterIndex);   // TODO: or mainPalette?
+    PaletteCellFilter* filter = m_userPaletteModel->getFilter(filterIndex);
     if (!filter) {
         return nullptr;
     }

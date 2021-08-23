@@ -127,7 +127,7 @@ bool SlurSegment::edit(EditData& ed)
         return true;
     }
     if (ed.key == Qt::Key_Home && !ed.modifiers) {
-        ups(ed.curGrip).off = PointF();              //TODO
+        ups(ed.curGrip).off = PointF();
         sl->layout();
         return true;
     }
@@ -514,7 +514,6 @@ static qreal fixArticulations(qreal yo, Chord* c, qreal _up, bool stemSide = fal
     // yo = current offset of slur from chord position
     // return unchanged position, or position of outmost "close" articulation
     //
-#if 1
     for (Articulation* a : c->articulations()) {
         if (!a->layoutCloseToNote() || !a->addToSkyline()) {
             continue;
@@ -530,25 +529,6 @@ static qreal fixArticulations(qreal yo, Chord* c, qreal _up, bool stemSide = fal
         }
     }
     return yo;
-#else
-    const QVector<Articulation*>& al = c->articulations();
-    if (al.size() >= 2) {
-        Articulation* a = al.at(1);
-        if (a->up() == c->up() && !stemSide) {
-            return yo;
-        } else if (a->layoutCloseToNote()) {
-            return a->y() + (a->height() + c->score()->spatium() * .3) * _up;
-        }
-    } else if (al.size() >= 1) {
-        Articulation* a = al.at(0);
-        if (a->up() == c->up() && !stemSide) {
-            return yo;
-        } else if (a->layoutCloseToNote()) {
-            return a->y() + (a->height() + c->score()->spatium() * .3) * _up;
-        }
-    }
-    return yo;
-#endif
 }
 
 //---------------------------------------------------------

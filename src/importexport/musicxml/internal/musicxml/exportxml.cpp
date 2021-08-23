@@ -4964,18 +4964,9 @@ void ExportMusicXml::lyrics(const std::vector<Lyrics*>* ll, const int trk)
                 // write formatted
                 MScoreTextToMXML mttm("text", attr, defFmt, mtf);
                 mttm.writeTextFragments(l->fragmentList(), _xml);
-#if 0
-                /*
-                 Temporarily disabled because it doesn't work yet (and thus breaks the regression test).
-                 See MusicXml::xmlLyric: "// TODO-WS      l->setTick(tick);"
-                if((l)->endTick() > 0)
-                      xml.tagE("extend");
-                */
-#else
                 if (l->ticks().isNotZero()) {
                     _xml.tagE("extend");
                 }
-#endif
                 _xml.etag();
             }
         }
@@ -5356,18 +5347,6 @@ void ExportMusicXml::work(const MeasureBase* /*measure*/)
         _xml.tag("movement-title", _score->metaTag("movementTitle"));
     }
 }
-
-#if 0
-//---------------------------------------------------------
-//   elementRighter // used for harmony order
-//---------------------------------------------------------
-
-static bool elementRighter(const Element* e1, const Element* e2)
-{
-    return e1->x() < e2->x();
-}
-
-#endif
 
 //---------------------------------------------------------
 //  measureRepeat -- write measure-repeat
@@ -7440,42 +7419,7 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
         break;
         }
         _xml.etag();           // harmony
-#if 0
-        // prior to 2.0, MuseScore exported unrecognized chords as plain text
-        xml.stag("direction");
-        xml.stag("direction-type");
-        xml.tag("words", h->text());
-        xml.etag();
-        xml.etag();
-#endif
     }
-#if 0
-    // this is very old code that may never have actually been used
-    xml.tag(QString("kind text=\"%1\"").arg(h->extensionName()), extension);
-    for (int i = 0; i < h->numberOfDegrees(); i++) {
-        HDegree hd = h->degree(i);
-        HDegreeType tp = hd.type();
-        if (tp == HDegreeType::ADD || tp == HDegreeType::ALTER || tp == HDegreeType::SUBTRACT) {
-            xml.stag("degree");
-            xml.tag("degree-value", hd.value());
-            xml.tag("degree-alter", hd.alter());
-            switch (tp) {
-            case HDegreeType::ADD:
-                xml.tag("degree-type", "add");
-                break;
-            case HDegreeType::ALTER:
-                xml.tag("degree-type", "alter");
-                break;
-            case HDegreeType::SUBTRACT:
-                xml.tag("degree-type", "subtract");
-                break;
-            default:
-                break;
-            }
-            xml.etag();
-        }
-    }
-#endif
 }
 
 //---------------------------------------------------------

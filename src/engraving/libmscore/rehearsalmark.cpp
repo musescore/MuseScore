@@ -76,7 +76,7 @@ void RehearsalMark::layout()
             } else {
                 // header at start of system
                 // align to a point just after the header
-                Element* e = header->element(track());              // TODO: firstVisibleStaff
+                Element* e = header->element(track());
                 qreal w = e ? e->width() : header->width();
                 rxpos() = header->x() + w - s->x();
 

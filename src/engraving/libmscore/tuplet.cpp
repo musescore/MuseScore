@@ -136,28 +136,6 @@ void Tuplet::setVisible(bool f)
     }
 }
 
-#if 0
-//---------------------------------------------------------
-//   tick
-//---------------------------------------------------------
-
-Fraction Tuplet::tick() const
-{
-    std::vector<DurationElement*> _elements;
-
-    const DurationElement* de = this;
-    while (de->isTuplet()) {
-        const Tuplet* t = toTuplet(de);
-        if (t->_elements.empty()) {
-            return Fraction(0, 1);
-        }
-        de = t->_elements.front();
-    }
-    return toChordRest(de)->tick();
-}
-
-#endif
-
 //---------------------------------------------------------
 //   rtick
 //---------------------------------------------------------

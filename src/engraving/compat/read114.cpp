@@ -414,13 +414,13 @@ static bool readTextProperties(XmlReader& e, TextBase* t, Element*)
         }
         t->setAlign(align);
         t->setPropertyFlags(Pid::ALIGN, PropertyFlags::UNSTYLED);
-    } else if (tag == "rxoffset") {       // TODO
+    } else if (tag == "rxoffset") {
         e.readElementText();
-    } else if (tag == "ryoffset") {       // TODO
+    } else if (tag == "ryoffset") {
         e.readElementText();
-    } else if (tag == "yoffset") {       // TODO
+    } else if (tag == "yoffset") {
         e.readElementText();
-    } else if (tag == "systemFlag") {       // TODO
+    } else if (tag == "systemFlag") {
         e.readElementText();
     } else if (!t->readProperties(e)) {
         return false;
@@ -1282,7 +1282,7 @@ static void readVolta114(XmlReader& e, Volta* volta)
                 volta->endings().append(i);
             }
         } else if (tag == "subtype") {
-            e.readInt();          // TODO
+            e.readInt();
         } else if (tag == "lineWidth") {
             volta->setLineWidth(e.readDouble() * volta->spatium());
             volta->setPropertyFlags(Pid::LINE_WIDTH, PropertyFlags::UNSTYLED);
@@ -2091,7 +2091,6 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                 // force the marker type for correct display
                 a->setXmlText("");
                 a->setMarkerType(a->markerType());
-//TODO::ws                        a->initElementStyle(Tid::REPEAT_LEFT);
             }
             m->add(a);
         } else if (tag == "Image") {
@@ -2737,9 +2736,6 @@ static void readStyle(MStyle* style, XmlReader& e, ReadChordListHook& readChordL
         }
 
         if (tag == "TextStyle") {
-//                  TextStyle s;
-//TODO                  s.read(e);
-//                  style->setTextStyle(s);
             e.skipCurrentElement();
         } else if (tag == "lyricsMinBottomDistance") {
             // no longer meaningful since it is now measured from skyline rather than staff
@@ -2778,7 +2774,6 @@ static void readStyle(MStyle* style, XmlReader& e, ReadChordListHook& readChordL
                 e.skipCurrentElement();
             }
         }
-//TODO                  style->convertToUnit(tag, val);
     }
 
     bool disableHarmonyPlay = MScore::harmonyPlayDisableCompatibility && !MScore::testMode;
@@ -2787,26 +2782,6 @@ static void readStyle(MStyle* style, XmlReader& e, ReadChordListHook& readChordL
     }
 
     readChordListHook.validate();
-
-#if 0 // TODO
-      //
-      //  Compatibility with old scores/styles:
-      //  translate old frameWidthMM and paddingWidthMM
-      //  into spatium units
-      //
-    int n = style->textStyles().size();
-    qreal _spatium = style->value(Sid::spatium).toDouble();
-    qreal spMM = _spatium / DPMM;
-    for (int i = 0; i < n; ++i) {
-        TextStyle* s = &style->textStyle(StyledPropertyListIdx(i));
-        if (s->frameWidthMM() != 0.0) {
-            s->setFrameWidth(Spatium(s->frameWidthMM() / spMM));
-        }
-        if (s->paddingWidthMM() != 0.0) {
-            s->setPaddingWidth(Spatium(s->paddingWidthMM() / spMM));
-        }
-    }
-#endif
 }
 
 //---------------------------------------------------------
@@ -3108,16 +3083,6 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e)
                 }
                 ChordRest* cr = toChordRest(s->element(track));
                 if (cr) {
-#if 0 // TODO
-                    if (cr->isRest()) {
-                        Rest* r = toRest(cr);
-                        if (!r->offset().isNull()) {
-                            int lineOffset = r->computeLineOffset();
-                            qreal lineDist = r->staff() ? r->staff()->staffType(cr->tick())->lineDistance().val() : 1.0;
-                            r->rUserYoffset() -= (lineOffset * .5 * lineDist * r->spatium());
-                        }
-                    }
-#endif
                     if (!first) {
                         switch (cr->beamMode()) {
                         case Beam::Mode::AUTO:

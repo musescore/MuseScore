@@ -2091,22 +2091,11 @@ void TextBase::layoutFrame()
     }
 
     if (square()) {
-#if 0
-        // "real" square
-        if (frame.width() > frame.height()) {
-            qreal w = frame.width() - frame.height();
-            frame.adjust(0.0, -w * .5, 0.0, w * .5);
-        } else {
-            qreal w = frame.height() - frame.width();
-            frame.adjust(-w * .5, 0.0, w * .5, 0.0);
-        }
-#else
         // make sure width >= height
         if (frame.height() > frame.width()) {
             qreal w = frame.height() - frame.width();
             frame.adjust(-w * .5, 0.0, w * .5, 0.0);
         }
-#endif
     } else if (circle()) {
         if (frame.width() > frame.height()) {
             frame.setY(frame.y() + (frame.width() - frame.height()) * -.5);
@@ -2681,7 +2670,6 @@ QString TextBase::plainText() const
 
 QString TextBase::xmlText() const
 {
-#if 1
     // this is way too expensive
     // what side effects has genText() ?
     // this method is const by design
@@ -2696,12 +2684,6 @@ QString TextBase::xmlText() const
         text = tmpText.get();
     }
     return text->_text;
-#else
-    if (textInvalid) {
-        genText();
-    }
-    return _text;
-#endif
 }
 
 //---------------------------------------------------------

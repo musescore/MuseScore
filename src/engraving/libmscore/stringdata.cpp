@@ -127,9 +127,9 @@ void StringData::write(XmlWriter& xml) const
 //          from highest (0) to lowest (strings()-1)
 //---------------------------------------------------------
 
-bool StringData::convertPitch(int pitch, Staff* staff, const Fraction& tick, int* string, int* fret) const
+bool StringData::convertPitch(int pitch, Staff* staff, int* string, int* fret) const
 {
-    return convertPitch(pitch, pitchOffsetAt(staff, tick), string, fret);
+    return convertPitch(pitch, pitchOffsetAt(staff), string, fret);
 }
 
 //---------------------------------------------------------
@@ -140,9 +140,9 @@ bool StringData::convertPitch(int pitch, Staff* staff, const Fraction& tick, int
 //    Note: frets above max fret are accepted.
 //---------------------------------------------------------
 
-int StringData::getPitch(int string, int fret, Staff* staff, const Fraction& tick) const
+int StringData::getPitch(int string, int fret, Staff* staff) const
 {
-    return getPitch(string, fret, pitchOffsetAt(staff, tick));
+    return getPitch(string, fret, pitchOffsetAt(staff));
 }
 
 //---------------------------------------------------------
@@ -152,9 +152,9 @@ int StringData::getPitch(int string, int fret, Staff* staff, const Fraction& tic
 //    Returns INVALID_FRET_INDEX if not possible
 //---------------------------------------------------------
 
-int StringData::fret(int pitch, int string, Staff* staff, const Fraction& tick) const
+int StringData::fret(int pitch, int string, Staff* staff) const
 {
-    return fret(pitch, string, pitchOffsetAt(staff, tick));
+    return fret(pitch, string, pitchOffsetAt(staff));
 }
 
 //---------------------------------------------------------
@@ -318,10 +318,9 @@ int StringData::frettedStrings() const
 //   For string data calculations, pitch offset may depend on transposition, capos and, possibly, ottavas.
 //---------------------------------------------------------
 
-int StringData::pitchOffsetAt(Staff* staff, const Fraction& /*tick*/)
+int StringData::pitchOffsetAt(Staff* staff)
 {
-    int transp = staff ? staff->part()->instrument()->transpose().chromatic : 0;    // TODO: tick?
-    return /*staff->pitchOffset(tick)*/ -transp;
+    return -(staff ? staff->part()->instrument()->transpose().chromatic : 0);
 }
 
 //********************
@@ -526,99 +525,5 @@ int StringData::adjustBanjo5thFret(int fret) const
 bool StringData::isFiveStringBanjo() const
 {
     return stringTable.size() == 5 && stringTable[0].pitch > stringTable[1].pitch;
-}
-
-#if 0
-//---------------------------------------------------------
-//   MusicXMLStepAltOct2Pitch
-//---------------------------------------------------------
-
-/**
- Convert MusicXML \a step / \a alter / \a octave to midi pitch.
- Note: similar to (part of) xmlSetPitch in mscore/importxml.cpp.
- TODO: combine ?
- */
-
-static int MusicXMLStepAltOct2Pitch(char step, int alter, int octave)
-{
-    int istep = step - 'A';
-    //                       a  b   c  d  e  f  g
-    static int table[7]  = { 9, 11, 0, 2, 4, 5, 7 };
-    if (istep < 0 || istep > 6) {
-        qDebug("MusicXMLStepAltOct2Pitch: illegal step %d, <%c>", istep, step);
-        return -1;
-    }
-    int pitch = table[istep] + alter + (octave + 1) * 12;
-
-    if (pitch < 0) {
-        pitch = -1;
-    }
-    if (pitch > 127) {
-        pitch = -1;
-    }
-
-    return pitch;
-}
-
-//---------------------------------------------------------
-//   Read MusicXML
-//---------------------------------------------------------
-
-void StringData::readMusicXML(XmlReader& e)
-{
-    _frets = 25;
-
-    while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
-        if (tag == "staff-lines") {
-            int val = e.readInt();
-            if (val > 0) {
-                // resize the string table and init with zeroes
-                stringTable = QVector<int>(val).toList();
-            } else {
-                qDebug("StringData::readMusicXML: illegal staff-lines %d", val);
-            }
-        } else if (tag == "staff-tuning") {
-            int line   = e.intAttribute("line");
-            QString step;
-            int alter  = 0;
-            int octave = 0;
-            while (e.readNextStartElement()) {
-                const QStringRef& tag(e.name());
-                if (tag == "tuning-alter") {
-                    alter = e.readInt();
-                } else if (tag == "tuning-octave") {
-                    octave = e.readInt();
-                } else if (tag == "tuning-step") {
-                    step = e.readElementText();
-                } else {
-                    e.unknown();
-                }
-            }
-            if (0 < line && line <= stringTable.size()) {
-                int pitch = MusicXMLStepAltOct2Pitch(step[0].toLatin1(), alter, octave);
-                if (pitch >= 0) {
-                    stringTable[line - 1] = pitch;
-                } else {
-                    qDebug("StringData::readMusicXML invalid string %d tuning step/alter/oct %s/%d/%d",
-                           line, qPrintable(step), alter, octave);
-                }
-            }
-        } else if (tag == "capo") {
-            // not supported: silently ignored
-        } else {
-            // others silently ignored
-        }
-    }
-}
-
-#endif
-
-//---------------------------------------------------------
-//   Write MusicXML
-//---------------------------------------------------------
-
-void StringData::writeMusicXML(XmlWriter& /*xml*/) const
-{
 }
 }

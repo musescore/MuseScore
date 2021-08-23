@@ -30,50 +30,6 @@
 
 namespace Ms {
 //---------------------------------------------------------
-//   charFormat2QString
-//    convert charFormat to QString for debug print
-//---------------------------------------------------------
-
-#if 0
-static QString charFormat2QString(const CharFormat& f)
-{
-    return QString("b %1 i %2 u %3 va %4 fs %5 fam %6")
-           .arg(f.bold())
-           .arg(f.italic())
-           .arg(f.underline())
-           .arg(static_cast<int>(f.valign()))
-           .arg(f.fontSize())
-           .arg(f.fontFamily())
-    ;
-}
-
-void dumpText(const QList<TextFragment>& list)
-{
-    qDebug("MScoreTextToMXML::dumpText %d fragment(s)", list.size());
-    for (const TextFragment& f : list) {
-        QString t = "fragment";
-        if (f.format.type() == CharFormatType::TEXT) {
-            t += QString(" text '%1'").arg(f.text);
-            t += QString(" len %1").arg(f.text.size());
-        } else {
-            t += " syms";
-            int len = 0;
-            for (const SymId id : f.ids) {
-                t += QString(" '%1'").arg(Sym::id2name(id));
-                QString s = QString("<sym>%1</sym>").arg(Sym::id2name(id));
-                len += s.size();
-            }
-            t += QString(" len %1").arg(len);
-        }
-        t += " format ";
-        t += charFormat2QString(f.format);
-        qDebug("%s", qPrintable(t));
-    }
-}
-
-#endif
-
-//---------------------------------------------------------
 //   MScoreTextToMXML
 //---------------------------------------------------------
 

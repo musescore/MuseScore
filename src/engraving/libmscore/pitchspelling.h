@@ -32,19 +32,6 @@ enum class Key;
 
 const int INVALID_PITCH      = -1;
 
-#if 0
-enum {
-    STEP_NONE      = -1,
-    STEP_C,
-    STEP_D,
-    STEP_E,
-    STEP_F,
-    STEP_G,
-    STEP_A,
-    STEP_B
-};
-#endif
-
 // a list of tpc's, with legal ranges, not really an enum, so no way to cnvert into a class
 enum Tpc : signed char {
     TPC_INVALID = -9,

@@ -123,7 +123,6 @@ public:
     bool showTips() const;
 
     void startEdit(EditData& ed) override;
-    void endEdit(EditData&) override;
     void editDrag(EditData&) override;
     void endEditDrag(EditData&) override;
     Shape shape() const override;

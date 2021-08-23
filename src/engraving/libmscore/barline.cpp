@@ -946,7 +946,6 @@ Element* BarLine::drop(EditData& data)
             if (bl->spanFrom() || bl->spanTo()) {
                 // if dropped spanFrom or spanTo are below the middle of standard staff (5 lines)
                 // adjust to the number of staff lines
-                // TODO:barlines
                 int spanFrom   = bl->spanFrom();
                 int spanTo     = bl->spanTo();
                 undoChangeProperty(Pid::BARLINE_SPAN, false);
@@ -1055,124 +1054,6 @@ void BarLine::startEdit(EditData& ed)
 }
 
 //---------------------------------------------------------
-//   endEdit
-//---------------------------------------------------------
-
-void BarLine::endEdit(EditData&)
-{
-#if 0 // TODO
-    if (ctrlDrag) {                             // if single bar line edit
-        char newSpanStaff = _spanStaff;              // copy edited span values
-        char newSpanFrom  = _spanFrom;
-        char newSpanTo    = _spanTo;
-        _spanStaff        = _origSpanStaff;          // restore original span values
-        _spanFrom         = _origSpanFrom;
-        _spanTo           = _origSpanTo;
-        // for mid-measure barline in root score, update parts
-        if (midMeasure && score()->isMaster() && score()->excerpts().size() > 0) {
-            int currIdx = staffIdx();
-            Measure* m = segment()->measure();
-            // change linked barlines as necessary
-            int lastIdx = currIdx + qMax(_span, newSpanStaff);
-            for (int idx = currIdx; idx < lastIdx; ++idx) {
-                Staff* staff = score()->staff(idx);
-                LinkedStaves* ls = staff->linkedStaves();
-                if (ls) {
-                    for (Staff* lstaff : ls->staves()) {
-                        Score* lscore = lstaff->score();
-                        // don't change barlines in root score
-                        if (lscore == staff->score()) {
-                            continue;
-                        }
-                        // change barline only in top staff of part
-                        if (lstaff != lscore->staff(0)) {
-                            continue;
-                        }
-                        int spannedStaves = qMax(currIdx + newSpanStaff - idx, 0);
-                        int lNewSpan = qMin(spannedStaves, lscore->nstaves());
-                        Measure* lm = lscore->tick2measure(m->tick());
-                        Segment* lseg = lm->undoGetSegmentR(SegmentType::BarLine, rtick());
-                        BarLine* lbl = toBarLine(lseg->element(0));
-                        if (lbl) {
-                            // already a barline here
-                            if (lNewSpan > 0) {
-                                // keep barline, but update span if necessary
-                                if (lbl->span() != lNewSpan) {
-                                    lbl->undoChangeProperty(Pid::BARLINE_SPAN, lNewSpan);
-                                }
-                            } else {
-                                // remove barline
-                                lbl->unlink();
-                                lbl->score()->undoRemoveElement(lbl);
-                            }
-                        } else {
-                            // new barline needed
-                            lbl = toBarLine(linkedClone());
-                            lbl->setSpan(lNewSpan);
-                            lbl->setTrack(lstaff->idx() * VOICES);
-                            lbl->setScore(lscore);
-                            lbl->setParent(lseg);
-                            lscore->undoAddElement(lbl);
-                        }
-                    }
-                }
-            }
-        }
-        undoChangeProperty(Pid::BARLINE_SPAN,      newSpanStaff);
-        undoChangeProperty(Pid::BARLINE_SPAN_FROM, newSpanFrom);
-        undoChangeProperty(Pid::BARLINE_SPAN_FROM, newSpanTo);
-        return;
-    }
-
-    // if same as staff settings, do nothing
-    if (staff()->barLineSpan() == _spanStaff && staff()->barLineFrom() == _spanFrom && staff()->barLineTo() == _spanTo) {
-        return;
-    }
-
-//      int idx1 = staffIdx();
-    if (_span != staff()->barLineSpan()) {
-        // if now bar lines span more staves
-        if (_span > staff()->barLineSpan()) {
-            int idx2 = idx1 + _span;
-            // set span 0 to all additional staves
-            for (int idx = idx1 + 1; idx < idx2; ++idx) {
-                // Mensurstrich special case:
-                // if line spans to top line of a stave AND current staff is
-                //    the last spanned staff BUT NOT the last score staff
-                //          keep its bar lines
-                // otherwise remove them
-                if (_spanTo > 0 || !(idx == idx2 - 1 && idx != score()->nstaves() - 1)) {
-                    Staff* staff = score()->staff(idx);
-                    staff->undoChangeProperty(Pid::STAFF_BARLINE_SPAN,      0);
-                    staff->undoChangeProperty(Pid::STAFF_BARLINE_SPAN_FROM, 0);
-                    staff->undoChangeProperty(Pid::STAFF_BARLINE_SPAN_TO,   (staff->lines(tick()) - 1) * 2);
-                }
-            }
-        }
-        // if now bar lines span fewer staves
-        else {
-            int idx1 = staffIdx() + _span;
-            int idx2 = staffIdx() + staff()->barLineSpan();
-            // set standard span for each no-longer-spanned staff
-            for (int idx = idx1; idx < idx2; ++idx) {
-                Staff* staff = score()->staff(idx);
-                int lines = staff->lines(tick());
-                int spanFrom = 0;
-                int spanTo   = 0;
-                staff->undoChangeProperty(Pid::STAFF_BARLINE_SPAN,      1);
-                staff->undoChangeProperty(Pid::STAFF_BARLINE_SPAN_FROM, spanFrom);
-                staff->undoChangeProperty(Pid::STAFF_BARLINE_SPAN_TO,   spanTo);
-            }
-        }
-    }
-    // update span for the staff the edited bar line belongs to
-    staff()->undoChangeProperty(Pid::STAFF_BARLINE_SPAN,      _spanStaff);
-    staff()->undoChangeProperty(Pid::STAFF_BARLINE_SPAN_FROM, _spanFrom);
-    staff()->undoChangeProperty(Pid::STAFF_BARLINE_SPAN_TO,   _spanTo);
-#endif
-}
-
-//---------------------------------------------------------
 //   editDrag
 //---------------------------------------------------------
 
@@ -1185,25 +1066,6 @@ void BarLine::editDrag(EditData& ed)
     if (ed.curGrip == Grip::START) {
         // Start grip moving is useless currently, so disable it
         return;
-#if 0
-        // min offset for top grip is line -1 (-2 for 1-line staves)
-        // max offset is 1 line above bottom grip or 1 below last staff line, whichever comes first
-        int lines = staff()->lines(tick());
-        qreal min = (-y1 - lines == 1) ? lineDist * 2 : lineDist;
-        qreal max = y2 - y1 - lineDist;                                       // 1 line above bottom grip
-        qreal lastmax = (lines - _spanFrom / 2) * lineDist;        // 1 line below last staff line
-        if (lastmax < max) {
-            max = lastmax;
-        }
-        // update yoff1 and bring it within limits
-        bed->yoff1 += ed.delta.y();
-        if (bed->yoff1 < min) {
-            bed->yoff1 = min;
-        }
-        if (bed->yoff1 > max) {
-            bed->yoff1 = max;
-        }
-#endif
     } else {
         // min for bottom grip is 1 line below top grip
         const qreal min = y1 - y2 + lineDist;
@@ -1267,49 +1129,8 @@ void BarLine::endEditDrag(EditData& ed)
     }
 
     // determine new spanFrom and spanTo values
-    int newSpanFrom, newSpanTo;
-//      Staff * staff2    = score()->staff(staffIdx2);
-//      int staff1lines   = staff()->lines(tick());
-//      int staff2lines   = staff2->lines(tick());
-
-#if 0       // TODO
-    if (shiftDrag) {                      // if precision dragging
-        newSpanFrom = _spanFrom;
-        if (yoff1 != 0.0) {
-            // round bar line top coord to nearest line of 1st staff (in half line dist units)
-            newSpanFrom = ((int)floor(y1 / (staff()->lineDistance(tick()) * spatium()) + 0.5)) * 2;
-            // min = 1 line dist above 1st staff line | max = 1 line dist below last staff line
-            // except for 1-line staves
-            int minFrom = staff1lines == 1 ? BARLINE_SPAN_1LINESTAFF_FROM : MIN_BARLINE_SPAN_FROMTO;
-            if (newSpanFrom < minFrom) {
-                newSpanFrom = minFrom;
-            }
-            if (newSpanFrom > staff1lines * 2) {
-                newSpanFrom = staff1lines * 2;
-            }
-        }
-
-        newSpanTo = _spanTo;
-        if (yoff2 != 0.0) {
-            // round bar line bottom coord to nearest line of 2nd staff (in half line dist units)
-            qreal staff2TopY = systTopY + syst->staff(staffIdx2)->y();
-            newSpanTo = ((int)floor((ay2 - staff2TopY) / (staff2->lineDistance(tick()) * spatium()) + 0.5)) * 2;
-            // min = 1 line dist above 1st staff line | max = 1 line dist below last staff line
-            int maxTo = staff2lines == 1 ? BARLINE_SPAN_1LINESTAFF_TO : staff2lines * 2;
-            if (newSpanTo < MIN_BARLINE_SPAN_FROMTO) {
-                newSpanTo = MIN_BARLINE_SPAN_FROMTO;
-            }
-            if (newSpanTo > maxTo) {
-                newSpanTo = maxTo;
-            }
-        }
-    }
-#endif
-//      else {                              // if coarse dragging
-    {                                   // if coarse dragging
-        newSpanFrom = 0;
-        newSpanTo   = 0;
-    }
+    int newSpanFrom = 0;
+    int newSpanTo = 0;
 
     bool localDrag = ed.control() || segment()->isBarLineType();
     if (localDrag) {

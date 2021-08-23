@@ -645,18 +645,7 @@ Element* Score::nextElement()
                 return score()->firstElement();
             }
         }
-#if 1
         case ElementType::VOLTA_SEGMENT:
-#else
-        case ElementType::VOLTA_SEGMENT: {
-            // TODO: see Spanner::nextSpanner()
-            System* sys = toSpannerSegment(e)->system();
-            if (sys) {
-                staffId = sys->firstVisibleStaff();
-            }
-        }
-            // fall through
-#endif
         case ElementType::SLUR_SEGMENT:
         case ElementType::TEXTLINE_SEGMENT:
         case ElementType::HAIRPIN_SEGMENT:
@@ -770,18 +759,7 @@ Element* Score::prevElement()
             Segment* s = toSegment(e);
             return s->prevElement(staffId);
         }
-#if 1
         case ElementType::VOLTA_SEGMENT:
-#else
-        case ElementType::VOLTA_SEGMENT: {
-            // TODO: see Spanner::nextSpanner()
-            System* sys = toSpannerSegment(e)->system();
-            if (sys) {
-                staffId = sys->firstVisibleStaff();
-            }
-        }
-            // fall through
-#endif
         case ElementType::SLUR_SEGMENT:
         case ElementType::TEXTLINE_SEGMENT:
         case ElementType::HAIRPIN_SEGMENT:

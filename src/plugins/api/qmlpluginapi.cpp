@@ -309,7 +309,6 @@ void PluginAPI::registerQmlTypes()
     qmlRegisterType<FileIO, 1>("FileIO",    3, 0, "FileIO");
     //-----------mscore bindings
     qmlRegisterUncreatableMetaObject(Ms::staticMetaObject, "MuseScore", 3, 0, "Ms", enumErr);
-//            qmlRegisterUncreatableType<Direction>("MuseScore", 3, 0, "Direction", QObject::tr(enumErr));
 
     if (-1 == qmlRegisterType<PluginAPI>("MuseScore", 3, 0, "MuseScore")) {
         qWarning("qmlRegisterType failed: MuseScore");
@@ -317,7 +316,6 @@ void PluginAPI::registerQmlTypes()
 
     qmlRegisterUncreatableType<Enum>("MuseScore", 3, 0, "MuseScoreEnum", "Cannot create an enumeration");
 
-//             qmlRegisterType<MScore>     ("MuseScore", 3, 0, "MScore");
     qmlRegisterType<ScoreView>("MuseScore", 3, 0, "ScoreView");
 
     qmlRegisterType<Cursor>("MuseScore", 3, 0, "Cursor");
@@ -336,41 +334,8 @@ void PluginAPI::registerQmlTypes()
     qmlRegisterAnonymousType<Excerpt>("MuseScore", 3);
     qmlRegisterAnonymousType<Selection>("MuseScore", 3);
     qmlRegisterAnonymousType<Tie>("MuseScore", 3);
-    //qmlRegisterAnonymousType<Hook>("MuseScore", 3);
-    //qmlRegisterAnonymousType<Stem>("MuseScore", 3);
-    //qmlRegisterAnonymousType<StemSlash>("MuseScore", 3);
-    //qmlRegisterAnonymousType<Beam>("MuseScore", 3);
     qmlRegisterType<PlayEvent>("MuseScore", 3, 0, "PlayEvent");
 
-#if 0
-    qmlRegisterType<NoteHead>("MuseScore", 1, 0, "NoteHead");
-    qmlRegisterType<Accidental>("MuseScore", 1, 0, "Accidental");
-    qmlRegisterType<Rest>("MuseScore", 1, 0, "Rest");
-    qmlRegisterType<StaffText>("MuseScore", 1, 0, "StaffText");
-    qmlRegisterType<Staff>("MuseScore", 1, 0, "Staff");
-    qmlRegisterType<Harmony>("MuseScore", 1, 0, "Harmony");
-    qmlRegisterType<TimeSig>("MuseScore", 1, 0, "TimeSig");
-    qmlRegisterType<KeySig>("MuseScore", 1, 0, "KeySig");
-    qmlRegisterType<Slur>("MuseScore", 1, 0, "Slur");
-    qmlRegisterType<Tie>("MuseScore", 1, 0, "Tie");
-    qmlRegisterType<NoteDot>("MuseScore", 1, 0, "NoteDot");
-    qmlRegisterType<FiguredBass>("MuseScore", 1, 0, "FiguredBass");
-    qmlRegisterType<Text>("MuseScore", 1, 0, "MText");
-    qmlRegisterType<Lyrics>("MuseScore", 1, 0, "Lyrics");
-    qmlRegisterType<FiguredBassItem>("MuseScore", 1, 0, "FiguredBassItem");
-    qmlRegisterType<LayoutBreak>("MuseScore", 1, 0, "LayoutBreak");
-    qmlRegisterType<BarLine>("MuseScore", 1, 0, "BarLine");
-
-    //classed enumerations
-    qmlRegisterUncreatableType<MSQE_StyledPropertyListIdx>("MuseScore", 1, 0, "StyledPropertyListIdx",
-                                                           QObject::tr("You can't create an enum"));
-    qmlRegisterUncreatableType<MSQE_BarLineType>("MuseScore", 1, 0, "BarLineType", enumErr);
-
-    //-----------virtual classes
-    qmlRegisterType<ChordRest>();
-    qmlRegisterType<SlurTie>();
-    qmlRegisterType<Spanner>();
-#endif
     qmlRegisterAnonymousType<FractionWrapper>("MuseScore", 3);
     qRegisterMetaType<FractionWrapper*>("FractionWrapper*");
 

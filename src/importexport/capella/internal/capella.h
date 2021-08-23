@@ -30,11 +30,6 @@ enum class TIMESTEP : char {
     D1, D2, D4, D8, D16, D32, D64, D128, D256, D_BREVE
 };
 
-#if 0
-static const char* timeNames[] = { "1/1", "1/2", "1/4", "1/8", "1/16", "1/32", "1/64",
-                                   "1/128", "1/256", "breve" };
-#endif
-
 class Capella;
 enum class ClefType : signed char;
 
