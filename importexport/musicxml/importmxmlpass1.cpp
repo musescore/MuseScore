@@ -2358,28 +2358,28 @@ void MusicXMLParserPass1::measure(const QString& partId,
       if (mDura.isZero() && !_timeSigDura.isValid())
             mDura = Fraction(4, 4);
 
-      // if necessary, round up to an integral number of 1/64s,
+      // if necessary, round up to an integral number of 1/128th,
       // to comply with MuseScores actual measure length constraints
-      Fraction length = mDura * Fraction(64,1);
+      Fraction length = mDura * Fraction(128,1);
       Fraction correctedLength = mDura;
       length.reduce();
       if (length.denominator() != 1) {
-            Fraction roundDown = Fraction(length.numerator() / length.denominator(), 64);
-            Fraction roundUp = Fraction(length.numerator() / length.denominator() + 1, 64);
-            // mDura is not an integer multiple of 1/64;
-            // first check if the duration is larger than an integer multiple of 1/64
+            Fraction roundDown = Fraction(length.numerator() / length.denominator(), 128);
+            Fraction roundUp = Fraction(length.numerator() / length.denominator() + 1, 128);
+            // mDura is not an integer multiple of 1/128;
+            // first check if the duration is larger than an integer multiple of 1/128
             // by an amount smaller than the minimum division resolution
             // in that case, round down (rounding errors have possibly occurred),
             // otherwise, round up
-            if ((_divs > 0) && ((mDura - roundDown) < Fraction(1, 4*_divs))) {
+            if ((_divs > 0) && ((mDura - roundDown) < Fraction(1, 4 * _divs))) {
                   _logger->logError(QString("rounding down measure duration %1 to %2")
-                                    .arg(qPrintable(mDura.print())).arg(qPrintable(roundDown.print())),
+                                    .arg(qPrintable(mDura.print()), qPrintable(roundDown.print())),
                                     &_e);
                   correctedLength = roundDown;
                   }
             else {
                   _logger->logError(QString("rounding up measure duration %1 to %2")
-                                    .arg(qPrintable(mDura.print())).arg(qPrintable(roundUp.print())),
+                                    .arg(qPrintable(mDura.print()), qPrintable(roundUp.print())),
                                     &_e);
                   correctedLength = roundUp;
                   }

@@ -81,12 +81,6 @@
         <type>128th</type>
         <stem>up</stem>
         </note>
-      <note print-object="no">
-        <rest/>
-        <duration>1</duration>
-        <voice>1</voice>
-        <type>128th</type>
-        </note>
       </measure>
     <measure number="3">
       <note>
