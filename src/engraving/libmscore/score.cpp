@@ -3193,7 +3193,7 @@ void Score::selectSingle(Element* e, int staffIdx)
 
 void Score::switchToPageMode()
 {
-    if (_layoutMode != LayoutMode::PAGE) {
+    if (layoutMode() != LayoutMode::PAGE) {
         setLayoutMode(LayoutMode::PAGE);
         doLayout();
     }
@@ -3840,24 +3840,6 @@ void Score::setPause(const Fraction& tick, qreal seconds)
 qreal Score::tempo(const Fraction& tick) const
 {
     return tempomap()->tempo(tick.ticks());
-}
-
-//---------------------------------------------------------
-//   loWidth
-//---------------------------------------------------------
-
-qreal Score::loWidth() const
-{
-    return styleD(Sid::pageWidth) * DPI;
-}
-
-//---------------------------------------------------------
-//   loHeight
-//---------------------------------------------------------
-
-qreal Score::loHeight() const
-{
-    return styleD(Sid::pageHeight) * DPI;
 }
 
 //---------------------------------------------------------
@@ -5093,7 +5075,7 @@ Part* Score::partById(const ID& partId) const
 void Score::rebuildBspTree()
 {
     for (Page* page : pages()) {
-        page->rebuildBspTree();
+        page->invalidateBspTree();
     }
 }
 
@@ -5216,7 +5198,11 @@ void Score::doLayout()
 
 void Score::doLayoutRange(const Fraction& st, const Fraction& et)
 {
-    m_layout.doLayoutRange(st, et);
+    _scoreFont = ScoreFont::fontByName(style().value(Sid::MusicalSymbolFont).toString());
+    _noteHeadWidth = _scoreFont->width(SymId::noteheadBlack, spatium() / SPATIUM20);
+
+    m_layoutOptions.updateFromStyle(style());
+    m_layout.doLayoutRange(m_layoutOptions, st, et);
 }
 
 UndoStack* Score::undoStack() const { return _masterScore->undoStack(); }

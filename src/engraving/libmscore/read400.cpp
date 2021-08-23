@@ -29,6 +29,7 @@
 #include "excerpt.h"
 #include "staff.h"
 
+using namespace mu::engraving;
 using namespace Ms;
 
 bool Score::read400(XmlReader& e)
@@ -185,9 +186,9 @@ bool Score::readScore400(XmlReader& e)
         } else if (tag == "layoutMode") {
             QString s = e.readElementText();
             if (s == "line") {
-                _layoutMode = LayoutMode::LINE;
+                setLayoutMode(LayoutMode::LINE);
             } else if (s == "system") {
-                _layoutMode = LayoutMode::SYSTEM;
+                setLayoutMode(LayoutMode::SYSTEM);
             } else {
                 qDebug("layoutMode: %s", qPrintable(s));
             }

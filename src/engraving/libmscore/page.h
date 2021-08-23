@@ -86,7 +86,7 @@ public:
 
     QList<Element*> items(const mu::RectF& r);
     QList<Element*> items(const mu::PointF& p);
-    void rebuildBspTree() { bspTreeValid = false; }
+    void invalidateBspTree() { bspTreeValid = false; }
     mu::PointF pagePos() const override { return mu::PointF(); }       ///< position in page coordinates
     QList<Element*> elements() const;           ///< list of visible elements
     mu::RectF tbbox();                             // tight bounding box, excluding white space

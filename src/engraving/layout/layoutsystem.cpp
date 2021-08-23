@@ -52,7 +52,7 @@ using namespace Ms;
 //   collectSystem
 //---------------------------------------------------------
 
-System* LayoutSystem::collectSystem(LayoutContext& lc, Ms::Score* score)
+System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext& lc, Ms::Score* score)
 {
     if (!lc.curMeasure) {
         return nullptr;
@@ -64,11 +64,11 @@ System* LayoutSystem::collectSystem(LayoutContext& lc, Ms::Score* score)
     }
 
     if (measure) {
-        lc.firstSystem        = measure->sectionBreak() && score->layoutMode() != LayoutMode::FLOAT;
-        lc.firstSystemIndent  = lc.firstSystem && measure->sectionBreakElement()->firstSystemIdentation() && score->styleB(
-            Sid::enableIndentationOnFirstSystem);
+        lc.firstSystem        = measure->sectionBreak() && !options.isMode(LayoutMode::FLOAT);
+        lc.firstSystemIndent  = lc.firstSystem && options.firstSystemIndent && measure->sectionBreakElement()->firstSystemIdentation();
         lc.startWithLongNames = lc.firstSystem && measure->sectionBreakElement()->startWithLongNames();
     }
+
     System* system = getNextSystem(lc, score);
     Fraction lcmTick = lc.curMeasure->tick();
     system->setInstrumentNames(lc.startWithLongNames, lcmTick);
@@ -131,7 +131,7 @@ System* LayoutSystem::collectSystem(LayoutContext& lc, Ms::Score* score)
             createHeader = toHBox(lc.curMeasure)->createSystemHeader();
         } else {
             // vbox:
-            LayoutMeasure::getNextMeasure(score, lc);
+            LayoutMeasure::getNextMeasure(options, score, lc);
             system->layout2();         // compute staff distances
             return system;
         }
@@ -202,7 +202,7 @@ System* LayoutSystem::collectSystem(LayoutContext& lc, Ms::Score* score)
 
         MeasureBase* mb = lc.curMeasure;
         bool lineBreak  = false;
-        switch (score->layoutMode()) {
+        switch (options.mode) {
         case LayoutMode::PAGE:
         case LayoutMode::SYSTEM:
             lineBreak = mb->pageBreak() || mb->lineBreak() || mb->sectionBreak();
@@ -235,7 +235,7 @@ System* LayoutSystem::collectSystem(LayoutContext& lc, Ms::Score* score)
             }
         }
 
-        LayoutMeasure::getNextMeasure(score, lc);
+        LayoutMeasure::getNextMeasure(options, score, lc);
 
         minWidth += ww;
 
@@ -264,7 +264,7 @@ System* LayoutSystem::collectSystem(LayoutContext& lc, Ms::Score* score)
                     }
                 }
                 const MeasureBase* pbmb = lc.prevMeasure->findPotentialSectionBreak();
-                bool localFirstSystem = pbmb->sectionBreak() && score->layoutMode() != LayoutMode::FLOAT;
+                bool localFirstSystem = pbmb->sectionBreak() && !options.isMode(LayoutMode::FLOAT);
                 MeasureBase* nm = breakMeasure ? breakMeasure : m;
                 if (curHeader) {
                     m->addSystemHeader(localFirstSystem);
@@ -398,7 +398,7 @@ System* LayoutSystem::collectSystem(LayoutContext& lc, Ms::Score* score)
     }
     system->setWidth(pos.x());
 
-    layoutSystemElements(lc, score, system);
+    layoutSystemElements(options, lc, score, system);
     system->layout2();     // compute staff distances
     // TODO: now that the code at the top of this function does this same backwards search,
     // we might be able to eliminate this block
@@ -409,9 +409,8 @@ System* LayoutSystem::collectSystem(LayoutContext& lc, Ms::Score* score)
         measure = measure->findPotentialSectionBreak();
     }
     if (measure) {
-        lc.firstSystem        = measure->sectionBreak() && score->layoutMode() != LayoutMode::FLOAT;
-        lc.firstSystemIndent  = lc.firstSystem && measure->sectionBreakElement()->firstSystemIdentation() && score->styleB(
-            Sid::enableIndentationOnFirstSystem);
+        lc.firstSystem        = measure->sectionBreak() && !options.isMode(LayoutMode::FLOAT);
+        lc.firstSystemIndent  = lc.firstSystem && options.firstSystemIndent && measure->sectionBreakElement()->firstSystemIdentation();
         lc.startWithLongNames = lc.firstSystem && measure->sectionBreakElement()->startWithLongNames();
     }
 #endif
@@ -545,7 +544,7 @@ void LayoutSystem::hideEmptyStaves(Score* score, System* system, bool isFirstSys
     }
 }
 
-void LayoutSystem::layoutSystemElements(LayoutContext& lc, Score* score, System* system)
+void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutContext& lc, Score* score, System* system)
 {
     //-------------------------------------------------------------
     //    create cr segment list to speed up computations
@@ -562,7 +561,7 @@ void LayoutSystem::layoutSystemElements(LayoutContext& lc, Score* score, System*
 
         // in continuous view, entire score is one system
         // but we only need to process the range
-        if (score->lineMode() && (m->tick() < lc.startTick || m->tick() > lc.endTick)) {
+        if (options.isMode(LayoutMode::LINE) && (m->tick() < lc.startTick || m->tick() > lc.endTick)) {
             continue;
         }
         for (Segment* s = m->first(); s; s = s->next()) {
@@ -614,7 +613,7 @@ void LayoutSystem::layoutSystemElements(LayoutContext& lc, Score* score, System*
             MeasureNumber* mno = m->noText(staffIdx);
             MMRestRange* mmrr  = m->mmRangeText(staffIdx);
             // no need to build skyline outside of range in continuous view
-            if (score->lineMode() && (m->tick() < lc.startTick || m->tick() > lc.endTick)) {
+            if (options.isMode(LayoutMode::LINE) && (m->tick() < lc.startTick || m->tick() > lc.endTick)) {
                 continue;
             }
             if (mno && mno->addToSkyline()) {
@@ -948,7 +947,7 @@ void LayoutSystem::layoutSystemElements(LayoutContext& lc, Score* score, System*
     // Lyric
     //-------------------------------------------------------------
 
-    LayoutLyrics::layoutLyrics(score, system);
+    LayoutLyrics::layoutLyrics(options, score, system);
 
     // here are lyrics dashes and melisma
     for (Spanner* sp : score->unmanagedSpanners()) {
@@ -984,7 +983,7 @@ void LayoutSystem::layoutSystemElements(LayoutContext& lc, Score* score, System*
 
     if (!hasFretDiagram) {
         LayoutHarmonies::layoutHarmonies(sl);
-        LayoutHarmonies::alignHarmonies(system, sl, true, score->styleP(Sid::maxChordShiftAbove), score->styleP(Sid::maxChordShiftBelow));
+        LayoutHarmonies::alignHarmonies(system, sl, true, options.maxFretShiftAbove, options.maxFretShiftBelow);
     }
 
     //-------------------------------------------------------------
@@ -1095,7 +1094,7 @@ void LayoutSystem::layoutSystemElements(LayoutContext& lc, Score* score, System*
         //-------------------------------------------------------------
 
         LayoutHarmonies::layoutHarmonies(sl);
-        LayoutHarmonies::alignHarmonies(system, sl, false, score->styleP(Sid::maxFretShiftAbove), score->styleP(Sid::maxFretShiftBelow));
+        LayoutHarmonies::alignHarmonies(system, sl, false, options.maxFretShiftAbove, options.maxFretShiftBelow);
     }
 
     //-------------------------------------------------------------

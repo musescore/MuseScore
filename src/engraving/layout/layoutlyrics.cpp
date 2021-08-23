@@ -203,7 +203,7 @@ static void applyLyricsMin(Measure* m, int staffIdx, qreal yMin)
 //
 //---------------------------------------------------------
 
-void LayoutLyrics::layoutLyrics(Score* score, System* system)
+void LayoutLyrics::layoutLyrics(const LayoutOptions& options, const Score* score, System* system)
 {
     std::vector<int> visibleStaves;
     for (int staffIdx = system->firstVisibleStaff(); staffIdx < score->nstaves(); staffIdx = system->nextVisibleStaff(staffIdx)) {
@@ -271,9 +271,7 @@ void LayoutLyrics::layoutLyrics(Score* score, System* system)
         }
     }
 
-    VerticalAlignRange ar = VerticalAlignRange(score->styleI(Sid::autoplaceVerticalAlignRange));
-
-    switch (ar) {
+    switch (options.verticalAlignRange) {
     case VerticalAlignRange::MEASURE:
         for (MeasureBase* mb : system->measures()) {
             if (!mb->isMeasure()) {

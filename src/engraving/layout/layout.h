@@ -22,6 +22,8 @@
 #ifndef MU_ENGRAVING_LAYOUT_H
 #define MU_ENGRAVING_LAYOUT_H
 
+#include "layoutoptions.h"
+
 namespace Ms {
 class Score;
 class Fraction;
@@ -36,16 +38,16 @@ class Layout
 public:
     Layout(Ms::Score* score);
 
-    void doLayoutRange(const Ms::Fraction&, const Ms::Fraction&);
+    void doLayoutRange(const LayoutOptions& options, const Ms::Fraction&, const Ms::Fraction&);
 
 private:
 
-    void layoutLinear(LayoutContext& lc);
-    void layoutLinear(bool layoutAll, LayoutContext& lc);
-    void resetSystems(bool layoutAll, LayoutContext& lc);
-    void collectLinearSystem(LayoutContext& lc);
+    void layoutLinear(const LayoutOptions& options, LayoutContext& lc);
+    void layoutLinear(bool layoutAll, const LayoutOptions& options, LayoutContext& lc);
+    void resetSystems(bool layoutAll, const LayoutOptions& options, LayoutContext& lc);
+    void collectLinearSystem(const LayoutOptions& options, LayoutContext& lc);
 
-    void doLayout(LayoutContext& lc);
+    void doLayout(const LayoutOptions& options, LayoutContext& lc);
 
     Ms::Score* m_score = nullptr;
 };
