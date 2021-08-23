@@ -24,13 +24,11 @@
 using namespace mu::instrumentsscene;
 using namespace mu::notation;
 
-mu::RetVal<PartInstrumentListScoreOrder> SelectInstrumentsScenario::selectInstruments(SelectInstrumentsMode mode) const
+mu::RetVal<PartInstrumentListScoreOrder> SelectInstrumentsScenario::selectInstruments() const
 {
-    QStringList params;
-    if (mode == SelectInstrumentsMode::ShowCurrentInstruments) {
-        params << "initiallySelectedPartIds=" + partsIds().join(",");
-        params << "currentScoreOrderId=" + scoreOrder().id;
-    }
+    QStringList params {
+        "canSelectMultipleInstruments=true"
+    };
 
     return selectInstruments(params);
 }
@@ -41,7 +39,7 @@ mu::RetVal<Instrument> SelectInstrumentsScenario::selectInstrument(const Instrum
 
     QStringList params {
         "canSelectMultipleInstruments=false",
-        "currentInstrumentId=" + currentInstrumentKey.instrumentId.toQString()
+        "currentInstrumentId=" + currentInstrumentKey.instrumentId
     };
 
     RetVal<PartInstrumentListScoreOrder> selectedInstruments = selectInstruments(params);
@@ -67,65 +65,28 @@ mu::RetVal<PartInstrumentListScoreOrder> SelectInstrumentsScenario::selectInstru
     RetVal<PartInstrumentListScoreOrder> result;
 
     QString uri = QString("musescore://instruments/select?%1").arg(params.join('&'));
-    RetVal<Val> instruments = interactive()->open(uri.toStdString());
-    if (!instruments.ret) {
-        result.ret = instruments.ret;
+    RetVal<Val> retVal = interactive()->open(uri.toStdString());
+    if (!retVal.ret) {
+        result.ret = retVal.ret;
         return result;
     }
 
     result.ret = make_ret(Ret::Code::Ok);
 
-    QVariantMap info = instruments.val.toQVariant().toMap();
-    result.val.scoreOrder = info["scoreOrder"].value<ScoreOrder>();
+    QVariantMap content = retVal.val.toQVariant().toMap();
+    result.val.scoreOrder = content["scoreOrder"].value<ScoreOrder>();
 
-    for (const QVariant& obj: info["instrumentList"].toList()) {
+    for (const QVariant& obj: content["instruments"].toList()) {
         QVariantMap map = obj.toMap();
         PartInstrument pi;
 
+        pi.partId = ID(map["partId"]);
         pi.isExistingPart = map["isExistingPart"].toBool();
         pi.isSoloist = map["isSoloist"].toBool();
-        pi.partId = map["id"].toString();
-        pi.instrumentTemplate = map["instrument"].value<InstrumentTemplate>();
+        pi.instrumentTemplate = map["instrumentTemplate"].value<InstrumentTemplate>();
 
         result.val.instruments << pi;
     }
 
     return result;
-}
-
-INotationPartsPtr SelectInstrumentsScenario::notationParts() const
-{
-    auto notation = globalContext()->currentNotation();
-    if (!notation) {
-        return nullptr;
-    }
-
-    return notation->parts();
-}
-
-QStringList SelectInstrumentsScenario::partsIds() const
-{
-    auto _notationParts = notationParts();
-    if (!_notationParts) {
-        return QStringList();
-    }
-
-    async::NotifyList<const Part*> parts = _notationParts->partList();
-
-    QStringList result;
-    for (const Part* part: parts) {
-        result << ID(part->id()).toQString();
-    }
-
-    return result;
-}
-
-ScoreOrder SelectInstrumentsScenario::scoreOrder() const
-{
-    auto notation = globalContext()->currentNotation();
-    if (!notation) {
-        return ScoreOrder();
-    }
-
-    return notation->scoreOrder();
 }

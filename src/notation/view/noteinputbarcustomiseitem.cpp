@@ -22,9 +22,10 @@
 #include "noteinputbarcustomiseitem.h"
 
 using namespace mu::notation;
+using namespace mu::uicomponents;
 
 NoteInputBarCustomiseItem::NoteInputBarCustomiseItem(const ItemType& type, QObject* parent)
-    : QObject(parent), m_type(type)
+    : Item(parent), m_type(type)
 {
 }
 

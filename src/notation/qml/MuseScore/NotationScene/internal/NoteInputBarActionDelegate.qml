@@ -31,6 +31,8 @@ Item {
     height: parent ? parent.height : implicitHeight
     width: parent ? parent.width : implicitWidth
 
+    property var item
+
     RowLayout {
         anchors.fill: parent
         anchors.leftMargin: 6
@@ -44,10 +46,10 @@ Item {
             normalStateColor: "transparent"
             pressedStateColor: ui.theme.accentColor
 
-            icon: Boolean(itemRole) && itemRole.checked ? IconCode.VISIBILITY_ON : IconCode.VISIBILITY_OFF
+            icon: Boolean(root.item) && root.item.checked ? IconCode.VISIBILITY_ON : IconCode.VISIBILITY_OFF
 
             onClicked: {
-                itemRole.checked = !itemRole.checked
+                root.item.checked = !root.item.checked
             }
         }
 
@@ -57,14 +59,14 @@ Item {
             width: 36
             height: width
 
-            iconCode: Boolean(itemRole) ? itemRole.icon : IconCode.NONE
+            iconCode: Boolean(root.item) ? root.item.icon : IconCode.NONE
         }
 
         StyledTextLabel {
             Layout.fillWidth: true
 
             horizontalAlignment: Qt.AlignLeft
-            text: Boolean(itemRole) ? itemRole.title : ""
+            text: Boolean(root.item) ? root.item.title : ""
         }
     }
 }
