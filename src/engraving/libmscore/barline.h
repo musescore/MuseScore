@@ -131,6 +131,7 @@ public:
     bool showTips() const;
 
     void startEdit(EditData& ed) override;
+    bool edit(EditData& ed) override;
     void editDrag(EditData&) override;
     void endEditDrag(EditData&) override;
     Shape shape() const override;
@@ -166,8 +167,8 @@ public:
     QString accessibleExtraInfo() const override;
 
     EditBehavior normalModeEditBehavior() const override { return EditBehavior::Edit; }
-    int gripsCount() const override { return 2; }
-    Grip initialEditModeGrip() const override { return Grip::END; }
+    int gripsCount() const override { return 1; }
+    Grip initialEditModeGrip() const override { return Grip::START; }
     Grip defaultGrip() const override { return Grip::START; }
     std::vector<mu::PointF> gripsPositions(const EditData&) const override;
 

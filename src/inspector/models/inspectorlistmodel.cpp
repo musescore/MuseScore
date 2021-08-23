@@ -271,4 +271,9 @@ void InspectorListModel::onNotationChanged()
             setElementList(QList { element });
         }
     });
+
+    notation->notationChanged().onNotify(this, [this, notation]() {
+        auto elements = notation->interaction()->selection()->elements();
+        setElementList(QList(elements.cbegin(), elements.cend()));
+    });
 }

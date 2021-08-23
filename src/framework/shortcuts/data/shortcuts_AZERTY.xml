@@ -682,10 +682,6 @@
     <seq>F9</seq>
     </SC>
   <SC>
-    <key>toggle-playpanel</key>
-    <seq>F11</seq>
-    </SC>
-  <SC>
     <key>toggle-timeline</key>
     <seq>F12</seq>
     </SC>
@@ -859,7 +855,7 @@
     </SC>
   <SC>
     <key>fullscreen</key>
-    <seq>Ctrl+U</seq>
+    <seq>F11</seq>
     <seq>Meta+Ctrl+F</seq>
     </SC>
   <SC>

@@ -971,7 +971,7 @@ void GPConverter::addOrnament(const GPNote* gpnote, Note* note)
 
     Articulation* art = mu::engraving::Factory::createArticulation(_score->dummy()->chord());
     art->setSymId(scoreOrnament(gpnote->ornament()));
-    if (!_score->addArticulation(note, art)) {
+    if (!_score->toggleArticulation(note, art)) {
         delete art;
     }
 }
@@ -1763,7 +1763,7 @@ void GPConverter::addVibratoWTremBar(const GPBeat* beat, ChordRest* cr)
 
     art->setSymId(scoreVibrato(beat->vibrato()));
     art->setAnchor(ArticulationAnchor::TOP_STAFF);
-    if (!_score->addArticulation(static_cast<Chord*>(cr)->upNote(), art)) {
+    if (!_score->toggleArticulation(static_cast<Chord*>(cr)->upNote(), art)) {
         delete art;
     }
 }
@@ -1790,7 +1790,7 @@ void GPConverter::addFadding(const GPBeat* beat, ChordRest* cr)
     Articulation* art = mu::engraving::Factory::createArticulation(_score->dummy()->chord());
     art->setSymId(scoreFadding(beat->fadding()));
     art->setAnchor(ArticulationAnchor::TOP_STAFF);
-    if (!_score->addArticulation(static_cast<Chord*>(cr)->upNote(), art)) {
+    if (!_score->toggleArticulation(static_cast<Chord*>(cr)->upNote(), art)) {
         delete art;
     }
 }
@@ -1855,7 +1855,7 @@ void GPConverter::addPickStroke(const GPBeat* beat, ChordRest* cr)
 
     Articulation* art = mu::engraving::Factory::createArticulation(_score->dummy()->chord());
     art->setSymId(scorePickStroke(beat->pickStroke()));
-    if (!_score->addArticulation(static_cast<Chord*>(cr)->upNote(), art)) {
+    if (!_score->toggleArticulation(static_cast<Chord*>(cr)->upNote(), art)) {
         delete art;
     }
 }

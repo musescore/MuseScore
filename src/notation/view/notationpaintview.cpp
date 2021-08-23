@@ -222,6 +222,11 @@ void NotationPaintView::onCurrentNotationChanged()
             emit textEdittingStarted();
         }
     });
+    interaction->dropChanged().onNotify(this, [this]() {
+        if (!hasActiveFocus()) {
+            emit textEdittingStarted(); // grab keyboard focus after element added from palette
+        }
+    });
 
     notationPlayback()->loopBoundaries().ch.onReceive(this, [this](const LoopBoundaries& boundaries) {
         updateLoopMarkers(boundaries);

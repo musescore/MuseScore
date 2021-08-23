@@ -81,6 +81,7 @@ void ShortcutsRegister::reload(bool onlyDef)
 
     if (ok) {
         expandStandardKeys(m_shortcuts);
+
         m_shortcutsChanged.notify();
     }
 }
@@ -269,9 +270,15 @@ Notification ShortcutsRegister::shortcutsChanged() const
     return m_shortcutsChanged;
 }
 
-const Shortcut& ShortcutsRegister::shortcut(const std::string& actionCode) const
+const Shortcut& ShortcutsRegister::shortcut(const std::string& actionCode)
 {
-    return findShortcut(m_shortcuts, actionCode);
+    const auto& shortCut = findShortcut(m_shortcuts, actionCode);
+    if (shortCut.action.empty()) {
+        Shortcut sc = { actionCode };
+        m_shortcuts.push_back(sc);
+        return findShortcut(m_shortcuts, actionCode);
+    }
+    return shortCut;
 }
 
 const Shortcut& ShortcutsRegister::defaultShortcut(const std::string& actionCode) const

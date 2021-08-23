@@ -1743,13 +1743,13 @@ void Score::upDownDelta(int pitchDelta)
 }
 
 //---------------------------------------------------------
-//   addArticulation
-///   Add attribute \a attr to all selected notes/rests.
+//   toggleArticulation
+///   Toggle attribute \a attr for all selected notes/rests.
 ///
 ///   Called from padToggle() to add note prefix/accent.
 //---------------------------------------------------------
 
-void Score::addArticulation(SymId attr)
+void Score::toggleArticulation(SymId attr)
 {
     QSet<Chord*> set;
     int numAdded = 0;
@@ -1766,7 +1766,7 @@ void Score::addArticulation(SymId attr)
             }
             Articulation* na = Factory::createArticulation(this->dummy()->chord());
             na->setSymId(attr);
-            if (addArticulation(el, na)) {
+            if (toggleArticulation(el, na)) {
                 ++numAdded;
             } else {
                 delete na;
@@ -1975,10 +1975,10 @@ void Score::changeAccidental(Note* note, AccidentalType accidental)
 }
 
 //---------------------------------------------------------
-//   addArticulation
+//   toggleArticulation
 //---------------------------------------------------------
 
-bool Score::addArticulation(EngravingItem* el, Articulation* a)
+bool Score::toggleArticulation(EngravingItem* el, Articulation* a)
 {
     Chord* c;
     if (el->isNote()) {
@@ -4358,9 +4358,9 @@ void Score::cmd(const QString& cmd, EditData& ed)
     static const std::vector<ScoreCmd> cmdList {
         { "toggle-visible",             [](Score* cs, EditData&) { cs->cmdToggleVisible(); } },
         { "mirror-note",                [](Score* cs, EditData&) { cs->cmdMirrorNoteHead(); } },
-        { "add-trill",                  [](Score* cs, EditData&) { cs->addArticulation(SymId::ornamentTrill); } },
-        { "add-up-bow",                 [](Score* cs, EditData&) { cs->addArticulation(SymId::stringsUpBow); } },
-        { "add-down-bow",               [](Score* cs, EditData&) { cs->addArticulation(SymId::stringsDownBow); } },
+        { "add-trill",                  [](Score* cs, EditData&) { cs->toggleArticulation(SymId::ornamentTrill); } },
+        { "add-up-bow",                 [](Score* cs, EditData&) { cs->toggleArticulation(SymId::stringsUpBow); } },
+        { "add-down-bow",               [](Score* cs, EditData&) { cs->toggleArticulation(SymId::stringsDownBow); } },
         { "clef-violin",                [](Score* cs, EditData&) { cs->cmdInsertClef(ClefType::G); } },
         { "clef-bass",                  [](Score* cs, EditData&) { cs->cmdInsertClef(ClefType::F); } },
         { "sharp2-post",                [](Score* cs, EditData&) { cs->changeAccidental(AccidentalType::SHARP2); } },

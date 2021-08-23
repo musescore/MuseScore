@@ -44,6 +44,7 @@ class Lasso;
 
 namespace mu::notation {
 class Notation;
+class NotationSelection;
 class NotationInteraction : public INotationInteraction, public async::Asyncable
 {
     INJECT(notation, INotationConfiguration, configuration)
@@ -73,7 +74,6 @@ public:
     void setHitElementContext(const HitElementContext& context) override;
 
     // Select
-    void addChordToSelection(MoveDirection d) override;
     void moveChordNoteSelection(MoveDirection d) override;
     void select(const std::vector<EngravingItem*>& elements, SelectType type = SelectType::REPLACE, int staffIndex = 0) override;
     void selectAll() override;
@@ -84,6 +84,7 @@ public:
     void clearSelection() override;
     async::Notification selectionChanged() const override;
     void selectTopOrBottomOfChord(MoveDirection d) override;
+    void moveSegmentSelection(MoveDirection d) override;
 
     // SelectionFilter
     bool isSelectionTypeFiltered(SelectionFilterType type) const override;
@@ -93,6 +94,7 @@ public:
     bool isDragStarted() const override;
     void startDrag(const std::vector<EngravingItem*>& elems, const PointF& eoffset, const IsDraggable& isDraggable) override;
     void drag(const PointF& fromPos, const PointF& toPos, DragMode mode) override;
+    void doEndDrag();
     void endDrag() override;
     async::Notification dragChanged() const override;
 
@@ -108,12 +110,19 @@ public:
     void undo() override;
     void redo() override;
 
-    // Move
-    //! NOTE Perform operations on selected elements
+    // Change selection
     void moveSelection(MoveDirection d, MoveSelectionType type) override;
-    void movePitch(MoveDirection d, PitchMode mode) override; //! NOTE Requires a note to be selected
-    void moveText(MoveDirection d, bool quickly) override;    //! NOTE Requires a text element to be selected
+    void expandSelection(ExpandSelectionMode mode) override;
+    void addToSelection(MoveDirection d, MoveSelectionType type) override;
+    void selectTopStaff() override;
+    void selectEmptyTrailingMeasure() override;
+
+    // Move
+    void movePitch(MoveDirection d, PitchMode mode) override;
+    void nudge(MoveDirection d, bool quickly) override;
     void moveChordRestToStaff(MoveDirection d) override;
+    void moveLyrics(MoveDirection d) override;
+    void swapChordRest(MoveDirection d) override;
 
     // Text edit
     bool isTextSelected() const override;
@@ -126,12 +135,17 @@ public:
     const TextBase* editedText() const override;
     async::Notification textEditingStarted() const override;
     async::Notification textEditingChanged() const override;
+    bool handleKeyPress(QKeyEvent* event);
 
     // Grip edit
     bool isGripEditStarted() const override;
     bool isHitGrip(const PointF& pos) const override;
     void startEditGrip(const PointF& pos) override;
-    void endEditGrip() override;
+    void startEditGrip(Ms::Grip grip);
+
+    bool isElementEditStarted() const override;
+    void endEditElement() override;
+    void startEditElement() override;
 
     // Measure
     void splitSelectedMeasure() override;
@@ -187,6 +201,7 @@ public:
     void fillSelectionWithSlashes() override;
     void replaceSelectedNotesWithSlashes() override;
 
+    void repeatSelection() override;
     void changeEnharmonicSpelling(bool) override;
     void spellPitches() override;
     void regroupNotesAndRests() override;
@@ -202,8 +217,8 @@ public:
     void setScoreConfig(ScoreConfig config) override;
     async::Channel<ScoreConfigType> scoreConfigChanged() const override;
 
-    void nextLyrics(bool = false, bool = false, bool = true) override;
-    void nextLyricsVerse(bool = false) override;
+    void nextLyrics(MoveDirection) override;
+    void nextLyricsVerse(MoveDirection) override;
     void nextSyllable() override;
     void addMelisma() override;
     void addLyricsVerse() override;
@@ -212,6 +227,16 @@ public:
     void toggleItalic() override;
     void toggleUnderline() override;
     void toggleStrike() override;
+    void toggleArticulation(Ms::SymId) override;
+    void toggleAutoplace(bool) override;
+
+    void insertClef(Ms::ClefType) override;
+    void changeAccidental(Ms::AccidentalType) override;
+    void transposeSemitone(int) override;
+    void transposeDiatonicAlterations(Ms::TransposeDirection) override;
+    void toggleGlobalOrLocalInsert() override;
+    void getLocation() override;
+    void execute(void (Ms::Score::*)()) override;
 
 private:
     Ms::Score* score() const;
@@ -229,6 +254,7 @@ private:
     void doDragLasso(const PointF& p);
     void endLasso();
     void toggleFontStyle(Ms::FontStyle);
+    void nextLyrics(bool, bool, bool);
 
     Ms::Page* point2page(const PointF& p) const;
     QList<EngravingItem*> hitElements(const PointF& p_in, float w) const;
@@ -236,6 +262,7 @@ private:
     EngravingItem* elementAt(const PointF& p) const;
     static bool elementIsLess(const Ms::EngravingItem* e1, const Ms::EngravingItem* e2);
 
+    void updateAnchorLines();
     void setAnchorLines(const std::vector<LineF>& anchorList);
     void resetAnchorLines();
     double currentScaling(draw::Painter* painter) const;
@@ -265,8 +292,11 @@ private:
 
     bool needEndTextEditing(const std::vector<EngravingItem*>& newSelectedElements) const;
 
-    void updateGripEdit(const std::vector<EngravingItem*>& elements);
+    void updateGripEdit();
     void resetGripEdit();
+
+    template<typename P>
+    void execute(void (Ms::Score::* function)(P), P param);
 
     struct HitMeasureData
     {
@@ -300,16 +330,15 @@ private:
     INotationNoteInputPtr m_noteInput = nullptr;
     Ms::ShadowNote* m_shadowNote = nullptr;
 
-    INotationSelectionPtr m_selection = nullptr;
+    std::shared_ptr<NotationSelection> m_selection = nullptr;
     async::Notification m_selectionChanged;
 
     DragData m_dragData;
     async::Notification m_dragChanged;
     std::vector<LineF> m_anchorLines;
 
-    Ms::EditData m_gripEditData;
+    Ms::EditData m_editData;
 
-    Ms::EditData m_textEditData;
     async::Notification m_textEditingStarted;
     async::Notification m_textEditingChanged;
 
@@ -322,6 +351,7 @@ private:
 
     bool m_notifyAboutDropChanged = false;
     HitElementContext m_hitElementContext;
+    Ms::SelState m_selectionState;
 };
 }
 

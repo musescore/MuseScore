@@ -475,23 +475,14 @@ private:
     mu::engraving::Layout m_layout;
     mu::engraving::LayoutOptions m_layoutOptions;
 
-    ChordRest* nextMeasure(ChordRest* element, bool selectBehavior = false, bool mmRest = false);
-    ChordRest* prevMeasure(ChordRest* element, bool mmRest = false);
-
     Note* getSelectedNote();
-    ChordRest* upStaff(ChordRest* cr);
-    ChordRest* downStaff(ChordRest* cr);
     ChordRest* nextTrack(ChordRest* cr, bool skipMeasureRepeatRests = true);
     ChordRest* prevTrack(ChordRest* cr, bool skipMeasureRepeatRests = true);
 
     void addTempo();
     void addMetronome();
 
-    void cmdInsertClef(ClefType);
-    void removeChordRest(ChordRest* cr, bool clearSegment);
-    void cmdMoveRest(Rest*, DirectionV);
-    void cmdMoveLyrics(Lyrics*, DirectionV);
-
+    void checkSlurs();
     void checkScore();
 
     bool rewriteMeasures(Measure* fm, Measure* lm, const Fraction&, int staffIdx);
@@ -534,12 +525,6 @@ protected:
     void cmdPitchDown();
     void cmdPitchUpOctave();
     void cmdPitchDownOctave();
-    void cmdPadNoteIncreaseTAB(const EditData& ed);
-    void cmdPadNoteDecreaseTAB(const EditData& ed);
-    void cmdToggleMmrest();
-    void cmdToggleHideEmpty();
-    void cmdSetVisible();
-    void cmdUnsetVisible();
 
     friend class MasterScore;
     Score();
@@ -620,6 +605,20 @@ public:
     void resetUserStretch();
     void cmdResetBeamMode();
     void cmdResetTextStyleOverrides();
+    void cmdInsertClef(ClefType);
+    void removeChordRest(ChordRest* cr, bool clearSegment);
+    ChordRest* nextMeasure(ChordRest* element, bool selectBehavior = false, bool mmRest = false);
+    ChordRest* prevMeasure(ChordRest* element, bool mmRest = false);
+    ChordRest* upStaff(ChordRest* cr);
+    ChordRest* downStaff(ChordRest* cr);
+    void cmdPadNoteIncreaseTAB(const EditData& ed);
+    void cmdPadNoteDecreaseTAB(const EditData& ed);
+    void cmdToggleMmrest();
+    void cmdToggleHideEmpty();
+    void cmdSetVisible();
+    void cmdUnsetVisible();
+    void cmdMoveRest(Rest*, DirectionV);
+    void cmdMoveLyrics(Lyrics*, DirectionV);
 
     void addRemoveBreaks(int interval, bool lock);
 
@@ -714,8 +713,8 @@ public:
     ChordRest* searchNote(const Fraction& tick, int track) const;
 
     // undo/redo ops
-    void addArticulation(SymId);
-    bool addArticulation(EngravingItem*, Articulation* atr);
+    void toggleArticulation(SymId);
+    bool toggleArticulation(EngravingItem*, Articulation* atr);
     void toggleAccidental(AccidentalType, const EditData& ed);
     void changeAccidental(AccidentalType);
     void changeAccidental(Note* oNote, Ms::AccidentalType);

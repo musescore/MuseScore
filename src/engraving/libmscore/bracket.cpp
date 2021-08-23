@@ -353,6 +353,7 @@ void Bracket::endEdit(EditData& ed)
     triggerLayoutAll();
     score()->update();
     ed.element = 0;           // score layout invalidates element
+    ed.clearData();
 }
 
 //---------------------------------------------------------
@@ -399,9 +400,6 @@ void Bracket::endEditDrag(EditData&)
     qreal ey = system()->staff(staffIdx2)->y() + score()->staff(staffIdx2)->height();
     h2 = (ey - sy) * .5;
     bracketItem()->undoChangeProperty(Pid::BRACKET_SPAN, staffIdx2 - staffIdx1 + 1);
-    // brackets do not survive layout
-    // make sure layout is not called:
-    score()->cmdState()._setUpdateMode(UpdateMode::Update);
 }
 
 //---------------------------------------------------------
@@ -436,6 +434,15 @@ EngravingItem* Bracket::drop(EditData& data)
 
 bool Bracket::edit(EditData& ed)
 {
+    if (ed.key == Qt::Key_Up && span() > 1) {
+        bracketItem()->undoChangeProperty(Pid::BRACKET_SPAN, span() - 1);
+        return true;
+    }
+    if (ed.key == Qt::Key_Down && _lastStaff < system()->staves()->size() - 1) {
+        bracketItem()->undoChangeProperty(Pid::BRACKET_SPAN, span() + 1);
+        return true;
+    }
+
     if (!(ed.modifiers & Qt::ShiftModifier)) {
         return false;
     }

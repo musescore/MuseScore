@@ -63,9 +63,9 @@ public:
 
     void addSlur(Ms::Slur* slur) override;
     void resetSlur() override;
-
     void addTie() override;
-
+    void doubleNoteInputDuration() override;
+    void halveNoteInputDuration() override;
     void setCurrentVoiceIndex(int voiceIndex) override;
 
     RectF cursorRect() const override;

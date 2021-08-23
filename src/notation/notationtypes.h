@@ -163,7 +163,17 @@ enum class MoveSelectionType
     EngravingItem,
     Chord,
     Measure,
-    Track
+    Track,
+    Frame,
+    System
+};
+
+enum class ExpandSelectionMode
+{
+    BeginSystem,
+    EndSystem,
+    BeginScore,
+    EndScore,
 };
 
 enum class BreaksSpawnIntervalType

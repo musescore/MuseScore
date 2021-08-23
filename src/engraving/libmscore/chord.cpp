@@ -2954,7 +2954,7 @@ void Chord::updateArticulations(const std::set<SymId>& newArticulationIds, Artic
     for (const SymId& articulationSymbolId: result) {
         Articulation* newArticulation = Factory::createArticulation(score()->dummy()->chord());
         newArticulation->setSymId(articulationSymbolId);
-        score()->addArticulation(this, newArticulation);
+        score()->toggleArticulation(this, newArticulation);
     }
 }
 

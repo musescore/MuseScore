@@ -46,7 +46,7 @@ void ActionsDispatcher::dispatch(const ActionCode& actionCode, const ActionData&
 {
     auto it = m_clients.find(actionCode);
     if (it == m_clients.end()) {
-        LOGW() << "not registred action: " << actionCode;
+        LOGW() << "not a registered action: " << actionCode;
         return;
     }
 

@@ -52,6 +52,7 @@ public:
     virtual void moveCanvasHorizontal(qreal dx) = 0;
     virtual void moveCanvasVertical(qreal dy) = 0;
 
+    virtual RectF notationContentRect() const = 0;
     virtual qreal currentScaling() const = 0;
     virtual void setScaling(qreal scaling, const QPointF& pos) = 0;
 
@@ -84,6 +85,12 @@ public:
     void initZoom();
     void zoomIn();
     void zoomOut();
+    void nextScreen();
+    void previousScreen();
+    void nextPage();
+    void previousPage();
+    void startOfScore();
+    void endOfScore();
 
     void setReadonly(bool readonly);
 
@@ -112,6 +119,8 @@ private:
     void zoomToPageWidth();
     void zoomToWholePage();
     void zoomToTwoPages();
+    void moveScreen(int direction);
+    void movePage(int direction);
 
     int currentZoomIndex() const;
     int currentZoomPercentage() const;
@@ -133,6 +142,7 @@ private:
 
     bool m_readonly = false;
     bool m_isCanvasDragged = false;
+    bool m_pressedOnSelected = false;
 
     bool m_isZoomInited = false;
     PointF m_beginPoint;

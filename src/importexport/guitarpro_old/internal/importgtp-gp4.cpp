@@ -244,7 +244,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
     if (noteBits & NOTE_SFORZATO) {             // 0x40
         Articulation* art = Factory::createArticulation(note->score()->dummy()->chord());
         art->setSymId(SymId::articAccentAbove);
-        if (!note->score()->addArticulation(note, art)) {
+        if (!note->score()->toggleArticulation(note, art)) {
             delete art;
         }
     }
@@ -425,7 +425,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
             // add the trill articulation to the note
             Articulation* art = Factory::createArticulation(note->score()->dummy()->chord());
             art->setSymId(SymId::ornamentTrill);
-            if (!note->score()->addArticulation(note, art)) {
+            if (!note->score()->toggleArticulation(note, art)) {
                 delete art;
             }
         }

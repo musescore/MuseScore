@@ -63,6 +63,12 @@ void NotationViewInputController::init()
         dispatcher()->reg(this, "view-mode-single", [this]() {
             setViewMode(ViewMode::SYSTEM);
         });
+        dispatcher()->reg(this, "scr-next", this, &NotationViewInputController::nextScreen);
+        dispatcher()->reg(this, "scr-prev", this, &NotationViewInputController::previousScreen);
+        dispatcher()->reg(this, "page-next", this, &NotationViewInputController::nextPage);
+        dispatcher()->reg(this, "page-prev", this, &NotationViewInputController::previousPage);
+        dispatcher()->reg(this, "page-top", this, &NotationViewInputController::startOfScore);
+        dispatcher()->reg(this, "page-end", this, &NotationViewInputController::endOfScore);
     }
 
     globalContext()->currentMasterNotationChanged().onNotify(this, [this]() {
@@ -258,6 +264,100 @@ void NotationViewInputController::setViewMode(const ViewMode& viewMode)
     }
 }
 
+constexpr qreal scrollStep = .8;
+constexpr qreal thinPadding = 10.0;
+constexpr qreal thickPadding = 25.0;
+
+void NotationViewInputController::moveScreen(int direction)
+{
+    auto notation = currentNotation();
+    if (!notation || m_view->width() == 0.0) {
+        return;
+    }
+    auto scale = m_view->currentScaling();
+    if (notation->viewMode() == ViewMode::LINE) {
+        m_view->moveCanvasHorizontal(m_view->width() * direction * scrollStep / scale);
+    } else {
+        auto offset = m_view->toLogical(QPoint());
+        auto rect = m_view->notationContentRect();
+        if (direction > 0 && offset.y() <= 0.0) {
+            if (offset.x() >= -thickPadding) {
+                m_view->moveCanvas(m_view->width() * direction * scrollStep / scale,
+                                   offset.y() - thickPadding - (rect.height() - m_view->height() / scale));
+            }
+        } else if (direction < 0 && offset.y() >= (rect.height() - m_view->height() / scale)) {
+            auto dx = m_view->width() * direction * scrollStep / scale;
+            if (offset.x() < rect.width() + thickPadding + dx) {
+                m_view->moveCanvas(dx, offset.y() + thickPadding);
+            }
+        } else {
+            m_view->moveCanvasVertical(m_view->height() * direction * scrollStep / scale);
+        }
+    }
+}
+
+void NotationViewInputController::movePage(int direction)
+{
+    auto notation = currentNotation();
+    if (!notation) {
+        return;
+    }
+    if (notation->viewMode() != ViewMode::PAGE) {
+        moveScreen(direction);
+        return;
+    }
+    Page* page = notation->elements()->msScore()->pages().back();
+    if (configuration()->canvasOrientation().val == mu::framework::Orientation::Vertical) {
+        qreal offset = std::min((page->height() + thickPadding) * direction, m_view->toLogical(QPoint()).y() + thickPadding);
+        m_view->moveCanvasVertical(offset);
+    } else {
+        qreal offset = std::min((page->width() + thickPadding) * direction, m_view->toLogical(QPoint()).x() + thickPadding);
+        m_view->moveCanvasHorizontal(offset);
+    }
+}
+
+void NotationViewInputController::nextScreen()
+{
+    moveScreen(-1);
+}
+
+void NotationViewInputController::previousScreen()
+{
+    moveScreen(1);
+}
+
+void NotationViewInputController::nextPage()
+{
+    movePage(-1);
+}
+
+void NotationViewInputController::previousPage()
+{
+    movePage(1);
+}
+
+void NotationViewInputController::startOfScore()
+{
+    auto offset = m_view->toLogical(QPoint());
+    m_view->moveCanvas(offset.x() + thickPadding, offset.y() + thickPadding);
+}
+
+void NotationViewInputController::endOfScore()
+{
+    auto notation = currentNotation();
+    if (!notation) {
+        return;
+    }
+    Ms::MeasureBase* lastMeasure = notation->elements()->msScore()->lastMeasureMM();
+    auto lmRect = lastMeasure->canvasBoundingRect();
+    auto scale = m_view->currentScaling();
+    qreal desiredX = std::max(-thickPadding, lmRect.right() + thickPadding - m_view->width() / scale);
+    qreal desiredY
+        = std::max(-thickPadding, lmRect.bottom() + lastMeasure->score()->styleD(Ms::Sid::spatium) * 5 - m_view->height() / scale);
+    auto offset = m_view->toLogical(QPoint());
+    m_view->moveCanvas(offset.x() - desiredX, offset.y() - desiredY);
+}
+
 void NotationViewInputController::wheelEvent(QWheelEvent* event)
 {
     QPoint pixelsScrolled = event->pixelDelta();
@@ -350,6 +450,13 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
         return;
     }
 
+    if (viewInteraction()->isHitGrip(logicPos)) {
+        viewInteraction()->startEditGrip(logicPos);
+        return;
+    }
+
+    m_pressedOnSelected = hitElement && hitElement == viewInteraction()->selection()->element();
+
     if (needSelect(event, logicPos)) {
         SelectType selectType = SelectType::SINGLE;
         if (keyState == Qt::NoModifier) {
@@ -360,6 +467,9 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
             selectType = SelectType::ADD;
         }
         viewInteraction()->select({ hitElement }, selectType, hitStaffIndex);
+    } else if (hitElement && event->button() == Qt::MouseButton::LeftButton
+               && event->modifiers() == Qt::KeyboardModifier::ControlModifier) {
+        viewInteraction()->select({ hitElement }, SelectType::ADD, hitStaffIndex);
     }
 
     if (event->button() == Qt::MouseButton::RightButton) {
@@ -371,8 +481,6 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
 
     if (hitElement) {
         playbackController()->playElement(hitElement);
-    } else {
-        viewInteraction()->endEditGrip();
     }
 
     if (viewInteraction()->isTextEditingStarted()) {
@@ -387,6 +495,8 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
                 : m_beginPoint.y() >= bbox.bottom() ? bbox.bottom() - 1 : m_beginPoint.y());
             viewInteraction()->changeTextCursorPosition(constrainedPt);
         }
+    } else if (!hitElement) {
+        viewInteraction()->endEditElement();
     }
 }
 
@@ -402,10 +512,6 @@ bool NotationViewInputController::needSelect(const QMouseEvent* event, const Poi
     }
 
     Qt::MouseButton button = event->button();
-
-    if (button == Qt::MouseButton::LeftButton && event->modifiers() == Qt::NoModifier) {
-        return true;
-    }
 
     bool result = hitElement && !hitElement->selected();
 
@@ -449,7 +555,7 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
     const EngravingItem* hitElement = this->hitElement();
 
     // drag element
-    if (!middleButton && ((hitElement && hitElement->isMovable())
+    if (!middleButton && ((hitElement && (hitElement->isMovable() || viewInteraction()->isElementEditStarted()))
                           || viewInteraction()->isGripEditStarted())) {
         if (hitElement && !viewInteraction()->isDragStarted()) {
             startDragElements(hitElement->type(), hitElement->offset());
@@ -498,7 +604,7 @@ void NotationViewInputController::startDragElements(ElementType elementsType, co
     viewInteraction()->startDrag(elements, elementsOffset, isDraggable);
 }
 
-void NotationViewInputController::mouseReleaseEvent(QMouseEvent*)
+void NotationViewInputController::mouseReleaseEvent(QMouseEvent* event)
 {
     if (!hitElement() && !m_isCanvasDragged && !viewInteraction()->isGripEditStarted()
         && !viewInteraction()->isDragStarted()) {
@@ -509,6 +615,9 @@ void NotationViewInputController::mouseReleaseEvent(QMouseEvent*)
 
     if (viewInteraction()->isDragStarted()) {
         viewInteraction()->endDrag();
+    } else if (m_pressedOnSelected && viewInteraction()->selection()->element()
+               && viewInteraction()->selection()->element()->isTextBase()) {
+        viewInteraction()->startEditText(viewInteraction()->selection()->element(), PointF(m_view->toLogical(event->pos())));
     }
 }
 
@@ -516,8 +625,8 @@ void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent* event)
 {
     EngravingItem* element = viewInteraction()->selection()->element();
 
-    if (viewInteraction()->textEditingAllowed(element)) {
-        viewInteraction()->startEditText(element, m_view->toLogical(event->pos()));
+    if (!viewInteraction()->textEditingAllowed(element)) {
+        viewInteraction()->startEditElement();
     }
 }
 
@@ -531,7 +640,7 @@ void NotationViewInputController::hoverMoveEvent(QHoverEvent* event)
 
 void NotationViewInputController::keyPressEvent(QKeyEvent* event)
 {
-    if (viewInteraction()->isTextEditingStarted()) {
+    if (viewInteraction()->selection()->element() != nullptr) {
         viewInteraction()->editText(event);
     } else if (viewInteraction()->isTextSelected()) {
         if (event->key() == Qt::Key_Return || event->key() == Qt::Key_Enter) {
