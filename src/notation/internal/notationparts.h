@@ -49,7 +49,7 @@ public:
     void setParts(const PartInstrumentList& parts, const ScoreOrder& order) override;
     void setScoreOrder(const ScoreOrder& order) override;
     void setPartVisible(const ID& partId, bool visible) override;
-    void setVoiceVisible(const ID& staffId, int voiceIndex, bool visible) override;
+    bool setVoiceVisible(const ID& staffId, int voiceIndex, bool visible) override;
     void setStaffVisible(const ID& staffId, bool visible) override;
     void setPartName(const ID& partId, const QString& name) override;
     void setPartSharpFlat(const ID& partId, const SharpFlat& sharpFlat) override;
@@ -104,6 +104,7 @@ private:
     void appendStaves(Part* part, const InstrumentTemplate& templ);
     void insertStaff(Staff* staff, int destinationStaffIndex);
     void initStaff(Staff* staff, const InstrumentTemplate& templ, const Ms::StaffType* staffType, int cleffIndex);
+    bool canDisableVoice(const ID& staffId) const;
 
     void removeMissingParts(const PartInstrumentList& parts);
     void appendNewParts(const PartInstrumentList& parts);

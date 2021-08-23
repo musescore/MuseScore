@@ -112,10 +112,26 @@ void StaffSettingsModel::setVoiceVisible(int voiceIndex, bool visible)
         return;
     }
 
-    m_voicesVisibility[voiceIndex] = visible;
-    notationParts()->setVoiceVisible(m_staffId, voiceIndex, visible);
+    bool ok = notationParts()->setVoiceVisible(m_staffId, voiceIndex, visible);
+    if (ok) {
+        m_voicesVisibility[voiceIndex] = visible;
+        emit voiceVisibilityChanged(voiceIndex, visible);
+    }
+}
 
-    emit voiceVisibilityChanged(voiceIndex, visible);
+bool StaffSettingsModel::isMainScore() const
+{
+    return currentNotation() == currentMasterNotation();
+}
+
+INotationPtr StaffSettingsModel::currentNotation() const
+{
+    return context()->currentNotation();
+}
+
+INotationPtr StaffSettingsModel::currentMasterNotation() const
+{
+    return context()->currentMasterNotation()->notation();
 }
 
 bool StaffSettingsModel::isSmallStaff() const

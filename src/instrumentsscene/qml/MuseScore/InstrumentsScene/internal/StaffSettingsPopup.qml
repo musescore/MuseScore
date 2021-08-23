@@ -75,6 +75,7 @@ StyledPopupView {
         SeparatorLine {}
 
         StyledTextLabel {
+            visible: !settingsModel.isMainScore
             text: qsTrc("instruments", "Voices visible in the score")
         }
 
@@ -83,6 +84,8 @@ StyledPopupView {
             width: parent.width
 
             spacing: 26
+
+            visible: !settingsModel.isMainScore
 
             Repeater {
                 model: settingsModel.voices

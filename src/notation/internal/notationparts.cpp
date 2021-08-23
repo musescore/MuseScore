@@ -396,13 +396,21 @@ void NotationParts::setInstrumentAbbreviature(const InstrumentKey& instrumentKey
     notifyAboutPartChanged(part);
 }
 
-void NotationParts::setVoiceVisible(const ID& staffId, int voiceIndex, bool visible)
+bool NotationParts::setVoiceVisible(const ID& staffId, int voiceIndex, bool visible)
 {
     TRACEFUNC;
 
+    if (!score()->excerpt()) {
+        return false;
+    }
+
     Staff* staff = staffModifiable(staffId);
     if (!staff) {
-        return;
+        return false;
+    }
+
+    if (!visible && !canDisableVoice(staffId)) {
+        return false;
     }
 
     startEdit();
@@ -412,6 +420,8 @@ void NotationParts::setVoiceVisible(const ID& staffId, int voiceIndex, bool visi
     apply();
 
     notifyAboutStaffChanged(staff);
+
+    return true;
 }
 
 void NotationParts::setStaffVisible(const ID& staffId, bool visible)
@@ -954,6 +964,25 @@ void NotationParts::initStaff(Staff* staff, const InstrumentTemplate& templ, con
         staff->setBarLineSpan(templ.barlineSpan[cleffIndex]);
     }
     staff->setDefaultClefType(templ.clefType(cleffIndex));
+}
+
+
+bool NotationParts::canDisableVoice(const mu::ID& staffId) const
+{
+    Staff* staff = this->staffModifiable(staffId);
+    if (!staff) {
+        return false;
+    }
+
+    auto voices = staff->visibilityVoices();
+    int countOfVisibleVoices = 0;
+    for (size_t i = 0; i < voices.size(); ++i) {
+        if (voices[i]) {
+            countOfVisibleVoices++;
+        }
+    }
+
+    return countOfVisibleVoices != 1;
 }
 
 void NotationParts::removeMissingParts(const PartInstrumentList& parts)
