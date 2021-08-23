@@ -226,14 +226,17 @@ void InstrumentsPanelTreeModel::selectRow(const QModelIndex& rowIndex)
 
 void InstrumentsPanelTreeModel::addInstruments()
 {
+    if (!m_masterNotation) {
+        return;
+    }
+
     RetVal<PartInstrumentListScoreOrder> selectedInstruments = selectInstrumentsScenario()->selectInstruments();
     if (!selectedInstruments.ret) {
         LOGE() << selectedInstruments.ret.toString();
         return;
     }
 
-    m_masterNotation->parts()->setScoreOrder(selectedInstruments.val.scoreOrder);
-    m_masterNotation->parts()->setParts(selectedInstruments.val.instruments);
+    m_masterNotation->parts()->setParts(selectedInstruments.val.instruments, selectedInstruments.val.scoreOrder);
 
     emit isEmptyChanged();
 }

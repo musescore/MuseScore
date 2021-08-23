@@ -43,7 +43,7 @@ public:
     const Staff* staff(const ID& staffId) const override;
     bool staffExists(const ID& staffId) const override;
 
-    void setParts(const PartInstrumentList& parts) override;
+    void setParts(const PartInstrumentList& parts, const ScoreOrder& order) override;
     void setScoreOrder(const ScoreOrder& order) override;
     void setPartVisible(const ID& partId, bool visible) override;
     void setVoiceVisible(const ID& staffId, int voiceIndex, bool visible) override;
@@ -86,6 +86,7 @@ protected:
 private:
     void updatePartTitles();
 
+    void doSetScoreOrder(const ScoreOrder& order);
     void doMoveStaves(const std::vector<Staff*>& staves, int destinationStaffIndex, Part* destinationPart = nullptr);
     void doSetStaffVoiceVisible(Staff* staff, int voiceIndex, bool visible);
     void doRemoveParts(const IDList& partsIds);

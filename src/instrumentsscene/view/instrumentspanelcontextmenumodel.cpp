@@ -69,6 +69,8 @@ void InstrumentsPanelContextMenuModel::loadItems()
 
     dispatcher()->unReg(this);
 
+    ScoreOrder currentOrder = m_masterNotation->notation()->scoreOrder();
+
     for (const ScoreOrder* order : m_orders) {
         MenuItem orderItem;
 
@@ -77,7 +79,7 @@ void InstrumentsPanelContextMenuModel::loadItems()
         orderItem.code = codeFromQString("set-order-" + order->id);
         orderItem.checkable = Checkable::Yes;
         orderItem.state.enabled = true;
-        orderItem.state.checked = m_masterNotation->notation()->scoreOrder().id == order->id;
+        orderItem.state.checked = currentOrder.id == order->id;
 
         orderItems << orderItem;
 

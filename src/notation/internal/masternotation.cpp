@@ -257,8 +257,7 @@ mu::Ret MasterNotation::setupNewScore(Ms::MasterScore* score, Ms::MasterScore* t
             nvb->setAutoSizeEnabled(tvb->isAutoSizeEnabled());
         }
     } else {
-        score->setScoreOrder(scoreOptions.order);
-        parts()->setParts(scoreOptions.parts);
+        parts()->setParts(scoreOptions.parts, scoreOptions.order);
     }
 
     score->setName(qtrc("notation", "Untitled"));

@@ -147,20 +147,17 @@ std::vector<Staff*> NotationParts::staves(const IDList& stavesIds) const
     return staves;
 }
 
-void NotationParts::setParts(const PartInstrumentList& parts)
+void NotationParts::setParts(const PartInstrumentList& parts, const ScoreOrder& order)
 {
     TRACEFUNC;
 
-    QList<Ms::Staff*> originalStaves = score()->staves();
-
     startEdit();
 
+    doSetScoreOrder(order);
     removeMissingParts(parts);
     appendNewParts(parts);
     updateSoloist(parts);
-
-    sortParts(parts, originalStaves);
-
+    sortParts(parts, score()->staves());
     setBracketsAndBarlines();
 
     apply();
@@ -168,9 +165,14 @@ void NotationParts::setParts(const PartInstrumentList& parts)
     m_partChangedNotifier.changed();
 }
 
-void NotationParts::setScoreOrder(const ScoreOrder&)
+void NotationParts::setScoreOrder(const ScoreOrder& order)
 {
-    NOT_SUPPORTED;
+    startEdit();
+
+    doSetScoreOrder(order);
+    setBracketsAndBarlines();
+
+    apply();
 }
 
 void NotationParts::setPartVisible(const ID& partId, bool visible)
@@ -251,6 +253,11 @@ void NotationParts::updatePartTitles()
     for (const Part* part: score()->parts()) {
         setPartName(part->id(), formatPartTitle(part));
     }
+}
+
+void NotationParts::doSetScoreOrder(const ScoreOrder& order)
+{
+    score()->undo(new Ms::ChangeScoreOrder(score(), order));
 }
 
 void NotationParts::doMoveStaves(const std::vector<Staff*>& staves, int destinationStaffIndex, Part* destinationPart)
@@ -786,6 +793,7 @@ void NotationParts::moveParts(const IDList& sourcePartsIds, const ID& destinatio
 
     startEdit();
 
+    doSetScoreOrder(makeCustomOrder());
     sortParts(parts, score()->staves());
 
     setBracketsAndBarlines();

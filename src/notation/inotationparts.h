@@ -43,7 +43,7 @@ public:
     virtual const Staff* staff(const ID& staffId) const = 0;
     virtual bool staffExists(const ID& staffId) const = 0;
 
-    virtual void setParts(const PartInstrumentList& instruments) = 0;
+    virtual void setParts(const PartInstrumentList& instruments, const ScoreOrder& order) = 0;
     virtual void setScoreOrder(const ScoreOrder& order) = 0;
     virtual void setPartVisible(const ID& partId, bool visible) = 0;
     virtual void setVoiceVisible(const ID& staffId, int voiceIndex, bool visible) = 0;
