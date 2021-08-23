@@ -21,6 +21,7 @@
  */
 #include "keynavdevsubsection.h"
 
+using namespace mu::diagnostics;
 using namespace mu::ui;
 
 KeyNavDevSubSection::KeyNavDevSubSection(INavigationPanel* subsection)

@@ -19,18 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "accessibledevmodel.h"
+#include "diagnosticaccessiblemodel.h"
 
 #include <QAccessible>
 #include <QMetaEnum>
 
+#include "accessibility/internal/accessibilitycontroller.h"
+
 #include "log.h"
 
+using namespace mu::diagnostics;
 using namespace mu::accessibility;
 
-QObject* AccessibleDevModel::m_rootObject = nullptr;
+QObject* DiagnosticAccessibleModel::m_rootObject = nullptr;
 
-AccessibleDevModel::AccessibleDevModel(QObject* parent)
+DiagnosticAccessibleModel::DiagnosticAccessibleModel(QObject* parent)
     : QAbstractListModel(parent)
 {
     m_refresher.setInterval(1000);
@@ -40,12 +43,65 @@ AccessibleDevModel::AccessibleDevModel(QObject* parent)
     });
 }
 
-void AccessibleDevModel::setRootObject(QObject* object)
+void DiagnosticAccessibleModel::init()
 {
-    m_rootObject = object;
+    AccessibilityController* accessController = dynamic_cast<AccessibilityController*>(accessibilityController().get());
+    AccessibilityController::Item rootItem = accessController->findItem(accessController);
+
+    m_rootObject = rootItem.object;
 }
 
-QVariant AccessibleDevModel::data(const QModelIndex& index, int role) const
+static void debug_dumpItem(QAccessibleInterface* item, QTextStream& stream, QString& level)
+{
+    QAccessibleInterface* prn = item->parent();
+    stream << level
+           << item->text(QAccessible::Name)
+           << " parent: " << (prn ? prn->text(QAccessible::Name) : QString("null"))
+           << " childCount: " << item->childCount()
+           << Qt::endl;
+
+    QAccessible::State st = item->state();
+    stream << level
+           << "state:"
+           << " invisible: " << st.invisible
+           << " invalid: " << st.invalid
+           << " disabled: " << st.disabled
+           << " active: " << st.active
+           << " focusable: " << st.focusable
+           << " focused: " << st.focused
+           << Qt::endl;
+
+    level += "  ";
+    int count = item->childCount();
+    for (int i = 0; i < count; ++i) {
+        QAccessibleInterface* ch = item->child(i);
+        debug_dumpItem(ch, stream, level);
+    }
+    level.chop(2);
+}
+
+static void debug_dumpTree(QAccessibleInterface* item)
+{
+    QString str;
+    QTextStream stream(&str);
+    QString level;
+
+    debug_dumpItem(item, stream, level);
+
+    stream.flush();
+    LOGI() << "================================================\n";
+    std::cout << str.toStdString() << '\n';
+}
+
+void DiagnosticAccessibleModel::dumpTree()
+{
+    AccessibilityController* accessController = dynamic_cast<AccessibilityController*>(accessibilityController().get());
+    AccessibilityController::Item rootItem = accessController->findItem(accessController);
+
+    debug_dumpTree(rootItem.iface);
+}
+
+QVariant DiagnosticAccessibleModel::data(const QModelIndex& index, int role) const
 {
     if (!index.isValid()) {
         return QVariant();
@@ -58,17 +114,17 @@ QVariant AccessibleDevModel::data(const QModelIndex& index, int role) const
     return QVariant();
 }
 
-int AccessibleDevModel::rowCount(const QModelIndex&) const
+int DiagnosticAccessibleModel::rowCount(const QModelIndex&) const
 {
     return m_items.count();
 }
 
-QHash<int, QByteArray> AccessibleDevModel::roleNames() const
+QHash<int, QByteArray> DiagnosticAccessibleModel::roleNames() const
 {
     return { { rItemData, "itemData" } };
 }
 
-void AccessibleDevModel::reload()
+void DiagnosticAccessibleModel::reload()
 {
     IF_ASSERT_FAILED(m_rootObject) {
         return;
@@ -97,7 +153,7 @@ void AccessibleDevModel::reload()
     }
 }
 
-void AccessibleDevModel::load(QAccessibleInterface* iface, int& level)
+void DiagnosticAccessibleModel::load(QAccessibleInterface* iface, int& level)
 {
     QAccessibleInterface* prn = iface->parent();
     int childCount = iface->childCount();
@@ -131,7 +187,7 @@ void AccessibleDevModel::load(QAccessibleInterface* iface, int& level)
     --level;
 }
 
-void AccessibleDevModel::setIsAutoRefresh(bool isAutoRefresh)
+void DiagnosticAccessibleModel::setIsAutoRefresh(bool isAutoRefresh)
 {
     if (m_isAutoRefresh == isAutoRefresh) {
         return;
@@ -145,7 +201,7 @@ void AccessibleDevModel::setIsAutoRefresh(bool isAutoRefresh)
     }
 }
 
-bool AccessibleDevModel::isAutoRefresh() const
+bool DiagnosticAccessibleModel::isAutoRefresh() const
 {
     return m_isAutoRefresh;
 }

@@ -21,6 +21,7 @@
  */
 #include "abstractkeynavdevitem.h"
 
+using namespace mu::diagnostics;
 using namespace mu::ui;
 
 AbstractKeyNavDevItem::AbstractKeyNavDevItem(INavigation* keynav)

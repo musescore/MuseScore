@@ -23,15 +23,26 @@
 
 #include "uri.h"
 
-using namespace mu::diagnostics;
+#include "view/diagnosticaccessiblemodel.h"
 
-static const mu::UriQuery DIAGNOSTICS_URI("musescore://diagnostics/main?sync=false&modal=false");
+using namespace mu::diagnostics;
+using namespace mu::accessibility;
+
+static const mu::UriQuery SYSTEN_PATHS_URI("musescore://diagnostics/system/paths?sync=false&modal=false");
+static const mu::UriQuery NAVIGATION_TREE_URI("musescore://diagnostics/navigation/tree?sync=false&modal=false");
+static const mu::UriQuery ACCESSIBLE_TREE_URI("musescore://diagnostics/accessible/tree?sync=false&modal=false");
 
 void DiagnosticsActionsController::init()
 {
-    dispatcher()->reg(this, "diagnostics-show", [this]() {
-        if (!interactive()->isOpened(DIAGNOSTICS_URI.uri()).val) {
-            interactive()->open(DIAGNOSTICS_URI);
-        }
-    });
+    dispatcher()->reg(this, "diagnostic-show-paths", [this]() { openUri(SYSTEN_PATHS_URI); });
+    dispatcher()->reg(this, "diagnostic-show-navigation-tree", [this]() { openUri(NAVIGATION_TREE_URI); });
+    dispatcher()->reg(this, "diagnostic-show-accessible-tree", [this]() { openUri(ACCESSIBLE_TREE_URI); });
+    dispatcher()->reg(this, "diagnostic-accessible-tree-dump", []() { DiagnosticAccessibleModel::dumpTree(); });
+}
+
+void DiagnosticsActionsController::openUri(const mu::UriQuery& uri)
+{
+    if (!interactive()->isOpened(uri.uri()).val) {
+        interactive()->open(uri);
+    }
 }

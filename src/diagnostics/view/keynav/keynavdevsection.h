@@ -19,12 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UI_KEYNAVDEVSECTION_H
-#define MU_UI_KEYNAVDEVSECTION_H
+#ifndef MU_DIAGNOSTICS_KEYNAVDEVSECTION_H
+#define MU_DIAGNOSTICS_KEYNAVDEVSECTION_H
 
 #include "abstractkeynavdevitem.h"
 
-namespace mu::ui {
+namespace mu::diagnostics {
 class KeyNavDevSection : public AbstractKeyNavDevItem
 {
     Q_OBJECT
@@ -33,7 +33,7 @@ class KeyNavDevSection : public AbstractKeyNavDevItem
     Q_PROPERTY(int controlsCount READ controlsCount NOTIFY controlsCountChanged)
 
 public:
-    explicit KeyNavDevSection(INavigationSection* section);
+    explicit KeyNavDevSection(ui::INavigationSection* section);
 
     QVariantList subsections() const;
     int panelsCount() const;
@@ -48,9 +48,9 @@ signals:
     void controlsCountChanged();
 
 private:
-    INavigationSection* m_section = nullptr;
+    ui::INavigationSection* m_section = nullptr;
     QVariantList m_subsections;
 };
 }
 
-#endif // MU_UI_KEYNAVDEVSECTION_H
+#endif // MU_DIAGNOSTICS_KEYNAVDEVSECTION_H

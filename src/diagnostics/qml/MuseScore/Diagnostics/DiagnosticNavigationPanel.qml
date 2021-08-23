@@ -22,6 +22,7 @@
 import QtQuick 2.15
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
+import MuseScore.Diagnostics 1.0
 
 Rectangle {
 
@@ -33,7 +34,7 @@ Rectangle {
         keynavModel.reload()
     }
 
-    KeyNavDevModel {
+    DiagnosticNavigationModel {
         id: keynavModel
 
         onBeforeReload: {

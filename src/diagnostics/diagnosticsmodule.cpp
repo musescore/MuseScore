@@ -33,6 +33,14 @@
 
 #include "view/diagnosticspathsmodel.h"
 
+#include "view/keynav/diagnosticnavigationmodel.h"
+#include "view/keynav/abstractkeynavdevitem.h"
+#include "view/keynav/keynavdevsection.h"
+#include "view/keynav/keynavdevsubsection.h"
+#include "view/keynav/keynavdevcontrol.h"
+
+#include "view/diagnosticaccessiblemodel.h"
+
 using namespace mu::diagnostics;
 using namespace mu::modularity;
 
@@ -52,7 +60,9 @@ void DiagnosticsModule::resolveImports()
 {
     auto ir = ioc()->resolve<ui::IInteractiveUriRegister>(moduleName());
     if (ir) {
-        ir->registerQmlUri(Uri("musescore://diagnostics/main"), "MuseScore/Diagnostics/DiagnosticsDialog.qml");
+        ir->registerQmlUri(Uri("musescore://diagnostics/system/paths"), "MuseScore/Diagnostics/DiagnosticPathsDialog.qml");
+        ir->registerQmlUri(Uri("musescore://diagnostics/navigation/controls"), "MuseScore/Diagnostics/DiagnosticNavigationDialog.qml");
+        ir->registerQmlUri(Uri("musescore://diagnostics/accessible/tree"), "MuseScore/Diagnostics/DiagnosticAccessibleDialog.qml");
     }
 
     auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
@@ -64,9 +74,19 @@ void DiagnosticsModule::resolveImports()
 void DiagnosticsModule::registerUiTypes()
 {
     qmlRegisterType<DiagnosticsPathsModel>("MuseScore.Diagnostics", 1, 0, "DiagnosticsPathsModel");
+
+    qmlRegisterType<DiagnosticNavigationModel>("MuseScore.Diagnostics", 1, 0, "DiagnosticNavigationModel");
+    qmlRegisterUncreatableType<AbstractKeyNavDevItem>("MuseScore.Diagnostics", 1, 0, "AbstractKeyNavDevItem", "Cannot create a Abstract");
+    qmlRegisterUncreatableType<KeyNavDevSubSection>("MuseScore.Diagnostics", 1, 0, "KeyNavDevSubSection", "Cannot create");
+    qmlRegisterUncreatableType<KeyNavDevSection>("MuseScore.Diagnostics", 1, 0, "KeyNavDevSection", "Cannot create a KeyNavDevSection");
+    qmlRegisterUncreatableType<KeyNavDevControl>("MuseScore.Diagnostics", 1, 0, "KeyNavDevControl", "Cannot create a KeyNavDevControl");
+
+    qmlRegisterType<DiagnosticAccessibleModel>("MuseScore.Diagnostics", 1, 0, "DiagnosticAccessibleModel");
 }
 
 void DiagnosticsModule::onInit(const framework::IApplication::RunMode&)
 {
     s_actionsController->init();
+
+    DiagnosticAccessibleModel::init();
 }

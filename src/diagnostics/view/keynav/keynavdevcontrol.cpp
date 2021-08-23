@@ -19,21 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
-import MuseScore.Ui 1.0
-import MuseScore.UiComponents 1.0
+#include "keynavdevcontrol.h"
 
-StyledDialogView {
-    id: root
+using namespace mu::diagnostics;
+using namespace mu::ui;
 
-    title: "AccessibleDevDialog"
+KeyNavDevControl::KeyNavDevControl(INavigationControl* control)
+    : AbstractKeyNavDevItem(control), m_control(control)
+{
+}
 
-    contentHeight: 800
-    contentWidth: 600
-    resizable: true
+void KeyNavDevControl::requestActive()
+{
+    m_control->activeRequested().send(m_control);
+}
 
-    AccessibleDevPanel {
-        anchors.fill: parent
-        anchors.margins: 8
-    }
+void KeyNavDevControl::trigger()
+{
+    m_control->trigger();
 }

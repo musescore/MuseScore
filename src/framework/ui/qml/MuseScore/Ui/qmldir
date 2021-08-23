@@ -1,5 +1,3 @@
 module MuseScore.Ui
 InteractiveProvider 1.0 InteractiveProvider.qml
 ToolTipProvider 1.0 ToolTipProvider.qml
-KeyNavDevPanel 1.0 KeyNavDevPanel.qml
-KeyNavDevDialog 1.0 KeyNavDevDialog.qml
