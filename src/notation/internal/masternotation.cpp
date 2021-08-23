@@ -376,6 +376,15 @@ mu::Ret MasterNotation::setupNewScore(Ms::MasterScore* score, Ms::MasterScore* t
                 bpm *= 16;
             }
             break;
+        case 128:
+            if (ts.numerator() % 3 == 0) {
+                text = "<sym>metNote64ndUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = %1";
+                bpm *= 6;
+            } else {
+                text = "<sym>metNote128thUp</sym> = %1";
+                bpm *= 16;
+            }
+            break;
         default:
             break;
         }

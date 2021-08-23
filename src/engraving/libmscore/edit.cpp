@@ -776,6 +776,13 @@ TextBase* Score::addText(Tid type)
                 text = "<sym>metNote64thUp</sym> = 80";
             }
             break;
+        case 128:
+            if (f.numerator() % 3 == 0) {
+                text = "<sym>metNote64ndUp</sym><sym>space</sym><sym>metAugmentationDot</sym> = 80";
+            } else {
+                text = "<sym>metNote128thUp</sym> = 80";
+            }
+            break;
         default:
             break;
         }
