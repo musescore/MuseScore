@@ -144,6 +144,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/layout/layoutsystem.h
     ${CMAKE_CURRENT_LIST_DIR}/layout/layoutharmonies.cpp
     ${CMAKE_CURRENT_LIST_DIR}/layout/layoutharmonies.h
+    ${CMAKE_CURRENT_LIST_DIR}/layout/layouttremolo.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/layout/layouttremolo.h
+    ${CMAKE_CURRENT_LIST_DIR}/layout/layoutpage.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/layout/layoutpage.h
     )
 
 if (NO_ENGRAVING_INTERNAL)
