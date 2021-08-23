@@ -2636,7 +2636,7 @@ bool GuitarPro3::read(QFile* fp)
                         art->setSymId(SymId::guitarFadeOut);
                         art->setAnchor(ArticulationAnchor::TOP_STAFF);
                         art->setPropertyFlags(Pid::ARTICULATION_ANCHOR, PropertyFlags::UNSTYLED);
-                        if (!score->addArticulation(cr, art)) {
+                        if (!score->toggleArticulation(cr, art)) {
                             delete art;
                         }
                     }

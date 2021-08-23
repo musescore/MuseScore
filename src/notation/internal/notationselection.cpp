@@ -133,3 +133,13 @@ Ms::Score* NotationSelection::score() const
 {
     return m_getScore->score();
 }
+
+void NotationSelection::onElementHit(EngravingItem* el)
+{
+    m_lastElementHit = el;
+}
+
+EngravingItem* NotationSelection::lastElementHit() const
+{
+    return m_lastElementHit;
+}

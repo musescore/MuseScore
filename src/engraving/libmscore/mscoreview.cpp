@@ -23,6 +23,7 @@
 #include "mscoreview.h"
 #include "score.h"
 #include "page.h"
+#include "text.h"
 
 using namespace mu;
 
@@ -46,7 +47,7 @@ static bool elementLower(const EngravingItem* e1, const EngravingItem* e2)
 //   elementAt
 //---------------------------------------------------------
 
-EngravingItem* MuseScoreView::elementAt(const mu::PointF& p)
+EngravingItem* MuseScoreView::elementAt(const mu::PointF& p) const
 {
     QList<EngravingItem*> el = elementsAt(p);
     EngravingItem* e = el.value(0);
@@ -60,7 +61,7 @@ EngravingItem* MuseScoreView::elementAt(const mu::PointF& p)
 //   point2page
 //---------------------------------------------------------
 
-Page* MuseScoreView::point2page(const mu::PointF& p)
+Page* MuseScoreView::point2page(const mu::PointF& p) const
 {
     if (score()->linearMode()) {
         return score()->pages().isEmpty() ? 0 : score()->pages().front();
@@ -78,7 +79,7 @@ Page* MuseScoreView::point2page(const mu::PointF& p)
 //    p is in canvas coordinates
 //---------------------------------------------------------
 
-const QList<EngravingItem*> MuseScoreView::elementsAt(const mu::PointF& p)
+const QList<EngravingItem*> MuseScoreView::elementsAt(const mu::PointF& p) const
 {
     QList<EngravingItem*> el;
 
@@ -88,5 +89,66 @@ const QList<EngravingItem*> MuseScoreView::elementsAt(const mu::PointF& p)
         std::sort(el.begin(), el.end(), elementLower);
     }
     return el;
+}
+
+EngravingItem* MuseScoreView::elementNear(const mu::PointF& pos) const
+{
+    QList<EngravingItem*> near = elementsNear(pos);
+    if (near.isEmpty()) {
+        return nullptr;
+    }
+    return near.front();
+}
+
+const QList<EngravingItem*> MuseScoreView::elementsNear(const mu::PointF& pos) const
+{
+    QList<EngravingItem*> ll;
+    Page* page = point2page(pos);
+    if (!page) {
+        return ll;
+    }
+
+    mu::PointF p = pos - page->pos();
+    double w = selectionProximity();
+    RectF r(p.x() - w, p.y() - w, 3.0 * w, 3.0 * w);
+
+    QList<EngravingItem*> el = page->items(r);
+    for (int i = 0; i < MAX_HEADERS; i++) {
+        if (score()->headerText(i) != nullptr) {
+            el.push_back(score()->headerText(i));
+        }
+    }
+    for (int i = 0; i < MAX_FOOTERS; i++) {
+        if (score()->footerText(i) != nullptr) {
+            el.push_back(score()->footerText(i));
+        }
+    }
+    for (EngravingItem* e : el) {
+        e->itemDiscovered = 0;
+        if (!e->selectable() || e->isPage()) {
+            continue;
+        }
+        if (e->contains(p)) {
+            ll.append(e);
+        }
+    }
+    int n = ll.size();
+    if ((n == 0) || ((n == 1) && (ll[0]->isMeasure()))) {
+        //
+        // if no relevant element hit, look nearby
+        //
+        for (EngravingItem* e : el) {
+            if (e->isPage() || !e->selectable()) {
+                continue;
+            }
+            if (e->intersects(r)) {
+                ll.append(e);
+            }
+        }
+    }
+    if (!ll.empty()) {
+        std::sort(ll.begin(), ll.end(), elementLower);
+    }
+    return ll;
 }
 }

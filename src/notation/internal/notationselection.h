@@ -51,8 +51,13 @@ public:
 
     INotationSelectionRangePtr range() const override;
 
+    EngravingItem* lastElementHit() const override;
+
+    void onElementHit(EngravingItem*);
+
 private:
     Ms::Score* score() const;
+    EngravingItem* m_lastElementHit;
 
     IGetScore* m_getScore = nullptr;
     INotationSelectionRangePtr m_range;

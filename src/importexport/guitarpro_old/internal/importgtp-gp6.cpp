@@ -1242,7 +1242,7 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                             if (trill) {
                                 Articulation* art = Factory::createArticulation(note->score()->dummy()->chord());
                                 art->setSymId(SymId::ornamentTrill);
-                                if (!note->score()->addArticulation(note, art)) {
+                                if (!note->score()->toggleArticulation(note, art)) {
                                     delete art;
                                 }
                             }
@@ -1267,13 +1267,13 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                                 if (!value.compare("Open")) {
                                     Articulation* art = Factory::createArticulation(note->score()->dummy()->chord());
                                     art->setSymId(SymId::brassMuteOpen);
-                                    if (!note->score()->addArticulation(note, art)) {
+                                    if (!note->score()->toggleArticulation(note, art)) {
                                         delete art;
                                     }
                                 } else if (!value.compare("Closed")) {
                                     Articulation* art = Factory::createArticulation(note->score()->dummy()->chord());
                                     art->setSymId(SymId::brassMuteClosed);
-                                    if (!note->score()->addArticulation(note, art)) {
+                                    if (!note->score()->toggleArticulation(note, art)) {
                                         delete art;
                                     }
                                 }
@@ -1296,7 +1296,7 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                                 }
                                 Articulation* art = Factory::createArticulation(note->score()->dummy()->chord());
                                 art->setSymId(symId);
-                                if (!note->score()->addArticulation(note, art)) {
+                                if (!note->score()->toggleArticulation(note, art)) {
                                     delete art;
                                 }
                             }
@@ -1307,25 +1307,25 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                                 if (!value.compare("InvertedTurn")) {
                                     Articulation* art = Factory::createArticulation(note->score()->dummy()->chord());
                                     art->setSymId(SymId::ornamentTurn);
-                                    if (!note->score()->addArticulation(note, art)) {
+                                    if (!note->score()->toggleArticulation(note, art)) {
                                         delete art;
                                     }
                                 } else if (!value.compare("Turn")) {
                                     Articulation* art = Factory::createArticulation(note->score()->dummy()->chord());
                                     art->setSymId(SymId::ornamentTurnInverted);
-                                    if (!note->score()->addArticulation(note, art)) {
+                                    if (!note->score()->toggleArticulation(note, art)) {
                                         delete art;
                                     }
                                 } else if (!value.compare("LowerMordent")) {
                                     Articulation* art = Factory::createArticulation(note->score()->dummy()->chord());
                                     art->setSymId(SymId::ornamentMordent);
-                                    if (!note->score()->addArticulation(note, art)) {
+                                    if (!note->score()->toggleArticulation(note, art)) {
                                         delete art;
                                     }
                                 } else if (!value.compare("UpperMordent")) {
                                     Articulation* art = Factory::createArticulation(note->score()->dummy()->chord());
                                     art->setSymId(SymId::ornamentShortTrill);
-                                    if (!note->score()->addArticulation(note, art)) {
+                                    if (!note->score()->toggleArticulation(note, art)) {
                                         delete art;
                                     }
                                 }
@@ -1341,13 +1341,13 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                                         if (!currentProperty1.firstChild().toElement().text().compare("Up")) {
                                             Articulation* art = Factory::createArticulation(note->score()->dummy()->chord());
                                             art->setSymId(SymId::stringsUpBow);
-                                            if (!note->score()->addArticulation(note, art)) {
+                                            if (!note->score()->toggleArticulation(note, art)) {
                                                 delete art;
                                             }
                                         } else if (!currentProperty1.firstChild().toElement().text().compare("Down")) {
                                             Articulation* art = Factory::createArticulation(note->score()->dummy()->chord());
                                             art->setSymId(SymId::stringsDownBow);
-                                            if (!note->score()->addArticulation(note, art)) {
+                                            if (!note->score()->toggleArticulation(note, art)) {
                                                 delete art;
                                             }
                                         }
@@ -1529,7 +1529,7 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                                 }
                                 art->setAnchor(ArticulationAnchor::TOP_STAFF);
                                 art->setPropertyFlags(Pid::ARTICULATION_ANCHOR, PropertyFlags::UNSTYLED);
-                                if (!note->score()->addArticulation(note, art)) {
+                                if (!note->score()->toggleArticulation(note, art)) {
                                     delete art;
                                 }
                             }

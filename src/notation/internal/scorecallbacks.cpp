@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "scorecallbacks.h"
+#include "libmscore/engravingitem.h"
 
 #include "log.h"
 
@@ -44,4 +45,30 @@ const mu::Rect ScoreCallbacks::geometry() const
 {
     NOT_IMPLEMENTED;
     return mu::Rect();
+}
+
+qreal ScoreCallbacks::selectionProximity() const
+{
+    return m_selectionProximity;
+}
+
+void ScoreCallbacks::setSelectionProximity(qreal proximity)
+{
+    m_selectionProximity = proximity;
+}
+
+void ScoreCallbacks::setDropTarget(const Ms::EngravingItem* dropTarget)
+{
+    if (m_dropTarget && m_dropTarget != dropTarget) {
+        m_dropTarget->setDropTarget(false);
+    }
+    if (dropTarget != nullptr) {
+        dropTarget->setDropTarget(true);
+    }
+    m_dropTarget = dropTarget;
+}
+
+const Ms::EngravingItem* ScoreCallbacks::dropTarget() const
+{
+    return m_dropTarget;
 }

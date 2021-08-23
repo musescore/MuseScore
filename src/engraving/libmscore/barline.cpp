@@ -1038,7 +1038,7 @@ std::vector<PointF> BarLine::gripsPositions(const EditData& ed) const
     const PointF pp = pagePos();
 
     return {
-        PointF(lw * .5, y1 + bed->yoff1) + pp,
+        //PointF(lw * .5, y1 + bed->yoff1) + pp,
         PointF(lw * .5, y2 + bed->yoff2) + pp
     };
 }
@@ -1056,6 +1056,23 @@ void BarLine::startEdit(EditData& ed)
     ed.addData(bed);
 }
 
+bool BarLine::edit(EditData& ed)
+{
+    bool local = ed.control() || segment()->isBarLineType() || spanStaff() != score()->staff(staffIdx())->barLineSpan();
+    if (ed.key == Qt::Key_Up && spanStaff() || ed.key == Qt::Key_Down && !spanStaff()) {
+        if (local) {
+            BarLine* b = toBarLine(segment()->element(staffIdx() * VOICES));
+            if (b) {
+                b->undoChangeProperty(Pid::BARLINE_SPAN, !spanStaff());
+            }
+        } else {
+            score()->staff(staffIdx())->undoChangeProperty(Pid::STAFF_BARLINE_SPAN, !spanStaff());
+        }
+        return true;
+    }
+    return EngravingItem::edit(ed);
+}
+
 //---------------------------------------------------------
 //   editDrag
 //---------------------------------------------------------
@@ -1066,8 +1083,7 @@ void BarLine::editDrag(EditData& ed)
 
     qreal lineDist = staff()->lineDistance(tick()) * spatium();
     getY();
-    if (ed.curGrip == Grip::START) {
-        // Start grip moving is useless currently, so disable it
+    if (ed.curGrip != Grip::START) {
         return;
     } else {
         // min for bottom grip is 1 line below top grip
@@ -1135,9 +1151,10 @@ void BarLine::endEditDrag(EditData& ed)
     int newSpanFrom = 0;
     int newSpanTo = 0;
 
-    bool localDrag = ed.control() || segment()->isBarLineType();
+    bool localDrag = ed.control() || segment()->isBarLineType() || spanStaff() != score()->staff(staffIdx())->barLineSpan();
     if (localDrag) {
         Segment* s = segment();
+        bool breakLast = staffIdx1 == staffIdx2;
         for (int staffIdx = staffIdx1; staffIdx < staffIdx2; ++staffIdx) {
             BarLine* b = toBarLine(s->element(staffIdx * VOICES));
             if (!b) {
@@ -1147,17 +1164,24 @@ void BarLine::endEditDrag(EditData& ed)
                 b->setParent(s);
                 score()->undoAddElement(b);
             }
+            breakLast = b->spanTo();
             b->undoChangeProperty(Pid::BARLINE_SPAN, true);
         }
-        BarLine* b = toBarLine(s->element(staffIdx2 * VOICES));
-        if (b) {
-            b->undoChangeProperty(Pid::BARLINE_SPAN, false);
+        if (breakLast) {
+            BarLine* b = toBarLine(s->element(staffIdx2 * VOICES));
+            if (b) {
+                b->undoChangeProperty(Pid::BARLINE_SPAN, false);
+            }
         }
     } else {
+        bool breakLast = staffIdx1 == staffIdx2;
         for (int staffIdx = staffIdx1; staffIdx < staffIdx2; ++staffIdx) {
+            breakLast = score()->staff(staffIdx)->barLineSpan();
             score()->staff(staffIdx)->undoChangeProperty(Pid::STAFF_BARLINE_SPAN, true);
         }
-        score()->staff(staffIdx2)->undoChangeProperty(Pid::STAFF_BARLINE_SPAN, false);
+        if (breakLast) {
+            score()->staff(staffIdx2)->undoChangeProperty(Pid::STAFF_BARLINE_SPAN, false);
+        }
         staff()->undoChangeProperty(Pid::STAFF_BARLINE_SPAN_FROM, newSpanFrom);
         staff()->undoChangeProperty(Pid::STAFF_BARLINE_SPAN_TO,   newSpanTo);
     }

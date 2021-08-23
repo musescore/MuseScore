@@ -3098,7 +3098,7 @@ void Score::padToggle(Pad p, const EditData& ed)
             for (const SymId& articulationId: _is.articulationIds()) {
                 Articulation* na = Factory::createArticulation(cr);
                 na->setSymId(articulationId);
-                addArticulation(cr, na);
+                toggleArticulation(cr, na);
             }
         }
     }

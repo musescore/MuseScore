@@ -133,7 +133,6 @@ private:
     void resetState();
     void resetStretch();
     void resetBeamMode();
-    void resetShapesAndPosition();
 
     void openEditStyleDialog();
     void openPageSettingsDialog();
@@ -160,6 +159,7 @@ private:
     bool isNoteInputMode() const;
     bool isEditingElement() const;
     bool isNotEditingElement() const;
+    bool isNotNoteInputMode() const;
 
     void pasteSelection(PastingType type = PastingType::Default);
     Fraction resolvePastingScale(const INotationInteractionPtr& interaction, PastingType type) const;
