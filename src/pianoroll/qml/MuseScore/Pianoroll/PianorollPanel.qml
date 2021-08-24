@@ -60,20 +60,40 @@ Rectangle {
                         ToolTip.delay: 1000
                         ToolTip.timeout: 5000
                         ToolTip.visible: hovered
-                        //onClicked
+
+//                        onClicked {
+//                            pianoView.tool: PianorollView.SELECT
+//                        }
+
+
                     }
+
                     ToolButton {
                         text: qsTr("Edit")
                         checkable: true
 
+//                        onClicked {
+//                            pianoView.tool: PianorollView.EDIT
+//                        }
+
                     }
+
                     ToolButton {
                         text: qsTr("Cut")
                         checkable: true
+
+//                        onClicked {
+                            //pianoView.tool: PianorollView.CUT
+//                        }
                     }
+
                     ToolButton {
                         text: qsTr("Erase")
                         checkable: true
+
+//                        onClicked {
+//                            pianoView.tool: PianorollView.ERASE
+//                        }
                     }
                 }
 
@@ -161,8 +181,12 @@ Rectangle {
                     Slider {
                         id: vertZoom
                         from: 1
-                        to: 100
-                        value: 20
+                        to: 40
+                        value: 14
+
+//                        onMoved: {
+                            //pianoView.zoomX =
+//                        }
                     }
 
                     Label {
@@ -181,6 +205,7 @@ Rectangle {
         }
 
 
+
         ScrollView {
             Layout.fillWidth: true
             Layout.fillHeight: true
@@ -194,10 +219,18 @@ Rectangle {
             contentHeight: 500
 
             PianorollView {
+                id: pianoView
                 anchors.fill: parent
 
                 implicitWidth: 1500
                 implicitHeight: 500
+
+//                zoomX: horizZoom.value
+//                zoomX: Math.log(horizZoom.value) / Math.log(2)
+                wholeNoteWidth: Math.pow(horizZoom.value, 1.1)
+                noteHeight: vertZoom.value
+//                tool: PianorollView.SELECT
+
 
                 StyledTextLabel {
                     anchors.centerIn: parent
@@ -207,6 +240,7 @@ Rectangle {
                 Component.onCompleted: {
                     load()
                 }
+
             }
         }
     }
