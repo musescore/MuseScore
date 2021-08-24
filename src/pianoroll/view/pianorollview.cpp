@@ -64,13 +64,13 @@ void PianorollView::setNoteHeight(int value)
     emit noteHeightChanged();
 }
 
-//void PianorollView::setTool(PianorollTool value)
-//{
-//    if (value == m_tool)
-//        return;
-//    m_tool = value;
-//    emit toolChanged();
-//}
+void PianorollView::setTool(PianorollTool value)
+{
+    if (value == m_tool)
+        return;
+    m_tool = value;
+    emit toolChanged();
+}
 
 
 void PianorollView::load()
