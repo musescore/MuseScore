@@ -20,37 +20,37 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <QMimeData>
 #include <QBuffer>
-
-#include "score.h"
+#include <QMimeData>
 
 #include "io/xml.h"
 
-#include "rest.h"
-#include "staff.h"
-#include "measure.h"
-#include "harmony.h"
-#include "fret.h"
-#include "breath.h"
+#include "articulation.h"
 #include "beam.h"
+#include "breath.h"
+#include "chord.h"
+#include "factory.h"
 #include "figuredbass.h"
+#include "fret.h"
+#include "hairpin.h"
+#include "harmony.h"
+#include "image.h"
+#include "lyrics.h"
+#include "measure.h"
+#include "measurerepeat.h"
+#include "mscoreview.h"
 #include "ottava.h"
 #include "part.h"
-#include "lyrics.h"
-#include "hairpin.h"
-#include "tie.h"
-#include "tuplet.h"
-#include "utils.h"
-#include "image.h"
-#include "measurerepeat.h"
-#include "chord.h"
-#include "tremolo.h"
-#include "slur.h"
-#include "articulation.h"
+#include "rest.h"
+#include "score.h"
 #include "sig.h"
+#include "slur.h"
+#include "staff.h"
+#include "tie.h"
+#include "tremolo.h"
+#include "tuplet.h"
 #include "undo.h"
-#include "factory.h"
+#include "utils.h"
 
 using namespace mu;
 using namespace mu::engraving;

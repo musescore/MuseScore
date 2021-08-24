@@ -28,11 +28,12 @@
 #include "draw/brush.h"
 #include "io/xml.h"
 
+#include "chord.h"
 #include "measure.h"
+#include "mscoreview.h"
 #include "score.h"
 #include "system.h"
 #include "undo.h"
-#include "chord.h"
 
 using namespace mu;
 

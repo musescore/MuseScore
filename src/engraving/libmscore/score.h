@@ -29,21 +29,19 @@
 */
 
 #include <set>
-#include <QFileInfo>
+
 #include <QQueue>
 #include <QSet>
 
-#include "config.h"
+#include "chordlist.h"
 #include "input.h"
-#include "instrument.h"
+#include "layoutbreak.h"
+#include "mscore.h"
+#include "property.h"
 #include "scoreorder.h"
 #include "select.h"
-#include "synthesizerstate.h"
-#include "mscoreview.h"
 #include "spannermap.h"
-#include "layoutbreak.h"
-#include "property.h"
-#include "chordlist.h"
+#include "synthesizerstate.h"
 
 #include "infrastructure/io/mscwriter.h"
 #include "infrastructure/io/mscreader.h"
@@ -55,81 +53,73 @@
 #include "layout/layoutoptions.h"
 #include "compat/dummyelement.h"
 
+#include "style/style.h"
+
+#include "modularity/ioc.h"
+#include "infrastructure/draw/iimageprovider.h"
+
 class QMimeData;
 
 namespace mu::engraving {
-class EngravingProject;
 class AccessibleScore;
 }
 
 namespace mu::engraving::compat {
-class ScoreAccess;
+class Read302;
 class ReadScoreHook;
 class WriteScoreHook;
-class Read302;
-class DummyElement;
 }
 
 namespace Ms {
-namespace Avs {
-class AvsOmr;
-}
 class Articulation;
 class Audio;
-class BarLine;
-class Beam;
+class Box;
 class Bracket;
-class BSymbol;
 class Chord;
 class ChordRest;
 class Clef;
-class Dynamic;
-class ElementList;
+class ConnectorInfoReader;
+class Element;
 class EventMap;
 class Excerpt;
 class FiguredBass;
-class Fingering;
 class Hairpin;
 class Harmony;
-class Instrument;
+class InstrumentTemplate;
+class InputState;
 class KeyList;
-class KeySig;
 class KeySigEvent;
 class LinkedObjects;
 class Lyrics;
-class MasterSynthesizer;
+class MasterScore;
 class Measure;
 class MeasureBase;
 class MuseScoreView;
 class Note;
-class Omr;
 class Page;
-class Parameter;
 class Part;
+class RehearsalMark;
 class RepeatList;
 class Rest;
-class Revisions;
+class Score;
+class ScoreElement;
 class ScoreFont;
 class Segment;
-class Selection;
-class SigEvent;
 class Slur;
 class Spanner;
 class Staff;
 class System;
+class TDuration;
 class TempoMap;
 class Text;
 class TimeSig;
 class TimeSigMap;
 class Tuplet;
-class Undo;
 class UndoCommand;
 class UndoStack;
-class Volta;
+class XmlReader;
 class XmlWriter;
-class Channel;
 struct Interval;
-struct TEvent;
 
 enum class Tid;
 enum class ClefType : signed char;
@@ -140,6 +130,8 @@ enum class SegmentType;
 enum class OttavaType : char;
 enum class Voicing : signed char;
 enum class HDuration : signed char;
+enum class Direction;
+enum class AccidentalType;
 
 enum class POS : char {
     CURRENT, LEFT, RIGHT
@@ -196,31 +188,6 @@ public:
 };
 
 //---------------------------------------------------------
-//   MidiMapping
-//---------------------------------------------------------
-
-class MidiMapping
-{
-    Part* _part;
-    std::unique_ptr<Channel> _articulation;
-    signed char _port;
-    signed char _channel;
-    Channel* masterChannel;
-    PartChannelSettingsLink link;
-
-    MidiMapping() = default;   // should be created only within MasterScore
-    friend class MasterScore;
-
-public:
-    Part* part() { return _part; }
-    const Part* part() const { return _part; }
-    Channel* articulation() { return _articulation.get(); }
-    const Channel* articulation() const { return _articulation.get(); }
-    signed char port() const { return _port; }
-    signed char channel() const { return _channel; }
-};
-
-//---------------------------------------------------------
 //   MidiInputEvent
 //---------------------------------------------------------
 
@@ -235,7 +202,7 @@ struct MidiInputEvent {
 //---------------------------------------------------------
 
 struct Position {
-    Segment* segment { 0 };
+    Segment* segment { nullptr };
     int staffIdx     { -1 };
     int line         { 0 };
     int fret         { INVALID_FRET_INDEX };
@@ -375,8 +342,6 @@ public:
     bool isNewerThan(const ScoreContentState& s2) const { return score == s2.score && num > s2.num; }
 };
 
-class MasterScore;
-
 //---------------------------------------------------------------------------------------
 //   @@ Score
 //   @P composer        string            composer of the score (read only)
@@ -500,7 +465,7 @@ private:
 
     Selection _selection;
     SelectionFilter _selectionFilter;
-    Audio* _audio { 0 };
+    Audio* _audio { nullptr };
     PlayMode _playMode { PlayMode::SYNTHESIZER };
 
     qreal _noteHeadWidth { 0.0 };         // cached value

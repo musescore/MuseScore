@@ -427,7 +427,7 @@ public:
         : GuitarPro(s, 6) {}
     GuitarPro6(MasterScore* s, int v)
         : GuitarPro(s, v) {}
-    virtual bool read(QFile*);
+    bool read(QFile*) override;
 };
 
 class GuitarPro7 : public GuitarPro6
@@ -437,7 +437,7 @@ class GuitarPro7 : public GuitarPro6
 public:
     GuitarPro7(MasterScore* s)
         : GuitarPro6(s, 7) {}
-    virtual bool read(QFile*);
+    bool read(QFile*) override;
 };
 } // namespace Ms
 #endif
