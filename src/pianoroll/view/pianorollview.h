@@ -40,19 +40,16 @@ class PianorollView : public QQuickPaintedItem, public async::Asyncable
 {
     Q_OBJECT
 public:
-//    enum class PianorollTool : char { SELECT, EDIT, CUT, ERASE };
-//    Q_ENUM(PianorollTool)
+    enum class PianorollTool : char { SELECT, EDIT, CUT, ERASE };
+    Q_ENUM(PianorollTool)
 
 private:
     INJECT(pianoroll, context::IGlobalContext, globalContext)
     INJECT(pianoroll, IPianorollController, controller)
 
-
-
-
     Q_PROPERTY(double wholeNoteWidth READ wholeNoteWidth WRITE setWholeNoteWidth NOTIFY wholeNoteWidthChanged)
     Q_PROPERTY(int noteHeight READ noteHeight WRITE setNoteHeight NOTIFY noteHeightChanged)
-//    Q_PROPERTY(PianorollTool tool READ tool WRITE setTool NOTIFY toolChanged)
+    Q_PROPERTY(PianorollTool tool READ tool WRITE setTool NOTIFY toolChanged)
 
 public:
 
@@ -81,8 +78,8 @@ public:
     void setWholeNoteWidth(double value);
     int noteHeight() const { return m_noteHeight; }
     void setNoteHeight(int value);
-//    PianorollTool tool() const { return m_tool; }
-//    void setTool(PianorollTool value);
+    PianorollTool tool() const { return m_tool; }
+    void setTool(PianorollTool value);
 
 
     void paint(QPainter*) override;
@@ -103,7 +100,7 @@ private:
 //    PianorollGeneral* m_common = nullptr;
     double m_wholeNoteWidth;
     int m_noteHeight;
-//    PianorollTool m_tool = PianorollTool::SELECT;
+    PianorollTool m_tool = PianorollTool::SELECT;
 
 };
 }
