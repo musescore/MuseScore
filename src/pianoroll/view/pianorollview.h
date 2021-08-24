@@ -30,37 +30,34 @@
 #include "async/asyncable.h"
 #include "context/iglobalcontext.h"
 #include "pianoroll/ipianorollcontroller.h"
+#include "pianorolltool.h"
 
 namespace mu::pianoroll {
 
-class PianorollView;
-
-//class PianoItem {
-//    Note* _note;
-//    PianoView* _pianoView;
-
-//public:
-//   PianoItem(Note*, PianorollView*);
-//   ~PianoItem() {}
-
-//};
-
-//--------------------
+class PianorollGeneral;
 
 class PianorollView : public QQuickPaintedItem, public async::Asyncable
 {
     Q_OBJECT
+public:
+//    enum class PianorollTool : char { SELECT, EDIT, CUT, ERASE };
+//    Q_ENUM(PianorollTool)
 
+private:
     INJECT(pianoroll, context::IGlobalContext, globalContext)
     INJECT(pianoroll, IPianorollController, controller)
 
 
-//    Q_PROPERTY(QVariant icon READ icon WRITE setIcon)
-//    Q_PROPERTY(bool selected READ selected WRITE setSelected)
-//    Q_PROPERTY(bool active READ active WRITE setActive)
-    Q_PROPERTY(QColor color READ color WRITE setColor)
+
+
+    Q_PROPERTY(double wholeNoteWidth READ wholeNoteWidth WRITE setWholeNoteWidth NOTIFY wholeNoteWidthChanged)
+    Q_PROPERTY(int noteHeight READ noteHeight WRITE setNoteHeight NOTIFY noteHeightChanged)
+//    Q_PROPERTY(PianorollTool tool READ tool WRITE setTool NOTIFY toolChanged)
 
 public:
+
+
+
     PianorollView(QQuickItem* parent = nullptr);
 
 //    QVariant icon() const;
@@ -77,7 +74,24 @@ public:
     QColor color() const { return m_color; }
     void setColor(QColor val) { m_color = val; }
 
+//    PianorollGeneral* common() const { return m_common; }
+//    void setCommon(PianorollGeneral* val) { m_common = val; }
+
+    double wholeNoteWidth() const { return m_wholeNoteWidth; }
+    void setWholeNoteWidth(double value);
+    int noteHeight() const { return m_noteHeight; }
+    void setNoteHeight(int value);
+//    PianorollTool tool() const { return m_tool; }
+//    void setTool(PianorollTool value);
+
+
     void paint(QPainter*) override;
+
+signals:
+    void wholeNoteWidthChanged();
+    void noteHeightChanged();
+    void toolChanged();
+
 
 private:
     void onNotationChanged();
@@ -86,9 +100,11 @@ private:
     notation::INotationPtr m_notation;
 
     QColor m_color = Qt::red;
-//    QIcon m_icon;
-//    bool m_selected { false };
-//    bool m_active   { false };
+//    PianorollGeneral* m_common = nullptr;
+    double m_wholeNoteWidth;
+    int m_noteHeight;
+//    PianorollTool m_tool = PianorollTool::SELECT;
+
 };
 }
 
