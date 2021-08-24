@@ -48,6 +48,31 @@ void PianorollView::onNotationChanged()
     update();
 }
 
+void PianorollView::setWholeNoteWidth(double value)
+{
+    if (value == m_wholeNoteWidth)
+        return;
+    m_wholeNoteWidth = value;
+    emit wholeNoteWidthChanged();
+}
+
+void PianorollView::setNoteHeight(int value)
+{
+    if (value == m_noteHeight)
+        return;
+    m_noteHeight = value;
+    emit noteHeightChanged();
+}
+
+//void PianorollView::setTool(PianorollTool value)
+//{
+//    if (value == m_tool)
+//        return;
+//    m_tool = value;
+//    emit toolChanged();
+//}
+
+
 void PianorollView::load()
 {
 //    globalContext()->currentNotationChanged().onNotify(this, [this]() {
