@@ -2683,14 +2683,11 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
 {
     select(0, SelectType::SINGLE, 0);
 
-    // createEndBar if last measure is deleted
-    bool createEndBar = false;
     if (mbEnd->isMeasure()) {
         Measure* mbEndMeasure = toMeasure(mbEnd);
         if (mbEndMeasure->isMMRest()) {
             mbEnd = mbEndMeasure->mmRestLast();
         }
-        createEndBar = false;
     }
 
     // get the last deleted timesig & keysig in order to restore after deletion
