@@ -154,6 +154,8 @@ void AccessibilityController::propertyChanged(IAccessible* item, IAccessible::Pr
         break;
     case IAccessible::Property::Name: etype = QAccessible::NameChanged;
         break;
+    case IAccessible::Property::Description: etype = QAccessible::DescriptionChanged;
+        break;
     }
 
     QAccessibleEvent ev(it.object, etype);
