@@ -91,8 +91,8 @@ private:
     void doMoveStaves(const std::vector<Staff*>& staves, int destinationStaffIndex, Part* destinationPart = nullptr);
     void doSetStaffVoiceVisible(Staff* staff, int voiceIndex, bool visible);
     void doRemoveParts(const IDList& partsIds);
-    void doAppendStaff(Staff* staff, const ID& destinationPartId);
-    void doSetStaffConfig(const ID& staffId, const StaffConfig& config);
+    void doAppendStaff(Staff* staff, Part* destinationPart);
+    void doSetStaffConfig(Staff* staff, const StaffConfig& config);
     void doInsertPart(Part* part, int index);
 
     Part* partModifiable(const ID& partId) const;
@@ -102,7 +102,6 @@ private:
     void appendStaves(Part* part, const InstrumentTemplate& templ);
     void insertStaff(Staff* staff, int destinationStaffIndex);
     void initStaff(Staff* staff, const InstrumentTemplate& templ, const Ms::StaffType* staffType, int cleffIndex);
-    void linkStaves(const ID& sourceStaffId, const ID& destinationStaffId);
 
     void removeMissingParts(const PartInstrumentList& parts);
     void appendNewParts(const PartInstrumentList& parts);

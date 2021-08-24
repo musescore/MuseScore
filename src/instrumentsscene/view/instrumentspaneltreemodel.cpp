@@ -37,6 +37,16 @@ using namespace mu::notation;
 using namespace mu::uicomponents;
 using ItemType = InstrumentsTreeItemType::ItemType;
 
+namespace mu::instrumentsscene {
+static QString notationToKey(const INotationPtr notation)
+{
+    std::stringstream stream;
+    stream << notation.get();
+
+    return QString::fromStdString(stream.str());
+}
+}
+
 InstrumentsPanelTreeModel::InstrumentsPanelTreeModel(QObject* parent)
     : QAbstractItemModel(parent)
 {
@@ -44,13 +54,13 @@ InstrumentsPanelTreeModel::InstrumentsPanelTreeModel(QObject* parent)
 
     context()->currentMasterNotationChanged().onNotify(this, [this]() {
         m_masterNotation = context()->currentMasterNotation();
+        initPartOrders();
     });
 
     context()->currentNotationChanged().onNotify(this, [this]() {
         m_partsNotifyReceiver->disconnectAll();
 
         onBeforeChangeNotation();
-
         m_notation = context()->currentNotation();
 
         if (m_notation) {
@@ -83,16 +93,36 @@ bool InstrumentsPanelTreeModel::canReceiveAction(const actions::ActionCode&) con
     return m_masterNotation != nullptr && m_notation != nullptr;
 }
 
+void InstrumentsPanelTreeModel::initPartOrders()
+{
+    m_sortedPartIdList.clear();
+
+    if (!m_masterNotation) {
+        return;
+    }
+
+    for (IExcerptNotationPtr excerpt : m_masterNotation->excerpts().val) {
+        NotationKey key = notationToKey(excerpt->notation());
+
+        for (const Part* part : excerpt->notation()->parts()->partList()) {
+            m_sortedPartIdList[key] << part->id();
+        }
+    }
+}
+
 void InstrumentsPanelTreeModel::onBeforeChangeNotation()
 {
     if (!m_notation || !m_rootItem) {
         return;
     }
 
+    QList<ID> partIdList;
+
     for (int i = 0; i < m_rootItem->childCount(); ++i) {
-        AbstractInstrumentsPanelTreeItem* item = m_rootItem->childAtRow(i);
-        m_sortedPartIdList[m_notation->title()].push_back(item->id());
+        partIdList << m_rootItem->childAtRow(i)->id();
     }
+
+    m_sortedPartIdList[notationToKey(m_notation)] = partIdList;
 }
 
 void InstrumentsPanelTreeModel::setupPartsConnections()
@@ -229,7 +259,7 @@ void InstrumentsPanelTreeModel::load()
 
 void InstrumentsPanelTreeModel::sortParts(notation::PartList& parts)
 {
-    NotationKey key = m_notation->title();
+    NotationKey key = notationToKey(m_notation);
 
     if (!m_sortedPartIdList.contains(key)) {
         return;
@@ -240,6 +270,14 @@ void InstrumentsPanelTreeModel::sortParts(notation::PartList& parts)
     std::sort(parts.begin(), parts.end(), [&sortedPartIdList](const Part* part1, const Part* part2) {
         int index1 = sortedPartIdList.indexOf(part1->id());
         int index2 = sortedPartIdList.indexOf(part2->id());
+
+        if (index1 < 0) {
+            index1 = std::numeric_limits<int>::max();
+        }
+
+        if (index2 < 0) {
+            index2 = std::numeric_limits<int>::max();
+        }
 
         return index1 < index2;
     });
