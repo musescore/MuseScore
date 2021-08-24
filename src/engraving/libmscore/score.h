@@ -55,8 +55,6 @@ class QMimeData;
 
 namespace mu::engraving {
 class EngravingProject;
-class LayoutContext;
-class LayoutMeasure;
 class AccessibleScore;
 }
 
@@ -428,8 +426,6 @@ private:
     friend class mu::engraving::compat::ReadScoreHook;
     friend class mu::engraving::compat::Read302;
     friend class mu::engraving::Layout;
-    friend class mu::engraving::LayoutContext;
-    friend class mu::engraving::LayoutMeasure;
 
     static std::set<Score*> validScores;
     int _linkId { 0 };

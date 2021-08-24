@@ -32,7 +32,7 @@ class Tremolo;
 }
 
 namespace mu::engraving {
-class LayoutContext;
+struct LayoutContext;
 class Layout
 {
 public:
