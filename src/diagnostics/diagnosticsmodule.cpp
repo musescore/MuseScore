@@ -87,6 +87,4 @@ void DiagnosticsModule::registerUiTypes()
 void DiagnosticsModule::onInit(const framework::IApplication::RunMode&)
 {
     s_actionsController->init();
-
-    DiagnosticAccessibleModel::init();
 }

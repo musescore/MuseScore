@@ -34,6 +34,7 @@ Rectangle {
     color: ui.theme.backgroundPrimaryColor
 
     Component.onCompleted: {
+        accessibleModel.init()
         accessibleModel.reload()
     }
 
