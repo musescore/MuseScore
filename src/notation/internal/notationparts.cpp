@@ -184,7 +184,7 @@ void NotationParts::setPartVisible(const ID& partId, bool visible)
     TRACEFUNC;
 
     Part* part = partModifiable(partId);
-    IF_ASSERT_FAILED(part) {
+    if (!part) {
         return;
     }
 
@@ -206,7 +206,7 @@ void NotationParts::setPartName(const ID& partId, const QString& name)
     TRACEFUNC;
 
     Part* part = partModifiable(partId);
-    IF_ASSERT_FAILED(part) {
+    if (!part) {
         return;
     }
 
@@ -228,7 +228,7 @@ void NotationParts::setPartSharpFlat(const ID& partId, const SharpFlat& sharpFla
     TRACEFUNC;
 
     Part* part = partModifiable(partId);
-    IF_ASSERT_FAILED(part) {
+    if (!part) {
         return;
     }
 
@@ -246,7 +246,7 @@ void NotationParts::setPartTransposition(const ID& partId, const Interval& trans
     TRACEFUNC;
 
     Part* part = partModifiable(partId);
-    IF_ASSERT_FAILED(part) {
+    if (!part) {
         return;
     }
 
@@ -304,7 +304,7 @@ void NotationParts::setInstrumentName(const InstrumentKey& instrumentKey, const 
     TRACEFUNC;
 
     Part* part = partModifiable(instrumentKey.partId);
-    IF_ASSERT_FAILED(part) {
+    if (!part) {
         return;
     }
 
@@ -322,7 +322,7 @@ void NotationParts::setInstrumentAbbreviature(const InstrumentKey& instrumentKey
     TRACEFUNC;
 
     Part* part = partModifiable(instrumentKey.partId);
-    IF_ASSERT_FAILED(part) {
+    if (!part) {
         return;
     }
 
@@ -340,7 +340,7 @@ void NotationParts::setVoiceVisible(const ID& staffId, int voiceIndex, bool visi
     TRACEFUNC;
 
     Staff* staff = staffModifiable(staffId);
-    IF_ASSERT_FAILED(staff) {
+    if (!staff) {
         return;
     }
 
@@ -358,7 +358,7 @@ void NotationParts::setStaffVisible(const ID& staffId, bool visible)
     TRACEFUNC;
 
     Staff* staff = staffModifiable(staffId);
-    IF_ASSERT_FAILED(staff) {
+    if (!staff) {
         return;
     }
 
@@ -402,7 +402,7 @@ void NotationParts::setCutawayEnabled(const ID& staffId, bool enabled)
     TRACEFUNC;
 
     Staff* staff = staffModifiable(staffId);
-    IF_ASSERT_FAILED(staff) {
+    if (!staff) {
         return;
     }
 
@@ -426,7 +426,7 @@ void NotationParts::setSmallStaff(const ID& staffId, bool smallStaff)
     TRACEFUNC;
 
     Staff* staff = staffModifiable(staffId);
-    IF_ASSERT_FAILED(staff) {
+    if (!staff) {
         return;
     }
 
@@ -489,7 +489,7 @@ void NotationParts::setStaffConfig(const ID& staffId, const StaffConfig& config)
     TRACEFUNC;
 
     Staff* staff = staffModifiable(staffId);
-    IF_ASSERT_FAILED(staff) {
+    if (!staff) {
         return;
     }
 
@@ -544,7 +544,7 @@ void NotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
     TRACEFUNC;
 
     Part* destinationPart = partModifiable(destinationPartId);
-    IF_ASSERT_FAILED(staff && destinationPart) {
+    if (!staff || !destinationPart) {
         return;
     }
 
@@ -564,7 +564,7 @@ void NotationParts::appendLinkedStaff(Staff* staff, const ID& sourceStaffId, con
 
     Staff* sourceStaff = staffModifiable(sourceStaffId);
     Part* destinationPart = partModifiable(destinationPartId);
-    IF_ASSERT_FAILED(staff && sourceStaff && destinationPart) {
+    if (!staff || !sourceStaff || !destinationPart) {
         return;
     }
 
@@ -587,7 +587,7 @@ void NotationParts::insertPart(Part* part, size_t index)
 {
     TRACEFUNC;
 
-    IF_ASSERT_FAILED(part) {
+    if (!part) {
         return;
     }
 
@@ -605,7 +605,7 @@ void NotationParts::replacePart(const ID& partId, Part* newPart)
     TRACEFUNC;
 
     Part* part = partModifiable(partId);
-    IF_ASSERT_FAILED(part && newPart) {
+    if (!part || !newPart) {
         return;
     }
 
@@ -625,7 +625,7 @@ void NotationParts::replaceInstrument(const InstrumentKey& instrumentKey, const 
     TRACEFUNC;
 
     Part* part = partModifiable(instrumentKey.partId);
-    IF_ASSERT_FAILED(part) {
+    if (!part) {
         return;
     }
 
@@ -642,7 +642,7 @@ void NotationParts::replaceInstrument(const InstrumentKey& instrumentKey, const 
 void NotationParts::replaceDrumset(const InstrumentKey& instrumentKey, const Drumset& newDrumset)
 {
     Part* part = partModifiable(instrumentKey.partId);
-    IF_ASSERT_FAILED(part) {
+    if (!part) {
         return;
     }
 

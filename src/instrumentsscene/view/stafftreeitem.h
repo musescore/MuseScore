@@ -34,15 +34,14 @@ class StaffTreeItem : public AbstractInstrumentsPanelTreeItem
 public:
     StaffTreeItem(notation::IMasterNotationPtr masterNotation, notation::INotationPtr notation, QObject* parent);
 
+    void init(const notation::Staff* masterStaff);
+
+    bool isSelectable() const override;
+
     Q_INVOKABLE bool isSmall() const;
     Q_INVOKABLE bool cutawayEnabled() const;
     Q_INVOKABLE int staffType() const;
     Q_INVOKABLE QVariantList voicesVisibility() const;
-
-    void setIsSmall(bool value);
-    void setCutawayEnabled(bool value);
-    void setStaffType(int type);
-    void setVoicesVisibility(const QVariantList& visibility);
 
 private:
     bool m_isSmall = false;

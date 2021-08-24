@@ -32,9 +32,11 @@ Item {
     property var attachedControl: undefined
     property var index: styleData.index
     property string filterKey
+    property int type: InstrumentsTreeItemType.UNDEFINED
     property bool isSelected: false
     property bool isDragAvailable: false
-    property int type: InstrumentsTreeItemType.UNDEFINED
+    property alias isExpandable: expandButton.visible
+    property alias isEditable: settingsButton.visible
 
     property int keynavRow: 0
     property NavigationPanel navigationPanel: null
@@ -270,7 +272,6 @@ Item {
             navigation.column: 1
 
             isVisible: model && model.itemRole.isVisible
-            enabled: root.visible && model && model.itemRole.canChangeVisibility
 
             onVisibleToggled: {
                 if (!model) {
@@ -301,8 +302,6 @@ Item {
                 pressedStateColor: ui.theme.accentColor
 
                 icon: styleData.isExpanded ? IconCode.SMALL_ARROW_DOWN : IconCode.SMALL_ARROW_RIGHT
-
-                visible: styleData.hasChildren && (root.type === InstrumentsTreeItemType.INSTRUMENT ? styleData.index.row === 0 : true)
 
                 onClicked: {
                     if (!styleData.isExpanded) {
@@ -347,9 +346,6 @@ Item {
             navigation.column: 3
 
             pressedStateColor: ui.theme.accentColor
-
-            visible: model ? root.type === InstrumentsTreeItemType.PART ||
-                             root.type === InstrumentsTreeItemType.STAFF : false
 
             icon: IconCode.SETTINGS_COG
 

@@ -33,8 +33,6 @@ AbstractInstrumentsPanelTreeItem::AbstractInstrumentsPanelTreeItem(const Instrum
     : QObject(parent), m_masterNotation(masterNotation), m_notation(notation)
 {
     setType(type);
-
-    m_canChangeVisibility = isSelectable();
 }
 
 AbstractInstrumentsPanelTreeItem::~AbstractInstrumentsPanelTreeItem()
@@ -42,15 +40,6 @@ AbstractInstrumentsPanelTreeItem::~AbstractInstrumentsPanelTreeItem()
     for (AbstractInstrumentsPanelTreeItem* child : m_children) {
         child->deleteLater();
     }
-}
-
-bool AbstractInstrumentsPanelTreeItem::canAcceptDrop(const int type) const
-{
-    return static_cast<InstrumentsTreeItemType::ItemType>(type) == m_type;
-}
-
-void AbstractInstrumentsPanelTreeItem::appendNewItem()
-{
 }
 
 mu::ID AbstractInstrumentsPanelTreeItem::id() const
@@ -61,11 +50,6 @@ mu::ID AbstractInstrumentsPanelTreeItem::id() const
 QString AbstractInstrumentsPanelTreeItem::idStr() const
 {
     return m_id.toQString();
-}
-
-bool AbstractInstrumentsPanelTreeItem::canChangeVisibility() const
-{
-    return m_canChangeVisibility;
 }
 
 QString AbstractInstrumentsPanelTreeItem::title() const
@@ -85,9 +69,68 @@ bool AbstractInstrumentsPanelTreeItem::isVisible() const
 
 bool AbstractInstrumentsPanelTreeItem::isSelectable() const
 {
-    return m_type == InstrumentsTreeItemType::ItemType::PART
-           || m_type == InstrumentsTreeItemType::ItemType::INSTRUMENT
-           || m_type == InstrumentsTreeItemType::ItemType::STAFF;
+    return false;
+}
+
+bool AbstractInstrumentsPanelTreeItem::isExpandable() const
+{
+    return m_isExpandable;
+}
+
+bool AbstractInstrumentsPanelTreeItem::isEditable() const
+{
+    return m_isEditable;
+}
+
+bool AbstractInstrumentsPanelTreeItem::isRemovable() const
+{
+    return m_isRemovable;
+}
+
+bool AbstractInstrumentsPanelTreeItem::canAcceptDrop(int type) const
+{
+    return static_cast<InstrumentsTreeItemType::ItemType>(type) == m_type;
+}
+
+void AbstractInstrumentsPanelTreeItem::appendNewItem()
+{
+}
+
+void AbstractInstrumentsPanelTreeItem::moveChildren(int sourceRow, int count,
+                                                    AbstractInstrumentsPanelTreeItem* destinationParent,
+                                                    int destinationRow)
+{
+    QList<AbstractInstrumentsPanelTreeItem*> childrenToMove;
+    for (int i = sourceRow; i < sourceRow + count; ++i) {
+        childrenToMove << childAtRow(i);
+    }
+
+    int destinationRow_ = destinationRow;
+    for (AbstractInstrumentsPanelTreeItem* child: childrenToMove) {
+        destinationParent->insertChild(child, destinationRow_);
+        destinationRow_++;
+    }
+
+    int childToRemoveIndex = sourceRow;
+
+    if (sourceRow > destinationRow && destinationParent == this) {
+        childToRemoveIndex = sourceRow + count;
+    }
+
+    AbstractInstrumentsPanelTreeItem::removeChildren(childToRemoveIndex, count);
+}
+
+void AbstractInstrumentsPanelTreeItem::removeChildren(int row, int count, bool deleteChild)
+{
+    for (int i = row + count - 1; i >= row; --i) {
+        AbstractInstrumentsPanelTreeItem* child = m_children.at(i);
+
+        m_children.removeAt(i);
+
+        if (deleteChild) {
+            child->deleteLater();
+        }
+    }
 }
 
 AbstractInstrumentsPanelTreeItem* AbstractInstrumentsPanelTreeItem::parentItem() const
@@ -98,11 +141,6 @@ AbstractInstrumentsPanelTreeItem* AbstractInstrumentsPanelTreeItem::parentItem()
 void AbstractInstrumentsPanelTreeItem::setParentItem(AbstractInstrumentsPanelTreeItem* parent)
 {
     m_parent = parent;
-}
-
-bool AbstractInstrumentsPanelTreeItem::isEmpty() const
-{
-    return m_children.isEmpty();
 }
 
 AbstractInstrumentsPanelTreeItem* AbstractInstrumentsPanelTreeItem::childAtId(const ID& id) const
@@ -116,7 +154,7 @@ AbstractInstrumentsPanelTreeItem* AbstractInstrumentsPanelTreeItem::childAtId(co
     return nullptr;
 }
 
-AbstractInstrumentsPanelTreeItem* AbstractInstrumentsPanelTreeItem::childAtRow(const int row) const
+AbstractInstrumentsPanelTreeItem* AbstractInstrumentsPanelTreeItem::childAtRow(int row) const
 {
     if (row < 0 || row >= childCount()) {
         return nullptr;
@@ -145,31 +183,7 @@ void AbstractInstrumentsPanelTreeItem::appendChild(AbstractInstrumentsPanelTreeI
     m_children.append(child);
 }
 
-void AbstractInstrumentsPanelTreeItem::moveChildren(const int sourceRow, const int count,
-                                                    AbstractInstrumentsPanelTreeItem* destinationParent,
-                                                    const int destinationRow)
-{
-    QList<AbstractInstrumentsPanelTreeItem*> childrenToMove;
-    for (int i = sourceRow; i < sourceRow + count; ++i) {
-        childrenToMove << childAtRow(i);
-    }
-
-    int destinationRow_ = destinationRow;
-    for (AbstractInstrumentsPanelTreeItem* child: childrenToMove) {
-        destinationParent->insertChild(child, destinationRow_);
-        destinationRow_++;
-    }
-
-    int childToRemoveIndex = sourceRow;
-
-    if (sourceRow > destinationRow && destinationParent == this) {
-        childToRemoveIndex = sourceRow + count;
-    }
-
-    AbstractInstrumentsPanelTreeItem::removeChildren(childToRemoveIndex, count);
-}
-
-void AbstractInstrumentsPanelTreeItem::insertChild(AbstractInstrumentsPanelTreeItem* child, const int beforeRow)
+void AbstractInstrumentsPanelTreeItem::insertChild(AbstractInstrumentsPanelTreeItem* child, int beforeRow)
 {
     if (!child) {
         return;
@@ -180,28 +194,9 @@ void AbstractInstrumentsPanelTreeItem::insertChild(AbstractInstrumentsPanelTreeI
     m_children.insert(beforeRow, child);
 }
 
-void AbstractInstrumentsPanelTreeItem::replaceChild(AbstractInstrumentsPanelTreeItem* child, const int row)
+bool AbstractInstrumentsPanelTreeItem::isEmpty() const
 {
-    if (!child) {
-        return;
-    }
-
-    child->setParentItem(this);
-
-    m_children.replace(row, child);
-}
-
-void AbstractInstrumentsPanelTreeItem::removeChildren(const int row, const int count, const bool deleteChild)
-{
-    for (int i = row + count - 1; i >= row; --i) {
-        AbstractInstrumentsPanelTreeItem* child = m_children.at(i);
-
-        m_children.removeAt(i);
-
-        if (deleteChild) {
-            child->deleteLater();
-        }
-    }
+    return m_children.isEmpty();
 }
 
 int AbstractInstrumentsPanelTreeItem::childCount() const
@@ -211,11 +206,7 @@ int AbstractInstrumentsPanelTreeItem::childCount() const
 
 int AbstractInstrumentsPanelTreeItem::row() const
 {
-    if (!parentItem()) {
-        return 0;
-    }
-
-    return parentItem()->indexOf(this);
+    return m_parent ? m_parent->indexOf(this) : 0;
 }
 
 void AbstractInstrumentsPanelTreeItem::setType(InstrumentsTreeItemType::ItemType type)
@@ -226,7 +217,6 @@ void AbstractInstrumentsPanelTreeItem::setType(InstrumentsTreeItemType::ItemType
 
     m_type = type;
     emit typeChanged(m_type);
-    emit isSelectableChanged(isSelectable());
 }
 
 void AbstractInstrumentsPanelTreeItem::setTitle(QString title)
@@ -258,14 +248,34 @@ void AbstractInstrumentsPanelTreeItem::setId(const ID& id)
     m_id = id;
 }
 
-void AbstractInstrumentsPanelTreeItem::setCanChangeVisibility(bool value)
+void AbstractInstrumentsPanelTreeItem::setIsExpandable(bool expandable)
 {
-    if (m_canChangeVisibility == value) {
+    if (m_isExpandable == expandable) {
         return;
     }
 
-    m_canChangeVisibility = value;
-    emit canChangeVisibilityChanged(value);
+    m_isExpandable = expandable;
+    emit isExpandableChanged(expandable);
+}
+
+void AbstractInstrumentsPanelTreeItem::setIsEditable(bool editable)
+{
+    if (m_isEditable == editable) {
+        return;
+    }
+
+    m_isEditable = editable;
+    emit isEditableChanged(editable);
+}
+
+void AbstractInstrumentsPanelTreeItem::setIsRemovable(bool removable)
+{
+    if (m_isRemovable == removable) {
+        return;
+    }
+
+    m_isRemovable = removable;
+    emit isRemovableChanged(removable);
 }
 
 IMasterNotationPtr AbstractInstrumentsPanelTreeItem::masterNotation() const

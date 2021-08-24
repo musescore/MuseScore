@@ -34,17 +34,16 @@ class PartTreeItem : public AbstractInstrumentsPanelTreeItem
 public:
     PartTreeItem(notation::IMasterNotationPtr masterNotation, notation::INotationPtr notation, QObject* parent);
 
+    void init(const notation::Part* masterPart);
+
+    bool isSelectable() const override;
+
     Q_INVOKABLE QString instrumentId() const;
     Q_INVOKABLE QString instrumentName() const;
     Q_INVOKABLE QString instrumentAbbreviature() const;
 
-    void setInstrumentId(const QString& instrumentId);
-    void setInstrumentName(const QString& name);
-    void setInstrumentAbbreviature(const QString& abbreviature);
-
-    void moveChildren(const int sourceRow, const int count, AbstractInstrumentsPanelTreeItem* destinationParent,
-                      const int destinationRow) override;
-    void removeChildren(const int row, const int count, const bool deleteChild) override;
+    void moveChildren(int sourceRow, int count, AbstractInstrumentsPanelTreeItem* destinationParent, int destinationRow) override;
+    void removeChildren(int row, int count, bool deleteChild) override;
 
 private:
     void listenVisibilityChanged();
