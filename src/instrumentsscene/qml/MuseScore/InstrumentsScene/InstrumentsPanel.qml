@@ -205,6 +205,8 @@ Item {
                         id: treeItemDelegateLoader
 
                         property var delegateType: model ? model.itemRole.type : InstrumentsTreeItemType.UNDEFINED
+                        property bool isExpandable: model ? model.itemRole.isExpandable : false
+                        property bool isEditable: model ? model.itemRole.isEditable : false
 
                         height: parent.height
                         width: parent.width
@@ -231,15 +233,17 @@ Item {
 
                             InstrumentsTreeItemDelegate {
                                 attachedControl: instrumentsTreeView
-                                isSelected: treeItemDelegateLoader.isSelected
 
                                 keynavRow: model ? model.index : 0
                                 navigationPanel: navigationTreePanel
 
-                                isDragAvailable: dropArea.isSelectable
                                 type: treeItemDelegateLoader.delegateType
-                                sideMargin: contentColumn.sideMargin
+                                isSelected: treeItemDelegateLoader.isSelected
+                                isDragAvailable: dropArea.isSelectable
+                                isExpandable: treeItemDelegateLoader.isExpandable
+                                isEditable: treeItemDelegateLoader.isEditable
 
+                                sideMargin: contentColumn.sideMargin
                                 popupAnchorItem: root
 
                                 onClicked: {
@@ -247,14 +251,14 @@ Item {
                                 }
 
                                 onDoubleClicked: {
-                                    if (styleData.hasChildren
-                                            && (root.type === InstrumentsTreeItemType.INSTRUMENT
-                                                    ? styleData.index.row === 0 : true)) {
-                                        if (!styleData.isExpanded) {
-                                            instrumentsTreeView.expand(styleData.index)
-                                        } else {
-                                            instrumentsTreeView.collapse(styleData.index)
-                                        }
+                                    if (!isExpandable) {
+                                        return
+                                    }
+
+                                    if (!styleData.isExpanded) {
+                                        instrumentsTreeView.expand(styleData.index)
+                                    } else {
+                                        instrumentsTreeView.collapse(styleData.index)
                                     }
                                 }
 

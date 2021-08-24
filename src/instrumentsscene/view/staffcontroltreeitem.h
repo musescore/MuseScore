@@ -34,9 +34,9 @@ class StaffControlTreeItem : public AbstractInstrumentsPanelTreeItem
 public:
     StaffControlTreeItem(notation::IMasterNotationPtr masterNotation, notation::INotationPtr notation, QObject* parent);
 
-    Q_INVOKABLE void appendNewItem() override;
+    void init(const ID& partId);
 
-    void setPartId(const ID& id);
+    Q_INVOKABLE void appendNewItem() override;
 
 private:
     ID m_partId;

@@ -21,15 +21,55 @@
  */
 #include "stafftreeitem.h"
 
+#include "log.h"
+
 using namespace mu::instrumentsscene;
 using namespace mu::notation;
 
 StaffTreeItem::StaffTreeItem(IMasterNotationPtr masterNotation, INotationPtr notation, QObject* parent)
     : AbstractInstrumentsPanelTreeItem(InstrumentsTreeItemType::ItemType::STAFF, masterNotation, notation, parent)
 {
-    connect(this, &AbstractInstrumentsPanelTreeItem::isVisibleChanged, [this](const bool isVisible) {
+    connect(this, &AbstractInstrumentsPanelTreeItem::isVisibleChanged, [this](bool isVisible) {
         this->notation()->parts()->setStaffVisible(id(), isVisible);
     });
+
+    setIsEditable(true);
+    setIsRemovable(true);
+}
+
+void StaffTreeItem::init(const Staff* masterStaff)
+{
+    IF_ASSERT_FAILED(masterStaff) {
+        return;
+    }
+
+    const Staff* staff = notation()->parts()->staff(masterStaff->id());
+    bool visible = staff && staff->show();
+
+    if (!staff) {
+        staff = masterStaff;
+    }
+
+    QString staffName = staff->staffName();
+    QString title = masterStaff->isLinked() ? qtrc("instruments", "[LINK] %1").arg(staffName) : staffName;
+
+    setId(staff->id());
+    setTitle(title);
+    setIsVisible(visible);
+
+    m_cutawayEnabled = staff->cutaway();
+    m_isSmall = staff->staffType()->isSmall();
+    m_staffType = static_cast<int>(staff->staffType()->type());
+
+    m_voicesVisibility.clear();
+    for (bool visible: staff->visibilityVoices()) {
+        m_voicesVisibility << visible;
+    }
+}
+
+bool StaffTreeItem::isSelectable() const
+{
+    return true;
 }
 
 bool StaffTreeItem::isSmall() const
@@ -50,24 +90,4 @@ int StaffTreeItem::staffType() const
 QVariantList StaffTreeItem::voicesVisibility() const
 {
     return m_voicesVisibility;
-}
-
-void StaffTreeItem::setIsSmall(bool value)
-{
-    m_isSmall = value;
-}
-
-void StaffTreeItem::setCutawayEnabled(bool value)
-{
-    m_cutawayEnabled = value;
-}
-
-void StaffTreeItem::setStaffType(int type)
-{
-    m_staffType = type;
-}
-
-void StaffTreeItem::setVoicesVisibility(const QVariantList& visibility)
-{
-    m_voicesVisibility = visibility;
 }

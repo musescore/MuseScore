@@ -33,9 +33,40 @@ PartTreeItem::PartTreeItem(IMasterNotationPtr masterNotation, INotationPtr notat
     listenVisibilityChanged();
 }
 
+void PartTreeItem::init(const notation::Part* masterPart)
+{
+    IF_ASSERT_FAILED(masterPart) {
+        return;
+    }
+
+    const Part* part = notation()->parts()->part(masterPart->id());
+    bool partExists = part != nullptr;
+    bool visible = partExists && part->show();
+
+    if (!partExists) {
+        part = masterPart;
+    }
+
+    setId(part->id());
+    setTitle(part->partName().isEmpty() ? part->instrument()->name() : part->partName());
+    setIsVisible(visible);
+    setIsEditable(partExists);
+    setIsExpandable(partExists);
+    setIsRemovable(partExists);
+
+    m_instrumentId = part->instrumentId();
+    m_instrumentName = part->instrument()->name();
+    m_instrumentAbbreviature = part->instrument()->abbreviature();
+}
+
+bool PartTreeItem::isSelectable() const
+{
+    return true;
+}
+
 void PartTreeItem::listenVisibilityChanged()
 {
-    connect(this, &AbstractInstrumentsPanelTreeItem::isVisibleChanged, this, [this](const bool isVisible) {
+    connect(this, &AbstractInstrumentsPanelTreeItem::isVisibleChanged, this, [this](bool isVisible) {
         INotationPartsPtr parts = notation()->parts();
         if (!parts) {
             return;
@@ -114,23 +145,8 @@ QString PartTreeItem::instrumentAbbreviature() const
     return m_instrumentAbbreviature;
 }
 
-void PartTreeItem::setInstrumentId(const QString& instrumentId)
-{
-    m_instrumentId = instrumentId;
-}
-
-void PartTreeItem::setInstrumentName(const QString& name)
-{
-    m_instrumentName = name;
-}
-
-void PartTreeItem::setInstrumentAbbreviature(const QString& abbreviature)
-{
-    m_instrumentAbbreviature = abbreviature;
-}
-
-void PartTreeItem::moveChildren(const int sourceRow, const int count, AbstractInstrumentsPanelTreeItem* destinationParent,
-                                const int destinationRow)
+void PartTreeItem::moveChildren(int sourceRow, int count, AbstractInstrumentsPanelTreeItem* destinationParent,
+                                int destinationRow)
 {
     IDList stavesIds;
 
@@ -152,7 +168,7 @@ void PartTreeItem::moveChildren(const int sourceRow, const int count, AbstractIn
     AbstractInstrumentsPanelTreeItem::moveChildren(sourceRow, count, destinationParent, destinationRow);
 }
 
-void PartTreeItem::removeChildren(const int row, const int count, const bool deleteChild)
+void PartTreeItem::removeChildren(int row, int count, bool deleteChild)
 {
     IDList stavesIds;
 
