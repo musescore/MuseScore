@@ -58,7 +58,7 @@ QString EditMidiMappingModel::mappingTitle() const
 {
     MidiDeviceID currentMidiInDeviceId = midiInPort()->deviceID();
     if (currentMidiInDeviceId.empty() || !m_event.isValid()) {
-        return qtrc("shortcuts", "Waiting...");
+        return qtrc("shortcuts", "Waiting…");
     }
 
     return deviceName(currentMidiInDeviceId) + " > " + eventName(m_event);
