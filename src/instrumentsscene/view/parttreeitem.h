@@ -48,7 +48,9 @@ public:
 
 private:
     void listenVisibilityChanged();
-    void createAndAppendPart(const ID& masterPartId);
+    void createAndAddPart(const ID& masterPartId);
+
+    size_t resolveNewPartIndex(const ID& partId) const;
 
     QString m_instrumentId;
     QString m_instrumentName;
