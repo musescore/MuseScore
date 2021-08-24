@@ -21,6 +21,7 @@
  */
 #include "layoutcontext.h"
 
+#include "libmscore/mscoreview.h"
 #include "libmscore/score.h"
 #include "libmscore/spanner.h"
 

@@ -22,11 +22,12 @@
 
 #include "xml.h"
 
+#include "libmscore/beam.h"
 #include "libmscore/measure.h"
 #include "libmscore/score.h"
 #include "libmscore/spanner.h"
 #include "libmscore/staff.h"
-#include "libmscore/beam.h"
+#include "libmscore/textlinebase.h"
 #include "libmscore/tuplet.h"
 #include "libmscore/linkedobjects.h"
 

@@ -20,11 +20,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "log.h"
 #include "textedit.h"
+
+#include "mscoreview.h"
 #include "score.h"
 #include "scorefont.h"
 #include "sym.h"
+
+#include "log.h"
 
 using namespace mu;
 

@@ -27,14 +27,15 @@
 #include "io/xml.h"
 
 #include "chord.h"
-#include "score.h"
-#include "system.h"
-#include "staff.h"
-#include "segment.h"
-#include "undo.h"
-#include "textedit.h"
-#include "measure.h"
 #include "masterscore.h"
+#include "measure.h"
+#include "mscoreview.h"
+#include "score.h"
+#include "segment.h"
+#include "staff.h"
+#include "system.h"
+#include "textedit.h"
+#include "undo.h"
 
 using namespace mu;
 
