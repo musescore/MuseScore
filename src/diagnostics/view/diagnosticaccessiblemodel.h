@@ -28,9 +28,12 @@
 #include "modularity/ioc.h"
 #include "accessibility/iaccessibilitycontroller.h"
 
+#include "async/asyncable.h"
+
 class QAccessibleInterface;
+class QAccessibleEvent;
 namespace mu::diagnostics {
-class DiagnosticAccessibleModel : public QAbstractItemModel
+class DiagnosticAccessibleModel : public QAbstractItemModel, public async::Asyncable
 {
     Q_OBJECT
     Q_PROPERTY(bool isAutoRefresh READ isAutoRefresh WRITE setIsAutoRefresh NOTIFY isAutoRefreshChanged)
@@ -50,9 +53,9 @@ public:
     QVariant data(const QModelIndex& index, int role) const override;
     QHash<int, QByteArray> roleNames() const override;
 
+    Q_INVOKABLE void init();
     Q_INVOKABLE void reload();
 
-    static void init();
     static void dumpTree();
 
 public slots:
@@ -65,8 +68,6 @@ signals:
     void isAutoRefreshChanged();
 
 private:
-
-    static QObject* m_accessibleRootObject;
 
     enum Roles {
         rItemData = Qt::UserRole + 1
@@ -83,16 +84,6 @@ private:
         }
 
         Item* parent() const { return m_parent; }
-        int level() const
-        {
-            int l = 0;
-            Item* p = parent();
-            while (p) {
-                ++l;
-                p = p->parent();
-            }
-            return l;
-        }
 
         void addChild(Item* child) { m_children.append(child); }
         Item* child(int row) const { return m_children.at(row); }
@@ -100,6 +91,9 @@ private:
 
         void setData(const QVariant& d) { m_data = d; }
         QVariant data() const { return m_data; }
+
+        void setIface(QAccessibleInterface* iface) { m_iface = iface; }
+        QAccessibleInterface* iface() const { return m_iface; }
 
         Item(Item* parent)
             : m_parent(parent)
@@ -120,10 +114,17 @@ private:
         Item* m_parent = nullptr;
         QList<Item*> m_children;
         QVariant m_data;
+        QAccessibleInterface* m_iface = nullptr;
     };
 
     void load(QAccessibleInterface* iface, Item* parent);
+    QVariant makeData(const QAccessibleInterface* iface) const;
 
+    void onAccessibleEvent(QAccessibleEvent* ev);
+    void onItemChanged(QObject* accessibleObject);
+    Item* findItemForIface(const QAccessibleInterface* iface, Item* rootItem) const;
+
+    QObject* m_accessibleRootObject;
     Item* m_rootItem = nullptr;
     QTimer m_refresher;
     bool m_isAutoRefresh = false;

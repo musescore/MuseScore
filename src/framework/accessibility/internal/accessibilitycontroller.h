@@ -83,6 +83,8 @@ public:
     QAccessibleInterface* child(const IAccessible* item, int i) const;
     int indexOfChild(const IAccessible* item, const QAccessibleInterface* iface) const;
 
+    async::Channel<QAccessibleEvent*> eventSent() const;
+
 private:
 
     friend class mu::diagnostics::DiagnosticAccessibleModel;
@@ -106,6 +108,7 @@ private:
     QHash<const IAccessible*, Item> m_allItems;
 
     QList<IAccessible*> m_children;
+    async::Channel<QAccessibleEvent*> m_eventSent;
 };
 }
 
