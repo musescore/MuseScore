@@ -126,7 +126,7 @@ void InstrumentsPanelTreeModel::setupStavesConnections(const ID& stavesPartId)
         }
 
         const Staff* masterStaff = m_masterNotation->parts()->staff(staff->id());
-        auto staffItem = buildMasterStaffItem(masterStaff);
+        auto staffItem = buildMasterStaffItem(masterStaff, partItem);
 
         QModelIndex partIndex = index(partItem->row(), 0, QModelIndex());
 
@@ -167,8 +167,9 @@ void InstrumentsPanelTreeModel::listenSelectionChanged()
 
 void InstrumentsPanelTreeModel::clear()
 {
+    TRACEFUNC;
+
     beginResetModel();
-    m_selectionModel->clear();
     deleteItems();
     endResetModel();
 
@@ -178,6 +179,7 @@ void InstrumentsPanelTreeModel::clear()
 
 void InstrumentsPanelTreeModel::deleteItems()
 {
+    m_selectionModel->clear();
     delete m_rootItem;
     m_rootItem = nullptr;
 }
@@ -191,6 +193,7 @@ void InstrumentsPanelTreeModel::load()
     TRACEFUNC;
 
     beginResetModel();
+    deleteItems();
 
     m_rootItem = new RootTreeItem(m_masterNotation, m_notation);
 
@@ -584,11 +587,11 @@ AbstractInstrumentsPanelTreeItem* InstrumentsPanelTreeModel::loadMasterPart(cons
     async::NotifyList<const Staff*> masterStaves = m_masterNotation->parts()->staffList(partId);
 
     for (const Staff* staff : masterStaves) {
-        auto staffItem = buildMasterStaffItem(staff);
+        auto staffItem = buildMasterStaffItem(staff, partItem);
         partItem->appendChild(staffItem);
     }
 
-    auto addStaffControlItem = buildAddStaffControlItem(partId);
+    auto addStaffControlItem = buildAddStaffControlItem(partId, partItem);
     partItem->appendChild(addStaffControlItem);
 
     setupStavesConnections(partId);
@@ -598,7 +601,7 @@ AbstractInstrumentsPanelTreeItem* InstrumentsPanelTreeModel::loadMasterPart(cons
 
 AbstractInstrumentsPanelTreeItem* InstrumentsPanelTreeModel::buildPartItem(const Part* masterPart)
 {
-    auto result = new PartTreeItem(m_masterNotation, m_notation, this);
+    auto result = new PartTreeItem(m_masterNotation, m_notation, m_rootItem);
     updatePartItem(result, masterPart);
 
     return result;
@@ -622,9 +625,9 @@ void InstrumentsPanelTreeModel::updatePartItem(PartTreeItem* item, const Part* m
     item->setInstrumentAbbreviature(part->instrument()->abbreviature());
 }
 
-AbstractInstrumentsPanelTreeItem* InstrumentsPanelTreeModel::buildMasterStaffItem(const Staff* masterStaff)
+AbstractInstrumentsPanelTreeItem* InstrumentsPanelTreeModel::buildMasterStaffItem(const Staff* masterStaff, QObject* parent)
 {
-    auto result = new StaffTreeItem(m_masterNotation, m_notation, this);
+    auto result = new StaffTreeItem(m_masterNotation, m_notation, parent);
     updateStaffItem(result, masterStaff);
 
     return result;
@@ -658,9 +661,9 @@ void InstrumentsPanelTreeModel::updateStaffItem(StaffTreeItem* item, const Staff
     item->setVoicesVisibility(visibility);
 }
 
-AbstractInstrumentsPanelTreeItem* InstrumentsPanelTreeModel::buildAddStaffControlItem(const ID& partId)
+AbstractInstrumentsPanelTreeItem* InstrumentsPanelTreeModel::buildAddStaffControlItem(const ID& partId, QObject* parent)
 {
-    auto result = new StaffControlTreeItem(m_masterNotation, m_notation, this);
+    auto result = new StaffControlTreeItem(m_masterNotation, m_notation, parent);
     result->setTitle(qtrc("instruments", "Add staff"));
     result->setPartId(partId);
 

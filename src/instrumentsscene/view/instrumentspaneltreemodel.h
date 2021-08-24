@@ -132,8 +132,8 @@ private:
     void updateStaffItem(StaffTreeItem* item, const mu::notation::Staff* masterStaff);
 
     AbstractInstrumentsPanelTreeItem* buildPartItem(const mu::notation::Part* masterPart);
-    AbstractInstrumentsPanelTreeItem* buildMasterStaffItem(const mu::notation::Staff* masterStaff);
-    AbstractInstrumentsPanelTreeItem* buildAddStaffControlItem(const ID& partId);
+    AbstractInstrumentsPanelTreeItem* buildMasterStaffItem(const mu::notation::Staff* masterStaff, QObject* parent);
+    AbstractInstrumentsPanelTreeItem* buildAddStaffControlItem(const ID& partId, QObject* parent);
 
     AbstractInstrumentsPanelTreeItem* m_rootItem = nullptr;
     uicomponents::ItemMultiSelectionModel* m_selectionModel = nullptr;

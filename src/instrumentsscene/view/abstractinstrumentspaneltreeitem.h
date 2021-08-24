@@ -44,8 +44,8 @@ class AbstractInstrumentsPanelTreeItem : public QObject
     Q_PROPERTY(bool isSelectable READ isSelectable NOTIFY isSelectableChanged)
 
 public:
-    explicit AbstractInstrumentsPanelTreeItem(const InstrumentsTreeItemType::ItemType& type, notation::IMasterNotationPtr masterNotation,
-                                              notation::INotationPtr notation, QObject* parent = nullptr);
+    AbstractInstrumentsPanelTreeItem(const InstrumentsTreeItemType::ItemType& type, notation::IMasterNotationPtr masterNotation,
+                                     notation::INotationPtr notation, QObject* parent);
     virtual ~AbstractInstrumentsPanelTreeItem();
 
     Q_INVOKABLE virtual bool canAcceptDrop(const int type) const;
