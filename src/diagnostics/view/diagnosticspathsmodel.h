@@ -25,6 +25,7 @@
 #include <QAbstractListModel>
 #include "modularity/ioc.h"
 #include "idiagnosticspathsregister.h"
+#include "iinteractive.h"
 
 namespace mu::diagnostics {
 class DiagnosticsPathsModel : public QAbstractListModel
@@ -32,6 +33,7 @@ class DiagnosticsPathsModel : public QAbstractListModel
     Q_OBJECT
 
     INJECT(diagnostics, IDiagnosticsPathsRegister, pathsRegister)
+    INJECT(diagnostics, framework::IInteractive, interactive)
 
 public:
     explicit DiagnosticsPathsModel(QObject* parent = nullptr);
@@ -41,6 +43,8 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     Q_INVOKABLE void load();
+
+    Q_INVOKABLE void openPath(const QString& path);
 
 private:
     enum Roles {

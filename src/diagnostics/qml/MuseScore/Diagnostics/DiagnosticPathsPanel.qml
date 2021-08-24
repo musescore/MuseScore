@@ -66,6 +66,10 @@ Rectangle {
                 horizontalAlignment: Text.AlignLeft
                 text: dgate.item.path
             }
+
+            onDoubleClicked: {
+                pathsModel.openPath(dgate.item.path)
+            }
         }
     }
 }
