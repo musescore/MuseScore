@@ -61,9 +61,10 @@ Rectangle {
                         ToolTip.timeout: 5000
                         ToolTip.visible: hovered
 
-//                        onClicked {
-//                            pianoView.tool: PianorollView.SELECT
-//                        }
+
+                        onClicked: {
+                            pianoView.tool = PianorollView.SELECT
+                        }
 
 
                     }
@@ -72,9 +73,9 @@ Rectangle {
                         text: qsTr("Edit")
                         checkable: true
 
-//                        onClicked {
-//                            pianoView.tool: PianorollView.EDIT
-//                        }
+                        onClicked: {
+                            pianoView.tool = PianorollView.EDIT
+                        }
 
                     }
 
@@ -82,18 +83,18 @@ Rectangle {
                         text: qsTr("Cut")
                         checkable: true
 
-//                        onClicked {
-                            //pianoView.tool: PianorollView.CUT
-//                        }
+                        onClicked: {
+                            pianoView.tool = PianorollView.CUT
+                        }
                     }
 
                     ToolButton {
                         text: qsTr("Erase")
                         checkable: true
 
-//                        onClicked {
-//                            pianoView.tool: PianorollView.ERASE
-//                        }
+                        onClicked: {
+                            pianoView.tool = PianorollView.ERASE
+                        }
                     }
                 }
 
@@ -229,7 +230,7 @@ Rectangle {
 //                zoomX: Math.log(horizZoom.value) / Math.log(2)
                 wholeNoteWidth: Math.pow(horizZoom.value, 1.1)
                 noteHeight: vertZoom.value
-//                tool: PianorollView.SELECT
+                tool: PianorollView.SELECT
 
 
                 StyledTextLabel {
