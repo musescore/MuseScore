@@ -40,16 +40,6 @@ Rectangle {
 
     DiagnosticAccessibleModel {
         id: accessibleModel
-
-        property int savedY: 0
-
-        onBeforeReload: {
-            //accessibleModel.savedY = view.contentY
-        }
-
-        onAfterReload: {
-            //view.contentY = accessibleModel.savedY
-        }
     }
 
     Row {
@@ -92,20 +82,10 @@ Rectangle {
 
         style: TreeViewStyle {
             indentation: styleData.depth
-
-//            frame: Item {}
-//            incrementControl: Item {}
-//            decrementControl: Item {}
-//            handle: Item {}
-//            scrollBarBackground: Item {}
-//            branchDelegate: Item {}
-
-           // backgroundColor: root.color
-
             rowDelegate: Rectangle {
                 height: 48
                 width: parent.width
-                color: root.color
+                color: styleData.row%2 == 0 ? root.color : ui.theme.backgroundSecondaryColor
             }
         }
 
@@ -125,8 +105,8 @@ Rectangle {
 
             Rectangle {
                 anchors.fill: parent
-                color: ui.theme.backgroundSecondaryColor
-                visible: styleData.row%2 == 1
+                color: ui.theme.accentColor
+                visible: styleData.value ? styleData.value.state.focused === 1 : false
             }
 
             StyledTextLabel {
