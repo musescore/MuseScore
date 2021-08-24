@@ -108,6 +108,7 @@ private:
         ItemRole = Qt::UserRole + 1
     };
 
+    void initPartOrders();
     void onBeforeChangeNotation();
 
     void sortParts(notation::PartList& parts);

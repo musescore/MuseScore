@@ -167,6 +167,10 @@ void NotationParts::setParts(const PartInstrumentList& parts, const ScoreOrder& 
 
 void NotationParts::setScoreOrder(const ScoreOrder& order)
 {
+    if (score()->scoreOrder() == order) {
+        return;
+    }
+
     startEdit();
 
     doSetScoreOrder(order);
@@ -180,8 +184,11 @@ void NotationParts::setPartVisible(const ID& partId, bool visible)
     TRACEFUNC;
 
     Part* part = partModifiable(partId);
+    IF_ASSERT_FAILED(part) {
+        return;
+    }
 
-    if (part && part->show() == visible) {
+    if (part->show() == visible) {
         return;
     }
 
@@ -199,7 +206,11 @@ void NotationParts::setPartName(const ID& partId, const QString& name)
     TRACEFUNC;
 
     Part* part = partModifiable(partId);
-    if (!part || part->partName() == name) {
+    IF_ASSERT_FAILED(part) {
+        return;
+    }
+
+    if (part->partName() == name) {
         return;
     }
 
@@ -217,7 +228,7 @@ void NotationParts::setPartSharpFlat(const ID& partId, const SharpFlat& sharpFla
     TRACEFUNC;
 
     Part* part = partModifiable(partId);
-    if (!part) {
+    IF_ASSERT_FAILED(part) {
         return;
     }
 
@@ -235,7 +246,7 @@ void NotationParts::setPartTransposition(const ID& partId, const Interval& trans
     TRACEFUNC;
 
     Part* part = partModifiable(partId);
-    if (!part) {
+    IF_ASSERT_FAILED(part) {
         return;
     }
 
@@ -293,7 +304,7 @@ void NotationParts::setInstrumentName(const InstrumentKey& instrumentKey, const 
     TRACEFUNC;
 
     Part* part = partModifiable(instrumentKey.partId);
-    if (!part) {
+    IF_ASSERT_FAILED(part) {
         return;
     }
 
@@ -311,7 +322,7 @@ void NotationParts::setInstrumentAbbreviature(const InstrumentKey& instrumentKey
     TRACEFUNC;
 
     Part* part = partModifiable(instrumentKey.partId);
-    if (!part) {
+    IF_ASSERT_FAILED(part) {
         return;
     }
 
@@ -328,8 +339,8 @@ void NotationParts::setVoiceVisible(const ID& staffId, int voiceIndex, bool visi
 {
     TRACEFUNC;
 
-    Staff* staff = this->staffModifiable(staffId);
-    if (!staff) {
+    Staff* staff = staffModifiable(staffId);
+    IF_ASSERT_FAILED(staff) {
         return;
     }
 
@@ -346,17 +357,20 @@ void NotationParts::setStaffVisible(const ID& staffId, bool visible)
 {
     TRACEFUNC;
 
-    const Staff* staff = this->staff(staffId);
+    Staff* staff = staffModifiable(staffId);
+    IF_ASSERT_FAILED(staff) {
+        return;
+    }
+
     StaffConfig config = staffConfig(staffId);
-    if (!staff || config.visible == visible) {
+    if (config.visible == visible) {
         return;
     }
 
     startEdit();
 
     config.visible = visible;
-
-    doSetStaffConfig(staffId, config);
+    doSetStaffConfig(staff, config);
 
     apply();
 
@@ -387,17 +401,20 @@ void NotationParts::setCutawayEnabled(const ID& staffId, bool enabled)
 {
     TRACEFUNC;
 
-    const Staff* staff = this->staff(staffId);
+    Staff* staff = staffModifiable(staffId);
+    IF_ASSERT_FAILED(staff) {
+        return;
+    }
+
     StaffConfig config = staffConfig(staffId);
-    if (!staff || config.cutaway == enabled) {
+    if (config.cutaway == enabled) {
         return;
     }
 
     startEdit();
 
     config.cutaway = enabled;
-
-    doSetStaffConfig(staffId, config);
+    doSetStaffConfig(staff, config);
 
     apply();
 
@@ -408,17 +425,20 @@ void NotationParts::setSmallStaff(const ID& staffId, bool smallStaff)
 {
     TRACEFUNC;
 
-    const Staff* staff = this->staff(staffId);
+    Staff* staff = staffModifiable(staffId);
+    IF_ASSERT_FAILED(staff) {
+        return;
+    }
+
     StaffConfig config = staffConfig(staffId);
-    if (!staff || config.isSmall == smallStaff) {
+    if (config.isSmall == smallStaff) {
         return;
     }
 
     startEdit();
 
     config.isSmall = smallStaff;
-
-    doSetStaffConfig(staffId, config);
+    doSetStaffConfig(staff, config);
 
     apply();
 
@@ -468,14 +488,14 @@ void NotationParts::setStaffConfig(const ID& staffId, const StaffConfig& config)
 {
     TRACEFUNC;
 
-    const Staff* staff = this->staff(staffId);
-    if (!staff) {
+    Staff* staff = staffModifiable(staffId);
+    IF_ASSERT_FAILED(staff) {
         return;
     }
 
     startEdit();
 
-    doSetStaffConfig(staffId, config);
+    doSetStaffConfig(staff, config);
 
     apply();
 
@@ -523,9 +543,14 @@ void NotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
 {
     TRACEFUNC;
 
+    Part* destinationPart = partModifiable(destinationPartId);
+    IF_ASSERT_FAILED(staff && destinationPart) {
+        return;
+    }
+
     startEdit();
 
-    doAppendStaff(staff, destinationPartId);
+    doAppendStaff(staff, destinationPart);
     updateTracks();
 
     apply();
@@ -537,15 +562,19 @@ void NotationParts::appendLinkedStaff(Staff* staff, const ID& sourceStaffId, con
 {
     TRACEFUNC;
 
-    const Part* destinationPart = part(destinationPartId);
-    if (!destinationPart) {
+    Staff* sourceStaff = staffModifiable(sourceStaffId);
+    Part* destinationPart = partModifiable(destinationPartId);
+    IF_ASSERT_FAILED(staff && sourceStaff && destinationPart) {
         return;
     }
 
     startEdit();
 
-    doAppendStaff(staff, destinationPartId);
-    linkStaves(sourceStaffId, staff->id());
+    doAppendStaff(staff, destinationPart);
+
+    ///! NOTE: need to unlink before linking
+    staff->undoUnlink();
+    Ms::Excerpt::cloneStaff(sourceStaff, staff);
 
     updateTracks();
 
@@ -596,7 +625,7 @@ void NotationParts::replaceInstrument(const InstrumentKey& instrumentKey, const 
     TRACEFUNC;
 
     Part* part = partModifiable(instrumentKey.partId);
-    if (!part) {
+    IF_ASSERT_FAILED(part) {
         return;
     }
 
@@ -613,7 +642,7 @@ void NotationParts::replaceInstrument(const InstrumentKey& instrumentKey, const 
 void NotationParts::replaceDrumset(const InstrumentKey& instrumentKey, const Drumset& newDrumset)
 {
     Part* part = partModifiable(instrumentKey.partId);
-    if (!part) {
+    IF_ASSERT_FAILED(part) {
         return;
     }
 
@@ -690,13 +719,8 @@ void NotationParts::doRemoveParts(const IDList& partsIds)
     }
 }
 
-void NotationParts::doAppendStaff(Staff* staff, const mu::ID& destinationPartId)
+void NotationParts::doAppendStaff(Staff* staff, Part* destinationPart)
 {
-    Part* destinationPart = partModifiable(destinationPartId);
-    if (!destinationPart) {
-        return;
-    }
-
     int staffIndex = destinationPart->nstaves();
 
     staff->setScore(score());
@@ -709,13 +733,8 @@ void NotationParts::doAppendStaff(Staff* staff, const mu::ID& destinationPartId)
     destinationPart->instrument()->setClefType(staffIndex, staff->defaultClefType());
 }
 
-void NotationParts::doSetStaffConfig(const ID& staffId, const StaffConfig& config)
+void NotationParts::doSetStaffConfig(Staff* staff, const StaffConfig& config)
 {
-    Staff* staff = this->staffModifiable(staffId);
-    if (!staff) {
-        return;
-    }
-
     Ms::StaffType* staffType = staff->staffType(DEFAULT_TICK);
     if (!staffType) {
         return;
@@ -923,23 +942,6 @@ void NotationParts::initStaff(Staff* staff, const InstrumentTemplate& templ, con
         staff->setBarLineSpan(templ.barlineSpan[cleffIndex]);
     }
     staff->setDefaultClefType(templ.clefType(cleffIndex));
-}
-
-void NotationParts::linkStaves(const ID& sourceStaffId, const ID& destinationStaffId)
-{
-    TRACEFUNC;
-
-    Staff* sourceStaff = staffModifiable(sourceStaffId);
-    Staff* destinationStaff = staffModifiable(destinationStaffId);
-
-    if (!sourceStaff || !destinationStaff) {
-        return;
-    }
-
-    ///! NOTE: need to unlink before linking
-    destinationStaff->undoUnlink();
-
-    Ms::Excerpt::cloneStaff(sourceStaff, destinationStaff);
 }
 
 void NotationParts::removeMissingParts(const PartInstrumentList& parts)
