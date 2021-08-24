@@ -131,6 +131,11 @@ QModelIndex DiagnosticAccessibleModel::index(int row, int column, const QModelIn
     return QModelIndex();
 }
 
+int DiagnosticAccessibleModel::indexRow(const QModelIndex& idx) const
+{
+    return idx.row();
+}
+
 QModelIndex DiagnosticAccessibleModel::parent(const QModelIndex& child) const
 {
     if (!child.isValid()) {
@@ -218,6 +223,11 @@ void DiagnosticAccessibleModel::onItemChanged(QObject* accessibleObject)
     item->setData(newData);
 
     QModelIndex index = createIndex(item->row(), 0, item);
+
+    QAccessible::State st = iface->state();
+    if (st.focused) {
+        emit focusedItem(index);
+    }
 
     emit dataChanged(index, index, { rItemData });
 }
