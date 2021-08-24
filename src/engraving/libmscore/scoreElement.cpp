@@ -620,7 +620,10 @@ void ScoreElement::linkTo(ScoreElement* element)
 
 void ScoreElement::unlink()
 {
-    Q_ASSERT(_links);
+    if (!_links) {
+        return;
+    }
+
     Q_ASSERT(_links->contains(this));
     _links->removeOne(this);
 
