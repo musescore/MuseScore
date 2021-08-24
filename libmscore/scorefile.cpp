@@ -36,6 +36,8 @@
 #include "stafftype.h"
 #include "sym.h"
 #include "scoreOrder.h"
+#include <chrono>
+#include <thread>
 
 #include "mscore/preferences.h"
 
@@ -403,7 +405,18 @@ bool MasterScore::saveFile(bool generateBackup)
 
       QString tempName = info.filePath() + QString(".temp");
       QFile temp(tempName);
-      if (!temp.open(QIODevice::WriteOnly)) {
+      bool tempFileWritable = false;
+      int timeoutVar = 0;
+
+      // Check if the temp file is writable several times, in case of race
+      // conditions with other programs accessing the file (cloud sync etc)
+      while(tempFileWritable == false && timeoutVar < 4) {
+            tempFileWritable = temp.open(QIODevice::WriteOnly);
+            timeoutVar++;
+            std::this_thread::sleep_for(std::chrono::milliseconds(10));
+            }
+
+      if (tempFileWritable == false) {
             MScore::lastError = tr("Open Temp File\n%1\nfailed: %2").arg(tempName, strerror(errno));
             return false;
             }
