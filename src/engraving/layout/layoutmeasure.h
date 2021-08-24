@@ -32,7 +32,7 @@ class MeasureBase;
 }
 
 namespace mu::engraving {
-class LayoutContext;
+struct LayoutContext;
 class LayoutMeasure
 {
 public:

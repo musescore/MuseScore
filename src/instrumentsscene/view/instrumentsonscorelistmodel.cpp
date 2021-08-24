@@ -71,10 +71,10 @@ QVariant InstrumentsOnScoreListModel::data(const QModelIndex& index, int role) c
     case RoleIsSoloist:
         return instrument->isSoloist;
     default:
-        return SelectableItemListModel::data(index, role);
+        break;
     }
 
-    return QVariant();
+    return SelectableItemListModel::data(index, role);
 }
 
 bool InstrumentsOnScoreListModel::setData(const QModelIndex& index, const QVariant& value, int role)

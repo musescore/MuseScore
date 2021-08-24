@@ -71,10 +71,10 @@ QVariant NoteInputBarCustomiseModel::data(const QModelIndex& index, int role) co
 
     switch (role) {
     case ItemRole: return QVariant::fromValue(item);
-    default: return SelectableItemListModel::data(index, role);
+    default: break;
     }
 
-    return QVariant();
+    return SelectableItemListModel::data(index, role);
 }
 
 QHash<int, QByteArray> NoteInputBarCustomiseModel::roleNames() const
