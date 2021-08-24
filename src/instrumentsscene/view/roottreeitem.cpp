@@ -35,7 +35,11 @@ void RootTreeItem::moveChildren(const int sourceRow, const int count, AbstractIn
     IDList partIds;
 
     for (int i = sourceRow; i < sourceRow + count; ++i) {
-        partIds.push_back(childAtRow(i)->id());
+        ID partId = childAtRow(i)->id();
+
+        if (notation()->parts()->partExists(partId)) {
+            partIds.push_back(childAtRow(i)->id());
+        }
     }
 
     int destinationRow_ = destinationRow;

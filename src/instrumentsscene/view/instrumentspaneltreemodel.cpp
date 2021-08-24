@@ -49,6 +49,8 @@ InstrumentsPanelTreeModel::InstrumentsPanelTreeModel(QObject* parent)
     context()->currentNotationChanged().onNotify(this, [this]() {
         m_partsNotifyReceiver->disconnectAll();
 
+        onBeforeChangeNotation();
+
         m_notation = context()->currentNotation();
 
         if (m_notation) {
@@ -79,6 +81,18 @@ InstrumentsPanelTreeModel::~InstrumentsPanelTreeModel()
 bool InstrumentsPanelTreeModel::canReceiveAction(const actions::ActionCode&) const
 {
     return m_masterNotation != nullptr && m_notation != nullptr;
+}
+
+void InstrumentsPanelTreeModel::onBeforeChangeNotation()
+{
+    if (!m_notation || !m_rootItem) {
+        return;
+    }
+
+    for (int i = 0; i < m_rootItem->childCount(); ++i) {
+        AbstractInstrumentsPanelTreeItem* item = m_rootItem->childAtRow(i);
+        m_sortedPartIdList[m_notation->title()].push_back(item->id());
+    }
 }
 
 void InstrumentsPanelTreeModel::setupPartsConnections()
@@ -198,6 +212,7 @@ void InstrumentsPanelTreeModel::load()
     m_rootItem = new RootTreeItem(m_masterNotation, m_notation);
 
     async::NotifyList<const Part*> masterParts = m_masterNotation->parts()->partList();
+    sortParts(masterParts);
 
     for (const Part* part : masterParts) {
         m_rootItem->appendChild(loadMasterPart(part));
@@ -210,6 +225,24 @@ void InstrumentsPanelTreeModel::load()
 
     emit isEmptyChanged();
     emit isAddingAvailableChanged(true);
+}
+
+void InstrumentsPanelTreeModel::sortParts(notation::PartList& parts)
+{
+    NotationKey key = m_notation->title();
+
+    if (!m_sortedPartIdList.contains(key)) {
+        return;
+    }
+
+    const QList<ID>& sortedPartIdList = m_sortedPartIdList[key];
+
+    std::sort(parts.begin(), parts.end(), [&sortedPartIdList](const Part* part1, const Part* part2) {
+        int index1 = sortedPartIdList.indexOf(part1->id());
+        int index2 = sortedPartIdList.indexOf(part2->id());
+
+        return index1 < index2;
+    });
 }
 
 bool InstrumentsPanelTreeModel::isPartExsistsOnCurrentNotation(const ID& partId) const

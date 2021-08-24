@@ -108,6 +108,10 @@ private:
         ItemRole = Qt::UserRole + 1
     };
 
+    void onBeforeChangeNotation();
+
+    void sortParts(notation::PartList& parts);
+
     void setupPartsConnections();
     void setupStavesConnections(const ID& stavesPartId);
     void listenSelectionChanged();
@@ -147,6 +151,9 @@ private:
     bool m_isLoadingBlocked = false;
 
     std::shared_ptr<async::Asyncable> m_partsNotifyReceiver = nullptr;
+
+    using NotationKey = QString;
+    QHash<NotationKey, QList<ID>> m_sortedPartIdList;
 };
 }
 

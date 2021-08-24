@@ -73,7 +73,8 @@ public:
 
     virtual void appendStaff(Staff* staff, const ID& destinationPartId) = 0;
     virtual void appendLinkedStaff(Staff* staff, const ID& sourceStaffId, const ID& destinationPartId) = 0;
-    virtual void appendPart(Part* part) = 0;
+
+    virtual void insertPart(Part* part, size_t index) = 0;
 
     virtual void replacePart(const ID& partId, Part* newPart) = 0;
     virtual void replaceInstrument(const InstrumentKey& instrumentKey, const Instrument& newInstrument) = 0;
