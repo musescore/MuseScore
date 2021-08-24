@@ -31,8 +31,6 @@ bool AccessibilityConfiguration::enabled() const
         return false;
     }
 
-    return true;
-
     if (!QAccessible::isActive()) {
         return false;
     }

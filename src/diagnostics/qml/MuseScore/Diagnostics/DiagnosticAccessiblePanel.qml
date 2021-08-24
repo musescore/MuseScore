@@ -40,6 +40,18 @@ Rectangle {
 
     DiagnosticAccessibleModel {
         id: accessibleModel
+
+        property var lastFocusedIndex: null
+
+        onFocusedItem: {
+            if (lastFocusedIndex) {
+                view.collapseBranch(lastFocusedIndex)
+            }
+
+            view.expandBranch(index)
+            view.positionViewAtIndex(index)
+            lastFocusedIndex = index
+        }
     }
 
     Row {
@@ -75,10 +87,49 @@ Rectangle {
 
         model: accessibleModel
 
+        function positionViewAtIndex(index) {
+            var rows = -1
+            while (index.valid) {
+                var r = accessibleModel.indexRow(index) + 1
+                rows += r
+                index = view.model.parent(index)
+            }
+
+            __listView.positionViewAtIndex(rows, ListView.Center)
+        }
+
+        function expandBranch(index) {
+            var idxs = []
+            var parent = view.model.parent(index)
+            while (parent.valid) {
+                idxs.push(parent)
+                parent = view.model.parent(parent)
+            }
+
+            for(var i = (idxs.length - 1); i >= 0; --i) {
+                var idx = idxs[i]
+                view.expand(idx)
+            }
+        }
+
+        function collapseBranch(index) {
+            var idxs = []
+            idxs.push(index)
+            var parent = view.model.parent(index)
+            while (parent.valid) {
+                idxs.push(parent)
+                parent = view.model.parent(parent)
+            }
+
+            for(var i = 0; i < idxs.length; ++i) {
+                var idx = idxs[i]
+                view.collapse(idx)
+            }
+        }
+
         TableViewColumn {
             role: "itemData"
         }
-
 
         style: TreeViewStyle {
             indentation: styleData.depth
@@ -115,7 +166,7 @@ Rectangle {
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignLeft
                 elide: Text.ElideNone
-                text: item.formatData(styleData.value)
+                text: "row: " + styleData.row + " " + item.formatData(styleData.value)
             }
 
             MouseArea {
