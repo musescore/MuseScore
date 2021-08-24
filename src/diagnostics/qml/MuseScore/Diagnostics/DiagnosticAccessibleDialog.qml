@@ -26,7 +26,7 @@ import MuseScore.UiComponents 1.0
 StyledDialogView {
     id: root
 
-    title: "Diagnostic Accessibility"
+    title: "Diagnostic: Accessibility"
 
     contentHeight: 800
     contentWidth: 600
@@ -34,6 +34,5 @@ StyledDialogView {
 
     DiagnosticAccessiblePanel {
         anchors.fill: parent
-        anchors.margins: 8
     }
 }

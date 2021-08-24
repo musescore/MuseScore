@@ -20,6 +20,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
+import QtQuick.Controls 1.4
+import QtQuick.Controls.Styles 1.4
+
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Diagnostics 1.0
@@ -40,11 +43,11 @@ Rectangle {
         property int savedY: 0
 
         onBeforeReload: {
-            accessibleModel.savedY = view.contentY
+            //accessibleModel.savedY = view.contentY
         }
 
         onAfterReload: {
-            view.contentY = accessibleModel.savedY
+            //view.contentY = accessibleModel.savedY
         }
     }
 
@@ -69,24 +72,47 @@ Rectangle {
         }
     }
 
-    ListView {
+    TreeView {
         id: view
         anchors.top: tools.bottom
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right
         clip: true
-        spacing: 8
+
+        headerVisible: false
 
         model: accessibleModel
-        delegate: Rectangle {
+
+        TableViewColumn {
+            role: "itemData"
+        }
+
+
+        style: TreeViewStyle {
+            indentation: styleData.depth
+
+//            frame: Item {}
+//            incrementControl: Item {}
+//            decrementControl: Item {}
+//            handle: Item {}
+//            scrollBarBackground: Item {}
+//            branchDelegate: Item {}
+
+           // backgroundColor: root.color
+
+            rowDelegate: Rectangle {
+                height: 48
+                width: parent.width
+                color: root.color
+            }
+        }
+
+        itemDelegate: Item {
             id: item
 
-            width: parent ? parent.width : 0
-            height: 32
-
             function formatData(data) {
-                var str = data.name + "[" + data.role + "]"
+                var str = data.name + " [" + data.role + "]"
                 if (data.children > 0) {
                     str += ", children: " + data.children
                 }
@@ -96,26 +122,30 @@ Rectangle {
                 return str;
             }
 
-            color: {
-                if (itemData.state.focused) {
-                    return "#75507b"
-                }
-
-                if (itemData.state.active) {
-                    return "#73d216"
-                }
-
-                return root.color
+            Rectangle {
+                anchors.fill: parent
+                color: ui.theme.backgroundSecondaryColor
+                visible: styleData.row%2 == 1
             }
 
             StyledTextLabel {
                 id: secLabel
                 anchors.fill: parent
-                anchors.leftMargin: itemData.level * 16
-                verticalAlignment: Text.AlignTop
+                verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignLeft
                 elide: Text.ElideNone
-                text: item.formatData(itemData)
+                text: item.formatData(styleData.value)
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    if (!styleData.isExpanded) {
+                        view.expand(styleData.index)
+                    } else {
+                        view.collapse(styleData.index)
+                    }
+                }
             }
         }
     }

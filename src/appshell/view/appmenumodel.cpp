@@ -327,7 +327,7 @@ MenuItem AppMenuModel::diagnosticItem() const
         makeMenu(qtrc("appshell", "Accessibility"), accessibilityItems),
     };
 
-    return makeMenu(qtrc("appshell", "&Diagnostic"), items);
+    return makeMenu(qtrc("appshell", "Diagnostic"), items);
 }
 
 MenuItemList AppMenuModel::recentScores() const
