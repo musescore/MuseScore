@@ -31,6 +31,8 @@ Loader {
 
     property bool isMenuOpened: Boolean(loader.menu) && loader.menu.isOpened
 
+    property var navigation: null
+
     QtObject {
         id: prv
 
@@ -55,6 +57,8 @@ Loader {
             menu.navigation.name = navigationParentControl.name + "PopupMenu"
         }
         menu.anchorItem = menuAnchorItem
+
+        menu.navigationParentControl = loader.navigation
 
         update(model, x, y)
         menu.open()

@@ -41,6 +41,12 @@ Rectangle {
         id: navSec
         name: "AppTitleBar"
         order: 0
+
+        onActiveChanged: {
+            if (active) {
+                root.forceActiveFocus()
+            }
+        }
     }
 
     Item {
@@ -82,9 +88,22 @@ Rectangle {
             anchors.right: parent.right
             anchors.verticalCenter: parent.verticalCenter
 
+            NavigationPanel {
+                id: navAppControlPanel
+                name: "AppControl"
+                section: navSec
+                order: 1
+                accessible.name: qsTrc("appshell", "App control") + " " + navAppControlPanel.directionInfo
+            }
+
             FlatButton {
                 icon: IconCode.MINUS
                 normalStateColor: "transparent"
+
+                navigation.name: "AppControl"
+                navigation.panel: navAppControlPanel
+                navigation.order: 1
+                accessible.name: qsTrc("appshell", "Minimize")
 
                 onClicked: {
                     root.showWindowMinimizedRequested()
@@ -94,6 +113,11 @@ Rectangle {
             FlatButton {
                 icon: IconCode.SPLIT_OUT_ARROWS
                 normalStateColor: "transparent"
+
+                navigation.name: "AppControl"
+                navigation.panel: navAppControlPanel
+                navigation.order: 2
+                accessible.name: qsTrc("appshell", "Maximize") // todo
 
                 onClicked: {
                     root.toggleWindowMaximizedRequested()
@@ -105,6 +129,11 @@ Rectangle {
                 normalStateColor: "transparent"
                 pressedStateColor: "red"
                 hoveredStateColor: "red"
+
+                navigation.name: "AppControl"
+                navigation.panel: navAppControlPanel
+                navigation.order: 3
+                accessible.name: qsTrc("appshell", "Quit")
 
                 onClicked: {
                     root.closeWindowRequested()

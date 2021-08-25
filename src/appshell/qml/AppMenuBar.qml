@@ -26,12 +26,15 @@ import MuseScore.UiComponents 1.0
 import MuseScore.AppShell 1.0
 
 ListView {
+    id: root
 
     property alias navigation: navPanel
 
     height: contentItem.childrenRect.height
     width: contentWidth
     orientation: Qt.Horizontal
+
+    interactive: false
 
     model: appMenuModel.items
 
@@ -52,6 +55,8 @@ ListView {
     NavigationPanel {
         id: navPanel
         name: "AppMenuBar"
+        enabled: root.enabled && root.visible
+        accessible.name: qsTrc("appshell", "App menu bar") + " " + navPanel.directionInfo
     }
 
     delegate: FlatButton {
@@ -65,8 +70,12 @@ ListView {
         hoveredStateColor: ui.theme.accentColor
         text: Boolean(item) ? item.title : ""
 
+        navigation.name: text
         navigation.panel: navPanel
         navigation.order: index
+        navigation.accessible.name: {
+            return text.replace('&', '')
+        }
 
         mouseArea.onContainsMouseChanged: {
             if (!mouseArea.containsMouse || !prv.showedMenu ||
@@ -97,6 +106,8 @@ ListView {
 
         StyledMenuLoader {
             id: menuLoader
+
+            navigation: radioButtonDelegate.navigation
 
             onHandleMenuItem: {
                 Qt.callLater(appMenuModel.handleMenuItem, item.id)

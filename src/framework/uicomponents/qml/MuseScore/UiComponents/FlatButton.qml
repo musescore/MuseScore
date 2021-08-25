@@ -84,7 +84,7 @@ FocusScope {
         enabled: root.enabled && root.visible
 
         accessible.role: MUAccessible.Button
-        accessible.name: root.text
+        accessible.name: Boolean(root.text) ? root.text : root.toolTipTitle
         accessible.visualItem: root
 
         onTriggered: {

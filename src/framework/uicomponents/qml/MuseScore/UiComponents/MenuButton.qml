@@ -48,6 +48,8 @@ FlatButton {
     StyledMenuLoader {
         id: menuLoader
 
+        navigation: root.navigation
+
         onHandleMenuItem: {
             root.handleMenuItem(item)
         }
