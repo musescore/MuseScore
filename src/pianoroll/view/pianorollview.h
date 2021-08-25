@@ -93,7 +93,7 @@ signals:
 private:
     void onNotationChanged();
     void updateBoundingSize();
-
+    
     notation::INotationPtr m_notation;
 
     QColor m_color = Qt::red;
