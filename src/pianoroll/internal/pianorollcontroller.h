@@ -107,6 +107,8 @@ signals:
 
 private:
 
+    void onUndoStackChanged();
+    void onCurrentNotationChanged();
     void onNotationChanged();
     void onSelectionChanged();
 
