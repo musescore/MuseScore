@@ -31,7 +31,7 @@ using namespace mu::ui;
 const UiActionList InstrumentsUiActions::m_actions = {
     UiAction("instruments",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Instruments...")
+             QT_TRANSLATE_NOOP("action", "Instruments…")
              )
 };
 
