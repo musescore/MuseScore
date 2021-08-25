@@ -24,6 +24,7 @@
 #include "translation.h"
 
 #include "log.h"
+#include "config.h"
 
 using namespace mu::appshell;
 using namespace mu::ui;
@@ -55,7 +56,9 @@ void AppMenuModel::load()
         formatItem(),
         toolsItem(),
         helpItem(),
+#ifdef BUILD_DIAGNOSTICS
         diagnosticItem()
+#endif
     };
 
     setItems(items);
