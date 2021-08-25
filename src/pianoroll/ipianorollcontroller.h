@@ -29,6 +29,7 @@
 #include "notation/notationtypes.h"
 #include "audio/audiotypes.h"
 #include "actions/actiontypes.h"
+#include "libmscore/fraction.h"
 
 namespace mu::pianoroll {
 class IPianorollController : MODULE_EXPORT_INTERFACE
@@ -48,6 +49,7 @@ public:
     virtual void setNoteHeight(int value) = 0;
 
     virtual int widthInTicks() const = 0;
+    virtual Ms::Fraction widthInBeats() = 0;
 
 //    virtual bool isPlayAllowed() const = 0;
 //    virtual async::Notification isPlayAllowedChanged() const = 0;
