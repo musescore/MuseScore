@@ -127,7 +127,6 @@ void PianorollView::updateBoundingSize()
 
     Ms::Fraction beats = controller()->widthInBeats();
     double beat = beats.numerator() / (double)beats.denominator();
-    //    setImplicitSize((int)(32 * m_wholeNoteWidth), m_noteHeight * 128);
     setImplicitSize((int)(beat * m_wholeNoteWidth), m_noteHeight * 128);
 
 //    Score* score = controller()->score();
