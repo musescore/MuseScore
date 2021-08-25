@@ -21,7 +21,9 @@
  */
 #include "uicontextresolver.h"
 
+#include "diagnostics/diagnosticutils.h"
 #include "log.h"
+#include "config.h"
 
 using namespace mu::context;
 using namespace mu::ui;
@@ -73,12 +75,17 @@ void UiContextResolver::notifyAboutContextChanged()
 UiContext UiContextResolver::currentUiContext() const
 {
     TRACEFUNC;
-    ValCh<Uri> currentUri = interactive()->currentUri();
-    if (currentUri.val == HOME_PAGE_URI) {
+    Uri currentUri = interactive()->currentUri().val;
+
+#ifdef BUILD_DIAGNOSTICS
+    currentUri = diagnostics::diagnosticCurrentUri(interactive()->stack());
+#endif
+
+    if (currentUri == HOME_PAGE_URI) {
         return context::UiCtxHomeOpened;
     }
 
-    if (currentUri.val == NOTATION_PAGE_URI) {
+    if (currentUri == NOTATION_PAGE_URI) {
         auto notation = globalContext()->currentNotation();
         if (!notation) {
             //! NOTE The notation page is open, but the notation itself is not loaded - we consider that the notation is not open.

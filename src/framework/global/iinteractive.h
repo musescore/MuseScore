@@ -159,6 +159,7 @@ public:
     virtual void close(const Uri& uri) = 0;
 
     virtual ValCh<Uri> currentUri() const = 0;
+    virtual std::vector<Uri> stack() const = 0;
 
     virtual Ret openUrl(const std::string& url) const = 0;
 };

@@ -226,6 +226,15 @@ ValCh<Uri> InteractiveProvider::currentUri() const
     return v;
 }
 
+std::vector<Uri> InteractiveProvider::stack() const
+{
+    std::vector<Uri> uris;
+    for (const ObjectInfo& info : m_stack) {
+        uris.push_back(info.uriQuery.uri());
+    }
+    return uris;
+}
+
 QString InteractiveProvider::objectID(const QVariant& val) const
 {
     static int count(0);
