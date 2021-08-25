@@ -189,6 +189,11 @@ ValCh<Uri> Interactive::currentUri() const
     return provider()->currentUri();
 }
 
+std::vector<Uri> Interactive::stack() const
+{
+    return provider()->stack();
+}
+
 Ret Interactive::openUrl(const std::string& url) const
 {
     QUrl _url(QString::fromStdString(url));

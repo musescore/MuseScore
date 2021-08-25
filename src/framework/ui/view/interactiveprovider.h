@@ -78,6 +78,7 @@ public:
     void close(const Uri& uri) override;
 
     ValCh<Uri> currentUri() const override;
+    std::vector<Uri> stack() const override;
 
     Q_INVOKABLE QString objectID(const QVariant& val) const;
 

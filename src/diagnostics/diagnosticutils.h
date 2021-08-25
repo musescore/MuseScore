@@ -19,11 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DIAGNOSTICS_DIAGNOSTICSCHECK_H
-#define MU_DIAGNOSTICS_DIAGNOSTICSCHECK_H
+#ifndef MU_DIAGNOSTICS_DIAGNOSTICUTILS_H
+#define MU_DIAGNOSTICS_DIAGNOSTICUTILS_H
 
 #include <QObject>
 
+#include "uri.h"
 #include "log.h"
 
 namespace mu::diagnostics {
@@ -80,6 +81,26 @@ inline bool isDiagnosticHierarchy(const QObject* obj, bool print = false)
     }
     return false;
 }
+
+inline std::vector<Uri> removeDiagnosticsUri(const std::vector<Uri>& uris)
+{
+    std::vector<Uri> nuris;
+    for (const Uri& uri : uris) {
+        if (!QString::fromStdString(uri.toString()).startsWith("musescore://diagnostics")) {
+            nuris.push_back(uri);
+        }
+    }
+    return nuris;
 }
 
-#endif // MU_DIAGNOSTICS_DIAGNOSTICSCHECK_H
+inline Uri diagnosticCurrentUri(const std::vector<Uri>& stack)
+{
+    std::vector<Uri> uris = removeDiagnosticsUri(stack);
+    if (!uris.empty()) {
+        return uris.back();
+    }
+    return Uri();
+}
+}
+
+#endif // MU_DIAGNOSTICS_DIAGNOSTICUTILS_H
