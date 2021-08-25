@@ -156,7 +156,7 @@ void InstrumentsOnScoreListModel::loadOrders()
     emit ordersChanged();
 
     INotationPtr notation = context()->currentNotation();
-    QString currentOrderId = notation ? notation->scoreOrder().id : QString();
+    QString currentOrderId = notation ? notation->parts()->scoreOrder().id : QString();
 
     for (int i = 0; i < m_scoreOrders.size(); ++i) {
         if (m_scoreOrders[i].id == currentOrderId) {

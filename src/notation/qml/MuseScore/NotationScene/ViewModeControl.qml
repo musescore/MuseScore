@@ -72,7 +72,7 @@ FlatButton {
         menuAnchorItem: ui.rootItem
 
         onHandleMenuItem: {
-            Qt.callLater(root.changeCurrentViewModeRequested, itemId)
+            Qt.callLater(root.changeCurrentViewModeRequested, item.id)
         }
     }
 }

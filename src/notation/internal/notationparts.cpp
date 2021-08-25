@@ -122,6 +122,50 @@ bool NotationParts::staffExists(const ID& staffId) const
     return staff(staffId) != nullptr;
 }
 
+StaffConfig NotationParts::staffConfig(const ID& staffId) const
+{
+    Staff* staff = this->staffModifiable(staffId);
+    if (!staff) {
+        return StaffConfig();
+    }
+
+    Ms::StaffType* staffType = staff->staffType(DEFAULT_TICK);
+    if (!staffType) {
+        return StaffConfig();
+    }
+
+    StaffConfig config;
+    config.visible = staff->visible();
+    config.userDistance = staff->userDist();
+    config.cutaway = staff->cutaway();
+    config.showIfEmpty = staff->showIfEmpty();
+    config.hideSystemBarline = staff->hideSystemBarLine();
+    config.mergeMatchingRests = staff->mergeMatchingRests();
+    config.hideMode = staff->hideWhenEmpty();
+    config.clefTypeList = staff->defaultClefType();
+
+    config.visibleLines = staffType->invisible();
+    config.isSmall = staffType->isSmall();
+    config.scale = staffType->userMag();
+    config.linesColor = staffType->color();
+    config.linesCount = staffType->lines();
+    config.lineDistance = staffType->lineDistance().val();
+    config.showClef = staffType->genClef();
+    config.showTimeSignature = staffType->genTimesig();
+    config.showKeySignature = staffType->genKeysig();
+    config.showBarlines = staffType->showBarlines();
+    config.showStemless = staffType->stemless();
+    config.showLedgerLinesPitched = staffType->showLedgerLines();
+    config.noteheadScheme = staffType->noteHeadScheme();
+
+    return config;
+}
+
+ScoreOrder NotationParts::scoreOrder() const
+{
+    return score()->scoreOrder();
+}
+
 Part* NotationParts::partModifiable(const ID& partId) const
 {
     return score()->partById(partId.toUint64());
@@ -269,6 +313,8 @@ void NotationParts::updatePartTitles()
 void NotationParts::doSetScoreOrder(const ScoreOrder& order)
 {
     score()->undo(new Ms::ChangeScoreOrder(score(), order));
+
+    m_scoreOrderChanged.notify();
 }
 
 void NotationParts::doMoveStaves(const std::vector<Staff*>& staves, int destinationStaffIndex, Part* destinationPart)
@@ -443,45 +489,6 @@ void NotationParts::setSmallStaff(const ID& staffId, bool smallStaff)
     apply();
 
     notifyAboutStaffChanged(staff);
-}
-
-StaffConfig NotationParts::staffConfig(const ID& staffId) const
-{
-    Staff* staff = this->staffModifiable(staffId);
-    if (!staff) {
-        return StaffConfig();
-    }
-
-    Ms::StaffType* staffType = staff->staffType(DEFAULT_TICK);
-    if (!staffType) {
-        return StaffConfig();
-    }
-
-    StaffConfig config;
-    config.visible = staff->visible();
-    config.userDistance = staff->userDist();
-    config.cutaway = staff->cutaway();
-    config.showIfEmpty = staff->showIfEmpty();
-    config.hideSystemBarline = staff->hideSystemBarLine();
-    config.mergeMatchingRests = staff->mergeMatchingRests();
-    config.hideMode = staff->hideWhenEmpty();
-    config.clefTypeList = staff->defaultClefType();
-
-    config.visibleLines = staffType->invisible();
-    config.isSmall = staffType->isSmall();
-    config.scale = staffType->userMag();
-    config.linesColor = staffType->color();
-    config.linesCount = staffType->lines();
-    config.lineDistance = staffType->lineDistance().val();
-    config.showClef = staffType->genClef();
-    config.showTimeSignature = staffType->genTimesig();
-    config.showKeySignature = staffType->genKeysig();
-    config.showBarlines = staffType->showBarlines();
-    config.showStemless = staffType->stemless();
-    config.showLedgerLinesPitched = staffType->showLedgerLines();
-    config.noteheadScheme = staffType->noteHeadScheme();
-
-    return config;
 }
 
 void NotationParts::setStaffConfig(const ID& staffId, const StaffConfig& config)
@@ -663,6 +670,11 @@ void NotationParts::replaceDrumset(const InstrumentKey& instrumentKey, const Dru
 Notification NotationParts::partsChanged() const
 {
     return m_partsChanged;
+}
+
+Notification NotationParts::scoreOrderChanged() const
+{
+    return m_scoreOrderChanged;
 }
 
 Ms::Score* NotationParts::score() const

@@ -43,6 +43,9 @@ public:
     virtual const Staff* staff(const ID& staffId) const = 0;
     virtual bool staffExists(const ID& staffId) const = 0;
 
+    virtual StaffConfig staffConfig(const ID& staffId) const = 0;
+    virtual ScoreOrder scoreOrder() const = 0;
+
     virtual void setParts(const PartInstrumentList& instruments, const ScoreOrder& order) = 0;
     virtual void setScoreOrder(const ScoreOrder& order) = 0;
     virtual void setPartVisible(const ID& partId, bool visible) = 0;
@@ -56,8 +59,6 @@ public:
     virtual void setStaffType(const ID& staffId, StaffType type) = 0;
     virtual void setCutawayEnabled(const ID& staffId, bool enabled) = 0;
     virtual void setSmallStaff(const ID& staffId, bool smallStaff) = 0;
-
-    virtual StaffConfig staffConfig(const ID& staffId) const = 0;
     virtual void setStaffConfig(const ID& staffId, const StaffConfig& config) = 0;
 
     virtual void removeParts(const IDList& partsIds) = 0;
@@ -81,6 +82,7 @@ public:
     virtual void replaceDrumset(const InstrumentKey& instrumentKey, const Drumset& newDrumset) = 0;
 
     virtual async::Notification partsChanged() const = 0;
+    virtual async::Notification scoreOrderChanged() const = 0;
 };
 
 using INotationPartsPtr = std::shared_ptr<INotationParts>;

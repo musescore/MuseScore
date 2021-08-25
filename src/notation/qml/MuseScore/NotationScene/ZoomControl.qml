@@ -123,7 +123,7 @@ RowLayout {
             menuAnchorItem: ui.rootItem
 
             onHandleMenuItem: {
-                root.changeZoomRequested(itemId)
+                root.changeZoomRequested(item.id)
             }
         }
 
