@@ -43,8 +43,6 @@ void StaffSettingsModel::load(const QString& staffId)
     m_staffId = staffId;
     m_config = notationParts()->staffConfig(m_staffId);
 
-    setIsSmallStaff(m_config.isSmall);
-    setCutawayEnabled(m_config.cutaway);
     setStaffType(static_cast<int>(staff->staffType()->type()));
 
     m_voicesVisibility.clear();
@@ -53,6 +51,8 @@ void StaffSettingsModel::load(const QString& staffId)
     }
 
     emit voicesChanged();
+    emit cutawayEnabledChanged();
+    emit isSmallStaffChanged();
 }
 
 QVariantList StaffSettingsModel::allStaffTypes() const
