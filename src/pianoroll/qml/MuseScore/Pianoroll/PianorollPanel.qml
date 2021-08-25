@@ -181,13 +181,9 @@ Rectangle {
 
                     Slider {
                         id: vertZoom
-                        from: 1
+                        from: 4
                         to: 40
                         value: 14
-
-//                        onMoved: {
-                            //pianoView.zoomX =
-//                        }
                     }
 
                     Label {
@@ -215,9 +211,6 @@ Rectangle {
             ScrollBar.vertical.interactive: true
             ScrollBar.horizontal.policy: ScrollBar.AlwaysOn
             ScrollBar.vertical.policy: ScrollBar.AlwaysOn
-
-            contentWidth: 1500
-            contentHeight: 500
 
             PianorollView {
                 id: pianoView

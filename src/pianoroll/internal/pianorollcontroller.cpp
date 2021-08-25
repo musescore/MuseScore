@@ -151,6 +151,39 @@ void PianorollController::addChord(Chord* chrd, int voice)
     }
 }
 
+ 
+
+Ms::Fraction PianorollController::widthInBeats()
+{
+//    return m_widthInTicks; 
+    notation::INotationPtr notation = globalContext()->currentNotation();
+    if (!notation) {
+        return Ms::Fraction();
+    }
+
+    qDebug() << "---------";
+
+    Ms::Score* score = notation->elements()->msScore();
+    //std::vector<Element*> selectedElements = notation->interaction()->selection()->elements();
+    //m_selectedStaves.clear();
+    //m_activeStaff = -1;
+    //for (Element* e : selectedElements)
+    //{
+    //    int idx = e->staffIdx();
+    //    qDebug() << "ele idx " << idx;
+    //    m_activeStaff = idx;
+    //    if (std::find(m_selectedStaves.begin(), m_selectedStaves.end(), idx) == m_selectedStaves.end())
+    //    {
+    //        m_selectedStaves.push_back(idx);
+    //    }
+    //}
+
+//    Ms::Staff* staff = score->staff(m_activeStaff);
+    Ms::Measure* lm = score->lastMeasure();
+    Ms::Fraction beats = lm->tick() + lm->ticks();
+    return beats;
+}
+
 void PianorollController::buildNoteBlocks()
 {
     m_notes.clear();

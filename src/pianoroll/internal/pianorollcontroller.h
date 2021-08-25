@@ -98,7 +98,8 @@ public:
     int noteHeight() const { return m_noteHeight; }
     void setNoteHeight(int value);
 
-    int widthInTicks() const { return m_widthInTicks; }
+    int widthInTicks() const { return m_widthInTicks;  }
+    Ms::Fraction widthInBeats();
 
 signals:
     void xZoomChanged();
