@@ -78,7 +78,7 @@ public:
     void select(const std::vector<Element*>& elements, SelectType type, int staffIndex = 0) override;
     void selectAll() override;
     void selectSection() override;
-    void selectFirstElement() override;
+    void selectFirstElement(bool frame = false) override;
     void selectLastElement() override;
     INotationSelectionPtr selection() const override;
     void clearSelection() override;

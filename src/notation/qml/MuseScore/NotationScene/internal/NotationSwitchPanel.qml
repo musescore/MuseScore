@@ -52,6 +52,14 @@ Rectangle {
         notationSwitchModel.load()
     }
 
+    NavigationPanel {
+        id: navPanel
+        name: "NotationViewTabs"
+        section: root.navigationSection
+        direction: NavigationPanel.Horizontal
+        order: 1
+    }
+
     RadioButtonGroup {
         id: notationsView
 
@@ -71,20 +79,10 @@ Rectangle {
         delegate: NotationSwitchButton {
             id: button
 
-            property NavigationPanel navigationPanel: NavigationPanel {
-                name: "NotationView" + model.index
-                section: root.navigationSection
-                order: 1 + model.index
-
-                onNavigationEvent: {
-                    event.accepted = true;
-                }
-            }
-
             navigation.name: "NotationTab" + model.index
-            navigation.panel: button.navigationPanel
+            navigation.panel: navPanel
             navigation.row: 1
-            navigation.column: 1
+            navigation.column: model.index + 1
 
             text: model.title
             needSave: model.needSave

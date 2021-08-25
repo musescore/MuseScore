@@ -83,6 +83,31 @@ FocusScope {
             NotationPaintView {
                 id: notationView
 
+                NavigationPanel {
+                    id: navPanel
+                    name: "ScoreView"
+                    section: navSec
+                    direction: NavigationPanel.Both
+                    order: 2
+                }
+
+                NavigationControl {
+                    id: fakeNavCtrl
+                    name: "Score"
+
+                    panel: navPanel
+                    order: 1
+
+                    accessible.role: MUAccessible.Panel
+                    accessible.name: "Score"
+
+                    onActiveChanged: {
+                        if (fakeNavCtrl.active) {
+                            notationView.selectOnNavigationActive()
+                        }
+                    }
+                }
+
                 SplitView.fillWidth: true
                 SplitView.fillHeight: true
 
