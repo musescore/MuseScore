@@ -107,6 +107,10 @@ void DiagnosticAccessibleModel::dumpTree()
 
 QModelIndex DiagnosticAccessibleModel::index(int row, int column, const QModelIndex& parent) const
 {
+    if (!m_rootItem) {
+        return QModelIndex();
+    }
+
     if (!hasIndex(row, column, parent)) {
         return QModelIndex();
     }
@@ -116,7 +120,7 @@ QModelIndex DiagnosticAccessibleModel::index(int row, int column, const QModelIn
     if (!parent.isValid()) {
         parentItem = m_rootItem;
     } else {
-        parentItem = static_cast<Item*>(parent.internalPointer());
+        parentItem = itemByModelIndex(parent);
     }
 
     if (!parentItem) {
@@ -125,7 +129,7 @@ QModelIndex DiagnosticAccessibleModel::index(int row, int column, const QModelIn
 
     Item* childItem = parentItem->child(row);
     if (childItem) {
-        return createIndex(row, column, childItem);
+        return createIndex(row, column, childItem->key());
     }
 
     return QModelIndex();
@@ -138,28 +142,39 @@ int DiagnosticAccessibleModel::indexRow(const QModelIndex& idx) const
 
 QModelIndex DiagnosticAccessibleModel::parent(const QModelIndex& child) const
 {
+    if (!m_rootItem) {
+        return QModelIndex();
+    }
+
     if (!child.isValid()) {
         return QModelIndex();
     }
 
-    Item* childItem = static_cast<Item*>(child.internalPointer());
-    Item* parentItem = childItem->parent();
+    Item* childItem = itemByModelIndex(child);
+    if (!childItem) {
+        return QModelIndex();
+    }
 
+    Item* parentItem = childItem->parent();
     if (parentItem == m_rootItem) {
         return QModelIndex();
     }
 
-    return createIndex(parentItem->row(), 0, parentItem);
+    return createIndex(parentItem->row(), 0, parentItem->key());
 }
 
 int DiagnosticAccessibleModel::rowCount(const QModelIndex& parent) const
 {
+    if (!m_rootItem) {
+        return 0;
+    }
+
     Item* parentItem = nullptr;
 
     if (!parent.isValid()) {
         parentItem = m_rootItem;
     } else {
-        parentItem = static_cast<Item*>(parent.internalPointer());
+        parentItem = itemByModelIndex(parent);
     }
 
     if (!parentItem) {
@@ -180,7 +195,7 @@ QVariant DiagnosticAccessibleModel::data(const QModelIndex& index, int role) con
         return QVariant();
     }
 
-    Item* item = static_cast<Item*>(index.internalPointer());
+    Item* item = itemByModelIndex(index);
     if (!item) {
         return QVariant();
     }
@@ -223,7 +238,7 @@ void DiagnosticAccessibleModel::onItemChanged(QObject* accessibleObject)
     QVariant newData = makeData(iface);
     item->setData(newData);
 
-    QModelIndex index = createIndex(item->row(), 0, item);
+    QModelIndex index = createIndex(item->row(), 0, item->key());
 
     QAccessible::State st = iface->state();
     if (st.focused) {
@@ -253,6 +268,18 @@ DiagnosticAccessibleModel::Item* DiagnosticAccessibleModel::findItemForIface(con
     return nullptr;
 }
 
+DiagnosticAccessibleModel::Item* DiagnosticAccessibleModel::createItem(Item* parent)
+{
+    Item* item = new Item(parent);
+    m_allItems.insert(item->key(), item);
+    return item;
+}
+
+DiagnosticAccessibleModel::Item* DiagnosticAccessibleModel::itemByModelIndex(const QModelIndex& index) const
+{
+    return m_allItems.value(index.internalId(), nullptr);
+}
+
 void DiagnosticAccessibleModel::reload()
 {
     IF_ASSERT_FAILED(m_accessibleRootObject) {
@@ -269,8 +296,9 @@ void DiagnosticAccessibleModel::reload()
     emit beforeReload();
     beginResetModel();
 
+    m_allItems.clear();
     delete m_rootItem;
-    m_rootItem = new Item(nullptr);
+    m_rootItem = createItem(nullptr);
     load(iface, m_rootItem);
 
     endResetModel();
@@ -308,7 +336,7 @@ QVariant DiagnosticAccessibleModel::makeData(const QAccessibleInterface* iface) 
 
 void DiagnosticAccessibleModel::load(QAccessibleInterface* iface, Item* parent)
 {
-    Item* item = new Item(parent);
+    Item* item = createItem(parent);
     item->setIface(iface);
     item->setData(makeData(iface));
 
