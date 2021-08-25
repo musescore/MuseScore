@@ -46,8 +46,31 @@ PianorollView::PianorollView(QQuickItem* parent)
 
 void PianorollView::onNotationChanged()
 {
+    //updateBoundingSize();
+    //update();
+    auto notation = globalContext()->currentNotation();
+    if (notation)
+    {
+        notation->interaction()->selectionChanged().onNotify(this, [this]() {
+            onSelectionChanged();
+        });
+
+        notation->notationChanged().onNotify(this, [this]() {
+            onCurrentNotationChanged();
+        });
+    }
+}
+
+void PianorollView::onCurrentNotationChanged()
+{
     updateBoundingSize();
-    update();
+    //update();
+
+}
+
+void PianorollView::onSelectionChanged()
+{
+    int j = 9;
 }
 
 void PianorollView::setWholeNoteWidth(double value)
@@ -81,6 +104,12 @@ void PianorollView::setTool(PianorollTool value)
 
 void PianorollView::load()
 {
+    onNotationChanged();
+    globalContext()->currentNotationChanged().onNotify(this, [this]() {
+        onNotationChanged();
+    });
+
+
 //    globalContext()->currentNotationChanged().onNotify(this, [this]() {
 //        onCurrentNotationChanged();
 //    });
@@ -89,15 +118,15 @@ void PianorollView::load()
 //        onNotationChanged();
 //    });
 
-    auto notation = globalContext()->currentNotation();
-    if (!notation)
-    {
-        return;
-    }
+    //auto notation = globalContext()->currentNotation();
+    //if (!notation)
+    //{
+    //    return;
+    //}
 
-    notation->undoStack()->stackChanged().onNotify(this, [this]() {
-        onNotationChanged();
-    });
+    //notation->undoStack()->stackChanged().onNotify(this, [this]() {
+    //    onNotationChanged();
+    //});
 
 //    notation->notationChanged().onNotify(this, [this]() {
 //        onNotationChanged();
