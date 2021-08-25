@@ -29,17 +29,26 @@ StaffSettingsModel::StaffSettingsModel(QObject* parent)
 {
 }
 
-void StaffSettingsModel::load(const QVariant& staff)
+void StaffSettingsModel::load(const QString& staffId)
 {
-    QVariantMap map = staff.toMap();
+    if (!notationParts()) {
+        return;
+    }
 
-    m_staffId = map["staffId"].toString();
-    setIsSmallStaff(map["isSmall"].toBool());
-    setCutawayEnabled(map["cutawayEnabled"].toBool());
-    setStaffType(map["type"].toInt());
+    const Staff* staff = notationParts()->staff(staffId);
+    if (!staff) {
+        return;
+    }
+
+    m_staffId = staffId;
+    m_config = notationParts()->staffConfig(m_staffId);
+
+    setIsSmallStaff(m_config.isSmall);
+    setCutawayEnabled(m_config.cutaway);
+    setStaffType(static_cast<int>(staff->staffType()->type()));
 
     m_voicesVisibility.clear();
-    for (const QVariant& voice: map["voicesVisibility"].toList()) {
+    for (const QVariant& voice: staff->visibilityVoices()) {
         m_voicesVisibility << voice.toBool();
     }
 
@@ -119,34 +128,34 @@ void StaffSettingsModel::setVoiceVisible(int voiceIndex, bool visible)
 
 bool StaffSettingsModel::isSmallStaff() const
 {
-    return m_isSmallStaff;
+    return m_config.isSmall;
 }
 
 void StaffSettingsModel::setIsSmallStaff(bool value)
 {
-    if (m_isSmallStaff == value || !notationParts()) {
+    if (m_config.isSmall == value || !notationParts()) {
         return;
     }
 
-    m_isSmallStaff = value;
-    notationParts()->setSmallStaff(m_staffId, value);
+    m_config.isSmall = value;
+    notationParts()->setStaffConfig(m_staffId, m_config);
 
     emit isSmallStaffChanged();
 }
 
 bool StaffSettingsModel::cutawayEnabled() const
 {
-    return m_cutawayEnabled;
+    return m_config.cutaway;
 }
 
 void StaffSettingsModel::setCutawayEnabled(bool value)
 {
-    if (m_cutawayEnabled == value || !notationParts()) {
+    if (m_config.cutaway == value || !notationParts()) {
         return;
     }
 
-    m_cutawayEnabled = value;
-    notationParts()->setCutawayEnabled(m_staffId, value);
+    m_config.cutaway = value;
+    notationParts()->setStaffConfig(m_staffId, m_config);
 
     emit cutawayEnabledChanged();
 }

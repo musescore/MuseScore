@@ -57,8 +57,6 @@ public:
     void setInstrumentName(const InstrumentKey& instrumentKey, const QString& name) override;
     void setInstrumentAbbreviature(const InstrumentKey& instrumentKey, const QString& abbreviature) override;
     void setStaffType(const ID& staffId, StaffType type) override;
-    void setCutawayEnabled(const ID& staffId, bool enabled) override;
-    void setSmallStaff(const ID& staffId, bool smallStaff) override;
     void setStaffConfig(const ID& staffId, const StaffConfig& config) override;
 
     void removeParts(const IDList& partsIds) override;

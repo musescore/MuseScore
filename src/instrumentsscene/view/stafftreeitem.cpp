@@ -56,38 +56,9 @@ void StaffTreeItem::init(const Staff* masterStaff)
     setId(staff->id());
     setTitle(title);
     setIsVisible(visible);
-
-    m_cutawayEnabled = staff->cutaway();
-    m_isSmall = staff->staffType()->isSmall();
-    m_staffType = static_cast<int>(staff->staffType()->type());
-
-    m_voicesVisibility.clear();
-    for (bool visible: staff->visibilityVoices()) {
-        m_voicesVisibility << visible;
-    }
 }
 
 bool StaffTreeItem::isSelectable() const
 {
     return true;
-}
-
-bool StaffTreeItem::isSmall() const
-{
-    return m_isSmall;
-}
-
-bool StaffTreeItem::cutawayEnabled() const
-{
-    return m_cutawayEnabled;
-}
-
-int StaffTreeItem::staffType() const
-{
-    return m_staffType;
-}
-
-QVariantList StaffTreeItem::voicesVisibility() const
-{
-    return m_voicesVisibility;
 }

@@ -222,6 +222,7 @@ Item {
 
     Loader {
         id: popupLoader
+
         function createPopup(comp, btn) {
             popupLoader.sourceComponent = comp
             popupLoader.item.parent = btn
@@ -231,6 +232,7 @@ Item {
 
     Component {
         id: instrumentSettingsComp
+
         InstrumentSettingsPopup {
             navigationParentControl: settingsButton.navigation
             anchorItem: popupAnchorItem
@@ -244,6 +246,7 @@ Item {
 
     Component {
         id: staffSettingsComp
+
         StaffSettingsPopup {
             navigationParentControl: settingsButton.navigation
             anchorItem: popupAnchorItem
@@ -365,18 +368,12 @@ Item {
                     item["partId"] = model.itemRole.id
                     item["partName"] = model.itemRole.title
                     item["instrumentId"] = model.itemRole.instrumentId()
-                    item["instrumentName"] = model.itemRole.instrumentName()
-                    item["abbreviature"] = model.itemRole.instrumentAbbreviature()
 
                 } else if (root.type === InstrumentsTreeItemType.STAFF) {
 
                     popup = popupLoader.createPopup(staffSettingsComp, this)
 
-                    item["staffId"] = model.itemRole.id
-                    item["isSmall"] = model.itemRole.isSmall()
-                    item["cutawayEnabled"] = model.itemRole.cutawayEnabled()
-                    item["type"] = model.itemRole.staffType()
-                    item["voicesVisibility"] = model.itemRole.voicesVisibility()
+                    item["id"] = model.itemRole.id
                 }
 
                 prv.openPopup(popup, item)

@@ -443,54 +443,6 @@ void NotationParts::setStaffType(const ID& staffId, StaffType type)
     notifyAboutStaffChanged(staff);
 }
 
-void NotationParts::setCutawayEnabled(const ID& staffId, bool enabled)
-{
-    TRACEFUNC;
-
-    Staff* staff = staffModifiable(staffId);
-    if (!staff) {
-        return;
-    }
-
-    StaffConfig config = staffConfig(staffId);
-    if (config.cutaway == enabled) {
-        return;
-    }
-
-    startEdit();
-
-    config.cutaway = enabled;
-    doSetStaffConfig(staff, config);
-
-    apply();
-
-    notifyAboutStaffChanged(staff);
-}
-
-void NotationParts::setSmallStaff(const ID& staffId, bool smallStaff)
-{
-    TRACEFUNC;
-
-    Staff* staff = staffModifiable(staffId);
-    if (!staff) {
-        return;
-    }
-
-    StaffConfig config = staffConfig(staffId);
-    if (config.isSmall == smallStaff) {
-        return;
-    }
-
-    startEdit();
-
-    config.isSmall = smallStaff;
-    doSetStaffConfig(staff, config);
-
-    apply();
-
-    notifyAboutStaffChanged(staff);
-}
-
 void NotationParts::setStaffConfig(const ID& staffId, const StaffConfig& config)
 {
     TRACEFUNC;
