@@ -26,12 +26,16 @@ import MuseScore.UiComponents 1.0
 StyledDialogView {
     id: root
 
-    title: "Diagnostic Navigation"
+    title: "Diagnostic: Navigation"
 
     contentHeight: 900
     contentWidth: 600
 
+    //! NOTE It is necessary that it can be determined that this is an object for diagnostics
+    contentItem.objectName: panel.objectName
+
     DiagnosticNavigationPanel {
+        id: panel
         anchors.fill: parent
         anchors.margins: 8
     }

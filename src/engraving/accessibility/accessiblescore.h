@@ -54,6 +54,7 @@ public:
     const IAccessible* accessibleChild(size_t i) const override;
     Role accessibleRole() const override;
     QString accessibleName() const override;
+    QString accessibleDescription() const override;
     bool accessibleState(State st) const override;
     QRect accessibleRect() const override;
     mu::async::Channel<Property> accessiblePropertyChanged() const override;
