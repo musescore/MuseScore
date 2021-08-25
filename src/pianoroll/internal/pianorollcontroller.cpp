@@ -117,10 +117,31 @@ void PianorollController::onNotationChanged()
         notation->interaction()->selectionChanged().onNotify(this, [this]() {
             onSelectionChanged();
         });
+
+        notation->undoStack()->stackChanged().onNotify(this, [this]() {
+            onUndoStackChanged();
+        });
+
+        notation->notationChanged().onNotify(this, [this]() {
+            onCurrentNotationChanged();
+        });
     }
 
     buildNoteBlocks();
 }
+
+void PianorollController::onUndoStackChanged()
+{
+    int j = 9;
+    qDebug() << "onUndoStackChanged";
+}
+
+void PianorollController::onCurrentNotationChanged()
+{
+    int j = 9;
+    qDebug() << "notationChanged";
+}
+
 
 void PianorollController::setXZoom(double value)
 {
