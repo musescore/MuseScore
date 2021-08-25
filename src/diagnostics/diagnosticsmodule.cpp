@@ -61,7 +61,7 @@ void DiagnosticsModule::resolveImports()
     auto ir = ioc()->resolve<ui::IInteractiveUriRegister>(moduleName());
     if (ir) {
         ir->registerQmlUri(Uri("musescore://diagnostics/system/paths"), "MuseScore/Diagnostics/DiagnosticPathsDialog.qml");
-        ir->registerQmlUri(Uri("musescore://diagnostics/navigation/controls"), "MuseScore/Diagnostics/DiagnosticNavigationDialog.qml");
+        ir->registerQmlUri(Uri("musescore://diagnostics/navigation/tree"), "MuseScore/Diagnostics/DiagnosticNavigationDialog.qml");
         ir->registerQmlUri(Uri("musescore://diagnostics/accessible/tree"), "MuseScore/Diagnostics/DiagnosticAccessibleDialog.qml");
     }
 

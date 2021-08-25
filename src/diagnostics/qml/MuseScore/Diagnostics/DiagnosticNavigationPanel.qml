@@ -28,6 +28,8 @@ Rectangle {
 
     id: root
 
+    objectName: "DiagnosticNavigationPanel"
+
     color: ui.theme.backgroundPrimaryColor
 
     Component.onCompleted: {
@@ -68,6 +70,7 @@ Rectangle {
 
     ListView {
         id: view
+        objectName: "DiagnosticNavigationView"
         anchors.top: tools.bottom
         anchors.bottom: parent.bottom
         anchors.left: parent.left
@@ -112,6 +115,7 @@ Rectangle {
 
             ListView {
                 id: subView
+                objectName: "DiagnosticNavigationSubView"
                 anchors.top: secLabel.bottom
                 anchors.left: parent.left
                 anchors.right: parent.right
@@ -152,6 +156,7 @@ Rectangle {
 
                     GridView {
                         id: ctrlView
+                        objectName: "DiagnosticNavigationGridView"
                         anchors.top: subLabel.bottom
                         anchors.left: parent.left
                         anchors.right: parent.right

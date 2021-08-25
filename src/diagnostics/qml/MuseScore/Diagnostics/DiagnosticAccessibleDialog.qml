@@ -32,7 +32,11 @@ StyledDialogView {
     contentWidth: 600
     resizable: true
 
+    //! NOTE It is necessary that it can be determined that this is an object for diagnostics
+    contentItem.objectName: panel.objectName
+
     DiagnosticAccessiblePanel {
+        id: panel
         anchors.fill: parent
     }
 }

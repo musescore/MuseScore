@@ -31,6 +31,8 @@ Rectangle {
 
     id: root
 
+    objectName: "DiagnosticAccessiblePanel"
+
     color: ui.theme.backgroundPrimaryColor
 
     Component.onCompleted: {
