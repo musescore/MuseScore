@@ -24,6 +24,7 @@
 
 #include <QAbstractItemModel>
 #include <QTimer>
+#include <QHash>
 
 #include "modularity/ioc.h"
 #include "accessibility/iaccessibilitycontroller.h"
@@ -78,6 +79,8 @@ private:
 
     struct Item
     {
+        quintptr key() const { return reinterpret_cast<quintptr>(this); }
+
         int row() const
         {
             if (m_parent) {
@@ -120,6 +123,9 @@ private:
         QAccessibleInterface* m_iface = nullptr;
     };
 
+    Item* createItem(Item* parent);
+    Item* itemByModelIndex(const QModelIndex& index) const;
+
     void load(QAccessibleInterface* iface, Item* parent);
     QVariant makeData(const QAccessibleInterface* iface) const;
 
@@ -131,6 +137,7 @@ private:
     Item* m_rootItem = nullptr;
     QTimer m_refresher;
     bool m_isAutoRefresh = false;
+    QHash<quintptr, Item*> m_allItems;
 };
 }
 
