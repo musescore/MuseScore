@@ -57,6 +57,26 @@ ListItemBlank {
 
     isSelected: Boolean(itemPrv.showedSubMenu) || (itemPrv.isSelectable && itemPrv.isSelected) || navigation.active
 
+    navigation.name: titleLabel.text
+    navigation.accessible.name: {
+        var text = titleLabel.text
+        if (itemPrv.isCheckable) {
+            text += " " + (itemPrv.isChecked ? qsTrc("appshell", "checked") : qsTrc("appshell", "not checked"))
+        } else if (itemPrv.isSelectable) {
+            text += " " + (itemPrv.isSelected ? qsTrc("appshell", "selected") : qsTrc("appshell", "not selected"))
+        }
+
+        if (itemPrv.hasShortcut) {
+            text += " " + itemPrv.shortcut
+        }
+
+        if (itemPrv.hasSubMenu) {
+            text += " " + qsTrc("appshell", "menu")
+        }
+
+        return text.replace('&', '')
+    }
+
     navigation.onNavigationEvent: {
         switch (event.type) {
         case NavigationEvent.Right:
@@ -100,6 +120,7 @@ ListItemBlank {
         id: itemPrv
 
         property bool hasShortcut: Boolean(modelData) && Boolean(modelData.shortcut)
+        property string shortcut: hasShortcut ? modelData.shortcut : ""
 
         property bool hasSubMenu: Boolean(modelData) && Boolean(modelData.subitems) && modelData.subitems.length > 0
         property var showedSubMenu: null
@@ -237,9 +258,9 @@ ListItemBlank {
         StyledTextLabel {
             id: shortcutLabel
             Layout.alignment: Qt.AlignRight
-            text: itemPrv.hasShortcut ? modelData.shortcut : ""
+            text: itemPrv.shortcut
             horizontalAlignment: Text.AlignRight
-            visible: !isEmpty || (root.reserveSpaceForShortcutOrSubmenuIndicator)
+            visible: !itemPrv.hasShortcut || (root.reserveSpaceForShortcutOrSubmenuIndicator)
         }
 
         StyledIconLabel {

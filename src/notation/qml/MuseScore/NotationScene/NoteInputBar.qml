@@ -170,6 +170,9 @@ Rectangle {
 
             StyledMenuLoader {
                 id: menuLoader
+
+                navigation: btn.navigation
+
                 onHandleMenuItem: function(item) {
                     noteInputModel.handleMenuItem(item.id)
                 }
