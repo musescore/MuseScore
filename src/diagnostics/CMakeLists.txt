@@ -32,6 +32,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/diagnosticsmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/diagnosticsmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/idiagnosticspathsregister.h
+    ${CMAKE_CURRENT_LIST_DIR}/diagnosticscheck.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/diagnosticsactions.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/diagnosticsactions.h

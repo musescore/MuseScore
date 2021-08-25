@@ -26,8 +26,11 @@
 #include <limits>
 #include <utility>
 
+#include "diagnostics/diagnosticscheck.h"
 #include "async/async.h"
 #include "log.h"
+
+#include "config.h"
 
 //#define NAVIGATION_LOGGING_ENABLED
 
@@ -323,6 +326,9 @@ const std::set<INavigationSection*>& NavigationController::sections() const
 bool NavigationController::eventFilter(QObject* watched, QEvent* event)
 {
     if (event->type() == QEvent::MouseButtonPress) {
+#ifdef BUILD_DIAGNOSTICS
+        if (!diagnostics::isDiagnosticHierarchy(watched, true))
+#endif
         resetActive();
     }
 

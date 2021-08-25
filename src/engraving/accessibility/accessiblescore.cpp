@@ -112,6 +112,11 @@ QString AccessibleScore::accessibleName() const
     return m_score->title();
 }
 
+QString AccessibleScore::accessibleDescription() const
+{
+    return QString();
+}
+
 bool AccessibleScore::accessibleState(State st) const
 {
     switch (st) {
