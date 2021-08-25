@@ -219,6 +219,13 @@ void AccessibilityController::sendEvent(QAccessibleEvent* ev)
     QAccessible::updateAccessibility(ev);
     //! NOTE Disabled any events from Qt
     QAccessible::installUpdateHandler(updateHandlerNoop);
+
+    m_eventSent.send(ev);
+}
+
+mu::async::Channel<QAccessibleEvent*> AccessibilityController::eventSent() const
+{
+    return m_eventSent;
 }
 
 const AccessibilityController::Item& AccessibilityController::findItem(const IAccessible* aitem) const
