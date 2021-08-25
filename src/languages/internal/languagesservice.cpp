@@ -48,12 +48,12 @@ static const QStringList languageFileTypes = {
 namespace mu::languages {
 static QString analysingStatusTitle()
 {
-    return qtrc("languages", "Analysing...");
+    return qtrc("languages", "Analysing…");
 }
 
 static QString downloadingStatusTitle()
 {
-    return qtrc("languages", "Downloading...");
+    return qtrc("languages", "Downloading…");
 }
 }
 

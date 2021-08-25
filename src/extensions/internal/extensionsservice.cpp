@@ -38,12 +38,12 @@ using namespace mu::network;
 namespace mu::extensions {
 QString analysingStatusTitle()
 {
-    return qtrc("extensions", "Analysing...");
+    return qtrc("extensions", "Analysing…");
 }
 
 QString downloadingStatusTitle()
 {
-    return qtrc("extensions", "Downloading...");
+    return qtrc("extensions", "Downloading…");
 }
 }
 

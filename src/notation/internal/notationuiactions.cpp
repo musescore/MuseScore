@@ -233,22 +233,22 @@ const UiActionList NotationUiActions::m_actions = {
              ),
     UiAction("edit-style",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Style..."),
+             QT_TRANSLATE_NOOP("action", "Style…"),
              QT_TRANSLATE_NOOP("action", "Edit style")
              ),
     UiAction("page-settings",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Page settings..."),
+             QT_TRANSLATE_NOOP("action", "Page settings…"),
              QT_TRANSLATE_NOOP("action", "Page settings")
              ),
     UiAction("load-style",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Load style..."),
+             QT_TRANSLATE_NOOP("action", "Load style…"),
              QT_TRANSLATE_NOOP("action", "Load style")
              ),
     UiAction("transpose",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "&Transpose..."),
+             QT_TRANSLATE_NOOP("action", "&Transpose…"),
              QT_TRANSLATE_NOOP("action", "Transpose")
              ),
     UiAction("explode",

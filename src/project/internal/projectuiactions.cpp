@@ -27,12 +27,12 @@ using namespace mu::ui;
 const UiActionList ProjectUiActions::m_actions = {
     UiAction("file-open",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "Open..."),
+             QT_TRANSLATE_NOOP("action", "Open…"),
              QT_TRANSLATE_NOOP("action", "Load score from file")
              ),
     UiAction("file-new",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "New..."),
+             QT_TRANSLATE_NOOP("action", "New…"),
              QT_TRANSLATE_NOOP("action", "Create new score")
              ),
     UiAction("file-close",
@@ -53,17 +53,17 @@ const UiActionList ProjectUiActions::m_actions = {
              ),
     UiAction("file-save-as",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Save as..."),
+             QT_TRANSLATE_NOOP("action", "Save as…"),
              QT_TRANSLATE_NOOP("action", "Save score under a new file name")
              ),
     UiAction("file-save-a-copy",
              mu::context::UiCtxNotationOpened,
-             QT_TRANSLATE_NOOP("action", "Save a copy..."),
+             QT_TRANSLATE_NOOP("action", "Save a copy…"),
              QT_TRANSLATE_NOOP("action", "Save a copy of the score in addition to the current file")
              ),
     UiAction("file-save-selection",
              mu::context::UiCtxNotationFocused,
-             QT_TRANSLATE_NOOP("action", "Save selection..."),
+             QT_TRANSLATE_NOOP("action", "Save selection…"),
              QT_TRANSLATE_NOOP("action", "Save current selection as new score")
              ),
     UiAction("file-export",
@@ -74,12 +74,12 @@ const UiActionList ProjectUiActions::m_actions = {
              ),
     UiAction("file-import-pdf",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "Import PDF..."),
+             QT_TRANSLATE_NOOP("action", "Import PDF…"),
              QT_TRANSLATE_NOOP("action", "Import a PDF file with an experimental service on musescore.com")
              ),
     UiAction("print",
              mu::context::UiCtxAny,
-             QT_TRANSLATE_NOOP("action", "Print..."),
+             QT_TRANSLATE_NOOP("action", "Print…"),
              QT_TRANSLATE_NOOP("action", "Print score/part")
              ),
     UiAction("clear-recent",
