@@ -115,7 +115,6 @@ void PopupWindow_QQuickView::show(QPoint p)
     mainWindow()->pushWindow(m_view);
 
     m_view->requestActivate();
-
     QQuickItem* item = m_view->rootObject();
     m_view->resize(item->implicitWidth(), item->implicitHeight());
 
