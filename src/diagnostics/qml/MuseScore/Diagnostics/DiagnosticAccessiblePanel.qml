@@ -20,6 +20,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
+import QtQuick.Controls 1.4
+import QtQuick.Controls.Styles 1.4
+
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Diagnostics 1.0
@@ -31,20 +34,23 @@ Rectangle {
     color: ui.theme.backgroundPrimaryColor
 
     Component.onCompleted: {
+        accessibleModel.init()
         accessibleModel.reload()
     }
 
     DiagnosticAccessibleModel {
         id: accessibleModel
 
-        property int savedY: 0
+        property var lastFocusedIndex: null
 
-        onBeforeReload: {
-            accessibleModel.savedY = view.contentY
-        }
+        onFocusedItem: {
+            if (lastFocusedIndex) {
+                view.collapseBranch(lastFocusedIndex)
+            }
 
-        onAfterReload: {
-            view.contentY = accessibleModel.savedY
+            view.expandBranch(index)
+            view.positionViewAtIndex(index)
+            lastFocusedIndex = index
         }
     }
 
@@ -69,24 +75,76 @@ Rectangle {
         }
     }
 
-    ListView {
+    TreeView {
         id: view
         anchors.top: tools.bottom
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right
         clip: true
-        spacing: 8
+
+        headerVisible: false
 
         model: accessibleModel
-        delegate: Rectangle {
+
+        function positionViewAtIndex(index) {
+            var rows = -1
+            while (index.valid) {
+                var r = accessibleModel.indexRow(index) + 1
+                rows += r
+                index = view.model.parent(index)
+            }
+
+            __listView.positionViewAtIndex(rows, ListView.Center)
+        }
+
+        function expandBranch(index) {
+            var idxs = []
+            var parent = view.model.parent(index)
+            while (parent.valid) {
+                idxs.push(parent)
+                parent = view.model.parent(parent)
+            }
+
+            for(var i = (idxs.length - 1); i >= 0; --i) {
+                var idx = idxs[i]
+                view.expand(idx)
+            }
+        }
+
+        function collapseBranch(index) {
+            var idxs = []
+            idxs.push(index)
+            var parent = view.model.parent(index)
+            while (parent.valid) {
+                idxs.push(parent)
+                parent = view.model.parent(parent)
+            }
+
+            for(var i = 0; i < idxs.length; ++i) {
+                var idx = idxs[i]
+                view.collapse(idx)
+            }
+        }
+
+        TableViewColumn {
+            role: "itemData"
+        }
+
+        style: TreeViewStyle {
+            indentation: styleData.depth
+            rowDelegate: Rectangle {
+                height: 48
+                width: parent.width
+                color: styleData.row%2 == 0 ? root.color : ui.theme.backgroundSecondaryColor
+            }
+        }
+
+        itemDelegate: Item {
             id: item
 
-            width: parent ? parent.width : 0
-            height: 32
-
             function formatData(data) {
-                var str = data.name + "[" + data.role + "]"
+                var str = data.name + " [" + data.role + "]"
                 if (data.children > 0) {
                     str += ", children: " + data.children
                 }
@@ -96,26 +154,30 @@ Rectangle {
                 return str;
             }
 
-            color: {
-                if (itemData.state.focused) {
-                    return "#75507b"
-                }
-
-                if (itemData.state.active) {
-                    return "#73d216"
-                }
-
-                return root.color
+            Rectangle {
+                anchors.fill: parent
+                color: ui.theme.accentColor
+                visible: styleData.value ? styleData.value.state.focused === 1 : false
             }
 
             StyledTextLabel {
                 id: secLabel
                 anchors.fill: parent
-                anchors.leftMargin: itemData.level * 16
-                verticalAlignment: Text.AlignTop
+                verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignLeft
                 elide: Text.ElideNone
-                text: item.formatData(itemData)
+                text: "row: " + styleData.row + " " + item.formatData(styleData.value)
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    if (!styleData.isExpanded) {
+                        view.expand(styleData.index)
+                    } else {
+                        view.collapse(styleData.index)
+                    }
+                }
             }
         }
     }
