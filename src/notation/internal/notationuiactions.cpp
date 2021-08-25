@@ -88,6 +88,16 @@ const UiActionList NotationUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Down note in chord"),
              QT_TRANSLATE_NOOP("action", "Go to lower pitched note in chord")
              ),
+    UiAction("top-chord",
+             mu::context::UiCtxNotationFocused,
+             QT_TRANSLATE_NOOP("action", "Top note in chord"),
+             QT_TRANSLATE_NOOP("action", "Go to top note in chord")
+             ),
+    UiAction("bottom-chord",
+             mu::context::UiCtxNotationFocused,
+             QT_TRANSLATE_NOOP("action", "Bottom note in chord"),
+             QT_TRANSLATE_NOOP("action", "Go bottom note in chord")
+             ),
     UiAction("first-element",
              mu::context::UiCtxNotationFocused,
              QT_TRANSLATE_NOOP("action", "First element"),
@@ -97,6 +107,16 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::UiCtxNotationFocused,
              QT_TRANSLATE_NOOP("action", "Last element"),
              QT_TRANSLATE_NOOP("action", "Go to last element in score")
+             ),
+    UiAction("move-up",
+             mu::context::UiCtxNotationFocused,
+             QT_TRANSLATE_NOOP("action", "Move up"),
+             QT_TRANSLATE_NOOP("action", "Move chord/rest to staff above")
+             ),
+    UiAction("move-down",
+             mu::context::UiCtxNotationFocused,
+             QT_TRANSLATE_NOOP("action", "Move down"),
+             QT_TRANSLATE_NOOP("action", "Move chord/rest to staff below")
              ),
     UiAction("next-track",
              mu::context::UiCtxNotationFocused,
