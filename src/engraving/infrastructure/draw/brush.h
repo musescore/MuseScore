@@ -65,7 +65,7 @@ public:
 #endif
 
 private:
-    Color m_color{ 0, 0, 0 };
+    Color m_color = Color::black;
     BrushStyle m_style = BrushStyle::SolidPattern;
 };
 } // namespace mu::draw

@@ -395,14 +395,14 @@ std::shared_ptr<mu::draw::Pixmap> Score::createThumbnail()
     doLayout();
 
     Page* page = pages().at(0);
-    RectF fr  = page->abbox();
-    qreal mag  = 256.0 / qMax(fr.width(), fr.height());
-    int w      = int(fr.width() * mag);
-    int h      = int(fr.height() * mag);
+    RectF fr = page->abbox();
+    qreal mag = 256.0 / qMax(fr.width(), fr.height());
+    int w = int(fr.width() * mag);
+    int h = int(fr.height() * mag);
 
     int dpm = lrint(DPMM * 1000.0);
 
-    auto pixmap = imageProvider()->createPixmap(w, h, dpm, mu::draw::Color(255, 255, 255, 255));
+    auto pixmap = imageProvider()->createPixmap(w, h, dpm, mu::draw::Color::white);
 
     double pr = MScore::pixelRatio;
     MScore::pixelRatio = 1.0;
