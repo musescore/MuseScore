@@ -26,7 +26,7 @@
 #include <limits>
 #include <utility>
 
-#include "diagnostics/diagnosticscheck.h"
+#include "diagnostics/diagnosticutils.h"
 #include "async/async.h"
 #include "log.h"
 
@@ -327,7 +327,7 @@ bool NavigationController::eventFilter(QObject* watched, QEvent* event)
 {
     if (event->type() == QEvent::MouseButtonPress) {
 #ifdef BUILD_DIAGNOSTICS
-        if (!diagnostics::isDiagnosticHierarchy(watched, true))
+        if (!diagnostics::isDiagnosticHierarchy(watched))
 #endif
         resetActive();
     }
