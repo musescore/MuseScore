@@ -58,10 +58,6 @@ Loader {
 
         update(model, x, y)
         menu.open()
-
-        if (!menu.focusOnSelected()) {
-            menu.focusOnFirstItem()
-        }
     }
 
     function toggleOpened(model, navigationParentControl, x = 0, y = 0) {
@@ -113,6 +109,10 @@ Loader {
         StyledMenu {
             id: itemMenu
 
+            onLoaded: {
+                focusOnOpenedMenuTimer.start()
+            }
+
             onHandleMenuItem: {
                 Qt.callLater(loader.handleMenuItem, item)
                 itemMenu.close()
@@ -121,6 +121,18 @@ Loader {
             onClosed: {
                 Qt.callLater(prv.unloadMenu)
             }
+        }
+    }
+
+    Timer {
+        id: focusOnOpenedMenuTimer
+
+        interval: 50
+        running: false
+        repeat: false
+
+        onTriggered: {
+            loader.menu.requestFocus()
         }
     }
 }

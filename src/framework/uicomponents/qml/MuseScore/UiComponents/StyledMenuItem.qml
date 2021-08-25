@@ -38,7 +38,7 @@ ListItemBlank {
     }
 
     property int iconAndCheckMarkMode: StyledMenuItem.ShowOne
-    property bool reserveSpaceForShortcutOrSubmenuIndicator: prv.hasShortcut || prv.hasSubMenu
+    property bool reserveSpaceForShortcutOrSubmenuIndicator: itemPrv.hasShortcut || itemPrv.hasSubMenu
 
     property int padding: 0
 
@@ -55,41 +55,49 @@ ListItemBlank {
     pressedStateColor: ui.theme.accentColor
     enabled: (Boolean(modelData) && modelData.enabled !== undefined) ? Boolean(modelData.enabled) : true // default true
 
-    isSelected: Boolean(prv.showedSubMenu) || (prv.isSelectable && prv.isSelected)
-
-    navigation.onActiveChanged: {
-        if (prv.hasSubMenu) {
-            if (navigation.active) {
-                prv.showSubMenu()
-            } else {
-                Qt.callLater(function() {
-                    if (prv.showedSubMenu && !prv.showedSubMenu.navigation.active) {
-                        prv.closeSubMenu()
-                    }
-                })
-            }
-        }
-    }
+    isSelected: Boolean(itemPrv.showedSubMenu) || (itemPrv.isSelectable && itemPrv.isSelected) || navigation.active
 
     navigation.onNavigationEvent: {
         switch (event.type) {
         case NavigationEvent.Right:
-            //! NOTE Go to submenu if shown
-            if (prv.showedSubMenu) {
-                event.accepted = true
-                prv.showedSubMenu.focusOnFirstItem()
+            if (!itemPrv.hasSubMenu) {
+                return
             }
-            break;
+
+            //! NOTE Go to submenu if shown
+            if (!itemPrv.showedSubMenu) {
+                itemPrv.showSubMenu()
+            }
+
+            var focused = itemPrv.showedSubMenu.requestFocus()
+
+            if (focused) {
+                event.accepted = true
+            }
+
+            break
         case NavigationEvent.Left:
+            if (itemPrv.showedSubMenu) {
+                itemPrv.closeSubMenu()
+            }
+
             //! NOTE Go to parent item
-            root.requestParentItemActive()
+            requestParentItemActive()
+            break
+        case NavigationEvent.Up:
+        case NavigationEvent.Down:
+            if (itemPrv.showedSubMenu) {
+                itemPrv.closeSubMenu()
+            }
+
+            break
         }
     }
 
     navigation.onTriggered: root.clicked()
 
     QtObject {
-        id: prv
+        id: itemPrv
 
         property bool hasShortcut: Boolean(modelData) && Boolean(modelData.shortcut)
 
@@ -105,7 +113,7 @@ ListItemBlank {
         property bool hasIcon: Boolean(modelData) && Boolean(modelData.icon) && modelData.icon !== IconCode.NONE
 
         function showSubMenu() {
-            if (prv.showedSubMenu) {
+            if (itemPrv.showedSubMenu) {
                 return
             }
 
@@ -125,21 +133,21 @@ ListItemBlank {
             })
 
             menu.closed.connect(function() {
-                prv.showedSubMenu = null
+                itemPrv.showedSubMenu = null
                 menu.destroy()
                 subMenuClosed()
             })
 
             subMenuShowed()
 
-            prv.showedSubMenu = menu
+            itemPrv.showedSubMenu = menu
             menu.toggleOpened()
         }
 
         function closeSubMenu() {
-            if (prv.showedSubMenu) {
-                prv.showedSubMenu.isDoActiveParentOnClose = false
-                prv.showedSubMenu.close()
+            if (itemPrv.showedSubMenu) {
+                itemPrv.showedSubMenu.isDoActiveParentOnClose = false
+                itemPrv.showedSubMenu.close()
             }
         }
     }
@@ -198,12 +206,12 @@ ListItemBlank {
             Layout.alignment: Qt.AlignLeft
             width: 16
             iconCode: {
-                if (root.iconAndCheckMarkMode !== StyledMenuItem.ShowBoth && prv.hasIcon) {
-                    return prv.hasIcon ? modelData.icon : IconCode.NONE
-                } else if (prv.isCheckable) {
-                    return prv.isChecked ? IconCode.TICK_RIGHT_ANGLE : IconCode.NONE
-                } else  if (prv.isSelectable) {
-                    return prv.isSelected ? IconCode.TICK_RIGHT_ANGLE : IconCode.NONE
+                if (root.iconAndCheckMarkMode !== StyledMenuItem.ShowBoth && itemPrv.hasIcon) {
+                    return itemPrv.hasIcon ? modelData.icon : IconCode.NONE
+                } else if (itemPrv.isCheckable) {
+                    return itemPrv.isChecked ? IconCode.TICK_RIGHT_ANGLE : IconCode.NONE
+                } else  if (itemPrv.isSelectable) {
+                    return itemPrv.isSelected ? IconCode.TICK_RIGHT_ANGLE : IconCode.NONE
                 }
 
                 return IconCode.NONE
@@ -215,7 +223,7 @@ ListItemBlank {
             id: secondaryIconLabel
             Layout.alignment: Qt.AlignLeft
             width: 16
-            iconCode: prv.hasIcon ? modelData.icon : IconCode.NONE
+            iconCode: itemPrv.hasIcon ? modelData.icon : IconCode.NONE
             visible: root.iconAndCheckMarkMode === StyledMenuItem.ShowBoth
         }
 
@@ -229,7 +237,7 @@ ListItemBlank {
         StyledTextLabel {
             id: shortcutLabel
             Layout.alignment: Qt.AlignRight
-            text: prv.hasShortcut ? modelData.shortcut : ""
+            text: itemPrv.hasShortcut ? modelData.shortcut : ""
             horizontalAlignment: Text.AlignRight
             visible: !isEmpty || (root.reserveSpaceForShortcutOrSubmenuIndicator)
         }
@@ -238,29 +246,25 @@ ListItemBlank {
             id: submenuIndicator
             Layout.alignment: Qt.AlignRight
             width: 16
-            iconCode: prv.hasSubMenu ? IconCode.SMALL_ARROW_RIGHT : IconCode.NONE
+            iconCode: itemPrv.hasSubMenu ? IconCode.SMALL_ARROW_RIGHT : IconCode.NONE
             visible: !isEmpty || (root.reserveSpaceForShortcutOrSubmenuIndicator && !shortcutLabel.visible)
         }
     }
 
     onHovered: {
-        if (isHovered) {
-            root.navigation.requestActive()
-        }
-
-        if (!prv.hasSubMenu) {
+        if (!itemPrv.hasSubMenu) {
             return
         }
 
         if (isHovered) {
-            prv.showSubMenu()
+            itemPrv.showSubMenu()
         } else {
             var mouseGlogalPos = mapToGlobal(Qt.point(mouseX, mouseY))
-            var showedSubMenuGlobalPos = prv.showedSubMenu.contentItem.mapToGlobal(0, 0)
+            var showedSubMenuGlobalPos = itemPrv.showedSubMenu.contentItem.mapToGlobal(0, 0)
 
             var eps = 8
-            var subMenuWidth = prv.showedSubMenu.width
-            var subMenuHeight = prv.showedSubMenu.height
+            var subMenuWidth = itemPrv.showedSubMenu.width
+            var subMenuHeight = itemPrv.showedSubMenu.height
 
             var isHoveredOnShowedSubMenu = (showedSubMenuGlobalPos.x < mouseGlogalPos.x + eps && mouseGlogalPos.x - eps < showedSubMenuGlobalPos.x + subMenuWidth)
                     && (showedSubMenuGlobalPos.y < mouseGlogalPos.y + eps && mouseGlogalPos.y - eps < showedSubMenuGlobalPos.y + subMenuHeight)
@@ -269,13 +273,16 @@ ListItemBlank {
                 return
             }
 
-            prv.closeSubMenu()
+            itemPrv.closeSubMenu()
         }
     }
 
     onClicked: {
-        if (prv.hasSubMenu) {
-            prv.showSubMenu()
+        if (itemPrv.hasSubMenu) {
+            itemPrv.showSubMenu()
+
+            itemPrv.showedSubMenu.requestFocus()
+
             return
         }
 
