@@ -27,6 +27,8 @@
 
 #include "actions/actiontypes.h"
 
+#include <QTimer>
+
 using namespace mu::context;
 using namespace mu::instrumentsscene;
 using namespace mu::notation;
@@ -49,6 +51,16 @@ void InstrumentsPanelContextMenuModel::load()
         } else {
             loadItems();
         }
+
+        if (!m_masterNotation) {
+            return;
+        }
+
+        m_masterNotation->parts()->scoreOrderChanged().onNotify(this, [this] {
+            QTimer::singleShot(0, [this]() {
+                loadItems();
+            });
+        });
     });
 }
 
@@ -56,7 +68,7 @@ void InstrumentsPanelContextMenuModel::loadItems()
 {
     TRACEFUNC;
 
-    ScoreOrder currentOrder = m_masterNotation->notation()->scoreOrder();
+    ScoreOrder currentOrder = m_masterNotation->parts()->scoreOrder();
     ScoreOrderList allOrders = instrumentsRepository()->orders();
 
     if (!allOrders.contains(currentOrder)) {

@@ -170,8 +170,8 @@ Rectangle {
 
             StyledMenuLoader {
                 id: menuLoader
-                onHandleMenuItem: function(itemId) {
-                    noteInputModel.handleMenuItem(itemId)
+                onHandleMenuItem: function(item) {
+                    noteInputModel.handleMenuItem(item.id)
                 }
             }
         }

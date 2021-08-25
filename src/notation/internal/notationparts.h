@@ -43,6 +43,9 @@ public:
     const Staff* staff(const ID& staffId) const override;
     bool staffExists(const ID& staffId) const override;
 
+    StaffConfig staffConfig(const ID& staffId) const override;
+    ScoreOrder scoreOrder() const override;
+
     void setParts(const PartInstrumentList& parts, const ScoreOrder& order) override;
     void setScoreOrder(const ScoreOrder& order) override;
     void setPartVisible(const ID& partId, bool visible) override;
@@ -56,8 +59,6 @@ public:
     void setStaffType(const ID& staffId, StaffType type) override;
     void setCutawayEnabled(const ID& staffId, bool enabled) override;
     void setSmallStaff(const ID& staffId, bool smallStaff) override;
-
-    StaffConfig staffConfig(const ID& staffId) const override;
     void setStaffConfig(const ID& staffId, const StaffConfig& config) override;
 
     void removeParts(const IDList& partsIds) override;
@@ -76,6 +77,7 @@ public:
     void replaceDrumset(const InstrumentKey& instrumentKey, const Drumset& newDrumset) override;
 
     async::Notification partsChanged() const override;
+    async::Notification scoreOrderChanged() const override;
 
 protected:
     Ms::Score* score() const;
@@ -128,6 +130,7 @@ private:
     INotationUndoStackPtr m_undoStack;
     INotationInteractionPtr m_interaction;
     async::Notification m_partsChanged;
+    async::Notification m_scoreOrderChanged;
 
     mutable async::ChangedNotifier<const Part*> m_partChangedNotifier;
     mutable std::map<ID, async::ChangedNotifier<const Staff*> > m_staffChangedNotifierMap;
