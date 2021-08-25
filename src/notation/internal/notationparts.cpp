@@ -181,7 +181,7 @@ std::vector<Staff*> NotationParts::staves(const IDList& stavesIds) const
     std::vector<Staff*> staves;
 
     for (const ID& staffId: stavesIds) {
-        Staff* staff = this->staffModifiable(staffId);
+        Staff* staff = staffModifiable(staffId);
 
         if (staff) {
             staves.push_back(staff);
@@ -189,6 +189,21 @@ std::vector<Staff*> NotationParts::staves(const IDList& stavesIds) const
     }
 
     return staves;
+}
+
+std::vector<Part*> NotationParts::parts(const IDList& partsIds) const
+{
+    std::vector<Part*> parts;
+
+    for (const ID& partId: partsIds) {
+        Part* part = partModifiable(partId);
+
+        if (part) {
+            parts.push_back(part);
+        }
+    }
+
+    return parts;
 }
 
 void NotationParts::setParts(const PartInstrumentList& parts, const ScoreOrder& order)
@@ -656,29 +671,40 @@ void NotationParts::removeParts(const IDList& partsIds)
 {
     TRACEFUNC;
 
-    if (partsIds.empty()) {
+    std::vector<Part*> partsToRemove = parts(partsIds);
+    if (partsToRemove.empty()) {
         return;
     }
 
     startEdit();
 
-    doRemoveParts(partsIds);
+    doRemoveParts(partsToRemove);
 
-//  sortParts(parts, score(), originalStaves); // todo: temporary solution, need implement according new spec, see issue #8727
+    PartInstrumentList parts;
+    for (Ms::Part* part: score()->parts()) {
+        PartInstrument pi;
+        pi.isExistingPart = true;
+        pi.partId = part->id();
+        parts << pi;
+    }
+
+    sortParts(parts, score()->staves());
 
     setBracketsAndBarlines();
 
     apply();
     deselectAll();
+
+    for (const Part* part : partsToRemove) {
+        notifyAboutPartRemoved(part);
+    }
 }
 
-void NotationParts::doRemoveParts(const IDList& partsIds)
+void NotationParts::doRemoveParts(const std::vector<Part*>& parts)
 {
     TRACEFUNC;
 
-    for (const ID& partId: partsIds) {
-        Part* part = partModifiable(partId);
-        notifyAboutPartRemoved(part);
+    for (Part* part : parts) {
         score()->cmdRemovePart(part);
     }
 }
@@ -762,14 +788,14 @@ void NotationParts::removeStaves(const IDList& stavesIds)
 {
     TRACEFUNC;
 
-    if (stavesIds.empty()) {
+    std::vector<Staff*> stavesToRemove = staves(stavesIds);
+    if (stavesToRemove.empty()) {
         return;
     }
 
     startEdit();
 
-    for (Staff* staff: staves(stavesIds)) {
-        notifyAboutStaffRemoved(staff);
+    for (Staff* staff: stavesToRemove) {
         score()->cmdRemoveStaff(staff->idx());
     }
 
@@ -777,34 +803,42 @@ void NotationParts::removeStaves(const IDList& stavesIds)
 
     apply();
     deselectAll();
+
+    for (const Staff* staff : stavesToRemove) {
+        notifyAboutStaffRemoved(staff);
+    }
 }
 
 void NotationParts::moveParts(const IDList& sourcePartsIds, const ID& destinationPartId, InsertMode mode)
 {
-    if (sourcePartsIds.empty()) {
+    std::vector<Part*> sourceParts = parts(sourcePartsIds);
+    if (sourceParts.empty()) {
+        return;
+    }
+
+    QList<ID> allScorePartIds;
+    for (Ms::Part* currentPart: score()->parts()) {
+        allScorePartIds.push_back(currentPart->id());
+    }
+
+    if (!allScorePartIds.contains(destinationPartId)) {
         return;
     }
 
     TRACEFUNC;
 
-    QList<ID> partIds;
-
-    for (Ms::Part* currentPart: score()->parts()) {
-        partIds.push_back(currentPart->id());
-    }
-
-    for (const ID& sourcePartId: sourcePartsIds) {
-        int srcIndex = partIds.indexOf(sourcePartId);
-        int dstIndex = partIds.indexOf(destinationPartId);
+    for (const Part* sourcePart: sourceParts) {
+        int srcIndex = allScorePartIds.indexOf(sourcePart->id());
+        int dstIndex = allScorePartIds.indexOf(destinationPartId);
         dstIndex += (mode == InsertMode::Before) && (srcIndex < dstIndex) ? -1 : 0;
 
-        if (dstIndex >= 0 && dstIndex < partIds.size()) {
-            partIds.move(srcIndex, dstIndex);
+        if (dstIndex >= 0 && dstIndex < allScorePartIds.size()) {
+            allScorePartIds.move(srcIndex, dstIndex);
         }
     }
 
     PartInstrumentList parts;
-    for (const ID& partId: partIds) {
+    for (const ID& partId: allScorePartIds) {
         PartInstrument pi;
         pi.isExistingPart = true;
         pi.partId = partId;
@@ -813,7 +847,10 @@ void NotationParts::moveParts(const IDList& sourcePartsIds, const ID& destinatio
 
     startEdit();
 
-    doSetScoreOrder(customOrder());
+    if (scoreOrder() != customOrder()) {
+        doSetScoreOrder(customOrder());
+    }
+
     sortParts(parts, score()->staves());
 
     setBracketsAndBarlines();
@@ -914,21 +951,13 @@ void NotationParts::removeMissingParts(const PartInstrumentList& parts)
 
     IDList partsToRemove;
 
-    IDList partIds;
     for (const PartInstrument& pi: parts) {
-        if (pi.isExistingPart) {
-            partIds.push_back(pi.partId);
+        if (!pi.isExistingPart) {
+            partsToRemove.push_back(pi.partId);
         }
     }
 
-    for (const Part* part: partList()) {
-        if (containsId(partIds, part->id())) {
-            continue;
-        }
-        partsToRemove.push_back(part->id());
-    }
-
-    doRemoveParts(partsToRemove);
+    doRemoveParts(this->parts(partsToRemove));
 }
 
 void NotationParts::appendNewParts(const PartInstrumentList& parts)

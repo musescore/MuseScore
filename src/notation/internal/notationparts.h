@@ -90,14 +90,16 @@ private:
     void doSetScoreOrder(const ScoreOrder& order);
     void doMoveStaves(const std::vector<Staff*>& staves, int destinationStaffIndex, Part* destinationPart = nullptr);
     void doSetStaffVoiceVisible(Staff* staff, int voiceIndex, bool visible);
-    void doRemoveParts(const IDList& partsIds);
+    void doRemoveParts(const std::vector<Part*>& parts);
     void doAppendStaff(Staff* staff, Part* destinationPart);
     void doSetStaffConfig(Staff* staff, const StaffConfig& config);
     void doInsertPart(Part* part, int index);
 
     Part* partModifiable(const ID& partId) const;
     Staff* staffModifiable(const ID& staffId) const;
+
     std::vector<Staff*> staves(const IDList& stavesIds) const;
+    std::vector<Part*> parts(const IDList& partsIds) const;
 
     void appendStaves(Part* part, const InstrumentTemplate& templ);
     void insertStaff(Staff* staff, int destinationStaffIndex);
