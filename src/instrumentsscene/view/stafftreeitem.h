@@ -37,17 +37,6 @@ public:
     void init(const notation::Staff* masterStaff);
 
     bool isSelectable() const override;
-
-    Q_INVOKABLE bool isSmall() const;
-    Q_INVOKABLE bool cutawayEnabled() const;
-    Q_INVOKABLE int staffType() const;
-    Q_INVOKABLE QVariantList voicesVisibility() const;
-
-private:
-    bool m_isSmall = false;
-    bool m_cutawayEnabled = false;
-    int m_staffType = 0;
-    QVariantList m_voicesVisibility;
 };
 }
 

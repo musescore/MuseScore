@@ -39,8 +39,6 @@ public:
     bool isSelectable() const override;
 
     Q_INVOKABLE QString instrumentId() const;
-    Q_INVOKABLE QString instrumentName() const;
-    Q_INVOKABLE QString instrumentAbbreviature() const;
 
     void moveChildren(int sourceRow, int count, AbstractInstrumentsPanelTreeItem* destinationParent, int destinationRow) override;
     void removeChildren(int row, int count, bool deleteChild) override;
@@ -52,8 +50,6 @@ private:
     size_t resolveNewPartIndex(const ID& partId) const;
 
     QString m_instrumentId;
-    QString m_instrumentName;
-    QString m_instrumentAbbreviature;
 };
 }
 

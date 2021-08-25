@@ -35,13 +35,22 @@ InstrumentSettingsModel::InstrumentSettingsModel(QObject* parent)
 
 void InstrumentSettingsModel::load(const QVariant& instrument)
 {
-    QVariantMap map = instrument.toMap();
+    if (!notationParts()) {
+        return;
+    }
 
+    QVariantMap map = instrument.toMap();
     m_instrumentKey.partId = ID(map["partId"]);
     m_instrumentKey.instrumentId = map["instrumentId"].toString();
     m_partName = map["partName"].toString();
-    m_instrumentName = map["instrumentName"].toString();
-    m_instrumentAbbreviature = map["abbreviature"].toString();
+
+    const Part* part = notationParts()->part(m_instrumentKey.partId);
+    if (!part) {
+        return;
+    }
+
+    m_instrumentName = part->instrument()->name();
+    m_instrumentAbbreviature = part->instrument()->abbreviature();
 
     context()->currentNotationChanged().onNotify(this, [this]() {
         emit isMainScoreChanged();

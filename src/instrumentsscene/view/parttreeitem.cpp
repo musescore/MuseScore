@@ -55,8 +55,6 @@ void PartTreeItem::init(const notation::Part* masterPart)
     setIsRemovable(partExists);
 
     m_instrumentId = part->instrumentId();
-    m_instrumentName = part->instrument()->name();
-    m_instrumentAbbreviature = part->instrument()->abbreviature();
 }
 
 bool PartTreeItem::isSelectable() const
@@ -133,16 +131,6 @@ size_t PartTreeItem::resolveNewPartIndex(const ID& partId) const
 QString PartTreeItem::instrumentId() const
 {
     return m_instrumentId;
-}
-
-QString PartTreeItem::instrumentName() const
-{
-    return m_instrumentName;
-}
-
-QString PartTreeItem::instrumentAbbreviature() const
-{
-    return m_instrumentAbbreviature;
 }
 
 void PartTreeItem::moveChildren(int sourceRow, int count, AbstractInstrumentsPanelTreeItem* destinationParent,

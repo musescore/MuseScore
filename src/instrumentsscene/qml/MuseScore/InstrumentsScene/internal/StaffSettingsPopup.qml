@@ -35,7 +35,7 @@ StyledPopupView {
     navigation.direction: NavigationPanel.Vertical
 
     function load(staff) {
-        settingsModel.load(staff)
+        settingsModel.load(staff.id)
     }
 
     onOpened: {
