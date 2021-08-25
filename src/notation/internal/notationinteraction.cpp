@@ -506,6 +506,29 @@ void NotationInteraction::moveChordNoteSelection(MoveDirection d)
     notifyAboutSelectionChanged();
 }
 
+void NotationInteraction::selectTopOrBottomOfChord(MoveDirection d)
+{
+    IF_ASSERT_FAILED(MoveDirection::Up == d || MoveDirection::Down == d) {
+        return;
+    }
+
+    Element* current = selection()->element();
+    if (!current || !current->isNote()) {
+        return;
+    }
+
+    Element* target = d == MoveDirection::Up
+                      ? score()->upAltCtrl(toNote(current)) : score()->downAltCtrl(toNote(current));
+
+    if (target == current) {
+        return;
+    }
+
+    score()->select(target, SelectType::SINGLE);
+
+    notifyAboutSelectionChanged();
+}
+
 void NotationInteraction::doSelect(const std::vector<Element*>& elements, SelectType type, int staffIndex)
 {
     if (needEndTextEditing(elements)) {
@@ -1850,6 +1873,33 @@ void NotationInteraction::moveSelection(MoveDirection d, MoveSelectionType type)
 
     score()->move(cmd);
     notifyAboutSelectionChanged();
+}
+
+static ChordRest* asChordRest(Element* e)
+{
+    if (e->isNote()) {
+        return toNote(e)->chord();
+    } else if (e->isChordRest()) {
+        return toChordRest(e);
+    }
+    return nullptr;
+}
+
+void NotationInteraction::moveChordRestToStaff(MoveDirection dir)
+{
+    startEdit();
+    for (Element* e: score()->selection().uniqueElements()) {
+        ChordRest* cr = asChordRest(e);
+        if (cr != nullptr) {
+            if (dir == MoveDirection::Up) {
+                score()->moveUp(cr);
+            } else if (dir == MoveDirection::Down) {
+                score()->moveDown(cr);
+            }
+        }
+    }
+    apply();
+    notifyAboutNotationChanged();
 }
 
 void NotationInteraction::moveElementSelection(MoveDirection d)
