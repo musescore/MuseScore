@@ -92,6 +92,8 @@ signals:
 
 private:
     void onNotationChanged();
+    void onCurrentNotationChanged();
+    void onSelectionChanged();
     void updateBoundingSize();
     
     notation::INotationPtr m_notation;
