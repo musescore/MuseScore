@@ -26,23 +26,49 @@
 #include "libmscore/measure.h"
 #include "libmscore/fraction.h"
 #include "libmscore/pos.h"
+#include "libmscore/noteevent.h"
+#include "libmscore/note.h"
 
 #include <QPainter>
 
 using namespace mu::pianoroll;
 
 
-//PianoItem::PianoItem(Note* n, PianorollView* pianoView)
-//   : _note(n), _pianoView(pianoView)
-//      {
-//      }
+
+const BarPattern PianorollView::barPatterns[] = {
+      {QT_TRANSLATE_NOOP("BarPattern", "C major / A minor"),   {1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1}},
+      {QT_TRANSLATE_NOOP("BarPattern", "D♭ major / B♭ minor"), {1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 0}},
+      {QT_TRANSLATE_NOOP("BarPattern", "D major / B minor"),   {0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1}},
+      {QT_TRANSLATE_NOOP("BarPattern", "E♭ major / C minor"),  {1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1, 0}},
+      {QT_TRANSLATE_NOOP("BarPattern", "E major / C♯ minor"),  {0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0, 1}},
+      {QT_TRANSLATE_NOOP("BarPattern", "F major / D minor"),   {1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1, 0}},
+      {QT_TRANSLATE_NOOP("BarPattern", "G♭ major / E♭ minor"), {0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1, 1}},
+      {QT_TRANSLATE_NOOP("BarPattern", "G major / E minor"),   {1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0, 1}},
+      {QT_TRANSLATE_NOOP("BarPattern", "A♭ major / F minor"),  {1, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1, 0}},
+      {QT_TRANSLATE_NOOP("BarPattern", "A major / F♯ minor"),  {0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0, 1}},
+      {QT_TRANSLATE_NOOP("BarPattern", "B♭ major / G minor"),  {1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1, 0}},
+      {QT_TRANSLATE_NOOP("BarPattern", "B major / G♯ minor"),  {0, 1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 1}},
+      {QT_TRANSLATE_NOOP("BarPattern", "C Diminished"),  {1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0}},
+      {QT_TRANSLATE_NOOP("BarPattern", "D♭ Diminished"), {0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0}},
+      {QT_TRANSLATE_NOOP("BarPattern", "D Diminished"),  {0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1}},
+      {QT_TRANSLATE_NOOP("BarPattern", "C Half/Whole"),  {1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0}},
+      {QT_TRANSLATE_NOOP("BarPattern", "D♭ Half/Whole"), {0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1}},
+      {QT_TRANSLATE_NOOP("BarPattern", "D Half/Whole"),  {1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1}},
+      {QT_TRANSLATE_NOOP("BarPattern", "C Whole tone"),  {1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0}},
+      {QT_TRANSLATE_NOOP("BarPattern", "D♭ Whole tone"), {0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1}},
+      {QT_TRANSLATE_NOOP("BarPattern", "C Augmented"),   {1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0}},
+      {QT_TRANSLATE_NOOP("BarPattern", "D♭ Augmented"),  {0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0}},
+      {QT_TRANSLATE_NOOP("BarPattern", "D Augmented"),   {0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0}},
+      {QT_TRANSLATE_NOOP("BarPattern", "E♭ Augmented"),  {0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1}},
+      {"",              {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}
+};
 
 //--------------------
 
 PianorollView::PianorollView(QQuickItem* parent)
     : QQuickPaintedItem(parent)
 {
-    int j = 9;
+    memset(m_pitchHighlight, 0, 128);
 }
 
 void PianorollView::onNotationChanged()
@@ -200,19 +226,25 @@ void PianorollView::paint(QPainter* p)
 
     //Find staff to draw from
     Ms::Score* score = notation->elements()->msScore();
-//    std::vector<Ms::Element*> selectedElements = notation->interaction()->selection()->elements();
-//    std::vector<int> selectedStaves;
-//    int activeStaff = -1;
-//    for (Ms::Element* e: selectedElements)
-//    {
-//        int idx = e->staffIdx();
-//        qDebug() << "ele idx " << idx;
-//        activeStaff = idx;
-//        if (std::find(selectedStaves.begin(), selectedStaves.end(), idx) == selectedStaves.end())
-//        {
-//            selectedStaves.push_back(idx);
-//        }
-//    }
+    std::vector<Ms::Element*> selectedElements = notation->interaction()->selection()->elements();
+    std::vector<int> selectedStaves;
+    int activeStaff = -1;
+    for (Ms::Element* e: selectedElements)
+    {
+        int idx = e->staffIdx();
+        qDebug() << "ele idx " << idx;
+        activeStaff = idx;
+        if (std::find(selectedStaves.begin(), selectedStaves.end(), idx) == selectedStaves.end())
+        {
+            selectedStaves.push_back(idx);
+        }
+    }
+
+    if (activeStaff == -1)
+        activeStaff = 0;
+//        return;
+    Ms::Staff* staff = score->staff(activeStaff);
+    Ms::Part* part = staff->part();
 
 
     //
@@ -230,23 +262,37 @@ void PianorollView::paint(QPainter* p)
     qreal x1 = 0;
     qreal x2 = width();
 
+    //-----------------------------------
     //Draw horizontal grid lines
-    for (int i = 0; i < NUM_PITCHES; ++i)
+    Ms::Interval transp = part->instrument()->transpose();
+
+    //MIDI notes span [0, 127] and map to pitches with MIDI pitch 0 being the note C-1
+
+    //Colored stripes
+    for (int pitch = 0; pitch < NUM_PITCHES; ++pitch)
     {
-        if ((i % 4) == 0)
+        int y = (127 - pitch) * m_noteHeight;
+
+        int degree = (pitch - transp.chromatic + 60) % 12;
+        const BarPattern& pat = barPatterns[m_barPattern];
+
+        if (m_pitchHighlight[pitch])
         {
-            p->fillRect(0, i * m_noteHeight, width(), m_noteHeight, m_colorKeyBlack);
+            p->fillRect(0, y, width(), m_noteHeight, m_colorKeyHighlight);
+        }
+        else if (!pat.isWhiteKey[degree])
+        {
+            p->fillRect(0, y, width(), m_noteHeight, m_colorKeyBlack);
         }
     }
 
-//    QRect viewportRect = p->viewport();
-//    QRect winRect = p->window();
-    //QRectF clipRect = p->clipBoundingRect();
-    for (int i = 0; i < NUM_PITCHES; ++i)
+    //Bounding lines
+    for (int pitch = 0; pitch <= NUM_PITCHES; ++pitch)
     {
-        int degree = i % 12;
+        int y = (128 - pitch) * m_noteHeight;
+        int degree = (pitch - transp.chromatic + 60) % 12;
         p->setPen(degree == 0 ? penLineMajor : penLineMinor);
-        p->drawLine(QLineF(0, i * m_noteHeight, width(), i * m_noteHeight));
+        p->drawLine(QLineF(0, y, width(), y));
     }
 
     //-----------------------------------
@@ -306,64 +352,98 @@ void PianorollView::paint(QPainter* p)
         p->drawLine(x, 0, x, height());
     }
 
+    //-----------------
+    //Notes
 
+    Ms::SegmentType st = Ms::SegmentType::ChordRest;
+    for (Ms::Segment* s = staff->score()->firstSegment(st); s; s = s->next1(st)) 
+    {
+        for (int voice = 0; voice < VOICES; ++voice)
+        {
+            int track = voice + activeStaff * VOICES;
+            Ms::Element* e = s->element(track);
+            if (e && e->isChord())
+            drawChord(p, toChord(e), voice);
+        }
+    }
 
-
-//    const int minBeatGap = 20;
-//    Ms::Pos pos1(score->tempomap(), score->sigmap(), qMax(pixelXToTick(x1), 0), Ms::TType::TICKS);
-//    Ms::Pos pos2(score->tempomap(), score->sigmap(), qMax(pixelXToTick(x2), 0), Ms::TType::TICKS);
-
-//    int bar1, bar2, beat, tick;
-//    pos1.mbt(&bar1, &beat, &tick);
-//    pos2.mbt(&bar2, &beat, &tick);
-
-
-//    for (int bar = bar1; bar <= bar2; ++bar)
-//    {
-//        Ms::Pos barPos(score->tempomap(), score->sigmap(), bar, 0, 0);
-
-//        //Beat lines
-//        int beatsInBar = barPos.timesig().timesig().numerator();
-//        int ticksPerBeat = barPos.timesig().timesig().beatTicks();
-//        double pixPerBeat = ticksPerBeat * m_beatWidth;
-//        int beatSkip = ceil(minBeatGap / pixPerBeat);
-
-
-//        //Round up to next power of 2
-//        beatSkip = (int)pow(2, ceil(log(beatSkip)/log(2)));
-
-//        for (int beat1 = 0; beat1 < beatsInBar; beat1 += beatSkip)
-//        {
-//          Ms::Pos beatPos(score->tempomap(), score->sigmap(), bar, beat1, 0);
-//          double x = tickToPixelX(beatPos.time(Ms::TType::TICKS));
-//          p->setPen(penLineMinor);
-//          p->drawLine(x, y1, x, y2);
-
-//          int subbeats = m_tuplet * (1 << m_subdiv);
-
-//          for (int sub = 1; sub < subbeats; ++sub)
-//          {
-//              Ms::Pos subBeatPos(score->tempomap(), score->sigmap(), bar, beat1, sub * Ms::MScore::division / subbeats);
-//              x = tickToPixelX(subBeatPos.time(Ms::TType::TICKS));
-
-//              p->setPen(penLineSub);
-//              p->drawLine(x, y1, x, y2);
-//          }
-
-//        }
-
-//        //Bar line
-//        double x = tickToPixelX(barPos.time(Ms::TType::TICKS));
-//        p->setPen(x > 0 ? penLineMajor : QPen(Qt::black, 2.0));
-//        p->drawLine(x, y1, x, y2);
-
-//    }
-
-
-    //score->
-
-//    p->setPen(Qt::blue);
-//    p->drawEllipse(0, 0, width(), height());
 
     int value = controller()->getNotes();
+}
+
+QRect PianorollView::boundingRect(Ms::Note* note, Ms::NoteEvent* evt)
+{
+    Ms::Chord* chord = note->chord();
+//    int ticks = chord->ticks().ticks();
+//    int tieLen = note->playTicks() - ticks;
+//    int pitch = note->pitch() + (evt ? evt->pitch() : 0);
+//    int len = (evt ? ticks * evt->len() / 1000 : ticks) + tieLen;
+
+//    int x1 = _note->chord()->tick().ticks()
+//        + (evt ? evt->ontime() * ticks / 1000 : 0);
+//    qreal y1 = pitch;
+
+//    QRect rect;
+//    rect.setRect(x1, y1, len, 1);
+//    return rect;
+
+    Ms::Fraction baseLen = chord->ticks();
+    Ms::Fraction tieLen = note->playTicksFraction() - baseLen;
+    int pitch = note->pitch() + (evt ? evt->pitch() : 0);
+    Ms::Fraction len = (evt ? baseLen * evt->len() / 1000 : baseLen) + tieLen;
+
+    Ms::Fraction start = note->chord()->tick();
+    if (evt)
+        start += evt->ontime() * baseLen / 1000;
+
+
+    int x0 = m_wholeNoteWidth * start.numerator() / start.denominator();
+    int y0 = (127 - pitch) * m_noteHeight;
+    int width = m_wholeNoteWidth * len.numerator() / len.denominator();
+
+    QRect rect;
+    rect.setRect(x0, y0, width, m_noteHeight);
+    return rect;
+}
+
+void PianorollView::drawChord(QPainter* p, Ms::Chord* chrd, int voice)
+{
+    for (Ms::Chord* c : chrd->graceNotes())
+        drawChord(p, c, voice);
+
+    p->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform | QPainter::TextAntialiasing);
+
+    for (Ms::Note* note : chrd->notes())
+    {
+        if (note->tieBack())
+            continue;
+
+//            _noteList.append(new PianoItem(note, this));
+//        Ms::Fraction start = chord->tick();
+//        Ms::Fraction len = chord->ticks();
+//        Ms::Fraction end = start + len;
+//        int pitch = note->pitch();
+
+        QColor noteColor = note->selected() ? m_colorNoteSel : m_colorNoteUnsel;
+        p->setBrush(noteColor);
+        p->setPen(QPen(noteColor.darker(250)));
+
+//        QRectF bounds = boundingRectPixels(evt);
+
+//        int x0 = m_wholeNoteWidth * start.numerator() / start.denominator();
+//        int x1 = m_wholeNoteWidth * end.numerator() / end.denominator();
+//        int width = m_wholeNoteWidth * len.numerator() / len.denominator();
+
+        for (Ms::NoteEvent& e : note->playEvents())
+        {
+            QRect bounds = boundingRect(note, &e);
+            p->drawRect(bounds);
+
+//              paintNoteBlock(painter, &e);
+        }
+
+//        QRect bounds(x0, pitch * m_noteHeight, len, m_noteHeight);
+//        p->drawRect(bounds);
+
+    }
 }
