@@ -27,7 +27,7 @@
 
 #include "paintdebugger.h"
 
-#define ENABLED_PAINT_DEBUGGER
+#define PAINT_DEBUGGER_ENABLED
 
 using namespace mu::engraving;
 using namespace mu::accessibility;
@@ -43,7 +43,7 @@ void Paint::initDebugger(mu::draw::Painter& painter, const Ms::Element* element)
 
     // Accessible
     AccessibleElement* accessible = element->accessible();
-    if (accessible->accessibleState(IAccessible::State::Focused)) {
+    if (accessible->registred() && accessible->accessibleState(IAccessible::State::Focused)) {
         debugger->setDebugPenColor(draw::Color(255, 0, 0));
     }
     // ----------
@@ -61,7 +61,7 @@ void Paint::paintElement(mu::draw::Painter& painter, const Ms::Element* element)
     element->itemDiscovered = false;
     PointF elementPosition(element->pagePos());
 
-#ifdef ENABLED_PAINT_DEBUGGER
+#ifdef PAINT_DEBUGGER_ENABLED
     initDebugger(painter, element);
 #endif
 
@@ -69,7 +69,7 @@ void Paint::paintElement(mu::draw::Painter& painter, const Ms::Element* element)
     element->draw(&painter);
     painter.translate(-elementPosition);
 
-#ifdef ENABLED_PAINT_DEBUGGER
+#ifdef PAINT_DEBUGGER_ENABLED
     deinitDebugger(painter);
 #endif
 }

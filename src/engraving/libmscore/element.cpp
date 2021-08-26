@@ -2650,7 +2650,7 @@ void Element::setSelected(bool f)
     setFlag(ElementFlag::SELECTED, f);
 #ifdef ENGRAVING_BUILD_ACCESSIBLE_TREE
     if (f) {
-        m_accessible->focused();
+        m_accessible->setFocus();
     }
 #endif
 }

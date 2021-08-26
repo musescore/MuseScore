@@ -943,14 +943,6 @@ void NavigationController::goToControl(MoveDirection direction, INavigationPanel
     }
 
     INavigationControl* activeControl = findActive(activePanel->controls());
-    if (activeControl) {
-        MYLOG() << "current activated control: " << activeControl->name()
-                << ", row: " << activeControl->index().row
-                << ", column: " << activeControl->index().column;
-
-        doDeactivateControl(activeControl);
-    }
-
     INavigationControl* toControl = nullptr;
 
     switch (direction) {
@@ -1010,9 +1002,19 @@ void NavigationController::goToControl(MoveDirection direction, INavigationPanel
     } break;
     }
 
-    if (toControl) {
-        doActivateControl(toControl);
+    if (!toControl) {
+        return;
     }
+
+    if (activeControl) {
+        MYLOG() << "current activated control: " << activeControl->name()
+                << ", row: " << activeControl->index().row
+                << ", column: " << activeControl->index().column;
+
+        doDeactivateControl(activeControl);
+    }
+
+    doActivateControl(toControl);
 
     m_navigationChanged.notify();
 }
