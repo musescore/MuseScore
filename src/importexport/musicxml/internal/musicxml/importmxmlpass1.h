@@ -119,6 +119,7 @@ public:
     void initPartState(const QString& partId);
     Score::FileError parse(QIODevice* device);
     Score::FileError parse();
+    QString errors() const { return _errors; }
     void scorePartwise();
     void identification();
     void credit(CreditWordsList& credits);
@@ -171,7 +172,7 @@ public:
 
 private:
     // functions
-    // none
+    void addError(const QString& error);        ///< Add an error to be shown in the GUI
 
     // generic pass 1 data
     QXmlStreamReader _e;
@@ -186,6 +187,7 @@ private:
     QMap<QString, MusicXMLInstruments> _instruments;   ///< instruments for each part, mapped on part id
     Score* _score;                              ///< MuseScore score
     MxmlLogger* _logger;                        ///< Error logger
+    QString _errors;                            ///< Errors to present to the user
     bool _hasBeamingInfo;                       ///< Whether the score supports or contains beaming info
 
     // part specific data (TODO: move to part-specific class)
