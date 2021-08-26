@@ -101,8 +101,6 @@ private:
 
     using Instruments = QList<CombinedInstrument>;
 
-    void setInstrumentsMeta(const notation::InstrumentsMeta& meta);
-
     void init(const QString& genreId, const QString& groupId);
 
     QString resolveInstrumentGroupId(const QString& instrumentId) const;
@@ -128,7 +126,6 @@ private:
     QString m_currentGroupId;
     QString m_searchText;
 
-    notation::InstrumentsMeta m_instrumentsMeta;
     Instruments m_instruments;
     uicomponents::ItemMultiSelectionModel* m_selection = nullptr;
 

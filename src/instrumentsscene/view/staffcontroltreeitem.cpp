@@ -27,6 +27,12 @@ using namespace mu::notation;
 StaffControlTreeItem::StaffControlTreeItem(IMasterNotationPtr masterNotation, INotationPtr notation, QObject* parent)
     : AbstractInstrumentsPanelTreeItem(InstrumentsTreeItemType::ItemType::CONTROL_ADD_STAFF, masterNotation, notation, parent)
 {
+    setTitle(qtrc("instruments", "Add staff"));
+}
+
+void StaffControlTreeItem::init(const ID& partId)
+{
+    m_partId = partId;
 }
 
 void StaffControlTreeItem::appendNewItem()
@@ -42,9 +48,4 @@ void StaffControlTreeItem::appendNewItem()
     staff->setDefaultClefType(part->instrument()->clefType(lastStaffIndex));
 
     masterNotation()->parts()->appendStaff(staff, m_partId);
-}
-
-void StaffControlTreeItem::setPartId(const ID& id)
-{
-    m_partId = id;
 }

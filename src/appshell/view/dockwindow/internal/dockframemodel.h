@@ -54,7 +54,7 @@ public:
     QString currentDockUniqueName() const;
     QVariant currentDockContextMenuModel() const;
 
-    Q_INVOKABLE void handleMenuItem(const QString& itemId);
+    Q_INVOKABLE void handleMenuItem(const QVariant& item);
 
 public slots:
     void setFrame(QQuickItem* item);

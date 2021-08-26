@@ -35,7 +35,10 @@ class IInstrumentsRepository : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IInstrumentsRepository() = default;
 
-    virtual RetValCh<InstrumentsMeta> instrumentsMeta() = 0;
+    virtual const InstrumentTemplateList& instrumentTemplates() const = 0;
+    virtual const InstrumentGenreList& genres() const = 0;
+    virtual const InstrumentGroupList& groups() const = 0;
+    virtual const ScoreOrderList& orders() const = 0;
 };
 }
 

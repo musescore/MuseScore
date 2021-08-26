@@ -27,6 +27,8 @@
 
 #include "actions/actiontypes.h"
 
+#include <QTimer>
+
 using namespace mu::context;
 using namespace mu::instrumentsscene;
 using namespace mu::notation;
@@ -49,6 +51,16 @@ void InstrumentsPanelContextMenuModel::load()
         } else {
             loadItems();
         }
+
+        if (!m_masterNotation) {
+            return;
+        }
+
+        m_masterNotation->parts()->scoreOrderChanged().onNotify(this, [this] {
+            QTimer::singleShot(0, [this]() {
+                loadItems();
+            });
+        });
     });
 }
 
@@ -56,33 +68,31 @@ void InstrumentsPanelContextMenuModel::loadItems()
 {
     TRACEFUNC;
 
-    m_orders.clear();
+    ScoreOrder currentOrder = m_masterNotation->parts()->scoreOrder();
+    ScoreOrderList allOrders = instrumentsRepository()->orders();
 
-    RetValCh<InstrumentsMeta> meta = instrumentsRepository()->instrumentsMeta();
-    if (!meta.ret) {
-        LOGE() << meta.ret.toString();
-        return;
+    if (!allOrders.contains(currentOrder)) {
+        allOrders.append(currentOrder);
     }
 
-    m_orders = meta.val.scoreOrders;
     MenuItemList orderItems;
 
     dispatcher()->unReg(this);
 
-    for (const ScoreOrder* order : m_orders) {
+    for (const ScoreOrder& order : allOrders) {
         MenuItem orderItem;
 
-        orderItem.id = order->id;
-        orderItem.title = order->name;
-        orderItem.code = codeFromQString("set-order-" + order->id);
+        orderItem.id = order.id;
+        orderItem.title = order.name;
+        orderItem.code = codeFromQString("set-order-" + order.id);
         orderItem.checkable = Checkable::Yes;
         orderItem.state.enabled = true;
-        orderItem.state.checked = m_masterNotation->notation()->scoreOrder().id == order->id;
+        orderItem.state.checked = currentOrder.id == order.id;
 
         orderItems << orderItem;
 
         dispatcher()->reg(this, orderItem.code, [this, order]() {
-            m_masterNotation->parts()->setScoreOrder(*order);
+            m_masterNotation->parts()->setScoreOrder(order);
         });
     }
 

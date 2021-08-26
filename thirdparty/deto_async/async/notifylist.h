@@ -4,20 +4,19 @@
 #include <vector>
 #include "changednotify.h"
 
-namespace deto {
-namespace async {
+namespace deto::async {
 template<typename T>
 class NotifyList : public std::vector<T>
 {
 public:
     NotifyList() {}
     NotifyList(const NotifyList&) = default;
-    NotifyList(ChangedNotify<T>* n)
+    NotifyList(std::shared_ptr<ChangedNotify<T>> n)
         : m_notify(n) {}
-    NotifyList(const std::vector<T>& l, ChangedNotify<T>* n)
+    NotifyList(const std::vector<T>& l, std::shared_ptr<ChangedNotify<T>> n)
         : std::vector<T>(l), m_notify(n) {}
 
-    void setNotify(ChangedNotify<T>* n)
+    void setNotify(std::shared_ptr<ChangedNotify<T>> n)
     {
         m_notify = n;
     }
@@ -117,10 +116,8 @@ public:
     }
 
 private:
-
-    ChangedNotify<T>* m_notify = nullptr;
+    std::shared_ptr<ChangedNotify<T>> m_notify = nullptr;
 };
-}
 }
 
 #endif // NOTIFYLIST_H

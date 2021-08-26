@@ -21,53 +21,44 @@
  */
 #include "stafftreeitem.h"
 
+#include "log.h"
+
 using namespace mu::instrumentsscene;
 using namespace mu::notation;
 
 StaffTreeItem::StaffTreeItem(IMasterNotationPtr masterNotation, INotationPtr notation, QObject* parent)
     : AbstractInstrumentsPanelTreeItem(InstrumentsTreeItemType::ItemType::STAFF, masterNotation, notation, parent)
 {
-    connect(this, &AbstractInstrumentsPanelTreeItem::isVisibleChanged, [this](const bool isVisible) {
+    connect(this, &AbstractInstrumentsPanelTreeItem::isVisibleChanged, [this](bool isVisible) {
         this->notation()->parts()->setStaffVisible(id(), isVisible);
     });
+
+    setIsEditable(true);
+    setIsRemovable(true);
 }
 
-bool StaffTreeItem::isSmall() const
+void StaffTreeItem::init(const Staff* masterStaff)
 {
-    return m_isSmall;
+    IF_ASSERT_FAILED(masterStaff) {
+        return;
+    }
+
+    const Staff* staff = notation()->parts()->staff(masterStaff->id());
+    bool visible = staff && staff->show();
+
+    if (!staff) {
+        staff = masterStaff;
+    }
+
+    QString staffName = staff->staffName();
+    QString title = masterStaff->isLinked() ? qtrc("instruments", "[LINK] %1").arg(staffName) : staffName;
+
+    setId(staff->id());
+    setTitle(title);
+    setIsVisible(visible);
 }
 
-bool StaffTreeItem::cutawayEnabled() const
+bool StaffTreeItem::isSelectable() const
 {
-    return m_cutawayEnabled;
-}
-
-int StaffTreeItem::staffType() const
-{
-    return m_staffType;
-}
-
-QVariantList StaffTreeItem::voicesVisibility() const
-{
-    return m_voicesVisibility;
-}
-
-void StaffTreeItem::setIsSmall(bool value)
-{
-    m_isSmall = value;
-}
-
-void StaffTreeItem::setCutawayEnabled(bool value)
-{
-    m_cutawayEnabled = value;
-}
-
-void StaffTreeItem::setStaffType(int type)
-{
-    m_staffType = type;
-}
-
-void StaffTreeItem::setVoicesVisibility(const QVariantList& visibility)
-{
-    m_voicesVisibility = visibility;
+    return true;
 }

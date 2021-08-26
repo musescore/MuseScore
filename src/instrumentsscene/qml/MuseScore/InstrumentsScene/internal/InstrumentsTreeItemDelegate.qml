@@ -32,9 +32,11 @@ Item {
     property var attachedControl: undefined
     property var index: styleData.index
     property string filterKey
+    property int type: InstrumentsTreeItemType.UNDEFINED
     property bool isSelected: false
     property bool isDragAvailable: false
-    property int type: InstrumentsTreeItemType.UNDEFINED
+    property alias isExpandable: expandButton.visible
+    property alias isEditable: settingsButton.visible
 
     property int keynavRow: 0
     property NavigationPanel navigationPanel: null
@@ -220,6 +222,7 @@ Item {
 
     Loader {
         id: popupLoader
+
         function createPopup(comp, btn) {
             popupLoader.sourceComponent = comp
             popupLoader.item.parent = btn
@@ -229,6 +232,7 @@ Item {
 
     Component {
         id: instrumentSettingsComp
+
         InstrumentSettingsPopup {
             navigationParentControl: settingsButton.navigation
             anchorItem: popupAnchorItem
@@ -242,6 +246,7 @@ Item {
 
     Component {
         id: staffSettingsComp
+
         StaffSettingsPopup {
             navigationParentControl: settingsButton.navigation
             anchorItem: popupAnchorItem
@@ -270,7 +275,6 @@ Item {
             navigation.column: 1
 
             isVisible: model && model.itemRole.isVisible
-            enabled: root.visible && model && model.itemRole.canChangeVisibility
 
             onVisibleToggled: {
                 if (!model) {
@@ -301,8 +305,6 @@ Item {
                 pressedStateColor: ui.theme.accentColor
 
                 icon: styleData.isExpanded ? IconCode.SMALL_ARROW_DOWN : IconCode.SMALL_ARROW_RIGHT
-
-                visible: styleData.hasChildren && (root.type === InstrumentsTreeItemType.INSTRUMENT ? styleData.index.row === 0 : true)
 
                 onClicked: {
                     if (!styleData.isExpanded) {
@@ -348,9 +350,6 @@ Item {
 
             pressedStateColor: ui.theme.accentColor
 
-            visible: model ? root.type === InstrumentsTreeItemType.PART ||
-                             root.type === InstrumentsTreeItemType.STAFF : false
-
             icon: IconCode.SETTINGS_COG
 
             onClicked: {
@@ -369,18 +368,12 @@ Item {
                     item["partId"] = model.itemRole.id
                     item["partName"] = model.itemRole.title
                     item["instrumentId"] = model.itemRole.instrumentId()
-                    item["instrumentName"] = model.itemRole.instrumentName()
-                    item["abbreviature"] = model.itemRole.instrumentAbbreviature()
 
                 } else if (root.type === InstrumentsTreeItemType.STAFF) {
 
                     popup = popupLoader.createPopup(staffSettingsComp, this)
 
-                    item["staffId"] = model.itemRole.id
-                    item["isSmall"] = model.itemRole.isSmall()
-                    item["cutawayEnabled"] = model.itemRole.cutawayEnabled()
-                    item["type"] = model.itemRole.staffType()
-                    item["voicesVisibility"] = model.itemRole.voicesVisibility()
+                    item["id"] = model.itemRole.id
                 }
 
                 prv.openPopup(popup, item)

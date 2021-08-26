@@ -114,12 +114,8 @@ void InstrumentListModel::load(bool canSelectMultipleInstruments, const QString&
 
     m_selection->setSingleItemSelectionMode(!canSelectMultipleInstruments);
 
-    RetValCh<InstrumentsMeta> instrumentsMeta = repository()->instrumentsMeta();
-    if (!instrumentsMeta.ret) {
-        LOGE() << instrumentsMeta.ret.toString();
-    }
-
-    setInstrumentsMeta(instrumentsMeta.val);
+    emit genresChanged();
+    emit groupsChanged();
 
     if (currentInstrumentId.isEmpty()) {
         init(COMMON_GENRE_ID, NONE_GROUP_ID);
@@ -151,14 +147,6 @@ QStringList InstrumentListModel::groups() const
     return result;
 }
 
-void InstrumentListModel::setInstrumentsMeta(const notation::InstrumentsMeta& meta)
-{
-    m_instrumentsMeta = meta;
-
-    emit genresChanged();
-    emit groupsChanged();
-}
-
 void InstrumentListModel::init(const QString& genreId, const QString& groupId)
 {
     setCurrentGenre(genreId);
@@ -170,7 +158,7 @@ void InstrumentListModel::init(const QString& genreId, const QString& groupId)
 
 QString InstrumentListModel::resolveInstrumentGroupId(const QString& instrumentId) const
 {
-    for (const InstrumentTemplate* templ : m_instrumentsMeta.instrumentTemplates) {
+    for (const InstrumentTemplate* templ : repository()->instrumentTemplates()) {
         if (templ->id == instrumentId) {
             return templ->groupId;
         }
@@ -205,7 +193,7 @@ void InstrumentListModel::loadInstruments()
     using InstrumentName = QString;
     QHash<InstrumentName, InstrumentTemplateList> templatesByInstrumentName;
 
-    for (const InstrumentTemplate* templ: m_instrumentsMeta.instrumentTemplates) {
+    for (const InstrumentTemplate* templ: repository()->instrumentTemplates()) {
         if (!isInstrumentAccepted(*templ)) {
             continue;
         }
@@ -328,7 +316,7 @@ InstrumentGenreList InstrumentListModel::availableGenres() const
     InstrumentGenreList result;
     result << &allInstrumentsGenre;
 
-    for (const InstrumentGenre* genre: m_instrumentsMeta.genres) {
+    for (const InstrumentGenre* genre: repository()->genres()) {
         if (genre->id == COMMON_GENRE_ID) {
             result.prepend(genre);
         } else {
@@ -357,7 +345,7 @@ InstrumentGroupList InstrumentListModel::availableGroups() const
 
     InstrumentGroupList result;
 
-    for (const InstrumentGroup* group : m_instrumentsMeta.groups) {
+    for (const InstrumentGroup* group : repository()->groups()) {
         if (isGroupAccepted(group)) {
             result << group;
         }

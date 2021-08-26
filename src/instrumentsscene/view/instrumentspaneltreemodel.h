@@ -27,7 +27,6 @@
 
 #include "abstractinstrumentspaneltreeitem.h"
 #include "modularity/ioc.h"
-#include "notation/inotationparts.h"
 #include "notation/iselectinstrumentscenario.h"
 #include "context/iglobalcontext.h"
 #include "async/asyncable.h"
@@ -41,8 +40,6 @@ class ItemMultiSelectionModel;
 class QItemSelectionModel;
 
 namespace mu::instrumentsscene {
-class PartTreeItem;
-class StaffTreeItem;
 class InstrumentsPanelTreeModel : public QAbstractItemModel, public async::Asyncable, public actions::Actionable
 {
     Q_OBJECT
@@ -97,16 +94,22 @@ signals:
 
 private slots:
     void updateRearrangementAvailability();
-    void updateMovingUpAvailability(const bool isSelectionMovable, const QModelIndex& firstSelectedRowIndex = QModelIndex());
-    void updateMovingDownAvailability(const bool isSelectionMovable, const QModelIndex& lastSelectedRowIndex = QModelIndex());
+    void updateMovingUpAvailability(bool isSelectionMovable, const QModelIndex& firstSelectedRowIndex = QModelIndex());
+    void updateMovingDownAvailability(bool isSelectionMovable, const QModelIndex& lastSelectedRowIndex = QModelIndex());
     void updateRemovingAvailability();
 
 private:
     bool canReceiveAction(const actions::ActionCode&) const override;
+    bool removeRows(int row, int count, const QModelIndex& parent) override;
 
     enum RoleNames {
         ItemRole = Qt::UserRole + 1
     };
+
+    void initPartOrders();
+    void onBeforeChangeNotation();
+
+    void sortParts(notation::PartList& parts);
 
     void setupPartsConnections();
     void setupStavesConnections(const ID& stavesPartId);
@@ -119,34 +122,25 @@ private:
     void setIsMovingDownAvailable(bool isMovingDownAvailable);
     void setIsRemovingAvailable(bool isRemovingAvailable);
 
-    bool removeRows(int row, int count, const QModelIndex& parent) override;
-
-    bool isPartExsistsOnCurrentNotation(const ID& partId) const;
-    bool isStaffExsistsOnCurrentNotation(const ID& staffId) const;
-
     AbstractInstrumentsPanelTreeItem* loadMasterPart(const notation::Part* masterPart);
-
-    AbstractInstrumentsPanelTreeItem* modelIndexToItem(const QModelIndex& index) const;
-
-    void updatePartItem(PartTreeItem* item, const notation::Part* masterPart);
-    void updateStaffItem(StaffTreeItem* item, const mu::notation::Staff* masterStaff);
-
     AbstractInstrumentsPanelTreeItem* buildPartItem(const mu::notation::Part* masterPart);
-    AbstractInstrumentsPanelTreeItem* buildMasterStaffItem(const mu::notation::Staff* masterStaff);
-    AbstractInstrumentsPanelTreeItem* buildAddStaffControlItem(const ID& partId);
-
-    AbstractInstrumentsPanelTreeItem* m_rootItem = nullptr;
-    uicomponents::ItemMultiSelectionModel* m_selectionModel = nullptr;
-
-    mu::notation::IMasterNotationPtr m_masterNotation = nullptr;
-    mu::notation::INotationPtr m_notation = nullptr;
+    AbstractInstrumentsPanelTreeItem* buildMasterStaffItem(const mu::notation::Staff* masterStaff, QObject* parent);
+    AbstractInstrumentsPanelTreeItem* buildAddStaffControlItem(const ID& partId, QObject* parent);
+    AbstractInstrumentsPanelTreeItem* modelIndexToItem(const QModelIndex& index) const;
 
     bool m_isMovingUpAvailable = false;
     bool m_isMovingDownAvailable = false;
     bool m_isRemovingAvailable = false;
     bool m_isLoadingBlocked = false;
 
+    AbstractInstrumentsPanelTreeItem* m_rootItem = nullptr;
+    uicomponents::ItemMultiSelectionModel* m_selectionModel = nullptr;
+    mu::notation::IMasterNotationPtr m_masterNotation = nullptr;
+    mu::notation::INotationPtr m_notation = nullptr;
     std::shared_ptr<async::Asyncable> m_partsNotifyReceiver = nullptr;
+
+    using NotationKey = QString;
+    QHash<NotationKey, QList<ID> > m_sortedPartIdList;
 };
 }
 

@@ -195,8 +195,8 @@ FocusScope {
                 StyledMenuLoader {
                     id: contextMenuLoader
 
-                    onHandleMenuItem: function (itemId) {
-                        contextMenuModel.handleMenuItem(itemId)
+                    onHandleMenuItem: function (item) {
+                        contextMenuModel.handleMenuItem(item.id)
                     }
                 }
             }

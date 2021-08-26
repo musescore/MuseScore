@@ -149,11 +149,6 @@ QString Notation::title() const
     return m_score ? m_score->title() : QString();
 }
 
-mu::notation::ScoreOrder Notation::scoreOrder() const
-{
-    return m_score ? m_score->scoreOrder() : ScoreOrder();
-}
-
 void Notation::setViewSize(const QSizeF& vs)
 {
     m_viewSize = vs;

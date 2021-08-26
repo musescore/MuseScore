@@ -70,7 +70,7 @@ private:
         RoleIsSoloist
     };
 
-    void loadInstrumentsMeta();
+    void loadOrders();
 
     void updateInstrumentsOrder();
     void sortInstruments(ItemList& instruments);
@@ -82,7 +82,6 @@ private:
     void onRowsMoved() override;
     void doSetCurrentOrderIndex(int index);
 
-    notation::InstrumentTemplateList m_instrumentTemplates;
     notation::ScoreOrderList m_scoreOrders;
     int m_currentOrderIndex = 0;
 };

@@ -34,9 +34,6 @@ public:
 
     void setExcerpts(ExcerptNotationList excerpts);
 
-    void setParts(const PartInstrumentList& instruments) override;
-    void setScoreOrder(const ScoreOrder& order) override;
-
     void removeParts(const IDList& partsIds) override;
     void removeStaves(const IDList& stavesIds) override;
 
@@ -47,8 +44,6 @@ public:
     void replaceDrumset(const InstrumentKey& instrumentKey, const Drumset& newDrumset) override;
 
 private:
-    Ms::MasterScore* masterScore() const;
-
     void startGlobalEdit();
     void endGlobalEdit();
 

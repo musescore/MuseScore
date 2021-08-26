@@ -169,7 +169,7 @@ extern QList<InstrumentGenre*> instrumentGenres;
 extern QList<InstrumentFamily*> instrumentFamilies;
 extern QList<MidiArticulation> articulation;
 extern QList<InstrumentGroup*> instrumentGroups;
-extern QList<ScoreOrder*> instrumentOrders;
+extern QList<ScoreOrder> instrumentOrders;
 extern void clearInstrumentTemplates();
 extern bool loadInstrumentTemplates(const QString& instrTemplates);
 extern InstrumentTemplate* searchTemplate(const QString& name);
