@@ -50,6 +50,8 @@ private:
     Q_PROPERTY(double wholeNoteWidth READ wholeNoteWidth WRITE setWholeNoteWidth NOTIFY wholeNoteWidthChanged)
     Q_PROPERTY(int noteHeight READ noteHeight WRITE setNoteHeight NOTIFY noteHeightChanged)
     Q_PROPERTY(PianorollTool tool READ tool WRITE setTool NOTIFY toolChanged)
+    Q_PROPERTY(int tuplet READ tuplet WRITE setTuplet NOTIFY tupletChanged)
+    Q_PROPERTY(int subdivision READ subdivision WRITE setSubdivision NOTIFY subdivisionChanged)
 
 public:
 
@@ -68,8 +70,8 @@ public:
 
     Q_INVOKABLE void load();
 
-    QColor color() const { return m_color; }
-    void setColor(QColor val) { m_color = val; }
+//    QColor color() const { return m_color; }
+//    void setColor(QColor val) { m_color = val; }
 
 //    PianorollGeneral* common() const { return m_common; }
 //    void setCommon(PianorollGeneral* val) { m_common = val; }
@@ -80,14 +82,22 @@ public:
     void setNoteHeight(int value);
     PianorollTool tool() const { return m_tool; }
     void setTool(PianorollTool value);
+    int tuplet() const { return m_tuplet; }
+    void setTuplet(int value);
+    int subdivision() const { return m_subdivision; }
+    void setSubdivision(int value);
 
 
     void paint(QPainter*) override;
+    int tickToPixelX(int tick);
+    int pixelXToTick(int tick);
 
 signals:
     void wholeNoteWidthChanged();
     void noteHeightChanged();
     void toolChanged();
+    void tupletChanged();
+    void subdivisionChanged();
 
 
 private:
@@ -98,11 +108,27 @@ private:
     
     notation::INotationPtr m_notation;
 
-    QColor m_color = Qt::red;
+//    QColor m_color = Qt::red;
 //    PianorollGeneral* m_common = nullptr;
     double m_wholeNoteWidth;
     int m_noteHeight;
+    int m_tuplet = 1;
+    int m_subdivision = 0;
     PianorollTool m_tool = PianorollTool::SELECT;
+
+    QColor m_colorKeyWhite = QColor(0xffffff);
+    QColor m_colorKeyBlack = QColor(0xe6e6e6);
+    QColor m_colorKeyHighlight = QColor(0xaaaaff);
+    QColor m_colorSelectionBox = QColor(0x2085c3);
+    QColor m_colorGridLine = QColor(0xa2a2a6);
+    QColor m_colorNoteUnsel = QColor(0x1dcca0);
+    QColor m_colorNoteSel = QColor(0xffff00);
+    QColor m_colorNoteDrag = QColor(0xffbb33);
+    QColor m_colorText = QColor(0x111111);
+    QColor m_colorTie = QColor(0xff0000);
+
+
+    const int NUM_PITCHES = 128;
 
 };
 }
