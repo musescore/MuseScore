@@ -1353,47 +1353,6 @@ void collectElements(void* data, Element* e)
     el->append(e);
 }
 
-void paintElement(mu::draw::Painter& painter, const Element* element)
-{
-    element->itemDiscovered = false;
-    PointF elementPosition(element->pagePos());
-
-    painter.translate(elementPosition);
-    element->draw(&painter);
-    painter.translate(-elementPosition);
-}
-
-void paintElements(mu::draw::Painter& painter, const QList<Element*>& elements)
-{
-    QList<Ms::Element*> sortedElements = elements;
-
-    std::sort(sortedElements.begin(), sortedElements.end(), [](Ms::Element* e1, Ms::Element* e2) {
-        if (e1->z() == e2->z()) {
-            if (e1->selected()) {
-                return false;
-            } else if (e1->visible()) {
-                return false;
-            } else if (e2->selected()) {
-                return true;
-            } else if (e1->visible()) {
-                return true;
-            }
-
-            return e1->track() > e2->track();
-        }
-
-        return e1->z() < e2->z();
-    });
-
-    for (const Element* element : sortedElements) {
-        if (!element->isInteractionAvailable()) {
-            continue;
-        }
-
-        paintElement(painter, element);
-    }
-}
-
 //---------------------------------------------------------
 //   autoplace
 //---------------------------------------------------------
@@ -2691,7 +2650,7 @@ void Element::setSelected(bool f)
     setFlag(ElementFlag::SELECTED, f);
 #ifdef ENGRAVING_BUILD_ACCESSIBLE_TREE
     if (f) {
-        m_accessible->focused();
+        m_accessible->setFocus();
     }
 #endif
 }

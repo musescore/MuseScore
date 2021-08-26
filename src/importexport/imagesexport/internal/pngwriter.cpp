@@ -27,6 +27,7 @@
 
 #include "libmscore/masterscore.h"
 #include "libmscore/page.h"
+#include "engraving/paint/paint.h"
 
 #include "log.h"
 
@@ -96,7 +97,7 @@ mu::Ret PngWriter::write(INotationPtr notation, Device& destinationDevice, const
     QList<Ms::Element*> elements = page->elements();
     std::stable_sort(elements.begin(), elements.end(), Ms::elementLessThan);
 
-    Ms::paintElements(painter, elements);
+    engraving::Paint::paintElements(painter, elements);
     image.save(&destinationDevice, "png");
 
     score->setPrinting(false);
