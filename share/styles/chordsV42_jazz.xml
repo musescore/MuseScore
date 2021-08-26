@@ -323,6 +323,11 @@
     </token>
 
   <token class="quality">
+    <name>circle</name>
+    <render>circle</render>
+  </token>
+
+  <token class="quality">
     <name>dim</name>
     <render>dim</render>
     </token>
@@ -383,20 +388,25 @@
     <render>sdim</render>
     </token>
 
-  <token>
+  <token class="extension">
     <name>69</name>
-    <render>m:1:-2 s6 m:-4:7 s9 m:0:-5</render>
-    </token>
+    <render>:push m:0:-2 s6 :pop m:0:4 s9 m:0:-2</render>
+  </token>
 
   <token class="extension">
     <name>6,9</name>
-    <render>s6 m:0:-&mod; s, m:0:&mod; s9</render>
-    </token>
+    <render>s6 s, s9</render>
+  </token>
 
   <token class="extension">
     <name>6/9</name>
     <render>m:1:-2 s6 m:-2.5:0 s/ m:-2:7 s9 m:0:-5</render>
-    </token>
+  </token>
+
+  <token class="extension">
+    <name>6-9</name>
+    <render>:push m:0:-6 s6 :pop :push m:-0.3:-6 s_ :pop m:0:2 s9 m:0:-2</render>
+  </token>
 
   <token class="quality">
     <name>add</name>
