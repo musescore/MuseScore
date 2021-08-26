@@ -100,6 +100,13 @@ private:
     Rgba m_rgba = rgba(0, 0, 0, DEFAULT_ALPHA);
     bool m_isValid = false;
 };
+
+inline const Color Color::black { 0, 0, 0 };
+inline const Color Color::white { 255, 255, 255 };
+inline const Color Color::transparent { 255, 255, 255, 0 };
+inline const Color Color::redColor { 255, 0, 0 };
+inline const Color Color::greenColor { 0, 255, 0 };
+inline const Color Color::blueColor { 0, 0, 255 };
 }
 
 Q_DECLARE_METATYPE(mu::draw::Color)
