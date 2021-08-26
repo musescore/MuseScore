@@ -567,9 +567,9 @@ void NotationInteraction::selectSection()
     notifyAboutSelectionChanged();
 }
 
-void NotationInteraction::selectFirstElement()
+void NotationInteraction::selectFirstElement(bool frame)
 {
-    Element* element = score()->firstElement();
+    Element* element = score()->firstElement(frame);
     score()->select(element, SelectType::SINGLE, element->staffIdx());
 
     notifyAboutSelectionChanged();
