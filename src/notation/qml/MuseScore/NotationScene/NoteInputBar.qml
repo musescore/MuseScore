@@ -45,6 +45,7 @@ Rectangle {
         id: keynavSub
         name: "NoteInputBar"
         enabled: root.enabled && root.visible
+        accessible.name: qsTrc("notation", "Note Input toolbar")
     }
 
     NoteInputBarModel {
