@@ -26,7 +26,7 @@
 #include "bsymbol.h"
 #include "symid.h"
 
-#include "draw/font.h"
+#include "infrastructure/draw/font.h"
 
 namespace Ms {
 class Segment;

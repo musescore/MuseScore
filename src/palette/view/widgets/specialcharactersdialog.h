@@ -24,7 +24,7 @@
 
 #include "ui_specialcharactersdialog.h"
 
-#include "engraving/draw/font.h"
+#include "engraving/infrastructure/draw/font.h"
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"

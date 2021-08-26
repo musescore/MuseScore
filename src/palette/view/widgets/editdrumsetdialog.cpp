@@ -22,7 +22,7 @@
 
 #include "editdrumsetdialog.h"
 
-#include "engraving/io/xml.h"
+#include "engraving/infrastructure/io/xml.h"
 #include "libmscore/utils.h"
 #include "libmscore/chord.h"
 #include "libmscore/score.h"
@@ -31,7 +31,7 @@
 #include "libmscore/scorefont.h"
 #include "libmscore/sym.h"
 
-#include "engraving/draw/geometry.h"
+#include "engraving/infrastructure/draw/geometry.h"
 
 #include "framework/global/smuflranges.h"
 

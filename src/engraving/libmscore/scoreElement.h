@@ -24,7 +24,7 @@
 #define __SCORE_ELEMENT_H__
 
 #include "types.h"
-#include "draw/geometry.h"
+#include "infrastructure/draw/geometry.h"
 #include "style/styledef.h"
 #include "style/textstyle.h"
 

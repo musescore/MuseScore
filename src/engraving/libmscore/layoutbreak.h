@@ -24,7 +24,7 @@
 #define __LAYOUTBREAK_H__
 
 #include "element.h"
-#include "draw/painterpath.h"
+#include "infrastructure/draw/painterpath.h"
 
 namespace Ms {
 //---------------------------------------------------------

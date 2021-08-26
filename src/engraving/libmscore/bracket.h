@@ -25,7 +25,7 @@
 
 #include "element.h"
 #include "bracketItem.h"
-#include "draw/painterpath.h"
+#include "infrastructure/draw/painterpath.h"
 
 namespace Ms {
 class MuseScoreView;

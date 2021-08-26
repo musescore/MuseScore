@@ -24,9 +24,9 @@
 #include "modularity/ioc.h"
 
 #ifndef NO_ENGRAVING_INTERNAL
-#include "engraving/internal/engravingconfiguration.h"
-#include "engraving/internal/qfontprovider.h"
-#include "engraving/internal/qimageprovider.h"
+#include "engraving/infrastructure/internal/engravingconfiguration.h"
+#include "engraving/infrastructure/internal/qfontprovider.h"
+#include "engraving/infrastructure/internal/qimageprovider.h"
 #endif
 
 #include "engraving/style/defaultstyle.h"

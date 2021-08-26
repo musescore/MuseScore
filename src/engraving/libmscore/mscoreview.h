@@ -25,7 +25,7 @@
 
 #include <QList>
 
-#include "draw/painter.h"
+#include "infrastructure/draw/painter.h"
 
 namespace Ms {
 class Element;

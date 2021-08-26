@@ -47,7 +47,7 @@
 #include "thirdparty/qzip/qzipwriter_p.h"
 
 #include "engraving/style/style.h"
-#include "engraving/io/xml.h"
+#include "engraving/infrastructure/io/xml.h"
 
 #include "libmscore/masterscore.h"
 #include "libmscore/rest.h"

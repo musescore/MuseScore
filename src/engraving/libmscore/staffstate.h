@@ -25,7 +25,7 @@
 
 #include "element.h"
 #include "instrument.h"
-#include "draw/painterpath.h"
+#include "infrastructure/draw/painterpath.h"
 
 namespace Ms {
 enum class StaffStateType : char {
