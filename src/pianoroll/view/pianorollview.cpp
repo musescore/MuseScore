@@ -28,6 +28,7 @@
 #include "libmscore/pos.h"
 #include "libmscore/noteevent.h"
 #include "libmscore/note.h"
+#include "libmscore/pitchspelling.h"
 
 #include <QPainter>
 
@@ -372,7 +373,30 @@ void PianorollView::paint(QPainter* p)
 
     }
 
-//    Ms::SegmentType st = ;
+
+
+//    //Draw locators
+//    for (int i = 0; i < 3; ++i) {
+//          if (_locator[i].valid())
+//                {
+//                p->setPen(QPen(i == 0 ? Qt::red : Qt::blue, 2));
+//                qreal x = tickToPixelX(_locator[i].time(TType::TICKS));
+//                p->drawLine(x, y1, x, y2);
+//                }
+//          }
+
+//    //Draw drag selection box
+//    if (_dragStarted && _dragStyle == DragStyle::SELECTION_RECT && _editNoteTool == PianoRollEditTool::SELECT) {
+//          int minX = qMin(_mouseDownPos.x(), _lastMousePos.x());
+//          int minY = qMin(_mouseDownPos.y(), _lastMousePos.y());
+//          int maxX = qMax(_mouseDownPos.x(), _lastMousePos.x());
+//          int maxY = qMax(_mouseDownPos.y(), _lastMousePos.y());
+//          QRectF rect(minX, minY, maxX - minX + 1, maxY - minY + 1);
+
+//          p->setPen(QPen(colSelectionBox, 2));
+//          p->setBrush(QBrush(colSelectionBoxFill, Qt::SolidPattern));
+//          p->drawRect(rect);
+//          }
 
 
     int value = controller()->getNotes();
@@ -381,18 +405,6 @@ void PianorollView::paint(QPainter* p)
 QRect PianorollView::boundingRect(Ms::Note* note, Ms::NoteEvent* evt)
 {
     Ms::Chord* chord = note->chord();
-//    int ticks = chord->ticks().ticks();
-//    int tieLen = note->playTicks() - ticks;
-//    int pitch = note->pitch() + (evt ? evt->pitch() : 0);
-//    int len = (evt ? ticks * evt->len() / 1000 : ticks) + tieLen;
-
-//    int x1 = _note->chord()->tick().ticks()
-//        + (evt ? evt->ontime() * ticks / 1000 : 0);
-//    qreal y1 = pitch;
-
-//    QRect rect;
-//    rect.setRect(x1, y1, len, 1);
-//    return rect;
 
     Ms::Fraction baseLen = chord->ticks();
     Ms::Fraction tieLen = note->playTicksFraction() - baseLen;
@@ -425,12 +437,6 @@ void PianorollView::drawChord(QPainter* p, Ms::Chord* chrd, int voice, bool acti
         if (note->tieBack())
             continue;
 
-//            _noteList.append(new PianoItem(note, this));
-//        Ms::Fraction start = chord->tick();
-//        Ms::Fraction len = chord->ticks();
-//        Ms::Fraction end = start + len;
-//        int pitch = note->pitch();
-
         QColor noteColor;
         switch (voice)
         {
@@ -450,28 +456,39 @@ void PianorollView::drawChord(QPainter* p, Ms::Chord* chrd, int voice, bool acti
 
         if (note->selected())
             noteColor = m_colorNoteSel;
+
         if (!active)
-            noteColor = m_colorNoteGhost;
+            noteColor = noteColor.lighter(150);
 
         p->setBrush(noteColor);
         p->setPen(QPen(noteColor.darker(250)));
-
-//        QRectF bounds = boundingRectPixels(evt);
-
-//        int x0 = m_wholeNoteWidth * start.numerator() / start.denominator();
-//        int x1 = m_wholeNoteWidth * end.numerator() / end.denominator();
-//        int width = m_wholeNoteWidth * len.numerator() / len.denominator();
 
         for (Ms::NoteEvent& e : note->playEvents())
         {
             QRect bounds = boundingRect(note, &e);
             p->drawRect(bounds);
 
-//              paintNoteBlock(painter, &e);
-        }
+            //Pitch name
+            if (bounds.width() >= 20 && bounds.height() >= 12)
+            {
+                QRectF textRect(bounds.x() + 2, bounds.y(), bounds.width() - 6, bounds.height() + 1);
+                QRectF textHiliteRect(bounds.x() + 3, bounds.y() + 1, bounds.width() - 6, bounds.height());
 
-//        QRect bounds(x0, pitch * m_noteHeight, len, m_noteHeight);
-//        p->drawRect(bounds);
+                QFont f("FreeSans", 8);
+                p->setFont(f);
+
+                //Note name
+                QString name = note->tpcUserName();
+                p->setPen(QPen(noteColor.lighter(130)));
+                p->drawText(textHiliteRect,
+                    Qt::AlignLeft | Qt::AlignTop, name);
+
+                p->setPen(QPen(noteColor.darker(180)));
+                p->drawText(textRect,
+                    Qt::AlignLeft | Qt::AlignTop, name);
+            }
+
+        }
 
     }
 }
