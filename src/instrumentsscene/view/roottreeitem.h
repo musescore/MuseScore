@@ -32,12 +32,11 @@ class RootTreeItem : public AbstractInstrumentsPanelTreeItem
     Q_OBJECT
 
 public:
-    explicit RootTreeItem(notation::IMasterNotationPtr masterNotation, notation::INotationPtr notation, QObject* parent = nullptr);
+    RootTreeItem(notation::IMasterNotationPtr masterNotation, notation::INotationPtr notation, QObject* parent = nullptr);
 
-    void moveChildren(const int sourceRow, const int count, AbstractInstrumentsPanelTreeItem* destinationParent,
-                      const int destinationRow) override;
+    void moveChildren(int sourceRow, int count, AbstractInstrumentsPanelTreeItem* destinationParent, int destinationRow) override;
 
-    void removeChildren(const int row, const int count, const bool deleteChild) override;
+    void removeChildren(int row, int count, bool deleteChild) override;
 };
 }
 

@@ -122,6 +122,50 @@ bool NotationParts::staffExists(const ID& staffId) const
     return staff(staffId) != nullptr;
 }
 
+StaffConfig NotationParts::staffConfig(const ID& staffId) const
+{
+    Staff* staff = this->staffModifiable(staffId);
+    if (!staff) {
+        return StaffConfig();
+    }
+
+    Ms::StaffType* staffType = staff->staffType(DEFAULT_TICK);
+    if (!staffType) {
+        return StaffConfig();
+    }
+
+    StaffConfig config;
+    config.visible = staff->visible();
+    config.userDistance = staff->userDist();
+    config.cutaway = staff->cutaway();
+    config.showIfEmpty = staff->showIfEmpty();
+    config.hideSystemBarline = staff->hideSystemBarLine();
+    config.mergeMatchingRests = staff->mergeMatchingRests();
+    config.hideMode = staff->hideWhenEmpty();
+    config.clefTypeList = staff->defaultClefType();
+
+    config.visibleLines = staffType->invisible();
+    config.isSmall = staffType->isSmall();
+    config.scale = staffType->userMag();
+    config.linesColor = staffType->color();
+    config.linesCount = staffType->lines();
+    config.lineDistance = staffType->lineDistance().val();
+    config.showClef = staffType->genClef();
+    config.showTimeSignature = staffType->genTimesig();
+    config.showKeySignature = staffType->genKeysig();
+    config.showBarlines = staffType->showBarlines();
+    config.showStemless = staffType->stemless();
+    config.showLedgerLinesPitched = staffType->showLedgerLines();
+    config.noteheadScheme = staffType->noteHeadScheme();
+
+    return config;
+}
+
+ScoreOrder NotationParts::scoreOrder() const
+{
+    return score()->scoreOrder();
+}
+
 Part* NotationParts::partModifiable(const ID& partId) const
 {
     return score()->partById(partId.toUint64());
@@ -137,7 +181,7 @@ std::vector<Staff*> NotationParts::staves(const IDList& stavesIds) const
     std::vector<Staff*> staves;
 
     for (const ID& staffId: stavesIds) {
-        Staff* staff = this->staffModifiable(staffId);
+        Staff* staff = staffModifiable(staffId);
 
         if (staff) {
             staves.push_back(staff);
@@ -147,20 +191,32 @@ std::vector<Staff*> NotationParts::staves(const IDList& stavesIds) const
     return staves;
 }
 
-void NotationParts::setParts(const PartInstrumentList& parts)
+std::vector<Part*> NotationParts::parts(const IDList& partsIds) const
+{
+    std::vector<Part*> parts;
+
+    for (const ID& partId: partsIds) {
+        Part* part = partModifiable(partId);
+
+        if (part) {
+            parts.push_back(part);
+        }
+    }
+
+    return parts;
+}
+
+void NotationParts::setParts(const PartInstrumentList& parts, const ScoreOrder& order)
 {
     TRACEFUNC;
 
-    QList<Ms::Staff*> originalStaves = score()->staves();
-
     startEdit();
 
+    doSetScoreOrder(order);
     removeMissingParts(parts);
     appendNewParts(parts);
     updateSoloist(parts);
-
-    sortParts(parts, originalStaves);
-
+    sortParts(parts, score()->staves());
     setBracketsAndBarlines();
 
     apply();
@@ -168,9 +224,18 @@ void NotationParts::setParts(const PartInstrumentList& parts)
     m_partChangedNotifier.changed();
 }
 
-void NotationParts::setScoreOrder(const ScoreOrder&)
+void NotationParts::setScoreOrder(const ScoreOrder& order)
 {
-    NOT_SUPPORTED;
+    if (score()->scoreOrder() == order) {
+        return;
+    }
+
+    startEdit();
+
+    doSetScoreOrder(order);
+    setBracketsAndBarlines();
+
+    apply();
 }
 
 void NotationParts::setPartVisible(const ID& partId, bool visible)
@@ -178,8 +243,11 @@ void NotationParts::setPartVisible(const ID& partId, bool visible)
     TRACEFUNC;
 
     Part* part = partModifiable(partId);
+    if (!part) {
+        return;
+    }
 
-    if (part && part->show() == visible) {
+    if (part->show() == visible) {
         return;
     }
 
@@ -197,7 +265,11 @@ void NotationParts::setPartName(const ID& partId, const QString& name)
     TRACEFUNC;
 
     Part* part = partModifiable(partId);
-    if (!part || part->partName() == name) {
+    if (!part) {
+        return;
+    }
+
+    if (part->partName() == name) {
         return;
     }
 
@@ -251,6 +323,13 @@ void NotationParts::updatePartTitles()
     for (const Part* part: score()->parts()) {
         setPartName(part->id(), formatPartTitle(part));
     }
+}
+
+void NotationParts::doSetScoreOrder(const ScoreOrder& order)
+{
+    score()->undo(new Ms::ChangeScoreOrder(score(), order));
+
+    m_scoreOrderChanged.notify();
 }
 
 void NotationParts::doMoveStaves(const std::vector<Staff*>& staves, int destinationStaffIndex, Part* destinationPart)
@@ -321,7 +400,7 @@ void NotationParts::setVoiceVisible(const ID& staffId, int voiceIndex, bool visi
 {
     TRACEFUNC;
 
-    Staff* staff = this->staffModifiable(staffId);
+    Staff* staff = staffModifiable(staffId);
     if (!staff) {
         return;
     }
@@ -339,17 +418,20 @@ void NotationParts::setStaffVisible(const ID& staffId, bool visible)
 {
     TRACEFUNC;
 
-    const Staff* staff = this->staff(staffId);
+    Staff* staff = staffModifiable(staffId);
+    if (!staff) {
+        return;
+    }
+
     StaffConfig config = staffConfig(staffId);
-    if (!staff || config.visible == visible) {
+    if (config.visible == visible) {
         return;
     }
 
     startEdit();
 
     config.visible = visible;
-
-    doSetStaffConfig(staffId, config);
+    doSetStaffConfig(staff, config);
 
     apply();
 
@@ -376,99 +458,18 @@ void NotationParts::setStaffType(const ID& staffId, StaffType type)
     notifyAboutStaffChanged(staff);
 }
 
-void NotationParts::setCutawayEnabled(const ID& staffId, bool enabled)
-{
-    TRACEFUNC;
-
-    const Staff* staff = this->staff(staffId);
-    StaffConfig config = staffConfig(staffId);
-    if (!staff || config.cutaway == enabled) {
-        return;
-    }
-
-    startEdit();
-
-    config.cutaway = enabled;
-
-    doSetStaffConfig(staffId, config);
-
-    apply();
-
-    notifyAboutStaffChanged(staff);
-}
-
-void NotationParts::setSmallStaff(const ID& staffId, bool smallStaff)
-{
-    TRACEFUNC;
-
-    const Staff* staff = this->staff(staffId);
-    StaffConfig config = staffConfig(staffId);
-    if (!staff || config.isSmall == smallStaff) {
-        return;
-    }
-
-    startEdit();
-
-    config.isSmall = smallStaff;
-
-    doSetStaffConfig(staffId, config);
-
-    apply();
-
-    notifyAboutStaffChanged(staff);
-}
-
-StaffConfig NotationParts::staffConfig(const ID& staffId) const
-{
-    Staff* staff = this->staffModifiable(staffId);
-    if (!staff) {
-        return StaffConfig();
-    }
-
-    Ms::StaffType* staffType = staff->staffType(DEFAULT_TICK);
-    if (!staffType) {
-        return StaffConfig();
-    }
-
-    StaffConfig config;
-    config.visible = staff->visible();
-    config.userDistance = staff->userDist();
-    config.cutaway = staff->cutaway();
-    config.showIfEmpty = staff->showIfEmpty();
-    config.hideSystemBarline = staff->hideSystemBarLine();
-    config.mergeMatchingRests = staff->mergeMatchingRests();
-    config.hideMode = staff->hideWhenEmpty();
-    config.clefTypeList = staff->defaultClefType();
-
-    config.visibleLines = staffType->invisible();
-    config.isSmall = staffType->isSmall();
-    config.scale = staffType->userMag();
-    config.linesColor = staffType->color();
-    config.linesCount = staffType->lines();
-    config.lineDistance = staffType->lineDistance().val();
-    config.showClef = staffType->genClef();
-    config.showTimeSignature = staffType->genTimesig();
-    config.showKeySignature = staffType->genKeysig();
-    config.showBarlines = staffType->showBarlines();
-    config.showStemless = staffType->stemless();
-    config.showLedgerLinesPitched = staffType->showLedgerLines();
-    config.noteheadScheme = staffType->noteHeadScheme();
-
-    return config;
-}
-
 void NotationParts::setStaffConfig(const ID& staffId, const StaffConfig& config)
 {
     TRACEFUNC;
 
-    const Staff* staff = this->staff(staffId);
+    Staff* staff = staffModifiable(staffId);
     if (!staff) {
         return;
     }
 
     startEdit();
 
-    doSetStaffConfig(staffId, config);
+    doSetStaffConfig(staff, config);
 
     apply();
 
@@ -516,9 +517,14 @@ void NotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
 {
     TRACEFUNC;
 
+    Part* destinationPart = partModifiable(destinationPartId);
+    if (!staff || !destinationPart) {
+        return;
+    }
+
     startEdit();
 
-    doAppendStaff(staff, destinationPartId);
+    doAppendStaff(staff, destinationPart);
     updateTracks();
 
     apply();
@@ -530,15 +536,19 @@ void NotationParts::appendLinkedStaff(Staff* staff, const ID& sourceStaffId, con
 {
     TRACEFUNC;
 
-    const Part* destinationPart = part(destinationPartId);
-    if (!destinationPart) {
+    Staff* sourceStaff = staffModifiable(sourceStaffId);
+    Part* destinationPart = partModifiable(destinationPartId);
+    if (!staff || !sourceStaff || !destinationPart) {
         return;
     }
 
     startEdit();
 
-    doAppendStaff(staff, destinationPartId);
-    linkStaves(sourceStaffId, staff->id());
+    doAppendStaff(staff, destinationPart);
+
+    ///! NOTE: need to unlink before linking
+    staff->undoUnlink();
+    Ms::Excerpt::cloneStaff(sourceStaff, staff);
 
     updateTracks();
 
@@ -547,17 +557,17 @@ void NotationParts::appendLinkedStaff(Staff* staff, const ID& sourceStaffId, con
     notifyAboutStaffAdded(staff, destinationPartId);
 }
 
-void NotationParts::appendPart(Part* part)
+void NotationParts::insertPart(Part* part, size_t index)
 {
     TRACEFUNC;
 
-    IF_ASSERT_FAILED(part) {
+    if (!part) {
         return;
     }
 
     startEdit();
 
-    insertPart(part, score()->parts().size());
+    doInsertPart(part, static_cast<int>(index));
 
     apply();
 
@@ -569,7 +579,7 @@ void NotationParts::replacePart(const ID& partId, Part* newPart)
     TRACEFUNC;
 
     Part* part = partModifiable(partId);
-    IF_ASSERT_FAILED(part && newPart) {
+    if (!part || !newPart) {
         return;
     }
 
@@ -577,7 +587,7 @@ void NotationParts::replacePart(const ID& partId, Part* newPart)
 
     int partIndex = score()->parts().indexOf(part);
     score()->cmdRemovePart(part);
-    insertPart(newPart, partIndex);
+    doInsertPart(newPart, partIndex);
 
     apply();
 
@@ -629,6 +639,11 @@ Notification NotationParts::partsChanged() const
     return m_partsChanged;
 }
 
+Notification NotationParts::scoreOrderChanged() const
+{
+    return m_scoreOrderChanged;
+}
+
 Ms::Score* NotationParts::score() const
 {
     return m_getScore->score();
@@ -656,40 +671,46 @@ void NotationParts::removeParts(const IDList& partsIds)
 {
     TRACEFUNC;
 
-    if (partsIds.empty()) {
+    std::vector<Part*> partsToRemove = parts(partsIds);
+    if (partsToRemove.empty()) {
         return;
     }
 
     startEdit();
 
-    doRemoveParts(partsIds);
+    doRemoveParts(partsToRemove);
 
-//  sortParts(parts, score(), originalStaves); // todo: temporary solution, need implement according new spec, see issue #8727
+    PartInstrumentList parts;
+    for (Ms::Part* part: score()->parts()) {
+        PartInstrument pi;
+        pi.isExistingPart = true;
+        pi.partId = part->id();
+        parts << pi;
+    }
+
+    sortParts(parts, score()->staves());
 
     setBracketsAndBarlines();
 
     apply();
     deselectAll();
+
+    for (const Part* part : partsToRemove) {
+        notifyAboutPartRemoved(part);
+    }
 }
 
-void NotationParts::doRemoveParts(const IDList& partsIds)
+void NotationParts::doRemoveParts(const std::vector<Part*>& parts)
 {
     TRACEFUNC;
 
-    for (const ID& partId: partsIds) {
-        Part* part = partModifiable(partId);
-        notifyAboutPartRemoved(part);
+    for (Part* part : parts) {
         score()->cmdRemovePart(part);
     }
 }
 
-void NotationParts::doAppendStaff(Staff* staff, const mu::ID& destinationPartId)
+void NotationParts::doAppendStaff(Staff* staff, Part* destinationPart)
 {
-    Part* destinationPart = partModifiable(destinationPartId);
-    if (!destinationPart) {
-        return;
-    }
-
     int staffIndex = destinationPart->nstaves();
 
     staff->setScore(score());
@@ -702,13 +723,8 @@ void NotationParts::doAppendStaff(Staff* staff, const mu::ID& destinationPartId)
     destinationPart->instrument()->setClefType(staffIndex, staff->defaultClefType());
 }
 
-void NotationParts::doSetStaffConfig(const ID& staffId, const StaffConfig& config)
+void NotationParts::doSetStaffConfig(Staff* staff, const StaffConfig& config)
 {
-    Staff* staff = this->staffModifiable(staffId);
-    if (!staff) {
-        return;
-    }
-
     Ms::StaffType* staffType = staff->staffType(DEFAULT_TICK);
     if (!staffType) {
         return;
@@ -735,18 +751,51 @@ void NotationParts::doSetStaffConfig(const ID& staffId, const StaffConfig& confi
     score()->undo(new Ms::ChangeStaffType(staff, newStaffType));
 }
 
+void NotationParts::doInsertPart(Part* part, int index)
+{
+    TRACEFUNC;
+
+    QList<Staff*> stavesCopy = *part->staves();
+    part->clearStaves();
+
+    score()->insertPart(part, index);
+
+    if (score()->excerpt()) {
+        score()->excerpt()->parts().insert(index, part);
+    }
+
+    for (int staffIndex = 0; staffIndex < stavesCopy.size(); ++staffIndex) {
+        Staff* staff = stavesCopy[staffIndex];
+
+        Staff* staffCopy = new Staff(score());
+        staffCopy->setId(staff->id());
+        staffCopy->setPart(part);
+        staffCopy->init(staff);
+
+        insertStaff(staffCopy, staffIndex);
+        score()->undo(new Ms::Link(staffCopy, staff));
+
+        Ms::Fraction startTick = staff->score()->firstMeasure()->tick();
+        Ms::Fraction endTick = staff->score()->lastMeasure()->tick();
+        Ms::Excerpt::cloneStaff2(staff, staffCopy, startTick, endTick);
+    }
+
+    part->setScore(score());
+    updateTracks();
+}
+
 void NotationParts::removeStaves(const IDList& stavesIds)
 {
     TRACEFUNC;
 
-    if (stavesIds.empty()) {
+    std::vector<Staff*> stavesToRemove = staves(stavesIds);
+    if (stavesToRemove.empty()) {
         return;
     }
 
     startEdit();
 
-    for (Staff* staff: staves(stavesIds)) {
-        notifyAboutStaffRemoved(staff);
+    for (Staff* staff: stavesToRemove) {
         score()->cmdRemoveStaff(staff->idx());
     }
 
@@ -754,30 +803,42 @@ void NotationParts::removeStaves(const IDList& stavesIds)
 
     apply();
     deselectAll();
+
+    for (const Staff* staff : stavesToRemove) {
+        notifyAboutStaffRemoved(staff);
+    }
 }
 
 void NotationParts::moveParts(const IDList& sourcePartsIds, const ID& destinationPartId, InsertMode mode)
 {
-    TRACEFUNC;
-
-    QList<ID> partIds;
-
-    for (Ms::Part* currentPart: score()->parts()) {
-        partIds.push_back(currentPart->id());
+    std::vector<Part*> sourceParts = parts(sourcePartsIds);
+    if (sourceParts.empty()) {
+        return;
     }
 
-    for (const ID& sourcePartId: sourcePartsIds) {
-        int srcIndex = partIds.indexOf(sourcePartId);
-        int dstIndex = partIds.indexOf(destinationPartId);
+    QList<ID> allScorePartIds;
+    for (Ms::Part* currentPart: score()->parts()) {
+        allScorePartIds.push_back(currentPart->id());
+    }
+
+    if (!allScorePartIds.contains(destinationPartId)) {
+        return;
+    }
+
+    TRACEFUNC;
+
+    for (const Part* sourcePart: sourceParts) {
+        int srcIndex = allScorePartIds.indexOf(sourcePart->id());
+        int dstIndex = allScorePartIds.indexOf(destinationPartId);
         dstIndex += (mode == InsertMode::Before) && (srcIndex < dstIndex) ? -1 : 0;
 
-        if (dstIndex >= 0 && dstIndex < partIds.size()) {
-            partIds.move(srcIndex, dstIndex);
+        if (dstIndex >= 0 && dstIndex < allScorePartIds.size()) {
+            allScorePartIds.move(srcIndex, dstIndex);
         }
     }
 
     PartInstrumentList parts;
-    for (const ID& partId: partIds) {
+    for (const ID& partId: allScorePartIds) {
         PartInstrument pi;
         pi.isExistingPart = true;
         pi.partId = partId;
@@ -785,6 +846,10 @@ void NotationParts::moveParts(const IDList& sourcePartsIds, const ID& destinatio
     }
 
     startEdit();
+
+    if (scoreOrder() != customOrder()) {
+        doSetScoreOrder(customOrder());
+    }
 
     sortParts(parts, score()->staves());
 
@@ -859,39 +924,6 @@ void NotationParts::insertStaff(Staff* staff, int destinationStaffIndex)
     score()->undoInsertStaff(staff, destinationStaffIndex);
 }
 
-void NotationParts::insertPart(Part* part, int destinationPartIndex)
-{
-    TRACEFUNC;
-
-    QList<Staff*> stavesCopy = *part->staves();
-    part->clearStaves();
-
-    score()->insertPart(part, destinationPartIndex);
-
-    if (score()->excerpt()) {
-        score()->excerpt()->parts().insert(destinationPartIndex, part);
-    }
-
-    for (int staffIndex = 0; staffIndex < stavesCopy.size(); ++staffIndex) {
-        Staff* staff = stavesCopy[staffIndex];
-
-        Staff* staffCopy = new Staff(score());
-        staffCopy->setId(staff->id());
-        staffCopy->setPart(part);
-        staffCopy->init(staff);
-
-        insertStaff(staffCopy, staffIndex);
-        score()->undo(new Ms::Link(staffCopy, staff));
-
-        Ms::Fraction startTick = staff->score()->firstMeasure()->tick();
-        Ms::Fraction endTick = staff->score()->lastMeasure()->tick();
-        Ms::Excerpt::cloneStaff2(staff, staffCopy, startTick, endTick);
-    }
-
-    part->setScore(score());
-    updateTracks();
-}
-
 void NotationParts::initStaff(Staff* staff, const InstrumentTemplate& templ, const Ms::StaffType* staffType, int cleffIndex)
 {
     TRACEFUNC;
@@ -913,44 +945,19 @@ void NotationParts::initStaff(Staff* staff, const InstrumentTemplate& templ, con
     staff->setDefaultClefType(templ.clefType(cleffIndex));
 }
 
-void NotationParts::linkStaves(const ID& sourceStaffId, const ID& destinationStaffId)
-{
-    TRACEFUNC;
-
-    Staff* sourceStaff = staffModifiable(sourceStaffId);
-    Staff* destinationStaff = staffModifiable(destinationStaffId);
-
-    if (!sourceStaff || !destinationStaff) {
-        return;
-    }
-
-    ///! NOTE: need to unlink before linking
-    destinationStaff->undoUnlink();
-
-    Ms::Excerpt::cloneStaff(sourceStaff, destinationStaff);
-}
-
 void NotationParts::removeMissingParts(const PartInstrumentList& parts)
 {
     TRACEFUNC;
 
     IDList partsToRemove;
 
-    IDList partIds;
     for (const PartInstrument& pi: parts) {
-        if (pi.isExistingPart) {
-            partIds.push_back(pi.partId);
+        if (!pi.isExistingPart) {
+            partsToRemove.push_back(pi.partId);
         }
     }
 
-    for (const Part* part: partList()) {
-        if (containsId(partIds, part->id())) {
-            continue;
-        }
-        partsToRemove.push_back(part->id());
-    }
-
-    doRemoveParts(partsToRemove);
+    doRemoveParts(this->parts(partsToRemove));
 }
 
 void NotationParts::appendNewParts(const PartInstrumentList& parts)

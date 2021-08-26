@@ -3,8 +3,7 @@
 
 #include "internal/abstractinvoker.h"
 
-namespace deto {
-namespace async {
+namespace deto::async {
 template<typename T>
 class ChangedNotifier;
 
@@ -221,10 +220,13 @@ class ChangedNotifier
 {
 public:
     ChangedNotifier()
-        : m_notify(new ChangedNotify<T>()) {}
+        : m_notify(std::make_shared<ChangedNotify<T>>()) {}
     ~ChangedNotifier() {}
 
-    ChangedNotify<T>* notify() const { return m_notify; }
+    std::shared_ptr<ChangedNotify<T>> notify() const
+    {
+        return m_notify;
+    }
 
     void changed()
     {
@@ -245,8 +247,6 @@ public:
         d.setArg<T>(0, item);
 
         m_notify->ptr()->invoke(ChangedNotify<T>::ItemAdded, d);
-
-        changed();
     }
 
     void itemRemoved(const T& item)
@@ -255,8 +255,6 @@ public:
         d.setArg<T>(0, item);
 
         m_notify->ptr()->invoke(ChangedNotify<T>::ItemRemoved, d);
-
-        changed();
     }
 
     void itemReplaced(const T& oldItem, const T& newItem)
@@ -266,13 +264,11 @@ public:
         d.setArg<T>(1, newItem);
 
         m_notify->ptr()->invoke(ChangedNotify<T>::ItemReplaced, d);
-
-        changed();
     }
 
 private:
-    ChangedNotify<T>* m_notify;
+    std::shared_ptr<ChangedNotify<T>> m_notify;
 };
 }
-}
+
 #endif // DETO_ASYNC_CHANGEDNOTIFIER_H

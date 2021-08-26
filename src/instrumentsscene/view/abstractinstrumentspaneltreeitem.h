@@ -39,45 +39,44 @@ class AbstractInstrumentsPanelTreeItem : public QObject
     Q_PROPERTY(QString id READ idStr CONSTANT)
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
     Q_PROPERTY(int type READ type NOTIFY typeChanged)
-    Q_PROPERTY(bool canChangeVisibility READ canChangeVisibility NOTIFY canChangeVisibilityChanged)
     Q_PROPERTY(bool isVisible READ isVisible WRITE setIsVisible NOTIFY isVisibleChanged)
-    Q_PROPERTY(bool isSelectable READ isSelectable NOTIFY isSelectableChanged)
+    Q_PROPERTY(bool isExpandable READ isExpandable NOTIFY isExpandableChanged)
+    Q_PROPERTY(bool isEditable READ isEditable NOTIFY isEditableChanged)
+    Q_PROPERTY(bool isRemovable READ isRemovable NOTIFY isRemovableChanged)
+    Q_PROPERTY(bool isSelectable READ isSelectable CONSTANT)
 
 public:
-    explicit AbstractInstrumentsPanelTreeItem(const InstrumentsTreeItemType::ItemType& type, notation::IMasterNotationPtr masterNotation,
-                                              notation::INotationPtr notation, QObject* parent = nullptr);
+    AbstractInstrumentsPanelTreeItem(const InstrumentsTreeItemType::ItemType& type, notation::IMasterNotationPtr masterNotation,
+                                     notation::INotationPtr notation, QObject* parent);
     virtual ~AbstractInstrumentsPanelTreeItem();
-
-    Q_INVOKABLE virtual bool canAcceptDrop(const int type) const;
-    Q_INVOKABLE virtual void appendNewItem();
 
     ID id() const;
     QString idStr() const;
     QString title() const;
     int type() const;
     bool isVisible() const;
-    bool isSelectable() const;
+    bool isExpandable() const;
+    bool isEditable() const;
+    bool isRemovable() const;
 
-    bool canChangeVisibility() const;
-    void setCanChangeVisibility(bool value);
+    virtual bool isSelectable() const;
+
+    Q_INVOKABLE virtual bool canAcceptDrop(int type) const;
+    Q_INVOKABLE virtual void appendNewItem();
+
+    virtual void moveChildren(int sourceRow, int count, AbstractInstrumentsPanelTreeItem* destinationParent, int destinationRow);
+    virtual void removeChildren(int row, int count = 1, bool deleteChild = false);
 
     AbstractInstrumentsPanelTreeItem* parentItem() const;
     void setParentItem(AbstractInstrumentsPanelTreeItem* parent);
 
-    bool isEmpty() const;
-
     AbstractInstrumentsPanelTreeItem* childAtId(const ID& id) const;
-    AbstractInstrumentsPanelTreeItem* childAtRow(const int row) const;
-    int indexOf(const AbstractInstrumentsPanelTreeItem* item) const;
+    AbstractInstrumentsPanelTreeItem* childAtRow(int row) const;
 
     void appendChild(AbstractInstrumentsPanelTreeItem* child);
-    void insertChild(AbstractInstrumentsPanelTreeItem* child, const int beforeRow);
-    void replaceChild(AbstractInstrumentsPanelTreeItem* child, const int row);
+    void insertChild(AbstractInstrumentsPanelTreeItem* child, int beforeRow);
 
-    virtual void moveChildren(const int sourceRow, const int count, AbstractInstrumentsPanelTreeItem* destinationParent,
-                              const int destinationRow);
-    virtual void removeChildren(const int row, const int count = 1, const bool deleteChild = false);
-
+    bool isEmpty() const;
     int childCount() const;
     int row() const;
 
@@ -86,19 +85,25 @@ public slots:
     void setTitle(QString title);
     void setIsVisible(bool isVisible);
     void setId(const ID& id);
+    void setIsExpandable(bool expandable);
+    void setIsEditable(bool editable);
+    void setIsRemovable(bool removable);
 
 signals:
     void typeChanged(InstrumentsTreeItemType::ItemType type);
     void titleChanged(QString title);
-    void canChangeVisibilityChanged(bool canChange);
     void isVisibleChanged(bool isVisible);
-    void isSelectableChanged(bool isSelectable);
+    void isExpandableChanged(bool isExpandable);
+    void isEditableChanged(bool isEditable);
+    void isRemovableChanged(bool isRemovable);
 
 protected:
     notation::IMasterNotationPtr masterNotation() const;
     notation::INotationPtr notation() const;
 
 private:
+    int indexOf(const AbstractInstrumentsPanelTreeItem* item) const;
+
     QList<AbstractInstrumentsPanelTreeItem*> m_children;
     AbstractInstrumentsPanelTreeItem* m_parent = nullptr;
 
@@ -106,7 +111,9 @@ private:
     QString m_title;
     InstrumentsTreeItemType::ItemType m_type = InstrumentsTreeItemType::ItemType::UNDEFINED;
     bool m_isVisible = false;
-    bool m_canChangeVisibility = false;
+    bool m_isExpandable = false;
+    bool m_isEditable = false;
+    bool m_isRemovable = false;
 
     notation::IMasterNotationPtr m_masterNotation = nullptr;
     notation::INotationPtr m_notation = nullptr;

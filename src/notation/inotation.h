@@ -49,8 +49,6 @@ public:
 
     virtual QString title() const = 0;
 
-    virtual ScoreOrder scoreOrder() const = 0;
-
     virtual void setViewSize(const QSizeF& vs) = 0;
     virtual void setViewMode(const ViewMode& vm) = 0;
     virtual ViewMode viewMode() const = 0;

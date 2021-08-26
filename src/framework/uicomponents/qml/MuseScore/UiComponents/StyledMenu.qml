@@ -34,7 +34,7 @@ StyledPopupView {
 
     property int preferredAlign: Qt.AlignRight // Left, HCenter, Right
 
-    signal handleMenuItem(string itemId)
+    signal handleMenuItem(var item)
 
     x: {
         switch(preferredAlign) {
@@ -163,7 +163,7 @@ StyledPopupView {
         readonly property int separatorHeight: 1
         readonly property int viewVerticalMargin: 4
 
-        readonly property int iconAndCheckMarkMode: {
+        property int iconAndCheckMarkMode: {
             if (prv.hasItemsWithIconAndCheckable) {
                 return StyledMenuItem.ShowBoth
             } else if (prv.hasItemsWithIconOrCheckable) {
@@ -231,7 +231,7 @@ StyledPopupView {
                         // NOTE: reset view state
                         view.update()
 
-                        root.handleMenuItem(itemId)
+                        root.handleMenuItem(item)
                     }
 
                     onRequestParentItemActive: {

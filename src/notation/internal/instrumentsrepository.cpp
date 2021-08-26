@@ -41,21 +41,33 @@ void InstrumentsRepository::init()
     load();
 }
 
-mu::RetValCh<InstrumentsMeta> InstrumentsRepository::instrumentsMeta()
+const InstrumentTemplateList& InstrumentsRepository::instrumentTemplates() const
 {
-    RetValCh<InstrumentsMeta> result;
-    result.ret = make_ret(Ret::Code::Ok);
-    result.val = m_instrumentsMeta;
-    result.ch = m_instrumentsMetaChannel;
+    return m_instrumentTemplates;
+}
 
-    return result;
+const InstrumentGenreList& InstrumentsRepository::genres() const
+{
+    return m_genres;
+}
+
+const InstrumentGroupList& InstrumentsRepository::groups() const
+{
+    return m_groups;
+}
+
+const ScoreOrderList& InstrumentsRepository::orders() const
+{
+    return Ms::instrumentOrders;
 }
 
 void InstrumentsRepository::load()
 {
     TRACEFUNC;
 
-    m_instrumentsMeta.clear();
+    m_instrumentTemplates.clear();
+    m_genres.clear();
+    m_groups.clear();
     Ms::clearInstrumentTemplates();
 
     for (const io::path& filePath: configuration()->instrumentListPaths()) {
@@ -64,22 +76,12 @@ void InstrumentsRepository::load()
         }
     }
 
-    fillInstrumentsMeta(m_instrumentsMeta);
-    m_instrumentsMetaChannel.send(m_instrumentsMeta);
-}
-
-void InstrumentsRepository::fillInstrumentsMeta(InstrumentsMeta& meta)
-{
-    TRACEFUNC;
-
-    meta.articulations = Ms::articulation;
-
     for (const InstrumentGenre* genre : Ms::instrumentGenres) {
-        meta.genres << genre;
+        m_genres << genre;
     }
 
     for (const InstrumentGroup* group : Ms::instrumentGroups) {
-        meta.groups << group;
+        m_groups << group;
 
         for (InstrumentTemplate* templ : group->instrumentTemplates) {
             if (templ->trackName.isEmpty() || templ->longNames.isEmpty()) {
@@ -87,11 +89,7 @@ void InstrumentsRepository::fillInstrumentsMeta(InstrumentsMeta& meta)
             }
 
             templ->groupId = group->id;
-            meta.instrumentTemplates << templ;
+            m_instrumentTemplates << templ;
         }
-    }
-
-    for (const ScoreOrder* order : Ms::instrumentOrders) {
-        meta.scoreOrders << order;
     }
 }

@@ -127,7 +127,7 @@ Rectangle {
 
                             StyledMenuLoader {
                                 id: menuLoader
-                                onHandleMenuItem: playbackModel.handleMenuItem(itemId)
+                                onHandleMenuItem: playbackModel.handleMenuItem(item.id)
                             }
                         }
                     }

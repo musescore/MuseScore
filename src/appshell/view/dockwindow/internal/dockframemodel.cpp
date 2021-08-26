@@ -35,25 +35,6 @@
 using namespace mu::dock;
 using namespace mu::actions;
 
-static QVariantMap findMenuItem(const QVariantList& menuItems, const QString& itemId)
-{
-    for (const QVariant& obj : menuItems) {
-        QVariantMap item = obj.toMap();
-
-        if (item["id"].toString() == itemId) {
-            return item;
-        }
-
-        item = findMenuItem(item["subitems"].toList(), itemId);
-
-        if (!item.isEmpty()) {
-            return item;
-        }
-    }
-
-    return QVariantMap();
-}
-
 DockFrameModel::DockFrameModel(QObject* parent)
     : QObject(parent)
 {
@@ -222,11 +203,11 @@ QVariant DockFrameModel::currentDockProperty(const char* propertyName) const
     return obj ? obj->property(propertyName) : QVariant();
 }
 
-void DockFrameModel::handleMenuItem(const QString& itemId)
+void DockFrameModel::handleMenuItem(const QVariant& item)
 {
-    QVariantList menuItems = currentDockContextMenuModel().toList();
-    QVariantMap item = findMenuItem(menuItems, itemId);
-    ActionCode code = codeFromQString(item["code"].toString());
+    ActionCode code = codeFromQString(item.toMap()["code"].toString());
 
-    dispatcher()->dispatch(code);
+    if (!code.empty()) {
+        dispatcher()->dispatch(code);
+    }
 }

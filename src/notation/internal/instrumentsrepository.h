@@ -38,15 +38,18 @@ class InstrumentsRepository : public IInstrumentsRepository, public async::Async
 public:
     void init();
 
-    RetValCh<InstrumentsMeta> instrumentsMeta() override;
+    const InstrumentTemplateList& instrumentTemplates() const override;
+    const InstrumentGenreList& genres() const override;
+    const InstrumentGroupList& groups() const override;
+    const ScoreOrderList& orders() const override;
 
 private:
     void load();
     void clear();
-    void fillInstrumentsMeta(InstrumentsMeta& meta);
 
-    InstrumentsMeta m_instrumentsMeta;
-    async::Channel<InstrumentsMeta> m_instrumentsMetaChannel;
+    InstrumentTemplateList m_instrumentTemplates;
+    InstrumentGroupList m_groups;
+    InstrumentGenreList m_genres;
 };
 }
 

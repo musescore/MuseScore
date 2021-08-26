@@ -48,7 +48,7 @@ public:
     bool isSmallStaff() const;
     bool cutawayEnabled() const;
 
-    Q_INVOKABLE void load(const QVariant& staff);
+    Q_INVOKABLE void load(const QString& staffId);
 
     Q_INVOKABLE QVariantList allStaffTypes() const;
     Q_INVOKABLE void createLinkedStaff();
@@ -69,10 +69,9 @@ private:
     notation::INotationPartsPtr masterNotationParts() const;
 
     ID m_staffId;
-    bool m_isSmallStaff = false;
-    bool m_cutawayEnabled = false;
     QList<bool> m_voicesVisibility;
     notation::StaffType m_type = notation::StaffType::STANDARD;
+    notation::StaffConfig m_config;
 };
 }
 

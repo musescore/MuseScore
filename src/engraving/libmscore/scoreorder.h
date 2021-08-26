@@ -66,6 +66,9 @@ struct ScoreOrder
 
     ScoreOrder() = default;
 
+    bool operator==(const ScoreOrder& order) const;
+    bool operator!=(const ScoreOrder& order) const;
+
     bool readBoolAttribute(Ms::XmlReader& reader, const char* name, bool defValue);
     void readInstrument(Ms::XmlReader& reader);
     void readSoloists(Ms::XmlReader& reader, const QString section);

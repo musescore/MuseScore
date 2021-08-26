@@ -312,8 +312,9 @@ Rectangle {
 
                 StyledMenuLoader {
                     id: menuLoader
+
                     onHandleMenuItem: {
-                        console.log("selected " + itemId)
+                        console.log("selected " + item.id)
                     }
                 }
             }

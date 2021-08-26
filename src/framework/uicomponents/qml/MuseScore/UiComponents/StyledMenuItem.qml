@@ -42,7 +42,7 @@ ListItemBlank {
 
     property int padding: 0
 
-    signal handleMenuItem(string itemId)
+    signal handleMenuItem(var item)
 
     signal subMenuShowed()
     signal subMenuClosed()
@@ -102,7 +102,7 @@ ListItemBlank {
         property bool isSelectable: Boolean(modelData) && Boolean(modelData.selectable)
         property bool isSelected: isSelectable && Boolean(modelData.selected)
 
-        property bool hasIcon: Boolean(modelData) && Boolean(modelData.icon)
+        property bool hasIcon: Boolean(modelData) && Boolean(modelData.icon) && modelData.icon !== IconCode.NONE
 
         function showSubMenu() {
             if (prv.showedSubMenu) {
@@ -119,8 +119,8 @@ ListItemBlank {
 
             menu.model = modelData.subitems
 
-            menu.handleMenuItem.connect(function(itemId) {
-                Qt.callLater(root.handleMenuItem, itemId)
+            menu.handleMenuItem.connect(function(item) {
+                Qt.callLater(root.handleMenuItem, item)
                 menu.close()
             })
 
@@ -279,6 +279,6 @@ ListItemBlank {
             return
         }
 
-        root.handleMenuItem(modelData.id)
+        root.handleMenuItem(modelData)
     }
 }

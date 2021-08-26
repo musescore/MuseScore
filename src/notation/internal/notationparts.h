@@ -43,7 +43,10 @@ public:
     const Staff* staff(const ID& staffId) const override;
     bool staffExists(const ID& staffId) const override;
 
-    void setParts(const PartInstrumentList& parts) override;
+    StaffConfig staffConfig(const ID& staffId) const override;
+    ScoreOrder scoreOrder() const override;
+
+    void setParts(const PartInstrumentList& parts, const ScoreOrder& order) override;
     void setScoreOrder(const ScoreOrder& order) override;
     void setPartVisible(const ID& partId, bool visible) override;
     void setVoiceVisible(const ID& staffId, int voiceIndex, bool visible) override;
@@ -54,10 +57,6 @@ public:
     void setInstrumentName(const InstrumentKey& instrumentKey, const QString& name) override;
     void setInstrumentAbbreviature(const InstrumentKey& instrumentKey, const QString& abbreviature) override;
     void setStaffType(const ID& staffId, StaffType type) override;
-    void setCutawayEnabled(const ID& staffId, bool enabled) override;
-    void setSmallStaff(const ID& staffId, bool smallStaff) override;
-
-    StaffConfig staffConfig(const ID& staffId) const override;
     void setStaffConfig(const ID& staffId, const StaffConfig& config) override;
 
     void removeParts(const IDList& partsIds) override;
@@ -68,13 +67,15 @@ public:
 
     void appendStaff(Staff* staff, const ID& destinationPartId) override;
     void appendLinkedStaff(Staff* staff, const ID& sourceStaffId, const ID& destinationPartId) override;
-    void appendPart(Part* part) override;
+
+    void insertPart(Part* part, size_t index) override;
 
     void replacePart(const ID& partId, Part* newPart) override;
     void replaceInstrument(const InstrumentKey& instrumentKey, const Instrument& newInstrument) override;
     void replaceDrumset(const InstrumentKey& instrumentKey, const Drumset& newDrumset) override;
 
     async::Notification partsChanged() const override;
+    async::Notification scoreOrderChanged() const override;
 
 protected:
     Ms::Score* score() const;
@@ -86,21 +87,23 @@ protected:
 private:
     void updatePartTitles();
 
+    void doSetScoreOrder(const ScoreOrder& order);
     void doMoveStaves(const std::vector<Staff*>& staves, int destinationStaffIndex, Part* destinationPart = nullptr);
     void doSetStaffVoiceVisible(Staff* staff, int voiceIndex, bool visible);
-    void doRemoveParts(const IDList& partsIds);
-    void doAppendStaff(Staff* staff, const ID& destinationPartId);
-    void doSetStaffConfig(const ID& staffId, const StaffConfig& config);
+    void doRemoveParts(const std::vector<Part*>& parts);
+    void doAppendStaff(Staff* staff, Part* destinationPart);
+    void doSetStaffConfig(Staff* staff, const StaffConfig& config);
+    void doInsertPart(Part* part, int index);
 
     Part* partModifiable(const ID& partId) const;
     Staff* staffModifiable(const ID& staffId) const;
+
     std::vector<Staff*> staves(const IDList& stavesIds) const;
+    std::vector<Part*> parts(const IDList& partsIds) const;
 
     void appendStaves(Part* part, const InstrumentTemplate& templ);
     void insertStaff(Staff* staff, int destinationStaffIndex);
-    void insertPart(Part* part, int destinationPartIndex);
     void initStaff(Staff* staff, const InstrumentTemplate& templ, const Ms::StaffType* staffType, int cleffIndex);
-    void linkStaves(const ID& sourceStaffId, const ID& destinationStaffId);
 
     void removeMissingParts(const PartInstrumentList& parts);
     void appendNewParts(const PartInstrumentList& parts);
@@ -127,6 +130,7 @@ private:
     INotationUndoStackPtr m_undoStack;
     INotationInteractionPtr m_interaction;
     async::Notification m_partsChanged;
+    async::Notification m_scoreOrderChanged;
 
     mutable async::ChangedNotifier<const Part*> m_partChangedNotifier;
     mutable std::map<ID, async::ChangedNotifier<const Staff*> > m_staffChangedNotifierMap;

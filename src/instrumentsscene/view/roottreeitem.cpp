@@ -29,8 +29,8 @@ RootTreeItem::RootTreeItem(IMasterNotationPtr masterNotation, INotationPtr notat
 {
 }
 
-void RootTreeItem::moveChildren(const int sourceRow, const int count, AbstractInstrumentsPanelTreeItem* destinationParent,
-                                const int destinationRow)
+void RootTreeItem::moveChildren(int sourceRow, int count, AbstractInstrumentsPanelTreeItem* destinationParent,
+                                int destinationRow)
 {
     IDList partIds;
 
@@ -56,7 +56,7 @@ void RootTreeItem::moveChildren(const int sourceRow, const int count, AbstractIn
     AbstractInstrumentsPanelTreeItem::moveChildren(sourceRow, count, destinationParent, destinationRow);
 }
 
-void RootTreeItem::removeChildren(const int row, const int count, const bool deleteChild)
+void RootTreeItem::removeChildren(int row, int count, bool deleteChild)
 {
     IDList partIds;
 

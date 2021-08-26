@@ -48,7 +48,6 @@ private:
     void loadItems();
 
     notation::IMasterNotationPtr m_masterNotation;
-    notation::ScoreOrderList m_orders;
 };
 }
 

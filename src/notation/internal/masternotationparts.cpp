@@ -40,11 +40,6 @@ void MasterNotationParts::setExcerpts(ExcerptNotationList excerpts)
     m_excerpts = excerpts;
 }
 
-Ms::MasterScore* MasterNotationParts::masterScore() const
-{
-    return dynamic_cast<Ms::MasterScore*>(score());
-}
-
 void MasterNotationParts::startGlobalEdit()
 {
     NotationParts::startEdit();
@@ -55,25 +50,6 @@ void MasterNotationParts::endGlobalEdit()
 {
     undoStack()->unlock();
     NotationParts::apply();
-}
-
-void MasterNotationParts::setParts(const PartInstrumentList& instruments)
-{
-    startEdit();
-    NotationParts::setParts(instruments);
-    apply();
-}
-
-void MasterNotationParts::setScoreOrder(const ScoreOrder& order)
-{
-    TRACEFUNC;
-
-    startEdit();
-
-    masterScore()->undo(new Ms::ChangeScoreOrder(masterScore(), order));
-    masterScore()->setBracketsAndBarlines();
-
-    apply();
 }
 
 void MasterNotationParts::removeParts(const IDList& partsIds)
