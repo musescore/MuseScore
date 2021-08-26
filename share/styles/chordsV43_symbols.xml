@@ -36,8 +36,8 @@
 <museScore version="1.24" type="chordStyle" styleName="Symbols" usePresets="true" description="This is Standard">
 
   <modifier m = "bassNote">
-    <sym>/</sym>
     <sym>/lowered</sym>
+    <sym>/center</sym>
   </modifier>
 
   <quality q = "major7th">
@@ -584,18 +584,18 @@
   </token>
 
   <token>
-    <name>/</name>
-    <render>m:-0.2:1 / m:0.2:1</render>
+    <name>/center</name>
+    <render>m:-0.2:0 / m:0.2:0</render>
   </token>
 
   <token>
     <name>/lowered</name>
-    <render>m:0:3 / m:0:6</render>
+    <render>m:-1.5:3 / m:-0.5:3</render>
   </token>
 
   <renderRoot>:n :a m:0.5:0</renderRoot>
   <renderFunction>:a m:0.5:0 :n</renderFunction>
-  <renderBase>m:-0.2:1 / m:0.2:1 :n :a m:0:-2</renderBase>
+  <renderBase>m:-0.2:0 / m:0.2:0 :n :a m:0:-2</renderBase>
 
 <!--
       Part III: chord list

@@ -639,13 +639,13 @@
     </token>
 
   <token>
-    <name>/</name>
-    <render>m:0:2 s/ m:0:-2</render>
+    <name>/center</name>
+    <render>m:-0.2:0 / m:0.2:0</render>
     </token>
 
   <token>
     <name>/lowered</name>
-    <render>m:0:3 s/ m:0:6</render>
+    <render>m:-1.5:3 / m:-0.5:3</render>
     </token>
 
   <renderRoot>:n :a </renderRoot>
