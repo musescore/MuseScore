@@ -1541,9 +1541,12 @@ void ParsedChord::addParentheses(const ChordList* cl)
     // The parentheses are not added in as separate tokens themselves
     // They are associated to the tokens already present in _tokenList
     QStringList allModifiers = { "b", "bb", "#", "##", "natural", "sus", "alt", "alt#", "altb", "omit", "no", "add", "maj", "/" };
-    QStringList nonAlterationModifiers = { "sus", "alt", "alt#", "altb", "omit", "no", "add", "maj", "/" };
+    QStringList nonAlterationModifiers
+        = { "sus", "alt", "alt#", "altb", "omit", "no", "add", "maj", "Maj", "ma", "Ma", "M", "triangle", "^", "t", "/" };
+    QStringList majSymbols = { "maj", "Maj", "ma", "Ma", "M", "triangle", "^", "t" };
     QStringList alterations = { "b", "bb", "#", "##", "natural" };
     QStringList addOmitSymbols = { "omit", "no", "add" };
+
     for (int index = 0; index < _tokenList.size(); index++) {
         const ChordToken& tok = _tokenList.at(index);
         if (tok.tokenClass == ChordTokenClass::MODIFIER) {
@@ -1560,7 +1563,7 @@ void ParsedChord::addParentheses(const ChordList* cl)
                 }
                 index--;
                 closeParenthesesIndices.push_back(index);
-            } else if (_quality == "minor" && tok.names.first() == "maj" && cl->minMajParentheses) {
+            } else if (_quality == "minor" && majSymbols.contains(tok.names.first()) && cl->minMajParentheses) {
                 openParenthesesIndices.push_back(index);
                 bool foundNextModifier = false;
                 while (!foundNextModifier) {
@@ -1625,7 +1628,9 @@ void ParsedChord::addParentheses(const ChordList* cl)
 //---------------------------------------------------------
 void ParsedChord::sortModifiers()
 {
-    QStringList allModifiers = { "b", "bb", "#", "##", "natural", "sus", "alt", "alt#", "altb", "omit", "no", "add", "maj", "/" };
+    QStringList allModifiers
+        = { "b", "bb", "#", "##", "natural", "sus", "alt", "alt#", "altb", "omit", "no", "add", "maj", "Maj", "ma", "Ma", "M", "triangle",
+            "^", "t", "/" };
 
     QList<ChordToken> alterations;
     QStringList alterationsList = { "b", "bb", "#", "##", "natural" };
@@ -1633,6 +1638,7 @@ void ParsedChord::sortModifiers()
     QList<ChordToken> suspension;
 
     QList<ChordToken> maj;
+    QStringList majList  = { "maj", "Maj", "ma", "Ma", "M", "triangle", "^", "t" };
 
     QList<ChordToken> addOmit;
     QStringList addOmitList = { "omit", "no", "add" };
@@ -1661,7 +1667,7 @@ void ParsedChord::sortModifiers()
                     }
                 }
                 index--;
-            } else if (tok.names.first() == "maj") {
+            } else if (majList.contains(tok.names.first())) {
                 bool foundNextModifier = false;
                 while (!foundNextModifier) {
                     maj.push_back(tok);
@@ -1821,7 +1827,7 @@ void ChordList::respellRenderListBase()
 
 void ParsedChord::respellQualitySymbols(const ChordList* cl)
 {
-//   Note: This function is build under the assumption that
+//   Note: This function is built under the assumption that
 //   1. half diminished can have only 7 and b5
 //   2. diminished can have only b5
 //   3. augmented can have only 5 or #5
@@ -1830,12 +1836,7 @@ void ParsedChord::respellQualitySymbols(const ChordList* cl)
     // Major seventh chords
     bool isMajorSeventh = false;
     bool hasSeven = true;
-    if (_quality == "major" && (_extension.contains("7") || _modifierList.contains("7"))) {
-        if (_modifierList.contains("7")) {
-            // moving extension 7 to the correct place
-            _extension += "7";
-            _modifierList.removeAll("7");
-        }
+    if (_quality == "major" && _extension != "") {
         isMajorSeventh = true;
     }
 
@@ -2035,6 +2036,17 @@ void ParsedChord::respellQualitySymbols(const ChordList* cl)
                     // decide whether or not to skip the  b5.
                     hasFlatFive = diminishedTokens.contains("b5");
                 }
+
+                if (hasFlatFive) {
+                    QString sym = cl->qualitySymbols.value("minor");
+                    if (sym != "-1") {
+                        ChordToken qualTok;
+                        qualTok.names += sym;
+                        qualTok.tokenClass = ChordTokenClass::QUALITY;
+                        _tokenList.removeAt(index);
+                        _tokenList.insert(index, qualTok);
+                    }
+                }
             } else if (_quality == "diminished") {
                 // This part of code is encountered when the input is dim or o.
                 QStringList diminishedTokens = cl->qualitySymbols.value("diminished").split(" ");
@@ -2057,6 +2069,16 @@ void ParsedChord::respellQualitySymbols(const ChordList* cl)
                         fiveToken.names += "5";
                         fiveToken.tokenClass = ChordTokenClass::MODIFIER;
                         _tokenList.insert(index + 2, fiveToken);
+
+                        // If of form <minor>b5, switch the minor symbol to match the quality minor
+                        QString sym = cl->qualitySymbols.value("minor");
+                        if (sym != "-1") {
+                            ChordToken qualTok;
+                            qualTok.names += sym;
+                            qualTok.tokenClass = ChordTokenClass::QUALITY;
+                            _tokenList.removeAt(index);
+                            _tokenList.insert(index, qualTok);
+                        }
                     }
                 }
             } else if (isAugmented) {
