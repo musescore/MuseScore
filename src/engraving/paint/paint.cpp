@@ -23,6 +23,8 @@
 
 #include "libmscore/element.h"
 
+#include "paintdebugger.h"
+
 using namespace mu::engraving;
 using namespace Ms;
 
@@ -31,9 +33,17 @@ void Paint::paintElement(mu::draw::Painter& painter, const Ms::Element* element)
     element->itemDiscovered = false;
     PointF elementPosition(element->pagePos());
 
+    auto originalProvider = painter.provider();
+    auto debugger = std::make_shared<PaintDebugger>(originalProvider);
+    painter.setProvider(debugger, false);
+
+    debugger->setDebugPenColor(draw::Color(255, 0, 0));
+
     painter.translate(elementPosition);
     element->draw(&painter);
     painter.translate(-elementPosition);
+
+    debugger->restorePenColor();
 }
 
 void Paint::paintElements(mu::draw::Painter& painter, const QList<Element*>& elements)

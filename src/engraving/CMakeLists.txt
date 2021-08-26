@@ -39,6 +39,8 @@ set(MODULE_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/paint/paint.cpp
     ${CMAKE_CURRENT_LIST_DIR}/paint/paint.h
+    ${CMAKE_CURRENT_LIST_DIR}/paint/paintdebugger.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/paint/paintdebugger.h
 
     ${CMAKE_CURRENT_LIST_DIR}/accessibility/accessiblescore.cpp
     ${CMAKE_CURRENT_LIST_DIR}/accessibility/accessiblescore.h
