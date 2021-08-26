@@ -34,7 +34,14 @@
 
 namespace mu::pianoroll {
 
-class PianorollGeneral;
+//class PianorollGeneral;
+
+
+struct BarPattern {
+      QString name;
+      char isWhiteKey[12];  //Set to 1 for white keys, 0 for black
+      };
+
 
 class PianorollView : public QQuickPaintedItem, public async::Asyncable
 {
@@ -42,6 +49,8 @@ class PianorollView : public QQuickPaintedItem, public async::Asyncable
 public:
     enum class PianorollTool : char { SELECT, EDIT, CUT, ERASE };
     Q_ENUM(PianorollTool)
+
+    static const BarPattern barPatterns[];
 
 private:
     INJECT(pianoroll, context::IGlobalContext, globalContext)
@@ -54,8 +63,6 @@ private:
     Q_PROPERTY(int subdivision READ subdivision WRITE setSubdivision NOTIFY subdivisionChanged)
 
 public:
-
-
 
     PianorollView(QQuickItem* parent = nullptr);
 
@@ -105,6 +112,9 @@ private:
     void onCurrentNotationChanged();
     void onSelectionChanged();
     void updateBoundingSize();
+    QRect boundingRect(Ms::Note* note, Ms::NoteEvent* evt = nullptr);
+
+    void drawChord(QPainter* p, Ms::Chord* chrd, int voice);
     
     notation::INotationPtr m_notation;
 
@@ -115,6 +125,9 @@ private:
     int m_tuplet = 1;
     int m_subdivision = 0;
     PianorollTool m_tool = PianorollTool::SELECT;
+    int m_barPattern = 0;
+
+    quint8 m_pitchHighlight[128];
 
     QColor m_colorKeyWhite = QColor(0xffffff);
     QColor m_colorKeyBlack = QColor(0xe6e6e6);
@@ -129,6 +142,7 @@ private:
 
 
     const int NUM_PITCHES = 128;
+    const int VOICES = 4;
 
 };
 }
