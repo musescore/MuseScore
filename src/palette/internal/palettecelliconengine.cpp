@@ -21,9 +21,9 @@
  */
 #include "palettecelliconengine.h"
 
-#include "engraving/draw/geometry.h"
-#include "engraving/draw/painter.h"
-#include "engraving/draw/pen.h"
+#include "engraving/infrastructure/draw/geometry.h"
+#include "engraving/infrastructure/draw/painter.h"
+#include "engraving/infrastructure/draw/pen.h"
 #include "engraving/libmscore/actionicon.h"
 #include "engraving/libmscore/element.h"
 #include "engraving/libmscore/masterscore.h"

@@ -24,10 +24,10 @@
 
 #include "style/style.h"
 
-#include "draw/geometry.h"
+#include "infrastructure/draw/geometry.h"
 
 #include "modularity/ioc.h"
-#include "draw/ifontprovider.h"
+#include "infrastructure/draw/ifontprovider.h"
 
 #include "symid.h"
 

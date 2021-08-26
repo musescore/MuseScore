@@ -25,7 +25,7 @@
 
 #include <vector>
 
-#include "draw/geometry.h"
+#include "infrastructure/draw/geometry.h"
 
 namespace Ms {
 #ifndef NDEBUG

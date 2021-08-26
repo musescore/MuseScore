@@ -22,7 +22,7 @@
 #ifndef MU_DRAW_QIMAGEPROVIDER_H
 #define MU_DRAW_QIMAGEPROVIDER_H
 
-#include "draw/iimageprovider.h"
+#include "infrastructure/draw/iimageprovider.h"
 
 namespace mu::draw {
 class QImageProvider : public IImageProvider

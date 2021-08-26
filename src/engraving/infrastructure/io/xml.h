@@ -28,7 +28,7 @@
 #include <QTextStream>
 #include <QFile>
 
-#include "draw/color.h"
+#include "infrastructure/draw/color.h"
 #include "libmscore/connector.h"
 #include "libmscore/stafftype.h"
 #include "libmscore/interval.h"

@@ -26,7 +26,7 @@
 #include <QList>
 
 #include "symid.h"
-#include "draw/geometry.h"
+#include "infrastructure/draw/geometry.h"
 
 namespace Ms {
 class XmlWriter;

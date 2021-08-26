@@ -24,7 +24,7 @@
 
 #include <QBuffer>
 
-#include "engraving/io/xml.h"
+#include "engraving/infrastructure/io/xml.h"
 
 using namespace mu::palette;
 

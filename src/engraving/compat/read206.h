@@ -24,7 +24,7 @@
 #define MU_ENGRAVING_READ206_H
 
 #include "style/styledef.h"
-#include "draw/geometry.h"
+#include "infrastructure/draw/geometry.h"
 #include "libmscore/score.h"
 
 namespace Ms {

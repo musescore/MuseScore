@@ -22,7 +22,7 @@
 #ifndef MU_ENGRAVING_READPAGEFORMAT_H
 #define MU_ENGRAVING_READPAGEFORMAT_H
 
-#include "draw/geometry.h"
+#include "infrastructure/draw/geometry.h"
 
 namespace Ms {
 class MStyle;
