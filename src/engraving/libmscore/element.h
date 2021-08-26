@@ -661,9 +661,6 @@ public:
 extern bool elementLessThan(const Element* const, const Element* const);
 extern void collectElements(void* data, Element* e);
 
-extern void paintElement(mu::draw::Painter& painter, const Element* element);
-extern void paintElements(mu::draw::Painter& painter, const QList<Element*>& elements);
-
 template<typename T> std::shared_ptr<T> makeElement(Ms::Score* score)
 {
     return std::make_shared<T>(score);
