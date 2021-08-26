@@ -97,7 +97,7 @@ void PianorollView::onCurrentNotationChanged()
 
 void PianorollView::onSelectionChanged()
 {
-    int j = 9;
+    update();
 }
 
 void PianorollView::setWholeNoteWidth(double value)
@@ -247,7 +247,7 @@ void PianorollView::paint(QPainter* p)
     Ms::Part* part = staff->part();
 
 
-    //
+
     const QColor colSelectionBoxFill = QColor(
                       m_colorSelectionBox.red(), m_colorSelectionBox.green(), m_colorSelectionBox.blue(),
                       128);
@@ -354,18 +354,25 @@ void PianorollView::paint(QPainter* p)
 
     //-----------------
     //Notes
-
-    Ms::SegmentType st = Ms::SegmentType::ChordRest;
-    for (Ms::Segment* s = staff->score()->firstSegment(st); s; s = s->next1(st)) 
+    for (int staffIndex : selectedStaves)
     {
-        for (int voice = 0; voice < VOICES; ++voice)
+        Ms::Staff* staff = score->staff(staffIndex);
+//        activeStaff
+
+        for (Ms::Segment* s = staff->score()->firstSegment(Ms::SegmentType::ChordRest); s; s = s->next1(Ms::SegmentType::ChordRest))
         {
-            int track = voice + activeStaff * VOICES;
-            Ms::Element* e = s->element(track);
-            if (e && e->isChord())
-            drawChord(p, toChord(e), voice);
+            for (int voice = 0; voice < VOICES; ++voice)
+            {
+                int track = voice + staffIndex * VOICES;
+                Ms::Element* e = s->element(track);
+                if (e && e->isChord())
+                    drawChord(p, toChord(e), voice, staffIndex == activeStaff);
+            }
         }
+
     }
+
+//    Ms::SegmentType st = ;
 
 
     int value = controller()->getNotes();
@@ -406,10 +413,10 @@ QRect PianorollView::boundingRect(Ms::Note* note, Ms::NoteEvent* evt)
     return rect;
 }
 
-void PianorollView::drawChord(QPainter* p, Ms::Chord* chrd, int voice)
+void PianorollView::drawChord(QPainter* p, Ms::Chord* chrd, int voice, bool active)
 {
     for (Ms::Chord* c : chrd->graceNotes())
-        drawChord(p, c, voice);
+        drawChord(p, c, voice, active);
 
     p->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform | QPainter::TextAntialiasing);
 
@@ -424,7 +431,28 @@ void PianorollView::drawChord(QPainter* p, Ms::Chord* chrd, int voice)
 //        Ms::Fraction end = start + len;
 //        int pitch = note->pitch();
 
-        QColor noteColor = note->selected() ? m_colorNoteSel : m_colorNoteUnsel;
+        QColor noteColor;
+        switch (voice)
+        {
+        case 0:
+            noteColor = m_colorNoteVoice1;
+            break;
+        case 1:
+            noteColor = m_colorNoteVoice2;
+            break;
+        case 2:
+            noteColor = m_colorNoteVoice3;
+            break;
+        case 3:
+            noteColor = m_colorNoteVoice4;
+            break;
+        }
+
+        if (note->selected())
+            noteColor = m_colorNoteSel;
+        if (!active)
+            noteColor = m_colorNoteGhost;
+
         p->setBrush(noteColor);
         p->setPen(QPen(noteColor.darker(250)));
 
