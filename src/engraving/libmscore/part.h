@@ -143,6 +143,7 @@ public:
     Instrument* instrument(Fraction = { -1, 1 });
     const Instrument* instrument(Fraction = { -1, 1 }) const;
     void setInstrument(Instrument*, Fraction = { -1, 1 });         // transfer ownership
+    void setInstrument(Instrument*, int tick);
     void setInstrument(const Instrument&&, Fraction = { -1, 1 });
     void setInstrument(const Instrument&, Fraction = { -1, 1 });
     void setInstruments(const InstrumentList& instruments);
