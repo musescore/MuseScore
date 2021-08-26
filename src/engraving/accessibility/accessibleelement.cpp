@@ -117,7 +117,17 @@ const Ms::Element* AccessibleElement::element() const
     return m_element;
 }
 
-void AccessibleElement::focused()
+void AccessibleElement::setRegistred(bool arg)
+{
+    m_registred = arg;
+}
+
+bool AccessibleElement::registred() const
+{
+    return m_registred;
+}
+
+void AccessibleElement::setFocus()
 {
     LOGI() << accessibleName();
     AccessibleScore* ascore = accessibleScore();
@@ -125,9 +135,12 @@ void AccessibleElement::focused()
         return;
     }
 
-    ascore->setActive(true);
     ascore->setFocusedElement(this);
-    m_accessibleStateChanged.send(IAccessible::State::Focused, true);
+}
+
+void AccessibleElement::notifyAboutFocus(bool focused)
+{
+    m_accessibleStateChanged.send(IAccessible::State::Focused, focused);
 }
 
 const IAccessible* AccessibleElement::accessibleParent() const

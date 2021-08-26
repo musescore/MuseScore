@@ -41,7 +41,12 @@ public:
 
     void setElement(Ms::Element* e);
     const Ms::Element* element() const;
-    void focused();
+
+    void setRegistred(bool arg);
+    bool registred() const;
+
+    void setFocus();
+    void notifyAboutFocus(bool focused);
 
     // IAccessible
     const IAccessible* accessibleParent() const override;
