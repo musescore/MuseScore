@@ -758,10 +758,17 @@ void NotationParts::doInsertPart(Part* part, int index)
     QList<Staff*> stavesCopy = *part->staves();
     part->clearStaves();
 
+    Ms::InstrumentList instrumentsCopy = *part->instruments();
+    part->setInstruments({});
+
     score()->insertPart(part, index);
 
     if (score()->excerpt()) {
         score()->excerpt()->parts().insert(index, part);
+    }
+
+    for (auto it = instrumentsCopy.cbegin(); it != instrumentsCopy.cend(); ++it) {
+        part->setInstrument(new Instrument(*it->second), it->first);
     }
 
     for (int staffIndex = 0; staffIndex < stavesCopy.size(); ++staffIndex) {
@@ -873,6 +880,10 @@ void NotationParts::moveStaves(const IDList& sourceStavesIds, const ID& destinat
     }
 
     std::vector<Staff*> staves = this->staves(sourceStavesIds);
+    if (staves.empty()) {
+        return;
+    }
+
     Part* destinationPart = destinationStaff->part();
     int destinationStaffIndex = (mode == InsertMode::Before ? destinationStaff->idx() : destinationStaff->idx() + 1);
     destinationStaffIndex -= score()->staffIdx(destinationPart); // NOTE: convert to local part's staff index

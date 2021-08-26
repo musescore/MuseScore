@@ -377,6 +377,11 @@ void Part::setInstrument(Instrument* i, Fraction tick)
     _instruments.setInstrument(i, tick.ticks());
 }
 
+void Part::setInstrument(Instrument* i, int tick)
+{
+    _instruments.setInstrument(i, tick);
+}
+
 void Part::setInstrument(const Instrument&& i, Fraction tick)
 {
     _instruments.setInstrument(new Instrument(i), tick.ticks());
