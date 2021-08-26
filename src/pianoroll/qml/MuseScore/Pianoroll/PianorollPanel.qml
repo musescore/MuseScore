@@ -182,7 +182,7 @@ Rectangle {
                     Slider {
                         id: vertZoom
                         from: 4
-                        to: 40
+                        to: 30
                         value: 14
                     }
 
@@ -192,9 +192,9 @@ Rectangle {
 
                     Slider {
                         id: horizZoom
-                        from: 1
-                        to: 100
-                        value: 20
+                        from: 20
+                        to: 800
+                        value: 60
                     }
                 }
 
@@ -219,17 +219,12 @@ Rectangle {
                 implicitWidth: 1500
                 implicitHeight: 500
 
-//                zoomX: horizZoom.value
+                wholeNoteWidth: horizZoom.value
 //                zoomX: Math.log(horizZoom.value) / Math.log(2)
-                wholeNoteWidth: Math.pow(horizZoom.value, 1.1)
+//                wholeNoteWidth: Math.pow(horizZoom.value, 1.1)
+//                wholeNoteWidth: Math.pow(2, horizZoom.value)
                 noteHeight: vertZoom.value
                 tool: PianorollView.SELECT
-
-
-                StyledTextLabel {
-                    anchors.centerIn: parent
-                    text: pianoRollPanel.title + " Walla"
-                }
 
                 Component.onCompleted: {
                     load()
