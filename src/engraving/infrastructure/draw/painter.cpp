@@ -67,6 +67,8 @@ void Painter::init()
     State st;
     st.worldTransform = m_provider->transform();
     st.isWxF = true;
+
+    m_states = std::stack<State>();
     m_states.push(std::move(st));
 
     m_provider->beginTarget(m_name);
@@ -78,6 +80,14 @@ void Painter::init()
 IPaintProviderPtr Painter::provider() const
 {
     return m_provider;
+}
+
+void Painter::setProvider(const IPaintProviderPtr& p, bool reinit)
+{
+    m_provider = p;
+    if (reinit) {
+        init();
+    }
 }
 
 bool Painter::endDraw()

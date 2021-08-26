@@ -55,6 +55,7 @@ public:
     ~Painter();
 
     IPaintProviderPtr provider() const;
+    void setProvider(const IPaintProviderPtr& p, bool reinit = true);
 
     bool isActive() const;
     bool endDraw();

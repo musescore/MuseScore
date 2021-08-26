@@ -30,6 +30,7 @@
 #include "libmscore/staff.h"
 #include "libmscore/measure.h"
 #include "libmscore/stafflines.h"
+#include "engraving/paint/paint.h"
 
 #include "log.h"
 
@@ -142,7 +143,7 @@ mu::Ret SvgWriter::write(INotationPtr notation, Device& destinationDevice, const
                     if (measure->isMeasure() && Ms::toMeasure(measure)->visible(staffIndex)) {
                         Ms::StaffLines* sl = Ms::toMeasure(measure)->staffLines(staffIndex);
                         printer.setElement(sl);
-                        Ms::paintElement(painter, sl);
+                        engraving::Paint::paintElement(painter, sl);
                     }
                 }
             } else {   // Draw staff lines once per system
@@ -158,7 +159,7 @@ mu::Ret SvgWriter::write(INotationPtr notation, Device& destinationDevice, const
                 }
 
                 printer.setElement(firstSL);
-                Ms::paintElement(painter, firstSL);
+                engraving::Paint::paintElement(painter, firstSL);
             }
         }
     }
@@ -207,10 +208,10 @@ mu::Ret SvgWriter::write(INotationPtr notation, Device& destinationDevice, const
 
             Ms::Element* note = dynamic_cast<const Ms::Note*>(element)->clone();
             note->setColor(color);
-            Ms::paintElement(painter, note);
+            engraving::Paint::paintElement(painter, note);
             delete note;
         } else {
-            Ms::paintElement(painter, element);
+            engraving::Paint::paintElement(painter, element);
         }
     }
 

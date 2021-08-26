@@ -46,6 +46,7 @@ void AccessibleScore::addChild(AccessibleElement* e)
 
     m_children.append(e);
     accessibilityController()->reg(e);
+    e->setRegistred(true);
 }
 
 void AccessibleScore::removeChild(AccessibleElement* e)
@@ -54,8 +55,8 @@ void AccessibleScore::removeChild(AccessibleElement* e)
         return;
     }
     m_children.removeOne(e);
-
     accessibilityController()->unreg(e);
+    e->setRegistred(false);
 }
 
 void AccessibleScore::setActive(bool arg)
@@ -70,7 +71,19 @@ void AccessibleScore::setActive(bool arg)
 
 void AccessibleScore::setFocusedElement(AccessibleElement* e)
 {
+    setActive(true);
+
+    AccessibleElement* old = m_focusedElement;
+    m_focusedElement = nullptr;
+
+    if (old) {
+        old->notifyAboutFocus(false);
+    }
+
     m_focusedElement = e;
+    if (m_focusedElement) {
+        m_focusedElement->notifyAboutFocus(true);
+    }
 }
 
 AccessibleElement* AccessibleScore::focusedElement() const

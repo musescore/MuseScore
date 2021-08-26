@@ -31,6 +31,7 @@
 #include "libmscore/page.h"
 #include "libmscore/rendermidi.h"
 #include "engraving/accessibility/accessibleelement.h"
+#include "engraving/paint/paint.h"
 
 #include "notationinteraction.h"
 #include "masternotationmididata.h"
@@ -222,7 +223,7 @@ void Notation::paintPages(draw::Painter* painter, const RectF& frameRect, const 
         painter->setClipRect(page->bbox());
 
         QList<Element*> elements = page->items(frameRect.translated(-page->pos()));
-        Ms::paintElements(*painter, elements);
+        engraving::Paint::paintElements(*painter, elements);
 
         painter->translate(-pagePosition);
         painter->setClipping(false);
