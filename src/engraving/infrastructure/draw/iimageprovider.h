@@ -31,7 +31,7 @@
 #include "pixmap.h"
 #include "color.h"
 #include "painter.h"
-#include "draw/ipaintprovider.h"
+#include "infrastructure/draw/ipaintprovider.h"
 
 namespace mu::draw {
 class IImageProvider : MODULE_EXPORT_INTERFACE

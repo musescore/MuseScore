@@ -25,7 +25,7 @@
 
 #include "modularity/ioc.h"
 
-#include "engraving/draw/iimageprovider.h"
+#include "infrastructure/draw/iimageprovider.h"
 #include "bsymbol.h"
 
 namespace mu::draw {

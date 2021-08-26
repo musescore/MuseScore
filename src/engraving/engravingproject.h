@@ -25,8 +25,8 @@
 #include <memory>
 
 #include "engravingerrors.h"
-#include "io/mscreader.h"
-#include "io/mscwriter.h"
+#include "infrastructure/io/mscreader.h"
+#include "infrastructure/io/mscwriter.h"
 
 //! NOTE In addition to the score itself, the mscz file also stores other data,
 //! such as synthesizer, mixer settings, omr, etc.

@@ -23,7 +23,7 @@
 #ifndef __BEND_H__
 #define __BEND_H__
 
-#include "draw/font.h"
+#include "infrastructure/draw/font.h"
 #include "style/style.h"
 
 #include "element.h"

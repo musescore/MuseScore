@@ -32,9 +32,9 @@
 #include "sig.h"
 #include "symid.h"
 
-#include "draw/color.h"
-#include "draw/geometry.h"
-#include "draw/painter.h"
+#include "infrastructure/draw/color.h"
+#include "infrastructure/draw/geometry.h"
+#include "infrastructure/draw/painter.h"
 
 #include "modularity/ioc.h"
 #include "iengravingconfiguration.h"

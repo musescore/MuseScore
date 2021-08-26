@@ -23,7 +23,7 @@
 #ifndef __HARMONY_H__
 #define __HARMONY_H__
 
-#include "draw/font.h"
+#include "infrastructure/draw/font.h"
 
 #include "text.h"
 #include "pitchspelling.h"

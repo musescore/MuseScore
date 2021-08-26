@@ -45,9 +45,9 @@
 #include "property.h"
 #include "chordlist.h"
 
-#include "io/mscwriter.h"
-#include "io/mscreader.h"
-#include "engraving/draw/iimageprovider.h"
+#include "infrastructure/io/mscwriter.h"
+#include "infrastructure/io/mscreader.h"
+#include "infrastructure/draw/iimageprovider.h"
 #include "layout/layout.h"
 #include "layout/layoutoptions.h"
 

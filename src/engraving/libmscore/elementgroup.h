@@ -23,7 +23,7 @@
 #ifndef __ELEMENTGROUP_H__
 #define __ELEMENTGROUP_H__
 
-#include "draw/geometry.h"
+#include "infrastructure/draw/geometry.h"
 
 namespace Ms {
 class Element;

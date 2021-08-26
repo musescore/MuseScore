@@ -24,7 +24,7 @@
 #define __SYM_H__
 
 #include "symid.h"
-#include "draw/geometry.h"
+#include "infrastructure/draw/geometry.h"
 
 namespace Ms {
 //---------------------------------------------------------

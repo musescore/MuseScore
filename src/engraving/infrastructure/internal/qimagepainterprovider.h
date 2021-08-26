@@ -24,7 +24,7 @@
 
 #include "qpainterprovider.h"
 #include <QImage>
-#include "draw/pixmap.h"
+#include "infrastructure/draw/pixmap.h"
 
 namespace mu::draw {
 class QImagePainterProvider : public QPainterProvider

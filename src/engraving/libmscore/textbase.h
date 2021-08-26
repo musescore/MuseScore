@@ -23,9 +23,9 @@
 #ifndef __TEXTBASE_H__
 #define __TEXTBASE_H__
 
-#include "draw/fontmetrics.h"
+#include "infrastructure/draw/fontmetrics.h"
 
-#include "draw/color.h"
+#include "infrastructure/draw/color.h"
 #include "element.h"
 #include "property.h"
 #include "style/style.h"

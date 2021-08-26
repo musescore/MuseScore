@@ -26,7 +26,7 @@
 #include <QVector>
 #include <QList>
 
-#include "draw/geometry.h"
+#include "infrastructure/draw/geometry.h"
 
 namespace Ms {
 class BspTreeVisitor;
