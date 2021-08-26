@@ -30,6 +30,11 @@ PaintDebugger::PaintDebugger(IPaintProviderPtr real)
 {
 }
 
+draw::IPaintProviderPtr PaintDebugger::realProvider() const
+{
+    return m_real;
+}
+
 void PaintDebugger::setDebugPenColor(const draw::Color& c)
 {
     m_debugPenColor = c;
@@ -100,7 +105,9 @@ const Font& PaintDebugger::font() const
 void PaintDebugger::setPen(const Pen& pen)
 {
     Pen p = pen;
-    p.setColor(m_debugPenColor);
+    if (m_debugPenColor.isValid()) {
+        p.setColor(m_debugPenColor);
+    }
     m_real->setPen(p);
 }
 
