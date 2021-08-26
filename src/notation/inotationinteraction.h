@@ -66,7 +66,7 @@ public:
     virtual void select(const std::vector<Element*>& elements, SelectType type, int staffIndex = 0) = 0;
     virtual void selectAll() = 0;
     virtual void selectSection() = 0;
-    virtual void selectFirstElement() = 0;
+    virtual void selectFirstElement(bool frame = true) = 0;
     virtual void selectLastElement() = 0;
     virtual INotationSelectionPtr selection() const = 0;
     virtual void clearSelection() = 0;
