@@ -28,8 +28,8 @@
 
 #include "mimedatautils.h"
 
-#include "engraving/draw/geometry.h"
-#include "engraving/io/xml.h"
+#include "engraving/infrastructure/draw/geometry.h"
+#include "engraving/infrastructure/io/xml.h"
 #include "engraving/libmscore/actionicon.h"
 #include "engraving/libmscore/articulation.h"
 #include "engraving/libmscore/bracket.h"

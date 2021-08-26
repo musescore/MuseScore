@@ -25,7 +25,7 @@
 
 #include "spanner.h"
 #include "mscore.h"
-#include "draw/painterpath.h"
+#include "infrastructure/draw/painterpath.h"
 
 namespace Ms {
 //---------------------------------------------------------

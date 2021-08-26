@@ -31,7 +31,7 @@
 #include <set>
 #include <functional>
 
-#include "draw/color.h"
+#include "infrastructure/draw/color.h"
 #include "chordrest.h"
 #include "articulation.h"
 

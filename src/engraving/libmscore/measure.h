@@ -28,7 +28,7 @@
  Definition of class Measure.
 */
 
-#include "draw/color.h"
+#include "infrastructure/draw/color.h"
 #include "measurebase.h"
 #include "fraction.h"
 #include "segmentlist.h"

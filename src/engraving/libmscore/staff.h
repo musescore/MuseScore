@@ -28,7 +28,7 @@
  Definition of class Staff.
 */
 
-#include "draw/color.h"
+#include "infrastructure/draw/color.h"
 #include "changeMap.h"
 #include "pitch.h"
 #include "cleflist.h"

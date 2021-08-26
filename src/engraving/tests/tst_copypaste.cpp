@@ -25,7 +25,7 @@
 #include <QClipboard>
 
 #include "testbase.h"
-#include "engraving/io/xml.h"
+#include "engraving/infrastructure/io/xml.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/measure.h"
 #include "libmscore/segment.h"

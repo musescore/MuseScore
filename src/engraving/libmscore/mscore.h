@@ -25,7 +25,7 @@
 
 #include "config.h"
 
-#include "draw/color.h"
+#include "infrastructure/draw/color.h"
 
 namespace Ms {
 #define MSC_VERSION     "4.00"

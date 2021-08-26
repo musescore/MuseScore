@@ -24,7 +24,7 @@
 #define __EASEINOUT_H__
 
 #include <QtGlobal>
-#include "draw/geometry.h"
+#include "infrastructure/draw/geometry.h"
 
 namespace Ms {
 //---------------------------------------------------------

@@ -23,7 +23,7 @@
 #ifndef __STAFFTYPE_H__
 #define __STAFFTYPE_H__
 
-#include "draw/color.h"
+#include "infrastructure/draw/color.h"
 #include "element.h"
 #include "spatium.h"
 #include "mscore.h"

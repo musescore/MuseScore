@@ -27,7 +27,7 @@
 #include <functional>
 
 #include "elementgroup.h"
-#include "draw/geometry.h"
+#include "infrastructure/draw/geometry.h"
 
 namespace Ms {
 class Dynamic;

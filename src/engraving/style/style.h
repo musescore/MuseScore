@@ -32,7 +32,7 @@
 #include "libmscore/types.h"
 #include "libmscore/spatium.h"
 
-#include "draw/geometry.h"
+#include "infrastructure/draw/geometry.h"
 
 #include "styledef.h"
 

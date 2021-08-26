@@ -25,7 +25,7 @@
 
 #include <deque>
 
-#include "draw/color.h"
+#include "infrastructure/draw/color.h"
 #include "element.h"
 
 namespace Ms {

@@ -23,7 +23,7 @@
 #ifndef __LINE_H__
 #define __LINE_H__
 
-#include "draw/color.h"
+#include "infrastructure/draw/color.h"
 #include "spanner.h"
 #include "mscore.h"
 

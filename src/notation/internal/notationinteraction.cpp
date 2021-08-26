@@ -30,9 +30,9 @@
 
 #include "ptrutils.h"
 
-#include "engraving/io/xml.h"
-#include "engraving/draw/pen.h"
-#include "engraving/draw/painterpath.h"
+#include "engraving/infrastructure/io/xml.h"
+#include "engraving/infrastructure/draw/pen.h"
+#include "engraving/infrastructure/draw/painterpath.h"
 
 #include "libmscore/masterscore.h"
 #include "libmscore/page.h"

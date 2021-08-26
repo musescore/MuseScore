@@ -24,7 +24,7 @@
 #define __SPACER_H__
 
 #include "element.h"
-#include "draw/painterpath.h"
+#include "infrastructure/draw/painterpath.h"
 
 namespace Ms {
 //---------------------------------------------------------
