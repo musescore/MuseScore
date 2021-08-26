@@ -242,7 +242,7 @@ static Score::FileError doValidateAndImport(Score* score, const QString& name, Q
 
     // actually do the import
     res = importMusicXMLfromBuffer(score, name, dev);
-    //qDebug("importMusicXml() return %d", int(res));
+    //qDebug("res %d", static_cast<int>(res));
     return res;
 }
 

@@ -180,7 +180,6 @@ QString mxmlNoteDuration::checkTiming(const QString& type, const bool rest, cons
 
 void mxmlNoteDuration::duration(QXmlStreamReader& e)
 {
-    Q_ASSERT(e.isStartElement() && e.name() == "duration");
     _logger->logDebugTrace("MusicXMLParserPass1::duration", &e);
 
     _dura.set(0, 0);          // invalid unless set correctly
@@ -213,7 +212,7 @@ bool mxmlNoteDuration::readProperties(QXmlStreamReader& e)
     //qDebug("tag %s", qPrintable(tag.toString()));
     if (tag == "dot") {
         _dots++;
-        e.readNext();
+        e.skipCurrentElement();  // skip but don't log
         return true;
     } else if (tag == "duration") {
         duration(e);
@@ -235,7 +234,6 @@ bool mxmlNoteDuration::readProperties(QXmlStreamReader& e)
 
 void mxmlNoteDuration::timeModification(QXmlStreamReader& e)
 {
-    Q_ASSERT(e.isStartElement() && e.name() == "time-modification");
     _logger->logDebugTrace("MusicXMLParserPass1::timeModification", &e);
 
     int intActual = 0;

@@ -204,11 +204,13 @@ public:
     void parse();
     void addToScore(ChordRest* const cr, Note* const note, const int tick, SlurStack& slurs, Glissando* glissandi[MAX_NUMBER_LEVEL][2],
                     MusicXmlSpannerMap& spanners, TrillStack& trills, Tie*& tie);
+    QString errors() const { return _errors; }
     MusicXmlTupletDesc tupletDesc() const { return _tupletDesc; }
     QString tremoloType() const { return _tremoloType; }
     int tremoloNr() const { return _tremoloNr; }
     bool mustStopGraceAFter() const { return _slurStop || _wavyLineStop; }
 private:
+    void addError(const QString& error);      ///< Add an error to be shown in the GUI
     void addNotation(const Notation& notation, ChordRest* const cr, Note* const note);
     void addTechnical(const Notation& notation, Note* note);
     void harmonic();
@@ -226,6 +228,7 @@ private:
     QXmlStreamReader& _e;
     Score* const _score;                        // the score
     MxmlLogger* _logger;                              // the error logger
+    QString _errors;                    // errors to present to the user
     MusicXmlTupletDesc _tupletDesc;
     QString _dynamicsPlacement;
     QStringList _dynamicsList;
@@ -249,6 +252,7 @@ class MusicXMLParserPass2
 public:
     MusicXMLParserPass2(Score* score, MusicXMLParserPass1& pass1, MxmlLogger* logger);
     Score::FileError parse(QIODevice* device);
+    QString errors() const { return _errors; }
 
     // part specific data interface functions
     void addSpanner(const MusicXmlSpannerDesc& desc);
@@ -256,6 +260,7 @@ public:
     void clearSpanner(const MusicXmlSpannerDesc& desc);
 
 private:
+    void addError(const QString& error);      ///< Add an error to be shown in the GUI
     void initPartState(const QString& partId);
     SpannerSet findIncompleteSpannersAtPartEnd();
     Score::FileError parse();
@@ -306,6 +311,7 @@ private:
     Score* const _score;                  // the score
     MusicXMLParserPass1& _pass1;          // the pass1 results
     MxmlLogger* _logger;                  ///< Error logger
+    QString _errors;                      ///< Errors to present to the user
 
     // part specific data (TODO: move to part-specific class)
 
