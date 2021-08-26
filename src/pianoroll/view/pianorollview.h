@@ -114,7 +114,7 @@ private:
     void updateBoundingSize();
     QRect boundingRect(Ms::Note* note, Ms::NoteEvent* evt = nullptr);
 
-    void drawChord(QPainter* p, Ms::Chord* chrd, int voice);
+    void drawChord(QPainter* p, Ms::Chord* chrd, int voice, bool active);
     
     notation::INotationPtr m_notation;
 
@@ -134,8 +134,14 @@ private:
     QColor m_colorKeyHighlight = QColor(0xaaaaff);
     QColor m_colorSelectionBox = QColor(0x2085c3);
     QColor m_colorGridLine = QColor(0xa2a2a6);
-    QColor m_colorNoteUnsel = QColor(0x1dcca0);
     QColor m_colorNoteSel = QColor(0xffff00);
+    QColor m_colorNoteVoice1 = QColor(0x9bcdff);
+    QColor m_colorNoteVoice2 = QColor(0x80d580);
+    QColor m_colorNoteVoice3 = QColor(0xffac85);
+    QColor m_colorNoteVoice4 = QColor(0xff94db);
+//    QColor m_colorNoteGhost = QColor(0x1dcca0);
+    QColor m_colorNoteGhost = QColor(0x8cb6bd);
+
     QColor m_colorNoteDrag = QColor(0xffbb33);
     QColor m_colorText = QColor(0x111111);
     QColor m_colorTie = QColor(0xff0000);
