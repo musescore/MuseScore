@@ -36,6 +36,11 @@ public:
 
     static void paintElement(mu::draw::Painter& painter, const Ms::Element* element);
     static void paintElements(mu::draw::Painter& painter, const QList<Ms::Element*>& elements);
+
+private:
+
+    static void initDebugger(mu::draw::Painter& painter, const Ms::Element* element);
+    static void deinitDebugger(mu::draw::Painter& painter);
 };
 }
 

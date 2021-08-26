@@ -30,6 +30,7 @@ class PaintDebugger : public draw::IPaintProvider
 public:
     PaintDebugger(draw::IPaintProviderPtr real);
 
+    draw::IPaintProviderPtr realProvider() const;
     void setDebugPenColor(const draw::Color& c);
     void restorePenColor();
 

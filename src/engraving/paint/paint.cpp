@@ -23,27 +23,55 @@
 
 #include "libmscore/element.h"
 
+#include "accessibility/accessibleelement.h"
+
 #include "paintdebugger.h"
 
+#define ENABLED_PAINT_DEBUGGER
+
 using namespace mu::engraving;
+using namespace mu::accessibility;
 using namespace Ms;
+
+void Paint::initDebugger(mu::draw::Painter& painter, const Ms::Element* element)
+{
+    auto originalProvider = painter.provider();
+    auto debugger = std::make_shared<PaintDebugger>(originalProvider);
+    painter.setProvider(debugger, false);
+
+    //! NOTE Here we can configure the debugger depending on the conditions
+
+    // Accessible
+    AccessibleElement* accessible = element->accessible();
+    if (accessible->accessibleState(IAccessible::State::Focused)) {
+        debugger->setDebugPenColor(draw::Color(255, 0, 0));
+    }
+    // ----------
+}
+
+void Paint::deinitDebugger(mu::draw::Painter& painter)
+{
+    auto debugger = std::static_pointer_cast<PaintDebugger>(painter.provider());
+    debugger->restorePenColor();
+    painter.setProvider(debugger->realProvider(), false);
+}
 
 void Paint::paintElement(mu::draw::Painter& painter, const Ms::Element* element)
 {
     element->itemDiscovered = false;
     PointF elementPosition(element->pagePos());
 
-    auto originalProvider = painter.provider();
-    auto debugger = std::make_shared<PaintDebugger>(originalProvider);
-    painter.setProvider(debugger, false);
-
-    debugger->setDebugPenColor(draw::Color(255, 0, 0));
+#ifdef ENABLED_PAINT_DEBUGGER
+    initDebugger(painter, element);
+#endif
 
     painter.translate(elementPosition);
     element->draw(&painter);
     painter.translate(-elementPosition);
 
-    debugger->restorePenColor();
+#ifdef ENABLED_PAINT_DEBUGGER
+    deinitDebugger(painter);
+#endif
 }
 
 void Paint::paintElements(mu::draw::Painter& painter, const QList<Element*>& elements)
