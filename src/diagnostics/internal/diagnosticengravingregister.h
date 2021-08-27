@@ -30,17 +30,17 @@ class DiagnosticEngravingRegister : public IDiagnosticEngravingRegister
 public:
     DiagnosticEngravingRegister() = default;
 
-    void reg(Ms::ScoreElement* e) override;
-    void unreg(Ms::ScoreElement* e) override;
-    std::list<Ms::ScoreElement*> elements() const override;
-    async::Channel<Ms::ScoreElement*> registred() const override;
-    async::Channel<Ms::ScoreElement*> unregistred() const override;
+    void reg(const Ms::ScoreElement* e) override;
+    void unreg(const Ms::ScoreElement* e) override;
+    std::list<const Ms::ScoreElement*> elements() const override;
+    async::Channel<const Ms::ScoreElement*> registred() const override;
+    async::Channel<const Ms::ScoreElement*> unregistred() const override;
 
 private:
 
-    std::list<Ms::ScoreElement*> m_elements;
-    async::Channel<Ms::ScoreElement*> m_registred;
-    async::Channel<Ms::ScoreElement*> m_unregistred;
+    std::list<const Ms::ScoreElement*> m_elements;
+    async::Channel<const Ms::ScoreElement*> m_registred;
+    async::Channel<const Ms::ScoreElement*> m_unregistred;
 };
 }
 

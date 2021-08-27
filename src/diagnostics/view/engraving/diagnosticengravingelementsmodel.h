@@ -76,20 +76,26 @@ private:
         Item* child(int row) const { return m_children.at(row); }
         int childCount() const { return m_children.count(); }
 
-        void setElement(Ms::ScoreElement* el) { m_element = el; }
-        Ms::ScoreElement* element() const { return m_element; }
-        QVariant data() const;
+        void setElement(const Ms::ScoreElement* el) { m_element = el; }
+        const Ms::ScoreElement* element() const { return m_element; }
+
+        void setData(const QVariant& d) { m_data = d; }
+        QVariant data() const { return m_data; }
 
     private:
-        Ms::ScoreElement* m_element = nullptr;
+        const Ms::ScoreElement* m_element = nullptr;
         Item* m_parent = nullptr;
         QList<Item*> m_children;
+        QVariant m_data;
     };
 
     Item* createItem(Item* parent);
     Item* itemByModelIndex(const QModelIndex& index) const;
+    QVariant makeData(const Ms::ScoreElement* el) const;
 
-    void load(std::list<Ms::ScoreElement*>& elements, Item* root);
+    void load(const std::list<const Ms::ScoreElement*>& elements, Item* root);
+    void findAndAddLoss(const std::list<const Ms::ScoreElement*>& elements, Item* lossRoot, const Item* root);
+    const Item* findItem(const Ms::ScoreElement* el, const Item* root) const;
 
     void updateInfo();
 
