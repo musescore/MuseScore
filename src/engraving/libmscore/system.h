@@ -209,6 +209,7 @@ public:
     Spacer* downSpacer(int staffIdx) const;
 
     qreal firstNoteRestSegmentX(bool leading = false);
+    qreal lastNoteRestSegmentX(bool trailing = false);
 
     bool hasFixedDownDistance() const { return fixedDownDistance; }
     int firstVisibleStaff() const;
