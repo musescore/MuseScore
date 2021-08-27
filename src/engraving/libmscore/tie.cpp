@@ -712,7 +712,7 @@ TieSegment* Tie::layoutFor(System* system)
     int n;
     if (sPos.system1 != sPos.system2) {
         n = 2;
-        sPos.p2 = PointF(system->width(), sPos.p1.y());
+        sPos.p2 = PointF(system->lastNoteRestSegmentX(true), sPos.p1.y());
     } else {
         n = 1;
     }
