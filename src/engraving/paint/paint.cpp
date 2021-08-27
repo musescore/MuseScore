@@ -27,11 +27,13 @@
 
 #include "paintdebugger.h"
 
-//#define PAINT_DEBUGGER_ENABLED
+#define PAINT_DEBUGGER_ENABLED
 
 using namespace mu::engraving;
 using namespace mu::accessibility;
 using namespace Ms;
+
+static const mu::draw::Color DEBUG_ELTREE_SELECTED_COLOR(164, 0, 0);
 
 void Paint::initDebugger(mu::draw::Painter& painter, const Ms::Element* element)
 {
@@ -40,6 +42,13 @@ void Paint::initDebugger(mu::draw::Painter& painter, const Ms::Element* element)
     painter.setProvider(debugger, false);
 
     //! NOTE Here we can configure the debugger depending on the conditions
+
+    // Elements tree
+    if (elementsProvider()) {
+        if (elementsProvider()->isSelected(element)) {
+            debugger->setDebugPenColor(DEBUG_ELTREE_SELECTED_COLOR);
+        }
+    }
 
     // Accessible
     AccessibleElement* accessible = element->accessible();

@@ -178,6 +178,17 @@ Rectangle {
                     }
                 }
             }
+
+            FlatButton {
+                id: selBtn
+                anchors.right: parent.right
+                anchors.rightMargin: 8
+                height: 16
+                width: 32
+                anchors.verticalCenter: parent.verticalCenter
+                text: styleData.value.selected ? "Unsel" : "Sel"
+                onClicked: elementsModel.select(styleData.index, !styleData.value.selected)
+            }
         }
     }
 }

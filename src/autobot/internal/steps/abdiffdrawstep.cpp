@@ -24,8 +24,8 @@
 #include "log.h"
 #include "../draw/abpaintprovider.h"
 
-#include "engraving/draw/drawtypes.h"
-#include "engraving/draw/utils/drawcomp.h"
+#include "engraving/infrastructure/draw/drawtypes.h"
+#include "engraving/infrastructure/draw/utils/drawcomp.h"
 
 using namespace mu::autobot;
 
@@ -40,7 +40,7 @@ void AbDiffDrawStep::doRun(IAbContextPtr ctx)
     AbPaintProvider::instance()->setDiff(diff);
     AbPaintProvider::instance()->setIsDiffDrawEnabled(true);
 
-    dispatcher()->dispatch("dev-notationview-redraw");
+    dispatcher()->dispatch("diagnostic-notationview-redraw");
 
     doFinish(ctx, make_ret(Ret::Code::Ok));
 }

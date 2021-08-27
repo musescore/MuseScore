@@ -151,6 +151,7 @@ QVariant EngravingElementsModel::makeData(const Ms::ScoreElement* el) const
 
     QVariantMap d;
     d["name"] = el->name();
+    d["selected"] = elementsProvider()->isSelected(el);
     return d;
 }
 
@@ -226,6 +227,21 @@ void EngravingElementsModel::findAndAddLoss(const std::list<const Ms::ScoreEleme
         item->setElement(el);
         item->setData(makeData(el));
     }
+}
+
+void EngravingElementsModel::select(QModelIndex index, bool arg)
+{
+    Item* item = itemByModelIndex(index);
+    if (!item) {
+        return;
+    }
+
+    elementsProvider()->select(item->element(), arg);
+    item->setData(makeData(item->element()));
+
+    emit dataChanged(index, index, { rItemData });
+
+    dispatcher()->dispatch("diagnostic-notationview-redraw");
 }
 
 void EngravingElementsModel::updateInfo()

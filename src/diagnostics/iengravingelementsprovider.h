@@ -37,11 +37,16 @@ class IEngravingElementsProvider : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IEngravingElementsProvider() = default;
 
+    // register
     virtual void reg(const Ms::ScoreElement* e) = 0;
     virtual void unreg(const Ms::ScoreElement* e) = 0;
     virtual std::list<const Ms::ScoreElement*> elements() const = 0;
-    virtual async::Channel<const Ms::ScoreElement*> registred() const = 0;
-    virtual async::Channel<const Ms::ScoreElement*> unregistred() const = 0;
+    virtual async::Channel<const Ms::ScoreElement*, bool> registreChanged() const = 0;
+
+    // debug draw
+    virtual void select(const Ms::ScoreElement* e, bool arg) = 0;
+    virtual bool isSelected(const Ms::ScoreElement* e) const = 0;
+    virtual async::Channel<const Ms::ScoreElement*, bool> selectChanged() const = 0;
 };
 }
 
