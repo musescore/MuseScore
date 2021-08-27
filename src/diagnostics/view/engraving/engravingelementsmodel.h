@@ -19,26 +19,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DIAGNOSTICS_DIAGNOSTICENGRAVINGELEMENTSMODEL_H
-#define MU_DIAGNOSTICS_DIAGNOSTICENGRAVINGELEMENTSMODEL_H
+#ifndef MU_DIAGNOSTICS_ENGRAVINGELEMENTSMODEL_H
+#define MU_DIAGNOSTICS_ENGRAVINGELEMENTSMODEL_H
 
 #include <QAbstractItemModel>
 #include <QHash>
 
 #include "modularity/ioc.h"
-#include "idiagnosticengravingregister.h"
+#include "iengravingelementsprovider.h"
 
 namespace mu::diagnostics {
-class DiagnosticEngravingElementsModel : public QAbstractItemModel
+class EngravingElementsModel : public QAbstractItemModel
 {
     Q_OBJECT
     Q_PROPERTY(QString info READ info NOTIFY infoChanged)
     Q_PROPERTY(QString summary READ summary NOTIFY summaryChanged)
 
-    INJECT(diagnostics, IDiagnosticEngravingRegister, engravingRegister)
+    INJECT(diagnostics, IEngravingElementsProvider, elementsProvider)
 
 public:
-    DiagnosticEngravingElementsModel(QObject* parent = 0);
+    EngravingElementsModel(QObject* parent = 0);
 
     QModelIndex index(int row, int column, const QModelIndex& parent) const override;
     QModelIndex parent(const QModelIndex& child) const override;
@@ -107,4 +107,4 @@ private:
 };
 }
 
-#endif // MU_DIAGNOSTICS_DIAGNOSTICENGRAVINGELEMENTSMODEL_H
+#endif // MU_DIAGNOSTICS_ENGRAVINGELEMENTSMODEL_H

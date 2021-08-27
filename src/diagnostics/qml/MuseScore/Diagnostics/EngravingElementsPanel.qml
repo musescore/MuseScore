@@ -40,7 +40,7 @@ Rectangle {
         elementsModel.reload()
     }
 
-    DiagnosticEngravingElementsModel {
+    EngravingElementsModel {
         id: elementsModel
     }
 

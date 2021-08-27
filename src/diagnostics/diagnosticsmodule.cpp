@@ -30,7 +30,7 @@
 #include "internal/diagnosticsactions.h"
 #include "internal/diagnosticsactionscontroller.h"
 #include "internal/diagnosticspathsregister.h"
-#include "internal/diagnosticengravingregister.h"
+#include "internal/engravingelementsprovider.h"
 
 #include "view/diagnosticspathsmodel.h"
 
@@ -42,7 +42,7 @@
 
 #include "view/diagnosticaccessiblemodel.h"
 
-#include "view/engraving/diagnosticengravingelementsmodel.h"
+#include "view/engraving/engravingelementsmodel.h"
 
 using namespace mu::diagnostics;
 using namespace mu::modularity;
@@ -57,7 +57,7 @@ std::string DiagnosticsModule::moduleName() const
 void DiagnosticsModule::registerExports()
 {
     ioc()->registerExport<IDiagnosticsPathsRegister>(moduleName(), new DiagnosticsPathsRegister());
-    ioc()->registerExport<DiagnosticEngravingRegister>(moduleName(), new DiagnosticEngravingRegister());
+    ioc()->registerExport<EngravingElementsProvider>(moduleName(), new EngravingElementsProvider());
 }
 
 void DiagnosticsModule::resolveImports()
@@ -67,8 +67,7 @@ void DiagnosticsModule::resolveImports()
         ir->registerQmlUri(Uri("musescore://diagnostics/system/paths"), "MuseScore/Diagnostics/DiagnosticPathsDialog.qml");
         ir->registerQmlUri(Uri("musescore://diagnostics/navigation/tree"), "MuseScore/Diagnostics/DiagnosticNavigationDialog.qml");
         ir->registerQmlUri(Uri("musescore://diagnostics/accessible/tree"), "MuseScore/Diagnostics/DiagnosticAccessibleDialog.qml");
-        ir->registerQmlUri(Uri("musescore://diagnostics/engraving/elements"),
-                           "MuseScore/Diagnostics/DiagnosticEngravingElementsDialog.qml");
+        ir->registerQmlUri(Uri("musescore://diagnostics/engraving/elements"), "MuseScore/Diagnostics/EngravingElementsDialog.qml");
     }
 
     auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
@@ -89,7 +88,7 @@ void DiagnosticsModule::registerUiTypes()
 
     qmlRegisterType<DiagnosticAccessibleModel>("MuseScore.Diagnostics", 1, 0, "DiagnosticAccessibleModel");
 
-    qmlRegisterType<DiagnosticEngravingElementsModel>("MuseScore.Diagnostics", 1, 0, "DiagnosticEngravingElementsModel");
+    qmlRegisterType<EngravingElementsModel>("MuseScore.Diagnostics", 1, 0, "EngravingElementsModel");
 }
 
 void DiagnosticsModule::onInit(const framework::IApplication::RunMode&)
