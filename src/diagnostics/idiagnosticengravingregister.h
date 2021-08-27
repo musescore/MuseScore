@@ -37,11 +37,11 @@ class IDiagnosticEngravingRegister : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IDiagnosticEngravingRegister() = default;
 
-    virtual void reg(Ms::ScoreElement* e) = 0;
-    virtual void unreg(Ms::ScoreElement* e) = 0;
-    virtual std::list<Ms::ScoreElement*> elements() const = 0;
-    virtual async::Channel<Ms::ScoreElement*> registred() const = 0;
-    virtual async::Channel<Ms::ScoreElement*> unregistred() const = 0;
+    virtual void reg(const Ms::ScoreElement* e) = 0;
+    virtual void unreg(const Ms::ScoreElement* e) = 0;
+    virtual std::list<const Ms::ScoreElement*> elements() const = 0;
+    virtual async::Channel<const Ms::ScoreElement*> registred() const = 0;
+    virtual async::Channel<const Ms::ScoreElement*> unregistred() const = 0;
 };
 }
 

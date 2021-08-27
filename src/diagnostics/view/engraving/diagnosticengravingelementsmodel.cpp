@@ -143,6 +143,17 @@ DiagnosticEngravingElementsModel::Item* DiagnosticEngravingElementsModel::itemBy
     return m_allItems.value(index.internalId(), nullptr);
 }
 
+QVariant DiagnosticEngravingElementsModel::makeData(const Ms::ScoreElement* el) const
+{
+    if (!el) {
+        return QVariant();
+    }
+
+    QVariantMap d;
+    d["name"] = el->name();
+    return d;
+}
+
 void DiagnosticEngravingElementsModel::init()
 {
 }
@@ -155,34 +166,71 @@ void DiagnosticEngravingElementsModel::reload()
     delete m_rootItem;
     m_rootItem = createItem(nullptr);
 
-    std::list<Ms::ScoreElement*> elements = engravingRegister()->elements();
-    for (Ms::ScoreElement* el : elements) {
+    std::list<const Ms::ScoreElement*> elements = engravingRegister()->elements();
+    for (const Ms::ScoreElement* el : elements) {
         if (el->isScore()) {
             Item* scoreItem = createItem(m_rootItem);
             scoreItem->setElement(el);
+            scoreItem->setData(makeData(el));
             load(elements, scoreItem);
         }
     }
+
+    Item* lossItem = createItem(m_rootItem);
+    QVariantMap lossData;
+    lossData["name"] = "Loss";
+    lossItem->setData(lossData);
+    findAndAddLoss(elements, lossItem, m_rootItem);
 
     endResetModel();
 
     updateInfo();
 }
 
-void DiagnosticEngravingElementsModel::load(std::list<Ms::ScoreElement*>& elements, Item* root)
+void DiagnosticEngravingElementsModel::load(const std::list<const Ms::ScoreElement*>& elements, Item* root)
 {
-    for (Ms::ScoreElement* el : elements) {
+    for (const Ms::ScoreElement* el : elements) {
         if (el->treeParent() == root->element()) {
             Item* item = createItem(root);
             item->setElement(el);
+            item->setData(makeData(el));
             load(elements, item);
         }
     }
 }
 
+const DiagnosticEngravingElementsModel::Item* DiagnosticEngravingElementsModel::findItem(const Ms::ScoreElement* el, const Item* root) const
+{
+    if (root->element() == el) {
+        return root;
+    }
+
+    for (int i = 0; i < root->childCount(); ++i) {
+        const Item* ch = findItem(el, root->child(i));
+        if (ch) {
+            return ch;
+        }
+    }
+    return nullptr;
+}
+
+void DiagnosticEngravingElementsModel::findAndAddLoss(const std::list<const Ms::ScoreElement*>& elements, Item* lossRoot, const Item* root)
+{
+    for (const Ms::ScoreElement* el : elements) {
+        const Item* it = findItem(el, root);
+        if (it) {
+            continue;
+        }
+
+        Item* item = createItem(lossRoot);
+        item->setElement(el);
+        item->setData(makeData(el));
+    }
+}
+
 void DiagnosticEngravingElementsModel::updateInfo()
 {
-    std::list<Ms::ScoreElement*> elements = engravingRegister()->elements();
+    std::list<const Ms::ScoreElement*> elements = engravingRegister()->elements();
     QHash<QString, int> els;
     for (const Ms::ScoreElement* el : elements) {
         els[el->name()] += 1;
@@ -238,15 +286,4 @@ int DiagnosticEngravingElementsModel::Item::row() const
         return m_parent->m_children.indexOf(const_cast<Item*>(this));
     }
     return 0;
-}
-
-QVariant DiagnosticEngravingElementsModel::Item::data() const
-{
-    if (!m_element) {
-        return QVariant();
-    }
-
-    QVariantMap d;
-    d["name"] = m_element->name();
-    return d;
 }
