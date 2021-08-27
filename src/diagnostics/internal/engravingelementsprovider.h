@@ -19,16 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DIAGNOSTICS_DIAGNOSTICENGRAVINGREGISTER_H
-#define MU_DIAGNOSTICS_DIAGNOSTICENGRAVINGREGISTER_H
+#ifndef MU_DIAGNOSTICS_ENGRAVINGELEMENTSPROVIDER_H
+#define MU_DIAGNOSTICS_ENGRAVINGELEMENTSPROVIDER_H
 
-#include "../idiagnosticengravingregister.h"
+#include "../iengravingelementsprovider.h"
 
 namespace mu::diagnostics {
-class DiagnosticEngravingRegister : public IDiagnosticEngravingRegister
+class EngravingElementsProvider : public IEngravingElementsProvider
 {
 public:
-    DiagnosticEngravingRegister() = default;
+    EngravingElementsProvider() = default;
 
     void reg(const Ms::ScoreElement* e) override;
     void unreg(const Ms::ScoreElement* e) override;
@@ -44,4 +44,4 @@ private:
 };
 }
 
-#endif // MU_DIAGNOSTICS_DIAGNOSTICENGRAVINGREGISTER_H
+#endif // MU_DIAGNOSTICS_ENGRAVINGELEMENTSPROVIDER_H

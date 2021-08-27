@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DIAGNOSTICS_IDIAGNOSTICENGRAVINGREGISTER_H
-#define MU_DIAGNOSTICS_IDIAGNOSTICENGRAVINGREGISTER_H
+#ifndef MU_DIAGNOSTICS_IENGRAVINGELEMENTSPROVIDER_H
+#define MU_DIAGNOSTICS_IENGRAVINGELEMENTSPROVIDER_H
 
 #include <list>
 #include "modularity/imoduleexport.h"
@@ -31,11 +31,11 @@ class ScoreElement;
 }
 
 namespace mu::diagnostics {
-class IDiagnosticEngravingRegister : MODULE_EXPORT_INTERFACE
+class IEngravingElementsProvider : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(IDiagnosticEngravingRegister)
+    INTERFACE_ID(IEngravingElementsProvider)
 public:
-    virtual ~IDiagnosticEngravingRegister() = default;
+    virtual ~IEngravingElementsProvider() = default;
 
     virtual void reg(const Ms::ScoreElement* e) = 0;
     virtual void unreg(const Ms::ScoreElement* e) = 0;
@@ -45,4 +45,4 @@ public:
 };
 }
 
-#endif // MU_DIAGNOSTICS_IDIAGNOSTICENGRAVINGREGISTER_H
+#endif // MU_DIAGNOSTICS_IENGRAVINGELEMENTSPROVIDER_H
