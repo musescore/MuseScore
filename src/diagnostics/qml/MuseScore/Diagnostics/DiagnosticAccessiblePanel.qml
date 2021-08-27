@@ -93,7 +93,7 @@ Rectangle {
         function positionViewAtIndex(index) {
             var rows = -1
             while (index.valid) {
-                var r = accessibleModel.indexRow(index) + 1
+                var r = index.row + 1
                 rows += r
                 index = view.model.parent(index)
             }

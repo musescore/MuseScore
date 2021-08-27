@@ -135,11 +135,6 @@ QModelIndex DiagnosticAccessibleModel::index(int row, int column, const QModelIn
     return QModelIndex();
 }
 
-int DiagnosticAccessibleModel::indexRow(const QModelIndex& idx) const
-{
-    return idx.row();
-}
-
 QModelIndex DiagnosticAccessibleModel::parent(const QModelIndex& child) const
 {
     if (!m_rootItem) {
