@@ -30,17 +30,24 @@ class EngravingElementsProvider : public IEngravingElementsProvider
 public:
     EngravingElementsProvider() = default;
 
+    // registr
     void reg(const Ms::ScoreElement* e) override;
     void unreg(const Ms::ScoreElement* e) override;
     std::list<const Ms::ScoreElement*> elements() const override;
-    async::Channel<const Ms::ScoreElement*> registred() const override;
-    async::Channel<const Ms::ScoreElement*> unregistred() const override;
+    async::Channel<const Ms::ScoreElement*, bool> registreChanged() const override;
+
+    // debug draw
+    void select(const Ms::ScoreElement* e, bool arg) override;
+    bool isSelected(const Ms::ScoreElement* e) const override;
+    async::Channel<const Ms::ScoreElement*, bool> selectChanged() const override;
 
 private:
 
     std::list<const Ms::ScoreElement*> m_elements;
-    async::Channel<const Ms::ScoreElement*> m_registred;
-    async::Channel<const Ms::ScoreElement*> m_unregistred;
+    async::Channel<const Ms::ScoreElement*, bool> m_registreChanged;
+
+    std::list<const Ms::ScoreElement*> m_selected;
+    async::Channel<const Ms::ScoreElement*, bool> m_selectChanged;
 };
 }
 
