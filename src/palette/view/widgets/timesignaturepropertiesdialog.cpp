@@ -139,7 +139,7 @@ TimeSignaturePropertiesDialog::TimeSignaturePropertiesDialog(QWidget* parent)
 //        { SymId::mensuralProlation11, Icon::timesig_prolatio11_ICON }, // tempus inperf., prol. perfecta, reversed
     };
 
-    ScoreFont* scoreFont = gscore->scoreFont();
+    ScoreFont* scoreFont = gpaletteScore->scoreFont();
     int idx = 0;
 
     otherCombo->clear();

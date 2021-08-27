@@ -19,24 +19,39 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_ENGRAVINGMODULE_H
-#define MU_ENGRAVING_ENGRAVINGMODULE_H
+#include "diagnosticengravingregister.h"
 
-#include "modularity/imodulesetup.h"
+#include "engraving/libmscore/score.h"
 
-namespace mu::engraving {
-class EngravingModule : public modularity::IModuleSetup
+using namespace mu::diagnostics;
+
+void DiagnosticEngravingRegister::reg(Ms::ScoreElement* e)
 {
-public:
-    std::string moduleName() const override;
+    if (e->score()->isPaletteScore()) {
+        return;
+    }
 
-    void registerExports() override;
-    void resolveImports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
-    void onInit(const framework::IApplication::RunMode& mode) override;
-    void onDeinit();
-};
+    m_elements.push_back(e);
+    m_registred.send(e);
 }
 
-#endif // MU_ENGRAVING_ENGRAVINGMODULE_H
+void DiagnosticEngravingRegister::unreg(Ms::ScoreElement* e)
+{
+    m_elements.remove(e);
+    m_unregistred.send(e);
+}
+
+std::list<Ms::ScoreElement*> DiagnosticEngravingRegister::elements() const
+{
+    return m_elements;
+}
+
+mu::async::Channel<Ms::ScoreElement*> DiagnosticEngravingRegister::registred() const
+{
+    return m_registred;
+}
+
+mu::async::Channel<Ms::ScoreElement*> DiagnosticEngravingRegister::unregistred() const
+{
+    return m_unregistred;
+}

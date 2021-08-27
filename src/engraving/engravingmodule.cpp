@@ -88,14 +88,23 @@ void EngravingModule::onInit(const framework::IApplication::RunMode&)
     Ms::MScore::setNudgeStep10(1.0); // Ctrl + cursor key (default 1.0)
     Ms::MScore::setNudgeStep50(0.01); // Alt  + cursor key (default 0.01)
 
-    Ms::gscore = compat::ScoreAccess::createMasterScore();
-    Ms::gscore->setPaletteMode(true);
-    Ms::gscore->setStyle(DefaultStyle::baseStyle());
+    Ms::gpaletteScore = compat::ScoreAccess::createMasterScore();
+    if (Ms::ScoreElement::diagnosticRegister()) {
+        Ms::ScoreElement::diagnosticRegister()->unreg(Ms::gpaletteScore);
+    }
 
-    Ms::gscore->style().set(Ms::Sid::MusicalTextFont, QString("Leland Text"));
+    Ms::gpaletteScore->setStyle(DefaultStyle::baseStyle());
+
+    Ms::gpaletteScore->style().set(Ms::Sid::MusicalTextFont, QString("Leland Text"));
     Ms::ScoreFont* scoreFont = Ms::ScoreFont::fontByName("Leland");
-    Ms::gscore->setScoreFont(scoreFont);
-    Ms::gscore->setNoteHeadWidth(scoreFont->width(Ms::SymId::noteheadBlack, Ms::gscore->spatium()) / Ms::SPATIUM20);
+    Ms::gpaletteScore->setScoreFont(scoreFont);
+    Ms::gpaletteScore->setNoteHeadWidth(scoreFont->width(Ms::SymId::noteheadBlack, Ms::gpaletteScore->spatium()) / Ms::SPATIUM20);
 
     //! NOTE And some initialization in the `Notation::init()`
+}
+
+void EngravingModule::onDeinit()
+{
+    delete Ms::gpaletteScore;
+    Ms::gpaletteScore = nullptr;
 }

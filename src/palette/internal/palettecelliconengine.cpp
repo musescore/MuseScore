@@ -167,7 +167,7 @@ void PaletteCellIconEngine::paintScoreElement(Painter& painter, Element* element
 
     painter.save();
 
-    const qreal sizeRatio = spatium / gscore->spatium();
+    const qreal sizeRatio = spatium / gpaletteScore->spatium();
     painter.scale(sizeRatio, sizeRatio); // scale coordinates so element is drawn at correct size
 
     element->layout(); // calculate bbox

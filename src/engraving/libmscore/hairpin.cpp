@@ -110,7 +110,7 @@ void HairpinSegment::layout()
     Dynamic* sd = nullptr;
     Dynamic* ed = nullptr;
     qreal dymax = hairpin()->placeBelow() ? -10000.0 : 10000.0;
-    if (autoplace() && !score()->isPalette()) {
+    if (autoplace() && !score()->isPaletteScore()) {
         Segment* start = hairpin()->startSegment();
         Segment* end = hairpin()->endSegment();
         // Try to fit between adjacent dynamics

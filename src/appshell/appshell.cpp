@@ -248,6 +248,11 @@ int AppShell::run(int argc, char** argv)
 
     globalModule.onDeinit();
 
+    // Delete modules
+    qDeleteAll(m_modules);
+    m_modules.clear();
+    mu::modularity::ioc()->reset();
+
     return retCode;
 }
 

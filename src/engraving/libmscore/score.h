@@ -485,7 +485,6 @@ private:
                                                 ///< save a backup file will be created, subsequent
                                                 ///< saves will not overwrite the backup file.
     bool _defaultsRead        { false };        ///< defaults were read at MusicXML import, allow export of defaults in convertermode
-    bool _isPalette           { false };
     ScoreOrder _scoreOrder;                     ///< used for score ordering
 
     int _mscVersion { MSCVERSION };     ///< version of current loading *.msc file
@@ -1002,9 +1001,6 @@ public:
     bool defaultsRead() const { return _defaultsRead; }
     void setDefaultsRead(bool b) { _defaultsRead = b; }
     Text* getText(Tid subtype) const;
-
-    bool isPalette() const { return _isPalette; }
-    void setPaletteMode(bool palette) { _isPalette = palette; }
 
     bool enableVerticalSpread() const;
     void setEnableVerticalSpread(bool val);

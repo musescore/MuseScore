@@ -796,20 +796,20 @@ void SpecialCharactersDialog::populateCommon()
     m_pCommon->clear();
 
     for (auto id : unicodeAccidentals) {
-        std::shared_ptr<FSymbol> fs = std::make_shared<FSymbol>(gscore);
+        std::shared_ptr<FSymbol> fs = std::make_shared<FSymbol>(gpaletteScore);
         fs->setCode(id);
         fs->setFont(m_font);
         m_pCommon->appendElement(fs, QString(id));
     }
 
     for (auto id : Sym::commonScoreSymbols) {
-        std::shared_ptr<Symbol> s = std::make_shared<Symbol>(gscore);
-        s->setSym(id, gscore->scoreFont());
+        std::shared_ptr<Symbol> s = std::make_shared<Symbol>(gpaletteScore);
+        s->setSym(id, gpaletteScore->scoreFont());
         m_pCommon->appendElement(s, Sym::id2userName(id));
     }
 
     for (auto id : commonTextSymbols) {
-        std::shared_ptr<FSymbol> fs = std::make_shared<FSymbol>(gscore);
+        std::shared_ptr<FSymbol> fs = std::make_shared<FSymbol>(gpaletteScore);
         fs->setCode(id);
         fs->setFont(m_font);
         m_pCommon->appendElement(fs, QString(id));
@@ -828,8 +828,8 @@ void SpecialCharactersDialog::populateSmufl()
 
     m_pSmufl->clear();
     for (QString name : smuflNames) {
-        std::shared_ptr<Symbol> s = std::make_shared<Symbol>(gscore);
-        s->setSym(Sym::name2id(name), gscore->scoreFont());
+        std::shared_ptr<Symbol> s = std::make_shared<Symbol>(gpaletteScore);
+        s->setSym(Sym::name2id(name), gpaletteScore->scoreFont());
         m_pSmufl->appendElement(s, Sym::id2userName(Sym::name2id(name)));
     }
 }
@@ -844,7 +844,7 @@ void SpecialCharactersDialog::populateUnicode()
     QPoint p = rangeInfo[row];
     m_pUnicode->clear();
     for (int code = p.x(); code <= p.y(); ++code) {
-        std::shared_ptr<FSymbol> fs = std::make_shared<FSymbol>(gscore);
+        std::shared_ptr<FSymbol> fs = std::make_shared<FSymbol>(gpaletteScore);
         fs->setCode(code);
         fs->setFont(m_font);
         m_pUnicode->appendElement(fs, QString("0x%1").arg(code, 5, 16, QLatin1Char('0')));

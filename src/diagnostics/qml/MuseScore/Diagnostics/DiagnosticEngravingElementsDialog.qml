@@ -19,24 +19,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_ENGRAVINGMODULE_H
-#define MU_ENGRAVING_ENGRAVINGMODULE_H
+import QtQuick 2.15
+import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
 
-#include "modularity/imodulesetup.h"
+StyledDialogView {
+    id: root
 
-namespace mu::engraving {
-class EngravingModule : public modularity::IModuleSetup
-{
-public:
-    std::string moduleName() const override;
+    title: "Diagnostic: Accessibility"
 
-    void registerExports() override;
-    void resolveImports() override;
-    void registerResources() override;
-    void registerUiTypes() override;
-    void onInit(const framework::IApplication::RunMode& mode) override;
-    void onDeinit();
-};
+    contentHeight: 800
+    contentWidth: 600
+    resizable: true
+
+    //! NOTE It is necessary that it can be determined that this is an object for diagnostics
+    contentItem.objectName: panel.objectName
+
+    DiagnosticEngravingElementsPanel {
+        id: panel
+        anchors.fill: parent
+    }
 }
-
-#endif // MU_ENGRAVING_ENGRAVINGMODULE_H
