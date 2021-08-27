@@ -616,24 +616,9 @@ void MasterScore::addExcerpt(Excerpt* ex, int index)
     }
 
     if (ex->tracks().isEmpty()) {   // SHOULDN'T HAPPEN, protected in the UI, but it happens during read-in!!!
-        QMultiMap<int, int> tracks;
-        for (Staff* s : score->staves()) {
-            const LinkedElements* ls = s->links();
-            if (ls == 0) {
-                continue;
-            }
-            for (auto le : *ls) {
-                Staff* ps = toStaff(le);
-                if (ps->primaryStaff()) {
-                    for (int i = 0; i < VOICES; i++) {
-                        tracks.insert(ps->idx() * VOICES + i % VOICES, s->idx() * VOICES + i % VOICES);
-                    }
-                    break;
-                }
-            }
-        }
-        ex->setTracks(tracks);
+        ex->updateTracks();
     }
+
     excerpts().insert(index < 0 ? excerpts().size() : index, ex);
     setExcerptsChanged(true);
 }
