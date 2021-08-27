@@ -44,6 +44,7 @@
 #include "bracketItem.h"
 #include "chord.h"
 #include "masterscore.h"
+#include "excerpt.h"
 
 // #define DEBUG_CLEFS
 
@@ -296,12 +297,53 @@ std::array<bool, VOICES> Staff::visibilityVoices() const
 
 bool Staff::isVoiceVisible(int voice) const
 {
+    if (voice < 0 || voice >= VOICES) {
+        return false;
+    }
+
     return _visibilityVoices[voice];
 }
 
 void Staff::setVoiceVisible(int voice, bool visible)
 {
+    if (voice < 0 || voice >= VOICES) {
+        return;
+    }
+
     _visibilityVoices[voice] = visible;
+}
+
+bool Staff::canDisableVoice() const
+{
+    auto voices = visibilityVoices();
+    int countOfVisibleVoices = 0;
+    for (size_t i = 0; i < voices.size(); ++i) {
+        if (voices[i]) {
+            countOfVisibleVoices++;
+        }
+    }
+
+    return countOfVisibleVoices > 1;
+}
+
+void Staff::updateVisibilityVoices()
+{
+    std::array<bool, VOICES> voices{ true, true, true, true };
+
+    if (!score()->excerpt()) {
+        return;
+    }
+
+    auto tracks = score()->excerpt()->tracks();
+
+    Staff* masterStaff = masterScore()->staffById(id());
+    int srcStaffIdx = masterStaff->idx();
+
+    for (int voice = 0; voice < VOICES; voice++) {
+        voices[voice] = tracks.contains(srcStaffIdx * VOICES + voice % VOICES);
+    }
+
+    _visibilityVoices = voices;
 }
 
 //---------------------------------------------------------
@@ -1237,6 +1279,7 @@ void Staff::init(const Staff* s)
     _mergeMatchingRests = s->_mergeMatchingRests;
     _color             = s->_color;
     _userDist          = s->_userDist;
+    _visibilityVoices = s->_visibilityVoices;
 }
 
 ID Staff::id() const

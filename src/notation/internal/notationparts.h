@@ -89,7 +89,6 @@ private:
 
     void doSetScoreOrder(const ScoreOrder& order);
     void doMoveStaves(const std::vector<Staff*>& staves, int destinationStaffIndex, Part* destinationPart = nullptr);
-    void doSetStaffVoiceVisible(Staff* staff, int voiceIndex, bool visible);
     void doRemoveParts(const std::vector<Part*>& parts);
     void doAppendStaff(Staff* staff, Part* destinationPart);
     void doSetStaffConfig(Staff* staff, const StaffConfig& config);
@@ -104,7 +103,6 @@ private:
     void appendStaves(Part* part, const InstrumentTemplate& templ);
     void insertStaff(Staff* staff, int destinationStaffIndex);
     void initStaff(Staff* staff, const InstrumentTemplate& templ, const Ms::StaffType* staffType, int cleffIndex);
-    bool canDisableVoice(const ID& staffId) const;
 
     void removeMissingParts(const PartInstrumentList& parts);
     void appendNewParts(const PartInstrumentList& parts);

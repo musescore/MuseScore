@@ -3405,7 +3405,8 @@ void Score::selectRange(Element* e, int staffIdx)
 void Score::collectMatch(void* data, Element* e)
 {
     ElementPattern* p = static_cast<ElementPattern*>(data);
-    if (p->type != int(e->type())) {
+
+    if (p->type != int(ElementType::INVALID) && p->type != int(e->type())) {
         return;
     }
 

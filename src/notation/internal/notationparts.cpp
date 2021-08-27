@@ -409,17 +409,18 @@ bool NotationParts::setVoiceVisible(const ID& staffId, int voiceIndex, bool visi
         return false;
     }
 
-    if (!visible && !canDisableVoice(staffId)) {
+    if (!visible && !staff->canDisableVoice()) {
         return false;
     }
 
     startEdit();
 
-    doSetStaffVoiceVisible(staff, voiceIndex, visible);
+    score()->excerpt()->setVoiceVisible(staffId.toUint64(), voiceIndex, visible);
 
     apply();
 
-    notifyAboutStaffChanged(staff);
+    Staff* newStaff = staffModifiable(staffId);
+    notifyAboutStaffChanged(newStaff);
 
     return true;
 }
@@ -484,43 +485,6 @@ void NotationParts::setStaffConfig(const ID& staffId, const StaffConfig& config)
     apply();
 
     notifyAboutStaffChanged(staff);
-}
-
-void NotationParts::doSetStaffVoiceVisible(Staff* staff, int voiceIndex, bool visible)
-{
-    TRACEFUNC;
-
-    if (staff->isVoiceVisible(voiceIndex) == visible) {
-        return;
-    }
-
-    static const QSet<Ms::ElementType> ignoredTypes {
-        Ms::ElementType::STAFF_LINES,
-        Ms::ElementType::BAR_LINE,
-        Ms::ElementType::BRACKET,
-        Ms::ElementType::TIMESIG,
-        Ms::ElementType::CLEF
-    };
-
-    for (Ms::Page* page : score()->pages()) {
-        for (Ms::Element* element : page->elements()) {
-            if (!element) {
-                continue;
-            }
-
-            if (element->staffIdx() != staff->idx() || element->voice() != voiceIndex) {
-                continue;
-            }
-
-            if (ignoredTypes.contains(element->type())) {
-                continue;
-            }
-
-            element->undoChangeProperty(Ms::Pid::VISIBLE, visible);
-        }
-    }
-
-    staff->setVoiceVisible(voiceIndex, visible);
 }
 
 void NotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
@@ -964,25 +928,6 @@ void NotationParts::initStaff(Staff* staff, const InstrumentTemplate& templ, con
         staff->setBarLineSpan(templ.barlineSpan[cleffIndex]);
     }
     staff->setDefaultClefType(templ.clefType(cleffIndex));
-}
-
-
-bool NotationParts::canDisableVoice(const mu::ID& staffId) const
-{
-    Staff* staff = this->staffModifiable(staffId);
-    if (!staff) {
-        return false;
-    }
-
-    auto voices = staff->visibilityVoices();
-    int countOfVisibleVoices = 0;
-    for (size_t i = 0; i < voices.size(); ++i) {
-        if (voices[i]) {
-            countOfVisibleVoices++;
-        }
-    }
-
-    return countOfVisibleVoices != 1;
 }
 
 void NotationParts::removeMissingParts(const PartInstrumentList& parts)

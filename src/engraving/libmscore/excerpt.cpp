@@ -114,6 +114,15 @@ bool Excerpt::isEmpty() const
     return partScore() ? partScore()->parts().empty() : true;
 }
 
+void Excerpt::setTracks(const QMultiMap<int, int>& t)
+{
+    _tracks = t;
+
+    for (Staff* staff : partScore()->staves()) {
+        staff->updateVisibilityVoices();
+    }
+}
+
 void Excerpt::removePart(const ID& id)
 {
     int index = 0;
@@ -211,8 +220,14 @@ void Excerpt::updateTracks()
         for (auto le : *ls) {
             Staff* ps = toStaff(le);
             if (ps->primaryStaff()) {
+                int v = 0;
                 for (int i = 0; i < VOICES; i++) {
-                    tracks.insert(ps->idx() * VOICES + i % VOICES, s->idx() * VOICES + i % VOICES);
+                    if (!s->isVoiceVisible(i)) {
+                        continue;
+                    }
+
+                    tracks.insert(ps->idx() * VOICES + i % VOICES, s->idx() * VOICES + v % VOICES);
+                    v++;
                 }
 
                 break;
@@ -221,6 +236,40 @@ void Excerpt::updateTracks()
     }
 
     setTracks(tracks);
+}
+
+void Excerpt::setVoiceVisible(ID staffId, int voiceIndex, bool visible)
+{
+    Staff* staff = partScore()->staffById(staffId);
+    Staff* masterStaff = oscore()->staffById(staffId);
+    if (!staff || !masterStaff) {
+        return;
+    }
+
+    int staffIndex = staff->idx();
+
+    // update tracks
+    staff->setVoiceVisible(voiceIndex, visible);
+    updateTracks();
+
+    // clone staff
+    Staff* staffCopy = new Staff(partScore());
+    staffCopy->setId(staff->id());
+    staffCopy->setPart(staff->part());
+    staffCopy->init(staff);
+
+    // remove current staff, insert cloned
+    partScore()->cmdRemoveStaff(staffIndex);
+    partScore()->undoInsertStaff(staffCopy, staffIndex);
+
+    // clone master staff to current with mapped tracks
+    Ms::Fraction startTick = staffCopy->score()->firstMeasure()->tick();
+    Ms::Fraction endTick = staffCopy->score()->lastMeasure()->tick();
+    cloneStaff2(masterStaff, staffCopy, startTick, endTick);
+
+    // link master staff to cloned
+    Staff* newStaff = partScore()->staffById(staffId);
+    partScore()->undo(new Link(newStaff, masterStaff));
 }
 
 //---------------------------------------------------------

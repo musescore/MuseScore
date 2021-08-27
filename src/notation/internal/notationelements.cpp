@@ -79,7 +79,7 @@ std::vector<Element*> NotationElements::elements(const FilterElementsOptions& el
 
     const FilterElementsOptions* elementsFilterOptions = dynamic_cast<const FilterElementsOptions*>(&elementsOptions);
 
-    if (!elementsFilterOptions || !elementsFilterOptions->isValid()) {
+    if (!elementsFilterOptions) {
         return allScoreElements();
     }
 
