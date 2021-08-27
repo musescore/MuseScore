@@ -539,7 +539,7 @@ QRect PaletteWidget::rectForCellAt(int idx) const
 
 QPixmap PaletteWidget::pixmapForCellAt(int paletteIdx) const
 {
-    qreal _spatium = gscore->spatium();
+    qreal _spatium = gpaletteScore->spatium();
     qreal magS     = configuration()->paletteSpatium() * mag() * paletteScaling();
     qreal mag      = magS / _spatium;
 
@@ -819,7 +819,7 @@ void PaletteWidget::dropEvent(QDropEvent* event)
         QList<QUrl> ul = event->mimeData()->urls();
         QUrl u = ul.front();
         if (u.scheme() == "file") {
-            auto image = makeElement<Image>(gscore);
+            auto image = makeElement<Image>(gpaletteScore);
             QString filePath(u.toLocalFile());
             image->load(filePath);
             element = image;
@@ -834,11 +834,11 @@ void PaletteWidget::dropEvent(QDropEvent* event)
         ElementType type = Element::readType(xml, &dragOffset, &duration);
 
         if (type == ElementType::SYMBOL) {
-            auto symbol = makeElement<Symbol>(gscore);
+            auto symbol = makeElement<Symbol>(gpaletteScore);
             symbol->read(xml);
             element = symbol;
         } else {
-            element = std::shared_ptr<Element>(Element::create(type, gscore));
+            element = std::shared_ptr<Element>(Element::create(type, gpaletteScore));
             if (element) {
                 element->read(xml);
                 element->setTrack(0);
@@ -895,10 +895,10 @@ void PaletteWidget::resizeEvent(QResizeEvent* e)
 
 void PaletteWidget::paintEvent(QPaintEvent* /*event*/)
 {
-    qreal _spatium = gscore->spatium();
+    qreal _spatium = gpaletteScore->spatium();
     qreal magS     = configuration()->paletteSpatium() * mag() * paletteScaling();
     qreal mag      = magS / _spatium;
-    gscore->setSpatium(SPATIUM20);
+    gpaletteScore->setSpatium(SPATIUM20);
 
     mu::draw::Painter painter(this, "palette");
     painter.setAntialiasing(true);

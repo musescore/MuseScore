@@ -3,3 +3,5 @@ DiagnosticPathsDialog 1.0 DiagnosticPathsDialog.qml
 DiagnosticPathsPanel 1.0 DiagnosticPathsPanel.qml
 DiagnosticNavigationDialog 1.0 DiagnosticNavigationDialog.qml
 DiagnosticNavigationPanel 1.0 DiagnosticNavigationPanel.qml
+DiagnosticEngravingElementsDialog 1.0 DiagnosticEngravingElementsDialog.qml
+DiagnosticEngravingElementsPanel 1.0 DiagnosticEngravingElementsPanel.qml

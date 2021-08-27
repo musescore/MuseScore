@@ -60,6 +60,7 @@ Rectangle {
         id: tools
         anchors.left: parent.left
         anchors.right: parent.right
+        anchors.margins: 8
         height: 48
         spacing: 16
 

@@ -184,7 +184,7 @@ bool PaletteCell::read(XmlReader& e)
         } else if (s == "visible") {
             visible = e.readBool();
         } else {
-            element.reset(Element::name2Element(s, gscore));
+            element.reset(Element::name2Element(s, gpaletteScore));
             if (!element) {
                 e.unknown();
             } else {
@@ -255,7 +255,7 @@ PaletteCellPtr PaletteCell::fromElementMimeData(const QByteArray& data)
 {
     PointF dragOffset;
     Fraction duration(1, 4);
-    ElementPtr element(Element::readMimeData(gscore, data, &dragOffset, &duration));
+    ElementPtr element(Element::readMimeData(gpaletteScore, data, &dragOffset, &duration));
 
     if (!element) {
         return nullptr;

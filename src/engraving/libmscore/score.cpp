@@ -104,7 +104,7 @@ using namespace mu;
 using namespace mu::engraving;
 
 namespace Ms {
-MasterScore* gscore;                 ///< system score, used for palettes etc.
+MasterScore* gpaletteScore;                 ///< system score, used for palettes etc.
 std::set<Score*> Score::validScores;
 
 bool noSeq           = false;
@@ -449,12 +449,12 @@ Score* Score::clone()
 
 Score* Score::paletteScore()
 {
-    return Ms::gscore;
+    return Ms::gpaletteScore;
 }
 
 bool Score::isPaletteScore() const
 {
-    return this == Ms::gscore;
+    return this == Ms::gpaletteScore;
 }
 
 //---------------------------------------------------------

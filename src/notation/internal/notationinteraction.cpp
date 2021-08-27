@@ -225,7 +225,7 @@ void NotationInteraction::showShadowNote(const PointF& pos)
 
     if (inputState.rest()) {
         int yo = 0;
-        Ms::Rest rest(Ms::gscore, duration.type());
+        Ms::Rest rest(Ms::gpaletteScore, duration.type());
         rest.setTicks(duration.fraction());
         symNotehead = rest.getSymbol(inputState.duration().type(), 0, staff->lines(position.segment->tick()), &yo);
         m_shadowNote->setState(symNotehead, duration, true, segmentSkylineTopY, segmentSkylineBottomY);

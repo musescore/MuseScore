@@ -90,7 +90,7 @@ void DrumsetPalette::updateDrumset()
 
     TRACEFUNC;
 
-    double _spatium = gscore->spatium();
+    double _spatium = gpaletteScore->spatium();
 
     for (int pitch = 0; pitch < 128; ++pitch) {
         if (!m_drumset->isValid(pitch)) {
@@ -111,15 +111,15 @@ void DrumsetPalette::updateDrumset()
             up = line > 4;
         }
 
-        auto chord = std::make_shared<Chord>(gscore);
+        auto chord = std::make_shared<Chord>(gpaletteScore);
         chord->setDurationType(TDuration::DurationType::V_QUARTER);
         chord->setStemDirection(dir);
         chord->setUp(up);
         chord->setTrack(voice);
-        Stem* stem = new Stem(gscore);
+        Stem* stem = new Stem(gpaletteScore);
         stem->setLen((up ? -3.0 : 3.0) * _spatium);
         chord->add(stem);
-        Note* note = new Note(gscore);
+        Note* note = new Note(gpaletteScore);
         note->setMark(true);
         note->setParent(chord.get());
         note->setTrack(voice);
