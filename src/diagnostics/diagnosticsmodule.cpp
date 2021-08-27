@@ -30,6 +30,7 @@
 #include "internal/diagnosticsactions.h"
 #include "internal/diagnosticsactionscontroller.h"
 #include "internal/diagnosticspathsregister.h"
+#include "internal/diagnosticengravingregister.h"
 
 #include "view/diagnosticspathsmodel.h"
 
@@ -40,6 +41,8 @@
 #include "view/keynav/keynavdevcontrol.h"
 
 #include "view/diagnosticaccessiblemodel.h"
+
+#include "view/engraving/diagnosticengravingelementsmodel.h"
 
 using namespace mu::diagnostics;
 using namespace mu::modularity;
@@ -54,6 +57,7 @@ std::string DiagnosticsModule::moduleName() const
 void DiagnosticsModule::registerExports()
 {
     ioc()->registerExport<IDiagnosticsPathsRegister>(moduleName(), new DiagnosticsPathsRegister());
+    ioc()->registerExport<DiagnosticEngravingRegister>(moduleName(), new DiagnosticEngravingRegister());
 }
 
 void DiagnosticsModule::resolveImports()
@@ -63,6 +67,8 @@ void DiagnosticsModule::resolveImports()
         ir->registerQmlUri(Uri("musescore://diagnostics/system/paths"), "MuseScore/Diagnostics/DiagnosticPathsDialog.qml");
         ir->registerQmlUri(Uri("musescore://diagnostics/navigation/tree"), "MuseScore/Diagnostics/DiagnosticNavigationDialog.qml");
         ir->registerQmlUri(Uri("musescore://diagnostics/accessible/tree"), "MuseScore/Diagnostics/DiagnosticAccessibleDialog.qml");
+        ir->registerQmlUri(Uri("musescore://diagnostics/engraving/elements"),
+                           "MuseScore/Diagnostics/DiagnosticEngravingElementsDialog.qml");
     }
 
     auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
@@ -82,6 +88,8 @@ void DiagnosticsModule::registerUiTypes()
     qmlRegisterUncreatableType<KeyNavDevControl>("MuseScore.Diagnostics", 1, 0, "KeyNavDevControl", "Cannot create a KeyNavDevControl");
 
     qmlRegisterType<DiagnosticAccessibleModel>("MuseScore.Diagnostics", 1, 0, "DiagnosticAccessibleModel");
+
+    qmlRegisterType<DiagnosticEngravingElementsModel>("MuseScore.Diagnostics", 1, 0, "DiagnosticEngravingElementsModel");
 }
 
 void DiagnosticsModule::onInit(const framework::IApplication::RunMode&)

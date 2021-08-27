@@ -43,6 +43,10 @@ const UiActionList DiagnosticsActions::m_actions = {
     UiAction("diagnostic-accessible-tree-dump",
              mu::context::UiCtxAny,
              QT_TRANSLATE_NOOP("action", "Accessible dump")
+             ),
+    UiAction("diagnostic-show-engraving-elements",
+             mu::context::UiCtxAny,
+             QT_TRANSLATE_NOOP("action", "Engraving elements")
              )
 };
 

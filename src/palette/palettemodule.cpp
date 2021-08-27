@@ -151,3 +151,11 @@ void PaletteModule::onAllInited(const framework::IApplication::RunMode& mode)
     //! So, we loads these settings on onAllInited
     s_paletteWorkspaceSetup->setup();
 }
+
+void PaletteModule::onDeinit()
+{
+    s_paletteWorkspaceSetup.reset();
+    s_configuration.reset();
+    s_paletteUiActions.reset();
+    s_paletteProvider.reset();
+}

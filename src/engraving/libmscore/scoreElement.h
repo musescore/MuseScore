@@ -28,6 +28,9 @@
 #include "style/styledef.h"
 #include "style/textstyle.h"
 
+#include "modularity/ioc.h"
+#include "diagnostics/idiagnosticengravingregister.h"
+
 namespace Ms {
 class ScoreElement;
 class MasterScore;
@@ -186,6 +189,8 @@ struct ElementName {
 
 class ScoreElement
 {
+    INJECT_STATIC(engraving, mu::diagnostics::IDiagnosticEngravingRegister, diagnosticRegister)
+
     Score* _score;
     static ElementStyle const emptyStyle;
 
@@ -196,8 +201,7 @@ protected:
     virtual int getPropertyFlagsIdx(Pid id) const;
 
 public:
-    ScoreElement(Score* s)
-        : _score(s) {}
+    ScoreElement(Score* s);
     ScoreElement(const ScoreElement& se);
 
     virtual ~ScoreElement();

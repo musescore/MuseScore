@@ -88,7 +88,7 @@ TimeDialog::TimeDialog(QWidget* parent)
 
 void TimeDialog::addClicked()
 {
-    auto ts = makeElement<TimeSig>(gscore);
+    auto ts = makeElement<TimeSig>(gpaletteScore);
     ts->setSig(Fraction(zNominal->value(), denominator()));
     ts->setGroups(groups->groups());
 

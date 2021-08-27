@@ -159,6 +159,14 @@ static const ElementName elementNames[] = {
 //   ScoreElement
 //---------------------------------------------------------
 
+ScoreElement::ScoreElement(Score* s)
+    : _score(s)
+{
+    if (diagnosticRegister()) {
+        diagnosticRegister()->reg(this);
+    }
+}
+
 ScoreElement::ScoreElement(const ScoreElement& se)
 {
     _score        = se._score;
@@ -179,6 +187,10 @@ ScoreElement::ScoreElement(const ScoreElement& se)
 
 ScoreElement::~ScoreElement()
 {
+    if (diagnosticRegister()) {
+        diagnosticRegister()->unreg(this);
+    }
+
     if (_links) {
         _links->removeOne(this);
         if (_links->empty()) {

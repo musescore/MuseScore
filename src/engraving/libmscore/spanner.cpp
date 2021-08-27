@@ -696,7 +696,7 @@ void Spanner::computeStartElement()
 
 void Spanner::computeEndElement()
 {
-    if (score()->isPalette()) {
+    if (score()->isPaletteScore()) {
         // return immediately to prevent lots of
         // "no element found" messages from appearing
         _endElement = nullptr;

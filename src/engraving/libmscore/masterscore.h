@@ -187,7 +187,7 @@ public:
     virtual QString title() const override;
 };
 
-extern Ms::MasterScore* gscore;
+extern Ms::MasterScore* gpaletteScore;
 }
 
 #endif // MU_ENGRAVING_MASTERSCORE_H

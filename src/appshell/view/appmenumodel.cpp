@@ -325,9 +325,14 @@ MenuItem AppMenuModel::diagnosticItem() const
         makeMenuItem("diagnostic-accessible-tree-dump"),
     };
 
+    MenuItemList engravingItems {
+        makeMenuItem("diagnostic-show-engraving-elements"),
+    };
+
     MenuItemList items {
         makeMenu(qtrc("appshell", "System"), systemItems),
         makeMenu(qtrc("appshell", "Accessibility"), accessibilityItems),
+        makeMenu(qtrc("appshell", "Engraving"), engravingItems),
     };
 
     return makeMenu(qtrc("appshell", "Diagnostic"), items);

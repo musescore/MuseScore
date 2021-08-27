@@ -31,6 +31,7 @@ using namespace mu::accessibility;
 static const mu::UriQuery SYSTEN_PATHS_URI("musescore://diagnostics/system/paths?sync=false&modal=false");
 static const mu::UriQuery NAVIGATION_TREE_URI("musescore://diagnostics/navigation/tree?sync=false&modal=false");
 static const mu::UriQuery ACCESSIBLE_TREE_URI("musescore://diagnostics/accessible/tree?sync=false&modal=false");
+static const mu::UriQuery ENGRAVING_ELEMENTS_URI("musescore://diagnostics/engraving/elements?sync=false&modal=false");
 
 void DiagnosticsActionsController::init()
 {
@@ -38,6 +39,7 @@ void DiagnosticsActionsController::init()
     dispatcher()->reg(this, "diagnostic-show-navigation-tree", [this]() { openUri(NAVIGATION_TREE_URI); });
     dispatcher()->reg(this, "diagnostic-show-accessible-tree", [this]() { openUri(ACCESSIBLE_TREE_URI); });
     dispatcher()->reg(this, "diagnostic-accessible-tree-dump", []() { DiagnosticAccessibleModel::dumpTree(); });
+    dispatcher()->reg(this, "diagnostic-show-engraving-elements", [this]() { openUri(ENGRAVING_ELEMENTS_URI); });
 }
 
 void DiagnosticsActionsController::openUri(const mu::UriQuery& uri)

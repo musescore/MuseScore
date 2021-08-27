@@ -122,7 +122,7 @@ PaletteCellPtr Palette::appendElement(ElementPtr element, const QString& name, q
 PaletteCellPtr Palette::appendActionIcon(Ms::ActionIconType type, actions::ActionCode code)
 {
     const ui::UiAction& action = actionsRegister()->action(code);
-    auto icon = makeElement<ActionIcon>(gscore);
+    auto icon = makeElement<ActionIcon>(gpaletteScore);
     icon->setActionType(type);
     icon->setAction(code, static_cast<char16_t>(action.iconCode));
     return appendElement(icon, action.title);
@@ -395,7 +395,7 @@ bool Palette::readFromFile(const QString& p)
             QString version = e.attribute("version");
             QStringList sl = version.split('.');
             int versionId = sl[0].toInt() * 100 + sl[1].toInt();
-            gscore->setMscVersion(versionId); // TODO: what is this?
+            gpaletteScore->setMscVersion(versionId); // TODO: what is this?
 
             while (e.readNextStartElement()) {
                 if (e.name() == "Palette") {
@@ -441,7 +441,7 @@ bool Palette::writeToFile(const QString& p) const
     }
     QBuffer cbuf;
     cbuf.open(QIODevice::ReadWrite);
-    XmlWriter xml(gscore, &cbuf);
+    XmlWriter xml(gpaletteScore, &cbuf);
     xml.header();
     xml.stag("container");
     xml.stag("rootfiles");
@@ -466,7 +466,7 @@ bool Palette::writeToFile(const QString& p) const
     {
         QBuffer cbuf1;
         cbuf1.open(QIODevice::ReadWrite);
-        XmlWriter xml1(gscore, &cbuf1);
+        XmlWriter xml1(gpaletteScore, &cbuf1);
         xml1.header();
         xml1.stag("museScore version=\"" MSC_VERSION "\"");
         write(xml1);
