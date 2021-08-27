@@ -57,8 +57,6 @@ public:
     Q_INVOKABLE void init();
     Q_INVOKABLE void reload();
 
-    Q_INVOKABLE int indexRow(const QModelIndex& idx) const;
-
     static void dumpTree();
 
 public slots:
