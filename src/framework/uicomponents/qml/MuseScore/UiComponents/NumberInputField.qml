@@ -137,6 +137,17 @@ Item {
         validator: IntValidator {
             bottom: root.minValue
         }
+
+        Keys.onShortcutOverride: {
+            event.accepted = true
+        }
+
+        Keys.onPressed: {
+            if (event.key === Qt.Key_Enter || event.key === Qt.Key_Return
+                    || event.key === Qt.Key_Escape) {
+                textField.focus = false
+            }
+        }
     }
 
     MouseArea {
