@@ -46,6 +46,7 @@ Rectangle {
 
     Item {
         id: tools
+        anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.margins: 8
@@ -58,39 +59,124 @@ Rectangle {
         }
 
         StyledTextLabel {
+            id: summaryLabel
+            anchors.top: parent.top
+            anchors.left: reloadBtn.right
+            anchors.right: parent.right
+            anchors.leftMargin: 8
+            height: 32
+            verticalAlignment: Text.AlignTop
+            horizontalAlignment: Text.AlignLeft
+            text: elementsModel.summary
+            visible: true
+        }
+
+        FlatButton {
+            id: moreBtn
+            anchors.right: parent.right
+            text: infoLable.visible ? "Less" : "More"
+            onClicked: infoLable.visible = !infoLable.visible
+        }
+
+        StyledTextLabel {
+            id: infoLable
             anchors.top: reloadBtn.bottom
             anchors.left: parent.left
             anchors.right: parent.right
-            height: implicitHeight
+            height: visible ? implicitHeight : 0
             verticalAlignment: Text.AlignTop
             horizontalAlignment: Text.AlignLeft
             text: elementsModel.info
+            visible: false
         }
     }
 
-    ListView {
+    TreeView {
+        id: view
         anchors.top: tools.bottom
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right
         clip: true
 
+        headerVisible: false
+
         model: elementsModel
 
-        delegate: Item {
-            id: delgt
-            width: parent.width
-            height: 48
+        function positionViewAtIndex(index) {
+            var rows = -1
+            while (index.valid) {
+                var r = index.row + 1
+                rows += r
+                index = view.model.parent(index)
+            }
 
-            property var item: itemData
+            __listView.positionViewAtIndex(rows, ListView.Center)
+        }
+
+        function expandBranch(index) {
+            var idxs = []
+            var parent = view.model.parent(index)
+            while (parent.valid) {
+                idxs.push(parent)
+                parent = view.model.parent(parent)
+            }
+
+            for(var i = (idxs.length - 1); i >= 0; --i) {
+                var idx = idxs[i]
+                view.expand(idx)
+            }
+        }
+
+        function collapseBranch(index) {
+            var idxs = []
+            idxs.push(index)
+            var parent = view.model.parent(index)
+            while (parent.valid) {
+                idxs.push(parent)
+                parent = view.model.parent(parent)
+            }
+
+            for(var i = 0; i < idxs.length; ++i) {
+                var idx = idxs[i]
+                view.collapse(idx)
+            }
+        }
+
+        TableViewColumn {
+            role: "itemData"
+        }
+
+        style: TreeViewStyle {
+            indentation: styleData.depth
+            rowDelegate: Rectangle {
+                height: 24
+                width: parent.width
+                color: styleData.row%2 == 0 ? root.color : ui.theme.backgroundSecondaryColor
+            }
+        }
+
+        itemDelegate: Item {
+            id: item
 
             StyledTextLabel {
+                id: secLabel
                 anchors.fill: parent
-                anchors.margins: 8
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignLeft
                 elide: Text.ElideNone
-                text: model.index + ": " + delgt.item.name
+                text: styleData.value.name
+            }
+
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    if (!styleData.isExpanded) {
+                        view.expand(styleData.index)
+                    } else {
+                        view.collapse(styleData.index)
+                    }
+                }
             }
         }
     }

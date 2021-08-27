@@ -25,7 +25,7 @@
 
 using namespace mu::diagnostics;
 
-void DiagnosticEngravingRegister::reg(Ms::ScoreElement* e)
+void DiagnosticEngravingRegister::reg(const Ms::ScoreElement* e)
 {
     if (e->score()->isPaletteScore()) {
         return;
@@ -35,23 +35,23 @@ void DiagnosticEngravingRegister::reg(Ms::ScoreElement* e)
     m_registred.send(e);
 }
 
-void DiagnosticEngravingRegister::unreg(Ms::ScoreElement* e)
+void DiagnosticEngravingRegister::unreg(const Ms::ScoreElement* e)
 {
     m_elements.remove(e);
     m_unregistred.send(e);
 }
 
-std::list<Ms::ScoreElement*> DiagnosticEngravingRegister::elements() const
+std::list<const Ms::ScoreElement*> DiagnosticEngravingRegister::elements() const
 {
     return m_elements;
 }
 
-mu::async::Channel<Ms::ScoreElement*> DiagnosticEngravingRegister::registred() const
+mu::async::Channel<const Ms::ScoreElement*> DiagnosticEngravingRegister::registred() const
 {
     return m_registred;
 }
 
-mu::async::Channel<Ms::ScoreElement*> DiagnosticEngravingRegister::unregistred() const
+mu::async::Channel<const Ms::ScoreElement*> DiagnosticEngravingRegister::unregistred() const
 {
     return m_unregistred;
 }
