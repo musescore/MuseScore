@@ -74,8 +74,6 @@ PianorollView::PianorollView(QQuickItem* parent)
 
 void PianorollView::onNotationChanged()
 {
-    //updateBoundingSize();
-    //update();
     auto notation = globalContext()->currentNotation();
     if (notation)
     {
@@ -87,6 +85,9 @@ void PianorollView::onNotationChanged()
             onCurrentNotationChanged();
         });
     }
+
+    update();
+    updateBoundingSize();
 }
 
 void PianorollView::onCurrentNotationChanged()
@@ -137,6 +138,42 @@ void PianorollView::setSubdivision(int value)
     m_subdivision = value;
 
     emit subdivisionChanged();
+}
+
+void PianorollView::setCenterX(double value)
+{
+    if (value == m_centerX)
+        return;
+    m_centerX = value;
+
+    emit centerXChanged();
+}
+
+void PianorollView::setCenterY(double value)
+{
+    if (value == m_centerY)
+        return;
+    m_centerY = value;
+
+    emit centerYChanged();
+}
+
+void PianorollView::setDisplayObjectWidth(double value)
+{
+    if (value == m_displayObjectWidth)
+        return;
+    m_displayObjectWidth = value;
+
+    emit displayObjectWidthChanged();
+}
+
+void PianorollView::setDisplayObjectHeight(double value)
+{
+    if (value == m_displayObjectHeight)
+        return;
+    m_displayObjectHeight = value;
+
+    emit displayObjectHeightChanged();
 }
 
 void PianorollView::setTool(PianorollTool value)
@@ -192,9 +229,12 @@ void PianorollView::updateBoundingSize()
     Ms::Score* score = notation->elements()->msScore();
     //    Ms::Fraction beats = controller()->widthInBeats();
     Ms::Measure* lm = score->lastMeasure();
-    Ms::Fraction beats = lm->tick() + lm->ticks();
-    double beat = beats.numerator() / (double)beats.denominator();
-    setImplicitSize((int)(beat * m_wholeNoteWidth), m_noteHeight * NUM_PITCHES);
+    Ms::Fraction wholeNotesFrac = lm->tick() + lm->ticks();
+    double wholeNotes = wholeNotesFrac.numerator() / (double)wholeNotesFrac.denominator();
+    setImplicitSize((int)(wholeNotes * m_wholeNoteWidth), m_noteHeight * NUM_PITCHES);
+
+    setDisplayObjectWidth(wholeNotes * m_wholeNoteWidth);
+    setDisplayObjectHeight(m_noteHeight * NUM_PITCHES);
 
 //    Ms::Score* score = notation->elements()->msScore();
 //    Ms::Measure* lm = score->lastMeasure();
@@ -206,14 +246,24 @@ void PianorollView::updateBoundingSize()
     update();
 }
 
-int PianorollView::tickToPixelX(int tick)
+int PianorollView::tickToPixelX(double tick)
 {
-    return static_cast<int>(tick * m_wholeNoteWidth);
+    return static_cast<int>(tick * m_wholeNoteWidth + m_centerX);
 }
 
-int PianorollView::pixelXToTick(int pixX)
+double PianorollView::pixelXToTick(int pixX)
 {
     return static_cast<int>(pixX / m_wholeNoteWidth);
+}
+
+int PianorollView::pitchToPixelY(double pitch)
+{
+    return static_cast<int>(pitch * m_noteHeight);
+}
+
+double PianorollView::pixelYToPitch(int pixY)
+{
+    return static_cast<int>(pixY / m_noteHeight);
 }
 
 void PianorollView::paint(QPainter* p)

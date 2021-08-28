@@ -43,6 +43,28 @@ void PianorollScrollbar::load()
 
 void PianorollScrollbar::updateSlider()
 {
+//    notation::INotationPtr notation = globalContext()->currentNotation();
+//    if (!notation) {
+//        return;
+//    }
+
+//    Ms::Score* score = notation->elements()->msScore();
+//    Ms::Measure* lm = score->lastMeasure();
+//    Ms::Fraction spanInNotesFrac = lm->tick() + lm->ticks();
+//    double spanInNotes = spanInNotesFrac.numerator() / (double)spanInNotesFrac.denominator();
+////    setImplicitSize((int)(beat * m_wholeNoteWidth), m_noteHeight * NUM_PITCHES);
+//    int viewportWidth = width();
+//    m_wholeNoteWidth;
+
+//    m_focusWholeNotes;
+
+//    double focusPix = viewportWidth * (m_focusWholeNotes / spanInNotes);
+
+//    double scoreSpanPix = m_wholeNoteWidth * spanInNotes;
+//    double scrollheadWidth = qMin(m_noteWindowWidth / scoreSpanPix, 1);
+
+//    double scrollheadWidthPix = scrollheadWidth * viewportWidth;
+
     double frac = m_viewportSpan / m_displayObjectSpan;
     if (frac > 0)
         m_center = .5;
@@ -56,7 +78,6 @@ void PianorollScrollbar::setDirection(Direction value)
     m_direction = value;
 
     emit directionChanged();
-    update();
 }
 
 void PianorollScrollbar::setCenter(double value)
@@ -127,11 +148,9 @@ void PianorollScrollbar::mouseMoveEvent(QMouseEvent *event)
 {
     if (m_dragging)
     {
-        int delta = m_direction == Direction::HORIZONTAL
-                ? event->pos().x() - m_mouseDownPos.x()
-                : event->pos().y() - m_mouseDownPos.y();
-        double span = m_direction == Direction::HORIZONTAL ? width() : height();
-        setCenter(m_centerDragStart + delta / span);
+        int delta = event->pos().x() - m_mouseDownPos.x();
+        //delta / width()
+        setCenter(m_centerDragStart + delta / (double)width());
     }
 
 }
@@ -140,22 +159,8 @@ void PianorollScrollbar::paint(QPainter* p)
 {
     p->fillRect(0, 0, width(), height(), m_colorBackground);
 
-    if (m_direction == Direction::HORIZONTAL)
-    {
-        double span = width() * m_viewportSpan / m_displayObjectSpan;
-        QRect bounds(m_center * width() - span / 2, 0, span, height());
-        p->fillRect(bounds, m_colorSlider);
-        p->setPen(m_colorSlider.darker(100));
-        p->drawRect(bounds);
-    }
-    else
-    {
-        double span = height() * m_viewportSpan / m_displayObjectSpan;
-        QRect bounds(0, m_center * height() - span / 2, width(), span);
-        p->fillRect(bounds, m_colorSlider);
-        p->setPen(m_colorSlider.darker(100));
-        p->drawRect(bounds);
-    }
+    double span = width() * m_viewportSpan / m_displayObjectSpan;
+    p->fillRect(m_center * width() - span / 2, 0, span, height(), m_colorSlider);
 
 
 }
