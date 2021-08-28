@@ -30,6 +30,9 @@ static const volume_dbfs_t MIN_DISPLAYED_DBFS = -60.f; // 0%
 WaveFormModel::WaveFormModel(QObject* parent)
     : QObject(parent)
 {
+    if (!(playback()->audioOutput())) {
+        return;
+    }
     playback()->audioOutput()->masterSignalChanges().onResolve(this, [this](AudioSignalChanges signalChanges) {
         signalChanges.onReceive(this, [this](const audioch_t, const AudioSignalVal& newValue) {
             setCurrentSignalAmplitude(newValue.amplitude);

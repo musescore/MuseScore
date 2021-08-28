@@ -164,7 +164,9 @@ void PlaybackController::seek(const audio::msecs_t msecs)
         return;
     }
 
-    playback()->player()->seek(m_currentSequenceId, msecs);
+    if (playback()->player()) {
+        playback()->player()->seek(m_currentSequenceId, msecs);
+    }
 }
 
 Notification PlaybackController::playbackPositionChanged() const
@@ -352,7 +354,9 @@ void PlaybackController::onSelectionChanged()
         return;
     }
 
-    playback()->player()->resetLoop(m_currentSequenceId);
+    if (playback()->player()) {
+        playback()->player()->resetLoop(m_currentSequenceId);
+    }
 
     seekRangeSelection();
     updateMuteStates();
@@ -395,7 +399,9 @@ void PlaybackController::play()
         seek(startMsecs);
     }
 
-    playback()->player()->play(m_currentSequenceId);
+    if (playback()->player()) {
+        playback()->player()->play(m_currentSequenceId);
+    }
     setCurrentPlaybackStatus(PlaybackStatus::Running);
 }
 
@@ -415,7 +421,9 @@ void PlaybackController::pause()
         return;
     }
 
-    playback()->player()->pause(m_currentSequenceId);
+    if (playback()->player()) {
+        playback()->player()->pause(m_currentSequenceId);
+    }
     setCurrentPlaybackStatus(PlaybackStatus::Paused);
 }
 
@@ -425,7 +433,9 @@ void PlaybackController::stop()
         return;
     }
 
-    playback()->player()->stop(m_currentSequenceId);
+    if (playback()->player()) {
+        playback()->player()->stop(m_currentSequenceId);
+    }
     setCurrentPlaybackStatus(PlaybackStatus::Stopped);
 }
 
@@ -435,7 +445,9 @@ void PlaybackController::resume()
         return;
     }
 
-    playback()->player()->resume(m_currentSequenceId);
+    if (playback()->player()) {
+        playback()->player()->resume(m_currentSequenceId);
+    }
     setCurrentPlaybackStatus(PlaybackStatus::Running);
 }
 
@@ -590,7 +602,9 @@ void PlaybackController::setLoop(const LoopBoundaries& boundaries)
 
     msecs_t fromMsesc = tickToMsecs(boundaries.loopInTick);
     msecs_t toMsecs = tickToMsecs(boundaries.loopOutTick);
-    playback()->player()->setLoop(m_currentSequenceId, fromMsesc, toMsecs);
+    if (playback()->player()) {
+        playback()->player()->setLoop(m_currentSequenceId, fromMsesc, toMsecs);
+    }
 
     showLoop();
 
@@ -610,7 +624,9 @@ void PlaybackController::hideLoop()
         return;
     }
 
-    playback()->player()->resetLoop(m_currentSequenceId);
+    if (playback()->player()) {
+        playback()->player()->resetLoop(m_currentSequenceId);
+    }
     notationPlayback()->setLoopBoundariesVisible(false);
 
     notifyActionCheckedChanged(LOOP_CODE);
