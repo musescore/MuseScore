@@ -61,27 +61,18 @@ private:
     Q_PROPERTY(PianorollTool tool READ tool WRITE setTool NOTIFY toolChanged)
     Q_PROPERTY(int tuplet READ tuplet WRITE setTuplet NOTIFY tupletChanged)
     Q_PROPERTY(int subdivision READ subdivision WRITE setSubdivision NOTIFY subdivisionChanged)
+    Q_PROPERTY(double centerX READ centerX WRITE setCenterX NOTIFY centerXChanged)
+    Q_PROPERTY(double centerY READ centerY WRITE setCenterY NOTIFY centerYChanged)
+    Q_PROPERTY(double displayObjectWidth READ displayObjectWidth WRITE setDisplayObjectWidth NOTIFY displayObjectWidthChanged)
+    Q_PROPERTY(double displayObjectHeight READ displayObjectHeight WRITE setDisplayObjectHeight NOTIFY displayObjectHeightChanged)
 
 public:
 
     PianorollView(QQuickItem* parent = nullptr);
 
-//    QVariant icon() const;
-//    void setIcon(QVariant val);
-
-//    bool selected() const;
-//    void setSelected(bool val);
-
-    //    bool active() const;
-    //    void setActive(bool val);
 
     Q_INVOKABLE void load();
 
-//    QColor color() const { return m_color; }
-//    void setColor(QColor val) { m_color = val; }
-
-//    PianorollGeneral* common() const { return m_common; }
-//    void setCommon(PianorollGeneral* val) { m_common = val; }
 
     double wholeNoteWidth() const { return m_wholeNoteWidth; }
     void setWholeNoteWidth(double value);
@@ -93,11 +84,22 @@ public:
     void setTuplet(int value);
     int subdivision() const { return m_subdivision; }
     void setSubdivision(int value);
+    double centerX() const { return m_centerX; }
+    void setCenterX(double value);
+    double centerY() const { return m_centerY; }
+    void setCenterY(double value);
+    double displayObjectWidth() const { return m_displayObjectWidth; }
+    void setDisplayObjectWidth(double value);
+    double displayObjectHeight() const { return m_displayObjectHeight; }
+    void setDisplayObjectHeight(double value);
 
 
     void paint(QPainter*) override;
-    int tickToPixelX(int tick);
-    int pixelXToTick(int tick);
+
+    int tickToPixelX(double tick);
+    double pixelXToTick(int pixelX);
+    int pitchToPixelY(double pitch);
+    double pixelYToPitch(int tick);
 
 signals:
     void wholeNoteWidthChanged();
@@ -105,6 +107,10 @@ signals:
     void toolChanged();
     void tupletChanged();
     void subdivisionChanged();
+    void centerXChanged();
+    void centerYChanged();
+    void displayObjectWidthChanged();
+    void displayObjectHeightChanged();
 
 
 private:
@@ -118,8 +124,14 @@ private:
     
     notation::INotationPtr m_notation;
 
-//    QColor m_color = Qt::red;
-//    PianorollGeneral* m_common = nullptr;
+
+
+    double m_centerX = 0;  //fraction of note grid camera is focused on
+    double m_centerY = 0;  //fraction of note grid camera is focused on
+
+    double m_displayObjectWidth = 0;  //Set to note grid in pixels
+    double m_displayObjectHeight = 0;  //Set to note grid in pixels
+
     double m_wholeNoteWidth;
     int m_noteHeight;
     int m_tuplet = 1;
@@ -140,7 +152,6 @@ private:
     QColor m_colorNoteVoice3 = QColor(0xffac85);
     QColor m_colorNoteVoice4 = QColor(0xff94db);
 //    QColor m_colorNoteGhost = QColor(0x1dcca0);
-    QColor m_colorNoteGhost = QColor(0x8cb6bd);
 
     QColor m_colorNoteDrag = QColor(0xffbb33);
     QColor m_colorText = QColor(0x111111);

@@ -31,6 +31,7 @@ import MuseScore.Pianoroll 1.0
 
 Rectangle {
     color: ui.theme.backgroundPrimaryColor
+//    anchors.fill: parent
 
     ColumnLayout {
         anchors.fill: parent
@@ -202,22 +203,21 @@ Rectangle {
         }
 
 
-
-        ScrollView {
-            Layout.fillWidth: true
+        GridLayout {
+            columns: 2
+            //anchors.fill: parent
             Layout.fillHeight: true
-            clip: true
-            ScrollBar.horizontal.interactive: true
-            ScrollBar.vertical.interactive: true
-            ScrollBar.horizontal.policy: ScrollBar.AlwaysOn
-            ScrollBar.vertical.policy: ScrollBar.AlwaysOn
 
             PianorollView {
                 id: pianoView
-                anchors.fill: parent
+//                anchors.fill: parent
+                Layout.fillHeight: true
+                Layout.fillWidth: true
 
                 implicitWidth: 1500
                 implicitHeight: 500
+
+                centerX: scrollViewX.center
 
                 wholeNoteWidth: horizZoom.value
 //                zoomX: Math.log(horizZoom.value) / Math.log(2)
@@ -229,9 +229,64 @@ Rectangle {
                 Component.onCompleted: {
                     load()
                 }
+            }
+
+
+//            Text {
+//                Layout.minimumWidth: 12
+//                Layout.minimumHeight: 12
+//                text: "Three"; font.bold: true;
+//            }
+
+            Slider {
+                Layout.fillHeight: true
+                Layout.minimumWidth: 12
 
             }
+
+            PianorollScrollbar{
+                id: scrollViewX
+                diretion: PianorollScrollbar.HORIZONTAL
+                displayObjectSpan: pianoView.displayObjectWidth
+                viewportSpan: pianoView.width
+                Layout.fillWidth: true
+                Layout.minimumHeight: 12
+
+            }
+
+//            ScrollBar {
+//                id: hbar
+//                hoverEnabled: true
+//                active: hovered || pressed
+//                orientation: Qt.Horizontal
+//                size: 20 //
+//                //Layout.preferredWidth:
+//                Layout.fillWidth: true
+//                Layout.minimumHeight: 12
+//            }
+
+//            Text {
+//                Layout.minimumWidth: 12
+//                Layout.minimumHeight: 12
+//                text: "words"; font.bold: true;
+//            }
+//            Text {
+//                Layout.minimumWidth: 12
+//                Layout.minimumHeight: 12
+//                text: "in"; font.bold: true;
+//            }
         }
+
+//        ScrollView {
+//            Layout.fillWidth: true
+//            Layout.fillHeight: true
+//            clip: true
+//            ScrollBar.horizontal.interactive: true
+//            ScrollBar.vertical.interactive: true
+//            ScrollBar.horizontal.policy: ScrollBar.AlwaysOn
+//            ScrollBar.vertical.policy: ScrollBar.AlwaysOn
+
+//        }
     }
 }
 angle {
