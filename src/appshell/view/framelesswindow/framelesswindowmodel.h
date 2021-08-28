@@ -39,7 +39,7 @@ public:
     explicit FramelessWindowModel(QObject* parent = nullptr);
     ~FramelessWindowModel();
 
-    Q_INVOKABLE void init(QWindow* window);
+    Q_INVOKABLE void init();
 
     QRect titleBarMoveArea() const;
 
