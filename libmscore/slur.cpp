@@ -1129,11 +1129,11 @@ SpannerSegment* Slur::layoutSystem(System* system)
                   slurSegment->layoutSegment(sPos.p1, sPos.p2);
                   break;
             case SpannerSegmentType::BEGIN:
-                  slurSegment->layoutSegment(sPos.p1, QPointF(system->bbox().width(), sPos.p1.y()));
+                  slurSegment->layoutSegment(sPos.p1, QPointF(system->lastNoteRestSegmentX(true), sPos.p1.y()));
                   break;
             case SpannerSegmentType::MIDDLE: {
                   qreal x1 = system->firstNoteRestSegmentX(true);
-                  qreal x2 = system->bbox().width();
+                  qreal x2 = system->lastNoteRestSegmentX(true);
                   qreal y  = staffIdx() > system->staves()->size() ? system->y() : system->staff(staffIdx())->y();
                   slurSegment->layoutSegment(QPointF(x1, y), QPointF(x2, y));
                   }
