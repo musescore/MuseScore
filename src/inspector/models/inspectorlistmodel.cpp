@@ -27,6 +27,7 @@
 #include "score/scoredisplaysettingsmodel.h"
 #include "score/scoreappearancesettingsmodel.h"
 #include "notation/inotationinteraction.h"
+#include "engraving/libmscore/tremolo.h"
 
 using namespace mu::inspector;
 using namespace mu::notation;
@@ -86,6 +87,9 @@ void InspectorListModel::setElementList(const QList<Ms::Element*>& selectedEleme
     QSet<Ms::ElementType> newElementTypeSet;
 
     for (const Ms::Element* element : selectedElementList) {
+        if (element->isTremolo() && !Ms::toTremolo(element)->customStyleApplicable()) {
+            continue;
+        }
         newElementTypeSet << element->type();
     }
 
