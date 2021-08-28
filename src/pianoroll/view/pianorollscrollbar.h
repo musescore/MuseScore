@@ -30,6 +30,7 @@
 #include "async/asyncable.h"
 #include "context/iglobalcontext.h"
 #include "pianoroll/ipianorollcontroller.h"
+#include "pianorolltool.h"
 
 
 namespace mu::pianoroll {
@@ -47,6 +48,9 @@ class PianorollScrollbar : public QQuickPaintedItem, public async::Asyncable
 public:
     enum class Direction : char { HORIZONTAL, VERTICAL };
     Q_ENUM(Direction)
+
+private:
+//    INJECT(pianoroll, context::IGlobalContext, globalContext)
 
 public:
     PianorollScrollbar(QQuickItem* parent = nullptr);
@@ -88,12 +92,19 @@ private:
     double m_viewportSpan = 0;
     double m_center = 0;
 
+//    double m_wholeNoteWidth = 20;  //note size in pixels
+//    double m_focusWholeNotes = 0;  //camera is centered on this whole note position
+
+
+//    int m_noteWindowWidth;  //viewport in pixels
+//    double m_camera_span = .1;  //
+//    double m_camera_center = 0;
     Direction m_direction = Direction::HORIZONTAL;
 
-    QColor m_colorSlider = Qt::gray;
-//    QColor m_colorSlider = Qt::blue;
-    QColor m_colorBackground = QColor(0xdddddd);
-//    QColor m_colorBackground = Qt::green;
+//    QColor m_colorSlider = Qt::lightGray;
+    QColor m_colorSlider = Qt::blue;
+    //    QColor m_colorBackground = Qt::white;
+    QColor m_colorBackground = Qt::green;
 };
 
 }
