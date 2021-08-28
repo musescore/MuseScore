@@ -47,9 +47,9 @@ FramelessWindowModel::~FramelessWindowModel()
     delete m_controller;
 }
 
-void FramelessWindowModel::init(QWindow* window)
+void FramelessWindowModel::init()
 {
-    m_controller->init(window);
+    m_controller->init();
 }
 
 QRect FramelessWindowModel::titleBarMoveArea() const
