@@ -117,7 +117,7 @@ QPointF LineSegment::rightAnchorPosition(const qreal& systemPositionY) const
     {
 
     if (isMiddleType() || isBeginType())
-          return QPointF(system()->lastMeasure()->abbox().right(), systemPositionY);
+          return QPointF(system()->lastNoteRestSegmentX(true), systemPositionY);
 
     QPointF result;
 
@@ -1071,13 +1071,13 @@ SpannerSegment* SLine::layoutSystem(System* system)
                   System* s;
                   QPointF p1 = linePos(Grip::START, &s);
                   lineSegm->setPos(p1);
-                  qreal x2 = system->bbox().right();
+                  qreal x2 = system->lastNoteRestSegmentX(true);
                   lineSegm->setPos2(QPointF(x2 - p1.x(), 0.0));
                   }
                   break;
             case SpannerSegmentType::MIDDLE: {
                   qreal x1 = system->firstNoteRestSegmentX(true);
-                  qreal x2 = system->bbox().right();
+                  qreal x2 = system->lastNoteRestSegmentX(true);
                   System* s;
                   QPointF p1 = linePos(Grip::START, &s);
                   lineSegm->setPos(QPointF(x1, p1.y()));
