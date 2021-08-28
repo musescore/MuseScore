@@ -1670,6 +1670,42 @@ qreal System::firstNoteRestSegmentX(bool leading)
       }
 
 //---------------------------------------------------------
+//   lastNoteRestSegmentX
+//    in System() coordinates
+//    returns the position of the last note or rest,
+//    or the position just before the first non-chordrest segment
+//---------------------------------------------------------
+
+qreal System::lastNoteRestSegmentX(bool trailing)
+      {
+      qreal margin = score()->spatium() / 4;  // TODO: this can be parameterizable
+      //for (const MeasureBase* mb : measures()) {
+      for (auto measureBaseIter = measures().rbegin(); measureBaseIter != measures().rend(); measureBaseIter++) {
+            if ((*measureBaseIter)->isMeasure()) {
+                  const Measure* measure = static_cast<const Measure*>(*measureBaseIter);
+                  for (const Segment* seg = measure->last(); seg; seg = seg->prev()) {
+                        if (seg->isChordRestType()) {
+                              qreal noteRestPos = seg->measure()->pos().x() + seg->pos().x();
+                              if (!trailing)
+                                    return noteRestPos;
+
+                              // last CR found; find next segment after this one
+                              seg = seg->nextActive();
+                              while (seg && seg->allElementsInvisible())
+                                    seg = seg->nextActive();
+                              if (seg)
+                                    return qMax(seg->measure()->pos().x() + seg->pos().x() - margin, noteRestPos);
+                              else
+                                    return bbox().x() - margin;
+                              }
+                        }
+                  }
+            }
+      qDebug("lastNoteRestSegmentX: did not find segment");
+      return margin;
+      }
+
+//---------------------------------------------------------
 //   moveBracket
 //---------------------------------------------------------
 

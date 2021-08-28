@@ -192,6 +192,7 @@ public:
       Spacer* downSpacer(int staffIdx) const;
 
       qreal firstNoteRestSegmentX(bool leading = false);
+      qreal lastNoteRestSegmentX(bool trailing = false);
 
       void moveBracket(int staffIdx, int srcCol, int dstCol);
       bool hasFixedDownDistance() const { return fixedDownDistance; }
