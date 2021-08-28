@@ -27,6 +27,7 @@
 #include "ui/iuiengine.h"
 
 #include "view/pianorollview.h"
+#include "view/pianorollscrollbar.h"
 #include "view/pianorollgeneral.h"
 #include "internal/pianorollcontroller.h"
 
@@ -62,7 +63,7 @@ void PianorollModule::registerResources()
 void PianorollModule::registerUiTypes()
 {
     qmlRegisterType<PianorollView>("MuseScore.Pianoroll", 1, 0, "PianorollView");
-//    qmlRegisterType<PianorollGeneral>("MuseScore.Pianoroll", 1, 0, "PianorollGeneral");
+    qmlRegisterType<PianorollScrollbar>("MuseScore.Pianoroll", 1, 0, "PianorollScrollbar");
 
     auto ui = ioc()->resolve<ui::IUiEngine>(moduleName());
     if (ui) {
