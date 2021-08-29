@@ -146,6 +146,7 @@ void PianorollView::setCenterX(double value)
         return;
     m_centerX = value;
 
+    update();
     emit centerXChanged();
 }
 
@@ -155,6 +156,7 @@ void PianorollView::setCenterY(double value)
         return;
     m_centerY = value;
 
+    update();
     emit centerYChanged();
 }
 
@@ -163,6 +165,7 @@ void PianorollView::setDisplayObjectWidth(double value)
     if (value == m_displayObjectWidth)
         return;
     m_displayObjectWidth = value;
+    update();
 
     emit displayObjectWidthChanged();
 }
@@ -172,6 +175,7 @@ void PianorollView::setDisplayObjectHeight(double value)
     if (value == m_displayObjectHeight)
         return;
     m_displayObjectHeight = value;
+    update();
 
     emit displayObjectHeightChanged();
 }
@@ -218,9 +222,6 @@ void PianorollView::load()
 
 void PianorollView::updateBoundingSize()
 {
-    //    setImplicitSize((int)(32 * m_wholeNoteWidth), m_noteHeight * 128);
-
-
     notation::INotationPtr notation = globalContext()->currentNotation();
     if (!notation) {
         return;
@@ -236,39 +237,33 @@ void PianorollView::updateBoundingSize()
     setDisplayObjectWidth(wholeNotes * m_wholeNoteWidth);
     setDisplayObjectHeight(m_noteHeight * NUM_PITCHES);
 
-//    Ms::Score* score = notation->elements()->msScore();
-//    Ms::Measure* lm = score->lastMeasure();
-//    Ms::Fraction beats = lm->tick() + lm->ticks();
-
-//    int width = tickToPixelX(beats.ticks());
-//    setImplicitSize(width, m_noteHeight * NUM_PITCHES);
-
     update();
 }
 
-int PianorollView::tickToPixelX(double tick)
+int PianorollView::wholeNoteToPixelX(double tick) const
 {
-    return static_cast<int>(tick * m_wholeNoteWidth + m_centerX);
+    return tick * m_wholeNoteWidth - m_centerX * m_displayObjectWidth + width() / 2;
 }
 
-double PianorollView::pixelXToTick(int pixX)
+double PianorollView::pixelXToWholeNote(int pixX) const
 {
-    return static_cast<int>(pixX / m_wholeNoteWidth);
+
+    return (pixX + m_centerX * m_displayObjectWidth - width() / 2) / m_wholeNoteWidth;
 }
 
-int PianorollView::pitchToPixelY(double pitch)
+int PianorollView::pitchToPixelY(double pitch) const
 {
-    return static_cast<int>(pitch * m_noteHeight);
+    return (128 - pitch) * m_noteHeight - m_centerY * m_displayObjectHeight + height() / 2;
 }
 
-double PianorollView::pixelYToPitch(int pixY)
+double PianorollView::pixelYToPitch(int pixY) const
 {
-    return static_cast<int>(pixY / m_noteHeight);
+    return 128 - ((pixY + m_centerY * m_displayObjectHeight - height() / 2) / m_noteHeight);
 }
 
 void PianorollView::paint(QPainter* p)
 {    
-    p->fillRect(0, 0, width(), height(), m_colorKeyWhite);
+    p->fillRect(0, 0, width(), height(), m_colorBackground);
 
     notation::INotationPtr notation = globalContext()->currentNotation();
     if (!notation) {
@@ -308,10 +303,14 @@ void PianorollView::paint(QPainter* p)
     const QPen penLineSub = QPen(m_colorGridLine, 1.0, Qt::DotLine);
 
     //Visible area we are rendering to
-    qreal y1 = 0;
-    qreal y2 = height();
-    qreal x1 = 0;
-    qreal x2 = width();
+    Ms::Measure* lm = score->lastMeasure();
+    Ms::Fraction end = lm->tick() + lm->ticks();
+
+    qreal y1 = pitchToPixelY(0);
+    qreal y2 = pitchToPixelY(128);
+    qreal x1 = wholeNoteToPixelX(0);
+    qreal x2 = wholeNoteToPixelX(end);
+
 
     //-----------------------------------
     //Draw horizontal grid lines
@@ -322,25 +321,31 @@ void PianorollView::paint(QPainter* p)
     //Colored stripes
     for (int pitch = 0; pitch < NUM_PITCHES; ++pitch)
     {
-        int y = (127 - pitch) * m_noteHeight;
+//        int y = (127 - pitch) * m_noteHeight;
+        double y = pitchToPixelY(pitch + 1);
 
         int degree = (pitch - transp.chromatic + 60) % 12;
         const BarPattern& pat = barPatterns[m_barPattern];
 
         if (m_pitchHighlight[pitch])
         {
-            p->fillRect(0, y, width(), m_noteHeight, m_colorKeyHighlight);
+            p->fillRect(x1, y, x2 - x1, m_noteHeight, m_colorKeyHighlight);
         }
         else if (!pat.isWhiteKey[degree])
         {
-            p->fillRect(0, y, width(), m_noteHeight, m_colorKeyBlack);
+            p->fillRect(x1, y, x2 - x1, m_noteHeight, m_colorKeyBlack);
+        }
+        else
+        {
+            p->fillRect(x1, y, x2 - x1, m_noteHeight, m_colorKeyWhite);
         }
     }
 
     //Bounding lines
     for (int pitch = 0; pitch <= NUM_PITCHES; ++pitch)
     {
-        int y = (128 - pitch) * m_noteHeight;
+//        int y = (128 - pitch) * m_noteHeight;
+        double y = pitchToPixelY(pitch);
         int degree = (pitch - transp.chromatic + 60) % 12;
         p->setPen(degree == 0 ? penLineMajor : penLineMinor);
         p->drawLine(QLineF(0, y, width(), y));
@@ -355,7 +360,8 @@ void PianorollView::paint(QPainter* p)
         Ms::Fraction len = m->ticks();  //Beats in bar / note length with the beat
 
         p->setPen(penLineMajor);
-        int x = m_wholeNoteWidth * start.numerator() / start.denominator();
+//        int x = m_wholeNoteWidth * start.numerator() / start.denominator();
+        int x = wholeNoteToPixelX(start);
         p->drawLine(x, 0, x, height());
 
         //Beats
@@ -366,7 +372,8 @@ void PianorollView::paint(QPainter* p)
         for (int i = 1; i < len.numerator(); ++i)
         {
             Ms::Fraction beat = start + Ms::Fraction(i, len.denominator());
-            int x = m_wholeNoteWidth * beat.numerator() / beat.denominator();
+//            int x = m_wholeNoteWidth * beat.numerator() / beat.denominator();
+            int x = wholeNoteToPixelX(beat);
             p->setPen(penLineMinor);
             p->drawLine(x, 0, x, height());
 
@@ -387,7 +394,8 @@ void PianorollView::paint(QPainter* p)
             for (int j = 1; j < subbeats; ++j)
             {
                 Ms::Fraction subbeat = beat + Ms::Fraction(j, len.denominator() * subbeats);
-                int x = m_wholeNoteWidth * subbeat.numerator() / subbeat.denominator();
+//                int x = m_wholeNoteWidth * subbeat.numerator() / subbeat.denominator();
+                int x = wholeNoteToPixelX(subbeat);
                 p->setPen(penLineSub);
                 p->drawLine(x, 0, x, height());
             }
@@ -396,10 +404,9 @@ void PianorollView::paint(QPainter* p)
     }
 
     {
-        Ms::Measure* lm = score->lastMeasure();
-        Ms::Fraction end = lm->tick() + lm->ticks();
         p->setPen(penLineMajor);
-        int x = m_wholeNoteWidth * end.numerator() / end.denominator();
+//        int x = m_wholeNoteWidth * end.numerator() / end.denominator();
+        int x = wholeNoteToPixelX(end);
         p->drawLine(x, 0, x, height());
     }
 
@@ -466,8 +473,10 @@ QRect PianorollView::boundingRect(Ms::Note* note, Ms::NoteEvent* evt)
         start += evt->ontime() * baseLen / 1000;
 
 
-    int x0 = m_wholeNoteWidth * start.numerator() / start.denominator();
-    int y0 = (127 - pitch) * m_noteHeight;
+//    int x0 = m_wholeNoteWidth * start.numerator() / start.denominator();
+    int x0 = wholeNoteToPixelX(start);
+//    int y0 = (127 - pitch) * m_noteHeight;
+    int y0 = pitchToPixelY(pitch + 1);
     int width = m_wholeNoteWidth * len.numerator() / len.denominator();
 
     QRect rect;
