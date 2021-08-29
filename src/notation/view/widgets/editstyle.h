@@ -97,8 +97,6 @@ private:
     int pageListMap[50];
 
 private slots:
-    void selectChordDescriptionFile();
-    void setChordStyle(bool);
     void enableStyleWidget(const StyleId idx, bool enable);
     void enableVerticalSpreadClicked(bool);
     void disableVerticalSpreadClicked(bool);

@@ -184,21 +184,7 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::repeatBarlineDotSeparation, false, repeatBarlineDotSeparation, resetRepeatBarlineDotSeparation },
 
         { StyleId::barGraceDistance,        false, barGraceDistance,        resetBarGraceDistance },
-        { StyleId::chordExtensionMag,       false, extensionMag,            resetExtensionMag },
-        { StyleId::chordExtensionAdjust,    false, extensionAdjust,         resetExtensionAdjust },
-        { StyleId::chordModifierMag,        false, modifierMag,             resetModifierMag },
-        { StyleId::chordModifierAdjust,     false, modifierAdjust,          resetModifierAdjust },
-        { StyleId::useStandardNoteNames,    false, useStandardNoteNames,    0 },
-        { StyleId::useGermanNoteNames,      false, useGermanNoteNames,      0 },
-        { StyleId::useFullGermanNoteNames,  false, useFullGermanNoteNames,  0 },
-        { StyleId::useSolfeggioNoteNames,   false, useSolfeggioNoteNames,   0 },
-        { StyleId::useFrenchNoteNames,      false, useFrenchNoteNames,      0 },
-        { StyleId::automaticCapitalization, false, automaticCapitalization, 0 },
 
-        { StyleId::lowerCaseMinorChords,    false, lowerCaseMinorChords,    0 },
-
-        { StyleId::lowerCaseBassNotes,      false, lowerCaseBassNotes,      0 },
-        { StyleId::allCapsNoteNames,        false, allCapsNoteNames,        0 },
         { StyleId::concertPitch,            false, concertPitch,            0 },
         { StyleId::createMultiMeasureRests, false, multiMeasureRests,       0 },
         { StyleId::minEmptyMeasures,        false, minEmptyMeasures,        0 },
@@ -303,16 +289,6 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::vibratoPosAbove,         false, vibratoLinePosAbove,     resetVibratoLinePosAbove },
         { StyleId::vibratoPosBelow,         false, vibratoLinePosBelow,     resetVibratoLinePosBelow },
 
-        { StyleId::harmonyFretDist,         false, harmonyFretDist,         0 },
-        { StyleId::minHarmonyDistance,      false, minHarmonyDistance,      0 },
-        { StyleId::maxHarmonyBarDistance,   false, maxHarmonyBarDistance,   0 },
-        { StyleId::maxChordShiftAbove,      false, maxChordShiftAbove,      resetMaxChordShiftAbove },
-        { StyleId::maxChordShiftBelow,      false, maxChordShiftBelow,      resetMaxChordShiftBelow },
-        { StyleId::harmonyPlay,             false, harmonyPlay,             0 },
-        { StyleId::harmonyVoiceLiteral,     false, voicingSelectWidget->interpretBox, 0 },
-        { StyleId::harmonyVoicing,          false, voicingSelectWidget->voicingBox, 0 },
-        { StyleId::harmonyDuration,         false, voicingSelectWidget->durationBox, 0 },
-
         { StyleId::tupletVHeadDistance,     false, tupletVHeadDistance,     resetTupletVHeadDistance },
         { StyleId::tupletVStemDistance,     false, tupletVStemDistance,     resetTupletVStemDistance },
         { StyleId::tupletStemLeftDistance,  false, tupletStemLeftDistance,  resetTupletStemLeftDistance },
@@ -363,7 +339,6 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::genCourtesyKeysig,        false, genCourtesyKeysig,            0 },
         { StyleId::genCourtesyClef,          false, genCourtesyClef,              0 },
         { StyleId::swingRatio,               false, swingBox,                     0 },
-        { StyleId::chordsXmlFile,            false, chordsXmlFile,                0 },
         { StyleId::dotMag,                   true,  dotMag,                       0 },
         { StyleId::articulationMag,          true,  articulationMag,              resetArticulationMag },
         { StyleId::shortenStem,              false, shortenStem,                  0 },
@@ -387,7 +362,6 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::oddFooterR,               false, oddFooterR,                   0 },
 
         { StyleId::ottavaNumbersOnly,        false, ottavaNumbersOnly,            resetOttavaNumbersOnly },
-        { StyleId::capoPosition,             false, capoPosition,                 0 },
         { StyleId::fretNumMag,               true,  fretNumMag,                   0 },
         { StyleId::fretNumPos,               false, fretNumGroup,                 0 },
         { StyleId::fretY,                    false, fretY,                        0 },
@@ -544,30 +518,6 @@ EditStyle::EditStyle(QWidget* parent)
     connect(comboFBFont, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &EditStyle::on_comboFBFont_currentIndexChanged);
 
     // ====================================================
-    // Chord Symbols
-    // ====================================================
-
-    harmonyPlay->setChecked(true);
-
-    voicingSelectWidget->interpretBox->clear();
-    voicingSelectWidget->interpretBox->addItem(tr("Jazz"), int(0));   // two-item combobox for boolean style variant
-    voicingSelectWidget->interpretBox->addItem(tr("Literal"), int(1));   // true = literal
-
-    voicingSelectWidget->voicingBox->clear();
-    voicingSelectWidget->voicingBox->addItem(tr("Automatic"), int(Ms::Voicing::AUTO));
-    voicingSelectWidget->voicingBox->addItem(tr("Root Only"), int(Ms::Voicing::ROOT_ONLY));
-    voicingSelectWidget->voicingBox->addItem(tr("Close"), int(Ms::Voicing::CLOSE));
-    voicingSelectWidget->voicingBox->addItem(tr("Drop Two"), int(Ms::Voicing::DROP_2));
-    voicingSelectWidget->voicingBox->addItem(tr("Six Note"), int(Ms::Voicing::SIX_NOTE));
-    voicingSelectWidget->voicingBox->addItem(tr("Four Note"), int(Ms::Voicing::FOUR_NOTE));
-    voicingSelectWidget->voicingBox->addItem(tr("Three Note"), int(Ms::Voicing::THREE_NOTE));
-
-    voicingSelectWidget->durationBox->clear();
-    voicingSelectWidget->durationBox->addItem(tr("Until Next Chord Symbol"), int(Ms::HDuration::UNTIL_NEXT_CHORD_SYMBOL));
-    voicingSelectWidget->durationBox->addItem(tr("Until End of Measure"), int(Ms::HDuration::STOP_AT_MEASURE_END));
-    voicingSelectWidget->durationBox->addItem(tr("Chord/Rest Duration"), int(Ms::HDuration::SEGMENT_DURATION));
-
-    // ====================================================
     // Miscellaneous
     // ====================================================
 
@@ -578,14 +528,6 @@ EditStyle::EditStyle(QWidget* parent)
     connect(disableVerticalSpread, &QGroupBox::toggled,         this, &EditStyle::disableVerticalSpreadClicked);
     connect(headerOddEven,         &QCheckBox::toggled,         this, &EditStyle::toggleHeaderOddEven);
     connect(footerOddEven,         &QCheckBox::toggled,         this, &EditStyle::toggleFooterOddEven);
-    connect(chordDescriptionFileButton, &QToolButton::clicked,  this, &EditStyle::selectChordDescriptionFile);
-    connect(chordsStandard,        &QRadioButton::toggled,      this, &EditStyle::setChordStyle);
-    connect(chordsJazz,            &QRadioButton::toggled,      this, &EditStyle::setChordStyle);
-    connect(chordsCustom,          &QRadioButton::toggled,      this, &EditStyle::setChordStyle);
-    connect(chordsXmlFile,         &QCheckBox::toggled,         this, &EditStyle::setChordStyle);
-    connect(chordDescriptionFile,  &QLineEdit::editingFinished, [=]() { setChordStyle(true); });
-
-    chordDescriptionFileButton->setText(OPEN_FILE_ICON);
 
     connect(swingOff,       &QRadioButton::toggled, this, &EditStyle::setSwingParams);
     connect(swingEighth,    &QRadioButton::toggled, this, &EditStyle::setSwingParams);
@@ -657,11 +599,11 @@ EditStyle::EditStyle(QWidget* parent)
     connect(resetSignalMapper, &QSignalMapper::mappedInt, this, &EditStyle::resetStyleValue);
 
     // ====================================================
-    // New Chord Symbols Page(QML)
+    // Chord Symbols Page(QML)
     // ====================================================
 
     QQuickWidget* chordSymbolsQuickWidget = new QQuickWidget(
-        /*QmlEngine*/ qmlEngineProvider()->qmlEngine(), /*parent*/ PageChordSymbolsNew);
+        /*QmlEngine*/ qmlEngineProvider()->qmlEngine(), /*parent*/ PageChordSymbols);
     chordSymbolsQuickWidget->setObjectName("chordSymbolsQuickWidget");
     chordSymbolsQuickWidget->setResizeMode(QQuickWidget::SizeRootObjectToView);
     chordSymbolsQuickWidget->setSource(QUrl(QString::fromUtf8("qrc:/view/widgets/ChordSymbolStyleEditor.qml")));
@@ -670,7 +612,7 @@ EditStyle::EditStyle(QWidget* parent)
     if (rootItem) {
         rootItem->setProperty("editStyleDialog", QVariant::fromValue(this));
     }
-    PageChordSymbolsNew->layout()->addWidget(chordSymbolsQuickWidget);
+    PageChordSymbols->layout()->addWidget(chordSymbolsQuickWidget);
 
     textStyles->clear();
     for (auto ss : Ms::allTextStyles()) {
@@ -911,21 +853,6 @@ void EditStyle::retranslate()
     tupletBracketType->setItemText(0, tr("Automatic"));
     tupletBracketType->setItemText(1, tr("Bracket"));
     tupletBracketType->setItemText(2, tr("None", "no tuplet bracket type"));
-
-    voicingSelectWidget->interpretBox->setItemText(0, tr("Jazz"));
-    voicingSelectWidget->interpretBox->setItemText(1, tr("Literal"));
-
-    voicingSelectWidget->voicingBox->setItemText(0, tr("Automatic"));
-    voicingSelectWidget->voicingBox->setItemText(1, tr("Root Only"));
-    voicingSelectWidget->voicingBox->setItemText(2, tr("Close"));
-    voicingSelectWidget->voicingBox->setItemText(3, tr("Drop Two"));
-    voicingSelectWidget->voicingBox->setItemText(4, tr("Six Note"));
-    voicingSelectWidget->voicingBox->setItemText(5, tr("Four Note"));
-    voicingSelectWidget->voicingBox->setItemText(6, tr("Three Note"));
-
-    voicingSelectWidget->durationBox->setItemText(0, tr("Until Next Chord Symbol"));
-    voicingSelectWidget->durationBox->setItemText(1, tr("Until End of Measure"));
-    voicingSelectWidget->durationBox->setItemText(2, tr("Chord/Rest Duration"));
 
     setHeaderFooterToolTip();
 
@@ -1463,15 +1390,11 @@ void EditStyle::setValues()
                 unhandledType(sw);
             }
         } else if (!strcmp("bool", type)) {
-            if (sw.idx == StyleId::harmonyVoiceLiteral) { // special case for bool represented by a two-item combobox
-                voicingSelectWidget->interpretBox->setCurrentIndex(val.toBool());
-            } else {
-                if (!sw.widget->setProperty("checked", val)) {
-                    unhandledType(sw);
-                }
-                if (sw.idx == StyleId::measureNumberSystem && !val.toBool()) {
-                    showIntervalMeasureNumber->setChecked(true);
-                }
+            if (!sw.widget->setProperty("checked", val)) {
+                unhandledType(sw);
+            }
+            if (sw.idx == StyleId::measureNumberSystem && !val.toBool()) {
+                showIntervalMeasureNumber->setChecked(true);
             }
         } else if (!strcmp("int", type)) {
             if (qobject_cast<QComboBox*>(sw.widget)) {
@@ -1549,20 +1472,6 @@ void EditStyle::setValues()
         swingOff->setChecked(true);
         swingBox->setEnabled(false);
     }
-    QString s(styleValue(StyleId::chordDescriptionFile).toString());
-    chordDescriptionFile->setText(s);
-    QString cstyle(styleValue(StyleId::chordStyle).toString());
-    if (cstyle == "std") {
-        chordsStandard->setChecked(true);
-        chordDescriptionGroup->setEnabled(false);
-    } else if (cstyle == "jazz") {
-        chordsJazz->setChecked(true);
-        chordDescriptionGroup->setEnabled(false);
-    } else {
-        chordsCustom->setChecked(true);
-        chordDescriptionGroup->setEnabled(true);
-    }
-    //formattingGroup->setEnabled(lstyle.chordList()->autoAdjust());
 
     // figured bass
     for (int i = 0; i < comboFBFont->count(); i++) {
@@ -1602,24 +1511,6 @@ void EditStyle::setValues()
     toggleHeaderOddEven(styleValue(StyleId::headerOddEven).toBool());
     toggleFooterOddEven(styleValue(StyleId::footerOddEven).toBool());
     disableVerticalSpread->setChecked(!styleValue(StyleId::enableVerticalSpread).toBool());
-}
-
-//---------------------------------------------------------
-//   selectChordDescriptionFile
-//---------------------------------------------------------
-
-void EditStyle::selectChordDescriptionFile()
-{
-    io::path dir = configuration()->userStylesPath();
-    QString filter = qtrc("notation", "MuseScore Styles") + " (*.mss)";
-
-    mu::io::path path = interactive()->selectOpeningFile(qtrc("notation", "Load Style"), dir, filter);
-    if (path.empty()) {
-        return;
-    }
-
-    chordDescriptionFile->setText(path.toQString());
-    setChordStyle(true);
 }
 
 //---------------------------------------------------------
@@ -1673,46 +1564,6 @@ void EditStyle::setStyleValue(StyleId id, const QVariant& value)
 void EditStyle::concertPitchToggled(bool checked)
 {
     setStyleValue(StyleId::concertPitch, checked);
-}
-
-//---------------------------------------------------------
-//   setChordStyle
-//---------------------------------------------------------
-
-void EditStyle::setChordStyle(bool checked)
-{
-    if (!checked) {
-        return;
-    }
-    QVariant val;
-    QString file;
-    bool chordsXml;
-    if (chordsStandard->isChecked()) {
-        val  = QString("std");
-        file = "chordsV41_pop.xml";
-        chordsXml = false;
-    } else if (chordsJazz->isChecked()) {
-        val  = QString("jazz");
-        file = "chords_jazz.xml";
-        chordsXml = false;
-    } else {
-        val = QString("custom");
-        chordDescriptionGroup->setEnabled(true);
-        file = chordDescriptionFile->text();
-        chordsXml = chordsXmlFile->isChecked();
-    }
-    if (val != "custom") {
-        chordsXmlFile->setChecked(chordsXml);
-        chordDescriptionGroup->setEnabled(false);
-        chordDescriptionFile->setText(file);
-    }
-
-    setStyleValue(StyleId::chordsXmlFile, chordsXml);
-    setStyleValue(StyleId::chordStyle, val);
-
-    if (!file.isEmpty()) {
-        setStyleValue(StyleId::chordDescriptionFile, file);
-    }
 }
 
 //---------------------------------------------------------
