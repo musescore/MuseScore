@@ -116,8 +116,14 @@ void ChordSymbolStylesModel::initCurrentStyleIndex()
 void ChordSymbolStylesModel::setChordStyle(int index)
 {
     m_currentStyleIndex = index;
-    globalContext()->currentNotation()->style()->setStyleValue(StyleId::chordDescriptionFile, m_styles.at(m_currentStyleIndex).fileName);
+    QStringList chordStyles = { "Pop/Contemporary", "Jazz", "Symbols", "No preset style" };
+
+    globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordStyle, m_styles.at(m_currentStyleIndex).styleName);
+    globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordDescriptionFile, m_styles.at(m_currentStyleIndex).fileName);
     globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::useChordSymbolPresets, m_styles.at(m_currentStyleIndex).usePresets);
+    if (!chordStyles.contains(m_styles.at(m_currentStyleIndex).styleName)) {
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordStyle, "custom");
+    }
 
     // Extract the selection history everytime because it could have been changed
     QString selectionHistory = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::chordQualitySelectionHistory).toString();

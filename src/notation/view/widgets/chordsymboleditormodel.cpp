@@ -837,9 +837,14 @@ void ChordSymbolEditorModel::setQualitySymbol(QString quality, int index)
 void ChordSymbolEditorModel::setChordStyle(int index)
 {
     m_currentStyleIndex = index;
+    QStringList chordStyles = { "Pop/Contemporary", "Jazz", "Symbols", "No preset style" };
 
+    globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordStyle, m_styles.at(m_currentStyleIndex).styleName);
     globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordDescriptionFile, m_styles.at(m_currentStyleIndex).fileName);
     globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::useChordSymbolPresets, m_styles.at(m_currentStyleIndex).usePresets);
+    if (!chordStyles.contains(m_styles.at(m_currentStyleIndex).styleName)) {
+        globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordStyle, "custom");
+    }
     m_styleDescription = m_styles.at(m_currentStyleIndex).description;
     m_usePresets = m_styles.at(m_currentStyleIndex).usePresets;
 
