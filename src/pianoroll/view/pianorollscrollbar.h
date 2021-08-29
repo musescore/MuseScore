@@ -30,7 +30,6 @@
 #include "async/asyncable.h"
 #include "context/iglobalcontext.h"
 #include "pianoroll/ipianorollcontroller.h"
-#include "pianorolltool.h"
 
 
 namespace mu::pianoroll {
