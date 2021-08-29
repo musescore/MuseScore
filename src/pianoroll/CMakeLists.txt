@@ -41,6 +41,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/pianorollview.h
     ${CMAKE_CURRENT_LIST_DIR}/view/pianorollscrollbar.h
     ${CMAKE_CURRENT_LIST_DIR}/view/pianorollscrollbar.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/pianorollruler.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/pianorollruler.cpp
 
     )
 
