@@ -30,7 +30,6 @@
 #include "async/asyncable.h"
 #include "context/iglobalcontext.h"
 #include "pianoroll/ipianorollcontroller.h"
-#include "pianorolltool.h"
 
 namespace mu::pianoroll {
 
@@ -69,7 +68,6 @@ private:
 public:
 
     PianorollView(QQuickItem* parent = nullptr);
-
 
     Q_INVOKABLE void load();
 
@@ -124,8 +122,6 @@ private:
     void drawChord(QPainter* p, Ms::Chord* chrd, int voice, bool active);
     
     notation::INotationPtr m_notation;
-
-
 
     double m_centerX = 0;  //fraction of note grid camera is focused on
     double m_centerY = 0;  //fraction of note grid camera is focused on
