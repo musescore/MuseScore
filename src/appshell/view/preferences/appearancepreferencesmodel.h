@@ -26,7 +26,7 @@
 
 #include "modularity/ioc.h"
 #include "ui/iuiconfiguration.h"
-#include "notation/view/notationpaintview.h"    //testing
+//#include "notation/view/notationpaintview.h"    //testing
 #include "notation/inotationconfiguration.h"
 #include "async/asyncable.h"
 

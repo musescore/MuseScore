@@ -56,7 +56,6 @@ public:
 
     async::Notification backgroundChanged() const override;
 
-    void loadAppropriateForegroundColor() override;
     QColor foregroundColor() const override;
     void setForegroundColor(const QColor& color) override;
 
