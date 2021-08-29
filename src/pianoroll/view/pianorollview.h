@@ -96,10 +96,11 @@ public:
 
     void paint(QPainter*) override;
 
-    int tickToPixelX(double tick);
-    double pixelXToTick(int pixelX);
-    int pitchToPixelY(double pitch);
-    double pixelYToPitch(int tick);
+    int wholeNoteToPixelX(Ms::Fraction tick) const { return wholeNoteToPixelX(tick.numerator() / (double)tick.denominator()); }
+    int wholeNoteToPixelX(double tick) const;
+    double pixelXToWholeNote(int pixelX) const;
+    int pitchToPixelY(double pitch) const;
+    double pixelYToPitch(int tick) const;
 
 signals:
     void wholeNoteWidthChanged();
@@ -141,6 +142,7 @@ private:
 
     quint8 m_pitchHighlight[128];
 
+    QColor m_colorBackground = Qt::gray;
     QColor m_colorKeyWhite = QColor(0xffffff);
     QColor m_colorKeyBlack = QColor(0xe6e6e6);
     QColor m_colorKeyHighlight = QColor(0xaaaaff);
