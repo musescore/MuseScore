@@ -182,7 +182,7 @@ PreferencesPage {
 
             width: parent.width
 
-            enabled: !appearanceModel.invertScoreColor
+            enabled: highContrastEnable.checked ? !appearanceModel.invertScoreColor : true
             opacityOverride: paperSettings.enabled ? 1.0 : 0.6
 
             title: qsTrc("appshell", "Paper")

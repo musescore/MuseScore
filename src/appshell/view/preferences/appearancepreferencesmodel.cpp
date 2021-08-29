@@ -42,6 +42,7 @@ void AppearancePreferencesModel::init()
 {
     uiConfiguration()->currentThemeChanged().onNotify(this, [this]() {
         emit themesChanged();
+        emit foregroundColorChanged();
     });
 
     uiConfiguration()->fontChanged().onNotify(this, [this]() {
@@ -51,6 +52,7 @@ void AppearancePreferencesModel::init()
 
     notationConfiguration()->scoreInversionChanged().onNotify(this, [this]() {
         emit invertScoreColorChanged();
+        emit foregroundColorChanged();
     });
 
     notationConfiguration()->backgroundChanged().onNotify(this, [this]() {

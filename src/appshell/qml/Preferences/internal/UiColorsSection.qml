@@ -34,7 +34,6 @@ BaseSection {
 
     property alias scoreInversionChecked: scoreInversionEnable.checked
 
-    signal changePageColorRequested()
     signal scoreInversionRequested(var newValue)
     signal colorChangeRequested(var newColor, var propertyType)
 
@@ -46,7 +45,6 @@ BaseSection {
         onClicked: {
             checked = !checked
             root.scoreInversionRequested(checked)
-            root.changePageColorRequested()
         }
     }
 
