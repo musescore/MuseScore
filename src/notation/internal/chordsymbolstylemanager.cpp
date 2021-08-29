@@ -165,10 +165,21 @@ QHash<QString, QList<QualitySymbol> > ChordSymbolStyleManager::getQualitySymbols
     }
 
     QFileInfo ftest3(path);
-    // If the file is not found anywhere, default to chords_std.xml
-    if (!ftest3.exists()) {
-        path = QString("%1styles/%2").arg(Ms::MScore::globalShare(), "chords_std.xml");
+    // If the file is not found anywhere, default to chordsV41_pop.xml
+    if (!ftest3.exists())
+#if defined(Q_OS_IOS)
+    {
+        path = QString("%1/%2").arg(MScore::globalShare()).arg("chordsV41_pop.xml");
     }
+#elif defined(Q_OS_ANDROID)
+    {
+        path = QString(":/styles/chordsV41_pop.xml");
+    }
+#else
+    {
+        path = QString("%1styles/%2").arg(Ms::MScore::globalShare(), "chordsV41_pop.xml");
+    }
+#endif
 
     QFile file(path);
     Ms::XmlReader e(&file);

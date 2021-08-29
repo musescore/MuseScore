@@ -1689,7 +1689,7 @@ void EditStyle::setChordStyle(bool checked)
     bool chordsXml;
     if (chordsStandard->isChecked()) {
         val  = QString("std");
-        file = "chords_std.xml";
+        file = "chordsV41_pop.xml";
         chordsXml = false;
     } else if (chordsJazz->isChecked()) {
         val  = QString("jazz");

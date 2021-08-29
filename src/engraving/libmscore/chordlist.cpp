@@ -2811,20 +2811,20 @@ bool ChordList::read(const QString& name)
         path = QString("%1styles/%2").arg(MScore::globalShare(), name);
 #endif
     }
-    // default to chords_std.xml
+    // default to chordsV41_pop.xml
     QFileInfo fi(path);
     if (!fi.exists())
 #if defined(Q_OS_IOS)
     {
-        path = QString("%1/%2").arg(MScore::globalShare()).arg("chords_std.xml");
+        path = QString("%1/%2").arg(MScore::globalShare()).arg("chordsV41_pop.xml");
     }
 #elif defined(Q_OS_ANDROID)
     {
-        path = QString(":/styles/chords_std.xml");
+        path = QString(":/styles/chordsV41_pop.xml");
     }
 #else
     {
-        path = QString("%1styles/%2").arg(MScore::globalShare(), "chords_std.xml");
+        path = QString("%1styles/%2").arg(MScore::globalShare(), "chordsV41_pop.xml");
     }
 #endif
 
