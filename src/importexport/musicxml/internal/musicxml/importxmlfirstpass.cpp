@@ -22,6 +22,8 @@
 
 #include "importxmlfirstpass.h"
 
+#include "log.h"
+
 namespace Ms {
 // TODO: move somewhere else
 

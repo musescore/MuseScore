@@ -62,7 +62,7 @@ Element* MuseScoreView::elementAt(const mu::PointF& p)
 
 Page* MuseScoreView::point2page(const mu::PointF& p)
 {
-    if (score()->layoutMode() == LayoutMode::LINE) {
+    if (score()->layoutMode() == mu::engraving::LayoutMode::LINE) {
         return score()->pages().isEmpty() ? 0 : score()->pages().front();
     }
     foreach (Page* page, score()->pages()) {
