@@ -164,8 +164,8 @@ public:
     void stringifyAndSaveSelectionHistory();
     void extractSelectionHistory(QString selectionHistory);
     void updateSelectionHistory(QString currentStyle);
-    void setStyleR(Ms::Sid id, qreal val);
-    void setStyleB(Ms::Sid id, bool val);
+    void setStyle(Ms::Sid id, QVariant val);
+    qreal getDefValR(Ms::Sid id);
 
     Q_INVOKABLE void setChordStyle(int index);
     Q_INVOKABLE void setChordSpelling(QString spelling);

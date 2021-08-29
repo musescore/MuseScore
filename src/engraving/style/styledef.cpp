@@ -416,8 +416,8 @@ const StyleDef::StyleValue StyleDef::styleValues[int(Sid::STYLES)] = {
     { Sid::lowerCaseMinorSymbols,   "lowerCaseMinorSymbols",   QVariant(true) }, // For minor symbol itself
     { Sid::lowerCaseBassNotes,      "lowerCaseBassNotes",      QVariant(false) },
     { Sid::allCapsNoteNames,        "allCapsNoteNames",        QVariant(false) },
-    { Sid::stackModifiers,          "stackModifiers",          QVariant(false) },
-    { Sid::chordStyle,              "chordStyle",              QVariant(QString("std")) },
+    { Sid::stackModifiers,          "stackModifiers",          QVariant(true) },
+    { Sid::chordStyle,              "chordStyle",              QVariant(QString("Pop/Contemporary")) },
     { Sid::chordsXmlFile,           "chordsXmlFile",           QVariant(false) },
     { Sid::useChordSymbolPresets,   "useChordSymbolPresets",   QVariant(false) },
     { Sid::chordDescriptionFile,    "chordDescriptionFile",    QVariant(QString("chordsV41_pop.xml")) },

@@ -51,8 +51,8 @@ public:
     void setPropertiesOnStyleChange();
     void setChordSpelling(QString newSpelling);
     void extractSelectionHistory(QString selectionHistory);
-    void setStyleR(Ms::Sid id, qreal val);
-    void setStyleB(Ms::Sid id, bool val);
+    void setStyle(Ms::Sid id, QVariant val);
+    QVariant getDefVal(Ms::Sid id);
 
     Q_INVOKABLE void setChordStyle(int index);
 

@@ -75,14 +75,14 @@ int ChordSymbolStylesModel::currentStyleIndex() const
     return m_currentStyleIndex;
 }
 
-void ChordSymbolStylesModel::setStyleR(Ms::Sid id, qreal val)
+void ChordSymbolStylesModel::setStyle(Ms::Sid id, QVariant val)
 {
     globalContext()->currentNotation()->style()->setStyleValue(id, val);
 }
 
-void ChordSymbolStylesModel::setStyleB(Ms::Sid id, bool val)
+QVariant ChordSymbolStylesModel::getDefVal(Ms::Sid id)
 {
-    globalContext()->currentNotation()->style()->setStyleValue(id, val);
+    return globalContext()->currentNotation()->style()->defaultStyleValue(id);
 }
 
 void ChordSymbolStylesModel::initCurrentStyleIndex()
@@ -259,64 +259,64 @@ void ChordSymbolStylesModel::setPropertiesOnStyleChange()
     if (m_selectionHistory.find(currentStyle) != m_selectionHistory.end()) {
         int chordSpellingIndex = m_selectionHistory.value(currentStyle).value("chrdSpell").toInt();
         setChordSpelling(m_chordSpellingList[chordSpellingIndex]);
-        setStyleR(Ms::Sid::chordQualityMag, m_selectionHistory.value(currentStyle).value("qualMag").toReal());
-        setStyleR(Ms::Sid::chordQualityAdjust, m_selectionHistory.value(currentStyle).value("qualAdj").toReal());
-        setStyleR(Ms::Sid::chordExtensionMag, m_selectionHistory.value(currentStyle).value("extMag").toReal());
-        setStyleR(Ms::Sid::chordExtensionAdjust, m_selectionHistory.value(currentStyle).value("extAdj").toReal());
-        setStyleR(Ms::Sid::chordModifierMag, m_selectionHistory.value(currentStyle).value("modMag").toReal());
-        setStyleR(Ms::Sid::chordModifierAdjust, m_selectionHistory.value(currentStyle).value("modAdj").toReal());
+        setStyle(Ms::Sid::chordQualityMag, m_selectionHistory.value(currentStyle).value("qualMag").toReal());
+        setStyle(Ms::Sid::chordQualityAdjust, m_selectionHistory.value(currentStyle).value("qualAdj").toReal());
+        setStyle(Ms::Sid::chordExtensionMag, m_selectionHistory.value(currentStyle).value("extMag").toReal());
+        setStyle(Ms::Sid::chordExtensionAdjust, m_selectionHistory.value(currentStyle).value("extAdj").toReal());
+        setStyle(Ms::Sid::chordModifierMag, m_selectionHistory.value(currentStyle).value("modMag").toReal());
+        setStyle(Ms::Sid::chordModifierAdjust, m_selectionHistory.value(currentStyle).value("modAdj").toReal());
 
-        setStyleR(Ms::Sid::harmonyFretDist, m_selectionHistory.value(currentStyle).value("hFretDist").toReal());
-        setStyleR(Ms::Sid::minHarmonyDistance, m_selectionHistory.value(currentStyle).value("mnHDist").toReal());
-        setStyleR(Ms::Sid::maxHarmonyBarDistance, m_selectionHistory.value(currentStyle).value("mxHBarDist").toReal());
-        setStyleR(Ms::Sid::maxChordShiftAbove, m_selectionHistory.value(currentStyle).value("mxSftAbv").toReal());
-        setStyleR(Ms::Sid::maxChordShiftBelow, m_selectionHistory.value(currentStyle).value("mxSftBlw").toReal());
-        setStyleR(Ms::Sid::capoPosition, m_selectionHistory.value(currentStyle).value("cpFretPos").toReal());
+        setStyle(Ms::Sid::harmonyFretDist, m_selectionHistory.value(currentStyle).value("hFretDist").toReal());
+        setStyle(Ms::Sid::minHarmonyDistance, m_selectionHistory.value(currentStyle).value("mnHDist").toReal());
+        setStyle(Ms::Sid::maxHarmonyBarDistance, m_selectionHistory.value(currentStyle).value("mxHBarDist").toReal());
+        setStyle(Ms::Sid::maxChordShiftAbove, m_selectionHistory.value(currentStyle).value("mxSftAbv").toReal());
+        setStyle(Ms::Sid::maxChordShiftBelow, m_selectionHistory.value(currentStyle).value("mxSftBlw").toReal());
+        setStyle(Ms::Sid::capoPosition, m_selectionHistory.value(currentStyle).value("cpFretPos").toReal());
 
-        setStyleB(Ms::Sid::stackModifiers, (m_selectionHistory.value(currentStyle).value("stkMod").toReal() == 1));
+        setStyle(Ms::Sid::stackModifiers, (m_selectionHistory.value(currentStyle).value("stkMod").toReal() == 1));
 
-        setStyleB(Ms::Sid::automaticCapitalization, (m_selectionHistory.value(currentStyle).value("autoCap").toReal() == 1));
-        setStyleB(Ms::Sid::lowerCaseMinorChords, !(m_selectionHistory.value(currentStyle).value("minRtCap").toReal() == 1));
-        setStyleB(Ms::Sid::lowerCaseMajorSymbols, !(m_selectionHistory.value(currentStyle).value("qualMajCap").toReal() == 1));
-        setStyleB(Ms::Sid::lowerCaseMinorSymbols, !(m_selectionHistory.value(currentStyle).value("qualMinCap").toReal() == 1));
-        setStyleB(Ms::Sid::lowerCaseBassNotes, !(m_selectionHistory.value(currentStyle).value("bsNtCap").toReal() == 1));
-        setStyleB(Ms::Sid::allCapsNoteNames, (m_selectionHistory.value(currentStyle).value("solNtCap").toReal() == 1));
+        setStyle(Ms::Sid::automaticCapitalization, (m_selectionHistory.value(currentStyle).value("autoCap").toReal() == 1));
+        setStyle(Ms::Sid::lowerCaseMinorChords, !(m_selectionHistory.value(currentStyle).value("minRtCap").toReal() == 1));
+        setStyle(Ms::Sid::lowerCaseMajorSymbols, !(m_selectionHistory.value(currentStyle).value("qualMajCap").toReal() == 1));
+        setStyle(Ms::Sid::lowerCaseMinorSymbols, !(m_selectionHistory.value(currentStyle).value("qualMinCap").toReal() == 1));
+        setStyle(Ms::Sid::lowerCaseBassNotes, !(m_selectionHistory.value(currentStyle).value("bsNtCap").toReal() == 1));
+        setStyle(Ms::Sid::allCapsNoteNames, (m_selectionHistory.value(currentStyle).value("solNtCap").toReal() == 1));
 
-        setStyleB(Ms::Sid::chordAlterationsParentheses, (m_selectionHistory.value(currentStyle).value("altParen").toReal() == 1));
-        setStyleB(Ms::Sid::chordSuspensionsParentheses, (m_selectionHistory.value(currentStyle).value("susParen").toReal() == 1));
-        setStyleB(Ms::Sid::chordMinMajParentheses, (m_selectionHistory.value(currentStyle).value("minMajParen").toReal() == 1));
-        setStyleB(Ms::Sid::chordAddOmitParentheses, (m_selectionHistory.value(currentStyle).value("addOmitParen").toReal() == 1));
+        setStyle(Ms::Sid::chordAlterationsParentheses, (m_selectionHistory.value(currentStyle).value("altParen").toReal() == 1));
+        setStyle(Ms::Sid::chordSuspensionsParentheses, (m_selectionHistory.value(currentStyle).value("susParen").toReal() == 1));
+        setStyle(Ms::Sid::chordMinMajParentheses, (m_selectionHistory.value(currentStyle).value("minMajParen").toReal() == 1));
+        setStyle(Ms::Sid::chordAddOmitParentheses, (m_selectionHistory.value(currentStyle).value("addOmitParen").toReal() == 1));
     } else {
         // Set default values
         setChordSpelling(m_chordSpellingList[0]);
 
-        setStyleR(Ms::Sid::chordQualityMag, 1.0);
-        setStyleR(Ms::Sid::chordQualityAdjust, 0.0);
-        setStyleR(Ms::Sid::chordExtensionMag, 1.0);
-        setStyleR(Ms::Sid::chordExtensionAdjust, 0.0);
-        setStyleR(Ms::Sid::chordModifierMag, 1.0);
-        setStyleR(Ms::Sid::chordModifierAdjust, 0.0);
+        setStyle(Ms::Sid::chordQualityMag, getDefVal(Ms::Sid::chordQualityMag));
+        setStyle(Ms::Sid::chordQualityAdjust, getDefVal(Ms::Sid::chordQualityAdjust));
+        setStyle(Ms::Sid::chordExtensionMag, getDefVal(Ms::Sid::chordExtensionMag));
+        setStyle(Ms::Sid::chordExtensionAdjust, getDefVal(Ms::Sid::chordExtensionAdjust));
+        setStyle(Ms::Sid::chordModifierMag, getDefVal(Ms::Sid::chordModifierMag));
+        setStyle(Ms::Sid::chordModifierAdjust, getDefVal(Ms::Sid::chordModifierAdjust));
 
-        setStyleR(Ms::Sid::harmonyFretDist, 1.0);
-        setStyleR(Ms::Sid::minHarmonyDistance, 0.5);
-        setStyleR(Ms::Sid::maxHarmonyBarDistance, 3.0);
-        setStyleR(Ms::Sid::maxChordShiftAbove, 0.0);
-        setStyleR(Ms::Sid::maxChordShiftBelow, 0.0);
-        setStyleR(Ms::Sid::capoPosition, 0.0);
+        setStyle(Ms::Sid::harmonyFretDist, getDefVal(Ms::Sid::harmonyFretDist));
+        setStyle(Ms::Sid::minHarmonyDistance, getDefVal(Ms::Sid::minHarmonyDistance));
+        setStyle(Ms::Sid::maxHarmonyBarDistance, getDefVal(Ms::Sid::maxHarmonyBarDistance));
+        setStyle(Ms::Sid::maxChordShiftAbove, getDefVal(Ms::Sid::maxChordShiftAbove));
+        setStyle(Ms::Sid::maxChordShiftBelow, getDefVal(Ms::Sid::maxChordShiftBelow));
+        setStyle(Ms::Sid::capoPosition, getDefVal(Ms::Sid::capoPosition));
 
-        setStyleB(Ms::Sid::stackModifiers, true);
+        setStyle(Ms::Sid::stackModifiers, getDefVal(Ms::Sid::stackModifiers));
 
-        setStyleB(Ms::Sid::automaticCapitalization, true);
-        setStyleB(Ms::Sid::lowerCaseMinorChords, false);
-        setStyleB(Ms::Sid::lowerCaseMajorSymbols, false);
-        setStyleB(Ms::Sid::lowerCaseMinorSymbols, true);
-        setStyleB(Ms::Sid::lowerCaseBassNotes, false);
-        setStyleB(Ms::Sid::allCapsNoteNames, false);
+        setStyle(Ms::Sid::automaticCapitalization, getDefVal(Ms::Sid::automaticCapitalization));
+        setStyle(Ms::Sid::lowerCaseMinorChords, getDefVal(Ms::Sid::lowerCaseMinorChords));
+        setStyle(Ms::Sid::lowerCaseMajorSymbols, getDefVal(Ms::Sid::lowerCaseMajorSymbols));
+        setStyle(Ms::Sid::lowerCaseMinorSymbols, getDefVal(Ms::Sid::lowerCaseMinorSymbols));
+        setStyle(Ms::Sid::lowerCaseBassNotes, getDefVal(Ms::Sid::lowerCaseBassNotes));
+        setStyle(Ms::Sid::allCapsNoteNames, getDefVal(Ms::Sid::allCapsNoteNames));
 
-        setStyleB(Ms::Sid::chordAlterationsParentheses, true);
-        setStyleB(Ms::Sid::chordSuspensionsParentheses, true);
-        setStyleB(Ms::Sid::chordMinMajParentheses, true);
-        setStyleB(Ms::Sid::chordAddOmitParentheses, true);
+        setStyle(Ms::Sid::chordAlterationsParentheses, getDefVal(Ms::Sid::chordAlterationsParentheses));
+        setStyle(Ms::Sid::chordSuspensionsParentheses, getDefVal(Ms::Sid::chordSuspensionsParentheses));
+        setStyle(Ms::Sid::chordMinMajParentheses, getDefVal(Ms::Sid::chordMinMajParentheses));
+        setStyle(Ms::Sid::chordAddOmitParentheses, getDefVal(Ms::Sid::chordAddOmitParentheses));
     }
 }
 
