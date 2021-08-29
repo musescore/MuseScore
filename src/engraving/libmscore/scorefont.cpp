@@ -274,7 +274,6 @@ void ScoreFont::load()
 void ScoreFont::loadGlyphsWithAnchors(const QJsonObject& glyphsWithAnchors)
 {
     for (const QString& symName : glyphsWithAnchors.keys()) {
-        constexpr qreal scale = SPATIUM20;
         QJsonObject anchors = glyphsWithAnchors.value(symName).toObject();
 
         SymId symId = Sym::nameToSymIdHash.value(symName, SymId::noSym);
@@ -284,42 +283,31 @@ void ScoreFont::loadGlyphsWithAnchors(const QJsonObject& glyphsWithAnchors)
             continue;
         }
 
-        Sym* sym = &m_symbols[int(symId)];
+        Sym& sym = m_symbols[size_t(symId)];
 
-        for (const QString& anchorKey : anchors.keys()) {
-            if (anchorKey == "stemDownNW") {
-                qreal x = anchors.value(anchorKey).toArray().at(0).toDouble();
-                qreal y = anchors.value(anchorKey).toArray().at(1).toDouble();
-                sym->setSmuflAnchor(SmuflAnchorId::stemDownNW, PointF(x, -y) * 4.0 * DPI_F);
-            } else if (anchorKey == "stemUpSE") {
-                qreal x = anchors.value(anchorKey).toArray().at(0).toDouble();
-                qreal y = anchors.value(anchorKey).toArray().at(1).toDouble();
-                sym->setSmuflAnchor(SmuflAnchorId::stemUpSE, PointF(x, -y) * 4.0 * DPI_F);
-            } else if (anchorKey == "stemDownSW") {
-                qreal x = anchors.value(anchorKey).toArray().at(0).toDouble();
-                qreal y = anchors.value(anchorKey).toArray().at(1).toDouble();
-                sym->setSmuflAnchor(SmuflAnchorId::stemDownSW, PointF(x, -y) * 4.0 * DPI_F);
-            } else if (anchorKey == "stemUpNW") {
-                qreal x = anchors.value(anchorKey).toArray().at(0).toDouble();
-                qreal y = anchors.value(anchorKey).toArray().at(1).toDouble();
-                sym->setSmuflAnchor(SmuflAnchorId::stemUpNW, PointF(x, -y) * 4.0 * DPI_F);
-            } else if (anchorKey == "cutOutNE") {
-                qreal x = anchors.value(anchorKey).toArray().at(0).toDouble();
-                qreal y = anchors.value(anchorKey).toArray().at(1).toDouble();
-                sym->setSmuflAnchor(SmuflAnchorId::cutOutNE, PointF(x, -y) * scale);
-            } else if (anchorKey == "cutOutNW") {
-                qreal x = anchors.value(anchorKey).toArray().at(0).toDouble();
-                qreal y = anchors.value(anchorKey).toArray().at(1).toDouble();
-                sym->setSmuflAnchor(SmuflAnchorId::cutOutNW, PointF(x, -y) * scale);
-            } else if (anchorKey == "cutOutSE") {
-                qreal x = anchors.value(anchorKey).toArray().at(0).toDouble();
-                qreal y = anchors.value(anchorKey).toArray().at(1).toDouble();
-                sym->setSmuflAnchor(SmuflAnchorId::cutOutSE, PointF(x, -y) * scale);
-            } else if (anchorKey == "cutOutSW") {
-                qreal x = anchors.value(anchorKey).toArray().at(0).toDouble();
-                qreal y = anchors.value(anchorKey).toArray().at(1).toDouble();
-                sym->setSmuflAnchor(SmuflAnchorId::cutOutSW, PointF(x, -y) * scale);
+        static const std::unordered_map<QString, SmuflAnchorId> smuflAnchorIdNames {
+            { "stemDownNW", SmuflAnchorId::stemDownNW },
+            { "stemUpSE", SmuflAnchorId::stemUpSE },
+            { "stemDownSW", SmuflAnchorId::stemDownSW },
+            { "stemUpNW", SmuflAnchorId::stemUpNW },
+            { "cutOutNE", SmuflAnchorId::cutOutNE },
+            { "cutOutNW", SmuflAnchorId::cutOutNW },
+            { "cutOutSE", SmuflAnchorId::cutOutSE },
+            { "cutOutSW", SmuflAnchorId::cutOutSW }
+        };
+
+        for (const QString& anchorId : anchors.keys()) {
+            auto search = smuflAnchorIdNames.find(anchorId);
+            if (search == smuflAnchorIdNames.cend()) {
+                //LOGD() << "Unhandled SMuFL anchorId: " << anchorId;
+                continue;
             }
+
+            QJsonArray arr = anchors.value(anchorId).toArray();
+            double x = arr.at(0).toDouble();
+            double y = arr.at(1).toDouble();
+
+            sym.setSmuflAnchor(search->second, PointF(x, -y) * SPATIUM20);
         }
     }
 }
