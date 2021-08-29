@@ -785,9 +785,7 @@ const ChordDescription* Harmony::parseHarmony(const QString& ss, int* root, int*
     _userName = s;
     const ChordList* cl = score()->chordList();
     const ChordDescription* cd = 0;
-    if (useLiteral) {
-        cd = descr(s);
-    } else {
+    if (!useLiteral) {
         _parsedForm = new ParsedChord();
         _parsedForm->parse(s, cl, syntaxOnly, preferMinor);
         // parser prepends "=" to name of implied minor chords
@@ -795,20 +793,11 @@ const ChordDescription* Harmony::parseHarmony(const QString& ss, int* root, int*
         if (preferMinor) {
             s = _parsedForm->name();
         }
-        // look up to see if we already have a descriptor (chord has been used before)
-        cd = descr(s, _parsedForm);
     }
-    if (cd) {
-        // descriptor found; use its information
-        _id = cd->id;
-        if (!cd->names.empty()) {
-            _textName = cd->names.front();
-        }
-    } else {
-        // no descriptor yet; just set textname
-        // we will generate descriptor later if necessary (when we are done editing this chord)
-        _textName = s;
-    }
+    // no descriptor yet; just set textname
+    // we will generate descriptor later if necessary (when we are done editing this chord)
+    _textName = s;
+
     return cd;
 }
 
@@ -1249,39 +1238,6 @@ const ChordDescription* Harmony::descr() const
 }
 
 //---------------------------------------------------------
-//   descr
-//    look up name in chord list
-//    optionally look up by parsed chord as fallback
-//    return chord description if found, or null
-//---------------------------------------------------------
-
-const ChordDescription* Harmony::descr(const QString& name, const ParsedChord* pc) const
-{
-    const ChordList* cl = score()->chordList();
-    const ChordDescription* match = 0;
-
-    // This interferes with quality respelling
-    // Commented out for now, will remove later if not needed
-//    if (cl) {
-//        for (const ChordDescription& cd : *cl) {
-//            for (const QString& s : cd.names) {
-//                if (s == name) {
-//                    return &cd;
-//                } else if (pc) {
-//                    for (const ParsedChord& sParsed : cd.parsedChords) {
-//                        if (sParsed == *pc) {
-//                            match = &cd;
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
-    // exact match failed, so fall back on parsed match if one was found
-    return match;
-}
-
-//---------------------------------------------------------
 //   getDescription
 //    look up id in chord list
 //    return chord description if found
@@ -1309,13 +1265,8 @@ const ChordDescription* Harmony::getDescription()
 
 const ChordDescription* Harmony::getDescription(const QString& name, const ParsedChord* pc)
 {
-    const ChordDescription* cd = descr(name, pc);
-    if (cd) {
-        _id = cd->id;
-    } else {
-        cd = generateDescription();
-        _id = cd->id;
-    }
+    const ChordDescription* cd = generateDescription();
+    _id = cd->id;
     return cd;
 }
 
