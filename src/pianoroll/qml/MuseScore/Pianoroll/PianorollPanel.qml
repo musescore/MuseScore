@@ -218,11 +218,9 @@ Rectangle {
                 implicitHeight: 500
 
                 centerX: scrollViewX.center
+                centerY: scrollViewY.center
 
                 wholeNoteWidth: horizZoom.value
-//                zoomX: Math.log(horizZoom.value) / Math.log(2)
-//                wholeNoteWidth: Math.pow(horizZoom.value, 1.1)
-//                wholeNoteWidth: Math.pow(2, horizZoom.value)
                 noteHeight: vertZoom.value
                 tool: PianorollView.SELECT
 
@@ -238,10 +236,14 @@ Rectangle {
 //                text: "Three"; font.bold: true;
 //            }
 
-            Slider {
-                Layout.fillHeight: true
-                Layout.minimumWidth: 12
 
+            PianorollScrollbar{
+                id: scrollViewY
+                diretion: PianorollScrollbar.VERTICAL
+                displayObjectSpan: pianoView.displayObjectHeight
+                viewportSpan: pianoView.height
+                Layout.minimumWidth: 12
+                Layout.fillHeight: true
             }
 
             PianorollScrollbar{
@@ -251,7 +253,6 @@ Rectangle {
                 viewportSpan: pianoView.width
                 Layout.fillWidth: true
                 Layout.minimumHeight: 12
-
             }
 
 //            ScrollBar {
