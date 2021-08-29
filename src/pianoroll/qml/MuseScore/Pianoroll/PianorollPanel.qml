@@ -208,11 +208,35 @@ Rectangle {
             //anchors.fill: parent
             Layout.fillHeight: true
 
+
+            //-------
+            //Row
+
+            PianorollRuler {
+                Layout.fillWidth: true
+                height: 30
+
+                centerX: scrollViewX.center
+                wholeNoteWidth: horizZoom.value
+            }
+
+            Text {
+                Layout.minimumWidth: 12
+                Layout.minimumHeight: 12
+                text: "foo";
+            }
+//            Rectangle {
+//                color: "purple"
+
+//            }
+
+            //-------
+            //Row
+
             PianorollView {
                 id: pianoView
-//                anchors.fill: parent
-                Layout.fillHeight: true
                 Layout.fillWidth: true
+                Layout.fillHeight: true
 
                 implicitWidth: 1500
                 implicitHeight: 500
@@ -230,13 +254,6 @@ Rectangle {
             }
 
 
-//            Text {
-//                Layout.minimumWidth: 12
-//                Layout.minimumHeight: 12
-//                text: "Three"; font.bold: true;
-//            }
-
-
             PianorollScrollbar{
                 id: scrollViewY
                 diretion: PianorollScrollbar.VERTICAL
@@ -246,6 +263,10 @@ Rectangle {
                 Layout.fillHeight: true
             }
 
+
+            //-------
+            //Row
+
             PianorollScrollbar{
                 id: scrollViewX
                 diretion: PianorollScrollbar.HORIZONTAL
@@ -253,6 +274,12 @@ Rectangle {
                 viewportSpan: pianoView.width
                 Layout.fillWidth: true
                 Layout.minimumHeight: 12
+            }
+
+
+            Rectangle {
+                color: "orange"
+
             }
 
 //            ScrollBar {
