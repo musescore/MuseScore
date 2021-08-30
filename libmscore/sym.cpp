@@ -6680,7 +6680,6 @@ void ScoreFont::load()
 
       QJsonObject oo = metadataJson.value("glyphsWithAnchors").toObject();
       for (const auto &i : oo.keys()) {
-            constexpr qreal scale = SPATIUM20;
             QJsonObject ooo = oo.value(i).toObject();
             SymId symId = Sym::lnhash.value(i, SymId::noSym);
             if (symId == SymId::noSym) {
@@ -6694,42 +6693,42 @@ void ScoreFont::load()
                   if (j == "stemDownNW") {
                         qreal x = ooo.value(j).toArray().at(0).toDouble();
                         qreal y = ooo.value(j).toArray().at(1).toDouble();
-                        sym->setStemDownNW(QPointF(4.0 * DPI_F * x, 4.0 * DPI_F * -y));
+                        sym->setStemDownNW(QPointF(x, -y) * SPATIUM20);
                         }
                   else if (j == "stemUpSE") {
                         qreal x = ooo.value(j).toArray().at(0).toDouble();
                         qreal y = ooo.value(j).toArray().at(1).toDouble();
-                        sym->setStemUpSE(QPointF(4.0 * DPI_F * x, 4.0 * DPI_F * -y));
+                        sym->setStemUpSE(QPointF(x, -y) * SPATIUM20);
                         }
                   else if (j == "stemDownSW") {
                         qreal x = ooo.value(j).toArray().at(0).toDouble();
                         qreal y = ooo.value(j).toArray().at(1).toDouble();
-                        sym->setStemDownSW(QPointF(4.0 * DPI_F * x, 4.0 * DPI_F * -y));
+                        sym->setStemDownSW(QPointF(x, -y) * SPATIUM20);
                         }
                   else if (j == "stemUpNW") {
                         qreal x = ooo.value(j).toArray().at(0).toDouble();
                         qreal y = ooo.value(j).toArray().at(1).toDouble();
-                        sym->setStemUpNW(QPointF(4.0 * DPI_F * x, 4.0 * DPI_F * -y));
+                        sym->setStemUpNW(QPointF(x, -y) * SPATIUM20);
                         }
                   else if (j == "cutOutNE") {
-                        qreal x = ooo.value(j).toArray().at(0).toDouble() * scale;
-                        qreal y = ooo.value(j).toArray().at(1).toDouble() * scale;
-                        sym->setCutOutNE(QPointF(x, -y));
+                        qreal x = ooo.value(j).toArray().at(0).toDouble();
+                        qreal y = ooo.value(j).toArray().at(1).toDouble();
+                        sym->setCutOutNE(QPointF(x, -y) * SPATIUM20);
                         }
                   else if (j == "cutOutNW") {
-                        qreal x = ooo.value(j).toArray().at(0).toDouble() * scale;
-                        qreal y = ooo.value(j).toArray().at(1).toDouble() * scale;
-                        sym->setCutOutNW(QPointF(x, -y));
+                        qreal x = ooo.value(j).toArray().at(0).toDouble();
+                        qreal y = ooo.value(j).toArray().at(1).toDouble();
+                        sym->setCutOutNW(QPointF(x, -y) * SPATIUM20);
                         }
                   else if (j == "cutOutSE") {
-                        qreal x = ooo.value(j).toArray().at(0).toDouble() * scale;
-                        qreal y = ooo.value(j).toArray().at(1).toDouble() * scale;
-                        sym->setCutOutSE(QPointF(x, -y));
+                        qreal x = ooo.value(j).toArray().at(0).toDouble();
+                        qreal y = ooo.value(j).toArray().at(1).toDouble();
+                        sym->setCutOutSE(QPointF(x, -y) * SPATIUM20);
                         }
                   else if (j == "cutOutSW") {
-                        qreal x = ooo.value(j).toArray().at(0).toDouble() * scale;
-                        qreal y = ooo.value(j).toArray().at(1).toDouble() * scale;
-                        sym->setCutOutSW(QPointF(x, -y));
+                        qreal x = ooo.value(j).toArray().at(0).toDouble();
+                        qreal y = ooo.value(j).toArray().at(1).toDouble();
+                        sym->setCutOutSW(QPointF(x, -y) * SPATIUM20);
                         }
                   }
             }
