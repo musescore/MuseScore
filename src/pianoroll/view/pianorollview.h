@@ -33,18 +33,41 @@
 
 namespace mu::pianoroll {
 
-//class PianorollGeneral;
 
+enum class NoteSelectType
+{
+    REPLACE = 0,
+    XOR,
+    ADD,
+    SUBTRACT,
+    FIRST
+};
 
-struct BarPattern {
-      QString name;
-      char isWhiteKey[12];  //Set to 1 for white keys, 0 for black
-      };
+enum class DragStyle
+{
+    NONE = 0,
+    CANCELLED,
+    SELECTION_RECT,
+    NOTES
+};
 
+struct BarPattern
+{
+    QString name;
+    char isWhiteKey[12];  //Set to 1 for white keys, 0 for black
+};
+
+struct NoteBlock
+{
+    Ms::Note* note;
+    int voice;
+    int staffIdx;
+};
 
 class PianorollView : public QQuickPaintedItem, public async::Asyncable
 {
     Q_OBJECT
+
 public:
     enum class PianorollTool : char { SELECT, EDIT, CUT, ERASE };
     Q_ENUM(PianorollTool)
@@ -95,12 +118,19 @@ public:
 
 
     void paint(QPainter*) override;
+    void keyReleaseEvent(QKeyEvent* event) override;
+    void mousePressEvent(QMouseEvent* event) override;
+    void mouseReleaseEvent(QMouseEvent* event) override;
+    void mouseMoveEvent(QMouseEvent* event) override;
 
     int wholeNoteToPixelX(Ms::Fraction tick) const { return wholeNoteToPixelX(tick.numerator() / (double)tick.denominator()); }
     int wholeNoteToPixelX(double tick) const;
     double pixelXToWholeNote(int pixelX) const;
     int pitchToPixelY(double pitch) const;
     double pixelYToPitch(int tick) const;
+
+    void finishNoteGroupDrag();
+    void selectNotes(double startTick, double endTick, int lowPitch, int highPitch, NoteSelectType selType);
 
 signals:
     void wholeNoteWidthChanged();
@@ -120,10 +150,24 @@ private:
     void onSelectionChanged();
     void updateBoundingSize();
     QRect boundingRect(Ms::Note* note, Ms::NoteEvent* evt = nullptr);
+    QString serializeSelectedNotes();
+
+    void buildNoteData();
+    void addChord(Ms::Chord* chrd, int voice, int staffIdx);
 
     void drawChord(QPainter* p, Ms::Chord* chrd, int voice, bool active);
+    void drawNoteBlock(QPainter* p, NoteBlock* block);
+
+    NoteBlock* pickNote(int pixX, int pixY);
+
+    Ms::Staff* activeStaff();
     
     notation::INotationPtr m_notation;
+
+    QList<NoteBlock*> m_noteList;
+    std::vector<int> m_selectedStaves;
+    int m_activeStaff;
+
 
     double m_centerX = 0;  //fraction of note grid camera is focused on
     double m_centerY = 0;  //fraction of note grid camera is focused on
@@ -138,7 +182,15 @@ private:
     PianorollTool m_tool = PianorollTool::SELECT;
     int m_barPattern = 0;
 
-//    quint8 m_pitchHighlight[128];
+    bool m_mouseDown;
+    bool m_dragStarted;
+    QString m_dragNoteCache;
+    QPointF m_mouseDownPos;
+    QPointF m_lastMousePos;
+    QPointF m_popupMenuPos;
+    DragStyle m_dragStyle;
+    int m_dragStartPitch;
+    bool m_inProgressUndoEvent;
 
     QColor m_colorBackground = Qt::gray;
     QColor m_colorKeyWhite = QColor(0xffffff);
