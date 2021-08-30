@@ -50,6 +50,7 @@ private:
     size_t resolveNewPartIndex(const ID& partId) const;
 
     QString m_instrumentId;
+    bool m_isInited = false;
 };
 }
 

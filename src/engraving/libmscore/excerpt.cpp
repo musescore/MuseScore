@@ -59,6 +59,8 @@
 #include "utils.h"
 #include "masterscore.h"
 
+#include "log.h"
+
 using namespace mu;
 
 namespace Ms {
@@ -114,9 +116,9 @@ bool Excerpt::isEmpty() const
     return partScore() ? partScore()->parts().empty() : true;
 }
 
-void Excerpt::setTracks(const QMultiMap<int, int>& t)
+void Excerpt::setTracks(const QMultiMap<int, int>& tracks)
 {
-    _tracks = t;
+    _tracks = tracks;
 
     for (Staff* staff : partScore()->staves()) {
         staff->updateVisibilityVoices();
@@ -213,8 +215,8 @@ void Excerpt::updateTracks()
 {
     QMultiMap<int, int> tracks;
     for (Staff* staff : partScore()->staves()) {
-        Staff* primaryStaff = staff->primaryStaff();
-        if (!primaryStaff) {
+        Staff* masterStaff = oscore()->staffById(staff->id());
+        if (!masterStaff) {
             continue;
         }
 
@@ -224,7 +226,7 @@ void Excerpt::updateTracks()
                 continue;
             }
 
-            tracks.insert(primaryStaff->idx() * VOICES + i % VOICES, staff->idx() * VOICES + voice % VOICES);
+            tracks.insert(masterStaff->idx() * VOICES + i % VOICES, staff->idx() * VOICES + voice % VOICES);
             voice++;
         }
     }
@@ -232,15 +234,22 @@ void Excerpt::updateTracks()
     setTracks(tracks);
 }
 
-void Excerpt::setVoiceVisible(ID staffId, int voiceIndex, bool visible)
+void Excerpt::setVoiceVisible(Staff* staff, int voiceIndex, bool visible)
 {
-    Staff* staff = partScore()->staffById(staffId);
-    Staff* masterStaff = oscore()->staffById(staffId);
-    if (!staff || !masterStaff) {
+    TRACEFUNC;
+
+    if (!staff) {
+        return;
+    }
+
+    Staff* masterStaff = oscore()->staffById(staff->id());
+    if (!masterStaff) {
         return;
     }
 
     int staffIndex = staff->idx();
+    Ms::Fraction startTick = staff->score()->firstMeasure()->tick();
+    Ms::Fraction endTick = staff->score()->lastMeasure()->tick();
 
     // update tracks
     staff->setVoiceVisible(voiceIndex, visible);
@@ -253,16 +262,15 @@ void Excerpt::setVoiceVisible(ID staffId, int voiceIndex, bool visible)
     staffCopy->init(staff);
 
     // remove current staff, insert cloned
-    partScore()->cmdRemoveStaff(staffIndex);
-    partScore()->undoInsertStaff(staffCopy, staffIndex);
+    partScore()->undoRemoveStaff(staff);
+    int partStaffIndex = staffIndex - partScore()->staffIdx(staff->part());
+    partScore()->undoInsertStaff(staffCopy, partStaffIndex);
 
     // clone master staff to current with mapped tracks
-    Ms::Fraction startTick = staffCopy->score()->firstMeasure()->tick();
-    Ms::Fraction endTick = staffCopy->score()->lastMeasure()->tick();
     cloneStaff2(masterStaff, staffCopy, startTick, endTick);
 
     // link master staff to cloned
-    Staff* newStaff = partScore()->staffById(staffId);
+    Staff* newStaff = partScore()->staffById(masterStaff->id());
     partScore()->undo(new Link(newStaff, masterStaff));
 }
 
@@ -1280,6 +1288,8 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
         }
     }
 
+    bool firstVoiceVisible = dstStaff->isVoiceVisible(0);
+
     for (Measure* m = m1; m && (m != m2); m = m->nextMeasure()) {
         Measure* nm = score->tick2measure(m->tick());
         nm->setMeasureRepeatCount(m->measureRepeatCount(srcStaffIdx), dstStaffIdx);
@@ -1287,14 +1297,23 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
             TupletMap tupletMap;          // tuplets cannot cross measure boundaries
             int dstTrack = map.value(srcTrack);
             for (Segment* oseg = m->first(); oseg; oseg = oseg->next()) {
+                Segment* ns = nm->getSegment(oseg->segmentType(), oseg->tick());
+                Element* oef = oseg->element(trackZeroVoice(srcTrack));
+                if (oef && !oef->generated() && (oef->isTimeSig() || oef->isKeySig())) {
+                    if (!firstVoiceVisible) {
+                        Element* ne = oef->linkedClone();
+                        ne->setTrack(trackZeroVoice(dstTrack));
+                        ne->setParent(ns);
+                        ne->setScore(score);
+                        score->undoAddElement(ne);
+                    }
+                }
+
                 Element* oe = oseg->element(srcTrack);
                 if (oe == 0 || oe->generated()) {
                     continue;
                 }
-                if (oe->isTimeSig()) {
-                    continue;
-                }
-                Segment* ns = nm->getSegment(oseg->segmentType(), oseg->tick());
+
                 Element* ne = oe->linkedClone();
                 ne->setTrack(dstTrack);
                 ne->setParent(ns);
