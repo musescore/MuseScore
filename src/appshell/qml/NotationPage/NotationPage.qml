@@ -207,9 +207,11 @@ DockPage {
             contextMenuModel: instrumentsPanelContent.contextMenuModel
 
             InstrumentsPanel {
-                id: instrumentsPanelContent
-
                 navigationSection: instrumentsPanel.navigationSection
+
+                onContextMenuModelChanged: {
+                    instrumentsPanel.contextMenuModel = newModel
+                }
             }
         },
 
