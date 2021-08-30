@@ -1759,7 +1759,7 @@ mu::draw::Color TextBase::textColor() const
 
     mu::draw::Color normalColor = (engravingConfiguration()->isCurrentThemeHighContrast()
                                    && engravingConfiguration()->scoreInversionEnabled())
-                                    ? engravingConfiguration()->defaultColor() : color();
+                                  ? engravingConfiguration()->defaultColor() : color();
     return curColor(visible(), normalColor);
 }
 
