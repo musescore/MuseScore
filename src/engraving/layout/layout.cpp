@@ -191,12 +191,12 @@ void Layout::doLayoutRange(const LayoutOptions& options, const Fraction& st, con
                     m_score->setSelectionChanged(true);
                 }
             }
-            s->setParent(nullptr);
+            s->moveToDummy();
         }
         for (MeasureBase* mb = m_score->first(); mb; mb = mb->next()) {
-            mb->setSystem(0);
+            mb->moveToDummy();
             if (mb->isMeasure() && toMeasure(mb)->mmRest()) {
-                toMeasure(mb)->mmRest()->setSystem(0);
+                toMeasure(mb)->mmRest()->moveToDummy();
             }
         }
         qDeleteAll(m_score->_systems);
@@ -284,7 +284,7 @@ void Layout::resetSystems(bool layoutAll, const LayoutOptions& options, LayoutCo
     if (layoutAll) {
         for (System* s : qAsConst(m_score->_systems)) {
             for (SpannerSegment* ss : s->spannerSegments()) {
-                ss->setParent(0);
+                ss->moveToDummy();
             }
         }
         qDeleteAll(m_score->_systems);
@@ -297,7 +297,7 @@ void Layout::resetSystems(bool layoutAll, const LayoutOptions& options, LayoutCo
         }
 
         for (MeasureBase* mb = m_score->first(); mb; mb = mb->next()) {
-            mb->setSystem(0);
+            mb->moveToDummy();
         }
 
         page = new Page(m_score);
@@ -305,7 +305,7 @@ void Layout::resetSystems(bool layoutAll, const LayoutOptions& options, LayoutCo
         page->bbox().setRect(0.0, 0.0, options.loWidth, options.loHeight);
         page->setNo(0);
 
-        System* system = new System(m_score);
+        System* system = new System(page);
         m_score->_systems.push_back(system);
         page->appendSystem(system);
         system->adjustStavesNumber(m_score->nstaves());
@@ -343,7 +343,7 @@ void Layout::collectLinearSystem(const LayoutOptions& options, LayoutContext& lc
     while (lc.curMeasure) {
         qreal ww = 0.0;
         if (lc.curMeasure->isVBox() || lc.curMeasure->isTBox()) {
-            lc.curMeasure->setParent(nullptr);
+            lc.curMeasure->moveToDummy();
             LayoutMeasure::getNextMeasure(options, m_score, lc);
             continue;
         }
@@ -351,7 +351,7 @@ void Layout::collectLinearSystem(const LayoutOptions& options, LayoutContext& lc
         if (lc.curMeasure->isMeasure()) {
             Measure* m = toMeasure(lc.curMeasure);
             if (m->mmRest()) {
-                m->mmRest()->setSystem(nullptr);
+                m->mmRest()->moveToDummy();
             }
             if (firstMeasure) {
                 system->layoutSystem(pos.rx());

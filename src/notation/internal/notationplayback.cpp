@@ -222,7 +222,7 @@ RetVal<midi::tick_t> NotationPlayback::playPositionTickByElement(const Element* 
     }
 
     if (element->isNote()) {
-        element = element->parent();
+        element = element->parentElement();
     }
 
     const Ms::ChordRest* cr = Ms::toChordRest(element);

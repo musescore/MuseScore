@@ -150,7 +150,7 @@ class Clef final : public Element
     ClefTypeList _clefTypes { ClefType::INVALID };
 
 public:
-    Clef(Score*);
+    Clef(Segment* parent);
     Clef* clone() const override { return new Clef(*this); }
     qreal mag() const override;
 

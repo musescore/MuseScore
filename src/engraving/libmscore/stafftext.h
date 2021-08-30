@@ -38,7 +38,7 @@ class StaffText final : public StaffTextBase
     QVariant propertyDefault(Pid id) const override;
 
 public:
-    StaffText(Score* s = 0, Tid = Tid::STAFF);
+    StaffText(Segment* parent = 0, Tid = Tid::STAFF);
 
     StaffText* clone() const override { return new StaffText(*this); }
     void layout() override;

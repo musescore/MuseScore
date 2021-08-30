@@ -192,7 +192,11 @@ class ScoreElement
     INJECT_STATIC(engraving, mu::diagnostics::IEngravingElementsProvider, elementsProvider)
 
     ElementType m_type = ElementType::INVALID;
-    Score* _score;
+    ScoreElement* m_parent = nullptr;
+    bool m_isParentExplicitlySet = false;
+    bool m_isDummy = false;
+    Score* _score = nullptr;
+
     static ElementStyle const emptyStyle;
 
 protected:
@@ -205,15 +209,55 @@ protected:
     void hack_setType(const ElementType& t) { m_type = t; }
 
 public:
-    ScoreElement(const ElementType& type, Score* s);
+    ScoreElement(const ElementType& type, ScoreElement* parent);
     ScoreElement(const ScoreElement& se);
 
     virtual ~ScoreElement();
 
     inline ElementType type() const { return m_type; }
 
+    //! NOTE Before, element tree is made to be done like this
+    //! class ScoreElement
+    //! {
+    //!     Score* _score;
+    //!     ScoreElement(Score* score)...
+    //! }
+    //!
+    //! class Element : public ScoreElement
+    //! {
+    //!    Element* _parent;
+    //!    Element(Score* s) : ScoreElement(s)...
+    //!
+    //!    Element* parent() const { return _parent; }
+    //!    void setElement(Element* e) { _parent = e; }
+    //! }
+    //! accordingly:
+    //! * All elements have a ref to score which they are located.
+    //! * The base element (ScoreElement) itself has no parent property
+    //! * The parent of an element could be set or could not be set, so in general, it is impossible to build a tree of elements
+    //! (to solve this problem, a `treeParent` method was added that tries to determine the parent)
+    //! * There was also logic for some elements that if a parent is set, then an element in the tree,
+    //! if not set, then no, but for other elements, it does not matter.
+    //!
+    //! Now the element tree is:
+    //! class ScoreElement
+    //! {
+    //!     ScoreElement* m_parent;
+    //!     ScoreElement(ScoreElement* parent)...
+    //! }
+    //! accordingly:
+    //! * No more score property (score is searched for in the parent tree)
+    //! * All objects must belong to someone
+    //!
+    //! For compatibility purposes, it has been done so that the new structure has the old behavior.
+    ScoreElement* parent(bool isIncludeDummy = false) const;
+    void setParent(ScoreElement* p, bool isExplicitly = true);
+    void moveToDummy();
+    void setIsDummy(bool arg);
+    bool isDummy() const;
+
     // Score Tree functions
-    virtual ScoreElement* treeParent() const { return nullptr; }
+    virtual ScoreElement* treeParent() const { return m_parent; }
     virtual ScoreElement* treeChild(int n) const { Q_UNUSED(n); return nullptr; }
     virtual int treeChildCount() const { return 0; }
 
@@ -249,9 +293,9 @@ public:
     const_iterator begin() const { return const_iterator(this, 0); }
     const_iterator end() const { return const_iterator(this, treeChildCount()); }
 
-    Score* score() const { return _score; }
+    Score* score(bool required = true) const;
     MasterScore* masterScore() const;
-    virtual void setScore(Score* s) { _score = s; }
+    virtual void setScore(Score* s);
     const char* name() const;
     virtual QString userName() const;
 

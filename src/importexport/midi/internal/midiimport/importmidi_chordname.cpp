@@ -230,7 +230,7 @@ void setChordNames(QList<MTrack>& tracks)
             Segment* seg = measure->getSegment(SegmentType::ChordRest, onTime.fraction());
             const int t = staff->idx() * VOICES;
 
-            Harmony* h = new Harmony(score);
+            Harmony* h = new Harmony(seg);
             h->setHarmony(chordName);
             h->setTrack(t);
             seg->add(h);

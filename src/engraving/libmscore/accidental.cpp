@@ -240,8 +240,8 @@ AccidentalVal sym2accidentalVal(SymId id)
 //   Accidental
 //---------------------------------------------------------
 
-Accidental::Accidental(Score* s)
-    : Element(ElementType::ACCIDENTAL, s, ElementFlag::MOVABLE)
+Accidental::Accidental(Element* parent)
+    : Element(ElementType::ACCIDENTAL, parent, ElementFlag::MOVABLE)
 {
 }
 
@@ -380,7 +380,7 @@ void Accidental::layout()
         return;
     }
 
-    qreal m = parent() ? parent()->mag() : 1.0;
+    qreal m = parent() ? parentElement()->mag() : 1.0;
     if (m_isSmall) {
         m *= score()->styleD(Sid::smallNoteMag);
     }

@@ -64,8 +64,8 @@ static const QList<PitchValue> RELEASE_DOWN_CURVE = { PitchValue(0, 150),
 //   TremoloBar
 //---------------------------------------------------------
 
-TremoloBar::TremoloBar(Score* s)
-    : Element(ElementType::TREMOLOBAR, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+TremoloBar::TremoloBar(Element* parent)
+    : Element(ElementType::TREMOLOBAR, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     initElementStyle(&tremoloBarStyle);
 }

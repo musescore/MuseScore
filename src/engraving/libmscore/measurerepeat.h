@@ -38,7 +38,7 @@ class Segment;
 class MeasureRepeat final : public Rest
 {
 public:
-    MeasureRepeat(Score*);
+    MeasureRepeat(Segment* parent);
     MeasureRepeat& operator=(const MeasureRepeat&) = delete;
 
     MeasureRepeat* clone() const override { return new MeasureRepeat(*this); }

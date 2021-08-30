@@ -87,7 +87,7 @@ class Accidental final : public Element
     AccidentalRole _role           { AccidentalRole::AUTO };
 
 public:
-    Accidental(Score* s = 0);
+    Accidental(Element* parent = 0);
 
     Accidental* clone() const override { return new Accidental(*this); }
 

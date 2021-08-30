@@ -53,8 +53,8 @@ private:
     QString _label;                 ///< referenced from Jump() element
 
 public:
-    Marker(Score*);
-    Marker(Score*, Tid);
+    Marker(Element* parent);
+    Marker(Element* parent, Tid);
 
     void setMarkerType(Type t);
     Type markerType() const { return _markerType; }

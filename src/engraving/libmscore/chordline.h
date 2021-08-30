@@ -52,7 +52,7 @@ class ChordLine final : public Element
     const int _initialLength = 2;
 
 public:
-    ChordLine(Score*);
+    ChordLine(Chord* parent);
     ChordLine(const ChordLine&);
 
     ChordLine* clone() const override { return new ChordLine(*this); }

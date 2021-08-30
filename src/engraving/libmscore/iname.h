@@ -44,7 +44,7 @@ class InstrumentName final : public TextBase
     SysStaff* _sysStaff { nullptr };
 
 public:
-    InstrumentName(Score*);
+    InstrumentName(System*);
 
     InstrumentName* clone() const override { return new InstrumentName(*this); }
 

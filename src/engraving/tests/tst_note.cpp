@@ -78,8 +78,8 @@ void TestNote::initTestCase()
 
 void TestNote::note()
 {
-    Ms::Chord* chord = new Ms::Chord(score);
-    Note* note = new Note(score);
+    Ms::Chord* chord = new Ms::Chord(score->dummy()->segment());
+    Note* note = new Note(chord);
     chord->add(note);
 
     // pitch
@@ -354,7 +354,7 @@ void TestNote::grace()
 
     // tremolo
     score->startCmd();
-    Tremolo* tr = new Tremolo(score);
+    Tremolo* tr = new Tremolo(gc);
     tr->setTremoloType(TremoloType::R16);
     tr->setParent(gc);
     tr->setTrack(gc->track());
@@ -366,7 +366,7 @@ void TestNote::grace()
 
     // articulation
     score->startCmd();
-    Articulation* ar = new Articulation(SymId::articAccentAbove, score);
+    Articulation* ar = new Articulation(SymId::articAccentAbove, gc);
     ar->setParent(gc);
     ar->setTrack(gc->track());
     score->undoAddElement(ar);

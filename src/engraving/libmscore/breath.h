@@ -48,7 +48,7 @@ class Breath final : public Element
     SymId _symId;
 
 public:
-    Breath(Score* s);
+    Breath(Segment* parent);
 
     Breath* clone() const override { return new Breath(*this); }
 

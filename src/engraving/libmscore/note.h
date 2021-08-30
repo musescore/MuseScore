@@ -171,8 +171,7 @@ public:
     Q_ENUM(Group);
     Q_ENUM(Type);
 
-    NoteHead(Score* s = 0)
-        : Symbol(ElementType::NOTEHEAD, s) {}
+    NoteHead(Note* parent = 0);
     NoteHead& operator=(const NoteHead&) = delete;
     NoteHead* clone() const override { return new NoteHead(*this); }
 
@@ -330,17 +329,20 @@ private:
     static QString tpcUserName(int tpc, int pitch, bool explicitAccidental);
 
 public:
-    Note(Score* s = 0);
+    Note(Chord* ch = 0);
     Note(const Note&, bool link = false);
     ~Note();
+
+    Note& operator=(const Note&) = delete;
+    virtual Note* clone() const override { return new Note(*this, false); }
+
+    Chord* chord() const { return (Chord*)parent(); }
+    void setParent(Chord* ch);
 
     // Score Tree functions
     ScoreElement* treeParent() const override;
     ScoreElement* treeChild(int idx) const override;
     int treeChildCount() const override;
-
-    Note& operator=(const Note&) = delete;
-    virtual Note* clone() const override { return new Note(*this, false); }
 
     void undoUnlink() override;
 
@@ -450,8 +452,6 @@ public:
     void disconnectTiedNotes();
     void connectTiedNotes();
 
-    Chord* chord() const { return (Chord*)parent(); }
-    void setChord(Chord* a) { setParent((Element*)a); }
     void draw(mu::draw::Painter*) const override;
 
     void read(XmlReader&) override;

@@ -48,7 +48,7 @@ enum class TremoloBarType {
 class TremoloBar final : public Element
 {
 public:
-    TremoloBar(Score* s);
+    TremoloBar(Element* parent);
 
     TremoloBar* clone() const override { return new TremoloBar(*this); }
 

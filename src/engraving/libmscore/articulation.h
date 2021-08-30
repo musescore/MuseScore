@@ -102,8 +102,8 @@ class Articulation final : public Element
     static AnchorGroup anchorGroup(SymId);
 
 public:
-    Articulation(Score*);
-    Articulation(SymId, Score*);
+    Articulation(ChordRest* parent);
+    Articulation(SymId, ChordRest* parent);
     Articulation& operator=(const Articulation&) = delete;
 
     Articulation* clone() const override { return new Articulation(*this); }

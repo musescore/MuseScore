@@ -1362,7 +1362,7 @@ static void creditWords(XmlWriter& xml, const Score* const s, const int pageNr,
 
 static double parentHeight(const Element* element)
 {
-    const Element* parent = element->parent();
+    const Element* parent = element->parentElement();
 
     if (!parent) {
         return 0;
@@ -3901,7 +3901,7 @@ static void directionTag(XmlWriter& xml, Attributes& attr, Element const* const 
                         seg->pagePos().x(), seg->pagePos().y(),
                         seg->offset().y());
                  */
-                pel = seg->parent();
+                pel = seg->parentElement();
             }
         } else if (el->type() == ElementType::DYNAMIC
                    || el->type() == ElementType::INSTRUMENT_CHANGE
@@ -3911,7 +3911,7 @@ static void directionTag(XmlWriter& xml, Attributes& attr, Element const* const 
                    || el->type() == ElementType::TEXT) {
             // handle other elements attached (e.g. via Segment / Measure) to a system
             // find the system containing this element
-            for (const Element* e = el; e; e = e->parent()) {
+            for (const Element* e = el; e; e = e->parentElement()) {
                 if (e->type() == ElementType::SYSTEM) {
                     pel = e;
                 }
@@ -5779,7 +5779,7 @@ void ExportMusicXml::keysigTimesig(const Measure* m, const Part* p)
         if (m->tick().isZero()) {
             //KeySigEvent kse;
             //kse.setKey(Key::C);
-            KeySig* ks = new KeySig(_score);
+            KeySig* ks = new KeySig(_score->dummy()->segment());
             ks->setKey(Key::C);
             keysig(ks, p->staff(0)->clef(m->tick()));
             delete ks;

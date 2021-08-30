@@ -53,6 +53,7 @@
 #include "engraving/libmscore/symbol.h"
 #include "engraving/style/defaultstyle.h"
 #include "engraving/style/style.h"
+#include "engraving/compat/dummyelement.h"
 
 #include "internal/palettecelliconengine.h"
 
@@ -819,7 +820,7 @@ void PaletteWidget::dropEvent(QDropEvent* event)
         QList<QUrl> ul = event->mimeData()->urls();
         QUrl u = ul.front();
         if (u.scheme() == "file") {
-            auto image = makeElement<Image>(gpaletteScore);
+            auto image = makeElement<Image>(gpaletteScore->dummy());
             QString filePath(u.toLocalFile());
             image->load(filePath);
             element = image;
@@ -834,11 +835,11 @@ void PaletteWidget::dropEvent(QDropEvent* event)
         ElementType type = Element::readType(xml, &dragOffset, &duration);
 
         if (type == ElementType::SYMBOL) {
-            auto symbol = makeElement<Symbol>(gpaletteScore);
+            auto symbol = makeElement<Symbol>(gpaletteScore->dummy());
             symbol->read(xml);
             element = symbol;
         } else {
-            element = std::shared_ptr<Element>(Element::create(type, gpaletteScore));
+            element = std::shared_ptr<Element>(Element::create(type, gpaletteScore->dummy()));
             if (element) {
                 element->read(xml);
                 element->setTrack(0);

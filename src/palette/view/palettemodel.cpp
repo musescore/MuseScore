@@ -875,7 +875,7 @@ void PaletteTreeModel::updateCellsState(const Selection& sel)
 
     for (Element* e : sel.elements()) {
         if (e->isNote()) {
-            e = e->parent();
+            e = e->parentElement();
         }
         if (e->isChordRest()) {
             if (toChordRest(e)->beamMode() != bm) {

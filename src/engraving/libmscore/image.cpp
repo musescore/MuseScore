@@ -49,8 +49,8 @@ static bool defaultSizeIsSpatium    = true;
 //   Image
 //---------------------------------------------------------
 
-Image::Image(Score* s)
-    : BSymbol(ElementType::IMAGE, s, ElementFlag::MOVABLE)
+Image::Image(Element* parent)
+    : BSymbol(ElementType::IMAGE, parent, ElementFlag::MOVABLE)
 {
     imageType        = ImageType::NONE;
     rasterDoc        = 0;
@@ -568,8 +568,8 @@ void Image::layout()
             qreal f = _sizeIsSpatium ? spatium() : DPMM;
             SizeF size(imageSize());
             qreal ratio = size.width() / size.height();
-            qreal w = parent()->width();
-            qreal h = parent()->height();
+            qreal w = parentElement()->width();
+            qreal h = parentElement()->height();
             if ((w / h) < ratio) {
                 _size.setWidth(w / f);
                 _size.setHeight((w / ratio) / f);
@@ -578,7 +578,7 @@ void Image::layout()
                 _size.setWidth(h * ratio / f);
             }
         } else {
-            _size = pixel2size(parent()->bbox().size());
+            _size = pixel2size(parentElement()->bbox().size());
         }
     }
 

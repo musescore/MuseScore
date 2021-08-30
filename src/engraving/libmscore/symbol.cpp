@@ -41,14 +41,14 @@ namespace Ms {
 //   Symbol
 //---------------------------------------------------------
 
-Symbol::Symbol(const ElementType& type, Score* s, ElementFlags f)
-    : BSymbol(type, s, f)
+Symbol::Symbol(const ElementType& type, Element* parent, ElementFlags f)
+    : BSymbol(type, parent, f)
 {
     _sym = SymId::accidentalSharp;          // arbitrary valid default
 }
 
-Symbol::Symbol(Score* s, ElementFlags f)
-    : Symbol(ElementType::SYMBOL, s, f)
+Symbol::Symbol(Element* parent, ElementFlags f)
+    : Symbol(ElementType::SYMBOL, parent, f)
 {
 }
 
@@ -157,14 +157,14 @@ void Symbol::read(XmlReader& e)
         } else if (tag == "font") {
             _scoreFont = ScoreFont::fontByName(e.readElementText());
         } else if (tag == "Symbol") {
-            Symbol* s = new Symbol(score());
+            Symbol* s = new Symbol(this);
             s->read(e);
             add(s);
         } else if (tag == "Image") {
             if (MScore::noImages) {
                 e.skipCurrentElement();
             } else {
-                Image* image = new Image(score());
+                Image* image = new Image(this);
                 image->read(e);
                 add(image);
             }
@@ -212,8 +212,8 @@ bool Symbol::setProperty(Pid propertyId, const QVariant& v)
 //   FSymbol
 //---------------------------------------------------------
 
-FSymbol::FSymbol(Score* s)
-    : BSymbol(ElementType::FSYMBOL, s)
+FSymbol::FSymbol(Element* parent)
+    : BSymbol(ElementType::FSYMBOL, parent)
 {
     _code = 0;
     _font.setNoFontMerging(true);

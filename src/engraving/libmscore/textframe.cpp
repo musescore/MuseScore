@@ -43,11 +43,11 @@ namespace Ms {
 //   TBox
 //---------------------------------------------------------
 
-TBox::TBox(Score* score)
-    : VBox(ElementType::TBOX, score)
+TBox::TBox(System* parent)
+    : VBox(ElementType::TBOX, parent)
 {
     setBoxHeight(Spatium(1));
-    _text  = new Text(score, Tid::FRAME);
+    _text  = new Text(this, Tid::FRAME);
     _text->setLayoutToParentWidth(true);
     _text->setParent(this);
 }
@@ -162,7 +162,7 @@ void TBox::remove(Element* el)
         // replace with new empty text element
         // this keeps undo/redo happier than just clearing the text
         qDebug("TBox::remove() - replacing _text");
-        _text = new Text(score(), Tid::FRAME);
+        _text = new Text(this, Tid::FRAME);
         _text->setLayoutToParentWidth(true);
         _text->setParent(this);
     } else {

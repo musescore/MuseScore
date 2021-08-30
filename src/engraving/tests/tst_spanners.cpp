@@ -101,7 +101,7 @@ void TestSpanners::spanners01()
     Note* note  = chord->upNote();
     QVERIFY(note);
     // drop a glissando on note
-    gliss             = new Glissando(score);   // create a new element each time, as drop() will eventually delete it
+    gliss             = new Glissando(score->dummy());   // create a new element each time, as drop() will eventually delete it
     dropData.pos      = note->pagePos();
     dropData.dropElement  = gliss;
     note->drop(dropData);
@@ -117,7 +117,7 @@ void TestSpanners::spanners01()
     note  = chord->upNote();
     QVERIFY(note);
     // drop a glissando on note
-    gliss             = new Glissando(score);
+    gliss             = new Glissando(score->dummy());
     dropData.pos      = note->pagePos();
     dropData.dropElement  = gliss;
     note->drop(dropData);
@@ -133,7 +133,7 @@ void TestSpanners::spanners01()
     note  = chord->upNote();
     QVERIFY(note);
     // drop a glissando on note
-    gliss             = new Glissando(score);
+    gliss             = new Glissando(score->dummy());
     dropData.pos      = note->pagePos();
     dropData.dropElement  = gliss;
     note->drop(dropData);
@@ -149,7 +149,7 @@ void TestSpanners::spanners01()
     note  = chord->upNote();
     QVERIFY(note);
     // drop a glissando on note
-    gliss             = new Glissando(score);
+    gliss             = new Glissando(score->dummy());
     dropData.pos      = note->pagePos();
     dropData.dropElement  = gliss;
     note->drop(dropData);
@@ -165,7 +165,7 @@ void TestSpanners::spanners01()
     note  = chord->upNote();
     QVERIFY(note);
     // drop a glissando on note
-    gliss             = new Glissando(score);
+    gliss             = new Glissando(score->dummy());
     dropData.pos      = note->pagePos();
     dropData.dropElement  = gliss;
     note->drop(dropData);
@@ -216,7 +216,7 @@ void TestSpanners::spanners03()
     Note* note  = chord->upNote();
     QVERIFY(note);
     // drop a glissando on note
-    gliss             = new Glissando(score);   // create a new element each time, as drop() will eventually delete it
+    gliss             = new Glissando(score->dummy());   // create a new element each time, as drop() will eventually delete it
     dropData.pos      = note->pagePos();
     dropData.dropElement  = gliss;
     note->drop(dropData);
@@ -227,7 +227,7 @@ void TestSpanners::spanners03()
     QVERIFY(grace && grace->type() == ElementType::CHORD);
     note              = grace->upNote();
     QVERIFY(note);
-    gliss             = new Glissando(score);
+    gliss             = new Glissando(score->dummy());
     dropData.pos      = note->pagePos();
     dropData.dropElement  = gliss;
     note->drop(dropData);
@@ -240,7 +240,7 @@ void TestSpanners::spanners03()
     QVERIFY(chord && chord->type() == ElementType::CHORD);
     note              = chord->upNote();
     QVERIFY(note);
-    gliss             = new Glissando(score);
+    gliss             = new Glissando(score->dummy());
     dropData.pos      = note->pagePos();
     dropData.dropElement  = gliss;
     note->drop(dropData);
@@ -256,7 +256,7 @@ void TestSpanners::spanners03()
     QVERIFY(grace && grace->type() == ElementType::CHORD);
     note              = grace->upNote();
     QVERIFY(note);
-    gliss             = new Glissando(score);
+    gliss             = new Glissando(score->dummy());
     dropData.pos      = note->pagePos();
     dropData.dropElement  = gliss;
     note->drop(dropData);
@@ -346,7 +346,7 @@ void TestSpanners::spanners06()
     Note* note  = chord->upNote();
     QVERIFY(note);
     // drop a glissando on note
-    gliss             = new Glissando(score);
+    gliss             = new Glissando(score->dummy());
     dropData.pos      = note->pagePos();
     dropData.dropElement  = gliss;
     note->drop(dropData);
@@ -378,7 +378,7 @@ void TestSpanners::spanners07()
     Note* note  = chord->upNote();
     QVERIFY(note);
     // drop a glissando on note
-    gliss             = new Glissando(score);
+    gliss             = new Glissando(score->dummy());
     dropData.pos      = note->pagePos();
     dropData.dropElement  = gliss;
     note->drop(dropData);

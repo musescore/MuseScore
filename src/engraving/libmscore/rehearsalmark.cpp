@@ -41,8 +41,8 @@ static const ElementStyle rehearsalMarkStyle {
 //   RehearsalMark
 //---------------------------------------------------------
 
-RehearsalMark::RehearsalMark(Score* s)
-    : TextBase(ElementType::REHEARSAL_MARK, s, Tid::REHEARSAL_MARK)
+RehearsalMark::RehearsalMark(Segment* parent)
+    : TextBase(ElementType::REHEARSAL_MARK, parent, Tid::REHEARSAL_MARK)
 {
     initElementStyle(&rehearsalMarkStyle);
     setSystemFlag(true);

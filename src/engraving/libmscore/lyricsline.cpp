@@ -69,8 +69,8 @@ static Lyrics* searchNextLyrics(Segment* s, int staffIdx, int verse, Placement p
 //   LyricsLine
 //---------------------------------------------------------
 
-LyricsLine::LyricsLine(Score* s)
-    : SLine(ElementType::LYRICSLINE, s, ElementFlag::NOT_SELECTABLE)
+LyricsLine::LyricsLine(Element* parent)
+    : SLine(ElementType::LYRICSLINE, parent, ElementFlag::NOT_SELECTABLE)
 {
     setGenerated(true);             // no need to save it, as it can be re-generated
     setDiagonal(false);

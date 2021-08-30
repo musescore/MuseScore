@@ -186,8 +186,8 @@ const ElementStyle chordSymbolStyle {
 //   Harmony
 //---------------------------------------------------------
 
-Harmony::Harmony(Score* s)
-    : TextBase(ElementType::HARMONY, s, Tid::HARMONY_A, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+Harmony::Harmony(Segment* parent)
+    : TextBase(ElementType::HARMONY, parent, Tid::HARMONY_A, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     _rootTpc    = Tpc::TPC_INVALID;
     _baseTpc    = Tpc::TPC_INVALID;

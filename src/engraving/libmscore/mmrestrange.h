@@ -37,7 +37,7 @@ class MMRestRange : public MeasureNumberBase
     M_PROPERTY(MMRestRangeBracketType, bracketType, setBracketType)
 
 public:
-    MMRestRange(Score* s = nullptr);
+    MMRestRange(Measure* parent = nullptr);
     MMRestRange(const MMRestRange& other);
 
     virtual MMRestRange* clone() const override { return new MMRestRange(*this); }

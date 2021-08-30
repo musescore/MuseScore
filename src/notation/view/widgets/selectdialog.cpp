@@ -138,7 +138,7 @@ Ms::System* SelectDialog::elementSystem(const Element* element) const
         if (_element->type() == ElementType::SYSTEM) {
             return dynamic_cast<Ms::System*>(_element);
         }
-        _element = _element->parent();
+        _element = _element->parentElement();
     } while (element);
 
     return nullptr;

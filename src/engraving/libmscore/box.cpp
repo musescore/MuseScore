@@ -58,8 +58,8 @@ static const ElementStyle hBoxStyle {
 //   Box
 //---------------------------------------------------------
 
-Box::Box(const ElementType& type, Score* score)
-    : MeasureBase(type, score)
+Box::Box(const ElementType& type, System* parent)
+    : MeasureBase(type, parent)
 {
 }
 
@@ -298,29 +298,41 @@ bool Box::readProperties(XmlReader& e)
             }
         }
     } else if (tag == "Symbol") {
-        Symbol* s = new Symbol(score());
+        Symbol* s = new Symbol(this);
         s->read(e);
         add(s);
     } else if (tag == "Image") {
         if (MScore::noImages) {
             e.skipCurrentElement();
         } else {
-            Image* image = new Image(score());
+            Image* image = new Image(this);
             image->setTrack(e.track());
             image->read(e);
             add(image);
         }
     } else if (tag == "FretDiagram") {
-        FretDiagram* f = new FretDiagram(score());
+        FretDiagram* f = new FretDiagram(this->score()->dummy()->segment());
         f->read(e);
+        //! TODO Looks like a bug.
+        //! The FretDiagram parent must be Segment
+        //! there is a method: `Segment* segment() const { return toSegment(parent()); }`,
+        //! but when we add it to Box, the parent will be rewritten.
         add(f);
     } else if (tag == "HBox") {
-        HBox* hb = new HBox(score());
+        HBox* hb = new HBox(this->system());
         hb->read(e);
+        //! TODO Looks like a bug.
+        //! The HBox parent must be System
+        //! there is a method: `System* system() const { return (System*)parent(); }`,
+        //! but when we add it to Box, the parent will be rewritten.
         add(hb);
     } else if (tag == "VBox") {
-        VBox* vb = new VBox(score());
+        VBox* vb = new VBox(this->system());
         vb->read(e);
+        //! TODO Looks like a bug.
+        //! The VBox parent must be System
+        //! there is a method: `System* system() const { return (System*)parent(); }`,
+        //! but when we add it to Box, the parent will be rewritten.
         add(vb);
     } else if (MeasureBase::readProperties(e)) {
     } else {
@@ -475,8 +487,8 @@ void Box::copyValues(Box* origin)
 //   HBox
 //---------------------------------------------------------
 
-HBox::HBox(Score* score)
-    : Box(ElementType::HBOX, score)
+HBox::HBox(System* parent)
+    : Box(ElementType::HBOX, parent)
 {
     initElementStyle(&hBoxStyle);
     setBoxWidth(Spatium(5.0));
@@ -599,7 +611,7 @@ Element* Box::drop(EditData& data)
 
     case ElementType::STAFF_TEXT:
     {
-        Text* text = new Text(score(), Tid::FRAME);
+        Text* text = new Text(this, Tid::FRAME);
         text->setParent(this);
         text->setXmlText(toStaffText(e)->xmlText());
         score()->undoAddElement(text);
@@ -652,7 +664,7 @@ RectF HBox::drag(EditData& data)
     qreal x1   = offset().x() + diff;
     if (parent()->type() == ElementType::VBOX) {
         VBox* vb = toVBox(parent());
-        qreal x2 = parent()->width() - width() - (vb->leftMargin() + vb->rightMargin()) * DPMM;
+        qreal x2 = parentElement()->width() - width() - (vb->leftMargin() + vb->rightMargin()) * DPMM;
         if (x1 < 0.0) {
             x1 = 0.0;
         } else if (x1 > x2) {
@@ -757,16 +769,16 @@ QVariant HBox::propertyDefault(Pid id) const
 //   VBox
 //---------------------------------------------------------
 
-VBox::VBox(const ElementType& type, Score* score)
-    : Box(type, score)
+VBox::VBox(const ElementType& type, System* parent)
+    : Box(type, parent)
 {
     initElementStyle(&boxStyle);
     setBoxHeight(Spatium(10.0));
     setLineBreak(true);
 }
 
-VBox::VBox(Score* score)
-    : VBox(ElementType::VBOX, score)
+VBox::VBox(System* parent)
+    : VBox(ElementType::VBOX, parent)
 {
 }
 

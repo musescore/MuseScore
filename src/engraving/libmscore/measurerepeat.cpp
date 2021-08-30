@@ -42,12 +42,12 @@ static const ElementStyle measureRepeatStyle {
 //   MeasureRepeat
 //---------------------------------------------------------
 
-MeasureRepeat::MeasureRepeat(Score* score)
-    : Rest(ElementType::MEASURE_REPEAT, score), m_numMeasures(0), m_symId(SymId::noSym)
+MeasureRepeat::MeasureRepeat(Segment* parent)
+    : Rest(ElementType::MEASURE_REPEAT, parent), m_numMeasures(0), m_symId(SymId::noSym)
 {
     // however many measures the group, the element itself is always exactly the duration of its containing measure
     setDurationType(TDuration::DurationType::V_MEASURE);
-    if (score) {
+    if (parent) {
         initElementStyle(&measureRepeatStyle);
     }
 }

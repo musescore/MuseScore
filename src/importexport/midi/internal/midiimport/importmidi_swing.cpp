@@ -246,9 +246,9 @@ void detectSwing(Staff* staff, MidiOperations::Swing swingType)
     }
     if (swingDetector.wasSwingApplied()) {
         // add swing label to the score
-        StaffText* st = new StaffText(score, Tid::STAFF);
-        st->setPlainText(swingCaption(swingType));
         Segment* seg = score->firstSegment(SegmentType::ChordRest);
+        StaffText* st = new StaffText(seg, Tid::STAFF);
+        st->setPlainText(swingCaption(swingType));
         st->setParent(seg);
         st->setTrack(strack);       // voice == 0
         score->addElement(st);

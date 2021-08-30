@@ -35,8 +35,8 @@ namespace Ms {
 //   LayoutBreak
 //---------------------------------------------------------
 
-Spacer::Spacer(Score* score)
-    : Element(ElementType::SPACER, score)
+Spacer::Spacer(Measure* parent)
+    : Element(ElementType::SPACER, parent)
 {
     _spacerType = SpacerType::UP;
     _gap = 0.0;

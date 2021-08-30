@@ -54,7 +54,7 @@ class Page final : public Element
     void drawHeaderFooter(mu::draw::Painter*, int area, const QString&) const;
 
 public:
-    Page(Score*);
+    Page(ScoreElement* parent);
     ~Page();
 
     // Score Tree functions

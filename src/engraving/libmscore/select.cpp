@@ -266,7 +266,7 @@ ChordRest* Selection::cr() const
         return 0;
     }
     if (e->isNote()) {
-        e = e->parent();
+        e = e->parentElement();
     }
     if (e->isChordRest()) {
         return toChordRest(e);
@@ -340,7 +340,7 @@ ChordRest* Selection::firstChordRest(int track) const
     ChordRest* cr = 0;
     for (Element* el : _el) {
         if (el->isNote()) {
-            el = el->parent();
+            el = el->parentElement();
         }
         if (el->isChordRest()) {
             if (track != -1 && el->track() != track) {

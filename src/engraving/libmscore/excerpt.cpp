@@ -463,7 +463,7 @@ static void cloneSpanner(Spanner* s, Score* score, int dstTrack, int dstTrack2)
     }
     Spanner* ns = toSpanner(s->linkedClone());
     ns->setScore(score);
-    ns->setParent(0);
+    ns->moveToDummy();
     ns->setTrack(dstTrack);
     ns->setTrack2(dstTrack2);
 
@@ -571,18 +571,18 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& sourceS
     for (MeasureBase* mb = oscore->measures()->first(); mb; mb = mb->next()) {
         MeasureBase* nmb = 0;
         if (mb->isHBox()) {
-            nmb = new HBox(score);
+            nmb = new HBox(score->dummy()->system());
         } else if (mb->isVBox()) {
-            nmb = new VBox(score);
+            nmb = new VBox(score->dummy()->system());
         } else if (mb->isTBox()) {
-            nmb = new TBox(score);
+            nmb = new TBox(score->dummy()->system());
             Text* text = toTBox(mb)->text();
             Element* ne = text->linkedClone();
             ne->setScore(score);
             nmb->add(ne);
         } else if (mb->isMeasure()) {
             Measure* m  = toMeasure(mb);
-            Measure* nm = new Measure(score);
+            Measure* nm = new Measure(score->dummy()->system());
             nmb = nm;
             nm->setTick(m->tick());
             nm->setTicks(m->ticks());
@@ -816,11 +816,11 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& sourceS
 
                         Segment* tst = nm->segments().firstCRSegment();
                         if (srcTrack % VOICES && !(track % VOICES) && (!tst || (!tst->element(track)))) {
-                            Rest* rest = new Rest(score);
+                            Segment* segment = nm->getSegment(SegmentType::ChordRest, nm->tick());
+                            Rest* rest = new Rest(segment);
                             rest->setTicks(nm->ticks());
                             rest->setDurationType(nm->ticks());
                             rest->setTrack(track);
-                            Segment* segment = nm->getSegment(SegmentType::ChordRest, nm->tick());
                             segment->add(rest);
                         }
                     }

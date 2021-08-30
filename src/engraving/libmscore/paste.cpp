@@ -199,14 +199,14 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
                         }
                         return false;
                     }
-                    tuplet = new Tuplet(this);
+                    Measure* measure = tick2measure(tick);
+                    tuplet = new Tuplet(measure);
                     tuplet->setTrack(e.track());
                     tuplet->read(e);
                     if (doScale) {
                         tuplet->setTicks(tuplet->ticks() * scale);
                         tuplet->setBaseLen(tuplet->baseLen().fraction() * scale);
                     }
-                    Measure* measure = tick2measure(tick);
                     tuplet->setParent(measure);
                     tuplet->setTick(tick);
                     tuplet->setTuplet(oldTuplet);
@@ -240,7 +240,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
                     }
                     e.readNext();
                 } else if (tag == "Chord" || tag == "Rest" || tag == "MeasureRepeat") {
-                    ChordRest* cr = toChordRest(Element::name2Element(tag, this));
+                    ChordRest* cr = toChordRest(Element::name2Element(tag, this->dummy()));
                     cr->setTrack(e.track());
                     cr->read(e);
                     cr->setSelected(false);
@@ -350,12 +350,15 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
                     Spanner::readSpanner(e, this, e.track());
                     spannerFound = true;
                 } else if (tag == "Harmony") {
-                    Harmony* harmony = new Harmony(this);
+                    // transpose
+                    Fraction tick = doScale ? (e.tick() - dstTick) * scale + dstTick : e.tick();
+                    Measure* m = tick2measure(tick);
+                    Segment* seg = m->undoGetSegment(SegmentType::ChordRest, tick);
+                    Harmony* harmony = new Harmony(seg);
                     harmony->setTrack(e.track());
                     harmony->read(e);
                     harmony->setTrack(e.track());
-                    // transpose
-                    Fraction tick = doScale ? (e.tick() - dstTick) * scale + dstTick : e.tick();
+
                     Part* partDest = staff(e.track() / VOICES)->part();
                     Interval interval = partDest->instrument(tick)->transpose();
                     if (!styleB(Sid::concertPitch) && !interval.isZero()) {
@@ -365,8 +368,6 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
                         undoTransposeHarmony(harmony, rootTpc, baseTpc);
                     }
 
-                    Measure* m = tick2measure(tick);
-                    Segment* seg = m->undoGetSegment(SegmentType::ChordRest, tick);
                     // remove pre-existing chords on this track
                     // but be sure not to remove any we just added
                     for (Element* el : seg->findAnnotations(ElementType::HARMONY, e.track(), e.track())) {
@@ -391,7 +392,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
                            || tag == "Sticking"
                            || tag == "Fermata"
                            ) {
-                    Element* el = Element::name2Element(tag, this);
+                    Element* el = Element::name2Element(tag, this->dummy());
                     el->setTrack(e.track());                // a valid track might be necessary for el->read() to work
                     if (el->isFermata()) {
                         el->setPlacement(el->track() & 1 ? Placement::BELOW : Placement::ABOVE);
@@ -409,35 +410,35 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
                     el->setStaffIdx(e.track() / VOICES);
                     undoAddElement(el);
                 } else if (tag == "Clef") {
-                    Clef* clef = new Clef(this);
-                    clef->read(e);
-                    clef->setTrack(e.track());
                     Fraction tick = doScale ? (e.tick() - dstTick) * scale + dstTick : e.tick();
                     Measure* m = tick2measure(tick);
                     if (m->tick().isNotZero() && m->tick() == tick) {
                         m = m->prevMeasure();
                     }
                     Segment* segment = m->undoGetSegment(SegmentType::Clef, tick);
+                    Clef* clef = new Clef(segment);
+                    clef->read(e);
+                    clef->setTrack(e.track());
                     clef->setParent(segment);
                     undoChangeElement(segment->element(e.track()), clef);
                 } else if (tag == "Breath") {
-                    Breath* breath = new Breath(this);
-                    breath->setTrack(e.track());
-                    breath->setPlacement(breath->track() & 1 ? Placement::BELOW : Placement::ABOVE);
-                    breath->read(e);
                     Fraction tick = doScale ? (e.tick() - dstTick) * scale + dstTick : e.tick();
                     Measure* m = tick2measure(tick);
                     if (m->tick() == tick) {
                         m = m->prevMeasure();
                     }
                     Segment* segment = m->undoGetSegment(SegmentType::Breath, tick);
+                    Breath* breath = new Breath(segment);
+                    breath->setTrack(e.track());
+                    breath->setPlacement(breath->track() & 1 ? Placement::BELOW : Placement::ABOVE);
+                    breath->read(e);
                     breath->setParent(segment);
                     undoChangeElement(segment->element(e.track()), breath);
                 } else if (tag == "Beam") {
-                    Beam* beam = new Beam(this);
+                    Beam* beam = new Beam(this->dummy(), this);
                     beam->setTrack(e.track());
                     beam->read(e);
-                    beam->setParent(0);
+                    beam->moveToDummy();
                     if (startingBeam) {
                         qDebug("The read beam was not used");
                         delete startingBeam;
@@ -688,7 +689,7 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t, const Interval& src
 
                 if (!firstpart) {
                     for (unsigned i = 0; i < nl1.size(); ++i) {
-                        Tie* tie = new Tie(this);
+                        Tie* tie = new Tie(nl1[i]);
                         tie->setStartNote(nl1[i]);
                         tie->setEndNote(nl2[i]);
                         tie->setTick(tie->startNote()->tick());
@@ -732,7 +733,7 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t, const Interval& src
             MeasureRepeat* mr = toMeasureRepeat(cr);
             std::vector<TDuration> list = toDurationList(mr->actualTicks(), true);
             for (auto dur : list) {
-                Rest* r = new Rest(this, dur);
+                Rest* r = new Rest(this->dummy()->segment(), dur);
                 r->setTrack(cr->track());
                 Fraction rest = r->ticks();
                 while (!rest.isZero()) {
@@ -829,7 +830,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                         continue;
                     }
                     if (tag == "Harmony") {
-                        Harmony* el = new Harmony(this);
+                        Harmony* el = new Harmony(harmSegm);
                         el->setTrack(trackZeroVoice(destTrack));
                         el->read(e);
                         el->setTrack(trackZeroVoice(destTrack));
@@ -845,7 +846,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                         el->setParent(harmSegm);
                         undoAddElement(el);
                     } else {
-                        FretDiagram* el = new FretDiagram(this);
+                        FretDiagram* el = new FretDiagram(harmSegm);
                         el->setTrack(trackZeroVoice(destTrack));
                         el->read(e);
                         el->setTrack(trackZeroVoice(destTrack));
@@ -858,14 +859,14 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                         e.skipCurrentElement();
                         continue;
                     }
-                    Dynamic* d = new Dynamic(this);
+                    Dynamic* d = new Dynamic(destCR->segment());
                     d->setTrack(destTrack);
                     d->read(e);
                     d->setTrack(destTrack);
                     d->setParent(destCR->segment());
                     undoAddElement(d);
                 } else if (tag == "HairPin") {
-                    Hairpin* h = new Hairpin(this);
+                    Hairpin* h = new Hairpin(this->dummy()->segment());
                     h->setTrack(destTrack);
                     h->read(e);
                     h->setTrack(destTrack);
@@ -894,7 +895,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                     ChordRest* cr = toChordRest(currSegm->element(destTrack));
 
                     if (tag == "Articulation") {
-                        Articulation* el = new Articulation(this);
+                        Articulation* el = new Articulation(cr);
                         el->read(e);
                         el->setTrack(destTrack);
                         el->setParent(cr);
@@ -904,7 +905,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                             undoAddElement(el);
                         }
                     } else if (tag == "StaffText" || tag == "Sticking") {
-                        Element* el = Element::name2Element(tag, this);
+                        Element* el = Element::name2Element(tag, this->dummy());
                         el->read(e);
                         el->setTrack(destTrack);
                         el->setParent(currSegm);
@@ -917,7 +918,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                         // FiguredBass always belongs to first staff voice
                         destTrack = trackZeroVoice(destTrack);
                         Fraction ticks;
-                        FiguredBass* el = new FiguredBass(this);
+                        FiguredBass* el = new FiguredBass(currSegm);
                         el->setTrack(destTrack);
                         el->read(e);
                         el->setTrack(destTrack);
@@ -1015,7 +1016,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                             e.skipCurrentElement();
                             continue;
                         }
-                        Lyrics* el = new Lyrics(this);
+                        Lyrics* el = new Lyrics(cr);
                         el->setTrack(destTrack);
                         el->read(e);
                         el->setTrack(destTrack);
@@ -1212,7 +1213,7 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
         auto px = imageProvider()->pixmapFromQVariant(ms->imageData());
         imageProvider()->saveAsPng(px, &buffer);
 
-        Image* image = new Image(this);
+        Image* image = new Image(this->dummy());
         image->setImageType(ImageType::RASTER);
         image->loadFromData("dragdrop", ba);
 

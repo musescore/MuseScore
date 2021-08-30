@@ -209,7 +209,7 @@ void TrackList::append(Element* e)
         }
     } else {
         Element* c = e->clone();
-        c->setParent(0);
+        c->moveToDummy();
         QList<Element*>::append(c);
     }
 }
@@ -218,7 +218,7 @@ void TrackList::append(Element* e)
 //   appendGap
 //---------------------------------------------------------
 
-void TrackList::appendGap(const Fraction& du)
+void TrackList::appendGap(const Fraction& du, Score* score)
 {
     if (du.isZero()) {
         return;
@@ -231,7 +231,7 @@ void TrackList::appendGap(const Fraction& du)
         _duration   += du;
         rest->setTicks(dd);
     } else {
-        Rest* rest = new Rest(0);
+        Rest* rest = new Rest(score->dummy()->segment());
         rest->setTicks(du);
         QList<Element*>::append(rest);
         _duration   += du;
@@ -309,7 +309,7 @@ void TrackList::read(const Segment* fs, const Segment* es)
             }
 
             if (gap.isNotZero()) {
-                appendGap(gap);
+                appendGap(gap, e->score());
                 tick += gap;
             }
             append(de);
@@ -325,7 +325,7 @@ void TrackList::read(const Segment* fs, const Segment* es)
     }
     Fraction gap = es->tick() - tick;
     if (gap.isNotZero()) {
-        appendGap(gap);
+        appendGap(gap, es->score());
     }
 
     //
@@ -462,7 +462,7 @@ Tuplet* TrackList::writeTuplet(Tuplet* parent, Tuplet* tuplet, Measure*& measure
                     if (cr->isChord()) {
                         for (Note* note : toChord(cr)->notes()) {
                             if (!duration.isZero() && !note->tieFor()) {
-                                Tie* tie = new Tie(score);
+                                Tie* tie = new Tie(note);
                                 tie->setGenerated(true);
                                 note->add(tie);
                             }
@@ -522,7 +522,7 @@ bool TrackList::write(Score* score, const Fraction& tick) const
                     Segment* seg = m->getSegmentR(SegmentType::ChordRest, m->ticks() - remains);
                     if ((_track % VOICES) == 0) {
                         // write only for voice 1
-                        Rest* r = new Rest(score, TDuration::DurationType::V_MEASURE);
+                        Rest* r = new Rest(seg, TDuration::DurationType::V_MEASURE);
                         // ideally we should be using stretchedLen
                         // but this is not valid during rewrite when adding time signatures
                         // since the time signature has not been added yet
@@ -570,7 +570,7 @@ bool TrackList::write(Score* score, const Fraction& tick) const
                             }
                             for (Note* note : toChord(cr)->notes()) {
                                 if (!duration.isZero() && !note->tieFor()) {
-                                    Tie* tie = new Tie(score);
+                                    Tie* tie = new Tie(note);
                                     tie->setGenerated(true);
                                     note->add(tie);
                                 }
@@ -678,7 +678,7 @@ void ScoreRange::read(Segment* first, Segment* last, bool readSpanner)
             Spanner* s = i.second;
             if (s->tick() >= stick && s->tick() < etick && s->track() >= startTrack && s->track() < endTrack) {
                 Spanner* ns = toSpanner(s->clone());
-                ns->setParent(0);
+                ns->moveToDummy();
                 ns->setStartElement(0);
                 ns->setEndElement(0);
                 ns->setTick(ns->tick() - stick);
@@ -770,7 +770,7 @@ void ScoreRange::fill(const Fraction& f)
     const Fraction oldDuration = ticks();
     Fraction oldEndTick = _first->tick() + oldDuration;
     for (auto t : qAsConst(tracks)) {
-        t->appendGap(f);
+        t->appendGap(f, _first->score());
     }
 
     Fraction diff = ticks() - oldDuration;

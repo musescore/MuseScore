@@ -104,7 +104,7 @@ protected:
     virtual mu::PointF linePos(Grip, System** system) const;
 
 public:
-    SLine(const ElementType& type, Score* s, ElementFlags = ElementFlag::NOTHING);
+    SLine(const ElementType& type, Element* parent, ElementFlags = ElementFlag::NOTHING);
     SLine(const SLine&);
 
     virtual void layout() override;

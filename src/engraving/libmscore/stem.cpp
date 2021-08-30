@@ -51,8 +51,8 @@ static const ElementStyle stemStyle {
 //    Notenhals
 //---------------------------------------------------------
 
-Stem::Stem(Score* s)
-    : Element(ElementType::STEM, s)
+Stem::Stem(Chord* parent)
+    : Element(ElementType::STEM, parent)
 {
     initElementStyle(&stemStyle);
     resetProperty(Pid::USER_LEN);
@@ -63,7 +63,7 @@ Stem::Stem(Score* s)
 //---------------------------------------------------------
 Element* Stem::elementBase() const
 {
-    return parent();
+    return parentElement();
 }
 
 //---------------------------------------------------------
@@ -355,7 +355,7 @@ Element* Stem::drop(EditData& data)
 
     switch (e->type()) {
     case ElementType::TREMOLO:
-        e->setParent(ch);
+        toTremolo(e)->setParent(ch);
         score()->undoAddElement(e);
         return e;
     default:

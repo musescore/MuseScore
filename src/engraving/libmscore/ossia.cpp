@@ -27,8 +27,8 @@ namespace Ms {
 //   Ossia
 //---------------------------------------------------------
 
-Ossia::Ossia(Score* score)
-    : Element(ElementType::OSSIA, score)
+Ossia::Ossia(Element* parent)
+    : Element(ElementType::OSSIA, parent)
 {
 }
 

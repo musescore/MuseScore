@@ -48,8 +48,8 @@ class Fermata final : public Element
     Sid getPropertyStyle(Pid) const override;
 
 public:
-    Fermata(Score*);
-    Fermata(SymId, Score*);
+    Fermata(Element* parent);
+    Fermata(SymId, Element* parent);
     Fermata& operator=(const Fermata&) = delete;
 
     Fermata* clone() const override { return new Fermata(*this); }

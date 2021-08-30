@@ -24,6 +24,8 @@
 #include "importmxmlnotepitch.h"
 #include "musicxmlsupport.h"
 
+#include "libmscore/score.h"
+
 namespace Ms {
 //---------------------------------------------------------
 //   accidental
@@ -46,7 +48,7 @@ static Accidental* accidental(QXmlStreamReader& e, Score* score)
     const auto type = mxmlString2accidentalType(s);
 
     if (type != AccidentalType::NONE) {
-        auto a = new Accidental(score);
+        auto a = new Accidental(score->dummy());
         a->setAccidentalType(type);
         if (editorial || cautionary || parentheses) {
             a->setBracket(AccidentalBracket(cautionary || parentheses));

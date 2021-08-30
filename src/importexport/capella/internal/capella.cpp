@@ -82,9 +82,9 @@ const char* Capella::errmsg[] = {
 //   addDynamic
 //---------------------------------------------------------
 
-static void addDynamic(Score* score, Segment* s, int track, const char* name)
+static void addDynamic(Score*, Segment* s, int track, const char* name)
 {
-    Dynamic* d = new Dynamic(score);
+    Dynamic* d = new Dynamic(s);
     d->setDynamicType(name);
     d->setTrack(track);
     s->add(d);
@@ -94,9 +94,9 @@ static void addDynamic(Score* score, Segment* s, int track, const char* name)
 //   addArticulationText
 //---------------------------------------------------------
 
-static void addArticulationText(Score* score, ChordRest* cr, int track, SymId symId)
+static void addArticulationText(Score*, ChordRest* cr, int track, SymId symId)
 {
-    Articulation* na = new Articulation(score);
+    Articulation* na = new Articulation(cr);
     na->setTrack(track);
     na->setSymId(symId);
     cr->add(na);
@@ -225,10 +225,10 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                         break;
                     case 181:                         // caesura
                     {
-                        Breath* b = new Breath(score);
+                        Segment* seg = s->measure()->getSegment(SegmentType::Breath, s->tick() + (cr ? cr->actualTicks() : Fraction(0, 1)));
+                        Breath* b = new Breath(seg);
                         b->setTrack(track);
                         b->setSymId(SymId::caesura);
-                        Segment* seg = s->measure()->getSegment(SegmentType::Breath, s->tick() + (cr ? cr->actualTicks() : Fraction(0, 1)));
                         seg->add(b);
                     }
                     break;
@@ -240,9 +240,9 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                         case 172:                           // arpeggio (short)
                         case 173:                           // arpeggio (long)
                         {
-                            Arpeggio* a = new Arpeggio(score);
+                            Arpeggio* a = new Arpeggio(Ms::toChord(cr));
                             a->setArpeggioType(ArpeggioType::NORMAL);
-                            if ((static_cast<Chord*>(cr))->arpeggio()) {                           // there can be only one
+                            if (Ms::toChord(cr)->arpeggio()) {                           // there can be only one
                                 delete a;
                                 a = 0;
                             } else {
@@ -252,7 +252,7 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                         break;
                         case 187:                           // arpeggio (wiggle line, arrow up)
                         {
-                            Arpeggio* a = new Arpeggio(score);
+                            Arpeggio* a = new Arpeggio(Ms::toChord(cr));
                             a->setArpeggioType(ArpeggioType::UP);
                             if ((static_cast<Chord*>(cr))->arpeggio()) {                           // there can be only one
                                 delete a;
@@ -264,7 +264,7 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                         break;
                         case 188:                           // arpeggio (wiggle line, arrow down)
                         {
-                            Arpeggio* a = new Arpeggio(score);
+                            Arpeggio* a = new Arpeggio(Ms::toChord(cr));
                             a->setArpeggioType(ArpeggioType::DOWN);
                             if ((static_cast<Chord*>(cr))->arpeggio()) {                           // there can be only one
                                 delete a;
@@ -281,7 +281,7 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                     break;
                 }
             }
-            TextBase* text = new StaffText(score);
+            TextBase* text = new StaffText(s);
             QFont f(st->font());
             text->setFamily(f.family());
             text->setItalic(f.italic());
@@ -338,7 +338,7 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                     str += st->text();
                 }
             }
-            Harmony* harmony = new Harmony(score);
+            Harmony* harmony = new Harmony(s);
             harmony->setHarmony(str);
             harmony->setTrack(track);
             s->add(harmony);
@@ -509,12 +509,12 @@ static bool findChordRests(BasicDrawObj const* const o, Score* score, const int 
 //   createAndAddTimeSig
 //---------------------------------------------------------
 
-static Segment* createAndAddTimeSig(Score* score, Measure* m, Fraction f, int track, Fraction tick)
+static Segment* createAndAddTimeSig(Score*, Measure* m, Fraction f, int track, Fraction tick)
 {
-    TimeSig* ts = new TimeSig(score);
+    auto s = m->getSegment(SegmentType::TimeSig, tick);
+    TimeSig* ts = new TimeSig(s);
     ts->setSig(f);
     ts->setTrack(track);
-    auto s = m->getSegment(SegmentType::TimeSig, tick);
     s->add(ts);
     return s;
 }
@@ -562,7 +562,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                     tupletprol  = o->isProlonging;
                     nTuplet     = 0;
                     tupletTick  = tick;
-                    tuplet      = new Tuplet(score);
+                    tuplet      = new Tuplet(m);
                     Fraction f  = TupletFractionCap(tupletCount, tuplettrp, tupletprol);
                     tuplet->setRatio(f);
                     tuplet->setBaseLen(d);
@@ -581,7 +581,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                     for (unsigned i = 0; i < o->fullMeasures; ++i) {
                         Measure* m1 = score->getCreateMeasure(tick + (ft * i));
                         Segment* s = m1->getSegment(SegmentType::ChordRest, tick + (ft * i));
-                        Rest* rest = new Rest(score);
+                        Rest* rest = new Rest(s);
                         rest->setDurationType(TDuration(TDuration::DurationType::V_MEASURE));
                         rest->setTicks(m1->ticks());
                         rest->setTrack(staffIdx * VOICES + voice);
@@ -591,7 +591,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
             }
             if (!o->invisible || voice == 0) {
                 Segment* s = m->getSegment(SegmentType::ChordRest, tick);
-                Rest* rest = new Rest(score);
+                Rest* rest = new Rest(s);
                 TDuration d1;
                 if (o->fullMeasures) {
                     d1.setType(TDuration::DurationType::V_MEASURE);
@@ -647,7 +647,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                     tupletprol  = o->isProlonging;
                     nTuplet     = 0;
                     tupletTick  = tick;
-                    tuplet      = new Tuplet(score);
+                    tuplet      = new Tuplet(m);
                     Fraction f  = TupletFractionCap(tupletCount, tuplettrp, tupletprol);
                     tuplet->setRatio(f);
                     tuplet->setBaseLen(d);
@@ -662,7 +662,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                        o->objects.size());
             }
 
-            Chord* chord = new Chord(score);
+            Chord* chord = new Chord(score->dummy()->segment());
             if (isgracenote) {             // grace notes
                 SetCapGraceDuration(chord, o);
                 chord->setTicks(chord->durationType().fraction());
@@ -753,7 +753,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
             off += keyOffsets[int(key) + 7];
 
             for (CNote n : o->notes) {
-                Note* note = new Note(score);
+                Note* note = new Note(chord);
                 int pitch = 0;
                 // .cap import: pitch contains the diatonic note number relative to clef and key
                 // .capx  import: pitch the MIDI note number instead
@@ -781,14 +781,14 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                 // TODO: compute tpc from pitch & line
                 note->setTpcFromPitch();
                 if (o->rightTie) {
-                    Tie* tie = new Tie(score);
+                    Tie* tie = new Tie(score->dummy());
                     tie->setStartNote(note);
                     tie->setTrack(track);
                     note->setTieFor(tie);
                 }
             }
             for (Verse v : o->verse) {
-                Lyrics* l = new Lyrics(score);
+                Lyrics* l = new Lyrics(chord);
                 l->setTrack(track);
                 l->setPlainText(v.text);
                 if (v.hyphen) {
@@ -836,9 +836,6 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                 break;
             }
             // staff(staffIdx)->setClef(tick, nclef);
-            Clef* clef = new Clef(score);
-            clef->setClefType(nclef);
-            clef->setTrack(staffIdx * VOICES);
             Measure* m = score->getCreateMeasure(tick);
             Segment* s;
             if (tick == m->tick()) {
@@ -846,6 +843,9 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
             } else {
                 s = m->getSegment(SegmentType::Clef, tick);
             }
+            Clef* clef = new Clef(s);
+            clef->setClefType(nclef);
+            clef->setTrack(staffIdx * VOICES);
             s->add(clef);
         }
         break;
@@ -858,10 +858,10 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
             okey.setKey(Key(o->signature));
             if (!(key == okey)) {
                 score->staff(staffIdx)->setKey(tick, okey);
-                KeySig* ks = new KeySig(score);
-                ks->setTrack(staffIdx * VOICES);
                 Measure* m = score->getCreateMeasure(tick);
                 Segment* s = m->getSegment(SegmentType::KeySig, tick);
+                KeySig* ks = new KeySig(s);
+                ks->setTrack(staffIdx * VOICES);
                 ks->setKeySigEvent(okey);
                 s->add(ks);
             }
@@ -981,7 +981,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                         qDebug("first and second anchor for slur identical (tick %d track %d first %p second %p)",
                                tick.ticks(), track, cr1, cr2);
                     } else {
-                        Slur* slur = new Slur(score);
+                        Slur* slur = new Slur(score->dummy());
                         qDebug("tick %d track %d cr1 %p cr2 %p -> slur %p",
                                tick.ticks(), track, cr1, cr2, slur);
                         slur->setTick(cr1->tick());
@@ -1005,7 +1005,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                 s->setXmlText(ss);
                 MeasureBase* measure = score->measures()->first();
                 if (measure->type() != ElementType::VBOX) {
-                    MeasureBase* mb = new VBox(score);
+                    MeasureBase* mb = new VBox(score->dummy()->system());
                     mb->setTick(Fraction(0, 1));
                     score->addMeasure(mb, measure);
                     measure = mb;
@@ -1022,7 +1022,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                 bool res = findChordRests(o, score, track, tick, cr1, cr2, no, cvoice->objects);
 
                 if (res) {
-                    Volta* volta = new Volta(score);
+                    Volta* volta = new Volta(score->dummy());
                     volta->setTrack(track);
                     volta->setTrack2(track);
                     // TODO also support endings such as "1 - 3"
@@ -1050,7 +1050,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                         qDebug("first and second anchor for trill line identical (tick %d track %d first %p second %p)",
                                tick.ticks(), track, cr1, cr2);
                     } else {
-                        Trill* trill = new Trill(score);
+                        Trill* trill = new Trill(score->dummy());
                         trill->setTrack(track);
                         trill->setTrack2(track);
                         trill->setTick(cr1->tick());
@@ -1074,7 +1074,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                         qDebug("first and second anchor for hairpin identical (tick %d track %d first %p second %p)",
                                tick.ticks(), track, cr1, cr2);
                     } else {
-                        Hairpin* hp = new Hairpin(score);
+                        Hairpin* hp = new Hairpin(score->dummy()->segment());
                         if (wdgo->decresc) {
                             hp->setHairpinType(HairpinType::DECRESC_HAIRPIN);
                         } else {
@@ -1282,7 +1282,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
             QString ss = to->text();
             s->setPlainText(ss);
             if (!measure) {
-                measure = new VBox(score);
+                measure = new VBox(score->dummy()->system());
                 measure->setTick(Fraction(0, 1));
                 score->addMeasure(measure, score->measures()->first());
             }
@@ -1302,7 +1302,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
         if (mbl->size() && mbl->first()->type() == ElementType::VBOX) {
             mb = static_cast<VBox*>(mbl->first());
         } else {
-            VBox* vb = new VBox(score);
+            VBox* vb = new VBox(score->dummy()->system());
             vb->setTick(Fraction(0, 1));
             score->addMeasure(vb, mb);
             mb = vb;
@@ -1341,7 +1341,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
         }
         Measure* m = score->tick2measure(mtick - Fraction::fromTicks(1));
         if (m && !m->lineBreak()) {
-            LayoutBreak* lb = new LayoutBreak(score);
+            LayoutBreak* lb = new LayoutBreak(m);
             lb->setLayoutBreakType(LayoutBreak::Type::LINE);
             lb->setTrack(-1);             // this are system elements
             m->add(lb);
@@ -1365,7 +1365,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
             if (empty) {
                 if ((m->ticks() == m->timesig())) {
                     Segment* s = m->getSegment(SegmentType::ChordRest, m->tick());
-                    Rest* rest = new Rest(score);
+                    Rest* rest = new Rest(s);
                     rest->setDurationType(TDuration::DurationType::V_MEASURE);
                     rest->setTicks(m->ticks());
                     rest->setTrack(staffIdx * VOICES);
@@ -1375,7 +1375,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
                     int tickOffset = 0;
                     for (auto d : durList) {
                         Segment* s = m->getSegment(SegmentType::ChordRest, m->tick() + Fraction::fromTicks(tickOffset));
-                        Rest* rest = new Rest(score);
+                        Rest* rest = new Rest(s);
                         rest->setDurationType(d);
                         rest->setTrack(staffIdx * VOICES);
                         s->add(rest);

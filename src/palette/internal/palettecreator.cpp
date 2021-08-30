@@ -84,6 +84,43 @@
 using namespace mu::palette;
 using namespace Ms;
 
+template<typename T> std::shared_ptr<T> makeElement(Ms::Score* score)
+{
+    return std::make_shared<T>(score->dummy());
+}
+
+#define MAKE_ELEMENT(T, P) \
+    template<> \
+    std::shared_ptr<T> makeElement<T>(Ms::Score* score) { return std::make_shared<T>(P); } \
+
+MAKE_ELEMENT(Dynamic, score->dummy()->segment())
+MAKE_ELEMENT(KeySig, score->dummy()->segment())
+MAKE_ELEMENT(BarLine, score->dummy()->segment())
+MAKE_ELEMENT(MeasureRepeat, score->dummy()->segment())
+MAKE_ELEMENT(Breath, score->dummy()->segment())
+MAKE_ELEMENT(Clef, score->dummy()->segment())
+MAKE_ELEMENT(Hairpin, score->dummy()->segment())
+MAKE_ELEMENT(Ambitus, score->dummy()->segment())
+MAKE_ELEMENT(SystemText, score->dummy()->segment())
+MAKE_ELEMENT(TempoText, score->dummy()->segment())
+MAKE_ELEMENT(StaffText, score->dummy()->segment())
+MAKE_ELEMENT(RehearsalMark, score->dummy()->segment())
+
+MAKE_ELEMENT(Jump, score->dummy()->measure())
+MAKE_ELEMENT(LayoutBreak, score->dummy()->measure())
+MAKE_ELEMENT(Spacer, score->dummy()->measure())
+MAKE_ELEMENT(StaffTypeChange, score->dummy()->measure())
+MAKE_ELEMENT(MeasureNumber, score->dummy()->measure())
+
+MAKE_ELEMENT(Articulation, score->dummy()->chord())
+MAKE_ELEMENT(Tremolo, score->dummy()->chord())
+MAKE_ELEMENT(Arpeggio, score->dummy()->chord())
+MAKE_ELEMENT(ChordLine, score->dummy()->chord())
+
+MAKE_ELEMENT(Fingering, score->dummy()->note())
+MAKE_ELEMENT(NoteHead, score->dummy()->note())
+MAKE_ELEMENT(Bend, score->dummy()->note())
+
 PaletteTreePtr PaletteCreator::newMasterPaletteTree()
 {
     PaletteTreePtr tree = std::make_shared<PaletteTree>();
@@ -1373,7 +1410,7 @@ PalettePtr PaletteCreator::newTimePalette()
     sp->setGridSize(42, 38);
 
     for (unsigned i = 0; i < sizeof(tsList) / sizeof(*tsList); ++i) {
-        auto ts = makeElement<TimeSig>(gpaletteScore);
+        auto ts = std::make_shared<TimeSig>(gpaletteScore->dummy()->segment());
         ts->setSig(Fraction(tsList[i].numerator, tsList[i].denominator), tsList[i].type);
         sp->appendElement(ts, tsList[i].name);
     }

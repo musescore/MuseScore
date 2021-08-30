@@ -171,7 +171,7 @@ void addTitleToScore(Score* score, const QString& string, int textCounter)
 
     MeasureBase* measure = score->first();
     if (!measure->isVBox()) {
-        measure = new VBox(score);
+        measure = new VBox(score->dummy()->system());
         measure->setTick(Fraction(0, 1));
         measure->setNext(score->first());
         score->measures()->add(measure);

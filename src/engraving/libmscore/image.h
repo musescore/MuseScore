@@ -74,7 +74,7 @@ protected:
     QVector<mu::LineF> gripAnchorLines(Grip) const override { return QVector<mu::LineF>(); }
 
 public:
-    Image(Score* = 0);
+    Image(Element* parent = 0);
     Image(const Image&);
     ~Image();
 

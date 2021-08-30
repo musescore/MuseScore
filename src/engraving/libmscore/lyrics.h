@@ -69,7 +69,7 @@ protected:
     bool _even;
 
 public:
-    Lyrics(Score* = 0);
+    Lyrics(Element* parent = 0);
     Lyrics(const Lyrics&);
     ~Lyrics();
 
@@ -123,7 +123,7 @@ protected:
     Lyrics* _nextLyrics;
 
 public:
-    LyricsLine(Score*);
+    LyricsLine(Element* parent);
     LyricsLine(const LyricsLine&);
 
     LyricsLine* clone() const override { return new LyricsLine(*this); }

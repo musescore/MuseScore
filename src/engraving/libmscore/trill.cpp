@@ -274,8 +274,8 @@ Sid Trill::getPropertyStyle(Pid pid) const
 //   Trill
 //---------------------------------------------------------
 
-Trill::Trill(Score* s)
-    : SLine(ElementType::TRILL, s)
+Trill::Trill(Element* parent)
+    : SLine(ElementType::TRILL, parent)
 {
     _trillType     = Type::TRILL_LINE;
     _accidental    = 0;
@@ -285,7 +285,7 @@ Trill::Trill(Score* s)
 }
 
 Trill::Trill(const Trill& t)
-    : SLine(ElementType::TRILL, t.score())
+    : SLine(ElementType::TRILL, t.parentElement())
 {
     _trillType = t._trillType;
     _accidental = t._accidental ? t._accidental->clone() : nullptr;
@@ -398,7 +398,7 @@ void Trill::read(XmlReader& e)
         if (tag == "subtype") {
             setTrillType(e.readElementText());
         } else if (tag == "Accidental") {
-            _accidental = new Accidental(score());
+            _accidental = new Accidental(this);
             _accidental->read(e);
             _accidental->setParent(this);
         } else if (tag == "ornamentStyle") {

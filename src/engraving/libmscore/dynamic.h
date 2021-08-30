@@ -101,7 +101,7 @@ private:
     mu::RectF drag(EditData&) override;
 
 public:
-    Dynamic(Score*);
+    Dynamic(Segment* parent);
     Dynamic(const Dynamic&);
     Dynamic* clone() const override { return new Dynamic(*this); }
     Segment* segment() const { return (Segment*)parent(); }

@@ -71,11 +71,11 @@ void MuseData::musicalAttribute(QString s, Part* part)
             int n = tl[1].toInt();
             if ((z > 0) && (n > 0)) {
 //TODO                        score->sigmap()->add(curTick, Fraction(z, n));
-                TimeSig* ts = new TimeSig(score);
-                Staff* staff = part->staff(0);
-                ts->setTrack(staff->idx() * VOICES);
                 Measure* mes = score->tick2measure(curTick);
                 Segment* seg = mes->getSegment(SegmentType::TimeSig, curTick);
+                TimeSig* ts = new TimeSig(seg);
+                Staff* staff = part->staff(0);
+                ts->setTrack(staff->idx() * VOICES);
                 seg->add(ts);
             }
         } else if (item.startsWith("X:")) {
@@ -145,7 +145,7 @@ void MuseData::readChord(Part*, const QString& s)
     }
 
     Chord* chord = (Chord*)chordRest;
-    Note* note = new Note(score);
+    Note* note = new Note(chord);
     note->setPitch(pitch);
     note->setTpcFromPitch();
     note->setTrack(staffIdx * VOICES + voice);
@@ -163,7 +163,7 @@ void MuseData::openSlur(int idx, const Fraction& tick, Staff* staff, int voc)
         qDebug("%06d: slur %d already open", tick.ticks(), idx + 1);
         return;
     }
-    slur[idx] = new Slur(score);
+    slur[idx] = new Slur(score->dummy());
     slur[idx]->setTick(tick);
     slur[idx]->setTrack(staffIdx * VOICES + voc);
     score->addElement(slur[idx]);
@@ -252,7 +252,7 @@ void MuseData::readNote(Part* part, const QString& s)
             if (chordRest && chordRest->tuplet() && ntuplet) {
                 tuplet = chordRest->tuplet();
             } else {
-                tuplet = new Tuplet(score);
+                tuplet = new Tuplet(measure);
                 tuplet->setTrack(gstaff * VOICES);
                 tuplet->setTick(tick);
                 ntuplet = a;
@@ -265,7 +265,7 @@ void MuseData::readNote(Part* part, const QString& s)
         }
     }
 
-    Chord* chord = new Chord(score);
+    Chord* chord = new Chord(score->dummy()->segment());
     chordRest = chord;
     chord->setTrack(gstaff * VOICES);
     chord->setStemDirection(dir);
@@ -294,7 +294,7 @@ void MuseData::readNote(Part* part, const QString& s)
         delete chord;
         return;
     }
-    Note* note = new Note(score);
+    Note* note = new Note(chord);
     note->setPitch(pitch);
     note->setTpcFromPitch();
     note->setTrack(gstaff * VOICES + voice);
@@ -320,32 +320,32 @@ void MuseData::readNote(Part* part, const QString& s)
         } else if (an[i] == 'x') {
             closeSlur(3, tick, staff, voice);
         } else if (an[i] == '.') {
-            Articulation* atr = new Articulation(score);
+            Articulation* atr = new Articulation(chord);
             atr->setSymId(SymId::articStaccatoAbove);
             chord->add(atr);
         } else if (an[i] == '_') {
-            Articulation* atr = new Articulation(score);
+            Articulation* atr = new Articulation(chord);
             atr->setSymId(SymId::articTenutoAbove);
             chord->add(atr);
         } else if (an[i] == 'v') {
-            Articulation* atr = new Articulation(score);
+            Articulation* atr = new Articulation(chord);
             atr->setSymId(SymId::stringsUpBow);
             chord->add(atr);
         } else if (an[i] == 'n') {
-            Articulation* atr = new Articulation(score);
+            Articulation* atr = new Articulation(chord);
             atr->setSymId(SymId::stringsDownBow);
             chord->add(atr);
         } else if (an[i] == 't') {
-            Articulation* atr = new Articulation(score);
+            Articulation* atr = new Articulation(chord);
             atr->setSymId(SymId::ornamentTrill);
             chord->add(atr);
         } else if (an[i] == 'F') {
-            Articulation* atr = new Articulation(score);
+            Articulation* atr = new Articulation(chord);
             atr->setUp(true);
             atr->setSymId(SymId::fermataAbove);
             chord->add(atr);
         } else if (an[i] == 'E') {
-            Articulation* atr = new Articulation(score);
+            Articulation* atr = new Articulation(chord);
             atr->setUp(false);
             atr->setSymId(SymId::fermataBelow);
             chord->add(atr);
@@ -376,10 +376,10 @@ void MuseData::readNote(Part* part, const QString& s)
         }
     }
     if (!dynamics.isEmpty()) {
-        Dynamic* dyn = new Dynamic(score);
+        Segment* seg = measure->getSegment(SegmentType::ChordRest, tick);
+        Dynamic* dyn = new Dynamic(seg);
         dyn->setDynamicType(dynamics);
         dyn->setTrack(gstaff * VOICES);
-        Segment* seg = measure->getSegment(SegmentType::ChordRest, tick);
         seg->add(dyn);
     }
 
@@ -389,11 +389,11 @@ void MuseData::readNote(Part* part, const QString& s)
         int no = 0;
         foreach (QString w, sl) {
             w = diacritical(w);
-            Lyrics* l = new Lyrics(score);
+            Segment* seg = measure->tick2segment(tick);
+            Lyrics* l = new Lyrics(seg);
             l->setPlainText(w);
             l->setNo(no++);
             l->setTrack(gstaff * VOICES);
-            Segment* seg = measure->tick2segment(tick);
             seg->add(l);
         }
     }
@@ -449,7 +449,7 @@ void MuseData::readRest(Part* part, const QString& s)
 
     TDuration d;
     d.setVal(ticks.ticks());
-    Rest* rest = new Rest(score, d);
+    Rest* rest = new Rest(score->dummy()->segment(), d);
     rest->setTicks(d.fraction());
     chordRest  = rest;
     rest->setTrack(gstaff * VOICES);
@@ -510,7 +510,7 @@ Measure* MuseData::createMeasure()
             return 0;
         }
     }
-    Measure* mes  = new Measure(score);
+    Measure* mes  = new Measure(score->dummy()->system());
     mes->setTick(curTick);
 
     score->measures()->add(mes);

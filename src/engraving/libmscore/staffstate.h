@@ -51,7 +51,7 @@ class StaffState final : public Element
     void layout() override;
 
 public:
-    StaffState(Score*);
+    StaffState(Element* parent);
     StaffState(const StaffState&);
     ~StaffState();
 

@@ -45,7 +45,7 @@ class KeySig final : public Element
     void addLayout(SymId sym, qreal x, int y);
 
 public:
-    KeySig(Score* = 0);
+    KeySig(Segment* = 0);
     KeySig(const KeySig&);
 
     KeySig* clone() const override { return new KeySig(*this); }

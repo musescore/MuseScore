@@ -138,8 +138,8 @@ ClefType ClefInfo::tag2type(const QString& s)
 //   Clef
 //---------------------------------------------------------
 
-Clef::Clef(Score* s)
-    : Element(ElementType::CLEF, s, ElementFlag::ON_STAFF), symId(SymId::noSym)
+Clef::Clef(Segment* parent)
+    : Element(ElementType::CLEF, parent, ElementFlag::ON_STAFF), symId(SymId::noSym)
 {}
 
 //---------------------------------------------------------
@@ -311,7 +311,7 @@ Element* Clef::drop(EditData& data)
             if (segm->element(track())) {
                 score()->undoRemoveElement(segm->element(track()));
             }
-            Ambitus* r = new Ambitus(score());
+            Ambitus* r = new Ambitus(segm);
             r->setParent(segm);
             r->setTrack(track());
             score()->undoAddElement(r);

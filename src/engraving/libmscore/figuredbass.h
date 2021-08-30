@@ -153,7 +153,7 @@ private:
     QString                   Modifier2MusicXML(FiguredBassItem::Modifier prefix) const;
 
 public:
-    FiguredBassItem(Score* s = 0, int line = 0);
+    FiguredBassItem(FiguredBass* parent = 0, int line = 0);
     FiguredBassItem(const FiguredBassItem&);
     ~FiguredBassItem();
 
@@ -253,7 +253,7 @@ class FiguredBass final : public TextBase
     Sid getPropertyStyle(Pid) const override;
 
 public:
-    FiguredBass(Score* s = 0);
+    FiguredBass(Segment* parent = 0);
     FiguredBass(const FiguredBass&);
     ~FiguredBass();
 

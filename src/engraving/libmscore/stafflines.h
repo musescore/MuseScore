@@ -40,7 +40,7 @@ class StaffLines final : public Element
     std::vector<mu::LineF> lines;
 
 public:
-    StaffLines(Score*);
+    StaffLines(Measure* parent);
 
     StaffLines* clone() const override { return new StaffLines(*this); }
 

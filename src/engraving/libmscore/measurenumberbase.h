@@ -37,7 +37,7 @@ class MeasureNumberBase : public TextBase
     M_PROPERTY(HPlacement, hPlacement, setHPlacement)    // Horizontal Placement
 
 public:
-    MeasureNumberBase(const ElementType& type, Score* = nullptr, Tid = Tid::DEFAULT);
+    MeasureNumberBase(const ElementType& type, Measure* parent = nullptr, Tid = Tid::DEFAULT);
     MeasureNumberBase(const MeasureNumberBase& other);
 
     virtual QVariant getProperty(Pid id) const override;

@@ -603,8 +603,8 @@ Sid Hairpin::getPropertyStyle(Pid pid) const
 //   Hairpin
 //---------------------------------------------------------
 
-Hairpin::Hairpin(Score* s)
-    : TextLineBase(ElementType::HAIRPIN, s)
+Hairpin::Hairpin(Segment* parent)
+    : TextLineBase(ElementType::HAIRPIN, parent)
 {
     initElementStyle(&hairpinStyle);
 

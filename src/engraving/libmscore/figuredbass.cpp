@@ -75,8 +75,8 @@ static QList<FiguredBassFont> g_FBFonts;
 const QChar FiguredBassItem::normParenthToChar[int(FiguredBassItem::Parenthesis::NUMOF)] =
 { 0, '(', ')', '[', ']' };
 
-FiguredBassItem::FiguredBassItem(Score* s, int l)
-    : Element(ElementType::INVALID, s), ord(l)
+FiguredBassItem::FiguredBassItem(FiguredBass* parent, int l)
+    : Element(ElementType::INVALID, parent), ord(l)
 {
     _prefix     = _suffix = Modifier::NONE;
     _digit      = FBIDigitNone;
@@ -997,8 +997,8 @@ bool FiguredBassItem::startsWithParenthesis() const
 //   F I G U R E D   B A S S
 //---------------------------------------------------------
 
-FiguredBass::FiguredBass(Score* s)
-    : TextBase(ElementType::FIGURED_BASS, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+FiguredBass::FiguredBass(Segment* parent)
+    : TextBase(ElementType::FIGURED_BASS, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     initElementStyle(&figuredBassStyle);
     // figured bass inherits from TextBase for layout purposes
@@ -1103,7 +1103,7 @@ void FiguredBass::read(XmlReader& e)
         } else if (tag == "onNote") {
             setOnNote(e.readInt() != 0l);
         } else if (tag == "FiguredBassItem") {
-            FiguredBassItem* pItem = new FiguredBassItem(score(), idx++);
+            FiguredBassItem* pItem = new FiguredBassItem(this, idx++);
             pItem->setTrack(track());
             pItem->setParent(this);
             pItem->read(e);
@@ -1333,7 +1333,7 @@ void FiguredBass::endEdit(EditData& ed)
     QString normalizedText = QString();
     idx = 0;
     for (QString str : qAsConst(list)) {
-        FiguredBassItem* pItem = new FiguredBassItem(score(), idx++);
+        FiguredBassItem* pItem = new FiguredBassItem(this, idx++);
         if (!pItem->parse(str)) {               // if any item fails parsing
             qDeleteAll(items);
             items.clear();                      // clear item list
@@ -1513,7 +1513,7 @@ FiguredBass* FiguredBass::addFiguredBassToSegment(Segment* seg, int track, const
         }
     }
     if (fb == 0) {                            // no FB at segment: create new
-        fb = new FiguredBass(seg->score());
+        fb = new FiguredBass(seg);
         fb->setTrack(track);
         fb->setParent(seg);
 

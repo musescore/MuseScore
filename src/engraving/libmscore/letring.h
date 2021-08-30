@@ -57,7 +57,7 @@ protected:
     mu::PointF linePos(Grip, System**) const override;
 
 public:
-    LetRing(Score* s);
+    LetRing(Element* parent);
 
     LetRing* clone() const override { return new LetRing(*this); }
 

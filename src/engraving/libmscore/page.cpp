@@ -57,14 +57,19 @@ static QString revision;
 //   Page
 //---------------------------------------------------------
 
-Page::Page(Score* s)
-    : Element(ElementType::PAGE, s, ElementFlag::NOT_SELECTABLE), _no(0)
+Page::Page(ScoreElement* parent)
+    : Element(ElementType::PAGE, parent, ElementFlag::NOT_SELECTABLE), _no(0)
 {
     bspTreeValid = false;
 }
 
 Page::~Page()
 {
+    for (System* s : _systems) {
+        if (s->page() == this) {
+            s->moveToDummy();
+        }
+    }
 }
 
 //---------------------------------------------------------
@@ -104,7 +109,9 @@ QList<Element*> Page::items(const mu::PointF& p)
 
 void Page::appendSystem(System* s)
 {
-    s->setParent(this);
+    if (s->parent() != this) {
+        s->moveToPage(this);
+    }
     _systems.push_back(s);
 }
 
@@ -216,7 +223,7 @@ void Page::drawHeaderFooter(mu::draw::Painter* p, int area, const QString& ss) c
     p->translate(text->pos());
     text->draw(p);
     p->translate(-text->pos());
-    text->setParent(0);
+    text->moveToDummy();
 }
 
 //---------------------------------------------------------
@@ -472,7 +479,7 @@ void Page::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
         if (e.name() == "System") {
-            System* system = new System(score());
+            System* system = new System(score()->dummy()->page());
             score()->systems().push_back(system);
             system->read(e);
         } else {

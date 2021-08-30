@@ -75,16 +75,16 @@ void assignKeyListToStaff(const KeyList& kl, Staff* staff)
             continue;
         }
         pkey = key;
-        KeySig* ks = new KeySig(score);
-        ks->setTrack(track);
-        ks->setGenerated(false);
-        ks->setKey(key);
-        ks->setMag(staff->staffMag(Fraction::fromTicks(tick)));
         Measure* m = score->tick2measure(Fraction::fromTicks(tick));
         if (!m) {
             continue;
         }
         Segment* seg = m->getSegment(SegmentType::KeySig, Fraction::fromTicks(tick));
+        KeySig* ks = new KeySig(seg);
+        ks->setTrack(track);
+        ks->setGenerated(false);
+        ks->setKey(key);
+        ks->setMag(staff->staffMag(Fraction::fromTicks(tick)));
         seg->add(ks);
     }
 }

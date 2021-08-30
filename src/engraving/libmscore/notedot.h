@@ -36,7 +36,8 @@ class Rest;
 class NoteDot final : public Element
 {
 public:
-    NoteDot(Score* = 0);
+    NoteDot(Note* parent);
+    NoteDot(Rest* parent);
 
     NoteDot* clone() const override { return new NoteDot(*this); }
     qreal mag() const override;

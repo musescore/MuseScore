@@ -50,7 +50,7 @@ class Spacer final : public Element
     void layout0();
 
 public:
-    Spacer(Score*);
+    Spacer(Measure* parent);
     Spacer(const Spacer&);
 
     Spacer* clone() const override { return new Spacer(*this); }

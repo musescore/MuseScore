@@ -41,8 +41,8 @@ namespace Ms {
 //   MeasureBase
 //---------------------------------------------------------
 
-MeasureBase::MeasureBase(const ElementType& type, Score* score)
-    : Element(type, score)
+MeasureBase::MeasureBase(const ElementType& type, System* system)
+    : Element(type, system)
 {
     setIrregular(true);
 }
@@ -110,7 +110,10 @@ MeasureBase::~MeasureBase()
 
 void MeasureBase::add(Element* e)
 {
-    e->setParent(this);
+    if (e->parent() != this) {
+        e->setParent(this);
+    }
+
     if (e->isLayoutBreak()) {
         LayoutBreak* b = toLayoutBreak(e);
         switch (b->layoutBreakType()) {
@@ -484,10 +487,10 @@ void MeasureBase::undoSetBreak(bool v, LayoutBreak::Type type)
     }
 
     if (v) {
-        LayoutBreak* lb = new LayoutBreak(score());
+        MeasureBase* mb = (isMeasure() && toMeasure(this)->isMMRest()) ? toMeasure(this)->mmRestLast() : this;
+        LayoutBreak* lb = new LayoutBreak(mb);
         lb->setLayoutBreakType(type);
         lb->setTrack(-1);           // this are system elements
-        MeasureBase* mb = (isMeasure() && toMeasure(this)->isMMRest()) ? toMeasure(this)->mmRestLast() : this;
         lb->setParent(mb);
         score()->undoAddElement(lb);
     }
@@ -586,7 +589,7 @@ bool MeasureBase::readProperties(XmlReader& e)
 {
     const QStringRef& tag(e.name());
     if (tag == "LayoutBreak") {
-        LayoutBreak* lb = new LayoutBreak(score());
+        LayoutBreak* lb = new LayoutBreak(this);
         lb->read(e);
         bool doAdd = true;
         switch (lb->layoutBreakType()) {
@@ -618,7 +621,7 @@ bool MeasureBase::readProperties(XmlReader& e)
             delete lb;
         }
     } else if (tag == "StaffTypeChange") {
-        StaffTypeChange* stc = new StaffTypeChange(score());
+        StaffTypeChange* stc = new StaffTypeChange(this);
         stc->setTrack(e.track());
         stc->setParent(this);
         stc->read(e);

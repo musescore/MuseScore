@@ -284,7 +284,7 @@ private:
                Fraction& dura, Fraction& missingCurr, QString& currentVoice, GraceChordList& gcl, int& gac, Beam*& beam,
                FiguredBassList& fbl, int& alt, MxmlTupletStates& tupletStates, Tuplets& tuplets);
     void notePrintSpacingNo(Fraction& dura);
-    FiguredBassItem* figure(const int idx, const bool paren);
+    FiguredBassItem* figure(const int idx, const bool paren, FiguredBass* parent);
     FiguredBass* figuredBass();
     FretDiagram* frame();
     void harmony(const QString& partId, Measure* measure, const Fraction sTime);

@@ -64,7 +64,7 @@ void SymbolDialog::createSymbols()
         SymId id     = Sym::name2id(name);
         if (search->text().isEmpty()
             || Sym::id2userName(id).contains(search->text(), Qt::CaseInsensitive)) {
-            auto s = makeElement<Symbol>(gpaletteScore);
+            auto s = makeElement<Symbol>(gpaletteScore->dummy());
             s->setSym(SymId(id), f);
             sp->appendElement(s, Sym::id2userName(SymId(id)));
         }

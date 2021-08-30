@@ -67,6 +67,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/compat/read206.h
     ${CMAKE_CURRENT_LIST_DIR}/compat/read302.cpp
     ${CMAKE_CURRENT_LIST_DIR}/compat/read302.h
+    ${CMAKE_CURRENT_LIST_DIR}/compat/dummyelement.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/compat/dummyelement.h
 
     ${COMPAT_MIDI_SRC}
 

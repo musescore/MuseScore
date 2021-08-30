@@ -310,7 +310,7 @@ void Score::readStaff(XmlReader& e)
 
             if (tag == "Measure") {
                 Measure* measure = nullptr;
-                measure = new Measure(this);
+                measure = new Measure(this->dummy()->system());
                 measure->setTick(e.tick());
                 e.setCurrentMeasureIndex(measureIdx++);
                 //
@@ -338,7 +338,7 @@ void Score::readStaff(XmlReader& e)
                     }
                 }
             } else if (tag == "HBox" || tag == "VBox" || tag == "TBox" || tag == "FBox") {
-                MeasureBase* mb = toMeasureBase(Element::name2Element(tag, this));
+                MeasureBase* mb = toMeasureBase(Element::name2Element(tag, this->dummy()));
                 mb->read(e);
                 mb->setTick(e.tick());
                 measures()->add(mb);
@@ -356,7 +356,7 @@ void Score::readStaff(XmlReader& e)
             if (tag == "Measure") {
                 if (measure == 0) {
                     qDebug("Score::readStaff(): missing measure!");
-                    measure = new Measure(this);
+                    measure = new Measure(this->dummy()->system());
                     measure->setTick(e.tick());
                     measures()->add(measure);
                 }
@@ -717,7 +717,7 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
                 // we will miss a key sig!
                 if (!keySigWritten) {
                     Key k = score()->staff(track2staff(track))->key(segment->tick());
-                    KeySig* ks = new KeySig(this);
+                    KeySig* ks = new KeySig(this->dummy()->segment());
                     ks->setKey(k);
                     ks->write(xml);
                     delete ks;
@@ -725,7 +725,7 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
                 }
                 // we will miss a time sig!
                 Fraction tsf = sigmap()->timesig(segment->tick()).timesig();
-                TimeSig* ts = new TimeSig(this);
+                TimeSig* ts = new TimeSig(this->dummy()->segment());
                 ts->setSig(tsf);
                 ts->write(xml);
                 delete ts;
