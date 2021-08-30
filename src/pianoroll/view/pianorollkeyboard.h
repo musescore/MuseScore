@@ -58,10 +58,6 @@ public:
 
     void paint(QPainter*) override;
 
-    void mousePressEvent(QMouseEvent* event) override;
-    void mouseReleaseEvent(QMouseEvent*) override;
-    void mouseMoveEvent(QMouseEvent* event) override;
-
     int pitchToPixelY(double pitch) const;
     double pixelYToPitch(int tick) const;
 
@@ -70,35 +66,16 @@ signals:
     void centerYChanged();
     void displayObjectHeightChanged();
 
-    void keyPressed(int pitch);
-    void keyReleased(int pitch);
-//    void pitchHighlightToggled(int pitch);
-
 private:
     void onNotationChanged();
     void onCurrentNotationChanged();
-    void onSelectionChanged();
     void updateBoundingSize();
-
-//    void paintKeyboard(QPainter*);
-//    void paintNames(QPainter*);
-
-    int m_curKeyPressed = -1;
-    int m_curPitch = -1;
 
     double m_centerY = 0;  //fraction of note grid camera is focused on
     double m_displayObjectHeight = 0;  //Set to note grid in pixels
     double m_noteHeight;
 
-    QColor m_colorText = Qt::black;
-    QColor m_colorGridLines = Qt::black;
     QColor m_colorBackground = Qt::lightGray;
-    QColor m_colorDrumBlack = QColor(0xcccccc);
-    QColor m_colorDrumWhite = QColor(0xffffff);
-    QColor m_colorKeyBlack = Qt::black;
-    QColor m_colorKeyWhite = QColor(0xffffff);
-    QColor m_colorKeyHighlight = QColor(224, 170, 20);
-    QColor m_colorDrumHighlight = QColor(224, 170, 20);
 
 };
 
