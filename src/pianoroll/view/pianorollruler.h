@@ -24,7 +24,7 @@
 #define MU_PIANOROLL_PIANOROLLRULER_H
 
 #include <QQuickPaintedItem>
-#include <QIcon>
+#include <QPixmap>
 #include <QColor>
 
 #include "async/asyncable.h"
@@ -69,12 +69,21 @@ signals:
 
 private:
     void onNotationChanged();
+    void onCurrentNotationChanged();
+    void updateBoundingSize();
+
+    static QPixmap* markIcon[3];
 
     double m_centerX = 0;  //fraction of note grid camera is focused on
     double m_displayObjectWidth = 0;  //Set to note grid in pixels
     double m_wholeNoteWidth;
 
-    QColor m_colorBackground = Qt::gray;
+    QFont m_font1;
+    QFont m_font2;
+
+    QColor m_colorBackground = Qt::lightGray;
+    QColor m_colorGridLine = QColor(0xa2a2a6);
+    QColor m_colorText = Qt::black;
 
 };
 
