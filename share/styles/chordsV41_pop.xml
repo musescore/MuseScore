@@ -33,34 +33,36 @@
   <!ENTITY susn "2">
   ]>
 
-<museScore version="1.24" type="chordStyle" styleName="Pop/Contemporary" usePresets="true" description="This is Standard">
+<museScore version="1.24" type="chordStyle" styleName="Pop/Contemporary" usePresets="true">
+  
+  <description>This default style is designed for clear legibility and is in line with engraving conventions of some of the world’s leading contemporary and music theater publishing houses. Further customizations can be found in the Advanced tab.</description>
 
-  <quality q = "major7th">
+  <quality type = "major7th">
     <sym>maj 7</sym>
     <sym>ma 7</sym>
   </quality>
 
-  <quality q = "minor">
+  <quality type = "minor">
     <sym>m</sym>
     <sym>min</sym>
   </quality>
 
-  <quality q = "augmented">
+  <quality type = "augmented">
     <sym>aug</sym>
     <sym>+</sym>
     <sym>+ 5</sym>
     <!-- <sym>maj #5</sym> -->
   </quality>
 
-  <quality q = "diminished">
+  <quality type = "diminished">
     <sym>dim</sym>
     <sym>circle</sym>
   </quality>
 
-  <modifier m = "omit">
+  <quality type = "omit">
     <sym>omit</sym>
     <sym>no</sym>
-  </modifier>
+  </quality>
 
 <!--
       Part I: font list

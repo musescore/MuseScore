@@ -33,7 +33,9 @@
   <!ENTITY susn "2">
   ]>
 
-<museScore version="1.24" type="chordStyle" styleName="No preset style" usePresets="false" description="No Presets style/Chord symbols are handled like in v3.6">
+<museScore version="1.24" type="chordStyle" styleName="No preset style" usePresets="false">
+
+  <description>No Presets style - Chord symbols are handled like in v3.6</description>
 
 <!--
       Part I: font list

@@ -467,9 +467,13 @@ Flickable {
             }
         }
 
-        StyledTextLabel{
-            text:editorModel.styleDescription
+        StyledTextLabel {
+            text: editorModel.styleDescription
             font: ui.theme.bodyFont
+            anchors.left: parent.left
+            anchors.right: parent.right
+            horizontalAlignment: Text.AlignLeft
+            wrapMode: Text.Wrap
         }
     }
 }

@@ -131,8 +131,13 @@ void ChordSymbolStyleManager::extractChordStyleInfo(mu::io::path& f)
             if (e.attribute("type") == "chordStyle") {
                 styleName = e.attribute("styleName");
                 usePresets = (e.attribute("usePresets") == "true");
-                // TODO: Make this a separate tag
-                description = e.attribute("description");
+                while (e.readNextStartElement()) {
+                    if (e.name() == "description") {
+                        description = e.readElementText();
+                    } else {
+                        e.unknown();
+                    }
+                }
                 break;
             }
         }
@@ -194,7 +199,7 @@ QHash<QString, QList<QualitySymbol> > ChordSymbolStyleManager::getQualitySymbols
                 // Inside the MuseScore element now, start reading the quality symbols
                 while (e.readNextStartElement()) {
                     if (e.name() == "quality") {
-                        QString qual = e.attribute("q");
+                        QString qual = e.attribute("type");
                         QList<QualitySymbol> rep;
                         while (e.readNextStartElement()) {
                             if (e.name() == "sym") {
@@ -207,43 +212,14 @@ QHash<QString, QList<QualitySymbol> > ChordSymbolStyleManager::getQualitySymbols
                                 qualSym.modAdjust = e.hasAttribute("mAdj") ? e.doubleAttribute("mAdj") : qualSym.modAdjust;
                                 qualSym.qualitySymbol = e.readElementText();
                                 rep << qualSym;
+                                e.readNext();
+                            } else {
+                                e.unknown();
                             }
                         }
                         qualitySymbols.insert(qual, rep);
-                    } else if (e.name() == "extension") {
-                        QString ext = e.attribute("e");
-                        QList<QualitySymbol> rep;
-                        while (e.readNextStartElement()) {
-                            if (e.name() == "sym") {
-                                QualitySymbol extSym;
-                                extSym.qualMag = e.hasAttribute("qMag") ? e.doubleAttribute("qMag") : extSym.qualMag;
-                                extSym.qualAdjust = e.hasAttribute("qAdj") ? e.doubleAttribute("qAdj") : extSym.qualAdjust;
-                                extSym.extMag = e.hasAttribute("eMag") ? e.doubleAttribute("eMag") : extSym.extMag;
-                                extSym.extAdjust = e.hasAttribute("eAdj") ? e.doubleAttribute("eAdj") : extSym.extAdjust;
-                                extSym.modMag = e.hasAttribute("mMag") ? e.doubleAttribute("mMag") : extSym.modMag;
-                                extSym.modAdjust = e.hasAttribute("mAdj") ? e.doubleAttribute("mAdj") : extSym.modAdjust;
-                                extSym.qualitySymbol = e.readElementText();
-                                rep << extSym;
-                            }
-                        }
-                        qualitySymbols.insert(ext, rep);
-                    } else if (e.name() == "modifier") {
-                        QString mod = e.attribute("m");
-                        QList<QualitySymbol> rep;
-                        while (e.readNextStartElement()) {
-                            if (e.name() == "sym") {
-                                QualitySymbol modSym;
-                                modSym.qualMag = e.hasAttribute("qMag") ? e.doubleAttribute("qMag") : modSym.qualMag;
-                                modSym.qualAdjust = e.hasAttribute("qAdj") ? e.doubleAttribute("qAdj") : modSym.qualAdjust;
-                                modSym.extMag = e.hasAttribute("eMag") ? e.doubleAttribute("eMag") : modSym.extMag;
-                                modSym.extAdjust = e.hasAttribute("eAdj") ? e.doubleAttribute("eAdj") : modSym.extAdjust;
-                                modSym.modMag = e.hasAttribute("mMag") ? e.doubleAttribute("mMag") : modSym.modMag;
-                                modSym.modAdjust = e.hasAttribute("mAdj") ? e.doubleAttribute("mAdj") : modSym.modAdjust;
-                                modSym.qualitySymbol = e.readElementText();
-                                rep << modSym;
-                            }
-                        }
-                        qualitySymbols.insert(mod, rep);
+                    } else {
+                        e.unknown();
                     }
                 }
             }

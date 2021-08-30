@@ -33,45 +33,47 @@
   <!ENTITY susn "2">
   ]>
 
-<museScore version="1.24" type="chordStyle" styleName="Symbols" usePresets="true" description="This is Standard">
+<museScore version="1.24" type="chordStyle" styleName="Symbols" usePresets="true">
 
-  <modifier m = "bassNote">
+  <description>The default symbol style is based on the Colorado Cookbook: Tasty Tunes for the Musical Gourmet, a jazz fake book that made extensive and effective use of the “symbols style”. Further customization can be found in the Advanced tab.</description>
+
+  <quality type = "bassNote">
     <sym>/lowered</sym>
     <sym>/center</sym>
-  </modifier>
+  </quality>
 
-  <quality q = "major7th">
+  <quality type = "major7th">
     <sym qMag = "1" qAdj = "0">triangle</sym>
     <sym qMag = "0.6" qAdj = "-4">triangle</sym>
     <sym qMag = "0.6" qAdj = "-4">triangle 7</sym>
     <sym qMag = "1" qAdj = "0">triangle 7</sym>
   </quality>
 
-  <quality q = "augmented">
+  <quality type = "augmented">
     <sym>+</sym>
     <sym>+ 5</sym>
   </quality>
 
-  <quality q = "half-diminished">
+  <quality type = "half-diminished">
     <sym qMag = "0.8" qAdj = "-4">oslash 7</sym>
     <sym qMag = "1" qAdj = "0">oslash 7</sym>
   </quality>
 
-  <quality q = "diminished">
+  <quality type = "diminished">
     <sym qMag = "0.8" qAdj = "-4">circle</sym>
     <sym qMag = "1" qAdj = "0">circle</sym>
   </quality>
 
-  <extension e = "sixNine">
+  <quality type = "sixNine">
     <sym>6/9</sym>
     <sym>69</sym>
     <sym>6-9</sym>
-  </extension>
+  </quality>
 
-  <modifier m = "omit">
+  <quality type = "omit">
     <sym>omit</sym>
     <sym>no</sym>
-  </modifier>
+  </quality>
 
 <!--
       Part I: font list

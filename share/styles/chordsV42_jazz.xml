@@ -37,15 +37,17 @@
 
   ]>
 
-<museScore version="1.24" type="chordStyle" styleName="Jazz" usePresets="true" description="This is Jazz">
+<museScore version="1.24" type="chordStyle" styleName="Jazz" usePresets="true">
 
-  <quality q = "major7th">
+  <description>This default symbol style is based on Chuck Sher (ed.), The New Real Book (Petaluma, CA: Sher Music Co., 1991), which in turn is based on Brandt &amp; Roemer’s Standard Chord Symbol Notation (Sherman Oaks, CA: Clinton H. Roemer, 1976), an arguably underrated authority on chord symbol styles. The suggested modifications to the style will bring it more closely in line with some of the original Real Books. Further customization can of course be found in the Advanced tab.</description>
+
+  <quality type = "major7th">
     <sym eAdj = "-2">MA 7</sym>
     <sym eAdj = "-2">ma 7</sym>
     <sym eAdj = "-2">maj 7</sym>
   </quality>
 
-  <quality q = "minor">
+  <quality type = "minor">
     <sym>MI</sym>
     <sym>Mi</sym>
     <sym>m</sym>
@@ -53,31 +55,31 @@
     <sym>-</sym>
   </quality>
 
-  <quality q = "augmented">
+  <quality type = "augmented">
     <sym qMag = "0.6" qAdj = "-4">+</sym>
     <sym>aug</sym>
     <sym>Aug</sym>
   </quality>
 
-  <quality q = "diminished">
+  <quality type = "diminished">
     <sym>dim</sym>
     <sym>degree</sym>
   </quality>
 
-  <extension e = "sixNine">
+  <quality type = "sixNine">
     <sym>6/9</sym>
     <sym>69</sym>
-  </extension>
+  </quality>
 
-  <modifier m = "omit">
+  <quality type = "omit">
     <sym>omit</sym>
     <sym>no</sym>
-  </modifier>
+  </quality>
 
-  <modifier m = "suspension">
+  <quality type = "suspension">
     <sym>baseline</sym>
     <sym>raised</sym>
-  </modifier>
+  </quality>
 
 <!--
       Part I: font list
