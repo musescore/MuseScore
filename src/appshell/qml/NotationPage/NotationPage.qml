@@ -204,7 +204,6 @@ DockPage {
             maximumWidth: root.defaultPanelWidth
 
             tabifyPanel: inspectorPanel
-            contextMenuModel: instrumentsPanelContent.contextMenuModel
 
             InstrumentsPanel {
                 navigationSection: instrumentsPanel.navigationSection
