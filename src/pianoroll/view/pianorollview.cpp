@@ -69,7 +69,19 @@ const BarPattern PianorollView::barPatterns[] = {
 PianorollView::PianorollView(QQuickItem* parent)
     : QQuickPaintedItem(parent)
 {
-    memset(m_pitchHighlight, 0, 128);
+//    memset(m_pitchHighlight, 0, 128);
+}
+
+void PianorollView::load()
+{
+    onNotationChanged();
+    globalContext()->currentNotationChanged().onNotify(this, [this]() {
+        onNotationChanged();
+    });
+
+    controller()->pitchHighlightChanged().onNotify(this, [this](){
+        update();
+    });
 }
 
 void PianorollView::onNotationChanged()
@@ -189,15 +201,6 @@ void PianorollView::setTool(PianorollTool value)
 }
 
 
-void PianorollView::load()
-{
-    onNotationChanged();
-    globalContext()->currentNotationChanged().onNotify(this, [this]() {
-        onNotationChanged();
-    });
-
-}
-
 void PianorollView::updateBoundingSize()
 {
     notation::INotationPtr notation = globalContext()->currentNotation();
@@ -305,7 +308,8 @@ void PianorollView::paint(QPainter* p)
         int degree = (pitch - transp.chromatic + 60) % 12;
         const BarPattern& pat = barPatterns[m_barPattern];
 
-        if (m_pitchHighlight[pitch])
+
+        if (controller()->isPitchHighlight(pitch))
         {
             p->fillRect(x1, y, x2 - x1, m_noteHeight, m_colorKeyHighlight);
         }
