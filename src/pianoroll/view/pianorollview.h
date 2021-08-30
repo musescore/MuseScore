@@ -138,7 +138,7 @@ private:
     PianorollTool m_tool = PianorollTool::SELECT;
     int m_barPattern = 0;
 
-    quint8 m_pitchHighlight[128];
+//    quint8 m_pitchHighlight[128];
 
     QColor m_colorBackground = Qt::gray;
     QColor m_colorKeyWhite = QColor(0xffffff);
