@@ -101,9 +101,14 @@ public:
     int widthInTicks() const { return m_widthInTicks;  }
     Ms::Fraction widthInBeats();
 
+    async::Notification pitchHighlightChanged() const override;
+    bool isPitchHighlight(int pitch) const override { return m_pitchHighlight[pitch]; }
+    void setPitchHighlight(int pitch, bool value) override;
+
 signals:
     void xZoomChanged();
     void noteHeightChanged();
+    void pitchHighlightChanged();
 
 private:
 
@@ -120,7 +125,7 @@ private:
     Ms::Score* score();
 
 
-
+    bool m_pitchHighlight[128];
 
     std::vector<int> m_selectedStaves;
     int m_activeStaff = -1;
@@ -128,6 +133,8 @@ private:
     std::vector<NoteBlock> m_notes;
 
     async::Notification m_noteLayoutChanged;
+    async::Notification m_pitchHighlightChanged;
+
     double m_xZoom = X_ZOOM_INITIAL;
     int m_widthInTicks;
     int m_noteHeight = DEFAULT_KEY_HEIGHT;

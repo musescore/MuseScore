@@ -59,6 +59,7 @@ NoteBlock::NoteBlock(Note* note):
 
 void PianorollController::init()
 {
+    memset(m_pitchHighlight, 0, 128);
 
     onNotationChanged();
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
@@ -98,6 +99,11 @@ Ms::Score* PianorollController::score()
 Notification PianorollController::noteLayoutChanged() const
 {
     return m_noteLayoutChanged;
+}
+
+Notification PianorollController::pitchHighlightChanged() const
+{
+    return m_pitchHighlightChanged;
 }
 
 void PianorollController::onSelectionChanged()
@@ -168,38 +174,18 @@ void PianorollController::addChord(Chord* chrd, int voice)
         if (note->tieBack())
               continue;
         m_notes.push_back(NoteBlock(note));
-//        _noteList.append(new PianoItem(note, this));
     }
 }
 
- 
-
 Ms::Fraction PianorollController::widthInBeats()
 {
-//    return m_widthInTicks; 
     notation::INotationPtr notation = globalContext()->currentNotation();
     if (!notation) {
         return Ms::Fraction();
     }
 
-    qDebug() << "---------";
-
     Ms::Score* score = notation->elements()->msScore();
-    //std::vector<Element*> selectedElements = notation->interaction()->selection()->elements();
-    //m_selectedStaves.clear();
-    //m_activeStaff = -1;
-    //for (Element* e : selectedElements)
-    //{
-    //    int idx = e->staffIdx();
-    //    qDebug() << "ele idx " << idx;
-    //    m_activeStaff = idx;
-    //    if (std::find(m_selectedStaves.begin(), m_selectedStaves.end(), idx) == m_selectedStaves.end())
-    //    {
-    //        m_selectedStaves.push_back(idx);
-    //    }
-    //}
 
-//    Ms::Staff* staff = score->staff(m_activeStaff);
     Ms::Measure* lm = score->lastMeasure();
     Ms::Fraction beats = lm->tick() + lm->ticks();
     return beats;
@@ -207,65 +193,38 @@ Ms::Fraction PianorollController::widthInBeats()
 
 void PianorollController::buildNoteBlocks()
 {
-    m_notes.clear();
+    //m_notes.clear();
 
 
-    notation::INotationPtr notation = globalContext()->currentNotation();
-    if (!notation) {
+    //notation::INotationPtr notation = globalContext()->currentNotation();
+    //if (!notation) {
+    //    return;
+    //}
+
+    //Ms::Score* score = notation->elements()->msScore();
+    //std::vector<Element*> selectedElements = notation->interaction()->selection()->elements();
+    //m_selectedStaves.clear();
+    //m_activeStaff = -1;
+    //for (Element* e: selectedElements)
+    //{
+    //    int idx = e->staffIdx();
+    //    qDebug() << "ele idx " << idx;
+    //    m_activeStaff = idx;
+    //    if (std::find(m_selectedStaves.begin(), m_selectedStaves.end(), idx) == m_selectedStaves.end())
+    //    {
+    //        m_selectedStaves.push_back(idx);
+
+    //    }
+    //}
+
+    //m_noteLayoutChanged.notify();
+}
+
+void PianorollController::setPitchHighlight(int pitch, bool value)
+{
+    if (m_pitchHighlight[pitch] == value)
         return;
-    }
 
-    qDebug() << "---------";
-
-    Ms::Score* score = notation->elements()->msScore();
-    std::vector<Element*> selectedElements = notation->interaction()->selection()->elements();
-    m_selectedStaves.clear();
-    m_activeStaff = -1;
-    for (Element* e: selectedElements)
-    {
-        int idx = e->staffIdx();
-        qDebug() << "ele idx " << idx;
-        m_activeStaff = idx;
-        if (std::find(m_selectedStaves.begin(), m_selectedStaves.end(), idx) == m_selectedStaves.end())
-        {
-            m_selectedStaves.push_back(idx);
-
-        }
-    }
-
-
-//    int staffIdx = score->staffIdx();
-
-//    for (Ms::Segment* s = score->firstSegment(Ms::SegmentType::ChordRest); s; s = s->next1(Ms::SegmentType::ChordRest))
-//    {
-//        for (int voice = 0; voice < MAX_VOICES; ++voice)
-//        {
-//            int track = voice + staffIdx * MAX_VOICES;
-//            Element* e = s->element(track);
-//            if (e && e->isChord())
-//                addChord(toChord(e), voice);
-//        }
-//    }
-
-
-    //Update bounds
-//    Measure* lm = _staff->score()->lastMeasure();
-//    m_widthInTicks = (lm->tick() + lm->ticks()).ticks();
-
-
-
-
-//    INotationElementsPtr elements = notation->elements();
-////    auto list = elements->elements();
-//    std::vector<Element*> list = elements->elements();
-//    for (Element* ele: list) {
-//        bool sel = ele->selected();
-//        auto type = ele->type();
-//        auto name = ele->name();
-
-//        int j = 9;
-//    }
-
-    m_noteLayoutChanged.notify();
-
+    m_pitchHighlight[pitch] = value;
+    m_pitchHighlightChanged.notify();
 }
