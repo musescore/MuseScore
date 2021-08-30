@@ -23,6 +23,7 @@
 #include "pianorollkeyboard.h"
 
 #include <QPainter>
+#include <QGuiApplication>
 
 #include "libmscore/drumset.h"
 
@@ -57,6 +58,7 @@ static const KeyShape keyShapes[] {
 PianorollKeyboard::PianorollKeyboard(QQuickItem* parent)
     : QQuickPaintedItem(parent)
 {
+    setAcceptedMouseButtons(Qt::AllButtons);
 }
 
 void PianorollKeyboard::load()
@@ -247,7 +249,7 @@ void PianorollKeyboard::paint(QPainter* p)
                 double y1 = pitchToPixelY(pitch + shape.marginBottom);
 
                 QRect bounds(0, y0, width(), y1 - y0);
-                p->fillRect(bounds, m_colorKeyWhite);
+                p->fillRect(bounds, pitch == m_curKeyPressed ? m_colorKeyHighlight : m_colorKeyWhite);
 //                p->drawLine(0, y0, width(), y0);
                 p->drawRect(bounds);
 
@@ -270,12 +272,84 @@ void PianorollKeyboard::paint(QPainter* p)
                 double y0 = pitchToPixelY(pitch + shape.marginTop);
                 double y1 = pitchToPixelY(pitch + shape.marginBottom);
 
-                p->fillRect(0, y0, width() * .6, y1 - y0, m_colorKeyBlack);
+                p->fillRect(0, y0, width() * .6, y1 - y0, pitch == m_curKeyPressed ? m_colorKeyHighlight : m_colorKeyBlack);
                 p->drawRect(0, y0, width() * .6, y1 - y0);
             }
 
         }
 
     }
+}
 
+
+
+
+void PianorollKeyboard::mousePressEvent(QMouseEvent* event)
+{
+    int pitch = pixelYToPitch(event->pos().y());
+
+    if (pitch < 0 || pitch > 127)
+        pitch = -1;
+
+    m_curKeyPressed = pitch;
+
+    uint modifiers = QGuiApplication::keyboardModifiers();
+    bool bnCtrl = modifiers & Qt::ControlModifier;
+    if (bnCtrl)
+    {
+        //        emit pitchHighlightToggled(pitch);
+        bool highlight = controller()->isPitchHighlight(pitch);
+        controller()->setPitchHighlight(pitch, !highlight);
+    }
+    else
+        emit keyPressed(pitch);
+
+    update();
+}
+
+
+void PianorollKeyboard::mouseReleaseEvent(QMouseEvent*)
+{
+    if (m_curKeyPressed != -1)
+    {
+        emit keyReleased(m_curKeyPressed);
+        m_curKeyPressed = -1;
+        update();
+    }
+}
+
+
+void PianorollKeyboard::mouseMoveEvent(QMouseEvent* event)
+{
+    int pitch = pixelYToPitch(event->pos().y());
+
+    if (pitch < 0 || pitch > 127)
+        pitch = -1;
+
+    if (pitch != m_curPitch) {
+        m_curPitch = pitch;
+
+//        //Set tooltip
+//        int degree = curPitch % 12;
+//        int octave = curPitch / 12;
+//        QString text = qApp->translate("utils", pitchNames[degree]) + QString::number(octave - 1);
+//        Part* part = _staff->part();
+//        Drumset* ds = part->instrument()->drumset();
+//        if (ds)
+//            text += " - " + qApp->translate("drumset", ds->name(curPitch).toUtf8().constData());
+
+//        setToolTip(text);
+
+        //Send event
+//        emit pitchChanged(m_curPitch);
+
+        if ((m_curKeyPressed != -1) && (m_curKeyPressed != pitch))
+        {
+            emit keyReleased(m_curKeyPressed);
+            m_curKeyPressed = pitch;
+            emit keyPressed(m_curKeyPressed);
+        }
+
+        update();
+    }
 }
