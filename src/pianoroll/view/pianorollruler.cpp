@@ -109,6 +109,14 @@ PianorollRuler::PianorollRuler(QQuickItem* parent)
 }
 
 
+void PianorollRuler::load()
+{
+    onNotationChanged();
+    globalContext()->currentNotationChanged().onNotify(this, [this]() {
+        onNotationChanged();
+    });
+}
+
 void PianorollRuler::onNotationChanged()
 {
     auto notation = globalContext()->currentNotation();
@@ -125,7 +133,6 @@ void PianorollRuler::onNotationChanged()
 void PianorollRuler::onCurrentNotationChanged()
 {
     updateBoundingSize();
-//    update();
 }
 
 void PianorollRuler::setWholeNoteWidth(double value)
@@ -173,14 +180,6 @@ void PianorollRuler::updateBoundingSize()
     setDisplayObjectWidth(wholeNotes * m_wholeNoteWidth);
 
     update();
-}
-
-void PianorollRuler::load()
-{
-    onNotationChanged();
-    globalContext()->currentNotationChanged().onNotify(this, [this]() {
-        onNotationChanged();
-    });
 }
 
 int PianorollRuler::wholeNoteToPixelX(double tick) const
