@@ -208,8 +208,8 @@ DockPage {
             InstrumentsPanel {
                 navigationSection: instrumentsPanel.navigationSection
 
-                onContextMenuModelChanged: {
-                    instrumentsPanel.contextMenuModel = newModel
+                Component.onCompleted: {
+                    instrumentsPanel.contextMenuModel = contextMenuModel
                 }
             }
         },

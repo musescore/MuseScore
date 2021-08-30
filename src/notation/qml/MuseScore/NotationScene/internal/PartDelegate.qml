@@ -134,7 +134,7 @@ ListItemBlank {
             ]
 
             onHandleMenuItem: {
-                switch(item.id) {
+                switch(itemId) {
                 case "duplicate":
                     root.copyPartRequested()
                     break

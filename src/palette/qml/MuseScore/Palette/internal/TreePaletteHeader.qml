@@ -155,7 +155,7 @@ Item {
         ]
 
         onHandleMenuItem: {
-            switch(item.id) {
+            switch(itemId) {
             case "hide": root.hidePaletteRequested(); break
             case "new": root.insertNewPaletteRequested(); break
             case "edit": root.enableEditingToggled(!root.editingEnabled); break

@@ -36,8 +36,7 @@ Item {
     id: root
 
     property NavigationSection navigationSection: null
-
-    signal contextMenuModelChanged(var newModel)
+    property alias contextMenuModel: contextMenuModel
 
     Rectangle {
         id: background
@@ -66,10 +65,6 @@ Item {
 
     InstrumentsPanelContextMenuModel {
         id: contextMenuModel
-
-        onItemsChanged: {
-            root.contextMenuModelChanged(contextMenuModel.items)
-        }
     }
 
     Component.onCompleted: {

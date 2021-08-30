@@ -55,7 +55,7 @@ Item {
         function modelSections() {
             var _sections = []
 
-            for (var i = 0; i < root.model.count; i++) {
+            for (var i = 0; i < root.model.length; i++) {
                 var element = root.model.get(i)
 
                 var section = element[sectionRole]

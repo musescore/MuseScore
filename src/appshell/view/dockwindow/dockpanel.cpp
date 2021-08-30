@@ -27,15 +27,13 @@
 #include "log.h"
 #include "translation.h"
 #include "ui/uitypes.h"
-
 #include "ui/view/abstractmenumodel.h"
 
 using namespace mu::dock;
 using namespace mu::uicomponents;
 using namespace mu::ui;
-using namespace mu::actions;
 
-class DockPanel::DockPanelMenuModel : public ui::AbstractMenuModel
+class DockPanel::DockPanelMenuModel : public AbstractMenuModel
 {
 public:
     explicit DockPanelMenuModel(QObject* parent = nullptr)
@@ -45,55 +43,51 @@ public:
 
     void load() override
     {
+        MenuItemList items;
+
+        if (m_customMenuModel && m_customMenuModel->rowCount() > 0) {
+            items << m_customMenuModel->items();
+            items << makeSeparator();
+        }
+
         //! TODO: temporary solution for testing
         MenuItem close;
         close.code = "close";
         close.title = "Close tab";
         close.state.enabled = true;
+        items << close;
 
         MenuItem undock;
         undock.code = "undock";
         undock.title = "Undock";
         undock.state.enabled = true;
+        items << undock;
 
         MenuItem move;
         move.code = "move";
         move.title = "Move panel to right side";
         move.state.enabled = true;
+        items << move;
 
-        MenuItemList standardItems {
-            close,
-            undock,
-            move
-        };
-
-        setItems(standardItems);
+        setItems(items);
     }
 
-    QVariant customMenuModel() const
+    AbstractMenuModel* customMenuModel() const
     {
         return m_customMenuModel;
     }
 
-    void setCustomMenuModel(const QVariant& model)
+    void setCustomMenuModel(AbstractMenuModel* model)
     {
         m_customMenuModel = model;
-    }
 
-    QVariant toVariant() const
-    {
-        QVariantList result = m_customMenuModel.toList();
-        if (!result.isEmpty()) {
-            result << makeSeparator().toMap();
-        }
-
-        result << itemsProperty();
-
-        return result;
+        connect(model, &AbstractMenuModel::itemsChanged, this, [this]() {
+            load();
+        });
     }
 
 private:
-    QVariant m_customMenuModel;
+    AbstractMenuModel* m_customMenuModel = nullptr;
 };
 
 DockPanel::DockPanel(QQuickItem* parent)
@@ -110,6 +104,7 @@ DockPanel::~DockPanel()
     }
 
     w->setProperty(DOCK_PANEL_PROPERY, QVariant::fromValue(nullptr));
+    w->setProperty(CONTEXT_MENU_MODEL_PROPERTY, QVariant::fromValue(nullptr));
 }
 
 DockPanel* DockPanel::tabifyPanel() const
@@ -141,14 +136,13 @@ void DockPanel::componentComplete()
         return;
     }
 
+    w->setProperty(DOCK_PANEL_PROPERY, QVariant::fromValue(this));
+
     m_menuModel->load();
 
-    w->setProperty(DOCK_PANEL_PROPERY, QVariant::fromValue(this));
-    w->setProperty(CONTEXT_MENU_MODEL_PROPERTY, m_menuModel->toVariant());
-
-    connect(this, &DockPanel::contextMenuModelChanged, [this, w]() {
+    connect(m_menuModel, &AbstractMenuModel::itemsChanged, [w, this]() {
         if (w) {
-            w->setProperty(CONTEXT_MENU_MODEL_PROPERTY, m_menuModel->toVariant());
+            w->setProperty(CONTEXT_MENU_MODEL_PROPERTY, QVariant::fromValue(m_menuModel));
         }
     });
 }
@@ -168,12 +162,12 @@ void DockPanel::setNavigationSection(QObject* newNavigation)
     emit navigationSectionChanged();
 }
 
-QVariant DockPanel::contextMenuModel() const
+AbstractMenuModel* DockPanel::contextMenuModel() const
 {
     return m_menuModel->customMenuModel();
 }
 
-void DockPanel::setContextMenuModel(const QVariant& model)
+void DockPanel::setContextMenuModel(AbstractMenuModel* model)
 {
     if (m_menuModel->customMenuModel() == model) {
         return;

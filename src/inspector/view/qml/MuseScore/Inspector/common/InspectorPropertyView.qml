@@ -85,8 +85,8 @@ Column {
 
                 menuAlign: Qt.AlignHCenter
 
-                onHandleMenuItem: function(item) {
-                    switch (item.id) {
+                onHandleMenuItem: function(itemId) {
+                    switch (itemId) {
                     case "reset":
                         root.propertyItem.resetToDefault()
                         break

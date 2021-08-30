@@ -631,7 +631,7 @@ GridView {
                 ]
 
                 onHandleMenuItem: {
-                    switch(item.id) {
+                    switch(itemId) {
                     case "delete":
                         paletteView.paletteController.remove(contextMenu.modelIndex)
                         break
