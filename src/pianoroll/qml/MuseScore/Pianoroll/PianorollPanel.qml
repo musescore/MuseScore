@@ -238,7 +238,7 @@ Rectangle {
             //-------
             //Row
             PianorollKeyboard {
-                width: 100
+                width: 120
                 Layout.fillHeight: true
 
                 centerY: scrollViewY.center
