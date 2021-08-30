@@ -127,7 +127,7 @@
 #endif
 
 #include "log.h"
-#define LOG_PROP() if (0) LOGD ()
+#define LOG_PROP() if (0) LOGD()
 
 using namespace mu;
 using namespace mu::engraving;
@@ -140,7 +140,7 @@ EngravingItem::EngravingItem(const ElementType& type, EngravingObject* se, Eleme
 {
     _flags         = f;
     _track         = -1;
-    _color         = mu::draw::Color();
+    _color         = engravingConfiguration()->defaultColor();
     _mag           = 1.0;
     _tag           = 1;
     _z             = -1;
@@ -482,7 +482,7 @@ Fraction EngravingItem::beat() const
     tsm->tickValues(tick().ticks(), &bar, &beat, &ticks);
     int ticksB = ticks_beat(tsm->timesig(tick().ticks()).timesig().denominator());
 
-    Fraction complexFraction((++beat* ticksB) + ticks, ticksB);
+    Fraction complexFraction((++beat * ticksB) + ticks, ticksB);
     return complexFraction.reduced();
 }
 
@@ -498,7 +498,7 @@ Part* EngravingItem::part() const
 
 draw::Color Element::color() const
 {
-    return _color.isValid() ? _color : engravingConfiguration()->defaultColor();
+    return _color;
 }
 
 //---------------------------------------------------------
@@ -517,7 +517,6 @@ mu::draw::Color EngravingItem::curColor() const
 mu::draw::Color EngravingItem::curColor(bool isVisible) const
 {
     return curColor(isVisible, color());
-    //return curColor(isVisible, engravingConfiguration()->defaultColor());
 }
 
 mu::draw::Color EngravingItem::curColor(bool isVisible, mu::draw::Color normalColor) const
@@ -553,8 +552,11 @@ mu::draw::Color EngravingItem::curColor(bool isVisible, mu::draw::Color normalCo
     if (!isVisible) {
         return engravingConfiguration()->invisibleColor();
     }
+    if(engravingConfiguration()->isCurrentThemeHighContrast() && engravingConfiguration()->scoreInversionEnabled()) {
+        return engravingConfiguration()->defaultColor();
+    }
+
     return normalColor;
-    //return engravingConfiguration()->defaultColor();
 }
 
 //---------------------------------------------------------

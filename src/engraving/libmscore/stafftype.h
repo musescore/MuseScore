@@ -200,7 +200,7 @@ class StaffType
     Spatium _yoffset         { 0.0 };
     bool _small              { false };
     bool _invisible          { false };
-    mu::draw::Color _color   { mu::draw::Color() };
+    mu::draw::Color _color   { engravingConfiguration()->defaultColor() };
 
     int _lines            = 5;
     int _stepOffset       = 0;
@@ -392,10 +392,10 @@ public:
 
     // properties setters (setting some props invalidates metrics)
     void  setDurationFontName(const QString&);
-    void setDurationFontSize(qreal);
+    void  setDurationFontSize(qreal);
     void  setDurationFontUserY(qreal val) { _durationFontUserY = val; }
     void  setFretFontName(const QString&);
-    void setFretFontSize(qreal);
+    void  setFretFontSize(qreal);
     void  setFretFontUserY(qreal val) { _fretFontUserY = val; }
     void  setGenDurations(bool val) { _genDurations = val; }
     void  setLinesThrough(bool val) { _linesThrough = val; }
