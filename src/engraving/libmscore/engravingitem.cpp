@@ -552,7 +552,7 @@ mu::draw::Color EngravingItem::curColor(bool isVisible, mu::draw::Color normalCo
     if (!isVisible) {
         return engravingConfiguration()->invisibleColor();
     }
-    if(engravingConfiguration()->isCurrentThemeHighContrast() && engravingConfiguration()->scoreInversionEnabled()) {
+    if (engravingConfiguration()->isCurrentThemeHighContrast() && engravingConfiguration()->scoreInversionEnabled()) {
         return engravingConfiguration()->defaultColor();
     }
 
