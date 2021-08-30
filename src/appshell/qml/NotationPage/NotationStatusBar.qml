@@ -205,7 +205,7 @@ Rectangle {
             }
 
             onHandleMenuItem: {
-                switch (item.id) {
+                switch (itemId) {
                 case model.concertPitchAction.id:
                     model.handleAction(model.concertPitchAction.code)
                     break

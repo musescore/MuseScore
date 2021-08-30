@@ -24,7 +24,7 @@ import QtQuick 2.15
 Loader {
     id: loader
 
-    signal handleMenuItem(var item)
+    signal handleMenuItem(string itemId)
 
     property alias menu: loader.item
     property var menuAnchorItem: null
@@ -52,7 +52,7 @@ Loader {
 
         onHandleMenuItem: {
             itemMenu.close()
-            Qt.callLater(loader.handleMenuItem, item)
+            Qt.callLater(loader.handleMenuItem, itemId)
         }
 
         onClosed: {
@@ -118,6 +118,7 @@ Loader {
             menu.y = y
         }
     }
+
     Timer {
         id: focusOnOpenedMenuTimer
 

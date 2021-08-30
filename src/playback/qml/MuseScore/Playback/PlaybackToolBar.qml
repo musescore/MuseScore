@@ -130,7 +130,9 @@ Rectangle {
 
                                 navigation: btn.navigation
 
-                                onHandleMenuItem: playbackModel.handleMenuItem(item.id)
+                                onHandleMenuItem: {
+                                    playbackModel.handleMenuItem(itemId)
+                                }
                             }
                         }
                     }

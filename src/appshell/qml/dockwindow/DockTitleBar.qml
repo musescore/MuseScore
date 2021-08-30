@@ -73,8 +73,8 @@ Item {
 
                 Layout.margins: 2
 
-                onHandleMenuItem: function(item) {
-                    root.handleContextMenuItemRequested(item)
+                onHandleMenuItem: function(itemId) {
+                    root.handleContextMenuItemRequested(itemId)
                 }
             }
         }
