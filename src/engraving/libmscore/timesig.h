@@ -71,7 +71,9 @@ class TimeSig final : public Element
     bool _largeParentheses;
 
 public:
-    TimeSig(Score* = 0);
+    TimeSig(Segment* parent = 0);
+
+    void setParent(Segment* parent);
 
     QString ssig() const;
     void setSSig(const QString&);

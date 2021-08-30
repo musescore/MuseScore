@@ -67,7 +67,7 @@ static void addText(Ms::VBox*& vbx, Ms::Score* s, QString strTxt, Ms::Tid stl)
         Ms::Text* text = new Ms::Text(s, stl);
         text->setPlainText(strTxt);
         if (vbx == 0) {
-            vbx = new Ms::VBox(s);
+            vbx = new Ms::VBox(s->dummy()->system());
         }
         vbx->add(text);
     }
@@ -118,14 +118,14 @@ static void xmlSetPitch(Ms::Note* n, char step, int alter, int octave)
 
 static void setTempo(Ms::Score* score, int tempo)
 {
-    Ms::TempoText* tt = new Ms::TempoText(score);
+    Ms::Measure* measure = score->firstMeasure();
+    Ms::Segment* segment = measure->getSegment(Ms::SegmentType::ChordRest, Ms::Fraction(0, 1));
+    Ms::TempoText* tt = new Ms::TempoText(segment);
     tt->setTempo(double(tempo) / 60.0);
     tt->setTrack(0);
     QString tempoText = Ms::TempoText::duration2tempoTextString(Ms::TDuration::DurationType::V_QUARTER);
     tempoText += QString(" = %1").arg(tempo);
     tt->setPlainText(tempoText);
-    Ms::Measure* measure = score->firstMeasure();
-    Ms::Segment* segment = measure->getSegment(Ms::SegmentType::ChordRest, Ms::Fraction(0, 1));
     segment->add(tt);
 }
 
@@ -212,7 +212,7 @@ void MsScWriter::beginMeasure(const Bww::MeasureBeginFlags mbf)
     ++measureNumber;
 
     // create a new measure
-    currentMeasure  = new Ms::Measure(score);
+    currentMeasure  = new Ms::Measure(score->dummy()->system());
     currentMeasure->setTick(tick);
     currentMeasure->setTimesig(Ms::Fraction(beats, beat));
     currentMeasure->setNo(measureNumber);
@@ -227,7 +227,7 @@ void MsScWriter::beginMeasure(const Bww::MeasureBeginFlags mbf)
     }
 
     if (mbf.endingFirst || mbf.endingSecond) {
-        Ms::Volta* volta = new Ms::Volta(score);
+        Ms::Volta* volta = new Ms::Volta(score->dummy());
         volta->setTrack(0);
         volta->endings().clear();
         if (mbf.endingFirst) {
@@ -247,24 +247,24 @@ void MsScWriter::beginMeasure(const Bww::MeasureBeginFlags mbf)
     // set clef, key and time signature in the first measure
     if (measureNumber == 1) {
         // clef
-        Ms::Clef* clef = new Ms::Clef(score);
+        Ms::Segment* s = currentMeasure->getSegment(Ms::SegmentType::Clef, tick);
+        Ms::Clef* clef = new Ms::Clef(s);
         clef->setClefType(Ms::ClefType::G);
         clef->setTrack(0);
-        Ms::Segment* s = currentMeasure->getSegment(Ms::SegmentType::Clef, tick);
         s->add(clef);
         // keysig
         Ms::KeySigEvent key;
         key.setKey(Ms::Key::D);
-        Ms::KeySig* keysig = new Ms::KeySig(score);
+        s = currentMeasure->getSegment(Ms::SegmentType::KeySig, tick);
+        Ms::KeySig* keysig = new Ms::KeySig(s);
         keysig->setKeySigEvent(key);
         keysig->setTrack(0);
-        s = currentMeasure->getSegment(Ms::SegmentType::KeySig, tick);
         s->add(keysig);
         // timesig
-        Ms::TimeSig* timesig = new Ms::TimeSig(score);
+        s = currentMeasure->getSegment(Ms::SegmentType::TimeSig, tick);
+        Ms::TimeSig* timesig = new Ms::TimeSig(s);
         timesig->setSig(Ms::Fraction(beats, beat));
         timesig->setTrack(0);
-        s = currentMeasure->getSegment(Ms::SegmentType::TimeSig, tick);
         s->add(timesig);
         qDebug("tempo %d", tempo);
     }
@@ -297,7 +297,7 @@ void MsScWriter::endMeasure(const Bww::MeasureEndFlags mef)
     }
 
     if (mef.lastOfSystem) {
-        Ms::LayoutBreak* lb = new Ms::LayoutBreak(score);
+        Ms::LayoutBreak* lb = new Ms::LayoutBreak(currentMeasure);
         lb->setTrack(0);
         lb->setLayoutBreakType(Ms::LayoutBreak::Type::LINE);
         currentMeasure->add(lb);
@@ -354,7 +354,7 @@ void MsScWriter::note(const QString pitch, const QVector<Bww::BeamType> beamList
     Ms::Direction sd = Ms::Direction::AUTO;
 
     // create chord
-    Ms::Chord* cr = new Ms::Chord(score);
+    Ms::Chord* cr = new Ms::Chord(score->dummy()->segment());
     //ws cr->setTick(tick);
     cr->setBeamMode(bm);
     cr->setTrack(0);
@@ -373,11 +373,11 @@ void MsScWriter::note(const QString pitch, const QVector<Bww::BeamType> beamList
     cr->setDots(dots);
     cr->setStemDirection(sd);
     // add note to chord
-    Ms::Note* note = new Ms::Note(score);
+    Ms::Note* note = new Ms::Note(cr);
     note->setTrack(0);
     xmlSetPitch(note, sao.s.toLatin1(), sao.a, sao.o);
     if (tieStart) {
-        Ms::Tie* tie = new Ms::Tie(score);
+        Ms::Tie* tie = new Ms::Tie(score->dummy());
         note->setTieFor(tie);
         tie->setStartNote(note);
         tie->setTrack(0);
@@ -501,7 +501,7 @@ void MsScWriter::doTriplet(Ms::Chord* cr, StartStop triplet)
     ;
 
     if (triplet == StartStop::ST_START) {
-        tuplet = new Ms::Tuplet(score);
+        tuplet = new Ms::Tuplet(currentMeasure);
         tuplet->setTrack(0);
         tuplet->setRatio(Ms::Fraction(3, 2));
 //            tuplet->setTick(tick);

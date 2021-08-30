@@ -120,7 +120,7 @@ protected:
     friend class TextLineBaseSegment;
 
 public:
-    TextLineBase(const ElementType& type, Score* s, ElementFlags = ElementFlag::NOTHING);
+    TextLineBase(const ElementType& type, Element* parent, ElementFlags = ElementFlag::NOTHING);
 
     virtual void write(XmlWriter& xml) const override;
     virtual void read(XmlReader&) override;

@@ -34,7 +34,7 @@ namespace Ms {
 class Ossia final : public Element
 {
 public:
-    Ossia(Score*);
+    Ossia(Element* parent);
     Ossia(const Ossia&);
 
     Ossia* clone() const override { return new Ossia(*this); }

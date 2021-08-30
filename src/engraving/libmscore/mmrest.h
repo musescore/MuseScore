@@ -34,7 +34,7 @@ namespace Ms {
 class MMRest final : public Rest
 {
 public:
-    MMRest(Score* s = 0);
+    MMRest(Segment* s = 0);
     MMRest(const MMRest&, bool link = false);
     ~MMRest()
     {

@@ -55,8 +55,8 @@ static const ElementStyle articulationStyle {
 //   Articulation
 //---------------------------------------------------------
 
-Articulation::Articulation(Score* s)
-    : Element(ElementType::ARTICULATION, s, ElementFlag::MOVABLE)
+Articulation::Articulation(ChordRest* parent)
+    : Element(ElementType::ARTICULATION, parent, ElementFlag::MOVABLE)
 {
     _symId         = SymId::noSym;
     _anchor        = ArticulationAnchor::TOP_STAFF;
@@ -67,8 +67,8 @@ Articulation::Articulation(Score* s)
     initElementStyle(&articulationStyle);
 }
 
-Articulation::Articulation(SymId id, Score* s)
-    : Articulation(s)
+Articulation::Articulation(SymId id, ChordRest* parent)
+    : Articulation(parent)
 {
     setSymId(id);
 }
@@ -307,7 +307,7 @@ bool Articulation::layoutCloseToNote() const
 QVector<mu::LineF> Articulation::dragAnchorLines() const
 {
     QVector<LineF> result;
-    result << LineF(canvasPos(), parent()->canvasPos());
+    result << LineF(canvasPos(), parentElement()->canvasPos());
     return result;
 }
 
@@ -592,7 +592,7 @@ void Articulation::resetProperty(Pid id)
 
 qreal Articulation::mag() const
 {
-    return parent() ? parent()->mag() * score()->styleD(Sid::articulationMag) : 1.0;
+    return parent() ? parentElement()->mag() * score()->styleD(Sid::articulationMag) : 1.0;
 }
 
 bool Articulation::isTenuto() const

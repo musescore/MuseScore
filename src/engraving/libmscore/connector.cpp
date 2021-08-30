@@ -390,7 +390,7 @@ bool ConnectorInfoReader::read()
             readEndpointLocation(_nextLoc);
         } else {
             if (tag == name) {
-                _connector = Element::name2Element(tag, _connectorReceiver->score());
+                _connector = Element::name2Element(tag, _connectorReceiver->score()->dummy());
             } else {
                 qWarning("ConnectorInfoReader::read: element tag (%s) does not match connector type (%s). Is the file corrupted?",
                          tag.toLatin1().constData(), name.toLatin1().constData());

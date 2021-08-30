@@ -449,8 +449,8 @@ class TabDurationSymbol final : public Element
     bool _repeat     { false };
 
 public:
-    TabDurationSymbol(Score* s);
-    TabDurationSymbol(Score* s, const StaffType* tab, TDuration::DurationType type, int dots);
+    TabDurationSymbol(ChordRest* parent);
+    TabDurationSymbol(ChordRest* parent, const StaffType* tab, TDuration::DurationType type, int dots);
     TabDurationSymbol(const TabDurationSymbol&);
     TabDurationSymbol* clone() const override { return new TabDurationSymbol(*this); }
     void draw(mu::draw::Painter*) const override;

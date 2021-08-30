@@ -134,7 +134,7 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
                     Segment* lsegment = lmeasure->undoGetSegmentR(SegmentType::EndBarLine, lmeasure->ticks());
                     BarLine* lbl = toBarLine(lsegment->element(ltrack));
                     if (!lbl) {
-                        lbl = new BarLine(lscore);
+                        lbl = new BarLine(lsegment);
                         lbl->setParent(lsegment);
                         lbl->setTrack(ltrack);
                         lbl->setSpanStaff(lstaff->barLineSpan());
@@ -335,8 +335,8 @@ BarLineType BarLine::barLineType(const QString& s)
 //   BarLine
 //---------------------------------------------------------
 
-BarLine::BarLine(Score* s)
-    : Element(ElementType::BAR_LINE, s)
+BarLine::BarLine(Segment* parent)
+    : Element(ElementType::BAR_LINE, parent)
 {
     setHeight(4 * spatium());   // for use in palettes
 }
@@ -359,6 +359,11 @@ BarLine::BarLine(const BarLine& bl)
 BarLine::~BarLine()
 {
     qDeleteAll(_el);
+}
+
+void BarLine::setParent(Segment* parent)
+{
+    Element::setParent(parent);
 }
 
 //---------------------------------------------------------
@@ -872,11 +877,11 @@ void BarLine::read(XmlReader& e)
         } else if (tag == "spanToOffset") {
             _spanTo = e.readInt();
         } else if (tag == "Articulation") {
-            Articulation* a = new Articulation(score());
+            Articulation* a = new Articulation(score()->dummy()->chord());
             a->read(e);
             add(a);
         } else if (tag == "Symbol") {
-            Symbol* s = new Symbol(score());
+            Symbol* s = new Symbol(this);
             s->setTrack(track());
             s->read(e);
             add(s);
@@ -884,7 +889,7 @@ void BarLine::read(XmlReader& e)
             if (MScore::noImages) {
                 e.skipCurrentElement();
             } else {
-                Image* image = new Image(score());
+                Image* image = new Image(this);
                 image->setTrack(track());
                 image->read(e);
                 add(image);

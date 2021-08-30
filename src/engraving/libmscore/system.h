@@ -120,8 +120,10 @@ class System final : public Element
     Bracket* createBracket(Ms::BracketItem* bi, int column, int staffIdx, QList<Ms::Bracket*>& bl, Measure* measure);
 
 public:
-    System(Score*);
+    System(Page* parent);
     ~System();
+
+    void moveToPage(Page* parent);
 
     // Score Tree functions
     ScoreElement* treeParent() const override;

@@ -103,8 +103,8 @@ void SysStaff::restoreLayout()
 //   System
 //---------------------------------------------------------
 
-System::System(Score* s)
-    : Element(ElementType::SYSTEM, s)
+System::System(Page* parent)
+    : Element(ElementType::SYSTEM, parent)
 {
 }
 
@@ -116,18 +116,23 @@ System::~System()
 {
     for (SpannerSegment* ss : spannerSegments()) {
         if (ss->system() == this) {
-            ss->setParent(nullptr);
+            ss->moveToDummy();
         }
     }
     for (MeasureBase* mb : measures()) {
         if (mb->system() == this) {
-            mb->setSystem(nullptr);
+            mb->moveToDummy();
         }
     }
     qDeleteAll(_staves);
     qDeleteAll(_brackets);
     delete _systemDividerLeft;
     delete _systemDividerRight;
+}
+
+void System::moveToPage(Page* parent)
+{
+    setParent(parent);
 }
 
 //---------------------------------------------------------
@@ -139,13 +144,13 @@ void System::clear()
 {
     for (MeasureBase* mb : measures()) {
         if (mb->system() == this) {
-            mb->setSystem(nullptr);
+            mb->moveToDummy();
         }
     }
     ml.clear();
     for (SpannerSegment* ss : qAsConst(_spannerSegments)) {
         if (ss->system() == this) {
-            ss->setParent(0);             // assume parent() is System
+            ss->moveToDummy();             // assume parent() is System
         }
     }
     _spannerSegments.clear();
@@ -159,7 +164,7 @@ void System::clear()
 void System::appendMeasure(MeasureBase* mb)
 {
     Q_ASSERT(!mb->isMeasure() || !(score()->styleB(Sid::createMultiMeasureRests) && toMeasure(mb)->hasMMRest()));
-    mb->setSystem(this);
+    mb->setParent(this);
     ml.push_back(mb);
 }
 
@@ -171,7 +176,7 @@ void System::removeMeasure(MeasureBase* mb)
 {
     ml.erase(std::remove(ml.begin(), ml.end(), mb), ml.end());
     if (mb->system() == this) {
-        mb->setSystem(nullptr);
+        mb->moveToDummy();
     }
 }
 
@@ -187,7 +192,7 @@ void System::removeLastMeasure()
     MeasureBase* mb = ml.back();
     ml.pop_back();
     if (mb->system() == this) {
-        mb->setSystem(nullptr);
+        mb->moveToDummy();
     }
 }
 
@@ -619,7 +624,7 @@ Bracket* System::createBracket(Ms::BracketItem* bi, int column, int staffIdx, QL
             }
         }
         if (b == 0) {
-            b = new Bracket(score());
+            b = new Bracket(score()->dummy());
             b->setBracketItem(bi);
             b->setGenerated(true);
             b->setTrack(track);
@@ -913,7 +918,7 @@ void System::setInstrumentNames(bool longName, Fraction tick)
         for (const StaffName& sn : names) {
             InstrumentName* iname = staff->instrumentNames.value(idx);
             if (iname == 0) {
-                iname = new InstrumentName(score());
+                iname = new InstrumentName(this);
                 // iname->setGenerated(true);
                 iname->setParent(this);
                 iname->setSysStaff(staff);
@@ -1023,7 +1028,9 @@ void System::add(Element* el)
     }
 // qDebug("%p System::add: %p %s", this, el, el->name());
 
-    el->setParent(this);
+    if (el->parent() != this) {
+        el->setParent(this);
+    }
     switch (el->type()) {
     case ElementType::INSTRUMENT_NAME:
 // qDebug("  staffIdx %d, staves %d", el->staffIdx(), _staves.size());
@@ -1292,7 +1299,7 @@ void System::read(XmlReader& e)
     while (e.readNextStartElement()) {
         const QStringRef& tag(e.name());
         if (tag == "SystemDivider") {
-            SystemDivider* sd = new SystemDivider(score());
+            SystemDivider* sd = new SystemDivider(this);
             sd->read(e);
             add(sd);
         } else {

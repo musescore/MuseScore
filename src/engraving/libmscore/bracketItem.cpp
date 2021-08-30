@@ -28,6 +28,10 @@
 using namespace mu;
 
 namespace Ms {
+BracketItem::BracketItem(ScoreElement* parent)
+    : ScoreElement(ElementType::BRACKET_ITEM, parent) {}
+BracketItem::BracketItem(ScoreElement* parent, BracketType a, int b)
+    : ScoreElement(ElementType::BRACKET_ITEM, parent), _bracketType(a), _bracketSpan(b) { }
 //---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------

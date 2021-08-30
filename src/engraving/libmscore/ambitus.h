@@ -51,7 +51,7 @@ class Ambitus final : public Element
     void normalize();
 
 public:
-    Ambitus(Score* s);
+    Ambitus(Segment* parent);
 
     Ambitus* clone() const override { return new Ambitus(*this); }
 

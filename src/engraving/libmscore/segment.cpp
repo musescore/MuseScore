@@ -171,6 +171,11 @@ Segment::Segment(const Segment& s)
     _shapes  = s._shapes;
 }
 
+void Segment::setParent(Measure* parent)
+{
+    Element::setParent(parent);
+}
+
 //---------------------------------------------------------
 //   setSegmentType
 //---------------------------------------------------------
@@ -537,7 +542,9 @@ void Segment::add(Element* el)
 {
 //      qDebug("%p segment %s add(%d, %d, %s)", this, subTypeName(), tick(), el->track(), el->name());
 
-    el->setParent(this);
+    if (el->parent() != this) {
+        el->setParent(this);
+    }
 
     int track = el->track();
     Q_ASSERT(track != -1);
@@ -1795,13 +1802,13 @@ Element* Segment::nextElement(int activeStaff)
             p = sp->startElement();
         } else {
             p = e;
-            Element* pp = p->parent();
+            Element* pp = p->parentElement();
             if (pp->isNote() || pp->isRest() || (pp->isChord() && !p->isNote())) {
                 p = pp;
             }
         }
         Element* el = p;
-        for (; p && p->type() != ElementType::SEGMENT; p = p->parent()) {
+        for (; p && p->type() != ElementType::SEGMENT; p = p->parentElement()) {
         }
         Segment* seg = toSegment(p);
         // next in _elist
@@ -1945,9 +1952,9 @@ Element* Segment::prevElement(int activeStaff)
             el = sp->startElement();
             seg = sp->startSegment();
         } else {
-            Element* ep = e->parent();
+            Element* ep = e->parentElement();
             if (ep->isNote() || ep->isRest() || (ep->isChord() && !e->isNote())) {
-                el = e->parent();
+                el = e->parentElement();
             }
         }
 

@@ -543,7 +543,7 @@ void TestMeasure::mmrest()
 
 void TestMeasure::measureNumbers()
 {
-    MeasureNumber* measureNumber = new MeasureNumber(score);
+    MeasureNumber* measureNumber = new MeasureNumber(score->dummy()->measure());
 
     // horizontal placement
     measureNumber->setHPlacement(HPlacement::CENTER);

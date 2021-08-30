@@ -66,7 +66,7 @@ public:
         OPEN, CLOSED
     };
 
-    Volta(Score* s);
+    Volta(Element* parent);
 
     Volta* clone() const override { return new Volta(*this); }
 

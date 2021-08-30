@@ -34,8 +34,14 @@ namespace Ms {
 //   NoteDot
 //---------------------------------------------------------
 
-NoteDot::NoteDot(Score* s)
-    : Element(ElementType::NOTEDOT, s)
+NoteDot::NoteDot(Note* parent)
+    : Element(ElementType::NOTEDOT, parent)
+{
+    setFlag(ElementFlag::MOVABLE, false);
+}
+
+NoteDot::NoteDot(Rest* parent)
+    : Element(ElementType::NOTEDOT, parent)
 {
     setFlag(ElementFlag::MOVABLE, false);
 }
@@ -77,7 +83,7 @@ void NoteDot::layout()
 
 Element* NoteDot::elementBase() const
 {
-    return parent();
+    return parentElement();
 }
 
 //---------------------------------------------------------
@@ -103,6 +109,6 @@ void NoteDot::read(XmlReader& e)
 
 qreal NoteDot::mag() const
 {
-    return parent()->mag() * score()->styleD(Sid::dotMag);
+    return parentElement()->mag() * score()->styleD(Sid::dotMag);
 }
 }

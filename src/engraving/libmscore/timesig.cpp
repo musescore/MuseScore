@@ -50,8 +50,8 @@ static const ElementStyle timesigStyle {
 //    Layout() is static and called in setSig().
 //---------------------------------------------------------
 
-TimeSig::TimeSig(Score* s)
-    : Element(ElementType::TIMESIG, s, ElementFlag::ON_STAFF | ElementFlag::MOVABLE)
+TimeSig::TimeSig(Segment* parent)
+    : Element(ElementType::TIMESIG, parent, ElementFlag::ON_STAFF | ElementFlag::MOVABLE)
 {
     initElementStyle(&timesigStyle);
 
@@ -60,6 +60,11 @@ TimeSig::TimeSig(Score* s)
     _sig.set(0, 1);                 // initialize to invalid
     _timeSigType      = TimeSigType::NORMAL;
     _largeParentheses = false;
+}
+
+void TimeSig::setParent(Segment* parent)
+{
+    Element::setParent(parent);
 }
 
 //---------------------------------------------------------

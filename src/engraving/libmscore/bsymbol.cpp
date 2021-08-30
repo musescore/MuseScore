@@ -39,8 +39,8 @@ namespace Ms {
 //   BSymbol
 //---------------------------------------------------------
 
-BSymbol::BSymbol(const Ms::ElementType& type, Score* s, ElementFlags f)
-    : Element(type, s, f)
+BSymbol::BSymbol(const Ms::ElementType& type, Ms::Element* parent, ElementFlags f)
+    : Element(type, parent, f)
 {
     _align = Align::LEFT | Align::BASELINE;
 }
@@ -81,14 +81,14 @@ bool BSymbol::readProperties(XmlReader& e)
     } else if (tag == "systemFlag") {
         setSystemFlag(e.readInt());
     } else if (tag == "Symbol" || tag == "FSymbol") {
-        Element* element = name2Element(tag, score());
+        Element* element = name2Element(tag, this);
         element->read(e);
         add(element);
     } else if (tag == "Image") {
         if (MScore::noImages) {
             e.skipCurrentElement();
         } else {
-            Element* element = name2Element(tag, score());
+            Element* element = name2Element(tag, this);
             element->read(e);
             add(element);
         }

@@ -136,7 +136,7 @@ private:
 class Measure final : public MeasureBase
 {
 public:
-    Measure(Score* = 0);
+    Measure(System* parent = 0);
     Measure(const Measure&);
     ~Measure();
 

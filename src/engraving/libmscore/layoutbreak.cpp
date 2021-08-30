@@ -40,8 +40,8 @@ static const ElementStyle sectionBreakStyle {
 //   LayoutBreak
 //---------------------------------------------------------
 
-LayoutBreak::LayoutBreak(Score* score)
-    : Element(ElementType::LAYOUT_BREAK, score, ElementFlag::SYSTEM | ElementFlag::HAS_TAG)
+LayoutBreak::LayoutBreak(MeasureBase* parent)
+    : Element(ElementType::LAYOUT_BREAK, parent, ElementFlag::SYSTEM | ElementFlag::HAS_TAG)
 {
     _pause = 0.;
     _startWithLongNames = false;
@@ -68,6 +68,11 @@ LayoutBreak::LayoutBreak(const LayoutBreak& lb)
     _startWithMeasureOne   = lb._startWithMeasureOne;
     _firstSystemIdentation = lb._firstSystemIdentation;
     layout0();
+}
+
+void LayoutBreak::setParent(MeasureBase* parent)
+{
+    Element::setParent(parent);
 }
 
 //---------------------------------------------------------

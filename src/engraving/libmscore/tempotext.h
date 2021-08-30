@@ -48,7 +48,7 @@ class TempoText final : public TextBase
     void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps) override;
 
 public:
-    TempoText(Score*);
+    TempoText(Segment* parent);
 
     TempoText* clone() const override { return new TempoText(*this); }
 

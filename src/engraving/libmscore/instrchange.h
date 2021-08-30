@@ -41,8 +41,8 @@ class InstrumentChange final : public TextBase
     bool _init = false;   // Set if the instrument has been set by the user, as there is no other way to tell.
 
 public:
-    InstrumentChange(Score*);
-    InstrumentChange(const Instrument&, Score*);
+    InstrumentChange(Element* parent);
+    InstrumentChange(const Instrument&, Element* parent);
     InstrumentChange(const InstrumentChange&);
     ~InstrumentChange();
 

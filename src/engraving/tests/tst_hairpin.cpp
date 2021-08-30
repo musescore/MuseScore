@@ -55,7 +55,7 @@ void TestHairpin::initTestCase()
 
 void TestHairpin::hairpin()
 {
-    Hairpin* hp = new Hairpin(score);
+    Hairpin* hp = new Hairpin(score->dummy()->segment());
 
     // subtype
     hp->setHairpinType(HairpinType::DECRESC_HAIRPIN);

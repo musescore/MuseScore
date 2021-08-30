@@ -87,7 +87,7 @@ bool TestTuplet::createTuplet(int n, ChordRest* cr)
         fr    *= Fraction(1, 2);
     }
 
-    Tuplet* tuplet = new Tuplet(cr->score());
+    Tuplet* tuplet = new Tuplet(cr->score()->dummy()->measure());
     tuplet->setRatio(ratio);
 
     //
@@ -150,7 +150,7 @@ void TestTuplet::split(const char* p1, const char* p2)
 {
     MasterScore* score = readScore(TUPLET_DATA_DIR + p1);
     Measure* m         = score->firstMeasure();
-    TimeSig* ts        = new TimeSig(score);
+    TimeSig* ts        = new TimeSig(score->dummy()->segment());
     ts->setSig(Fraction(3, 4), TimeSigType::NORMAL);
 
     score->startCmd();

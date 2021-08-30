@@ -41,7 +41,7 @@ class Stem final : public Element
     qreal _len       { 0.0 };       // always positive
 
 public:
-    Stem(Score* = 0);
+    Stem(Chord* parent = 0);
     Stem& operator=(const Stem&) = delete;
 
     Stem* clone() const override { return new Stem(*this); }

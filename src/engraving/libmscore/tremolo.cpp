@@ -67,8 +67,8 @@ static const char* tremoloName[] = {
     QT_TRANSLATE_NOOP("Tremolo", "64th between notes")
 };
 
-Tremolo::Tremolo(Score* score)
-    : Element(ElementType::TREMOLO, score, ElementFlag::MOVABLE)
+Tremolo::Tremolo(Chord* parent)
+    : Element(ElementType::TREMOLO, parent, ElementFlag::MOVABLE)
 {
     initElementStyle(&tremoloStyle);
 }
@@ -80,6 +80,11 @@ Tremolo::Tremolo(const Tremolo& t)
     _chord1       = t.chord1();
     _chord2       = t.chord2();
     _durationType = t._durationType;
+}
+
+void Tremolo::setParent(Chord* ch)
+{
+    Element::setParent(ch);
 }
 
 //---------------------------------------------------------
@@ -97,7 +102,7 @@ qreal Tremolo::chordMag() const
 
 qreal Tremolo::mag() const
 {
-    return parent() ? parent()->mag() : 1.0;
+    return parentElement() ? parentElement()->mag() : 1.0;
 }
 
 //---------------------------------------------------------

@@ -508,7 +508,7 @@ void Cursor::addTuplet(FractionWrapper* ratio, FractionWrapper* duration)
 
     _score->changeCRlen(cr, fDuration);
 
-    Ms::Tuplet* tuplet = new Ms::Tuplet(_score);
+    Ms::Tuplet* tuplet = new Ms::Tuplet(tupletMeasure);
     tuplet->setParent(tupletMeasure);
     tuplet->setTrack(track());
     tuplet->setTick(tupletTick);

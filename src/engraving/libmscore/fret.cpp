@@ -64,8 +64,8 @@ static const ElementStyle fretStyle {
 //   FretDiagram
 //---------------------------------------------------------
 
-FretDiagram::FretDiagram(Score* score)
-    : Element(ElementType::FRET_DIAGRAM, score, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+FretDiagram::FretDiagram(Segment* parent)
+    : Element(ElementType::FRET_DIAGRAM, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     font.setFamily("FreeSans");
     font.setPointSizeF(4.0 * mag());
@@ -125,7 +125,7 @@ Element* FretDiagram::linkedClone()
 
 std::shared_ptr<FretDiagram> FretDiagram::createFromString(Score* score, const QString& s)
 {
-    auto fd = makeElement<FretDiagram>(score);
+    auto fd = std::make_shared<FretDiagram>(score->dummy()->segment());
     int strings = s.size();
 
     fd->setStrings(strings);
@@ -822,7 +822,7 @@ void FretDiagram::read(XmlReader& e)
         } else if (tag == "mag") {
             readProperty(e, Pid::MAG);
         } else if (tag == "Harmony") {
-            Harmony* h = new Harmony(score());
+            Harmony* h = new Harmony(this->score()->dummy()->segment());
             h->read(e);
             add(h);
         } else if (!Element::readProperties(e)) {
@@ -1177,7 +1177,7 @@ FretItem::Barre FretDiagram::barre(int f) const
 void FretDiagram::setHarmony(QString harmonyText)
 {
     if (!_harmony) {
-        Harmony* h = new Harmony(score());
+        Harmony* h = new Harmony(this->score()->dummy()->segment());
         add(h);
     }
 

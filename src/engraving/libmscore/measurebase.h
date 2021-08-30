@@ -87,9 +87,12 @@ protected:
     void cleanupLayoutBreaks(bool undo);
 
 public:
-    MeasureBase(const ElementType& type, Score* score = 0);
+    MeasureBase(const ElementType& type, System* system = 0);
     ~MeasureBase();
     MeasureBase(const MeasureBase&);
+
+    System* system() const { return (System*)parent(); }
+    void setParent(System* s) { Element::setParent((ScoreElement*)(s)); }
 
     // Score Tree functions
     ScoreElement* treeParent() const override;
@@ -118,8 +121,6 @@ public:
 
     ElementList& el() { return _el; }
     const ElementList& el() const { return _el; }
-    System* system() const { return (System*)parent(); }
-    void setSystem(System* s) { setParent((Element*)s); }
 
     const MeasureBase* findPotentialSectionBreak() const;
     LayoutBreak* sectionBreakElement() const;

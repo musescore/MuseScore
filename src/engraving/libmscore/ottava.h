@@ -109,7 +109,7 @@ protected:
     friend class OttavaSegment;
 
 public:
-    Ottava(Score* s);
+    Ottava(Element* parent);
     Ottava(const Ottava&);
 
     Ottava* clone() const override { return new Ottava(*this); }

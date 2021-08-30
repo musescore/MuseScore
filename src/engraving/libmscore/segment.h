@@ -86,6 +86,8 @@ public:
     Segment(const Segment&);
     ~Segment();
 
+    void setParent(Measure* parent);
+
     // Score Tree functions
     ScoreElement* treeParent() const override;
     ScoreElement* treeChild(int idx) const override;

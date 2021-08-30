@@ -74,7 +74,7 @@ Element* MTest::writeReadElement(Element* element)
 
     XmlReader e(buffer.buffer());
     e.readNextStartElement();
-    element = Element::name2Element(e.name(), score);
+    element = Element::name2Element(e.name(), score->dummy());
     element->read(e);
     return element;
 }

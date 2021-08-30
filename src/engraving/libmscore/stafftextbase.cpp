@@ -34,8 +34,8 @@ namespace Ms {
 //   StaffTextBase
 //---------------------------------------------------------
 
-StaffTextBase::StaffTextBase(const ElementType& type, Score* s, Tid tid, ElementFlags flags)
-    : TextBase(type, s, tid, flags)
+StaffTextBase::StaffTextBase(const ElementType& type, Segment* parent, Tid tid, ElementFlags flags)
+    : TextBase(type, parent, tid, flags)
 {
     setSwingParameters(MScore::division / 2, 60);
 }

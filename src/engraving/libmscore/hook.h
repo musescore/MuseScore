@@ -37,10 +37,10 @@ class Hook final : public Symbol
     int _hookType { 0 };
 
 public:
-    Hook(Score* = 0);
+    Hook(Chord* parent = 0);
 
     Hook* clone() const override { return new Hook(*this); }
-    qreal mag() const override { return parent()->mag(); }
+    qreal mag() const override { return parentElement()->mag(); }
     Element* elementBase() const override;
 
     void setHookType(int v);

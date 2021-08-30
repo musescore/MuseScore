@@ -180,8 +180,8 @@ Element* GlissandoSegment::propertyDelegate(Pid pid)
 //   Glissando
 //=========================================================
 
-Glissando::Glissando(Score* s)
-    : SLine(ElementType::GLISSANDO, s, ElementFlag::MOVABLE)
+Glissando::Glissando(Element* parent)
+    : SLine(ElementType::GLISSANDO, parent, ElementFlag::MOVABLE)
 {
     setAnchor(Spanner::Anchor::NOTE);
     setDiagonal(true);

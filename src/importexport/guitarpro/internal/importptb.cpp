@@ -592,7 +592,7 @@ void PowerTab::addPalmMute(Chord* chord)
         }
     }
     if (!_palmMutes[track]) {
-        PalmMute* pm = new PalmMute(score);
+        PalmMute* pm = new PalmMute(score->dummy());
         _palmMutes[track] = pm;
         Segment* segment = chord->segment();
         Fraction tick = segment->tick();
@@ -640,14 +640,14 @@ void PowerTab::fillMeasure(tBeatList& elist, Measure* measure, int staff, std::v
         }
         ChordRest* cr;
         if (beat->notes.empty()) {
-            auto rest = new Rest(score);
+            auto rest = new Rest(segment);
             cr = rest;
             rest->setTrack(staff * VOICES);
             rest->setTicks(l);
             rest->setDurationType(d);
             segment->add(rest);
         } else {
-            Chord* chord = new Chord(score);
+            Chord* chord = new Chord(segment);
             cr = chord;
             chord->setTrack(staff * VOICES);
             chord->setTicks(l);
@@ -658,18 +658,18 @@ void PowerTab::fillMeasure(tBeatList& elist, Measure* measure, int staff, std::v
                 addPalmMute(chord);
             }
             if (beat->accent) {
-                auto accent = new Articulation(score);
+                auto accent = new Articulation(chord);
                 accent->setSymId(SymId::articAccentAbove);
                 chord->add(accent);
             }
             if (beat->staccato) {
-                auto st = new Articulation(score);
+                auto st = new Articulation(chord);
                 st->setSymId(SymId::articStaccatoAbove);
                 chord->add(st);
             }
             bool has_hammer = false;
             for (const auto& n : beat->notes) {
-                auto note = new Note(score);
+                auto note = new Note(chord);
                 chord->add(note);
                 if (n.dead) {
                     note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
@@ -681,13 +681,13 @@ void PowerTab::fillMeasure(tBeatList& elist, Measure* measure, int staff, std::v
                 }
 
                 if (n.tied && tiedNotes[n.str]) {
-                    Tie* tie = new Tie(score);
+                    Tie* tie = new Tie(tiedNotes[n.str]);
                     tie->setEndNote(note);
                     tiedNotes[n.str]->add(tie);
                 }
 
                 if (n.bend) {
-                    Bend* bend = new Bend(score);
+                    Bend* bend = new Bend(note);
 //TODO-ws                              bend->setNote(note);
                     bend->points().append(PitchValue(0, n.bend * 25 - 12));
                     bend->points().append(PitchValue(50, 0));
@@ -716,7 +716,7 @@ void PowerTab::fillMeasure(tBeatList& elist, Measure* measure, int staff, std::v
                 auto cr2 = chord;
                 hammer = nullptr;
 
-                Slur* slur = new Slur(score);
+                Slur* slur = new Slur(score->dummy());
                 slur->setStartElement(cr1);
                 slur->setEndElement(cr2);
                 slur->setTick(cr1->tick());
@@ -742,7 +742,7 @@ void PowerTab::fillMeasure(tBeatList& elist, Measure* measure, int staff, std::v
         }
 
         if (beat->tuplet && !tuple) {
-            tuple = new Tuplet(score);
+            tuple = new Tuplet(measure);
             tuple->setParent(measure);
             tuple->setTrack(cr->track());
             tuple->setBaseLen(l);
@@ -756,12 +756,13 @@ void PowerTab::fillMeasure(tBeatList& elist, Measure* measure, int staff, std::v
     }
 
     if (tick == measure->tick()) {
-        auto rest = new Rest(score);
+        Segment* seg = measure->getSegment(SegmentType::ChordRest, tick);
+        auto rest = new Rest(seg);
         rest->setTrack(staff * VOICES);
         auto ts = measure->timesig();
         rest->setTicks(ts);
         rest->setDurationType(TDuration(ts));
-        measure->getSegment(SegmentType::ChordRest, tick)->add(rest);
+        seg->add(rest);
     }
 }
 
@@ -825,24 +826,24 @@ void PowerTab::addToScore(ptSection& sec)
         sec.bars.pop_front();
     }
     if (sec.tempo) {
-        TempoText* tt = new TempoText(score);
+        Segment* segment = measure->getSegment(SegmentType::ChordRest, measure->tick());
+        TempoText* tt = new TempoText(segment);
         tt->setTempo(double(sec.tempo) / 60.0f);
         tt->setXmlText(QString("<sym>metNoteQuarterUp</sym> = %1").arg(sec.tempo));
         tt->setTrack(0);
-        Segment* segment = measure->getSegment(SegmentType::ChordRest, measure->tick());
         segment->add(tt);
         score->setTempo(measure->tick(), tt->tempo());
     }
     if (!sec.partName.empty() && lastPart != sec.partMarker) {
         lastPart = sec.partMarker;
-        RehearsalMark* t = new RehearsalMark(score);
+        auto seg = measure->getSegment(SegmentType::ChordRest, measure->tick());
+        RehearsalMark* t = new RehearsalMark(seg);
         t->setFrameType(FrameType::SQUARE);
         t->setPlainText(QString(sec.partMarker));
         t->setTrack(0);
-        auto seg = measure->getSegment(SegmentType::ChordRest, measure->tick());
         seg->add(t);
 
-        t = new RehearsalMark(score);
+        t = new RehearsalMark(seg);
         t->setFrameType(FrameType::NO_FRAME);
         t->setPlainText(QString::fromUtf8(sec.partName.data(), int(sec.partName.size())));
         t->setOffset(mu::PointF(10.0, 0.0));
@@ -852,17 +853,17 @@ void PowerTab::addToScore(ptSection& sec)
     if (firstMeasure) {
         for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
             int keysig = staffIdx >= staffInc ? 0 : 1;       // Can be parsed int beat section
-            KeySig* t = new KeySig(score);
+            Segment* s = measure->getSegment(SegmentType::KeySig, tick);
+            KeySig* t = new KeySig(s);
             t->setKey(Key(keysig));
             t->setTrack(staffIdx * VOICES);
-            Segment* s = measure->getSegment(SegmentType::KeySig, tick);
             s->add(t);
 
             ClefType clefId = staffIdx >= staffInc ? ClefType::F8_VB : ClefType::G15_MB;
-            auto clef = new Clef(score);
+            s = measure->getSegment(SegmentType::HeaderClef, Fraction(0, 1));
+            auto clef = new Clef(s);
             clef->setTrack(staffIdx * VOICES);
             clef->setClefType(clefId);
-            s = measure->getSegment(SegmentType::HeaderClef, Fraction(0, 1));
             s->add(clef);
         }
     }
@@ -890,10 +891,10 @@ void PowerTab::addToScore(ptSection& sec)
                 Staff* staff = score->staff(staffIdx);
                 auto staffType = staff->staffType(Fraction(0, 1));
                 if (staffType->genTimesig()) {
-                    auto t = new TimeSig(score);
+                    Segment* s = measure->getSegment(SegmentType::TimeSig, measure->tick());
+                    auto t = new TimeSig(s);
                     t->setTrack(staffIdx * VOICES);
                     t->setSig(lastTS);
-                    Segment* s = measure->getSegment(SegmentType::TimeSig, measure->tick());
                     s->add(t);
                 }
             }
@@ -1151,7 +1152,7 @@ std::string crTS(int strings, int tuning[])
 
 Measure* PowerTab::createMeasure(ptBar* bar, const Fraction& tick)
 {
-    auto measure = new Measure(score);
+    auto measure = new Measure(score->dummy()->system());
     Fraction nts(bar->numerator, bar->denominator);
 
     measure->setTick(tick);
@@ -1256,13 +1257,13 @@ Score::FileError PowerTab::read()
 
     MeasureBase* m;
     if (!score->measures()->first()) {
-        m = new VBox(score);
+        m = new VBox(score->dummy()->system());
         m->setTick(Fraction(0, 1));
         score->addMeasure(m, 0);
     } else {
         m = score->measures()->first();
         if (!m->isVBox()) {
-            MeasureBase* mb = new VBox(score);
+            MeasureBase* mb = new VBox(score->dummy()->system());
             mb->setTick(Fraction(0, 1));
             score->addMeasure(mb, m);
             m = mb;
@@ -1345,7 +1346,7 @@ Score::FileError PowerTab::read()
         //
         MeasureBase* measure = pscore->first();
         if (!measure || (measure->type() != ElementType::VBOX)) {
-            MeasureBase* mb = new VBox(pscore);
+            MeasureBase* mb = new VBox(pscore->dummy()->system());
             mb->setTick(Fraction(0, 1));
             pscore->addMeasure(mb, measure);
             measure = mb;

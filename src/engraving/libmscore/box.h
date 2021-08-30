@@ -52,7 +52,7 @@ class Box : public MeasureBase
     bool _isAutoSizeEnabled       { true };
 
 public:
-    Box(const ElementType& type, Score*);
+    Box(const ElementType& type, System* parent);
 
     void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
 
@@ -118,7 +118,7 @@ class HBox final : public Box
     bool _createSystemHeader { true };
 
 public:
-    HBox(Score* score);
+    HBox(System* parent);
     virtual ~HBox() {}
 
     HBox* clone() const override { return new HBox(*this); }
@@ -151,8 +151,8 @@ public:
 class VBox : public Box
 {
 public:
-    VBox(const ElementType& type, Score* score);
-    VBox(Score* score);
+    VBox(const ElementType& type, System* parent);
+    VBox(System* parent);
     virtual ~VBox() {}
 
     VBox* clone() const override { return new VBox(*this); }
@@ -176,8 +176,8 @@ public:
 class FBox : public VBox
 {
 public:
-    FBox(Score* score)
-        : VBox(ElementType::FBOX, score) {}
+    FBox(System* parent)
+        : VBox(ElementType::FBOX, parent) {}
     virtual ~FBox() {}
 
     FBox* clone() const override { return new FBox(*this); }

@@ -63,7 +63,7 @@ public:
     void read(const Segment* fs, const Segment* ls);
     bool write(Score*, const Fraction&) const;
 
-    void appendGap(const Fraction&);
+    void appendGap(const Fraction&, Ms::Score* score);
     bool truncate(const Fraction&);
     void dump() const;
 };

@@ -142,7 +142,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
         if (doBreak) {
             breakMeasure = lc.curMeasure;
             system->removeLastMeasure();
-            lc.curMeasure->setSystem(oldSystem);
+            lc.curMeasure->setParent(oldSystem);
             while (lc.prevMeasure && lc.prevMeasure->noBreak() && system->measures().size() > 1) {
                 // remove however many measures are grouped with nobreak, working backwards
                 // but if too many are grouped, stop before we get 0 measures left on system
@@ -156,7 +156,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
 
                 minWidth -= system->lastMeasure()->width();
                 system->removeLastMeasure();
-                lc.curMeasure->setSystem(oldSystem);
+                lc.curMeasure->setParent(oldSystem);
             }
             break;
         }
@@ -426,7 +426,7 @@ System* LayoutSystem::getNextSystem(LayoutContext& lc, Ms::Score* score)
     bool isVBox = lc.curMeasure->isVBox();
     System* system;
     if (lc.systemList.empty()) {
-        system = new System(score);
+        system = new System(score->dummy()->page());
         lc.systemOldMeasure = 0;
     } else {
         system = lc.systemList.takeFirst();
@@ -583,7 +583,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
                 // the beam and its system may still be referenced when selecting all,
                 // even if the staff is invisible. The old system is invalid and does cause problems in #284012
                 if (e && e->isChordRest() && !score->score()->staff(e->staffIdx())->show() && toChordRest(e)->beam()) {
-                    toChordRest(e)->beam()->setParent(nullptr);
+                    toChordRest(e)->beam()->moveToDummy();
                 }
                 continue;
             }

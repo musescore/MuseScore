@@ -63,10 +63,15 @@ class Tremolo final : public Element
     void layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal spatium);
 
 public:
-    Tremolo(Score*);
+    Tremolo(Chord* parent);
     Tremolo(const Tremolo&);
+
     Tremolo& operator=(const Tremolo&) = delete;
     Tremolo* clone() const override { return new Tremolo(*this); }
+
+    Chord* chord() const { return toChord(parent()); }
+    void setParent(Chord* ch);
+
     int subtype() const override { return static_cast<int>(_tremoloType); }
     QString subtypeName() const override;
 
@@ -76,8 +81,6 @@ public:
     void setTremoloType(const QString& s);
     static TremoloType name2Type(const QString& s);
     static QString type2name(TremoloType t);
-
-    Chord* chord() const { return toChord(parent()); }
 
     void setTremoloType(TremoloType t);
     TremoloType tremoloType() const { return _tremoloType; }

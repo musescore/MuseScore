@@ -114,7 +114,7 @@ static void createMeasures(Ms::Score* score, const ScoreCreateOptions& scoreOpti
         QList<Ms::Rest*> puRests;
         for (Ms::Score* _score : score->scoreList()) {
             Ms::Rest* rest = 0;
-            Ms::Measure* measure = new Ms::Measure(_score);
+            Ms::Measure* measure = new Ms::Measure(_score->dummy()->system());
             measure->setTimesig(timesig);
             measure->setTicks(timesig);
             measure->setTick(tick);
@@ -129,11 +129,11 @@ static void createMeasures(Ms::Score* score, const ScoreCreateOptions& scoreOpti
             for (Ms::Staff* staff : _score->staves()) {
                 int staffIdx = staff->idx();
                 if (tick.isZero()) {
-                    Ms::TimeSig* ts = new Ms::TimeSig(_score);
-                    ts->setTrack(staffIdx * Ms::VOICES);
-                    ts->setSig(timesig, scoreOptions.timesigType);
                     Ms::Measure* m = _score->firstMeasure();
                     Ms::Segment* s = m->getSegment(Ms::SegmentType::TimeSig, Ms::Fraction(0, 1));
+                    Ms::TimeSig* ts = new Ms::TimeSig(s);
+                    ts->setTrack(staffIdx * Ms::VOICES);
+                    ts->setSig(timesig, scoreOptions.timesigType);
                     s->add(ts);
                     Part* part = staff->part();
                     if (!part->instrument()->useDrumset()) {
@@ -149,10 +149,10 @@ static void createMeasures(Ms::Score* score, const ScoreCreateOptions& scoreOpti
                         // do not create empty keysig unless custom or atonal
                         if (nKey.custom() || nKey.isAtonal() || nKey.key() != Key::C) {
                             staff->setKey(Ms::Fraction(0, 1), nKey);
-                            Ms::KeySig* keysig = new Ms::KeySig(score);
+                            Ms::Segment* ss = measure->getSegment(Ms::SegmentType::KeySig, Ms::Fraction(0, 1));
+                            Ms::KeySig* keysig = new Ms::KeySig(ss);
                             keysig->setTrack(staffIdx * Ms::VOICES);
                             keysig->setKeySigEvent(nKey);
-                            Ms::Segment* ss = measure->getSegment(Ms::SegmentType::KeySig, Ms::Fraction(0, 1));
                             ss->add(keysig);
                         }
                     }
@@ -169,31 +169,31 @@ static void createMeasures(Ms::Score* score, const ScoreCreateOptions& scoreOpti
                         Ms::Fraction ltick = tick;
                         int k = 0;
                         foreach (Ms::TDuration d, dList) {
+                            Ms::Segment* seg = measure->getSegment(Ms::SegmentType::ChordRest, ltick);
                             if (k < puRests.count()) {
                                 rest = static_cast<Ms::Rest*>(puRests[k]->linkedClone());
                             } else {
-                                rest = new Ms::Rest(score, d);
+                                rest = new Ms::Rest(seg, d);
                                 puRests.append(rest);
                             }
                             rest->setScore(_score);
                             rest->setTicks(d.fraction());
                             rest->setTrack(staffIdx * Ms::VOICES);
-                            Ms::Segment* seg = measure->getSegment(Ms::SegmentType::ChordRest, ltick);
                             seg->add(rest);
                             ltick += rest->actualTicks();
                             k++;
                         }
                     }
                 } else {
+                    Ms::Segment* seg = measure->getSegment(Ms::SegmentType::ChordRest, tick);
                     if (linkedToPrevious && rest) {
                         rest = static_cast<Ms::Rest*>(rest->linkedClone());
                     } else {
-                        rest = new Ms::Rest(score, Ms::TDuration(Ms::TDuration::DurationType::V_MEASURE));
+                        rest = new Ms::Rest(seg, Ms::TDuration(Ms::TDuration::DurationType::V_MEASURE));
                     }
                     rest->setScore(_score);
                     rest->setTicks(measure->ticks());
                     rest->setTrack(staffIdx * Ms::VOICES);
-                    Ms::Segment* seg = measure->getSegment(Ms::SegmentType::ChordRest, tick);
                     seg->add(rest);
                 }
             }
@@ -245,7 +245,7 @@ mu::Ret MasterNotation::setupNewScore(Ms::MasterScore* score, Ms::MasterScore* t
         Ms::MeasureBase* mb = templateScore->first();
         if (mb && mb->isVBox()) {
             Ms::VBox* tvb = toVBox(mb);
-            nvb = new Ms::VBox(score);
+            nvb = new Ms::VBox(score->dummy()->system());
             nvb->setBoxHeight(tvb->boxHeight());
             nvb->setBoxWidth(tvb->boxWidth());
             nvb->setTopGap(tvb->topGap());
@@ -293,7 +293,7 @@ mu::Ret MasterNotation::setupNewScore(Ms::MasterScore* score, Ms::MasterScore* t
         if (!title.isEmpty() || !subtitle.isEmpty() || !composer.isEmpty() || !lyricist.isEmpty()) {
             Ms::MeasureBase* measure = score->measures()->first();
             if (measure->type() != ElementType::VBOX) {
-                Ms::MeasureBase* nm = nvb ? nvb : new Ms::VBox(score);
+                Ms::MeasureBase* nm = nvb ? nvb : new Ms::VBox(score->dummy()->system());
                 nm->setTick(Ms::Fraction(0, 1));
                 nm->setNext(measure);
                 score->measures()->add(nm);
@@ -379,7 +379,8 @@ mu::Ret MasterNotation::setupNewScore(Ms::MasterScore* score, Ms::MasterScore* t
             break;
         }
 
-        Ms::TempoText* tt = new Ms::TempoText(score);
+        Ms::Segment* seg = score->firstMeasure()->first(Ms::SegmentType::ChordRest);
+        Ms::TempoText* tt = new Ms::TempoText(seg);
         tt->setXmlText(text.arg(bpm));
 
         double tempo = scoreOptions.tempo.valueBpm;
@@ -388,7 +389,6 @@ mu::Ret MasterNotation::setupNewScore(Ms::MasterScore* score, Ms::MasterScore* t
         tt->setTempo(tempo);
         tt->setFollowText(true);
         tt->setTrack(0);
-        Ms::Segment* seg = score->firstMeasure()->first(Ms::SegmentType::ChordRest);
         seg->add(tt);
         score->setTempo(seg, tempo);
     }

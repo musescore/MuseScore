@@ -58,7 +58,7 @@ class TextLine final : public TextLineBase
     Sid getPropertyStyle(Pid) const override;
 
 public:
-    TextLine(Score* s, bool system=false);
+    TextLine(Element* parent, bool system=false);
     TextLine(const TextLine&);
     ~TextLine() {}
 

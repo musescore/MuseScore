@@ -235,7 +235,7 @@ void Measure::fillGap(const Fraction& pos, const Fraction& len, int track, const
     TDuration d;
     d.setVal(len.ticks());
     if (d.isValid()) {
-        Rest* rest = new Rest(score());
+        Rest* rest = new Rest(score()->dummy()->segment());
         rest->setTicks(len);
         rest->setDurationType(d);
         rest->setTrack(track);

@@ -69,9 +69,11 @@ class Tuplet final : public DurationElement
     Fraction addMissingElement(const Fraction& startTick, const Fraction& endTick);
 
 public:
-    Tuplet(Score*);
+    Tuplet(Measure* parent);
     Tuplet(const Tuplet&);
     ~Tuplet();
+
+    void setParent(Measure* parent);
 
     // Score Tree functions
     ScoreElement* treeParent() const override;

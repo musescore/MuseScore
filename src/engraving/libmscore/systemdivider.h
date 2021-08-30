@@ -41,7 +41,7 @@ private:
     Type _dividerType;
 
 public:
-    SystemDivider(Score* s = 0);
+    SystemDivider(System* parent = 0);
     SystemDivider(const SystemDivider&);
 
     SystemDivider* clone() const override { return new SystemDivider(*this); }

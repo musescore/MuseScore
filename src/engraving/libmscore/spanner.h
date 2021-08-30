@@ -175,7 +175,7 @@ protected:
     const std::vector<SpannerSegment*> spannerSegments() const { return segments; }
 
 public:
-    Spanner(const ElementType& type, Score* s, ElementFlags = ElementFlag::NOTHING);
+    Spanner(const ElementType& type, Element* parent, ElementFlags = ElementFlag::NOTHING);
     Spanner(const Spanner&);
     ~Spanner();
 

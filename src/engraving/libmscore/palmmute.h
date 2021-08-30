@@ -61,7 +61,7 @@ protected:
     mu::PointF linePos(Grip, System**) const override;
 
 public:
-    PalmMute(Score* s);
+    PalmMute(Element* parent);
 
     PalmMute* clone() const override { return new PalmMute(*this); }
 

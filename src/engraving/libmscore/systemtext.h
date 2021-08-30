@@ -36,7 +36,7 @@ class SystemText final : public StaffTextBase
     QVariant propertyDefault(Pid id) const override;
 
 public:
-    SystemText(Score* = 0, Tid = Tid::SYSTEM);
+    SystemText(Segment* parent, Tid = Tid::SYSTEM);
 
     SystemText* clone() const override { return new SystemText(*this); }
     Segment* segment() const { return (Segment*)parent(); }

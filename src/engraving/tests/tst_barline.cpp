@@ -147,7 +147,7 @@ void TestBarline::barline02()
     Score* score = readScore(BARLINE_DATA_DIR + "barline02.mscx");
     QVERIFY(score);
     Measure* msr = score->firstMeasure()->nextMeasure();
-    TimeSig* ts  = new TimeSig(score);
+    TimeSig* ts  = new TimeSig(score->dummy()->segment());
     ts->setSig(Fraction(3, 4), TimeSigType::NORMAL);
 
     score->cmdAddTimeSig(msr, 0, ts, false);
@@ -278,7 +278,7 @@ void TestBarline::barline05()
         msr = msr->nextMeasure();
     }
     // create and add a LineBreak element
-    LayoutBreak* lb = new LayoutBreak(score);
+    LayoutBreak* lb = new LayoutBreak(msr);
     lb->setLayoutBreakType(LayoutBreak::Type::LINE);
     lb->setTrack(-1);               // system-level element
     lb->setParent(msr);
@@ -368,7 +368,7 @@ void TestBarline::barline06()
 void dropNormalBarline(Element* e)
 {
     EditData dropData(0);
-    BarLine* barLine = new BarLine(e->score());
+    BarLine* barLine = new BarLine(e->score()->dummy()->segment());
     barLine->setBarLineType(BarLineType::NORMAL);
     dropData.dropElement = barLine;
 

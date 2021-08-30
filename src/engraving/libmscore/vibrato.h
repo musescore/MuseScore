@@ -77,7 +77,7 @@ private:
     bool _playArticulation;
 
 public:
-    Vibrato(Score* s);
+    Vibrato(Element* parent);
     ~Vibrato();
 
     Vibrato* clone() const override { return new Vibrato(*this); }

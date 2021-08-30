@@ -423,8 +423,8 @@ void SlurTieSegment::drawEditMode(mu::draw::Painter* p, EditData& ed)
 //   SlurTie
 //---------------------------------------------------------
 
-SlurTie::SlurTie(const ElementType& type, Score* s)
-    : Spanner(type, s)
+SlurTie::SlurTie(const ElementType& type, Element* parent)
+    : Spanner(type, parent)
 {
     _slurDirection = Direction::AUTO;
     _up            = true;

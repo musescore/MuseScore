@@ -173,7 +173,7 @@ void TestTextBase::musicalSymbolsNotItalic()
 Dynamic* TestTextBase::addDynamic()
 {
     score = readScore("test.mscx");
-    Dynamic* dynamic = new Dynamic(score);
+    Dynamic* dynamic = new Dynamic(score->dummy()->segment());
     dynamic->setXmlText("<sym>dynamicForte</sym>");
     ChordRest* chordRest = score->firstSegment(SegmentType::ChordRest)->nextChordRest(0);
     ed.dropElement = dynamic;
@@ -184,7 +184,7 @@ Dynamic* TestTextBase::addDynamic()
 StaffText* TestTextBase::addStaffText()
 {
     score = readScore("test.mscx");
-    StaffText* staffText = new StaffText(score);
+    StaffText* staffText = new StaffText(score->dummy()->segment());
     ChordRest* chordRest = score->firstSegment(SegmentType::ChordRest)->nextChordRest(0);
     ed.dropElement = staffText;
     chordRest->drop(ed);

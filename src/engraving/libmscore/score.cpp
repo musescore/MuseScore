@@ -34,6 +34,7 @@
 #include "style/style.h"
 #include "style/defaultstyle.h"
 #include "compat/writescorehook.h"
+#include "compat/dummyelement.h"
 #include "io/xml.h"
 
 #include "fermata.h"
@@ -276,7 +277,7 @@ void MeasureBaseList::change(MeasureBase* ob, MeasureBase* nb)
     }
     if (nb->type() == ElementType::HBOX || nb->type() == ElementType::VBOX
         || nb->type() == ElementType::TBOX || nb->type() == ElementType::FBOX) {
-        nb->setSystem(ob->system());
+        nb->setParent(ob->system());
     }
     foreach (Element* e, nb->el()) {
         e->setParent(nb);
@@ -297,7 +298,7 @@ void MeasureBaseList::fixupSystems()
     while (m != _last) {
         m = m->next();
         if (m->prev()->system() && !m->system()) {
-            m->setSystem(m->prev()->system());
+            m->setParent(m->prev()->system());
             if (m->isMeasure() && !toMeasure(m)->hasMMRest()) {
                 m->system()->appendMeasure(m);
             }
@@ -310,7 +311,7 @@ void MeasureBaseList::fixupSystems()
 //---------------------------------------------------------
 
 Score::Score()
-    : ScoreElement(ElementType::SCORE, this), _headersText(MAX_HEADERS, nullptr), _footersText(MAX_FOOTERS, nullptr), _selection(this),
+    : ScoreElement(ElementType::SCORE, nullptr), _headersText(MAX_HEADERS, nullptr), _footersText(MAX_FOOTERS, nullptr), _selection(this),
     m_layout(this)
 {
     Score::validScores.insert(this);
@@ -327,6 +328,8 @@ Score::Score()
     _style  = DefaultStyle::defaultStyle();
 //      accInfo = tr("No selection");     // ??
     accInfo = "No selection";
+
+    m_dummyElement = new mu::engraving::compat::DummyElement(this);
 
 #ifdef ENGRAVING_BUILD_ACCESSIBLE_TREE
     m_accessible = new mu::engraving::AccessibleScore(this);
@@ -416,6 +419,8 @@ Score::~Score()
 
     imageStore.clearUnused();
 
+    delete m_dummyElement;
+
 #ifdef ENGRAVING_BUILD_ACCESSIBLE_TREE
     delete m_accessible;
 #endif
@@ -466,7 +471,7 @@ bool Score::isPaletteScore() const
 
 void Score::onElementDestruction(Element* e)
 {
-    Score* score = e->score();
+    Score* score = e->score(false);
     if (!score || Score::validScores.find(score) == Score::validScores.end()) {
         // No score or the score is already deleted
         return;
@@ -1426,7 +1431,7 @@ Measure* Score::getCreateMeasure(const Fraction& tick)
     if (last == 0 || ((last->tick() + last->ticks()) <= tick)) {
         Fraction lastTick  = last ? (last->tick() + last->ticks()) : Fraction(0, 1);
         while (tick >= lastTick) {
-            Measure* m = new Measure(this);
+            Measure* m = new Measure(this->dummy()->system());
             Fraction ts = sigmap()->timesig(lastTick).timesig();
             m->setTick(lastTick);
             m->setTimesig(ts);
@@ -1451,7 +1456,7 @@ Measure* Score::getCreateMeasure(const Fraction& tick)
 
 void Score::addElement(Element* element)
 {
-    Element* parent = element->parent();
+    Element* parent = element->parentElement();
     element->triggerLayout();
 
 //      qDebug("Score(%p) Element(%p)(%s) parent %p(%s)",
@@ -1577,7 +1582,7 @@ void Score::addElement(Element* element)
 
 void Score::removeElement(Element* element)
 {
-    Element* parent = element->parent();
+    Element* parent = element->parentElement();
     element->triggerLayout();
 
 //      qDebug("Score(%p) Element(%p)(%s) parent %p(%s)",
@@ -1607,7 +1612,7 @@ void Score::removeElement(Element* element)
         if (element->isBox() && system->measures().size() == 1) {
             auto i = std::find(page->systems().begin(), page->systems().end(), system);
             page->systems().erase(i);
-            mb->setSystem(0);
+            mb->moveToDummy();
             if (page->systems().isEmpty()) {
                 // Remove this page, since it is now empty.
                 // This involves renumbering and repositioning all subsequent pages.
@@ -1629,7 +1634,7 @@ void Score::removeElement(Element* element)
     }
 
     if (et == ElementType::BEAM) {            // beam parent does not survive layout
-        element->setParent(0);
+        element->moveToDummy();
         parent = 0;
     }
 
@@ -1711,7 +1716,7 @@ void Score::removeElement(Element* element)
     case ElementType::ARTICULATION:
     case ElementType::ARPEGGIO:
     {
-        Element* cr = element->parent();
+        Element* cr = element->parentElement();
         if (cr->isChord()) {
             createPlayEvents(toChord(cr));
         }
@@ -2136,7 +2141,7 @@ bool Score::appendMeasuresFromScore(Score* score, const Fraction& startTick, con
         if (ostaff->key(otick) != staff->key(ctick)) {
             Segment* ns = firstAppendedMeasure->undoGetSegment(SegmentType::KeySig, ctick);
             KeySigEvent nkse = KeySigEvent(ostaff->keySigEvent(otick));
-            KeySig* nks = new KeySig(this);
+            KeySig* nks = new KeySig(ns);
             nks->setScore(this);
             nks->setTrack(trackIdx);
 
@@ -2207,7 +2212,7 @@ bool Score::appendMeasuresFromScore(Score* score, const Fraction& startTick, con
         }
         Spanner* ns = toSpanner(spanner->clone());
         ns->setScore(this);
-        ns->setParent(0);
+        ns->moveToDummy();
         ns->setTick(spanner->tick() - startTick + tickOfAppend);
         ns->setTick2(spanner->tick2() - startTick + tickOfAppend);
         ns->computeStartElement();
@@ -2238,10 +2243,10 @@ void Score::splitStaff(int staffIdx, int splitPoint)
     int staffIdxPart = staffIdx - p->staff(0)->idx();
     undoInsertStaff(ns, staffIdxPart + 1, false);
 
-    Clef* clef = new Clef(this);
+    Segment* seg = firstMeasure()->getSegment(SegmentType::HeaderClef, Fraction(0, 1));
+    Clef* clef = new Clef(seg);
     clef->setClefType(ClefType::F);
     clef->setTrack((staffIdx + 1) * VOICES);
-    Segment* seg = firstMeasure()->getSegment(SegmentType::HeaderClef, Fraction(0, 1));
     clef->setParent(seg);
     undoAddElement(clef);
     clef->layout();
@@ -2658,10 +2663,11 @@ void Score::adjustKeySigs(int sidx, int eidx, KeyList km)
                 nKey.setKey(transposeKey(nKey.key(), diff, staff->part()->preferSharpFlat()));
             }
             staff->setKey(tick, nKey);
-            KeySig* keysig = new KeySig(this);
+
+            Segment* s = measure->getSegment(SegmentType::KeySig, tick);
+            KeySig* keysig = new KeySig(s);
             keysig->setTrack(staffIdx * VOICES);
             keysig->setKeySigEvent(nKey);
-            Segment* s = measure->getSegment(SegmentType::KeySig, tick);
             s->add(keysig);
         }
     }
@@ -3099,7 +3105,7 @@ void Score::padToggle(Pad p, const EditData& ed)
             changeCRlen(cr, _is.duration());
 
             for (const SymId& articulationId: _is.articulationIds()) {
-                Articulation* na = new Articulation(cr->score());
+                Articulation* na = new Articulation(cr);
                 na->setSymId(articulationId);
                 addArticulation(cr, na);
             }
@@ -3175,7 +3181,7 @@ void Score::selectSingle(Element* e, int staffIdx)
         _is.setTrack(e->track());
         selState = SelState::LIST;
         if (e->type() == ElementType::NOTE) {
-            e = e->parent();
+            e = e->parentElement();
         }
         if (e->isChordRest()) {
             _is.setLastSegment(_is.segment());
@@ -3265,7 +3271,7 @@ void Score::selectRange(Element* e, int staffIdx)
             Element* oe = selection().element();
             if (oe->isNote() || oe->isChordRest()) {
                 if (oe->isNote()) {
-                    oe = oe->parent();
+                    oe = oe->parentElement();
                 }
                 ChordRest* cr = toChordRest(oe);
                 Fraction oetick = cr->segment()->tick();
@@ -3296,7 +3302,7 @@ void Score::selectRange(Element* e, int staffIdx)
         }
     } else if (e->isNote() || e->isChordRest()) {
         if (e->isNote()) {
-            e = e->parent();
+            e = e->parentElement();
         }
         ChordRest* cr = toChordRest(e);
 
@@ -3311,7 +3317,7 @@ void Score::selectRange(Element* e, int staffIdx)
             Element* oe = _selection.element();
             if (oe && (oe->isNote() || oe->isRest() || oe->isMMRest())) {
                 if (oe->isNote()) {
-                    oe = oe->parent();
+                    oe = oe->parentElement();
                 }
                 ChordRest* ocr = toChordRest(oe);
 
@@ -3440,7 +3446,7 @@ void Score::collectMatch(void* data, Element* e)
                 }
                 break;
             }
-            ee = ee->parent();
+            ee = ee->parentElement();
         } while (ee);
     }
 
@@ -3701,7 +3707,7 @@ void Score::lassoSelectEnd(bool convertToRange)
         }
         ++noteRestCount;
         if (e->type() == ElementType::NOTE) {
-            e = e->parent();
+            e = e->parentElement();
         }
         Segment* seg = static_cast<const ChordRest*>(e)->segment();
         if ((startSegment == 0) || (*seg < *startSegment)) {
@@ -3754,7 +3760,7 @@ void Score::addLyrics(const Fraction& tick, int staffIdx, const QString& txt)
         int track = staffIdx * VOICES + voice;
         ChordRest* cr = toChordRest(seg->element(track));
         if (cr) {
-            Lyrics* l = new Lyrics(this);
+            Lyrics* l = new Lyrics(cr);
             l->setXmlText(txt);
             l->setTrack(track);
             cr->add(l);
@@ -4825,7 +4831,7 @@ void Score::changeSelectedNotesVoice(int voice)
                 // existing rest in destination with correct duration;
                 //   replace with chord, then move note in
                 //   this case allows for tuplets, unlike the more general case below
-                dstChord = new Chord(this);
+                dstChord = new Chord(s);
                 dstChord->setTrack(dstTrack);
                 dstChord->setDurationType(chord->durationType());
                 dstChord->setTicks(chord->ticks());
@@ -4858,7 +4864,7 @@ void Score::changeSelectedNotesVoice(int voice)
                 Fraction gapEnd   = ncr ? ncr->tick() : m->tick() + m->ticks();
                 if (gapStart <= s->tick() && gapEnd >= s->tick() + chord->actualTicks()) {
                     // big enough gap found
-                    dstChord = new Chord(this);
+                    dstChord = new Chord(s);
                     dstChord->setTrack(dstTrack);
                     dstChord->setDurationType(chord->durationType());
                     dstChord->setTicks(chord->ticks());
@@ -4898,7 +4904,7 @@ void Score::changeSelectedNotesVoice(int voice)
                     undoRemoveElement(note);
                 } else if (notes == 1) {
                     // create rest to leave behind
-                    Rest* r = new Rest(this);
+                    Rest* r = new Rest(s);
                     r->setTrack(chord->track());
                     r->setDurationType(chord->durationType());
                     r->setTicks(chord->ticks());

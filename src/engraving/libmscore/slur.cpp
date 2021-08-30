@@ -959,8 +959,8 @@ void Slur::slurPos(SlurPos* sp)
 //   Slur
 //---------------------------------------------------------
 
-Slur::Slur(Score* s)
-    : SlurTie(ElementType::SLUR, s)
+Slur::Slur(Element* parent)
+    : SlurTie(ElementType::SLUR, parent)
 {
     setAnchor(Anchor::CHORD);
 }

@@ -117,15 +117,15 @@ void createClef(ClefType clefType, Staff* staff, int tick, bool isSmall = false)
     if (tick == 0) {
         staff->setDefaultClefType(ClefTypeList(clefType, clefType));
     } else {
-        Clef* clef = new Clef(staff->score());
+        Measure* m = staff->score()->tick2measure(Fraction::fromTicks(tick));
+        Segment* seg = m->getSegment(SegmentType::Clef, Fraction::fromTicks(tick));
+        Clef* clef = new Clef(seg);
         clef->setClefType(clefType);
         const int track = staff->idx() * VOICES;
         clef->setTrack(track);
         clef->setGenerated(false);
         clef->setMag(staff->staffMag(Fraction::fromTicks(tick)));
         clef->setSmall(isSmall);
-        Measure* m = staff->score()->tick2measure(Fraction::fromTicks(tick));
-        Segment* seg = m->getSegment(SegmentType::Clef, Fraction::fromTicks(tick));
         seg->add(clef);
     }
 }

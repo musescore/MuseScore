@@ -172,7 +172,7 @@ class FretDiagram final : public Element
     void removeDotsMarkers(int ss, int es, int fret);
 
 public:
-    FretDiagram(Score* s = nullptr);
+    FretDiagram(Segment* parent = nullptr);
     FretDiagram(const FretDiagram&);
     ~FretDiagram();
 

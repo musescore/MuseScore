@@ -102,7 +102,7 @@ class Hairpin final : public TextLineBase
     Sid getPropertyStyle(Pid) const override;
 
 public:
-    Hairpin(Score* s);
+    Hairpin(Segment* parent);
 
     Hairpin* clone() const override { return new Hairpin(*this); }
 

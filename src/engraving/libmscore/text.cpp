@@ -39,8 +39,8 @@ static const ElementStyle defaultStyle {
 //   Text
 //---------------------------------------------------------
 
-Text::Text(Score* s, Tid tid)
-    : TextBase(ElementType::TEXT, s, tid)
+Text::Text(ScoreElement* parent, Tid tid)
+    : TextBase(ElementType::TEXT, parent, tid)
 {
     initElementStyle(&defaultStyle);
 }

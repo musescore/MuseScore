@@ -531,7 +531,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
             Segment* seg = firstMeasure()->undoGetSegmentR(SegmentType::KeySig, Fraction(0, 1));
             KeySig* ks = toKeySig(seg->element(track));
             if (!ks) {
-                ks = new KeySig(this);
+                ks = new KeySig(seg);
                 ks->setTrack(track);
                 Key nKey = transposeKey(Key::C, interval, ks->part()->preferSharpFlat());
                 ks->setKey(nKey);
@@ -619,14 +619,14 @@ void Score::transposeKeys(int staffStart, int staffEnd, const Fraction& ts, cons
             }
         }
         if (createKey && firstMeasure()) {
-            KeySig* ks = new KeySig(this);
+            Segment* seg = firstMeasure()->undoGetSegmentR(SegmentType::KeySig, Fraction(0, 1));
+            seg->setHeader(true);
+            KeySig* ks = new KeySig(seg);
             ks->setTrack(staffIdx * VOICES);
             Key nKey = transposeKey(Key::C, firstInterval, ks->part()->preferSharpFlat());
             KeySigEvent ke;
             ke.setKey(nKey);
             ks->setKeySigEvent(ke);
-            Segment* seg = firstMeasure()->undoGetSegmentR(SegmentType::KeySig, Fraction(0, 1));
-            seg->setHeader(true);
             ks->setParent(seg);
             undoAddElement(ks);
         }

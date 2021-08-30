@@ -63,7 +63,7 @@ enum class ActionIconType {
 class ActionIcon final : public Element
 {
 public:
-    ActionIcon(Score* score);
+    ActionIcon(Element* score);
     ~ActionIcon() override = default;
 
     ActionIcon* clone() const override;

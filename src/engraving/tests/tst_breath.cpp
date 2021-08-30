@@ -76,7 +76,7 @@ void TestBreath::breath()
     score->cmdSelectAll();
     for (Element* e : score->selection().elements()) {
         EditData dd(0);
-        Breath* b = new Breath(score);
+        Breath* b = new Breath(score->dummy()->segment());
         b->setSymId(SymId::breathMarkComma);
         dd.dropElement = b;
         if (e->acceptDrop(dd)) {

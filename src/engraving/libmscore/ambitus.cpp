@@ -50,8 +50,8 @@ static const qreal LINEOFFSET_DEFAULT      = 0.8;               // the distance 
 //   Ambitus
 //---------------------------------------------------------
 
-Ambitus::Ambitus(Score* s)
-    : Element(ElementType::AMBITUS, s, ElementFlag::ON_STAFF), _topAccid(s), _bottomAccid(s)
+Ambitus::Ambitus(Segment* parent)
+    : Element(ElementType::AMBITUS, parent, ElementFlag::ON_STAFF), _topAccid(parent), _bottomAccid(parent)
 {
     _noteHeadGroup    = NOTEHEADGROUP_DEFAULT;
     _noteHeadType     = NOTEHEADTYPE_DEFAULT;

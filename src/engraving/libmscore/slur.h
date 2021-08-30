@@ -67,7 +67,7 @@ class Slur final : public SlurTie
     int _sourceStemArrangement = -1;
 
 public:
-    Slur(Score* = 0);
+    Slur(Element* parent);
     Slur(const Slur&);
     ~Slur() {}
 

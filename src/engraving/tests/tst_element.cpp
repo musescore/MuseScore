@@ -105,7 +105,7 @@ void TestElement::testIds()
     };
 
     for (ElementType t : ids) {
-        Element* e = Element::create(t, score);
+        Element* e = Element::create(t, score->dummy());
         Element* ee = writeReadElement(e);
         QCOMPARE(e->type(), ee->type());
         delete e;

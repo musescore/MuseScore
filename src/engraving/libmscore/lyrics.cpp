@@ -51,8 +51,8 @@ static const ElementStyle lyricsElementStyle {
 //   Lyrics
 //---------------------------------------------------------
 
-Lyrics::Lyrics(Score* s)
-    : TextBase(ElementType::LYRICS, s, Tid::LYRICS_ODD)
+Lyrics::Lyrics(Element* parent)
+    : TextBase(ElementType::LYRICS, parent, Tid::LYRICS_ODD)
 {
     _even       = false;
     initElementStyle(&lyricsElementStyle);
@@ -186,7 +186,7 @@ void Lyrics::remove(Element* el)
             // be sure each finds a clean context
             LyricsLine* separ = _separator;
             _separator = 0;
-            separ->setParent(0);
+            separ->moveToDummy();
             separ->removeUnmanaged();
         }
     } else {
@@ -337,7 +337,7 @@ void Lyrics::layout()
 
     if (_ticks > Fraction(0, 1) || _syllabic == Syllabic::BEGIN || _syllabic == Syllabic::MIDDLE) {
         if (!_separator) {
-            _separator = new LyricsLine(score());
+            _separator = new LyricsLine(score()->dummy());
             _separator->setTick(cr->tick());
             score()->addUnmanagedSpanner(_separator);
         }

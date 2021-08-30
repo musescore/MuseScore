@@ -230,8 +230,8 @@ int Chord::downString() const
 //   Chord
 //---------------------------------------------------------
 
-Chord::Chord(Score* s)
-    : ChordRest(ElementType::CHORD, s)
+Chord::Chord(Segment* parent)
+    : ChordRest(ElementType::CHORD, parent)
 {
     _ledgerLines      = 0;
     _stem             = 0;
@@ -556,7 +556,9 @@ void Chord::setTremolo(Tremolo* tr)
 
 void Chord::add(Element* e)
 {
-    e->setParent(this);
+    if (e->parent() != this) {
+        e->setParent(this);
+    }
     e->setTrack(track());
     switch (e->type()) {
     case ElementType::NOTE:
@@ -1141,19 +1143,19 @@ bool Chord::readProperties(XmlReader& e)
     const QStringRef& tag(e.name());
 
     if (tag == "Note") {
-        Note* note = new Note(score());
+        Note* note = new Note(this);
         // the note needs to know the properties of the track it belongs to
         note->setTrack(track());
-        note->setChord(this);
+        note->setParent(this);
         note->read(e);
         add(note);
     } else if (ChordRest::readProperties(e)) {
     } else if (tag == "Stem") {
-        Stem* s = new Stem(score());
+        Stem* s = new Stem(this);
         s->read(e);
         add(s);
     } else if (tag == "Hook") {
-        _hook = new Hook(score());
+        _hook = new Hook(this);
         _hook->read(e);
         add(_hook);
     } else if (tag == "appoggiatura") {
@@ -1181,26 +1183,26 @@ bool Chord::readProperties(XmlReader& e)
         _noteType = NoteType::GRACE32_AFTER;
         e.readNext();
     } else if (tag == "StemSlash") {
-        StemSlash* ss = new StemSlash(score());
+        StemSlash* ss = new StemSlash(this);
         ss->read(e);
         add(ss);
     } else if (readProperty(tag, e, Pid::STEM_DIRECTION)) {
     } else if (tag == "noStem") {
         _noStem = e.readInt();
     } else if (tag == "Arpeggio") {
-        _arpeggio = new Arpeggio(score());
+        _arpeggio = new Arpeggio(this);
         _arpeggio->setTrack(track());
         _arpeggio->read(e);
         _arpeggio->setParent(this);
     } else if (tag == "Tremolo") {
-        _tremolo = new Tremolo(score());
+        _tremolo = new Tremolo(this);
         _tremolo->setTrack(track());
         _tremolo->read(e);
         _tremolo->setParent(this);
         _tremolo->setDurationType(durationType());
     } else if (tag == "tickOffset") {     // obsolete
     } else if (tag == "ChordLine") {
-        ChordLine* cl = new ChordLine(score());
+        ChordLine* cl = new ChordLine(this);
         cl->read(e);
         add(cl);
     } else {
@@ -1504,14 +1506,14 @@ void Chord::layoutStem1()
     if (durationType().hasStem()
         && !(_noStem || (measure() && measure()->stemless(staffIdx())) || (st && st->isTabStaff() && st->stemless()))) {
         if (!_stem) {
-            Stem* stem = new Stem(score());
+            Stem* stem = new Stem(this);
             stem->setParent(this);
             stem->setGenerated(true);
             score()->undoAddElement(stem);
         }
         if ((_noteType == NoteType::ACCIACCATURA) && !(beam() && beam()->elements().front() != this)) {
             if (!_stemSlash) {
-                add(new StemSlash(score()));
+                add(new StemSlash(this));
             }
         } else if (_stemSlash) {
             remove(_stemSlash);
@@ -1552,7 +1554,7 @@ void Chord::layoutStem()
 
     if (hookIdx && !(noStem() || measure()->stemless(staffIdx()))) {
         if (!hook()) {
-            Hook* hook = new Hook(score());
+            Hook* hook = new Hook(this);
             hook->setParent(this);
             hook->setGenerated(true);
             score()->undoAddElement(hook);
@@ -2285,7 +2287,7 @@ void Chord::layoutTablature()
     // set stem position (stem length is set in Chord:layoutStem() )
     else {
         if (_stem == 0) {
-            Stem* stem = new Stem(score());
+            Stem* stem = new Stem(this);
             stem->setParent(this);
             score()->undo(new AddElement(stem));
         }
@@ -2349,7 +2351,7 @@ void Chord::layoutTablature()
         if (needTabDur) {
             // symbol needed; if not exist, create; if exists, update duration
             if (!_tabDur) {
-                _tabDur = new TabDurationSymbol(score(), tab, durationType().type(), dots());
+                _tabDur = new TabDurationSymbol(this, tab, durationType().type(), dots());
             } else {
                 _tabDur->setDuration(durationType().type(), dots(), tab);
             }
@@ -2904,7 +2906,7 @@ void Chord::updateArticulations(const std::set<SymId>& newArticulationIds, Artic
 
     std::set<SymId> result = joinArticulations(articulationIds);
     for (const SymId& articulationSymbolId: result) {
-        Articulation* newArticulation = new Articulation(score());
+        Articulation* newArticulation = new Articulation(score()->dummy()->chord());
         newArticulation->setSymId(articulationSymbolId);
         score()->addArticulation(this, newArticulation);
     }
@@ -3095,8 +3097,8 @@ qreal Chord::mag() const
 
 Segment* Chord::segment() const
 {
-    Element* e = parent();
-    for (; e && e->type() != ElementType::SEGMENT; e = e->parent()) {
+    Element* e = parentElement();
+    for (; e && e->type() != ElementType::SEGMENT; e = e->parentElement()) {
     }
     return toSegment(e);
 }
@@ -3107,8 +3109,8 @@ Segment* Chord::segment() const
 
 Measure* Chord::measure() const
 {
-    Element* e = parent();
-    for (; e && e->type() != ElementType::MEASURE; e = e->parent()) {
+    Element* e = parentElement();
+    for (; e && e->type() != ElementType::MEASURE; e = e->parentElement()) {
     }
     return toMeasure(e);
 }
@@ -3328,7 +3330,7 @@ Element* Chord::nextElement()
         break;
 
     case ElementType::ACCIDENTAL:
-        e = e->parent();
+        e = e->parentElement();
     // fall through
 
     case ElementType::NOTE: {

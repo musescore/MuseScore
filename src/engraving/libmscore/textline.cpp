@@ -138,8 +138,8 @@ void TextLineSegment::layout()
 //   TextLine
 //---------------------------------------------------------
 
-TextLine::TextLine(Score* s, bool system)
-    : TextLineBase(ElementType::TEXTLINE, s)
+TextLine::TextLine(Element* parent, bool system)
+    : TextLineBase(ElementType::TEXTLINE, parent)
 {
     setSystemFlag(system);
 

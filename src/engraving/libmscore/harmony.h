@@ -120,7 +120,7 @@ class Harmony final : public TextBase
     Harmony* findInSeg(Segment* seg) const;
 
 public:
-    Harmony(Score* = 0);
+    Harmony(Segment* parent = 0);
     Harmony(const Harmony&);
     ~Harmony();
 

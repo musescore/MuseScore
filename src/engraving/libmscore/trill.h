@@ -87,7 +87,7 @@ private:
     bool _playArticulation;
 
 public:
-    Trill(Score* s);
+    Trill(Element* parent);
     Trill(const Trill& t);
     ~Trill();
 

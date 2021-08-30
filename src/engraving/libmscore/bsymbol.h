@@ -37,7 +37,7 @@ class BSymbol : public Element
     Align _align;
 
 public:
-    BSymbol(const ElementType& type, Score* s, ElementFlags f = ElementFlag::NOTHING);
+    BSymbol(const ElementType& type, Element* parent, ElementFlags f = ElementFlag::NOTHING);
     BSymbol(const BSymbol&);
 
     // Score Tree functions

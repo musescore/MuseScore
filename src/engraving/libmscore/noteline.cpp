@@ -24,8 +24,8 @@
 #include "textline.h"
 
 namespace Ms {
-NoteLine::NoteLine(Score* s)
-    : TextLineBase(ElementType::NOTELINE, s)
+NoteLine::NoteLine(Element* parent)
+    : TextLineBase(ElementType::NOTELINE, parent)
 {
 //TODO-ws      init();
 }

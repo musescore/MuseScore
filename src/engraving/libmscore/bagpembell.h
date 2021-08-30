@@ -63,8 +63,8 @@ class BagpipeEmbellishment final : public Element
     void drawGraceNote(mu::draw::Painter*, const BEDrawingDataX&, const BEDrawingDataY&, SymId, const qreal x, const bool drawFlag) const;
 
 public:
-    BagpipeEmbellishment(Score* s)
-        : Element(ElementType::BAGPIPE_EMBELLISHMENT, s), _embelType(0) { }
+    BagpipeEmbellishment(Element* parent)
+        : Element(ElementType::BAGPIPE_EMBELLISHMENT, parent), _embelType(0) { }
 
     BagpipeEmbellishment* clone() const override { return new BagpipeEmbellishment(*this); }
 

@@ -75,7 +75,7 @@ class Tie final : public SlurTie
     static Note* editEndNote;
 
 public:
-    Tie(Score* = 0);
+    Tie(Element* parent = 0);
 
     Tie* clone() const override { return new Tie(*this); }
 

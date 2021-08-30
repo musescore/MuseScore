@@ -111,15 +111,15 @@ void DrumsetPalette::updateDrumset()
             up = line > 4;
         }
 
-        auto chord = std::make_shared<Chord>(gpaletteScore);
+        auto chord = std::make_shared<Chord>(gpaletteScore->dummy()->segment());
         chord->setDurationType(TDuration::DurationType::V_QUARTER);
         chord->setStemDirection(dir);
         chord->setUp(up);
         chord->setTrack(voice);
-        Stem* stem = new Stem(gpaletteScore);
+        Stem* stem = new Stem(chord.get());
         stem->setLen((up ? -3.0 : 3.0) * _spatium);
         chord->add(stem);
-        Note* note = new Note(gpaletteScore);
+        Note* note = new Note(chord.get());
         note->setMark(true);
         note->setParent(chord.get());
         note->setTrack(voice);

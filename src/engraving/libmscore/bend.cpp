@@ -84,8 +84,8 @@ static const QList<PitchValue> PREBEND_RELEASE_CURVE = { PitchValue(0, 100),
 //   Bend
 //---------------------------------------------------------
 
-Bend::Bend(Score* s)
-    : Element(ElementType::BEND, s, ElementFlag::MOVABLE)
+Bend::Bend(Note* parent)
+    : Element(ElementType::BEND, parent, ElementFlag::MOVABLE)
 {
     initElementStyle(&bendStyle);
 }
