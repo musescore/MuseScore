@@ -172,10 +172,9 @@ public:
     Q_ENUM(Type);
 
     NoteHead(Score* s = 0)
-        : Symbol(s) {}
+        : Symbol(ElementType::NOTEHEAD, s) {}
     NoteHead& operator=(const NoteHead&) = delete;
     NoteHead* clone() const override { return new NoteHead(*this); }
-    ElementType type() const override { return ElementType::NOTEHEAD; }
 
     Group headGroup() const;
 
@@ -342,7 +341,6 @@ public:
 
     Note& operator=(const Note&) = delete;
     virtual Note* clone() const override { return new Note(*this, false); }
-    ElementType type() const override { return ElementType::NOTE; }
 
     void undoUnlink() override;
 

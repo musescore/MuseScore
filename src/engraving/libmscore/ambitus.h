@@ -53,7 +53,6 @@ class Ambitus final : public Element
 public:
     Ambitus(Score* s);
 
-    ElementType type() const override { return ElementType::AMBITUS; }
     Ambitus* clone() const override { return new Ambitus(*this); }
 
     // Score Tree functions

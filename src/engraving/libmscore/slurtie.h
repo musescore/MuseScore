@@ -101,7 +101,7 @@ protected:
     QVector<mu::LineF> gripAnchorLines(Grip grip) const override;
 
 public:
-    SlurTieSegment(Score*);
+    SlurTieSegment(const ElementType& type, Score*);
     SlurTieSegment(const SlurTieSegment&);
     virtual void spatiumChanged(qreal, qreal) override;
     SlurTie* slurTie() const { return (SlurTie*)spanner(); }
@@ -152,7 +152,7 @@ protected:
     void fixupSegments(unsigned nsegs);
 
 public:
-    SlurTie(Score*);
+    SlurTie(const ElementType& type, Score*);
     SlurTie(const SlurTie&);
     ~SlurTie();
 

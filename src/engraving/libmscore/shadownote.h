@@ -56,7 +56,6 @@ public:
     ShadowNote(Score*);
 
     ShadowNote* clone() const override { return new ShadowNote(*this); }
-    ElementType type() const override { return ElementType::SHADOW_NOTE; }
 
     bool isValid() const;
 

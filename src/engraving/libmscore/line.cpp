@@ -785,8 +785,8 @@ RectF LineSegment::drag(EditData& ed)
 //   SLine
 //---------------------------------------------------------
 
-SLine::SLine(Score* s, ElementFlags f)
-    : Spanner(s, f)
+SLine::SLine(const ElementType& type, Score* s, ElementFlags f)
+    : Spanner(type, s, f)
 {
     setTrack(0);
     _lineWidth = 0.15 * spatium();

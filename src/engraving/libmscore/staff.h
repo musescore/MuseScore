@@ -130,8 +130,6 @@ public:
     ID id() const;
     void setId(const ID& id);
 
-    ElementType type() const override { return ElementType::STAFF; }
-
     void setScore(Score* score) override;
 
     bool isTop() const;

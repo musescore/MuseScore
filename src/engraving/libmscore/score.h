@@ -603,8 +603,6 @@ public:
     int treeChildCount() const override;
     void dumpScoreTree();  // for debugging purposes
 
-    virtual ElementType type() const override { return ElementType::SCORE; }
-
     void rebuildBspTree();
     bool noStaves() const { return _staves.empty(); }
     void insertPart(Part*, int);

@@ -92,7 +92,6 @@ public:
     int treeChildCount() const override;
 
     BarLine* clone() const override { return new BarLine(*this); }
-    ElementType type() const override { return ElementType::BAR_LINE; }
     Fraction playTick() const override;
     void write(XmlWriter& xml) const override;
     void read(XmlReader&) override;

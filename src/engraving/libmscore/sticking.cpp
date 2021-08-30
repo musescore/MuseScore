@@ -40,7 +40,7 @@ static const ElementStyle stickingStyle {
 //---------------------------------------------------------
 
 Sticking::Sticking(Score* s)
-    : TextBase(s, Tid::STICKING, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+    : TextBase(ElementType::STICKING, s, Tid::STICKING, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     initElementStyle(&stickingStyle);
 }

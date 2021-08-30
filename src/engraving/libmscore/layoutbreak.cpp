@@ -41,7 +41,7 @@ static const ElementStyle sectionBreakStyle {
 //---------------------------------------------------------
 
 LayoutBreak::LayoutBreak(Score* score)
-    : Element(score, ElementFlag::SYSTEM | ElementFlag::HAS_TAG)
+    : Element(ElementType::LAYOUT_BREAK, score, ElementFlag::SYSTEM | ElementFlag::HAS_TAG)
 {
     _pause = 0.;
     _startWithLongNames = false;

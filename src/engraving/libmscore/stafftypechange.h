@@ -46,7 +46,6 @@ public:
     StaffTypeChange(const StaffTypeChange&);
 
     StaffTypeChange* clone() const override { return new StaffTypeChange(*this); }
-    ElementType type() const override { return ElementType::STAFFTYPE_CHANGE; }
 
     void write(XmlWriter&) const override;
     void read(XmlReader&) override;

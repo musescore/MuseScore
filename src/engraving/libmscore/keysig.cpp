@@ -62,7 +62,7 @@ const char* keyNames[] = {
 //---------------------------------------------------------
 
 KeySig::KeySig(Score* s)
-    : Element(s, ElementFlag::ON_STAFF)
+    : Element(ElementType::KEYSIG, s, ElementFlag::ON_STAFF)
 {
     _showCourtesy = true;
     _hideNaturals = false;

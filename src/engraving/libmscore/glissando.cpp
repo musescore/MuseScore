@@ -181,7 +181,7 @@ Element* GlissandoSegment::propertyDelegate(Pid pid)
 //=========================================================
 
 Glissando::Glissando(Score* s)
-    : SLine(s, ElementFlag::MOVABLE)
+    : SLine(ElementType::GLISSANDO, s, ElementFlag::MOVABLE)
 {
     setAnchor(Spanner::Anchor::NOTE);
     setDiagonal(true);

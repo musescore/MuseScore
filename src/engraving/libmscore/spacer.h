@@ -54,7 +54,6 @@ public:
     Spacer(const Spacer&);
 
     Spacer* clone() const override { return new Spacer(*this); }
-    ElementType type() const override { return ElementType::SPACER; }
     Measure* measure() const { return toMeasure(parent()); }
 
     SpacerType spacerType() const { return _spacerType; }

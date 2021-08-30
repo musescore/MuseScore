@@ -68,7 +68,7 @@ static const char* tremoloName[] = {
 };
 
 Tremolo::Tremolo(Score* score)
-    : Element(score, ElementFlag::MOVABLE)
+    : Element(ElementType::TREMOLO, score, ElementFlag::MOVABLE)
 {
     initElementStyle(&tremoloStyle);
 }

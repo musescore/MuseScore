@@ -43,7 +43,6 @@ public:
     ~NoteLine() {}
 
     NoteLine* clone() const override { return new NoteLine(*this); }
-    ElementType type() const override { return ElementType::NOTELINE; }
 
     void setStartNote(Note* n) { _startNote = n; }
     Note* startNote() const { return _startNote; }

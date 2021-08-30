@@ -39,16 +39,19 @@ class Rest : public ChordRest
 {
 public:
     Rest(Score* s = 0);
+    Rest(const ElementType& type, Score* s = 0);
     Rest(Score*, const TDuration&);
+    Rest(const ElementType& type, Score*, const TDuration&);
     Rest(const Rest&, bool link = false);
     ~Rest() { qDeleteAll(m_dots); }
+
+    void hack_toRestType();
 
     // Score Tree functions
     ScoreElement* treeParent() const override;
     ScoreElement* treeChild(int idx) const override;
     int treeChildCount() const override;
 
-    virtual ElementType type() const override { return ElementType::REST; }
     Rest& operator=(const Rest&) = delete;
 
     Rest* clone() const override { return new Rest(*this, false); }

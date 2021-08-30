@@ -32,7 +32,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 Lasso::Lasso(Score* s)
-    : Element(s)
+    : Element(ElementType::LASSO, s)
 {
     setVisible(false);
 }

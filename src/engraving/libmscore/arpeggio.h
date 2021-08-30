@@ -64,7 +64,6 @@ public:
     Arpeggio(Score* s);
 
     Arpeggio* clone() const override { return new Arpeggio(*this); }
-    ElementType type() const override { return ElementType::ARPEGGIO; }
 
     ArpeggioType arpeggioType() const { return _arpeggioType; }
     void setArpeggioType(ArpeggioType v) { _arpeggioType = v; }

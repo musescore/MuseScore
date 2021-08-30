@@ -191,6 +191,7 @@ class ScoreElement
 {
     INJECT_STATIC(engraving, mu::diagnostics::IEngravingElementsProvider, elementsProvider)
 
+    ElementType m_type = ElementType::INVALID;
     Score* _score;
     static ElementStyle const emptyStyle;
 
@@ -200,11 +201,16 @@ protected:
     LinkedElements* _links            { 0 };
     virtual int getPropertyFlagsIdx(Pid id) const;
 
+    //! NOTE For compatibility reasons, hope, we will remove the need for this method.
+    void hack_setType(const ElementType& t) { m_type = t; }
+
 public:
-    ScoreElement(Score* s);
+    ScoreElement(const ElementType& type, Score* s);
     ScoreElement(const ScoreElement& se);
 
     virtual ~ScoreElement();
+
+    inline ElementType type() const { return m_type; }
 
     // Score Tree functions
     virtual ScoreElement* treeParent() const { return nullptr; }
@@ -248,7 +254,6 @@ public:
     virtual void setScore(Score* s) { _score = s; }
     const char* name() const;
     virtual QString userName() const;
-    virtual ElementType type() const = 0;
 
     static ElementType name2type(const QStringRef&, bool silent = false);
     static ElementType name2type(const QString& s) { return name2type(QStringRef(&s)); }

@@ -51,7 +51,6 @@ public:
     TempoText(Score*);
 
     TempoText* clone() const override { return new TempoText(*this); }
-    ElementType type() const override { return ElementType::TEMPO_TEXT; }
 
     void write(XmlWriter& xml) const override;
     void read(XmlReader&) override;

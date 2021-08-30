@@ -87,7 +87,7 @@ protected:
     void cleanupLayoutBreaks(bool undo);
 
 public:
-    MeasureBase(Score* score = 0);
+    MeasureBase(const ElementType& type, Score* score = 0);
     ~MeasureBase();
     MeasureBase(const MeasureBase&);
 

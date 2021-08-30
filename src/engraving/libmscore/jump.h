@@ -62,7 +62,7 @@ public:
     QString jumpTypeUserName() const;
 
     Jump* clone() const override { return new Jump(*this); }
-    ElementType type() const override { return ElementType::JUMP; }
+
     int subtype() const override { return int(jumpType()); }
 
     Measure* measure() const { return toMeasure(parent()); }

@@ -39,7 +39,6 @@ public:
     SystemText(Score* = 0, Tid = Tid::SYSTEM);
 
     SystemText* clone() const override { return new SystemText(*this); }
-    ElementType type() const override { return ElementType::SYSTEM_TEXT; }
     Segment* segment() const { return (Segment*)parent(); }
 };
 }     // namespace Ms

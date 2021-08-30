@@ -43,7 +43,7 @@ const char* scorelineNames[] = {
 //---------------------------------------------------------
 
 ChordLine::ChordLine(Score* s)
-    : Element(s, ElementFlag::MOVABLE)
+    : Element(ElementType::CHORDLINE, s, ElementFlag::MOVABLE)
 {
     modified = false;
     _chordLineType = ChordLineType::NOTYPE;

@@ -152,7 +152,6 @@ class Clef final : public Element
 public:
     Clef(Score*);
     Clef* clone() const override { return new Clef(*this); }
-    ElementType type() const override { return ElementType::CLEF; }
     qreal mag() const override;
 
     Segment* segment() const { return (Segment*)parent(); }

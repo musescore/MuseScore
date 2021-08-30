@@ -65,7 +65,7 @@ static const ElementStyle fretStyle {
 //---------------------------------------------------------
 
 FretDiagram::FretDiagram(Score* score)
-    : Element(score, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+    : Element(ElementType::FRET_DIAGRAM, score, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     font.setFamily("FreeSans");
     font.setPointSizeF(4.0 * mag());

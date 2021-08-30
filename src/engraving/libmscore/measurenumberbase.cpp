@@ -33,8 +33,8 @@ namespace Ms {
 //   MeasureNumberBase
 //---------------------------------------------------------
 
-MeasureNumberBase::MeasureNumberBase(Score* s, Tid tid)
-    : TextBase(s, tid)
+MeasureNumberBase::MeasureNumberBase(const ElementType& type, Score* s, Tid tid)
+    : TextBase(type, s, tid)
 {
     setFlag(ElementFlag::ON_STAFF, true);
 }

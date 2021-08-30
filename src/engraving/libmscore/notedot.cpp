@@ -35,7 +35,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 NoteDot::NoteDot(Score* s)
-    : Element(s)
+    : Element(ElementType::NOTEDOT, s)
 {
     setFlag(ElementFlag::MOVABLE, false);
 }

@@ -68,7 +68,7 @@ Marker::Marker(Score* s)
 }
 
 Marker::Marker(Score* s, Tid tid)
-    : TextBase(s, tid, ElementFlag::MOVABLE | ElementFlag::ON_STAFF | ElementFlag::SYSTEM)
+    : TextBase(ElementType::MARKER, s, tid, ElementFlag::MOVABLE | ElementFlag::ON_STAFF | ElementFlag::SYSTEM)
 {
     initElementStyle(&markerStyle);
     _markerType = Type::FINE;

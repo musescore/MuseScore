@@ -50,7 +50,7 @@ static bool defaultSizeIsSpatium    = true;
 //---------------------------------------------------------
 
 Image::Image(Score* s)
-    : BSymbol(s, ElementFlag::MOVABLE)
+    : BSymbol(ElementType::IMAGE, s, ElementFlag::MOVABLE)
 {
     imageType        = ImageType::NONE;
     rasterDoc        = 0;

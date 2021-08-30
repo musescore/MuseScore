@@ -51,10 +51,10 @@ protected:
     void startDrag(EditData&) override;
 
 public:
-    LineSegment(Spanner* sp, Score* s, ElementFlags f = ElementFlag::NOTHING)
-        : SpannerSegment(sp, s, f) {}
-    LineSegment(Score* s, ElementFlags f = ElementFlag::NOTHING)
-        : SpannerSegment(s, f) {}
+    LineSegment(const ElementType& type, Spanner* sp, Score* s, ElementFlags f = ElementFlag::NOTHING)
+        : SpannerSegment(type, sp, s, f) {}
+    LineSegment(const ElementType& type, Score* s, ElementFlags f = ElementFlag::NOTHING)
+        : SpannerSegment(type, s, f) {}
     LineSegment(const LineSegment&);
     SLine* line() const { return (SLine*)spanner(); }
     virtual void spatiumChanged(qreal, qreal) override;
@@ -104,7 +104,7 @@ protected:
     virtual mu::PointF linePos(Grip, System** system) const;
 
 public:
-    SLine(Score* s, ElementFlags = ElementFlag::NOTHING);
+    SLine(const ElementType& type, Score* s, ElementFlags = ElementFlag::NOTHING);
     SLine(const SLine&);
 
     virtual void layout() override;

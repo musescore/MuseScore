@@ -44,7 +44,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 TBox::TBox(Score* score)
-    : VBox(score)
+    : VBox(ElementType::TBOX, score)
 {
     setBoxHeight(Spatium(1));
     _text  = new Text(score, Tid::FRAME);

@@ -100,7 +100,6 @@ public:
     void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
 
     Beam* clone() const override { return new Beam(*this); }
-    ElementType type() const override { return ElementType::BEAM; }
     mu::PointF pagePos() const override;      ///< position in page coordinates
     mu::PointF canvasPos() const override;    ///< position in page coordinates
 

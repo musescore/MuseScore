@@ -28,18 +28,13 @@ using namespace mu;
 
 namespace Ms {
 ActionIcon::ActionIcon(Score* score)
-    : Element(score)
+    : Element(ElementType::ACTION_ICON, score)
 {
 }
 
 ActionIcon* ActionIcon::clone() const
 {
     return new ActionIcon(*this);
-}
-
-ElementType ActionIcon::type() const
-{
-    return ElementType::ACTION_ICON;
 }
 
 ActionIconType ActionIcon::actionType() const

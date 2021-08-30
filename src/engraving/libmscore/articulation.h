@@ -107,7 +107,6 @@ public:
     Articulation& operator=(const Articulation&) = delete;
 
     Articulation* clone() const override { return new Articulation(*this); }
-    ElementType type() const override { return ElementType::ARTICULATION; }
 
     qreal mag() const override;
 

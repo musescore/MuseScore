@@ -44,12 +44,12 @@ class TrillSegment final : public LineSegment
 protected:
 public:
     TrillSegment(Spanner* sp, Score* s)
-        : LineSegment(sp, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF) {}
+        : LineSegment(ElementType::TRILL_SEGMENT, sp, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF) {}
     TrillSegment(Score* s)
-        : LineSegment(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF) {}
+        : LineSegment(ElementType::TRILL_SEGMENT, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF) {}
 
     Trill* trill() const { return (Trill*)spanner(); }
-    ElementType type() const override { return ElementType::TRILL_SEGMENT; }
+
     TrillSegment* clone() const override { return new TrillSegment(*this); }
     void draw(mu::draw::Painter*) const override;
     bool acceptDrop(EditData&) const override;
@@ -97,7 +97,6 @@ public:
     int treeChildCount() const override;
 
     Trill* clone() const override { return new Trill(*this); }
-    ElementType type() const override { return ElementType::TRILL; }
 
     void layout() override;
     LineSegment* createLineSegment() override;

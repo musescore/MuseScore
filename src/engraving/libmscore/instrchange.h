@@ -47,7 +47,6 @@ public:
     ~InstrumentChange();
 
     InstrumentChange* clone() const override { return new InstrumentChange(*this); }
-    ElementType type() const override { return ElementType::INSTRUMENT_CHANGE; }
 
     void write(XmlWriter& xml) const override;
     void read(XmlReader&) override;

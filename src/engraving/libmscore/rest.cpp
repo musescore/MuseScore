@@ -53,14 +53,24 @@ namespace Ms {
 //--------------------------------------------------------
 
 Rest::Rest(Score* s)
-    : ChordRest(s)
+    : Rest(ElementType::REST, s)
+{
+}
+
+Rest::Rest(const ElementType& type, Score* s)
+    : ChordRest(type, s)
 {
     _beamMode  = Beam::Mode::NONE;
     m_sym      = SymId::restQuarter;
 }
 
 Rest::Rest(Score* s, const TDuration& d)
-    : ChordRest(s)
+    : Rest(ElementType::REST, s, d)
+{
+}
+
+Rest::Rest(const ElementType& type, Score* s, const TDuration& d)
+    : ChordRest(type, s)
 {
     _beamMode  = Beam::Mode::NONE;
     m_sym      = SymId::restQuarter;
@@ -83,6 +93,11 @@ Rest::Rest(const Rest& r, bool link)
     for (NoteDot* dot : r.m_dots) {
         add(new NoteDot(*dot));
     }
+}
+
+void Rest::hack_toRestType()
+{
+    hack_setType(ElementType::REST);
 }
 
 //---------------------------------------------------------

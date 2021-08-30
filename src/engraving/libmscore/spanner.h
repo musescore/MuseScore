@@ -54,8 +54,8 @@ protected:
     mu::PointF _offset2;
 
 public:
-    SpannerSegment(Spanner*, Score*, ElementFlags f = ElementFlag::ON_STAFF | ElementFlag::MOVABLE);
-    SpannerSegment(Score* s, ElementFlags f = ElementFlag::ON_STAFF | ElementFlag::MOVABLE);
+    SpannerSegment(const ElementType& type, Spanner*, Score*, ElementFlags f = ElementFlag::ON_STAFF | ElementFlag::MOVABLE);
+    SpannerSegment(const ElementType& type, Score* s, ElementFlags f = ElementFlag::ON_STAFF | ElementFlag::MOVABLE);
     SpannerSegment(const SpannerSegment&);
 
     // Score Tree functions
@@ -175,7 +175,7 @@ protected:
     const std::vector<SpannerSegment*> spannerSegments() const { return segments; }
 
 public:
-    Spanner(Score* s, ElementFlags = ElementFlag::NOTHING);
+    Spanner(const ElementType& type, Score* s, ElementFlags = ElementFlag::NOTHING);
     Spanner(const Spanner&);
     ~Spanner();
 

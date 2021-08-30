@@ -48,7 +48,7 @@ public:
     int treeChildCount() const override;
 
     virtual TBox* clone() const override { return new TBox(*this); }
-    virtual ElementType type() const override { return ElementType::TBOX; }
+
     virtual void write(XmlWriter&) const override;
     using VBox::write;
     virtual void read(XmlReader&) override;

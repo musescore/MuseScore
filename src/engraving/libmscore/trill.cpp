@@ -275,7 +275,7 @@ Sid Trill::getPropertyStyle(Pid pid) const
 //---------------------------------------------------------
 
 Trill::Trill(Score* s)
-    : SLine(s)
+    : SLine(ElementType::TRILL, s)
 {
     _trillType     = Type::TRILL_LINE;
     _accidental    = 0;
@@ -285,7 +285,7 @@ Trill::Trill(Score* s)
 }
 
 Trill::Trill(const Trill& t)
-    : SLine(t.score())
+    : SLine(ElementType::TRILL, t.score())
 {
     _trillType = t._trillType;
     _accidental = t._accidental ? t._accidental->clone() : nullptr;

@@ -66,7 +66,6 @@ public:
     HairpinSegment(Spanner* sp, Score* s);
 
     HairpinSegment* clone() const override { return new HairpinSegment(*this); }
-    ElementType type() const override { return ElementType::HAIRPIN_SEGMENT; }
 
     Hairpin* hairpin() const { return (Hairpin*)spanner(); }
 
@@ -106,7 +105,6 @@ public:
     Hairpin(Score* s);
 
     Hairpin* clone() const override { return new Hairpin(*this); }
-    ElementType type() const override { return ElementType::HAIRPIN; }
 
     HairpinType hairpinType() const { return _hairpinType; }
     void setHairpinType(HairpinType val);

@@ -37,7 +37,6 @@ public:
     Fingering(Score* s, ElementFlags ef = ElementFlag::HAS_TAG);
 
     Fingering* clone() const override { return new Fingering(*this); }
-    ElementType type() const override { return ElementType::FINGERING; }
 
     Note* note() const { return toNote(parent()); }
     ElementType layoutType();

@@ -57,15 +57,15 @@ public:
 //   SpannerSegment
 //---------------------------------------------------------
 
-SpannerSegment::SpannerSegment(Spanner* sp, Score* s, ElementFlags f)
-    : Element(s, f)
+SpannerSegment::SpannerSegment(const ElementType& type, Spanner* sp, Score* s, ElementFlags f)
+    : Element(type, s, f)
 {
     _spanner = sp;
     setSpannerSegmentType(SpannerSegmentType::SINGLE);
 }
 
-SpannerSegment::SpannerSegment(Score* s, ElementFlags f)
-    : Element(s, f)
+SpannerSegment::SpannerSegment(const ElementType& type, Score* s, ElementFlags f)
+    : Element(type, s, f)
 {
     setSpannerSegmentType(SpannerSegmentType::SINGLE);
     _spanner = 0;
@@ -373,8 +373,8 @@ void SpannerSegment::scanElements(void* data, void (* func)(void*, Element*), bo
 //   Spanner
 //---------------------------------------------------------
 
-Spanner::Spanner(Score* s, ElementFlags f)
-    : Element(s, f)
+Spanner::Spanner(const ElementType& type, Score* s, ElementFlags f)
+    : Element(type, s, f)
 {
 }
 
