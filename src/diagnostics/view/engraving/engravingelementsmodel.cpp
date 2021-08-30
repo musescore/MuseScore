@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "diagnosticengravingelementsmodel.h"
+#include "engravingelementsmodel.h"
 
 #include <QTextStream>
 
@@ -28,12 +28,12 @@
 
 using namespace mu::diagnostics;
 
-DiagnosticEngravingElementsModel::DiagnosticEngravingElementsModel(QObject* parent)
+EngravingElementsModel::EngravingElementsModel(QObject* parent)
     : QAbstractItemModel(parent)
 {
 }
 
-QModelIndex DiagnosticEngravingElementsModel::index(int row, int column, const QModelIndex& parent) const
+QModelIndex EngravingElementsModel::index(int row, int column, const QModelIndex& parent) const
 {
     if (!m_rootItem) {
         return QModelIndex();
@@ -63,7 +63,7 @@ QModelIndex DiagnosticEngravingElementsModel::index(int row, int column, const Q
     return QModelIndex();
 }
 
-QModelIndex DiagnosticEngravingElementsModel::parent(const QModelIndex& child) const
+QModelIndex EngravingElementsModel::parent(const QModelIndex& child) const
 {
     if (!m_rootItem) {
         return QModelIndex();
@@ -86,7 +86,7 @@ QModelIndex DiagnosticEngravingElementsModel::parent(const QModelIndex& child) c
     return createIndex(parentItem->row(), 0, parentItem->key());
 }
 
-int DiagnosticEngravingElementsModel::rowCount(const QModelIndex& parent) const
+int EngravingElementsModel::rowCount(const QModelIndex& parent) const
 {
     if (!m_rootItem) {
         return 0;
@@ -107,12 +107,12 @@ int DiagnosticEngravingElementsModel::rowCount(const QModelIndex& parent) const
     return parentItem->childCount();
 }
 
-int DiagnosticEngravingElementsModel::columnCount(const QModelIndex&) const
+int EngravingElementsModel::columnCount(const QModelIndex&) const
 {
     return 1;
 }
 
-QVariant DiagnosticEngravingElementsModel::data(const QModelIndex& index, int role) const
+QVariant EngravingElementsModel::data(const QModelIndex& index, int role) const
 {
     if (!index.isValid() && role != rItemData) {
         return QVariant();
@@ -126,24 +126,24 @@ QVariant DiagnosticEngravingElementsModel::data(const QModelIndex& index, int ro
     return item->data();
 }
 
-QHash<int, QByteArray> DiagnosticEngravingElementsModel::roleNames() const
+QHash<int, QByteArray> EngravingElementsModel::roleNames() const
 {
     return { { rItemData, "itemData" } };
 }
 
-DiagnosticEngravingElementsModel::Item* DiagnosticEngravingElementsModel::createItem(Item* parent)
+EngravingElementsModel::Item* EngravingElementsModel::createItem(Item* parent)
 {
     Item* item = new Item(parent);
     m_allItems.insert(item->key(), item);
     return item;
 }
 
-DiagnosticEngravingElementsModel::Item* DiagnosticEngravingElementsModel::itemByModelIndex(const QModelIndex& index) const
+EngravingElementsModel::Item* EngravingElementsModel::itemByModelIndex(const QModelIndex& index) const
 {
     return m_allItems.value(index.internalId(), nullptr);
 }
 
-QVariant DiagnosticEngravingElementsModel::makeData(const Ms::ScoreElement* el) const
+QVariant EngravingElementsModel::makeData(const Ms::ScoreElement* el) const
 {
     if (!el) {
         return QVariant();
@@ -151,14 +151,15 @@ QVariant DiagnosticEngravingElementsModel::makeData(const Ms::ScoreElement* el) 
 
     QVariantMap d;
     d["name"] = el->name();
+    d["selected"] = elementsProvider()->isSelected(el);
     return d;
 }
 
-void DiagnosticEngravingElementsModel::init()
+void EngravingElementsModel::init()
 {
 }
 
-void DiagnosticEngravingElementsModel::reload()
+void EngravingElementsModel::reload()
 {
     beginResetModel();
 
@@ -166,7 +167,7 @@ void DiagnosticEngravingElementsModel::reload()
     delete m_rootItem;
     m_rootItem = createItem(nullptr);
 
-    std::list<const Ms::ScoreElement*> elements = engravingRegister()->elements();
+    std::list<const Ms::ScoreElement*> elements = elementsProvider()->elements();
     for (const Ms::ScoreElement* el : elements) {
         if (el->isScore()) {
             Item* scoreItem = createItem(m_rootItem);
@@ -187,7 +188,7 @@ void DiagnosticEngravingElementsModel::reload()
     updateInfo();
 }
 
-void DiagnosticEngravingElementsModel::load(const std::list<const Ms::ScoreElement*>& elements, Item* root)
+void EngravingElementsModel::load(const std::list<const Ms::ScoreElement*>& elements, Item* root)
 {
     for (const Ms::ScoreElement* el : elements) {
         if (el->treeParent() == root->element()) {
@@ -199,7 +200,7 @@ void DiagnosticEngravingElementsModel::load(const std::list<const Ms::ScoreEleme
     }
 }
 
-const DiagnosticEngravingElementsModel::Item* DiagnosticEngravingElementsModel::findItem(const Ms::ScoreElement* el, const Item* root) const
+const EngravingElementsModel::Item* EngravingElementsModel::findItem(const Ms::ScoreElement* el, const Item* root) const
 {
     if (root->element() == el) {
         return root;
@@ -214,7 +215,7 @@ const DiagnosticEngravingElementsModel::Item* DiagnosticEngravingElementsModel::
     return nullptr;
 }
 
-void DiagnosticEngravingElementsModel::findAndAddLoss(const std::list<const Ms::ScoreElement*>& elements, Item* lossRoot, const Item* root)
+void EngravingElementsModel::findAndAddLoss(const std::list<const Ms::ScoreElement*>& elements, Item* lossRoot, const Item* root)
 {
     for (const Ms::ScoreElement* el : elements) {
         const Item* it = findItem(el, root);
@@ -228,9 +229,24 @@ void DiagnosticEngravingElementsModel::findAndAddLoss(const std::list<const Ms::
     }
 }
 
-void DiagnosticEngravingElementsModel::updateInfo()
+void EngravingElementsModel::select(QModelIndex index, bool arg)
 {
-    std::list<const Ms::ScoreElement*> elements = engravingRegister()->elements();
+    Item* item = itemByModelIndex(index);
+    if (!item) {
+        return;
+    }
+
+    elementsProvider()->select(item->element(), arg);
+    item->setData(makeData(item->element()));
+
+    emit dataChanged(index, index, { rItemData });
+
+    dispatcher()->dispatch("diagnostic-notationview-redraw");
+}
+
+void EngravingElementsModel::updateInfo()
+{
+    std::list<const Ms::ScoreElement*> elements = elementsProvider()->elements();
     QHash<QString, int> els;
     for (const Ms::ScoreElement* el : elements) {
         els[el->name()] += 1;
@@ -254,18 +270,18 @@ void DiagnosticEngravingElementsModel::updateInfo()
     emit summaryChanged();
 }
 
-QString DiagnosticEngravingElementsModel::info() const
+QString EngravingElementsModel::info() const
 {
     return m_info;
 }
 
-QString DiagnosticEngravingElementsModel::summary() const
+QString EngravingElementsModel::summary() const
 {
     return m_summary;
 }
 
 // Item ===============
-DiagnosticEngravingElementsModel::Item::Item(Item* parent)
+EngravingElementsModel::Item::Item(Item* parent)
     : m_parent(parent)
 {
     if (m_parent) {
@@ -273,14 +289,14 @@ DiagnosticEngravingElementsModel::Item::Item(Item* parent)
     }
 }
 
-DiagnosticEngravingElementsModel::Item::~Item()
+EngravingElementsModel::Item::~Item()
 {
     for (Item* item : m_children) {
         delete item;
     }
 }
 
-int DiagnosticEngravingElementsModel::Item::row() const
+int EngravingElementsModel::Item::row() const
 {
     if (m_parent) {
         return m_parent->m_children.indexOf(const_cast<Item*>(this));

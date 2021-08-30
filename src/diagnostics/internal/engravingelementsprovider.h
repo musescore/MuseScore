@@ -19,29 +19,36 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DIAGNOSTICS_DIAGNOSTICENGRAVINGREGISTER_H
-#define MU_DIAGNOSTICS_DIAGNOSTICENGRAVINGREGISTER_H
+#ifndef MU_DIAGNOSTICS_ENGRAVINGELEMENTSPROVIDER_H
+#define MU_DIAGNOSTICS_ENGRAVINGELEMENTSPROVIDER_H
 
-#include "../idiagnosticengravingregister.h"
+#include "../iengravingelementsprovider.h"
 
 namespace mu::diagnostics {
-class DiagnosticEngravingRegister : public IDiagnosticEngravingRegister
+class EngravingElementsProvider : public IEngravingElementsProvider
 {
 public:
-    DiagnosticEngravingRegister() = default;
+    EngravingElementsProvider() = default;
 
+    // registr
     void reg(const Ms::ScoreElement* e) override;
     void unreg(const Ms::ScoreElement* e) override;
     std::list<const Ms::ScoreElement*> elements() const override;
-    async::Channel<const Ms::ScoreElement*> registred() const override;
-    async::Channel<const Ms::ScoreElement*> unregistred() const override;
+    async::Channel<const Ms::ScoreElement*, bool> registreChanged() const override;
+
+    // debug draw
+    void select(const Ms::ScoreElement* e, bool arg) override;
+    bool isSelected(const Ms::ScoreElement* e) const override;
+    async::Channel<const Ms::ScoreElement*, bool> selectChanged() const override;
 
 private:
 
     std::list<const Ms::ScoreElement*> m_elements;
-    async::Channel<const Ms::ScoreElement*> m_registred;
-    async::Channel<const Ms::ScoreElement*> m_unregistred;
+    async::Channel<const Ms::ScoreElement*, bool> m_registreChanged;
+
+    std::list<const Ms::ScoreElement*> m_selected;
+    async::Channel<const Ms::ScoreElement*, bool> m_selectChanged;
 };
 }
 
-#endif // MU_DIAGNOSTICS_DIAGNOSTICENGRAVINGREGISTER_H
+#endif // MU_DIAGNOSTICS_ENGRAVINGELEMENTSPROVIDER_H

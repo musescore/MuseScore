@@ -66,8 +66,8 @@ NotationPaintView::NotationPaintView(QQuickItem* parent)
     m_loopInMarker = std::make_unique<LoopMarker>(LoopBoundaryType::LoopIn);
     m_loopOutMarker = std::make_unique<LoopMarker>(LoopBoundaryType::LoopOut);
 
-    //! NOTE For Autobot tests tool
-    dispatcher()->reg(this, "dev-notationview-redraw", [this]() {
+    //! NOTE For diagnostic tools
+    dispatcher()->reg(this, "diagnostic-notationview-redraw", [this]() {
         update();
     });
 
