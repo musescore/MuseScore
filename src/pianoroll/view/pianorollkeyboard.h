@@ -69,13 +69,23 @@ signals:
 private:
     void onNotationChanged();
     void onCurrentNotationChanged();
+    void onSelectionChanged();
     void updateBoundingSize();
+
+//    void paintKeyboard(QPainter*);
+//    void paintNames(QPainter*);
 
     double m_centerY = 0;  //fraction of note grid camera is focused on
     double m_displayObjectHeight = 0;  //Set to note grid in pixels
     double m_noteHeight;
 
+    QColor m_colorText = Qt::black;
+    QColor m_colorGridLines = Qt::black;
     QColor m_colorBackground = Qt::lightGray;
+    QColor m_colorDrumBlack = QColor(0xcccccc);
+    QColor m_colorDrumWhite = QColor(0xffffff);
+    QColor m_colorKeyBlack = Qt::black;
+    QColor m_colorKeyWhite = QColor(0xffffff);
 
 };
 
