@@ -52,10 +52,10 @@ using namespace mu::actions;
 //using namespace mu::Ms;
 
 
-NoteBlock::NoteBlock(Note* note):
-    m_note(note)
-{
-}
+//NoteBlock::NoteBlock(Note* note):
+//    m_note(note)
+//{
+//}
 
 void PianorollController::init()
 {
@@ -167,14 +167,14 @@ void PianorollController::setNoteHeight(int value)
 
 void PianorollController::addChord(Chord* chrd, int voice)
 {
-    for (Chord* c : chrd->graceNotes())
-        addChord(c, voice);
+    //for (Chord* c : chrd->graceNotes())
+    //    addChord(c, voice);
 
-    for (Note* note : chrd->notes()) {
-        if (note->tieBack())
-              continue;
-        m_notes.push_back(NoteBlock(note));
-    }
+    //for (Note* note : chrd->notes()) {
+    //    if (note->tieBack())
+    //          continue;
+    //    m_notes.push_back(NoteBlock(note));
+    //}
 }
 
 Ms::Fraction PianorollController::widthInBeats()

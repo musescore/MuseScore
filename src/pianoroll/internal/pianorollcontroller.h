@@ -50,13 +50,13 @@ namespace mu::pianoroll {
 
 //class ms::Chord;
 
-class NoteBlock
-{
-    Ms::Note* m_note;
-
-    public:
-    NoteBlock(Ms::Note* note);
-};
+//class NoteBlock
+//{
+//    Ms::Note* m_note;
+//
+//    public:
+//    NoteBlock(Ms::Note* note);
+//};
 
 //----------------------
 
@@ -130,7 +130,7 @@ private:
     std::vector<int> m_selectedStaves;
     int m_activeStaff = -1;
 
-    std::vector<NoteBlock> m_notes;
+//    std::vector<NoteBlock> m_notes;
 
     async::Notification m_noteLayoutChanged;
     async::Notification m_pitchHighlightChanged;

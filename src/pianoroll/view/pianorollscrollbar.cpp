@@ -43,28 +43,6 @@ void PianorollScrollbar::load()
 
 void PianorollScrollbar::updateSlider()
 {
-//    notation::INotationPtr notation = globalContext()->currentNotation();
-//    if (!notation) {
-//        return;
-//    }
-
-//    Ms::Score* score = notation->elements()->msScore();
-//    Ms::Measure* lm = score->lastMeasure();
-//    Ms::Fraction spanInNotesFrac = lm->tick() + lm->ticks();
-//    double spanInNotes = spanInNotesFrac.numerator() / (double)spanInNotesFrac.denominator();
-////    setImplicitSize((int)(beat * m_wholeNoteWidth), m_noteHeight * NUM_PITCHES);
-//    int viewportWidth = width();
-//    m_wholeNoteWidth;
-
-//    m_focusWholeNotes;
-
-//    double focusPix = viewportWidth * (m_focusWholeNotes / spanInNotes);
-
-//    double scoreSpanPix = m_wholeNoteWidth * spanInNotes;
-//    double scrollheadWidth = qMin(m_noteWindowWidth / scoreSpanPix, 1);
-
-//    double scrollheadWidthPix = scrollheadWidth * viewportWidth;
-
     double frac = m_viewportSpan / m_displayObjectSpan;
     if (frac > 0)
         m_center = .5;
@@ -165,12 +143,18 @@ void PianorollScrollbar::paint(QPainter* p)
     if (m_direction == Direction::HORIZONTAL)
     {
         double span = width() * m_viewportSpan / m_displayObjectSpan;
-        p->fillRect(m_center * width() - span / 2, 0, span, height(), m_colorSlider);
+        QRect bounds(m_center * width() - span / 2, 0, span, height());
+        p->fillRect(bounds, m_colorSlider);
+        p->setPen(m_colorSlider.darker(100));
+        p->drawRect(bounds);
     }
     else
     {
         double span = height() * m_viewportSpan / m_displayObjectSpan;
-        p->fillRect(0, m_center * height() - span / 2, width(), span, m_colorSlider);
+        QRect bounds(0, m_center * height() - span / 2, width(), span);
+        p->fillRect(bounds, m_colorSlider);
+        p->setPen(m_colorSlider.darker(100));
+        p->drawRect(bounds);
     }
 
 
