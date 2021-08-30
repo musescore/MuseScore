@@ -100,6 +100,7 @@ public:
     DrumInstrument& drum(int i) { return _drum[i]; }
     const DrumInstrument& drum(int i) const { return _drum[i]; }
     DrumInstrumentVariant findVariant(int pitch, const QVector<Articulation*> articulations, Tremolo* tremolo) const;
+    int pitch(int element, int variation, const QString& name) const;
 };
 
 extern Drumset* smDrumset;
