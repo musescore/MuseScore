@@ -267,7 +267,8 @@ public:
     void updateOttava();
 
     QList<Staff*> staffList() const;
-    bool primaryStaff() const;
+    Staff* primaryStaff() const;
+    bool isPrimaryStaff() const;
 
     qreal userDist() const { return _userDist; }
     void setUserDist(qreal val) { _userDist = val; }
