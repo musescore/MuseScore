@@ -37,6 +37,41 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/importgtp.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/importptb.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/importptb.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gp6dombuilder.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gp6dombuilder.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gp7dombuilder.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gp7dombuilder.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gp67dombuilder.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gp67dombuilder.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gp67domfixer.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gp67domfixer.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpaudiotrack.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpaudiotrack.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpbar.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpbar.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpbeat.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpbeat.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpconverter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpconverter.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpdommodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpdommodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpmasterbar.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpmasterbar.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpmastertracks.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpmastertracks.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpnote.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpnote.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gprhytm.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gprhytm.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpscore.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpscore.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gptrack.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gptrack.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpvoice.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/gpvoice.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/igpdombuilder.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/gtp/inoteproperty.h
     )
 
 set(MODULE_LINK

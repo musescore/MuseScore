@@ -25,6 +25,10 @@
 #include <QDebug>
 #include <cmath>
 
+#include "gtp/gp6dombuilder.h"
+#include "gtp/gp7dombuilder.h"
+#include "gtp/gpconverter.h"
+
 #include "libmscore/factory.h"
 #include "libmscore/arpeggio.h"
 #include "libmscore/articulation.h"
@@ -228,6 +232,11 @@ const std::map<QString, QString> GuitarPro6::instrumentMapping = {
     { "whstl",           "tin-whistle" },
     { "xlphn",           "xylophone" }
 };
+
+std::unique_ptr<IGPDomBuilder> GuitarPro6::createGPDomBuilder() const
+{
+    return std::make_unique<GP6DomBuilder>();
+}
 
 //---------------------------------------------------------
 //   readBit
@@ -1808,7 +1817,7 @@ void GuitarPro6::readBars(QDomNode* barList, Measure* measure, ClefType oldClefI
     int staffIdx           = 0;
 
     // used to keep track of tuplets
-    std::vector<Tuplet*> tuplets(staves * VOICES);
+    std::vector<Tuplet*> tuplets(staves* VOICES);
     for (int track = 0; track < staves * VOICES; ++track) {
         tuplets[track] = 0;
     }
@@ -2353,6 +2362,20 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
 
 void GuitarPro6::readGpif(QByteArray* data)
 {
+    {
+        QDomDocument qdomDoc;
+        qdomDoc.setContent(*data);
+        QDomElement qdomElem = qdomDoc.documentElement();
+
+        auto builder = createGPDomBuilder();
+        builder->buildGPDomModel(&qdomElem);
+
+        GPConverter scoreBuilder(score, builder->getGPDomModel());
+        scoreBuilder.convertGP();
+
+        return;
+    }
+
     // qDebug() << QString(*data);
     QDomDocument qdomDoc;
     qdomDoc.setContent(*data);
