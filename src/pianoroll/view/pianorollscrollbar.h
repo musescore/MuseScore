@@ -90,10 +90,10 @@ private:
 
     Direction m_direction = Direction::HORIZONTAL;
 
-//    QColor m_colorSlider = Qt::lightGray;
-    QColor m_colorSlider = Qt::blue;
-    //    QColor m_colorBackground = Qt::white;
-    QColor m_colorBackground = Qt::green;
+    QColor m_colorSlider = Qt::gray;
+//    QColor m_colorSlider = Qt::blue;
+    QColor m_colorBackground = QColor(0xdddddd);
+//    QColor m_colorBackground = Qt::green;
 };
 
 }
