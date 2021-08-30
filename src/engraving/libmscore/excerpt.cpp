@@ -212,26 +212,20 @@ bool Excerpt::operator==(const Excerpt& e) const
 void Excerpt::updateTracks()
 {
     QMultiMap<int, int> tracks;
-    for (Staff* s : partScore()->staves()) {
-        const Ms::LinkedElements* ls = s->links();
-        if (ls == nullptr) {
+    for (Staff* staff : partScore()->staves()) {
+        Staff* primaryStaff = staff->primaryStaff();
+        if (!primaryStaff) {
             continue;
         }
-        for (auto le : *ls) {
-            Staff* ps = toStaff(le);
-            if (ps->primaryStaff()) {
-                int v = 0;
-                for (int i = 0; i < VOICES; i++) {
-                    if (!s->isVoiceVisible(i)) {
-                        continue;
-                    }
 
-                    tracks.insert(ps->idx() * VOICES + i % VOICES, s->idx() * VOICES + v % VOICES);
-                    v++;
-                }
-
-                break;
+        int voice = 0;
+        for (int i = 0; i < VOICES; i++) {
+            if (!staff->isVoiceVisible(i)) {
+                continue;
             }
+
+            tracks.insert(primaryStaff->idx() * VOICES + i % VOICES, staff->idx() * VOICES + voice % VOICES);
+            voice++;
         }
     }
 
@@ -936,7 +930,7 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& sourceS
             nm = nm->nextMeasure();
         }
 
-        if (srcStaff->primaryStaff()) {
+        if (srcStaff->isPrimaryStaff()) {
             int span = srcStaff->barLineSpan();
             int sIdx = srcStaff->idx();
             if (dstStaffIdx == 0 && span == 0) {

@@ -328,19 +328,27 @@ bool Staff::canDisableVoice() const
 
 void Staff::updateVisibilityVoices()
 {
-    std::array<bool, VOICES> voices{ true, true, true, true };
-
     if (!score()->excerpt()) {
         return;
     }
 
     auto tracks = score()->excerpt()->tracks();
 
-    Staff* masterStaff = masterScore()->staffById(id());
-    int srcStaffIdx = masterStaff->idx();
+    Staff* primaryStaff = this->primaryStaff();
+    if (!primaryStaff) {
+        return;
+    }
 
+    std::array<bool, VOICES> voices{ false, false, false, false };
+
+    int voiceIndex = 0;
     for (int voice = 0; voice < VOICES; voice++) {
-        voices[voice] = tracks.contains(srcStaffIdx * VOICES + voice % VOICES);
+        QList<int> primaryStaffTracks = tracks.values(primaryStaff->idx() * VOICES + voice % VOICES);
+        bool isVoiceVisible = primaryStaffTracks.contains(idx() * VOICES + voiceIndex % VOICES);
+        if (isVoiceVisible) {
+            voices[voice] = true;
+            voiceIndex++;
+        }
     }
 
     _visibilityVoices = voices;
@@ -1122,14 +1130,14 @@ void Staff::setSlashStyle(const Fraction& tick, bool val)
 }
 
 //---------------------------------------------------------
-//   primaryStaff
+//   isPrimaryStaff
 ///   if there are linked staves, the primary staff is
 ///   the one who is played back and it's not a tab staff
 ///   because we don't have enough information  to play
 ///   e.g ornaments. NOTE: it's not necessarily the top staff!
 //---------------------------------------------------------
 
-bool Staff::primaryStaff() const
+bool Staff::isPrimaryStaff() const
 {
     if (!_links) {
         return true;
@@ -1482,6 +1490,23 @@ QList<Staff*> Staff::staffList() const
         staffList.append(const_cast<Staff*>(this));
     }
     return staffList;
+}
+
+Staff* Staff::primaryStaff() const
+{
+    const Ms::LinkedElements* linkedElements = links();
+    if (!linkedElements) {
+        return nullptr;
+    }
+
+    for (auto linkedElement : *linkedElements) {
+        Staff* staff = toStaff(linkedElement);
+        if (staff && staff->isPrimaryStaff()) {
+            return staff;
+        }
+    }
+
+    return nullptr;
 }
 
 //---------------------------------------------------------
