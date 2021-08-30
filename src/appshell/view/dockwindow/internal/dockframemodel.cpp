@@ -108,7 +108,7 @@ void DockFrameModel::listenChangesInFrame()
         return;
     }
 
-    auto numDocksChangedCon = connect(frame, &KDDockWidgets::Frame::numDockWidgetsChanged, [this, frame]() {
+    connect(frame, &KDDockWidgets::Frame::numDockWidgetsChanged, this, [this, frame]() {
         emit tabsChanged();
 
         auto currentDock = frame->currentDockWidget();
@@ -130,19 +130,10 @@ void DockFrameModel::listenChangesInFrame()
         updateNavigationSection();
     });
 
-    auto currentDockWidgetChangedCon = connect(frame, &KDDockWidgets::Frame::currentDockWidgetChanged, [this]() {
+    connect(frame, &KDDockWidgets::Frame::currentDockWidgetChanged, this, [this]() {
         updateNavigationSection();
 
         emit currentDockChanged();
-    });
-
-    connect(qApp, &QApplication::aboutToQuit, [numDocksChangedCon, currentDockWidgetChangedCon
-#if (defined (_MSCVER) || defined (_MSC_VER)) // prevent bogus compiler warning with MSVC
-                                               , this
-#endif
-            ]() {
-        disconnect(numDocksChangedCon);
-        disconnect(currentDockWidgetChangedCon);
     });
 }
 
