@@ -66,6 +66,8 @@ private:
     Q_PROPERTY(double displayObjectHeight READ displayObjectHeight WRITE setDisplayObjectHeight NOTIFY displayObjectHeightChanged)
 
 public:
+    static const int NUM_PITCHES = 128;
+    static const int VOICES = 4;
 
     PianorollView(QQuickItem* parent = nullptr);
 
@@ -156,8 +158,6 @@ private:
     QColor m_colorTie = QColor(0xff0000);
 
 
-    const int NUM_PITCHES = 128;
-    const int VOICES = 4;
 
 };
 }

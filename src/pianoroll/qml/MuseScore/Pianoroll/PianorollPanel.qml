@@ -204,13 +204,18 @@ Rectangle {
 
 
         GridLayout {
-            columns: 2
+            columns: 3
             //anchors.fill: parent
             Layout.fillHeight: true
 
 
             //-------
             //Row
+            Text {
+                Layout.minimumWidth: 12
+                Layout.minimumHeight: 12
+                text: "";
+            }
 
             PianorollRuler {
                 Layout.fillWidth: true
@@ -229,13 +234,20 @@ Rectangle {
                 Layout.minimumHeight: 12
                 text: "";
             }
-//            Rectangle {
-//                color: "purple"
-
-//            }
 
             //-------
             //Row
+            PianorollKeyboard {
+                width: 100
+                Layout.fillHeight: true
+
+                centerY: scrollViewY.center
+                noteHeight: vertZoom.value
+
+                Component.onCompleted: {
+                    load()
+                }
+            }
 
             PianorollView {
                 id: pianoView
@@ -270,6 +282,11 @@ Rectangle {
 
             //-------
             //Row
+            Text {
+                Layout.minimumWidth: 12
+                Layout.minimumHeight: 12
+                text: "";
+            }
 
             PianorollScrollbar{
                 id: scrollViewX
@@ -280,10 +297,10 @@ Rectangle {
                 Layout.minimumHeight: 12
             }
 
-
-            Rectangle {
-                color: "orange"
-
+            Text {
+                Layout.minimumWidth: 12
+                Layout.minimumHeight: 12
+                text: "";
             }
 
 //            ScrollBar {
