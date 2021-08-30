@@ -159,7 +159,10 @@ private:
     void drawNoteBlock(QPainter* p, NoteBlock* block);
 
     NoteBlock* pickNote(int pixX, int pixY);
+    bool intersects(NoteBlock* block, int pixX, int pixY);
+    bool intersectsPixel(NoteBlock* block, int x, int y, int width, int height);
 
+    Ms::Score* score();
     Ms::Staff* activeStaff();
     
     notation::INotationPtr m_notation;
