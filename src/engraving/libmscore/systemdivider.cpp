@@ -34,8 +34,8 @@ namespace Ms {
 //   SystemDivider
 //---------------------------------------------------------
 
-SystemDivider::SystemDivider(Score* s)
-    : Symbol(ElementType::SYSTEM_DIVIDER, s, ElementFlag::SYSTEM | ElementFlag::NOT_SELECTABLE)
+SystemDivider::SystemDivider(System* parent)
+    : Symbol(ElementType::SYSTEM_DIVIDER, parent, ElementFlag::SYSTEM | ElementFlag::NOT_SELECTABLE)
 {
     // default value, but not valid until setDividerType()
     _dividerType = SystemDivider::Type::LEFT;

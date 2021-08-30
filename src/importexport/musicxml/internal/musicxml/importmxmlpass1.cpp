@@ -513,9 +513,9 @@ void MusicXMLParserPass1::skipLogCurrElem()
 //   addBreak
 //---------------------------------------------------------
 
-static void addBreak(Score* const score, MeasureBase* const mb, const LayoutBreak::Type type)
+static void addBreak(Score* const, MeasureBase* const mb, const LayoutBreak::Type type)
 {
-    LayoutBreak* lb = new LayoutBreak(score);
+    LayoutBreak* lb = new LayoutBreak(mb);
     lb->setLayoutBreakType(type);
     mb->add(lb);
 }
@@ -698,7 +698,7 @@ static Tid tidForCreditWords(const CreditWords* const word, std::vector<const Cr
 
 static VBox* createAndAddVBoxForCreditWords(Score* const score, const int miny = 0, const int maxy = 75)
 {
-    auto vbox = new VBox(score);
+    auto vbox = new VBox(score->dummy()->system());
     qreal vboxHeight = 10;                           // default height in tenths
     double diff = maxy - miny;                       // calculate height in tenths
     if (diff > vboxHeight) {                         // and size is reasonable
@@ -860,7 +860,7 @@ static void createMeasuresAndVboxes(Score* const score,
         }
 
         // create and add the measure
-        Measure* measure  = new Measure(score);
+        Measure* measure  = new Measure(score->dummy()->system());
         measure->setTick(ms.at(i));
         measure->setTicks(ml.at(i));
         measure->setNo(i);

@@ -73,7 +73,7 @@ class Glissando final : public SLine
     static const std::array<const char*, 2> glissandoTypeNames;
 
 public:
-    Glissando(Score* s);
+    Glissando(Element* parent);
     Glissando(const Glissando&);
 
     static Note* guessInitialNote(Chord* chord);

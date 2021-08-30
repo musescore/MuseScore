@@ -186,7 +186,6 @@ class Element : public ScoreElement
 {
     INJECT(engraving, mu::engraving::IEngravingConfiguration, engravingConfiguration)
 
-    Element* _parent { 0 };
     mutable mu::RectF _bbox;  ///< Bounding box relative to _pos + _offset
     qreal _mag;                     ///< standard magnification (derived value)
     mu::PointF _pos;          ///< Reference position, relative to _parent, set by autoplace
@@ -212,7 +211,8 @@ protected:
     mu::draw::Color _color;                ///< element color attribute
 
 public:
-    Element(const ElementType& type, Score* = 0, ElementFlags = ElementFlag::NOTHING, mu::engraving::AccessibleElement* access = nullptr);
+    Element(const ElementType& type, ScoreElement* se = 0, ElementFlags = ElementFlag::NOTHING,
+            mu::engraving::AccessibleElement* access = nullptr);
     Element(const Element&);
     virtual ~Element();
 
@@ -223,10 +223,7 @@ public:
 
     void deleteLater();
 
-    Element* parent() const { return _parent; }
-    void setParent(Element* e) { _parent = e; }
-
-    virtual ScoreElement* treeParent() const override { return _parent; }
+    Element* parentElement() const { return static_cast<Element*>(parent()); }
 
     Element* findAncestor(ElementType t);
     const Element* findAncestor(ElementType t) const;
@@ -486,8 +483,8 @@ public:
     bool isPrintable() const;
     qreal point(const Spatium sp) const { return sp.val() * spatium(); }
 
-    static Ms::Element* create(Ms::ElementType type, Score*);
-    static Element* name2Element(const QStringRef&, Score*);
+    static Ms::Element* create(Ms::ElementType type, Ms::Element* parent);
+    static Element* name2Element(const QStringRef&, Ms::Element* parent);
 
     bool systemFlag() const { return flag(ElementFlag::SYSTEM); }
     void setSystemFlag(bool v) const { setFlag(ElementFlag::SYSTEM, v); }
@@ -661,9 +658,9 @@ public:
 extern bool elementLessThan(const Element* const, const Element* const);
 extern void collectElements(void* data, Element* e);
 
-template<typename T> std::shared_ptr<T> makeElement(Ms::Score* score)
+template<typename T> std::shared_ptr<T> makeElement(Ms::Element* parent)
 {
-    return std::make_shared<T>(score);
+    return std::make_shared<T>(parent);
 }
 }     // namespace Ms
 

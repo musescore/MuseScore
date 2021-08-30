@@ -59,7 +59,7 @@ protected:
     mu::PointF linePos(Grip, System**) const override;
 
 public:
-    Pedal(Score* s);
+    Pedal(Element* parent);
 
     Pedal* clone() const override { return new Pedal(*this); }
 

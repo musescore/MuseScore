@@ -42,7 +42,7 @@ class StaffTypeChange final : public Element
     void draw(mu::draw::Painter*) const override;
 
 public:
-    StaffTypeChange(Score* = 0);
+    StaffTypeChange(MeasureBase* parent = 0);
     StaffTypeChange(const StaffTypeChange&);
 
     StaffTypeChange* clone() const override { return new StaffTypeChange(*this); }

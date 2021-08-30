@@ -40,8 +40,8 @@ static const ElementStyle measureNumberStyle {
 //   MeasureNumber
 //---------------------------------------------------------
 
-MeasureNumber::MeasureNumber(Score* s, Tid tid)
-    : MeasureNumberBase(ElementType::MEASURE_NUMBER, s, tid)
+MeasureNumber::MeasureNumber(Measure* parent, Tid tid)
+    : MeasureNumberBase(ElementType::MEASURE_NUMBER, parent, tid)
 {
     initElementStyle(&measureNumberStyle);
 

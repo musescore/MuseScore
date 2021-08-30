@@ -34,8 +34,8 @@ namespace Ms {
 //   StaffTypeChange
 //---------------------------------------------------------
 
-StaffTypeChange::StaffTypeChange(Score* score)
-    : Element(ElementType::STAFFTYPE_CHANGE, score, ElementFlag::HAS_TAG)
+StaffTypeChange::StaffTypeChange(MeasureBase* parent)
+    : Element(ElementType::STAFFTYPE_CHANGE, parent, ElementFlag::HAS_TAG)
 {
     lw = spatium() * 0.3;
 }

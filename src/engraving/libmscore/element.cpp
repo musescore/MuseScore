@@ -163,12 +163,11 @@ void Element::localSpatiumChanged(qreal oldValue, qreal newValue)
 
 qreal Element::spatium() const
 {
-    if (systemFlag() || (parent() && parent()->systemFlag())) {
+    if (systemFlag() || (parent() && parentElement()->systemFlag())) {
         return score()->spatium();
-    } else {
-        Staff* s = staff();
-        return s ? s->spatium(this) : score()->spatium();
     }
+    Staff* s = staff();
+    return s ? s->spatium(this) : score()->spatium();
 }
 
 bool Element::isInteractionAvailable() const
@@ -211,8 +210,8 @@ QString Element::subtypeName() const
 //   Element
 //---------------------------------------------------------
 
-Element::Element(const ElementType& type, Score* s, ElementFlags f, mu::engraving::AccessibleElement* access)
-    : ScoreElement(type, s)
+Element::Element(const ElementType& type, ScoreElement* se, ElementFlags f, mu::engraving::AccessibleElement* access)
+    : ScoreElement(type, se)
 {
     _flags         = f;
     _track         = -1;
@@ -237,7 +236,6 @@ Element::Element(const ElementType& type, Score* s, ElementFlags f, mu::engravin
 Element::Element(const Element& e)
     : ScoreElement(e)
 {
-    _parent     = e._parent;
     _bbox       = e._bbox;
     _mag        = e._mag;
     _pos        = e._pos;
@@ -439,7 +437,7 @@ Fraction Element::tick() const
         } else if (e->parent()->isMeasureBase()) {
             return toMeasureBase(e->parent())->tick();
         }
-        e = e->parent();
+        e = e->parentElement();
     }
     return Fraction(0, 1);
 }
@@ -455,7 +453,7 @@ Fraction Element::rtick() const
         if (e->parent()->isSegment()) {
             return toSegment(e->parent())->rtick();
         }
-        e = e->parent();
+        e = e->parentElement();
     }
     return Fraction(0, 1);
 }
@@ -571,7 +569,7 @@ PointF Element::pagePos() const
         } else if (parent()->isSystem()) {
             system = toSystem(parent());
         } else if (parent()->isFretDiagram()) {
-            return p + parent()->pagePos();
+            return p + parentElement()->pagePos();
         } else {
             qFatal("this %s parent %s\n", name(), parent()->name());
         }
@@ -588,7 +586,7 @@ PointF Element::pagePos() const
         p.rx() = pageX();
     } else {
         if (parent()->parent()) {
-            p += parent()->pagePos();
+            p += parentElement()->pagePos();
         }
     }
     return p;
@@ -619,7 +617,7 @@ PointF Element::canvasPos() const
         } else if (parent()->isChord()) {       // grace chord
             measure = toSegment(parent()->parent())->measure();
         } else if (parent()->isFretDiagram()) {
-            return p + parent()->canvasPos() + PointF(toFretDiagram(parent())->centerX(), 0.0);
+            return p + parentElement()->canvasPos() + PointF(toFretDiagram(parent())->centerX(), 0.0);
         } else {
             qFatal("this %s parent %s\n", name(), parent()->name());
         }
@@ -638,7 +636,7 @@ PointF Element::canvasPos() const
         }
         p.rx() = canvasX();
     } else {
-        p += parent()->canvasPos();
+        p += parentElement()->canvasPos();
     }
     return p;
 }
@@ -650,7 +648,7 @@ PointF Element::canvasPos() const
 qreal Element::pageX() const
 {
     qreal xp = x();
-    for (Element* e = parent(); e && e->parent(); e = e->parent()) {
+    for (Element* e = parentElement(); e && e->parentElement(); e = e->parentElement()) {
         xp += e->x();
     }
     return xp;
@@ -663,7 +661,7 @@ qreal Element::pageX() const
 qreal Element::canvasX() const
 {
     qreal xp = x();
-    for (Element* e = parent(); e; e = e->parent()) {
+    for (Element* e = parentElement(); e; e = e->parentElement()) {
         xp += e->x();
     }
     return xp;
@@ -1157,7 +1155,7 @@ Element* Element::readMimeData(Score* score, const QByteArray& data, PointF* dra
         return nullptr;
     }
 
-    Element* el = Element::create(type, score);
+    Element* el = Element::create(type, score->dummy());
     if (el) {
         el->read(e);
     }
@@ -1188,80 +1186,89 @@ void Element::remove(Element* e)
 //    Element factory
 //---------------------------------------------------------
 
-Element* Element::create(ElementType type, Score* score)
+Element* Element::create(ElementType type, Element* parent)
 {
+    auto dummy = parent->score()->dummy();
     switch (type) {
-    case ElementType::VOLTA:             return new Volta(score);
-    case ElementType::OTTAVA:            return new Ottava(score);
-    case ElementType::TEXTLINE:          return new TextLine(score);
-    case ElementType::NOTELINE:          return new NoteLine(score);
-    case ElementType::TRILL:             return new Trill(score);
-    case ElementType::LET_RING:          return new LetRing(score);
-    case ElementType::VIBRATO:           return new Vibrato(score);
-    case ElementType::PALM_MUTE:         return new PalmMute(score);
-    case ElementType::PEDAL:             return new Pedal(score);
-    case ElementType::HAIRPIN:           return new Hairpin(score);
-    case ElementType::CLEF:              return new Clef(score);
-    case ElementType::KEYSIG:            return new KeySig(score);
-    case ElementType::TIMESIG:           return new TimeSig(score);
-    case ElementType::BAR_LINE:          return new BarLine(score);
-    case ElementType::SYSTEM_DIVIDER:    return new SystemDivider(score);
-    case ElementType::ARPEGGIO:          return new Arpeggio(score);
-    case ElementType::BREATH:            return new Breath(score);
-    case ElementType::GLISSANDO:         return new Glissando(score);
-    case ElementType::BRACKET:           return new Bracket(score);
-    case ElementType::ARTICULATION:      return new Articulation(score);
-    case ElementType::FERMATA:           return new Fermata(score);
-    case ElementType::CHORDLINE:         return new ChordLine(score);
-    case ElementType::ACCIDENTAL:        return new Accidental(score);
-    case ElementType::DYNAMIC:           return new Dynamic(score);
-    case ElementType::TEXT:              return new Text(score);
-    case ElementType::MEASURE_NUMBER:    return new MeasureNumber(score);
-    case ElementType::MMREST_RANGE:      return new MMRestRange(score);
-    case ElementType::INSTRUMENT_NAME:   return new InstrumentName(score);
-    case ElementType::STAFF_TEXT:        return new StaffText(score);
-    case ElementType::SYSTEM_TEXT:       return new SystemText(score);
-    case ElementType::REHEARSAL_MARK:    return new RehearsalMark(score);
-    case ElementType::INSTRUMENT_CHANGE: return new InstrumentChange(score);
-    case ElementType::STAFFTYPE_CHANGE:  return new StaffTypeChange(score);
-    case ElementType::NOTEHEAD:          return new NoteHead(score);
-    case ElementType::NOTEDOT:           return new NoteDot(score);
-    case ElementType::TREMOLO:           return new Tremolo(score);
-    case ElementType::LAYOUT_BREAK:      return new LayoutBreak(score);
-    case ElementType::MARKER:            return new Marker(score);
-    case ElementType::JUMP:              return new Jump(score);
-    case ElementType::MEASURE_REPEAT:    return new MeasureRepeat(score);
-    case ElementType::ACTION_ICON:       return new ActionIcon(score);
-    case ElementType::NOTE:              return new Note(score);
-    case ElementType::SYMBOL:            return new Symbol(score);
-    case ElementType::FSYMBOL:           return new FSymbol(score);
-    case ElementType::CHORD:             return new Chord(score);
-    case ElementType::REST:              return new Rest(score);
-    case ElementType::MMREST:            return new MMRest(score);
-    case ElementType::SPACER:            return new Spacer(score);
-    case ElementType::STAFF_STATE:       return new StaffState(score);
-    case ElementType::TEMPO_TEXT:        return new TempoText(score);
-    case ElementType::HARMONY:           return new Harmony(score);
-    case ElementType::FRET_DIAGRAM:      return new FretDiagram(score);
-    case ElementType::BEND:              return new Bend(score);
-    case ElementType::TREMOLOBAR:        return new TremoloBar(score);
-    case ElementType::LYRICS:            return new Lyrics(score);
-    case ElementType::FIGURED_BASS:      return new FiguredBass(score);
-    case ElementType::STEM:              return new Stem(score);
-    case ElementType::SLUR:              return new Slur(score);
-    case ElementType::TIE:               return new Tie(score);
-    case ElementType::FINGERING:         return new Fingering(score);
-    case ElementType::HBOX:              return new HBox(score);
-    case ElementType::VBOX:              return new VBox(score);
-    case ElementType::TBOX:              return new TBox(score);
-    case ElementType::FBOX:              return new FBox(score);
-    case ElementType::MEASURE:           return new Measure(score);
-    case ElementType::TAB_DURATION_SYMBOL: return new TabDurationSymbol(score);
-    case ElementType::OSSIA:               return new Ossia(score);
-    case ElementType::IMAGE:             return new Image(score);
-    case ElementType::BAGPIPE_EMBELLISHMENT: return new BagpipeEmbellishment(score);
-    case ElementType::AMBITUS:           return new Ambitus(score);
-    case ElementType::STICKING:          return new Sticking(score);
+    case ElementType::VOLTA:             return new Volta(parent);
+    case ElementType::OTTAVA:            return new Ottava(parent);
+    case ElementType::TEXTLINE:          return new TextLine(parent);
+    case ElementType::NOTELINE:          return new NoteLine(parent);
+    case ElementType::TRILL:             return new Trill(parent);
+    case ElementType::LET_RING:          return new LetRing(parent);
+    case ElementType::VIBRATO:           return new Vibrato(parent);
+    case ElementType::PALM_MUTE:         return new PalmMute(parent);
+    case ElementType::PEDAL:             return new Pedal(parent);
+    case ElementType::HAIRPIN:           return new Hairpin(parent->isSegment() ? toSegment(parent) : dummy->segment());
+    case ElementType::CLEF:              return new Clef(parent->isSegment() ? toSegment(parent) : dummy->segment());
+    case ElementType::KEYSIG:            return new KeySig(parent->isSegment() ? toSegment(parent) : dummy->segment());
+    case ElementType::TIMESIG:           return new TimeSig(parent->isSegment() ? toSegment(parent) : dummy->segment());
+    case ElementType::BAR_LINE:          return new BarLine(parent->isSegment() ? toSegment(parent) : dummy->segment());
+    case ElementType::SYSTEM_DIVIDER:    return new SystemDivider(parent->isSystem() ? toSystem(parent) : dummy->system());
+    case ElementType::ARPEGGIO:          return new Arpeggio(parent->isChord() ? toChord(parent) : dummy->chord());
+    case ElementType::BREATH:            return new Breath(parent->isSegment() ? toSegment(parent) : dummy->segment());
+    case ElementType::GLISSANDO:         return new Glissando(parent);
+    case ElementType::BRACKET:           return new Bracket(parent);
+    case ElementType::ARTICULATION:      return new Articulation(parent->isChordRest() ? toChordRest(parent) : dummy->chord());
+    case ElementType::FERMATA:           return new Fermata(parent);
+    case ElementType::CHORDLINE:         return new ChordLine(parent->isChord() ? toChord(parent) : dummy->chord());
+    case ElementType::ACCIDENTAL:        return new Accidental(parent);
+    case ElementType::DYNAMIC:           return new Dynamic(parent->isSegment() ? toSegment(parent) : dummy->segment());
+    case ElementType::TEXT:              return new Text(parent);
+    case ElementType::MEASURE_NUMBER:    return new MeasureNumber(parent->isMeasure() ? toMeasure(parent) : dummy->measure());
+    case ElementType::MMREST_RANGE:      return new MMRestRange(parent->isMeasure() ? toMeasure(parent) : dummy->measure());
+    case ElementType::INSTRUMENT_NAME:   return new InstrumentName(parent->isSystem() ? toSystem(parent) : dummy->system());
+    case ElementType::STAFF_TEXT:        return new StaffText(parent->isSegment() ? toSegment(parent) : dummy->segment());
+    case ElementType::SYSTEM_TEXT:       return new SystemText(parent->isSegment() ? toSegment(parent) : dummy->segment());
+    case ElementType::REHEARSAL_MARK:    return new RehearsalMark(parent->isSegment() ? toSegment(parent) : dummy->segment());
+    case ElementType::INSTRUMENT_CHANGE: return new InstrumentChange(parent);
+    case ElementType::STAFFTYPE_CHANGE:  return new StaffTypeChange(parent->isMeasureBase() ? toMeasureBase(parent) : dummy->measure());
+    case ElementType::NOTEHEAD:          return new NoteHead(parent->isNote() ? toNote(parent) : dummy->note());
+    case ElementType::NOTEDOT: {
+        if (parent->isNote()) {
+            return new NoteDot(toNote(parent));
+        } else if (parent->isRest()) {
+            return new NoteDot(toRest(parent));
+        } else {
+            return new NoteDot(dummy->note());
+        }
+    }
+    case ElementType::TREMOLO:           return new Tremolo(parent->isChord() ? toChord(parent) : dummy->chord());
+    case ElementType::LAYOUT_BREAK:      return new LayoutBreak(parent->isMeasureBase() ? toMeasureBase(parent) : dummy->measure());
+    case ElementType::MARKER:            return new Marker(parent);
+    case ElementType::JUMP:              return new Jump(parent->isMeasure() ? toMeasure(parent) : dummy->measure());
+    case ElementType::MEASURE_REPEAT:    return new MeasureRepeat(parent->isSegment() ? toSegment(parent) : dummy->segment());
+    case ElementType::ACTION_ICON:       return new ActionIcon(parent);
+    case ElementType::NOTE:              return new Note(parent->isChord() ? toChord(parent) : dummy->chord());
+    case ElementType::SYMBOL:            return new Symbol(parent);
+    case ElementType::FSYMBOL:           return new FSymbol(parent);
+    case ElementType::CHORD:             return new Chord(parent->isSegment() ? toSegment(parent) : dummy->segment());
+    case ElementType::REST:              return new Rest(parent->isSegment() ? toSegment(parent) : dummy->segment());
+    case ElementType::MMREST:            return new MMRest(parent->isSegment() ? toSegment(parent) : dummy->segment());
+    case ElementType::SPACER:            return new Spacer(parent->isMeasure() ? toMeasure(parent) : dummy->measure());
+    case ElementType::STAFF_STATE:       return new StaffState(parent);
+    case ElementType::TEMPO_TEXT:        return new TempoText(parent->isSegment() ? toSegment(parent) : dummy->segment());
+    case ElementType::HARMONY:           return new Harmony(parent->isSegment() ? toSegment(parent) : dummy->segment());
+    case ElementType::FRET_DIAGRAM:      return new FretDiagram(parent->isSegment() ? toSegment(parent) : dummy->segment());
+    case ElementType::BEND:              return new Bend(parent->isNote() ? toNote(parent) : dummy->note());
+    case ElementType::TREMOLOBAR:        return new TremoloBar(parent);
+    case ElementType::LYRICS:            return new Lyrics(parent);
+    case ElementType::FIGURED_BASS:      return new FiguredBass(parent->isSegment() ? toSegment(parent) : dummy->segment());
+    case ElementType::STEM:              return new Stem(parent->isChord() ? toChord(parent) : dummy->chord());
+    case ElementType::SLUR:              return new Slur(parent);
+    case ElementType::TIE:               return new Tie(parent);
+    case ElementType::FINGERING:         return new Fingering(parent->isNote() ? toNote(parent) : dummy->note());
+    case ElementType::HBOX:              return new HBox(parent->isSystem() ? toSystem(parent) : dummy->system());
+    case ElementType::VBOX:              return new VBox(parent->isSystem() ? toSystem(parent) : dummy->system());
+    case ElementType::TBOX:              return new TBox(parent->isSystem() ? toSystem(parent) : dummy->system());
+    case ElementType::FBOX:              return new FBox(parent->isSystem() ? toSystem(parent) : dummy->system());
+    case ElementType::MEASURE:           return new Measure(parent->isSystem() ? toSystem(parent) : dummy->system());
+    case ElementType::TAB_DURATION_SYMBOL: return new TabDurationSymbol(parent->isChordRest() ? toChordRest(parent) : dummy->chord());
+    case ElementType::OSSIA:               return new Ossia(parent);
+    case ElementType::IMAGE:             return new Image(parent);
+    case ElementType::BAGPIPE_EMBELLISHMENT: return new BagpipeEmbellishment(parent);
+    case ElementType::AMBITUS:           return new Ambitus(parent->isSegment() ? toSegment(parent) : dummy->segment());
+    case ElementType::STICKING:          return new Sticking(parent->isSegment() ? toSegment(parent) : dummy->segment());
 
     case ElementType::LYRICSLINE:
     case ElementType::TEXTLINE_BASE:
@@ -1311,14 +1318,14 @@ Element* Element::create(ElementType type, Score* score)
 //   name2Element
 //---------------------------------------------------------
 
-Element* Element::name2Element(const QStringRef& s, Score* sc)
+Element* Element::name2Element(const QStringRef& s, Element* parent)
 {
     ElementType type = Element::name2type(s);
     if (type == ElementType::INVALID) {
         qDebug("invalid <%s>\n", qPrintable(s.toString()));
         return 0;
     }
-    return Element::create(type, sc);
+    return Element::create(type, parent);
 }
 
 //---------------------------------------------------------
@@ -1619,7 +1626,7 @@ Element* Element::findAncestor(ElementType t)
 {
     Element* e = this;
     while (e && e->type() != t) {
-        e = e->parent();
+        e = e->parentElement();
     }
     return e;
 }
@@ -1628,7 +1635,7 @@ const Element* Element::findAncestor(ElementType t) const
 {
     const Element* e = this;
     while (e && e->type() != t) {
-        e = e->parent();
+        e = e->parentElement();
     }
     return e;
 }
@@ -1641,8 +1648,8 @@ Measure* Element::findMeasure()
 {
     if (isMeasure()) {
         return toMeasure(this);
-    } else if (_parent) {
-        return _parent->findMeasure();
+    } else if (parent()) {
+        return parentElement()->findMeasure();
     } else {
         return 0;
     }
@@ -1666,8 +1673,8 @@ MeasureBase* Element::findMeasureBase()
 {
     if (isMeasureBase()) {
         return toMeasureBase(this);
-    } else if (_parent) {
-        return _parent->findMeasureBase();
+    } else if (parent()) {
+        return parentElement()->findMeasureBase();
     } else {
         return 0;
     }
@@ -1825,7 +1832,7 @@ Element* Element::nextElement()
         case ElementType::BAR_LINE:
             return nextSegmentElement();
         default: {
-            return e->parent()->nextElement();
+            return e->parentElement()->nextElement();
         }
         }
     }
@@ -1859,7 +1866,7 @@ Element* Element::prevElement()
         case ElementType::BAR_LINE:
             return prevSegmentElement();
         default: {
-            return e->parent()->prevElement();
+            return e->parentElement()->prevElement();
         }
         }
     }
@@ -1909,7 +1916,7 @@ Element* Element::nextSegmentElement()
         default:
             break;
         }
-        p = p->parent();
+        p = p->parentElement();
     }
     return score()->firstElement();
 }
@@ -1957,7 +1964,7 @@ Element* Element::prevSegmentElement()
         default:
             break;
         }
-        p = p->parent();
+        p = p->parentElement();
     }
     return score()->firstElement();
 }
@@ -2200,7 +2207,7 @@ RectF Element::drag(EditData& ed)
                 p = toPage(e);
                 break;
             }
-            e = e->parent();
+            e = e->parentElement();
         }
         if (p) {
             bool move = false;
@@ -2258,7 +2265,7 @@ void Element::endDrag(EditData& ed)
 QVector<LineF> Element::genericDragAnchorLines() const
 {
     qreal xp = 0.0;
-    for (Element* e = parent(); e; e = e->parent()) {
+    for (Element* e = parentElement(); e; e = e->parentElement()) {
         xp += e->x();
     }
     qreal yp;
@@ -2274,7 +2281,7 @@ QVector<LineF> Element::genericDragAnchorLines() const
             yp += staff()->staffTypeForElement(this)->yoffset().val() * spatium();
         }
     } else {
-        yp = parent()->canvasPos().y();
+        yp = parentElement()->canvasPos().y();
     }
     PointF p1(xp, yp);
     LineF anchorLine(p1, canvasPos());

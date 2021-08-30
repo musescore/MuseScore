@@ -38,6 +38,7 @@
 #include "engraving/libmscore/masterscore.h"
 #include "engraving/libmscore/mscore.h"
 #include "engraving/style/defaultstyle.h"
+#include "engraving/compat/dummyelement.h"
 
 #include "keycanvas.h"
 #include "palettewidget.h"
@@ -63,7 +64,7 @@ KeyCanvas::KeyCanvas(QWidget* parent)
     QAction* a = new QAction("delete", this);
     a->setShortcut(Qt::Key_Delete);
     addAction(a);
-    clef = new Clef(gpaletteScore);
+    clef = new Clef(gpaletteScore->dummy()->segment());
     clef->setClefType(ClefType::G);
     connect(a, &QAction::triggered, this, &KeyCanvas::deleteElement);
 }
@@ -218,8 +219,8 @@ void KeyCanvas::dragEnterEvent(QDragEnterEvent* event)
         }
 
         event->acceptProposedAction();
-        dragElement = static_cast<Accidental*>(Element::create(type, gpaletteScore));
-        dragElement->setParent(0);
+        dragElement = static_cast<Accidental*>(Element::create(type, gpaletteScore->dummy()));
+        dragElement->moveToDummy();
         dragElement->read(e);
         dragElement->layout();
     } else {
@@ -361,7 +362,7 @@ void KeyEditor::addClicked()
         s.spos      = pos / spatium;
         e.keySymbols().append(s);
     }
-    auto ks = makeElement<KeySig>(gpaletteScore);
+    auto ks = std::make_shared<KeySig>(gpaletteScore->dummy()->segment());
     ks->setKeySigEvent(e);
     sp->appendElement(ks, "custom");
     _dirty = true;

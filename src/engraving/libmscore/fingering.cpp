@@ -51,15 +51,15 @@ static const ElementStyle fingeringStyle {
 //      Element(Score* = 0, ElementFlags = ElementFlag::NOTHING);
 //---------------------------------------------------------
 
-Fingering::Fingering(Score* s, Tid tid, ElementFlags ef)
-    : TextBase(ElementType::FINGERING, s, tid, ef)
+Fingering::Fingering(Note* parent, Tid tid, ElementFlags ef)
+    : TextBase(ElementType::FINGERING, parent, tid, ef)
 {
     setPlacement(Placement::ABOVE);
     initElementStyle(&fingeringStyle);
 }
 
-Fingering::Fingering(Score* s, ElementFlags ef)
-    : Fingering(s, Tid::FINGERING, ef)
+Fingering::Fingering(Note* parent, ElementFlags ef)
+    : Fingering(parent, Tid::FINGERING, ef)
 {
 }
 
@@ -105,7 +105,7 @@ Placement Fingering::calculatePlacement() const
 void Fingering::layout()
 {
     if (parent()) {
-        Fraction tick = parent()->tick();
+        Fraction tick = parentElement()->tick();
         const Staff* st = staff();
         if (st && st->isTabStaff(tick) && !st->staffType(tick)->showTabFingering()) {
             setbbox(RectF());

@@ -34,6 +34,7 @@
 #include "libmscore/masterscore.h"
 #include "libmscore/musescoreCore.h"
 #include "engraving/compat/scoreaccess.h"
+#include "engraving/compat/dummyelement.h"
 
 #include <QQmlEngine>
 
@@ -164,7 +165,7 @@ Element* PluginAPI::newElement(int elementType)
         return nullptr;
     }
     const ElementType type = ElementType(elementType);
-    Ms::Element* e = Ms::Element::create(type, score);
+    Ms::Element* e = Ms::Element::create(type, score->dummy());
     return wrap(e, Ownership::PLUGIN);
 }
 

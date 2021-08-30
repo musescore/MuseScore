@@ -55,7 +55,7 @@ class Bracket final : public Element
     Measure* _measure = nullptr;
 
 public:
-    Bracket(Score*);
+    Bracket(Element* parent);
     ~Bracket();
 
     Bracket* clone() const override { return new Bracket(*this); }

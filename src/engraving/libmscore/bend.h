@@ -52,7 +52,7 @@ class Bend final : public Element
     M_PROPERTY(qreal,     lineWidth, setLineWidth)
 
 public:
-    Bend(Score* s);
+    Bend(Note* parent);
 
     Bend* clone() const override { return new Bend(*this); }
 

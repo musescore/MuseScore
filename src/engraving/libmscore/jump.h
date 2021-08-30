@@ -55,7 +55,7 @@ public:
         USER
     };
 
-    Jump(Score*);
+    Jump(Measure* parent);
 
     void setJumpType(Type t);
     Type jumpType() const;

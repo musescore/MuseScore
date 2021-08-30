@@ -1301,7 +1301,7 @@ void ChangeElement::flip(EditData*)
         score->removeElement(oldElement);
         score->addElement(newElement);
     } else {
-        oldElement->parent()->change(oldElement, newElement);
+        oldElement->parentElement()->change(oldElement, newElement);
     }
 
     if (newElement->isKeySig()) {
@@ -2496,7 +2496,7 @@ void ChangeSpannerElements::flip(EditData*)
 
 void ChangeParent::flip(EditData*)
 {
-    Element* p = element->parent();
+    Element* p = element->parentElement();
     int si = element->staffIdx();
     p->remove(element);
     element->setParent(parent);

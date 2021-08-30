@@ -583,12 +583,12 @@ void EditDrumsetDialog::updateExample()
     int v         = m_editedDrumset.voice(pitch);
     Direction dir = m_editedDrumset.stemDirection(pitch);
     bool up = (Direction::UP == dir) || (Direction::AUTO == dir && line > 4);
-    std::shared_ptr<Chord> chord = std::make_shared<Chord>(gpaletteScore);
+    std::shared_ptr<Chord> chord = std::make_shared<Chord>(gpaletteScore->dummy()->segment());
     chord->setDurationType(TDuration::DurationType::V_QUARTER);
     chord->setStemDirection(dir);
     chord->setTrack(v);
     chord->setUp(up);
-    Note* note = new Note(gpaletteScore);
+    Note* note = new Note(chord.get());
     note->setParent(chord.get());
     note->setTrack(v);
     note->setPitch(pitch);
@@ -599,7 +599,7 @@ void EditDrumsetDialog::updateExample()
     note->setHeadGroup(nh);
     note->setCachedNoteheadSym(Sym::name2id(quarterCmb->currentData().toString()));
     chord->add(note);
-    Stem* stem = new Stem(gpaletteScore);
+    Stem* stem = new Stem(chord.get());
     stem->setLen((up ? -3.0 : 3.0) * gpaletteScore->spatium());
     chord->add(stem);
     drumNote->appendElement(chord, mu::qtrc("drumset", m_editedDrumset.name(pitch).toUtf8().constData()));

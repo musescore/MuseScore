@@ -49,8 +49,8 @@ static const ElementStyle fermataStyle {
 //   Fermata
 //---------------------------------------------------------
 
-Fermata::Fermata(Score* s)
-    : Element(ElementType::FERMATA, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+Fermata::Fermata(Element* parent)
+    : Element(ElementType::FERMATA, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     setPlacement(Placement::ABOVE);
     _symId         = SymId::noSym;
@@ -59,8 +59,8 @@ Fermata::Fermata(Score* s)
     initElementStyle(&fermataStyle);
 }
 
-Fermata::Fermata(SymId id, Score* s)
-    : Fermata(s)
+Fermata::Fermata(SymId id, Element* parent)
+    : Fermata(parent)
 {
     setSymId(id);
 }
@@ -257,7 +257,7 @@ void Fermata::layout()
 QVector<mu::LineF> Fermata::dragAnchorLines() const
 {
     QVector<LineF> result;
-    result << LineF(canvasPos(), parent()->canvasPos());
+    result << LineF(canvasPos(), parentElement()->canvasPos());
     return result;
 }
 

@@ -37,8 +37,8 @@ namespace Ms {
 //   StaffState
 //---------------------------------------------------------
 
-StaffState::StaffState(Score* score)
-    : Element(ElementType::STAFF_STATE, score)
+StaffState::StaffState(Element* parent)
+    : Element(ElementType::STAFF_STATE, parent)
 {
     _staffStateType = StaffStateType::INSTRUMENT;
     _instrument = new Instrument;

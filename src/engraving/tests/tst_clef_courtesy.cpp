@@ -70,7 +70,7 @@ static Measure* getMeasure(Score* score, int idx)
 
 static void dropClef(Element* m, ClefType t)
 {
-    Clef* clef = new Clef(m->score());   // create a new element, as Measure::drop() will eventually delete it
+    Clef* clef = new Clef(m->score()->dummy()->segment());   // create a new element, as Measure::drop() will eventually delete it
     clef->setClefType(t);
     EditData dropData(0);
     dropData.pos = m->pagePos();
@@ -165,7 +165,7 @@ void TestClefCourtesy::clef_courtesy02()
         m1 = m1->nextMeasure();
     }
     // make a clef-drop object and drop it to the measure
-    Clef* clef = new Clef(score);   // create a new element, as Measure::drop() will eventually delete it
+    Clef* clef = new Clef(score->dummy()->segment());   // create a new element, as Measure::drop() will eventually delete it
     clef->setClefType(ClefType::G8_VA);
     EditData dropData(0);
     dropData.pos = m1->pagePos();
@@ -178,7 +178,7 @@ void TestClefCourtesy::clef_courtesy02()
         m2 = m2->nextMeasure();
     }
     // make a clef-drop object and drop it to the measure
-    clef = new Clef(score);   // create a new element, as Measure::drop() will eventually delete it
+    clef = new Clef(score->dummy()->segment());   // create a new element, as Measure::drop() will eventually delete it
     clef->setClefType(ClefType::G);
     dropData.pos = m2->pagePos();
     dropData.dropElement = clef;
@@ -221,7 +221,7 @@ void TestClefCourtesy::clef_courtesy03()
     Measure* m2 = m1->nextMeasure();
 
     // make a clef-drop object and drop it to the 2nd measure
-    Clef* clef = new Clef(score);   // create a new element, as Measure::drop() will eventually delete it
+    Clef* clef = new Clef(score->dummy()->segment());   // create a new element, as Measure::drop() will eventually delete it
     clef->setClefType(ClefType::G8_VA);
     EditData dropData(0);
     dropData.pos = m2->pagePos();

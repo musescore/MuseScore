@@ -214,7 +214,7 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag, InputState* externalInputStat
         // for keyboard input (where we are given a staff position), there is a separate function Score::repitchNote()
         // the code is similar enough that it could possibly be refactored
         Chord* chord = toChord(is.cr());
-        note = new Note(this);
+        note = new Note(chord);
         note->setParent(chord);
         note->setTrack(chord->track());
         note->setNval(nval);
@@ -265,7 +265,7 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag, InputState* externalInputStat
         // recreate tie forward if there is a note to tie to
         // one-sided ties will not be recreated
         if (firstTiedNote) {
-            Tie* tie = new Tie(this);
+            Tie* tie = new Tie(note);
             tie->setStartNote(note);
             tie->setEndNote(firstTiedNote);
             tie->setTick(tie->startNote()->tick());
@@ -547,7 +547,7 @@ void Score::repitchNote(const Position& p, bool replace)
     } else {
         chord = toChord(cr);
     }
-    Note* note = new Note(this);
+    Note* note = new Note(chord);
     note->setParent(chord);
     note->setTrack(chord->track());
     note->setNval(nval);
@@ -605,7 +605,7 @@ void Score::repitchNote(const Position& p, bool replace)
         int tpc = styleB(Sid::concertPitch) ? nval.tpc1 : nval.tpc2;
         AccidentalVal alter = tpc2alter(tpc);
         at = Accidental::value2subtype(alter);
-        Accidental* a = new Accidental(this);
+        Accidental* a = new Accidental(note);
         a->setAccidentalType(at);
         a->setRole(AccidentalRole::USER);
         a->setParent(note);
@@ -616,7 +616,7 @@ void Score::repitchNote(const Position& p, bool replace)
     // recreate tie forward if there is a note to tie to
     // one-sided ties will not be recreated
     if (firstTiedNote) {
-        Tie* tie = new Tie(this);
+        Tie* tie = new Tie(note);
         tie->setStartNote(note);
         tie->setEndNote(firstTiedNote);
         tie->setTick(tie->startNote()->tick());

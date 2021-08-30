@@ -198,7 +198,7 @@ std::pair<int, float> NotationAccessibility::barbeat(const Element* element) con
 
     const Element* parent = element;
     while (parent && parent->type() != ElementType::SEGMENT && parent->type() != ElementType::MEASURE) {
-        parent = parent->parent();
+        parent = parent->parentElement();
     }
 
     if (!parent) {

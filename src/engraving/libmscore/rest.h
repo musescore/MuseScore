@@ -38,10 +38,10 @@ class TDuration;
 class Rest : public ChordRest
 {
 public:
-    Rest(Score* s = 0);
-    Rest(const ElementType& type, Score* s = 0);
-    Rest(Score*, const TDuration&);
-    Rest(const ElementType& type, Score*, const TDuration&);
+    Rest(Segment* parent);
+    Rest(const ElementType& type, Segment* parent = 0);
+    Rest(Segment* parent, const TDuration&);
+    Rest(const ElementType& type, Segment* parent, const TDuration&);
     Rest(const Rest&, bool link = false);
     ~Rest() { qDeleteAll(m_dots); }
 

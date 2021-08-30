@@ -56,7 +56,7 @@ void TestDynamic::initTestCase()
 
 void TestDynamic::test1()
 {
-    Dynamic* dynamic = new Dynamic(score);
+    Dynamic* dynamic = new Dynamic(score->dummy()->segment());
     dynamic->setDynamicType(Dynamic::Type(1));
 
     Dynamic* d;

@@ -91,7 +91,7 @@ void TestInstrumentChange::testAdd()
     MasterScore* score = test_pre("add");
     Measure* m = score->firstMeasure()->nextMeasure();
     Segment* s = m->first(SegmentType::ChordRest);
-    InstrumentChange* ic = new InstrumentChange(score);
+    InstrumentChange* ic = new InstrumentChange(s);
     ic->setParent(s);
     ic->setTrack(0);
     ic->setXmlText("Instrument");

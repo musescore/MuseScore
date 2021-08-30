@@ -52,25 +52,25 @@ namespace Ms {
 //    Rest
 //--------------------------------------------------------
 
-Rest::Rest(Score* s)
-    : Rest(ElementType::REST, s)
+Rest::Rest(Segment* parent)
+    : Rest(ElementType::REST, parent)
 {
 }
 
-Rest::Rest(const ElementType& type, Score* s)
-    : ChordRest(type, s)
+Rest::Rest(const ElementType& type, Segment* parent)
+    : ChordRest(type, parent)
 {
     _beamMode  = Beam::Mode::NONE;
     m_sym      = SymId::restQuarter;
 }
 
-Rest::Rest(Score* s, const TDuration& d)
-    : Rest(ElementType::REST, s, d)
+Rest::Rest(Segment* parent, const TDuration& d)
+    : Rest(ElementType::REST, parent, d)
 {
 }
 
-Rest::Rest(const ElementType& type, Score* s, const TDuration& d)
-    : ChordRest(type, s)
+Rest::Rest(const ElementType& type, Segment* parent, const TDuration& d)
+    : ChordRest(type, parent)
 {
     _beamMode  = Beam::Mode::NONE;
     m_sym      = SymId::restQuarter;
@@ -342,7 +342,7 @@ void Rest::layout()
             }
             // symbol needed; if not exist, create, if exists, update duration
             if (!_tabDur) {
-                _tabDur = new TabDurationSymbol(score(), stt, type, dots);
+                _tabDur = new TabDurationSymbol(this, stt, type, dots);
             } else {
                 _tabDur->setDuration(type, dots, stt);
             }
@@ -406,7 +406,7 @@ void Rest::checkDots()
 {
     int n = dots() - int(m_dots.size());
     for (int i = 0; i < n; ++i) {
-        NoteDot* dot = new NoteDot(score());
+        NoteDot* dot = new NoteDot(this);
         dot->setParent(this);
         dot->setVisible(visible());
         score()->undoAddElement(dot);
@@ -863,7 +863,9 @@ QString Rest::screenReaderInfo() const
 
 void Rest::add(Element* e)
 {
-    e->setParent(this);
+    if (e->parent() != this) {
+        e->setParent(this);
+    }
     e->setTrack(track());
 
     switch (e->type()) {
@@ -941,7 +943,7 @@ void Rest::read(XmlReader& e)
     while (e.readNextStartElement()) {
         const QStringRef& tag(e.name());
         if (tag == "Symbol") {
-            Symbol* s = new Symbol(score());
+            Symbol* s = new Symbol(this);
             s->setTrack(track());
             s->read(e);
             add(s);
@@ -949,13 +951,13 @@ void Rest::read(XmlReader& e)
             if (MScore::noImages) {
                 e.skipCurrentElement();
             } else {
-                Image* image = new Image(score());
+                Image* image = new Image(this);
                 image->setTrack(track());
                 image->read(e);
                 add(image);
             }
         } else if (tag == "NoteDot") {
-            NoteDot* dot = new NoteDot(score());
+            NoteDot* dot = new NoteDot(this);
             dot->read(e);
             add(dot);
         } else if (readStyledProperty(e, tag)) {

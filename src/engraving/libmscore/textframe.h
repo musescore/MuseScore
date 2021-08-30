@@ -38,7 +38,7 @@ class TBox : public VBox
     Text* _text;
 
 public:
-    TBox(Score* score);
+    TBox(System* parent);
     TBox(const TBox&);
     ~TBox();
 

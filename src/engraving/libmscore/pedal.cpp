@@ -92,8 +92,8 @@ Sid Pedal::getPropertyStyle(Pid pid) const
 //   Pedal
 //---------------------------------------------------------
 
-Pedal::Pedal(Score* s)
-    : TextLineBase(ElementType::PEDAL, s)
+Pedal::Pedal(Element* parent)
+    : TextLineBase(ElementType::PEDAL, parent)
 {
     initElementStyle(&pedalStyle);
     setLineVisible(true);

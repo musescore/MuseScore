@@ -22,7 +22,7 @@
 
 #include "mcursor.h"
 
-#include "engraving/compat/scoreaccess.h"
+#include "compat/scoreaccess.h"
 
 #include "part.h"
 #include "staff.h"
@@ -68,7 +68,7 @@ void MCursor::createMeasures()
                 break;
             }
         }
-        measure = new Measure(_score);
+        measure = new Measure(_score->dummy()->system());
         measure->setTick(tick);
         measure->setTimesig(_sig);
         measure->setTicks(_sig);
@@ -87,13 +87,13 @@ Chord* MCursor::addChord(int pitch, const TDuration& duration)
     Segment* segment = measure->getSegment(SegmentType::ChordRest, _tick);
     Chord* chord = toChord(segment->element(_track));
     if (chord == 0) {
-        chord = new Chord(_score);
+        chord = new Chord(segment);
         chord->setTrack(_track);
         chord->setDurationType(duration);
         chord->setTicks(duration.fraction());
         segment->add(chord);
     }
-    Note* note = new Note(_score);
+    Note* note = new Note(chord);
     chord->add(note);
     note->setPitch(pitch);
     note->setTpcFromPitch();
@@ -112,7 +112,7 @@ void MCursor::addKeySig(Key key)
     Segment* segment = measure->getSegment(SegmentType::KeySig, _tick);
     int n = _score->nstaves();
     for (int i = 0; i < n; ++i) {
-        KeySig* ks = new KeySig(_score);
+        KeySig* ks = new KeySig(segment);
         ks->setKey(key);
         ks->setTrack(i * VOICES);
         segment->add(ks);
@@ -130,7 +130,7 @@ TimeSig* MCursor::addTimeSig(const Fraction& f)
     Segment* segment = measure->getSegment(SegmentType::TimeSig, _tick);
     TimeSig* ts = 0;
     for (int i = 0; i < _score->nstaves(); ++i) {
-        ts = new TimeSig(_score);
+        ts = new TimeSig(segment);
         ts->setSig(f, TimeSigType::NORMAL);
         ts->setTrack(i * VOICES);
         segment->add(ts);

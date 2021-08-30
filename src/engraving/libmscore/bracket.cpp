@@ -43,8 +43,8 @@ namespace Ms {
 //   Bracket
 //---------------------------------------------------------
 
-Bracket::Bracket(Score* s)
-    : Element(ElementType::BRACKET, s)
+Bracket::Bracket(Element* parent)
+    : Element(ElementType::BRACKET, parent)
 {
     ay1          = 0;
     h2           = 3.5 * spatium();
@@ -370,7 +370,7 @@ void Bracket::endEditDrag(EditData&)
     if (staffIdx1 + 1 >= n) {
         staffIdx2 = staffIdx1;
     } else {
-        qreal ay  = parent()->pagePos().y();
+        qreal ay  = parentElement()->pagePos().y();
         System* s = system();
         qreal y   = s->staff(staffIdx1)->y() + ay;
         qreal h1  = staff()->height();

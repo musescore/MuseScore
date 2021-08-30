@@ -428,7 +428,7 @@ void LayoutPage::checkDivider(bool left, System* s, qreal yOffset, bool remove)
     SystemDivider* divider = left ? s->systemDividerLeft() : s->systemDividerRight();
     if ((s->score()->styleB(left ? Sid::dividerLeft : Sid::dividerRight)) && !remove) {
         if (!divider) {
-            divider = new SystemDivider(s->score());
+            divider = new SystemDivider(s);
             divider->setDividerType(left ? SystemDivider::Type::LEFT : SystemDivider::Type::RIGHT);
             divider->setGenerated(true);
             s->add(divider);

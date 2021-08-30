@@ -49,7 +49,7 @@ static const ElementStyle shortInstrumentStyle {
 //   InstrumentName
 //---------------------------------------------------------
 
-InstrumentName::InstrumentName(Score* s)
+InstrumentName::InstrumentName(System* s)
     : TextBase(ElementType::INSTRUMENT_NAME, s, Tid::INSTRUMENT_LONG, ElementFlag::NOTHING)
 {
     setFlag(ElementFlag::MOVABLE, false);

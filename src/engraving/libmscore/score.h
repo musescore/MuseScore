@@ -50,6 +50,7 @@
 #include "infrastructure/draw/iimageprovider.h"
 #include "layout/layout.h"
 #include "layout/layoutoptions.h"
+#include "compat/dummyelement.h"
 
 class QMimeData;
 
@@ -63,6 +64,7 @@ class ScoreAccess;
 class ReadScoreHook;
 class WriteScoreHook;
 class Read302;
+class DummyElement;
 }
 
 namespace Ms {
@@ -506,6 +508,7 @@ private:
 
     mu::engraving::Layout m_layout;
     mu::engraving::LayoutOptions m_layoutOptions;
+    mu::engraving::compat::DummyElement* m_dummyElement = nullptr;
 
     ChordRest* nextMeasure(ChordRest* element, bool selectBehavior = false, bool mmRest = false);
     ChordRest* prevMeasure(ChordRest* element, bool mmRest = false);
@@ -602,6 +605,8 @@ public:
     ScoreElement* treeChild(int idx) const override;
     int treeChildCount() const override;
     void dumpScoreTree();  // for debugging purposes
+
+    mu::engraving::compat::DummyElement* dummy() { return m_dummyElement; }
 
     void rebuildBspTree();
     bool noStaves() const { return _staves.empty(); }

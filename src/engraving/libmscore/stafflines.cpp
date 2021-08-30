@@ -48,8 +48,8 @@ namespace Ms {
 //   StaffLines
 //---------------------------------------------------------
 
-StaffLines::StaffLines(Score* s)
-    : Element(ElementType::STAFF_LINES, s)
+StaffLines::StaffLines(Measure* parent)
+    : Element(ElementType::STAFF_LINES, parent)
 {
     setSelectable(false);
 }
@@ -71,13 +71,13 @@ PointF StaffLines::pagePos() const
 PointF StaffLines::canvasPos() const
 {
     PointF p(pagePos());
-    Element* e = parent();
+    Element* e = parentElement();
     while (e) {
         if (e->type() == ElementType::PAGE) {
             p += e->pos();
             break;
         }
-        e = e->parent();
+        e = e->parentElement();
     }
     return p;
 }

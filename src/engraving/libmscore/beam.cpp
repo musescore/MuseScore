@@ -75,9 +75,10 @@ struct BeamFragment {
 //   Beam
 //---------------------------------------------------------
 
-Beam::Beam(Score* s)
-    : Element(ElementType::BEAM, s)
+Beam::Beam(Element* parent, Score* score)
+    : Element(ElementType::BEAM, parent)
 {
+    ScoreElement::setScore(score);
     initElementStyle(&beamStyle);
 }
 
@@ -150,7 +151,7 @@ PointF Beam::canvasPos() const
 {
     PointF p(pagePos());
     if (system() && system()->parent()) {
-        p += system()->parent()->pos();
+        p += system()->parentElement()->pos();
     }
     return p;
 }
@@ -339,11 +340,16 @@ void Beam::layout1()
     qDeleteAll(beamSegments);
     beamSegments.clear();
 
-    setParent(nullptr);   // parent is System
+    moveToDummy();  // parent is System
 
     maxDuration.setType(TDuration::DurationType::V_INVALID);
     Chord* c1 = 0;
     Chord* c2 = 0;
+
+    if (!staff()) {
+        int k = 0;
+        auto s = staff();
+    }
 
     // TAB's with stem beside staves have special layout
     if (staff()->isTabStaff(Fraction(0, 1)) && !staff()->staffType(Fraction(0, 1))->stemThrough()) {
@@ -1692,7 +1698,7 @@ void Beam::layout2(std::vector<ChordRest*> crl, SpannerSegmentType, int frag)
             }
             _up = crl.front()->up();
             if (relayoutGrace) {
-                c1->parent()->layout();
+                c1->parentElement()->layout();
             }
         } else if (_cross) {
             qreal beamY   = 0.0;        // y position of main beam start

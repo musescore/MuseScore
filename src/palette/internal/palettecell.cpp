@@ -184,7 +184,7 @@ bool PaletteCell::read(XmlReader& e)
         } else if (s == "visible") {
             visible = e.readBool();
         } else {
-            element.reset(Element::name2Element(s, gpaletteScore));
+            element.reset(Element::name2Element(s, gpaletteScore->dummy()));
             if (!element) {
                 e.unknown();
             } else {

@@ -67,7 +67,7 @@ using namespace mu::notation;
 
 NotationInteraction::NotationInteraction(Notation* notation, INotationUndoStackPtr undoStack)
     : m_notation(notation), m_undoStack(undoStack), m_gripEditData(&m_scoreCallbacks),
-    m_textEditData(&m_scoreCallbacks), m_lasso(new Ms::Lasso(notation->score()))
+    m_textEditData(&m_scoreCallbacks)
 {
     m_noteInput = std::make_shared<NotationNoteInput>(notation, this, m_undoStack);
     m_selection = std::make_shared<NotationSelection>(notation);
@@ -152,7 +152,7 @@ void NotationInteraction::paint(mu::draw::Painter* painter)
     drawTextEditMode(painter);
     drawSelectionRange(painter);
     drawGripPoints(painter);
-    if (!m_lasso->bbox().isEmpty()) {
+    if (m_lasso && !m_lasso->bbox().isEmpty()) {
         m_lasso->draw(painter);
     }
 }
@@ -225,7 +225,7 @@ void NotationInteraction::showShadowNote(const PointF& pos)
 
     if (inputState.rest()) {
         int yo = 0;
-        Ms::Rest rest(Ms::gpaletteScore, duration.type());
+        Ms::Rest rest(Ms::gpaletteScore->dummy()->segment(), duration.type());
         rest.setTicks(duration.fraction());
         symNotehead = rest.getSymbol(inputState.duration().type(), 0, staff->lines(position.segment->tick()), &yo);
         m_shadowNote->setState(symNotehead, duration, true, segmentSkylineTopY, segmentSkylineBottomY);
@@ -666,6 +666,10 @@ void NotationInteraction::startDrag(const std::vector<Element*>& elems,
 
 void NotationInteraction::doDragLasso(const PointF& pt)
 {
+    if (!m_lasso) {
+        m_lasso = new Ms::Lasso(score());
+    }
+
     score()->addRefresh(m_lasso->canvasBoundingRect());
     RectF r;
     r.setCoords(m_dragData.beginMove.x(), m_dragData.beginMove.y(), pt.x(), pt.y());
@@ -677,6 +681,10 @@ void NotationInteraction::doDragLasso(const PointF& pt)
 
 void NotationInteraction::endLasso()
 {
+    if (!m_lasso) {
+        return;
+    }
+
     score()->addRefresh(m_lasso->canvasBoundingRect());
     m_lasso->setbbox(RectF());
     score()->lassoSelectEnd(m_dragData.mode != DragMode::LassoList);
@@ -815,7 +823,7 @@ void NotationInteraction::startDrop(const QByteArray& edata)
     Fraction duration;      // dummy
     ElementType type = Element::readType(e, &m_dropData.ed.dragOffset, &duration);
 
-    Element* el = Element::create(type, score());
+    Element* el = Element::create(type, score()->dummy());
     if (el) {
         if (type == ElementType::BAR_LINE || type == ElementType::ARPEGGIO || type == ElementType::BRACKET) {
             double spatium = score()->spatium();
@@ -1232,7 +1240,7 @@ bool NotationInteraction::applyPaletteElement(Ms::Element* element, Qt::Keyboard
             Ms::Fraction duration;        // dummy
             PointF dragOffset;
             Ms::ElementType type = Ms::Element::readType(e, &dragOffset, &duration);
-            Ms::Spanner* spanner = static_cast<Ms::Spanner*>(Ms::Element::create(type, score));
+            Ms::Spanner* spanner = static_cast<Ms::Spanner*>(Ms::Element::create(type, score->dummy()));
             spanner->read(e);
             spanner->styleChanged();
             score->cmdAddSpanner(spanner, idx, startSegment, endSegment);
@@ -1314,14 +1322,14 @@ bool NotationInteraction::applyPaletteElement(Ms::Element* element, Qt::Keyboard
                     switch (element->type()) {
                     case Ms::ElementType::CLEF:
                     {
-                        Ms::Clef* oclef = new Ms::Clef(score);
+                        Ms::Clef* oclef = new Ms::Clef(score->dummy()->segment());
                         oclef->setClefType(staff->clef(tick1));
                         oelement = oclef;
                         break;
                     }
                     case Ms::ElementType::KEYSIG:
                     {
-                        Ms::KeySig* okeysig = new Ms::KeySig(score);
+                        Ms::KeySig* okeysig = new Ms::KeySig(score->dummy()->segment());
                         okeysig->setKeySigEvent(staff->keySigEvent(tick1));
                         if (!score->styleB(Ms::Sid::concertPitch) && !okeysig->isCustom() && !okeysig->isAtonal()) {
                             Ms::Interval v = staff->part()->instrument(tick1)->transpose();
@@ -1335,7 +1343,7 @@ bool NotationInteraction::applyPaletteElement(Ms::Element* element, Qt::Keyboard
                     }
                     case Ms::ElementType::TIMESIG:
                     {
-                        Ms::TimeSig* otimesig = new Ms::TimeSig(score);
+                        Ms::TimeSig* otimesig = new Ms::TimeSig(score->dummy()->segment());
                         otimesig->setFrom(staff->timeSig(tick1));
                         oelement = otimesig;
                         break;
@@ -1450,7 +1458,7 @@ void NotationInteraction::applyDropPaletteElement(Ms::Score* score, Ms::Element*
         Fraction duration;      // dummy
         PointF dragOffset;
         ElementType type = Element::readType(n, &dragOffset, &duration);
-        dropData->dropElement = Element::create(type, score);
+        dropData->dropElement = Element::create(type, score->dummy());
 
         dropData->dropElement->read(n);
         dropData->dropElement->styleChanged();       // update to local style
@@ -3156,7 +3164,7 @@ void NotationInteraction::nextLyrics(bool back, bool moveOnly, bool end)
 
     bool newLyrics = false;
     if (!nextLyrics) {
-        nextLyrics = new Ms::Lyrics(score());
+        nextLyrics = new Ms::Lyrics(cr);
         nextLyrics->setTrack(track);
         cr = toChordRest(nextSegment->element(track));
         nextLyrics->setParent(cr);
@@ -3265,7 +3273,7 @@ void NotationInteraction::nextSyllable()
     Ms::Lyrics* toLyrics = cr->lyrics(verse, placement);
     bool newLyrics = (toLyrics == 0);
     if (!toLyrics) {
-        toLyrics = new Ms::Lyrics(score());
+        toLyrics = new Ms::Lyrics(nextSegment->element(track));
         toLyrics->setTrack(track);
         toLyrics->setParent(nextSegment->element(track));
         toLyrics->setNo(verse);
@@ -3341,7 +3349,7 @@ void NotationInteraction::nextLyricsVerse(bool back)
 
     lyrics = cr->lyrics(verse, placement);
     if (!lyrics) {
-        lyrics = new Ms::Lyrics(score());
+        lyrics = new Ms::Lyrics(cr);
         lyrics->setTrack(track);
         lyrics->setParent(cr);
         lyrics->setNo(verse);
@@ -3448,7 +3456,7 @@ void NotationInteraction::addMelisma()
     Ms::Lyrics* toLyrics = cr->lyrics(verse, placement);
     bool newLyrics = (toLyrics == 0);
     if (!toLyrics) {
-        toLyrics = new Ms::Lyrics(score());
+        toLyrics = new Ms::Lyrics(nextSegment->element(track));
         toLyrics->setTrack(track);
         toLyrics->setParent(nextSegment->element(track));
         toLyrics->setNo(verse);
@@ -3504,7 +3512,7 @@ void NotationInteraction::addLyricsVerse()
     newVerse = lyrics->no() + 1;
 
     Ms::Lyrics* oldLyrics = lyrics;
-    lyrics = new Ms::Lyrics(score());
+    lyrics = new Ms::Lyrics(oldLyrics->segment()->element(oldLyrics->track()));
     lyrics->setTrack(oldLyrics->track());
     lyrics->setParent(oldLyrics->segment()->element(oldLyrics->track()));
     lyrics->setPlacement(oldLyrics->placement());

@@ -38,8 +38,8 @@ static const ElementStyle mmRestRangeStyle {
     { Sid::mmRestRangeHPlacement,  Pid::HPLACEMENT }
 };
 
-MMRestRange::MMRestRange(Score* s)
-    : MeasureNumberBase(ElementType::MMREST_RANGE, s, Tid::MMREST_RANGE)
+MMRestRange::MMRestRange(Measure* parent)
+    : MeasureNumberBase(ElementType::MMREST_RANGE, parent, Tid::MMREST_RANGE)
 {
     initElementStyle(&mmRestRangeStyle);
 }

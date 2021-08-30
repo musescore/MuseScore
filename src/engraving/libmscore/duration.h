@@ -46,7 +46,7 @@ class DurationElement : public Element
     Tuplet* _tuplet;
 
 public:
-    DurationElement(const ElementType& type, Score* = 0, ElementFlags = ElementFlag::MOVABLE | ElementFlag::ON_STAFF);
+    DurationElement(const ElementType& type, Element* parent = 0, ElementFlags = ElementFlag::MOVABLE | ElementFlag::ON_STAFF);
     DurationElement(const DurationElement& e);
     ~DurationElement();
 

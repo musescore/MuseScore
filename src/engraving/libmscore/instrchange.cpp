@@ -51,15 +51,15 @@ static const ElementStyle instrumentChangeStyle {
 //   InstrumentChange
 //---------------------------------------------------------
 
-InstrumentChange::InstrumentChange(Score* s)
-    : TextBase(ElementType::INSTRUMENT_CHANGE, s, Tid::INSTRUMENT_CHANGE, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+InstrumentChange::InstrumentChange(Element* parent)
+    : TextBase(ElementType::INSTRUMENT_CHANGE, parent, Tid::INSTRUMENT_CHANGE, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     initElementStyle(&instrumentChangeStyle);
     _instrument = new Instrument();
 }
 
-InstrumentChange::InstrumentChange(const Instrument& i, Score* s)
-    : TextBase(ElementType::INSTRUMENT_CHANGE, s, Tid::INSTRUMENT_CHANGE, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+InstrumentChange::InstrumentChange(const Instrument& i, Element* parent)
+    : TextBase(ElementType::INSTRUMENT_CHANGE, parent, Tid::INSTRUMENT_CHANGE, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     initElementStyle(&instrumentChangeStyle);
     _instrument = new Instrument(i);

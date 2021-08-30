@@ -33,7 +33,7 @@ namespace Ms {
 class RehearsalMark final : public TextBase
 {
 public:
-    RehearsalMark(Score* score);
+    RehearsalMark(Segment* parent);
 
     RehearsalMark* clone() const override { return new RehearsalMark(*this); }
 

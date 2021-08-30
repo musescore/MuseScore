@@ -162,7 +162,7 @@ bool Score::readScore400(XmlReader& e)
                    || (tag == "Trill")
                    || (tag == "Slur")
                    || (tag == "Pedal")) {
-            Spanner* s = toSpanner(Element::name2Element(tag, this));
+            Spanner* s = toSpanner(Element::name2Element(tag, this->dummy()));
             s->read(e);
             addSpanner(s);
         } else if (tag == "Excerpt") {

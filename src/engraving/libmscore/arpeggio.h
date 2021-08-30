@@ -61,7 +61,7 @@ class Arpeggio final : public Element
     static const std::array<const char*, 6> arpeggioTypeNames;
 
 public:
-    Arpeggio(Score* s);
+    Arpeggio(Chord* parent);
 
     Arpeggio* clone() const override { return new Arpeggio(*this); }
 

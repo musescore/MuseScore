@@ -168,7 +168,7 @@ void TestChordSymbol::testAddLink()
     MasterScore* score = test_pre("add-link");
     Segment* seg = score->firstSegment(SegmentType::ChordRest);
     ChordRest* cr = seg->cr(0);
-    Harmony* harmony = new Harmony(score);
+    Harmony* harmony = new Harmony(cr->segment());
     harmony->setHarmony("C7");
     harmony->setTrack(cr->track());
     harmony->setParent(cr->segment());
@@ -182,7 +182,7 @@ void TestChordSymbol::testAddPart()
     MasterScore* score = test_pre("add-part");
     Segment* seg = score->firstSegment(SegmentType::ChordRest);
     ChordRest* cr = seg->cr(0);
-    Harmony* harmony = new Harmony(score);
+    Harmony* harmony = new Harmony(cr->segment());
     harmony->setHarmony("C7");
     harmony->setTrack(cr->track());
     harmony->setParent(cr->segment());

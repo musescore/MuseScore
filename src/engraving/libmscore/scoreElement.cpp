@@ -35,6 +35,8 @@
 #include "sym.h"
 #include "masterscore.h"
 
+#include "log.h"
+
 using namespace mu;
 
 namespace Ms {
@@ -159,9 +161,18 @@ static const ElementName elementNames[] = {
 //   ScoreElement
 //---------------------------------------------------------
 
-ScoreElement::ScoreElement(const ElementType& type, Score* s)
-    : m_type(type), _score(s)
+ScoreElement::ScoreElement(const ElementType& type, ScoreElement* parent)
+    : m_type(type), m_parent(parent)
 {
+    IF_ASSERT_FAILED(this != parent) {
+        return;
+    }
+
+    if (type != ElementType::SCORE) {
+        IF_ASSERT_FAILED(parent) {
+        }
+    }
+
     if (elementsProvider()) {
         elementsProvider()->reg(this);
     }
@@ -170,7 +181,9 @@ ScoreElement::ScoreElement(const ElementType& type, Score* s)
 ScoreElement::ScoreElement(const ScoreElement& se)
 {
     m_type = se.m_type;
-    _score = se._score;
+    m_parent = se.m_parent;
+    m_isParentExplicitlySet = se.m_isParentExplicitlySet;
+    m_isDummy = se.m_isDummy;
     _elementStyle = se._elementStyle;
     if (_elementStyle) {
         size_t n = _elementStyle->size();
@@ -676,7 +689,7 @@ bool ScoreElement::isLinked(ScoreElement* se) const
 void ScoreElement::undoUnlink()
 {
     if (_links) {
-        _score->undo(new Unlink(this));
+        score()->undo(new Unlink(this));
     }
 }
 
@@ -799,13 +812,103 @@ ScoreElement* LinkedElements::mainElement()
     });
 }
 
-//---------------------------------------------------------
-//   masterScore
-//---------------------------------------------------------
+void ScoreElement::setScore(Score* s)
+{
+    _score = s;
+}
+
+ScoreElement* ScoreElement::parent(bool isIncludeDummy) const
+{
+    if (!m_parent) {
+        return nullptr;
+    }
+
+    //! NOTE We need to exclude a dummy for compatibility reasons.
+    if (isIncludeDummy) {
+        return m_parent;
+    }
+
+    if (!m_isParentExplicitlySet) {
+        return nullptr;
+    }
+
+    if (m_parent->isScore()) {
+        return nullptr;
+    }
+
+    if (m_parent->isDummy()) {
+        return nullptr;
+    }
+
+    return m_parent;
+}
+
+void ScoreElement::setParent(ScoreElement* p, bool isExplicitly)
+{
+    IF_ASSERT_FAILED(this != p) {
+        return;
+    }
+
+    if (!p) {
+        moveToDummy();
+        return;
+    }
+
+    m_parent = p;
+
+    m_isParentExplicitlySet = isExplicitly;
+}
+
+void ScoreElement::moveToDummy()
+{
+    Score* sc = score();
+    IF_ASSERT_FAILED(sc) {
+        return;
+    }
+
+    if (sc->dummy() != this && sc->dummy()) {
+        setParent(sc->dummy());
+    }
+}
+
+void ScoreElement::setIsDummy(bool arg)
+{
+    m_isDummy = arg;
+}
+
+bool ScoreElement::isDummy() const
+{
+    return m_isDummy;
+}
+
+Score* ScoreElement::score(bool required) const
+{
+    if (_score) {
+        return _score;
+    }
+
+    Score* sc = nullptr;
+    ScoreElement* e = const_cast<ScoreElement*>(this);
+    while (e) {
+        if (e->isScore()) {
+            sc = toScore(e);
+            break;
+        }
+
+        e = e->m_parent;
+    }
+
+    if (required) {
+        IF_ASSERT_FAILED(sc) {
+        }
+    }
+
+    return sc;
+}
 
 MasterScore* ScoreElement::masterScore() const
 {
-    return _score->masterScore();
+    return score()->masterScore();
 }
 
 //---------------------------------------------------------

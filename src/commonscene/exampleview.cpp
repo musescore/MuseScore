@@ -236,9 +236,9 @@ void ExampleView::dragEnterEvent(QDragEnterEvent* event)
         Fraction duration;      // dummy
         ElementType type = Element::readType(e, &dragOffset, &duration);
 
-        dragElement = Element::create(type, _score);
+        dragElement = Element::create(type, _score->dummy());
         if (dragElement) {
-            dragElement->setParent(0);
+            dragElement->moveToDummy();
             dragElement->read(e);
             dragElement->layout();
         }

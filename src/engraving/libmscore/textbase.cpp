@@ -1028,7 +1028,7 @@ void TextBlock::layout(TextBase* t)
     qreal lm     = 0.0;
 
     qreal layoutWidth = 0;
-    Element* e = t->parent();
+    Element* e = t->parentElement();
     if (e && t->layoutToParentWidth()) {
         layoutWidth = e->width();
         switch (e->type()) {
@@ -1674,8 +1674,8 @@ QString TextBlock::text(int col1, int len, bool withFormat) const
 //   Text
 //---------------------------------------------------------
 
-TextBase::TextBase(const Ms::ElementType& type, Score* s, Tid tid, ElementFlags f)
-    : Element(type, s, f | ElementFlag::MOVABLE)
+TextBase::TextBase(const Ms::ElementType& type, Ms::ScoreElement* parent, Tid tid, ElementFlags f)
+    : Element(type, parent, f | ElementFlag::MOVABLE)
 {
     _cursor                 = new TextCursor(this);
     _cursor->init();
@@ -1691,8 +1691,8 @@ TextBase::TextBase(const Ms::ElementType& type, Score* s, Tid tid, ElementFlags 
     _frameRound             = 0;
 }
 
-TextBase::TextBase(const ElementType& type, Score* s, ElementFlags f)
-    : TextBase(type, s, Tid::DEFAULT, f)
+TextBase::TextBase(const ElementType& type, ScoreElement* parent, ElementFlags f)
+    : TextBase(type, parent, Tid::DEFAULT, f)
 {
 }
 
@@ -2043,7 +2043,7 @@ void TextBase::layout1()
                 yoff = p->tm();
             } else if (parent()->isMeasure()) {
             } else {
-                h  = parent()->height();
+                h  = parentElement()->height();
             }
         }
     } else {

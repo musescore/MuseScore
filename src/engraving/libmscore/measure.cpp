@@ -181,8 +181,8 @@ void MStaff::setTrack(int track)
 //   Measure
 //---------------------------------------------------------
 
-Measure::Measure(Score* s)
-    : MeasureBase(ElementType::MEASURE, s), m_timesig(4, 4)
+Measure::Measure(System* parent)
+    : MeasureBase(ElementType::MEASURE, parent), m_timesig(4, 4)
 {
     setTicks(Fraction(4, 4));
     m_repeatCount = 2;
@@ -192,7 +192,7 @@ Measure::Measure(Score* s)
     for (int staffIdx = 0; staffIdx < n; ++staffIdx) {
         MStaff* ms = new MStaff;
         Staff* staff = score()->staff(staffIdx);
-        ms->setLines(new StaffLines(score()));
+        ms->setLines(new StaffLines(this));
         ms->lines()->setTrack(staffIdx * VOICES);
         ms->lines()->setParent(this);
         ms->lines()->setVisible(!staff->isLinesInvisible(tick()));
@@ -260,7 +260,7 @@ void Measure::createStaves(int staffIdx)
     for (int n = int(m_mstaves.size()); n <= staffIdx; ++n) {
         Staff* staff = score()->staff(n);
         MStaff* s    = new MStaff;
-        s->setLines(new StaffLines(score()));
+        s->setLines(new StaffLines(this));
         s->lines()->setParent(this);
         s->lines()->setTrack(n * VOICES);
         s->lines()->setVisible(!staff->isLinesInvisible(tick()));
@@ -629,7 +629,7 @@ void Measure::layoutMeasureNumber()
         }
         if (smn && ((staffIdx == nn) || nas)) {
             if (t == 0) {
-                t = new MeasureNumber(score());
+                t = new MeasureNumber(this);
                 t->setTrack(staffIdx * VOICES);
                 t->setGenerated(true);
                 t->setParent(this);
@@ -682,7 +682,7 @@ void Measure::layoutMMRestRange()
         MStaff* ms = m_mstaves[staffIdx];
         MMRestRange* rr = ms->mmRangeText();
         if (!rr) {
-            rr = new MMRestRange(score());
+            rr = new MMRestRange(this);
             rr->setTrack(staffIdx * VOICES);
             rr->setGenerated(true);
             rr->setParent(this);
@@ -900,7 +900,10 @@ Segment* Measure::getSegmentR(SegmentType st, const Fraction& t)
 
 void Measure::add(Element* e)
 {
-    e->setParent(this);
+    if (e->parent() != this) {
+        e->setParent(this);
+    }
+
     ElementType type = e->type();
 
     switch (type) {
@@ -1287,7 +1290,7 @@ void Measure::cmdAddStaves(int sStaff, int eStaff, bool createRest)
     for (int i = sStaff; i < eStaff; ++i) {
         Staff* staff = score()->staff(i);
         MStaff* ms   = new MStaff;
-        ms->setLines(new StaffLines(score()));
+        ms->setLines(new StaffLines(this));
         ms->lines()->setTrack(i * VOICES);
         ms->lines()->setParent(this);
         ms->lines()->setVisible(!staff->isLinesInvisible(tick()));
@@ -1335,7 +1338,7 @@ void Measure::cmdAddStaves(int sStaff, int eStaff, bool createRest)
             }
             if (!ots) {
                 // no time signature found; use measure timesig to construct one
-                ots = new TimeSig(score());
+                ots = new TimeSig(score()->dummy()->segment());
                 ots->setSig(timesig());
                 constructed = true;
             }
@@ -1409,7 +1412,7 @@ void Measure::insertStaff(Staff* staff, int staffIdx)
     }
 
     MStaff* ms = new MStaff;
-    ms->setLines(new StaffLines(score()));
+    ms->setLines(new StaffLines(this));
     ms->lines()->setParent(this);
     ms->lines()->setTrack(staffIdx * VOICES);
     ms->lines()->setVisible(!staff->isLinesInvisible(tick()));
@@ -1906,7 +1909,7 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
                 // add rests for any other duration list value
                 Fraction tickOffset = tick() + rest->actualTicks();
                 for (unsigned i = 1; i < durList.size(); i++) {
-                    Rest* newRest = new Rest(s);
+                    Rest* newRest = new Rest(s->dummy()->segment());
                     newRest->setDurationType(durList.at(i));
                     newRest->setTicks(durList.at(i).fraction());
                     newRest->setTrack(rest->track());
@@ -2075,7 +2078,7 @@ void Measure::read(XmlReader& e, int staffIdx)
     for (int n = int(m_mstaves.size()); n <= staffIdx; ++n) {
         Staff* staff = score()->staff(n);
         MStaff* s    = new MStaff;
-        s->setLines(new StaffLines(score()));
+        s->setLines(new StaffLines(this));
         s->lines()->setParent(this);
         s->lines()->setTrack(n * VOICES);
         s->lines()->setVisible(!staff->isLinesInvisible(tick()));
@@ -2109,7 +2112,7 @@ void Measure::read(XmlReader& e, int staffIdx)
             e.setTick(tick());
             readVoice(e, staffIdx, irregular);
         } else if (tag == "Marker" || tag == "Jump") {
-            Element* el = Element::name2Element(tag, score());
+            Element* el = Element::name2Element(tag, this);
             el->setTrack(e.track());
             el->read(e);
             add(el);
@@ -2135,7 +2138,7 @@ void Measure::read(XmlReader& e, int staffIdx)
             setRepeatEnd(true);
         } else if (tag == "vspacer" || tag == "vspacerDown") {
             if (!m_mstaves[staffIdx]->vspacerDown()) {
-                Spacer* spacer = new Spacer(score());
+                Spacer* spacer = new Spacer(this);
                 spacer->setSpacerType(SpacerType::DOWN);
                 spacer->setTrack(staffIdx * VOICES);
                 add(spacer);
@@ -2143,7 +2146,7 @@ void Measure::read(XmlReader& e, int staffIdx)
             m_mstaves[staffIdx]->vspacerDown()->setGap(e.readDouble() * _spatium);
         } else if (tag == "vspacerFixed") {
             if (!m_mstaves[staffIdx]->vspacerDown()) {
-                Spacer* spacer = new Spacer(score());
+                Spacer* spacer = new Spacer(this);
                 spacer->setSpacerType(SpacerType::FIXED);
                 spacer->setTrack(staffIdx * VOICES);
                 add(spacer);
@@ -2151,7 +2154,7 @@ void Measure::read(XmlReader& e, int staffIdx)
             m_mstaves[staffIdx]->vspacerDown()->setGap(e.readDouble() * _spatium);
         } else if (tag == "vspacerUp") {
             if (!m_mstaves[staffIdx]->vspacerUp()) {
-                Spacer* spacer = new Spacer(score());
+                Spacer* spacer = new Spacer(this);
                 spacer->setSpacerType(SpacerType::UP);
                 spacer->setTrack(staffIdx * VOICES);
                 add(spacer);
@@ -2164,8 +2167,12 @@ void Measure::read(XmlReader& e, int staffIdx)
         } else if (tag == "measureRepeatCount") {
             setMeasureRepeatCount(e.readInt(), staffIdx);
         } else if (tag == "SystemDivider") {
-            SystemDivider* sd = new SystemDivider(score());
+            SystemDivider* sd = new SystemDivider(this->score()->dummy()->system());
             sd->read(e);
+            //! TODO Looks like a bug.
+            //! The SystemDivider parent must be System
+            //! there is a method: `System* system() const { return (System*)parent(); }`,
+            //! but when we add it to Measure, the parent will be rewritten.
             add(sd);
         } else if (tag == "multiMeasureRest") {
             m_mmRestCount = e.readInt();
@@ -2173,12 +2180,12 @@ void Measure::read(XmlReader& e, int staffIdx)
             setTick(e.lastMeasure()->tick());
             e.setTick(e.lastMeasure()->tick());
         } else if (tag == "MeasureNumber") {
-            MeasureNumber* noText = new MeasureNumber(score());
+            MeasureNumber* noText = new MeasureNumber(this);
             noText->read(e);
             noText->setTrack(e.track());
             add(noText);
         } else if (tag == "MMRestRange") {
-            MMRestRange* range = new MMRestRange(score());
+            MMRestRange* range = new MMRestRange(this);
             range->read(e);
             range->setTrack(e.track());
             add(range);
@@ -2223,7 +2230,7 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
             qDebug("read midi tick");
             e.setTick(Fraction::fromTicks(score()->fileDivision(e.readInt())));
         } else if (tag == "BarLine") {
-            BarLine* barLine = new BarLine(score());
+            BarLine* barLine = new BarLine(score()->dummy()->segment());
             barLine->setTrack(e.track());
             barLine->read(e);
             //
@@ -2257,7 +2264,7 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
                 fermata = nullptr;
             }
         } else if (tag == "Chord") {
-            Chord* chord = new Chord(score());
+            Chord* chord = new Chord(score()->dummy()->segment());
             chord->setTrack(e.track());
             chord->read(e);
             if (startingBeam) {
@@ -2288,14 +2295,15 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
             }
         } else if (tag == "Rest") {
             if (isMMRest()) {
-                MMRest* mmr = new MMRest(score());
+                segment = getSegment(SegmentType::ChordRest, e.tick());
+                MMRest* mmr = new MMRest(segment);
                 mmr->setTrack(e.track());
                 mmr->read(e);
-                segment = getSegment(SegmentType::ChordRest, e.tick());
                 segment->add(mmr);
                 e.incTick(mmr->actualTicks());
             } else {
-                Rest* rest = new Rest(score());
+                segment = getSegment(SegmentType::ChordRest, e.tick());
+                Rest* rest = new Rest(segment);
                 rest->setDurationType(TDuration::DurationType::V_MEASURE);
                 rest->setTicks(timesig() / timeStretch);
                 rest->setTrack(e.track());
@@ -2304,7 +2312,7 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
                     startingBeam->add(rest); // also calls rest->setBeam(startingBeam)
                     startingBeam = nullptr;
                 }
-                segment = getSegment(SegmentType::ChordRest, e.tick());
+
                 segment->add(rest);
                 if (fermata) {
                     segment->add(fermata);
@@ -2321,17 +2329,18 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
                 e.incTick(rest->actualTicks());
             }
         } else if (tag == "Breath") {
-            Breath* breath = new Breath(score());
+            segment = getSegment(SegmentType::Breath, e.tick());
+            Breath* breath = new Breath(segment);
             breath->setTrack(e.track());
             breath->setPlacement(breath->track() & 1 ? Placement::BELOW : Placement::ABOVE);
             breath->read(e);
-            segment = getSegment(SegmentType::Breath, e.tick());
             segment->add(breath);
         } else if (tag == "Spanner") {
             Spanner::readSpanner(e, this, e.track());
         } else if (tag == "MeasureRepeat" || tag == "RepeatMeasure") {
             //             4.x                       3.x
-            MeasureRepeat* mr = new MeasureRepeat(score());
+            segment = getSegment(SegmentType::ChordRest, e.tick());
+            MeasureRepeat* mr = new MeasureRepeat(segment);
             mr->setTrack(e.track());
             mr->read(e);
             if (!mr->numMeasures()) {
@@ -2340,15 +2349,9 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
             if (!measureRepeatCount(staffIdx)) {
                 setMeasureRepeatCount(1, staffIdx);
             }
-            segment = getSegment(SegmentType::ChordRest, e.tick());
             segment->add(mr);
             e.incTick(ticks());
         } else if (tag == "Clef") {
-            Clef* clef = new Clef(score());
-            clef->setTrack(e.track());
-            clef->read(e);
-            clef->setGenerated(false);
-
             // there may be more than one clef segment for same tick position
             // the first clef may be missing and is added later in layout
 
@@ -2369,9 +2372,14 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
                 }
             }
             segment = getSegment(header ? SegmentType::HeaderClef : SegmentType::Clef, e.tick());
+            Clef* clef = new Clef(segment);
+            clef->setTrack(e.track());
+            clef->read(e);
+            clef->setGenerated(false);
+
             segment->add(clef);
         } else if (tag == "TimeSig") {
-            TimeSig* ts = new TimeSig(score());
+            TimeSig* ts = new TimeSig(score()->dummy()->segment());
             ts->setTrack(e.track());
             ts->read(e);
             // if time sig not at beginning of measure => courtesy time sig
@@ -2398,7 +2406,7 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
                 }
             }
         } else if (tag == "KeySig") {
-            KeySig* ks = new KeySig(score());
+            KeySig* ks = new KeySig(score()->dummy()->segment());
             ks->setTrack(e.track());
             ks->read(e);
             Fraction curTick = e.tick();
@@ -2415,24 +2423,24 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
                 }
             }
         } else if (tag == "Text") {
-            StaffText* t = new StaffText(score());
+            segment = getSegment(SegmentType::ChordRest, e.tick());
+            StaffText* t = new StaffText(segment);
             t->setTrack(e.track());
             t->read(e);
             if (t->empty()) {
                 qDebug("==reading empty text: deleted");
                 delete t;
             } else {
-                segment = getSegment(SegmentType::ChordRest, e.tick());
                 segment->add(t);
             }
         }
         //----------------------------------------------------
         // Annotation
         else if (tag == "Dynamic") {
-            Dynamic* dyn = new Dynamic(score());
+            segment = getSegment(SegmentType::ChordRest, e.tick());
+            Dynamic* dyn = new Dynamic(segment);
             dyn->setTrack(e.track());
             dyn->read(e);
-            segment = getSegment(SegmentType::ChordRest, e.tick());
             segment->add(dyn);
         } else if (tag == "Harmony"
                    || tag == "FretDiagram"
@@ -2447,15 +2455,15 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
                    || tag == "StaffState"
                    || tag == "FiguredBass"
                    ) {
-            Element* el = Element::name2Element(tag, score());
+            segment = getSegment(SegmentType::ChordRest, e.tick());
+            Element* el = Element::name2Element(tag, segment);
             // hack - needed because tick tags are unreliable in 1.3 scores
             // for symbols attached to anything but a measure
             el->setTrack(e.track());
             el->read(e);
-            segment = getSegment(SegmentType::ChordRest, e.tick());
             segment->add(el);
         } else if (tag == "Fermata") {
-            fermata = new Fermata(score());
+            fermata = new Fermata(score()->dummy());
             fermata->setTrack(e.track());
             fermata->setPlacement(fermata->track() & 1 ? Placement::BELOW : Placement::ABOVE);
             fermata->read(e);
@@ -2463,17 +2471,17 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
             if (MScore::noImages) {
                 e.skipCurrentElement();
             } else {
-                Element* el = Element::name2Element(tag, score());
+                segment = getSegment(SegmentType::ChordRest, e.tick());
+                Element* el = Element::name2Element(tag, segment);
                 el->setTrack(e.track());
                 el->read(e);
-                segment = getSegment(SegmentType::ChordRest, e.tick());
                 segment->add(el);
             }
         }
         //----------------------------------------------------
         else if (tag == "Tuplet") {
             Tuplet* oldTuplet = tuplet;
-            tuplet = new Tuplet(score());
+            tuplet = new Tuplet(this);
             tuplet->setTrack(e.track());
             tuplet->setTick(e.tick());
             tuplet->setParent(this);
@@ -2499,10 +2507,10 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
             }
             e.readNext();
         } else if (tag == "Beam") {
-            Beam* beam = new Beam(score());
+            Beam* beam = new Beam(score()->dummy(), score());
             beam->setTrack(e.track());
             beam->read(e);
-            beam->setParent(0);
+            beam->moveToDummy();
             if (startingBeam) {
                 qDebug("The read beam was not used");
                 delete startingBeam;
@@ -2511,9 +2519,9 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
         } else if (tag == "Segment" && segment) {
             segment->read(e);
         } else if (tag == "Ambitus") {
-            Ambitus* range = new Ambitus(score());
-            range->read(e);
             segment = getSegment(SegmentType::Ambitus, e.tick());
+            Ambitus* range = new Ambitus(segment);
+            range->read(e);
             range->setParent(segment);                // a parent segment is needed for setTrack() to work
             range->setTrack(trackZeroVoice(e.track()));
             segment->add(range);
@@ -3115,7 +3123,7 @@ Fraction Measure::stretchedLen(Staff* staff) const
 
 Measure* Measure::cloneMeasure(Score* sc, const Fraction& tick, TieMap* tieMap)
 {
-    Measure* m      = new Measure(sc);
+    Measure* m      = new Measure(sc->dummy()->system());
     m->m_timesig    = m_timesig;
     m->_len         = _len;
     m->m_repeatCount = m_repeatCount;
@@ -3610,7 +3618,7 @@ Element* Measure::nextElementStaff(int staff)
         }
     }
 
-    for (; e && e->type() != ElementType::SEGMENT; e = e->parent()) {
+    for (; e && e->type() != ElementType::SEGMENT; e = e->parentElement()) {
     }
     Segment* seg = toSegment(e);
     Segment* nextSegment = seg ? seg->next() : first();
@@ -3923,7 +3931,7 @@ void Measure::setEndBarLineType(BarLineType val, int track, bool visible, mu::dr
     BarLine* bl = toBarLine(seg->element(track));
     if (!bl) {
         // no suitable bar line: create a new one
-        bl = new BarLine(score());
+        bl = new BarLine(seg);
         bl->setParent(seg);
         bl->setTrack(track);
         Part* part = score()->staff(track / VOICES)->part();
@@ -3955,7 +3963,7 @@ void Measure::barLinesSetSpan(Segment* seg)
                 bl->setSpanTo(staff->barLineTo());
             }
         } else {
-            bl = new BarLine(score());
+            bl = new BarLine(seg);
             bl->setParent(seg);
             bl->setTrack(track);
             bl->setGenerated(true);
@@ -4045,7 +4053,7 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
             BarLine* bl  = toBarLine(seg->element(track));
             Staff* staff = score()->staff(staffIdx);
             if (!bl) {
-                bl = new BarLine(score());
+                bl = new BarLine(seg);
                 bl->setParent(seg);
                 bl->setTrack(track);
                 bl->setGenerated(true);
@@ -4254,7 +4262,7 @@ void Measure::addSystemHeader(bool isFirstSystem)
                     //
                     // create missing clef
                     //
-                    clef = new Clef(score());
+                    clef = new Clef(cSegment);
                     clef->setTrack(track);
                     clef->setGenerated(true);
                     clef->setParent(cSegment);
@@ -4266,7 +4274,7 @@ void Measure::addSystemHeader(bool isFirstSystem)
                 clef->setSmall(false);
                 clef->layout();
             } else if (clef) {
-                clef->parent()->remove(clef);
+                clef->parentElement()->remove(clef);
                 delete clef;
             }
             //cSegment->createShape(staffIdx);
@@ -4319,7 +4327,7 @@ void Measure::addSystemHeader(bool isFirstSystem)
                 //
                 // create missing key signature
                 //
-                keysig = new KeySig(score());
+                keysig = new KeySig(kSegment);
                 keysig->setTrack(track);
                 keysig->setGenerated(true);
                 keysig->setParent(kSegment);
@@ -4381,7 +4389,7 @@ void Measure::addSystemHeader(bool isFirstSystem)
         for (int track = 0; track < score()->ntracks(); track += VOICES) {
             BarLine* bl = toBarLine(s->element(track));
             if (!bl) {
-                bl = new BarLine(score());
+                bl = new BarLine(s);
                 bl->setTrack(track);
                 bl->setGenerated(true);
                 bl->setParent(s);
@@ -4441,7 +4449,7 @@ void Measure::addSystemTrailer(Measure* nm)
                     }
                     ts = toTimeSig(s->element(track));
                     if (!ts) {
-                        ts = new TimeSig(score());
+                        ts = new TimeSig(s);
                         ts->setTrack(track);
                         ts->setGenerated(true);
                         ts->setParent(s);
@@ -4482,7 +4490,7 @@ void Measure::addSystemTrailer(Measure* nm)
             KeySigEvent key2 = staff->keySigEvent(endTick());
 
             if (!ks) {
-                ks = new KeySig(score());
+                ks = new KeySig(s);
                 ks->setTrack(track);
                 ks->setGenerated(true);
                 ks->setParent(s);

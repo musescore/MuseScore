@@ -355,7 +355,7 @@ void MTrack::processMeta(int tick, const MidiEvent& mm)
 
         MeasureBase* measure = cs->first();
         if (!measure->isVBox()) {
-            measure = new VBox(cs);
+            measure = new VBox(cs->dummy()->system());
             measure->setTick(Fraction(0, 1));
             measure->setNext(cs->first());
             cs->measures()->add(measure);
@@ -447,10 +447,10 @@ void MTrack::fillGapWithRests(Score* score,
             len = ReducedFraction(measure->ticks());
             if (voice == 0) {
                 TDuration duration(TDuration::DurationType::V_MEASURE);
-                Rest* rest = new Rest(score, duration);
+                Segment* s = measure->getSegment(SegmentType::ChordRest, startChordTick.fraction());
+                Rest* rest = new Rest(s, duration);
                 rest->setTicks(measure->ticks());
                 rest->setTrack(track);
-                Segment* s = measure->getSegment(SegmentType::ChordRest, startChordTick.fraction());
                 s->add(rest);
             }
             restLen -= len;
@@ -467,10 +467,10 @@ void MTrack::fillGapWithRests(Score* score,
                 const TDuration& duration = durationPair.second;
                 const ReducedFraction& tupletRatio = durationPair.first;
                 len = ReducedFraction(duration.fraction()) / tupletRatio;
-                Rest* rest = new Rest(score, duration);
+                Segment* s = measure->getSegment(SegmentType::ChordRest, startChordTick.fraction());
+                Rest* rest = new Rest(s, duration);
                 rest->setTicks(duration.fraction());
                 rest->setTrack(track);
-                Segment* s = measure->getSegment(SegmentType::ChordRest, startChordTick.fraction());
                 s->add(rest);
                 MidiTuplet::addElementToTuplet(voice, startChordTick, len, rest, tuplets);
                 restLen -= len;
@@ -480,7 +480,7 @@ void MTrack::fillGapWithRests(Score* score,
     }
 }
 
-void setMusicNotesFromMidi(Score* score,
+void setMusicNotesFromMidi(Score*,
                            const QList<MidiNote>& midiNotes,
                            Chord* chord,
                            const Drumset* drumset,
@@ -488,7 +488,7 @@ void setMusicNotesFromMidi(Score* score,
 {
     for (int i = 0; i < midiNotes.size(); ++i) {
         const MidiNote& mn = midiNotes[i];
-        Note* note = new Note(score);
+        Note* note = new Note(chord);
         note->setTrack(chord->track());
 
         NoteVal nval(mn.pitch);
@@ -525,7 +525,7 @@ void setTies(Chord* chord,
     for (int i = 0; i < midiNotes.size(); ++i) {
         const MidiNote& midiNote = midiNotes[i];
         Note* note = chord->findNote(midiNote.pitch);
-        midiNotes[i].tie = new Tie(score);
+        midiNotes[i].tie = new Tie(score->dummy());
         midiNotes[i].tie->setStartNote(note);
         note->setTieFor(midiNotes[i].tie);
     }
@@ -568,7 +568,8 @@ void MTrack::processPendingNotes(QList<MidiChord>& midiChords,
         const ReducedFraction& tupletRatio = dl[0].first;
         len = ReducedFraction(d.fraction()) / tupletRatio;
 
-        Chord* chord = new Chord(score);
+        Segment* s = measure->getSegment(SegmentType::ChordRest, tick.fraction());
+        Chord* chord = new Chord(s);
         chord->setTrack(track);
         chord->setDurationType(d);
         chord->setTicks(d.fraction());
@@ -576,12 +577,11 @@ void MTrack::processPendingNotes(QList<MidiChord>& midiChords,
         if (opers.showStaccato.value(currentTrack)
             && startChordTick == startChordTickFrac               // first chord in tied chord sequence
             && midiChords.begin()->isStaccato()) {
-            Articulation* a = new Articulation(chord->score());
+            Articulation* a = new Articulation(chord);
             a->setSymId(SymId::articStaccatoAbove);
             chord->add(a);
         }
 
-        Segment* s = measure->getSegment(SegmentType::ChordRest, tick.fraction());
         s->add(chord);
         MidiTuplet::addElementToTuplet(voice, tick, len, chord, tuplets);
 
@@ -806,7 +806,7 @@ void tryCreatePickupMeasure(
     const Fraction secondTimeSig = score->sigmap()->timesig(secondBarTick).timesig();
 
     if (isPickupWithLessTimeSig(firstTimeSig, secondTimeSig)) {
-        Measure* pickup = new Measure(score);
+        Measure* pickup = new Measure(score->dummy()->system());
         pickup->setTick(Fraction::fromTicks(firstBarTick));
         pickup->setNo(0);
         pickup->setIrregular(true);
@@ -822,14 +822,14 @@ void tryCreatePickupMeasure(
 
         score->sigmap()->add(firstBarTick, secondTimeSig);
 
-        Measure* firstBar = new Measure(score);
+        Measure* firstBar = new Measure(score->dummy()->system());
         firstBar->setTick(Fraction::fromTicks(firstBarTick));
         firstBar->setNo(0);
         firstBar->setTimesig(secondTimeSig);
         firstBar->setTicks(secondTimeSig);
         score->measures()->add(firstBar);
 
-        Measure* secondBar = new Measure(score);
+        Measure* secondBar = new Measure(score->dummy()->system());
         secondBar->setTick(Fraction::fromTicks(firstBarTick + secondTimeSig.ticks()));
         secondBar->setNo(1);
         secondBar->setTimesig(secondTimeSig);
@@ -862,7 +862,7 @@ void createMeasures(const ReducedFraction& firstTick, ReducedFraction& lastTick,
     }
 
     for (int i = begBarIndex; i < barCount; ++i) {
-        Measure* m = new Measure(score);
+        Measure* m = new Measure(score->dummy()->system());
         const int t = score->sigmap()->bar2tick(i, 0);
         m->setTick(Fraction::fromTicks(tick));
         m->setNo(i);
@@ -938,10 +938,10 @@ void createTimeSignatures(Score* score)
             }
         }
         for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
-            TimeSig* ts = new TimeSig(score);
+            Segment* seg = m->getSegment(SegmentType::TimeSig, Fraction::fromTicks(tick));
+            TimeSig* ts = new TimeSig(seg);
             ts->setSig(newTimeSig);
             ts->setTrack(staffIdx * VOICES);
-            Segment* seg = m->getSegment(SegmentType::TimeSig, Fraction::fromTicks(tick));
             seg->add(ts);
         }
         if (newTimeSig != se.timesig()) {     // was a pickup measure - skip next timesig

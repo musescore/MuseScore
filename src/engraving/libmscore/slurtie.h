@@ -152,7 +152,7 @@ protected:
     void fixupSegments(unsigned nsegs);
 
 public:
-    SlurTie(const ElementType& type, Score*);
+    SlurTie(const ElementType& type, Element* parent);
     SlurTie(const SlurTie&);
     ~SlurTie();
 

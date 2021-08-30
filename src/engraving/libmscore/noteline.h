@@ -38,7 +38,7 @@ class NoteLine final : public TextLineBase
     Note* _endNote;
 
 public:
-    NoteLine(Score* s);
+    NoteLine(Element* parent);
     NoteLine(const NoteLine&);
     ~NoteLine() {}
 

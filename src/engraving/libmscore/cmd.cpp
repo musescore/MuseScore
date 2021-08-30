@@ -557,8 +557,8 @@ void Score::expandVoice()
 void Score::addInterval(int val, const std::vector<Note*>& nl)
 {
     for (Note* on : nl) {
-        Note* note = new Note(this);
         Chord* chord = on->chord();
+        Note* note = new Note(chord);
         note->setParent(chord);
         note->setTrack(chord->track());
         int valTmp = val < 0 ? val + 1 : val - 1;
@@ -619,7 +619,7 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
 
         undoAddElement(note);
         if (forceAccidental) {
-            Accidental* a = new Accidental(this);
+            Accidental* a = new Accidental(note);
             a->setAccidentalType(_is.accidentalType());
             a->setRole(AccidentalRole::USER);
             a->setParent(note);
@@ -646,8 +646,8 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
 
 Note* Score::setGraceNote(Chord* ch, int pitch, NoteType type, int len)
 {
-    Note* note = new Note(this);
-    Chord* chord = new Chord(this);
+    Chord* chord = new Chord(this->dummy()->segment());
+    Note* note = new Note(chord);
 
     // allow grace notes to be added to other grace notes
     // by really adding to parent chord
@@ -712,7 +712,7 @@ void Score::createCRSequence(const Fraction& f, ChordRest* cr, const Fraction& t
             for (unsigned int i = 0; i < oc->notes().size(); ++i) {
                 Note* on = oc->notes()[i];
                 Note* nn = nc->notes()[i];
-                Tie* tie = new Tie(this);
+                Tie* tie = new Tie(this->dummy());
                 tie->setStartNote(on);
                 tie->setEndNote(nn);
                 tie->setTick(tie->startNote()->tick());
@@ -780,12 +780,12 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
             Note* note = nullptr;
             Tie* addTie = nullptr;
             if (isRest) {
-                nr = ncr = new Rest(this);
+                nr = ncr = new Rest(this->dummy()->segment());
                 nr->setTrack(track);
                 ncr->setDurationType(d);
                 ncr->setTicks(d == TDuration::DurationType::V_MEASURE ? measure->ticks() : d.fraction());
             } else {
-                nr = note = new Note(this);
+                nr = note = new Note(this->dummy()->chord());
 
                 if (tie) {
                     tie->setEndNote(note);
@@ -793,7 +793,7 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
                     note->setTieBack(tie);
                     addTie = tie;
                 }
-                Chord* chord = new Chord(this);
+                Chord* chord = new Chord(this->dummy()->segment());
                 chord->setTrack(track);
                 chord->setDurationType(d);
                 chord->setTicks(d.fraction());
@@ -804,7 +804,7 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
                     int tpc = styleB(Sid::concertPitch) ? nval.tpc1 : nval.tpc2;
                     AccidentalVal alter = tpc2alter(tpc);
                     AccidentalType at = Accidental::value2subtype(alter);
-                    Accidental* a = new Accidental(this);
+                    Accidental* a = new Accidental(note);
                     a->setAccidentalType(at);
                     a->setRole(AccidentalRole::USER);
                     note->add(a);
@@ -812,7 +812,7 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
 
                 ncr = chord;
                 if (i + 1 < n) {
-                    tie = new Tie(this);
+                    tie = new Tie(this->dummy());
                     tie->setStartNote(note);
                     tie->setTick(tie->startNote()->tick());
                     tie->setTrack(track);
@@ -862,7 +862,7 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
         //  Note does not fit on current measure, create Tie to
         //  next part of note
         if (!isRest) {
-            tie = new Tie(this);
+            tie = new Tie(this->dummy());
             tie->setStartNote((Note*)nr);
             tie->setTick(tie->startNote()->tick());
             tie->setTrack(nr->track());
@@ -1759,7 +1759,7 @@ void Score::addArticulation(SymId attr)
                     continue;
                 }
             }
-            Articulation* na = new Articulation(this);
+            Articulation* na = new Articulation(this->dummy()->chord());
             na->setSymId(attr);
             if (addArticulation(el, na)) {
                 ++numAdded;
@@ -1955,7 +1955,7 @@ void Score::changeAccidental(Note* note, AccidentalType accidental)
             if (a) {
                 undoRemoveElement(a);
             }
-            Accidental* a1 = new Accidental(lns);
+            Accidental* a1 = new Accidental(ln);
             a1->setParent(ln);
             a1->setAccidentalType(accidental);
             a1->setRole(AccidentalRole::USER);
@@ -2307,7 +2307,7 @@ Element* Score::move(const QString& cmd)
         // cr is the ChordRest to move from on other cmd's
         int track = el->track();                // keep note of element track
         if (!el->isBox()) {
-            el = el->parent();
+            el = el->parentElement();
         }
         // element with no parent (eg, a newly-added line) - no way to find context
         if (!el) {
@@ -2675,7 +2675,7 @@ void Score::cmdIncDecDuration(int nSteps, bool stepDotted)
         return;
     }
     if (el->isNote()) {
-        el = el->parent();
+        el = el->parentElement();
     }
     if (!el->isChordRest()) {
         return;
@@ -3148,7 +3148,7 @@ void Score::cmdImplode()
                                 for (Note* tn : tied->notes()) {
                                     if (nn->pitch() == tn->pitch() && nn->tpc() == tn->tpc() && !tn->tieFor()) {
                                         // found note to tie
-                                        Tie* tie = new Tie(this);
+                                        Tie* tie = new Tie(this->dummy());
                                         tie->setStartNote(tn);
                                         tie->setEndNote(nn);
                                         tie->setTick(tie->startNote()->tick());
@@ -3426,7 +3426,7 @@ void Score::cmdRealizeChordSymbols(bool literal, Voicing voicing, HDuration dura
         Fraction duration = r.getActualDuration(tick.ticks(), durationType);
         bool concertPitch = styleB(Sid::concertPitch);
 
-        Chord* chord = new Chord(this);     //chord template
+        Chord* chord = new Chord(this->dummy()->segment());     //chord template
         chord->setTrack(h->track());     //set track so notes have a track to sit on
 
         //create chord from notes
@@ -3446,7 +3446,7 @@ void Score::cmdRealizeChordSymbols(bool literal, Voicing voicing, HDuration dura
         RealizedHarmony::PitchMapIterator i(notes);     //add notes to chord
         while (i.hasNext()) {
             i.next();
-            Note* note = new Note(this);
+            Note* note = new Note(chord);
             NoteVal nval;
             nval.pitch = i.key();
             if (concertPitch) {
@@ -3556,7 +3556,7 @@ Segment* Score::setChord(Segment* segment, int track, Chord* chordTemplate, Frac
             //set tie forward
             if (i + 1 < n) {
                 for (size_t j = 0; j < notes.size(); ++j) {
-                    tie[j] = new Tie(this);
+                    tie[j] = new Tie(this->dummy());
                     tie[j]->setStartNote(notes[j]);
                     tie[j]->setTick(tie[j]->startNote()->tick());
                     tie[j]->setTrack(track);
@@ -3603,7 +3603,7 @@ Segment* Score::setChord(Segment* segment, int track, Chord* chordTemplate, Frac
         //  next part of note
         std::vector<Note*> notes = nr->notes();
         for (size_t i = 0; i < notes.size(); ++i) {
-            tie[i] = new Tie(this);
+            tie[i] = new Tie(this->dummy());
             tie[i]->setStartNote(notes[i]);
             tie[i]->setTick(tie[i]->startNote()->tick());
             tie[i]->setTrack(notes[i]->track());
@@ -4256,7 +4256,7 @@ void Score::cmdToggleVisible()
         if (e->isBracket()) {       // ignore
             continue;
         }
-        if (e->isNoteDot() && selection().elements().contains(e->parent())) {
+        if (e->isNoteDot() && selection().elements().contains(e->parentElement())) {
             // already handled in ScoreElement::undoChangeProperty(); don't toggle twice
             continue;
         }

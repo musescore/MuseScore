@@ -103,7 +103,7 @@ class Chord final : public ChordRest
     qreal noteHeadWidth() const;
 
 public:
-    Chord(Score* s = 0);
+    Chord(Segment* parent = 0);
     Chord(const Chord&, bool link = false);
     ~Chord();
     Chord& operator=(const Chord&) = delete;

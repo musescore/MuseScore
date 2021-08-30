@@ -69,8 +69,8 @@ namespace Ms {
 //   ChordRest
 //---------------------------------------------------------
 
-ChordRest::ChordRest(const ElementType& type, Score* s)
-    : DurationElement(type, s)
+ChordRest::ChordRest(const ElementType& type, Segment* parent)
+    : DurationElement(type, parent)
 {
     _staffMove    = 0;
     _beam         = 0;
@@ -268,7 +268,7 @@ bool ChordRest::readProperties(XmlReader& e)
         }
         _beamMode = Beam::Mode(bm);
     } else if (tag == "Articulation") {
-        Articulation* atr = new Articulation(score());
+        Articulation* atr = new Articulation(this);
         atr->setTrack(track());
         atr->read(e);
         add(atr);
@@ -303,7 +303,7 @@ bool ChordRest::readProperties(XmlReader& e)
     } else if (tag == "Spanner") {
         Spanner::readSpanner(e, this, track());
     } else if (tag == "Lyrics") {
-        Element* element = new Lyrics(score());
+        Element* element = new Lyrics(this);
         element->setTrack(e.track());
         element->read(e);
         add(element);
@@ -521,7 +521,7 @@ Element* ChordRest::drop(EditData& data)
         Note* note = toNote(e);
         Segment* seg = segment();
         score()->undoRemoveElement(this);
-        Chord* chord = new Chord(score());
+        Chord* chord = new Chord(score()->dummy()->segment());
         chord->setTrack(track());
         chord->setDurationType(durationType());
         chord->setTicks(ticks());

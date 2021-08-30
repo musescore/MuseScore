@@ -46,8 +46,8 @@ namespace Ms {
 TextLineBaseSegment::TextLineBaseSegment(const ElementType& type, Spanner* sp, Score* score, ElementFlags f)
     : LineSegment(type, sp, score, f)
 {
-    _text    = new Text(score);
-    _endText = new Text(score);
+    _text    = new Text(this);
+    _endText = new Text(this);
     _text->setParent(this);
     _endText->setParent(this);
     _text->setFlag(ElementFlag::MOVABLE, false);
@@ -505,8 +505,8 @@ Element* TextLineBaseSegment::propertyDelegate(Pid pid)
 //   TextLineBase
 //---------------------------------------------------------
 
-TextLineBase::TextLineBase(const ElementType& type, Score* s, ElementFlags f)
-    : SLine(type, s, f)
+TextLineBase::TextLineBase(const ElementType& type, Element* parent, ElementFlags f)
+    : SLine(type, parent, f)
 {
     setBeginHookHeight(Spatium(1.9));
     setEndHookHeight(Spatium(1.9));

@@ -27,7 +27,7 @@
 using namespace mu;
 
 namespace Ms {
-ActionIcon::ActionIcon(Score* score)
+ActionIcon::ActionIcon(Element* score)
     : Element(ElementType::ACTION_ICON, score)
 {
 }

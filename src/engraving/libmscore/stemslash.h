@@ -37,10 +37,10 @@ class StemSlash final : public Element
     mu::LineF line;
 
 public:
-    StemSlash(Score* s = 0)
-        : Element(ElementType::STEM_SLASH, s) {}
+    StemSlash(Chord* parent = 0)
+        : Element(ElementType::STEM_SLASH, parent) {}
 
-    qreal mag() const override { return parent()->mag(); }
+    qreal mag() const override { return parentElement()->mag(); }
     void setLine(const mu::LineF& l);
 
     StemSlash* clone() const override { return new StemSlash(*this); }

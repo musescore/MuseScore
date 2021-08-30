@@ -81,10 +81,12 @@ class BarLine final : public Element
     void drawEditMode(mu::draw::Painter*, EditData&) override;
 
 public:
-    BarLine(Score* s = 0);
+    BarLine(Segment* parent);
     virtual ~BarLine();
     BarLine(const BarLine&);
     BarLine& operator=(const BarLine&) = delete;
+
+    void setParent(Segment* parent);
 
     // Score Tree functions
     ScoreElement* treeParent() const override;

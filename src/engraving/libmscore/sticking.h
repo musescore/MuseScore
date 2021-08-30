@@ -36,7 +36,7 @@ class Sticking final : public TextBase
     QVariant propertyDefault(Pid id) const override;
 
 public:
-    Sticking(Score*);
+    Sticking(Segment* parent);
 
     Sticking* clone() const override { return new Sticking(*this); }
 

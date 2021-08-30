@@ -33,8 +33,8 @@ namespace Ms {
 class Fingering final : public TextBase
 {
 public:
-    Fingering(Score*, Tid tid, ElementFlags ef = ElementFlag::HAS_TAG);
-    Fingering(Score* s, ElementFlags ef = ElementFlag::HAS_TAG);
+    Fingering(Note* parent, Tid tid, ElementFlags ef = ElementFlag::HAS_TAG);
+    Fingering(Note* parent, ElementFlags ef = ElementFlag::HAS_TAG);
 
     Fingering* clone() const override { return new Fingering(*this); }
 

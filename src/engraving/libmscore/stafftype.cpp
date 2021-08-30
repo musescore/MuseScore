@@ -843,8 +843,8 @@ qreal StaffType::physStringToYOffset(int strg) const
 //   TabDurationSymbol
 //---------------------------------------------------------
 
-TabDurationSymbol::TabDurationSymbol(Score* s)
-    : Element(ElementType::TAB_DURATION_SYMBOL, s, ElementFlag::NOT_SELECTABLE)
+TabDurationSymbol::TabDurationSymbol(ChordRest* parent)
+    : Element(ElementType::TAB_DURATION_SYMBOL, parent, ElementFlag::NOT_SELECTABLE)
 {
     setGenerated(true);
     _beamGrid   = TabBeamGrid::NONE;
@@ -853,8 +853,8 @@ TabDurationSymbol::TabDurationSymbol(Score* s)
     _text       = QString();
 }
 
-TabDurationSymbol::TabDurationSymbol(Score* s, const StaffType* tab, TDuration::DurationType type, int dots)
-    : Element(ElementType::TAB_DURATION_SYMBOL, s, ElementFlag::NOT_SELECTABLE)
+TabDurationSymbol::TabDurationSymbol(ChordRest* parent, const StaffType* tab, TDuration::DurationType type, int dots)
+    : Element(ElementType::TAB_DURATION_SYMBOL, parent, ElementFlag::NOT_SELECTABLE)
 {
     setGenerated(true);
     _beamGrid   = TabBeamGrid::NONE;

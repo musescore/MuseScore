@@ -121,7 +121,7 @@ bool Read302::readScore302(Ms::Score* score, XmlReader& e)
             }
             score->_scoreFont = ScoreFont::fontByName(score->style().value(Sid::MusicalSymbolFont).toString());
         } else if (tag == "copyright" || tag == "rights") {
-            Text* text = new Text(score);
+            Text* text = new Text(score->dummy());
             text->read(e);
             score->setMetaTag("copyright", text->xmlText());
             delete text;
@@ -155,7 +155,7 @@ bool Read302::readScore302(Ms::Score* score, XmlReader& e)
                    || (tag == "Trill")
                    || (tag == "Slur")
                    || (tag == "Pedal")) {
-            Spanner* s = toSpanner(Element::name2Element(tag, score));
+            Spanner* s = toSpanner(Element::name2Element(tag, score->dummy()));
             s->read(e);
             score->addSpanner(s);
         } else if (tag == "Excerpt") {

@@ -110,7 +110,7 @@ void SpannerSegment::setSystem(System* s)
         if (s) {
             s->add(this);
         } else {
-            setParent(0);
+            moveToDummy();
         }
     }
 }
@@ -373,8 +373,8 @@ void SpannerSegment::scanElements(void* data, void (* func)(void*, Element*), bo
 //   Spanner
 //---------------------------------------------------------
 
-Spanner::Spanner(const ElementType& type, Score* s, ElementFlags f)
-    : Element(type, s, f)
+Spanner::Spanner(const ElementType& type, Element* parent, ElementFlags f)
+    : Element(type, parent, f)
 {
 }
 
@@ -484,7 +484,7 @@ void Spanner::insertTimeUnmanaged(const Fraction& fromTick, const Fraction& len)
         if (tick() > fromTick) {          // start after beginning of removed time
             if (tick() < toTick) {        // start within removed time: bring start at removing point
                 if (parent()) {
-                    parent()->remove(this);
+                    parentElement()->remove(this);
                     return;
                 } else {
                     newTick1 = fromTick;
@@ -505,7 +505,7 @@ void Spanner::insertTimeUnmanaged(const Fraction& fromTick, const Fraction& len)
     // update properties as required
     if (newTick2 <= newTick1) {                 // if no longer any span: remove it
         if (parent()) {
-            parent()->remove(this);
+            parentElement()->remove(this);
         }
     } else {                                    // if either TICKS or TICK did change, update property
         if (newTick2 - newTick1 != tick2() - tick()) {

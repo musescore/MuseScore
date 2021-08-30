@@ -80,7 +80,7 @@ void LayoutMeasure::createMMRest(const LayoutOptions& options, Score* score, Mea
         }
         mmrMeasure->removeSystemTrailer();
     } else {
-        mmrMeasure = new Measure(score);
+        mmrMeasure = new Measure(score->dummy()->system());
         mmrMeasure->setTicks(len);
         mmrMeasure->setTick(firstMeasure->tick());
         score->undo(new ChangeMMRest(firstMeasure, mmrMeasure));
@@ -188,7 +188,7 @@ void LayoutMeasure::createMMRest(const LayoutOptions& options, Score* score, Mea
     for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
         int track = staffIdx * VOICES;
         if (s->element(track) == 0) {
-            MMRest* mmr = new MMRest(score);
+            MMRest* mmr = new MMRest(s);
             mmr->setDurationType(TDuration::DurationType::V_MEASURE);
             mmr->setTicks(mmrMeasure->ticks());
             mmr->setTrack(track);

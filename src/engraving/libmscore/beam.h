@@ -88,7 +88,7 @@ public:
     };
     Q_ENUM(Mode);
 
-    Beam(Score* = 0);
+    Beam(Element* parent, Ms::Score* score);
     Beam(const Beam&);
     ~Beam();
 

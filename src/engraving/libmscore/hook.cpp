@@ -32,8 +32,8 @@ namespace Ms {
 //   Hook
 //---------------------------------------------------------
 
-Hook::Hook(Score* s)
-    : Symbol(ElementType::HOOK, s, ElementFlag::NOTHING)
+Hook::Hook(Chord* parent)
+    : Symbol(ElementType::HOOK, parent, ElementFlag::NOTHING)
 {
     setZ(int(type()) * 100);
 }
@@ -44,7 +44,7 @@ Hook::Hook(Score* s)
 
 Element* Hook::elementBase() const
 {
-    return parent();
+    return parentElement();
 }
 
 //---------------------------------------------------------

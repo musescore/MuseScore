@@ -96,8 +96,8 @@ Element* VoltaSegment::propertyDelegate(Pid pid)
 //   Volta
 //---------------------------------------------------------
 
-Volta::Volta(Score* s)
-    : TextLineBase(ElementType::VOLTA, s, ElementFlag::SYSTEM)
+Volta::Volta(Element* parent)
+    : TextLineBase(ElementType::VOLTA, parent, ElementFlag::SYSTEM)
 {
     setPlacement(Placement::ABOVE);
     initElementStyle(&voltaStyle);

@@ -635,7 +635,7 @@ Element* Score::nextElement()
         case ElementType::KEYSIG:
         case ElementType::TIMESIG:
         case ElementType::BAR_LINE: {
-            for (; e && e->type() != ElementType::SEGMENT; e = e->parent()) {
+            for (; e && e->type() != ElementType::SEGMENT; e = e->parentElement()) {
             }
             Segment* s = toSegment(e);
             Element* next = s->nextElement(staffId);
@@ -708,7 +708,7 @@ Element* Score::nextElement()
         default:
             break;
         }
-        e = e->parent();
+        e = e->parentElement();
     }
     return score()->lastElement();
 }
@@ -754,7 +754,7 @@ Element* Score::prevElement()
         case ElementType::KEYSIG:
         case ElementType::TIMESIG:
         case ElementType::BAR_LINE: {
-            for (; e && e->type() != ElementType::SEGMENT; e = e->parent()) {
+            for (; e && e->type() != ElementType::SEGMENT; e = e->parentElement()) {
             }
             Segment* s = toSegment(e);
             return s->prevElement(staffId);
@@ -841,7 +841,7 @@ Element* Score::prevElement()
         default:
             break;
         }
-        e = e->parent();
+        e = e->parentElement();
     }
     return score()->firstElement();
 }

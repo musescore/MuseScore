@@ -62,8 +62,8 @@ static const ElementStyle tupletStyle {
 //   Tuplet
 //---------------------------------------------------------
 
-Tuplet::Tuplet(Score* s)
-    : DurationElement(ElementType::TUPLET, s)
+Tuplet::Tuplet(Measure* parent)
+    : DurationElement(ElementType::TUPLET, parent)
 {
     _direction    = Direction::AUTO;
     _numberType   = TupletNumberType::SHOW_NUMBER;
@@ -110,6 +110,11 @@ Tuplet::~Tuplet()
         de->setTuplet(nullptr);
     }
     delete _number;
+}
+
+void Tuplet::setParent(Measure* parent)
+{
+    Element::setParent(parent);
 }
 
 //---------------------------------------------------------
@@ -180,7 +185,7 @@ void Tuplet::layout()
     qreal _spatium = spatium();
     if (_numberType != TupletNumberType::NO_TEXT) {
         if (_number == 0) {
-            _number = new Text(score(), Tid::TUPLET);
+            _number = new Text(this, Tid::TUPLET);
             _number->setComposition(true);
             _number->setTrack(track());
             _number->setParent(this);
@@ -564,7 +569,7 @@ void Tuplet::layout()
     }
 
     setPos(0.0, 0.0);
-    PointF mp(parent()->pagePos());
+    PointF mp(parentElement()->pagePos());
     if (parent()->isMeasure()) {
         System* s = toMeasure(parent())->system();
         if (s) {
@@ -864,7 +869,7 @@ bool Tuplet::readProperties(XmlReader& e)
     } else if (tag == "baseDots") {
         _baseLen.setDots(e.readInt());
     } else if (tag == "Number") {
-        _number = new Text(score(), Tid::TUPLET);
+        _number = new Text(this, Tid::TUPLET);
         _number->setComposition(true);
         _number->setParent(this);
         resetNumberProperty();
@@ -1293,12 +1298,13 @@ Fraction Tuplet::addMissingElement(const Fraction& startTick, const Fraction& en
         return Fraction::fromTicks(0);
     }
     f = d.fraction();
-    Rest* rest = new Rest(score());
+    Segment* segment = measure()->getSegment(SegmentType::ChordRest, startTick);
+    Rest* rest = new Rest(segment);
     rest->setDurationType(d);
     rest->setTicks(f);
     rest->setTrack(track());
     rest->setVisible(false);
-    Segment* segment = measure()->getSegment(SegmentType::ChordRest, startTick);
+
     segment->add(rest);
     add(rest);
     return f;

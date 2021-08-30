@@ -406,7 +406,7 @@ class Element : public Ms::PluginAPI::ScoreElement
 
     QPointF pagePos() const { return mu::PointF(element()->pagePos() / element()->spatium()).toQPointF(); }
 
-    Ms::PluginAPI::Element* parent() const { return wrap(element()->parent()); }
+    Ms::PluginAPI::Element* parent() const { return wrap(element()->parentElement()); }
     Staff* staff() { return wrap<Staff>(element()->staff()); }
 
     QRectF bbox() const;

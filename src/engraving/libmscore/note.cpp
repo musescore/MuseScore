@@ -664,6 +664,9 @@ SymId Note::noteHead(int direction, NoteHead::Group group, NoteHead::Type t, int
     return noteHeads[direction][int(group)][int(t)];
 }
 
+NoteHead::NoteHead(Note* parent)
+    : Symbol(ElementType::NOTEHEAD, parent) {}
+
 //---------------------------------------------------------
 //   headGroup
 //   used only when dropping a notehead from the palette
@@ -686,8 +689,8 @@ NoteHead::Group NoteHead::headGroup() const
 //   Note
 //---------------------------------------------------------
 
-Note::Note(Score* s)
-    : Element(ElementType::NOTE, s, ElementFlag::MOVABLE
+Note::Note(Chord* ch)
+    : Element(ElementType::NOTE, ch, ElementFlag::MOVABLE
 #ifdef ENGRAVING_BUILD_ACCESSIBLE_TREE
               , new mu::engraving::AccessibleNote())
 #else
@@ -775,6 +778,11 @@ Note::Note(const Note& n, bool link)
         add(new NoteDot(*dot));
     }
     _mark      = n._mark;
+}
+
+void Note::setParent(Chord* ch)
+{
+    Element::setParent(ch);
 }
 
 //---------------------------------------------------------
@@ -1254,7 +1262,9 @@ void Note::removeSpanner(Spanner* l)
 
 void Note::add(Element* e)
 {
-    e->setParent(this);
+    if (e->parent() != this) {
+        e->setParent(this);
+    }
     e->setTrack(track());
 
     switch (e->type()) {
@@ -1590,7 +1600,7 @@ bool Note::readProperties(XmlReader& e)
     } else if (tag == "track") {          // for performance
         setTrack(e.readInt());
     } else if (tag == "Accidental") {
-        Accidental* a = new Accidental(score());
+        Accidental* a = new Accidental(this);
         a->setTrack(track());
         a->read(e);
         add(a);
@@ -1631,12 +1641,12 @@ bool Note::readProperties(XmlReader& e)
     } else if (tag == "line") {
         setLine(e.readInt());
     } else if (tag == "Fingering") {
-        Fingering* f = new Fingering(score());
+        Fingering* f = new Fingering(this);
         f->setTrack(track());
         f->read(e);
         add(f);
     } else if (tag == "Symbol") {
-        Symbol* s = new Symbol(score());
+        Symbol* s = new Symbol(this);
         s->setTrack(track());
         s->read(e);
         add(s);
@@ -1644,18 +1654,18 @@ bool Note::readProperties(XmlReader& e)
         if (MScore::noImages) {
             e.skipCurrentElement();
         } else {
-            Image* image = new Image(score());
+            Image* image = new Image(this);
             image->setTrack(track());
             image->read(e);
             add(image);
         }
     } else if (tag == "Bend") {
-        Bend* b = new Bend(score());
+        Bend* b = new Bend(this);
         b->setTrack(track());
         b->read(e);
         add(b);
     } else if (tag == "NoteDot") {
-        NoteDot* dot = new NoteDot(score());
+        NoteDot* dot = new NoteDot(this);
         dot->read(e);
         add(dot);
     } else if (tag == "Events") {
@@ -2106,11 +2116,12 @@ Element* Note::drop(EditData& data)
 
 void Note::addParentheses()
 {
-    Symbol* s = new Symbol(score());
+    Symbol* s = new Symbol(this);
     s->setSym(SymId::noteheadParenthesisLeft);
     s->setParent(this);
     score()->undoAddElement(s);
-    s = new Symbol(score());
+
+    s = new Symbol(this);
     s->setSym(SymId::noteheadParenthesisRight);
     s->setParent(this);
     score()->undoAddElement(s);
@@ -2173,7 +2184,7 @@ void Note::setDotY(Direction pos)
 
     int n = cdots - ndots;
     for (int i = 0; i < n; ++i) {
-        NoteDot* dot = new NoteDot(score());
+        NoteDot* dot = new NoteDot(this);
         dot->setParent(this);
         dot->setTrack(track());      // needed to know the staff it belongs to (and detect tablature)
         dot->setVisible(visible());
@@ -2377,7 +2388,7 @@ void Note::updateAccidental(AccidentalState* as)
         }
         if (acci != AccidentalType::NONE && !_hidden) {
             if (_accidental == 0) {
-                Accidental* a = new Accidental(score());
+                Accidental* a = new Accidental(this);
                 a->setParent(this);
                 a->setAccidentalType(acci);
                 score()->undoAddElement(a);
@@ -2527,7 +2538,7 @@ qreal Note::mag() const
 //---------------------------------------------------------
 Element* Note::elementBase() const
 {
-    return parent();
+    return parentElement();
 }
 
 //---------------------------------------------------------

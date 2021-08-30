@@ -57,8 +57,10 @@ private:
     void spatiumChanged(qreal oldValue, qreal newValue) override;
 
 public:
-    LayoutBreak(Score* = 0);
+    LayoutBreak(MeasureBase* parent = 0);
     LayoutBreak(const LayoutBreak&);
+
+    void setParent(MeasureBase* parent);
 
     LayoutBreak* clone() const override { return new LayoutBreak(*this); }
     int subtype() const override { return static_cast<int>(_layoutBreakType); }
