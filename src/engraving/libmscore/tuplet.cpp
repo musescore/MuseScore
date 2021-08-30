@@ -63,7 +63,7 @@ static const ElementStyle tupletStyle {
 //---------------------------------------------------------
 
 Tuplet::Tuplet(Score* s)
-    : DurationElement(s)
+    : DurationElement(ElementType::TUPLET, s)
 {
     _direction    = Direction::AUTO;
     _numberType   = TupletNumberType::SHOW_NUMBER;

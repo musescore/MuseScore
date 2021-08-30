@@ -79,7 +79,7 @@ public:
     ~Image();
 
     Image* clone() const override { return new Image(*this); }
-    ElementType type() const override { return ElementType::IMAGE; }
+
     void write(XmlWriter& xml) const override;
     void read(XmlReader&) override;
     bool load(const QString& s);

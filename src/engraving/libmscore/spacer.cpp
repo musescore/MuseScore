@@ -36,7 +36,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 Spacer::Spacer(Score* score)
-    : Element(score)
+    : Element(ElementType::SPACER, score)
 {
     _spacerType = SpacerType::UP;
     _gap = 0.0;

@@ -41,10 +41,15 @@ namespace Ms {
 //   Symbol
 //---------------------------------------------------------
 
-Symbol::Symbol(Score* s, ElementFlags f)
-    : BSymbol(s, f)
+Symbol::Symbol(const ElementType& type, Score* s, ElementFlags f)
+    : BSymbol(type, s, f)
 {
     _sym = SymId::accidentalSharp;          // arbitrary valid default
+}
+
+Symbol::Symbol(Score* s, ElementFlags f)
+    : Symbol(ElementType::SYMBOL, s, f)
+{
 }
 
 Symbol::Symbol(const Symbol& s)
@@ -208,7 +213,7 @@ bool Symbol::setProperty(Pid propertyId, const QVariant& v)
 //---------------------------------------------------------
 
 FSymbol::FSymbol(Score* s)
-    : BSymbol(s)
+    : BSymbol(ElementType::FSYMBOL, s)
 {
     _code = 0;
     _font.setNoFontMerging(true);

@@ -159,8 +159,8 @@ static const ElementName elementNames[] = {
 //   ScoreElement
 //---------------------------------------------------------
 
-ScoreElement::ScoreElement(Score* s)
-    : _score(s)
+ScoreElement::ScoreElement(const ElementType& type, Score* s)
+    : m_type(type), _score(s)
 {
     if (elementsProvider()) {
         elementsProvider()->reg(this);
@@ -169,7 +169,8 @@ ScoreElement::ScoreElement(Score* s)
 
 ScoreElement::ScoreElement(const ScoreElement& se)
 {
-    _score        = se._score;
+    m_type = se.m_type;
+    _score = se._score;
     _elementStyle = se._elementStyle;
     if (_elementStyle) {
         size_t n = _elementStyle->size();

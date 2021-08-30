@@ -70,7 +70,7 @@ static Lyrics* searchNextLyrics(Segment* s, int staffIdx, int verse, Placement p
 //---------------------------------------------------------
 
 LyricsLine::LyricsLine(Score* s)
-    : SLine(s, ElementFlag::NOT_SELECTABLE)
+    : SLine(ElementType::LYRICSLINE, s, ElementFlag::NOT_SELECTABLE)
 {
     setGenerated(true);             // no need to save it, as it can be re-generated
     setDiagonal(false);
@@ -335,7 +335,7 @@ bool LyricsLine::setProperty(Pid propertyId, const QVariant& v)
 //=========================================================
 
 LyricsLineSegment::LyricsLineSegment(Spanner* sp, Score* s)
-    : LineSegment(sp, s, ElementFlag::ON_STAFF | ElementFlag::NOT_SELECTABLE)
+    : LineSegment(ElementType::LYRICSLINE_SEGMENT, sp, s, ElementFlag::ON_STAFF | ElementFlag::NOT_SELECTABLE)
 {
     setGenerated(true);
 }

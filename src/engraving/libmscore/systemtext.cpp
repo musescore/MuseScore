@@ -39,7 +39,7 @@ static const ElementStyle systemStyle {
 //---------------------------------------------------------
 
 SystemText::SystemText(Score* s, Tid tid)
-    : StaffTextBase(s, tid, ElementFlag::SYSTEM | ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+    : StaffTextBase(ElementType::SYSTEM_TEXT, s, tid, ElementFlag::SYSTEM | ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     initElementStyle(&systemStyle);
 }

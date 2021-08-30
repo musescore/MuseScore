@@ -40,7 +40,6 @@ public:
     MMRestRange(Score* s = nullptr);
     MMRestRange(const MMRestRange& other);
 
-    virtual ElementType type()   const override { return ElementType::MMREST_RANGE; }
     virtual MMRestRange* clone() const override { return new MMRestRange(*this); }
 
     virtual QVariant getProperty(Pid id) const override;

@@ -39,7 +39,6 @@ public:
     Sticking(Score*);
 
     Sticking* clone() const override { return new Sticking(*this); }
-    ElementType type() const override { return ElementType::STICKING; }
 
     Segment* segment() const { return (Segment*)parent(); }
     Measure* measure() const { return (Measure*)parent()->parent(); }

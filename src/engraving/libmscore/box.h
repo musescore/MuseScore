@@ -52,7 +52,7 @@ class Box : public MeasureBase
     bool _isAutoSizeEnabled       { true };
 
 public:
-    Box(Score*);
+    Box(const ElementType& type, Score*);
 
     void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
 
@@ -122,7 +122,6 @@ public:
     virtual ~HBox() {}
 
     HBox* clone() const override { return new HBox(*this); }
-    ElementType type() const override { return ElementType::HBOX; }
 
     void layout() override;
     void writeProperties(XmlWriter&) const override;
@@ -152,11 +151,11 @@ public:
 class VBox : public Box
 {
 public:
+    VBox(const ElementType& type, Score* score);
     VBox(Score* score);
     virtual ~VBox() {}
 
     VBox* clone() const override { return new VBox(*this); }
-    ElementType type() const override { return ElementType::VBOX; }
 
     qreal minHeight() const;
     qreal maxHeight() const;
@@ -178,11 +177,10 @@ class FBox : public VBox
 {
 public:
     FBox(Score* score)
-        : VBox(score) {}
+        : VBox(ElementType::FBOX, score) {}
     virtual ~FBox() {}
 
     FBox* clone() const override { return new FBox(*this); }
-    ElementType type() const override { return ElementType::FBOX; }
 
     void layout() override;
     void add(Element*) override;

@@ -63,7 +63,6 @@ public:
     int treeChildCount() const override;
 
     Page* clone() const override { return new Page(*this); }
-    ElementType type() const override { return ElementType::PAGE; }
     const QList<System*>& systems() const { return _systems; }
     QList<System*>& systems() { return _systems; }
     System* system(int idx) { return _systems[idx]; }

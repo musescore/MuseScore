@@ -57,7 +57,7 @@ static const ElementStyle tempoStyle {
 //---------------------------------------------------------
 
 TempoText::TempoText(Score* s)
-    : TextBase(s, Tid::TEMPO, ElementFlags(ElementFlag::SYSTEM))
+    : TextBase(ElementType::TEMPO_TEXT, s, Tid::TEMPO, ElementFlags(ElementFlag::SYSTEM))
 {
     initElementStyle(&tempoStyle);
     _tempo      = 2.0;        // propertyDefault(P_TEMPO).toDouble();

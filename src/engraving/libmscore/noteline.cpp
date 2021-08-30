@@ -25,7 +25,7 @@
 
 namespace Ms {
 NoteLine::NoteLine(Score* s)
-    : TextLineBase(s)
+    : TextLineBase(ElementType::NOTELINE, s)
 {
 //TODO-ws      init();
 }

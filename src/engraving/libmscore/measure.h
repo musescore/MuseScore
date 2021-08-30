@@ -141,7 +141,6 @@ public:
     ~Measure();
 
     Measure* clone() const override { return new Measure(*this); }
-    ElementType type() const override { return ElementType::MEASURE; }
     void setScore(Score* s) override;
     Measure* cloneMeasure(Score*, const Fraction& tick, TieMap*);
 

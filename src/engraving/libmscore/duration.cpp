@@ -36,8 +36,8 @@ namespace Ms {
 //   DurationElement
 //---------------------------------------------------------
 
-DurationElement::DurationElement(Score* s, ElementFlags f)
-    : Element(s, f)
+DurationElement::DurationElement(const ElementType& type, Score* s, ElementFlags f)
+    : Element(type, s, f)
 {
     _tuplet = 0;
 }

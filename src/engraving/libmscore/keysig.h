@@ -50,7 +50,7 @@ public:
 
     KeySig* clone() const override { return new KeySig(*this); }
     void draw(mu::draw::Painter*) const override;
-    ElementType type() const override { return ElementType::KEYSIG; }
+
     bool acceptDrop(EditData&) const override;
     Element* drop(EditData&) override;
     void layout() override;

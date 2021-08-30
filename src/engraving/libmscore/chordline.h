@@ -56,7 +56,6 @@ public:
     ChordLine(const ChordLine&);
 
     ChordLine* clone() const override { return new ChordLine(*this); }
-    ElementType type() const override { return ElementType::CHORDLINE; }
 
     void setChordLineType(ChordLineType);
     ChordLineType chordLineType() const { return _chordLineType; }

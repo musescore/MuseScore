@@ -38,7 +38,6 @@ public:
     Ossia(const Ossia&);
 
     Ossia* clone() const override { return new Ossia(*this); }
-    ElementType type() const override { return ElementType::OSSIA; }
 };
 }     // namespace Ms
 #endif

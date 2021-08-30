@@ -39,8 +39,8 @@ namespace Ms {
 //   BSymbol
 //---------------------------------------------------------
 
-BSymbol::BSymbol(Score* s, ElementFlags f)
-    : Element(s, f)
+BSymbol::BSymbol(const Ms::ElementType& type, Score* s, ElementFlags f)
+    : Element(type, s, f)
 {
     _align = Align::LEFT | Align::BASELINE;
 }

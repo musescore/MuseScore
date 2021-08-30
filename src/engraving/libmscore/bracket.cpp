@@ -44,7 +44,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 Bracket::Bracket(Score* s)
-    : Element(s)
+    : Element(ElementType::BRACKET, s)
 {
     ay1          = 0;
     h2           = 3.5 * spatium();

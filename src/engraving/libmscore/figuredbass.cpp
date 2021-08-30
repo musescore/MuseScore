@@ -76,7 +76,7 @@ const QChar FiguredBassItem::normParenthToChar[int(FiguredBassItem::Parenthesis:
 { 0, '(', ')', '[', ']' };
 
 FiguredBassItem::FiguredBassItem(Score* s, int l)
-    : Element(s), ord(l)
+    : Element(ElementType::INVALID, s), ord(l)
 {
     _prefix     = _suffix = Modifier::NONE;
     _digit      = FBIDigitNone;
@@ -998,7 +998,7 @@ bool FiguredBassItem::startsWithParenthesis() const
 //---------------------------------------------------------
 
 FiguredBass::FiguredBass(Score* s)
-    : TextBase(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+    : TextBase(ElementType::FIGURED_BASS, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     initElementStyle(&figuredBassStyle);
     // figured bass inherits from TextBase for layout purposes

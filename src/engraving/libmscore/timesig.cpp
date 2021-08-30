@@ -51,7 +51,7 @@ static const ElementStyle timesigStyle {
 //---------------------------------------------------------
 
 TimeSig::TimeSig(Score* s)
-    : Element(s, ElementFlag::ON_STAFF | ElementFlag::MOVABLE)
+    : Element(ElementType::TIMESIG, s, ElementFlag::ON_STAFF | ElementFlag::MOVABLE)
 {
     initElementStyle(&timesigStyle);
 

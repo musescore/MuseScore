@@ -50,7 +50,7 @@ static const ElementStyle fermataStyle {
 //---------------------------------------------------------
 
 Fermata::Fermata(Score* s)
-    : Element(s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+    : Element(ElementType::FERMATA, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     setPlacement(Placement::ABOVE);
     _symId         = SymId::noSym;

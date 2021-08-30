@@ -129,7 +129,6 @@ public:
     int treeChildCount() const override;
 
     System* clone() const override { return new System(*this); }
-    ElementType type() const override { return ElementType::SYSTEM; }
 
     void add(Element*) override;
     void remove(Element*) override;

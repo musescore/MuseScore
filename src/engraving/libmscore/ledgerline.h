@@ -49,7 +49,7 @@ public:
     LedgerLine& operator=(const LedgerLine&) = delete;
 
     LedgerLine* clone() const override { return new LedgerLine(*this); }
-    ElementType type() const override { return ElementType::LEDGER_LINE; }
+
     mu::PointF pagePos() const override;        ///< position in page coordinates
     Chord* chord() const { return toChord(parent()); }
 

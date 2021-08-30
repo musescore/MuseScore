@@ -41,8 +41,8 @@ namespace Ms {
 //   MeasureBase
 //---------------------------------------------------------
 
-MeasureBase::MeasureBase(Score* score)
-    : Element(score)
+MeasureBase::MeasureBase(const ElementType& type, Score* score)
+    : Element(type, score)
 {
     setIrregular(true);
 }

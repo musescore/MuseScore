@@ -41,7 +41,6 @@ public:
     StaffText(Score* s = 0, Tid = Tid::STAFF);
 
     StaffText* clone() const override { return new StaffText(*this); }
-    ElementType type() const override { return ElementType::STAFF_TEXT; }
     void layout() override;
 };
 }     // namespace Ms

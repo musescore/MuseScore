@@ -40,7 +40,7 @@ public:
 
     Lasso(Score*);
     virtual Lasso* clone() const override { return new Lasso(*this); }
-    ElementType type() const final { return ElementType::LASSO; }
+
     virtual void draw(mu::draw::Painter*) const override;
     virtual bool isEditable() const override { return true; }
     virtual void editDrag(EditData&) override;

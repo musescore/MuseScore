@@ -104,7 +104,7 @@ void SysStaff::restoreLayout()
 //---------------------------------------------------------
 
 System::System(Score* s)
-    : Element(s)
+    : Element(ElementType::SYSTEM, s)
 {
 }
 

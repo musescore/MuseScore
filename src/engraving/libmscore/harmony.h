@@ -125,7 +125,6 @@ public:
     ~Harmony();
 
     Harmony* clone() const override { return new Harmony(*this); }
-    ElementType type() const override { return ElementType::HARMONY; }
 
     void setId(int d) { _id = d; }
     int id() const { return _id; }

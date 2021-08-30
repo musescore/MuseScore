@@ -189,7 +189,6 @@ public:
 
     static std::shared_ptr<FretDiagram> createFromString(Score* score, const QString& s);
 
-    ElementType type() const override { return ElementType::FRET_DIAGRAM; }
     void layout() override;
     void write(XmlWriter& xml) const override;
     void writeNew(XmlWriter& xml) const;

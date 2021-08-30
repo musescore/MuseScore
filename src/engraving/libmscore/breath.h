@@ -50,7 +50,6 @@ class Breath final : public Element
 public:
     Breath(Score* s);
 
-    ElementType type() const override { return ElementType::BREATH; }
     Breath* clone() const override { return new Breath(*this); }
 
     qreal mag() const override;

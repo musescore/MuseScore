@@ -41,8 +41,8 @@ namespace Ms {
 //   SlurTieSegment
 //---------------------------------------------------------
 
-SlurTieSegment::SlurTieSegment(Score* score)
-    : SpannerSegment(score)
+SlurTieSegment::SlurTieSegment(const ElementType& type, Score* score)
+    : SpannerSegment(type, score)
 {
     setFlag(ElementFlag::ON_STAFF, true);
 }
@@ -423,8 +423,8 @@ void SlurTieSegment::drawEditMode(mu::draw::Painter* p, EditData& ed)
 //   SlurTie
 //---------------------------------------------------------
 
-SlurTie::SlurTie(Score* s)
-    : Spanner(s)
+SlurTie::SlurTie(const ElementType& type, Score* s)
+    : Spanner(type, s)
 {
     _slurDirection = Direction::AUTO;
     _up            = true;

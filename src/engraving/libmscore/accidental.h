@@ -90,7 +90,6 @@ public:
     Accidental(Score* s = 0);
 
     Accidental* clone() const override { return new Accidental(*this); }
-    ElementType type() const override { return ElementType::ACCIDENTAL; }
 
     // Score Tree functions
     ScoreElement* treeParent() const override;

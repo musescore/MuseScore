@@ -212,7 +212,7 @@ protected:
     mu::draw::Color _color;                ///< element color attribute
 
 public:
-    Element(Score* = 0, ElementFlags = ElementFlag::NOTHING, mu::engraving::AccessibleElement* access = nullptr);
+    Element(const ElementType& type, Score* = 0, ElementFlags = ElementFlag::NOTHING, mu::engraving::AccessibleElement* access = nullptr);
     Element(const Element&);
     virtual ~Element();
 
@@ -647,7 +647,7 @@ protected:
     const QList<Element*>& getElements() const { return elements; }
 
 public:
-    Compound(Score*);
+    Compound(const ElementType& type, Score*);
     Compound(const Compound&);
 
     virtual void draw(mu::draw::Painter*) const;

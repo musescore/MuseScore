@@ -56,7 +56,6 @@ public:
     ~StaffState();
 
     StaffState* clone() const override { return new StaffState(*this); }
-    ElementType type() const override { return ElementType::STAFF_STATE; }
 
     void setStaffStateType(const QString&);
     void setStaffStateType(StaffStateType st) { _staffStateType = st; }

@@ -231,7 +231,7 @@ int Chord::downString() const
 //---------------------------------------------------------
 
 Chord::Chord(Score* s)
-    : ChordRest(s)
+    : ChordRest(ElementType::CHORD, s)
 {
     _ledgerLines      = 0;
     _stem             = 0;

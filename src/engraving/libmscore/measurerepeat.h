@@ -43,7 +43,6 @@ public:
 
     MeasureRepeat* clone() const override { return new MeasureRepeat(*this); }
     Element* linkedClone() override { return Element::linkedClone(); }
-    ElementType type() const override { return ElementType::MEASURE_REPEAT; }
 
     void setNumMeasures(int n) { m_numMeasures = n; }
     int numMeasures() const { return m_numMeasures; }

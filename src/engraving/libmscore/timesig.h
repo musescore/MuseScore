@@ -77,7 +77,6 @@ public:
     void setSSig(const QString&);
 
     TimeSig* clone() const override { return new TimeSig(*this); }
-    ElementType type() const override { return ElementType::TIMESIG; }
 
     TimeSigType timeSigType() const { return _timeSigType; }
 

@@ -104,7 +104,6 @@ public:
     Dynamic(Score*);
     Dynamic(const Dynamic&);
     Dynamic* clone() const override { return new Dynamic(*this); }
-    ElementType type() const override { return ElementType::DYNAMIC; }
     Segment* segment() const { return (Segment*)parent(); }
     Measure* measure() const { return (Measure*)parent()->parent(); }
 

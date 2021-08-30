@@ -69,8 +69,8 @@ namespace Ms {
 //   ChordRest
 //---------------------------------------------------------
 
-ChordRest::ChordRest(Score* s)
-    : DurationElement(s)
+ChordRest::ChordRest(const ElementType& type, Score* s)
+    : DurationElement(type, s)
 {
     _staffMove    = 0;
     _beam         = 0;

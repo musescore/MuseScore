@@ -38,7 +38,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 LedgerLine::LedgerLine(Score* s)
-    : Element(s)
+    : Element(ElementType::LEDGER_LINE, s)
 {
     setSelectable(false);
     _width      = 0.;

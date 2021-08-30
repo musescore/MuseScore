@@ -62,7 +62,7 @@ public:
     Type markerType(const QString&) const;
 
     Marker* clone() const override { return new Marker(*this); }
-    ElementType type() const override { return ElementType::MARKER; }
+
     int subtype() const override { return int(_markerType); }
 
     Measure* measure() const { return (Measure*)parent(); }

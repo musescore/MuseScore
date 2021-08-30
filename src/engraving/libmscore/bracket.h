@@ -59,7 +59,6 @@ public:
     ~Bracket();
 
     Bracket* clone() const override { return new Bracket(*this); }
-    ElementType type() const override { return ElementType::BRACKET; }
 
     void setBracketItem(BracketItem* i) { _bi = i; }
     BracketItem* bracketItem() const { return _bi; }

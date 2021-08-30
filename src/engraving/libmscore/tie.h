@@ -44,12 +44,12 @@ protected:
 
 public:
     TieSegment(Score* s)
-        : SlurTieSegment(s) { autoAdjustOffset = mu::PointF(); }
+        : SlurTieSegment(ElementType::TIE_SEGMENT, s) { autoAdjustOffset = mu::PointF(); }
     TieSegment(const TieSegment& s)
         : SlurTieSegment(s) { autoAdjustOffset = mu::PointF(); }
 
     TieSegment* clone() const override { return new TieSegment(*this); }
-    ElementType type() const override { return ElementType::TIE_SEGMENT; }
+
     int subtype() const override { return static_cast<int>(spanner()->type()); }
     void draw(mu::draw::Painter*) const override;
 
@@ -78,7 +78,6 @@ public:
     Tie(Score* = 0);
 
     Tie* clone() const override { return new Tie(*this); }
-    ElementType type() const override { return ElementType::TIE; }
 
     void setStartNote(Note* note);
     void setEndNote(Note* note) { setEndElement((Element*)note); }

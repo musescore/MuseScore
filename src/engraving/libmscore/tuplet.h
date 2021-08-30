@@ -79,7 +79,6 @@ public:
     int treeChildCount() const override;
 
     Tuplet* clone() const override { return new Tuplet(*this); }
-    ElementType type() const override { return ElementType::TUPLET; }
     void setTrack(int val) override;
 
     void add(Element*) override;

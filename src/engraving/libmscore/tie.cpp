@@ -552,7 +552,7 @@ void Tie::slurPos(SlurPos* sp)
 //---------------------------------------------------------
 
 Tie::Tie(Score* s)
-    : SlurTie(s)
+    : SlurTie(ElementType::TIE, s)
 {
     setAnchor(Anchor::NOTE);
 }

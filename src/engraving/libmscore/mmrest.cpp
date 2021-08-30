@@ -43,7 +43,7 @@ static const ElementStyle mmRestStyle {
 //--------------------------------------------------------
 
 MMRest::MMRest(Score* s)
-    : Rest(s)
+    : Rest(ElementType::MMREST, s)
 {
     m_width = 0;
     m_symsWidth = 0;

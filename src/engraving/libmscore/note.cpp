@@ -687,7 +687,7 @@ NoteHead::Group NoteHead::headGroup() const
 //---------------------------------------------------------
 
 Note::Note(Score* s)
-    : Element(s, ElementFlag::MOVABLE
+    : Element(ElementType::NOTE, s, ElementFlag::MOVABLE
 #ifdef ENGRAVING_BUILD_ACCESSIBLE_TREE
               , new mu::engraving::AccessibleNote())
 #else

@@ -33,7 +33,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 Hook::Hook(Score* s)
-    : Symbol(s, ElementFlag::NOTHING)
+    : Symbol(ElementType::HOOK, s, ElementFlag::NOTHING)
 {
     setZ(int(type()) * 100);
 }

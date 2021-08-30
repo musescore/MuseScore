@@ -58,7 +58,7 @@ static QString revision;
 //---------------------------------------------------------
 
 Page::Page(Score* s)
-    : Element(s, ElementFlag::NOT_SELECTABLE), _no(0)
+    : Element(ElementType::PAGE, s, ElementFlag::NOT_SELECTABLE), _no(0)
 {
     bspTreeValid = false;
 }

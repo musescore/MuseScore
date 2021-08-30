@@ -39,7 +39,7 @@ static const ElementStyle mmRestRangeStyle {
 };
 
 MMRestRange::MMRestRange(Score* s)
-    : MeasureNumberBase(s, Tid::MMREST_RANGE)
+    : MeasureNumberBase(ElementType::MMREST_RANGE, s, Tid::MMREST_RANGE)
 {
     initElementStyle(&mmRestRangeStyle);
 }

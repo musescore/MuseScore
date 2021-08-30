@@ -158,7 +158,7 @@ int Dynamic::findInString(const QString& s, int& length, QString& type)
 //---------------------------------------------------------
 
 Dynamic::Dynamic(Score* s)
-    : TextBase(s, Tid::DYNAMICS, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+    : TextBase(ElementType::DYNAMIC, s, Tid::DYNAMICS, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     _velocity    = -1;
     _dynRange    = Range::PART;

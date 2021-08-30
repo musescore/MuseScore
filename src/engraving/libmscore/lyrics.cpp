@@ -52,7 +52,7 @@ static const ElementStyle lyricsElementStyle {
 //---------------------------------------------------------
 
 Lyrics::Lyrics(Score* s)
-    : TextBase(s, Tid::LYRICS_ODD)
+    : TextBase(ElementType::LYRICS, s, Tid::LYRICS_ODD)
 {
     _even       = false;
     initElementStyle(&lyricsElementStyle);
