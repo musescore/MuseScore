@@ -207,6 +207,8 @@ Rectangle {
             columns: 3
             //anchors.fill: parent
             Layout.fillHeight: true
+            rowSpacing: 0
+            columnSpacing: 0
 
 
             //-------
