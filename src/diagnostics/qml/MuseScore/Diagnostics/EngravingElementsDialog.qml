@@ -35,7 +35,7 @@ StyledDialogView {
     //! NOTE It is necessary that it can be determined that this is an object for diagnostics
     contentItem.objectName: panel.objectName
 
-    DiagnosticEngravingElementsPanel {
+    EngravingElementsPanel {
         id: panel
         anchors.fill: parent
     }

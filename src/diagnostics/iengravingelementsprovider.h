@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_DIAGNOSTICS_IDIAGNOSTICENGRAVINGREGISTER_H
-#define MU_DIAGNOSTICS_IDIAGNOSTICENGRAVINGREGISTER_H
+#ifndef MU_DIAGNOSTICS_IENGRAVINGELEMENTSPROVIDER_H
+#define MU_DIAGNOSTICS_IENGRAVINGELEMENTSPROVIDER_H
 
 #include <list>
 #include "modularity/imoduleexport.h"
@@ -31,18 +31,23 @@ class ScoreElement;
 }
 
 namespace mu::diagnostics {
-class IDiagnosticEngravingRegister : MODULE_EXPORT_INTERFACE
+class IEngravingElementsProvider : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(IDiagnosticEngravingRegister)
+    INTERFACE_ID(IEngravingElementsProvider)
 public:
-    virtual ~IDiagnosticEngravingRegister() = default;
+    virtual ~IEngravingElementsProvider() = default;
 
+    // register
     virtual void reg(const Ms::ScoreElement* e) = 0;
     virtual void unreg(const Ms::ScoreElement* e) = 0;
     virtual std::list<const Ms::ScoreElement*> elements() const = 0;
-    virtual async::Channel<const Ms::ScoreElement*> registred() const = 0;
-    virtual async::Channel<const Ms::ScoreElement*> unregistred() const = 0;
+    virtual async::Channel<const Ms::ScoreElement*, bool> registreChanged() const = 0;
+
+    // debug draw
+    virtual void select(const Ms::ScoreElement* e, bool arg) = 0;
+    virtual bool isSelected(const Ms::ScoreElement* e) const = 0;
+    virtual async::Channel<const Ms::ScoreElement*, bool> selectChanged() const = 0;
 };
 }
 
-#endif // MU_DIAGNOSTICS_IDIAGNOSTICENGRAVINGREGISTER_H
+#endif // MU_DIAGNOSTICS_IENGRAVINGELEMENTSPROVIDER_H

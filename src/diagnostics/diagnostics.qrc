@@ -7,7 +7,7 @@
         <file>qml/MuseScore/Diagnostics/DiagnosticNavigationPanel.qml</file>
         <file>qml/MuseScore/Diagnostics/DiagnosticAccessibleDialog.qml</file>
         <file>qml/MuseScore/Diagnostics/DiagnosticAccessiblePanel.qml</file>
-        <file>qml/MuseScore/Diagnostics/DiagnosticEngravingElementsDialog.qml</file>
-        <file>qml/MuseScore/Diagnostics/DiagnosticEngravingElementsPanel.qml</file>
+        <file>qml/MuseScore/Diagnostics/EngravingElementsDialog.qml</file>
+        <file>qml/MuseScore/Diagnostics/EngravingElementsPanel.qml</file>
     </qresource>
 </RCC>

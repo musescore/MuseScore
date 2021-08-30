@@ -25,6 +25,9 @@
 #include <QList>
 #include "infrastructure/draw/painter.h"
 
+#include "modularity/ioc.h"
+#include "diagnostics/iengravingelementsprovider.h"
+
 namespace Ms {
 class Element;
 }
@@ -32,6 +35,8 @@ class Element;
 namespace mu::engraving {
 class Paint
 {
+    INJECT_STATIC(engraving, diagnostics::IEngravingElementsProvider, elementsProvider)
+
 public:
 
     static void paintElement(mu::draw::Painter& painter, const Ms::Element* element);

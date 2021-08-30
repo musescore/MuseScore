@@ -29,7 +29,7 @@
 #include "style/textstyle.h"
 
 #include "modularity/ioc.h"
-#include "diagnostics/idiagnosticengravingregister.h"
+#include "diagnostics/iengravingelementsprovider.h"
 
 namespace Ms {
 class ScoreElement;
@@ -189,7 +189,7 @@ struct ElementName {
 
 class ScoreElement
 {
-    INJECT_STATIC(engraving, mu::diagnostics::IDiagnosticEngravingRegister, diagnosticRegister)
+    INJECT_STATIC(engraving, mu::diagnostics::IEngravingElementsProvider, elementsProvider)
 
     Score* _score;
     static ElementStyle const emptyStyle;

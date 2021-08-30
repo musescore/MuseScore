@@ -162,8 +162,8 @@ static const ElementName elementNames[] = {
 ScoreElement::ScoreElement(Score* s)
     : _score(s)
 {
-    if (diagnosticRegister()) {
-        diagnosticRegister()->reg(this);
+    if (elementsProvider()) {
+        elementsProvider()->reg(this);
     }
 }
 
@@ -187,8 +187,8 @@ ScoreElement::ScoreElement(const ScoreElement& se)
 
 ScoreElement::~ScoreElement()
 {
-    if (diagnosticRegister()) {
-        diagnosticRegister()->unreg(this);
+    if (elementsProvider()) {
+        elementsProvider()->unreg(this);
     }
 
     if (_links) {

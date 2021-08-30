@@ -33,7 +33,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/diagnosticsmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/diagnosticutils.h
     ${CMAKE_CURRENT_LIST_DIR}/idiagnosticspathsregister.h
-    ${CMAKE_CURRENT_LIST_DIR}/idiagnosticengravingregister.h
+    ${CMAKE_CURRENT_LIST_DIR}/iengravingelementsprovider.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/diagnosticsactions.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/diagnosticsactions.h
@@ -41,8 +41,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/diagnosticsactionscontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/diagnosticspathsregister.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/diagnosticspathsregister.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/diagnosticengravingregister.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/diagnosticengravingregister.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/engravingelementsprovider.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/engravingelementsprovider.h
 
     ${CMAKE_CURRENT_LIST_DIR}/view/diagnosticspathsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/diagnosticspathsmodel.h
@@ -60,8 +60,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/keynav/keynavdevsection.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/keynav/keynavdevsection.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/view/engraving/diagnosticengravingelementsmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/engraving/diagnosticengravingelementsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/engraving/engravingelementsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/engraving/engravingelementsmodel.h
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

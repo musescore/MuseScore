@@ -32,6 +32,7 @@
 #include "pen.h"
 #include "pixmap.h"
 #include "transform.h"
+#include "painterpath.h"
 
 namespace mu::draw {
 class Painter;
