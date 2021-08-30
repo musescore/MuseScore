@@ -43,7 +43,6 @@ class VoltaSegment final : public TextLineBaseSegment
 public:
     VoltaSegment(Spanner*, Score*);
 
-    ElementType type() const override { return ElementType::VOLTA_SEGMENT; }
     VoltaSegment* clone() const override { return new VoltaSegment(*this); }
 
     Volta* volta() const { return (Volta*)spanner(); }
@@ -70,7 +69,6 @@ public:
     Volta(Score* s);
 
     Volta* clone() const override { return new Volta(*this); }
-    ElementType type() const override { return ElementType::VOLTA; }
 
     LineSegment* createLineSegment() override;
 

@@ -186,7 +186,7 @@ static const ElementStyle vibratoStyle {
 //---------------------------------------------------------
 
 Vibrato::Vibrato(Score* s)
-    : SLine(s)
+    : SLine(ElementType::VIBRATO, s)
 {
     initElementStyle(&vibratoStyle);
     _vibratoType = Type::GUITAR_VIBRATO;

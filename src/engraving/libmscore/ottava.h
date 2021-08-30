@@ -83,9 +83,8 @@ class OttavaSegment final : public TextLineBaseSegment
 
 public:
     OttavaSegment(Spanner* sp, Score* s)
-        : TextLineBaseSegment(sp, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF) { }
+        : TextLineBaseSegment(ElementType::OTTAVA_SEGMENT, sp, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF) { }
 
-    ElementType type() const override { return ElementType::OTTAVA_SEGMENT; }
     OttavaSegment* clone() const override { return new OttavaSegment(*this); }
     Ottava* ottava() const { return (Ottava*)spanner(); }
     void layout() override;
@@ -114,7 +113,6 @@ public:
     Ottava(const Ottava&);
 
     Ottava* clone() const override { return new Ottava(*this); }
-    ElementType type() const override { return ElementType::OTTAVA; }
 
     void setOttavaType(OttavaType val);
     OttavaType ottavaType() const { return _ottavaType; }

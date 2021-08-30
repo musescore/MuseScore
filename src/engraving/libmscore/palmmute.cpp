@@ -89,7 +89,7 @@ Sid PalmMute::getPropertyStyle(Pid pid) const
 //---------------------------------------------------------
 
 PalmMute::PalmMute(Score* s)
-    : TextLineBase(s)
+    : TextLineBase(ElementType::PALM_MUTE, s)
 {
     initElementStyle(&palmMuteStyle);
     resetProperty(Pid::LINE_VISIBLE);

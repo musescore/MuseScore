@@ -49,7 +49,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 StaffLines::StaffLines(Score* s)
-    : Element(s)
+    : Element(ElementType::STAFF_LINES, s)
 {
     setSelectable(false);
 }

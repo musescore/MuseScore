@@ -38,9 +38,8 @@ class PedalSegment final : public TextLineBaseSegment
 
 public:
     PedalSegment(Spanner* sp, Score* s)
-        : TextLineBaseSegment(sp, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF) {}
+        : TextLineBaseSegment(ElementType::PEDAL_SEGMENT, sp, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF) {}
 
-    ElementType type() const override { return ElementType::PEDAL_SEGMENT; }
     PedalSegment* clone() const override { return new PedalSegment(*this); }
     Pedal* pedal() const { return toPedal(spanner()); }
     void layout() override;
@@ -63,7 +62,6 @@ public:
     Pedal(Score* s);
 
     Pedal* clone() const override { return new Pedal(*this); }
-    ElementType type() const override { return ElementType::PEDAL; }
 
     void read(XmlReader&) override;
     void write(XmlWriter& xml) const override;

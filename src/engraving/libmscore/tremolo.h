@@ -67,7 +67,6 @@ public:
     Tremolo(const Tremolo&);
     Tremolo& operator=(const Tremolo&) = delete;
     Tremolo* clone() const override { return new Tremolo(*this); }
-    ElementType type() const override { return ElementType::TREMOLO; }
     int subtype() const override { return static_cast<int>(_tremoloType); }
     QString subtypeName() const override;
 

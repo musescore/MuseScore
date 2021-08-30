@@ -38,9 +38,8 @@ class PalmMuteSegment final : public TextLineBaseSegment
 
 public:
     PalmMuteSegment(Spanner* sp, Score* s)
-        : TextLineBaseSegment(sp, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF) { }
+        : TextLineBaseSegment(ElementType::PALM_MUTE_SEGMENT, sp, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF) { }
 
-    ElementType type() const override { return ElementType::PALM_MUTE_SEGMENT; }
     PalmMuteSegment* clone() const override { return new PalmMuteSegment(*this); }
 
     PalmMute* palmMute() const { return (PalmMute*)spanner(); }
@@ -65,7 +64,6 @@ public:
     PalmMute(Score* s);
 
     PalmMute* clone() const override { return new PalmMute(*this); }
-    ElementType type() const override { return ElementType::PALM_MUTE; }
 
     void read(XmlReader&) override;
 //      virtual void write(XmlWriter& xml) const override;

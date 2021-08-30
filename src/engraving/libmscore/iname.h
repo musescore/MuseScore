@@ -47,7 +47,6 @@ public:
     InstrumentName(Score*);
 
     InstrumentName* clone() const override { return new InstrumentName(*this); }
-    ElementType type() const override { return ElementType::INSTRUMENT_NAME; }
 
     int layoutPos() const { return _layoutPos; }
     void setLayoutPos(int val) { _layoutPos = val; }

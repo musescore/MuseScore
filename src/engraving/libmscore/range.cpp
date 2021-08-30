@@ -292,6 +292,10 @@ void TrackList::read(const Segment* fs, const Segment* es)
             // TODO: copy previous measure contents?
             MeasureRepeat* rm = toMeasureRepeat(e);
             Rest r(*rm);
+            //! TODO Perhaps there is a bug.
+            //! Previously, the element changed its type (because there was a virtual method that returned the type).
+            //! This code has been added for compatibility reasons to maintain the same behavior.
+            r.hack_toRestType();
             r.reset();
             append(&r);
             tick += r.ticks();

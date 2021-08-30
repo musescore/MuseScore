@@ -92,7 +92,6 @@ public:
     int treeChildCount() const override;
 
     Segment* clone() const override { return new Segment(*this); }
-    ElementType type() const override { return ElementType::SEGMENT; }
 
     void setScore(Score*) override;
 

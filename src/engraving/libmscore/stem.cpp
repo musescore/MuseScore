@@ -52,7 +52,7 @@ static const ElementStyle stemStyle {
 //---------------------------------------------------------
 
 Stem::Stem(Score* s)
-    : Element(s)
+    : Element(ElementType::STEM, s)
 {
     initElementStyle(&stemStyle);
     resetProperty(Pid::USER_LEN);

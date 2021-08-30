@@ -66,7 +66,7 @@ static const ElementStyle voltaStyle {
 //---------------------------------------------------------
 
 VoltaSegment::VoltaSegment(Spanner* sp, Score* s)
-    : TextLineBaseSegment(sp, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF | ElementFlag::SYSTEM)
+    : TextLineBaseSegment(ElementType::VOLTA_SEGMENT, sp, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF | ElementFlag::SYSTEM)
 {
 }
 
@@ -97,7 +97,7 @@ Element* VoltaSegment::propertyDelegate(Pid pid)
 //---------------------------------------------------------
 
 Volta::Volta(Score* s)
-    : TextLineBase(s, ElementFlag::SYSTEM)
+    : TextLineBase(ElementType::VOLTA, s, ElementFlag::SYSTEM)
 {
     setPlacement(Placement::ABOVE);
     initElementStyle(&voltaStyle);

@@ -55,7 +55,7 @@ public:
     Bend(Score* s);
 
     Bend* clone() const override { return new Bend(*this); }
-    ElementType type() const override { return ElementType::BEND; }
+
     void layout() override;
     void draw(mu::draw::Painter*) const override;
     void write(XmlWriter&) const override;

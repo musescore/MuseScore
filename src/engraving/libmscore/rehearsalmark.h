@@ -36,7 +36,7 @@ public:
     RehearsalMark(Score* score);
 
     RehearsalMark* clone() const override { return new RehearsalMark(*this); }
-    ElementType type() const override { return ElementType::REHEARSAL_MARK; }
+
     Segment* segment() const { return (Segment*)parent(); }
     void layout() override;
     QVariant propertyDefault(Pid id) const override;

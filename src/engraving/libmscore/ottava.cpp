@@ -220,7 +220,7 @@ Sid Ottava::getPropertyStyle(Pid pid) const
 //---------------------------------------------------------
 
 Ottava::Ottava(Score* s)
-    : TextLineBase(s, ElementFlag::ON_STAFF | ElementFlag::MOVABLE)
+    : TextLineBase(ElementType::OTTAVA, s, ElementFlag::ON_STAFF | ElementFlag::MOVABLE)
 {
     _ottavaType  = OttavaType::OTTAVA_8VA;
     _numbersOnly = false;

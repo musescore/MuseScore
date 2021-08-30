@@ -40,7 +40,6 @@ class TextLineSegment final : public TextLineBaseSegment
 public:
     TextLineSegment(Spanner* sp, Score* s, bool system=false);
 
-    ElementType type() const override { return ElementType::TEXTLINE_SEGMENT; }
     TextLineSegment* clone() const override { return new TextLineSegment(*this); }
 
     virtual Element* propertyDelegate(Pid) override;
@@ -67,7 +66,6 @@ public:
     virtual SpannerSegment* layoutSystem(System*) override;
 
     TextLine* clone() const override { return new TextLine(*this); }
-    ElementType type() const override { return ElementType::TEXTLINE; }
 
     void write(XmlWriter&) const override;
     void read(XmlReader&) override;

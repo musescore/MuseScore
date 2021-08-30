@@ -90,8 +90,6 @@ public:
 
     Part* clone() const;
 
-    ElementType type() const override { return ElementType::PART; }
-
     void read(XmlReader&);
     bool readProperties(XmlReader&);
     void write(XmlWriter& xml) const;

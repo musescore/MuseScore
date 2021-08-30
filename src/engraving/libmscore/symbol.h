@@ -46,13 +46,13 @@ protected:
     const ScoreFont* _scoreFont = nullptr;
 
 public:
+    Symbol(const ElementType& type, Score* s, ElementFlags f = ElementFlag::MOVABLE);
     Symbol(Score* s, ElementFlags f = ElementFlag::MOVABLE);
     Symbol(const Symbol&);
 
     Symbol& operator=(const Symbol&) = delete;
 
     Symbol* clone() const override { return new Symbol(*this); }
-    ElementType type() const override { return ElementType::SYMBOL; }
 
     void setSym(SymId s, const ScoreFont* sf = nullptr) { _sym  = s; _scoreFont = sf; }
     SymId sym() const { return _sym; }
@@ -85,7 +85,6 @@ public:
     FSymbol(const FSymbol&);
 
     FSymbol* clone() const override { return new FSymbol(*this); }
-    ElementType type() const override { return ElementType::FSYMBOL; }
 
     void draw(mu::draw::Painter*) const override;
     void write(XmlWriter& xml) const override;

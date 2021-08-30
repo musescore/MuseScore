@@ -45,7 +45,6 @@ public:
     SystemDivider(const SystemDivider&);
 
     SystemDivider* clone() const override { return new SystemDivider(*this); }
-    ElementType type() const override { return ElementType::SYSTEM_DIVIDER; }
 
     Type dividerType() const { return _dividerType; }
     void setDividerType(Type v);

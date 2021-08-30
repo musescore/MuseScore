@@ -181,7 +181,7 @@ void MStaff::setTrack(int track)
 //---------------------------------------------------------
 
 Measure::Measure(Score* s)
-    : MeasureBase(s), m_timesig(4, 4)
+    : MeasureBase(ElementType::MEASURE, s), m_timesig(4, 4)
 {
     setTicks(Fraction(4, 4));
     m_repeatCount = 2;

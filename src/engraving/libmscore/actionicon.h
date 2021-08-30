@@ -67,7 +67,6 @@ public:
     ~ActionIcon() override = default;
 
     ActionIcon* clone() const override;
-    ElementType type() const override;
 
     ActionIconType actionType() const;
     const std::string& actionCode() const;

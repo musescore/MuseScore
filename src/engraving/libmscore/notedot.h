@@ -39,7 +39,6 @@ public:
     NoteDot(Score* = 0);
 
     NoteDot* clone() const override { return new NoteDot(*this); }
-    ElementType type() const override { return ElementType::NOTEDOT; }
     qreal mag() const override;
 
     void draw(mu::draw::Painter*) const override;

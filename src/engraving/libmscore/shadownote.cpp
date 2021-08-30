@@ -38,7 +38,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 ShadowNote::ShadowNote(Score* s)
-    : Element(s), m_noteheadSymbol(SymId::noSym)
+    : Element(ElementType::SHADOW_NOTE, s), m_noteheadSymbol(SymId::noSym)
 {
     m_lineIndex = 1000;
     m_duration = TDuration(TDuration::DurationType::V_INVALID);

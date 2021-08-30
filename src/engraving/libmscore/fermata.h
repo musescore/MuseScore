@@ -53,7 +53,6 @@ public:
     Fermata& operator=(const Fermata&) = delete;
 
     Fermata* clone() const override { return new Fermata(*this); }
-    ElementType type() const override { return ElementType::FERMATA; }
 
     qreal mag() const override;
 

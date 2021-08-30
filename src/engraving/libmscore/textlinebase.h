@@ -49,7 +49,7 @@ protected:
     bool twoLines { false };
 
 public:
-    TextLineBaseSegment(Spanner*, Score* s, ElementFlags f = ElementFlag::NOTHING);
+    TextLineBaseSegment(const ElementType& type, Spanner*, Score* s, ElementFlags f = ElementFlag::NOTHING);
     TextLineBaseSegment(const TextLineBaseSegment&);
     ~TextLineBaseSegment();
 
@@ -120,7 +120,7 @@ protected:
     friend class TextLineBaseSegment;
 
 public:
-    TextLineBase(Score* s, ElementFlags = ElementFlag::NOTHING);
+    TextLineBase(const ElementType& type, Score* s, ElementFlags = ElementFlag::NOTHING);
 
     virtual void write(XmlWriter& xml) const override;
     virtual void read(XmlReader&) override;

@@ -51,7 +51,6 @@ public:
     TremoloBar(Score* s);
 
     TremoloBar* clone() const override { return new TremoloBar(*this); }
-    ElementType type() const override { return ElementType::TREMOLOBAR; }
 
     void layout() override;
     void draw(mu::draw::Painter*) const override;

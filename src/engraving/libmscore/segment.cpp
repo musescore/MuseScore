@@ -126,14 +126,14 @@ void Segment::removeElement(int track)
 //---------------------------------------------------------
 
 Segment::Segment(Measure* m)
-    : Element(m->score(), ElementFlag::EMPTY | ElementFlag::ENABLED | ElementFlag::NOT_SELECTABLE)
+    : Element(ElementType::SEGMENT, m->score(), ElementFlag::EMPTY | ElementFlag::ENABLED | ElementFlag::NOT_SELECTABLE)
 {
     setParent(m);
     init();
 }
 
 Segment::Segment(Measure* m, SegmentType st, const Fraction& t)
-    : Element(m->score(), ElementFlag::EMPTY | ElementFlag::ENABLED | ElementFlag::NOT_SELECTABLE)
+    : Element(ElementType::SEGMENT, m->score(), ElementFlag::EMPTY | ElementFlag::ENABLED | ElementFlag::NOT_SELECTABLE)
 {
     setParent(m);
 //      Q_ASSERT(t >= Fraction(0,1));

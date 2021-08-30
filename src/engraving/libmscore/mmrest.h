@@ -40,8 +40,6 @@ public:
     {
     }
 
-    ElementType type() const override { return ElementType::MMREST; }
-
     MMRest* clone() const override { return new MMRest(*this, false); }
     Element* linkedClone() override { return new MMRest(*this, true); }
 

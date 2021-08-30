@@ -76,7 +76,7 @@ struct BeamFragment {
 //---------------------------------------------------------
 
 Beam::Beam(Score* s)
-    : Element(s)
+    : Element(ElementType::BEAM, s)
 {
     initElementStyle(&beamStyle);
 }

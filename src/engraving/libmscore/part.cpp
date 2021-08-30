@@ -46,7 +46,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 Part::Part(Score* s)
-    : ScoreElement(s)
+    : ScoreElement(ElementType::PART, s)
 {
     _color   = DEFAULT_COLOR;
     _show    = true;

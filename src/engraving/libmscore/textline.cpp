@@ -99,7 +99,7 @@ static const ElementStyle systemTextLineStyle {
 //---------------------------------------------------------
 
 TextLineSegment::TextLineSegment(Spanner* sp, Score* s, bool system)
-    : TextLineBaseSegment(sp, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+    : TextLineBaseSegment(ElementType::TEXTLINE_SEGMENT, sp, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     setSystemFlag(system);
     if (systemFlag()) {
@@ -139,7 +139,7 @@ void TextLineSegment::layout()
 //---------------------------------------------------------
 
 TextLine::TextLine(Score* s, bool system)
-    : TextLineBase(s)
+    : TextLineBase(ElementType::TEXTLINE, s)
 {
     setSystemFlag(system);
 

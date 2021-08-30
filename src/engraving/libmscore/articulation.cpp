@@ -56,7 +56,7 @@ static const ElementStyle articulationStyle {
 //---------------------------------------------------------
 
 Articulation::Articulation(Score* s)
-    : Element(s, ElementFlag::MOVABLE)
+    : Element(ElementType::ARTICULATION, s, ElementFlag::MOVABLE)
 {
     _symId         = SymId::noSym;
     _anchor        = ArticulationAnchor::TOP_STAFF;

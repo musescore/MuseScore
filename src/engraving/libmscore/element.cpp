@@ -211,8 +211,8 @@ QString Element::subtypeName() const
 //   Element
 //---------------------------------------------------------
 
-Element::Element(Score* s, ElementFlags f, mu::engraving::AccessibleElement* access)
-    : ScoreElement(s)
+Element::Element(const ElementType& type, Score* s, ElementFlags f, mu::engraving::AccessibleElement* access)
+    : ScoreElement(type, s)
 {
     _flags         = f;
     _track         = -1;
@@ -976,8 +976,8 @@ void ElementList::write(XmlWriter& xml) const
 //   Compound
 //---------------------------------------------------------
 
-Compound::Compound(Score* s)
-    : Element(s)
+Compound::Compound(const ElementType& type, Score* s)
+    : Element(type, s)
 {
 }
 

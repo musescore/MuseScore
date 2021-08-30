@@ -310,7 +310,8 @@ void MeasureBaseList::fixupSystems()
 //---------------------------------------------------------
 
 Score::Score()
-    : ScoreElement(this), _headersText(MAX_HEADERS, nullptr), _footersText(MAX_FOOTERS, nullptr), _selection(this), m_layout(this)
+    : ScoreElement(ElementType::SCORE, this), _headersText(MAX_HEADERS, nullptr), _footersText(MAX_FOOTERS, nullptr), _selection(this),
+    m_layout(this)
 {
     Score::validScores.insert(this);
     _masterScore = 0;

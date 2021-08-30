@@ -78,7 +78,7 @@ protected:
     TDuration _crossMeasureTDur;          ///< the total Duration type of the combined notes
 
 public:
-    ChordRest(Score*);
+    ChordRest(const ElementType& type, Score*);
     ChordRest(const ChordRest&, bool link = false);
     ChordRest& operator=(const ChordRest&) = delete;
     ~ChordRest();

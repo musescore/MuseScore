@@ -39,12 +39,11 @@ protected:
 
 public:
     SlurSegment(Score* s)
-        : SlurTieSegment(s) {}
+        : SlurTieSegment(ElementType::SLUR_SEGMENT, s) {}
     SlurSegment(const SlurSegment& ss)
         : SlurTieSegment(ss) {}
 
     SlurSegment* clone() const override { return new SlurSegment(*this); }
-    ElementType type() const override { return ElementType::SLUR_SEGMENT; }
     int subtype() const override { return static_cast<int>(spanner()->type()); }
     void draw(mu::draw::Painter*) const override;
 
@@ -73,7 +72,7 @@ public:
     ~Slur() {}
 
     Slur* clone() const override { return new Slur(*this); }
-    ElementType type() const override { return ElementType::SLUR; }
+
     void write(XmlWriter& xml) const override;
     bool readProperties(XmlReader&) override;
     void layout() override;

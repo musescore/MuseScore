@@ -38,13 +38,12 @@ class StemSlash final : public Element
 
 public:
     StemSlash(Score* s = 0)
-        : Element(s) {}
+        : Element(ElementType::STEM_SLASH, s) {}
 
     qreal mag() const override { return parent()->mag(); }
     void setLine(const mu::LineF& l);
 
     StemSlash* clone() const override { return new StemSlash(*this); }
-    ElementType type() const override { return ElementType::STEM_SLASH; }
     void draw(mu::draw::Painter*) const override;
     void layout() override;
     Chord* chord() const { return (Chord*)parent(); }

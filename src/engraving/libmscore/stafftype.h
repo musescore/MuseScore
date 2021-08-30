@@ -456,7 +456,6 @@ public:
     void draw(mu::draw::Painter*) const override;
     bool isEditable() const override { return false; }
     void layout() override;
-    ElementType type() const override { return ElementType::TAB_DURATION_SYMBOL; }
 
     TabBeamGrid beamGrid() { return _beamGrid; }
     void layout2();                 // second step of layout: after horiz. pos. are defined, compute width of 'grid beams'

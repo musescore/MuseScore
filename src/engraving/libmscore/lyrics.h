@@ -74,7 +74,6 @@ public:
     ~Lyrics();
 
     Lyrics* clone() const override { return new Lyrics(*this); }
-    ElementType type() const override { return ElementType::LYRICS; }
     bool acceptDrop(EditData&) const override;
     Element* drop(EditData&) override;
 
@@ -128,7 +127,6 @@ public:
     LyricsLine(const LyricsLine&);
 
     LyricsLine* clone() const override { return new LyricsLine(*this); }
-    ElementType type() const override { return ElementType::LYRICSLINE; }
     void layout() override;
     LineSegment* createLineSegment() override;
     void removeUnmanaged() override;
@@ -157,7 +155,6 @@ public:
     LyricsLineSegment(Spanner*, Score*);
 
     LyricsLineSegment* clone() const override { return new LyricsLineSegment(*this); }
-    ElementType type() const override { return ElementType::LYRICSLINE_SEGMENT; }
     void draw(mu::draw::Painter*) const override;
     void layout() override;
     // helper functions

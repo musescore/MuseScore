@@ -36,9 +36,8 @@ class LetRingSegment final : public TextLineBaseSegment
 {
 public:
     LetRingSegment(Spanner* sp, Score* s)
-        : TextLineBaseSegment(sp, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF) { }
+        : TextLineBaseSegment(ElementType::LET_RING_SEGMENT, sp, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF) { }
 
-    ElementType type() const override { return ElementType::LET_RING_SEGMENT; }
     LetRingSegment* clone() const override { return new LetRingSegment(*this); }
 
     LetRing* letRing() const { return (LetRing*)spanner(); }
@@ -61,7 +60,6 @@ public:
     LetRing(Score* s);
 
     LetRing* clone() const override { return new LetRing(*this); }
-    ElementType type() const override { return ElementType::LET_RING; }
 
     void read(XmlReader&) override;
 //      virtual void write(XmlWriter& xml) const override;

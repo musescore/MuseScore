@@ -51,7 +51,7 @@ const std::vector<BreathType> Breath::breathList {
 //---------------------------------------------------------
 
 Breath::Breath(Score* s)
-    : Element(s, ElementFlag::MOVABLE)
+    : Element(ElementType::BREATH, s, ElementFlag::MOVABLE)
 {
     _symId = SymId::breathMarkComma;
     _pause = 0.0;

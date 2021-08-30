@@ -241,7 +241,7 @@ AccidentalVal sym2accidentalVal(SymId id)
 //---------------------------------------------------------
 
 Accidental::Accidental(Score* s)
-    : Element(s, ElementFlag::MOVABLE)
+    : Element(ElementType::ACCIDENTAL, s, ElementFlag::MOVABLE)
 {
 }
 

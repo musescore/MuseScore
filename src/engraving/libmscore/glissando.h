@@ -43,10 +43,9 @@ class GlissandoSegment final : public LineSegment
 {
 public:
     GlissandoSegment(Spanner* sp, Score* s)
-        : LineSegment(sp, s) {}
+        : LineSegment(ElementType::GLISSANDO_SEGMENT, sp, s) {}
     Glissando* glissando() const { return toGlissando(spanner()); }
 
-    ElementType type() const override { return ElementType::GLISSANDO_SEGMENT; }
     GlissandoSegment* clone() const override { return new GlissandoSegment(*this); }
     void draw(mu::draw::Painter*) const override;
     void layout() override;
@@ -84,7 +83,7 @@ public:
 
     // overridden inherited methods
     Glissando* clone() const override { return new Glissando(*this); }
-    ElementType type() const override { return ElementType::GLISSANDO; }
+
     LineSegment* createLineSegment() override;
 
     void layout() override;
