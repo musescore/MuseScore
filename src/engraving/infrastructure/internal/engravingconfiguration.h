@@ -60,6 +60,9 @@ public:
 
     draw::Color highlightSelectionColor(int voice = 0) const override;
 
+    virtual bool isCurrentThemeHighContrast() const override;
+    virtual bool scoreInversionEnabled() const override;
+
 private:
     async::Channel<int, draw::Color> m_voiceColorChanged;
 };

@@ -114,7 +114,7 @@ void StaffLines::layoutForWidth(qreal w)
 //                  rypos() = 2 * _spatium;
     } else {
         _lines = 5;
-        setColor(mu::draw::Color());
+        setColor(engravingConfiguration()->defaultColor());
     }
     lw       = score()->styleS(Sid::staffLineWidth).val() * _spatium;
     qreal x1 = pos().x();
@@ -159,7 +159,7 @@ void StaffLines::layoutPartialWidth(qreal w, qreal wPartial, bool alignRight)
         rypos()       = st->yoffset().val() * _spatium;
     } else {
         _lines = 5;
-        setColor(mu::draw::Color());
+        setColor(engravingConfiguration()->defaultColor());
     }
     lw       = score()->styleS(Sid::staffLineWidth).val() * _spatium;
     qreal x1 = pos().x();
