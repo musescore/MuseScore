@@ -25,6 +25,7 @@
 
 #include <QDomNode>
 
+#include "gtp/gp67dombuilder.h"
 #include "libmscore/score.h"
 #include "libmscore/vibrato.h"
 
@@ -250,6 +251,7 @@ protected:
     void addSlap(Note*);
     void addPop(Note*);
     void createTuningString(int strings, int tuning[]);
+    virtual std::unique_ptr<IGPDomBuilder> createGPDomBuilder() const { return nullptr; }
 
     std::vector<PalmMute*> _palmMutes;
     std::vector<LetRing*> _letRings;
@@ -258,6 +260,7 @@ protected:
 public:
     std::vector<std::string> tunings;
 
+    static int harmonicOvertone(Note* note, float harmonicValue, int harmonicType);
     void setTempo(int n, Measure* measure);
     void initGuitarProDrumset();
     QString title, subtitle, artist, album, composer;
@@ -429,6 +432,8 @@ protected:
     virtual int readBeatEffects(int track, Segment*);
     void readTrackProperties(const QDomNode& currentNode, Part* part, int trackCounter, bool& hasTuning);
 
+    virtual std::unique_ptr<IGPDomBuilder> createGPDomBuilder() const override;
+
 public:
     GuitarPro6(MasterScore* s)
         : GuitarPro(s, 6) {}
@@ -440,6 +445,8 @@ public:
 class GuitarPro7 : public GuitarPro6
 {
     virtual void readTracks(QDomNode* tracks);
+
+    virtual std::unique_ptr<IGPDomBuilder> createGPDomBuilder() const override;
 
 public:
     GuitarPro7(MasterScore* s)

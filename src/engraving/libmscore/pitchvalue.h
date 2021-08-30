@@ -46,6 +46,11 @@ struct PitchValue {
     {
         return pv.time == time && pv.pitch == pitch && pv.vibrato == vibrato;
     }
+
+    inline bool operator!=(const PitchValue& pv) const
+    {
+        return !operator==(pv);
+    }
 };
 
 inline QVariant pitchValuesToVariant(const QList<PitchValue>& values)

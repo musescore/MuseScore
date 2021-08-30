@@ -23,6 +23,7 @@
 
 #include <QDebug>
 
+#include "gtp/gp7dombuilder.h"
 #include "libmscore/factory.h"
 #include "libmscore/bracketItem.h"
 #include "libmscore/instrtemplate.h"
@@ -129,5 +130,10 @@ bool GuitarPro7::read(QFile* fp)
     zip.close();
     readGpif(&fileData);
     return true;
+}
+
+std::unique_ptr<IGPDomBuilder> GuitarPro7::createGPDomBuilder() const
+{
+    return std::make_unique<GP7DomBuilder>();
 }
 }
