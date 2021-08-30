@@ -415,7 +415,7 @@ bool NotationParts::setVoiceVisible(const ID& staffId, int voiceIndex, bool visi
 
     startEdit();
 
-    score()->excerpt()->setVoiceVisible(staffId.toUint64(), voiceIndex, visible);
+    score()->excerpt()->setVoiceVisible(staff, voiceIndex, visible);
 
     apply();
 
@@ -521,7 +521,7 @@ void NotationParts::appendLinkedStaff(Staff* staff, const ID& sourceStaffId, con
     doAppendStaff(staff, destinationPart);
 
     ///! NOTE: need to unlink before linking
-    staff->undoUnlink();
+    staff->setLinks(nullptr);
     Ms::Excerpt::cloneStaff(sourceStaff, staff);
 
     updateTracks();

@@ -55,6 +55,7 @@ void PartTreeItem::init(const notation::Part* masterPart)
     setIsRemovable(partExists);
 
     m_instrumentId = part->instrumentId();
+    m_isInited = true;
 }
 
 bool PartTreeItem::isSelectable() const
@@ -65,6 +66,10 @@ bool PartTreeItem::isSelectable() const
 void PartTreeItem::listenVisibilityChanged()
 {
     connect(this, &AbstractInstrumentsPanelTreeItem::isVisibleChanged, this, [this](bool isVisible) {
+        if (!m_isInited) {
+            return;
+        }
+
         INotationPartsPtr parts = notation()->parts();
         if (!parts) {
             return;

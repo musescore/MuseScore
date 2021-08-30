@@ -43,7 +43,7 @@ void StaffSettingsModel::load(const QString& staffId)
     m_staffId = staffId;
     m_config = notationParts()->staffConfig(m_staffId);
 
-    setStaffType(static_cast<int>(staff->staffType()->type()));
+    m_type = staff->staffType()->type();
 
     m_voicesVisibility.clear();
     for (const QVariant& voice: staff->visibilityVoices()) {

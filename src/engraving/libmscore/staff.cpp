@@ -333,9 +333,13 @@ void Staff::updateVisibilityVoices()
     }
 
     auto tracks = score()->excerpt()->tracks();
+    if (tracks.empty()) {
+        _visibilityVoices = { true, true, true, true };
+        return;
+    }
 
-    Staff* primaryStaff = this->primaryStaff();
-    if (!primaryStaff) {
+    Staff* masterStaff = this->masterScore()->staffById(id());
+    if (!masterStaff) {
         return;
     }
 
@@ -343,8 +347,8 @@ void Staff::updateVisibilityVoices()
 
     int voiceIndex = 0;
     for (int voice = 0; voice < VOICES; voice++) {
-        QList<int> primaryStaffTracks = tracks.values(primaryStaff->idx() * VOICES + voice % VOICES);
-        bool isVoiceVisible = primaryStaffTracks.contains(idx() * VOICES + voiceIndex % VOICES);
+        QList<int> masterStaffTracks = tracks.values(masterStaff->idx() * VOICES + voice % VOICES);
+        bool isVoiceVisible = masterStaffTracks.contains(idx() * VOICES + voiceIndex % VOICES);
         if (isVoiceVisible) {
             voices[voice] = true;
             voiceIndex++;

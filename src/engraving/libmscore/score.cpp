@@ -2627,7 +2627,7 @@ void Score::adjustBracketsIns(int sidx, int eidx)
             if ((span == 0) || ((staffIdx + span) < sidx) || (staffIdx > eidx)) {
                 continue;
             }
-            if ((sidx >= staffIdx) && (eidx < (staffIdx + span))) {
+            if ((sidx >= staffIdx) && (eidx <= (staffIdx + span))) {
                 bi->undoChangeProperty(Pid::BRACKET_SPAN, span + (eidx - sidx));
             }
         }
