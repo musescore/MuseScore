@@ -218,12 +218,16 @@ Rectangle {
 
                 centerX: scrollViewX.center
                 wholeNoteWidth: horizZoom.value
+
+                Component.onCompleted: {
+                    load()
+                }
             }
 
             Text {
                 Layout.minimumWidth: 12
                 Layout.minimumHeight: 12
-                text: "foo";
+                text: "";
             }
 //            Rectangle {
 //                color: "purple"

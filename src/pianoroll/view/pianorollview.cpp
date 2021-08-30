@@ -196,28 +196,6 @@ void PianorollView::load()
         onNotationChanged();
     });
 
-
-//    globalContext()->currentNotationChanged().onNotify(this, [this]() {
-//        onCurrentNotationChanged();
-//    });
-
-//    controller()->noteLayoutChanged().onNotify(this, [this]() {
-//        onNotationChanged();
-//    });
-
-    //auto notation = globalContext()->currentNotation();
-    //if (!notation)
-    //{
-    //    return;
-    //}
-
-    //notation->undoStack()->stackChanged().onNotify(this, [this]() {
-    //    onNotationChanged();
-    //});
-
-//    notation->notationChanged().onNotify(this, [this]() {
-//        onNotationChanged();
-    //});
 }
 
 void PianorollView::updateBoundingSize()
