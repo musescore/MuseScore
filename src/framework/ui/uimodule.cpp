@@ -133,9 +133,9 @@ void UiModule::registerUiTypes()
     qmlRegisterUncreatableType<MUAccessible>("MuseScore.Ui", 1, 0, "MUAccessible", "Cannot create a enum type");
 
 #ifdef Q_OS_MAC
-    qmlRegisterType<MacOSMainWindowProvider>("MuseScore.Dock", 1, 0, "MainWindowProvider");
+    qmlRegisterType<MacOSMainWindowProvider>("MuseScore.Ui", 1, 0, "MainWindowProvider");
 #else
-    qmlRegisterType<MainWindowProvider>("MuseScore.Dock", 1, 0, "MainWindowProvider");
+    qmlRegisterType<MainWindowProvider>("MuseScore.Ui", 1, 0, "MainWindowProvider");
 #endif
 
     qmlRegisterType<InteractiveTestsModel>("MuseScore.Ui", 1, 0, "InteractiveTestsModel");

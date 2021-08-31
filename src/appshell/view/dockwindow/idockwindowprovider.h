@@ -19,25 +19,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_APPSHELL_INOTATIONPAGESTATE_H
-#define MU_APPSHELL_INOTATIONPAGESTATE_H
+#ifndef MU_DOCK_IDOCKWINDOWPROVIDER_H
+#define MU_DOCK_IDOCKWINDOWPROVIDER_H
 
 #include "modularity/imoduleexport.h"
-#include "appshelltypes.h"
-#include "async/channel.h"
+#include "async/notification.h"
 
-namespace mu::appshell {
-class INotationPageState : MODULE_EXPORT_INTERFACE
+namespace mu::dock {
+class IDockWindow;
+class IDockWindowProvider : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(INotationPageState)
+    INTERFACE_ID(IDockWindowProvider)
 
 public:
-    virtual ~INotationPageState() = default;
+    virtual ~IDockWindowProvider() = default;
 
-    virtual bool isPanelVisible(PanelType type) const = 0;
-    virtual void setIsPanelsVisible(const std::map<PanelType, bool>& panelsVisible) = 0;
-    virtual async::Channel<PanelTypeList> panelsVisibleChanged() const = 0;
+    virtual void init(IDockWindow* window) = 0;
+    virtual void deinit() = 0;
+
+    virtual IDockWindow* window() const = 0;
+    virtual async::Notification windowChanged() const = 0;
 };
 }
 
-#endif // MU_APPSHELL_NOTATIONPAGESTATE_H
+#endif // MU_DOCK_IDOCKWINDOWPROVIDER_H

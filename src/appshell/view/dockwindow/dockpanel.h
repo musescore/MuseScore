@@ -40,7 +40,7 @@ class DockPanel : public DockBase
 
     Q_PROPERTY(DockPanel * tabifyPanel READ tabifyPanel WRITE setTabifyPanel NOTIFY tabifyPanelChanged)
     Q_PROPERTY(QObject * navigationSection READ navigationSection WRITE setNavigationSection NOTIFY navigationSectionChanged)
-    Q_PROPERTY(mu::ui::AbstractMenuModel * contextMenuModel READ contextMenuModel WRITE setContextMenuModel NOTIFY contextMenuModelChanged)
+    Q_PROPERTY(mu::ui::AbstractMenuModel* contextMenuModel READ contextMenuModel WRITE setContextMenuModel NOTIFY contextMenuModelChanged)
 
 public:
     explicit DockPanel(QQuickItem* parent = nullptr);

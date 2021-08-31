@@ -19,32 +19,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#ifndef MU_DOCK_DOCKWINDOWPROVIDER_H
+#define MU_DOCK_DOCKWINDOWPROVIDER_H
 
-#ifndef MU_DOCK_DOCKWINDOWACTIONSCONTROLLER_H
-#define MU_DOCK_DOCKWINDOWACTIONSCONTROLLER_H
-
-#include "actions/actionable.h"
-
-#include "modularity/ioc.h"
-#include "actions/iactionsdispatcher.h"
 #include "../idockwindowprovider.h"
 
 namespace mu::dock {
-class DockWindowActionsController : public actions::Actionable
+class DockWindowProvider : public IDockWindowProvider
 {
-    INJECT(dock, IDockWindowProvider, dockWindowProvider)
-    INJECT(dock, actions::IActionsDispatcher, dispatcher)
-
 public:
-    void init();
+    void init(IDockWindow* window) override;
+    void deinit() override;
+
+    IDockWindow* window() const override;
+    async::Notification windowChanged() const override;
 
 private:
-    void setDockOpen(const actions::ActionData& args);
-    void toggleOpened(const actions::ActionData& args);
-    void toggleFloating(const actions::ActionData& args);
+    void setWindow(IDockWindow* window);
 
-    IDockWindow* window() const;
+    IDockWindow* m_window = nullptr;
+    async::Notification m_windowChanged;
 };
 }
 
-#endif // MU_DOCK_DOCKWINDOWACTIONSCONTROLLER_H
+#endif // MU_DOCK_DOCKWINDOWPROVIDER_H

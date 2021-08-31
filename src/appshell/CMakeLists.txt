@@ -30,7 +30,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/appshellmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/appshell.cpp
     ${CMAKE_CURRENT_LIST_DIR}/appshell.h
-    ${CMAKE_CURRENT_LIST_DIR}/inotationpagestate.h
     ${CMAKE_CURRENT_LIST_DIR}/commandlinecontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/commandlinecontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/iappshellconfiguration.h
@@ -43,8 +42,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/applicationactioncontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/appshellconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/appshellconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/notationpagestate.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/notationpagestate.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/framelesswindowcontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/framelesswindowcontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/istartupscenario.h

@@ -32,10 +32,10 @@
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 #include "ui/iuiconfiguration.h"
-#include "ui/imainwindow.h"
 #include "async/asyncable.h"
 #include "internal/istartupscenario.h"
-#include "internal/idockwindow.h"
+#include "idockwindow.h"
+#include "idockwindowprovider.h"
 
 namespace KDDockWidgets {
 class MainWindowBase;
@@ -60,8 +60,8 @@ class DockWindow : public QQuickItem, public IDockWindow, public async::Asyncabl
         * mainToolBarDockingHolder READ mainToolBarDockingHolder WRITE setMainToolBarDockingHolder NOTIFY mainToolBarDockingHolderChanged)
     Q_PROPERTY(QQmlListProperty<mu::dock::DockPage> pages READ pagesProperty)
 
-    INJECT(dock, ui::IUiConfiguration, configuration)
-    INJECT(dock, ui::IMainWindow, mainWindow)
+    INJECT(dock, IDockWindowProvider, dockWindowProvider)
+    INJECT(dock, ui::IUiConfiguration, uiConfiguration)
     INJECT(dock, appshell::IStartupScenario, startupScenario)
 
 public:
@@ -84,6 +84,8 @@ public:
     bool isDockOpen(const QString& dockName) const override;
     void toggleDock(const QString& dockName) override;
     void setDockOpen(const QString& dockName, bool open) override;
+
+    async::Channel<QStringList> docksOpenStatusChanged() const override;
 
     bool isDockFloating(const QString& dockName) const override;
     void toggleDockFloating(const QString& dockName) override;
@@ -142,6 +144,7 @@ private:
     uicomponents::QmlListProperty<DockPage> m_pages;
     DockToolBarHolder* m_currentToolBarDockingHolder = nullptr;
     DockPanelHolder* m_currentPanelDockingHolder = nullptr;
+    async::Channel<QStringList> m_docksOpenStatusChanged;
 
     bool m_quiting = false;
 };

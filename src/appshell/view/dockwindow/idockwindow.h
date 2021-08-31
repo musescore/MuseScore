@@ -22,17 +22,16 @@
 #ifndef MU_DOCK_IDOCKWINDOW_H
 #define MU_DOCK_IDOCKWINDOW_H
 
-#include "modularity/imoduleexport.h"
 #include "globaltypes.h"
+#include "async/channel.h"
 
-class QString;
+#include <QString>
+
 class QPoint;
 
 namespace mu::dock {
-class IDockWindow : MODULE_EXPORT_INTERFACE
+class IDockWindow
 {
-    INTERFACE_ID(IDockWindow)
-
 public:
     virtual ~IDockWindow() = default;
 
@@ -48,6 +47,8 @@ public:
     virtual bool isDockOpen(const QString& dockName) const = 0;
     virtual void setDockOpen(const QString& dockName, bool open) = 0;
     virtual void toggleDock(const QString& dockName) = 0;
+
+    virtual async::Channel<QStringList> docksOpenStatusChanged() const = 0;
 
     virtual bool isDockFloating(const QString& dockName) const = 0;
     virtual void toggleDockFloating(const QString& dockName) = 0;

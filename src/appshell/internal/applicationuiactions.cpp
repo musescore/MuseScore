@@ -24,10 +24,16 @@
 #include "ui/view/iconcodes.h"
 #include "context/uicontext.h"
 
+#include "view/dockwindow/idockwindow.h"
+
 #include "log.h"
 
 using namespace mu::appshell;
 using namespace mu::ui;
+using namespace mu::actions;
+using namespace mu::dock;
+
+const ActionCode TOGGLE_NAVIGATOR_ACTION_CODE("toggle-navigator");
 
 const UiActionList ApplicationUiActions::m_actions = {
     UiAction("quit",
@@ -178,24 +184,6 @@ const UiActionList ApplicationUiActions::m_actions = {
              )
 };
 
-const std::vector<std::pair<mu::actions::ActionCode, PanelType> > ApplicationUiActions::m_panels = {
-    { "toggle-palettes", PanelType::Palettes },
-    { "toggle-instruments", PanelType::Instruments },
-    { "inspector", PanelType::Inspector },
-    { "toggle-selection-filter", PanelType::SelectionFilter },
-    { "toggle-notationtoolbar", PanelType::NotationToolBar },
-    { "toggle-noteinput", PanelType::NoteInputBar },
-    { "toggle-undoredo", PanelType::UndoRedoToolBar },
-    { "toggle-navigator", PanelType::NotationNavigator },
-    { "toggle-statusbar", PanelType::NotationStatusBar },
-    { "toggle-transport", PanelType::PlaybackToolBar },
-    { "toggle-mixer", PanelType::Mixer },
-    { "toggle-timeline", PanelType::Timeline },
-    { "synth-control", PanelType::Synthesizer },
-    { "toggle-piano", PanelType::Piano },
-    { "toggle-scorecmp-tool", PanelType::ComparisonTool }
-};
-
 ApplicationUiActions::ApplicationUiActions(std::shared_ptr<ApplicationActionController> controller)
     : m_controller(controller)
 {
@@ -203,16 +191,34 @@ ApplicationUiActions::ApplicationUiActions(std::shared_ptr<ApplicationActionCont
 
 void ApplicationUiActions::init()
 {
-    notationPageState()->panelsVisibleChanged().onReceive(this, [this](const PanelTypeList& types) {
-        actions::ActionCodeList alist;
-        for (PanelType t : types) {
-            actions::ActionCode code = panelTypeToAction(t);
-            if (!code.empty()) {
-                alist.push_back(std::move(code));
+    configuration()->isNotationNavigatorVisibleChanged().onNotify(this, [this]() {
+        m_actionCheckedChanged.send({ TOGGLE_NAVIGATOR_ACTION_CODE });
+    });
+
+    dockWindowProvider()->windowChanged().onNotify(this, [this]() {
+        listenOpenedDocksChanged(dockWindowProvider()->window());
+    });
+}
+
+void ApplicationUiActions::listenOpenedDocksChanged(IDockWindow* window)
+{
+    if (!window) {
+        return;
+    }
+
+    window->docksOpenStatusChanged().onReceive(this, [this](const QStringList& dockNames) {
+        ActionCodeList actions;
+
+        for (const ActionCode& toggleDockAction : toggleDockActions().keys()) {
+            const DockName& dockName = toggleDockActions()[toggleDockAction];
+
+            if (dockNames.contains(dockName)) {
+                actions.push_back(toggleDockAction);
             }
         }
-        if (!alist.empty()) {
-            m_actionCheckedChanged.send(alist);
+
+        if (!actions.empty()) {
+            m_actionCheckedChanged.send(actions);
         }
     });
 }
@@ -231,34 +237,21 @@ bool ApplicationUiActions::actionEnabled(const UiAction& act) const
     return true;
 }
 
-PanelType ApplicationUiActions::panelType(const actions::ActionCode& code) const
-{
-    for (const auto& p : m_panels) {
-        if (p.first == code) {
-            return p.second;
-        }
-    }
-    return PanelType::Undefined;
-}
-
-mu::actions::ActionCode ApplicationUiActions::panelTypeToAction(const PanelType& type) const
-{
-    for (const auto& p : m_panels) {
-        if (p.second == type) {
-            return p.first;
-        }
-    }
-    return actions::ActionCode();
-}
-
 bool ApplicationUiActions::actionChecked(const UiAction& act) const
 {
-    PanelType panel = panelType(act.code);
-    if (panel != PanelType::Undefined) {
-        return notationPageState()->isPanelVisible(panel);
+    QMap<ActionCode, DockName> toggleDockActions = ApplicationUiActions::toggleDockActions();
+    DockName dockName = toggleDockActions.value(act.code, DockName());
+
+    if (dockName.isEmpty()) {
+        return false;
     }
 
-    return false;
+    if (dockName == NOTATION_NAVIGATOR_PANEL_NAME) {
+        return configuration()->isNotationNavigatorVisible();
+    }
+
+    const IDockWindow* window = dockWindowProvider()->window();
+    return window ? window->isDockOpen(dockName) : false;
 }
 
 mu::async::Channel<mu::actions::ActionCodeList> ApplicationUiActions::actionEnabledChanged() const
@@ -269,4 +262,24 @@ mu::async::Channel<mu::actions::ActionCodeList> ApplicationUiActions::actionEnab
 mu::async::Channel<mu::actions::ActionCodeList> ApplicationUiActions::actionCheckedChanged() const
 {
     return m_actionCheckedChanged;
+}
+
+const QMap<mu::actions::ActionCode, DockName>& ApplicationUiActions::toggleDockActions()
+{
+    static const QMap<mu::actions::ActionCode, DockName> actionsMap {
+        { TOGGLE_NAVIGATOR_ACTION_CODE, NOTATION_NAVIGATOR_PANEL_NAME },
+        { "toggle-mixer", MIXER_PANEL_NAME },
+        { "toggle-timeline", TIMELINE_PANEL_NAME },
+        { "toggle-palettes", PALETTES_PANEL_NAME },
+        { "toggle-instruments", INSTRUMENTS_PANEL_NAME },
+        { "inspector", INSPECTOR_PANEL_NAME },
+        { "toggle-selection-filter", SELECTION_FILTERS_PANEL_NAME },
+        { "toggle-statusbar", NOTATION_STATUSBAR_NAME },
+        { "toggle-noteinput", NOTE_INPUT_BAR_NAME },
+        { "toggle-notationtoolbar", NOTATION_TOOLBAR_NAME },
+        { "toggle-undoredo", UNDO_REDO_TOOLBAR_NAME },
+        { "toggle-transport", PLAYBACK_TOOLBAR_NAME }
+    };
+
+    return actionsMap;
 }
