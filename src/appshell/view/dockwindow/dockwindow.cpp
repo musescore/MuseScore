@@ -35,9 +35,12 @@
 #include "docktoolbar.h"
 #include "docktoolbarholder.h"
 
+#include "modularity/ioc.h"
+
 #include "log.h"
 
 using namespace mu::dock;
+using namespace mu::modularity;
 
 static constexpr double MAX_DISTANCE_TO_HOLDER = 25;
 
@@ -54,6 +57,8 @@ void DockWindow::componentComplete()
 
     QQuickItem::componentComplete();
 
+    ioc()->registerExport<IDockWindow>("dock", this);
+
     m_mainWindow = new KDDockWidgets::MainWindowQuick("mainWindow",
                                                       KDDockWidgets::MainWindowOption_None,
                                                       this);
@@ -61,79 +66,10 @@ void DockWindow::componentComplete()
     connect(qApp, &QCoreApplication::aboutToQuit, this, &DockWindow::onQuit);
 
     configuration()->windowGeometryChanged().onNotify(this, [this]() {
-        if (m_quiting) {
-            return;
-        }
-
-        resetWindowState();
-    });
-
-    /*! FIXME
-    mainWindow()->changeToolBarOrientationRequested().onReceive(this, [this](QString name, mu::framework::Orientation orientation) {
-        const DockPage* page = currentPage();
-        DockToolBar* toolBar = page ? dynamic_cast<DockToolBar*>(page->dockByName(name)) : nullptr;
-
-        if (toolBar) {
-            toolBar->setOrientation(static_cast<Qt::Orientation>(orientation));
+        if (!m_quiting) {
+            resetWindowState();
         }
     });
-
-    mainWindow()->hideAllDockingHoldersRequested().onNotify(this, [this]() {
-        hideCurrentToolBarDockingHolder();
-        hideCurrentPanelDockingHolder();
-    });
-
-    mainWindow()->showToolBarDockingHolderRequested().onReceive(this, [this](const QPoint& mouseGlobalPos) {
-        QPoint localPos = m_mainWindow->mapFromGlobal(mouseGlobalPos);
-        QRect mainFrameGeometry = m_mainWindow->rect();
-
-        if (!mainFrameGeometry.contains(localPos)) {
-            return;
-        }
-
-        if (isMouseOverCurrentToolBarDockingHolder(localPos)) {
-            return;
-        }
-
-        DockToolBarHolder* holder = resolveToolbarDockingHolder(localPos);
-
-        if (holder != m_currentToolBarDockingHolder) {
-            hideCurrentToolBarDockingHolder();
-
-            if (holder) {
-                holder->open();
-            }
-        }
-
-        m_currentToolBarDockingHolder = holder;
-    });
-
-    mainWindow()->showPanelDockingHolderRequested().onReceive(this, [this](const QPoint& mouseGlobalPos) {
-        QPoint localPos = m_mainWindow->mapFromGlobal(mouseGlobalPos);
-        QRect mainFrameGeometry = m_mainWindow->rect();
-
-        if (!mainFrameGeometry.contains(localPos)) {
-            return;
-        }
-
-        if (isMouseOverCurrentPanelDockingHolder(localPos)) {
-            return;
-        }
-
-        DockPanelHolder* holder = resolvePanelDockingHolder(localPos);
-
-        if (holder != m_currentPanelDockingHolder) {
-            hideCurrentPanelDockingHolder();
-
-            if (holder) {
-                qDebug() << holder->location();
-                holder->open();
-            }
-        }
-
-        m_currentPanelDockingHolder = holder;
-    });
-    */
 
     startupScenario()->run();
 }
@@ -205,6 +141,34 @@ void DockWindow::loadPage(const QString& uri)
 
     m_currentPageUri = uri;
     emit currentPageUriChanged(uri);
+}
+
+void DockWindow::setToolBarOrientation(const QString& toolBarName, framework::Orientation orientation)
+{
+    const DockPage* page = currentPage();
+    DockToolBar* toolBar = page ? dynamic_cast<DockToolBar*>(page->dockByName(toolBarName)) : nullptr;
+
+    if (toolBar) {
+        toolBar->setOrientation(static_cast<Qt::Orientation>(orientation));
+    }
+}
+
+void DockWindow::showDockingHolder(const QPoint& globalPos, DockingHolderType type)
+{
+    switch (type) {
+    case ToolBar:
+        showToolBarDockingHolder(globalPos);
+        break;
+    case Panel:
+        showPanelDockingHolder(globalPos);
+        break;
+    }
+}
+
+void DockWindow::hideAllDockingHolders()
+{
+    hideCurrentToolBarDockingHolder();
+    hideCurrentPanelDockingHolder();
 }
 
 bool DockWindow::isDockOpen(const QString& dockName) const
@@ -568,6 +532,32 @@ DockPanelHolder* DockWindow::resolvePanelDockingHolder(const QPoint& localPos) c
     return newHolder;
 }
 
+void DockWindow::showToolBarDockingHolder(const QPoint& globalPos)
+{
+    QPoint localPos = m_mainWindow->mapFromGlobal(globalPos);
+    QRect mainFrameGeometry = m_mainWindow->rect();
+
+    if (!mainFrameGeometry.contains(localPos)) {
+        return;
+    }
+
+    if (isMouseOverCurrentToolBarDockingHolder(localPos)) {
+        return;
+    }
+
+    DockToolBarHolder* holder = resolveToolbarDockingHolder(localPos);
+
+    if (holder != m_currentToolBarDockingHolder) {
+        hideCurrentToolBarDockingHolder();
+
+        if (holder) {
+            holder->open();
+        }
+    }
+
+    m_currentToolBarDockingHolder = holder;
+}
+
 void DockWindow::hideCurrentToolBarDockingHolder()
 {
     if (!m_currentToolBarDockingHolder) {
@@ -576,6 +566,33 @@ void DockWindow::hideCurrentToolBarDockingHolder()
 
     m_currentToolBarDockingHolder->close();
     m_currentToolBarDockingHolder = nullptr;
+}
+
+void DockWindow::showPanelDockingHolder(const QPoint& globalPos)
+{
+    QPoint localPos = m_mainWindow->mapFromGlobal(globalPos);
+    QRect mainFrameGeometry = m_mainWindow->rect();
+
+    if (!mainFrameGeometry.contains(localPos)) {
+        return;
+    }
+
+    if (isMouseOverCurrentPanelDockingHolder(localPos)) {
+        return;
+    }
+
+    DockPanelHolder* holder = resolvePanelDockingHolder(localPos);
+
+    if (holder != m_currentPanelDockingHolder) {
+        hideCurrentPanelDockingHolder();
+
+        if (holder) {
+            qDebug() << holder->location();
+            holder->open();
+        }
+    }
+
+    m_currentPanelDockingHolder = holder;
 }
 
 void DockWindow::hideCurrentPanelDockingHolder()
