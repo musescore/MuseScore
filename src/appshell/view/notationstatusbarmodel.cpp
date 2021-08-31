@@ -102,6 +102,10 @@ QVariant NotationStatusBarModel::currentViewMode() const
 
 QVariantList NotationStatusBarModel::availableViewModeList() const
 {
+    if (!notation()) {
+        return {};
+    }
+
     static const QMap<ViewMode, ActionCode> allModeMap {
         { ViewMode::PAGE, "view-mode-page" },
         { ViewMode::LINE, "view-mode-continuous" },
@@ -122,6 +126,8 @@ QVariantList NotationStatusBarModel::availableViewModeList() const
 
     QVariantList result;
 
+    ViewMode currentViewMode = notation()->viewMode();
+
     for (const ViewMode& viewMode: allModeMap.keys()) {
         ActionCode code = allModeMap[viewMode];
         UiAction action = actionsRegister()->action(code);
@@ -131,6 +137,8 @@ QVariantList NotationStatusBarModel::availableViewModeList() const
         viewModeObj[ID_KEY] = QString::fromStdString(code);
         viewModeObj[TITLE_KEY] = correctedTitle(viewMode, action.title);
         viewModeObj[ICON_KEY] = static_cast<int>(action.iconCode);
+        viewModeObj[SELECTABLE_KEY] = true;
+        viewModeObj[SELECTED_KEY] = currentViewMode == viewMode;
 
         result << viewModeObj;
     }
@@ -170,10 +178,12 @@ void NotationStatusBarModel::load()
         }
 
         emit currentViewModeChanged();
+        emit availableViewModeListChanged();
         emit zoomEnabledChanged();
 
         notation()->notationChanged().onNotify(this, [this]() {
             emit currentViewModeChanged();
+            emit availableViewModeListChanged();
         });
 
         listenChangesInAccessibility();

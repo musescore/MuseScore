@@ -122,6 +122,8 @@ RowLayout {
 
             menuAnchorItem: ui.rootItem
 
+            navigation: menuButton.navigation
+
             onHandleMenuItem: {
                 root.changeZoomRequested(item.id)
             }

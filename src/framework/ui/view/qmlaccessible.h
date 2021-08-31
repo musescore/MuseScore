@@ -57,6 +57,7 @@ public:
         RadioButton,
         ComboBox,
         ListItem,
+        MenuItem,
         Information
     };
     Q_ENUM(Role)

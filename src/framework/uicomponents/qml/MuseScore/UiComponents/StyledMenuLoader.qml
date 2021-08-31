@@ -31,6 +31,8 @@ Loader {
 
     property bool isMenuOpened: Boolean(loader.menu) && loader.menu.isOpened
 
+    property var navigation: null
+
     QtObject {
         id: prv
 
@@ -56,12 +58,10 @@ Loader {
         }
         menu.anchorItem = menuAnchorItem
 
+        menu.navigationParentControl = loader.navigation
+
         update(model, x, y)
         menu.open()
-
-        if (!menu.focusOnSelected()) {
-            menu.focusOnFirstItem()
-        }
     }
 
     function toggleOpened(model, navigationParentControl, x = 0, y = 0) {
@@ -113,6 +113,10 @@ Loader {
         StyledMenu {
             id: itemMenu
 
+            onLoaded: {
+                focusOnOpenedMenuTimer.start()
+            }
+
             onHandleMenuItem: {
                 Qt.callLater(loader.handleMenuItem, item)
                 itemMenu.close()
@@ -121,6 +125,18 @@ Loader {
             onClosed: {
                 Qt.callLater(prv.unloadMenu)
             }
+        }
+    }
+
+    Timer {
+        id: focusOnOpenedMenuTimer
+
+        interval: 50
+        running: false
+        repeat: false
+
+        onTriggered: {
+            loader.menu.requestFocus()
         }
     }
 }

@@ -41,7 +41,6 @@ FocusScope {
     property int sideMargin: 46
 
     signal requestOpenVideo(string videoId)
-    signal requestActiveFocus()
 
     signal requestOpenOrganizationUrl()
 
@@ -66,7 +65,6 @@ FocusScope {
         MouseArea {
             anchors.fill: parent
             onClicked: {
-                root.requestActiveFocus()
                 root.forceActiveFocus()
             }
         }

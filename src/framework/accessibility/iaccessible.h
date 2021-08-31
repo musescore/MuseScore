@@ -49,6 +49,7 @@ public:
         RadioButton,
         ComboBox,
         ListItem,
+        MenuItem,
 
         // Custom roles
         Information, // just text
