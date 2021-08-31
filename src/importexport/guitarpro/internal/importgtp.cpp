@@ -30,7 +30,6 @@
 #include "importptb.h"
 
 #include "engraving/infrastructure/io/xml.h"
-#include "realfn.h"
 
 #include <libmscore/factory.h>
 #include <libmscore/measurebase.h>
