@@ -54,7 +54,7 @@ ListView {
         id: navPanel
         name: "AppMenuBar"
         enabled: root.enabled && root.visible
-        accessible.name: qsTrc("appshell", "App menu bar") + " " + navPanel.directionInfo
+        accessible.name: qsTrc("appshell", "App menu bar")
     }
 
     delegate: FlatButton {
@@ -71,7 +71,7 @@ ListView {
         navigation.name: text
         navigation.panel: navPanel
         navigation.order: index
-        navigation.accessible.name: {
+        accessible.name: {
             return text.replace('&', '')
         }
 

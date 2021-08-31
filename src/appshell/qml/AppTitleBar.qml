@@ -93,7 +93,7 @@ Rectangle {
                 name: "AppControl"
                 section: navSec
                 order: 1
-                accessible.name: qsTrc("appshell", "App control") + " " + navAppControlPanel.directionInfo
+                accessible.name: qsTrc("appshell", "App control")
             }
 
             FlatButton {

@@ -59,10 +59,11 @@ ListItemBlank {
     isSelected: Boolean(itemPrv.showedSubMenu) || (itemPrv.isSelectable && itemPrv.isSelected) || navigation.active
 
     navigation.name: titleLabel.text
+    navigation.accessible.role: MUAccessible.MenuItem
     navigation.accessible.name: {
         var text = titleLabel.text
         if (itemPrv.isCheckable) {
-            text += " " + (itemPrv.isChecked ? qsTrc("appshell", "checked") : qsTrc("appshell", "not checked"))
+            text += " " + (itemPrv.isChecked ? qsTrc("appshell", "checked") : qsTrc("appshell", "unchecked"))
         } else if (itemPrv.isSelectable) {
             text += " " + (itemPrv.isSelected ? qsTrc("appshell", "selected") : qsTrc("appshell", "not selected"))
         }
