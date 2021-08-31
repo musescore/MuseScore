@@ -4,7 +4,6 @@
 
 #include "global/log.h"
 
-
 namespace Ms {
 GP67DomBuilder::GP67DomBuilder()
 {

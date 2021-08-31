@@ -206,7 +206,7 @@ Fraction GPConverter::convertBeat(const GPBeat* beat, ChordRestContainer& graceG
 
     auto curSegment = _score->lastMeasure()->getSegment(SegmentType::ChordRest, ctx.curTick);
     curSegment->add(cr);
-    
+
     convertNotes(beat->notes(), cr);
 
     if (!graceGhords.empty()) {
@@ -276,7 +276,7 @@ void GPConverter::convertNote(const GPNote* gpnote, ChordRest* cr)
 void GPConverter::configureGraceChord(const GPBeat* beat, ChordRest* cr)
 {
     convertNotes(beat->notes(), cr);
-    
+
     auto rhytm = [] (GPRhytm::RhytmType rhytm) {
         if (rhytm == GPRhytm::RhytmType::Whole) {
             return 1;
