@@ -44,6 +44,9 @@ MasterNotationMidiData::MasterNotationMidiData(IGetScore* getScore, async::Notif
 
 MasterNotationMidiData::~MasterNotationMidiData()
 {
+    for (auto& midiData : m_midiDataMap) {
+        midiData.second.stream.eventsRequest.resetOnReceive(this);
+    }
     m_parts = nullptr;
 }
 
@@ -108,13 +111,13 @@ Ret MasterNotationMidiData::triggerElementMidiData(const Element* element)
     return make_ret(Err::UnableToPlaybackElement);
 }
 
-Events MasterNotationMidiData::retrieveEvents(const channel_t midiChannel, const tick_t fromTick, const tick_t toTick) const
+Events MasterNotationMidiData::retrieveEvents(const std::vector<channel_t>& midiChannels, const tick_t fromTick, const tick_t toTick) const
 {
     for (const auto& gap : m_renderRanges.unrenderedGaps(fromTick, toTick)) {
         loadEvents(gap.second.start, gap.second.end);
     }
 
-    return eventsFromRange(midiChannel, fromTick, toTick);
+    return eventsFromRange(midiChannels, fromTick, toTick);
 }
 
 Events MasterNotationMidiData::retrieveEventsForElement(const Element* element, const channel_t midiChannel) const
@@ -157,22 +160,29 @@ std::vector<Event> MasterNotationMidiData::retrieveSetupEvents(const std::list<I
     return result;
 }
 
-Events MasterNotationMidiData::eventsFromRange(const channel_t midiChannel, const tick_t fromTick, const tick_t toTick) const
+Events MasterNotationMidiData::eventsFromRange(const std::vector<channel_t>& midiChannels, const tick_t fromTick, const tick_t toTick) const
 {
-    auto search = m_eventsCache.find(midiChannel);
-
-    if (search == m_eventsCache.end() || fromTick >= toTick) {
+    if (fromTick >= toTick) {
         return {};
     }
 
     Events result;
 
-    for (const auto& pair : search->second) {
-        if (pair.first < fromTick || pair.first > toTick) {
+    for (const channel_t& channel : midiChannels) {
+
+        auto search = m_eventsCache.find(channel);
+        if (search == m_eventsCache.cend()) {
             continue;
         }
 
-        result.insert(pair);
+        for (const auto& pair : search->second) {
+            if (pair.first < fromTick || pair.first > toTick) {
+                continue;
+            }
+
+            std::vector<Event>& events = result[pair.first];
+            events.insert(events.end(), pair.second.begin(), pair.second.end());
+        }
     }
 
     return result;
@@ -245,11 +255,7 @@ MidiStream MasterNotationMidiData::buildMidiStream(const Ms::Part* part) const
                 return;
             }
 
-            for (const channel_t& midiChannel : midiChannels) {
-                Events events = retrieveEvents(static_cast<channel_t>(midiChannel), fromTick, toTick);
-
-                stream.mainStream.send(std::move(events), toTick);
-            }
+            stream.mainStream.send(retrieveEvents(midiChannels, fromTick, toTick), toTick);
         });
     }
 

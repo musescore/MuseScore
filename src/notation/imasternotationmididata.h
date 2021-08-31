@@ -42,7 +42,7 @@ public:
     virtual midi::MidiData trackMidiData(const ID& partId) const = 0;
     virtual Ret triggerElementMidiData(const Element* element) = 0;
 
-    virtual midi::Events retrieveEvents(const midi::channel_t midiChannel, const midi::tick_t fromTick,
+    virtual midi::Events retrieveEvents(const std::vector<midi::channel_t>& midiChannels, const midi::tick_t fromTick,
                                         const midi::tick_t toTick) const = 0;
     virtual midi::Events retrieveEventsForElement(const Element* element, const midi::channel_t midiChannel) const = 0;
     virtual std::vector<midi::Event> retrieveSetupEvents(const std::list<InstrumentChannel*> instrChannel) const = 0;
