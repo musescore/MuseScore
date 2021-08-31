@@ -166,6 +166,7 @@ private:
     bool intersectsPixel(NoteBlock* block, int x, int y, int width, int height);
 
     void insertNote(int modifiers);
+    void cutChord(const QPointF& pos);
     void eraseNote(const QPointF& pos);
     Ms::Fraction roundDownToSubdivision(double wholeNote);
 
