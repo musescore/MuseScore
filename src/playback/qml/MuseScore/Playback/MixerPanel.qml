@@ -21,93 +21,78 @@
  */
 
 import QtQuick 2.15
+import QtQuick.Controls 2.15
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Audio 1.0
 import MuseScore.Playback 1.0
 
-Item {
+import "internal"
+
+Rectangle {
     id: root
 
-    Rectangle {
-        id: backgroundRect
+    property alias navigation: navPanel
 
-        anchors.fill: parent
-        color: ui.theme.backgroundPrimaryColor
+    color: ui.theme.backgroundPrimaryColor
+
+//    ScrollBar.vertical: StyledScrollBar {
+//        anchors.top: parent.top
+//        anchors.bottom: parent.bottom
+//        anchors.right: parent.right
+//        anchors.rightMargin: 16
+//    }
+
+    NavigationPanel {
+        id: navPanel
+        name: "MixerPanel"
+        enabled: root.enabled && root.visible
     }
 
-    ListView {
-        anchors.fill: parent
+    MixerPanelModel {
+        id: mixerPanelModel
 
-        orientation: Qt.Horizontal
+        Component.onCompleted: {
+            mixerPanelModel.load()
+        }
+    }
 
-        spacing: 4
+    Column {
+        id: contentColumn
 
-        model: MixerPanelModel {
-            id: mixerPanelModel
+        anchors.left: parent.left
+        anchors.right: parent.right
 
-            Component.onCompleted: {
-                mixerPanelModel.load()
-            }
+        spacing: 8
+
+        MixerSoundSection {
+            id: soundSection
+
+            model: mixerPanelModel
         }
 
-        delegate: Column {
+        MixerFxSection {
+            id: fxSection
 
-            spacing: 2
+            model: mixerPanelModel
+        }
 
-            KnobControl {
-                id: balanceKnob
+        MixerBalanceSection {
+            id: balanceSection
 
-                value: item.balance * balanceKnob.valueScale
+            model: mixerPanelModel
+        }
 
-                onMoved: {
-                    item.balance = value / balanceKnob.valueScale
-                }
-            }
+        MixerVolumeSection {
+            id: volumeSection
 
-            Row {
+            model: mixerPanelModel
+        }
 
-                spacing: 8
+        MixerTitleSection {
+            id: titleSection
 
-                VolumeSlider {
-                    value: item.volumeLevel
-
-                    onMoved: {
-                        item.volumeLevel = value
-                    }
-                }
-
-                Row {
-                    anchors.verticalCenter: parent.verticalCenter
-
-                    spacing: 2
-
-                    VolumePressureMeter {
-                        id: leftPressure
-                        currentVolumePressure: item.leftChannelPressure
-                    }
-
-                    VolumePressureMeter {
-                        id: rightPressure
-                        currentVolumePressure: item.rightChannelPressure
-                        showRuler: true
-                    }
-                }
-            }
-
-            Rectangle {
-                width: parent.width
-                height: 22
-
-                color: Utils.colorWithAlpha(ui.theme.accentColor, 0.5)
-                border.color: ui.theme.accentColor
-                border.width: 1
-
-                StyledTextLabel {
-                    anchors.centerIn: parent
-                    text: item.title
-                }
-            }
+            model: mixerPanelModel
         }
     }
 }
