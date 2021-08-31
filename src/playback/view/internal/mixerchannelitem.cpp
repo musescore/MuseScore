@@ -81,14 +81,14 @@ float MixerChannelItem::volumeLevel() const
     return m_outParams.volume;
 }
 
-float MixerChannelItem::balance() const
+int MixerChannelItem::balance() const
 {
-    return m_outParams.balance;
+    return m_outParams.balance * BALANCE_SCALING_FACTOR;
 }
 
 bool MixerChannelItem::muted() const
 {
-    return m_outParams.muted;
+    return m_mutedManually || m_mutedBySolo;
 }
 
 bool MixerChannelItem::solo() const
@@ -202,32 +202,49 @@ void MixerChannelItem::setVolumeLevel(float volumeLevel)
     emit outputParamsChanged(m_outParams);
 }
 
-void MixerChannelItem::setBalance(float balance)
+void MixerChannelItem::setBalance(int balance)
 {
-    if (qFuzzyCompare(m_outParams.balance, balance)) {
+    if (m_outParams.balance * BALANCE_SCALING_FACTOR == balance) {
         return;
     }
 
-    m_outParams.balance = balance;
+    m_outParams.balance = balance / BALANCE_SCALING_FACTOR;
     emit balanceChanged(balance);
     emit outputParamsChanged(m_outParams);
 }
 
-void MixerChannelItem::setMuted(bool muted)
+void MixerChannelItem::setMuted(bool isMuted)
 {
-    if (m_outParams.muted == muted) {
+    if (muted() == isMuted) {
         return;
     }
 
-    m_outParams.muted = muted;
-    emit mutedChanged(muted);
-    emit outputParamsChanged(m_outParams);
+    m_mutedManually = isMuted;
+    applyMuteToOutputParams(muted());
+
+    emit mutedChanged(isMuted);
+}
+
+void MixerChannelItem::setMutedBySolo(bool isMuted)
+{
+    if (m_mutedBySolo == isMuted) {
+        return;
+    }
+
+    m_mutedBySolo = isMuted;
+    applyMuteToOutputParams(muted());
+
+    emit mutedChanged(isMuted);
 }
 
 void MixerChannelItem::setSolo(bool solo)
 {
     if (m_solo == solo) {
         return;
+    }
+
+    if (solo) {
+        setMutedBySolo(false);
     }
 
     m_solo = solo;
