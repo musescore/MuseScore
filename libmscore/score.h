@@ -1335,6 +1335,7 @@ class MasterScore : public Score {
       void setPlaylistClean()                                         { _playlistDirty = false; }
 
       void setExpandRepeats(bool expandRepeats);
+      bool expandRepeats() const { return _expandRepeats; }
       void updateRepeatListTempo();
       virtual const RepeatList& repeatList() const override;
       virtual const RepeatList& repeatList2() const override;
