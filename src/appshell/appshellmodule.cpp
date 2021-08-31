@@ -86,8 +86,6 @@ std::string AppShellModule::moduleName() const
 
 void AppShellModule::registerExports()
 {
-    DockSetup::registerExports();
-
     ioc()->registerExport<IAppShellConfiguration>(moduleName(), s_appShellConfiguration);
     ioc()->registerExport<INotationPageState>(moduleName(), s_notationPageState);
     ioc()->registerExport<IStartupScenario>(moduleName(), new StartupScenario());
@@ -147,6 +145,8 @@ void AppShellModule::registerUiTypes()
 
 void AppShellModule::onInit(const IApplication::RunMode&)
 {
+    DockSetup::onInit();
+
     s_appShellConfiguration->init();
     s_applicationActionController->init();
     s_notationPageState->init();

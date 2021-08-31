@@ -26,23 +26,30 @@
 
 #include "log.h"
 #include "translation.h"
+
 #include "ui/uitypes.h"
 #include "ui/view/abstractmenumodel.h"
 
 using namespace mu::dock;
 using namespace mu::uicomponents;
 using namespace mu::ui;
+using namespace mu::actions;
 
 class DockPanel::DockPanelMenuModel : public AbstractMenuModel
 {
 public:
-    explicit DockPanelMenuModel(QObject* parent = nullptr)
-        : AbstractMenuModel(parent)
+    DockPanelMenuModel(DockPanel* panel)
+        : AbstractMenuModel(panel), m_panel(panel)
     {
+        connect(m_panel, &DockPanel::floatingChanged, this, [this]() {
+            load();
+        });
     }
 
     void load() override
     {
+        TRACEFUNC;
+
         MenuItemList items;
 
         if (m_customMenuModel && m_customMenuModel->rowCount() > 0) {
@@ -50,24 +57,11 @@ public:
             items << makeSeparator();
         }
 
-        //! TODO: temporary solution for testing
-        MenuItem close;
-        close.code = "close";
-        close.title = "Close tab";
-        close.state.enabled = true;
-        items << close;
+        QString toggleFloatingTitle = m_panel->floating() ? mu::qtrc("dock", "Dock")
+                                                          : mu::qtrc("dock", "Undock");
 
-        MenuItem undock;
-        undock.code = "undock";
-        undock.title = "Undock";
-        undock.state.enabled = true;
-        items << undock;
-
-        MenuItem move;
-        move.code = "move";
-        move.title = "Move panel to right side";
-        move.state.enabled = true;
-        items << move;
+        items << makeDockPanelItem("close-dock", mu::qtrc("dock", "Close"));
+        items << makeDockPanelItem("toggle-floating", toggleFloatingTitle);
 
         setItems(items);
     }
@@ -81,13 +75,30 @@ public:
     {
         m_customMenuModel = model;
 
+        if (!model) {
+            return;
+        }
+
         connect(model, &AbstractMenuModel::itemsChanged, this, [this]() {
             load();
         });
     }
 
 private:
+    MenuItem makeDockPanelItem(const QString& code, const QString& title) const
+    {
+        MenuItem item;
+        item.id = code;
+        item.code = codeFromQString(code);
+        item.title = title;
+        item.state.enabled = true;
+        item.args = ActionData::make_arg1<QString>(m_panel->objectName());
+
+        return item;
+    }
+
     AbstractMenuModel* m_customMenuModel = nullptr;
+    DockPanel* m_panel = nullptr;
 };
 
 DockPanel::DockPanel(QQuickItem* parent)
@@ -136,9 +147,10 @@ void DockPanel::componentComplete()
         return;
     }
 
-    w->setProperty(DOCK_PANEL_PROPERY, QVariant::fromValue(this));
-
     m_menuModel->load();
+
+    w->setProperty(DOCK_PANEL_PROPERY, QVariant::fromValue(this));
+    w->setProperty(CONTEXT_MENU_MODEL_PROPERTY, QVariant::fromValue(m_menuModel));
 
     connect(m_menuModel, &AbstractMenuModel::itemsChanged, [w, this]() {
         if (w) {

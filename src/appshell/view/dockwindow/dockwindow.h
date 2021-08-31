@@ -66,6 +66,7 @@ class DockWindow : public QQuickItem, public IDockWindow, public async::Asyncabl
 
 public:
     explicit DockWindow(QQuickItem* parent = nullptr);
+    ~DockWindow() override;
 
     QString currentPageUri() const;
 
@@ -83,6 +84,9 @@ public:
     bool isDockOpen(const QString& dockName) const override;
     void toggleDock(const QString& dockName) override;
     void setDockOpen(const QString& dockName, bool open) override;
+
+    bool isDockFloating(const QString& dockName) const override;
+    void toggleDockFloating(const QString& dockName) override;
 
 public slots:
     void setMainToolBarDockingHolder(DockToolBarHolder* mainToolBarDockingHolder);

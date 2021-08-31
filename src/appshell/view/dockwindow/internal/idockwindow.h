@@ -48,6 +48,9 @@ public:
     virtual bool isDockOpen(const QString& dockName) const = 0;
     virtual void setDockOpen(const QString& dockName, bool open) = 0;
     virtual void toggleDock(const QString& dockName) = 0;
+
+    virtual bool isDockFloating(const QString& dockName) const = 0;
+    virtual void toggleDockFloating(const QString& dockName) = 0;
 };
 }
 

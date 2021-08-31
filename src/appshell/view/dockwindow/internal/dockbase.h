@@ -121,6 +121,8 @@ private:
     void applySizeConstraints();
     void listenFloatingChanges();
 
+    void doSetFloating(bool floating);
+
     int m_minimumWidth = 0;
     int m_minimumHeight = 0;
     int m_maximumWidth = 0;
