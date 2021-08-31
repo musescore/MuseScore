@@ -69,7 +69,7 @@ class PianorollView : public QQuickPaintedItem, public async::Asyncable
     Q_OBJECT
 
 public:
-    enum class PianorollTool : char { SELECT, EDIT, CUT, ERASE };
+    enum class PianorollTool : char { SELECT, ADD, CUT, ERASE };
     Q_ENUM(PianorollTool)
 
     static const BarPattern barPatterns[];
@@ -130,7 +130,8 @@ public:
     double pixelYToPitch(int tick) const;
 
     void finishNoteGroupDrag();
-    void selectNotes(double startTick, double endTick, int lowPitch, int highPitch, NoteSelectType selType);
+    void selectNotes(double startTick, double endTick, double lowPitch, double highPitch, NoteSelectType selType);
+    void handleSelectionClick();
 
 signals:
     void wholeNoteWidthChanged();
