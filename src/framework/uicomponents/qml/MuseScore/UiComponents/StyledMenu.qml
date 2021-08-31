@@ -145,6 +145,8 @@ StyledPopupView {
     QtObject {
         id: prv
 
+        property var showedSubMenu: null
+
         property bool hasItemsWithIconAndCheckable: false
         property bool hasItemsWithIconOrCheckable: false
         property bool hasItemsWithSubmenu: false
@@ -237,12 +239,26 @@ StyledPopupView {
 
                     padding: root.padding
 
+                    onOpenSubMenuRequested: {
+                        if (prv.showedSubMenu){
+                            if (prv.showedSubMenu === menu) {
+                                return
+                            } else {
+                                prv.showedSubMenu.close()
+                            }
+                        }
+
+                        menu.toggleOpened()
+                    }
+
                     onSubMenuShowed: {
                         root.closePolicy = PopupView.NoAutoClose
+                        prv.showedSubMenu = menu
                     }
 
                     onSubMenuClosed: {
                         root.closePolicy = PopupView.CloseOnPressOutsideParent
+                        prv.showedSubMenu = null
                     }
 
                     onHandleMenuItem: {
