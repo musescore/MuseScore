@@ -170,8 +170,8 @@ void DockBase::setFloating(bool floating)
         return;
     }
 
-    m_floating = floating;
-    emit floatingChanged();
+    m_dockWidget->setFloating(floating);
+    doSetFloating(floating);
 }
 
 void DockBase::setLocation(DockLocation location)
@@ -312,7 +312,13 @@ void DockBase::listenFloatingChanges()
         }
 
         connect(frame, &KDDockWidgets::Frame::isInMainWindowChanged, this, [=]() {
-            setFloating(!frame->isInMainWindow());
+            doSetFloating(!frame->isInMainWindow());
         }, Qt::UniqueConnection);
     });
+}
+
+void DockBase::doSetFloating(bool floating)
+{
+    m_floating = floating;
+    emit floatingChanged();
 }

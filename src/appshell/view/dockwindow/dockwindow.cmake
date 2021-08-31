@@ -53,6 +53,8 @@ set (DOCKWINDOW_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/dockseparator.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/dockframemodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/dockframemodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/dockwindowactionscontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/dockwindowactionscontroller.h
     ${DOCKWINDOW_PLATFORM_SRC}
 )
 

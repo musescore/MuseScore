@@ -25,6 +25,7 @@
 #include "internal/dropindicators.h"
 #include "internal/dockseparator.h"
 #include "internal/dockframemodel.h"
+#include "internal/dockwindowactionscontroller.h"
 
 #include "dockwindow.h"
 #include "dockpanel.h"
@@ -76,6 +77,8 @@ public:
 
 using namespace mu::dock;
 
+static std::shared_ptr<DockWindowActionsController> s_actionsController = std::make_shared<DockWindowActionsController>();
+
 void DockSetup::registerQmlTypes()
 {
     qmlRegisterType<DockWindow>("MuseScore.Dock", 1, 0, "DockWindow");
@@ -90,10 +93,6 @@ void DockSetup::registerQmlTypes()
     qmlRegisterType<DockBase>("MuseScore.Dock", 1, 0, "DockBase");
 
     qRegisterMetaType<DropIndicators*>();
-}
-
-void DockSetup::registerExports()
-{
 }
 
 void DockSetup::setup(QQmlEngine* engine)
@@ -120,4 +119,9 @@ void DockSetup::setup(QQmlEngine* engine)
     KDDockWidgets::Config::self().setAbsoluteWidgetMinSize(minDockSize);
 
     KDDockWidgets::Config::self().setSeparatorThickness(1);
+}
+
+void DockSetup::onInit()
+{
+    s_actionsController->init();
 }

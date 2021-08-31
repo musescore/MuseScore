@@ -20,19 +20,29 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_DOCK_DOCKSETUP_H
-#define MU_DOCK_DOCKSETUP_H
+#ifndef MU_DOCK_DOCKWINDOWACTIONSCONTROLLER_H
+#define MU_DOCK_DOCKWINDOWACTIONSCONTROLLER_H
 
-class QQmlEngine;
+#include "actions/actionable.h"
+
+#include "modularity/ioc.h"
+#include "actions/iactionsdispatcher.h"
+#include "idockwindow.h"
 
 namespace mu::dock {
-class DockSetup
+class DockWindowActionsController : public actions::Actionable
 {
+    INJECT(dock, IDockWindow, window)
+    INJECT(dock, actions::IActionsDispatcher, dispatcher)
+
 public:
-    static void registerQmlTypes();
-    static void setup(QQmlEngine* engine);
-    static void onInit();
+    void init();
+
+private:
+    void close(const actions::ActionData& args);
+    void toggleOpened(const actions::ActionData& args);
+    void toggleFloating(const actions::ActionData& args);
 };
 }
 
-#endif // MU_DOCK_DOCKSETUP_H
+#endif // MU_DOCK_DOCKWINDOWACTIONSCONTROLLER_H

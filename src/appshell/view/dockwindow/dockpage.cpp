@@ -221,6 +221,22 @@ void DockPage::setDockOpen(const QString& dockName, bool open)
     }
 }
 
+bool DockPage::isDockFloating(const QString& dockName) const
+{
+    const DockBase* dock = dockByName(dockName);
+    return dock ? dock->floating() : false;
+}
+
+void DockPage::toggleDockFloating(const QString& dockName)
+{
+    DockBase* dock = dockByName(dockName);
+    if (!dock) {
+        return;
+    }
+
+    dock->setFloating(!dock->floating());
+}
+
 void DockPage::setUri(const QString& uri)
 {
     if (uri == m_uri) {

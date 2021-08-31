@@ -51,6 +51,11 @@ DockWindow::DockWindow(QQuickItem* parent)
 {
 }
 
+DockWindow::~DockWindow()
+{
+    ioc()->unregisterExport<IDockWindow>();
+}
+
 void DockWindow::componentComplete()
 {
     TRACEFUNC;
@@ -190,6 +195,20 @@ void DockWindow::setDockOpen(const QString& dockName, bool open)
     DockPage* currPage = currentPage();
     if (currPage) {
         currPage->setDockOpen(dockName, open);
+    }
+}
+
+bool DockWindow::isDockFloating(const QString& dockName) const
+{
+    const DockPage* currPage = currentPage();
+    return currPage ? currPage->isDockFloating(dockName) : false;
+}
+
+void DockWindow::toggleDockFloating(const QString& dockName)
+{
+    DockPage* currPage = currentPage();
+    if (currPage) {
+        currPage->toggleDockFloating(dockName);
     }
 }
 
