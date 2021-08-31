@@ -480,6 +480,8 @@ void PianorollView::paint(QPainter* p)
         drawNoteBlock(p, block);
     }
 
+    if (m_dragStyle == DragStyle::NOTES)
+        drawDraggedNotes(p);
 
 
 //    //Draw locators
@@ -511,6 +513,108 @@ void PianorollView::paint(QPainter* p)
         p->drawRect(rect);
     }
 
+}
+
+void PianorollView::drawDraggedNotes(QPainter* painter)
+{
+
+    QColor noteColor = m_colorNoteDrag;
+
+    Ms::Score* curScore = score();
+
+
+    Ms::Fraction pos(pixelXToWholeNote(m_lastMousePos.x()) * 1000, 1000);
+    Ms::Measure* m = curScore->tick2measure(pos);
+
+    Ms::Fraction timeSig = m->timesig();
+    int beatsInBar = timeSig.numerator();
+
+    //Number of smaller pieces the beat is divided into
+    int subbeats = m_tuplet * (1 << m_subdivision);
+    int divisions = beatsInBar * subbeats;
+
+    //Round down to nearest division
+    double dragToTick = pixelXToWholeNote(m_lastMousePos.x());
+    double startTick = pixelXToWholeNote(m_mouseDownPos.x());
+    double offsetTicks = dragToTick - startTick;
+
+    //offsetTicks = floor(offsetTicks * divisions) / divisions;
+    Ms::Fraction pasteTickOffset(floor(offsetTicks * divisions), divisions);
+
+    int dragToPitch = pixelYToPitch(m_lastMousePos.y());
+    int startPitch = pixelYToPitch(m_mouseDownPos.y());
+
+    int pitchOffset = dragToPitch - startPitch;
+
+
+//      Pos barPos(score->tempomap(), score->sigmap(), pixelXToTick(_lastMousePos.x()), TType::TICKS);
+
+//      int beatsInBar = barPos.timesig().timesig().numerator();
+
+//      //Number of smaller pieces the beat is divided into
+//      int subbeats = _tuplet * (1 << _subdiv);
+//      int divisions = beatsInBar * subbeats;
+
+//      QPointF offset = _lastMousePos - _mouseDownPos;
+
+//      Fraction tickOffset = Fraction::fromTicks(offset.x() / _xZoom);
+//      //Round down to nearest division
+//      int numDiv = (int)floor((tickOffset.numerator() * divisions / (double)tickOffset.denominator()));
+//      Fraction pasteTickOffset(numDiv, divisions);
+
+//      int pitchOffset = (int)(-offset.y() / _noteHeight);
+
+      //Iterate thorugh note data
+    QXmlStreamReader xml(m_dragNoteCache);
+    Ms::Fraction firstTick;
+
+    Ms::Staff* staff = activeStaff();
+
+    while (!xml.atEnd())
+    {
+        QXmlStreamReader::TokenType tt = xml.readNext();
+        if (tt == QXmlStreamReader::StartElement)
+        {
+            if (xml.name().toString() == "notes")
+            {
+                int n = xml.attributes().value("firstN").toString().toInt();
+                int d = xml.attributes().value("firstD").toString().toInt();
+                firstTick = Ms::Fraction(n, d);
+            }
+            if (xml.name().toString() == "note")
+            {
+                int sn = xml.attributes().value("startN").toString().toInt();
+                int sd = xml.attributes().value("startD").toString().toInt();
+                Ms::Fraction startTick = Ms::Fraction(sn, sd);
+
+                int tn = xml.attributes().value("lenN").toString().toInt();
+                int td = xml.attributes().value("lenD").toString().toInt();
+                Ms::Fraction tickLen = Ms::Fraction(tn, td);
+
+                int pitch = xml.attributes().value("pitch").toString().toInt();
+                int voice = xml.attributes().value("voice").toString().toInt();
+
+                int track = staff->idx() * VOICES + voice;
+
+                drawDraggedNote(painter, startTick + pasteTickOffset, tickLen, pitch + pitchOffset, track, m_colorNoteDrag);
+            }
+        }
+    }
+}
+
+
+void PianorollView::drawDraggedNote(QPainter* painter, Ms::Fraction startTick, Ms::Fraction frac, int pitch, int track, QColor color)
+{
+    Q_UNUSED(track);
+    painter->setBrush(color);
+
+    painter->setPen(QPen(color.darker(250)));
+    int x0 = wholeNoteToPixelX(startTick);
+    int x1 = wholeNoteToPixelX(startTick + frac);
+    int y0 = pitchToPixelY(pitch);
+
+    QRectF bounds(x0, y0 - m_noteHeight, x1 - x0, m_noteHeight);
+    painter->drawRect(bounds);
 }
 
 
@@ -600,72 +704,6 @@ void PianorollView::drawNoteBlock(QPainter *p, NoteBlock *block)
     }
 
 }
-
-//void PianorollView::drawChord(QPainter* p, Ms::Chord* chrd, int voice, bool active)
-//{
-//    for (Ms::Chord* c : chrd->graceNotes())
-//        drawChord(p, c, voice, active);
-
-//    p->setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform | QPainter::TextAntialiasing);
-
-//    for (Ms::Note* note : chrd->notes())
-//    {
-//        if (note->tieBack())
-//            continue;
-
-//        QColor noteColor;
-//        switch (voice)
-//        {
-//        case 0:
-//            noteColor = m_colorNoteVoice1;
-//            break;
-//        case 1:
-//            noteColor = m_colorNoteVoice2;
-//            break;
-//        case 2:
-//            noteColor = m_colorNoteVoice3;
-//            break;
-//        case 3:
-//            noteColor = m_colorNoteVoice4;
-//            break;
-//        }
-
-//        if (note->selected())
-//            noteColor = m_colorNoteSel;
-
-//        if (!active)
-//            noteColor = noteColor.lighter(150);
-
-//        p->setBrush(noteColor);
-//        p->setPen(QPen(noteColor.darker(250)));
-
-//        for (Ms::NoteEvent& e : note->playEvents())
-//        {
-//            QRect bounds = boundingRect(note, &e);
-//            p->drawRect(bounds);
-
-//            //Pitch name
-//            if (bounds.width() >= 20 && bounds.height() >= 12)
-//            {
-//                QRectF textRect(bounds.x() + 2, bounds.y(), bounds.width() - 6, bounds.height() + 1);
-//                QRectF textHiliteRect(bounds.x() + 3, bounds.y() + 1, bounds.width() - 6, bounds.height());
-
-//                QFont f("FreeSans", 8);
-//                p->setFont(f);
-
-//                //Note name
-//                QString name = note->tpcUserName();
-//                p->setPen(QPen(noteColor.lighter(130)));
-//                p->drawText(textHiliteRect,
-//                    Qt::AlignLeft | Qt::AlignTop, name);
-
-//                p->setPen(QPen(noteColor.darker(180)));
-//                p->drawText(textRect,
-//                    Qt::AlignLeft | Qt::AlignTop, name);
-//            }
-//        }
-//    }
-//}
 
 
 void PianorollView::keyReleaseEvent(QKeyEvent* event)
@@ -843,6 +881,8 @@ void PianorollView::mouseMoveEvent(QMouseEvent* event)
         default:
             break;
         }
+
+        update();
     }
 
 }
@@ -1128,6 +1168,9 @@ void PianorollView::finishNoteGroupDrag()
     curScore->endCmd();
 
     m_dragNoteCache = QByteArray();
+
+    buildNoteData();
+    update();
 }
 
 void PianorollView::pasteNotes(const QString& copiedNotes, Ms::Fraction pasteStartTick, int pitchOffset, bool xIsOffset)
