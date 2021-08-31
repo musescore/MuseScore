@@ -88,7 +88,7 @@ void MixerPanelModel::loadItems(const TrackSequenceId sequenceId, const TrackIdL
     clear();
 
     for (TrackId trackId : trackIdList) {
-        m_mixerChannelList.append(buildChannelItem(sequenceId, trackId));
+        m_mixerChannelList.append(buildTrackChannelItem(sequenceId, trackId));
     }
 
     m_mixerChannelList.append(buildMasterChannelItem());
@@ -101,7 +101,7 @@ void MixerPanelModel::addItem(const audio::TrackSequenceId sequenceId, const aud
 {
     beginResetModel();
 
-    m_mixerChannelList.append(buildChannelItem(sequenceId, trackId));
+    m_mixerChannelList.append(buildTrackChannelItem(sequenceId, trackId));
     sortItems();
 
     endResetModel();
@@ -127,6 +127,10 @@ void MixerPanelModel::sortItems()
             return false;
         }
 
+        if (s->isMasterChannel()) {
+            return true;
+        }
+
         return f->id() < s->id();
     });
 }
@@ -137,7 +141,7 @@ void MixerPanelModel::clear()
     m_mixerChannelList.clear();
 }
 
-MixerChannelItem* MixerPanelModel::buildChannelItem(const audio::TrackSequenceId& sequenceId, const audio::TrackId& trackId)
+MixerChannelItem* MixerPanelModel::buildTrackChannelItem(const audio::TrackSequenceId& sequenceId, const audio::TrackId& trackId)
 {
     MixerChannelItem* item = new MixerChannelItem(this, trackId);
 
