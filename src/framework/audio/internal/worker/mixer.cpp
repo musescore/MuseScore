@@ -201,6 +201,10 @@ void Mixer::mixOutput(float* outBuffer, float* inBuffer, unsigned int samplesCou
         return;
     }
 
+    if (m_masterParams.muted) {
+        return;
+    }
+
     for (audioch_t audioChNum = 0; audioChNum < audioChannelsCount(); ++audioChNum) {
         float squaredSum = 0.f;
 
