@@ -62,22 +62,15 @@ StyledPopupView {
     navigation.name: "StyledMenu"
     navigation.direction: NavigationPanel.Vertical
 
-    function focusOnFirstItem() {
-        var loader = view.itemAtIndex(0)
-        if (loader && loader.item) {
-            loader.item.navigation.requestActive()
-        }
-    }
+    signal loaded()
 
-    function focusOnSelected() {
-        for (var i = 0; i < view.count; ++i) {
-            var loader = view.itemAtIndex(i)
-            if (loader && loader.item && loader.item.isSelected) {
-                loader.item.navigation.requestActive()
-                return true
-            }
+    function requestFocus() {
+        var focused = prv.focusOnSelected()
+        if (!focused) {
+            focused = prv.focusOnFirstEnabled()
         }
-        return false
+
+        return focused
     }
 
     onModelChanged: {
@@ -145,10 +138,14 @@ StyledPopupView {
 
         root.contentHeight = itemHeight * itemsCount + sepCount * prv.separatorHeight +
                 prv.viewVerticalMargin * 2
+
+        root.loaded()
     }
 
     QtObject {
         id: prv
+
+        property var showedSubMenu: null
 
         property bool hasItemsWithIconAndCheckable: false
         property bool hasItemsWithIconOrCheckable: false
@@ -178,6 +175,29 @@ StyledPopupView {
             reserveSpaceForShortcutOrSubmenuIndicator:
                 prv.hasItemsWithShortcut || prv.hasItemsWithSubmenu
         }
+
+        function focusOnFirstEnabled() {
+            for (var i = 0; i < view.count; ++i) {
+                var loader = view.itemAtIndex(i)
+                if (loader && !loader.isSeparator && loader.item && loader.item.enabled) {
+                    loader.item.navigation.requestActive()
+                    return true
+                }
+            }
+
+            return false
+        }
+
+        function focusOnSelected() {
+            for (var i = 0; i < view.count; ++i) {
+                var loader = view.itemAtIndex(i)
+                if (loader && !loader.isSeparator && loader.item && loader.item.isSelected) {
+                    loader.item.navigation.requestActive()
+                    return true
+                }
+            }
+            return false
+        }
     }
 
     ListView {
@@ -193,9 +213,9 @@ StyledPopupView {
         delegate: Loader {
             id: loader
 
-            property bool isSeparator: Boolean(modelData.title)
+            property bool isSeparator: !Boolean(modelData.title) || modelData.title === ""
 
-            sourceComponent: isSeparator ? menuItemComp : separatorComp
+            sourceComponent: isSeparator ? separatorComp : menuItemComp
 
             onLoaded: {
                 loader.item.modelData = Qt.binding(() => (modelData))
@@ -219,12 +239,26 @@ StyledPopupView {
 
                     padding: root.padding
 
+                    onOpenSubMenuRequested: {
+                        if (prv.showedSubMenu){
+                            if (prv.showedSubMenu === menu) {
+                                return
+                            } else {
+                                prv.showedSubMenu.close()
+                            }
+                        }
+
+                        menu.toggleOpened()
+                    }
+
                     onSubMenuShowed: {
                         root.closePolicy = PopupView.NoAutoClose
+                        prv.showedSubMenu = menu
                     }
 
                     onSubMenuClosed: {
                         root.closePolicy = PopupView.CloseOnPressOutsideParent
+                        prv.showedSubMenu = null
                     }
 
                     onHandleMenuItem: {
@@ -236,6 +270,7 @@ StyledPopupView {
 
                     onRequestParentItemActive: {
                         root.navigationParentControl.requestActive()
+                        root.close()
                     }
                 }
             }

@@ -45,6 +45,8 @@ FocusableControl {
     Accessible.selectable: true
     Accessible.selected: isSelected
 
+    navigation.accessible.role: MUAccessible.ListItem
+
     background.color: normalStateColor
     background.opacity: root.enabled ? 1 : ui.theme.itemOpacityDisabled
 

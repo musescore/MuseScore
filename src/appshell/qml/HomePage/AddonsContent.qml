@@ -35,8 +35,6 @@ FocusScope {
     property var color: ui.theme.backgroundSecondaryColor
     property string section: ""
 
-    signal requestActiveFocus()
-
     QtObject {
         id: prv
 
@@ -50,7 +48,7 @@ FocusScope {
         order: 3
         onActiveChanged: {
             if (active) {
-                root.requestActiveFocus()
+                root.forceActiveFocus()
             }
         }
     }

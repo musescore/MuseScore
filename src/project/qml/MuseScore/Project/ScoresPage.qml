@@ -31,8 +31,6 @@ import "internal"
 FocusScope {
     id: root
 
-    signal requestActiveFocus()
-
     QtObject {
         id: prv
 
@@ -47,7 +45,6 @@ FocusScope {
         order: 3
         onActiveChanged: {
             if (navSec.active) {
-                root.requestActiveFocus()
                 root.forceActiveFocus()
             }
         }
@@ -66,7 +63,6 @@ FocusScope {
         MouseArea {
             anchors.fill: parent
             onClicked: {
-                root.requestActiveFocus()
                 root.forceActiveFocus()
             }
         }

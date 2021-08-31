@@ -77,8 +77,6 @@ PopupView {
             if (keynavPanel.active) {
                 root.forceActiveFocus()
                 rootContainer.forceActiveFocus()
-            } else {
-                root.close()
             }
         }
 

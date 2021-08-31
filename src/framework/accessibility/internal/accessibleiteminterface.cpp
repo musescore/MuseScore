@@ -189,6 +189,7 @@ QAccessible::Role AccessibleItemInterface::role() const
     case IAccessible::Role::RadioButton: return QAccessible::RadioButton;
     case IAccessible::Role::ComboBox: return QAccessible::ComboBox;
     case IAccessible::Role::ListItem: return QAccessible::ListItem;
+    case IAccessible::Role::MenuItem: return QAccessible::MenuItem;
     case IAccessible::Role::Information: {
 #ifdef Q_OS_WIN
         return QAccessible::StaticText;
