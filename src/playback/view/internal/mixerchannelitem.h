@@ -48,7 +48,7 @@ class MixerChannelItem : public QObject, public async::Asyncable
     Q_PROPERTY(float rightChannelPressure READ rightChannelPressure NOTIFY rightChannelPressureChanged)
 
     Q_PROPERTY(float volumeLevel READ volumeLevel WRITE setVolumeLevel NOTIFY volumeLevelChanged)
-    Q_PROPERTY(float balance READ balance WRITE setBalance NOTIFY balanceChanged)
+    Q_PROPERTY(int balance READ balance WRITE setBalance NOTIFY balanceChanged)
 
     Q_PROPERTY(bool muted READ muted WRITE setMuted NOTIFY mutedChanged)
     Q_PROPERTY(bool solo READ solo WRITE setSolo NOTIFY soloChanged)
@@ -70,7 +70,7 @@ public:
     float rightChannelPressure() const;
 
     float volumeLevel() const;
-    float balance() const;
+    int balance() const;
 
     bool muted() const;
     bool solo() const;
@@ -93,9 +93,10 @@ public slots:
     void setRightChannelPressure(float rightChannelPressure);
 
     void setVolumeLevel(float volumeLevel);
-    void setBalance(float balance);
+    void setBalance(int balance);
 
-    void setMuted(bool muted);
+    void setMuted(bool isMuted);
+    void setMutedBySolo(bool isMuted);
     void setSolo(bool solo);
 
 signals:
@@ -105,7 +106,7 @@ signals:
     void rightChannelPressureChanged(float rightChannelPressure);
 
     void volumeLevelChanged(float volumeLevel);
-    void balanceChanged(float balance);
+    void balanceChanged(int balance);
 
     void mutedChanged(bool muted);
     void soloChanged(bool solo);
@@ -119,6 +120,10 @@ signals:
 
 private:
     void setAudioChannelVolumePressure(const audio::audioch_t chNum, const float newValue);
+    void resetAudioChannelsVolumePressure();
+
+    void applyMuteToOutputParams(const bool isMuted);
+
     InputResourceItem* buildInputResourceItem();
     OutputResourceItem* buildOutputResourceItem(const audio::AudioFxParams& fxParams);
     void ensureBlankOutputResourceSlot();
@@ -139,6 +144,8 @@ private:
     float m_leftChannelPressure = 0.0;
     float m_rightChannelPressure = 0.0;
 
+    bool m_mutedBySolo = false;
+    bool m_mutedManually = false;
     bool m_solo = false;
 };
 }

@@ -191,11 +191,11 @@ MixerChannelItem* MixerPanelModel::buildTrackChannelItem(const audio::TrackSeque
 
     connect(item, &MixerChannelItem::soloChanged, this, [this, item](const bool solo) {
         for (MixerChannelItem* ch : m_mixerChannelList) {
-            if (item == ch || ch->isMasterChannel()) {
+            if (item == ch || ch->isMasterChannel() || ch->solo()) {
                 continue;
             }
 
-            ch->setMuted(!solo);
+            ch->setMutedBySolo(solo);
         }
     });
 
@@ -228,6 +228,16 @@ MixerChannelItem* MixerPanelModel::buildMasterChannelItem()
 
     connect(item, &MixerChannelItem::outputParamsChanged, this, [this](const AudioOutputParams& params) {
         playback()->audioOutput()->setMasterOutputParams(params);
+    });
+
+    connect(item, &MixerChannelItem::soloChanged, this, [this, item](const bool solo) {
+        for (MixerChannelItem* ch : m_mixerChannelList) {
+            if (item == ch || ch->solo()) {
+                continue;
+            }
+
+            ch->setMutedBySolo(solo);
+        }
     });
 
     return item;
