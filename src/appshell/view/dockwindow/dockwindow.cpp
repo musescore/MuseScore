@@ -68,6 +68,7 @@ void DockWindow::componentComplete()
         resetWindowState();
     });
 
+    /*! FIXME
     mainWindow()->changeToolBarOrientationRequested().onReceive(this, [this](QString name, mu::framework::Orientation orientation) {
         const DockPage* page = currentPage();
         DockToolBar* toolBar = page ? dynamic_cast<DockToolBar*>(page->dockByName(name)) : nullptr;
@@ -132,6 +133,7 @@ void DockWindow::componentComplete()
 
         m_currentPanelDockingHolder = holder;
     });
+    */
 
     startupScenario()->run();
 }

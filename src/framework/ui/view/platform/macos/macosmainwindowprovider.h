@@ -26,14 +26,14 @@
 #include "modularity/ioc.h"
 #include "ui/iuiconfiguration.h"
 
-#include "view/dockwindow/mainwindowprovider.h"
+#include "ui/view/mainwindowprovider.h"
 
-namespace mu::dock {
+namespace mu::ui {
 class MacOSMainWindowProvider : public MainWindowProvider, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(appshell, ui::IUiConfiguration, uiConfiguration)
+    INJECT(appshell, IUiConfiguration, uiConfiguration)
 
 public:
     explicit MacOSMainWindowProvider(QObject* parent = nullptr);

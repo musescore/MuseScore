@@ -105,11 +105,13 @@ KDDockWidgets::DropIndicatorOverlayInterface::DropLocation DropIndicators::hover
     }
 
     if (needShowToolBarHolders()) {
-        mainWindow()->requestShowToolBarDockingHolder(globalPos);
+        //! FIXME
+        //mainWindow()->requestShowToolBarDockingHolder(globalPos);
     }
 
     if (needShowPanelHolders()) {
-        mainWindow()->requestShowPanelDockingHolder(globalPos);
+        //! FIXME
+        //mainWindow()->requestShowPanelDockingHolder(globalPos);
     }
 
     if (isDropAllowed(dropLocation)) {
@@ -197,7 +199,8 @@ void DropIndicators::updateVisibility()
         updateWindowPosition();
         m_indicatorsWindow->raise();
     } else {
-        mainWindow()->requestHideAllDockingHolders();
+        //! FIXME
+        //mainWindow()->requestHideAllDockingHolders();
         hideDropArea();
     }
 
@@ -470,7 +473,8 @@ void DropIndicators::updateToolBarOrientation()
         newOrientation = framework::Orientation::Vertical;
     }
 
-    mainWindow()->requestChangeToolBarOrientation(draggedDock->uniqueName(), newOrientation);
+    //! FIXME
+    //mainWindow()->requestChangeToolBarOrientation(draggedDock->uniqueName(), newOrientation);
 }
 
 void DropIndicators::updateWindowPosition()

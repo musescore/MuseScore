@@ -22,29 +22,12 @@ set (DOCK_LIBS
     kddockwidgets
 )
 
-if (OS_IS_MAC)
-    set (DOCKWINDOW_PLATFORM_SRC
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosmainwindowprovider.mm
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosmainwindowprovider.h
-        )
-    # Don't mix C++ and Objective-C++ in Unity Build
-    set_source_files_properties(${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosmainwindowprovider.mm
-                                PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON)
-
-    set_source_files_properties(${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosmainwindowprovider.mm
-                                PROPERTIES SKIP_PRECOMPILE_HEADERS ON)
-else()
-    set (DOCKWINDOW_PLATFORM_SRC )
-endif()
-
 set (DOCKWINDOW_SRC
     ${CMAKE_CURRENT_LIST_DIR}/docksetup.cpp
     ${CMAKE_CURRENT_LIST_DIR}/docksetup.h
     ${CMAKE_CURRENT_LIST_DIR}/docktypes.h
     ${CMAKE_CURRENT_LIST_DIR}/dockwindow.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dockwindow.h
-    ${CMAKE_CURRENT_LIST_DIR}/mainwindowprovider.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/mainwindowprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/dockpage.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dockpage.h
     ${CMAKE_CURRENT_LIST_DIR}/dockpanel.cpp

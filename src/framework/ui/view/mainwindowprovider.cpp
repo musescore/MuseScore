@@ -22,13 +22,14 @@
 
 #include "mainwindowprovider.h"
 
-#include <QWindow>
-
 #include "modularity/ioc.h"
+
 #include "log.h"
 
-using namespace mu::dock;
-using namespace mu::async;
+#include <QWindow>
+
+using namespace mu::ui;
+using namespace mu::modularity;
 
 MainWindowProvider::MainWindowProvider(QObject* parent)
     : QObject(parent), m_window(nullptr)
@@ -76,7 +77,7 @@ void MainWindowProvider::setWindow(QWindow* window)
 
 void MainWindowProvider::init()
 {
-    modularity::ioc()->registerExport<ui::IMainWindow>("dock", this);
+    ioc()->registerExport<IMainWindow>("ui", this);
 }
 
 QString MainWindowProvider::filePath() const
@@ -153,44 +154,4 @@ void MainWindowProvider::toggleFullScreen()
 const QScreen* MainWindowProvider::screen() const
 {
     return m_window ? m_window->screen() : nullptr;
-}
-
-void MainWindowProvider::requestChangeToolBarOrientation(const QString& toolBarName, mu::framework::Orientation orientation)
-{
-    m_dockOrientationChanged.send(toolBarName, orientation);
-}
-
-Channel<QString, mu::framework::Orientation> MainWindowProvider::changeToolBarOrientationRequested() const
-{
-    return m_dockOrientationChanged;
-}
-
-void MainWindowProvider::requestShowToolBarDockingHolder(const QPoint& globalPos)
-{
-    m_showToolBarDockingHolderRequested.send(globalPos);
-}
-
-mu::async::Channel<QPoint> MainWindowProvider::showToolBarDockingHolderRequested() const
-{
-    return m_showToolBarDockingHolderRequested;
-}
-
-void MainWindowProvider::requestShowPanelDockingHolder(const QPoint& globalPos)
-{
-    m_showPanelDockingHolderRequested.send(globalPos);
-}
-
-mu::async::Channel<QPoint> MainWindowProvider::showPanelDockingHolderRequested() const
-{
-    return m_showPanelDockingHolderRequested;
-}
-
-void MainWindowProvider::requestHideAllDockingHolders()
-{
-    m_hideAllHoldersRequested.notify();
-}
-
-mu::async::Notification MainWindowProvider::hideAllDockingHoldersRequested() const
-{
-    return m_hideAllHoldersRequested;
 }
