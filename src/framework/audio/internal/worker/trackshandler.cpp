@@ -58,6 +58,21 @@ Promise<TrackIdList> TracksHandler::trackIdList(const TrackSequenceId sequenceId
     }, AudioThread::ID);
 }
 
+Promise<TrackName> TracksHandler::trackName(const TrackSequenceId sequenceId, const TrackId trackId) const
+{
+    return Promise<TrackName>([this, sequenceId, trackId](Promise<TrackName>::Resolve resolve, Promise<TrackName>::Reject reject) {
+        ONLY_AUDIO_WORKER_THREAD;
+
+        ITrackSequencePtr s = sequence(sequenceId);
+
+        if (s) {
+            resolve(s->trackName(trackId));
+        } else {
+            reject(static_cast<int>(Err::InvalidSequenceId), "invalid sequence id");
+        }
+    }, AudioThread::ID);
+}
+
 Promise<TrackId> TracksHandler::addTrack(const TrackSequenceId sequenceId, const std::string& trackName, midi::MidiData&& playbackData,
                                          AudioParams&& params)
 {
@@ -69,6 +84,7 @@ Promise<TrackId> TracksHandler::addTrack(const TrackSequenceId sequenceId, const
 
         if (!s) {
             reject(static_cast<int>(Err::InvalidSequenceId), "invalid sequence id");
+            return;
         }
 
         RetVal<TrackId> result = s->addTrack(trackName, playbackData, params);
@@ -92,12 +108,14 @@ Promise<TrackId> TracksHandler::addTrack(const TrackSequenceId sequenceId, const
 
         if (!s) {
             reject(static_cast<int>(Err::InvalidSequenceId), "invalid sequence id");
+            return;
         }
 
         RetVal<TrackId> result = s->addTrack(trackName, playbackData, params);
 
         if (!result.ret) {
             reject(result.ret.code(), result.ret.text());
+            return;
         }
 
         resolve(result.val);
@@ -170,12 +188,14 @@ Promise<AudioInputParams> TracksHandler::inputParams(const TrackSequenceId seque
 
         if (!s) {
             reject(static_cast<int>(Err::InvalidSequenceId), "invalid sequence id");
+            return;
         }
 
         RetVal<AudioInputParams> result = s->audioIO()->inputParams(trackId);
 
         if (!result.ret) {
             reject(result.ret.code(), result.ret.text());
+            return;
         }
 
         resolve(result.val);
