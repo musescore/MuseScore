@@ -58,6 +58,8 @@ class MixerChannelItem : public QObject, public async::Asyncable
 public:
     explicit MixerChannelItem(QObject* parent, const audio::TrackId id = -1, const bool isMaster = false);
 
+    ~MixerChannelItem();
+
     audio::TrackId id() const;
 
     bool isMasterChannel() const;

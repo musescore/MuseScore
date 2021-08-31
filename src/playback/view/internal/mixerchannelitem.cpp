@@ -46,6 +46,11 @@ MixerChannelItem::MixerChannelItem(QObject* parent, const audio::TrackId id, con
     m_inputResourceItem = buildInputResourceItem();
 }
 
+MixerChannelItem::~MixerChannelItem()
+{
+    m_audioSignalChanges.pressureChanges.resetOnReceive(this);
+}
+
 TrackId MixerChannelItem::id() const
 {
     return m_id;
