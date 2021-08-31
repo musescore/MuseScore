@@ -30,11 +30,13 @@
 
 #include "abstractaudiosource.h"
 #include "mixerchannel.h"
-#include "clock.h"
+#include "ifxresolver.h"
+#include "iclock.h"
 
 namespace mu::audio {
 class Mixer : public AbstractAudioSource, public std::enable_shared_from_this<Mixer>, public async::Asyncable
 {
+    INJECT(audio, fx::IFxResolver, fxResolver)
 public:
     Mixer();
     ~Mixer();
@@ -69,7 +71,7 @@ private:
 
     AudioOutputParams m_masterParams;
     async::Channel<AudioOutputParams> m_masterOutputParamsChanged;
-    std::vector<IFxProcessorPtr> m_globalFxProcessors = {};
+    std::vector<IFxProcessorPtr> m_masterFxProcessors = {};
 
     std::map<MixerChannelId, MixerChannelPtr> m_mixerChannels = {};
 
