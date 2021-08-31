@@ -277,7 +277,7 @@ void GPConverter::configureGraceChord(const GPBeat* beat, ChordRest* cr)
 {
     convertNotes(beat->notes(), cr);
 
-    auto rhytm = [] (GPRhytm::RhytmType rhytm) {
+    auto rhytm = [](GPRhytm::RhytmType rhytm) {
         if (rhytm == GPRhytm::RhytmType::Whole) {
             return 1;
         } else if (rhytm == GPRhytm::RhytmType::Half) {
@@ -431,7 +431,7 @@ void GPConverter::doAddVolta(const GPMasterBar* mB, Measure* measure)
 void GPConverter::addDirection(const GPMasterBar* mB, Measure* measure)
 {
     if (!mB->direction().jump.isEmpty()) {
-        auto scoreDirection = [] (const auto& str) {
+        auto scoreDirection = [](const auto& str) {
             if (str == "DaCapo") {
                 return "Da Capo";
             } else if (str == "DaCapoAlCoda") {
@@ -554,7 +554,7 @@ void GPConverter::addTripletFeel(const GPMasterBar* mB, Measure* measure)
 
 void GPConverter::addKeySig(const GPMasterBar* mB, Measure* measure)
 {
-    auto convertKeySig = [] (GPMasterBar::KeySig kS) {
+    auto convertKeySig = [](GPMasterBar::KeySig kS) {
         if (kS == GPMasterBar::KeySig::C_B) {
             return Key::C_B;
         } else if (kS == GPMasterBar::KeySig::C_B) {
@@ -859,12 +859,12 @@ void GPConverter::addContiniousSlideHammerOn()
 
 void GPConverter::addFermatas()
 {
-    auto fermataTick = [] (const GPMasterBar::Fermata& fer, const Measure* m) {
+    auto fermataTick = [](const GPMasterBar::Fermata& fer, const Measure* m) {
         Fraction fr{ fer.offsetEnum, fer.offsetDenum };
         return fr + m->tick();
     };
 
-    auto fermataType = [] (const GPMasterBar::Fermata& fer) {
+    auto fermataType = [](const GPMasterBar::Fermata& fer) {
         if (fer.type == GPMasterBar::Fermata::Type::Long) {
             return SymId::fermataLongAbove;
         } else if (fer.type == GPMasterBar::Fermata::Type::Short) {
@@ -960,7 +960,7 @@ void GPConverter::addClef(const GPBar* bar, int curTrack)
 {
     //!@TODO add another types of clef
 
-    auto convertClef = [] (GPBar::Clef cl) {
+    auto convertClef = [](GPBar::Clef cl) {
         if (cl.type == GPBar::ClefType::Neutral) {
             return ClefType::PERC2;
         } else if (cl.type == GPBar::ClefType::G2) {
@@ -1025,7 +1025,7 @@ Measure* GPConverter::addMeasure(const GPMasterBar* mB)
 
 ChordRest* GPConverter::addChordRest(const GPBeat* beat, const Context& ctx)
 {
-    auto rhytm = [] (GPRhytm::RhytmType rhytm) {
+    auto rhytm = [](GPRhytm::RhytmType rhytm) {
         if (rhytm == GPRhytm::RhytmType::Whole) {
             return 1;
         } else if (rhytm == GPRhytm::RhytmType::Half) {
@@ -1068,7 +1068,7 @@ void GPConverter::addFingering(const GPNote* gpnote, Note* note)
         return;
     }
 
-    auto scoreFinger = [] (const auto& str) {
+    auto scoreFinger = [](const auto& str) {
         if (str == "Open") {
             return QString("O");
         }
@@ -1106,7 +1106,7 @@ void GPConverter::addOrnament(const GPNote* gpnote, Note* note)
         return;
     }
 
-    auto scoreOrnament = [] (const auto& orn) {
+    auto scoreOrnament = [](const auto& orn) {
         if (orn == GPNote::Ornament::Turn) {
             return SymId::ornamentTurn;
         } else if (orn == GPNote::Ornament::InvertedTurn) {
@@ -1131,7 +1131,7 @@ void GPConverter::addVibrato(const GPNote* gpnote, Note* note)
         return;
     }
 
-    auto scoreVibratoType = [] (GPNote::VibratoType gpType) {
+    auto scoreVibratoType = [](GPNote::VibratoType gpType) {
         switch (gpType) {
         case GPNote::VibratoType::Slight:
             return Vibrato::Type::GUITAR_VIBRATO;
@@ -1213,7 +1213,7 @@ void GPConverter::addHarmonic(const GPNote* gpnote, Note* note)
     note->setPitch(harmonicPitch);
     note->setTpcFromPitch();
 
-    auto harmoniText = [] (const GPNote::Harmonic::Type& h) {
+    auto harmoniText = [](const GPNote::Harmonic::Type& h) {
         if (h == GPNote::Harmonic::Type::Artificial) {
             return QString("A.H.");
         } else if (h == GPNote::Harmonic::Type::Pinch) {
@@ -1257,7 +1257,7 @@ void GPConverter::addAccent(const GPNote* gpnote, Note* note)
         return;
     }
 
-    auto accentType = [] (size_t flagIdx) {
+    auto accentType = [](size_t flagIdx) {
         if (flagIdx == 0) {
             return SymId::articStaccatoAbove;
         } else if (flagIdx == 2) {
@@ -1319,7 +1319,7 @@ void GPConverter::addSlide(const GPNote* gpnote, Note* note)
 void GPConverter::addSingleSlide(const GPNote* gpnote, Note* note)
 {
     //!@TODO add slide in note, slide out of note
-    auto slideType = [] (size_t flagIdx) {
+    auto slideType = [](size_t flagIdx) {
         if (flagIdx == 2) {
             return ChordLineType::FALL;
         } else if (flagIdx == 3) {
@@ -1615,7 +1615,7 @@ void GPConverter::addDynamic(const GPBeat* gpb, ChordRest* cr)
         }
     }
 
-    auto convertDynamic = [] (GPBeat::DynamicType t) {
+    auto convertDynamic = [](GPBeat::DynamicType t) {
         if (t == GPBeat::DynamicType::FFF) {
             return "fff";
         } else if (t == GPBeat::DynamicType::FF) {
@@ -1651,13 +1651,13 @@ void GPConverter::addTie(const GPNote* gpnote, Note* note)
 
     using tieMap = std::unordered_multimap<int, Tie*>;
 
-    auto startTie = [] (Note* note, Score* sc, tieMap& ties, int curTrack) {
+    auto startTie = [](Note* note, Score* sc, tieMap& ties, int curTrack) {
         Tie* tie = new Tie(sc);
         note->add(tie);
         ties.insert(std::make_pair(curTrack, tie));
     };
 
-    auto endTie = [] (Note* note, tieMap& ties, int curTrack) {
+    auto endTie = [](Note* note, tieMap& ties, int curTrack) {
         auto range = ties.equal_range(curTrack);
         for (auto it = range.first; it != range.second; it++) {
             Tie* tie = it->second;
@@ -1701,7 +1701,7 @@ void GPConverter::addLegato(const GPBeat* beat, ChordRest* cr)
         sc->addSpanner(slur);
     };
 
-    auto mediateSlur = [] (ChordRest* cr, slurMap& slurs, int curTrack, Fraction curTick) {
+    auto mediateSlur = [](ChordRest* cr, slurMap& slurs, int curTrack, Fraction curTick) {
         Slur* slur = slurs[curTrack];
         if (!slur) {
             return;
@@ -1712,7 +1712,7 @@ void GPConverter::addLegato(const GPBeat* beat, ChordRest* cr)
         slur->setEndElement(cr);
     };
 
-    auto endSlur = [] (ChordRest* cr, slurMap& slurs, int curTrack, Fraction curTick) {
+    auto endSlur = [](ChordRest* cr, slurMap& slurs, int curTrack, Fraction curTick) {
         Slur* slur = slurs[curTrack];
         if (!slur) {
             return;
@@ -1803,7 +1803,7 @@ void GPConverter::addBrush(const GPBeat* beat, ChordRest* cr)
         return;
     }
 
-    auto brushType = [] (auto&& gpArp) {
+    auto brushType = [](auto&& gpArp) {
         if (gpArp == GPBeat::Brush::Up) {
             return ArpeggioType::DOWN_STRAIGHT;
         } else {
@@ -1823,7 +1823,7 @@ void GPConverter::addArpeggio(const GPBeat* beat, ChordRest* cr)
         return;
     }
 
-    auto arpeggioType = [] (auto&& gpArp) {
+    auto arpeggioType = [](auto&& gpArp) {
         if (gpArp == GPBeat::Arpeggio::Up) {
             return ArpeggioType::DOWN;
         } else {
@@ -1915,7 +1915,7 @@ void GPConverter::addVibratoWTremBar(const GPBeat* beat, ChordRest* cr)
         return;
     }
 
-    auto scoreVibrato = [] (GPBeat::VibratoWTremBar vr) {
+    auto scoreVibrato = [](GPBeat::VibratoWTremBar vr) {
         if (vr == GPBeat::VibratoWTremBar::Slight) {
             return SymId::wiggleSawtooth;
         } else {
@@ -1941,7 +1941,7 @@ void GPConverter::addFadding(const GPBeat* beat, ChordRest* cr)
         return;
     }
 
-    auto scoreFadding = [] (const auto& fad) {
+    auto scoreFadding = [](const auto& fad) {
         if (fad == GPBeat::Fadding::FadeIn) {
             return SymId::guitarFadeIn;
         } else if (fad == GPBeat::Fadding::FadeOut) {
@@ -1966,7 +1966,7 @@ void GPConverter::addHairPin(const GPBeat* beat, ChordRest* cr)
         return;
     }
 
-    auto scoreHairpin = [] (const auto& h) {
+    auto scoreHairpin = [](const auto& h) {
         if (h == GPBeat::Hairpin::Crescendo) {
             return HairpinType::CRESC_HAIRPIN;
         } else {
@@ -2010,7 +2010,7 @@ void GPConverter::addPickStroke(const GPBeat* beat, ChordRest* cr)
         return;
     }
 
-    auto scorePickStroke = [] (const auto& p) {
+    auto scorePickStroke = [](const auto& p) {
         if (p == GPBeat::PickStroke::Up) {
             return SymId::stringsUpBow;
         } else {
@@ -2031,7 +2031,7 @@ void GPConverter::addTremolo(const GPBeat* beat, ChordRest* cr)
         return;
     }
 
-    auto scoreTremolo = [] (const GPBeat::Tremolo tr) {
+    auto scoreTremolo = [](const GPBeat::Tremolo tr) {
         if (tr.denumerator == 2) {
             return TremoloType::R8;
         }
@@ -2079,7 +2079,7 @@ void GPConverter::addBarre(const GPBeat* beat, ChordRest* cr)
         return;
     }
 
-    auto barreType = [] (const GPBeat::Barre& barre) {
+    auto barreType = [](const GPBeat::Barre& barre) {
         if (barre.string == 1) {
             return QString("1/2B ");
         } else {
