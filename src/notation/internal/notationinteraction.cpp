@@ -2389,6 +2389,7 @@ void NotationInteraction::deleteSelection()
     apply();
 
     notifyAboutSelectionChanged();
+    notifyAboutNotationChanged();
 }
 
 void NotationInteraction::flipSelection()
