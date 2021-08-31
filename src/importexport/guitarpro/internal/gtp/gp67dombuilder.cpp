@@ -4,7 +4,6 @@
 
 #include "global/log.h"
 
-#include "gp67domfixer.h"
 
 namespace Ms {
 GP67DomBuilder::GP67DomBuilder()
@@ -66,8 +65,6 @@ void GP67DomBuilder::buildGPDomModel(QDomElement* qdomElem)
     buildGPMasterTracks(&masterTrack);
     buildGPAudioTracks(&eachTrack);
     buildGPTracks(&eachTrack);
-
-    GP67DomFixer::fixGPDomModel(_gpDom.get());
 }
 
 std::unique_ptr<GPDomModel> GP67DomBuilder::getGPDomModel()
