@@ -154,6 +154,15 @@ MixerChannelItem* MixerPanelModel::buildTrackChannelItem(const audio::TrackSeque
                << ", " << text;
     });
 
+    playback()->tracks()->trackName(sequenceId, trackId)
+    .onResolve(this, [item](const TrackName& trackName) {
+        item->setTitle(QString::fromStdString(trackName));
+    })
+    .onReject(this, [](int errCode, std::string text) {
+        LOGE() << "unable to get track name, error code: " << errCode
+               << ", " << text;
+    });
+
     playback()->audioOutput()->outputParams(sequenceId, trackId)
     .onResolve(this, [item](AudioOutputParams outParams) {
         item->loadOutputParams(outParams);
