@@ -35,6 +35,7 @@
 #include "ui/imainwindow.h"
 #include "async/asyncable.h"
 #include "internal/istartupscenario.h"
+#include "internal/idockwindow.h"
 
 namespace KDDockWidgets {
 class MainWindowBase;
@@ -47,7 +48,7 @@ class DockToolBarHolder;
 class DockPanelHolder;
 class DockPage;
 class DockBase;
-class DockWindow : public QQuickItem, public async::Asyncable
+class DockWindow : public QQuickItem, public IDockWindow, public async::Asyncable
 {
     Q_OBJECT
 
@@ -74,9 +75,14 @@ public:
 
     Q_INVOKABLE void loadPage(const QString& uri);
 
-    bool isDockOpen(const QString& dockName) const;
-    void toggleDock(const QString& dockName);
-    void setDockOpen(const QString& dockName, bool open);
+    //! IDockWindow
+    void setToolBarOrientation(const QString& toolBarName, framework::Orientation orientation) override;
+    void showDockingHolder(const QPoint& globalPos, DockingHolderType type) override;
+    void hideAllDockingHolders() override;
+
+    bool isDockOpen(const QString& dockName) const override;
+    void toggleDock(const QString& dockName) override;
+    void setDockOpen(const QString& dockName, bool open) override;
 
 public slots:
     void setMainToolBarDockingHolder(DockToolBarHolder* mainToolBarDockingHolder);
@@ -116,10 +122,12 @@ private:
     void initDocks(DockPage* page);
 
     DockToolBarHolder* resolveToolbarDockingHolder(const QPoint& localPos) const;
+    void showToolBarDockingHolder(const QPoint& globalPos);
     void hideCurrentToolBarDockingHolder();
     bool isMouseOverCurrentToolBarDockingHolder(const QPoint& mouseLocalPos) const;
 
     DockPanelHolder* resolvePanelDockingHolder(const QPoint& localPos) const;
+    void showPanelDockingHolder(const QPoint& globalPos);
     void hideCurrentPanelDockingHolder();
     bool isMouseOverCurrentPanelDockingHolder(const QPoint& mouseLocalPos) const;
 

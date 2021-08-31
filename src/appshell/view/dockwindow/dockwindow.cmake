@@ -42,6 +42,7 @@ set (DOCKWINDOW_SRC
     ${CMAKE_CURRENT_LIST_DIR}/docktoolbarholder.h
     ${CMAKE_CURRENT_LIST_DIR}/dockcentral.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dockcentral.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/idockwindow.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/dockbase.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/dockbase.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/dropindicators.cpp
