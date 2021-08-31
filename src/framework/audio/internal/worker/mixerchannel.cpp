@@ -73,7 +73,7 @@ void MixerChannel::setOutputParams(const AudioOutputParams& params)
     m_fxProcessors.clear();
     m_fxProcessors = fxResolver()->resolveFxList(m_trackId, params.fxParams);
 
-    for (IFxProcessorPtr fx : m_fxProcessors) {
+    for (IFxProcessorPtr& fx : m_fxProcessors) {
         fx->setSampleRate(m_sampleRate);
     }
 }
@@ -145,6 +145,9 @@ void MixerChannel::process(float* buffer, unsigned int sampleCount)
     m_audioSource->process(buffer, sampleCount);
 
     for (IFxProcessorPtr fx : m_fxProcessors) {
+        if (!fx->active()) {
+            continue;
+        }
         fx->process(buffer, sampleCount);
     }
 
