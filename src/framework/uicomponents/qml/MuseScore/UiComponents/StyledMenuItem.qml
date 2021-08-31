@@ -44,7 +44,8 @@ ListItemBlank {
 
     signal handleMenuItem(var item)
 
-    signal subMenuShowed()
+    signal openSubMenuRequested(var menu)
+    signal subMenuShowed(var menu)
     signal subMenuClosed()
 
     signal requestParentItemActive()
@@ -159,10 +160,12 @@ ListItemBlank {
                 subMenuClosed()
             })
 
-            subMenuShowed()
+            menu.opened.connect(function() {
+                itemPrv.showedSubMenu = menu
+                subMenuShowed(menu)
+            })
 
-            itemPrv.showedSubMenu = menu
-            menu.toggleOpened()
+            root.openSubMenuRequested(menu)
         }
 
         function closeSubMenu() {
