@@ -270,7 +270,7 @@ Item {
 
                     onHandleMenuItem: {
                         if (root.resourceItemModel) {
-                            root.resourceItemModel.handleMenuItem(itemId)
+                            root.resourceItemModel.handleMenuItem(item.id)
                         }
                     }
 
