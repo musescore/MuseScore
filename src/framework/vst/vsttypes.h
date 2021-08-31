@@ -63,14 +63,23 @@ enum class VstPluginType {
     Fx
 };
 
-struct VstPluginMeta {
-    PluginId id;
-    VstPluginType type = VstPluginType::Undefined;
-    std::string name;
-    std::string path;
-};
-
-using VstPluginMetaList = std::vector<VstPluginMeta>;
+/// @see https://steinbergmedia.github.io/vst3_doc/vstinterfaces/namespaceSteinberg_1_1Vst_1_1PlugType.html
+namespace PluginCategory {
+static const std::string Analyzer = "Analyzer";
+static const std::string Delay = "Delay";
+static const std::string Distortion = "Distortion";
+static const std::string Dynamics = "Dynamics";
+static const std::string Equalizer = "EQ";
+static const std::string Filter = "Filter";
+static const std::string Generator = "Generator";
+static const std::string Mastering = "Mastering";
+static const std::string Modulation = "Modulation";
+static const std::string PitchShift = "Pitch Shift";
+static const std::string Restoration = "Restoration";
+static const std::string Reverb = "Reverb";
+static const std::string Surround = "Surround";
+static const std::string Tools = "Tools";
+}
 
 using VstEventList = Steinberg::Vst::EventList;
 using VstEvent = Steinberg::Vst::Event;
