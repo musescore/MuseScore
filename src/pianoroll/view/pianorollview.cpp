@@ -752,9 +752,9 @@ void PianorollView::mouseReleaseEvent(QMouseEvent* event)
     else {
           //This was just a click, not a drag
         switch (m_tool) {
-//          case SELECT:
-//                handleSelectionClick();
-//                break;
+        case PianorollTool::SELECT:
+                handleSelectionClick();
+                break;
 //          case CHANGE_LENGTH:
 //                changeChordLength(_mouseDownPos);
 //                break;
@@ -829,7 +829,7 @@ void PianorollView::mouseMoveEvent(QMouseEvent* event)
     {
         switch (m_tool) {
         case PianorollTool::SELECT:
-        case PianorollTool::EDIT:
+        case PianorollTool::ADD:
         case PianorollTool::CUT:
 //                scene()->update();
             update();
@@ -842,23 +842,6 @@ void PianorollView::mouseMoveEvent(QMouseEvent* event)
         }
     }
 
-
-    //Update mouse tracker
-//    QPointF p(mapToScene(event->pos()));
-//    int pitch = static_cast<int>((m_noteHeight * 128 - p.y()) / m_noteHeight);
-//    emit pitchChanged(pitch);
-
-//    double tick = pixelXToWholeNote(p.x());
-//    if (tick < 0)
-//    {
-//        tick = 0;
-//        trackingPos.setTick(tick);
-//        trackingPos.setInvalid();
-//    }
-//    else
-//        trackingPos.setTick(tick);
-
-//    emit trackingPosChanged(trackingPos);
 }
 
 Ms::Staff* PianorollView::activeStaff()
@@ -890,11 +873,17 @@ bool PianorollView::intersects(NoteBlock* block, int pixX, int pixY)
 bool PianorollView::intersectsPixel(NoteBlock* block, int pixX, int pixY, int width, int height)
 {
     QRect hit(pixX, pixY, width, height);
+    
 
     for (Ms::NoteEvent& e : block->note->playEvents())
     {
         QRect bounds = boundingRect(block->note, &e);
-        if (bounds.intersects(hit))
+        if (width == 0 || height == 0)
+        {
+            if (bounds.contains(pixX, pixY))
+                return true;
+        }
+        else if (bounds.intersects(hit))
         {
             return true;
         }
@@ -915,7 +904,7 @@ NoteBlock* PianorollView::pickNote(int pixX, int pixY)
 }
 
 
-void PianorollView::selectNotes(double startTick, double endTick, int lowPitch, int highPitch, NoteSelectType selType)
+void PianorollView::selectNotes(double startTick, double endTick, double lowPitch, double highPitch, NoteSelectType selType)
 {
     int startPixX = wholeNoteToPixelX(startTick);
     int endPixX = wholeNoteToPixelX(endTick);
@@ -926,13 +915,13 @@ void PianorollView::selectNotes(double startTick, double endTick, int lowPitch, 
     //score->masterScore()->cmdState().reset();      // DEBUG: should not be necessary
     curScore->startCmd();
 
-//    QList<PianoItem*> oldSel;
     std::vector<NoteBlock*> oldSel;
-    for (int i = 0; i < m_noteList.size(); ++i) {
-          NoteBlock* pi = m_noteList[i];
-          if (pi->note->selected())
-                oldSel.push_back(pi);
-          }
+    for (int i = 0; i < m_noteList.size(); ++i)
+    {
+        NoteBlock* pi = m_noteList[i];
+        if (pi->note->selected())
+            oldSel.push_back(pi);
+    }
 
     Ms::Selection& selection = curScore->selection();
     selection.deselectAll();
@@ -942,7 +931,6 @@ void PianorollView::selectNotes(double startTick, double endTick, int lowPitch, 
         NoteBlock* pi = m_noteList.at(i);
 
         bool inBounds = intersectsPixel(pi, startPixX, lowPixY, endPixX - startPixX, highPixY - lowPixY);
-//          bool inBounds = pi->intersects(startTick, endTick, highPitch, lowPitch);
 
         bool sel;
         bool isInList = std::find(oldSel.begin(), oldSel.end(), pi) != oldSel.end();
@@ -952,36 +940,53 @@ void PianorollView::selectNotes(double startTick, double endTick, int lowPitch, 
             sel = inBounds;
             break;
         case NoteSelectType::XOR:
-//            sel = inBounds != oldSel.contains(pi);
             sel = inBounds != isInList;
             break;
         case NoteSelectType::ADD:
             sel = inBounds || isInList;
-//            sel = inBounds || oldSel.contains(pi);
             break;
         case NoteSelectType::SUBTRACT:
             sel = !inBounds && isInList;
-//            sel = !inBounds && oldSel.contains(pi);
             break;
         case NoteSelectType::FIRST:
             sel = inBounds && selection.elements().empty();
             break;
         }
 
-
         if (sel)
             selection.add(pi->note);
     }
 
-//    for (MuseScoreView* view : score->getViewer())
-//          view->updateAll();
+    for (Ms::MuseScoreView* view : curScore->getViewer())
+          view->updateAll();
 
-//    scene()->update();
     curScore->setUpdateAll();
     curScore->update();
     curScore->endCmd();
 
     update();
+}
+
+void PianorollView::handleSelectionClick()
+{
+    int modifiers = QGuiApplication::keyboardModifiers();
+    bool bnShift = modifiers & Qt::ShiftModifier;
+    bool bnCtrl = modifiers & Qt::ControlModifier;
+    NoteSelectType selType = bnShift ? (bnCtrl ? NoteSelectType::SUBTRACT : NoteSelectType::XOR)
+        : (bnCtrl ? NoteSelectType::ADD : NoteSelectType::REPLACE);
+
+    Ms::Score* curScore = score();
+
+    double pickTick = pixelXToWholeNote((int)m_mouseDownPos.x());
+    double pickPitch = pixelYToPitch(m_mouseDownPos.y());
+
+    if (selType == NoteSelectType::REPLACE)
+        selType = NoteSelectType::FIRST;
+
+//        mscore->play(pn->note());
+//        curScore->setPlayNote(false);
+
+    selectNotes(pickTick, pickTick, pickPitch, pickPitch, selType);
 }
 
 
