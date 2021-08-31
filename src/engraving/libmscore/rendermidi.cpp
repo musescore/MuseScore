@@ -692,7 +692,7 @@ static void renderHarmony(EventMap* events, Measure const* m, Harmony* h, int ti
     return;
 
     events->registerChannel(channel->channel());
-    if (!staff->primaryStaff()) {
+    if (!staff->isPrimaryStaff()) {
         return;
     }
 
@@ -760,7 +760,7 @@ void MidiRenderer::collectMeasureEventsSimple(EventMap* events, Measure const* m
 
         for (int track = strack; track < etrack; ++track) {
             // skip linked staves, except primary
-            if (!m->score()->staff(track / VOICES)->primaryStaff()) {
+            if (!m->score()->staff(track / VOICES)->isPrimaryStaff()) {
                 track += VOICES - 1;
                 continue;
             }
@@ -857,7 +857,7 @@ void MidiRenderer::collectMeasureEventsDefault(EventMap* events, Measure const* 
         for (int track = strack; track < etrack; ++track) {
             // Skip linked staves, except primary
             Staff* st1 = m->score()->staff(track / VOICES);
-            if (!st1->primaryStaff()) {
+            if (!st1->isPrimaryStaff()) {
                 track += VOICES - 1;
                 continue;
             }
@@ -2396,7 +2396,7 @@ void Score::createPlayEvents(Measure const* start, Measure const* const end)
             }
 
             // skip linked staves, except primary
-            if (!m->score()->staff(track / VOICES)->primaryStaff()) {
+            if (!m->score()->staff(track / VOICES)->isPrimaryStaff()) {
                 continue;
             }
             for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {

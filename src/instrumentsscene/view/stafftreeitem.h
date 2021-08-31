@@ -37,6 +37,9 @@ public:
     void init(const notation::Staff* masterStaff);
 
     bool isSelectable() const override;
+
+private:
+    bool m_isInited = false;
 };
 }
 

@@ -44,6 +44,7 @@
 #include "bracketItem.h"
 #include "chord.h"
 #include "masterscore.h"
+#include "excerpt.h"
 
 // #define DEBUG_CLEFS
 
@@ -296,12 +297,65 @@ std::array<bool, VOICES> Staff::visibilityVoices() const
 
 bool Staff::isVoiceVisible(int voice) const
 {
+    if (voice < 0 || voice >= VOICES) {
+        return false;
+    }
+
     return _visibilityVoices[voice];
 }
 
 void Staff::setVoiceVisible(int voice, bool visible)
 {
+    if (voice < 0 || voice >= VOICES) {
+        return;
+    }
+
     _visibilityVoices[voice] = visible;
+}
+
+bool Staff::canDisableVoice() const
+{
+    auto voices = visibilityVoices();
+    int countOfVisibleVoices = 0;
+    for (size_t i = 0; i < voices.size(); ++i) {
+        if (voices[i]) {
+            countOfVisibleVoices++;
+        }
+    }
+
+    return countOfVisibleVoices > 1;
+}
+
+void Staff::updateVisibilityVoices()
+{
+    if (!score()->excerpt()) {
+        return;
+    }
+
+    auto tracks = score()->excerpt()->tracks();
+    if (tracks.empty()) {
+        _visibilityVoices = { true, true, true, true };
+        return;
+    }
+
+    Staff* masterStaff = this->masterScore()->staffById(id());
+    if (!masterStaff) {
+        return;
+    }
+
+    std::array<bool, VOICES> voices{ false, false, false, false };
+
+    int voiceIndex = 0;
+    for (int voice = 0; voice < VOICES; voice++) {
+        QList<int> masterStaffTracks = tracks.values(masterStaff->idx() * VOICES + voice % VOICES);
+        bool isVoiceVisible = masterStaffTracks.contains(idx() * VOICES + voiceIndex % VOICES);
+        if (isVoiceVisible) {
+            voices[voice] = true;
+            voiceIndex++;
+        }
+    }
+
+    _visibilityVoices = voices;
 }
 
 //---------------------------------------------------------
@@ -1080,14 +1134,14 @@ void Staff::setSlashStyle(const Fraction& tick, bool val)
 }
 
 //---------------------------------------------------------
-//   primaryStaff
+//   isPrimaryStaff
 ///   if there are linked staves, the primary staff is
 ///   the one who is played back and it's not a tab staff
 ///   because we don't have enough information  to play
 ///   e.g ornaments. NOTE: it's not necessarily the top staff!
 //---------------------------------------------------------
 
-bool Staff::primaryStaff() const
+bool Staff::isPrimaryStaff() const
 {
     if (!_links) {
         return true;
@@ -1237,6 +1291,7 @@ void Staff::init(const Staff* s)
     _mergeMatchingRests = s->_mergeMatchingRests;
     _color             = s->_color;
     _userDist          = s->_userDist;
+    _visibilityVoices = s->_visibilityVoices;
 }
 
 ID Staff::id() const
@@ -1439,6 +1494,23 @@ QList<Staff*> Staff::staffList() const
         staffList.append(const_cast<Staff*>(this));
     }
     return staffList;
+}
+
+Staff* Staff::primaryStaff() const
+{
+    const Ms::LinkedElements* linkedElements = links();
+    if (!linkedElements) {
+        return nullptr;
+    }
+
+    for (auto linkedElement : *linkedElements) {
+        Staff* staff = toStaff(linkedElement);
+        if (staff && staff->isPrimaryStaff()) {
+            return staff;
+        }
+    }
+
+    return nullptr;
 }
 
 //---------------------------------------------------------

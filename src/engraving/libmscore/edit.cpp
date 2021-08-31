@@ -5241,7 +5241,7 @@ void Score::undoAddElement(Element* element)
                     const bool linkedPart  = linked && (staff != ostaff) && (staff->score() == ostaff->score());
                     const bool linkedScore = linked && (staff != ostaff) && (staff->score() != ostaff->score());
                     if (linkedPart && !linkedScore) {
-                        tr.append(staff->idx() * VOICES + mapping.value(track));
+                        tr.append(staff->idx() * VOICES + mapping.value(track) % VOICES);
                     } else if (!linkedPart && linkedScore) {
                         if ((track >> 2) != staffIdx) {
                             track += (staffIdx - (track >> 2)) * VOICES;
@@ -5626,7 +5626,7 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, const Fraction& tick)
                 const bool linkedScore = linked && (staff != ostaff) && (staff->score() != ostaff->score());
                 for (int track : mapping.values(strack)) {
                     if (linkedPart && !linkedScore) {
-                        tracks.append(staff->idx() * VOICES + mapping.value(track));
+                        tracks.append(staff->idx() * VOICES + mapping.value(track) % VOICES);
                     } else if (!linkedPart && linkedScore) {
                         if ((track >> 2) != staff->idx()) {
                             track += (staff->idx() - (track >> 2)) * VOICES;

@@ -267,7 +267,8 @@ public:
     void updateOttava();
 
     QList<Staff*> staffList() const;
-    bool primaryStaff() const;
+    Staff* primaryStaff() const;
+    bool isPrimaryStaff() const;
 
     qreal userDist() const { return _userDist; }
     void setUserDist(qreal val) { _userDist = val; }
@@ -296,6 +297,8 @@ public:
     std::array<bool, VOICES> visibilityVoices() const;
     bool isVoiceVisible(int voice) const;
     void setVoiceVisible(int voice, bool visible);
+    bool canDisableVoice() const;
+    void updateVisibilityVoices();
 
 #ifndef NDEBUG
     void dumpClefs(const char* title) const;
