@@ -311,7 +311,7 @@ std::unique_ptr<GPMasterBar> GP67DomBuilder::createGPMasterBar(QDomNode* masterB
         "XProperties", "DoubleBar"
     };
 
-    auto tripletFeelType = [] (auto&& str) {
+    auto tripletFeelType = [](auto&& str) {
         if (str == "Triplet8th") {
             return GPMasterBar::TripletFeelType::Triplet8th;
         }
@@ -388,7 +388,7 @@ std::pair<int, std::unique_ptr<GPBar> > GP67DomBuilder::createGPBar(QDomNode* ba
         "XProperties"
     };
 
-    auto clefType = [] (const QString& clef) {
+    auto clefType = [](const QString& clef) {
         if (clef == "C4") {
             return GPBar::ClefType::C4;
         } else if (clef == "C3") {
@@ -402,7 +402,7 @@ std::pair<int, std::unique_ptr<GPBar> > GP67DomBuilder::createGPBar(QDomNode* ba
         }
     };
 
-    auto ottaviaType = [] (const QString& ott) {
+    auto ottaviaType = [](const QString& ott) {
         if (ott == "8va") {
             return GPBar::OttaviaType::va8;
         } else if (ott == "15ma") {
@@ -415,7 +415,7 @@ std::pair<int, std::unique_ptr<GPBar> > GP67DomBuilder::createGPBar(QDomNode* ba
             return GPBar::OttaviaType::Regular;
         }
     };
-    auto simileMarkType = [] (const auto& str) {
+    auto simileMarkType = [](const auto& str) {
         if (str == "Simple") {
             return GPBar::SimileMark::Simple;
         } else if (str == "FirstOfDouble") {
@@ -501,7 +501,7 @@ std::pair<int, std::shared_ptr<GPBeat> > GP67DomBuilder::createGPBeat(QDomNode* 
         "Ottavia"
     };
 
-    auto dynamicType = [] (auto&& str) -> GPBeat::DynamicType {
+    auto dynamicType = [](auto&& str) -> GPBeat::DynamicType {
         if (str == "FFF") {
             return GPBeat::DynamicType::FFF;
         } else if (str == "FF") {
@@ -520,7 +520,7 @@ std::pair<int, std::shared_ptr<GPBeat> > GP67DomBuilder::createGPBeat(QDomNode* 
             return GPBeat::DynamicType::PPP;
         }
     };
-    auto legatoType = [] (const auto& origin, const auto& destination) {
+    auto legatoType = [](const auto& origin, const auto& destination) {
         if (origin == "true" && destination == "false") {
             return GPBeat::LegatoType::Start;
         } else if (origin == "true" && destination == "true") {
@@ -531,7 +531,7 @@ std::pair<int, std::shared_ptr<GPBeat> > GP67DomBuilder::createGPBeat(QDomNode* 
             return GPBeat::LegatoType::None;
         }
     };
-    auto arpeggioType = [] (const auto& arp) {
+    auto arpeggioType = [](const auto& arp) {
         if (arp == "Up") {
             return GPBeat::Arpeggio::Up;
         } else if (arp == "Down") {
@@ -539,7 +539,7 @@ std::pair<int, std::shared_ptr<GPBeat> > GP67DomBuilder::createGPBeat(QDomNode* 
         }
         return GPBeat::Arpeggio::None;
     };
-    auto graceNotes = [] (const auto& gn) {
+    auto graceNotes = [](const auto& gn) {
         if (gn == "OnBeat") {
             return GPBeat::GraceNotes::OnBeat;
         } else if (gn == "BeforeBeat") {
@@ -547,7 +547,7 @@ std::pair<int, std::shared_ptr<GPBeat> > GP67DomBuilder::createGPBeat(QDomNode* 
         }
         return GPBeat::GraceNotes::None;
     };
-    auto faddingType = [] (const auto& str) {
+    auto faddingType = [](const auto& str) {
         if (str == "FadeIn") {
             return GPBeat::Fadding::FadeIn;
         } else if (str == "FadeOut") {
@@ -557,7 +557,7 @@ std::pair<int, std::shared_ptr<GPBeat> > GP67DomBuilder::createGPBeat(QDomNode* 
         }
         return GPBeat::Fadding::None;
     };
-    auto hairpinType = [] (const auto& str) {
+    auto hairpinType = [](const auto& str) {
         if (str == "Crescendo") {
             return GPBeat::Hairpin::Crescendo;
         } else if (str == "Decrescendo") {
@@ -565,7 +565,7 @@ std::pair<int, std::shared_ptr<GPBeat> > GP67DomBuilder::createGPBeat(QDomNode* 
         }
         return GPBeat::Hairpin::None;
     };
-    auto wahType = [] (const auto& str) {
+    auto wahType = [](const auto& str) {
         if (str == "Open") {
             return GPBeat::Wah::Open;
         } else if (str == "Closed") {
@@ -650,7 +650,7 @@ std::pair<int, std::shared_ptr<GPBeat> > GP67DomBuilder::createGPBeat(QDomNode* 
 
 std::pair<int, std::shared_ptr<GPNote> > GP67DomBuilder::createGPNote(QDomNode* noteNode)
 {
-    auto tieType = [] (const QString& origin, const QString& destination) ->GPNote::TieType {
+    auto tieType = [](const QString& origin, const QString& destination) ->GPNote::TieType {
         if (origin == "true" && destination == "false") {
             return GPNote::TieType::Start;
         } else if (origin == "true" && destination == "true") {
@@ -661,7 +661,7 @@ std::pair<int, std::shared_ptr<GPNote> > GP67DomBuilder::createGPNote(QDomNode* 
             return GPNote::TieType::None;
         }
     };
-    auto vibratoType = [] (const auto& str) {
+    auto vibratoType = [](const auto& str) {
         if (str == "Wide") {
             return GPNote::VibratoType::Wide;
         } else if (str == "Slight") {
@@ -670,7 +670,7 @@ std::pair<int, std::shared_ptr<GPNote> > GP67DomBuilder::createGPNote(QDomNode* 
             return GPNote::VibratoType::None;
         }
     };
-    auto ornametType = [] (const auto& str) {
+    auto ornametType = [](const auto& str) {
         if (str == "UpperMordent") {
             return GPNote::Ornament::UpperMordent;
         } else if (str == "LowerMordent") {
@@ -733,7 +733,7 @@ std::pair<int, std::shared_ptr<GPNote> > GP67DomBuilder::createGPNote(QDomNode* 
 
 std::pair<int, std::shared_ptr<GPRhytm> > GP67DomBuilder::createGPRhythm(QDomNode* rhythmNode)
 {
-    auto rhythmType = [] (const QString& str) -> GPRhytm::RhytmType {
+    auto rhythmType = [](const QString& str) -> GPRhytm::RhytmType {
         if (str == "Whole") {
             return GPRhytm::RhytmType::Whole;
         } else if (str == "Half") {
@@ -949,7 +949,7 @@ std::unique_ptr<GPNote::Bend> GP67DomBuilder::createBend(QDomNode* propertyNode)
 
 void GP67DomBuilder::readHarmonic(QDomNode* propertyNode, GPNote* note) const
 {
-    auto harmonicType = [] (const auto& str) {
+    auto harmonicType = [](const auto& str) {
         if (str == "Artificial") {
             return GPNote::Harmonic::Type::Artificial;
         } else if (str == "Semi") {
@@ -975,13 +975,13 @@ void GP67DomBuilder::readHarmonic(QDomNode* propertyNode, GPNote* note) const
 
 void GP67DomBuilder::readBeatProperties(const QDomNode& propertiesNode, GPBeat* beat) const
 {
-    auto brushType = [] (const auto& brush) {
+    auto brushType = [](const auto& brush) {
         if (brush == "Down") {
             return GPBeat::Brush::Down;
         }
         return GPBeat::Brush::Up;
     };
-    auto vibratoType = [] (const auto& str) {
+    auto vibratoType = [](const auto& str) {
         if (str == "Wide") {
             return GPBeat::VibratoWTremBar::Wide;
         } else if (str == "Slight") {
@@ -990,7 +990,7 @@ void GP67DomBuilder::readBeatProperties(const QDomNode& propertiesNode, GPBeat* 
             return GPBeat::VibratoWTremBar::None;
         }
     };
-    auto rasgueadoType = [] (const auto& str) {
+    auto rasgueadoType = [](const auto& str) {
         if (str == "ii_1") {
             return GPBeat::Rasgueado::II_1;
         } else if (str == "mi_1") {
@@ -1029,7 +1029,7 @@ void GP67DomBuilder::readBeatProperties(const QDomNode& propertiesNode, GPBeat* 
             return GPBeat::Rasgueado::None;
         }
     };
-    auto pickStrokeType = [] (const auto& str) {
+    auto pickStrokeType = [](const auto& str) {
         if (str == "Up") {
             return GPBeat::PickStroke::Up;
         } else if (str == "Down") {
@@ -1169,7 +1169,7 @@ std::vector<int> GP67DomBuilder::readEnding(QDomNode* endNode) const
 
 GPMasterBar::Repeat GP67DomBuilder::readRepeat(QDomNode* repeatNode) const
 {
-    auto repeatType = [] (const QString& start, const QString& end) {
+    auto repeatType = [](const QString& start, const QString& end) {
         if (start == "true" && end == "false") {
             return GPMasterBar::Repeat::Type::Start;
         } else if (start == "false" && end == "true") {
@@ -1212,7 +1212,7 @@ GP67DomBuilder::readMasterBarSection(const QDomNode& sectionNode) const
 
 std::vector<GPMasterBar::Fermata> GP67DomBuilder::readFermatas(QDomNode* fermatasNode) const
 {
-    auto fermataType = [] (const QString& str) {
+    auto fermataType = [](const QString& str) {
         if (str == "Short") {
             return GPMasterBar::Fermata::Type::Short;
         } else if (str == "Medium") {
