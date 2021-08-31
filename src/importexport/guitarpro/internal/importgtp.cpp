@@ -30,6 +30,7 @@
 #include "importptb.h"
 
 #include "engraving/infrastructure/io/xml.h"
+#include "realfn.h"
 
 #include <libmscore/factory.h>
 #include <libmscore/measurebase.h>
@@ -1338,24 +1339,33 @@ int GuitarPro::harmonicOvertone(Note* note, float harmonicValue, int harmonicTyp
 {
     int result{ 0 };
 
-    if (harmonicValue == 12.0f) {
+    if (mu::RealIsEqual(harmonicValue, 12.0f)) {
         result = 12;
-    } else if (harmonicValue == 7.0f || harmonicValue == 19.0f) {
+    } else if (mu::RealIsEqual(harmonicValue, 7.0f) || mu::RealIsEqual(harmonicValue, 19.0f)) {
         result = 19;
-    } else if (harmonicValue == 5.0f || harmonicValue == 24.0f) {
+    } else if (mu::RealIsEqual(harmonicValue, 5.0f) || mu::RealIsEqual(harmonicValue, 24.0f)) {
         result = 24;
-    } else if (harmonicValue == 3.9f || harmonicValue == 4.0f || harmonicValue == 9.0f || harmonicValue == 16.0f) {
+    } else if (mu::RealIsEqual(harmonicValue, 3.9f)
+               || mu::RealIsEqual(harmonicValue, 4.0f)
+               || mu::RealIsEqual(harmonicValue, 9.0f)
+               || mu::RealIsEqual(harmonicValue, 16.0f)) {
         result = 28;
-    } else if (harmonicValue == 3.2f) {
+    } else if (mu::RealIsEqual(harmonicValue, 3.2f)) {
         result = 31;
-    } else if (harmonicValue == 2.7f || harmonicValue == 5.8f || harmonicValue == 9.6f || harmonicValue == 14.7f
-               || harmonicValue == 21.7f) {
+    } else if (mu::RealIsEqual(harmonicValue, 2.7f)
+               || mu::RealIsEqual(harmonicValue, 5.8f)
+               || mu::RealIsEqual(harmonicValue, 9.6f)
+               || mu::RealIsEqual(harmonicValue, 14.7f)
+               || mu::RealIsEqual(harmonicValue, 21.7f)) {
         result = 34;
-    } else if (harmonicValue == 2.3f || harmonicValue == 2.4f || harmonicValue == 8.2f || harmonicValue == 17.0f) {
+    } else if (mu::RealIsEqual(harmonicValue, 2.3f)
+               || mu::RealIsEqual(harmonicValue, 2.4f)
+               || mu::RealIsEqual(harmonicValue, 8.2f)
+               || mu::RealIsEqual(harmonicValue, 17.0f)) {
         result = 36;
-    } else if (harmonicValue == 2.0f) {
+    } else if (mu::RealIsEqual(harmonicValue, 2.0f)) {
         result = 38;
-    } else if (harmonicValue == 1.8f) {
+    } else if (mu::RealIsEqual(harmonicValue, 1.8f)) {
         result = 40;
     }
 
