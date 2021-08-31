@@ -1334,7 +1334,6 @@ bool GuitarPro1::read(QFile* fp)
     return true;
 }
 
-
 int GuitarPro::harmonicOvertone(Note* note, float harmonicValue, int harmonicType)
 {
     int result{ 0 };
