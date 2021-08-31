@@ -165,6 +165,7 @@ private:
     bool intersects(NoteBlock* block, int pixX, int pixY);
     bool intersectsPixel(NoteBlock* block, int x, int y, int width, int height);
 
+    void insertNote(int modifiers);
     void eraseNote(const QPointF& pos);
 
     void pasteNotes(const QString& copiedNotes, Ms::Fraction pasteStartTick, int pitchOffset, bool xIsOffset);
@@ -199,6 +200,10 @@ private:
     int m_subdivision = 0;
     PianorollTool m_tool = PianorollTool::SELECT;
     int m_barPattern = 0;
+
+
+    int m_editNoteVoice = 0;  //Voice to use when adding notes
+    Ms::Fraction m_editNoteLength = Ms::Fraction(1, 4);  //Length of note used when adding notes
 
     bool m_mouseDown;
     bool m_dragStarted;
