@@ -158,6 +158,8 @@ private:
 
 //    void drawChord(QPainter* p, Ms::Chord* chrd, int voice, bool active);
     void drawNoteBlock(QPainter* p, NoteBlock* block);
+    void drawDraggedNotes(QPainter* painter);
+    void drawDraggedNote(QPainter* painter, Ms::Fraction startTick, Ms::Fraction frac, int pitch, int track, QColor color);
 
     NoteBlock* pickNote(int pixX, int pixY);
     bool intersects(NoteBlock* block, int pixX, int pixY);
