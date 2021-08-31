@@ -32,11 +32,13 @@ SynthsSettingsModel::SynthsSettingsModel(QObject* parent)
 
 void SynthsSettingsModel::load()
 {
-    playback()->tracks()->availableInputResources(AudioSourceType::Fluid).onResolve(this, [this](const AudioResourceIdList& resources) {
+    playback()->tracks()->availableInputResources().onResolve(this, [this](const AudioResourceMetaList& resources) {
         QString name("Fluid");
 
-        for (const AudioResourceId& resourceId : resources) {
-            m_avalaibleSoundFonts[name] << QString::fromStdString(resourceId);
+        for (const auto& meta : resources) {
+            if (meta.type == AudioResourceType::FluidSoundfont) {
+                m_avalaibleSoundFonts[name] << QString::fromStdString(meta.id);
+            }
         }
 
         emit avalaibleChanged(name);

@@ -42,6 +42,7 @@ public:
     virtual RetVal<TrackId> addTrack(const std::string& trackName, const midi::MidiData& midiData, const AudioParams& params) = 0;
     virtual RetVal<TrackId> addTrack(const std::string& trackName, io::Device* device, const AudioParams& params) = 0;
 
+    virtual TrackName trackName(const TrackId id) const = 0;
     virtual TrackIdList trackIdList() const = 0;
 
     virtual Ret removeTrack(const TrackId id) = 0;

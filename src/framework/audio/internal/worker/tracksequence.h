@@ -48,6 +48,7 @@ public:
     RetVal<TrackId> addTrack(const std::string& trackName, const midi::MidiData& midiData, const AudioParams& params) override;
     RetVal<TrackId> addTrack(const std::string& trackName, io::Device* device, const AudioParams& params) override;
 
+    TrackName trackName(const TrackId id) const override;
     TrackIdList trackIdList() const override;
 
     Ret removeTrack(const TrackId id) override;
