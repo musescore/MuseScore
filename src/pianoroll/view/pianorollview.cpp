@@ -796,24 +796,15 @@ void PianorollView::mouseReleaseEvent(QMouseEvent* event)
         case PianorollTool::SELECT:
                 handleSelectionClick();
                 break;
-//          case CHANGE_LENGTH:
-//                changeChordLength(_mouseDownPos);
-//                break;
           case PianorollTool::ERASE:
                 eraseNote(m_mouseDownPos);
                 break;
           case PianorollTool::ADD:
                 insertNote(modifiers);
                 break;
-//          case APPEND_NOTE:
-//                appendNoteToChord(_mouseDownPos);
-//                break;
-//          case CUT_CHORD:
-//                cutChord(_mouseDownPos);
-//                break;
-//          case TIE:
-//                toggleTie(_mouseDownPos);
-//                break;
+          case PianorollTool::CUT:
+                cutChord(m_mouseDownPos);
+                break;
         default:
             break;
         }
@@ -935,6 +926,44 @@ void PianorollView::insertNote(int modifiers)
 
         addNote(insertPosition, noteLen, pickPitch, track);
 
+        curScore->endCmd();
+    }
+
+    buildNoteData();
+    update();
+}
+
+void PianorollView::cutChord(const QPointF& pos)
+{
+    Ms::Score* curScore = score();
+    Ms::Staff* staff = activeStaff();
+
+    double pickTick = pixelXToWholeNote(pos.x());
+    double pickPitch = pixelYToPitch(pos.y());
+    NoteBlock *pn = pickNote(pickTick, pickPitch);
+
+    int voice = pn ? pn->note->voice() : m_editNoteVoice;
+
+    //Find best chord to add to
+    int track = staff->idx() * VOICES + voice;
+
+    Ms::Fraction insertPosition = roundDownToSubdivision(pickTick);
+
+    Ms::Segment* seg = curScore->tick2segment(insertPosition);
+    curScore->expandVoice(seg, track);
+
+    Ms::ChordRest* e = curScore->findCR(insertPosition, track);
+    if (e && !e->tuplet() && m_tuplet == 1)
+    {
+        curScore->startCmd();
+        Ms::Fraction startTick = e->tick();
+
+        if (insertPosition != startTick)
+        {
+            Ms::ChordRest* cr0;
+            Ms::ChordRest* cr1;
+            cutChordRest(e, track, insertPosition, cr0, cr1);
+        }
         curScore->endCmd();
     }
 
@@ -1195,17 +1224,12 @@ void PianorollView::finishNoteGroupDrag()
     Ms::Measure* m = curScore->tick2measure(pos);
 
     Ms::Fraction timeSig = m->timesig();
-    int beatsInBar = timeSig.numerator();
+    int noteWithBeat = timeSig.denominator();
 
-//    Ms::SigEvent& sig = curScore->sigmap()->timesig(pos);
-//    int beatsInBar = sig.timesig().numerator();
-
-//    Ms::Pos barPos(score->tempomap(), score->sigmap(), pixelXToTick(m_lastMousePos.x()), Ms::TType::TICKS);
-//    int beatsInBar = barPos.timesig().timesig().numerator();
 
     //Number of smaller pieces the beat is divided into
     int subbeats = m_tuplet * (1 << m_subdivision);
-    int divisions = beatsInBar * subbeats;
+    int divisions = noteWithBeat * subbeats;
 
     //Round down to nearest division
     double dragToTick = pixelXToWholeNote(m_lastMousePos.x());
@@ -1216,18 +1240,9 @@ void PianorollView::finishNoteGroupDrag()
     Ms::Fraction pasteTickOffset(floor(offsetTicks * divisions), divisions);
 
 
-
-//    QPointF offset = m_lastMousePos - m_mouseDownPos;
-
-//    Ms::Fraction tickOffset = Ms::Fraction::fromTicks(offset.x() / _xZoom);
-//    //Round down to nearest division
-//    int numDiv = (int)floor((tickOffset.numerator() * divisions / (double)tickOffset.denominator()));
-//    Ms::Fraction pasteTickOffset(numDiv, divisions);
-
     int dragToPitch = pixelYToPitch(m_lastMousePos.y());
     int startPitch = pixelYToPitch(m_mouseDownPos.y());
 
-//    int pitchOffset = (int)(-offset.y() / m_noteHeight);
     int pitchOffset = dragToPitch - startPitch;
 
 
