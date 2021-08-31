@@ -28,8 +28,8 @@
 #include <QObject>
 #include <QStack>
 
-namespace mu::dock {
-class MainWindowProvider : public QObject, public ui::IMainWindow
+namespace mu::ui {
+class MainWindowProvider : public QObject, public IMainWindow
 {
     Q_OBJECT
 
@@ -56,18 +56,6 @@ public:
     void toggleFullScreen() override;
     const QScreen* screen() const override;
 
-    void requestChangeToolBarOrientation(const QString& toolBarName, framework::Orientation orientation) override;
-    async::Channel<QString, framework::Orientation> changeToolBarOrientationRequested() const override;
-
-    void requestShowToolBarDockingHolder(const QPoint& globalPos) override;
-    async::Channel<QPoint> showToolBarDockingHolderRequested() const override;
-
-    void requestShowPanelDockingHolder(const QPoint& globalPos) override;
-    async::Channel<QPoint> showPanelDockingHolderRequested() const override;
-
-    void requestHideAllDockingHolders() override;
-    async::Notification hideAllDockingHoldersRequested() const override;
-
 signals:
     void windowChanged();
     void filePathChanged();
@@ -85,10 +73,6 @@ private slots: // Should only be used from QML
 
 private:
     QStack<QWindow*> m_windows;
-    async::Channel<QString, framework::Orientation> m_dockOrientationChanged;
-    async::Channel<QPoint> m_showToolBarDockingHolderRequested;
-    async::Channel<QPoint> m_showPanelDockingHolderRequested;
-    async::Notification m_hideAllHoldersRequested;
 };
 }
 

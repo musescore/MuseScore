@@ -34,10 +34,13 @@
 
 #ifdef Q_OS_MAC
 #include "internal/platform/macos/macosplatformtheme.h"
+#include "view/platform/macos/macosmainwindowprovider.h"
 #elif defined(Q_OS_WIN)
 #include "internal/platform/windows/windowsplatformtheme.h"
+#include "view/mainwindowprovider.h"
 #else
 #include "internal/platform/stub/stubplatformtheme.h"
+#include "view/mainwindowprovider.h"
 #endif
 
 #include "view/qmltooltip.h"
@@ -128,6 +131,12 @@ void UiModule::registerUiTypes()
     qmlRegisterType<NavigationControl>("MuseScore.Ui", 1, 0, "NavigationControl");
     qmlRegisterType<AccessibleItem>("MuseScore.Ui", 1, 0, "AccessibleItem");
     qmlRegisterUncreatableType<MUAccessible>("MuseScore.Ui", 1, 0, "MUAccessible", "Cannot create a enum type");
+
+#ifdef Q_OS_MAC
+    qmlRegisterType<MacOSMainWindowProvider>("MuseScore.Dock", 1, 0, "MainWindowProvider");
+#else
+    qmlRegisterType<MainWindowProvider>("MuseScore.Dock", 1, 0, "MainWindowProvider");
+#endif
 
     qmlRegisterType<InteractiveTestsModel>("MuseScore.Ui", 1, 0, "InteractiveTestsModel");
     qRegisterMetaType<TestDialog>("TestDialog");

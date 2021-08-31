@@ -25,9 +25,7 @@
 
 #include "modularity/ioc.h"
 #include "../docktypes.h"
-#include "ui/imainwindow.h"
-
-#include "modularity/ioc.h"
+#include "globaltypes.h"
 #include "ui/imainwindow.h"
 
 #include "thirdparty/KDDockWidgets/src/private/DropIndicatorOverlayInterface_p.h"
