@@ -71,11 +71,11 @@ Rectangle {
                     }
 
                     ToolButton {
-                        text: qsTr("Edit")
+                        text: qsTr("Add")
                         checkable: true
 
                         onClicked: {
-                            pianoView.tool = PianorollView.EDIT
+                            pianoView.tool = PianorollView.ADD
                         }
 
                     }
@@ -105,20 +105,6 @@ Rectangle {
                         text: qsTr("Automation")
                         checkable: true
                     }
-
-//                    FlatToggleButton {
-//                        id: automationButton
-
-//                        icon: checked ? IconCode.LOCK_CLOSED : IconCode.LOCK_OPEN
-//                        height: 20
-//                        width: 20
-
-//                        checked: true
-
-////                        onToggled: {
-////                            root.model.isAspectRatioLocked.value = !root.model.isAspectRatioLocked.value
-////                        }
-//                    }
 
                 }
 
