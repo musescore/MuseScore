@@ -133,7 +133,7 @@ void Mixer::process(float* outBuffer, unsigned int samplesPerChannel)
 
     // TODO add limiter
 
-    for (IFxProcessorPtr& fxProcessor : m_globalFxProcessors) {
+    for (IFxProcessorPtr& fxProcessor : m_masterFxProcessors) {
         if (fxProcessor->active()) {
             fxProcessor->process(outBuffer, samplesPerChannel);
         }
@@ -171,13 +171,13 @@ void Mixer::setMasterOutputParams(const AudioOutputParams& params)
 
     m_masterParams = params;
 
-    m_globalFxProcessors.clear();
+    m_masterFxProcessors.clear();
+    m_masterFxProcessors = fxResolver()->resolveMasterFxList(params.fxParams);
     m_masterOutputParamsChanged.send(params);
 
-    // TODO fulfill fxProcessors using fxProvider
-    /*for (const FxProcessorId& fxId : m_globalOutputParams.fxProcessors) {
-        // m_masterFxProcessors.push_back();
-    }*/
+    for (IFxProcessorPtr& fx : m_masterFxProcessors) {
+        fx->setSampleRate(m_sampleRate);
+    }
 }
 
 Channel<AudioOutputParams> Mixer::masterOutputParamsChanged() const
