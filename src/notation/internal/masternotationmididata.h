@@ -49,7 +49,8 @@ public:
     midi::MidiData trackMidiData(const ID& partId) const override;
     Ret triggerElementMidiData(const Element* element) override;
 
-    midi::Events retrieveEvents(const midi::channel_t midiChannel, const midi::tick_t fromTick, const midi::tick_t toTick) const override;
+    midi::Events retrieveEvents(const std::vector<midi::channel_t>& midiChannels, const midi::tick_t fromTick,
+                                const midi::tick_t toTick) const override;
     midi::Events retrieveEventsForElement(const Element* element, const midi::channel_t midiChannel) const override;
     std::vector<midi::Event> retrieveSetupEvents(const std::list<InstrumentChannel*> instrChannel) const override;
 
@@ -100,7 +101,8 @@ private:
     Ret playHarmonyMidiData(const Ms::Harmony* harmony) const;
 
     void loadEvents(const midi::tick_t fromTick, const midi::tick_t toTick) const;
-    midi::Events eventsFromRange(const midi::channel_t midiChannel, const midi::tick_t fromTick, const midi::tick_t toTick) const;
+    midi::Events eventsFromRange(const std::vector<midi::channel_t>& midiChannels, const midi::tick_t fromTick,
+                                 const midi::tick_t toTick) const;
     bool hasCachedEvents(const midi::channel_t midiChannel) const;
 
     Ms::EventMap renderMsEvents(const midi::tick_t fromTick, const midi::tick_t toTick) const;
