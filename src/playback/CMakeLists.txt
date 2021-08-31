@@ -47,6 +47,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/mixerchannelitem.h
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/abstractaudioresourceitem.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/abstractaudioresourceitem.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/outputresourceitem.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/outputresourceitem.h
     ${CMAKE_CURRENT_LIST_DIR}/view/mixerpanelmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/mixerpanelmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/playbacktoolbarmodel.cpp
