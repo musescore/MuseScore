@@ -37,7 +37,8 @@ public:
     virtual ~IVstModulesRepository() = default;
 
     virtual PluginModulePtr pluginModule(const audio::AudioResourceId& resourceId) const = 0;
-    virtual audio::AudioResourceIdList moduleIdList(const VstPluginType& type) const = 0;
+    virtual audio::AudioResourceMetaList instrumentModulesMeta() const = 0;
+    virtual audio::AudioResourceMetaList fxModulesMeta() const = 0;
     virtual void refresh() = 0;
 };
 }
