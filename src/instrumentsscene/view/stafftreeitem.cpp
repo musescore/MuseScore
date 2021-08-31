@@ -30,6 +30,10 @@ StaffTreeItem::StaffTreeItem(IMasterNotationPtr masterNotation, INotationPtr not
     : AbstractInstrumentsPanelTreeItem(InstrumentsTreeItemType::ItemType::STAFF, masterNotation, notation, parent)
 {
     connect(this, &AbstractInstrumentsPanelTreeItem::isVisibleChanged, [this](bool isVisible) {
+        if (!m_isInited) {
+            return;
+        }
+
         this->notation()->parts()->setStaffVisible(id(), isVisible);
     });
 
@@ -56,6 +60,8 @@ void StaffTreeItem::init(const Staff* masterStaff)
     setId(staff->id());
     setTitle(title);
     setIsVisible(visible);
+
+    m_isInited = true;
 }
 
 bool StaffTreeItem::isSelectable() const

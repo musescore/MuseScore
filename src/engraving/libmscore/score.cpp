@@ -2627,7 +2627,7 @@ void Score::adjustBracketsIns(int sidx, int eidx)
             if ((span == 0) || ((staffIdx + span) < sidx) || (staffIdx > eidx)) {
                 continue;
             }
-            if ((sidx >= staffIdx) && (eidx < (staffIdx + span))) {
+            if ((sidx >= staffIdx) && (eidx <= (staffIdx + span))) {
                 bi->undoChangeProperty(Pid::BRACKET_SPAN, span + (eidx - sidx));
             }
         }
@@ -3405,7 +3405,8 @@ void Score::selectRange(Element* e, int staffIdx)
 void Score::collectMatch(void* data, Element* e)
 {
     ElementPattern* p = static_cast<ElementPattern*>(data);
-    if (p->type != int(e->type())) {
+
+    if (p->type != int(ElementType::INVALID) && p->type != int(e->type())) {
         return;
     }
 

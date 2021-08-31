@@ -43,7 +43,7 @@ void StaffSettingsModel::load(const QString& staffId)
     m_staffId = staffId;
     m_config = notationParts()->staffConfig(m_staffId);
 
-    setStaffType(static_cast<int>(staff->staffType()->type()));
+    m_type = staff->staffType()->type();
 
     m_voicesVisibility.clear();
     for (const QVariant& voice: staff->visibilityVoices()) {
@@ -112,18 +112,26 @@ void StaffSettingsModel::setVoiceVisible(int voiceIndex, bool visible)
         return;
     }
 
-    m_voicesVisibility[voiceIndex] = visible;
-    notationParts()->setVoiceVisible(m_staffId, voiceIndex, visible);
+    bool ok = notationParts()->setVoiceVisible(m_staffId, voiceIndex, visible);
+    if (ok) {
+        m_voicesVisibility[voiceIndex] = visible;
+        emit voiceVisibilityChanged(voiceIndex, visible);
+    }
+}
 
-    //! NOTE Do not send a signal to change the list
-    //! This will lead to the re-creation of the controlы (checkboxes),
-    //! and so we will lose the control with active focus,
-    //! and new controls will be created and added.
-    //! None of the controls will be the active focus.
-    //! The checkbox state changes in the view.
-    //! An alternative solution - we need to make a powerful model
-    //! and not recreate elements when their state changes (do not reset it completely)
-    //emit voicesChanged();
+bool StaffSettingsModel::isMainScore() const
+{
+    return currentNotation() == currentMasterNotation();
+}
+
+INotationPtr StaffSettingsModel::currentNotation() const
+{
+    return context()->currentNotation();
+}
+
+INotationPtr StaffSettingsModel::currentMasterNotation() const
+{
+    return context()->currentMasterNotation()->notation();
 }
 
 bool StaffSettingsModel::isSmallStaff() const

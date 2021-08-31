@@ -40,6 +40,8 @@ class StaffSettingsModel : public QObject
     Q_PROPERTY(bool isSmallStaff READ isSmallStaff NOTIFY isSmallStaffChanged)
     Q_PROPERTY(bool cutawayEnabled READ cutawayEnabled NOTIFY cutawayEnabledChanged)
 
+    Q_PROPERTY(bool isMainScore READ isMainScore NOTIFY isMainScoreChanged)
+
 public:
     explicit StaffSettingsModel(QObject* parent = nullptr);
 
@@ -58,13 +60,20 @@ public:
     Q_INVOKABLE void setCutawayEnabled(bool value);
     Q_INVOKABLE void setVoiceVisible(int voiceIndex, bool visible);
 
+    bool isMainScore() const;
+
 signals:
     void staffTypeChanged();
     void voicesChanged();
+    void voiceVisibilityChanged(int voiceIndex, bool visible);
     void isSmallStaffChanged();
     void cutawayEnabledChanged();
 
+    void isMainScoreChanged(bool isMainScore);
+
 private:
+    notation::INotationPtr currentNotation() const;
+    notation::INotationPtr currentMasterNotation() const;
     notation::INotationPartsPtr notationParts() const;
     notation::INotationPartsPtr masterNotationParts() const;
 

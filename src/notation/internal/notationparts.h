@@ -49,7 +49,7 @@ public:
     void setParts(const PartInstrumentList& parts, const ScoreOrder& order) override;
     void setScoreOrder(const ScoreOrder& order) override;
     void setPartVisible(const ID& partId, bool visible) override;
-    void setVoiceVisible(const ID& staffId, int voiceIndex, bool visible) override;
+    bool setVoiceVisible(const ID& staffId, int voiceIndex, bool visible) override;
     void setStaffVisible(const ID& staffId, bool visible) override;
     void setPartName(const ID& partId, const QString& name) override;
     void setPartSharpFlat(const ID& partId, const SharpFlat& sharpFlat) override;
@@ -89,7 +89,6 @@ private:
 
     void doSetScoreOrder(const ScoreOrder& order);
     void doMoveStaves(const std::vector<Staff*>& staves, int destinationStaffIndex, Part* destinationPart = nullptr);
-    void doSetStaffVoiceVisible(Staff* staff, int voiceIndex, bool visible);
     void doRemoveParts(const std::vector<Part*>& parts);
     void doAppendStaff(Staff* staff, Part* destinationPart);
     void doSetStaffConfig(Staff* staff, const StaffConfig& config);

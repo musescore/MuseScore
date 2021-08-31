@@ -396,22 +396,33 @@ void NotationParts::setInstrumentAbbreviature(const InstrumentKey& instrumentKey
     notifyAboutPartChanged(part);
 }
 
-void NotationParts::setVoiceVisible(const ID& staffId, int voiceIndex, bool visible)
+bool NotationParts::setVoiceVisible(const ID& staffId, int voiceIndex, bool visible)
 {
     TRACEFUNC;
 
+    if (!score()->excerpt()) {
+        return false;
+    }
+
     Staff* staff = staffModifiable(staffId);
     if (!staff) {
-        return;
+        return false;
+    }
+
+    if (!visible && !staff->canDisableVoice()) {
+        return false;
     }
 
     startEdit();
 
-    doSetStaffVoiceVisible(staff, voiceIndex, visible);
+    score()->excerpt()->setVoiceVisible(staff, voiceIndex, visible);
 
     apply();
 
-    notifyAboutStaffChanged(staff);
+    Staff* newStaff = staffModifiable(staffId);
+    notifyAboutStaffChanged(newStaff);
+
+    return true;
 }
 
 void NotationParts::setStaffVisible(const ID& staffId, bool visible)
@@ -476,43 +487,6 @@ void NotationParts::setStaffConfig(const ID& staffId, const StaffConfig& config)
     notifyAboutStaffChanged(staff);
 }
 
-void NotationParts::doSetStaffVoiceVisible(Staff* staff, int voiceIndex, bool visible)
-{
-    TRACEFUNC;
-
-    if (staff->isVoiceVisible(voiceIndex) == visible) {
-        return;
-    }
-
-    static const QSet<Ms::ElementType> ignoredTypes {
-        Ms::ElementType::STAFF_LINES,
-        Ms::ElementType::BAR_LINE,
-        Ms::ElementType::BRACKET,
-        Ms::ElementType::TIMESIG,
-        Ms::ElementType::CLEF
-    };
-
-    for (Ms::Page* page : score()->pages()) {
-        for (Ms::Element* element : page->elements()) {
-            if (!element) {
-                continue;
-            }
-
-            if (element->staffIdx() != staff->idx() || element->voice() != voiceIndex) {
-                continue;
-            }
-
-            if (ignoredTypes.contains(element->type())) {
-                continue;
-            }
-
-            element->undoChangeProperty(Ms::Pid::VISIBLE, visible);
-        }
-    }
-
-    staff->setVoiceVisible(voiceIndex, visible);
-}
-
 void NotationParts::appendStaff(Staff* staff, const ID& destinationPartId)
 {
     TRACEFUNC;
@@ -547,7 +521,7 @@ void NotationParts::appendLinkedStaff(Staff* staff, const ID& sourceStaffId, con
     doAppendStaff(staff, destinationPart);
 
     ///! NOTE: need to unlink before linking
-    staff->undoUnlink();
+    staff->setLinks(nullptr);
     Ms::Excerpt::cloneStaff(sourceStaff, staff);
 
     updateTracks();

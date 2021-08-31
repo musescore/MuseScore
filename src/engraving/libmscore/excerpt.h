@@ -68,7 +68,7 @@ public:
     bool isEmpty() const;
 
     QMultiMap<int, int>& tracks() { return _tracks; }
-    void setTracks(const QMultiMap<int, int>& t) { _tracks = t; }
+    void setTracks(const QMultiMap<int, int>& tracks);
 
     MasterScore* oscore() const { return _oscore; }
     Score* partScore() const { return _partScore; }
@@ -83,6 +83,8 @@ public:
     void setTitle(const QString& s) { _title = s; }
 
     void updateTracks();
+
+    void setVoiceVisible(Staff* staff, int voiceIndex, bool visible);
 
     static QList<Excerpt*> createExcerptsFromParts(const QList<Part*>& parts);
     static Excerpt* createExcerptFromPart(Part* part);

@@ -378,7 +378,7 @@ struct FilterElementsOptions
     int staffEnd = -1;
     int voice = -1;
     const Ms::System* system = nullptr;
-    Fraction durationTicks;
+    Fraction durationTicks{ -1, 1 };
 
     bool bySubtype = false;
     int subtype = -1;

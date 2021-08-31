@@ -75,6 +75,7 @@ StyledPopupView {
         SeparatorLine {}
 
         StyledTextLabel {
+            visible: !settingsModel.isMainScore
             text: qsTrc("instruments", "Voices visible in the score")
         }
 
@@ -84,11 +85,15 @@ StyledPopupView {
 
             spacing: 26
 
+            visible: !settingsModel.isMainScore
+
             Repeater {
                 model: settingsModel.voices
 
                 delegate: CheckBox {
                     id: item
+
+                    property int index: model.index
 
                     objectName: "Voice" + modelData.title + "CheckBox"
 
@@ -99,8 +104,16 @@ StyledPopupView {
                     checked: modelData.visible
 
                     onClicked: {
-                        item.checked = !item.checked
                         settingsModel.setVoiceVisible(model.index, !checked)
+                    }
+
+                    Connections {
+                        target: settingsModel
+                        function onVoiceVisibilityChanged(voiceIndex, visible) {
+                            if (item.index === voiceIndex) {
+                                item.checked = visible
+                            }
+                        }
                     }
                 }
             }
