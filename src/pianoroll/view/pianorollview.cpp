@@ -802,9 +802,9 @@ void PianorollView::mouseReleaseEvent(QMouseEvent* event)
           case PianorollTool::ERASE:
                 eraseNote(m_mouseDownPos);
                 break;
-//          case INSERT_NOTE:
-//                insertNote(modifiers);
-//                break;
+          case PianorollTool::ADD:
+                insertNote(modifiers);
+                break;
 //          case APPEND_NOTE:
 //                appendNoteToChord(_mouseDownPos);
 //                break;
@@ -887,14 +887,56 @@ void PianorollView::mouseMoveEvent(QMouseEvent* event)
 }
 
 
+void PianorollView::insertNote(int modifiers)
+{
+    Ms::Score* curScore = score();
+    Ms::Staff* staff = activeStaff();
+
+    Ms::Fraction pos(pixelXToWholeNote(m_mouseDownPos.x()) * 1000, 1000);
+    Ms::Measure* m = curScore->tick2measure(pos);
+
+    Ms::Fraction timeSig = m->timesig();
+    int beatsInBar = timeSig.numerator();
+
+    double pickTick = pixelXToWholeNote(m_mouseDownPos.x());
+    double pickPitch = pixelYToPitch(m_mouseDownPos.y());
+
+    //Number of smaller pieces the beat is divided into
+    int subbeats = m_tuplet * (1 << m_subdivision);
+    int divisions = beatsInBar * subbeats;
+
+    //Round down to nearest division
+    double startTick = pixelXToWholeNote(m_mouseDownPos.x());
+    Ms::Fraction insertPosition = Ms::Fraction(floor(startTick * divisions), divisions);
+
+
+    int voice = m_editNoteVoice;
+
+    int track = staff->idx() * VOICES + voice;
+    Ms::Fraction noteLen = m_editNoteLength;
+
+    Ms::Segment* seg = curScore->tick2segment(insertPosition);
+    curScore->expandVoice(seg, track);
+
+    Ms::ChordRest* e = curScore->findCR(insertPosition, track);
+    if (e)
+    {
+        curScore->startCmd();
+
+        addNote(insertPosition, noteLen, pickPitch, track);
+
+        curScore->endCmd();
+    }
+
+    buildNoteData();
+    update();
+}
+
 void PianorollView::eraseNote(const QPointF& pos)
 {
     Ms::Score* curScore = score();
 
     NoteBlock *pn = pickNote(pos.x(), pos.y());
-//    int pickTick = pixelXToTick((int)pos.x());
-//    int pickPitch = pixelYToPitch(pos.y());
-//    NoteBlock *pn = pickNote(pickTick, pickPitch);
 
     if (pn)
     {
@@ -1133,6 +1175,7 @@ QString PianorollView::serializeSelectedNotes()
 
     return xmlStrn;
 }
+
 
 void PianorollView::finishNoteGroupDrag()
 {
