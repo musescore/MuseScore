@@ -33,12 +33,12 @@ VstFxProcessor::VstFxProcessor(VstPluginPtr&& pluginPtr)
 
 void VstFxProcessor::init()
 {
-    m_vstAudioClient->init(m_pluginPtr);
+    m_vstAudioClient->init(VstPluginType::Fx, m_pluginPtr);
 }
 
 AudioFxType VstFxProcessor::type() const
 {
-    return audio::AudioFxType::Vst;
+    return audio::AudioFxType::VstFx;
 }
 
 void VstFxProcessor::setSampleRate(unsigned int sampleRate)

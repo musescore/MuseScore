@@ -47,7 +47,7 @@ public:
     std::vector<audio::IFxProcessorPtr> resolveFxList(const audio::TrackId trackId,
                                                       const std::vector<audio::AudioFxParams>& fxParams) override;
     std::vector<audio::IFxProcessorPtr> resolveMasterFxList(const std::vector<audio::AudioFxParams>& fxParams) override;
-    audio::AudioResourceIdList resolveResources() const override;
+    audio::AudioResourceMetaList resolveResources() const override;
     void refresh() override;
 
 private:
@@ -56,8 +56,8 @@ private:
     VstFxPtr createMasterFx(const audio::AudioResourceId& resourceId) const;
     VstFxPtr createTrackFx(const audio::TrackId trackId, const audio::AudioResourceId& resourceId) const;
 
-    void updateMasterFxMap(const audio::AudioResourceIdList& newResourceIdList);
-    void updateTrackFxMap(FxMap& fxMap, const audio::TrackId trackId, const audio::AudioResourceIdList& newResourceIdList);
+    void updateMasterFxMap(const std::vector<audio::AudioFxParams>& fxParams);
+    void updateTrackFxMap(FxMap& fxMap, const audio::TrackId trackId, const std::vector<audio::AudioFxParams>& fxParams);
 
     void fxListToRemove(const audio::AudioResourceIdList& currentResourceIdList, const audio::AudioResourceIdList& newResourceIdList,
                         audio::AudioResourceIdList& resultList);

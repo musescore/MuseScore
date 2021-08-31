@@ -35,18 +35,12 @@ std::vector<IFxProcessorPtr> VstFxResolver::resolveFxList(const audio::TrackId t
         return {};
     }
 
-    AudioResourceIdList newResourcesidList;
-
-    for (const auto& param : fxParams) {
-        newResourcesidList.emplace_back(param.resourceId);
-    }
-
     FxMap& fxMap = m_tracksFxMap[trackId];
-    updateTrackFxMap(fxMap, trackId, newResourcesidList);
+    updateTrackFxMap(fxMap, trackId, fxParams);
 
     std::vector<IFxProcessorPtr> result;
 
-    for (const auto& pair : m_masterFxMap) {
+    for (const auto& pair : fxMap) {
         result.emplace_back(pair.second);
     }
 
@@ -60,13 +54,7 @@ std::vector<IFxProcessorPtr> VstFxResolver::resolveMasterFxList(const std::vecto
         return {};
     }
 
-    AudioResourceIdList newResourcesidList;
-
-    for (const auto& param : fxParams) {
-        newResourcesidList.emplace_back(param.resourceId);
-    }
-
-    updateMasterFxMap(newResourcesidList);
+    updateMasterFxMap(fxParams);
 
     std::vector<IFxProcessorPtr> result;
 
@@ -77,9 +65,9 @@ std::vector<IFxProcessorPtr> VstFxResolver::resolveMasterFxList(const std::vecto
     return result;
 }
 
-AudioResourceIdList VstFxResolver::resolveResources() const
+AudioResourceMetaList VstFxResolver::resolveResources() const
 {
-    return pluginModulesRepo()->moduleIdList(VstPluginType::Fx);
+    return pluginModulesRepo()->fxModulesMeta();
 }
 
 void VstFxResolver::refresh()
@@ -121,15 +109,20 @@ VstFxPtr VstFxResolver::createTrackFx(const audio::TrackId trackId, const audio:
     return fx;
 }
 
-void VstFxResolver::updateTrackFxMap(FxMap& fxMap, const audio::TrackId trackId, const audio::AudioResourceIdList& newResourceIdList)
+void VstFxResolver::updateTrackFxMap(FxMap& fxMap, const audio::TrackId trackId, const std::vector<AudioFxParams>& fxParams)
 {
     AudioResourceIdList currentResourceIdList;
     for (const auto& pair : fxMap) {
         currentResourceIdList.emplace_back(pair.first);
     }
 
+    AudioResourceIdList newResourcesidList;
+    for (const auto& param : fxParams) {
+        newResourcesidList.emplace_back(param.resourceMeta.id);
+    }
+
     audio::AudioResourceIdList idListToRemove;
-    fxListToRemove(newResourceIdList, currentResourceIdList, idListToRemove);
+    fxListToRemove(newResourcesidList, currentResourceIdList, idListToRemove);
 
     for (const auto& idToRemove : idListToRemove) {
         pluginsRegister()->unregisterFxPlugin(trackId, idToRemove);
@@ -137,22 +130,32 @@ void VstFxResolver::updateTrackFxMap(FxMap& fxMap, const audio::TrackId trackId,
     }
 
     audio::AudioResourceIdList idListToCreate;
-    fxListToCreate(newResourceIdList, currentResourceIdList, idListToCreate);
+    fxListToCreate(newResourcesidList, currentResourceIdList, idListToCreate);
 
     for (const auto& idToCreate : idListToCreate) {
         fxMap.emplace(idToCreate, createTrackFx(trackId, idToCreate));
     }
+
+    for (const auto& param : fxParams) {
+        VstFxPtr& fxPtr = fxMap[param.resourceMeta.id];
+        fxPtr->setActive(param.active);
+    }
 }
 
-void VstFxResolver::updateMasterFxMap(const audio::AudioResourceIdList& newResourceIdList)
+void VstFxResolver::updateMasterFxMap(const std::vector<AudioFxParams>& fxParams)
 {
     AudioResourceIdList currentResourceIdList;
     for (const auto& pair : m_masterFxMap) {
         currentResourceIdList.emplace_back(pair.first);
     }
 
+    AudioResourceIdList newResourcesidList;
+    for (const auto& param : fxParams) {
+        newResourcesidList.emplace_back(param.resourceMeta.id);
+    }
+
     audio::AudioResourceIdList idListToRemove;
-    fxListToRemove(newResourceIdList, currentResourceIdList, idListToRemove);
+    fxListToRemove(newResourcesidList, currentResourceIdList, idListToRemove);
 
     for (const auto& idToRemove : idListToRemove) {
         pluginsRegister()->unregisterMasterFxPlugin(idToRemove);
@@ -160,10 +163,15 @@ void VstFxResolver::updateMasterFxMap(const audio::AudioResourceIdList& newResou
     }
 
     audio::AudioResourceIdList idListToCreate;
-    fxListToCreate(newResourceIdList, currentResourceIdList, idListToCreate);
+    fxListToCreate(newResourcesidList, currentResourceIdList, idListToCreate);
 
     for (const auto& idToCreate : idListToCreate) {
         m_masterFxMap.emplace(idToCreate, createMasterFx(idToCreate));
+    }
+
+    for (const auto& param : fxParams) {
+        VstFxPtr& fxPtr = m_masterFxMap[param.resourceMeta.id];
+        fxPtr->setActive(param.active);
     }
 }
 

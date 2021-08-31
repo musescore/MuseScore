@@ -150,17 +150,13 @@ Channel<TrackSequenceId, TrackId> TracksHandler::trackRemoved() const
     return m_trackRemoved;
 }
 
-Promise<AudioResourceIdList> TracksHandler::availableInputResources(const AudioSourceType type) const
+Promise<AudioResourceMetaList> TracksHandler::availableInputResources() const
 {
-    return Promise<AudioResourceIdList>([this, type](Promise<AudioResourceIdList>::Resolve resolve,
-                                                     Promise<AudioResourceIdList>::Reject reject) {
+    return Promise<AudioResourceMetaList>([this](Promise<AudioResourceMetaList>::Resolve resolve,
+                                                 Promise<AudioResourceMetaList>::Reject /*reject*/) {
         ONLY_AUDIO_WORKER_THREAD;
 
-        if (type == AudioSourceType::Undefined) {
-            reject(static_cast<int>(Err::InvalidAudioSourceParams), "unable to get resources for undefined audio source type");
-        }
-
-        resolve(resolver()->resolveAvailableResources(type));
+        resolve(resolver()->resolveAvailableResources());
     }, AudioThread::ID);
 }
 
