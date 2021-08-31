@@ -33,11 +33,11 @@ if (OS_IS_MAC)
     )
     # Don't mix C++ and Objective-C++ in Unity Build
     set_source_files_properties(${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosplatformtheme.mm
-                                                 ${CMAKE_CURRENT_LIST_DIR}/view/platform/macos/macosmainwindowprovider.mm
+                                ${CMAKE_CURRENT_LIST_DIR}/view/platform/macos/macosmainwindowprovider.mm
                                 PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON)
 
     set_source_files_properties(${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosplatformtheme.mm
-                                                 ${CMAKE_CURRENT_LIST_DIR}/view/platform/macos/macosmainwindowprovider.mm
+                                ${CMAKE_CURRENT_LIST_DIR}/view/platform/macos/macosmainwindowprovider.mm
                                 PROPERTIES SKIP_PRECOMPILE_HEADERS ON)
 elseif(OS_IS_WIN)
     set(PLATFORM_THEME_SRC

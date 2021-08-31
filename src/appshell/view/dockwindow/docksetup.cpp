@@ -26,6 +26,7 @@
 #include "internal/dockseparator.h"
 #include "internal/dockframemodel.h"
 #include "internal/dockwindowactionscontroller.h"
+#include "internal/dockwindowprovider.h"
 
 #include "dockwindow.h"
 #include "dockpanel.h"
@@ -76,6 +77,7 @@ public:
 }
 
 using namespace mu::dock;
+using namespace mu::modularity;
 
 static std::shared_ptr<DockWindowActionsController> s_actionsController = std::make_shared<DockWindowActionsController>();
 
@@ -93,6 +95,11 @@ void DockSetup::registerQmlTypes()
     qmlRegisterType<DockBase>("MuseScore.Dock", 1, 0, "DockBase");
 
     qRegisterMetaType<DropIndicators*>();
+}
+
+void DockSetup::registerExports()
+{
+    ioc()->registerExport<IDockWindowProvider>("dock", new DockWindowProvider());
 }
 
 void DockSetup::setup(QQmlEngine* engine)

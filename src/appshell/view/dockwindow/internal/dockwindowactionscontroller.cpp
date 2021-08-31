@@ -32,15 +32,21 @@ static QString dockNameFromArgs(const ActionData& args)
 
 void DockWindowActionsController::init()
 {
-    dispatcher()->reg(this, "close-dock", this, &DockWindowActionsController::close);
+    dispatcher()->reg(this, "set-dock-open", this, &DockWindowActionsController::setDockOpen);
     dispatcher()->reg(this, "toggle-dock", this, &DockWindowActionsController::toggleOpened);
     dispatcher()->reg(this, "toggle-floating", this, &DockWindowActionsController::toggleFloating);
 }
 
-void DockWindowActionsController::close(const ActionData& args)
+void DockWindowActionsController::setDockOpen(const ActionData& args)
 {
-    QString dockName = dockNameFromArgs(args);
-    window()->setDockOpen(dockName, false);
+    if (args.count() < 2) {
+        return;
+    }
+
+    QString dockName = args.arg<QString>(0);
+    bool open = args.arg<bool>(1);
+
+    window()->setDockOpen(dockName, open);
 }
 
 void DockWindowActionsController::toggleOpened(const ActionData& args)
@@ -53,4 +59,9 @@ void DockWindowActionsController::toggleFloating(const ActionData& args)
 {
     QString dockName = dockNameFromArgs(args);
     window()->toggleDockFloating(dockName);
+}
+
+IDockWindow* DockWindowActionsController::window() const
+{
+    return dockWindowProvider()->window();
 }

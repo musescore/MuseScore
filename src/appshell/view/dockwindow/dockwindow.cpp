@@ -35,12 +35,10 @@
 #include "docktoolbar.h"
 #include "docktoolbarholder.h"
 
-#include "modularity/ioc.h"
-
 #include "log.h"
 
 using namespace mu::dock;
-using namespace mu::modularity;
+using namespace mu::async;
 
 static constexpr double MAX_DISTANCE_TO_HOLDER = 25;
 
@@ -53,7 +51,7 @@ DockWindow::DockWindow(QQuickItem* parent)
 
 DockWindow::~DockWindow()
 {
-    ioc()->unregisterExport<IDockWindow>();
+    dockWindowProvider()->deinit();
 }
 
 void DockWindow::componentComplete()
@@ -62,19 +60,19 @@ void DockWindow::componentComplete()
 
     QQuickItem::componentComplete();
 
-    ioc()->registerExport<IDockWindow>("dock", this);
-
     m_mainWindow = new KDDockWidgets::MainWindowQuick("mainWindow",
                                                       KDDockWidgets::MainWindowOption_None,
                                                       this);
 
     connect(qApp, &QCoreApplication::aboutToQuit, this, &DockWindow::onQuit);
 
-    configuration()->windowGeometryChanged().onNotify(this, [this]() {
+    uiConfiguration()->windowGeometryChanged().onNotify(this, [this]() {
         if (!m_quiting) {
             resetWindowState();
         }
     });
+
+    dockWindowProvider()->init(this);
 
     startupScenario()->run();
 }
@@ -138,14 +136,20 @@ void DockWindow::loadPage(const QString& uri)
     restorePageState(newPage->objectName());
     initDocks(newPage);
 
+    QStringList allDockNames;
+
     for (DockBase* dock : newPage->allDocks()) {
         if (!dock->isVisible()) {
             dock->close();
         }
+
+        allDockNames << dock->objectName();
     }
 
     m_currentPageUri = uri;
     emit currentPageUriChanged(uri);
+
+    m_docksOpenStatusChanged.send(allDockNames);
 }
 
 void DockWindow::setToolBarOrientation(const QString& toolBarName, framework::Orientation orientation)
@@ -187,6 +191,7 @@ void DockWindow::toggleDock(const QString& dockName)
     DockPage* currPage = currentPage();
     if (currPage) {
         currPage->toggleDock(dockName);
+        m_docksOpenStatusChanged.send({ dockName });
     }
 }
 
@@ -195,7 +200,13 @@ void DockWindow::setDockOpen(const QString& dockName, bool open)
     DockPage* currPage = currentPage();
     if (currPage) {
         currPage->setDockOpen(dockName, open);
+        m_docksOpenStatusChanged.send({ dockName });
     }
+}
+
+Channel<QStringList> DockWindow::docksOpenStatusChanged() const
+{
+    return m_docksOpenStatusChanged;
 }
 
 bool DockWindow::isDockFloating(const QString& dockName) const
@@ -405,14 +416,14 @@ void DockWindow::saveGeometry()
     /// and restore only the application geometry.
     /// Therefore, for correct operation after saving or restoring geometry,
     /// it is necessary to apply the appropriate method for the state.
-    configuration()->setWindowGeometry(windowState());
+    uiConfiguration()->setWindowGeometry(windowState());
 }
 
 void DockWindow::restoreGeometry()
 {
     TRACEFUNC;
 
-    if (!restoreLayout(configuration()->windowGeometry())) {
+    if (!restoreLayout(uiConfiguration()->windowGeometry())) {
         LOGE() << "Could not restore the window geometry!";
     }
 }
@@ -421,7 +432,7 @@ void DockWindow::savePageState(const QString& pageName)
 {
     TRACEFUNC;
 
-    configuration()->setPageState(pageName, windowState());
+    uiConfiguration()->setPageState(pageName, windowState());
 }
 
 void DockWindow::restorePageState(const QString& pageName)
@@ -429,7 +440,7 @@ void DockWindow::restorePageState(const QString& pageName)
     TRACEFUNC;
 
     /// NOTE: Do not restore geometry
-    bool ok = restoreLayout(configuration()->pageState(pageName), KDDockWidgets::RestoreOption::RestoreOption_RelativeToMainWindow);
+    bool ok = restoreLayout(uiConfiguration()->pageState(pageName), KDDockWidgets::RestoreOption::RestoreOption_RelativeToMainWindow);
     if (!ok) {
         LOGE() << "Could not restore the state of " << pageName << "!";
     }

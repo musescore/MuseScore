@@ -28,6 +28,8 @@ set (DOCKWINDOW_SRC
     ${CMAKE_CURRENT_LIST_DIR}/docktypes.h
     ${CMAKE_CURRENT_LIST_DIR}/dockwindow.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dockwindow.h
+    ${CMAKE_CURRENT_LIST_DIR}/idockwindow.h
+    ${CMAKE_CURRENT_LIST_DIR}/idockwindowprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/dockpage.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dockpage.h
     ${CMAKE_CURRENT_LIST_DIR}/dockpanel.cpp
@@ -42,7 +44,6 @@ set (DOCKWINDOW_SRC
     ${CMAKE_CURRENT_LIST_DIR}/docktoolbarholder.h
     ${CMAKE_CURRENT_LIST_DIR}/dockcentral.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dockcentral.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/idockwindow.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/dockbase.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/dockbase.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/dropindicators.cpp
@@ -55,6 +56,8 @@ set (DOCKWINDOW_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/dockframemodel.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/dockwindowactionscontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/dockwindowactionscontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/dockwindowprovider.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/dockwindowprovider.h
     ${DOCKWINDOW_PLATFORM_SRC}
 )
 

@@ -20,31 +20,39 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_DOCK_DOCKWINDOWACTIONSCONTROLLER_H
-#define MU_DOCK_DOCKWINDOWACTIONSCONTROLLER_H
+#include "dockwindowprovider.h"
 
-#include "actions/actionable.h"
+#include "log.h"
 
-#include "modularity/ioc.h"
-#include "actions/iactionsdispatcher.h"
-#include "../idockwindowprovider.h"
+using namespace mu::dock;
+using namespace mu::async;
 
-namespace mu::dock {
-class DockWindowActionsController : public actions::Actionable
+void DockWindowProvider::init(IDockWindow* window)
 {
-    INJECT(dock, IDockWindowProvider, dockWindowProvider)
-    INJECT(dock, actions::IActionsDispatcher, dispatcher)
+    IF_ASSERT_FAILED_X(m_window == nullptr, "Window for this DockWindowProvider is already set. Refusing to set it again") {
+        return;
+    }
 
-public:
-    void init();
-
-private:
-    void setDockOpen(const actions::ActionData& args);
-    void toggleOpened(const actions::ActionData& args);
-    void toggleFloating(const actions::ActionData& args);
-
-    IDockWindow* window() const;
-};
+    setWindow(window);
 }
 
-#endif // MU_DOCK_DOCKWINDOWACTIONSCONTROLLER_H
+void DockWindowProvider::deinit()
+{
+    setWindow(nullptr);
+}
+
+void DockWindowProvider::setWindow(IDockWindow* window)
+{
+    m_window = window;
+    m_windowChanged.notify();
+}
+
+IDockWindow* DockWindowProvider::window() const
+{
+    return m_window;
+}
+
+Notification DockWindowProvider::windowChanged() const
+{
+    return m_windowChanged;
+}

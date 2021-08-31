@@ -57,11 +57,22 @@ public:
             items << makeSeparator();
         }
 
-        QString toggleFloatingTitle = m_panel->floating() ? mu::qtrc("dock", "Dock")
-                                                          : mu::qtrc("dock", "Undock");
+        MenuItem closeDockItem;
+        closeDockItem.id = "set-dock-open";
+        closeDockItem.code = codeFromQString(closeDockItem.id);
+        closeDockItem.title = mu::qtrc("dock", "Close");
+        closeDockItem.state.enabled = true;
+        closeDockItem.args = ActionData::make_arg2<QString, bool>(m_panel->objectName(), false);
+        items << closeDockItem;
 
-        items << makeDockPanelItem("close-dock", mu::qtrc("dock", "Close"));
-        items << makeDockPanelItem("toggle-floating", toggleFloatingTitle);
+        MenuItem toggleFloatingItem;
+        toggleFloatingItem.id = "toggle-floating";
+        toggleFloatingItem.code = codeFromQString(toggleFloatingItem.id);
+        toggleFloatingItem.title = m_panel->floating() ? mu::qtrc("dock", "Dock")
+                                   : mu::qtrc("dock", "Undock");
+        toggleFloatingItem.state.enabled = true;
+        toggleFloatingItem.args = ActionData::make_arg1<QString>(m_panel->objectName());
+        items << toggleFloatingItem;
 
         setItems(items);
     }
@@ -85,18 +96,6 @@ public:
     }
 
 private:
-    MenuItem makeDockPanelItem(const QString& code, const QString& title) const
-    {
-        MenuItem item;
-        item.id = code;
-        item.code = codeFromQString(code);
-        item.title = title;
-        item.state.enabled = true;
-        item.args = ActionData::make_arg1<QString>(m_panel->objectName());
-
-        return item;
-    }
-
     AbstractMenuModel* m_customMenuModel = nullptr;
     DockPanel* m_panel = nullptr;
 };

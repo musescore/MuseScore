@@ -23,6 +23,8 @@
 #include "dropindicators.h"
 #include "dropindicatorswindow.h"
 
+#include "../idockwindow.h"
+
 #include "thirdparty/KDDockWidgets/src/Config.h"
 #include "thirdparty/KDDockWidgets/src/private/DragController_p.h"
 #include "thirdparty/KDDockWidgets/src/private/Utils_p.h"
@@ -482,4 +484,9 @@ void DropIndicators::updateWindowPosition()
         rect.moveTo(pos);
     }
     m_indicatorsWindow->setGeometry(rect);
+}
+
+IDockWindow* DropIndicators::dockWindow() const
+{
+    return dockWindowProvider()->window();
 }
