@@ -2468,12 +2468,14 @@ void Score::renderMidi(EventMap* events, const SynthesizerState& synthState)
 
 void Score::renderMidi(EventMap* events, bool metronome, bool expandRepeats, const SynthesizerState& synthState)
 {
+    bool expandRepeatsBackup = masterScore()->expandRepeats();
     masterScore()->setExpandRepeats(expandRepeats);
     MidiRenderer::Context ctx;
     ctx.synthState = synthState;
     ctx.metronome = metronome;
     ctx.renderHarmony = true;
     MidiRenderer(this).renderScore(events, ctx);
+    masterScore()->setExpandRepeats(expandRepeatsBackup);
 }
 
 void MidiRenderer::renderScore(EventMap* events, const Context& ctx)
