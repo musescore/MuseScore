@@ -165,6 +165,8 @@ private:
     bool intersects(NoteBlock* block, int pixX, int pixY);
     bool intersectsPixel(NoteBlock* block, int x, int y, int width, int height);
 
+    void eraseNote(const QPointF& pos);
+
     void pasteNotes(const QString& copiedNotes, Ms::Fraction pasteStartTick, int pitchOffset, bool xIsOffset);
     std::vector<Ms::Note*> addNote(Ms::Fraction startTick, Ms::Fraction duration, int pitch, int track);
     bool cutChordRest(Ms::ChordRest* targetCr, int track, Ms::Fraction cutTick, Ms::ChordRest*& cr0, Ms::ChordRest*& cr1);

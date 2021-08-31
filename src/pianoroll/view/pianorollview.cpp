@@ -799,9 +799,9 @@ void PianorollView::mouseReleaseEvent(QMouseEvent* event)
 //          case CHANGE_LENGTH:
 //                changeChordLength(_mouseDownPos);
 //                break;
-//          case ERASE:
-//                eraseNote(_mouseDownPos);
-//                break;
+          case PianorollTool::ERASE:
+                eraseNote(m_mouseDownPos);
+                break;
 //          case INSERT_NOTE:
 //                insertNote(modifiers);
 //                break;
@@ -876,15 +876,34 @@ void PianorollView::mouseMoveEvent(QMouseEvent* event)
             update();
             break;
         case PianorollTool::ERASE:
-//            eraseNote(m_lastMousePos);
+            eraseNote(m_lastMousePos);
+            update();
             break;
         default:
             break;
         }
 
-        update();
+    }
+}
+
+
+void PianorollView::eraseNote(const QPointF& pos)
+{
+    Ms::Score* curScore = score();
+
+    NoteBlock *pn = pickNote(pos.x(), pos.y());
+//    int pickTick = pixelXToTick((int)pos.x());
+//    int pickPitch = pixelYToPitch(pos.y());
+//    NoteBlock *pn = pickNote(pickTick, pickPitch);
+
+    if (pn)
+    {
+        curScore->startCmd();
+        curScore->deleteItem(pn->note);
+        curScore->endCmd();
     }
 
+    buildNoteData();
 }
 
 Ms::Staff* PianorollView::activeStaff()
