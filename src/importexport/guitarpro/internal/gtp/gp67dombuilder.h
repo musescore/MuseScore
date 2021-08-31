@@ -2,6 +2,7 @@
 #define GPDOMBUILDER_H
 
 #include <memory>
+#include <QDomNode>
 
 #include "igpdombuilder.h"
 #include "gpdommodel.h"
