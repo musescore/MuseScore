@@ -886,29 +886,39 @@ void PianorollView::mouseMoveEvent(QMouseEvent* event)
     }
 }
 
-
-void PianorollView::insertNote(int modifiers)
+Ms::Fraction PianorollView::roundDownToSubdivision(double wholeNote)
 {
     Ms::Score* curScore = score();
-    Ms::Staff* staff = activeStaff();
 
-    Ms::Fraction pos(pixelXToWholeNote(m_mouseDownPos.x()) * 1000, 1000);
+    Ms::Fraction pos(wholeNote * 1000, 1000);
     Ms::Measure* m = curScore->tick2measure(pos);
 
     Ms::Fraction timeSig = m->timesig();
-    int beatsInBar = timeSig.numerator();
-
-    double pickTick = pixelXToWholeNote(m_mouseDownPos.x());
-    double pickPitch = pixelYToPitch(m_mouseDownPos.y());
+    int noteWithBeat = timeSig.denominator();
 
     //Number of smaller pieces the beat is divided into
     int subbeats = m_tuplet * (1 << m_subdivision);
-    int divisions = beatsInBar * subbeats;
+    int divisions = noteWithBeat * subbeats;
 
     //Round down to nearest division
-    double startTick = pixelXToWholeNote(m_mouseDownPos.x());
-    Ms::Fraction insertPosition = Ms::Fraction(floor(startTick * divisions), divisions);
+    Ms::Fraction roundedTick = Ms::Fraction(floor(wholeNote * divisions), divisions);
+    return roundedTick;
+}
 
+void PianorollView::insertNote(int modifiers)
+{
+    double pickTick = pixelXToWholeNote(m_mouseDownPos.x());
+    double pickPitch = pixelYToPitch(m_mouseDownPos.y());
+
+    Ms::Score* curScore = score();
+    Ms::Staff* staff = activeStaff();
+
+    Ms::Fraction pos(pickTick * 1000, 1000);
+    Ms::Measure* m = curScore->tick2measure(pos);
+
+    Ms::Fraction timeSig = m->timesig();
+
+    Ms::Fraction insertPosition = roundDownToSubdivision(pickTick);
 
     int voice = m_editNoteVoice;
 
