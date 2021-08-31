@@ -167,6 +167,7 @@ private:
 
     void insertNote(int modifiers);
     void eraseNote(const QPointF& pos);
+    Ms::Fraction roundDownToSubdivision(double wholeNote);
 
     void pasteNotes(const QString& copiedNotes, Ms::Fraction pasteStartTick, int pitchOffset, bool xIsOffset);
     std::vector<Ms::Note*> addNote(Ms::Fraction startTick, Ms::Fraction duration, int pitch, int track);
