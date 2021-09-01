@@ -53,6 +53,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/inputresourceitem.h
     ${CMAKE_CURRENT_LIST_DIR}/view/mixerpanelmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/mixerpanelmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/mixerpanelcontextmenumodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/mixerpanelcontextmenumodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/playbacktoolbarmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/playbacktoolbarmodel.h
     )

@@ -44,6 +44,9 @@ public:
     virtual void setPlayHarmonyWhenEditing(bool value) = 0;
 
     virtual PlaybackCursorType cursorType() const = 0;
+
+    virtual bool isMixerSectionVisible(MixerSectionType sectionType) const = 0;
+    virtual void setMixerSectionVisible(MixerSectionType sectionType, bool visible) = 0;
 };
 }
 

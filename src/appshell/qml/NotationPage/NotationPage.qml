@@ -260,7 +260,11 @@ DockPage {
 
             Loader {
                 asynchronous: true
-                sourceComponent: MixerPanel {}
+                sourceComponent: MixerPanel {
+                    Component.onCompleted: {
+                        mixerPanel.contextMenuModel = contextMenuModel
+                    }
+                }
             }
         },
 
