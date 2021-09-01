@@ -848,6 +848,7 @@ void PianorollView::mouseMoveEvent(QMouseEvent* event)
 
                   m_dragStyle = DragStyle::NOTES;
                   m_dragStartPitch = mouseDownPitch;
+                  m_dragStartTick = pi->note->tick();
                   m_dragNoteCache = serializeSelectedNotes();
               }
               else if (!pi && m_tool == PianorollTool::SELECT)
@@ -1231,13 +1232,19 @@ void PianorollView::finishNoteGroupDrag()
     int subbeats = m_tuplet * (1 << m_subdivision);
     int divisions = noteWithBeat * subbeats;
 
+
     //Round down to nearest division
     double dragToTick = pixelXToWholeNote(m_lastMousePos.x());
     double startTick = pixelXToWholeNote(m_mouseDownPos.x());
     double offsetTicks = dragToTick - startTick;
 
-    //offsetTicks = floor(offsetTicks * divisions) / divisions;
-    Ms::Fraction pasteTickOffset(floor(offsetTicks * divisions), divisions);
+    //Adjust offset so that note under cursor is aligned to note divistion
+    double startNoteDraggedTick = m_dragStartTick.numerator() / (double)m_dragStartTick.denominator() + offsetTicks;
+    Ms::Fraction startNoteDraggedAlignedTick = Ms::Fraction(floor(startNoteDraggedTick * divisions), divisions);
+
+
+//    Ms::Fraction pasteTickOffset(floor(offsetTicks * divisions), divisions);
+    Ms::Fraction pasteTickOffset = startNoteDraggedAlignedTick - m_dragStartTick;
 
 
     int dragToPitch = pixelYToPitch(m_lastMousePos.y());
