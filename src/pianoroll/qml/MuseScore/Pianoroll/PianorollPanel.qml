@@ -332,6 +332,9 @@ Rectangle {
                         Layout.preferredWidth: pianoView.width
                         Layout.fillHeight: true
 
+                        tuplet: pianoView.tuplet
+                        subdivision: pianoView.subdivision
+
                         centerX: scrollViewX.center
 
                         wholeNoteWidth: horizZoom.value
