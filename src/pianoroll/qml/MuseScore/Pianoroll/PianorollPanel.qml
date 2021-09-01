@@ -116,23 +116,40 @@ Rectangle {
                         text: qsTr("Grid:")
                     }
 
+//                    ComboBox {
+//                        id: gridCombo
+
+//                        model: ListModel {
+//                            id: gridModel
+//                            ListElement {
+//                                text: "1/1"
+//                            }
+//                            ListElement {
+//                                text: "1/2"
+//                            }
+//                            ListElement {
+//                                text: "1/4"
+//                            }
+//                            ListElement {
+//                                text: "1/8"
+//                            }
+//                        }
+//                    }
+
                     ComboBox {
                         id: gridCombo
+                        textRole: "text"
+                        valueRole: "value"
 
-                        model: ListModel {
-                            id: gridModel
-                            ListElement {
-                                text: "1/1"
-                            }
-                            ListElement {
-                                text: "1/2"
-                            }
-                            ListElement {
-                                text: "1/4"
-                            }
-                            ListElement {
-                                text: "1/8"
-                            }
+                        model: [
+                            { text: "1/1", value: 0 },
+                            { text: "1/2", value: 1 },
+                            { text: "1/4", value: 2 },
+                            { text: "1/8", value: 3 }
+                        ]
+
+                        onActivated: {
+                            pianoView.subdivision = currentValue
                         }
                     }
 
@@ -142,19 +159,17 @@ Rectangle {
 
                     ComboBox {
                         id: tupletCombo
-                        model: ListModel {
-                            ListElement {
-                                text: qsTr("None")
-                            }
-                            ListElement {
-                                text: qsTr("Duplet")
-                            }
-                            ListElement {
-                                text: qsTr("Triplet")
-                            }
-                        }
-                        onObjectNameChanged: {
+                        textRole: "text"
+                        valueRole: "value"
 
+                        model: [
+                            { text: qsTr("None"), value: 1 },
+                            { text: qsTr("Duplet"), value: 2 },
+                            { text: qsTr("Triplet"), value: 3 }
+                        ]
+
+                        onActivated: {
+                            pianoView.tuplet = currentValue
                         }
                     }
                 }
