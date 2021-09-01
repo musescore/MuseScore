@@ -24,6 +24,8 @@
 
 #include <QPainter>
 
+#include "audio/iplayer.h"
+
 using namespace mu::pianoroll;
 
 
