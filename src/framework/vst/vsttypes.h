@@ -65,20 +65,20 @@ enum class VstPluginType {
 
 /// @see https://steinbergmedia.github.io/vst3_doc/vstinterfaces/namespaceSteinberg_1_1Vst_1_1PlugType.html
 namespace PluginCategory {
-static const std::string Analyzer = "Analyzer";
-static const std::string Delay = "Delay";
-static const std::string Distortion = "Distortion";
-static const std::string Dynamics = "Dynamics";
-static const std::string Equalizer = "EQ";
-static const std::string Filter = "Filter";
-static const std::string Generator = "Generator";
-static const std::string Mastering = "Mastering";
-static const std::string Modulation = "Modulation";
-static const std::string PitchShift = "Pitch Shift";
-static const std::string Restoration = "Restoration";
-static const std::string Reverb = "Reverb";
-static const std::string Surround = "Surround";
-static const std::string Tools = "Tools";
+static constexpr std::string_view Analyzer { "Analyzer" };
+static constexpr std::string_view Delay { "Delay" };
+static constexpr std::string_view Distortion { "Distortion" };
+static constexpr std::string_view Dynamics { "Dynamics" };
+static constexpr std::string_view Equalizer { "EQ" };
+static constexpr std::string_view Filter { "Filter" };
+static constexpr std::string_view Generator { "Generator" };
+static constexpr std::string_view Mastering { "Mastering" };
+static constexpr std::string_view Modulation { "Modulation" };
+static constexpr std::string_view PitchShift { "Pitch Shift" };
+static constexpr std::string_view Restoration { "Restoration" };
+static constexpr std::string_view Reverb { "Reverb" };
+static constexpr std::string_view Surround { "Surround" };
+static constexpr std::string_view Tools { "Tools" };
 }
 
 using VstEventList = Steinberg::Vst::EventList;

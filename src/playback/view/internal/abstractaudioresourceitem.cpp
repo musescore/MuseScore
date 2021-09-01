@@ -7,7 +7,7 @@ using namespace mu::playback;
 
 //!Note Some resources like VST plugins are not able to work in a couple of msecs
 //!     So we've to add explicit delay before the launching their 'native' editor views
-static const int EXPLICIT_DELAY_MSECS = 3000;
+static constexpr int EXPLICIT_DELAY_MSECS = 3000;
 
 AbstractAudioResourceItem::AbstractAudioResourceItem(QObject* parent)
     : QObject(parent)
