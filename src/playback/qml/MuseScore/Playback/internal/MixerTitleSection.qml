@@ -28,7 +28,7 @@ import MuseScore.Audio 1.0
 MixerPanelSection {
     id: root
 
-    headerTitle: qsTr("Name")
+    headerTitle: qsTrc("playback", "Name")
 
     Rectangle {
         width: root.delegateDefaultWidth
