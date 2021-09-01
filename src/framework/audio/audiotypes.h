@@ -49,8 +49,6 @@ using TrackId = int32_t;
 using TrackIdList = std::vector<TrackId>;
 using TrackName = std::string;
 
-using MixerChannelId = int32_t;
-
 using AudioSourceName = std::string;
 using AudioResourceId = std::string;
 using AudioResourceIdList = std::vector<AudioResourceId>;

@@ -30,24 +30,31 @@ using namespace mu;
 using namespace mu::audio;
 using namespace mu::async;
 
-MixerChannel::MixerChannel(const TrackId trackId, const MixerChannelId id, IAudioSourcePtr source, AudioOutputParams params,
-                           async::Channel<AudioOutputParams> paramsChanged, const unsigned int sampleRate)
-    : m_trackId(trackId), m_id(id), m_sampleRate(sampleRate), m_params(std::move(params)), m_audioSource(std::move(source))
+MixerChannel::MixerChannel(const TrackId trackId, IAudioSourcePtr source, const unsigned int sampleRate)
+    : m_trackId(trackId), m_sampleRate(sampleRate), m_audioSource(std::move(source))
 {
     ONLY_AUDIO_WORKER_THREAD;
-
-    paramsChanged.onReceive(this, [this](const AudioOutputParams& params) {
-        setOutputParams(params);
-    });
 
     setSampleRate(sampleRate);
 }
 
-MixerChannelId MixerChannel::id() const
+void MixerChannel::applyOutputParams(const AudioOutputParams& originParams, AudioOutputParams& resultParams)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    return m_id;
+    /// TODO add a fallback mechanism for effects
+    /// @see task #8998
+
+    m_params = originParams;
+
+    m_fxProcessors.clear();
+    m_fxProcessors = fxResolver()->resolveFxList(m_trackId, originParams.fxParams);
+
+    for (IFxProcessorPtr& fx : m_fxProcessors) {
+        fx->setSampleRate(m_sampleRate);
+    }
+
+    resultParams = m_params;
 }
 
 Channel<audioch_t, float> MixerChannel::signalAmplitudeRmsChanged() const
@@ -58,24 +65,6 @@ Channel<audioch_t, float> MixerChannel::signalAmplitudeRmsChanged() const
 Channel<audioch_t, volume_dbfs_t> MixerChannel::volumePressureDbfsChanged() const
 {
     return m_volumePressureDbfsChanged;
-}
-
-void MixerChannel::setOutputParams(const AudioOutputParams& params)
-{
-    ONLY_AUDIO_WORKER_THREAD;
-
-    if (m_params == params) {
-        return;
-    }
-
-    m_params = params;
-
-    m_fxProcessors.clear();
-    m_fxProcessors = fxResolver()->resolveFxList(m_trackId, params.fxParams);
-
-    for (IFxProcessorPtr& fx : m_fxProcessors) {
-        fx->setSampleRate(m_sampleRate);
-    }
 }
 
 bool MixerChannel::isActive() const

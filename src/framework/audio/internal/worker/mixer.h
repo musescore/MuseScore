@@ -43,9 +43,8 @@ public:
 
     IAudioSourcePtr mixedSource();
 
-    RetVal<IMixerChannelPtr> addChannel(const TrackId trackId, IAudioSourcePtr source, const AudioOutputParams& params,
-                                        async::Channel<AudioOutputParams> paramsChanged);
-    Ret removeChannel(const MixerChannelId id);
+    RetVal<MixerChannelPtr> addChannel(const TrackId trackId, IAudioSourcePtr source);
+    Ret removeChannel(const TrackId id);
 
     void setAudioChannelsCount(const audioch_t count);
 
@@ -73,7 +72,7 @@ private:
     async::Channel<AudioOutputParams> m_masterOutputParamsChanged;
     std::vector<IFxProcessorPtr> m_masterFxProcessors = {};
 
-    std::map<MixerChannelId, MixerChannelPtr> m_mixerChannels = {};
+    std::map<TrackId, MixerChannelPtr> m_mixerChannels = {};
 
     std::set<IClockPtr> m_clocks;
     audioch_t m_audioChannelsCount = 0;
