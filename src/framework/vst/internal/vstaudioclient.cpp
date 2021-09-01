@@ -42,13 +42,15 @@ VstAudioClient::~VstAudioClient()
     processor->setProcessing(false);
 }
 
-void VstAudioClient::init(VstPluginPtr plugin)
+void VstAudioClient::init(VstPluginType&& type, VstPluginPtr plugin, audio::audioch_t&& audioChannelsCount)
 {
-    IF_ASSERT_FAILED(plugin) {
+    IF_ASSERT_FAILED(plugin && type != VstPluginType::Undefined) {
         return;
     }
 
+    m_type = type;
     m_pluginPtr = std::move(plugin);
+    m_audioChannelsCount = audioChannelsCount;
 }
 
 bool VstAudioClient::handleEvent(const mu::midi::Event& e)
@@ -75,11 +77,17 @@ void VstAudioClient::process(float* output, unsigned int samples)
 
     m_processData.numSamples = samples;
 
+    if (m_type == VstPluginType::Fx) {
+        extractInputSamples(samples, output);
+    }
+
     if (processor->process(m_processData) != Steinberg::kResultOk) {
         return;
     }
 
-    m_eventList.clear();
+    if (m_type == VstPluginType::Instrument) {
+        m_eventList.clear();
+    }
 
     fillOutputBuffer(samples, output);
 }
@@ -153,14 +161,22 @@ void VstAudioClient::updateProcessSetup()
     setUpProcessData();
 }
 
+void VstAudioClient::extractInputSamples(const audio::samples_t& sampleCount, const float* sourceBuffer)
+{
+    for (unsigned int i = 0; i < sampleCount; ++i) {
+        for (audio::audioch_t s = 0; s < m_audioChannelsCount; ++s) {
+            auto getFromChannel = std::min<unsigned int>(s, m_processData.outputs[0].numChannels - 1);
+            m_processData.inputs[0].channelBuffers32[getFromChannel][i] = sourceBuffer[i * m_audioChannelsCount + s];
+        }
+    }
+}
+
 void VstAudioClient::fillOutputBuffer(unsigned int samples, float* output)
 {
-    unsigned int audioChannels = config()->audioChannelsCount();
-
     for (unsigned int i = 0; i < samples; ++i) {
-        for (unsigned int s = 0; s < audioChannels; ++s) {
+        for (unsigned int s = 0; s < m_audioChannelsCount; ++s) {
             auto getFromChannel = std::min<unsigned int>(s, m_processData.outputs[0].numChannels - 1);
-            output[i * audioChannels + s] = m_processData.outputs[0].channelBuffers32[getFromChannel][i];
+            output[i * m_audioChannelsCount + s] = m_processData.outputs[0].channelBuffers32[getFromChannel][i];
         }
     }
 }

@@ -49,12 +49,16 @@ void VstPluginListModelExample::load()
                << "error text: " << text;
     });
 
-    playback()->tracks()->availableInputResources(audio::AudioSourceType::Vsti)
-    .onResolve(this, [this](AudioResourceIdList idList) {
+    playback()->tracks()->availableInputResources()
+    .onResolve(this, [this](AudioResourceMetaList resourceList) {
         QVariantList list;
 
-        for (const AudioResourceId& id : idList) {
-            QVariantMap item = { { "value", QString::fromStdString(id) } };
+        for (const auto& meta : resourceList) {
+            if (meta.type != AudioResourceType::VstPlugin) {
+                continue;
+            }
+
+            QVariantMap item = { { "value", QString::fromStdString(meta.id) } };
             list << item;
         }
         setAvailableSynthResources(list);
@@ -65,12 +69,12 @@ void VstPluginListModelExample::load()
                << "error text: " << text;
     });
 
-    playback()->audioOutput()->availableOutputResources(audio::AudioFxType::Vst)
-    .onResolve(this, [this](AudioResourceIdList idList) {
+    playback()->audioOutput()->availableOutputResources()
+    .onResolve(this, [this](AudioResourceMetaList resources) {
         QVariantList list;
 
-        for (const AudioResourceId& id : idList) {
-            QVariantMap item = { { "value", QString::fromStdString(id) } };
+        for (const auto& meta : resources) {
+            QVariantMap item = { { "value", QString::fromStdString(meta.id) } };
             list << item;
         }
         setAvailableFxResources(list);
@@ -209,8 +213,7 @@ const QString& VstPluginListModelExample::currentSynthResource() const
 void VstPluginListModelExample::applyNewInputParams()
 {
     AudioInputParams inputParams;
-    inputParams.type = AudioSourceType::Vsti;
-    inputParams.resourceId = m_currentSynthResource.toStdString();
+    inputParams.resourceMeta.id = m_currentSynthResource.toStdString();
 
     playback()->tracks()->setInputParams(m_currentSequenceId, m_currentTrackId, inputParams);
 }
@@ -218,11 +221,10 @@ void VstPluginListModelExample::applyNewInputParams()
 void VstPluginListModelExample::applyNewOutputParams()
 {
     AudioFxParams fxParams;
-    fxParams.type = AudioFxType::Vst;
-    fxParams.resourceId = m_currentFxResource.toStdString();
+    fxParams.resourceMeta.id = m_currentFxResource.toStdString();
 
     AudioOutputParams outputParams;
-    outputParams.fxParams.emplace(AudioFxType::Vst, std::vector<AudioFxParams>({ fxParams }));
+    outputParams.fxParams.emplace(AudioFxType::VstFx, std::vector<AudioFxParams>({ fxParams }));
 
     playback()->audioOutput()->setOutputParams(m_currentSequenceId, m_currentTrackId, outputParams);
 }

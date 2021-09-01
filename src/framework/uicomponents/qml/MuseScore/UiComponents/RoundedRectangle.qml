@@ -59,6 +59,14 @@ Canvas {
         requestPaint()
     }
 
+    onOpacityChanged: {
+        requestPaint()
+    }
+
+    onActiveFocusChanged: {
+        requestPaint()
+    }
+
     onPaint: {
         roundRect(0, 0, width, height)
     }

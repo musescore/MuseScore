@@ -39,6 +39,7 @@ public:
     virtual ~ITracks() = default;
 
     virtual async::Promise<TrackIdList> trackIdList(const TrackSequenceId sequenceId) const = 0;
+    virtual async::Promise<TrackName> trackName(const TrackSequenceId sequenceId, const TrackId trackId) const = 0;
     virtual async::Promise<TrackId> addTrack(const TrackSequenceId sequenceId, const std::string& trackName, midi::MidiData&& playbackData,
                                              AudioParams&& params) = 0;
     virtual async::Promise<TrackId> addTrack(const TrackSequenceId sequenceId, const std::string& trackName, io::Device* playbackData,
@@ -49,7 +50,7 @@ public:
     virtual async::Channel<TrackSequenceId, TrackId> trackAdded() const = 0;
     virtual async::Channel<TrackSequenceId, TrackId> trackRemoved() const = 0;
 
-    virtual async::Promise<AudioResourceIdList> availableInputResources(const AudioSourceType type) const = 0;
+    virtual async::Promise<AudioResourceMetaList> availableInputResources() const = 0;
 
     virtual async::Promise<AudioInputParams> inputParams(const TrackSequenceId sequenceId, const TrackId trackId) const = 0;
     virtual void setInputParams(const TrackSequenceId sequenceId, const TrackId trackId, const AudioInputParams& params) = 0;

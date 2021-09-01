@@ -39,7 +39,7 @@ class VstiResolver : public audio::synth::ISynthResolver::IResolver
     INJECT(vst, IVstPluginsRegister, pluginsRegister)
 public:
     audio::synth::ISynthesizerPtr resolveSynth(const audio::TrackId trackId, const audio::AudioResourceId& resourceId) const override;
-    audio::AudioResourceIdList resolveResources() const override;
+    audio::AudioResourceMetaList resolveResources() const override;
     void refresh() override;
 
 private:

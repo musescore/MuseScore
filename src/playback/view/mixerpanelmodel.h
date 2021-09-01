@@ -62,7 +62,7 @@ private:
     void sortItems();
     void clear();
 
-    MixerChannelItem* buildChannelItem(const audio::TrackSequenceId& sequenceId, const audio::TrackId& trackId);
+    MixerChannelItem* buildTrackChannelItem(const audio::TrackSequenceId& sequenceId, const audio::TrackId& trackId);
     MixerChannelItem* buildMasterChannelItem();
 
     QList<MixerChannelItem*> m_mixerChannelList;

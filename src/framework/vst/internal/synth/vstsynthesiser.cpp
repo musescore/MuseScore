@@ -35,7 +35,7 @@ VstSynthesiser::VstSynthesiser(VstPluginPtr&& pluginPtr)
 
 Ret VstSynthesiser::init()
 {
-    m_vstAudioClient->init(m_pluginPtr);
+    m_vstAudioClient->init(VstPluginType::Instrument, m_pluginPtr);
 
     return make_ret(Ret::Code::Ok);
 }

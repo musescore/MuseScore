@@ -67,7 +67,7 @@ VstSynthPtr VstiResolver::createSynth(const audio::TrackId trackId, const audio:
     return synth;
 }
 
-AudioResourceIdList VstiResolver::resolveResources() const
+AudioResourceMetaList VstiResolver::resolveResources() const
 {
-    return pluginModulesRepo()->moduleIdList(VstPluginType::Instrument);
+    return pluginModulesRepo()->instrumentModulesMeta();
 }

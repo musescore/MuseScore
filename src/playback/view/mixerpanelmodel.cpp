@@ -88,7 +88,7 @@ void MixerPanelModel::loadItems(const TrackSequenceId sequenceId, const TrackIdL
     clear();
 
     for (TrackId trackId : trackIdList) {
-        m_mixerChannelList.append(buildChannelItem(sequenceId, trackId));
+        m_mixerChannelList.append(buildTrackChannelItem(sequenceId, trackId));
     }
 
     m_mixerChannelList.append(buildMasterChannelItem());
@@ -101,7 +101,7 @@ void MixerPanelModel::addItem(const audio::TrackSequenceId sequenceId, const aud
 {
     beginResetModel();
 
-    m_mixerChannelList.append(buildChannelItem(sequenceId, trackId));
+    m_mixerChannelList.append(buildTrackChannelItem(sequenceId, trackId));
     sortItems();
 
     endResetModel();
@@ -127,6 +127,10 @@ void MixerPanelModel::sortItems()
             return false;
         }
 
+        if (s->isMasterChannel()) {
+            return true;
+        }
+
         return f->id() < s->id();
     });
 }
@@ -137,7 +141,7 @@ void MixerPanelModel::clear()
     m_mixerChannelList.clear();
 }
 
-MixerChannelItem* MixerPanelModel::buildChannelItem(const audio::TrackSequenceId& sequenceId, const audio::TrackId& trackId)
+MixerChannelItem* MixerPanelModel::buildTrackChannelItem(const audio::TrackSequenceId& sequenceId, const audio::TrackId& trackId)
 {
     MixerChannelItem* item = new MixerChannelItem(this, trackId);
 
@@ -147,6 +151,15 @@ MixerChannelItem* MixerPanelModel::buildChannelItem(const audio::TrackSequenceId
     })
     .onReject(this, [](int errCode, std::string text) {
         LOGE() << "unable to get track output parameters, error code: " << errCode
+               << ", " << text;
+    });
+
+    playback()->tracks()->trackName(sequenceId, trackId)
+    .onResolve(this, [item](const TrackName& trackName) {
+        item->setTitle(QString::fromStdString(trackName));
+    })
+    .onReject(this, [](int errCode, std::string text) {
+        LOGE() << "unable to get track name, error code: " << errCode
                << ", " << text;
     });
 
@@ -178,11 +191,11 @@ MixerChannelItem* MixerPanelModel::buildChannelItem(const audio::TrackSequenceId
 
     connect(item, &MixerChannelItem::soloChanged, this, [this, item](const bool solo) {
         for (MixerChannelItem* ch : m_mixerChannelList) {
-            if (item == ch || ch->isMasterChannel()) {
+            if (item == ch || ch->isMasterChannel() || ch->solo()) {
                 continue;
             }
 
-            ch->setMuted(!solo);
+            ch->setMutedBySolo(solo);
         }
     });
 
@@ -215,6 +228,16 @@ MixerChannelItem* MixerPanelModel::buildMasterChannelItem()
 
     connect(item, &MixerChannelItem::outputParamsChanged, this, [this](const AudioOutputParams& params) {
         playback()->audioOutput()->setMasterOutputParams(params);
+    });
+
+    connect(item, &MixerChannelItem::soloChanged, this, [this, item](const bool solo) {
+        for (MixerChannelItem* ch : m_mixerChannelList) {
+            if (item == ch || ch->solo()) {
+                continue;
+            }
+
+            ch->setMutedBySolo(solo);
+        }
     });
 
     return item;

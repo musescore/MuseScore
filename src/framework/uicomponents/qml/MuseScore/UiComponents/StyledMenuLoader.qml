@@ -29,7 +29,7 @@ Loader {
     property alias menu: loader.item
     property var menuAnchorItem: null
 
-    property bool isMenuOpened: Boolean(loader.menu) && loader.menu.isOpened
+    property alias isMenuOpened: loader.active
 
     property var navigation: null
 
@@ -37,13 +37,26 @@ Loader {
         id: prv
 
         function loadMenu() {
-            if (!loader.sourceComponent) {
-                loader.sourceComponent = itemMenuComp
-            }
+            loader.active = true
         }
 
         function unloadMenu() {
-            loader.sourceComponent = null
+            loader.active = false
+        }
+    }
+
+    active: false
+
+    sourceComponent: StyledMenu {
+        id: itemMenu
+
+        onHandleMenuItem: {
+            Qt.callLater(loader.handleMenuItem, item)
+            itemMenu.close()
+        }
+
+        onClosed: {
+            Qt.callLater(prv.unloadMenu)
         }
     }
 
@@ -106,28 +119,6 @@ Loader {
             menu.y = y
         }
     }
-
-    Component {
-        id: itemMenuComp
-
-        StyledMenu {
-            id: itemMenu
-
-            onLoaded: {
-                focusOnOpenedMenuTimer.start()
-            }
-
-            onHandleMenuItem: {
-                Qt.callLater(loader.handleMenuItem, item)
-                itemMenu.close()
-            }
-
-            onClosed: {
-                Qt.callLater(prv.unloadMenu)
-            }
-        }
-    }
-
     Timer {
         id: focusOnOpenedMenuTimer
 

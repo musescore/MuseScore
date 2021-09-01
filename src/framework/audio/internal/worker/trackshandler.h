@@ -39,6 +39,7 @@ public:
     ~TracksHandler();
 
     async::Promise<TrackIdList> trackIdList(const TrackSequenceId sequenceId) const override;
+    async::Promise<TrackName> trackName(const TrackSequenceId sequenceId, const TrackId trackId) const override;
     async::Promise<TrackId> addTrack(const TrackSequenceId sequenceId, const std::string& trackName, midi::MidiData&& playbackData,
                                      AudioParams&& params) override;
     async::Promise<TrackId> addTrack(const TrackSequenceId sequenceId, const std::string& trackName, io::Device* playbackData,
@@ -49,7 +50,7 @@ public:
     async::Channel<TrackSequenceId, TrackId> trackAdded() const override;
     async::Channel<TrackSequenceId, TrackId> trackRemoved() const override;
 
-    async::Promise<AudioResourceIdList> availableInputResources(const AudioSourceType type) const override;
+    async::Promise<AudioResourceMetaList> availableInputResources() const override;
 
     async::Promise<AudioInputParams> inputParams(const TrackSequenceId sequenceId, const TrackId trackId) const override;
     void setInputParams(const TrackSequenceId sequenceId, const TrackId trackId, const AudioInputParams& params) override;

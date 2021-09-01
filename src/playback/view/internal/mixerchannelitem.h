@@ -27,30 +27,38 @@
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
-#include "audio/iaudiooutput.h"
-#include "audio/iplayback.h"
 #include "audio/audiotypes.h"
+#include "iinteractive.h"
+
+#include "inputresourceitem.h"
+#include "outputresourceitem.h"
 
 namespace mu::playback {
 class MixerChannelItem : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(playback, audio::IPlayback, playback)
-
     Q_PROPERTY(QString title READ title NOTIFY titleChanged)
+
+    Q_PROPERTY(bool outputOnly READ outputOnly CONSTANT)
+    Q_PROPERTY(InputResourceItem * inputResourceItem READ inputResourceItem NOTIFY inputResourceItemChanged)
+    Q_PROPERTY(QList<OutputResourceItem*> outputResourceItemList READ outputResourceItemList NOTIFY outputResourceItemListChanged)
 
     Q_PROPERTY(float leftChannelPressure READ leftChannelPressure NOTIFY leftChannelPressureChanged)
     Q_PROPERTY(float rightChannelPressure READ rightChannelPressure NOTIFY rightChannelPressureChanged)
 
     Q_PROPERTY(float volumeLevel READ volumeLevel WRITE setVolumeLevel NOTIFY volumeLevelChanged)
-    Q_PROPERTY(float balance READ balance WRITE setBalance NOTIFY balanceChanged)
+    Q_PROPERTY(int balance READ balance WRITE setBalance NOTIFY balanceChanged)
 
     Q_PROPERTY(bool muted READ muted WRITE setMuted NOTIFY mutedChanged)
     Q_PROPERTY(bool solo READ solo WRITE setSolo NOTIFY soloChanged)
 
+    INJECT(playback, framework::IInteractive, interactive)
+
 public:
     explicit MixerChannelItem(QObject* parent, const audio::TrackId id = -1, const bool isMaster = false);
+
+    ~MixerChannelItem();
 
     audio::TrackId id() const;
 
@@ -62,7 +70,7 @@ public:
     float rightChannelPressure() const;
 
     float volumeLevel() const;
-    float balance() const;
+    int balance() const;
 
     bool muted() const;
     bool solo() const;
@@ -72,6 +80,12 @@ public:
 
     void subscribeOnAudioSignalChanges(audio::AudioSignalChanges&& audioSignalChanges);
 
+    bool outputOnly() const;
+
+    const QList<OutputResourceItem*>& outputResourceItemList() const;
+
+    InputResourceItem* inputResourceItem() const;
+
 public slots:
     void setTitle(QString title);
 
@@ -79,9 +93,10 @@ public slots:
     void setRightChannelPressure(float rightChannelPressure);
 
     void setVolumeLevel(float volumeLevel);
-    void setBalance(float balance);
+    void setBalance(int balance);
 
-    void setMuted(bool muted);
+    void setMuted(bool isMuted);
+    void setMutedBySolo(bool isMuted);
     void setSolo(bool solo);
 
 signals:
@@ -91,7 +106,7 @@ signals:
     void rightChannelPressureChanged(float rightChannelPressure);
 
     void volumeLevelChanged(float volumeLevel);
-    void balanceChanged(float balance);
+    void balanceChanged(int balance);
 
     void mutedChanged(bool muted);
     void soloChanged(bool solo);
@@ -99,13 +114,27 @@ signals:
     void inputParamsChanged(const audio::AudioInputParams& params);
     void outputParamsChanged(const audio::AudioOutputParams& params);
 
+    void outputResourceItemListChanged(QList<OutputResourceItem*> itemList);
+
+    void inputResourceItemChanged();
+
 private:
     void setAudioChannelVolumePressure(const audio::audioch_t chNum, const float newValue);
+    void resetAudioChannelsVolumePressure();
+
+    void applyMuteToOutputParams(const bool isMuted);
+
+    InputResourceItem* buildInputResourceItem();
+    OutputResourceItem* buildOutputResourceItem(const audio::AudioFxParams& fxParams);
+    void ensureBlankOutputResourceSlot();
 
     audio::TrackId m_id = -1;
 
     audio::AudioInputParams m_inputParams;
     audio::AudioOutputParams m_outParams;
+
+    InputResourceItem* m_inputResourceItem = nullptr;
+    QList<OutputResourceItem*> m_outputResourceItemList;
 
     audio::AudioSignalChanges m_audioSignalChanges;
 
@@ -115,6 +144,8 @@ private:
     float m_leftChannelPressure = 0.0;
     float m_rightChannelPressure = 0.0;
 
+    bool m_mutedBySolo = false;
+    bool m_mutedManually = false;
     bool m_solo = false;
 };
 }

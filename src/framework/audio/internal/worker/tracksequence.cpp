@@ -132,6 +132,18 @@ RetVal<TrackId> TrackSequence::addTrack(const std::string& trackName, io::Device
     return result.make_ok(newId);
 }
 
+TrackName TrackSequence::trackName(const TrackId id) const
+{
+    TrackPtr trackPtr = track(id);
+
+    if (trackPtr) {
+        return trackPtr->name;
+    }
+
+    static TrackName emptyName;
+    return emptyName;
+}
+
 TrackIdList TrackSequence::trackIdList() const
 {
     ONLY_AUDIO_WORKER_THREAD;

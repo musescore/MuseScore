@@ -47,7 +47,7 @@ public:
     void setMasterOutputParams(const AudioOutputParams& params) override;
     async::Channel<AudioOutputParams> masterOutputParamsChanged() const override;
 
-    async::Promise<AudioResourceIdList> availableOutputResources(const AudioFxType type) const override;
+    async::Promise<AudioResourceMetaList> availableOutputResources() const override;
 
     async::Promise<AudioSignalChanges> signalChanges(const TrackSequenceId sequenceId, const TrackId trackId) const override;
     async::Promise<AudioSignalChanges> masterSignalChanges() const override;

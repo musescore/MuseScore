@@ -65,36 +65,22 @@ PluginModulePtr VstModulesRepository::pluginModule(const audio::AudioResourceId&
     return nullptr;
 }
 
-audio::AudioResourceIdList VstModulesRepository::moduleIdList(const VstPluginType& type) const
+audio::AudioResourceMetaList VstModulesRepository::instrumentModulesMeta() const
 {
     ONLY_AUDIO_THREAD(threadSecurer);
 
     std::lock_guard lock(m_mutex);
 
-    audio::AudioResourceIdList result;
+    return modulesMetaList(VstPluginType::Instrument);
+}
 
-    if (type == VstPluginType::Undefined) {
-        return result;
-    }
+audio::AudioResourceMetaList VstModulesRepository::fxModulesMeta() const
+{
+    ONLY_AUDIO_THREAD(threadSecurer);
 
-    for (const auto& pair : m_modules) {
-        PluginModulePtr module = pair.second;
+    std::lock_guard lock(m_mutex);
 
-        const auto& factory = module->getFactory();
-
-        for (auto& classInfo : factory.classInfos()) {
-            if (classInfo.category() != kVstAudioEffectClass) {
-                continue;
-            }
-
-            std::string subCategoriesStr = classInfo.subCategoriesString();
-            if (subCategoriesStr.find(PLUGIN_TYPE_MAP.at(type)) != std::string::npos) {
-                result.emplace_back(pair.first);
-            }
-        }
-    }
-
-    return result;
+    return modulesMetaList(VstPluginType::Fx);
 }
 
 void VstModulesRepository::refresh()
@@ -126,6 +112,45 @@ void VstModulesRepository::addModule(const io::path& path)
     }
 
     m_modules.emplace(io::basename(path).toStdString(), module);
+}
+
+audio::AudioResourceMetaList VstModulesRepository::modulesMetaList(const VstPluginType& type) const
+{
+    audio::AudioResourceMetaList result;
+
+    static auto hasNativeEditorSupport = []() {
+#ifdef Q_OS_LINUX
+        //!Note Host applications on Linux should provide their own event loop via VST3 API,
+        //!     otherwise it'll be impossible to launch native VST editor views
+        return false;
+#else
+        return true;
+#endif
+    };
+
+    for (const auto& pair : m_modules) {
+        PluginModulePtr module = pair.second;
+        const auto& factory = module->getFactory();
+
+        for (auto& classInfo : factory.classInfos()) {
+            if (classInfo.category() != kVstAudioEffectClass) {
+                continue;
+            }
+
+            std::string subCategoriesStr = classInfo.subCategoriesString();
+            if (subCategoriesStr.find(PLUGIN_TYPE_MAP.at(type)) != std::string::npos) {
+                audio::AudioResourceMeta meta;
+                meta.id = pair.first;
+                meta.type = audio::AudioResourceType::VstPlugin;
+                meta.vendor = factory.info().vendor();
+                meta.hasNativeEditorSupport = hasNativeEditorSupport();
+                result.emplace_back(std::move(meta));
+                break;
+            }
+        }
+    }
+
+    return result;
 }
 
 RetVal<io::paths> VstModulesRepository::pluginPathsFromCustomLocation(const io::path& customPath) const
