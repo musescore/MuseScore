@@ -527,47 +527,31 @@ void PianorollView::drawDraggedNotes(QPainter* painter)
 
     Ms::Score* curScore = score();
 
-
     Ms::Fraction pos(pixelXToWholeNote(m_lastMousePos.x()) * 1000, 1000);
     Ms::Measure* m = curScore->tick2measure(pos);
 
     Ms::Fraction timeSig = m->timesig();
-    int beatsInBar = timeSig.numerator();
+    int noteWithBeat = timeSig.denominator();
 
     //Number of smaller pieces the beat is divided into
     int subbeats = m_tuplet * (1 << m_subdivision);
-    int divisions = beatsInBar * subbeats;
+    int divisions = noteWithBeat * subbeats;
 
     //Round down to nearest division
     double dragToTick = pixelXToWholeNote(m_lastMousePos.x());
     double startTick = pixelXToWholeNote(m_mouseDownPos.x());
     double offsetTicks = dragToTick - startTick;
 
-    //offsetTicks = floor(offsetTicks * divisions) / divisions;
-    Ms::Fraction pasteTickOffset(floor(offsetTicks * divisions), divisions);
+    //Adjust offset so that note under cursor is aligned to note divistion
+    double startNoteDraggedTick = m_dragStartTick.numerator() / (double)m_dragStartTick.denominator() + offsetTicks;
+    Ms::Fraction startNoteDraggedAlignedTick = Ms::Fraction(floor(startNoteDraggedTick * divisions), divisions);
+
+    Ms::Fraction pasteTickOffset = startNoteDraggedAlignedTick - m_dragStartTick;
 
     int dragToPitch = pixelYToPitch(m_lastMousePos.y());
     int startPitch = pixelYToPitch(m_mouseDownPos.y());
 
     int pitchOffset = dragToPitch - startPitch;
-
-
-//      Pos barPos(score->tempomap(), score->sigmap(), pixelXToTick(_lastMousePos.x()), TType::TICKS);
-
-//      int beatsInBar = barPos.timesig().timesig().numerator();
-
-//      //Number of smaller pieces the beat is divided into
-//      int subbeats = _tuplet * (1 << _subdiv);
-//      int divisions = beatsInBar * subbeats;
-
-//      QPointF offset = _lastMousePos - _mouseDownPos;
-
-//      Fraction tickOffset = Fraction::fromTicks(offset.x() / _xZoom);
-//      //Round down to nearest division
-//      int numDiv = (int)floor((tickOffset.numerator() * divisions / (double)tickOffset.denominator()));
-//      Fraction pasteTickOffset(numDiv, divisions);
-
-//      int pitchOffset = (int)(-offset.y() / _noteHeight);
 
       //Iterate thorugh note data
     QXmlStreamReader xml(m_dragNoteCache);
@@ -1232,7 +1216,6 @@ void PianorollView::finishNoteGroupDrag()
     Ms::Fraction timeSig = m->timesig();
     int noteWithBeat = timeSig.denominator();
 
-
     //Number of smaller pieces the beat is divided into
     int subbeats = m_tuplet * (1 << m_subdivision);
     int divisions = noteWithBeat * subbeats;
@@ -1247,8 +1230,6 @@ void PianorollView::finishNoteGroupDrag()
     double startNoteDraggedTick = m_dragStartTick.numerator() / (double)m_dragStartTick.denominator() + offsetTicks;
     Ms::Fraction startNoteDraggedAlignedTick = Ms::Fraction(floor(startNoteDraggedTick * divisions), divisions);
 
-
-//    Ms::Fraction pasteTickOffset(floor(offsetTicks * divisions), divisions);
     Ms::Fraction pasteTickOffset = startNoteDraggedAlignedTick - m_dragStartTick;
 
 
