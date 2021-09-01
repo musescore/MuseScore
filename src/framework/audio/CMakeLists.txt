@@ -91,7 +91,6 @@ set(MODULE_SRC
     ${DRIVER_SRC}
 
     # Worker
-    ${CMAKE_CURRENT_LIST_DIR}/internal/worker/imixerchannel.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/playback.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/playback.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/abstractaudiosource.cpp
