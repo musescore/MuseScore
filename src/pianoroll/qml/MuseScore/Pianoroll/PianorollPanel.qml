@@ -298,30 +298,45 @@ Rectangle {
             ColumnLayout {
                 id: automationArea
                 visible: true
-                SplitView.minimumHeight: 40
+//                SplitView.minimumHeight: 40
+                SplitView.preferredHeight: 100
 
                 RowLayout {
                     spacing: 0
                     Layout.fillWidth: true
 
-                    Label {
+                    ColumnLayout {
                         Layout.preferredWidth: keyboardComponent.width
                         Layout.fillHeight: true
 
-                        text: "View 1"
+                        ComboBox {
+                            id: automationAttribute
+                            textRole: "text"
+                            valueRole: "value"
+
+                            model: [
+                                { text: qsTr("Velocity"), value: PianorollAutomationEditor.VELOCITY },
+                                { text: qsTr("Expression"), value: PianorollAutomationEditor.EXPRESSION },
+                                { text: qsTr("Pan"), value: PianorollAutomationEditor.PAN }
+                            ]
+
+                            onActivated: {
+                                automationEditor.automationAttribute = currentValue
+                                //pianoView.tuplet = currentValue
+                            }
+                        }
                     }
 
-                    Label {
+                    PianorollAutomationEditor {
+                        id: automationEditor
                         Layout.preferredWidth: pianoView.width
                         Layout.fillHeight: true
-
-                        text: "View 2"
                     }
 
                     Label {
                         Layout.fillHeight: true
 
-                        text: "3"
+                        text: " "
                     }
                 }
 
