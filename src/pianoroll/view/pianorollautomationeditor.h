@@ -48,6 +48,9 @@ class PianorollAutomationEditor : public QQuickPaintedItem, public async::Asynca
     Q_PROPERTY(double displayObjectWidth READ displayObjectWidth WRITE setDisplayObjectWidth NOTIFY displayObjectWidthChanged)
 
 public:
+    enum class AutomationAttribute { VELOCITY, EXPRESSION, PAN };
+    Q_ENUM(AutomationAttribute)
+
     PianorollAutomationEditor(QQuickItem* parent = nullptr);
 
     Q_INVOKABLE void load();
@@ -58,14 +61,16 @@ public:
     void setCenterX(double value);
     double displayObjectWidth() const { return m_displayObjectWidth; }
     void setDisplayObjectWidth(double value);
+    Ms::Fraction playbackPosition() { return m_playbackPosition; }
+    void setPlaybackPosition(Ms::Fraction value);
+    AutomationAttribute automationAttribute() { return m_automationAttribute; }
+    void setAutomationAttribute(AutomationAttribute value);
+
     void paint(QPainter*) override;
 
     int wholeNoteToPixelX(Ms::Fraction tick) const { return wholeNoteToPixelX(tick.numerator() / (double)tick.denominator()); }
     int wholeNoteToPixelX(double tick) const;
     double pixelXToWholeNote(int pixelX) const;
-
-    Ms::Fraction playbackPosition() { return m_playbackPosition; }
-    void setPlaybackPosition(Ms::Fraction value);
 
     Ms::Score* score();
 
@@ -74,12 +79,15 @@ signals:
     void centerXChanged();
     void displayObjectWidthChanged();
     void playbackPositionChanged();
+    void automationAttributeChanged();
 
 
 private:
     void onNotationChanged();
     void onCurrentNotationChanged();
     void updateBoundingSize();
+
+    AutomationAttribute m_automationAttribute = AutomationAttribute::VELOCITY;
 
     double m_centerX = 0;  //fraction of note grid camera is focused on
     double m_displayObjectWidth = 0;  //Set to note grid in pixels
