@@ -30,6 +30,7 @@
 #include "async/asyncable.h"
 #include "context/iglobalcontext.h"
 #include "pianoroll/ipianorollcontroller.h"
+#include "audio/iplayback.h"
 
 namespace mu::pianoroll {
 
@@ -77,6 +78,7 @@ public:
 private:
     INJECT(pianoroll, context::IGlobalContext, globalContext)
     INJECT(pianoroll, IPianorollController, controller)
+    INJECT(playback, audio::IPlayback, playback)
 
     Q_PROPERTY(double wholeNoteWidth READ wholeNoteWidth WRITE setWholeNoteWidth NOTIFY wholeNoteWidthChanged)
     Q_PROPERTY(int noteHeight READ noteHeight WRITE setNoteHeight NOTIFY noteHeightChanged)
@@ -116,6 +118,8 @@ public:
     double displayObjectHeight() const { return m_displayObjectHeight; }
     void setDisplayObjectHeight(double value);
 
+    Ms::Fraction playbackPosition() { return m_playbackPosition; }
+    void setPlaybackPosition(Ms::Fraction value);
 
     void paint(QPainter*) override;
     void keyReleaseEvent(QKeyEvent* event) override;
@@ -143,6 +147,7 @@ signals:
     void centerYChanged();
     void displayObjectWidthChanged();
     void displayObjectHeightChanged();
+    void playbackPositionChanged();
 
 
 private:
@@ -218,18 +223,20 @@ private:
     Ms::Fraction m_dragStartTick;
     bool m_inProgressUndoEvent;
 
+    Ms::Fraction m_playbackPosition;
+
     QColor m_colorBackground = Qt::gray;
     QColor m_colorKeyWhite = QColor(0xffffff);
     QColor m_colorKeyBlack = QColor(0xe6e6e6);
     QColor m_colorKeyHighlight = QColor(0xaaaaff);
     QColor m_colorSelectionBox = QColor(0x2085c3);
+    QColor m_colorPlaybackLine = QColor(0xff0000);
     QColor m_colorGridLine = QColor(0xa2a2a6);
     QColor m_colorNoteSel = QColor(0xffff00);
     QColor m_colorNoteVoice1 = QColor(0x9bcdff);
     QColor m_colorNoteVoice2 = QColor(0x80d580);
     QColor m_colorNoteVoice3 = QColor(0xffac85);
     QColor m_colorNoteVoice4 = QColor(0xff94db);
-//    QColor m_colorNoteGhost = QColor(0x1dcca0);
 
     QColor m_colorNoteDrag = QColor(0xffbb33);
     QColor m_colorText = QColor(0x111111);
