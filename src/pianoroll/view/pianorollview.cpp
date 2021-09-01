@@ -461,7 +461,6 @@ void PianorollView::paint(QPainter* p)
                 p->drawLine(x, 0, x, height());
             }
         }
-
     }
 
     {
