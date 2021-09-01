@@ -118,7 +118,7 @@ Rectangle {
 
                             onClicked: {
                                 if (menuLoader.isMenuOpened || hasSubitems) {
-                                    menuLoader.toggleOpened(modelData.subitems, btn.navigation)
+                                    menuLoader.toggleOpened(modelData.subitems)
                                     return
                                 }
 

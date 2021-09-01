@@ -113,7 +113,7 @@ Rectangle {
                                        : Qt.LeftButton
 
             function toggleMenuOpened() {
-                menuLoader.toggleOpened(item.subitems, btn.navigation)
+                menuLoader.toggleOpened(item.subitems)
             }
 
             function handleMenuItem() {
