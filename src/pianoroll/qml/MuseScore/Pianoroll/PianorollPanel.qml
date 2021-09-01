@@ -62,7 +62,6 @@ Rectangle {
                         ToolTip.timeout: 5000
                         ToolTip.visible: hovered
 
-
                         onClicked: {
                             pianoView.tool = PianorollView.SELECT
                         }
@@ -100,10 +99,15 @@ Rectangle {
                 }
 
                 RowLayout {
+                    id: automationButton
 
                     ToolButton {
                         text: qsTr("Automation")
                         checkable: true
+
+                        onClicked: {
+                            automationArea.visible = checked
+                        }
                     }
 
                 }
@@ -224,6 +228,7 @@ Rectangle {
                 //-------
                 //Row
                 PianorollKeyboard {
+                    id: keyboardComponent
                     width: 120
                     Layout.fillHeight: true
 
@@ -290,13 +295,36 @@ Rectangle {
                 }
             }
 
-            Rectangle {
+            ColumnLayout {
+                id: automationArea
+                visible: true
                 SplitView.minimumHeight: 40
-                color: "lightgreen"
-                Label {
-                    text: "View 3"
-                    anchors.centerIn: parent
+
+                RowLayout {
+                    spacing: 0
+                    Layout.fillWidth: true
+
+                    Label {
+                        Layout.preferredWidth: keyboardComponent.width
+                        Layout.fillHeight: true
+
+                        text: "View 1"
+                    }
+
+                    Label {
+                        Layout.preferredWidth: pianoView.width
+                        Layout.fillHeight: true
+
+                        text: "View 2"
+                    }
+
+                    Label {
+                        Layout.fillHeight: true
+
+                        text: "3"
+                    }
                 }
+
             }
         }
 
