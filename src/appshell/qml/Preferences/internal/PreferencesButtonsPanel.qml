@@ -59,7 +59,7 @@ Rectangle {
             width: 160
 
             navigation.panel: root.navigation
-            navigation.order: 1
+            navigation.order: 2
 
             text: qsTrc("appshell", "Reset preferences")
 
@@ -73,7 +73,7 @@ Rectangle {
             anchors.rightMargin: 12
 
             navigation.panel: root.navigation
-            navigation.order: 2
+            navigation.order: 3
 
             width: 132
             text: qsTrc("global", "Cancel")
@@ -89,7 +89,7 @@ Rectangle {
             anchors.right: parent.right
 
             navigation.panel: root.navigation
-            navigation.order: 3
+            navigation.order: 1
 
             width: 132
             accentButton: true
