@@ -48,11 +48,14 @@ public:
     void init();
 
     PluginModulePtr pluginModule(const audio::AudioResourceId& resourceId) const override;
-    audio::AudioResourceIdList moduleIdList(const VstPluginType& type) const override;
+
+    audio::AudioResourceMetaList instrumentModulesMeta() const override;
+    audio::AudioResourceMetaList fxModulesMeta() const override;
     void refresh() override;
 
 private:
     void addModule(const io::path& path);
+    audio::AudioResourceMetaList modulesMetaList(const VstPluginType& type) const;
 
     RetVal<io::paths> pluginPathsFromCustomLocation(const io::path& customPath) const;
     PluginModule::PathList pluginPathsFromDefaultLocation() const;

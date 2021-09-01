@@ -74,8 +74,7 @@ void ProjectAudioSettings::makeDefault()
 AudioInputParams ProjectAudioSettings::inputParamsFromJson(const QJsonObject& object) const
 {
     AudioInputParams result;
-    result.type = sourceTypeFromString(object.value("type").toString());
-    result.resourceId = object.value("resourceId").toString().toStdString();
+    result.resourceMeta.id = object.value("resourceId").toString().toStdString();
 
     return result;
 }
@@ -93,8 +92,8 @@ AudioOutputParams ProjectAudioSettings::outputParamsFromJson(const QJsonObject& 
 QJsonObject ProjectAudioSettings::inputParamsToJson(const audio::AudioInputParams& params) const
 {
     QJsonObject result;
-    result.insert("type", sourceTypeToString(params.type));
-    result.insert("resourceId", QString::fromStdString(params.resourceId));
+    result.insert("type", sourceTypeToString(params.type()));
+    result.insert("resourceId", QString::fromStdString(params.resourceMeta.id));
 
     return result;
 }

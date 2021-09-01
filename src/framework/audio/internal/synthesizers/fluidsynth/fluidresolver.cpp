@@ -35,6 +35,8 @@ static const std::map<SoundFontFormat, std::string> FLUID_SF_FILE_EXTENSIONS =
     { SoundFontFormat::SF3, "*.sf3" }
 };
 
+static const AudioResourceVendor FLUID_VENDOR_NAME = "Fluid";
+
 FluidResolver::FluidResolver(const io::paths& soundFontDirs, async::Channel<io::paths> sfDirsChanges)
 {
     ONLY_AUDIO_WORKER_THREAD;
@@ -67,14 +69,21 @@ ISynthesizerPtr FluidResolver::resolveSynth(const TrackId /*trackId*/, const Aud
     return synth;
 }
 
-AudioResourceIdList FluidResolver::resolveResources() const
+AudioResourceMetaList FluidResolver::resolveResources() const
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    AudioResourceIdList result(m_resourcesCache.size());
+    AudioResourceMetaList result;
+    result.reserve(m_resourcesCache.size());
 
     for (const auto& pair : m_resourcesCache) {
-        result.push_back(pair.first);
+        AudioResourceMeta meta;
+        meta.id = pair.first;
+        meta.type = AudioResourceType::FluidSoundfont;
+        meta.vendor = FLUID_VENDOR_NAME;
+        meta.hasNativeEditorSupport = false;
+
+        result.push_back(std::move(meta));
     }
 
     return result;

@@ -88,7 +88,7 @@ void VSTModule::resolveImports()
 
     auto fxResolver = ioc()->resolve<IFxResolver>(moduleName());
     if (fxResolver) {
-        fxResolver->registerResolver(AudioFxType::Vst, std::make_shared<VstFxResolver>());
+        fxResolver->registerResolver(AudioFxType::VstFx, std::make_shared<VstFxResolver>());
     }
 }
 

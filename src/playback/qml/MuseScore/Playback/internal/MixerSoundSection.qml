@@ -20,27 +20,33 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_FXRESOLVER_H
-#define MU_AUDIO_FXRESOLVER_H
+import QtQuick 2.15
+import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
+import MuseScore.Audio 1.0
 
-#include <map>
-#include <mutex>
+MixerPanelSection {
+    id: root
 
-#include "ifxresolver.h"
+    headerTitle: qsTrc("playback", "Sound")
 
-namespace mu::audio::fx {
-class FxResolver : public IFxResolver
-{
-public:
-    std::vector<IFxProcessorPtr> resolveMasterFxList(const AudioFxParamsMap& fxParams) override;
-    std::vector<IFxProcessorPtr> resolveFxList(const TrackId trackId, const AudioFxParamsMap& fxParams) override;
-    AudioResourceMetaList resolveAvailableResources() const override;
-    void registerResolver(const AudioFxType type, IResolverPtr resolver) override;
+    Item {
+        height: inputResourceControl.height
+        width: root.delegateDefaultWidth
 
-private:
-    std::map<AudioFxType, IResolverPtr> m_resolvers;
-    mutable std::mutex m_mutex;
-};
+        visible: !item.outputOnly
+
+        AudioResourceControl {
+            id: inputResourceControl
+
+            supportsByPassing: false
+            resourceItemModel: item.inputResourceItem
+
+            onTitleClicked: {
+                if (item.inputResourceItem) {
+                    item.inputResourceItem.requestToLaunchNativeEditorView()
+                }
+            }
+        }
+    }
 }
-
-#endif // MU_AUDIO_FXRESOLVER_H

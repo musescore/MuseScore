@@ -57,14 +57,14 @@ ISynthesizerPtr SynthResolver::resolveSynth(const TrackId trackId, const AudioIn
 
     std::lock_guard lock(m_mutex);
 
-    auto search = m_resolvers.find(params.type);
+    auto search = m_resolvers.find(params.type());
 
     if (search == m_resolvers.end()) {
         return nullptr;
     }
 
     const IResolverPtr& resolver = search->second;
-    return resolver->resolveSynth(trackId, params.resourceId);
+    return resolver->resolveSynth(trackId, params.resourceMeta.id);
 }
 
 ISynthesizerPtr SynthResolver::resolveDefaultSynth(const TrackId trackId) const
@@ -74,7 +74,7 @@ ISynthesizerPtr SynthResolver::resolveDefaultSynth(const TrackId trackId) const
     return resolveSynth(trackId, m_defaultInputParams);
 }
 
-AudioResourceIdList SynthResolver::resolveAvailableResources(const AudioSourceType type) const
+AudioResourceMetaList SynthResolver::resolveAvailableResources() const
 {
     ONLY_AUDIO_WORKER_THREAD;
 
@@ -82,14 +82,14 @@ AudioResourceIdList SynthResolver::resolveAvailableResources(const AudioSourceTy
 
     std::lock_guard lock(m_mutex);
 
-    auto search = m_resolvers.find(type);
+    AudioResourceMetaList result;
 
-    if (search != m_resolvers.end()) {
-        return search->second->resolveResources();
+    for (const auto& pair : m_resolvers) {
+        const AudioResourceMetaList& resolvedResources = pair.second->resolveResources();
+        result.insert(result.end(), resolvedResources.begin(), resolvedResources.end());
     }
 
-    LOGE() << "Unable to find a resolver for type: " << static_cast<int>(type);
-    return {};
+    return result;
 }
 
 void SynthResolver::registerResolver(const AudioSourceType type, IResolverPtr resolver)

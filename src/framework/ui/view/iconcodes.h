@@ -276,6 +276,8 @@ public:
         TENUTO = 0xF38D,
         STACCATO = 0xF38E,
 
+        BYPASS = 0xF38F,
+
         VOICE_1 = 0xF391,
         VOICE_2 = 0xF392,
         VOICE_3 = 0xF393,
@@ -313,6 +315,9 @@ public:
         INFO = 0xF3CF,
         ERROR = 0xF3D0,
         QUESTION = 0xF3D1,
+
+        MUTE = 0xF3D5,
+        SOLO = 0xF3D6,
 
         AUTO,
         NONE,

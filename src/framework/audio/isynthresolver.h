@@ -44,7 +44,7 @@ public:
         virtual ~IResolver() = default;
 
         virtual ISynthesizerPtr resolveSynth(const audio::TrackId trackId, const audio::AudioResourceId& resourceId) const = 0;
-        virtual AudioResourceIdList resolveResources() const = 0;
+        virtual audio::AudioResourceMetaList resolveResources() const = 0;
         virtual void refresh() = 0;
     };
     using IResolverPtr = std::shared_ptr<IResolver>;
@@ -53,7 +53,7 @@ public:
 
     virtual ISynthesizerPtr resolveSynth(const TrackId trackId, const AudioInputParams& params) const = 0;
     virtual ISynthesizerPtr resolveDefaultSynth(const TrackId trackId) const = 0;
-    virtual AudioResourceIdList resolveAvailableResources(const AudioSourceType type) const = 0;
+    virtual audio::AudioResourceMetaList resolveAvailableResources() const = 0;
     virtual void registerResolver(const AudioSourceType type, IResolverPtr resolver) = 0;
 };
 

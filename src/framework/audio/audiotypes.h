@@ -25,6 +25,7 @@
 
 #include <variant>
 #include <memory>
+#include <set>
 #include <string>
 
 #include "midi/miditypes.h"
@@ -53,31 +54,90 @@ using MixerChannelId = int32_t;
 using AudioSourceName = std::string;
 using AudioResourceId = std::string;
 using AudioResourceIdList = std::vector<AudioResourceId>;
+using AudioResourceVendor = std::string;
+
+enum class AudioResourceType {
+    Undefined = -1,
+    FluidSoundfont,
+    VstPlugin
+};
+
+struct AudioResourceMeta {
+    AudioResourceId id;
+    AudioResourceType type = AudioResourceType::Undefined;
+    AudioResourceVendor vendor;
+
+    bool hasNativeEditorSupport = false;
+
+    bool isValid() const
+    {
+        return !id.empty()
+               && !vendor.empty()
+               && type != AudioResourceType::Undefined;
+    }
+
+    bool operator==(const AudioResourceMeta& other) const
+    {
+        return id == other.id
+               && vendor == other.vendor
+               && type == other.type
+               && hasNativeEditorSupport == other.hasNativeEditorSupport;
+    }
+};
+
+using AudioResourceMetaList = std::vector<AudioResourceMeta>;
 
 using FxProcessorId = std::string;
 using FxProcessorIdList =  std::vector<FxProcessorId>;
 
 enum class AudioFxType {
     Undefined = -1,
-    Vst
+    VstFx
 };
 
+enum class AudioFxCategory {
+    Undefined = -1,
+    FxEqualizer,
+    FxAnalyzer,
+    FxDelay,
+    FxDistortion,
+    FxDynamics,
+    FxFilter,
+    FxGenerator,
+    FxMastering,
+    FxModulation,
+    FxPitchShift,
+    FxRestoration,
+    FxReverb,
+    FxSurround,
+    FxTools
+};
+
+using AudioFxCategories = std::set<AudioFxCategory>;
+
 struct AudioFxParams {
-    AudioFxType type = AudioFxType::Undefined;
-    AudioResourceId resourceId;
+    AudioFxType type() const
+    {
+        switch (resourceMeta.type) {
+        case AudioResourceType::VstPlugin: return AudioFxType::VstFx;
+        default: return AudioFxType::Undefined;
+        }
+    }
+
+    AudioFxCategories categories;
+    AudioResourceMeta resourceMeta;
     bool active = false;
 
     bool operator ==(const AudioFxParams& other) const
     {
-        return type == other.type
-               && resourceId == other.resourceId
-               && active == other.active;
+        return resourceMeta == other.resourceMeta
+               && active == other.active
+               && categories == other.categories;
     }
 
     bool isValid() const
     {
-        return type != AudioFxType::Undefined
-               && !resourceId.empty();
+        return resourceMeta.isValid();
     }
 };
 
@@ -105,19 +165,27 @@ enum class AudioSourceType {
 };
 
 struct AudioSourceParams {
-    AudioSourceType type = AudioSourceType::Undefined;
-    AudioResourceId resourceId;
+    AudioSourceType type() const
+    {
+        switch (resourceMeta.type) {
+        case AudioResourceType::FluidSoundfont: return AudioSourceType::Fluid;
+        case AudioResourceType::VstPlugin: return AudioSourceType::Vsti;
+        default: return AudioSourceType::Undefined;
+        }
+    }
+
+    AudioResourceMeta resourceMeta;
 
     bool isValid() const
     {
-        return type != AudioSourceType::Undefined
-               && !resourceId.empty();
+        return type() != AudioSourceType::Undefined
+               && resourceMeta.isValid();
     }
 
     bool operator ==(const AudioSourceParams& other) const
     {
-        return type == other.type
-               && resourceId == other.resourceId;
+        return type() == other.type()
+               && resourceMeta == other.resourceMeta;
     }
 };
 

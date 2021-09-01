@@ -44,7 +44,7 @@ public:
     virtual void setMasterOutputParams(const AudioOutputParams& params) = 0;
     virtual async::Channel<AudioOutputParams> masterOutputParamsChanged() const = 0;
 
-    virtual async::Promise<AudioResourceIdList> availableOutputResources(const AudioFxType type) const = 0;
+    virtual async::Promise<AudioResourceMetaList> availableOutputResources() const = 0;
 
     virtual async::Promise<AudioSignalChanges> signalChanges(const TrackSequenceId sequenceId, const TrackId trackId) const = 0;
     virtual async::Promise<AudioSignalChanges> masterSignalChanges() const = 0;

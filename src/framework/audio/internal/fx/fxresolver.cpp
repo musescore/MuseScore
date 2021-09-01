@@ -80,7 +80,7 @@ std::vector<IFxProcessorPtr> FxResolver::resolveFxList(const TrackId trackId, co
     return result;
 }
 
-AudioResourceIdList FxResolver::resolveAvailableResources(const AudioFxType type) const
+AudioResourceMetaList FxResolver::resolveAvailableResources() const
 {
     ONLY_AUDIO_WORKER_THREAD;
 
@@ -88,13 +88,14 @@ AudioResourceIdList FxResolver::resolveAvailableResources(const AudioFxType type
 
     std::lock_guard lock(m_mutex);
 
-    auto search = m_resolvers.find(type);
+    AudioResourceMetaList result;
 
-    if (search == m_resolvers.end()) {
-        return {};
+    for (const auto& pair : m_resolvers) {
+        const AudioResourceMetaList& resolvedResources = pair.second->resolveResources();
+        result.insert(result.end(), resolvedResources.begin(), resolvedResources.end());
     }
 
-    return search->second->resolveResources();
+    return result;
 }
 
 void FxResolver::registerResolver(const AudioFxType type, IResolverPtr resolver)

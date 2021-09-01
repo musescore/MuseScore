@@ -465,7 +465,9 @@ void PlaybackController::resetCurrentSequence()
     playback()->player()->playbackPositionMsecs().resetOnReceive(this);
     playback()->player()->playbackStatusChanged().resetOnReceive(this);
 
-    stop();
+    setCurrentTick(0);
+    m_isPlaying = false;
+    m_isPlayingChanged.notify();
 
     playback()->removeSequence(m_currentSequenceId);
     m_currentSequenceId = -1;

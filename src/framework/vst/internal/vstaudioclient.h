@@ -19,11 +19,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef VSTAUDIOCLIENT_H
-#define VSTAUDIOCLIENT_H
+#ifndef MU_VST_VSTAUDIOCLIENT_H
+#define MU_VST_VSTAUDIOCLIENT_H
 
-#include "modularity/ioc.h"
-#include "audio/iaudioconfiguration.h"
+#include "audio/audiotypes.h"
 
 #include "vstplugin.h"
 #include "vsttypes.h"
@@ -31,13 +30,11 @@
 namespace mu::vst {
 class VstAudioClient
 {
-    INJECT(vst, audio::IAudioConfiguration, config)
-
 public:
     VstAudioClient() = default;
     ~VstAudioClient();
 
-    void init(VstPluginPtr plugin);
+    void init(VstPluginType&& type, VstPluginPtr plugin, audio::audioch_t&& audioChannelsCount = 2);
 
     bool handleEvent(const midi::Event& e);
 
@@ -61,6 +58,7 @@ private:
     PluginComponentPtr pluginComponent() const;
     void setUpProcessData();
     void updateProcessSetup();
+    void extractInputSamples(const audio::samples_t& sampleCount, const float* sourceBuffer);
     void fillOutputBuffer(unsigned int samples, float* output);
 
     bool convertMidiToVst(const mu::midi::Event& in, VstEvent& out) const;
@@ -73,7 +71,10 @@ private:
     VstEventList m_eventList;
     VstProcessData m_processData;
     VstProcessContext m_processContext;
+
+    VstPluginType m_type = VstPluginType::Undefined;
+    audio::audioch_t m_audioChannelsCount = 0;
 };
 }
 
-#endif // VSTAUDIOCLIENT_H
+#endif // MU_VST_VSTAUDIOCLIENT_H

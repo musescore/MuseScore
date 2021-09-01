@@ -41,7 +41,7 @@ public:
     explicit FluidResolver(const io::paths& soundFontDirs, async::Channel<io::paths> sfDirsChanges);
 
     ISynthesizerPtr resolveSynth(const audio::TrackId trackId, const audio::AudioResourceId& resourceId) const override;
-    AudioResourceIdList resolveResources() const override;
+    audio::AudioResourceMetaList resolveResources() const override;
 
     void refresh() override;
 
