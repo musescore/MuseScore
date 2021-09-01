@@ -74,6 +74,13 @@ ISynthesizerPtr SynthResolver::resolveDefaultSynth(const TrackId trackId) const
     return resolveSynth(trackId, m_defaultInputParams);
 }
 
+AudioInputParams SynthResolver::resolveDefaultInputParams() const
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    return m_defaultInputParams;
+}
+
 AudioResourceMetaList SynthResolver::resolveAvailableResources() const
 {
     ONLY_AUDIO_WORKER_THREAD;

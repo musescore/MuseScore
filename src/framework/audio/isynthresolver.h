@@ -53,6 +53,7 @@ public:
 
     virtual ISynthesizerPtr resolveSynth(const TrackId trackId, const AudioInputParams& params) const = 0;
     virtual ISynthesizerPtr resolveDefaultSynth(const TrackId trackId) const = 0;
+    virtual AudioInputParams resolveDefaultInputParams() const = 0;
     virtual audio::AudioResourceMetaList resolveAvailableResources() const = 0;
     virtual void registerResolver(const AudioSourceType type, IResolverPtr resolver) = 0;
 };
