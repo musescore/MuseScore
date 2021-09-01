@@ -489,16 +489,6 @@ void PianorollView::paint(QPainter* p)
         p->drawLine(x, 0, x, height());
     }
 
-//    //Draw locators
-//    for (int i = 0; i < 3; ++i) {
-//          if (_locator[i].valid())
-//                {
-//                p->setPen(QPen(i == 0 ? Qt::red : Qt::blue, 2));
-//                qreal x = tickToPixelX(_locator[i].time(TType::TICKS));
-//                p->drawLine(x, y1, x, y2);
-//                }
-//          }
-
     //Draw drag selection box
     if (m_dragStarted && m_dragStyle == DragStyle::SELECTION_RECT && m_tool == PianorollTool::SELECT)
     {
