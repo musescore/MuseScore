@@ -26,7 +26,6 @@
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 
-#include "imixerchannel.h"
 #include "itracksequence.h"
 #include "igettracks.h"
 #include "iaudiosource.h"

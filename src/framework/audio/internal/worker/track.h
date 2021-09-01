@@ -30,7 +30,6 @@
 #include "async/channel.h"
 
 #include "iaudiosource.h"
-#include "imixerchannel.h"
 #include "audiotypes.h"
 
 namespace mu::audio {
