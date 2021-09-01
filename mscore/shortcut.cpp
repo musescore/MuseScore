@@ -4722,7 +4722,7 @@ void Shortcut::reset()
 //---------------------------------------------------------
 
 static const QString numPadPrefix("NumPad+");
-static const int NUMPADPREFIX_SIZE = 7;         // the length in chars of the above string
+static const int NUMPADPREFIX_SIZE = numPadPrefix.size();
 
 QString Shortcut::keySeqToString(const QKeySequence& keySeq, QKeySequence::SequenceFormat fmt, bool escapeKeyStr /* = false */)
       {

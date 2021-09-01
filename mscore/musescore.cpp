@@ -4312,7 +4312,7 @@ void MuseScore::changeState(ScoreState val)
             "pad-note-256-TAB", "pad-note-512-TAB", "pad-note-1024-TAB", "pad-rest-TAB", "rest-TAB"};
       bool intoTAB = (_sstate != STATE_NOTE_ENTRY_STAFF_TAB) && (val == STATE_NOTE_ENTRY_STAFF_TAB);
       bool fromTAB = (_sstate == STATE_NOTE_ENTRY_STAFF_TAB) && (val != STATE_NOTE_ENTRY_STAFF_TAB);
-      // if activating TAB note entry, swap "pad-note-...-TAB" shorctuts into "pad-note-..." actions
+      // if activating TAB note entry, swap "pad-note-...-TAB" shortcuts into "pad-note-..." actions
       if (intoTAB) {
             for (unsigned i = 0; i < sizeof(stdNames)/sizeof(char*); ++i) {
                   QAction* act = getAction(stdNames[i]);
