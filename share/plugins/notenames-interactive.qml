@@ -21,8 +21,8 @@ import MuseScore 3.0
 
 MuseScore {
     version: "3.5"
-    description: qsTr("This plugin names notes as per your language setting")
-    menuPath: "Plugins.Notes." + qsTr("Note Names (Interactive)")
+    description: "This plugin names notes as per your language setting"
+    menuPath: "Plugins.Notes." + "Note Names (Interactive)"
     pluginType: "dock"
 
     implicitHeight: controls.implicitHeight * 1.5

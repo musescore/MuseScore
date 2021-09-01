@@ -4,11 +4,6 @@
 <context>
     <name>helloqml</name>
     <message>
-	<location filename="../helloqml.qml" line="8"/>
-        <source>This demo plugin shows some basic tasks.</source>
-        <translation>Dieses Demo-Plugin zeigt einige einfache Funktionen.</translation>
-    </message>
-    <message>
 	<location filename="../helloqml.qml" line="13"/>
         <source>hello world</source>
         <translation>Hallo Welt</translation>

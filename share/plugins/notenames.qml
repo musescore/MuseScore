@@ -20,8 +20,8 @@ import MuseScore 3.0
 
 MuseScore {
    version: "3.5"
-   description: qsTr("This plugin names notes as per your language setting")
-   menuPath: "Plugins.Notes." + qsTr("Note Names")
+   description: "This plugin names notes as per your language setting"
+   menuPath: "Plugins.Notes." + "Note Names"
 
    // Small note name size is fraction of the full font size.
    property var fontSizeMini: 0.7;
