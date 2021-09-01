@@ -95,7 +95,8 @@ private:
 
     Ms::Fraction m_playbackPosition;
 
-    QColor m_colorBackground = Qt::lightGray;
+    QColor m_colorBackground = Qt::gray;
+    QColor m_colorGridBackground = QColor(0xdddddd);
     QColor m_colorPlaybackLine = QColor(0xff0000);
     QColor m_colorGridLine = QColor(0xa2a2a6);
     QColor m_colorText = Qt::black;
