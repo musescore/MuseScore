@@ -31,6 +31,28 @@ Item {
 
     property alias model: treeView.model
 
+    property NavigationPanel navigation: NavigationPanel {
+        name: "PreferencesMenuPanel"
+        direction: NavigationPanel.Both
+        onActiveChanged: {
+            if (active) {
+                root.forceActiveFocus()
+            }
+        }
+
+        onNavigationEvent: {
+            if (event.type === NavigationEvent.AboutActive) {
+                event.setData("controlIndex", prv.currentItemNavigationIndex)
+            }
+        }
+    }
+
+    QtObject {
+        id: prv
+
+        property var currentItemNavigationIndex: []
+    }
+
     Rectangle {
         id: background
         anchors.fill: parent
@@ -74,6 +96,8 @@ Item {
 
         itemDelegate: GradientTabButton {
             property bool expanded: Boolean(model) ? model.itemRole.expanded : false
+            property int navigationRow: styleData.index.row
+            property int navigationColumn: styleData.depth
 
             orientation: Qt.Horizontal
 
@@ -85,6 +109,21 @@ Item {
 
             title: Boolean(model) ? model.itemRole.title : ""
             checked: Boolean(model) && Boolean(model.itemRole) ? model.itemRole.id === treeView.model.currentPageId : false
+            enabled: visible
+
+            navigation.name: "PreferencesMenuItem"
+            navigation.panel: root.navigation
+            navigation.row: navigationRow
+            navigation.column: navigationColumn
+            navigation.enabled: enabled
+            navigation.accessible.name: title
+            navigation.accessible.role: MUAccessible.ListItem
+            navigation.onActiveChanged: {
+                if (navigation.active) {
+                    prv.currentItemNavigationIndex = [navigationRow, navigationColumn]
+                    treeView.model.selectRow(styleData.index)
+                }
+            }
 
             Component.onCompleted: {
                 updateExpandedState()
@@ -106,6 +145,12 @@ Item {
                 width: 24
                 height: width
                 iconCode: Boolean(model) ? model.itemRole.icon : IconCode.NONE
+            }
+
+            onCheckedChanged: {
+                if (checked && !navigation.active) {
+                    Qt.callLater(navigation.requestActive)
+                }
             }
 
             onClicked: {
