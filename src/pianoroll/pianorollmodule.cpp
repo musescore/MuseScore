@@ -68,7 +68,7 @@ void PianorollModule::registerUiTypes()
     qmlRegisterType<PianorollRuler>("MuseScore.Pianoroll", 1, 0, "PianorollRuler");
     qmlRegisterType<PianorollKeyboard>("MuseScore.Pianoroll", 1, 0, "PianorollKeyboard");
     qmlRegisterType<PianorollScrollbar>("MuseScore.Pianoroll", 1, 0, "PianorollScrollbar");
-    qmlRegisterType<PianorollScrollbar>("MuseScore.Pianoroll", 1, 0, "PianorollAutomationEditor");
+    qmlRegisterType<PianorollAutomationEditor>("MuseScore.Pianoroll", 1, 0, "PianorollAutomationEditor");
 
     auto ui = ioc()->resolve<ui::IUiEngine>(moduleName());
     if (ui) {

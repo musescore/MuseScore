@@ -331,6 +331,15 @@ Rectangle {
                         id: automationEditor
                         Layout.preferredWidth: pianoView.width
                         Layout.fillHeight: true
+
+                        centerX: scrollViewX.center
+
+                        wholeNoteWidth: horizZoom.value
+
+                        Component.onCompleted: {
+                            load()
+                        }
+
                     }
 
                     Label {
