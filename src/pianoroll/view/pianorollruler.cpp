@@ -106,6 +106,12 @@ PianorollRuler::PianorollRuler(QQuickItem* parent)
 //    m_font2.setBold(true);
     m_font1.setPixelSize(10);
 
+    if (markIcon[0] == 0)
+    {
+        markIcon[0] = new QPixmap(cmark_xpm);
+        markIcon[1] = new QPixmap(lmark_xpm);
+        markIcon[2] = new QPixmap(rmark_xpm);
+    }
 }
 
 
@@ -114,6 +120,11 @@ void PianorollRuler::load()
     onNotationChanged();
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         onNotationChanged();
+    });
+
+    playback()->player()->playbackPositionMsecs().onReceive(this, [this](audio::TrackSequenceId currentTrackSequence, const audio::msecs_t newPosMsecs) {
+        int tick = score()->utime2utick(newPosMsecs / 1000.);
+        setPlaybackPosition(Ms::Fraction::fromTicks(tick));
     });
 }
 
@@ -133,6 +144,29 @@ void PianorollRuler::onNotationChanged()
 void PianorollRuler::onCurrentNotationChanged()
 {
     updateBoundingSize();
+}
+
+Ms::Score* PianorollRuler::score()
+{
+    notation::INotationPtr notation = globalContext()->currentNotation();
+    if (!notation)
+    {
+        return nullptr;
+    }
+
+    //Find staff to draw from
+    Ms::Score* score = notation->elements()->msScore();
+    return score;
+}
+
+void PianorollRuler::setPlaybackPosition(Ms::Fraction value)
+{
+    if (value == m_playbackPosition)
+        return;
+    m_playbackPosition = value;
+    update();
+
+    emit playbackPositionChanged();
 }
 
 void PianorollRuler::setWholeNoteWidth(double value)
@@ -233,10 +267,15 @@ void PianorollRuler::paint(QPainter* p)
             text.setNum(measureIndex);
             int pixelSize = m_font2.pixelSize();
             p->drawText(pos + 4, pixelSize + 2, text);
-
         }
+    }
 
-
+    //Draw playhead
+    {
+        p->setPen(m_colorPlaybackLine);
+        int xp = wholeNoteToPixelX(m_playbackPosition);
+        QPixmap* pm = markIcon[0];
+        p->drawPixmap(xp - pm->width() / 2, height() - pm->height(), *pm);
     }
 
 }
