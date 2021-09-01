@@ -27,14 +27,14 @@ import MuseScore.UiComponents 1.0
 BaseSection {
     id: root
 
+    title: qsTrc("appshell", "Audio")
+
     property int firstColumnWidth: 0
 
     property alias currentAudioApiIndex: apiComboBox.currentIndex
     property alias audioApiList: apiComboBox.model
 
     signal currentAudioApiIndexChangeRequested(int newIndex)
-
-    title: qsTrc("appshell", "Audio")
 
     Column {
         spacing: 12

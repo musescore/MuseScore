@@ -50,13 +50,18 @@ FocusScope {
 
     NavigationControl {
         id: navCtrl
+
         name: root.objectName != "" ? root.objectName : "CheckBox"
         enabled: root.enabled
+        accessible.role: MUAccessible.CheckBox
+        accessible.name: root.text
+
         onActiveChanged: {
             if (!root.activeFocus) {
                 root.forceActiveFocus()
             }
         }
+
         onTriggered: root.clicked()
     }
 

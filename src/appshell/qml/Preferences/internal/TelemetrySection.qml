@@ -21,33 +21,31 @@
  */
 import QtQuick 2.15
 
-import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
-Column {
+BaseSection {
     id: root
 
-    width: parent.width
-    spacing: 18
+    title: qsTrc("appshell", "Telemetry")
 
-    property alias title: titleLabel.text
+    property alias isTelemetryAllowed: sendCheckBox.checked
 
-    property int navigationOrderStart: 0
-    property NavigationPanel navigation: NavigationPanel {
-        name: root.title
-        direction: NavigationPanel.Vertical
-        accessible.name: root.title
-        enabled: root.visible
+    signal telemetryAllowedChanged(bool allowed)
 
-        onActiveChanged: {
-            if (active) {
-                root.forceActiveFocus()
-            }
+    CheckBox {
+        id: sendCheckBox
+
+        width: 216
+        anchors.verticalCenter: parent.verticalCenter
+
+        text: qsTrc("appshell", "Send anonymous telemetry data to MuseScore")
+
+        navigation.name: "TelemetryAllowedBox"
+        navigation.panel: root.navigation
+        navigation.row: 1
+
+        onClicked: {
+            root.telemetryAllowedChanged(!checked)
         }
-    }
-
-    StyledTextLabel {
-        id: titleLabel
-        font: ui.theme.bodyBoldFont
     }
 }
