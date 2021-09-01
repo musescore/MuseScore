@@ -215,6 +215,7 @@ private:
     QPointF m_popupMenuPos;
     DragStyle m_dragStyle;
     int m_dragStartPitch;
+    Ms::Fraction m_dragStartTick;
     bool m_inProgressUndoEvent;
 
     QColor m_colorBackground = Qt::gray;
