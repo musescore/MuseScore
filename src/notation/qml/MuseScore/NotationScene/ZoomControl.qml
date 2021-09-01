@@ -130,7 +130,7 @@ RowLayout {
         }
 
         onClicked: {
-            menuLoader.toggleOpened(root.availableZoomList, parent.navigation)
+            menuLoader.toggleOpened(root.availableZoomList)
         }
     }
 }

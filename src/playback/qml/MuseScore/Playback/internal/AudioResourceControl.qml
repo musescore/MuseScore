@@ -267,6 +267,7 @@ Item {
                     id: menuLoader
 
                     menuAnchorItem: ui.rootItem
+                    navigation: menuButton.navigation
 
                     onHandleMenuItem: {
                         if (root.resourceItemModel) {

@@ -37,7 +37,7 @@ FlatButton {
 
     function toggleMenu(item, x, y) {
         menuLoader.parent = item
-        menuLoader.toggleOpened(menuModel, null, x, y)
+        menuLoader.toggleOpened(menuModel, x, y)
     }
 
     enabled: visible
@@ -59,9 +59,9 @@ FlatButton {
         menuLoader.parent = root
 
         if (root.menuAlign !== 0) {
-            menuLoader.toggleOpenedWithAlign(root.menuModel, root.navigation, root.menuAlign)
+            menuLoader.toggleOpenedWithAlign(root.menuModel, root.menuAlign)
         } else {
-            menuLoader.toggleOpened(root.menuModel, root.navigation, root.menuOffsetX, root.menuOffsetY)
+            menuLoader.toggleOpened(root.menuModel, root.menuOffsetX, root.menuOffsetY)
         }
     }
 }
