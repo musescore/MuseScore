@@ -40,6 +40,9 @@ public:
     void setPlayHarmonyWhenEditing(bool value) override;
 
     PlaybackCursorType cursorType() const override;
+
+    bool isMixerSectionVisible(MixerSectionType sectionType) const override;
+    void setMixerSectionVisible(MixerSectionType sectionType, bool visible) override;
 };
 }
 
