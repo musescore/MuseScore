@@ -24,7 +24,7 @@ import QtQuick.Layouts 1.12
 
 import MuseScore.UiComponents 1.0
 
-Column {
+BaseSection {
     id: root
 
     property int firstColumnWidth: 0
@@ -34,13 +34,7 @@ Column {
 
     signal currentAudioApiIndexChangeRequested(int newIndex)
 
-    width: parent.width
-    spacing: 18
-
-    StyledTextLabel {
-        text: qsTrc("appshell", "Audio")
-        font: ui.theme.bodyBoldFont
-    }
+    title: qsTrc("appshell", "Audio")
 
     Column {
         spacing: 12
@@ -51,6 +45,10 @@ Column {
             title: qsTrc("appshell", "Audio API:")
             titleWidth: root.firstColumnWidth
 
+            navigation.name: "AudioApiBox"
+            navigation.panel: root.navigation
+            navigation.row: 1
+
             onValueEdited: {
                 root.currentAudioApiIndexChangeRequested(currentIndex)
             }
@@ -58,6 +56,9 @@ Column {
 
         CommonAudioApiConfiguration {
             firstColumnWidth: root.firstColumnWidth
+
+            navigation: root.navigation
+            navigationOrderStart: 2
         }
     }
 }
