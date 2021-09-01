@@ -11,8 +11,6 @@ class IMixerChannel
 public:
     virtual ~IMixerChannel() = default;
 
-    virtual MixerChannelId id() const = 0;
-
     // root mean square of a processed sample block
     virtual async::Channel<audioch_t, float> signalAmplitudeRmsChanged() const = 0;
 

@@ -27,20 +27,18 @@
 #include "async/asyncable.h"
 
 #include "ifxresolver.h"
-#include "iaudiosource.h"
 #include "ifxprocessor.h"
-#include "imixerchannel.h"
+#include "track.h"
 
 namespace mu::audio {
-class MixerChannel : public IMixerChannel, public IAudioSource, public async::Asyncable
+class MixerChannel : public ITrackAudioOutput, public async::Asyncable
 {
     INJECT(audio, fx::IFxResolver, fxResolver)
 
 public:
-    explicit MixerChannel(const TrackId trackId, const MixerChannelId id, IAudioSourcePtr source, AudioOutputParams params,
-                          async::Channel<AudioOutputParams> paramsChanged, const unsigned int sampleRate);
+    explicit MixerChannel(const TrackId trackId, IAudioSourcePtr source, const unsigned int sampleRate);
 
-    MixerChannelId id() const override;
+    void applyOutputParams(const AudioOutputParams& originParams, AudioOutputParams& resultParams) override;
 
     async::Channel<audioch_t, float> signalAmplitudeRmsChanged() const override;
     async::Channel<audioch_t, volume_dbfs_t> volumePressureDbfsChanged() const override;
@@ -54,11 +52,9 @@ public:
     void process(float* buffer, unsigned int sampleCount) override;
 
 private:
-    void setOutputParams(const AudioOutputParams& params);
     void completeOutput(float* buffer, unsigned int samplesCount) const;
 
     TrackId m_trackId = -1;
-    MixerChannelId m_id = -1;
 
     unsigned int m_sampleRate = 0;
     AudioOutputParams m_params;
