@@ -130,6 +130,25 @@ void PianorollAutomationEditor::setDisplayObjectWidth(double value)
     emit displayObjectWidthChanged();
 }
 
+void PianorollAutomationEditor::setTuplet(int value)
+{
+    if (value == m_tuplet)
+        return;
+    m_tuplet = value;
+    update();
+
+    emit tupletChanged();
+}
+
+void PianorollAutomationEditor::setSubdivision(int value)
+{
+    if (value == m_subdivision)
+        return;
+    m_subdivision = value;
+    update();
+
+    emit subdivisionChanged();
+}
 void PianorollAutomationEditor::updateBoundingSize()
 {
     notation::INotationPtr notation = globalContext()->currentNotation();
@@ -173,6 +192,7 @@ void PianorollAutomationEditor::paint(QPainter* p)
 
     const QPen penLineMajor = QPen(m_colorGridLine, 2.0, Qt::SolidLine);
     const QPen penLineMinor = QPen(m_colorGridLine, 1.0, Qt::SolidLine);
+    const QPen penLineSub = QPen(m_colorGridLine, 1.0, Qt::DotLine);
 
     //Visible area we are rendering to
     Ms::Measure* lm = score->lastMeasure();
@@ -184,6 +204,60 @@ void PianorollAutomationEditor::paint(QPainter* p)
     qreal x2 = wholeNoteToPixelX(end);
 
     p->fillRect(x1, 0, x2 - x1, height(), m_colorGridBackground);
+
+    //-----------------------------------
+    //Draw horizontal grid lines
+    p->setPen(penLineMinor);
+    p->drawLine(QLineF(x1, m_marginY, x2, m_marginY));
+    p->drawLine(QLineF(x1, height() - m_marginY, x2, height() - m_marginY));
+
+    //-----------------------------------
+    //Draw vertial grid lines
+    const int minBeatGap = 20;
+    for (Ms::MeasureBase* m = score->first(); m; m = m->next())
+    {
+        Ms::Fraction start = m->tick();  //fraction representing number of whole notes since start of score.  Expressed in terms of the note getting the beat in this bar
+        Ms::Fraction len = m->ticks();  //Beats in bar / note length with the beat
+
+        p->setPen(penLineMajor);
+        int x = wholeNoteToPixelX(start);
+        p->drawLine(x, 0, x, height());
+
+        //Beats
+        int beatWidth = m_wholeNoteWidth * len.numerator() / len.denominator();
+        if (beatWidth < minBeatGap)
+            continue;
+
+        for (int i = 1; i < len.numerator(); ++i)
+        {
+            Ms::Fraction beat = start + Ms::Fraction(i, len.denominator());
+            int x = wholeNoteToPixelX(beat);
+            p->setPen(penLineMinor);
+            p->drawLine(x, 0, x, height());
+
+        }
+
+        //Subbeats
+        int subbeats = m_tuplet * (1 << m_subdivision);
+
+        int subbeatWidth = m_wholeNoteWidth * len.numerator() / (len.denominator() * subbeats);
+
+        if (subbeatWidth < minBeatGap)
+            continue;
+
+        for (int i = 0; i < len.numerator(); ++i)
+        {
+            Ms::Fraction beat = start + Ms::Fraction(i, len.denominator());
+            for (int j = 1; j < subbeats; ++j)
+            {
+                Ms::Fraction subbeat = beat + Ms::Fraction(j, len.denominator() * subbeats);
+                int x = wholeNoteToPixelX(subbeat);
+                p->setPen(penLineSub);
+                p->drawLine(x, 0, x, height());
+            }
+        }
+
+    }
 
 
 }
