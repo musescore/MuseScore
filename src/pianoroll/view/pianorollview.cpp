@@ -31,6 +31,9 @@
 #include "libmscore/pitchspelling.h"
 #include "libmscore/undo.h"
 #include "libmscore/tuplet.h"
+#include "notation/inotationplayback.h"
+#include "audio/iplayer.h"
+#include "audio/audiotypes.h"
 
 #include <QPainter>
 #include <QGuiApplication>
@@ -88,6 +91,13 @@ void PianorollView::load()
     controller()->pitchHighlightChanged().onNotify(this, [this](){
         update();
     });
+
+    
+    //playback()->player()->playbackPositionMsecs().onReceive(this, [this](const audio::msecs_t newPosMsecs) {
+    //    int tick = score()->utime2utick(newPosMsecs);
+    //    setPlaybackPosition(Ms::Fraction::fromTicks(tick));
+    //});
+
 }
 
 Ms::Score* PianorollView::score()
@@ -115,6 +125,7 @@ void PianorollView::onNotationChanged()
         notation->notationChanged().onNotify(this, [this]() {
             onCurrentNotationChanged();
         });
+
     }
 
     buildNoteData();
@@ -275,6 +286,16 @@ void PianorollView::setDisplayObjectHeight(double value)
     emit displayObjectHeightChanged();
 }
 
+void PianorollView::setPlaybackPosition(Ms::Fraction value)
+{
+    if (value == m_playbackPosition)
+        return;
+    m_playbackPosition = value;
+    update();
+
+    emit playbackPositionChanged();
+}
+
 void PianorollView::setTool(PianorollTool value)
 {
     if (value == m_tool)
@@ -336,23 +357,7 @@ void PianorollView::paint(QPainter* p)
 
     //Find staff to draw from
     Ms::Score* score = notation->elements()->msScore();
-    //std::vector<Ms::Element*> selectedElements = notation->interaction()->selection()->elements();
-    //std::vector<int> selectedStaves;
-    //int activeStaff = -1;
-    //for (Ms::Element* e: selectedElements)
-    //{
-    //    int idx = e->staffIdx();
-    //    qDebug() << "ele idx " << idx;
-    //    activeStaff = idx;
-    //    if (std::find(selectedStaves.begin(), selectedStaves.end(), idx) == selectedStaves.end())
-    //    {
-    //        selectedStaves.push_back(idx);
-    //    }
-    //}
 
-    //if (activeStaff == -1)
-    //    activeStaff = 0;
-//        return;
     Ms::Staff* staff = score->staff(m_activeStaff);
     Ms::Part* part = staff->part();
 
@@ -381,7 +386,6 @@ void PianorollView::paint(QPainter* p)
     //Colored stripes
     for (int pitch = 0; pitch < NUM_PITCHES; ++pitch)
     {
-//        int y = (127 - pitch) * m_noteHeight;
         double y = pitchToPixelY(pitch + 1);
 
         int degree = (pitch - transp.chromatic + 60) % 12;
@@ -405,7 +409,6 @@ void PianorollView::paint(QPainter* p)
     //Bounding lines
     for (int pitch = 0; pitch <= NUM_PITCHES; ++pitch)
     {
-//        int y = (128 - pitch) * m_noteHeight;
         double y = pitchToPixelY(pitch);
         int degree = (pitch - transp.chromatic + 60) % 12;
         p->setPen(degree == 0 ? penLineMajor : penLineMinor);
@@ -421,7 +424,6 @@ void PianorollView::paint(QPainter* p)
         Ms::Fraction len = m->ticks();  //Beats in bar / note length with the beat
 
         p->setPen(penLineMajor);
-//        int x = m_wholeNoteWidth * start.numerator() / start.denominator();
         int x = wholeNoteToPixelX(start);
         p->drawLine(x, 0, x, height());
 
@@ -433,7 +435,6 @@ void PianorollView::paint(QPainter* p)
         for (int i = 1; i < len.numerator(); ++i)
         {
             Ms::Fraction beat = start + Ms::Fraction(i, len.denominator());
-//            int x = m_wholeNoteWidth * beat.numerator() / beat.denominator();
             int x = wholeNoteToPixelX(beat);
             p->setPen(penLineMinor);
             p->drawLine(x, 0, x, height());
@@ -455,7 +456,6 @@ void PianorollView::paint(QPainter* p)
             for (int j = 1; j < subbeats; ++j)
             {
                 Ms::Fraction subbeat = beat + Ms::Fraction(j, len.denominator() * subbeats);
-//                int x = m_wholeNoteWidth * subbeat.numerator() / subbeat.denominator();
                 int x = wholeNoteToPixelX(subbeat);
                 p->setPen(penLineSub);
                 p->drawLine(x, 0, x, height());
@@ -466,7 +466,6 @@ void PianorollView::paint(QPainter* p)
 
     {
         p->setPen(penLineMajor);
-//        int x = m_wholeNoteWidth * end.numerator() / end.denominator();
         int x = wholeNoteToPixelX(end);
         p->drawLine(x, 0, x, height());
     }
@@ -483,6 +482,12 @@ void PianorollView::paint(QPainter* p)
     if (m_dragStyle == DragStyle::NOTES)
         drawDraggedNotes(p);
 
+    //Draw playback position
+    {
+        p->setPen(QPen(m_colorPlaybackLine, 2));
+        int x = wholeNoteToPixelX(m_playbackPosition);
+        p->drawLine(x, 0, x, height());
+    }
 
 //    //Draw locators
 //    for (int i = 0; i < 3; ++i) {
