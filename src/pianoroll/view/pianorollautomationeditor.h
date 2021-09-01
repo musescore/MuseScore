@@ -46,6 +46,8 @@ class PianorollAutomationEditor : public QQuickPaintedItem, public async::Asynca
     Q_PROPERTY(double wholeNoteWidth READ wholeNoteWidth WRITE setWholeNoteWidth NOTIFY wholeNoteWidthChanged)
     Q_PROPERTY(double centerX READ centerX WRITE setCenterX NOTIFY centerXChanged)
     Q_PROPERTY(double displayObjectWidth READ displayObjectWidth WRITE setDisplayObjectWidth NOTIFY displayObjectWidthChanged)
+    Q_PROPERTY(int tuplet READ tuplet WRITE setTuplet NOTIFY tupletChanged)
+    Q_PROPERTY(int subdivision READ subdivision WRITE setSubdivision NOTIFY subdivisionChanged)
 
 public:
     enum class AutomationAttribute { VELOCITY, EXPRESSION, PAN };
@@ -61,6 +63,10 @@ public:
     void setCenterX(double value);
     double displayObjectWidth() const { return m_displayObjectWidth; }
     void setDisplayObjectWidth(double value);
+    int tuplet() const { return m_tuplet; }
+    void setTuplet(int value);
+    int subdivision() const { return m_subdivision; }
+    void setSubdivision(int value);
     Ms::Fraction playbackPosition() { return m_playbackPosition; }
     void setPlaybackPosition(Ms::Fraction value);
     AutomationAttribute automationAttribute() { return m_automationAttribute; }
@@ -80,6 +86,8 @@ signals:
     void displayObjectWidthChanged();
     void playbackPositionChanged();
     void automationAttributeChanged();
+    void tupletChanged();
+    void subdivisionChanged();
 
 
 private:
@@ -92,6 +100,11 @@ private:
     double m_centerX = 0;  //fraction of note grid camera is focused on
     double m_displayObjectWidth = 0;  //Set to note grid in pixels
     double m_wholeNoteWidth;
+
+    double m_marginY = 8;
+
+    int m_tuplet = 1;
+    int m_subdivision = 0;
 
     Ms::Fraction m_playbackPosition;
 
