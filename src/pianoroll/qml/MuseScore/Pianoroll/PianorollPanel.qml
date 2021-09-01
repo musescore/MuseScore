@@ -288,7 +288,6 @@ Rectangle {
                     Layout.minimumHeight: 12
                     text: "";
                 }
-
             }
 
             Rectangle {
