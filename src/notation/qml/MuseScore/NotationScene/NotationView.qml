@@ -121,8 +121,7 @@ FocusScope {
                     if (contextMenuLoader.isMenuOpened) {
                         contextMenuLoader.update(contextMenuModel.items, pos.x, pos.y)
                     } else {
-                        // TODO: replace `null` with a NavigationControl
-                        contextMenuLoader.open(contextMenuModel.items, null, pos.x, pos.y)
+                        contextMenuLoader.open(contextMenuModel.items, pos.x, pos.y)
                     }
                 }
 
@@ -195,7 +194,7 @@ FocusScope {
                 StyledMenuLoader {
                     id: contextMenuLoader
 
-                    navigation: navPanel
+                    navigation: fakeNavCtrl
 
                     onHandleMenuItem: function (item) {
                         contextMenuModel.handleMenuItem(item.id)

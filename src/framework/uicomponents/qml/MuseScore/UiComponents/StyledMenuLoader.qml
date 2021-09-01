@@ -51,8 +51,8 @@ Loader {
         id: itemMenu
 
         onHandleMenuItem: {
-            Qt.callLater(loader.handleMenuItem, item)
             itemMenu.close()
+            Qt.callLater(loader.handleMenuItem, item)
         }
 
         onClosed: {
@@ -60,24 +60,23 @@ Loader {
         }
     }
 
-    function open(model, navigationParentControl, x = 0, y = 0) {
+    function open(model, x = 0, y = 0) {
         prv.loadMenu()
 
         var menu = loader.menu
         menu.parent = loader.parent
-        if (navigationParentControl) {
-            menu.navigationParentControl = navigationParentControl
-            menu.navigation.name = navigationParentControl.name + "PopupMenu"
-        }
         menu.anchorItem = menuAnchorItem
 
-        menu.navigationParentControl = loader.navigation
+        if (loader.navigation) {
+            menu.navigationParentControl = loader.navigation
+            menu.navigation.name = loader.navigation.name + "PopupMenu"
+        }
 
         update(model, x, y)
         menu.open()
     }
 
-    function toggleOpened(model, navigationParentControl, x = 0, y = 0) {
+    function toggleOpened(model, x = 0, y = 0) {
         prv.loadMenu()
 
         var menu = loader.menu
@@ -86,15 +85,15 @@ Loader {
             return
         }
 
-        open(model, navigationParentControl, x, y)
+        open(model, x, y)
     }
 
-    function toggleOpenedWithAlign(model, navigationParentControl, align) {
+    function toggleOpenedWithAlign(model, align) {
         prv.loadMenu()
 
         loader.menu.preferredAlign = align
 
-        toggleOpened(model, navigationParentControl)
+        toggleOpened(model)
     }
 
     function close() {
@@ -127,7 +126,9 @@ Loader {
         repeat: false
 
         onTriggered: {
-            loader.menu.requestFocus()
+            if (loader.menu) {
+                loader.menu.requestFocus()
+            }
         }
     }
 }

@@ -98,7 +98,7 @@ StyledDialogView {
                             {id: "checkable", title: "Checkable", checkable: true, checked: false}
                         ]
 
-                menuLoader.toggleOpened(items, null, mouseX, mouseY)
+                menuLoader.toggleOpened(items, mouseX, mouseY)
             }
         }
 
