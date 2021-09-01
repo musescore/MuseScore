@@ -92,12 +92,10 @@ void PianorollView::load()
         update();
     });
 
-    
-    //playback()->player()->playbackPositionMsecs().onReceive(this, [this](const audio::msecs_t newPosMsecs) {
-    //    int tick = score()->utime2utick(newPosMsecs);
-    //    setPlaybackPosition(Ms::Fraction::fromTicks(tick));
-    //});
-
+    playback()->player()->playbackPositionMsecs().onReceive(this, [this](audio::TrackSequenceId currentTrackSequence, const audio::msecs_t newPosMsecs) {
+        int tick = score()->utime2utick(newPosMsecs / 1000.);
+        setPlaybackPosition(Ms::Fraction::fromTicks(tick));
+    });
 }
 
 Ms::Score* PianorollView::score()

@@ -30,6 +30,7 @@
 #include "async/asyncable.h"
 #include "context/iglobalcontext.h"
 #include "pianoroll/ipianorollcontroller.h"
+#include "audio/iplayback.h"
 
 namespace mu::pianoroll {
 
@@ -39,6 +40,7 @@ class PianorollRuler : public QQuickPaintedItem, public async::Asyncable
 
     INJECT(pianoroll, context::IGlobalContext, globalContext)
     INJECT(pianoroll, IPianorollController, controller)
+    INJECT(playback, audio::IPlayback, playback)
 
     Q_PROPERTY(double wholeNoteWidth READ wholeNoteWidth WRITE setWholeNoteWidth NOTIFY wholeNoteWidthChanged)
     Q_PROPERTY(double centerX READ centerX WRITE setCenterX NOTIFY centerXChanged)
@@ -61,10 +63,16 @@ public:
     int wholeNoteToPixelX(double tick) const;
     double pixelXToWholeNote(int pixelX) const;
 
+    Ms::Fraction playbackPosition() { return m_playbackPosition; }
+    void setPlaybackPosition(Ms::Fraction value);
+
+    Ms::Score* score();
+
 signals:
     void wholeNoteWidthChanged();
     void centerXChanged();
     void displayObjectWidthChanged();
+    void playbackPositionChanged();
 
 
 private:
@@ -81,7 +89,10 @@ private:
     QFont m_font1;
     QFont m_font2;
 
+    Ms::Fraction m_playbackPosition;
+
     QColor m_colorBackground = Qt::lightGray;
+    QColor m_colorPlaybackLine = QColor(0xff0000);
     QColor m_colorGridLine = QColor(0xa2a2a6);
     QColor m_colorText = Qt::black;
 
