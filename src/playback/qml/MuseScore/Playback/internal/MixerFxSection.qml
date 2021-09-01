@@ -28,7 +28,7 @@ import MuseScore.Audio 1.0
 MixerPanelSection {
     id: root
 
-    headerTitle: qsTr("Audio Fx")
+    headerTitle: qsTrc("playback", "Audio Fx")
 
     Column {
         y: 0

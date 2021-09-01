@@ -28,7 +28,7 @@ import MuseScore.Audio 1.0
 MixerPanelSection {
     id: root
 
-    headerTitle: qsTr("Sound")
+    headerTitle: qsTrc("playback", "Sound")
 
     Item {
         height: inputResourceControl.height

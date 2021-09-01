@@ -8,7 +8,12 @@
 using namespace mu::playback;
 using namespace mu::audio;
 
-static const QString NO_FX_MENU_ITEM_ID = QString::fromStdString(mu::trc("playback", "No effect"));
+static const QString& NO_FX_MENU_ITEM_ID()
+{
+    static std::string id = mu::trc("playback", "No effect");
+    static QString resultStr = QString::fromStdString(id);
+    return resultStr;
+}
 
 OutputResourceItem::OutputResourceItem(QObject* parent, const audio::AudioFxParams& params)
     : AbstractAudioResourceItem(parent),
@@ -34,8 +39,8 @@ void OutputResourceItem::requestAvailableResources()
         }
 
         // add "no fx" item
-        result << buildMenuItem(NO_FX_MENU_ITEM_ID,
-                                NO_FX_MENU_ITEM_ID,
+        result << buildMenuItem(NO_FX_MENU_ITEM_ID(),
+                                NO_FX_MENU_ITEM_ID(),
                                 m_currentFxParams.resourceMeta.id.empty());
 
         result << buildSeparator();
@@ -69,7 +74,7 @@ void OutputResourceItem::requestAvailableResources()
 
 void OutputResourceItem::handleMenuItem(const QString& menuItemId)
 {
-    if (menuItemId == NO_FX_MENU_ITEM_ID) {
+    if (menuItemId == NO_FX_MENU_ITEM_ID()) {
         updateCurrentFxParams(AudioResourceMeta());
         return;
     }
