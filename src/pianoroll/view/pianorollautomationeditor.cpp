@@ -89,6 +89,17 @@ void PianorollAutomationEditor::setPlaybackPosition(Ms::Fraction value)
     emit playbackPositionChanged();
 }
 
+void PianorollAutomationEditor::setAutomationAttribute(AutomationAttribute value)
+{
+    if (value == m_automationAttribute)
+        return;
+    m_automationAttribute = value;
+    update();
+
+    emit automationAttributeChanged();
+}
+
+
 void PianorollAutomationEditor::setWholeNoteWidth(double value)
 {
     if (value == m_wholeNoteWidth)
