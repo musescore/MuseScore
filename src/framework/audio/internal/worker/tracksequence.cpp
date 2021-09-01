@@ -90,7 +90,7 @@ RetVal<TrackId> TrackSequence::addTrack(const std::string& trackName, const midi
     track.name = trackName;
     track.setPlaybackData(midiData);
     track.inputHandler = std::make_shared<MidiAudioSource>(track.id, midiData);
-    track.mixerChannel = mixer()->addChannel(track.id, track.inputHandler, params.out, track.outputParamsChanged).val;
+    track.outputHandler = mixer()->addChannel(track.id, track.inputHandler).val;
     track.setInputParams(params.in);
     track.setOutputParams(params.out);
 
@@ -168,7 +168,7 @@ Ret TrackSequence::removeTrack(const TrackId id)
     auto search = m_tracks.find(id);
 
     if (search != m_tracks.end() && search->second) {
-        mixer()->removeChannel(search->second->mixerChannel->id());
+        mixer()->removeChannel(id);
         m_tracks.erase(id);
         m_trackRemoved.send(id);
         return true;

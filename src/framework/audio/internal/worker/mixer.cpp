@@ -51,12 +51,11 @@ IAudioSourcePtr Mixer::mixedSource()
     return shared_from_this();
 }
 
-RetVal<IMixerChannelPtr> Mixer::addChannel(const TrackId trackId, IAudioSourcePtr source, const AudioOutputParams& params,
-                                           async::Channel<AudioOutputParams> paramsChanged)
+RetVal<MixerChannelPtr> Mixer::addChannel(const TrackId trackId, IAudioSourcePtr source)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    RetVal<IMixerChannelPtr> result;
+    RetVal<MixerChannelPtr> result;
 
     if (!source) {
         result.val = nullptr;
@@ -64,16 +63,15 @@ RetVal<IMixerChannelPtr> Mixer::addChannel(const TrackId trackId, IAudioSourcePt
         return result;
     }
 
-    MixerChannelId newId = static_cast<MixerChannelId>(m_mixerChannels.size());
-    m_mixerChannels.emplace(newId, std::make_shared<MixerChannel>(trackId, newId, std::move(source), params, paramsChanged, m_sampleRate));
+    m_mixerChannels.emplace(trackId, std::make_shared<MixerChannel>(trackId, std::move(source), m_sampleRate));
 
-    result.val = m_mixerChannels[newId];
+    result.val = m_mixerChannels[trackId];
     result.ret = make_ret(Ret::Code::Ok);
 
     return result;
 }
 
-Ret Mixer::removeChannel(const MixerChannelId id)
+Ret Mixer::removeChannel(const TrackId id)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
@@ -84,7 +82,7 @@ Ret Mixer::removeChannel(const MixerChannelId id)
         return make_ret(Ret::Code::Ok);
     }
 
-    return make_ret(Err::InvalidMixerChannelId);
+    return make_ret(Err::InvalidTrackId);
 }
 
 void Mixer::setAudioChannelsCount(const audioch_t count)

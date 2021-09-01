@@ -49,7 +49,22 @@ public:
     virtual void applyInputParams(const AudioInputParams& originParams, AudioInputParams& resultParams) = 0;
 };
 
+class ITrackAudioOutput : public IAudioSource
+{
+public:
+    virtual ~ITrackAudioOutput() = default;
+
+    virtual void applyOutputParams(const AudioOutputParams& originParams, AudioOutputParams& resultParams) = 0;
+
+    // root mean square of a processed sample block
+    virtual async::Channel<audioch_t, float> signalAmplitudeRmsChanged() const = 0;
+
+    // root mean square of a processed sample block in the "decibels relative to full scale" units
+    virtual async::Channel<audioch_t, volume_dbfs_t> volumePressureDbfsChanged() const = 0;
+};
+
 using ITrackAudioInputPtr = std::shared_ptr<ITrackAudioInput>;
+using ITrackAudioOutputPtr = std::shared_ptr<ITrackAudioOutput>;
 
 struct Track
 {
@@ -67,7 +82,7 @@ public:
         return id != -1
                && type != Undefined
                && inputHandler
-               && mixerChannel;
+               && outputHandler;
     }
 
     virtual PlaybackData playbackData() const = 0;
@@ -97,14 +112,16 @@ public:
         return m_outParams;
     }
 
-    bool setOutputParams(const AudioOutputParams& params)
+    bool setOutputParams(const AudioOutputParams& requiredParams)
     {
-        if (m_outParams == params) {
+        if (m_outParams == requiredParams) {
             return false;
         }
 
-        m_outParams = params;
-        outputParamsChanged.send(params);
+        AudioOutputParams appliedParams;
+        outputHandler->applyOutputParams(requiredParams, appliedParams);
+        m_outParams = std::move(appliedParams);
+        outputParamsChanged.send(m_outParams);
 
         return true;
     }
@@ -114,7 +131,7 @@ public:
     async::Channel<PlaybackData> playbackDataChanged;
 
     ITrackAudioInputPtr inputHandler = nullptr;
-    IMixerChannelPtr mixerChannel = nullptr;
+    ITrackAudioOutputPtr outputHandler = nullptr;
 
 private:
     AudioInputParams m_inParams;

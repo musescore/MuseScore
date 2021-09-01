@@ -124,7 +124,7 @@ Channel<audioch_t, float> SequenceIO::signalAmplitudeChanged(const TrackId id) c
 
     TrackPtr track = m_getTracks->track(id);
 
-    return track->mixerChannel->signalAmplitudeRmsChanged();
+    return track->outputHandler->signalAmplitudeRmsChanged();
 }
 
 Channel<audioch_t, volume_dbfs_t> SequenceIO::volumePressureChanged(const TrackId id) const
@@ -137,5 +137,5 @@ Channel<audioch_t, volume_dbfs_t> SequenceIO::volumePressureChanged(const TrackI
 
     TrackPtr track = m_getTracks->track(id);
 
-    return track->mixerChannel->volumePressureDbfsChanged();
+    return track->outputHandler->volumePressureDbfsChanged();
 }
