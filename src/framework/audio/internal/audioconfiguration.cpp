@@ -47,7 +47,8 @@ static const Settings::Key USER_SOUNDFONTS_PATH("midi", "application/paths/mySou
 static const Settings::Key SHOW_CONTROLS_IN_MIXER("midi", "io/midi/showControlsInMixer");
 
 static const AudioResourceId DEFAULT_SOUND_FONT_NAME = "MuseScore_General";     // "GeneralUser GS v1.471.sf2"; // "MuseScore_General.sf3";
-static const AudioResourceMeta DEFAULT_AUDIO_RESOURCE_META = { DEFAULT_SOUND_FONT_NAME, AudioResourceType::FluidSoundfont, "Fluid", false /*hasNativeEditor*/};
+static const AudioResourceMeta DEFAULT_AUDIO_RESOURCE_META
+    = { DEFAULT_SOUND_FONT_NAME, AudioResourceType::FluidSoundfont, "Fluid", false /*hasNativeEditor*/ };
 
 void AudioConfiguration::init()
 {
