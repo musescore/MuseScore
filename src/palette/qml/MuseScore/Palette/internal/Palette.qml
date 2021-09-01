@@ -614,7 +614,7 @@ GridView {
             function showCellMenu() {
                 contextMenu.modelIndex = modelIndex
                 contextMenu.canEdit = paletteView.paletteController.canEdit(paletteView.paletteRootIndex)
-                contextMenu.toggleOpened(contextMenu.items, null, mouseArea.mouseX, mouseArea.mouseY)
+                contextMenu.toggleOpened(contextMenu.items, mouseArea.mouseX, mouseArea.mouseY)
             }
 
             StyledMenuLoader {

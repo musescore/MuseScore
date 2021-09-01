@@ -63,7 +63,7 @@ FlatButton {
     }
 
     onClicked: {
-        menu.toggleOpened(root.availableViewModeList, root.navigation)
+        menu.toggleOpened(root.availableViewModeList)
     }
 
     StyledMenuLoader {
