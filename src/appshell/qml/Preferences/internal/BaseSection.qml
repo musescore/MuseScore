@@ -20,36 +20,34 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Controls 2.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
-Flickable {
+Column {
     id: root
 
-    contentWidth: width
+    width: parent.width
+    spacing: 18
 
-    clip: true
-    boundsBehavior: Flickable.StopAtBounds
-    interactive: height < contentHeight
+    property alias title: titleLabel.text
 
-    ScrollBar.vertical: StyledScrollBar {}
-
-    property NavigationSection navigationSection: null
     property int navigationOrderStart: 0
+    property int navigationOrderEnd: 0
+    property NavigationPanel navigation: NavigationPanel {
+        name: root.title
+        direction: NavigationPanel.Vertical
+        accessible.name: root.title
 
-    signal hideRequested()
-
-    function apply() {
-        return true
+        onActiveChanged: {
+            if (active) {
+                root.forceActiveFocus()
+            }
+        }
     }
 
-    MouseArea {
-        anchors.fill: parent
-
-        onClicked: {
-            root.forceActiveFocus()
-        }
+    StyledTextLabel {
+        id: titleLabel
+        font: ui.theme.bodyBoldFont
     }
 }

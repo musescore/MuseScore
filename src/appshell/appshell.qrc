@@ -77,5 +77,6 @@
         <file>qml/platform/mac/Main.qml</file>
         <file>qml/platform/win/Main.qml</file>
         <file>resources/win_opengl_buglist.json</file>
+        <file>qml/Preferences/internal/BaseSection.qml</file>
     </qresource>
 </RCC>
