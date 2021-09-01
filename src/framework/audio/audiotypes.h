@@ -71,13 +71,16 @@ struct AudioResourceMeta {
 
     bool isValid() const
     {
-        return !id.empty() && !vendor.empty();
+        return !id.empty()
+               && !vendor.empty()
+               && type != AudioResourceType::Undefined;
     }
 
     bool operator==(const AudioResourceMeta& other) const
     {
         return id == other.id
                && vendor == other.vendor
+               && type == other.type
                && hasNativeEditorSupport == other.hasNativeEditorSupport;
     }
 };
