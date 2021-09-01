@@ -28,11 +28,22 @@ import MuseScore.UiComponents 1.0
 Rectangle {
     id: root
 
+    color: ui.theme.backgroundPrimaryColor
+
+    property NavigationPanel navigation: NavigationPanel {
+        name: "PreferencesButtonsPanel"
+        direction: NavigationPanel.Horizontal
+
+        onActiveChanged: {
+            if (active) {
+                root.forceActiveFocus()
+            }
+        }
+    }
+
     signal revertFactorySettingsRequested()
     signal applyRequested()
     signal rejectRequested()
-
-    color: ui.theme.backgroundPrimaryColor
 
     Item {
         anchors.left: parent.left
@@ -47,6 +58,9 @@ Rectangle {
 
             width: 160
 
+            navigation.panel: root.navigation
+            navigation.order: 1
+
             text: qsTrc("appshell", "Reset preferences")
 
             onClicked: {
@@ -57,6 +71,9 @@ Rectangle {
         FlatButton {
             anchors.right: applyButton.left
             anchors.rightMargin: 12
+
+            navigation.panel: root.navigation
+            navigation.order: 2
 
             width: 132
             text: qsTrc("global", "Cancel")
@@ -70,6 +87,9 @@ Rectangle {
             id: applyButton
 
             anchors.right: parent.right
+
+            navigation.panel: root.navigation
+            navigation.order: 3
 
             width: 132
             accentButton: true

@@ -74,6 +74,10 @@ StyledDialogView {
         }
     }
 
+    onOpened: {
+        buttonsPanel.focusOnApplyButton()
+    }
+
     PreferencesModel {
         id: preferencesModel
     }
@@ -127,6 +131,9 @@ StyledDialogView {
 
             Layout.fillWidth: true
             Layout.preferredHeight: 70
+
+            navigation.section: root.navigation
+            navigation.order: 1
 
             onRevertFactorySettingsRequested: {
                 preferencesModel.resetFactorySettings()
