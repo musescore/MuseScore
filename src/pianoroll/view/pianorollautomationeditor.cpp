@@ -169,6 +169,23 @@ void PianorollAutomationEditor::paint(QPainter* p)
 
     Ms::Score* score = notation->elements()->msScore();
     Ms::Staff* staff = score->staff(0);
+    Ms::Part* part = staff->part();
+
+    const QPen penLineMajor = QPen(m_colorGridLine, 2.0, Qt::SolidLine);
+    const QPen penLineMinor = QPen(m_colorGridLine, 1.0, Qt::SolidLine);
+
+    //Visible area we are rendering to
+    Ms::Measure* lm = score->lastMeasure();
+    Ms::Fraction end = lm->tick() + lm->ticks();
+
+//    qreal y1 = pitchToPixelY(0);
+//    qreal y2 = pitchToPixelY(128);
+    qreal x1 = wholeNoteToPixelX(0);
+    qreal x2 = wholeNoteToPixelX(end);
+
+    p->fillRect(x1, 0, x2 - x1, height(), m_colorGridBackground);
+
+
 }
 
 
