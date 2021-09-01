@@ -40,6 +40,17 @@ enum TrackType {
     Audio
 };
 
+class ITrackAudioInput : public IAudioSource
+{
+public:
+    virtual ~ITrackAudioInput() = default;
+
+    virtual void seek(const msecs_t newPositionMsecs) = 0;
+    virtual void applyInputParams(const AudioInputParams& originParams, AudioInputParams& resultParams) = 0;
+};
+
+using ITrackAudioInputPtr = std::shared_ptr<ITrackAudioInput>;
+
 struct Track
 {
 public:
@@ -55,7 +66,7 @@ public:
     {
         return id != -1
                && type != Undefined
-               && audioSource
+               && inputHandler
                && mixerChannel;
     }
 
@@ -67,14 +78,16 @@ public:
         return m_inParams;
     }
 
-    bool setInputParams(const AudioInputParams& params)
+    bool setInputParams(const AudioInputParams& requiredParams)
     {
-        if (m_inParams == params) {
+        if (m_inParams.isValid() && m_inParams == requiredParams) {
             return false;
         }
 
-        m_inParams = params;
-        inputParamsChanged.send(params);
+        AudioInputParams appliedParams;
+        inputHandler->applyInputParams(requiredParams, appliedParams);
+        m_inParams = std::move(appliedParams);
+        inputParamsChanged.send(m_inParams);
 
         return true;
     }
@@ -100,7 +113,7 @@ public:
     async::Channel<AudioOutputParams> outputParamsChanged;
     async::Channel<PlaybackData> playbackDataChanged;
 
-    IAudioSourcePtr audioSource = nullptr;
+    ITrackAudioInputPtr inputHandler = nullptr;
     IMixerChannelPtr mixerChannel = nullptr;
 
 private:

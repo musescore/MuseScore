@@ -79,6 +79,9 @@ const AudioInputParams& InputResourceItem::params() const
 void InputResourceItem::setParams(const audio::AudioInputParams& newParams)
 {
     m_currentInputParams = newParams;
+
+    emit titleChanged();
+    emit isBlankChanged();
 }
 
 QString InputResourceItem::title() const

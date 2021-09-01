@@ -34,17 +34,17 @@
 #include "midi/imidioutport.h"
 
 #include "isynthresolver.h"
+#include "track.h"
 #include "audiotypes.h"
 
 namespace mu::audio {
-class MidiAudioSource : public IAudioSource, public async::Asyncable
+class MidiAudioSource : public ITrackAudioInput, public async::Asyncable
 {
     INJECT(audio, synth::ISynthResolver, synthResolver)
     INJECT(audio, midi::IMidiOutPort, midiOutPort)
 
 public:
-    explicit MidiAudioSource(const TrackId trackId, const midi::MidiData& midiData, const AudioInputParams& params,
-                             async::Channel<AudioInputParams> paramsChanged);
+    explicit MidiAudioSource(const TrackId trackId, const midi::MidiData& midiData);
     ~MidiAudioSource() override;
 
     bool isActive() const override;
@@ -56,6 +56,7 @@ public:
     void process(float* buffer, unsigned int sampleCount) override;
 
     void seek(const msecs_t newPositionMsecs) override;
+    void applyInputParams(const AudioInputParams& originParams, AudioInputParams& resultParams) override;
 
 private:
     struct EventsBuffer {
@@ -112,7 +113,6 @@ private:
     void requestNextEvents(const midi::tick_t nextTicksNumber);
     void sendRequestFromTick(const midi::tick_t from);
 
-    void resolveSynth(const AudioInputParams& inputParams);
     void buildTempoMap();
     void setupChannels();
 
