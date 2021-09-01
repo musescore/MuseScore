@@ -231,6 +231,7 @@ void PianorollView::setTuplet(int value)
     if (value == m_tuplet)
         return;
     m_tuplet = value;
+    update();
 
     emit tupletChanged();
 }
@@ -240,6 +241,7 @@ void PianorollView::setSubdivision(int value)
     if (value == m_subdivision)
         return;
     m_subdivision = value;
+    update();
 
     emit subdivisionChanged();
 }
