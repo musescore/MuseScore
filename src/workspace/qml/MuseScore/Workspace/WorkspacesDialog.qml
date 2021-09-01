@@ -31,6 +31,8 @@ import "internal"
 StyledDialogView {
     id: root
 
+    signal requestActiveFocus()
+
     contentWidth: 552
     contentHeight: 286
 
@@ -42,10 +44,54 @@ StyledDialogView {
         workspacesModel.load()
     }
 
+    NavigationSection {
+        id: navTopSec
+        name: "WorkspacesTop"
+        enabled: root.visible
+        order: 10
+        onActiveChanged: {
+            if (active) {
+                root.requestActiveFocus()
+            }
+        }
+    }
+
+    NavigationSection {
+        id: navWorkspacesSec
+        name: "Workspaces"
+        enabled: root.visible
+        order: 11
+        onActiveChanged: {
+            if (active) {
+                root.requestActiveFocus()
+            }
+        }
+    }
+
+    NavigationSection {
+        id: navBottomSec
+        name: "WorkspacesBottom"
+        enabled: root.visible
+        order: 12
+        onActiveChanged: {
+            if (active) {
+                root.requestActiveFocus()
+            }
+        }
+    }
+
     ColumnLayout {
         anchors.fill: parent
         anchors.margins: 24
         spacing: 0
+
+        NavigationPanel {
+            id: navTopPanel
+            name: "Workspaces Top"
+            section: navTopSec
+            direction: NavigationPanel.Horizontal
+            order: 1
+        }
 
         Item {
             Layout.fillWidth: true
@@ -59,6 +105,10 @@ StyledDialogView {
             }
 
             FlatButton {
+                navigation.name: "New Workspace"
+                navigation.panel: navTopPanel
+                navigation.column: 1
+
                 text: qsTrc("workspace", "Create new workspace")
 
                 anchors.right: deleteButton.left
@@ -70,6 +120,10 @@ StyledDialogView {
             }
 
             FlatButton {
+                navigation.name: "Delete Workspace"
+                navigation.panel: navTopPanel
+                navigation.column: 2
+
                 id: deleteButton
 
                 anchors.right: parent.right
@@ -106,7 +160,18 @@ StyledDialogView {
             Layout.rightMargin: -parent.anchors.rightMargin
             leftPadding: parent.anchors.leftMargin
 
+            navigation.section: navWorkspacesSec
+            navigation.order: 1
+
             model: workspacesModel
+        }
+
+        NavigationPanel {
+            id: navBottomPanel
+            name: "Workspaces Bottom"
+            section: navBottomSec
+            direction: NavigationPanel.Horizontal
+            order: 1
         }
 
         Row {
@@ -117,6 +182,10 @@ StyledDialogView {
             spacing: 12
 
             FlatButton {
+                navigation.name: "Cancel"
+                navigation.panel: navBottomPanel
+                navigation.column: 1
+
                 text: qsTrc("global", "Cancel")
 
                 onClicked: {
@@ -125,6 +194,10 @@ StyledDialogView {
             }
 
             FlatButton {
+                navigation.name: "Select"
+                navigation.panel: navBottomPanel
+                navigation.column: 2
+                
                 text: qsTrc("global", "Select")
 
                 enabled: Boolean(workspacesModel.selectedWorkspace)

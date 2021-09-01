@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.12
+import QtQuick 2.15
 import QtQuick.Controls 2.2
 
 import MuseScore.Ui 1.0
@@ -35,6 +35,15 @@ RadioButtonGroup {
     orientation: Qt.Vertical
 
     property int leftPadding: 0
+
+    property alias navigation: navPanel
+
+    NavigationPanel {
+        id: navPanel
+        name: "Workspaces List"
+        direction: NavigationPanel.Vertical
+        order: 1
+    }
 
     Connections {
         target: model
@@ -60,6 +69,9 @@ RadioButtonGroup {
 
         background: FlatRadioButton {
             anchors.fill: parent
+
+            navigation.panel: navPanel
+            keynavRow: model ? model.index : 0
 
             ButtonGroup.group: root.radioButtonGroup
             normalStateColor: "transparent"

@@ -34,6 +34,8 @@ RadioDelegate {
     //!      It can't be overridden either, as it is marked `FINAL`.
     property int iconCode: IconCode.NONE
 
+    property int keynavRow: 0
+
     property alias radius: backgroundRect.radius
 
     property color normalStateColor: ui.theme.buttonColor
@@ -65,6 +67,14 @@ RadioDelegate {
         accessible.selected: root.checked
 
         onTriggered: root.checked = !root.checked
+
+        row: root.keynavRow
+
+        onActiveChanged: {
+            if (active) {
+                root.clicked()
+            }
+        }
     }
 
     background: Rectangle {
