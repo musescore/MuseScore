@@ -169,7 +169,6 @@ Events MasterNotationMidiData::eventsFromRange(const std::vector<channel_t>& mid
     Events result;
 
     for (const channel_t& channel : midiChannels) {
-
         auto search = m_eventsCache.find(channel);
         if (search == m_eventsCache.cend()) {
             continue;
