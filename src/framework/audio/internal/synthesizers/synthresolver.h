@@ -37,6 +37,7 @@ public:
 
     ISynthesizerPtr resolveSynth(const TrackId trackId, const AudioInputParams& params) const override;
     ISynthesizerPtr resolveDefaultSynth(const TrackId trackId) const override;
+    AudioInputParams resolveDefaultInputParams() const override;
     AudioResourceMetaList resolveAvailableResources() const override;
 
     void registerResolver(const AudioSourceType type, IResolverPtr resolver) override;
