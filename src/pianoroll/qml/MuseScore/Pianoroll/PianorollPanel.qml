@@ -108,33 +108,10 @@ Rectangle {
 
                 }
 
-
                 RowLayout {
-//                    anchors.fill: parent
-
                     Label {
                         text: qsTr("Grid:")
                     }
-
-//                    ComboBox {
-//                        id: gridCombo
-
-//                        model: ListModel {
-//                            id: gridModel
-//                            ListElement {
-//                                text: "1/1"
-//                            }
-//                            ListElement {
-//                                text: "1/2"
-//                            }
-//                            ListElement {
-//                                text: "1/4"
-//                            }
-//                            ListElement {
-//                                text: "1/8"
-//                            }
-//                        }
-//                    }
 
                     ComboBox {
                         id: gridCombo
@@ -204,140 +181,126 @@ Rectangle {
         }
 
 
-        GridLayout {
-            columns: 3
+        SplitView {
             //anchors.fill: parent
             Layout.fillHeight: true
-            rowSpacing: 0
-            columnSpacing: 0
+            Layout.fillWidth: true
+            orientation: Qt.Vertical
+
+            GridLayout {
+                columns: 3
+                rowSpacing: 0
+                columnSpacing: 0
+                SplitView.minimumHeight: 100
+                SplitView.fillHeight: true
 
 
-            //-------
-            //Row
-            Text {
-                Layout.minimumWidth: 12
-                Layout.minimumHeight: 12
-                text: "";
+                //-------
+                //Row
+                Text {
+                    Layout.minimumWidth: 12
+                    Layout.minimumHeight: 12
+                    text: "";
+                }
+
+                PianorollRuler {
+                    Layout.fillWidth: true
+                    height: 30
+
+                    centerX: scrollViewX.center
+                    wholeNoteWidth: horizZoom.value
+
+                    Component.onCompleted: {
+                        load()
+                    }
+                }
+
+                Text {
+                    Layout.minimumWidth: 12
+                    Layout.minimumHeight: 12
+                    text: "";
+                }
+
+                //-------
+                //Row
+                PianorollKeyboard {
+                    width: 120
+                    Layout.fillHeight: true
+
+                    centerY: scrollViewY.center
+                    noteHeight: vertZoom.value
+
+                    Component.onCompleted: {
+                        load()
+                    }
+                }
+
+                PianorollView {
+                    id: pianoView
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+
+                    implicitWidth: 1500
+                    implicitHeight: 500
+
+                    centerX: scrollViewX.center
+                    centerY: scrollViewY.center
+
+                    wholeNoteWidth: horizZoom.value
+                    noteHeight: vertZoom.value
+                    tool: PianorollView.SELECT
+
+                    Component.onCompleted: {
+                        load()
+                    }
+                }
+
+
+                PianorollScrollbar{
+                    id: scrollViewY
+                    diretion: PianorollScrollbar.VERTICAL
+                    displayObjectSpan: pianoView.displayObjectHeight
+                    viewportSpan: pianoView.height
+                    Layout.minimumWidth: 12
+                    Layout.fillHeight: true
+                }
+
+
+                //-------
+                //Row
+                Text {
+                    Layout.minimumWidth: 12
+                    Layout.minimumHeight: 12
+                    text: "";
+                }
+
+                PianorollScrollbar{
+                    id: scrollViewX
+                    diretion: PianorollScrollbar.HORIZONTAL
+                    displayObjectSpan: pianoView.displayObjectWidth
+                    viewportSpan: pianoView.width
+                    Layout.fillWidth: true
+                    Layout.minimumHeight: 12
+                }
+
+                Text {
+                    Layout.minimumWidth: 12
+                    Layout.minimumHeight: 12
+                    text: "";
+                }
+
             }
 
-            PianorollRuler {
-                Layout.fillWidth: true
-                height: 30
-
-                centerX: scrollViewX.center
-                wholeNoteWidth: horizZoom.value
-
-                Component.onCompleted: {
-                    load()
+            Rectangle {
+                SplitView.minimumHeight: 40
+                color: "lightgreen"
+                Label {
+                    text: "View 3"
+                    anchors.centerIn: parent
                 }
             }
-
-            Text {
-                Layout.minimumWidth: 12
-                Layout.minimumHeight: 12
-                text: "";
-            }
-
-            //-------
-            //Row
-            PianorollKeyboard {
-                width: 120
-                Layout.fillHeight: true
-
-                centerY: scrollViewY.center
-                noteHeight: vertZoom.value
-
-                Component.onCompleted: {
-                    load()
-                }
-            }
-
-            PianorollView {
-                id: pianoView
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-
-                implicitWidth: 1500
-                implicitHeight: 500
-
-                centerX: scrollViewX.center
-                centerY: scrollViewY.center
-
-                wholeNoteWidth: horizZoom.value
-                noteHeight: vertZoom.value
-                tool: PianorollView.SELECT
-
-                Component.onCompleted: {
-                    load()
-                }
-            }
-
-
-            PianorollScrollbar{
-                id: scrollViewY
-                diretion: PianorollScrollbar.VERTICAL
-                displayObjectSpan: pianoView.displayObjectHeight
-                viewportSpan: pianoView.height
-                Layout.minimumWidth: 12
-                Layout.fillHeight: true
-            }
-
-
-            //-------
-            //Row
-            Text {
-                Layout.minimumWidth: 12
-                Layout.minimumHeight: 12
-                text: "";
-            }
-
-            PianorollScrollbar{
-                id: scrollViewX
-                diretion: PianorollScrollbar.HORIZONTAL
-                displayObjectSpan: pianoView.displayObjectWidth
-                viewportSpan: pianoView.width
-                Layout.fillWidth: true
-                Layout.minimumHeight: 12
-            }
-
-            Text {
-                Layout.minimumWidth: 12
-                Layout.minimumHeight: 12
-                text: "";
-            }
-
-//            ScrollBar {
-//                id: hbar
-//                hoverEnabled: true
-//                active: hovered || pressed
-//                orientation: Qt.Horizontal
-//                size: 20 //
-//                //Layout.preferredWidth:
-//                Layout.fillWidth: true
-//                Layout.minimumHeight: 12
-//            }
-
-//            Text {
-//                Layout.minimumWidth: 12
-//                Layout.minimumHeight: 12
-//                text: "words"; font.bold: true;
-//            }
-//            Text {
-//                Layout.minimumWidth: 12
-//                Layout.minimumHeight: 12
-//                text: "in"; font.bold: true;
-//            }
         }
 
-//        ScrollView {
-//            Layout.fillWidth: true
-//            Layout.fillHeight: true
-//            clip: true
-//            ScrollBar.horizontal.interactive: true
-//            ScrollBar.vertical.interactive: true
-//            ScrollBar.horizontal.policy: ScrollBar.AlwaysOn
-//            ScrollBar.vertical.policy: ScrollBar.AlwaysOn
 
-//        }
     }
 }
