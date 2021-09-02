@@ -40,6 +40,12 @@ MixerPanelSection {
 
         StyledTextLabel {
             anchors.centerIn: parent
+
+            font: ui.theme.bodyBoldFont
+
+            readonly property int margin: -8
+            width: margin + parent.width + margin
+
             text: item.title
         }
     }
