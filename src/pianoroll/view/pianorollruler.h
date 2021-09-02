@@ -66,6 +66,9 @@ public:
     Ms::Fraction playbackPosition() { return m_playbackPosition; }
     void setPlaybackPosition(Ms::Fraction value);
 
+    void mousePressEvent(QMouseEvent* event) override;
+    void mouseMoveEvent(QMouseEvent* event) override;
+
     Ms::Score* score();
 
 signals:

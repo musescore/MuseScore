@@ -24,15 +24,34 @@
 
 #include <QPainter>
 
+#include "libmscore/element.h"
 #include "audio/iplayer.h"
+#include "automation/automationvelocity.h"
+#include "ipianorollautomationmodel.h"
+
+#include "pianorollview.h"
 
 using namespace mu::pianoroll;
+
+std::vector<IPianorollAutomationModel*> PianorollAutomationEditor::m_automationModels = {
+    new AutomationVelocity()
+};
 
 
 PianorollAutomationEditor::PianorollAutomationEditor(QQuickItem* parent)
     : QQuickPaintedItem(parent)
 {
 
+}
+
+IPianorollAutomationModel* PianorollAutomationEditor::lookupModel(AutomationType type)
+{
+    for (auto model: m_automationModels)
+    {
+        if (model->type() == type)
+            return model;
+    }
+    return nullptr;
 }
 
 void PianorollAutomationEditor::load()
@@ -53,17 +72,94 @@ void PianorollAutomationEditor::onNotationChanged()
     auto notation = globalContext()->currentNotation();
     if (notation)
     {
+        notation->interaction()->selectionChanged().onNotify(this, [this]() {
+            onSelectionChanged();
+        });
+
         notation->notationChanged().onNotify(this, [this]() {
             onCurrentNotationChanged();
         });
     }
 
+    buildNoteData();
     updateBoundingSize();
 }
 
 void PianorollAutomationEditor::onCurrentNotationChanged()
 {
+    buildNoteData();
     updateBoundingSize();
+}
+
+void PianorollAutomationEditor::onSelectionChanged()
+{
+    buildNoteData();
+    update();
+}
+
+void PianorollAutomationEditor::buildNoteData()
+{
+    for (auto n: m_noteLevels)
+    {
+        delete n;
+    }
+    m_noteLevels.clear();
+
+    IPianorollAutomationModel* model = lookupModel(m_automationType);
+    if (!model)
+        return;
+
+
+    notation::INotationPtr notation = globalContext()->currentNotation();
+    if (!notation) {
+        return;
+    }
+
+    Ms::Score* curScore = score();
+
+    std::vector<Ms::Element*> selectedElements = notation->interaction()->selection()->elements();
+    for (Ms::Element* e: selectedElements)
+    {
+        int idx = e->staffIdx();
+        m_activeStaff = idx;
+        if (std::find(m_selectedStaves.begin(), m_selectedStaves.end(), idx) == m_selectedStaves.end())
+        {
+            m_selectedStaves.push_back(idx);
+        }
+    }
+
+    if (m_activeStaff == -1)
+        m_activeStaff = 0;
+
+    for (int staffIndex : m_selectedStaves)
+    {
+        Ms::Staff* staff = curScore->staff(staffIndex);
+
+        for (Ms::Segment* s = staff->score()->firstSegment(Ms::SegmentType::ChordRest); s; s = s->next1(Ms::SegmentType::ChordRest))
+        {
+            for (int voice = 0; voice < PianorollView::VOICES; ++voice)
+            {
+                int track = voice + staffIndex * PianorollView::VOICES;
+                Ms::Element* e = s->element(track);
+                if (e && e->isChord())
+                    addChord(toChord(e), voice, staffIndex);
+            }
+        }
+    }
+}
+
+void PianorollAutomationEditor::addChord(Ms::Chord* chrd, int voice, int staffIdx)
+{
+    for (Ms::Chord* c : chrd->graceNotes())
+        addChord(c, voice, staffIdx);
+
+    for (Ms::Note* note : chrd->notes())
+    {
+        if (note->tieBack())
+              continue;
+
+        m_noteLevels.push_back(new NoteEventBlock { note, voice, staffIdx });
+    }
 }
 
 Ms::Score* PianorollAutomationEditor::score()
@@ -79,6 +175,20 @@ Ms::Score* PianorollAutomationEditor::score()
     return score;
 }
 
+Ms::Staff* PianorollAutomationEditor::activeStaff()
+{
+    notation::INotationPtr notation = globalContext()->currentNotation();
+    if (!notation) {
+        return nullptr;
+    }
+
+    Ms::Score* score = notation->elements()->msScore();
+
+    Ms::Staff* staff = score->staff(m_activeStaff);
+    return staff;
+}
+
+
 void PianorollAutomationEditor::setPlaybackPosition(Ms::Fraction value)
 {
     if (value == m_playbackPosition)
@@ -89,14 +199,14 @@ void PianorollAutomationEditor::setPlaybackPosition(Ms::Fraction value)
     emit playbackPositionChanged();
 }
 
-void PianorollAutomationEditor::setAutomationAttribute(AutomationAttribute value)
+void PianorollAutomationEditor::setAutomationType(AutomationType value)
 {
-    if (value == m_automationAttribute)
+    if (value == m_automationType)
         return;
-    m_automationAttribute = value;
+    m_automationType = value;
     update();
 
-    emit automationAttributeChanged();
+    emit automationTypeChanged();
 }
 
 
@@ -257,6 +367,49 @@ void PianorollAutomationEditor::paint(QPainter* p)
             }
         }
 
+    }
+
+
+    //--------------------
+    //Notes
+    IPianorollAutomationModel* model = lookupModel(m_automationType);
+
+    if (model)
+    {
+        for (int i = 0; i < m_noteLevels.size(); ++i)
+        {
+            NoteEventBlock* block = m_noteLevels.at(i);
+
+            double valMax = model->maxValue();
+            double valMin = model->minValue();
+            double val = model->value(*block);
+
+            int x0 = wholeNoteToPixelX(block->note->tick());
+            double ratio = (val - valMin) / (valMax - valMin);
+            int gridSpanY = height() - m_marginY * 2;
+            int y = gridSpanY * ratio + m_marginY;
+
+            int x1;
+            if (i < m_noteLevels.size() - 1)
+            {
+                NoteEventBlock* blockNext = m_noteLevels.at(i + 1);
+                x1 = wholeNoteToPixelX(blockNext->note->tick());
+            }
+            else
+            {
+                x1 = wholeNoteToPixelX(block->note->tick() + block->note->chord()->ticks());
+            }
+
+            p->fillRect(x0, y, x1 - x0, gridSpanY - y + m_marginY, m_colorGraphFill);
+
+            p->drawLine(x0, y, x1, y);
+            p->drawLine(x0, y, x0, gridSpanY + m_marginY);
+
+            QRectF circleBounds(x0 - m_vertexRadius, y - m_vertexRadius, m_vertexRadius * 2, m_vertexRadius * 2);
+            p->setPen(m_colorVertexLine);
+            p->setBrush(m_colorVertexFill);
+            p->drawEllipse(circleBounds);
+        }
     }
 
 
