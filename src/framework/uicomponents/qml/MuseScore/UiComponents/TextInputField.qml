@@ -108,7 +108,7 @@ FocusScope {
 
         border.color: ui.theme.strokeColor
         border.width: ui.theme.borderWidth
-    }    
+    }
 
     RowLayout {
         anchors.fill: parent
