@@ -380,7 +380,7 @@ bool ConnectorInfoReader::read()
 {
     XmlReader& e = *_reader;
     const QString name(e.attribute("type"));
-    _type = EngravingObject::name2type(&name);
+    _type = Factory::name2type(&name);
 
     e.fillLocation(_currentLoc);
 
