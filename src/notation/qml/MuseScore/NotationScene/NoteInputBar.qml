@@ -117,7 +117,7 @@ Rectangle {
             }
 
             function handleMenuItem() {
-                Qt.callLater(noteInputModel.handleMenuItem, itemId)
+                Qt.callLater(noteInputModel.handleMenuItem, item.id)
             }
 
             onClicked: function (mouse) {
