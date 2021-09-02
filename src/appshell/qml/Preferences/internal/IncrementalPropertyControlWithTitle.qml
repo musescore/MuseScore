@@ -37,6 +37,8 @@ Row {
 
     property alias control: control
 
+    property alias navigation: control.navigation
+
     signal valueEdited(var newValue)
 
     spacing: 0
@@ -57,6 +59,8 @@ Row {
         width: 102
         decimals: 0
         step: 1
+
+        navigation.accessible.name: titleLabel.text + " " + currentValue
 
         onValueEdited: {
             root.valueEdited(newValue)

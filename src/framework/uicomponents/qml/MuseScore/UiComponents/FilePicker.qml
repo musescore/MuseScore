@@ -66,7 +66,7 @@ Item {
             navigation.name: "PathFieldBox"
             navigation.panel: root.navigation
             navigation.row: root.navigationRowOrder
-            navigation.enabled: root.visible
+            navigation.enabled: root.visible && root.enabled
             navigation.column: root.navigationColumnOrderStart
             navigation.accessible.name: root.pathFieldTitle + " " + pathField.currentText
 
@@ -82,7 +82,7 @@ Item {
             navigation.name: "FilePickerButton"
             navigation.panel: root.navigation
             navigation.row: root.navigationRowOrder
-            navigation.enabled: root.visible
+            navigation.enabled: root.visible && root.enabled
             navigation.column: root.navigationColumnOrderStart + 1
             accessible.name: root.pickerType === FilePicker.PickerType.File ? qsTrc("uicomponents", "File choose")
                                                                             : qsTrc("uicomponents", "Directory choose")

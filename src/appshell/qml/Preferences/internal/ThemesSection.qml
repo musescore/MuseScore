@@ -21,12 +21,14 @@
  */
 import QtQuick 2.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
 BaseSection {
     id: root
 
-    title: root.highContrastEnabled ? qsTrc("appshell", "High Contrast Themes") : qsTrc("appshell", "Themes")
+    title: highContrastEnabled ? qsTrc("appshell", "High Contrast Themes") : qsTrc("appshell", "Themes")
+    navigation.direction: NavigationPanel.Both
 
     property bool highContrastEnabled: false
 
@@ -48,6 +50,11 @@ BaseSection {
         text: qsTrc("appshell", "Enable high-contrast")
 
         checked: root.highContrastEnabled
+
+        navigation.name: "EnableHighContrastBox"
+        navigation.panel: root.navigation
+        navigation.row: 0
+        navigation.column: 0
 
         onClicked: {
             root.highContrastChangeRequested(!checked)
@@ -90,6 +97,11 @@ BaseSection {
                 checked: root.currentThemeCode === modelData.codeKey
                 text: modelData.title
 
+                navigation.name: text
+                navigation.panel: root.navigation
+                navigation.row: 1
+                navigation.column: index
+
                 onClicked: {
                     root.themeChangeRequested(modelData.codeKey)
                 }
@@ -103,6 +115,9 @@ BaseSection {
         firstColumnWidth: root.columnWidth
 
         visible: !root.highContrastEnabled
+
+        navigation.section: root.navigation.section
+        navigation.order: root.navigation.order + 1
 
         onAccentColorChangeRequested: {
             root.accentColorChangeRequested(newColorIndex)
