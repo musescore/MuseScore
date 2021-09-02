@@ -66,11 +66,11 @@ void PaletteActionsController::toggleMasterPalette(const actions::ActionData& ar
     if (interactive()->isOpened(MASTER_PALETTE_URI.uri()).val) {
         interactive()->close(MASTER_PALETTE_URI.uri());
     } else {
-        if (args.count() > 0) {
+        if (args.empty()) {
+            interactive()->open(MASTER_PALETTE_URI);
+        } else {
             std::string selectedPaletteName = args.arg<std::string>(0);
             interactive()->open(MASTER_PALETTE_URI.addingParam("selectedPaletteName", Val(selectedPaletteName)));
-        } else {
-            interactive()->open(MASTER_PALETTE_URI);
         }
     }
 }

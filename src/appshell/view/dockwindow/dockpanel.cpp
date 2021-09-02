@@ -151,13 +151,13 @@ DockPanel::DockPanel(QQuickItem* parent)
 
 DockPanel::~DockPanel()
 {
-    KDDockWidgets::DockWidgetQuick* w = dockWidget();
-    IF_ASSERT_FAILED(w) {
+    KDDockWidgets::DockWidgetQuick* dockWidget = this->dockWidget();
+    IF_ASSERT_FAILED(dockWidget) {
         return;
     }
 
-    w->setProperty(DOCK_PANEL_PROPERY, QVariant::fromValue(nullptr));
-    w->setProperty(CONTEXT_MENU_MODEL_PROPERTY, QVariant::fromValue(nullptr));
+    dockWidget->setProperty(DOCK_PANEL_PROPERY, QVariant::fromValue(nullptr));
+    dockWidget->setProperty(CONTEXT_MENU_MODEL_PROPERTY, QVariant::fromValue(nullptr));
 }
 
 DockPanel* DockPanel::tabifyPanel() const
@@ -184,19 +184,19 @@ void DockPanel::componentComplete()
 {
     DockBase::componentComplete();
 
-    KDDockWidgets::DockWidgetQuick* w = dockWidget();
-    IF_ASSERT_FAILED(w) {
+    KDDockWidgets::DockWidgetQuick* dockWidget = this->dockWidget();
+    IF_ASSERT_FAILED(dockWidget) {
         return;
     }
 
     m_menuModel->load();
 
-    w->setProperty(DOCK_PANEL_PROPERY, QVariant::fromValue(this));
-    w->setProperty(CONTEXT_MENU_MODEL_PROPERTY, QVariant::fromValue(m_menuModel));
+    dockWidget->setProperty(DOCK_PANEL_PROPERY, QVariant::fromValue(this));
+    dockWidget->setProperty(CONTEXT_MENU_MODEL_PROPERTY, QVariant::fromValue(m_menuModel));
 
-    connect(m_menuModel, &AbstractMenuModel::itemsChanged, [w, this]() {
-        if (w) {
-            w->setProperty(CONTEXT_MENU_MODEL_PROPERTY, QVariant::fromValue(m_menuModel));
+    connect(m_menuModel, &AbstractMenuModel::itemsChanged, [dockWidget, this]() {
+        if (dockWidget) {
+            dockWidget->setProperty(CONTEXT_MENU_MODEL_PROPERTY, QVariant::fromValue(m_menuModel));
         }
     });
 }

@@ -83,7 +83,7 @@ INotationSelectionPtr ProjectFilesController::currentNotationSelection() const
 
 void ProjectFilesController::openProject(const actions::ActionData& args)
 {
-    io::path projectPath = args.count() > 0 ? args.arg<io::path>(0) : "";
+    io::path projectPath = !args.empty() ? args.arg<io::path>(0) : "";
     openProject(projectPath);
 }
 

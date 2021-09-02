@@ -34,7 +34,7 @@ void WorkspaceActionController::init()
 
 void WorkspaceActionController::selectWorkspace(const ActionData& args)
 {
-    std::string selectedWorkspace = args.count() > 0 ? args.arg<std::string>(0) : "";
+    std::string selectedWorkspace = !args.empty() ? args.arg<std::string>(0) : "";
     setCurrentWorkspaceName(selectedWorkspace);
 }
 

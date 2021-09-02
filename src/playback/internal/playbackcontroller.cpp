@@ -297,7 +297,7 @@ void PlaybackController::rewind(const ActionData& args)
         return;
     }
 
-    if (args.count() == 0) {
+    if (args.empty()) {
         playback()->player()->seek(m_currentSequenceId, 0);
         return;
     }
