@@ -704,10 +704,18 @@ void PreferenceDialog::updateValues(bool useDefaultValues, bool setup)
                         QStringList midiInputs = midiDriver->deviceInList();
                         int curMidiInIdx = 0;
                         portMidiInput->clear();
+                        portMidiInput->insertItem(0," "); // note: a space to be different from the default empty string.
+                        // The current input device can be different from the saved preference if the preference was empty
+                        // because of automatic grabbing of the default input device if not explicitly told otherwise.
+                        // Therefore, comparison must be done with respect to the actual current input device name.
+                        const PmDeviceInfo* info = Pm_GetDeviceInfo(midiDriver->getInputId());
+                        QString portmidiInputDevice;
+                        if(info && (info->input))
+                              portmidiInputDevice = QString(info->interf) + "," + QString(info->name);
                         for(int i = 0; i < midiInputs.size(); ++i) {
-                              portMidiInput->addItem(midiInputs.at(i), i);
-                              if (midiInputs.at(i) == preferences.getString(PREF_IO_PORTMIDI_INPUTDEVICE))
-                                    curMidiInIdx = i;
+                              portMidiInput->insertItem(i+1, midiInputs.at(i));
+                              if (midiInputs.at(i) == portmidiInputDevice)
+                                    curMidiInIdx = i + 1;
                               }
                         portMidiInput->setCurrentIndex(curMidiInIdx);
 

@@ -62,6 +62,7 @@ class PortMidiDriver : public MidiDriver {
       PmStream* getOutputStream() { return outputStream; }
       bool canOutput() { return outputStream != 0; }
       bool isSameCoreMidiIacBus(const QString& inInterfaceAndName, const QString& outInterfaceAndName);
+      int getInputId() { return inputId; }
       };
 
 
