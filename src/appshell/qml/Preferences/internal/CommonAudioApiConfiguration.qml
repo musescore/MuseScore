@@ -22,6 +22,7 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.12
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Preferences 1.0
 
@@ -29,6 +30,9 @@ Item {
     id: root
 
     property int firstColumnWidth: 0
+
+    property NavigationPanel navigation: null
+    property int navigationOrderStart: 0
 
     width: parent.width
     height: content.height
@@ -49,18 +53,28 @@ Item {
             currentIndex: apiModel.currentDeviceIndex
             model: apiModel.deviceList()
 
+            navigation.name: "AudioDeviceBox"
+            navigation.panel: root.navigation
+            navigation.row: root.navigationOrderStart
+
             onValueEdited: {
                 apiModel.currentDeviceIndex = currentIndex
             }
         }
 
         ComboBoxWithTitle {
+            id: sampleRate
+
             title: qsTrc("appshell", "Sample rate:")
             titleWidth: root.firstColumnWidth
 
             currentIndex: apiModel.currentSampleRateIndex
             model: apiModel.sampleRateHzList()
             control.displayText: currentValue
+
+            navigation.name: "SampleRateBox"
+            navigation.panel: root.navigation
+            navigation.row: root.navigationOrderStart + 1
 
             onValueEdited: {
                 apiModel.currentSampleRateIndex = currentIndex

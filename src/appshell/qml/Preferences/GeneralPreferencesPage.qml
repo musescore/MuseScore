@@ -26,8 +26,12 @@ import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Preferences 1.0
 
+import "internal"
+
 PreferencesPage {
     id: root
+
+    contentHeight: content.height
 
     Component.onCompleted: {
         preferencesModel.load()
@@ -38,167 +42,80 @@ PreferencesPage {
     }
 
     Column {
-        anchors.fill: parent
+        id: content
+
+        width: parent.width
         spacing: 24
 
-        Column {
-            anchors.left: parent.left
-            anchors.right: parent.right
-            spacing: 18
+        LanguagesSection {
+            languages: preferencesModel.languages
+            currentLanguageCode: preferencesModel.currentLanguageCode
 
-            StyledTextLabel {
-                text: qsTrc("appshell", "Languages")
-                font: ui.theme.bodyBoldFont
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 1
+
+            onLanguageSelected: {
+                preferencesModel.currentLanguageCode = languageCode
             }
 
-            Row {
-                spacing: 12
-
-                Dropdown {
-                    id: dropdown
-
-                    width: 208
-
-                    textRole: "name"
-                    valueRole: "code"
-
-                    model: preferencesModel.languages
-
-                    currentIndex: dropdown.indexOfValue(preferencesModel.currentLanguageCode)
-
-                    onCurrentValueChanged: {
-                        preferencesModel.currentLanguageCode = dropdown.currentValue
-                    }
-                }
-
-                FlatButton {
-                    text: qsTrc("appshell", "Update translations")
-
-                    onClicked: {
-                        root.hideRequested()
-                        preferencesModel.openUpdateTranslationsPage()
-                    }
-                }
+            onUpdateTranslationsRequested: {
+                root.hideRequested()
+                preferencesModel.openUpdateTranslationsPage()
             }
         }
 
-        //SeparatorLine { }
+        SeparatorLine {
+            visible: telemetrySection.visible
+        }
 
-        Column {
-            anchors.left: parent.left
-            anchors.right: parent.right
-            spacing: 18
+        TelemetrySection {
+            id: telemetrySection
+
+            isTelemetryAllowed: preferencesModel.isTelemetryAllowed
 
             visible: false
 
-            StyledTextLabel {
-                text: qsTrc("appshell", "Telemetry")
-                font: ui.theme.bodyBoldFont
-            }
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 2
 
-            CheckBox {
-                width: 216
-                text: qsTrc("appshell", "Send anonymous telemetry data to MuseScore")
-
-                checked: preferencesModel.isTelemetryAllowed
-
-                onClicked: {
-                    preferencesModel.isTelemetryAllowed = !preferencesModel.isTelemetryAllowed
-                }
+            onTelemetryAllowedChanged: {
+                preferencesModel.isTelemetryAllowed = allowed
             }
         }
 
         SeparatorLine { }
 
-        Column {
-            anchors.left: parent.left
-            anchors.right: parent.right
-            spacing: 18
+        AutoSaveSection {
+            isAutoSave: preferencesModel.isAutoSave
+            autoSavePeriod: preferencesModel.autoSavePeriod
 
-            StyledTextLabel {
-                text: qsTrc("appshell", "Auto save")
-                font: ui.theme.bodyBoldFont
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 3
+
+            onAutoSaveChanged: {
+                preferencesModel.isAutoSave = autoSave
             }
 
-            Row {
-                anchors.left: parent.left
-                anchors.right: parent.right
-                spacing: 0
-
-                CheckBox {
-                    width: 216
-                    text: qsTrc("appshell", "Auto save every:")
-
-                    checked: preferencesModel.isAutoSave
-
-                    onClicked: {
-                        preferencesModel.isAutoSave = !preferencesModel.isAutoSave
-                    }
-                }
-
-                IncrementalPropertyControl {
-                    width: 96
-
-                    enabled: preferencesModel.isAutoSave
-
-                    currentValue: preferencesModel.autoSavePeriod
-                    minValue: 1
-                    maxValue: 100
-                    step: 1
-                    decimals: 0
-
-                    measureUnitsSymbol: qsTrc("appshell", "min")
-
-                    onValueEdited: {
-                        preferencesModel.autoSavePeriod = newValue
-                    }
-                }
+            onPeriodChanged: {
+                preferencesModel.autoSavePeriod = period
             }
         }
 
         SeparatorLine { }
 
-        Column {
-            anchors.left: parent.left
-            anchors.right: parent.right
-            spacing: 18
+        RemoteControlSection {
+            isOSCRemoteControl: preferencesModel.isOSCRemoteControl
+            oscPort: preferencesModel.oscPort
 
-            StyledTextLabel {
-                text: qsTrc("appshell", "OSC remote control")
-                font: ui.theme.bodyBoldFont
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 4
+
+            onRemoteControlChanged: {
+                preferencesModel.isOSCRemoteControl = control
             }
 
-            Row {
-                anchors.left: parent.left
-                anchors.right: parent.right
-                spacing: 0
-
-                CheckBox {
-                    width: 216
-                    text: qsTrc("appshell", "Port number:")
-
-                    checked: preferencesModel.isOSCRemoteControl
-
-                    onClicked: {
-                        preferencesModel.isOSCRemoteControl = !preferencesModel.isOSCRemoteControl
-                    }
-                }
-
-                IncrementalPropertyControl {
-                    width: 96
-
-                    enabled: preferencesModel.isOSCRemoteControl
-
-                    currentValue: preferencesModel.oscPort
-                    minValue: 1
-                    maxValue: 65535
-                    step: 1
-                    decimals: 0
-
-                    onValueEdited: {
-                        preferencesModel.oscPort = newValue
-                    }
-                }
+            onPortChanged: {
+                preferencesModel.oscPort = port
             }
         }
     }

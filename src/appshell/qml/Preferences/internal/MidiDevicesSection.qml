@@ -24,7 +24,7 @@ import QtQuick.Layouts 1.12
 
 import MuseScore.UiComponents 1.0
 
-Column {
+BaseSection {
     id: root
 
     property alias currentInputDeviceIndex: inputDevicesBox.currentIndex
@@ -38,12 +38,7 @@ Column {
     signal currentInputDeviceIndexChangeRequested(int newIndex)
     signal currentOuputDeviceIndexChangeRequested(int newIndex)
 
-    spacing: 18
-
-    StyledTextLabel {
-        text: qsTrc("appshell", "MIDI")
-        font: ui.theme.bodyBoldFont
-    }
+    title: qsTrc("appshell", "MIDI")
 
     Column {
         width: parent.width
@@ -55,6 +50,10 @@ Column {
             title: qsTrc("appshell", "MIDI input:")
             titleWidth: root.firstColumnWidth
 
+            navigation.name: "MidiInputBox"
+            navigation.panel: root.navigation
+            navigation.row: 1
+
             onValueEdited: {
                 root.currentInputDeviceIndexChangeRequested(currentIndex)
             }
@@ -63,8 +62,12 @@ Column {
         ComboBoxWithTitle {
             id: outputDevicesBox
 
-            title: qsTrc("appshell", "MIDI ouput:")
+            title: qsTrc("appshell", "MIDI output:")
             titleWidth: root.firstColumnWidth
+
+            navigation.name: "MidiOutputBox"
+            navigation.panel: root.navigation
+            navigation.row: 2
 
             onValueEdited: {
                 root.currentOuputDeviceIndexChangeRequested(currentIndex)

@@ -58,6 +58,10 @@ Loader {
         onClosed: {
             Qt.callLater(prv.unloadMenu)
         }
+
+        onLoaded: {
+            focusOnOpenedMenuTimer.start()
+        }
     }
 
     function open(model, x = 0, y = 0) {

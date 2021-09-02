@@ -46,8 +46,12 @@ Item {
 
     NavigationControl {
         id: navCtrl
+
         name: root.objectName != "" ? root.objectName : "Dropdown"
         enabled: root.enabled && root.visible
+        accessible.role: MUAccessible.ListItem
+        accessible.name: root.text
+
         onActiveChanged: {
             if (!root.activeFocus) {
                 root.forceActiveFocus()

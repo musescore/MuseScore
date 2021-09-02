@@ -77,5 +77,12 @@
         <file>qml/platform/mac/Main.qml</file>
         <file>qml/platform/win/Main.qml</file>
         <file>resources/win_opengl_buglist.json</file>
+        <file>qml/Preferences/internal/BaseSection.qml</file>
+        <file>qml/Preferences/internal/LanguagesSection.qml</file>
+        <file>qml/Preferences/internal/TelemetrySection.qml</file>
+        <file>qml/Preferences/internal/AutoSaveSection.qml</file>
+        <file>qml/Preferences/internal/RemoteControlSection.qml</file>
+        <file>qml/Preferences/internal/ProgrammeStartSection.qml</file>
+        <file>qml/Preferences/internal/FoldersSection.qml</file>
     </qresource>
 </RCC>

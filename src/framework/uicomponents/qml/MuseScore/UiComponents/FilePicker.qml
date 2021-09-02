@@ -22,8 +22,8 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
 
-import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
 
 Item {
     id: root
@@ -39,6 +39,12 @@ Item {
     property alias dialogTitle: filePickerModel.title
     property alias filter: filePickerModel.filter
     property alias dir: filePickerModel.dir
+
+    property NavigationPanel navigation: null
+    property int navigationRowOrder: 0
+    property int navigationColumnOrderStart: 0
+
+    property string pathFieldTitle: qsTrc("uicomponents", "Current path:")
 
     signal pathEdited(var newPath)
 
@@ -57,6 +63,13 @@ Item {
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignVCenter
 
+            navigation.name: "PathFieldBox"
+            navigation.panel: root.navigation
+            navigation.row: root.navigationRowOrder
+            navigation.enabled: root.visible
+            navigation.column: root.navigationColumnOrderStart
+            navigation.accessible.name: root.pathFieldTitle + " " + pathField.currentText
+
             onCurrentTextEdited: {
                 root.pathEdited(newTextValue)
             }
@@ -65,6 +78,14 @@ Item {
         FlatButton {
             Layout.alignment: Qt.AlignVCenter
             icon: IconCode.OPEN_FILE
+
+            navigation.name: "FilePickerButton"
+            navigation.panel: root.navigation
+            navigation.row: root.navigationRowOrder
+            navigation.enabled: root.visible
+            navigation.column: root.navigationColumnOrderStart + 1
+            accessible.name: root.pickerType === FilePicker.PickerType.File ? qsTrc("uicomponents", "File choose")
+                                                                            : qsTrc("uicomponents", "Directory choose")
 
             onClicked: {
                 var selectedPath

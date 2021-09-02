@@ -20,32 +20,38 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Layouts 1.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
-import MuseScore.Preferences 1.0
 
-import "internal"
-
-PreferencesPage {
+Column {
     id: root
 
-    contentHeight: content.height
+    width: parent.width
+    spacing: 18
 
-    FoldersPreferencesModel {
-        id: foldersPreferencesModel
+    //! NOTE: Added to prevent components clipping when navigating
+    padding: 2
+
+    property alias title: titleLabel.text
+    property int columnWidth: 216
+
+    property int navigationOrderStart: 0
+    property NavigationPanel navigation: NavigationPanel {
+        name: root.title
+        direction: NavigationPanel.Vertical
+        accessible.name: root.title
+        enabled: root.visible
+
+        onActiveChanged: {
+            if (active) {
+                root.forceActiveFocus()
+            }
+        }
     }
 
-    Component.onCompleted: {
-        foldersPreferencesModel.load()
-    }
-
-    FoldersSection {
-        id: content
-
-        model: foldersPreferencesModel
-
-        navigation.section: root.navigationSection
-        navigation.order: root.navigationOrderStart + 1
+    StyledTextLabel {
+        id: titleLabel
+        font: ui.theme.bodyBoldFont
     }
 }
