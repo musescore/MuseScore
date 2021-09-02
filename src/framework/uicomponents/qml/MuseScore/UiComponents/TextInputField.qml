@@ -78,6 +78,9 @@ FocusScope {
 
     opacity: root.enabled ? 1.0 : ui.theme.itemOpacityDisabled
 
+    FocusListener {
+        item: root
+    }
 
     NavigationControl {
         id: navCtrl
@@ -105,7 +108,7 @@ FocusScope {
 
         border.color: ui.theme.strokeColor
         border.width: ui.theme.borderWidth
-    }
+    }    
 
     RowLayout {
         anchors.fill: parent
