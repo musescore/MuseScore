@@ -28,6 +28,7 @@
 #include "spanner.h"
 #include "excerpt.h"
 #include "staff.h"
+#include "factory.h"
 
 using namespace mu::engraving;
 using namespace Ms;
@@ -162,7 +163,7 @@ bool Score::readScore400(XmlReader& e)
                    || (tag == "Trill")
                    || (tag == "Slur")
                    || (tag == "Pedal")) {
-            Spanner* s = toSpanner(EngravingItem::name2Element(tag, this->dummy()));
+            Spanner* s = toSpanner(Factory::name2Element(tag, this->dummy()));
             s->read(e);
             addSpanner(s);
         } else if (tag == "Excerpt") {

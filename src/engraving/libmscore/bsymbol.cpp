@@ -31,8 +31,10 @@
 #include "page.h"
 #include "system.h"
 #include "measure.h"
+#include "factory.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -81,14 +83,14 @@ bool BSymbol::readProperties(XmlReader& e)
     } else if (tag == "systemFlag") {
         setSystemFlag(e.readInt());
     } else if (tag == "Symbol" || tag == "FSymbol") {
-        EngravingItem* element = name2Element(tag, this);
+        EngravingItem* element = Factory::name2Element(tag, this);
         element->read(e);
         add(element);
     } else if (tag == "Image") {
         if (MScore::noImages) {
             e.skipCurrentElement();
         } else {
-            EngravingItem* element = name2Element(tag, this);
+            EngravingItem* element = Factory::name2Element(tag, this);
             element->read(e);
             add(element);
         }

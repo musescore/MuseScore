@@ -92,6 +92,8 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/engravingobject.h
     ${CMAKE_CURRENT_LIST_DIR}/excerpt.cpp
     ${CMAKE_CURRENT_LIST_DIR}/excerpt.h
+    ${CMAKE_CURRENT_LIST_DIR}/factory.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/factory.h
     ${CMAKE_CURRENT_LIST_DIR}/fermata.cpp
     ${CMAKE_CURRENT_LIST_DIR}/fermata.h
     ${CMAKE_CURRENT_LIST_DIR}/fifo.cpp

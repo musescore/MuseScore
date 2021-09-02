@@ -33,6 +33,7 @@
 #include "libmscore/page.h"
 #include "libmscore/musescoreCore.h"
 #include "libmscore/excerpt.h"
+#include "libmscore/factory.h"
 #include "thirdparty/qzip/qzipreader_p.h"
 
 #include "engraving/compat/mscxcompat.h"
@@ -74,7 +75,7 @@ EngravingItem* MTest::writeReadElement(EngravingItem* element)
 
     XmlReader e(buffer.buffer());
     e.readNextStartElement();
-    element = EngravingItem::name2Element(e.name(), score->dummy());
+    element = Factory::name2Element(e.name(), score->dummy());
     element->read(e);
     return element;
 }

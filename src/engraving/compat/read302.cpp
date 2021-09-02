@@ -42,6 +42,7 @@
 #include "libmscore/scoreorder.h"
 #include "libmscore/measurebase.h"
 #include "libmscore/masterscore.h"
+#include "libmscore/factory.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -155,7 +156,7 @@ bool Read302::readScore302(Ms::Score* score, XmlReader& e)
                    || (tag == "Trill")
                    || (tag == "Slur")
                    || (tag == "Pedal")) {
-            Spanner* s = toSpanner(EngravingItem::name2Element(tag, score->dummy()));
+            Spanner* s = toSpanner(Factory::name2Element(tag, score->dummy()));
             s->read(e);
             score->addSpanner(s);
         } else if (tag == "Excerpt") {
