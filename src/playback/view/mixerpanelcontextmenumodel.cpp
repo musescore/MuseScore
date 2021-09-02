@@ -30,6 +30,8 @@ using namespace mu::actions;
 
 static const ActionCode TOGGLE_MIXER_SECTION_ACTION("toggle-mixer-section");
 
+static const QString VIEW_MENU_ID("view-menu");
+
 static QString mixerSectionTitle(MixerSectionType type)
 {
     switch (type) {
@@ -90,7 +92,7 @@ void MixerPanelContextMenuModel::load()
     }
 
     MenuItemList viewMenu {
-        makeMenu(qtrc("playback", "View"), viewMenuItems)
+        makeMenu(qtrc("playback", "View"), viewMenuItems, true /*enabled*/, VIEW_MENU_ID)
     };
 
     setItems(viewMenu);
@@ -123,9 +125,11 @@ void MixerPanelContextMenuModel::toggleMixerSection(const actions::ActionData& a
         return;
     }
 
-    MixerSectionType sectionType = static_cast<MixerSectionType>(args.arg<int>(0));
-    bool visible = isSectionVisible(sectionType);
-    configuration()->setMixerSectionVisible(sectionType, !visible);
+    int sectionTypeInt = args.arg<int>(0);
+    MixerSectionType sectionType = static_cast<MixerSectionType>(sectionTypeInt);
+
+    bool newVisibilityValue = !isSectionVisible(sectionType);
+    configuration()->setMixerSectionVisible(sectionType, newVisibilityValue);
 
     switch (sectionType) {
     case MixerSectionType::Labels:
@@ -150,5 +154,15 @@ void MixerPanelContextMenuModel::toggleMixerSection(const actions::ActionData& a
         break;
     }
 
-    load();
+    QString sectionItemId = QString::number(sectionTypeInt);
+    MenuItem& viewMenu = findMenu(VIEW_MENU_ID);
+
+    for (MenuItem& item : viewMenu.subitems) {
+        if (item.id == sectionItemId) {
+            item.state.checked = newVisibilityValue;
+            break;
+        }
+    }
+
+    emit itemChanged(viewMenu);
 }

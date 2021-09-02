@@ -27,15 +27,15 @@
 
 #include "actions/actiontypes.h"
 
-#include <QTimer>
-
 using namespace mu::context;
 using namespace mu::instrumentsscene;
 using namespace mu::notation;
 using namespace mu::ui;
 using namespace mu::actions;
 
-const ActionCode SET_INSTRUMENTS_ORDER_CODE("set-instruments-order");
+static const ActionCode SET_INSTRUMENTS_ORDER_CODE("set-instruments-order");
+
+static const QString ORDERING_MENU_ID("ordering-menu");
 
 InstrumentsPanelContextMenuModel::InstrumentsPanelContextMenuModel(QObject* parent)
     : AbstractMenuModel(parent)
@@ -61,9 +61,7 @@ void InstrumentsPanelContextMenuModel::load()
         }
 
         m_masterNotation->parts()->scoreOrderChanged().onNotify(this, [this] {
-            QTimer::singleShot(0, [this]() {
-                loadItems();
-            });
+            updateOrderingMenu(m_masterNotation->parts()->scoreOrder().id);
         });
     });
 }
@@ -96,7 +94,7 @@ void InstrumentsPanelContextMenuModel::loadItems()
     }
 
     MenuItemList items {
-        makeMenu(qtrc("instruments", "Instrument ordering"), orderItems)
+        makeMenu(qtrc("instruments", "Instrument ordering"), orderItems, true /*enabled*/, ORDERING_MENU_ID)
     };
 
     setItems(items);
@@ -108,12 +106,25 @@ void InstrumentsPanelContextMenuModel::setInstrumentsOrder(const actions::Action
         return;
     }
 
-    QString orderId = args.arg<QString>(0);
+    QString newOrderId = args.arg<QString>(0);
 
     for (const ScoreOrder& order : m_orders) {
-        if (order.id == orderId) {
+        if (order.id == newOrderId) {
             m_masterNotation->parts()->setScoreOrder(order);
-            return;
+            break;
         }
     }
+
+    updateOrderingMenu(newOrderId);
+}
+
+void InstrumentsPanelContextMenuModel::updateOrderingMenu(const QString& newOrderId)
+{
+    MenuItem& orderingMenu = findMenu(ORDERING_MENU_ID);
+
+    for (MenuItem& item : orderingMenu.subitems) {
+        item.state.checked = item.id == newOrderId;
+    }
+
+    emit itemChanged(orderingMenu);
 }
