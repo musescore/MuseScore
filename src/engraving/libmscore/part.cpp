@@ -662,7 +662,7 @@ int Part::harmonyCount() const
     SegmentType st = SegmentType::ChordRest;
     int count = 0;
     for (const Segment* seg = firstM->first(st); seg; seg = seg->next1(st)) {
-        for (const Element* e : seg->annotations()) {
+        for (const EngravingItem* e : seg->annotations()) {
             if ((e->isHarmony() || (e->isFretDiagram() && toFretDiagram(e)->harmony())) && e->track() >= startTrack()
                 && e->track() < endTrack()) {
                 count++;

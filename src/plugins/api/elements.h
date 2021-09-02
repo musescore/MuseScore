@@ -27,7 +27,7 @@
 
 #include <QQmlListProperty>
 
-#include "libmscore/element.h"
+#include "libmscore/engravingitem.h"
 #include "libmscore/chord.h"
 #include "libmscore/hook.h"
 #include "libmscore/lyrics.h"
@@ -50,7 +50,7 @@
 namespace Ms {
 namespace PluginAPI {
 class FractionWrapper;
-class Element;
+class EngravingItem;
 class Part;
 class Staff;
 class Tie;
@@ -62,7 +62,7 @@ extern Tie* tieWrap(Ms::Tie* tie);
 //   wrap
 //---------------------------------------------------------
 
-extern Element* wrap(Ms::Element* se, Ownership own = Ownership::SCORE);
+extern EngravingItem* wrap(Ms::EngravingItem* se, Ownership own = Ownership::SCORE);
 
 // TODO: add RESET functions
 #define API_PROPERTY(name, pid) \
@@ -91,11 +91,11 @@ extern Element* wrap(Ms::Element* se, Ownership own = Ownership::SCORE);
     type get_##name() const { return get(Ms::Pid::pid).value<type>(); }  \
 
 //---------------------------------------------------------
-//   Element
-//    Element wrapper
+//   EngravingItem
+//    EngravingItem wrapper
 //---------------------------------------------------------
 
-class Element : public Ms::PluginAPI::ScoreElement
+class EngravingItem : public Ms::PluginAPI::ScoreElement
 {
     Q_OBJECT
 
@@ -103,7 +103,7 @@ class Element : public Ms::PluginAPI::ScoreElement
      * Parent element for this element.
      * \since 3.3
      */
-    Q_PROPERTY(Ms::PluginAPI::Element* parent READ parent)
+    Q_PROPERTY(Ms::PluginAPI::EngravingItem* parent READ parent)
     /**
      * Staff which this element belongs to.
      * \since MuseScore 3.5
@@ -111,12 +111,12 @@ class Element : public Ms::PluginAPI::ScoreElement
     Q_PROPERTY(Ms::PluginAPI::Staff* staff READ staff)
     /**
      * X-axis offset from a reference position in spatium units.
-     * \see Element::offset
+     * \see EngravingItem::offset
      */
     Q_PROPERTY(qreal offsetX READ offsetX WRITE setOffsetX)
     /**
      * Y-axis offset from a reference position in spatium units.
-     * \see Element::offset
+     * \see EngravingItem::offset
      */
     Q_PROPERTY(qreal offsetY READ offsetY WRITE setOffsetY)
     /**
@@ -127,7 +127,7 @@ class Element : public Ms::PluginAPI::ScoreElement
      * element. You can use this value to accurately position other elements
      * related to the same parent.
      *
-     * This value is in spatium units for compatibility with Element.offsetX.
+     * This value is in spatium units for compatibility with EngravingItem.offsetX.
      * \since MuseScore 3.3
      */
     Q_PROPERTY(qreal posX READ posX)
@@ -139,7 +139,7 @@ class Element : public Ms::PluginAPI::ScoreElement
      * element. You can use this value to accurately position other elements
      * related to the same parent.
      *
-     * This value is in spatium units for compatibility with Element.offsetY.
+     * This value is in spatium units for compatibility with EngravingItem.offsetY.
      * \since MuseScore 3.3
      */
     Q_PROPERTY(qreal posY READ posY)
@@ -152,7 +152,7 @@ class Element : public Ms::PluginAPI::ScoreElement
     /**
      * Bounding box of this element.
      *
-     * This value is in spatium units for compatibility with other Element positioning properties.
+     * This value is in spatium units for compatibility with other EngravingItem positioning properties.
      * \since MuseScore 3.3.1
      */
     Q_PROPERTY(QRectF bbox READ bbox)
@@ -161,7 +161,7 @@ class Element : public Ms::PluginAPI::ScoreElement
     API_PROPERTY_READ_ONLY_T(bool, selected, SELECTED)
     API_PROPERTY_READ_ONLY_T(bool, generated, GENERATED)
     /**
-     * Element color. See https://doc.qt.io/qt-5/qml-color.html
+     * EngravingItem color. See https://doc.qt.io/qt-5/qml-color.html
      * for the reference on color type in QML.
      */
     API_PROPERTY_T(QColor, color,         COLOR)
@@ -202,8 +202,8 @@ class Element : public Ms::PluginAPI::ScoreElement
      * Offset from a reference position in spatium units.
      * Use `Qt.point(x, y)` to create a point value which can be
      * assigned to this property.
-     * \see Element::offsetX
-     * \see Element::offsetY
+     * \see EngravingItem::offsetX
+     * \see EngravingItem::offsetY
      */
     API_PROPERTY_T(QPointF, offset,       OFFSET)
     API_PROPERTY(fret,                    FRET)
@@ -406,25 +406,25 @@ class Element : public Ms::PluginAPI::ScoreElement
 
     QPointF pagePos() const { return mu::PointF(element()->pagePos() / element()->spatium()).toQPointF(); }
 
-    Ms::PluginAPI::Element* parent() const { return wrap(element()->parentElement()); }
+    Ms::PluginAPI::EngravingItem* parent() const { return wrap(element()->parentElement()); }
     Staff* staff() { return wrap<Staff>(element()->staff()); }
 
     QRectF bbox() const;
 
 public:
     /// \cond MS_INTERNAL
-    Element(Ms::Element* e = nullptr, Ownership own = Ownership::PLUGIN)
+    EngravingItem(Ms::EngravingItem* e = nullptr, Ownership own = Ownership::PLUGIN)
         : Ms::PluginAPI::ScoreElement(e, own) {}
 
-    /// \brief Returns the underlying Ms::Element
+    /// \brief Returns the underlying Ms::EngravingItem
     /// \{
-    Ms::Element* element() { return toElement(e); }
-    const Ms::Element* element() const { return toElement(e); }
+    Ms::EngravingItem* element() { return toEngravingItem(e); }
+    const Ms::EngravingItem* element() const { return toEngravingItem(e); }
     /// \}
     /// \endcond
 
     /// Create a copy of the element
-    Q_INVOKABLE Ms::PluginAPI::Element* clone() const { return wrap(element()->clone(), Ownership::PLUGIN); }
+    Q_INVOKABLE Ms::PluginAPI::EngravingItem* clone() const { return wrap(element()->clone(), Ownership::PLUGIN); }
 
     Q_INVOKABLE QString subtypeName() const { return element()->subtypeName(); }
     /// Deprecated: same as ScoreElement::name. Left for compatibility purposes.
@@ -436,16 +436,16 @@ public:
 //    Note wrapper
 //---------------------------------------------------------
 
-class Note : public Element
+class Note : public EngravingItem
 {
     Q_OBJECT
-    Q_PROPERTY(Ms::PluginAPI::Element* accidental READ accidental)
+    Q_PROPERTY(Ms::PluginAPI::EngravingItem* accidental READ accidental)
     Q_PROPERTY(Ms::AccidentalType accidentalType READ accidentalType WRITE setAccidentalType)
     /** List of dots attached to this note */
-    Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Element> dots READ dots)
+    Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::EngravingItem> dots READ dots)
 //       Q_PROPERTY(int                            dotsCount         READ qmlDotsCount)
     /** List of other elements attached to this note: fingerings, symbols, bends etc. */
-    Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Element> elements READ elements)
+    Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::EngravingItem> elements READ elements)
     /// List of PlayEvents associated with this note.
     /// Important: You must call Score.createPlayEvents()
     /// to see meaningful data in the PlayEvent lists.
@@ -513,7 +513,7 @@ class Note : public Element
 public:
     /// \cond MS_INTERNAL
     Note(Ms::Note* c = nullptr, Ownership own = Ownership::PLUGIN)
-        : Element(c, own) {}
+        : EngravingItem(c, own) {}
 
     Ms::Note* note() { return toNote(e); }
     const Ms::Note* note() const { return toNote(e); }
@@ -531,17 +531,17 @@ public:
     Ms::PluginAPI::Note* firstTiedNote() { return wrap<Note>(note()->firstTiedNote()); }
     Ms::PluginAPI::Note* lastTiedNote() { return wrap<Note>(note()->lastTiedNote()); }
 
-    QQmlListProperty<Element> dots() { return wrapContainerProperty<Element>(this, note()->dots()); }
-    QQmlListProperty<Element> elements() { return wrapContainerProperty<Element>(this, note()->el()); }
+    QQmlListProperty<EngravingItem> dots() { return wrapContainerProperty<EngravingItem>(this, note()->dots()); }
+    QQmlListProperty<EngravingItem> elements() { return wrapContainerProperty<EngravingItem>(this, note()->el()); }
     QQmlListProperty<PlayEvent> playEvents() { return wrapPlayEventsContainerProperty(this, note()->playEvents()); }
 
-    Element* accidental() { return wrap<Element>(note()->accidental()); }
+    EngravingItem* accidental() { return wrap<EngravingItem>(note()->accidental()); }
 
     Ms::AccidentalType accidentalType() { return note()->accidentalType(); }
     void setAccidentalType(Ms::AccidentalType t) { note()->setAccidentalType(t); }
     Ms::NoteType noteType() { return note()->noteType(); }
 
-    static void addInternal(Ms::Note* note, Ms::Element* el);
+    static void addInternal(Ms::Note* note, Ms::EngravingItem* el);
     static bool isChildAllowed(Ms::ElementType elementType);
     /// \endcond
 
@@ -551,17 +551,17 @@ public:
 
     /// Add to a note's elements.
     /// \since MuseScore 3.3.3
-    Q_INVOKABLE void add(Ms::PluginAPI::Element* wrapped);
+    Q_INVOKABLE void add(Ms::PluginAPI::EngravingItem* wrapped);
     /// Remove a note's element.
     /// \since MuseScore 3.3.3
-    Q_INVOKABLE void remove(Ms::PluginAPI::Element* wrapped);
+    Q_INVOKABLE void remove(Ms::PluginAPI::EngravingItem* wrapped);
 };
 
 //---------------------------------------------------------
 //   DurationElement
 //---------------------------------------------------------
 
-class DurationElement : public Element
+class DurationElement : public EngravingItem
 {
     Q_OBJECT
 
@@ -594,7 +594,7 @@ class DurationElement : public Element
 public:
     /// \cond MS_INTERNAL
     DurationElement(Ms::DurationElement* de = nullptr, Ownership own = Ownership::PLUGIN)
-        : Element(de, own) {}
+        : EngravingItem(de, own) {}
 
     Ms::DurationElement* durationElement() { return toDurationElement(e); }
     const Ms::DurationElement* durationElement() const { return toDurationElement(e); }
@@ -633,7 +633,7 @@ class Tuplet : public DurationElement
     * List of elements which belong to this tuplet.
     * \since MuseScore 3.5
     */
-    Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Element> elements READ elements)
+    Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::EngravingItem> elements READ elements)
 
 public:
     /// \cond MS_INTERNAL
@@ -643,7 +643,7 @@ public:
     Ms::Tuplet* tuplet() { return toTuplet(e); }
     const Ms::Tuplet* tuplet() const { return toTuplet(e); }
 
-    QQmlListProperty<Element> elements() { return wrapContainerProperty<Element>(this, tuplet()->elements()); }
+    QQmlListProperty<EngravingItem> elements() { return wrapContainerProperty<EngravingItem>(this, tuplet()->elements()); }
     /// \endcond
 };
 
@@ -659,12 +659,12 @@ class ChordRest : public DurationElement
      * Lyrics corresponding to this chord or rest, if any.
      * Before 3.6 version this property was only available for \ref Chord objects.
      */
-    Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Element> lyrics READ lyrics)
+    Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::EngravingItem> lyrics READ lyrics)
     /**
      * Beam which covers this chord/rest, if such exists.
      * \since MuseScore 3.6
      */
-    Q_PROPERTY(Ms::PluginAPI::Element* beam READ beam)
+    Q_PROPERTY(Ms::PluginAPI::EngravingItem* beam READ beam)
 
 public:
     /// \cond MS_INTERNAL
@@ -673,8 +673,8 @@ public:
 
     Ms::ChordRest* chordRest() { return toChordRest(e); }
 
-    QQmlListProperty<Element> lyrics() { return wrapContainerProperty<Element>(this, chordRest()->lyrics()); }   // TODO: special type for Lyrics?
-    Element* beam() { return wrap(chordRest()->beam()); }
+    QQmlListProperty<EngravingItem> lyrics() { return wrapContainerProperty<EngravingItem>(this, chordRest()->lyrics()); }   // TODO: special type for Lyrics?
+    EngravingItem* beam() { return wrap(chordRest()->beam()); }
     /// \endcond
 };
 
@@ -691,12 +691,12 @@ class Chord : public ChordRest
     /// List of notes belonging to this chord.
     Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Note> notes READ notes)
     /// Stem of this chord, if exists. \since MuseScore 3.6
-    Q_PROPERTY(Ms::PluginAPI::Element* stem READ stem)
+    Q_PROPERTY(Ms::PluginAPI::EngravingItem* stem READ stem)
     /// Stem slash of this chord, if exists. Stem slashes are present in grace notes of type acciaccatura.
     /// \since MuseScore 3.6
-    Q_PROPERTY(Ms::PluginAPI::Element* stemSlash READ stemSlash)
+    Q_PROPERTY(Ms::PluginAPI::EngravingItem* stemSlash READ stemSlash)
     /// Hook on a stem of this chord, if exists. \since MuseScore 3.6
-    Q_PROPERTY(Ms::PluginAPI::Element* hook READ hook)
+    Q_PROPERTY(Ms::PluginAPI::EngravingItem* hook READ hook)
     /// The NoteType of the chord.
     /// \since MuseScore 3.2.1
     Q_PROPERTY(Ms::NoteType noteType READ noteType)
@@ -714,22 +714,22 @@ public:
 
     QQmlListProperty<Chord> graceNotes() { return wrapContainerProperty<Chord>(this, chord()->graceNotes()); }
     QQmlListProperty<Note> notes() { return wrapContainerProperty<Note>(this, chord()->notes()); }
-    Element* stem() { return wrap(chord()->stem()); }
-    Element* stemSlash() { return wrap(chord()->stemSlash()); }
-    Element* hook() { return wrap(chord()->hook()); }
+    EngravingItem* stem() { return wrap(chord()->stem()); }
+    EngravingItem* stemSlash() { return wrap(chord()->stemSlash()); }
+    EngravingItem* hook() { return wrap(chord()->hook()); }
     Ms::NoteType noteType() { return chord()->noteType(); }
     Ms::PlayEventType playEventType() { return chord()->playEventType(); }
     void setPlayEventType(Ms::PlayEventType v);
 
-    static void addInternal(Ms::Chord* chord, Ms::Element* el);
+    static void addInternal(Ms::Chord* chord, Ms::EngravingItem* el);
     /// \endcond
 
     /// Add to a chord's elements.
     /// \since MuseScore 3.3
-    Q_INVOKABLE void add(Ms::PluginAPI::Element* wrapped);
+    Q_INVOKABLE void add(Ms::PluginAPI::EngravingItem* wrapped);
     /// Remove a chord's element.
     /// \since MuseScore 3.3
-    Q_INVOKABLE void remove(Ms::PluginAPI::Element* wrapped);
+    Q_INVOKABLE void remove(Ms::PluginAPI::EngravingItem* wrapped);
 };
 
 //---------------------------------------------------------
@@ -737,14 +737,14 @@ public:
 //    Segment
 //---------------------------------------------------------
 
-class Segment : public Element
+class Segment : public EngravingItem
 {
     Q_OBJECT
     /**
      * The list of annotations. Articulations, staff/system/expression
      * text are examples of what is considered to be segment annotations.
      */
-    Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Element> annotations READ annotations)
+    Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::EngravingItem> annotations READ annotations)
     /// \brief Next segment in this measure
     /// \returns The next segment in this segment's measure.
     /// Null if there is no such segment.
@@ -778,7 +778,7 @@ class Segment : public Element
 public:
     /// \cond MS_INTERNAL
     Segment(Ms::Segment* s = nullptr, Ownership own = Ownership::SCORE)
-        : Element(s, own) {}
+        : EngravingItem(s, own) {}
 
     Ms::Segment* segment() { return toSegment(e); }
     const Ms::Segment* segment() const { return toSegment(e); }
@@ -791,12 +791,12 @@ public:
     Segment* nextInMeasure() { return wrap<Segment>(segment()->next()); }
     Segment* prevInScore() { return wrap<Segment>(segment()->prev1()); }
     Segment* prevInMeasure() { return wrap<Segment>(segment()->prev()); }
-    QQmlListProperty<Element> annotations() { return wrapContainerProperty<Element>(this, segment()->annotations()); }
+    QQmlListProperty<EngravingItem> annotations() { return wrapContainerProperty<EngravingItem>(this, segment()->annotations()); }
     /// \endcond
 
-    /// \return Element at the given \p track (null if there is no such an element)
+    /// \return EngravingItem at the given \p track (null if there is no such an element)
     /// \param track track number
-    Q_INVOKABLE Ms::PluginAPI::Element* elementAt(int track);
+    Q_INVOKABLE Ms::PluginAPI::EngravingItem* elementAt(int track);
 };
 
 //---------------------------------------------------------
@@ -804,7 +804,7 @@ public:
 //    Measure wrapper
 //---------------------------------------------------------
 
-class Measure : public Element
+class Measure : public EngravingItem
 {
     Q_OBJECT
     /// The first segment of this measure
@@ -837,12 +837,12 @@ class Measure : public Element
 
     /// List of measure-related elements: layout breaks, jump/repeat markings etc.
     /// \since MuseScore 3.3
-    Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Element> elements READ elements)
+    Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::EngravingItem> elements READ elements)
 
 public:
     /// \cond MS_INTERNAL
     Measure(Ms::Measure* m = nullptr, Ownership own = Ownership::SCORE)
-        : Element(m, own) {}
+        : EngravingItem(m, own) {}
 
     Ms::Measure* measure() { return toMeasure(e); }
     const Ms::Measure* measure() const { return toMeasure(e); }
@@ -856,7 +856,7 @@ public:
     Measure* prevMeasureMM() { return wrap<Measure>(measure()->prevMeasureMM(), Ownership::SCORE); }
     Measure* nextMeasureMM() { return wrap<Measure>(measure()->nextMeasureMM(), Ownership::SCORE); }
 
-    QQmlListProperty<Element> elements() { return wrapContainerProperty<Element>(this, measure()->el()); }
+    QQmlListProperty<EngravingItem> elements() { return wrapContainerProperty<EngravingItem>(this, measure()->el()); }
     /// \endcond
 };
 
@@ -864,7 +864,7 @@ public:
 //   Page
 //---------------------------------------------------------
 
-class Page : public Element
+class Page : public EngravingItem
 {
     Q_OBJECT
     /**
@@ -884,7 +884,7 @@ class Page : public Element
 public:
     /// \cond MS_INTERNAL
     Page(Ms::Page* p = nullptr, Ownership own = Ownership::SCORE)
-        : Element(p, own) {}
+        : EngravingItem(p, own) {}
 
     Ms::Page* page() { return toPage(e); }
     const Ms::Page* page() const { return toPage(e); }
@@ -928,7 +928,7 @@ class Staff : public ScoreElement
      * It is recommended to consider adding a spacer instead as it
      * allows adjusting staff spacing locally as opposed to this
      * property.
-     * \see \ref Element.space
+     * \see \ref EngravingItem.space
      */
     API_PROPERTY_T(qreal, staffUserdist,  STAFF_USERDIST)
 

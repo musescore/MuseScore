@@ -33,7 +33,7 @@
 #include "engraving/libmscore/actionicon.h"
 #include "engraving/libmscore/articulation.h"
 #include "engraving/libmscore/bracket.h"
-#include "engraving/libmscore/element.h"
+#include "engraving/libmscore/engravingitem.h"
 #include "engraving/libmscore/image.h"
 #include "engraving/libmscore/imageStore.h"
 #include "engraving/libmscore/masterscore.h"
@@ -179,7 +179,7 @@ std::vector<PaletteCellPtr> Palette::takeCells(size_t idx, size_t count)
 }
 
 // Helper function to compare two Elements
-static bool isEquivalent(const Element& e1, const Element& e2)
+static bool isEquivalent(const EngravingItem& e1, const EngravingItem& e2)
 {
     return e1.type() == e2.type()
            && e1.subtype() == e2.subtype()
@@ -188,7 +188,7 @@ static bool isEquivalent(const Element& e1, const Element& e2)
 
 int Palette::indexOfCell(const PaletteCell& cell, bool matchName) const
 {
-    const Element* el = cell.element.get();
+    const EngravingItem* el = cell.element.get();
     if (!el) {
         return -1;
     }
@@ -199,7 +199,7 @@ int Palette::indexOfCell(const PaletteCell& cell, bool matchName) const
             continue;
         }
 
-        const Element* exElement = localCell.element.get();
+        const EngravingItem* exElement = localCell.element.get();
         if (exElement && !isEquivalent(*exElement, *el)) {
             continue;
         }
@@ -495,7 +495,7 @@ Palette::Type Palette::guessType() const
         return Type::Custom;
     }
 
-    const Element* e = nullptr;
+    const EngravingItem* e = nullptr;
     for (PaletteCellPtr cell : m_cells) {
         if (cell->element) {
             e = cell->element.get();

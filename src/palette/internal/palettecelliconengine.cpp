@@ -25,7 +25,7 @@
 #include "engraving/infrastructure/draw/painter.h"
 #include "engraving/infrastructure/draw/pen.h"
 #include "engraving/libmscore/actionicon.h"
-#include "engraving/libmscore/element.h"
+#include "engraving/libmscore/engravingitem.h"
 #include "engraving/libmscore/masterscore.h"
 #include "engraving/style/defaultstyle.h"
 
@@ -65,7 +65,7 @@ void PaletteCellIconEngine::paintCell(Painter& painter, const RectF& rect, bool 
         return;
     }
 
-    Element* element = m_cell->element.get();
+    EngravingItem* element = m_cell->element.get();
     if (!element) {
         return;
     }
@@ -103,7 +103,7 @@ void PaletteCellIconEngine::paintBackground(Painter& painter, const RectF& rect,
 
 /// Paint an icon element so that it fills a QRect, preserving aspect ratio, and
 /// leaving a small margin around the edges.
-void PaletteCellIconEngine::paintActionIcon(Painter& painter, const RectF& rect, Element* element) const
+void PaletteCellIconEngine::paintActionIcon(Painter& painter, const RectF& rect, EngravingItem* element) const
 {
     IF_ASSERT_FAILED(element && element->isActionIcon()) {
         return;
@@ -159,7 +159,7 @@ qreal PaletteCellIconEngine::paintStaff(Painter& painter, const RectF& rect, qre
 /// system. If alignToStaff is true then the element is only centered horizontally;
 /// i.e. vertical alignment is unchanged from the default so that item will appear
 /// at the correct height on the staff.
-void PaletteCellIconEngine::paintScoreElement(Painter& painter, Element* element, qreal spatium, bool alignToStaff) const
+void PaletteCellIconEngine::paintScoreElement(Painter& painter, EngravingItem* element, qreal spatium, bool alignToStaff) const
 {
     IF_ASSERT_FAILED(element && !element->isActionIcon()) {
         return;
@@ -186,7 +186,7 @@ void PaletteCellIconEngine::paintScoreElement(Painter& painter, Element* element
     painter.restore();
 }
 
-void PaletteCellIconEngine::paintPaletteElement(void* data, Element* element)
+void PaletteCellIconEngine::paintPaletteElement(void* data, EngravingItem* element)
 {
     Painter* painter = static_cast<Painter*>(data);
     painter->save();

@@ -156,7 +156,7 @@ void GlissandoSegment::draw(mu::draw::Painter* painter) const
 //   propertyDelegate
 //---------------------------------------------------------
 
-Element* GlissandoSegment::propertyDelegate(Pid pid)
+EngravingItem* GlissandoSegment::propertyDelegate(Pid pid)
 {
     switch (pid) {
     case Pid::GLISS_TYPE:
@@ -180,7 +180,7 @@ Element* GlissandoSegment::propertyDelegate(Pid pid)
 //   Glissando
 //=========================================================
 
-Glissando::Glissando(Element* parent)
+Glissando::Glissando(EngravingItem* parent)
     : SLine(ElementType::GLISSANDO, parent, ElementFlag::MOVABLE)
 {
     setAnchor(Spanner::Anchor::NOTE);
@@ -534,7 +534,7 @@ Note* Glissando::guessInitialNote(Chord* chord)
             if (segm->element(chordTrack) && segm->element(chordTrack)->isChord()) {
                 target = toChord(segm->element(chordTrack));
             } else {                 // if no same track, look for other chords in the same instrument
-                for (Element* currChord : segm->elist()) {
+                for (EngravingItem* currChord : segm->elist()) {
                     if (currChord && currChord->isChord() && toChord(currChord)->part() == part) {
                         target = toChord(currChord);
                         break;
@@ -633,7 +633,7 @@ Note* Glissando::guessFinalNote(Chord* chord)
             if (segm->element(chordTrack) && segm->element(chordTrack)->isChord()) {
                 target = toChord(segm->element(chordTrack));
             } else {                  // if no same track, look for other chords in the same instrument
-                for (Element* currChord : segm->elist()) {
+                for (EngravingItem* currChord : segm->elist()) {
                     if (currChord && currChord->isChord() && toChord(currChord)->part() == part) {
                         target = toChord(currChord);
                         break;

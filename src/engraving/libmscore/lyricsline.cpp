@@ -69,7 +69,7 @@ static Lyrics* searchNextLyrics(Segment* s, int staffIdx, int verse, Placement p
 //   LyricsLine
 //---------------------------------------------------------
 
-LyricsLine::LyricsLine(Element* parent)
+LyricsLine::LyricsLine(EngravingItem* parent)
     : SLine(ElementType::LYRICSLINE, parent, ElementFlag::NOT_SELECTABLE)
 {
     setGenerated(true);             // no need to save it, as it can be re-generated
@@ -127,7 +127,7 @@ void LyricsLine::layout()
             s = score()->lastSegment();
             lyricsEndTick = Fraction(-1, 1);
         }
-        Element* se = s->element(lyricsTrack);
+        EngravingItem* se = s->element(lyricsTrack);
         // everything is OK if we have reached a chord at right tick on right track
         if (s->tick() == lyricsEndTick && se && se->type() == ElementType::CHORD) {
             // advance to next CR, or last segment if no next CR
@@ -144,7 +144,7 @@ void LyricsLine::layout()
             Segment* ns = s;
             Segment* ps = s->prev1(SegmentType::ChordRest);
             while (ps && ps != lyricsSegment) {
-                Element* pe = ps->element(lyricsTrack);
+                EngravingItem* pe = ps->element(lyricsTrack);
                 // we're looking for an actual chord on this track
                 if (pe && pe->type() == ElementType::CHORD) {
                     break;
@@ -156,7 +156,7 @@ void LyricsLine::layout()
                 // no valid previous CR, so try to lengthen melisma instead
                 ps = ns;
                 s = ps->nextCR(lyricsTrack, true);
-                Element* e = s ? s->element(lyricsTrack) : nullptr;
+                EngravingItem* e = s ? s->element(lyricsTrack) : nullptr;
                 // check to make sure we have a chord
                 if (!e || e->type() != ElementType::CHORD) {
                     // nothing to do but set ticks to 0

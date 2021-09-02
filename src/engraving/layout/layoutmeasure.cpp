@@ -98,11 +98,11 @@ void LayoutMeasure::createMMRest(const LayoutOptions& options, Score* score, Mea
     if (lastMeasureEndBarlineSeg) {
         Segment* mmrEndBarlineSeg = mmrMeasure->undoGetSegmentR(SegmentType::EndBarLine, mmrMeasure->ticks());
         for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
-            Element* e = lastMeasureEndBarlineSeg->element(staffIdx * VOICES);
+            EngravingItem* e = lastMeasureEndBarlineSeg->element(staffIdx * VOICES);
             if (e) {
                 bool generated = e->generated();
                 if (!mmrEndBarlineSeg->element(staffIdx * VOICES)) {
-                    Element* eClone = generated ? e->clone() : e->linkedClone();
+                    EngravingItem* eClone = generated ? e->clone() : e->linkedClone();
                     eClone->setGenerated(generated);
                     eClone->setParent(mmrEndBarlineSeg);
                     score->undoAddElement(eClone);
@@ -133,7 +133,7 @@ void LayoutMeasure::createMMRest(const LayoutOptions& options, Score* score, Mea
         Segment* mmrClefSeg = mmrMeasure->undoGetSegment(lastMeasureClefSeg->segmentType(), lastMeasure->endTick());
         for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
             const int track = staff2track(staffIdx);
-            Element* e = lastMeasureClefSeg->element(track);
+            EngravingItem* e = lastMeasureClefSeg->element(track);
             if (e && e->isClef()) {
                 Clef* lastMeasureClef = toClef(e);
                 if (!mmrClefSeg->element(track)) {
@@ -159,14 +159,14 @@ void LayoutMeasure::createMMRest(const LayoutOptions& options, Score* score, Mea
     //
     ElementList oldList = mmrMeasure->takeElements();
     ElementList newList = lastMeasure->el();
-    for (Element* e : firstMeasure->el()) {
+    for (EngravingItem* e : firstMeasure->el()) {
         if (e->isMarker()) {
             newList.push_back(e);
         }
     }
-    for (Element* e : newList) {
+    for (EngravingItem* e : newList) {
         bool found = false;
-        for (Element* ee : oldList) {
+        for (EngravingItem* ee : oldList) {
             if (ee->type() == e->type() && ee->subtype() == e->subtype()) {
                 mmrMeasure->add(ee);
                 auto i = std::find(oldList.begin(), oldList.end(), ee);
@@ -181,7 +181,7 @@ void LayoutMeasure::createMMRest(const LayoutOptions& options, Score* score, Mea
             mmrMeasure->add(e->clone());
         }
     }
-    for (Element* e : oldList) {
+    for (EngravingItem* e : oldList) {
         delete e;
     }
     Segment* s = mmrMeasure->undoGetSegmentR(SegmentType::ChordRest, Fraction(0, 1));
@@ -333,7 +333,7 @@ void LayoutMeasure::createMMRest(const LayoutOptions& options, Score* score, Mea
     underlyingSeg = firstMeasure->findSegmentR(SegmentType::ChordRest, Fraction(0, 1));
     if (underlyingSeg) {
         // clone elements from underlying measure to mmr
-        for (Element* e : underlyingSeg->annotations()) {
+        for (EngravingItem* e : underlyingSeg->annotations()) {
             // look at elements in underlying measure
             if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText() || e->isSystemText()
                   || e->isInstrumentChange())) {
@@ -341,7 +341,7 @@ void LayoutMeasure::createMMRest(const LayoutOptions& options, Score* score, Mea
             }
             // try to find a match in mmr
             bool found = false;
-            for (Element* ee : s->annotations()) {
+            for (EngravingItem* ee : s->annotations()) {
                 if (e->linkList().contains(ee)) {
                     found = true;
                     break;
@@ -349,7 +349,7 @@ void LayoutMeasure::createMMRest(const LayoutOptions& options, Score* score, Mea
             }
             // add to mmr if no match found
             if (!found) {
-                Element* eClone = e->linkedClone();
+                EngravingItem* eClone = e->linkedClone();
                 eClone->setParent(s);
                 score->undo(new AddElement(eClone));
             }
@@ -357,7 +357,7 @@ void LayoutMeasure::createMMRest(const LayoutOptions& options, Score* score, Mea
 
         // remove stray elements (possibly leftover from a previous layout of this mmr)
         // this should not happen since the elements are linked?
-        for (Element* e : s->annotations()) {
+        for (EngravingItem* e : s->annotations()) {
             // look at elements in mmr
             if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText() || e->isSystemText()
                   || e->isInstrumentChange())) {
@@ -365,7 +365,7 @@ void LayoutMeasure::createMMRest(const LayoutOptions& options, Score* score, Mea
             }
             // try to find a match in underlying measure
             bool found = false;
-            for (Element* ee : underlyingSeg->annotations()) {
+            for (EngravingItem* ee : underlyingSeg->annotations()) {
                 if (e->linkList().contains(ee)) {
                     found = true;
                     break;
@@ -397,7 +397,7 @@ static bool validMMRestMeasure(Measure* m)
 
     int n = 0;
     for (Segment* s = m->first(); s; s = s->next()) {
-        for (Element* e : s->annotations()) {
+        for (EngravingItem* e : s->annotations()) {
             if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText() || e->isSystemText()
                   || e->isInstrumentChange())) {
                 return false;
@@ -418,7 +418,7 @@ static bool validMMRestMeasure(Measure* m)
                     restFound = true;
                 }
             }
-            for (Element* e : s->annotations()) {
+            for (EngravingItem* e : s->annotations()) {
                 if (e->isFermata()) {
                     return false;
                 }
@@ -465,7 +465,7 @@ static bool breakMultiMeasureRest(Measure* m)
     }
 
     // break for marker in this measure
-    for (Element* e : m->el()) {
+    for (EngravingItem* e : m->el()) {
         if (e->isMarker()) {
             Marker* mark = toMarker(e);
             if (!(mark->align() & Align::RIGHT)) {
@@ -477,7 +477,7 @@ static bool breakMultiMeasureRest(Measure* m)
     // break for marker & jump in previous measure
     Measure* pm = m->prevMeasure();
     if (pm) {
-        for (Element* e : pm->el()) {
+        for (EngravingItem* e : pm->el()) {
             if (e->isJump()) {
                 return true;
             } else if (e->isMarker()) {
@@ -498,7 +498,7 @@ static bool breakMultiMeasureRest(Measure* m)
     }
 
     for (Segment* s = m->first(); s; s = s->next()) {
-        for (Element* e : s->annotations()) {
+        for (EngravingItem* e : s->annotations()) {
             if (!e->visible()) {
                 continue;
             }
@@ -513,7 +513,7 @@ static bool breakMultiMeasureRest(Measure* m)
             if (!m->score()->staff(staffIdx)->show()) {
                 continue;
             }
-            Element* e = s->element(staffIdx * VOICES);
+            EngravingItem* e = s->element(staffIdx * VOICES);
             if (!e || e->generated()) {
                 continue;
             }
@@ -732,13 +732,13 @@ void LayoutMeasure::getNextMeasure(const LayoutOptions& options, Ms::Score* scor
                     cr->setMag(m);
                 }
             } else if (segment.isClefType()) {
-                Element* e = segment.element(staffIdx * VOICES);
+                EngravingItem* e = segment.element(staffIdx * VOICES);
                 if (e) {
                     toClef(e)->setSmall(true);
                     e->layout();
                 }
             } else if (segment.isType(SegmentType::TimeSig | SegmentType::Ambitus | SegmentType::HeaderClef)) {
-                Element* e = segment.element(staffIdx * VOICES);
+                EngravingItem* e = segment.element(staffIdx * VOICES);
                 if (e) {
                     e->layout();
                 }
@@ -770,13 +770,13 @@ void LayoutMeasure::getNextMeasure(const LayoutOptions& options, Ms::Score* scor
 
     for (Segment& segment : measure->segments()) {
         if (segment.isBreathType()) {
-            for (Element* e : segment.elist()) {
+            for (EngravingItem* e : segment.elist()) {
                 if (e && e->isBreath()) {
                     e->layout();
                 }
             }
         } else if (segment.isChordRestType()) {
-            for (Element* e : segment.annotations()) {
+            for (EngravingItem* e : segment.annotations()) {
                 if (e->isSymbol()) {
                     e->layout();
                 }
@@ -809,7 +809,7 @@ void LayoutMeasure::getNextMeasure(const LayoutOptions& options, Ms::Score* scor
         //      continue;
         // DEBUG: relayout grace notes as beaming/flags may have changed
         if (s.isChordRestType()) {
-            for (Element* e : s.elist()) {
+            for (EngravingItem* e : s.elist()) {
                 if (e && e->isChord()) {
                     Chord* chord = toChord(e);
                     chord->layout();

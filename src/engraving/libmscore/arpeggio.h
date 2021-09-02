@@ -23,7 +23,7 @@
 #ifndef __ARPEGGIO_H__
 #define __ARPEGGIO_H__
 
-#include "element.h"
+#include "engravingitem.h"
 
 namespace Ms {
 class Chord;
@@ -36,7 +36,7 @@ enum class ArpeggioType : char {
 //   @@ Arpeggio
 //---------------------------------------------------------
 
-class Arpeggio final : public Element
+class Arpeggio final : public EngravingItem
 {
     ArpeggioType _arpeggioType;
     qreal _userLen1;
@@ -72,7 +72,7 @@ public:
     Chord* chord() const { return (Chord*)parent(); }
 
     bool acceptDrop(EditData&) const override;
-    Element* drop(EditData&) override;
+    EngravingItem* drop(EditData&) override;
     void layout() override;
     void draw(mu::draw::Painter* painter) const override;
     bool isEditable() const override { return true; }

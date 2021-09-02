@@ -57,7 +57,7 @@
 #include "libmscore/articulation.h"
 #include "libmscore/page.h"
 #include "libmscore/system.h"
-#include "libmscore/element.h"
+#include "libmscore/engravingitem.h"
 #include "libmscore/glissando.h"
 #include "libmscore/navigate.h"
 #include "libmscore/spanner.h"
@@ -594,7 +594,7 @@ void ExportBraille::credits(QIODevice* dev)
         for (const auto system : page->systems()) {
             for (const auto mb : system->measures()) {
                 if (mb->isVBox()) {
-                    for (const Element* element : mb->el()) {
+                    for (const EngravingItem* element : mb->el()) {
                         if (element->isText()) {
                             const Text* text = toText(element);
                             out << TextToUEBBraille().braille(text->plainText()).toUtf8() << Qt::endl;
@@ -966,7 +966,7 @@ QString ExportBraille::brailleRest(Rest* rest)
     }
 
     QString fermata = QString();
-    for (Element* el : rest->segment()->annotations()) {
+    for (EngravingItem* el : rest->segment()->annotations()) {
         if (el->isFermata()) {
             fermata = brailleFermata(toFermata(el));
         }
@@ -1018,7 +1018,7 @@ QString ExportBraille::brailleBreath(Breath* breath)
 BarLine* ExportBraille::lastBarline(Measure* measure, int track)
 {
     for (Segment* seg = measure->last(); seg; seg = seg->prev()) {
-        Element* el = seg->element(track);
+        EngravingItem* el = seg->element(track);
         if (el && el->isBarLine()) {
             return toBarLine(el);
         }
@@ -1029,7 +1029,7 @@ BarLine* ExportBraille::lastBarline(Measure* measure, int track)
 BarLine* ExportBraille::firstBarline(Measure* measure, int track)
 {
     for (Segment* seg = measure->first(); seg; seg = seg->next()) {
-        Element* el = seg->element(track);
+        EngravingItem* el = seg->element(track);
         if (el && el->isChordRest()) {
             return nullptr;
         }
@@ -1046,7 +1046,7 @@ QString ExportBraille::brailleMeasure(Measure* measure, int staffCount)
     QTextStream out(&rez);
 
     //Render all repeats and jumps that are on the left
-    for (Element* el : measure->el()) {
+    for (EngravingItem* el : measure->el()) {
         if (el->isMarker()) {
             Marker* marker = toMarker(el);
             if (marker->tid() == Tid::REPEAT_LEFT) {
@@ -1071,7 +1071,7 @@ QString ExportBraille::brailleMeasure(Measure* measure, int staffCount)
 
     //Render everything that is in Voice 1
     for (auto seg = measure->first(); seg; seg = seg->next()) {
-        for (Element* annotation : seg->annotations()) {
+        for (EngravingItem* annotation : seg->annotations()) {
             if (annotation->isTempoText()) {
                 out << brailleTempoText(toTempoText(annotation), staffCount);
             }
@@ -1082,7 +1082,7 @@ QString ExportBraille::brailleMeasure(Measure* measure, int staffCount)
             }
         }
 
-        Element* el = seg->element(staffCount * VOICES);
+        EngravingItem* el = seg->element(staffCount * VOICES);
         if (!el) {
             continue;
         }
@@ -1129,7 +1129,7 @@ QString ExportBraille::brailleMeasure(Measure* measure, int staffCount)
             resetOctave(staffCount);
             out << BRAILLE_FULL_MEASURE_IN_ACORD;
             for (auto seg = measure->first(); seg; seg = seg->next()) {
-                Element* el = seg->element(staffCount * VOICES + i);
+                EngravingItem* el = seg->element(staffCount * VOICES + i);
                 if (!el) {
                     continue;
                 }
@@ -1157,7 +1157,7 @@ QString ExportBraille::brailleMeasure(Measure* measure, int staffCount)
     out << brailleBarline(lastBarline(measure, staffCount * VOICES));
 
     //Render repeats and jumps that are on the right
-    for (Element* el : measure->el()) {
+    for (EngravingItem* el : measure->el()) {
         if (el->isMarker()) {
             Marker* marker = toMarker(el);
             if (marker->tid() == Tid::REPEAT_RIGHT) {
@@ -1390,7 +1390,7 @@ QString ExportBraille::brailleChordRootNote(Chord* chord, Note* rootNote)
     QString noteTieBraille = brailleTie(rootNote);
 
     QString fingeringAfterBraille = QString();
-    for (Element* el : rootNote->el()) {
+    for (EngravingItem* el : rootNote->el()) {
         if (el->isFingering()) {
             fingeringAfterBraille += brailleFingeringAfter(toFingering(el));
         }
@@ -1501,7 +1501,7 @@ QString ExportBraille::brailleChordInterval(Note* rootNote, QList<Note*>* notes,
     QString noteTieBraille = brailleTie(note);
 
     QString fingeringAfterBraille = QString();
-    for (Element* el : rootNote->el()) {
+    for (EngravingItem* el : rootNote->el()) {
         if (el->isFingering()) {
             fingeringAfterBraille += brailleFingeringAfter(toFingering(el));
         }
@@ -1564,7 +1564,7 @@ QString ExportBraille::brailleChord(Chord* chord)
     QString chordTieBraille = brailleTie(chord);
 
     QString fermata = QString();
-    for (Element* el : chord->segment()->annotations()) {
+    for (EngravingItem* el : chord->segment()->annotations()) {
         if (el->isFermata()) {
             fermata = brailleFermata(toFermata(el));
         }
@@ -1694,7 +1694,7 @@ QString ExportBraille::brailleBarline(BarLine* barline)
     }
 
     QString fermataBraille = QString();
-    for (Element* el : barline->segment()->annotations()) {
+    for (EngravingItem* el : barline->segment()->annotations()) {
         if (el->isFermata()) {
             fermataBraille = brailleFermata(toFermata(el));
         }

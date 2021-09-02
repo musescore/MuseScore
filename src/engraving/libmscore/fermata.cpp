@@ -49,8 +49,8 @@ static const ElementStyle fermataStyle {
 //   Fermata
 //---------------------------------------------------------
 
-Fermata::Fermata(Element* parent)
-    : Element(ElementType::FERMATA, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+Fermata::Fermata(EngravingItem* parent)
+    : EngravingItem(ElementType::FERMATA, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     setPlacement(Placement::ABOVE);
     _symId         = SymId::noSym;
@@ -59,7 +59,7 @@ Fermata::Fermata(Element* parent)
     initElementStyle(&fermataStyle);
 }
 
-Fermata::Fermata(SymId id, Element* parent)
+Fermata::Fermata(SymId id, EngravingItem* parent)
     : Fermata(parent)
 {
     setSymId(id);
@@ -96,11 +96,11 @@ bool Fermata::readProperties(XmlReader& e)
         _timeStretch = e.readDouble();
     } else if (tag == "offset") {
         if (score()->mscVersion() > 114) {
-            Element::readProperties(e);
+            EngravingItem::readProperties(e);
         } else {
             e.skipCurrentElement();       // ignore manual layout in older scores
         }
-    } else if (Element::readProperties(e)) {
+    } else if (EngravingItem::readProperties(e)) {
     } else {
         return false;
     }
@@ -125,7 +125,7 @@ void Fermata::write(XmlWriter& xml) const
     if (!isStyled(Pid::OFFSET)) {
         writeProperty(xml, Pid::OFFSET);
     }
-    Element::writeProperties(xml);
+    EngravingItem::writeProperties(xml);
     xml.etag();
 }
 
@@ -225,7 +225,7 @@ void Fermata::layout()
     if (isStyled(Pid::OFFSET)) {
         setOffset(propertyDefault(Pid::OFFSET).value<PointF>());
     }
-    Element* e = s->element(track());
+    EngravingItem* e = s->element(track());
     if (e) {
         if (e->isChord()) {
             rxpos() += score()->noteHeadWidth() * staff()->staffMag(Fraction(0, 1)) * .5;
@@ -275,7 +275,7 @@ QVariant Fermata::getProperty(Pid propertyId) const
     case Pid::PLAY:
         return play();
     default:
-        return Element::getProperty(propertyId);
+        return EngravingItem::getProperty(propertyId);
     }
 }
 
@@ -310,7 +310,7 @@ bool Fermata::setProperty(Pid propertyId, const QVariant& v)
         score()->fixTicks();
         break;
     default:
-        return Element::setProperty(propertyId, v);
+        return EngravingItem::setProperty(propertyId, v);
     }
     triggerLayout();
     return true;
@@ -332,7 +332,7 @@ QVariant Fermata::propertyDefault(Pid propertyId) const
     default:
         break;
     }
-    return Element::propertyDefault(propertyId);
+    return EngravingItem::propertyDefault(propertyId);
 }
 
 //---------------------------------------------------------
@@ -349,7 +349,7 @@ void Fermata::resetProperty(Pid id)
     default:
         break;
     }
-    Element::resetProperty(id);
+    EngravingItem::resetProperty(id);
 }
 
 //---------------------------------------------------------
@@ -361,7 +361,7 @@ Pid Fermata::propertyId(const QStringRef& xmlName) const
     if (xmlName == "subtype") {
         return Pid::SYMBOL;
     }
-    return Element::propertyId(xmlName);
+    return EngravingItem::propertyId(xmlName);
 }
 
 //---------------------------------------------------------
@@ -391,6 +391,6 @@ qreal Fermata::mag() const
 
 QString Fermata::accessibleInfo() const
 {
-    return QString("%1: %2").arg(Element::accessibleInfo(), userName());
+    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), userName());
 }
 }

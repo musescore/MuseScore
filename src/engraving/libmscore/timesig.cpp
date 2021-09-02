@@ -51,7 +51,7 @@ static const ElementStyle timesigStyle {
 //---------------------------------------------------------
 
 TimeSig::TimeSig(Segment* parent)
-    : Element(ElementType::TIMESIG, parent, ElementFlag::ON_STAFF | ElementFlag::MOVABLE)
+    : EngravingItem(ElementType::TIMESIG, parent, ElementFlag::ON_STAFF | ElementFlag::MOVABLE)
 {
     initElementStyle(&timesigStyle);
 
@@ -64,7 +64,7 @@ TimeSig::TimeSig(Segment* parent)
 
 void TimeSig::setParent(Segment* parent)
 {
-    Element::setParent(parent);
+    EngravingItem::setParent(parent);
 }
 
 //---------------------------------------------------------
@@ -103,9 +103,9 @@ bool TimeSig::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-Element* TimeSig::drop(EditData& data)
+EngravingItem* TimeSig::drop(EditData& data)
 {
-    Element* e = data.dropElement;
+    EngravingItem* e = data.dropElement;
     if (e->isTimeSig()) {
         // change timesig applies to all staves, can't simply set subtype
         // for this one only
@@ -149,7 +149,7 @@ void TimeSig::write(XmlWriter& xml) const
 {
     xml.stag(this);
     writeProperty(xml, Pid::TIMESIG_TYPE);
-    Element::writeProperties(xml);
+    EngravingItem::writeProperties(xml);
 
     xml.tag("sigN",  _sig.numerator());
     xml.tag("sigD",  _sig.denominator());
@@ -225,7 +225,7 @@ void TimeSig::read(XmlReader& e)
         } else if (tag == "Groups") {
             _groups.read(e);
         } else if (readStyledProperty(e, tag)) {
-        } else if (!Element::readProperties(e)) {
+        } else if (!EngravingItem::readProperties(e)) {
             e.unknown();
         }
     }
@@ -266,7 +266,7 @@ Pid TimeSig::propertyId(const QStringRef& name) const
     if (name == "Groups") {
         return Pid::GROUPS;
     }
-    return Element::propertyId(name);
+    return EngravingItem::propertyId(name);
 }
 
 //---------------------------------------------------------
@@ -478,7 +478,7 @@ QVariant TimeSig::getProperty(Pid propertyId) const
     case Pid::SCALE:
         return _scale;
     default:
-        return Element::getProperty(propertyId);
+        return EngravingItem::getProperty(propertyId);
     }
 }
 
@@ -520,7 +520,7 @@ bool TimeSig::setProperty(Pid propertyId, const QVariant& v)
         _scale = SizeF::fromVariant(v);
         break;
     default:
-        if (!Element::setProperty(propertyId, v)) {
+        if (!EngravingItem::setProperty(propertyId, v)) {
             return false;
         }
         break;
@@ -552,7 +552,7 @@ QVariant TimeSig::propertyDefault(Pid id) const
     case Pid::SCALE:
         return score()->styleV(Sid::timesigScale);
     default:
-        return Element::propertyDefault(id);
+        return EngravingItem::propertyDefault(id);
     }
 }
 
@@ -560,7 +560,7 @@ QVariant TimeSig::propertyDefault(Pid id) const
 //   nextSegmentElement
 //---------------------------------------------------------
 
-Element* TimeSig::nextSegmentElement()
+EngravingItem* TimeSig::nextSegmentElement()
 {
     return segment()->firstInNextSegments(staffIdx());
 }
@@ -569,7 +569,7 @@ Element* TimeSig::nextSegmentElement()
 //   prevSegmentElement
 //---------------------------------------------------------
 
-Element* TimeSig::prevSegmentElement()
+EngravingItem* TimeSig::prevSegmentElement()
 {
     return segment()->lastInPrevSegments(staffIdx());
 }
@@ -597,7 +597,7 @@ QString TimeSig::accessibleInfo() const
     default:
         timeSigString = qtrc("engraving", "%1/%2 time").arg(QString::number(numerator()), QString::number(denominator()));
     }
-    return QString("%1: %2").arg(Element::accessibleInfo(), timeSigString);
+    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), timeSigString);
 }
 
 //---------------------------------------------------------

@@ -26,7 +26,7 @@
 #include "infrastructure/draw/fontmetrics.h"
 
 #include "infrastructure/draw/color.h"
-#include "element.h"
+#include "engravingitem.h"
 #include "property.h"
 #include "style/style.h"
 
@@ -261,7 +261,7 @@ public:
 //   TextBase
 //---------------------------------------------------------
 
-class TextBase : public Element
+class TextBase : public EngravingItem
 {
     // sorted by size to allow for most compact memory layout
     M_PROPERTY(Align,      align,                  setAlign)
@@ -383,7 +383,7 @@ public:
     QVector<mu::LineF> dragAnchorLines() const override;
 
     virtual bool acceptDrop(EditData&) const override;
-    virtual Element* drop(EditData&) override;
+    virtual EngravingItem* drop(EditData&) override;
 
     friend class TextBlock;
     friend class TextFragment;

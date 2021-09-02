@@ -279,7 +279,7 @@ void MeasureBaseList::change(MeasureBase* ob, MeasureBase* nb)
         || nb->type() == ElementType::TBOX || nb->type() == ElementType::FBOX) {
         nb->setParent(ob->system());
     }
-    foreach (Element* e, nb->el()) {
+    foreach (EngravingItem* e, nb->el()) {
         e->setParent(nb);
     }
     fixupSystems();
@@ -470,7 +470,7 @@ bool Score::isPaletteScore() const
 //    of the element (e.g. remove invalid pointers etc.).
 //---------------------------------------------------------
 
-void Score::onElementDestruction(Element* e)
+void Score::onElementDestruction(EngravingItem* e)
 {
     Score* score = e->score(false);
     if (!score || Score::validScores.find(score) == Score::validScores.end()) {
@@ -576,7 +576,7 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure)
                 continue;
             }
             qreal length = 0.0;
-            for (Element* e : s->elist()) {
+            for (EngravingItem* e : s->elist()) {
                 if (e && e->isBreath()) {
                     length = qMax(length, toBreath(e)->pause());
                 }
@@ -596,7 +596,7 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure)
             Fraction tick = segment.tick();
             // find longest pause
             for (int i = 0, n = ntracks(); i < n; ++i) {
-                Element* e = segment.element(i);
+                EngravingItem* e = segment.element(i);
                 if (e && e->isBreath()) {
                     Breath* b = toBreath(e);
                     length = qMax(length, b->pause());
@@ -617,7 +617,7 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure)
                 continue;
             }
             qreal stretch = 0.0;
-            for (Element* e : segment.annotations()) {
+            for (EngravingItem* e : segment.annotations()) {
                 if (e->isFermata() && toFermata(e)->play()) {
                     stretch = qMax(stretch, toFermata(e)->timeStretch());
                 } else if (e->isTempoText()) {
@@ -855,10 +855,10 @@ void Score::spell()
             int strack = i * VOICES;
             int etrack = strack + VOICES;
             for (int track = strack; track < etrack; ++track) {
-                Element* e = s->element(track);
+                EngravingItem* e = s->element(track);
                 if (e && e->type() == ElementType::CHORD) {
                     std::copy_if(toChord(e)->notes().begin(), toChord(e)->notes().end(),
-                                 std::back_inserter(notes), [this](Element* ce) { return selection().isNone() || ce->selected(); });
+                                 std::back_inserter(notes), [this](EngravingItem* ce) { return selection().isNone() || ce->selected(); });
                 }
             }
         }
@@ -874,7 +874,7 @@ void Score::spell(int startStaff, int endStaff, Segment* startSegment, Segment* 
             int strack = i * VOICES;
             int etrack = strack + VOICES;
             for (int track = strack; track < etrack; ++track) {
-                Element* e = s->element(track);
+                EngravingItem* e = s->element(track);
                 if (e && e->type() == ElementType::CHORD) {
                     notes.insert(notes.end(),
                                  toChord(e)->notes().begin(),
@@ -964,7 +964,7 @@ Note* prevNote(Note* n)
     while (seg) {
         if (seg->segmentType() == SegmentType::ChordRest) {
             for (int track = startTrack; track >= endTrack; --track) {
-                Element* e = seg->element(track);
+                EngravingItem* e = seg->element(track);
                 if (e && e->type() == ElementType::CHORD) {
                     return toChord(e)->upNote();
                 }
@@ -998,7 +998,7 @@ static Note* nextNote(Note* n)
     while (seg) {
         if (seg->segmentType() == SegmentType::ChordRest) {
             for (int track = startTrack; track < endTrack; ++track) {
-                Element* e = seg->element(track);
+                EngravingItem* e = seg->element(track);
                 if (e && e->type() == ElementType::CHORD) {
                     return ((Chord*)e)->downNote();
                 }
@@ -1150,7 +1150,7 @@ static Segment* getNextValidInputSegment(Segment* segment, int track, int voice)
 
     ChordRest* chordRest = nullptr;
     for (Segment* s1 = segment; s1; s1 = s1->prev(SegmentType::ChordRest)) {
-        Element* element = s1->element(track + voice);
+        EngravingItem* element = s1->element(track + voice);
         chordRest = toChordRest(element);
 
         if (chordRest) {
@@ -1365,7 +1365,7 @@ bool Score::checkHasMeasures() const
 //   spatiumHasChanged
 //---------------------------------------------------------
 
-static void spatiumHasChanged(void* data, Element* e)
+static void spatiumHasChanged(void* data, EngravingItem* e)
 {
     qreal* val = (qreal*)data;
     e->spatiumChanged(val[0], val[1]);
@@ -1391,7 +1391,7 @@ void Score::spatiumChanged(qreal oldValue, qreal newValue)
 //   updateStyle
 //---------------------------------------------------------
 
-static void updateStyle(void*, Element* e)
+static void updateStyle(void*, EngravingItem* e)
 {
     bool v = e->generated();
     e->styleChanged();
@@ -1455,12 +1455,12 @@ Measure* Score::getCreateMeasure(const Fraction& tick)
  changes throughout the score.
 */
 
-void Score::addElement(Element* element)
+void Score::addElement(EngravingItem* element)
 {
-    Element* parent = element->parentElement();
+    EngravingItem* parent = element->parentElement();
     element->triggerLayout();
 
-//      qDebug("Score(%p) Element(%p)(%s) parent %p(%s)",
+//      qDebug("Score(%p) EngravingItem(%p)(%s) parent %p(%s)",
 //         this, element, element->name(), parent, parent ? parent->name() : "");
 
     ElementType et = element->type();
@@ -1581,12 +1581,12 @@ void Score::addElement(Element* element)
 ///   changes throughout the score.
 //---------------------------------------------------------
 
-void Score::removeElement(Element* element)
+void Score::removeElement(EngravingItem* element)
 {
-    Element* parent = element->parentElement();
+    EngravingItem* parent = element->parentElement();
     element->triggerLayout();
 
-//      qDebug("Score(%p) Element(%p)(%s) parent %p(%s)",
+//      qDebug("Score(%p) EngravingItem(%p)(%s) parent %p(%s)",
 //         this, element, element->name(), parent, parent ? parent->name() : "");
 
     // special for MEASURE, HBOX, VBOX
@@ -1717,7 +1717,7 @@ void Score::removeElement(Element* element)
     case ElementType::ARTICULATION:
     case ElementType::ARPEGGIO:
     {
-        Element* cr = element->parentElement();
+        EngravingItem* cr = element->parentElement();
         if (cr->isChord()) {
             createPlayEvents(toChord(cr));
         }
@@ -1936,7 +1936,7 @@ Fraction Score::inputPos() const
 //   scanElementsInRange
 //---------------------------------------------------------
 
-void Score::scanElementsInRange(void* data, void (* func)(void*, Element*), bool all)
+void Score::scanElementsInRange(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
     Segment* startSeg = _selection.startSegment();
     for (Segment* s = startSeg; s && s != _selection.endSegment(); s = s->next1()) {
@@ -1949,7 +1949,7 @@ void Score::scanElementsInRange(void* data, void (* func)(void*, Element*), bool
             }
         }
     }
-    for (Element* e : _selection.elements()) {
+    for (EngravingItem* e : _selection.elements()) {
         if (e->isSpanner()) {
             Spanner* spanner = toSpanner(e);
             for (SpannerSegment* ss : spanner->spannerSegments()) {
@@ -1968,7 +1968,7 @@ void Score::setSelection(const Selection& s)
     deselectAll();
     _selection = s;
 
-    foreach (Element* e, _selection.elements()) {
+    foreach (EngravingItem* e, _selection.elements()) {
         e->setSelected(true);
     }
 }
@@ -1981,7 +1981,7 @@ Text* Score::getText(Tid tid) const
 {
     MeasureBase* m = first();
     if (m && m->isVBox()) {
-        for (Element* e : m->el()) {
+        for (EngravingItem* e : m->el()) {
             if (e->isText() && toText(e)->tid() == tid) {
                 return toText(e);
             }
@@ -2280,7 +2280,7 @@ void Score::splitStaff(int staffIdx, int splitPoint)
 
     for (Segment* s = firstSegment(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
         for (int voice = 0; voice < VOICES; ++voice) {
-            Element* e = s->element(strack + voice);
+            EngravingItem* e = s->element(strack + voice);
 
             if (!e) {
                 continue;
@@ -2833,7 +2833,7 @@ void Score::cmdConcertPitchChanged(bool flag)
             if (!flag) {
                 interval.flip();
             }
-            for (Element* e : segment->annotations()) {
+            for (EngravingItem* e : segment->annotations()) {
                 if (!e->isHarmony() || (e->track() < startTrack) || (e->track() >= endTrack)) {
                     continue;
                 }
@@ -2986,7 +2986,7 @@ void Score::padToggle(Pad p, const EditData& ed)
                     // Enter a rest
                     nval = NoteVal();
                 } else {
-                    Element* e = selection().element();
+                    EngravingItem* e = selection().element();
                     if (e && e->isNote()) {
                         // use same pitch etc. as previous note
                         Note* n = toNote(e);
@@ -3036,7 +3036,7 @@ void Score::padToggle(Pad p, const EditData& ed)
     std::vector<ChordRest*> crs;
 
     if (selection().isSingle()) {
-        Element* e = selection().element();
+        EngravingItem* e = selection().element();
         ChordRest* cr = InputState::chordRest(e);
 
         // do not allow to add a dot on a full measure rest
@@ -3069,7 +3069,7 @@ void Score::padToggle(Pad p, const EditData& ed)
     } else {
         const auto elements = selection().uniqueElements();
         bool canAdjustLength = true;
-        for (Element* e : elements) {
+        for (EngravingItem* e : elements) {
             ChordRest* cr = InputState::chordRest(e);
             if (!cr) {
                 continue;
@@ -3118,7 +3118,7 @@ void Score::padToggle(Pad p, const EditData& ed)
 //   deselect
 //---------------------------------------------------------
 
-void Score::deselect(Element* el)
+void Score::deselect(EngravingItem* el)
 {
     addRefresh(el->abbox());
     _selection.remove(el);
@@ -3131,7 +3131,7 @@ void Score::deselect(Element* el)
 //    staffIdx is valid, if element is of type MEASURE
 //---------------------------------------------------------
 
-void Score::select(Element* e, SelectType type, int staffIdx)
+void Score::select(EngravingItem* e, SelectType type, int staffIdx)
 {
     // Move the playhead to the selected element's preferred play position.
     if (e) {
@@ -3165,7 +3165,7 @@ void Score::select(Element* e, SelectType type, int staffIdx)
 //    staffIdx is valid, if element is of type MEASURE
 //---------------------------------------------------------
 
-void Score::selectSingle(Element* e, int staffIdx)
+void Score::selectSingle(EngravingItem* e, int staffIdx)
 {
     SelState selState = _selection.state();
     deselectAll();
@@ -3211,7 +3211,7 @@ void Score::switchToPageMode()
 //   selectAdd
 //---------------------------------------------------------
 
-void Score::selectAdd(Element* e)
+void Score::selectAdd(EngravingItem* e)
 {
     SelState selState = _selection.state();
 
@@ -3246,7 +3246,7 @@ void Score::selectAdd(Element* e)
 //    staffIdx is valid, if element is of type MEASURE
 //---------------------------------------------------------
 
-void Score::selectRange(Element* e, int staffIdx)
+void Score::selectRange(EngravingItem* e, int staffIdx)
 {
     int activeTrack = e->track();
     // current selection is range extending to end of score?
@@ -3269,7 +3269,7 @@ void Score::selectRange(Element* e, int staffIdx)
         } else if (_selection.isRange()) {
             _selection.extendRangeSelection(s1, s2, staffIdx, tick, etick);
         } else if (_selection.isSingle()) {
-            Element* oe = selection().element();
+            EngravingItem* oe = selection().element();
             if (oe->isNote() || oe->isChordRest()) {
                 if (oe->isNote()) {
                     oe = oe->parentElement();
@@ -3315,7 +3315,7 @@ void Score::selectRange(Element* e, int staffIdx)
             _selection.setRange(cr->segment(), cr->nextSegmentAfterCR(st), e->staffIdx(), e->staffIdx() + 1);
             activeTrack = cr->track();
         } else if (_selection.isSingle()) {
-            Element* oe = _selection.element();
+            EngravingItem* oe = _selection.element();
             if (oe && (oe->isNote() || oe->isRest() || oe->isMMRest())) {
                 if (oe->isNote()) {
                     oe = oe->parentElement();
@@ -3347,7 +3347,7 @@ void Score::selectRange(Element* e, int staffIdx)
         }
     } else {
         // try to select similar in range
-        Element* selectedElement = _selection.element();
+        EngravingItem* selectedElement = _selection.element();
         if (selectedElement && e->type() == selectedElement->type()) {
             int idx1 = selectedElement->staffIdx();
             int idx2 = e->staffIdx();
@@ -3376,8 +3376,8 @@ void Score::selectRange(Element* e, int staffIdx)
                     selectSimilarInRange(e);
                     if (selectedElement->track() == e->track()) {
                         // limit to this voice only
-                        const QList<Element*>& list = _selection.elements();
-                        for (Element* el : list) {
+                        const QList<EngravingItem*>& list = _selection.elements();
+                        for (EngravingItem* el : list) {
                             if (el->track() != e->track()) {
                                 _selection.remove(el);
                             }
@@ -3409,7 +3409,7 @@ void Score::selectRange(Element* e, int staffIdx)
 //   collectMatch
 //---------------------------------------------------------
 
-void Score::collectMatch(void* data, Element* e)
+void Score::collectMatch(void* data, EngravingItem* e)
 {
     ElementPattern* p = static_cast<ElementPattern*>(data);
 
@@ -3439,7 +3439,7 @@ void Score::collectMatch(void* data, Element* e)
     }
 
     if (p->system) {
-        Element* ee = e;
+        EngravingItem* ee = e;
         do {
             if (ee->type() == ElementType::SYSTEM) {
                 if (p->system != ee) {
@@ -3473,7 +3473,7 @@ void Score::collectMatch(void* data, Element* e)
 //   collectNoteMatch
 //---------------------------------------------------------
 
-void Score::collectNoteMatch(void* data, Element* e)
+void Score::collectNoteMatch(void* data, EngravingItem* e)
 {
     NotePattern* p = static_cast<NotePattern*>(data);
     if (!e->isNote()) {
@@ -3524,7 +3524,7 @@ void Score::collectNoteMatch(void* data, Element* e)
 //   selectSimilar
 //---------------------------------------------------------
 
-void Score::selectSimilar(Element* e, bool sameStaff)
+void Score::selectSimilar(EngravingItem* e, bool sameStaff)
 {
     ElementType type = e->type();
     Score* score = e->score();
@@ -3549,7 +3549,7 @@ void Score::selectSimilar(Element* e, bool sameStaff)
     score->scanElements(&pattern, collectMatch);
 
     score->select(0, SelectType::SINGLE, 0);
-    for (Element* ee : qAsConst(pattern.el)) {
+    for (EngravingItem* ee : qAsConst(pattern.el)) {
         score->select(ee, SelectType::ADD, 0);
     }
 }
@@ -3558,7 +3558,7 @@ void Score::selectSimilar(Element* e, bool sameStaff)
 //   selectSimilarInRange
 //---------------------------------------------------------
 
-void Score::selectSimilarInRange(Element* e)
+void Score::selectSimilarInRange(EngravingItem* e)
 {
     ElementType type = e->type();
     Score* score = e->score();
@@ -3584,7 +3584,7 @@ void Score::selectSimilarInRange(Element* e)
     score->scanElementsInRange(&pattern, collectMatch);
 
     score->select(0, SelectType::SINGLE, 0);
-    for (Element* ee : qAsConst(pattern.el)) {
+    for (EngravingItem* ee : qAsConst(pattern.el)) {
         score->select(ee, SelectType::ADD, 0);
     }
 }
@@ -3665,9 +3665,9 @@ void Score::lassoSelect(const RectF& bbox)
             break;
         }
 
-        QList<Element*> el = page->items(frr);
+        QList<EngravingItem*> el = page->items(frr);
         for (int i = 0; i < el.size(); ++i) {
-            Element* e = el.at(i);
+            EngravingItem* e = el.at(i);
             if (frr.contains(e->abbox())) {
                 if (e->type() != ElementType::MEASURE && e->selectable()) {
                     select(e, SelectType::ADD, 0);
@@ -3702,7 +3702,7 @@ void Score::lassoSelectEnd(bool convertToRange)
         return;
     }
 
-    foreach (const Element* e, _selection.elements()) {
+    foreach (const EngravingItem* e, _selection.elements()) {
         if (e->type() != ElementType::NOTE && e->type() != ElementType::REST) {
             continue;
         }
@@ -4122,7 +4122,7 @@ ChordRest* Score::findCR(Fraction tick, int track) const
         if (!ns || ns->tick() > tick) {
             break;
         }
-        Element* el = ns->element(track);
+        EngravingItem* el = ns->element(track);
         if (el && el->isRest() && toRest(el)->isGap()) {
             continue;
         } else if (el) {
@@ -4133,7 +4133,7 @@ ChordRest* Score::findCR(Fraction tick, int track) const
     if (!s) {
         return nullptr;
     }
-    Element* el = s->element(track);
+    EngravingItem* el = s->element(track);
     if (el && el->isRest() && toRest(el)->isGap()) {
         s = nullptr;
     }
@@ -4279,7 +4279,7 @@ Box* Score::cmdNextPrevFrame(MeasureBase* currentMeasureBase, bool next) const
 //    Return [Box* or ChordRest*] of next/previous section
 //---------------------------------------------------------
 
-Element* Score::cmdNextPrevSection(Element* el, bool dir) const
+EngravingItem* Score::cmdNextPrevSection(EngravingItem* el, bool dir) const
 {
     auto currentMeasureBase = el->findMeasureBase();
     auto destination = currentMeasureBase;
@@ -4364,13 +4364,13 @@ MeasureBase* Score::getNextPrevSectionBreak(MeasureBase* mb, bool dir) const
 //---------------------------------------------------------
 //   getScoreElementOfMeasureBase
 //    Helper function
-//    Get an Element* as Box or ChordRest depending on
+//    Get an EngravingItem* as Box or ChordRest depending on
 //    MeasureBase
 //---------------------------------------------------------
 
-Element* Score::getScoreElementOfMeasureBase(MeasureBase* mb) const
+EngravingItem* Score::getScoreElementOfMeasureBase(MeasureBase* mb) const
 {
-    Element* el { nullptr };
+    EngravingItem* el { nullptr };
     ChordRest* cr { nullptr };
     const Measure* currentMeasure { nullptr };
     if (mb) {
@@ -4492,7 +4492,7 @@ bool Score::hasHarmonies()
 
     SegmentType st = SegmentType::ChordRest;
     for (Segment* seg = firstMeasure()->first(st); seg; seg = seg->next1(st)) {
-        for (Element* e : seg->annotations()) {
+        for (EngravingItem* e : seg->annotations()) {
             if (e->type() == ElementType::HARMONY) {
                 return true;
             }
@@ -4529,7 +4529,7 @@ int Score::harmonyCount()
     int count = 0;
     SegmentType st = SegmentType::ChordRest;
     for (Segment* seg = firstMeasure()->first(st); seg; seg = seg->next1(st)) {
-        for (Element* e : seg->annotations()) {
+        for (EngravingItem* e : seg->annotations()) {
             if (e->type() == ElementType::HARMONY) {
                 count++;
             }
@@ -4692,7 +4692,7 @@ QString Score::createRehearsalMarkText(RehearsalMark* current) const
     RehearsalMark* before = 0;
     RehearsalMark* after = 0;
     for (Segment* s = firstSegment(SegmentType::All); s; s = s->next1()) {
-        for (Element* e : s->annotations()) {
+        for (EngravingItem* e : s->annotations()) {
             if (e && e->type() == ElementType::REHEARSAL_MARK) {
                 if (s->tick() < tick) {
                     before = toRehearsalMark(e);
@@ -4794,9 +4794,9 @@ QString Score::nextRehearsalMarkText(RehearsalMark* previous, RehearsalMark* cur
 
 void Score::changeSelectedNotesVoice(int voice)
 {
-    QList<Element*> el;
-    QList<Element*> oel = selection().elements();       // make copy
-    for (Element* e : oel) {
+    QList<EngravingItem*> el;
+    QList<EngravingItem*> oel = selection().elements();       // make copy
+    for (EngravingItem* e : oel) {
         if (e->type() != ElementType::NOTE) {
             continue;
         }
@@ -4931,7 +4931,7 @@ void Score::changeSelectedNotesVoice(int voice)
     if (!el.empty()) {
         selection().clear();
     }
-    for (Element* e : el) {
+    for (EngravingItem* e : el) {
         select(e, SelectType::ADD, -1);
     }
     setLayoutAll();
@@ -5104,7 +5104,7 @@ void Score::connectTies(bool silent)
     SegmentType st = SegmentType::ChordRest;
     for (Segment* s = m->first(st); s; s = s->next1(st)) {
         for (int i = 0; i < tracks; ++i) {
-            Element* e = s->element(i);
+            EngravingItem* e = s->element(i);
             if (e == 0 || !e->isChord()) {
                 continue;
             }
@@ -5224,9 +5224,9 @@ std::list<MidiInputEvent>* Score::activeMidiPitches() { return _masterScore->act
 
 void Score::setUpdateAll() { _masterScore->setUpdateAll(); }
 
-void Score::setLayoutAll(int staff, const Element* e) { _masterScore->setLayoutAll(staff, e); }
-void Score::setLayout(const Fraction& tick, int staff, const Element* e) { _masterScore->setLayout(tick, staff, e); }
-void Score::setLayout(const Fraction& tick1, const Fraction& tick2, int staff1, int staff2, const Element* e)
+void Score::setLayoutAll(int staff, const EngravingItem* e) { _masterScore->setLayoutAll(staff, e); }
+void Score::setLayout(const Fraction& tick, int staff, const EngravingItem* e) { _masterScore->setLayout(tick, staff, e); }
+void Score::setLayout(const Fraction& tick1, const Fraction& tick2, int staff1, int staff2, const EngravingItem* e)
 {
     _masterScore->setLayout(tick1, tick2, staff1, staff2, e);
 }

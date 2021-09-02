@@ -70,7 +70,7 @@ Box::Box(const ElementType& type, System* parent)
 void Box::layout()
 {
     MeasureBase::layout();
-    for (Element* e : el()) {
+    for (EngravingItem* e : el()) {
         if (!e->isLayoutBreak()) {
             e->layout();
         }
@@ -81,7 +81,7 @@ void Box::layout()
 //   scanElements
 //---------------------------------------------------------
 
-void Box::scanElements(void* data, void (* func)(void*, Element*), bool all)
+void Box::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
     EngravingObject::scanElements(data, func, all);
     if (all || visible() || score()->showInvisible()) {
@@ -226,8 +226,8 @@ void Box::writeProperties(XmlWriter& xml) const
             Pid::LEFT_MARGIN, Pid::RIGHT_MARGIN, Pid::TOP_MARGIN, Pid::BOTTOM_MARGIN, Pid::BOX_AUTOSIZE }) {
         writeProperty(xml, id);
     }
-    Element::writeProperties(xml);
-    for (const Element* e : el()) {
+    EngravingItem::writeProperties(xml);
+    for (const EngravingItem* e : el()) {
         e->write(xml);
     }
 }
@@ -343,10 +343,10 @@ bool Box::readProperties(XmlReader& e)
 
 //---------------------------------------------------------
 //   add
-///   Add new Element \a el to Box
+///   Add new EngravingItem \a el to Box
 //---------------------------------------------------------
 
-void Box::add(Element* e)
+void Box::add(EngravingItem* e)
 {
     if (e->isText()) {
         toText(e)->setLayoutToParentWidth(true);
@@ -358,7 +358,7 @@ RectF Box::contentRect() const
 {
     RectF result;
 
-    for (const Element* element : el()) {
+    for (const EngravingItem* element : el()) {
         result = result.united(element->bbox());
     }
 
@@ -570,9 +570,9 @@ bool Box::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-Element* Box::drop(EditData& data)
+EngravingItem* Box::drop(EditData& data)
 {
-    Element* e = data.dropElement;
+    EngravingItem* e = data.dropElement;
     if (e->flag(ElementFlag::ON_STAFF)) {
         return 0;
     }
@@ -595,7 +595,7 @@ Element* Box::drop(EditData& data)
                 delete lb;
                 break;
             }
-            for (Element* elem : el()) {
+            for (EngravingItem* elem : el()) {
                 if (elem->type() == ElementType::LAYOUT_BREAK) {
                     score()->undoChangeElement(elem, e);
                     break;
@@ -816,7 +816,7 @@ void VBox::layout()
         bbox().setRect(0.0, 0.0, 50, 50);
     }
 
-    for (Element* e : el()) {
+    for (EngravingItem* e : el()) {
         if (!e->isLayoutBreak()) {
             e->layout();
         }
@@ -861,10 +861,10 @@ void FBox::layout()
 
 //---------------------------------------------------------
 //   add
-///   Add new Element \a e to fret diagram box
+///   Add new EngravingItem \a e to fret diagram box
 //---------------------------------------------------------
 
-void FBox::add(Element* e)
+void FBox::add(EngravingItem* e)
 {
     e->setParent(this);
     if (e->isFretDiagram()) {
@@ -884,7 +884,7 @@ void FBox::add(Element* e)
 QString Box::accessibleExtraInfo() const
 {
     QString rez = "";
-    for (Element* e : el()) {
+    for (EngravingItem* e : el()) {
         rez += " " + e->screenReaderInfo();
     }
     return rez;

@@ -55,16 +55,16 @@ public:
     Rest& operator=(const Rest&) = delete;
 
     Rest* clone() const override { return new Rest(*this, false); }
-    Element* linkedClone() override { return new Rest(*this, true); }
+    EngravingItem* linkedClone() override { return new Rest(*this, true); }
     Measure* measure() const override { return parent() ? toMeasure(parent()->parent()) : 0; }
     qreal mag() const override;
 
     void draw(mu::draw::Painter*) const override;
-    void scanElements(void* data, void (* func)(void*, Element*), bool all = true) override;
+    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all = true) override;
     void setTrack(int val) override;
 
     bool acceptDrop(EditData&) const override;
-    Element* drop(EditData&) override;
+    EngravingItem* drop(EditData&) override;
     void layout() override;
 
     bool isGap() const { return m_gap; }
@@ -72,8 +72,8 @@ public:
 
     void reset() override;
 
-    virtual void add(Element*) override;
-    virtual void remove(Element*) override;
+    virtual void add(EngravingItem*) override;
+    virtual void remove(EngravingItem*) override;
 
     void read(XmlReader&) override;
     void write(XmlWriter& xml) const override;
@@ -104,8 +104,8 @@ public:
     QVariant getProperty(Pid propertyId) const override;
     void undoChangeDotsVisible(bool v);
 
-    Element* nextElement() override;
-    Element* prevElement() override;
+    EngravingItem* nextElement() override;
+    EngravingItem* prevElement() override;
     QString accessibleInfo() const override;
     QString screenReaderInfo() const override;
     Shape shape() const override;

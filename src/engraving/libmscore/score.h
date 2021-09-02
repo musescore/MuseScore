@@ -299,7 +299,7 @@ class CmdState
     Fraction _endTick   { -1, 1 };              // end tick for mode LayoutTick
     int _startStaff = -1;
     int _endStaff = -1;
-    const Element* _el = nullptr;
+    const EngravingItem* _el = nullptr;
     const MeasureBase* _mb = nullptr;
     bool _oneElement = true;
     bool _oneMeasureBase = true;
@@ -323,13 +323,13 @@ public:
     bool updateRange() const { return _updateMode == UpdateMode::Update; }
     void setTick(const Fraction& t);
     void setStaff(int staff);
-    void setElement(const Element* e);
-    void unsetElement(const Element* e);
+    void setElement(const EngravingItem* e);
+    void unsetElement(const EngravingItem* e);
     Fraction startTick() const { return _startTick; }
     Fraction endTick() const { return _endTick; }
     int startStaff() const { return _startStaff; }
     int endStaff() const { return _endStaff; }
-    const Element* element() const;
+    const EngravingItem* element() const;
 
     void lock() { _locked = true; }
     void unlock() { _locked = false; }
@@ -537,9 +537,9 @@ private:
     QList<Fraction> splitGapToMeasureBoundaries(ChordRest*, Fraction);
     void pasteChordRest(ChordRest* cr, const Fraction& tick, const Interval&);
 
-    void selectSingle(Element* e, int staffIdx);
-    void selectAdd(Element* e);
-    void selectRange(Element* e, int staffIdx);
+    void selectSingle(EngravingItem* e, int staffIdx);
+    void selectAdd(EngravingItem* e);
+    void selectRange(EngravingItem* e, int staffIdx);
 
     void cmdToggleVisible();
 
@@ -598,7 +598,7 @@ public:
     virtual bool isMaster() const { return false; }
     virtual bool readOnly() const;
 
-    static void onElementDestruction(Element* se);
+    static void onElementDestruction(EngravingItem* se);
 
     // Score Tree functions
     EngravingObject* treeParent() const override;
@@ -686,11 +686,11 @@ public:
     Measure* pos2measure(const mu::PointF&, int* staffIdx, int* pitch, Segment**, mu::PointF* offset) const;
     void dragPosition(const mu::PointF&, int* staffIdx, Segment**, qreal spacingFactor = 0.5) const;
 
-    void undoAddElement(Element* element);
+    void undoAddElement(EngravingItem* element);
     void undoAddCR(ChordRest* element, Measure*, const Fraction& tick);
-    void undoRemoveElement(Element* element);
-    void undoChangeSpannerElements(Spanner* spanner, Element* startElement, Element* endElement);
-    void undoChangeElement(Element* oldElement, Element* newElement);
+    void undoRemoveElement(EngravingItem* element);
+    void undoChangeSpannerElements(Spanner* spanner, EngravingItem* startElement, EngravingItem* endElement);
+    void undoChangeElement(EngravingItem* oldElement, EngravingItem* newElement);
     void undoChangePitch(Note* note, int pitch, int tpc1, int tpc2);
     void undoChangeFretting(Note* note, int pitch, int string, int fret, int tpc1, int tpc2);
     void spellNotelist(std::vector<Note*>& notes);
@@ -702,12 +702,12 @@ public:
     void undoInsertPart(Part* part, int idx);
     void undoRemoveStaff(Staff* staff);
     void undoInsertStaff(Staff* staff, int idx, bool createRests=true);
-    void undoChangeInvisible(Element*, bool);
+    void undoChangeInvisible(EngravingItem*, bool);
     void undoChangeTuning(Note*, qreal);
     void undoChangeUserMirror(Note*, MScore::DirectionH);
     void undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent);
-    void undoChangeClef(Staff* ostaff, Element*, ClefType st, bool forInstrumentChange = false);
-    bool undoPropertyChanged(Element* e, Pid t, const QVariant& st, PropertyFlags ps = PropertyFlags::NOSTYLE);
+    void undoChangeClef(Staff* ostaff, EngravingItem*, ClefType st, bool forInstrumentChange = false);
+    bool undoPropertyChanged(EngravingItem* e, Pid t, const QVariant& st, PropertyFlags ps = PropertyFlags::NOSTYLE);
     void undoPropertyChanged(EngravingObject*, Pid, const QVariant& v, PropertyFlags ps = PropertyFlags::NOSTYLE);
     virtual UndoStack* undoStack() const;
     void undo(UndoCommand*, EditData* = 0) const;
@@ -751,13 +751,13 @@ public:
 
     // undo/redo ops
     void addArticulation(SymId);
-    bool addArticulation(Element*, Articulation* atr);
+    bool addArticulation(EngravingItem*, Articulation* atr);
     void toggleAccidental(AccidentalType, const EditData& ed);
     void changeAccidental(AccidentalType);
     void changeAccidental(Note* oNote, Ms::AccidentalType);
 
-    void addElement(Element*);
-    void removeElement(Element*);
+    void addElement(EngravingItem*);
+    void removeElement(EngravingItem*);
 
     Note* addPitch(NoteVal&, bool addFlag, InputState* externalInputState = nullptr);
     void addPitch(int pitch, bool addFlag, bool insert);
@@ -771,7 +771,7 @@ public:
     Slur* addSlur(ChordRest* firstChordRest, ChordRest* secondChordRest, const Slur* slurTemplate);
     TextBase* addText(Tid type);
 
-    void deleteItem(Element*);
+    void deleteItem(EngravingItem*);
     void deleteMeasures(MeasureBase* firstMeasure, MeasureBase* lastMeasure, bool preserveTies = false);
     void cmdDeleteSelection();
     void cmdFullMeasureRest();
@@ -797,9 +797,9 @@ public:
     void cmdAddTimeSig(Measure*, int staffIdx, TimeSig*, bool local);
 
     virtual void setUpdateAll();
-    void setLayoutAll(int staff = -1, const Element* e = nullptr);
-    void setLayout(const Fraction& tick, int staff, const Element* e = nullptr);
-    void setLayout(const Fraction& tick1, const Fraction& tick2, int staff1, int staff2, const Element* e = nullptr);
+    void setLayoutAll(int staff = -1, const EngravingItem* e = nullptr);
+    void setLayout(const Fraction& tick, int staff, const EngravingItem* e = nullptr);
+    void setLayout(const Fraction& tick1, const Fraction& tick2, int staff1, int staff2, const EngravingItem* e = nullptr);
     virtual CmdState& cmdState();
     virtual const CmdState& cmdState() const;
     virtual void addLayoutFlags(LayoutFlags);
@@ -845,15 +845,15 @@ public:
     QSet<ChordRest*> getSelectedChordRests() const;
     void getSelectedChordRest2(ChordRest** cr1, ChordRest** cr2) const;
 
-    void select(Element* obj, SelectType = SelectType::SINGLE, int staff = 0);
-    void selectSimilar(Element* e, bool sameStaff);
-    void selectSimilarInRange(Element* e);
-    static void collectMatch(void* data, Element* e);
-    static void collectNoteMatch(void* data, Element* e);
-    void deselect(Element* obj);
+    void select(EngravingItem* obj, SelectType = SelectType::SINGLE, int staff = 0);
+    void selectSimilar(EngravingItem* e, bool sameStaff);
+    void selectSimilarInRange(EngravingItem* e);
+    static void collectMatch(void* data, EngravingItem* e);
+    static void collectNoteMatch(void* data, EngravingItem* e);
+    void deselect(EngravingItem* obj);
     void deselectAll() { _selection.deselectAll(); }
     void updateSelection() { _selection.update(); }
-    Element* getSelectedElement() const { return _selection.element(); }
+    EngravingItem* getSelectedElement() const { return _selection.element(); }
     const Selection& selection() const { return _selection; }
     Selection& selection() { return _selection; }
     SelectionFilter& selectionFilter() { return _selectionFilter; }
@@ -874,13 +874,13 @@ public:
     Segment* tick2leftSegmentMM(const Fraction& tick) { return tick2leftSegment(tick, /* useMMRest */ true); }
     void fixTicks();
     void rebuildTempoAndTimeSigMaps(Measure* m);
-    Element* nextElement();
-    Element* prevElement();
+    EngravingItem* nextElement();
+    EngravingItem* prevElement();
     ChordRest* cmdNextPrevSystem(ChordRest*, bool);
     Box* cmdNextPrevFrame(MeasureBase*, bool) const;
-    Element* cmdNextPrevSection(Element*, bool) const;
+    EngravingItem* cmdNextPrevSection(EngravingItem*, bool) const;
     MeasureBase* getNextPrevSectionBreak(MeasureBase*, bool) const;
-    Element* getScoreElementOfMeasureBase(MeasureBase*) const;
+    EngravingItem* getScoreElementOfMeasureBase(MeasureBase*) const;
 
     void cmd(const QString&, EditData&);
     int fileDivision(int t) const { return ((qint64)t * MScore::division + _fileDivision / 2) / _fileDivision; }
@@ -1072,7 +1072,7 @@ public:
 
     qreal point(const Spatium sp) const { return sp.val() * spatium(); }
 
-    void scanElementsInRange(void* data, void (* func)(void*, Element*), bool all = true);
+    void scanElementsInRange(void* data, void (* func)(void*, EngravingItem*), bool all = true);
     int fileDivision() const { return _fileDivision; }   ///< division of current loading *.msc file
     void splitStaff(int staffIdx, int splitPoint);
     QString tmpName() const { return _tmpName; }
@@ -1082,8 +1082,8 @@ public:
     void expandVoice(Segment* s, int track);
     void expandVoice();
 
-    Element* selectMove(const QString& cmd);
-    Element* move(const QString& cmd);
+    EngravingItem* selectMove(const QString& cmd);
+    EngravingItem* move(const QString& cmd);
     void cmdEnterRest(const TDuration& d);
     void enterRest(const TDuration& d, InputState* externalInputState = nullptr);
     void addInterval(int, const std::vector<Note*>&);
@@ -1203,13 +1203,13 @@ public:
 
     void moveUp(ChordRest*);
     void moveDown(ChordRest*);
-    Element* upAlt(Element*);
+    EngravingItem* upAlt(EngravingItem*);
     Note* upAltCtrl(Note*) const;
-    Element* downAlt(Element*);
+    EngravingItem* downAlt(EngravingItem*);
     Note* downAltCtrl(Note*) const;
 
-    Element* firstElement(bool frame = true);
-    Element* lastElement(bool frame = true);
+    EngravingItem* firstElement(bool frame = true);
+    EngravingItem* lastElement(bool frame = true);
 
     int nmeasures() const;
     bool hasLyrics();

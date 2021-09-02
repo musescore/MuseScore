@@ -140,7 +140,7 @@ void MMRest::layout()
 {
     m_number = measure()->mmRestCount();
 
-    for (Element* e : el()) {
+    for (EngravingItem* e : el()) {
         e->layout();
     }
 

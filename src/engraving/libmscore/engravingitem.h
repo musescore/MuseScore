@@ -159,15 +159,15 @@ public:
 
     // drop data:
     mu::PointF dragOffset;
-    Element* element                 { 0 };
-    Element* dropElement             { 0 };
+    EngravingItem* element                 { 0 };
+    EngravingItem* dropElement             { 0 };
 
     EditData(MuseScoreView* v = nullptr)
         : view_(v) {}
     ~EditData();
     void clearData();
 
-    ElementEditData* getData(const Element*) const;
+    ElementEditData* getData(const EngravingItem*) const;
     void addData(ElementEditData*);
     bool control(bool textEditing = false) const;
     bool shift() const { return modifiers & Qt::ShiftModifier; }
@@ -175,14 +175,14 @@ public:
 };
 
 //-------------------------------------------------------------------
-//    @@ Element
+//    @@ EngravingItem
 ///     \brief Base class of score layout elements
 ///
-///     The Element class is the virtual base class of all
+///     The EngravingItem class is the virtual base class of all
 ///     score layout elements.
 //-------------------------------------------------------------------
 
-class Element : public EngravingObject
+class EngravingItem : public EngravingObject
 {
     INJECT(engraving, mu::engraving::IEngravingConfiguration, engravingConfiguration)
 
@@ -211,22 +211,22 @@ protected:
     mu::draw::Color _color;                ///< element color attribute
 
 public:
-    Element(const ElementType& type, EngravingObject* se = 0, ElementFlags = ElementFlag::NOTHING,
-            mu::engraving::AccessibleElement* access = nullptr);
-    Element(const Element&);
-    virtual ~Element();
+    EngravingItem(const ElementType& type, EngravingObject* se = 0, ElementFlags = ElementFlag::NOTHING,
+                  mu::engraving::AccessibleElement* access = nullptr);
+    EngravingItem(const EngravingItem&);
+    virtual ~EngravingItem();
 
-    Element& operator=(const Element&) = delete;
+    EngravingItem& operator=(const EngravingItem&) = delete;
     //@ create a copy of the element
-    Q_INVOKABLE virtual Ms::Element* clone() const = 0;
-    virtual Element* linkedClone();
+    Q_INVOKABLE virtual Ms::EngravingItem* clone() const = 0;
+    virtual EngravingItem* linkedClone();
 
     void deleteLater();
 
-    Element* parentElement() const { return static_cast<Element*>(parent()); }
+    EngravingItem* parentElement() const { return static_cast<EngravingItem*>(parent()); }
 
-    Element* findAncestor(ElementType t);
-    const Element* findAncestor(ElementType t) const;
+    EngravingItem* findAncestor(ElementType t);
+    const EngravingItem* findAncestor(ElementType t) const;
 
     Measure* findMeasure();
     const Measure* findMeasure() const;
@@ -235,9 +235,9 @@ public:
 
     //!Note Returns basic representative for the current element.
     //!     For example: notes->chord, chords->beam, etc.
-    virtual Element* elementBase() const { return const_cast<Element*>(this); }
+    virtual EngravingItem* elementBase() const { return const_cast<EngravingItem*>(this); }
 
-    virtual bool isElement() const override { return true; }
+    virtual bool isEngravingItem() const override { return true; }
 
     qreal spatium() const;
 
@@ -353,7 +353,7 @@ public:
     virtual void read(XmlReader&);
 
 //       virtual ElementGroup getElementGroup() { return SingleElementGroup(this); }
-    virtual std::unique_ptr<ElementGroup> getDragGroup(std::function<bool(const Element*)> isDragged)
+    virtual std::unique_ptr<ElementGroup> getDragGroup(std::function<bool(const EngravingItem*)> isDragged)
     {
         Q_UNUSED(isDragged);
         return std::unique_ptr<ElementGroup>(new SingleElementGroup(this));
@@ -367,7 +367,7 @@ public:
     /**
      * A generic \ref dragAnchorLines() implementation which can be used in
      * dragAnchorLines() overrides in descendants. It is not made its default
-     * implementation in Element class since showing anchor lines is not
+     * implementation in EngravingItem class since showing anchor lines is not
      * desirable for most element types.
      * TODO: maybe Annotation class could be extracted which would be a base
      * class of various annotation types and which would have this
@@ -417,9 +417,9 @@ public:
     bool onTabStaff() const;
     Part* part() const;
 
-    virtual void add(Element*);
-    virtual void remove(Element*);
-    virtual void change(Element* o, Element* n);
+    virtual void add(EngravingItem*);
+    virtual void remove(EngravingItem*);
+    virtual void change(EngravingItem* o, EngravingItem* n);
 
     virtual void layout() {}
     virtual void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/);
@@ -441,7 +441,7 @@ public:
     void undoSetVisible(bool v);
 
     static ElementType readType(XmlReader& node, mu::PointF*, Fraction*);
-    static Element* readMimeData(Score* score, const QByteArray& data, mu::PointF*, Fraction*);
+    static EngravingItem* readMimeData(Score* score, const QByteArray& data, mu::PointF*, Fraction*);
 
     virtual QByteArray mimeData(const mu::PointF&) const;
 /**
@@ -462,7 +462,7 @@ public:
 
  Reimplemented by elements that accept drops.
 */
-    virtual Element* drop(EditData&) { return 0; }
+    virtual EngravingItem* drop(EditData&) { return 0; }
 
 /**
  delivers mouseEvent to element in edit mode
@@ -472,7 +472,7 @@ public:
 
     mutable bool itemDiscovered      { false };       ///< helper flag for bsp
 
-    void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
+    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
     virtual void reset() override;           // reset all properties & position to default
 
@@ -483,8 +483,8 @@ public:
     bool isPrintable() const;
     qreal point(const Spatium sp) const { return sp.val() * spatium(); }
 
-    static Ms::Element* create(Ms::ElementType type, Ms::Element* parent);
-    static Element* name2Element(const QStringRef&, Ms::Element* parent);
+    static Ms::EngravingItem* create(Ms::ElementType type, Ms::EngravingItem* parent);
+    static EngravingItem* name2Element(const QStringRef&, Ms::EngravingItem* parent);
 
     bool systemFlag() const { return flag(ElementFlag::SYSTEM); }
     void setSystemFlag(bool v) const { setFlag(ElementFlag::SYSTEM, v); }
@@ -523,7 +523,7 @@ public:
     virtual QVariant propertyDefault(Pid) const override;
     virtual Pid propertyId(const QStringRef& xmlName) const override;
     virtual QString propertyUserValue(Pid) const override;
-    virtual Element* propertyDelegate(Pid) { return 0; }    // return Spanner for SpannerSegment for some properties
+    virtual EngravingItem* propertyDelegate(Pid) { return 0; }    // return Spanner for SpannerSegment for some properties
 
     bool custom(Pid) const;
     virtual bool isUserModified() const;
@@ -544,10 +544,10 @@ public:
     bool symIsValid(SymId id) const;
 
     bool concertPitch() const;
-    virtual Element* nextElement();   // selects the next score element, (notes, rests etc. as well as articulation etc.)
-    virtual Element* prevElement();   // selects the next score element, (notes, rests etc. as well as articulation etc.)
-    virtual Element* nextSegmentElement();    //< Used for navigation
-    virtual Element* prevSegmentElement();    //< next-element and prev-element command
+    virtual EngravingItem* nextElement();   // selects the next score element, (notes, rests etc. as well as articulation etc.)
+    virtual EngravingItem* prevElement();   // selects the next score element, (notes, rests etc. as well as articulation etc.)
+    virtual EngravingItem* nextSegmentElement();    //< Used for navigation
+    virtual EngravingItem* prevSegmentElement();    //< next-element and prev-element command
 
     mu::engraving::AccessibleElement* accessible() const;
     virtual QString accessibleInfo() const;           //< used to populate the status bar
@@ -577,7 +577,7 @@ public:
     qreal styleP(Sid idx) const;
 };
 
-using ElementPtr = std::shared_ptr<Element>;
+using ElementPtr = std::shared_ptr<EngravingItem>;
 
 //-----------------------------------------------------------------------------
 //   ElementEditData
@@ -605,7 +605,7 @@ struct PropertyData {
 class ElementEditData
 {
 public:
-    Element* e;
+    EngravingItem* e;
     QList<PropertyData> propertyData;
     mu::PointF initOffset;   ///< for dragging: difference between actual offset and editData.moveDelta
 
@@ -622,12 +622,12 @@ public:
 //   ElementList
 //---------------------------------------------------------
 
-class ElementList : public std::vector<Element*>
+class ElementList : public std::vector<EngravingItem*>
 {
 public:
     ElementList() {}
-    bool remove(Element*);
-    void replace(Element* old, Element* n);
+    bool remove(EngravingItem*);
+    void replace(EngravingItem* old, EngravingItem* n);
     void write(XmlWriter&) const;
     void write(XmlWriter&, const char* name) const;
 };
@@ -636,29 +636,29 @@ public:
 //   @@ Compound
 //---------------------------------------------------------
 
-class Compound : public Element
+class Compound : public EngravingItem
 {
-    QList<Element*> elements;
+    QList<EngravingItem*> elements;
 
 protected:
-    const QList<Element*>& getElements() const { return elements; }
+    const QList<EngravingItem*>& getElements() const { return elements; }
 
 public:
     Compound(const ElementType& type, Score*);
     Compound(const Compound&);
 
     virtual void draw(mu::draw::Painter*) const;
-    virtual void addElement(Element*, qreal x, qreal y);
+    virtual void addElement(EngravingItem*, qreal x, qreal y);
     void clear();
     virtual void setSelected(bool f);
     virtual void setVisible(bool);
     virtual void layout();
 };
 
-extern bool elementLessThan(const Element* const, const Element* const);
-extern void collectElements(void* data, Element* e);
+extern bool elementLessThan(const EngravingItem* const, const EngravingItem* const);
+extern void collectElements(void* data, EngravingItem* e);
 
-template<typename T> std::shared_ptr<T> makeElement(Ms::Element* parent)
+template<typename T> std::shared_ptr<T> makeElement(Ms::EngravingItem* parent)
 {
     return std::make_shared<T>(parent);
 }

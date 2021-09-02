@@ -467,7 +467,7 @@ void TempoText::layout()
         Segment* p = segment()->prev(SegmentType::TimeSig);
         if (p) {
             rxpos() -= s->x() - p->x();
-            Element* e = p->element(staffIdx() * VOICES);
+            EngravingItem* e = p->element(staffIdx() * VOICES);
             if (e) {
                 rxpos() += e->x();
             }
@@ -524,9 +524,10 @@ QString TempoText::accessibleInfo() const
         dots1 = duration2userName(t1);
         if (x2 != -1) {
             dots2 = duration2userName(t2);
-            return QString("%1: %2 %3 = %4 %5").arg(Element::accessibleInfo(), dots1, QObject::tr("note"), dots2, QObject::tr("note"));
+            return QString("%1: %2 %3 = %4 %5").arg(EngravingItem::accessibleInfo(), dots1, QObject::tr("note"), dots2,
+                                                    QObject::tr("note"));
         } else {
-            return QString("%1: %2 %3 = %4").arg(Element::accessibleInfo(), dots1, QObject::tr("note"), secondPart);
+            return QString("%1: %2 %3 = %4").arg(EngravingItem::accessibleInfo(), dots1, QObject::tr("note"), secondPart);
         }
     } else {
         return TextBase::accessibleInfo();

@@ -53,8 +53,8 @@ private:
     QString _label;                 ///< referenced from Jump() element
 
 public:
-    Marker(Element* parent);
-    Marker(Element* parent, Tid);
+    Marker(EngravingItem* parent);
+    Marker(EngravingItem* parent, Tid);
 
     void setMarkerType(Type t);
     Type markerType() const { return _markerType; }
@@ -82,8 +82,8 @@ public:
     bool setProperty(Pid propertyId, const QVariant&) override;
     QVariant propertyDefault(Pid) const override;
 
-    Element* nextSegmentElement() override;
-    Element* prevSegmentElement() override;
+    EngravingItem* nextSegmentElement() override;
+    EngravingItem* prevSegmentElement() override;
     QString accessibleInfo() const override;
 };
 

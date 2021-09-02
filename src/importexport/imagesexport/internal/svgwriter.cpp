@@ -165,12 +165,12 @@ mu::Ret SvgWriter::write(INotationPtr notation, Device& destinationDevice, const
     }
 
     // 2nd pass: the rest of the elements
-    QList<Ms::Element*> elements = page->elements();
+    QList<Ms::EngravingItem*> elements = page->elements();
     std::stable_sort(elements.begin(), elements.end(), Ms::elementLessThan);
 
     int lastNoteIndex = -1;
     for (int i = 0; i < PAGE_NUMBER; ++i) {
-        for (const Ms::Element* element: pages[i]->elements()) {
+        for (const Ms::EngravingItem* element: pages[i]->elements()) {
             if (element->type() == Ms::ElementType::NOTE) {
                 lastNoteIndex++;
             }
@@ -179,7 +179,7 @@ mu::Ret SvgWriter::write(INotationPtr notation, Device& destinationDevice, const
 
     NotesColors notesColors = parseNotesColors(options.value(OptionKey::NOTES_COLORS, Val()).toQVariant());
 
-    for (const Ms::Element* element : elements) {
+    for (const Ms::EngravingItem* element : elements) {
         // Always exclude invisible elements
         if (!element->visible()) {
             continue;
@@ -194,7 +194,7 @@ mu::Ret SvgWriter::write(INotationPtr notation, Device& destinationDevice, const
             break;
         }
 
-        // Set the Element pointer inside SvgGenerator/SvgPaintEngine
+        // Set the EngravingItem pointer inside SvgGenerator/SvgPaintEngine
         printer.setElement(element);
 
         // Paint it
@@ -206,7 +206,7 @@ mu::Ret SvgWriter::write(INotationPtr notation, Device& destinationDevice, const
                 color = notesColors[currentNoteIndex];
             }
 
-            Ms::Element* note = dynamic_cast<const Ms::Note*>(element)->clone();
+            Ms::EngravingItem* note = dynamic_cast<const Ms::Note*>(element)->clone();
             note->setColor(color);
             engraving::Paint::paintElement(painter, note);
             delete note;

@@ -42,8 +42,8 @@ public:
     EditStyle(const EditStyle&);
 
     void setPage(int idx);
-    void gotoElement(Element* e);
-    static bool elementHasPage(Element* e);
+    void gotoElement(EngravingItem* e);
+    static bool elementHasPage(EngravingItem* e);
 
 public slots:
     void accept();
@@ -62,7 +62,7 @@ private:
     /// This is a type for a pointer to any QWidget that is a member of EditStyle.
     /// It's used to create static references to the pointers to pages.
     typedef QWidget* EditStyle::* EditStylePage;
-    static EditStylePage pageForElement(Element*);
+    static EditStylePage pageForElement(EngravingItem*);
 
     struct StyleWidget {
         StyleId idx;

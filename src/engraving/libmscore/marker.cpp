@@ -62,12 +62,12 @@ int markerTypeTableSize()
 //   Marker
 //---------------------------------------------------------
 
-Marker::Marker(Element* parent)
+Marker::Marker(EngravingItem* parent)
     : Marker(parent, Tid::REPEAT_LEFT)
 {
 }
 
-Marker::Marker(Element* parent, Tid tid)
+Marker::Marker(EngravingItem* parent, Tid tid)
     : TextBase(ElementType::MARKER, parent, tid, ElementFlag::MOVABLE | ElementFlag::ON_STAFF | ElementFlag::SYSTEM)
 {
     initElementStyle(&markerStyle);
@@ -315,7 +315,7 @@ QVariant Marker::propertyDefault(Pid propertyId) const
 //   nextSegmentElement
 //---------------------------------------------------------
 
-Element* Marker::nextSegmentElement()
+EngravingItem* Marker::nextSegmentElement()
 {
     Segment* seg;
     if (markerType() == Marker::Type::FINE) {
@@ -327,14 +327,14 @@ Element* Marker::nextSegmentElement()
         seg = prevMeasure->last();
         return seg->firstElement(staffIdx());
     }
-    return Element::nextSegmentElement();
+    return EngravingItem::nextSegmentElement();
 }
 
 //---------------------------------------------------------
 //   prevSegmentElement
 //---------------------------------------------------------
 
-Element* Marker::prevSegmentElement()
+EngravingItem* Marker::prevSegmentElement()
 {
     //it's the same barline
     return nextSegmentElement();
@@ -346,6 +346,6 @@ Element* Marker::prevSegmentElement()
 
 QString Marker::accessibleInfo() const
 {
-    return QString("%1: %2").arg(Element::accessibleInfo(), markerTypeUserName());
+    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), markerTypeUserName());
 }
 }

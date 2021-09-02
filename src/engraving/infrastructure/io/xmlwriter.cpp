@@ -442,7 +442,7 @@ int XmlWriter::assignLocalIndex(const Location& mainElementLocation)
 //   canWrite
 //---------------------------------------------------------
 
-bool XmlWriter::canWrite(const Element* e) const
+bool XmlWriter::canWrite(const EngravingItem* e) const
 {
     if (!_clipboardmode) {
         return true;

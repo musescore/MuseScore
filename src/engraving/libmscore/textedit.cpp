@@ -630,11 +630,11 @@ void SplitJoinText::split(EditData* ed)
 //   drop
 //---------------------------------------------------------
 
-Element* TextBase::drop(EditData& ed)
+EngravingItem* TextBase::drop(EditData& ed)
 {
     TextCursor* cursor = cursorFromEditData(ed);
 
-    Element* e = ed.dropElement;
+    EngravingItem* e = ed.dropElement;
 
     switch (e->type()) {
     case ElementType::SYMBOL:

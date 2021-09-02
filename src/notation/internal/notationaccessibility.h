@@ -54,10 +54,10 @@ private:
     QString rangeAccessibilityInfo() const;
     QString singleElementAccessibilityInfo() const;
 
-    std::pair<int, float> barbeat(const Element* element) const;
-    QString formatSingleElementBarsAndBeats(const Element* element) const;
-    QString formatStartBarsAndBeats(const Element* element) const;
-    QString formatEndBarsAndBeats(const Element* element) const;
+    std::pair<int, float> barbeat(const EngravingItem* element) const;
+    QString formatSingleElementBarsAndBeats(const EngravingItem* element) const;
+    QString formatStartBarsAndBeats(const EngravingItem* element) const;
+    QString formatEndBarsAndBeats(const EngravingItem* element) const;
 
     const IGetScore* m_getScore = nullptr;
     ValCh<std::string> m_accessibilityInfo;

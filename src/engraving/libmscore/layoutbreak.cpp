@@ -41,7 +41,7 @@ static const ElementStyle sectionBreakStyle {
 //---------------------------------------------------------
 
 LayoutBreak::LayoutBreak(MeasureBase* parent)
-    : Element(ElementType::LAYOUT_BREAK, parent, ElementFlag::SYSTEM | ElementFlag::HAS_TAG)
+    : EngravingItem(ElementType::LAYOUT_BREAK, parent, ElementFlag::SYSTEM | ElementFlag::HAS_TAG)
 {
     _pause = 0.;
     _startWithLongNames = false;
@@ -59,7 +59,7 @@ LayoutBreak::LayoutBreak(MeasureBase* parent)
 }
 
 LayoutBreak::LayoutBreak(const LayoutBreak& lb)
-    : Element(lb)
+    : EngravingItem(lb)
 {
     _layoutBreakType       = lb._layoutBreakType;
     lw                     = lb.lw;
@@ -72,7 +72,7 @@ LayoutBreak::LayoutBreak(const LayoutBreak& lb)
 
 void LayoutBreak::setParent(MeasureBase* parent)
 {
-    Element::setParent(parent);
+    EngravingItem::setParent(parent);
 }
 
 //---------------------------------------------------------
@@ -82,7 +82,7 @@ void LayoutBreak::setParent(MeasureBase* parent)
 void LayoutBreak::write(XmlWriter& xml) const
 {
     xml.stag(this);
-    Element::writeProperties(xml);
+    EngravingItem::writeProperties(xml);
 
     for (auto id :
          { Pid::LAYOUT_BREAK, Pid::PAUSE, Pid::START_WITH_LONG_NAMES, Pid::START_WITH_MEASURE_ONE, Pid::FIRST_SYSTEM_INDENTATION }) {
@@ -110,7 +110,7 @@ void LayoutBreak::read(XmlReader& e)
             readProperty(e, Pid::START_WITH_MEASURE_ONE);
         } else if (tag == "firstSystemIdentation") {
             readProperty(e, Pid::FIRST_SYSTEM_INDENTATION);
-        } else if (!Element::readProperties(e)) {
+        } else if (!EngravingItem::readProperties(e)) {
             e.unknown();
         }
     }
@@ -252,9 +252,9 @@ bool LayoutBreak::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-Element* LayoutBreak::drop(EditData& data)
+EngravingItem* LayoutBreak::drop(EditData& data)
 {
-    Element* e = data.dropElement;
+    EngravingItem* e = data.dropElement;
     score()->undoChangeElement(this, e);
     return e;
 }
@@ -277,7 +277,7 @@ QVariant LayoutBreak::getProperty(Pid propertyId) const
     case Pid::FIRST_SYSTEM_INDENTATION:
         return _firstSystemIdentation;
     default:
-        return Element::getProperty(propertyId);
+        return EngravingItem::getProperty(propertyId);
     }
 }
 
@@ -304,7 +304,7 @@ bool LayoutBreak::setProperty(Pid propertyId, const QVariant& v)
         setFirstSystemIdentation(v.toBool());
         break;
     default:
-        if (!Element::setProperty(propertyId, v)) {
+        if (!EngravingItem::setProperty(propertyId, v)) {
             return false;
         }
         break;
@@ -332,7 +332,7 @@ QVariant LayoutBreak::propertyDefault(Pid id) const
     case Pid::FIRST_SYSTEM_INDENTATION:
         return true;
     default:
-        return Element::propertyDefault(id);
+        return EngravingItem::propertyDefault(id);
     }
 }
 
@@ -345,6 +345,6 @@ Pid LayoutBreak::propertyId(const QStringRef& name) const
     if (name == propertyName(Pid::LAYOUT_BREAK)) {
         return Pid::LAYOUT_BREAK;
     }
-    return Element::propertyId(name);
+    return EngravingItem::propertyId(name);
 }
 }

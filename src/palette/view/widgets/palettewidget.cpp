@@ -45,7 +45,7 @@
 #include "engraving/infrastructure/io/xml.h"
 #include "engraving/libmscore/actionicon.h"
 #include "engraving/libmscore/chord.h"
-#include "engraving/libmscore/element.h"
+#include "engraving/libmscore/engravingitem.h"
 #include "engraving/libmscore/fret.h"
 #include "engraving/libmscore/image.h"
 #include "engraving/libmscore/masterscore.h"
@@ -832,14 +832,14 @@ void PaletteWidget::dropEvent(QDropEvent* event)
         XmlReader xml(dta);
         PointF dragOffset;
         Fraction duration;
-        ElementType type = Element::readType(xml, &dragOffset, &duration);
+        ElementType type = EngravingItem::readType(xml, &dragOffset, &duration);
 
         if (type == ElementType::SYMBOL) {
             auto symbol = makeElement<Symbol>(gpaletteScore->dummy());
             symbol->read(xml);
             element = symbol;
         } else {
-            element = std::shared_ptr<Element>(Element::create(type, gpaletteScore->dummy()));
+            element = std::shared_ptr<EngravingItem>(EngravingItem::create(type, gpaletteScore->dummy()));
             if (element) {
                 element->read(xml);
                 element->setTrack(0);

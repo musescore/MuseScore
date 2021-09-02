@@ -68,7 +68,7 @@ struct StaffCheckData {
 //    the element belongs to a staff with a certain number.
 //---------------------------------------------------------
 
-static void inStaff(void* staffCheckData, Element* e)
+static void inStaff(void* staffCheckData, EngravingItem* e)
 {
     StaffCheckData* checkData = static_cast<StaffCheckData*>(staffCheckData);
     if (e->staffIdx() == checkData->staffIdx) {

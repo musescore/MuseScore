@@ -411,7 +411,7 @@ void TestSpanners::spanners08()
     Ms::Chord* chord = static_cast<Ms::Chord*>(seg->element(0));
     QVERIFY(chord && chord->type() == ElementType::CHORD);
     QVERIFY(chord->lyrics().size() > 0);
-    Lyrics* lyr   = chord->lyrics(0, Element::Placement::BELOW);
+    Lyrics* lyr   = chord->lyrics(0, EngravingItem::Placement::BELOW);
     score->startCmd();
     score->undoRemoveElement(lyr);
     score->endCmd();

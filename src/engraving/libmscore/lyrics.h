@@ -69,13 +69,13 @@ protected:
     bool _even;
 
 public:
-    Lyrics(Element* parent = 0);
+    Lyrics(EngravingItem* parent = 0);
     Lyrics(const Lyrics&);
     ~Lyrics();
 
     Lyrics* clone() const override { return new Lyrics(*this); }
     bool acceptDrop(EditData&) const override;
-    Element* drop(EditData&) override;
+    EngravingItem* drop(EditData&) override;
 
     Segment* segment() const { return toSegment(parent()->parent()); }
     Measure* measure() const { return toMeasure(parent()->parent()->parent()); }
@@ -94,8 +94,8 @@ public:
     bool isEven() const { return _no % 1; }
     void setSyllabic(Syllabic s) { _syllabic = s; }
     Syllabic syllabic() const { return _syllabic; }
-    void add(Element*) override;
-    void remove(Element*) override;
+    void add(EngravingItem*) override;
+    void remove(EngravingItem*) override;
     bool edit(EditData&) override;
     void endEdit(EditData&) override;
 
@@ -123,7 +123,7 @@ protected:
     Lyrics* _nextLyrics;
 
 public:
-    LyricsLine(Element* parent);
+    LyricsLine(EngravingItem* parent);
     LyricsLine(const LyricsLine&);
 
     LyricsLine* clone() const override { return new LyricsLine(*this); }

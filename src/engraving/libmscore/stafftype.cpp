@@ -844,7 +844,7 @@ qreal StaffType::physStringToYOffset(int strg) const
 //---------------------------------------------------------
 
 TabDurationSymbol::TabDurationSymbol(ChordRest* parent)
-    : Element(ElementType::TAB_DURATION_SYMBOL, parent, ElementFlag::NOT_SELECTABLE)
+    : EngravingItem(ElementType::TAB_DURATION_SYMBOL, parent, ElementFlag::NOT_SELECTABLE)
 {
     setGenerated(true);
     _beamGrid   = TabBeamGrid::NONE;
@@ -854,7 +854,7 @@ TabDurationSymbol::TabDurationSymbol(ChordRest* parent)
 }
 
 TabDurationSymbol::TabDurationSymbol(ChordRest* parent, const StaffType* tab, TDuration::DurationType type, int dots)
-    : Element(ElementType::TAB_DURATION_SYMBOL, parent, ElementFlag::NOT_SELECTABLE)
+    : EngravingItem(ElementType::TAB_DURATION_SYMBOL, parent, ElementFlag::NOT_SELECTABLE)
 {
     setGenerated(true);
     _beamGrid   = TabBeamGrid::NONE;
@@ -863,7 +863,7 @@ TabDurationSymbol::TabDurationSymbol(ChordRest* parent, const StaffType* tab, TD
 }
 
 TabDurationSymbol::TabDurationSymbol(const TabDurationSymbol& e)
-    : Element(e)
+    : EngravingItem(e)
 {
     _tab = e._tab;
     _text = e._text;

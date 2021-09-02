@@ -671,20 +671,20 @@ void NotationActionController::moveAction(const actions::ActionCode& actionCode)
 
     //! NOTE Should work for any elements
     if ("next-element" == actionCode) {
-        interaction->moveSelection(MoveDirection::Right, MoveSelectionType::Element);
+        interaction->moveSelection(MoveDirection::Right, MoveSelectionType::EngravingItem);
         return;
     } else if ("prev-element" == actionCode) {
-        interaction->moveSelection(MoveDirection::Left, MoveSelectionType::Element);
+        interaction->moveSelection(MoveDirection::Left, MoveSelectionType::EngravingItem);
         return;
     }
     //! -----
 
-    std::vector<Element*> selectionElements = interaction->selection()->elements();
+    std::vector<EngravingItem*> selectionElements = interaction->selection()->elements();
     if (selectionElements.empty()) {
         LOGW() << "no selection element";
         return;
     }
-    Element* element = selectionElements.back();
+    EngravingItem* element = selectionElements.back();
 
     if (element->isLyrics()) {
         NOT_IMPLEMENTED;
@@ -1023,13 +1023,13 @@ void NotationActionController::selectAllSimilarElements()
         return;
     }
 
-    Element* selectedElement = interaction->selection()->element();
+    EngravingItem* selectedElement = interaction->selection()->element();
     if (!selectedElement) {
         return;
     }
 
     FilterElementsOptions options = elementsFilterOptions(selectedElement);
-    std::vector<Element*> elements = notationElements->elements(options);
+    std::vector<EngravingItem*> elements = notationElements->elements(options);
     if (elements.empty()) {
         return;
     }
@@ -1047,7 +1047,7 @@ void NotationActionController::selectAllSimilarElementsInStaff()
         return;
     }
 
-    Element* selectedElement = interaction->selection()->element();
+    EngravingItem* selectedElement = interaction->selection()->element();
     if (!selectedElement) {
         return;
     }
@@ -1056,7 +1056,7 @@ void NotationActionController::selectAllSimilarElementsInStaff()
     options.staffStart = selectedElement->staffIdx();
     options.staffEnd = options.staffStart + 1;
 
-    std::vector<Element*> elements = notationElements->elements(options);
+    std::vector<EngravingItem*> elements = notationElements->elements(options);
     if (elements.empty()) {
         return;
     }
@@ -1534,7 +1534,7 @@ void NotationActionController::openPartsDialog()
     interactive()->open("musescore://notation/parts");
 }
 
-FilterElementsOptions NotationActionController::elementsFilterOptions(const Element* element) const
+FilterElementsOptions NotationActionController::elementsFilterOptions(const EngravingItem* element) const
 {
     FilterElementsOptions options;
     options.elementType = element->type();
@@ -1638,7 +1638,7 @@ void NotationActionController::playSelectedElement(bool playChord)
         return;
     }
 
-    Element* element = interaction->selection()->element();
+    EngravingItem* element = interaction->selection()->element();
     if (!element || !element->isNote()) {
         return;
     }

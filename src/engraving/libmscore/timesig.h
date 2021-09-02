@@ -23,7 +23,7 @@
 #ifndef __TIMESIG_H__
 #define __TIMESIG_H__
 
-#include "element.h"
+#include "engravingitem.h"
 #include "sig.h"
 #include "mscore.h"
 #include "groups.h"
@@ -49,7 +49,7 @@ enum class TimeSigType : char {
 ///    This class represents a time signature.
 //---------------------------------------------------------------------------------------
 
-class TimeSig final : public Element
+class TimeSig final : public EngravingItem
 {
     QString _numeratorString;       // calculated from actualSig() if !customText
     QString _denominatorString;
@@ -102,7 +102,7 @@ public:
     int denominatorStretch() const { return _stretch.denominator(); }
 
     bool acceptDrop(EditData&) const override;
-    Element* drop(EditData&) override;
+    EngravingItem* drop(EditData&) override;
 
     Segment* segment() const { return (Segment*)parent(); }
     Measure* measure() const { return (Measure*)parent()->parent(); }
@@ -135,8 +135,8 @@ public:
 
     bool isLocal() const { return _stretch != Fraction(1, 1); }
 
-    Element* nextSegmentElement() override;
-    Element* prevSegmentElement() override;
+    EngravingItem* nextSegmentElement() override;
+    EngravingItem* prevSegmentElement() override;
     QString accessibleInfo() const override;
 };
 }     // namespace Ms

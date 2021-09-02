@@ -115,7 +115,7 @@ void PainterPath::translate(double dx, double dy)
     }
     
     setDirty();
-    PainterPath::Element *element = m_elements.data();
+    PainterPath::EngravingItem *element = m_elements.data();
     assert(element);
     while (m_elementsLeft--) {
         element->x += dx;
@@ -147,7 +147,7 @@ size_t PainterPath::elementCount() const
     return m_elements.size();
 }
 
-PainterPath::Element PainterPath::elementAt(size_t i) const
+PainterPath::EngravingItem PainterPath::elementAt(size_t i) const
 {
     assert(i < elementCount());
     return m_elements.at(i);
@@ -349,8 +349,8 @@ void PainterPath::closeSubpath()
     }
     setDirty();
     m_requireMoveTo = true;
-    const Element &first = m_elements.at(m_cStart);
-    Element &last = m_elements.back();
+    const EngravingItem &first = m_elements.at(m_cStart);
+    EngravingItem &last = m_elements.back();
     if (first.x != last.x || first.y != last.y) {
         if (qFuzzyCompare(first.x, last.x) && qFuzzyCompare(first.y, last.y)) {
             last.x = first.x;
@@ -402,7 +402,7 @@ void PainterPath::computeBoundingRect() const
     double minx = maxx = m_elements.at(0).x;
     double miny = maxy = m_elements.at(0).y;
     for (size_t i = 1; i < m_elements.size(); ++i) {
-        const Element &e = m_elements.at(i);
+        const EngravingItem &e = m_elements.at(i);
         switch (e.type) {
         case ElementType::MoveToElement:
         case ElementType::LineToElement:

@@ -23,7 +23,7 @@
 #ifndef __LAYOUTBREAK_H__
 #define __LAYOUTBREAK_H__
 
-#include "element.h"
+#include "engravingitem.h"
 #include "infrastructure/draw/painterpath.h"
 
 namespace Ms {
@@ -31,7 +31,7 @@ namespace Ms {
 //   @@ LayoutBreak
 ///    symbols for line break, page break etc.
 //---------------------------------------------------------
-class LayoutBreak final : public Element
+class LayoutBreak final : public EngravingItem
 {
     Q_GADGET
 public:
@@ -69,7 +69,7 @@ public:
     Type layoutBreakType() const { return _layoutBreakType; }
 
     bool acceptDrop(EditData&) const override;
-    Element* drop(EditData&) override;
+    EngravingItem* drop(EditData&) override;
     void write(XmlWriter&) const override;
     void read(XmlReader&) override;
 

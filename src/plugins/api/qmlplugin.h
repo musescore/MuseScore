@@ -34,7 +34,7 @@
 namespace Ms {
 class MsProcess;
 class Score;
-class Element;
+class EngravingItem;
 class MScore;
 
 //---------------------------------------------------------

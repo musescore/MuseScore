@@ -361,7 +361,7 @@ Note* nextChordNote(Note* note)
     // TODO : limit to same instrument, not simply to same staff!
     Segment* seg   = note->chord()->segment()->nextCR(track, true);
     while (seg) {
-        Element* targetElement = seg->elementAt(track);
+        EngravingItem* targetElement = seg->elementAt(track);
         // if a chord exists in the same track, return its top note
         if (targetElement && targetElement->isChord()) {
             return toChord(targetElement)->upNote();
@@ -387,7 +387,7 @@ Note* prevChordNote(Note* note)
     Segment* seg   = note->chord()->segment()->prev1();
     while (seg) {
         if (seg->segmentType() == SegmentType::ChordRest) {
-            Element* targetElement = seg->elementAt(track);
+            EngravingItem* targetElement = seg->elementAt(track);
             // if a chord exists in the same track, return its top note
             if (targetElement && targetElement->isChord()) {
                 return toChord(targetElement)->upNote();
@@ -884,7 +884,7 @@ Note* searchTieNote(Note* note)
             continue;
         }
         for (int track = strack; track < etrack; ++track) {
-            Element* e = seg->element(track);
+            EngravingItem* e = seg->element(track);
             if (e == 0 || !e->isChord()) {
                 continue;
             }
@@ -941,7 +941,7 @@ Note* searchTieNote114(Note* note)
 
     while ((seg = seg->next1(SegmentType::ChordRest))) {
         for (int track = strack; track < etrack; ++track) {
-            Element* e = seg->element(track);
+            EngravingItem* e = seg->element(track);
             if (e == 0 || (!e->isChord()) || (e->track() != chord->track())) {
                 continue;
             }

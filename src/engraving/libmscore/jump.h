@@ -88,8 +88,8 @@ public:
     bool setProperty(Pid propertyId, const QVariant&) override;
     QVariant propertyDefault(Pid) const override;
 
-    Element* nextSegmentElement() override;
-    Element* prevSegmentElement() override;
+    EngravingItem* nextSegmentElement() override;
+    EngravingItem* prevSegmentElement() override;
     QString accessibleInfo() const override;
 };
 

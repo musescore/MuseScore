@@ -288,7 +288,7 @@ static QString convertFromHtml(const QString& in_html)
 //   readTextProperties
 //---------------------------------------------------------
 
-static bool readTextProperties(XmlReader& e, TextBase* t, Element*)
+static bool readTextProperties(XmlReader& e, TextBase* t, EngravingItem*)
 {
     const QStringRef& tag(e.name());
     if (tag == "style") {
@@ -434,7 +434,7 @@ static bool readTextProperties(XmlReader& e, TextBase* t, Element*)
 //   readText114
 //---------------------------------------------------------
 
-static void readText114(XmlReader& e, TextBase* t, Element* be)
+static void readText114(XmlReader& e, TextBase* t, EngravingItem* be)
 {
     while (e.readNextStartElement()) {
         if (!readTextProperties(e, t, be)) {
@@ -596,7 +596,7 @@ static void readAccidental(Accidental* a, XmlReader& e)
             a->setSmall(e.readInt());
         } else if (tag == "offset") {
             e.skipCurrentElement();       // ignore manual layout in older scores
-        } else if (a->Element::readProperties(e)) {
+        } else if (a->EngravingItem::readProperties(e)) {
         } else {
             e.unknown();
         }
@@ -1098,7 +1098,7 @@ static void readTremolo(Tremolo* tremolo, XmlReader& e)
                 break;
             }
             tremolo->setTremoloType(st);
-        } else if (!tremolo->Element::readProperties(e)) {
+        } else if (!tremolo->EngravingItem::readProperties(e)) {
             e.unknown();
         }
     }
@@ -1120,7 +1120,7 @@ static void readChord(Measure* m, Chord* chord, XmlReader& e)
             readNote(note, e);
             chord->add(note);
         } else if (tag == "Attribute" || tag == "Articulation") {
-            Element* el = Read206::readArticulation(chord, e);
+            EngravingItem* el = Read206::readArticulation(chord, e);
             if (el->isFermata()) {
                 if (!chord->segment()) {
                     chord->setParent(m->getSegment(SegmentType::ChordRest, e.tick()));
@@ -1152,7 +1152,7 @@ static void readRest(Measure* m, Rest* rest, XmlReader& e)
     while (e.readNextStartElement()) {
         const QStringRef& tag(e.name());
         if (tag == "Attribute" || tag == "Articulation") {
-            Element* el = Read206::readArticulation(rest, e);
+            EngravingItem* el = Read206::readArticulation(rest, e);
             if (el->isFermata()) {
                 if (!rest->segment()) {
                     rest->setParent(m->getSegment(SegmentType::ChordRest, e.tick()));
@@ -1644,7 +1644,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                         break;
                     }
                     barLine->setBarLineType(t);
-                } else if (!barLine->Element::readProperties(e)) {
+                } else if (!barLine->EngravingItem::readProperties(e)) {
                     e.unknown();
                 }
             }
@@ -1824,7 +1824,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                    || tag == "Trill"
                    || tag == "TextLine"
                    || tag == "Volta") {
-            Spanner* sp = toSpanner(Element::name2Element(tag, m->score()->dummy()));
+            Spanner* sp = toSpanner(EngravingItem::name2Element(tag, m->score()->dummy()));
             sp->setTrack(e.track());
             sp->setTick(e.tick());
             // ?? sp->setAnchor(Spanner::Anchor::SEGMENT);
@@ -2040,7 +2040,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                    || tag == "InstrumentChange"
                    || tag == "StaffState"
                    ) {
-            Element* el = Element::name2Element(tag, m->score()->dummy());
+            EngravingItem* el = EngravingItem::name2Element(tag, m->score()->dummy());
             // hack - needed because tick tags are unreliable in 1.3 scores
             // for symbols attached to anything but a measure
             if (el->type() == ElementType::SYMBOL) {
@@ -2099,7 +2099,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                 e.skipCurrentElement();
             } else {
                 segment = m->getSegment(SegmentType::ChordRest, e.tick());
-                Element* el = Element::name2Element(tag, segment);
+                EngravingItem* el = EngravingItem::name2Element(tag, segment);
                 el->setTrack(e.track());
                 el->read(e);
                 segment->add(el);
@@ -2392,7 +2392,7 @@ static void readStaffContent(Score* score, XmlReader& e)
                 }
             }
         } else if (tag == "HBox" || tag == "VBox" || tag == "TBox" || tag == "FBox") {
-            Box* mb = toBox(Element::name2Element(tag, score->dummy()));
+            Box* mb = toBox(EngravingItem::name2Element(tag, score->dummy()));
             readBox(e, mb);
             mb->setTick(e.tick());
             score->measures()->add(mb);
@@ -2902,7 +2902,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e)
                    || (tag == "Volta")
                    || (tag == "Trill")
                    || (tag == "Pedal")) {
-            Spanner* s = toSpanner(Element::name2Element(tag, masterScore->dummy()));
+            Spanner* s = toSpanner(EngravingItem::name2Element(tag, masterScore->dummy()));
             if (tag == "Volta") {
                 readVolta114(e, toVolta(s));
             } else if (tag == "Ottava") {

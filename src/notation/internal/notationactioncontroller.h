@@ -197,7 +197,7 @@ private:
     void pasteSelection(PastingType type = PastingType::Default);
     Fraction resolvePastingScale(const INotationInteractionPtr& interaction, PastingType type) const;
 
-    FilterElementsOptions elementsFilterOptions(const Element* element) const;
+    FilterElementsOptions elementsFilterOptions(const EngravingItem* element) const;
 
     void startNoteInputIfNeed();
 

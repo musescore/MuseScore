@@ -60,7 +60,7 @@ and provides its FiguredBass parent with a normalized text for future editing.
 
 FiguredBassItem has not use for formats (italics, bold, ...) and it is never edited directly;
 more generally, it is never accessed directly, only via its FiguredBass parent;
-so it is directly derived from Element and returns INVALID as type.
+so it is directly derived from EngravingItem and returns INVALID as type.
 
 FiguredBass might require formatting (discouraged, but might be necessary for very uncommon cases)
 and it is edited (via the normalized text); so it is derived from Text.
@@ -87,7 +87,7 @@ and it is edited (via the normalized text); so it is derived from Text.
 
 class FiguredBass;
 
-class FiguredBassItem final : public Element
+class FiguredBassItem final : public EngravingItem
 {
 public:
     enum class Modifier : char {

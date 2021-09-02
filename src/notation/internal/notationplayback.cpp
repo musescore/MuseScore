@@ -202,7 +202,7 @@ QRect NotationPlayback::playbackCursorRectByTick(tick_t _tick) const
     return QRect(x, y, w, h);
 }
 
-RetVal<midi::tick_t> NotationPlayback::playPositionTickByElement(const Element* element) const
+RetVal<midi::tick_t> NotationPlayback::playPositionTickByElement(const EngravingItem* element) const
 {
     RetVal<tick_t> result;
     result.ret = make_ret(Err::Undefined);
@@ -412,7 +412,7 @@ const Ms::TempoText* NotationPlayback::tempoText(int _tick) const
 
     Ms::SegmentType segmentType = Ms::SegmentType::All;
     for (const Ms::Segment* segment = score()->firstSegment(segmentType); segment; segment = segment->next1(segmentType)) {
-        for (Ms::Element* element: segment->annotations()) {
+        for (Ms::EngravingItem* element: segment->annotations()) {
             if (element && element->isTempoText() && element->tick() <= tick) {
                 result = Ms::toTempoText(element);
             }

@@ -48,7 +48,7 @@ public:
     Volta* volta() const { return (Volta*)spanner(); }
     void layout() override;
 
-    Element* propertyDelegate(Pid) override;
+    EngravingItem* propertyDelegate(Pid) override;
 };
 
 //---------------------------------------------------------
@@ -66,7 +66,7 @@ public:
         OPEN, CLOSED
     };
 
-    Volta(Element* parent);
+    Volta(EngravingItem* parent);
 
     Volta* clone() const override { return new Volta(*this); }
 

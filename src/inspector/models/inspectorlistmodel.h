@@ -24,7 +24,7 @@
 
 #include <QAbstractListModel>
 
-#include "libmscore/element.h"
+#include "libmscore/engravingitem.h"
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
@@ -57,7 +57,7 @@ private:
         InspectorTitleRole
     };
 
-    void setElementList(const QList<Ms::Element*>& selectedElementList);
+    void setElementList(const QList<Ms::EngravingItem*>& selectedElementList);
 
     void buildModelsForEmptySelection(const QSet<Ms::ElementType>& selectedElementSet);
     void buildModelsForSelectedElements(const QSet<Ms::ElementType>& selectedElementSet);

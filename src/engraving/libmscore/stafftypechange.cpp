@@ -35,13 +35,13 @@ namespace Ms {
 //---------------------------------------------------------
 
 StaffTypeChange::StaffTypeChange(MeasureBase* parent)
-    : Element(ElementType::STAFFTYPE_CHANGE, parent, ElementFlag::HAS_TAG)
+    : EngravingItem(ElementType::STAFFTYPE_CHANGE, parent, ElementFlag::HAS_TAG)
 {
     lw = spatium() * 0.3;
 }
 
 StaffTypeChange::StaffTypeChange(const StaffTypeChange& lb)
-    : Element(lb)
+    : EngravingItem(lb)
 {
     lw = lb.lw;
 }
@@ -56,7 +56,7 @@ void StaffTypeChange::write(XmlWriter& xml) const
     if (_staffType) {
         _staffType->write(xml);
     }
-    Element::writeProperties(xml);
+    EngravingItem::writeProperties(xml);
     xml.etag();
 }
 
@@ -73,7 +73,7 @@ void StaffTypeChange::read(XmlReader& e)
             st->read(e);
             // Measure::add() will replace this with a pointer to a copy in the staff
             _staffType = st;
-        } else if (!Element::readProperties(e)) {
+        } else if (!EngravingItem::readProperties(e)) {
             e.unknown();
         }
     }
@@ -185,7 +185,7 @@ QVariant StaffTypeChange::getProperty(Pid propertyId) const
     case Pid::STAFF_YOFFSET:
         return _staffType->yoffset();
     default:
-        return Element::getProperty(propertyId);
+        return EngravingItem::getProperty(propertyId);
     }
 }
 
@@ -254,7 +254,7 @@ bool StaffTypeChange::setProperty(Pid propertyId, const QVariant& v)
         _staffType->setYoffset(v.value<Spatium>());
         break;
     default:
-        if (!Element::setProperty(propertyId, v)) {
+        if (!EngravingItem::setProperty(propertyId, v)) {
             return false;
         }
         break;
@@ -303,7 +303,7 @@ QVariant StaffTypeChange::propertyDefault(Pid id) const
     case Pid::STAFF_YOFFSET:
         return Spatium(0.0);
     default:
-        return Element::propertyDefault(id);
+        return EngravingItem::propertyDefault(id);
     }
 }
 }

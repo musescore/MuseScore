@@ -35,7 +35,7 @@ using namespace Ms;
 void LayoutHarmonies::layoutHarmonies(const std::vector<Segment*>& sl)
 {
     for (const Segment* s : sl) {
-        for (Element* e : s->annotations()) {
+        for (EngravingItem* e : s->annotations()) {
             if (e->isHarmony()) {
                 Harmony* h = toHarmony(e);
                 // For chord symbols that coincide with a chord or rest,
@@ -55,19 +55,19 @@ void LayoutHarmonies::alignHarmonies(const System* system, const std::vector<Seg
 {
     // Help class.
     // Contains harmonies/fretboard per segment.
-    class HarmonyList : public QList<Element*>
+    class HarmonyList : public QList<EngravingItem*>
     {
-        QMap<const Segment*, QList<Element*> > elements;
-        QList<Element*> modified;
+        QMap<const Segment*, QList<EngravingItem*> > elements;
+        QList<EngravingItem*> modified;
 
-        Element* getReferenceElement(const Segment* s, bool above, bool visible) const
+        EngravingItem* getReferenceElement(const Segment* s, bool above, bool visible) const
         {
             // Returns the reference element for aligning.
             // When a segments contains multiple harmonies/fretboard, the lowest placed
             // element (for placement above, otherwise the highest placed element) is
             // used for alignment.
-            Element* element { nullptr };
-            for (Element* e : elements[s]) {
+            EngravingItem* element { nullptr };
+            for (EngravingItem* e : elements[s]) {
                 // Only chord symbols have styled offset, fretboards don't.
                 if (!e->autoplace() || (e->isHarmony() && !e->isStyled(Pid::OFFSET)) || (visible && !e->visible())) {
                     continue;
@@ -91,7 +91,7 @@ void LayoutHarmonies::alignHarmonies(const System* system, const std::vector<Seg
             modified.clear();
         }
 
-        void append(const Segment* s, Element* e)
+        void append(const Segment* s, EngravingItem* e)
         {
             elements[s].append(e);
         }
@@ -105,7 +105,7 @@ void LayoutHarmonies::alignHarmonies(const System* system, const std::vector<Seg
             bool first { true };
             qreal ref { 0.0 };
             for (auto s : elements.keys()) {
-                Element* e { getReferenceElement(s, above, true) };
+                EngravingItem* e { getReferenceElement(s, above, true) };
                 if (!e) {
                     continue;
                 }
@@ -132,8 +132,8 @@ void LayoutHarmonies::alignHarmonies(const System* system, const std::vector<Seg
             }
 
             for (auto s : elements.keys()) {
-                QList<Element*> handled;
-                Element* be = getReferenceElement(s, above, false);
+                QList<EngravingItem*> handled;
+                EngravingItem* be = getReferenceElement(s, above, false);
                 if (!be) {
                     // If there are only invisible elements, we have to use an invisible
                     // element for alignment reference.
@@ -143,7 +143,7 @@ void LayoutHarmonies::alignHarmonies(const System* system, const std::vector<Seg
                     qreal shift = be->rypos();
                     be->rypos() = reference - be->ryoffset();
                     shift -= be->rypos();
-                    for (Element* e : elements[s]) {
+                    for (EngravingItem* e : elements[s]) {
                         if ((above && e->placeBelow()) || (!above && e->placeAbove())) {
                             continue;
                         }
@@ -164,7 +164,7 @@ void LayoutHarmonies::alignHarmonies(const System* system, const std::vector<Seg
 
         void addToSkyline(const System* system)
         {
-            for (Element* e : qAsConst(modified)) {
+            for (EngravingItem* e : qAsConst(modified)) {
                 const Segment* s = toSegment(e->parent());
                 const MeasureBase* m = toMeasureBase(s->parent());
                 system->staff(e->staffIdx())->skyline().add(e->shape().translated(e->pos() + s->pos() + m->pos()));
@@ -189,7 +189,7 @@ void LayoutHarmonies::alignHarmonies(const System* system, const std::vector<Seg
     // In the same pass, the maximum height is collected.
     QMap<int, HarmonyList> staves;
     for (const Segment* s : sl) {
-        for (Element* e : s->annotations()) {
+        for (EngravingItem* e : s->annotations()) {
             if ((harmony && e->isHarmony()) || (!harmony && e->isFretDiagram())) {
                 staves[e->staffIdx()].append(s, e);
             }

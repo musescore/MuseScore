@@ -41,7 +41,7 @@ public:
     }
 
     MMRest* clone() const override { return new MMRest(*this, false); }
-    Element* linkedClone() override { return new MMRest(*this, true); }
+    EngravingItem* linkedClone() override { return new MMRest(*this, true); }
 
     void draw(mu::draw::Painter*) const override;
     void layout() override;

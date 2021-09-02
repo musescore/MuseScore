@@ -23,7 +23,7 @@
 #include <cmath>
 
 #include "bsp.h"
-#include "element.h"
+#include "engravingitem.h"
 
 using namespace mu;
 
@@ -35,9 +35,9 @@ namespace Ms {
 class InsertItemBspTreeVisitor : public BspTreeVisitor
 {
 public:
-    Element* item;
+    EngravingItem* item;
 
-    inline void visit(QList<Element*>* items) { items->prepend(item); }
+    inline void visit(QList<EngravingItem*>* items) { items->prepend(item); }
 };
 
 //---------------------------------------------------------
@@ -47,9 +47,9 @@ public:
 class RemoveItemBspTreeVisitor : public BspTreeVisitor
 {
 public:
-    Element* item;
+    EngravingItem* item;
 
-    inline void visit(QList<Element*>* items) { items->removeAll(item); }
+    inline void visit(QList<EngravingItem*>* items) { items->removeAll(item); }
 };
 
 //---------------------------------------------------------
@@ -59,12 +59,12 @@ public:
 class FindItemBspTreeVisitor : public BspTreeVisitor
 {
 public:
-    QList<Element*> foundItems;
+    QList<EngravingItem*> foundItems;
 
-    void visit(QList<Element*>* items)
+    void visit(QList<EngravingItem*>* items)
     {
         for (int i = 0; i < items->size(); ++i) {
-            Element* item = items->at(i);
+            EngravingItem* item = items->at(i);
             if (!item->itemDiscovered) {
                 item->itemDiscovered = true;
                 foundItems.prepend(item);
@@ -104,7 +104,7 @@ void BspTree::initialize(const RectF& rec, int n)
 
     nodes.resize((1 << (depth + 1)) - 1);
     leaves.resize(1 << depth);
-    leaves.fill(QList<Element*>());
+    leaves.fill(QList<EngravingItem*>());
     initialize(rec, depth, 0);
 }
 
@@ -123,7 +123,7 @@ void BspTree::clear()
 //   insert
 //---------------------------------------------------------
 
-void BspTree::insert(Element* element)
+void BspTree::insert(EngravingItem* element)
 {
     InsertItemBspTreeVisitor insertVisitor;
     insertVisitor.item = element;
@@ -134,7 +134,7 @@ void BspTree::insert(Element* element)
 //   remove
 //---------------------------------------------------------
 
-void BspTree::remove(Element* element)
+void BspTree::remove(EngravingItem* element)
 {
     RemoveItemBspTreeVisitor removeVisitor;
     removeVisitor.item = element;
@@ -145,12 +145,12 @@ void BspTree::remove(Element* element)
 //   items
 //---------------------------------------------------------
 
-QList<Element*> BspTree::items(const RectF& rec)
+QList<EngravingItem*> BspTree::items(const RectF& rec)
 {
     FindItemBspTreeVisitor findVisitor;
     climbTree(&findVisitor, rec);
-    QList<Element*> l;
-    for (Element* e : qAsConst(findVisitor.foundItems)) {
+    QList<EngravingItem*> l;
+    for (EngravingItem* e : qAsConst(findVisitor.foundItems)) {
         e->itemDiscovered = false;
         if (e->pageBoundingRect().intersects(rec)) {
             l.append(e);
@@ -163,13 +163,13 @@ QList<Element*> BspTree::items(const RectF& rec)
 //   items
 //---------------------------------------------------------
 
-QList<Element*> BspTree::items(const PointF& pos)
+QList<EngravingItem*> BspTree::items(const PointF& pos)
 {
     FindItemBspTreeVisitor findVisitor;
     climbTree(&findVisitor, pos);
 
-    QList<Element*> l;
-    for (Element* e : qAsConst(findVisitor.foundItems)) {
+    QList<EngravingItem*> l;
+    for (EngravingItem* e : qAsConst(findVisitor.foundItems)) {
         e->itemDiscovered = false;
         if (e->contains(pos)) {
             l.append(e);

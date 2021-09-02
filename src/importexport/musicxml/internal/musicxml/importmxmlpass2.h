@@ -387,7 +387,7 @@ private:
     bool _segno;
     double _tpoMetro;                   // tempo according to metronome
     double _tpoSound;                   // tempo according to sound
-    QList<Element*> _elems;
+    QList<EngravingItem*> _elems;
     Fraction _offset;
 
     void directionType(QList<MusicXmlSpannerDesc>& starts, QList<MusicXmlSpannerDesc>& stops);

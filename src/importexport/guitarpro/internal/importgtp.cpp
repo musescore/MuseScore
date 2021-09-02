@@ -807,7 +807,7 @@ void GuitarPro::createSlide(int sl, ChordRest* cr, int staffIdx, Note* /*note*/)
         cr->add(s);
         s->setAnchor(Spanner::Anchor::NOTE);
         Segment* prevSeg = cr->segment()->prev1(SegmentType::ChordRest);
-        Element* prevElem = prevSeg->element(staffIdx);
+        EngravingItem* prevElem = prevSeg->element(staffIdx);
         if (prevElem) {
             if (prevElem->type() == ElementType::CHORD) {
                 Chord* prevChord = static_cast<Chord*>(prevElem);
@@ -1347,7 +1347,7 @@ void GuitarPro::setTempo(int temp, Measure* measure)
         std::swap(last_measure, measure);
 
         Segment* segment = measure->getSegment(SegmentType::ChordRest, measure->tick());
-        for (Element* e : segment->annotations()) {
+        for (EngravingItem* e : segment->annotations()) {
             if (e->isTempoText()) {
                 qDebug("already there");
                 return;
@@ -2086,7 +2086,7 @@ bool GuitarPro1::readNote(int string, Note* note)
         std::vector<Chord*> chords;
         Note* true_note = nullptr;
         while (segment) {
-            Element* e = segment->element(track);
+            EngravingItem* e = segment->element(track);
             if (e) {
                 if (e->isChord()) {
                     Chord* chord2 = toChord(e);

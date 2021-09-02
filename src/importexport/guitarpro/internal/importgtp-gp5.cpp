@@ -1326,7 +1326,7 @@ bool GuitarPro5::readNote(int string, Note* note)
         std::vector<ChordRest*> chords;
         Note* true_note = nullptr;
         while (segment) {
-            Element* e = segment->element(track);
+            EngravingItem* e = segment->element(track);
             if (e) {
                 if (e->isChord()) {
                     Chord* chord2 = toChord(e);

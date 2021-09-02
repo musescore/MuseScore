@@ -24,7 +24,7 @@
 #define __KEYSIG_H__
 
 #include "key.h"
-#include "element.h"
+#include "engravingitem.h"
 
 namespace Ms {
 class Sym;
@@ -37,7 +37,7 @@ class Segment;
 //   @P showCourtesy  bool  show courtesy key signature for this sig if appropriate
 //---------------------------------------------------------------------------------------
 
-class KeySig final : public Element
+class KeySig final : public EngravingItem
 {
     bool _showCourtesy;
     bool _hideNaturals;       // used in layout to override score style (needed for the Continuous panel)
@@ -52,7 +52,7 @@ public:
     void draw(mu::draw::Painter*) const override;
 
     bool acceptDrop(EditData&) const override;
-    Element* drop(EditData&) override;
+    EngravingItem* drop(EditData&) override;
     void layout() override;
     qreal mag() const override;
 
@@ -90,8 +90,8 @@ public:
     bool setProperty(Pid propertyId, const QVariant&) override;
     QVariant propertyDefault(Pid id) const override;
 
-    Element* nextSegmentElement() override;
-    Element* prevSegmentElement() override;
+    EngravingItem* nextSegmentElement() override;
+    EngravingItem* prevSegmentElement() override;
     QString accessibleInfo() const override;
 
     SymId convertFromOldId(int val) const;

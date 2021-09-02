@@ -25,7 +25,7 @@
 
 #include <set>
 
-#include "element.h"
+#include "engravingitem.h"
 #include "mscore.h"
 #include "symid.h"
 
@@ -80,7 +80,7 @@ std::set<SymId> flipArticulations(const std::set<SymId>& articulationSymbolIds, 
 ///    articulation marks
 //---------------------------------------------------------
 
-class Articulation final : public Element
+class Articulation final : public EngravingItem
 {
     SymId _symId;
     Direction _direction;

@@ -979,9 +979,9 @@ bool ArrayEq(const T* lhs, size_t size, const U* rhs) {
 }
 
 // Finds the first element in the iterator range [begin, end) that
-// equals elem.  Element may be a native array type itself.
-template <typename Iter, typename Element>
-Iter ArrayAwareFind(Iter begin, Iter end, const Element& elem) {
+// equals elem.  EngravingItem may be a native array type itself.
+template <typename Iter, typename EngravingItem>
+Iter ArrayAwareFind(Iter begin, Iter end, const EngravingItem& elem) {
   for (Iter it = begin; it != end; ++it) {
     if (internal::ArrayEq(*it, elem))
       return it;
@@ -1027,25 +1027,25 @@ struct RelationToSourceCopy {};
 // of the complete STL container concept, this adaptor only implements
 // members useful for Google Mock's container matchers.  New members
 // should be added as needed.  To simplify the implementation, we only
-// support Element being a raw type (i.e. having no top-level const or
+// support EngravingItem being a raw type (i.e. having no top-level const or
 // reference modifier).  It's the client's responsibility to satisfy
-// this requirement.  Element can be an array type itself (hence
+// this requirement.  EngravingItem can be an array type itself (hence
 // multi-dimensional arrays are supported).
-template <typename Element>
+template <typename EngravingItem>
 class NativeArray {
  public:
   // STL-style container typedefs.
-  typedef Element value_type;
-  typedef Element* iterator;
-  typedef const Element* const_iterator;
+  typedef EngravingItem value_type;
+  typedef EngravingItem* iterator;
+  typedef const EngravingItem* const_iterator;
 
   // Constructs from a native array. References the source.
-  NativeArray(const Element* array, size_t count, RelationToSourceReference) {
+  NativeArray(const EngravingItem* array, size_t count, RelationToSourceReference) {
     InitRef(array, count);
   }
 
   // Constructs from a native array. Copies the source.
-  NativeArray(const Element* array, size_t count, RelationToSourceCopy) {
+  NativeArray(const EngravingItem* array, size_t count, RelationToSourceCopy) {
     InitCopy(array, count);
   }
 
@@ -1069,13 +1069,13 @@ class NativeArray {
   }
 
  private:
-  static_assert(!std::is_const<Element>::value, "Type must not be const");
-  static_assert(!std::is_reference<Element>::value,
+  static_assert(!std::is_const<EngravingItem>::value, "Type must not be const");
+  static_assert(!std::is_reference<EngravingItem>::value,
                 "Type must not be a reference");
 
   // Initializes this object with a copy of the input.
-  void InitCopy(const Element* array, size_t a_size) {
-    Element* const copy = new Element[a_size];
+  void InitCopy(const EngravingItem* array, size_t a_size) {
+    EngravingItem* const copy = new EngravingItem[a_size];
     CopyArray(array, a_size, copy);
     array_ = copy;
     size_ = a_size;
@@ -1083,15 +1083,15 @@ class NativeArray {
   }
 
   // Initializes this object with a reference of the input.
-  void InitRef(const Element* array, size_t a_size) {
+  void InitRef(const EngravingItem* array, size_t a_size) {
     array_ = array;
     size_ = a_size;
     clone_ = &NativeArray::InitRef;
   }
 
-  const Element* array_;
+  const EngravingItem* array_;
   size_t size_;
-  void (NativeArray::*clone_)(const Element*, size_t);
+  void (NativeArray::*clone_)(const EngravingItem*, size_t);
 
   GTEST_DISALLOW_ASSIGN_(NativeArray);
 };

@@ -24,14 +24,14 @@
 
 #include <list>
 #include <QVariant>
-#include "libmscore/element.h"
+#include "libmscore/engravingitem.h"
 
 namespace Ms {
 enum class Pid : int;
 }
 
 namespace mu::engraving::compat {
-class DummyElement : public Ms::Element
+class DummyElement : public Ms::EngravingItem
 {
 public:
     DummyElement(Ms::Score* s);
@@ -44,7 +44,7 @@ public:
     Ms::Chord* chord();
     Ms::Note* note();
 
-    Ms::Element* clone() const override;
+    Ms::EngravingItem* clone() const override;
     void add(Ms::EngravingObject* e);
     void remove(Ms::EngravingObject* e);
 

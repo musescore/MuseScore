@@ -50,14 +50,14 @@ QObject* ElementRepositoryService::getQObject()
     return this;
 }
 
-void ElementRepositoryService::updateElementList(const QList<Ms::Element*>& newRawElementList)
+void ElementRepositoryService::updateElementList(const QList<Ms::EngravingItem*>& newRawElementList)
 {
     m_elementList = exposeRawElements(newRawElementList);
 
     emit elementsUpdated();
 }
 
-QList<Ms::Element*> ElementRepositoryService::findElementsByType(const Ms::ElementType elementType) const
+QList<Ms::EngravingItem*> ElementRepositoryService::findElementsByType(const Ms::ElementType elementType) const
 {
     switch (elementType) {
     case Ms::ElementType::CHORD: return findChords();
@@ -74,9 +74,9 @@ QList<Ms::Element*> ElementRepositoryService::findElementsByType(const Ms::Eleme
     case Ms::ElementType::TEXT: return findTexts();
     case Ms::ElementType::TREMOLO: return findTremolos();
     default:
-        QList<Ms::Element*> resultList;
+        QList<Ms::EngravingItem*> resultList;
 
-        for (Ms::Element* element : m_elementList) {
+        for (Ms::EngravingItem* element : m_elementList) {
             if (element->type() == elementType) {
                 resultList << element;
             }
@@ -86,14 +86,14 @@ QList<Ms::Element*> ElementRepositoryService::findElementsByType(const Ms::Eleme
     }
 }
 
-QList<Ms::Element*> ElementRepositoryService::findElementsByType(const Ms::ElementType elementType,
-                                                                 std::function<bool(const Ms::Element*)> filterFunc) const
+QList<Ms::EngravingItem*> ElementRepositoryService::findElementsByType(const Ms::ElementType elementType,
+                                                                       std::function<bool(const Ms::EngravingItem*)> filterFunc) const
 {
-    QList<Ms::Element*> resultList;
+    QList<Ms::EngravingItem*> resultList;
 
-    QList<Ms::Element*> unfilteredList = findElementsByType(elementType);
+    QList<Ms::EngravingItem*> unfilteredList = findElementsByType(elementType);
 
-    for (Ms::Element* element : unfilteredList) {
+    for (Ms::EngravingItem* element : unfilteredList) {
         if (filterFunc(element)) {
             resultList << element;
         }
@@ -102,16 +102,16 @@ QList<Ms::Element*> ElementRepositoryService::findElementsByType(const Ms::Eleme
     return resultList;
 }
 
-QList<Ms::Element*> ElementRepositoryService::takeAllElements() const
+QList<Ms::EngravingItem*> ElementRepositoryService::takeAllElements() const
 {
     return m_elementList;
 }
 
-QList<Ms::Element*> ElementRepositoryService::exposeRawElements(const QList<Ms::Element*>& rawElementList) const
+QList<Ms::EngravingItem*> ElementRepositoryService::exposeRawElements(const QList<Ms::EngravingItem*>& rawElementList) const
 {
-    QList<Ms::Element*> resultList;
+    QList<Ms::EngravingItem*> resultList;
 
-    for (const Ms::Element* element : rawElementList) {
+    for (const Ms::EngravingItem* element : rawElementList) {
         if (!resultList.contains(element->elementBase())) {
             resultList << element->elementBase();
         }
@@ -128,11 +128,11 @@ QList<Ms::Element*> ElementRepositoryService::exposeRawElements(const QList<Ms::
     return resultList;
 }
 
-QList<Ms::Element*> ElementRepositoryService::findChords() const
+QList<Ms::EngravingItem*> ElementRepositoryService::findChords() const
 {
-    QList<Ms::Element*> resultList;
+    QList<Ms::EngravingItem*> resultList;
 
-    for (Ms::Element* element : m_elementList) {
+    for (Ms::EngravingItem* element : m_elementList) {
         if (element->type() == Ms::ElementType::CHORD) {
             resultList << element;
         }
@@ -141,18 +141,18 @@ QList<Ms::Element*> ElementRepositoryService::findChords() const
     return resultList;
 }
 
-QList<Ms::Element*> ElementRepositoryService::findNotes() const
+QList<Ms::EngravingItem*> ElementRepositoryService::findNotes() const
 {
-    QList<Ms::Element*> resultList;
+    QList<Ms::EngravingItem*> resultList;
 
-    for (const Ms::Element* element : findChords()) {
+    for (const Ms::EngravingItem* element : findChords()) {
         const Ms::Chord* chord = Ms::toChord(element);
 
         if (!chord) {
             continue;
         }
 
-        for (Ms::Element* note : chord->notes()) {
+        for (Ms::EngravingItem* note : chord->notes()) {
             resultList << note;
         }
     }
@@ -160,11 +160,11 @@ QList<Ms::Element*> ElementRepositoryService::findNotes() const
     return resultList;
 }
 
-QList<Ms::Element*> ElementRepositoryService::findStems() const
+QList<Ms::EngravingItem*> ElementRepositoryService::findStems() const
 {
-    QList<Ms::Element*> resultList;
+    QList<Ms::EngravingItem*> resultList;
 
-    for (const Ms::Element* element : findChords()) {
+    for (const Ms::EngravingItem* element : findChords()) {
         const Ms::Chord* chord = Ms::toChord(element);
 
         if (chord && chord->stem()) {
@@ -175,11 +175,11 @@ QList<Ms::Element*> ElementRepositoryService::findStems() const
     return resultList;
 }
 
-QList<Ms::Element*> ElementRepositoryService::findHooks() const
+QList<Ms::EngravingItem*> ElementRepositoryService::findHooks() const
 {
-    QList<Ms::Element*> resultList;
+    QList<Ms::EngravingItem*> resultList;
 
-    for (const Ms::Element* element : findChords()) {
+    for (const Ms::EngravingItem* element : findChords()) {
         const Ms::Chord* chord = Ms::toChord(element);
 
         if (chord && chord->hook()) {
@@ -190,12 +190,12 @@ QList<Ms::Element*> ElementRepositoryService::findHooks() const
     return resultList;
 }
 
-QList<Ms::Element*> ElementRepositoryService::findBeams() const
+QList<Ms::EngravingItem*> ElementRepositoryService::findBeams() const
 {
-    QList<Ms::Element*> resultList;
+    QList<Ms::EngravingItem*> resultList;
 
-    for (const Ms::Element* element : findChords()) {
-        Ms::Element* beam = nullptr;
+    for (const Ms::EngravingItem* element : findChords()) {
+        Ms::EngravingItem* beam = nullptr;
 
         if (element->isChord()) {
             const Ms::Chord* chord = Ms::toChord(element);
@@ -206,7 +206,7 @@ QList<Ms::Element*> ElementRepositoryService::findBeams() const
 
             beam = chord->beam();
         } else if (element->isBeam()) {
-            beam = const_cast<Ms::Element*>(element);
+            beam = const_cast<Ms::EngravingItem*>(element);
         }
 
         if (!beam || resultList.contains(beam)) {
@@ -219,11 +219,11 @@ QList<Ms::Element*> ElementRepositoryService::findBeams() const
     return resultList;
 }
 
-QList<Ms::Element*> ElementRepositoryService::findGlissandos() const
+QList<Ms::EngravingItem*> ElementRepositoryService::findGlissandos() const
 {
-    QList<Ms::Element*> resultList;
+    QList<Ms::EngravingItem*> resultList;
 
-    for (Ms::Element* element : m_elementList) {
+    for (Ms::EngravingItem* element : m_elementList) {
         if (element->type() == Ms::ElementType::GLISSANDO_SEGMENT) {
             const Ms::GlissandoSegment* glissandoSegment = Ms::toGlissandoSegment(element);
 
@@ -240,11 +240,11 @@ QList<Ms::Element*> ElementRepositoryService::findGlissandos() const
     return resultList;
 }
 
-QList<Ms::Element*> ElementRepositoryService::findHairpins() const
+QList<Ms::EngravingItem*> ElementRepositoryService::findHairpins() const
 {
-    QList<Ms::Element*> resultList;
+    QList<Ms::EngravingItem*> resultList;
 
-    for (Ms::Element* element : m_elementList) {
+    for (Ms::EngravingItem* element : m_elementList) {
         if (element->type() == Ms::ElementType::HAIRPIN_SEGMENT) {
             const Ms::HairpinSegment* hairpinSegment = Ms::toHairpinSegment(element);
 
@@ -261,11 +261,11 @@ QList<Ms::Element*> ElementRepositoryService::findHairpins() const
     return resultList;
 }
 
-QList<Ms::Element*> ElementRepositoryService::findStaffs() const
+QList<Ms::EngravingItem*> ElementRepositoryService::findStaffs() const
 {
-    QList<Ms::Element*> resultList;
+    QList<Ms::EngravingItem*> resultList;
 
-    for (const Ms::Element* element : m_elementList) {
+    for (const Ms::EngravingItem* element : m_elementList) {
         if (!element->staff()) {
             continue;
         }
@@ -276,11 +276,11 @@ QList<Ms::Element*> ElementRepositoryService::findStaffs() const
     return resultList;
 }
 
-QList<Ms::Element*> ElementRepositoryService::findSectionBreaks() const
+QList<Ms::EngravingItem*> ElementRepositoryService::findSectionBreaks() const
 {
-    QList<Ms::Element*> resultList;
+    QList<Ms::EngravingItem*> resultList;
 
-    for (Ms::Element* element : m_elementList) {
+    for (Ms::EngravingItem* element : m_elementList) {
         if (element && element->type() == Ms::ElementType::LAYOUT_BREAK) {
             const Ms::LayoutBreak* layoutBreak = Ms::toLayoutBreak(element);
             if (layoutBreak->layoutBreakType() != Ms::LayoutBreak::Type::SECTION) {
@@ -294,11 +294,11 @@ QList<Ms::Element*> ElementRepositoryService::findSectionBreaks() const
     return resultList;
 }
 
-QList<Ms::Element*> ElementRepositoryService::findPedals() const
+QList<Ms::EngravingItem*> ElementRepositoryService::findPedals() const
 {
-    QList<Ms::Element*> resultList;
+    QList<Ms::EngravingItem*> resultList;
 
-    for (Ms::Element* element : m_elementList) {
+    for (Ms::EngravingItem* element : m_elementList) {
         if (element->type() == Ms::ElementType::PEDAL_SEGMENT) {
             const Ms::PedalSegment* pedalSegment = Ms::toPedalSegment(element);
 
@@ -315,11 +315,11 @@ QList<Ms::Element*> ElementRepositoryService::findPedals() const
     return resultList;
 }
 
-QList<Ms::Element*> ElementRepositoryService::findPairedClefs() const
+QList<Ms::EngravingItem*> ElementRepositoryService::findPairedClefs() const
 {
-    QList<Ms::Element*> resultList;
+    QList<Ms::EngravingItem*> resultList;
 
-    for (Ms::Element* element : m_elementList) {
+    for (Ms::EngravingItem* element : m_elementList) {
         if (element->type() == Ms::ElementType::CLEF) {
             auto clef = Ms::toClef(element);
             IF_ASSERT_FAILED(clef) {
@@ -338,11 +338,11 @@ QList<Ms::Element*> ElementRepositoryService::findPairedClefs() const
     return resultList;
 }
 
-QList<Ms::Element*> ElementRepositoryService::findTexts() const
+QList<Ms::EngravingItem*> ElementRepositoryService::findTexts() const
 {
-    QList<Ms::Element*> resultList;
+    QList<Ms::EngravingItem*> resultList;
 
-    for (Ms::Element* element : m_elementList) {
+    for (Ms::EngravingItem* element : m_elementList) {
         if (TEXT_ELEMENT_TYPES.contains(element->type())) {
             resultList << element;
         }
@@ -351,11 +351,11 @@ QList<Ms::Element*> ElementRepositoryService::findTexts() const
     return resultList;
 }
 
-QList<Ms::Element*> ElementRepositoryService::findTremolos() const
+QList<Ms::EngravingItem*> ElementRepositoryService::findTremolos() const
 {
-    QList<Ms::Element*> resultList;
+    QList<Ms::EngravingItem*> resultList;
 
-    for (Ms::Element* element : m_elementList) {
+    for (Ms::EngravingItem* element : m_elementList) {
         if (element->isTremolo()) {
             // the tremolo section currently only has a style setting
             // so only tremolos which can have custom styles make it appear

@@ -49,7 +49,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 StaffLines::StaffLines(Measure* parent)
-    : Element(ElementType::STAFF_LINES, parent)
+    : EngravingItem(ElementType::STAFF_LINES, parent)
 {
     setSelectable(false);
 }
@@ -71,7 +71,7 @@ PointF StaffLines::pagePos() const
 PointF StaffLines::canvasPos() const
 {
     PointF p(pagePos());
-    Element* e = parentElement();
+    EngravingItem* e = parentElement();
     while (e) {
         if (e->type() == ElementType::PAGE) {
             p += e->pos();
@@ -212,7 +212,7 @@ qreal StaffLines::y1() const
 //   scanElements
 //---------------------------------------------------------
 
-void StaffLines::scanElements(void* data, void (* func)(void*, Element*), bool all)
+void StaffLines::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
     if (all || (measure()->visible(staffIdx()) && score()->staff(staffIdx())->show())) {
         func(data, this);

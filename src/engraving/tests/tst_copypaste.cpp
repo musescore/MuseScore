@@ -316,7 +316,7 @@ void TestCopyPaste::copypaste2Voice5()
     score->cmdDeleteSelection();   //cut
 
     //paste to quarter rest
-    Element* dest = m1->first()->next(segTypeCR)->next(segTypeCR)->next(segTypeCR)->element(0);
+    EngravingItem* dest = m1->first()->next(segTypeCR)->next(segTypeCR)->next(segTypeCR)->element(0);
     QVERIFY(dest->isRest() && static_cast<ChordRest*>(dest)->durationType() == TDuration::DurationType::V_QUARTER);
     score->select(dest);
 
@@ -386,7 +386,7 @@ void TestCopyPaste::copypaste2Voice6()
     QApplication::clipboard()->setMimeData(mimeData);
 
     //paste to 16th rest
-    Element* dest
+    EngravingItem* dest
         = m1->first(segTypeCR)->next(segTypeCR)->next(segTypeCR)->next(segTypeCR)->next(segTypeCR)->element(0);
     qDebug() << int(dest->type());
     QVERIFY(dest->isRest()
@@ -425,7 +425,7 @@ void TestCopyPaste::copypastetuplet(const char* idx)
     mimeData->setData(mimeType, score->selection().mimeData());
     QApplication::clipboard()->setMimeData(mimeData);
 
-    Element* dest = m2->first(SegmentType::ChordRest)->element(0);
+    EngravingItem* dest = m2->first(SegmentType::ChordRest)->element(0);
     score->select(dest);
     score->startCmd();
     score->cmdPaste(mimeData, 0);
@@ -507,7 +507,7 @@ void TestCopyPaste::copypastenote(const QString& idx, Fraction scale)
     QMimeData mimeData;
     mimeData.setData(score->selection().mimeType(), score->selection().mimeData());
     ChordRest* cr = m1->first(SegmentType::ChordRest)->nextChordRest(0);
-    score->select(cr->isChord() ? toChord(cr)->upNote() : static_cast<Element*>(cr));
+    score->select(cr->isChord() ? toChord(cr)->upNote() : static_cast<EngravingItem*>(cr));
     score->startCmd();
     score->cmdPaste(&mimeData, 0, scale);
     score->endCmd();

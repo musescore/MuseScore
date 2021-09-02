@@ -41,7 +41,7 @@ XmlReader::~XmlReader()
     if (!_connectors.empty() || !_pendingConnectors.empty()) {
         qDebug("XmlReader::~XmlReader: there are unpaired connectors left");
         for (auto& c : _connectors) {
-            Element* conn = c->releaseConnector();
+            EngravingItem* conn = c->releaseConnector();
             if (conn && !conn->isTuplet()) {     // tuplets are added to score even when not finished
                 delete conn;
             }

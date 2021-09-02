@@ -23,7 +23,7 @@
 #ifndef __BSYMBOL_H__
 #define __BSYMBOL_H__
 
-#include "element.h"
+#include "engravingitem.h"
 
 namespace Ms {
 //---------------------------------------------------------
@@ -31,13 +31,13 @@ namespace Ms {
 ///    base class for Symbol and Image
 //---------------------------------------------------------
 
-class BSymbol : public Element
+class BSymbol : public EngravingItem
 {
-    QList<Element*> _leafs;
+    QList<EngravingItem*> _leafs;
     Align _align;
 
 public:
-    BSymbol(const ElementType& type, Element* parent, ElementFlags f = ElementFlag::NOTHING);
+    BSymbol(const ElementType& type, EngravingItem* parent, ElementFlags f = ElementFlag::NOTHING);
     BSymbol(const BSymbol&);
 
     // Score Tree functions
@@ -47,10 +47,10 @@ public:
 
     BSymbol& operator=(const BSymbol&) = delete;
 
-    virtual void add(Element*) override;
-    virtual void remove(Element*) override;
+    virtual void add(EngravingItem*) override;
+    virtual void remove(EngravingItem*) override;
     virtual bool acceptDrop(EditData&) const override;
-    virtual Element* drop(EditData&) override;
+    virtual EngravingItem* drop(EditData&) override;
     virtual void layout() override;
     mu::RectF drag(EditData&) override;
 
@@ -60,8 +60,8 @@ public:
     Align align() const { return _align; }
     void setAlign(Align a) { _align = a; }
 
-    const QList<Element*>& leafs() const { return _leafs; }
-    QList<Element*>& leafs() { return _leafs; }
+    const QList<EngravingItem*>& leafs() const { return _leafs; }
+    QList<EngravingItem*>& leafs() { return _leafs; }
     mu::PointF pagePos() const override;
     mu::PointF canvasPos() const override;
     QVector<mu::LineF> dragAnchorLines() const override;

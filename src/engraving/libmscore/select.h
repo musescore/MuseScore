@@ -32,7 +32,7 @@ class Score;
 class Page;
 class System;
 class ChordRest;
-class Element;
+class EngravingItem;
 class Segment;
 class Note;
 class Measure;
@@ -43,7 +43,7 @@ class Chord;
 //---------------------------------------------------------
 
 struct ElementPattern {
-    QList<Element*> el;
+    QList<EngravingItem*> el;
     int type = 0;
     int subtype = 0;
     int staffStart = 0;
@@ -136,7 +136,7 @@ public:
     bool isFiltered(SelectionFilterType type) const;
     void setFiltered(SelectionFilterType type, bool filtered);
 
-    bool canSelect(const Element* element) const;
+    bool canSelect(const EngravingItem* element) const;
     bool canSelectVoice(int track) const;
 
 private:
@@ -153,7 +153,7 @@ class Selection
 {
     Score* _score;
     SelState _state;
-    QList<Element*> _el;            // valid in mode SelState::LIST
+    QList<EngravingItem*> _el;            // valid in mode SelState::LIST
 
     int _staffStart = 0;            // valid if selState is SelState::RANGE
     int _staffEnd = 0;
@@ -176,9 +176,9 @@ class Selection
     QByteArray staffMimeData() const;
     QByteArray symbolListMimeData() const;
     SelectionFilter selectionFilter() const;
-    bool canSelect(Element* e) const { return selectionFilter().canSelect(e); }
+    bool canSelect(EngravingItem* e) const { return selectionFilter().canSelect(e); }
     bool canSelectVoice(int track) const { return selectionFilter().canSelectVoice(track); }
-    void appendFiltered(Element* e);
+    void appendFiltered(EngravingItem* e);
     void appendChord(Chord* chord);
 
 public:
@@ -197,19 +197,19 @@ public:
     bool isLocked() const { return !_lockReason.isEmpty(); }
     const QString& lockReason() const { return _lockReason; }
 
-    const QList<Element*>& elements() const { return _el; }
+    const QList<EngravingItem*>& elements() const { return _el; }
     std::vector<Note*> noteList(int track = -1) const;
 
-    const QList<Element*> uniqueElements() const;
+    const QList<EngravingItem*> uniqueElements() const;
     QList<Note*> uniqueNotes(int track = -1) const;
 
     bool isSingle() const { return (_state == SelState::LIST) && (_el.size() == 1); }
 
-    void add(Element*);
+    void add(EngravingItem*);
     void deselectAll();
-    void remove(Element*);
+    void remove(EngravingItem*);
     void clear();
-    Element* element() const;
+    EngravingItem* element() const;
     ChordRest* cr() const;
     Segment* firstChordRestSegment() const;
     ChordRest* firstChordRest(int track = -1) const;

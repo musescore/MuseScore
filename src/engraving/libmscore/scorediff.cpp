@@ -1118,8 +1118,8 @@ void ScoreDiff::mergeElementDiffs()
                 if (!se) {
                     continue;
                 }
-                if (!se->isMeasure() && se->isElement()) {
-                    const Element* m = toElement(se)->findMeasure();
+                if (!se->isMeasure() && se->isEngravingItem()) {
+                    const EngravingItem* m = toEngravingItem(se)->findMeasure();
                     if (m) {
                         foundDiff->ctx[i] = m;
                     } else {
@@ -1351,11 +1351,11 @@ bool BaseDiff::sameItem(const BaseDiff& other) const
 Fraction BaseDiff::afrac(int score) const
 {
     Q_ASSERT(score == 0 || score == 1);
-    if (ctx[score] && ctx[score]->isElement()) {
-        return toElement(ctx[score])->tick();
+    if (ctx[score] && ctx[score]->isEngravingItem()) {
+        return toEngravingItem(ctx[score])->tick();
     }
-    if (before[score] && before[score]->isElement()) {
-        const Element* bef = toElement(before[score]);
+    if (before[score] && before[score]->isEngravingItem()) {
+        const EngravingItem* bef = toEngravingItem(before[score]);
         Fraction f = bef->tick();
         if (bef->isDurationElement()) {
             const DurationElement* de = toDurationElement(bef);
@@ -1376,8 +1376,8 @@ static QString describeContext(const EngravingObject* ctx)
         return QString("no context");
     }
     QString descr;
-    if (ctx->isElement()) {
-        const Element* e = toElement(ctx);
+    if (ctx->isEngravingItem()) {
+        const EngravingItem* e = toEngravingItem(ctx);
         if (const Measure* m = toMeasure(e->findMeasure())) {
             descr += QString("%1 %2").arg(m->userName()).arg(m->no() + 1);
         }
@@ -1421,8 +1421,8 @@ Fraction ElementDiff::afrac(int score) const
 {
     Q_ASSERT(score == 0 || score == 1);
     const EngravingObject* se = el[score];
-    if (se && se->isElement()) {
-        return toElement(se)->tick();
+    if (se && se->isEngravingItem()) {
+        return toEngravingItem(se)->tick();
     }
     return BaseDiff::afrac(score);
 }

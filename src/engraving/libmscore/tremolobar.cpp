@@ -64,8 +64,8 @@ static const QList<PitchValue> RELEASE_DOWN_CURVE = { PitchValue(0, 150),
 //   TremoloBar
 //---------------------------------------------------------
 
-TremoloBar::TremoloBar(Element* parent)
-    : Element(ElementType::TREMOLOBAR, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+TremoloBar::TremoloBar(EngravingItem* parent)
+    : EngravingItem(ElementType::TREMOLOBAR, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     initElementStyle(&tremoloBarStyle);
 }
@@ -178,7 +178,7 @@ QVariant TremoloBar::getProperty(Pid propertyId) const
     case Pid::TREMOLOBAR_CURVE:
         return QVariant::fromValue(m_points);
     default:
-        return Element::getProperty(propertyId);
+        return EngravingItem::getProperty(propertyId);
     }
 }
 
@@ -206,7 +206,7 @@ bool TremoloBar::setProperty(Pid propertyId, const QVariant& v)
         setPoints(v.value<QList<Ms::PitchValue> >());
         break;
     default:
-        return Element::setProperty(propertyId, v);
+        return EngravingItem::setProperty(propertyId, v);
     }
     triggerLayout();
     return true;
@@ -236,7 +236,7 @@ QVariant TremoloBar::propertyDefault(Pid pid) const
                 return score()->styleV(p.sid);
             }
         }
-        return Element::propertyDefault(pid);
+        return EngravingItem::propertyDefault(pid);
     }
 }
 

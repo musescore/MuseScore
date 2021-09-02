@@ -28,7 +28,7 @@
  Definition of class Staff.
 */
 
-#include "element.h"
+#include "engravingitem.h"
 #include "infrastructure/draw/color.h"
 #include "changeMap.h"
 #include "pitch.h"
@@ -69,7 +69,7 @@ struct SwingParameters {
 ///    Global staff data not directly related to drawing.
 //---------------------------------------------------------
 
-class Staff final : public Element
+class Staff final : public EngravingItem
 {
 public:
     enum class HideMode {
@@ -232,7 +232,7 @@ public:
     //==== staff type helper function
     const StaffType* staffType(const Fraction& = Fraction(0, 1)) const;
     const StaffType* constStaffType(const Fraction&) const;
-    const StaffType* staffTypeForElement(const Element*) const;
+    const StaffType* staffTypeForElement(const EngravingItem*) const;
     StaffType* staffType(const Fraction&);
     StaffType* setStaffType(const Fraction&, const StaffType&);
     void removeStaffType(const Fraction&);
@@ -254,9 +254,9 @@ public:
     int bottomLine(const Fraction&) const;
 
     qreal staffMag(const Fraction&) const;
-    qreal staffMag(const Element* element) const;
+    qreal staffMag(const EngravingItem* element) const;
     qreal spatium(const Fraction&) const;
-    qreal spatium(const Element*) const;
+    qreal spatium(const EngravingItem*) const;
     //===========
 
     ChangeMap& velocities() { return _velocities; }
@@ -278,8 +278,8 @@ public:
     bool genKeySig();
     bool showLedgerLines(const Fraction&) const;
 
-    using Element::color;
-    using Element::setColor;
+    using EngravingItem::color;
+    using EngravingItem::setColor;
     mu::draw::Color color(const Fraction&) const;
     void setColor(const Fraction&, const mu::draw::Color& val);
     void undoSetColor(const mu::draw::Color& val);

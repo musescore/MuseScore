@@ -122,9 +122,9 @@ void TBox::read(XmlReader& e)
 //   drop
 //---------------------------------------------------------
 
-Element* TBox::drop(EditData& data)
+EngravingItem* TBox::drop(EditData& data)
 {
-    Element* e = data.dropElement;
+    EngravingItem* e = data.dropElement;
     switch (e->type()) {
     case ElementType::TEXT:
         _text->undoChangeProperty(Pid::TEXT, toText(e)->xmlText());
@@ -137,10 +137,10 @@ Element* TBox::drop(EditData& data)
 
 //---------------------------------------------------------
 //   add
-///   Add new Element \a el to TBox
+///   Add new EngravingItem \a el to TBox
 //---------------------------------------------------------
 
-void TBox::add(Element* e)
+void TBox::add(EngravingItem* e)
 {
     if (e->isText()) {
         // does not normally happen, since drop() handles this directly
@@ -154,7 +154,7 @@ void TBox::add(Element* e)
 //   remove
 //---------------------------------------------------------
 
-void TBox::remove(Element* el)
+void TBox::remove(EngravingItem* el)
 {
     if (el == _text) {
         // does not normally happen, since Score::deleteItem() handles this directly

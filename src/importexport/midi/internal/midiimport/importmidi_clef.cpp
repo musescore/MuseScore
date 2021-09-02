@@ -32,7 +32,7 @@
 #include "libmscore/chord.h"
 #include "libmscore/note.h"
 #include "libmscore/slur.h"
-#include "libmscore/element.h"
+#include "libmscore/engravingitem.h"
 #include "libmscore/sig.h"
 #include "importmidi_tie.h"
 #include "importmidi_meter.h"

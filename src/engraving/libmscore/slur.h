@@ -35,7 +35,7 @@ class SlurSegment final : public SlurTieSegment
 {
 protected:
     qreal _extraHeight = 0.0;
-    void changeAnchor(EditData&, Element*) override;
+    void changeAnchor(EditData&, EngravingItem*) override;
 
 public:
     SlurSegment(Score* s)
@@ -67,7 +67,7 @@ class Slur final : public SlurTie
     int _sourceStemArrangement = -1;
 
 public:
-    Slur(Element* parent);
+    Slur(EngravingItem* parent);
     Slur(const Slur&);
     ~Slur() {}
 

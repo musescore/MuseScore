@@ -46,8 +46,8 @@ protected:
     const ScoreFont* _scoreFont = nullptr;
 
 public:
-    Symbol(const ElementType& type, Element* parent, ElementFlags f = ElementFlag::MOVABLE);
-    Symbol(Element* parent, ElementFlags f = ElementFlag::MOVABLE);
+    Symbol(const ElementType& type, EngravingItem* parent, ElementFlags f = ElementFlag::MOVABLE);
+    Symbol(EngravingItem* parent, ElementFlags f = ElementFlag::MOVABLE);
     Symbol(const Symbol&);
 
     Symbol& operator=(const Symbol&) = delete;
@@ -81,7 +81,7 @@ class FSymbol final : public BSymbol
     int _code;
 
 public:
-    FSymbol(Element* parent);
+    FSymbol(EngravingItem* parent);
     FSymbol(const FSymbol&);
 
     FSymbol* clone() const override { return new FSymbol(*this); }

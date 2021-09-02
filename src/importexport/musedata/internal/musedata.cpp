@@ -282,7 +282,7 @@ void MuseData::readNote(Part* part, const QString& s)
 
     voice = 0;
     for (; voice < VOICES; ++voice) {
-        Element* e = segment->element(gstaff * VOICES + voice);
+        EngravingItem* e = segment->element(gstaff * VOICES + voice);
         if (e == 0) {
             chord->setTrack(gstaff * VOICES + voice);
             segment->add(chord);
@@ -457,7 +457,7 @@ void MuseData::readRest(Part* part, const QString& s)
 
     voice = 0;
     for (; voice < VOICES; ++voice) {
-        Element* e = segment->element(gstaff * VOICES + voice);
+        EngravingItem* e = segment->element(gstaff * VOICES + voice);
         if (e == 0) {
             rest->setTrack(gstaff * VOICES + voice);
             segment->add(rest);

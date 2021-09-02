@@ -51,7 +51,7 @@ const std::vector<BreathType> Breath::breathList {
 //---------------------------------------------------------
 
 Breath::Breath(Segment* parent)
-    : Element(ElementType::BREATH, parent, ElementFlag::MOVABLE)
+    : EngravingItem(ElementType::BREATH, parent, ElementFlag::MOVABLE)
 {
     _symId = SymId::breathMarkComma;
     _pause = 0.0;
@@ -103,7 +103,7 @@ void Breath::write(XmlWriter& xml) const
     xml.stag(this);
     writeProperty(xml, Pid::SYMBOL);
     writeProperty(xml, Pid::PAUSE);
-    Element::writeProperties(xml);
+    EngravingItem::writeProperties(xml);
     xml.etag();
 }
 
@@ -132,7 +132,7 @@ void Breath::read(XmlReader& e)
             _symId = Sym::name2id(e.readElementText());
         } else if (tag == "pause") {
             _pause = e.readDouble();
-        } else if (!Element::readProperties(e)) {
+        } else if (!EngravingItem::readProperties(e)) {
             e.unknown();
         }
     }
@@ -187,7 +187,7 @@ QVariant Breath::getProperty(Pid propertyId) const
     case Pid::PAUSE:
         return _pause;
     default:
-        return Element::getProperty(propertyId);
+        return EngravingItem::getProperty(propertyId);
     }
 }
 
@@ -205,7 +205,7 @@ bool Breath::setProperty(Pid propertyId, const QVariant& v)
         setPause(v.toDouble());
         break;
     default:
-        if (!Element::setProperty(propertyId, v)) {
+        if (!EngravingItem::setProperty(propertyId, v)) {
             return false;
         }
         break;
@@ -227,7 +227,7 @@ QVariant Breath::propertyDefault(Pid id) const
     case Pid::PLACEMENT:
         return track() & 1 ? int(Placement::BELOW) : int(Placement::ABOVE);
     default:
-        return Element::propertyDefault(id);
+        return EngravingItem::propertyDefault(id);
     }
 }
 
@@ -235,7 +235,7 @@ QVariant Breath::propertyDefault(Pid id) const
 //   nextSegmentElement
 //---------------------------------------------------------
 
-Element* Breath::nextSegmentElement()
+EngravingItem* Breath::nextSegmentElement()
 {
     return segment()->firstInNextSegments(staffIdx());
 }
@@ -244,7 +244,7 @@ Element* Breath::nextSegmentElement()
 //   prevSegmentElement
 //---------------------------------------------------------
 
-Element* Breath::prevSegmentElement()
+EngravingItem* Breath::prevSegmentElement()
 {
     return segment()->lastInPrevSegments(staffIdx());
 }

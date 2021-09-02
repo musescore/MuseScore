@@ -23,7 +23,7 @@
 #ifndef __BREATH_H__
 #define __BREATH_H__
 
-#include "element.h"
+#include "engravingitem.h"
 #include "symid.h"
 
 namespace Ms {
@@ -42,7 +42,7 @@ struct BreathType {
 //!    breathType() is index in symList
 //---------------------------------------------------------
 
-class Breath final : public Element
+class Breath final : public EngravingItem
 {
     qreal _pause;
     SymId _symId;
@@ -71,8 +71,8 @@ public:
     bool setProperty(Pid propertyId, const QVariant&) override;
     QVariant propertyDefault(Pid) const override;
 
-    Element* nextSegmentElement() override;
-    Element* prevSegmentElement() override;
+    EngravingItem* nextSegmentElement() override;
+    EngravingItem* prevSegmentElement() override;
     QString accessibleInfo() const override;
 
     bool isCaesura() const;

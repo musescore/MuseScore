@@ -68,13 +68,13 @@ static const char* tremoloName[] = {
 };
 
 Tremolo::Tremolo(Chord* parent)
-    : Element(ElementType::TREMOLO, parent, ElementFlag::MOVABLE)
+    : EngravingItem(ElementType::TREMOLO, parent, ElementFlag::MOVABLE)
 {
     initElementStyle(&tremoloStyle);
 }
 
 Tremolo::Tremolo(const Tremolo& t)
-    : Element(t)
+    : EngravingItem(t)
 {
     setTremoloType(t.tremoloType());
     _chord1       = t.chord1();
@@ -84,7 +84,7 @@ Tremolo::Tremolo(const Tremolo& t)
 
 void Tremolo::setParent(Chord* ch)
 {
-    Element::setParent(ch);
+    EngravingItem::setParent(ch);
 }
 
 //---------------------------------------------------------
@@ -179,7 +179,7 @@ void Tremolo::setTremoloType(TremoloType t)
 
 void Tremolo::spatiumChanged(qreal oldValue, qreal newValue)
 {
-    Element::spatiumChanged(oldValue, newValue);
+    EngravingItem::spatiumChanged(oldValue, newValue);
     computeShape();
 }
 
@@ -190,7 +190,7 @@ void Tremolo::spatiumChanged(qreal oldValue, qreal newValue)
 
 void Tremolo::localSpatiumChanged(qreal oldValue, qreal newValue)
 {
-    Element::localSpatiumChanged(oldValue, newValue);
+    EngravingItem::localSpatiumChanged(oldValue, newValue);
     computeShape();
 }
 
@@ -201,7 +201,7 @@ void Tremolo::localSpatiumChanged(qreal oldValue, qreal newValue)
 
 void Tremolo::styleChanged()
 {
-    Element::styleChanged();
+    EngravingItem::styleChanged();
     computeShape();
 }
 
@@ -561,7 +561,7 @@ void Tremolo::write(XmlWriter& xml) const
     xml.stag(this);
     writeProperty(xml, Pid::TREMOLO_TYPE);
     writeProperty(xml, Pid::TREMOLO_STYLE);
-    Element::writeProperties(xml);
+    EngravingItem::writeProperties(xml);
     xml.etag();
 }
 
@@ -583,7 +583,7 @@ void Tremolo::read(XmlReader& e)
             setStyle(TremoloStyle(e.readInt()));
             setPropertyFlags(Pid::TREMOLO_STYLE, PropertyFlags::UNSTYLED);
         } else if (readStyledProperty(e, tag)) {
-        } else if (!Element::readProperties(e)) {
+        } else if (!EngravingItem::readProperties(e)) {
             e.unknown();
         }
     }
@@ -693,7 +693,7 @@ QString Tremolo::subtypeName() const
 
 QString Tremolo::accessibleInfo() const
 {
-    return QString("%1: %2").arg(Element::accessibleInfo(), subtypeName());
+    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), subtypeName());
 }
 
 //---------------------------------------------------------
@@ -721,7 +721,7 @@ QVariant Tremolo::getProperty(Pid propertyId) const
     default:
         break;
     }
-    return Element::getProperty(propertyId);
+    return EngravingItem::getProperty(propertyId);
 }
 
 //---------------------------------------------------------
@@ -740,7 +740,7 @@ bool Tremolo::setProperty(Pid propertyId, const QVariant& val)
         }
         break;
     default:
-        return Element::setProperty(propertyId, val);
+        return EngravingItem::setProperty(propertyId, val);
     }
     triggerLayout();
     return true;
@@ -756,7 +756,7 @@ QVariant Tremolo::propertyDefault(Pid propertyId) const
     case Pid::TREMOLO_STYLE:
         return score()->styleI(Sid::tremoloStyle);
     default:
-        return Element::propertyDefault(propertyId);
+        return EngravingItem::propertyDefault(propertyId);
     }
 }
 
@@ -769,7 +769,7 @@ Pid Tremolo::propertyId(const QStringRef& name) const
     if (name == "subtype") {
         return Pid::TREMOLO_TYPE;
     }
-    return Element::propertyId(name);
+    return EngravingItem::propertyId(name);
 }
 
 //---------------------------------------------------------
@@ -784,18 +784,18 @@ QString Tremolo::propertyUserValue(Pid pid) const
     default:
         break;
     }
-    return Element::propertyUserValue(pid);
+    return EngravingItem::propertyUserValue(pid);
 }
 
 //---------------------------------------------------------
 //   scanElements
 //---------------------------------------------------------
 
-void Tremolo::scanElements(void* data, void (* func)(void*, Element*), bool all)
+void Tremolo::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
     if (chord() && chord()->tremoloChordType() == TremoloChordType::TremoloSecondNote) {
         return;
     }
-    Element::scanElements(data, func, all);
+    EngravingItem::scanElements(data, func, all);
 }
 }

@@ -41,7 +41,7 @@ using namespace Ms;
 static void layoutSegmentElements(Segment* segment, int startTrack, int endTrack)
 {
     for (int track = startTrack; track < endTrack; ++track) {
-        if (Element* e = segment->element(track)) {
+        if (EngravingItem* e = segment->element(track)) {
             e->layout();
         }
     }
@@ -87,7 +87,7 @@ void LayoutChords::layoutChords1(Score* score, Segment* segment, int staffIdx)
     bool downGrace     = false;
 
     for (int track = startTrack; track < endTrack; ++track) {
-        Element* e = segment->element(track);
+        EngravingItem* e = segment->element(track);
         if (e && e->isChord()) {
             Chord* chord = toChord(e);
             if (chord->beam() && chord->beam()->cross()) {
@@ -456,7 +456,7 @@ void LayoutChords::layoutChords1(Score* score, Segment* segment, int staffIdx)
 
         // apply chord offsets
         for (int track = startTrack; track < endTrack; ++track) {
-            Element* e = segment->element(track);
+            EngravingItem* e = segment->element(track);
             if (e && e->isChord()) {
                 Chord* chord = toChord(e);
                 if (chord->up()) {

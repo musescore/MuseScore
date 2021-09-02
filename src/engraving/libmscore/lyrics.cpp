@@ -51,7 +51,7 @@ static const ElementStyle lyricsElementStyle {
 //   Lyrics
 //---------------------------------------------------------
 
-Lyrics::Lyrics(Element* parent)
+Lyrics::Lyrics(EngravingItem* parent)
     : TextBase(ElementType::LYRICS, parent, Tid::LYRICS_ODD)
 {
     _even       = false;
@@ -163,7 +163,7 @@ bool Lyrics::readProperties(XmlReader& e)
 //   add
 //---------------------------------------------------------
 
-void Lyrics::add(Element* el)
+void Lyrics::add(EngravingItem* el)
 {
 //      el->setParent(this);
 //      if (el->type() == ElementType::LINE)
@@ -177,7 +177,7 @@ void Lyrics::add(Element* el)
 //   remove
 //---------------------------------------------------------
 
-void Lyrics::remove(Element* el)
+void Lyrics::remove(EngravingItem* el)
 {
     if (el->isLyricsLine()) {
         // only if separator still exists and is the right one
@@ -472,7 +472,7 @@ bool Lyrics::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-Element* Lyrics::drop(EditData& data)
+EngravingItem* Lyrics::drop(EditData& data)
 {
     ElementType type = data.dropElement->type();
     if (type == ElementType::SYMBOL || type == ElementType::FSYMBOL) {
@@ -637,7 +637,7 @@ QVariant Lyrics::propertyDefault(Pid id) const
 void Score::forAllLyrics(std::function<void(Lyrics*)> f)
 {
     for (Segment* s = firstSegment(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
-        for (Element* e : s->elist()) {
+        for (EngravingItem* e : s->elist()) {
             if (e) {
                 for (Lyrics* l : toChordRest(e)->lyrics()) {
                     f(l);

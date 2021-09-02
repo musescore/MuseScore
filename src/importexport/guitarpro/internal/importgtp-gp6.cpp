@@ -812,7 +812,7 @@ void GuitarPro6::makeTie(Note* note)
     segment = segment->prev1(SegmentType::ChordRest);
     int track = note->track();
     while (segment) {
-        Element* e = segment->element(track);
+        EngravingItem* e = segment->element(track);
         if (e) {
             if (e->type() == ElementType::CHORD) {
                 Chord* chord2 = static_cast<Chord*>(e);
@@ -1015,7 +1015,7 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                                             }
                                         }
                                     }
-                                } else if (argument == "Element") {
+                                } else if (argument == "EngravingItem") {
                                     element = currentProperty.firstChild().toElement().text();
                                 } else if (argument == "Slide") {
                                     int slideKind = currentProperty.firstChild().toElement().text().toInt();
@@ -1488,7 +1488,7 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                                 // do not add twice the same text per staff
                                 int strack = staffIdx * VOICES;
                                 int etrack = staffIdx * VOICES + VOICES;
-                                for (const Element* e : segment->annotations()) {
+                                for (const EngravingItem* e : segment->annotations()) {
                                     if (e->type() == ElementType::STAFF_TEXT && e->track() >= strack && e->track() < etrack) {
                                         const StaffText* st = static_cast<const StaffText*>(e);
                                         if (!st->xmlText().compare(text)) {
@@ -1978,7 +1978,7 @@ bool checkForHold(Segment* segment, QList<PitchValue> points)
     if (!prevSeg) {
         return false;
     }
-    foreach (Element* e, prevSeg->annotations()) {
+    foreach (EngravingItem* e, prevSeg->annotations()) {
         if (e->type() == ElementType::TREMOLOBAR) {
             QList<PitchValue> prevPoints = ((TremoloBar*)e)->points();
             if (prevPoints.length() != points.length()) {
@@ -2046,7 +2046,7 @@ void GuitarPro6::addTremoloBar(Segment* segment, int track, int whammyOrigin, in
         if (!prevSeg) {
             return;
         }
-        foreach (Element* e, prevSeg->annotations()) {
+        foreach (EngravingItem* e, prevSeg->annotations()) {
             if (e->type() == ElementType::TREMOLOBAR) {
                 QList<PitchValue> prevPoints = ((TremoloBar*)e)->points();
                 QList<PitchValue> points;
@@ -2301,7 +2301,7 @@ void GuitarPro6::readMasterBars(GPPartInfo* partInfo)
                                 //find last chord in track
                                 Chord* c = nullptr;
                                 for (const Segment* seg = measure->prevMeasure()->last(); seg; seg = seg->prev1()) {
-                                    Element* el = seg->element(i);
+                                    EngravingItem* el = seg->element(i);
                                     if (el && el->isChord()) {
                                         c = static_cast<Chord*>(el);
                                         break;
@@ -2407,7 +2407,7 @@ void GuitarPro6::readGpif(QByteArray* data)
             //find last chord in track
             Chord* c = nullptr;
             for (const Segment* seg = score->lastSegment(); seg; seg = seg->prev1()) {
-                Element* el = seg->element(i);
+                EngravingItem* el = seg->element(i);
                 if (el && el->isChord()) {
                     c = static_cast<Chord*>(el);
                     break;

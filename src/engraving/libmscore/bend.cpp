@@ -85,7 +85,7 @@ static const QList<PitchValue> PREBEND_RELEASE_CURVE = { PitchValue(0, 100),
 //---------------------------------------------------------
 
 Bend::Bend(Note* parent)
-    : Element(ElementType::BEND, parent, ElementFlag::MOVABLE)
+    : EngravingItem(ElementType::BEND, parent, ElementFlag::MOVABLE)
 {
     initElementStyle(&bendStyle);
 }
@@ -364,7 +364,7 @@ void Bend::write(XmlWriter& xml) const
     }
     writeStyledProperties(xml);
     writeProperty(xml, Pid::PLAY);
-    Element::writeProperties(xml);
+    EngravingItem::writeProperties(xml);
     xml.etag();
 }
 
@@ -387,7 +387,7 @@ void Bend::read(XmlReader& e)
             e.readNext();
         } else if (tag == "play") {
             setPlayBend(e.readBool());
-        } else if (!Element::readProperties(e)) {
+        } else if (!EngravingItem::readProperties(e)) {
             e.unknown();
         }
     }
@@ -415,7 +415,7 @@ QVariant Bend::getProperty(Pid id) const
     case Pid::BEND_CURVE:
         return QVariant::fromValue(m_points);
     default:
-        return Element::getProperty(id);
+        return EngravingItem::getProperty(id);
     }
 }
 
@@ -448,7 +448,7 @@ bool Bend::setProperty(Pid id, const QVariant& v)
         setPoints(v.value<QList<Ms::PitchValue> >());
         break;
     default:
-        return Element::setProperty(id, v);
+        return EngravingItem::setProperty(id, v);
     }
     triggerLayout();
     return true;
@@ -468,7 +468,7 @@ QVariant Bend::propertyDefault(Pid id) const
     case Pid::BEND_CURVE:
         return QVariant::fromValue(BEND_CURVE);
     default:
-        return Element::propertyDefault(id);
+        return EngravingItem::propertyDefault(id);
     }
 }
 }

@@ -103,7 +103,7 @@ private:
     INotationPtr currentNotation() const;
     INotationStylePtr notationStyle() const;
     INotationInteractionPtr viewInteraction() const;
-    Element* hitElement() const;
+    EngravingItem* hitElement() const;
 
     void zoomToPageWidth();
     void zoomToWholePage();

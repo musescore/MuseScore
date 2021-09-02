@@ -23,7 +23,7 @@
 #ifndef __STAFFTYPECHANGE_H__
 #define __STAFFTYPECHANGE_H__
 
-#include "element.h"
+#include "engravingitem.h"
 
 namespace Ms {
 class StaffType;
@@ -32,7 +32,7 @@ class StaffType;
 //   @@ StaffTypeChange
 //---------------------------------------------------------
 
-class StaffTypeChange final : public Element
+class StaffTypeChange final : public EngravingItem
 {
     StaffType* _staffType { 0 };
     qreal lw;
