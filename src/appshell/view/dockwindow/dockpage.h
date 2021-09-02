@@ -81,6 +81,9 @@ public:
     void toggleDock(const QString& dockName);
     void setDockOpen(const QString& dockName, bool open);
 
+    bool isDockFloating(const QString& dockName) const;
+    void toggleDockFloating(const QString& dockName);
+
 public slots:
     void setUri(const QString& uri);
     void setCentralDock(DockCentral* central);

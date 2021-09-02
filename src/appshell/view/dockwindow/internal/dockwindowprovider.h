@@ -19,35 +19,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UI_IMAINWINDOW_H
-#define MU_UI_IMAINWINDOW_H
+#ifndef MU_DOCK_DOCKWINDOWPROVIDER_H
+#define MU_DOCK_DOCKWINDOWPROVIDER_H
 
-#include "modularity/imoduleexport.h"
+#include "../idockwindowprovider.h"
 
-class QWindow;
-class QScreen;
-
-namespace mu::ui {
-class IMainWindow : MODULE_EXPORT_INTERFACE
+namespace mu::dock {
+class DockWindowProvider : public IDockWindowProvider
 {
-    INTERFACE_ID(IMainWindow)
-
 public:
-    virtual ~IMainWindow() = default;
+    void init(IDockWindow* window) override;
+    void deinit() override;
 
-    virtual QWindow* qWindow() const = 0;
+    IDockWindow* window() const override;
+    async::Notification windowChanged() const override;
 
-    virtual QWindow* topWindow() const = 0;
-    virtual void pushWindow(QWindow* w) = 0;
-    virtual void popWindow(QWindow* w) = 0;
+private:
+    void setWindow(IDockWindow* window);
 
-    virtual void requestShowOnBack() = 0;
-    virtual void requestShowOnFront() = 0;
-
-    virtual bool isFullScreen() const = 0;
-    virtual void toggleFullScreen() = 0;
-    virtual const QScreen* screen() const = 0;
+    IDockWindow* m_window = nullptr;
+    async::Notification m_windowChanged;
 };
 }
 
-#endif // MU_UI_IMAINWINDOW_H
+#endif // MU_DOCK_DOCKWINDOWPROVIDER_H

@@ -25,6 +25,8 @@
 #include "internal/dropindicators.h"
 #include "internal/dockseparator.h"
 #include "internal/dockframemodel.h"
+#include "internal/dockwindowactionscontroller.h"
+#include "internal/dockwindowprovider.h"
 
 #include "dockwindow.h"
 #include "dockpanel.h"
@@ -33,12 +35,6 @@
 #include "docktoolbarholder.h"
 #include "dockcentral.h"
 #include "dockpage.h"
-
-#ifdef Q_OS_MAC
-#include "internal/platform/macos/macosmainwindowprovider.h"
-#else
-#include "mainwindowprovider.h"
-#endif
 
 #include "docktypes.h"
 
@@ -81,6 +77,9 @@ public:
 }
 
 using namespace mu::dock;
+using namespace mu::modularity;
+
+static std::shared_ptr<DockWindowActionsController> s_actionsController = std::make_shared<DockWindowActionsController>();
 
 void DockSetup::registerQmlTypes()
 {
@@ -95,17 +94,12 @@ void DockSetup::registerQmlTypes()
     qmlRegisterType<DockFrameModel>("MuseScore.Dock", 1, 0, "DockFrameModel");
     qmlRegisterType<DockBase>("MuseScore.Dock", 1, 0, "DockBase");
 
-#ifdef Q_OS_MAC
-    qmlRegisterType<MacOSMainWindowProvider>("MuseScore.Dock", 1, 0, "MainWindowProvider");
-#else
-    qmlRegisterType<MainWindowProvider>("MuseScore.Dock", 1, 0, "MainWindowProvider");
-#endif
-
     qRegisterMetaType<DropIndicators*>();
 }
 
 void DockSetup::registerExports()
 {
+    ioc()->registerExport<IDockWindowProvider>("dock", new DockWindowProvider());
 }
 
 void DockSetup::setup(QQmlEngine* engine)
@@ -132,4 +126,9 @@ void DockSetup::setup(QQmlEngine* engine)
     KDDockWidgets::Config::self().setAbsoluteWidgetMinSize(minDockSize);
 
     KDDockWidgets::Config::self().setSeparatorThickness(1);
+}
+
+void DockSetup::onInit()
+{
+    s_actionsController->init();
 }

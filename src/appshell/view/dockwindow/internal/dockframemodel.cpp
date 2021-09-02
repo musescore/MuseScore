@@ -32,8 +32,11 @@
 
 #include "log.h"
 
+#include "ui/view/abstractmenumodel.h"
+
 using namespace mu::dock;
 using namespace mu::actions;
+using namespace mu::ui;
 
 DockFrameModel::DockFrameModel(QObject* parent)
     : QObject(parent)
@@ -76,7 +79,7 @@ QVariantList DockFrameModel::tabs() const
     for (const KDDockWidgets::DockWidgetBase* dock : frame->dockWidgets()) {
         QVariantMap tab;
         tab["title"] = dock->title();
-        tab[CONTEXT_MENU_MODEL_PROPERTY] = dock->property(CONTEXT_MENU_MODEL_PROPERTY).value<QVariant>();
+        tab[CONTEXT_MENU_MODEL_PROPERTY] = dock->property(CONTEXT_MENU_MODEL_PROPERTY);
 
         result << tab;
     }
@@ -179,7 +182,7 @@ QString DockFrameModel::currentDockUniqueName() const
 
 QVariant DockFrameModel::currentDockContextMenuModel() const
 {
-    return currentDockProperty(CONTEXT_MENU_MODEL_PROPERTY).value<QVariant>();
+    return currentDockProperty(CONTEXT_MENU_MODEL_PROPERTY);
 }
 
 const QObject* DockFrameModel::currentDockObject() const
@@ -194,11 +197,11 @@ QVariant DockFrameModel::currentDockProperty(const char* propertyName) const
     return obj ? obj->property(propertyName) : QVariant();
 }
 
-void DockFrameModel::handleMenuItem(const QVariant& item)
+void DockFrameModel::handleMenuItem(const QString& itemId) const
 {
-    ActionCode code = codeFromQString(item.toMap()["code"].toString());
+    auto menuModel = currentDockContextMenuModel().value<AbstractMenuModel*>();
 
-    if (!code.empty()) {
-        dispatcher()->dispatch(code);
+    if (menuModel) {
+        menuModel->handleMenuItem(itemId);
     }
 }

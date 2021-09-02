@@ -34,7 +34,7 @@ StyledPopupView {
 
     property int preferredAlign: Qt.AlignRight // Left, HCenter, Right
 
-    signal handleMenuItem(var item)
+    signal handleMenuItem(string itemId)
 
     x: {
         switch(preferredAlign) {
@@ -87,7 +87,7 @@ StyledPopupView {
         //! - all selectable items that are selected get an accent color background
 
         for (let i = 0; i < model.length; i++) {
-            let item = model[i]
+            let item = prv.getItem(i)
             let hasIcon = (Boolean(item.icon) && item.icon !== IconCode.NONE)
 
             if (item.checkable && hasIcon) {
@@ -110,7 +110,7 @@ StyledPopupView {
         let rightWidth = 0
 
         for (let j = 0; j < model.length; j++) {
-            prv.testItem.modelData = model[j]
+            prv.testItem.modelData = prv.getItem(j)
             leftWidth = Math.max(leftWidth, prv.testItem.calculatedLeftPartWidth())
             rightWidth = Math.max(rightWidth, prv.testItem.calculatedRightPartWidth())
         }
@@ -124,7 +124,7 @@ StyledPopupView {
         //  Let's manually adjust the height of the content
         var sepCount = 0
         for (let k = 0; k < model.length; k++) {
-            if (!Boolean(model[k].title)) {
+            if (!Boolean(prv.getItem(k).title)) {
                 sepCount++
             }
         }
@@ -198,6 +198,14 @@ StyledPopupView {
             }
             return false
         }
+
+        function getItem(row) {
+            if (Boolean(root.model.get)) {
+                return root.model.get(row)
+            }
+
+            return root.model[row]
+        }
     }
 
     ListView {
@@ -213,12 +221,13 @@ StyledPopupView {
         delegate: Loader {
             id: loader
 
-            property bool isSeparator: !Boolean(modelData.title) || modelData.title === ""
+            property var itemData: Boolean(root.model.get) ? model : modelData
+            property bool isSeparator: !Boolean(itemData.title) || itemData.title === ""
 
             sourceComponent: isSeparator ? separatorComp : menuItemComp
 
             onLoaded: {
-                loader.item.modelData = Qt.binding(() => (modelData))
+                loader.item.modelData = Qt.binding(() => (itemData))
                 loader.item.width = Qt.binding(() => (prv.itemWidth))
             }
 
@@ -265,7 +274,7 @@ StyledPopupView {
                         // NOTE: reset view state
                         view.update()
 
-                        root.handleMenuItem(item)
+                        root.handleMenuItem(itemId)
                     }
 
                     onRequestParentItemActive: {

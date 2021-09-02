@@ -33,7 +33,7 @@ FlatButton {
     property int menuOffsetY: 0
     property int menuAlign: 0
 
-    signal handleMenuItem(var item)
+    signal handleMenuItem(string itemId)
 
     function toggleMenu(item, x, y) {
         menuLoader.parent = item
@@ -51,7 +51,7 @@ FlatButton {
         navigation: root.navigation
 
         onHandleMenuItem: {
-            root.handleMenuItem(item)
+            root.handleMenuItem(itemId)
         }
     }
 

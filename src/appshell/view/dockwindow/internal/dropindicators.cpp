@@ -23,6 +23,8 @@
 #include "dropindicators.h"
 #include "dropindicatorswindow.h"
 
+#include "../idockwindow.h"
+
 #include "thirdparty/KDDockWidgets/src/Config.h"
 #include "thirdparty/KDDockWidgets/src/private/DragController_p.h"
 #include "thirdparty/KDDockWidgets/src/private/Utils_p.h"
@@ -105,11 +107,11 @@ KDDockWidgets::DropIndicatorOverlayInterface::DropLocation DropIndicators::hover
     }
 
     if (needShowToolBarHolders()) {
-        mainWindow()->requestShowToolBarDockingHolder(globalPos);
+        dockWindow()->showDockingHolder(globalPos, IDockWindow::ToolBar);
     }
 
     if (needShowPanelHolders()) {
-        mainWindow()->requestShowPanelDockingHolder(globalPos);
+        dockWindow()->showDockingHolder(globalPos, IDockWindow::Panel);
     }
 
     if (isDropAllowed(dropLocation)) {
@@ -197,7 +199,7 @@ void DropIndicators::updateVisibility()
         updateWindowPosition();
         m_indicatorsWindow->raise();
     } else {
-        mainWindow()->requestHideAllDockingHolders();
+        dockWindow()->hideAllDockingHolders();
         hideDropArea();
     }
 
@@ -470,7 +472,7 @@ void DropIndicators::updateToolBarOrientation()
         newOrientation = framework::Orientation::Vertical;
     }
 
-    mainWindow()->requestChangeToolBarOrientation(draggedDock->uniqueName(), newOrientation);
+    dockWindow()->setToolBarOrientation(draggedDock->uniqueName(), newOrientation);
 }
 
 void DropIndicators::updateWindowPosition()
@@ -482,4 +484,9 @@ void DropIndicators::updateWindowPosition()
         rect.moveTo(pos);
     }
     m_indicatorsWindow->setGeometry(rect);
+}
+
+IDockWindow* DropIndicators::dockWindow() const
+{
+    return dockWindowProvider()->window();
 }

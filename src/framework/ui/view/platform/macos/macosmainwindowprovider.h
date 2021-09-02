@@ -19,32 +19,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_APPSHELL_NOTATIONPAGESTATE_H
-#define MU_APPSHELL_NOTATIONPAGESTATE_H
+#ifndef MU_APPSHELL_MACOS_MAINWINDOWPROVIDER_H
+#define MU_APPSHELL_MACOS_MAINWINDOWPROVIDER_H
 
-#include "modularity/ioc.h"
 #include "async/asyncable.h"
-#include "inotationpagestate.h"
-#include "iappshellconfiguration.h"
+#include "modularity/ioc.h"
+#include "ui/iuiconfiguration.h"
 
-namespace mu::appshell {
-class NotationPageState : public INotationPageState, public async::Asyncable
+#include "ui/view/mainwindowprovider.h"
+
+namespace mu::ui {
+class MacOSMainWindowProvider : public MainWindowProvider, public async::Asyncable
 {
-    INJECT(appshell, IAppShellConfiguration, configuration)
+    Q_OBJECT
+
+    INJECT(appshell, IUiConfiguration, uiConfiguration)
 
 public:
-    void init();
+    explicit MacOSMainWindowProvider(QObject* parent = nullptr);
 
-    bool isPanelVisible(PanelType type) const override;
-    void setIsPanelsVisible(const std::map<PanelType, bool>& panelsVisible) override;
-    mu::async::Channel<PanelTypeList> panelsVisibleChanged() const override;
+    bool fileModified() const override;
+
+public slots:
+    void setFileModified(bool modified) override;
 
 private:
-    void setIsPanelVisible(PanelType type, bool visible);
-
-    mutable std::map<PanelType, bool> m_panelVisibleMap;
-    async::Channel<PanelTypeList> m_panelsVisibleChanged;
+    void init() override;
 };
 }
 
-#endif // MU_APPSHELL_NOTATIONPAGESTATE_H
+#endif // MU_APPSHELL_MACOS_MAINWINDOWPROVIDER_H

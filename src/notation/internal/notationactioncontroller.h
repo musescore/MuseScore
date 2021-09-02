@@ -44,9 +44,6 @@ class NotationActionController : public actions::Actionable, public async::Async
     INJECT(notation, playback::IPlaybackConfiguration, playbackConfiguration)
     INJECT(notation, INotationConfiguration, configuration)
 
-private:
-    std::map<mu::actions::ActionCode, bool (NotationActionController::*)() const> m_isEnabledMap;
-
 public:
     void init();
 
@@ -224,6 +221,7 @@ private:
     void registerMoveAction(const mu::actions::ActionCode&);
 
     async::Notification m_currentNotationNoteInputChanged;
+    std::map<mu::actions::ActionCode, bool (NotationActionController::*)() const> m_isEnabledMap;
 };
 }
 

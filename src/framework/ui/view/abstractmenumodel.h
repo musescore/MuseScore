@@ -38,7 +38,7 @@ class AbstractMenuModel : public QAbstractListModel, public async::Asyncable
     INJECT(ui, IUiActionsRegister, uiactionsRegister)
     INJECT(ui, actions::IActionsDispatcher, dispatcher)
 
-    Q_PROPERTY(int count READ rowCount NOTIFY itemsChanged)
+    Q_PROPERTY(int length READ rowCount NOTIFY itemsChanged)
     Q_PROPERTY(QVariantList items READ itemsProperty NOTIFY itemsChanged)
 
 public:
@@ -51,6 +51,7 @@ public:
     virtual void load();
 
     QVariantList itemsProperty() const;
+    const MenuItemList& items() const;
 
     Q_INVOKABLE void handleMenuItem(const QString& itemId);
     Q_INVOKABLE QVariantMap get(int index);
@@ -76,14 +77,13 @@ protected:
 
     virtual void onActionsStateChanges(const actions::ActionCodeList& codes);
 
-    const MenuItemList& items() const;
-    MenuItemList& items();
-
     void setItems(const MenuItemList& items);
     void clear();
 
     static const int INVALID_ITEM_INDEX;
     int itemIndex(const actions::ActionCode& actionCode) const;
+
+    MenuItem& item(int index);
 
     MenuItem& findItem(const QString& itemId);
     MenuItem& findItem(const actions::ActionCode& actionCode);

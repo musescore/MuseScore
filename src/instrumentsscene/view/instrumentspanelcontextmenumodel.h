@@ -46,8 +46,10 @@ public:
 
 private:
     void loadItems();
+    void setInstrumentsOrder(const actions::ActionData& args);
 
     notation::IMasterNotationPtr m_masterNotation;
+    notation::ScoreOrderList m_orders;
 };
 }
 

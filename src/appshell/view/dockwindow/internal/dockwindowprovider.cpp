@@ -19,35 +19,40 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_UI_IMAINWINDOW_H
-#define MU_UI_IMAINWINDOW_H
 
-#include "modularity/imoduleexport.h"
+#include "dockwindowprovider.h"
 
-class QWindow;
-class QScreen;
+#include "log.h"
 
-namespace mu::ui {
-class IMainWindow : MODULE_EXPORT_INTERFACE
+using namespace mu::dock;
+using namespace mu::async;
+
+void DockWindowProvider::init(IDockWindow* window)
 {
-    INTERFACE_ID(IMainWindow)
+    IF_ASSERT_FAILED_X(m_window == nullptr, "Window for this DockWindowProvider is already set. Refusing to set it again") {
+        return;
+    }
 
-public:
-    virtual ~IMainWindow() = default;
-
-    virtual QWindow* qWindow() const = 0;
-
-    virtual QWindow* topWindow() const = 0;
-    virtual void pushWindow(QWindow* w) = 0;
-    virtual void popWindow(QWindow* w) = 0;
-
-    virtual void requestShowOnBack() = 0;
-    virtual void requestShowOnFront() = 0;
-
-    virtual bool isFullScreen() const = 0;
-    virtual void toggleFullScreen() = 0;
-    virtual const QScreen* screen() const = 0;
-};
+    setWindow(window);
 }
 
-#endif // MU_UI_IMAINWINDOW_H
+void DockWindowProvider::deinit()
+{
+    setWindow(nullptr);
+}
+
+void DockWindowProvider::setWindow(IDockWindow* window)
+{
+    m_window = window;
+    m_windowChanged.notify();
+}
+
+IDockWindow* DockWindowProvider::window() const
+{
+    return m_window;
+}
+
+Notification DockWindowProvider::windowChanged() const
+{
+    return m_windowChanged;
+}
