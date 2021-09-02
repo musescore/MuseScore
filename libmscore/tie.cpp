@@ -585,46 +585,75 @@ void Tie::calculateDirection()
                   //
                   // chords
                   //
-                  int tiesCount = 0;
-                  Note* tieNote = startNote();
-                  Note* tieAbove = nullptr;
-                  Note* tieBelow = nullptr;
-
-                  for (size_t i = 0; i < n; ++i) {
-                        if (notes[i]->tieFor()) {
-                              tiesCount++;
-                              int noteDiff = compareNotesPos(notes[i], tieNote);
-
-                              if (noteDiff > 0) {
-                                    if (!tieAbove)
-                                          tieAbove = notes[i];
-                                    else if (compareNotesPos(notes[i], tieAbove) < 0)
-                                          tieAbove = notes[i];
-                                    }
-                              else if (noteDiff < 0) {
-                                    if (!tieBelow)
-                                          tieBelow = notes[i];
-                                    else if (compareNotesPos(notes[i], tieBelow) > 0)
-                                          tieBelow = notes[i];
+                  // first, find pivot point in chord (below which all ties curve down and above which all ties curve up)
+                  Note* pivotPoint = nullptr;
+                  bool multiplePivots = false;
+                  for (size_t i = 0; i < n - 1; ++i) {
+                        if (!notes[i]->tieFor())
+                              continue; // don't include notes that don't have ties
+                        for (size_t j = i + 1; j < n; ++j) {
+                              if (!notes[j]->tieFor())
+                                    continue;
+                              int noteDiff = compareNotesPos(notes[i], notes[j]);
+                              if (!multiplePivots && qAbs(noteDiff) <= 1) {
+                                    // TODO: Fix unison ties somehow--if noteDiff == 0 then we need to determine which of the unison is 'lower'
+                                    if (pivotPoint) {
+                                          multiplePivots = true;
+                                          pivotPoint = nullptr;
+                                          }
+                                    else
+                                          pivotPoint = noteDiff < 0 ? notes[i] : notes[j];
                                     }
                               }
                         }
-                  if (!tieBelow)
-                        // bottom tie is up if it is the only tie and not the bottom note of the chord
-                        _up = tiesCount == 1 && tieNote != c1->downNote();
-                  else if (!tieAbove)
-                        // top tie always up
-                        _up = true;
-                  else {
-                        bool tabStaff = onTabStaff();
-                        int tieLine = tabStaff ? tieNote->string() : tieNote->line();
-                        int belowLine = tabStaff ? tieBelow->string() : tieBelow->line();
-                        int aboveLine = tabStaff ? tieAbove->string() : tieAbove->line();
+                  if (!pivotPoint) {
+                        // if the pivot point was not found (either there are no unisons/seconds or there are more than one),
+                        // determine if this note is in the lower or upper half of this chord
+                        int notesAbove = 0, tiesAbove = 0;
+                        int notesBelow = 0, tiesBelow = 0;
+                        int unisonNotes = 0, unisonTies = 0;
+                        for (size_t i = 0; i < n; ++i) {
+                              if (notes[i] == startNote())
+                                    // skip counting if this note is the current note or if this note doesn't have a tie
+                                    continue;
+                              int noteDiff = compareNotesPos(startNote(), notes[i]);
+                              if (noteDiff == 0) {  // unison
+                                    unisonNotes++;
+                                    if (notes[i]->tieFor())
+                                          unisonTies++;
+                                    }
+                              if (noteDiff < 0) { // the note is above startNote
+                                    notesAbove++;
+                                    if (notes[i]->tieFor())
+                                          tiesAbove++;
+                                    }
+                              if (noteDiff > 0) { // the note is below startNote
+                                    notesBelow++;
+                                    if (notes[i]->tieFor())
+                                          tiesBelow++;
+                                    }
+                              }
 
-                        if (tieLine <= (tabStaff ? 2 : 4))
-                              _up = ((belowLine - tieLine) <= 1) || ((tieLine - aboveLine) > 1);
+                        if (tiesAbove == 0 && tiesBelow == 0 && unisonTies == 0) {
+                              // this is the only tie in the chord.
+                              if (notesAbove == notesBelow)
+                                    _up = !c1->up();
+                              else
+                                    _up = (notesAbove < notesBelow);
+                              }
+                        else if (tiesAbove == tiesBelow)
+                              // this note is dead center, so its tie should go counter to the stem direction
+                              _up = !c1->up();
                         else
-                              _up = ((belowLine - tieLine) <= 1) && ((tieLine - aboveLine) > 1);
+                              _up = (tiesAbove < tiesBelow);
+                        }
+                  else if (pivotPoint == startNote())
+                        // the current note is the lower of the only second or unison in the chord; tie goes down.
+                        _up = false;
+                  else {
+                        // if lower than the pivot, tie goes down, otherwise up
+                        int noteDiff = compareNotesPos(startNote(), pivotPoint);
+                        _up = (noteDiff >= 0);
                         }
                   }
             }
