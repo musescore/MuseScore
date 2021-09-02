@@ -123,7 +123,7 @@ bool MultiInstancesProvider::isProjectAlreadyOpened(const io::path& projectPath)
 
     int ret = 0;
     m_ipcChannel->syncRequestToAll(METHOD_PROJECT_IS_OPENED, { projectPath.toQString() }, [&ret](const QStringList& args) {
-        IF_ASSERT_FAILED(args.count() > 0) {
+        IF_ASSERT_FAILED(!args.empty()) {
             return false;
         }
         ret = args.at(0).toInt();
@@ -170,7 +170,7 @@ bool MultiInstancesProvider::isPreferencesAlreadyOpened() const
 
     int ret = 0;
     m_ipcChannel->syncRequestToAll(METHOD_PREFERENCES_IS_OPENED, {}, [&ret](const QStringList& args) {
-        IF_ASSERT_FAILED(args.count() > 0) {
+        IF_ASSERT_FAILED(!args.empty()) {
             return false;
         }
         ret = args.at(0).toInt();

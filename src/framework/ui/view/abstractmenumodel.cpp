@@ -155,7 +155,7 @@ void AbstractMenuModel::clear()
     setItems(MenuItemList());
 }
 
-int AbstractMenuModel::itemIndex(const QString &itemId) const
+int AbstractMenuModel::itemIndex(const QString& itemId) const
 {
     for (int i = 0; i < m_items.size(); ++i) {
         if (m_items[i].id == itemId) {

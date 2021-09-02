@@ -121,7 +121,7 @@ MenuItem MixerPanelContextMenuModel::buildViewMenuItem(MixerSectionType sectionT
 
 void MixerPanelContextMenuModel::toggleMixerSection(const actions::ActionData& args)
 {
-    if (args.count() <= 0) {
+    if (args.empty()) {
         return;
     }
 

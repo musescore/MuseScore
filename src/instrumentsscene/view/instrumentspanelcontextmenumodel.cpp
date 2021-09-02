@@ -102,7 +102,7 @@ void InstrumentsPanelContextMenuModel::loadItems()
 
 void InstrumentsPanelContextMenuModel::setInstrumentsOrder(const actions::ActionData& args)
 {
-    if (args.count() <= 0) {
+    if (args.empty()) {
         return;
     }
 
