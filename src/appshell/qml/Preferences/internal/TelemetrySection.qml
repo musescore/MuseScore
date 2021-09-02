@@ -35,8 +35,7 @@ BaseSection {
     CheckBox {
         id: sendCheckBox
 
-        width: 216
-        anchors.verticalCenter: parent.verticalCenter
+        width: 216 // todo
 
         text: qsTrc("appshell", "Send anonymous telemetry data to MuseScore")
 
