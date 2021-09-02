@@ -977,7 +977,7 @@ void FretDiagram::setBarre(int string, int fret, bool add /*= false*/)
 
 void FretDiagram::undoSetFretDot(int _string, int _fret, bool _add /*= true*/, FretDotType _dtype /*= FretDotType::NORMAl*/)
 {
-    for (ScoreElement* e : linkList()) {
+    for (EngravingObject* e : linkList()) {
         FretDiagram* fd = toFretDiagram(e);
         fd->score()->undo(new FretDot(fd, _string, _fret, _add, _dtype));
     }
@@ -989,7 +989,7 @@ void FretDiagram::undoSetFretDot(int _string, int _fret, bool _add /*= true*/, F
 
 void FretDiagram::undoSetFretMarker(int _string, FretMarkerType _mtype)
 {
-    for (ScoreElement* e : linkList()) {
+    for (EngravingObject* e : linkList()) {
         FretDiagram* fd = toFretDiagram(e);
         fd->score()->undo(new FretMarker(fd, _string, _mtype));
     }
@@ -1002,7 +1002,7 @@ void FretDiagram::undoSetFretMarker(int _string, FretMarkerType _mtype)
 
 void FretDiagram::undoSetFretBarre(int _string, int _fret, bool _add /*= false*/)
 {
-    for (ScoreElement* e : linkList()) {
+    for (EngravingObject* e : linkList()) {
         FretDiagram* fd = toFretDiagram(e);
         fd->score()->undo(new FretBarre(fd, _string, _fret, _add));
     }
@@ -1118,7 +1118,7 @@ void FretDiagram::clear()
 
 void FretDiagram::undoFretClear()
 {
-    for (ScoreElement* e : linkList()) {
+    for (EngravingObject* e : linkList()) {
         FretDiagram* fd = toFretDiagram(e);
         fd->score()->undo(new FretClear(fd));
     }
@@ -1256,7 +1256,7 @@ Element* FretDiagram::drop(EditData& data)
 void FretDiagram::scanElements(void* data, void (* func)(void*, Element*), bool all)
 {
     Q_UNUSED(all);
-    ScoreElement::scanElements(data, func, all);
+    EngravingObject::scanElements(data, func, all);
     func(data, this);
 }
 

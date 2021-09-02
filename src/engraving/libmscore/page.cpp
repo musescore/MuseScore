@@ -57,7 +57,7 @@ static QString revision;
 //   Page
 //---------------------------------------------------------
 
-Page::Page(ScoreElement* parent)
+Page::Page(EngravingObject* parent)
     : Element(ElementType::PAGE, parent, ElementFlag::NOT_SELECTABLE), _no(0)
 {
     bspTreeValid = false;
@@ -232,7 +232,7 @@ void Page::drawHeaderFooter(mu::draw::Painter* p, int area, const QString& ss) c
 
 void Page::scanElements(void* data, void (* func)(void*, Element*), bool all)
 {
-    ScoreElement::scanElements(data, func, all);
+    EngravingObject::scanElements(data, func, all);
     if (all || visible() || score()->showInvisible()) {
         func(data, this);
     }

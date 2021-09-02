@@ -919,7 +919,7 @@ void Harmony::endEdit(EditData& ed)
     _isMisspelled = false;
 
     if (links()) {
-        for (ScoreElement* e : *links()) {
+        for (EngravingObject* e : *links()) {
             if (e == this) {
                 continue;
             }

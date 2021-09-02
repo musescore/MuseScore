@@ -59,8 +59,8 @@ public:
     SpannerSegment(const SpannerSegment&);
 
     // Score Tree functions
-    virtual ScoreElement* treeParent() const override;
-    virtual ScoreElement* treeChild(int idx) const override;
+    virtual EngravingObject* treeParent() const override;
+    virtual EngravingObject* treeChild(int idx) const override;
     virtual int treeChildCount() const override;
 
     virtual qreal mag() const override;
@@ -107,7 +107,7 @@ public:
     virtual QVariant propertyDefault(Pid id) const override;
     virtual Element* propertyDelegate(Pid) override;
     virtual void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps) override;
-    using ScoreElement::undoChangeProperty;
+    using EngravingObject::undoChangeProperty;
 
     virtual Sid getPropertyStyle(Pid id) const override;
     virtual PropertyFlags propertyFlags(Pid id) const override;
@@ -180,8 +180,8 @@ public:
     ~Spanner();
 
     // Score Tree functions
-    virtual ScoreElement* treeParent() const override;
-    virtual ScoreElement* treeChild(int idx) const override;
+    virtual EngravingObject* treeParent() const override;
+    virtual EngravingObject* treeChild(int idx) const override;
     virtual int treeChildCount() const override;
 
     virtual qreal mag() const override;
@@ -283,7 +283,7 @@ public:
     virtual Element* prevSegmentElement() override;
 
     friend class SpannerSegment;
-    using ScoreElement::undoChangeProperty;
+    using EngravingObject::undoChangeProperty;
 };
 }     // namespace Ms
 #endif

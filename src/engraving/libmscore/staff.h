@@ -28,6 +28,7 @@
  Definition of class Staff.
 */
 
+#include "element.h"
 #include "infrastructure/draw/color.h"
 #include "changeMap.h"
 #include "pitch.h"
@@ -35,7 +36,6 @@
 #include "keylist.h"
 #include "stafftypelist.h"
 #include "groups.h"
-#include "scoreElement.h"
 
 namespace Ms {
 class InstrumentTemplate;

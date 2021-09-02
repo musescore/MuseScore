@@ -183,7 +183,7 @@ void SlurSegment::changeAnchor(EditData& ed, Element* element)
     }
 
     // save current start/end elements
-    for (ScoreElement* e : spanner()->linkList()) {
+    for (EngravingObject* e : spanner()->linkList()) {
         Spanner* sp = toSpanner(e);
         score()->undoStack()->push1(new ChangeStartEndSpanner(sp, sp->startElement(), sp->endElement()));
     }
@@ -210,7 +210,7 @@ void SlurSegment::changeAnchor(EditData& ed, Element* element)
     }
 
     // update start/end elements (which could be grace notes)
-    for (ScoreElement* lsp : spanner()->linkList()) {
+    for (EngravingObject* lsp : spanner()->linkList()) {
         Spanner* sp = static_cast<Spanner*>(lsp);
         if (sp == spanner()) {
             score()->undo(new ChangeSpannerElements(sp, scr, ecr));
@@ -218,8 +218,8 @@ void SlurSegment::changeAnchor(EditData& ed, Element* element)
             Element* se = 0;
             Element* ee = 0;
             if (scr) {
-                QList<ScoreElement*> sel = scr->linkList();
-                for (ScoreElement* lcr : qAsConst(sel)) {
+                QList<EngravingObject*> sel = scr->linkList();
+                for (EngravingObject* lcr : qAsConst(sel)) {
                     Element* le = toElement(lcr);
                     if (le->score() == sp->score() && le->track() == sp->track()) {
                         se = le;
@@ -228,8 +228,8 @@ void SlurSegment::changeAnchor(EditData& ed, Element* element)
                 }
             }
             if (ecr) {
-                QList<ScoreElement*> sel = ecr->linkList();
-                for (ScoreElement* lcr : qAsConst(sel)) {
+                QList<EngravingObject*> sel = ecr->linkList();
+                for (EngravingObject* lcr : qAsConst(sel)) {
                     Element* le = toElement(lcr);
                     if (le->score() == sp->score() && le->track() == sp->track2()) {
                         ee = le;

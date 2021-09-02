@@ -104,7 +104,7 @@ public:
     Fraction endTick() const;
     void removeFromScore();
 
-    using ScoreElement::undoChangeProperty;
+    using EngravingObject::undoChangeProperty;
     void paste(EditData& ed, const QString& txt) override;
 
     QVariant getProperty(Pid propertyId) const override;

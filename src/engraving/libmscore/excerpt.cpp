@@ -403,7 +403,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
                     // mmrests are on by default in part
                     // if this harmony is attached to an mmrest,
                     // be sure to transpose harmony in underlying measure as well
-                    for (ScoreElement* se : h->linkList()) {
+                    for (EngravingObject* se : h->linkList()) {
                         Harmony* hh = static_cast<Harmony*>(se);
                         // skip links to other staves (including in other scores)
                         if (hh->staff() != h->staff()) {
@@ -526,7 +526,7 @@ static void cloneSpanner(Spanner* s, Score* score, int dstTrack, int dstTrack2)
         ns->setStartElement(0);
         ns->setEndElement(0);
         if (cr1 && cr1->links()) {
-            for (ScoreElement* e : *cr1->links()) {
+            for (EngravingObject* e : *cr1->links()) {
                 ChordRest* cr = toChordRest(e);
                 if (cr == cr1) {
                     continue;
@@ -538,7 +538,7 @@ static void cloneSpanner(Spanner* s, Score* score, int dstTrack, int dstTrack2)
             }
         }
         if (cr2 && cr2->links()) {
-            for (ScoreElement* e : *cr2->links()) {
+            for (EngravingObject* e : *cr2->links()) {
                 ChordRest* cr = toChordRest(e);
                 if (cr == cr2) {
                     continue;

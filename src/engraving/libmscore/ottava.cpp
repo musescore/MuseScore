@@ -120,9 +120,9 @@ void Ottava::setPlacement(Placement p)
 void OttavaSegment::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
 {
     if (id == Pid::OTTAVA_TYPE || id == Pid::NUMBERS_ONLY) {
-        ScoreElement::undoChangeProperty(id, v, ps);
+        EngravingObject::undoChangeProperty(id, v, ps);
     } else {
-        ScoreElement::undoChangeProperty(id, v, ps);
+        EngravingObject::undoChangeProperty(id, v, ps);
     }
 }
 

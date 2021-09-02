@@ -311,8 +311,8 @@ protected:
     bool prepareFormat(const QString& token, Ms::CharFormat& format);
 
 public:
-    TextBase(const ElementType& type, ScoreElement* parent = 0, Tid tid = Tid::DEFAULT, ElementFlags = ElementFlag::NOTHING);
-    TextBase(const ElementType& type, ScoreElement* parent, ElementFlags);
+    TextBase(const ElementType& type, EngravingObject* parent = 0, Tid tid = Tid::DEFAULT, ElementFlags = ElementFlag::NOTHING);
+    TextBase(const ElementType& type, EngravingObject* parent, ElementFlags);
     TextBase(const TextBase&);
     ~TextBase();
 
@@ -454,7 +454,7 @@ public:
     bool hasCustomFormatting() const;
 
     friend class TextCursor;
-    using ScoreElement::undoChangeProperty;
+    using EngravingObject::undoChangeProperty;
 };
 }     // namespace Ms
 

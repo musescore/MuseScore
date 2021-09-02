@@ -338,13 +338,13 @@ void ChordRest::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
             spanner->setStartElement(this);
             if (pasteMode) {
                 score()->undoAddElement(spanner);
-                for (ScoreElement* ee : spanner->linkList()) {
+                for (EngravingObject* ee : spanner->linkList()) {
                     if (ee == spanner) {
                         continue;
                     }
                     Spanner* ls = toSpanner(ee);
                     ls->setTick(spanner->tick());
-                    for (ScoreElement* eee : linkList()) {
+                    for (EngravingObject* eee : linkList()) {
                         ChordRest* cr = toChordRest(eee);
                         if (cr->score() == eee->score() && cr->staffIdx() == ls->staffIdx()) {
                             ls->setTrack(cr->track());
@@ -363,13 +363,13 @@ void ChordRest::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
             spanner->setTick2(tick());
             spanner->setEndElement(this);
             if (pasteMode) {
-                for (ScoreElement* ee : spanner->linkList()) {
+                for (EngravingObject* ee : spanner->linkList()) {
                     if (ee == spanner) {
                         continue;
                     }
                     Spanner* ls = static_cast<Spanner*>(ee);
                     ls->setTick2(spanner->tick2());
-                    for (ScoreElement* eee : linkList()) {
+                    for (EngravingObject* eee : linkList()) {
                         ChordRest* cr = toChordRest(eee);
                         if (cr->score() == eee->score() && cr->staffIdx() == ls->staffIdx()) {
                             ls->setTrack2(cr->track());

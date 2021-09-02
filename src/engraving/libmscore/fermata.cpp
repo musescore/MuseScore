@@ -373,7 +373,7 @@ Sid Fermata::getPropertyStyle(Pid pid) const
     if (pid == Pid::OFFSET) {
         return placeAbove() ? Sid::fermataPosAbove : Sid::fermataPosBelow;
     }
-    return ScoreElement::getPropertyStyle(pid);
+    return EngravingObject::getPropertyStyle(pid);
 }
 
 //---------------------------------------------------------

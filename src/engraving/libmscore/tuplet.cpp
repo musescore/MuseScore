@@ -764,7 +764,7 @@ Shape Tuplet::shape() const
 
 void Tuplet::scanElements(void* data, void (* func)(void*, Element*), bool all)
 {
-    for (ScoreElement* child : *this) {
+    for (EngravingObject* child : *this) {
         if (child == _number && !all) {
             continue; // don't scan number unless all is true
         }
@@ -1215,7 +1215,7 @@ QVariant Tuplet::propertyDefault(Pid id) const
         return score()->styleV(Sid::tupletFontSpatiumDependent);
     default:
     {
-        QVariant v = ScoreElement::propertyDefault(id, Tid::DEFAULT);
+        QVariant v = EngravingObject::propertyDefault(id, Tid::DEFAULT);
         if (v.isValid()) {
             return v;
         }

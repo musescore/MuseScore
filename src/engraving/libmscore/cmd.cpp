@@ -388,7 +388,7 @@ void Score::update(bool resetCmdState)
 
 void Score::deletePostponed()
 {
-    for (ScoreElement* e : qAsConst(_updateState._deleteList)) {
+    for (EngravingObject* e : qAsConst(_updateState._deleteList)) {
         if (e->isSystem()) {
             System* s = toSystem(e);
             for (SpannerSegment* ss : s->spannerSegments()) {
@@ -885,9 +885,9 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
             //
             Chord* chord = toNote(nr)->chord();
             is.slur()->undoChangeProperty(Pid::SPANNER_TICKS, chord->tick() - is.slur()->tick());
-            for (ScoreElement* se : is.slur()->linkList()) {
+            for (EngravingObject* se : is.slur()->linkList()) {
                 Slur* slur = toSlur(se);
-                for (ScoreElement* ee : chord->linkList()) {
+                for (EngravingObject* ee : chord->linkList()) {
                     Element* e = static_cast<Element*>(ee);
                     if (e->score() == slur->score() && e->track() == slur->track2()) {
                         slur->score()->undo(new ChangeSpannerElements(slur, slur->startElement(), e));
@@ -1686,7 +1686,7 @@ void Score::upDown(bool up, UpDownMode mode)
             // because they're now harder to be re-entered due to the revised note-input workflow
             if (mode != UpDownMode::OCTAVE) {
                 auto l = oNote->linkList();
-                for (ScoreElement* e : qAsConst(l)) {
+                for (EngravingObject* e : qAsConst(l)) {
                     Note* ln = toNote(e);
                     if (ln->accidental()) {
                         undo(new RemoveElement(ln->accidental()));
@@ -1937,7 +1937,7 @@ void Score::changeAccidental(Note* note, AccidentalType accidental)
         forceAdd = true;
     }
 
-    for (ScoreElement* se : note->linkList()) {
+    for (EngravingObject* se : note->linkList()) {
         Note* ln = toNote(se);
         if (ln->concertPitch() != note->concertPitch()) {
             continue;
@@ -3331,7 +3331,7 @@ void Score::cmdSlashFill()
             Chord* c = toChord(s->element(track + voice));
             if (c) {
                 if (c->links()) {
-                    for (ScoreElement* e : *c->links()) {
+                    for (EngravingObject* e : *c->links()) {
                         Chord* lc = toChord(e);
                         lc->setSlash(true, true);
                     }
@@ -3367,7 +3367,7 @@ void Score::cmdSlashRhythm()
         if (e->voice() >= 2 && e->isRest()) {
             Rest* r = toRest(e);
             if (r->links()) {
-                for (ScoreElement* se : *r->links()) {
+                for (EngravingObject* se : *r->links()) {
                     Rest* lr = toRest(se);
                     lr->setAccent(!lr->accent());
                 }
@@ -3388,7 +3388,7 @@ void Score::cmdSlashRhythm()
             chords.append(c);
             // toggle slash setting
             if (c->links()) {
-                for (ScoreElement* se : *c->links()) {
+                for (EngravingObject* se : *c->links()) {
                     Chord* lc = toChord(se);
                     lc->setSlash(!lc->slash(), false);
                 }
@@ -3642,7 +3642,7 @@ void Score::cmdResequenceRehearsalMarks()
                 RehearsalMark* rm = toRehearsalMark(e);
                 if (last) {
                     QString rmText = nextRehearsalMarkText(last, rm);
-                    for (ScoreElement* le : rm->linkList()) {
+                    for (EngravingObject* le : rm->linkList()) {
                         le->undoChangeProperty(Pid::TEXT, rmText);
                     }
                 }

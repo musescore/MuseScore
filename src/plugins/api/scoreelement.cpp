@@ -25,7 +25,7 @@
 #include "score.h"
 #include "fraction.h"
 #include "libmscore/masterscore.h"
-#include "libmscore/scoreElement.h"
+#include "libmscore/engravingobject.h"
 
 namespace Ms {
 namespace PluginAPI {
@@ -151,7 +151,7 @@ void ScoreElement::set(Ms::Pid pid, QVariant val)
 ///   type at runtime based on the actual element type.
 //---------------------------------------------------------
 
-ScoreElement* wrap(Ms::ScoreElement* se, Ownership own)
+ScoreElement* wrap(Ms::EngravingObject* se, Ownership own)
 {
     if (!se) {
         return nullptr;

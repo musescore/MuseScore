@@ -91,18 +91,18 @@ class TextDiffParser
 
     int tagLevel = 0;
     int currentDiffTagLevel = 0;
-    std::vector<const ScoreElement*> contextsStack;
+    std::vector<const EngravingObject*> contextsStack;
     std::vector<bool> tagIsElement;
-    const ScoreElement* lastElementEnded = nullptr;
+    const EngravingObject* lastElementEnded = nullptr;
     QString markupContext;
 
-    BaseDiff* handleToken(const QXmlStreamReader& r, const ScoreElement* newElement, bool saveDiff);
+    BaseDiff* handleToken(const QXmlStreamReader& r, const EngravingObject* newElement, bool saveDiff);
     bool insideDiffTag() const { return currentDiffTagLevel != 0; }
 
 public:
     TextDiffParser(int iScore);
 
-    void makeDiffs(const QString& mscx, const std::vector<std::pair<const ScoreElement*, QString> >& elements,
+    void makeDiffs(const QString& mscx, const std::vector<std::pair<const EngravingObject*, QString> >& elements,
                    const std::vector<TextDiff>& textDiffs, std::vector<BaseDiff*>& diffs);
 };
 
@@ -562,7 +562,7 @@ TextDiffParser::TextDiffParser(int iScore)
 //   TextDiffParser::makeDiffs
 //---------------------------------------------------------
 
-void TextDiffParser::makeDiffs(const QString& mscx, const std::vector<std::pair<const ScoreElement*, QString> >& elements,
+void TextDiffParser::makeDiffs(const QString& mscx, const std::vector<std::pair<const EngravingObject*, QString> >& elements,
                                const std::vector<TextDiff>& textDiffs, std::vector<BaseDiff*>& diffs)
 {
     QXmlStreamReader r(mscx);
@@ -603,7 +603,7 @@ void TextDiffParser::makeDiffs(const QString& mscx, const std::vector<std::pair<
             }
         }
 
-        const ScoreElement* newElement = nullptr;
+        const EngravingObject* newElement = nullptr;
         if (r.isStartElement()) {
             if (nextElement != nextElementEnd
                 && nextElement->second == r.name()) {
@@ -661,7 +661,7 @@ void TextDiffParser::makeDiffs(const QString& mscx, const std::vector<std::pair<
 //    Type and textDiff are left unfilled.
 //---------------------------------------------------------
 
-BaseDiff* TextDiffParser::handleToken(const QXmlStreamReader& r, const ScoreElement* newElement, bool saveDiff)
+BaseDiff* TextDiffParser::handleToken(const QXmlStreamReader& r, const EngravingObject* newElement, bool saveDiff)
 {
     if (!r.isStartElement() && !r.isEndElement()) {
         return nullptr;
@@ -682,7 +682,7 @@ BaseDiff* TextDiffParser::handleToken(const QXmlStreamReader& r, const ScoreElem
         } else if (tag == "Spanner") {
             markupContext = tag.toString();
         } else if (saveDiff) {
-            const ScoreElement* ctx = contextsStack.back();
+            const EngravingObject* ctx = contextsStack.back();
             if (markupContext == "Spanner" && !(ctx && ctx->isSpanner())) {
                 // some property inside the end of a spanner
             } else if (tag == "prev" || tag == "next") {
@@ -693,7 +693,7 @@ BaseDiff* TextDiffParser::handleToken(const QXmlStreamReader& r, const ScoreElem
                     diff = d;
                     d->ctx[iScore] = ctx;
                     d->name = tag.toString();
-                    const ScoreElement* widerCtx = *(contextsStack.end() - 2);
+                    const EngravingObject* widerCtx = *(contextsStack.end() - 2);
                     if (widerCtx && widerCtx->isStaff()) {
                         d->info = toStaff(widerCtx)->idx();
                     }
@@ -797,8 +797,8 @@ static void makeDiffs(const QString& mscx1, const QString& mscx2, const XmlWrite
     std::stable_sort(diffs.begin(), diffs.end(), lineNumberSort);
 
     // Fill correct contexts for diffs
-    const ScoreElement* lastCtx[2] {};
-    const ScoreElement* lastBefore[2] {};
+    const EngravingObject* lastCtx[2] {};
+    const EngravingObject* lastBefore[2] {};
     for (BaseDiff* diff : diffs) {
         for (int i = 0; i < 2; ++i) {
             if (diff->ctx[i]) {
@@ -1016,8 +1016,8 @@ void ScoreDiff::processMarkupDiffs()
 
 void ScoreDiff::mergeInsertDeleteDiffs()
 {
-    const ScoreElement* lastCtx1 = _s1;
-    const ScoreElement* lastCtx2 = _s2;
+    const EngravingObject* lastCtx1 = _s1;
+    const EngravingObject* lastCtx2 = _s2;
     std::vector<BaseDiff*> diffsToMerge;
     std::vector<BaseDiff*> abandonedDiffs;
     for (BaseDiff* diff : _diffs) {
@@ -1093,7 +1093,7 @@ void ScoreDiff::mergeInsertDeleteDiffs()
 
 void ScoreDiff::mergeElementDiffs()
 {
-    std::map<const ScoreElement*, ElementDiff*> elementDiffs;
+    std::map<const EngravingObject*, ElementDiff*> elementDiffs;
     std::vector<BaseDiff*> abandonedDiffs;
     for (BaseDiff* diff : _diffs) {
         if (diff->itemType() != ItemType::ELEMENT) {
@@ -1114,7 +1114,7 @@ void ScoreDiff::mergeElementDiffs()
             && foundDiff->el[0] == elDiff->el[0]
             && foundDiff->el[1] == elDiff->el[1]) {
             for (int i = 0; i < 2; ++i) {
-                const ScoreElement* se = foundDiff->el[i];
+                const EngravingObject* se = foundDiff->el[i];
                 if (!se) {
                     continue;
                 }
@@ -1132,7 +1132,7 @@ void ScoreDiff::mergeElementDiffs()
             abandonedDiffs.push_back(elDiff);
         } else {
             for (int i = 0; i < 2; ++i) {
-                if (const ScoreElement* se = elDiff->el[i]) {
+                if (const EngravingObject* se = elDiff->el[i]) {
                     elementDiffs[se] = elDiff;
                 }
             }
@@ -1150,7 +1150,7 @@ void ScoreDiff::mergeElementDiffs()
 
 void ScoreDiff::editPropertyDiffs()
 {
-    std::multimap<const ScoreElement*, PropertyDiff*> propertyDiffs;
+    std::multimap<const EngravingObject*, PropertyDiff*> propertyDiffs;
     std::vector<BaseDiff*> abandonedDiffs;
     for (BaseDiff* diff : _diffs) {
         if (diff->itemType() != ItemType::PROPERTY) {
@@ -1370,7 +1370,7 @@ Fraction BaseDiff::afrac(int score) const
 //   describeContext
 //---------------------------------------------------------
 
-static QString describeContext(const ScoreElement* ctx)
+static QString describeContext(const EngravingObject* ctx)
 {
     if (!ctx) {
         return QString("no context");
@@ -1420,7 +1420,7 @@ bool ElementDiff::sameItem(const BaseDiff& other) const
 Fraction ElementDiff::afrac(int score) const
 {
     Q_ASSERT(score == 0 || score == 1);
-    const ScoreElement* se = el[score];
+    const EngravingObject* se = el[score];
     if (se && se->isElement()) {
         return toElement(se)->tick();
     }

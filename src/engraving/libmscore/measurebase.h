@@ -92,11 +92,11 @@ public:
     MeasureBase(const MeasureBase&);
 
     System* system() const { return (System*)parent(); }
-    void setParent(System* s) { Element::setParent((ScoreElement*)(s)); }
+    void setParent(System* s) { Element::setParent((EngravingObject*)(s)); }
 
     // Score Tree functions
-    ScoreElement* treeParent() const override;
-    ScoreElement* treeChild(int idx) const override;
+    EngravingObject* treeParent() const override;
+    EngravingObject* treeChild(int idx) const override;
     int treeChildCount() const override;
 
     virtual void setScore(Score* s) override;

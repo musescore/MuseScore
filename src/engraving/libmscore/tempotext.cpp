@@ -293,12 +293,12 @@ void TempoText::endEdit(EditData& ed)
 void TempoText::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
 {
     if (id == Pid::TEMPO_FOLLOW_TEXT) {
-        ScoreElement::undoChangeProperty(id, v, ps);
+        EngravingObject::undoChangeProperty(id, v, ps);
         if (_followText) {
             updateTempo();
         }
     } else {
-        ScoreElement::undoChangeProperty(id, v, ps);
+        EngravingObject::undoChangeProperty(id, v, ps);
     }
 }
 

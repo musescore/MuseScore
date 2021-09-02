@@ -126,8 +126,8 @@ public:
     void moveToPage(Page* parent);
 
     // Score Tree functions
-    ScoreElement* treeParent() const override;
-    ScoreElement* treeChild(int idx) const override;
+    EngravingObject* treeParent() const override;
+    EngravingObject* treeChild(int idx) const override;
     int treeChildCount() const override;
 
     System* clone() const override { return new System(*this); }

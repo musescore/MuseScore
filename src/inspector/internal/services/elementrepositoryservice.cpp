@@ -31,7 +31,6 @@
 #include "layoutbreak.h"
 #include "pedal.h"
 #include "tremolo.h"
-#include "scoreElement.h"
 #include "durationtype.h"
 #include "stafftype.h"
 #include "mscore.h"

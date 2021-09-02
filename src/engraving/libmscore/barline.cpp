@@ -1402,7 +1402,7 @@ void BarLine::scanElements(void* data, void (* func)(void*, Element*), bool all)
     if (width() == 0.0 && !all) {
         return;
     }
-    ScoreElement::scanElements(data, func, all);
+    EngravingObject::scanElements(data, func, all);
     func(data, this);
 }
 
@@ -1544,7 +1544,7 @@ void BarLine::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
             undoChangeBarLineType(const_cast<BarLine*>(bl), v.value<BarLineType>(), true);
         }
     } else {
-        ScoreElement::undoChangeProperty(id, v, ps);
+        EngravingObject::undoChangeProperty(id, v, ps);
     }
 }
 

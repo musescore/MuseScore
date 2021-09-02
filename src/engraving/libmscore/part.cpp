@@ -46,7 +46,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 Part::Part(Score* s)
-    : ScoreElement(ElementType::PART, s)
+    : EngravingObject(ElementType::PART, s)
 {
     _color   = DEFAULT_COLOR;
     _show    = true;
@@ -122,7 +122,7 @@ const Part* Part::masterPart() const
         return this;
     }
 
-    for (ScoreElement* le : *links) {
+    for (EngravingObject* le : *links) {
         if (le->isStaff() && toStaff(le)->score()->isMaster()) {
             if (Part* p = toStaff(le)->part()) {
                 return p;

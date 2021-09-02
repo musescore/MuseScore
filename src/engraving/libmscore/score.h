@@ -349,7 +349,7 @@ public:
     bool _playNote   { false };     ///< play selected note after command
     bool _playChord  { false };     ///< play whole chord for the selected note
     bool _selectionChanged { false };
-    QList<ScoreElement*> _deleteList;
+    QList<EngravingObject*> _deleteList;
 };
 
 //---------------------------------------------------------
@@ -400,7 +400,7 @@ class MasterScore;
 //    a Score has always an associated MasterScore
 //---------------------------------------------------------------------------------------
 
-class Score : public QObject, public ScoreElement
+class Score : public QObject, public EngravingObject
 {
     Q_OBJECT
 
@@ -601,8 +601,8 @@ public:
     static void onElementDestruction(Element* se);
 
     // Score Tree functions
-    ScoreElement* treeParent() const override;
-    ScoreElement* treeChild(int idx) const override;
+    EngravingObject* treeParent() const override;
+    EngravingObject* treeChild(int idx) const override;
     int treeChildCount() const override;
     void dumpScoreTree();  // for debugging purposes
 
@@ -708,7 +708,7 @@ public:
     void undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent);
     void undoChangeClef(Staff* ostaff, Element*, ClefType st, bool forInstrumentChange = false);
     bool undoPropertyChanged(Element* e, Pid t, const QVariant& st, PropertyFlags ps = PropertyFlags::NOSTYLE);
-    void undoPropertyChanged(ScoreElement*, Pid, const QVariant& v, PropertyFlags ps = PropertyFlags::NOSTYLE);
+    void undoPropertyChanged(EngravingObject*, Pid, const QVariant& v, PropertyFlags ps = PropertyFlags::NOSTYLE);
     virtual UndoStack* undoStack() const;
     void undo(UndoCommand*, EditData* = 0) const;
     void undoRemoveMeasures(Measure*, Measure*, bool preserveTies = false);
@@ -815,7 +815,7 @@ public:
     void setPlayChord(bool v) { _updateState._playChord = v; }
     bool selectionChanged() const { return _updateState._selectionChanged; }
     void setSelectionChanged(bool val) { _updateState._selectionChanged = val; }
-    void deleteLater(ScoreElement* e) { _updateState._deleteList.push_back(e); }
+    void deleteLater(EngravingObject* e) { _updateState._deleteList.push_back(e); }
     void deletePostponed();
 
     void changeSelectedNotesVoice(int);
@@ -1279,13 +1279,13 @@ public:
     friend class Chord;
 };
 
-static inline Score* toScore(ScoreElement* e)
+static inline Score* toScore(EngravingObject* e)
 {
     Q_ASSERT(!e || e->isScore());
     return static_cast<Score*>(e);
 }
 
-static inline const Score* toScore(const ScoreElement* e)
+static inline const Score* toScore(const EngravingObject* e)
 {
     Q_ASSERT(!e || e->isScore());
     return static_cast<const Score*>(e);

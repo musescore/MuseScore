@@ -23,11 +23,11 @@
 #ifndef __ELEMENT_H__
 #define __ELEMENT_H__
 
+#include "engravingobject.h"
 #include "elementgroup.h"
 #include "spatium.h"
 #include "fraction.h"
 #include "mscore.h"
-#include "scoreElement.h"
 #include "shape.h"
 #include "sig.h"
 #include "symid.h"
@@ -182,7 +182,7 @@ public:
 ///     score layout elements.
 //-------------------------------------------------------------------
 
-class Element : public ScoreElement
+class Element : public EngravingObject
 {
     INJECT(engraving, mu::engraving::IEngravingConfiguration, engravingConfiguration)
 
@@ -211,7 +211,7 @@ protected:
     mu::draw::Color _color;                ///< element color attribute
 
 public:
-    Element(const ElementType& type, ScoreElement* se = 0, ElementFlags = ElementFlag::NOTHING,
+    Element(const ElementType& type, EngravingObject* se = 0, ElementFlags = ElementFlag::NOTHING,
             mu::engraving::AccessibleElement* access = nullptr);
     Element(const Element&);
     virtual ~Element();
@@ -519,7 +519,7 @@ public:
     virtual QVariant getProperty(Pid) const override;
     virtual bool setProperty(Pid, const QVariant&) override;
     virtual void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps) override;
-    using ScoreElement::undoChangeProperty;
+    using EngravingObject::undoChangeProperty;
     virtual QVariant propertyDefault(Pid) const override;
     virtual Pid propertyId(const QStringRef& xmlName) const override;
     virtual QString propertyUserValue(Pid) const override;

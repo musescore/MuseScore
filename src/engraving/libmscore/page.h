@@ -54,12 +54,12 @@ class Page final : public Element
     void drawHeaderFooter(mu::draw::Painter*, int area, const QString&) const;
 
 public:
-    Page(ScoreElement* parent);
+    Page(EngravingObject* parent);
     ~Page();
 
     // Score Tree functions
-    ScoreElement* treeParent() const override;
-    ScoreElement* treeChild(int idx) const override;
+    EngravingObject* treeParent() const override;
+    EngravingObject* treeChild(int idx) const override;
     int treeChildCount() const override;
 
     Page* clone() const override { return new Page(*this); }

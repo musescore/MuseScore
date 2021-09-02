@@ -1866,7 +1866,7 @@ ChangeChordStaffMove::ChangeChordStaffMove(ChordRest* cr, int v)
 void ChangeChordStaffMove::flip(EditData*)
 {
     int v = chordRest->staffMove();
-    for (ScoreElement* e : chordRest->linkList()) {
+    for (EngravingObject* e : chordRest->linkList()) {
         ChordRest* cr = toChordRest(e);
         cr->setStaffMove(staffMove);
         cr->triggerLayout();
@@ -2614,7 +2614,7 @@ void LinkUnlink::unlink()
 //    link e1 to e2
 //---------------------------------------------------------
 
-Link::Link(ScoreElement* e1, ScoreElement* e2)
+Link::Link(EngravingObject* e1, EngravingObject* e2)
 {
     Q_ASSERT(e1->links() == 0);
     le = e2->links();
@@ -2646,7 +2646,7 @@ bool Link::isFiltered(UndoCommand::Filter f, const Element* target) const
 //   Unlink
 //---------------------------------------------------------
 
-Unlink::Unlink(ScoreElement* _e)
+Unlink::Unlink(EngravingObject* _e)
 {
     e  = _e;
     le = e->links();
