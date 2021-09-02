@@ -1830,7 +1830,7 @@ void TextBase::layout1()
                   else if (parent()->isPage()) {
                         Page* p = toPage(parent());
                         h = p->height() - p->tm() - p->bm();
-                        yoff = p->tm();
+                        yoff = _layoutRelativeToBottom ? -p->bm() : p->tm(); // used to keep footers inside page margins
                         }
                   else if (parent()->isMeasure())
                         ;

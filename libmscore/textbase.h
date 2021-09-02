@@ -252,6 +252,7 @@ class TextBase : public Element {
 
       QString preEdit;              // move to EditData?
       bool _layoutToParentWidth     { false };
+      bool _layoutRelativeToBottom  { false }; // used to keep footers inside page margins
 
       int  hexState                 { -1    };
       bool _primed                  { 0 };
@@ -298,11 +299,12 @@ class TextBase : public Element {
       qreal lineHeight() const;
       virtual qreal baseLine() const override;
 
-      bool empty() const                  { return xmlText().isEmpty(); }
-      void clear()                        { setXmlText(QString());      }
+      bool empty() const                        { return xmlText().isEmpty();   }
+      void clear()                              { setXmlText(QString());        }
 
-      bool layoutToParentWidth() const    { return _layoutToParentWidth; }
-      void setLayoutToParentWidth(bool v) { _layoutToParentWidth = v;   }
+      bool layoutToParentWidth() const          { return _layoutToParentWidth;  }
+      void setLayoutToParentWidth(bool v)       { _layoutToParentWidth = v;     }
+      void setLayoutRelativeToBottom(bool v)    { _layoutRelativeToBottom = v ; }
 
       virtual void startEdit(EditData&) override;
       virtual bool edit(EditData&) override;
