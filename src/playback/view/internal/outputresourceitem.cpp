@@ -121,11 +121,12 @@ void OutputResourceItem::setIsActive(bool newIsActive)
 
 void OutputResourceItem::updateCurrentFxParams(const AudioResourceMeta& newMeta)
 {
-    m_currentFxParams.resourceMeta = newMeta;
-
-    if (m_currentFxParams.resourceMeta.isValid()) {
-        m_currentFxParams.active = true;
+    if (m_currentFxParams.resourceMeta == newMeta) {
+        return;
     }
+
+    m_currentFxParams.resourceMeta = newMeta;
+    m_currentFxParams.active = newMeta.isValid();
 
     emit isActiveChanged();
     emit titleChanged();

@@ -170,7 +170,7 @@ void Mixer::setMasterOutputParams(const AudioOutputParams& params)
     m_masterParams = params;
 
     m_masterFxProcessors.clear();
-    m_masterFxProcessors = fxResolver()->resolveMasterFxList(params.fxParams);
+    m_masterFxProcessors = fxResolver()->resolveMasterFxList(params.fxChain);
     m_masterOutputParamsChanged.send(params);
 
     for (IFxProcessorPtr& fx : m_masterFxProcessors) {

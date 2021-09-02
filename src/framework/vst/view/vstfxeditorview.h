@@ -37,6 +37,7 @@ class VstFxEditorView : public QDialog, public Steinberg::IPlugFrame
 
     Q_PROPERTY(int trackId READ trackId WRITE setTrackId NOTIFY trackIdChanged)
     Q_PROPERTY(QString resourceId READ resourceId WRITE setResourceId NOTIFY resourceIdChanged)
+    Q_PROPERTY(int chainOrder READ chainOrder WRITE setChainOrder NOTIFY chainOrderChanged)
 
     INJECT(vst, IVstPluginsRegister, pluginsRegister)
 
@@ -54,11 +55,16 @@ public:
     const QString& resourceId() const;
     void setResourceId(const QString& newResourceId);
 
+    int chainOrder() const;
+    void setChainOrder(int newChainOrder);
+
 signals:
     void trackIdChanged();
     void resourceIdChanged();
+    void chainOrderChanged();
 
 private:
+    bool isAbleToWrapPlugin() const;
     void wrapPluginView();
 
     FIDString currentPlatformUiType() const;
@@ -67,6 +73,7 @@ private:
 
     audio::TrackId m_trackId = -1;
     QString m_resourceId;
+    audio::AudioFxChainOrder m_chainOrder = -1;
 };
 }
 

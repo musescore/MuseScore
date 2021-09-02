@@ -24,7 +24,6 @@
 #define MU_VST_VSTPLUGINSREGISTER_H
 
 #include <map>
-#include <unordered_map>
 #include <mutex>
 
 #include "modularity/ioc.h"
@@ -38,25 +37,41 @@ class VstPluginsRegister : public IVstPluginsRegister
     INJECT_STATIC(vst, audio::IAudioThreadSecurer, threadSecurer)
 public:
     void registerInstrPlugin(const audio::TrackId trackId, const audio::AudioResourceId& resourceId, VstPluginPtr pluginPtr) override;
-    void registerFxPlugin(const audio::TrackId trackId, const audio::AudioResourceId& resourceId, VstPluginPtr pluginPtr) override;
-    void registerMasterFxPlugin(const audio::AudioResourceId& resourceId, VstPluginPtr pluginPtr) override;
+    void registerFxPlugin(const audio::TrackId trackId, const audio::AudioResourceId& resourceId, const audio::AudioFxChainOrder chainOrder,
+                          VstPluginPtr pluginPtr) override;
+    void registerMasterFxPlugin(const audio::AudioResourceId& resourceId, const audio::AudioFxChainOrder chainOrder,
+                                VstPluginPtr pluginPtr) override;
 
     VstPluginPtr instrumentPlugin(const audio::TrackId trackId, const audio::AudioResourceId& resourceId) const override;
-    VstPluginPtr fxPlugin(const audio::TrackId trackId, const audio::AudioResourceId& resourceId) const override;
-    VstPluginPtr masterFxPlugin(const audio::AudioResourceId& resourceId) const override;
+    VstPluginPtr fxPlugin(const audio::TrackId trackId, const audio::AudioResourceId& resourceId,
+                          const audio::AudioFxChainOrder chainOrder) const override;
+    VstPluginPtr masterFxPlugin(const audio::AudioResourceId& resourceId, const audio::AudioFxChainOrder chainOrder) const override;
 
     void unregisterInstrPlugin(const audio::TrackId trackId, const audio::AudioResourceId& resourceId) override;
-    void unregisterFxPlugin(const audio::TrackId trackId, const audio::AudioResourceId& resourceId) override;
-    void unregisterMasterFxPlugin(const audio::AudioResourceId& resourceId) override;
+    void unregisterFxPlugin(const audio::TrackId trackId, const audio::AudioResourceId& resourceId,
+                            const audio::AudioFxChainOrder chainOrder) override;
+    void unregisterMasterFxPlugin(const audio::AudioResourceId& resourceId, const audio::AudioFxChainOrder chainOrder) override;
 
 private:
     mutable std::mutex m_mutex;
 
-    using PluginInstancesMap = std::unordered_map<audio::AudioResourceId, VstPluginPtr>;
+    struct FxPluginKey {
+        audio::AudioResourceId resourceId;
+        audio::AudioFxChainOrder chainOrder = 0;
 
-    std::map<audio::TrackId, PluginInstancesMap> m_vstiPluginsMap;
-    std::map<audio::TrackId, PluginInstancesMap> m_vstFxPluginsMap;
-    PluginInstancesMap m_masterPluginsMap;
+        bool operator<(const FxPluginKey& other) const
+        {
+            return chainOrder < other.chainOrder
+                   && resourceId < other.resourceId;
+        }
+    };
+
+    using VstiInstancesMap = std::map<audio::AudioResourceId, VstPluginPtr>;
+    using VstFxInstancesMap = std::map<FxPluginKey, VstPluginPtr>;
+
+    std::map<audio::TrackId, VstiInstancesMap> m_vstiPluginsMap;
+    std::map<audio::TrackId, VstFxInstancesMap> m_vstFxPluginsMap;
+    VstFxInstancesMap m_masterPluginsMap;
 };
 }
 

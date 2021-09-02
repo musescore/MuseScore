@@ -81,12 +81,16 @@ struct AudioResourceMeta {
                && type == other.type
                && hasNativeEditorSupport == other.hasNativeEditorSupport;
     }
+
+    bool operator<(const AudioResourceMeta& other) const
+    {
+        return id < other.id
+               && type < other.type
+               && vendor < other.vendor;
+    }
 };
 
 using AudioResourceMetaList = std::vector<AudioResourceMeta>;
-
-using FxProcessorId = std::string;
-using FxProcessorIdList =  std::vector<FxProcessorId>;
 
 enum class AudioFxType {
     Undefined = -1,
@@ -113,6 +117,8 @@ enum class AudioFxCategory {
 
 using AudioFxCategories = std::set<AudioFxCategory>;
 
+using AudioFxChainOrder = int8_t;
+
 struct AudioFxParams {
     AudioFxType type() const
     {
@@ -123,6 +129,7 @@ struct AudioFxParams {
     }
 
     AudioFxCategories categories;
+    AudioFxChainOrder chainOrder = -1;
     AudioResourceMeta resourceMeta;
     bool active = false;
 
@@ -130,7 +137,14 @@ struct AudioFxParams {
     {
         return resourceMeta == other.resourceMeta
                && active == other.active
+               && chainOrder == other.chainOrder
                && categories == other.categories;
+    }
+
+    bool operator<(const AudioFxParams& other) const
+    {
+        return resourceMeta < other.resourceMeta
+               && chainOrder < other.chainOrder;
     }
 
     bool isValid() const
@@ -139,17 +153,17 @@ struct AudioFxParams {
     }
 };
 
-using AudioFxParamsMap = std::map<AudioFxType, std::vector<AudioFxParams> >;
+using AudioFxChain = std::map<AudioFxChainOrder, AudioFxParams>;
 
 struct AudioOutputParams {
-    AudioFxParamsMap fxParams;
+    AudioFxChain fxChain;
     volume_db_t volume = 1.f;
     balance_t balance = 0.f;
     bool muted = false;
 
     bool operator ==(const AudioOutputParams& other) const
     {
-        return fxParams == other.fxParams
+        return fxChain == other.fxChain
                && volume == other.volume
                && balance == other.balance
                && muted == other.muted;

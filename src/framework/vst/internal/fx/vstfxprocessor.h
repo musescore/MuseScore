@@ -13,11 +13,12 @@ namespace mu::vst {
 class VstFxProcessor : public audio::IFxProcessor
 {
 public:
-    explicit VstFxProcessor(VstPluginPtr&& pluginPtr);
+    explicit VstFxProcessor(VstPluginPtr&& pluginPtr, const audio::AudioFxParams& params);
 
     void init();
 
     audio::AudioFxType type() const override;
+    const audio::AudioFxParams& params() const override;
     void setSampleRate(unsigned int sampleRate) override;
     bool active() const override;
     void setActive(bool active) override;
@@ -26,6 +27,8 @@ public:
 private:
     VstPluginPtr m_pluginPtr = nullptr;
     std::unique_ptr<VstAudioClient> m_vstAudioClient = nullptr;
+
+    audio::AudioFxParams m_params;
 
     bool m_isActive = false;
 };

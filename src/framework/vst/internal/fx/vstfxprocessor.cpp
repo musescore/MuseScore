@@ -26,8 +26,10 @@ using namespace mu;
 using namespace mu::vst;
 using namespace mu::audio;
 
-VstFxProcessor::VstFxProcessor(VstPluginPtr&& pluginPtr)
-    : m_pluginPtr(pluginPtr), m_vstAudioClient(std::make_unique<VstAudioClient>())
+VstFxProcessor::VstFxProcessor(VstPluginPtr&& pluginPtr, const AudioFxParams& params)
+    : m_pluginPtr(pluginPtr),
+    m_vstAudioClient(std::make_unique<VstAudioClient>()),
+    m_params(params)
 {
 }
 
@@ -39,6 +41,11 @@ void VstFxProcessor::init()
 AudioFxType VstFxProcessor::type() const
 {
     return audio::AudioFxType::VstFx;
+}
+
+const AudioFxParams& VstFxProcessor::params() const
+{
+    return m_params;
 }
 
 void VstFxProcessor::setSampleRate(unsigned int sampleRate)

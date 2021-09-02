@@ -32,7 +32,7 @@ using namespace mu::async;
 using namespace mu::audio;
 using namespace mu::audio::fx;
 
-std::vector<IFxProcessorPtr> FxResolver::resolveMasterFxList(const AudioFxParamsMap& fxParams)
+std::vector<IFxProcessorPtr> FxResolver::resolveMasterFxList(const AudioFxChain& fxChain)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
@@ -42,21 +42,23 @@ std::vector<IFxProcessorPtr> FxResolver::resolveMasterFxList(const AudioFxParams
 
     std::vector<IFxProcessorPtr> result;
 
-    for (const auto& pair : fxParams) {
-        auto search = m_resolvers.find(pair.first);
+    for (const auto& resolver : m_resolvers) {
+        AudioFxChain fxChainByType;
 
-        if (search == m_resolvers.end()) {
-            continue;
+        for (const auto& fx : fxChain) {
+            if (resolver.first == fx.second.type()) {
+                fxChainByType.insert(fx);
+            }
+
+            std::vector<IFxProcessorPtr> fxList = resolver.second->resolveMasterFxList(std::move(fxChainByType));
+            result.insert(result.end(), fxList.begin(), fxList.end());
         }
-
-        std::vector<IFxProcessorPtr> fxList = search->second->resolveMasterFxList(pair.second);
-        result.insert(result.end(), fxList.begin(), fxList.end());
     }
 
     return result;
 }
 
-std::vector<IFxProcessorPtr> FxResolver::resolveFxList(const TrackId trackId, const AudioFxParamsMap& fxParams)
+std::vector<IFxProcessorPtr> FxResolver::resolveFxList(const TrackId trackId, const AudioFxChain& fxChain)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
@@ -66,15 +68,17 @@ std::vector<IFxProcessorPtr> FxResolver::resolveFxList(const TrackId trackId, co
 
     std::vector<IFxProcessorPtr> result;
 
-    for (const auto& pair : fxParams) {
-        auto search = m_resolvers.find(pair.first);
+    for (const auto& resolver : m_resolvers) {
+        AudioFxChain fxChainByType;
 
-        if (search == m_resolvers.end()) {
-            continue;
+        for (const auto& fx : fxChain) {
+            if (resolver.first == fx.second.type()) {
+                fxChainByType.insert(fx);
+            }
+
+            std::vector<IFxProcessorPtr> fxList = resolver.second->resolveFxList(trackId, std::move(fxChainByType));
+            result.insert(result.end(), fxList.begin(), fxList.end());
         }
-
-        std::vector<IFxProcessorPtr> fxList = search->second->resolveFxList(trackId, pair.second);
-        result.insert(result.end(), fxList.begin(), fxList.end());
     }
 
     return result;
