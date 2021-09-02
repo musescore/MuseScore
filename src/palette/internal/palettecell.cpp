@@ -29,10 +29,12 @@
 #include "engraving/libmscore/fret.h"
 #include "engraving/libmscore/masterscore.h"
 #include "engraving/libmscore/textbase.h"
+#include "engraving/libmscore/factory.h"
 
 #include "translation.h"
 
 using namespace mu::palette;
+using namespace mu::engraving;
 using namespace Ms;
 
 static bool needsStaff(ElementPtr e)
@@ -184,7 +186,7 @@ bool PaletteCell::read(XmlReader& e)
         } else if (s == "visible") {
             visible = e.readBool();
         } else {
-            element.reset(EngravingItem::name2Element(s, gpaletteScore->dummy()));
+            element.reset(Factory::name2Element(s, gpaletteScore->dummy()));
             if (!element) {
                 e.unknown();
             } else {

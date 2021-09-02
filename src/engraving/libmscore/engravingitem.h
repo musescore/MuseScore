@@ -484,7 +484,6 @@ public:
     qreal point(const Spatium sp) const { return sp.val() * spatium(); }
 
     static Ms::EngravingItem* create(Ms::ElementType type, Ms::EngravingItem* parent);
-    static EngravingItem* name2Element(const QStringRef&, Ms::EngravingItem* parent);
 
     bool systemFlag() const { return flag(ElementFlag::SYSTEM); }
     void setSystemFlag(bool v) const { setFlag(ElementFlag::SYSTEM, v); }
