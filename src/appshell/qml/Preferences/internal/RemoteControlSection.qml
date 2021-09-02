@@ -46,7 +46,7 @@ BaseSection {
         CheckBox {
             id: isOSCRemoteControlCheckBox
 
-            width: 216 // todo
+            width: root.columnWidth
             anchors.verticalCenter: parent.verticalCenter
 
             text: qsTrc("appshell", "Port number:")
@@ -63,7 +63,7 @@ BaseSection {
         IncrementalPropertyControl {
             id: oscPortControl
 
-            width: 96 // todo
+            width: 96
             anchors.verticalCenter: parent.verticalCenter
 
             enabled: root.isOSCRemoteControl

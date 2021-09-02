@@ -83,5 +83,6 @@
         <file>qml/Preferences/internal/AutoSaveSection.qml</file>
         <file>qml/Preferences/internal/RemoteControlSection.qml</file>
         <file>qml/Preferences/internal/ProgrammeStartSection.qml</file>
+        <file>qml/Preferences/internal/FoldersSection.qml</file>
     </qresource>
 </RCC>

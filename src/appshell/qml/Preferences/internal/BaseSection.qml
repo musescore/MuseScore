@@ -31,6 +31,7 @@ Column {
     spacing: 18
 
     property alias title: titleLabel.text
+    property int columnWidth: 216
 
     property int navigationOrderStart: 0
     property NavigationPanel navigation: NavigationPanel {
