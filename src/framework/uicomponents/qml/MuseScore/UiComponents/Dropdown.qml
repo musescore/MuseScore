@@ -128,7 +128,7 @@ Item {
         text = text.toLowerCase()
         var idx = -1
         for (var i = 0; i < root.count; ++i) {
-            var itemText = accesser.itemAt(i).text
+            var itemText =  root.valueFromModel(i, root.textRole, "")
             if (itemText.toLowerCase().startsWith(text)) {
                 idx = i;
                 break;
@@ -193,14 +193,11 @@ Item {
         onOpened: {
             popup.forceActiveFocus()
             contentItem.forceActiveFocus()
-            view.positionViewAtIndex(root.currentIndex, ListView.Center)
-            var item = view.itemAtIndex(root.currentIndex)
-            item.navigation.requestActive()
         }
 
         function closeAndReturnFocus() {
-            popup.close()
             popup.navigationParentControl.requestActive()
+            popup.close()
         }
 
         NavigationPanel {
@@ -311,8 +308,15 @@ Item {
                         background.opacity: 1.0
                         hoveredColor: ui.theme.accentColor
 
-                        selected: model.index === root.currentIndex
+                        selected: model.index === root.currentIndex && popup.opened
                         text: root.valueFromModel(model.index, root.textRole, "")
+
+                        onSelectedChanged: {
+                            if (!item.navigation.active && item.selected) {
+                                view.positionViewAtIndex(root.currentIndex, ListView.Center)
+                                item.navigation.requestActive()
+                            }
+                        }
 
                         onClicked: {
                             root.currentIndex = model.index
