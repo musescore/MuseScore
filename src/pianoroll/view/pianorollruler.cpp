@@ -104,8 +104,9 @@ static const char* cmark_xpm[]={
 PianorollRuler::PianorollRuler(QQuickItem* parent)
     : QQuickPaintedItem(parent)
 {
+    setAcceptedMouseButtons(Qt::AllButtons);
+
     m_font2.setPixelSize(14);
-//    m_font2.setBold(true);
     m_font1.setPixelSize(10);
 
     if (markIcon[0] == 0)
@@ -227,6 +228,23 @@ double PianorollRuler::pixelXToWholeNote(int pixX) const
 {
 
     return (pixX + m_centerX * m_displayObjectWidth - width() / 2) / m_wholeNoteWidth;
+}
+void PianorollRuler::mousePressEvent(QMouseEvent* event)
+{
+    double wholeNote = pixelXToWholeNote(event->pos().x());
+    Ms::Fraction frac(wholeNote * 1000, 1000);
+    int ticks = frac.ticks();
+
+    Ms::Score* curScore = score();
+    qreal time = curScore->utick2utime(ticks);
+
+    playback()->player()->seek(0, time);
+
+//    update();
+}
+
+void PianorollRuler::mouseMoveEvent(QMouseEvent* event)
+{
 }
 
 void PianorollRuler::paint(QPainter* p)
