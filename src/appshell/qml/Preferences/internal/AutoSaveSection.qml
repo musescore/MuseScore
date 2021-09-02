@@ -46,7 +46,7 @@ BaseSection {
         CheckBox {
             id: autoSaveCheckBox
 
-            width: 216 // todo
+            width: root.columnWidth
             anchors.verticalCenter: parent.verticalCenter
 
             text: qsTrc("appshell", "Auto save every:")

@@ -44,6 +44,8 @@ Item {
     property int navigationRowOrder: 0
     property int navigationColumnOrderStart: 0
 
+    property string pathFieldTitle: qsTrc("uicomponents", "Current path:")
+
     signal pathEdited(var newPath)
 
     height: 30
@@ -66,6 +68,7 @@ Item {
             navigation.row: root.navigationRowOrder
             navigation.enabled: root.visible
             navigation.column: root.navigationColumnOrderStart
+            navigation.accessible.name: root.pathFieldTitle + " " + pathField.currentText
 
             onCurrentTextEdited: {
                 root.pathEdited(newTextValue)

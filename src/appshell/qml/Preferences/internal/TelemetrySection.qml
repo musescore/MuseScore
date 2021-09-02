@@ -35,7 +35,7 @@ BaseSection {
     CheckBox {
         id: sendCheckBox
 
-        width: 216 // todo
+        width: root.columnWidth
 
         text: qsTrc("appshell", "Send anonymous telemetry data to MuseScore")
 
