@@ -38,17 +38,12 @@ Loader {
 
     default property Component delegateComponent
 
-    anchors.left: parent.left
-    anchors.leftMargin: headerVisible ? 0 : 16
-    anchors.right: parent.right
-
     active: visible
 
     sourceComponent: ListView {
         id: sectionContentList
 
-        anchors.left: parent.left
-        anchors.right: parent.right
+        width: contentItem.childrenRect.width
         height: contentHeight
         contentHeight: contentItem.childrenRect.height
 
