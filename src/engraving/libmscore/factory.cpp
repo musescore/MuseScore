@@ -27,7 +27,7 @@
 using namespace mu::engraving;
 using namespace Ms;
 
-EngravingItem* Factory::name2Element(const QStringRef& name, EngravingItem* parent)
+EngravingItem* Factory::createItemByName(const QStringRef& name, EngravingItem* parent)
 {
     ElementType type = EngravingItem::name2type(name);
     if (type == ElementType::INVALID) {

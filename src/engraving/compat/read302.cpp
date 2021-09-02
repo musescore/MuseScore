@@ -156,7 +156,7 @@ bool Read302::readScore302(Ms::Score* score, XmlReader& e)
                    || (tag == "Trill")
                    || (tag == "Slur")
                    || (tag == "Pedal")) {
-            Spanner* s = toSpanner(Factory::name2Element(tag, score->dummy()));
+            Spanner* s = toSpanner(Factory::createItemByName(tag, score->dummy()));
             s->read(e);
             score->addSpanner(s);
         } else if (tag == "Excerpt") {

@@ -242,7 +242,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
                     }
                     e.readNext();
                 } else if (tag == "Chord" || tag == "Rest" || tag == "MeasureRepeat") {
-                    ChordRest* cr = toChordRest(Factory::name2Element(tag, this->dummy()));
+                    ChordRest* cr = toChordRest(Factory::createItemByName(tag, this->dummy()));
                     cr->setTrack(e.track());
                     cr->read(e);
                     cr->setSelected(false);
@@ -394,7 +394,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
                            || tag == "Sticking"
                            || tag == "Fermata"
                            ) {
-                    EngravingItem* el = Factory::name2Element(tag, this->dummy());
+                    EngravingItem* el = Factory::createItemByName(tag, this->dummy());
                     el->setTrack(e.track());                // a valid track might be necessary for el->read() to work
                     if (el->isFermata()) {
                         el->setPlacement(el->track() & 1 ? Placement::BELOW : Placement::ABOVE);
@@ -907,7 +907,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                             undoAddElement(el);
                         }
                     } else if (tag == "StaffText" || tag == "Sticking") {
-                        EngravingItem* el = Factory::name2Element(tag, this->dummy());
+                        EngravingItem* el = Factory::createItemByName(tag, this->dummy());
                         el->read(e);
                         el->setTrack(destTrack);
                         el->setParent(currSegm);
