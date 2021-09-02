@@ -33,12 +33,38 @@ static const Settings::Key PLAY_NOTES_WHEN_EDITING(moduleName, "score/note/playO
 static const Settings::Key PLAY_CHORD_WHEN_EDITING(moduleName, "score/chord/playOnAddNote");
 static const Settings::Key PLAY_HARMONY_WHEN_EDITING(moduleName, "score/harmony/play/onedit");
 
+static const Settings::Key MIXER_LABELS_SECTION_VISIBLE_KEY(moduleName, "playback/mixer/labelsSectionVisible");
+static const Settings::Key MIXER_SOUND_SECTION_VISIBLE_KEY(moduleName, "playback/mixer/soundSectionVisible");
+static const Settings::Key MIXER_AUDIO_FX_SECTION_VISIBLE_KEY(moduleName, "playback/mixer/audioFxSectionVisible");
+static const Settings::Key MIXER_BALANCE_SECTION_VISIBLE_KEY(moduleName, "playback/mixer/balanceSectionVisible");
+static const Settings::Key MIXER_VOLUME_SECTION_VISIBLE_KEY(moduleName, "playback/mixer/volumeSectionVisible");
+static const Settings::Key MIXER_TITLE_SECTION_VISIBLE_KEY(moduleName, "playback/mixer/titleSectionVisible");
+
+static Settings::Key mixerSectionVisibleKey(MixerSectionType sectionType)
+{
+    switch (sectionType) {
+    case MixerSectionType::Labels: return MIXER_LABELS_SECTION_VISIBLE_KEY;
+    case MixerSectionType::Sound: return MIXER_SOUND_SECTION_VISIBLE_KEY;
+    case MixerSectionType::AudioFX: return MIXER_AUDIO_FX_SECTION_VISIBLE_KEY;
+    case MixerSectionType::Balance: return MIXER_BALANCE_SECTION_VISIBLE_KEY;
+    case MixerSectionType::Volume: return MIXER_VOLUME_SECTION_VISIBLE_KEY;
+    case MixerSectionType::Title: return MIXER_TITLE_SECTION_VISIBLE_KEY;
+    case MixerSectionType::Unknown: break;
+    }
+
+    return Settings::Key();
+}
+
 void PlaybackConfiguration::init()
 {
     settings()->setDefaultValue(PLAY_NOTES_WHEN_EDITING, Val(true));
     settings()->setDefaultValue(PLAY_CHORD_WHEN_EDITING, Val(true));
     settings()->setDefaultValue(PLAY_HARMONY_WHEN_EDITING, Val(true));
     settings()->setDefaultValue(PLAYBACK_CURSOR_TYPE_KEY, Val(static_cast<int>(PlaybackCursorType::STEPPED)));
+
+    for (MixerSectionType sectionType : allMixerSectionTypes()) {
+        settings()->setDefaultValue(mixerSectionVisibleKey(sectionType), Val(true));
+    }
 }
 
 bool PlaybackConfiguration::playNotesWhenEditing() const
@@ -74,4 +100,14 @@ void PlaybackConfiguration::setPlayHarmonyWhenEditing(bool value)
 PlaybackCursorType PlaybackConfiguration::cursorType() const
 {
     return static_cast<PlaybackCursorType>(settings()->value(PLAYBACK_CURSOR_TYPE_KEY).toInt());
+}
+
+bool PlaybackConfiguration::isMixerSectionVisible(MixerSectionType sectionType) const
+{
+    return settings()->value(mixerSectionVisibleKey(sectionType)).toBool();
+}
+
+void PlaybackConfiguration::setMixerSectionVisible(MixerSectionType sectionType, bool visible)
+{
+    settings()->setSharedValue(mixerSectionVisibleKey(sectionType), Val(visible));
 }

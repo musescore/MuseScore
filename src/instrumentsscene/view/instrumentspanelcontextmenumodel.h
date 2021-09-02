@@ -47,6 +47,7 @@ public:
 private:
     void loadItems();
     void setInstrumentsOrder(const actions::ActionData& args);
+    void updateOrderingMenu(const QString& newOrderId);
 
     notation::IMasterNotationPtr m_masterNotation;
     notation::ScoreOrderList m_orders;

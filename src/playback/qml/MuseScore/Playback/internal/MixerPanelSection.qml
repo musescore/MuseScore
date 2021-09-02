@@ -30,14 +30,16 @@ Loader {
     id: root
 
     property string headerTitle: undefined
+    property bool headerVisible: true
     property int headerHeight: 22
-    property int headerWidth: 98
+    property int headerWidth: headerVisible ? 98 : 0
     property int delegateDefaultWidth: 108
     property var model: undefined
 
     default property Component delegateComponent
 
     anchors.left: parent.left
+    anchors.leftMargin: headerVisible ? 0 : 16
     anchors.right: parent.right
 
     sourceComponent: ListView {
@@ -67,6 +69,7 @@ Loader {
 
                 horizontalAlignment: Qt.AlignRight
                 text: root.headerTitle
+                visible: root.headerVisible
             }
         }
 

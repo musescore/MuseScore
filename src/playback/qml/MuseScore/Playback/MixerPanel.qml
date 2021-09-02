@@ -33,6 +33,7 @@ Rectangle {
     id: root
 
     property alias navigation: navPanel
+    property alias contextMenuModel: contextMenuModel
 
     color: ui.theme.backgroundPrimaryColor
 
@@ -57,6 +58,14 @@ Rectangle {
         }
     }
 
+    MixerPanelContextMenuModel {
+        id: contextMenuModel
+
+        Component.onCompleted: {
+            contextMenuModel.load()
+        }
+    }
+
     Column {
         id: contentColumn
 
@@ -68,11 +77,17 @@ Rectangle {
         MixerSoundSection {
             id: soundSection
 
+            active: contextMenuModel.soundSectionVisible
+            headerVisible: contextMenuModel.labelsSectionVisible
+
             model: mixerPanelModel
         }
 
         MixerFxSection {
             id: fxSection
+
+            active: contextMenuModel.audioFxSectionVisible
+            headerVisible: contextMenuModel.labelsSectionVisible
 
             model: mixerPanelModel
         }
@@ -80,17 +95,26 @@ Rectangle {
         MixerBalanceSection {
             id: balanceSection
 
+            active: contextMenuModel.balanceSectionVisible
+            headerVisible: contextMenuModel.labelsSectionVisible
+
             model: mixerPanelModel
         }
 
         MixerVolumeSection {
             id: volumeSection
 
+            active: contextMenuModel.volumeSectionVisible
+            headerVisible: contextMenuModel.labelsSectionVisible
+
             model: mixerPanelModel
         }
 
         MixerTitleSection {
             id: titleSection
+
+            active: contextMenuModel.titleSectionVisible
+            headerVisible: contextMenuModel.labelsSectionVisible
 
             model: mixerPanelModel
         }
