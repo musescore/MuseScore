@@ -31,7 +31,7 @@ class Factory
 {
 public:
 
-    static Ms::EngravingItem* name2Element(const QStringRef& name, Ms::EngravingItem* parent);
+    static Ms::EngravingItem* createItemByName(const QStringRef& name, Ms::EngravingItem* parent);
 };
 }
 

@@ -1826,7 +1826,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                    || tag == "Trill"
                    || tag == "TextLine"
                    || tag == "Volta") {
-            Spanner* sp = toSpanner(Factory::name2Element(tag, m->score()->dummy()));
+            Spanner* sp = toSpanner(Factory::createItemByName(tag, m->score()->dummy()));
             sp->setTrack(e.track());
             sp->setTick(e.tick());
             // ?? sp->setAnchor(Spanner::Anchor::SEGMENT);
@@ -2042,7 +2042,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                    || tag == "InstrumentChange"
                    || tag == "StaffState"
                    ) {
-            EngravingItem* el = Factory::name2Element(tag, m->score()->dummy());
+            EngravingItem* el = Factory::createItemByName(tag, m->score()->dummy());
             // hack - needed because tick tags are unreliable in 1.3 scores
             // for symbols attached to anything but a measure
             if (el->type() == ElementType::SYMBOL) {
@@ -2101,7 +2101,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                 e.skipCurrentElement();
             } else {
                 segment = m->getSegment(SegmentType::ChordRest, e.tick());
-                EngravingItem* el = Factory::name2Element(tag, segment);
+                EngravingItem* el = Factory::createItemByName(tag, segment);
                 el->setTrack(e.track());
                 el->read(e);
                 segment->add(el);
@@ -2394,7 +2394,7 @@ static void readStaffContent(Score* score, XmlReader& e)
                 }
             }
         } else if (tag == "HBox" || tag == "VBox" || tag == "TBox" || tag == "FBox") {
-            Box* mb = toBox(Factory::name2Element(tag, score->dummy()));
+            Box* mb = toBox(Factory::createItemByName(tag, score->dummy()));
             readBox(e, mb);
             mb->setTick(e.tick());
             score->measures()->add(mb);
@@ -2904,7 +2904,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e)
                    || (tag == "Volta")
                    || (tag == "Trill")
                    || (tag == "Pedal")) {
-            Spanner* s = toSpanner(Factory::name2Element(tag, masterScore->dummy()));
+            Spanner* s = toSpanner(Factory::createItemByName(tag, masterScore->dummy()));
             if (tag == "Volta") {
                 readVolta114(e, toVolta(s));
             } else if (tag == "Ottava") {

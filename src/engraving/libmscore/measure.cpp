@@ -2113,7 +2113,7 @@ void Measure::read(XmlReader& e, int staffIdx)
             e.setTick(tick());
             readVoice(e, staffIdx, irregular);
         } else if (tag == "Marker" || tag == "Jump") {
-            EngravingItem* el = Factory::name2Element(tag, this);
+            EngravingItem* el = Factory::createItemByName(tag, this);
             el->setTrack(e.track());
             el->read(e);
             add(el);
@@ -2457,7 +2457,7 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
                    || tag == "FiguredBass"
                    ) {
             segment = getSegment(SegmentType::ChordRest, e.tick());
-            EngravingItem* el = Factory::name2Element(tag, segment);
+            EngravingItem* el = Factory::createItemByName(tag, segment);
             // hack - needed because tick tags are unreliable in 1.3 scores
             // for symbols attached to anything but a measure
             el->setTrack(e.track());
@@ -2473,7 +2473,7 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
                 e.skipCurrentElement();
             } else {
                 segment = getSegment(SegmentType::ChordRest, e.tick());
-                EngravingItem* el = Factory::name2Element(tag, segment);
+                EngravingItem* el = Factory::createItemByName(tag, segment);
                 el->setTrack(e.track());
                 el->read(e);
                 segment->add(el);

@@ -1089,7 +1089,7 @@ bool Read206::readNoteProperties206(Note* note, XmlReader& e)
         e.readNext();
     } else if (tag == "TextLine"
                || tag == "Glissando") {
-        Spanner* sp = toSpanner(Factory::name2Element(tag, note->score()->dummy()));
+        Spanner* sp = toSpanner(Factory::createItemByName(tag, note->score()->dummy()));
         // check this is not a lower-to-higher cross-staff spanner we already got
         int id = e.intAttribute("id");
         Spanner* placeholder = e.findSpanner(id);
@@ -2645,7 +2645,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                    || tag == "Trill"
                    || tag == "TextLine"
                    || tag == "Volta") {
-            Spanner* sp = toSpanner(Factory::name2Element(tag, score->dummy()));
+            Spanner* sp = toSpanner(Factory::createItemByName(tag, score->dummy()));
             sp->setTrack(e.track());
             sp->setTick(e.tick());
             sp->eraseSpannerSegments();
@@ -2852,7 +2852,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                    || tag == "FiguredBass"
                    ) {
             segment = m->getSegment(SegmentType::ChordRest, e.tick());
-            EngravingItem* el = Factory::name2Element(tag, segment);
+            EngravingItem* el = Factory::createItemByName(tag, segment);
             // hack - needed because tick tags are unreliable in 1.3 scores
             // for symbols attached to anything but a measure
             el->setTrack(e.track());
@@ -2871,7 +2871,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             readTempoText(tt, e);
             segment->add(tt);
         } else if (tag == "Marker" || tag == "Jump") {
-            EngravingItem* el = Factory::name2Element(tag, score->dummy());
+            EngravingItem* el = Factory::createItemByName(tag, score->dummy());
             el->setTrack(e.track());
             if (tag == "Marker") {
                 Marker* ma = toMarker(el);
@@ -2887,7 +2887,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                 e.skipCurrentElement();
             } else {
                 segment = m->getSegment(SegmentType::ChordRest, e.tick());
-                EngravingItem* el = Factory::name2Element(tag, segment);
+                EngravingItem* el = Factory::createItemByName(tag, segment);
                 el->setTrack(e.track());
                 el->read(e);
                 segment->add(el);
@@ -3104,7 +3104,7 @@ static void readStaffContent(Score* score, XmlReader& e)
                     }
                 }
             } else if (tag == "HBox" || tag == "VBox" || tag == "TBox" || tag == "FBox") {
-                Box* b = toBox(Factory::name2Element(tag, score->dummy()));
+                Box* b = toBox(Factory::createItemByName(tag, score->dummy()));
                 readBox(b, e);
                 b->setTick(e.tick());
                 score->measures()->add(b);
@@ -3313,7 +3313,7 @@ bool Read206::readScore206(Score* score, XmlReader& e)
                    || (tag == "Trill")
                    || (tag == "Slur")
                    || (tag == "Pedal")) {
-            Spanner* s = toSpanner(Factory::name2Element(tag, score->dummy()));
+            Spanner* s = toSpanner(Factory::createItemByName(tag, score->dummy()));
             if (tag == "HairPin") {
                 readHairpin206(e, toHairpin(s));
             } else if (tag == "Ottava") {

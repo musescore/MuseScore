@@ -75,7 +75,7 @@ EngravingItem* MTest::writeReadElement(EngravingItem* element)
 
     XmlReader e(buffer.buffer());
     e.readNextStartElement();
-    element = Factory::name2Element(e.name(), score->dummy());
+    element = Factory::createItemByName(e.name(), score->dummy());
     element->read(e);
     return element;
 }
