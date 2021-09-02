@@ -24,10 +24,9 @@ import QtQuick.Layouts 1.15
 
 import MuseScore.UiComponents 1.0
 
-Column {
+BaseSection {
     id: root
 
-    property alias title: titleLabel.text
     property alias wallpaperDialogTitle: wallpaperPicker.dialogTitle
 
     property bool useColor: true
@@ -37,19 +36,9 @@ Column {
     property alias wallpapersDir: wallpaperPicker.dir
     property alias wallpaperFilter: wallpaperPicker.filter
 
-    property int firstColumnWidth: 0
-
     signal useColorChangeRequested(var newValue)
     signal colorChangeRequested(var newColor)
     signal wallpaperPathChangeRequested(var newWallpaperPath)
-
-    spacing: 18
-
-    StyledTextLabel {
-        id: titleLabel
-
-        font: ui.theme.bodyBoldFont
-    }
 
     GridLayout {
         rows: 2
@@ -59,7 +48,7 @@ Column {
         columnSpacing: 0
 
         RoundedRadioButton {
-            implicitWidth: root.firstColumnWidth
+            implicitWidth: root.columnWidth
 
             checked: root.useColor
             text: qsTrc("appshell", "Color:")
@@ -82,7 +71,7 @@ Column {
         }
 
         RoundedRadioButton {
-            implicitWidth: root.firstColumnWidth
+            implicitWidth: root.columnWidth
 
             checked: !root.useColor
             text: qsTrc("appshell", "Wallpaper:")
