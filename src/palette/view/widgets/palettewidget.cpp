@@ -51,6 +51,7 @@
 #include "engraving/libmscore/masterscore.h"
 #include "engraving/libmscore/note.h"
 #include "engraving/libmscore/symbol.h"
+#include "engraving/libmscore/factory.h"
 #include "engraving/style/defaultstyle.h"
 #include "engraving/style/style.h"
 #include "engraving/compat/dummyelement.h"
@@ -61,6 +62,7 @@
 
 using namespace mu;
 using namespace mu::palette;
+using namespace mu::engraving;
 using namespace mu::framework;
 using namespace mu::draw;
 using namespace Ms;
@@ -839,7 +841,7 @@ void PaletteWidget::dropEvent(QDropEvent* event)
             symbol->read(xml);
             element = symbol;
         } else {
-            element = std::shared_ptr<EngravingItem>(EngravingItem::create(type, gpaletteScore->dummy()));
+            element = std::shared_ptr<EngravingItem>(Factory::createItem(type, gpaletteScore->dummy()));
             if (element) {
                 element->read(xml);
                 element->setTrack(0);

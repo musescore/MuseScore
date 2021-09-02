@@ -74,10 +74,12 @@
 #include "figuredbass.h"
 #include "lyrics.h"
 #include "tempotext.h"
+#include "factory.h"
 
 #include "masterscore.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -3587,7 +3589,7 @@ void Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmp
                 qDebug("measure not found");
             }
         }
-        MeasureBase* mb = toMeasureBase(EngravingItem::create(type, score->dummy()));
+        MeasureBase* mb = toMeasureBase(Factory::createItem(type, score->dummy()));
         mb->setTick(tick);
 
         if (im) {

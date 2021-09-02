@@ -33,6 +33,7 @@ class Factory
 {
 public:
 
+    static Ms::EngravingItem* createItem(Ms::ElementType type, Ms::EngravingItem* parent);
     static Ms::EngravingItem* createItemByName(const QStringRef& name, Ms::EngravingItem* parent);
     static Ms::ElementType name2type(const QStringRef& name, bool silent = false);
     static Ms::ElementType name2type(const QString& name) { return name2type(QStringRef(&name)); }

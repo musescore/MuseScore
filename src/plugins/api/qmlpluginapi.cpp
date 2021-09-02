@@ -33,10 +33,13 @@
 
 #include "libmscore/masterscore.h"
 #include "libmscore/musescoreCore.h"
+#include "libmscore/factory.h"
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/compat/dummyelement.h"
 
 #include <QQmlEngine>
+
+using namespace mu::engraving;
 
 namespace Ms {
 namespace PluginAPI {
@@ -165,7 +168,7 @@ EngravingItem* PluginAPI::newElement(int elementType)
         return nullptr;
     }
     const ElementType type = ElementType(elementType);
-    Ms::EngravingItem* e = Ms::EngravingItem::create(type, score->dummy());
+    Ms::EngravingItem* e = Factory::createItem(type, score->dummy());
     return wrap(e, Ownership::PLUGIN);
 }
 

@@ -33,6 +33,7 @@
 #include "libmscore/system.h"
 #include "libmscore/actionicon.h"
 #include "libmscore/chord.h"
+#include "libmscore/factory.h"
 
 #include "commonscenetypes.h"
 
@@ -236,7 +237,7 @@ void ExampleView::dragEnterEvent(QDragEnterEvent* event)
         Fraction duration;      // dummy
         ElementType type = EngravingItem::readType(e, &dragOffset, &duration);
 
-        dragElement = EngravingItem::create(type, _score->dummy());
+        dragElement = Factory::createItem(type, _score->dummy());
         if (dragElement) {
             dragElement->moveToDummy();
             dragElement->read(e);
