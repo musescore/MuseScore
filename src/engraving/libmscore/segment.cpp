@@ -50,8 +50,10 @@
 #include "undo.h"
 #include "harmony.h"
 #include "hook.h"
+#include "factory.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -821,7 +823,7 @@ SegmentType Segment::segmentType(ElementType type)
     case ElementType::BREATH:
         return SegmentType::Breath;
     default:
-        qDebug("Segment:segmentType():  bad type: <%s>", EngravingItem::name(type));
+        qDebug("Segment:segmentType():  bad type: <%s>", Factory::name(type));
         return SegmentType::Invalid;
     }
 }
