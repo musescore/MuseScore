@@ -48,7 +48,7 @@ static const ElementStyle fingeringStyle {
 
 //---------------------------------------------------------
 //   Fingering
-//      Element(Score* = 0, ElementFlags = ElementFlag::NOTHING);
+//      EngravingItem(Score* = 0, ElementFlags = ElementFlag::NOTHING);
 //---------------------------------------------------------
 
 Fingering::Fingering(Note* parent, Tid tid, ElementFlags ef)
@@ -256,7 +256,7 @@ void Fingering::draw(mu::draw::Painter* painter) const
 
 QString Fingering::accessibleInfo() const
 {
-    QString rez = Element::accessibleInfo();
+    QString rez = EngravingItem::accessibleInfo();
     if (tid() == Tid::STRING_NUMBER) {
         rez += " " + QObject::tr("String number");
     }

@@ -26,18 +26,18 @@
 #include <QHash>
 
 namespace Ms {
-class Element;
+class EngravingItem;
 
 //---------------------------------------------------------
 //   ElementMap
 //---------------------------------------------------------
 
-class ElementMap : QHash<Element*, Element*>
+class ElementMap : QHash<EngravingItem*, EngravingItem*>
 {
 public:
     ElementMap() {}
-    Element* findNew(Element* o) const { return value(o); }
-    void add(Element* o, Element* n) { insert(o, n); }
+    EngravingItem* findNew(EngravingItem* o) const { return value(o); }
+    void add(EngravingItem* o, EngravingItem* n) { insert(o, n); }
 };
 }     // namespace Ms
 #endif

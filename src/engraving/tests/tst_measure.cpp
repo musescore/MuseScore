@@ -36,7 +36,7 @@
 #include "libmscore/segment.h"
 #include "libmscore/fingering.h"
 #include "libmscore/image.h"
-#include "libmscore/element.h"
+#include "libmscore/engravingitem.h"
 #include "libmscore/system.h"
 #include "libmscore/durationtype.h"
 
@@ -384,13 +384,13 @@ void TestMeasure::deleteLast()
 void TestMeasure::gap()
 {
     MasterScore* score = readScore(MEASURE_DATA_DIR + "gaps.mscx");
-    Element* tst       = 0;
+    EngravingItem* tst       = 0;
 
     //Select and delete third quarter rest in first Measure (voice 2)
     score->startCmd();
     Measure* m  = score->firstMeasure();
     Segment* s  = m->undoGetSegment(SegmentType::ChordRest, Fraction::fromTicks(960));
-    Element* el = s->element(1);
+    EngravingItem* el = s->element(1);
     score->select(el);
     score->cmdDeleteSelection();
     score->endCmd();
@@ -445,7 +445,7 @@ void TestMeasure::gap()
 void TestMeasure::checkMeasure()
 {
     MasterScore* score = readScore(MEASURE_DATA_DIR + "checkMeasure.mscx");
-    Element* tst       = 0;
+    EngravingItem* tst       = 0;
     Measure* m         = score->firstMeasure()->nextMeasure();
 
     Segment* s = m->undoGetSegment(SegmentType::ChordRest, Fraction::fromTicks(2880));

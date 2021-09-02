@@ -67,7 +67,7 @@ void LetRingSegment::layout()
 //   LetRing
 //---------------------------------------------------------
 
-LetRing::LetRing(Element* parent)
+LetRing::LetRing(EngravingItem* parent)
     : TextLineBase(ElementType::LET_RING, parent)
 {
     initElementStyle(&letRingStyle);
@@ -243,7 +243,7 @@ PointF LetRing::linePos(Grip grip, System** sys) const
             x -= c->x();
         }
     } else {
-        Element* e = endElement();
+        EngravingItem* e = endElement();
         ChordRest* c = toChordRest(endElement());
         if (!e || e == startElement() || (endHookType() == HookType::HOOK_90)) {
             // pedal marking on single note or ends with non-angled hook:

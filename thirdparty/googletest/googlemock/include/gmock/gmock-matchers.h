@@ -2362,12 +2362,12 @@ class QuantifierMatcherImpl : public MatcherInterface<Container> {
   typedef StlContainerView<RawContainer> View;
   typedef typename View::type StlContainer;
   typedef typename View::const_reference StlContainerReference;
-  typedef typename StlContainer::value_type Element;
+  typedef typename StlContainer::value_type EngravingItem;
 
   template <typename InnerMatcher>
   explicit QuantifierMatcherImpl(InnerMatcher inner_matcher)
       : inner_matcher_(
-           testing::SafeMatcherCast<const Element&>(inner_matcher)) {}
+           testing::SafeMatcherCast<const EngravingItem&>(inner_matcher)) {}
 
   // Checks whether:
   // * All elements in the container match, if all_elements_should_match.
@@ -2393,7 +2393,7 @@ class QuantifierMatcherImpl : public MatcherInterface<Container> {
   }
 
  protected:
-  const Matcher<const Element&> inner_matcher_;
+  const Matcher<const EngravingItem&> inner_matcher_;
 
   GTEST_DISALLOW_ASSIGN_(QuantifierMatcherImpl);
 };
@@ -2697,14 +2697,14 @@ class ElementsAreMatcherImpl : public MatcherInterface<Container> {
   typedef internal::StlContainerView<RawContainer> View;
   typedef typename View::type StlContainer;
   typedef typename View::const_reference StlContainerReference;
-  typedef typename StlContainer::value_type Element;
+  typedef typename StlContainer::value_type EngravingItem;
 
   // Constructs the matcher from a sequence of element values or
   // element matchers.
   template <typename InputIter>
   ElementsAreMatcherImpl(InputIter first, InputIter last) {
     while (first != last) {
-      matchers_.push_back(MatcherCast<const Element&>(*first++));
+      matchers_.push_back(MatcherCast<const EngravingItem&>(*first++));
     }
   }
 
@@ -2831,7 +2831,7 @@ class ElementsAreMatcherImpl : public MatcherInterface<Container> {
 
   size_t count() const { return matchers_.size(); }
 
-  ::std::vector<Matcher<const Element&> > matchers_;
+  ::std::vector<Matcher<const EngravingItem&> > matchers_;
 
   GTEST_DISALLOW_ASSIGN_(ElementsAreMatcherImpl);
 };
@@ -2952,14 +2952,14 @@ class UnorderedElementsAreMatcherImpl
   typedef typename View::type StlContainer;
   typedef typename View::const_reference StlContainerReference;
   typedef typename StlContainer::const_iterator StlContainerConstIterator;
-  typedef typename StlContainer::value_type Element;
+  typedef typename StlContainer::value_type EngravingItem;
 
   template <typename InputIter>
   UnorderedElementsAreMatcherImpl(UnorderedMatcherRequire::Flags matcher_flags,
                                   InputIter first, InputIter last)
       : UnorderedElementsAreMatcherImplBase(matcher_flags) {
     for (; first != last; ++first) {
-      matchers_.push_back(MatcherCast<const Element&>(*first));
+      matchers_.push_back(MatcherCast<const EngravingItem&>(*first));
       matcher_describers().push_back(matchers_.back().GetDescriber());
     }
   }
@@ -3030,7 +3030,7 @@ class UnorderedElementsAreMatcherImpl
     return matrix;
   }
 
-  ::std::vector<Matcher<const Element&> > matchers_;
+  ::std::vector<Matcher<const EngravingItem&> > matchers_;
 
   GTEST_DISALLOW_ASSIGN_(UnorderedElementsAreMatcherImpl);
 };
@@ -3056,11 +3056,11 @@ class UnorderedElementsAreMatcher {
   operator Matcher<Container>() const {
     typedef GTEST_REMOVE_REFERENCE_AND_CONST_(Container) RawContainer;
     typedef typename internal::StlContainerView<RawContainer>::type View;
-    typedef typename View::value_type Element;
-    typedef ::std::vector<Matcher<const Element&> > MatcherVec;
+    typedef typename View::value_type EngravingItem;
+    typedef ::std::vector<Matcher<const EngravingItem&> > MatcherVec;
     MatcherVec matchers;
     matchers.reserve(::std::tuple_size<MatcherTuple>::value);
-    TransformTupleValues(CastAndAppendTransform<const Element&>(), matchers_,
+    TransformTupleValues(CastAndAppendTransform<const EngravingItem&>(), matchers_,
                          ::std::back_inserter(matchers));
     return Matcher<Container>(
         new UnorderedElementsAreMatcherImpl<const Container&>(
@@ -3088,11 +3088,11 @@ class ElementsAreMatcher {
 
     typedef GTEST_REMOVE_REFERENCE_AND_CONST_(Container) RawContainer;
     typedef typename internal::StlContainerView<RawContainer>::type View;
-    typedef typename View::value_type Element;
-    typedef ::std::vector<Matcher<const Element&> > MatcherVec;
+    typedef typename View::value_type EngravingItem;
+    typedef ::std::vector<Matcher<const EngravingItem&> > MatcherVec;
     MatcherVec matchers;
     matchers.reserve(::std::tuple_size<MatcherTuple>::value);
-    TransformTupleValues(CastAndAppendTransform<const Element&>(), matchers_,
+    TransformTupleValues(CastAndAppendTransform<const EngravingItem&>(), matchers_,
                          ::std::back_inserter(matchers));
     return Matcher<Container>(new ElementsAreMatcherImpl<const Container&>(
         matchers.begin(), matchers.end()));

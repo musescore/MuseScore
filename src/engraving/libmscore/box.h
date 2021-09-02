@@ -54,7 +54,7 @@ class Box : public MeasureBase
 public:
     Box(const ElementType& type, System* parent);
 
-    void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
+    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
     virtual void draw(mu::draw::Painter*) const override;
     virtual bool isEditable() const override { return true; }
@@ -71,8 +71,8 @@ public:
     virtual bool readProperties(XmlReader&) override;
     virtual void read(XmlReader&) override;
     virtual bool acceptDrop(EditData&) const override;
-    virtual Element* drop(EditData&) override;
-    virtual void add(Element* e) override;
+    virtual EngravingItem* drop(EditData&) override;
+    virtual void add(EngravingItem* e) override;
 
     mu::RectF contentRect() const;
     Spatium boxWidth() const { return _boxWidth; }
@@ -183,7 +183,7 @@ public:
     FBox* clone() const override { return new FBox(*this); }
 
     void layout() override;
-    void add(Element*) override;
+    void add(EngravingItem*) override;
 };
 }     // namespace Ms
 #endif

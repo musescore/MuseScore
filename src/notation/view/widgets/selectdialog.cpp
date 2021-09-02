@@ -131,9 +131,9 @@ FilterElementsOptions SelectDialog::elementOptions() const
     return options;
 }
 
-Ms::System* SelectDialog::elementSystem(const Element* element) const
+Ms::System* SelectDialog::elementSystem(const EngravingItem* element) const
 {
-    Element* _element = const_cast<Element*>(element);
+    EngravingItem* _element = const_cast<EngravingItem*>(element);
     do {
         if (_element->type() == ElementType::SYSTEM) {
             return dynamic_cast<Ms::System*>(_element);
@@ -227,14 +227,14 @@ void SelectDialog::apply() const
         return;
     }
 
-    Element* selectedElement = interaction->selection()->element();
+    EngravingItem* selectedElement = interaction->selection()->element();
     if (!selectedElement) {
         return;
     }
 
     FilterElementsOptions options = elementOptions();
 
-    std::vector<Element*> elements = notationElements->elements(options);
+    std::vector<EngravingItem*> elements = notationElements->elements(options);
     if (elements.empty()) {
         return;
     }
@@ -243,18 +243,18 @@ void SelectDialog::apply() const
         interaction->clearSelection();
         interaction->select(elements, SelectType::ADD);
     } else if (doSubtract()) {
-        std::vector<Element*> selesctionElements = interaction->selection()->elements();
-        for (Element* element: elements) {
+        std::vector<EngravingItem*> selesctionElements = interaction->selection()->elements();
+        for (EngravingItem* element: elements) {
             selesctionElements.erase(std::remove(selesctionElements.begin(), selesctionElements.end(), element), selesctionElements.end());
         }
 
         interaction->clearSelection();
         interaction->select(selesctionElements, SelectType::ADD);
     } else if (doAdd()) {
-        std::vector<Element*> selesctionElements = interaction->selection()->elements();
+        std::vector<EngravingItem*> selesctionElements = interaction->selection()->elements();
 
-        std::vector<Element*> elementsToSelect;
-        for (Element* element: elements) {
+        std::vector<EngravingItem*> elementsToSelect;
+        for (EngravingItem* element: elements) {
             if (std::find(selesctionElements.begin(), selesctionElements.end(), element) == selesctionElements.end()) {
                 elementsToSelect.push_back(element);
             }

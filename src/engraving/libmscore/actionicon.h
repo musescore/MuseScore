@@ -23,7 +23,7 @@
 #ifndef __ICON_H__
 #define __ICON_H__
 
-#include "element.h"
+#include "engravingitem.h"
 
 namespace Ms {
 enum class ActionIconType {
@@ -60,10 +60,10 @@ enum class ActionIconType {
 };
 
 //! Dummy element, used for drag&drop
-class ActionIcon final : public Element
+class ActionIcon final : public EngravingItem
 {
 public:
-    ActionIcon(Element* score);
+    ActionIcon(EngravingItem* score);
     ~ActionIcon() override = default;
 
     ActionIcon* clone() const override;

@@ -398,7 +398,7 @@ AccidentalVal Measure::findAccidental(Note* note) const
         } else if (segment->segmentType() == SegmentType::ChordRest) {
             int endTrack   = startTrack + VOICES;
             for (int track = startTrack; track < endTrack; ++track) {
-                Element* e = segment->element(track);
+                EngravingItem* e = segment->element(track);
                 if (!e || !e->isChord()) {
                     continue;
                 }
@@ -464,7 +464,7 @@ AccidentalVal Measure::findAccidental(Segment* s, int staffIdx, int line, bool& 
             return tversatz.accidentalVal(l, error);
         }
         for (int track = startTrack; track < endTrack; ++track) {
-            Element* e = segment->element(track);
+            EngravingItem* e = segment->element(track);
             if (!e || !e->isChord()) {
                 continue;
             }
@@ -765,7 +765,7 @@ Chord* Measure::findChord(Fraction t, int track)
             return 0;
         }
         if (seg->rtick() == t) {
-            Element* el = seg->element(track);
+            EngravingItem* el = seg->element(track);
             if (el && el->isChord()) {
                 return toChord(el);
             }
@@ -787,7 +787,7 @@ ChordRest* Measure::findChordRest(Fraction t, int track)
             return 0;
         }
         if (seg.rtick() == t) {
-            Element* el = seg.element(track);
+            EngravingItem* el = seg.element(track);
             if (el && el->isChordRest()) {
                 return toChordRest(el);
             }
@@ -895,10 +895,10 @@ Segment* Measure::getSegmentR(SegmentType st, const Fraction& t)
 
 //---------------------------------------------------------
 //   add
-///   Add new Element \a el to Measure.
+///   Add new EngravingItem \a el to Measure.
 //---------------------------------------------------------
 
-void Measure::add(Element* e)
+void Measure::add(EngravingItem* e)
 {
     if (e->parent() != this) {
         e->setParent(this);
@@ -1027,10 +1027,10 @@ void Measure::add(Element* e)
 
 //---------------------------------------------------------
 //   remove
-///   Remove Element \a el from Measure.
+///   Remove EngravingItem \a el from Measure.
 //---------------------------------------------------------
 
-void Measure::remove(Element* e)
+void Measure::remove(EngravingItem* e)
 {
     Q_ASSERT(e->parent() == this);
     Q_ASSERT(e->score() == score());
@@ -1092,7 +1092,7 @@ void Measure::remove(Element* e)
             int staves = score()->nstaves();
             int tracks = staves * VOICES;
             for (int track = 0; track < tracks; ++track) {
-                Element* ee = segment->element(track);
+                EngravingItem* ee = segment->element(track);
                 if (ee == e) {
                     segment->setElement(track, 0);
                     return;
@@ -1133,7 +1133,7 @@ void Measure::remove(Element* e)
 //   change
 //---------------------------------------------------------
 
-void Measure::change(Element* o, Element* n)
+void Measure::change(EngravingItem* o, EngravingItem* n)
 {
     if (o->isTuplet()) {
         Tuplet* t = toTuplet(n);
@@ -1170,7 +1170,7 @@ void Measure::moveTicks(const Fraction& diff)
         } else if (segment->isChordRestType()) {
             // Tuplet ticks are stored as absolute ticks, so they must be adjusted.
             // But each tuplet must only be adjusted once.
-            for (Element* e : segment->elist()) {
+            for (EngravingItem* e : segment->elist()) {
                 if (e) {
                     ChordRest* cr = toChordRest(e);
                     Tuplet* tuplet = cr->tuplet();
@@ -1196,7 +1196,7 @@ void Measure::removeStaves(int sStaff, int eStaff)
             s->removeStaff(staff);
         }
     }
-    for (Element* e : el()) {
+    for (EngravingItem* e : el()) {
         if (e->track() == -1) {
             continue;
         }
@@ -1215,7 +1215,7 @@ void Measure::removeStaves(int sStaff, int eStaff)
 
 void Measure::insertStaves(int sStaff, int eStaff)
 {
-    for (Element* e : el()) {
+    for (EngravingItem* e : el()) {
         if (e->track() == -1) {
             continue;
         }
@@ -1243,13 +1243,13 @@ void Measure::cmdRemoveStaves(int sStaff, int eStaff)
     int eTrack = eStaff * VOICES;
     for (Segment* s = first(); s; s = s->next()) {
         for (int track = eTrack - 1; track >= sTrack; --track) {
-            Element* el = s->element(track);
+            EngravingItem* el = s->element(track);
             if (el) {
                 el->undoUnlink();
                 score()->undo(new RemoveElement(el));
             }
         }
-        foreach (Element* e, s->annotations()) {
+        foreach (EngravingItem* e, s->annotations()) {
             int staffIdx = e->staffIdx();
             if ((staffIdx >= sStaff) && (staffIdx < eStaff) && !e->systemFlag()) {
                 e->undoUnlink();
@@ -1257,7 +1257,7 @@ void Measure::cmdRemoveStaves(int sStaff, int eStaff)
             }
         }
     }
-    for (Element* e : el()) {
+    for (EngravingItem* e : el()) {
         if (e->track() == -1) {
             continue;
         }
@@ -1359,7 +1359,7 @@ void Measure::cmdAddStaves(int sStaff, int eStaff, bool createRest)
         if (bs) {
             BarLine* obl = nullptr;
             for (unsigned track = 0; track < m_mstaves.size() * VOICES; ++track) {
-                Element* e = bs->element(track);
+                EngravingItem* e = bs->element(track);
                 if (e && !e->generated()) {
                     obl = toBarLine(e);
                     break;
@@ -1438,14 +1438,14 @@ RectF Measure::staffabbox(int staffIdx) const
 //---------------------------------------------------------
 
 /**
- Return true if an Element of type \a type can be dropped on a Measure
+ Return true if an EngravingItem of type \a type can be dropped on a Measure
 */
 
 bool Measure::acceptDrop(EditData& data) const
 {
     MuseScoreView* viewer = data.view();
     PointF pos = data.pos;
-    Element* e = data.dropElement;
+    EngravingItem* e = data.dropElement;
 
     int staffIdx;
     Segment* seg;
@@ -1517,9 +1517,9 @@ bool Measure::acceptDrop(EditData& data) const
 ///   element \a type and \a subtype.
 //---------------------------------------------------------
 
-Element* Measure::drop(EditData& data)
+EngravingItem* Measure::drop(EditData& data)
 {
-    Element* e = data.dropElement;
+    EngravingItem* e = data.dropElement;
     int staffIdx = -1;
     Segment* seg;
     score()->pos2measure(data.pos, &staffIdx, 0, &seg, 0);
@@ -1776,7 +1776,7 @@ Element* Measure::drop(EditData& data)
             // drop to first end barline
             seg = findSegmentR(SegmentType::EndBarLine, ticks());
             if (seg) {
-                for (Element* ee : seg->elist()) {
+                for (EngravingItem* ee : seg->elist()) {
                     if (ee) {
                         ee->drop(data);
                         break;
@@ -1878,7 +1878,7 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
             int strack = staffIdx * VOICES;
             int etrack = strack + VOICES;
             for (int track = strack; track < etrack; ++track) {
-                Element* e = segment->element(track);
+                EngravingItem* e = segment->element(track);
                 if (e) {
                     if (e->isRest()) {
                         ++rests;
@@ -1901,7 +1901,7 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
                 std::vector<TDuration> durList = toDurationList(nf * stretch, false, 0);
 
                 // set the existing rest to the first value of the duration list
-                for (ScoreElement* e : rest->linkList()) {
+                for (EngravingObject* e : rest->linkList()) {
                     e->undoChangeProperty(Pid::DURATION, QVariant::fromValue<Fraction>(durList[0].fraction()));
                     e->undoChangeProperty(Pid::DURATION_TYPE, QVariant::fromValue<TDuration>(durList[0]));
                 }
@@ -1930,12 +1930,12 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
                 for (Segment* segment = m->last(); segment;) {
                     Segment* pseg = segment->prev();
                     if (segment->segmentType() == SegmentType::ChordRest) {
-                        for (Element* a : segment->annotations()) {
+                        for (EngravingItem* a : segment->annotations()) {
                             if (a->track() == trk) {
                                 s->undoRemoveElement(a);
                             }
                         }
-                        Element* e = segment->element(trk);
+                        EngravingItem* e = segment->element(trk);
                         if (e && e->isChordRest()) {
                             ChordRest* cr = toChordRest(e);
                             if (cr->durationType() == TDuration::DurationType::V_MEASURE) {
@@ -1951,7 +1951,7 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
                             }
                         }
                     } else if (segment->segmentType() == SegmentType::Breath) {
-                        Element* e = segment->element(trk);
+                        EngravingItem* e = segment->element(trk);
                         if (e) {
                             s->undoRemoveElement(e);
                         }
@@ -1973,7 +1973,7 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
         //
         //  CHECK: do not remove all slurs
         //
-        for (Element* e : m->el()) {
+        for (EngravingItem* e : m->el()) {
             if (e->isSlur()) {
                 s->undoRemoveElement(e);
             }
@@ -2050,7 +2050,7 @@ void Measure::write(XmlWriter& xml, int staff, bool writeSystemElements, bool fo
 
     int strack = staff * VOICES;
     int etrack = strack + VOICES;
-    for (const Element* e : el()) {
+    for (const EngravingItem* e : el()) {
         if (!e->generated() && ((e->staffIdx() == staff) || (e->systemFlag() && writeSystemElements))) {
             e->write(xml);
         }
@@ -2112,7 +2112,7 @@ void Measure::read(XmlReader& e, int staffIdx)
             e.setTick(tick());
             readVoice(e, staffIdx, irregular);
         } else if (tag == "Marker" || tag == "Jump") {
-            Element* el = Element::name2Element(tag, this);
+            EngravingItem* el = EngravingItem::name2Element(tag, this);
             el->setTrack(e.track());
             el->read(e);
             add(el);
@@ -2456,7 +2456,7 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
                    || tag == "FiguredBass"
                    ) {
             segment = getSegment(SegmentType::ChordRest, e.tick());
-            Element* el = Element::name2Element(tag, segment);
+            EngravingItem* el = EngravingItem::name2Element(tag, segment);
             // hack - needed because tick tags are unreliable in 1.3 scores
             // for symbols attached to anything but a measure
             el->setTrack(e.track());
@@ -2472,7 +2472,7 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
                 e.skipCurrentElement();
             } else {
                 segment = getSegment(SegmentType::ChordRest, e.tick());
-                Element* el = Element::name2Element(tag, segment);
+                EngravingItem* el = EngravingItem::name2Element(tag, segment);
                 el->setTrack(e.track());
                 el->read(e);
                 segment->add(el);
@@ -2664,9 +2664,9 @@ bool Measure::isFirstInSystem() const
 //   scanElements
 //---------------------------------------------------------
 
-void Measure::scanElements(void* data, void (* func)(void*, Element*), bool all)
+void Measure::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
-    for (ScoreElement* el : (*this)) {
+    for (EngravingObject* el : (*this)) {
         if (el->isMeasure()) {
             continue;  // do not scan Measures 'inside' mmrest measure
         }
@@ -2686,7 +2686,7 @@ void Measure::connectTremolo()
     constexpr SegmentType st = SegmentType::ChordRest;
     for (Segment* s = first(st); s; s = s->next(st)) {
         for (int i = 0; i < ntracks; ++i) {
-            Element* e = s->element(i);
+            EngravingItem* e = s->element(i);
             if (!e || !e->isChord()) {
                 continue;
             }
@@ -2706,7 +2706,7 @@ void Measure::connectTremolo()
                 }
 
                 for (Segment* ls = s->next(st); ls; ls = ls->next(st)) {
-                    if (Element* element = ls->element(i)) {
+                    if (EngravingItem* element = ls->element(i)) {
                         if (!element->isChord()) {
                             qDebug("cannot connect tremolo");
                             continue;
@@ -2762,7 +2762,7 @@ void Measure::sortStaves(QList<int>& dst)
         s.sortStaves(dst);
     }
 
-    for (Element* e : el()) {
+    for (EngravingItem* e : el()) {
         if (e->track() == -1 || e->systemFlag()) {
             continue;
         }
@@ -2924,7 +2924,7 @@ bool Measure::isEmpty(int staffIdx) const
     }
     for (Segment* s = first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
         for (int track = strack; track < etrack; ++track) {
-            Element* e = s->element(track);
+            EngravingItem* e = s->element(track);
             if (e && !e->isRest()) {
                 return false;
             }
@@ -2945,7 +2945,7 @@ bool Measure::isEmpty(int staffIdx) const
                 }
             }
         }
-        for (Element* a : s->annotations()) {
+        for (EngravingItem* a : s->annotations()) {
             if (a && staffIdx < 0) {
                 return false;
             }
@@ -2997,7 +2997,7 @@ bool Measure::isCutawayClef(int staffIdx) const
         return false;
     }
     for (int track = strack; track < etrack; ++track) {
-        Element* e = s->element(track);
+        EngravingItem* e = s->element(track);
         if (!e || !e->isClef()) {
             continue;
         }
@@ -3021,7 +3021,7 @@ bool Measure::isFullMeasureRest() const
 
     Segment* s = first(SegmentType::ChordRest);
     for (int track = strack; track < etrack; ++track) {
-        Element* e = s->element(track);
+        EngravingItem* e = s->element(track);
         if (e) {
             if (!e->isRest()) {
                 return false;
@@ -3157,12 +3157,12 @@ Measure* Measure::cloneMeasure(Score* sc, const Fraction& tick, TieMap* tieMap)
 
         m->m_segments.push_back(s);
         for (int track = 0; track < tracks; ++track) {
-            Element* oe = oseg->element(track);
-            for (Element* e : oseg->annotations()) {
+            EngravingItem* oe = oseg->element(track);
+            for (EngravingItem* e : oseg->annotations()) {
                 if (e->generated() || e->track() != track) {
                     continue;
                 }
-                Element* ne = e->clone();
+                EngravingItem* ne = e->clone();
                 ne->setTrack(track);
                 ne->setOffset(e->offset());
                 ne->setScore(sc);
@@ -3171,7 +3171,7 @@ Measure* Measure::cloneMeasure(Score* sc, const Fraction& tick, TieMap* tieMap)
             if (!oe) {
                 continue;
             }
-            Element* ne = oe->clone();
+            EngravingItem* ne = oe->clone();
             if (oe->isChordRest()) {
                 ChordRest* ocr = toChordRest(oe);
                 ChordRest* ncr = toChordRest(ne);
@@ -3221,8 +3221,8 @@ Measure* Measure::cloneMeasure(Score* sc, const Fraction& tick, TieMap* tieMap)
             s->add(ne);
         }
     }
-    for (Element* e : el()) {
-        Element* ne = e->clone();
+    for (EngravingItem* e : el()) {
+        EngravingItem* ne = e->clone();
         ne->setScore(sc);
         ne->setOffset(e->offset());
         m->add(ne);
@@ -3529,7 +3529,7 @@ MeasureRepeat* Measure::measureRepeatElement(int staffIdx) const
             // should only be in first track, but just in case
             for (Segment* s = m->first(SegmentType::ChordRest); s && s != m->last(); s = s->next(SegmentType::ChordRest)) {
                 // should only be in first segment, but just in case
-                Element* e = s->element(track);
+                EngravingItem* e = s->element(track);
                 if (e && e->isMeasureRepeat()) {
                     return toMeasureRepeat(e);
                 }
@@ -3598,9 +3598,9 @@ qreal Measure::userStretch() const
 //   nextElementStaff
 //---------------------------------------------------------
 
-Element* Measure::nextElementStaff(int staff)
+EngravingItem* Measure::nextElementStaff(int staff)
 {
-    Element* e = score()->selection().element();
+    EngravingItem* e = score()->selection().element();
     if (!e && !score()->selection().elements().isEmpty()) {
         e = score()->selection().elements().first();
     }
@@ -3610,7 +3610,7 @@ Element* Measure::nextElementStaff(int staff)
         auto i = std::find(el().begin(), el().end(), e);
         if (i != el().end()) {
             if (++i != el().end()) {
-                Element* resElement = *i;
+                EngravingItem* resElement = *i;
                 if (resElement) {
                     return resElement;
                 }
@@ -3622,7 +3622,7 @@ Element* Measure::nextElementStaff(int staff)
     }
     Segment* seg = toSegment(e);
     Segment* nextSegment = seg ? seg->next() : first();
-    Element* next = seg->firstElementOfSegment(nextSegment, staff);
+    EngravingItem* next = seg->firstElementOfSegment(nextSegment, staff);
     if (next) {
         return next;
     }
@@ -3634,9 +3634,9 @@ Element* Measure::nextElementStaff(int staff)
 //   prevElementStaff
 //---------------------------------------------------------
 
-Element* Measure::prevElementStaff(int staff)
+EngravingItem* Measure::prevElementStaff(int staff)
 {
-    Element* e = score()->selection().element();
+    EngravingItem* e = score()->selection().element();
     if (!e && !score()->selection().elements().isEmpty()) {
         e = score()->selection().elements().first();
     }
@@ -3646,7 +3646,7 @@ Element* Measure::prevElementStaff(int staff)
         auto i = std::find(el().rbegin(), el().rend(), e);
         if (i != el().rend()) {
             if (++i != el().rend()) {
-                Element* resElement = *i;
+                EngravingItem* resElement = *i;
                 if (resElement) {
                     return resElement;
                 }
@@ -3670,7 +3670,7 @@ Element* Measure::prevElementStaff(int staff)
 
 QString Measure::accessibleInfo() const
 {
-    return QString("%1: %2").arg(Element::accessibleInfo(), QString::number(no() + 1));
+    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), QString::number(no() + 1));
 }
 
 //-----------------------------------------------------------------------------
@@ -3762,7 +3762,7 @@ void Measure::stretchMeasure(qreal targetWidth)
         if (!s.enabled()) {
             continue;
         }
-        for (Element* e : s.elist()) {
+        for (EngravingItem* e : s.elist()) {
             if (!e) {
                 continue;
             }
@@ -3873,7 +3873,7 @@ const BarLine* Measure::endBarLine() const
     }
     // search first element
     if (s) {
-        for (const Element* e : s->elist()) {
+        for (const EngravingItem* e : s->elist()) {
             if (e) {
                 return toBarLine(e);
             }
@@ -4342,7 +4342,7 @@ void Measure::addSystemHeader(bool isFirstSystem)
                 // do not disable user modified keysigs
                 bool disable = true;
                 for (int i = 0; i < score()->nstaves(); ++i) {
-                    Element* e = kSegment->element(i * VOICES);
+                    EngravingItem* e = kSegment->element(i * VOICES);
                     Key key = score()->staff(i)->key(tick());
                     if ((e && !e->generated()) || (key != keyIdx.key())) {
                         disable = false;
@@ -4358,7 +4358,7 @@ void Measure::addSystemHeader(bool isFirstSystem)
                 if (disable) {
                     kSegment->setEnabled(false);
                 } else {
-                    Element* e = kSegment->element(track);
+                    EngravingItem* e = kSegment->element(track);
                     if (e && e->isKeySig()) {
                         KeySig* keysig = toKeySig(e);
                         keysig->layout();
@@ -4631,7 +4631,7 @@ static bool hasAccidental(Segment* s)
         if (!staff->show()) {
             continue;
         }
-        Element* e = s->element(track);
+        EngravingItem* e = s->element(track);
         if (!e || !e->isChord()) {
             continue;
         }

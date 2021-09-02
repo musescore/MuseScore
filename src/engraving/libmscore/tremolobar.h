@@ -23,7 +23,7 @@
 #ifndef __TREMOLOBAR_H__
 #define __TREMOLOBAR_H__
 
-#include "element.h"
+#include "engravingitem.h"
 #include "pitchvalue.h"
 
 namespace Ms {
@@ -45,10 +45,10 @@ enum class TremoloBarType {
     CUSTOM
 };
 
-class TremoloBar final : public Element
+class TremoloBar final : public EngravingItem
 {
 public:
-    TremoloBar(Element* parent);
+    TremoloBar(EngravingItem* parent);
 
     TremoloBar* clone() const override { return new TremoloBar(*this); }
 

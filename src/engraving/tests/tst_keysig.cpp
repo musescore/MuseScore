@@ -102,7 +102,7 @@ void TestKeySig::keysig()
     while (!(s->isKeySigType())) {
         s = s->next();
     }
-    Element* e = s->element(0);
+    EngravingItem* e = s->element(0);
     score->startCmd();
     score->undoRemoveElement(e);
     score->endCmd();

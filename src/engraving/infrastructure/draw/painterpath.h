@@ -49,15 +49,15 @@ public:
         WindingFill
     };
 
-    class Element
+    class EngravingItem
     {
     public:
         double x = 0.0;
         double y = 0.0;
         ElementType type = ElementType::MoveToElement;
 
-        Element() {}
-        Element(double x, double y, ElementType type)
+        EngravingItem() {}
+        EngravingItem(double x, double y, ElementType type)
             : x(x), y(y), type(type) {}
         bool isMoveTo() const { return type == ElementType::MoveToElement; }
         bool isLineTo() const { return type == ElementType::LineToElement; }
@@ -65,13 +65,13 @@ public:
         operator PointF() const {
             return PointF(x, y);
         }
-        bool operator==(const Element& e) const
+        bool operator==(const EngravingItem& e) const
         {
             return qFuzzyCompare(x, e.x)
                    && qFuzzyCompare(y, e.y) && type == e.type;
         }
 
-        inline bool operator!=(const Element& e) const { return !operator==(e); }
+        inline bool operator!=(const EngravingItem& e) const { return !operator==(e); }
     };
 
     PainterPath() = default;
@@ -95,7 +95,7 @@ public:
 
     bool isEmpty() const;
     size_t elementCount() const;
-    PainterPath::Element elementAt(size_t i) const;
+    PainterPath::EngravingItem elementAt(size_t i) const;
     void addRect(const RectF& r);
     inline void addRect(double x, double y, double w, double h)
     {
@@ -140,7 +140,7 @@ private:
     inline void maybeMoveTo()
     {
         if (m_requireMoveTo) {
-            Element e = m_elements.back();
+            EngravingItem e = m_elements.back();
             e.type = ElementType::MoveToElement;
             m_elements.push_back(e);
             m_requireMoveTo = false;
@@ -149,8 +149,8 @@ private:
 
     inline bool isClosed() const
     {
-        const PainterPath::Element& first = m_elements.at(m_cStart);
-        const PainterPath::Element& last = m_elements.back();
+        const PainterPath::EngravingItem& first = m_elements.at(m_cStart);
+        const PainterPath::EngravingItem& last = m_elements.back();
         return first.x == last.x && first.y == last.y;
     }
 
@@ -172,7 +172,7 @@ private:
     bool m_convex = false;
     FillRule m_fillRule = FillRule::OddEvenFill;
 
-    std::vector<Element> m_elements;
+    std::vector<EngravingItem> m_elements;
 
     friend class Transform;
 };

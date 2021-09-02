@@ -35,7 +35,7 @@ class Measure;
 class XmlWriter;
 class Staff;
 class XmlReader;
-class Element;
+class EngravingItem;
 
 //---------------------------------------------------------
 //   @@ Excerpt
@@ -96,7 +96,7 @@ public:
 
 private:
     static QString formatTitle(const QString& partName, const QList<Excerpt*>&);
-    static void processLinkedClone(Element* ne, Score* score, int strack);
+    static void processLinkedClone(EngravingItem* ne, Score* score, int strack);
 };
 }     // namespace Ms
 #endif

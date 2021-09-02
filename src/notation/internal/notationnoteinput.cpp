@@ -83,7 +83,7 @@ void NotationNoteInput::startNoteInput()
     is.setSegment(0);
 
     //! TODO Find out what does and why.
-    Element* el = score()->selection().element();
+    EngravingItem* el = score()->selection().element();
     if (!el) {
         el = score()->selection().firstChordRest();
     }

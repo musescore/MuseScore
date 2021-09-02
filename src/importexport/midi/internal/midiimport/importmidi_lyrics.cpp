@@ -25,7 +25,7 @@
 #include "importmidi_chord.h"
 #include "importmidi_operations.h"
 #include "libmscore/box.h"
-#include "libmscore/element.h"
+#include "libmscore/engravingitem.h"
 #include "libmscore/measurebase.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/staff.h"

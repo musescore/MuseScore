@@ -105,7 +105,7 @@ QString NotationAccessibility::rangeAccessibilityInfo() const
 
 QString NotationAccessibility::singleElementAccessibilityInfo() const
 {
-    const Element* element = selection()->element();
+    const EngravingItem* element = selection()->element();
     if (!element) {
         return QString();
     }
@@ -135,7 +135,7 @@ QString NotationAccessibility::singleElementAccessibilityInfo() const
     return accessibilityInfo;
 }
 
-QString NotationAccessibility::formatSingleElementBarsAndBeats(const Element* element) const
+QString NotationAccessibility::formatSingleElementBarsAndBeats(const EngravingItem* element) const
 {
     const Ms::Spanner* spanner = nullptr;
     if (element->isSpannerSegment()) {
@@ -172,7 +172,7 @@ QString NotationAccessibility::formatSingleElementBarsAndBeats(const Element* el
     return result;
 }
 
-QString NotationAccessibility::formatStartBarsAndBeats(const Element* element) const
+QString NotationAccessibility::formatStartBarsAndBeats(const EngravingItem* element) const
 {
     std::pair<int, float> barbeat = this->barbeat(element);
 
@@ -181,7 +181,7 @@ QString NotationAccessibility::formatStartBarsAndBeats(const Element* element) c
            .arg(QString::number(barbeat.second));
 }
 
-QString NotationAccessibility::formatEndBarsAndBeats(const Element* element) const
+QString NotationAccessibility::formatEndBarsAndBeats(const EngravingItem* element) const
 {
     std::pair<int, float> barbeat = this->barbeat(element);
 
@@ -190,13 +190,13 @@ QString NotationAccessibility::formatEndBarsAndBeats(const Element* element) con
            .arg(QString::number(barbeat.second));
 }
 
-std::pair<int, float> NotationAccessibility::barbeat(const Element* element) const
+std::pair<int, float> NotationAccessibility::barbeat(const EngravingItem* element) const
 {
     if (!element) {
         return std::pair<int, float>(0, 0.0F);
     }
 
-    const Element* parent = element;
+    const EngravingItem* parent = element;
     while (parent && parent->type() != ElementType::SEGMENT && parent->type() != ElementType::MEASURE) {
         parent = parent->parentElement();
     }

@@ -116,7 +116,7 @@ static void fixupScore(Score* score)
                 if (!s->element(track)) {
                     continue;
                 }
-                Element* e = s->element(track);
+                EngravingItem* e = s->element(track);
                 if (e->generated()) {
                     continue;
                 }

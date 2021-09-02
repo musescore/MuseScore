@@ -82,16 +82,16 @@ HairpinSegment::HairpinSegment(Spanner* sp, Score* s)
 
 bool HairpinSegment::acceptDrop(EditData& data) const
 {
-    Element* e = data.dropElement;
+    EngravingItem* e = data.dropElement;
     if (e->isDynamic()) {
         return true;
     }
     return false;
 }
 
-Element* HairpinSegment::drop(EditData& data)
+EngravingItem* HairpinSegment::drop(EditData& data)
 {
-    Element* e = data.dropElement;
+    EngravingItem* e = data.dropElement;
     if (e->isDynamic()) {
         Dynamic* d = toDynamic(e);
         hairpin()->undoChangeProperty(Pid::END_TEXT, d->xmlText());
@@ -440,7 +440,7 @@ std::vector<PointF> HairpinSegment::gripsPositions(const EditData&) const
 //   getDragGroup
 //---------------------------------------------------------
 
-std::unique_ptr<ElementGroup> HairpinSegment::getDragGroup(std::function<bool(const Element*)> isDragged)
+std::unique_ptr<ElementGroup> HairpinSegment::getDragGroup(std::function<bool(const EngravingItem*)> isDragged)
 {
     if (auto g = HairpinWithDynamicsDragGroup::detectFor(this, isDragged)) {
         return g;
@@ -506,7 +506,7 @@ void HairpinSegment::draw(mu::draw::Painter* painter) const
 //   propertyDelegate
 //---------------------------------------------------------
 
-Element* HairpinSegment::propertyDelegate(Pid pid)
+EngravingItem* HairpinSegment::propertyDelegate(Pid pid)
 {
     if (pid == Pid::HAIRPIN_TYPE
         || pid == Pid::VELO_CHANGE

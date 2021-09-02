@@ -29,7 +29,7 @@
 
 namespace Ms {
 enum class Pid;
-class ScoreElement;
+class EngravingObject;
 
 //---------------------------------------------------------
 //   ItemType
@@ -77,8 +77,8 @@ struct TextDiff {
 struct BaseDiff {
     DiffType type;
     const TextDiff* textDiff;
-    const ScoreElement* ctx[2];
-    const ScoreElement* before[2];
+    const EngravingObject* ctx[2];
+    const EngravingObject* before[2];
 
     virtual ~BaseDiff() = default;
 
@@ -104,7 +104,7 @@ struct ContextChange : public BaseDiff {
 //---------------------------------------------------------
 
 struct ElementDiff : public BaseDiff {
-    const ScoreElement* el[2];
+    const EngravingObject* el[2];
 
     ItemType itemType() const override { return ItemType::ELEMENT; }
     bool sameItem(const BaseDiff&) const override;

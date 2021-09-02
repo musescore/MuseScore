@@ -53,6 +53,6 @@ mu::async::Channel<uint32_t> PlaybackControllerStub::midiTickPlayed() const
     return mu::async::Channel<uint32_t>();
 }
 
-void PlaybackControllerStub::playElementOnClick(const mu::notation::Element*)
+void PlaybackControllerStub::playElementOnClick(const mu::notation::EngravingItem*)
 {
 }

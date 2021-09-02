@@ -27,7 +27,7 @@
 #include "async/channel.h"
 
 namespace Ms {
-class ScoreElement;
+class EngravingObject;
 }
 
 namespace mu::diagnostics {
@@ -38,15 +38,15 @@ public:
     virtual ~IEngravingElementsProvider() = default;
 
     // register
-    virtual void reg(const Ms::ScoreElement* e) = 0;
-    virtual void unreg(const Ms::ScoreElement* e) = 0;
-    virtual std::list<const Ms::ScoreElement*> elements() const = 0;
-    virtual async::Channel<const Ms::ScoreElement*, bool> registreChanged() const = 0;
+    virtual void reg(const Ms::EngravingObject* e) = 0;
+    virtual void unreg(const Ms::EngravingObject* e) = 0;
+    virtual std::list<const Ms::EngravingObject*> elements() const = 0;
+    virtual async::Channel<const Ms::EngravingObject*, bool> registreChanged() const = 0;
 
     // debug draw
-    virtual void select(const Ms::ScoreElement* e, bool arg) = 0;
-    virtual bool isSelected(const Ms::ScoreElement* e) const = 0;
-    virtual async::Channel<const Ms::ScoreElement*, bool> selectChanged() const = 0;
+    virtual void select(const Ms::EngravingObject* e, bool arg) = 0;
+    virtual bool isSelected(const Ms::EngravingObject* e) const = 0;
+    virtual async::Channel<const Ms::EngravingObject*, bool> selectChanged() const = 0;
 };
 }
 

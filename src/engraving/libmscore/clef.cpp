@@ -139,7 +139,7 @@ ClefType ClefInfo::tag2type(const QString& s)
 //---------------------------------------------------------
 
 Clef::Clef(Segment* parent)
-    : Element(ElementType::CLEF, parent, ElementFlag::ON_STAFF), symId(SymId::noSym)
+    : EngravingItem(ElementType::CLEF, parent, ElementFlag::ON_STAFF), symId(SymId::noSym)
 {}
 
 //---------------------------------------------------------
@@ -292,9 +292,9 @@ bool Clef::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-Element* Clef::drop(EditData& data)
+EngravingItem* Clef::drop(EditData& data)
 {
-    Element* e = data.dropElement;
+    EngravingItem* e = data.dropElement;
     Clef* c = 0;
     if (e->isClef()) {
         Clef* clef = toClef(e);
@@ -348,7 +348,7 @@ void Clef::read(XmlReader& e)
             _showCourtesy = e.readInt();
         } else if (tag == "forInstrumentChange") {
             _forInstrumentChange = e.readBool();
-        } else if (!Element::readProperties(e)) {
+        } else if (!EngravingItem::readProperties(e)) {
             e.unknown();
         }
     }
@@ -372,7 +372,7 @@ void Clef::write(XmlWriter& xml) const
     if (_forInstrumentChange) {
         xml.tag("forInstrumentChange", _forInstrumentChange);
     }
-    Element::writeProperties(xml);
+    EngravingItem::writeProperties(xml);
     xml.etag();
 }
 
@@ -464,7 +464,7 @@ ClefType Clef::clefType() const
 
 void Clef::spatiumChanged(qreal oldValue, qreal newValue)
 {
-    Element::spatiumChanged(oldValue, newValue);
+    EngravingItem::spatiumChanged(oldValue, newValue);
     layout();
 }
 
@@ -527,7 +527,7 @@ QVariant Clef::getProperty(Pid propertyId) const
     case Pid::SHOW_COURTESY: return showCourtesy();
     case Pid::SMALL:         return isSmall();
     default:
-        return Element::getProperty(propertyId);
+        return EngravingItem::getProperty(propertyId);
     }
 }
 
@@ -549,7 +549,7 @@ bool Clef::setProperty(Pid propertyId, const QVariant& v)
     case Pid::SMALL:         setSmall(v.toBool());
         break;
     default:
-        return Element::setProperty(propertyId, v);
+        return EngravingItem::setProperty(propertyId, v);
     }
     triggerLayout();
     return true;
@@ -566,7 +566,7 @@ QVariant Clef::propertyDefault(Pid id) const
     case Pid::CLEF_TYPE_TRANSPOSING: return int(ClefType::INVALID);
     case Pid::SHOW_COURTESY: return true;
     case Pid::SMALL:         return false;
-    default:              return Element::propertyDefault(id);
+    default:              return EngravingItem::propertyDefault(id);
     }
 }
 
@@ -574,7 +574,7 @@ QVariant Clef::propertyDefault(Pid id) const
 //   nextSegmentElement
 //---------------------------------------------------------
 
-Element* Clef::nextSegmentElement()
+EngravingItem* Clef::nextSegmentElement()
 {
     return segment()->firstInNextSegments(staffIdx());
 }
@@ -583,7 +583,7 @@ Element* Clef::nextSegmentElement()
 //   prevSegmentElement
 //---------------------------------------------------------
 
-Element* Clef::prevSegmentElement()
+EngravingItem* Clef::prevSegmentElement()
 {
     return segment()->lastInPrevSegments(staffIdx());
 }

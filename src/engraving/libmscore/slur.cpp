@@ -173,7 +173,7 @@ bool SlurSegment::edit(EditData& ed)
 //   changeAnchor
 //---------------------------------------------------------
 
-void SlurSegment::changeAnchor(EditData& ed, Element* element)
+void SlurSegment::changeAnchor(EditData& ed, EngravingItem* element)
 {
     ChordRest* cr = element->isChordRest() ? toChordRest(element) : nullptr;
     ChordRest* scr = spanner()->startCR();
@@ -183,7 +183,7 @@ void SlurSegment::changeAnchor(EditData& ed, Element* element)
     }
 
     // save current start/end elements
-    for (ScoreElement* e : spanner()->linkList()) {
+    for (EngravingObject* e : spanner()->linkList()) {
         Spanner* sp = toSpanner(e);
         score()->undoStack()->push1(new ChangeStartEndSpanner(sp, sp->startElement(), sp->endElement()));
     }
@@ -210,17 +210,17 @@ void SlurSegment::changeAnchor(EditData& ed, Element* element)
     }
 
     // update start/end elements (which could be grace notes)
-    for (ScoreElement* lsp : spanner()->linkList()) {
+    for (EngravingObject* lsp : spanner()->linkList()) {
         Spanner* sp = static_cast<Spanner*>(lsp);
         if (sp == spanner()) {
             score()->undo(new ChangeSpannerElements(sp, scr, ecr));
         } else {
-            Element* se = 0;
-            Element* ee = 0;
+            EngravingItem* se = 0;
+            EngravingItem* ee = 0;
             if (scr) {
-                QList<ScoreElement*> sel = scr->linkList();
-                for (ScoreElement* lcr : qAsConst(sel)) {
-                    Element* le = toElement(lcr);
+                QList<EngravingObject*> sel = scr->linkList();
+                for (EngravingObject* lcr : qAsConst(sel)) {
+                    EngravingItem* le = toEngravingItem(lcr);
                     if (le->score() == sp->score() && le->track() == sp->track()) {
                         se = le;
                         break;
@@ -228,9 +228,9 @@ void SlurSegment::changeAnchor(EditData& ed, Element* element)
                 }
             }
             if (ecr) {
-                QList<ScoreElement*> sel = ecr->linkList();
-                for (ScoreElement* lcr : qAsConst(sel)) {
-                    Element* le = toElement(lcr);
+                QList<EngravingObject*> sel = ecr->linkList();
+                for (EngravingObject* lcr : qAsConst(sel)) {
+                    EngravingItem* le = toEngravingItem(lcr);
                     if (le->score() == sp->score() && le->track() == sp->track2()) {
                         ee = le;
                         break;
@@ -959,7 +959,7 @@ void Slur::slurPos(SlurPos* sp)
 //   Slur
 //---------------------------------------------------------
 
-Slur::Slur(Element* parent)
+Slur::Slur(EngravingItem* parent)
     : SlurTie(ElementType::SLUR, parent)
 {
     setAnchor(Anchor::CHORD);
@@ -969,7 +969,7 @@ Slur::Slur(Element* parent)
 //   calcStemArrangement
 //---------------------------------------------------------
 
-int calcStemArrangement(Element* start, Element* end)
+int calcStemArrangement(EngravingItem* start, EngravingItem* end)
 {
     return (start && toChord(start)->stem() && toChord(start)->stem()->up() ? 2 : 0)
            + (end && end->isChord() && toChord(end)->stem() && toChord(end)->stem()->up() ? 4 : 0);
@@ -1038,7 +1038,7 @@ static bool isDirectionMixture(Chord* c1, Chord* c2)
 {
     bool up = c1->up();
     for (Segment* seg = c1->segment(); seg; seg = seg->next(SegmentType::ChordRest)) {
-        Element* e = seg->element(c1->track());
+        EngravingItem* e = seg->element(c1->track());
         if (!e || !e->isChord()) {
             continue;
         }
@@ -1345,7 +1345,7 @@ void Slur::layout()
 
 void Slur::setTrack(int n)
 {
-    Element::setTrack(n);
+    EngravingItem::setTrack(n);
     for (SpannerSegment* ss : spannerSegments()) {
         ss->setTrack(n);
     }

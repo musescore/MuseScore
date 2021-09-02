@@ -26,7 +26,7 @@
 
 #include "palettecell.h"
 
-#include "libmscore/element.h"
+#include "libmscore/engravingitem.h"
 
 #include "actions/actiontypes.h"
 

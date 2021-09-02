@@ -51,14 +51,14 @@ static const ElementStyle instrumentChangeStyle {
 //   InstrumentChange
 //---------------------------------------------------------
 
-InstrumentChange::InstrumentChange(Element* parent)
+InstrumentChange::InstrumentChange(EngravingItem* parent)
     : TextBase(ElementType::INSTRUMENT_CHANGE, parent, Tid::INSTRUMENT_CHANGE, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     initElementStyle(&instrumentChangeStyle);
     _instrument = new Instrument();
 }
 
-InstrumentChange::InstrumentChange(const Instrument& i, Element* parent)
+InstrumentChange::InstrumentChange(const Instrument& i, EngravingItem* parent)
     : TextBase(ElementType::INSTRUMENT_CHANGE, parent, Tid::INSTRUMENT_CHANGE, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     initElementStyle(&instrumentChangeStyle);
@@ -97,7 +97,7 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
                 ClefType clefType
                     = score()->styleB(Sid::concertPitch) ? instrument->clefType(i)._concertClef : instrument->clefType(i)._transposingClef;
                 // If instrument change is at the start of a measure, use the measure as the element, as this will place the instrument change before the barline.
-                Element* element = rtick().isZero() ? toElement(findMeasure()) : toElement(this);
+                EngravingItem* element = rtick().isZero() ? toEngravingItem(findMeasure()) : toEngravingItem(this);
                 score()->undoChangeClef(part->staff(i), element, clefType, true);
             }
         }
@@ -119,7 +119,7 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
         }
 
         // change instrument in all linked scores
-        for (ScoreElement* se : linkList()) {
+        for (EngravingObject* se : linkList()) {
             InstrumentChange* lic = static_cast<InstrumentChange*>(se);
             Instrument* newInstrument = new Instrument(*instrument);
             lic->score()->undo(new ChangeInstrument(lic, newInstrument));

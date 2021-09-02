@@ -36,8 +36,8 @@ namespace Ms {
 //   DurationElement
 //---------------------------------------------------------
 
-DurationElement::DurationElement(const ElementType& type, Element* parent, ElementFlags f)
-    : Element(type, parent, f)
+DurationElement::DurationElement(const ElementType& type, EngravingItem* parent, ElementFlags f)
+    : EngravingItem(type, parent, f)
 {
     _tuplet = 0;
 }
@@ -47,7 +47,7 @@ DurationElement::DurationElement(const ElementType& type, Element* parent, Eleme
 //---------------------------------------------------------
 
 DurationElement::DurationElement(const DurationElement& e)
-    : Element(e)
+    : EngravingItem(e)
 {
     _tuplet   = 0;      // e._tuplet;
     _duration = e._duration;
@@ -149,7 +149,7 @@ QVariant DurationElement::getProperty(Pid propertyId) const
     case Pid::DURATION:
         return QVariant::fromValue(_duration);
     default:
-        return Element::getProperty(propertyId);
+        return EngravingItem::getProperty(propertyId);
     }
 }
 
@@ -167,7 +167,7 @@ bool DurationElement::setProperty(Pid propertyId, const QVariant& v)
     }
     break;
     default:
-        return Element::setProperty(propertyId, v);
+        return EngravingItem::setProperty(propertyId, v);
     }
     return true;
 }

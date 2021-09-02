@@ -32,7 +32,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 Lasso::Lasso(Score* s)
-    : Element(ElementType::LASSO, s)
+    : EngravingItem(ElementType::LASSO, s)
 {
     setVisible(false);
 }
@@ -130,7 +130,7 @@ bool Lasso::setProperty(Pid propertyId, const QVariant& v)
         bbox().setSize(SizeF::fromVariant(v));
         break;
     default:
-        if (!Element::setProperty(propertyId, v)) {
+        if (!EngravingItem::setProperty(propertyId, v)) {
             return false;
         }
         break;
@@ -153,6 +153,6 @@ QVariant Lasso::getProperty(Pid propertyId) const
     default:
         break;
     }
-    return Element::getProperty(propertyId);
+    return EngravingItem::getProperty(propertyId);
 }
 }

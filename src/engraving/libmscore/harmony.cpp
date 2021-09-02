@@ -919,7 +919,7 @@ void Harmony::endEdit(EditData& ed)
     _isMisspelled = false;
 
     if (links()) {
-        for (ScoreElement* e : *links()) {
+        for (EngravingObject* e : *links()) {
             if (e == this) {
                 continue;
             }
@@ -1033,7 +1033,7 @@ QString HDegree::text() const
 Harmony* Harmony::findInSeg(Segment* seg) const
 {
     // Find harmony as parent of fret diagram on same track
-    Element* fde = seg->findAnnotation(ElementType::FRET_DIAGRAM, track(), track());
+    EngravingItem* fde = seg->findAnnotation(ElementType::FRET_DIAGRAM, track(), track());
     if (fde) {
         FretDiagram* fd = toFretDiagram(fde);
         if (fd->harmony()) {
@@ -1042,7 +1042,7 @@ Harmony* Harmony::findInSeg(Segment* seg) const
     }
 
     // Find harmony on same track
-    Element* e = seg->findAnnotation(ElementType::HARMONY, track(), track());
+    EngravingItem* e = seg->findAnnotation(ElementType::HARMONY, track(), track());
     if (e) {
         return toHarmony(e);
     }
@@ -1131,7 +1131,7 @@ Fraction Harmony::ticksTillNext(int utick, bool stopAtMeasureEnd) const
         // Loop over segments of this measure
         while (cur) {
             //find harmony on same track
-            Element* e = cur->findAnnotation(ElementType::HARMONY, track(), track());
+            EngravingItem* e = cur->findAnnotation(ElementType::HARMONY, track(), track());
             if (e) {
                 nextHarmony = toHarmony(e);
             } else {
@@ -2049,7 +2049,7 @@ QString Harmony::userName() const
     case HarmonyType::STANDARD:
         break;
     }
-    return Element::userName();
+    return EngravingItem::userName();
 }
 
 //---------------------------------------------------------
@@ -2163,7 +2163,7 @@ QString Harmony::generateScreenReaderInfo() const
 
 bool Harmony::acceptDrop(EditData& data) const
 {
-    Element* e = data.dropElement;
+    EngravingItem* e = data.dropElement;
     if (e->isFretDiagram()) {
         return true;
     } else if (e->isSymbol() || e->isFSymbol()) {
@@ -2181,9 +2181,9 @@ bool Harmony::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-Element* Harmony::drop(EditData& data)
+EngravingItem* Harmony::drop(EditData& data)
 {
-    Element* e = data.dropElement;
+    EngravingItem* e = data.dropElement;
     if (e->isFretDiagram()) {
         FretDiagram* fd = toFretDiagram(e);
         fd->setParent(parent());
@@ -2337,7 +2337,7 @@ Sid Harmony::getPropertyStyle(Pid pid) const
 //   scanElements
 //---------------------------------------------------------
 
-void Harmony::scanElements(void* data, void (* func)(void*, Element*), bool all)
+void Harmony::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
     Q_UNUSED(all);
     // don't display harmony in palette

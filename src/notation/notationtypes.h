@@ -30,7 +30,7 @@
 #include "id.h"
 #include "midi/midievent.h"
 
-#include "libmscore/element.h"
+#include "libmscore/engravingitem.h"
 #include "libmscore/page.h"
 #include "libmscore/durationtype.h"
 #include "libmscore/mscore.h"
@@ -57,7 +57,7 @@
 
 namespace mu::notation {
 using Page = Ms::Page;
-using Element = Ms::Element;
+using EngravingItem = Ms::EngravingItem;
 using ElementType = Ms::ElementType;
 using Note = Ms::Note;
 using Measure = Ms::Measure;
@@ -159,7 +159,7 @@ enum class MoveDirection
 enum class MoveSelectionType
 {
     Undefined = 0,
-    Element,
+    EngravingItem,
     Chord,
     Measure,
     Track

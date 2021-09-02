@@ -30,7 +30,7 @@ class PaletteWidget;
 }
 
 namespace Ms {
-class Element;
+class EngravingItem;
 
 //---------------------------------------------------------
 //   SymbolDialog

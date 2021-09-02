@@ -23,7 +23,6 @@
 #include "xml.h"
 
 #include "libmscore/property.h"
-#include "libmscore/scoreElement.h"
 
 #include "log.h"
 
@@ -97,7 +96,7 @@ void XmlWriter::stag(const QString& s)
 //    <mops attribute="value">
 //---------------------------------------------------------
 
-void XmlWriter::stag(const ScoreElement* se, const QString& attributes)
+void XmlWriter::stag(const EngravingObject* se, const QString& attributes)
 {
     stag(se->name(), se, attributes);
 }
@@ -107,7 +106,7 @@ void XmlWriter::stag(const ScoreElement* se, const QString& attributes)
 //    <mops attribute="value">
 //---------------------------------------------------------
 
-void XmlWriter::stag(const QString& name, const ScoreElement* se, const QString& attributes)
+void XmlWriter::stag(const QString& name, const EngravingObject* se, const QString& attributes)
 {
     putLevel();
     *this << '<' << name;
@@ -443,7 +442,7 @@ int XmlWriter::assignLocalIndex(const Location& mainElementLocation)
 //   canWrite
 //---------------------------------------------------------
 
-bool XmlWriter::canWrite(const Element* e) const
+bool XmlWriter::canWrite(const EngravingItem* e) const
 {
     if (!_clipboardmode) {
         return true;

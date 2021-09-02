@@ -31,7 +31,7 @@
 #include "note.h"
 #include "staff.h"
 #include "text.h"
-#include "element.h"
+#include "engravingitem.h"
 #include "undo.h"
 #include "stem.h"
 #include "beam.h"
@@ -114,7 +114,7 @@ Tuplet::~Tuplet()
 
 void Tuplet::setParent(Measure* parent)
 {
-    Element::setParent(parent);
+    EngravingItem::setParent(parent);
 }
 
 //---------------------------------------------------------
@@ -123,7 +123,7 @@ void Tuplet::setParent(Measure* parent)
 
 void Tuplet::setSelected(bool f)
 {
-    Element::setSelected(f);
+    EngravingItem::setSelected(f);
     if (_number) {
         _number->setSelected(f);
     }
@@ -135,7 +135,7 @@ void Tuplet::setSelected(bool f)
 
 void Tuplet::setVisible(bool f)
 {
-    Element::setVisible(f);
+    EngravingItem::setVisible(f);
     if (_number) {
         _number->setVisible(f);
     }
@@ -437,7 +437,7 @@ void Tuplet::layout()
         if (n >= 3) {
             d = (p2.y() - p1.y()) / (p2.x() - p1.x());
             for (size_t i = 1; i < (n - 1); ++i) {
-                Element* e = _elements[i];
+                EngravingItem* e = _elements[i];
                 if (e->isChord()) {
                     const Chord* chord = toChord(e);
                     const Stem* stem = chord->stem();
@@ -548,7 +548,7 @@ void Tuplet::layout()
         if (n >= 3) {
             d  = (p2.y() - p1.y()) / (p2.x() - p1.x());
             for (size_t i = 1; i < (n - 1); ++i) {
-                Element* e = _elements[i];
+                EngravingItem* e = _elements[i];
                 if (e->isChord()) {
                     const Chord* chord = toChord(e);
                     const Stem* stem = chord->stem();
@@ -762,9 +762,9 @@ Shape Tuplet::shape() const
 //   scanElements
 //---------------------------------------------------------
 
-void Tuplet::scanElements(void* data, void (* func)(void*, Element*), bool all)
+void Tuplet::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
-    for (ScoreElement* child : *this) {
+    for (EngravingObject* child : *this) {
         if (child == _number && !all) {
             continue; // don't scan number unless all is true
         }
@@ -782,7 +782,7 @@ void Tuplet::scanElements(void* data, void (* func)(void*, Element*), bool all)
 void Tuplet::write(XmlWriter& xml) const
 {
     xml.stag(this);
-    Element::writeProperties(xml);
+    EngravingItem::writeProperties(xml);
 
     writeProperty(xml, Pid::NORMAL_NOTES);
     writeProperty(xml, Pid::ACTUAL_NOTES);
@@ -890,7 +890,7 @@ bool Tuplet::readProperties(XmlReader& e)
 //   add
 //---------------------------------------------------------
 
-void Tuplet::add(Element* e)
+void Tuplet::add(EngravingItem* e)
 {
 #ifndef NDEBUG
     for (DurationElement* el : _elements) {
@@ -934,7 +934,7 @@ void Tuplet::add(Element* e)
 //   remove
 //---------------------------------------------------------
 
-void Tuplet::remove(Element* e)
+void Tuplet::remove(EngravingItem* e)
 {
     switch (e->type()) {
 //            case ElementType::TEXT:
@@ -1016,7 +1016,7 @@ void Tuplet::reset()
 {
     undoChangeProperty(Pid::P1, PointF());
     undoChangeProperty(Pid::P2, PointF());
-    Element::reset();
+    EngravingItem::reset();
 }
 
 //---------------------------------------------------------
@@ -1025,7 +1025,7 @@ void Tuplet::reset()
 
 void Tuplet::dump() const
 {
-    Element::dump();
+    EngravingItem::dump();
     qDebug("ratio %s", qPrintable(_ratio.print()));
 }
 
@@ -1041,7 +1041,7 @@ void Tuplet::setTrack(int val)
     if (_number) {
         _number->setTrack(val);
     }
-    Element::setTrack(val);
+    EngravingItem::setTrack(val);
 }
 
 //---------------------------------------------------------
@@ -1215,7 +1215,7 @@ QVariant Tuplet::propertyDefault(Pid id) const
         return score()->styleV(Sid::tupletFontSpatiumDependent);
     default:
     {
-        QVariant v = ScoreElement::propertyDefault(id, Tid::DEFAULT);
+        QVariant v = EngravingObject::propertyDefault(id, Tid::DEFAULT);
         if (v.isValid()) {
             return v;
         }

@@ -23,7 +23,7 @@
 #ifndef __OSSIA_H__
 #define __OSSIA_H__
 
-#include "element.h"
+#include "engravingitem.h"
 
 namespace Ms {
 //---------------------------------------------------------
@@ -31,10 +31,10 @@ namespace Ms {
 ///    not implemented yet
 //---------------------------------------------------------
 
-class Ossia final : public Element
+class Ossia final : public EngravingItem
 {
 public:
-    Ossia(Element* parent);
+    Ossia(EngravingItem* parent);
     Ossia(const Ossia&);
 
     Ossia* clone() const override { return new Ossia(*this); }

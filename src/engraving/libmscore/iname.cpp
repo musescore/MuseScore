@@ -168,7 +168,7 @@ QVariant InstrumentName::propertyDefault(Pid id) const
 //   scanElements
 //---------------------------------------------------------
 
-void InstrumentName::scanElements(void* data, void (* func)(void*, Element*), bool all)
+void InstrumentName::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
     if (all || sysStaff()->show()) {
         func(data, this);

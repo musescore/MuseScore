@@ -56,7 +56,7 @@ static const ElementStyle articulationStyle {
 //---------------------------------------------------------
 
 Articulation::Articulation(ChordRest* parent)
-    : Element(ElementType::ARTICULATION, parent, ElementFlag::MOVABLE)
+    : EngravingItem(ElementType::ARTICULATION, parent, ElementFlag::MOVABLE)
 {
     _symId         = SymId::noSym;
     _anchor        = ArticulationAnchor::TOP_STAFF;
@@ -173,11 +173,11 @@ bool Articulation::readProperties(XmlReader& e)
         setPlayArticulation(e.readBool());
     } else if (tag == "offset") {
         if (score()->mscVersion() > 114) {
-            Element::readProperties(e);
+            EngravingItem::readProperties(e);
         } else {
             e.skipCurrentElement();       // ignore manual layout in older scores
         }
-    } else if (Element::readProperties(e)) {
+    } else if (EngravingItem::readProperties(e)) {
     } else {
         return false;
     }
@@ -204,7 +204,7 @@ void Articulation::write(XmlWriter& xml) const
     for (const StyledProperty& spp : *styledProperties()) {
         writeProperty(xml, spp.pid);
     }
-    Element::writeProperties(xml);
+    EngravingItem::writeProperties(xml);
     xml.etag();
 }
 
@@ -324,7 +324,7 @@ QVariant Articulation::getProperty(Pid propertyId) const
     case Pid::ORNAMENT_STYLE:      return int(ornamentStyle());
     case Pid::PLAY:                return bool(playArticulation());
     default:
-        return Element::getProperty(propertyId);
+        return EngravingItem::getProperty(propertyId);
     }
 }
 
@@ -351,7 +351,7 @@ bool Articulation::setProperty(Pid propertyId, const QVariant& v)
         setOrnamentStyle(MScore::OrnamentStyle(v.toInt()));
         break;
     default:
-        return Element::setProperty(propertyId, v);
+        return EngravingItem::setProperty(propertyId, v);
     }
     triggerLayout();
     return true;
@@ -377,7 +377,7 @@ QVariant Articulation::propertyDefault(Pid propertyId) const
     default:
         break;
     }
-    return Element::propertyDefault(propertyId);
+    return EngravingItem::propertyDefault(propertyId);
 }
 
 //---------------------------------------------------------
@@ -526,7 +526,7 @@ Pid Articulation::propertyId(const QStringRef& xmlName) const
     if (xmlName == "subtype") {
         return Pid::SYMBOL;
     }
-    return Element::propertyId(xmlName);
+    return EngravingItem::propertyId(xmlName);
 }
 
 //---------------------------------------------------------
@@ -546,7 +546,7 @@ Sid Articulation::getPropertyStyle(Pid id) const
 {
     switch (id) {
     case Pid::MIN_DISTANCE:
-        return Element::getPropertyStyle(id);
+        return EngravingItem::getPropertyStyle(id);
 
     case Pid::ARTICULATION_ANCHOR: {
         switch (anchorGroup(_symId)) {
@@ -583,7 +583,7 @@ void Articulation::resetProperty(Pid id)
     default:
         break;
     }
-    Element::resetProperty(id);
+    EngravingItem::resetProperty(id);
 }
 
 //---------------------------------------------------------
@@ -671,7 +671,7 @@ bool Articulation::isOrnament() const
 
 QString Articulation::accessibleInfo() const
 {
-    return QString("%1: %2").arg(Element::accessibleInfo(), userName());
+    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), userName());
 }
 
 //---------------------------------------------------------

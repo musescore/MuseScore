@@ -34,7 +34,7 @@ void SearchPopupModel::load()
 
 void SearchPopupModel::search(const QString& text)
 {
-    Ms::Element* element = notation()->elements()->search(text.toStdString());
+    Ms::EngravingItem* element = notation()->elements()->search(text.toStdString());
     if (element) {
         notation()->interaction()->select({ element }, SelectType::SINGLE);
     } else {

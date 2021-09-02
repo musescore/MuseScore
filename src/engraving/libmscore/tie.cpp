@@ -115,7 +115,7 @@ bool TieSegment::edit(EditData& ed)
 //   changeAnchor
 //---------------------------------------------------------
 
-void TieSegment::changeAnchor(EditData& ed, Element* element)
+void TieSegment::changeAnchor(EditData& ed, EngravingItem* element)
 {
     if (ed.curGrip == Grip::START) {
         spanner()->setStartElement(element);
@@ -166,7 +166,7 @@ void TieSegment::editDrag(EditData& ed)
         //
         if ((g == Grip::START && isSingleBeginType()) || (g == Grip::END && isSingleEndType())) {
             Spanner* spanner = tie();
-            Element* e = ed.view()->elementNear(ed.pos);
+            EngravingItem* e = ed.view()->elementNear(ed.pos);
             Note* note = (e && e->isNote()) ? toNote(e) : nullptr;
             if (note && ((g == Grip::END && note->tick() > tie()->tick()) || (g == Grip::START && note->tick() < tie()->tick2()))) {
                 if (g == Grip::END) {
@@ -551,7 +551,7 @@ void Tie::slurPos(SlurPos* sp)
 //   Tie
 //---------------------------------------------------------
 
-Tie::Tie(Element* parent)
+Tie::Tie(EngravingItem* parent)
     : SlurTie(ElementType::TIE, parent)
 {
     setAnchor(Anchor::NOTE);

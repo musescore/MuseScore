@@ -23,7 +23,7 @@
 
 #include <QTextStream>
 
-#include "engraving/libmscore/scoreElement.h"
+#include "engraving/libmscore/engravingobject.h"
 #include "engraving/libmscore/score.h"
 
 using namespace mu::diagnostics;
@@ -143,7 +143,7 @@ EngravingElementsModel::Item* EngravingElementsModel::itemByModelIndex(const QMo
     return m_allItems.value(index.internalId(), nullptr);
 }
 
-QVariant EngravingElementsModel::makeData(const Ms::ScoreElement* el) const
+QVariant EngravingElementsModel::makeData(const Ms::EngravingObject* el) const
 {
     if (!el) {
         return QVariant();
@@ -167,8 +167,8 @@ void EngravingElementsModel::reload()
     delete m_rootItem;
     m_rootItem = createItem(nullptr);
 
-    std::list<const Ms::ScoreElement*> elements = elementsProvider()->elements();
-    for (const Ms::ScoreElement* el : elements) {
+    std::list<const Ms::EngravingObject*> elements = elementsProvider()->elements();
+    for (const Ms::EngravingObject* el : elements) {
         if (el->isScore()) {
             Item* scoreItem = createItem(m_rootItem);
             scoreItem->setElement(el);
@@ -188,9 +188,9 @@ void EngravingElementsModel::reload()
     updateInfo();
 }
 
-void EngravingElementsModel::load(const std::list<const Ms::ScoreElement*>& elements, Item* root)
+void EngravingElementsModel::load(const std::list<const Ms::EngravingObject*>& elements, Item* root)
 {
-    for (const Ms::ScoreElement* el : elements) {
+    for (const Ms::EngravingObject* el : elements) {
         if (el->treeParent() == root->element()) {
             Item* item = createItem(root);
             item->setElement(el);
@@ -200,7 +200,7 @@ void EngravingElementsModel::load(const std::list<const Ms::ScoreElement*>& elem
     }
 }
 
-const EngravingElementsModel::Item* EngravingElementsModel::findItem(const Ms::ScoreElement* el, const Item* root) const
+const EngravingElementsModel::Item* EngravingElementsModel::findItem(const Ms::EngravingObject* el, const Item* root) const
 {
     if (root->element() == el) {
         return root;
@@ -215,9 +215,9 @@ const EngravingElementsModel::Item* EngravingElementsModel::findItem(const Ms::S
     return nullptr;
 }
 
-void EngravingElementsModel::findAndAddLoss(const std::list<const Ms::ScoreElement*>& elements, Item* lossRoot, const Item* root)
+void EngravingElementsModel::findAndAddLoss(const std::list<const Ms::EngravingObject*>& elements, Item* lossRoot, const Item* root)
 {
-    for (const Ms::ScoreElement* el : elements) {
+    for (const Ms::EngravingObject* el : elements) {
         const Item* it = findItem(el, root);
         if (it) {
             continue;
@@ -246,9 +246,9 @@ void EngravingElementsModel::select(QModelIndex index, bool arg)
 
 void EngravingElementsModel::updateInfo()
 {
-    std::list<const Ms::ScoreElement*> elements = elementsProvider()->elements();
+    std::list<const Ms::EngravingObject*> elements = elementsProvider()->elements();
     QHash<QString, int> els;
-    for (const Ms::ScoreElement* el : elements) {
+    for (const Ms::EngravingObject* el : elements) {
         els[el->name()] += 1;
     }
 

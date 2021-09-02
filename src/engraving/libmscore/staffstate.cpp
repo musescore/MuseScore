@@ -37,15 +37,15 @@ namespace Ms {
 //   StaffState
 //---------------------------------------------------------
 
-StaffState::StaffState(Element* parent)
-    : Element(ElementType::STAFF_STATE, parent)
+StaffState::StaffState(EngravingItem* parent)
+    : EngravingItem(ElementType::STAFF_STATE, parent)
 {
     _staffStateType = StaffStateType::INSTRUMENT;
     _instrument = new Instrument;
 }
 
 StaffState::StaffState(const StaffState& ss)
-    : Element(ss)
+    : EngravingItem(ss)
 {
     _instrument = new Instrument(*ss._instrument);
 }
@@ -66,7 +66,7 @@ void StaffState::write(XmlWriter& xml) const
     if (staffStateType() == StaffStateType::INSTRUMENT) {
         _instrument->write(xml, nullptr);
     }
-    Element::writeProperties(xml);
+    EngravingItem::writeProperties(xml);
     xml.etag();
 }
 
@@ -82,7 +82,7 @@ void StaffState::read(XmlReader& e)
             _staffStateType = StaffStateType(e.readInt());
         } else if (tag == "Instrument") {
             _instrument->read(e, nullptr);
-        } else if (!Element::readProperties(e)) {
+        } else if (!EngravingItem::readProperties(e)) {
             e.unknown();
         }
     }
@@ -211,9 +211,9 @@ bool StaffState::acceptDrop(EditData&) const
 //   drop
 //---------------------------------------------------------
 
-Element* StaffState::drop(EditData& data)
+EngravingItem* StaffState::drop(EditData& data)
 {
-    Element* e = data.dropElement;
+    EngravingItem* e = data.dropElement;
     score()->undoChangeElement(this, e);
     return e;
 }

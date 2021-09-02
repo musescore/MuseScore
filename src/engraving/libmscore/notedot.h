@@ -23,7 +23,7 @@
 #ifndef __NOTEDOT_H__
 #define __NOTEDOT_H__
 
-#include "element.h"
+#include "engravingitem.h"
 
 namespace Ms {
 class Note;
@@ -33,7 +33,7 @@ class Rest;
 //   @@ NoteDot
 //---------------------------------------------------------
 
-class NoteDot final : public Element
+class NoteDot final : public EngravingItem
 {
 public:
     NoteDot(Note* parent);
@@ -48,7 +48,7 @@ public:
 
     Note* note() const { return parent()->isNote() ? toNote(parent()) : 0; }
     Rest* rest() const { return parent()->isRest() ? toRest(parent()) : 0; }
-    Element* elementBase() const override;
+    EngravingItem* elementBase() const override;
 };
 }     // namespace Ms
 #endif

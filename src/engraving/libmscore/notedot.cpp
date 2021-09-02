@@ -35,13 +35,13 @@ namespace Ms {
 //---------------------------------------------------------
 
 NoteDot::NoteDot(Note* parent)
-    : Element(ElementType::NOTEDOT, parent)
+    : EngravingItem(ElementType::NOTEDOT, parent)
 {
     setFlag(ElementFlag::MOVABLE, false);
 }
 
 NoteDot::NoteDot(Rest* parent)
-    : Element(ElementType::NOTEDOT, parent)
+    : EngravingItem(ElementType::NOTEDOT, parent)
 {
     setFlag(ElementFlag::MOVABLE, false);
 }
@@ -81,7 +81,7 @@ void NoteDot::layout()
 //   elementBase
 //---------------------------------------------------------
 
-Element* NoteDot::elementBase() const
+EngravingItem* NoteDot::elementBase() const
 {
     return parentElement();
 }
@@ -97,7 +97,7 @@ void NoteDot::read(XmlReader& e)
             e.readElementText();
         } else if (e.name() == "subtype") {     // obsolete
             e.readElementText();
-        } else if (!Element::readProperties(e)) {
+        } else if (!EngravingItem::readProperties(e)) {
             e.unknown();
         }
     }

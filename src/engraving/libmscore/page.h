@@ -24,7 +24,7 @@
 #define __PAGE_H__
 
 #include "config.h"
-#include "element.h"
+#include "engravingitem.h"
 #include "bsp.h"
 
 namespace Ms {
@@ -40,7 +40,7 @@ class MeasureBase;
 //   @P pagenumber int (read only)
 //---------------------------------------------------------
 
-class Page final : public Element
+class Page final : public EngravingItem
 {
     QList<System*> _systems;
     int _no;                        // page number
@@ -54,12 +54,12 @@ class Page final : public Element
     void drawHeaderFooter(mu::draw::Painter*, int area, const QString&) const;
 
 public:
-    Page(ScoreElement* parent);
+    Page(EngravingObject* parent);
     ~Page();
 
     // Score Tree functions
-    ScoreElement* treeParent() const override;
-    ScoreElement* treeChild(int idx) const override;
+    EngravingObject* treeParent() const override;
+    EngravingObject* treeChild(int idx) const override;
     int treeChildCount() const override;
 
     Page* clone() const override { return new Page(*this); }
@@ -81,13 +81,13 @@ public:
     qreal rm() const;
 
     void draw(mu::draw::Painter*) const override;
-    void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
+    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
-    QList<Element*> items(const mu::RectF& r);
-    QList<Element*> items(const mu::PointF& p);
+    QList<EngravingItem*> items(const mu::RectF& r);
+    QList<EngravingItem*> items(const mu::PointF& p);
     void invalidateBspTree() { bspTreeValid = false; }
     mu::PointF pagePos() const override { return mu::PointF(); }       ///< position in page coordinates
-    QList<Element*> elements() const;           ///< list of visible elements
+    QList<EngravingItem*> elements() const;           ///< list of visible elements
     mu::RectF tbbox();                             // tight bounding box, excluding white space
     Fraction endTick() const;
 };

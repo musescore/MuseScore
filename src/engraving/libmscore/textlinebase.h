@@ -31,7 +31,7 @@
 namespace Ms {
 enum class Align : char;
 class TextLineBase;
-class Element;
+class EngravingItem;
 class Text;
 
 //---------------------------------------------------------
@@ -61,7 +61,7 @@ public:
 
     virtual void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
 
-    virtual Element* propertyDelegate(Pid) override;
+    virtual EngravingItem* propertyDelegate(Pid) override;
 
     virtual Shape shape() const override;
 
@@ -120,7 +120,7 @@ protected:
     friend class TextLineBaseSegment;
 
 public:
-    TextLineBase(const ElementType& type, Element* parent, ElementFlags = ElementFlag::NOTHING);
+    TextLineBase(const ElementType& type, EngravingItem* parent, ElementFlags = ElementFlag::NOTHING);
 
     virtual void write(XmlWriter& xml) const override;
     virtual void read(XmlReader&) override;

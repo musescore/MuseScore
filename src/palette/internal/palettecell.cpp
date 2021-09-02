@@ -25,7 +25,7 @@
 
 #include "engraving/infrastructure/io/xml.h"
 #include "engraving/libmscore/actionicon.h"
-#include "engraving/libmscore/element.h"
+#include "engraving/libmscore/engravingitem.h"
 #include "engraving/libmscore/fret.h"
 #include "engraving/libmscore/masterscore.h"
 #include "engraving/libmscore/textbase.h"
@@ -184,7 +184,7 @@ bool PaletteCell::read(XmlReader& e)
         } else if (s == "visible") {
             visible = e.readBool();
         } else {
-            element.reset(Element::name2Element(s, gpaletteScore->dummy()));
+            element.reset(EngravingItem::name2Element(s, gpaletteScore->dummy()));
             if (!element) {
                 e.unknown();
             } else {
@@ -255,7 +255,7 @@ PaletteCellPtr PaletteCell::fromElementMimeData(const QByteArray& data)
 {
     PointF dragOffset;
     Fraction duration(1, 4);
-    ElementPtr element(Element::readMimeData(gpaletteScore, data, &dragOffset, &duration));
+    ElementPtr element(EngravingItem::readMimeData(gpaletteScore, data, &dragOffset, &duration));
 
     if (!element) {
         return nullptr;

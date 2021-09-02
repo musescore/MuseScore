@@ -27,9 +27,9 @@
 #include "types.h"
 
 namespace Ms {
-class Element;
+class EngravingItem;
 class Score;
-class ScoreElement;
+class EngravingObject;
 class XmlReader;
 class XmlWriter;
 
@@ -44,7 +44,7 @@ class XmlWriter;
 
 class ConnectorInfo
 {
-    const Element* _current    { 0 };
+    const EngravingItem* _current    { 0 };
     bool _currentUpdated       { false };
     const Score* _score;
 
@@ -62,7 +62,7 @@ protected:
     ConnectorInfo* _prev    { 0 };
     ConnectorInfo* _next    { 0 };
 
-    void updateLocation(const Element* e, Location& i, bool clipboardmode);
+    void updateLocation(const EngravingItem* e, Location& i, bool clipboardmode);
     void updateCurrentInfo(bool clipboardmode);
     bool currentUpdated() const { return _currentUpdated; }
     void setCurrentUpdated(bool v) { _currentUpdated = v; }
@@ -73,7 +73,7 @@ protected:
     const ConnectorInfo* findLast() const;
 
 public:
-    ConnectorInfo(const Element* current, int track = -1, Fraction = { -1, 1 });
+    ConnectorInfo(const EngravingItem* current, int track = -1, Fraction = { -1, 1 });
     ConnectorInfo(const Score* score, const Location& currentLocation);
 
     ConnectorInfo* prev() const { return _prev; }
@@ -106,22 +106,22 @@ public:
 class ConnectorInfoReader final : public ConnectorInfo
 {
     XmlReader* _reader;
-    Element* _connector;
-    ScoreElement* _connectorReceiver;
+    EngravingItem* _connector;
+    EngravingObject* _connectorReceiver;
 
     void readEndpointLocation(Location& l);
 
 public:
-    ConnectorInfoReader(XmlReader& e, Element* current, int track = -1);
+    ConnectorInfoReader(XmlReader& e, EngravingItem* current, int track = -1);
     ConnectorInfoReader(XmlReader& e, Score* current, int track = -1);
 
     ConnectorInfoReader* prev() const { return static_cast<ConnectorInfoReader*>(_prev); }
     ConnectorInfoReader* next() const { return static_cast<ConnectorInfoReader*>(_next); }
 
-    Element* connector();
-    const Element* connector() const;
-    Element* releaseConnector();   // returns connector and "forgets" it by
-                                   // setting an internal pointer to it to zero
+    EngravingItem* connector();
+    const EngravingItem* connector() const;
+    EngravingItem* releaseConnector();   // returns connector and "forgets" it by
+    // setting an internal pointer to it to zero
 
     bool read();
     void update();
@@ -142,17 +142,17 @@ class ConnectorInfoWriter : public ConnectorInfo
     XmlWriter* _xml;
 
 protected:
-    const Element* _connector;
+    const EngravingItem* _connector;
 
     virtual const char* tagName() const = 0;
 
 public:
-    ConnectorInfoWriter(XmlWriter& xml, const Element* current, const Element* connector, int track = -1, Fraction = { -1, 1 });
+    ConnectorInfoWriter(XmlWriter& xml, const EngravingItem* current, const EngravingItem* connector, int track = -1, Fraction = { -1, 1 });
 
     ConnectorInfoWriter* prev() const { return static_cast<ConnectorInfoWriter*>(_prev); }
     ConnectorInfoWriter* next() const { return static_cast<ConnectorInfoWriter*>(_next); }
 
-    const Element* connector() const { return _connector; }
+    const EngravingItem* connector() const { return _connector; }
 
     void write();
 };

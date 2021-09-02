@@ -64,9 +64,9 @@ public:
     virtual void read(XmlReader&) override;
     bool readProperties(XmlReader&) override;
 
-    virtual Element* propertyDelegate(Pid) override;
+    virtual EngravingItem* propertyDelegate(Pid) override;
 
-    Element::EditBehavior normalModeEditBehavior() const override { return Element::EditBehavior::Edit; }
+    EngravingItem::EditBehavior normalModeEditBehavior() const override { return EngravingItem::EditBehavior::Edit; }
     int gripsCount() const override { return 3; }
     Grip initialEditModeGrip() const override { return Grip::END; }
     Grip defaultGrip() const override { return Grip::MIDDLE; }
@@ -104,7 +104,7 @@ protected:
     virtual mu::PointF linePos(Grip, System** system) const;
 
 public:
-    SLine(const ElementType& type, Element* parent, ElementFlags = ElementFlag::NOTHING);
+    SLine(const ElementType& type, EngravingItem* parent, ElementFlags = ElementFlag::NOTHING);
     SLine(const SLine&);
 
     virtual void layout() override;
@@ -114,7 +114,7 @@ public:
     void writeProperties(XmlWriter& xml) const override;
     virtual LineSegment* createLineSegment() = 0;
     void setLen(qreal l);
-    using Element::bbox;
+    using EngravingItem::bbox;
     const mu::RectF& bbox() const override;
 
     virtual void write(XmlWriter&) const override;

@@ -36,7 +36,7 @@ namespace Ms {
 TextEditData::~TextEditData()
 {
     if (deleteText) {
-        for (ScoreElement* se : _textBase->linkList()) {
+        for (EngravingObject* se : _textBase->linkList()) {
             toTextBase(se)->deleteLater();
         }
     }
@@ -630,11 +630,11 @@ void SplitJoinText::split(EditData* ed)
 //   drop
 //---------------------------------------------------------
 
-Element* TextBase::drop(EditData& ed)
+EngravingItem* TextBase::drop(EditData& ed)
 {
     TextCursor* cursor = cursorFromEditData(ed);
 
-    Element* e = ed.dropElement;
+    EngravingItem* e = ed.dropElement;
 
     switch (e->type()) {
     case ElementType::SYMBOL:

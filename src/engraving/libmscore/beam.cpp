@@ -75,10 +75,10 @@ struct BeamFragment {
 //   Beam
 //---------------------------------------------------------
 
-Beam::Beam(Element* parent, Score* score)
-    : Element(ElementType::BEAM, parent)
+Beam::Beam(EngravingItem* parent, Score* score)
+    : EngravingItem(ElementType::BEAM, parent)
 {
-    ScoreElement::setScore(score);
+    EngravingObject::setScore(score);
     initElementStyle(&beamStyle);
 }
 
@@ -87,7 +87,7 @@ Beam::Beam(Element* parent, Score* score)
 //---------------------------------------------------------
 
 Beam::Beam(const Beam& b)
-    : Element(b)
+    : EngravingItem(b)
 {
     _elements     = b._elements;
     _id           = b._id;
@@ -160,7 +160,7 @@ PointF Beam::canvasPos() const
 //   add
 //---------------------------------------------------------
 
-void Beam::add(Element* e)
+void Beam::add(EngravingItem* e)
 {
     if (e->isChordRest()) {
         addChordRest(toChordRest(e));
@@ -171,7 +171,7 @@ void Beam::add(Element* e)
 //   remove
 //---------------------------------------------------------
 
-void Beam::remove(Element* e)
+void Beam::remove(EngravingItem* e)
 {
     if (e->isChordRest()) {
         removeChordRest(toChordRest(e));
@@ -288,7 +288,7 @@ void Beam::alignBeamPosition()
 
 void Beam::move(const PointF& offset)
 {
-    Element::move(offset);
+    EngravingItem::move(offset);
     for (mu::LineF* bs : qAsConst(beamSegments)) {
         bs->translate(offset);
     }
@@ -2120,7 +2120,7 @@ void Beam::write(XmlWriter& xml) const
         return;
     }
     xml.stag(this);
-    Element::writeProperties(xml);
+    EngravingItem::writeProperties(xml);
 
     writeProperty(xml, Pid::STEM_DIRECTION);
     writeProperty(xml, Pid::DISTRIBUTE);
@@ -2211,7 +2211,7 @@ void Beam::read(XmlReader& e)
             e.skipCurrentElement();
         } else if (tag == "subtype") {          // obsolete
             e.skipCurrentElement();
-        } else if (!Element::readProperties(e)) {
+        } else if (!EngravingItem::readProperties(e)) {
             e.unknown();
         }
     }
@@ -2371,7 +2371,7 @@ void Beam::startEdit(EditData& ed)
 
 void Beam::endEdit(EditData& ed)
 {
-    Element::endEdit(ed);
+    EngravingItem::endEdit(ed);
 }
 
 //---------------------------------------------------------
@@ -2392,7 +2392,7 @@ void Beam::triggerLayout() const
 
 bool Beam::acceptDrop(EditData& data) const
 {
-    Element* e = data.dropElement;
+    EngravingItem* e = data.dropElement;
 
     if (e->isActionIcon()) {
         ActionIconType type = toActionIcon(e)->actionType();
@@ -2407,7 +2407,7 @@ bool Beam::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-Element* Beam::drop(EditData& data)
+EngravingItem* Beam::drop(EditData& data)
 {
     if (!data.dropElement->isActionIcon()) {
         return nullptr;
@@ -2492,7 +2492,7 @@ QVariant Beam::getProperty(Pid propertyId) const
     case Pid::BEAM_POS:       return QVariant::fromValue(beamPos());
     case Pid::BEAM_NO_SLOPE:  return isNoSlope();
     default:
-        return Element::getProperty(propertyId);
+        return EngravingItem::getProperty(propertyId);
     }
 }
 
@@ -2529,7 +2529,7 @@ bool Beam::setProperty(Pid propertyId, const QVariant& v)
         }
         break;
     default:
-        if (!Element::setProperty(propertyId, v)) {
+        if (!EngravingItem::setProperty(propertyId, v)) {
             return false;
         }
         break;
@@ -2553,7 +2553,7 @@ QVariant Beam::propertyDefault(Pid id) const
     case Pid::GROW_RIGHT:     return 1.0;
     case Pid::USER_MODIFIED:  return false;
     case Pid::BEAM_POS:       return QVariant::fromValue(beamPos());
-    default:                  return Element::propertyDefault(id);
+    default:                  return EngravingItem::propertyDefault(id);
     }
 }
 
@@ -2732,12 +2732,12 @@ void Beam::startDrag(EditData& editData)
 //   scanElements
 //---------------------------------------------------------
 
-void Beam::scanElements(void* data, void (* func)(void*, Element*), bool all)
+void Beam::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
     ChordRest* cr = toChordRest(treeParent());
     if (!all && cr->measure()->stemless(cr->staffIdx())) {
         return;
     }
-    Element::scanElements(data, func, all);
+    EngravingItem::scanElements(data, func, all);
 }
 }

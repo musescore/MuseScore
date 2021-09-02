@@ -885,7 +885,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
             Measure* m = score->getCreateMeasure(tick);
             Segment* s = m->findSegment(SegmentType::TimeSig, tick);
             if (s) {
-                Element* e = s->element(trackZeroVoice(track));
+                EngravingItem* e = s->element(trackZeroVoice(track));
                 if (e && static_cast<TimeSig*>(e)->sig() == f) {
                     break;
                 }

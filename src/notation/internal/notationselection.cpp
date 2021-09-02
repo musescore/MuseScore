@@ -65,17 +65,17 @@ QMimeData* NotationSelection::mimeData() const
     return mimeData;
 }
 
-Element* NotationSelection::element() const
+EngravingItem* NotationSelection::element() const
 {
     return score()->selection().element();
 }
 
-std::vector<Element*> NotationSelection::elements() const
+std::vector<EngravingItem*> NotationSelection::elements() const
 {
-    std::vector<Element*> els;
-    QList<Ms::Element*> list = score()->selection().elements();
+    std::vector<EngravingItem*> els;
+    QList<Ms::EngravingItem*> list = score()->selection().elements();
     els.reserve(list.count());
-    for (Ms::Element* e : list) {
+    for (Ms::EngravingItem* e : list) {
         els.push_back(e);
     }
     return els;
@@ -101,19 +101,19 @@ QRectF NotationSelection::canvasBoundingRect() const
         return QRectF();
     }
 
-    Ms::Element* el = score()->selection().element();
+    Ms::EngravingItem* el = score()->selection().element();
     if (el) {
         return el->canvasBoundingRect().toQRectF();
     }
 
-    QList<Ms::Element*> els = score()->selection().elements();
+    QList<Ms::EngravingItem*> els = score()->selection().elements();
     if (els.isEmpty()) {
         LOGW() << "selection not none, but no elements";
         return QRectF();
     }
 
     RectF rect;
-    for (const Ms::Element* elm: els) {
+    for (const Ms::EngravingItem* elm: els) {
         if (rect.isNull()) {
             rect = elm->canvasBoundingRect();
         } else {

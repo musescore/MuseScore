@@ -23,7 +23,7 @@
 #ifndef __GLISSANDO_H__
 #define __GLISSANDO_H__
 
-#include "element.h"
+#include "engravingitem.h"
 #include "line.h"
 #include "property.h"
 
@@ -50,7 +50,7 @@ public:
     void draw(mu::draw::Painter*) const override;
     void layout() override;
 
-    Element* propertyDelegate(Pid) override;
+    EngravingItem* propertyDelegate(Pid) override;
 };
 
 //---------------------------------------------------------
@@ -73,7 +73,7 @@ class Glissando final : public SLine
     static const std::array<const char*, 2> glissandoTypeNames;
 
 public:
-    Glissando(Element* parent);
+    Glissando(EngravingItem* parent);
     Glissando(const Glissando&);
 
     static Note* guessInitialNote(Chord* chord);

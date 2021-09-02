@@ -697,7 +697,7 @@ void LineSegment::editDrag(EditData& ed)
         //
         // if we touch a different note, change anchor
         //
-        Element* e = ed.view()->elementNear(ed.pos);
+        EngravingItem* e = ed.view()->elementNear(ed.pos);
         if (e && e->isNote()) {
             SLine* l = line();
             if (ed.curGrip == Grip::END && e != line()->endElement()) {
@@ -725,7 +725,7 @@ void LineSegment::editDrag(EditData& ed)
 
 void LineSegment::spatiumChanged(qreal ov, qreal nv)
 {
-    Element::spatiumChanged(ov, nv);
+    EngravingItem::spatiumChanged(ov, nv);
     qreal scale = nv / ov;
     line()->setLineWidth(line()->lineWidth() * scale);
     _offset2 *= scale;
@@ -737,7 +737,7 @@ void LineSegment::spatiumChanged(qreal ov, qreal nv)
 
 void LineSegment::localSpatiumChanged(qreal ov, qreal nv)
 {
-    Element::localSpatiumChanged(ov, nv);
+    EngravingItem::localSpatiumChanged(ov, nv);
     _offset2 *= nv / ov;
 }
 
@@ -745,7 +745,7 @@ void LineSegment::localSpatiumChanged(qreal ov, qreal nv)
 //   propertyDelegate
 //---------------------------------------------------------
 
-Element* LineSegment::propertyDelegate(Pid pid)
+EngravingItem* LineSegment::propertyDelegate(Pid pid)
 {
     if (pid == Pid::DIAGONAL
         || pid == Pid::COLOR
@@ -785,7 +785,7 @@ RectF LineSegment::drag(EditData& ed)
 //   SLine
 //---------------------------------------------------------
 
-SLine::SLine(const ElementType& type, Element* parent, ElementFlags f)
+SLine::SLine(const ElementType& type, EngravingItem* parent, ElementFlags f)
     : Spanner(type, parent, f)
 {
     setTrack(0);
@@ -897,7 +897,7 @@ PointF SLine::linePos(Grip grip, System** sys) const
                 if (!cr) {
                     qDebug("no end for lyricsline segment - start %d, ticks %d", tick().ticks(), ticks().ticks());
                 } else if (cr->track() != track()) {
-                    Element* e = cr->segment()->element(track());
+                    EngravingItem* e = cr->segment()->element(track());
                     if (e) {
                         cr = toChordRest(e);
                     }
@@ -968,7 +968,7 @@ PointF SLine::linePos(Grip grip, System** sys) const
                 s = s->prev();
                 if (s && s->enabled()) {
                     offset = s->x();
-                    Element* e = s->element(staffIdx() * VOICES);
+                    EngravingItem* e = s->element(staffIdx() * VOICES);
                     if (e) {
                         offset += e->width();
                     }
@@ -1010,7 +1010,7 @@ PointF SLine::linePos(Grip grip, System** sys) const
             x = m->pos().x() + mwidth;
             // align to barline
             if (seg && (seg->segmentType() & SegmentType::BarLineType)) {
-                Element* e = seg->element(0);
+                EngravingItem* e = seg->element(0);
                 if (e && e->type() == ElementType::BAR_LINE) {
                     BarLineType blt = toBarLine(e)->barLineType();
                     switch (blt) {
@@ -1044,7 +1044,7 @@ PointF SLine::linePos(Grip grip, System** sys) const
     break;
 
     case Spanner::Anchor::NOTE: {
-        Element* e = grip == Grip::START ? startElement() : endElement();
+        EngravingItem* e = grip == Grip::START ? startElement() : endElement();
         if (!e) {
             return PointF();
         }
@@ -1315,14 +1315,14 @@ void SLine::writeProperties(XmlWriter& xml) const
         xml.stag("Segment", seg);
         xml.tag("subtype", int(seg->spannerSegmentType()));
         // TODO:
-        // NOSTYLE offset written in Element::writeProperties,
+        // NOSTYLE offset written in EngravingItem::writeProperties,
         // so we probably don't need to duplicate it here
         // see https://musescore.org/en/node/286848
         //if (seg->propertyFlags(Pid::OFFSET) & PropertyFlags::UNSTYLED)
         xml.tag("offset", seg->offset() / _spatium);
         xml.tag("off2", seg->userOff2() / _spatium);
         seg->writeProperty(xml, Pid::MIN_DISTANCE);
-        seg->Element::writeProperties(xml);
+        seg->EngravingItem::writeProperties(xml);
         xml.etag();
     }
 }
@@ -1401,7 +1401,7 @@ const mu::RectF& SLine::bbox() const
     } else {
         setbbox(segmentAt(0)->bbox());
     }
-    return Element::bbox();
+    return EngravingItem::bbox();
 }
 
 //---------------------------------------------------------

@@ -81,11 +81,11 @@ void InspectorListModel::buildModelsForEmptySelection(const QSet<Ms::ElementType
     createModelsBySectionType(persistentSectionList);
 }
 
-void InspectorListModel::setElementList(const QList<Ms::Element*>& selectedElementList)
+void InspectorListModel::setElementList(const QList<Ms::EngravingItem*>& selectedElementList)
 {
     QSet<Ms::ElementType> newElementTypeSet;
 
-    for (const Ms::Element* element : selectedElementList) {
+    for (const Ms::EngravingItem* element : selectedElementList) {
         newElementTypeSet << element->type();
     }
 
@@ -274,14 +274,14 @@ bool InspectorListModel::isModelAlreadyExists(const AbstractInspectorModel::Insp
 void InspectorListModel::subscribeOnSelectionChanges()
 {
     if (!context() || !context()->currentNotation()) {
-        setElementList(QList<Ms::Element*>());
+        setElementList(QList<Ms::EngravingItem*>());
     }
 
     context()->currentNotationChanged().onNotify(this, [this]() {
         m_notation = context()->currentNotation();
 
         if (!m_notation) {
-            setElementList(QList<Ms::Element*>());
+            setElementList(QList<Ms::EngravingItem*>());
             return;
         }
 

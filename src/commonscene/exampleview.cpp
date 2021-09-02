@@ -28,7 +28,7 @@
 #include "engraving/infrastructure/io/xml.h"
 
 #include "libmscore/masterscore.h"
-#include "libmscore/element.h"
+#include "libmscore/engravingitem.h"
 #include "libmscore/page.h"
 #include "libmscore/system.h"
 #include "libmscore/actionicon.h"
@@ -127,7 +127,7 @@ void ExampleView::updateAll()
     update();
 }
 
-void ExampleView::adjustCanvasPosition(const Element* /*el*/, bool /*playBack*/, int)
+void ExampleView::adjustCanvasPosition(const EngravingItem* /*el*/, bool /*playBack*/, int)
 {
 }
 
@@ -151,7 +151,7 @@ void ExampleView::removeScore()
 {
 }
 
-void ExampleView::changeEditElement(Element*)
+void ExampleView::changeEditElement(EngravingItem*)
 {
 }
 
@@ -163,7 +163,7 @@ void ExampleView::cmdAddSlur(Note* /*firstNote*/, Note* /*lastNote*/)
 {
 }
 
-Element* ExampleView::elementNear(PointF)
+EngravingItem* ExampleView::elementNear(PointF)
 {
     return 0;
 }
@@ -181,9 +181,9 @@ void ExampleView::drawBackground(mu::draw::Painter* p, const RectF& r) const
 //   drawElements
 //---------------------------------------------------------
 
-void ExampleView::drawElements(mu::draw::Painter& painter, const QList<Element*>& el)
+void ExampleView::drawElements(mu::draw::Painter& painter, const QList<EngravingItem*>& el)
 {
-    for (Element* e : el) {
+    for (EngravingItem* e : el) {
         e->itemDiscovered = 0;
         PointF pos(e->pagePos());
         painter.translate(pos);
@@ -210,7 +210,7 @@ void ExampleView::paintEvent(QPaintEvent* ev)
 
         QRegion r1(r.toQRect());
         Page* page = _score->pages().front();
-        QList<Element*> ell = page->items(RectF::fromQRectF(fr));
+        QList<EngravingItem*> ell = page->items(RectF::fromQRectF(fr));
         std::stable_sort(ell.begin(), ell.end(), elementLessThan);
         drawElements(p, ell);
     }
@@ -234,9 +234,9 @@ void ExampleView::dragEnterEvent(QDragEnterEvent* event)
         XmlReader e(a);
         PointF dragOffset;
         Fraction duration;      // dummy
-        ElementType type = Element::readType(e, &dragOffset, &duration);
+        ElementType type = EngravingItem::readType(e, &dragOffset, &duration);
 
-        dragElement = Element::create(type, _score->dummy());
+        dragElement = EngravingItem::create(type, _score->dummy());
         if (dragElement) {
             dragElement->moveToDummy();
             dragElement->read(e);
@@ -263,7 +263,7 @@ void ExampleView::dragLeaveEvent(QDragLeaveEvent*)
 //   moveElement
 //---------------------------------------------------------
 
-static void moveElement(void* data, Element* e)
+static void moveElement(void* data, EngravingItem* e)
 {
     QPointF* pos = (QPointF*)data;
     e->score()->addRefresh(e->canvasBoundingRect());
@@ -284,11 +284,11 @@ void ExampleView::dragMoveEvent(QDragMoveEvent* event)
     }
 
     PointF pos = PointF::fromQPointF(imatrix.map(QPointF(event->pos())));
-    QList<Element*> el = elementsAt(pos);
+    QList<EngravingItem*> el = elementsAt(pos);
     bool found = false;
-    foreach (const Element* e, el) {
+    foreach (const EngravingItem* e, el) {
         if (e->type() == ElementType::NOTE) {
-            setDropTarget(const_cast<Element*>(e));
+            setDropTarget(const_cast<EngravingItem*>(e));
             found = true;
             break;
         }
@@ -305,7 +305,7 @@ void ExampleView::dragMoveEvent(QDragMoveEvent* event)
 //   setDropTarget
 //---------------------------------------------------------
 
-void ExampleView::setDropTarget(const Element* el)
+void ExampleView::setDropTarget(const EngravingItem* el)
 {
     if (dropTarget != el) {
         if (dropTarget) {
@@ -345,7 +345,7 @@ void ExampleView::dropEvent(QDropEvent* event)
         dragElement = 0;
         return;
     }
-    foreach (Element* e, elementsAt(pos)) {
+    foreach (EngravingItem* e, elementsAt(pos)) {
         if (e->type() == ElementType::NOTE) {
             ActionIcon* icon = static_cast<ActionIcon*>(dragElement);
             Chord* chord = static_cast<Note*>(e)->chord();
@@ -385,7 +385,7 @@ void ExampleView::mousePressEvent(QMouseEvent* event)
     startMove  = imatrix.map(QPointF(event->pos()));
     PointF pos = PointF::fromQPointF(imatrix.map(QPointF(event->pos())));
 
-    foreach (Element* e, elementsAt(pos)) {
+    foreach (EngravingItem* e, elementsAt(pos)) {
         if (e->type() == ElementType::NOTE) {
             emit noteClicked(static_cast<Note*>(e));
             break;

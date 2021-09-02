@@ -21,7 +21,7 @@
  */
 #include "paint.h"
 
-#include "libmscore/element.h"
+#include "libmscore/engravingitem.h"
 
 #include "accessibility/accessibleelement.h"
 
@@ -35,7 +35,7 @@ using namespace Ms;
 
 static const mu::draw::Color DEBUG_ELTREE_SELECTED_COLOR(164, 0, 0);
 
-void Paint::initDebugger(mu::draw::Painter& painter, const Ms::Element* element)
+void Paint::initDebugger(mu::draw::Painter& painter, const Ms::EngravingItem* element)
 {
     auto originalProvider = painter.provider();
     auto debugger = std::make_shared<PaintDebugger>(originalProvider);
@@ -67,7 +67,7 @@ void Paint::deinitDebugger(mu::draw::Painter& painter)
     painter.setProvider(debugger->realProvider(), false);
 }
 
-void Paint::paintElement(mu::draw::Painter& painter, const Ms::Element* element)
+void Paint::paintElement(mu::draw::Painter& painter, const Ms::EngravingItem* element)
 {
     element->itemDiscovered = false;
     PointF elementPosition(element->pagePos());
@@ -85,11 +85,11 @@ void Paint::paintElement(mu::draw::Painter& painter, const Ms::Element* element)
 #endif
 }
 
-void Paint::paintElements(mu::draw::Painter& painter, const QList<Element*>& elements)
+void Paint::paintElements(mu::draw::Painter& painter, const QList<EngravingItem*>& elements)
 {
-    QList<Ms::Element*> sortedElements = elements;
+    QList<Ms::EngravingItem*> sortedElements = elements;
 
-    std::sort(sortedElements.begin(), sortedElements.end(), [](Ms::Element* e1, Ms::Element* e2) {
+    std::sort(sortedElements.begin(), sortedElements.end(), [](Ms::EngravingItem* e1, Ms::EngravingItem* e2) {
         if (e1->z() == e2->z()) {
             if (e1->selected()) {
                 return false;
@@ -107,7 +107,7 @@ void Paint::paintElements(mu::draw::Painter& painter, const QList<Element*>& ele
         return e1->z() < e2->z();
     });
 
-    for (const Element* element : sortedElements) {
+    for (const EngravingItem* element : sortedElements) {
         if (!element->isInteractionAvailable()) {
             continue;
         }

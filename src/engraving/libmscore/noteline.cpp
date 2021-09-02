@@ -24,7 +24,7 @@
 #include "textline.h"
 
 namespace Ms {
-NoteLine::NoteLine(Element* parent)
+NoteLine::NoteLine(EngravingItem* parent)
     : TextLineBase(ElementType::NOTELINE, parent)
 {
 //TODO-ws      init();

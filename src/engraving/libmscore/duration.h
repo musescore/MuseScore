@@ -24,7 +24,7 @@
 #define __DURATION_H__
 
 #include "config.h"
-#include "element.h"
+#include "engravingitem.h"
 #include "durationtype.h"
 
 namespace Ms {
@@ -40,13 +40,13 @@ class Spanner;
 //   @P globalDuration Fraction  played duration
 //---------------------------------------------------------
 
-class DurationElement : public Element
+class DurationElement : public EngravingItem
 {
     Fraction _duration;
     Tuplet* _tuplet;
 
 public:
-    DurationElement(const ElementType& type, Element* parent = 0, ElementFlags = ElementFlag::MOVABLE | ElementFlag::ON_STAFF);
+    DurationElement(const ElementType& type, EngravingItem* parent = 0, ElementFlags = ElementFlag::MOVABLE | ElementFlag::ON_STAFF);
     DurationElement(const DurationElement& e);
     ~DurationElement();
 

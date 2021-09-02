@@ -27,7 +27,7 @@
 
 #include "libmscore/select.h"
 #include "selectnotedialog.h"
-#include "libmscore/element.h"
+#include "libmscore/engravingitem.h"
 #include "libmscore/system.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/chord.h"
@@ -213,14 +213,14 @@ void SelectNoteDialog::apply() const
         return;
     }
 
-    Element* selectedElement = interaction->selection()->element();
+    EngravingItem* selectedElement = interaction->selection()->element();
     if (!selectedElement) {
         return;
     }
 
     FilterElementsOptions options = noteOptions();
 
-    std::vector<Element*> elements = notationElements->elements(options);
+    std::vector<EngravingItem*> elements = notationElements->elements(options);
     if (elements.empty()) {
         return;
     }
@@ -229,18 +229,18 @@ void SelectNoteDialog::apply() const
         interaction->clearSelection();
         interaction->select(elements, SelectType::ADD);
     } else if (doSubtract()) {
-        std::vector<Element*> selesctionElements = interaction->selection()->elements();
-        for (Element* element: elements) {
+        std::vector<EngravingItem*> selesctionElements = interaction->selection()->elements();
+        for (EngravingItem* element: elements) {
             selesctionElements.erase(std::remove(selesctionElements.begin(), selesctionElements.end(), element), selesctionElements.end());
         }
 
         interaction->clearSelection();
         interaction->select(selesctionElements, SelectType::ADD);
     } else if (doAdd()) {
-        std::vector<Element*> selesctionElements = interaction->selection()->elements();
+        std::vector<EngravingItem*> selesctionElements = interaction->selection()->elements();
 
-        std::vector<Element*> elementsToSelect;
-        for (Element* element: elements) {
+        std::vector<EngravingItem*> elementsToSelect;
+        for (EngravingItem* element: elements) {
             if (std::find(selesctionElements.begin(), selesctionElements.end(), element) == selesctionElements.end()) {
                 elementsToSelect.push_back(element);
             }

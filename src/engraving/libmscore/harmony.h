@@ -140,7 +140,7 @@ public:
     void setLeftParen(bool leftParen) { _leftParen = leftParen; }
     void setRightParen(bool rightParen) { _rightParen = rightParen; }
 
-    void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
+    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
     Harmony* findNext() const;
     Harmony* findPrev() const;
@@ -224,7 +224,7 @@ public:
     QString screenReaderInfo() const override;
 
     bool acceptDrop(EditData&) const override;
-    Element* drop(EditData&) override;
+    EngravingItem* drop(EditData&) override;
 
     QVariant getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const QVariant& v) override;

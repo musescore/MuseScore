@@ -33,8 +33,8 @@ public:
 
     Ms::Score* msScore() const override;
 
-    Element* search(const std::string& searchText) const override;
-    std::vector<Element*> elements(const FilterElementsOptions& elementsOptions) const override;
+    EngravingItem* search(const std::string& searchText) const override;
+    std::vector<EngravingItem*> elements(const FilterElementsOptions& elementsOptions) const override;
 
     Measure* measure(const int measureIndex) const override;
     PageList pages() const override;
@@ -45,10 +45,10 @@ private:
     Ms::RehearsalMark* rehearsalMark(const std::string& name) const;
     Ms::Page* page(const int pageIndex) const;
 
-    std::vector<Element*> allScoreElements() const;
+    std::vector<EngravingItem*> allScoreElements() const;
 
-    std::vector<Element*> filterElements(const FilterElementsOptions* elementsOptions) const;
-    std::vector<Element*> filterNotes(const FilterNotesOptions* notesOptions) const;
+    std::vector<EngravingItem*> filterElements(const FilterElementsOptions* elementsOptions) const;
+    std::vector<EngravingItem*> filterNotes(const FilterNotesOptions* notesOptions) const;
 
     ElementPattern* constructElementPattern(const FilterElementsOptions* elementsOptions) const;
     Ms::NotePattern* constructNotePattern(const FilterNotesOptions* notesOptions) const;

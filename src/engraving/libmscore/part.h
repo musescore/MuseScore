@@ -65,7 +65,7 @@ enum class PreferSharpFlat : char {
 //   @P volume          int
 //---------------------------------------------------------
 
-class Part final : public ScoreElement
+class Part final : public EngravingObject
 {
     QString _partName;              ///< used in tracklist (mixer)
     InstrumentList _instruments;

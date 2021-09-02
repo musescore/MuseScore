@@ -41,13 +41,13 @@ namespace Ms {
 //   Symbol
 //---------------------------------------------------------
 
-Symbol::Symbol(const ElementType& type, Element* parent, ElementFlags f)
+Symbol::Symbol(const ElementType& type, EngravingItem* parent, ElementFlags f)
     : BSymbol(type, parent, f)
 {
     _sym = SymId::accidentalSharp;          // arbitrary valid default
 }
 
-Symbol::Symbol(Element* parent, ElementFlags f)
+Symbol::Symbol(EngravingItem* parent, ElementFlags f)
     : Symbol(ElementType::SYMBOL, parent, f)
 {
 }
@@ -76,7 +76,7 @@ QString Symbol::symName() const
 
 void Symbol::layout()
 {
-    // foreach(Element* e, leafs())     done in BSymbol::layout() ?
+    // foreach(EngravingItem* e, leafs())     done in BSymbol::layout() ?
     //      e->layout();
     setbbox(_scoreFont ? _scoreFont->bbox(_sym, magS()) : symBbox(_sym));
     qreal w = width();
@@ -212,7 +212,7 @@ bool Symbol::setProperty(Pid propertyId, const QVariant& v)
 //   FSymbol
 //---------------------------------------------------------
 
-FSymbol::FSymbol(Element* parent)
+FSymbol::FSymbol(EngravingItem* parent)
     : BSymbol(ElementType::FSYMBOL, parent)
 {
     _code = 0;

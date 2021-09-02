@@ -23,7 +23,7 @@
 #ifndef __TEXTEDIT_H__
 #define __TEXTEDIT_H__
 
-#include "element.h"
+#include "engravingitem.h"
 #include "text.h"
 #include "undo.h"
 
@@ -64,7 +64,7 @@ protected:
 public:
     TextEditUndoCommand(const TextCursor& tc)
         : _cursor(tc) {}
-    bool isFiltered(UndoCommand::Filter f, const Element* target) const override
+    bool isFiltered(UndoCommand::Filter f, const EngravingItem* target) const override
     {
         return f == UndoCommand::Filter::TextEdit && _cursor.text() == target;
     }

@@ -873,7 +873,7 @@ void PaletteTreeModel::updateCellsState(const Selection& sel)
     const ActionIconType beamActionType = Beam::actionIconTypeForBeamMode(bm);
     bool deactivateAll = !cr;
 
-    for (Element* e : sel.elements()) {
+    for (EngravingItem* e : sel.elements()) {
         if (e->isNote()) {
             e = e->parentElement();
         }

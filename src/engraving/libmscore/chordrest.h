@@ -61,7 +61,7 @@ class ChordRest : public DurationElement
     TDuration _durationType;
     int _staffMove;           // -1, 0, +1, used for crossbeaming
 
-    void processSiblings(std::function<void(Element*)> func);
+    void processSiblings(std::function<void(EngravingItem*)> func);
 
 protected:
     std::vector<Lyrics*> _lyrics;
@@ -84,11 +84,11 @@ public:
     ~ChordRest();
 
     // Score Tree functions
-    virtual ScoreElement* treeParent() const override;
-    virtual ScoreElement* treeChild(int idx) const override;
+    virtual EngravingObject* treeParent() const override;
+    virtual EngravingObject* treeChild(int idx) const override;
     virtual int treeChildCount() const override;
 
-    virtual Element* drop(EditData&) override;
+    virtual EngravingItem* drop(EditData&) override;
     virtual void undoUnlink() override;
 
     virtual Segment* segment() const { return (Segment*)parent(); }
@@ -162,8 +162,8 @@ public:
     bool isMelismaEnd() const;
     void setMelismaEnd(bool v);
 
-    virtual void add(Element*) override;
-    virtual void remove(Element*) override;
+    virtual void add(EngravingItem*) override;
+    virtual void remove(EngravingItem*) override;
     void removeDeleteBeam(bool beamed);
     void replaceBeam(Beam* newBeam);
 
@@ -192,13 +192,13 @@ public:
     Segment* nextSegmentAfterCR(SegmentType types) const;
 
     virtual void setScore(Score* s) override;
-    Element* nextArticulationOrLyric(Element* e);
-    Element* prevArticulationOrLyric(Element* e);
-    virtual Element* nextElement() override;
-    virtual Element* prevElement() override;
-    Element* lastElementBeforeSegment();
-    virtual Element* nextSegmentElement() override;
-    virtual Element* prevSegmentElement() override;
+    EngravingItem* nextArticulationOrLyric(EngravingItem* e);
+    EngravingItem* prevArticulationOrLyric(EngravingItem* e);
+    virtual EngravingItem* nextElement() override;
+    virtual EngravingItem* prevElement() override;
+    EngravingItem* lastElementBeforeSegment();
+    virtual EngravingItem* nextSegmentElement() override;
+    virtual EngravingItem* prevSegmentElement() override;
     virtual QString accessibleExtraInfo() const override;
     virtual Shape shape() const override;
     virtual void layoutStem1() {}
@@ -209,7 +209,7 @@ public:
 
     bool isBefore(const ChordRest*) const;
 
-    void undoAddAnnotation(Element*);
+    void undoAddAnnotation(EngravingItem*);
 };
 }     // namespace Ms
 #endif

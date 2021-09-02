@@ -29,7 +29,7 @@
 
 namespace Ms {
 class XmlReader;
-class Element;
+class EngravingItem;
 class Accidental;
 class MStyle;
 class TextLineBase;
@@ -57,7 +57,7 @@ public:
     //---------------------------------------------------------
     static Ms::Score::FileError read206(Ms::MasterScore* masterScore, Ms::XmlReader& e);
 
-    static Ms::Element* readArticulation(Ms::Element*, Ms::XmlReader&);
+    static Ms::EngravingItem* readArticulation(Ms::EngravingItem*, Ms::XmlReader&);
     static void readAccidental206(Ms::Accidental*, Ms::XmlReader&);
     static void readTextStyle206(Ms::MStyle* style, Ms::XmlReader& e, std::map<QString, std::map<Ms::Sid, QVariant> >& excessStyles);
     static void readTextLine206(Ms::XmlReader& e, Ms::TextLineBase* tlb);

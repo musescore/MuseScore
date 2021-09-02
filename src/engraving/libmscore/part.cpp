@@ -46,7 +46,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 Part::Part(Score* s)
-    : ScoreElement(ElementType::PART, s)
+    : EngravingObject(ElementType::PART, s)
 {
     _color   = DEFAULT_COLOR;
     _show    = true;
@@ -122,7 +122,7 @@ const Part* Part::masterPart() const
         return this;
     }
 
-    for (ScoreElement* le : *links) {
+    for (EngravingObject* le : *links) {
         if (le->isStaff() && toStaff(le)->score()->isMaster()) {
             if (Part* p = toStaff(le)->part()) {
                 return p;
@@ -662,7 +662,7 @@ int Part::harmonyCount() const
     SegmentType st = SegmentType::ChordRest;
     int count = 0;
     for (const Segment* seg = firstM->first(st); seg; seg = seg->next1(st)) {
-        for (const Element* e : seg->annotations()) {
+        for (const EngravingItem* e : seg->annotations()) {
             if ((e->isHarmony() || (e->isFretDiagram() && toFretDiagram(e)->harmony())) && e->track() >= startTrack()
                 && e->track() < endTrack()) {
                 count++;

@@ -150,11 +150,11 @@ void PluginAPI::closeScore(Ms::PluginAPI::Score* score)
 //   newElement
 ///   Creates a new element with the given type. The
 ///   element can be then added to a score via Cursor::add.
-///   \param elementType Element type, should be the value
-///   from PluginAPI::PluginAPI::Element enumeration.
+///   \param elementType EngravingItem type, should be the value
+///   from PluginAPI::PluginAPI::EngravingItem enumeration.
 //---------------------------------------------------------
 
-Element* PluginAPI::newElement(int elementType)
+EngravingItem* PluginAPI::newElement(int elementType)
 {
     Ms::Score* score = msc()->currentScore();
     if (!score) {
@@ -165,18 +165,18 @@ Element* PluginAPI::newElement(int elementType)
         return nullptr;
     }
     const ElementType type = ElementType(elementType);
-    Ms::Element* e = Ms::Element::create(type, score->dummy());
+    Ms::EngravingItem* e = Ms::EngravingItem::create(type, score->dummy());
     return wrap(e, Ownership::PLUGIN);
 }
 
 //---------------------------------------------------------
 //   removeElement
-///   Disposes of an Element and its children.
-///   \param Element type.
+///   Disposes of an EngravingItem and its children.
+///   \param EngravingItem type.
 ///   \since MuseScore 3.3
 //---------------------------------------------------------
 
-void PluginAPI::removeElement(Ms::PluginAPI::Element* wrapped)
+void PluginAPI::removeElement(Ms::PluginAPI::EngravingItem* wrapped)
 {
     Ms::Score* score = wrapped->element()->score();
     score->deleteItem(wrapped->element());
@@ -322,7 +322,7 @@ void PluginAPI::registerQmlTypes()
     qmlRegisterType<Cursor>("MuseScore", 3, 0, "Cursor");
     qmlRegisterAnonymousType<ScoreElement>("MuseScore", 3);
     qmlRegisterAnonymousType<Score>("MuseScore", 3);
-    qmlRegisterAnonymousType<Element>("MuseScore", 3);
+    qmlRegisterAnonymousType<EngravingItem>("MuseScore", 3);
     qmlRegisterAnonymousType<Chord>("MuseScore", 3);
     qmlRegisterAnonymousType<Note>("MuseScore", 3);
     qmlRegisterAnonymousType<Segment>("MuseScore", 3);

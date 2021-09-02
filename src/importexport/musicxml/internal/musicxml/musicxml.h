@@ -95,13 +95,13 @@ typedef  CreditWordsList::const_iterator ciCreditWords;
 
 class JumpMarkerDesc
 {
-    Element* _el;
+    EngravingItem* _el;
     Measure* _meas;
 
 public:
-    JumpMarkerDesc(Element* el, Measure* meas)
+    JumpMarkerDesc(EngravingItem* el, Measure* meas)
         : _el(el), _meas(meas) {}
-    Element* el() const { return _el; }
+    EngravingItem* el() const { return _el; }
     Measure* meas() const { return _meas; }
 };
 

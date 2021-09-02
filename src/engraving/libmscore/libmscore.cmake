@@ -82,12 +82,14 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/easeInOut.cpp
     ${CMAKE_CURRENT_LIST_DIR}/easeInOut.h
     ${CMAKE_CURRENT_LIST_DIR}/edit.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/element.cpp
     ${CMAKE_CURRENT_LIST_DIR}/elementgroup.cpp
     ${CMAKE_CURRENT_LIST_DIR}/elementgroup.h
-    ${CMAKE_CURRENT_LIST_DIR}/element.h
     ${CMAKE_CURRENT_LIST_DIR}/elementmap.cpp
     ${CMAKE_CURRENT_LIST_DIR}/elementmap.h
+    ${CMAKE_CURRENT_LIST_DIR}/engravingitem.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/engravingitem.h
+    ${CMAKE_CURRENT_LIST_DIR}/engravingobject.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/engravingobject.h
     ${CMAKE_CURRENT_LIST_DIR}/excerpt.cpp
     ${CMAKE_CURRENT_LIST_DIR}/excerpt.h
     ${CMAKE_CURRENT_LIST_DIR}/fermata.cpp
@@ -229,8 +231,6 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/score.cpp
     ${CMAKE_CURRENT_LIST_DIR}/scorediff.cpp
     ${CMAKE_CURRENT_LIST_DIR}/scorediff.h
-    ${CMAKE_CURRENT_LIST_DIR}/scoreElement.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/scoreElement.h
     ${CMAKE_CURRENT_LIST_DIR}/scorefile.cpp
     ${CMAKE_CURRENT_LIST_DIR}/scorefont.cpp
     ${CMAKE_CURRENT_LIST_DIR}/scorefont.h

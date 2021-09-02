@@ -261,7 +261,7 @@ QVariant Jump::propertyDefault(Pid propertyId) const
 //   nextSegmentElement
 //---------------------------------------------------------
 
-Element* Jump::nextSegmentElement()
+EngravingItem* Jump::nextSegmentElement()
 {
     Segment* seg = measure()->last();
     return seg->firstElement(staffIdx());
@@ -271,7 +271,7 @@ Element* Jump::nextSegmentElement()
 //   prevSegmentElement
 //---------------------------------------------------------
 
-Element* Jump::prevSegmentElement()
+EngravingItem* Jump::prevSegmentElement()
 {
     return nextSegmentElement();
 }
@@ -282,6 +282,6 @@ Element* Jump::prevSegmentElement()
 
 QString Jump::accessibleInfo() const
 {
-    return QString("%1: %2").arg(Element::accessibleInfo(), this->jumpTypeUserName());
+    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), this->jumpTypeUserName());
 }
 }

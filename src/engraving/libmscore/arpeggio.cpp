@@ -54,7 +54,7 @@ const std::array<const char*, 6> Arpeggio::arpeggioTypeNames = {
 //---------------------------------------------------------
 
 Arpeggio::Arpeggio(Chord* parent)
-    : Element(ElementType::ARPEGGIO, parent, ElementFlag::MOVABLE)
+    : EngravingItem(ElementType::ARPEGGIO, parent, ElementFlag::MOVABLE)
 {
     _arpeggioType = ArpeggioType::NORMAL;
     setHeight(spatium() * 4);        // for use in palettes
@@ -89,7 +89,7 @@ void Arpeggio::write(XmlWriter& xml) const
         return;
     }
     xml.stag(this);
-    Element::writeProperties(xml);
+    EngravingItem::writeProperties(xml);
     writeProperty(xml, Pid::ARPEGGIO_TYPE);
     if (_userLen1 != 0.0) {
         xml.tag("userLen1", _userLen1 / spatium());
@@ -125,7 +125,7 @@ void Arpeggio::read(XmlReader& e)
             _playArpeggio = e.readBool();
         } else if (tag == "timeStretch") {
             _stretch = e.readDouble();
-        } else if (!Element::readProperties(e)) {
+        } else if (!EngravingItem::readProperties(e)) {
             e.unknown();
         }
     }
@@ -370,7 +370,7 @@ QVector<LineF> Arpeggio::gripAnchorLines(Grip grip) const
     } else if (grip == Grip::END) {
         Note* downNote = _chord->downNote();
         int btrack  = track() + (_span - 1) * VOICES;
-        Element* e = _chord->segment()->element(btrack);
+        EngravingItem* e = _chord->segment()->element(btrack);
         if (e && e->isChord()) {
             downNote = toChord(e)->downNote();
         }
@@ -385,7 +385,7 @@ QVector<LineF> Arpeggio::gripAnchorLines(Grip grip) const
 
 void Arpeggio::startEdit(EditData& ed)
 {
-    Element::startEdit(ed);
+    EngravingItem::startEdit(ed);
     ElementEditData* eed = ed.getData(this);
     eed->pushProperty(Pid::ARP_USER_LEN1);
     eed->pushProperty(Pid::ARP_USER_LEN2);
@@ -448,9 +448,9 @@ bool Arpeggio::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-Element* Arpeggio::drop(EditData& data)
+EngravingItem* Arpeggio::drop(EditData& data)
 {
-    Element* e = data.dropElement;
+    EngravingItem* e = data.dropElement;
     switch (e->type()) {
     case ElementType::ARPEGGIO:
     {
@@ -478,7 +478,7 @@ void Arpeggio::reset()
 {
     undoChangeProperty(Pid::ARP_USER_LEN1, 0.0);
     undoChangeProperty(Pid::ARP_USER_LEN2, 0.0);
-    Element::reset();
+    EngravingItem::reset();
 }
 
 //---------------------------------------------------------
@@ -501,7 +501,7 @@ QVariant Arpeggio::getProperty(Pid propertyId) const
     default:
         break;
     }
-    return Element::getProperty(propertyId);
+    return EngravingItem::getProperty(propertyId);
 }
 
 //---------------------------------------------------------
@@ -527,7 +527,7 @@ bool Arpeggio::setProperty(Pid propertyId, const QVariant& val)
         setPlayArpeggio(val.toBool());
         break;
     default:
-        if (!Element::setProperty(propertyId, val)) {
+        if (!EngravingItem::setProperty(propertyId, val)) {
             return false;
         }
         break;
@@ -554,7 +554,7 @@ QVariant Arpeggio::propertyDefault(Pid propertyId) const
     default:
         break;
     }
-    return Element::propertyDefault(propertyId);
+    return EngravingItem::propertyDefault(propertyId);
 }
 
 //---------------------------------------------------------
@@ -566,6 +566,6 @@ Pid Arpeggio::propertyId(const QStringRef& name) const
     if (name == "subtype") {
         return Pid::ARPEGGIO_TYPE;
     }
-    return Element::propertyId(name);
+    return EngravingItem::propertyId(name);
 }
 }

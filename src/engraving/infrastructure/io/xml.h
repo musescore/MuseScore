@@ -32,7 +32,7 @@
 #include "libmscore/connector.h"
 #include "libmscore/stafftype.h"
 #include "libmscore/interval.h"
-#include "libmscore/element.h"
+#include "libmscore/engravingitem.h"
 #include "libmscore/select.h"
 
 namespace Ms {
@@ -100,7 +100,7 @@ class XmlReader : public QXmlStreamReader
     QList<SpannerValues> _spannerValues;
     QList<std::pair<int, Spanner*> > _spanner;
     QList<StaffType> _staffTypes;
-    QList<std::pair<Element*, mu::PointF> > _fixOffsets;
+    QList<std::pair<EngravingItem*, mu::PointF> > _fixOffsets;
 
     std::vector<std::unique_ptr<ConnectorInfoReader> > _connectors;
     std::vector<std::unique_ptr<ConnectorInfoReader> > _pendingConnectors;  // connectors that are pending to be updated and added to _connectors. That will happen when checkConnectors() is called.
@@ -224,7 +224,7 @@ public:
     Tid lookupUserTextStyle(const QString& name) const;
     void clearUserTextStyles() { userTextStyles.clear(); }
 
-    QList<std::pair<Element*, mu::PointF> >& fixOffsets() { return _fixOffsets; }
+    QList<std::pair<EngravingItem*, mu::PointF> >& fixOffsets() { return _fixOffsets; }
 
     // for reading old files (< 3.01)
     QMap<int, QList<QPair<LinkedElements*, Location> > >& staffLinkedElements() { return _staffLinkedElements; }
@@ -257,7 +257,7 @@ class XmlWriter : public QTextStream
     LinksIndexer _linksIndexer;
     QMap<int, int> _lidLocalIndices;
 
-    std::vector<std::pair<const ScoreElement*, QString> > _elements;
+    std::vector<std::pair<const EngravingObject*, QString> > _elements;
     bool _recordElements = false;
 
     void putLevel();
@@ -295,7 +295,7 @@ public:
     void setLidLocalIndex(int lid, int localIndex) { _lidLocalIndices.insert(lid, localIndex); }
     int lidLocalIndex(int lid) const { return _lidLocalIndices[lid]; }
 
-    const std::vector<std::pair<const ScoreElement*, QString> >& elements() const { return _elements; }
+    const std::vector<std::pair<const EngravingObject*, QString> >& elements() const { return _elements; }
     void setRecordElements(bool record) { _recordElements = record; }
 
     void sTag(const char* name, Spatium sp) { XmlWriter::tag(name, QVariant(sp.val())); }
@@ -306,8 +306,8 @@ public:
     void stag(const QString&);
     void etag();
 
-    void stag(const ScoreElement* se, const QString& attributes = QString());
-    void stag(const QString& name, const ScoreElement* se, const QString& attributes = QString());
+    void stag(const EngravingObject* se, const QString& attributes = QString());
+    void stag(const QString& name, const EngravingObject* se, const QString& attributes = QString());
 
     void tagE(const QString&);
     void tagE(const char* format, ...);
@@ -327,7 +327,7 @@ public:
     void dump(int len, const unsigned char* p);
 
     void setFilter(SelectionFilter f) { _filter = f; }
-    bool canWrite(const Element*) const;
+    bool canWrite(const EngravingItem*) const;
     bool canWriteVoice(int track) const;
 
     static QString xmlString(const QString&);

@@ -27,7 +27,7 @@
 
 #include "internal/palette.h"
 
-#include "engraving/libmscore/element.h"
+#include "engraving/libmscore/engravingitem.h"
 
 #include "modularity/ioc.h"
 #include "ipaletteconfiguration.h"

@@ -24,7 +24,7 @@
 #define __STAFFTYPE_H__
 
 #include "infrastructure/draw/color.h"
-#include "element.h"
+#include "engravingitem.h"
 #include "spatium.h"
 #include "mscore.h"
 #include "durationtype.h"
@@ -429,7 +429,7 @@ public:
 
 //---------------------------------------------------------
 //   TabDurationSymbol
-//    Element used to draw duration symbols above tablatures
+//    EngravingItem used to draw duration symbols above tablatures
 //---------------------------------------------------------
 
 enum class TabBeamGrid : char {
@@ -439,7 +439,7 @@ enum class TabBeamGrid : char {
     NUM_OF
 };
 
-class TabDurationSymbol final : public Element
+class TabDurationSymbol final : public EngravingItem
 {
     qreal _beamLength { 0.0 };              // if _grid==MEDIALFINAL, length of the beam toward previous grid element
     int _beamLevel  { 0 };                 // if _grid==MEDIALFINAL, the number of beams

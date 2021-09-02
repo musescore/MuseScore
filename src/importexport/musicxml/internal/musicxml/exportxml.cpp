@@ -88,7 +88,7 @@
 #include "libmscore/articulation.h"
 #include "libmscore/page.h"
 #include "libmscore/system.h"
-#include "libmscore/element.h"
+#include "libmscore/engravingitem.h"
 #include "libmscore/glissando.h"
 #include "libmscore/navigate.h"
 #include "libmscore/spanner.h"
@@ -206,7 +206,7 @@ class Notations
     bool prevElementVisible = true;
 
 public:
-    void tag(XmlWriter& xml, const Element* e);
+    void tag(XmlWriter& xml, const EngravingItem* e);
     void etag(XmlWriter& xml);
 };
 
@@ -383,7 +383,7 @@ class ExportMusicXml
                const MeasurePrintContext& mpc);
     void findAndExportClef(const Measure* const m, const int staves, const int strack, const int etrack);
     void exportDefaultClef(const Part* const part, const Measure* const m);
-    void writeElement(Element* el, const Measure* m, int sstaff, bool useDrumset);
+    void writeElement(EngravingItem* el, const Measure* m, int sstaff, bool useDrumset);
     void writeMeasureTracks(const Measure* const m, const int partIndex, const int strack, const int partRelStaffNo, const bool useDrumset,
                             const bool isLastStaffOfPart, FigBassMap& fbMap, QSet<const Spanner*>& spannersStopped);
     void writeMeasureStaves(const Measure* m, const int partIndex, const int startStaff, const int nstaves, const bool useDrumset,
@@ -396,7 +396,7 @@ class ExportMusicXml
 
     static QString fermataPosition(const Fermata* const fermata);
     static QString notePosition(const ExportMusicXml* const expMxml, const Note* const note);
-    static QString positioningAttributes(Element const* const el, bool isSpanStart = true);
+    static QString positioningAttributes(EngravingItem const* const el, bool isSpanStart = true);
     static QString positioningAttributesForTboxText(const QPointF position, float spatium);
     static void identification(XmlWriter& xml, Score const* const score);
 
@@ -431,7 +431,7 @@ public:
     Fraction tick() const { return _tick; }
     void writeInstrumentDetails(const Instrument* instrument);
 
-    static bool canWrite(const Element* e);
+    static bool canWrite(const EngravingItem* e);
 };
 
 //---------------------------------------------------------
@@ -473,7 +473,7 @@ static QString positionToQString(const QPointF def, const QPointF rel, const flo
 //   while all other elements are relative to their position or the nearest note.
 //---------------------------------------------------------
 
-QString ExportMusicXml::positioningAttributes(Element const* const el, bool isSpanStart)
+QString ExportMusicXml::positioningAttributes(EngravingItem const* const el, bool isSpanStart)
 {
     if (!configuration()->musicxmlExportLayout()) {
         return "";
@@ -530,7 +530,7 @@ QString ExportMusicXml::positioningAttributes(Element const* const el, bool isSp
 //   tag
 //---------------------------------------------------------
 
-void Notations::tag(XmlWriter& xml, const Element* e)
+void Notations::tag(XmlWriter& xml, const EngravingItem* e)
 {
     if (notationsPrinted && prevElementVisible != e->visible()) {
         etag(xml);
@@ -647,7 +647,7 @@ static std::shared_ptr<mu::engraving::IEngravingConfiguration> engravingConfigur
  Return \a el color.
  */
 
-static QString color2xml(const Element* el)
+static QString color2xml(const EngravingItem* el)
 {
     if (el->color() != engravingConfiguration()->defaultColor()) {
         return QString(" color=\"%1\"").arg(QString::fromStdString(el->color().toString()).toUpper());
@@ -729,13 +729,13 @@ int SlurHandler::findSlur(const Slur* s) const
 
 static const ChordRest* findFirstChordRest(const Slur* s)
 {
-    const Element* e1 = s->startElement();
+    const EngravingItem* e1 = s->startElement();
     if (!e1 || !(e1->isChordRest())) {
         qDebug("no valid start element for slur %p", s);
         return nullptr;
     }
 
-    const Element* e2 = s->endElement();
+    const EngravingItem* e2 = s->endElement();
     if (!e2 || !(e2->isChordRest())) {
         qDebug("no valid end element for slur %p", s);
         return nullptr;
@@ -1036,19 +1036,19 @@ void GlissandoHandler::doGlissandoStop(Glissando* gliss, Notations& notations, X
 
 class DirectionsAnchor
 {
-    Element* direct;          // the element containing the direction
-    Element* anchor;          // the element it is attached to
+    EngravingItem* direct;          // the element containing the direction
+    EngravingItem* anchor;          // the element it is attached to
     bool start;               // whether it is attached to start or end
     Fraction tick;            // the timestamp
 
 public:
-    DirectionsAnchor(Element* a, bool s, const Fraction& t) { direct = 0; anchor = a; start = s; tick = t; }
+    DirectionsAnchor(EngravingItem* a, bool s, const Fraction& t) { direct = 0; anchor = a; start = s; tick = t; }
     DirectionsAnchor(const Fraction& t) { direct = 0; anchor = 0; start = true; tick = t; }
-    Element* getDirect() { return direct; }
-    Element* getAnchor() { return anchor; }
+    EngravingItem* getDirect() { return direct; }
+    EngravingItem* getAnchor() { return anchor; }
     bool getStart() { return start; }
     Fraction getTick() { return tick; }
-    void setDirect(Element* d) { direct = d; }
+    void setDirect(EngravingItem* d) { direct = d; }
 };
 
 //---------------------------------------------------------
@@ -1203,7 +1203,7 @@ void ExportMusicXml::calcDivisions()
                 sstaff /= VOICES;
 
                 for (Segment* seg = m->first(); seg; seg = seg->next()) {
-                    Element* el = seg->element(st);
+                    EngravingItem* el = seg->element(st);
                     if (!el) {
                         continue;
                     }
@@ -1360,9 +1360,9 @@ static void creditWords(XmlWriter& xml, const Score* const s, const int pageNr,
 //   parentHeight
 //---------------------------------------------------------
 
-static double parentHeight(const Element* element)
+static double parentHeight(const EngravingItem* element)
 {
-    const Element* parent = element->parentElement();
+    const EngravingItem* parent = element->parentElement();
 
     if (!parent) {
         return 0;
@@ -1466,7 +1466,7 @@ void ExportMusicXml::credits(XmlWriter& xml)
         for (const auto system : page->systems()) {
             for (const auto mb : system->measures()) {
                 if (mb->isVBox()) {
-                    for (const Element* element : mb->el()) {
+                    for (const EngravingItem* element : mb->el()) {
                         if (element->isText()) {
                             const Text* text = toText(element);
                             textAsCreditWords(this, xml, _score, pageIdx + 1, text);
@@ -2635,9 +2635,9 @@ static void tremoloSingleStartStop(Chord* chord, Notations& notations, Ornaments
 //   fermatas
 //---------------------------------------------------------
 
-static void fermatas(const QVector<Element*>& cra, XmlWriter& xml, Notations& notations)
+static void fermatas(const QVector<EngravingItem*>& cra, XmlWriter& xml, Notations& notations)
 {
-    for (const Element* e : cra) {
+    for (const EngravingItem* e : cra) {
         if (!e->isFermata() || !ExportMusicXml::canWrite(e)) {
             continue;
         }
@@ -2820,7 +2820,7 @@ static QString symIdToTechn(const SymId sid)
 
 static void writeChordLines(const Chord* const chord, XmlWriter& xml, Notations& notations, Articulations& articulations)
 {
-    for (Element* e : chord->el()) {
+    for (EngravingItem* e : chord->el()) {
         qDebug("writeChordLines: el %p type %d (%s)", e, int(e->type()), e->name());
         if (e->type() == ElementType::CHORDLINE) {
             ChordLine const* const cl = static_cast<ChordLine*>(e);
@@ -2857,8 +2857,8 @@ static void writeChordLines(const Chord* const chord, XmlWriter& xml, Notations&
 void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technical& technical,
                                      TrillHash& trillStart, TrillHash& trillStop)
 {
-    QVector<Element*> fl;
-    for (Element* e : chord->segment()->annotations()) {
+    QVector<EngravingItem*> fl;
+    for (EngravingItem* e : chord->segment()->annotations()) {
         if (e->track() == chord->track() && e->isFermata()) {
             fl.push_back(e);
         }
@@ -3187,7 +3187,7 @@ static void writeNotehead(XmlWriter& xml, const Note* const note)
     QString noteheadTagname = QString("notehead");
     noteheadTagname += color2xml(note);
     bool leftParenthesis = false, rightParenthesis = false;
-    for (Element* elem : note->el()) {
+    for (EngravingItem* elem : note->el()) {
         if (elem->type() == ElementType::SYMBOL) {
             Symbol* s = static_cast<Symbol*>(elem);
             if (s->sym() == SymId::noteheadParenthesisLeft) {
@@ -3254,7 +3254,7 @@ static void writeNotehead(XmlWriter& xml, const Note* const note)
 
 static void writeFingering(XmlWriter& xml, Notations& notations, Technical& technical, const Note* const note)
 {
-    for (const Element* e : note->el()) {
+    for (const EngravingItem* e : note->el()) {
         if (!ExportMusicXml::canWrite(e)) {
             continue;
         }
@@ -3319,7 +3319,7 @@ static void writeFingering(XmlWriter& xml, Notations& notations, Technical& tech
 
 static void writeNotationSymbols(XmlWriter& xml, Notations& notations, const ElementList& elist, bool excludeParentheses)
 {
-    for (const Element* e : elist) {
+    for (const EngravingItem* e : elist) {
         if (!e->isSymbol() || !ExportMusicXml::canWrite(e)) {
             continue;
         }
@@ -3554,7 +3554,7 @@ void ExportMusicXml::chord(Chord* chord, int staff, const std::vector<Lyrics*>* 
            chord, chord->parent(), chord->isGrace(), chord->graceNotes().size(), chord->graceIndex());
     qDebug("track %d tick %d part %p nr %d instr %p nr %d",
            chord->track(), chord->tick(), part, partNr, part->instrument(tick), instNr);
-    for (Element* e : chord->el())
+    for (EngravingItem* e : chord->el())
           qDebug("chord %p el %p", chord, e);
      */
     std::vector<Note*> nl = chord->notes();
@@ -3832,8 +3832,8 @@ void ExportMusicXml::rest(Rest* rest, int staff)
     }
 
     Notations notations;
-    QVector<Element*> fl;
-    for (Element* e : rest->segment()->annotations()) {
+    QVector<EngravingItem*> fl;
+    for (EngravingItem* e : rest->segment()->annotations()) {
         if (e->isFermata() && e->track() == rest->track()) {
             fl.push_back(e);
         }
@@ -3867,7 +3867,7 @@ void ExportMusicXml::rest(Rest* rest, int staff)
 //   directionTag
 //---------------------------------------------------------
 
-static void directionTag(XmlWriter& xml, Attributes& attr, Element const* const el = 0)
+static void directionTag(XmlWriter& xml, Attributes& attr, EngravingItem const* const el = 0)
 {
     attr.doAttr(xml, false);
     QString tagname = QString("direction");
@@ -3884,7 +3884,7 @@ static void directionTag(XmlWriter& xml, Attributes& attr, Element const* const 
                 el->offset().y()
                );
          */
-        const Element* pel = 0;
+        const EngravingItem* pel = 0;
         const LineSegment* seg = 0;
         if (el->type() == ElementType::HAIRPIN || el->type() == ElementType::OTTAVA
             || el->type() == ElementType::PEDAL || el->type() == ElementType::TEXTLINE
@@ -3911,7 +3911,7 @@ static void directionTag(XmlWriter& xml, Attributes& attr, Element const* const 
                    || el->type() == ElementType::TEXT) {
             // handle other elements attached (e.g. via Segment / Measure) to a system
             // find the system containing this element
-            for (const Element* e = el; e; e = e->parentElement()) {
+            for (const EngravingItem* e = el; e; e = e->parentElement()) {
                 if (e->type() == ElementType::SYSTEM) {
                     pel = e;
                 }
@@ -5225,7 +5225,7 @@ static int findTrackForAnnotations(int track, Segment* seg)
 void ExportMusicXml::repeatAtMeasureStart(Attributes& attr, const Measure* const m, int strack, int etrack, int track)
 {
     // loop over all segments
-    for (Element* e : m->el()) {
+    for (EngravingItem* e : m->el()) {
         int wtrack = -1;     // track to write jump
         if (strack <= e->track() && e->track() < etrack) {
             wtrack = findTrackForAnnotations(e->track(), m->first(SegmentType::ChordRest));
@@ -5263,7 +5263,7 @@ void ExportMusicXml::repeatAtMeasureStart(Attributes& attr, const Measure* const
         break;
         default:
             qDebug("repeatAtMeasureStart: direction type %s at tick %d not implemented",
-                   Element::name(e->type()), m->tick().ticks());
+                   EngravingItem::name(e->type()), m->tick().ticks());
             break;
         }
     }
@@ -5275,7 +5275,7 @@ void ExportMusicXml::repeatAtMeasureStart(Attributes& attr, const Measure* const
 
 void ExportMusicXml::repeatAtMeasureStop(const Measure* const m, int strack, int etrack, int track)
 {
-    for (Element* e : m->el()) {
+    for (EngravingItem* e : m->el()) {
         int wtrack = -1;     // track to write jump
         if (strack <= e->track() && e->track() < etrack) {
             wtrack = findTrackForAnnotations(e->track(), m->first(SegmentType::ChordRest));
@@ -5314,7 +5314,7 @@ void ExportMusicXml::repeatAtMeasureStop(const Measure* const m, int strack, int
             break;
         default:
             qDebug("repeatAtMeasureStop: direction type %s at tick %d not implemented",
-                   Element::name(e->type()), m->tick().ticks());
+                   EngravingItem::name(e->type()), m->tick().ticks());
             break;
         }
     }
@@ -5416,7 +5416,7 @@ static void measureStyle(XmlWriter& xml, Attributes& attr, const Measure* const 
 static const FretDiagram* findFretDiagram(int strack, int etrack, int track, Segment* seg)
 {
     if (seg->segmentType() == SegmentType::ChordRest) {
-        for (const Element* e : seg->annotations()) {
+        for (const EngravingItem* e : seg->annotations()) {
             int wtrack = -1;       // track to write annotation
 
             if (strack <= e->track() && e->track() < etrack) {
@@ -5435,7 +5435,7 @@ static const FretDiagram* findFretDiagram(int strack, int etrack, int track, Seg
 //  commonAnnotations
 //---------------------------------------------------------
 
-static bool commonAnnotations(ExportMusicXml* exp, const Element* e, int sstaff)
+static bool commonAnnotations(ExportMusicXml* exp, const EngravingItem* e, int sstaff)
 {
     bool instrChangeHandled  = false;
 
@@ -5472,7 +5472,7 @@ static bool commonAnnotations(ExportMusicXml* exp, const Element* e, int sstaff)
  * Write annotations that are attached to chords or rests
  */
 
-// In MuseScore, Element::FRET_DIAGRAM and Element::HARMONY are separate annotations,
+// In MuseScore, EngravingItem::FRET_DIAGRAM and EngravingItem::HARMONY are separate annotations,
 // in MusicXML they are combined in the harmony element. This means they have to be matched.
 // TODO: replace/repair current algorithm (which can only handle one FRET_DIAGRAM and one HARMONY)
 
@@ -5482,7 +5482,7 @@ static void annotations(ExportMusicXml* exp, int strack, int etrack, int track, 
         const FretDiagram* fd = findFretDiagram(strack, etrack, track, seg);
         // if (fd) qDebug("annotations seg %p found fretboard diagram %p", seg, fd);
 
-        for (const Element* e : seg->annotations()) {
+        for (const EngravingItem* e : seg->annotations()) {
             if (!exp->canWrite(e)) {
                 continue;
             }
@@ -5504,7 +5504,7 @@ static void annotations(ExportMusicXml* exp, int strack, int etrack, int track, 
                     // handled separately by chordAttributes(), figuredBass(), findFretDiagram() or ignored
                 } else {
                     qDebug("direction type %s at tick %d not implemented",
-                           Element::name(e->type()), seg->tick().ticks());
+                           EngravingItem::name(e->type()), seg->tick().ticks());
                 }
             }
         }
@@ -5524,7 +5524,7 @@ static void figuredBass(XmlWriter& xml, int strack, int etrack, int track, const
 {
     Segment* seg = cr->segment();
     if (seg->segmentType() == SegmentType::ChordRest) {
-        for (const Element* e : seg->annotations()) {
+        for (const EngravingItem* e : seg->annotations()) {
             int wtrack = -1;       // track to write annotation
 
             if (strack <= e->track() && e->track() < etrack) {
@@ -5552,7 +5552,7 @@ static void figuredBass(XmlWriter& xml, int strack, int etrack, int track, const
 
                     // Check for changing figures under a single note (each figure stored in a separate segment)
                     for (Segment* segNext = seg->next(); segNext && segNext->element(track) == NULL; segNext = segNext->next()) {
-                        for (Element* annot : segNext->annotations()) {
+                        for (EngravingItem* annot : segNext->annotations()) {
                             if (annot->type() == ElementType::FIGURED_BASS && annot->track() == track) {
                                 fb = dynamic_cast<const FiguredBass*>(annot);
                                 fb->writeMusicXML(xml, true, 0, 0, true, divisions);
@@ -5639,7 +5639,7 @@ static void spannerStart(ExportMusicXml* exp, int strack, int etrack, int track,
                     break;
                 default:
                     qDebug("spannerStart: direction type %d ('%s') at tick %d not implemented",
-                           int(e->type()), Element::name(e->type()), seg->tick().ticks());
+                           int(e->type()), EngravingItem::name(e->type()), seg->tick().ticks());
                     break;
                 }
             }
@@ -5698,7 +5698,7 @@ static void spannerStop(ExportMusicXml* exp, int strack, int etrack, const Fract
                 break;
             default:
                 qDebug("spannerStop: direction type %s at tick2 %d not implemented",
-                       Element::name(e->type()), tick2.ticks());
+                       EngravingItem::name(e->type()), tick2.ticks());
                 break;
             }
         }
@@ -5726,7 +5726,7 @@ void ExportMusicXml::keysigTimesig(const Measure* m, const Part* p)
             break;
         }
         for (int t = strack; t < etrack; t += VOICES) {
-            Element* el = seg->element(t);
+            EngravingItem* el = seg->element(t);
             if (!el) {
                 continue;
             }
@@ -5791,7 +5791,7 @@ void ExportMusicXml::keysigTimesig(const Measure* m, const Part* p)
         if (seg->tick() > m->tick()) {
             break;
         }
-        Element* el = seg->element(strack);
+        EngravingItem* el = seg->element(strack);
         if (el && el->type() == ElementType::TIMESIG) {
             tsig = (TimeSig*)el;
         }
@@ -6261,7 +6261,7 @@ static void findPitchesUsed(const Part* part, pitchSet& set)
         const Measure* m = static_cast<const Measure*>(mb);
         for (int st = strack; st < etrack; ++st) {
             for (Segment* seg = m->first(); seg; seg = seg->next()) {
-                const Element* el = seg->element(st);
+                const EngravingItem* el = seg->element(st);
                 if (!el) {
                     continue;
                 }
@@ -6434,7 +6434,7 @@ static bool tickIsInMiddleOfMeasure(const Fraction ti, const Measure* m)
  Write \a el.
  */
 
-void ExportMusicXml::writeElement(Element* el, const Measure* m, int sstaff, bool useDrumset)
+void ExportMusicXml::writeElement(EngravingItem* el, const Measure* m, int sstaff, bool useDrumset)
 {
     if (el->isClef()) {
         // output only clef changes, not generated clefs
@@ -7098,7 +7098,7 @@ static std::vector<const Jump*> findJumpElements(const Score* score)
     std::vector<const Jump*> jumps;
 
     for (const MeasureBase* m = score->first(); m; m = m->next()) {
-        for (const Element* e : m->el()) {
+        for (const EngravingItem* e : m->el()) {
             if (e->isJump()) {
                 jumps.push_back(toJump(e));
             }
@@ -7439,7 +7439,7 @@ void ExportMusicXml::harmony(Harmony const* const h, FretDiagram const* const fd
  should be included to the exported MusicXML file.
  */
 
-bool ExportMusicXml::canWrite(const Element* e)
+bool ExportMusicXml::canWrite(const EngravingItem* e)
 {
     return e->visible() || configuration()->musicxmlExportInvisibleElements();
 }

@@ -319,13 +319,13 @@ class RepeatListElement
 {
 public:
     RepeatListElementType const repeatListElementType;
-    Element const* const element;
+    EngravingItem const* const element;
     Measure const* const measure;    // convenience, should be measure containing element
 private:
     int repeatCount;
 
 public:
-    RepeatListElement(RepeatListElementType type, Element const* const el, Measure const* const m)
+    RepeatListElement(RepeatListElementType type, EngravingItem const* const el, Measure const* const m)
         : repeatListElementType(type), element(el), measure(m)
     {
         repeatCount = (type == RepeatListElementType::REPEAT_START) ? 1 : 0;
@@ -476,7 +476,7 @@ void RepeatList::collectRepeatListElements()
                 sectionRLElements->push_back(startFromRepeatMeasure);
             }
             // Jumps and Markers
-            for (Element* e : mb->el()) {
+            for (EngravingItem* e : mb->el()) {
                 if (e->isJump()) {
                     sectionRLElements->push_back(new RepeatListElement(RepeatListElementType::JUMP, e, toMeasure(mb)));
                     if (volta != nullptr) {

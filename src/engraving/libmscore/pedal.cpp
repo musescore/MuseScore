@@ -92,7 +92,7 @@ Sid Pedal::getPropertyStyle(Pid pid) const
 //   Pedal
 //---------------------------------------------------------
 
-Pedal::Pedal(Element* parent)
+Pedal::Pedal(EngravingItem* parent)
     : TextLineBase(ElementType::PEDAL, parent)
 {
     initElementStyle(&pedalStyle);
@@ -236,7 +236,7 @@ PointF Pedal::linePos(Grip grip, System** sys) const
             }
         }
     } else {
-        Element* e = endElement();
+        EngravingItem* e = endElement();
         ChordRest* c = toChordRest(endElement());
         if (!e || e == startElement() || (endHookType() == HookType::HOOK_90)) {
             // pedal marking on single note or ends with non-angled hook:

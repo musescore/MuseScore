@@ -482,7 +482,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
         std::vector<ChordRest*> chords;
         Note* true_note = 0;
         while (segment) {
-            Element* e = segment->element(track);
+            EngravingItem* e = segment->element(track);
             if (e) {
                 if (e->isChord()) {
                     Chord* chord2 = toChord(e);

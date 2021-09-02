@@ -53,7 +53,7 @@ public:
     void draw(mu::draw::Painter*) const override;
     void layout() override;
 
-    Element* propertyDelegate(Pid) override;
+    EngravingItem* propertyDelegate(Pid) override;
 
     Shape shape() const override;
     std::vector<SymId> symbols() const { return _symbols; }
@@ -77,7 +77,7 @@ private:
     bool _playArticulation;
 
 public:
-    Vibrato(Element* parent);
+    Vibrato(EngravingItem* parent);
     ~Vibrato();
 
     Vibrato* clone() const override { return new Vibrato(*this); }

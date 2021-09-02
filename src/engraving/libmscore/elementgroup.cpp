@@ -21,7 +21,7 @@
  */
 
 #include "elementgroup.h"
-#include "element.h"
+#include "engravingitem.h"
 
 namespace Ms {
 void SingleElementGroup::startDrag(EditData& ed)

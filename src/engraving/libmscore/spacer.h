@@ -23,7 +23,7 @@
 #ifndef __SPACER_H__
 #define __SPACER_H__
 
-#include "element.h"
+#include "engravingitem.h"
 #include "infrastructure/draw/painterpath.h"
 
 namespace Ms {
@@ -40,7 +40,7 @@ enum class SpacerType : char {
 ///    Vertical spacer element to adjust the distance of staves.
 //-------------------------------------------------------------------
 
-class Spacer final : public Element
+class Spacer final : public EngravingItem
 {
     SpacerType _spacerType;
     qreal _gap;
@@ -64,7 +64,7 @@ public:
 
     void draw(mu::draw::Painter*) const override;
 
-    void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
+    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
     bool isEditable() const override { return true; }
     void startEditDrag(EditData&) override;
