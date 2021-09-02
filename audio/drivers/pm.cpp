@@ -51,9 +51,17 @@ PortMidiDriver::PortMidiDriver(Seq* s)
 
 PortMidiDriver::~PortMidiDriver()
       {
+      if (timer) {
+            timer->stop();
+            delete timer;
+            }
       if (inputStream) {
             Pt_Stop();
             Pm_Close(inputStream);
+            }
+      if (outputStream) {
+            Pt_Stop();
+            Pm_Close(outputStream);
             }
       }
 
@@ -64,41 +72,50 @@ PortMidiDriver::~PortMidiDriver()
 
 bool PortMidiDriver::init()
       {
-      inputId = getDeviceIn(preferences.getString(PREF_IO_PORTMIDI_INPUTDEVICE));
-      if (inputId == -1)
-            inputId  = Pm_GetDefaultInputDeviceID();
-
-      if (inputId == pmNoDevice)
-            return false;
-
+      inputId = getDeviceIn(preferences.getString(PREF_IO_PORTMIDI_INPUTDEVICE)); // Note: allow init even if inputId == pmNoDevice, in case of output
       outputId = getDeviceOut(preferences.getString(PREF_IO_PORTMIDI_OUTPUTDEVICE)); // Note: allow init even if outputId == pmNoDevice, since input is more important than output.
-
+      bool autoGrabbing = false;
+      if ((inputId == -1) && (preferences.getString(PREF_IO_PORTMIDI_INPUTDEVICE) != " ")) {
+            inputId = Pm_GetDefaultInputDeviceID();
+            autoGrabbing = true;
+            }
+      // do not automatically grab the same device as both input and output
+      if (autoGrabbing && (outputId != -1)) {
+            const PmDeviceInfo* info = Pm_GetDeviceInfo(inputId);
+            QString portmidiInputDevice;
+            if (info && (info->input))
+                  portmidiInputDevice = QString(info->interf) + "," + QString(info->name);
+            if (portmidiInputDevice == preferences.getString(PREF_IO_PORTMIDI_OUTPUTDEVICE))
+                  inputId = -1;
+            }
+      if ((inputId == pmNoDevice) && (outputId == pmNoDevice) && (preferences.getString(PREF_IO_PORTMIDI_INPUTDEVICE) != " "))
+            return false;
       static const int DRIVER_INFO = 0;
       static const int TIME_INFO = 0;
 
       Pt_Start(20, 0, 0);      // timer started, 20 millisecond accuracy
 
-      PmError error = Pm_OpenInput(&inputStream,
-         inputId,
-         (void*)DRIVER_INFO,
-         preferences.getInt(PREF_IO_PORTMIDI_INPUTBUFFERCOUNT),
-         ((PmTimeProcPtr) Pt_Time),
-         (void*)TIME_INFO);
-      if (error != pmNoError) {
-            const char* p = Pm_GetErrorText(error);
-            qDebug("PortMidi: open input (id=%d) failed: %s", int(inputId), p);
-            Pt_Stop();
-            return false;
+      if (inputId != pmNoDevice) {
+            PmError error = Pm_OpenInput(&inputStream,
+               inputId,
+               (void*)DRIVER_INFO,
+               preferences.getInt(PREF_IO_PORTMIDI_INPUTBUFFERCOUNT),
+               ((PmTimeProcPtr) Pt_Time),
+               (void*)TIME_INFO);
+            if (error != pmNoError) {
+                  const char* p = Pm_GetErrorText(error);
+                  qDebug("PortMidi: open input (id=%d) failed: %s", int(inputId), p);
+                  Pt_Stop();
+                  return false;
+                  }
+            Pm_SetFilter(inputStream, PM_FILT_ACTIVE | PM_FILT_CLOCK | PM_FILT_SYSEX);
+            PmEvent buffer[1];
+            while (Pm_Poll(inputStream))
+                  Pm_Read(inputStream, buffer, 1);
             }
 
-      Pm_SetFilter(inputStream, PM_FILT_ACTIVE | PM_FILT_CLOCK | PM_FILT_SYSEX);
-
-      PmEvent buffer[1];
-      while (Pm_Poll(inputStream))
-            Pm_Read(inputStream, buffer, 1);
-
       if (outputId != pmNoDevice) {
-            error = Pm_OpenOutput(&outputStream,
+            PmError error = Pm_OpenOutput(&outputStream,
                outputId,
                (void*)DRIVER_INFO,
                preferences.getInt(PREF_IO_PORTMIDI_OUTPUTBUFFERCOUNT),
