@@ -234,7 +234,7 @@ void LayoutPage::collectPage(const LayoutOptions& options, LayoutContext& lc)
 
             for (int track = 0; track < currentScore->ntracks(); ++track) {
                 for (Segment* segment = m->first(); segment; segment = segment->next()) {
-                    Element* e = segment->element(track);
+                    EngravingItem* e = segment->element(track);
                     if (!e) {
                         continue;
                     }
@@ -263,7 +263,7 @@ void LayoutPage::collectPage(const LayoutOptions& options, LayoutContext& lc)
                                     cc->beam()->layout();
                                 }
                                 cc->layoutSpanners();
-                                for (Element* element : cc->el()) {
+                                for (EngravingItem* element : cc->el()) {
                                     if (element->isSlur()) {
                                         element->layout();
                                     }

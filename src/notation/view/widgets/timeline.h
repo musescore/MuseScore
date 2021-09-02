@@ -161,7 +161,7 @@ private:
 
     TimelineTheme _lightTheme, _darkTheme;
 
-    std::tuple<int, qreal, Element*, Element*, bool> _repeatInfo;
+    std::tuple<int, qreal, EngravingItem*, EngravingItem*, bool> _repeatInfo;
     std::tuple<QGraphicsItem*, int, QColor> _oldHoverInfo;
 
     std::map<BarLineType, QPixmap*> _barlines;
@@ -198,9 +198,9 @@ private:
     void barlineMeta(Segment* seg, int* stagger, int pos);
     void jumpMarkerMeta(Segment* seg, int* stagger, int pos);
 
-    bool addMetaValue(int x, int pos, QString metaText, int row, ElementType elementType, Element* element, Segment* seg, Measure* measure,
-                      QString tooltip = "");
-    void setMetaData(QGraphicsItem* gi, int staff, ElementType et, Measure* m, bool full_measure, Element* e,
+    bool addMetaValue(int x, int pos, QString metaText, int row, ElementType elementType, EngravingItem* element, Segment* seg,
+                      Measure* measure, QString tooltip = "");
+    void setMetaData(QGraphicsItem* gi, int staff, ElementType et, Measure* m, bool full_measure, EngravingItem* e,
                      QGraphicsItem* pairItem = nullptr, Segment* seg = nullptr);
     unsigned getMetaRow(QString targetText);
 

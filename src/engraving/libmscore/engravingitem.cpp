@@ -22,10 +22,10 @@
 
 /**
  \file
- Implementation of Element, ElementList
+ Implementation of EngravingItem, ElementList
 */
 
-#include "element.h"
+#include "engravingitem.h"
 
 #include <cmath>
 #include <QBuffer>
@@ -138,7 +138,7 @@ namespace Ms {
 //   spatiumChanged
 //---------------------------------------------------------
 
-void Element::spatiumChanged(qreal oldValue, qreal newValue)
+void EngravingItem::spatiumChanged(qreal oldValue, qreal newValue)
 {
     if (offsetIsSpatiumDependent()) {
         _offset *= (newValue / oldValue);
@@ -150,7 +150,7 @@ void Element::spatiumChanged(qreal oldValue, qreal newValue)
 //    the scale of a staff changed
 //---------------------------------------------------------
 
-void Element::localSpatiumChanged(qreal oldValue, qreal newValue)
+void EngravingItem::localSpatiumChanged(qreal oldValue, qreal newValue)
 {
     if (offsetIsSpatiumDependent()) {
         _offset *= (newValue / oldValue);
@@ -161,7 +161,7 @@ void Element::localSpatiumChanged(qreal oldValue, qreal newValue)
 //   spatium
 //---------------------------------------------------------
 
-qreal Element::spatium() const
+qreal EngravingItem::spatium() const
 {
     if (systemFlag() || (parent() && parentElement()->systemFlag())) {
         return score()->spatium();
@@ -170,7 +170,7 @@ qreal Element::spatium() const
     return s ? s->spatium(this) : score()->spatium();
 }
 
-bool Element::isInteractionAvailable() const
+bool EngravingItem::isInteractionAvailable() const
 {
     if (!visible() && (score()->printing() || !score()->showInvisible())) {
         return false;
@@ -183,7 +183,7 @@ bool Element::isInteractionAvailable() const
 //   offsetIsSpatiumDependent
 //---------------------------------------------------------
 
-bool Element::offsetIsSpatiumDependent() const
+bool EngravingItem::offsetIsSpatiumDependent() const
 {
     return sizeIsSpatiumDependent() || (_flags & ElementFlag::ON_STAFF);
 }
@@ -192,7 +192,7 @@ bool Element::offsetIsSpatiumDependent() const
 //   magS
 //---------------------------------------------------------
 
-qreal Element::magS() const
+qreal EngravingItem::magS() const
 {
     return mag() * (score()->spatium() / SPATIUM20);
 }
@@ -201,16 +201,16 @@ qreal Element::magS() const
 //   name
 //---------------------------------------------------------
 
-QString Element::subtypeName() const
+QString EngravingItem::subtypeName() const
 {
     return "";
 }
 
 //---------------------------------------------------------
-//   Element
+//   EngravingItem
 //---------------------------------------------------------
 
-Element::Element(const ElementType& type, EngravingObject* se, ElementFlags f, mu::engraving::AccessibleElement* access)
+EngravingItem::EngravingItem(const ElementType& type, EngravingObject* se, ElementFlags f, mu::engraving::AccessibleElement* access)
     : EngravingObject(type, se)
 {
     _flags         = f;
@@ -233,7 +233,7 @@ Element::Element(const ElementType& type, EngravingObject* se, ElementFlags f, m
 #endif
 }
 
-Element::Element(const Element& e)
+EngravingItem::EngravingItem(const EngravingItem& e)
     : EngravingObject(e)
 {
     _bbox       = e._bbox;
@@ -256,10 +256,10 @@ Element::Element(const Element& e)
 }
 
 //---------------------------------------------------------
-//   ~Element
+//   ~EngravingItem
 //---------------------------------------------------------
 
-Element::~Element()
+EngravingItem::~EngravingItem()
 {
 #ifdef ENGRAVING_BUILD_ACCESSIBLE_TREE
     delete m_accessible;
@@ -271,9 +271,9 @@ Element::~Element()
 //   linkedClone
 //---------------------------------------------------------
 
-Element* Element::linkedClone()
+EngravingItem* EngravingItem::linkedClone()
 {
-    Element* e = clone();
+    EngravingItem* e = clone();
     e->setAutoplace(true);
     score()->undo(new Link(e, this));
     return e;
@@ -283,7 +283,7 @@ Element* Element::linkedClone()
 //   deleteLater
 //---------------------------------------------------------
 
-void Element::deleteLater()
+void EngravingItem::deleteLater()
 {
     if (selected()) {
         score()->deselect(this);
@@ -299,7 +299,7 @@ void Element::deleteLater()
 /// or to apply `func` even to non-leaf nodes.
 //---------------------------------------------------------
 
-void Element::scanElements(void* data, void (* func)(void*, Element*), bool all)
+void EngravingItem::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
     if (treeChildCount() == 0) {
         if (all || visible() || score()->showInvisible()) {
@@ -314,7 +314,7 @@ void Element::scanElements(void* data, void (* func)(void*, Element*), bool all)
 //   reset
 //---------------------------------------------------------
 
-void Element::reset()
+void EngravingItem::reset()
 {
     undoResetProperty(Pid::AUTOPLACE);
     undoResetProperty(Pid::PLACEMENT);
@@ -328,7 +328,7 @@ void Element::reset()
 //   change
 //---------------------------------------------------------
 
-void Element::change(Element* o, Element* n)
+void EngravingItem::change(EngravingItem* o, EngravingItem* n)
 {
     remove(o);
     add(n);
@@ -338,7 +338,7 @@ void Element::change(Element* o, Element* n)
 //   staff
 //---------------------------------------------------------
 
-Staff* Element::staff() const
+Staff* EngravingItem::staff() const
 {
     if (!hasStaff() || score()->staves().empty()) {
         return nullptr;
@@ -347,7 +347,7 @@ Staff* Element::staff() const
     return score()->staff(staffIdx());
 }
 
-bool Element::hasStaff() const
+bool EngravingItem::hasStaff() const
 {
     return _track != INVALID_INDEX;
 }
@@ -356,7 +356,7 @@ bool Element::hasStaff() const
 //   staffType
 //---------------------------------------------------------
 
-const StaffType* Element::staffType() const
+const StaffType* EngravingItem::staffType() const
 {
     Staff* s = staff();
     return s ? s->staffTypeForElement(this) : nullptr;
@@ -366,18 +366,18 @@ const StaffType* Element::staffType() const
 //   onTabStaff
 //---------------------------------------------------------
 
-bool Element::onTabStaff() const
+bool EngravingItem::onTabStaff() const
 {
     const StaffType* stt = staffType();
     return stt ? stt->isTabStaff() : false;
 }
 
-int Element::track() const
+int EngravingItem::track() const
 {
     return _track;
 }
 
-void Element::setTrack(int val)
+void EngravingItem::setTrack(int val)
 {
     _track = val;
 }
@@ -386,7 +386,7 @@ void Element::setTrack(int val)
 //   z
 //---------------------------------------------------------
 
-int Element::z() const
+int EngravingItem::z() const
 {
     if (_z == -1) {
         _z = int(type()) * 100;
@@ -394,32 +394,32 @@ int Element::z() const
     return _z;
 }
 
-void Element::setZ(int val)
+void EngravingItem::setZ(int val)
 {
     _z = val;
 }
 
-int Element::staffIdx() const
+int EngravingItem::staffIdx() const
 {
     return track2staff(_track);
 }
 
-void Element::setStaffIdx(int val)
+void EngravingItem::setStaffIdx(int val)
 {
     _track = staff2track(val, voice());
 }
 
-int Element::vStaffIdx() const
+int EngravingItem::vStaffIdx() const
 {
     return staffIdx();
 }
 
-int Element::voice() const
+int EngravingItem::voice() const
 {
     return track2voice(_track);
 }
 
-void Element::setVoice(int v)
+void EngravingItem::setVoice(int v)
 {
     _track = (_track / VOICES) * VOICES + v;
 }
@@ -428,9 +428,9 @@ void Element::setVoice(int v)
 //   tick
 //---------------------------------------------------------
 
-Fraction Element::tick() const
+Fraction EngravingItem::tick() const
 {
-    const Element* e = this;
+    const EngravingItem* e = this;
     while (e->parent()) {
         if (e->parent()->isSegment()) {
             return toSegment(e->parent())->tick();
@@ -446,9 +446,9 @@ Fraction Element::tick() const
 //   rtick
 //---------------------------------------------------------
 
-Fraction Element::rtick() const
+Fraction EngravingItem::rtick() const
 {
-    const Element* e = this;
+    const EngravingItem* e = this;
     while (e->parent()) {
         if (e->parent()->isSegment()) {
             return toSegment(e->parent())->rtick();
@@ -462,7 +462,7 @@ Fraction Element::rtick() const
 //   playTick
 //---------------------------------------------------------
 
-Fraction Element::playTick() const
+Fraction EngravingItem::playTick() const
 {
     // Play from the element's tick position by default.
     return tick();
@@ -472,7 +472,7 @@ Fraction Element::playTick() const
 //   beat
 //---------------------------------------------------------
 
-Fraction Element::beat() const
+Fraction EngravingItem::beat() const
 {
     // Returns an appropriate fraction of ticks for use as a "Beat" reference
     // in the Select All Similar filter.
@@ -489,7 +489,7 @@ Fraction Element::beat() const
 //   part
 //---------------------------------------------------------
 
-Part* Element::part() const
+Part* EngravingItem::part() const
 {
     Staff* s = staff();
     return s ? s->part() : 0;
@@ -499,7 +499,7 @@ Part* Element::part() const
 //   curColor
 //---------------------------------------------------------
 
-mu::draw::Color Element::curColor() const
+mu::draw::Color EngravingItem::curColor() const
 {
     return curColor(visible());
 }
@@ -508,12 +508,12 @@ mu::draw::Color Element::curColor() const
 //   curColor
 //---------------------------------------------------------
 
-mu::draw::Color Element::curColor(bool isVisible) const
+mu::draw::Color EngravingItem::curColor(bool isVisible) const
 {
     return curColor(isVisible, color());
 }
 
-mu::draw::Color Element::curColor(bool isVisible, mu::draw::Color normalColor) const
+mu::draw::Color EngravingItem::curColor(bool isVisible, mu::draw::Color normalColor) const
 {
     // the default element color is always interpreted as black in printing
     if (score() && score()->printing()) {
@@ -552,7 +552,7 @@ mu::draw::Color Element::curColor(bool isVisible, mu::draw::Color normalColor) c
 //    return position in canvas coordinates
 //---------------------------------------------------------
 
-PointF Element::pagePos() const
+PointF EngravingItem::pagePos() const
 {
     PointF p(pos());
     if (parent() == 0) {
@@ -596,7 +596,7 @@ PointF Element::pagePos() const
 //   canvasPos
 //---------------------------------------------------------
 
-PointF Element::canvasPos() const
+PointF EngravingItem::canvasPos() const
 {
     PointF p(pos());
     if (parent() == nullptr) {
@@ -645,10 +645,10 @@ PointF Element::canvasPos() const
 //   pageX
 //---------------------------------------------------------
 
-qreal Element::pageX() const
+qreal EngravingItem::pageX() const
 {
     qreal xp = x();
-    for (Element* e = parentElement(); e && e->parentElement(); e = e->parentElement()) {
+    for (EngravingItem* e = parentElement(); e && e->parentElement(); e = e->parentElement()) {
         xp += e->x();
     }
     return xp;
@@ -658,10 +658,10 @@ qreal Element::pageX() const
 //    canvasX
 //---------------------------------------------------------
 
-qreal Element::canvasX() const
+qreal EngravingItem::canvasX() const
 {
     qreal xp = x();
-    for (Element* e = parentElement(); e; e = e->parentElement()) {
+    for (EngravingItem* e = parentElement(); e; e = e->parentElement()) {
         xp += e->x();
     }
     return xp;
@@ -673,7 +673,7 @@ qreal Element::canvasX() const
 //    Note: p is in page coordinates
 //---------------------------------------------------------
 
-bool Element::contains(const mu::PointF& p) const
+bool EngravingItem::contains(const mu::PointF& p) const
 {
     return shape().contains(p - pagePos());
 }
@@ -684,7 +684,7 @@ bool Element::contains(const mu::PointF& p) const
 //    Note: \a rr is in page coordinates
 //---------------------------------------------------------
 
-bool Element::intersects(const RectF& rr) const
+bool EngravingItem::intersects(const RectF& rr) const
 {
     return shape().intersects(rr.translated(-pagePos()));
 }
@@ -693,7 +693,7 @@ bool Element::intersects(const RectF& rr) const
 //   writeProperties
 //---------------------------------------------------------
 
-void Element::writeProperties(XmlWriter& xml) const
+void EngravingItem::writeProperties(XmlWriter& xml) const
 {
     bool autoplaceEnabled = score()->styleB(Sid::autoplaceEnabled);
     if (!autoplaceEnabled) {
@@ -709,13 +709,13 @@ void Element::writeProperties(XmlWriter& xml) const
         if (MScore::debugMode) {
             xml.tag("lid", _links->lid());
         }
-        Element* me = static_cast<Element*>(_links->mainElement());
+        EngravingItem* me = static_cast<EngravingItem*>(_links->mainElement());
         Q_ASSERT(type() == me->type());
         Staff* s = staff();
         if (!s) {
             s = score()->staff(xml.curTrack() / VOICES);
             if (!s) {
-                qWarning("Element::writeProperties: linked element's staff not found (%s)", name());
+                qWarning("EngravingItem::writeProperties: linked element's staff not found (%s)", name());
             }
         }
         Location loc = Location::positionForElement(this);
@@ -733,7 +733,7 @@ void Element::writeProperties(XmlWriter& xml) const
                     xml.tag("score", "same");
                 } else {
                     qWarning(
-                        "Element::writeProperties: linked elements belong to different scores but none of them is master score: (%s lid=%d)",
+                        "EngravingItem::writeProperties: linked elements belong to different scores but none of them is master score: (%s lid=%d)",
                         name(), _links->lid());
                 }
             }
@@ -777,7 +777,7 @@ void Element::writeProperties(XmlWriter& xml) const
 //   readProperties
 //---------------------------------------------------------
 
-bool Element::readProperties(XmlReader& e)
+bool EngravingItem::readProperties(XmlReader& e)
 {
     const QStringRef& tag(e.name());
 
@@ -798,7 +798,7 @@ bool Element::readProperties(XmlReader& e)
         if (!s) {
             s = score()->staff(e.track() / VOICES);
             if (!s) {
-                qWarning("Element::readProperties: linked element's staff not found (%s)", name());
+                qWarning("EngravingItem::readProperties: linked element's staff not found (%s)", name());
                 e.skipCurrentElement();
                 return true;
             }
@@ -845,12 +845,12 @@ bool Element::readProperties(XmlReader& e)
                 if (linked->type() == type()) {
                     linkTo(linked);
                 } else {
-                    qWarning("Element::readProperties: linked elements have different types: %s, %s. Input file corrupted?",
+                    qWarning("EngravingItem::readProperties: linked elements have different types: %s, %s. Input file corrupted?",
                              name(), linked->name());
                 }
             }
             if (!_links) {
-                qWarning("Element::readProperties: could not link %s at staff %d", name(), mainLoc.staff() + 1);
+                qWarning("EngravingItem::readProperties: could not link %s at staff %d", name(), mainLoc.staff() + 1);
             }
         }
     } else if (tag == "lid") {
@@ -870,7 +870,7 @@ bool Element::readProperties(XmlReader& e)
 #ifndef NDEBUG
         else {
             for (EngravingObject* eee : *_links) {
-                Element* ee = static_cast<Element*>(eee);
+                EngravingItem* ee = static_cast<EngravingItem*>(eee);
                 if (ee->type() != type()) {
                     qFatal("link %s(%d) type mismatch %s linked to %s",
                            ee->name(), id, ee->name(), name());
@@ -910,7 +910,7 @@ bool Element::readProperties(XmlReader& e)
 //   write
 //---------------------------------------------------------
 
-void Element::write(XmlWriter& xml) const
+void EngravingItem::write(XmlWriter& xml) const
 {
     xml.stag(this);
     writeProperties(xml);
@@ -921,7 +921,7 @@ void Element::write(XmlWriter& xml) const
 //   read
 //---------------------------------------------------------
 
-void Element::read(XmlReader& e)
+void EngravingItem::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
         if (!readProperties(e)) {
@@ -935,7 +935,7 @@ void Element::read(XmlReader& e)
 ///   Remove \a el from the list. Return true on success.
 //---------------------------------------------------------
 
-bool ElementList::remove(Element* el)
+bool ElementList::remove(EngravingItem* el)
 {
     auto i = find(begin(), end(), el);
     if (i == end()) {
@@ -949,7 +949,7 @@ bool ElementList::remove(Element* el)
 //   replace
 //---------------------------------------------------------
 
-void ElementList::replace(Element* o, Element* n)
+void ElementList::replace(EngravingItem* o, EngravingItem* n)
 {
     auto i = find(begin(), end(), o);
     if (i == end()) {
@@ -965,7 +965,7 @@ void ElementList::replace(Element* o, Element* n)
 
 void ElementList::write(XmlWriter& xml) const
 {
-    for (const Element* e : *this) {
+    for (const EngravingItem* e : *this) {
         e->write(xml);
     }
 }
@@ -975,15 +975,15 @@ void ElementList::write(XmlWriter& xml) const
 //---------------------------------------------------------
 
 Compound::Compound(const ElementType& type, Score* s)
-    : Element(type, s)
+    : EngravingItem(type, s)
 {
 }
 
 Compound::Compound(const Compound& c)
-    : Element(c)
+    : EngravingItem(c)
 {
     elements.clear();
-    foreach (Element* e, c.elements) {
+    foreach (EngravingItem* e, c.elements) {
         elements.append(e->clone());
     }
 }
@@ -994,7 +994,7 @@ Compound::Compound(const Compound& c)
 
 void Compound::draw(mu::draw::Painter* painter) const
 {
-    foreach (Element* e, elements) {
+    foreach (EngravingItem* e, elements) {
         PointF pt(e->pos());
         painter->translate(pt);
         e->draw(painter);
@@ -1010,7 +1010,7 @@ void Compound::draw(mu::draw::Painter* painter) const
  offset \a x and \a y are in Point units
 */
 
-void Compound::addElement(Element* e, qreal x, qreal y)
+void Compound::addElement(EngravingItem* e, qreal x, qreal y)
 {
     e->setPos(x, y);
     e->setParent(this);
@@ -1025,7 +1025,7 @@ void Compound::layout()
 {
     setbbox(RectF());
     for (auto i = elements.begin(); i != elements.end(); ++i) {
-        Element* e = *i;
+        EngravingItem* e = *i;
         e->layout();
         addbbox(e->bbox().translated(e->pos()));
     }
@@ -1037,7 +1037,7 @@ void Compound::layout()
 
 void Compound::setSelected(bool f)
 {
-    Element::setSelected(f);
+    EngravingItem::setSelected(f);
     for (auto i = elements.begin(); i != elements.end(); ++i) {
         (*i)->setSelected(f);
     }
@@ -1049,7 +1049,7 @@ void Compound::setSelected(bool f)
 
 void Compound::setVisible(bool f)
 {
-    Element::setVisible(f);
+    EngravingItem::setVisible(f);
     for (auto i = elements.begin(); i != elements.end(); ++i) {
         (*i)->setVisible(f);
     }
@@ -1061,7 +1061,7 @@ void Compound::setVisible(bool f)
 
 void Compound::clear()
 {
-    foreach (Element* e, elements) {
+    foreach (EngravingItem* e, elements) {
         if (e->selected()) {
             score()->deselect(e);
         }
@@ -1074,9 +1074,9 @@ void Compound::clear()
 //   dump
 //---------------------------------------------------------
 
-void Element::dump() const
+void EngravingItem::dump() const
 {
-    qDebug("---Element: %s, pos(%4.2f,%4.2f)"
+    qDebug("---EngravingItem: %s, pos(%4.2f,%4.2f)"
            "\n   bbox(%g,%g,%g,%g)"
            "\n   abox(%g,%g,%g,%g)"
            "\n  parent: %p",
@@ -1090,13 +1090,13 @@ void Element::dump() const
 //   mimeData
 //---------------------------------------------------------
 
-QByteArray Element::mimeData(const PointF& dragOffset) const
+QByteArray EngravingItem::mimeData(const PointF& dragOffset) const
 {
     QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
     XmlWriter xml(score(), &buffer);
     xml.setClipboardmode(true);
-    xml.stag("Element");
+    xml.stag("EngravingItem");
     if (isNote()) {
         xml.tag("duration", toNote(this)->chord()->ticks());
     }
@@ -1114,11 +1114,11 @@ QByteArray Element::mimeData(const PointF& dragOffset) const
 //    return new position of QDomElement in e
 //---------------------------------------------------------
 
-ElementType Element::readType(XmlReader& e, PointF* dragOffset,
-                              Fraction* duration)
+ElementType EngravingItem::readType(XmlReader& e, PointF* dragOffset,
+                                    Fraction* duration)
 {
     while (e.readNextStartElement()) {
-        if (e.name() == "Element") {
+        if (e.name() == "EngravingItem") {
             while (e.readNextStartElement()) {
                 const QStringRef& tag = e.name();
                 if (tag == "dragOffset") {
@@ -1144,10 +1144,10 @@ ElementType Element::readType(XmlReader& e, PointF* dragOffset,
 //   readMimeData
 //---------------------------------------------------------
 
-Element* Element::readMimeData(Score* score, const QByteArray& data, PointF* dragOffset, Fraction* duration)
+EngravingItem* EngravingItem::readMimeData(Score* score, const QByteArray& data, PointF* dragOffset, Fraction* duration)
 {
     XmlReader e(data);
-    const ElementType type = Element::readType(e, dragOffset, duration);
+    const ElementType type = EngravingItem::readType(e, dragOffset, duration);
     e.setPasteMode(true);
 
     if (type == ElementType::INVALID) {
@@ -1155,7 +1155,7 @@ Element* Element::readMimeData(Score* score, const QByteArray& data, PointF* dra
         return nullptr;
     }
 
-    Element* el = Element::create(type, score->dummy());
+    EngravingItem* el = EngravingItem::create(type, score->dummy());
     if (el) {
         el->read(e);
     }
@@ -1167,26 +1167,26 @@ Element* Element::readMimeData(Score* score, const QByteArray& data, PointF* dra
 //   add
 //---------------------------------------------------------
 
-void Element::add(Element* e)
+void EngravingItem::add(EngravingItem* e)
 {
-    qDebug("Element: cannot add %s to %s", e->name(), name());
+    qDebug("EngravingItem: cannot add %s to %s", e->name(), name());
 }
 
 //---------------------------------------------------------
 //   remove
 //---------------------------------------------------------
 
-void Element::remove(Element* e)
+void EngravingItem::remove(EngravingItem* e)
 {
-    qFatal("Element: cannot remove %s from %s", e->name(), name());
+    qFatal("EngravingItem: cannot remove %s from %s", e->name(), name());
 }
 
 //---------------------------------------------------------
 //   create
-//    Element factory
+//    EngravingItem factory
 //---------------------------------------------------------
 
-Element* Element::create(ElementType type, Element* parent)
+EngravingItem* EngravingItem::create(ElementType type, EngravingItem* parent)
 {
     auto dummy = parent->score()->dummy();
     switch (type) {
@@ -1310,7 +1310,7 @@ Element* Element::create(ElementType type, Element* parent)
     case ElementType::BRACKET_ITEM:
         break;
     }
-    qDebug("cannot create type %d <%s>", int(type), Element::name(type));
+    qDebug("cannot create type %d <%s>", int(type), EngravingItem::name(type));
     return 0;
 }
 
@@ -1318,21 +1318,21 @@ Element* Element::create(ElementType type, Element* parent)
 //   name2Element
 //---------------------------------------------------------
 
-Element* Element::name2Element(const QStringRef& s, Element* parent)
+EngravingItem* EngravingItem::name2Element(const QStringRef& s, EngravingItem* parent)
 {
-    ElementType type = Element::name2type(s);
+    ElementType type = EngravingItem::name2type(s);
     if (type == ElementType::INVALID) {
         qDebug("invalid <%s>\n", qPrintable(s.toString()));
         return 0;
     }
-    return Element::create(type, parent);
+    return EngravingItem::create(type, parent);
 }
 
 //---------------------------------------------------------
 //   elementLessThan
 //---------------------------------------------------------
 
-bool elementLessThan(const Element* const e1, const Element* const e2)
+bool elementLessThan(const EngravingItem* const e1, const EngravingItem* const e2)
 {
     if (e1->z() == e2->z()) {
         if (e1->selected()) {
@@ -1354,9 +1354,9 @@ bool elementLessThan(const Element* const e1, const Element* const e2)
 //   collectElements
 //---------------------------------------------------------
 
-void collectElements(void* data, Element* e)
+void collectElements(void* data, EngravingItem* e)
 {
-    QList<Element*>* el = static_cast<QList<Element*>*>(data);
+    QList<EngravingItem*>* el = static_cast<QList<EngravingItem*>*>(data);
     el->append(e);
 }
 
@@ -1364,7 +1364,7 @@ void collectElements(void* data, Element* e)
 //   autoplace
 //---------------------------------------------------------
 
-bool Element::autoplace() const
+bool EngravingItem::autoplace() const
 {
     if (!score() || !score()->styleB(Sid::autoplaceEnabled)) {
         return false;
@@ -1376,7 +1376,7 @@ bool Element::autoplace() const
 //   getProperty
 //---------------------------------------------------------
 
-QVariant Element::getProperty(Pid propertyId) const
+QVariant EngravingItem::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::TICK:
@@ -1422,7 +1422,7 @@ QVariant Element::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Element::setProperty(Pid propertyId, const QVariant& v)
+bool EngravingItem::setProperty(Pid propertyId, const QVariant& v)
 {
     switch (propertyId) {
     case Pid::TRACK:
@@ -1487,7 +1487,7 @@ bool Element::setProperty(Pid propertyId, const QVariant& v)
 //   undoChangeProperty
 //---------------------------------------------------------
 
-void Element::undoChangeProperty(Pid pid, const QVariant& val, PropertyFlags ps)
+void EngravingItem::undoChangeProperty(Pid pid, const QVariant& val, PropertyFlags ps)
 {
     if (pid == Pid::AUTOPLACE && (val.toBool() == true && !autoplace())) {
         // Switching autoplacement on. Save user-defined
@@ -1502,7 +1502,7 @@ void Element::undoChangeProperty(Pid pid, const QVariant& val, PropertyFlags ps)
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant Element::propertyDefault(Pid pid) const
+QVariant EngravingItem::propertyDefault(Pid pid) const
 {
     switch (pid) {
     case Pid::GENERATED:
@@ -1558,7 +1558,7 @@ QVariant Element::propertyDefault(Pid pid) const
 //   propertyId
 //---------------------------------------------------------
 
-Pid Element::propertyId(const QStringRef& name) const
+Pid EngravingItem::propertyId(const QStringRef& name) const
 {
     if (name == "pos" || name == "offset") {
         return Pid::OFFSET;
@@ -1570,7 +1570,7 @@ Pid Element::propertyId(const QStringRef& name) const
 //   propertyUserValue
 //---------------------------------------------------------
 
-QString Element::propertyUserValue(Pid pid) const
+QString EngravingItem::propertyUserValue(Pid pid) const
 {
     switch (pid) {
     case Pid::SUBTYPE:
@@ -1585,7 +1585,7 @@ QString Element::propertyUserValue(Pid pid) const
 //    check if property is != default
 //---------------------------------------------------------
 
-bool Element::custom(Pid id) const
+bool EngravingItem::custom(Pid id) const
 {
     return propertyDefault(id) != getProperty(id);
 }
@@ -1594,7 +1594,7 @@ bool Element::custom(Pid id) const
 //   isPrintable
 //---------------------------------------------------------
 
-bool Element::isPrintable() const
+bool EngravingItem::isPrintable() const
 {
     switch (type()) {
     case ElementType::PAGE:
@@ -1622,18 +1622,18 @@ bool Element::isPrintable() const
 //   findAncestor
 //---------------------------------------------------------
 
-Element* Element::findAncestor(ElementType t)
+EngravingItem* EngravingItem::findAncestor(ElementType t)
 {
-    Element* e = this;
+    EngravingItem* e = this;
     while (e && e->type() != t) {
         e = e->parentElement();
     }
     return e;
 }
 
-const Element* Element::findAncestor(ElementType t) const
+const EngravingItem* EngravingItem::findAncestor(ElementType t) const
 {
-    const Element* e = this;
+    const EngravingItem* e = this;
     while (e && e->type() != t) {
         e = e->parentElement();
     }
@@ -1644,7 +1644,7 @@ const Element* Element::findAncestor(ElementType t) const
 //   findMeasure
 //---------------------------------------------------------
 
-Measure* Element::findMeasure()
+Measure* EngravingItem::findMeasure()
 {
     if (isMeasure()) {
         return toMeasure(this);
@@ -1659,9 +1659,9 @@ Measure* Element::findMeasure()
 //   findMeasure
 //---------------------------------------------------------
 
-const Measure* Element::findMeasure() const
+const Measure* EngravingItem::findMeasure() const
 {
-    Element* e = const_cast<Element*>(this);
+    EngravingItem* e = const_cast<EngravingItem*>(this);
     return e->findMeasure();
 }
 
@@ -1669,7 +1669,7 @@ const Measure* Element::findMeasure() const
 //   findMeasureBase
 //---------------------------------------------------------
 
-MeasureBase* Element::findMeasureBase()
+MeasureBase* EngravingItem::findMeasureBase()
 {
     if (isMeasureBase()) {
         return toMeasureBase(this);
@@ -1684,9 +1684,9 @@ MeasureBase* Element::findMeasureBase()
 //   findMeasureBase
 //---------------------------------------------------------
 
-const MeasureBase* Element::findMeasureBase() const
+const MeasureBase* EngravingItem::findMeasureBase() const
 {
-    Element* e = const_cast<Element*>(this);
+    EngravingItem* e = const_cast<EngravingItem*>(this);
     return e->findMeasureBase();
 }
 
@@ -1694,7 +1694,7 @@ const MeasureBase* Element::findMeasureBase() const
 //   undoSetColor
 //---------------------------------------------------------
 
-void Element::undoSetColor(const mu::draw::Color& c)
+void EngravingItem::undoSetColor(const mu::draw::Color& c)
 {
     undoChangeProperty(Pid::COLOR, QVariant::fromValue(c));
 }
@@ -1703,7 +1703,7 @@ void Element::undoSetColor(const mu::draw::Color& c)
 //   undoSetVisible
 //---------------------------------------------------------
 
-void Element::undoSetVisible(bool v)
+void EngravingItem::undoSetVisible(bool v)
 {
     undoChangeProperty(Pid::VISIBLE, v);
 }
@@ -1712,22 +1712,22 @@ void Element::undoSetVisible(bool v)
 //   drawSymbol
 //---------------------------------------------------------
 
-void Element::drawSymbol(SymId id, mu::draw::Painter* p, const mu::PointF& o, qreal scale) const
+void EngravingItem::drawSymbol(SymId id, mu::draw::Painter* p, const mu::PointF& o, qreal scale) const
 {
     score()->scoreFont()->draw(id, p, magS() * scale, o);
 }
 
-void Element::drawSymbol(SymId id, mu::draw::Painter* p, const mu::PointF& o, int n) const
+void EngravingItem::drawSymbol(SymId id, mu::draw::Painter* p, const mu::PointF& o, int n) const
 {
     score()->scoreFont()->draw(id, p, magS(), o, n);
 }
 
-void Element::drawSymbols(const std::vector<SymId>& s, mu::draw::Painter* p, const PointF& o, qreal scale) const
+void EngravingItem::drawSymbols(const std::vector<SymId>& s, mu::draw::Painter* p, const PointF& o, qreal scale) const
 {
     score()->scoreFont()->draw(s, p, magS() * scale, o);
 }
 
-void Element::drawSymbols(const std::vector<SymId>& s, mu::draw::Painter* p, const PointF& o, const SizeF& scale) const
+void EngravingItem::drawSymbols(const std::vector<SymId>& s, mu::draw::Painter* p, const PointF& o, const SizeF& scale) const
 {
     score()->scoreFont()->draw(s, p, SizeF(magS() * scale), PointF(o));
 }
@@ -1736,7 +1736,7 @@ void Element::drawSymbols(const std::vector<SymId>& s, mu::draw::Painter* p, con
 //   symHeight
 //---------------------------------------------------------
 
-qreal Element::symHeight(SymId id) const
+qreal EngravingItem::symHeight(SymId id) const
 {
     return score()->scoreFont()->height(id, magS());
 }
@@ -1745,12 +1745,12 @@ qreal Element::symHeight(SymId id) const
 //   symWidth
 //---------------------------------------------------------
 
-qreal Element::symWidth(SymId id) const
+qreal EngravingItem::symWidth(SymId id) const
 {
     return score()->scoreFont()->width(id, magS());
 }
 
-qreal Element::symWidth(const std::vector<SymId>& s) const
+qreal EngravingItem::symWidth(const std::vector<SymId>& s) const
 {
     return score()->scoreFont()->width(s, magS());
 }
@@ -1759,7 +1759,7 @@ qreal Element::symWidth(const std::vector<SymId>& s) const
 //   symAdvance
 //---------------------------------------------------------
 
-qreal Element::symAdvance(SymId id) const
+qreal EngravingItem::symAdvance(SymId id) const
 {
     return score()->scoreFont()->advance(id, magS());
 }
@@ -1768,12 +1768,12 @@ qreal Element::symAdvance(SymId id) const
 //   symBbox
 //---------------------------------------------------------
 
-RectF Element::symBbox(SymId id) const
+RectF EngravingItem::symBbox(SymId id) const
 {
     return score()->scoreFont()->bbox(id, magS());
 }
 
-RectF Element::symBbox(const std::vector<SymId>& s) const
+RectF EngravingItem::symBbox(const std::vector<SymId>& s) const
 {
     return score()->scoreFont()->bbox(s, magS());
 }
@@ -1782,7 +1782,7 @@ RectF Element::symBbox(const std::vector<SymId>& s) const
 //   symSmuflAnchor
 //---------------------------------------------------------
 
-PointF Element::symSmuflAnchor(SymId symId, SmuflAnchorId anchorId) const
+PointF EngravingItem::symSmuflAnchor(SymId symId, SmuflAnchorId anchorId) const
 {
     return score()->scoreFont()->smuflAnchor(symId, anchorId, magS());
 }
@@ -1791,7 +1791,7 @@ PointF Element::symSmuflAnchor(SymId symId, SmuflAnchorId anchorId) const
 //   symIsValid
 //---------------------------------------------------------
 
-bool Element::symIsValid(SymId id) const
+bool EngravingItem::symIsValid(SymId id) const
 {
     return score()->scoreFont()->isValid(id);
 }
@@ -1800,7 +1800,7 @@ bool Element::symIsValid(SymId id) const
 //   concertPitch
 //---------------------------------------------------------
 
-bool Element::concertPitch() const
+bool EngravingItem::concertPitch() const
 {
     return score()->styleB(Sid::concertPitch);
 }
@@ -1810,9 +1810,9 @@ bool Element::concertPitch() const
 //   selects the next score element
 //---------------------------------------------------------
 
-Element* Element::nextElement()
+EngravingItem* EngravingItem::nextElement()
 {
-    Element* e = score()->selection().element();
+    EngravingItem* e = score()->selection().element();
     if (!e && !score()->selection().elements().isEmpty()) {
         e = score()->selection().elements().first();
     }
@@ -1844,9 +1844,9 @@ Element* Element::nextElement()
 //   selects the previous score element
 //---------------------------------------------------------
 
-Element* Element::prevElement()
+EngravingItem* EngravingItem::prevElement()
 {
-    Element* e = score()->selection().element();
+    EngravingItem* e = score()->selection().element();
     if (!e && !score()->selection().elements().isEmpty()) {
         e = score()->selection().elements().last();
     }
@@ -1881,9 +1881,9 @@ Element* Element::prevElement()
 //   element knows how to find the next one and overrides this method
 //------------------------------------------------------------------------------------------
 
-Element* Element::nextSegmentElement()
+EngravingItem* EngravingItem::nextSegmentElement()
 {
-    Element* p = this;
+    EngravingItem* p = this;
     while (p) {
         switch (p->type()) {
         case ElementType::NOTE:
@@ -1929,9 +1929,9 @@ Element* Element::nextSegmentElement()
 //   element knows how to find the previous one and overrides this method
 //------------------------------------------------------------------------------------------
 
-Element* Element::prevSegmentElement()
+EngravingItem* EngravingItem::prevSegmentElement()
 {
-    Element* p = this;
+    EngravingItem* p = this;
     while (p) {
         switch (p->type()) {
         case ElementType::NOTE:
@@ -1969,7 +1969,7 @@ Element* Element::prevSegmentElement()
     return score()->firstElement();
 }
 
-mu::engraving::AccessibleElement* Element::accessible() const
+mu::engraving::AccessibleElement* EngravingItem::accessible() const
 {
     return m_accessible;
 }
@@ -1978,16 +1978,16 @@ mu::engraving::AccessibleElement* Element::accessible() const
 //   accessibleInfo
 //---------------------------------------------------------
 
-QString Element::accessibleInfo() const
+QString EngravingItem::accessibleInfo() const
 {
-    return Element::userName();
+    return EngravingItem::userName();
 }
 
 //---------------------------------------------------------
 //   nextGrip
 //---------------------------------------------------------
 
-bool Element::nextGrip(EditData& ed) const
+bool EngravingItem::nextGrip(EditData& ed) const
 {
     int i = int(ed.curGrip) + 1;
     if (i >= ed.grips) {
@@ -2002,7 +2002,7 @@ bool Element::nextGrip(EditData& ed) const
 //   prevGrip
 //---------------------------------------------------------
 
-bool Element::prevGrip(EditData& ed) const
+bool EngravingItem::prevGrip(EditData& ed) const
 {
     int i = int(ed.curGrip) - 1;
     if (i < 0) {
@@ -2019,7 +2019,7 @@ bool Element::prevGrip(EditData& ed) const
 //    therefore must be saved.
 //---------------------------------------------------------
 
-bool Element::isUserModified() const
+bool EngravingItem::isUserModified() const
 {
     for (const StyledProperty& spp : *styledProperties()) {
         Pid pid               = spp.pid;
@@ -2048,7 +2048,7 @@ bool Element::isUserModified() const
 //   triggerLayout
 //---------------------------------------------------------
 
-void Element::triggerLayout() const
+void EngravingItem::triggerLayout() const
 {
     if (parent()) {
         score()->setLayout(tick(), staffIdx(), this);
@@ -2059,7 +2059,7 @@ void Element::triggerLayout() const
 //   triggerLayoutAll
 //---------------------------------------------------------
 
-void Element::triggerLayoutAll() const
+void EngravingItem::triggerLayoutAll() const
 {
     if (parent()) {
         score()->setLayoutAll(staffIdx(), this);
@@ -2102,7 +2102,7 @@ void EditData::clearData()
 //   getData
 //---------------------------------------------------------
 
-ElementEditData* EditData::getData(const Element* e) const
+ElementEditData* EditData::getData(const EngravingItem* e) const
 {
     for (ElementEditData* ed : data) {
         if (ed->e == e) {
@@ -2125,7 +2125,7 @@ void EditData::addData(ElementEditData* ed)
 //   drawEditMode
 //---------------------------------------------------------
 
-void Element::drawEditMode(mu::draw::Painter* p, EditData& ed)
+void EngravingItem::drawEditMode(mu::draw::Painter* p, EditData& ed)
 {
     using namespace mu::draw;
     Pen pen(engravingConfiguration()->defaultColor(), 0.0);
@@ -2144,7 +2144,7 @@ void Element::drawEditMode(mu::draw::Painter* p, EditData& ed)
 //   startDrag
 //---------------------------------------------------------
 
-void Element::startDrag(EditData& ed)
+void EngravingItem::startDrag(EditData& ed)
 {
     if (!isMovable()) {
         return;
@@ -2165,7 +2165,7 @@ void Element::startDrag(EditData& ed)
 ///   Return update Rect relative to canvas.
 //---------------------------------------------------------
 
-RectF Element::drag(EditData& ed)
+RectF EngravingItem::drag(EditData& ed)
 {
     if (!isMovable()) {
         return RectF();
@@ -2201,7 +2201,7 @@ RectF Element::drag(EditData& ed)
         //
         const RectF r(canvasBoundingRect());
         Page* p = 0;
-        Element* e = this;
+        EngravingItem* e = this;
         while (e) {
             if (e->isPage()) {
                 p = toPage(e);
@@ -2238,7 +2238,7 @@ RectF Element::drag(EditData& ed)
 //   endDrag
 //---------------------------------------------------------
 
-void Element::endDrag(EditData& ed)
+void EngravingItem::endDrag(EditData& ed)
 {
     if (!isMovable()) {
         return;
@@ -2262,10 +2262,10 @@ void Element::endDrag(EditData& ed)
 //   genericDragAnchorLines
 //---------------------------------------------------------
 
-QVector<LineF> Element::genericDragAnchorLines() const
+QVector<LineF> EngravingItem::genericDragAnchorLines() const
 {
     qreal xp = 0.0;
-    for (Element* e = parentElement(); e; e = e->parentElement()) {
+    for (EngravingItem* e = parentElement(); e; e = e->parentElement()) {
         xp += e->x();
     }
     qreal yp;
@@ -2292,7 +2292,7 @@ QVector<LineF> Element::genericDragAnchorLines() const
 //   updateGrips
 //---------------------------------------------------------
 
-void Element::updateGrips(EditData& ed) const
+void EngravingItem::updateGrips(EditData& ed) const
 {
     const auto positions(gripsPositions(ed));
     const size_t ngrips = positions.size();
@@ -2305,7 +2305,7 @@ void Element::updateGrips(EditData& ed) const
 //   startEdit
 //---------------------------------------------------------
 
-void Element::startEdit(EditData& ed)
+void EngravingItem::startEdit(EditData& ed)
 {
     ElementEditData* elementData = new ElementEditData();
     elementData->e = this;
@@ -2317,7 +2317,7 @@ void Element::startEdit(EditData& ed)
 //    return true if event is accepted
 //---------------------------------------------------------
 
-bool Element::edit(EditData& ed)
+bool EngravingItem::edit(EditData& ed)
 {
     if (ed.key == Qt::Key_Home) {
         setOffset(PointF());
@@ -2330,7 +2330,7 @@ bool Element::edit(EditData& ed)
 //   startEditDrag
 //---------------------------------------------------------
 
-void Element::startEditDrag(EditData& ed)
+void EngravingItem::startEditDrag(EditData& ed)
 {
     ElementEditData* eed = ed.getData(this);
     if (!eed) {
@@ -2349,7 +2349,7 @@ void Element::startEditDrag(EditData& ed)
 //   editDrag
 //---------------------------------------------------------
 
-void Element::editDrag(EditData& ed)
+void EngravingItem::editDrag(EditData& ed)
 {
     score()->addRefresh(canvasBoundingRect());
     setOffset(offset() + ed.delta);
@@ -2361,7 +2361,7 @@ void Element::editDrag(EditData& ed)
 //   endEditDrag
 //---------------------------------------------------------
 
-void Element::endEditDrag(EditData& ed)
+void EngravingItem::endEditDrag(EditData& ed)
 {
     ElementEditData* eed = ed.getData(this);
     bool changed = false;
@@ -2387,7 +2387,7 @@ void Element::endEditDrag(EditData& ed)
 //   endEdit
 //---------------------------------------------------------
 
-void Element::endEdit(EditData&)
+void EngravingItem::endEdit(EditData&)
 {
 }
 
@@ -2395,7 +2395,7 @@ void Element::endEdit(EditData&)
 //   styleP
 //---------------------------------------------------------
 
-qreal Element::styleP(Sid idx) const
+qreal EngravingItem::styleP(Sid idx) const
 {
     return score()->styleP(idx);
 }
@@ -2404,7 +2404,7 @@ qreal Element::styleP(Sid idx) const
 //   setOffsetChanged
 //---------------------------------------------------------
 
-void Element::setOffsetChanged(bool v, bool absolute, const PointF& diff)
+void EngravingItem::setOffsetChanged(bool v, bool absolute, const PointF& diff)
 {
     if (v) {
         _offsetChanged = absolute ? OffsetChange::ABSOLUTE_OFFSET : OffsetChange::RELATIVE_OFFSET;
@@ -2421,7 +2421,7 @@ void Element::setOffsetChanged(bool v, bool absolute, const PointF& diff)
 //    for nudge & other actions that result in relative adjustment, return the vertical difference
 //---------------------------------------------------------
 
-qreal Element::rebaseOffset(bool nox)
+qreal EngravingItem::rebaseOffset(bool nox)
 {
     PointF off = offset();
     PointF p = _changedPos - pos();
@@ -2438,7 +2438,7 @@ qreal Element::rebaseOffset(bool nox)
         // TODO: adjustPlacement() (from read206.cpp) on read for 3.0 as well
         RectF r = bbox().translated(_changedPos);
         qreal staffHeight = staff()->height();
-        Element* e = isSpannerSegment() ? toSpannerSegment(this)->spanner() : this;
+        EngravingItem* e = isSpannerSegment() ? toSpannerSegment(this)->spanner() : this;
         bool multi = e->isSpanner() && toSpanner(e)->spannerSegments().size() > 1;
         bool above = e->placeAbove();
         bool flipped = above ? r.top() > staffHeight : r.bottom() < 0.0;
@@ -2479,7 +2479,7 @@ qreal Element::rebaseOffset(bool nox)
 //    returns true if shape needs to be rebased
 //---------------------------------------------------------
 
-bool Element::rebaseMinDistance(qreal& md, qreal& yd, qreal sp, qreal rebase, bool above, bool fix)
+bool EngravingItem::rebaseMinDistance(qreal& md, qreal& yd, qreal sp, qreal rebase, bool above, bool fix)
 {
     bool rc = false;
     PropertyFlags pf = propertyFlags(Pid::MIN_DISTANCE);
@@ -2525,7 +2525,7 @@ bool Element::rebaseMinDistance(qreal& md, qreal& yd, qreal sp, qreal rebase, bo
 //   autoplaceSegmentElement
 //---------------------------------------------------------
 
-void Element::autoplaceSegmentElement(bool above, bool add)
+void EngravingItem::autoplaceSegmentElement(bool above, bool add)
 {
     // rebase vertical offset on drag
     qreal rebase = 0.0;
@@ -2596,7 +2596,7 @@ void Element::autoplaceSegmentElement(bool above, bool add)
 //   autoplaceMeasureElement
 //---------------------------------------------------------
 
-void Element::autoplaceMeasureElement(bool above, bool add)
+void EngravingItem::autoplaceMeasureElement(bool above, bool add)
 {
     // rebase vertical offset on drag
     qreal rebase = 0.0;
@@ -2647,12 +2647,12 @@ void Element::autoplaceMeasureElement(bool above, bool add)
     setOffsetChanged(false);
 }
 
-bool Element::selected() const
+bool EngravingItem::selected() const
 {
     return flag(ElementFlag::SELECTED);
 }
 
-void Element::setSelected(bool f)
+void EngravingItem::setSelected(bool f)
 {
     setFlag(ElementFlag::SELECTED, f);
 #ifdef ENGRAVING_BUILD_ACCESSIBLE_TREE

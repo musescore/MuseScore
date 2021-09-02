@@ -108,7 +108,7 @@ QVector<LineF> SlurTieSegment::gripAnchorLines(Grip grip) const
 
 void SlurTieSegment::move(const PointF& s)
 {
-    Element::move(s);
+    EngravingItem::move(s);
     for (int k = 0; k < int(Grip::GRIPS); ++k) {
         _ups[k].p += s;
     }
@@ -120,7 +120,7 @@ void SlurTieSegment::move(const PointF& s)
 
 void SlurTieSegment::spatiumChanged(qreal oldValue, qreal newValue)
 {
-    Element::spatiumChanged(oldValue, newValue);
+    EngravingItem::spatiumChanged(oldValue, newValue);
     qreal diff = newValue / oldValue;
     for (UP& u : _ups) {
         u.off *= diff;
@@ -165,7 +165,7 @@ void SlurTieSegment::startEditDrag(EditData& ed)
 
 void SlurTieSegment::endEditDrag(EditData& ed)
 {
-    Element::endEditDrag(ed);
+    EngravingItem::endEditDrag(ed);
     triggerLayout();
 }
 
@@ -189,7 +189,7 @@ void SlurTieSegment::editDrag(EditData& ed)
         if ((g == Grip::START && isSingleBeginType()) || (g == Grip::END && isSingleEndType())) {
             Spanner* spanner = slurTie();
             Qt::KeyboardModifiers km = ed.modifiers;
-            Element* e = ed.view()->elementNear(ed.pos);
+            EngravingItem* e = ed.view()->elementNear(ed.pos);
             if (e && e->isNote()) {
                 Note* note = toNote(e);
                 Fraction tick = note->chord()->tick();
@@ -304,7 +304,7 @@ QVariant SlurTieSegment::propertyDefault(Pid id) const
 
 void SlurTieSegment::reset()
 {
-    Element::reset();
+    EngravingItem::reset();
     undoResetProperty(Pid::SLUR_UOFF1);
     undoResetProperty(Pid::SLUR_UOFF2);
     undoResetProperty(Pid::SLUR_UOFF3);
@@ -362,7 +362,7 @@ void SlurTieSegment::writeSlur(XmlWriter& xml, int no) const
     if (!ups(Grip::END).off.isNull()) {
         xml.tag("o4", ups(Grip::END).off / _spatium);
     }
-    Element::writeProperties(xml);
+    EngravingItem::writeProperties(xml);
     xml.etag();
 }
 
@@ -423,7 +423,7 @@ void SlurTieSegment::drawEditMode(mu::draw::Painter* p, EditData& ed)
 //   SlurTie
 //---------------------------------------------------------
 
-SlurTie::SlurTie(const ElementType& type, Element* parent)
+SlurTie::SlurTie(const ElementType& type, EngravingItem* parent)
     : Spanner(type, parent)
 {
     _slurDirection = Direction::AUTO;
@@ -582,7 +582,7 @@ void SlurTie::fixupSegments(unsigned nsegs)
 
 void SlurTie::reset()
 {
-    Element::reset();
+    EngravingItem::reset();
     undoResetProperty(Pid::SLUR_DIRECTION);
     undoResetProperty(Pid::LINE_TYPE);
 }

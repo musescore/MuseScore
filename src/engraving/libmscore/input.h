@@ -30,7 +30,7 @@
 #include "beam.h"
 
 namespace Ms {
-class Element;
+class EngravingItem;
 class Slur;
 class ChordRest;
 class Drumset;
@@ -139,13 +139,13 @@ public:
     void setInsertMode(bool val) { _insertMode = val; }
 
     void update(Selection& selection);
-    void moveInputPos(Element* e);
+    void moveInputPos(EngravingItem* e);
     void moveToNextInputPos();
     bool endOfScore() const;
 
     // TODO: unify with Selection::cr()?
-    static Note* note(Element*);
-    static ChordRest* chordRest(Element*);
+    static Note* note(EngravingItem*);
+    static ChordRest* chordRest(EngravingItem*);
 };
 }     // namespace Ms
 #endif

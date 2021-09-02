@@ -1837,7 +1837,7 @@ void MusicXMLParserPass1::scorePart()
 
     while (_e.readNextStartElement()) {
         if (_e.name() == "part-name") {
-            // Element part-name contains the displayed (full) part name
+            // EngravingItem part-name contains the displayed (full) part name
             // It is displayed by default, but can be suppressed (print-object=”no”)
             // As of MusicXML 3.0, formatting is deprecated, with part-name in plain text
             // and the formatted version in the part-name-display element
@@ -1848,7 +1848,7 @@ void MusicXMLParserPass1::scorePart()
             // TODO
             _e.skipCurrentElement();       // skip but don't log
         } else if (_e.name() == "part-abbreviation") {
-            // Element part-name contains the displayed (abbreviated) part name
+            // EngravingItem part-name contains the displayed (abbreviated) part name
             // It is displayed by default, but can be suppressed (print-object=”no”)
             // As of MusicXML 3.0, formatting is deprecated, with part-name in plain text
             // and the formatted version in the part-abbreviation-display element
@@ -1911,7 +1911,7 @@ void MusicXMLParserPass1::scoreInstrument(const QString& partId)
                    );
              */
             _instruments[partId].insert(instrId, MusicXMLInstrument(instrName));
-            // Element instrument-name is typically not displayed in the score,
+            // EngravingItem instrument-name is typically not displayed in the score,
             // but used only internally
             if (_instruments[partId].contains(instrId)) {
                 _instruments[partId][instrId].name = instrName;

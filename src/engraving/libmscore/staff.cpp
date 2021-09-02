@@ -62,7 +62,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 Staff::Staff(Score* score)
-    : Element(ElementType::STAFF, score)
+    : EngravingItem(ElementType::STAFF, score)
 {
     initFromStaffType(0);
 }
@@ -72,7 +72,7 @@ Staff::Staff(Score* score)
 //---------------------------------------------------------
 
 Staff::Staff(const Staff& staff)
-    : Element(staff)
+    : EngravingItem(staff)
 {
     init(&staff);
     _part = staff._part;
@@ -966,7 +966,7 @@ qreal Staff::spatium(const Fraction& tick) const
     return score()->spatium() * staffMag(tick);
 }
 
-qreal Staff::spatium(const Element* e) const
+qreal Staff::spatium(const EngravingItem* e) const
 {
     return score()->spatium() * staffMag(e);
 }
@@ -985,7 +985,7 @@ qreal Staff::staffMag(const Fraction& tick) const
     return staffMag(staffType(tick));
 }
 
-qreal Staff::staffMag(const Element* element) const
+qreal Staff::staffMag(const EngravingItem* element) const
 {
     return staffMag(staffTypeForElement(element));
 }
@@ -1051,7 +1051,7 @@ QList<Note*> Staff::getNotes() const
     for (Segment* s = score()->firstSegment(st); s; s = s->next1(st)) {
         for (int voice = 0; voice < VOICES; ++voice) {
             int track = voice + staffIdx * VOICES;
-            Element* e = s->element(track);
+            EngravingItem* e = s->element(track);
             if (e && e->isChord()) {
                 addChord(list, toChord(e), voice);
             }
@@ -1183,7 +1183,7 @@ StaffType* Staff::staffType(const Fraction& tick)
     return &_staffTypeList.staffType(tick);
 }
 
-const StaffType* Staff::staffTypeForElement(const Element* e) const
+const StaffType* Staff::staffTypeForElement(const EngravingItem* e) const
 {
     if (_staffTypeList.uniqueStaffType()) { // optimize if one staff type spans for the entire staff
         return &_staffTypeList.staffType({ 0, 1 });
@@ -1306,7 +1306,7 @@ void Staff::setId(const ID& id)
 
 void Staff::setScore(Score* score)
 {
-    Element::setScore(score);
+    EngravingItem::setScore(score);
 
     for (BracketItem* bracket: _brackets) {
         bracket->setScore(score);
@@ -1612,7 +1612,7 @@ bool Staff::setProperty(Pid id, const QVariant& v)
         setBarLineSpan(v.toInt());
         // update non-generated barlines
         int track = idx() * VOICES;
-        std::vector<Element*> blList;
+        std::vector<EngravingItem*> blList;
         for (Measure* m = score()->firstMeasure(); m; m = m->nextMeasure()) {
             Segment* s = m->getSegmentR(SegmentType::EndBarLine, m->ticks());
             if (s && s->element(track)) {
@@ -1625,7 +1625,7 @@ bool Staff::setProperty(Pid id, const QVariant& v)
                 }
             }
         }
-        for (Element* e : blList) {
+        for (EngravingItem* e : blList) {
             if (e && e->isBarLine() && !e->generated()) {
                 toBarLine(e)->setSpanStaff(v.toInt());
             }
@@ -1693,7 +1693,7 @@ void Staff::setLocalSpatium(double oldVal, double newVal, Fraction tick)
     int startTrack = staffIdx * VOICES;
     int endTrack = startTrack + VOICES;
     for (Segment* s = score()->tick2rightSegment(tick); s && s->tick() < etick; s = s->next1()) {
-        for (Element* e : s->annotations()) {
+        for (EngravingItem* e : s->annotations()) {
             if (e->track() >= startTrack && e->track() < endTrack) {
                 e->localSpatiumChanged(oldVal, newVal);
             }

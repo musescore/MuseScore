@@ -53,13 +53,13 @@ public:
     TrillSegment* clone() const override { return new TrillSegment(*this); }
     void draw(mu::draw::Painter*) const override;
     bool acceptDrop(EditData&) const override;
-    Element* drop(EditData&) override;
+    EngravingItem* drop(EditData&) override;
     void layout() override;
 
-    Element* propertyDelegate(Pid) override;
+    EngravingItem* propertyDelegate(Pid) override;
 
-    void add(Element*) override;
-    void remove(Element*) override;
+    void add(EngravingItem*) override;
+    void remove(EngravingItem*) override;
     Shape shape() const override;
 
     std::vector<SymId> symbols() const { return _symbols; }
@@ -87,7 +87,7 @@ private:
     bool _playArticulation;
 
 public:
-    Trill(Element* parent);
+    Trill(EngravingItem* parent);
     Trill(const Trill& t);
     ~Trill();
 
@@ -100,8 +100,8 @@ public:
 
     void layout() override;
     LineSegment* createLineSegment() override;
-    void add(Element*) override;
-    void remove(Element*) override;
+    void add(EngravingItem*) override;
+    void remove(EngravingItem*) override;
     void write(XmlWriter&) const override;
     void read(XmlReader&) override;
 

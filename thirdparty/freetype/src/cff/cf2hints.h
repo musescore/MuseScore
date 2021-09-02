@@ -104,7 +104,7 @@ FT_BEGIN_HEADER
    * The map is implemented as an array of `CF2_Hint' elements, each
    * representing an edge.  When edges are paired, as from stem hints, the
    * bottom edge must immediately precede the top edge in the array.
-   * Element character space AND device space positions must both increase
+   * EngravingItem character space AND device space positions must both increase
    * monotonically in the array.  `CF2_Hint' elements are also used as
    * parameters to `cf2_blues_capture'.
    *

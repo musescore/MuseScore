@@ -113,7 +113,7 @@ TextLineSegment::TextLineSegment(Spanner* sp, Score* s, bool system)
 //   propertyDelegate
 //---------------------------------------------------------
 
-Element* TextLineSegment::propertyDelegate(Pid pid)
+EngravingItem* TextLineSegment::propertyDelegate(Pid pid)
 {
     if (pid == Pid::SYSTEM_FLAG) {
         return static_cast<TextLine*>(spanner());
@@ -138,7 +138,7 @@ void TextLineSegment::layout()
 //   TextLine
 //---------------------------------------------------------
 
-TextLine::TextLine(Element* parent, bool system)
+TextLine::TextLine(EngravingItem* parent, bool system)
     : TextLineBase(ElementType::TEXTLINE, parent)
 {
     setSystemFlag(system);

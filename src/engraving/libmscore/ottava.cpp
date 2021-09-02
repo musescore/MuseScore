@@ -78,7 +78,7 @@ void OttavaSegment::layout()
 //   propertyDelegate
 //---------------------------------------------------------
 
-Element* OttavaSegment::propertyDelegate(Pid pid)
+EngravingItem* OttavaSegment::propertyDelegate(Pid pid)
 {
     if (pid == Pid::OTTAVA_TYPE || pid == Pid::NUMBERS_ONLY) {
         return spanner();
@@ -219,7 +219,7 @@ Sid Ottava::getPropertyStyle(Pid pid) const
 //   Ottava
 //---------------------------------------------------------
 
-Ottava::Ottava(Element* parent)
+Ottava::Ottava(EngravingItem* parent)
     : TextLineBase(ElementType::OTTAVA, parent, ElementFlag::ON_STAFF | ElementFlag::MOVABLE)
 {
     _ottavaType  = OttavaType::OTTAVA_8VA;
@@ -453,7 +453,7 @@ Pid Ottava::propertyId(const QStringRef& name) const
 
 QString Ottava::accessibleInfo() const
 {
-    return QString("%1: %2").arg(Element::accessibleInfo(), ottavaDefault[static_cast<int>(ottavaType())].name);
+    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), ottavaDefault[static_cast<int>(ottavaType())].name);
 }
 
 //---------------------------------------------------------

@@ -43,7 +43,7 @@ public:
 
     virtual QRect playbackCursorRectByTick(midi::tick_t tick) const = 0;
 
-    virtual RetVal<midi::tick_t> playPositionTickByElement(const Element* element) const = 0;
+    virtual RetVal<midi::tick_t> playPositionTickByElement(const EngravingItem* element) const = 0;
 
     enum BoundaryTick : midi::tick_t {
         FirstScoreTick = 0,

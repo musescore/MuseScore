@@ -23,7 +23,7 @@
 #ifndef __BEAM_H__
 #define __BEAM_H__
 
-#include "element.h"
+#include "engravingitem.h"
 #include "durationtype.h"
 #include "property.h"
 
@@ -45,7 +45,7 @@ typedef QPair<qreal, qreal> BeamPos;
 //   @@ Beam
 //---------------------------------------------------------
 
-class Beam final : public Element
+class Beam final : public EngravingItem
 {
     Q_GADGET
     QVector<ChordRest*> _elements;          // must be sorted by tick
@@ -88,7 +88,7 @@ public:
     };
     Q_ENUM(Mode);
 
-    Beam(Element* parent, Ms::Score* score);
+    Beam(EngravingItem* parent, Ms::Score* score);
     Beam(const Beam&);
     ~Beam();
 
@@ -97,7 +97,7 @@ public:
     EngravingObject* treeChild(int idx) const override;
     int treeChildCount() const override;
 
-    void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
+    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
     Beam* clone() const override { return new Beam(*this); }
     mu::PointF pagePos() const override;      ///< position in page coordinates
@@ -132,8 +132,8 @@ public:
         return std::find(_elements.begin(), _elements.end(), cr) != _elements.end();
     }
 
-    void add(Element*) override;
-    void remove(Element*) override;
+    void add(EngravingItem*) override;
+    void remove(EngravingItem*) override;
 
     void move(const mu::PointF&) override;
     void draw(mu::draw::Painter*) const override;
@@ -151,7 +151,7 @@ public:
     //!Note Unfortunately we have no FEATHERED_BEAM_MODE for now int Beam::Mode enum, so we'll handle this localy
     void setAsFeathered(const bool slower);
     bool acceptDrop(EditData&) const override;
-    Element* drop(EditData&) override;
+    EngravingItem* drop(EditData&) override;
 
     qreal growLeft() const { return _grow1; }
     qreal growRight() const { return _grow2; }

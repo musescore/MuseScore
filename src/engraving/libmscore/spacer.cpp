@@ -36,14 +36,14 @@ namespace Ms {
 //---------------------------------------------------------
 
 Spacer::Spacer(Measure* parent)
-    : Element(ElementType::SPACER, parent)
+    : EngravingItem(ElementType::SPACER, parent)
 {
     _spacerType = SpacerType::UP;
     _gap = 0.0;
 }
 
 Spacer::Spacer(const Spacer& s)
-    : Element(s)
+    : EngravingItem(s)
 {
     _gap        = s._gap;
     path        = s.path;
@@ -195,7 +195,7 @@ void Spacer::write(XmlWriter& xml) const
 {
     xml.stag(this);
     xml.tag("subtype", int(_spacerType));
-    Element::writeProperties(xml);
+    EngravingItem::writeProperties(xml);
     xml.tag("space", _gap / spatium());
     xml.etag();
 }
@@ -212,7 +212,7 @@ void Spacer::read(XmlReader& e)
             _spacerType = SpacerType(e.readInt());
         } else if (tag == "space") {
             _gap = e.readDouble() * spatium();
-        } else if (!Element::readProperties(e)) {
+        } else if (!EngravingItem::readProperties(e)) {
             e.unknown();
         }
     }
@@ -229,7 +229,7 @@ QVariant Spacer::getProperty(Pid propertyId) const
     case Pid::SPACE:
         return gap();
     default:
-        return Element::getProperty(propertyId);
+        return EngravingItem::getProperty(propertyId);
     }
 }
 
@@ -244,7 +244,7 @@ bool Spacer::setProperty(Pid propertyId, const QVariant& v)
         setGap(v.toDouble());
         break;
     default:
-        if (!Element::setProperty(propertyId, v)) {
+        if (!EngravingItem::setProperty(propertyId, v)) {
             return false;
         }
         break;
@@ -265,7 +265,7 @@ QVariant Spacer::propertyDefault(Pid id) const
     case Pid::SPACE:
         return QVariant(0.0);
     default:
-        return Element::propertyDefault(id);
+        return EngravingItem::propertyDefault(id);
     }
 }
 
@@ -273,7 +273,7 @@ QVariant Spacer::propertyDefault(Pid id) const
 //   scanElements
 //---------------------------------------------------------
 
-void Spacer::scanElements(void* data, void (* func)(void*, Element*), bool all)
+void Spacer::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
     if (all || (measure()->visible(staffIdx()) && score()->staff(staffIdx())->show())) {
         func(data, this);

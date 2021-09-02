@@ -107,7 +107,7 @@ void InputState::setDots(int n)
 //   note
 //---------------------------------------------------------
 
-Note* InputState::note(Element* e)
+Note* InputState::note(EngravingItem* e)
 {
     return e && e->isNote() ? toNote(e) : nullptr;
 }
@@ -116,7 +116,7 @@ Note* InputState::note(Element* e)
 //   chordRest
 //---------------------------------------------------------
 
-ChordRest* InputState::chordRest(Element* e)
+ChordRest* InputState::chordRest(EngravingItem* e)
 {
     if (!e) {
         return nullptr;
@@ -152,7 +152,7 @@ void InputState::update(Selection& selection)
     bool chordsAndRests = false;
 
     std::set<SymId> articulationSymbolIds;
-    for (Element* e : selection.elements()) {
+    for (EngravingItem* e : selection.elements()) {
         if (Note* n = note(e)) {
             if (n1) {
                 if (n->accidentalType() != n1->accidentalType()) {
@@ -210,7 +210,7 @@ void InputState::update(Selection& selection)
 
     setArticulationIds(joinArticulations(articulationSymbolIds));
 
-    Element* e = selection.element();
+    EngravingItem* e = selection.element();
     if (e == 0) {
         setTrack(selection.activeTrack());
         setSegment(selection.startSegment());
@@ -242,7 +242,7 @@ void InputState::update(Selection& selection)
 //   moveInputPos
 //---------------------------------------------------------
 
-void InputState::moveInputPos(Element* e)
+void InputState::moveInputPos(EngravingItem* e)
 {
     if (e == 0) {
         return;

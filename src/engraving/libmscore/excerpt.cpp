@@ -470,12 +470,12 @@ void MasterScore::deleteExcerpt(Excerpt* excerpt)
             // unlink elements and annotation
             for (Segment* s = partScore->firstSegmentMM(SegmentType::All); s; s = s->next1MM()) {
                 for (int track = eTrack - 1; track >= sTrack; --track) {
-                    Element* el = s->element(track);
+                    EngravingItem* el = s->element(track);
                     if (el) {
                         el->undoUnlink();
                     }
                 }
-                for (Element* e : s->annotations()) {
+                for (EngravingItem* e : s->annotations()) {
                     if (e->staffIdx() == staffIdx) {
                         e->undoUnlink();
                     }
@@ -598,7 +598,7 @@ static void cloneTuplets(ChordRest* ocr, ChordRest* ncr, Tuplet* ot, TupletMap& 
 //   processLinkedClone
 //---------------------------------------------------------
 
-void Excerpt::processLinkedClone(Element* ne, Score* score, int strack)
+void Excerpt::processLinkedClone(EngravingItem* ne, Score* score, int strack)
 {
     // reset offset as most likely it will not fit
     PropertyFlags f = ne->propertyFlags(Pid::OFFSET);
@@ -628,7 +628,7 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& sourceS
         } else if (mb->isTBox()) {
             nmb = new TBox(score->dummy()->system());
             Text* text = toTBox(mb)->text();
-            Element* ne = text->linkedClone();
+            EngravingItem* ne = text->linkedClone();
             ne->setScore(score);
             nmb->add(ne);
         } else if (mb->isMeasure()) {
@@ -666,12 +666,12 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& sourceS
                 Tremolo* tremolo = 0;
                 for (Segment* oseg = m->first(); oseg; oseg = oseg->next()) {
                     Segment* ns = nullptr;           //create segment later, on demand
-                    for (Element* e : oseg->annotations()) {
+                    for (EngravingItem* e : oseg->annotations()) {
                         if (e->generated()) {
                             continue;
                         }
                         if ((e->track() == srcTrack && strack != -1) || (e->systemFlag() && srcTrack == 0)) {
-                            Element* ne = e->linkedClone();
+                            EngravingItem* ne = e->linkedClone();
                             processLinkedClone(ne, score, strack);
                             if (!ns) {
                                 ns = nm->getSegment(oseg->segmentType(), oseg->tick());
@@ -702,17 +702,17 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& sourceS
 
                     for (int track : qAsConst(t)) {
                         //Clone KeySig TimeSig and Clefs if voice 1 of source staff is not mapped to a track
-                        Element* oef = oseg->element(trackZeroVoice(srcTrack));
+                        EngravingItem* oef = oseg->element(trackZeroVoice(srcTrack));
                         if (oef && !oef->generated() && (oef->isTimeSig() || oef->isKeySig())
                             && !(trackList.size() == (score->excerpt()->nstaves() * VOICES))) {
-                            Element* ne = oef->linkedClone();
+                            EngravingItem* ne = oef->linkedClone();
                             ne->setTrack(trackZeroVoice(track));
                             ne->setScore(score);
                             ns = nm->getSegment(oseg->segmentType(), oseg->tick());
                             ns->add(ne);
                         }
 
-                        Element* oe = oseg->element(srcTrack);
+                        EngravingItem* oe = oseg->element(srcTrack);
                         int adjustedBarlineSpan = 0;
                         if (srcTrack % VOICES == 0 && oseg->segmentType() == SegmentType::BarLine) {
                             // mid-measure barline segment
@@ -746,7 +746,7 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& sourceS
                         }
 
                         if (oe && !oe->generated()) {
-                            Element* ne;
+                            EngravingItem* ne;
                             ne = oe->linkedClone();
                             ne->setTrack(track);
 
@@ -880,7 +880,7 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& sourceS
         }
 
         nmb->linkTo(mb);
-        for (Element* e : mb->el()) {
+        for (EngravingItem* e : mb->el()) {
             if (e->isLayoutBreak()) {
                 LayoutBreak::Type st = toLayoutBreak(e)->layoutBreakType();
                 if (st == LayoutBreak::Type::PAGE || st == LayoutBreak::Type::LINE) {
@@ -901,7 +901,7 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& sourceS
                 }
             }
 
-            Element* ne;
+            EngravingItem* ne;
             // link text - title, subtitle, also repeats (eg, coda/segno)
             // measure numbers are not stored in this list, but they should not be cloned anyhow
             // layout breaks other than section were skipped above,
@@ -1041,14 +1041,14 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
             int dstTrack = dstStaffIdx * VOICES + (srcTrack - sTrack);
             Tremolo* tremolo = 0;
             for (Segment* seg = m->first(); seg; seg = seg->next()) {
-                Element* oe = seg->element(srcTrack);
+                EngravingItem* oe = seg->element(srcTrack);
                 if (oe == 0 || oe->generated()) {
                     continue;
                 }
                 if (oe->isTimeSig()) {
                     continue;
                 }
-                Element* ne = 0;
+                EngravingItem* ne = 0;
                 if (oe->isClef()) {
                     // only clone clef if it matches staff group and does not exists yet
                     Clef* clef = toClef(oe);
@@ -1090,7 +1090,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
                     qDeleteAll(ncr->lyrics());
                     ncr->lyrics().clear();
 
-                    for (Element* e : seg->annotations()) {
+                    for (EngravingItem* e : seg->annotations()) {
                         if (!e) {
                             qDebug("cloneStaff: corrupted annotation found.");
                             continue;
@@ -1116,7 +1116,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
                         {
                             // Fermatas are special since the belong to a segment but should
                             // be created and linked on each staff.
-                            Element* ne1 = e->linkedClone();
+                            EngravingItem* ne1 = e->linkedClone();
                             ne1->setTrack(dstTrack);
                             ne1->setParent(seg);
                             ne1->setScore(score);
@@ -1127,7 +1127,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff)
                             if (toTextLine(e)->systemFlag()) {
                                 continue;
                             }
-                            Element* ne1 = e->clone();
+                            EngravingItem* ne1 = e->clone();
                             ne1->setTrack(dstTrack);
                             ne1->setParent(seg);
                             ne1->setScore(score);
@@ -1298,10 +1298,10 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
             int dstTrack = map.value(srcTrack);
             for (Segment* oseg = m->first(); oseg; oseg = oseg->next()) {
                 Segment* ns = nm->getSegment(oseg->segmentType(), oseg->tick());
-                Element* oef = oseg->element(trackZeroVoice(srcTrack));
+                EngravingItem* oef = oseg->element(trackZeroVoice(srcTrack));
                 if (oef && !oef->generated() && (oef->isTimeSig() || oef->isKeySig())) {
                     if (!firstVoiceVisible) {
-                        Element* ne = oef->linkedClone();
+                        EngravingItem* ne = oef->linkedClone();
                         ne->setTrack(trackZeroVoice(dstTrack));
                         ne->setParent(ns);
                         ne->setScore(score);
@@ -1309,12 +1309,12 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                     }
                 }
 
-                Element* oe = oseg->element(srcTrack);
+                EngravingItem* oe = oseg->element(srcTrack);
                 if (oe == 0 || oe->generated()) {
                     continue;
                 }
 
-                Element* ne = oe->linkedClone();
+                EngravingItem* ne = oe->linkedClone();
                 ne->setTrack(dstTrack);
                 ne->setParent(ns);
                 ne->setScore(score);
@@ -1337,7 +1337,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                         nt->add(ncr);
                     }
 
-                    for (Element* e : oseg->annotations()) {
+                    for (EngravingItem* e : oseg->annotations()) {
                         if (e->generated() || e->systemFlag()) {
                             continue;
                         }
@@ -1359,7 +1359,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                             if (e->isTextLine() && toTextLine(e)->systemFlag()) {
                                 continue;
                             }
-                            Element* ne1 = e->clone();
+                            EngravingItem* ne1 = e->clone();
                             ne1->setTrack(dstTrack);
                             ne1->setParent(ns);
                             ne1->setScore(score);

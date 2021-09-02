@@ -88,7 +88,7 @@ public:
     OttavaSegment* clone() const override { return new OttavaSegment(*this); }
     Ottava* ottava() const { return (Ottava*)spanner(); }
     void layout() override;
-    Element* propertyDelegate(Pid) override;
+    EngravingItem* propertyDelegate(Pid) override;
 };
 
 //---------------------------------------------------------
@@ -109,7 +109,7 @@ protected:
     friend class OttavaSegment;
 
 public:
-    Ottava(Element* parent);
+    Ottava(EngravingItem* parent);
     Ottava(const Ottava&);
 
     Ottava* clone() const override { return new Ottava(*this); }

@@ -52,9 +52,9 @@ public:
     virtual void write(XmlWriter&) const override;
     using VBox::write;
     virtual void read(XmlReader&) override;
-    virtual Element* drop(EditData&) override;
-    virtual void add(Element* e) override;
-    virtual void remove(Element* el) override;
+    virtual EngravingItem* drop(EditData&) override;
+    virtual void add(EngravingItem* e) override;
+    virtual void remove(EngravingItem* el) override;
 
     virtual void layout() override;
     virtual QString accessibleExtraInfo() const override;

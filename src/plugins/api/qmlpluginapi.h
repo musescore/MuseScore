@@ -37,7 +37,7 @@
 #include "modularity/ioc.h"
 
 namespace Ms {
-class Element;
+class EngravingItem;
 class MScore;
 class MuseScoreCore;
 
@@ -47,7 +47,7 @@ class MuseScoreCore;
  */
 
 namespace PluginAPI {
-class Element;
+class EngravingItem;
 class FractionWrapper;
 class MsProcess;
 class Score;
@@ -114,14 +114,14 @@ class PluginAPI : public Ms::QmlPlugin
 
     // Should be initialized in qmlpluginapi.cpp
     /// Contains Ms::ElementType enumeration values
-    DECLARE_API_ENUM(Element,          elementTypeEnum,        Ms::ElementType)
+    DECLARE_API_ENUM(EngravingItem,          elementTypeEnum,        Ms::ElementType)
     /// Contains Ms::AccidentalType enumeration values
     DECLARE_API_ENUM(Accidental,       accidentalTypeEnum,     Ms::AccidentalType)
     /// Contains Ms::Beam::Mode enumeration values
     DECLARE_API_ENUM(Beam,             beamModeEnum,           Ms::Beam::Mode)
     /// Contains Ms::Placement enumeration values
     /// \note In MuseScore 2.X this enumeration was available as
-    /// Element.ABOVE and Element.BELOW.
+    /// EngravingItem.ABOVE and EngravingItem.BELOW.
     DECLARE_API_ENUM(Placement,        placementEnum,          Ms::Placement)
     /// Contains Ms::GlissandoType enumeration values
     DECLARE_API_ENUM(Glissando,        glissandoTypeEnum,      Ms::GlissandoType)             // was probably absent in 2.X
@@ -235,7 +235,7 @@ signals:
      *     onScoreStateChanged: {
      *         if (state.selectionChanged) {
      *             var el = curScore ? curScore.selection.elements[0] : null;
-     *             if (el && el.type == Element.NOTE)
+     *             if (el && el.type == EngravingItem.NOTE)
      *                 pitchLabel.text = el.pitch;
      *             else
      *                 pitchLabel.text = "no note selected";
@@ -263,8 +263,8 @@ public:
     /// \endcond
 
     Q_INVOKABLE Ms::PluginAPI::Score* newScore(const QString& name, const QString& part, int measures);
-    Q_INVOKABLE Ms::PluginAPI::Element* newElement(int);
-    Q_INVOKABLE void removeElement(Ms::PluginAPI::Element* wrapped);
+    Q_INVOKABLE Ms::PluginAPI::EngravingItem* newElement(int);
+    Q_INVOKABLE void removeElement(Ms::PluginAPI::EngravingItem* wrapped);
     Q_INVOKABLE void cmd(const QString&);
     /** \cond PLUGIN_API \private \endcond */
     Q_INVOKABLE Ms::PluginAPI::MsProcess* newQProcess();

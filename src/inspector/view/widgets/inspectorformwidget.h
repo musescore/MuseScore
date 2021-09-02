@@ -36,7 +36,7 @@ public:
     explicit InspectorFormWidget(QQmlEngine* qmlEngine, QWidget* parent = nullptr);
 
 public slots:
-    void onSelectionChanged(const QList<Ms::Element*>& elementList);
+    void onSelectionChanged(const QList<Ms::EngravingItem*>& elementList);
 
 signals:
     void layoutUpdateRequested();

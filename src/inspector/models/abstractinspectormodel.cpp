@@ -202,7 +202,7 @@ void AbstractInspectorModel::onPropertyValueChanged(const Ms::Pid pid, const QVa
 
     QVariant convertedValue;
 
-    for (Ms::Element* element : m_elementList) {
+    for (Ms::EngravingItem* element : m_elementList) {
         IF_ASSERT_FAILED(element) {
             continue;
         }
@@ -249,7 +249,7 @@ Ms::Sid AbstractInspectorModel::styleIdByPropertyId(const Ms::Pid pid) const
 {
     Ms::Sid result = Ms::Sid::NOSTYLE;
 
-    for (const Ms::Element* element : m_elementList) {
+    for (const Ms::EngravingItem* element : m_elementList) {
         result = element->getPropertyStyle(pid);
 
         if (result != Ms::Sid::NOSTYLE) {
@@ -282,7 +282,7 @@ void AbstractInspectorModel::onResetToDefaults(const QList<Ms::Pid>& pidList)
 
     beginCommand();
 
-    for (Ms::Element* element : m_elementList) {
+    for (Ms::EngravingItem* element : m_elementList) {
         IF_ASSERT_FAILED(element) {
             continue;
         }
@@ -300,7 +300,7 @@ void AbstractInspectorModel::onResetToDefaults(const QList<Ms::Pid>& pidList)
 }
 
 QVariant AbstractInspectorModel::valueToElementUnits(const Ms::Pid& pid, const QVariant& value,
-                                                     const Ms::Element* element) const
+                                                     const Ms::EngravingItem* element) const
 {
     switch (Ms::propertyType(pid)) {
     case Ms::P_TYPE::POINT_SP:
@@ -351,7 +351,7 @@ QVariant AbstractInspectorModel::valueToElementUnits(const Ms::Pid& pid, const Q
 }
 
 QVariant AbstractInspectorModel::valueFromElementUnits(const Ms::Pid& pid, const QVariant& value,
-                                                       const Ms::Element* element) const
+                                                       const Ms::EngravingItem* element) const
 {
     switch (Ms::propertyType(pid)) {
     case Ms::P_TYPE::POINT_SP:
@@ -439,7 +439,7 @@ void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem, std::f
 
     bool isUndefined = false;
 
-    for (const Ms::Element* element : m_elementList) {
+    for (const Ms::EngravingItem* element : m_elementList) {
         IF_ASSERT_FAILED(element) {
             continue;
         }

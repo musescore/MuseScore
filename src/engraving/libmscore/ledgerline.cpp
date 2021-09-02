@@ -38,7 +38,7 @@ namespace Ms {
 //---------------------------------------------------------
 
 LedgerLine::LedgerLine(Score* s)
-    : Element(ElementType::LEDGER_LINE, s)
+    : EngravingItem(ElementType::LEDGER_LINE, s)
 {
     setSelectable(false);
     _width      = 0.;
@@ -160,12 +160,12 @@ bool LedgerLine::readProperties(XmlReader& e)
 //   scanElements
 //---------------------------------------------------------
 
-void LedgerLine::scanElements(void* data, void (* func)(void*, Element*), bool all)
+void LedgerLine::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
     Staff* st = chord()->staff();
     if (st && !st->showLedgerLines(tick())) {
         return;
     }
-    Element::scanElements(data, func, all);
+    EngravingItem::scanElements(data, func, all);
 }
 }

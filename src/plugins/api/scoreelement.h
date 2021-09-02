@@ -55,7 +55,7 @@ class ScoreElement : public QObject
 {
     Q_OBJECT
     /**
-     * Type of this element. See PluginAPI::PluginAPI::Element
+     * Type of this element. See PluginAPI::PluginAPI::EngravingItem
      * for the list of possible values.
      */
     Q_PROPERTY(int type READ type)

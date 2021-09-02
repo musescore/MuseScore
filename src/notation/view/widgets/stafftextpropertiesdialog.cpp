@@ -65,7 +65,7 @@ StaffTextPropertiesDialog::StaffTextPropertiesDialog(QWidget* parent)
 
     const INotationPtr notation = globalContext()->currentNotation();
     const INotationInteractionPtr interaction = notation ? notation->interaction() : nullptr;
-    Element* element = interaction ? interaction->hitElementContext().element : nullptr;
+    EngravingItem* element = interaction ? interaction->hitElementContext().element : nullptr;
     StaffTextBase* st = element && element->isStaffTextBase() ? Ms::toStaffTextBase(element) : nullptr;
 
     if (!st) {

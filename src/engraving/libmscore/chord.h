@@ -96,7 +96,7 @@ class Chord final : public ChordRest
     qreal downPos() const override;
     qreal centerX() const;
     void addLedgerLines();
-    void processSiblings(std::function<void(Element*)> func) const;
+    void processSiblings(std::function<void(EngravingItem*)> func) const;
 
     void layoutPitched();
     void layoutTablature();
@@ -114,7 +114,7 @@ public:
     int treeChildCount() const override;
 
     Chord* clone() const override { return new Chord(*this, false); }
-    Element* linkedClone() override { return new Chord(*this, true); }
+    EngravingItem* linkedClone() override { return new Chord(*this, true); }
     void undoUnlink() override;
 
     void setScore(Score* s) override;
@@ -124,7 +124,7 @@ public:
     void write(XmlWriter& xml) const override;
     void read(XmlReader&) override;
     bool readProperties(XmlReader&) override;
-    Element* drop(EditData&) override;
+    EngravingItem* drop(EditData&) override;
 
     void setColor(const mu::draw::Color& c) override;
     void setStemDirection(Direction d) { _stemDirection = d; }
@@ -189,9 +189,9 @@ public:
     Hook* hook() const { return _hook; }
 
     //@ add an element to the Chord
-    Q_INVOKABLE void add(Ms::Element*) override;
+    Q_INVOKABLE void add(Ms::EngravingItem*) override;
     //@ remove the element from the Chord
-    Q_INVOKABLE void remove(Ms::Element*) override;
+    Q_INVOKABLE void remove(Ms::EngravingItem*) override;
 
     Note* selectedNote() const;
     void layout() override;
@@ -249,11 +249,11 @@ public:
 
     Chord* nextTiedChord(bool backwards = false, bool sameSize = true);
 
-    Element* nextElement() override;
-    Element* prevElement() override;
-    Element* nextSegmentElement() override;
-    Element* lastElementBeforeSegment();
-    Element* prevSegmentElement() override;
+    EngravingItem* nextElement() override;
+    EngravingItem* prevElement() override;
+    EngravingItem* nextSegmentElement() override;
+    EngravingItem* lastElementBeforeSegment();
+    EngravingItem* prevSegmentElement() override;
     QString accessibleExtraInfo() const override;
 
     Shape shape() const override;

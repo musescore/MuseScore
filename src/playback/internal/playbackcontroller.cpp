@@ -183,7 +183,7 @@ Notification PlaybackController::currentTrackSequenceIdChanged() const
     return m_currentSequenceIdChanged;
 }
 
-void PlaybackController::playElement(const notation::Element* element)
+void PlaybackController::playElement(const notation::EngravingItem* element)
 {
     if (!configuration()->playNotesWhenEditing()) {
         return;

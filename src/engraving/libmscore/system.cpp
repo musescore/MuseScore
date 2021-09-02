@@ -104,7 +104,7 @@ void SysStaff::restoreLayout()
 //---------------------------------------------------------
 
 System::System(Page* parent)
-    : Element(ElementType::SYSTEM, parent)
+    : EngravingItem(ElementType::SYSTEM, parent)
 {
 }
 
@@ -1021,7 +1021,7 @@ int System::searchStaff(qreal y, int preferredStaff /* = -1 */, qreal spacingFac
 //   add
 //---------------------------------------------------------
 
-void System::add(Element* el)
+void System::add(EngravingItem* el)
 {
     if (!el) {
         return;
@@ -1100,7 +1100,7 @@ void System::add(Element* el)
 //   remove
 //---------------------------------------------------------
 
-void System::remove(Element* el)
+void System::remove(EngravingItem* el)
 {
     switch (el->type()) {
     case ElementType::INSTRUMENT_NAME:
@@ -1160,7 +1160,7 @@ void System::remove(Element* el)
 //   change
 //---------------------------------------------------------
 
-void System::change(Element* o, Element* n)
+void System::change(EngravingItem* o, EngravingItem* n)
 {
     remove(o);
     add(n);
@@ -1234,7 +1234,7 @@ MeasureBase* System::nextMeasure(const MeasureBase* m) const
 //   scanElements
 //---------------------------------------------------------
 
-void System::scanElements(void* data, void (* func)(void*, Element*), bool all)
+void System::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
     EngravingObject::scanElements(data, func, all);
     for (SpannerSegment* ss : qAsConst(_spannerSegments)) {
@@ -1312,7 +1312,7 @@ void System::read(XmlReader& e)
 //   nextSegmentElement
 //---------------------------------------------------------
 
-Element* System::nextSegmentElement()
+EngravingItem* System::nextSegmentElement()
 {
     Measure* m = firstMeasure();
     if (m) {
@@ -1328,10 +1328,10 @@ Element* System::nextSegmentElement()
 //   prevSegmentElement
 //---------------------------------------------------------
 
-Element* System::prevSegmentElement()
+EngravingItem* System::prevSegmentElement()
 {
     Segment* seg = firstMeasure()->first();
-    Element* re = 0;
+    EngravingItem* re = 0;
     while (!re) {
         seg = seg->prev1MM();
         if (!seg) {
@@ -1643,7 +1643,7 @@ qreal System::firstNoteRestSegmentX(bool leading)
                             if (!staff(i)->show()) {
                                 continue;
                             }
-                            Element* e = seg->element(i * VOICES);
+                            EngravingItem* e = seg->element(i * VOICES);
                             if (e && e->addToSkyline()) {
                                 width = qMax(width, e->pos().x() + e->bbox().right());
                             }

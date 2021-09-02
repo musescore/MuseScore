@@ -94,7 +94,7 @@ void TestSelectionRangeDelete::verifyNoDelete(MasterScore* score, size_t spanner
 //   chordRestAtBeat
 //---------------------------------------------------------
 
-Element* chordRestAtBeat(Score* score, int beat, int half = 0)
+EngravingItem* chordRestAtBeat(Score* score, int beat, int half = 0)
 {
     qDebug("Chordrest at beat %i,%i", beat, half);
     int division = MScore::division;

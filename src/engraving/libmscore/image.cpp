@@ -49,7 +49,7 @@ static bool defaultSizeIsSpatium    = true;
 //   Image
 //---------------------------------------------------------
 
-Image::Image(Element* parent)
+Image::Image(EngravingItem* parent)
     : BSymbol(ElementType::IMAGE, parent, ElementFlag::MOVABLE)
 {
     imageType        = ImageType::NONE;
@@ -608,7 +608,7 @@ QVariant Image::getProperty(Pid propertyId) const
     case Pid::SIZE_IS_SPATIUM:
         return sizeIsSpatium();
     default:
-        return Element::getProperty(propertyId);
+        return EngravingItem::getProperty(propertyId);
     }
 }
 
@@ -645,7 +645,7 @@ bool Image::setProperty(Pid propertyId, const QVariant& v)
     }
     break;
     default:
-        rv = Element::setProperty(propertyId, v);
+        rv = EngravingItem::setProperty(propertyId, v);
         break;
     }
     setGenerated(false);
@@ -676,7 +676,7 @@ QVariant Image::propertyDefault(Pid id) const
     case Pid::SIZE_IS_SPATIUM:
         return defaultSizeIsSpatium;
     default:
-        return Element::propertyDefault(id);
+        return EngravingItem::propertyDefault(id);
     }
 }
 }

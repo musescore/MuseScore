@@ -42,7 +42,7 @@ public:
     MeasureRepeat& operator=(const MeasureRepeat&) = delete;
 
     MeasureRepeat* clone() const override { return new MeasureRepeat(*this); }
-    Element* linkedClone() override { return Element::linkedClone(); }
+    EngravingItem* linkedClone() override { return EngravingItem::linkedClone(); }
 
     void setNumMeasures(int n) { m_numMeasures = n; }
     int numMeasures() const { return m_numMeasures; }

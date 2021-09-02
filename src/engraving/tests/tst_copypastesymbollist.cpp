@@ -121,7 +121,7 @@ void TestCopyPasteSymbolList::copypaste(const char* name, ElementType type)
     MasterScore* score = readScore(CPSYMBOLLIST_DATA_DIR + QString("copypastesymbollist-%1.mscx").arg(name));
     // score->doLayout();
 
-    Element* el = Element::create(type, score->dummy());
+    EngravingItem* el = EngravingItem::create(type, score->dummy());
     score->selectSimilar(el, false);
     delete el;
 
@@ -143,7 +143,7 @@ void TestCopyPasteSymbolList::copypastepart(const char* name, ElementType type)
     score->select(score->firstMeasure());
     score->select(score->firstMeasure()->nextMeasure(), SelectType::RANGE);
 
-    Element* el = Element::create(type, score->dummy());
+    EngravingItem* el = EngravingItem::create(type, score->dummy());
     score->selectSimilarInRange(el);
     delete el;
 
@@ -165,7 +165,7 @@ void TestCopyPasteSymbolList::copypastedifferentvoice(const char* name, ElementT
     score->select(score->firstMeasure());
     score->select(score->firstMeasure()->nextMeasure(), SelectType::RANGE, 1);
 
-    Element* el = Element::create(type, score->dummy());
+    EngravingItem* el = EngravingItem::create(type, score->dummy());
     score->selectSimilarInRange(el);
     delete el;
 

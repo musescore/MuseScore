@@ -91,7 +91,7 @@ void NotationMidiInput::onNoteReceived(const midi::Event& e)
 
     // holding shift while inputting midi will add the new pitch to the prior existing chord
     if (QGuiApplication::keyboardModifiers() & Qt::ShiftModifier) {
-        Ms::Element* cr = is.lastSegment()->element(is.track());
+        Ms::EngravingItem* cr = is.lastSegment()->element(is.track());
         if (cr && cr->isChord()) {
             inputEv.chord = true;
         }

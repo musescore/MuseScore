@@ -23,7 +23,7 @@
 #ifndef __CHORDLINE_H__
 #define __CHORDLINE_H__
 
-#include "element.h"
+#include "engravingitem.h"
 #include "infrastructure/draw/painterpath.h"
 
 namespace Ms {
@@ -41,7 +41,7 @@ enum class ChordLineType : char {
 ///    implements fall, doit, plop, bend
 //---------------------------------------------------------
 
-class ChordLine final : public Element
+class ChordLine final : public EngravingItem
 {
     ChordLineType _chordLineType;
     bool _straight;
@@ -80,7 +80,7 @@ public:
     QVariant propertyDefault(Pid) const override;
     Pid propertyId(const QStringRef& xmlName) const override;
 
-    Element::EditBehavior normalModeEditBehavior() const override { return Element::EditBehavior::Edit; }
+    EngravingItem::EditBehavior normalModeEditBehavior() const override { return EngravingItem::EditBehavior::Edit; }
     int gripsCount() const override { return _straight ? 1 : static_cast<int>(path.elementCount()); }
     Grip initialEditModeGrip() const override { return Grip(gripsCount() - 1); }
     Grip defaultGrip() const override { return initialEditModeGrip(); }

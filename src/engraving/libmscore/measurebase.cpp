@@ -42,13 +42,13 @@ namespace Ms {
 //---------------------------------------------------------
 
 MeasureBase::MeasureBase(const ElementType& type, System* system)
-    : Element(type, system)
+    : EngravingItem(type, system)
 {
     setIrregular(true);
 }
 
 MeasureBase::MeasureBase(const MeasureBase& m)
-    : Element(m)
+    : EngravingItem(m)
 {
     _next     = m._next;
     _prev     = m._prev;
@@ -56,7 +56,7 @@ MeasureBase::MeasureBase(const MeasureBase& m)
     _no       = m._no;
     _noOffset = m._noOffset;
 
-    for (Element* e : m._el) {
+    for (EngravingItem* e : m._el) {
         add(e->clone());
     }
 }
@@ -88,8 +88,8 @@ ElementList MeasureBase::takeElements()
 
 void MeasureBase::setScore(Score* score)
 {
-    Element::setScore(score);
-    for (Element* e : _el) {
+    EngravingItem::setScore(score);
+    for (EngravingItem* e : _el) {
         e->setScore(score);
     }
 }
@@ -105,10 +105,10 @@ MeasureBase::~MeasureBase()
 
 //---------------------------------------------------------
 //   add
-///   Add new Element \a el to MeasureBase
+///   Add new EngravingItem \a el to MeasureBase
 //---------------------------------------------------------
 
-void MeasureBase::add(Element* e)
+void MeasureBase::add(EngravingItem* e)
 {
     if (e->parent() != this) {
         e->setParent(this);
@@ -153,10 +153,10 @@ void MeasureBase::add(Element* e)
 
 //---------------------------------------------------------
 //   remove
-///   Remove Element \a el from MeasureBase.
+///   Remove EngravingItem \a el from MeasureBase.
 //---------------------------------------------------------
 
-void MeasureBase::remove(Element* el)
+void MeasureBase::remove(EngravingItem* el)
 {
     if (el->isLayoutBreak()) {
         LayoutBreak* lb = toLayoutBreak(el);
@@ -287,7 +287,7 @@ void MeasureBase::layout()
 {
     int breakCount = 0;
 
-    for (Element* element : _el) {
+    for (EngravingItem* element : _el) {
         if (!score()->tagIsValid(element->tag())) {
             continue;
         }
@@ -388,7 +388,7 @@ QVariant MeasureBase::getProperty(Pid id) const
     case Pid::IRREGULAR:
         return irregular();
     default:
-        return Element::getProperty(id);
+        return EngravingItem::getProperty(id);
     }
 }
 
@@ -415,7 +415,7 @@ bool MeasureBase::setProperty(Pid id, const QVariant& value)
         setIrregular(value.toBool());
         break;
     default:
-        if (!Element::setProperty(id, value)) {
+        if (!EngravingItem::setProperty(id, value)) {
             return false;
         }
         break;
@@ -439,7 +439,7 @@ QVariant MeasureBase::propertyDefault(Pid propertyId) const
     default:
         break;
     }
-    return Element::propertyDefault(propertyId);
+    return EngravingItem::propertyDefault(propertyId);
 }
 
 //---------------------------------------------------------
@@ -504,8 +504,8 @@ void MeasureBase::undoSetBreak(bool v, LayoutBreak::Type type)
 void MeasureBase::cleanupLayoutBreaks(bool undo)
 {
     // remove unneeded layout breaks
-    std::vector<Element*> toDelete;
-    for (Element* e : el()) {
+    std::vector<EngravingItem*> toDelete;
+    for (EngravingItem* e : el()) {
         if (e->isLayoutBreak()) {
             switch (toLayoutBreak(e)->layoutBreakType()) {
             case LayoutBreak::Type::LINE:
@@ -531,7 +531,7 @@ void MeasureBase::cleanupLayoutBreaks(bool undo)
             }
         }
     }
-    for (Element* e : toDelete) {
+    for (EngravingItem* e : toDelete) {
         if (undo) {
             score()->undoRemoveElement(e);
         } else {
@@ -575,8 +575,8 @@ MeasureBase* MeasureBase::prevMM() const
 
 void MeasureBase::writeProperties(XmlWriter& xml) const
 {
-    Element::writeProperties(xml);
-    for (const Element* e : el()) {
+    EngravingItem::writeProperties(xml);
+    for (const EngravingItem* e : el()) {
         e->write(xml);
     }
 }
@@ -626,7 +626,7 @@ bool MeasureBase::readProperties(XmlReader& e)
         stc->setParent(this);
         stc->read(e);
         add(stc);
-    } else if (Element::readProperties(e)) {
+    } else if (EngravingItem::readProperties(e)) {
     } else {
         return false;
     }
@@ -680,7 +680,7 @@ int MeasureBase::measureIndex() const
 LayoutBreak* MeasureBase::sectionBreakElement() const
 {
     if (sectionBreak()) {
-        for (Element* e : el()) {
+        for (EngravingItem* e : el()) {
             if (e->isLayoutBreak() && toLayoutBreak(e)->isSectionBreak()) {
                 return toLayoutBreak(e);
             }

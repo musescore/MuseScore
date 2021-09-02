@@ -365,7 +365,7 @@ void TestBarline::barline06()
 ///    helper for barline179726()
 //---------------------------------------------------------
 
-void dropNormalBarline(Element* e)
+void dropNormalBarline(EngravingItem* e)
 {
     EditData dropData(0);
     BarLine* barLine = new BarLine(e->score()->dummy()->segment());

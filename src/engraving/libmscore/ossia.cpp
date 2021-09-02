@@ -27,13 +27,13 @@ namespace Ms {
 //   Ossia
 //---------------------------------------------------------
 
-Ossia::Ossia(Element* parent)
-    : Element(ElementType::OSSIA, parent)
+Ossia::Ossia(EngravingItem* parent)
+    : EngravingItem(ElementType::OSSIA, parent)
 {
 }
 
 Ossia::Ossia(const Ossia& ossia)
-    : Element(ossia)
+    : EngravingItem(ossia)
 {
 }
 }

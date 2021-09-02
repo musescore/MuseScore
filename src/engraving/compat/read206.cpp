@@ -94,7 +94,7 @@ using namespace mu::engraving;
 using namespace mu::engraving::compat;
 using namespace Ms;
 
-static void readText206(XmlReader& e, TextBase* t, Element* be);
+static void readText206(XmlReader& e, TextBase* t, EngravingItem* be);
 
 //---------------------------------------------------------
 //   excessTextStyles206
@@ -469,7 +469,7 @@ void Read206::readAccidental206(Accidental* a, XmlReader& e)
             }
         } else if (tag == "small") {
             a->setSmall(e.readInt());
-        } else if (a->Element::readProperties(e)) {
+        } else if (a->EngravingItem::readProperties(e)) {
         } else {
             e.unknown();
         }
@@ -854,7 +854,7 @@ static void readNote(Note* note, XmlReader& e)
 //   adjustPlacement
 //---------------------------------------------------------
 
-static void adjustPlacement(Element* e)
+static void adjustPlacement(EngravingItem* e)
 {
     if (!e || !e->staff()) {
         return;
@@ -862,7 +862,7 @@ static void adjustPlacement(Element* e)
 
     // element to use to determine placement
     // for spanners, choose first segment
-    Element* ee;
+    EngravingItem* ee;
     Spanner* spanner;
     if (e->isSpanner()) {
         spanner = toSpanner(e);
@@ -1088,7 +1088,7 @@ bool Read206::readNoteProperties206(Note* note, XmlReader& e)
         e.readNext();
     } else if (tag == "TextLine"
                || tag == "Glissando") {
-        Spanner* sp = toSpanner(Element::name2Element(tag, note->score()->dummy()));
+        Spanner* sp = toSpanner(EngravingItem::name2Element(tag, note->score()->dummy()));
         // check this is not a lower-to-higher cross-staff spanner we already got
         int id = e.intAttribute("id");
         Spanner* placeholder = e.findSpanner(id);
@@ -1123,8 +1123,8 @@ bool Read206::readNoteProperties206(Note* note, XmlReader& e)
             adjustPlacement(sp);
         }
     } else if (tag == "offset") {
-        note->Element::readProperties(e);
-    } else if (note->Element::readProperties(e)) {
+        note->EngravingItem::readProperties(e);
+    } else if (note->EngravingItem::readProperties(e)) {
     } else {
         return false;
     }
@@ -1156,7 +1156,7 @@ static QString ReadStyleName206(QString xmlTag)
 //    before setting anything else.
 //---------------------------------------------------------
 
-static bool readTextPropertyStyle206(QString xmlTag, const XmlReader& e, TextBase* t, Element* be)
+static bool readTextPropertyStyle206(QString xmlTag, const XmlReader& e, TextBase* t, EngravingItem* be)
 {
     QString s = ReadStyleName206(xmlTag);
 
@@ -1351,7 +1351,7 @@ void TextReaderContext206::copyProperties(XmlReader& original, XmlReader& derive
 //   readText206
 //---------------------------------------------------------
 
-static void readText206(XmlReader& e, TextBase* t, Element* be)
+static void readText206(XmlReader& e, TextBase* t, EngravingItem* be)
 {
     TextReaderContext206 ctx(e);
     readTextPropertyStyle206(ctx.tag(), e, t, be);
@@ -1533,7 +1533,7 @@ bool Read206::readDurationProperties206(XmlReader& e, DurationElement* de)
             }
         }
         return true;
-    } else if (de->Element::readProperties(e)) {
+    } else if (de->EngravingItem::readProperties(e)) {
         return true;
     }
     return false;
@@ -1628,7 +1628,7 @@ bool Read206::readChordRestProperties206(XmlReader& e, ChordRest* ch)
         }
         ch->setBeamMode(bm);
     } else if (tag == "Articulation") {
-        Element* el = readArticulation(ch, e);
+        EngravingItem* el = readArticulation(ch, e);
         if (el->isFermata()) {
             ch->segment()->add(el);
         } else {
@@ -2196,7 +2196,7 @@ void Read206::readTextLine206(XmlReader& e, TextLineBase* tlb)
 //    for backwards compatibility
 //---------------------------------------------------------
 
-static void setFermataPlacement(Element* el, ArticulationAnchor anchor, Direction direction)
+static void setFermataPlacement(EngravingItem* el, ArticulationAnchor anchor, Direction direction)
 {
     if (direction == Direction::UP) {
         el->setPlacement(Placement::ABOVE);
@@ -2222,9 +2222,9 @@ static void setFermataPlacement(Element* el, ArticulationAnchor anchor, Directio
     }
 }
 
-Element* Read206::readArticulation(Element* parent, XmlReader& e)
+EngravingItem* Read206::readArticulation(EngravingItem* parent, XmlReader& e)
 {
-    Element* el = nullptr;
+    EngravingItem* el = nullptr;
     SymId sym = SymId::fermataAbove;            // default -- backward compatibility (no type = ufermata in 1.2)
     ArticulationAnchor anchor  = ArticulationAnchor::TOP_STAFF;
     Direction direction = Direction::AUTO;
@@ -2368,7 +2368,7 @@ static bool readSlurTieProperties(XmlReader& e, SlurTie* st)
         SlurTieSegment* s = st->newSlurTieSegment();
         s->read(e);
         st->add(s);
-    } else if (!st->Element::readProperties(e)) {
+    } else if (!st->EngravingItem::readProperties(e)) {
         return false;
     }
     return true;
@@ -2491,7 +2491,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                 } else if (t == "spanToOffset") {
                     bl->setSpanTo(e.readInt());
                 } else if (t == "Articulation") {
-                    Element* el = Read206::readArticulation(bl, e);
+                    EngravingItem* el = Read206::readArticulation(bl, e);
                     if (el->isFermata()) {
                         if (el->placement() == Placement::ABOVE) {
                             fermataAbove = toFermata(el);
@@ -2502,7 +2502,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                     } else {
                         bl->add(el);
                     }
-                } else if (!bl->Element::readProperties(e)) {
+                } else if (!bl->EngravingItem::readProperties(e)) {
                     e.unknown();
                 }
             }
@@ -2644,7 +2644,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                    || tag == "Trill"
                    || tag == "TextLine"
                    || tag == "Volta") {
-            Spanner* sp = toSpanner(Element::name2Element(tag, score->dummy()));
+            Spanner* sp = toSpanner(EngravingItem::name2Element(tag, score->dummy()));
             sp->setTrack(e.track());
             sp->setTick(e.tick());
             sp->eraseSpannerSegments();
@@ -2851,7 +2851,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                    || tag == "FiguredBass"
                    ) {
             segment = m->getSegment(SegmentType::ChordRest, e.tick());
-            Element* el = Element::name2Element(tag, segment);
+            EngravingItem* el = EngravingItem::name2Element(tag, segment);
             // hack - needed because tick tags are unreliable in 1.3 scores
             // for symbols attached to anything but a measure
             el->setTrack(e.track());
@@ -2870,12 +2870,12 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             readTempoText(tt, e);
             segment->add(tt);
         } else if (tag == "Marker" || tag == "Jump") {
-            Element* el = Element::name2Element(tag, score->dummy());
+            EngravingItem* el = EngravingItem::name2Element(tag, score->dummy());
             el->setTrack(e.track());
             if (tag == "Marker") {
                 Marker* ma = toMarker(el);
                 readMarker(ma, e);
-                Element* markerEl = toElement(ma);
+                EngravingItem* markerEl = toEngravingItem(ma);
                 m->add(markerEl);
             } else {
                 el->read(e);
@@ -2886,7 +2886,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                 e.skipCurrentElement();
             } else {
                 segment = m->getSegment(SegmentType::ChordRest, e.tick());
-                Element* el = Element::name2Element(tag, segment);
+                EngravingItem* el = EngravingItem::name2Element(tag, segment);
                 el->setTrack(e.track());
                 el->read(e);
                 segment->add(el);
@@ -3103,7 +3103,7 @@ static void readStaffContent(Score* score, XmlReader& e)
                     }
                 }
             } else if (tag == "HBox" || tag == "VBox" || tag == "TBox" || tag == "FBox") {
-                Box* b = toBox(Element::name2Element(tag, score->dummy()));
+                Box* b = toBox(EngravingItem::name2Element(tag, score->dummy()));
                 readBox(b, e);
                 b->setTick(e.tick());
                 score->measures()->add(b);
@@ -3312,7 +3312,7 @@ bool Read206::readScore206(Score* score, XmlReader& e)
                    || (tag == "Trill")
                    || (tag == "Slur")
                    || (tag == "Pedal")) {
-            Spanner* s = toSpanner(Element::name2Element(tag, score->dummy()));
+            Spanner* s = toSpanner(EngravingItem::name2Element(tag, score->dummy()));
             if (tag == "HairPin") {
                 readHairpin206(e, toHairpin(s));
             } else if (tag == "Ottava") {

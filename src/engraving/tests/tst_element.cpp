@@ -23,7 +23,7 @@
 #include "testing/qtestsuite.h"
 #include "testbase.h"
 #include "libmscore/masterscore.h"
-#include "libmscore/element.h"
+#include "libmscore/engravingitem.h"
 
 using namespace Ms;
 
@@ -105,8 +105,8 @@ void TestElement::testIds()
     };
 
     for (ElementType t : ids) {
-        Element* e = Element::create(t, score->dummy());
-        Element* ee = writeReadElement(e);
+        EngravingItem* e = EngravingItem::create(t, score->dummy());
+        EngravingItem* ee = writeReadElement(e);
         QCOMPARE(e->type(), ee->type());
         delete e;
         delete ee;

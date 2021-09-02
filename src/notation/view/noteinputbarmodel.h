@@ -106,7 +106,7 @@ private:
     bool isNoteInputMode() const;
     NoteInputState noteInputState() const;
 
-    const ChordRest* elementToChordRest(const Element* element) const;
+    const ChordRest* elementToChordRest(const EngravingItem* element) const;
 };
 }
 

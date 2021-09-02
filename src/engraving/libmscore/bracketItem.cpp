@@ -68,7 +68,7 @@ bool BracketItem::setProperty(Pid id, const QVariant& v)
         _bracketSpan = v.toInt();
         break;
     default:
-        // return Element::setProperty(id, v);
+        // return EngravingItem::setProperty(id, v);
         break;
     }
     score()->setLayoutAll();

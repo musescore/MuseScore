@@ -23,7 +23,7 @@
 #ifndef __BRACKET_H__
 #define __BRACKET_H__
 
-#include "element.h"
+#include "engravingitem.h"
 #include "bracketItem.h"
 #include "infrastructure/draw/painterpath.h"
 
@@ -36,7 +36,7 @@ enum class BracketType : signed char;
 //   @@ Bracket
 //---------------------------------------------------------
 
-class Bracket final : public Element
+class Bracket final : public EngravingItem
 {
     BracketItem* _bi;
     qreal ay1;
@@ -55,7 +55,7 @@ class Bracket final : public Element
     Measure* _measure = nullptr;
 
 public:
-    Bracket(Element* parent);
+    Bracket(EngravingItem* parent);
     ~Bracket();
 
     Bracket* clone() const override { return new Bracket(*this); }
@@ -102,7 +102,7 @@ public:
     void endEditDrag(EditData&) override;
 
     bool acceptDrop(EditData&) const override;
-    Element* drop(EditData&) override;
+    EngravingItem* drop(EditData&) override;
 
     QVariant getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const QVariant&) override;

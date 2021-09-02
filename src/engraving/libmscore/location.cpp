@@ -23,7 +23,7 @@
 #include "location.h"
 #include "io/xml.h"
 #include "chord.h"
-#include "element.h"
+#include "engravingitem.h"
 #include "measure.h"
 #include "mscore.h"
 
@@ -137,12 +137,12 @@ void Location::toRelative(const Location& ref)
 //---------------------------------------------------------
 //   Location::fillPositionForElement
 //    Fills default fields of Location by values relevant
-//    for the given Element. This function fills only
+//    for the given EngravingItem. This function fills only
 //    position values, not dealing with parameters specific
 //    for Chords and Notes, like grace index.
 //---------------------------------------------------------
 
-void Location::fillPositionForElement(const Element* e, bool absfrac)
+void Location::fillPositionForElement(const EngravingItem* e, bool absfrac)
 {
     Q_ASSERT(isAbsolute());
     if (!e) {
@@ -163,11 +163,11 @@ void Location::fillPositionForElement(const Element* e, bool absfrac)
 //---------------------------------------------------------
 //   Location::fillForElement
 //    Fills default fields of Location by values relevant
-//    for the given Element, including parameters specific
+//    for the given EngravingItem, including parameters specific
 //    for Chords and Notes.
 //---------------------------------------------------------
 
-void Location::fillForElement(const Element* e, bool absfrac)
+void Location::fillForElement(const EngravingItem* e, bool absfrac)
 {
     Q_ASSERT(isAbsolute());
     if (!e) {
@@ -184,7 +184,7 @@ void Location::fillForElement(const Element* e, bool absfrac)
 //   Location::forElement
 //---------------------------------------------------------
 
-Location Location::forElement(const Element* e, bool absfrac)
+Location Location::forElement(const EngravingItem* e, bool absfrac)
 {
     Location i = Location::absolute();
     i.fillForElement(e, absfrac);
@@ -195,7 +195,7 @@ Location Location::forElement(const Element* e, bool absfrac)
 //   Location::positionForElement
 //---------------------------------------------------------
 
-Location Location::positionForElement(const Element* e, bool absfrac)
+Location Location::positionForElement(const EngravingItem* e, bool absfrac)
 {
     Location i = Location::absolute();
     i.fillPositionForElement(e, absfrac);
@@ -206,7 +206,7 @@ Location Location::positionForElement(const Element* e, bool absfrac)
 //   Location::track
 //---------------------------------------------------------
 
-int Location::track(const Element* e)
+int Location::track(const EngravingItem* e)
 {
     int track = e->track();
     if (track < 0) {
@@ -224,7 +224,7 @@ int Location::track(const Element* e)
 //   Location::measure
 //---------------------------------------------------------
 
-int Location::measure(const Element* e)
+int Location::measure(const EngravingItem* e)
 {
     const Measure* m = toMeasure(e->findMeasure());
     if (m) {
@@ -238,7 +238,7 @@ int Location::measure(const Element* e)
 //   Location::graceIndex
 //---------------------------------------------------------
 
-int Location::graceIndex(const Element* e)
+int Location::graceIndex(const EngravingItem* e)
 {
     if (e->isChord() || (e->parent() && e->parent()->isChord())) {
         const Chord* ch = e->isChord() ? toChord(e) : toChord(e->parent());
@@ -253,7 +253,7 @@ int Location::graceIndex(const Element* e)
 //   Location::note
 //---------------------------------------------------------
 
-int Location::note(const Element* e)
+int Location::note(const EngravingItem* e)
 {
     if (e->isNote()) {
         const Note* n = toNote(e);
@@ -276,7 +276,7 @@ int Location::note(const Element* e)
 //   Location::getLocationProperty
 //---------------------------------------------------------
 
-QVariant Location::getLocationProperty(Pid pid, const Element* start, const Element* end)
+QVariant Location::getLocationProperty(Pid pid, const EngravingItem* start, const EngravingItem* end)
 {
     switch (pid) {
     case Pid::LOCATION_STAVES:

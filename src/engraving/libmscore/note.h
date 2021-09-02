@@ -30,7 +30,7 @@
 
 #include <QVector>
 
-#include "element.h"
+#include "engravingitem.h"
 #include "symbol.h"
 #include "noteevent.h"
 #include "pitchspelling.h"
@@ -217,7 +217,7 @@ static const int INVALID_LINE = -10000;
 //   @P accidentalType   int              note accidental type
 //   @P dots             array[NoteDot]   list of note dots (some can be null, read only)
 //   @P dotsCount        int              number of note dots (read only)
-//   @P elements         array[Element]   list of elements attached to notehead
+//   @P elements         array[EngravingItem]   list of elements attached to notehead
 //   @P fret             int              fret number in tablature
 //   @P ghost            bool             ghost note (guitar: death note)
 //   @P headScheme       enum (NoteHeadScheme.HEAD_AUTO, .HEAD_NORMAL, .HEAD_PITCHNAME, .HEAD_PITCHNAME_GERMAN, .HEAD_SHAPE_NOTE_4, .HEAD_SHAPE_NOTE_7_AIKIN, .HEAD_SHAPE_NOTE_7_FUNK, .HEAD_SHAPE_NOTE_7_WALKER, .HEAD_SOLFEGE, .HEAD_SOLFEGE_FIXED)
@@ -244,7 +244,7 @@ static const int INVALID_LINE = -10000;
 //   @P veloType         enum (Note.OFFSET_VAL, Note.USER_VAL)
 //---------------------------------------------------------------------------------------
 
-class Note final : public Element
+class Note final : public EngravingItem
 {
     Q_GADGET
 public:
@@ -347,13 +347,13 @@ public:
     void undoUnlink() override;
 
     qreal mag() const override;
-    Element* elementBase() const override;
+    EngravingItem* elementBase() const override;
 
     void layout() override;
     void layout2();
     //setter is used only in drumset tools to setup the notehead preview in the drumset editor and the palette
     void setCachedNoteheadSym(SymId i) { _cachedNoteheadSym = i; }
-    void scanElements(void* data, void (* func)(void*, Element*), bool all = true) override;
+    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all = true) override;
     void setTrack(int val) override;
 
     int playTicks() const;
@@ -429,8 +429,8 @@ public:
     bool fretConflict() const { return _fretConflict; }
     void setFretConflict(bool val) { _fretConflict = val; }
 
-    void add(Element*) override;
-    void remove(Element*) override;
+    void add(EngravingItem*) override;
+    void remove(EngravingItem*) override;
 
     bool mirror() const { return _mirror; }
     void setMirror(bool val) { _mirror = val; }
@@ -460,7 +460,7 @@ public:
     void write(XmlWriter&) const override;
 
     bool acceptDrop(EditData&) const override;
-    Element* drop(EditData&) override;
+    EngravingItem* drop(EditData&) override;
 
     bool hidden() const { return _hidden; }
     void setHidden(bool val) { _hidden = val; }
@@ -546,13 +546,13 @@ public:
     static SymId noteHead(int direction, NoteHead::Group, NoteHead::Type);
     NoteVal noteVal() const;
 
-    Element* nextInEl(Element* e);
-    Element* prevInEl(Element* e);
-    Element* nextElement() override;
-    Element* prevElement() override;
-    virtual Element* lastElementBeforeSegment();
-    Element* nextSegmentElement() override;
-    Element* prevSegmentElement() override;
+    EngravingItem* nextInEl(EngravingItem* e);
+    EngravingItem* prevInEl(EngravingItem* e);
+    EngravingItem* nextElement() override;
+    EngravingItem* prevElement() override;
+    virtual EngravingItem* lastElementBeforeSegment();
+    EngravingItem* nextSegmentElement() override;
+    EngravingItem* prevSegmentElement() override;
 
     QString accessibleInfo() const override;
     QString screenReaderInfo() const override;

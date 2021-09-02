@@ -46,7 +46,7 @@ enum class TremoloStyle : signed char {
 //   @@ Tremolo
 //---------------------------------------------------------
 
-class Tremolo final : public Element
+class Tremolo final : public EngravingItem
 {
     TremoloType _tremoloType { TremoloType::R8 };
     Chord* _chord1 { nullptr };
@@ -75,7 +75,7 @@ public:
     int subtype() const override { return static_cast<int>(_tremoloType); }
     QString subtypeName() const override;
 
-    void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
+    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
     QString tremoloTypeName() const;
     void setTremoloType(const QString& s);

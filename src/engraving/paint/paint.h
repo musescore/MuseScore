@@ -29,7 +29,7 @@
 #include "diagnostics/iengravingelementsprovider.h"
 
 namespace Ms {
-class Element;
+class EngravingItem;
 }
 
 namespace mu::engraving {
@@ -39,12 +39,12 @@ class Paint
 
 public:
 
-    static void paintElement(mu::draw::Painter& painter, const Ms::Element* element);
-    static void paintElements(mu::draw::Painter& painter, const QList<Ms::Element*>& elements);
+    static void paintElement(mu::draw::Painter& painter, const Ms::EngravingItem* element);
+    static void paintElements(mu::draw::Painter& painter, const QList<Ms::EngravingItem*>& elements);
 
 private:
 
-    static void initDebugger(mu::draw::Painter& painter, const Ms::Element* element);
+    static void initDebugger(mu::draw::Painter& painter, const Ms::EngravingItem* element);
     static void deinitDebugger(mu::draw::Painter& painter);
 };
 }

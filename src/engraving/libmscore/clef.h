@@ -28,7 +28,7 @@
  Definition of classes Clef
 */
 
-#include "element.h"
+#include "engravingitem.h"
 #include "mscore.h"
 
 namespace Ms {
@@ -140,7 +140,7 @@ public:
 //   @P isSmall       bool    small, mid-staff clef (read only, set by layout)
 //---------------------------------------------------------
 
-class Clef final : public Element
+class Clef final : public EngravingItem
 {
     SymId symId;
     bool _showCourtesy = true;
@@ -158,7 +158,7 @@ public:
     Measure* measure() const { return (Measure*)parent()->parent(); }
 
     bool acceptDrop(EditData&) const override;
-    Element* drop(EditData&) override;
+    EngravingItem* drop(EditData&) override;
     void layout() override;
     void draw(mu::draw::Painter*) const override;
     void read(XmlReader&) override;
@@ -196,8 +196,8 @@ public:
     bool setProperty(Pid propertyId, const QVariant&) override;
     QVariant propertyDefault(Pid id) const override;
 
-    Element* nextSegmentElement() override;
-    Element* prevSegmentElement() override;
+    EngravingItem* nextSegmentElement() override;
+    EngravingItem* prevSegmentElement() override;
     QString accessibleInfo() const override;
     void clear();
 };

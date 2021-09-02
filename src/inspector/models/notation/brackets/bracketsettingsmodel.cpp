@@ -45,7 +45,7 @@ void BracketSettingsModel::createProperties()
 
 void BracketSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::BRACKET, [](const Ms::Element* element) -> bool {
+    m_elementList = m_repository->findElementsByType(Ms::ElementType::BRACKET, [](const Ms::EngravingItem* element) -> bool {
         IF_ASSERT_FAILED(element) {
             return false;
         }

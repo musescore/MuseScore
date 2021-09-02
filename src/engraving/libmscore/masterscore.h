@@ -124,9 +124,9 @@ public:
 
     virtual void setUpdateAll() override;
 
-    void setLayoutAll(int staff = -1, const Element* e = nullptr);
-    void setLayout(const Fraction& tick, int staff, const Element* e = nullptr);
-    void setLayout(const Fraction& tick1, const Fraction& tick2, int staff1, int staff2, const Element* e = nullptr);
+    void setLayoutAll(int staff = -1, const EngravingItem* e = nullptr);
+    void setLayout(const Fraction& tick, int staff, const EngravingItem* e = nullptr);
+    void setLayout(const Fraction& tick1, const Fraction& tick2, int staff1, int staff2, const EngravingItem* e = nullptr);
 
     virtual CmdState& cmdState() override { return _cmdState; }
     const CmdState& cmdState() const override { return _cmdState; }

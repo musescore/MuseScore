@@ -207,7 +207,7 @@ void StringData::fretChords(Chord* chord) const
         int trkFrom = (chord->track() / VOICES) * VOICES;
         int trkTo   = trkFrom + VOICES;
         for (trk = trkFrom; trk < trkTo; ++trk) {
-            Element* ch = seg->elist().at(trk);
+            EngravingItem* ch = seg->elist().at(trk);
             if (ch && ch->type() == ElementType::CHORD) {
                 sortChordNotes(sortedNotes, toChord(ch), pitchOffset, &count);
             }

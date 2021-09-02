@@ -68,7 +68,7 @@ QString ScoreElement::userName() const
 
 qreal ScoreElement::spatium() const
 {
-    return e->isElement() ? toElement(e)->spatium() : e->score()->spatium();
+    return e->isEngravingItem() ? toEngravingItem(e)->spatium() : e->score()->spatium();
 }
 
 //---------------------------------------------------------
@@ -156,8 +156,8 @@ ScoreElement* wrap(Ms::EngravingObject* se, Ownership own)
     if (!se) {
         return nullptr;
     }
-    if (se->isElement()) {
-        return wrap(toElement(se), own);
+    if (se->isEngravingItem()) {
+        return wrap(toEngravingItem(se), own);
     }
 
     using Ms::ElementType;

@@ -101,7 +101,7 @@ bool LayoutBeams::notTopBeam(ChordRest* cr)
 void LayoutBeams::restoreBeams(Measure* m)
 {
     for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
-        for (Element* e : s->elist()) {
+        for (EngravingItem* e : s->elist()) {
             if (e && e->isChordRest()) {
                 ChordRest* cr = toChordRest(e);
                 if (isTopBeam(cr)) {
@@ -141,7 +141,7 @@ void LayoutBeams::breakCrossMeasureBeams(Measure* measure)
             continue;
         }
 
-        Element* e = fstSeg->element(track);
+        EngravingItem* e = fstSeg->element(track);
         if (!e || !e->isChordRest()) {
             continue;
         }

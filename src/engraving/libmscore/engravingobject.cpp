@@ -143,8 +143,8 @@ static const ElementName elementNames[] = {
     { ElementType::COMPOUND,             "Compound",             QT_TRANSLATE_NOOP("elementName", "Compound") },
     { ElementType::CHORD,                "Chord",                QT_TRANSLATE_NOOP("elementName", "Chord") },
     { ElementType::SLUR,                 "Slur",                 QT_TRANSLATE_NOOP("elementName", "Slur") },
-    { ElementType::ELEMENT,              "Element",              QT_TRANSLATE_NOOP("elementName", "Element") },
-    { ElementType::ELEMENT_LIST,         "ElementList",          QT_TRANSLATE_NOOP("elementName", "Element list") },
+    { ElementType::ELEMENT,              "EngravingItem",              QT_TRANSLATE_NOOP("elementName", "EngravingItem") },
+    { ElementType::ELEMENT_LIST,         "ElementList",          QT_TRANSLATE_NOOP("elementName", "EngravingItem list") },
     { ElementType::STAFF_LIST,           "StaffList",            QT_TRANSLATE_NOOP("elementName", "Staff list") },
     { ElementType::MEASURE_LIST,         "MeasureList",          QT_TRANSLATE_NOOP("elementName", "Measure list") },
     { ElementType::HBOX,                 "HBox",                 QT_TRANSLATE_NOOP("elementName", "Horizontal frame") },
@@ -234,10 +234,10 @@ int EngravingObject::treeChildIdx(EngravingObject* child) const
 //---------------------------------------------------------
 //   scanElements
 /// Recursively apply scanElements to all children.
-/// See also Element::scanElements.
+/// See also EngravingItem::scanElements.
 //---------------------------------------------------------
 
-void EngravingObject::scanElements(void* data, void (* func)(void*, Element*), bool all)
+void EngravingObject::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
     for (EngravingObject* child : (*this)) {
         child->scanElements(data, func, all);
@@ -380,16 +380,16 @@ void EngravingObject::undoChangeProperty(Pid id, const QVariant& v, PropertyFlag
         changeProperties(this, id, v, ps);
 
         if (isStyled(Pid::OFFSET)) {
-            // TODO: maybe it just makes more sense to do this in Element::undoChangeProperty,
+            // TODO: maybe it just makes more sense to do this in EngravingItem::undoChangeProperty,
             // but some of the overrides call ScoreElement explicitly
             qreal sp;
-            if (isElement()) {
-                sp = toElement(this)->spatium();
+            if (isEngravingItem()) {
+                sp = toEngravingItem(this)->spatium();
             } else {
                 sp = score()->spatium();
             }
             EngravingObject::undoChangeProperty(Pid::OFFSET, score()->styleV(getPropertyStyle(Pid::OFFSET)).value<PointF>() * sp);
-            Element* e = toElement(this);
+            EngravingItem* e = toEngravingItem(this);
             e->setOffsetChanged(false);
         }
     } else if (id == Pid::SUB_STYLE) {
@@ -406,8 +406,8 @@ void EngravingObject::undoChangeProperty(Pid id, const QVariant& v, PropertyFlag
         }
     } else if (id == Pid::OFFSET) {
         // TODO: do this in caller?
-        if (isElement()) {
-            Element* e = toElement(this);
+        if (isEngravingItem()) {
+            EngravingItem* e = toEngravingItem(this);
             if (e->offset() != v.value<PointF>()) {
                 e->setOffsetChanged(true, false, v.value<PointF>() - e->offset());
             }
@@ -747,7 +747,7 @@ EngravingObject* LinkedElements::mainElement()
         return nullptr;
     }
     MasterScore* ms = at(0)->masterScore();
-    const bool elements = at(0)->isElement();
+    const bool elements = at(0)->isEngravingItem();
     const bool staves = at(0)->isStaff();
     return *std::min_element(begin(), end(), [ms, elements, staves](EngravingObject* s1, EngravingObject* s2) {
         if (s1->score() == ms && s2->score() != ms) {
@@ -762,8 +762,8 @@ EngravingObject* LinkedElements::mainElement()
         if (elements) {
             // Now we compare either two elements from master score
             // or two elements from excerpt.
-            Element* e1 = toElement(s1);
-            Element* e2 = toElement(s2);
+            EngravingItem* e1 = toEngravingItem(s1);
+            EngravingItem* e2 = toEngravingItem(s2);
             const int tr1 = e1->track();
             const int tr2 = e2->track();
             if (tr1 == tr2) {
@@ -1075,8 +1075,8 @@ QVariant EngravingObject::styleValue(Pid pid, Sid sid) const
         return score()->styleP(sid);
     case P_TYPE::POINT_SP: {
         PointF val = score()->styleV(sid).value<PointF>() * score()->spatium();
-        if (isElement()) {
-            const Element* e = toElement(this);
+        if (isEngravingItem()) {
+            const EngravingItem* e = toEngravingItem(this);
             if (e->staff() && !e->systemFlag()) {
                 val *= e->staff()->staffMag(e->tick());
             }
@@ -1087,8 +1087,8 @@ QVariant EngravingObject::styleValue(Pid pid, Sid sid) const
         PointF val = score()->styleV(sid).value<PointF>();
         if (offsetIsSpatiumDependent()) {
             val *= score()->spatium();
-            if (isElement()) {
-                const Element* e = toElement(this);
+            if (isEngravingItem()) {
+                const EngravingItem* e = toEngravingItem(this);
                 if (e->staff() && !e->systemFlag()) {
                     val *= e->staff()->staffMag(e->tick());
                 }

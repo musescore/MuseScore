@@ -57,7 +57,7 @@ protected:
     mu::PointF linePos(Grip, System**) const override;
 
 public:
-    LetRing(Element* parent);
+    LetRing(EngravingItem* parent);
 
     LetRing* clone() const override { return new LetRing(*this); }
 

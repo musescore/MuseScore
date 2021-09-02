@@ -23,7 +23,7 @@
 #ifndef __FRET_H__
 #define __FRET_H__
 
-#include "element.h"
+#include "engravingitem.h"
 #include "harmony.h"
 
 #include "infrastructure/draw/font.h"
@@ -136,7 +136,7 @@ public:
 //   Note that, while strings are zero-indexed, frets are one-indexed
 //---------------------------------------------------------
 
-class FretDiagram final : public Element
+class FretDiagram final : public EngravingItem
 {
     int _strings       { 6 };
     int _frets         { 4 };
@@ -182,7 +182,7 @@ public:
     int treeChildCount() const override;
 
     void draw(mu::draw::Painter*) const override;
-    Element* linkedClone() override;
+    EngravingItem* linkedClone() override;
     FretDiagram* clone() const override { return new FretDiagram(*this); }
 
     Segment* segment() const { return toSegment(parent()); }
@@ -239,14 +239,14 @@ public:
     Harmony* harmony() const { return _harmony; }
 
     void init(Ms::StringData*, Chord*);
-    void add(Element*) override;
-    void remove(Element*) override;
+    void add(EngravingItem*) override;
+    void remove(EngravingItem*) override;
 
     bool acceptDrop(EditData&) const override;
-    Element* drop(EditData&) override;
+    EngravingItem* drop(EditData&) override;
 
     void endEditDrag(EditData& editData) override;
-    void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
+    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
     QVariant getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const QVariant&) override;

@@ -34,7 +34,7 @@ namespace PluginAPI {
 ///  \since MuseScore 3.3
 //---------------------------------------------------------
 
-class Tie : public Element
+class Tie : public EngravingItem
 {
     Q_OBJECT
     /// The starting note of the tie.
@@ -48,7 +48,7 @@ class Tie : public Element
 
 public:
     Tie(Ms::Tie* tie, Ownership own = Ownership::PLUGIN)
-        : Element(tie, own) {}
+        : EngravingItem(tie, own) {}
 
     Note* startNote();
     Note* endNote();

@@ -185,7 +185,7 @@ void ScoreView::paint(QPainter* qp)
     p.scale(mag, mag);
 
     Ms::Page* page = score->pages()[_currentPage];
-    QList<const Ms::Element*> el;
+    QList<const Ms::EngravingItem*> el;
     for (System* s : page->systems()) {
         for (MeasureBase* m : s->measures()) {
             m->scanElements(&el, Ms::collectElements, false);
@@ -193,7 +193,7 @@ void ScoreView::paint(QPainter* qp)
     }
     page->scanElements(&el, Ms::collectElements, false);
 
-    foreach (const Ms::Element* e, el) {
+    foreach (const Ms::EngravingItem* e, el) {
         PointF pos(e->pagePos());
         p.translate(pos);
         e->draw(&p);

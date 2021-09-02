@@ -33,7 +33,7 @@
 #include <QVariant>
 
 #include "config.h"
-#include "element.h"
+#include "engravingitem.h"
 #include "symid.h"
 
 namespace Ms {
@@ -78,7 +78,7 @@ struct SymElement {
 //   @P isSmall     bool
 //---------------------------------------------------------
 
-class Accidental final : public Element
+class Accidental final : public EngravingItem
 {
     QList<SymElement> el;
     AccidentalType _accidentalType { AccidentalType::NONE };
@@ -87,7 +87,7 @@ class Accidental final : public Element
     AccidentalRole _role           { AccidentalRole::AUTO };
 
 public:
-    Accidental(Element* parent = 0);
+    Accidental(EngravingItem* parent = 0);
 
     Accidental* clone() const override { return new Accidental(*this); }
 
@@ -107,7 +107,7 @@ public:
     QString subtypeName() const override { return QString(subtype2name(_accidentalType)); }
 
     bool acceptDrop(EditData&) const override;
-    Element* drop(EditData&) override;
+    EngravingItem* drop(EditData&) override;
     void layout() override;
     void layoutMultiGlyphAccidental();
     void layoutSingleGlyphAccidental();

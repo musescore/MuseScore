@@ -85,7 +85,7 @@ MidiData MasterNotationMidiData::trackMidiData(const ID& partId) const
     return MidiData();
 }
 
-Ret MasterNotationMidiData::triggerElementMidiData(const Element* element)
+Ret MasterNotationMidiData::triggerElementMidiData(const EngravingItem* element)
 {
     if (element->isNote()) {
         const Ms::Note* note = Ms::toNote(element);
@@ -120,7 +120,7 @@ Events MasterNotationMidiData::retrieveEvents(const std::vector<channel_t>& midi
     return eventsFromRange(midiChannels, fromTick, toTick);
 }
 
-Events MasterNotationMidiData::retrieveEventsForElement(const Element* element, const channel_t midiChannel) const
+Events MasterNotationMidiData::retrieveEventsForElement(const EngravingItem* element, const channel_t midiChannel) const
 {
     if (element->isNote()) {
         return eventsFromNote(element, midiChannel);
@@ -443,8 +443,8 @@ Events MasterNotationMidiData::convertMsEvents(Ms::EventMap&& eventMap) const
     return result;
 }
 
-//! NOTE Copied from MuseScore::play(Element* e, int pitch)
-Events MasterNotationMidiData::eventsFromNote(const Element* noteElement, const channel_t midiChannel) const
+//! NOTE Copied from MuseScore::play(EngravingItem* e, int pitch)
+Events MasterNotationMidiData::eventsFromNote(const EngravingItem* noteElement, const channel_t midiChannel) const
 {
     const Ms::Note* note = Ms::toNote(noteElement);
     IF_ASSERT_FAILED(note) {
@@ -466,8 +466,8 @@ Events MasterNotationMidiData::eventsFromNote(const Element* noteElement, const 
     return result;
 }
 
-//! NOTE Copied from MuseScore::play(Element* e, int pitch)
-Events MasterNotationMidiData::eventsFromChord(const Element* chordElement, const channel_t midiChannel) const
+//! NOTE Copied from MuseScore::play(EngravingItem* e, int pitch)
+Events MasterNotationMidiData::eventsFromChord(const EngravingItem* chordElement, const channel_t midiChannel) const
 {
     const Ms::Chord* chord = Ms::toChord(chordElement);
     IF_ASSERT_FAILED(chord) {
@@ -499,8 +499,8 @@ Events MasterNotationMidiData::eventsFromChord(const Element* chordElement, cons
     return result;
 }
 
-//! NOTE Copied from MuseScore::play(Element* e, int pitch)
-Events MasterNotationMidiData::eventsFromHarmony(const Element* harmonyElement, const channel_t midiChannel) const
+//! NOTE Copied from MuseScore::play(EngravingItem* e, int pitch)
+Events MasterNotationMidiData::eventsFromHarmony(const EngravingItem* harmonyElement, const channel_t midiChannel) const
 {
     const Harmony* harmony = Ms::toHarmony(harmonyElement);
     IF_ASSERT_FAILED(harmony) {

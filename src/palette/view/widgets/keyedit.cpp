@@ -213,13 +213,13 @@ void KeyCanvas::dragEnterEvent(QDragEnterEvent* event)
 
         PointF dragOffset;
         Fraction duration;
-        ElementType type = Element::readType(e, &dragOffset, &duration);
+        ElementType type = EngravingItem::readType(e, &dragOffset, &duration);
         if (type != ElementType::ACCIDENTAL) {
             return;
         }
 
         event->acceptProposedAction();
-        dragElement = static_cast<Accidental*>(Element::create(type, gpaletteScore->dummy()));
+        dragElement = static_cast<Accidental*>(EngravingItem::create(type, gpaletteScore->dummy()));
         dragElement->moveToDummy();
         dragElement->read(e);
         dragElement->layout();

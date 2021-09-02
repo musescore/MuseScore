@@ -59,7 +59,7 @@ protected:
     mu::PointF linePos(Grip, System**) const override;
 
 public:
-    Pedal(Element* parent);
+    Pedal(EngravingItem* parent);
 
     Pedal* clone() const override { return new Pedal(*this); }
 

@@ -186,7 +186,7 @@ void PositionsWriter::writeSegmentsPositions(XmlWriter& writer, const Ms::Score*
         qreal sx = 0;
         int tracks = score->nstaves() * Ms::VOICES;
         for (int track = 0; track < tracks; track++) {
-            Element* e = segment->element(track);
+            EngravingItem* e = segment->element(track);
             if (e) {
                 sx = qMax(sx, e->width());
             }

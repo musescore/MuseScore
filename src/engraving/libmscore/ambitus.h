@@ -23,7 +23,7 @@
 #ifndef __AMBITUS_H__
 #define __AMBITUS_H__
 
-#include "element.h"
+#include "engravingitem.h"
 #include "note.h"
 #include "accidental.h"
 
@@ -32,7 +32,7 @@ namespace Ms {
 //   @@ Ambitus
 //---------------------------------------------------------
 
-class Ambitus final : public Element
+class Ambitus final : public EngravingItem
 {
     NoteHead::Group _noteHeadGroup;
     NoteHead::Type _noteHeadType;
@@ -97,7 +97,7 @@ public:
     void      layout() override;
     mu::PointF pagePos() const override;        ///< position in page coordinates
     void      read(XmlReader&) override;
-    void      scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
+    void      scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
     void      setTrack(int val) override;
     void      write(XmlWriter&) const override;
     bool      readProperties(XmlReader&) override;
@@ -108,8 +108,8 @@ public:
     bool setProperty(Pid propertyId, const QVariant&) override;
     QVariant propertyDefault(Pid id) const override;
 
-    Element* nextSegmentElement() override;
-    Element* prevSegmentElement() override;
+    EngravingItem* nextSegmentElement() override;
+    EngravingItem* prevSegmentElement() override;
 
 private:
 

@@ -74,7 +74,7 @@ protected:
     QVector<mu::LineF> gripAnchorLines(Grip) const override { return QVector<mu::LineF>(); }
 
 public:
-    Image(Element* parent = 0);
+    Image(EngravingItem* parent = 0);
     Image(const Image&);
     ~Image();
 
@@ -113,7 +113,7 @@ public:
     ImageType getImageType() const { return imageType; }
     bool isValid() const { return rasterDoc || svgDoc; }
 
-    Element::EditBehavior normalModeEditBehavior() const override { return Element::EditBehavior::Edit; }
+    EngravingItem::EditBehavior normalModeEditBehavior() const override { return EngravingItem::EditBehavior::Edit; }
     int gripsCount() const override { return 2; }
     Grip initialEditModeGrip() const override { return Grip(1); }
     Grip defaultGrip() const override { return Grip(1); }

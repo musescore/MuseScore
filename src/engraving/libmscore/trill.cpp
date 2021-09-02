@@ -81,7 +81,7 @@ void TrillSegment::draw(mu::draw::Painter* painter) const
 //   add
 //---------------------------------------------------------
 
-void TrillSegment::add(Element* e)
+void TrillSegment::add(EngravingItem* e)
 {
     e->setParent(this);
     if (e->type() == ElementType::ACCIDENTAL) {
@@ -94,7 +94,7 @@ void TrillSegment::add(Element* e)
 //   remove
 //---------------------------------------------------------
 
-void TrillSegment::remove(Element* e)
+void TrillSegment::remove(EngravingItem* e)
 {
     if (trill()->accidental() == e) {
         // accidental is part of trill
@@ -221,9 +221,9 @@ bool TrillSegment::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-Element* TrillSegment::drop(EditData& data)
+EngravingItem* TrillSegment::drop(EditData& data)
 {
-    Element* e = data.dropElement;
+    EngravingItem* e = data.dropElement;
     switch (e->type()) {
     case ElementType::ACCIDENTAL:
         e->setParent(trill());
@@ -242,7 +242,7 @@ Element* TrillSegment::drop(EditData& data)
 //   propertyDelegate
 //---------------------------------------------------------
 
-Element* TrillSegment::propertyDelegate(Pid pid)
+EngravingItem* TrillSegment::propertyDelegate(Pid pid)
 {
     if (pid == Pid::TRILL_TYPE || pid == Pid::ORNAMENT_STYLE || pid == Pid::PLACEMENT || pid == Pid::PLAY) {
         return spanner();
@@ -274,7 +274,7 @@ Sid Trill::getPropertyStyle(Pid pid) const
 //   Trill
 //---------------------------------------------------------
 
-Trill::Trill(Element* parent)
+Trill::Trill(EngravingItem* parent)
     : SLine(ElementType::TRILL, parent)
 {
     _trillType     = Type::TRILL_LINE;
@@ -303,7 +303,7 @@ Trill::~Trill()
 //   add
 //---------------------------------------------------------
 
-void Trill::add(Element* e)
+void Trill::add(EngravingItem* e)
 {
     if (e->type() == ElementType::ACCIDENTAL) {
         e->setParent(this);
@@ -317,7 +317,7 @@ void Trill::add(Element* e)
 //   remove
 //---------------------------------------------------------
 
-void Trill::remove(Element* e)
+void Trill::remove(EngravingItem* e)
 {
     if (e == _accidental) {
         _accidental = 0;
@@ -555,6 +555,6 @@ Pid Trill::propertyId(const QStringRef& name) const
 
 QString Trill::accessibleInfo() const
 {
-    return QString("%1: %2").arg(Element::accessibleInfo(), trillTypeUserName());
+    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), trillTypeUserName());
 }
 }

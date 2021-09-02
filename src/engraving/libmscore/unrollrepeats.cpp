@@ -27,7 +27,7 @@
 #include "style/style.h"
 #include "io/xml.h"
 
-#include "element.h"
+#include "engravingitem.h"
 #include "note.h"
 #include "chord.h"
 #include "rest.h"
@@ -96,7 +96,7 @@ static void removeRepeatMarkings(Score* score)
     }
 
     // remove coda/fine labels and jumps
-    QList<Element*> elems;
+    QList<EngravingItem*> elems;
     score->scanElements(&elems, collectElements, false);
     for (auto e : elems) {
         if (e->isMarker() || e->isJump()) {

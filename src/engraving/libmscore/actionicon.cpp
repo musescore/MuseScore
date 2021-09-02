@@ -27,8 +27,8 @@
 using namespace mu;
 
 namespace Ms {
-ActionIcon::ActionIcon(Element* score)
-    : Element(ElementType::ACTION_ICON, score)
+ActionIcon::ActionIcon(EngravingItem* score)
+    : EngravingItem(ElementType::ACTION_ICON, score)
 {
 }
 
@@ -116,7 +116,7 @@ QVariant ActionIcon::getProperty(Pid pid) const
     default:
         break;
     }
-    return Element::getProperty(pid);
+    return EngravingItem::getProperty(pid);
 }
 
 bool ActionIcon::setProperty(Pid pid, const QVariant& v)
@@ -127,7 +127,7 @@ bool ActionIcon::setProperty(Pid pid, const QVariant& v)
         triggerLayout();
         break;
     default:
-        return Element::setProperty(pid, v);
+        return EngravingItem::setProperty(pid, v);
     }
     return true;
 }

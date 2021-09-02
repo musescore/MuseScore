@@ -34,7 +34,7 @@ class XmlReader;
 //       helper macro to define a styled ScoreElement property
 //
 //    usage example:
-//    class Text : public Element {
+//    class Text : public EngravingItem {
 //          M_PROPERTY(Color, color, setColor)
 //          ...
 //          };
@@ -67,7 +67,7 @@ enum class PropertyFlags : char {
 };
 
 //------------------------------------------------------------------------
-//   Element Properties
+//   EngravingItem Properties
 //------------------------------------------------------------------------
 
 enum class Pid {
@@ -402,7 +402,7 @@ enum class P_TYPE : char {
     POINT,
     POINT_SP,           // point units, value saved in (score) spatium units
     POINT_MM,
-    POINT_SP_MM,        // point units, value saved as mm or spatium depending on Element->sizeIsSpatiumDependent()
+    POINT_SP_MM,        // point units, value saved as mm or spatium depending on EngravingItem->sizeIsSpatiumDependent()
     SIZE,
     SIZE_MM,
     STRING,

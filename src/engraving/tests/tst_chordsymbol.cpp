@@ -113,7 +113,7 @@ void TestChordSymbol::selectAllChordSymbols(MasterScore* score)
 {
     //find a chord symbol
     Segment* seg = score->firstSegment(SegmentType::ChordRest);
-    Element* e = 0;
+    EngravingItem* e = 0;
     while (seg) {
         e = seg->findAnnotation(ElementType::HARMONY,
                                 0, score->ntracks());
@@ -132,7 +132,7 @@ void TestChordSymbol::selectAllChordSymbols(MasterScore* score)
 //---------------------------------------------------------
 void TestChordSymbol::realizeSelectionVoiced(MasterScore* score, Voicing voicing)
 {
-    for (Element* e : score->selection().elements()) {
+    for (EngravingItem* e : score->selection().elements()) {
         if (e->isHarmony()) {
             e->setProperty(Pid::HARMONY_VOICING, int(voicing));
         }

@@ -23,7 +23,7 @@
 #ifndef __LEDGERLINE_H__
 #define __LEDGERLINE_H__
 
-#include "element.h"
+#include "engravingitem.h"
 
 namespace Ms {
 class Chord;
@@ -37,7 +37,7 @@ class Chord;
 //!    y-origin:   SStaff
 //---------------------------------------------------------
 
-class LedgerLine final : public Element
+class LedgerLine final : public EngravingItem
 {
     qreal _width;
     qreal _len;
@@ -53,7 +53,7 @@ public:
     mu::PointF pagePos() const override;        ///< position in page coordinates
     Chord* chord() const { return toChord(parent()); }
 
-    void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
+    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
     qreal len() const { return _len; }
     qreal lineWidth() const { return _width; }

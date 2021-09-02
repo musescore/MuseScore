@@ -240,7 +240,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
                     }
                     e.readNext();
                 } else if (tag == "Chord" || tag == "Rest" || tag == "MeasureRepeat") {
-                    ChordRest* cr = toChordRest(Element::name2Element(tag, this->dummy()));
+                    ChordRest* cr = toChordRest(EngravingItem::name2Element(tag, this->dummy()));
                     cr->setTrack(e.track());
                     cr->read(e);
                     cr->setSelected(false);
@@ -370,7 +370,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
 
                     // remove pre-existing chords on this track
                     // but be sure not to remove any we just added
-                    for (Element* el : seg->findAnnotations(ElementType::HARMONY, e.track(), e.track())) {
+                    for (EngravingItem* el : seg->findAnnotations(ElementType::HARMONY, e.track(), e.track())) {
                         if (std::find(pastedHarmony.begin(), pastedHarmony.end(), el) == pastedHarmony.end()) {
                             undoRemoveElement(el);
                         }
@@ -392,7 +392,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
                            || tag == "Sticking"
                            || tag == "Fermata"
                            ) {
-                    Element* el = Element::name2Element(tag, this->dummy());
+                    EngravingItem* el = EngravingItem::name2Element(tag, this->dummy());
                     el->setTrack(e.track());                // a valid track might be necessary for el->read() to work
                     if (el->isFermata()) {
                         el->setPlacement(el->track() & 1 ? Placement::BELOW : Placement::ABOVE);
@@ -520,7 +520,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
 
         //finding the first element that has a track
         //the canvas position will be set to this element
-        Element* el = nullptr;
+        EngravingItem* el = nullptr;
         Segment* s = tick2segmentMM(dstTick);
         Segment* s2 = tick2segmentMM(dstTick + tickLen);
         bool found = false;
@@ -905,7 +905,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                             undoAddElement(el);
                         }
                     } else if (tag == "StaffText" || tag == "Sticking") {
-                        Element* el = Element::name2Element(tag, this->dummy());
+                        EngravingItem* el = EngravingItem::name2Element(tag, this->dummy());
                         el->read(e);
                         el->setTrack(destTrack);
                         el->setParent(currSegm);
@@ -944,7 +944,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                                 // in any case, look for a f.b. in annotations:
                                 // if there is a f.b. element in the right track,
                                 // this is an (actual) f.b. location
-                                foreach (Element* a, prevSegm->annotations()) {
+                                foreach (EngravingItem* a, prevSegm->annotations()) {
                                     if (a->isFiguredBass() && a->track() == destTrack) {
                                         onNoteFB = toFiguredBass(a);
                                         done1 = true;
@@ -984,7 +984,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                         }
                         // in both cases, look for an existing f.b. element in segment and remove it, if found
                         FiguredBass* oldFB = nullptr;
-                        foreach (Element* a, currSegm->annotations()) {
+                        foreach (EngravingItem* a, currSegm->annotations()) {
                             if (a->isFiguredBass() && a->track() == destTrack) {
                                 oldFB = toFiguredBass(a);
                                 break;
@@ -1056,7 +1056,7 @@ static Note* prepareTarget(ChordRest* target, Note* with, const Fraction& durati
     return toChord(segment->nextChordRest(target->track()))->upNote();
 }
 
-static Element* prepareTarget(Element* target, Note* with, const Fraction& duration)
+static EngravingItem* prepareTarget(EngravingItem* target, Note* with, const Fraction& duration)
 {
     if (target->isNote() && toNote(target)->chord()->ticks() != duration) {
         return prepareTarget(toNote(target)->chord(), with, duration);
@@ -1108,7 +1108,7 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
 
         PointF dragOffset;
         Fraction duration(1, 4);
-        std::unique_ptr<Element> el(Element::readMimeData(this, data, &dragOffset, &duration));
+        std::unique_ptr<EngravingItem> el(EngravingItem::readMimeData(this, data, &dragOffset, &duration));
 
         if (!el) {
             return;
@@ -1118,14 +1118,14 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
             return;
         }
 
-        QList<Element*> els;
+        QList<EngravingItem*> els;
         if (_selection.isSingle()) {
             els.append(_selection.element());
         } else {
             els.append(_selection.elements());
         }
-        Element* newEl = 0;
-        for (Element* target : els) {
+        EngravingItem* newEl = 0;
+        for (EngravingItem* target : els) {
             el->setTrack(target->track());
             addRefresh(target->abbox());         // layout() ?!
             EditData ddata(view);
@@ -1133,7 +1133,7 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
             if (target->acceptDrop(ddata)) {
                 if (!el->isNote() || (target = prepareTarget(target, toNote(el.get()), duration))) {
                     ddata.dropElement = newEl = el->clone();
-                    Element* dropped = target->drop(ddata);
+                    EngravingItem* dropped = target->drop(ddata);
                     if (dropped) {
                         newEl = dropped;
                     }
@@ -1148,7 +1148,7 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
         if (_selection.isRange()) {
             cr = _selection.firstChordRest();
         } else if (_selection.isSingle()) {
-            Element* e = _selection.element();
+            EngravingItem* e = _selection.element();
             if (!e->isNote() && !e->isChordRest()) {
                 qDebug("cannot paste to %s", e->name());
                 MScore::setError(MsError::DEST_NO_CR);
@@ -1183,7 +1183,7 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
         if (_selection.isRange()) {
             cr = _selection.firstChordRest();
         } else if (_selection.isSingle()) {
-            Element* e = _selection.element();
+            EngravingItem* e = _selection.element();
             if (!e->isNote() && !e->isRest() && !e->isChord()) {
                 qDebug("cannot paste to %s", e->name());
                 MScore::setError(MsError::DEST_NO_CR);
@@ -1217,15 +1217,15 @@ void Score::cmdPaste(const QMimeData* ms, MuseScoreView* view, Fraction scale)
         image->setImageType(ImageType::RASTER);
         image->loadFromData("dragdrop", ba);
 
-        QList<Element*> els;
+        QList<EngravingItem*> els;
         if (_selection.isSingle()) {
             els.append(_selection.element());
         } else {
             els.append(_selection.elements());
         }
 
-        for (Element* target : els) {
-            Element* nel = image->clone();
+        for (EngravingItem* target : els) {
+            EngravingItem* nel = image->clone();
             addRefresh(target->abbox());         // layout() ?!
             EditData ddata(view);
             ddata.dropElement    = nel;

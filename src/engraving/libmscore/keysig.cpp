@@ -62,14 +62,14 @@ const char* keyNames[] = {
 //---------------------------------------------------------
 
 KeySig::KeySig(Segment* s)
-    : Element(ElementType::KEYSIG, s, ElementFlag::ON_STAFF)
+    : EngravingItem(ElementType::KEYSIG, s, ElementFlag::ON_STAFF)
 {
     _showCourtesy = true;
     _hideNaturals = false;
 }
 
 KeySig::KeySig(const KeySig& k)
-    : Element(k)
+    : EngravingItem(k)
 {
     _showCourtesy = k._showCourtesy;
     _sig          = k._sig;
@@ -352,7 +352,7 @@ bool KeySig::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-Element* KeySig::drop(EditData& data)
+EngravingItem* KeySig::drop(EditData& data)
 {
     KeySig* ks = toKeySig(data.dropElement);
     if (ks->type() != ElementType::KEYSIG) {
@@ -393,7 +393,7 @@ void KeySig::setKey(Key key)
 void KeySig::write(XmlWriter& xml) const
 {
     xml.stag(this);
-    Element::writeProperties(xml);
+    EngravingItem::writeProperties(xml);
     if (_sig.isAtonal()) {
         xml.tag("custom", 1);
     } else if (_sig.custom()) {
@@ -518,7 +518,7 @@ void KeySig::read(XmlReader& e)
             subtype = e.readInt();
         } else if (tag == "forInstrumentChange") {
             setForInstrumentChange(e.readBool());
-        } else if (!Element::readProperties(e)) {
+        } else if (!EngravingItem::readProperties(e)) {
             e.unknown();
         }
     }
@@ -665,7 +665,7 @@ QVariant KeySig::getProperty(Pid propertyId) const
     case Pid::KEYSIG_MODE:
         return int(mode());
     default:
-        return Element::getProperty(propertyId);
+        return EngravingItem::getProperty(propertyId);
     }
 }
 
@@ -695,7 +695,7 @@ bool KeySig::setProperty(Pid propertyId, const QVariant& v)
         setMode(KeyMode(v.toInt()));
         break;
     default:
-        if (!Element::setProperty(propertyId, v)) {
+        if (!EngravingItem::setProperty(propertyId, v)) {
             return false;
         }
         break;
@@ -719,7 +719,7 @@ QVariant KeySig::propertyDefault(Pid id) const
     case Pid::KEYSIG_MODE:
         return int(KeyMode::UNKNOWN);
     default:
-        return Element::propertyDefault(id);
+        return EngravingItem::propertyDefault(id);
     }
 }
 
@@ -727,7 +727,7 @@ QVariant KeySig::propertyDefault(Pid id) const
 //   nextSegmentElement
 //---------------------------------------------------------
 
-Element* KeySig::nextSegmentElement()
+EngravingItem* KeySig::nextSegmentElement()
 {
     return segment()->firstInNextSegments(staffIdx());
 }
@@ -736,7 +736,7 @@ Element* KeySig::nextSegmentElement()
 //   prevSegmentElement
 //---------------------------------------------------------
 
-Element* KeySig::prevSegmentElement()
+EngravingItem* KeySig::prevSegmentElement()
 {
     return segment()->lastInPrevSegments(staffIdx());
 }
@@ -749,13 +749,13 @@ QString KeySig::accessibleInfo() const
 {
     QString keySigType;
     if (isAtonal()) {
-        return QString("%1: %2").arg(Element::accessibleInfo(), qtrc("MuseScore", keyNames[15]));
+        return QString("%1: %2").arg(EngravingItem::accessibleInfo(), qtrc("MuseScore", keyNames[15]));
     } else if (isCustom()) {
-        return QObject::tr("%1: Custom").arg(Element::accessibleInfo());
+        return QObject::tr("%1: Custom").arg(EngravingItem::accessibleInfo());
     }
 
     if (key() == Key::C) {
-        return QString("%1: %2").arg(Element::accessibleInfo(), qtrc("MuseScore", keyNames[14]));
+        return QString("%1: %2").arg(EngravingItem::accessibleInfo(), qtrc("MuseScore", keyNames[14]));
     }
     int keyInt = static_cast<int>(key());
     if (keyInt < 0) {
@@ -763,6 +763,6 @@ QString KeySig::accessibleInfo() const
     } else {
         keySigType = qtrc("MuseScore", keyNames[(keyInt - 1) * 2]);
     }
-    return QString("%1: %2").arg(Element::accessibleInfo(), keySigType);
+    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), keySigType);
 }
 }

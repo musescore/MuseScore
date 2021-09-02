@@ -47,11 +47,11 @@ public:
     void init(INotationPartsPtr parts) override;
 
     midi::MidiData trackMidiData(const ID& partId) const override;
-    Ret triggerElementMidiData(const Element* element) override;
+    Ret triggerElementMidiData(const EngravingItem* element) override;
 
     midi::Events retrieveEvents(const std::vector<midi::channel_t>& midiChannels, const midi::tick_t fromTick,
                                 const midi::tick_t toTick) const override;
-    midi::Events retrieveEventsForElement(const Element* element, const midi::channel_t midiChannel) const override;
+    midi::Events retrieveEventsForElement(const EngravingItem* element, const midi::channel_t midiChannel) const override;
     std::vector<midi::Event> retrieveSetupEvents(const std::list<InstrumentChannel*> instrChannel) const override;
 
 private:
@@ -108,9 +108,9 @@ private:
     Ms::EventMap renderMsEvents(const midi::tick_t fromTick, const midi::tick_t toTick) const;
     midi::Events convertMsEvents(Ms::EventMap&& eventMap) const;
 
-    midi::Events eventsFromNote(const Element* noteElement, const midi::channel_t midiChannel) const;
-    midi::Events eventsFromChord(const Element* chordElement, const midi::channel_t midiChannel) const;
-    midi::Events eventsFromHarmony(const Element* harmonyElement, const midi::channel_t midiChannel) const;
+    midi::Events eventsFromNote(const EngravingItem* noteElement, const midi::channel_t midiChannel) const;
+    midi::Events eventsFromChord(const EngravingItem* chordElement, const midi::channel_t midiChannel) const;
+    midi::Events eventsFromHarmony(const EngravingItem* harmonyElement, const midi::channel_t midiChannel) const;
 
     mutable RenderRangeMap m_renderRanges;
     mutable std::unordered_map<midi::channel_t, midi::Events> m_eventsCache = {};

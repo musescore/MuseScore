@@ -240,8 +240,8 @@ AccidentalVal sym2accidentalVal(SymId id)
 //   Accidental
 //---------------------------------------------------------
 
-Accidental::Accidental(Element* parent)
-    : Element(ElementType::ACCIDENTAL, parent, ElementFlag::MOVABLE)
+Accidental::Accidental(EngravingItem* parent)
+    : EngravingItem(ElementType::ACCIDENTAL, parent, ElementFlag::MOVABLE)
 {
 }
 
@@ -267,7 +267,7 @@ void Accidental::read(XmlReader& e)
             }
         } else if (tag == "small") {
             m_isSmall = e.readInt();
-        } else if (Element::readProperties(e)) {
+        } else if (EngravingItem::readProperties(e)) {
         } else {
             e.unknown();
         }
@@ -285,7 +285,7 @@ void Accidental::write(XmlWriter& xml) const
     writeProperty(xml, Pid::ROLE);
     writeProperty(xml, Pid::SMALL);
     writeProperty(xml, Pid::ACCIDENTAL_TYPE);
-    Element::writeProperties(xml);
+    EngravingItem::writeProperties(xml);
     xml.etag();
 }
 
@@ -539,7 +539,7 @@ void Accidental::draw(mu::draw::Painter* painter) const
 
 bool Accidental::acceptDrop(EditData& data) const
 {
-    Element* e = data.dropElement;
+    EngravingItem* e = data.dropElement;
 
     if (e->isActionIcon()) {
         ActionIconType type = toActionIcon(e)->actionType();
@@ -555,9 +555,9 @@ bool Accidental::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-Element* Accidental::drop(EditData& data)
+EngravingItem* Accidental::drop(EditData& data)
 {
-    Element* e = data.dropElement;
+    EngravingItem* e = data.dropElement;
     switch (e->type()) {
     case ElementType::ACTION_ICON:
         switch (toActionIcon(e)->actionType()) {
@@ -603,7 +603,7 @@ QVariant Accidental::getProperty(Pid propertyId) const
     case Pid::ACCIDENTAL_BRACKET: return int(bracket());
     case Pid::ROLE:               return int(role());
     default:
-        return Element::getProperty(propertyId);
+        return EngravingItem::getProperty(propertyId);
     }
 }
 
@@ -619,7 +619,7 @@ QVariant Accidental::propertyDefault(Pid propertyId) const
     case Pid::ACCIDENTAL_BRACKET: return int(AccidentalBracket::NONE);
     case Pid::ROLE:               return int(AccidentalRole::AUTO);
     default:
-        return Element::propertyDefault(propertyId);
+        return EngravingItem::propertyDefault(propertyId);
     }
 }
 
@@ -643,7 +643,7 @@ bool Accidental::setProperty(Pid propertyId, const QVariant& v)
         _role = v.value<AccidentalRole>();
         break;
     default:
-        return Element::setProperty(propertyId, v);
+        return EngravingItem::setProperty(propertyId, v);
     }
     triggerLayout();
     return true;
@@ -658,7 +658,7 @@ Pid Accidental::propertyId(const QStringRef& xmlName) const
     if (xmlName == propertyName(Pid::ACCIDENTAL_TYPE)) {
         return Pid::ACCIDENTAL_TYPE;
     }
-    return Element::propertyId(xmlName);
+    return EngravingItem::propertyId(xmlName);
 }
 
 //---------------------------------------------------------
@@ -671,7 +671,7 @@ QString Accidental::propertyUserValue(Pid pid) const
     case Pid::ACCIDENTAL_TYPE:
         return subtypeUserName();
     default:
-        return Element::propertyUserValue(pid);
+        return EngravingItem::propertyUserValue(pid);
     }
 }
 
@@ -681,6 +681,6 @@ QString Accidental::propertyUserValue(Pid pid) const
 
 QString Accidental::accessibleInfo() const
 {
-    return QString("%1: %2").arg(Element::accessibleInfo(), Accidental::subtypeUserName());
+    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), Accidental::subtypeUserName());
 }
 }

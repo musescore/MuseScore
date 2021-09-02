@@ -148,7 +148,7 @@ void MusicXmlLyricsExtend::addLyric(Lyrics* const lyric)
 static Fraction lastChordTicks(const Segment* s, const int track, const Fraction& tick)
 {
     while (s && s->tick() < tick) {
-        Element* el = s->element(track);
+        EngravingItem* el = s->element(track);
         if (el && el->isChordRest()) {
             ChordRest* cr = static_cast<ChordRest*>(el);
             if (cr->tick() + cr->actualTicks() == tick) {
@@ -172,7 +172,7 @@ void MusicXmlLyricsExtend::setExtend(const int no, const int track, const Fracti
 {
     QList<Lyrics*> list;
     foreach (Lyrics* l, _lyrics) {
-        Element* const el = l->parentElement();
+        EngravingItem* const el = l->parentElement();
         if (el->type() == ElementType::CHORD) {           // TODO: rest also possible ?
             ChordRest* const par = static_cast<ChordRest*>(el);
             if (par->track() == track && (no == -1 || l->no() == no)) {
@@ -325,7 +325,7 @@ static void fillGapsInFirstVoices(Measure* measure, Part* part)
         Fraction endOfLastCR = measTick;
         for (Segment* s = measure->first(); s; s = s->next()) {
             // qDebug("fillGIFV   segment %p tp %s", s, s->subTypeName());
-            Element* el = s->element(track);
+            EngravingItem* el = s->element(track);
             if (el) {
                 // qDebug(" el[%d] %p", track, el);
                 if (s->isChordRestType()) {
@@ -860,7 +860,7 @@ static void addLyrics(MxmlLogger* logger, const QXmlStreamReader* const xmlreade
 //   addElemOffset
 //---------------------------------------------------------
 
-static void addElemOffset(Element* el, int track, const QString& placement, Measure* measure, const Fraction& tick)
+static void addElemOffset(EngravingItem* el, int track, const QString& placement, Measure* measure, const Fraction& tick)
 {
     if (!measure) {
         return;
@@ -1872,7 +1872,7 @@ static void markUserAccidentals(const int firstStaff,
     SegmentType st = SegmentType::ChordRest;
     for (Ms::Segment* segment = measure->first(st); segment; segment = segment->next(st)) {
         for (int track = 0; track < staves * VOICES; ++track) {
-            Element* e = segment->element(firstStaff * VOICES + track);
+            EngravingItem* e = segment->element(firstStaff * VOICES + track);
             if (!e || e->type() != Ms::ElementType::CHORD) {
                 continue;
             }
@@ -1953,7 +1953,7 @@ static void addGraceChordsBefore(Chord* c, GraceChordList& gcl)
 {
     for (int i = gcl.size() - 1; i >= 0; i--) {
         Chord* gc = gcl.at(i);
-        for (Element* e : gc->el()) {
+        for (EngravingItem* e : gc->el()) {
             if (e->isFermata()) {
                 c->segment()->add(e);
                 gc->el().remove(e);

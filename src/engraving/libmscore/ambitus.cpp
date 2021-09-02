@@ -51,7 +51,7 @@ static const qreal LINEOFFSET_DEFAULT      = 0.8;               // the distance 
 //---------------------------------------------------------
 
 Ambitus::Ambitus(Segment* parent)
-    : Element(ElementType::AMBITUS, parent, ElementFlag::ON_STAFF), _topAccid(parent), _bottomAccid(parent)
+    : EngravingItem(ElementType::AMBITUS, parent, ElementFlag::ON_STAFF), _topAccid(parent), _bottomAccid(parent)
 {
     _noteHeadGroup    = NOTEHEADGROUP_DEFAULT;
     _noteHeadType     = NOTEHEADTYPE_DEFAULT;
@@ -104,7 +104,7 @@ void Ambitus::setTrack(int t)
     Segment* segm  = segment();
     Staff* stf   = score()->staff(track2staff(t));
 
-    Element::setTrack(t);
+    EngravingItem::setTrack(t);
     // if not initialized and there is a segment and a staff,
     // initialize pitches and tpc's to first and last staff line
     // (for use in palettes)
@@ -231,7 +231,7 @@ void Ambitus::write(XmlWriter& xml) const
         _bottomAccid.write(xml);
         xml.etag();
     }
-    Element::writeProperties(xml);
+    EngravingItem::writeProperties(xml);
     xml.etag();
 }
 
@@ -297,7 +297,7 @@ bool Ambitus::readProperties(XmlReader& e)
                 e.skipCurrentElement();
             }
         }
-    } else if (Element::readProperties(e)) {
+    } else if (EngravingItem::readProperties(e)) {
     } else {
         return false;
     }
@@ -521,7 +521,7 @@ void Ambitus::draw(mu::draw::Painter* painter) const
 //   scanElements
 //---------------------------------------------------------
 
-void Ambitus::scanElements(void* data, void (* func)(void*, Element*), bool all)
+void Ambitus::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
     Q_UNUSED(all);
     EngravingObject::scanElements(data, func, all);
@@ -635,7 +635,7 @@ Ambitus::Ranges Ambitus::estimateRanges() const
         }
         // scan all relevant tracks of this segment for chords
         for (trk = firstTrack; trk <= lastTrack; trk++) {
-            Element* e = segm->element(trk);
+            EngravingItem* e = segm->element(trk);
             if (!e || !e->isChord()) {
                 continue;
             }
@@ -699,7 +699,7 @@ QVariant Ambitus::getProperty(Pid propertyId) const
     case Pid::FBPARENTHESIS4:                // recycled property = octave of _bottomPitch
         return bottomOctave();
     default:
-        return Element::getProperty(propertyId);
+        return EngravingItem::getProperty(propertyId);
     }
 }
 
@@ -744,7 +744,7 @@ bool Ambitus::setProperty(Pid propertyId, const QVariant& v)
         setBottomPitch(bottomPitch() % 12 + (v.toInt() + 1) * 12);
         break;
     default:
-        return Element::setProperty(propertyId, v);
+        return EngravingItem::setProperty(propertyId, v);
     }
     triggerLayout();
     return true;
@@ -780,7 +780,7 @@ QVariant Ambitus::propertyDefault(Pid id) const
     case Pid::FBPARENTHESIS4:
         return int(estimateRanges().bottomPitch / 12) - 1;
     default:
-        return Element::propertyDefault(id);
+        return EngravingItem::propertyDefault(id);
     }
     //return QVariant();
 }
@@ -789,7 +789,7 @@ QVariant Ambitus::propertyDefault(Pid id) const
 //   nextSegmentElement
 //---------------------------------------------------------
 
-Element* Ambitus::nextSegmentElement()
+EngravingItem* Ambitus::nextSegmentElement()
 {
     return segment()->firstInNextSegments(staffIdx());
 }
@@ -798,7 +798,7 @@ Element* Ambitus::nextSegmentElement()
 //   prevSegmentElement
 //---------------------------------------------------------
 
-Element* Ambitus::prevSegmentElement()
+EngravingItem* Ambitus::prevSegmentElement()
 {
     return segment()->lastInPrevSegments(staffIdx());
 }
@@ -809,7 +809,7 @@ Element* Ambitus::prevSegmentElement()
 
 QString Ambitus::accessibleInfo() const
 {
-    return QObject::tr("%1; Top pitch: %2%3; Bottom pitch: %4%5").arg(Element::accessibleInfo(),
+    return QObject::tr("%1; Top pitch: %2%3; Bottom pitch: %4%5").arg(EngravingItem::accessibleInfo(),
                                                                       tpc2name(topTpc(), NoteSpellingType::STANDARD, NoteCaseType::AUTO,
                                                                                false),
                                                                       QString::number(topOctave()),

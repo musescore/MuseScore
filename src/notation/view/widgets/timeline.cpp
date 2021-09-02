@@ -776,7 +776,7 @@ Timeline::Timeline(QSplitter* splitter)
 
     std::tuple<QGraphicsItem*, int, QColor> ohi(nullptr, -1, QColor());
     _oldHoverInfo = ohi;
-    std::tuple<int, qreal, Element*, Element*, bool> ri(0, 0, nullptr, nullptr, false);
+    std::tuple<int, qreal, EngravingItem*, EngravingItem*, bool> ri(0, 0, nullptr, nullptr, false);
     _repeatInfo = ri;
 
     static const char* startRepeat[] = {
@@ -1134,13 +1134,13 @@ void Timeline::drawGrid(int globalRows, int globalCols, int startMeasure, int en
         // Handle all jumps here
         if (getMetaRow(tr("Jumps and Markers")) != numMetas) {
             ElementList measureElementsList = cm->el();
-            for (Element* element : measureElementsList) {
+            for (EngravingItem* element : measureElementsList) {
                 std::get<3>(_repeatInfo) = element;
                 if (element->isMarker()) {
                     jumpMarkerMeta(0, &stagger, xPos);
                 }
             }
-            for (Element* element : measureElementsList) {
+            for (EngravingItem* element : measureElementsList) {
                 if (element->isJump()) {
                     std::get<2>(_repeatInfo) = element;
                     if (_collapsedMeta) {
@@ -1175,8 +1175,8 @@ void Timeline::tempoMeta(Segment* seg, int* stagger, int pos)
     int row = getMetaRow(tr("Tempo"));
 
     // Add all tempo texts in this segment
-    const std::vector<Element*> annotations = seg->annotations();
-    for (Element* element : annotations) {
+    const std::vector<EngravingItem*> annotations = seg->annotations();
+    for (EngravingItem* element : annotations) {
         if (element->isTempoText()) {
             TempoText* text = toTempoText(element);
             qreal x = pos + (*stagger) * _spacing;
@@ -1244,7 +1244,7 @@ void Timeline::rehearsalMeta(Segment* seg, int* stagger, int pos)
 {
     int row = getMetaRow(tr("Rehearsal Mark"));
 
-    for (Element* element : seg->annotations()) {
+    for (EngravingItem* element : seg->annotations()) {
         int x = pos + (*stagger) * _spacing;
         if (element->isRehearsalMark()) {
             RehearsalMark* rehersal_mark = toRehearsalMark(element);
@@ -1407,7 +1407,7 @@ void Timeline::barlineMeta(Segment* seg, int* stagger, int pos)
 
     Measure* measure = seg->measure();
     ElementType elementType = ElementType::BAR_LINE;
-    Element* element = nullptr;
+    EngravingItem* element = nullptr;
 
     if (repeatText == "") {
         _isBarline = false;
@@ -1438,7 +1438,7 @@ void Timeline::jumpMarkerMeta(Segment* seg, int* stagger, int pos)
     int row = getMetaRow(tr("Jumps and Markers"));
 
     QString text = "";
-    Element* element = nullptr;
+    EngravingItem* element = nullptr;
     if (std::get<2>(_repeatInfo)) {
         element = std::get<2>(_repeatInfo);
     } else if (std::get<3>(_repeatInfo)) {
@@ -1583,7 +1583,7 @@ unsigned Timeline::getMetaRow(QString targetText)
 //   Timeline::addMetaValue
 //---------------------------------------------------------
 
-bool Timeline::addMetaValue(int x, int pos, QString metaText, int row, ElementType elementType, Element* element, Segment* seg,
+bool Timeline::addMetaValue(int x, int pos, QString metaText, int row, ElementType elementType, EngravingItem* element, Segment* seg,
                             Measure* measure, QString tooltip)
 {
     TRACEFUNC;
@@ -1738,7 +1738,8 @@ bool Timeline::addMetaValue(int x, int pos, QString metaText, int row, ElementTy
 //   Timeline::setMetaData
 //---------------------------------------------------------
 
-void Timeline::setMetaData(QGraphicsItem* gi, int staff, ElementType et, Measure* m, bool full_measure, Element* e, QGraphicsItem* pairItem,
+void Timeline::setMetaData(QGraphicsItem* gi, int staff, ElementType et, Measure* m, bool full_measure, EngravingItem* e,
+                           QGraphicsItem* pairItem,
                            Segment* seg)
 {
     // full_measure true for meta values
@@ -1965,7 +1966,7 @@ void Timeline::drawSelection()
 
     mu::notation::INotationSelectionPtr selection = interaction()->selection();
 
-    for (Element* element : selection->elements()) {
+    for (EngravingItem* element : selection->elements()) {
         if (element->tick() == Fraction(-1, 1)) {
             continue;
         } else {
@@ -2052,12 +2053,12 @@ void Timeline::drawSelection()
 
         if (stave == -1 && it != metaLabelsSet.end()) {
             //Make sure the element is correct
-            std::vector<Element*> elementList = interaction()->selection()->elements();
-            Element* targetElement = static_cast<Element*>(graphicsItem->data(4).value<void*>());
+            std::vector<EngravingItem*> elementList = interaction()->selection()->elements();
+            EngravingItem* targetElement = static_cast<EngravingItem*>(graphicsItem->data(4).value<void*>());
             Segment* seg = static_cast<Segment*>(graphicsItem->data(6).value<void*>());
 
             if (targetElement) {
-                for (Element* element : elementList) {
+                for (EngravingItem* element : elementList) {
                     if (element == targetElement) {
                         QGraphicsRectItem* graphicsRectItem = qgraphicsitem_cast<QGraphicsRectItem*>(graphicsItem);
                         if (graphicsRectItem) {
@@ -2066,7 +2067,7 @@ void Timeline::drawSelection()
                     }
                 }
             } else if (seg) {
-                for (Element* element : elementList) {
+                for (EngravingItem* element : elementList) {
                     QGraphicsRectItem* graphicsRectItem = qgraphicsitem_cast<QGraphicsRectItem*>(graphicsItem);
                     if (graphicsRectItem) {
                         for (int track = 0; track < score()->nstaves() * VOICES; track++) {
@@ -2214,7 +2215,7 @@ void Timeline::mousePressEvent(QMouseEvent* event)
             if (seg) {
                 interaction()->clearSelection();
                 for (int track = 0; track < score()->nstaves() * VOICES; track++) {
-                    Element* element = seg->element(track);
+                    EngravingItem* element = seg->element(track);
                     if (element) {
                         interaction()->select({ seg->element(track) }, SelectType::ADD);
                     }
@@ -2236,7 +2237,7 @@ void Timeline::mousePressEvent(QMouseEvent* event)
                     if (currSeg) {
                         interaction()->clearSelection();
                         for (int j = 0; j < score()->nstaves(); j++) {
-                            Element* element = currSeg->firstElement(j);
+                            EngravingItem* element = currSeg->firstElement(j);
                             if (element) {
                                 interaction()->select({ element }, SelectType::ADD);
                             }
@@ -2246,7 +2247,7 @@ void Timeline::mousePressEvent(QMouseEvent* event)
                     interaction()->clearSelection();
                     interaction()->select({ currMeasure }, SelectType::ADD, 0);
                     // Select just the element for tempo_text
-                    Element* element = static_cast<Element*>(currGraphicsItem->data(4).value<void*>());
+                    EngravingItem* element = static_cast<EngravingItem*>(currGraphicsItem->data(4).value<void*>());
                     interaction()->clearSelection();
                     interaction()->select({ element }, SelectType::SINGLE);
                 }

@@ -35,33 +35,33 @@ public:
 
     QObject* getQObject() override;
 
-    void updateElementList(const QList<Ms::Element*>& newRawElementList) override;
-    QList<Ms::Element*> findElementsByType(const Ms::ElementType elementType) const override;
-    QList<Ms::Element*> findElementsByType(const Ms::ElementType elementType,
-                                           std::function<bool(const Ms::Element*)> filterFunc) const override;
-    QList<Ms::Element*> takeAllElements() const override;
+    void updateElementList(const QList<Ms::EngravingItem*>& newRawElementList) override;
+    QList<Ms::EngravingItem*> findElementsByType(const Ms::ElementType elementType) const override;
+    QList<Ms::EngravingItem*> findElementsByType(const Ms::ElementType elementType,
+                                                 std::function<bool(const Ms::EngravingItem*)> filterFunc) const override;
+    QList<Ms::EngravingItem*> takeAllElements() const override;
 
 signals:
     void elementsUpdated() override;
 
 private:
-    QList<Ms::Element*> m_elementList;
+    QList<Ms::EngravingItem*> m_elementList;
 
-    QList<Ms::Element*> exposeRawElements(const QList<Ms::Element*>& rawElementList) const;
+    QList<Ms::EngravingItem*> exposeRawElements(const QList<Ms::EngravingItem*>& rawElementList) const;
 
-    QList<Ms::Element*> findChords() const;
-    QList<Ms::Element*> findNotes() const;
-    QList<Ms::Element*> findStems() const;
-    QList<Ms::Element*> findHooks() const;
-    QList<Ms::Element*> findBeams() const;
-    QList<Ms::Element*> findGlissandos() const;
-    QList<Ms::Element*> findHairpins() const;
-    QList<Ms::Element*> findStaffs() const;
-    QList<Ms::Element*> findSectionBreaks() const;
-    QList<Ms::Element*> findPedals() const;
-    QList<Ms::Element*> findPairedClefs() const;
-    QList<Ms::Element*> findTexts() const;
-    QList<Ms::Element*> findTremolos() const;
+    QList<Ms::EngravingItem*> findChords() const;
+    QList<Ms::EngravingItem*> findNotes() const;
+    QList<Ms::EngravingItem*> findStems() const;
+    QList<Ms::EngravingItem*> findHooks() const;
+    QList<Ms::EngravingItem*> findBeams() const;
+    QList<Ms::EngravingItem*> findGlissandos() const;
+    QList<Ms::EngravingItem*> findHairpins() const;
+    QList<Ms::EngravingItem*> findStaffs() const;
+    QList<Ms::EngravingItem*> findSectionBreaks() const;
+    QList<Ms::EngravingItem*> findPedals() const;
+    QList<Ms::EngravingItem*> findPairedClefs() const;
+    QList<Ms::EngravingItem*> findTexts() const;
+    QList<Ms::EngravingItem*> findTremolos() const;
 };
 }
 

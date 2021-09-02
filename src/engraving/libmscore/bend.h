@@ -26,7 +26,7 @@
 #include "infrastructure/draw/font.h"
 #include "style/style.h"
 
-#include "element.h"
+#include "engravingitem.h"
 #include "pitchvalue.h"
 #include "property.h"
 
@@ -44,7 +44,7 @@ enum class BendType {
     CUSTOM
 };
 
-class Bend final : public Element
+class Bend final : public EngravingItem
 {
     M_PROPERTY(QString,   fontFace,  setFontFace)
     M_PROPERTY(qreal,     fontSize,  setFontSize)

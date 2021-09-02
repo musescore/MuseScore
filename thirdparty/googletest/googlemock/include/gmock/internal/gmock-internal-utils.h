@@ -93,8 +93,8 @@ inline const typename Pointer::element_type* GetRawPointer(const Pointer& p) {
   return p.get();
 }
 // This overloaded version is for the raw pointer case.
-template <typename Element>
-inline Element* GetRawPointer(Element* p) { return p; }
+template <typename EngravingItem>
+inline EngravingItem* GetRawPointer(EngravingItem* p) { return p; }
 
 // MSVC treats wchar_t as a native type usually, but treats it as the
 // same as unsigned short when the compiler option /Zc:wchar_t- is
@@ -392,10 +392,10 @@ class StlContainerView {
 };
 
 // This specialization is used when RawContainer is a native array type.
-template <typename Element, size_t N>
-class StlContainerView<Element[N]> {
+template <typename EngravingItem, size_t N>
+class StlContainerView<EngravingItem[N]> {
  public:
-  typedef typename std::remove_const<Element>::type RawElement;
+  typedef typename std::remove_const<EngravingItem>::type RawElement;
   typedef internal::NativeArray<RawElement> type;
   // NativeArray<T> can represent a native array either by value or by
   // reference (selected by a constructor argument), so 'const type'
@@ -404,12 +404,12 @@ class StlContainerView<Element[N]> {
   // ConstReference() has to return a reference to a local variable.
   typedef const type const_reference;
 
-  static const_reference ConstReference(const Element (&array)[N]) {
-    static_assert(std::is_same<Element, RawElement>::value,
-                  "Element type must not be const");
+  static const_reference ConstReference(const EngravingItem (&array)[N]) {
+    static_assert(std::is_same<EngravingItem, RawElement>::value,
+                  "EngravingItem type must not be const");
     return type(array, N, RelationToSourceReference());
   }
-  static type Copy(const Element (&array)[N]) {
+  static type Copy(const EngravingItem (&array)[N]) {
     return type(array, N, RelationToSourceCopy());
   }
 };

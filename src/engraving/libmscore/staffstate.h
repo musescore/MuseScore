@@ -23,7 +23,7 @@
 #ifndef __STAFFSTATE_H__
 #define __STAFFSTATE_H__
 
-#include "element.h"
+#include "engravingitem.h"
 #include "instrument.h"
 #include "infrastructure/draw/painterpath.h"
 
@@ -39,7 +39,7 @@ enum class StaffStateType : char {
 //   @@ StaffState
 //---------------------------------------------------------
 
-class StaffState final : public Element
+class StaffState final : public EngravingItem
 {
     StaffStateType _staffStateType { StaffStateType::INVISIBLE };
     qreal lw { 0.0 };
@@ -51,7 +51,7 @@ class StaffState final : public Element
     void layout() override;
 
 public:
-    StaffState(Element* parent);
+    StaffState(EngravingItem* parent);
     StaffState(const StaffState&);
     ~StaffState();
 
@@ -63,7 +63,7 @@ public:
     QString staffStateTypeName() const;
 
     bool acceptDrop(EditData&) const override;
-    Element* drop(EditData&) override;
+    EngravingItem* drop(EditData&) override;
 
     void write(XmlWriter&) const override;
     void read(XmlReader&) override;

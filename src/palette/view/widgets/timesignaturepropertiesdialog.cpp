@@ -68,7 +68,7 @@ TimeSignaturePropertiesDialog::TimeSignaturePropertiesDialog(QWidget* parent)
     setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     const INotationInteractionPtr interaction = notation() ? notation()->interaction() : nullptr;
-    Element* element = interaction ? interaction->hitElementContext().element : nullptr;
+    EngravingItem* element = interaction ? interaction->hitElementContext().element : nullptr;
     m_originTimeSig = element ? toTimeSig(element) : nullptr;
 
     if (!m_originTimeSig) {

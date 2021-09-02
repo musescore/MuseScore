@@ -164,7 +164,7 @@ Shape VibratoSegment::shape() const
 //   propertyDelegate
 //---------------------------------------------------------
 
-Element* VibratoSegment::propertyDelegate(Pid pid)
+EngravingItem* VibratoSegment::propertyDelegate(Pid pid)
 {
     if (pid == Pid::VIBRATO_TYPE || pid == Pid::PLACEMENT || pid == Pid::PLAY) {
         return spanner();
@@ -185,7 +185,7 @@ static const ElementStyle vibratoStyle {
 //   Vibrato
 //---------------------------------------------------------
 
-Vibrato::Vibrato(Element* parent)
+Vibrato::Vibrato(EngravingItem* parent)
     : SLine(ElementType::VIBRATO, parent)
 {
     initElementStyle(&vibratoStyle);
@@ -426,6 +426,6 @@ void Vibrato::undoSetVibratoType(Type val)
 
 QString Vibrato::accessibleInfo() const
 {
-    return QString("%1: %2").arg(Element::accessibleInfo(), vibratoTypeUserName());
+    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), vibratoTypeUserName());
 }
 }

@@ -76,7 +76,7 @@ const QChar FiguredBassItem::normParenthToChar[int(FiguredBassItem::Parenthesis:
 { 0, '(', ')', '[', ']' };
 
 FiguredBassItem::FiguredBassItem(FiguredBass* parent, int l)
-    : Element(ElementType::INVALID, parent), ord(l)
+    : EngravingItem(ElementType::INVALID, parent), ord(l)
 {
     _prefix     = _suffix = Modifier::NONE;
     _digit      = FBIDigitNone;
@@ -86,7 +86,7 @@ FiguredBassItem::FiguredBassItem(FiguredBass* parent, int l)
 }
 
 FiguredBassItem::FiguredBassItem(const FiguredBassItem& item)
-    : Element(item)
+    : EngravingItem(item)
 {
     ord         = item.ord;
     _prefix     = item._prefix;
@@ -482,7 +482,7 @@ void FiguredBassItem::read(XmlReader& e)
             _suffix = (Modifier)(e.readInt());
         } else if (tag == "continuationLine") {
             _contLine = (ContLine)(e.readInt());
-        } else if (!Element::readProperties(e)) {
+        } else if (!EngravingItem::readProperties(e)) {
             e.unknown();
         }
     }
@@ -705,7 +705,7 @@ QVariant FiguredBassItem::getProperty(Pid propertyId) const
     case Pid::FBPARENTHESIS5:
         return int(parenth[4]);
     default:
-        return Element::getProperty(propertyId);
+        return EngravingItem::getProperty(propertyId);
     }
 }
 
@@ -766,7 +766,7 @@ bool FiguredBassItem::setProperty(Pid propertyId, const QVariant& v)
         parenth[4] = (Parenthesis)val;
         break;
     default:
-        return Element::setProperty(propertyId, v);
+        return EngravingItem::setProperty(propertyId, v);
     }
     triggerLayoutAll();
     return true;
@@ -783,7 +783,7 @@ QVariant FiguredBassItem::propertyDefault(Pid id) const
     case Pid::FBCONTINUATIONLINE:
         return false;
     default:
-        return Element::propertyDefault(id);
+        return EngravingItem::propertyDefault(id);
     }
 }
 
@@ -1051,7 +1051,7 @@ Sid FiguredBass::getPropertyStyle(Pid id) const
             return p.sid;
         }
     }
-    return Element::getPropertyStyle(id);
+    return EngravingItem::getPropertyStyle(id);
 }
 
 //---------------------------------------------------------
@@ -1083,7 +1083,7 @@ void FiguredBass::write(XmlWriter& xml) const
         for (const StyledProperty& spp : *_elementStyle) {
             writeProperty(xml, spp.pid);
         }
-        Element::writeProperties(xml);
+        EngravingItem::writeProperties(xml);
     }
     xml.etag();
 }
@@ -1191,7 +1191,7 @@ void FiguredBass::layoutLines()
             int endTrack = startTrack + VOICES;
             for (const Segment* seg = nextSegm->prev1(); seg; seg = seg->prev1()) {
                 for (int t = startTrack; t < endTrack; ++t) {
-                    Element* el = seg->element(t);
+                    EngravingItem* el = seg->element(t);
                     if (el && el->isChordRest()) {
                         lastCR = toChordRest(el);
                         break;
@@ -1371,7 +1371,7 @@ void FiguredBass::endEdit(EditData& ed)
 
 void FiguredBass::setSelected(bool flag)
 {
-    Element::setSelected(flag);
+    EngravingItem::setSelected(flag);
     for (FiguredBassItem* item : items) {
         item->setSelected(flag);
     }
@@ -1379,7 +1379,7 @@ void FiguredBass::setSelected(bool flag)
 
 void FiguredBass::setVisible(bool flag)
 {
-    Element::setVisible(flag);
+    EngravingItem::setVisible(flag);
     for (FiguredBassItem* item : items) {
         item->setVisible(flag);
     }
@@ -1408,7 +1408,7 @@ FiguredBass* FiguredBass::nextFiguredBass() const
     }
 
     // scan segment annotations for an existing FB element in the this' staff
-    for (Element* e : nextSegm->annotations()) {
+    for (EngravingItem* e : nextSegm->annotations()) {
         if (e->type() == ElementType::FIGURED_BASS && e->track() == track()) {
             return toFiguredBass(e);
         }
@@ -1503,7 +1503,7 @@ FiguredBass* FiguredBass::addFiguredBassToSegment(Segment* seg, int track, const
 
     // scan segment annotations for an existing FB element in the same staff
     FiguredBass* fb = 0;
-    for (Element* e : seg->annotations()) {
+    for (EngravingItem* e : seg->annotations()) {
         if (e->type() == ElementType::FIGURED_BASS && (e->track() / VOICES) == staff) {
             // an FB already exists in segment: re-use it
             fb = toFiguredBass(e);
@@ -1549,7 +1549,7 @@ FiguredBass* FiguredBass::addFiguredBassToSegment(Segment* seg, int track, const
         Segment* prevSegm;
         FiguredBass* prevFB = 0;
         for (prevSegm = seg->prev1(SegmentType::ChordRest); prevSegm; prevSegm = prevSegm->prev1(SegmentType::ChordRest)) {
-            for (Element* e : prevSegm->annotations()) {
+            for (EngravingItem* e : prevSegm->annotations()) {
                 if (e->type() == ElementType::FIGURED_BASS && (e->track()) == track) {
                     prevFB = toFiguredBass(e);             // previous FB found
                     break;
@@ -1810,7 +1810,7 @@ void FiguredBass::writeMusicXML(XmlWriter& xml, bool isOriginalFigure, int crEnd
 
 FiguredBass* Score::addFiguredBass()
 {
-    Element* el = selection().element();
+    EngravingItem* el = selection().element();
     if (!el || (!(el->isNote()) && !(el->isRest()) && !(el->isFiguredBass()))) {
         MScore::setError(MsError::NO_NOTE_FIGUREDBASS_SELECTED);
         return 0;

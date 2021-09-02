@@ -25,7 +25,7 @@
 
 #include <vector>
 
-#include "element.h"
+#include "engravingitem.h"
 
 namespace Ms {
 //-------------------------------------------------------------------
@@ -34,7 +34,7 @@ namespace Ms {
 ///    it draws the horizontal staff lines.
 //-------------------------------------------------------------------
 
-class StaffLines final : public Element
+class StaffLines final : public EngravingItem
 {
     qreal lw { 0.0 };
     std::vector<mu::LineF> lines;
@@ -49,7 +49,7 @@ public:
     mu::PointF pagePos() const override;      ///< position in page coordinates
     mu::PointF canvasPos() const override;    ///< position in page coordinates
 
-    void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
+    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
     std::vector<mu::LineF>& getLines() { return lines; }
     Measure* measure() const { return (Measure*)parent(); }

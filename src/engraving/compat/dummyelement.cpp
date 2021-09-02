@@ -32,7 +32,7 @@
 using namespace mu::engraving::compat;
 
 DummyElement::DummyElement(Ms::Score* s)
-    : Ms::Element(Ms::ElementType::INVALID, s)
+    : Ms::EngravingItem(Ms::ElementType::INVALID, s)
 {
     m_page = new Ms::Page(this);
     m_system = new Ms::System(m_page);
@@ -89,7 +89,7 @@ Ms::Note* DummyElement::note()
     return m_note;
 }
 
-Ms::Element* DummyElement::clone() const
+Ms::EngravingItem* DummyElement::clone() const
 {
     return nullptr;
 }

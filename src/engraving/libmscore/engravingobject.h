@@ -44,7 +44,7 @@ class Score;
 class Sym;
 class MuseScoreView;
 class Segment;
-class Element;
+class EngravingItem;
 class BarLine;
 class Articulation;
 class Marker;
@@ -219,13 +219,13 @@ public:
     //!     ScoreElement(Score* score)...
     //! }
     //!
-    //! class Element : public ScoreElement
+    //! class EngravingItem : public ScoreElement
     //! {
-    //!    Element* _parent;
-    //!    Element(Score* s) : ScoreElement(s)...
+    //!    EngravingItem* _parent;
+    //!    EngravingItem(Score* s) : ScoreElement(s)...
     //!
-    //!    Element* parent() const { return _parent; }
-    //!    void setElement(Element* e) { _parent = e; }
+    //!    EngravingItem* parent() const { return _parent; }
+    //!    void setElement(EngravingItem* e) { _parent = e; }
     //! }
     //! accordingly:
     //! * All elements have a ref to score which they are located.
@@ -299,7 +299,7 @@ public:
     static ElementType name2type(const QString& s) { return name2type(QStringRef(&s)); }
     static const char* name(ElementType);
 
-    virtual void scanElements(void* data, void (* func)(void*, Element*), bool all=true);
+    virtual void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true);
 
     virtual QVariant getProperty(Pid) const = 0;
     virtual bool setProperty(Pid, const QVariant&) = 0;
@@ -463,7 +463,7 @@ public:
     CONVERT(Sticking,      STICKING)
 #undef CONVERT
 
-    virtual bool isElement() const { return false; }   // overridden in element.h
+    virtual bool isEngravingItem() const { return false; }   // overridden in element.h
     bool isRestFamily() const { return isRest() || isMMRest() || isMeasureRepeat(); }
     bool isChordRest() const { return isRestFamily() || isChord(); }
     bool isDurationElement() const { return isChordRest() || isTuplet(); }
@@ -541,7 +541,7 @@ public:
 //
 // Example for ChordRest:
 //
-//    ChordRest* toChordRest(Element* e)
+//    ChordRest* toChordRest(EngravingItem* e)
 //---------------------------------------------------
 
 static inline ChordRest* toChordRest(EngravingObject* e)
@@ -668,7 +668,7 @@ static inline const StaffTextBase* toStaffTextBase(const EngravingObject* e)
     static inline a* to##a(EngravingObject * e) { Q_ASSERT(e == 0 || e->is##a()); return (a*)e; } \
     static inline const a* to##a(const EngravingObject * e) { Q_ASSERT(e == 0 || e->is##a()); return (const a*)e; }
 
-CONVERT(Element)
+CONVERT(EngravingItem)
 CONVERT(Note)
 CONVERT(Chord)
 CONVERT(BarLine)

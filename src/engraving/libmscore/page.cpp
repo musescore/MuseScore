@@ -58,7 +58,7 @@ static QString revision;
 //---------------------------------------------------------
 
 Page::Page(EngravingObject* parent)
-    : Element(ElementType::PAGE, parent, ElementFlag::NOT_SELECTABLE), _no(0)
+    : EngravingItem(ElementType::PAGE, parent, ElementFlag::NOT_SELECTABLE), _no(0)
 {
     bspTreeValid = false;
 }
@@ -76,21 +76,21 @@ Page::~Page()
 //   items
 //---------------------------------------------------------
 
-QList<Element*> Page::items(const RectF& r)
+QList<EngravingItem*> Page::items(const RectF& r)
 {
 #ifdef USE_BSP
     if (!bspTreeValid) {
         doRebuildBspTree();
     }
-    QList<Element*> el = bspTree.items(r);
+    QList<EngravingItem*> el = bspTree.items(r);
     return el;
 #else
     Q_UNUSED(r)
-    return QList<Element*>();
+    return QList<EngravingItem*>();
 #endif
 }
 
-QList<Element*> Page::items(const mu::PointF& p)
+QList<EngravingItem*> Page::items(const mu::PointF& p)
 {
 #ifdef USE_BSP
     if (!bspTreeValid) {
@@ -99,7 +99,7 @@ QList<Element*> Page::items(const mu::PointF& p)
     return bspTree.items(p);
 #else
     Q_UNUSED(p)
-    return QList<Element*>();
+    return QList<EngravingItem*>();
 #endif
 }
 
@@ -230,7 +230,7 @@ void Page::drawHeaderFooter(mu::draw::Painter* p, int area, const QString& ss) c
 //   scanElements
 //---------------------------------------------------------
 
-void Page::scanElements(void* data, void (* func)(void*, Element*), bool all)
+void Page::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
     EngravingObject::scanElements(data, func, all);
     if (all || visible() || score()->showInvisible()) {
@@ -243,12 +243,12 @@ void Page::scanElements(void* data, void (* func)(void*, Element*), bool all)
 //   bspInsert
 //---------------------------------------------------------
 
-static void bspInsert(void* bspTree, Element* e)
+static void bspInsert(void* bspTree, EngravingItem* e)
 {
     ((BspTree*)bspTree)->insert(e);
 }
 
-static void countElements(void* data, Element* /*e*/)
+static void countElements(void* data, EngravingItem* /*e*/)
 {
     ++(*(int*)data);
 }
@@ -492,9 +492,9 @@ void Page::read(XmlReader& e)
 //   elements
 //---------------------------------------------------------
 
-QList<Element*> Page::elements() const
+QList<EngravingItem*> Page::elements() const
 {
-    QList<Element*> el;
+    QList<EngravingItem*> el;
     const_cast<Page*>(this)->scanElements(&el, collectElements, false);
     return el;
 }
@@ -549,8 +549,8 @@ RectF Page::tbbox()
     qreal x2 = 0.0;
     qreal y1 = height();
     qreal y2 = 0.0;
-    const QList<Element*> el = elements();
-    for (Element* e : el) {
+    const QList<EngravingItem*> el = elements();
+    for (EngravingItem* e : el) {
         if (e == this || !e->isPrintable()) {
             continue;
         }

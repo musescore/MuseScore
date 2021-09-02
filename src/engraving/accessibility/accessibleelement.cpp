@@ -28,7 +28,7 @@
 using namespace mu::engraving;
 using namespace mu::accessibility;
 
-AccessibleElement::AccessibleElement(Ms::Element* e)
+AccessibleElement::AccessibleElement(Ms::EngravingItem* e)
 {
     setElement(e);
 }
@@ -52,7 +52,7 @@ AccessibleElement::~AccessibleElement()
     }
 }
 
-AccessibleElement* AccessibleElement::clone(Ms::Element* e) const
+AccessibleElement* AccessibleElement::clone(Ms::EngravingItem* e) const
 {
     return new AccessibleElement(e);
 }
@@ -92,7 +92,7 @@ AccessibleScore* AccessibleElement::accessibleScore() const
     return m_element->score()->accessible();
 }
 
-void AccessibleElement::setElement(Ms::Element* e)
+void AccessibleElement::setElement(Ms::EngravingItem* e)
 {
     AccessibleScore* ascore = accessibleScore();
     if (ascore && m_element) {
@@ -112,7 +112,7 @@ void AccessibleElement::setElement(Ms::Element* e)
     }
 }
 
-const Ms::Element* AccessibleElement::element() const
+const Ms::EngravingItem* AccessibleElement::element() const
 {
     return m_element;
 }
@@ -153,12 +153,12 @@ const IAccessible* AccessibleElement::accessibleParent() const
     //        return nullptr;
     //    }
 
-    //    if (treeParent == s || !treeParent->isElement()) {
+    //    if (treeParent == s || !treeParent->isEngravingItem()) {
     //        //! TODO Add Accessible Score
     //        return accessibilityController()->accessibleRoot();
     //    }
 
-    //    Ms::Element* p = static_cast<Ms::Element*>(treeParent);
+    //    Ms::EngravingItem* p = static_cast<Ms::EngravingItem*>(treeParent);
     //    return p->accessible();
 }
 
@@ -176,10 +176,10 @@ const IAccessible* AccessibleElement::accessibleChild(size_t) const
     return nullptr;
     //! TODO Not completed, please don't remove (igor.korsukov@gmail.com)
     //    Ms::ScoreElement* se = m_element->treeChild(static_cast<int>(i));
-    //    if (!se || !se->isElement()) {
+    //    if (!se || !se->isEngravingItem()) {
     //        return nullptr;
     //    }
-    //    Ms::Element* p = static_cast<Ms::Element*>(se);
+    //    Ms::EngravingItem* p = static_cast<Ms::EngravingItem*>(se);
     //    return p->accessible();
 }
 

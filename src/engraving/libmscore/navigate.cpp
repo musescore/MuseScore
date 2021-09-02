@@ -21,7 +21,7 @@
  */
 
 #include "navigate.h"
-#include "element.h"
+#include "engravingitem.h"
 #include "clef.h"
 #include "score.h"
 #include "note.h"
@@ -205,9 +205,9 @@ ChordRest* prevChordRest(ChordRest* cr, bool skipGrace, bool skipMeasureRepeatRe
 //    move to previous track if at top of chord
 //---------------------------------------------------------
 
-Element* Score::upAlt(Element* element)
+EngravingItem* Score::upAlt(EngravingItem* element)
 {
-    Element* re = 0;
+    EngravingItem* re = 0;
     if (element->isRestFamily()) {
         re = prevTrack(toRest(element));
     } else if (element->isNote()) {
@@ -250,9 +250,9 @@ Note* Score::upAltCtrl(Note* note) const
 //    move to next track if at bottom of chord
 //---------------------------------------------------------
 
-Element* Score::downAlt(Element* element)
+EngravingItem* Score::downAlt(EngravingItem* element)
 {
-    Element* re = 0;
+    EngravingItem* re = 0;
     if (element->isRestFamily()) {
         re = nextTrack(toRest(element));
     } else if (element->isNote()) {
@@ -293,7 +293,7 @@ Note* Score::downAltCtrl(Note* note) const
 //   firstElement
 //---------------------------------------------------------
 
-Element* Score::firstElement(bool frame)
+EngravingItem* Score::firstElement(bool frame)
 {
     if (frame) {
         MeasureBase* mb = measures()->first();
@@ -309,7 +309,7 @@ Element* Score::firstElement(bool frame)
 //   lastElement
 //---------------------------------------------------------
 
-Element* Score::lastElement(bool frame)
+EngravingItem* Score::lastElement(bool frame)
 {
     if (frame) {
         MeasureBase* mb = measures()->last();
@@ -317,7 +317,7 @@ Element* Score::lastElement(bool frame)
             return mb;
         }
     }
-    Element* re = 0;
+    EngravingItem* re = 0;
     Segment* seg = lastSegmentMM();
     if (!seg) {
         return nullptr;
@@ -351,7 +351,7 @@ ChordRest* Score::upStaff(ChordRest* cr)
     }
 
     for (int track = (cr->staffIdx() - 1) * VOICES; track >= 0; --track) {
-        Element* el = segment->element(track);
+        EngravingItem* el = segment->element(track);
         if (!el) {
             continue;
         }
@@ -379,7 +379,7 @@ ChordRest* Score::downStaff(ChordRest* cr)
     }
 
     for (int track = (cr->staffIdx() + 1) * VOICES; track < tracks; --track) {
-        Element* el = segment->element(track);
+        EngravingItem* el = segment->element(track);
         if (!el) {
             continue;
         }
@@ -533,7 +533,7 @@ ChordRest* Score::nextMeasure(ChordRest* element, bool selectBehavior, bool mmRe
     for (Segment* seg = startSeg; seg; seg = last ? seg->prev() : seg->next()) {
         int etrack = (staff + 1) * VOICES;
         for (int track = staff * VOICES; track < etrack; ++track) {
-            Element* pel = seg->element(track);
+            EngravingItem* pel = seg->element(track);
 
             if (pel && pel->isChordRest()) {
                 return toChordRest(pel);
@@ -579,7 +579,7 @@ ChordRest* Score::prevMeasure(ChordRest* element, bool mmRest)
     for (Segment* seg = startSeg; seg; seg = last ? seg->prev() : seg->next()) {
         int etrack = (staff + 1) * VOICES;
         for (int track = staff * VOICES; track < etrack; ++track) {
-            Element* pel = seg->element(track);
+            EngravingItem* pel = seg->element(track);
 
             if (pel && pel->isChordRest()) {
                 return toChordRest(pel);
@@ -593,9 +593,9 @@ ChordRest* Score::prevMeasure(ChordRest* element, bool mmRest)
 //   nextElement
 //---------------------------------------------------------
 
-Element* Score::nextElement()
+EngravingItem* Score::nextElement()
 {
-    Element* e = getSelectedElement();
+    EngravingItem* e = getSelectedElement();
     if (!e) {
         return nullptr;
     }
@@ -606,7 +606,7 @@ Element* Score::nextElement()
         case ElementType::REST:
         case ElementType::MMREST:
         case ElementType::CHORD: {
-            Element* next = e->nextElement();
+            EngravingItem* next = e->nextElement();
             if (next) {
                 return next;
             } else {
@@ -615,7 +615,7 @@ Element* Score::nextElement()
         }
         case ElementType::SEGMENT: {
             Segment* s = toSegment(e);
-            Element* next = s->nextElement(staffId);
+            EngravingItem* next = s->nextElement(staffId);
             if (next) {
                 return next;
             } else {
@@ -624,7 +624,7 @@ Element* Score::nextElement()
         }
         case ElementType::MEASURE: {
             Measure* m = toMeasure(e);
-            Element* next = m->nextElementStaff(staffId);
+            EngravingItem* next = m->nextElementStaff(staffId);
             if (next) {
                 return next;
             } else {
@@ -638,7 +638,7 @@ Element* Score::nextElement()
             for (; e && e->type() != ElementType::SEGMENT; e = e->parentElement()) {
             }
             Segment* s = toSegment(e);
-            Element* next = s->nextElement(staffId);
+            EngravingItem* next = s->nextElement(staffId);
             if (next) {
                 return next;
             } else {
@@ -666,7 +666,7 @@ Element* Score::nextElement()
             if (seg) {
                 Segment* nextSegment = seg->next1();
                 while (nextSegment) {
-                    Element* nextEl = nextSegment->firstElementOfSegment(nextSegment, staffId);
+                    EngravingItem* nextEl = nextSegment->firstElementOfSegment(nextSegment, staffId);
                     if (nextEl) {
                         return nextEl;
                     }
@@ -679,9 +679,9 @@ Element* Score::nextElement()
         case ElementType::TIE_SEGMENT: {
             SpannerSegment* s = toSpannerSegment(e);
             Spanner* sp = s->spanner();
-            Element* elSt = sp->startElement();
+            EngravingItem* elSt = sp->startElement();
             Note* n = toNote(elSt);
-            Element* next =  n->nextElement();
+            EngravingItem* next =  n->nextElement();
             if (next) {
                 return next;
             } else {
@@ -717,9 +717,9 @@ Element* Score::nextElement()
 //   prevElement
 //---------------------------------------------------------
 
-Element* Score::prevElement()
+EngravingItem* Score::prevElement()
 {
-    Element* e = getSelectedElement();
+    EngravingItem* e = getSelectedElement();
     if (!e) {
         return nullptr;
     }
@@ -730,7 +730,7 @@ Element* Score::prevElement()
         case ElementType::REST:
         case ElementType::MMREST:
         case ElementType::CHORD: {
-            Element* prev = e->prevElement();
+            EngravingItem* prev = e->prevElement();
             if (prev) {
                 return prev;
             } else {
@@ -739,7 +739,7 @@ Element* Score::prevElement()
         }
         case ElementType::SEGMENT: {
             Segment* s = toSegment(e);
-            Element* prev = s->prevElement(staffId);
+            EngravingItem* prev = s->prevElement(staffId);
             if (prev) {
                 return prev;
             } else {
@@ -769,25 +769,25 @@ Element* Score::prevElement()
         case ElementType::PEDAL_SEGMENT: {
             SpannerSegment* s = toSpannerSegment(e);
             Spanner* sp = s->spanner();
-            Element* stEl = sp->startElement();
+            EngravingItem* stEl = sp->startElement();
             Spanner* prevSp = sp->prevSpanner(sp, staffId);
             if (prevSp) {
                 return prevSp->spannerSegments().front();
             } else {
                 Segment* startSeg = sp->startSegment();
                 if (!startSeg->annotations().empty()) {
-                    Element* last = startSeg->lastAnnotation(startSeg, staffId);
+                    EngravingItem* last = startSeg->lastAnnotation(startSeg, staffId);
                     if (last) {
                         return last;
                     }
                 }
-                Element* el = startSeg->lastElementOfSegment(startSeg, staffId);
+                EngravingItem* el = startSeg->lastElementOfSegment(startSeg, staffId);
                 if (stEl->type() == ElementType::CHORD || stEl->type() == ElementType::REST
                     || stEl->type() == ElementType::MEASURE_REPEAT || stEl->type() == ElementType::MMREST
                     || stEl->type() == ElementType::NOTE) {
                     ChordRest* cr = startSeg->cr(stEl->track());
                     if (cr) {
-                        Element* elCr = cr->lastElementBeforeSegment();
+                        EngravingItem* elCr = cr->lastElementBeforeSegment();
                         if (elCr) {
                             return elCr;
                         }
@@ -807,10 +807,10 @@ Element* Score::prevElement()
         case ElementType::TIE_SEGMENT: {
             SpannerSegment* s = toSpannerSegment(e);
             Spanner* sp = s->spanner();
-            Element* elSt = sp->startElement();
+            EngravingItem* elSt = sp->startElement();
             Q_ASSERT(elSt->type() == ElementType::NOTE);
             Note* n = toNote(elSt);
-            Element* prev =  n->prevElement();
+            EngravingItem* prev =  n->prevElement();
             if (prev) {
                 return prev;
             } else {

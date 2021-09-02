@@ -290,7 +290,7 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag, InputState* externalInputStat
         ChordRest* e = searchNote(is.tick(), is.track());
         if (e) {
             Fraction stick = Fraction(0, 1);
-            Element* ee = is.slur()->startElement();
+            EngravingItem* ee = is.slur()->startElement();
             if (ee->isChordRest()) {
                 stick = toChordRest(ee)->tick();
             } else if (ee->isNote()) {
@@ -646,7 +646,7 @@ void Score::insertChord(const Position& pos)
     //    - check voices
     //    - split chord/rest
 
-    Element* el = selection().element();
+    EngravingItem* el = selection().element();
     if (!el || !(el->isNote() || el->isRest())) {
         return;
     }
@@ -699,7 +699,7 @@ void Score::localInsertChord(const Position& pos)
 
     Segment* firstSeg = msMeasure->first(SegmentType::ChordRest);
     for (int track = 0; track < msTracks; ++track) {
-        Element* maybeRest = firstSeg->element(track);
+        EngravingItem* maybeRest = firstSeg->element(track);
         bool measureIsFull = false;
 
         // I. Convert any measure rests into normal (non-measure) rest(s) of equivalent duration
@@ -803,7 +803,7 @@ void Score::globalInsertChord(const Position& pos)
     if (track != -1) {
         Measure* m = tick2measure(dtick);
         Segment* s = m->findSegment(SegmentType::ChordRest, dtick);
-        Element* e = s->element(track);
+        EngravingItem* e = s->element(track);
         if (e) {
             select(e->isChord() ? toChord(e)->notes().front() : e);
         }

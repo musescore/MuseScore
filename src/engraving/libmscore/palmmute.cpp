@@ -88,7 +88,7 @@ Sid PalmMute::getPropertyStyle(Pid pid) const
 //   PalmMute
 //---------------------------------------------------------
 
-PalmMute::PalmMute(Element* parent)
+PalmMute::PalmMute(EngravingItem* parent)
     : TextLineBase(ElementType::PALM_MUTE, parent)
 {
     initElementStyle(&palmMuteStyle);
@@ -230,7 +230,7 @@ mu::PointF PalmMute::linePos(Grip grip, System** sys) const
             x -= c->x();
         }
     } else {
-        Element* e = endElement();
+        EngravingItem* e = endElement();
         ChordRest* c = toChordRest(endElement());
         if (!e || e == startElement() || (endHookType() == HookType::HOOK_90)) {
             // palmMute marking on single note or ends with non-angled hook:

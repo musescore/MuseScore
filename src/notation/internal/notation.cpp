@@ -222,7 +222,7 @@ void Notation::paintPages(draw::Painter* painter, const RectF& frameRect, const 
         painter->setClipping(true);
         painter->setClipRect(page->bbox());
 
-        QList<Element*> elements = page->items(frameRect.translated(-page->pos()));
+        QList<EngravingItem*> elements = page->items(frameRect.translated(-page->pos()));
         engraving::Paint::paintElements(*painter, elements);
 
         painter->translate(-pagePosition);

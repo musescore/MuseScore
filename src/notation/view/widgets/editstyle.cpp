@@ -1018,7 +1018,7 @@ void EditStyle::adjustPagesStackSize(int currentPageIndex)
 ///   menu for every possible element on the score.
 //---------------------------------------------------------
 
-EditStyle::EditStylePage EditStyle::pageForElement(Element* e)
+EditStyle::EditStylePage EditStyle::pageForElement(EngravingItem* e)
 {
     switch (e->type()) {
     case ElementType::SCORE:
@@ -1168,7 +1168,7 @@ std::string EditStyle::ConsecutiveStr(int D)
 ///   check if the element `e` has a style page related to it
 //---------------------------------------------------------
 
-bool EditStyle::elementHasPage(Element* e)
+bool EditStyle::elementHasPage(EngravingItem* e)
 {
     return pageForElement(e) != nullptr;
 }
@@ -1178,7 +1178,7 @@ bool EditStyle::elementHasPage(Element* e)
 ///   switch to the page related to the element `e`
 //---------------------------------------------------------
 
-void EditStyle::gotoElement(Element* e)
+void EditStyle::gotoElement(EngravingItem* e)
 {
     if (auto pagePointer = pageForElement(e)) {
         if (QWidget* page = this->*pagePointer) {
