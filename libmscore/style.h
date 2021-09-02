@@ -455,6 +455,7 @@ enum class Sid {
       showFooter,
       footerFirstPage,
       footerOddEven,
+      footerInsideMargins,
       evenFooterL,
       evenFooterC,
       evenFooterR,
