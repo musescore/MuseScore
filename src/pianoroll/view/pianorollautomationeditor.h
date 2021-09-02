@@ -34,6 +34,8 @@
 
 namespace mu::pianoroll {
 
+class IPianorollAutomationModel;
+struct NoteEventBlock;
 
 class PianorollAutomationEditor : public QQuickPaintedItem, public async::Asyncable
 {
@@ -48,10 +50,11 @@ class PianorollAutomationEditor : public QQuickPaintedItem, public async::Asynca
     Q_PROPERTY(double displayObjectWidth READ displayObjectWidth WRITE setDisplayObjectWidth NOTIFY displayObjectWidthChanged)
     Q_PROPERTY(int tuplet READ tuplet WRITE setTuplet NOTIFY tupletChanged)
     Q_PROPERTY(int subdivision READ subdivision WRITE setSubdivision NOTIFY subdivisionChanged)
+    Q_PROPERTY(AutomationType automationType READ automationType WRITE setAutomationType NOTIFY automationTypeChanged)
 
 public:
-    enum class AutomationAttribute { VELOCITY, EXPRESSION, PAN };
-    Q_ENUM(AutomationAttribute)
+    enum class AutomationType { VELOCITY, EXPRESSION, PAN };
+    Q_ENUM(AutomationType)
 
     PianorollAutomationEditor(QQuickItem* parent = nullptr);
 
@@ -69,8 +72,8 @@ public:
     void setSubdivision(int value);
     Ms::Fraction playbackPosition() { return m_playbackPosition; }
     void setPlaybackPosition(Ms::Fraction value);
-    AutomationAttribute automationAttribute() { return m_automationAttribute; }
-    void setAutomationAttribute(AutomationAttribute value);
+    AutomationType automationType() { return m_automationType; }
+    void setAutomationType(AutomationType value);
 
     void paint(QPainter*) override;
 
@@ -79,13 +82,14 @@ public:
     double pixelXToWholeNote(int pixelX) const;
 
     Ms::Score* score();
+    Ms::Staff* activeStaff();
 
 signals:
     void wholeNoteWidthChanged();
     void centerXChanged();
     void displayObjectWidthChanged();
     void playbackPositionChanged();
-    void automationAttributeChanged();
+    void automationTypeChanged();
     void tupletChanged();
     void subdivisionChanged();
 
@@ -93,9 +97,23 @@ signals:
 private:
     void onNotationChanged();
     void onCurrentNotationChanged();
+    void onSelectionChanged();
     void updateBoundingSize();
 
-    AutomationAttribute m_automationAttribute = AutomationAttribute::VELOCITY;
+    void buildNoteData();
+    void addChord(Ms::Chord* chrd, int voice, int staffIdx);
+
+    IPianorollAutomationModel* lookupModel(AutomationType type);
+
+    static std::vector<IPianorollAutomationModel*> m_automationModels;
+
+    int m_activeStaff;
+    std::vector<int> m_selectedStaves;
+
+    //Note data for drawing in levels mode
+    std::vector<NoteEventBlock*> m_noteLevels;
+
+    AutomationType m_automationType = AutomationType::VELOCITY;
 
     double m_centerX = 0;  //fraction of note grid camera is focused on
     double m_displayObjectWidth = 0;  //Set to note grid in pixels
@@ -108,11 +126,17 @@ private:
 
     Ms::Fraction m_playbackPosition;
 
+    const int m_vertexRadius = 4;
+
     QColor m_colorBackground = Qt::gray;
     QColor m_colorGridBackground = QColor(0xdddddd);
     QColor m_colorPlaybackLine = QColor(0xff0000);
     QColor m_colorGridLine = QColor(0xa2a2a6);
+//    QColor m_colorGridLine = Qt::black;
     QColor m_colorText = Qt::black;
+    QColor m_colorVertexFill = QColor(0xffffff);
+    QColor m_colorVertexLine = Qt::black;
+    QColor m_colorGraphFill = QColor(0x80, 0x9b, 0xcd, 0x80);
 };
 
 }
