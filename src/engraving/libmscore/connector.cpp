@@ -25,8 +25,10 @@
 #include "engravingitem.h"
 #include "score.h"
 #include "engravingobject.h"
+#include "factory.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -391,7 +393,7 @@ bool ConnectorInfoReader::read()
             readEndpointLocation(_nextLoc);
         } else {
             if (tag == name) {
-                _connector = EngravingItem::name2Element(tag, _connectorReceiver->score()->dummy());
+                _connector = Factory::name2Element(tag, _connectorReceiver->score()->dummy());
             } else {
                 qWarning("ConnectorInfoReader::read: element tag (%s) does not match connector type (%s). Is the file corrupted?",
                          tag.toLatin1().constData(), name.toLatin1().constData());

@@ -1315,20 +1315,6 @@ EngravingItem* EngravingItem::create(ElementType type, EngravingItem* parent)
 }
 
 //---------------------------------------------------------
-//   name2Element
-//---------------------------------------------------------
-
-EngravingItem* EngravingItem::name2Element(const QStringRef& s, EngravingItem* parent)
-{
-    ElementType type = EngravingItem::name2type(s);
-    if (type == ElementType::INVALID) {
-        qDebug("invalid <%s>\n", qPrintable(s.toString()));
-        return 0;
-    }
-    return EngravingItem::create(type, parent);
-}
-
-//---------------------------------------------------------
 //   elementLessThan
 //---------------------------------------------------------
 

@@ -62,6 +62,7 @@
 #include "audio.h"
 #include "barline.h"
 #include "masterscore.h"
+#include "factory.h"
 
 #include "log.h"
 #include "config.h"
@@ -338,7 +339,7 @@ void Score::readStaff(XmlReader& e)
                     }
                 }
             } else if (tag == "HBox" || tag == "VBox" || tag == "TBox" || tag == "FBox") {
-                MeasureBase* mb = toMeasureBase(EngravingItem::name2Element(tag, this->dummy()));
+                MeasureBase* mb = toMeasureBase(Factory::name2Element(tag, this->dummy()));
                 mb->read(e);
                 mb->setTick(e.tick());
                 measures()->add(mb);
