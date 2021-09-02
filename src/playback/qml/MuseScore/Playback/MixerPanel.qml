@@ -32,91 +32,106 @@ import "internal"
 Rectangle {
     id: root
 
-    property alias navigation: navPanel
-    property alias contextMenuModel: contextMenuModel
+    property alias navigation: flickable.navigation
+    property alias contextMenuModel: flickable.contextMenuModel
 
     color: ui.theme.backgroundPrimaryColor
 
-//    ScrollBar.vertical: StyledScrollBar {
-//        anchors.top: parent.top
-//        anchors.bottom: parent.bottom
-//        anchors.right: parent.right
-//        anchors.rightMargin: 16
-//    }
+    Flickable {
+        id: flickable
 
-    NavigationPanel {
-        id: navPanel
-        name: "MixerPanel"
-        enabled: root.enabled && root.visible
-    }
+        property alias navigation: navPanel
+        property alias contextMenuModel: contextMenuModel
 
-    MixerPanelModel {
-        id: mixerPanelModel
+        anchors.fill: parent
 
-        Component.onCompleted: {
-            mixerPanelModel.load()
-        }
-    }
+        clip: true
 
-    MixerPanelContextMenuModel {
-        id: contextMenuModel
+        contentWidth: width
+        contentHeight: contentColumn.height
+        interactive: height < contentHeight
 
-        Component.onCompleted: {
-            contextMenuModel.load()
-        }
-    }
-
-    Column {
-        id: contentColumn
-
-        anchors.left: parent.left
-        anchors.right: parent.right
-
-        spacing: 8
-
-        MixerSoundSection {
-            id: soundSection
-
-            active: contextMenuModel.soundSectionVisible
-            headerVisible: contextMenuModel.labelsSectionVisible
-
-            model: mixerPanelModel
+        ScrollBar.vertical: StyledScrollBar {
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.right: parent.right
+            anchors.rightMargin: 16
         }
 
-        MixerFxSection {
-            id: fxSection
-
-            active: contextMenuModel.audioFxSectionVisible
-            headerVisible: contextMenuModel.labelsSectionVisible
-
-            model: mixerPanelModel
+        NavigationPanel {
+            id: navPanel
+            name: "MixerPanel"
+            enabled: root.enabled && root.visible
         }
 
-        MixerBalanceSection {
-            id: balanceSection
+        MixerPanelModel {
+            id: mixerPanelModel
 
-            active: contextMenuModel.balanceSectionVisible
-            headerVisible: contextMenuModel.labelsSectionVisible
-
-            model: mixerPanelModel
+            Component.onCompleted: {
+                mixerPanelModel.load()
+            }
         }
 
-        MixerVolumeSection {
-            id: volumeSection
+        MixerPanelContextMenuModel {
+            id: contextMenuModel
 
-            active: contextMenuModel.volumeSectionVisible
-            headerVisible: contextMenuModel.labelsSectionVisible
-
-            model: mixerPanelModel
+            Component.onCompleted: {
+                contextMenuModel.load()
+            }
         }
 
-        MixerTitleSection {
-            id: titleSection
+        Column {
+            id: contentColumn
 
-            active: contextMenuModel.titleSectionVisible
-            headerVisible: contextMenuModel.labelsSectionVisible
+            anchors.left: parent.left
+            anchors.right: parent.right
 
-            model: mixerPanelModel
+            spacing: 8
+
+            MixerSoundSection {
+                id: soundSection
+
+                active: contextMenuModel.soundSectionVisible
+                headerVisible: contextMenuModel.labelsSectionVisible
+
+                model: mixerPanelModel
+            }
+
+            MixerFxSection {
+                id: fxSection
+
+                active: contextMenuModel.audioFxSectionVisible
+                headerVisible: contextMenuModel.labelsSectionVisible
+
+                model: mixerPanelModel
+            }
+
+            MixerBalanceSection {
+                id: balanceSection
+
+                active: contextMenuModel.balanceSectionVisible
+                headerVisible: contextMenuModel.labelsSectionVisible
+
+                model: mixerPanelModel
+            }
+
+            MixerVolumeSection {
+                id: volumeSection
+
+                active: contextMenuModel.volumeSectionVisible
+                headerVisible: contextMenuModel.labelsSectionVisible
+
+                model: mixerPanelModel
+            }
+
+            MixerTitleSection {
+                id: titleSection
+
+                active: contextMenuModel.titleSectionVisible
+                headerVisible: contextMenuModel.labelsSectionVisible
+
+                model: mixerPanelModel
+            }
         }
     }
 }
