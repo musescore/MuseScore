@@ -35,6 +35,8 @@ Row {
     property alias model: comboBox.model
     property alias control: comboBox
 
+    property alias navigation: comboBox.navigation
+
     signal valueEdited(var newValue)
 
     spacing: 0
@@ -52,6 +54,8 @@ Row {
         id: comboBox
 
         width: 210
+
+        navigation.accessible.name: root.title + " " + currentText
 
         onCurrentValueChanged: {
             root.valueEdited(comboBox.currentValue)

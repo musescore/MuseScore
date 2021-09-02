@@ -20,32 +20,31 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Layouts 1.15
 
 import MuseScore.UiComponents 1.0
-import MuseScore.Preferences 1.0
 
-import "internal"
-
-PreferencesPage {
+BaseSection {
     id: root
 
-    contentHeight: content.height
+    title: qsTrc("appshell", "Telemetry")
 
-    FoldersPreferencesModel {
-        id: foldersPreferencesModel
-    }
+    property alias isTelemetryAllowed: sendCheckBox.checked
 
-    Component.onCompleted: {
-        foldersPreferencesModel.load()
-    }
+    signal telemetryAllowedChanged(bool allowed)
 
-    FoldersSection {
-        id: content
+    CheckBox {
+        id: sendCheckBox
 
-        model: foldersPreferencesModel
+        width: root.columnWidth
 
-        navigation.section: root.navigationSection
-        navigation.order: root.navigationOrderStart + 1
+        text: qsTrc("appshell", "Send anonymous telemetry data to MuseScore")
+
+        navigation.name: "TelemetryAllowedBox"
+        navigation.panel: root.navigation
+        navigation.row: 1
+
+        onClicked: {
+            root.telemetryAllowedChanged(!checked)
+        }
     }
 }

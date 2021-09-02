@@ -66,6 +66,9 @@ StyledDialogView {
                 continue
             }
 
+            obj.navigationSection = root.navigationSection
+            obj.navigationOrderStart = (i + 1) * 100
+
             obj.hideRequested.connect(function() {
                 root.hide()
             })
@@ -132,7 +135,7 @@ StyledDialogView {
             Layout.preferredHeight: 70
 
             navigation.section: root.navigation
-            navigation.order: 2
+            navigation.order: 100000
 
             onRevertFactorySettingsRequested: {
                 preferencesModel.resetFactorySettings()

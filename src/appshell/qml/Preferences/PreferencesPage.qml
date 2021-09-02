@@ -22,6 +22,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
 Flickable {
@@ -34,6 +35,9 @@ Flickable {
     interactive: height < contentHeight
 
     ScrollBar.vertical: StyledScrollBar {}
+
+    property NavigationSection navigationSection: null
+    property int navigationOrderStart: 0
 
     signal hideRequested()
 

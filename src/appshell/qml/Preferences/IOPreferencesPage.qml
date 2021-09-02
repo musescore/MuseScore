@@ -52,6 +52,9 @@ PreferencesPage {
             audioApiList: ioModel.audioApiList()
             firstColumnWidth: content.firstColumnWidth
 
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 1
+
             onCurrentAudioApiIndexChangeRequested: {
                 ioModel.currentAudioApiIndex = newIndex
             }
@@ -66,6 +69,9 @@ PreferencesPage {
             outputDevices: ioModel.midiOutputDevices
             firstColumnWidth: content.firstColumnWidth
 
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 2
+
             onCurrentInputDeviceIndexChangeRequested: {
                 ioModel.currentMidiInputDeviceIndex = newIndex
             }
@@ -78,6 +84,9 @@ PreferencesPage {
         SeparatorLine {}
 
         AudioEngineSection {
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 3
+
             onRestartAudioAndMidiDevicesRequested: {
                 ioModel.restartAudioAndMidiDevices()
             }

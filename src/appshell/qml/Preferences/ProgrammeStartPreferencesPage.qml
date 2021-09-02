@@ -25,6 +25,8 @@ import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Preferences 1.0
 
+import "internal"
+
 PreferencesPage {
     id: root
 
@@ -32,73 +34,24 @@ PreferencesPage {
         id: programmeStartModel
     }
 
-    Column {
-        anchors.fill: parent
+    ProgrammeStartSection {
+        startupModes: programmeStartModel.startupModes
+        scorePathFilter: programmeStartModel.scorePathFilter()
+        panels: programmeStartModel.panels
 
-        spacing: 20
+        navigation.section: root.navigationSection
+        navigation.order: root.navigationOrderStart + 1
 
-        StyledTextLabel {
-            text: qsTrc("appshell", "Programme start")
-            font: ui.theme.bodyBoldFont
+        onCurrentStartupModesChanged: {
+            programmeStartModel.setCurrentStartupMode(index)
         }
 
-        RadioButtonGroup {
-            spacing: 16
-            orientation: Qt.Vertical
-
-            width: parent.width
-
-            model: programmeStartModel.startupModes
-
-            delegate: Row {
-                spacing: 0
-
-                RoundedRadioButton {
-                    anchors.verticalCenter: parent.verticalCenter
-
-                    width: 220
-
-                    checked: modelData.checked
-                    text: modelData.title
-
-                    onClicked: {
-                        programmeStartModel.setCurrentStartupMode(model.index)
-                    }
-                }
-
-                FilePicker {
-                    width: 240
-
-                    dialogTitle: qsTrc("appshell", "Choose starting score")
-                    filter: programmeStartModel.scorePathFilter()
-
-                    visible: modelData.canSelectScorePath
-                    path: modelData.scorePath
-
-                    onPathEdited: {
-                        programmeStartModel.setStartupScorePath(newPath)
-                    }
-                }
-            }
+        onStartupScorePathChanged: {
+            programmeStartModel.setStartupScorePath(path)
         }
 
-        ListView {
-            spacing: 16
-            interactive: false
-
-            width: parent.width
-            height: contentHeight
-
-            model: programmeStartModel.panels
-
-            delegate: CheckBox {
-                text: modelData.title
-                checked: modelData.visible
-
-                onClicked: {
-                    programmeStartModel.setPanelVisible(model.index, !checked)
-                }
-            }
+        onPanelsVisibleChanged: {
+            programmeStartModel.setPanelVisible(panelIndex, visible)
         }
     }
 }
