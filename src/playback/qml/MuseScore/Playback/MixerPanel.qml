@@ -46,16 +46,24 @@ Rectangle {
         anchors.fill: parent
 
         clip: true
+        boundsBehavior: Flickable.StopAtBounds
 
-        contentWidth: width
+        contentWidth: contentColumn.width
         contentHeight: contentColumn.height
-        interactive: height < contentHeight
+        interactive: height < contentHeight || width < contentWidth
 
         ScrollBar.vertical: StyledScrollBar {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             anchors.right: parent.right
-            anchors.rightMargin: 16
+            anchors.rightMargin: 8
+        }
+
+        ScrollBar.horizontal: StyledScrollBar {
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.bottomMargin: 8
         }
 
         NavigationPanel {
@@ -83,8 +91,7 @@ Rectangle {
         Column {
             id: contentColumn
 
-            anchors.left: parent.left
-            anchors.right: parent.right
+            width: childrenRect.width
 
             spacing: 8
 
