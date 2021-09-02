@@ -77,7 +77,7 @@ Rectangle {
         MixerSoundSection {
             id: soundSection
 
-            visible: contextMenuModel.soundSectionVisible
+            active: contextMenuModel.soundSectionVisible
             headerVisible: contextMenuModel.labelsSectionVisible
 
             model: mixerPanelModel
@@ -86,7 +86,7 @@ Rectangle {
         MixerFxSection {
             id: fxSection
 
-            visible: contextMenuModel.audioFxSectionVisible
+            active: contextMenuModel.audioFxSectionVisible
             headerVisible: contextMenuModel.labelsSectionVisible
 
             model: mixerPanelModel
@@ -95,7 +95,7 @@ Rectangle {
         MixerBalanceSection {
             id: balanceSection
 
-            visible: contextMenuModel.balanceSectionVisible
+            active: contextMenuModel.balanceSectionVisible
             headerVisible: contextMenuModel.labelsSectionVisible
 
             model: mixerPanelModel
@@ -104,7 +104,7 @@ Rectangle {
         MixerVolumeSection {
             id: volumeSection
 
-            visible: contextMenuModel.volumeSectionVisible
+            active: contextMenuModel.volumeSectionVisible
             headerVisible: contextMenuModel.labelsSectionVisible
 
             model: mixerPanelModel
@@ -113,7 +113,7 @@ Rectangle {
         MixerTitleSection {
             id: titleSection
 
-            visible: contextMenuModel.titleSectionVisible
+            active: contextMenuModel.titleSectionVisible
             headerVisible: contextMenuModel.labelsSectionVisible
 
             model: mixerPanelModel
