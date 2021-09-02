@@ -33,6 +33,7 @@ public:
     virtual ~IFxProcessor() = default;
 
     virtual AudioFxType type() const = 0;
+    virtual const AudioFxParams& params() const = 0;
     virtual void setSampleRate(unsigned int sampleRate) = 0;
 
     virtual bool active() const = 0;

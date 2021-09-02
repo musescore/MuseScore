@@ -21,6 +21,8 @@
  */
 #include "mixerchannel.h"
 
+#include <algorithm>
+
 #include "log.h"
 
 #include "internal/audiomathutils.h"
@@ -42,19 +44,29 @@ void MixerChannel::applyOutputParams(const AudioOutputParams& originParams, Audi
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    /// TODO add a fallback mechanism for effects
-    /// @see task #8998
-
-    m_params = originParams;
-
     m_fxProcessors.clear();
-    m_fxProcessors = fxResolver()->resolveFxList(m_trackId, originParams.fxParams);
+    m_fxProcessors = fxResolver()->resolveFxList(m_trackId, originParams.fxChain);
 
     for (IFxProcessorPtr& fx : m_fxProcessors) {
+        fx->setActive(true);
         fx->setSampleRate(m_sampleRate);
     }
 
-    resultParams = m_params;
+    resultParams = originParams;
+
+    auto filterInvalidFx = [this](const std::pair<AudioFxChainOrder, AudioFxParams>& params) {
+        for (IFxProcessorPtr& fx : m_fxProcessors) {
+            if (fx->params() == params.second) {
+                return false;
+            }
+        }
+
+        return true;
+    };
+
+    resultParams.fxChain.erase(std::find_if(resultParams.fxChain.begin(),
+                                            resultParams.fxChain.end(),
+                                            filterInvalidFx));
 }
 
 Channel<audioch_t, float> MixerChannel::signalAmplitudeRmsChanged() const

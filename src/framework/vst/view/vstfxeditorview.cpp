@@ -62,14 +62,19 @@ tresult VstFxEditorView::resizeView(IPlugView* view, ViewRect* newSize)
     return kResultTrue;
 }
 
+bool VstFxEditorView::isAbleToWrapPlugin() const
+{
+    return !m_resourceId.isEmpty() && m_chainOrder != -1;
+}
+
 void VstFxEditorView::wrapPluginView()
 {
     VstPluginPtr plugin;
 
     if (m_trackId == -1) {
-        plugin = pluginsRegister()->masterFxPlugin(m_resourceId.toStdString());
+        plugin = pluginsRegister()->masterFxPlugin(m_resourceId.toStdString(), m_chainOrder);
     } else {
-        plugin = pluginsRegister()->fxPlugin(m_trackId, m_resourceId.toStdString());
+        plugin = pluginsRegister()->fxPlugin(m_trackId, m_resourceId.toStdString(), m_chainOrder);
     }
 
     if (!plugin || !plugin->view()) {
@@ -119,7 +124,7 @@ void VstFxEditorView::setTrackId(int newTrackId)
     m_trackId = newTrackId;
     emit trackIdChanged();
 
-    if (!m_resourceId.isEmpty()) {
+    if (isAbleToWrapPlugin()) {
         wrapPluginView();
     }
 }
@@ -137,7 +142,25 @@ void VstFxEditorView::setResourceId(const QString& newResourceId)
     m_resourceId = newResourceId;
     emit resourceIdChanged();
 
-    if (!m_resourceId.isEmpty()) {
+    if (isAbleToWrapPlugin()) {
+        wrapPluginView();
+    }
+}
+
+int VstFxEditorView::chainOrder() const
+{
+    return m_chainOrder;
+}
+
+void VstFxEditorView::setChainOrder(int newChainOrder)
+{
+    if (m_chainOrder == newChainOrder) {
+        return;
+    }
+    m_chainOrder = newChainOrder;
+    emit chainOrderChanged();
+
+    if (isAbleToWrapPlugin()) {
         wrapPluginView();
     }
 }

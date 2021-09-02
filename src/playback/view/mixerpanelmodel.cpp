@@ -147,7 +147,7 @@ MixerChannelItem* MixerPanelModel::buildTrackChannelItem(const audio::TrackSeque
 
     playback()->tracks()->inputParams(sequenceId, trackId)
     .onResolve(this, [item](AudioInputParams inParams) {
-        item->loadInputParams(inParams);
+        item->loadInputParams(std::move(inParams));
     })
     .onReject(this, [](int errCode, std::string text) {
         LOGE() << "unable to get track output parameters, error code: " << errCode
@@ -165,7 +165,7 @@ MixerChannelItem* MixerPanelModel::buildTrackChannelItem(const audio::TrackSeque
 
     playback()->audioOutput()->outputParams(sequenceId, trackId)
     .onResolve(this, [item](AudioOutputParams outParams) {
-        item->loadOutputParams(outParams);
+        item->loadOutputParams(std::move(outParams));
     })
     .onReject(this, [](int errCode, std::string text) {
         LOGE() << "unable to get track output parameters, error code: " << errCode
@@ -210,7 +210,7 @@ MixerChannelItem* MixerPanelModel::buildMasterChannelItem()
 
     playback()->audioOutput()->masterOutputParams()
     .onResolve(this, [item](AudioOutputParams outParams) {
-        item->loadOutputParams(outParams);
+        item->loadOutputParams(std::move(outParams));
     })
     .onReject(this, [](int errCode, std::string text) {
         LOGE() << "unable to get master output parameters, error code: " << errCode
