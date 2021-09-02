@@ -119,6 +119,12 @@ RadioDelegate {
         }
     }
 
+    background: Rectangle {
+        anchors.fill: parent
+
+        color: ui.theme.backgroundSecondaryColor
+    }
+
     states: [
         State {
             name: "PRESSED"
