@@ -44,29 +44,22 @@ class VstFxResolver : public audio::fx::IFxResolver::IResolver
     INJECT(vst, IVstPluginsRegister, pluginsRegister)
 public:
     // IFxResolver::IResolver interface
-    std::vector<audio::IFxProcessorPtr> resolveFxList(const audio::TrackId trackId,
-                                                      const std::vector<audio::AudioFxParams>& fxParams) override;
-    std::vector<audio::IFxProcessorPtr> resolveMasterFxList(const std::vector<audio::AudioFxParams>& fxParams) override;
+    std::vector<audio::IFxProcessorPtr> resolveFxList(const audio::TrackId trackId, const audio::AudioFxChain& fxChain) override;
+    std::vector<audio::IFxProcessorPtr> resolveMasterFxList(const audio::AudioFxChain& fxChain) override;
     audio::AudioResourceMetaList resolveResources() const override;
     void refresh() override;
 
 private:
-    using FxMap = std::unordered_map<audio::AudioResourceId, VstFxPtr>;
+    using FxMap = std::unordered_map<audio::AudioFxChainOrder, VstFxPtr>;
 
-    VstFxPtr createMasterFx(const audio::AudioResourceId& resourceId) const;
-    VstFxPtr createTrackFx(const audio::TrackId trackId, const audio::AudioResourceId& resourceId) const;
+    VstFxPtr createMasterFx(const audio::AudioFxParams& fxParams) const;
+    VstFxPtr createTrackFx(const audio::TrackId trackId, const audio::AudioFxParams& fxParams) const;
 
-    void updateMasterFxMap(const std::vector<audio::AudioFxParams>& fxParams);
-    void updateTrackFxMap(FxMap& fxMap, const audio::TrackId trackId, const std::vector<audio::AudioFxParams>& fxParams);
+    void updateMasterFxMap(const audio::AudioFxChain& newFxChain);
+    void updateTrackFxMap(FxMap& fxMap, const audio::TrackId trackId, const audio::AudioFxChain& newFxChain);
 
-    void fxListToRemove(const audio::AudioResourceIdList& currentResourceIdList, const audio::AudioResourceIdList& newResourceIdList,
-                        audio::AudioResourceIdList& resultList);
-    void removeUnusedMasterFx(const audio::AudioResourceIdList& currentResourceIdList, const audio::AudioResourceIdList& newResourceIdList);
-
-    void fxListToCreate(const audio::AudioResourceIdList& currentResourceIdList, const audio::AudioResourceIdList& newResourceIdList,
-                        audio::AudioResourceIdList& resultList);
-    void createMissingMasterFx(const audio::AudioResourceIdList& currentResourceIdList,
-                               const audio::AudioResourceIdList& newResourceIdList);
+    void fxChainToRemove(const audio::AudioFxChain& currentFxChain, const audio::AudioFxChain& newFxChain, audio::AudioFxChain& resultChain);
+    void fxChainToCreate(const audio::AudioFxChain& currentFxChain, const audio::AudioFxChain& newFxChain, audio::AudioFxChain& resultChain);
 
     std::map<audio::TrackId, FxMap> m_tracksFxMap;
     FxMap m_masterFxMap;

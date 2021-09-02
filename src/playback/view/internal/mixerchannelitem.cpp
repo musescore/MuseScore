@@ -32,8 +32,8 @@ static const float BALANCE_SCALING_FACTOR = 100.f;
 
 static const int OUTPUT_RESOURCE_COUNT_LIMIT = 4;
 
-static const QString& MASTER_VSTFX_EDITOR_URI_BODY = QString("musescore://vstfx/editor?sync=false&modal=false&resourceId=%2");
-static const QString& TRACK_VSTFX_EDITOR_URI_BODY = QString("musescore://vstfx/editor?sync=false&modal=false&trackId=%1&resourceId=%2");
+static const QString& MASTER_VSTFX_EDITOR_URI_BODY = QString("musescore://vstfx/editor?sync=false&modal=false&resourceId=%1&chainOrder=%2");
+static const QString& TRACK_VSTFX_EDITOR_URI_BODY = QString("musescore://vstfx/editor?sync=false&modal=false&trackId=%1&resourceId=%2&chainOrder=%3");
 static const QString& TRACK_VSTI_EDITOR_URI_BODY = QString("musescore://vsti/editor?sync=false&modal=false&trackId=%1&resourceId=%2");
 
 MixerChannelItem::MixerChannelItem(QObject* parent, const audio::TrackId id, const bool isMaster)
@@ -96,7 +96,7 @@ bool MixerChannelItem::solo() const
     return m_solo;
 }
 
-void MixerChannelItem::loadInputParams(const AudioInputParams& newParams)
+void MixerChannelItem::loadInputParams(AudioInputParams&& newParams)
 {
     if (m_inputParams == newParams) {
         return;
@@ -106,7 +106,7 @@ void MixerChannelItem::loadInputParams(const AudioInputParams& newParams)
     m_inputResourceItem->setParams(newParams);
 }
 
-void MixerChannelItem::loadOutputParams(const AudioOutputParams& newParams)
+void MixerChannelItem::loadOutputParams(AudioOutputParams&& newParams)
 {
     if (m_outParams.volume != newParams.volume) {
         m_outParams.volume = newParams.volume;
@@ -123,14 +123,15 @@ void MixerChannelItem::loadOutputParams(const AudioOutputParams& newParams)
         emit mutedChanged(newParams.muted);
     }
 
-    if (m_outParams.fxParams != newParams.fxParams) {
+    if (m_outParams.fxChain != newParams.fxChain) {
         qDeleteAll(m_outputResourceItemList);
         m_outputResourceItemList.clear();
 
-        for (const auto& pair : newParams.fxParams) {
-            for (const audio::AudioFxParams& params : pair.second) {
-                m_outputResourceItemList << buildOutputResourceItem(params);
-            }
+        for (int i = 0; i < OUTPUT_RESOURCE_COUNT_LIMIT; ++i) {
+            AudioFxParams& params = newParams.fxChain[i];
+            params.chainOrder = i;
+
+            m_outputResourceItemList << buildOutputResourceItem(params);
         }
     }
 
@@ -308,28 +309,17 @@ OutputResourceItem* MixerChannelItem::buildOutputResourceItem(const audio::Audio
     OutputResourceItem* newItem = new OutputResourceItem(this, fxParams);
 
     connect(newItem, &OutputResourceItem::fxParamsChanged, this, [this]() {
-        m_outParams.fxParams.clear();
+        m_outParams.fxChain.clear();
 
         for (const OutputResourceItem* item : m_outputResourceItemList) {
             const AudioFxParams& updatedParams = item->params();
-
-            std::vector<AudioFxParams>& paramsByType = m_outParams.fxParams[updatedParams.type()];
-            paramsByType.push_back(updatedParams);
+            m_outParams.fxChain.emplace(updatedParams.chainOrder, updatedParams);
         }
 
         emit outputParamsChanged(m_outParams);
     });
 
-    connect(newItem, &OutputResourceItem::isBlankChanged, this, [this, newItem]() {
-        if (newItem->isBlank()) {
-            m_outputResourceItemList.removeOne(newItem);
-            newItem->disconnect();
-            newItem->deleteLater();
-            emit outputResourceItemListChanged(m_outputResourceItemList);
-        }
-
-        ensureBlankOutputResourceSlot();
-    });
+    connect(newItem, &OutputResourceItem::isBlankChanged, this, &MixerChannelItem::ensureBlankOutputResourceSlot);
 
     connect(newItem, &OutputResourceItem::nativeEditorViewLaunchRequested, this, [this, newItem]() {
         if (newItem->params().type() != AudioFxType::VstFx) {
@@ -340,11 +330,13 @@ OutputResourceItem* MixerChannelItem::buildOutputResourceItem(const audio::Audio
 
         if (isMasterChannel()) {
             uri = MASTER_VSTFX_EDITOR_URI_BODY
-                  .arg(QString::fromStdString(newItem->params().resourceMeta.id));
+                  .arg(QString::fromStdString(newItem->params().resourceMeta.id))
+                  .arg(newItem->params().chainOrder);
         } else {
             uri = TRACK_VSTFX_EDITOR_URI_BODY
                   .arg(m_id)
-                  .arg(QString::fromStdString(newItem->params().resourceMeta.id));
+                  .arg(QString::fromStdString(newItem->params().resourceMeta.id))
+                  .arg(newItem->params().chainOrder);
         }
 
         interactive()->open(uri.toStdString());
@@ -359,13 +351,25 @@ void MixerChannelItem::ensureBlankOutputResourceSlot()
         return;
     }
 
-    for (const OutputResourceItem* item : m_outputResourceItemList) {
-        if (item->isBlank()) {
-            return;
-        }
-    }
+    auto hasSubsequentBlankSlots = [](const OutputResourceItem* f, const OutputResourceItem* s) {
+        return f->isBlank() && s->isBlank();
+    };
 
-    m_outputResourceItemList << buildOutputResourceItem(AudioFxParams());
+    auto adjacentSearch = std::adjacent_find(m_outputResourceItemList.begin(),
+                                             m_outputResourceItemList.end(),
+                                             hasSubsequentBlankSlots);
+
+    if (adjacentSearch != m_outputResourceItemList.end()) {
+        ++adjacentSearch;
+        OutputResourceItem* item = *adjacentSearch;
+        m_outputResourceItemList.erase(adjacentSearch);
+        item->disconnect();
+        item->deleteLater();
+    } else {
+        AudioFxParams params;
+        params.chainOrder = m_outputResourceItemList.count();
+        m_outputResourceItemList << buildOutputResourceItem(std::move(params));
+    }
 
     emit outputResourceItemListChanged(m_outputResourceItemList);
 }

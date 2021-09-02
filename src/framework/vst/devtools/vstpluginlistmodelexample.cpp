@@ -224,7 +224,7 @@ void VstPluginListModelExample::applyNewOutputParams()
     fxParams.resourceMeta.id = m_currentFxResource.toStdString();
 
     AudioOutputParams outputParams;
-    outputParams.fxParams.emplace(AudioFxType::VstFx, std::vector<AudioFxParams>({ fxParams }));
+    outputParams.fxChain.emplace(0, fxParams);
 
     playback()->audioOutput()->setOutputParams(m_currentSequenceId, m_currentTrackId, outputParams);
 }
