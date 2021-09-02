@@ -282,8 +282,6 @@ void PianorollKeyboard::paint(QPainter* p)
 }
 
 
-
-
 void PianorollKeyboard::mousePressEvent(QMouseEvent* event)
 {
     int pitch = pixelYToPitch(event->pos().y());

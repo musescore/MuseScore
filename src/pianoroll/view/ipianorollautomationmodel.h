@@ -45,8 +45,7 @@ public:
 
     virtual double maxValue() = 0;
     virtual double minValue() = 0;
-    virtual double value(Ms::Staff* staff, NoteEventBlock& block) = 0;
-    virtual void setValue(Ms::Staff* staff, NoteEventBlock& block, double value) = 0;
+    virtual double value(NoteEventBlock& block) = 0;
 };
 
 }
