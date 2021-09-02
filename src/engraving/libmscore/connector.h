@@ -29,7 +29,7 @@
 namespace Ms {
 class Element;
 class Score;
-class ScoreElement;
+class EngravingObject;
 class XmlReader;
 class XmlWriter;
 
@@ -107,7 +107,7 @@ class ConnectorInfoReader final : public ConnectorInfo
 {
     XmlReader* _reader;
     Element* _connector;
-    ScoreElement* _connectorReceiver;
+    EngravingObject* _connectorReceiver;
 
     void readEndpointLocation(Location& l);
 

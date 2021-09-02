@@ -524,7 +524,7 @@ void Ambitus::draw(mu::draw::Painter* painter) const
 void Ambitus::scanElements(void* data, void (* func)(void*, Element*), bool all)
 {
     Q_UNUSED(all);
-    ScoreElement::scanElements(data, func, all);
+    EngravingObject::scanElements(data, func, all);
     func(data, this);
 }
 

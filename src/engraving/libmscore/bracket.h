@@ -109,7 +109,7 @@ public:
     QVariant propertyDefault(Pid) const override;
 
     void undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps) override;
-    using ScoreElement::undoChangeProperty;
+    using EngravingObject::undoChangeProperty;
 
     int gripsCount() const override { return 1; }
     Grip initialEditModeGrip() const override { return Grip::START; }

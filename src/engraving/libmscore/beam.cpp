@@ -78,7 +78,7 @@ struct BeamFragment {
 Beam::Beam(Element* parent, Score* score)
     : Element(ElementType::BEAM, parent)
 {
-    ScoreElement::setScore(score);
+    EngravingObject::setScore(score);
     initElementStyle(&beamStyle);
 }
 

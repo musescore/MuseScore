@@ -523,7 +523,7 @@ void Spanner::insertTimeUnmanaged(const Fraction& fromTick, const Fraction& len)
 
 void Spanner::scanElements(void* data, void (* func)(void*, Element*), bool all)
 {
-    for (ScoreElement* el : *this) {
+    for (EngravingObject* el : *this) {
         if (treeParent() && el->isSpannerSegment()) {
             continue; // spanner segments are scanned by the system
                       // except in the palette (in which case treeParent() == nullptr)
@@ -802,7 +802,7 @@ Note* Spanner::startElementFromSpanner(Spanner* sp, Element* newEnd)
     int newTrack    = (newEnd->track() - oldEnd->track()) + oldStart->track();
     // look in notes linked to oldStart for a note with the
     // same score as new score and appropriate track
-    for (ScoreElement* newEl : oldStart->linkList()) {
+    for (EngravingObject* newEl : oldStart->linkList()) {
         if (toNote(newEl)->score() == score && toNote(newEl)->track() == newTrack) {
             newStart = toNote(newEl);
             break;
@@ -838,7 +838,7 @@ Note* Spanner::endElementFromSpanner(Spanner* sp, Element* newStart)
     int newTrack    = newStart->track() + (oldEnd->track() - oldStart->track());
     // look in notes linked to oldEnd for a note with the
     // same score as new score and appropriate track
-    for (ScoreElement* newEl : oldEnd->linkList()) {
+    for (EngravingObject* newEl : oldEnd->linkList()) {
         if (toNote(newEl)->score() == score && toNote(newEl)->track() == newTrack) {
             newEnd = toNote(newEl);
             break;
@@ -1612,7 +1612,7 @@ void SpannerSegment::autoplaceSpannerSegment()
 void Spanner::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
 {
     if (id == Pid::PLACEMENT) {
-        ScoreElement::undoChangeProperty(id, v, ps);
+        EngravingObject::undoChangeProperty(id, v, ps);
         // change offset of all segments if styled
 
         for (SpannerSegment* s : segments) {

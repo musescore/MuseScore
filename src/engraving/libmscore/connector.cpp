@@ -24,7 +24,7 @@
 #include "io/xml.h"
 #include "element.h"
 #include "score.h"
-#include "scoreElement.h"
+#include "engravingobject.h"
 
 using namespace mu;
 
@@ -377,7 +377,7 @@ bool ConnectorInfoReader::read()
 {
     XmlReader& e = *_reader;
     const QString name(e.attribute("type"));
-    _type = ScoreElement::name2type(&name);
+    _type = EngravingObject::name2type(&name);
 
     e.fillLocation(_currentLoc);
 

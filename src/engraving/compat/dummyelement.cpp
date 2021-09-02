@@ -94,12 +94,12 @@ Ms::Element* DummyElement::clone() const
     return nullptr;
 }
 
-void DummyElement::add(Ms::ScoreElement* e)
+void DummyElement::add(Ms::EngravingObject* e)
 {
     m_elements.push_back(e);
 }
 
-void DummyElement::remove(Ms::ScoreElement* e)
+void DummyElement::remove(Ms::EngravingObject* e)
 {
     m_elements.remove(e);
 }

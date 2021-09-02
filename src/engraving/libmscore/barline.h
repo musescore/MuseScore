@@ -89,8 +89,8 @@ public:
     void setParent(Segment* parent);
 
     // Score Tree functions
-    ScoreElement* treeParent() const override;
-    ScoreElement* treeChild(int idx) const override;
+    EngravingObject* treeParent() const override;
+    EngravingObject* treeChild(int idx) const override;
     int treeChildCount() const override;
 
     BarLine* clone() const override { return new BarLine(*this); }
@@ -148,7 +148,7 @@ public:
     QVariant propertyDefault(Pid propertyId) const override;
     Pid propertyId(const QStringRef& xmlName) const override;
     void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps) override;
-    using ScoreElement::undoChangeProperty;
+    using EngravingObject::undoChangeProperty;
 
     static qreal layoutWidth(Score*, BarLineType);
     mu::RectF layoutRect() const;

@@ -290,7 +290,7 @@ Ret MasterNotationMidiData::playNoteMidiData(const Ms::Note* note) const
 {
     const Ms::Note* masterNote = note;
     if (note->linkList().size() > 1) {
-        for (Ms::ScoreElement* se : note->linkList()) {
+        for (Ms::EngravingObject* se : note->linkList()) {
             if (se->score() == note->masterScore() && se->isNote()) {
                 masterNote = Ms::toNote(se);
                 break;

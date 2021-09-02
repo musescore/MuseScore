@@ -36,7 +36,7 @@ namespace Ms {
 TextEditData::~TextEditData()
 {
     if (deleteText) {
-        for (ScoreElement* se : _textBase->linkList()) {
+        for (EngravingObject* se : _textBase->linkList()) {
             toTextBase(se)->deleteLater();
         }
     }

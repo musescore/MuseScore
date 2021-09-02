@@ -45,8 +45,8 @@ public:
     Ms::Note* note();
 
     Ms::Element* clone() const override;
-    void add(Ms::ScoreElement* e);
-    void remove(Ms::ScoreElement* e);
+    void add(Ms::EngravingObject* e);
+    void remove(Ms::EngravingObject* e);
 
     QVariant getProperty(Ms::Pid) const override { return QVariant(); }
     bool setProperty(Ms::Pid, const QVariant&) override { return false; }
@@ -60,7 +60,7 @@ private:
     Ms::Segment* m_segment = nullptr;
     Ms::Chord* m_chord = nullptr;
     Ms::Note* m_note = nullptr;
-    std::list<Ms::ScoreElement*> m_elements;
+    std::list<Ms::EngravingObject*> m_elements;
 };
 }
 

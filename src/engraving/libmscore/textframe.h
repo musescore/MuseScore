@@ -43,8 +43,8 @@ public:
     ~TBox();
 
     // Score Tree functions
-    ScoreElement* treeParent() const override;
-    ScoreElement* treeChild(int idx) const override;
+    EngravingObject* treeParent() const override;
+    EngravingObject* treeChild(int idx) const override;
     int treeChildCount() const override;
 
     virtual TBox* clone() const override { return new TBox(*this); }

@@ -311,7 +311,8 @@ void MeasureBaseList::fixupSystems()
 //---------------------------------------------------------
 
 Score::Score()
-    : ScoreElement(ElementType::SCORE, nullptr), _headersText(MAX_HEADERS, nullptr), _footersText(MAX_FOOTERS, nullptr), _selection(this),
+    : EngravingObject(ElementType::SCORE, nullptr), _headersText(MAX_HEADERS, nullptr), _footersText(MAX_FOOTERS, nullptr),
+    _selection(this),
     m_layout(this)
 {
     Score::validScores.insert(this);
@@ -2360,14 +2361,14 @@ void Score::splitStaff(int staffIdx, int splitPoint)
                             }
                             if (slur->startCR() == chord) {
                                 slur->undoChangeProperty(Pid::TRACK, slur->track() + VOICES);
-                                for (ScoreElement* ee : slur->linkList()) {
+                                for (EngravingObject* ee : slur->linkList()) {
                                     Slur* lslur = toSlur(ee);
                                     lslur->setStartElement(0);
                                 }
                             }
                             if (slur->endCR() == chord) {
                                 slur->undoChangeProperty(Pid::SPANNER_TRACK2, slur->track2() + VOICES);
-                                for (ScoreElement* ee : slur->linkList()) {
+                                for (EngravingObject* ee : slur->linkList()) {
                                     Slur* lslur = toSlur(ee);
                                     lslur->setEndElement(0);
                                 }
@@ -2839,7 +2840,7 @@ void Score::cmdConcertPitchChanged(bool flag)
                 Harmony* h  = toHarmony(e);
                 int rootTpc = transposeTpc(h->rootTpc(), interval, true);
                 int baseTpc = transposeTpc(h->baseTpc(), interval, true);
-                for (ScoreElement* se : h->linkList()) {
+                for (EngravingObject* se : h->linkList()) {
                     // don't transpose all links
                     // just ones resulting from mmrests
                     Harmony* he = toHarmony(se);              // toHarmony() does not work as e is an ScoreElement

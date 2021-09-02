@@ -1696,13 +1696,13 @@ bool Read206::readChordRestProperties206(XmlReader& e, ChordRest* ch)
                     spanner->setStartElement(ch);
                 }
                 if (e.pasteMode()) {
-                    for (ScoreElement* el : spanner->linkList()) {
+                    for (EngravingObject* el : spanner->linkList()) {
                         if (el == spanner) {
                             continue;
                         }
                         Spanner* ls = static_cast<Spanner*>(el);
                         ls->setTick(spanner->tick());
-                        for (ScoreElement* ee : ch->linkList()) {
+                        for (EngravingObject* ee : ch->linkList()) {
                             ChordRest* cr = toChordRest(ee);
                             if (cr->score() == ee->score() && cr->staffIdx() == ls->staffIdx()) {
                                 ls->setTrack(cr->track());
@@ -1725,13 +1725,13 @@ bool Read206::readChordRestProperties206(XmlReader& e, ChordRest* ch)
                     spanner->setTrack(start->track());
                 }
                 if (e.pasteMode()) {
-                    for (ScoreElement* el : spanner->linkList()) {
+                    for (EngravingObject* el : spanner->linkList()) {
                         if (el == spanner) {
                             continue;
                         }
                         Spanner* ls = static_cast<Spanner*>(el);
                         ls->setTick2(spanner->tick2());
-                        for (ScoreElement* ee : ch->linkList()) {
+                        for (EngravingObject* ee : ch->linkList()) {
                             ChordRest* cr = toChordRest(ee);
                             if (cr->score() == ee->score() && cr->staffIdx() == ls->staffIdx()) {
                                 ls->setTrack2(cr->track());

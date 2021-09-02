@@ -1604,9 +1604,9 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                     if (_is.slur()) {
                         // extend slur
                         _is.slur()->undoChangeProperty(Pid::SPANNER_TICKS, nchord->tick() - _is.slur()->tick());
-                        for (ScoreElement* e : _is.slur()->linkList()) {
+                        for (EngravingObject* e : _is.slur()->linkList()) {
                             Slur* slur = toSlur(e);
-                            for (ScoreElement* ee : nchord->linkList()) {
+                            for (EngravingObject* ee : nchord->linkList()) {
                                 Element* e1 = static_cast<Element*>(ee);
                                 if (e1->score() == slur->score() && e1->track() == slur->track2()) {
                                     slur->score()->undo(new ChangeSpannerElements(slur, slur->startElement(), e1));
@@ -2254,10 +2254,10 @@ void Score::deleteItem(Element* el)
 
             Tuplet* tuplet = chord->tuplet();
             if (tuplet) {
-                QList<ScoreElement*> tl = tuplet->linkList();
-                for (ScoreElement* e : rest->linkList()) {
+                QList<EngravingObject*> tl = tuplet->linkList();
+                for (EngravingObject* e : rest->linkList()) {
                     DurationElement* de = toDurationElement(e);
-                    for (ScoreElement* ee : qAsConst(tl)) {
+                    for (EngravingObject* ee : qAsConst(tl)) {
                         Tuplet* t = toTuplet(ee);
                         if (t->score() == de->score() && t->track() == de->track()) {
                             de->setTuplet(t);
@@ -2322,7 +2322,7 @@ void Score::deleteItem(Element* el)
         }
         if ((el->voice() != 0) && !rest->tuplet()) {
             rest->undoChangeProperty(Pid::GAP, true);
-            for (ScoreElement* r : el->linkList()) {
+            for (EngravingObject* r : el->linkList()) {
                 Rest* rr = toRest(r);
                 if (rr->track() % VOICES) {
                     rr->undoChangeProperty(Pid::GAP, true);
@@ -3030,14 +3030,14 @@ void Score::cmdDeleteSelection()
 
         // keep track of linked elements that are deleted implicitly
         // so we don't try to delete them twice if they are also in selection
-        QList<ScoreElement*> deletedElements;
+        QList<EngravingObject*> deletedElements;
         // Similarly, deleting one spanner segment, will delete all of them
         // so we don't try to delete them twice if they are also in selection
         QList<Spanner*> deletedSpanners;
 
         for (Element* e : el) {
             // these are the linked elements we are about to delete
-            QList<ScoreElement*> links;
+            QList<EngravingObject*> links;
             if (e->links()) {
                 links = *e->links();
             }
@@ -3080,13 +3080,13 @@ void Score::cmdDeleteSelection()
                     if (deletedSpanners.contains(spanner)) {
                         continue;
                     } else {
-                        QList<ScoreElement*> linkedSpanners;
+                        QList<EngravingObject*> linkedSpanners;
                         if (spanner->links()) {
                             linkedSpanners = *spanner->links();
                         } else {
                             linkedSpanners.append(spanner);
                         }
-                        for (ScoreElement* se : qAsConst(linkedSpanners)) {
+                        for (EngravingObject* se : qAsConst(linkedSpanners)) {
                             deletedSpanners.append(toSpanner(se));
                         }
                     }
@@ -3100,7 +3100,7 @@ void Score::cmdDeleteSelection()
             }
 
             // add these linked elements to list of already-deleted elements
-            for (ScoreElement* se : qAsConst(links)) {
+            for (EngravingObject* se : qAsConst(links)) {
                 deletedElements.append(se);
             }
         }
@@ -3459,7 +3459,7 @@ void Score::enterRest(const TDuration& d, InputState* externalInputState)
 void Score::removeChordRest(ChordRest* cr, bool clearSegment)
 {
     QList<Segment*> segments;
-    for (ScoreElement* e : cr->linkList()) {
+    for (EngravingObject* e : cr->linkList()) {
         undo(new RemoveElement(static_cast<Element*>(e)));
         if (clearSegment) {
             Segment* s = cr->segment();
@@ -3575,7 +3575,7 @@ void Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmp
                         qDebug("no links");
                     }
                 } else {
-                    for (ScoreElement* m : *measure->links()) {
+                    for (EngravingObject* m : *measure->links()) {
                         if (measure->score() == score) {
                             im = toMeasureBase(m);
                             break;
@@ -4336,7 +4336,7 @@ void Score::cloneVoice(int strack, int dtrack, Segment* sf, const Fraction& lTic
                     ns->setStartElement(0);
                     ns->setEndElement(0);
                     if (cr1 && cr1->links()) {
-                        for (ScoreElement* e : *cr1->links()) {
+                        for (EngravingObject* e : *cr1->links()) {
                             ChordRest* cr = toChordRest(e);
                             if (cr == cr1) {
                                 continue;
@@ -4348,7 +4348,7 @@ void Score::cloneVoice(int strack, int dtrack, Segment* sf, const Fraction& lTic
                         }
                     }
                     if (cr2 && cr2->links()) {
-                        for (ScoreElement* e : *cr2->links()) {
+                        for (EngravingObject* e : *cr2->links()) {
                             ChordRest* cr = toChordRest(e);
                             if (cr == cr2) {
                                 continue;
@@ -4376,7 +4376,7 @@ bool Score::undoPropertyChanged(Element* e, Pid t, const QVariant& st, PropertyF
     bool changed = false;
 
     if (propertyLink(t) && e->links()) {
-        for (ScoreElement* ee : *e->links()) {
+        for (EngravingObject* ee : *e->links()) {
             if (ee == e) {
                 if (ee->getProperty(t) != st) {
                     undoStack()->push1(new ChangeProperty(ee, t, st, ps));
@@ -4402,7 +4402,7 @@ bool Score::undoPropertyChanged(Element* e, Pid t, const QVariant& st, PropertyF
     return changed;
 }
 
-void Score::undoPropertyChanged(ScoreElement* e, Pid t, const QVariant& st, PropertyFlags ps)
+void Score::undoPropertyChanged(EngravingObject* e, Pid t, const QVariant& st, PropertyFlags ps)
 {
     if (e->getProperty(t) != st) {
         undoStack()->push1(new ChangeProperty(e, t, st, ps));
@@ -4446,7 +4446,7 @@ void Score::undoChangeElement(Element* oldElement, Element* newElement)
 
 void Score::undoChangePitch(Note* note, int pitch, int tpc1, int tpc2)
 {
-    for (ScoreElement* e : note->linkList()) {
+    for (EngravingObject* e : note->linkList()) {
         Note* n = toNote(e);
         undoStack()->push(new ChangePitch(n, pitch, tpc1, tpc2), 0);
     }
@@ -4465,7 +4465,7 @@ void Score::undoChangeFretting(Note* note, int pitch, int string, int fret, int 
 {
     const LinkedElements* l = note->links();
     if (l) {
-        for (ScoreElement* e : *l) {
+        for (EngravingObject* e : *l) {
             Note* n = toNote(e);
             undo(new ChangeFretting(n, pitch, string, fret, tpc1, tpc2));
         }
@@ -4704,7 +4704,7 @@ static Element* findLinkedVoiceElement(Element* e, Staff* nstaff)
         QList<int> l = de->tracks().values(strack);
         if (l.isEmpty()) {
             // simply return the first linked element whose staff is equal to nstaff
-            for (ScoreElement* ee : e->linkList()) {
+            for (EngravingObject* ee : e->linkList()) {
                 Element* el = toElement(ee);
                 if (el->staff() == nstaff) {
                     return el;
@@ -4747,7 +4747,7 @@ static Chord* findLinkedChord(Chord* c, Staff* nstaff)
         QList<int> l = de->tracks().values(strack);
         if (l.isEmpty()) {
             // simply return the first linked chord whose staff is equal to nstaff
-            for (ScoreElement* ee : c->linkList()) {
+            for (EngravingObject* ee : c->linkList()) {
                 Chord* ch = toChord(ee);
                 if (ch->staff() == nstaff) {
                     return ch;
@@ -5135,7 +5135,7 @@ void Score::undoAddElement(Element* element)
             undo(new AddElement(element));
             return;
         }
-        for (ScoreElement* ee : *links) {
+        for (EngravingObject* ee : *links) {
             Element* e = static_cast<Element*>(ee);
             Element* ne;
             if (e == parent) {
@@ -5451,8 +5451,8 @@ void Score::undoAddElement(Element* element)
                 //
                 if (element->isSlur() && sp != nsp) {
                     if (sp->startElement()) {
-                        QList<ScoreElement*> sel = sp->startElement()->linkList();
-                        for (ScoreElement* ee : qAsConst(sel)) {
+                        QList<EngravingObject*> sel = sp->startElement()->linkList();
+                        for (EngravingObject* ee : qAsConst(sel)) {
                             Element* e = static_cast<Element*>(ee);
                             if (e->score() == nsp->score() && e->track() == nsp->track()) {
                                 nsp->setStartElement(e);
@@ -5461,8 +5461,8 @@ void Score::undoAddElement(Element* element)
                         }
                     }
                     if (sp->endElement()) {
-                        QList<ScoreElement*> eel = sp->endElement()->linkList();
-                        for (ScoreElement* ee : qAsConst(eel)) {
+                        QList<EngravingObject*> eel = sp->endElement()->linkList();
+                        for (EngravingObject* ee : qAsConst(eel)) {
                             Element* e = static_cast<Element*>(ee);
                             if (e->score() == nsp->score() && e->track() == nsp->track2()) {
                                 nsp->setEndElement(e);
@@ -5730,7 +5730,7 @@ void Score::undoRemoveElement(Element* element)
         return;
     }
     QList<Segment*> segments;
-    for (ScoreElement* ee : element->linkList()) {
+    for (EngravingObject* ee : element->linkList()) {
         Element* e = static_cast<Element*>(ee);
         undo(new RemoveElement(e));
         if (e->parent() && (e->parent()->isSegment())) {
@@ -5765,7 +5765,7 @@ void Score::undoChangeSpannerElements(Spanner* spanner, Element* startElement, E
     int startDeltaTrack = startElement && oldStartElement ? startElement->track() - oldStartElement->track() : 0;
     int endDeltaTrack = endElement && oldEndElement ? endElement->track() - oldEndElement->track() : 0;
     // scan all spanners linked to this one
-    for (ScoreElement* el : spanner->linkList()) {
+    for (EngravingObject* el : spanner->linkList()) {
         Spanner* sp = toSpanner(el);
         Element* newStartElement = nullptr;
         Element* newEndElement = nullptr;
@@ -5777,7 +5777,7 @@ void Score::undoChangeSpannerElements(Spanner* spanner, Element* startElement, E
                 int newTrack = sp->startElement() ? sp->startElement()->track() + startDeltaTrack : sp->track();
                 // look in elements linked to new start element for an element with
                 // same score as linked spanner and appropriate track
-                for (ScoreElement* ee : startElement->linkList()) {
+                for (EngravingObject* ee : startElement->linkList()) {
                     Element* e = toElement(ee);
                     if (e->score() == sp->score() && e->track() == newTrack) {
                         newStartElement = e;
@@ -5788,7 +5788,7 @@ void Score::undoChangeSpannerElements(Spanner* spanner, Element* startElement, E
             // similarly to determine the 'parallel' end element
             if (endElement) {
                 int newTrack = sp->endElement() ? sp->endElement()->track() + endDeltaTrack : sp->track2();
-                for (ScoreElement* ee : endElement->linkList()) {
+                for (EngravingObject* ee : endElement->linkList()) {
                     Element* e = toElement(ee);
                     if (e->score() == sp->score() && e->track() == newTrack) {
                         newEndElement = e;

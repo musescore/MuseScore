@@ -980,7 +980,7 @@ static void handleTupletStop(Tuplet*& tuplet, const int normalNotes)
 //   setElementPropertyFlags
 //---------------------------------------------------------
 
-static void setElementPropertyFlags(ScoreElement* element, const Pid propertyId,
+static void setElementPropertyFlags(EngravingObject* element, const Pid propertyId,
                                     const QString value1, const QString value2 = QString())
 {
     if (value1.isEmpty()) { // Set as an implicit value

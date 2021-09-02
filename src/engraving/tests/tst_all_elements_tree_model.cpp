@@ -41,7 +41,7 @@ class TestTreeModel : public QObject, public MTest
     Q_OBJECT
 
     void tstTree(QString file);
-    void traverseTree(ScoreElement* element);
+    void traverseTree(EngravingObject* element);
 
 private slots:
     void initTestCase();
@@ -51,7 +51,7 @@ private slots:
     void tstTreeGoldberg() { tstTree("goldberg.mscx"); }
 };
 
-QString elementToText(ScoreElement* element);
+QString elementToText(EngravingObject* element);
 
 //---------------------------------------------------------
 //   initTestCase
@@ -78,9 +78,9 @@ void TestTreeModel::tstTree(QString file)
 ///   correct, then recursively checks all children.
 //---------------------------------------------------------
 
-void TestTreeModel::traverseTree(ScoreElement* element)
+void TestTreeModel::traverseTree(EngravingObject* element)
 {
-    for (ScoreElement* child : (*element)) {
+    for (EngravingObject* child : (*element)) {
         // child should never be nullptr
         if (!child) {
             qDebug() << "Element returned nullptr in treeChild()!";
@@ -111,7 +111,7 @@ void TestTreeModel::traverseTree(ScoreElement* element)
 ///   for printing debug info about any element
 //---------------------------------------------------------
 
-QString elementToText(ScoreElement* element)
+QString elementToText(EngravingObject* element)
 {
     if (element == nullptr) {
         return "nullptr";

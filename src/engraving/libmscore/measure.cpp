@@ -1901,7 +1901,7 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
                 std::vector<TDuration> durList = toDurationList(nf * stretch, false, 0);
 
                 // set the existing rest to the first value of the duration list
-                for (ScoreElement* e : rest->linkList()) {
+                for (EngravingObject* e : rest->linkList()) {
                     e->undoChangeProperty(Pid::DURATION, QVariant::fromValue<Fraction>(durList[0].fraction()));
                     e->undoChangeProperty(Pid::DURATION_TYPE, QVariant::fromValue<TDuration>(durList[0]));
                 }
@@ -2666,7 +2666,7 @@ bool Measure::isFirstInSystem() const
 
 void Measure::scanElements(void* data, void (* func)(void*, Element*), bool all)
 {
-    for (ScoreElement* el : (*this)) {
+    for (EngravingObject* el : (*this)) {
         if (el->isMeasure()) {
             continue;  // do not scan Measures 'inside' mmrest measure
         }

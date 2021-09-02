@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __SCORE_ELEMENT_H__
-#define __SCORE_ELEMENT_H__
+#ifndef MU_ENGRAVING_OBJECT_H
+#define MU_ENGRAVING_OBJECT_H
 
 #include "types.h"
 #include "infrastructure/draw/geometry.h"
@@ -32,7 +32,7 @@
 #include "diagnostics/iengravingelementsprovider.h"
 
 namespace Ms {
-class ScoreElement;
+class EngravingObject;
 class MasterScore;
 class XmlWriter;
 class XmlReader;
@@ -159,7 +159,7 @@ enum class PropertyFlags : char;
 //   LinkedElements
 //---------------------------------------------------------
 
-class LinkedElements : public QList<ScoreElement*>
+class LinkedElements : public QList<EngravingObject*>
 {
     int _lid;           // unique id for every linked list
 
@@ -170,7 +170,7 @@ public:
     void setLid(Score*, int val);
     int lid() const { return _lid; }
 
-    ScoreElement* mainElement();
+    EngravingObject* mainElement();
 };
 
 //---------------------------------------------------------
@@ -183,16 +183,12 @@ struct ElementName {
     const char* userName;
 };
 
-//---------------------------------------------------------
-//   ScoreElement
-//---------------------------------------------------------
-
-class ScoreElement
+class EngravingObject
 {
     INJECT_STATIC(engraving, mu::diagnostics::IEngravingElementsProvider, elementsProvider)
 
     ElementType m_type = ElementType::INVALID;
-    ScoreElement* m_parent = nullptr;
+    EngravingObject* m_parent = nullptr;
     bool m_isParentExplicitlySet = false;
     bool m_isDummy = false;
     Score* _score = nullptr;
@@ -209,10 +205,10 @@ protected:
     void hack_setType(const ElementType& t) { m_type = t; }
 
 public:
-    ScoreElement(const ElementType& type, ScoreElement* parent);
-    ScoreElement(const ScoreElement& se);
+    EngravingObject(const ElementType& type, EngravingObject* parent);
+    EngravingObject(const EngravingObject& se);
 
-    virtual ~ScoreElement();
+    virtual ~EngravingObject();
 
     inline ElementType type() const { return m_type; }
 
@@ -250,41 +246,41 @@ public:
     //! * All objects must belong to someone
     //!
     //! For compatibility purposes, it has been done so that the new structure has the old behavior.
-    ScoreElement* parent(bool isIncludeDummy = false) const;
-    void setParent(ScoreElement* p, bool isExplicitly = true);
+    EngravingObject* parent(bool isIncludeDummy = false) const;
+    void setParent(EngravingObject* p, bool isExplicitly = true);
     void moveToDummy();
     void setIsDummy(bool arg);
     bool isDummy() const;
 
     // Score Tree functions
-    virtual ScoreElement* treeParent() const { return m_parent; }
-    virtual ScoreElement* treeChild(int n) const { Q_UNUSED(n); return nullptr; }
+    virtual EngravingObject* treeParent() const { return m_parent; }
+    virtual EngravingObject* treeChild(int n) const { Q_UNUSED(n); return nullptr; }
     virtual int treeChildCount() const { return 0; }
 
-    int treeChildIdx(ScoreElement* child) const;
+    int treeChildIdx(EngravingObject* child) const;
 
     // For iterating over child elements
     class iterator
     {
-        ScoreElement* el;
+        EngravingObject* el;
         int i;
     public:
-        iterator(ScoreElement* el, int pos)
+        iterator(EngravingObject* el, int pos)
             : el(el), i(pos) {}
         iterator operator++() { return iterator(el, i++); }
-        ScoreElement* operator*() { return el->treeChild(i); }
+        EngravingObject* operator*() { return el->treeChild(i); }
         bool operator!=(const iterator& o) { return o.el != el || o.i != i; }
     };
 
     class const_iterator
     {
-        const ScoreElement* el;
+        const EngravingObject* el;
         int i;
     public:
-        const_iterator(const ScoreElement* el, int pos)
+        const_iterator(const EngravingObject* el, int pos)
             : el(el), i(pos) {}
         const_iterator operator++() { return const_iterator(el, i++); }
-        const ScoreElement* operator*() { return el->treeChild(i); }
+        const EngravingObject* operator*() { return el->treeChild(i); }
         bool operator!=(const const_iterator& o) { return o.el != el || o.i != i; }
     };
 
@@ -345,11 +341,11 @@ public:
     void writeProperty(XmlWriter& xml, Pid id) const;
     void writeStyledProperties(XmlWriter&) const;
 
-    QList<ScoreElement*> linkList() const;
+    QList<EngravingObject*> linkList() const;
 
-    void linkTo(ScoreElement*);
+    void linkTo(EngravingObject*);
     void unlink();
-    bool isLinked(ScoreElement* se = nullptr) const;
+    bool isLinked(EngravingObject* se = nullptr) const;
 
     virtual void undoUnlink();
     int lid() const { return _links ? _links->lid() : 0; }
@@ -548,21 +544,21 @@ public:
 //    ChordRest* toChordRest(Element* e)
 //---------------------------------------------------
 
-static inline ChordRest* toChordRest(ScoreElement* e)
+static inline ChordRest* toChordRest(EngravingObject* e)
 {
     Q_ASSERT(e == 0 || e->type() == ElementType::CHORD || e->type() == ElementType::REST
              || e->type() == ElementType::MMREST || e->type() == ElementType::MEASURE_REPEAT);
     return (ChordRest*)e;
 }
 
-static inline const ChordRest* toChordRest(const ScoreElement* e)
+static inline const ChordRest* toChordRest(const EngravingObject* e)
 {
     Q_ASSERT(e == 0 || e->type() == ElementType::CHORD || e->type() == ElementType::REST
              || e->type() == ElementType::MMREST || e->type() == ElementType::MEASURE_REPEAT);
     return (const ChordRest*)e;
 }
 
-static inline DurationElement* toDurationElement(ScoreElement* e)
+static inline DurationElement* toDurationElement(EngravingObject* e)
 {
     Q_ASSERT(e == 0 || e->type() == ElementType::CHORD || e->type() == ElementType::REST
              || e->type() == ElementType::MMREST || e->type() == ElementType::MEASURE_REPEAT
@@ -570,7 +566,7 @@ static inline DurationElement* toDurationElement(ScoreElement* e)
     return (DurationElement*)e;
 }
 
-static inline const DurationElement* toDurationElement(const ScoreElement* e)
+static inline const DurationElement* toDurationElement(const EngravingObject* e)
 {
     Q_ASSERT(e == 0 || e->type() == ElementType::CHORD || e->type() == ElementType::REST
              || e->type() == ElementType::MMREST || e->type() == ElementType::MEASURE_REPEAT
@@ -578,99 +574,99 @@ static inline const DurationElement* toDurationElement(const ScoreElement* e)
     return (const DurationElement*)e;
 }
 
-static inline Rest* toRest(ScoreElement* e)
+static inline Rest* toRest(EngravingObject* e)
 {
     Q_ASSERT(!e || e->isRestFamily());
     return (Rest*)e;
 }
 
-static inline const Rest* toRest(const ScoreElement* e)
+static inline const Rest* toRest(const EngravingObject* e)
 {
     Q_ASSERT(!e || e->isRestFamily());
     return (const Rest*)e;
 }
 
-static inline SlurTieSegment* toSlurTieSegment(ScoreElement* e)
+static inline SlurTieSegment* toSlurTieSegment(EngravingObject* e)
 {
     Q_ASSERT(e == 0 || e->type() == ElementType::SLUR_SEGMENT || e->type() == ElementType::TIE_SEGMENT);
     return (SlurTieSegment*)e;
 }
 
-static inline const SlurTieSegment* toSlurTieSegment(const ScoreElement* e)
+static inline const SlurTieSegment* toSlurTieSegment(const EngravingObject* e)
 {
     Q_ASSERT(e == 0 || e->type() == ElementType::SLUR_SEGMENT || e->type() == ElementType::TIE_SEGMENT);
     return (const SlurTieSegment*)e;
 }
 
-static inline const MeasureBase* toMeasureBase(const ScoreElement* e)
+static inline const MeasureBase* toMeasureBase(const EngravingObject* e)
 {
     Q_ASSERT(e == 0 || e->isMeasure() || e->isVBox() || e->isHBox() || e->isTBox() || e->isFBox());
     return (const MeasureBase*)e;
 }
 
-static inline MeasureBase* toMeasureBase(ScoreElement* e)
+static inline MeasureBase* toMeasureBase(EngravingObject* e)
 {
     Q_ASSERT(e == 0 || e->isMeasureBase());
     return (MeasureBase*)e;
 }
 
-static inline Box* toBox(ScoreElement* e)
+static inline Box* toBox(EngravingObject* e)
 {
     Q_ASSERT(e == 0 || e->isBox());
     return (Box*)e;
 }
 
-static inline SpannerSegment* toSpannerSegment(ScoreElement* e)
+static inline SpannerSegment* toSpannerSegment(EngravingObject* e)
 {
     Q_ASSERT(e == 0 || e->isSpannerSegment());
     return (SpannerSegment*)e;
 }
 
-static inline const SpannerSegment* toSpannerSegment(const ScoreElement* e)
+static inline const SpannerSegment* toSpannerSegment(const EngravingObject* e)
 {
     Q_ASSERT(e == 0 || e->isSpannerSegment());
     return (const SpannerSegment*)e;
 }
 
-static inline BSymbol* toBSymbol(ScoreElement* e)
+static inline BSymbol* toBSymbol(EngravingObject* e)
 {
     Q_ASSERT(e == 0 || e->isBSymbol());
     return (BSymbol*)e;
 }
 
-static inline TextLineBase* toTextLineBase(ScoreElement* e)
+static inline TextLineBase* toTextLineBase(EngravingObject* e)
 {
     Q_ASSERT(e == 0 || e->isTextLineBase());
     return (TextLineBase*)e;
 }
 
-static inline TextBase* toTextBase(ScoreElement* e)
+static inline TextBase* toTextBase(EngravingObject* e)
 {
     Q_ASSERT(e == 0 || e->isTextBase());
     return (TextBase*)e;
 }
 
-static inline const TextBase* toTextBase(const ScoreElement* e)
+static inline const TextBase* toTextBase(const EngravingObject* e)
 {
     Q_ASSERT(e == 0 || e->isTextBase());
     return (const TextBase*)e;
 }
 
-static inline StaffTextBase* toStaffTextBase(ScoreElement* e)
+static inline StaffTextBase* toStaffTextBase(EngravingObject* e)
 {
     Q_ASSERT(e == 0 || e->isStaffTextBase());
     return (StaffTextBase*)e;
 }
 
-static inline const StaffTextBase* toStaffTextBase(const ScoreElement* e)
+static inline const StaffTextBase* toStaffTextBase(const EngravingObject* e)
 {
     Q_ASSERT(e == 0 || e->isStaffTextBase());
     return (const StaffTextBase*)e;
 }
 
 #define CONVERT(a)  \
-    static inline a* to##a(ScoreElement * e) { Q_ASSERT(e == 0 || e->is##a()); return (a*)e; } \
-    static inline const a* to##a(const ScoreElement * e) { Q_ASSERT(e == 0 || e->is##a()); return (const a*)e; }
+    static inline a* to##a(EngravingObject * e) { Q_ASSERT(e == 0 || e->is##a()); return (a*)e; } \
+    static inline const a* to##a(const EngravingObject * e) { Q_ASSERT(e == 0 || e->is##a()); return (const a*)e; }
 
 CONVERT(Element)
 CONVERT(Note)

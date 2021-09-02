@@ -502,7 +502,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                 // undoTransposeHarmony does not do links
                 // because it is also used to handle transposing instruments
                 // and score / parts could be in different concert pitch states
-                for (ScoreElement* se : hh->linkList()) {
+                for (EngravingObject* se : hh->linkList()) {
                     Harmony* h = toHarmony(se);
                     if (mode == TransposeMode::DIATONICALLY) {
                         Fraction tick = segment->tick();
@@ -839,7 +839,7 @@ void Score::transpositionChanged(Part* part, Interval oldV, Fraction tickStart, 
                     Harmony* h  = toHarmony(element);
                     int rootTpc = transposeTpc(h->rootTpc(), diffV, false);
                     int baseTpc = transposeTpc(h->baseTpc(), diffV, false);
-                    for (ScoreElement* scoreElement : h->linkList()) {
+                    for (EngravingObject* scoreElement : h->linkList()) {
                         if (!scoreElement->score()->styleB(Sid::concertPitch)) {
                             undoTransposeHarmony(toHarmony(scoreElement), rootTpc, baseTpc);
                         }

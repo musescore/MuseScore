@@ -210,8 +210,8 @@ QString Element::subtypeName() const
 //   Element
 //---------------------------------------------------------
 
-Element::Element(const ElementType& type, ScoreElement* se, ElementFlags f, mu::engraving::AccessibleElement* access)
-    : ScoreElement(type, se)
+Element::Element(const ElementType& type, EngravingObject* se, ElementFlags f, mu::engraving::AccessibleElement* access)
+    : EngravingObject(type, se)
 {
     _flags         = f;
     _track         = -1;
@@ -234,7 +234,7 @@ Element::Element(const ElementType& type, ScoreElement* se, ElementFlags f, mu::
 }
 
 Element::Element(const Element& e)
-    : ScoreElement(e)
+    : EngravingObject(e)
 {
     _bbox       = e._bbox;
     _mag        = e._mag;
@@ -306,7 +306,7 @@ void Element::scanElements(void* data, void (* func)(void*, Element*), bool all)
             func(data, this);
         }
     } else {
-        ScoreElement::scanElements(data, func, all);
+        EngravingObject::scanElements(data, func, all);
     }
 }
 
@@ -321,7 +321,7 @@ void Element::reset()
     undoResetProperty(Pid::MIN_DISTANCE);
     undoResetProperty(Pid::OFFSET);
     setOffsetChanged(false);
-    ScoreElement::reset();
+    EngravingObject::reset();
 }
 
 //---------------------------------------------------------
@@ -841,7 +841,7 @@ bool Element::readProperties(XmlReader& e)
             }
             LinkedElements* link = e.getLink(linkedIsMaster, mainLoc, localIndexDiff);
             if (link) {
-                ScoreElement* linked = link->mainElement();
+                EngravingObject* linked = link->mainElement();
                 if (linked->type() == type()) {
                     linkTo(linked);
                 } else {
@@ -869,7 +869,7 @@ bool Element::readProperties(XmlReader& e)
         }
 #ifndef NDEBUG
         else {
-            for (ScoreElement* eee : *_links) {
+            for (EngravingObject* eee : *_links) {
                 Element* ee = static_cast<Element*>(eee);
                 if (ee->type() != type()) {
                     qFatal("link %s(%d) type mismatch %s linked to %s",
@@ -1495,7 +1495,7 @@ void Element::undoChangeProperty(Pid pid, const QVariant& val, PropertyFlags ps)
         undoPushProperty(Pid::PLACEMENT);
         undoPushProperty(Pid::OFFSET);
     }
-    ScoreElement::undoChangeProperty(pid, val, ps);
+    EngravingObject::undoChangeProperty(pid, val, ps);
 }
 
 //---------------------------------------------------------
@@ -1512,7 +1512,7 @@ QVariant Element::propertyDefault(Pid pid) const
     case Pid::COLOR:
         return QVariant::fromValue(engravingConfiguration()->defaultColor());
     case Pid::PLACEMENT: {
-        QVariant v = ScoreElement::propertyDefault(pid);
+        QVariant v = EngravingObject::propertyDefault(pid);
         if (v.isValid()) {        // if it's a styled property
             return v;
         }
@@ -1521,14 +1521,14 @@ QVariant Element::propertyDefault(Pid pid) const
     case Pid::SELECTED:
         return false;
     case Pid::OFFSET: {
-        QVariant v = ScoreElement::propertyDefault(pid);
+        QVariant v = EngravingObject::propertyDefault(pid);
         if (v.isValid()) {        // if it's a styled property
             return v;
         }
         return QVariant::fromValue(PointF());
     }
     case Pid::MIN_DISTANCE: {
-        QVariant v = ScoreElement::propertyDefault(pid);
+        QVariant v = EngravingObject::propertyDefault(pid);
         if (v.isValid()) {
             return v;
         }
@@ -1539,7 +1539,7 @@ QVariant Element::propertyDefault(Pid pid) const
     case Pid::Z:
         return int(type()) * 100;
     default: {
-        QVariant v = ScoreElement::propertyDefault(pid);
+        QVariant v = EngravingObject::propertyDefault(pid);
 
         if (v.isValid()) {
             return v;
@@ -1563,7 +1563,7 @@ Pid Element::propertyId(const QStringRef& name) const
     if (name == "pos" || name == "offset") {
         return Pid::OFFSET;
     }
-    return ScoreElement::propertyId(name);
+    return EngravingObject::propertyId(name);
 }
 
 //---------------------------------------------------------
@@ -1576,7 +1576,7 @@ QString Element::propertyUserValue(Pid pid) const
     case Pid::SUBTYPE:
         return subtypeName();
     default:
-        return ScoreElement::propertyUserValue(pid);
+        return EngravingObject::propertyUserValue(pid);
     }
 }
 

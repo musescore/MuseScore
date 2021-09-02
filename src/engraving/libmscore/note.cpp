@@ -1089,7 +1089,7 @@ void Note::updateHeadGroup(const NoteHead::Group headGroup)
     }
 
     if (links()) {
-        for (ScoreElement* scoreElement : *links()) {
+        for (EngravingObject* scoreElement : *links()) {
             scoreElement->undoChangeProperty(Pid::HEAD_GROUP, static_cast<int>(group));
 
             Note* note = toNote(scoreElement);
@@ -1937,7 +1937,7 @@ Element* Note::drop(EditData& data)
 
         if (group != _headGroup) {
             if (links()) {
-                for (ScoreElement* se : *links()) {
+                for (EngravingObject* se : *links()) {
                     se->undoChangeProperty(Pid::HEAD_GROUP, int(group));
                     Note* note = toNote(se);
                     if (note->staff() && note->staff()->isTabStaff(ch->tick()) && group == NoteHead::Group::HEAD_CROSS) {
@@ -2470,7 +2470,7 @@ QString Note::noteTypeUserName() const
 
 void Note::scanElements(void* data, void (* func)(void*, Element*), bool all)
 {
-    ScoreElement::scanElements(data, func, all);
+    EngravingObject::scanElements(data, func, all);
     if (all || visible() || score()->showInvisible()) {
         func(data, this);
     }

@@ -1236,7 +1236,7 @@ MeasureBase* System::nextMeasure(const MeasureBase* m) const
 
 void System::scanElements(void* data, void (* func)(void*, Element*), bool all)
 {
-    ScoreElement::scanElements(data, func, all);
+    EngravingObject::scanElements(data, func, all);
     for (SpannerSegment* ss : qAsConst(_spannerSegments)) {
         ss->scanElements(data, func, all);
     }

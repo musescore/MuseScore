@@ -1486,7 +1486,7 @@ QList<Staff*> Staff::staffList() const
 {
     QList<Staff*> staffList;
     if (_links) {
-        for (ScoreElement* e : *_links) {
+        for (EngravingObject* e : *_links) {
             staffList.append(toStaff(e));
         }
 //            staffList = _linkedStaves->staves();

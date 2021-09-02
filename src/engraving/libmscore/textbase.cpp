@@ -1674,7 +1674,7 @@ QString TextBlock::text(int col1, int len, bool withFormat) const
 //   Text
 //---------------------------------------------------------
 
-TextBase::TextBase(const Ms::ElementType& type, Ms::ScoreElement* parent, Tid tid, ElementFlags f)
+TextBase::TextBase(const Ms::ElementType& type, Ms::EngravingObject* parent, Tid tid, ElementFlags f)
     : Element(type, parent, f | ElementFlag::MOVABLE)
 {
     _cursor                 = new TextCursor(this);
@@ -1691,7 +1691,7 @@ TextBase::TextBase(const Ms::ElementType& type, Ms::ScoreElement* parent, Tid ti
     _frameRound             = 0;
 }
 
-TextBase::TextBase(const ElementType& type, ScoreElement* parent, ElementFlags f)
+TextBase::TextBase(const ElementType& type, EngravingObject* parent, ElementFlags f)
     : TextBase(type, parent, Tid::DEFAULT, f)
 {
 }

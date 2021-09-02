@@ -1112,7 +1112,7 @@ public:
 class ChangeProperty : public UndoCommand
 {
 protected:
-    ScoreElement* element;
+    EngravingObject* element;
     Pid id;
     QVariant property;
     PropertyFlags flags;
@@ -1120,10 +1120,10 @@ protected:
     void flip(EditData*) override;
 
 public:
-    ChangeProperty(ScoreElement* e, Pid i, const QVariant& v, PropertyFlags ps = PropertyFlags::NOSTYLE)
+    ChangeProperty(EngravingObject* e, Pid i, const QVariant& v, PropertyFlags ps = PropertyFlags::NOSTYLE)
         : element(e), id(i), property(v), flags(ps) {}
     Pid getId() const { return id; }
-    ScoreElement* getElement() const { return element; }
+    EngravingObject* getElement() const { return element; }
     QVariant data() const { return property; }
     UNDO_NAME("ChangeProperty")
 
@@ -1159,7 +1159,7 @@ class ChangeTextLineProperty : public ChangeProperty
     void flip(EditData*) override;
 
 public:
-    ChangeTextLineProperty(ScoreElement* e, QVariant v)
+    ChangeTextLineProperty(EngravingObject* e, QVariant v)
         : ChangeProperty(e, Pid::SYSTEM_FLAG, v, PropertyFlags::NOSTYLE) {}
     UNDO_NAME("ChangeTextLineProperty")
 };
@@ -1376,7 +1376,7 @@ class LinkUnlink : public UndoCommand
 
 protected:
     LinkedElements* le = nullptr;
-    ScoreElement* e = nullptr;
+    EngravingObject* e = nullptr;
 
     void link();
     void unlink();
@@ -1393,7 +1393,7 @@ public:
 class Unlink : public LinkUnlink
 {
 public:
-    Unlink(ScoreElement*);
+    Unlink(EngravingObject*);
     virtual void undo(EditData*) override { link(); }
     virtual void redo(EditData*) override { unlink(); }
     UNDO_NAME("Unlink")
@@ -1406,7 +1406,7 @@ public:
 class Link : public LinkUnlink
 {
 public:
-    Link(ScoreElement*, ScoreElement*);
+    Link(EngravingObject*, EngravingObject*);
     virtual void undo(EditData*) override { unlink(); }
     virtual void redo(EditData*) override { link(); }
     UNDO_NAME("Link")

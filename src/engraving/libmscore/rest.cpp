@@ -698,7 +698,7 @@ qreal Rest::downPos() const
 
 void Rest::scanElements(void* data, void (* func)(void*, Element*), bool all)
 {
-    ScoreElement::scanElements(data, func, all);
+    EngravingObject::scanElements(data, func, all);
     if (!isGap()) {
         func(data, this);
     }
