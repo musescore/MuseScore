@@ -173,16 +173,6 @@ public:
     EngravingObject* mainElement();
 };
 
-//---------------------------------------------------------
-//   ElementName
-//---------------------------------------------------------
-
-struct ElementName {
-    ElementType type;
-    const char* name;
-    const char* userName;
-};
-
 class EngravingObject
 {
     INJECT_STATIC(engraving, mu::diagnostics::IEngravingElementsProvider, elementsProvider)
@@ -294,10 +284,6 @@ public:
     virtual void setScore(Score* s);
     const char* name() const;
     virtual QString userName() const;
-
-    static ElementType name2type(const QStringRef&, bool silent = false);
-    static ElementType name2type(const QString& s) { return name2type(QStringRef(&s)); }
-    static const char* name(ElementType);
 
     virtual void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true);
 

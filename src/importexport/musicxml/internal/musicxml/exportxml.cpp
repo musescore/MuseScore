@@ -5263,7 +5263,7 @@ void ExportMusicXml::repeatAtMeasureStart(Attributes& attr, const Measure* const
         break;
         default:
             qDebug("repeatAtMeasureStart: direction type %s at tick %d not implemented",
-                   EngravingItem::name(e->type()), m->tick().ticks());
+                   e->name(), m->tick().ticks());
             break;
         }
     }
@@ -5314,7 +5314,7 @@ void ExportMusicXml::repeatAtMeasureStop(const Measure* const m, int strack, int
             break;
         default:
             qDebug("repeatAtMeasureStop: direction type %s at tick %d not implemented",
-                   EngravingItem::name(e->type()), m->tick().ticks());
+                   e->name(), m->tick().ticks());
             break;
         }
     }
@@ -5504,7 +5504,7 @@ static void annotations(ExportMusicXml* exp, int strack, int etrack, int track, 
                     // handled separately by chordAttributes(), figuredBass(), findFretDiagram() or ignored
                 } else {
                     qDebug("direction type %s at tick %d not implemented",
-                           EngravingItem::name(e->type()), seg->tick().ticks());
+                           e->name(), seg->tick().ticks());
                 }
             }
         }
@@ -5639,7 +5639,7 @@ static void spannerStart(ExportMusicXml* exp, int strack, int etrack, int track,
                     break;
                 default:
                     qDebug("spannerStart: direction type %d ('%s') at tick %d not implemented",
-                           int(e->type()), EngravingItem::name(e->type()), seg->tick().ticks());
+                           int(e->type()), e->name(), seg->tick().ticks());
                     break;
                 }
             }
@@ -5698,7 +5698,7 @@ static void spannerStop(ExportMusicXml* exp, int strack, int etrack, const Fract
                 break;
             default:
                 qDebug("spannerStop: direction type %s at tick2 %d not implemented",
-                       EngravingItem::name(e->type()), tick2.ticks());
+                       e->name(), tick2.ticks());
                 break;
             }
         }

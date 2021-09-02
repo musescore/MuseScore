@@ -115,6 +115,7 @@
 #include "palmmute.h"
 #include "fermata.h"
 #include "shape.h"
+#include "factory.h"
 
 #include "masterscore.h"
 
@@ -130,6 +131,7 @@
 #define LOG_PROP() if (0) LOGD()
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 // extern bool showInvisible;
@@ -1126,7 +1128,7 @@ ElementType EngravingItem::readType(XmlReader& e, PointF* dragOffset,
                 } else if (tag == "duration") {
                     *duration = e.readFraction();
                 } else {
-                    ElementType type = name2type(tag);
+                    ElementType type = Factory::name2type(tag);
                     if (type == ElementType::INVALID) {
                         break;
                     }
@@ -1310,7 +1312,7 @@ EngravingItem* EngravingItem::create(ElementType type, EngravingItem* parent)
     case ElementType::BRACKET_ITEM:
         break;
     }
-    qDebug("cannot create type %d <%s>", int(type), EngravingItem::name(type));
+    qDebug("cannot create type %d <%s>", int(type), Factory::name(type));
     return 0;
 }
 

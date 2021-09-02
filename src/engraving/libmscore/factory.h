@@ -24,6 +24,8 @@
 #define MU_ENGRAVING_FACTORY_H
 
 #include <QStringRef>
+#include <QString>
+
 #include "engravingitem.h"
 
 namespace mu::engraving {
@@ -32,6 +34,10 @@ class Factory
 public:
 
     static Ms::EngravingItem* createItemByName(const QStringRef& name, Ms::EngravingItem* parent);
+    static Ms::ElementType name2type(const QStringRef& name, bool silent = false);
+    static Ms::ElementType name2type(const QString& name) { return name2type(QStringRef(&name)); }
+    static const char* name(Ms::ElementType type);
+    static const char* userName(Ms::ElementType type);
 };
 }
 
