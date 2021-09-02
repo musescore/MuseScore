@@ -42,6 +42,8 @@ Loader {
     anchors.leftMargin: headerVisible ? 0 : 16
     anchors.right: parent.right
 
+    active: visible
+
     sourceComponent: ListView {
         id: sectionContentList
 
