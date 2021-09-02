@@ -27,7 +27,7 @@ using namespace mu::actions;
 
 static QString dockNameFromArgs(const ActionData& args)
 {
-    return args.count() > 0 ? args.arg<QString>(0) : QString();
+    return !args.empty() ? args.arg<QString>(0) : QString();
 }
 
 void DockWindowActionsController::init()

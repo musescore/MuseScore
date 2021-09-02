@@ -95,6 +95,11 @@ public:
         return int(m_args.size());
     }
 
+    bool empty() const
+    {
+        return count() == 0;
+    }
+
     struct IArg {
         virtual ~IArg() = default;
     };

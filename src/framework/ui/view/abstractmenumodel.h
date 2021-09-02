@@ -58,6 +58,7 @@ public:
 
 signals:
     void itemsChanged();
+    void itemChanged(const MenuItem& item);
 
 protected:
     enum Roles {
@@ -81,7 +82,7 @@ protected:
     void clear();
 
     static const int INVALID_ITEM_INDEX;
-    int itemIndex(const actions::ActionCode& actionCode) const;
+    int itemIndex(const QString& itemId) const;
 
     MenuItem& item(int index);
 
