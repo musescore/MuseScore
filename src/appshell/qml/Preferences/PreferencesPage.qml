@@ -52,12 +52,4 @@ Flickable {
             root.contentY -= root.contentY - contentRect.y
         }
     }
-
-    MouseArea {
-        anchors.fill: parent
-
-        onClicked: {
-            root.forceActiveFocus()
-        }
-    }
 }
