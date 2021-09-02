@@ -321,7 +321,7 @@ Rectangle {
                             ]
 
                             onActivated: {
-                                automationEditor.automationAttribute = currentValue
+                                automationEditor.automationType = currentValue
                                 //pianoView.tuplet = currentValue
                             }
                         }
