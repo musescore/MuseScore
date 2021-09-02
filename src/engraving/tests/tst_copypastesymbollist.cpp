@@ -30,9 +30,11 @@
 #include "libmscore/system.h"
 #include "libmscore/measure.h"
 #include "libmscore/chord.h"
+#include "libmscore/factory.h"
 
 static const QString CPSYMBOLLIST_DATA_DIR("copypastesymbollist_data/");
 
+using namespace mu::engraving;
 using namespace Ms;
 
 //---------------------------------------------------------
@@ -121,7 +123,7 @@ void TestCopyPasteSymbolList::copypaste(const char* name, ElementType type)
     MasterScore* score = readScore(CPSYMBOLLIST_DATA_DIR + QString("copypastesymbollist-%1.mscx").arg(name));
     // score->doLayout();
 
-    EngravingItem* el = EngravingItem::create(type, score->dummy());
+    EngravingItem* el = Factory::createItem(type, score->dummy());
     score->selectSimilar(el, false);
     delete el;
 
@@ -143,7 +145,7 @@ void TestCopyPasteSymbolList::copypastepart(const char* name, ElementType type)
     score->select(score->firstMeasure());
     score->select(score->firstMeasure()->nextMeasure(), SelectType::RANGE);
 
-    EngravingItem* el = EngravingItem::create(type, score->dummy());
+    EngravingItem* el = Factory::createItem(type, score->dummy());
     score->selectSimilarInRange(el);
     delete el;
 
@@ -165,7 +167,7 @@ void TestCopyPasteSymbolList::copypastedifferentvoice(const char* name, ElementT
     score->select(score->firstMeasure());
     score->select(score->firstMeasure()->nextMeasure(), SelectType::RANGE, 1);
 
-    EngravingItem* el = EngravingItem::create(type, score->dummy());
+    EngravingItem* el = Factory::createItem(type, score->dummy());
     score->selectSimilarInRange(el);
     delete el;
 

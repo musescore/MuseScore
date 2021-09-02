@@ -49,7 +49,7 @@ ElementStyle const EngravingObject::emptyStyle;
 //---------------------------------------------------------
 
 EngravingObject::EngravingObject(const ElementType& type, EngravingObject* parent)
-    : m_type(type), m_parent(parent)
+    : m_type(type)
 {
     IF_ASSERT_FAILED(this != parent) {
         return;
@@ -60,6 +60,8 @@ EngravingObject::EngravingObject(const ElementType& type, EngravingObject* paren
         }
     }
 
+    doSetParent(parent);
+
     if (elementsProvider()) {
         elementsProvider()->reg(this);
     }
@@ -68,7 +70,7 @@ EngravingObject::EngravingObject(const ElementType& type, EngravingObject* paren
 EngravingObject::EngravingObject(const EngravingObject& se)
 {
     m_type = se.m_type;
-    m_parent = se.m_parent;
+    doSetParent(se.m_parent);
     m_isParentExplicitlySet = se.m_isParentExplicitlySet;
     m_isDummy = se.m_isDummy;
     _elementStyle = se._elementStyle;
@@ -88,6 +90,9 @@ EngravingObject::EngravingObject(const EngravingObject& se)
 
 EngravingObject::~EngravingObject()
 {
+    m_onDestroyed.send(this);
+    doSetParent(nullptr);
+
     if (elementsProvider()) {
         elementsProvider()->unreg(this);
     }
@@ -100,6 +105,26 @@ EngravingObject::~EngravingObject()
         }
     }
     delete[] _propertyFlagsList;
+}
+
+void EngravingObject::doSetParent(EngravingObject* p)
+{
+    if (m_parent == p) {
+        return;
+    }
+
+    if (p) {
+        p->m_onDestroyed.resetOnReceive(this);
+    }
+    m_parent = p;
+
+    if (m_parent) {
+        m_parent->m_onDestroyed.onReceive(this, [this](EngravingObject* p) {
+            if (!(p->isScore() || p->isDummy() || p != this->m_parent)) {
+                moveToDummy();
+            }
+        });
+    }
 }
 
 //---------------------------------------------------------
@@ -155,7 +180,7 @@ QVariant EngravingObject::propertyDefault(Pid pid) const
     if (sid != Sid::NOSTYLE) {
         return styleValue(pid, sid);
     }
-//      qDebug("<%s>(%d) not found in <%s>", propertyQmlName(pid), int(pid), name());
+    //      qDebug("<%s>(%d) not found in <%s>", propertyQmlName(pid), int(pid), name());
     return QVariant();
 }
 
@@ -173,7 +198,7 @@ void EngravingObject::initElementStyle(const ElementStyle* ss)
         _propertyFlagsList[i] = PropertyFlags::STYLED;
     }
     for (const StyledProperty& spp : *_elementStyle) {
-//            setProperty(spp.pid, styleValue(spp.pid, spp.sid));
+        //            setProperty(spp.pid, styleValue(spp.pid, spp.sid));
         setProperty(spp.pid, styleValue(spp.pid, getPropertyStyle(spp.pid)));
     }
 }
@@ -741,7 +766,7 @@ void EngravingObject::setParent(EngravingObject* p, bool isExplicitly)
         return;
     }
 
-    m_parent = p;
+    doSetParent(p);
 
     m_isParentExplicitlySet = isExplicitly;
 }

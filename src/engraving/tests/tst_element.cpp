@@ -24,7 +24,9 @@
 #include "testbase.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/engravingitem.h"
+#include "libmscore/factory.h"
 
+using namespace mu::engraving;
 using namespace Ms;
 
 //---------------------------------------------------------
@@ -105,7 +107,7 @@ void TestElement::testIds()
     };
 
     for (ElementType t : ids) {
-        EngravingItem* e = EngravingItem::create(t, score->dummy());
+        EngravingItem* e = Factory::createItem(t, score->dummy());
         EngravingItem* ee = writeReadElement(e);
         QCOMPARE(e->type(), ee->type());
         delete e;

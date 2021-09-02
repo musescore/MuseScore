@@ -57,6 +57,7 @@
 #include "libmscore/lasso.h"
 #include "libmscore/textedit.h"
 #include "libmscore/lyrics.h"
+#include "libmscore/factory.h"
 
 #include "masternotation.h"
 #include "scorecallbacks.h"
@@ -64,6 +65,7 @@
 #include "notationselection.h"
 
 using namespace mu::notation;
+using namespace mu::engraving;
 
 NotationInteraction::NotationInteraction(Notation* notation, INotationUndoStackPtr undoStack)
     : m_notation(notation), m_undoStack(undoStack), m_gripEditData(&m_scoreCallbacks),
@@ -823,7 +825,7 @@ void NotationInteraction::startDrop(const QByteArray& edata)
     Fraction duration;      // dummy
     ElementType type = EngravingItem::readType(e, &m_dropData.ed.dragOffset, &duration);
 
-    EngravingItem* el = EngravingItem::create(type, score()->dummy());
+    EngravingItem* el = Factory::createItem(type, score()->dummy());
     if (el) {
         if (type == ElementType::BAR_LINE || type == ElementType::ARPEGGIO || type == ElementType::BRACKET) {
             double spatium = score()->spatium();
@@ -1240,7 +1242,7 @@ bool NotationInteraction::applyPaletteElement(Ms::EngravingItem* element, Qt::Ke
             Ms::Fraction duration;        // dummy
             PointF dragOffset;
             Ms::ElementType type = Ms::EngravingItem::readType(e, &dragOffset, &duration);
-            Ms::Spanner* spanner = static_cast<Ms::Spanner*>(Ms::EngravingItem::create(type, score->dummy()));
+            Ms::Spanner* spanner = static_cast<Ms::Spanner*>(Factory::createItem(type, score->dummy()));
             spanner->read(e);
             spanner->styleChanged();
             score->cmdAddSpanner(spanner, idx, startSegment, endSegment);
@@ -1458,7 +1460,7 @@ void NotationInteraction::applyDropPaletteElement(Ms::Score* score, Ms::Engravin
         Fraction duration;      // dummy
         PointF dragOffset;
         ElementType type = EngravingItem::readType(n, &dragOffset, &duration);
-        dropData->dropElement = EngravingItem::create(type, score->dummy());
+        dropData->dropElement = Factory::createItem(type, score->dummy());
 
         dropData->dropElement->read(n);
         dropData->dropElement->styleChanged();       // update to local style

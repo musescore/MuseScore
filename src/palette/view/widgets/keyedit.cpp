@@ -37,6 +37,7 @@
 #include "engraving/libmscore/keysig.h"
 #include "engraving/libmscore/masterscore.h"
 #include "engraving/libmscore/mscore.h"
+#include "engraving/libmscore/factory.h"
 #include "engraving/style/defaultstyle.h"
 #include "engraving/compat/dummyelement.h"
 
@@ -45,6 +46,7 @@
 #include "internal/palettecreator.h"
 
 using namespace mu;
+using namespace mu::engraving;
 using namespace mu::palette;
 using namespace Ms;
 
@@ -219,7 +221,7 @@ void KeyCanvas::dragEnterEvent(QDragEnterEvent* event)
         }
 
         event->acceptProposedAction();
-        dragElement = static_cast<Accidental*>(EngravingItem::create(type, gpaletteScore->dummy()));
+        dragElement = static_cast<Accidental*>(Factory::createItem(type, gpaletteScore->dummy()));
         dragElement->moveToDummy();
         dragElement->read(e);
         dragElement->layout();
