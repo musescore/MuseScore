@@ -59,7 +59,7 @@ RadioDelegate {
             }
         }
 
-        onTriggered: root.toggled()
+        onTriggered: root.clicked()
     }
 
     contentItem: Item {

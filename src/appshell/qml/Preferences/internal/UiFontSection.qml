@@ -45,6 +45,10 @@ BaseSection {
             title: qsTrc("appshell", "Font face:")
             titleWidth: root.columnWidth
 
+            navigation.name: "FontFaceBox"
+            navigation.panel: root.navigation
+            navigation.row: 1
+
             onValueEdited: {
                 root.fontChangeRequested(currentIndex)
             }
@@ -59,6 +63,10 @@ BaseSection {
             minValue: 8
             maxValue: 24
             measureUnitsSymbol: qsTrc("appshell", "pt")
+
+            navigation.name: "BodyTextControl"
+            navigation.panel: root.navigation
+            navigation.row: 2
 
             onValueEdited: {
                 root.bodyTextSizeChangeRequested(newValue)

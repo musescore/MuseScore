@@ -22,10 +22,13 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
 BaseSection {
     id: root
+
+    navigation.direction: NavigationPanel.Both
 
     property alias wallpaperDialogTitle: wallpaperPicker.dialogTitle
 
@@ -48,10 +51,16 @@ BaseSection {
         columnSpacing: 0
 
         RoundedRadioButton {
+            id: colorButton
             implicitWidth: root.columnWidth
 
             checked: root.useColor
             text: qsTrc("appshell", "Color:")
+
+            navigation.name: "ColorBox"
+            navigation.panel: root.navigation
+            navigation.row: 0
+            navigation.column: 0
 
             onClicked: {
                 root.useColorChangeRequested(true)
@@ -65,6 +74,11 @@ BaseSection {
 
             enabled: root.useColor
 
+            navigation.name: "ColorBox"
+            navigation.panel: root.navigation
+            navigation.row: 0
+            navigation.column: 1
+
             onNewColorSelected: {
                 root.colorChangeRequested(newColor)
             }
@@ -75,6 +89,11 @@ BaseSection {
 
             checked: !root.useColor
             text: qsTrc("appshell", "Wallpaper:")
+
+            navigation.name: "WallpaperBox"
+            navigation.panel: root.navigation
+            navigation.row: 1
+            navigation.column: 0
 
             onClicked: {
                 root.useColorChangeRequested(false)
@@ -87,6 +106,10 @@ BaseSection {
             width: 208
 
             enabled: !root.useColor
+
+            navigation: root.navigation
+            navigationRowOrder: 1
+            navigationColumnOrderStart: 1
 
             onPathEdited: {
                 root.wallpaperPathChangeRequested(newPath)

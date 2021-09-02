@@ -22,17 +22,21 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.3
 
-import MuseScore.Preferences 1.0
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
+import MuseScore.Preferences 1.0
 
 BaseSection {
     id: root
 
+    title: qsTrc("appshell", "UI colors")
+    navigation.direction: NavigationPanel.Both
+
     signal colorChangeRequested(var newColor, var propertyType)
 
-    title: qsTrc("appshell", "UI colors")
-
     GridLayout {
+        id: grid
+
         columnSpacing: parent.width / 8
         rowSpacing: 20
         columns: 2
@@ -49,6 +53,7 @@ BaseSection {
             delegate: Row {
 
                 StyledTextLabel {
+                    id: titleLabel
                     anchors.verticalCenter: parent.verticalCenter
                     text: modelData["textRole"]
                     width: root.columnWidth / 2
@@ -58,6 +63,12 @@ BaseSection {
                 ColorPicker {
                     width: 112
                     color: modelData["colorRole"]
+
+                    navigation.name: titleLabel.text
+                    navigation.panel: root.navigation
+                    navigation.row: index / grid.columns
+                    navigation.column: index % grid.columns
+                    navigation.accessible.name: titleLabel.text
 
                     onNewColorSelected: {
                         root.colorChangeRequested(newColor, modelData.typeRole)

@@ -21,6 +21,7 @@
  */
 import QtQuick 2.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Preferences 1.0
 
@@ -54,6 +55,9 @@ PreferencesPage {
             accentColors: appearanceModel.accentColors
             currentAccentColorIndex: appearanceModel.currentAccentColorIndex
 
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 1
+
             onThemeChangeRequested: {
                 appearanceModel.currentThemeCode = newThemeCode
             }
@@ -78,6 +82,10 @@ PreferencesPage {
 
             visible: appearanceModel.highContrastEnabled
 
+            navigation.section: root.navigationSection
+            //! NOTE: 3 because ThemesSection have two panels
+            navigation.order: root.navigationOrderStart + 3
+
             onColorChangeRequested: {
                 appearanceModel.setNewColor(newColor, propertyType)
             }
@@ -89,6 +97,9 @@ PreferencesPage {
             allFonts: appearanceModel.allFonts()
             currentFontIndex: appearanceModel.currentFontIndex
             bodyTextSize: appearanceModel.bodyTextSize
+
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 4
 
             onFontChangeRequested: {
                 appearanceModel.currentFontIndex = newFontIndex
@@ -111,6 +122,9 @@ PreferencesPage {
             wallpaperPath: appearanceModel.backgroundWallpaperPath
             wallpapersDir: appearanceModel.wallpapersDir()
             wallpaperFilter: appearanceModel.wallpaperPathFilter()
+
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 5
 
             onUseColorChangeRequested: {
                 appearanceModel.backgroundUseColor = newValue
@@ -138,6 +152,9 @@ PreferencesPage {
             wallpapersDir: appearanceModel.wallpapersDir()
             wallpaperFilter: appearanceModel.wallpaperPathFilter()
 
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 6
+
             onUseColorChangeRequested: {
                 appearanceModel.foregroundUseColor = newValue
             }
@@ -152,7 +169,27 @@ PreferencesPage {
         }
 
         FlatButton {
+            id: resetButton
             text: qsTrc("appshell", "Reset theme to default")
+
+            NavigationPanel {
+                id: navPanel
+
+                name: resetButton.text
+                direction: NavigationPanel.Vertical
+                section: root.navigationSection
+                order: root.navigationOrderStart + 7
+
+                onActiveChanged: {
+                    if (active) {
+                        resetButton.forceActiveFocus()
+                    }
+                }
+            }
+
+            navigation.name: "ResetButton"
+            navigation.panel: navPanel
+            navigation.order: 1
 
             onClicked: {
                 appearanceModel.resetThemeToDefault()
