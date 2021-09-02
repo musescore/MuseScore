@@ -362,36 +362,89 @@ bool MuseScore::loadPlugin(const QString& filename)
       }
 
 //---------------------------------------------------------
+//   pluginPathFromIdx
+//---------------------------------------------------------
+
+QString MuseScore::pluginPathFromIdx(int idx)      {
+      if (plugins.size() > idx)
+            return plugins[idx];
+      else
+            return QString();
+      }
+
+//---------------------------------------------------------
+//   getPluginFromPath
+//---------------------------------------------------------
+
+QmlPlugin* pluginFromPath(QmlPluginEngine* engine, QString pluginPath)
+      {
+      QQmlComponent component(engine);
+      component.loadUrl(QUrl::fromLocalFile(pluginPath));
+      QObject* obj = component.create();
+      if (!obj ) {
+            foreach(QQmlError e, component.errors())
+                  qDebug("   line %d: %s", e.line(), qPrintable(e.description()));
+            return nullptr;
+            }
+
+      return qobject_cast<QmlPlugin*>(obj);
+      }
+
+//---------------------------------------------------------
+//   oscControlPlugin
+//---------------------------------------------------------
+
+#ifdef SCRIPT_INTERFACE
+
+void MuseScore::oscControlPlugin(int idx, QStringList methodPath, QVariant arg)
+      {
+      oscControlPlugin(pluginPathFromIdx(idx), methodPath, arg);
+      }
+
+void MuseScore::oscControlPlugin(QString _pluginPath, QStringList methodPath, QVariant arg)
+      {
+      if (_pluginPath.isEmpty())
+            return;
+
+      QmlPluginEngine* engine = getPluginEngine();
+      QmlPlugin* p = pluginFromPath(engine, _pluginPath);
+      if (!p)
+            return;
+
+      QObject* obj = dynamic_cast<QObject*>(p);
+
+      for (int i = 0 ; i < (methodPath.length() - 1) ; i++)
+                  obj = obj->findChild<QObject*>(methodPath[i]);
+
+      QMetaObject::invokeMethod(obj, methodPath.last().toLocal8Bit().data(), Q_ARG(QVariant, arg));
+      }
+
+#endif
+//---------------------------------------------------------
 //   pluginTriggered
 //---------------------------------------------------------
 
 void MuseScore::pluginTriggered(int idx)
       {
-      if (plugins.size() > idx)
-            pluginTriggered(plugins[idx]);
+      pluginTriggered(pluginPathFromIdx(idx));
       }
 
 void MuseScore::pluginTriggered(QString pp)
       {
-      QmlPluginEngine* engine = getPluginEngine();
-
-      QQmlComponent component(engine);
-      component.loadUrl(QUrl::fromLocalFile(pp));
-      QObject* obj = component.create();
-      if (obj == 0) {
-            foreach(QQmlError e, component.errors())
-                  qDebug("   line %d: %s", e.line(), qPrintable(e.description()));
+      if (pp.isEmpty())
             return;
-            }
 
-      QmlPlugin* p = qobject_cast<QmlPlugin*>(obj);
+      QmlPluginEngine* engine = getPluginEngine();
+      QmlPlugin* p = pluginFromPath(engine, pp);
+      if (!p)
+            return;
+
       if(MuseScoreCore::mscoreCore->currentScore() == nullptr && p->requiresScore() == true) {
             QMessageBox::information(0,
                   QMessageBox::tr("MuseScore"),
                   QMessageBox::tr("No score open.\n"
                   "This plugin requires an open score to run.\n"),
                   QMessageBox::Ok, QMessageBox::NoButton);
-            delete obj;
             return;
             }
 

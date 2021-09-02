@@ -93,7 +93,8 @@ class PathObject : public QObject
 		void data( double );
 		void data( QString );
 		void data( QVariantList );
-		void data();
+		void data( QString path, QVariant args );
+ 		void data();
 		// @}
 	private:
 		// called by QOscServer:

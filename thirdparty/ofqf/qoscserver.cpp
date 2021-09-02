@@ -140,6 +140,8 @@ void QOscServer::readyRead()
               		foreach( PathObject* obj, paths ) {
               		      if ( exp.exactMatch( obj->_path ) )
               				        obj->signalData( arguments );
+              		      else if ( QRegExp( obj->_path ).exactMatch( path ) )
+              				        emit obj->data( path, arguments );
               		      }
               		}
             }

@@ -96,8 +96,8 @@ void MuseScore::initOsc()
       oo = new PathObject( "/close-all", QVariant::Invalid, osc);
       QObject::connect(oo, SIGNAL(data()), SLOT(oscCloseAll()));
 
-      oo = new PathObject( "/plugin", QVariant::String, osc);
-      QObject::connect(oo, SIGNAL(data(QString)), SLOT(oscTriggerPlugin(QString)));
+      oo = new PathObject( "/plugin(/[^/.]*)+", QVariant::List, osc);
+      QObject::connect(oo, SIGNAL(data(QString, QVariant)), SLOT(oscTriggerPlugin(QString, QVariant)));
 
       oo = new PathObject( "/color-note", QVariant::List, osc);
       QObject::connect(oo, SIGNAL(data(QVariantList)), SLOT(oscColorNote(QVariantList)));
@@ -196,27 +196,37 @@ void MuseScore::oscTempo(int val)
             seq->setRelTempo(double(t));
       }
 
+void addOscPrefix(QString* methodName)
+      {
+      methodName->replace(0, 1, methodName[0][0].toUpper());
+      methodName->prepend("osc");
+      }
+
 //---------------------------------------------------------
 //   oscTriggerPlugin
 //---------------------------------------------------------
 
-void MuseScore::oscTriggerPlugin(QString /*s*/)
+void MuseScore::oscTriggerPlugin(QString path, QVariant args)
       {
-#if 0 // TODO
-#ifdef SCRIPT_INTERFACE
-      QStringList args = s.split(",");
-      if(args.length() > 0) {
-            int idx = pluginIdxFromPath(args.at(0));
-            if(idx != -1) {
-                  for(int i = 1; i < args.length()-1; i++) {
-                        addGlobalObjectToPluginEngine(qPrintable(args.at(i)), args.at(i+1));
-                        i++;
-                        }
-                  pluginTriggered(idx);
-                  }
+      QStringList pathElts = path.split("/");
+      QString pluginName;
+
+      for (int i = 0 ; i < 3 ; i++) {
+            if (i == 2)
+                  pluginName = pathElts.first();
+
+            pathElts.removeFirst();
             }
-#endif
-#endif
+
+      qDebug() << "[OSC] Plugin called : " << pluginName;
+
+      int idx = pluginIdxFromPath(pluginName);
+      if (idx != -1) {
+            addOscPrefix(&pathElts.last());
+            oscControlPlugin(idx, pathElts, args);
+            }
+      else
+            qDebug() << "[OSC] Unknow plugin : " << pluginName;
       }
 
 //---------------------------------------------------------
