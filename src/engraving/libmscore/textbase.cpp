@@ -1028,7 +1028,7 @@ void TextBlock::layout(TextBase* t)
     qreal lm     = 0.0;
 
     qreal layoutWidth = 0;
-    Element* e = t->parentElement();
+    EngravingItem* e = t->parentElement();
     if (e && t->layoutToParentWidth()) {
         layoutWidth = e->width();
         switch (e->type()) {
@@ -1674,8 +1674,8 @@ QString TextBlock::text(int col1, int len, bool withFormat) const
 //   Text
 //---------------------------------------------------------
 
-TextBase::TextBase(const Ms::ElementType& type, Ms::ScoreElement* parent, Tid tid, ElementFlags f)
-    : Element(type, parent, f | ElementFlag::MOVABLE)
+TextBase::TextBase(const Ms::ElementType& type, Ms::EngravingObject* parent, Tid tid, ElementFlags f)
+    : EngravingItem(type, parent, f | ElementFlag::MOVABLE)
 {
     _cursor                 = new TextCursor(this);
     _cursor->init();
@@ -1691,13 +1691,13 @@ TextBase::TextBase(const Ms::ElementType& type, Ms::ScoreElement* parent, Tid ti
     _frameRound             = 0;
 }
 
-TextBase::TextBase(const ElementType& type, ScoreElement* parent, ElementFlags f)
+TextBase::TextBase(const ElementType& type, EngravingObject* parent, ElementFlags f)
     : TextBase(type, parent, Tid::DEFAULT, f)
 {
 }
 
 TextBase::TextBase(const TextBase& st)
-    : Element(st)
+    : EngravingItem(st)
 {
     _cursor                      = new TextCursor(this);
     _cursor->setFormat(*(st.cursor()->format()));
@@ -2400,7 +2400,7 @@ void TextBase::read(XmlReader& e)
 
 void TextBase::writeProperties(XmlWriter& xml, bool writeText, bool /*writeStyle*/) const
 {
-    Element::writeProperties(xml);
+    EngravingItem::writeProperties(xml);
     writeProperty(xml, Pid::SUB_STYLE);
 
     for (const StyledProperty& spp : *_elementStyle) {
@@ -2479,7 +2479,7 @@ bool TextBase::readProperties(XmlReader& e)
         if (isStyled(Pid::FONT_STYLE)) {
             setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
         }
-    } else if (!Element::readProperties(e)) {
+    } else if (!EngravingItem::readProperties(e)) {
         return false;
     }
     return true;
@@ -2500,7 +2500,7 @@ Pid TextBase::propertyId(const QStringRef& name) const
             return pid;
         }
     }
-    return Element::propertyId(name);
+    return EngravingItem::propertyId(name);
 }
 
 //---------------------------------------------------------
@@ -2730,7 +2730,7 @@ QString TextBase::accessibleInfo() const
         rez = score() ? score()->getTextStyleUserName(tid()) : textStyleUserName(tid());
         break;
     default:
-        rez = Element::accessibleInfo();
+        rez = EngravingItem::accessibleInfo();
         break;
     }
     QString s = plainText().simplified();
@@ -2760,7 +2760,7 @@ QString TextBase::screenReaderInfo() const
         rez = score() ? score()->getTextStyleUserName(tid()) : textStyleUserName(tid());
         break;
     default:
-        rez = Element::accessibleInfo();
+        rez = EngravingItem::accessibleInfo();
         break;
     }
     QString s = plainText().simplified();
@@ -2945,7 +2945,7 @@ QVariant TextBase::getProperty(Pid propertyId) const
     case Pid::TEXT:
         return xmlText();
     default:
-        return Element::getProperty(propertyId);
+        return EngravingItem::getProperty(propertyId);
     }
 }
 
@@ -3004,7 +3004,7 @@ bool TextBase::setProperty(Pid pid, const QVariant& v)
         _cursor->setFormat(FormatId::Valign, v.toInt());
         break;
     default:
-        rv = Element::setProperty(pid, v);
+        rv = EngravingItem::setProperty(pid, v);
         break;
     }
 
@@ -3020,7 +3020,7 @@ bool TextBase::setProperty(Pid pid, const QVariant& v)
 QVariant TextBase::propertyDefault(Pid id) const
 {
     if (id == Pid::Z) {
-        return Element::propertyDefault(id);
+        return EngravingItem::propertyDefault(id);
     }
     if (composition()) {
         QVariant v = parent()->propertyDefault(id);
@@ -3049,7 +3049,7 @@ QVariant TextBase::propertyDefault(Pid id) const
                 return styleValue(id, p.sid);
             }
         }
-        return Element::propertyDefault(id);
+        return EngravingItem::propertyDefault(id);
     }
     return v;
 }
@@ -3592,7 +3592,7 @@ void TextBase::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
         // can't use standard change property as Undo might set to "undefined"
         score()->undo(new ChangeTextProperties(_cursor, id, v));
     } else {
-        Element::undoChangeProperty(id, v, ps);
+        EngravingItem::undoChangeProperty(id, v, ps);
     }
 }
 }

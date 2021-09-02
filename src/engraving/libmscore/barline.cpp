@@ -108,8 +108,8 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
                 }
                 segment = m2->undoGetSegment(segment->segmentType(), segment->tick());
             }
-            const std::vector<Element*>& elist = allStaves ? segment->elist() : std::vector<Element*> { bl };
-            for (Element* e : elist) {
+            const std::vector<EngravingItem*>& elist = allStaves ? segment->elist() : std::vector<EngravingItem*> { bl };
+            for (EngravingItem* e : elist) {
                 if (!e || !e->staff() || !e->isBarLine()) {
                     continue;
                 }
@@ -161,7 +161,7 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
             }
         } else if (segmentType == SegmentType::BeginBarLine) {
             Segment* segment1 = m->undoGetSegmentR(SegmentType::BeginBarLine, Fraction(0, 1));
-            for (Element* e : segment1->elist()) {
+            for (EngravingItem* e : segment1->elist()) {
                 if (e) {
                     e->score()->undo(new ChangeProperty(e, Pid::GENERATED, false, PropertyFlags::NOSTYLE));
                     e->score()->undo(new ChangeProperty(e, Pid::BARLINE_TYPE, QVariant::fromValue(barType), PropertyFlags::NOSTYLE));
@@ -336,13 +336,13 @@ BarLineType BarLine::barLineType(const QString& s)
 //---------------------------------------------------------
 
 BarLine::BarLine(Segment* parent)
-    : Element(ElementType::BAR_LINE, parent)
+    : EngravingItem(ElementType::BAR_LINE, parent)
 {
     setHeight(4 * spatium());   // for use in palettes
 }
 
 BarLine::BarLine(const BarLine& bl)
-    : Element(bl)
+    : EngravingItem(bl)
 {
     _spanStaff   = bl._spanStaff;
     _spanFrom    = bl._spanFrom;
@@ -351,7 +351,7 @@ BarLine::BarLine(const BarLine& bl)
     y1           = bl.y1;
     y2           = bl.y2;
 
-    for (Element* e : bl._el) {
+    for (EngravingItem* e : bl._el) {
         add(e->clone());
     }
 }
@@ -363,7 +363,7 @@ BarLine::~BarLine()
 
 void BarLine::setParent(Segment* parent)
 {
-    Element::setParent(parent);
+    EngravingItem::setParent(parent);
 }
 
 //---------------------------------------------------------
@@ -372,7 +372,7 @@ void BarLine::setParent(Segment* parent)
 
 PointF BarLine::canvasPos() const
 {
-    PointF pos = Element::canvasPos();
+    PointF pos = EngravingItem::canvasPos();
     if (parent()) {
         System* system = measure()->system();
         qreal yoff = system ? system->staff(staffIdx())->y() : 0.0;
@@ -805,7 +805,7 @@ void BarLine::draw(mu::draw::Painter* painter) const
 
 void BarLine::drawEditMode(mu::draw::Painter* p, EditData& ed)
 {
-    Element::drawEditMode(p, ed);
+    EngravingItem::drawEditMode(p, ed);
     BarLineEditData* bed = static_cast<BarLineEditData*>(ed.getData(this));
     y1 += bed->yoff1;
     y2 += bed->yoff2;
@@ -849,10 +849,10 @@ void BarLine::write(XmlWriter& xml) const
     writeProperty(xml, Pid::BARLINE_SPAN_FROM);
     writeProperty(xml, Pid::BARLINE_SPAN_TO);
 
-    for (const Element* e : _el) {
+    for (const EngravingItem* e : _el) {
         e->write(xml);
     }
-    Element::writeProperties(xml);
+    EngravingItem::writeProperties(xml);
     xml.etag();
 }
 
@@ -894,7 +894,7 @@ void BarLine::read(XmlReader& e)
                 image->read(e);
                 add(image);
             }
-        } else if (!Element::readProperties(e)) {
+        } else if (!EngravingItem::readProperties(e)) {
             e.unknown();
         }
     }
@@ -923,9 +923,9 @@ bool BarLine::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-Element* BarLine::drop(EditData& data)
+EngravingItem* BarLine::drop(EditData& data)
 {
-    Element* e = data.dropElement;
+    EngravingItem* e = data.dropElement;
 
     if (e->isBarLine()) {
         BarLine* bl    = toBarLine(e);
@@ -978,7 +978,7 @@ Element* BarLine::drop(EditData& data)
         return e;
     } else if (e->isFermata()) {
         e->setPlacement(track() & 1 ? Placement::BELOW : Placement::ABOVE);
-        for (Element* el: segment()->annotations()) {
+        for (EngravingItem* el: segment()->annotations()) {
             if (el->isFermata() && (el->track() == track())) {
                 if (el->subtype() == e->subtype()) {
                     delete e;
@@ -1311,7 +1311,7 @@ void BarLine::layout()
     }
     setbbox(r);
 
-    for (Element* e : _el) {
+    for (EngravingItem* e : _el) {
         e->layout();
         if (e->isArticulation()) {
             Articulation* a  = toArticulation(e);
@@ -1396,13 +1396,13 @@ Shape BarLine::shape() const
 //   scanElements
 //---------------------------------------------------------
 
-void BarLine::scanElements(void* data, void (* func)(void*, Element*), bool all)
+void BarLine::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
     // if no width (staff has bar lines turned off) and not all requested, do nothing
     if (width() == 0.0 && !all) {
         return;
     }
-    ScoreElement::scanElements(data, func, all);
+    EngravingObject::scanElements(data, func, all);
     func(data, this);
 }
 
@@ -1412,8 +1412,8 @@ void BarLine::scanElements(void* data, void (* func)(void*, Element*), bool all)
 
 void BarLine::setTrack(int t)
 {
-    Element::setTrack(t);
-    for (Element* e : _el) {
+    EngravingItem::setTrack(t);
+    for (EngravingItem* e : _el) {
         e->setTrack(t);
     }
 }
@@ -1424,8 +1424,8 @@ void BarLine::setTrack(int t)
 
 void BarLine::setScore(Score* s)
 {
-    Element::setScore(s);
-    for (Element* e : _el) {
+    EngravingItem::setScore(s);
+    for (EngravingItem* e : _el) {
         e->setScore(s);
     }
 }
@@ -1434,7 +1434,7 @@ void BarLine::setScore(Score* s)
 //   add
 //---------------------------------------------------------
 
-void BarLine::add(Element* e)
+void BarLine::add(EngravingItem* e)
 {
     e->setParent(this);
     switch (e->type()) {
@@ -1455,7 +1455,7 @@ void BarLine::add(Element* e)
 //   remove
 //---------------------------------------------------------
 
-void BarLine::remove(Element* e)
+void BarLine::remove(EngravingItem* e)
 {
     switch (e->type()) {
     case ElementType::ARTICULATION:
@@ -1491,7 +1491,7 @@ QVariant BarLine::getProperty(Pid id) const
     default:
         break;
     }
-    return Element::getProperty(id);
+    return EngravingItem::getProperty(id);
 }
 
 //---------------------------------------------------------
@@ -1517,7 +1517,7 @@ bool BarLine::setProperty(Pid id, const QVariant& v)
         setShowTips(v.toBool());
         break;
     default:
-        return Element::setProperty(id, v);
+        return EngravingItem::setProperty(id, v);
     }
     setGenerated(false);
     triggerLayout();
@@ -1544,7 +1544,7 @@ void BarLine::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
             undoChangeBarLineType(const_cast<BarLine*>(bl), v.value<BarLineType>(), true);
         }
     } else {
-        ScoreElement::undoChangeProperty(id, v, ps);
+        EngravingObject::undoChangeProperty(id, v, ps);
     }
 }
 
@@ -1576,7 +1576,7 @@ QVariant BarLine::propertyDefault(Pid propertyId) const
     default:
         break;
     }
-    return Element::propertyDefault(propertyId);
+    return EngravingItem::propertyDefault(propertyId);
 }
 
 //---------------------------------------------------------
@@ -1588,14 +1588,14 @@ Pid BarLine::propertyId(const QStringRef& name) const
     if (name == "subtype") {
         return Pid::BARLINE_TYPE;
     }
-    return Element::propertyId(name);
+    return EngravingItem::propertyId(name);
 }
 
 //---------------------------------------------------------
 //   nextSegmentElement
 //---------------------------------------------------------
 
-Element* BarLine::nextSegmentElement()
+EngravingItem* BarLine::nextSegmentElement()
 {
     return segment()->firstInNextSegments(staffIdx());      //score()->inputState().prevTrack() / VOICES);
 }
@@ -1604,7 +1604,7 @@ Element* BarLine::nextSegmentElement()
 //   prevSegmentElement
 //---------------------------------------------------------
 
-Element* BarLine::prevSegmentElement()
+EngravingItem* BarLine::prevSegmentElement()
 {
     return segment()->lastInPrevSegments(staffIdx());       //score()->inputState().prevTrack() / VOICES);
 }
@@ -1615,7 +1615,7 @@ Element* BarLine::prevSegmentElement()
 
 QString BarLine::accessibleInfo() const
 {
-    return QString("%1: %2").arg(Element::accessibleInfo(), BarLine::userTypeName(barLineType()));
+    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), BarLine::userTypeName(barLineType()));
 }
 
 //---------------------------------------------------------
@@ -1627,14 +1627,14 @@ QString BarLine::accessibleExtraInfo() const
     Segment* seg = segment();
     QString rez;
 
-    for (const Element* e : *el()) {
+    for (const EngravingItem* e : *el()) {
         if (!score()->selectionFilter().canSelect(e)) {
             continue;
         }
         rez = QString("%1 %2").arg(rez, e->screenReaderInfo());
     }
 
-    for (const Element* e : seg->annotations()) {
+    for (const EngravingItem* e : seg->annotations()) {
         if (!score()->selectionFilter().canSelect(e)) {
             continue;
         }
@@ -1646,7 +1646,7 @@ QString BarLine::accessibleExtraInfo() const
 
     if (m) {      // always true?
         //jumps
-        for (const Element* e : m->el()) {
+        for (const EngravingItem* e : m->el()) {
             if (!score()->selectionFilter().canSelect(e)) {
                 continue;
             }
@@ -1663,7 +1663,7 @@ QString BarLine::accessibleExtraInfo() const
         //markers
         Measure* nextM = m->nextMeasureMM();
         if (nextM) {
-            for (const Element* e : nextM->el()) {
+            for (const EngravingItem* e : nextM->el()) {
                 if (!score()->selectionFilter().canSelect(e)) {
                     continue;
                 }

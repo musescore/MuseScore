@@ -554,7 +554,7 @@ void TestNote::LongNoteAfterShort_183746()
     QVERIFY(s && s->segmentType() == SegmentType::ChordRest);
     QVERIFY(s->tick() == Fraction(1, 128));
 
-    Element* e = s->firstElement(0);
+    EngravingItem* e = s->firstElement(0);
     QVERIFY(e && e->isNote());
 
     std::vector<Note*> nl = toNote(e)->tiedNotes();

@@ -25,7 +25,7 @@
 
 using namespace mu::diagnostics;
 
-void EngravingElementsProvider::reg(const Ms::ScoreElement* e)
+void EngravingElementsProvider::reg(const Ms::EngravingObject* e)
 {
     if (e->score()->isPaletteScore()) {
         return;
@@ -35,23 +35,23 @@ void EngravingElementsProvider::reg(const Ms::ScoreElement* e)
     m_registreChanged.send(e, true);
 }
 
-void EngravingElementsProvider::unreg(const Ms::ScoreElement* e)
+void EngravingElementsProvider::unreg(const Ms::EngravingObject* e)
 {
     m_elements.remove(e);
     m_registreChanged.send(e, false);
 }
 
-std::list<const Ms::ScoreElement*> EngravingElementsProvider::elements() const
+std::list<const Ms::EngravingObject*> EngravingElementsProvider::elements() const
 {
     return m_elements;
 }
 
-mu::async::Channel<const Ms::ScoreElement*, bool> EngravingElementsProvider::registreChanged() const
+mu::async::Channel<const Ms::EngravingObject*, bool> EngravingElementsProvider::registreChanged() const
 {
     return m_registreChanged;
 }
 
-void EngravingElementsProvider::select(const Ms::ScoreElement* e, bool arg)
+void EngravingElementsProvider::select(const Ms::EngravingObject* e, bool arg)
 {
     if (arg) {
         m_selected.push_back(e);
@@ -61,7 +61,7 @@ void EngravingElementsProvider::select(const Ms::ScoreElement* e, bool arg)
     m_selectChanged.send(e, arg);
 }
 
-bool EngravingElementsProvider::isSelected(const Ms::ScoreElement* e) const
+bool EngravingElementsProvider::isSelected(const Ms::EngravingObject* e) const
 {
     if (std::find(m_selected.cbegin(), m_selected.cend(), e) != m_selected.cend()) {
         return true;
@@ -69,7 +69,7 @@ bool EngravingElementsProvider::isSelected(const Ms::ScoreElement* e) const
     return false;
 }
 
-mu::async::Channel<const Ms::ScoreElement*, bool> EngravingElementsProvider::selectChanged() const
+mu::async::Channel<const Ms::EngravingObject*, bool> EngravingElementsProvider::selectChanged() const
 {
     return m_selectChanged;
 }

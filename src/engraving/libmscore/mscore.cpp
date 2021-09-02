@@ -28,7 +28,7 @@
 
 #include "musescoreCore.h"
 #include "mscore.h"
-#include "element.h"
+#include "engravingitem.h"
 #include "dynamic.h"
 #include "accidental.h"
 #include "figuredbass.h"

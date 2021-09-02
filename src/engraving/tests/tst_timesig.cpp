@@ -234,7 +234,7 @@ void TestTimesig::timesig08()
 
     Measure* m1 = score->firstMeasure();
     Segment* seg = m1->findSegment(SegmentType::TimeSigAnnounce, m1->endTick());
-    Element* el = seg->element(staff2track(1));
+    EngravingItem* el = seg->element(staff2track(1));
 
     QVERIFY2(el, "Should be a courtesy signature in the second staff at the end of measure 1.");
     delete score;

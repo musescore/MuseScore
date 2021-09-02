@@ -120,7 +120,7 @@ void Score::updateSwing()
         return;
     }
     for (Segment* s = fm->first(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
-        for (const Element* e : s->annotations()) {
+        for (const EngravingItem* e : s->annotations()) {
             if (!e->isStaffTextBase()) {
                 continue;
             }
@@ -160,7 +160,7 @@ void Score::updateCapo()
         return;
     }
     for (Segment* s = fm->first(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
-        for (Element* e : s->annotations()) {
+        for (EngravingItem* e : s->annotations()) {
             if (e->isHarmony()) {
                 toHarmony(e)->realizedHarmony().setDirty(true);
             }
@@ -196,7 +196,7 @@ void Score::updateChannel()
         return;
     }
     for (Segment* s = fm->first(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
-        for (const Element* e : s->annotations()) {
+        for (const EngravingItem* e : s->annotations()) {
             if (e->isInstrumentChange()) {
                 for (Staff* staff : *e->part()->staves()) {
                     for (int voice = 0; voice < VOICES; ++voice) {
@@ -240,7 +240,7 @@ void Score::updateChannel()
                 if (!s->element(track)) {
                     continue;
                 }
-                Element* e = s->element(track);
+                EngravingItem* e = s->element(track);
                 if (e->type() != ElementType::CHORD) {
                     continue;
                 }
@@ -506,7 +506,7 @@ static void collectNote(EventMap* events, int channel, const Note* note, qreal v
     }
 
     // Bends
-    for (Element* e : note->el()) {
+    for (EngravingItem* e : note->el()) {
         if (e == 0 || e->type() != ElementType::BEND) {
             continue;
         }
@@ -606,7 +606,7 @@ static void collectProgramChanges(EventMap* events, Measure const* m, Staff* sta
     // collect program changes and controller
     //
     for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
-        for (Element* e : s->annotations()) {
+        for (EngravingItem* e : s->annotations()) {
             if (!e->isStaffTextBase() || e->staffIdx() < firstStaffIdx || e->staffIdx() >= nextStaffIdx) {
                 continue;
             }
@@ -741,7 +741,7 @@ void MidiRenderer::collectMeasureEventsSimple(EventMap* events, Measure const* m
 
         //render harmony
         if (sctx.renderHarmony) {
-            for (Element* e : seg->annotations()) {
+            for (EngravingItem* e : seg->annotations()) {
                 if (!e || (e->track() < strack) || (e->track() >= etrack)) {
                     continue;
                 }
@@ -764,7 +764,7 @@ void MidiRenderer::collectMeasureEventsSimple(EventMap* events, Measure const* m
                 track += VOICES - 1;
                 continue;
             }
-            Element* cr = seg->element(track);
+            EngravingItem* cr = seg->element(track);
             if (cr == 0 || cr->type() != ElementType::CHORD) {
                 continue;
             }
@@ -837,7 +837,7 @@ void MidiRenderer::collectMeasureEventsDefault(EventMap* events, Measure const* 
 
         //render harmony
         if (sctx.renderHarmony) {
-            for (Element* e : seg->annotations()) {
+            for (EngravingItem* e : seg->annotations()) {
                 if (!e || (e->track() < strack) || (e->track() >= etrack)) {
                     continue;
                 }
@@ -862,7 +862,7 @@ void MidiRenderer::collectMeasureEventsDefault(EventMap* events, Measure const* 
                 continue;
             }
 
-            Element* cr = seg->element(track);
+            EngravingItem* cr = seg->element(track);
             if (!cr) {
                 continue;
             }
@@ -1011,7 +1011,7 @@ void Score::updateVelo()
 
         for (Segment* s = firstMeasure()->first(); s; s = s->next1()) {
             Fraction tick = s->tick();
-            for (const Element* e : s->annotations()) {
+            for (const EngravingItem* e : s->annotations()) {
                 if (e->staffIdx() != staffIdx) {
                     continue;
                 }
@@ -1076,7 +1076,7 @@ void Score::updateVelo()
 
             if (s->isChordRestType()) {
                 for (int i = staffIdx * VOICES; i < (staffIdx + 1) * VOICES; ++i) {
-                    Element* el = s->element(i);
+                    EngravingItem* el = s->element(i);
                     if (!el || !el->isChord()) {
                         continue;
                     }
@@ -1394,7 +1394,7 @@ void renderTremolo(Chord* chord, QList<NoteEventList>& ell)
             return;
         }
 
-        Element* s2El = seg2->element(track);
+        EngravingItem* s2El = seg2->element(track);
         if (s2El) {
             if (!s2El->isChord()) {
                 return;
@@ -1595,7 +1595,7 @@ int articulationExcursion(Note* noteL, Note* noteR, int deltastep)
     int endTrack   = startTrack + VOICES;
     bool done = false;
     for (int track = startTrack; track < endTrack; ++track) {
-        Element* e = segment->element(track);
+        EngravingItem* e = segment->element(track);
         if (!e || e->type() != ElementType::CHORD) {
             continue;
         }
@@ -2380,7 +2380,7 @@ void Score::createPlayEvents(Measure const* start, Measure const* const end)
                 // The range has ended, but we should collect events
                 // for tied notes. So we'll check if this is the case.
                 const Segment* seg = m->first(st);
-                const Element* e = seg->element(track);
+                const EngravingItem* e = seg->element(track);
                 bool tie = false;
                 if (e && e->isChord()) {
                     for (const Note* n : toChord(e)->notes()) {
@@ -2400,7 +2400,7 @@ void Score::createPlayEvents(Measure const* start, Measure const* const end)
                 continue;
             }
             for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
-                Element* e = seg->element(track);
+                EngravingItem* e = seg->element(track);
                 if (e == 0 || !e->isChord()) {
                     continue;
                 }

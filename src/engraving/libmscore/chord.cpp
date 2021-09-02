@@ -320,7 +320,7 @@ Chord::Chord(const Chord& c, bool link)
         add(t);
     }
 
-    for (Element* e : c.el()) {
+    for (EngravingItem* e : c.el()) {
         if (e->isChordLine()) {
             ChordLine* cl = toChordLine(e);
             ChordLine* ncl = new ChordLine(*cl);
@@ -357,7 +357,7 @@ void Chord::undoUnlink()
         _tremolo->undoUnlink();
     }
 
-    for (Element* e : el()) {
+    for (EngravingItem* e : el()) {
         if (e->type() == ElementType::CHORDLINE) {
             e->undoUnlink();
         }
@@ -554,7 +554,7 @@ void Chord::setTremolo(Tremolo* tr)
 //   add
 //---------------------------------------------------------
 
-void Chord::add(Element* e)
+void Chord::add(EngravingItem* e)
 {
     if (e->parent() != this) {
         e->setParent(this);
@@ -659,7 +659,7 @@ void Chord::add(Element* e)
 //   remove
 //---------------------------------------------------------
 
-void Chord::remove(Element* e)
+void Chord::remove(EngravingItem* e)
 {
     if (!e) {
         return;
@@ -1114,7 +1114,7 @@ void Chord::write(XmlWriter& xml) const
     if (_tremolo && tremoloChordType() != TremoloChordType::TremoloSecondNote) {
         _tremolo->write(xml);
     }
-    for (Element* e : el()) {
+    for (EngravingItem* e : el()) {
         e->write(xml);
     }
     xml.etag();
@@ -1255,7 +1255,7 @@ qreal Chord::centerX() const
 //   processSiblings
 //---------------------------------------------------------
 
-void Chord::processSiblings(std::function<void(Element*)> func) const
+void Chord::processSiblings(std::function<void(EngravingItem*)> func) const
 {
     if (_hook) {
         func(_hook);
@@ -1281,7 +1281,7 @@ void Chord::processSiblings(std::function<void(Element*)> func) const
     for (Note* note : _notes) {
         func(note);
     }
-    for (Element* e : el()) {
+    for (EngravingItem* e : el()) {
         func(e);
     }
     for (Chord* chord : _graceNotes) {    // process grace notes last, needed for correct shape calculation
@@ -1296,7 +1296,7 @@ void Chord::processSiblings(std::function<void(Element*)> func) const
 void Chord::setTrack(int val)
 {
     ChordRest::setTrack(val);
-    processSiblings([val](Element* e) { e->setTrack(val); });
+    processSiblings([val](EngravingItem* e) { e->setTrack(val); });
 }
 
 //---------------------------------------------------------
@@ -1306,7 +1306,7 @@ void Chord::setTrack(int val)
 void Chord::setScore(Score* s)
 {
     ChordRest::setScore(s);
-    processSiblings([s](Element* e) { e->setScore(s); });
+    processSiblings([s](EngravingItem* e) { e->setScore(s); });
 }
 
 //-----------------------------------------------------------------------------
@@ -1818,7 +1818,7 @@ mu::PointF Chord::pagePos() const
         p.ry() += system->staffYpage(vStaffIdx()) + staffYOffset;
         return p;
     }
-    return Element::pagePos();
+    return EngravingItem::pagePos();
 }
 
 //---------------------------------------------------------
@@ -1985,7 +1985,7 @@ void Chord::layoutPitched()
         }
 
         // clear layout for note-based fingerings
-        for (Element* e : note->el()) {
+        for (EngravingItem* e : note->el()) {
             if (e->isFingering()) {
                 Fingering* f = toFingering(e);
                 if (f->layoutType() == ElementType::NOTE) {
@@ -2084,7 +2084,7 @@ void Chord::layoutPitched()
         }
     }
 
-    for (Element* e : el()) {
+    for (EngravingItem* e : el()) {
         if (e->type() == ElementType::SLUR) {       // we cannot at this time as chordpositions are not fixed
             continue;
         }
@@ -2111,7 +2111,7 @@ void Chord::layoutPitched()
     qreal xNote = 10000.0;
     for (Note* note : _notes) {
         bool leftFound = false;
-        for (Element* e : note->el()) {
+        for (EngravingItem* e : note->el()) {
             if (e->isFingering() && e->autoplace()) {
                 Fingering* f = toFingering(e);
                 if (f->layoutType() == ElementType::NOTE && f->tid() == Tid::LH_GUITAR_FINGERING) {
@@ -2481,7 +2481,7 @@ void Chord::layoutTablature()
             _spaceRw = xr;
         }
     }
-    for (Element* e : el()) {
+    for (EngravingItem* e : el()) {
         e->layout();
         if (e->type() == ElementType::CHORDLINE) {
             RectF tbbox = e->bbox().translated(e->pos());
@@ -2500,7 +2500,7 @@ void Chord::layoutTablature()
         _notes.at(i)->layout2();
     }
     RectF bb;
-    processSiblings([&bb](Element* e) { bb.unite(e->bbox().translated(e->pos())); });
+    processSiblings([&bb](EngravingItem* e) { bb.unite(e->bbox().translated(e->pos())); });
     if (_tabDur) {
         bb.unite(_tabDur->bbox().translated(_tabDur->pos()));
     }
@@ -2560,7 +2560,7 @@ void Chord::layoutArpeggio2()
     int span          = _arpeggio->span();
     int btrack        = track() + (span - 1) * VOICES;
 
-    Element* element = segment()->element(btrack);
+    EngravingItem* element = segment()->element(btrack);
     ChordRest* bchord = element ? toChordRest(element) : nullptr;
     Note* dnote       = (bchord && bchord->type() == ElementType::CHORD) ? toChord(bchord)->downNote() : downNote();
 
@@ -2671,9 +2671,9 @@ Note* Chord::findNote(int pitch, int skip) const
 //   drop
 //---------------------------------------------------------
 
-Element* Chord::drop(EditData& data)
+EngravingItem* Chord::drop(EditData& data)
 {
-    Element* e = data.dropElement;
+    EngravingItem* e = data.dropElement;
     switch (e->type()) {
     case ElementType::ARTICULATION:
     {
@@ -2788,7 +2788,7 @@ qreal Chord::dotPosX() const
 void Chord::localSpatiumChanged(qreal oldValue, qreal newValue)
 {
     ChordRest::localSpatiumChanged(oldValue, newValue);
-    for (Element* e : graceNotes()) {
+    for (EngravingItem* e : graceNotes()) {
         e->localSpatiumChanged(oldValue, newValue);
     }
     if (_hook) {
@@ -2806,7 +2806,7 @@ void Chord::localSpatiumChanged(qreal oldValue, qreal newValue)
     if (_tremolo && (tremoloChordType() != TremoloChordType::TremoloSecondNote)) {
         _tremolo->localSpatiumChanged(oldValue, newValue);
     }
-    for (Element* e : articulations()) {
+    for (EngravingItem* e : articulations()) {
         e->localSpatiumChanged(oldValue, newValue);
     }
     for (Note* note : notes()) {
@@ -3058,7 +3058,7 @@ void Chord::removeMarkings(bool keepTremolo)
     qDeleteAll(articulations());
     articulations().clear();
     for (Note* n : notes()) {
-        for (Element* e : n->el()) {
+        for (EngravingItem* e : n->el()) {
             n->remove(e);
         }
     }
@@ -3097,7 +3097,7 @@ qreal Chord::mag() const
 
 Segment* Chord::segment() const
 {
-    Element* e = parentElement();
+    EngravingItem* e = parentElement();
     for (; e && e->type() != ElementType::SEGMENT; e = e->parentElement()) {
     }
     return toSegment(e);
@@ -3109,7 +3109,7 @@ Segment* Chord::segment() const
 
 Measure* Chord::measure() const
 {
-    Element* e = parentElement();
+    EngravingItem* e = parentElement();
     for (; e && e->type() != ElementType::MEASURE; e = e->parentElement()) {
     }
     return toMeasure(e);
@@ -3270,9 +3270,9 @@ TremoloChordType Chord::tremoloChordType() const
 //   nextElement
 //---------------------------------------------------------
 
-Element* Chord::nextElement()
+EngravingItem* Chord::nextElement()
 {
-    Element* e = score()->selection().element();
+    EngravingItem* e = score()->selection().element();
     if (!e && !score()->selection().elements().isEmpty()) {
         e = score()->selection().elements().first();
     }
@@ -3304,7 +3304,7 @@ Element* Chord::nextElement()
     case ElementType::TIE_SEGMENT: {
         SpannerSegment* s = toSpannerSegment(e);
         Spanner* sp = s->spanner();
-        Element* elSt = sp->startElement();
+        EngravingItem* elSt = sp->startElement();
         Q_ASSERT(elSt->type() == ElementType::NOTE);
         Note* n = toNote(elSt);
         Q_ASSERT(n != NULL);
@@ -3364,9 +3364,9 @@ Element* Chord::nextElement()
 //   prevElement
 //---------------------------------------------------------
 
-Element* Chord::prevElement()
+EngravingItem* Chord::prevElement()
 {
-    Element* e = score()->selection().element();
+    EngravingItem* e = score()->selection().element();
     if (!e && !score()->selection().elements().isEmpty()) {
         e = score()->selection().elements().last();
     }
@@ -3381,7 +3381,7 @@ Element* Chord::prevElement()
                 prevNote = *(&i + 1);
             }
         }
-        Element* next = prevNote->lastElementBeforeSegment();
+        EngravingItem* next = prevNote->lastElementBeforeSegment();
         return next;
     }
 
@@ -3396,7 +3396,7 @@ Element* Chord::prevElement()
 
     case ElementType::ARPEGGIO: {
         Note* n = _notes.front();
-        Element* elN = n->lastElementBeforeSegment();
+        EngravingItem* elN = n->lastElementBeforeSegment();
         Q_ASSERT(elN != NULL);
         return elN;
     }
@@ -3411,7 +3411,7 @@ Element* Chord::prevElement()
 //   lastElementBeforeSegment
 //---------------------------------------------------------
 
-Element* Chord::lastElementBeforeSegment()
+EngravingItem* Chord::lastElementBeforeSegment()
 {
     if (_tremolo) {
         return _tremolo;
@@ -3419,7 +3419,7 @@ Element* Chord::lastElementBeforeSegment()
         return _arpeggio;
     } else {
         Note* n = _notes.front();
-        Element* elN = n->lastElementBeforeSegment();
+        EngravingItem* elN = n->lastElementBeforeSegment();
         Q_ASSERT(elN != NULL);
         return elN;
     }
@@ -3429,10 +3429,10 @@ Element* Chord::lastElementBeforeSegment()
 //   nextSegmentElement
 //---------------------------------------------------------
 
-Element* Chord::nextSegmentElement()
+EngravingItem* Chord::nextSegmentElement()
 {
     for (int v = track() + 1; staffIdx() == v / VOICES; ++v) {
-        Element* e = segment()->element(v);
+        EngravingItem* e = segment()->element(v);
         if (e) {
             if (e->type() == ElementType::CHORD) {
                 return toChord(e)->notes().back();
@@ -3449,13 +3449,13 @@ Element* Chord::nextSegmentElement()
 //   prevSegmentElement
 //---------------------------------------------------------
 
-Element* Chord::prevSegmentElement()
+EngravingItem* Chord::prevSegmentElement()
 {
-    Element* el = score()->selection().element();
+    EngravingItem* el = score()->selection().element();
     if (!el && !score()->selection().elements().isEmpty()) {
         el = score()->selection().elements().first();
     }
-    Element* e = segment()->lastInPrevSegments(el->staffIdx());
+    EngravingItem* e = segment()->lastInPrevSegments(el->staffIdx());
     if (e) {
         if (e->isChord()) {
             return toChord(e)->notes().front();
@@ -3498,7 +3498,7 @@ QString Chord::accessibleExtraInfo() const
         rez = QString("%1 %2").arg(rez, tremolo()->screenReaderInfo());
     }
 
-    foreach (Element* e, el()) {
+    foreach (EngravingItem* e, el()) {
         if (!score()->selectionFilter().canSelect(e)) {
             continue;
         }
@@ -3535,7 +3535,7 @@ Shape Chord::shape() const
 //            shape.add(_tremolo->shape().translated(_tremolo->pos()));
     for (Note* note : _notes) {
         shape.add(note->shape().translated(note->pos()));
-        for (Element* e : note->el()) {
+        for (EngravingItem* e : note->el()) {
             if (!e->addToSkyline()) {
                 continue;
             }
@@ -3544,7 +3544,7 @@ Shape Chord::shape() const
             }
         }
     }
-    for (Element* e : el()) {
+    for (EngravingItem* e : el()) {
         if (e->addToSkyline()) {
             shape.add(e->shape().translated(e->pos()));
         }
@@ -3574,12 +3574,12 @@ void Chord::undoChangeProperty(Pid id, const QVariant& newValue)
 void Chord::undoChangeProperty(Pid id, const QVariant& newValue, PropertyFlags ps)
 {
     if (id == Pid::VISIBLE) {
-        processSiblings([=](Element* element) {
+        processSiblings([=](EngravingItem* element) {
             element->undoChangeProperty(id, newValue, ps);
         });
     }
 
-    Element::undoChangeProperty(id, newValue, ps);
+    EngravingItem::undoChangeProperty(id, newValue, ps);
 }
 
 //---------------------------------------------------------

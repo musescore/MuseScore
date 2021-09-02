@@ -76,15 +76,15 @@ public:
     void setParent(Measure* parent);
 
     // Score Tree functions
-    ScoreElement* treeParent() const override;
-    ScoreElement* treeChild(int idx) const override;
+    EngravingObject* treeParent() const override;
+    EngravingObject* treeChild(int idx) const override;
     int treeChildCount() const override;
 
     Tuplet* clone() const override { return new Tuplet(*this); }
     void setTrack(int val) override;
 
-    void add(Element*) override;
-    void remove(Element*) override;
+    void add(EngravingItem*) override;
+    void remove(EngravingItem*) override;
 
     Text* number() const { return _number; }
     void setNumber(Text* t) { _number = t; }
@@ -118,7 +118,7 @@ public:
     }
 
     void layout() override;
-    void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
+    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
     void read(XmlReader&) override;
     void write(XmlWriter&) const override;
@@ -153,7 +153,7 @@ public:
 
     Shape shape() const override;
 
-    Element::EditBehavior normalModeEditBehavior() const override { return Element::EditBehavior::Edit; }
+    EngravingItem::EditBehavior normalModeEditBehavior() const override { return EngravingItem::EditBehavior::Edit; }
     int gripsCount() const override { return 2; }
     Grip initialEditModeGrip() const override { return Grip::END; }
     Grip defaultGrip() const override { return Grip::START; }

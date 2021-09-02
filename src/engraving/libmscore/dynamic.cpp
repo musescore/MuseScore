@@ -319,7 +319,7 @@ void Dynamic::layout()
     if (s) {
         int t = track() & ~0x3;
         for (int voice = 0; voice < VOICES; ++voice) {
-            Element* e = s->element(t + voice);
+            EngravingItem* e = s->element(t + voice);
             if (!e) {
                 continue;
             }
@@ -438,7 +438,7 @@ void Dynamic::reset()
 //   getDragGroup
 //---------------------------------------------------------
 
-std::unique_ptr<ElementGroup> Dynamic::getDragGroup(std::function<bool(const Element*)> isDragged)
+std::unique_ptr<ElementGroup> Dynamic::getDragGroup(std::function<bool(const EngravingItem*)> isDragged)
 {
     if (auto g = HairpinWithDynamicsDragGroup::detectFor(this, isDragged)) {
         return g;
@@ -455,7 +455,7 @@ std::unique_ptr<ElementGroup> Dynamic::getDragGroup(std::function<bool(const Ele
 
 mu::RectF Dynamic::drag(EditData& ed)
 {
-    RectF f = Element::drag(ed);
+    RectF f = EngravingItem::drag(ed);
 
     //
     // move anchor
@@ -654,7 +654,7 @@ QString Dynamic::accessibleInfo() const
     } else {
         s = dynamicTypeName();
     }
-    return QString("%1: %2").arg(Element::accessibleInfo(), s);
+    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), s);
 }
 
 //---------------------------------------------------------
@@ -670,6 +670,6 @@ QString Dynamic::screenReaderInfo() const
     } else {
         s = dynamicTypeName();
     }
-    return QString("%1: %2").arg(Element::accessibleInfo(), s);
+    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), s);
 }
 }

@@ -61,7 +61,7 @@ protected:
     mu::PointF linePos(Grip, System**) const override;
 
 public:
-    PalmMute(Element* parent);
+    PalmMute(EngravingItem* parent);
 
     PalmMute* clone() const override { return new PalmMute(*this); }
 

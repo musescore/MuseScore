@@ -35,7 +35,7 @@
 #include "beam.h"
 #include "chord.h"
 #include "dynamic.h"
-#include "element.h"
+#include "engravingitem.h"
 #include "figuredbass.h"
 #include "glissando.h"
 #include "hairpin.h"
@@ -112,7 +112,7 @@ void SelectionFilter::setFiltered(SelectionFilterType type, bool filtered)
     }
 }
 
-bool SelectionFilter::canSelect(const Element* e) const
+bool SelectionFilter::canSelect(const EngravingItem* e) const
 {
     if (e->isDynamic()) {
         return isFiltered(SelectionFilterType::DYNAMIC);
@@ -254,14 +254,14 @@ bool Selection::isEndActive() const
     return activeSegment() && activeSegment()->tick() == tickEnd();
 }
 
-Element* Selection::element() const
+EngravingItem* Selection::element() const
 {
     return ((state() != SelState::RANGE) && (_el.size() == 1)) ? _el[0] : 0;
 }
 
 ChordRest* Selection::cr() const
 {
-    Element* e = element();
+    EngravingItem* e = element();
     if (!e) {
         return 0;
     }
@@ -289,7 +289,7 @@ ChordRest* Selection::currentCR() const
     if (track < 0 || track >= score()->ntracks()) {
         track = 0;
     }
-    Element* e = s->element(track);
+    EngravingItem* e = s->element(track);
     if (e && e->isChordRest()) {
         return toChordRest(e);
     } else {
@@ -329,7 +329,7 @@ Segment* Selection::firstChordRestSegment() const
 ChordRest* Selection::firstChordRest(int track) const
 {
     if (_el.size() == 1) {
-        Element* el = _el[0];
+        EngravingItem* el = _el[0];
         if (el->isNote()) {
             return toChordRest(el->parent());
         } else if (el->isChordRest()) {
@@ -338,7 +338,7 @@ ChordRest* Selection::firstChordRest(int track) const
         return 0;
     }
     ChordRest* cr = 0;
-    for (Element* el : _el) {
+    for (EngravingItem* el : _el) {
         if (el->isNote()) {
             el = el->parentElement();
         }
@@ -361,7 +361,7 @@ ChordRest* Selection::firstChordRest(int track) const
 ChordRest* Selection::lastChordRest(int track) const
 {
     if (_el.size() == 1) {
-        Element* el = _el[0];
+        EngravingItem* el = _el[0];
         if (el) {
             if (el->isNote()) {
                 return toChordRest(el->parent());
@@ -396,7 +396,7 @@ Measure* Selection::findMeasure() const
 {
     Measure* m = 0;
     if (_el.size() > 0) {
-        Element* el = _el[0];
+        EngravingItem* el = _el[0];
         m = toMeasure(el->findMeasure());
     }
     return m;
@@ -411,7 +411,7 @@ void Selection::deselectAll()
     updateState();
 }
 
-static RectF changeSelection(Element* e, bool b)
+static RectF changeSelection(EngravingItem* e, bool b)
 {
     RectF r = e->canvasBoundingRect();
     e->setSelected(b);
@@ -426,7 +426,7 @@ void Selection::clear()
         return;
     }
 
-    for (Element* e : qAsConst(_el)) {
+    for (EngravingItem* e : qAsConst(_el)) {
         if (e->isSpanner()) {       // TODO: only visible elements should be selectable?
             Spanner* sp = toSpanner(e);
             for (auto s : sp->spannerSegments()) {
@@ -446,7 +446,7 @@ void Selection::clear()
     setState(SelState::NONE);
 }
 
-void Selection::remove(Element* el)
+void Selection::remove(EngravingItem* el)
 {
     const bool removed = _el.removeOne(el);
     el->setSelected(false);
@@ -455,7 +455,7 @@ void Selection::remove(Element* el)
     }
 }
 
-void Selection::add(Element* el)
+void Selection::add(EngravingItem* el)
 {
     IF_ASSERT_FAILED(!isLocked()) {
         LOGE() << "selection locked, reason: " << lockReason();
@@ -465,7 +465,7 @@ void Selection::add(Element* el)
     update();
 }
 
-void Selection::appendFiltered(Element* e)
+void Selection::appendFiltered(EngravingItem* e)
 {
     IF_ASSERT_FAILED(!isLocked()) {
         LOGE() << "selection locked, reason: " << lockReason();
@@ -505,7 +505,7 @@ void Selection::appendChord(Chord* chord)
         if (note->accidental()) {
             _el.append(note->accidental());
         }
-        foreach (Element* el, note->el()) {
+        foreach (EngravingItem* el, note->el()) {
             appendFiltered(el);
         }
         for (NoteDot* dot : note->dots()) {
@@ -568,7 +568,7 @@ void Selection::updateSelectedElements()
         _plannedTick2 = Fraction(-1, 1);
     }
 
-    for (Element* e : qAsConst(_el)) {
+    for (EngravingItem* e : qAsConst(_el)) {
         e->setSelected(false);
     }
     _el.clear();
@@ -592,19 +592,19 @@ void Selection::updateSelectedElements()
             if (!s->enabled() || s->isEndBarLineType()) {      // do not select end bar line
                 continue;
             }
-            for (Element* e : s->annotations()) {
+            for (EngravingItem* e : s->annotations()) {
                 if (e->track() != st) {
                     continue;
                 }
                 appendFiltered(e);
             }
-            Element* e = s->element(st);
+            EngravingItem* e = s->element(st);
             if (!e || e->generated() || e->isTimeSig() || e->isKeySig()) {
                 continue;
             }
             if (e->isChordRest()) {
                 ChordRest* cr = toChordRest(e);
-                for (Element* el : cr->lyrics()) {
+                for (EngravingItem* el : cr->lyrics()) {
                     if (el) {
                         appendFiltered(el);
                     }
@@ -706,7 +706,7 @@ void Selection::setRangeTicks(const Fraction& tick1, const Fraction& tick2, int 
 
 void Selection::update()
 {
-    for (Element* e : qAsConst(_el)) {
+    for (EngravingItem* e : qAsConst(_el)) {
         e->setSelected(true);
     }
     updateState();
@@ -723,7 +723,7 @@ void Selection::dump()
     case SelState::LIST:   qDebug("LIST");
         break;
     }
-    foreach (const Element* e, _el) {
+    foreach (const EngravingItem* e, _el) {
         qDebug("  %p %s", e, e->name());
     }
 }
@@ -736,7 +736,7 @@ void Selection::dump()
 void Selection::updateState()
 {
     int n = _el.size();
-    Element* e = element();
+    EngravingItem* e = element();
     if (n == 0) {
         setState(SelState::NONE);
     } else if (_state == SelState::NONE) {
@@ -881,7 +881,7 @@ QByteArray Selection::staffMimeData() const
 QByteArray Selection::symbolListMimeData() const
 {
     struct MapData {
-        Element* e;
+        EngravingItem* e;
         Segment* s;
     };
 
@@ -900,7 +900,7 @@ QByteArray Selection::symbolListMimeData() const
     std::multimap<qint64, MapData> map;
 
     // scan selection element list, inserting relevant elements in a tick-sorted map
-    foreach (Element* e, _el) {
+    foreach (EngravingItem* e, _el) {
         switch (e->type()) {
         /* All these element types are ignored:
 
@@ -1073,7 +1073,7 @@ QByteArray Selection::symbolListMimeData() const
                 if (seg->isChordRestType()) {
                     // if no ChordRest in right track, look in anotations
                     if (seg->element(currTrack) == nullptr) {
-                        foreach (Element* el, seg->annotations()) {
+                        foreach (EngravingItem* el, seg->annotations()) {
                             // do annotations include our element?
                             if (el == iter->second.e) {
                                 done = true;
@@ -1117,7 +1117,7 @@ std::vector<Note*> Selection::noteList(int selTrack) const
     std::vector<Note*> nl;
 
     if (_state == SelState::LIST) {
-        foreach (Element* e, _el) {
+        foreach (EngravingItem* e, _el) {
             if (e->isNote()) {
                 nl.push_back(toNote(e));
             }
@@ -1134,7 +1134,7 @@ std::vector<Note*> Selection::noteList(int selTrack) const
                     if (!canSelectVoice(track)) {
                         continue;
                     }
-                    Element* e = seg->element(track);
+                    EngravingItem* e = seg->element(track);
                     if (e == 0 || e->type() != ElementType::CHORD
                         || (selTrack != -1 && selTrack != track)) {
                         continue;
@@ -1157,7 +1157,7 @@ std::vector<Note*> Selection::noteList(int selTrack) const
 //     return true  if element is part of a tuplet/tremolo, but not the start
 //---------------------------------------------------------
 
-static bool checkStart(Element* e)
+static bool checkStart(EngravingItem* e)
 {
     if (e == 0 || !e->isChordRest()) {
         return false;
@@ -1190,7 +1190,7 @@ static bool checkStart(Element* e)
 //     return true  if element is part of a tuplet, but not the end
 //---------------------------------------------------------
 
-static bool checkEnd(Element* e, const Fraction& endTick)
+static bool checkEnd(EngravingItem* e, const Fraction& endTick)
 {
     if (e == 0 || !e->isChordRest()) {
         return false;
@@ -1317,13 +1317,13 @@ bool Selection::measureRange(Measure** m1, Measure** m2) const
 //    elements show up in the list.
 //---------------------------------------------------------
 
-const QList<Element*> Selection::uniqueElements() const
+const QList<EngravingItem*> Selection::uniqueElements() const
 {
-    QList<Element*> l;
+    QList<EngravingItem*> l;
 
-    for (Element* e : elements()) {
+    for (EngravingItem* e : elements()) {
         bool alreadyThere = false;
-        for (Element* ee : l) {
+        for (EngravingItem* ee : l) {
             if ((ee->links() && ee->links()->contains(e)) || e == ee) {
                 alreadyThere = true;
                 break;

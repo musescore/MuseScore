@@ -25,7 +25,7 @@
 #include "accessibility/iaccessible.h"
 #include "async/asyncable.h"
 
-#include "libmscore/element.h"
+#include "libmscore/engravingitem.h"
 
 //! NOTE At the moment this is just a concept, not a production-ready system, a lot of work yet.
 
@@ -34,13 +34,13 @@ class AccessibleScore;
 class AccessibleElement : public accessibility::IAccessible, public async::Asyncable
 {
 public:
-    AccessibleElement(Ms::Element* e = nullptr);
+    AccessibleElement(Ms::EngravingItem* e = nullptr);
     virtual ~AccessibleElement();
 
-    virtual AccessibleElement* clone(Ms::Element* e) const;
+    virtual AccessibleElement* clone(Ms::EngravingItem* e) const;
 
-    void setElement(Ms::Element* e);
-    const Ms::Element* element() const;
+    void setElement(Ms::EngravingItem* e);
+    const Ms::EngravingItem* element() const;
 
     void setRegistred(bool arg);
     bool registred() const;
@@ -68,7 +68,7 @@ private:
     bool isAvalaible() const;
     AccessibleScore* accessibleScore() const;
 
-    Ms::Element* m_element = nullptr;
+    Ms::EngravingItem* m_element = nullptr;
     bool m_registred = false;
 
     mu::async::Channel<IAccessible::State, bool> m_accessibleStateChanged;

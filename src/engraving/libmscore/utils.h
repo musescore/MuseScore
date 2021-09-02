@@ -46,7 +46,7 @@ enum class Key;
 class Measure;
 class Segment;
 class System;
-class Element;
+class EngravingItem;
 class Note;
 class Tuplet;
 class BarLine;

@@ -23,7 +23,7 @@
 #ifndef __STEM_H__
 #define __STEM_H__
 
-#include "element.h"
+#include "engravingitem.h"
 
 namespace Ms {
 class Chord;
@@ -33,7 +33,7 @@ class Chord;
 ///    Graphic representation of a note stem.
 //---------------------------------------------------------
 
-class Stem final : public Element
+class Stem final : public EngravingItem
 {
     mu::LineF line;   // p1 is attached to notehead
     qreal _lineWidth;
@@ -49,7 +49,7 @@ public:
     bool isEditable() const override { return true; }
     void layout() override;
     void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
-    Element* elementBase() const override;
+    EngravingItem* elementBase() const override;
 
     void startEdit(EditData&) override;
     void editDrag(EditData&) override;
@@ -58,7 +58,7 @@ public:
     bool readProperties(XmlReader&) override;
     void reset() override;
     bool acceptDrop(EditData&) const override;
-    Element* drop(EditData&) override;
+    EngravingItem* drop(EditData&) override;
 
     QVariant getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const QVariant&) override;

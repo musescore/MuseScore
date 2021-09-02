@@ -23,7 +23,7 @@
 #include "libmscore/masterscore.h"
 #include "libmscore/chordrest.h"
 #include "libmscore/stafftext.h"
-#include "libmscore/element.h"
+#include "libmscore/engravingitem.h"
 #include "libmscore/segment.h"
 #include "libmscore/measure.h"
 #include "libmscore/staff.h"

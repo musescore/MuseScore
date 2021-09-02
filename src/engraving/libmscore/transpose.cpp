@@ -336,7 +336,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
     }
 
     if (_selection.isList()) {
-        foreach (Element* e, _selection.uniqueElements()) {
+        foreach (EngravingItem* e, _selection.uniqueElements()) {
             if (!e->staff() || e->staff()->staffType(e->tick())->group() == StaffGroup::PERCUSSION) {
                 continue;
             }
@@ -437,7 +437,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
             if (staff(track / VOICES)->staffType(s1->tick())->group() == StaffGroup::PERCUSSION) {
                 continue;
             }
-            Element* e = segment->element(track);
+            EngravingItem* e = segment->element(track);
             if (!e) {
                 continue;
             }
@@ -493,7 +493,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
             }
         }
         if (transposeChordNames) {
-            foreach (Element* e, segment->annotations()) {
+            foreach (EngravingItem* e, segment->annotations()) {
                 if ((e->type() != ElementType::HARMONY) || (!tracks.contains(e->track()))) {
                     continue;
                 }
@@ -502,7 +502,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                 // undoTransposeHarmony does not do links
                 // because it is also used to handle transposing instruments
                 // and score / parts could be in different concert pitch states
-                for (ScoreElement* se : hh->linkList()) {
+                for (EngravingObject* se : hh->linkList()) {
                     Harmony* h = toHarmony(se);
                     if (mode == TransposeMode::DIATONICALLY) {
                         Fraction tick = segment->tick();
@@ -817,7 +817,7 @@ void Score::transpositionChanged(Part* part, Interval oldV, Fraction tickStart, 
             int t1 = st->idx() * VOICES;
             int t2 = t1 + VOICES;
             for (int track = t1; track < t2; ++track) {
-                Element* e = s->element(track);
+                EngravingItem* e = s->element(track);
                 if (e && e->isChord()) {
                     Chord* c = toChord(e);
                     for (Chord* gc : c->graceNotes()) {
@@ -832,14 +832,14 @@ void Score::transpositionChanged(Part* part, Interval oldV, Fraction tickStart, 
                     }
                 }
                 // find chord symbols
-                for (Element* element : s->annotations()) {
+                for (EngravingItem* element : s->annotations()) {
                     if (element->track() != track || element->type() != ElementType::HARMONY) {
                         continue;
                     }
                     Harmony* h  = toHarmony(element);
                     int rootTpc = transposeTpc(h->rootTpc(), diffV, false);
                     int baseTpc = transposeTpc(h->baseTpc(), diffV, false);
-                    for (ScoreElement* scoreElement : h->linkList()) {
+                    for (EngravingObject* scoreElement : h->linkList()) {
                         if (!scoreElement->score()->styleB(Sid::concertPitch)) {
                             undoTransposeHarmony(toHarmony(scoreElement), rootTpc, baseTpc);
                         }

@@ -491,7 +491,7 @@ static constexpr std::array<Pid, 26> TextLineBasePropertyId = { {
 //   propertyDelegate
 //---------------------------------------------------------
 
-Element* TextLineBaseSegment::propertyDelegate(Pid pid)
+EngravingItem* TextLineBaseSegment::propertyDelegate(Pid pid)
 {
     for (Pid id : TextLineBasePropertyId) {
         if (pid == id) {
@@ -505,7 +505,7 @@ Element* TextLineBaseSegment::propertyDelegate(Pid pid)
 //   TextLineBase
 //---------------------------------------------------------
 
-TextLineBase::TextLineBase(const ElementType& type, Element* parent, ElementFlags f)
+TextLineBase::TextLineBase(const ElementType& type, EngravingItem* parent, ElementFlags f)
     : SLine(type, parent, f)
 {
     setBeginHookHeight(Spatium(1.9));

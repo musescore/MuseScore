@@ -115,7 +115,7 @@ void Rest::draw(mu::draw::Painter* painter) const
 }
 
 //---------------------------------------------------------
-//   setOffset, overridden from Element
+//   setOffset, overridden from EngravingItem
 //    (- raster vertical position in spatium units) -> no
 //    - half rests and whole rests outside the staff are
 //      replaced by special symbols with ledger lines
@@ -136,7 +136,7 @@ void Rest::setOffset(const mu::PointF& o)
         m_sym = SymId::restHalf;
     }
 
-    Element::setOffset(o);
+    EngravingItem::setOffset(o);
 }
 
 //---------------------------------------------------------
@@ -170,7 +170,7 @@ mu::RectF Rest::drag(EditData& ed)
 
 bool Rest::acceptDrop(EditData& data) const
 {
-    Element* e = data.dropElement;
+    EngravingItem* e = data.dropElement;
     ElementType type = e->type();
     if (
         (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::BEAM_START)
@@ -211,9 +211,9 @@ bool Rest::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-Element* Rest::drop(EditData& data)
+EngravingItem* Rest::drop(EditData& data)
 {
-    Element* e = data.dropElement;
+    EngravingItem* e = data.dropElement;
     switch (e->type()) {
     case ElementType::ARTICULATION:
     {
@@ -321,7 +321,7 @@ void Rest::layout()
     if (m_gap) {
         return;
     }
-    for (Element* e : el()) {
+    for (EngravingItem* e : el()) {
         e->layout();
     }
     qreal _spatium = spatium();
@@ -463,7 +463,7 @@ int Rest::computeLineOffset(int lines)
     bool offsetVoices = s && measure() && (voice() > 0 || measure()->hasVoices(staffIdx(), tick(), actualTicks()));
     if (offsetVoices && voice() == 0) {
         // do not offset voice 1 rest if there exists a matching invisible rest in voice 2;
-        Element* e = s->element(track() + 1);
+        EngravingItem* e = s->element(track() + 1);
         if (e && e->isRest() && !e->visible() && !toRest(e)->isGap()) {
             Rest* r = toRest(e);
             if (r->globalTicks() == globalTicks()) {
@@ -477,7 +477,7 @@ int Rest::computeLineOffset(int lines)
         // if the staff contains slash notation then only offset rests in voices 3 and 4
         int baseTrack = staffIdx() * VOICES;
         for (int v = 0; v < VOICES; ++v) {
-            Element* e = s->element(baseTrack + v);
+            EngravingItem* e = s->element(baseTrack + v);
             if (e && e->isChord() && toChord(e)->slash()) {
                 offsetVoices = false;
                 break;
@@ -495,7 +495,7 @@ int Rest::computeLineOffset(int lines)
             if (v == voice()) {
                 continue;
             }
-            Element* e = s->element(baseTrack + v);
+            EngravingItem* e = s->element(baseTrack + v);
             // try to find match in any other voice
             if (e) {
                 if (e->type() == ElementType::REST) {
@@ -538,7 +538,7 @@ int Rest::computeLineOffset(int lines)
             Segment* seg = isMeasureRest ? measure()->first() : s;
             while (seg) {
                 for (const int& track : { firstTrack + upOffset, firstTrack + 2 + upOffset }) {
-                    Element* e = seg->element(track);
+                    EngravingItem* e = seg->element(track);
                     if (e && e->isChord()) {
                         Chord* chord = toChord(e);
                         StaffGroup staffGroup = staff()->staffType(chord->tick())->group();
@@ -696,9 +696,9 @@ qreal Rest::downPos() const
 //   scanElements
 //---------------------------------------------------------
 
-void Rest::scanElements(void* data, void (* func)(void*, Element*), bool all)
+void Rest::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
-    ScoreElement::scanElements(data, func, all);
+    EngravingObject::scanElements(data, func, all);
     if (!isGap()) {
         func(data, this);
     }
@@ -842,7 +842,7 @@ void Rest::setAccent(bool flag)
 QString Rest::accessibleInfo() const
 {
     QString voice = QObject::tr("Voice: %1").arg(QString::number(track() % VOICES + 1));
-    return QObject::tr("%1; Duration: %2; %3").arg(Element::accessibleInfo(), durationUserName(), voice);
+    return QObject::tr("%1; Duration: %2; %3").arg(EngravingItem::accessibleInfo(), durationUserName(), voice);
 }
 
 //---------------------------------------------------------
@@ -854,14 +854,14 @@ QString Rest::screenReaderInfo() const
     Measure* m = measure();
     bool voices = m ? m->hasVoices(staffIdx()) : false;
     QString voice = voices ? QObject::tr("Voice: %1").arg(QString::number(track() % VOICES + 1)) : "";
-    return QString("%1 %2 %3").arg(Element::accessibleInfo(), durationUserName(), voice);
+    return QString("%1 %2 %3").arg(EngravingItem::accessibleInfo(), durationUserName(), voice);
 }
 
 //---------------------------------------------------------
 //   add
 //---------------------------------------------------------
 
-void Rest::add(Element* e)
+void Rest::add(EngravingItem* e)
 {
     if (e->parent() != this) {
         e->setParent(this);
@@ -886,7 +886,7 @@ void Rest::add(Element* e)
 //   remove
 //---------------------------------------------------------
 
-void Rest::remove(Element* e)
+void Rest::remove(EngravingItem* e)
 {
     switch (e->type()) {
     case ElementType::NOTEDOT:
@@ -975,10 +975,10 @@ void Rest::read(XmlReader& e)
 void Rest::localSpatiumChanged(qreal oldValue, qreal newValue)
 {
     ChordRest::localSpatiumChanged(oldValue, newValue);
-    for (Element* e : m_dots) {
+    for (EngravingItem* e : m_dots) {
         e->localSpatiumChanged(oldValue, newValue);
     }
-    for (Element* e : el()) {
+    for (EngravingItem* e : el()) {
         e->localSpatiumChanged(oldValue, newValue);
     }
 }
@@ -1067,7 +1067,7 @@ void Rest::undoChangeDotsVisible(bool v)
 //   nextElement
 //---------------------------------------------------------
 
-Element* Rest::nextElement()
+EngravingItem* Rest::nextElement()
 {
     return ChordRest::nextElement();
 }
@@ -1076,7 +1076,7 @@ Element* Rest::nextElement()
 //   prevElement
 //---------------------------------------------------------
 
-Element* Rest::prevElement()
+EngravingItem* Rest::prevElement()
 {
     return ChordRest::prevElement();
 }
@@ -1103,7 +1103,7 @@ Shape Rest::shape() const
             shape.add(symBbox(SymId::augmentationDot).translated(dot->pos()));
         }
     }
-    for (Element* e : el()) {
+    for (EngravingItem* e : el()) {
         if (e->addToSkyline()) {
             shape.add(e->shape().translated(e->pos()));
         }

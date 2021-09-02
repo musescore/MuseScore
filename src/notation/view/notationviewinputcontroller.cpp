@@ -116,7 +116,7 @@ INotationInteractionPtr NotationViewInputController::viewInteraction() const
     return m_view->notationInteraction();
 }
 
-Element* NotationViewInputController::hitElement() const
+EngravingItem* NotationViewInputController::hitElement() const
 {
     return viewInteraction()->hitElementContext().element;
 }
@@ -308,7 +308,7 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
 
     m_beginPoint = logicPos;
 
-    Element* hitElement = nullptr;
+    EngravingItem* hitElement = nullptr;
     int hitStaffIndex = -1;
 
     if (!m_readonly) {
@@ -384,7 +384,7 @@ bool NotationViewInputController::needSelect(const QMouseEvent* event, const Poi
         return false;
     }
 
-    const Element* hitElement = this->hitElement();
+    const EngravingItem* hitElement = this->hitElement();
     if (!hitElement) {
         return false;
     }
@@ -433,7 +433,7 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
         return;
     }
 
-    const Element* hitElement = this->hitElement();
+    const EngravingItem* hitElement = this->hitElement();
 
     // drag element
     if (!middleButton && ((hitElement && hitElement->isMovable())
@@ -443,7 +443,7 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
         }
 
         if (viewInteraction()->isGripEditStarted() && !viewInteraction()->isDragStarted()) {
-            Element* selectedElement = viewInteraction()->selection()->element();
+            EngravingItem* selectedElement = viewInteraction()->selection()->element();
             startDragElements(selectedElement->type(), selectedElement->offset());
         }
 
@@ -458,7 +458,7 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
         return;
     } else if (hitElement == nullptr && (keyState & (Qt::ShiftModifier | Qt::ControlModifier))) {
         if (!viewInteraction()->isDragStarted()) {
-            viewInteraction()->startDrag(std::vector<Element*>(), PointF(), [](const Element*) { return false; });
+            viewInteraction()->startDrag(std::vector<EngravingItem*>(), PointF(), [](const EngravingItem*) { return false; });
         }
         viewInteraction()->drag(m_beginPoint, logicPos,
                                 keyState & Qt::ControlModifier ? DragMode::LassoList : DragMode::BothXY);
@@ -480,13 +480,13 @@ void NotationViewInputController::mouseMoveEvent(QMouseEvent* event)
 
 void NotationViewInputController::startDragElements(ElementType elementsType, const PointF& elementsOffset)
 {
-    std::vector<Element*> elements = viewInteraction()->selection()->elements();
+    std::vector<EngravingItem*> elements = viewInteraction()->selection()->elements();
     IF_ASSERT_FAILED(!elements.empty()) {
         return;
     }
 
     bool isFilterType = viewInteraction()->selection()->isRange();
-    auto isDraggable = [isFilterType, elementsType](const Element* element) {
+    auto isDraggable = [isFilterType, elementsType](const EngravingItem* element) {
         return element && element->selected() && (!isFilterType || elementsType == element->type());
     };
 
@@ -509,7 +509,7 @@ void NotationViewInputController::mouseReleaseEvent(QMouseEvent*)
 
 void NotationViewInputController::mouseDoubleClickEvent(QMouseEvent* event)
 {
-    Element* element = viewInteraction()->selection()->element();
+    EngravingItem* element = viewInteraction()->selection()->element();
 
     if (!element) {
         return;
@@ -609,7 +609,7 @@ float NotationViewInputController::hitWidth() const
 
 ElementType NotationViewInputController::selectionType() const
 {
-    const Element* hitElement = this->hitElement();
+    const EngravingItem* hitElement = this->hitElement();
     ElementType type = ElementType::INVALID;
 
     if (hitElement) {

@@ -23,7 +23,7 @@
 #ifndef __BAGPEMBELL_H__
 #define __BAGPEMBELL_H__
 
-#include "element.h"
+#include "engravingitem.h"
 
 namespace Ms {
 typedef QList<int> noteList;
@@ -57,14 +57,14 @@ struct BEDrawingDataY;
 //    dummy element, used for drag&drop
 //---------------------------------------------------------
 
-class BagpipeEmbellishment final : public Element
+class BagpipeEmbellishment final : public EngravingItem
 {
     int _embelType;
     void drawGraceNote(mu::draw::Painter*, const BEDrawingDataX&, const BEDrawingDataY&, SymId, const qreal x, const bool drawFlag) const;
 
 public:
-    BagpipeEmbellishment(Element* parent)
-        : Element(ElementType::BAGPIPE_EMBELLISHMENT, parent), _embelType(0) { }
+    BagpipeEmbellishment(EngravingItem* parent)
+        : EngravingItem(ElementType::BAGPIPE_EMBELLISHMENT, parent), _embelType(0) { }
 
     BagpipeEmbellishment* clone() const override { return new BagpipeEmbellishment(*this); }
 

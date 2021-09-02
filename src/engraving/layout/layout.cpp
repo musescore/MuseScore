@@ -389,7 +389,7 @@ void Layout::collectLinearSystem(const LayoutOptions& options, LayoutContext& lc
                             continue;
                         }
                         for (int track = 0; track < m_score->ntracks(); ++track) {
-                            Element* e = s.element(track);
+                            EngravingItem* e = s.element(track);
                             if (e) {
                                 ChordRest* cr = toChordRest(e);
                                 if (cr->beam() && cr->beam()->elements().front() == cr) {
@@ -435,7 +435,7 @@ void Layout::layoutLinear(const LayoutOptions& options, LayoutContext& lc)
 
         for (int track = 0; track < lc.score->ntracks(); ++track) {
             for (Segment* segment = m->first(); segment; segment = segment->next()) {
-                Element* e = segment->element(track);
+                EngravingItem* e = segment->element(track);
                 if (!e) {
                     continue;
                 }
@@ -467,7 +467,7 @@ void Layout::layoutLinear(const LayoutOptions& options, LayoutContext& lc)
                                 cc->beam()->layout();
                             }
                             cc->layoutSpanners();
-                            for (Element* element : cc->el()) {
+                            for (EngravingItem* element : cc->el()) {
                                 if (element->isSlur()) {
                                     element->layout();
                                 }

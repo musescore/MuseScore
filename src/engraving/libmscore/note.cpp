@@ -690,11 +690,11 @@ NoteHead::Group NoteHead::headGroup() const
 //---------------------------------------------------------
 
 Note::Note(Chord* ch)
-    : Element(ElementType::NOTE, ch, ElementFlag::MOVABLE
+    : EngravingItem(ElementType::NOTE, ch, ElementFlag::MOVABLE
 #ifdef ENGRAVING_BUILD_ACCESSIBLE_TREE
-              , new mu::engraving::AccessibleNote())
+                    , new mu::engraving::AccessibleNote())
 #else
-              )
+                    )
 #endif
 {
     _playEvents.append(NoteEvent());      // add default play event
@@ -711,7 +711,7 @@ Note::~Note()
 }
 
 Note::Note(const Note& n, bool link)
-    : Element(n)
+    : EngravingItem(n)
 {
     if (link) {
         score()->undo(new Link(this, const_cast<Note*>(&n)));
@@ -752,14 +752,14 @@ Note::Note(const Note& n, bool link)
     // types in _el: SYMBOL, IMAGE, FINGERING, TEXT, BEND
     const Staff* stf = staff();
     bool tabFingering = stf->staffTypeForElement(this)->showTabFingering();
-    for (Element* e : n._el) {
+    for (EngravingItem* e : n._el) {
         if (e->isFingering() && staff()->isTabStaff(tick()) && !tabFingering) {      // tablature has no fingering
             continue;
         }
-        Element* ce = e->clone();
+        EngravingItem* ce = e->clone();
         add(ce);
         if (link) {
-            score()->undo(new Link(ce, const_cast<Element*>(e)));
+            score()->undo(new Link(ce, const_cast<EngravingItem*>(e)));
         }
     }
 
@@ -782,7 +782,7 @@ Note::Note(const Note& n, bool link)
 
 void Note::setParent(Chord* ch)
 {
-    Element::setParent(ch);
+    EngravingItem::setParent(ch);
 }
 
 //---------------------------------------------------------
@@ -1089,7 +1089,7 @@ void Note::updateHeadGroup(const NoteHead::Group headGroup)
     }
 
     if (links()) {
-        for (ScoreElement* scoreElement : *links()) {
+        for (EngravingObject* scoreElement : *links()) {
             scoreElement->undoChangeProperty(Pid::HEAD_GROUP, static_cast<int>(group));
 
             Note* note = toNote(scoreElement);
@@ -1223,7 +1223,7 @@ Fraction Note::playTicksFraction() const
 
 void Note::addSpanner(Spanner* l)
 {
-    Element* e = l->endElement();
+    EngravingItem* e = l->endElement();
     if (e && e->isNote()) {
         Note* note = toNote(e);
         note->addSpannerBack(l);
@@ -1260,7 +1260,7 @@ void Note::removeSpanner(Spanner* l)
 //   add
 //---------------------------------------------------------
 
-void Note::add(Element* e)
+void Note::add(EngravingItem* e)
 {
     if (e->parent() != this) {
         e->setParent(this);
@@ -1307,7 +1307,7 @@ void Note::add(Element* e)
 //   remove
 //---------------------------------------------------------
 
-void Note::remove(Element* e)
+void Note::remove(EngravingItem* e)
 {
     switch (e->type()) {
     case ElementType::NOTEDOT:
@@ -1455,7 +1455,7 @@ void Note::draw(mu::draw::Painter* painter) const
 void Note::write(XmlWriter& xml) const
 {
     xml.stag(this);
-    Element::writeProperties(xml);
+    EngravingItem::writeProperties(xml);
 
     if (_accidental) {
         _accidental->write(xml);
@@ -1684,8 +1684,8 @@ bool Note::readProperties(XmlReader& e)
             chord()->setPlayEventType(PlayEventType::User);
         }
     } else if (tag == "offset") {
-        Element::readProperties(e);
-    } else if (Element::readProperties(e)) {
+        EngravingItem::readProperties(e);
+    } else if (EngravingItem::readProperties(e)) {
     } else {
         return false;
     }
@@ -1811,7 +1811,7 @@ public:
 
 bool Note::acceptDrop(EditData& data) const
 {
-    Element* e = data.dropElement;
+    EngravingItem* e = data.dropElement;
     ElementType type = e->type();
     if (type == ElementType::GLISSANDO) {
         for (auto ee : _spannerFor) {
@@ -1880,9 +1880,9 @@ bool Note::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-Element* Note::drop(EditData& data)
+EngravingItem* Note::drop(EditData& data)
 {
-    Element* e = data.dropElement;
+    EngravingItem* e = data.dropElement;
 
     const Staff* st = staff();
     bool isTablature = st->isTabStaff(tick());
@@ -1937,7 +1937,7 @@ Element* Note::drop(EditData& data)
 
         if (group != _headGroup) {
             if (links()) {
-                for (ScoreElement* se : *links()) {
+                for (EngravingObject* se : *links()) {
                     se->undoChangeProperty(Pid::HEAD_GROUP, int(group));
                     Note* note = toNote(se);
                     if (note->staff() && note->staff()->isTabStaff(ch->tick()) && group == NoteHead::Group::HEAD_CROSS) {
@@ -2286,7 +2286,7 @@ void Note::layout2()
     }
 
     // layout elements attached to note
-    for (Element* e : _el) {
+    for (EngravingItem* e : _el) {
         if (!score()->tagIsValid(e->tag())) {
             continue;
         }
@@ -2468,9 +2468,9 @@ QString Note::noteTypeUserName() const
 //   scanElements
 //---------------------------------------------------------
 
-void Note::scanElements(void* data, void (* func)(void*, Element*), bool all)
+void Note::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
-    ScoreElement::scanElements(data, func, all);
+    EngravingObject::scanElements(data, func, all);
     if (all || visible() || score()->showInvisible()) {
         func(data, this);
     }
@@ -2482,7 +2482,7 @@ void Note::scanElements(void* data, void (* func)(void*, Element*), bool all)
 
 void Note::setTrack(int val)
 {
-    Element::setTrack(val);
+    EngravingItem::setTrack(val);
     if (_tieFor) {
         _tieFor->setTrack(val);
         for (SpannerSegment* seg : _tieFor->spannerSegments()) {
@@ -2495,7 +2495,7 @@ void Note::setTrack(int val)
     for (Spanner* s : qAsConst(_spannerBack)) {
         s->setTrack2(val);
     }
-    for (Element* e : _el) {
+    for (EngravingItem* e : _el) {
         e->setTrack(val);
     }
     if (_accidental) {
@@ -2536,7 +2536,7 @@ qreal Note::mag() const
 //---------------------------------------------------------
 //   elementBase
 //---------------------------------------------------------
-Element* Note::elementBase() const
+EngravingItem* Note::elementBase() const
 {
     return parentElement();
 }
@@ -2970,11 +2970,11 @@ void Note::setNval(const NoteVal& nval, Fraction tick)
 
 void Note::localSpatiumChanged(qreal oldValue, qreal newValue)
 {
-    Element::localSpatiumChanged(oldValue, newValue);
-    for (Element* e : dots()) {
+    EngravingItem::localSpatiumChanged(oldValue, newValue);
+    for (EngravingItem* e : dots()) {
         e->localSpatiumChanged(oldValue, newValue);
     }
-    for (Element* e : el()) {
+    for (EngravingItem* e : el()) {
         e->localSpatiumChanged(oldValue, newValue);
     }
     for (Spanner* spanner : spannerBack()) {
@@ -3032,7 +3032,7 @@ QVariant Note::getProperty(Pid propertyId) const
     default:
         break;
     }
-    return Element::getProperty(propertyId);
+    return EngravingItem::getProperty(propertyId);
 }
 
 //---------------------------------------------------------
@@ -3114,7 +3114,7 @@ bool Note::setProperty(Pid propertyId, const QVariant& v)
         setFixedLine(v.toInt());
         break;
     default:
-        if (!Element::setProperty(propertyId, v)) {
+        if (!EngravingItem::setProperty(propertyId, v)) {
             return false;
         }
         break;
@@ -3166,7 +3166,7 @@ QVariant Note::propertyDefault(Pid propertyId) const
     default:
         break;
     }
-    return Element::propertyDefault(propertyId);
+    return EngravingItem::propertyDefault(propertyId);
 }
 
 //---------------------------------------------------------
@@ -3186,7 +3186,7 @@ QString Note::propertyUserValue(Pid pid) const
         return tpc2name(tpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO, false);
     }
     default:
-        return Element::propertyUserValue(pid);
+        return EngravingItem::propertyUserValue(pid);
     }
 }
 
@@ -3225,7 +3225,7 @@ void Note::setOffTimeOffset(int val)
 
 void Note::setScore(Score* s)
 {
-    Element::setScore(s);
+    EngravingItem::setScore(s);
     if (_tieFor) {
         _tieFor->setScore(s);
     }
@@ -3235,7 +3235,7 @@ void Note::setScore(Score* s)
     for (NoteDot* dot : qAsConst(_dots)) {
         dot->setScore(s);
     }
-    for (Element* el : _el) {
+    for (EngravingItem* el : _el) {
         el->setScore(s);
     }
 }
@@ -3306,7 +3306,7 @@ QString Note::accessibleExtraInfo() const
         rez = QString("%1 %2").arg(rez, accidental()->screenReaderInfo());
     }
     if (!el().empty()) {
-        for (Element* e : el()) {
+        for (EngravingItem* e : el()) {
             if (!score()->selectionFilter().canSelect(e)) {
                 continue;
             }
@@ -3387,7 +3387,7 @@ QString Note::subtypeName() const
 //   returns next element in _el
 //---------------------------------------------------------
 
-Element* Note::nextInEl(Element* e)
+EngravingItem* Note::nextInEl(EngravingItem* e)
 {
     if (e == _el.back()) {
         return nullptr;
@@ -3404,7 +3404,7 @@ Element* Note::nextInEl(Element* e)
 //   returns prev element in _el
 //---------------------------------------------------------
 
-Element* Note::prevInEl(Element* e)
+EngravingItem* Note::prevInEl(EngravingItem* e)
 {
     if (e == _el.front()) {
         return nullptr;
@@ -3425,9 +3425,9 @@ static bool tieValid(Tie* tie)
 //   nextElement
 //---------------------------------------------------------
 
-Element* Note::nextElement()
+EngravingItem* Note::nextElement()
 {
-    Element* e = score()->selection().element();
+    EngravingItem* e = score()->selection().element();
     if (!e && !score()->selection().elements().isEmpty()) {
         e = score()->selection().elements().first();
     }
@@ -3440,7 +3440,7 @@ Element* Note::nextElement()
     case ElementType::FINGERING:
     case ElementType::TEXT:
     case ElementType::BEND: {
-        Element* next = nextInEl(e);           // return next element in _el
+        EngravingItem* next = nextInEl(e);           // return next element in _el
         if (next) {
             return next;
         } else if (tieValid(_tieFor)) {
@@ -3509,9 +3509,9 @@ Element* Note::nextElement()
 //   prevElement
 //---------------------------------------------------------
 
-Element* Note::prevElement()
+EngravingItem* Note::prevElement()
 {
-    Element* e = score()->selection().element();
+    EngravingItem* e = score()->selection().element();
     if (!e && !score()->selection().elements().isEmpty()) {
         e = score()->selection().elements().last();
     }
@@ -3524,7 +3524,7 @@ Element* Note::prevElement()
     case ElementType::FINGERING:
     case ElementType::TEXT:
     case ElementType::BEND: {
-        Element* prev = prevInEl(e);           // return prev element in _el
+        EngravingItem* prev = prevInEl(e);           // return prev element in _el
         if (prev) {
             return prev;
         }
@@ -3553,7 +3553,7 @@ Element* Note::prevElement()
 //   lastElementBeforeSegment
 //---------------------------------------------------------
 
-Element* Note::lastElementBeforeSegment()
+EngravingItem* Note::lastElementBeforeSegment()
 {
     if (!_spannerFor.empty()) {
         for (auto i : qAsConst(_spannerFor)) {
@@ -3575,10 +3575,10 @@ Element* Note::lastElementBeforeSegment()
 //   nextSegmentElement
 //---------------------------------------------------------
 
-Element* Note::nextSegmentElement()
+EngravingItem* Note::nextSegmentElement()
 {
     if (chord()->isGrace()) {
-        return Element::nextSegmentElement();
+        return EngravingItem::nextSegmentElement();
     }
 
     const std::vector<Note*>& notes = chord()->notes();
@@ -3593,10 +3593,10 @@ Element* Note::nextSegmentElement()
 //   prevSegmentElement
 //---------------------------------------------------------
 
-Element* Note::prevSegmentElement()
+EngravingItem* Note::prevSegmentElement()
 {
     if (chord()->isGrace()) {
-        return Element::prevSegmentElement();
+        return EngravingItem::prevSegmentElement();
     }
 
     const std::vector<Note*>& notes = chord()->notes();
@@ -3791,8 +3791,8 @@ Shape Note::shape() const
 
 void Note::undoUnlink()
 {
-    Element::undoUnlink();
-    for (Element* e : _el) {
+    EngravingItem::undoUnlink();
+    for (EngravingItem* e : _el) {
         e->undoUnlink();
     }
 }

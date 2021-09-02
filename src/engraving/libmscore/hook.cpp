@@ -42,7 +42,7 @@ Hook::Hook(Chord* parent)
 //   elementBase
 //---------------------------------------------------------
 
-Element* Hook::elementBase() const
+EngravingItem* Hook::elementBase() const
 {
     return parentElement();
 }

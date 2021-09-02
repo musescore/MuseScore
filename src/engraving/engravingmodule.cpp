@@ -89,8 +89,8 @@ void EngravingModule::onInit(const framework::IApplication::RunMode&)
     Ms::MScore::setNudgeStep50(0.01); // Alt  + cursor key (default 0.01)
 
     Ms::gpaletteScore = compat::ScoreAccess::createMasterScore();
-    if (Ms::ScoreElement::elementsProvider()) {
-        Ms::ScoreElement::elementsProvider()->unreg(Ms::gpaletteScore);
+    if (Ms::EngravingObject::elementsProvider()) {
+        Ms::EngravingObject::elementsProvider()->unreg(Ms::gpaletteScore);
     }
 
     Ms::gpaletteScore->setStyle(DefaultStyle::baseStyle());

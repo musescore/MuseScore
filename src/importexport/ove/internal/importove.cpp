@@ -2178,7 +2178,7 @@ void OveToMScore::convertRepeats(Measure* measure, int part, int staff, int trac
     for (i = 0; i < repeats.size(); ++i) {
         ovebase::RepeatSymbol* repeatPtr = static_cast<ovebase::RepeatSymbol*>(repeats[i]);
         ovebase::RepeatType type = repeatPtr->getRepeatType();
-        Element* e = 0;
+        EngravingItem* e = 0;
 
         switch (type) {
         case ovebase::RepeatType::Segno: {

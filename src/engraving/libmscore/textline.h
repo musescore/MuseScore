@@ -42,7 +42,7 @@ public:
 
     TextLineSegment* clone() const override { return new TextLineSegment(*this); }
 
-    virtual Element* propertyDelegate(Pid) override;
+    virtual EngravingItem* propertyDelegate(Pid) override;
 
     TextLine* textLine() const { return toTextLine(spanner()); }
     void layout() override;
@@ -58,7 +58,7 @@ class TextLine final : public TextLineBase
     Sid getPropertyStyle(Pid) const override;
 
 public:
-    TextLine(Element* parent, bool system=false);
+    TextLine(EngravingItem* parent, bool system=false);
     TextLine(const TextLine&);
     ~TextLine() {}
 

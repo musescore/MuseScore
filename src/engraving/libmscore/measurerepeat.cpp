@@ -94,7 +94,7 @@ void MeasureRepeat::draw(mu::draw::Painter* painter) const
 
 void MeasureRepeat::layout()
 {
-    for (Element* e : el()) {
+    for (EngravingItem* e : el()) {
         e->layout();
     }
 
@@ -273,7 +273,7 @@ Fraction MeasureRepeat::ticks() const
 
 QString MeasureRepeat::accessibleInfo() const
 {
-    return QObject::tr("%1; Duration: %2 measure(s)").arg(Element::accessibleInfo()).arg(numMeasures());
+    return QObject::tr("%1; Duration: %2 measure(s)").arg(EngravingItem::accessibleInfo()).arg(numMeasures());
 }
 
 //---------------------------------------------------------

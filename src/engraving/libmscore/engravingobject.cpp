@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "scoreElement.h"
+#include "engravingobject.h"
 
 #include "translation.h"
 #include "io/xml.h"
@@ -40,7 +40,7 @@
 using namespace mu;
 
 namespace Ms {
-ElementStyle const ScoreElement::emptyStyle;
+ElementStyle const EngravingObject::emptyStyle;
 
 //
 // list has to be synchronized with ElementType enum
@@ -143,8 +143,8 @@ static const ElementName elementNames[] = {
     { ElementType::COMPOUND,             "Compound",             QT_TRANSLATE_NOOP("elementName", "Compound") },
     { ElementType::CHORD,                "Chord",                QT_TRANSLATE_NOOP("elementName", "Chord") },
     { ElementType::SLUR,                 "Slur",                 QT_TRANSLATE_NOOP("elementName", "Slur") },
-    { ElementType::ELEMENT,              "Element",              QT_TRANSLATE_NOOP("elementName", "Element") },
-    { ElementType::ELEMENT_LIST,         "ElementList",          QT_TRANSLATE_NOOP("elementName", "Element list") },
+    { ElementType::ELEMENT,              "EngravingItem",              QT_TRANSLATE_NOOP("elementName", "EngravingItem") },
+    { ElementType::ELEMENT_LIST,         "ElementList",          QT_TRANSLATE_NOOP("elementName", "EngravingItem list") },
     { ElementType::STAFF_LIST,           "StaffList",            QT_TRANSLATE_NOOP("elementName", "Staff list") },
     { ElementType::MEASURE_LIST,         "MeasureList",          QT_TRANSLATE_NOOP("elementName", "Measure list") },
     { ElementType::HBOX,                 "HBox",                 QT_TRANSLATE_NOOP("elementName", "Horizontal frame") },
@@ -161,7 +161,7 @@ static const ElementName elementNames[] = {
 //   ScoreElement
 //---------------------------------------------------------
 
-ScoreElement::ScoreElement(const ElementType& type, ScoreElement* parent)
+EngravingObject::EngravingObject(const ElementType& type, EngravingObject* parent)
     : m_type(type), m_parent(parent)
 {
     IF_ASSERT_FAILED(this != parent) {
@@ -178,7 +178,7 @@ ScoreElement::ScoreElement(const ElementType& type, ScoreElement* parent)
     }
 }
 
-ScoreElement::ScoreElement(const ScoreElement& se)
+EngravingObject::EngravingObject(const EngravingObject& se)
 {
     m_type = se.m_type;
     m_parent = se.m_parent;
@@ -199,7 +199,7 @@ ScoreElement::ScoreElement(const ScoreElement& se)
 //   ~ScoreElement
 //---------------------------------------------------------
 
-ScoreElement::~ScoreElement()
+EngravingObject::~EngravingObject()
 {
     if (elementsProvider()) {
         elementsProvider()->unreg(this);
@@ -219,10 +219,10 @@ ScoreElement::~ScoreElement()
 //   treeChildIdx
 //---------------------------------------------------------
 
-int ScoreElement::treeChildIdx(ScoreElement* child) const
+int EngravingObject::treeChildIdx(EngravingObject* child) const
 {
     int i = 0;
-    for (const ScoreElement* el : (*this)) {
+    for (const EngravingObject* el : (*this)) {
         if (el == child) {
             return i;
         }
@@ -234,12 +234,12 @@ int ScoreElement::treeChildIdx(ScoreElement* child) const
 //---------------------------------------------------------
 //   scanElements
 /// Recursively apply scanElements to all children.
-/// See also Element::scanElements.
+/// See also EngravingItem::scanElements.
 //---------------------------------------------------------
 
-void ScoreElement::scanElements(void* data, void (* func)(void*, Element*), bool all)
+void EngravingObject::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
-    for (ScoreElement* child : (*this)) {
+    for (EngravingObject* child : (*this)) {
         child->scanElements(data, func, all);
     }
 }
@@ -248,7 +248,7 @@ void ScoreElement::scanElements(void* data, void (* func)(void*, Element*), bool
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant ScoreElement::propertyDefault(Pid pid, Tid tid) const
+QVariant EngravingObject::propertyDefault(Pid pid, Tid tid) const
 {
     for (const StyledProperty& spp : *textStyle(tid)) {
         if (spp.pid == pid) {
@@ -262,7 +262,7 @@ QVariant ScoreElement::propertyDefault(Pid pid, Tid tid) const
 //   propertyDefault
 //---------------------------------------------------------
 
-QVariant ScoreElement::propertyDefault(Pid pid) const
+QVariant EngravingObject::propertyDefault(Pid pid) const
 {
     Sid sid = getPropertyStyle(pid);
     if (sid != Sid::NOSTYLE) {
@@ -276,7 +276,7 @@ QVariant ScoreElement::propertyDefault(Pid pid) const
 //   initElementStyle
 //---------------------------------------------------------
 
-void ScoreElement::initElementStyle(const ElementStyle* ss)
+void EngravingObject::initElementStyle(const ElementStyle* ss)
 {
     _elementStyle = ss;
     size_t n      = _elementStyle->size();
@@ -295,7 +295,7 @@ void ScoreElement::initElementStyle(const ElementStyle* ss)
 //   resetProperty
 //---------------------------------------------------------
 
-void ScoreElement::resetProperty(Pid pid)
+void EngravingObject::resetProperty(Pid pid)
 {
     QVariant v = propertyDefault(pid);
     if (v.isValid()) {
@@ -311,7 +311,7 @@ void ScoreElement::resetProperty(Pid pid)
 //   undoResetProperty
 //---------------------------------------------------------
 
-void ScoreElement::undoResetProperty(Pid id)
+void EngravingObject::undoResetProperty(Pid id)
 {
     PropertyFlags f = propertyFlags(id);
     if (f == PropertyFlags::UNSTYLED) {
@@ -324,7 +324,7 @@ void ScoreElement::undoResetProperty(Pid id)
 //   isStyled
 //---------------------------------------------------------
 
-bool ScoreElement::isStyled(Pid pid) const
+bool EngravingObject::isStyled(Pid pid) const
 {
     PropertyFlags f = propertyFlags(pid);
     return f == PropertyFlags::STYLED;
@@ -334,7 +334,7 @@ bool ScoreElement::isStyled(Pid pid) const
 //   changeProperty
 //---------------------------------------------------------
 
-static void changeProperty(ScoreElement* e, Pid t, const QVariant& st, PropertyFlags ps)
+static void changeProperty(EngravingObject* e, Pid t, const QVariant& st, PropertyFlags ps)
 {
     if (e->getProperty(t) != st || e->propertyFlags(t) != ps) {
         if (e->isBracketItem()) {
@@ -350,10 +350,10 @@ static void changeProperty(ScoreElement* e, Pid t, const QVariant& st, PropertyF
 //   changeProperties
 //---------------------------------------------------------
 
-static void changeProperties(ScoreElement* e, Pid t, const QVariant& st, PropertyFlags ps)
+static void changeProperties(EngravingObject* e, Pid t, const QVariant& st, PropertyFlags ps)
 {
     if (propertyLink(t)) {
-        for (ScoreElement* ee : e->linkList()) {
+        for (EngravingObject* ee : e->linkList()) {
             changeProperty(ee, t, st, ps);
         }
     } else {
@@ -365,12 +365,12 @@ static void changeProperties(ScoreElement* e, Pid t, const QVariant& st, Propert
 //   undoChangeProperty
 //---------------------------------------------------------
 
-void ScoreElement::undoChangeProperty(Pid id, const QVariant& v)
+void EngravingObject::undoChangeProperty(Pid id, const QVariant& v)
 {
     undoChangeProperty(id, v, propertyFlags(id));
 }
 
-void ScoreElement::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
+void EngravingObject::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
 {
     if ((getProperty(id) == v) && (propertyFlags(id) == ps)) {
         return;
@@ -380,16 +380,16 @@ void ScoreElement::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags p
         changeProperties(this, id, v, ps);
 
         if (isStyled(Pid::OFFSET)) {
-            // TODO: maybe it just makes more sense to do this in Element::undoChangeProperty,
+            // TODO: maybe it just makes more sense to do this in EngravingItem::undoChangeProperty,
             // but some of the overrides call ScoreElement explicitly
             qreal sp;
-            if (isElement()) {
-                sp = toElement(this)->spatium();
+            if (isEngravingItem()) {
+                sp = toEngravingItem(this)->spatium();
             } else {
                 sp = score()->spatium();
             }
-            ScoreElement::undoChangeProperty(Pid::OFFSET, score()->styleV(getPropertyStyle(Pid::OFFSET)).value<PointF>() * sp);
-            Element* e = toElement(this);
+            EngravingObject::undoChangeProperty(Pid::OFFSET, score()->styleV(getPropertyStyle(Pid::OFFSET)).value<PointF>() * sp);
+            EngravingItem* e = toEngravingItem(this);
             e->setOffsetChanged(false);
         }
     } else if (id == Pid::SUB_STYLE) {
@@ -406,8 +406,8 @@ void ScoreElement::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags p
         }
     } else if (id == Pid::OFFSET) {
         // TODO: do this in caller?
-        if (isElement()) {
-            Element* e = toElement(this);
+        if (isEngravingItem()) {
+            EngravingItem* e = toEngravingItem(this);
             if (e->offset() != v.value<PointF>()) {
                 e->setOffsetChanged(true, false, v.value<PointF>() - e->offset());
             }
@@ -423,7 +423,7 @@ void ScoreElement::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags p
 //   undoPushProperty
 //---------------------------------------------------------
 
-void ScoreElement::undoPushProperty(Pid id)
+void EngravingObject::undoPushProperty(Pid id)
 {
     QVariant val = getProperty(id);
     score()->undoStack()->push1(new ChangeProperty(this, id, val));
@@ -433,7 +433,7 @@ void ScoreElement::undoPushProperty(Pid id)
 //   readProperty
 //---------------------------------------------------------
 
-void ScoreElement::readProperty(XmlReader& e, Pid id)
+void EngravingObject::readProperty(XmlReader& e, Pid id)
 {
     QVariant v = Ms::readProperty(id, e);
     switch (propertyType(id)) {
@@ -459,7 +459,7 @@ void ScoreElement::readProperty(XmlReader& e, Pid id)
     }
 }
 
-bool ScoreElement::readProperty(const QStringRef& s, XmlReader& e, Pid id)
+bool EngravingObject::readProperty(const QStringRef& s, XmlReader& e, Pid id)
 {
     if (s == propertyName(id)) {
         readProperty(e, id);
@@ -476,7 +476,7 @@ bool ScoreElement::readProperty(const QStringRef& s, XmlReader& e, Pid id)
 //    - properties without style are written if different from default value
 //-----------------------------------------------------------------------------
 
-void ScoreElement::writeProperty(XmlWriter& xml, Pid pid) const
+void EngravingObject::writeProperty(XmlWriter& xml, Pid pid) const
 {
     if (isStyled(pid)) {
         return;
@@ -540,7 +540,7 @@ void ScoreElement::writeProperty(XmlWriter& xml, Pid pid) const
 //   propertyId
 //---------------------------------------------------------
 
-Pid ScoreElement::propertyId(const QStringRef& xmlName) const
+Pid EngravingObject::propertyId(const QStringRef& xmlName) const
 {
     return Ms::propertyId(xmlName);
 }
@@ -549,7 +549,7 @@ Pid ScoreElement::propertyId(const QStringRef& xmlName) const
 //   propertyUserValue
 //---------------------------------------------------------
 
-QString ScoreElement::propertyUserValue(Pid id) const
+QString EngravingObject::propertyUserValue(Pid id) const
 {
     QVariant val = getProperty(id);
     switch (propertyType(id)) {
@@ -572,7 +572,7 @@ QString ScoreElement::propertyUserValue(Pid id) const
 //   readStyledProperty
 //---------------------------------------------------------
 
-bool ScoreElement::readStyledProperty(XmlReader& e, const QStringRef& tag)
+bool EngravingObject::readStyledProperty(XmlReader& e, const QStringRef& tag)
 {
     for (const StyledProperty& spp : *styledProperties()) {
         if (readProperty(tag, e, spp.pid)) {
@@ -586,7 +586,7 @@ bool ScoreElement::readStyledProperty(XmlReader& e, const QStringRef& tag)
 //   writeStyledProperties
 //---------------------------------------------------------
 
-void ScoreElement::writeStyledProperties(XmlWriter& xml) const
+void EngravingObject::writeStyledProperties(XmlWriter& xml) const
 {
     for (const StyledProperty& spp : *styledProperties()) {
         writeProperty(xml, spp.pid);
@@ -597,7 +597,7 @@ void ScoreElement::writeStyledProperties(XmlWriter& xml) const
 //   reset
 //---------------------------------------------------------
 
-void ScoreElement::reset()
+void EngravingObject::reset()
 {
     for (const StyledProperty& spp : *styledProperties()) {
         undoResetProperty(spp.pid);
@@ -608,7 +608,7 @@ void ScoreElement::reset()
 //   readAddConnector
 //---------------------------------------------------------
 
-void ScoreElement::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
+void EngravingObject::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
 {
     Q_UNUSED(pasteMode);
     qDebug("Cannot add connector %s to %s", info->connector()->name(), name());
@@ -619,7 +619,7 @@ void ScoreElement::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
 //    link this to element
 //---------------------------------------------------------
 
-void ScoreElement::linkTo(ScoreElement* element)
+void EngravingObject::linkTo(EngravingObject* element)
 {
     Q_ASSERT(element != this);
     Q_ASSERT(!_links);
@@ -644,7 +644,7 @@ void ScoreElement::linkTo(ScoreElement* element)
 //   unlink
 //---------------------------------------------------------
 
-void ScoreElement::unlink()
+void EngravingObject::unlink()
 {
     if (!_links) {
         return;
@@ -669,7 +669,7 @@ void ScoreElement::unlink()
 ///  linked to this element
 //---------------------------------------------------------
 
-bool ScoreElement::isLinked(ScoreElement* se) const
+bool EngravingObject::isLinked(EngravingObject* se) const
 {
     if (se == this || !_links) {
         return false;
@@ -686,7 +686,7 @@ bool ScoreElement::isLinked(ScoreElement* se) const
 //   undoUnlink
 //---------------------------------------------------------
 
-void ScoreElement::undoUnlink()
+void EngravingObject::undoUnlink()
 {
     if (_links) {
         score()->undo(new Unlink(this));
@@ -697,13 +697,13 @@ void ScoreElement::undoUnlink()
 //   linkList
 //---------------------------------------------------------
 
-QList<ScoreElement*> ScoreElement::linkList() const
+QList<EngravingObject*> EngravingObject::linkList() const
 {
-    QList<ScoreElement*> el;
+    QList<EngravingObject*> el;
     if (_links) {
         el = *_links;
     } else {
-        el.append(const_cast<ScoreElement*>(this));
+        el.append(const_cast<EngravingObject*>(this));
     }
     return el;
 }
@@ -741,15 +741,15 @@ void LinkedElements::setLid(Score* score, int id)
 //    be written to the file prior to others.
 //---------------------------------------------------------
 
-ScoreElement* LinkedElements::mainElement()
+EngravingObject* LinkedElements::mainElement()
 {
     if (isEmpty()) {
         return nullptr;
     }
     MasterScore* ms = at(0)->masterScore();
-    const bool elements = at(0)->isElement();
+    const bool elements = at(0)->isEngravingItem();
     const bool staves = at(0)->isStaff();
-    return *std::min_element(begin(), end(), [ms, elements, staves](ScoreElement* s1, ScoreElement* s2) {
+    return *std::min_element(begin(), end(), [ms, elements, staves](EngravingObject* s1, EngravingObject* s2) {
         if (s1->score() == ms && s2->score() != ms) {
             return true;
         }
@@ -762,8 +762,8 @@ ScoreElement* LinkedElements::mainElement()
         if (elements) {
             // Now we compare either two elements from master score
             // or two elements from excerpt.
-            Element* e1 = toElement(s1);
-            Element* e2 = toElement(s2);
+            EngravingItem* e1 = toEngravingItem(s1);
+            EngravingItem* e2 = toEngravingItem(s2);
             const int tr1 = e1->track();
             const int tr2 = e2->track();
             if (tr1 == tr2) {
@@ -812,12 +812,12 @@ ScoreElement* LinkedElements::mainElement()
     });
 }
 
-void ScoreElement::setScore(Score* s)
+void EngravingObject::setScore(Score* s)
 {
     _score = s;
 }
 
-ScoreElement* ScoreElement::parent(bool isIncludeDummy) const
+EngravingObject* EngravingObject::parent(bool isIncludeDummy) const
 {
     if (!m_parent) {
         return nullptr;
@@ -843,7 +843,7 @@ ScoreElement* ScoreElement::parent(bool isIncludeDummy) const
     return m_parent;
 }
 
-void ScoreElement::setParent(ScoreElement* p, bool isExplicitly)
+void EngravingObject::setParent(EngravingObject* p, bool isExplicitly)
 {
     IF_ASSERT_FAILED(this != p) {
         return;
@@ -859,7 +859,7 @@ void ScoreElement::setParent(ScoreElement* p, bool isExplicitly)
     m_isParentExplicitlySet = isExplicitly;
 }
 
-void ScoreElement::moveToDummy()
+void EngravingObject::moveToDummy()
 {
     Score* sc = score();
     IF_ASSERT_FAILED(sc) {
@@ -871,24 +871,24 @@ void ScoreElement::moveToDummy()
     }
 }
 
-void ScoreElement::setIsDummy(bool arg)
+void EngravingObject::setIsDummy(bool arg)
 {
     m_isDummy = arg;
 }
 
-bool ScoreElement::isDummy() const
+bool EngravingObject::isDummy() const
 {
     return m_isDummy;
 }
 
-Score* ScoreElement::score(bool required) const
+Score* EngravingObject::score(bool required) const
 {
     if (_score) {
         return _score;
     }
 
     Score* sc = nullptr;
-    ScoreElement* e = const_cast<ScoreElement*>(this);
+    EngravingObject* e = const_cast<EngravingObject*>(this);
     while (e) {
         if (e->isScore()) {
             sc = toScore(e);
@@ -906,7 +906,7 @@ Score* ScoreElement::score(bool required) const
     return sc;
 }
 
-MasterScore* ScoreElement::masterScore() const
+MasterScore* EngravingObject::masterScore() const
 {
     return score()->masterScore();
 }
@@ -915,7 +915,7 @@ MasterScore* ScoreElement::masterScore() const
 //   getPropertyFlagsIdx
 //---------------------------------------------------------
 
-int ScoreElement::getPropertyFlagsIdx(Pid id) const
+int EngravingObject::getPropertyFlagsIdx(Pid id) const
 {
     int i = 0;
     for (const StyledProperty& p : *_elementStyle) {
@@ -931,7 +931,7 @@ int ScoreElement::getPropertyFlagsIdx(Pid id) const
 //   propertyFlags
 //---------------------------------------------------------
 
-PropertyFlags ScoreElement::propertyFlags(Pid id) const
+PropertyFlags EngravingObject::propertyFlags(Pid id) const
 {
     static PropertyFlags f = PropertyFlags::NOSTYLE;
 
@@ -946,7 +946,7 @@ PropertyFlags ScoreElement::propertyFlags(Pid id) const
 //   setPropertyFlags
 //---------------------------------------------------------
 
-void ScoreElement::setPropertyFlags(Pid id, PropertyFlags f)
+void EngravingObject::setPropertyFlags(Pid id, PropertyFlags f)
 {
     int i = getPropertyFlagsIdx(id);
     if (i == -1) {
@@ -959,7 +959,7 @@ void ScoreElement::setPropertyFlags(Pid id, PropertyFlags f)
 //   getPropertyStyle
 //---------------------------------------------------------
 
-Sid ScoreElement::getPropertyStyle(Pid id) const
+Sid EngravingObject::getPropertyStyle(Pid id) const
 {
     for (const StyledProperty& p : *_elementStyle) {
         if (p.pid == id) {
@@ -973,7 +973,7 @@ Sid ScoreElement::getPropertyStyle(Pid id) const
 //   styleChanged
 //---------------------------------------------------------
 
-void ScoreElement::styleChanged()
+void EngravingObject::styleChanged()
 {
     for (const StyledProperty& spp : *_elementStyle) {
         PropertyFlags f = propertyFlags(spp.pid);
@@ -987,7 +987,7 @@ void ScoreElement::styleChanged()
 //   name
 //---------------------------------------------------------
 
-const char* ScoreElement::name() const
+const char* EngravingObject::name() const
 {
     return name(type());
 }
@@ -996,7 +996,7 @@ const char* ScoreElement::name() const
 //   name
 //---------------------------------------------------------
 
-const char* ScoreElement::name(ElementType type)
+const char* EngravingObject::name(ElementType type)
 {
     return elementNames[int(type)].name;
 }
@@ -1005,7 +1005,7 @@ const char* ScoreElement::name(ElementType type)
 //   userName
 //---------------------------------------------------------
 
-QString ScoreElement::userName() const
+QString EngravingObject::userName() const
 {
     return qtrc("elementName", elementNames[int(type())].userName);
 }
@@ -1014,7 +1014,7 @@ QString ScoreElement::userName() const
 //   name2type
 //---------------------------------------------------------
 
-ElementType ScoreElement::name2type(const QStringRef& s, bool silent)
+ElementType EngravingObject::name2type(const QStringRef& s, bool silent)
 {
     for (int i = 0; i < int(ElementType::MAXTYPE); ++i) {
         if (s == elementNames[i].name) {
@@ -1031,7 +1031,7 @@ ElementType ScoreElement::name2type(const QStringRef& s, bool silent)
 //   isSLineSegment
 //---------------------------------------------------------
 
-bool ScoreElement::isSLineSegment() const
+bool EngravingObject::isSLineSegment() const
 {
     return isHairpinSegment() || isOttavaSegment() || isPedalSegment()
            || isTrillSegment() || isVoltaSegment() || isTextLineSegment()
@@ -1042,7 +1042,7 @@ bool ScoreElement::isSLineSegment() const
 //   isText
 //---------------------------------------------------------
 
-bool ScoreElement::isTextBase() const
+bool EngravingObject::isTextBase() const
 {
     return type() == ElementType::TEXT
            || type() == ElementType::LYRICS
@@ -1068,15 +1068,15 @@ bool ScoreElement::isTextBase() const
 //   styleValue
 //---------------------------------------------------------
 
-QVariant ScoreElement::styleValue(Pid pid, Sid sid) const
+QVariant EngravingObject::styleValue(Pid pid, Sid sid) const
 {
     switch (propertyType(pid)) {
     case P_TYPE::SP_REAL:
         return score()->styleP(sid);
     case P_TYPE::POINT_SP: {
         PointF val = score()->styleV(sid).value<PointF>() * score()->spatium();
-        if (isElement()) {
-            const Element* e = toElement(this);
+        if (isEngravingItem()) {
+            const EngravingItem* e = toEngravingItem(this);
             if (e->staff() && !e->systemFlag()) {
                 val *= e->staff()->staffMag(e->tick());
             }
@@ -1087,8 +1087,8 @@ QVariant ScoreElement::styleValue(Pid pid, Sid sid) const
         PointF val = score()->styleV(sid).value<PointF>();
         if (offsetIsSpatiumDependent()) {
             val *= score()->spatium();
-            if (isElement()) {
-                const Element* e = toElement(this);
+            if (isEngravingItem()) {
+                const EngravingItem* e = toEngravingItem(this);
                 if (e->staff() && !e->systemFlag()) {
                     val *= e->staff()->staffMag(e->tick());
                 }

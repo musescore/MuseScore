@@ -40,7 +40,7 @@ class TieSegment final : public SlurTieSegment
     mu::PointF getAutoAdjust() const { return autoAdjustOffset; }
 
 protected:
-    void changeAnchor(EditData&, Element*) override;
+    void changeAnchor(EditData&, EngravingItem*) override;
 
 public:
     TieSegment(Score* s)
@@ -75,12 +75,12 @@ class Tie final : public SlurTie
     static Note* editEndNote;
 
 public:
-    Tie(Element* parent = 0);
+    Tie(EngravingItem* parent = 0);
 
     Tie* clone() const override { return new Tie(*this); }
 
     void setStartNote(Note* note);
-    void setEndNote(Note* note) { setEndElement((Element*)note); }
+    void setEndNote(Note* note) { setEndElement((EngravingItem*)note); }
     Note* startNote() const;
     Note* endNote() const;
 

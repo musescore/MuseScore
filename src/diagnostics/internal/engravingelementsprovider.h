@@ -31,23 +31,23 @@ public:
     EngravingElementsProvider() = default;
 
     // registr
-    void reg(const Ms::ScoreElement* e) override;
-    void unreg(const Ms::ScoreElement* e) override;
-    std::list<const Ms::ScoreElement*> elements() const override;
-    async::Channel<const Ms::ScoreElement*, bool> registreChanged() const override;
+    void reg(const Ms::EngravingObject* e) override;
+    void unreg(const Ms::EngravingObject* e) override;
+    std::list<const Ms::EngravingObject*> elements() const override;
+    async::Channel<const Ms::EngravingObject*, bool> registreChanged() const override;
 
     // debug draw
-    void select(const Ms::ScoreElement* e, bool arg) override;
-    bool isSelected(const Ms::ScoreElement* e) const override;
-    async::Channel<const Ms::ScoreElement*, bool> selectChanged() const override;
+    void select(const Ms::EngravingObject* e, bool arg) override;
+    bool isSelected(const Ms::EngravingObject* e) const override;
+    async::Channel<const Ms::EngravingObject*, bool> selectChanged() const override;
 
 private:
 
-    std::list<const Ms::ScoreElement*> m_elements;
-    async::Channel<const Ms::ScoreElement*, bool> m_registreChanged;
+    std::list<const Ms::EngravingObject*> m_elements;
+    async::Channel<const Ms::EngravingObject*, bool> m_registreChanged;
 
-    std::list<const Ms::ScoreElement*> m_selected;
-    async::Channel<const Ms::ScoreElement*, bool> m_selectChanged;
+    std::list<const Ms::EngravingObject*> m_selected;
+    async::Channel<const Ms::EngravingObject*, bool> m_selectChanged;
 };
 }
 

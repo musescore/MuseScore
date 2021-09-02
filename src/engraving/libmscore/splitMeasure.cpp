@@ -77,8 +77,8 @@ void Score::splitMeasure(Segment* segment)
     std::list<std::tuple<Spanner*, Fraction, Fraction> > sl;
     for (auto i : spanner()) {
         Spanner* s = i.second;
-        Element* start = s->startElement();
-        Element* end = s->endElement();
+        EngravingItem* start = s->startElement();
+        EngravingItem* end = s->endElement();
         if (s->tick() >= stick && s->tick() < etick) {
             start = nullptr;
         }

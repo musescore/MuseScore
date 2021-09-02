@@ -52,7 +52,7 @@ static const ElementStyle stemStyle {
 //---------------------------------------------------------
 
 Stem::Stem(Chord* parent)
-    : Element(ElementType::STEM, parent)
+    : EngravingItem(ElementType::STEM, parent)
 {
     initElementStyle(&stemStyle);
     resetProperty(Pid::USER_LEN);
@@ -61,7 +61,7 @@ Stem::Stem(Chord* parent)
 //---------------------------------------------------------
 //   elementBase
 //---------------------------------------------------------
-Element* Stem::elementBase() const
+EngravingItem* Stem::elementBase() const
 {
     return parentElement();
 }
@@ -250,7 +250,7 @@ void Stem::draw(mu::draw::Painter* painter) const
 void Stem::write(XmlWriter& xml) const
 {
     xml.stag(this);
-    Element::writeProperties(xml);
+    EngravingItem::writeProperties(xml);
     writeProperty(xml, Pid::USER_LEN);
     writeProperty(xml, Pid::LINE_WIDTH);
     xml.etag();
@@ -279,7 +279,7 @@ bool Stem::readProperties(XmlReader& e)
 
     if (readProperty(tag, e, Pid::USER_LEN)) {
     } else if (readStyledProperty(e, tag)) {
-    } else if (Element::readProperties(e)) {
+    } else if (EngravingItem::readProperties(e)) {
     } else {
         return false;
     }
@@ -301,7 +301,7 @@ std::vector<mu::PointF> Stem::gripsPositions(const EditData&) const
 
 void Stem::startEdit(EditData& ed)
 {
-    Element::startEdit(ed);
+    EngravingItem::startEdit(ed);
     ElementEditData* eed = ed.getData(this);
     eed->pushProperty(Pid::USER_LEN);
 }
@@ -328,7 +328,7 @@ void Stem::editDrag(EditData& ed)
 void Stem::reset()
 {
     undoChangeProperty(Pid::USER_LEN, 0.0);
-    Element::reset();
+    EngravingItem::reset();
 }
 
 //---------------------------------------------------------
@@ -337,7 +337,7 @@ void Stem::reset()
 
 bool Stem::acceptDrop(EditData& data) const
 {
-    Element* e = data.dropElement;
+    EngravingItem* e = data.dropElement;
     if ((e->type() == ElementType::TREMOLO) && (toTremolo(e)->tremoloType() <= TremoloType::R64)) {
         return true;
     }
@@ -348,9 +348,9 @@ bool Stem::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-Element* Stem::drop(EditData& data)
+EngravingItem* Stem::drop(EditData& data)
 {
-    Element* e = data.dropElement;
+    EngravingItem* e = data.dropElement;
     Chord* ch  = chord();
 
     switch (e->type()) {
@@ -379,7 +379,7 @@ QVariant Stem::getProperty(Pid propertyId) const
     case Pid::STEM_DIRECTION:
         return QVariant::fromValue<Direction>(chord()->stemDirection());
     default:
-        return Element::getProperty(propertyId);
+        return EngravingItem::getProperty(propertyId);
     }
 }
 
@@ -400,7 +400,7 @@ bool Stem::setProperty(Pid propertyId, const QVariant& v)
         chord()->setStemDirection(v.value<Direction>());
         break;
     default:
-        return Element::setProperty(propertyId, v);
+        return EngravingItem::setProperty(propertyId, v);
     }
     triggerLayout();
     return true;
@@ -420,7 +420,7 @@ QVariant Stem::propertyDefault(Pid id) const
     case Pid::STEM_DIRECTION:
         return QVariant::fromValue<Direction>(Direction::AUTO);
     default:
-        return Element::propertyDefault(id);
+        return EngravingItem::propertyDefault(id);
     }
 }
 

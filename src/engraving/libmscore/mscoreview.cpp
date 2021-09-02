@@ -31,7 +31,7 @@ namespace Ms {
 //   elementLower
 //---------------------------------------------------------
 
-static bool elementLower(const Element* e1, const Element* e2)
+static bool elementLower(const EngravingItem* e1, const EngravingItem* e2)
 {
     if (!e1->selectable()) {
         return false;
@@ -46,10 +46,10 @@ static bool elementLower(const Element* e1, const Element* e2)
 //   elementAt
 //---------------------------------------------------------
 
-Element* MuseScoreView::elementAt(const mu::PointF& p)
+EngravingItem* MuseScoreView::elementAt(const mu::PointF& p)
 {
-    QList<Element*> el = elementsAt(p);
-    Element* e = el.value(0);
+    QList<EngravingItem*> el = elementsAt(p);
+    EngravingItem* e = el.value(0);
     if (e && e->isPage()) {
         e = el.value(1);
     }
@@ -78,9 +78,9 @@ Page* MuseScoreView::point2page(const mu::PointF& p)
 //    p is in canvas coordinates
 //---------------------------------------------------------
 
-const QList<Element*> MuseScoreView::elementsAt(const mu::PointF& p)
+const QList<EngravingItem*> MuseScoreView::elementsAt(const mu::PointF& p)
 {
-    QList<Element*> el;
+    QList<EngravingItem*> el;
 
     Page* page = point2page(p);
     if (page) {

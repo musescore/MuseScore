@@ -74,7 +74,7 @@ void TestBreath::breath()
     // do
     score->startCmd();
     score->cmdSelectAll();
-    for (Element* e : score->selection().elements()) {
+    for (EngravingItem* e : score->selection().elements()) {
         EditData dd(0);
         Breath* b = new Breath(score->dummy()->segment());
         b->setSymId(SymId::breathMarkComma);

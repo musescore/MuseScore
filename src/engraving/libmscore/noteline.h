@@ -38,7 +38,7 @@ class NoteLine final : public TextLineBase
     Note* _endNote;
 
 public:
-    NoteLine(Element* parent);
+    NoteLine(EngravingItem* parent);
     NoteLine(const NoteLine&);
     ~NoteLine() {}
 

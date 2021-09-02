@@ -27,7 +27,7 @@
 #include "libmscore/masterscore.h"
 #include "libmscore/scorefont.h"
 #include "libmscore/sym.h"
-#include "libmscore/element.h"
+#include "libmscore/engravingitem.h"
 #include "libmscore/symbol.h"
 
 #include "palettewidget.h"

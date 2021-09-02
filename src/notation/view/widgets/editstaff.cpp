@@ -419,7 +419,7 @@ void EditStaff::initStaff()
     const INotationPtr notation = this->notation();
     const INotationInteractionPtr interaction = notation ? notation->interaction() : nullptr;
     auto context = interaction ? interaction->hitElementContext() : INotationInteraction::HitElementContext();
-    const Element* element = Ms::toMeasure(context.element);
+    const EngravingItem* element = Ms::toMeasure(context.element);
 
     if (!element || !context.staff) {
         return;

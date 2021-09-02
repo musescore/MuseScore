@@ -65,7 +65,7 @@ static const ElementStyle fretStyle {
 //---------------------------------------------------------
 
 FretDiagram::FretDiagram(Segment* parent)
-    : Element(ElementType::FRET_DIAGRAM, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+    : EngravingItem(ElementType::FRET_DIAGRAM, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     font.setFamily("FreeSans");
     font.setPointSizeF(4.0 * mag());
@@ -73,7 +73,7 @@ FretDiagram::FretDiagram(Segment* parent)
 }
 
 FretDiagram::FretDiagram(const FretDiagram& f)
-    : Element(f)
+    : EngravingItem(f)
 {
     _strings    = f._strings;
     _frets      = f._frets;
@@ -105,12 +105,12 @@ FretDiagram::~FretDiagram()
 //   linkedClone
 //---------------------------------------------------------
 
-Element* FretDiagram::linkedClone()
+EngravingItem* FretDiagram::linkedClone()
 {
     FretDiagram* e = clone();
     e->setAutoplace(true);
     if (_harmony) {
-        Element* newHarmony = _harmony->linkedClone();
+        EngravingItem* newHarmony = _harmony->linkedClone();
         e->add(newHarmony);
     }
     score()->undo(new Link(e, this));
@@ -188,7 +188,7 @@ PointF FretDiagram::pagePos() const
         }
         return PointF(pageX(), yp);
     } else {
-        return Element::pagePos();
+        return EngravingItem::pagePos();
     }
 }
 
@@ -504,7 +504,7 @@ void FretDiagram::layout()
     qreal noteheadWidth = 0;
     if (pSeg->isChordRestType()) {
         int idx = staff()->idx();
-        for (Element* e = pSeg->firstElementOfSegment(pSeg, idx); e; e = pSeg->nextElementOfSegment(pSeg, e, idx)) {
+        for (EngravingItem* e = pSeg->firstElementOfSegment(pSeg, idx); e; e = pSeg->nextElementOfSegment(pSeg, e, idx)) {
             if (e->isRest()) {
                 Rest* r = toRest(e);
                 noteheadWidth = symWidth(r->sym());
@@ -562,7 +562,7 @@ void FretDiagram::layout()
 //---------------------------------------------------------
 //   centerX
 ///   used by harmony for layout. Keep in sync with layout, same dotd and x as above
-//    also used in Element::canvasPos().
+//    also used in EngravingItem::canvasPos().
 //---------------------------------------------------------
 
 qreal FretDiagram::centerX() const
@@ -600,7 +600,7 @@ void FretDiagram::write(XmlWriter& xml) const
     for (Pid p : pids) {
         writeProperty(xml, p);
     }
-    Element::writeProperties(xml);
+    EngravingItem::writeProperties(xml);
 
     if (_harmony) {
         _harmony->write(xml);
@@ -825,7 +825,7 @@ void FretDiagram::read(XmlReader& e)
             Harmony* h = new Harmony(this->score()->dummy()->segment());
             h->read(e);
             add(h);
-        } else if (!Element::readProperties(e)) {
+        } else if (!EngravingItem::readProperties(e)) {
             e.unknown();
         }
     }
@@ -877,7 +877,7 @@ void FretDiagram::readNew(XmlReader& e)
             int fret = e.readInt();
 
             setBarre(start, end, fret);
-        } else if (!Element::readProperties(e)) {
+        } else if (!EngravingItem::readProperties(e)) {
             e.unknown();
         }
     }
@@ -977,7 +977,7 @@ void FretDiagram::setBarre(int string, int fret, bool add /*= false*/)
 
 void FretDiagram::undoSetFretDot(int _string, int _fret, bool _add /*= true*/, FretDotType _dtype /*= FretDotType::NORMAl*/)
 {
-    for (ScoreElement* e : linkList()) {
+    for (EngravingObject* e : linkList()) {
         FretDiagram* fd = toFretDiagram(e);
         fd->score()->undo(new FretDot(fd, _string, _fret, _add, _dtype));
     }
@@ -989,7 +989,7 @@ void FretDiagram::undoSetFretDot(int _string, int _fret, bool _add /*= true*/, F
 
 void FretDiagram::undoSetFretMarker(int _string, FretMarkerType _mtype)
 {
-    for (ScoreElement* e : linkList()) {
+    for (EngravingObject* e : linkList()) {
         FretDiagram* fd = toFretDiagram(e);
         fd->score()->undo(new FretMarker(fd, _string, _mtype));
     }
@@ -1002,7 +1002,7 @@ void FretDiagram::undoSetFretMarker(int _string, FretMarkerType _mtype)
 
 void FretDiagram::undoSetFretBarre(int _string, int _fret, bool _add /*= false*/)
 {
-    for (ScoreElement* e : linkList()) {
+    for (EngravingObject* e : linkList()) {
         FretDiagram* fd = toFretDiagram(e);
         fd->score()->undo(new FretBarre(fd, _string, _fret, _add));
     }
@@ -1118,7 +1118,7 @@ void FretDiagram::clear()
 
 void FretDiagram::undoFretClear()
 {
-    for (ScoreElement* e : linkList()) {
+    for (EngravingObject* e : linkList()) {
         FretDiagram* fd = toFretDiagram(e);
         fd->score()->undo(new FretClear(fd));
     }
@@ -1190,7 +1190,7 @@ void FretDiagram::setHarmony(QString harmonyText)
 //   add
 //---------------------------------------------------------
 
-void FretDiagram::add(Element* e)
+void FretDiagram::add(EngravingItem* e)
 {
     e->setParent(this);
     if (e->isHarmony()) {
@@ -1211,7 +1211,7 @@ void FretDiagram::add(Element* e)
 //   remove
 //---------------------------------------------------------
 
-void FretDiagram::remove(Element* e)
+void FretDiagram::remove(EngravingItem* e)
 {
     if (e == _harmony) {
         _harmony = 0;
@@ -1233,9 +1233,9 @@ bool FretDiagram::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-Element* FretDiagram::drop(EditData& data)
+EngravingItem* FretDiagram::drop(EditData& data)
 {
-    Element* e = data.dropElement;
+    EngravingItem* e = data.dropElement;
     if (e->isHarmony()) {
         Harmony* h = toHarmony(e);
         h->setParent(parent());
@@ -1253,10 +1253,10 @@ Element* FretDiagram::drop(EditData& data)
 //   scanElements
 //---------------------------------------------------------
 
-void FretDiagram::scanElements(void* data, void (* func)(void*, Element*), bool all)
+void FretDiagram::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
     Q_UNUSED(all);
-    ScoreElement::scanElements(data, func, all);
+    EngravingObject::scanElements(data, func, all);
     func(data, this);
 }
 
@@ -1366,7 +1366,7 @@ QVariant FretDiagram::getProperty(Pid propertyId) const
         return int(_orientation);
         break;
     default:
-        return Element::getProperty(propertyId);
+        return EngravingItem::getProperty(propertyId);
     }
 }
 
@@ -1399,7 +1399,7 @@ bool FretDiagram::setProperty(Pid propertyId, const QVariant& v)
         _orientation = Orientation(v.toInt());
         break;
     default:
-        return Element::setProperty(propertyId, v);
+        return EngravingItem::setProperty(propertyId, v);
     }
     triggerLayout();
     return true;
@@ -1424,7 +1424,7 @@ QVariant FretDiagram::propertyDefault(Pid pid) const
             return score()->styleV(p.sid);
         }
     }
-    return Element::propertyDefault(pid);
+    return EngravingItem::propertyDefault(pid);
 }
 
 //---------------------------------------------------------
@@ -1433,7 +1433,7 @@ QVariant FretDiagram::propertyDefault(Pid pid) const
 
 void FretDiagram::endEditDrag(EditData& editData)
 {
-    Element::endEditDrag(editData);
+    EngravingItem::endEditDrag(editData);
 
     triggerLayout();
 }

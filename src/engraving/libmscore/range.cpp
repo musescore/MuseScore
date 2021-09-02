@@ -65,7 +65,7 @@ TrackList::~TrackList()
 {
     int n = size();
     for (int i = 0; i < n; ++i) {
-        Element* e = at(i);
+        EngravingItem* e = at(i);
         if (e->isTuplet()) {
             Tuplet* t = toTuplet(e);
             cleanupTuplet(t);
@@ -142,7 +142,7 @@ void TrackList::combineTuplet(Tuplet* dst, Tuplet* src)
 //   append
 //---------------------------------------------------------
 
-void TrackList::append(Element* e)
+void TrackList::append(EngravingItem* e)
 {
     if (e->isDurationElement()) {
         _duration += toDurationElement(e)->ticks();
@@ -157,7 +157,7 @@ void TrackList::append(Element* e)
             du += toRest(e)->ticks();
             rest->setTicks(du);
         } else {
-            Element* element = 0;
+            EngravingItem* element = 0;
             if (e->isTuplet()) {
                 Tuplet* src = toTuplet(e);
                 if (src->generated() && !empty() && back()->isTuplet()) {
@@ -172,7 +172,7 @@ void TrackList::append(Element* e)
                 element = e->clone();
                 ChordRest* src = toChordRest(e);
                 Segment* s1 = src->segment();
-                for (Element* ee : s1->annotations()) {
+                for (EngravingItem* ee : s1->annotations()) {
                     if (ee->track() == e->track()) {
                         _range->annotations.push_back({ s1->tick(), ee->clone() });
                     }
@@ -204,13 +204,13 @@ void TrackList::append(Element* e)
             }
             if (element) {
                 element->setSelected(false);
-                QList<Element*>::append(element);
+                QList<EngravingItem*>::append(element);
             }
         }
     } else {
-        Element* c = e->clone();
+        EngravingItem* c = e->clone();
         c->moveToDummy();
-        QList<Element*>::append(c);
+        QList<EngravingItem*>::append(c);
     }
 }
 
@@ -223,7 +223,7 @@ void TrackList::appendGap(const Fraction& du, Score* score)
     if (du.isZero()) {
         return;
     }
-    Element* e = empty() ? 0 : back();
+    EngravingItem* e = empty() ? 0 : back();
     if (e && e->isRest()) {
         Rest* rest  = toRest(back());
         Fraction dd = rest->ticks();
@@ -233,7 +233,7 @@ void TrackList::appendGap(const Fraction& du, Score* score)
     } else {
         Rest* rest = new Rest(score->dummy()->segment());
         rest->setTicks(du);
-        QList<Element*>::append(rest);
+        QList<EngravingItem*>::append(rest);
         _duration   += du;
     }
 }
@@ -248,7 +248,7 @@ bool TrackList::truncate(const Fraction& f)
     if (empty()) {
         return true;
     }
-    Element* e = back();
+    EngravingItem* e = back();
     if (!e->isRest()) {
         return false;
     }
@@ -279,9 +279,9 @@ void TrackList::read(const Segment* fs, const Segment* es)
         if (!s->enabled()) {
             continue;
         }
-        Element* e = s->element(_track);
+        EngravingItem* e = s->element(_track);
         if (!e || e->generated()) {
-            for (Element* ee : s->annotations()) {
+            for (EngravingItem* ee : s->annotations()) {
                 if (ee->track() == _track) {
                     _range->annotations.push_back({ s->tick(), ee->clone() });
                 }
@@ -333,7 +333,7 @@ void TrackList::read(const Segment* fs, const Segment* es)
     //
     int n = size();
     for (int i = 0; i < n; ++i) {
-        Element* e = at(i);
+        EngravingItem* e = at(i);
         if (!e->isChord()) {
             continue;
         }
@@ -344,7 +344,7 @@ void TrackList::read(const Segment* fs, const Segment* es)
                 continue;
             }
             for (int k = i + 1; k < n; ++k) {
-                Element* ee = at(k);
+                EngravingItem* ee = at(k);
                 if (!ee->isChord()) {
                     continue;
                 }
@@ -499,7 +499,7 @@ bool TrackList::write(Score* score, const Fraction& tick) const
     Fraction remains = m->endTick() - tick;
     Segment* segment = 0;
 
-    for (Element* e : *this) {
+    for (EngravingItem* e : *this) {
         if (e->isDurationElement()) {
             Fraction duration = toDurationElement(e)->ticks();
             if (!checkRest(remains, m, duration)) {     // go to next measure, if necessary
@@ -600,7 +600,7 @@ bool TrackList::write(Score* score, const Fraction& tick) const
             } else {
                 seg = m->getSegmentR(SegmentType::HeaderClef, Fraction(0, 1));
             }
-            Element* ne = e->clone();
+            EngravingItem* ne = e->clone();
             ne->setScore(score);
             ne->setTrack(_track);
             seg->add(ne);
@@ -612,7 +612,7 @@ bool TrackList::write(Score* score, const Fraction& tick) const
             // but KeySig has to be at start of (current) measure
 
             Segment* seg = m->getSegmentR(Segment::segmentType(e->type()), e->isKeySig() ? Fraction() : m->ticks() - remains);
-            Element* ne = e->clone();
+            EngravingItem* ne = e->clone();
             ne->setScore(score);
             ne->setTrack(_track);
             seg->add(ne);
@@ -623,7 +623,7 @@ bool TrackList::write(Score* score, const Fraction& tick) const
     //
 
     for (Segment* s = measure->first(); s; s = s->next1()) {
-        Element* e = s->element(_track);
+        EngravingItem* e = s->element(_track);
         if (!e || !e->isChord()) {
             continue;
         }
@@ -792,7 +792,7 @@ bool ScoreRange::truncate(const Fraction& f)
         if (dl->empty()) {
             continue;
         }
-        Element* e = dl->back();
+        EngravingItem* e = dl->back();
         if (!e->isRest()) {
             return false;
         }
@@ -823,7 +823,7 @@ Fraction ScoreRange::ticks() const
 void TrackList::dump() const
 {
     qDebug("elements %d, duration %d/%d", size(), _duration.numerator(), _duration.denominator());
-    for (Element* e : *this) {
+    for (EngravingItem* e : *this) {
         if (e->isDurationElement()) {
             Fraction du = toDurationElement(e)->ticks();
             qDebug("   %s  %d/%d", e->name(), du.numerator(), du.denominator());

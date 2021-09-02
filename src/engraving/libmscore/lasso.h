@@ -23,7 +23,7 @@
 #ifndef __LASSO_H__
 #define __LASSO_H__
 
-#include "element.h"
+#include "engravingitem.h"
 
 #include "iengravingconfiguration.h"
 #include "modularity/ioc.h"
@@ -33,7 +33,7 @@ namespace Ms {
 //   Lasso
 //---------------------------------------------------------
 
-class Lasso : public Element
+class Lasso : public EngravingItem
 {
 public:
     INJECT(notation, mu::engraving::IEngravingConfiguration, engravingConfiguration)

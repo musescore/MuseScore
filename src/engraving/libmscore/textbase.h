@@ -26,7 +26,7 @@
 #include "infrastructure/draw/fontmetrics.h"
 
 #include "infrastructure/draw/color.h"
-#include "element.h"
+#include "engravingitem.h"
 #include "property.h"
 #include "style/style.h"
 
@@ -261,7 +261,7 @@ public:
 //   TextBase
 //---------------------------------------------------------
 
-class TextBase : public Element
+class TextBase : public EngravingItem
 {
     // sorted by size to allow for most compact memory layout
     M_PROPERTY(Align,      align,                  setAlign)
@@ -311,8 +311,8 @@ protected:
     bool prepareFormat(const QString& token, Ms::CharFormat& format);
 
 public:
-    TextBase(const ElementType& type, ScoreElement* parent = 0, Tid tid = Tid::DEFAULT, ElementFlags = ElementFlag::NOTHING);
-    TextBase(const ElementType& type, ScoreElement* parent, ElementFlags);
+    TextBase(const ElementType& type, EngravingObject* parent = 0, Tid tid = Tid::DEFAULT, ElementFlags = ElementFlag::NOTHING);
+    TextBase(const ElementType& type, EngravingObject* parent, ElementFlags);
     TextBase(const TextBase&);
     ~TextBase();
 
@@ -383,7 +383,7 @@ public:
     QVector<mu::LineF> dragAnchorLines() const override;
 
     virtual bool acceptDrop(EditData&) const override;
-    virtual Element* drop(EditData&) override;
+    virtual EngravingItem* drop(EditData&) override;
 
     friend class TextBlock;
     friend class TextFragment;
@@ -454,7 +454,7 @@ public:
     bool hasCustomFormatting() const;
 
     friend class TextCursor;
-    using ScoreElement::undoChangeProperty;
+    using EngravingObject::undoChangeProperty;
 };
 }     // namespace Ms
 

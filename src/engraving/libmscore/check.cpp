@@ -54,7 +54,7 @@ void Score::checkScore()
 
         if (s->segmentType() & (SegmentType::ChordRest)) {
             bool empty = true;
-            foreach (Element* e, s->elist()) {
+            foreach (EngravingItem* e, s->elist()) {
                 if (e) {
                     empty = false;
                     break;
@@ -205,7 +205,7 @@ bool Score::checkKeys()
         for (Measure* m = firstMeasure(); m; m = m->nextMeasure()) {
             Segment* s = m->findSegment(SegmentType::KeySig, m->tick());
             if (s) {
-                Element* element = s->element(i * VOICES);
+                EngravingItem* element = s->element(i * VOICES);
                 if (element) {
                     k = toKeySig(element)->key();
                 }
@@ -267,7 +267,7 @@ void Measure::checkMeasure(int staffIdx, bool useGapRests)
         Fraction currentPos  = Fraction(0, 1);
 
         for (Segment* seg = first(SegmentType::ChordRest); seg; seg = seg->next(SegmentType::ChordRest)) {
-            Element* e = seg->element(track);
+            EngravingItem* e = seg->element(track);
             if (!e) {
                 continue;
             }

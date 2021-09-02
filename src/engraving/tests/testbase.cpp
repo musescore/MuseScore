@@ -56,7 +56,7 @@ namespace Ms {
 //    writes and element and reads it back
 //---------------------------------------------------------
 
-Element* MTest::writeReadElement(Element* element)
+EngravingItem* MTest::writeReadElement(EngravingItem* element)
 {
     //
     // write element
@@ -74,7 +74,7 @@ Element* MTest::writeReadElement(Element* element)
 
     XmlReader e(buffer.buffer());
     e.readNextStartElement();
-    element = Element::name2Element(e.name(), score->dummy());
+    element = EngravingItem::name2Element(e.name(), score->dummy());
     element->read(e);
     return element;
 }

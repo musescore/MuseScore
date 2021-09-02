@@ -23,7 +23,7 @@
 #ifndef __SHADOWNOTE_H__
 #define __SHADOWNOTE_H__
 
-#include "element.h"
+#include "engravingitem.h"
 #include "durationtype.h"
 #include "staff.h"
 #include "iengravingconfiguration.h"
@@ -39,7 +39,7 @@ namespace Ms {
  which shows the note insert position in note entry mode.
 */
 
-class ShadowNote final : public Element
+class ShadowNote final : public EngravingItem
 {
     INJECT(notation, mu::engraving::IEngravingConfiguration, engravingConfiguration)
 

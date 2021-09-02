@@ -23,7 +23,7 @@
 #ifndef __BARLINE_H__
 #define __BARLINE_H__
 
-#include "element.h"
+#include "engravingitem.h"
 #include "mscore.h"
 
 namespace Ms {
@@ -63,7 +63,7 @@ struct BarLineTableItem {
 //   @P barLineType  enum  (BarLineType.NORMAL, .DOUBLE, .START_REPEAT, .END_REPEAT, .BROKEN, .END, .END_START_REPEAT, .DOTTED)
 //---------------------------------------------------------
 
-class BarLine final : public Element
+class BarLine final : public EngravingItem
 {
     int _spanStaff          { 0 };         // span barline to next staff if true, values > 1 are used for importing from 2.x
     int _spanFrom           { 0 };         // line number on start and end staves
@@ -89,8 +89,8 @@ public:
     void setParent(Segment* parent);
 
     // Score Tree functions
-    ScoreElement* treeParent() const override;
-    ScoreElement* treeChild(int idx) const override;
+    EngravingObject* treeParent() const override;
+    EngravingObject* treeChild(int idx) const override;
     int treeChildCount() const override;
 
     BarLine* clone() const override { return new BarLine(*this); }
@@ -102,13 +102,13 @@ public:
     mu::PointF pagePos() const override;        ///< position in page coordinates
     void layout() override;
     void layout2();
-    void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
+    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
     void setTrack(int t) override;
     void setScore(Score* s) override;
-    void add(Element*) override;
-    void remove(Element*) override;
+    void add(EngravingItem*) override;
+    void remove(EngravingItem*) override;
     bool acceptDrop(EditData&) const override;
-    Element* drop(EditData&) override;
+    EngravingItem* drop(EditData&) override;
     bool isEditable() const override { return true; }
 
     Segment* segment() const { return toSegment(parent()); }
@@ -148,13 +148,13 @@ public:
     QVariant propertyDefault(Pid propertyId) const override;
     Pid propertyId(const QStringRef& xmlName) const override;
     void undoChangeProperty(Pid id, const QVariant&, PropertyFlags ps) override;
-    using ScoreElement::undoChangeProperty;
+    using EngravingObject::undoChangeProperty;
 
     static qreal layoutWidth(Score*, BarLineType);
     mu::RectF layoutRect() const;
 
-    Element* nextSegmentElement() override;
-    Element* prevSegmentElement() override;
+    EngravingItem* nextSegmentElement() override;
+    EngravingItem* prevSegmentElement() override;
 
     QString accessibleInfo() const override;
     QString accessibleExtraInfo() const override;

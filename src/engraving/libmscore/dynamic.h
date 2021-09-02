@@ -146,7 +146,7 @@ public:
     Pid propertyId(const QStringRef& xmlName) const override;
     QString propertyUserValue(Pid) const override;
 
-    std::unique_ptr<ElementGroup> getDragGroup(std::function<bool(const Element*)> isDragged) override;
+    std::unique_ptr<ElementGroup> getDragGroup(std::function<bool(const EngravingItem*)> isDragged) override;
 
     QString accessibleInfo() const override;
     QString screenReaderInfo() const override;

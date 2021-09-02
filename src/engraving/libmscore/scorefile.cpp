@@ -32,7 +32,7 @@
 #include "io/xml.h"
 
 #include "score.h"
-#include "element.h"
+#include "engravingitem.h"
 #include "measure.h"
 #include "segment.h"
 #include "slur.h"
@@ -338,7 +338,7 @@ void Score::readStaff(XmlReader& e)
                     }
                 }
             } else if (tag == "HBox" || tag == "VBox" || tag == "TBox" || tag == "FBox") {
-                MeasureBase* mb = toMeasureBase(Element::name2Element(tag, this->dummy()));
+                MeasureBase* mb = toMeasureBase(EngravingItem::name2Element(tag, this->dummy()));
                 mb->read(e);
                 mb->setTick(e.tick());
                 measures()->add(mb);
@@ -517,9 +517,9 @@ void Score::print(mu::draw::Painter* painter, int pageNo)
     Page* page = pages().at(pageNo);
     RectF fr  = page->abbox();
 
-    QList<Element*> ell = page->items(fr);
+    QList<EngravingItem*> ell = page->items(fr);
     std::stable_sort(ell.begin(), ell.end(), elementLessThan);
-    for (const Element* e : qAsConst(ell)) {
+    for (const EngravingItem* e : qAsConst(ell)) {
         if (!e->visible()) {
             continue;
         }
@@ -641,7 +641,7 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
             if (track == 0) {
                 segment->setWritten(false);
             }
-            Element* e = segment->element(track);
+            EngravingItem* e = segment->element(track);
 
             //
             // special case: - barline span > 1
@@ -660,7 +660,7 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
                     }
                 }
             }
-            for (Element* e1 : segment->annotations()) {
+            for (EngravingItem* e1 : segment->annotations()) {
                 if (e1->track() != track || e1->generated() || (e1->systemFlag() && !writeSystemElements)) {
                     continue;
                 }

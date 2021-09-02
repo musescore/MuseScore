@@ -381,7 +381,7 @@ int NoteInputBarModel::resolveCurrentVoiceIndex() const
         return INVALID_VOICE;
     }
 
-    for (const Element* element: selection()->elements()) {
+    for (const EngravingItem* element: selection()->elements()) {
         return element->voice();
     }
 
@@ -414,7 +414,7 @@ std::set<SymbolId> NoteInputBarModel::resolveCurrentArticulations() const
 
     std::set<SymbolId> result;
     bool isFirstNote = true;
-    for (const Element* element: selection()->elements()) {
+    for (const EngravingItem* element: selection()->elements()) {
         if (!element->isNote()) {
             continue;
         }
@@ -453,7 +453,7 @@ bool NoteInputBarModel::resolveRestSelected() const
         return false;
     }
 
-    for (const Element* element: selection()->elements()) {
+    for (const EngravingItem* element: selection()->elements()) {
         if (!element->isRest()) {
             return false;
         }
@@ -484,7 +484,7 @@ DurationType NoteInputBarModel::resolveCurrentDurationType() const
 
     DurationType result = INVALID_DURATION_TYPE;
     bool isFirstElement = true;
-    for (const Element* element: selection()->elements()) {
+    for (const EngravingItem* element: selection()->elements()) {
         const ChordRest* chordRest = elementToChordRest(element);
         if (!chordRest) {
             continue;
@@ -519,7 +519,7 @@ bool NoteInputBarModel::resolveSlurSelected() const
         return false;
     }
 
-    for (const Element* element: selection()->elements()) {
+    for (const EngravingItem* element: selection()->elements()) {
         const ChordRest* chordRest = elementToChordRest(element);
         if (!chordRest) {
             continue;
@@ -792,7 +792,7 @@ NoteInputState NoteInputBarModel::noteInputState() const
     return noteInput() ? noteInput()->state() : NoteInputState();
 }
 
-const ChordRest* NoteInputBarModel::elementToChordRest(const Element* element) const
+const ChordRest* NoteInputBarModel::elementToChordRest(const EngravingItem* element) const
 {
     if (!element) {
         return nullptr;

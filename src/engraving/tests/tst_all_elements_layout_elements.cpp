@@ -74,7 +74,7 @@ void TestLayoutElements::initTestCase()
 //    data.
 //---------------------------------------------------------
 
-static void isLayoutDone(void* data, Element* e)
+static void isLayoutDone(void* data, EngravingItem* e)
 {
     bool* result = static_cast<bool*>(data);
     if (e->isTuplet()) {

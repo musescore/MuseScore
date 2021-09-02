@@ -28,7 +28,7 @@
  Definition of classes SysStaff and System
 */
 
-#include "element.h"
+#include "engravingitem.h"
 #include "spatium.h"
 #include "symbol.h"
 #include "skyline.h"
@@ -97,7 +97,7 @@ public:
 ///    a complete piece of the timeline.
 //---------------------------------------------------------
 
-class System final : public Element
+class System final : public EngravingItem
 {
     SystemDivider* _systemDividerLeft    { nullptr };       // to the next system
     SystemDivider* _systemDividerRight   { nullptr };
@@ -126,19 +126,19 @@ public:
     void moveToPage(Page* parent);
 
     // Score Tree functions
-    ScoreElement* treeParent() const override;
-    ScoreElement* treeChild(int idx) const override;
+    EngravingObject* treeParent() const override;
+    EngravingObject* treeChild(int idx) const override;
     int treeChildCount() const override;
 
     System* clone() const override { return new System(*this); }
 
-    void add(Element*) override;
-    void remove(Element*) override;
-    void change(Element* o, Element* n) override;
+    void add(EngravingItem*) override;
+    void remove(EngravingItem*) override;
+    void change(EngravingItem* o, EngravingItem* n) override;
     void write(XmlWriter&) const override;
     void read(XmlReader&) override;
 
-    void scanElements(void* data, void (* func)(void*, Element*), bool all=true) override;
+    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
     void appendMeasure(MeasureBase*);
     void removeMeasure(MeasureBase*);
@@ -197,8 +197,8 @@ public:
     SystemDivider* systemDividerLeft() const { return _systemDividerLeft; }
     SystemDivider* systemDividerRight() const { return _systemDividerRight; }
 
-    Element* nextSegmentElement() override;
-    Element* prevSegmentElement() override;
+    EngravingItem* nextSegmentElement() override;
+    EngravingItem* prevSegmentElement() override;
 
     qreal minDistance(System*) const;
     qreal topDistance(int staffIdx, const SkylineLine&) const;

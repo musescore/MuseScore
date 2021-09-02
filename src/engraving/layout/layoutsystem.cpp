@@ -578,7 +578,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
     //-------------------------------------------------------------
 
     for (Segment* s : sl) {
-        for (Element* e : s->elist()) {
+        for (EngravingItem* e : s->elist()) {
             if (!e || !e->isChordRest() || !score->score()->staff(e->staffIdx())->show()) {
                 // the beam and its system may still be referenced when selecting all,
                 // even if the staff is invisible. The old system is invalid and does cause problems in #284012
@@ -640,7 +640,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
                 } else {
                     int strack = staffIdx * VOICES;
                     int etrack = strack + VOICES;
-                    for (Element* e : s.elist()) {
+                    for (EngravingItem* e : s.elist()) {
                         if (!e) {
                             continue;
                         }
@@ -663,7 +663,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
                                 notes.push_back(n);
                             }
                             for (Note* note : notes) {
-                                for (Element* en : note->el()) {
+                                for (EngravingItem* en : note->el()) {
                                     if (en->isFingering()) {
                                         Fingering* f = toFingering(en);
                                         if (f->layoutType() == ElementType::CHORD) {
@@ -703,7 +703,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
 
     for (Segment* s : sl) {
         std::set<int> recreateShapes;
-        for (Element* e : s->elist()) {
+        for (EngravingItem* e : s->elist()) {
             if (!e || !e->isChordRest() || !score->score()->staff(e->staffIdx())->show()) {
                 continue;
             }
@@ -729,7 +729,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
                 }
                 std::list<Fingering*> fingerings;
                 for (Note* note : notes) {
-                    for (Element* el : note->el()) {
+                    for (EngravingItem* el : note->el()) {
                         if (el->isFingering()) {
                             Fingering* f = toFingering(el);
                             if (f->layoutType() == ElementType::CHORD) {
@@ -763,7 +763,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
     //-------------------------------------------------------------
 
     for (Segment* s : sl) {
-        for (Element* e : s->elist()) {
+        for (EngravingItem* e : s->elist()) {
             if (!e || !e->isChordRest() || !score->score()->staff(e->staffIdx())->show()) {
                 continue;
             }
@@ -782,7 +782,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
     //-------------------------------------------------------------
 
     for (Segment* s : sl) {
-        for (Element* e : s->elist()) {
+        for (EngravingItem* e : s->elist()) {
             if (!e || !e->isChordRest() || !score->score()->staff(e->staffIdx())->show()) {
                 continue;
             }
@@ -804,7 +804,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
     //-------------------------------------------------------------
 
     for (const Segment* s : sl) {
-        for (Element* e : s->annotations()) {
+        for (EngravingItem* e : s->annotations()) {
             if (e->isSticking()) {
                 e->layout();
             }
@@ -854,7 +854,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
 
     std::vector<Dynamic*> dynamics;
     for (Segment* s : sl) {
-        for (Element* e : s->elist()) {
+        for (EngravingItem* e : s->elist()) {
             if (!e) {
                 continue;
             }
@@ -866,7 +866,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
                 layoutTies(c, system, stick);
             }
         }
-        for (Element* e : s->annotations()) {
+        for (EngravingItem* e : s->annotations()) {
             if (e->isDynamic()) {
                 Dynamic* d = toDynamic(e);
                 d->layout();
@@ -929,7 +929,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
     //-------------------------------------------------------------
 
     for (const Segment* s : sl) {
-        for (Element* e : s->annotations()) {
+        for (EngravingItem* e : s->annotations()) {
             if (e->isFermata() || e->isTremoloBar()) {
                 e->layout();
             }
@@ -963,7 +963,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
 
     bool hasFretDiagram = false;
     for (const Segment* s : sl) {
-        for (Element* e : s->annotations()) {
+        for (EngravingItem* e : s->annotations()) {
             if (e->isFretDiagram()) {
                 hasFretDiagram = true;
                 break;
@@ -991,7 +991,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
     //-------------------------------------------------------------
 
     for (const Segment* s : sl) {
-        for (Element* e : s->annotations()) {
+        for (EngravingItem* e : s->annotations()) {
             if (e->isStaffText() || e->isSystemText() || e->isInstrumentChange()) {
                 e->layout();
             }
@@ -1007,7 +1007,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
             continue;
         }
         Measure* m = toMeasure(mb);
-        for (Element* e : m->el()) {
+        for (EngravingItem* e : m->el()) {
             if (e->isJump() || e->isMarker()) {
                 e->layout();
             }
@@ -1019,7 +1019,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
     //-------------------------------------------------------------
 
     for (const Segment* s : sl) {
-        for (Element* e : s->annotations()) {
+        for (EngravingItem* e : s->annotations()) {
             if (e->isTempoText()) {
                 e->layout();
             }
@@ -1080,7 +1080,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
 
     if (hasFretDiagram) {
         for (const Segment* s : sl) {
-            for (Element* e : s->annotations()) {
+            for (EngravingItem* e : s->annotations()) {
                 if (e->isFretDiagram()) {
                     e->layout();
                 }
@@ -1102,7 +1102,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
     //-------------------------------------------------------------
 
     for (const Segment* s : sl) {
-        for (Element* e : s->annotations()) {
+        for (EngravingItem* e : s->annotations()) {
             if (e->isRehearsalMark()) {
                 e->layout();
             }
@@ -1114,7 +1114,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
     //-------------------------------------------------------------
 
     for (const Segment* s : sl) {
-        for (Element* e : s->annotations()) {
+        for (EngravingItem* e : s->annotations()) {
             if (e->isImage()) {
                 e->layout();
             }

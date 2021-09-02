@@ -68,7 +68,7 @@ static Measure* getMeasure(Score* score, int idx)
     return m;
 }
 
-static void dropClef(Element* m, ClefType t)
+static void dropClef(EngravingItem* m, ClefType t)
 {
     Clef* clef = new Clef(m->score()->dummy()->segment());   // create a new element, as Measure::drop() will eventually delete it
     clef->setClefType(t);

@@ -94,7 +94,7 @@ mu::Ret PngWriter::write(INotationPtr notation, Device& destinationDevice, const
         painter.translate(-pageRect.topLeft());
     }
 
-    QList<Ms::Element*> elements = page->elements();
+    QList<Ms::EngravingItem*> elements = page->elements();
     std::stable_sort(elements.begin(), elements.end(), Ms::elementLessThan);
 
     engraving::Paint::paintElements(painter, elements);

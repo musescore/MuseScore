@@ -23,7 +23,7 @@
 #ifndef __BRACKET_ITEM_H__
 #define __BRACKET_ITEM_H__
 
-#include "scoreElement.h"
+#include "engravingobject.h"
 #include "mscore.h"
 
 namespace Ms {
@@ -31,7 +31,7 @@ namespace Ms {
 //   BracketItem
 //---------------------------------------------------------
 
-class BracketItem final : public ScoreElement
+class BracketItem final : public EngravingObject
 {
     BracketType _bracketType { BracketType::NO_BRACKET };
     int _column              { 0 };
@@ -39,8 +39,8 @@ class BracketItem final : public ScoreElement
     Staff* _staff            { 0 };
 
 public:
-    BracketItem(ScoreElement* parent);
-    BracketItem(ScoreElement* parent, BracketType a, int b);
+    BracketItem(EngravingObject* parent);
+    BracketItem(EngravingObject* parent, BracketType a, int b);
 
     virtual QVariant getProperty(Pid) const override;
     virtual bool setProperty(Pid, const QVariant&) override;

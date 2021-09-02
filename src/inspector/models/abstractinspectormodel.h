@@ -27,7 +27,7 @@
 
 #include "engraving/style/style.h"
 
-#include "libmscore/element.h"
+#include "libmscore/engravingitem.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/property.h"
 
@@ -152,8 +152,8 @@ protected:
 
     bool isNotationExisting() const;
 
-    QVariant valueToElementUnits(const Ms::Pid& pid, const QVariant& value, const Ms::Element* element) const;
-    QVariant valueFromElementUnits(const Ms::Pid& pid, const QVariant& value, const Ms::Element* element) const;
+    QVariant valueToElementUnits(const Ms::Pid& pid, const QVariant& value, const Ms::EngravingItem* element) const;
+    QVariant valueFromElementUnits(const Ms::Pid& pid, const QVariant& value, const Ms::EngravingItem* element) const;
 
     notation::INotationStylePtr style() const;
     void updateStyleValue(const Ms::Sid& sid, const QVariant& newValue);
@@ -168,7 +168,7 @@ protected:
 
     IElementRepositoryService* m_repository;
 
-    QList<Ms::Element*> m_elementList;
+    QList<Ms::EngravingItem*> m_elementList;
 
 protected slots:
     void onResetToDefaults(const QList<Ms::Pid>& pidList);

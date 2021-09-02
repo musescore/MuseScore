@@ -22,7 +22,7 @@
 #ifndef MU_PALETTE_PALETTECELL_H
 #define MU_PALETTE_PALETTECELL_H
 
-#include "libmscore/element.h"
+#include "libmscore/engravingitem.h"
 
 #include "modularity/ioc.h"
 #include "ui/iuiactionsregister.h"

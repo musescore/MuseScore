@@ -23,7 +23,7 @@
 #ifndef __HAIRPIN_H__
 #define __HAIRPIN_H__
 
-#include "element.h"
+#include "engravingitem.h"
 #include "dynamic.h"
 #include "line.h"
 #include "textlinebase.h"
@@ -60,7 +60,7 @@ class HairpinSegment final : public TextLineBaseSegment
     Sid getPropertyStyle(Pid) const override;
 
     bool acceptDrop(EditData&) const override;
-    Element* drop(EditData&) override;
+    EngravingItem* drop(EditData&) override;
 
 public:
     HairpinSegment(Spanner* sp, Score* s);
@@ -69,7 +69,7 @@ public:
 
     Hairpin* hairpin() const { return (Hairpin*)spanner(); }
 
-    Element* propertyDelegate(Pid) override;
+    EngravingItem* propertyDelegate(Pid) override;
 
     void layout() override;
     Shape shape() const override;
@@ -77,7 +77,7 @@ public:
     int gripsCount() const override { return 4; }
     std::vector<mu::PointF> gripsPositions(const EditData& = EditData()) const override;
 
-    std::unique_ptr<ElementGroup> getDragGroup(std::function<bool(const Element*)> isDragged) override;
+    std::unique_ptr<ElementGroup> getDragGroup(std::function<bool(const EngravingItem*)> isDragged) override;
 };
 
 //---------------------------------------------------------

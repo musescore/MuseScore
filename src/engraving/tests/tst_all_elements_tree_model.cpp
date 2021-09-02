@@ -41,7 +41,7 @@ class TestTreeModel : public QObject, public MTest
     Q_OBJECT
 
     void tstTree(QString file);
-    void traverseTree(ScoreElement* element);
+    void traverseTree(EngravingObject* element);
 
 private slots:
     void initTestCase();
@@ -51,7 +51,7 @@ private slots:
     void tstTreeGoldberg() { tstTree("goldberg.mscx"); }
 };
 
-QString elementToText(ScoreElement* element);
+QString elementToText(EngravingObject* element);
 
 //---------------------------------------------------------
 //   initTestCase
@@ -78,13 +78,13 @@ void TestTreeModel::tstTree(QString file)
 ///   correct, then recursively checks all children.
 //---------------------------------------------------------
 
-void TestTreeModel::traverseTree(ScoreElement* element)
+void TestTreeModel::traverseTree(EngravingObject* element)
 {
-    for (ScoreElement* child : (*element)) {
+    for (EngravingObject* child : (*element)) {
         // child should never be nullptr
         if (!child) {
-            qDebug() << "Element returned nullptr in treeChild()!";
-            qDebug() << "Element: " << elementToText(element);
+            qDebug() << "EngravingItem returned nullptr in treeChild()!";
+            qDebug() << "EngravingItem: " << elementToText(element);
             qDebug() << "Number of children: " << element->treeChildCount();
             qDebug() << "Children: ";
             for (int i = 0; i < element->treeChildCount(); i++) {
@@ -94,8 +94,8 @@ void TestTreeModel::traverseTree(ScoreElement* element)
         QVERIFY(child);
         // if parent is not correct print some logging info and exit
         if (child->treeParent() != element) {
-            qDebug() << "Element does not have correct parent!";
-            qDebug() << "Element name: " << elementToText(child);
+            qDebug() << "EngravingItem does not have correct parent!";
+            qDebug() << "EngravingItem name: " << elementToText(child);
             qDebug() << "Parent in tree model: " << elementToText(child->treeParent());
             qDebug() << "Expected parent: " << elementToText(element);
         }
@@ -111,13 +111,13 @@ void TestTreeModel::traverseTree(ScoreElement* element)
 ///   for printing debug info about any element
 //---------------------------------------------------------
 
-QString elementToText(ScoreElement* element)
+QString elementToText(EngravingObject* element)
 {
     if (element == nullptr) {
         return "nullptr";
     }
-    if (element->isElement()) {
-        return toElement(element)->accessibleInfo();
+    if (element->isEngravingItem()) {
+        return toEngravingItem(element)->accessibleInfo();
     }
     return element->userName();
 }

@@ -23,7 +23,7 @@
 #ifndef __FERMATA_H__
 #define __FERMATA_H__
 
-#include "element.h"
+#include "engravingitem.h"
 #include "mscore.h"
 #include "symid.h"
 
@@ -38,7 +38,7 @@ class Page;
 //    Fermata
 //---------------------------------------------------------
 
-class Fermata final : public Element
+class Fermata final : public EngravingItem
 {
     SymId _symId;
     qreal _timeStretch;
@@ -48,8 +48,8 @@ class Fermata final : public Element
     Sid getPropertyStyle(Pid) const override;
 
 public:
-    Fermata(Element* parent);
-    Fermata(SymId, Element* parent);
+    Fermata(EngravingItem* parent);
+    Fermata(SymId, EngravingItem* parent);
     Fermata& operator=(const Fermata&) = delete;
 
     Fermata* clone() const override { return new Fermata(*this); }

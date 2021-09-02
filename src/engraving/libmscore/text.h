@@ -33,7 +33,7 @@ namespace Ms {
 class Text final : public TextBase
 {
 public:
-    Text(ScoreElement* parent = 0, Tid tid = Tid::DEFAULT);
+    Text(EngravingObject* parent = 0, Tid tid = Tid::DEFAULT);
 
     Text* clone() const override { return new Text(*this); }
     void read(XmlReader&) override;

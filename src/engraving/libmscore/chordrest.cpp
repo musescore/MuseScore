@@ -303,7 +303,7 @@ bool ChordRest::readProperties(XmlReader& e)
     } else if (tag == "Spanner") {
         Spanner::readSpanner(e, this, track());
     } else if (tag == "Lyrics") {
-        Element* element = new Lyrics(this);
+        EngravingItem* element = new Lyrics(this);
         element->setTrack(e.track());
         element->read(e);
         add(element);
@@ -338,13 +338,13 @@ void ChordRest::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
             spanner->setStartElement(this);
             if (pasteMode) {
                 score()->undoAddElement(spanner);
-                for (ScoreElement* ee : spanner->linkList()) {
+                for (EngravingObject* ee : spanner->linkList()) {
                     if (ee == spanner) {
                         continue;
                     }
                     Spanner* ls = toSpanner(ee);
                     ls->setTick(spanner->tick());
-                    for (ScoreElement* eee : linkList()) {
+                    for (EngravingObject* eee : linkList()) {
                         ChordRest* cr = toChordRest(eee);
                         if (cr->score() == eee->score() && cr->staffIdx() == ls->staffIdx()) {
                             ls->setTrack(cr->track());
@@ -363,13 +363,13 @@ void ChordRest::readAddConnector(ConnectorInfoReader* info, bool pasteMode)
             spanner->setTick2(tick());
             spanner->setEndElement(this);
             if (pasteMode) {
-                for (ScoreElement* ee : spanner->linkList()) {
+                for (EngravingObject* ee : spanner->linkList()) {
                     if (ee == spanner) {
                         continue;
                     }
                     Spanner* ls = static_cast<Spanner*>(ee);
                     ls->setTick2(spanner->tick2());
-                    for (ScoreElement* eee : linkList()) {
+                    for (EngravingObject* eee : linkList()) {
                         ChordRest* cr = toChordRest(eee);
                         if (cr->score() == eee->score() && cr->staffIdx() == ls->staffIdx()) {
                             ls->setTrack2(cr->track());
@@ -413,9 +413,9 @@ void ChordRest::undoSetSmall(bool val)
 //   drop
 //---------------------------------------------------------
 
-Element* ChordRest::drop(EditData& data)
+EngravingItem* ChordRest::drop(EditData& data)
 {
-    Element* e       = data.dropElement;
+    EngravingItem* e       = data.dropElement;
     Measure* m       = measure();
     bool fromPalette = (e->track() == -1);
     switch (e->type()) {
@@ -492,7 +492,7 @@ Element* ChordRest::drop(EditData& data)
 
     case ElementType::FERMATA:
         e->setPlacement(track() & 1 ? Placement::BELOW : Placement::ABOVE);
-        for (Element* el: segment()->annotations()) {
+        for (EngravingItem* el: segment()->annotations()) {
             if (el->isFermata() && (el->track() == track())) {
                 if (el->subtype() == e->subtype()) {
                     delete e;
@@ -759,7 +759,7 @@ QString ChordRest::durationUserName() const
 //   add
 //---------------------------------------------------------
 
-void ChordRest::add(Element* e)
+void ChordRest::add(EngravingItem* e)
 {
     e->setParent(this);
     e->setTrack(track());
@@ -783,7 +783,7 @@ void ChordRest::add(Element* e)
 //   remove
 //---------------------------------------------------------
 
-void ChordRest::remove(Element* e)
+void ChordRest::remove(EngravingItem* e)
 {
     switch (e->type()) {
     case ElementType::LYRICS: {
@@ -879,10 +879,10 @@ void ChordRest::undoSetBeamMode(Beam::Mode mode)
 void ChordRest::localSpatiumChanged(qreal oldValue, qreal newValue)
 {
     DurationElement::localSpatiumChanged(oldValue, newValue);
-    for (Element* e : lyrics()) {
+    for (EngravingItem* e : lyrics()) {
         e->localSpatiumChanged(oldValue, newValue);
     }
-    for (Element* e : el()) {
+    for (EngravingItem* e : el()) {
         e->localSpatiumChanged(oldValue, newValue);
     }
 }
@@ -1018,10 +1018,10 @@ Segment* ChordRest::nextSegmentAfterCR(SegmentType types) const
         // chordrest ends at afrac+actualFraction
         // we return the segment at or after the end of the chordrest
         // Segment::afrac() is based on ticks; use DurationElement::afrac() if possible
-        Element* e = s;
+        EngravingItem* e = s;
         if (s->isChordRestType()) {
             // Find the first non-NULL element in the segment
-            for (Element* ee : s->elist()) {
+            for (EngravingItem* ee : s->elist()) {
                 if (ee) {
                     e = ee;
                     break;
@@ -1041,8 +1041,8 @@ Segment* ChordRest::nextSegmentAfterCR(SegmentType types) const
 
 void ChordRest::setTrack(int val)
 {
-    Element::setTrack(val);
-    processSiblings([val](Element* e) { e->setTrack(val); });
+    EngravingItem::setTrack(val);
+    processSiblings([val](EngravingItem* e) { e->setTrack(val); });
 }
 
 //---------------------------------------------------------
@@ -1051,15 +1051,15 @@ void ChordRest::setTrack(int val)
 
 void ChordRest::setScore(Score* s)
 {
-    Element::setScore(s);
-    processSiblings([s](Element* e) { e->setScore(s); });
+    EngravingItem::setScore(s);
+    processSiblings([s](EngravingItem* e) { e->setScore(s); });
 }
 
 //---------------------------------------------------------
 //   processSiblings
 //---------------------------------------------------------
 
-void ChordRest::processSiblings(std::function<void(Element*)> func)
+void ChordRest::processSiblings(std::function<void(EngravingItem*)> func)
 {
     if (_beam) {
         func(_beam);
@@ -1079,7 +1079,7 @@ void ChordRest::processSiblings(std::function<void(Element*)> func)
 //   nextArticulationOrLyric
 //---------------------------------------------------------
 
-Element* ChordRest::nextArticulationOrLyric(Element* e)
+EngravingItem* ChordRest::nextArticulationOrLyric(EngravingItem* e)
 {
     if (isChord() && e->isArticulation()) {
         Chord* c = toChord(this);
@@ -1110,7 +1110,7 @@ Element* ChordRest::nextArticulationOrLyric(Element* e)
 //   prevArticulationOrLyric
 //---------------------------------------------------------
 
-Element* ChordRest::prevArticulationOrLyric(Element* e)
+EngravingItem* ChordRest::prevArticulationOrLyric(EngravingItem* e)
 {
     auto i = std::find(_lyrics.begin(), _lyrics.end(), e);
     if (i != _lyrics.end()) {
@@ -1139,16 +1139,16 @@ Element* ChordRest::prevArticulationOrLyric(Element* e)
 //   nextElement
 //---------------------------------------------------------
 
-Element* ChordRest::nextElement()
+EngravingItem* ChordRest::nextElement()
 {
-    Element* e = score()->selection().element();
+    EngravingItem* e = score()->selection().element();
     if (!e && !score()->selection().elements().isEmpty()) {
         e = score()->selection().elements().first();
     }
     switch (e->type()) {
     case ElementType::ARTICULATION:
     case ElementType::LYRICS: {
-        Element* next = nextArticulationOrLyric(e);
+        EngravingItem* next = nextArticulationOrLyric(e);
         if (next) {
             return next;
         } else {
@@ -1173,16 +1173,16 @@ Element* ChordRest::nextElement()
 //   prevElement
 //---------------------------------------------------------
 
-Element* ChordRest::prevElement()
+EngravingItem* ChordRest::prevElement()
 {
-    Element* e = score()->selection().element();
+    EngravingItem* e = score()->selection().element();
     if (!e && !score()->selection().elements().isEmpty()) {
         e = score()->selection().elements().last();
     }
     switch (e->type()) {
     case ElementType::ARTICULATION:
     case ElementType::LYRICS: {
-        Element* prev = prevArticulationOrLyric(e);
+        EngravingItem* prev = prevArticulationOrLyric(e);
         if (prev) {
             return prev;
         } else {
@@ -1204,7 +1204,7 @@ Element* ChordRest::prevElement()
 //   lastElementBeforeSegment
 //---------------------------------------------------------
 
-Element* ChordRest::lastElementBeforeSegment()
+EngravingItem* ChordRest::lastElementBeforeSegment()
 {
     if (!_lyrics.empty()) {
         return _lyrics.back();
@@ -1217,7 +1217,7 @@ Element* ChordRest::lastElementBeforeSegment()
 //   nextSegmentElement
 //---------------------------------------------------------
 
-Element* ChordRest::nextSegmentElement()
+EngravingItem* ChordRest::nextSegmentElement()
 {
     return segment()->firstInNextSegments(staffIdx());
 }
@@ -1226,7 +1226,7 @@ Element* ChordRest::nextSegmentElement()
 //   prevSegmentElement
 //---------------------------------------------------------
 
-Element* ChordRest::prevSegmentElement()
+EngravingItem* ChordRest::prevSegmentElement()
 {
     return segment()->lastInPrevSegments(staffIdx());
 }
@@ -1234,7 +1234,7 @@ Element* ChordRest::prevSegmentElement()
 QString ChordRest::accessibleExtraInfo() const
 {
     QString rez = "";
-    for (Element* l : lyrics()) {
+    for (EngravingItem* l : lyrics()) {
         if (!score()->selectionFilter().canSelect(l)) {
             continue;
         }
@@ -1242,7 +1242,7 @@ QString ChordRest::accessibleExtraInfo() const
     }
 
     if (segment()) {
-        for (Element* e : segment()->annotations()) {
+        for (EngravingItem* e : segment()->annotations()) {
             if (!score()->selectionFilter().canSelect(e)) {
                 continue;
             }
@@ -1347,7 +1347,7 @@ Shape ChordRest::shape() const
         qreal x1 = 1000000.0;
         qreal x2 = -1000000.0;
         bool adjustWidth = false;
-        for (Element* e : segment()->annotations()) {
+        for (EngravingItem* e : segment()->annotations()) {
             if (!e || !e->addToSkyline()) {
                 continue;
             }
@@ -1458,7 +1458,7 @@ bool ChordRest::isBefore(const ChordRest* o) const
 //   undoAddAnnotation
 //---------------------------------------------------------
 
-void ChordRest::undoAddAnnotation(Element* a)
+void ChordRest::undoAddAnnotation(EngravingItem* a)
 {
     Segment* seg = segment();
     Measure* m = measure();

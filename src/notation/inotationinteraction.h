@@ -48,12 +48,12 @@ public:
     virtual void toggleVisible() = 0;
 
     // Hit
-    virtual Element* hitElement(const PointF& pos, float width) const = 0;
+    virtual EngravingItem* hitElement(const PointF& pos, float width) const = 0;
     virtual Staff* hitStaff(const PointF& pos) const = 0;
 
     struct HitElementContext
     {
-        notation::Element* element = nullptr;
+        notation::EngravingItem* element = nullptr;
         notation::Staff* staff = nullptr;
     };
 
@@ -63,7 +63,7 @@ public:
     // Select
     virtual void addChordToSelection(MoveDirection d) = 0;
     virtual void moveChordNoteSelection(MoveDirection d) = 0;
-    virtual void select(const std::vector<Element*>& elements, SelectType type, int staffIndex = 0) = 0;
+    virtual void select(const std::vector<EngravingItem*>& elements, SelectType type, int staffIndex = 0) = 0;
     virtual void selectAll() = 0;
     virtual void selectSection() = 0;
     virtual void selectFirstElement(bool frame = true) = 0;
@@ -78,9 +78,9 @@ public:
     virtual void setSelectionTypeFiltered(SelectionFilterType type, bool filtered) = 0;
 
     // Drag
-    using IsDraggable = std::function<bool (const Element*)>;
+    using IsDraggable = std::function<bool (const EngravingItem*)>;
     virtual bool isDragStarted() const = 0;
-    virtual void startDrag(const std::vector<Element*>& elems, const PointF& eoffset, const IsDraggable& isDrag) = 0;
+    virtual void startDrag(const std::vector<EngravingItem*>& elems, const PointF& eoffset, const IsDraggable& isDrag) = 0;
     virtual void drag(const PointF& fromPos, const PointF& toPos, DragMode mode) = 0;
     virtual void endDrag() = 0;
     virtual async::Notification dragChanged() const = 0;
@@ -93,7 +93,7 @@ public:
     virtual void endDrop() = 0;
     virtual async::Notification dropChanged() const = 0;
 
-    virtual bool applyPaletteElement(Ms::Element* element, Qt::KeyboardModifiers modifiers = {}) = 0;
+    virtual bool applyPaletteElement(Ms::EngravingItem* element, Qt::KeyboardModifiers modifiers = {}) = 0;
     virtual void undo() = 0;
     virtual void redo() = 0;
 
@@ -106,7 +106,7 @@ public:
 
     // Text edit
     virtual bool isTextEditingStarted() const = 0;
-    virtual void startEditText(Element* element, const PointF& elementPos) = 0;
+    virtual void startEditText(EngravingItem* element, const PointF& elementPos) = 0;
     virtual void editText(QKeyEvent* event) = 0;
     virtual void endEditText() = 0;
     virtual void changeTextCursorPosition(const PointF& newCursorPos) = 0;

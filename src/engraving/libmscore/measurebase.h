@@ -28,7 +28,7 @@
  Definition of MeasureBase class.
 */
 
-#include "element.h"
+#include "engravingitem.h"
 #include "layoutbreak.h"
 
 namespace Ms {
@@ -70,7 +70,7 @@ constexpr bool operator&(Repeat t1, Repeat t2)
 //   @P prevMeasureMM   Measure     the previous multi-measure rest Measure (read-only)
 //---------------------------------------------------------
 
-class MeasureBase : public Element
+class MeasureBase : public EngravingItem
 {
     MeasureBase* _next    { 0 };
     MeasureBase* _prev    { 0 };
@@ -92,11 +92,11 @@ public:
     MeasureBase(const MeasureBase&);
 
     System* system() const { return (System*)parent(); }
-    void setParent(System* s) { Element::setParent((ScoreElement*)(s)); }
+    void setParent(System* s) { EngravingItem::setParent((EngravingObject*)(s)); }
 
     // Score Tree functions
-    ScoreElement* treeParent() const override;
-    ScoreElement* treeChild(int idx) const override;
+    EngravingObject* treeParent() const override;
+    EngravingObject* treeChild(int idx) const override;
     int treeChildCount() const override;
 
     virtual void setScore(Score* s) override;
@@ -133,8 +133,8 @@ public:
 
     virtual void moveTicks(const Fraction& diff) { setTick(tick() + diff); }
 
-    virtual void add(Element*) override;
-    virtual void remove(Element*) override;
+    virtual void add(EngravingItem*) override;
+    virtual void remove(EngravingItem*) override;
     virtual void writeProperties(XmlWriter&) const override;
     virtual bool readProperties(XmlReader&) override;
 

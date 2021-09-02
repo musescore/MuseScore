@@ -43,8 +43,8 @@ namespace Ms {
 //   Bracket
 //---------------------------------------------------------
 
-Bracket::Bracket(Element* parent)
-    : Element(ElementType::BRACKET, parent)
+Bracket::Bracket(EngravingItem* parent)
+    : EngravingItem(ElementType::BRACKET, parent)
 {
     ay1          = 0;
     h2           = 3.5 * spatium();
@@ -320,7 +320,7 @@ void Bracket::draw(mu::draw::Painter* painter) const
 
 void Bracket::startEdit(EditData& ed)
 {
-    Element::startEdit(ed);
+    EngravingItem::startEdit(ed);
     ay1 = pagePos().y();
 }
 
@@ -407,9 +407,9 @@ bool Bracket::acceptDrop(EditData& data) const
 //   drop
 //---------------------------------------------------------
 
-Element* Bracket::drop(EditData& data)
+EngravingItem* Bracket::drop(EditData& data)
 {
-    Element* e = data.dropElement;
+    EngravingItem* e = data.dropElement;
     Bracket* b = 0;
     if (e->isBracket()) {
         b = toBracket(e);
@@ -450,7 +450,7 @@ bool Bracket::edit(EditData& ed)
 
 QVariant Bracket::getProperty(Pid id) const
 {
-    QVariant v = Element::getProperty(id);
+    QVariant v = EngravingItem::getProperty(id);
     if (!v.isValid()) {
         v = _bi->getProperty(id);
     }
@@ -475,7 +475,7 @@ QVariant Bracket::propertyDefault(Pid id) const
     if (id == Pid::BRACKET_COLUMN) {
         return 0;
     }
-    QVariant v = Element::propertyDefault(id);
+    QVariant v = EngravingItem::propertyDefault(id);
     if (!v.isValid()) {
         v = _bi->propertyDefault(id);
     }
@@ -505,7 +505,7 @@ void Bracket::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
 void Bracket::setSelected(bool f)
 {
 //      _bi->setSelected(f);
-    Element::setSelected(f);
+    EngravingItem::setSelected(f);
 }
 
 //---------------------------------------------------------
@@ -560,7 +560,7 @@ void Bracket::write(XmlWriter& xml) const
             xml.tag("level", _bi->column());
         }
 
-        Element::writeProperties(xml);
+        EngravingItem::writeProperties(xml);
 
         xml.etag();
     }
@@ -593,7 +593,7 @@ void Bracket::read(XmlReader& e)
     while (e.readNextStartElement()) {
         if (e.name() == "level") {
             _bi->setColumn(e.readInt());
-        } else if (!Element::readProperties(e)) {
+        } else if (!EngravingItem::readProperties(e)) {
             e.unknown();
         }
     }

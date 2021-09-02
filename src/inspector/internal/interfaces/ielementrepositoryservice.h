@@ -22,7 +22,7 @@
 #ifndef MU_INSPECTOR_IELEMENTREPOSITORYSERVICE_H
 #define MU_INSPECTOR_IELEMENTREPOSITORYSERVICE_H
 
-#include "libmscore/element.h"
+#include "libmscore/engravingitem.h"
 #include <QList>
 #include <QObject>
 #include <functional>
@@ -35,11 +35,11 @@ public:
 
     virtual QObject* getQObject() = 0;
 
-    virtual void updateElementList(const QList<Ms::Element*>& newRawElementList) = 0;
-    virtual QList<Ms::Element*> findElementsByType(const Ms::ElementType elementType) const = 0;
-    virtual QList<Ms::Element*> findElementsByType(const Ms::ElementType elementType,
-                                                   std::function<bool(const Ms::Element*)> filterFunc) const = 0;
-    virtual QList<Ms::Element*> takeAllElements() const = 0;
+    virtual void updateElementList(const QList<Ms::EngravingItem*>& newRawElementList) = 0;
+    virtual QList<Ms::EngravingItem*> findElementsByType(const Ms::ElementType elementType) const = 0;
+    virtual QList<Ms::EngravingItem*> findElementsByType(const Ms::ElementType elementType,
+                                                         std::function<bool(const Ms::EngravingItem*)> filterFunc) const = 0;
+    virtual QList<Ms::EngravingItem*> takeAllElements() const = 0;
 
 signals:
     virtual void elementsUpdated() = 0;

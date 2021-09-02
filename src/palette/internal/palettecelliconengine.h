@@ -43,14 +43,14 @@ public:
 
     void paint(QPainter* painter, const QRect& rect, QIcon::Mode mode, QIcon::State state) override;
 
-    static void paintPaletteElement(void* data, Ms::Element* element);
+    static void paintPaletteElement(void* data, Ms::EngravingItem* element);
 
 private:
     void paintCell(draw::Painter& painter, const RectF& rect, bool selected, bool current) const;
     void paintBackground(draw::Painter& painter, const RectF& rect, bool selected, bool current) const;
-    void paintActionIcon(draw::Painter& painter, const RectF& rect, Ms::Element* element) const;
+    void paintActionIcon(draw::Painter& painter, const RectF& rect, Ms::EngravingItem* element) const;
     qreal paintStaff(draw::Painter& painter, const RectF& rect, qreal spatium) const;
-    void paintScoreElement(draw::Painter& painter, Ms::Element* element, qreal spatium, bool alignToStaff) const;
+    void paintScoreElement(draw::Painter& painter, Ms::EngravingItem* element, qreal spatium, bool alignToStaff) const;
 
     PaletteCellConstPtr m_cell;
     qreal m_extraMag = 1.0;

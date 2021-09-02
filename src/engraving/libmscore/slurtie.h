@@ -97,7 +97,7 @@ protected:
     mu::PainterPath shapePath;
     Shape _shape;
 
-    virtual void changeAnchor(EditData&, Element*) = 0;
+    virtual void changeAnchor(EditData&, EngravingItem*) = 0;
     QVector<mu::LineF> gripAnchorLines(Grip grip) const override;
 
 public:
@@ -123,7 +123,7 @@ public:
     UP& ups(Grip i) { return _ups[int(i)]; }
     virtual Shape shape() const override { return _shape; }
 
-    Element::EditBehavior normalModeEditBehavior() const override { return Element::EditBehavior::Edit; }
+    EngravingItem::EditBehavior normalModeEditBehavior() const override { return EngravingItem::EditBehavior::Edit; }
     int gripsCount() const override { return int(Grip::GRIPS); }
     Grip initialEditModeGrip() const override { return Grip::END; }
     Grip defaultGrip() const override { return Grip::DRAG; }
@@ -152,7 +152,7 @@ protected:
     void fixupSegments(unsigned nsegs);
 
 public:
-    SlurTie(const ElementType& type, Element* parent);
+    SlurTie(const ElementType& type, EngravingItem* parent);
     SlurTie(const SlurTie&);
     ~SlurTie();
 

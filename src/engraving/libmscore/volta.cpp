@@ -84,7 +84,7 @@ void VoltaSegment::layout()
 //   propertyDelegate
 //---------------------------------------------------------
 
-Element* VoltaSegment::propertyDelegate(Pid pid)
+EngravingItem* VoltaSegment::propertyDelegate(Pid pid)
 {
     if (pid == Pid::BEGIN_HOOK_TYPE || pid == Pid::END_HOOK_TYPE || pid == Pid::VOLTA_ENDING) {
         return spanner();
@@ -96,7 +96,7 @@ Element* VoltaSegment::propertyDelegate(Pid pid)
 //   Volta
 //---------------------------------------------------------
 
-Volta::Volta(Element* parent)
+Volta::Volta(EngravingItem* parent)
     : TextLineBase(ElementType::VOLTA, parent, ElementFlag::SYSTEM)
 {
     setPlacement(Placement::ABOVE);
@@ -419,7 +419,7 @@ void Volta::setTempo() const
 
 QString Volta::accessibleInfo() const
 {
-    return QString("%1: %2").arg(Element::accessibleInfo(), text());
+    return QString("%1: %2").arg(EngravingItem::accessibleInfo(), text());
 }
 
 //---------------------------------------------------------

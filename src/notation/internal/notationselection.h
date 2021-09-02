@@ -42,8 +42,8 @@ public:
     bool canCopy() const override;
     QMimeData* mimeData() const override;
 
-    Element* element() const override;
-    std::vector<Element*> elements() const override;
+    EngravingItem* element() const override;
+    std::vector<EngravingItem*> elements() const override;
 
     std::vector<Note*> notes(NoteFilter filter) const override;
 

@@ -81,7 +81,7 @@ void HairpinSettingsModel::createProperties()
 
 void HairpinSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::HAIRPIN, [](const Ms::Element* element) -> bool {
+    m_elementList = m_repository->findElementsByType(Ms::ElementType::HAIRPIN, [](const Ms::EngravingItem* element) -> bool {
         const Ms::Hairpin* hairpin = Ms::toHairpin(element);
 
         if (!hairpin) {

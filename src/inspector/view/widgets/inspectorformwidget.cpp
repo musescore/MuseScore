@@ -49,7 +49,7 @@ InspectorFormWidget::InspectorFormWidget(QQmlEngine* qmlEngine, QWidget* parent)
     }
 }
 
-void InspectorFormWidget::onSelectionChanged(const QList<Ms::Element*>& elementList)
+void InspectorFormWidget::onSelectionChanged(const QList<Ms::EngravingItem*>& elementList)
 {
     m_inspectorListModel->setElementList(elementList);
 }

@@ -54,7 +54,7 @@ public:
 
     QRect playbackCursorRectByTick(midi::tick_t tick) const override;
 
-    RetVal<midi::tick_t> playPositionTickByElement(const Element* element) const override;
+    RetVal<midi::tick_t> playPositionTickByElement(const EngravingItem* element) const override;
 
     void addLoopBoundary(LoopBoundaryType boundaryType, midi::tick_t tick) override;
     void setLoopBoundariesVisible(bool visible) override;

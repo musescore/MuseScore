@@ -26,7 +26,7 @@
 #include "infrastructure/draw/geometry.h"
 
 namespace Ms {
-class Element;
+class EngravingItem;
 class EditData;
 
 //-------------------------------------------------------------------
@@ -63,14 +63,14 @@ public:
 
 //-------------------------------------------------------------------
 //   SingleElementGroup
-///   Element group for single element.
+///   EngravingItem group for single element.
 //-------------------------------------------------------------------
 
 class SingleElementGroup final : public ElementGroup
 {
-    Element* e;
+    EngravingItem* e;
 public:
-    SingleElementGroup(Element* el)
+    SingleElementGroup(EngravingItem* el)
         : e(el) {}
 
     void startDrag(EditData& ed) override;
