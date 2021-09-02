@@ -83,14 +83,14 @@ bool BSymbol::readProperties(XmlReader& e)
     } else if (tag == "systemFlag") {
         setSystemFlag(e.readInt());
     } else if (tag == "Symbol" || tag == "FSymbol") {
-        EngravingItem* element = Factory::name2Element(tag, this);
+        EngravingItem* element = Factory::createItemByName(tag, this);
         element->read(e);
         add(element);
     } else if (tag == "Image") {
         if (MScore::noImages) {
             e.skipCurrentElement();
         } else {
-            EngravingItem* element = Factory::name2Element(tag, this);
+            EngravingItem* element = Factory::createItemByName(tag, this);
             element->read(e);
             add(element);
         }
