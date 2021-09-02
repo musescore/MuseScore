@@ -39,8 +39,6 @@ BaseSection {
     signal periodChanged(int period)
 
     Row {
-        anchors.left: parent.left
-        anchors.right: parent.right
         spacing: 0
 
         CheckBox {

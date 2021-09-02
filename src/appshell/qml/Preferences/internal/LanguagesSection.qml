@@ -41,8 +41,6 @@ BaseSection {
     Row {
         spacing: 12
 
-        height: 30
-
         Dropdown {
             id: dropdown
 

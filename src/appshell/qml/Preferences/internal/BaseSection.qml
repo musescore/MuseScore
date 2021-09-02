@@ -30,6 +30,9 @@ Column {
     width: parent.width
     spacing: 18
 
+    //! NOTE: Added to prevent components clipping when navigating
+    padding: 2
+
     property alias title: titleLabel.text
     property int columnWidth: 216
 
