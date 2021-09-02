@@ -22,12 +22,15 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
-RadioButton {
+RadioDelegate {
     id: root
 
     default property Component contentComponent
+
+    property alias navigation: keynavCtrl
 
     implicitHeight: 20
     implicitWidth: ListView.view ? (ListView.view.width - (ListView.view.spacing * (ListView.view.count - 1))) / ListView.view.count
@@ -38,6 +41,26 @@ RadioButton {
     font: ui.theme.bodyFont
 
     hoverEnabled: true
+
+    //! NONE Disabled default Qt Accessible
+    Accessible.role: Accessible.NoRole
+
+    NavigationControl {
+        id: keynavCtrl
+        name: root.objectName
+
+        accessible.role: MUAccessible.RadioButton
+        accessible.name: root.text
+        accessible.selected: root.checked
+
+        onActiveChanged: {
+            if (keynavCtrl.active) {
+                root.forceActiveFocus()
+            }
+        }
+
+        onTriggered: root.toggled()
+    }
 
     contentItem: Item {
         anchors.fill: parent
@@ -76,6 +99,8 @@ RadioButton {
             radius: 10
 
             property real borderColorOpacity: ui.theme.buttonOpacityNormal
+
+            NavigationFocusBorder { navigationCtrl: keynavCtrl }
 
             color: ui.theme.textFieldColor
             border.color: Utils.colorWithAlpha(ui.theme.fontPrimaryColor, borderColorOpacity)
