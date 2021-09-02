@@ -25,23 +25,18 @@ import QtQuick.Layouts 1.3
 import MuseScore.Preferences 1.0
 import MuseScore.UiComponents 1.0
 
-Column {
+BaseSection {
     id: root
-    spacing: 18
-
-    property int firstColumnWidth: 0
 
     signal colorChangeRequested(var newColor, var propertyType)
 
-    StyledTextLabel {
-        text: qsTrc("appshell", "UI colors")
-        font: ui.theme.bodyBoldFont
-    }
+    title: qsTrc("appshell", "UI colors")
 
     GridLayout {
-        columnSpacing: parent.width/8
+        columnSpacing: parent.width / 8
         rowSpacing: 20
         columns: 2
+
         Repeater {
 
             model: [
@@ -56,7 +51,7 @@ Column {
                 StyledTextLabel {
                     anchors.verticalCenter: parent.verticalCenter
                     text: modelData["textRole"]
-                    width: root.firstColumnWidth/2
+                    width: root.columnWidth / 2
                     horizontalAlignment: Text.AlignLeft
                 }
 

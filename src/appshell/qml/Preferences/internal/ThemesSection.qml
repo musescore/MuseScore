@@ -23,15 +23,36 @@ import QtQuick 2.15
 
 import MuseScore.UiComponents 1.0
 
-Column {
+BaseSection {
     id: root
+
+    title: root.highContrastEnabled ? qsTrc("appshell", "High Contrast Themes") : qsTrc("appshell", "Themes")
+
+    property bool highContrastEnabled: false
 
     property alias themes: view.model
     property string currentThemeCode
 
-    signal themeChangeRequested(var newThemeCode)
+    property alias accentColors: accentColorsSection.colors
+    property alias currentAccentColorIndex: accentColorsSection.currentColorIndex
 
-    spacing: 18
+    signal themeChangeRequested(var newThemeCode)
+    signal highContrastChangeRequested(bool enabled)
+    signal accentColorChangeRequested(var newColorIndex)
+
+    CheckBox {
+        id: highContrastEnable
+
+        width: 200
+
+        text: qsTrc("appshell", "Enable high-contrast")
+
+        checked: root.highContrastEnabled
+
+        onClicked: {
+            root.highContrastChangeRequested(!checked)
+        }
+    }
 
     ListView {
         id: view
@@ -73,6 +94,18 @@ Column {
                     root.themeChangeRequested(modelData.codeKey)
                 }
             }
+        }
+    }
+
+    AccentColorsSection {
+        id: accentColorsSection
+
+        firstColumnWidth: root.columnWidth
+
+        visible: !root.highContrastEnabled
+
+        onAccentColorChangeRequested: {
+            root.accentColorChangeRequested(newColorIndex)
         }
     }
 }
