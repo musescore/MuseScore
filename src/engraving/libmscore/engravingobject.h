@@ -31,6 +31,9 @@
 #include "modularity/ioc.h"
 #include "diagnostics/iengravingelementsprovider.h"
 
+#include "async/channel.h"
+#include "async/asyncable.h"
+
 namespace Ms {
 class EngravingObject;
 class MasterScore;
@@ -173,7 +176,7 @@ public:
     EngravingObject* mainElement();
 };
 
-class EngravingObject
+class EngravingObject : public mu::async::Asyncable
 {
     INJECT_STATIC(engraving, mu::diagnostics::IEngravingElementsProvider, elementsProvider)
 
@@ -185,8 +188,12 @@ class EngravingObject
 
     static ElementStyle const emptyStyle;
 
+    mu::async::Channel<EngravingObject*> m_onDestroyed;
+
+    void doSetParent(EngravingObject* p);
+
 protected:
-    const ElementStyle* _elementStyle {& emptyStyle };
+    const ElementStyle* _elementStyle { &emptyStyle };
     PropertyFlags* _propertyFlagsList { 0 };
     LinkedElements* _links            { 0 };
     virtual int getPropertyFlagsIdx(Pid id) const;
