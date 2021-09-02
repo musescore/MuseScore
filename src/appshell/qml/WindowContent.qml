@@ -94,8 +94,6 @@ DockWindow {
         HomePage {},
 
         NotationPage {
-            dockWindow: root
-
             topToolKeyNavSec: root.topToolKeyNavSec
         },
 

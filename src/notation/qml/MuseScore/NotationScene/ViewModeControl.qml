@@ -74,7 +74,7 @@ FlatButton {
         navigation: root.navigation
 
         onHandleMenuItem: {
-            Qt.callLater(root.changeCurrentViewModeRequested, item.id)
+            Qt.callLater(root.changeCurrentViewModeRequested, itemId)
         }
     }
 }

@@ -42,7 +42,7 @@ ListItemBlank {
 
     property int padding: 0
 
-    signal handleMenuItem(var item)
+    signal handleMenuItem(string itemId)
 
     signal openSubMenuRequested(var menu)
     signal subMenuShowed(var menu)
@@ -150,8 +150,8 @@ ListItemBlank {
 
             menu.model = modelData.subitems
 
-            menu.handleMenuItem.connect(function(item) {
-                Qt.callLater(root.handleMenuItem, item)
+            menu.handleMenuItem.connect(function(itemId) {
+                Qt.callLater(root.handleMenuItem, itemId)
                 menu.close()
             })
 
@@ -311,6 +311,6 @@ ListItemBlank {
             return
         }
 
-        root.handleMenuItem(modelData)
+        root.handleMenuItem(modelData.id)
     }
 }

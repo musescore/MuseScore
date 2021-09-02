@@ -19,25 +19,32 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_APPSHELL_INOTATIONPAGESTATE_H
-#define MU_APPSHELL_INOTATIONPAGESTATE_H
 
-#include "modularity/imoduleexport.h"
-#include "appshelltypes.h"
-#include "async/channel.h"
+#ifndef MU_DOCK_DOCKWINDOWACTIONSCONTROLLER_H
+#define MU_DOCK_DOCKWINDOWACTIONSCONTROLLER_H
 
-namespace mu::appshell {
-class INotationPageState : MODULE_EXPORT_INTERFACE
+#include "actions/actionable.h"
+
+#include "modularity/ioc.h"
+#include "actions/iactionsdispatcher.h"
+#include "../idockwindowprovider.h"
+
+namespace mu::dock {
+class DockWindowActionsController : public actions::Actionable
 {
-    INTERFACE_ID(INotationPageState)
+    INJECT(dock, IDockWindowProvider, dockWindowProvider)
+    INJECT(dock, actions::IActionsDispatcher, dispatcher)
 
 public:
-    virtual ~INotationPageState() = default;
+    void init();
 
-    virtual bool isPanelVisible(PanelType type) const = 0;
-    virtual void setIsPanelsVisible(const std::map<PanelType, bool>& panelsVisible) = 0;
-    virtual async::Channel<PanelTypeList> panelsVisibleChanged() const = 0;
+private:
+    void setDockOpen(const actions::ActionData& args);
+    void toggleOpened(const actions::ActionData& args);
+    void toggleFloating(const actions::ActionData& args);
+
+    IDockWindow* window() const;
 };
 }
 
-#endif // MU_APPSHELL_NOTATIONPAGESTATE_H
+#endif // MU_DOCK_DOCKWINDOWACTIONSCONTROLLER_H

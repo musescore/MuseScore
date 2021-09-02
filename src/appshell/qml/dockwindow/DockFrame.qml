@@ -86,7 +86,7 @@ Rectangle {
         visible: frameModel.titleBarVisible
 
         onHandleContextMenuItemRequested: {
-            frameModel.handleMenuItem(item)
+            frameModel.handleMenuItem(itemId)
         }
     }
 
@@ -167,7 +167,7 @@ Rectangle {
                 }
 
                 onHandleContextMenuItemRequested: {
-                    frameModel.handleMenuItem(item)
+                    frameModel.handleMenuItem(itemId)
                 }
             }
         }

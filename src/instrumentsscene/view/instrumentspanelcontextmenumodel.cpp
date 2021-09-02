@@ -35,6 +35,8 @@ using namespace mu::notation;
 using namespace mu::ui;
 using namespace mu::actions;
 
+const ActionCode SET_INSTRUMENTS_ORDER_CODE("set-instruments-order");
+
 InstrumentsPanelContextMenuModel::InstrumentsPanelContextMenuModel(QObject* parent)
     : AbstractMenuModel(parent)
 {
@@ -42,6 +44,8 @@ InstrumentsPanelContextMenuModel::InstrumentsPanelContextMenuModel(QObject* pare
 
 void InstrumentsPanelContextMenuModel::load()
 {
+    dispatcher()->reg(this, SET_INSTRUMENTS_ORDER_CODE, this, &InstrumentsPanelContextMenuModel::setInstrumentsOrder);
+
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         INotationPtr notation = globalContext()->currentNotation();
         m_masterNotation = globalContext()->currentMasterNotation();
@@ -69,31 +73,26 @@ void InstrumentsPanelContextMenuModel::loadItems()
     TRACEFUNC;
 
     ScoreOrder currentOrder = m_masterNotation->parts()->scoreOrder();
-    ScoreOrderList allOrders = instrumentsRepository()->orders();
+    m_orders = instrumentsRepository()->orders();
 
-    if (!allOrders.contains(currentOrder)) {
-        allOrders.append(currentOrder);
+    if (!m_orders.contains(currentOrder)) {
+        m_orders.append(currentOrder);
     }
 
     MenuItemList orderItems;
 
-    dispatcher()->unReg(this);
-
-    for (const ScoreOrder& order : allOrders) {
+    for (const ScoreOrder& order : m_orders) {
         MenuItem orderItem;
 
         orderItem.id = order.id;
         orderItem.title = order.name;
-        orderItem.code = codeFromQString("set-order-" + order.id);
+        orderItem.code = SET_INSTRUMENTS_ORDER_CODE;
         orderItem.checkable = Checkable::Yes;
         orderItem.state.enabled = true;
         orderItem.state.checked = currentOrder.id == order.id;
+        orderItem.args = ActionData::make_arg1<QString>(order.id);
 
         orderItems << orderItem;
-
-        dispatcher()->reg(this, orderItem.code, [this, order]() {
-            m_masterNotation->parts()->setScoreOrder(order);
-        });
     }
 
     MenuItemList items {
@@ -101,4 +100,20 @@ void InstrumentsPanelContextMenuModel::loadItems()
     };
 
     setItems(items);
+}
+
+void InstrumentsPanelContextMenuModel::setInstrumentsOrder(const actions::ActionData& args)
+{
+    if (args.count() <= 0) {
+        return;
+    }
+
+    QString orderId = args.arg<QString>(0);
+
+    for (const ScoreOrder& order : m_orders) {
+        if (order.id == orderId) {
+            m_masterNotation->parts()->setScoreOrder(order);
+            return;
+        }
+    }
 }

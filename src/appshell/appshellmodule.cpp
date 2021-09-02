@@ -32,7 +32,6 @@
 #include "internal/applicationuiactions.h"
 #include "internal/applicationactioncontroller.h"
 #include "internal/appshellconfiguration.h"
-#include "internal/notationpagestate.h"
 #include "internal/startupscenario.h"
 
 #include "view/devtools/settingslistmodel.h"
@@ -68,7 +67,6 @@ using namespace mu::dock;
 static std::shared_ptr<ApplicationActionController> s_applicationActionController = std::make_shared<ApplicationActionController>();
 static std::shared_ptr<ApplicationUiActions> s_applicationUiActions = std::make_shared<ApplicationUiActions>(s_applicationActionController);
 static std::shared_ptr<AppShellConfiguration> s_appShellConfiguration = std::make_shared<AppShellConfiguration>();
-static std::shared_ptr<NotationPageState> s_notationPageState = std::make_shared<NotationPageState>();
 
 static void appshell_init_qrc()
 {
@@ -89,7 +87,6 @@ void AppShellModule::registerExports()
     DockSetup::registerExports();
 
     ioc()->registerExport<IAppShellConfiguration>(moduleName(), s_appShellConfiguration);
-    ioc()->registerExport<INotationPageState>(moduleName(), s_notationPageState);
     ioc()->registerExport<IStartupScenario>(moduleName(), new StartupScenario());
 }
 
@@ -147,8 +144,9 @@ void AppShellModule::registerUiTypes()
 
 void AppShellModule::onInit(const IApplication::RunMode&)
 {
+    DockSetup::onInit();
+
     s_appShellConfiguration->init();
     s_applicationActionController->init();
-    s_notationPageState->init();
     s_applicationUiActions->init();
 }

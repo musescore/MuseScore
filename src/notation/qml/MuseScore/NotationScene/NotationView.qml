@@ -196,8 +196,8 @@ FocusScope {
 
                     navigation: fakeNavCtrl
 
-                    onHandleMenuItem: function (item) {
-                        contextMenuModel.handleMenuItem(item.id)
+                    onHandleMenuItem: function (itemId) {
+                        contextMenuModel.handleMenuItem(itemId)
                     }
                 }
             }

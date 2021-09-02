@@ -28,12 +28,16 @@ if (OS_IS_MAC)
     set(PLATFORM_THEME_SRC
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosplatformtheme.mm
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosplatformtheme.h
+        ${CMAKE_CURRENT_LIST_DIR}/view/platform/macos/macosmainwindowprovider.mm
+        ${CMAKE_CURRENT_LIST_DIR}/view/platform/macos/macosmainwindowprovider.h
     )
     # Don't mix C++ and Objective-C++ in Unity Build
     set_source_files_properties(${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosplatformtheme.mm
+                                ${CMAKE_CURRENT_LIST_DIR}/view/platform/macos/macosmainwindowprovider.mm
                                 PROPERTIES SKIP_UNITY_BUILD_INCLUSION ON)
 
     set_source_files_properties(${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosplatformtheme.mm
+                                ${CMAKE_CURRENT_LIST_DIR}/view/platform/macos/macosmainwindowprovider.mm
                                 PROPERTIES SKIP_PRECOMPILE_HEADERS ON)
 elseif(OS_IS_WIN)
     set(PLATFORM_THEME_SRC
@@ -116,6 +120,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/qmlaccessible.h
     ${CMAKE_CURRENT_LIST_DIR}/view/widgetview.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/widgetview.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/mainwindowprovider.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/mainwindowprovider.h
 
     ${CMAKE_CURRENT_LIST_DIR}/dev/interactivetestsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dev/interactivetestsmodel.h

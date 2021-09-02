@@ -24,7 +24,7 @@
 #include <Cocoa/Cocoa.h>
 #include <QWindow>
 
-using namespace mu::dock;
+using namespace mu::ui;
 
 static NSWindow* nsWindowForQWindow(QWindow* qWindow)
 {

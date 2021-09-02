@@ -41,8 +41,6 @@ DockPage {
     objectName: "Notation"
     uri: "musescore://notation"
 
-    property DockWindow dockWindow: null
-
     property var topToolKeyNavSec
 
     property NotationPageModel pageModel: NotationPageModel {}
@@ -73,21 +71,7 @@ DockPage {
     }
 
     onInited: {
-        pageModel.setNotationToolBarDockName(notationToolBar.objectName)
-        pageModel.setPlaybackToolBarDockName(playbackToolBar.objectName)
-        pageModel.setUndoRedoToolBarDockName(undoRedoToolBar.objectName)
-        pageModel.setNoteInputBarDockName(noteInputBar.objectName)
-        pageModel.setPalettesPanelDockName(palettesPanel.objectName)
-        pageModel.setInspectorPanelDockName(inspectorPanel.objectName)
-        pageModel.setInstrumentsPanelDockName(instrumentsPanel.objectName)
-        pageModel.setSelectionFilterPanelDockName(selectionFilterPanel.objectName)
-        pageModel.setPianoRollDockName(pianoRollPanel.objectName)
-        pageModel.setMixerDockName(mixerPanel.objectName)
-        pageModel.setTimelineDockName(timelinePanel.objectName)
-        pageModel.setDrumsetPanelDockName(drumsetPanel.objectName)
-        pageModel.setStatusBarDockName(notationStatusBar.objectName)
-
-        Qt.callLater(pageModel.init, root.dockWindow)
+        Qt.callLater(pageModel.init)
     }
 
     readonly property int defaultPanelWidth: 300
@@ -117,7 +101,7 @@ DockPage {
         DockToolBar {
             id: playbackToolBar
 
-            objectName: "playbackToolBar"
+            objectName: pageModel.playbackToolBarName()
             title: qsTrc("appshell", "Playback controls")
 
             width: root.width / 3
@@ -133,9 +117,7 @@ DockPage {
         },
 
         DockToolBar {
-            id: undoRedoToolBar
-
-            objectName: "undoRedoToolBar"
+            objectName: pageModel.undoRedoToolBarName()
             title: qsTrc("appshell", "Undo/redo toolbar")
 
             minimumWidth: 74
@@ -154,7 +136,7 @@ DockPage {
         DockToolBar {
             id: noteInputBar
 
-            objectName: "noteInputBar"
+            objectName: pageModel.noteInputBarName()
             title: qsTrc("appshell", "Note input")
 
             horizontalPreferredSize: Qt.size(720, root.toolBarHeight)
@@ -175,7 +157,7 @@ DockPage {
         DockPanel {
             id: palettesPanel
 
-            objectName: "palettesPanel"
+            objectName: pageModel.palettesPanelName()
             title: qsTrc("appshell", "Palettes")
 
             navigationSection: root.navigationPanelSec(palettesPanel.location)
@@ -194,7 +176,7 @@ DockPage {
         DockPanel {
             id: instrumentsPanel
 
-            objectName: "instrumentsPanel"
+            objectName: pageModel.instrumentsPanelName()
             title: qsTrc("appshell", "Instruments")
 
             navigationSection: root.navigationPanelSec(instrumentsPanel.location)
@@ -208,8 +190,8 @@ DockPage {
             InstrumentsPanel {
                 navigationSection: instrumentsPanel.navigationSection
 
-                onContextMenuModelChanged: {
-                    instrumentsPanel.contextMenuModel = newModel
+                Component.onCompleted: {
+                    instrumentsPanel.contextMenuModel = contextMenuModel
                 }
             }
         },
@@ -217,7 +199,7 @@ DockPage {
         DockPanel {
             id: inspectorPanel
 
-            objectName: "inspectorPanel"
+            objectName: pageModel.inspectorPanelName()
             title: qsTrc("appshell", "Properties")
 
             navigationSection: root.navigationPanelSec(inspectorPanel.location)
@@ -236,7 +218,7 @@ DockPage {
         DockPanel {
             id: selectionFilterPanel
 
-            objectName: "selectionFilterPanel"
+            objectName: pageModel.selectionFiltersPanelName()
             title: qsTrc("appshell", "Selection Filter")
 
             navigationSection: root.navigationPanelSec(selectionFilterPanel.location)
@@ -261,7 +243,7 @@ DockPage {
         DockPanel {
             id: mixerPanel
 
-            objectName: "mixerPanel"
+            objectName: pageModel.mixerPanelName()
             title: qsTrc("appshell", "Mixer")
 
             allowedAreas: Qt.TopDockWidgetArea | Qt.BottomDockWidgetArea
@@ -285,7 +267,7 @@ DockPage {
         DockPanel {
             id: pianoRollPanel
 
-            objectName: "pianoRollPanel"
+            objectName: pageModel.pianoPanelName()
             title: qsTrc("appshell", "Piano Roll")
 
             allowedAreas: Qt.TopDockWidgetArea | Qt.BottomDockWidgetArea
@@ -314,7 +296,7 @@ DockPage {
         DockPanel {
             id: timelinePanel
 
-            objectName: "timelinePanel"
+            objectName: pageModel.timelinePanelName()
             title: qsTrc("appshell", "Timeline")
 
             allowedAreas: Qt.TopDockWidgetArea | Qt.BottomDockWidgetArea
@@ -335,7 +317,7 @@ DockPage {
         DockPanel {
             id: drumsetPanel
 
-            objectName: "drumsetPanel"
+            objectName: pageModel.drumsetPanelName()
             title: qsTrc("appshell", "Drumset Tools")
 
             allowedAreas: Qt.TopDockWidgetArea | Qt.BottomDockWidgetArea
@@ -362,7 +344,7 @@ DockPage {
     statusBar: DockStatusBar {
         id: notationStatusBar
 
-        objectName: "notationStatusBar"
+        objectName: pageModel.statusBarName()
 
         NotationStatusBar {}
     }

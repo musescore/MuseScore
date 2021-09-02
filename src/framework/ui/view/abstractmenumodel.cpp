@@ -139,11 +139,6 @@ const MenuItemList& AbstractMenuModel::items() const
     return m_items;
 }
 
-MenuItemList& AbstractMenuModel::items()
-{
-    return m_items;
-}
-
 void AbstractMenuModel::setItems(const MenuItemList& items)
 {
     TRACEFUNC;
@@ -169,6 +164,11 @@ int AbstractMenuModel::itemIndex(const actions::ActionCode& actionCode) const
     }
 
     return INVALID_ITEM_INDEX;
+}
+
+MenuItem& AbstractMenuModel::item(int index)
+{
+    return m_items[index];
 }
 
 MenuItem& AbstractMenuModel::findItem(const QString& itemId)

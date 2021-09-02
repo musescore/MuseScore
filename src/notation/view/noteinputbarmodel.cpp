@@ -186,7 +186,8 @@ void NoteInputBarModel::updateState()
 {
     bool enabled = notation() && !playbackController()->isPlaying();
 
-    for (MenuItem& item : items()) {
+    for (int i = 0; i < rowCount(); ++i) {
+        MenuItem& item = this->item(i);
         item.state.enabled = enabled;
         item.state.checked = false;
     }
@@ -221,8 +222,7 @@ void NoteInputBarModel::updateNoteInputModeState()
         return;
     }
 
-    MenuItemList& items = this->items();
-    MenuItem& item = items[noteInputModeIndex];
+    MenuItem& item = this->item(noteInputModeIndex);
 
     QString currentSection = item.section;
     MenuItemList subitems = noteInputMethodItems();
@@ -234,7 +234,7 @@ void NoteInputBarModel::updateNoteInputModeState()
 
 void NoteInputBarModel::updateNoteDotState()
 {
-    static ActionCodeList dotActions = {
+    static const ActionCodeList dotActions = {
         "pad-dot",
         "pad-dotdot",
         "pad-dot3",
@@ -250,7 +250,7 @@ void NoteInputBarModel::updateNoteDotState()
 
 void NoteInputBarModel::updateNoteDurationState()
 {
-    static ActionCodeList noteActions = {
+    static const ActionCodeList noteActions = {
         "note-longa",
         "note-breve",
         "pad-note-1",
@@ -274,7 +274,7 @@ void NoteInputBarModel::updateNoteDurationState()
 
 void NoteInputBarModel::updateNoteAccidentalState()
 {
-    static ActionCodeList accidentalActions = {
+    static const ActionCodeList accidentalActions = {
         "flat2",
         "flat",
         "nat",
@@ -315,7 +315,7 @@ void NoteInputBarModel::updateSlurState()
 
 void NoteInputBarModel::updateVoicesState()
 {
-    static ActionCodeList voiceActions {
+    static const ActionCodeList voiceActions {
         "voice-1",
         "voice-2",
         "voice-3",
@@ -331,7 +331,7 @@ void NoteInputBarModel::updateVoicesState()
 
 void NoteInputBarModel::updateArticulationsState()
 {
-    static ActionCodeList articulationActions {
+    static const ActionCodeList articulationActions {
         "add-marcato",
         "add-sforzato",
         "add-tenuto",

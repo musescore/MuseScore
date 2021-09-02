@@ -19,33 +19,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_APPSHELL_MACOS_MAINWINDOWPROVIDER_H
-#define MU_APPSHELL_MACOS_MAINWINDOWPROVIDER_H
+#ifndef MU_DOCK_IDOCKWINDOWPROVIDER_H
+#define MU_DOCK_IDOCKWINDOWPROVIDER_H
 
-#include "async/asyncable.h"
-#include "modularity/ioc.h"
-#include "ui/iuiconfiguration.h"
-
-#include "view/dockwindow/mainwindowprovider.h"
+#include "modularity/imoduleexport.h"
+#include "async/notification.h"
 
 namespace mu::dock {
-class MacOSMainWindowProvider : public MainWindowProvider, public async::Asyncable
+class IDockWindow;
+class IDockWindowProvider : MODULE_EXPORT_INTERFACE
 {
-    Q_OBJECT
-
-    INJECT(appshell, ui::IUiConfiguration, uiConfiguration)
+    INTERFACE_ID(IDockWindowProvider)
 
 public:
-    explicit MacOSMainWindowProvider(QObject* parent = nullptr);
+    virtual ~IDockWindowProvider() = default;
 
-    bool fileModified() const override;
+    virtual void init(IDockWindow* window) = 0;
+    virtual void deinit() = 0;
 
-public slots:
-    void setFileModified(bool modified) override;
-
-private:
-    void init() override;
+    virtual IDockWindow* window() const = 0;
+    virtual async::Notification windowChanged() const = 0;
 };
 }
 
-#endif // MU_APPSHELL_MACOS_MAINWINDOWPROVIDER_H
+#endif // MU_DOCK_IDOCKWINDOWPROVIDER_H

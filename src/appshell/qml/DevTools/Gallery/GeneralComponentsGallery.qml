@@ -314,7 +314,7 @@ Rectangle {
                     id: menuLoader
 
                     onHandleMenuItem: {
-                        console.log("selected " + item.id)
+                        console.log("selected " + itemId)
                     }
                 }
             }
