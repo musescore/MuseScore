@@ -194,6 +194,7 @@ private slots:
       void noteheadParentheses() { mxmlIoTest("testNoteheadParentheses"); }
       void noteheads() { mxmlIoTest("testNoteheads"); }
       void noteheadsFilled() { mxmlIoTest("testNoteheadsFilled"); }
+      void noteTuning() { mxmlMscxExportTestRef("testNoteTuning"); }
       void notesRests1() { mxmlIoTest("testNotesRests1"); }
       void notesRests2() { mxmlIoTest("testNotesRests2"); }
       void numberedLyrics() { mxmlIoTestRef("testNumberedLyrics"); }
