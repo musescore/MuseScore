@@ -47,6 +47,9 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/pianorollkeyboard.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/pianorollautomationeditor.h
     ${CMAKE_CURRENT_LIST_DIR}/view/pianorollautomationeditor.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/ipianorollautomationmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/automation/automationvelocity.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/automation/automationvelocity.cpp
     )
 
 set(MODULE_LINK
