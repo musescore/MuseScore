@@ -36,6 +36,8 @@ class EngravingElementsModel : public QAbstractItemModel
     Q_PROPERTY(QString info READ info NOTIFY infoChanged)
     Q_PROPERTY(QString summary READ summary NOTIFY summaryChanged)
 
+    Q_PROPERTY(bool isUseTreeParent READ isUseTreeParent WRITE setIsUseTreeParent NOTIFY isUseTreeParentChanged)
+
     INJECT(diagnostics, IEngravingElementsProvider, elementsProvider)
     INJECT(diagnostics, actions::IActionsDispatcher, dispatcher)
 
@@ -51,6 +53,7 @@ public:
 
     QString info() const;
     QString summary() const;
+    bool isUseTreeParent() const;
 
     Q_INVOKABLE void init();
     Q_INVOKABLE void reload();
@@ -60,6 +63,10 @@ public:
 signals:
     void infoChanged();
     void summaryChanged();
+    void isUseTreeParentChanged();
+
+public slots:
+    void setIsUseTreeParent(bool arg);
 
 private:
 
@@ -98,7 +105,7 @@ private:
     QVariant makeData(const Ms::EngravingObject* el) const;
 
     void load(const std::list<const Ms::EngravingObject*>& elements, Item* root);
-    void findAndAddLoss(const std::list<const Ms::EngravingObject*>& elements, Item* lossRoot, const Item* root);
+    void findAndAddLost(const std::list<const Ms::EngravingObject*>& elements, Item* lossRoot, const Item* root);
     const Item* findItem(const Ms::EngravingObject* el, const Item* root) const;
 
     void updateInfo();
@@ -108,6 +115,7 @@ private:
 
     QString m_info;
     QString m_summary;
+    bool m_isUseTreeParent = true;
 };
 }
 
