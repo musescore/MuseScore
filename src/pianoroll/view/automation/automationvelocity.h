@@ -37,7 +37,8 @@ public:
 
     double maxValue() override;
     double minValue() override;
-    double value(NoteEventBlock& block) override;
+    double value(Ms::Staff* staff, NoteEventBlock& block) override;
+    void setValue(Ms::Staff* staff, NoteEventBlock& block, double value) override;
 
 };
 
