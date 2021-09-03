@@ -45,8 +45,6 @@ public:
     Ms::Note* note();
 
     Ms::EngravingItem* clone() const override;
-    void add(Ms::EngravingObject* e);
-    void remove(Ms::EngravingObject* e);
 
     QVariant getProperty(Ms::Pid) const override { return QVariant(); }
     bool setProperty(Ms::Pid, const QVariant&) override { return false; }

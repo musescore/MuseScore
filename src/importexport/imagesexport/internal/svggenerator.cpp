@@ -129,14 +129,12 @@ static void translate_dashPattern(QVector<qreal> pattern, const qreal& width, QS
 // Gets the contents of the SVG class attribute, based on element type/name
 static QString getClass(const Ms::EngravingItem* e)
 {
-    Ms::ElementType eType;
     QString eName;
 
     // Add element type as "class"
     if (e == NULL) {
         return eName; // e should never be null, this is extra-cautious
     }
-    eType = e->type();
     eName = e->name();
 
     // Future sub-typing code goes here

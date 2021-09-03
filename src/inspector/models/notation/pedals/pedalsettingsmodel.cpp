@@ -57,7 +57,7 @@ void PedalSettingsModel::loadProperties()
     loadPropertyItem(m_hookType);
 
     auto formatDoubleFunc = [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
+        return DataFormatter::roundDouble(elementPropertyValue.toDouble());
     };
 
     loadPropertyItem(m_thickness, formatDoubleFunc);
