@@ -256,17 +256,19 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag, InputState* externalInputStat
             if (e) {
                   Fraction stick = Fraction(0, 1);
                   Element* ee = is.slur()->startElement();
-                  if (ee->isChordRest())
-                        stick = toChordRest(ee)->tick();
-                  else if (ee->isNote())
-                        stick = toNote(ee)->chord()->tick();
-                  if (stick == e->tick()) {
-                        is.slur()->setTick(stick);
-                        is.slur()->setStartElement(e);
-                        }
-                  else {
-                        is.slur()->setTick2(e->tick());
-                        is.slur()->setEndElement(e);
+                  if (ee) {
+                        if (ee->isChordRest())
+                              stick = toChordRest(ee)->tick();
+                        else if (ee->isNote())
+                              stick = toNote(ee)->chord()->tick();
+                        if (stick == e->tick()) {
+                              is.slur()->setTick(stick);
+                              is.slur()->setStartElement(e);
+                              }
+                        else {
+                              is.slur()->setTick2(e->tick());
+                              is.slur()->setEndElement(e);
+                              }
                         }
                   }
             else
