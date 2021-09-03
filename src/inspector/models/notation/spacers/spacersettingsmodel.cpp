@@ -49,7 +49,7 @@ void SpacerSettingsModel::requestElements()
 void SpacerSettingsModel::loadProperties()
 {
     loadPropertyItem(m_spacerHeight, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
+        return DataFormatter::roundDouble(elementPropertyValue.toDouble());
     });
 }
 

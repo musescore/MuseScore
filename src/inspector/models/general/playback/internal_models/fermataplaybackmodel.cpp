@@ -50,7 +50,7 @@ void FermataPlaybackModel::requestElements()
 void FermataPlaybackModel::loadProperties()
 {
     loadPropertyItem(m_timeStretch, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toDouble()) * 100;
+        return DataFormatter::roundDouble(elementPropertyValue.toDouble()) * 100;
     });
 }
 

@@ -346,11 +346,6 @@ void Beam::layout1()
     Chord* c1 = 0;
     Chord* c2 = 0;
 
-    if (!staff()) {
-        int k = 0;
-        auto s = staff();
-    }
-
     // TAB's with stem beside staves have special layout
     if (staff()->isTabStaff(Fraction(0, 1)) && !staff()->staffType(Fraction(0, 1))->stemThrough()) {
         //TABULATURES: all beams (and related chords) are:

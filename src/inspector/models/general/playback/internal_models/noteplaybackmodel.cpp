@@ -49,7 +49,7 @@ void NotePlaybackModel::requestElements()
 void NotePlaybackModel::loadProperties()
 {
     loadPropertyItem(m_tuning, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
+        return DataFormatter::roundDouble(elementPropertyValue.toDouble());
     });
 
     loadPropertyItem(m_velocity);

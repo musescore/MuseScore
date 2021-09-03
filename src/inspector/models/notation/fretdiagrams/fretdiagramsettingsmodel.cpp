@@ -76,7 +76,7 @@ void FretDiagramSettingsModel::requestElements()
 void FretDiagramSettingsModel::loadProperties()
 {
     loadPropertyItem(m_scale, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toDouble()) * 100;
+        return DataFormatter::roundDouble(elementPropertyValue.toDouble()) * 100;
     });
 
     loadPropertyItem(m_stringsCount);

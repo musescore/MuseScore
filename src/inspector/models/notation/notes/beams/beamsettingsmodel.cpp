@@ -64,11 +64,11 @@ void BeamSettingsModel::requestElements()
 void BeamSettingsModel::loadProperties()
 {
     loadPropertyItem(m_featheringHeightLeft, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
+        return DataFormatter::roundDouble(elementPropertyValue.toDouble());
     });
 
     loadPropertyItem(m_featheringHeightRight, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
+        return DataFormatter::roundDouble(elementPropertyValue.toDouble());
     });
 
     loadPropertyItem(m_isBeamHidden, [](const QVariant& isVisible) -> QVariant {
@@ -76,11 +76,11 @@ void BeamSettingsModel::loadProperties()
     });
 
     loadPropertyItem(m_beamVectorX, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toPointF().x());
+        return DataFormatter::roundDouble(elementPropertyValue.toPointF().x());
     });
 
     loadPropertyItem(m_beamVectorY, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toPointF().y());
+        return DataFormatter::roundDouble(elementPropertyValue.toPointF().y());
     });
 
     m_cachedBeamVector.setX(m_beamVectorX->value().toDouble());
