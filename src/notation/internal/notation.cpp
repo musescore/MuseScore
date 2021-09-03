@@ -196,6 +196,8 @@ void Notation::paint(mu::draw::Painter* painter, const RectF& frameRect)
     }
     }
 
+    engraving::Paint::paintDiagnostic(*painter);
+
     static_cast<NotationInteraction*>(m_interaction.get())->paint(painter);
 }
 
@@ -219,14 +221,9 @@ void Notation::paintPages(draw::Painter* painter, const RectF& frameRect, const 
         PointF pagePosition(page->pos());
         painter->translate(pagePosition);
         paintForeground(painter, page->bbox());
-        painter->setClipping(true);
-        painter->setClipRect(page->bbox());
-
-        QList<EngravingItem*> elements = page->items(frameRect.translated(-page->pos()));
-        engraving::Paint::paintElements(*painter, elements);
-
         painter->translate(-pagePosition);
-        painter->setClipping(false);
+
+        engraving::Paint::paintPage(*painter, page, frameRect.translated(-page->pos()));
     }
 }
 
