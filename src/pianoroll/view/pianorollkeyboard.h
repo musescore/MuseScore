@@ -98,6 +98,7 @@ private:
     QColor m_colorKeyBlack = Qt::black;
     QColor m_colorKeyWhite = QColor(0xffffff);
     QColor m_colorKeyHighlight = QColor(224, 170, 20);
+    QColor m_colorDrumHighlight = QColor(224, 170, 20);
 
 };
 
