@@ -297,7 +297,7 @@ Rectangle {
 
             ColumnLayout {
                 id: automationArea
-                visible: true
+                visible: false
 //                SplitView.minimumHeight: 40
                 SplitView.preferredHeight: 100
 
