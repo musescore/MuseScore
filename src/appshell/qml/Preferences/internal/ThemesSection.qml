@@ -42,6 +42,8 @@ BaseSection {
     signal highContrastChangeRequested(bool enabled)
     signal accentColorChangeRequested(var newColorIndex)
 
+    signal ensureContentVisibleRequested(var contentRect)
+
     CheckBox {
         id: highContrastEnable
 
@@ -121,6 +123,12 @@ BaseSection {
 
         onAccentColorChangeRequested: {
             root.accentColorChangeRequested(newColorIndex)
+        }
+
+        onFocusChanged: {
+            if (activeFocus) {
+                root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+            }
         }
     }
 }

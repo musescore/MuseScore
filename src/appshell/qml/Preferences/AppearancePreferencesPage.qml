@@ -69,6 +69,16 @@ PreferencesPage {
             onAccentColorChangeRequested: {
                 appearanceModel.currentAccentColorIndex = newColorIndex
             }
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+                }
+            }
+
+            onEnsureContentVisibleRequested: {
+                root.ensureContentVisibleRequested(contentRect)
+            }
         }
 
         SeparatorLine {
@@ -89,6 +99,12 @@ PreferencesPage {
             onColorChangeRequested: {
                 appearanceModel.setNewColor(newColor, propertyType)
             }
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+                }
+            }
         }
 
         SeparatorLine {}
@@ -107,6 +123,12 @@ PreferencesPage {
 
             onBodyTextSizeChangeRequested: {
                 appearanceModel.bodyTextSize = newBodyTextSize
+            }
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+                }
             }
         }
 
@@ -137,6 +159,12 @@ PreferencesPage {
             onWallpaperPathChangeRequested: {
                 appearanceModel.backgroundWallpaperPath = newWallpaperPath
             }
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+                }
+            }
         }
 
         SeparatorLine {}
@@ -166,6 +194,12 @@ PreferencesPage {
             onWallpaperPathChangeRequested: {
                 appearanceModel.foregroundWallpaperPath = newWallpaperPath
             }
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+                }
+            }
         }
 
         FlatButton {
@@ -193,6 +227,12 @@ PreferencesPage {
 
             onClicked: {
                 appearanceModel.resetThemeToDefault()
+            }
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+                }
             }
         }
     }
