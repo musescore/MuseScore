@@ -122,6 +122,9 @@ Item {
 
             buttonWidth: prv.buttonWidth
 
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 3
+
             onImportShortcutsFromFileRequested: {
                 shortcutsModel.importShortcutsFromFile()
             }

@@ -38,10 +38,27 @@ RowLayout {
     signal exportShortcutsToFileRequested()
     signal resetToDefaultSelectedShortcuts()
 
+    property NavigationPanel navigation: NavigationPanel {
+        name: "ShortcutsBottomPanel"
+        direction: NavigationPanel.Horizontal
+        accessible.name: qsTrc("shortcuts", "Shortcuts bottom panel")
+        enabled: root.visible
+
+        onActiveChanged: {
+            if (active) {
+                root.forceActiveFocus()
+            }
+        }
+    }
+
     FlatButton {
         Layout.preferredWidth: root.buttonWidth
 
         text: qsTrc("shortcuts", "Import")
+
+        navigation.name: "ImportButton"
+        navigation.panel: root.navigation
+        navigation.column: 0
 
         onClicked: {
             root.importShortcutsFromFile()
@@ -52,6 +69,10 @@ RowLayout {
         Layout.preferredWidth: root.buttonWidth
 
         text: qsTrc("shortcuts", "Export")
+
+        navigation.name: "ExportButton"
+        navigation.panel: root.navigation
+        navigation.column: 1
 
         onClicked: {
             root.exportShortcutsToFileRequested()
@@ -66,6 +87,10 @@ RowLayout {
         Layout.preferredWidth: root.buttonWidth
 
         text: qsTrc("shortcuts", "Reset to default")
+
+        navigation.name: "ResetButton"
+        navigation.panel: root.navigation
+        navigation.column: 2
 
         onClicked: {
             root.resetToDefaultSelectedShortcuts()
