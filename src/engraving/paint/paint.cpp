@@ -21,11 +21,16 @@
  */
 #include "paint.h"
 
+#include "infrastructure/draw/painter.h"
 #include "libmscore/engravingitem.h"
+#include "libmscore/page.h"
+#include "libmscore/score.h"
 
 #include "accessibility/accessibleelement.h"
 
 #include "paintdebugger.h"
+
+#include "log.h"
 
 #define PAINT_DEBUGGER_ENABLED
 
@@ -114,4 +119,66 @@ void Paint::paintElements(mu::draw::Painter& painter, const QList<EngravingItem*
 
         paintElement(painter, element);
     }
+}
+
+void Paint::paintPage(mu::draw::Painter& painter, Ms::Page* page, const RectF& rect)
+{
+    PointF pagePosition(page->pos());
+    painter.translate(pagePosition);
+    painter.setClipping(true);
+    painter.setClipRect(page->bbox());
+
+    QList<EngravingItem*> elements = page->items(rect);
+    paintElements(painter, elements);
+
+    paintPageDiagnostic(painter, page);
+
+    painter.translate(-pagePosition);
+    painter.setClipping(false);
+}
+
+void Paint::paintDiagnostic(mu::draw::Painter& painter)
+{
+    return;
+    std::list<const Ms::EngravingObject*> elements = elementsProvider()->elements();
+    for (const Ms::EngravingObject* el : elements) {
+        if (!el->isEngravingItem()) {
+            continue;
+        }
+
+        const Ms::EngravingItem* item = Ms::toEngravingItem(el);
+        paintElement(painter, item);
+    }
+}
+
+void Paint::paintChildren(mu::draw::Painter& painter, const std::list<const Ms::EngravingObject*>& elements,
+                          const Ms::EngravingItem* parent)
+{
+    for (const Ms::EngravingObject* el : elements) {
+        if (!el->isEngravingItem()) {
+            continue;
+        }
+
+        if (el->treeParent() == parent) {
+            const Ms::EngravingItem* item = Ms::toEngravingItem(el);
+            paintElement(painter, item);
+
+            if (item->isChord()) {
+                mu::RectF bbox = item->bbox();
+                //if (bbox.isNull()) {
+                bbox = mu::RectF(0, 0, 10, 10);
+//                }
+                painter.setPen(mu::draw::Color(200, 0, 0));
+                painter.drawRect(bbox);
+            }
+
+            paintChildren(painter, elements, item);
+        }
+    }
+}
+
+void Paint::paintPageDiagnostic(mu::draw::Painter& painter, Ms::Page* page)
+{
+    std::list<const Ms::EngravingObject*> elements = elementsProvider()->elements();
+    paintChildren(painter, elements, page);
 }
