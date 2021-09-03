@@ -49,7 +49,9 @@ enum class DragStyle
     NONE = 0,
     CANCELLED,
     SELECTION_RECT,
-    NOTES
+    NOTE_POSITION,
+    NOTE_LENGTH_START,
+    NOTE_LENGTH_END
 };
 
 struct BarPattern
@@ -126,6 +128,7 @@ public:
     void mousePressEvent(QMouseEvent* event) override;
     void mouseReleaseEvent(QMouseEvent* event) override;
     void mouseMoveEvent(QMouseEvent* event) override;
+    void hoverMoveEvent(QHoverEvent* event) override;
 
     int wholeNoteToPixelX(Ms::Fraction tick) const { return wholeNoteToPixelX(tick.numerator() / (double)tick.denominator()); }
     int wholeNoteToPixelX(double tick) const;
@@ -155,7 +158,8 @@ private:
     void onCurrentNotationChanged();
     void onSelectionChanged();
     void updateBoundingSize();
-    QRect boundingRect(Ms::Note* note, Ms::NoteEvent* evt = nullptr);
+    QRect boundingRect(Ms::Note* note);
+    QRect boundingRect(Ms::Note* note, Ms::NoteEvent* evt);
     QString serializeSelectedNotes();
 
     void buildNoteData();
@@ -221,6 +225,7 @@ private:
     DragStyle m_dragStyle;
     int m_dragStartPitch;
     Ms::Fraction m_dragStartTick;
+    int m_dragNoteLengthMargin = 4;
     bool m_inProgressUndoEvent;
 
     Ms::Fraction m_playbackPosition;
