@@ -38,12 +38,29 @@ RowLayout {
     signal startEditCurrentShortcutRequested()
     signal clearSelectedShortcutsRequested()
 
+    property NavigationPanel navigation: NavigationPanel {
+        name: "ShortcutsTopPanel"
+        direction: NavigationPanel.Horizontal
+        accessible.name: qsTrc("shortcuts", "Shortcuts top panel")
+        enabled: root.visible
+
+        onActiveChanged: {
+            if (active) {
+                root.forceActiveFocus()
+            }
+        }
+    }
+
     FlatButton {
         id: editButton
 
         Layout.preferredWidth: root.buttonWidth
 
         text: qsTrc("shortcuts", "Define...")
+
+        navigation.name: "DefineShortcutButton"
+        navigation.panel: root.navigation
+        navigation.column: 0
 
         onClicked: {
             root.startEditCurrentShortcutRequested()
@@ -56,6 +73,10 @@ RowLayout {
         Layout.preferredWidth: root.buttonWidth
 
         text: qsTrc("shortcuts", "Clear")
+
+        navigation.name: "ClearShortcutsButton"
+        navigation.panel: root.navigation
+        navigation.column: 1
 
         onClicked: {
             root.clearSelectedShortcutsRequested()
@@ -70,5 +91,9 @@ RowLayout {
         Layout.preferredWidth: 160
 
         hint: qsTrc("shortcuts", "Search shortcut")
+
+        navigation.name: "ShortcutSearchField"
+        navigation.panel: root.navigation
+        navigation.column: 2
     }
 }
