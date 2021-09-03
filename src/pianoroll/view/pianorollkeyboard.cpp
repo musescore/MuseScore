@@ -128,13 +128,6 @@ void PianorollKeyboard::setDisplayObjectHeight(double value)
 
 void PianorollKeyboard::updateBoundingSize()
 {
-//    notation::INotationPtr notation = globalContext()->currentNotation();
-//    if (!notation) {
-//        return;
-//    }
-
-//    Ms::Score* score = notation->elements()->msScore();
-
     setDisplayObjectHeight(m_noteHeight * PianorollView::NUM_PITCHES);
 
     update();
@@ -210,11 +203,11 @@ void PianorollKeyboard::paint(QPainter* p)
 
             if (!pat.isWhiteKey[degree])
             {
-                p->fillRect(0, y, width(), m_noteHeight, m_colorDrumBlack);
+                p->fillRect(0, y, width(), m_noteHeight, pitch == m_curKeyPressed ? m_colorDrumHighlight : m_colorDrumBlack);
             }
             else
             {
-                p->fillRect(0, y, width(), m_noteHeight, m_colorDrumWhite);
+                p->fillRect(0, y, width(), m_noteHeight, pitch == m_curKeyPressed ? m_colorDrumHighlight : m_colorDrumWhite);
             }
 
             p->setPen(m_colorText);
