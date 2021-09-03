@@ -481,7 +481,7 @@ void PianorollView::paint(QPainter* p)
         drawNoteBlock(p, block);
     }
 
-    if (m_dragStyle == DragStyle::NOTE_POSITION)
+    if (m_dragStyle == DragStyle::NOTE_POSITION || m_dragStyle == DragStyle::NOTE_LENGTH_END || m_dragStyle == DragStyle::NOTE_LENGTH_START)
         drawDraggedNotes(p);
 
     //Draw playback position
@@ -535,17 +535,39 @@ void PianorollView::drawDraggedNotes(QPainter* painter)
     double offsetTicks = dragToTick - startTick;
 
     //Adjust offset so that note under cursor is aligned to note divistion
-    double startNoteDraggedTick = m_dragStartTick.numerator() / (double)m_dragStartTick.denominator() + offsetTicks;
-    Ms::Fraction startNoteDraggedAlignedTick = Ms::Fraction(floor(startNoteDraggedTick * divisions), divisions);
+//    double startNoteDraggedTick = m_dragStartTick.numerator() / (double)m_dragStartTick.denominator() + offsetTicks;
+//    Ms::Fraction startNoteDraggedAlignedTick = Ms::Fraction(floor(startNoteDraggedTick * divisions), divisions);
 
-    Ms::Fraction pasteTickOffset = startNoteDraggedAlignedTick - m_dragStartTick;
+    Ms::Fraction pasteTickOffset(0, 1);
+    Ms::Fraction pasteLengthOffset(0, 1);
+    int pitchOffset = 0;
 
     int dragToPitch = pixelYToPitch(m_lastMousePos.y());
     int startPitch = pixelYToPitch(m_mouseDownPos.y());
 
-    int pitchOffset = dragToPitch - startPitch;
+    if (m_dragStyle == DragStyle::NOTE_POSITION)
+    {
+        double noteStartDraggedTick = m_dragStartTick.numerator() / (double)m_dragStartTick.denominator() + offsetTicks;
+        Ms::Fraction noteStartDraggedAlignedTick = Ms::Fraction(floor(noteStartDraggedTick * divisions), divisions);
+        pasteTickOffset = noteStartDraggedAlignedTick - m_dragStartTick;
+        pitchOffset = dragToPitch - startPitch;
+    }
+    else if (m_dragStyle == DragStyle::NOTE_LENGTH_END)
+    {
+        double noteEndDraggedTick = m_dragEndTick.numerator() / (double)m_dragEndTick.denominator() + offsetTicks;
+        Ms::Fraction noteEndDraggedAlignedTick = Ms::Fraction(floor(noteEndDraggedTick * divisions), divisions);
+        pasteLengthOffset = noteEndDraggedAlignedTick - m_dragEndTick;
+    }
+    else if (m_dragStyle == DragStyle::NOTE_LENGTH_START)
+    {
+        double noteStartDraggedTick = m_dragStartTick.numerator() / (double)m_dragStartTick.denominator() + offsetTicks;
+        Ms::Fraction noteStartDraggedAlignedTick = Ms::Fraction(floor(noteStartDraggedTick * divisions), divisions);
+        pasteTickOffset = noteStartDraggedAlignedTick - m_dragStartTick;
+        pasteLengthOffset = m_dragStartTick - noteStartDraggedAlignedTick;
+    }
 
-      //Iterate thorugh note data
+
+    //Iterate thorugh note data
     QXmlStreamReader xml(m_dragNoteCache);
     Ms::Fraction firstTick;
 
@@ -571,6 +593,9 @@ void PianorollView::drawDraggedNotes(QPainter* painter)
                 int tn = xml.attributes().value("lenN").toString().toInt();
                 int td = xml.attributes().value("lenD").toString().toInt();
                 Ms::Fraction tickLen = Ms::Fraction(tn, td);
+                tickLen += pasteLengthOffset;
+                if (tickLen.numerator() <= 0)
+                    continue;
 
                 int pitch = xml.attributes().value("pitch").toString().toInt();
                 int voice = xml.attributes().value("voice").toString().toInt();
@@ -766,7 +791,7 @@ void PianorollView::mouseReleaseEvent(QMouseEvent* event)
 
             selectNotes(startTick, endTick, lowPitch, highPitch, selType);
         }
-        else if (m_dragStyle == DragStyle::NOTE_POSITION)
+        else if (m_dragStyle == DragStyle::NOTE_POSITION || m_dragStyle == DragStyle::NOTE_LENGTH_START || m_dragStyle == DragStyle::NOTE_LENGTH_END)
         {
             if (m_tool == PianorollTool::SELECT)
             {
@@ -874,6 +899,7 @@ void PianorollView::mouseMoveEvent(QMouseEvent* event)
 
                 m_dragStartPitch = mouseDownPitch;
                 m_dragStartTick = pi->note->tick();
+                m_dragEndTick = m_dragStartTick + pi->note->chord()->ticks();
                 m_dragNoteCache = serializeSelectedNotes();
             }
             else if (!pi && m_tool == PianorollTool::SELECT)
@@ -1263,23 +1289,48 @@ void PianorollView::finishNoteGroupDrag()
     double offsetTicks = dragToTick - startTick;
 
     //Adjust offset so that note under cursor is aligned to note divistion
-    double startNoteDraggedTick = m_dragStartTick.numerator() / (double)m_dragStartTick.denominator() + offsetTicks;
-    Ms::Fraction startNoteDraggedAlignedTick = Ms::Fraction(floor(startNoteDraggedTick * divisions), divisions);
+//    double startNoteDraggedTick = m_dragStartTick.numerator() / (double)m_dragStartTick.denominator() + offsetTicks;
+//    Ms::Fraction startNoteDraggedAlignedTick = Ms::Fraction(floor(startNoteDraggedTick * divisions), divisions);
+//    double endNoteDraggedTick = m_dragEndTick.numerator() / (double)m_dragEndTick.denominator() + offsetTicks;
+//    Ms::Fraction endNoteDraggedAlignedTick = Ms::Fraction(floor(endNoteDraggedTick * divisions), divisions);
 
-    Ms::Fraction pasteTickOffset = startNoteDraggedAlignedTick - m_dragStartTick;
-
+    Ms::Fraction pasteTickOffset(0, 1);
+    Ms::Fraction pasteLengthOffset(0, 1);
+    int pitchOffset = 0;
 
     int dragToPitch = pixelYToPitch(m_lastMousePos.y());
     int startPitch = pixelYToPitch(m_mouseDownPos.y());
 
-    int pitchOffset = dragToPitch - startPitch;
+    if (m_dragStyle == DragStyle::NOTE_POSITION)
+    {
+        double noteStartDraggedTick = m_dragStartTick.numerator() / (double)m_dragStartTick.denominator() + offsetTicks;
+        Ms::Fraction noteStartDraggedAlignedTick = Ms::Fraction(floor(noteStartDraggedTick * divisions), divisions);
+        pasteTickOffset = noteStartDraggedAlignedTick - m_dragStartTick;
+        pitchOffset = dragToPitch - startPitch;
+    }
+    else if (m_dragStyle == DragStyle::NOTE_LENGTH_END)
+    {
+        double noteEndDraggedTick = m_dragEndTick.numerator() / (double)m_dragEndTick.denominator() + offsetTicks;
+        Ms::Fraction noteEndDraggedAlignedTick = Ms::Fraction(floor(noteEndDraggedTick * divisions), divisions);
+        pasteLengthOffset = noteEndDraggedAlignedTick - m_dragEndTick;
+    }
+    else if (m_dragStyle == DragStyle::NOTE_LENGTH_START)
+    {
+        double noteStartDraggedTick = m_dragStartTick.numerator() / (double)m_dragStartTick.denominator() + offsetTicks;
+        Ms::Fraction noteStartDraggedAlignedTick = Ms::Fraction(floor(noteStartDraggedTick * divisions), divisions);
+        pasteTickOffset = noteStartDraggedAlignedTick - m_dragStartTick;
+        pasteLengthOffset = m_dragStartTick - noteStartDraggedAlignedTick;
+    }
+
+
+
 
 
     //Do command
     curScore->startCmd();
 
     curScore->cmdDeleteSelection();
-    pasteNotes(m_dragNoteCache, pasteTickOffset, pitchOffset, true);
+    pasteNotes(m_dragNoteCache, pasteTickOffset, pasteLengthOffset, pitchOffset, true);
 
     curScore->endCmd();
 
@@ -1289,7 +1340,7 @@ void PianorollView::finishNoteGroupDrag()
     update();
 }
 
-void PianorollView::pasteNotes(const QString& copiedNotes, Ms::Fraction pasteStartTick, int pitchOffset, bool xIsOffset)
+void PianorollView::pasteNotes(const QString& copiedNotes, Ms::Fraction pasteStartTick, Ms::Fraction lengthOffset, int pitchOffset, bool xIsOffset)
 {
     QXmlStreamReader xml(copiedNotes);
     Ms::Fraction firstTick;
@@ -1318,6 +1369,9 @@ void PianorollView::pasteNotes(const QString& copiedNotes, Ms::Fraction pasteSta
                 int tn = xml.attributes().value("lenN").toString().toInt();
                 int td = xml.attributes().value("lenD").toString().toInt();
                 Ms::Fraction tickLen = Ms::Fraction(tn, td);
+                tickLen += lengthOffset;
+                if (tickLen.numerator() <= 0)
+                    continue;
 
                 int pitch = xml.attributes().value("pitch").toString().toInt();
                 int voice = xml.attributes().value("voice").toString().toInt();
