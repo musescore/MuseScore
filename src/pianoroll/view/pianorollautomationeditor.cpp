@@ -41,7 +41,7 @@ std::vector<IPianorollAutomationModel*> PianorollAutomationEditor::m_automationM
 PianorollAutomationEditor::PianorollAutomationEditor(QQuickItem* parent)
     : QQuickPaintedItem(parent)
 {
-
+    setAcceptedMouseButtons(Qt::AllButtons);
 }
 
 IPianorollAutomationModel* PianorollAutomationEditor::lookupModel(AutomationType type)
@@ -117,6 +117,7 @@ void PianorollAutomationEditor::buildNoteData()
 
     Ms::Score* curScore = score();
 
+    m_selectedStaves.clear();
     std::vector<Ms::Element*> selectedElements = notation->interaction()->selection()->elements();
     for (Ms::Element* e: selectedElements)
     {
@@ -287,6 +288,69 @@ double PianorollAutomationEditor::pixelXToWholeNote(int pixX) const
 }
 
 
+void PianorollAutomationEditor::mousePressEvent(QMouseEvent* e)
+{
+    if (e->button() == Qt::LeftButton)
+    {
+        m_mouseDown = true;
+        m_mouseDownPos = e->pos();
+        m_lastMousePos = m_mouseDownPos;
+        m_dragBlock = pickBlock(m_mouseDownPos);
+
+    }
+}
+
+void PianorollAutomationEditor::mouseReleaseEvent(QMouseEvent* e)
+{
+    m_mouseDown = false;
+    m_dragging = false;
+    m_dragBlock = nullptr;
+}
+
+void PianorollAutomationEditor::mouseMoveEvent(QMouseEvent* e)
+{
+    if (m_mouseDown)
+    {
+        m_lastMousePos = e->pos();
+
+        if (!m_dragging && m_dragBlock)
+        {
+            int dx = e->x() - m_mouseDownPos.x();
+            int dy = e->y() - m_mouseDownPos.y();
+            if (dx * dx + dy * dy > m_pickRadius * m_pickRadius)
+            {
+                //Start dragging
+                m_dragging = true;
+            }
+        }
+
+        IPianorollAutomationModel* model = lookupModel(m_automationType);
+
+        if (m_dragging && model)
+        {
+            QPointF offset = m_lastMousePos - m_mouseDownPos;
+
+            Ms::Score* curScore = score();
+            Ms::Staff* staff = curScore->staff(m_dragBlock->staffIdx);
+
+            double valMax = model->maxValue();
+            double valMin = model->minValue();
+
+            int pixMaxY = height() - m_marginY;
+            int pixMinY = m_marginY;
+
+            double dragToVal = pixYToValue(m_lastMousePos.y(), valMin, valMax);
+            dragToVal = qMin(qMax(dragToVal, valMin), valMax);
+
+            model->setValue(staff, *m_dragBlock, dragToVal);
+
+            update();
+        }
+
+    }
+}
+
+
 void PianorollAutomationEditor::paint(QPainter* p)
 {
     p->fillRect(0, 0, width(), height(), m_colorBackground);
@@ -296,8 +360,8 @@ void PianorollAutomationEditor::paint(QPainter* p)
         return;
     }
 
-    Ms::Score* score = notation->elements()->msScore();
-    Ms::Staff* staff = score->staff(0);
+    Ms::Score* curScore = notation->elements()->msScore();
+    Ms::Staff* staff = curScore->staff(0);
     Ms::Part* part = staff->part();
 
     const QPen penLineMajor = QPen(m_colorGridLine, 2.0, Qt::SolidLine);
@@ -305,11 +369,9 @@ void PianorollAutomationEditor::paint(QPainter* p)
     const QPen penLineSub = QPen(m_colorGridLine, 1.0, Qt::DotLine);
 
     //Visible area we are rendering to
-    Ms::Measure* lm = score->lastMeasure();
+    Ms::Measure* lm = curScore->lastMeasure();
     Ms::Fraction end = lm->tick() + lm->ticks();
 
-//    qreal y1 = pitchToPixelY(0);
-//    qreal y2 = pitchToPixelY(128);
     qreal x1 = wholeNoteToPixelX(0);
     qreal x2 = wholeNoteToPixelX(end);
 
@@ -324,7 +386,7 @@ void PianorollAutomationEditor::paint(QPainter* p)
     //-----------------------------------
     //Draw vertial grid lines
     const int minBeatGap = 20;
-    for (Ms::MeasureBase* m = score->first(); m; m = m->next())
+    for (Ms::MeasureBase* m = curScore->first(); m; m = m->next())
     {
         Ms::Fraction start = m->tick();  //fraction representing number of whole notes since start of score.  Expressed in terms of the note getting the beat in this bar
         Ms::Fraction len = m->ticks();  //Beats in bar / note length with the beat
@@ -379,15 +441,16 @@ void PianorollAutomationEditor::paint(QPainter* p)
         for (int i = 0; i < m_noteLevels.size(); ++i)
         {
             NoteEventBlock* block = m_noteLevels.at(i);
+            Ms::Staff* staff = curScore->staff(block->staffIdx);
 
             double valMax = model->maxValue();
             double valMin = model->minValue();
-            double val = model->value(*block);
+            double val = model->value(staff, *block);
 
-            int x0 = wholeNoteToPixelX(block->note->tick());
-            double ratio = (val - valMin) / (valMax - valMin);
+            double x0 = wholeNoteToPixelX(block->note->tick());
+
             int gridSpanY = height() - m_marginY * 2;
-            int y = gridSpanY * ratio + m_marginY;
+            int y = valueToPixY(val, valMin, valMax);
 
             int x1;
             if (i < m_noteLevels.size() - 1)
@@ -411,8 +474,48 @@ void PianorollAutomationEditor::paint(QPainter* p)
             p->drawEllipse(circleBounds);
         }
     }
-
-
 }
 
+double PianorollAutomationEditor::pixYToValue(double pixY, double valMin, double valMax)
+{
+    int span = height() - m_marginY * 2;
+    double frac = (span + m_marginY - pixY) / (double)span;
+    return (valMax - valMin) * frac + valMin;
+}
 
+double PianorollAutomationEditor::valueToPixY(double value, double valMin, double valMax)
+{
+    double frac = (value - valMin) / (valMax - valMin);
+    int span = height() - m_marginY * 2;
+    return m_marginY + span - frac * span;
+}
+
+NoteEventBlock* PianorollAutomationEditor::pickBlock(QPointF point)
+{
+    Ms::Score* curScore = score();
+    IPianorollAutomationModel* model = lookupModel(m_automationType);
+
+    if (model)
+    {
+        for (int i = 0; i < m_noteLevels.size(); ++i)
+        {
+            NoteEventBlock* block = m_noteLevels.at(i);
+            Ms::Staff* staff = curScore->staff(block->staffIdx);
+
+            double valMax = model->maxValue();
+            double valMin = model->minValue();
+            double val = model->value(staff, *block);
+
+            double x0 = wholeNoteToPixelX(block->note->tick());
+            int y = valueToPixY(val, valMin, valMax);
+
+            QRectF circleBounds(x0 - m_vertexRadius, y - m_vertexRadius, m_vertexRadius * 2, m_vertexRadius * 2);
+            if (circleBounds.contains(point))
+            {
+                return block;
+            }
+        }
+    }
+
+    return nullptr;
+}
