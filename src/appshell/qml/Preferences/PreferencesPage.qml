@@ -45,6 +45,14 @@ Flickable {
         return true
     }
 
+    function ensureContentVisibleRequested(contentRect) {
+        if (root.contentY + root.height < contentRect.y + contentRect.height) {
+            root.contentY += contentRect.y + contentRect.height - (root.contentY + root.height)
+        } else if (root.contentY > contentRect.y) {
+            root.contentY -= root.contentY - contentRect.y
+        }
+    }
+
     MouseArea {
         anchors.fill: parent
 
