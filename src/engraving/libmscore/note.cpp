@@ -2526,7 +2526,7 @@ void Note::reset()
 
 qreal Note::mag() const
 {
-    qreal m = chord()->mag();
+    qreal m = chord() ? chord()->mag() : 1.0;
     if (m_isSmall) {
         m *= score()->styleD(Sid::smallNoteMag);
     }

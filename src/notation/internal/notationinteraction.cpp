@@ -624,7 +624,15 @@ void NotationInteraction::setSelectionTypeFiltered(SelectionFilterType type, boo
 
 bool NotationInteraction::isDragStarted() const
 {
-    return m_dragData.dragGroups.size() > 0 || !m_lasso->bbox().isEmpty();
+    if (m_dragData.dragGroups.size() > 0) {
+        return true;
+    }
+
+    if (m_lasso && !m_lasso->bbox().isEmpty()) {
+        return true;
+    }
+
+    return false;
 }
 
 void NotationInteraction::DragData::reset()
