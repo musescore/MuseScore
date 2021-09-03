@@ -535,9 +535,6 @@ void PianorollView::drawDraggedNotes(QPainter* painter)
     double offsetTicks = dragToTick - startTick;
 
     //Adjust offset so that note under cursor is aligned to note divistion
-//    double startNoteDraggedTick = m_dragStartTick.numerator() / (double)m_dragStartTick.denominator() + offsetTicks;
-//    Ms::Fraction startNoteDraggedAlignedTick = Ms::Fraction(floor(startNoteDraggedTick * divisions), divisions);
-
     Ms::Fraction pasteTickOffset(0, 1);
     Ms::Fraction pasteLengthOffset(0, 1);
     int pitchOffset = 0;
@@ -1289,11 +1286,6 @@ void PianorollView::finishNoteGroupDrag()
     double offsetTicks = dragToTick - startTick;
 
     //Adjust offset so that note under cursor is aligned to note divistion
-//    double startNoteDraggedTick = m_dragStartTick.numerator() / (double)m_dragStartTick.denominator() + offsetTicks;
-//    Ms::Fraction startNoteDraggedAlignedTick = Ms::Fraction(floor(startNoteDraggedTick * divisions), divisions);
-//    double endNoteDraggedTick = m_dragEndTick.numerator() / (double)m_dragEndTick.denominator() + offsetTicks;
-//    Ms::Fraction endNoteDraggedAlignedTick = Ms::Fraction(floor(endNoteDraggedTick * divisions), divisions);
-
     Ms::Fraction pasteTickOffset(0, 1);
     Ms::Fraction pasteLengthOffset(0, 1);
     int pitchOffset = 0;
