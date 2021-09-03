@@ -150,7 +150,7 @@ Rectangle {
         style: TreeViewStyle {
             indentation: styleData.depth
             rowDelegate: Rectangle {
-                height: 24
+                height: 48
                 width: parent.width
                 color: styleData.row%2 == 0 ? root.color : ui.theme.backgroundSecondaryColor
             }
@@ -165,7 +165,8 @@ Rectangle {
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignLeft
                 elide: Text.ElideNone
-                text: styleData.value.name
+                text: styleData.value.name + "\n"
+                      + "pagePos: " + styleData.value.pagePos + ", bbox: " + styleData.value.bbox
             }
 
             MouseArea {

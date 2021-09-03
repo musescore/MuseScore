@@ -77,17 +77,9 @@ void Paint::paintElement(mu::draw::Painter& painter, const Ms::EngravingItem* el
     element->itemDiscovered = false;
     PointF elementPosition(element->pagePos());
 
-#ifdef PAINT_DEBUGGER_ENABLED
-    initDebugger(painter, element);
-#endif
-
     painter.translate(elementPosition);
     element->draw(&painter);
     painter.translate(-elementPosition);
-
-#ifdef PAINT_DEBUGGER_ENABLED
-    deinitDebugger(painter);
-#endif
 }
 
 void Paint::paintElements(mu::draw::Painter& painter, const QList<EngravingItem*>& elements)
@@ -161,15 +153,24 @@ void Paint::paintChildren(mu::draw::Painter& painter, const std::list<const Ms::
 
         if (el->treeParent() == parent) {
             const Ms::EngravingItem* item = Ms::toEngravingItem(el);
+
+#ifdef PAINT_DEBUGGER_ENABLED
+            initDebugger(painter, item);
+#endif
+
             paintElement(painter, item);
 
-            if (item->isChord()) {
-                mu::RectF bbox = item->bbox();
-                //if (bbox.isNull()) {
-                bbox = mu::RectF(0, 0, 10, 10);
-//                }
-                painter.setPen(mu::draw::Color(200, 0, 0));
-                painter.drawRect(bbox);
+#ifdef PAINT_DEBUGGER_ENABLED
+            deinitDebugger(painter);
+#endif
+            if (elementsProvider()->isSelected(item)) {
+                static mu::draw::Pen borderPen(DEBUG_ELTREE_SELECTED_COLOR, 4);
+
+                PointF pos(item->pagePos());
+                painter.translate(pos);
+                painter.setPen(borderPen);
+                painter.drawRect(item->bbox());
+                painter.translate(-pos);
             }
 
             paintChildren(painter, elements, item);

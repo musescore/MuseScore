@@ -29,9 +29,14 @@
 
 using namespace mu;
 
-double DataFormatter::formatDouble(const double& val, const int decimals)
+double DataFormatter::roundDouble(const double& val, const int decimals)
 {
     return QString::number(val, 'f', decimals).toDouble();
+}
+
+QString DataFormatter::formatReal(double val, int prec)
+{
+    return QString::number(val, 'f', prec);
 }
 
 QString DataFormatter::formatTimeSince(const QDate& dateTime)

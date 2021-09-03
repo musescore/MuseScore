@@ -83,7 +83,7 @@ void AmbitusSettingsModel::loadProperties()
 
     loadPropertyItem(m_direction);
     loadPropertyItem(m_lineThickness, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
+        return DataFormatter::roundDouble(elementPropertyValue.toDouble());
     });
 }
 

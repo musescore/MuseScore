@@ -130,7 +130,7 @@ void TextSettingsModel::loadProperties()
     loadPropertyItem(m_frameHighlightColor);
 
     auto formatDoubleFunc = [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
+        return DataFormatter::roundDouble(elementPropertyValue.toDouble());
     };
 
     loadPropertyItem(m_frameThickness, formatDoubleFunc);

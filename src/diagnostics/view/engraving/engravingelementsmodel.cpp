@@ -25,6 +25,7 @@
 
 #include "engraving/libmscore/engravingobject.h"
 #include "engraving/libmscore/score.h"
+#include "dataformatter.h"
 
 using namespace mu::diagnostics;
 
@@ -149,9 +150,35 @@ QVariant EngravingElementsModel::makeData(const Ms::EngravingObject* el) const
         return QVariant();
     }
 
+    auto formatRect = [](const mu::RectF& r) {
+        QString str = "[";
+        str += DataFormatter::formatReal(r.x(), 1) + ", ";
+        str += DataFormatter::formatReal(r.y(), 1) + ", ";
+        str += DataFormatter::formatReal(r.width(), 1) + ", ";
+        str += DataFormatter::formatReal(r.height(), 1) + "]";
+        return str;
+    };
+
+    auto formatPoint= [](const mu::PointF& p) {
+        QString str = "[";
+        str += DataFormatter::formatReal(p.x(), 1) + ", ";
+        str += DataFormatter::formatReal(p.y(), 1) + "]";
+        return str;
+    };
+
     QVariantMap d;
     d["name"] = el->name();
     d["selected"] = elementsProvider()->isSelected(el);
+
+    if (el->isEngravingItem()) {
+        const Ms::EngravingItem* item = Ms::toEngravingItem(el);
+        d["pagePos"] = formatPoint(item->pagePos());
+        d["bbox"] = formatRect(item->bbox());
+    } else {
+        d["pagePos"] = "-";
+        d["bbox"] = "-";
+    }
+
     return d;
 }
 
