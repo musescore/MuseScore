@@ -37,6 +37,7 @@ class AppearancePreferencesModel : public QObject, public async::Asyncable
     INJECT(appshell, ui::IUiConfiguration, uiConfiguration)
     INJECT(appshell, notation::INotationConfiguration, notationConfiguration)
 
+    Q_PROPERTY(bool highContrastEnabled READ highContrastEnabled WRITE setHighContrastEnabled NOTIFY highContrastEnabledChanged)
     Q_PROPERTY(QVariantList generalThemes READ generalThemes NOTIFY themesChanged)
     Q_PROPERTY(QVariantList highContrastThemes READ highContrastThemes NOTIFY themesChanged)
     Q_PROPERTY(QStringList accentColors READ accentColors NOTIFY themesChanged)
@@ -70,6 +71,7 @@ public:
     };
     Q_ENUM(ColorType)
 
+    bool highContrastEnabled() const;
     QVariantList generalThemes() const;
     QVariantList highContrastThemes() const;
 
@@ -91,14 +93,13 @@ public:
 
     Q_INVOKABLE void resetThemeToDefault();
     Q_INVOKABLE bool enableHighContrastChecked();
-    Q_INVOKABLE void loadLastUsedGeneralTheme();
-    Q_INVOKABLE void loadLastUsedHighContrastTheme();
     Q_INVOKABLE void setNewColor(const QColor& newColor, ColorType colorType);
     Q_INVOKABLE QStringList allFonts() const;
     Q_INVOKABLE QString wallpaperPathFilter() const;
     Q_INVOKABLE QString wallpapersDir() const;
 
 public slots:
+    void setHighContrastEnabled(bool enabled);
     void setCurrentThemeCode(const QString& themeCode);
     void setCurrentAccentColorIndex(int index);
     void setCurrentFontIndex(int index);
@@ -111,6 +112,7 @@ public slots:
     void setForegroundWallpaperPath(const QString& path);
 
 signals:
+    void highContrastEnabledChanged();
     void themesChanged();
     void currentFontIndexChanged();
     void bodyTextSizeChanged();

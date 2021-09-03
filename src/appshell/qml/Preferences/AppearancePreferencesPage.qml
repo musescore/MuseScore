@@ -62,12 +62,13 @@ PreferencesPage {
         CheckBox {
             id: highContrastEnable
             width: 200
-            checked: appearanceModel.enableHighContrastChecked()
 
             text: qsTrc("appshell", "Enable high-contrast")
+
+            checked: appearanceModel.highContrastEnabled
+
             onClicked: {
-                checked = !checked
-                highContrastEnable.checked ? appearanceModel.loadLastUsedHighContrastTheme() : appearanceModel.loadLastUsedGeneralTheme()
+                appearanceModel.highContrastEnabled = !checked
             }
         }
 
