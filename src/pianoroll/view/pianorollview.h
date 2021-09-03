@@ -179,7 +179,7 @@ private:
     void eraseNote(const QPointF& pos);
     Ms::Fraction roundDownToSubdivision(double wholeNote);
 
-    void pasteNotes(const QString& copiedNotes, Ms::Fraction pasteStartTick, int pitchOffset, bool xIsOffset);
+    void pasteNotes(const QString& copiedNotes, Ms::Fraction pasteStartTick, Ms::Fraction lengthOffset, int pitchOffset, bool xIsOffset);
     std::vector<Ms::Note*> addNote(Ms::Fraction startTick, Ms::Fraction duration, int pitch, int track);
     bool cutChordRest(Ms::ChordRest* targetCr, int track, Ms::Fraction cutTick, Ms::ChordRest*& cr0, Ms::ChordRest*& cr1);
     std::vector<Ms::Note*> getSegmentNotes(Ms::Segment* seg, int track);
@@ -225,6 +225,7 @@ private:
     DragStyle m_dragStyle;
     int m_dragStartPitch;
     Ms::Fraction m_dragStartTick;
+    Ms::Fraction m_dragEndTick;
     int m_dragNoteLengthMargin = 4;
     bool m_inProgressUndoEvent;
 
