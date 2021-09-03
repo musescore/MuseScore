@@ -32,6 +32,9 @@ import "internal"
 Item {
     id: root
 
+    property NavigationSection navigationSection: null
+    property int navigationOrderStart: 0
+
     ShortcutsModel {
         id: shortcutsModel
 
@@ -69,6 +72,9 @@ Item {
     ColumnLayout {
         anchors.fill: parent
 
+        //! NOTE: Added to prevent components clipping when navigating
+        anchors.margins: 2
+
         spacing: 20
 
         ShortcutsTopPanel {
@@ -81,6 +87,9 @@ Item {
             canClearCurrentShortcuts: shortcutsView.hasSelection
 
             buttonWidth: prv.buttonWidth
+
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 1
 
             onStartEditCurrentShortcutRequested: {
                 editShortcutDialog.startEditCurrentShortcut()
