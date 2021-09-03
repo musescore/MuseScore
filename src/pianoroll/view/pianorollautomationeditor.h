@@ -77,6 +77,10 @@ public:
 
     void paint(QPainter*) override;
 
+    void mousePressEvent(QMouseEvent* e) override;
+    void mouseReleaseEvent(QMouseEvent* e) override;
+    void mouseMoveEvent(QMouseEvent* e) override;
+
     int wholeNoteToPixelX(Ms::Fraction tick) const { return wholeNoteToPixelX(tick.numerator() / (double)tick.denominator()); }
     int wholeNoteToPixelX(double tick) const;
     double pixelXToWholeNote(int pixelX) const;
@@ -103,6 +107,16 @@ private:
     void buildNoteData();
     void addChord(Ms::Chord* chrd, int voice, int staffIdx);
 
+    double pixYToValue(double pixY, double valMin, double valMax);
+    double valueToPixY(double value, double valMin, double valMax);
+    NoteEventBlock* pickBlock(QPointF point);
+
+    enum DragStyle {
+        NONE,
+        OFFSET
+    };
+    DragStyle m_dragStyle = DragStyle::NONE;
+
     IPianorollAutomationModel* lookupModel(AutomationType type);
 
     static std::vector<IPianorollAutomationModel*> m_automationModels;
@@ -114,6 +128,14 @@ private:
     std::vector<NoteEventBlock*> m_noteLevels;
 
     AutomationType m_automationType = AutomationType::VELOCITY;
+
+    bool m_mouseDown = false;
+    bool m_dragging = false;
+    QPoint m_mouseDownPos;
+    QPoint m_lastMousePos;
+    int m_pickRadius = 4;
+//    double m_dragStartValue = 0;
+    NoteEventBlock* m_dragBlock = nullptr;
 
     double m_centerX = 0;  //fraction of note grid camera is focused on
     double m_displayObjectWidth = 0;  //Set to note grid in pixels
