@@ -46,16 +46,14 @@ public:
     virtual QStringList possibleFontFamilies() const = 0;
     virtual QStringList possibleAccentColors() const = 0;
 
-    virtual bool isCurrentThemeHighContrast() const = 0;
-    virtual bool isCurrentThemeGeneral() const = 0;
+    virtual bool isHighContrast() const = 0;
+    virtual void setIsHighContrast(bool highContrast) = 0;
 
     virtual void resetCurrentThemeToDefault(const ThemeCode& codeKey) = 0;
 
     virtual const ThemeInfo& currentTheme() const = 0;
     virtual void setCurrentTheme(const ThemeCode& codeKey) = 0;
     virtual void setCurrentThemeStyleValue(ThemeStyleKey key, const Val& val) = 0;
-    virtual void loadLastUsedGeneralTheme() = 0;
-    virtual void loadLastUsedHighContrastTheme() = 0;
     virtual async::Notification currentThemeChanged() const = 0;
 
     virtual std::string fontFamily() const = 0;

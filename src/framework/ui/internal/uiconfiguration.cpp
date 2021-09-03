@@ -429,26 +429,28 @@ ThemeCode UiConfiguration::currentThemeCodeKey() const
     return preferredThemeCode.empty() ? LIGHT_THEME_CODE : preferredThemeCode;
 }
 
-bool UiConfiguration::isCurrentThemeHighContrast() const
+bool UiConfiguration::isHighContrast() const
 {
     ThemeCode currentThemeCode = currentThemeCodeKey();
 
     return currentThemeCode == HIGH_CONTRAST_BLACK_THEME_CODE || currentThemeCode == HIGH_CONTRAST_WHITE_THEME_CODE;
 }
 
-bool UiConfiguration::isCurrentThemeGeneral() const
+void UiConfiguration::setIsHighContrast(bool highContrast)
 {
-    ThemeCode currentThemeCode = currentThemeCodeKey();
-
-    return currentThemeCode == DARK_THEME_CODE || currentThemeCode == LIGHT_THEME_CODE;
+    if (highContrast) {
+        setCurrentTheme(settings()->value(UI_PREVIOUS_HIGH_CONTRAST_THEME).toQString().QString::toStdString());
+    } else {
+        setCurrentTheme(settings()->value(UI_PREVIOUS_GENERAL_THEME).toQString().QString::toStdString());
+    }
 }
 
 void UiConfiguration::setCurrentTheme(const ThemeCode& codeKey)
 {
-    if (isCurrentThemeGeneral()) {
-        settings()->setSharedValue(UI_PREVIOUS_GENERAL_THEME, Val(currentThemeCodeKey()));
-    } else {
+    if (isHighContrast()) {
         settings()->setSharedValue(UI_PREVIOUS_HIGH_CONTRAST_THEME, Val(currentThemeCodeKey()));
+    } else {
+        settings()->setSharedValue(UI_PREVIOUS_GENERAL_THEME, Val(currentThemeCodeKey()));
     }
 
     settings()->setSharedValue(UI_CURRENT_THEME_CODE_KEY, Val(codeKey));
@@ -476,16 +478,6 @@ void UiConfiguration::setCurrentThemeStyleValue(ThemeStyleKey key, const Val& va
 Notification UiConfiguration::currentThemeChanged() const
 {
     return m_currentThemeChanged;
-}
-
-void UiConfiguration::loadLastUsedGeneralTheme()
-{
-    setCurrentTheme(settings()->value(UI_PREVIOUS_GENERAL_THEME).toQString().QString::toStdString());
-}
-
-void UiConfiguration::loadLastUsedHighContrastTheme()
-{
-    setCurrentTheme(settings()->value(UI_PREVIOUS_HIGH_CONTRAST_THEME).toQString().QString::toStdString());
 }
 
 std::string UiConfiguration::fontFamily() const
