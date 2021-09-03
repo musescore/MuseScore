@@ -208,6 +208,7 @@ public:
     virtual ~EngravingObject();
 
     inline ElementType type() const { return m_type; }
+    inline bool isType(ElementType t) const { return t == m_type; }
 
     //! NOTE Before, element tree is made to be done like this
     //! class ScoreElement
