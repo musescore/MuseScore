@@ -59,11 +59,11 @@ void TimeSignatureSettingsModel::requestElements()
 void TimeSignatureSettingsModel::loadProperties()
 {
     loadPropertyItem(m_horizontalScale, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toSizeF().width()) * 100;
+        return DataFormatter::roundDouble(elementPropertyValue.toSizeF().width()) * 100;
     });
 
     loadPropertyItem(m_verticalScale, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toSizeF().height()) * 100;
+        return DataFormatter::roundDouble(elementPropertyValue.toSizeF().height()) * 100;
     });
 
     loadPropertyItem(m_shouldShowCourtesy);

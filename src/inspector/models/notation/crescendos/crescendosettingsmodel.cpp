@@ -100,7 +100,7 @@ void CrescendoSettingsModel::loadProperties()
     loadPropertyItem(m_endHookType);
 
     auto formatDoubleFunc = [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toDouble());
+        return DataFormatter::roundDouble(elementPropertyValue.toDouble());
     };
 
     loadPropertyItem(m_thickness, formatDoubleFunc);
@@ -112,18 +112,18 @@ void CrescendoSettingsModel::loadProperties()
 
     loadPropertyItem(m_beginningText);
     loadPropertyItem(m_beginningTextHorizontalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toPointF().x());
+        return DataFormatter::roundDouble(elementPropertyValue.toPointF().x());
     });
     loadPropertyItem(m_beginningTextVerticalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toPointF().x());
+        return DataFormatter::roundDouble(elementPropertyValue.toPointF().x());
     });
 
     loadPropertyItem(m_continiousText);
     loadPropertyItem(m_continiousTextHorizontalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toPointF().x());
+        return DataFormatter::roundDouble(elementPropertyValue.toPointF().x());
     });
     loadPropertyItem(m_continiousTextVerticalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::formatDouble(elementPropertyValue.toPointF().x());
+        return DataFormatter::roundDouble(elementPropertyValue.toPointF().x());
     });
 
     updateLinePropertiesAvailability();
