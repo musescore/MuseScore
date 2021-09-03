@@ -202,30 +202,11 @@ PreferencesPage {
             }
         }
 
-        FlatButton {
-            id: resetButton
-            text: qsTrc("appshell", "Reset theme to default")
+        ResetThemeButtonSection {
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 7
 
-            NavigationPanel {
-                id: navPanel
-
-                name: resetButton.text
-                direction: NavigationPanel.Vertical
-                section: root.navigationSection
-                order: root.navigationOrderStart + 7
-
-                onActiveChanged: {
-                    if (active) {
-                        resetButton.forceActiveFocus()
-                    }
-                }
-            }
-
-            navigation.name: "ResetButton"
-            navigation.panel: navPanel
-            navigation.order: 1
-
-            onClicked: {
+            onResetThemeToDefaultRequested: {
                 appearanceModel.resetThemeToDefault()
             }
 
