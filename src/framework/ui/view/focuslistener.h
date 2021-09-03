@@ -29,7 +29,7 @@ class FocusListener : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(QQuickItem* item READ item WRITE setItem NOTIFY itemChanged)
+    Q_PROPERTY(QQuickItem * item READ item WRITE setItem NOTIFY itemChanged)
 
 public:
     explicit FocusListener(QObject* parent = nullptr);
