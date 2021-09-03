@@ -25,6 +25,7 @@
 
 #include "engraving/libmscore/engravingobject.h"
 #include "engraving/libmscore/score.h"
+#include "engraving/libmscore/masterscore.h"
 #include "dataformatter.h"
 
 using namespace mu::diagnostics;
@@ -167,7 +168,24 @@ QVariant EngravingElementsModel::makeData(const Ms::EngravingObject* el) const
     };
 
     QVariantMap d;
-    d["name"] = el->name();
+
+    if (el->isScore()) {
+        const Ms::Score* score = Ms::toScore(el);
+        if (score->isMaster()) {
+            d["name"] = "MasterScore: " + score->title();
+        } else {
+            d["name"] = "Score: " + score->title();
+        }
+    } else if (el->isDummy()) {
+        if (el->isType(Ms::ElementType::INVALID)) {
+            d["name"] = "Dummy";
+        } else {
+            d["name"] = QString("Dummy: ") + el->name();
+        }
+    } else {
+        d["name"] = el->name();
+    }
+
     d["selected"] = elementsProvider()->isSelected(el);
 
     if (el->isEngravingItem()) {
@@ -196,7 +214,11 @@ void EngravingElementsModel::reload()
 
     std::list<const Ms::EngravingObject*> elements = elementsProvider()->elements();
     for (const Ms::EngravingObject* el : elements) {
-        if (el->isScore()) {
+        if (el == Ms::gpaletteScore) {
+            continue;
+        }
+
+        if (el->isScore() && el->score() == el->masterScore()) {
             Item* scoreItem = createItem(m_rootItem);
             scoreItem->setElement(el);
             scoreItem->setData(makeData(el));
@@ -204,11 +226,13 @@ void EngravingElementsModel::reload()
         }
     }
 
-    Item* lossItem = createItem(m_rootItem);
-    QVariantMap lossData;
-    lossData["name"] = "Loss";
-    lossItem->setData(lossData);
-    findAndAddLoss(elements, lossItem, m_rootItem);
+    Item* lostItem = createItem(m_rootItem);
+    QVariantMap lostData;
+    lostData["name"] = "Lost items";
+    lostData["pagePos"] = "-";
+    lostData["bbox"] = "-";
+    lostItem->setData(lostData);
+    findAndAddLost(elements, lostItem, m_rootItem);
 
     endResetModel();
 
@@ -218,7 +242,18 @@ void EngravingElementsModel::reload()
 void EngravingElementsModel::load(const std::list<const Ms::EngravingObject*>& elements, Item* root)
 {
     for (const Ms::EngravingObject* el : elements) {
-        if (el->treeParent() == root->element()) {
+        if (el == Ms::gpaletteScore) {
+            continue;
+        }
+
+        Ms::EngravingObject* parent = nullptr;
+        if (isUseTreeParent()) {
+            parent = el->treeParent();
+        } else {
+            parent = el->parent(true);
+        }
+
+        if (parent == root->element()) {
             Item* item = createItem(root);
             item->setElement(el);
             item->setData(makeData(el));
@@ -242,7 +277,7 @@ const EngravingElementsModel::Item* EngravingElementsModel::findItem(const Ms::E
     return nullptr;
 }
 
-void EngravingElementsModel::findAndAddLoss(const std::list<const Ms::EngravingObject*>& elements, Item* lossRoot, const Item* root)
+void EngravingElementsModel::findAndAddLost(const std::list<const Ms::EngravingObject*>& elements, Item* lossRoot, const Item* root)
 {
     for (const Ms::EngravingObject* el : elements) {
         const Item* it = findItem(el, root);
@@ -329,4 +364,20 @@ int EngravingElementsModel::Item::row() const
         return m_parent->m_children.indexOf(const_cast<Item*>(this));
     }
     return 0;
+}
+
+bool EngravingElementsModel::isUseTreeParent() const
+{
+    return m_isUseTreeParent;
+}
+
+void EngravingElementsModel::setIsUseTreeParent(bool arg)
+{
+    if (m_isUseTreeParent == arg) {
+        return;
+    }
+    m_isUseTreeParent = arg;
+    emit isUseTreeParentChanged();
+
+    reload();
 }
