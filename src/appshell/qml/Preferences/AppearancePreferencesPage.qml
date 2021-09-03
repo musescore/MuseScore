@@ -21,6 +21,7 @@
  */
 import QtQuick 2.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Preferences 1.0
 
@@ -42,96 +43,66 @@ PreferencesPage {
     Column {
         id: content
 
-        QtObject {
-            id: prv
-
-            readonly property int firstColumnWidth: 212
-            readonly property int spacing: 24
-        }
-
         width: parent.width
-        height: childrenRect.height
+        spacing: 24
 
-        spacing: prv.spacing
+        ThemesSection {
+            width: content.width
 
-        StyledTextLabel {
-            text: highContrastEnable.checked ? qsTrc("appshell", "High Contrast Themes") : qsTrc("appshell", "Themes")
-            font: ui.theme.bodyBoldFont
-        }
+            themes: appearanceModel.generalThemes
+            currentThemeCode: appearanceModel.currentThemeCode
+            highContrastEnabled: appearanceModel.highContrastEnabled
+            accentColors: appearanceModel.accentColors
+            currentAccentColorIndex: appearanceModel.currentAccentColorIndex
 
-        CheckBox {
-            id: highContrastEnable
-            width: 200
-            checked: appearanceModel.enableHighContrastChecked()
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 1
 
-            text: qsTrc("appshell", "Enable high-contrast")
-            onClicked: {
-                checked = !checked
-                highContrastEnable.checked ? appearanceModel.loadLastUsedHighContrastTheme() : appearanceModel.loadLastUsedGeneralTheme()
+            onThemeChangeRequested: {
+                appearanceModel.currentThemeCode = newThemeCode
+            }
+
+            onHighContrastChangeRequested: {
+                appearanceModel.highContrastEnabled = enabled
+            }
+
+            onAccentColorChangeRequested: {
+                appearanceModel.currentAccentColorIndex = newColorIndex
+            }
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+                }
+            }
+
+            onEnsureContentVisibleRequested: {
+                root.ensureContentVisibleRequested(contentRect)
             }
         }
 
-        Loader {
-            sourceComponent: highContrastEnable.checked ? highContrastThemesModel : generalThemesModel
+        SeparatorLine {
+            visible: uiColorsSection.visible
         }
 
-        Component {
-            id: generalThemesModel
+        UiColorsSection {
+            id: uiColorsSection
 
-            Column {
-                spacing: prv.spacing
+            width: content.width
 
-                ThemesSection {
-                    width: content.width
+            visible: appearanceModel.highContrastEnabled
 
-                    themes: appearanceModel.generalThemes
-                    currentThemeCode: appearanceModel.currentThemeCode
+            navigation.section: root.navigationSection
+            //! NOTE: 3 because ThemesSection have two panels
+            navigation.order: root.navigationOrderStart + 3
 
-                    onThemeChangeRequested: {
-                        appearanceModel.currentThemeCode = newThemeCode
-                    }
-                }
-
-                AccentColorsSection {
-                    width: content.width
-
-                    colors: appearanceModel.accentColors
-                    currentColorIndex: appearanceModel.currentAccentColorIndex
-                    firstColumnWidth: prv.firstColumnWidth
-
-                    onAccentColorChangeRequested: {
-                        appearanceModel.currentAccentColorIndex = newColorIndex
-                    }
-                }
+            onColorChangeRequested: {
+                appearanceModel.setNewColor(newColor, propertyType)
             }
-        }
 
-        Component {
-            id: highContrastThemesModel
-
-            Column {
-                spacing: prv.spacing
-
-                ThemesSection {
-                    width: content.width
-
-                    themes: appearanceModel.highContrastThemes
-                    currentThemeCode: appearanceModel.currentThemeCode
-
-                    onThemeChangeRequested: {
-                        appearanceModel.currentThemeCode = newThemeCode
-                    }
-                }
-
-                SeparatorLine {}
-
-                UiColorsSection {
-                    width: content.width
-                    firstColumnWidth: prv.firstColumnWidth
-
-                    onColorChangeRequested: {
-                        appearanceModel.setNewColor(newColor, propertyType)
-                    }
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
                 }
             }
         }
@@ -142,7 +113,9 @@ PreferencesPage {
             allFonts: appearanceModel.allFonts()
             currentFontIndex: appearanceModel.currentFontIndex
             bodyTextSize: appearanceModel.bodyTextSize
-            firstColumnWidth: prv.firstColumnWidth
+
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 4
 
             onFontChangeRequested: {
                 appearanceModel.currentFontIndex = newFontIndex
@@ -150,6 +123,12 @@ PreferencesPage {
 
             onBodyTextSizeChangeRequested: {
                 appearanceModel.bodyTextSize = newBodyTextSize
+            }
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+                }
             }
         }
 
@@ -165,7 +144,9 @@ PreferencesPage {
             wallpaperPath: appearanceModel.backgroundWallpaperPath
             wallpapersDir: appearanceModel.wallpapersDir()
             wallpaperFilter: appearanceModel.wallpaperPathFilter()
-            firstColumnWidth: prv.firstColumnWidth
+
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 5
 
             onUseColorChangeRequested: {
                 appearanceModel.backgroundUseColor = newValue
@@ -177,6 +158,12 @@ PreferencesPage {
 
             onWallpaperPathChangeRequested: {
                 appearanceModel.backgroundWallpaperPath = newWallpaperPath
+            }
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+                }
             }
         }
 
@@ -192,7 +179,9 @@ PreferencesPage {
             wallpaperPath: appearanceModel.foregroundWallpaperPath
             wallpapersDir: appearanceModel.wallpapersDir()
             wallpaperFilter: appearanceModel.wallpaperPathFilter()
-            firstColumnWidth: prv.firstColumnWidth
+
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 6
 
             onUseColorChangeRequested: {
                 appearanceModel.foregroundUseColor = newValue
@@ -205,13 +194,26 @@ PreferencesPage {
             onWallpaperPathChangeRequested: {
                 appearanceModel.foregroundWallpaperPath = newWallpaperPath
             }
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+                }
+            }
         }
 
-        FlatButton {
-            text: qsTrc("appshell", "Reset theme to default")
+        ResetThemeButtonSection {
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 7
 
-            onClicked: {
+            onResetThemeToDefaultRequested: {
                 appearanceModel.resetThemeToDefault()
+            }
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+                }
             }
         }
     }

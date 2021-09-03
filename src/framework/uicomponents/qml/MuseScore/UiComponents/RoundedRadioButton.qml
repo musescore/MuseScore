@@ -59,7 +59,7 @@ RadioDelegate {
             }
         }
 
-        onTriggered: root.toggled()
+        onTriggered: root.clicked()
     }
 
     contentItem: Item {
@@ -117,6 +117,12 @@ RadioDelegate {
             color: ui.theme.accentColor
             visible: root.checked
         }
+    }
+
+    background: Rectangle {
+        anchors.fill: parent
+
+        color: ui.theme.backgroundSecondaryColor
     }
 
     states: [

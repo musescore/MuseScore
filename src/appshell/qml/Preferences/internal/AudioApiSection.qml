@@ -55,7 +55,7 @@ BaseSection {
         }
 
         CommonAudioApiConfiguration {
-            firstColumnWidth: root.firstColumnWidth
+            firstColumnWidth: root.columnWidth
 
             navigation: root.navigation
             navigationOrderStart: 2

@@ -22,12 +22,14 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
-Column {
+BaseSection {
     id: root
 
-    property alias title: titleLabel.text
+    navigation.direction: NavigationPanel.Both
+
     property alias wallpaperDialogTitle: wallpaperPicker.dialogTitle
 
     property bool useColor: true
@@ -37,19 +39,9 @@ Column {
     property alias wallpapersDir: wallpaperPicker.dir
     property alias wallpaperFilter: wallpaperPicker.filter
 
-    property int firstColumnWidth: 0
-
     signal useColorChangeRequested(var newValue)
     signal colorChangeRequested(var newColor)
     signal wallpaperPathChangeRequested(var newWallpaperPath)
-
-    spacing: 18
-
-    StyledTextLabel {
-        id: titleLabel
-
-        font: ui.theme.bodyBoldFont
-    }
 
     GridLayout {
         rows: 2
@@ -59,10 +51,16 @@ Column {
         columnSpacing: 0
 
         RoundedRadioButton {
-            implicitWidth: root.firstColumnWidth
+            id: colorButton
+            implicitWidth: root.columnWidth
 
             checked: root.useColor
             text: qsTrc("appshell", "Color:")
+
+            navigation.name: "ColorBox"
+            navigation.panel: root.navigation
+            navigation.row: 0
+            navigation.column: 0
 
             onClicked: {
                 root.useColorChangeRequested(true)
@@ -76,16 +74,26 @@ Column {
 
             enabled: root.useColor
 
+            navigation.name: "ColorBox"
+            navigation.panel: root.navigation
+            navigation.row: 0
+            navigation.column: 1
+
             onNewColorSelected: {
                 root.colorChangeRequested(newColor)
             }
         }
 
         RoundedRadioButton {
-            implicitWidth: root.firstColumnWidth
+            implicitWidth: root.columnWidth
 
             checked: !root.useColor
             text: qsTrc("appshell", "Wallpaper:")
+
+            navigation.name: "WallpaperBox"
+            navigation.panel: root.navigation
+            navigation.row: 1
+            navigation.column: 0
 
             onClicked: {
                 root.useColorChangeRequested(false)
@@ -98,6 +106,10 @@ Column {
             width: 208
 
             enabled: !root.useColor
+
+            navigation: root.navigation
+            navigationRowOrder: 1
+            navigationColumnOrderStart: 1
 
             onPathEdited: {
                 root.wallpaperPathChangeRequested(newPath)

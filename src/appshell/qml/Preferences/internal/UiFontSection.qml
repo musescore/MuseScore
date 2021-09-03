@@ -23,25 +23,18 @@ import QtQuick 2.15
 
 import MuseScore.UiComponents 1.0
 
-Column {
+BaseSection {
     id: root
+
+    title: qsTrc("appshell", "Appearance")
 
     property alias allFonts: selectFontControl.model
 
     property alias currentFontIndex: selectFontControl.currentIndex
     property alias bodyTextSize: bodyTextSizeControl.currentValue
 
-    property int firstColumnWidth: 0
-
     signal fontChangeRequested(var newFontIndex)
     signal bodyTextSizeChangeRequested(var newBodyTextSize)
-
-    spacing: 18
-
-    StyledTextLabel {
-        text: qsTrc("appshell", "Appearance")
-        font: ui.theme.bodyBoldFont
-    }
 
     Column {
         spacing: 8
@@ -50,7 +43,11 @@ Column {
             id: selectFontControl
 
             title: qsTrc("appshell", "Font face:")
-            titleWidth: root.firstColumnWidth
+            titleWidth: root.columnWidth
+
+            navigation.name: "FontFaceBox"
+            navigation.panel: root.navigation
+            navigation.row: 1
 
             onValueEdited: {
                 root.fontChangeRequested(currentIndex)
@@ -61,11 +58,15 @@ Column {
             id: bodyTextSizeControl
 
             title: qsTrc("appshell", "Body text size:")
-            titleWidth: root.firstColumnWidth
+            titleWidth: root.columnWidth
 
             minValue: 8
             maxValue: 24
             measureUnitsSymbol: qsTrc("appshell", "pt")
+
+            navigation.name: "BodyTextControl"
+            navigation.panel: root.navigation
+            navigation.row: 2
 
             onValueEdited: {
                 root.bodyTextSizeChangeRequested(newValue)
