@@ -565,7 +565,7 @@ void UiTheme::drawComplexControl(ComplexControl control, const QStyleOptionCompl
     case CC_ScrollBar: {
         QProxyStyle::drawComplexControl(control, option, painter, widget);
 
-        if (configuration()->isCurrentThemeHighContrast()) {
+        if (configuration()->isHighContrast()) {
             QRect scrollBarHandle = QProxyStyle::subControlRect(CC_ScrollBar, option, SC_ScrollBarSlider, widget);
 
             QColor handleColor = fontPrimaryColor();
@@ -772,7 +772,7 @@ void UiTheme::drawButtonBackground(QPainter* painter, const QRect& rect, bool en
                               : 0);
 
     if (enabled) {
-        if (configuration()->isCurrentThemeHighContrast()) {
+        if (configuration()->isHighContrast()) {
             QColor penBorderColor(strokeColor());
             penBorderColor.setAlphaF(pressed ? buttonOpacityHit() : hovered ? buttonOpacityHover() : buttonOpacityNormal());
 
@@ -795,21 +795,17 @@ void UiTheme::drawCheckboxIndicator(QPainter* painter, const QRect& rect, bool e
                                   : hovered ? buttonOpacityHover()
                                   : buttonOpacityNormal());
 
-        if (configuration()->isCurrentThemeGeneral()) {
-            QColor penBorderColor;
-            penBorderColor.setAlphaF(pressed ? buttonOpacityHit() : hovered ? buttonOpacityHover() : buttonOpacityNormal());
-
-            const int penBorderWidth = enabled && (hovered || pressed) ? borderWidth() : 0;
-
-            drawRoundedRect(painter, rect, 2, backgroundColor, QPen(penBorderColor, penBorderWidth));
+        QColor penBorderColor(Qt::transparent);
+        int penBorderWidth = 0;
+        if (configuration()->isHighContrast()) {
+            penBorderColor = strokeColor();
+            penBorderWidth = enabled ? borderWidth() : 0;
         } else {
-            QColor penBorderColor = strokeColor();
-            penBorderColor.setAlphaF(pressed ? buttonOpacityHit() : hovered ? buttonOpacityHover() : buttonOpacityNormal());
-
-            const int penBorderWidth = enabled ? borderWidth() : 0;
-
-            drawRoundedRect(painter, rect, 2, backgroundColor, QPen(penBorderColor, penBorderWidth));
+            penBorderWidth = enabled && (hovered || pressed) ? borderWidth() : 0;
         }
+
+        penBorderColor.setAlphaF(pressed ? buttonOpacityHit() : hovered ? buttonOpacityHover() : buttonOpacityNormal());
+        drawRoundedRect(painter, rect, 2, backgroundColor, QPen(penBorderColor, penBorderWidth));
     }
 
     if (checked || indeterminate) {
@@ -903,7 +899,7 @@ void UiTheme::drawListViewItemBackground(QPainter* painter, const QRect& rect, b
 
     painter->fillRect(rect, backgroundColor);
 
-    if (configuration()->isCurrentThemeHighContrast()) {
+    if (configuration()->isHighContrast()) {
         drawRoundedRect(painter, rect, 1, NO_FILL, QPen(strokeColor(), borderWidth()));
     }
 }

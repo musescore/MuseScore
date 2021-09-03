@@ -22,6 +22,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
 Row {
@@ -29,6 +30,19 @@ Row {
 
     property alias colors: view.model
     property alias currentColorIndex: view.currentIndex
+
+    property NavigationPanel navigation: NavigationPanel {
+        name: titleLabel.text
+        direction: NavigationPanel.Horizontal
+        accessible.name: titleLabel.text
+        enabled: root.visible
+
+        onActiveChanged: {
+            if (active) {
+                root.forceActiveFocus()
+            }
+        }
+    }
 
     property int firstColumnWidth: 0
 
@@ -38,6 +52,7 @@ Row {
     spacing: 0
 
     StyledTextLabel {
+        id: titleLabel
         width: root.firstColumnWidth
 
         anchors.verticalCenter: parent.verticalCenter
@@ -52,10 +67,16 @@ Row {
         spacing: 10
 
         delegate: RoundedRadioButton {
+            id: button
+
             width: 36
             height: width
 
             checked: view.currentIndex === model.index
+
+            navigation.name: "AccentColourButton"
+            navigation.panel: root.navigation
+            navigation.column: model.index
 
             onClicked: {
                 root.accentColorChangeRequested(model.index)
@@ -70,6 +91,8 @@ Row {
                 border.width: parent.checked ? 1 : 0
 
                 color: "transparent"
+
+                NavigationFocusBorder { navigationCtrl: button.navigation }
 
                 Rectangle {
                     anchors.centerIn: parent

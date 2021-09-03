@@ -62,6 +62,11 @@ void AppearancePreferencesModel::init()
     });
 }
 
+bool AppearancePreferencesModel::highContrastEnabled() const
+{
+    return uiConfiguration()->isHighContrast();
+}
+
 QVariantList AppearancePreferencesModel::generalThemes() const
 {
     QVariantList result;
@@ -103,33 +108,25 @@ void AppearancePreferencesModel::resetThemeToDefault()
 
 bool AppearancePreferencesModel::enableHighContrastChecked()
 {
-    return uiConfiguration()->isCurrentThemeHighContrast();
-}
-
-void AppearancePreferencesModel::loadLastUsedGeneralTheme()
-{
-    uiConfiguration()->loadLastUsedGeneralTheme();
-}
-
-void AppearancePreferencesModel::loadLastUsedHighContrastTheme()
-{
-    uiConfiguration()->loadLastUsedHighContrastTheme();
+    return uiConfiguration()->isHighContrast();
 }
 
 void AppearancePreferencesModel::setNewColor(const QColor& newColor, ColorType colorType)
 {
     switch (colorType) {
-    case AccentColor: uiConfiguration()->setCurrentThemeStyleValue(ThemeStyleKey::ACCENT_COLOR, Val(newColor));
+    case AccentColor:
+        uiConfiguration()->setCurrentThemeStyleValue(ThemeStyleKey::ACCENT_COLOR, Val(newColor));
         break;
-
-    case TextAndIconsColor: uiConfiguration()->setCurrentThemeStyleValue(ThemeStyleKey::FONT_PRIMARY_COLOR, Val(newColor));
+    case TextAndIconsColor:
+        uiConfiguration()->setCurrentThemeStyleValue(ThemeStyleKey::FONT_PRIMARY_COLOR, Val(newColor));
         break;
-
-    case DisabledColor: return;
-
-    case BorderColor: uiConfiguration()->setCurrentThemeStyleValue(ThemeStyleKey::STROKE_COLOR, Val(newColor));
+    case DisabledColor:
+        return;
+    case BorderColor:
+        uiConfiguration()->setCurrentThemeStyleValue(ThemeStyleKey::STROKE_COLOR, Val(newColor));
         break;
     }
+
     emit themesChanged();
 }
 
@@ -147,6 +144,16 @@ QString AppearancePreferencesModel::wallpaperPathFilter() const
 QString AppearancePreferencesModel::wallpapersDir() const
 {
     return notationConfiguration()->wallpapersDefaultDirPath().toQString();
+}
+
+void AppearancePreferencesModel::setHighContrastEnabled(bool enabled)
+{
+    if (highContrastEnabled() == enabled) {
+        return;
+    }
+
+    uiConfiguration()->setIsHighContrast(enabled);
+    emit highContrastEnabledChanged();
 }
 
 QString AppearancePreferencesModel::currentThemeCode() const

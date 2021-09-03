@@ -20,44 +20,25 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Controls 2.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
+import MuseScore.Preferences 1.0
 
-Flickable {
+BaseSection {
     id: root
 
-    contentWidth: width
+    signal resetThemeToDefaultRequested()
 
-    clip: true
-    boundsBehavior: Flickable.StopAtBounds
-    interactive: height < contentHeight
+    FlatButton {
+        text: qsTrc("appshell", "Reset theme to default")
 
-    ScrollBar.vertical: StyledScrollBar {}
-
-    property NavigationSection navigationSection: null
-    property int navigationOrderStart: 0
-
-    signal hideRequested()
-
-    function apply() {
-        return true
-    }
-
-    function ensureContentVisibleRequested(contentRect) {
-        if (root.contentY + root.height < contentRect.y + contentRect.height) {
-            root.contentY += contentRect.y + contentRect.height - (root.contentY + root.height)
-        } else if (root.contentY > contentRect.y) {
-            root.contentY -= root.contentY - contentRect.y
-        }
-    }
-
-    MouseArea {
-        anchors.fill: parent
+        navigation.name: "ResetButton"
+        navigation.panel: root.navigation
+        navigation.order: 1
 
         onClicked: {
-            root.forceActiveFocus()
+            root.resetThemeToDefaultRequested()
         }
     }
 }
