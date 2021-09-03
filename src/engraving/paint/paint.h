@@ -30,6 +30,8 @@
 
 namespace Ms {
 class EngravingItem;
+class Page;
+class Score;
 }
 
 namespace mu::engraving {
@@ -42,10 +44,18 @@ public:
     static void paintElement(mu::draw::Painter& painter, const Ms::EngravingItem* element);
     static void paintElements(mu::draw::Painter& painter, const QList<Ms::EngravingItem*>& elements);
 
+    static void paintPage(mu::draw::Painter& painter, Ms::Page* page, const RectF& rect);
+
+    static void paintDiagnostic(mu::draw::Painter& painter);
+    static void paintPageDiagnostic(mu::draw::Painter& painter, Ms::Page* page);
+
 private:
 
     static void initDebugger(mu::draw::Painter& painter, const Ms::EngravingItem* element);
     static void deinitDebugger(mu::draw::Painter& painter);
+
+    static void paintChildren(mu::draw::Painter& painter, const std::list<const Ms::EngravingObject*>& els,
+                              const Ms::EngravingItem* parent);
 };
 }
 
