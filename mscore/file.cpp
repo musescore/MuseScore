@@ -2119,10 +2119,31 @@ bool MuseScore::savePdf(Score* cs_, QPrinter& printer)
       const QList<Page*> pl = cs_->pages();
       int pages = pl.size();
       bool firstPage = true;
+
+      const QRect fillRect(0.0, 0.0, size.width() * DPI, size.height() * DPI);
+      int exportBgStyle = preferences.getInt(PREF_EXPORT_BG_STYLE);
+      bool useFgColor = preferences.getBool(PREF_UI_CANVAS_FG_USECOLOR);
+      const QColor fgColor = preferences.getColor(PREF_UI_CANVAS_FG_COLOR);
+      const QColor customColor = preferences.getColor(PREF_EXPORT_BG_CUSTOM_COLOR);
+      const QPixmap fgPixMap(preferences.getString(PREF_UI_CANVAS_FG_WALLPAPER));
+
       for (int n = 0; n < pages; ++n) {
             if (!firstPage)
                   printer.newPage();
             firstPage = false;
+            switch (exportBgStyle) {
+                  case 1:
+                        if (useFgColor)
+                              p.fillRect(fillRect, fgColor);
+                        else
+                              p.drawTiledPixmap(fillRect, fgPixMap, fillRect.topLeft());
+                        break;
+                  case 2:
+                        p.fillRect(fillRect, customColor);
+                        break;
+                  default:
+                        break;
+                  }
             cs_->print(&p, n);
             }
       p.end();
@@ -2173,6 +2194,13 @@ bool MuseScore::savePdf(QList<Score*> cs_, const QString& saveName)
       double pr = MScore::pixelRatio;
 
       bool firstPage = true;
+      const QRect fillRect(0.0, 0.0, size.width() * DPI, size.height() * DPI);
+      int exportBgStyle = preferences.getInt(PREF_EXPORT_BG_STYLE);
+      bool useFgColor = preferences.getBool(PREF_UI_CANVAS_FG_USECOLOR);
+      const QColor fgColor = preferences.getColor(PREF_UI_CANVAS_FG_COLOR);
+      const QColor customColor = preferences.getColor(PREF_EXPORT_BG_CUSTOM_COLOR);
+      const QPixmap fgPixMap(preferences.getString(PREF_UI_CANVAS_FG_WALLPAPER));
+
       for (Score* s : cs_) {
             LayoutMode layoutMode = s->layoutMode();
             if (layoutMode != LayoutMode::PAGE) {
@@ -2205,6 +2233,21 @@ bool MuseScore::savePdf(QList<Score*> cs_, const QString& saveName)
 
             //reset score
             s->setPrinting(false);
+
+            switch (exportBgStyle) {
+                  case 1:
+                      if (useFgColor)
+                          p.fillRect(fillRect, fgColor);
+                      else
+                          p.drawTiledPixmap(fillRect, fgPixMap, fillRect.topLeft());
+                      break;
+                  case 2:
+                      p.fillRect(fillRect, customColor);
+                      break;
+                  default:
+                      break;
+                  }
+
             MScore::pdfPrinting = false;
 
             if (layoutMode != s->layoutMode()) {
@@ -2665,8 +2708,8 @@ bool MuseScore::savePng(Score* score, const QString& name, SaveReplacePolicy* re
 
 bool MuseScore::savePng(Score* score, QIODevice* device, int pageNumber, bool drawPageBackground)
       {
+      Q_UNUSED(drawPageBackground);
       const bool screenshot = false;
-      const bool transparent = preferences.getBool(PREF_EXPORT_PNG_USETRANSPARENCY) && !drawPageBackground;
       const double convDpi = preferences.getDouble(PREF_EXPORT_PNG_RESOLUTION);
       const int localTrimMargin = trimMargin;
       const QImage::Format format = QImage::Format_ARGB32_Premultiplied;
@@ -2698,7 +2741,31 @@ bool MuseScore::savePng(Score* score, QIODevice* device, int pageNumber, bool dr
       printer.setDotsPerMeterX(lrint((convDpi * 1000) / INCH));
       printer.setDotsPerMeterY(lrint((convDpi * 1000) / INCH));
 
-      printer.fill(transparent ? 0 : 0xffffffff);
+      int exportBgStyle = preferences.getInt(PREF_EXPORT_BG_STYLE);
+      bool useFgColor = preferences.getBool(PREF_UI_CANVAS_FG_USECOLOR);
+      const QColor fgColor = preferences.getColor(PREF_UI_CANVAS_FG_COLOR);
+      const QColor customColor = preferences.getColor(PREF_EXPORT_BG_CUSTOM_COLOR);
+      const QPixmap fgPixMap(preferences.getString(PREF_UI_CANVAS_FG_WALLPAPER));
+
+      switch (exportBgStyle) {
+            case 0:
+                  printer.fill(0);
+                  break;
+            case 1:
+                  if (useFgColor)
+                        printer.fill(fgColor);
+                  else {
+                        QPainter painter(&printer);
+                        painter.drawTiledPixmap(r, fgPixMap, r.topLeft());
+                  }
+                  break;
+            case 2:
+                  printer.fill(customColor);
+                  break;
+            default:
+                  break;
+            }
+
       double mag_ = convDpi / DPI;
       MScore::pixelRatio = 1.0 / mag_;
 
@@ -2716,7 +2783,7 @@ bool MuseScore::savePng(Score* score, QIODevice* device, int pageNumber, bool dr
             //convert to grayscale & respect alpha
             QVector<QRgb> colorTable;
             colorTable.push_back(QColor(0, 0, 0, 0).rgba());
-            if (!transparent) {
+            if (exportBgStyle != 0) {
                   for (int i = 1; i < 256; i++)
                         colorTable.push_back(QColor(i, i, i).rgb());
                   }
@@ -2945,6 +3012,7 @@ NotesColors MuseScore::readNotesColors(const QString& filePath) const
 
 bool MuseScore::saveSvg(Score* score, QIODevice* device, int pageNumber, bool drawPageBackground, const NotesColors& notesColors)
       {
+      Q_UNUSED(drawPageBackground);
       QString title(score->title());
       score->setPrinting(true);
       MScore::pdfPrinting = true;
@@ -2976,8 +3044,25 @@ bool MuseScore::saveSvg(Score* score, QIODevice* device, int pageNumber, bool dr
             p.translate(-r.topLeft());
       MScore::pixelRatio = DPI / printer.logicalDpiX();
 
-      if (drawPageBackground)
-            p.fillRect(r, Qt::white);
+      int exportBgStyle = preferences.getInt(PREF_EXPORT_BG_STYLE);
+      bool useFgColor = preferences.getBool(PREF_UI_CANVAS_FG_USECOLOR);
+      const QColor fgColor = preferences.getColor(PREF_UI_CANVAS_FG_COLOR);
+      const QColor customColor = preferences.getColor(PREF_EXPORT_BG_CUSTOM_COLOR);
+      const QPixmap fgPixMap(preferences.getString(PREF_UI_CANVAS_FG_WALLPAPER));
+
+      switch (exportBgStyle) {
+            case 1:
+                  if (useFgColor)
+                        p.fillRect(r, fgColor);
+                  else
+                        p.drawTiledPixmap(r, fgPixMap, r.topLeft());
+                  break;
+            case 2:
+                  p.fillRect(r, customColor);
+                  break;
+            default:
+                  break;
+      }
 
       QList<Element*> pel = page->elements();
       std::stable_sort(pel.begin(), pel.end(), elementLessThan);

@@ -66,6 +66,8 @@
 #define PREF_EXPORT_PDF_DPI                                 "export/pdf/dpi"
 #define PREF_EXPORT_PNG_RESOLUTION                          "export/png/resolution"
 #define PREF_EXPORT_PNG_USETRANSPARENCY                     "export/png/useTransparency"
+#define PREF_EXPORT_BG_STYLE                                "export/bg/style"
+#define PREF_EXPORT_BG_CUSTOM_COLOR                         "export/bg/customcolor"
 #define PREF_IMPORT_GUITARPRO_CHARSET                       "import/guitarpro/charset"
 #define PREF_IMPORT_MUSICXML_IMPORTBREAKS                   "import/musicXML/importBreaks"
 #define PREF_IMPORT_MUSICXML_IMPORTLAYOUT                   "import/musicXML/importLayout"
