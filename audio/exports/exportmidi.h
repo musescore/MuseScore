@@ -47,7 +47,7 @@ class ExportMidi {
 
       PauseMap pauseMap;
 
-      void writeHeader();
+      void writeHeader(MidiTrack& tempoTrack);
 
    public:
       MidiFile mf;
