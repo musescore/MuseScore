@@ -875,10 +875,11 @@ void PianorollView::mouseMoveEvent(QMouseEvent* event)
 
             //Check for move note
             double tick = pixelXToWholeNote(m_mouseDownPos.x());
-            int mouseDownPitch = pixelYToPitch(m_mouseDownPos.y());
+            double mouseDownPitch = pixelYToPitch(m_mouseDownPos.y());
 
             NoteBlock* pi = pickNote(m_mouseDownPos.x(), m_mouseDownPos.y());
-            if (pi && m_tool == PianorollTool::SELECT) {
+            if (pi && m_tool == PianorollTool::SELECT)
+            {
                 if (!pi->note->selected())
                 {
                     selectNotes(tick, tick, mouseDownPitch, mouseDownPitch, NoteSelectType::REPLACE);
