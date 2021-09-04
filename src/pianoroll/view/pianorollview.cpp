@@ -22,7 +22,6 @@
 
 #include "pianorollview.h"
 
-#include "libmscore/element.h"
 #include "libmscore/measure.h"
 #include "libmscore/fraction.h"
 #include "libmscore/pos.h"
@@ -163,8 +162,8 @@ void PianorollView::buildNoteData()
 
     //Find staff to draw from
     Ms::Score* score = notation->elements()->msScore();
-    std::vector<Ms::Element*> selectedElements = notation->interaction()->selection()->elements();
-    for (Ms::Element* e: selectedElements)
+    std::vector<Ms::EngravingItem*> selectedElements = notation->interaction()->selection()->elements();
+    for (Ms::EngravingItem* e: selectedElements)
     {
         int idx = e->staffIdx();
         m_activeStaff = idx;
@@ -186,7 +185,7 @@ void PianorollView::buildNoteData()
             for (int voice = 0; voice < VOICES; ++voice)
             {
                 int track = voice + staffIndex * VOICES;
-                Ms::Element* e = s->element(track);
+                Ms::EngravingItem* e = s->element(track);
                 if (e && e->isChord())
                     addChord(toChord(e), voice, staffIndex);
             }

@@ -155,10 +155,10 @@ void PianorollKeyboard::paint(QPainter* p)
 
     //Find staff to draw from
     Ms::Score* score = notation->elements()->msScore();
-    std::vector<Ms::Element*> selectedElements = notation->interaction()->selection()->elements();
+    std::vector<Ms::EngravingItem*> selectedElements = notation->interaction()->selection()->elements();
     std::vector<int> selectedStaves;
     int activeStaff = -1;
-    for (Ms::Element* e: selectedElements)
+    for (Ms::EngravingItem* e: selectedElements)
     {
         int idx = e->staffIdx();
         qDebug() << "ele idx " << idx;
