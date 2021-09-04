@@ -148,7 +148,6 @@ void PianorollController::onCurrentNotationChanged()
     qDebug() << "notationChanged";
 }
 
-
 void PianorollController::setXZoom(double value)
 {
     if (value == m_xZoom)

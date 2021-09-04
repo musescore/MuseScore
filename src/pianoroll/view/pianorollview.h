@@ -248,8 +248,6 @@ private:
     QColor m_colorText = QColor(0x111111);
     QColor m_colorTie = QColor(0xff0000);
 
-
-
 };
 }
 
