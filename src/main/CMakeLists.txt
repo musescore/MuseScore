@@ -232,7 +232,11 @@ if (OS_IS_MAC)
 endif (OS_IS_MAC)
 
 if (CC_IS_MINGW)
-    set_target_properties(mscore PROPERTIES LINK_FLAGS "-Wl,-S -mwindows" )
+    if (CMAKE_BUILD_TYPE MATCHES "DEBUG")
+        set_target_properties(mscore PROPERTIES LINK_FLAGS "-mwindows -mconsole")
+    else (CMAKE_BUILD_TYPE MATCHES "DEBUG")
+        set_target_properties(mscore PROPERTIES LINK_FLAGS "-Wl,-S -mwindows")
+    endif (CMAKE_BUILD_TYPE MATCHES "DEBUG")
 endif(CC_IS_MINGW)
 
 if (CC_IS_MSVC)
