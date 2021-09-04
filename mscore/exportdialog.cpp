@@ -60,13 +60,18 @@ ExportDialog::ExportDialog(Score* s, QWidget* parent)
       setObjectName("ExportDialog");
       setupUi(this);
       setWindowFlags(this->windowFlags() & ~Qt::WindowContextHelpButtonHint);
-            
+
       connect(listWidget, &QListWidget::itemChanged, this, &ExportDialog::setOkButtonEnabled);
       connect(fileTypeComboBox, SIGNAL(currentIndexChanged(int)), SLOT(fileTypeChosen(int)));
-      
+
       pdfSeparateOrSingleFiles = new QButtonGroup(this);
       pdfSeparateOrSingleFiles->addButton(pdfSeparateFilesRadioButton, 0);
       pdfSeparateOrSingleFiles->addButton(pdfOneFileRadioButton, 1);
+
+      exportBackgroundOption = new QButtonGroup(this);
+      exportBackgroundOption->addButton(transparentBackgroundRadioButton, 0);
+      exportBackgroundOption->addButton(scoreBackgroundRadioButton, 1);
+      exportBackgroundOption->addButton(customBackgroundRadioButton, 2);
 
 #if !defined(HAS_AUDIOFILE) || !defined(USE_LAME)
       // Disable audio options that are unavailable
@@ -86,11 +91,16 @@ ExportDialog::ExportDialog(Score* s, QWidget* parent)
             }
 # endif
 #endif
-      
+
       fileTypeComboBox->setCurrentIndex(0);
       pageStack->setCurrentIndex(0);
-      
+      pngDpiWidget->setVisible(false);
+      pngFileOptionWidget->setVisible(false);
+      svgFileOptionWidget->setVisible(false);
+
       pdfSeparateFilesRadioButton->setChecked(true);
+      transparentBackgroundRadioButton->setChecked(true);
+      customBackgroundColorLabel->setDisabled(true);
 
       audioSampleRate->clear();
       audioSampleRate->addItem(tr("32000"), 32000);
@@ -156,8 +166,20 @@ void ExportDialog::loadValues()
       pdfDpiSpinbox->setValue(preferences.getInt(PREF_EXPORT_PDF_DPI));
       
       pngDpiSpinbox->setValue(preferences.getDouble(PREF_EXPORT_PNG_RESOLUTION));
-      pngTransparentBackgroundCheckBox->setChecked(preferences.getBool(PREF_EXPORT_PNG_USETRANSPARENCY));
-      
+
+      switch (preferences.getInt(PREF_EXPORT_BG_STYLE)) {
+            case 0:
+                  transparentBackgroundRadioButton->setChecked(true);
+                  break;
+            case 1:
+                  scoreBackgroundRadioButton->setChecked(true);
+                  break;
+            case 2:
+                  customBackgroundRadioButton->setChecked(true);
+                  break;
+            }
+      customBackgroundColorLabel->setColor(preferences.getColor(PREF_EXPORT_BG_CUSTOM_COLOR));
+
       audioNormaliseCheckBox->setChecked(preferences.getBool(PREF_EXPORT_AUDIO_NORMALIZE));
       int audioSampleRateIndex = audioSampleRate->findData(preferences.getInt(PREF_EXPORT_AUDIO_SAMPLERATE));
       if (audioSampleRateIndex == -1)
@@ -280,8 +302,16 @@ void ExportDialog::setOkButtonEnabled()
 
 void ExportDialog::fileTypeChosen(int index)
       {
-      if (index <= 2) // Pdf, png and svg
-            pageStack->setCurrentIndex(index);
+      if (index <= 2) { // Pdf, png and svg
+            pageStack->setCurrentWidget(visualPage);
+            pdfDpiWidget->setVisible(index == 0);
+            pdfFileOptionWidget->setVisible(index == 0);
+
+            pngDpiWidget->setVisible(index == 1);
+            pngFileOptionWidget->setVisible(index == 1);
+
+            svgFileOptionWidget->setVisible(index == 2);
+            }
       else if (index <= 6) { // Audio formats share their page (because they share many settings)
             pageStack->setCurrentWidget(audioPage);
             mp3BitRateLabel->setVisible(index == 3);
@@ -289,7 +319,7 @@ void ExportDialog::fileTypeChosen(int index)
             mp3kBitSLabel->setVisible(index == 3);
             }
       else // And others have their own page again
-            pageStack->setCurrentIndex(index - 3);
+            pageStack->setCurrentIndex(index - 5);
       }
 
 //---------------------------------------------------------
@@ -377,6 +407,14 @@ void ExportDialog::accept()
       
       QString saveFormat;
       int currentIndex = fileTypeComboBox->currentIndex();
+
+      if (currentIndex <= 2) {
+          if (exportBackgroundOption->checkedId() != preferences.getInt(PREF_EXPORT_BG_STYLE))
+                preferences.setPreference(PREF_EXPORT_BG_STYLE, exportBackgroundOption->checkedId());
+          if (customBackgroundColorLabel->color() != preferences.getColor(PREF_EXPORT_BG_CUSTOM_COLOR))
+                preferences.setPreference(PREF_EXPORT_BG_CUSTOM_COLOR, customBackgroundColorLabel->color());
+      }
+
       if (currentIndex == 0) {
             saveFormat = "pdf";
             if (pdfDpiSpinbox->value() != preferences.getInt(PREF_EXPORT_PDF_DPI))
@@ -385,8 +423,6 @@ void ExportDialog::accept()
             saveFormat = "png";
             if (pngDpiSpinbox->value() != preferences.getDouble(PREF_EXPORT_PNG_RESOLUTION))
                   preferences.setPreference(PREF_EXPORT_PNG_RESOLUTION, pngDpiSpinbox->value());
-            if (pngTransparentBackgroundCheckBox->isChecked() != preferences.getBool(PREF_EXPORT_PNG_USETRANSPARENCY))
-                  preferences.setPreference(PREF_EXPORT_PNG_USETRANSPARENCY, pngTransparentBackgroundCheckBox->isChecked());
       } else if (currentIndex == 2) {
             saveFormat = "svg";
       } else if (currentIndex <= 6) { // The audio formats share some settings

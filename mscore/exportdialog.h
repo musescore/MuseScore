@@ -54,7 +54,8 @@ class ExportDialog : public AbstractDialog, public Ui::ExportDialog {
       Q_OBJECT
       
       QButtonGroup* pdfSeparateOrSingleFiles;
-      
+      QButtonGroup* exportBackgroundOption;
+
       Score* cs = nullptr;
       
       void loadValues();

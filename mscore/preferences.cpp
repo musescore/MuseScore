@@ -169,6 +169,8 @@ void Preferences::init(bool storeInMemoryOnly)
             {PREF_EXPORT_PDF_DPI,                                  new IntPreference(DPI, false)},
             {PREF_EXPORT_PNG_RESOLUTION,                           new DoublePreference(DPI, false)},
             {PREF_EXPORT_PNG_USETRANSPARENCY,                      new BoolPreference(true, false)},
+            {PREF_EXPORT_BG_STYLE,                                 new IntPreference(0, false)},
+            {PREF_EXPORT_BG_CUSTOM_COLOR,                          new ColorPreference(QColor(0xffffff), false)},
             {PREF_IMPORT_GUITARPRO_CHARSET,                        new StringPreference("UTF-8", false)},
             {PREF_IMPORT_MUSICXML_IMPORTBREAKS,                    new BoolPreference(true, false)},
             {PREF_IMPORT_MUSICXML_IMPORTLAYOUT,                    new BoolPreference(true, false)},
