@@ -112,7 +112,7 @@ void PianorollController::onSelectionChanged()
     if (!notation) {
         return;
     }
-    std::vector<Element*> selectedElements = notation->interaction()->selection()->elements();
+    std::vector<EngravingItem*> selectedElements = notation->interaction()->selection()->elements();
 }
 
 void PianorollController::onNotationChanged()
