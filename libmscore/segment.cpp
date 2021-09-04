@@ -2098,6 +2098,8 @@ void Segment::createShape(int staffIdx)
                   continue;
             int effectiveTrack = e->vStaffIdx() * VOICES + e->voice();
             if (effectiveTrack >= strack && effectiveTrack < etrack) {
+                  // TODO: we could choose to ignore invisible/no-autoplace notes & rests
+                  // but these might be relied upon by some
                   setVisible(true);
                   if (e->addToSkyline())
                         s.add(e->shape().translated(e->pos()));
@@ -2107,9 +2109,10 @@ void Segment::createShape(int staffIdx)
       for (Element* e : _annotations) {
             if (!e || e->staffIdx() != staffIdx)
                   continue;
-            setVisible(true);
             if (!e->addToSkyline())
                   continue;
+            // TODO: will skipping segments that contain only invisible annotations adversely affect playback or anything else?
+            setVisible(true);
 
             if (e->isHarmony()) {
                   // use same spacing calculation as for chordrest
