@@ -24,7 +24,6 @@
 
 #include <QPainter>
 
-#include "libmscore/element.h"
 #include "audio/iplayer.h"
 #include "automation/automationvelocity.h"
 #include "ipianorollautomationmodel.h"
@@ -118,8 +117,8 @@ void PianorollAutomationEditor::buildNoteData()
     Ms::Score* curScore = score();
 
     m_selectedStaves.clear();
-    std::vector<Ms::Element*> selectedElements = notation->interaction()->selection()->elements();
-    for (Ms::Element* e: selectedElements)
+    std::vector<Ms::EngravingItem*> selectedElements = notation->interaction()->selection()->elements();
+    for (Ms::EngravingItem* e: selectedElements)
     {
         int idx = e->staffIdx();
         m_activeStaff = idx;
@@ -141,7 +140,7 @@ void PianorollAutomationEditor::buildNoteData()
             for (int voice = 0; voice < PianorollView::VOICES; ++voice)
             {
                 int track = voice + staffIndex * PianorollView::VOICES;
-                Ms::Element* e = s->element(track);
+                Ms::EngravingItem* e = s->element(track);
                 if (e && e->isChord())
                     addChord(toChord(e), voice, staffIndex);
             }

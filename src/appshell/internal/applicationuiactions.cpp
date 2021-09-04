@@ -269,6 +269,7 @@ const QMap<mu::actions::ActionCode, DockName>& ApplicationUiActions::toggleDockA
     static const QMap<mu::actions::ActionCode, DockName> actionsMap {
         { TOGGLE_NAVIGATOR_ACTION_CODE, NOTATION_NAVIGATOR_PANEL_NAME },
         { "toggle-mixer", MIXER_PANEL_NAME },
+        { "toggle-piano", PIANO_PANEL_NAME },
         { "toggle-timeline", TIMELINE_PANEL_NAME },
         { "toggle-palettes", PALETTES_PANEL_NAME },
         { "toggle-instruments", INSTRUMENTS_PANEL_NAME },
