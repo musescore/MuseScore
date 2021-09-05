@@ -49,7 +49,7 @@ PreferencesPage {
         ThemesSection {
             width: content.width
 
-            themes: appearanceModel.generalThemes
+            themes: appearanceModel.highContrastEnabled ? appearanceModel.highContrastThemes : appearanceModel.generalThemes
             currentThemeCode: appearanceModel.currentThemeCode
             highContrastEnabled: appearanceModel.highContrastEnabled
             accentColors: appearanceModel.accentColors
