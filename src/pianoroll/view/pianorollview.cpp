@@ -218,7 +218,7 @@ void PianorollView::setWholeNoteWidth(double value)
     emit wholeNoteWidthChanged();
 }
 
-void PianorollView::setNoteHeight(int value)
+void PianorollView::setNoteHeight(double value)
 {
     if (value == m_noteHeight)
         return;
