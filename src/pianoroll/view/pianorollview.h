@@ -83,7 +83,7 @@ private:
     INJECT(playback, audio::IPlayback, playback)
 
     Q_PROPERTY(double wholeNoteWidth READ wholeNoteWidth WRITE setWholeNoteWidth NOTIFY wholeNoteWidthChanged)
-    Q_PROPERTY(int noteHeight READ noteHeight WRITE setNoteHeight NOTIFY noteHeightChanged)
+    Q_PROPERTY(double noteHeight READ noteHeight WRITE setNoteHeight NOTIFY noteHeightChanged)
     Q_PROPERTY(PianorollTool tool READ tool WRITE setTool NOTIFY toolChanged)
     Q_PROPERTY(int tuplet READ tuplet WRITE setTuplet NOTIFY tupletChanged)
     Q_PROPERTY(int subdivision READ subdivision WRITE setSubdivision NOTIFY subdivisionChanged)
@@ -104,7 +104,7 @@ public:
     double wholeNoteWidth() const { return m_wholeNoteWidth; }
     void setWholeNoteWidth(double value);
     int noteHeight() const { return m_noteHeight; }
-    void setNoteHeight(int value);
+    void setNoteHeight(double value);
     PianorollTool tool() const { return m_tool; }
     void setTool(PianorollTool value);
     int tuplet() const { return m_tuplet; }
@@ -206,7 +206,7 @@ private:
     double m_displayObjectHeight = 0;  //Set to note grid in pixels
 
     double m_wholeNoteWidth;
-    int m_noteHeight;
+    double m_noteHeight;
     int m_tuplet = 1;
     int m_subdivision = 0;
     PianorollTool m_tool = PianorollTool::SELECT;
