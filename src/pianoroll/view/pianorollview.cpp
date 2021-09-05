@@ -830,19 +830,22 @@ void PianorollView::mouseReleaseEvent(QMouseEvent* event)
 
 void PianorollView::hoverMoveEvent(QHoverEvent* event)
 {
-    QPointF pos = event->pos();
-    NoteBlock* pi = pickNote(pos.x(), pos.y());
-
-    if (pi)
+    if (m_tool == PianorollTool::SELECT)
     {
-        QRect bounds = boundingRect(pi->note);
-        if (bounds.contains(pos.x(), pos.y()))
+        QPointF pos = event->pos();
+        NoteBlock* pi = pickNote(pos.x(), pos.y());
+
+        if (pi)
         {
-            if (pos.x() <= bounds.x() + m_dragNoteLengthMargin ||
-                pos.x() >= bounds.x() + bounds.width() - m_dragNoteLengthMargin)
+            QRect bounds = boundingRect(pi->note);
+            if (bounds.contains(pos.x(), pos.y()))
             {
-                setCursor(Qt::SizeHorCursor);
-                return;
+                if (pos.x() <= bounds.x() + m_dragNoteLengthMargin ||
+                    pos.x() >= bounds.x() + bounds.width() - m_dragNoteLengthMargin)
+                {
+                    setCursor(Qt::SizeHorCursor);
+                    return;
+                }
             }
         }
     }
@@ -1171,6 +1174,12 @@ void PianorollView::handleSelectionClick()
 
     double pickTick = pixelXToWholeNote((int)m_mouseDownPos.x());
     double pickPitch = pixelYToPitch(m_mouseDownPos.y());
+
+    NoteBlock* pi = pickNote(m_mouseDownPos.x(), m_mouseDownPos.y());
+    if (pi)
+    {
+        m_editNoteLength = pi->note->chord()->ticks();
+    }
 
     if (selType == NoteSelectType::REPLACE)
         selType = NoteSelectType::FIRST;
