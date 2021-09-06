@@ -167,6 +167,7 @@ EngravingItem::EngravingItem(const EngravingItem& e)
     itemDiscovered = false;
 
 #ifdef ENGRAVING_BUILD_ACCESSIBLE_TREE
+    //! TODO Please don't remove (igor.korsukov@gmail.com)
     //m_accessible = e.m_accessible->clone(this);
 #endif
 }
@@ -184,14 +185,16 @@ void EngravingItem::init()
 #ifdef ENGRAVING_BUILD_ACCESSIBLE_TREE
     m_accessible = createAccessible();
     m_accessible->setElement(this);
-#else
-    UNUSED(access);
 #endif
 }
 
 mu::engraving::AccessibleElement* EngravingItem::createAccessible() const
 {
+#ifdef ENGRAVING_BUILD_ACCESSIBLE_TREE
     return new mu::engraving::AccessibleElement();
+#else
+    return nullptr;
+#endif
 }
 
 //---------------------------------------------------------
