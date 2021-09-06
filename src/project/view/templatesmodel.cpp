@@ -91,6 +91,10 @@ void TemplatesModel::setCurrentCategory(int index)
 
 void TemplatesModel::updateTemplatesByCategory()
 {
+    if (categoriesTitles().isEmpty()) {
+        return;
+    }
+
     m_visibleTemplates.clear();
     m_currentTemplateIndex = 0;
 
