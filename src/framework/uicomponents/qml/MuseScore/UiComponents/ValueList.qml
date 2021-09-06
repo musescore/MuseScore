@@ -139,7 +139,7 @@ Item {
             sortOrder: keySorter.sortOrder
 
             navigation.panel: header.headerNavigation
-            navigation.order: 1
+            navigation.column: 0
 
             onClicked: {
                 privateProperties.toggleSorter(keySorter)
@@ -159,7 +159,7 @@ Item {
             sortOrder: valueSorter.sortOrder
 
             navigation.panel: header.headerNavigation
-            navigation.order: 2
+            navigation.column: 1
 
             onClicked: {
                 privateProperties.toggleSorter(valueSorter)
