@@ -643,7 +643,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Each selected score will be exported as a separate audio file. </string>
+             <string>Each selected score will be exported as a separate audio file.</string>
             </property>
             <property name="wordWrap">
              <bool>true</bool>
@@ -670,7 +670,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Each selected score will be exported as a separate MIDI file. </string>
+             <string>Each selected score will be exported as a separate MIDI file.</string>
             </property>
             <property name="wordWrap">
              <bool>true</bool>
@@ -896,7 +896,7 @@
              </sizepolicy>
             </property>
             <property name="text">
-             <string>Each selected score will be exported to a separate uncompressed MuseScore file. </string>
+             <string>Each selected score will be exported to a separate uncompressed MuseScore file.</string>
             </property>
             <property name="wordWrap">
              <bool>true</bool>
