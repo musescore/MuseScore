@@ -2143,7 +2143,7 @@ bool Score::appendMeasuresFromScore(Score* score, const Fraction& startTick, con
         if (ostaff->key(otick) != staff->key(ctick)) {
             Segment* ns = firstAppendedMeasure->undoGetSegment(SegmentType::KeySig, ctick);
             KeySigEvent nkse = KeySigEvent(ostaff->keySigEvent(otick));
-            KeySig* nks = new KeySig(ns);
+            KeySig* nks = Factory::createKeySig(ns);
             nks->setScore(this);
             nks->setTrack(trackIdx);
 
@@ -2246,7 +2246,7 @@ void Score::splitStaff(int staffIdx, int splitPoint)
     undoInsertStaff(ns, staffIdxPart + 1, false);
 
     Segment* seg = firstMeasure()->getSegment(SegmentType::HeaderClef, Fraction(0, 1));
-    Clef* clef = new Clef(seg);
+    Clef* clef = Factory::createClef(seg);
     clef->setClefType(ClefType::F);
     clef->setTrack((staffIdx + 1) * VOICES);
     clef->setParent(seg);
@@ -2322,7 +2322,7 @@ void Score::splitStaff(int staffIdx, int splitPoint)
                             chord->setTrack(dtrack + voice);
                             undoAddElement(chord);
                         }
-                        Note* nnote = new Note(*note);
+                        Note* nnote = Factory::copyNote(*note);
                         if (note->tieFor()) {
                             // Save the note and the tie for processing later.
                             // Use the end note as index in the map so, when this is found
@@ -2667,7 +2667,7 @@ void Score::adjustKeySigs(int sidx, int eidx, KeyList km)
             staff->setKey(tick, nKey);
 
             Segment* s = measure->getSegment(SegmentType::KeySig, tick);
-            KeySig* keysig = new KeySig(s);
+            KeySig* keysig = Factory::createKeySig(s);
             keysig->setTrack(staffIdx * VOICES);
             keysig->setKeySigEvent(nKey);
             s->add(keysig);
@@ -4882,7 +4882,7 @@ void Score::changeSelectedNotesVoice(int voice)
             // move note to destination chord
             if (dstChord) {
                 // create & add new note
-                Note* newNote = new Note(*note);
+                Note* newNote = Factory::copyNote(*note);
                 newNote->setSelected(false);
                 newNote->setParent(dstChord);
                 undoAddElement(newNote);

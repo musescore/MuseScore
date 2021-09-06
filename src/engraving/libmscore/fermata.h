@@ -27,6 +27,10 @@
 #include "mscore.h"
 #include "symid.h"
 
+namespace mu::engraving {
+class Factory;
+}
+
 namespace Ms {
 class ChordRest;
 class Segment;
@@ -44,12 +48,14 @@ class Fermata final : public EngravingItem
     qreal _timeStretch;
     bool _play;
 
+    friend class mu::engraving::Factory;
+    Fermata(EngravingItem* parent);
+
     void draw(mu::draw::Painter*) const override;
     Sid getPropertyStyle(Pid) const override;
 
 public:
-    Fermata(EngravingItem* parent);
-    Fermata(SymId, EngravingItem* parent);
+
     Fermata& operator=(const Fermata&) = delete;
 
     Fermata* clone() const override { return new Fermata(*this); }

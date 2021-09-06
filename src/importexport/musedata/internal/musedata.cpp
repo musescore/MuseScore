@@ -149,7 +149,7 @@ void MuseData::readChord(Part*, const QString& s)
     }
 
     Chord* chord = (Chord*)chordRest;
-    Note* note = new Note(chord);
+    Note* note = Factory::createNote(chord);
     note->setPitch(pitch);
     note->setTpcFromPitch();
     note->setTrack(staffIdx * VOICES + voice);
@@ -298,7 +298,7 @@ void MuseData::readNote(Part* part, const QString& s)
         delete chord;
         return;
     }
-    Note* note = new Note(chord);
+    Note* note = Factory::createNote(chord);
     note->setPitch(pitch);
     note->setTpcFromPitch();
     note->setTrack(gstaff * VOICES + voice);

@@ -1033,7 +1033,8 @@ static void addFermataToChord(const Notation& notation, ChordRest* cr)
 {
     const SymId articSym = notation.symId();
     const QString direction = notation.attribute("type");
-    Fermata* na = new Fermata(articSym, cr);
+    Fermata* na = Factory::createFermata(cr);
+    na->setSymId(articSym);
     na->setTrack(cr->track());
     if (!direction.isNull()) { // Only for case where XML attribute is present (isEmpty wouldn't work)
         na->setPlacement(direction == "inverted" ? Placement::BELOW : Placement::ABOVE);
@@ -3605,7 +3606,7 @@ static void addKey(const KeySigEvent key, const bool printObj, Score* score, Mea
     if (oldkey != key.key() || key.custom() || key.isAtonal()) {
         // new key differs from key in effect at this tick
         Segment* s = measure->getSegment(SegmentType::KeySig, tick);
-        KeySig* keysig = new KeySig(s);
+        KeySig* keysig = Factory::createKeySig(s);
         keysig->setTrack((staffIdx) * VOICES);
         keysig->setKeySigEvent(key);
         keysig->setVisible(printObj);
@@ -3862,7 +3863,7 @@ void MusicXMLParserPass2::clef(const QString& partId, Measure* measure, const Fr
         s = measure->getSegment(tick.isNotZero() ? SegmentType::Clef : SegmentType::HeaderClef, tick);
     }
 
-    Clef* clefs = new Clef(s);
+    Clef* clefs = Factory::createClef(s);
     clefs->setClefType(clef);
     int track = _pass1.trackForPart(partId) + clefno * VOICES;
     clefs->setTrack(track);
@@ -4623,7 +4624,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                 c = gcl.last();
             }
         }
-        note = new Note(c);
+        note = Factory::createNote(c);
         const int ottavaStaff = (msTrack - _pass1.trackForPart(partId)) / VOICES;
         const int octaveShift = _pass1.octaveShift(partId, ottavaStaff, noteStartTime);
         const auto part = _pass1.getPart(partId);
@@ -4872,7 +4873,7 @@ void MusicXMLParserPass2::duration(Fraction& dura)
 
 FiguredBassItem* MusicXMLParserPass2::figure(const int idx, const bool paren, FiguredBass* parent)
 {
-    FiguredBassItem* fgi = new FiguredBassItem(parent, idx);
+    FiguredBassItem* fgi = parent->createItem(idx);
 
     // read the figure
     while (_e.readNextStartElement()) {
@@ -4945,7 +4946,7 @@ FiguredBassItem* MusicXMLParserPass2::figure(const int idx, const bool paren, Fi
 
 FiguredBass* MusicXMLParserPass2::figuredBass()
 {
-    FiguredBass* fb = new FiguredBass(_score->dummy()->segment());
+    FiguredBass* fb = Factory::createFiguredBass(_score->dummy()->segment());
 
     bool parentheses = _e.attributes().value("parentheses") == "yes";
     QString normalizedText;
@@ -5000,7 +5001,7 @@ FiguredBass* MusicXMLParserPass2::figuredBass()
 
 FretDiagram* MusicXMLParserPass2::frame()
 {
-    FretDiagram* fd = new FretDiagram(_score->dummy()->segment());
+    FretDiagram* fd = Factory::createFretDiagram(_score->dummy()->segment());
 
     // Format: fret: string
     std::map<int, int> bStarts;
@@ -6036,7 +6037,7 @@ static void addBreath(ChordRest* cr, const Fraction& tick, SymId breath)
     if (breath != SymId::noSym && !cr->isGrace()) {
         const Fraction& ticks = cr->ticks();
         const auto seg = cr->measure()->getSegment(SegmentType::Breath, tick + ticks);
-        const auto b = new Breath(seg);
+        const auto b = Factory::createBreath(seg);
         // b->setTrack(trk + voice); TODO check next line
         b->setTrack(cr->track());
         b->setSymId(breath);
@@ -6054,7 +6055,7 @@ static void addChordLine(const Notation& notation, Note* note,
     const QString& chordLineType = notation.subType();
     if (chordLineType != "") {
         if (note) {
-            const auto chordline = new ChordLine(note->chord());
+            const auto chordline = Factory::createChordLine(note->chord());
             if (chordLineType == "falloff") {
                 chordline->setChordLineType(ChordLineType::FALL);
             }

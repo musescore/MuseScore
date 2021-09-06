@@ -26,6 +26,10 @@
 #include "engravingitem.h"
 #include "infrastructure/draw/painterpath.h"
 
+namespace mu::engraving {
+class Factory;
+}
+
 namespace Ms {
 //---------------------------------------------------------
 //   @@ LayoutBreak
@@ -40,25 +44,7 @@ public:
         PAGE, LINE, SECTION, NOBREAK
         ///\}
     };
-private:
     Q_ENUM(Type);
-
-    qreal lw;
-    mu::RectF m_iconBorderRect;
-    mu::PainterPath m_iconPath;
-    qreal _pause;
-    bool _startWithLongNames;
-    bool _startWithMeasureOne;
-    bool _firstSystemIdentation;
-    Type _layoutBreakType;
-
-    void draw(mu::draw::Painter*) const override;
-    void layout0();
-    void spatiumChanged(qreal oldValue, qreal newValue) override;
-
-public:
-    LayoutBreak(MeasureBase* parent = 0);
-    LayoutBreak(const LayoutBreak&);
 
     void setParent(MeasureBase* parent);
 
@@ -92,6 +78,25 @@ public:
     bool setProperty(Pid propertyId, const QVariant&) override;
     QVariant propertyDefault(Pid) const override;
     Pid propertyId(const QStringRef& xmlName) const override;
+
+private:
+
+    friend class mu::engraving::Factory;
+    LayoutBreak(MeasureBase* parent = 0);
+    LayoutBreak(const LayoutBreak&);
+
+    void draw(mu::draw::Painter*) const override;
+    void layout0();
+    void spatiumChanged(qreal oldValue, qreal newValue) override;
+
+    qreal lw;
+    mu::RectF m_iconBorderRect;
+    mu::PainterPath m_iconPath;
+    qreal _pause;
+    bool _startWithLongNames;
+    bool _startWithMeasureOne;
+    bool _firstSystemIdentation;
+    Type _layoutBreakType;
 };
 }     // namespace Ms
 

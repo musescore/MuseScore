@@ -230,7 +230,7 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                     case 181:                         // caesura
                     {
                         Segment* seg = s->measure()->getSegment(SegmentType::Breath, s->tick() + (cr ? cr->actualTicks() : Fraction(0, 1)));
-                        Breath* b = new Breath(seg);
+                        Breath* b = Factory::createBreath(seg);
                         b->setTrack(track);
                         b->setSymId(SymId::caesura);
                         seg->add(b);
@@ -757,7 +757,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
             off += keyOffsets[int(key) + 7];
 
             for (CNote n : o->notes) {
-                Note* note = new Note(chord);
+                Note* note = Factory::createNote(chord);
                 int pitch = 0;
                 // .cap import: pitch contains the diatonic note number relative to clef and key
                 // .capx  import: pitch the MIDI note number instead
@@ -847,7 +847,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
             } else {
                 s = m->getSegment(SegmentType::Clef, tick);
             }
-            Clef* clef = new Clef(s);
+            Clef* clef = Factory::createClef(s);
             clef->setClefType(nclef);
             clef->setTrack(staffIdx * VOICES);
             s->add(clef);
@@ -864,7 +864,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                 score->staff(staffIdx)->setKey(tick, okey);
                 Measure* m = score->getCreateMeasure(tick);
                 Segment* s = m->getSegment(SegmentType::KeySig, tick);
-                KeySig* ks = new KeySig(s);
+                KeySig* ks = Factory::createKeySig(s);
                 ks->setTrack(staffIdx * VOICES);
                 ks->setKeySigEvent(okey);
                 s->add(ks);
@@ -1345,7 +1345,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
         }
         Measure* m = score->tick2measure(mtick - Fraction::fromTicks(1));
         if (m && !m->lineBreak()) {
-            LayoutBreak* lb = new LayoutBreak(m);
+            LayoutBreak* lb = Factory::createLayoutBreak(m);
             lb->setLayoutBreakType(LayoutBreak::Type::LINE);
             lb->setTrack(-1);             // this are system elements
             m->add(lb);

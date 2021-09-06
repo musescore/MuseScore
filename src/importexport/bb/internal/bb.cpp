@@ -22,6 +22,8 @@
 
 #include "libmscore/mscore.h"
 #include "bb.h"
+
+#include "libmscore/factory.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/part.h"
 #include "libmscore/staff.h"
@@ -42,6 +44,8 @@
 #include "libmscore/measure.h"
 #include "libmscore/segment.h"
 #include "libmscore/keysig.h"
+
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -530,7 +534,7 @@ Score::FileError importBB(MasterScore* score, const QString& name)
         }
         Measure* measure = (Measure*)mb;
         if (n && (n % 4) == 0) {
-            LayoutBreak* lb = new LayoutBreak(measure);
+            LayoutBreak* lb = Factory::createLayoutBreak(measure);
             lb->setLayoutBreakType(LayoutBreak::Type::LINE);
             measure->add(lb);
         }
@@ -550,7 +554,7 @@ Score::FileError importBB(MasterScore* score, const QString& name)
         staff->setKey(tick, ke);
         Measure* mks = score->tick2measure(tick);
         Segment* sks = mks->getSegment(SegmentType::KeySig, tick);
-        KeySig* keysig = new KeySig(sks);
+        KeySig* keysig = Factory::createKeySig(sks);
         keysig->setTrack((score->staffIdx(staff->part()) + staff->rstaff()) * VOICES);
         keysig->setKey(Key(bb.key()));
         sks->add(keysig);
@@ -607,7 +611,7 @@ Fraction BBFile::processPendingNotes(Score* score, QList<MNote*>* notes, const F
         QList<Event>& nl = n->mc.notes();
         for (int i = 0; i < nl.size(); ++i) {
             const Event& mn = nl[i];
-            Note* note = new Note(chord);
+            Note* note = Factory::createNote(chord);
             note->setPitch(mn.pitch(), mn.tpc(), mn.tpc());
             note->setTrack(track);
             chord->add(note);

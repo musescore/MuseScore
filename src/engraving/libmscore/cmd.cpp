@@ -559,7 +559,7 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
 {
     for (Note* on : nl) {
         Chord* chord = on->chord();
-        Note* note = new Note(chord);
+        Note* note = Factory::createNote(chord);
         note->setParent(chord);
         note->setTrack(chord->track());
         int valTmp = val < 0 ? val + 1 : val - 1;
@@ -648,7 +648,7 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
 Note* Score::setGraceNote(Chord* ch, int pitch, NoteType type, int len)
 {
     Chord* chord = new Chord(this->dummy()->segment());
-    Note* note = new Note(chord);
+    Note* note = Factory::createNote(chord);
 
     // allow grace notes to be added to other grace notes
     // by really adding to parent chord
@@ -786,7 +786,7 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
                 ncr->setDurationType(d);
                 ncr->setTicks(d == TDuration::DurationType::V_MEASURE ? measure->ticks() : d.fraction());
             } else {
-                nr = note = new Note(this->dummy()->chord());
+                nr = note = Factory::createNote(this->dummy()->chord());
 
                 if (tie) {
                     tie->setEndNote(note);
@@ -3447,7 +3447,7 @@ void Score::cmdRealizeChordSymbols(bool literal, Voicing voicing, HDuration dura
         RealizedHarmony::PitchMapIterator i(notes);     //add notes to chord
         while (i.hasNext()) {
             i.next();
-            Note* note = new Note(chord);
+            Note* note = Factory::createNote(chord);
             NoteVal nval;
             nval.pitch = i.key();
             if (concertPitch) {

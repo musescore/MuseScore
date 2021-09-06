@@ -59,12 +59,6 @@ Fermata::Fermata(EngravingItem* parent)
     initElementStyle(&fermataStyle);
 }
 
-Fermata::Fermata(SymId id, EngravingItem* parent)
-    : Fermata(parent)
-{
-    setSymId(id);
-}
-
 //---------------------------------------------------------
 //   read
 //---------------------------------------------------------

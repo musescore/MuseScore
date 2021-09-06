@@ -29,6 +29,7 @@
 #include "writer.h"
 #include "parser.h"
 
+#include "libmscore/factory.h"
 #include "libmscore/fraction.h"
 #include "libmscore/barline.h"
 #include "libmscore/box.h"
@@ -49,6 +50,8 @@
 #include "libmscore/tuplet.h"
 #include "libmscore/volta.h"
 #include "libmscore/segment.h"
+
+using namespace mu::engraving;
 
 namespace Bww {
 /**
@@ -248,7 +251,7 @@ void MsScWriter::beginMeasure(const Bww::MeasureBeginFlags mbf)
     if (measureNumber == 1) {
         // clef
         Ms::Segment* s = currentMeasure->getSegment(Ms::SegmentType::Clef, tick);
-        Ms::Clef* clef = new Ms::Clef(s);
+        Ms::Clef* clef = Factory::createClef(s);
         clef->setClefType(Ms::ClefType::G);
         clef->setTrack(0);
         s->add(clef);
@@ -256,7 +259,7 @@ void MsScWriter::beginMeasure(const Bww::MeasureBeginFlags mbf)
         Ms::KeySigEvent key;
         key.setKey(Ms::Key::D);
         s = currentMeasure->getSegment(Ms::SegmentType::KeySig, tick);
-        Ms::KeySig* keysig = new Ms::KeySig(s);
+        Ms::KeySig* keysig = Factory::createKeySig(s);
         keysig->setKeySigEvent(key);
         keysig->setTrack(0);
         s->add(keysig);
@@ -297,7 +300,7 @@ void MsScWriter::endMeasure(const Bww::MeasureEndFlags mef)
     }
 
     if (mef.lastOfSystem) {
-        Ms::LayoutBreak* lb = new Ms::LayoutBreak(currentMeasure);
+        Ms::LayoutBreak* lb = Factory::createLayoutBreak(currentMeasure);
         lb->setTrack(0);
         lb->setLayoutBreakType(Ms::LayoutBreak::Type::LINE);
         currentMeasure->add(lb);
@@ -373,7 +376,7 @@ void MsScWriter::note(const QString pitch, const QVector<Bww::BeamType> beamList
     cr->setDots(dots);
     cr->setStemDirection(sd);
     // add note to chord
-    Ms::Note* note = new Ms::Note(cr);
+    Ms::Note* note = Factory::createNote(cr);
     note->setTrack(0);
     xmlSetPitch(note, sao.s.toLatin1(), sao.a, sao.o);
     if (tieStart) {

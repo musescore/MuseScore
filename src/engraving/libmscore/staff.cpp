@@ -23,6 +23,7 @@
 #include "style/style.h"
 #include "io/xml.h"
 
+#include "factory.h"
 #include "mscore.h"
 #include "staff.h"
 #include "part.h"
@@ -49,6 +50,7 @@
 // #define DEBUG_CLEFS
 
 using namespace mu;
+using namespace mu::engraving;
 
 #ifdef DEBUG_CLEFS
 #define DUMP_CLEFS(s) dumpClefs(s)
@@ -127,7 +129,7 @@ void Staff::triggerLayout(const Fraction& tick)
 void Staff::fillBrackets(int idx)
 {
     for (int i = _brackets.size(); i <= idx; ++i) {
-        BracketItem* bi = new BracketItem(score());
+        BracketItem* bi = Factory::createBracketItem(score()->dummy());
         bi->setStaff(this);
         bi->setColumn(i);
         _brackets.append(bi);
@@ -244,7 +246,7 @@ void Staff::addBracket(BracketItem* b)
             if (s == this) {
                 s->_brackets.append(b);
             } else {
-                BracketItem* bi = new BracketItem(score());
+                BracketItem* bi = Factory::createBracketItem(score()->dummy());
                 bi->setStaff(this);
                 s->_brackets.append(bi);
             }
@@ -382,13 +384,13 @@ void Staff::cleanupBrackets()
         }
         int span = _brackets[i]->bracketSpan();
         if (span <= 1) {
-            _brackets[i] = new BracketItem(score());
+            _brackets[i] = Factory::createBracketItem(score()->dummy());
             _brackets[i]->setStaff(this);
         } else {
             // delete all other brackets with same span
             for (int k = i + 1; k < _brackets.size(); ++k) {
                 if (span == _brackets[k]->bracketSpan()) {
-                    _brackets[k] = new BracketItem(score());
+                    _brackets[k] = Factory::createBracketItem(score()->dummy());
                     _brackets[k]->setStaff(this);
                 }
             }

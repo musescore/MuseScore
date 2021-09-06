@@ -215,7 +215,7 @@ Note* Score::addPitch(NoteVal& nval, bool addFlag, InputState* externalInputStat
         // for keyboard input (where we are given a staff position), there is a separate function Score::repitchNote()
         // the code is similar enough that it could possibly be refactored
         Chord* chord = toChord(is.cr());
-        note = new Note(chord);
+        note = Factory::createNote(chord);
         note->setParent(chord);
         note->setTrack(chord->track());
         note->setNval(nval);
@@ -548,7 +548,7 @@ void Score::repitchNote(const Position& p, bool replace)
     } else {
         chord = toChord(cr);
     }
-    Note* note = new Note(chord);
+    Note* note = Factory::createNote(chord);
     note->setParent(chord);
     note->setTrack(chord->track());
     note->setNval(nval);

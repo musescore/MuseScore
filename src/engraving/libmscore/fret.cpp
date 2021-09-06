@@ -26,6 +26,7 @@
 #include "draw/brush.h"
 #include "io/xml.h"
 
+#include "factory.h"
 #include "measure.h"
 #include "system.h"
 #include "score.h"
@@ -40,6 +41,7 @@
 #include "undo.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //    parent() is Segment or Box
@@ -125,7 +127,7 @@ EngravingItem* FretDiagram::linkedClone()
 
 std::shared_ptr<FretDiagram> FretDiagram::createFromString(Score* score, const QString& s)
 {
-    auto fd = std::make_shared<FretDiagram>(score->dummy()->segment());
+    auto fd = Factory::makeFretDiagram(score->dummy()->segment());
     int strings = s.size();
 
     fd->setStrings(strings);

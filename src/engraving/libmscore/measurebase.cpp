@@ -21,7 +21,10 @@
  */
 
 #include "measurebase.h"
+
 #include "io/xml.h"
+
+#include "factory.h"
 #include "measure.h"
 #include "staff.h"
 #include "score.h"
@@ -35,6 +38,7 @@
 #include "stafftypechange.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -488,7 +492,7 @@ void MeasureBase::undoSetBreak(bool v, LayoutBreak::Type type)
 
     if (v) {
         MeasureBase* mb = (isMeasure() && toMeasure(this)->isMMRest()) ? toMeasure(this)->mmRestLast() : this;
-        LayoutBreak* lb = new LayoutBreak(mb);
+        LayoutBreak* lb = Factory::createLayoutBreak(mb);
         lb->setLayoutBreakType(type);
         lb->setTrack(-1);           // this are system elements
         lb->setParent(mb);
@@ -589,7 +593,7 @@ bool MeasureBase::readProperties(XmlReader& e)
 {
     const QStringRef& tag(e.name());
     if (tag == "LayoutBreak") {
-        LayoutBreak* lb = new LayoutBreak(this);
+        LayoutBreak* lb = Factory::createLayoutBreak(this);
         lb->read(e);
         bool doAdd = true;
         switch (lb->layoutBreakType()) {

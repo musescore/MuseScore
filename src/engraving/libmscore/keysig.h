@@ -26,6 +26,10 @@
 #include "key.h"
 #include "engravingitem.h"
 
+namespace mu::engraving {
+class Factory;
+}
+
 namespace Ms {
 class Sym;
 class Segment;
@@ -42,11 +46,14 @@ class KeySig final : public EngravingItem
     bool _showCourtesy;
     bool _hideNaturals;       // used in layout to override score style (needed for the Continuous panel)
     KeySigEvent _sig;
+
+    friend class mu::engraving::Factory;
+    KeySig(Segment* = 0);
+    KeySig(const KeySig&);
+
     void addLayout(SymId sym, qreal x, int y);
 
 public:
-    KeySig(Segment* = 0);
-    KeySig(const KeySig&);
 
     KeySig* clone() const override { return new KeySig(*this); }
     void draw(mu::draw::Painter*) const override;

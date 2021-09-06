@@ -333,7 +333,7 @@ Chord* Score::addChord(const Fraction& tick, TDuration d, Chord* oc, bool genTie
     chord->setTicks(d.fraction());
 
     for (Note* n : oc->notes()) {
-        Note* nn = new Note(chord);
+        Note* nn = Factory::createNote(chord);
         nn->setPitch(n->pitch());
         nn->setTpc1(n->tpc1());
         nn->setTpc2(n->tpc2());
@@ -496,7 +496,7 @@ Note* Score::addNote(Chord* chord, const NoteVal& noteVal, bool forceAccidental,
 {
     InputState& is = externalInputState ? (*externalInputState) : _is;
 
-    Note* note = new Note(chord);
+    Note* note = Factory::createNote(chord);
     note->setParent(chord);
     note->setTrack(chord->track());
     note->setNval(noteVal);
@@ -1015,7 +1015,7 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx)
             || (toMeasure(measure)->first(SegmentType::TimeSig) && measure != fm)) {
             // save section break to reinstate after rewrite
             if (lm && lm->sectionBreak()) {
-                sectionBreak = new LayoutBreak(*lm->sectionBreakElement());
+                sectionBreak = Factory::copyLayoutBreak(*lm->sectionBreakElement());
             }
 
             if (!rewriteMeasures(fm1, lm, ns, staffIdx)) {
@@ -2780,7 +2780,7 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
                         v.flip();
                         nkse.setKey(transposeKey(nkse.key(), v, lastDeletedKeySig->part()->preferSharpFlat()));
                     }
-                    KeySig* nks = new KeySig(ns);
+                    KeySig* nks = Factory::createKeySig(ns);
                     nks->setTrack(staffIdx * VOICES);
                     nks->setParent(ns);
                     nks->setKeySigEvent(nkse);
@@ -3344,7 +3344,7 @@ void Score::cmdCreateTuplet(ChordRest* ocr, Tuplet* tuplet)
     if (ocr->isChord()) {
         cr = new Chord(this->dummy()->segment());
         foreach (Note* oldNote, toChord(ocr)->notes()) {
-            Note* note = new Note(toChord(cr));
+            Note* note = Factory::createNote(toChord(cr));
             note->setPitch(oldNote->pitch());
             note->setTpc1(oldNote->tpc1());
             note->setTpc2(oldNote->tpc2());
@@ -3688,20 +3688,20 @@ void Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmp
                 undoAddElement(nts);
             }
             for (KeySig* ks : ksl) {
-                KeySig* nks = new KeySig(*ks);
+                KeySig* nks = Factory::copyKeySig(*ks);
                 Segment* s  = m->undoGetSegmentR(SegmentType::KeySig, Fraction(0, 1));
                 nks->setParent(s);
                 undoAddElement(nks);
             }
             for (Clef* clef : cl) {
-                Clef* nClef = new Clef(*clef);
+                Clef* nClef = Factory::copyClef(*clef);
                 Segment* s  = m->undoGetSegmentR(SegmentType::HeaderClef, Fraction(0, 1));
                 nClef->setParent(s);
                 undoAddElement(nClef);
             }
             Measure* pm = m->prevMeasure();
             for (Clef* clef : pcl) {
-                Clef* nClef = new Clef(*clef);
+                Clef* nClef = Factory::copyClef(*clef);
                 Segment* s  = pm->undoGetSegment(SegmentType::Clef, tick);
                 nClef->setParent(s);
                 undoAddElement(nClef);
@@ -4519,7 +4519,7 @@ void Score::undoChangeKeySig(Staff* ostaff, const Fraction& tick, KeySigEvent ke
         } else {
             // do not create empty keysig unless custom or atonal
             if (tick.isNotZero() || nkey.key() != Key::C || nkey.custom() || nkey.isAtonal()) {
-                KeySig* nks = new KeySig(s);
+                KeySig* nks = Factory::createKeySig(s);
                 nks->setParent(s);
                 nks->setTrack(track);
                 nks->setKeySigEvent(nkey);
@@ -4672,7 +4672,7 @@ void Score::undoChangeClef(Staff* ostaff, EngravingItem* e, ClefType ct, bool fo
                 clef = toClef(gclef->linkedClone());
                 clef->setScore(score);
             } else {
-                clef = new Clef(score->dummy()->segment());
+                clef = Factory::createClef(score->dummy()->segment());
                 gclef = clef;
             }
             clef->setTrack(track);

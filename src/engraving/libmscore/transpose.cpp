@@ -21,6 +21,7 @@
  */
 
 #include "utils.h"
+#include "factory.h"
 #include "score.h"
 #include "pitchspelling.h"
 #include "key.h"
@@ -37,6 +38,7 @@
 #include "part.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -531,7 +533,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
             Segment* seg = firstMeasure()->undoGetSegmentR(SegmentType::KeySig, Fraction(0, 1));
             KeySig* ks = toKeySig(seg->element(track));
             if (!ks) {
-                ks = new KeySig(seg);
+                ks = Factory::createKeySig(seg);
                 ks->setTrack(track);
                 Key nKey = transposeKey(Key::C, interval, ks->part()->preferSharpFlat());
                 ks->setKey(nKey);
@@ -621,7 +623,7 @@ void Score::transposeKeys(int staffStart, int staffEnd, const Fraction& ts, cons
         if (createKey && firstMeasure()) {
             Segment* seg = firstMeasure()->undoGetSegmentR(SegmentType::KeySig, Fraction(0, 1));
             seg->setHeader(true);
-            KeySig* ks = new KeySig(seg);
+            KeySig* ks = Factory::createKeySig(seg);
             ks->setTrack(staffIdx * VOICES);
             Key nKey = transposeKey(Key::C, firstInterval, ks->part()->preferSharpFlat());
             KeySigEvent ke;

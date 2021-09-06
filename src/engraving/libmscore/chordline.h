@@ -26,6 +26,10 @@
 #include "engravingitem.h"
 #include "infrastructure/draw/painterpath.h"
 
+namespace mu::engraving {
+class Factory;
+}
+
 namespace Ms {
 class Chord;
 
@@ -51,9 +55,11 @@ class ChordLine final : public EngravingItem
     qreal _lengthY;
     const int _initialLength = 2;
 
-public:
+    friend class mu::engraving::Factory;
     ChordLine(Chord* parent);
     ChordLine(const ChordLine&);
+
+public:
 
     ChordLine* clone() const override { return new ChordLine(*this); }
 

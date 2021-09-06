@@ -27,6 +27,10 @@
 #include "bracketItem.h"
 #include "infrastructure/draw/painterpath.h"
 
+namespace mu::engraving {
+class Factory;
+}
+
 namespace Ms {
 class MuseScoreView;
 class System;
@@ -54,8 +58,11 @@ class Bracket final : public EngravingItem
     qreal _magx;
     Measure* _measure = nullptr;
 
-public:
+    friend class mu::engraving::Factory;
     Bracket(EngravingItem* parent);
+
+public:
+
     ~Bracket();
 
     Bracket* clone() const override { return new Bracket(*this); }
