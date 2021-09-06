@@ -218,7 +218,7 @@ FocusScope {
                 navigation.column: 2
 
                 width: prv.buttonWidth
-                text: qsTrc("project", "Open other...")
+                text: qsTrc("project", "Open other…")
 
                 onClicked: {
                     recentScoresModel.openScore()

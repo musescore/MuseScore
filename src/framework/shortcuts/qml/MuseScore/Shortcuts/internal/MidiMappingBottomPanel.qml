@@ -20,28 +20,26 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Layouts 1.15
+import QtQuick.Layouts 1.12
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
-RowLayout {
+Row {
     id: root
 
-    property alias canEditCurrentShortcut: editButton.enabled
-    property alias canClearCurrentShortcuts: clearButton.enabled
+    property alias canEditAction: editActionButton.enabled
 
-    property alias searchText: searchField.searchText
+    spacing: 8
 
-    property int buttonWidth: 0
-
-    signal startEditCurrentShortcutRequested()
-    signal clearSelectedShortcutsRequested()
+    signal editActionRequested()
+    signal clearSelectedActionsRequested()
+    signal clearAllActionsRequested()
 
     property NavigationPanel navigation: NavigationPanel {
-        name: "ShortcutsTopPanel"
+        name: "MidiMappingBottomPanel"
         direction: NavigationPanel.Horizontal
-        accessible.name: qsTrc("shortcuts", "Shortcuts top panel")
+        accessible.name: qsTrc("shortcuts", "Midi mapping bottom panel")
         enabled: root.visible
 
         onActiveChanged: {
@@ -52,48 +50,44 @@ RowLayout {
     }
 
     FlatButton {
-        id: editButton
+        id: editActionButton
 
-        Layout.preferredWidth: root.buttonWidth
+        text: qsTrc("shortcuts", "Assign MIDI mapping…")
 
-        text: qsTrc("shortcuts", "Define…")
-
-        navigation.name: "DefineShortcutButton"
+        navigation.name: "EditActionButton"
         navigation.panel: root.navigation
         navigation.column: 0
 
         onClicked: {
-            root.startEditCurrentShortcutRequested()
+            root.editActionRequested()
         }
     }
 
     FlatButton {
-        id: clearButton
+        width: 100
 
-        Layout.preferredWidth: root.buttonWidth
+        text: qsTrc("global", "Clear")
 
-        text: qsTrc("shortcuts", "Clear")
-
-        navigation.name: "ClearShortcutsButton"
+        navigation.name: "ClearSelectedButton"
         navigation.panel: root.navigation
         navigation.column: 1
 
         onClicked: {
-            root.clearSelectedShortcutsRequested()
+            root.clearSelectedActionsRequested()
         }
     }
 
-    Item { Layout.fillWidth: true }
+    FlatButton {
+        width: 100
 
-    SearchField {
-        id: searchField
+        text: qsTrc("global", "Clear all")
 
-        Layout.preferredWidth: 160
-
-        hint: qsTrc("shortcuts", "Search shortcut")
-
-        navigation.name: "ShortcutSearchField"
+        navigation.name: "ClearAllButton"
         navigation.panel: root.navigation
         navigation.column: 2
+
+        onClicked: {
+            root.clearAllActions()
+        }
     }
 }
