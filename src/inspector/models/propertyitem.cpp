@@ -21,12 +21,21 @@
  */
 #include "propertyitem.h"
 
+#include "property.h"
+
 using namespace mu::inspector;
 
 PropertyItem::PropertyItem(const int propertyId, QObject* parent)
     : QObject(parent)
 {
     m_propertyId = propertyId;
+
+    Ms::P_TYPE propertyType = Ms::propertyType(static_cast<Ms::Pid>(propertyId));
+
+    if (propertyType != Ms::P_TYPE::COLOR) {
+        m_currentValue = 0;
+        m_defaultValue = 0;
+    }
 }
 
 void PropertyItem::fillValues(const QVariant& currentValue, const QVariant& defaultValue)

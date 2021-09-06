@@ -77,8 +77,8 @@ private:
     int m_propertyId = -1;
     int m_styleId = -1;
 
-    QVariant m_defaultValue = 0;
-    QVariant m_currentValue = 0;
+    QVariant m_defaultValue;
+    QVariant m_currentValue;
     bool m_isEnabled = false;
     bool m_isStyled = false;
 };
