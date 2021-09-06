@@ -215,11 +215,9 @@ Item {
                 anchors.centerIn: parent
                 width: view.width - ui.theme.navCtrlBorderWidth * 2
 
-                navigation.enabled: true
-
                 item: model
 
-                property var modelIndex: sortFilterProxyModel.index(item.index, 0)
+                property var modelIndex: sortFilterProxyModel.index(model.index, 0)
 
                 keyRoleName: root.keyRoleName
                 valueRoleName: root.valueRoleName
@@ -235,8 +233,24 @@ Item {
                 valueItemWidth: privateProperties.valueItemWidth
 
                 navigation.panel: view.navigation
-                navigation.row: item.index
+                navigation.enabled: enabled
+                navigation.row: model.index
                 navigation.column: 0
+
+                navigation.onNavigationEvent: {
+                    switch (event.type) {
+                    case NavigationEvent.Up:
+                        if (model.index === 0) {
+                            event.accepted = true
+                        }
+                        break
+                    case NavigationEvent.Down:
+                        if (model.index === view.model.rowCount() - 1) {
+                            event.accepted = true
+                        }
+                        break
+                    }
+                }
 
                 onClicked: {
                     selectionModel.select(modelIndex)

@@ -112,10 +112,6 @@ ListItemBlank {
             onLoaded: {
                 loader.item.val = loader.val
 
-                loader.item.navigation.panel = root.navigation.panel
-                loader.item.navigation.row = root.navigation.row
-                loader.item.navigation.column = 1
-
                 if (privateProperties.isNumberComponent() && !root.readOnly) {
                     if (Boolean(root.item.min)) {
                         loader.item.minValue = root.item.min
@@ -152,6 +148,10 @@ ListItemBlank {
 
             property string accessibleName: navigation.accessible.name
 
+            navigation.panel: root.navigation.panel
+            navigation.row: root.navigation.row
+            navigation.column: 1
+
             currentText: val
 
             onCurrentTextEdited: {
@@ -170,6 +170,10 @@ ListItemBlank {
 
             property string accessibleName: navigation.accessible.name
 
+            navigation.panel: root.navigation.panel
+            navigation.row: root.navigation.row
+            navigation.column: 1
+
             color: val
 
             onNewColorSelected: {
@@ -187,6 +191,10 @@ ListItemBlank {
             signal changed(int newVal)
 
             property string accessibleName: navigation.accessible.name
+
+            navigation.panel: root.navigation.panel
+            navigation.row: root.navigation.row
+            navigation.column: 1
 
             currentValue: val
 
@@ -209,6 +217,10 @@ ListItemBlank {
 
             property string accessibleName: navigation.accessible.name
 
+            navigation.panel: root.navigation.panel
+            navigation.row: root.navigation.row
+            navigation.column: 1
+
             currentValue: val
             step: 1.0
 
@@ -225,6 +237,10 @@ ListItemBlank {
 
             property bool val
             signal changed(bool newVal)
+
+            navigation.panel: root.navigation.panel
+            navigation.row: root.navigation.row
+            navigation.column: 1
 
             property string accessibleName: checked ? qsTrc("uicomponents", "checked") : qsTrc("uicomponents", "unchecked")
 
