@@ -36,5 +36,8 @@ PreferencesPage {
         id: page
 
         anchors.fill: parent
+
+        navigationSection: root.navigationSection
+        navigationOrderStart: root.navigationOrderStart
     }
 }

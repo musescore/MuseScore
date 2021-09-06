@@ -12,5 +12,7 @@
         <file>qml/MuseScore/Shortcuts/internal/ShortcutsTopPanel.qml</file>
         <file>qml/MuseScore/Shortcuts/internal/ShortcutsList.qml</file>
         <file>qml/MuseScore/Shortcuts/internal/ShortcutsBottomPanel.qml</file>
+        <file>qml/MuseScore/Shortcuts/internal/MidiMappingTopPanel.qml</file>
+        <file>qml/MuseScore/Shortcuts/internal/MidiMappingBottomPanel.qml</file>
     </qresource>
 </RCC>

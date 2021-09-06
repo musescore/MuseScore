@@ -61,7 +61,7 @@ RowLayout {
         navigation.column: 0
 
         onClicked: {
-            root.importShortcutsFromFile()
+            root.importShortcutsFromFileRequested()
         }
     }
 
