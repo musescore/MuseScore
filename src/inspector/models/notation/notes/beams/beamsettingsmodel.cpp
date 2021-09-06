@@ -76,11 +76,11 @@ void BeamSettingsModel::loadProperties()
     });
 
     loadPropertyItem(m_beamVectorX, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.toPointF().x());
+        return DataFormatter::roundDouble(elementPropertyValue.value<PointF>().x());
     });
 
     loadPropertyItem(m_beamVectorY, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.toPointF().y());
+        return DataFormatter::roundDouble(elementPropertyValue.value<PointF>().y());
     });
 
     m_cachedBeamVector.setX(m_beamVectorX->value().toDouble());
@@ -96,7 +96,7 @@ void BeamSettingsModel::resetProperties()
     m_beamVectorX->resetToDefault();
     m_beamVectorY->resetToDefault();
 
-    m_cachedBeamVector = QPointF();
+    m_cachedBeamVector = PointF();
 
     setFeatheringMode(BeamTypes::FeatheringMode::FEATHERING_NONE);
     setIsBeamHeightLocked(false);
@@ -116,7 +116,7 @@ void BeamSettingsModel::updateBeamHeight(const qreal& x, const qreal& y)
     }
 
     onPropertyValueChanged(Ms::Pid::USER_MODIFIED, true);
-    onPropertyValueChanged(Ms::Pid::BEAM_POS, QPointF(m_beamVectorX->value().toDouble(), m_beamVectorY->value().toDouble()));
+    onPropertyValueChanged(Ms::Pid::BEAM_POS, PointF(m_beamVectorX->value().toDouble(), m_beamVectorY->value().toDouble()));
 
     m_cachedBeamVector.setX(m_beamVectorX->value().toDouble());
     m_cachedBeamVector.setY(m_beamVectorY->value().toDouble());

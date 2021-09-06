@@ -62,22 +62,22 @@ void CrescendoSettingsModel::createProperties()
 
     m_beginningText = buildPropertyItem(Ms::Pid::BEGIN_TEXT);
     m_beginningTextHorizontalOffset = buildPropertyItem(Ms::Pid::BEGIN_TEXT_OFFSET, [this](const int pid, const QVariant& newValue) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), QPointF(newValue.toDouble(), m_beginningTextVerticalOffset->value().toDouble()));
+        onPropertyValueChanged(static_cast<Ms::Pid>(pid), PointF(newValue.toDouble(), m_beginningTextVerticalOffset->value().toDouble()));
     });
 
     m_beginningTextVerticalOffset = buildPropertyItem(Ms::Pid::BEGIN_TEXT_OFFSET, [this](const int pid, const QVariant& newValue) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), QPointF(m_beginningTextHorizontalOffset->value().toDouble(),
-                                                                  newValue.toDouble()));
+        onPropertyValueChanged(static_cast<Ms::Pid>(pid), PointF(m_beginningTextHorizontalOffset->value().toDouble(),
+                                                                 newValue.toDouble()));
     });
 
     m_continiousText = buildPropertyItem(Ms::Pid::CONTINUE_TEXT);
     m_continiousTextHorizontalOffset = buildPropertyItem(Ms::Pid::CONTINUE_TEXT_OFFSET, [this](const int pid, const QVariant& newValue) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), QPointF(newValue.toDouble(), m_continiousTextVerticalOffset->value().toDouble()));
+        onPropertyValueChanged(static_cast<Ms::Pid>(pid), PointF(newValue.toDouble(), m_continiousTextVerticalOffset->value().toDouble()));
     });
 
     m_continiousTextVerticalOffset = buildPropertyItem(Ms::Pid::CONTINUE_TEXT_OFFSET, [this](const int pid, const QVariant& newValue) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), QPointF(m_continiousTextHorizontalOffset->value().toDouble(),
-                                                                  newValue.toDouble()));
+        onPropertyValueChanged(static_cast<Ms::Pid>(pid), PointF(m_continiousTextHorizontalOffset->value().toDouble(),
+                                                                 newValue.toDouble()));
     });
 }
 
@@ -112,18 +112,18 @@ void CrescendoSettingsModel::loadProperties()
 
     loadPropertyItem(m_beginningText);
     loadPropertyItem(m_beginningTextHorizontalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.toPointF().x());
+        return DataFormatter::roundDouble(elementPropertyValue.value<PointF>().x());
     });
     loadPropertyItem(m_beginningTextVerticalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.toPointF().x());
+        return DataFormatter::roundDouble(elementPropertyValue.value<PointF>().x());
     });
 
     loadPropertyItem(m_continiousText);
     loadPropertyItem(m_continiousTextHorizontalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.toPointF().x());
+        return DataFormatter::roundDouble(elementPropertyValue.value<PointF>().x());
     });
     loadPropertyItem(m_continiousTextVerticalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.toPointF().x());
+        return DataFormatter::roundDouble(elementPropertyValue.value<PointF>().x());
     });
 
     updateLinePropertiesAvailability();

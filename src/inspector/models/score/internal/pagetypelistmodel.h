@@ -22,10 +22,8 @@
 #ifndef MU_INSPECTOR_PAGETYPELISTMODEL_H
 #define MU_INSPECTOR_PAGETYPELISTMODEL_H
 
-#include <QPageSize>
 #include <QList>
 #include <QHash>
-#include <QSizeF>
 #include <QAbstractListModel>
 
 namespace mu::inspector {

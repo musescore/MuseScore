@@ -92,7 +92,7 @@ private:
 
     PropertyItem* m_beamVectorX = nullptr;
     PropertyItem* m_beamVectorY = nullptr;
-    QPointF m_cachedBeamVector; //!Note used in delta calculation
+    PointF m_cachedBeamVector; //!Note used in delta calculation
     bool m_isBeamHeightLocked = false;
 
     PropertyItem* m_isBeamHidden = nullptr;
