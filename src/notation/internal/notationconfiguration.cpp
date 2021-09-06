@@ -273,8 +273,8 @@ async::Notification NotationConfiguration::backgroundChanged() const
 
 QColor NotationConfiguration::foregroundColor() const
 {
-    if (scoreInversionEnabled() && uiConfiguration()->isCurrentThemeHighContrast()) {
-        return QColor("#000000");
+    if (scoreInversionEnabled() && uiConfiguration()->isHighContrast()) {
+        return QColorConstants::Black;
     } else {
         return settings()->value(FOREGROUND_COLOR).toQColor();
     }
@@ -332,8 +332,8 @@ io::path NotationConfiguration::wallpapersDefaultDirPath() const
 
 QColor NotationConfiguration::borderColor() const
 {
-    if (uiConfiguration()->isCurrentThemeHighContrast()) {
-        return QColor(255, 255, 255);
+    if (uiConfiguration()->isHighContrast()) {
+        return QColorConstants::White;
     } else {
         return QColor(0, 0, 0, 102);
     }
@@ -341,7 +341,7 @@ QColor NotationConfiguration::borderColor() const
 
 int NotationConfiguration::borderWidth() const
 {
-    if (uiConfiguration()->isCurrentThemeHighContrast()) {
+    if (uiConfiguration()->isHighContrast()) {
         return 10;
     } else {
         return 1;

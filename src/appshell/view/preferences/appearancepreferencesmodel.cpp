@@ -117,11 +117,6 @@ bool AppearancePreferencesModel::enableHighContrastChecked()
     return uiConfiguration()->isHighContrast();
 }
 
-void AppearancePreferencesModel::loadAppropriateForegroundColor()
-{
-    notationConfiguration()->loadAppropriateForegroundColor();
-}
-
 void AppearancePreferencesModel::setNewColor(const QColor& newColor, ColorType colorType)
 {
     switch (colorType) {
@@ -362,5 +357,4 @@ void AppearancePreferencesModel::setInvertScoreColor(bool value)
 
     notationConfiguration()->setScoreInversionEnabled(value);
     emit invertScoreColorChanged();
-    //notationPaintView()->load();
 }
