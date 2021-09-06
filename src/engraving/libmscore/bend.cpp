@@ -413,7 +413,7 @@ QVariant Bend::getProperty(Pid id) const
     case Pid::BEND_TYPE:
         return static_cast<int>(parseBendTypeFromCurve());
     case Pid::BEND_CURVE:
-        return QVariant::fromValue(m_points);
+        return pitchValuesToVariant(m_points);
     default:
         return EngravingItem::getProperty(id);
     }
@@ -445,7 +445,7 @@ bool Bend::setProperty(Pid id, const QVariant& v)
         updatePointsByBendType(static_cast<BendType>(v.toInt()));
         break;
     case Pid::BEND_CURVE:
-        setPoints(v.value<QList<Ms::PitchValue> >());
+        setPoints(pitchValuesFromVariant(v));
         break;
     default:
         return EngravingItem::setProperty(id, v);

@@ -23,6 +23,8 @@
 #ifndef __PITCHVALUE_H__
 #define __PITCHVALUE_H__
 
+#include <QVariant>
+
 namespace Ms {
 //---------------------------------------------------------
 //   PitchValue
@@ -45,9 +47,30 @@ struct PitchValue {
         return pv.time == time && pv.pitch == pitch && pv.vibrato == vibrato;
     }
 };
+
+inline QVariant pitchValuesToVariant(const QList<PitchValue>& values)
+{
+    QVariantList result;
+
+    for (const PitchValue& value : values) {
+        result << QVariant::fromValue(value);
+    }
+
+    return result;
+}
+
+inline QList<PitchValue> pitchValuesFromVariant(const QVariant& values)
+{
+    QList<PitchValue> result;
+
+    for (const QVariant& value : values.toList()) {
+        result << value.value<PitchValue>();
+    }
+
+    return result;
+}
 }     // namespace Ms
 
 Q_DECLARE_METATYPE(Ms::PitchValue)
-Q_DECLARE_METATYPE(QList<Ms::PitchValue>)
 
 #endif
