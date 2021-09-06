@@ -176,7 +176,7 @@ QVariant TremoloBar::getProperty(Pid propertyId) const
     case Pid::TREMOLOBAR_TYPE:
         return static_cast<int>(parseTremoloBarTypeFromCurve(m_points));
     case Pid::TREMOLOBAR_CURVE:
-        return QVariant::fromValue(m_points);
+        return pitchValuesToVariant(m_points);
     default:
         return EngravingItem::getProperty(propertyId);
     }
@@ -203,7 +203,7 @@ bool TremoloBar::setProperty(Pid propertyId, const QVariant& v)
         updatePointsByTremoloBarType(static_cast<TremoloBarType>(v.toInt()));
         break;
     case Pid::TREMOLOBAR_CURVE:
-        setPoints(v.value<QList<Ms::PitchValue> >());
+        setPoints(pitchValuesFromVariant(v));
         break;
     default:
         return EngravingItem::setProperty(propertyId, v);
