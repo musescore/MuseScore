@@ -1657,7 +1657,7 @@ bool Note::readProperties(XmlReader& e)
             add(image);
         }
     } else if (tag == "Bend") {
-        Bend* b = new Bend(this);
+        Bend* b = Factory::createBend(this);
         b->setTrack(track());
         b->read(e);
         add(b);

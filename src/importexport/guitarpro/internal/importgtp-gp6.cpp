@@ -25,6 +25,7 @@
 #include <QDebug>
 #include <cmath>
 
+#include "libmscore/factory.h"
 #include "libmscore/arpeggio.h"
 #include "libmscore/articulation.h"
 #include "libmscore/barline.h"
@@ -72,6 +73,8 @@
 #include "libmscore/tremolobar.h"
 #include "libmscore/tuplet.h"
 #include "libmscore/volta.h"
+
+using namespace mu::engraving;
 
 namespace Ms {
 const std::map<QString, QString> GuitarPro6::instrumentMapping = {
@@ -1112,7 +1115,7 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                                             props = props.nextSibling();
                                         }
 
-                                        Bend* bend = new Bend(note);
+                                        Bend* bend = Factory::createBend(note);
                                         //bend->setNote(note); //TODO
                                         bend->points().append(PitchValue(0, origin));
                                         bend->points().append(PitchValue(off1, has_middle ? middleval : destination));
@@ -1232,7 +1235,7 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                                 tie = false;
                             }
                             if (trill) {
-                                Articulation* art = new Articulation(note->score()->dummy()->chord());
+                                Articulation* art = Factory::createArticulation(note->score()->dummy()->chord());
                                 art->setSymId(SymId::ornamentTrill);
                                 if (!note->score()->addArticulation(note, art)) {
                                     delete art;
@@ -1257,13 +1260,13 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                             if (!wahNode.isNull()) {
                                 QString value = wahNode.toElement().text();
                                 if (!value.compare("Open")) {
-                                    Articulation* art = new Articulation(note->score()->dummy()->chord());
+                                    Articulation* art = Factory::createArticulation(note->score()->dummy()->chord());
                                     art->setSymId(SymId::brassMuteOpen);
                                     if (!note->score()->addArticulation(note, art)) {
                                         delete art;
                                     }
                                 } else if (!value.compare("Closed")) {
-                                    Articulation* art = new Articulation(note->score()->dummy()->chord());
+                                    Articulation* art = Factory::createArticulation(note->score()->dummy()->chord());
                                     art->setSymId(SymId::brassMuteClosed);
                                     if (!note->score()->addArticulation(note, art)) {
                                         delete art;
@@ -1286,7 +1289,7 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                                 case 16: symId = SymId::articTenutoAbove;
                                     break;
                                 }
-                                Articulation* art = new Articulation(note->score()->dummy()->chord());
+                                Articulation* art = Factory::createArticulation(note->score()->dummy()->chord());
                                 art->setSymId(symId);
                                 if (!note->score()->addArticulation(note, art)) {
                                     delete art;
@@ -1297,25 +1300,25 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                                 QString value = ornamentNode.toElement().text();
                                 // guitar pro represents the turns the other way to what we do
                                 if (!value.compare("InvertedTurn")) {
-                                    Articulation* art = new Articulation(note->score()->dummy()->chord());
+                                    Articulation* art = Factory::createArticulation(note->score()->dummy()->chord());
                                     art->setSymId(SymId::ornamentTurn);
                                     if (!note->score()->addArticulation(note, art)) {
                                         delete art;
                                     }
                                 } else if (!value.compare("Turn")) {
-                                    Articulation* art = new Articulation(note->score()->dummy()->chord());
+                                    Articulation* art = Factory::createArticulation(note->score()->dummy()->chord());
                                     art->setSymId(SymId::ornamentTurnInverted);
                                     if (!note->score()->addArticulation(note, art)) {
                                         delete art;
                                     }
                                 } else if (!value.compare("LowerMordent")) {
-                                    Articulation* art = new Articulation(note->score()->dummy()->chord());
+                                    Articulation* art = Factory::createArticulation(note->score()->dummy()->chord());
                                     art->setSymId(SymId::ornamentMordent);
                                     if (!note->score()->addArticulation(note, art)) {
                                         delete art;
                                     }
                                 } else if (!value.compare("UpperMordent")) {
-                                    Articulation* art = new Articulation(note->score()->dummy()->chord());
+                                    Articulation* art = Factory::createArticulation(note->score()->dummy()->chord());
                                     art->setSymId(SymId::ornamentShortTrill);
                                     if (!note->score()->addArticulation(note, art)) {
                                         delete art;
@@ -1331,20 +1334,20 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                                     QString argument = currentProperty1.attributes().namedItem("name").toAttr().value();
                                     if (!argument.compare("PickStroke")) {
                                         if (!currentProperty1.firstChild().toElement().text().compare("Up")) {
-                                            Articulation* art = new Articulation(note->score()->dummy()->chord());
+                                            Articulation* art = Factory::createArticulation(note->score()->dummy()->chord());
                                             art->setSymId(SymId::stringsUpBow);
                                             if (!note->score()->addArticulation(note, art)) {
                                                 delete art;
                                             }
                                         } else if (!currentProperty1.firstChild().toElement().text().compare("Down")) {
-                                            Articulation* art = new Articulation(note->score()->dummy()->chord());
+                                            Articulation* art = Factory::createArticulation(note->score()->dummy()->chord());
                                             art->setSymId(SymId::stringsDownBow);
                                             if (!note->score()->addArticulation(note, art)) {
                                                 delete art;
                                             }
                                         }
                                     } else if (!argument.compare("Brush")) {
-                                        Arpeggio* a = new Arpeggio(chord);
+                                        Arpeggio* a = Factory::createArpeggio(chord);
                                         // directions in arpeggion type are reversed, they are correct below
                                         if (!currentProperty1.firstChild().toElement().text().compare("Up")) {
                                             a->setArpeggioType(ArpeggioType::DOWN_STRAIGHT);
@@ -1469,7 +1472,7 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                             QDomNode arpeggioNode = currentNode.parentNode().firstChildElement("Arpeggio");
                             if (!arpeggioNode.isNull()) {
                                 QString arpeggioStr = arpeggioNode.toElement().text();
-                                Arpeggio* a         = new Arpeggio(chord);
+                                Arpeggio* a = Factory::createArpeggio(chord);
                                 if (!arpeggioStr.compare("Up")) {
                                     a->setArpeggioType(ArpeggioType::DOWN);
                                 } else {
@@ -1511,7 +1514,7 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                             QDomNode swellNode = currentNode.parentNode().firstChildElement("Fadding");
                             if (!swellNode.isNull()) {
                                 auto str          = swellNode.toElement().text();
-                                Articulation* art = new Articulation(note->score()->dummy()->chord());
+                                Articulation* art = Factory::createArticulation(note->score()->dummy()->chord());
                                 if (str == "FadeIn") {
                                     art->setSymId(SymId::guitarFadeIn);
                                 } else if (str == "FadeOut") {
@@ -1767,7 +1770,7 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
             auto fermataIter     = (*fermataList)->begin();
             Fraction targetIndex = fermataToFraction((*fermataIter).index, ((*fermataIter).timeDivision));
             if (fermataIndex == targetIndex) {
-                Articulation* art = new Articulation(score->dummy()->chord());
+                Articulation* art = Factory::createArticulation(score->dummy()->chord());
                 art->setSymId(SymId::fermataAbove);
                 if (fermataIter->type == "Long") {
                     art->setSymId(SymId::fermataLongAbove);

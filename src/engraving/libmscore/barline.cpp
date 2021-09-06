@@ -27,6 +27,7 @@
 #include "draw/fontmetrics.h"
 #include "io/xml.h"
 
+#include "factory.h"
 #include "score.h"
 #include "scorefont.h"
 #include "sym.h"
@@ -48,6 +49,7 @@
 #include "masterscore.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -134,7 +136,7 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
                     Segment* lsegment = lmeasure->undoGetSegmentR(SegmentType::EndBarLine, lmeasure->ticks());
                     BarLine* lbl = toBarLine(lsegment->element(ltrack));
                     if (!lbl) {
-                        lbl = new BarLine(lsegment);
+                        lbl = Factory::createBarLine(lsegment);
                         lbl->setParent(lsegment);
                         lbl->setTrack(ltrack);
                         lbl->setSpanStaff(lstaff->barLineSpan());
@@ -877,7 +879,7 @@ void BarLine::read(XmlReader& e)
         } else if (tag == "spanToOffset") {
             _spanTo = e.readInt();
         } else if (tag == "Articulation") {
-            Articulation* a = new Articulation(score()->dummy()->chord());
+            Articulation* a = Factory::createArticulation(score()->dummy()->chord());
             a->read(e);
             add(a);
         } else if (tag == "Symbol") {

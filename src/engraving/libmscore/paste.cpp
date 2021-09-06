@@ -437,7 +437,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
                     breath->setParent(segment);
                     undoChangeElement(segment->element(e.track()), breath);
                 } else if (tag == "Beam") {
-                    Beam* beam = new Beam(this->dummy(), this);
+                    Beam* beam = Factory::createBeam(this->dummy(), this);
                     beam->setTrack(e.track());
                     beam->read(e);
                     beam->moveToDummy();
@@ -897,7 +897,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                     ChordRest* cr = toChordRest(currSegm->element(destTrack));
 
                     if (tag == "Articulation") {
-                        Articulation* el = new Articulation(cr);
+                        Articulation* el = Factory::createArticulation(cr);
                         el->read(e);
                         el->setTrack(destTrack);
                         el->setParent(cr);

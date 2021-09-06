@@ -30,6 +30,7 @@
 #include "translation.h"
 #include "io/xml.h"
 
+#include "factory.h"
 #include "measure.h"
 #include "ambitus.h"
 #include "symbol.h"
@@ -41,6 +42,7 @@
 #include "part.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 // table must be in sync with enum ClefType
@@ -311,7 +313,7 @@ EngravingItem* Clef::drop(EditData& data)
             if (segm->element(track())) {
                 score()->undoRemoveElement(segm->element(track()));
             }
-            Ambitus* r = new Ambitus(segm);
+            Ambitus* r = Factory::createAmbitus(segm);
             r->setParent(segm);
             r->setTrack(track());
             score()->undoAddElement(r);

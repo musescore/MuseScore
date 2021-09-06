@@ -37,6 +37,7 @@
 #include "compat/dummyelement.h"
 #include "io/xml.h"
 
+#include "factory.h"
 #include "fermata.h"
 #include "imageStore.h"
 #include "key.h"
@@ -3106,7 +3107,7 @@ void Score::padToggle(Pad p, const EditData& ed)
             changeCRlen(cr, _is.duration());
 
             for (const SymId& articulationId: _is.articulationIds()) {
-                Articulation* na = new Articulation(cr);
+                Articulation* na = Factory::createArticulation(cr);
                 na->setSymId(articulationId);
                 addArticulation(cr, na);
             }

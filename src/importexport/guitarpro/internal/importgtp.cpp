@@ -31,6 +31,7 @@
 
 #include "engraving/infrastructure/io/xml.h"
 
+#include <libmscore/factory.h>
 #include <libmscore/measurebase.h>
 #include <libmscore/text.h>
 #include <libmscore/box.h>
@@ -78,6 +79,8 @@
 #include <libmscore/palmmute.h>
 #include <libmscore/vibrato.h>
 #include <libmscore/masterscore.h>
+
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -750,7 +753,7 @@ void GuitarPro::readBend(Note* note)
     if (numPoints == 0) {
         return;
     }
-    Bend* bend = new Bend(note);
+    Bend* bend = Factory::createBend(note);
     //TODO-ws      bend->setNote(note);
     for (int i = 0; i < numPoints; ++i) {
         int bendTime  = readInt();
@@ -1084,7 +1087,7 @@ void GuitarPro::applyBeatEffects(Chord* chord, int beatEffect)
         addPop(chord->upNote());
     } else if (beatEffect == 4) {
         if (version >= 400) {
-            Articulation* a = new Articulation(chord);
+            Articulation* a = Factory::createArticulation(chord);
             a->setSymId(SymId::guitarFadeIn);
             a->setAnchor(ArticulationAnchor::TOP_STAFF);
             a->setPropertyFlags(Pid::ARTICULATION_ANCHOR, PropertyFlags::UNSTYLED);
@@ -1093,11 +1096,11 @@ void GuitarPro::applyBeatEffects(Chord* chord, int beatEffect)
         //TODO-ws		else for (auto n : chord->notes())
         //			n->setHarmonic(true);
     } else if (beatEffect == 5) {
-        Articulation* a = new Articulation(chord);
+        Articulation* a = Factory::createArticulation(chord);
         a->setSymId(SymId::stringsUpBow);
         chord->add(a);
     } else if (beatEffect == 6) {
-        Articulation* art = new Articulation(chord);
+        Articulation* art = Factory::createArticulation(chord);
         art->setSymId(SymId::stringsDownBow);
         chord->add(art);
     } else if (beatEffect == 7) {
@@ -1995,7 +1998,7 @@ bool GuitarPro1::readNote(int string, Note* note)
                 points.append(PitchValue(0,0, false));
                 points.append(PitchValue(60,(fretNumber-gn->fret())*100, false));
 
-                Bend* b = new Bend(note->score());
+                Bend* b = Factory::createBend(note->score());
                 b->setPoints(points);
                 b->setTrack(gn->track());
                 gn->add(b);*/
@@ -2592,7 +2595,7 @@ bool GuitarPro3::read(QFile* fp)
                 if (cr && (cr->isChord())) {
                     if (beatEffects >= 200) {
                         beatEffects -= 200;
-                        Articulation* art = new Articulation(cr);
+                        Articulation* art = Factory::createArticulation(cr);
                         art->setSymId(SymId::guitarFadeOut);
                         art->setAnchor(ArticulationAnchor::TOP_STAFF);
                         art->setPropertyFlags(Pid::ARTICULATION_ANCHOR, PropertyFlags::UNSTYLED);
@@ -2723,7 +2726,7 @@ int GuitarPro3::readBeatEffects(int track, Segment* segment)
         int strokeup = readUChar();                // up stroke length
         int strokedown = readUChar();                // down stroke length
 
-        Arpeggio* a = new Arpeggio(score->dummy()->chord());
+        Arpeggio* a = Factory::createArpeggio(score->dummy()->chord());
         if (strokeup > 0) {
             a->setArpeggioType(ArpeggioType::UP_STRAIGHT);
         } else if (strokedown > 0) {
