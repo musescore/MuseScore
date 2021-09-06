@@ -392,7 +392,8 @@ QVariant AbstractInspectorModel::valueFromElementUnits(const Ms::Pid& pid, const
 
         return strList.join(",");
     }
-
+    case Ms::P_TYPE::COLOR:
+        return value.value<mu::draw::Color>().toQColor();
     default:
         return value;
     }
