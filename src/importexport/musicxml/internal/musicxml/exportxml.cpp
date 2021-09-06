@@ -49,6 +49,7 @@
 #include "engraving/style/style.h"
 #include "engraving/infrastructure/io/xml.h"
 
+#include "libmscore/factory.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/rest.h"
 #include "libmscore/chord.h"
@@ -123,6 +124,7 @@
 #include "log.h"
 
 using namespace mu::iex::musicxml;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -5779,7 +5781,7 @@ void ExportMusicXml::keysigTimesig(const Measure* m, const Part* p)
         if (m->tick().isZero()) {
             //KeySigEvent kse;
             //kse.setKey(Key::C);
-            KeySig* ks = new KeySig(_score->dummy()->segment());
+            KeySig* ks = Factory::createKeySig(_score->dummy()->segment());
             ks->setKey(Key::C);
             keysig(ks, p->staff(0)->clef(m->tick()));
             delete ks;

@@ -96,10 +96,7 @@ template<typename T> std::shared_ptr<T> makeElement(Ms::Score* score)
     std::shared_ptr<T> makeElement<T>(Ms::Score* score) { return std::make_shared<T>(P); } \
 
 MAKE_ELEMENT(Dynamic, score->dummy()->segment())
-MAKE_ELEMENT(KeySig, score->dummy()->segment())
 MAKE_ELEMENT(MeasureRepeat, score->dummy()->segment())
-MAKE_ELEMENT(Breath, score->dummy()->segment())
-MAKE_ELEMENT(Clef, score->dummy()->segment())
 MAKE_ELEMENT(Hairpin, score->dummy()->segment())
 MAKE_ELEMENT(SystemText, score->dummy()->segment())
 MAKE_ELEMENT(TempoText, score->dummy()->segment())
@@ -107,13 +104,11 @@ MAKE_ELEMENT(StaffText, score->dummy()->segment())
 MAKE_ELEMENT(RehearsalMark, score->dummy()->segment())
 
 MAKE_ELEMENT(Jump, score->dummy()->measure())
-MAKE_ELEMENT(LayoutBreak, score->dummy()->measure())
 MAKE_ELEMENT(Spacer, score->dummy()->measure())
 MAKE_ELEMENT(StaffTypeChange, score->dummy()->measure())
 MAKE_ELEMENT(MeasureNumber, score->dummy()->measure())
 
 MAKE_ELEMENT(Tremolo, score->dummy()->chord())
-MAKE_ELEMENT(ChordLine, score->dummy()->chord())
 
 MAKE_ELEMENT(Fingering, score->dummy()->note())
 MAKE_ELEMENT(NoteHead, score->dummy()->note())
@@ -241,16 +236,16 @@ PalettePtr PaletteCreator::newKeySigPalette()
     sp->setYOffset(1.0);
 
     for (int i = 0; i < 7; ++i) {
-        auto k = makeElement<KeySig>(Ms::gpaletteScore);
+        auto k = Factory::makeKeySig(Ms::gpaletteScore->dummy()->segment());
         k->setKey(Key(i + 1));
         sp->appendElement(k, keyNames[i * 2]);
     }
     for (int i = -7; i < 0; ++i) {
-        auto k = makeElement<KeySig>(gpaletteScore);
+        auto k = Factory::makeKeySig(Ms::gpaletteScore->dummy()->segment());
         k->setKey(Key(i));
         sp->appendElement(k, keyNames[(7 + i) * 2 + 1]);
     }
-    auto k = makeElement<KeySig>(gpaletteScore);
+    auto k = Factory::makeKeySig(Ms::gpaletteScore->dummy()->segment());
     k->setKey(Key::C);
     sp->appendElement(k, keyNames[14]);
 
@@ -259,7 +254,7 @@ PalettePtr PaletteCreator::newKeySigPalette()
     nke.setKey(Key::C);
     nke.setCustom(true);
     nke.setMode(KeyMode::NONE);
-    auto nk = makeElement<KeySig>(gpaletteScore);
+    auto nk = Factory::makeKeySig(Ms::gpaletteScore->dummy()->segment());
     nk->setKeySigEvent(nke);
     sp->appendElement(nk, keyNames[15]);
 
@@ -408,22 +403,22 @@ PalettePtr PaletteCreator::newLayoutPalette()
     sp->setDrawGrid(true);
     sp->setVisible(false);
 
-    auto lb = makeElement<LayoutBreak>(gpaletteScore);
+    auto lb = Factory::makeLayoutBreak(gpaletteScore->dummy()->measure());
     lb->setLayoutBreakType(LayoutBreak::Type::LINE);
     PaletteCellPtr cell = sp->appendElement(lb, QT_TRANSLATE_NOOP("palette", "System break"));
     cell->mag = 1.2;
 
-    lb = makeElement<LayoutBreak>(gpaletteScore);
+    lb = Factory::makeLayoutBreak(gpaletteScore->dummy()->measure());
     lb->setLayoutBreakType(LayoutBreak::Type::PAGE);
     cell = sp->appendElement(lb, QT_TRANSLATE_NOOP("palette", "Page break"));
     cell->mag = 1.2;
 
-    lb = makeElement<LayoutBreak>(gpaletteScore);
+    lb = Factory::makeLayoutBreak(gpaletteScore->dummy()->measure());
     lb->setLayoutBreakType(LayoutBreak::Type::SECTION);
     cell = sp->appendElement(lb, QT_TRANSLATE_NOOP("palette", "Section break"));
     cell->mag = 1.2;
 
-    lb = makeElement<LayoutBreak>(gpaletteScore);
+    lb = Factory::makeLayoutBreak(gpaletteScore->dummy()->measure());
     lb->setLayoutBreakType(LayoutBreak::Type::NOBREAK);
     cell = sp->appendElement(lb, QT_TRANSLATE_NOOP("palette", "Group measures"));
     cell->mag = 1.2;
@@ -755,7 +750,7 @@ PalettePtr PaletteCreator::newBracketsPalette()
     bracketItemOwner.setBracketType(static_cast<int>(types.size()) - 1, BracketType::NORMAL);
 
     for (size_t i = 0; i < types.size(); ++i) {
-        auto b1 = makeElement<Bracket>(gpaletteScore);
+        auto b1 = Factory::makeBracket(gpaletteScore->dummy());
         auto bi1 = bracketItemOwner.brackets()[static_cast<int>(i)];
         const auto& type = types[i];
         bi1->setBracketType(type.first);
@@ -784,13 +779,13 @@ PalettePtr PaletteCreator::newBreathPalette()
     };
 
     for (auto i : fermatas) {
-        auto f = makeElement<Fermata>(gpaletteScore);
+        auto f = Factory::makeFermata(gpaletteScore->dummy());
         f->setSymId(i);
         sp->appendElement(f, f->userName());
     }
 
     for (BreathType bt : Breath::breathList) {
-        auto a = makeElement<Breath>(gpaletteScore);
+        auto a = Factory::makeBreath(gpaletteScore->dummy()->segment());
         a->setSymId(bt.id);
         a->setPause(bt.pause);
         sp->appendElement(a, Sym::id2userName(bt.id));
@@ -820,38 +815,38 @@ PalettePtr PaletteCreator::newArpeggioPalette()
 
     //fall and doits
 
-    auto cl = makeElement<ChordLine>(gpaletteScore);
+    auto cl = Factory::makeChordLine(gpaletteScore->dummy()->chord());
     cl->setChordLineType(ChordLineType::FALL);
     sp->appendElement(cl, scorelineNames[0]);
 
-    cl = makeElement<ChordLine>(gpaletteScore);
+    cl = Factory::makeChordLine(gpaletteScore->dummy()->chord());
     cl->setChordLineType(ChordLineType::DOIT);
     sp->appendElement(cl, scorelineNames[1]);
 
-    cl = makeElement<ChordLine>(gpaletteScore);
+    cl = Factory::makeChordLine(gpaletteScore->dummy()->chord());
     cl->setChordLineType(ChordLineType::PLOP);
     sp->appendElement(cl, scorelineNames[2]);
 
-    cl = makeElement<ChordLine>(gpaletteScore);
+    cl = Factory::makeChordLine(gpaletteScore->dummy()->chord());
     cl->setChordLineType(ChordLineType::SCOOP);
     sp->appendElement(cl, scorelineNames[3]);
 
-    cl = makeElement<ChordLine>(gpaletteScore);
+    cl = Factory::makeChordLine(gpaletteScore->dummy()->chord());
     cl->setChordLineType(ChordLineType::FALL);
     cl->setStraight(true);
     sp->appendElement(cl, QT_TRANSLATE_NOOP("Ms", "Slide out down"));
 
-    cl = makeElement<ChordLine>(gpaletteScore);
+    cl = Factory::makeChordLine(gpaletteScore->dummy()->chord());
     cl->setChordLineType(ChordLineType::DOIT);
     cl->setStraight(true);
     sp->appendElement(cl, QT_TRANSLATE_NOOP("Ms", "Slide out up"));
 
-    cl = makeElement<ChordLine>(gpaletteScore);
+    cl = Factory::makeChordLine(gpaletteScore->dummy()->chord());
     cl->setChordLineType(ChordLineType::PLOP);
     cl->setStraight(true);
     sp->appendElement(cl, QT_TRANSLATE_NOOP("Ms", "Slide in above"));
 
-    cl = makeElement<ChordLine>(gpaletteScore);
+    cl = Factory::makeChordLine(gpaletteScore->dummy()->chord());
     cl->setChordLineType(ChordLineType::SCOOP);
     cl->setStraight(true);
     sp->appendElement(cl, QT_TRANSLATE_NOOP("Ms", "Slide in below"));
@@ -886,7 +881,7 @@ PalettePtr PaletteCreator::newClefsPalette(bool defaultPalette)
     };
 
     for (ClefType clefType : defaultPalette ? clefsDefault : clefsMaster) {
-        auto clef = makeElement<Ms::Clef>(gpaletteScore);
+        auto clef = Factory::makeClef(gpaletteScore->dummy()->segment());
         clef->setClefType(ClefTypeList(clefType, clefType));
         sp->appendElement(clef, ClefInfo::name(clefType));
     }

@@ -418,7 +418,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
                         m = m->prevMeasure();
                     }
                     Segment* segment = m->undoGetSegment(SegmentType::Clef, tick);
-                    Clef* clef = new Clef(segment);
+                    Clef* clef = Factory::createClef(segment);
                     clef->read(e);
                     clef->setTrack(e.track());
                     clef->setParent(segment);
@@ -430,7 +430,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
                         m = m->prevMeasure();
                     }
                     Segment* segment = m->undoGetSegment(SegmentType::Breath, tick);
-                    Breath* breath = new Breath(segment);
+                    Breath* breath = Factory::createBreath(segment);
                     breath->setTrack(e.track());
                     breath->setPlacement(breath->track() & 1 ? Placement::BELOW : Placement::ABOVE);
                     breath->read(e);
@@ -848,7 +848,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                         el->setParent(harmSegm);
                         undoAddElement(el);
                     } else {
-                        FretDiagram* el = new FretDiagram(harmSegm);
+                        FretDiagram* el = Factory::createFretDiagram(harmSegm);
                         el->setTrack(trackZeroVoice(destTrack));
                         el->read(e);
                         el->setTrack(trackZeroVoice(destTrack));
@@ -920,7 +920,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                         // FiguredBass always belongs to first staff voice
                         destTrack = trackZeroVoice(destTrack);
                         Fraction ticks;
-                        FiguredBass* el = new FiguredBass(currSegm);
+                        FiguredBass* el = Factory::createFiguredBass(currSegm);
                         el->setTrack(destTrack);
                         el->read(e);
                         el->setTrack(destTrack);

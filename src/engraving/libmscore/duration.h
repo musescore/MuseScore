@@ -42,12 +42,7 @@ class Spanner;
 
 class DurationElement : public EngravingItem
 {
-    Fraction _duration;
-    Tuplet* _tuplet;
-
 public:
-    DurationElement(const ElementType& type, EngravingItem* parent = 0, ElementFlags = ElementFlag::MOVABLE | ElementFlag::ON_STAFF);
-    DurationElement(const DurationElement& e);
     ~DurationElement();
 
     virtual Measure* measure() const { return (Measure*)(parent()); }
@@ -68,8 +63,16 @@ public:
     Fraction globalTicks() const;
     void setTicks(const Fraction& f) { _duration = f; }
 
-    virtual QVariant getProperty(Pid propertyId) const override;
-    virtual bool setProperty(Pid propertyId, const QVariant&) override;
+    QVariant getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const QVariant&) override;
+
+protected:
+    DurationElement(const ElementType& type, EngravingItem* parent = 0, ElementFlags = ElementFlag::MOVABLE | ElementFlag::ON_STAFF);
+    DurationElement(const DurationElement& e);
+
+private:
+    Fraction _duration;
+    Tuplet* _tuplet;
 };
 }     // namespace Ms
 #endif

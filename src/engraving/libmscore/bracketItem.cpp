@@ -28,10 +28,16 @@
 using namespace mu;
 
 namespace Ms {
-BracketItem::BracketItem(EngravingObject* parent)
-    : EngravingObject(ElementType::BRACKET_ITEM, parent) {}
-BracketItem::BracketItem(EngravingObject* parent, BracketType a, int b)
-    : EngravingObject(ElementType::BRACKET_ITEM, parent), _bracketType(a), _bracketSpan(b) { }
+BracketItem::BracketItem(EngravingItem* parent)
+    : EngravingObject(ElementType::BRACKET_ITEM, parent)
+{
+}
+
+BracketItem::BracketItem(EngravingItem* parent, BracketType a, int b)
+    : EngravingObject(ElementType::BRACKET_ITEM, parent), _bracketType(a), _bracketSpan(b)
+{
+}
+
 //---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------

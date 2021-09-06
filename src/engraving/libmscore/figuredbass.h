@@ -25,6 +25,10 @@
 
 #include "text.h"
 
+namespace mu::engraving {
+class Factory;
+}
+
 namespace Ms {
 class Segment;
 
@@ -143,6 +147,10 @@ private:
     Parenthesis parenth[5];                     // each of the parenthesis: before, between and after parts
     qreal textWidth;                            // the text width (in raster units), set during layout()
                                                 //    used by draw()
+    friend class FiguredBass;
+    FiguredBassItem(FiguredBass* parent = 0, int line = 0);
+    FiguredBassItem(const FiguredBassItem&);
+
     // part parsing
     int               parseDigit(QString& str);
     int               parseParenthesis(QString& str, int parenthIdx);
@@ -153,8 +161,7 @@ private:
     QString                   Modifier2MusicXML(FiguredBassItem::Modifier prefix) const;
 
 public:
-    FiguredBassItem(FiguredBass* parent = 0, int line = 0);
-    FiguredBassItem(const FiguredBassItem&);
+
     ~FiguredBassItem();
 
     FiguredBassItem& operator=(const FiguredBassItem&) = delete;
@@ -247,14 +254,18 @@ class FiguredBass final : public TextBase
     Fraction _ticks;                            // the duration (used for cont. lines and for multiple F.B.
                                                 // under the same note)
     qreal _printedLineLength;                   // the length of lines actually printed (i.e. continuation lines)
+
+    friend class mu::engraving::Factory;
+    FiguredBass(Segment* parent = 0);
+    FiguredBass(const FiguredBass&);
+
     void              layoutLines();
     bool              hasParentheses() const;   // read / write MusicXML support
 
     Sid getPropertyStyle(Pid) const override;
 
 public:
-    FiguredBass(Segment* parent = 0);
-    FiguredBass(const FiguredBass&);
+
     ~FiguredBass();
 
     // a convenience static function to create/retrieve a new FiguredBass into/from its intended parent
@@ -267,6 +278,8 @@ public:
 
     // standard re-implemented virtual functions
     FiguredBass* clone() const override { return new FiguredBass(*this); }
+
+    FiguredBassItem* createItem(int line) { return new FiguredBassItem(this, line); }
 
     void      draw(mu::draw::Painter* painter) const override;
     void      endEdit(EditData&) override;

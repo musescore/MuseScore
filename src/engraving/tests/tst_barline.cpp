@@ -280,7 +280,7 @@ void TestBarline::barline05()
         msr = msr->nextMeasure();
     }
     // create and add a LineBreak element
-    LayoutBreak* lb = new LayoutBreak(msr);
+    LayoutBreak* lb = Factory::createLayoutBreak(msr);
     lb->setLayoutBreakType(LayoutBreak::Type::LINE);
     lb->setTrack(-1);               // system-level element
     lb->setParent(msr);

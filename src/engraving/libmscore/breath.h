@@ -26,6 +26,10 @@
 #include "engravingitem.h"
 #include "symid.h"
 
+namespace mu::engraving {
+class Factory;
+}
+
 namespace Ms {
 //---------------------------------------------------------
 //   BreathType
@@ -47,8 +51,10 @@ class Breath final : public EngravingItem
     qreal _pause;
     SymId _symId;
 
-public:
+    friend class mu::engraving::Factory;
     Breath(Segment* parent);
+
+public:
 
     Breath* clone() const override { return new Breath(*this); }
 
