@@ -23,8 +23,8 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 
-import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
 
 import "internal"
 
@@ -46,7 +46,10 @@ Item {
     property alias hasSelection: selectionModel.hasSelection
     readonly property var selection: sortFilterProxyModel.mapSelectionToSource(selectionModel.selection)
 
-    signal doubleClicked(var index, var item)
+    property NavigationSection navigationSection: null
+    property int navigationOrderStart: 0
+
+    signal handleItem(var index, var item)
 
     QtObject {
         id: privateProperties
@@ -110,6 +113,21 @@ Item {
         anchors.right: parent.right
         height: 38
 
+        property NavigationPanel headerNavigation: NavigationPanel {
+            name: "ValueListHeaderPanel"
+            section: root.navigationSection
+            direction: NavigationPanel.Horizontal
+            order: root.navigationOrderStart
+            accessible.name: qsTrc("uicomponents", "Value list header panel")
+            enabled: root.visible
+
+            onActiveChanged: {
+                if (active) {
+                    root.forceActiveFocus()
+                }
+            }
+        }
+
         ValueListHeaderItem {
             Layout.fillHeight: true
             Layout.fillWidth: true
@@ -119,6 +137,9 @@ Item {
             spacing: privateProperties.spacing
             isSorterEnabled: keySorter.enabled
             sortOrder: keySorter.sortOrder
+
+            navigation.panel: header.headerNavigation
+            navigation.order: 1
 
             onClicked: {
                 privateProperties.toggleSorter(keySorter)
@@ -136,6 +157,9 @@ Item {
             spacing: privateProperties.spacing
             isSorterEnabled: valueSorter.enabled
             sortOrder: valueSorter.sortOrder
+
+            navigation.panel: header.headerNavigation
+            navigation.order: 2
 
             onClicked: {
                 privateProperties.toggleSorter(valueSorter)
@@ -160,35 +184,77 @@ Item {
         clip: true
         boundsBehavior: Flickable.StopAtBounds
 
+        property NavigationPanel navigation: NavigationPanel {
+            name: "ValueListPanel"
+            section: root.navigationSection
+            direction: NavigationPanel.Both
+            order: root.navigationOrderStart + 1
+            accessible.name: qsTrc("uicomponents", "Value list panel")
+            enabled: root.visible
+
+            onActiveChanged: {
+                if (active) {
+                    root.forceActiveFocus()
+                }
+            }
+        }
+
         ScrollBar.vertical: StyledScrollBar {
             anchors.right: parent.right
             anchors.rightMargin: 8
         }
 
-        delegate: ValueListItem {
-            item: model
+        delegate: Item {
+            //! NOTE: Added to prevent components clipping when navigating
+            width: view.width
+            height: listItem.height + ui.theme.navCtrlBorderWidth * 2
 
-            property var modelIndex: sortFilterProxyModel.index(item.index, 0)
+            ValueListItem {
+                id: listItem
 
-            keyRoleName: root.keyRoleName
-            valueRoleName: root.valueRoleName
-            valueTypeRole: root.valueTypeRole
-            valueEnabledRoleName: root.valueEnabledRoleName
-            iconRoleName: root.iconRoleName
+                anchors.centerIn: parent
+                width: view.width - ui.theme.navCtrlBorderWidth * 2
 
-            isSelected: selectionModel.hasSelection && selectionModel.isSelected(modelIndex)
-            readOnly: root.readOnly
+                navigation.enabled: true
 
-            spacing: privateProperties.spacing
-            sideMargin: privateProperties.sideMargin
-            valueItemWidth: privateProperties.valueItemWidth
+                item: model
 
-            onClicked: {
-                selectionModel.select(modelIndex)
-            }
+                property var modelIndex: sortFilterProxyModel.index(item.index, 0)
 
-            onDoubleClicked: {
-                root.doubleClicked(sortFilterProxyModel.mapToSource(modelIndex), item)
+                keyRoleName: root.keyRoleName
+                valueRoleName: root.valueRoleName
+                valueTypeRole: root.valueTypeRole
+                valueEnabledRoleName: root.valueEnabledRoleName
+                iconRoleName: root.iconRoleName
+
+                isSelected: selectionModel.hasSelection && selectionModel.isSelected(modelIndex)
+                readOnly: root.readOnly
+
+                spacing: privateProperties.spacing
+                sideMargin: privateProperties.sideMargin
+                valueItemWidth: privateProperties.valueItemWidth
+
+                navigation.panel: view.navigation
+                navigation.row: item.index
+                navigation.column: 0
+
+                onClicked: {
+                    selectionModel.select(modelIndex)
+                }
+
+                onDoubleClicked: {
+                    root.handleItem(sortFilterProxyModel.mapToSource(modelIndex), item)
+                }
+
+                onNavigationTriggered: {
+                    root.handleItem(sortFilterProxyModel.mapToSource(modelIndex), item)
+                }
+
+                onFocusChanged: {
+                    if (activeFocus) {
+                        view.positionViewAtIndex(index, ListView.Contain)
+                    }
+                }
             }
         }
     }

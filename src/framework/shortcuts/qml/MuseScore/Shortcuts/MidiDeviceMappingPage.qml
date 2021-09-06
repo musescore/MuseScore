@@ -89,7 +89,7 @@ Item {
 
             model: mappingsModel
 
-            onDoubleClicked: {
+            onHandleItem: {
                 editMappingDialog.startEditCurrentAction()
             }
         }

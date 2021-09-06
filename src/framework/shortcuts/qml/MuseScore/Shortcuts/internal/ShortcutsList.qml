@@ -51,7 +51,7 @@ ValueList {
         ]
     }
 
-    onDoubleClicked: {
+    onHandleItem: {
         root.startEditCurrentShortcutRequested()
     }
 }

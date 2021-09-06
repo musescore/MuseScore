@@ -24,6 +24,8 @@ import QtQuick.Dialogs 1.2
 
 import MuseScore.Ui 1.0
 
+import "Utils.js" as Utils
+
 Rectangle {
     id: root
 
@@ -50,6 +52,9 @@ Rectangle {
         id: navCtrl
         name: root.objectName != "" ? root.objectName : "ColorPicker"
         enabled: root.enabled && root.visible
+        accessible.role: MUAccessible.Button
+        accessible.name: Utils.colorToString(root.color)
+
         onTriggered: colorDialog.open()
     }
 
