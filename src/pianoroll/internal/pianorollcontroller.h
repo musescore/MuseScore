@@ -47,18 +47,6 @@
 #include "../ipianorollconfiguration.h"
 
 namespace mu::pianoroll {
-//class ms::Chord;
-
-//class NoteBlock
-//{
-//    Ms::Note* m_note;
-//
-//    public:
-//    NoteBlock(Ms::Note* note);
-//};
-
-//----------------------
-
 static const int PIANO_KEYBOARD_WIDTH = 100;
 static const int BLACK_KEY_WIDTH = PIANO_KEYBOARD_WIDTH * 9 / 14;
 const int MAX_KEY_HEIGHT = 20;
