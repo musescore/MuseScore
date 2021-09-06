@@ -46,11 +46,10 @@ Row {
 
         anchors.verticalCenter: parent.verticalCenter
 
-        width: root.firstColumnWidth
         horizontalAlignment: Qt.AlignLeft
     }
 
-   Dropdown {
+    Dropdown {
         id: comboBox
 
         width: 210
