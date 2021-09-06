@@ -32,6 +32,7 @@
 #include "io/htmlparser.h"
 #include "io/xml.h"
 
+#include "libmscore/factory.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/slur.h"
 #include "libmscore/staff.h"
@@ -730,7 +731,7 @@ static void readNote(Note* note, XmlReader& e)
             if (e.hasAccidental) {                // if the other tag has already been read,
                 a = note->accidental();                // re-use the accidental it constructed
             } else {
-                a = new Accidental(note->score()->dummy());
+                a = Factory::createAccidental(note->score()->dummy());
             }
             // the accidental needs to know the properties of the
             // track it belongs to (??)
@@ -778,7 +779,7 @@ static void readNote(Note* note, XmlReader& e)
                 // only construct a new accidental, if the other tag has not been read yet
                 // (<userAccidental> tag is only used in older scores: no need to check the score mscVersion)
                 if (!e.hasAccidental) {
-                    Accidental* a = new Accidental(note);
+                    Accidental* a = Factory::createAccidental(note);
                     note->add(a);
                 }
                 // TODO: for backward compatibility

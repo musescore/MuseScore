@@ -136,6 +136,64 @@ using namespace mu::engraving;
 namespace Ms {
 // extern bool showInvisible;
 
+EngravingItem::EngravingItem(const ElementType& type, EngravingObject* se, ElementFlags f)
+    : EngravingObject(type, se)
+{
+    _flags         = f;
+    _track         = -1;
+    _color         = engravingConfiguration()->defaultColor();
+    _mag           = 1.0;
+    _tag           = 1;
+    _z             = -1;
+    _offsetChanged = OffsetChange::NONE;
+    _minDistance   = Spatium(0.0);
+}
+
+EngravingItem::EngravingItem(const EngravingItem& e)
+    : EngravingObject(e)
+{
+    _bbox       = e._bbox;
+    _mag        = e._mag;
+    _pos        = e._pos;
+    _offset     = e._offset;
+    _track      = e._track;
+    _flags      = e._flags;
+    setFlag(ElementFlag::SELECTED, false);
+    _tag        = e._tag;
+    _z          = e._z;
+    _color      = e._color;
+    _offsetChanged = e._offsetChanged;
+    _minDistance   = e._minDistance;
+    itemDiscovered = false;
+
+#ifdef ENGRAVING_BUILD_ACCESSIBLE_TREE
+    //m_accessible = e.m_accessible->clone(this);
+#endif
+}
+
+EngravingItem::~EngravingItem()
+{
+#ifdef ENGRAVING_BUILD_ACCESSIBLE_TREE
+    delete m_accessible;
+#endif
+    Score::onElementDestruction(this);
+}
+
+void EngravingItem::init()
+{
+#ifdef ENGRAVING_BUILD_ACCESSIBLE_TREE
+    m_accessible = createAccessible();
+    m_accessible->setElement(this);
+#else
+    UNUSED(access);
+#endif
+}
+
+mu::engraving::AccessibleElement* EngravingItem::createAccessible() const
+{
+    return new mu::engraving::AccessibleElement();
+}
+
 //---------------------------------------------------------
 //   spatiumChanged
 //---------------------------------------------------------
@@ -206,67 +264,6 @@ qreal EngravingItem::magS() const
 QString EngravingItem::subtypeName() const
 {
     return "";
-}
-
-//---------------------------------------------------------
-//   EngravingItem
-//---------------------------------------------------------
-
-EngravingItem::EngravingItem(const ElementType& type, EngravingObject* se, ElementFlags f, mu::engraving::AccessibleElement* access)
-    : EngravingObject(type, se)
-{
-    _flags         = f;
-    _track         = -1;
-    _color         = engravingConfiguration()->defaultColor();
-    _mag           = 1.0;
-    _tag           = 1;
-    _z             = -1;
-    _offsetChanged = OffsetChange::NONE;
-    _minDistance   = Spatium(0.0);
-
-#ifdef ENGRAVING_BUILD_ACCESSIBLE_TREE
-    m_accessible = access;
-    if (!m_accessible) {
-        m_accessible = new mu::engraving::AccessibleElement();
-    }
-    m_accessible->setElement(this);
-#else
-    UNUSED(access);
-#endif
-}
-
-EngravingItem::EngravingItem(const EngravingItem& e)
-    : EngravingObject(e)
-{
-    _bbox       = e._bbox;
-    _mag        = e._mag;
-    _pos        = e._pos;
-    _offset     = e._offset;
-    _track      = e._track;
-    _flags      = e._flags;
-    setFlag(ElementFlag::SELECTED, false);
-    _tag        = e._tag;
-    _z          = e._z;
-    _color      = e._color;
-    _offsetChanged = e._offsetChanged;
-    _minDistance   = e._minDistance;
-    itemDiscovered = false;
-
-#ifdef ENGRAVING_BUILD_ACCESSIBLE_TREE
-    m_accessible = e.m_accessible->clone(this);
-#endif
-}
-
-//---------------------------------------------------------
-//   ~EngravingItem
-//---------------------------------------------------------
-
-EngravingItem::~EngravingItem()
-{
-#ifdef ENGRAVING_BUILD_ACCESSIBLE_TREE
-    delete m_accessible;
-#endif
-    Score::onElementDestruction(this);
 }
 
 //---------------------------------------------------------

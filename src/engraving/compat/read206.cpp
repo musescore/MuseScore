@@ -802,7 +802,7 @@ static void readNote(Note* note, XmlReader& e)
     while (e.readNextStartElement()) {
         const QStringRef& tag(e.name());
         if (tag == "Accidental") {
-            Accidental* a = new Accidental(note);
+            Accidental* a = Factory::createAccidental(note);
             a->setTrack(note->track());
             Read206::readAccidental206(a, e);
             note->add(a);
@@ -964,7 +964,7 @@ bool Read206::readNoteProperties206(Note* note, XmlReader& e)
     } else if (tag == "track") {          // for performance
         note->setTrack(e.readInt());
     } else if (tag == "Accidental") {
-        Accidental* a = new Accidental(note);
+        Accidental* a = Factory::createAccidental(note);
         a->setTrack(note->track());
         a->read(e);
         note->add(a);
@@ -2166,7 +2166,7 @@ void Read206::readTrill206(XmlReader& e, Trill* t)
         if (tag == "subtype") {
             t->setTrillType(e.readElementText());
         } else if (tag == "Accidental") {
-            Accidental* _accidental = new Accidental(t);
+            Accidental* _accidental = Factory::createAccidental(t);
             readAccidental206(_accidental, e);
             _accidental->setParent(t);
             t->setAccidental(_accidental);

@@ -736,8 +736,8 @@ EngravingObject* Ambitus::treeParent() const
 EngravingObject* Ambitus::treeChild(int idx) const
 {
     Q_ASSERT(0 <= idx && idx < treeChildCount());
-    Accidental* topAccid = const_cast<Accidental*>(&_topAccid);
-    Accidental* bottomAccid = const_cast<Accidental*>(&_bottomAccid);
+    Accidental* topAccid = const_cast<Accidental*>(_topAccid);
+    Accidental* bottomAccid = const_cast<Accidental*>(_bottomAccid);
     if (topAccid && topAccid->accidentalType() != AccidentalType::NONE) {
         if (idx == 0) {
             return topAccid;
@@ -756,8 +756,8 @@ EngravingObject* Ambitus::treeChild(int idx) const
 int Ambitus::treeChildCount() const
 {
     int numChildren = 0;
-    Accidental* topAccid = const_cast<Accidental*>(&_topAccid);
-    Accidental* bottomAccid = const_cast<Accidental*>(&_bottomAccid);
+    Accidental* topAccid = const_cast<Accidental*>(_topAccid);
+    Accidental* bottomAccid = const_cast<Accidental*>(_bottomAccid);
     if (topAccid && topAccid->accidentalType() != AccidentalType::NONE) {
         numChildren++;
     }

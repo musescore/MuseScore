@@ -39,7 +39,8 @@ class Ambitus final : public EngravingItem
     MScore::DirectionH _dir;
     bool _hasLine;
     Spatium _lineWidth;
-    Accidental _topAccid, _bottomAccid;
+    Accidental* _topAccid = nullptr;
+    Accidental* _bottomAccid = nullptr;
     int _topPitch, _bottomPitch;
     int _topTpc, _bottomTpc;
 
@@ -52,6 +53,7 @@ class Ambitus final : public EngravingItem
 
 public:
     Ambitus(Segment* parent);
+    ~Ambitus();
 
     Ambitus* clone() const override { return new Ambitus(*this); }
 

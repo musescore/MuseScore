@@ -34,6 +34,7 @@
 #include "draw/brush.h"
 #include "io/xml.h"
 
+#include "factory.h"
 #include "score.h"
 #include "chord.h"
 #include "sym.h"
@@ -80,6 +81,7 @@
 #endif
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -690,12 +692,7 @@ NoteHead::Group NoteHead::headGroup() const
 //---------------------------------------------------------
 
 Note::Note(Chord* ch)
-    : EngravingItem(ElementType::NOTE, ch, ElementFlag::MOVABLE
-#ifdef ENGRAVING_BUILD_ACCESSIBLE_TREE
-                    , new mu::engraving::AccessibleNote())
-#else
-                    )
-#endif
+    : EngravingItem(ElementType::NOTE, ch, ElementFlag::MOVABLE)
 {
     _playEvents.append(NoteEvent());      // add default play event
     _cachedNoteheadSym = SymId::noSym;
@@ -1600,7 +1597,7 @@ bool Note::readProperties(XmlReader& e)
     } else if (tag == "track") {          // for performance
         setTrack(e.readInt());
     } else if (tag == "Accidental") {
-        Accidental* a = new Accidental(this);
+        Accidental* a = Factory::createAccidental(this);
         a->setTrack(track());
         a->read(e);
         add(a);
@@ -2388,7 +2385,7 @@ void Note::updateAccidental(AccidentalState* as)
         }
         if (acci != AccidentalType::NONE && !_hidden) {
             if (_accidental == 0) {
-                Accidental* a = new Accidental(this);
+                Accidental* a = Factory::createAccidental(this);
                 a->setParent(this);
                 a->setAccidentalType(acci);
                 score()->undoAddElement(a);
