@@ -80,7 +80,7 @@ public:
 private:
     INJECT(pianoroll, context::IGlobalContext, globalContext)
     INJECT(pianoroll, IPianorollController, controller)
-    INJECT(playback, audio::IPlayback, playback)
+    INJECT(pianoroll, audio::IPlayback, playback)
 
     Q_PROPERTY(double wholeNoteWidth READ wholeNoteWidth WRITE setWholeNoteWidth NOTIFY wholeNoteWidthChanged)
     Q_PROPERTY(double noteHeight READ noteHeight WRITE setNoteHeight NOTIFY noteHeightChanged)
