@@ -1785,7 +1785,7 @@ void OveToMScore::convertArticulation(
     switch (art->getArtType()) {
     case ovebase::ArticulationType::Major_Trill:
     case ovebase::ArticulationType::Minor_Trill: {
-        Articulation* a = new Articulation(cr);
+        Articulation* a = Factory::createArticulation(cr);
         a->setSymId(SymId::ornamentTrill);
         cr->add(a);
         break;
@@ -1795,19 +1795,19 @@ void OveToMScore::convertArticulation(
     }
     case ovebase::ArticulationType::Inverted_Short_Mordent:
     case ovebase::ArticulationType::Inverted_Long_Mordent: {
-        Articulation* a = new Articulation(cr);
+        Articulation* a = Factory::createArticulation(cr);
         a->setSymId(SymId::ornamentMordent);
         cr->add(a);
         break;
     }
     case ovebase::ArticulationType::Short_Mordent: {
-        Articulation* a = new Articulation(cr);
+        Articulation* a = Factory::createArticulation(cr);
         a->setSymId(SymId::ornamentShortTrill);
         cr->add(a);
         break;
     }
     case ovebase::ArticulationType::Turn: {
-        Articulation* a = new Articulation(cr);
+        Articulation* a = Factory::createArticulation(cr);
         a->setSymId(SymId::ornamentTurn);
         cr->add(a);
         break;
@@ -1840,93 +1840,93 @@ void OveToMScore::convertArticulation(
         break;
     }
     case ovebase::ArticulationType::Marcato: {
-        Articulation* a = new Articulation(cr);
+        Articulation* a = Factory::createArticulation(cr);
         a->setSymId(SymId::articAccentAbove);
         cr->add(a);
         break;
     }
     case ovebase::ArticulationType::Marcato_Dot: {
-        Articulation* a = new Articulation(cr);
+        Articulation* a = Factory::createArticulation(cr);
         a->setSymId(SymId::articAccentAbove);
         cr->add(a);
 
-        a = new Articulation(cr);
+        a = Factory::createArticulation(cr);
         a->setSymId(SymId::articStaccatoAbove);
         cr->add(a);
         break;
     }
     case ovebase::ArticulationType::Heavy_Attack: {
-        Articulation* a = new Articulation(cr);
+        Articulation* a = Factory::createArticulation(cr);
         a->setSymId(SymId::articAccentAbove);
         cr->add(a);
 
-        a = new Articulation(cr);
+        a = Factory::createArticulation(cr);
         a->setSymId(SymId::articTenutoAbove);
         cr->add(a);
         break;
     }
     case ovebase::ArticulationType::SForzando: {
-        Articulation* a = new Articulation(cr);
+        Articulation* a = Factory::createArticulation(cr);
         a->setUp(true);
         a->setSymId(SymId::articMarcatoAbove);
         cr->add(a);
         break;
     }
     case ovebase::ArticulationType::SForzando_Inverted: {
-        Articulation* a = new Articulation(cr);
+        Articulation* a = Factory::createArticulation(cr);
         a->setUp(false);
         a->setSymId(SymId::articMarcatoAbove);
         cr->add(a);
         break;
     }
     case ovebase::ArticulationType::SForzando_Dot: {
-        Articulation* a = new Articulation(cr);
+        Articulation* a = Factory::createArticulation(cr);
         a->setUp(true);
         a->setSymId(SymId::articMarcatoAbove);
         cr->add(a);
 
-        a = new Articulation(cr);
+        a = Factory::createArticulation(cr);
         a->setSymId(SymId::articStaccatoAbove);
         cr->add(a);
         break;
     }
     case ovebase::ArticulationType::SForzando_Dot_Inverted: {
-        Articulation* a = new Articulation(cr);
+        Articulation* a = Factory::createArticulation(cr);
         a->setUp(false);
         a->setSymId(SymId::articMarcatoAbove);
         cr->add(a);
 
-        a = new Articulation(cr);
+        a = Factory::createArticulation(cr);
         a->setSymId(SymId::articStaccatoAbove);
         cr->add(a);
         break;
     }
     case ovebase::ArticulationType::Heavier_Attack: {
-        Articulation* a = new Articulation(cr);
+        Articulation* a = Factory::createArticulation(cr);
         a->setUp(true);
         a->setSymId(SymId::articMarcatoAbove);
         cr->add(a);
 
-        a = new Articulation(cr);
+        a = Factory::createArticulation(cr);
         a->setSymId(SymId::articTenutoAbove);
         cr->add(a);
         break;
     }
     case ovebase::ArticulationType::Staccatissimo: {
-        Articulation* a = new Articulation(cr);
+        Articulation* a = Factory::createArticulation(cr);
         a->setUp(true);
         a->setSymId(SymId::articStaccatissimoAbove);
         cr->add(a);
         break;
     }
     case ovebase::ArticulationType::Staccato: {
-        Articulation* a = new Articulation(cr);
+        Articulation* a = Factory::createArticulation(cr);
         a->setSymId(SymId::articStaccatoAbove);
         cr->add(a);
         break;
     }
     case ovebase::ArticulationType::Tenuto: {
-        Articulation* a = new Articulation(cr);
+        Articulation* a = Factory::createArticulation(cr);
         a->setSymId(SymId::articTenutoAbove);
         cr->add(a);
         break;
@@ -1943,33 +1943,33 @@ void OveToMScore::convertArticulation(
         break;
     }
     case ovebase::ArticulationType::Up_Bow: {
-        Articulation* a = new Articulation(cr);
+        Articulation* a = Factory::createArticulation(cr);
         a->setSymId(SymId::stringsUpBow);
         cr->add(a);
         break;
     }
     case ovebase::ArticulationType::Down_Bow: {
-        Articulation* a = new Articulation(cr);
+        Articulation* a = Factory::createArticulation(cr);
         a->setSymId(SymId::stringsDownBow);
         cr->add(a);
         break;
     }
     case ovebase::ArticulationType::Up_Bow_Inverted: {
-        Articulation* a = new Articulation(cr);
+        Articulation* a = Factory::createArticulation(cr);
         a->setSymId(SymId::stringsUpBow);
         a->ryoffset() = 5.3;
         cr->add(a);
         break;
     }
     case ovebase::ArticulationType::Down_Bow_Inverted: {
-        Articulation* a = new Articulation(cr);
+        Articulation* a = Factory::createArticulation(cr);
         a->setSymId(SymId::stringsDownBow);
         a->ryoffset() = 5.3;
         cr->add(a);
         break;
     }
     case ovebase::ArticulationType::Natural_Harmonic: {
-        Articulation* a = new Articulation(cr);
+        Articulation* a = Factory::createArticulation(cr);
         a->setSymId(SymId::stringsHarmonic);
         cr->add(a);
         break;
@@ -1985,7 +1985,7 @@ void OveToMScore::convertArticulation(
         break;
     }
     case ovebase::ArticulationType::Plus_Sign: {
-        Articulation* a = new Articulation(cr);
+        Articulation* a = Factory::createArticulation(cr);
         a->setSymId(SymId::brassMuteClosed);
         cr->add(a);
         break;
@@ -1993,7 +1993,7 @@ void OveToMScore::convertArticulation(
     case ovebase::ArticulationType::Arpeggio: {
         // there can be only one
         if (!(static_cast<Ms::Chord*>(cr))->arpeggio()) {
-            Arpeggio* a = new Arpeggio(cr);
+            Arpeggio* a = Factory::createArpeggio(cr);
             a->setArpeggioType(ArpeggioType::NORMAL);
             /*
             if (art->getPlacementAbove()){
@@ -2008,14 +2008,14 @@ void OveToMScore::convertArticulation(
         break;
     }
     case ovebase::ArticulationType::Fermata: {
-        Articulation* a = new Articulation(cr);
+        Articulation* a = Factory::createArticulation(cr);
         a->setUp(true);
         a->setSymId(SymId::fermataAbove);
         cr->add(a);
         break;
     }
     case ovebase::ArticulationType::Fermata_Inverted: {
-        Articulation* a = new Articulation(cr);
+        Articulation* a = Factory::createArticulation(cr);
         a->setDirection(Direction::DOWN);
         a->setSymId(SymId::fermataBelow);
         cr->add(a);

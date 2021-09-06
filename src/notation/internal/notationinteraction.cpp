@@ -154,7 +154,7 @@ void NotationInteraction::paint(mu::draw::Painter* painter)
     drawTextEditMode(painter);
     drawSelectionRange(painter);
     drawGripPoints(painter);
-    if (m_lasso && !m_lasso->bbox().isEmpty()) {
+    if (m_lasso && !m_lasso->isEmpty()) {
         m_lasso->draw(painter);
     }
 }
@@ -628,7 +628,7 @@ bool NotationInteraction::isDragStarted() const
         return true;
     }
 
-    if (m_lasso && !m_lasso->bbox().isEmpty()) {
+    if (m_lasso && !m_lasso->isEmpty()) {
         return true;
     }
 
@@ -799,7 +799,7 @@ void NotationInteraction::endDrag()
         for (auto& group : m_dragData.dragGroups) {
             group->endDrag(m_dragData.ed);
         }
-        if (!m_lasso->bbox().isEmpty()) {
+        if (m_lasso && !m_lasso->isEmpty()) {
             endLasso();
         }
     }

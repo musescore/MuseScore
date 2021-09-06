@@ -29,6 +29,10 @@
 #include "mscore.h"
 #include "symid.h"
 
+namespace mu::engraving {
+class Factory;
+}
+
 namespace Ms {
 class ChordRest;
 class Segment;
@@ -92,6 +96,9 @@ class Articulation final : public EngravingItem
     MScore::OrnamentStyle _ornamentStyle;       // for use in ornaments such as trill
     bool _playArticulation;
 
+    friend class mu::engraving::Factory;
+    Articulation(ChordRest* parent);
+
     void draw(mu::draw::Painter*) const override;
 
     enum class AnchorGroup {
@@ -102,8 +109,7 @@ class Articulation final : public EngravingItem
     static AnchorGroup anchorGroup(SymId);
 
 public:
-    Articulation(ChordRest* parent);
-    Articulation(SymId, ChordRest* parent);
+
     Articulation& operator=(const Articulation&) = delete;
 
     Articulation* clone() const override { return new Articulation(*this); }

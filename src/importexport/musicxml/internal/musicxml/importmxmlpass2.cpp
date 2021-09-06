@@ -1002,7 +1002,8 @@ static void addArticulationToChord(const Notation& notation, ChordRest* cr)
     const SymId articSym = notation.symId();
     const QString dir = notation.attribute("type");
     const QString place = notation.attribute("placement");
-    Articulation* na = new Articulation(articSym, cr);
+    Articulation* na = Factory::createArticulation(cr);
+    na->setSymId(articSym);
 
     if (!dir.isNull()) { // Only for case where XML attribute is present (isEmpty wouldn't work)
         na->setUp(dir.isEmpty() || dir == "up");
@@ -1086,7 +1087,7 @@ static void addMordentToChord(const Notation& notation, ChordRest* cr)
         }
     }
     if (articSym != SymId::noSym) {
-        Articulation* na = new Articulation(cr);
+        Articulation* na = Factory::createArticulation(cr);
         na->setSymId(articSym);
         cr->add(na);
     } else {
@@ -1807,7 +1808,7 @@ static void handleBeamAndStemDir(ChordRest* cr, const Beam::Mode bm, const Direc
             removeBeam(beam);
         }
         // create a new beam
-        beam = new Beam(cr->score()->dummy(), cr->score());
+        beam = Factory::createBeam(cr->score()->dummy(), cr->score());
         beam->setTrack(cr->track());
         beam->setBeamDirection(sd);
     }
@@ -3366,7 +3367,7 @@ static bool determineBarLineType(const QString& barStyle, const QString& repeat,
 static std::unique_ptr<BarLine> createBarline(Score* score, const int track, const BarLineType type, const bool visible,
                                               const QString& barStyle)
 {
-    std::unique_ptr<BarLine> barline(new BarLine(score->dummy()->segment()));
+    std::unique_ptr<BarLine> barline(Factory::createBarLine(score->dummy()->segment()));
     barline->setTrack(track);
     barline->setBarLineType(type);
     barline->setSpanStaff(0);
@@ -5893,7 +5894,7 @@ static void addArpeggio(ChordRest* cr, const QString& arpeggioType,
 {
     // no support for arpeggio on rest
     if (!arpeggioType.isEmpty() && cr->type() == ElementType::CHORD) {
-        std::unique_ptr<Arpeggio> arpeggio { new Arpeggio(Ms::toChord(cr)) };
+        std::unique_ptr<Arpeggio> arpeggio(Factory::createArpeggio(Ms::toChord(cr)));
         arpeggio->setArpeggioType(ArpeggioType::NORMAL);
         if (arpeggioType == "up") {
             arpeggio->setArpeggioType(ArpeggioType::UP);
@@ -5923,7 +5924,8 @@ static void addArticLaissezVibrer(const Note* const note)
 
     auto chord = note->chord();
     if (!findLaissezVibrer(chord)) {
-        Articulation* na = new Articulation(SymId::articLaissezVibrerBelow, chord);
+        Articulation* na = Factory::createArticulation(chord);
+        na->setSymId(SymId::articLaissezVibrerBelow);
         chord->add(na);
     }
 }

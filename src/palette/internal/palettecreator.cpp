@@ -97,12 +97,10 @@ template<typename T> std::shared_ptr<T> makeElement(Ms::Score* score)
 
 MAKE_ELEMENT(Dynamic, score->dummy()->segment())
 MAKE_ELEMENT(KeySig, score->dummy()->segment())
-MAKE_ELEMENT(BarLine, score->dummy()->segment())
 MAKE_ELEMENT(MeasureRepeat, score->dummy()->segment())
 MAKE_ELEMENT(Breath, score->dummy()->segment())
 MAKE_ELEMENT(Clef, score->dummy()->segment())
 MAKE_ELEMENT(Hairpin, score->dummy()->segment())
-MAKE_ELEMENT(Ambitus, score->dummy()->segment())
 MAKE_ELEMENT(SystemText, score->dummy()->segment())
 MAKE_ELEMENT(TempoText, score->dummy()->segment())
 MAKE_ELEMENT(StaffText, score->dummy()->segment())
@@ -114,14 +112,11 @@ MAKE_ELEMENT(Spacer, score->dummy()->measure())
 MAKE_ELEMENT(StaffTypeChange, score->dummy()->measure())
 MAKE_ELEMENT(MeasureNumber, score->dummy()->measure())
 
-MAKE_ELEMENT(Articulation, score->dummy()->chord())
 MAKE_ELEMENT(Tremolo, score->dummy()->chord())
-MAKE_ELEMENT(Arpeggio, score->dummy()->chord())
 MAKE_ELEMENT(ChordLine, score->dummy()->chord())
 
 MAKE_ELEMENT(Fingering, score->dummy()->note())
 MAKE_ELEMENT(NoteHead, score->dummy()->note())
-MAKE_ELEMENT(Bend, score->dummy()->note())
 
 PaletteTreePtr PaletteCreator::newMasterPaletteTree()
 {
@@ -313,7 +308,7 @@ PalettePtr PaletteCreator::newBarLinePalette()
         if (!bti) {
             break;
         }
-        auto b = makeElement<BarLine>(gpaletteScore);
+        auto b = Factory::makeBarLine(gpaletteScore->dummy()->segment());
         b->setBarLineType(bti->type);
         sp->appendElement(b, BarLine::userTypeName(bti->type));
     }
@@ -329,7 +324,7 @@ PalettePtr PaletteCreator::newBarLinePalette()
         { BARLINE_SPAN_SHORT2_FROM, BARLINE_SPAN_SHORT2_TO, QT_TRANSLATE_NOOP("symUserNames", "Short barline 2") }, // Not in SMuFL
     };
     for (auto span : spans) {
-        auto b = makeElement<BarLine>(gpaletteScore);
+        auto b = Factory::makeBarLine(gpaletteScore->dummy()->segment());
         b->setBarLineType(BarLineType::NORMAL);
         b->setSpanFrom(span.from);
         b->setSpanTo(span.to);
@@ -396,7 +391,7 @@ PalettePtr PaletteCreator::newRepeatsPalette()
             continue;
         }
 
-        auto b = makeElement<BarLine>(gpaletteScore);
+        auto b = Factory::makeBarLine(gpaletteScore->dummy()->segment());
         b->setBarLineType(bti->type);
         PaletteCellPtr cell = sp->appendElement(b, BarLine::userTypeName(bti->type));
         cell->drawStaff = false;
@@ -510,7 +505,7 @@ PalettePtr PaletteCreator::newFingeringPalette()
     };
     // include additional symbol-based fingerings (temporarily?) implemented as articulations
     for (auto i : lute) {
-        auto s = makeElement<Articulation>(gpaletteScore);
+        auto s = Factory::makeArticulation(gpaletteScore->dummy()->chord());
         s->setSymId(i);
         sp->appendElement(s, s->userName());
     }
@@ -606,11 +601,11 @@ PalettePtr PaletteCreator::newArticulationsPalette()
         // SymId::luteFingeringRHThird,
     };
     for (auto i : art) {
-        auto s = makeElement<Articulation>(gpaletteScore);
+        auto s = Factory::makeArticulation(gpaletteScore->dummy()->chord());
         s->setSymId(i);
         sp->appendElement(s, s->userName());
     }
-    auto bend = makeElement<Bend>(gpaletteScore);
+    auto bend = Factory::makeBend(gpaletteScore->dummy()->note());
     bend->points().append(PitchValue(0,    0, false));
     bend->points().append(PitchValue(15, 100, false));
     bend->points().append(PitchValue(60, 100, false));
@@ -653,7 +648,7 @@ PalettePtr PaletteCreator::newOrnamentsPalette()
         SymId::ornamentPrecompSlide,
     };
     for (auto i : art) {
-        auto s = makeElement<Articulation>(gpaletteScore);
+        auto s = Factory::makeArticulation(gpaletteScore->dummy()->chord());
         s->setSymId(i);
         sp->appendElement(s, s->userName());
     }
@@ -813,7 +808,7 @@ PalettePtr PaletteCreator::newArpeggioPalette()
     sp->setVisible(false);
 
     for (int i = 0; i < 6; ++i) {
-        auto a = makeElement<Arpeggio>(gpaletteScore);
+        auto a = Factory::makeArpeggio(gpaletteScore->dummy()->chord());
         a->setArpeggioType(ArpeggioType(i));
         sp->appendElement(a, a->arpeggioTypeName());
     }
@@ -1110,7 +1105,7 @@ PalettePtr PaletteCreator::newLinesPalette()
     line->setDiagonal(true);
     sp->appendElement(line, QT_TRANSLATE_NOOP("palette", "Line"));
 
-    auto a = makeElement<Ambitus>(gpaletteScore);
+    auto a = Factory::makeAmbitus(gpaletteScore->dummy()->segment());
     sp->appendElement(a, QT_TRANSLATE_NOOP("palette", "Ambitus"));
 
     auto letRing = makeElement<LetRing>(gpaletteScore);

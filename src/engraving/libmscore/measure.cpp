@@ -1367,7 +1367,7 @@ void Measure::cmdAddStaves(int sStaff, int eStaff, bool createRest)
                 }
             }
             if (obl) {
-                BarLine* barline = new BarLine(*obl);
+                BarLine* barline = Factory::copyBarLine(*obl);
                 barline->setSpanStaff(score()->staff(staffIdx)->barLineSpan());
                 barline->setTrack(staffIdx * VOICES);
                 barline->setParent(bs);
@@ -2231,7 +2231,7 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
             qDebug("read midi tick");
             e.setTick(Fraction::fromTicks(score()->fileDivision(e.readInt())));
         } else if (tag == "BarLine") {
-            BarLine* barLine = new BarLine(score()->dummy()->segment());
+            BarLine* barLine = Factory::createBarLine(score()->dummy()->segment());
             barLine->setTrack(e.track());
             barLine->read(e);
             //
@@ -2508,7 +2508,7 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
             }
             e.readNext();
         } else if (tag == "Beam") {
-            Beam* beam = new Beam(score()->dummy(), score());
+            Beam* beam = Factory::createBeam(score()->dummy(), score());
             beam->setTrack(e.track());
             beam->read(e);
             beam->moveToDummy();
@@ -2521,7 +2521,7 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
             segment->read(e);
         } else if (tag == "Ambitus") {
             segment = getSegment(SegmentType::Ambitus, e.tick());
-            Ambitus* range = new Ambitus(segment);
+            Ambitus* range = Factory::createAmbitus(segment);
             range->read(e);
             range->setParent(segment);                // a parent segment is needed for setTrack() to work
             range->setTrack(trackZeroVoice(e.track()));
@@ -3932,7 +3932,7 @@ void Measure::setEndBarLineType(BarLineType val, int track, bool visible, mu::dr
     BarLine* bl = toBarLine(seg->element(track));
     if (!bl) {
         // no suitable bar line: create a new one
-        bl = new BarLine(seg);
+        bl = Factory::createBarLine(seg);
         bl->setParent(seg);
         bl->setTrack(track);
         Part* part = score()->staff(track / VOICES)->part();
@@ -3964,7 +3964,7 @@ void Measure::barLinesSetSpan(Segment* seg)
                 bl->setSpanTo(staff->barLineTo());
             }
         } else {
-            bl = new BarLine(seg);
+            bl = Factory::createBarLine(seg);
             bl->setParent(seg);
             bl->setTrack(track);
             bl->setGenerated(true);
@@ -4054,7 +4054,7 @@ qreal Measure::createEndBarLines(bool isLastMeasureInSystem)
             BarLine* bl  = toBarLine(seg->element(track));
             Staff* staff = score()->staff(staffIdx);
             if (!bl) {
-                bl = new BarLine(seg);
+                bl = Factory::createBarLine(seg);
                 bl->setParent(seg);
                 bl->setTrack(track);
                 bl->setGenerated(true);
@@ -4390,7 +4390,7 @@ void Measure::addSystemHeader(bool isFirstSystem)
         for (int track = 0; track < score()->ntracks(); track += VOICES) {
             BarLine* bl = toBarLine(s->element(track));
             if (!bl) {
-                bl = new BarLine(s);
+                bl = Factory::createBarLine(s);
                 bl->setTrack(track);
                 bl->setGenerated(true);
                 bl->setParent(s);

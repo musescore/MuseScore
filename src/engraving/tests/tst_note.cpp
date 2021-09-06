@@ -23,6 +23,8 @@
 #include "testing/qtestsuite.h"
 #include "testbase.h"
 
+#include "libmscore/factory.h"
+#include "libmscore/articulation.h"
 #include "libmscore/mscore.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/note.h"
@@ -40,6 +42,7 @@
 static const QString NOTE_DATA_DIR("note_data/");
 
 using namespace Ms;
+using namespace mu::engraving;
 
 //---------------------------------------------------------
 //   TestNote
@@ -366,7 +369,8 @@ void TestNote::grace()
 
     // articulation
     score->startCmd();
-    Articulation* ar = new Articulation(SymId::articAccentAbove, gc);
+    Articulation* ar = Factory::createArticulation(gc);
+    ar->setSymId(SymId::articAccentAbove);
     ar->setParent(gc);
     ar->setTrack(gc->track());
     score->undoAddElement(ar);

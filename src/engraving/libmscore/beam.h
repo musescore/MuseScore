@@ -27,6 +27,10 @@
 #include "durationtype.h"
 #include "property.h"
 
+namespace mu::engraving {
+class Factory;
+}
+
 namespace Ms {
 class ChordRest;
 class MuseScoreView;
@@ -72,6 +76,10 @@ class Beam final : public EngravingItem
     TDuration maxDuration;
     qreal slope             { 0.0 };
 
+    friend class mu::engraving::Factory;
+    Beam(EngravingItem* parent, Ms::Score* score);
+    Beam(const Beam&);
+
     void layout2(std::vector<ChordRest*>, SpannerSegmentType, int frag);
     bool twoBeamedNotes();
     void computeStemLen(const std::vector<ChordRest*>& crl, qreal& py1, int beamLevels);
@@ -88,8 +96,6 @@ public:
     };
     Q_ENUM(Mode);
 
-    Beam(EngravingItem* parent, Ms::Score* score);
-    Beam(const Beam&);
     ~Beam();
 
     // Score Tree functions

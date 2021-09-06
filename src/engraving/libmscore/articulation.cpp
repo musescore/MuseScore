@@ -67,12 +67,6 @@ Articulation::Articulation(ChordRest* parent)
     initElementStyle(&articulationStyle);
 }
 
-Articulation::Articulation(SymId id, ChordRest* parent)
-    : Articulation(parent)
-{
-    setSymId(id);
-}
-
 //---------------------------------------------------------
 //   setSymId
 //---------------------------------------------------------

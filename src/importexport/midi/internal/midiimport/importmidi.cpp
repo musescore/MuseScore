@@ -20,12 +20,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <set>
+
 #include <QMessageBox>
 
 #include "engraving/compat/midi/midifile.h"
 #include "engraving/style/style.h"
 #include "engraving/infrastructure/io/xml.h"
 
+#include "libmscore/factory.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/key.h"
 #include "libmscore/clef.h"
@@ -77,7 +80,7 @@
 #include "importmidi_instrument.h"
 #include "importmidi_chordname.h"
 
-#include <set>
+using namespace mu::engraving;
 
 namespace Ms {
 extern void updateNoteLines(Segment*, int track);
@@ -577,7 +580,7 @@ void MTrack::processPendingNotes(QList<MidiChord>& midiChords,
         if (opers.showStaccato.value(currentTrack)
             && startChordTick == startChordTickFrac               // first chord in tied chord sequence
             && midiChords.begin()->isStaccato()) {
-            Articulation* a = new Articulation(chord);
+            Articulation* a = Factory::createArticulation(chord);
             a->setSymId(SymId::articStaccatoAbove);
             chord->add(a);
         }

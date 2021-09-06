@@ -24,6 +24,7 @@
 
 #include "testbase.h"
 
+#include "libmscore/factory.h"
 #include "libmscore/barline.h"
 #include "libmscore/measure.h"
 #include "libmscore/masterscore.h"
@@ -34,6 +35,7 @@
 static const QString BARLINE_DATA_DIR("barline_data/");
 
 using namespace Ms;
+using namespace mu::engraving;
 
 //---------------------------------------------------------
 //   TestBarline
@@ -368,7 +370,7 @@ void TestBarline::barline06()
 void dropNormalBarline(EngravingItem* e)
 {
     EditData dropData(0);
-    BarLine* barLine = new BarLine(e->score()->dummy()->segment());
+    BarLine* barLine = Factory::createBarLine(e->score()->dummy()->segment());
     barLine->setBarLineType(BarLineType::NORMAL);
     dropData.dropElement = barLine;
 

@@ -41,13 +41,15 @@ public:
     Lasso(Score*);
     virtual Lasso* clone() const override { return new Lasso(*this); }
 
-    virtual void draw(mu::draw::Painter*) const override;
-    virtual bool isEditable() const override { return true; }
-    virtual void editDrag(EditData&) override;
-    virtual void endDrag(EditData&) override {}
+    bool isEmpty() const { return bbox().isEmpty(); }
 
-    virtual QVariant getProperty(Pid propertyId) const override;
-    virtual bool setProperty(Pid propertyId, const QVariant&) override;
+    void draw(mu::draw::Painter*) const override;
+    bool isEditable() const override { return true; }
+    void editDrag(EditData&) override;
+    void endDrag(EditData&) override {}
+
+    QVariant getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const QVariant&) override;
 
     int gripsCount() const override { return 8; }
     Grip initialEditModeGrip() const override { return Grip(7); }

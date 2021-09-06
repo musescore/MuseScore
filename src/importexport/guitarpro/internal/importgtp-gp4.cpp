@@ -22,6 +22,7 @@
 
 #include "importgtp.h"
 
+#include "libmscore/factory.h"
 #include "libmscore/arpeggio.h"
 #include "libmscore/articulation.h"
 #include "libmscore/barline.h"
@@ -63,6 +64,8 @@
 #include "libmscore/tremolobar.h"
 #include "libmscore/tuplet.h"
 #include "libmscore/volta.h"
+
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -140,7 +143,7 @@ int GuitarPro4::readBeatEffects(int track, Segment* segment)
         int strokeup = readUChar();                // up stroke length
         int strokedown = readUChar();                // down stroke length
 
-        Arpeggio* a = new Arpeggio(score->dummy()->chord());
+        Arpeggio* a = Factory::createArpeggio(score->dummy()->chord());
         if (strokeup > 0) {
             a->setArpeggioType(ArpeggioType::UP_STRAIGHT);
         } else if (strokedown > 0) {
@@ -239,7 +242,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
 
     // check if a note is supposed to be accented, and give it the sforzato type
     if (noteBits & NOTE_SFORZATO) {             // 0x40
-        Articulation* art = new Articulation(note->score()->dummy()->chord());
+        Articulation* art = Factory::createArticulation(note->score()->dummy()->chord());
         art->setSymId(SymId::articAccentAbove);
         if (!note->score()->addArticulation(note, art)) {
             delete art;
@@ -373,7 +376,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
         }
         if (modMask2 & EFFECT_STACATTO) {       // staccato
             Chord* chord = note->chord();
-            Articulation* a = new Articulation(chord);
+            Articulation* a = Factory::createArticulation(chord);
             a->setSymId(SymId::articStaccatoAbove);
             chord->add(a);
         }
@@ -420,7 +423,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
             /*int period =*/ readUChar();            // trill length
 
             // add the trill articulation to the note
-            Articulation* art = new Articulation(note->score()->dummy()->chord());
+            Articulation* art = Factory::createArticulation(note->score()->dummy()->chord());
             art->setSymId(SymId::ornamentTrill);
             if (!note->score()->addArticulation(note, art)) {
                 delete art;
