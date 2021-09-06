@@ -315,11 +315,11 @@ void PluginCreator::runClicked()
       msg("  " + tr("Version:") + " " + item->version() + "\n");
       msg("  " + tr("Description:") + " " + item->description() + "\n");
       if (item->requiresScore()) msg("  " + tr("Requires Score\n"));
-      if(MuseScoreCore::mscoreCore->currentScore() == nullptr && item->requiresScore() == true) {
+      if (MuseScoreCore::mscoreCore->currentScore() == nullptr && item->requiresScore() == true) {
             QMessageBox::information(0,
                   tr("MuseScore"),
                   tr("No score open.\n"
-                  "This plugin requires an open score to run.\n"),
+                  "This plugin requires an open score to run."),
                   QMessageBox::Ok, QMessageBox::NoButton);
             delete obj;
             item = nullptr;
