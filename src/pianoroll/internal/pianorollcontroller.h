@@ -47,15 +47,6 @@
 #include "../ipianorollconfiguration.h"
 
 namespace mu::pianoroll {
-//class ms::Chord;
-
-//class NoteBlock
-//{
-//    Ms::Note* m_note;
-//
-//    public:
-//    NoteBlock(Ms::Note* note);
-//};
 
 //----------------------
 

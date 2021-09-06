@@ -616,9 +616,7 @@ QRect PianorollView::boundingRect(Ms::Note* note, Ms::NoteEvent* evt)
         start += evt->ontime() * baseLen / 1000;
     }
 
-//    int x0 = m_wholeNoteWidth * start.numerator() / start.denominator();
     int x0 = wholeNoteToPixelX(start);
-//    int y0 = (127 - pitch) * m_noteHeight;
     int y0 = pitchToPixelY(pitch + 1);
     int width = m_wholeNoteWidth * len.numerator() / len.denominator();
 
@@ -778,6 +776,7 @@ void PianorollView::mouseReleaseEvent(QMouseEvent* event)
         case PianorollTool::CUT:
             cutChord(m_mouseDownPos);
             break;
+
         default:
             break;
         }
