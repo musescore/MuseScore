@@ -101,7 +101,7 @@ Dialog {
                     readOnly: true
 
                     currentText: model.mappingTitle
-                    hint: qsTrc("global", "Waiting...")
+                    hint: qsTrc("global", "Waiting…")
                 }
             }
 

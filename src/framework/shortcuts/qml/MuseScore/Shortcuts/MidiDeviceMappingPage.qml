@@ -26,8 +26,13 @@ import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Shortcuts 1.0
 
+import "internal"
+
 Item {
     id: root
+
+    property NavigationSection navigationSection: null
+    property int navigationOrderStart: 0
 
     function apply() {
         return mappingsModel.apply()
@@ -58,16 +63,17 @@ Item {
     ColumnLayout {
         anchors.fill: parent
 
+        //! NOTE: Added to prevent components clipping when navigating
+        anchors.margins: 2
+
         spacing: 20
 
-        CheckBox {
-            text: qsTrc("shortcuts", "MIDI remote control")
-            font: ui.theme.bodyBoldFont
+        MidiMappingTopPanel {
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 1
 
-            checked: mappingsModel.useRemoteControl
-
-            onClicked:  {
-                mappingsModel.useRemoteControl = !checked
+            onUseRemoteControlChangeRequested: {
+                mappingsModel.useRemoteControl = checked
             }
         }
 
@@ -89,45 +95,35 @@ Item {
 
             model: mappingsModel
 
-            onDoubleClicked: {
+            navigationSection: root.navigationSection
+            navigationOrderStart: root.navigationOrderStart + 2
+
+            onHandleItem: {
                 editMappingDialog.startEditCurrentAction()
             }
         }
 
-        Row {
-            enabled: mappingsModel.useRemoteControl
-
+        MidiMappingBottomPanel {
             Layout.alignment: Qt.AlignRight
 
-            spacing: 8
+            enabled: mappingsModel.useRemoteControl
 
-            FlatButton {
-                enabled: mappingsModel.canEditAction
-                text: qsTrc("shortcuts", "Assign MIDI mapping...")
+            canEditAction: mappingsModel.canEditAction
 
-                onClicked: {
-                    editMappingDialog.startEditCurrentAction()
-                }
+            navigation.section: root.navigationSection
+            //! NOTE: 4 because ShortcutsList have two panels(header and content)
+            navigation.order: root.navigationOrderStart + 4
+
+            onEditActionRequested: {
+                editMappingDialog.startEditCurrentAction()
             }
 
-            FlatButton {
-                width: 100
-
-                text: qsTrc("global", "Clear")
-
-                onClicked: {
-                    mappingsModel.clearSelectedActions()
-                }
+            onClearSelectedActionsRequested: {
+                mappingsModel.clearSelectedActions()
             }
 
-            FlatButton {
-                width: 100
-
-                text: qsTrc("global", "Clear all")
-
-                onClicked: {
-                    mappingsModel.clearAllActions()
-                }
+            onClearAllActionsRequested: {
+                mappingsModel.clearAllActions()
             }
         }
     }

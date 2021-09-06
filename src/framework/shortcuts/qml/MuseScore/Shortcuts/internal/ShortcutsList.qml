@@ -20,24 +20,38 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Controls 2.15
 
-import MuseScore.Preferences 1.0
-import MuseScore.Shortcuts 1.0
+import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
 
-PreferencesPage {
+ValueList {
     id: root
 
-    function apply() {
-        return page.apply()
+    keyRoleName: "title"
+    keyTitle: qsTrc("shortcuts", "action")
+    valueRoleName: "sequence"
+    valueTitle: qsTrc("shortcuts", "shortcut")
+    iconRoleName: "icon"
+    readOnly: true
+
+    property var sourceModel: null
+    property string searchText: ""
+
+    signal startEditCurrentShortcutRequested()
+
+    model: SortFilterProxyModel {
+        sourceModel: root.sourceModel
+
+        filters: [
+            FilterValue {
+                roleName: "searchKey"
+                roleValue: root.searchText
+                compareType: CompareType.Contains
+            }
+        ]
     }
 
-    MidiDeviceMappingPage {
-        id: page
-
-        anchors.fill: parent
-
-        navigationSection: root.navigationSection
-        navigationOrderStart: root.navigationOrderStart
+    onHandleItem: {
+        root.startEditCurrentShortcutRequested()
     }
 }

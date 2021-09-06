@@ -27,13 +27,18 @@ import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Shortcuts 1.0
 
+import "internal"
+
 Item {
     id: root
+
+    property NavigationSection navigationSection: null
+    property int navigationOrderStart: 0
 
     ShortcutsModel {
         id: shortcutsModel
 
-        selection: view.selection
+        selection: shortcutsView.selection
     }
 
     function apply() {
@@ -45,7 +50,7 @@ Item {
     }
 
     QtObject {
-        id: privateProperties
+        id: prv
 
         readonly property int buttonWidth: 105
     }
@@ -67,110 +72,73 @@ Item {
     ColumnLayout {
         anchors.fill: parent
 
+        //! NOTE: Added to prevent components clipping when navigating
+        anchors.margins: 2
+
         spacing: 20
 
-        RowLayout {
+        ShortcutsTopPanel {
+            id: topPanel
+
             Layout.fillWidth: true
             Layout.preferredHeight: childrenRect.height
 
-            FlatButton {
-                Layout.preferredWidth: privateProperties.buttonWidth
+            canEditCurrentShortcut: editShortcutDialog.canEditCurrentShortcut
+            canClearCurrentShortcuts: shortcutsView.hasSelection
 
-                text: qsTrc("shortcuts", "Define...")
-                enabled: editShortcutDialog.canEditCurrentShortcut
+            buttonWidth: prv.buttonWidth
 
-                onClicked: {
-                    editShortcutDialog.startEditCurrentShortcut()
-                }
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 1
+
+            onStartEditCurrentShortcutRequested: {
+                editShortcutDialog.startEditCurrentShortcut()
             }
 
-            FlatButton {
-                Layout.preferredWidth: privateProperties.buttonWidth
-
-                text: qsTrc("shortcuts", "Clear")
-                enabled: view.hasSelection
-
-                onClicked: {
-                    shortcutsModel.clearSelectedShortcuts()
-                }
-            }
-
-            Item { Layout.fillWidth: true }
-
-            SearchField {
-                id: searchField
-
-                Layout.preferredWidth: 160
-
-                hint: qsTrc("shortcuts", "Search shortcut")
+            onClearSelectedShortcutsRequested: {
+                shortcutsModel.clearSelectedShortcuts()
             }
         }
 
-        ValueList {
-            id: view
+        ShortcutsList {
+            id: shortcutsView
 
             Layout.fillWidth: true
             Layout.fillHeight: true
 
-            keyRoleName: "title"
-            keyTitle: qsTrc("shortcuts", "action")
-            valueRoleName: "sequence"
-            valueTitle: qsTrc("shortcuts", "shortcut")
-            iconRoleName: "icon"
-            readOnly: true
+            sourceModel: shortcutsModel
+            searchText: topPanel.searchText
 
-            model: SortFilterProxyModel {
-                sourceModel: shortcutsModel
+            navigationSection: root.navigationSection
+            navigationOrderStart: root.navigationOrderStart + 2
 
-                filters: [
-                    FilterValue {
-                        roleName: "searchKey"
-                        roleValue: searchField.searchText
-                        compareType: CompareType.Contains
-                    }
-                ]
-            }
-
-            onDoubleClicked: {
+            onStartEditCurrentShortcutRequested: {
                 editShortcutDialog.startEditCurrentShortcut()
             }
         }
 
-        RowLayout {
+        ShortcutsBottomPanel {
             Layout.fillWidth: true
             Layout.preferredHeight: childrenRect.height
 
-            FlatButton {
-                Layout.preferredWidth: privateProperties.buttonWidth
+            canResetCurrentShortcut: shortcutsView.hasSelection
 
-                text: qsTrc("shortcuts", "Import")
+            buttonWidth: prv.buttonWidth
 
-                onClicked: {
-                    shortcutsModel.importShortcutsFromFile()
-                }
+            navigation.section: root.navigationSection
+            //! NOTE: 4 because ShortcutsList have two panels(header and content)
+            navigation.order: root.navigationOrderStart + 4
+
+            onImportShortcutsFromFileRequested: {
+                shortcutsModel.importShortcutsFromFile()
             }
 
-            FlatButton {
-                Layout.preferredWidth: privateProperties.buttonWidth
-
-                text: qsTrc("shortcuts", "Export")
-
-                onClicked: {
-                    shortcutsModel.exportShortcutsToFile()
-                }
+            onExportShortcutsToFileRequested: {
+                shortcutsModel.exportShortcutsToFile()
             }
 
-            Item { Layout.fillWidth: true }
-
-            FlatButton {
-                Layout.preferredWidth: privateProperties.buttonWidth
-
-                text: qsTrc("shortcuts", "Reset to default")
-                enabled: view.hasSelection
-
-                onClicked: {
-                    shortcutsModel.resetToDefaultSelectedShortcuts()
-                }
+            onResetToDefaultSelectedShortcuts: {
+                shortcutsModel.resetToDefaultSelectedShortcuts()
             }
         }
     }

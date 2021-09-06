@@ -9,5 +9,10 @@
         <file>data/shortcuts-Mac.xml</file>
         <file>qml/MuseScore/Shortcuts/EditMidiMappingDialog.qml</file>
         <file>qml/MuseScore/Shortcuts/MidiDeviceMappingPage.qml</file>
+        <file>qml/MuseScore/Shortcuts/internal/ShortcutsTopPanel.qml</file>
+        <file>qml/MuseScore/Shortcuts/internal/ShortcutsList.qml</file>
+        <file>qml/MuseScore/Shortcuts/internal/ShortcutsBottomPanel.qml</file>
+        <file>qml/MuseScore/Shortcuts/internal/MidiMappingTopPanel.qml</file>
+        <file>qml/MuseScore/Shortcuts/internal/MidiMappingBottomPanel.qml</file>
     </qresource>
 </RCC>
