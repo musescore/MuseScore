@@ -28,7 +28,6 @@ using namespace mu::pianoroll;
 
 PianorollScrollbar::PianorollScrollbar(QQuickItem* parent)
     : QQuickPaintedItem(parent)
-
 {
     setAcceptedMouseButtons(Qt::AllButtons);
 }
@@ -44,15 +43,16 @@ void PianorollScrollbar::load()
 void PianorollScrollbar::updateSlider()
 {
     double frac = m_viewportSpan / m_displayObjectSpan;
-    if (frac > 0)
+    if (frac > 0) {
         m_center = .5;
-
+    }
 }
 
 void PianorollScrollbar::setDirection(Direction value)
 {
-    if (value == m_direction)
+    if (value == m_direction) {
         return;
+    }
     m_direction = value;
 
     emit directionChanged();
@@ -61,8 +61,9 @@ void PianorollScrollbar::setDirection(Direction value)
 
 void PianorollScrollbar::setCenter(double value)
 {
-    if (value == m_center)
+    if (value == m_center) {
         return;
+    }
     m_center = value;
 
     emit centerChanged();
@@ -75,23 +76,24 @@ void PianorollScrollbar::updateCenter()
 {
     //Clip center to bounds of slider
 
-    if (m_viewportSpan >= m_displayObjectSpan)
-    {
+    if (m_viewportSpan >= m_displayObjectSpan) {
         setCenter(.5);
         return;
     }
 
     double frac = m_viewportSpan / m_displayObjectSpan;
-    if (m_center < frac / 2)
+    if (m_center < frac / 2) {
         setCenter(frac / 2);
-    else if (m_center > 1 - (frac / 2))
+    } else if (m_center > 1 - (frac / 2)) {
         setCenter(1 - (frac / 2));
+    }
 }
 
 void PianorollScrollbar::setViewportSpan(double value)
 {
-    if (value == m_viewportSpan)
+    if (value == m_viewportSpan) {
         return;
+    }
     m_viewportSpan = value;
 
     emit viewportSpanChanged();
@@ -101,8 +103,9 @@ void PianorollScrollbar::setViewportSpan(double value)
 
 void PianorollScrollbar::setDisplayObjectSpan(double value)
 {
-    if (value == m_displayObjectSpan)
+    if (value == m_displayObjectSpan) {
         return;
+    }
     m_displayObjectSpan = value;
 
     emit displayObjectSpanChanged();
@@ -110,52 +113,44 @@ void PianorollScrollbar::setDisplayObjectSpan(double value)
     update();
 }
 
-void PianorollScrollbar::mousePressEvent(QMouseEvent *event)
+void PianorollScrollbar::mousePressEvent(QMouseEvent* event)
 {
     m_dragging = true;
     m_mouseDownPos = event->pos();
     m_centerDragStart = m_center;
 }
 
-void PianorollScrollbar::mouseReleaseEvent(QMouseEvent *event)
+void PianorollScrollbar::mouseReleaseEvent(QMouseEvent* event)
 {
     m_dragging = false;
-
 }
 
-void PianorollScrollbar::mouseMoveEvent(QMouseEvent *event)
+void PianorollScrollbar::mouseMoveEvent(QMouseEvent* event)
 {
-    if (m_dragging)
-    {
+    if (m_dragging) {
         int delta = m_direction == Direction::HORIZONTAL
-                ? event->pos().x() - m_mouseDownPos.x()
-                : event->pos().y() - m_mouseDownPos.y();
+                    ? event->pos().x() - m_mouseDownPos.x()
+                    : event->pos().y() - m_mouseDownPos.y();
         double span = m_direction == Direction::HORIZONTAL ? width() : height();
         setCenter(m_centerDragStart + delta / span);
     }
-
 }
 
 void PianorollScrollbar::paint(QPainter* p)
 {
     p->fillRect(0, 0, width(), height(), m_colorBackground);
 
-    if (m_direction == Direction::HORIZONTAL)
-    {
+    if (m_direction == Direction::HORIZONTAL) {
         double span = width() * m_viewportSpan / m_displayObjectSpan;
         QRect bounds(m_center * width() - span / 2, 0, span, height());
         p->fillRect(bounds, m_colorSlider);
         p->setPen(m_colorSlider.darker(100));
         p->drawRect(bounds);
-    }
-    else
-    {
+    } else {
         double span = height() * m_viewportSpan / m_displayObjectSpan;
         QRect bounds(0, m_center * height() - span / 2, width(), span);
         p->fillRect(bounds, m_colorSlider);
         p->setPen(m_colorSlider.darker(100));
         p->drawRect(bounds);
     }
-
-
 }

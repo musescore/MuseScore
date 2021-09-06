@@ -54,7 +54,6 @@ static const KeyShape keyShapes[] {
     { true, -.5, 1 },
 };
 
-
 PianorollKeyboard::PianorollKeyboard(QQuickItem* parent)
     : QQuickPaintedItem(parent)
 {
@@ -72,8 +71,7 @@ void PianorollKeyboard::load()
 void PianorollKeyboard::onNotationChanged()
 {
     auto notation = globalContext()->currentNotation();
-    if (notation)
-    {
+    if (notation) {
         notation->interaction()->selectionChanged().onNotify(this, [this]() {
             onSelectionChanged();
         });
@@ -98,8 +96,9 @@ void PianorollKeyboard::onCurrentNotationChanged()
 
 void PianorollKeyboard::setNoteHeight(double value)
 {
-    if (value == m_noteHeight)
+    if (value == m_noteHeight) {
         return;
+    }
     m_noteHeight = value;
     updateBoundingSize();
 
@@ -108,8 +107,9 @@ void PianorollKeyboard::setNoteHeight(double value)
 
 void PianorollKeyboard::setCenterY(double value)
 {
-    if (value == m_centerY)
+    if (value == m_centerY) {
         return;
+    }
     m_centerY = value;
     update();
 
@@ -118,8 +118,9 @@ void PianorollKeyboard::setCenterY(double value)
 
 void PianorollKeyboard::setDisplayObjectHeight(double value)
 {
-    if (value == m_displayObjectHeight)
+    if (value == m_displayObjectHeight) {
         return;
+    }
     m_displayObjectHeight = value;
     updateBoundingSize();
 
@@ -143,7 +144,6 @@ double PianorollKeyboard::pixelYToPitch(int pixY) const
     return 128 - ((pixY + m_centerY * m_displayObjectHeight - height() / 2) / m_noteHeight);
 }
 
-
 void PianorollKeyboard::paint(QPainter* p)
 {
     p->fillRect(0, 0, width(), height(), m_colorBackground);
@@ -158,19 +158,18 @@ void PianorollKeyboard::paint(QPainter* p)
     std::vector<Ms::EngravingItem*> selectedElements = notation->interaction()->selection()->elements();
     std::vector<int> selectedStaves;
     int activeStaff = -1;
-    for (Ms::EngravingItem* e: selectedElements)
-    {
+    for (Ms::EngravingItem* e: selectedElements) {
         int idx = e->staffIdx();
         qDebug() << "ele idx " << idx;
         activeStaff = idx;
-        if (std::find(selectedStaves.begin(), selectedStaves.end(), idx) == selectedStaves.end())
-        {
+        if (std::find(selectedStaves.begin(), selectedStaves.end(), idx) == selectedStaves.end()) {
             selectedStaves.push_back(idx);
         }
     }
 
-    if (activeStaff == -1)
+    if (activeStaff == -1) {
         activeStaff = 0;
+    }
 //        return;
     Ms::Staff* staff = score->staff(activeStaff);
     Ms::Part* part = staff->part();
@@ -187,26 +186,21 @@ void PianorollKeyboard::paint(QPainter* p)
     QFont font("FreeSans", fontSize);
     p->setFont(font);
 
-    if (ds)
-    {
+    if (ds) {
         Ms::Interval transp = part->instrument()->transpose();
 
         //MIDI notes span [0, 127] and map to pitches with MIDI pitch 0 being the note C-1
 
         //Colored stripes
-        for (int pitch = 0; pitch < PianorollView::NUM_PITCHES; ++pitch)
-        {
+        for (int pitch = 0; pitch < PianorollView::NUM_PITCHES; ++pitch) {
             double y = pitchToPixelY(pitch + 1);
 
             int degree = (pitch - transp.chromatic + 60) % 12;
             const BarPattern& pat = PianorollView::barPatterns[0];
 
-            if (!pat.isWhiteKey[degree])
-            {
+            if (!pat.isWhiteKey[degree]) {
                 p->fillRect(0, y, width(), m_noteHeight, pitch == m_curKeyPressed ? m_colorDrumHighlight : m_colorDrumBlack);
-            }
-            else
-            {
+            } else {
                 p->fillRect(0, y, width(), m_noteHeight, pitch == m_curKeyPressed ? m_colorDrumHighlight : m_colorDrumWhite);
             }
 
@@ -220,24 +214,18 @@ void PianorollKeyboard::paint(QPainter* p)
 
         //Bounding lines
         p->setPen(m_colorGridLines);
-        for (int pitch = 0; pitch <= PianorollView::NUM_PITCHES; ++pitch)
-        {
+        for (int pitch = 0; pitch <= PianorollView::NUM_PITCHES; ++pitch) {
             double y = pitchToPixelY(pitch);
             p->drawLine(QLineF(0, y, width(), y));
         }
-
-    }
-    else
-    {
+    } else {
         p->setPen(m_colorGridLines);
 
         //White keys
-        for (int pitch = 0; pitch < PianorollView::NUM_PITCHES; ++pitch)
-        {
+        for (int pitch = 0; pitch < PianorollView::NUM_PITCHES; ++pitch) {
             int degree = (pitch - transp.chromatic + 60) % 12;
             const KeyShape& shape = keyShapes[degree];
-            if (shape.white)
-            {
+            if (shape.white) {
                 double y0 = pitchToPixelY(pitch + shape.marginTop);
                 double y1 = pitchToPixelY(pitch + shape.marginBottom);
 
@@ -246,8 +234,7 @@ void PianorollKeyboard::paint(QPainter* p)
 //                p->drawLine(0, y0, width(), y0);
                 p->drawRect(bounds);
 
-                if (degree == 0 && font.pointSize() + 2 < bounds.height())
-                {
+                if (degree == 0 && font.pointSize() + 2 < bounds.height()) {
                     int octave = (pitch - transp.chromatic) / 12 - 1;
                     QString text = "C" + QString::number(octave);
                     p->drawText(bounds, Qt::AlignBottom | Qt::AlignRight, text);
@@ -256,66 +243,59 @@ void PianorollKeyboard::paint(QPainter* p)
         }
 
         //Black keys
-        for (int pitch = 0; pitch < PianorollView::NUM_PITCHES; ++pitch)
-        {
+        for (int pitch = 0; pitch < PianorollView::NUM_PITCHES; ++pitch) {
             int degree = (pitch - transp.chromatic + 60) % 12;
             const KeyShape& shape = keyShapes[degree];
-            if (!shape.white)
-            {
+            if (!shape.white) {
                 double y0 = pitchToPixelY(pitch + shape.marginTop);
                 double y1 = pitchToPixelY(pitch + shape.marginBottom);
 
                 p->fillRect(0, y0, width() * .6, y1 - y0, pitch == m_curKeyPressed ? m_colorKeyHighlight : m_colorKeyBlack);
                 p->drawRect(0, y0, width() * .6, y1 - y0);
             }
-
         }
-
     }
 }
-
 
 void PianorollKeyboard::mousePressEvent(QMouseEvent* event)
 {
     int pitch = pixelYToPitch(event->pos().y());
 
-    if (pitch < 0 || pitch > 127)
+    if (pitch < 0 || pitch > 127) {
         pitch = -1;
+    }
 
     m_curKeyPressed = pitch;
 
     uint modifiers = QGuiApplication::keyboardModifiers();
     bool bnCtrl = modifiers & Qt::ControlModifier;
-    if (bnCtrl)
-    {
+    if (bnCtrl) {
         //        emit pitchHighlightToggled(pitch);
         bool highlight = controller()->isPitchHighlight(pitch);
         controller()->setPitchHighlight(pitch, !highlight);
-    }
-    else
+    } else {
         emit keyPressed(pitch);
+    }
 
     update();
 }
 
-
 void PianorollKeyboard::mouseReleaseEvent(QMouseEvent*)
 {
-    if (m_curKeyPressed != -1)
-    {
+    if (m_curKeyPressed != -1) {
         emit keyReleased(m_curKeyPressed);
         m_curKeyPressed = -1;
         update();
     }
 }
 
-
 void PianorollKeyboard::mouseMoveEvent(QMouseEvent* event)
 {
     int pitch = pixelYToPitch(event->pos().y());
 
-    if (pitch < 0 || pitch > 127)
+    if (pitch < 0 || pitch > 127) {
         pitch = -1;
+    }
 
     if (pitch != m_curPitch) {
         m_curPitch = pitch;
@@ -334,8 +314,7 @@ void PianorollKeyboard::mouseMoveEvent(QMouseEvent* event)
         //Send event
 //        emit pitchChanged(m_curPitch);
 
-        if ((m_curKeyPressed != -1) && (m_curKeyPressed != pitch))
-        {
+        if ((m_curKeyPressed != -1) && (m_curKeyPressed != pitch)) {
             emit keyReleased(m_curKeyPressed);
             m_curKeyPressed = pitch;
             emit keyPressed(m_curKeyPressed);

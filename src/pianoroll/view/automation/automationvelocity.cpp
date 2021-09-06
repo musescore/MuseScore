@@ -6,7 +6,6 @@ using namespace mu::pianoroll;
 
 AutomationVelocity::AutomationVelocity()
 {
-
 }
 
 PianorollAutomationEditor::AutomationType AutomationVelocity::type()
@@ -29,8 +28,7 @@ double AutomationVelocity::value(Ms::Staff* staff, NoteEventBlock& block)
     Ms::Note* note = block.note;
 
     //Change velocity to equivalent in new metric
-    switch (note->veloType())
-    {
+    switch (note->veloType()) {
     case Ms::Note::ValueType::USER_VAL:
     {
         int dynamicsVel = staff->velocities().val(note->tick());
@@ -49,8 +47,7 @@ void AutomationVelocity::setValue(Ms::Staff* staff, NoteEventBlock& block, doubl
 
     score->startCmd();
 
-    switch (note->veloType())
-    {
+    switch (note->veloType()) {
     case Ms::Note::ValueType::USER_VAL:
     {
         int dynamicsVel = staff->velocities().val(note->tick());
@@ -59,13 +56,13 @@ void AutomationVelocity::setValue(Ms::Staff* staff, NoteEventBlock& block, doubl
         score->undo(new Ms::ChangeVelocity(note, Ms::Note::ValueType::USER_VAL, newVelocity));
 
         break;
-        }
+    }
     default:
     case Ms::Note::ValueType::OFFSET_VAL:
     {
         score->undo(new Ms::ChangeVelocity(note, Ms::Note::ValueType::OFFSET_VAL, value));
         break;
-        }
+    }
     }
 
     score->endCmd();

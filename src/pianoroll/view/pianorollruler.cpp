@@ -28,78 +28,76 @@
 
 using namespace mu::pianoroll;
 
-
 QPixmap* PianorollRuler::markIcon[3];
 
 static const char* rmark_xpm[]={
-      "18 18 2 1",
-      "# c #0000ff",
-      ". c None",
-      "..................",
-      "..................",
-      "..................",
-      "..................",
-      "..................",
-      "..................",
-      "..................",
-      "........##########",
-      "........#########.",
-      "........########..",
-      "........#######...",
-      "........######....",
-      "........#####.....",
-      "........####......",
-      "........###.......",
-      "........##........",
-      "........##........",
-      "........##........"};
+    "18 18 2 1",
+    "# c #0000ff",
+    ". c None",
+    "..................",
+    "..................",
+    "..................",
+    "..................",
+    "..................",
+    "..................",
+    "..................",
+    "........##########",
+    "........#########.",
+    "........########..",
+    "........#######...",
+    "........######....",
+    "........#####.....",
+    "........####......",
+    "........###.......",
+    "........##........",
+    "........##........",
+    "........##........" };
 
 static const char* lmark_xpm[]={
-      "18 18 2 1",
-      "# c #0000ff",
-      ". c None",
-      "..................",
-      "..................",
-      "..................",
-      "..................",
-      "..................",
-      "..................",
-      "..................",
-      "##########........",
-      ".#########........",
-      "..########........",
-      "...#######........",
-      "....######........",
-      ".....#####........",
-      "......####........",
-      ".......###........",
-      "........##........",
-      "........##........",
-      "........##........"};
+    "18 18 2 1",
+    "# c #0000ff",
+    ". c None",
+    "..................",
+    "..................",
+    "..................",
+    "..................",
+    "..................",
+    "..................",
+    "..................",
+    "##########........",
+    ".#########........",
+    "..########........",
+    "...#######........",
+    "....######........",
+    ".....#####........",
+    "......####........",
+    ".......###........",
+    "........##........",
+    "........##........",
+    "........##........" };
 
 static const char* cmark_xpm[]={
-      "18 18 2 1",
-      "# c #ff0000",
-      ". c None",
-      "..................",
-      "..................",
-      "..................",
-      "..................",
-      "..................",
-      "..................",
-      "..................",
-      "##################",
-      ".################.",
-      "..##############..",
-      "...############...",
-      "....##########....",
-      ".....########.....",
-      "......######......",
-      ".......####.......",
-      "........##........",
-      "........##........",
-      "........##........"};
-
+    "18 18 2 1",
+    "# c #ff0000",
+    ". c None",
+    "..................",
+    "..................",
+    "..................",
+    "..................",
+    "..................",
+    "..................",
+    "..................",
+    "##################",
+    ".################.",
+    "..##############..",
+    "...############...",
+    "....##########....",
+    ".....########.....",
+    "......######......",
+    ".......####.......",
+    "........##........",
+    "........##........",
+    "........##........" };
 
 PianorollRuler::PianorollRuler(QQuickItem* parent)
     : QQuickPaintedItem(parent)
@@ -109,14 +107,12 @@ PianorollRuler::PianorollRuler(QQuickItem* parent)
     m_font2.setPixelSize(14);
     m_font1.setPixelSize(10);
 
-    if (markIcon[0] == 0)
-    {
+    if (markIcon[0] == 0) {
         markIcon[0] = new QPixmap(cmark_xpm);
         markIcon[1] = new QPixmap(lmark_xpm);
         markIcon[2] = new QPixmap(rmark_xpm);
     }
 }
-
 
 void PianorollRuler::load()
 {
@@ -125,7 +121,9 @@ void PianorollRuler::load()
         onNotationChanged();
     });
 
-    playback()->player()->playbackPositionMsecs().onReceive(this, [this](audio::TrackSequenceId currentTrackSequence, const audio::msecs_t newPosMsecs) {
+    playback()->player()->playbackPositionMsecs().onReceive(this,
+                                                            [this](audio::TrackSequenceId currentTrackSequence,
+                                                                   const audio::msecs_t newPosMsecs) {
         int tick = score()->utime2utick(newPosMsecs / 1000.);
         setPlaybackPosition(Ms::Fraction::fromTicks(tick));
     });
@@ -134,8 +132,7 @@ void PianorollRuler::load()
 void PianorollRuler::onNotationChanged()
 {
     auto notation = globalContext()->currentNotation();
-    if (notation)
-    {
+    if (notation) {
         notation->notationChanged().onNotify(this, [this]() {
             onCurrentNotationChanged();
         });
@@ -152,8 +149,7 @@ void PianorollRuler::onCurrentNotationChanged()
 Ms::Score* PianorollRuler::score()
 {
     notation::INotationPtr notation = globalContext()->currentNotation();
-    if (!notation)
-    {
+    if (!notation) {
         return nullptr;
     }
 
@@ -164,8 +160,9 @@ Ms::Score* PianorollRuler::score()
 
 void PianorollRuler::setPlaybackPosition(Ms::Fraction value)
 {
-    if (value == m_playbackPosition)
+    if (value == m_playbackPosition) {
         return;
+    }
     m_playbackPosition = value;
     update();
 
@@ -174,8 +171,9 @@ void PianorollRuler::setPlaybackPosition(Ms::Fraction value)
 
 void PianorollRuler::setWholeNoteWidth(double value)
 {
-    if (value == m_wholeNoteWidth)
+    if (value == m_wholeNoteWidth) {
         return;
+    }
     m_wholeNoteWidth = value;
     updateBoundingSize();
 
@@ -184,8 +182,9 @@ void PianorollRuler::setWholeNoteWidth(double value)
 
 void PianorollRuler::setCenterX(double value)
 {
-    if (value == m_centerX)
+    if (value == m_centerX) {
         return;
+    }
     m_centerX = value;
     update();
 
@@ -194,8 +193,9 @@ void PianorollRuler::setCenterX(double value)
 
 void PianorollRuler::setDisplayObjectWidth(double value)
 {
-    if (value == m_displayObjectWidth)
+    if (value == m_displayObjectWidth) {
         return;
+    }
     m_displayObjectWidth = value;
     updateBoundingSize();
 
@@ -226,9 +226,9 @@ int PianorollRuler::wholeNoteToPixelX(double tick) const
 
 double PianorollRuler::pixelXToWholeNote(int pixX) const
 {
-
     return (pixX + m_centerX * m_displayObjectWidth - width() / 2) / m_wholeNoteWidth;
 }
+
 void PianorollRuler::mousePressEvent(QMouseEvent* event)
 {
     double wholeNote = pixelXToWholeNote(event->pos().x());
@@ -267,15 +267,13 @@ void PianorollRuler::paint(QPainter* p)
     int lastDrawPos = -1;
     int measureIndex = 0;
 
-    for (Ms::MeasureBase* m = score->first(); m; m = m->next())
-    {
+    for (Ms::MeasureBase* m = score->first(); m; m = m->next()) {
         measureIndex++;
         Ms::Fraction start = m->tick();  //fraction representing number of whole notes since start of score.  Expressed in terms of the note getting the beat in this bar
 
         int pos = wholeNoteToPixelX(start);
 
-        if (lastDrawPos == -1 || pos - lastDrawPos >= minGap)
-        {
+        if (lastDrawPos == -1 || pos - lastDrawPos >= minGap) {
             lastDrawPos = pos;
 
             p->setPen(penLineMajor);
@@ -297,5 +295,4 @@ void PianorollRuler::paint(QPainter* p)
         QPixmap* pm = markIcon[0];
         p->drawPixmap(xp - pm->width() / 2, height() - pm->height(), *pm);
     }
-
 }

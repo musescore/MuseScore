@@ -33,8 +33,6 @@
 #include "audio/iplayback.h"
 
 namespace mu::pianoroll {
-
-
 enum class NoteSelectType
 {
     REPLACE = 0,
@@ -72,7 +70,9 @@ class PianorollView : public QQuickPaintedItem, public async::Asyncable
     Q_OBJECT
 
 public:
-    enum class PianorollTool : char { SELECT, ADD, CUT, ERASE };
+    enum class PianorollTool : char {
+        SELECT, ADD, CUT, ERASE
+    };
     Q_ENUM(PianorollTool)
 
     static const BarPattern barPatterns[];
@@ -99,7 +99,6 @@ public:
     PianorollView(QQuickItem* parent = nullptr);
 
     Q_INVOKABLE void load();
-
 
     double wholeNoteWidth() const { return m_wholeNoteWidth; }
     void setWholeNoteWidth(double value);
@@ -152,7 +151,6 @@ signals:
     void displayObjectHeightChanged();
     void playbackPositionChanged();
 
-
 private:
     void onNotationChanged();
     void onCurrentNotationChanged();
@@ -191,13 +189,12 @@ private:
 
     Ms::Score* score();
     Ms::Staff* activeStaff();
-    
+
     notation::INotationPtr m_notation;
 
     QList<NoteBlock*> m_noteList;
     std::vector<int> m_selectedStaves;
     int m_activeStaff;
-
 
     double m_centerX = 0;  //fraction of note grid camera is focused on
     double m_centerY = 0;  //fraction of note grid camera is focused on
@@ -211,7 +208,6 @@ private:
     int m_subdivision = 0;
     PianorollTool m_tool = PianorollTool::SELECT;
     int m_barPattern = 0;
-
 
     int m_editNoteVoice = 0;  //Voice to use when adding notes
     Ms::Fraction m_editNoteLength = Ms::Fraction(1, 4);  //Length of note used when adding notes
@@ -247,9 +243,6 @@ private:
     QColor m_colorNoteDrag = QColor(0xffbb33);
     QColor m_colorText = QColor(0x111111);
     QColor m_colorTie = QColor(0xff0000);
-
-
-
 };
 }
 

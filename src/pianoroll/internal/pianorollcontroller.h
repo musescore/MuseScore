@@ -47,7 +47,6 @@
 #include "../ipianorollconfiguration.h"
 
 namespace mu::pianoroll {
-
 //class ms::Chord;
 
 //class NoteBlock
@@ -79,7 +78,6 @@ class PianorollController : public QObject, public IPianorollController, public 
 //    INJECT(pianoroll, notation::INotationConfiguration, notationConfiguration)
     INJECT(pianoroll, audio::IPlayback, playback)
 
-
     Q_PROPERTY(double xZoom READ xZoom WRITE setXZoom NOTIFY xZoomChanged)
     Q_PROPERTY(int noteHeight READ noteHeight WRITE setNoteHeight NOTIFY noteHeightChanged)
 
@@ -90,7 +88,6 @@ public:
 
     int getNotes() const;
 
-
     async::Notification noteLayoutChanged() const override;
 
     double xZoom() const { return m_xZoom; }
@@ -98,7 +95,7 @@ public:
     int noteHeight() const { return m_noteHeight; }
     void setNoteHeight(int value);
 
-    int widthInTicks() const { return m_widthInTicks;  }
+    int widthInTicks() const { return m_widthInTicks; }
     Ms::Fraction widthInBeats();
 
     async::Notification pitchHighlightChanged() const override;
@@ -120,10 +117,8 @@ private:
     void buildNoteBlocks();
     void addChord(Ms::Chord* chrd, int voice);
 
-
     Ms::Measure* lastMeasure();
     Ms::Score* score();
-
 
     bool m_pitchHighlight[128];
 

@@ -51,7 +51,6 @@ using namespace mu::audio;
 using namespace mu::actions;
 //using namespace mu::Ms;
 
-
 //NoteBlock::NoteBlock(Note* note):
 //    m_note(note)
 //{
@@ -65,7 +64,6 @@ void PianorollController::init()
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         onNotationChanged();
     });
-
 }
 
 int PianorollController::getNotes() const
@@ -95,7 +93,6 @@ Ms::Score* PianorollController::score()
     return score;
 }
 
-
 Notification PianorollController::noteLayoutChanged() const
 {
     return m_noteLayoutChanged;
@@ -118,8 +115,7 @@ void PianorollController::onSelectionChanged()
 void PianorollController::onNotationChanged()
 {
     auto notation = globalContext()->currentNotation();
-    if (notation)
-    {
+    if (notation) {
         notation->interaction()->selectionChanged().onNotify(this, [this]() {
             onSelectionChanged();
         });
@@ -148,19 +144,20 @@ void PianorollController::onCurrentNotationChanged()
     qDebug() << "notationChanged";
 }
 
-
 void PianorollController::setXZoom(double value)
 {
-    if (value == m_xZoom)
+    if (value == m_xZoom) {
         return;
+    }
     m_xZoom = value;
     emit xZoomChanged();
 }
 
 void PianorollController::setNoteHeight(int value)
 {
-    if (value == m_noteHeight)
+    if (value == m_noteHeight) {
         return;
+    }
     m_noteHeight = value;
     emit noteHeightChanged();
 }
@@ -195,7 +192,6 @@ void PianorollController::buildNoteBlocks()
 {
     //m_notes.clear();
 
-
     //notation::INotationPtr notation = globalContext()->currentNotation();
     //if (!notation) {
     //    return;
@@ -222,8 +218,9 @@ void PianorollController::buildNoteBlocks()
 
 void PianorollController::setPitchHighlight(int pitch, bool value)
 {
-    if (m_pitchHighlight[pitch] == value)
+    if (m_pitchHighlight[pitch] == value) {
         return;
+    }
 
     m_pitchHighlight[pitch] = value;
     m_pitchHighlightChanged.notify();
