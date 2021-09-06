@@ -25,6 +25,8 @@ Loader {
     id: loader
 
     signal handleMenuItem(string itemId)
+    signal opened()
+    signal closed()
 
     property alias menu: loader.item
     property var menuAnchorItem: null
@@ -42,6 +44,7 @@ Loader {
 
         function unloadMenu() {
             loader.active = false
+            Qt.callLater(loader.closed)
         }
     }
 
@@ -52,7 +55,7 @@ Loader {
 
         onHandleMenuItem: {
             itemMenu.close()
-            Qt.callLater(loader.handleMenuItem, itemId)
+            loader.handleMenuItem(itemId)
         }
 
         onClosed: {
@@ -78,6 +81,8 @@ Loader {
 
         update(model, x, y)
         menu.open()
+
+        Qt.callLater(loader.opened)
     }
 
     function toggleOpened(model, x = 0, y = 0) {
