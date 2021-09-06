@@ -42,11 +42,12 @@ ListItemBlank {
     property real sideMargin: 0
     property real valueItemWidth: 126
 
-    width: ListView.view.width
     height: 34
 
     normalStateColor: (index % 2 == 0) ? ui.theme.backgroundSecondaryColor
                                        : ui.theme.backgroundPrimaryColor
+
+    navigation.accessible.name: titleLabel.text + ": " + (Boolean(loader.item) ? loader.item.accessibleName : "")
 
     QtObject {
         id: privateProperties
@@ -90,6 +91,7 @@ ListItemBlank {
             }
 
             StyledTextLabel {
+                id: titleLabel
                 text: root.item[keyRoleName]
                 horizontalAlignment: Text.AlignLeft
             }
@@ -144,6 +146,12 @@ ListItemBlank {
             property string val
             signal changed(string newVal)
 
+            property string accessibleName: navigation.accessible.name
+
+            navigation.panel: root.navigation.panel
+            navigation.row: root.navigation.row
+            navigation.column: 1
+
             currentText: val
 
             onCurrentTextEdited: {
@@ -160,6 +168,12 @@ ListItemBlank {
             property color val
             signal changed(color newVal)
 
+            property string accessibleName: navigation.accessible.name
+
+            navigation.panel: root.navigation.panel
+            navigation.row: root.navigation.row
+            navigation.column: 1
+
             color: val
 
             onNewColorSelected: {
@@ -175,6 +189,12 @@ ListItemBlank {
 
             property int val
             signal changed(int newVal)
+
+            property string accessibleName: navigation.accessible.name
+
+            navigation.panel: root.navigation.panel
+            navigation.row: root.navigation.row
+            navigation.column: 1
 
             currentValue: val
 
@@ -195,6 +215,12 @@ ListItemBlank {
             property double val
             signal changed(double newVal)
 
+            property string accessibleName: navigation.accessible.name
+
+            navigation.panel: root.navigation.panel
+            navigation.row: root.navigation.row
+            navigation.column: 1
+
             currentValue: val
             step: 1.0
 
@@ -212,6 +238,12 @@ ListItemBlank {
             property bool val
             signal changed(bool newVal)
 
+            navigation.panel: root.navigation.panel
+            navigation.row: root.navigation.row
+            navigation.column: 1
+
+            property string accessibleName: checked ? qsTrc("uicomponents", "checked") : qsTrc("uicomponents", "unchecked")
+
             checked: val ? true : false
             onClicked: {
                 boolControl.changed(!boolControl.checked)
@@ -225,6 +257,8 @@ ListItemBlank {
         StyledTextLabel {
             property var val
             signal changed(var stub)
+
+            property string accessibleName: text
 
             text: val
             horizontalAlignment: Text.AlignLeft

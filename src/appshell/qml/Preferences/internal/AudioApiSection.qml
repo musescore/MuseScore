@@ -43,7 +43,7 @@ BaseSection {
             id: apiComboBox
 
             title: qsTrc("appshell", "Audio API:")
-            titleWidth: root.firstColumnWidth
+            titleWidth: root.columnWidth
 
             navigation.name: "AudioApiBox"
             navigation.panel: root.navigation

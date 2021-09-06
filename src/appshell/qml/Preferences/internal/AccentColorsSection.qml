@@ -74,9 +74,12 @@ Row {
 
             checked: view.currentIndex === model.index
 
+            property color accentColor: modelData
+
             navigation.name: "AccentColourButton"
             navigation.panel: root.navigation
             navigation.column: model.index
+            navigation.accessible.name: Utils.colorToString(accentColor)
 
             onClicked: {
                 root.accentColorChangeRequested(model.index)
@@ -104,7 +107,7 @@ Row {
                     border.color: ui.theme.strokeColor
                     border.width: 1
 
-                    color: modelData
+                    color: button.accentColor
                 }
             }
 

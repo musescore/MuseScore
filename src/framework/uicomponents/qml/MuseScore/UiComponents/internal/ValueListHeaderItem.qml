@@ -32,12 +32,39 @@ Item {
     property bool isSorterEnabled: false
     property int sortOrder: Qt.AscendingOrder
 
+    property alias navigation: navCtrl
+
     signal clicked()
+
+    NavigationControl {
+        id: navCtrl
+        name: root.objectName !== "" ? root.objectName : "ValueListHeaderItem"
+        enabled: root.enabled && root.visible
+
+        accessible.role: MUAccessible.Button
+        accessible.name: {
+            var text = root.headerTitle
+            if (root.isSorterEnabled) {
+                var sortOrderName = root.sortOrder === Qt.AscendingOrder ? qsTrc("uicomponents", "ascending") : qsTrc("uicomponents", "descending")
+                text += " " + qsTrc("uicomponents", "sort ") + sortOrderName
+            } else {
+                text += qsTrc("uicomponents", "sort default")
+            }
+
+            return text
+        }
+        accessible.visualItem: root
+
+        onTriggered: {
+            root.clicked()
+        }
+    }
 
     Row {
         id: row
 
         anchors.fill: parent
+
         spacing: root.spacing
 
         StyledTextLabel {
@@ -60,6 +87,13 @@ Item {
 
             opacity: ui.theme.buttonOpacityNormal
         }
+    }
+
+    NavigationFocusBorder {
+        anchors.leftMargin: -4
+        anchors.rightMargin: -4
+
+        navigationCtrl: navCtrl
     }
 
     MouseArea {

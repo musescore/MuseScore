@@ -22,42 +22,40 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.12
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
-Row {
+RowLayout {
     id: root
 
-    property alias title: titleLabel.text
-    property alias titleWidth: titleLabel.width
+    property alias useRemoteControl: remoteControlCheckBox.checked
 
-    property alias currentIndex: comboBox.currentIndex
-    property alias currentValue: comboBox.currentValue
-    property alias model: comboBox.model
-    property alias control: comboBox
+    signal useRemoteControlChangeRequested(bool checked)
 
-    property alias navigation: comboBox.navigation
+    property NavigationPanel navigation: NavigationPanel {
+        name: "MidiMappingTopPanel"
+        direction: NavigationPanel.Horizontal
+        accessible.name: qsTrc("shortcuts", "Midi mapping top panel")
+        enabled: root.visible
 
-    signal valueEdited(var newValue)
-
-    spacing: 0
-
-    StyledTextLabel {
-        id: titleLabel
-
-        anchors.verticalCenter: parent.verticalCenter
-
-        horizontalAlignment: Qt.AlignLeft
+        onActiveChanged: {
+            if (active) {
+                root.forceActiveFocus()
+            }
+        }
     }
 
-    Dropdown {
-        id: comboBox
+    CheckBox {
+        id: remoteControlCheckBox
+        text: qsTrc("shortcuts", "MIDI remote control")
+        font: ui.theme.bodyBoldFont
 
-        width: 210
+        navigation.name: "RemoteControlCheckBox"
+        navigation.panel: root.navigation
+        navigation.column: 0
 
-        navigation.accessible.name: root.title + " " + currentText
-
-        onCurrentValueChanged: {
-            root.valueEdited(comboBox.currentValue)
+        onClicked:  {
+            root.useRemoteControlChangeRequested(!checked)
         }
     }
 }

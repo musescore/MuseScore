@@ -27,6 +27,8 @@ import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Preferences 1.0
 
+import "internal"
+
 PreferencesPage {
     id: root
 
@@ -42,28 +44,17 @@ PreferencesPage {
         anchors.fill: parent
         spacing: 20
 
-        Item {
+        AdvancedTopSection {
+            id: topSection
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignTop
             Layout.preferredHeight: 30
 
-            FlatButton {
-                anchors.left: parent.left
-                anchors.verticalCenter: parent.verticalCenter
-                text: qsTrc("appshell", "Reset to default")
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 1
 
-                onClicked: {
-                    preferencesModel.resetToDefault()
-                }
-            }
-
-            SearchField {
-                id: searchField
-                anchors.right: parent.right
-                anchors.verticalCenter: parent.verticalCenter
-                width: 160
-
-                hint: qsTrc("appshell", "Search advanced")
+            onResetToDefaultRequested: {
+                preferencesModel.resetToDefault()
             }
         }
 
@@ -77,13 +68,16 @@ PreferencesPage {
             valueTitle: qsTrc("appshell", "Value")
             valueTypeRole: "typeRole"
 
+            navigationSection: root.navigationSection
+            navigationOrderStart: root.navigationOrderStart + 2
+
             model: SortFilterProxyModel {
                 sourceModel: preferencesModel
 
                 filters: [
                     FilterValue {
                         roleName: "keyRole"
-                        roleValue: searchField.searchText
+                        roleValue: topSection.searchText
                         compareType: CompareType.Contains
                     }
                 ]
