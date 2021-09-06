@@ -304,13 +304,13 @@ QVariant AbstractInspectorModel::valueToElementUnits(const Ms::Pid& pid, const Q
 {
     switch (Ms::propertyType(pid)) {
     case Ms::P_TYPE::POINT_SP:
-        return value.toPointF() * element->spatium();
+        return value.value<PointF>() * element->spatium();
 
     case Ms::P_TYPE::POINT_SP_MM: {
         if (element->sizeIsSpatiumDependent()) {
-            return value.toPointF() * element->spatium();
+            return value.value<PointF>() * element->spatium();
         } else {
-            return value.toPointF() * Ms::DPMM;
+            return value.value<PointF>() * Ms::DPMM;
         }
     }
 
@@ -324,10 +324,10 @@ QVariant AbstractInspectorModel::valueToElementUnits(const Ms::Pid& pid, const Q
         return value.toInt() - 1;
 
     case Ms::P_TYPE::POINT_MM:
-        return value.toPointF() * Ms::DPMM;
+        return value.value<PointF>() * Ms::DPMM;
 
     case Ms::P_TYPE::SIZE_MM:
-        return value.toSizeF() * Ms::DPMM;
+        return value.value<SizeF>() * Ms::DPMM;
 
     case Ms::P_TYPE::DIRECTION:
         return static_cast<int>(value.value<Ms::Direction>());
@@ -355,13 +355,13 @@ QVariant AbstractInspectorModel::valueFromElementUnits(const Ms::Pid& pid, const
 {
     switch (Ms::propertyType(pid)) {
     case Ms::P_TYPE::POINT_SP:
-        return value.toPointF() / element->spatium();
+        return value.value<PointF>() / element->spatium();
 
     case Ms::P_TYPE::POINT_SP_MM: {
         if (element->sizeIsSpatiumDependent()) {
-            return value.toPointF() / element->spatium();
+            return value.value<PointF>() / element->spatium();
         } else {
-            return value.toPointF() / Ms::DPMM;
+            return value.value<PointF>() / Ms::DPMM;
         }
     }
 
@@ -375,10 +375,10 @@ QVariant AbstractInspectorModel::valueFromElementUnits(const Ms::Pid& pid, const
         return value.toInt() + 1;
 
     case Ms::P_TYPE::POINT_MM:
-        return value.toPointF() / Ms::DPMM;
+        return value.value<PointF>() / Ms::DPMM;
 
     case Ms::P_TYPE::SIZE_MM:
-        return value.toSizeF() / Ms::DPMM;
+        return value.value<SizeF>() / Ms::DPMM;
 
     case Ms::P_TYPE::DIRECTION:
         return static_cast<int>(value.value<Ms::Direction>());

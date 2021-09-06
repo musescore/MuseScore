@@ -21,6 +21,8 @@
  */
 #include "pagetypelistmodel.h"
 
+#include <QPageSize>
+
 using namespace mu::inspector;
 
 PageTypeListModel::PageTypeListModel(QObject* parent)

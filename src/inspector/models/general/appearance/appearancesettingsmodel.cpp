@@ -46,11 +46,11 @@ void AppearanceSettingsModel::createProperties()
     m_arrangeOrder = buildPropertyItem(Ms::Pid::Z);
 
     m_horizontalOffset = buildPropertyItem(Ms::Pid::OFFSET, [this](const int pid, const QVariant& newValue) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), QPointF(newValue.toDouble(), m_verticalOffset->value().toDouble()));
+        onPropertyValueChanged(static_cast<Ms::Pid>(pid), PointF(newValue.toDouble(), m_verticalOffset->value().toDouble()));
     });
 
     m_verticalOffset = buildPropertyItem(Ms::Pid::OFFSET, [this](const int pid, const QVariant& newValue) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), QPointF(m_horizontalOffset->value().toDouble(), newValue.toDouble()));
+        onPropertyValueChanged(static_cast<Ms::Pid>(pid), PointF(m_horizontalOffset->value().toDouble(), newValue.toDouble()));
     });
 }
 
@@ -73,11 +73,11 @@ void AppearanceSettingsModel::loadProperties()
     loadPropertyItem(m_arrangeOrder);
 
     loadPropertyItem(m_horizontalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.toPointF().x());
+        return DataFormatter::roundDouble(elementPropertyValue.value<PointF>().x());
     });
 
     loadPropertyItem(m_verticalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.toPointF().y());
+        return DataFormatter::roundDouble(elementPropertyValue.value<PointF>().y());
     });
 }
 
