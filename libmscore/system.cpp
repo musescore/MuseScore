@@ -926,7 +926,8 @@ void System::setInstrumentNames(bool longName, Fraction tick)
                         iname->setTrack(staffIdx * VOICES);
                         iname->setInstrumentNameType(longName ? InstrumentNameType::LONG : InstrumentNameType::SHORT);
                         iname->setLayoutPos(sn.pos());
-                        score()->addElement(iname);
+                        iname->setColor(part->namesColor(tick));
+                        score()->addElement(iname); // Add the instrument name to the score.
                         }
                   iname->setXmlText(sn.name());
                   ++idx;
