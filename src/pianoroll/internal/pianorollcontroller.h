@@ -47,9 +47,6 @@
 #include "../ipianorollconfiguration.h"
 
 namespace mu::pianoroll {
-
-//----------------------
-
 static const int PIANO_KEYBOARD_WIDTH = 100;
 static const int BLACK_KEY_WIDTH = PIANO_KEYBOARD_WIDTH * 9 / 14;
 const int MAX_KEY_HEIGHT = 20;
