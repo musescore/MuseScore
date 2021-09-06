@@ -144,7 +144,7 @@ void MasterScore::setName(const QString& ss)
 {
     QString s(ss);
     s.replace('/', '_');      // for sanity
-    if (!(s.endsWith(".mscz") || s.endsWith(".mscx"))) {
+    if (!(s.endsWith(".mscz", Qt::CaseInsensitive) || s.endsWith(".mscx", Qt::CaseInsensitive))) {
         s += ".mscz";
     }
     info.setFile(s);

@@ -125,7 +125,7 @@ QByteArray MscReader::readScoreFile() const
         QStringList files = reader()->fileList();
         for (const QString& name : files) {
             // mscx file in the root dir
-            if (!name.contains("/") && name.endsWith(".mscx")) {
+            if (!name.contains("/") && name.endsWith(".mscx", Qt::CaseInsensitive)) {
                 mscxFileName = name;
                 break;
             }
@@ -145,7 +145,7 @@ std::vector<QString> MscReader::excerptNames() const
     std::vector<QString> names;
     QStringList files = reader()->fileList();
     for (const QString& filePath : files) {
-        if (filePath.startsWith("Excerpts/") && filePath.endsWith(".mscx")) {
+        if (filePath.startsWith("Excerpts/") && filePath.endsWith(".mscx", Qt::CaseInsensitive)) {
             names.push_back(QFileInfo(filePath).completeBaseName());
         }
     }

@@ -332,7 +332,7 @@ PalettePtr Palette::fromMimeData(const QByteArray& data)
 bool Palette::readFromFile(const QString& p)
 {
     QString path(p);
-    if (!path.endsWith(".mpal")) {
+    if (!path.endsWith(".mpal", Qt::CaseInsensitive)) {
         path += ".mpal";
     }
 
@@ -423,7 +423,7 @@ bool Palette::writeToFile(const QString& p) const
     }
 
     QString path(p);
-    if (!path.endsWith(".mpal")) {
+    if (!path.endsWith(".mpal", Qt::CaseInsensitive)) {
         path += ".mpal";
     }
 
