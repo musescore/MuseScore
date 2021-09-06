@@ -21,9 +21,6 @@
  */
 #include "scoreappearancesettingsmodel.h"
 
-#include <QPageSize>
-#include <QSize>
-
 #include "log.h"
 #include "translation.h"
 #include "dataformatter.h"

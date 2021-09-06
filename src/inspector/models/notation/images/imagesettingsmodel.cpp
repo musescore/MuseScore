@@ -21,8 +21,6 @@
  */
 #include "imagesettingsmodel.h"
 
-#include <QSizeF>
-
 #include "dataformatter.h"
 
 #include "translation.h"
