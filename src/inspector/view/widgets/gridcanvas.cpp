@@ -39,7 +39,7 @@ GridCanvas::GridCanvas(QQuickItem* parent)
 
 QVariant GridCanvas::pointList() const
 {
-    return QVariant::fromValue(m_points);
+    return Ms::pitchValuesToVariant(m_points);
 }
 
 int GridCanvas::rowCount() const
@@ -119,7 +119,7 @@ void GridCanvas::setShouldShowNegativeRows(bool shouldShowNegativeRows)
 
 void GridCanvas::setPointList(QVariant pointList)
 {
-    QList<Ms::PitchValue> newPointList = pointList.value<QList<Ms::PitchValue> >();
+    QList<Ms::PitchValue> newPointList = Ms::pitchValuesFromVariant(pointList);
 
     if (m_points == newPointList) {
         return;
