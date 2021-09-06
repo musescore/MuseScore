@@ -109,6 +109,9 @@ Item {
             sourceModel: shortcutsModel
             searchText: topPanel.searchText
 
+            navigationSection: root.navigationSection
+            navigationOrderStart: root.navigationOrderStart + 2
+
             onStartEditCurrentShortcutRequested: {
                 editShortcutDialog.startEditCurrentShortcut()
             }
@@ -123,7 +126,8 @@ Item {
             buttonWidth: prv.buttonWidth
 
             navigation.section: root.navigationSection
-            navigation.order: root.navigationOrderStart + 3
+            //! NOTE: 4 because ShortcutsList have two panels(header and content)
+            navigation.order: root.navigationOrderStart + 4
 
             onImportShortcutsFromFileRequested: {
                 shortcutsModel.importShortcutsFromFile()
