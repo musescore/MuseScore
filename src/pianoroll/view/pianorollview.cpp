@@ -1453,7 +1453,10 @@ std::vector<Ms::Note*> PianorollView::addNote(Ms::Fraction startTick, Ms::Fracti
             {
                 Ms::Segment* newSeg = curScore->setNoteRest(crMid->segment(), track, nv, duration);
                 if (newSeg)
-                    append(addedNotes, getSegmentNotes(newSeg, track));
+                {
+                    std::vector<Ms::Note*> segNotes = getSegmentNotes(newSeg, track);
+                    addedNotes.insert(addedNotes.end(), segNotes.begin(), segNotes.end());
+                }
             }
         }
         else if (cr1End == startTick + duration)
@@ -1467,14 +1470,20 @@ std::vector<Ms::Note*> PianorollView::addNote(Ms::Fraction startTick, Ms::Fracti
             {
                 Ms::Segment* newSeg = curScore->setNoteRest(cr1->segment(), track, nv, duration);
                 if (newSeg)
-                    append(addedNotes, getSegmentNotes(newSeg, track));
+                {
+                    std::vector<Ms::Note*> segNotes = getSegmentNotes(newSeg, track);
+                    addedNotes.insert(addedNotes.end(), segNotes.begin(), segNotes.end());
+                }
             }
         }
         else
         {
             Ms::Segment* newSeg = curScore->setNoteRest(cr1->segment(), track, nv, duration);
             if (newSeg)
-                append(addedNotes, getSegmentNotes(newSeg, track));
+            {
+                std::vector<Ms::Note*> segNotes = getSegmentNotes(newSeg, track);
+                addedNotes.insert(addedNotes.end(), segNotes.begin(), segNotes.end());
+            }
         }
     }
 
