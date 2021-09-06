@@ -54,7 +54,7 @@ void MixerChannel::applyOutputParams(const AudioOutputParams& originParams, Audi
 
     resultParams = originParams;
 
-    auto filterInvalidFx = [this](const std::pair<AudioFxChainOrder, AudioFxParams>& params) {
+    auto filterOutInvalidFxParams = [this](const std::pair<AudioFxChainOrder, AudioFxParams>& params) {
         for (IFxProcessorPtr& fx : m_fxProcessors) {
             if (fx->params() == params.second) {
                 return false;
@@ -64,9 +64,13 @@ void MixerChannel::applyOutputParams(const AudioOutputParams& originParams, Audi
         return true;
     };
 
-    resultParams.fxChain.erase(std::find_if(resultParams.fxChain.begin(),
-                                            resultParams.fxChain.end(),
-                                            filterInvalidFx));
+    for (auto it = resultParams.fxChain.begin(); it != resultParams.fxChain.end(); ) {
+        if (filterOutInvalidFxParams(*it)) {
+            it = resultParams.fxChain.erase(it);
+        } else {
+            ++it;
+        }
+    }
 }
 
 Channel<audioch_t, float> MixerChannel::signalAmplitudeRmsChanged() const
