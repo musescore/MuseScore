@@ -32,6 +32,7 @@
 #include "style/style.h"
 #include "io/xml.h"
 
+#include "factory.h"
 #include "types.h"
 #include "musescoreCore.h"
 #include "score.h"
@@ -619,7 +620,7 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
 
         undoAddElement(note);
         if (forceAccidental) {
-            Accidental* a = new Accidental(note);
+            Accidental* a = Factory::createAccidental(note);
             a->setAccidentalType(_is.accidentalType());
             a->setRole(AccidentalRole::USER);
             a->setParent(note);
@@ -804,7 +805,7 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
                     int tpc = styleB(Sid::concertPitch) ? nval.tpc1 : nval.tpc2;
                     AccidentalVal alter = tpc2alter(tpc);
                     AccidentalType at = Accidental::value2subtype(alter);
-                    Accidental* a = new Accidental(note);
+                    Accidental* a = Factory::createAccidental(note);
                     a->setAccidentalType(at);
                     a->setRole(AccidentalRole::USER);
                     note->add(a);
@@ -1955,7 +1956,7 @@ void Score::changeAccidental(Note* note, AccidentalType accidental)
             if (a) {
                 undoRemoveElement(a);
             }
-            Accidental* a1 = new Accidental(ln);
+            Accidental* a1 = Factory::createAccidental(ln);
             a1->setParent(ln);
             a1->setAccidentalType(accidental);
             a1->setRole(AccidentalRole::USER);

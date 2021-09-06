@@ -22,6 +22,7 @@
 
 #include "palettecreator.h"
 
+#include "libmscore/factory.h"
 #include "libmscore/accidental.h"
 #include "libmscore/actionicon.h"
 #include "libmscore/ambitus.h"
@@ -82,6 +83,7 @@
 #include "translation.h"
 
 using namespace mu::palette;
+using namespace mu::engraving;
 using namespace Ms;
 
 template<typename T> std::shared_ptr<T> makeElement(Ms::Score* score)
@@ -284,7 +286,7 @@ PalettePtr PaletteCreator::newAccidentalsPalette(bool defaultPalette)
     }
 
     for (int i = int(AccidentalType::FLAT); i < end; ++i) {
-        auto ac = makeElement<Accidental>(gpaletteScore);
+        auto ac = Factory::makeAccidental(gpaletteScore->dummy());
         ac->setAccidentalType(AccidentalType(i));
         if (ac->symbol() != SymId::noSym) {
             sp->appendElement(ac, ac->subtypeUserName());

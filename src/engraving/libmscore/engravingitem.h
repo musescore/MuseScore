@@ -40,6 +40,7 @@
 #include "iengravingconfiguration.h"
 
 namespace mu::engraving {
+class Factory;
 class AccessibleElement;
 }
 
@@ -210,10 +211,14 @@ protected:
     mutable int _z;
     mu::draw::Color _color;                ///< element color attribute
 
-public:
-    EngravingItem(const ElementType& type, EngravingObject* se = 0, ElementFlags = ElementFlag::NOTHING,
-                  mu::engraving::AccessibleElement* access = nullptr);
+    friend class mu::engraving::Factory;
+    EngravingItem(const ElementType& type, EngravingObject* se = 0, ElementFlags = ElementFlag::NOTHING);
     EngravingItem(const EngravingItem&);
+    virtual void init();
+    virtual mu::engraving::AccessibleElement* createAccessible() const;
+
+public:
+
     virtual ~EngravingItem();
 
     EngravingItem& operator=(const EngravingItem&) = delete;

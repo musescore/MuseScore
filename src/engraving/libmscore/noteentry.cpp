@@ -23,6 +23,7 @@
 #include "translation.h"
 #include "interactive/messagebox.h"
 
+#include "factory.h"
 #include "utils.h"
 #include "score.h"
 #include "chord.h"
@@ -605,7 +606,7 @@ void Score::repitchNote(const Position& p, bool replace)
         int tpc = styleB(Sid::concertPitch) ? nval.tpc1 : nval.tpc2;
         AccidentalVal alter = tpc2alter(tpc);
         at = Accidental::value2subtype(alter);
-        Accidental* a = new Accidental(note);
+        Accidental* a = Factory::createAccidental(note);
         a->setAccidentalType(at);
         a->setRole(AccidentalRole::USER);
         a->setParent(note);
