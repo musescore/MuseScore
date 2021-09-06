@@ -28,6 +28,7 @@
 #include "style/style.h"
 #include "io/xml.h"
 
+#include "factory.h"
 #include "system.h"
 #include "measure.h"
 #include "utils.h"
@@ -38,6 +39,7 @@
 #include "staff.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -398,7 +400,7 @@ void Trill::read(XmlReader& e)
         if (tag == "subtype") {
             setTrillType(e.readElementText());
         } else if (tag == "Accidental") {
-            _accidental = new Accidental(this);
+            _accidental = Factory::createAccidental(this);
             _accidental->read(e);
             _accidental->setParent(this);
         } else if (tag == "ornamentStyle") {

@@ -75,6 +75,7 @@ option(BUILD_DIAGNOSTICS "Build diagnostic code" ON)
 set(YOUTUBE_API_KEY "" CACHE STRING "YouTube API key")
 
 option(ENGRAVING_BUILD_ACCESSIBLE_TREE "Build score accessible tree" OFF)
+option(ENGRAVING_PAINT_DEBUGGER_ENABLED "Enable diagnostic engraving paint debugger" OFF)
 # Temporary flags for MU3 compatibility to make testing easier.
 option(ENGRAVING_COMPAT_WRITESTYLE_302 "Write style to score xml file" ON)
 option(ENGRAVING_COMPAT_WRITEEXCERPTS_302 "Write excerpts to score xml file" ON)

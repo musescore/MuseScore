@@ -32,8 +32,6 @@
 
 #include "log.h"
 
-#define PAINT_DEBUGGER_ENABLED
-
 using namespace mu::engraving;
 using namespace mu::accessibility;
 using namespace Ms;
@@ -123,7 +121,9 @@ void Paint::paintPage(mu::draw::Painter& painter, Ms::Page* page, const RectF& r
     QList<EngravingItem*> elements = page->items(rect);
     paintElements(painter, elements);
 
+#ifdef ENGRAVING_PAINT_DEBUGGER_ENABLED
     paintPageDiagnostic(painter, page);
+#endif
 
     painter.translate(-pagePosition);
     painter.setClipping(false);
@@ -154,15 +154,12 @@ void Paint::paintChildren(mu::draw::Painter& painter, const std::list<const Ms::
         if (el->treeParent() == parent) {
             const Ms::EngravingItem* item = Ms::toEngravingItem(el);
 
-#ifdef PAINT_DEBUGGER_ENABLED
             initDebugger(painter, item);
-#endif
 
             paintElement(painter, item);
 
-#ifdef PAINT_DEBUGGER_ENABLED
             deinitDebugger(painter);
-#endif
+
             if (elementsProvider()->isSelected(item)) {
                 static mu::draw::Pen borderPen(DEBUG_ELTREE_SELECTED_COLOR, 4);
 

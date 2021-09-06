@@ -24,7 +24,10 @@
 #include "importmxmlnotepitch.h"
 #include "musicxmlsupport.h"
 
+#include "libmscore/factory.h"
 #include "libmscore/score.h"
+
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -48,7 +51,7 @@ static Accidental* accidental(QXmlStreamReader& e, Score* score)
     const auto type = mxmlString2accidentalType(s);
 
     if (type != AccidentalType::NONE) {
-        auto a = new Accidental(score->dummy());
+        auto a = Factory::createAccidental(score->dummy());
         a->setAccidentalType(type);
         if (editorial || cautionary || parentheses) {
             a->setBracket(AccidentalBracket(cautionary || parentheses));

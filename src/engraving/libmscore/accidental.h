@@ -36,6 +36,10 @@
 #include "engravingitem.h"
 #include "symid.h"
 
+namespace mu::engraving {
+class Factory;
+}
+
 namespace Ms {
 class Note;
 enum class AccidentalVal : signed char;
@@ -86,8 +90,11 @@ class Accidental final : public EngravingItem
     AccidentalBracket _bracket     { AccidentalBracket::NONE };
     AccidentalRole _role           { AccidentalRole::AUTO };
 
+    friend class mu::engraving::Factory;
+
+    Accidental(EngravingItem* parent);
+
 public:
-    Accidental(EngravingItem* parent = 0);
 
     Accidental* clone() const override { return new Accidental(*this); }
 
