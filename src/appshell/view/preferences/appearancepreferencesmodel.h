@@ -26,7 +26,6 @@
 
 #include "modularity/ioc.h"
 #include "ui/iuiconfiguration.h"
-//#include "notation/view/notationpaintview.h"    //testing
 #include "notation/inotationconfiguration.h"
 #include "async/asyncable.h"
 
@@ -37,7 +36,6 @@ class AppearancePreferencesModel : public QObject, public async::Asyncable
 
     INJECT(appshell, ui::IUiConfiguration, uiConfiguration)
     INJECT(appshell, notation::INotationConfiguration, notationConfiguration)
-    //INJECT(appshell, notation::NotationPaintView, notationPaintView)
 
     Q_PROPERTY(bool highContrastEnabled READ highContrastEnabled WRITE setHighContrastEnabled NOTIFY highContrastEnabledChanged)
     Q_PROPERTY(QVariantList generalThemes READ generalThemes NOTIFY themesChanged)

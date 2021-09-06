@@ -88,11 +88,7 @@ void EngravingConfiguration::setPartStyleFilePath(const QString& path)
 
 Color EngravingConfiguration::defaultColor() const
 {
-    if (isCurrentThemeHighContrast() && scoreInversionEnabled()) {
-        return Color(255, 255, 255, 200);
-    } else {
-        return Color::black;
-    }
+    return Color::black;
 }
 
 Color EngravingConfiguration::invisibleColor() const
@@ -152,7 +148,7 @@ Color EngravingConfiguration::highlightSelectionColor(int voice) const
 
 bool EngravingConfiguration::isCurrentThemeHighContrast() const
 {
-    return uiConfiguration()->isCurrentThemeHighContrast();
+    return uiConfiguration()->isHighContrast();
 }
 
 bool EngravingConfiguration::scoreInversionEnabled() const

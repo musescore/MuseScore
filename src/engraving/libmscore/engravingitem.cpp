@@ -496,7 +496,7 @@ Part* EngravingItem::part() const
     return s ? s->part() : 0;
 }
 
-draw::Color Element::color() const
+draw::Color EngravingItem::color() const
 {
     return _color;
 }
@@ -521,8 +521,6 @@ mu::draw::Color EngravingItem::curColor(bool isVisible) const
 
 mu::draw::Color EngravingItem::curColor(bool isVisible, mu::draw::Color normalColor) const
 {
-    //return engravingConfiguration()->defaultColor(); //testing
-
     // the default element color is always interpreted as black in printing
     if (score() && score()->printing()) {
         return (normalColor == engravingConfiguration()->defaultColor()) ? mu::draw::Color::black : normalColor;
@@ -552,8 +550,9 @@ mu::draw::Color EngravingItem::curColor(bool isVisible, mu::draw::Color normalCo
     if (!isVisible) {
         return engravingConfiguration()->invisibleColor();
     }
-    if (engravingConfiguration()->isCurrentThemeHighContrast() && engravingConfiguration()->scoreInversionEnabled()) {
-        return engravingConfiguration()->defaultColor();
+    if (engravingConfiguration()->isCurrentThemeHighContrast() && engravingConfiguration()->scoreInversionEnabled()
+        && !score()->isPaletteScore()) {
+        return mu::draw::Color(255, 255, 255, 160); //slightly dulled white for less strain on the eyes
     }
 
     return normalColor;
