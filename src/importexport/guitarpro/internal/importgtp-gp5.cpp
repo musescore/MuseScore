@@ -22,6 +22,7 @@
 
 #include "importgtp.h"
 
+#include "libmscore/factory.h"
 #include "libmscore/arpeggio.h"
 #include "libmscore/articulation.h"
 #include "libmscore/barline.h"
@@ -62,6 +63,8 @@
 #include "libmscore/tremolobar.h"
 #include "libmscore/tuplet.h"
 #include "libmscore/volta.h"
+
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -123,7 +126,7 @@ int GuitarPro5::readBeatEffects(int track, Segment* segment)
         int strokeup = readUChar();                // up stroke length
         int strokedown = readUChar();                // down stroke length
 
-        Arpeggio* a = new Arpeggio(score->dummy()->chord());
+        Arpeggio* a = Factory::createArpeggio(score->dummy()->chord());
         // representation is different in guitar pro 5 - the up/down order below is correct
         if (strokeup > 0) {
             a->setArpeggioType(ArpeggioType::UP_STRAIGHT);
@@ -1006,7 +1009,7 @@ bool GuitarPro5::readNoteEffects(Note* note)
     }
     if (modMask2 & EFFECT_STACATTO) {
         Chord* chord = note->chord();
-        Articulation* a = new Articulation(chord);
+        Articulation* a = Factory::createArticulation(chord);
         a->setSymId(SymId::articStaccatoAbove);
         bool add = true;
         for (auto a1 : chord->articulations()) {
@@ -1158,7 +1161,7 @@ bool GuitarPro5::readNoteEffects(Note* note)
         int period = readUChar();          // trill length
 
         // add the trill articulation to the note
-        Articulation* art = new Articulation(note->score()->dummy()->chord());
+        Articulation* art = Factory::createArticulation(note->score()->dummy()->chord());
         art->setSymId(SymId::ornamentTrill);
         if (!note->score()->addArticulation(note, art)) {
             delete art;
@@ -1273,7 +1276,7 @@ bool GuitarPro5::readNote(int string, Note* note)
 
     // check if a note is supposed to be accented, and give it the marcato type
     if (noteBits & NOTE_MARCATO) {
-        Articulation* art = new Articulation(note->score()->dummy()->chord());
+        Articulation* art = Factory::createArticulation(note->score()->dummy()->chord());
         art->setSymId(SymId::articMarcatoAbove);
         if (!note->score()->addArticulation(note, art)) {
             delete art;
@@ -1282,7 +1285,7 @@ bool GuitarPro5::readNote(int string, Note* note)
 
     // check if a note is supposed to be accented, and give it the sforzato type
     if (noteBits & NOTE_SFORZATO) {
-        Articulation* art = new Articulation(note->score()->dummy()->chord());
+        Articulation* art = Factory::createArticulation(note->score()->dummy()->chord());
         art->setSymId(SymId::articAccentAbove);
         note->add(art);
         // if (!note->score()->addArticulation(note, art))

@@ -1612,7 +1612,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             e.setTick(Fraction::fromTicks(m->score()->fileDivision(e.readInt())));
             lastTick = e.tick();
         } else if (tag == "BarLine") {
-            BarLine* barLine = new BarLine(m->score()->dummy()->segment());
+            BarLine* barLine = Factory::createBarLine(m->score()->dummy()->segment());
             barLine->setTrack(e.track());
             barLine->resetProperty(Pid::BARLINE_SPAN);
             barLine->resetProperty(Pid::BARLINE_SPAN_FROM);
@@ -2124,7 +2124,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
         } else if (tag == "sysInitBarLineType") {
             const QString& val(e.readElementText());
             segment = m->getSegment(SegmentType::BeginBarLine, m->tick());
-            BarLine* barLine = new BarLine(segment);
+            BarLine* barLine = Factory::createBarLine(segment);
             barLine->setTrack(e.track());
             barLine->setBarLineType(val);
             segment->add(barLine);
@@ -2162,7 +2162,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
         } else if (tag == "slashStyle") {
             m->setStaffStemless(staffIdx, e.readInt());
         } else if (tag == "Beam") {
-            Beam* beam = new Beam(m->score()->dummy(), m->score());
+            Beam* beam = Factory::createBeam(m->score()->dummy(), m->score());
             beam->setTrack(e.track());
             beam->read(e);
             beam->moveToDummy();
@@ -2948,7 +2948,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e)
                 masterScore->_excerpts.append(ex);
             }
         } else if (tag == "Beam") {
-            Beam* beam = new Beam(masterScore->dummy(), masterScore);
+            Beam* beam = Factory::createBeam(masterScore->dummy(), masterScore);
             beam->read(e);
             beam->moveToDummy();
             // _beams.append(beam);

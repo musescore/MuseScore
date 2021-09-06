@@ -27,6 +27,10 @@
 #include "note.h"
 #include "accidental.h"
 
+namespace mu::engraving {
+class Factory;
+}
+
 namespace Ms {
 //---------------------------------------------------------
 //   @@ Ambitus
@@ -49,10 +53,12 @@ class Ambitus final : public EngravingItem
     mu::PointF _bottomPos;    // position of bottom note symbol
     mu::LineF _line;          // the drawn line
 
+    friend class mu::engraving::Factory;
+    Ambitus(Segment* parent);
+
     void normalize();
 
 public:
-    Ambitus(Segment* parent);
     ~Ambitus();
 
     Ambitus* clone() const override { return new Ambitus(*this); }

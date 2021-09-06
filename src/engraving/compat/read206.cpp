@@ -1027,7 +1027,7 @@ bool Read206::readNoteProperties206(Note* note, XmlReader& e)
             note->add(image);
         }
     } else if (tag == "Bend") {
-        Bend* b = new Bend(note);
+        Bend* b = Factory::createBend(note);
         b->setTrack(note->track());
         b->read(e);
         note->add(b);
@@ -1823,7 +1823,7 @@ bool Read206::readChordProperties206(XmlReader& e, Chord* ch)
     } else if (tag == "noStem") {
         ch->setNoStem(e.readInt());
     } else if (tag == "Arpeggio") {
-        Arpeggio* arpeggio = new Arpeggio(ch);
+        Arpeggio* arpeggio = Factory::createArpeggio(ch);
         arpeggio->setTrack(ch->track());
         arpeggio->read(e);
         arpeggio->setParent(ch);
@@ -2307,8 +2307,10 @@ EngravingItem* Read206::readArticulation(EngravingItem* parent, XmlReader& e)
                 el = new Fermata(sym, score->dummy());
                 break;
             default:
-                el = new Articulation(sym, score->dummy()->chord());
-                toArticulation(el)->setDirection(direction);
+                Articulation* ar = Factory::createArticulation(score->dummy()->chord());
+                ar->setSymId(sym);
+                ar->setDirection(direction);
+                el = ar;
                 break;
             }
         } else if (tag == "anchor") {
@@ -2473,7 +2475,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
         } else if (tag == "BarLine") {
             Fermata* fermataAbove = nullptr;
             Fermata* fermataBelow = nullptr;
-            BarLine* bl = new BarLine(score->dummy()->segment());
+            BarLine* bl = Factory::createBarLine(score->dummy()->segment());
             bl->setTrack(e.track());
             while (e.readNextStartElement()) {
                 const QStringRef& t(e.name());
@@ -2911,7 +2913,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
         } else if (tag == "sysInitBarLineType") {
             const QString& val(e.readElementText());
             segment = m->getSegment(SegmentType::BeginBarLine, m->tick());
-            BarLine* barLine = new BarLine(segment);
+            BarLine* barLine = Factory::createBarLine(segment);
             barLine->setTrack(e.track());
             barLine->setBarLineType(val);
             segment->add(barLine);
@@ -2949,7 +2951,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
         } else if (tag == "slashStyle") {
             m->setStaffStemless(staffIdx, e.readInt());
         } else if (tag == "Beam") {
-            Beam* beam = new Beam(score->dummy(), score);
+            Beam* beam = Factory::createBeam(score->dummy(), score);
             beam->setTrack(e.track());
             beam->read(e);
             beam->moveToDummy();
@@ -2972,7 +2974,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             m->add(sd);
         } else if (tag == "Ambitus") {
             segment = m->getSegment(SegmentType::Ambitus, e.tick());
-            Ambitus* range = new Ambitus(segment);
+            Ambitus* range = Factory::createAmbitus(segment);
             readAmbitus(range, e);
             range->setParent(segment);                // a parent segment is needed for setTrack() to work
             range->setTrack(trackZeroVoice(e.track()));

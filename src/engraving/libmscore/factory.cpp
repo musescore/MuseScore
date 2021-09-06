@@ -319,13 +319,53 @@ const char* Factory::userName(Ms::ElementType type)
     return elementNames[int(type)].userName;
 }
 
-Ms::Accidental* Factory::createAccidental(Ms::EngravingItem* parent)
+#define CREATE_ITEM_IMPL(T, type, P) \
+    T* Factory::create##T(P * parent) \
+    { \
+        EngravingItem* e = createItem(type, parent); \
+        return to##T(e); \
+    } \
+
+#define MAKE_ITEM_IMPL(T, P) \
+    std::shared_ptr<T> Factory::make##T(P * parent) \
+    { \
+        return std::shared_ptr<T>(create##T(parent)); \
+    } \
+
+#define COPY_ITEM_IMPL(T) \
+    T* Factory::copy##T(const T& src) \
+    { \
+        T* copy = new T(src); \
+        return copy; \
+    } \
+
+CREATE_ITEM_IMPL(Accidental, ElementType::ACCIDENTAL, EngravingItem)
+MAKE_ITEM_IMPL(Accidental, EngravingItem)
+
+CREATE_ITEM_IMPL(Ambitus, ElementType::AMBITUS, Segment)
+MAKE_ITEM_IMPL(Ambitus, Segment)
+
+CREATE_ITEM_IMPL(Arpeggio, ElementType::ARPEGGIO, Chord)
+MAKE_ITEM_IMPL(Arpeggio, Chord)
+
+CREATE_ITEM_IMPL(Articulation, ElementType::ARTICULATION, ChordRest)
+MAKE_ITEM_IMPL(Articulation, ChordRest)
+
+CREATE_ITEM_IMPL(BarLine, ElementType::BAR_LINE, Segment)
+MAKE_ITEM_IMPL(BarLine, Segment)
+COPY_ITEM_IMPL(BarLine)
+
+Beam* Factory::createBeam(EngravingItem * parent, Score * score)
 {
-    EngravingItem* e = createItem(Ms::ElementType::ACCIDENTAL, parent);
-    return Ms::toAccidental(e);
+    Beam* b = new Beam(parent, score);
+    b->init();
+    return b;
 }
 
-std::shared_ptr<Ms::Accidental> Factory::makeAccidental(Ms::EngravingItem* parent)
+std::shared_ptr<Beam> Factory::makeBeam(EngravingItem* parent, Score* score)
 {
-    return std::shared_ptr<Ms::Accidental>(createAccidental(parent));
+    return std::shared_ptr<Beam>(createBeam(parent, score));
 }
+
+CREATE_ITEM_IMPL(Bend, ElementType::BEND, Note)
+MAKE_ITEM_IMPL(Bend, Note)
