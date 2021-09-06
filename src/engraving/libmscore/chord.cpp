@@ -27,6 +27,7 @@
 #include "style/style.h"
 #include "io/xml.h"
 
+#include "factory.h"
 #include "note.h"
 #include "segment.h"
 #include "text.h"
@@ -63,6 +64,7 @@
 #include "fingering.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -1190,7 +1192,7 @@ bool Chord::readProperties(XmlReader& e)
     } else if (tag == "noStem") {
         _noStem = e.readInt();
     } else if (tag == "Arpeggio") {
-        _arpeggio = new Arpeggio(this);
+        _arpeggio = Factory::createArpeggio(this);
         _arpeggio->setTrack(track());
         _arpeggio->read(e);
         _arpeggio->setParent(this);
@@ -2906,7 +2908,7 @@ void Chord::updateArticulations(const std::set<SymId>& newArticulationIds, Artic
 
     std::set<SymId> result = joinArticulations(articulationIds);
     for (const SymId& articulationSymbolId: result) {
-        Articulation* newArticulation = new Articulation(score()->dummy()->chord());
+        Articulation* newArticulation = Factory::createArticulation(score()->dummy()->chord());
         newArticulation->setSymId(articulationSymbolId);
         score()->addArticulation(this, newArticulation);
     }

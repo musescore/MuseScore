@@ -45,6 +45,26 @@ public:
     static Ms::Accidental* createAccidental(Ms::EngravingItem* parent);
     static std::shared_ptr<Ms::Accidental> makeAccidental(Ms::EngravingItem* parent);
 
+    static Ms::Ambitus* createAmbitus(Ms::Segment* parent);
+    static std::shared_ptr<Ms::Ambitus> makeAmbitus(Ms::Segment* parent);
+
+    static Ms::Arpeggio* createArpeggio(Ms::Chord* parent);
+    static std::shared_ptr<Ms::Arpeggio> makeArpeggio(Ms::Chord* parent);
+
+    static Ms::Articulation* createArticulation(Ms::ChordRest* parent);
+    static std::shared_ptr<Ms::Articulation> makeArticulation(Ms::ChordRest* parent);
+
+    static Ms::BarLine* createBarLine(Ms::Segment* parent);
+    static Ms::BarLine* copyBarLine(const Ms::BarLine& src);
+    static std::shared_ptr<Ms::BarLine> makeBarLine(Ms::Segment* parent);
+
+    //! NOTE Ms::Score* is needed temporarily
+    static Ms::Beam* createBeam(Ms::EngravingItem* parent, Ms::Score* score);
+    static std::shared_ptr<Ms::Beam> makeBeam(Ms::EngravingItem* parent, Ms::Score* score);
+
+    static Ms::Bend* createBend(Ms::Note* parent);
+    static std::shared_ptr<Ms::Bend> makeBend(Ms::Note* parent);
+
 private:
     static Ms::EngravingItem* doCreateItem(Ms::ElementType type, Ms::EngravingItem* parent);
 };

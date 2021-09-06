@@ -24,6 +24,7 @@
 
 #include <cmath>
 
+#include "libmscore/factory.h"
 #include "libmscore/articulation.h"
 #include "libmscore/bend.h"
 #include "libmscore/box.h"
@@ -46,6 +47,8 @@
 #include "libmscore/tie.h"
 #include "libmscore/timesig.h"
 #include "libmscore/tuplet.h"
+
+using namespace mu::engraving;
 
 namespace Ms {
 bool PowerTab::readBoolean()
@@ -658,12 +661,12 @@ void PowerTab::fillMeasure(tBeatList& elist, Measure* measure, int staff, std::v
                 addPalmMute(chord);
             }
             if (beat->accent) {
-                auto accent = new Articulation(chord);
+                auto accent = Factory::createArticulation(chord);
                 accent->setSymId(SymId::articAccentAbove);
                 chord->add(accent);
             }
             if (beat->staccato) {
-                auto st = new Articulation(chord);
+                auto st = Factory::createArticulation(chord);
                 st->setSymId(SymId::articStaccatoAbove);
                 chord->add(st);
             }
@@ -687,7 +690,7 @@ void PowerTab::fillMeasure(tBeatList& elist, Measure* measure, int staff, std::v
                 }
 
                 if (n.bend) {
-                    Bend* bend = new Bend(note);
+                    Bend* bend = Factory::createBend(note);
 //TODO-ws                              bend->setNote(note);
                     bend->points().append(PitchValue(0, n.bend * 25 - 12));
                     bend->points().append(PitchValue(50, 0));

@@ -26,6 +26,10 @@
 #include "engravingitem.h"
 #include "mscore.h"
 
+namespace mu::engraving {
+class Factory;
+}
+
 namespace Ms {
 class MuseScoreView;
 class Segment;
@@ -73,6 +77,10 @@ class BarLine final : public EngravingItem
     mutable qreal y2;
     ElementList _el;          ///< fermata or other articulations
 
+    friend class mu::engraving::Factory;
+    BarLine(Segment* parent);
+    BarLine(const BarLine&);
+
     void getY() const;
     void drawDots(mu::draw::Painter* painter, qreal x) const;
     void drawTips(mu::draw::Painter* painter, bool reversed, qreal x) const;
@@ -81,9 +89,9 @@ class BarLine final : public EngravingItem
     void drawEditMode(mu::draw::Painter*, EditData&) override;
 
 public:
-    BarLine(Segment* parent);
+
     virtual ~BarLine();
-    BarLine(const BarLine&);
+
     BarLine& operator=(const BarLine&) = delete;
 
     void setParent(Segment* parent);

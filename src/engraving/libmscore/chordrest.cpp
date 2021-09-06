@@ -27,6 +27,7 @@
 #include "style/style.h"
 #include "io/xml.h"
 
+#include "factory.h"
 #include "chord.h"
 #include "system.h"
 #include "measure.h"
@@ -63,6 +64,7 @@
 #include "instrchange.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -268,7 +270,7 @@ bool ChordRest::readProperties(XmlReader& e)
         }
         _beamMode = Beam::Mode(bm);
     } else if (tag == "Articulation") {
-        Articulation* atr = new Articulation(this);
+        Articulation* atr = Factory::createArticulation(this);
         atr->setTrack(track());
         atr->read(e);
         add(atr);

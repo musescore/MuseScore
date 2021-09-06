@@ -25,6 +25,10 @@
 
 #include "engravingitem.h"
 
+namespace mu::engraving {
+class Factory;
+}
+
 namespace Ms {
 class Chord;
 
@@ -50,6 +54,9 @@ class Arpeggio final : public EngravingItem
 
     bool _hidden = false;   // set in layout, will skip draw if true
 
+    friend class mu::engraving::Factory;
+    Arpeggio(Chord* parent);
+
     void symbolLine(SymId start, SymId fill);
     void symbolLine2(SymId end, SymId fill);
 
@@ -61,7 +68,6 @@ class Arpeggio final : public EngravingItem
     static const std::array<const char*, 6> arpeggioTypeNames;
 
 public:
-    Arpeggio(Chord* parent);
 
     Arpeggio* clone() const override { return new Arpeggio(*this); }
 

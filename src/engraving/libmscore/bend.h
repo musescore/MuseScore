@@ -30,6 +30,10 @@
 #include "pitchvalue.h"
 #include "property.h"
 
+namespace mu::engraving {
+class Factory;
+}
+
 namespace Ms {
 //---------------------------------------------------------
 //   @@ Bend
@@ -52,7 +56,6 @@ class Bend final : public EngravingItem
     M_PROPERTY(qreal,     lineWidth, setLineWidth)
 
 public:
-    Bend(Note* parent);
 
     Bend* clone() const override { return new Bend(*this); }
 
@@ -72,6 +75,10 @@ public:
     QVariant propertyDefault(Pid) const override;
 
 private:
+
+    friend class mu::engraving::Factory;
+    Bend(Note* parent);
+
     mu::draw::Font font(qreal) const;
     BendType parseBendTypeFromCurve() const;
     void updatePointsByBendType(const BendType bendType);

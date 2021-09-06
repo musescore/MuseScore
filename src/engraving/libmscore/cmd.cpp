@@ -1760,7 +1760,7 @@ void Score::addArticulation(SymId attr)
                     continue;
                 }
             }
-            Articulation* na = new Articulation(this->dummy()->chord());
+            Articulation* na = Factory::createArticulation(this->dummy()->chord());
             na->setSymId(attr);
             if (addArticulation(el, na)) {
                 ++numAdded;

@@ -21,6 +21,8 @@
  */
 
 #include "musedata.h"
+
+#include "libmscore/factory.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/part.h"
 #include "libmscore/staff.h"
@@ -42,6 +44,8 @@
 #include "libmscore/timesig.h"
 #include "libmscore/segment.h"
 #include "libmscore/symid.h"
+
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -320,32 +324,32 @@ void MuseData::readNote(Part* part, const QString& s)
         } else if (an[i] == 'x') {
             closeSlur(3, tick, staff, voice);
         } else if (an[i] == '.') {
-            Articulation* atr = new Articulation(chord);
+            Articulation* atr = Factory::createArticulation(chord);
             atr->setSymId(SymId::articStaccatoAbove);
             chord->add(atr);
         } else if (an[i] == '_') {
-            Articulation* atr = new Articulation(chord);
+            Articulation* atr = Factory::createArticulation(chord);
             atr->setSymId(SymId::articTenutoAbove);
             chord->add(atr);
         } else if (an[i] == 'v') {
-            Articulation* atr = new Articulation(chord);
+            Articulation* atr = Factory::createArticulation(chord);
             atr->setSymId(SymId::stringsUpBow);
             chord->add(atr);
         } else if (an[i] == 'n') {
-            Articulation* atr = new Articulation(chord);
+            Articulation* atr = Factory::createArticulation(chord);
             atr->setSymId(SymId::stringsDownBow);
             chord->add(atr);
         } else if (an[i] == 't') {
-            Articulation* atr = new Articulation(chord);
+            Articulation* atr = Factory::createArticulation(chord);
             atr->setSymId(SymId::ornamentTrill);
             chord->add(atr);
         } else if (an[i] == 'F') {
-            Articulation* atr = new Articulation(chord);
+            Articulation* atr = Factory::createArticulation(chord);
             atr->setUp(true);
             atr->setSymId(SymId::fermataAbove);
             chord->add(atr);
         } else if (an[i] == 'E') {
-            Articulation* atr = new Articulation(chord);
+            Articulation* atr = Factory::createArticulation(chord);
             atr->setUp(false);
             atr->setSymId(SymId::fermataBelow);
             chord->add(atr);
