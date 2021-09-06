@@ -275,8 +275,12 @@ Item {
                         }
                     }
 
-                    onIsMenuOpenedChanged: {
-                        root.resourcePickingActive = menuLoader.isMenuOpened
+                    onOpened: {
+                        root.resourcePickingActive = true
+                    }
+
+                    onClosed: {
+                        root.resourcePickingActive = false
                     }
                 }
 
