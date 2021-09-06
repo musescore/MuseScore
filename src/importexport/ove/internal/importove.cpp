@@ -24,6 +24,7 @@
 
 #include <QtMath>
 
+#include "libmscore/factory.h"
 #include "libmscore/sig.h"
 #include "libmscore/tempo.h"
 #include "libmscore/arpeggio.h"
@@ -79,6 +80,7 @@ static std::shared_ptr<mu::iex::ove::IOveConfiguration> configuration()
 }
 }
 
+using namespace mu::engraving;
 using namespace Ms;
 
 class MeasureToTick
@@ -1647,7 +1649,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                     // note->setTpcFromPitch();
                     note->setTpc(step2tpc(tone, AccidentalVal(alter)));
                     if (oveNote->getShowAccidental()) {
-                        Ms::Accidental* a = new Accidental(m_score->dummy());
+                        Ms::Accidental* a = Factory::createAccidental(m_score->dummy());
                         bool bracket = static_cast<int>(oveNote->getAccidental()) & 0x8;
                         AccidentalType at = Ms::AccidentalType::NONE;
                         switch (alter) {

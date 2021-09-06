@@ -26,6 +26,7 @@
 #include "compat/read206.h"
 #include "io/xml.h"
 
+#include "factory.h"
 #include "chord.h"
 #include "measure.h"
 #include "score.h"
@@ -51,7 +52,7 @@ static const qreal LINEOFFSET_DEFAULT      = 0.8;               // the distance 
 //---------------------------------------------------------
 
 Ambitus::Ambitus(Segment* parent)
-    : EngravingItem(ElementType::AMBITUS, parent, ElementFlag::ON_STAFF), _topAccid(parent), _bottomAccid(parent)
+    : EngravingItem(ElementType::AMBITUS, parent, ElementFlag::ON_STAFF)
 {
     _noteHeadGroup    = NOTEHEADGROUP_DEFAULT;
     _noteHeadType     = NOTEHEADTYPE_DEFAULT;
@@ -62,8 +63,17 @@ Ambitus::Ambitus(Segment* parent)
     _bottomPitch      = INVALID_PITCH;
     _topTpc           = Tpc::TPC_INVALID;
     _bottomTpc        = Tpc::TPC_INVALID;
-    _topAccid.setParent(this);
-    _bottomAccid.setParent(this);
+
+    _topAccid = Factory::createAccidental(parent);
+    _bottomAccid = Factory::createAccidental(parent);
+    _topAccid->setParent(this);
+    _bottomAccid->setParent(this);
+}
+
+Ambitus::~Ambitus()
+{
+    delete _topAccid;
+    delete _bottomAccid;
 }
 
 //---------------------------------------------------------
@@ -117,8 +127,8 @@ void Ambitus::setTrack(int t)
             _topPitch = ranges.topPitch;
             _bottomPitch = ranges.bottomPitch;
 
-            _topAccid.setTrack(t);
-            _bottomAccid.setTrack(t);
+            _topAccid->setTrack(t);
+            _bottomAccid->setTrack(t);
         }
 //            else {
 //                  _topPitch = _bottomPitch = INVALID_PITCH;
@@ -221,14 +231,14 @@ void Ambitus::write(XmlWriter& xml) const
     xml.tag("topTpc",     _topTpc);
     xml.tag("bottomPitch", _bottomPitch);
     xml.tag("bottomTpc",  _bottomTpc);
-    if (_topAccid.accidentalType() != AccidentalType::NONE) {
+    if (_topAccid->accidentalType() != AccidentalType::NONE) {
         xml.stag("topAccidental");
-        _topAccid.write(xml);
+        _topAccid->write(xml);
         xml.etag();
     }
-    if (_bottomAccid.accidentalType() != AccidentalType::NONE) {
+    if (_bottomAccid->accidentalType() != AccidentalType::NONE) {
         xml.stag("bottomAccidental");
-        _bottomAccid.write(xml);
+        _bottomAccid->write(xml);
         xml.etag();
     }
     EngravingItem::writeProperties(xml);
@@ -277,9 +287,9 @@ bool Ambitus::readProperties(XmlReader& e)
         while (e.readNextStartElement()) {
             if (e.name() == "Accidental") {
                 if (score()->mscVersion() < 301) {
-                    compat::Read206::readAccidental206(&_topAccid, e);
+                    compat::Read206::readAccidental206(_topAccid, e);
                 } else {
-                    _topAccid.read(e);
+                    _topAccid->read(e);
                 }
             } else {
                 e.skipCurrentElement();
@@ -289,9 +299,9 @@ bool Ambitus::readProperties(XmlReader& e)
         while (e.readNextStartElement()) {
             if (e.name() == "Accidental") {
                 if (score()->mscVersion() < 301) {
-                    compat::Read206::readAccidental206(&_bottomAccid, e);
+                    compat::Read206::readAccidental206(_bottomAccid, e);
                 } else {
-                    _bottomAccid.read(e);
+                    _bottomAccid->read(e);
                 }
             } else {
                 e.skipCurrentElement();
@@ -364,13 +374,13 @@ void Ambitus::layout()
                 accidType = AccidentalType::NATURAL;
             }
         }
-        _topAccid.setAccidentalType(accidType);
+        _topAccid->setAccidentalType(accidType);
         if (accidType != AccidentalType::NONE) {
-            _topAccid.layout();
+            _topAccid->layout();
         } else {
-            _topAccid.setbbox(RectF());
+            _topAccid->setbbox(RectF());
         }
-        _topAccid.rypos() = _topPos.y();
+        _topAccid->rypos() = _topPos.y();
     }
 
     // bottom notehead
@@ -391,13 +401,13 @@ void Ambitus::layout()
                 accidType = AccidentalType::NATURAL;
             }
         }
-        _bottomAccid.setAccidentalType(accidType);
+        _bottomAccid->setAccidentalType(accidType);
         if (accidType != AccidentalType::NONE) {
-            _bottomAccid.layout();
+            _bottomAccid->layout();
         } else {
-            _bottomAccid.setbbox(RectF());
+            _bottomAccid->setbbox(RectF());
         }
-        _bottomAccid.rypos() = _bottomPos.y();
+        _bottomAccid->rypos() = _bottomPos.y();
     }
 
     //
@@ -406,22 +416,22 @@ void Ambitus::layout()
     // Note: manages colliding accidentals
     //
     qreal accNoteDist = point(score()->styleS(Sid::accidentalNoteDistance));
-    xAccidOffTop      = _topAccid.width() + accNoteDist;
-    xAccidOffBottom   = _bottomAccid.width() + accNoteDist;
+    xAccidOffTop      = _topAccid->width() + accNoteDist;
+    xAccidOffBottom   = _bottomAccid->width() + accNoteDist;
 
     // if top accidental extends down more than bottom accidental extends up,
     // AND ambitus is not leaning right, bottom accidental needs to be displaced
     bool collision
-        =(_topAccid.ipos().y() + _topAccid.bbox().y() + _topAccid.height()
-          > _bottomAccid.ipos().y() + _bottomAccid.bbox().y())
+        =(_topAccid->ipos().y() + _topAccid->bbox().y() + _topAccid->height()
+          > _bottomAccid->ipos().y() + _bottomAccid->bbox().y())
           && _dir != MScore::DirectionH::RIGHT;
     if (collision) {
         // displace bottom accidental (also attempting to 'undercut' flats)
         xAccidOffBottom = xAccidOffTop
-                          + ((_bottomAccid.accidentalType() == AccidentalType::FLAT
-                              || _bottomAccid.accidentalType() == AccidentalType::FLAT2
-                              || _bottomAccid.accidentalType() == AccidentalType::NATURAL)
-                             ? _bottomAccid.width() * 0.5 : _bottomAccid.width());
+                          + ((_bottomAccid->accidentalType() == AccidentalType::FLAT
+                              || _bottomAccid->accidentalType() == AccidentalType::FLAT2
+                              || _bottomAccid->accidentalType() == AccidentalType::NATURAL)
+                             ? _bottomAccid->width() * 0.5 : _bottomAccid->width());
     }
 
     switch (_dir) {
@@ -429,24 +439,24 @@ void Ambitus::layout()
         // left align noteheads and right align accidentals 'hanging' on the left
         _topPos.setX(0.0);
         _bottomPos.setX(0.0);
-        _topAccid.rxpos()       = -xAccidOffTop;
-        _bottomAccid.rxpos()    = -xAccidOffBottom;
+        _topAccid->rxpos()       = -xAccidOffTop;
+        _bottomAccid->rxpos()    = -xAccidOffBottom;
         break;
     case MScore::DirectionH::LEFT:                       // top notehead at the left of bottom notehead
         // place top notehead at left margin; bottom notehead at right of top head;
         // top accid. 'hanging' on left of top head and bottom accid. 'hanging' at left of bottom head
         _topPos.setX(0.0);
         _bottomPos.setX(headWdt);
-        _topAccid.rxpos() = -xAccidOffTop;
-        _bottomAccid.rxpos() = collision ? -xAccidOffBottom : headWdt - xAccidOffBottom;
+        _topAccid->rxpos() = -xAccidOffTop;
+        _bottomAccid->rxpos() = collision ? -xAccidOffBottom : headWdt - xAccidOffBottom;
         break;
     case MScore::DirectionH::RIGHT:                      // top notehead at the right of bottom notehead
         // bottom notehead at left margin; top notehead at right of bottomnotehead
         // top accid. 'hanging' on left of top head and bottom accid. 'hanging' at left of bottom head
         _bottomPos.setX(0.0);
         _topPos.setX(headWdt);
-        _bottomAccid.rxpos() = -xAccidOffBottom;
-        _topAccid.rxpos() = headWdt - xAccidOffTop;
+        _bottomAccid->rxpos() = -xAccidOffBottom;
+        _topAccid->rxpos() = headWdt - xAccidOffTop;
         break;
     }
 
@@ -465,8 +475,8 @@ void Ambitus::layout()
 
     mu::RectF headRect(0, -0.5 * _spatium, headWdt, 1 * _spatium);
     setbbox(headRect.translated(_topPos).united(headRect.translated(_bottomPos))
-            .united(_topAccid.bbox().translated(_topAccid.ipos()))
-            .united(_bottomAccid.bbox().translated(_bottomAccid.ipos()))
+            .united(_topAccid->bbox().translated(_topAccid->ipos()))
+            .united(_bottomAccid->bbox().translated(_bottomAccid->ipos()))
             );
 }
 

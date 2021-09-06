@@ -26,6 +26,7 @@
 
 #include <QRegularExpression>
 
+#include "libmscore/factory.h"
 #include "libmscore/accidental.h"
 #include "libmscore/arpeggio.h"
 #include "libmscore/articulation.h"
@@ -86,6 +87,8 @@
 #include "importexport/musicxml/imusicxmlconfiguration.h"
 
 #include "log.h"
+
+using namespace mu::engraving;
 
 namespace Ms {
 static std::shared_ptr<mu::iex::musicxml::IMusicXmlConfiguration> configuration()
@@ -4693,7 +4696,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
         //       acc, acc ? acc->accidentalType() : static_cast<Ms::AccidentalType>(0), accType);
         Accidental* acc = mnp.acc();
         if (!acc && mnp.accType() != AccidentalType::NONE) {
-            acc = new Accidental(_score->dummy());
+            acc = Factory::createAccidental(_score->dummy());
             acc->setAccidentalType(mnp.accType());
         }
 

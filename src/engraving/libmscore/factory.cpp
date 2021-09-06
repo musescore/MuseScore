@@ -153,6 +153,13 @@ static const ElementName elementNames[] = {
 
 EngravingItem* Factory::createItem(ElementType type, EngravingItem* parent)
 {
+    EngravingItem* item = doCreateItem(type, parent);
+    item->init();
+    return item;
+}
+
+EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
+{
     auto dummy = parent->score()->dummy();
     switch (type) {
     case ElementType::VOLTA:             return new Volta(parent);
@@ -310,4 +317,15 @@ const char* Factory::name(ElementType type)
 const char* Factory::userName(Ms::ElementType type)
 {
     return elementNames[int(type)].userName;
+}
+
+Ms::Accidental* Factory::createAccidental(Ms::EngravingItem* parent)
+{
+    EngravingItem* e = createItem(Ms::ElementType::ACCIDENTAL, parent);
+    return Ms::toAccidental(e);
+}
+
+std::shared_ptr<Ms::Accidental> Factory::makeAccidental(Ms::EngravingItem* parent)
+{
+    return std::shared_ptr<Ms::Accidental>(createAccidental(parent));
 }
