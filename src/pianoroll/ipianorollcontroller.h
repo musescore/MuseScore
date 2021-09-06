@@ -54,7 +54,6 @@ public:
     virtual async::Notification pitchHighlightChanged() const = 0;
     virtual bool isPitchHighlight(int pitch) const = 0;
     virtual void setPitchHighlight(int pitch, bool value) = 0;
-
 };
 }
 

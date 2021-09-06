@@ -83,5 +83,4 @@ void PianorollModule::onInit(const framework::IApplication::RunMode& /*mode*/)
 //    }
 
     s_pianorollController->init();
-
 }

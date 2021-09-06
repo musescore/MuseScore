@@ -33,7 +33,6 @@
 #include "audio/iplayback.h"
 
 namespace mu::pianoroll {
-
 class PianorollRuler : public QQuickPaintedItem, public async::Asyncable
 {
     Q_OBJECT
@@ -77,7 +76,6 @@ signals:
     void displayObjectWidthChanged();
     void playbackPositionChanged();
 
-
 private:
     void onNotationChanged();
     void onCurrentNotationChanged();
@@ -98,9 +96,7 @@ private:
     QColor m_colorPlaybackLine = QColor(0xff0000);
     QColor m_colorGridLine = QColor(0xa2a2a6);
     QColor m_colorText = Qt::black;
-
 };
-
 }
 
 #endif // MU_PIANOROLL_PIANOROLLRULER_H

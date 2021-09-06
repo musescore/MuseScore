@@ -26,8 +26,6 @@
 #include "../ipianorollautomationmodel.h"
 
 namespace mu::pianoroll {
-
-
 class AutomationVelocity : public IPianorollAutomationModel
 {
 public:
@@ -39,9 +37,7 @@ public:
     double minValue() override;
     double value(Ms::Staff* staff, NoteEventBlock& block) override;
     void setValue(Ms::Staff* staff, NoteEventBlock& block, double value) override;
-
 };
-
 }
 
 #endif // MU_PIANOROLL_AUTOMATIONVELOCITY_H

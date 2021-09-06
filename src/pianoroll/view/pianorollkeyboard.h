@@ -23,7 +23,6 @@
 #ifndef MU_PIANOROLL_PIANOROLLKEYBOARD_H
 #define MU_PIANOROLL_PIANOROLLKEYBOARD_H
 
-
 #include <QQuickPaintedItem>
 #include <QColor>
 
@@ -32,7 +31,6 @@
 #include "pianoroll/ipianorollcontroller.h"
 
 namespace mu::pianoroll {
-
 class PianorollKeyboard : public QQuickPaintedItem, public async::Asyncable
 {
     Q_OBJECT
@@ -99,9 +97,7 @@ private:
     QColor m_colorKeyWhite = QColor(0xffffff);
     QColor m_colorKeyHighlight = QColor(224, 170, 20);
     QColor m_colorDrumHighlight = QColor(224, 170, 20);
-
 };
-
 }
 
 #endif // MU_PIANOROLL_PIANOROLLKEYBOARD_H

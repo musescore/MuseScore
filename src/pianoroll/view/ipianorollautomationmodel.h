@@ -28,7 +28,6 @@
 #include <vector>
 
 namespace mu::pianoroll {
-
 struct NoteEventBlock
 {
     Ms::Note* note;
@@ -36,8 +35,8 @@ struct NoteEventBlock
     int staffIdx;
 };
 
-
-class IPianorollAutomationModel {
+class IPianorollAutomationModel
+{
 public:
     virtual ~IPianorollAutomationModel() = default;
 
@@ -48,7 +47,6 @@ public:
     virtual double value(Ms::Staff* staff, NoteEventBlock& block) = 0;
     virtual void setValue(Ms::Staff* staff, NoteEventBlock& block, double value) = 0;
 };
-
 }
 
 #endif // MU_PIANOROLL_IPIANOROLLAUTOMATIONMODEL_H

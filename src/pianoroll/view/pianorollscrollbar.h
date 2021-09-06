@@ -31,10 +31,7 @@
 #include "context/iglobalcontext.h"
 #include "pianoroll/ipianorollcontroller.h"
 
-
 namespace mu::pianoroll {
-
-
 class PianorollScrollbar : public QQuickPaintedItem, public async::Asyncable
 {
     Q_OBJECT
@@ -45,7 +42,9 @@ class PianorollScrollbar : public QQuickPaintedItem, public async::Asyncable
     Q_PROPERTY(double displayObjectSpan READ displayObjectSpan WRITE setDisplayObjectSpan NOTIFY displayObjectSpanChanged)
 
 public:
-    enum class Direction : char { HORIZONTAL, VERTICAL };
+    enum class Direction : char {
+        HORIZONTAL, VERTICAL
+    };
     Q_ENUM(Direction)
 
 public:
@@ -53,10 +52,9 @@ public:
 
     Q_INVOKABLE void load();
 
-    void mousePressEvent(QMouseEvent *event) override;
+    void mousePressEvent(QMouseEvent* event) override;
     void mouseReleaseEvent(QMouseEvent* event) override;
     void mouseMoveEvent(QMouseEvent* event) override;
-
 
     Direction direction() const { return m_direction; }
     void setDirection(Direction value);
@@ -66,7 +64,6 @@ public:
     void setViewportSpan(double value);
     double displayObjectSpan() const { return m_displayObjectSpan; }
     void setDisplayObjectSpan(double value);
-
 
     void updateCenter();
     void paint(QPainter*) override;
@@ -95,7 +92,6 @@ private:
     QColor m_colorBackground = QColor(0xdddddd);
 //    QColor m_colorBackground = Qt::green;
 };
-
 }
 
 #endif // MU_PIANOROLL_PIANOROLLSCROLLBAR_H

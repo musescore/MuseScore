@@ -33,7 +33,6 @@
 #include "audio/iplayback.h"
 
 namespace mu::pianoroll {
-
 class IPianorollAutomationModel;
 struct NoteEventBlock;
 
@@ -53,7 +52,9 @@ class PianorollAutomationEditor : public QQuickPaintedItem, public async::Asynca
     Q_PROPERTY(AutomationType automationType READ automationType WRITE setAutomationType NOTIFY automationTypeChanged)
 
 public:
-    enum class AutomationType { VELOCITY, EXPRESSION, PAN };
+    enum class AutomationType {
+        VELOCITY, EXPRESSION, PAN
+    };
     Q_ENUM(AutomationType)
 
     PianorollAutomationEditor(QQuickItem* parent = nullptr);
@@ -96,7 +97,6 @@ signals:
     void automationTypeChanged();
     void tupletChanged();
     void subdivisionChanged();
-
 
 private:
     void onNotationChanged();
@@ -160,7 +160,6 @@ private:
     QColor m_colorVertexLine = Qt::black;
     QColor m_colorGraphFill = QColor(0x80, 0x9b, 0xcd, 0x80);
 };
-
 }
 
 #endif // MU_PIANOROLL_PIANOROLLAUTOMATIONEDITOR_H
