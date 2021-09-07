@@ -63,7 +63,7 @@ void MixerChannel::applyOutputParams(const AudioOutputParams& originParams, Audi
         return true;
     };
 
-    for (auto it = resultParams.fxChain.begin(); it != resultParams.fxChain.end(); ) {
+    for (auto it = resultParams.fxChain.begin(); it != resultParams.fxChain.end();) {
         if (filterOutInvalidFxParams(*it)) {
             it = resultParams.fxChain.erase(it);
         } else {
