@@ -128,6 +128,10 @@ private:
     OutputResourceItem* buildOutputResourceItem(const audio::AudioFxParams& fxParams);
     void ensureBlankOutputResourceSlot();
 
+    bool hasToCleanUpEmptySlots() const;
+    QList<OutputResourceItem*> emptySlotsToRemove() const;
+    void removeRedundantEmptySlots();
+
     audio::TrackId m_id = -1;
 
     audio::AudioInputParams m_inputParams;

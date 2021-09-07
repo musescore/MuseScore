@@ -32,9 +32,9 @@ static const float BALANCE_SCALING_FACTOR = 100.f;
 
 static const int OUTPUT_RESOURCE_COUNT_LIMIT = 4;
 
-static const QString& MASTER_VSTFX_EDITOR_URI_BODY = QString("musescore://vstfx/editor?sync=false&modal=false&resourceId=%1&chainOrder=%2");
-static const QString& TRACK_VSTFX_EDITOR_URI_BODY = QString("musescore://vstfx/editor?sync=false&modal=false&trackId=%1&resourceId=%2&chainOrder=%3");
-static const QString& TRACK_VSTI_EDITOR_URI_BODY = QString("musescore://vsti/editor?sync=false&modal=false&trackId=%1&resourceId=%2");
+static const QString MASTER_VSTFX_EDITOR_URI_BODY("musescore://vstfx/editor?sync=false&modal=false&resourceId=%1&chainOrder=%2");
+static const QString TRACK_VSTFX_EDITOR_URI_BODY("musescore://vstfx/editor?sync=false&modal=false&trackId=%1&resourceId=%2&chainOrder=%3");
+static const QString TRACK_VSTI_EDITOR_URI_BODY("musescore://vsti/editor?sync=false&modal=false&trackId=%1&resourceId=%2");
 
 MixerChannelItem::MixerChannelItem(QObject* parent, const audio::TrackId id, const bool isMaster)
     : QObject(parent),
@@ -312,8 +312,7 @@ OutputResourceItem* MixerChannelItem::buildOutputResourceItem(const audio::Audio
         m_outParams.fxChain.clear();
 
         for (const OutputResourceItem* item : m_outputResourceItemList) {
-            const AudioFxParams& updatedParams = item->params();
-            m_outParams.fxChain.emplace(updatedParams.chainOrder, updatedParams);
+            m_outParams.fxChain.insert({ item->params().chainOrder, item->params() });
         }
 
         emit outputParamsChanged(m_outParams);
@@ -347,31 +346,42 @@ OutputResourceItem* MixerChannelItem::buildOutputResourceItem(const audio::Audio
 
 void MixerChannelItem::ensureBlankOutputResourceSlot()
 {
+    removeRedundantEmptySlots();
+
     if (m_outputResourceItemList.count() >= OUTPUT_RESOURCE_COUNT_LIMIT) {
         return;
     }
 
-    auto hasSubsequentBlankSlots = [](const OutputResourceItem* f, const OutputResourceItem* s) {
-        return f->isBlank() && s->isBlank();
-    };
-
-    auto adjacentSearch = std::adjacent_find(m_outputResourceItemList.begin(),
-                                             m_outputResourceItemList.end(),
-                                             hasSubsequentBlankSlots);
-
-    if (adjacentSearch != m_outputResourceItemList.end()) {
-        ++adjacentSearch;
-        OutputResourceItem* item = *adjacentSearch;
-        m_outputResourceItemList.erase(adjacentSearch);
-        item->disconnect();
-        item->deleteLater();
-    } else {
-        AudioFxParams params;
-        params.chainOrder = m_outputResourceItemList.count();
-        m_outputResourceItemList << buildOutputResourceItem(std::move(params));
-    }
+    AudioFxParams params;
+    params.chainOrder = m_outputResourceItemList.count();
+    m_outputResourceItemList << buildOutputResourceItem(std::move(params));
 
     emit outputResourceItemListChanged(m_outputResourceItemList);
+}
+
+QList<OutputResourceItem*> MixerChannelItem::emptySlotsToRemove() const
+{
+    QList<OutputResourceItem*> result;
+
+    for (OutputResourceItem* item : m_outputResourceItemList) {
+        if (!item->isBlank()) {
+            result.clear();
+            continue;
+        }
+
+        result << item;
+    }
+
+    return result;
+}
+
+void MixerChannelItem::removeRedundantEmptySlots()
+{
+    for (OutputResourceItem* itemToRemove : emptySlotsToRemove()) {
+        m_outputResourceItemList.removeOne(itemToRemove);
+        itemToRemove->disconnect();
+        itemToRemove->deleteLater();
+    }
 }
 
 bool MixerChannelItem::outputOnly() const

@@ -70,6 +70,8 @@ void MixerChannel::applyOutputParams(const AudioOutputParams& originParams, Audi
             ++it;
         }
     }
+
+    m_params = resultParams;
 }
 
 Channel<audioch_t, float> MixerChannel::signalAmplitudeRmsChanged() const
