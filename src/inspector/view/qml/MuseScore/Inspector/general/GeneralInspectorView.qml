@@ -136,6 +136,8 @@ InspectorSectionView {
                 icon: IconCode.AUDIO
                 text: qsTrc("inspector", "Playback")
 
+                enabled: model && !model.playbackProxyModel.isEmpty
+
                 popupContent: PlaybackSettings {
                     id: playbackSettings
                     navigationPanel: playbackButton.popup.navigation
