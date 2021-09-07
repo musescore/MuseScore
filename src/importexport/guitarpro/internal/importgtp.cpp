@@ -844,7 +844,7 @@ void GuitarPro::createSlide(int sl, ChordRest* cr, int staffIdx, Note* /*note*/)
     }
     // slide out downwards (fall)
     if (sl & SLIDE_OUT_DOWN) {
-        ChordLine* cl = new ChordLine(Ms::toChord(cr));
+        ChordLine* cl = Factory::createChordLine(Ms::toChord(cr));
         cl->setChordLineType(ChordLineType::FALL);
         cl->setStraight(true);
         //TODO-ws		cl->setNote(note);
@@ -852,7 +852,7 @@ void GuitarPro::createSlide(int sl, ChordRest* cr, int staffIdx, Note* /*note*/)
     }
     // slide out upwards (doit)
     if (sl & SLIDE_OUT_UP) {
-        ChordLine* cl = new ChordLine(Ms::toChord(cr));
+        ChordLine* cl = Factory::createChordLine(Ms::toChord(cr));
         cl->setChordLineType(ChordLineType::DOIT);
         cl->setStraight(true);
         //TODO-ws            cl->setNote(note);
@@ -860,7 +860,7 @@ void GuitarPro::createSlide(int sl, ChordRest* cr, int staffIdx, Note* /*note*/)
     }
     // slide in from below (plop)
     if (sl & SLIDE_IN_BELOW) {
-        ChordLine* cl = new ChordLine(Ms::toChord(cr));
+        ChordLine* cl = Factory::createChordLine(Ms::toChord(cr));
         cl->setChordLineType(ChordLineType::PLOP);
         cl->setStraight(true);
         //TODO-ws		cl->setNote(note);
@@ -868,7 +868,7 @@ void GuitarPro::createSlide(int sl, ChordRest* cr, int staffIdx, Note* /*note*/)
     }
     // slide in from above (scoop)
     if (sl & SLIDE_IN_ABOVE) {
-        ChordLine* cl = new ChordLine(Ms::toChord(cr));
+        ChordLine* cl = Factory::createChordLine(Ms::toChord(cr));
         cl->setChordLineType(ChordLineType::SCOOP);
         cl->setStraight(true);
         //TODO-ws		cl->setNote(note);
@@ -1030,7 +1030,7 @@ void GuitarPro::createMeasures()
                 int keysig = bars[i].keysig != GP_INVALID_KEYSIG ? bars[i].keysig : key;
                 if (tick.isZero() || (int)score->staff(staffIdx)->key(tick) != (int)Key(keysig)) {
                     Segment* s = m->getSegment(SegmentType::KeySig, tick);
-                    KeySig* t = new KeySig(s);
+                    KeySig* t = Factory::createKeySig(s);
                     t->setKey(Key(keysig));
                     t->setTrack(staffIdx * VOICES);
                     s->add(t);
@@ -1312,7 +1312,7 @@ bool GuitarPro1::read(QFile* fp)
                 int numStrings = staff->part()->instrument()->stringData()->strings();
                 for (int i = 6; i >= 0; --i) {
                     if (strings & (1 << i) && ((6 - i) < numStrings)) {
-                        Note* note = new Note(static_cast<Chord*>(cr));
+                        Note* note = Factory::createNote(static_cast<Chord*>(cr));
                         static_cast<Chord*>(cr)->add(note);
                         readNote(6 - i, note);
                         note->setTpcFromPitch();
@@ -1376,7 +1376,7 @@ void GuitarPro::readChord(Segment* seg, int track, int numStrings, QString name,
 {
     int firstFret = readInt();
     if (firstFret || gpHeader) {
-        FretDiagram* fret = new FretDiagram(seg);
+        FretDiagram* fret = Factory::createFretDiagram(seg);
         fret->setTrack(track);
         fret->setStrings(numStrings);
         fret->setFretOffset(firstFret - 1);
@@ -1670,7 +1670,7 @@ bool GuitarPro2::read(QFile* fp)
         }
         Measure* measure = score->firstMeasure();
         Segment* segment = measure->getSegment(SegmentType::HeaderClef, Fraction(0, 1));
-        Clef* clef = new Clef(segment);
+        Clef* clef = Factory::createClef(segment);
         clef->setClefType(clefId);
         clef->setTrack(i * VOICES);
         segment->add(clef);
@@ -1812,7 +1812,7 @@ bool GuitarPro2::read(QFile* fp)
                 int numStrings = staff->part()->instrument()->stringData()->strings();
                 for (int i = 6; i >= 0; --i) {
                     if (strings & (1 << i) && ((6 - i) < numStrings)) {
-                        Note* note = new Note(static_cast<Chord*>(cr));
+                        Note* note = Factory::createNote(static_cast<Chord*>(cr));
                         static_cast<Chord*>(cr)->add(note);
                         readNote(6 - i, note);
                         note->setTpcFromPitch();
@@ -1929,7 +1929,7 @@ bool GuitarPro1::readNote(int string, Note* note)
             } else if (duration == 3) {
                 grace_len = MScore::division / 4;       //16th
             }
-            Note* gn = new Note(score->dummy()->chord());
+            Note* gn = Factory::createNote(score->dummy()->chord());
 
             if (fret == 255) {
                 gn->setHeadGroup(NoteHead::Group::HEAD_CROSS);
@@ -2121,7 +2121,7 @@ bool GuitarPro1::readNote(int string, Note* note)
         if (chords.size() && true_note) {
             Note* end_note = note;
             for (unsigned int i = 0; i < chords.size(); ++i) {
-                Note* note2 = new Note(chords[i]);
+                Note* note2 = Factory::createNote(chords[i]);
                 note2->setString(true_note->string());
                 note2->setFret(true_note->fret());
                 note2->setPitch(true_note->pitch());
@@ -2301,7 +2301,7 @@ bool GuitarPro3::read(QFile* fp)
         if (i == 0 && key) {
             for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
                 Segment* s = m->getSegment(SegmentType::KeySig, tick);
-                KeySig* t = new KeySig(s);
+                KeySig* t = Factory::createKeySig(s);
                 t->setKey(Key(key));
                 t->setTrack(staffIdx * VOICES);
                 s->add(t);
@@ -2386,7 +2386,7 @@ bool GuitarPro3::read(QFile* fp)
         }
         Measure* measure = score->firstMeasure();
         Segment* segment = measure->getSegment(SegmentType::HeaderClef, Fraction(0, 1));
-        Clef* clef = new Clef(segment);
+        Clef* clef = Factory::createClef(segment);
         clef->setClefType(clefId);
         clef->setTrack(i * VOICES);
         segment->add(clef);
@@ -2563,7 +2563,7 @@ bool GuitarPro3::read(QFile* fp)
                 bool hasSlur = false;
                 for (int i = 6; i >= 0; --i) {
                     if (strings & (1 << i) && ((6 - i) < numStrings)) {
-                        Note* note = new Note(toChord(cr));
+                        Note* note = Factory::createNote(toChord(cr));
                         toChord(cr)->add(note);
                         if (vibrato) {
                             addVibrato(note);
@@ -3008,7 +3008,7 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
             s1->setStaffType(Fraction(0, 1), st1);
             s1->setLines(Fraction(0, 1), lines);
             Excerpt::cloneStaff(s, s1);
-            p->staves()->front()->addBracket(new BracketItem(pscore, BracketType::NORMAL, 2));
+            p->staves()->front()->addBracket(Factory::createBracketItem(pscore->dummy(), BracketType::NORMAL, 2));
         }
         pscore->appendPart(p);
 

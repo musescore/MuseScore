@@ -26,6 +26,7 @@
 #include "log.h"
 #include "translation.h"
 
+#include "libmscore/factory.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/part.h"
 #include "libmscore/staff.h"
@@ -150,7 +151,7 @@ static void createMeasures(Ms::Score* score, const ScoreCreateOptions& scoreOpti
                         if (nKey.custom() || nKey.isAtonal() || nKey.key() != Key::C) {
                             staff->setKey(Ms::Fraction(0, 1), nKey);
                             Ms::Segment* ss = measure->getSegment(Ms::SegmentType::KeySig, Ms::Fraction(0, 1));
-                            Ms::KeySig* keysig = new Ms::KeySig(ss);
+                            Ms::KeySig* keysig = mu::engraving::Factory::createKeySig(ss);
                             keysig->setTrack(staffIdx * Ms::VOICES);
                             keysig->setKeySigEvent(nKey);
                             ss->add(keysig);

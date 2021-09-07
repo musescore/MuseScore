@@ -23,6 +23,7 @@
 
 #include <QDebug>
 
+#include "libmscore/factory.h"
 #include "libmscore/bracketItem.h"
 #include "libmscore/instrtemplate.h"
 #include "libmscore/masterscore.h"
@@ -30,6 +31,8 @@
 #include "libmscore/staff.h"
 
 #include "thirdparty/qzip/qzipreader_p.h"
+
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -72,7 +75,7 @@ void GuitarPro7::readTracks(QDomNode* track)
                 if (ref.endsWith("-gs") || ref.startsWith("2")) {         // grand staff
                     Staff* s2 = createStaff(score, part);
                     score->appendStaff(s2);
-                    s->addBracket(new BracketItem(s->score(), BracketType::BRACE, 2));
+                    s->addBracket(Factory::createBracketItem(s->score()->dummy(), BracketType::BRACE, 2));
                     s->setBarLineSpan(2);
                 }
             } else if (nodeName == "Transpose") {

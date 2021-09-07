@@ -1777,7 +1777,7 @@ bool Read206::readChordProperties206(XmlReader& e, Chord* ch)
     const QStringRef& tag(e.name());
 
     if (tag == "Note") {
-        Note* note = new Note(ch);
+        Note* note = Factory::createNote(ch);
         // the note needs to know the properties of the track it belongs to
         note->setTrack(ch->track());
         readNote(note, e);
@@ -1858,7 +1858,7 @@ bool Read206::readChordProperties206(XmlReader& e, Chord* ch)
         ch->setTremolo(tremolo);
     } else if (tag == "tickOffset") {     // obsolete
     } else if (tag == "ChordLine") {
-        ChordLine* cl = new ChordLine(ch);
+        ChordLine* cl = Factory::createChordLine(ch);
         cl->read(e);
         PointF o = cl->offset();
         cl->setOffset(0.0, 0.0);
@@ -1964,7 +1964,7 @@ static void readChord(Chord* chord, XmlReader& e)
     while (e.readNextStartElement()) {
         const QStringRef& tag(e.name());
         if (tag == "Note") {
-            Note* note = new Note(chord);
+            Note* note = Factory::createNote(chord);
             // the note needs to know the properties of the track it belongs to
             note->setTrack(chord->track());
             readNote(note, e);
@@ -2303,9 +2303,11 @@ EngravingItem* Read206::readArticulation(EngravingItem* parent, XmlReader& e)
             case SymId::fermataLongAbove:
             case SymId::fermataLongBelow:
             case SymId::fermataVeryLongAbove:
-            case SymId::fermataVeryLongBelow:
-                el = new Fermata(sym, score->dummy());
-                break;
+            case SymId::fermataVeryLongBelow: {
+                Fermata* fe = Factory::createFermata(score->dummy());
+                fe->setSymId(sym);
+                el = fe;
+            } break;
             default:
                 Articulation* ar = Factory::createArticulation(score->dummy()->chord());
                 ar->setSymId(sym);
@@ -2340,7 +2342,9 @@ EngravingItem* Read206::readArticulation(EngravingItem* parent, XmlReader& e)
     }
     // Special case for "no type" = ufermata, with missing subtype tag
     if (!el) {
-        el = new Fermata(sym, score->dummy());
+        Fermata* f = Factory::createFermata(score->dummy());
+        f->setSymId(sym);
+        el = f;
     }
     if (el->isFermata()) {
         if (timeStretch != 0.0) {
@@ -2581,7 +2585,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                 e.incTick(rest->actualTicks());
             }
         } else if (tag == "Breath") {
-            Breath* breath = new Breath(score->dummy()->segment());
+            Breath* breath = Factory::createBreath(score->dummy()->segment());
             breath->setTrack(e.track());
             breath->setPlacement(Placement::ABOVE);
             Fraction tick = e.tick();
@@ -2687,7 +2691,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             lastTick = e.tick();
             e.incTick(m->ticks());
         } else if (tag == "Clef") {
-            Clef* clef = new Clef(score->dummy()->segment());
+            Clef* clef = Factory::createClef(score->dummy()->segment());
             clef->setTrack(e.track());
             clef->read(e);
             clef->setGenerated(false);
@@ -2775,7 +2779,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                 }
             }
         } else if (tag == "KeySig") {
-            KeySig* ks = new KeySig(score->dummy()->segment());
+            KeySig* ks = Factory::createKeySig(score->dummy()->segment());
             ks->setTrack(e.track());
             ks->read(e);
             Fraction curTick = e.tick();

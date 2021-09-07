@@ -28,6 +28,10 @@
 
 #include "infrastructure/draw/font.h"
 
+namespace mu::engraving {
+class Factory;
+}
+
 namespace Ms {
 class StringData;
 class Chord;
@@ -165,6 +169,10 @@ class FretDiagram final : public EngravingItem
     qreal markerSize;
     int _numPos;
 
+    friend class mu::engraving::Factory;
+    FretDiagram(Segment* parent = nullptr);
+    FretDiagram(const FretDiagram&);
+
     void removeDot(int s, int f = 0);
     void removeBarre(int f);
     void removeBarres(int string, int fret = 0);
@@ -172,8 +180,7 @@ class FretDiagram final : public EngravingItem
     void removeDotsMarkers(int ss, int es, int fret);
 
 public:
-    FretDiagram(Segment* parent = nullptr);
-    FretDiagram(const FretDiagram&);
+
     ~FretDiagram();
 
     // Score Tree functions

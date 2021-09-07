@@ -20,9 +20,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include <set>
 #include <QDebug>
 
 #include "importmidi_clef.h"
+#include "libmscore/factory.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/staff.h"
 #include "libmscore/measure.h"
@@ -40,7 +42,7 @@
 #include "importmidi_operations.h"
 #include "libmscore/instrtemplate.h"
 
-#include <set>
+using namespace mu::engraving;
 
 namespace Ms {
 namespace MidiClef {
@@ -119,7 +121,7 @@ void createClef(ClefType clefType, Staff* staff, int tick, bool isSmall = false)
     } else {
         Measure* m = staff->score()->tick2measure(Fraction::fromTicks(tick));
         Segment* seg = m->getSegment(SegmentType::Clef, Fraction::fromTicks(tick));
-        Clef* clef = new Clef(seg);
+        Clef* clef = Factory::createClef(seg);
         clef->setClefType(clefType);
         const int track = staff->idx() * VOICES;
         clef->setTrack(track);

@@ -83,13 +83,16 @@ class MeasureBase : public EngravingItem
     qreal m_oldWidth       { 0 };         ///< Used to restore layout during recalculations in Score::collectSystem()
 
 protected:
+
+    MeasureBase(const ElementType& type, System* system = 0);
+    MeasureBase(const MeasureBase&);
+
     Fraction _len  { Fraction(0, 1) };    ///< actual length of measure
     void cleanupLayoutBreaks(bool undo);
 
 public:
-    MeasureBase(const ElementType& type, System* system = 0);
+
     ~MeasureBase();
-    MeasureBase(const MeasureBase&);
 
     System* system() const { return (System*)parent(); }
     void setParent(System* s) { EngravingItem::setParent((EngravingObject*)(s)); }

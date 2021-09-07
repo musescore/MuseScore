@@ -30,6 +30,7 @@
 #include "style/style.h"
 #include "io/xml.h"
 
+#include "factory.h"
 #include "measure.h"
 #include "segment.h"
 #include "score.h"
@@ -59,6 +60,7 @@
 #include "log.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -624,7 +626,7 @@ Bracket* System::createBracket(Ms::BracketItem* bi, int column, int staffIdx, QL
             }
         }
         if (b == 0) {
-            b = new Bracket(score()->dummy());
+            b = Factory::createBracket(score()->dummy());
             b->setBracketItem(bi);
             b->setGenerated(true);
             b->setTrack(track);

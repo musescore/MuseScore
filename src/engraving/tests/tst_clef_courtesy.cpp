@@ -24,6 +24,7 @@
 
 #include "testbase.h"
 
+#include "libmscore/factory.h"
 #include "libmscore/clef.h"
 #include "libmscore/measure.h"
 #include "libmscore/masterscore.h"
@@ -32,6 +33,7 @@
 static const QString CLEFCOURTESY_DATA_DIR("clef_courtesy_data/");
 
 using namespace Ms;
+using namespace mu::engraving;
 
 //---------------------------------------------------------
 //   TestClefCourtesy
@@ -70,7 +72,7 @@ static Measure* getMeasure(Score* score, int idx)
 
 static void dropClef(EngravingItem* m, ClefType t)
 {
-    Clef* clef = new Clef(m->score()->dummy()->segment());   // create a new element, as Measure::drop() will eventually delete it
+    Clef* clef = Factory::createClef(m->score()->dummy()->segment());   // create a new element, as Measure::drop() will eventually delete it
     clef->setClefType(t);
     EditData dropData(0);
     dropData.pos = m->pagePos();
@@ -165,7 +167,7 @@ void TestClefCourtesy::clef_courtesy02()
         m1 = m1->nextMeasure();
     }
     // make a clef-drop object and drop it to the measure
-    Clef* clef = new Clef(score->dummy()->segment());   // create a new element, as Measure::drop() will eventually delete it
+    Clef* clef = Factory::createClef(score->dummy()->segment());   // create a new element, as Measure::drop() will eventually delete it
     clef->setClefType(ClefType::G8_VA);
     EditData dropData(0);
     dropData.pos = m1->pagePos();
@@ -178,7 +180,7 @@ void TestClefCourtesy::clef_courtesy02()
         m2 = m2->nextMeasure();
     }
     // make a clef-drop object and drop it to the measure
-    clef = new Clef(score->dummy()->segment());   // create a new element, as Measure::drop() will eventually delete it
+    clef = Factory::createClef(score->dummy()->segment());   // create a new element, as Measure::drop() will eventually delete it
     clef->setClefType(ClefType::G);
     dropData.pos = m2->pagePos();
     dropData.dropElement = clef;
@@ -221,7 +223,7 @@ void TestClefCourtesy::clef_courtesy03()
     Measure* m2 = m1->nextMeasure();
 
     // make a clef-drop object and drop it to the 2nd measure
-    Clef* clef = new Clef(score->dummy()->segment());   // create a new element, as Measure::drop() will eventually delete it
+    Clef* clef = Factory::createClef(score->dummy()->segment());   // create a new element, as Measure::drop() will eventually delete it
     clef->setClefType(ClefType::G8_VA);
     EditData dropData(0);
     dropData.pos = m2->pagePos();

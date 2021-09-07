@@ -39,6 +39,10 @@
 #include "iengravingconfiguration.h"
 #include "modularity/ioc.h"
 
+namespace mu::engraving {
+class Factory;
+}
+
 namespace Ms {
 class Tie;
 class Chord;
@@ -252,7 +256,7 @@ public:
         OFFSET_VAL, USER_VAL
     };
     Q_ENUM(ValueType);
-    INJECT(notation, mu::engraving::IEngravingConfiguration, engravingConfiguration)
+    INJECT_STATIC(notation, mu::engraving::IEngravingConfiguration, engravingConfiguration)
 
 private:
     bool _ghost         { false };        ///< ghost note (guitar: death note)
@@ -309,6 +313,10 @@ private:
 
     QString _fretString;
 
+    friend class mu::engraving::Factory;
+    Note(Chord* ch = 0);
+    Note(const Note&, bool link = false);
+
     void startDrag(EditData&) override;
     mu::RectF drag(EditData& ed) override;
     void endDrag(EditData&) override;
@@ -329,8 +337,7 @@ private:
     static QString tpcUserName(int tpc, int pitch, bool explicitAccidental);
 
 public:
-    Note(Chord* ch = 0);
-    Note(const Note&, bool link = false);
+
     ~Note();
 
     Note& operator=(const Note&) = delete;

@@ -352,8 +352,8 @@ CREATE_ITEM_IMPL(Articulation, ElementType::ARTICULATION, ChordRest)
 MAKE_ITEM_IMPL(Articulation, ChordRest)
 
 CREATE_ITEM_IMPL(BarLine, ElementType::BAR_LINE, Segment)
-MAKE_ITEM_IMPL(BarLine, Segment)
 COPY_ITEM_IMPL(BarLine)
+MAKE_ITEM_IMPL(BarLine, Segment)
 
 Beam* Factory::createBeam(EngravingItem * parent, Score * score)
 {
@@ -369,3 +369,55 @@ std::shared_ptr<Beam> Factory::makeBeam(EngravingItem* parent, Score* score)
 
 CREATE_ITEM_IMPL(Bend, ElementType::BEND, Note)
 MAKE_ITEM_IMPL(Bend, Note)
+
+CREATE_ITEM_IMPL(Bracket, ElementType::BRACKET, EngravingItem)
+MAKE_ITEM_IMPL(Bracket, EngravingItem)
+
+BracketItem* Factory::createBracketItem(EngravingItem * parent)
+{
+    BracketItem* bi = new BracketItem(parent);
+    return bi;
+}
+
+BracketItem* Factory::createBracketItem(EngravingItem* parent, BracketType a, int b)
+{
+    BracketItem* bi = new BracketItem(parent, a, b);
+    return bi;
+}
+
+CREATE_ITEM_IMPL(Breath, ElementType::BREATH, Segment)
+MAKE_ITEM_IMPL(Breath, Segment)
+
+CREATE_ITEM_IMPL(ChordLine, ElementType::CHORDLINE, Chord)
+COPY_ITEM_IMPL(ChordLine)
+MAKE_ITEM_IMPL(ChordLine, Chord)
+
+CREATE_ITEM_IMPL(Clef, ElementType::CLEF, Segment)
+COPY_ITEM_IMPL(Clef)
+MAKE_ITEM_IMPL(Clef, Segment)
+
+CREATE_ITEM_IMPL(Fermata, ElementType::FERMATA, EngravingItem)
+MAKE_ITEM_IMPL(Fermata, EngravingItem)
+
+CREATE_ITEM_IMPL(FiguredBass, ElementType::FIGURED_BASS, Segment)
+MAKE_ITEM_IMPL(FiguredBass, Segment)
+
+CREATE_ITEM_IMPL(FretDiagram, ElementType::FRET_DIAGRAM, Segment)
+COPY_ITEM_IMPL(FretDiagram)
+MAKE_ITEM_IMPL(FretDiagram, Segment)
+
+CREATE_ITEM_IMPL(KeySig, ElementType::KEYSIG, Segment)
+COPY_ITEM_IMPL(KeySig)
+MAKE_ITEM_IMPL(KeySig, Segment)
+
+CREATE_ITEM_IMPL(LayoutBreak, ElementType::LAYOUT_BREAK, MeasureBase)
+COPY_ITEM_IMPL(LayoutBreak)
+MAKE_ITEM_IMPL(LayoutBreak, MeasureBase)
+
+CREATE_ITEM_IMPL(Note, ElementType::NOTE, Chord)
+Note* Factory::copyNote(const Note& src, bool link)
+{
+    Note* copy = new Note(src, link);
+    return copy;
+}
+MAKE_ITEM_IMPL(Note, Chord)

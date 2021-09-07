@@ -26,6 +26,7 @@
 
 #include "io/xml.h"
 
+#include "factory.h"
 #include "textframe.h"
 #include "text.h"
 #include "score.h"
@@ -43,6 +44,7 @@
 #include "undo.h"
 
 using namespace mu;
+using namespace mu::engraving;
 using namespace mu::draw;
 
 namespace Ms {
@@ -311,7 +313,7 @@ bool Box::readProperties(XmlReader& e)
             add(image);
         }
     } else if (tag == "FretDiagram") {
-        FretDiagram* f = new FretDiagram(this->score()->dummy()->segment());
+        FretDiagram* f = Factory::createFretDiagram(this->score()->dummy()->segment());
         f->read(e);
         //! TODO Looks like a bug.
         //! The FretDiagram parent must be Segment

@@ -65,6 +65,44 @@ public:
     static Ms::Bend* createBend(Ms::Note* parent);
     static std::shared_ptr<Ms::Bend> makeBend(Ms::Note* parent);
 
+    static Ms::Bracket* createBracket(Ms::EngravingItem* parent);
+    static std::shared_ptr<Ms::Bracket> makeBracket(Ms::EngravingItem* parent);
+    static Ms::BracketItem* createBracketItem(Ms::EngravingItem* parent);
+    static Ms::BracketItem* createBracketItem(Ms::EngravingItem* parent, Ms::BracketType a, int b);
+
+    static Ms::Breath* createBreath(Ms::Segment* parent);
+    static std::shared_ptr<Ms::Breath> makeBreath(Ms::Segment* parent);
+
+    static Ms::ChordLine* createChordLine(Ms::Chord* parent);
+    static Ms::ChordLine* copyChordLine(const Ms::ChordLine& src);
+    static std::shared_ptr<Ms::ChordLine> makeChordLine(Ms::Chord* parent);
+
+    static Ms::Clef* createClef(Ms::Segment* parent);
+    static Ms::Clef* copyClef(const Ms::Clef& src);
+    static std::shared_ptr<Ms::Clef> makeClef(Ms::Segment* parent);
+
+    static Ms::Fermata* createFermata(Ms::EngravingItem* parent);
+    static std::shared_ptr<Ms::Fermata> makeFermata(Ms::EngravingItem* parent);
+
+    static Ms::FiguredBass* createFiguredBass(Ms::Segment* parent);
+    static std::shared_ptr<Ms::FiguredBass> makeFiguredBass(Ms::Segment* parent);
+
+    static Ms::FretDiagram* createFretDiagram(Ms::Segment* parent);
+    static Ms::FretDiagram* copyFretDiagram(const Ms::FretDiagram& src);
+    static std::shared_ptr<Ms::FretDiagram> makeFretDiagram(Ms::Segment* parent);
+
+    static Ms::KeySig* createKeySig(Ms::Segment* parent);
+    static Ms::KeySig* copyKeySig(const Ms::KeySig& src);
+    static std::shared_ptr<Ms::KeySig> makeKeySig(Ms::Segment* parent);
+
+    static Ms::LayoutBreak* createLayoutBreak(Ms::MeasureBase* parent);
+    static Ms::LayoutBreak* copyLayoutBreak(const Ms::LayoutBreak& src);
+    static std::shared_ptr<Ms::LayoutBreak> makeLayoutBreak(Ms::MeasureBase* parent);
+
+    static Ms::Note* createNote(Ms::Chord* parent);
+    static Ms::Note* copyNote(const Ms::Note& src, bool link = false);
+    static std::shared_ptr<Ms::Note> makeNote(Ms::Chord* parent);
+
 private:
     static Ms::EngravingItem* doCreateItem(Ms::ElementType type, Ms::EngravingItem* parent);
 };

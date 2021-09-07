@@ -718,7 +718,7 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
                 // we will miss a key sig!
                 if (!keySigWritten) {
                     Key k = score()->staff(track2staff(track))->key(segment->tick());
-                    KeySig* ks = new KeySig(this->dummy()->segment());
+                    KeySig* ks = Factory::createKeySig(this->dummy()->segment());
                     ks->setKey(k);
                     ks->write(xml);
                     delete ks;

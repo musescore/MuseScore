@@ -261,7 +261,7 @@ Chord::Chord(const Chord& c, bool link)
     _ledgerLines = 0;
 
     for (Note* onote : c._notes) {
-        Note* nnote = new Note(*onote, link);
+        Note* nnote = Factory::copyNote(*onote, link);
         add(nnote);
     }
     for (Chord* gn : c.graceNotes()) {
@@ -325,7 +325,7 @@ Chord::Chord(const Chord& c, bool link)
     for (EngravingItem* e : c.el()) {
         if (e->isChordLine()) {
             ChordLine* cl = toChordLine(e);
-            ChordLine* ncl = new ChordLine(*cl);
+            ChordLine* ncl = Factory::copyChordLine(*cl);
             add(ncl);
             if (link) {
                 score()->undo(new Link(ncl, cl));
@@ -1145,7 +1145,7 @@ bool Chord::readProperties(XmlReader& e)
     const QStringRef& tag(e.name());
 
     if (tag == "Note") {
-        Note* note = new Note(this);
+        Note* note = Factory::createNote(this);
         // the note needs to know the properties of the track it belongs to
         note->setTrack(track());
         note->setParent(this);
@@ -1204,7 +1204,7 @@ bool Chord::readProperties(XmlReader& e)
         _tremolo->setDurationType(durationType());
     } else if (tag == "tickOffset") {     // obsolete
     } else if (tag == "ChordLine") {
-        ChordLine* cl = new ChordLine(this);
+        ChordLine* cl = Factory::createChordLine(this);
         cl->read(e);
         add(cl);
     } else {

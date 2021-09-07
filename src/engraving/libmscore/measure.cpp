@@ -2331,7 +2331,7 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
             }
         } else if (tag == "Breath") {
             segment = getSegment(SegmentType::Breath, e.tick());
-            Breath* breath = new Breath(segment);
+            Breath* breath = Factory::createBreath(segment);
             breath->setTrack(e.track());
             breath->setPlacement(breath->track() & 1 ? Placement::BELOW : Placement::ABOVE);
             breath->read(e);
@@ -2373,7 +2373,7 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
                 }
             }
             segment = getSegment(header ? SegmentType::HeaderClef : SegmentType::Clef, e.tick());
-            Clef* clef = new Clef(segment);
+            Clef* clef = Factory::createClef(segment);
             clef->setTrack(e.track());
             clef->read(e);
             clef->setGenerated(false);
@@ -2407,7 +2407,7 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
                 }
             }
         } else if (tag == "KeySig") {
-            KeySig* ks = new KeySig(score()->dummy()->segment());
+            KeySig* ks = Factory::createKeySig(score()->dummy()->segment());
             ks->setTrack(e.track());
             ks->read(e);
             Fraction curTick = e.tick();
@@ -2464,7 +2464,7 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
             el->read(e);
             segment->add(el);
         } else if (tag == "Fermata") {
-            fermata = new Fermata(score()->dummy());
+            fermata = Factory::createFermata(score()->dummy());
             fermata->setTrack(e.track());
             fermata->setPlacement(fermata->track() & 1 ? Placement::BELOW : Placement::ABOVE);
             fermata->read(e);
@@ -3141,7 +3141,7 @@ Measure* Measure::cloneMeasure(Score* sc, const Fraction& tick, TieMap* tieMap)
     m->setTick(tick);
     m->setLineBreak(lineBreak());
     m->setPageBreak(pageBreak());
-    m->setSectionBreak(sectionBreak() ? new LayoutBreak(*sectionBreakElement()) : 0);
+    m->setSectionBreak(sectionBreak() ? Factory::copyLayoutBreak(*sectionBreakElement()) : 0);
 
     m->setHeader(header());
     m->setTrailer(trailer());
@@ -4263,7 +4263,7 @@ void Measure::addSystemHeader(bool isFirstSystem)
                     //
                     // create missing clef
                     //
-                    clef = new Clef(cSegment);
+                    clef = Factory::createClef(cSegment);
                     clef->setTrack(track);
                     clef->setGenerated(true);
                     clef->setParent(cSegment);
@@ -4328,7 +4328,7 @@ void Measure::addSystemHeader(bool isFirstSystem)
                 //
                 // create missing key signature
                 //
-                keysig = new KeySig(kSegment);
+                keysig = Factory::createKeySig(kSegment);
                 keysig->setTrack(track);
                 keysig->setGenerated(true);
                 keysig->setParent(kSegment);
@@ -4491,7 +4491,7 @@ void Measure::addSystemTrailer(Measure* nm)
             KeySigEvent key2 = staff->keySigEvent(endTick());
 
             if (!ks) {
-                ks = new KeySig(s);
+                ks = Factory::createKeySig(s);
                 ks->setTrack(track);
                 ks->setGenerated(true);
                 ks->setParent(s);

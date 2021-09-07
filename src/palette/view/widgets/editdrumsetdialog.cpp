@@ -23,6 +23,8 @@
 #include "editdrumsetdialog.h"
 
 #include "engraving/infrastructure/io/xml.h"
+
+#include "libmscore/factory.h"
 #include "libmscore/utils.h"
 #include "libmscore/chord.h"
 #include "libmscore/score.h"
@@ -39,6 +41,7 @@
 
 using namespace mu::framework;
 using namespace mu::notation;
+using namespace mu::engraving;
 
 static const QString EDIT_DRUMSET_DIALOG_NAME("EditDrumsetDialog");
 
@@ -588,7 +591,7 @@ void EditDrumsetDialog::updateExample()
     chord->setStemDirection(dir);
     chord->setTrack(v);
     chord->setUp(up);
-    Note* note = new Note(chord.get());
+    Note* note = Factory::createNote(chord.get());
     note->setParent(chord.get());
     note->setTrack(v);
     note->setPitch(pitch);
