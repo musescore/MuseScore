@@ -36,7 +36,7 @@ public:
     void process(float* buffer, unsigned int sampleCount) override;
 
 private:
-    float m_frequency = 1'000.f;
+    float m_frequency = 1000.f;
     float m_phase = 0;
 };
 }
