@@ -65,11 +65,6 @@ Page::Page(EngravingObject* parent)
 
 Page::~Page()
 {
-    for (System* s : _systems) {
-        if (s->page() == this) {
-            s->moveToDummy();
-        }
-    }
 }
 
 //---------------------------------------------------------
