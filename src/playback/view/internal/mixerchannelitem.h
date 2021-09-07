@@ -75,8 +75,8 @@ public:
     bool muted() const;
     bool solo() const;
 
-    void loadInputParams(audio::AudioInputParams &&newParams);
-    void loadOutputParams(audio::AudioOutputParams &&newParams);
+    void loadInputParams(audio::AudioInputParams&& newParams);
+    void loadOutputParams(audio::AudioOutputParams&& newParams);
 
     void subscribeOnAudioSignalChanges(audio::AudioSignalChanges&& audioSignalChanges);
 

@@ -156,8 +156,8 @@ void VstFxResolver::updateMasterFxMap(const AudioFxChain& newFxChain)
 }
 
 void VstFxResolver::fxChainToRemove(const AudioFxChain& currentFxChain,
-                                   const audio::AudioFxChain& newFxChain,
-                                   audio::AudioFxChain& resultChain)
+                                    const audio::AudioFxChain& newFxChain,
+                                    audio::AudioFxChain& resultChain)
 {
     std::set_difference(newFxChain.begin(), newFxChain.end(),
                         currentFxChain.begin(), currentFxChain.end(),
@@ -165,8 +165,8 @@ void VstFxResolver::fxChainToRemove(const AudioFxChain& currentFxChain,
 }
 
 void VstFxResolver::fxChainToCreate(const AudioFxChain& currentFxChain,
-                                   const audio::AudioFxChain& newFxChain,
-                                   audio::AudioFxChain& resultChain)
+                                    const audio::AudioFxChain& newFxChain,
+                                    audio::AudioFxChain& resultChain)
 {
     std::set_difference(currentFxChain.begin(), currentFxChain.end(),
                         newFxChain.begin(), newFxChain.end(),

@@ -58,8 +58,10 @@ private:
     void updateMasterFxMap(const audio::AudioFxChain& newFxChain);
     void updateTrackFxMap(FxMap& fxMap, const audio::TrackId trackId, const audio::AudioFxChain& newFxChain);
 
-    void fxChainToRemove(const audio::AudioFxChain& currentFxChain, const audio::AudioFxChain& newFxChain, audio::AudioFxChain& resultChain);
-    void fxChainToCreate(const audio::AudioFxChain& currentFxChain, const audio::AudioFxChain& newFxChain, audio::AudioFxChain& resultChain);
+    void fxChainToRemove(const audio::AudioFxChain& currentFxChain, const audio::AudioFxChain& newFxChain,
+                         audio::AudioFxChain& resultChain);
+    void fxChainToCreate(const audio::AudioFxChain& currentFxChain, const audio::AudioFxChain& newFxChain,
+                         audio::AudioFxChain& resultChain);
 
     std::map<audio::TrackId, FxMap> m_tracksFxMap;
     FxMap m_masterFxMap;
