@@ -114,6 +114,8 @@ FocusableItem {
                     height: childrenRect.height
                     width: parent.width
 
+                    visible: root.model && root.model.isFeatheringHeightChangingAllowed
+
                     InspectorPropertyView {
                         anchors.left: parent.left
                         anchors.right: parent.horizontalCenter
