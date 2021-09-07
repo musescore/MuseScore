@@ -37,6 +37,10 @@
 #include "stafftypelist.h"
 #include "groups.h"
 
+namespace mu::engraving {
+class Factory;
+}
+
 namespace Ms {
 class InstrumentTemplate;
 class XmlWriter;
@@ -112,14 +116,17 @@ private:
     ChangeMap _velocityMultiplications;         ///< cached value
     PitchList _pitchOffsets;        ///< cached value
 
+    friend class mu::engraving::Factory;
+    Staff(Score* score = nullptr);
+    Staff(const Staff& staff);
+
     void fillBrackets(int);
     void cleanBrackets();
 
     qreal staffMag(const StaffType*) const;
 
 public:
-    Staff(Score* score = nullptr);
-    Staff(const Staff& staff);
+
     Staff* clone() const override;
     ~Staff();
 
@@ -313,13 +320,5 @@ public:
     void triggerLayout() const override;
     void triggerLayout(const Fraction& tick);
 };
-
-inline Staff* createStaff(Score* score, Part* part)
-{
-    Staff* staff = new Staff(score);
-    staff->setPart(part);
-
-    return staff;
-}
 }     // namespace Ms
 #endif

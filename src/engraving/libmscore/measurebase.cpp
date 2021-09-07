@@ -625,7 +625,7 @@ bool MeasureBase::readProperties(XmlReader& e)
             delete lb;
         }
     } else if (tag == "StaffTypeChange") {
-        StaffTypeChange* stc = new StaffTypeChange(this);
+        StaffTypeChange* stc = Factory::createStaffTypeChange(this);
         stc->setTrack(e.track());
         stc->setParent(this);
         stc->read(e);

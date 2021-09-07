@@ -1148,7 +1148,7 @@ bool GuitarPro1::read(QFile* fp)
     //
     for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
         Part* part = new Part(score);
-        Staff* s = createStaff(score, part);
+        Staff* s = Factory::createStaff(score, part);
 
         score->appendStaff(s);
         score->appendPart(part);
@@ -1621,7 +1621,7 @@ bool GuitarPro2::read(QFile* fp)
     //
     for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
         Part* part = new Part(score);
-        Staff* s = createStaff(score, part);
+        Staff* s = Factory::createStaff(score, part);
 
         score->appendStaff(s);
         score->appendPart(part);
@@ -2311,7 +2311,7 @@ bool GuitarPro3::read(QFile* fp)
     //
     for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
         Part* part = new Part(score);
-        Staff* s = createStaff(score, part);
+        Staff* s = Factory::createStaff(score, part);
 
         score->appendStaff(s);
         score->appendPart(part);
@@ -2606,7 +2606,7 @@ bool GuitarPro3::read(QFile* fp)
                             addVibrato(note);
                         }
                         if (dotted) {
-                            NoteDot* dot = new NoteDot(note);
+                            NoteDot* dot = Factory::createNoteDot(note);
                             // there is at most one dotted note in this guitar pro version - set 0 index
                             dot->setParent(note);
                             dot->setTrack(track);                // needed to know the staff it belongs to (and detect tablature)
@@ -3012,7 +3012,7 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
 
         Staff* staff = part->staves()->front();
 
-        Staff* s = createStaff(score, part);
+        Staff* s = Factory::createStaff(score, part);
         const StaffType* st = staff->constStaffType(Fraction(0, 1));
         s->setStaffType(Fraction(0, 1), *st);
 

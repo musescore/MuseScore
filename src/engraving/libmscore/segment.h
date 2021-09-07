@@ -27,6 +27,10 @@
 #include "shape.h"
 #include "mscore.h"
 
+namespace mu::engraving {
+class Factory;
+}
+
 namespace Ms {
 class Measure;
 class Segment;
@@ -72,6 +76,11 @@ class Segment final : public EngravingItem
     std::vector<Shape> _shapes;           // size = staves
     std::vector<qreal> _dotPosX;          // size = staves
 
+    friend class mu::engraving::Factory;
+    Segment(Measure* m = 0);
+    Segment(Measure*, SegmentType, const Fraction&);
+    Segment(const Segment&);
+
     void init();
     void checkEmpty() const;
     void checkElement(EngravingItem*, int track);
@@ -81,9 +90,7 @@ protected:
     EngravingItem* getElement(int staff);       //??
 
 public:
-    Segment(Measure* m = 0);
-    Segment(Measure*, SegmentType, const Fraction&);
-    Segment(const Segment&);
+
     ~Segment();
 
     void setParent(Measure* parent);

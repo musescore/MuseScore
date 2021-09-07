@@ -21,6 +21,7 @@
  */
 #include "notationparts.h"
 
+#include "libmscore/factory.h"
 #include "libmscore/undo.h"
 #include "libmscore/excerpt.h"
 #include "libmscore/page.h"
@@ -748,7 +749,7 @@ void NotationParts::doInsertPart(Part* part, int index)
     for (int staffIndex = 0; staffIndex < stavesCopy.size(); ++staffIndex) {
         Staff* staff = stavesCopy[staffIndex];
 
-        Staff* staffCopy = new Staff(score());
+        Staff* staffCopy = engraving::Factory::createStaff(score());
         staffCopy->setId(staff->id());
         staffCopy->setPart(part);
         staffCopy->init(staff);
@@ -883,7 +884,7 @@ void NotationParts::appendStaves(Part* part, const InstrumentTemplate& templ)
     for (int staffIndex = 0; staffIndex < templ.staffCount; ++staffIndex) {
         int lastStaffIndex = !score()->staves().isEmpty() ? score()->staves().last()->idx() : 0;
 
-        Staff* staff = Ms::createStaff(score(), part);
+        Staff* staff = engraving::Factory::createStaff(score(), part);
         initStaff(staff, templ, Ms::StaffType::preset(StaffType::STANDARD), staffIndex);
 
         if (lastStaffIndex > 0) {

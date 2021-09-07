@@ -27,6 +27,7 @@
 #include "style/style.h"
 #include "io/xml.h"
 
+#include "factory.h"
 #include "barline.h"
 #include "beam.h"
 #include "box.h"
@@ -62,6 +63,7 @@
 #include "log.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -256,7 +258,7 @@ void Excerpt::setVoiceVisible(Staff* staff, int voiceIndex, bool visible)
     updateTracks();
 
     // clone staff
-    Staff* staffCopy = new Staff(partScore());
+    Staff* staffCopy = Factory::createStaff(partScore());
     staffCopy->setId(staff->id());
     staffCopy->setPart(staff->part());
     staffCopy->init(staff);
@@ -307,7 +309,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
         p->setPartName(part->partName());
 
         for (Staff* staff : *part->staves()) {
-            Staff* s = createStaff(score, p);
+            Staff* s = Factory::createStaff(score, p);
             s->setId(staff->id());
             s->init(staff);
             s->setDefaultClefType(staff->defaultClefType());

@@ -40,8 +40,11 @@ class Stem final : public EngravingItem
     qreal _userLen;
     qreal _len       { 0.0 };       // always positive
 
-public:
+    friend class mu::engraving::Factory;
     Stem(Chord* parent = 0);
+
+public:
+
     Stem& operator=(const Stem&) = delete;
 
     Stem* clone() const override { return new Stem(*this); }

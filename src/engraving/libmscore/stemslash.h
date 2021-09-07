@@ -36,9 +36,11 @@ class StemSlash final : public EngravingItem
 {
     mu::LineF line;
 
-public:
+    friend class mu::engraving::Factory;
     StemSlash(Chord* parent = 0)
         : EngravingItem(ElementType::STEM_SLASH, parent) {}
+
+public:
 
     qreal mag() const override { return parentElement()->mag(); }
     void setLine(const mu::LineF& l);
