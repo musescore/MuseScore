@@ -165,8 +165,7 @@ void VstAudioClient::extractInputSamples(const audio::samples_t& sampleCount, co
 {
     for (unsigned int i = 0; i < sampleCount; ++i) {
         for (audio::audioch_t s = 0; s < m_audioChannelsCount; ++s) {
-            auto getFromChannel = std::min<unsigned int>(s, m_processData.outputs[0].numChannels - 1);
-            m_processData.inputs[0].channelBuffers32[getFromChannel][i] = sourceBuffer[i * m_audioChannelsCount + s];
+            m_processData.inputs[0].channelBuffers32[s][i] = sourceBuffer[i * m_audioChannelsCount + s];
         }
     }
 }

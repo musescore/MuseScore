@@ -55,12 +55,12 @@ void VstFxProcessor::setSampleRate(unsigned int sampleRate)
 
 bool VstFxProcessor::active() const
 {
-    return m_isActive;
+    return m_params.active;
 }
 
 void VstFxProcessor::setActive(bool active)
 {
-    m_isActive = active;
+    m_params.active = active;
 }
 
 void VstFxProcessor::process(float* buffer, unsigned int sampleCount)

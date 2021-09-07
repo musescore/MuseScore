@@ -29,8 +29,6 @@ private:
     std::unique_ptr<VstAudioClient> m_vstAudioClient = nullptr;
 
     audio::AudioFxParams m_params;
-
-    bool m_isActive = false;
 };
 
 using VstFxPtr = std::shared_ptr<VstFxProcessor>;
