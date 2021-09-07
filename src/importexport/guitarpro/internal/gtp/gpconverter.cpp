@@ -390,7 +390,7 @@ void GPConverter::addVolta(const GPMasterBar* mB, Measure* measure)
         return;
     }
 
-    if (_lastVolta && _lastVolta->endings().size() != mB->alternateEnding().size()) {
+    if (_lastVolta && _lastVolta->endings().size() != static_cast<int>(mB->alternateEnding().size())) {
         _lastVolta = nullptr;
     }
 
@@ -676,11 +676,11 @@ void GPConverter::setUpTrack(const std::unique_ptr<GPTrack>& tR)
                 tunning = standartTuning;
             }
 
-            StringData stringData = StringData(fretCount, tunning.size(), tunning.data());
+            StringData stringData = StringData(fretCount, static_cast<int>(tunning.size()), tunning.data());
 
             part->instrument()->setStringData(stringData);
         } else {
-            StringData stringData = StringData(24, standartTuning.size(), standartTuning.data());
+            StringData stringData = StringData(24, static_cast<int>(standartTuning.size()), standartTuning.data());
             part->instrument()->setStringData(stringData);
 //            part->staff(0)->insertIntoCapoList({0, 1}, 0);
 //            part->setCapoFret(0);
@@ -801,12 +801,11 @@ void GPConverter::addTempoMap()
 
 bool GPConverter::addSimileMark(const GPBar* bar, int /*curTrack*/)
 {
-    //!@NOTE add simile mark
-    return false;
-
     if (bar->simileMark() == GPBar::SimileMark::None) {
         return false;
     }
+    //!@NOTE add simile mark
+    return false;
 }
 
 void GPConverter::addClef(const GPBar* bar, int curTrack)
@@ -2022,7 +2021,7 @@ int GPConverter::getStringNumberFor(Ms::Note* pNote, int pitch) const
         return -1;
     }
 
-    const int32_t lastIdx = stringTableSize - 1;
+    const int32_t lastIdx = static_cast<int32_t>(stringTableSize) - 1;
 
     for (int32_t idx = lastIdx; idx >= 0; --idx) {
         auto string = stringTable[idx];
