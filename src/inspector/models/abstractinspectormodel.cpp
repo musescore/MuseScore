@@ -68,7 +68,7 @@ static const QMap<Ms::ElementType, AbstractInspectorModel::InspectorModelType> N
     { Ms::ElementType::MMREST, AbstractInspectorModel::InspectorModelType::TYPE_MMREST },
     { Ms::ElementType::BEND, AbstractInspectorModel::InspectorModelType::TYPE_BEND },
     { Ms::ElementType::TREMOLOBAR, AbstractInspectorModel::InspectorModelType::TYPE_TREMOLOBAR },
-    { Ms::ElementType::TREMOLO, AbstractInspectorModel::InspectorModelType::TYPE_TREMOLOBAR },
+    { Ms::ElementType::TREMOLO, AbstractInspectorModel::InspectorModelType::TYPE_TREMOLO },
     { Ms::ElementType::MEASURE_REPEAT, AbstractInspectorModel::InspectorModelType::TYPE_MEASURE_REPEAT }
 };
 
