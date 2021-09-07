@@ -48,7 +48,6 @@ void MixerChannel::applyOutputParams(const AudioOutputParams& originParams, Audi
     m_fxProcessors = fxResolver()->resolveFxList(m_trackId, originParams.fxChain);
 
     for (IFxProcessorPtr& fx : m_fxProcessors) {
-        fx->setActive(true);
         fx->setSampleRate(m_sampleRate);
     }
 

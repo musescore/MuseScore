@@ -55,16 +55,7 @@ public:
 private:
     mutable std::mutex m_mutex;
 
-    struct FxPluginKey {
-        audio::AudioResourceId resourceId;
-        audio::AudioFxChainOrder chainOrder = 0;
-
-        bool operator<(const FxPluginKey& other) const
-        {
-            return chainOrder < other.chainOrder
-                   && resourceId < other.resourceId;
-        }
-    };
+    using FxPluginKey = std::pair<audio::AudioResourceId, audio::AudioFxChainOrder>;
 
     using VstiInstancesMap = std::map<audio::AudioResourceId, VstPluginPtr>;
     using VstFxInstancesMap = std::map<FxPluginKey, VstPluginPtr>;
