@@ -43,6 +43,8 @@ void BarlineSettingsModel::createProperties()
     m_spanFrom = buildPropertyItem(Ms::Pid::BARLINE_SPAN_FROM);
     m_spanTo = buildPropertyItem(Ms::Pid::BARLINE_SPAN_TO);
     m_hasToShowTips = buildPropertyItem(Ms::Pid::BARLINE_SHOW_TIPS);
+
+    connect(m_type, &PropertyItem::valueChanged, this, &BarlineSettingsModel::isRepeatStyleChangingAllowedChanged);
 }
 
 void BarlineSettingsModel::requestElements()
@@ -137,4 +139,18 @@ PropertyItem* BarlineSettingsModel::spanTo() const
 PropertyItem* BarlineSettingsModel::hasToShowTips() const
 {
     return m_hasToShowTips;
+}
+
+bool BarlineSettingsModel::isRepeatStyleChangingAllowed() const
+{
+    using LineType = BarlineTypes::LineType;
+
+    static const QList<LineType> allowedLineTypes {
+        LineType::TYPE_START_REPEAT,
+        LineType::TYPE_END_REPEAT,
+        LineType::TYPE_END_START_REPEAT
+    };
+
+    LineType currentType = static_cast<LineType>(m_type->value().toInt());
+    return allowedLineTypes.contains(currentType);
 }
