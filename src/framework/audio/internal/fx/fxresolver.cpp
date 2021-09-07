@@ -77,6 +77,10 @@ std::vector<IFxProcessorPtr> FxResolver::resolveFxList(const TrackId trackId, co
             }
         }
 
+        if (fxChainByType.empty()) {
+            continue;
+        }
+
         std::vector<IFxProcessorPtr> fxList = resolver.second->resolveFxList(trackId, std::move(fxChainByType));
         result.insert(result.end(), fxList.begin(), fxList.end());
     }
