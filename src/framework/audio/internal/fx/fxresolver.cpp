@@ -49,10 +49,14 @@ std::vector<IFxProcessorPtr> FxResolver::resolveMasterFxList(const AudioFxChain&
             if (resolver.first == fx.second.type()) {
                 fxChainByType.insert(fx);
             }
-
-            std::vector<IFxProcessorPtr> fxList = resolver.second->resolveMasterFxList(std::move(fxChainByType));
-            result.insert(result.end(), fxList.begin(), fxList.end());
         }
+
+        if (fxChainByType.empty()) {
+            continue;
+        }
+
+        std::vector<IFxProcessorPtr> fxList = resolver.second->resolveMasterFxList(std::move(fxChainByType));
+        result.insert(result.end(), fxList.begin(), fxList.end());
     }
 
     return result;
