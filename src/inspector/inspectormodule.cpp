@@ -54,6 +54,7 @@
 #include "types/bendtypes.h"
 #include "types/tremolobartypes.h"
 #include "types/tremolotypes.h"
+#include "types/beamtypes.h"
 
 using namespace mu::inspector;
 using namespace mu::modularity;
