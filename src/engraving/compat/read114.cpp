@@ -1116,7 +1116,7 @@ static void readChord(Measure* m, Chord* chord, XmlReader& e)
     while (e.readNextStartElement()) {
         const QStringRef& tag(e.name());
         if (tag == "Note") {
-            Note* note = new Note(chord);
+            Note* note = Factory::createNote(chord);
             // the note needs to know the properties of the track it belongs to
             note->setTrack(chord->track());
             note->setParent(chord);
@@ -1761,7 +1761,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                 e.incTick(rest->actualTicks());
             }
         } else if (tag == "Breath") {
-            Breath* breath = new Breath(m->score()->dummy()->segment());
+            Breath* breath = Factory::createBreath(m->score()->dummy()->segment());
             breath->setTrack(e.track());
             Fraction tick = e.tick();
             breath->setPlacement(breath->track() & 1 ? Placement::BELOW : Placement::ABOVE);
@@ -1881,7 +1881,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             }
             segment = m->getSegment(header ? SegmentType::HeaderClef : SegmentType::Clef, e.tick());
 
-            Clef* clef = new Clef(segment);
+            Clef* clef = Factory::createClef(segment);
             clef->setTrack(e.track());
             readClef(clef, e);
             if (m->score()->mscVersion() < 113) {
@@ -1919,7 +1919,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                 m->setTimesig(ts->sig() / timeStretch);
             }
         } else if (tag == "KeySig") {
-            KeySig* ks = new KeySig(m->score()->dummy()->segment());
+            KeySig* ks = Factory::createKeySig(m->score()->dummy()->segment());
             ks->setTrack(e.track());
             ks->read(e);
             Fraction curTick = e.tick();
@@ -2802,7 +2802,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e)
         if (tag == "Staff") {
             readStaffContent(masterScore, e);
         } else if (tag == "KeySig") {                 // not supported
-            KeySig* ks = new KeySig(masterScore->dummy()->segment());
+            KeySig* ks = Factory::createKeySig(masterScore->dummy()->segment());
             ks->read(e);
             delete ks;
         } else if (tag == "siglist") {
@@ -2996,7 +2996,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e)
             if (seg->element(track)) {
                 seg->element(track)->setGenerated(false);
             } else {
-                Clef* clef = new Clef(seg);
+                Clef* clef = Factory::createClef(seg);
                 clef->setClefType(clefId);
                 clef->setTrack(track);
                 clef->setGenerated(false);
@@ -3024,7 +3024,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e)
                 toKeySig(seg->element(track))->setGenerated(false);
             } else {
                 KeySigEvent ke = i->second;
-                KeySig* ks = new KeySig(seg);
+                KeySig* ks = Factory::createKeySig(seg);
                 ks->setKeySigEvent(ke);
                 ks->setParent(seg);
                 ks->setTrack(track);

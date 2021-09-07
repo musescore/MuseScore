@@ -672,7 +672,7 @@ void PowerTab::fillMeasure(tBeatList& elist, Measure* measure, int staff, std::v
             }
             bool has_hammer = false;
             for (const auto& n : beat->notes) {
-                auto note = new Note(chord);
+                auto note = Factory::createNote(chord);
                 chord->add(note);
                 if (n.dead) {
                     note->setHeadGroup(NoteHead::Group::HEAD_CROSS);
@@ -857,14 +857,14 @@ void PowerTab::addToScore(ptSection& sec)
         for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
             int keysig = staffIdx >= staffInc ? 0 : 1;       // Can be parsed int beat section
             Segment* s = measure->getSegment(SegmentType::KeySig, tick);
-            KeySig* t = new KeySig(s);
+            KeySig* t = Factory::createKeySig(s);
             t->setKey(Key(keysig));
             t->setTrack(staffIdx * VOICES);
             s->add(t);
 
             ClefType clefId = staffIdx >= staffInc ? ClefType::F8_VB : ClefType::G15_MB;
             s = measure->getSegment(SegmentType::HeaderClef, Fraction(0, 1));
-            auto clef = new Clef(s);
+            auto clef = Factory::createClef(s);
             clef->setTrack(staffIdx * VOICES);
             clef->setClefType(clefId);
             s->add(clef);
@@ -1339,7 +1339,7 @@ Score::FileError PowerTab::read()
             s1->setStaffType(Fraction(0, 1), st1);
             s1->setLines(Fraction(0, 1), lines);
             Excerpt::cloneStaff(s, s1);
-            BracketItem* bi = new BracketItem(pscore, BracketType::NORMAL, 2);
+            BracketItem* bi = Factory::createBracketItem(pscore->dummy(), BracketType::NORMAL, 2);
             p->staves()->front()->addBracket(bi);
         }
         pscore->appendPart(p);

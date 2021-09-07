@@ -26,6 +26,7 @@
 #include "style/style.h"
 #include "io/xml.h"
 
+#include "factory.h"
 #include "utils.h"
 #include "measure.h"
 #include "staff.h"
@@ -36,6 +37,7 @@
 #include "bracketItem.h"
 
 using namespace mu;
+using namespace mu::engraving;
 using namespace mu::draw;
 
 namespace Ms {
@@ -574,7 +576,7 @@ void Bracket::write(XmlWriter& xml) const
 void Bracket::read(XmlReader& e)
 {
     QString t(e.attribute("type", "Normal"));
-    _bi = new BracketItem(score());
+    _bi = Factory::createBracketItem(score()->dummy());
 
     if (t == "Normal") {
         _bi->setBracketType(BracketType::NORMAL);

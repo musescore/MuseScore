@@ -33,12 +33,9 @@ namespace Ms {
 
 class BSymbol : public EngravingItem
 {
-    QList<EngravingItem*> _leafs;
-    Align _align;
-
 public:
-    BSymbol(const ElementType& type, EngravingItem* parent, ElementFlags f = ElementFlag::NOTHING);
-    BSymbol(const BSymbol&);
+
+    Segment* segment() const { return (Segment*)parent(); }
 
     // Score Tree functions
     EngravingObject* treeParent() const override;
@@ -47,11 +44,11 @@ public:
 
     BSymbol& operator=(const BSymbol&) = delete;
 
-    virtual void add(EngravingItem*) override;
-    virtual void remove(EngravingItem*) override;
-    virtual bool acceptDrop(EditData&) const override;
-    virtual EngravingItem* drop(EditData&) override;
-    virtual void layout() override;
+    void add(EngravingItem*) override;
+    void remove(EngravingItem*) override;
+    bool acceptDrop(EditData&) const override;
+    EngravingItem* drop(EditData&) override;
+    void layout() override;
     mu::RectF drag(EditData&) override;
 
     void writeProperties(XmlWriter& xml) const override;
@@ -65,7 +62,15 @@ public:
     mu::PointF pagePos() const override;
     mu::PointF canvasPos() const override;
     QVector<mu::LineF> dragAnchorLines() const override;
-    Segment* segment() const { return (Segment*)parent(); }
+
+protected:
+    BSymbol(const ElementType& type, EngravingItem* parent, ElementFlags f = ElementFlag::NOTHING);
+    BSymbol(const BSymbol&);
+
+private:
+
+    QList<EngravingItem*> _leafs;
+    Align _align;
 };
 }     // namespace Ms
 #endif

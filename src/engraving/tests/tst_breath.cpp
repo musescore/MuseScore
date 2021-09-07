@@ -24,6 +24,7 @@
 
 #include "testbase.h"
 
+#include "libmscore/factory.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/undo.h"
 #include "libmscore/measure.h"
@@ -32,6 +33,7 @@
 
 static const QString BREATH_DATA_DIR("breath_data/");
 
+using namespace mu::engraving;
 using namespace Ms;
 
 //---------------------------------------------------------
@@ -76,7 +78,7 @@ void TestBreath::breath()
     score->cmdSelectAll();
     for (EngravingItem* e : score->selection().elements()) {
         EditData dd(0);
-        Breath* b = new Breath(score->dummy()->segment());
+        Breath* b = Factory::createBreath(score->dummy()->segment());
         b->setSymId(SymId::breathMarkComma);
         dd.dropElement = b;
         if (e->acceptDrop(dd)) {

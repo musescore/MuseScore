@@ -66,7 +66,7 @@ KeyCanvas::KeyCanvas(QWidget* parent)
     QAction* a = new QAction("delete", this);
     a->setShortcut(Qt::Key_Delete);
     addAction(a);
-    clef = new Clef(gpaletteScore->dummy()->segment());
+    clef = Factory::createClef(gpaletteScore->dummy()->segment());
     clef->setClefType(ClefType::G);
     connect(a, &QAction::triggered, this, &KeyCanvas::deleteElement);
 }
@@ -364,7 +364,7 @@ void KeyEditor::addClicked()
         s.spos      = pos / spatium;
         e.keySymbols().append(s);
     }
-    auto ks = std::make_shared<KeySig>(gpaletteScore->dummy()->segment());
+    auto ks = Factory::makeKeySig(gpaletteScore->dummy()->segment());
     ks->setKeySigEvent(e);
     sp->appendElement(ks, "custom");
     _dirty = true;

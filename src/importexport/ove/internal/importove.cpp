@@ -440,7 +440,7 @@ void OveToMScore::convertGroups()
                 int span = staffPtr->getGroupStaffCount() + 1;
                 int endStaff = staffIndex + span;
                 if (span > 0 && endStaff >= staffIndex && endStaff <= m_ove->getTrackCount()) {
-                    staff->addBracket(new BracketItem(staff->score(), BracketType::NORMAL, span));
+                    staff->addBracket(Factory::createBracketItem(staff->score()->dummy(), BracketType::NORMAL, span));
                     staff->setBarLineSpan(span);
                 }
             }
@@ -769,7 +769,7 @@ void OveToMScore::convertLineBreak()
             ovebase::Line* line = m_ove->getLine(i);
             if (measure->no() > 0) {
                 if ((int)line->getBeginBar() + (int)line->getBarCount() - 1 == measure->no()) {
-                    LayoutBreak* lb = new LayoutBreak(measure);
+                    LayoutBreak* lb = Factory::createLayoutBreak(measure);
                     lb->setTrack(0);
                     lb->setLayoutBreakType(LayoutBreak::Type::LINE);
                     measure->add(lb);
@@ -836,7 +836,7 @@ void OveToMScore::convertSignatures()
                             m_score->staff(staffCount + j)->setKey(Fraction::fromTicks(tick), ke);
 
                             Segment* s = measure->getSegment(SegmentType::KeySig, Fraction::fromTicks(tick));
-                            KeySig* keysig = new KeySig(s);
+                            KeySig* keysig = Factory::createKeySig(s);
                             keysig->setTrack((staffCount + j) * VOICES);
                             keysig->setKeySigEvent(ke);
                             s->add(keysig);
@@ -860,7 +860,7 @@ void OveToMScore::convertSignatures()
                 Measure* measure = m_score->tick2measure(Fraction::fromTicks(m_mtt->getTick(0, 0)));
                 if (measure) {
                     Segment* s = measure->getSegment(SegmentType::KeySig, Fraction(0, 1));
-                    KeySig* keysig = new KeySig(s);
+                    KeySig* keysig = Factory::createKeySig(s);
                     keysig->setTrack((staffCount + j) * VOICES);
                     keysig->setKeySigEvent(KeySigEvent());
                     s->add(keysig);
@@ -886,7 +886,7 @@ void OveToMScore::convertSignatures()
                 // note: also generate symbol for tick 0
                 // was not necessary before 0.9.6
                 Segment* s = measure->getSegment(SegmentType::HeaderClef, Fraction(0, 1));
-                Clef* clef = new Clef(s);
+                Clef* clef = Factory::createClef(s);
                 clef->setClefType(clefType);
                 clef->setTrack((staffCount + j) * VOICES);
                 s->add(clef);
@@ -905,7 +905,7 @@ void OveToMScore::convertSignatures()
                         ClefType clefType = OveClefToClef(clefPtr->getClefType());
 
                         Segment* s = measure->getSegment(SegmentType::Clef, Fraction::fromTicks(absTick));
-                        Clef* clef = new Clef(s);
+                        Clef* clef = Factory::createClef(s);
                         clef->setClefType(clefType);
                         clef->setTrack((staffCount + j) * VOICES);
                         s->add(clef);
@@ -1604,7 +1604,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
             cr->setSmall(container->getIsCue());
             for (j = 0; j < notes.size(); ++j) {
                 ovebase::Note* oveNote = notes[j];
-                Note* note = new Note(Ms::toChord(cr));
+                Note* note = Factory::createNote(Ms::toChord(cr));
                 int pitch = oveNote->getNote();
 
                 // note->setTrack(noteTrack);
@@ -1934,7 +1934,7 @@ void OveToMScore::convertArticulation(
     case ovebase::ArticulationType::Pause: {
         Segment* seg = measure->getSegment(SegmentType::Breath,
                                            Fraction::fromTicks(absTick + (cr ? cr->actualTicks().ticks() : 0)));
-        Breath* b = new Breath(seg);
+        Breath* b = Factory::createBreath(seg);
         b->setTrack(track);
         seg->add(b);
         break;

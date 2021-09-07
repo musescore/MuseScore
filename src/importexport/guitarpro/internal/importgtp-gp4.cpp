@@ -316,7 +316,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
             } else if (duration == 3) {
                 grace_len = MScore::division / 4;       //16th
             }
-            Note* gn = new Note(score->dummy()->chord());
+            Note* gn = Factory::createNote(score->dummy()->chord());
 
             if (fret == 255) {
                 gn->setHeadGroup(NoteHead::Group::HEAD_CROSS);
@@ -462,7 +462,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
             addTextToNote("A.H.", Align::CENTER, note);
             int harmonicFret = note->fret();
             harmonicFret += type - 10;
-            Note* harmonicNote = new Note(note->chord());
+            Note* harmonicNote = Factory::createNote(note->chord());
             note->chord()->add(harmonicNote);
             harmonicNote->setFret(harmonicFret);
             harmonicNote->setString(note->string());
@@ -542,7 +542,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
                     }
                 }
 
-                Note* note2 = new Note(chord1);
+                Note* note2 = Factory::createNote(chord1);
                 note2->setString(true_note->string());
                 note2->setFret(true_note->fret());
                 note2->setPitch(true_note->pitch());
@@ -766,7 +766,7 @@ bool GuitarPro4::read(QFile* fp)
         }
         Measure* measure = score->firstMeasure();
         Segment* segment = measure->getSegment(SegmentType::HeaderClef, Fraction(0, 1));
-        Clef* clef = new Clef(segment);
+        Clef* clef = Factory::createClef(segment);
         clef->setClefType(clefId);
         clef->setTrack(i * VOICES);
         segment->add(clef);
@@ -957,7 +957,7 @@ bool GuitarPro4::read(QFile* fp)
                 if (cr && cr->isChord()) {            // TODO::ws  crashes without if
                     for (int i = 6; i >= 0; --i) {
                         if (strings & (1 << i) && ((6 - i) < numStrings)) {
-                            Note* note = new Note(toChord(cr));
+                            Note* note = Factory::createNote(toChord(cr));
                             // apply dotted notes to the note
                             if (dotted) {
                                 // there is at most one dotted note in this guitar pro version

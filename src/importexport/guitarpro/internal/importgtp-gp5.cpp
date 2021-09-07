@@ -327,7 +327,7 @@ Fraction GuitarPro5::readBeat(const Fraction& tick, int voice, Measure* measure,
         std::vector<Note*> delnote;
         for (int i = 6; i >= 0; --i) {
             if (strings & (1 << i) && ((6 - i) < numStrings)) {
-                Note* note = new Note(toChord(cr));
+                Note* note = Factory::createNote(toChord(cr));
                 _note = note;
                 if (dotted) {
                     // there is at most one dotted note in this guitar pro version
@@ -565,7 +565,7 @@ bool GuitarPro5::readTracks()
         }
         Measure* measure = score->firstMeasure();
         Segment* segment = measure->getSegment(SegmentType::HeaderClef, Fraction(0, 1));
-        Clef* clef = new Clef(segment);
+        Clef* clef = Factory::createClef(segment);
         clef->setClefType(clefId);
         clef->setTrack(i * VOICES);
         segment->add(clef);
@@ -1049,7 +1049,7 @@ bool GuitarPro5::readNoteEffects(Note* note)
         int slideKind = readUChar();
         if (slideKind & SLIDE_OUT_DOWN) {
             slideKind &= ~SLIDE_OUT_DOWN;
-            ChordLine* cl = new ChordLine(score->dummy()->chord());
+            ChordLine* cl = Factory::createChordLine(score->dummy()->chord());
             cl->setChordLineType(ChordLineType::FALL);
             cl->setStraight(true);
             note->add(cl);
@@ -1058,7 +1058,7 @@ bool GuitarPro5::readNoteEffects(Note* note)
         // slide out upwards (doit)
         if (slideKind & SLIDE_OUT_UP) {
             slideKind &= ~SLIDE_OUT_UP;
-            ChordLine* cl = new ChordLine(score->dummy()->chord());
+            ChordLine* cl = Factory::createChordLine(score->dummy()->chord());
             cl->setChordLineType(ChordLineType::DOIT);
             cl->setStraight(true);
             note->add(cl);
@@ -1067,7 +1067,7 @@ bool GuitarPro5::readNoteEffects(Note* note)
         // slide in from below (plop)
         if (slideKind & SLIDE_IN_BELOW) {
             slideKind &= ~SLIDE_IN_BELOW;
-            ChordLine* cl = new ChordLine(score->dummy()->chord());
+            ChordLine* cl = Factory::createChordLine(score->dummy()->chord());
             cl->setChordLineType(ChordLineType::PLOP);
             cl->setStraight(true);
             note->add(cl);
@@ -1076,7 +1076,7 @@ bool GuitarPro5::readNoteEffects(Note* note)
         // slide in from above (scoop)
         if (slideKind & SLIDE_IN_ABOVE) {
             slideKind &= ~SLIDE_IN_ABOVE;
-            ChordLine* cl = new ChordLine(score->dummy()->chord());
+            ChordLine* cl = Factory::createChordLine(score->dummy()->chord());
             cl->setChordLineType(ChordLineType::SCOOP);
             cl->setStraight(true);
             note->add(cl);
@@ -1124,7 +1124,7 @@ bool GuitarPro5::readNoteEffects(Note* note)
             /*auto sharp =*/ readChar();
             auto octave = readUChar();
 
-            auto harmonicNote = new Note(note->chord());
+            auto harmonicNote = Factory::createNote(note->chord());
             note->chord()->add(harmonicNote);
             auto staff = note->staff();
             int fret = note->fret();
@@ -1386,7 +1386,7 @@ bool GuitarPro5::readNote(int string, Note* note)
                     }
                 }
 
-                Note* note2 = new Note(chord1);
+                Note* note2 = Factory::createNote(chord1);
                 note2->setString(true_note->string());
                 note2->setFret(true_note->fret());
                 note2->setPitch(true_note->pitch());

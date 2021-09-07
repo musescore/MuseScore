@@ -22,6 +22,7 @@
 
 #include <QRegularExpression>
 
+#include "engraving/libmscore/factory.h"
 #include "engraving/libmscore/box.h"
 #include "engraving/libmscore/chordrest.h"
 #include "engraving/libmscore/instrtemplate.h"
@@ -48,6 +49,8 @@
 #include "importexport/musicxml/imusicxmlconfiguration.h"
 
 #include "log.h"
+
+using namespace mu::engraving;
 
 static std::shared_ptr<mu::iex::musicxml::IMusicXmlConfiguration> configuration()
 {
@@ -515,7 +518,7 @@ void MusicXMLParserPass1::skipLogCurrElem()
 
 static void addBreak(Score* const, MeasureBase* const mb, const LayoutBreak::Type type)
 {
-    LayoutBreak* lb = new LayoutBreak(mb);
+    LayoutBreak* lb = Factory::createLayoutBreak(mb);
     lb->setLayoutBreakType(type);
     mb->add(lb);
 }

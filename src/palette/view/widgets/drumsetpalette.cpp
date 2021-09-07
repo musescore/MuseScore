@@ -23,8 +23,8 @@
 #include "drumsetpalette.h"
 
 #include "translation.h"
-#include "log.h"
 
+#include "engraving/libmscore/factory.h"
 #include "engraving/libmscore/chord.h"
 #include "engraving/libmscore/note.h"
 #include "engraving/libmscore/drumset.h"
@@ -35,7 +35,10 @@
 #include "engraving/libmscore/mscore.h"
 #include "engraving/libmscore/undo.h"
 
+#include "log.h"
+
 using namespace mu::notation;
+using namespace mu::engraving;
 using namespace mu::palette;
 using namespace Ms;
 
@@ -119,7 +122,7 @@ void DrumsetPalette::updateDrumset()
         Stem* stem = new Stem(chord.get());
         stem->setLen((up ? -3.0 : 3.0) * _spatium);
         chord->add(stem);
-        Note* note = new Note(chord.get());
+        Note* note = Factory::createNote(chord.get());
         note->setMark(true);
         note->setParent(chord.get());
         note->setTrack(voice);

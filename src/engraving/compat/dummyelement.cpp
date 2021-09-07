@@ -21,6 +21,7 @@
  */
 #include "dummyelement.h"
 
+#include "libmscore/factory.h"
 #include "libmscore/score.h"
 #include "libmscore/page.h"
 #include "libmscore/system.h"
@@ -39,7 +40,7 @@ DummyElement::DummyElement(Ms::Score* s)
     m_measure = new Ms::Measure(m_system);
     m_segment = new Ms::Segment(m_measure);
     m_chord = new Ms::Chord(m_segment);
-    m_note = new Ms::Note(m_chord);
+    m_note = Factory::createNote(m_chord);
 
     setIsDummy(true);
     m_page->setIsDummy(true);

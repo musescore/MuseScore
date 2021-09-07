@@ -31,6 +31,10 @@
 #include "engravingitem.h"
 #include "mscore.h"
 
+namespace mu::engraving {
+class Factory;
+}
+
 namespace Ms {
 class XmlWriter;
 class MuseScoreView;
@@ -149,8 +153,11 @@ class Clef final : public EngravingItem
 
     ClefTypeList _clefTypes { ClefType::INVALID };
 
-public:
+    friend class mu::engraving::Factory;
     Clef(Segment* parent);
+
+public:
+
     Clef* clone() const override { return new Clef(*this); }
     qreal mag() const override;
 

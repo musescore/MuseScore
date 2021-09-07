@@ -26,6 +26,10 @@
 #include "engravingobject.h"
 #include "mscore.h"
 
+namespace mu::engraving {
+class Factory;
+}
+
 namespace Ms {
 //---------------------------------------------------------
 //   BracketItem
@@ -38,13 +42,16 @@ class BracketItem final : public EngravingObject
     int _bracketSpan        { 0 };
     Staff* _staff            { 0 };
 
-public:
-    BracketItem(EngravingObject* parent);
-    BracketItem(EngravingObject* parent, BracketType a, int b);
+    friend class mu::engraving::Factory;
 
-    virtual QVariant getProperty(Pid) const override;
-    virtual bool setProperty(Pid, const QVariant&) override;
-    virtual QVariant propertyDefault(Pid id) const override;
+    BracketItem(EngravingItem* parent);
+    BracketItem(EngravingItem* parent, BracketType a, int b);
+
+public:
+
+    QVariant getProperty(Pid) const override;
+    bool setProperty(Pid, const QVariant&) override;
+    QVariant propertyDefault(Pid id) const override;
 
 //      bool selected() const              { return _selected;    }
     int bracketSpan() const { return _bracketSpan; }

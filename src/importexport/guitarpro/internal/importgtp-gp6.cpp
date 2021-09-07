@@ -418,7 +418,7 @@ void GuitarPro6::readMasterTracks(QDomNode* masterTrack)
 void GuitarPro6::readChord(QDomNode* diagram, int track)
 {
     // initialize a new fret diagram for our current track
-    FretDiagram* fretDiagram = new FretDiagram(score->dummy()->segment());
+    FretDiagram* fretDiagram = Factory::createFretDiagram(score->dummy()->segment());
     fretDiagram->setTrack(track);
 
     // get the identifier to set as the domain in the map
@@ -531,7 +531,7 @@ void GuitarPro6::readTracks(QDomNode* track)
                 if (ref.endsWith("-gs") || ref.startsWith("2")) {         // grand staff
                     Staff* s2 = createStaff(score, part);
                     score->appendStaff(s2);
-                    s->addBracket(new BracketItem(s->score(), BracketType::BRACE, 2));
+                    s->addBracket(Factory::createBracketItem(s->score()->dummy(), BracketType::BRACE, 2));
                     s->setBarLineSpan(2);
                 }
             } else if (nodeName == "PartSounding") {
@@ -963,7 +963,7 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                             QString element;
                             QString variation;
 
-                            Note* note = new Note(score->dummy()->chord());
+                            Note* note = Factory::createNote(score->dummy()->chord());
                             if (graceNote) {
                                 lyrNote = note;
                             }
@@ -1166,7 +1166,7 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                                         if (!harmonicText.compare("Natural")) {
                                             harmonicNote = note;
                                         } else {
-                                            harmonicNote = new Note(chord);
+                                            harmonicNote = Factory::createNote(chord);
                                             chord->add(harmonicNote);
                                         }
                                     }
@@ -1626,7 +1626,7 @@ Fraction GuitarPro6::readBeats(QString beats, GPPartInfo* partInfo, Measure* mea
                 int k = currentNode.toElement().text().toInt();
                 if (fretDiagrams[k]) {
                     // TODO: free fretDiagrams
-                    segment->add(new FretDiagram(*fretDiagrams[k]));
+                    segment->add(Factory::copyFretDiagram(*fretDiagrams[k]));
                 }
             } else if (currentNode.nodeName() == "Timer") {
                 //int time    = currentNode.toElement().text().toInt();
@@ -1862,7 +1862,7 @@ void GuitarPro6::readBars(QDomNode* barList, Measure* measure, ClefType oldClefI
                 } else {
                     qDebug() << "WARNING: unhandled clef type: " << clefString;
                 }
-                Clef* newClef = new Clef(score->dummy()->segment());
+                Clef* newClef = Factory::createClef(score->dummy()->segment());
                 newClef->setClefType(clefId);
                 newClef->setTrack(staffIdx * VOICES);
                 // only add the clef to the bar if it differs from previous measure

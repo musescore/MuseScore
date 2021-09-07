@@ -24,6 +24,7 @@
 
 #include "compat/scoreaccess.h"
 
+#include "factory.h"
 #include "part.h"
 #include "staff.h"
 #include "note.h"
@@ -38,6 +39,7 @@
 #include "masterscore.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 extern MScore* mscore;
@@ -93,7 +95,7 @@ Chord* MCursor::addChord(int pitch, const TDuration& duration)
         chord->setTicks(duration.fraction());
         segment->add(chord);
     }
-    Note* note = new Note(chord);
+    Note* note = Factory::createNote(chord);
     chord->add(note);
     note->setPitch(pitch);
     note->setTpcFromPitch();
@@ -112,7 +114,7 @@ void MCursor::addKeySig(Key key)
     Segment* segment = measure->getSegment(SegmentType::KeySig, _tick);
     int n = _score->nstaves();
     for (int i = 0; i < n; ++i) {
-        KeySig* ks = new KeySig(segment);
+        KeySig* ks = Factory::createKeySig(segment);
         ks->setKey(key);
         ks->setTrack(i * VOICES);
         segment->add(ks);

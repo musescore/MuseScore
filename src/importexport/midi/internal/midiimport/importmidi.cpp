@@ -491,7 +491,7 @@ void setMusicNotesFromMidi(Score*,
 {
     for (int i = 0; i < midiNotes.size(); ++i) {
         const MidiNote& mn = midiNotes[i];
-        Note* note = new Note(chord);
+        Note* note = Factory::createNote(chord);
         note->setTrack(chord->track());
 
         NoteVal nval(mn.pitch);

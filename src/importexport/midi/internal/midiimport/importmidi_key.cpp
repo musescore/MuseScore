@@ -23,6 +23,8 @@
 #include "importmidi_fraction.h"
 #include "importmidi_chord.h"
 #include "importmidi_inner.h"
+
+#include "libmscore/factory.h"
 #include "libmscore/key.h"
 #include "libmscore/keysig.h"
 #include "libmscore/keylist.h"
@@ -34,6 +36,8 @@
 // This simple key detection algorithm is from thesis
 // "Inferring Score Level Musical Information From Low-Level Musical Data", 2004
 // by Jürgen Kilian
+
+using namespace mu::engraving;
 
 namespace Ms {
 namespace MidiKey {
@@ -80,7 +84,7 @@ void assignKeyListToStaff(const KeyList& kl, Staff* staff)
             continue;
         }
         Segment* seg = m->getSegment(SegmentType::KeySig, Fraction::fromTicks(tick));
-        KeySig* ks = new KeySig(seg);
+        KeySig* ks = Factory::createKeySig(seg);
         ks->setTrack(track);
         ks->setGenerated(false);
         ks->setKey(key);
