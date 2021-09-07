@@ -171,6 +171,11 @@ BeamTypes::FeatheringMode BeamSettingsModel::featheringMode() const
     return m_featheringMode;
 }
 
+bool BeamSettingsModel::isFeatheringHeightChangingAllowed() const
+{
+    return m_featheringMode != BeamTypes::FeatheringMode::FEATHERING_NONE;
+}
+
 PropertyItem* BeamSettingsModel::isBeamHidden() const
 {
     return m_isBeamHidden;
