@@ -26,6 +26,10 @@
 #include "engravingitem.h"
 #include "infrastructure/draw/painterpath.h"
 
+namespace mu::engraving {
+class Factory;
+}
+
 namespace Ms {
 //---------------------------------------------------------
 //   SpacerType
@@ -47,11 +51,13 @@ class Spacer final : public EngravingItem
 
     mu::PainterPath path;
 
+    friend class mu::engraving::Factory;
+    Spacer(Measure* parent);
+    Spacer(const Spacer&);
+
     void layout0();
 
 public:
-    Spacer(Measure* parent);
-    Spacer(const Spacer&);
 
     Spacer* clone() const override { return new Spacer(*this); }
     Measure* measure() const { return toMeasure(parent()); }

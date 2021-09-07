@@ -25,6 +25,10 @@
 
 #include "engravingitem.h"
 
+namespace mu::engraving {
+class Factory;
+}
+
 namespace Ms {
 class Note;
 class Rest;
@@ -36,8 +40,6 @@ class Rest;
 class NoteDot final : public EngravingItem
 {
 public:
-    NoteDot(Note* parent);
-    NoteDot(Rest* parent);
 
     NoteDot* clone() const override { return new NoteDot(*this); }
     qreal mag() const override;
@@ -49,6 +51,11 @@ public:
     Note* note() const { return parent()->isNote() ? toNote(parent()) : 0; }
     Rest* rest() const { return parent()->isRest() ? toRest(parent()) : 0; }
     EngravingItem* elementBase() const override;
+
+private:
+    friend class mu::engraving::Factory;
+    NoteDot(Note* parent);
+    NoteDot(Rest* parent);
 };
 }     // namespace Ms
 #endif

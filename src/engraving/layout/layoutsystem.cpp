@@ -21,6 +21,7 @@
  */
 #include "layoutsystem.h"
 
+#include "libmscore/factory.h"
 #include "libmscore/barline.h"
 #include "libmscore/box.h"
 #include "libmscore/chord.h"
@@ -426,7 +427,7 @@ System* LayoutSystem::getNextSystem(LayoutContext& lc, Ms::Score* score)
     bool isVBox = lc.curMeasure->isVBox();
     System* system;
     if (lc.systemList.empty()) {
-        system = new System(score->dummy()->page());
+        system = Factory::createSystem(score->dummy()->page());
         lc.systemOldMeasure = 0;
     } else {
         system = lc.systemList.takeFirst();

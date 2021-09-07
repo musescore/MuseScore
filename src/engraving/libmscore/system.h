@@ -112,6 +112,9 @@ class System final : public EngravingItem
     qreal _distance                { 0.0 };     /// temp. variable used during layout
     qreal _systemHeight            { 0.0 };
 
+    friend class mu::engraving::Factory;
+    System(Page* parent);
+
     int firstVisibleSysStaff() const;
     int lastVisibleSysStaff() const;
 
@@ -120,7 +123,7 @@ class System final : public EngravingItem
     Bracket* createBracket(Ms::BracketItem* bi, int column, int staffIdx, QList<Ms::Bracket*>& bl, Measure* measure);
 
 public:
-    System(Page* parent);
+
     ~System();
 
     void moveToPage(Page* parent);

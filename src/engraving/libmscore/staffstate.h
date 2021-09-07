@@ -47,12 +47,15 @@ class StaffState final : public EngravingItem
 
     Instrument* _instrument { nullptr };
 
+    friend class mu::engraving::Factory;
+    StaffState(EngravingItem* parent);
+    StaffState(const StaffState&);
+
     void draw(mu::draw::Painter*) const override;
     void layout() override;
 
 public:
-    StaffState(EngravingItem* parent);
-    StaffState(const StaffState&);
+
     ~StaffState();
 
     StaffState* clone() const override { return new StaffState(*this); }

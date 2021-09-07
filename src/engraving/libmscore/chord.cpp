@@ -292,13 +292,13 @@ Chord::Chord(const Chord& c, bool link)
     _crossMeasure   = CrossMeasure::UNKNOWN;
 
     if (c._stem) {
-        add(new Stem(*(c._stem)));
+        add(Factory::copyStem(*(c._stem)));
     }
     if (c._hook) {
         add(new Hook(*(c._hook)));
     }
     if (c._stemSlash) {
-        add(new StemSlash(*(c._stemSlash)));
+        add(Factory::copyStemSlash(*(c._stemSlash)));
     }
     if (c._arpeggio) {
         Arpeggio* a = new Arpeggio(*(c._arpeggio));
@@ -1153,7 +1153,7 @@ bool Chord::readProperties(XmlReader& e)
         add(note);
     } else if (ChordRest::readProperties(e)) {
     } else if (tag == "Stem") {
-        Stem* s = new Stem(this);
+        Stem* s = Factory::createStem(this);
         s->read(e);
         add(s);
     } else if (tag == "Hook") {
@@ -1185,7 +1185,7 @@ bool Chord::readProperties(XmlReader& e)
         _noteType = NoteType::GRACE32_AFTER;
         e.readNext();
     } else if (tag == "StemSlash") {
-        StemSlash* ss = new StemSlash(this);
+        StemSlash* ss = Factory::createStemSlash(this);
         ss->read(e);
         add(ss);
     } else if (readProperty(tag, e, Pid::STEM_DIRECTION)) {
@@ -1508,14 +1508,14 @@ void Chord::layoutStem1()
     if (durationType().hasStem()
         && !(_noStem || (measure() && measure()->stemless(staffIdx())) || (st && st->isTabStaff() && st->stemless()))) {
         if (!_stem) {
-            Stem* stem = new Stem(this);
+            Stem* stem = Factory::createStem(this);
             stem->setParent(this);
             stem->setGenerated(true);
             score()->undoAddElement(stem);
         }
         if ((_noteType == NoteType::ACCIACCATURA) && !(beam() && beam()->elements().front() != this)) {
             if (!_stemSlash) {
-                add(new StemSlash(this));
+                add(Factory::createStemSlash(this));
             }
         } else if (_stemSlash) {
             remove(_stemSlash);
@@ -2289,7 +2289,7 @@ void Chord::layoutTablature()
     // set stem position (stem length is set in Chord:layoutStem() )
     else {
         if (_stem == 0) {
-            Stem* stem = new Stem(this);
+            Stem* stem = Factory::createStem(this);
             stem->setParent(this);
             score()->undo(new AddElement(stem));
         }

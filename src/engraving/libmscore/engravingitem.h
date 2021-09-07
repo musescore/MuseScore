@@ -214,7 +214,7 @@ protected:
     friend class mu::engraving::Factory;
     EngravingItem(const ElementType& type, EngravingObject* se = 0, ElementFlags = ElementFlag::NOTHING);
     EngravingItem(const EngravingItem&);
-    virtual void init();
+    virtual void setup();
     virtual mu::engraving::AccessibleElement* createAccessible() const;
 
 public:

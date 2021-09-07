@@ -331,7 +331,7 @@ Fraction GuitarPro5::readBeat(const Fraction& tick, int voice, Measure* measure,
                 _note = note;
                 if (dotted) {
                     // there is at most one dotted note in this guitar pro version
-                    NoteDot* dot = new NoteDot(note);
+                    NoteDot* dot = Factory::createNoteDot(note);
                     dot->setParent(note);
                     dot->setTrack(track);            // needed to know the staff it belongs to (and detect tablature)
                     dot->setVisible(true);
@@ -841,7 +841,7 @@ bool GuitarPro5::read(QFile* fp)
     //
     for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
         Part* part = new Part(score);
-        Staff* s = createStaff(score, part);
+        Staff* s = Factory::createStaff(score, part);
 
         score->appendStaff(s);
         score->appendPart(part);

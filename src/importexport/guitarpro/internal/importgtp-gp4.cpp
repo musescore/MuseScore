@@ -699,7 +699,7 @@ bool GuitarPro4::read(QFile* fp)
     //
     for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
         Part* part = new Part(score);
-        Staff* s = createStaff(score, part);
+        Staff* s = Factory::createStaff(score, part);
 
         score->appendStaff(s);
         score->appendPart(part);
@@ -961,7 +961,7 @@ bool GuitarPro4::read(QFile* fp)
                             // apply dotted notes to the note
                             if (dotted) {
                                 // there is at most one dotted note in this guitar pro version
-                                NoteDot* dot = new NoteDot(note);
+                                NoteDot* dot = Factory::createNoteDot(note);
                                 dot->setParent(note);
                                 dot->setTrack(track);                  // needed to know the staff it belongs to (and detect tablature)
                                 dot->setVisible(true);

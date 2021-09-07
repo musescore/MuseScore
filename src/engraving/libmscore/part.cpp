@@ -25,6 +25,7 @@
 #include "style/style.h"
 #include "io/xml.h"
 
+#include "factory.h"
 #include "staff.h"
 #include "score.h"
 #include "note.h"
@@ -39,6 +40,7 @@
 #include "masterscore.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -149,7 +151,7 @@ bool Part::readProperties(XmlReader& e)
 {
     const QStringRef& tag(e.name());
     if (tag == "Staff") {
-        Staff* staff = createStaff(score(), this);
+        Staff* staff = Factory::createStaff(score(), this);
         score()->appendStaff(staff);
         staff->read(e);
     } else if (tag == "Instrument") {
@@ -271,7 +273,7 @@ void Part::setStaves(int n)
 
     int staffIdx = score()->staffIdx(this) + ns;
     for (int i = ns; i < n; ++i) {
-        Staff* staff = createStaff(score(), this);
+        Staff* staff = Factory::createStaff(score(), this);
         _staves.push_back(staff);
         const_cast<QList<Staff*>&>(score()->staves()).insert(staffIdx, staff);
 

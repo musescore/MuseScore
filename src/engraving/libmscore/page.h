@@ -27,6 +27,10 @@
 #include "engravingitem.h"
 #include "bsp.h"
 
+namespace mu::engraving {
+class Factory;
+}
+
 namespace Ms {
 class System;
 class Text;
@@ -50,11 +54,14 @@ class Page final : public EngravingItem
 #endif
     bool bspTreeValid;
 
+    friend class mu::engraving::Factory;
+    Page(EngravingObject* parent);
+
     QString replaceTextMacros(const QString&) const;
     void drawHeaderFooter(mu::draw::Painter*, int area, const QString&) const;
 
 public:
-    Page(EngravingObject* parent);
+
     ~Page();
 
     // Score Tree functions

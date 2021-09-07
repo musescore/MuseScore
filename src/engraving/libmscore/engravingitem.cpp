@@ -72,7 +72,6 @@
 #include "notedot.h"
 #include "note.h"
 #include "noteline.h"
-#include "ossia.h"
 #include "ottava.h"
 #include "page.h"
 #include "pedal.h"
@@ -180,7 +179,7 @@ EngravingItem::~EngravingItem()
     Score::onElementDestruction(this);
 }
 
-void EngravingItem::init()
+void EngravingItem::setup()
 {
 #ifdef ENGRAVING_BUILD_ACCESSIBLE_TREE
     m_accessible = createAccessible();

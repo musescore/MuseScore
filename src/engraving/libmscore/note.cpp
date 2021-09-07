@@ -772,7 +772,7 @@ Note::Note(const Note& n, bool link)
     }
     _tieBack  = 0;
     for (NoteDot* dot : n._dots) {
-        add(new NoteDot(*dot));
+        add(Factory::copyNoteDot(*dot));
     }
     _mark      = n._mark;
 }
@@ -1662,7 +1662,7 @@ bool Note::readProperties(XmlReader& e)
         b->read(e);
         add(b);
     } else if (tag == "NoteDot") {
-        NoteDot* dot = new NoteDot(this);
+        NoteDot* dot = Factory::createNoteDot(this);
         dot->read(e);
         add(dot);
     } else if (tag == "Events") {
@@ -2181,7 +2181,7 @@ void Note::setDotY(Direction pos)
 
     int n = cdots - ndots;
     for (int i = 0; i < n; ++i) {
-        NoteDot* dot = new NoteDot(this);
+        NoteDot* dot = Factory::createNoteDot(this);
         dot->setParent(this);
         dot->setTrack(track());      // needed to know the staff it belongs to (and detect tablature)
         dot->setVisible(visible());

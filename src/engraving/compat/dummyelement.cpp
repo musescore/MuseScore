@@ -35,10 +35,10 @@ using namespace mu::engraving::compat;
 DummyElement::DummyElement(Ms::Score* s)
     : Ms::EngravingItem(Ms::ElementType::INVALID, s)
 {
-    m_page = new Ms::Page(this);
-    m_system = new Ms::System(m_page);
+    m_page = Factory::createPage(this);
+    m_system = Factory::createSystem(m_page);
     m_measure = new Ms::Measure(m_system);
-    m_segment = new Ms::Segment(m_measure);
+    m_segment = Factory::createSegment(m_measure);
     m_chord = new Ms::Chord(m_segment);
     m_note = Factory::createNote(m_chord);
 

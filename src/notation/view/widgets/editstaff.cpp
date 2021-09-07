@@ -25,6 +25,8 @@
 #include "editpitch.h"
 #include "editstafftype.h"
 #include "editstringdata.h"
+
+#include "libmscore/factory.h"
 #include "libmscore/part.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/staff.h"
@@ -124,7 +126,7 @@ void EditStaff::setStaff(Staff* s, const Fraction& tick)
     m_instrumentKey.partId = part->id();
     m_instrumentKey.tick = tick;
 
-    m_staff = new Ms::Staff(score);
+    m_staff = engraving::Factory::createStaff(score);
     Ms::StaffType* stt = m_staff->setStaffType(Fraction(0, 1), *m_orgStaff->staffType(Fraction(0, 1)));
     stt->setInvisible(m_orgStaff->staffType(Fraction(0, 1))->invisible());
     stt->setColor(m_orgStaff->staffType(Fraction(0, 1))->color());

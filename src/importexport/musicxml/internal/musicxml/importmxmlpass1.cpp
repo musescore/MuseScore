@@ -1688,7 +1688,7 @@ static void createPart(Score* score, const QString& id, PartMap& pm)
     Part* part = new Part(score);
     pm.insert(id, part);
     score->appendPart(part);
-    Staff* staff = createStaff(score, part);
+    Staff* staff = Factory::createStaff(score, part);
     score->appendStaff(staff);
 }
 
