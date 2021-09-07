@@ -21,6 +21,8 @@
  */
 #include "staffcontroltreeitem.h"
 
+#include "engraving/libmscore/factory.h"
+
 using namespace mu::instrumentsscene;
 using namespace mu::notation;
 
@@ -44,7 +46,7 @@ void StaffControlTreeItem::appendNewItem()
 
     int lastStaffIndex = part->nstaves();
 
-    Staff* staff = new Staff();
+    Staff* staff = engraving::Factory::createStaff(part->score());
     staff->setDefaultClefType(part->instrument()->clefType(lastStaffIndex));
 
     masterNotation()->parts()->appendStaff(staff, m_partId);

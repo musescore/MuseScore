@@ -119,7 +119,7 @@ void DrumsetPalette::updateDrumset()
         chord->setStemDirection(dir);
         chord->setUp(up);
         chord->setTrack(voice);
-        Stem* stem = new Stem(chord.get());
+        Stem* stem = Factory::createStem(chord.get());
         stem->setLen((up ? -3.0 : 3.0) * _spatium);
         chord->add(stem);
         Note* note = Factory::createNote(chord.get());

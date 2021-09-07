@@ -27,6 +27,7 @@
 #include "style/style.h"
 #include "io/xml.h"
 
+#include "factory.h"
 #include "score.h"
 #include "text.h"
 #include "measure.h"
@@ -474,7 +475,7 @@ void Page::read(XmlReader& e)
 {
     while (e.readNextStartElement()) {
         if (e.name() == "System") {
-            System* system = new System(score()->dummy()->page());
+            System* system = Factory::createSystem(score()->dummy()->page());
             score()->systems().push_back(system);
             system->read(e);
         } else {

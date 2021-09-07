@@ -104,8 +104,6 @@ MAKE_ELEMENT(StaffText, score->dummy()->segment())
 MAKE_ELEMENT(RehearsalMark, score->dummy()->segment())
 
 MAKE_ELEMENT(Jump, score->dummy()->measure())
-MAKE_ELEMENT(Spacer, score->dummy()->measure())
-MAKE_ELEMENT(StaffTypeChange, score->dummy()->measure())
 MAKE_ELEMENT(MeasureNumber, score->dummy()->measure())
 
 MAKE_ELEMENT(Tremolo, score->dummy()->chord())
@@ -424,25 +422,25 @@ PalettePtr PaletteCreator::newLayoutPalette()
     cell->mag = 1.2;
 
     qreal _spatium = gpaletteScore->spatium();
-    auto spacer = makeElement<Spacer>(gpaletteScore);
+    auto spacer = Factory::makeSpacer(gpaletteScore->dummy()->measure());
     spacer->setSpacerType(SpacerType::DOWN);
     spacer->setGap(3 * _spatium);
     cell = sp->appendElement(spacer, QT_TRANSLATE_NOOP("palette", "Staff spacer down"));
     cell->mag = .7;
 
-    spacer = makeElement<Spacer>(gpaletteScore);
+    spacer = Factory::makeSpacer(gpaletteScore->dummy()->measure());
     spacer->setSpacerType(SpacerType::UP);
     spacer->setGap(3 * _spatium);
     cell = sp->appendElement(spacer, QT_TRANSLATE_NOOP("palette", "Staff spacer up"));
     cell->mag = .7;
 
-    spacer = makeElement<Spacer>(gpaletteScore);
+    spacer = Factory::makeSpacer(gpaletteScore->dummy()->measure());
     spacer->setSpacerType(SpacerType::FIXED);
     spacer->setGap(3 * _spatium);
     cell = sp->appendElement(spacer, QT_TRANSLATE_NOOP("palette", "Staff spacer fixed down"));
     cell->mag = .7;
 
-    auto stc = makeElement<StaffTypeChange>(gpaletteScore);
+    auto stc = Factory::makeStaffTypeChange(gpaletteScore->dummy()->measure());
     sp->appendElement(stc, QT_TRANSLATE_NOOP("palette", "Staff type change"));
 
     sp->appendActionIcon(ActionIconType::VFRAME, "insert-vbox");
@@ -746,12 +744,12 @@ PalettePtr PaletteCreator::newBracketsPalette()
             { BracketType::LINE,   QT_TRANSLATE_NOOP("palette", "Line") } }
     };
 
-    static Staff bracketItemOwner(gpaletteScore);
-    bracketItemOwner.setBracketType(static_cast<int>(types.size()) - 1, BracketType::NORMAL);
+    static Staff* bracketItemOwner = Factory::createStaff(gpaletteScore);
+    bracketItemOwner->setBracketType(static_cast<int>(types.size()) - 1, BracketType::NORMAL);
 
     for (size_t i = 0; i < types.size(); ++i) {
         auto b1 = Factory::makeBracket(gpaletteScore->dummy());
-        auto bi1 = bracketItemOwner.brackets()[static_cast<int>(i)];
+        auto bi1 = bracketItemOwner->brackets()[static_cast<int>(i)];
         const auto& type = types[i];
         bi1->setBracketType(type.first);
         b1->setBracketItem(bi1);

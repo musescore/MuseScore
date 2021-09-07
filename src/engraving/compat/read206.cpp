@@ -761,7 +761,7 @@ void Read206::readPart206(Part* part, XmlReader& e)
                 }
             }
         } else if (tag == "Staff") {
-            Staff* staff = createStaff(part->score(), part);
+            Staff* staff = Factory::createStaff(part->score(), part);
             part->score()->appendStaff(staff);
             readStaff(staff, e);
         } else if (part->readProperties(e)) {
@@ -1032,7 +1032,7 @@ bool Read206::readNoteProperties206(Note* note, XmlReader& e)
         b->read(e);
         note->add(b);
     } else if (tag == "NoteDot") {
-        NoteDot* dot = new NoteDot(note);
+        NoteDot* dot = Factory::createNoteDot(note);
         dot->read(e);
         note->add(dot);
     } else if (tag == "Events") {
@@ -1784,7 +1784,7 @@ bool Read206::readChordProperties206(XmlReader& e, Chord* ch)
         ch->add(note);
     } else if (readChordRestProperties206(e, ch)) {
     } else if (tag == "Stem") {
-        Stem* s = new Stem(ch);
+        Stem* s = Factory::createStem(ch);
         s->read(e);
         ch->add(s);
     } else if (tag == "Hook") {
@@ -1816,7 +1816,7 @@ bool Read206::readChordProperties206(XmlReader& e, Chord* ch)
         ch->setNoteType(NoteType::GRACE32_AFTER);
         e.readNext();
     } else if (tag == "StemSlash") {
-        StemSlash* ss = new StemSlash(ch);
+        StemSlash* ss = Factory::createStemSlash(ch);
         ss->read(e);
         ch->add(ss);
     } else if (ch->readProperty(tag, e, Pid::STEM_DIRECTION)) {
@@ -1970,7 +1970,7 @@ static void readChord(Chord* chord, XmlReader& e)
             readNote(note, e);
             chord->add(note);
         } else if (tag == "Stem") {
-            Stem* stem = new Stem(chord);
+            Stem* stem = Factory::createStem(chord);
             while (e.readNextStartElement()) {
                 const QStringRef& t(e.name());
                 if (t == "subtype") {              // obsolete
@@ -2739,7 +2739,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                         }
                     }
                     if (!segment) {
-                        segment = new Segment(m, SegmentType::Clef, e.tick() - m->tick());
+                        segment = Factory::createSegment(m, SegmentType::Clef, e.tick() - m->tick());
                         m->segments().insert(segment, ns);
                     }
                 } else {
@@ -2936,7 +2936,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             m->setRepeatEnd(true);
         } else if (tag == "vspacer" || tag == "vspacerDown") {
             if (!m->vspacerDown(staffIdx)) {
-                Spacer* spacer = new Spacer(m);
+                Spacer* spacer = Factory::createSpacer(m);
                 spacer->setSpacerType(SpacerType::DOWN);
                 spacer->setTrack(staffIdx * VOICES);
                 m->add(spacer);
@@ -2944,7 +2944,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             m->vspacerDown(staffIdx)->setGap(e.readDouble() * _spatium);
         } else if (tag == "vspacer" || tag == "vspacerUp") {
             if (!m->vspacerUp(staffIdx)) {
-                Spacer* spacer = new Spacer(m);
+                Spacer* spacer = Factory::createSpacer(m);
                 spacer->setSpacerType(SpacerType::UP);
                 spacer->setTrack(staffIdx * VOICES);
                 m->add(spacer);

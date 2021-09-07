@@ -2238,7 +2238,7 @@ void Score::splitStaff(int staffIdx, int splitPoint)
     //
     Staff* st = staff(staffIdx);
     Part* p  = st->part();
-    Staff* ns = new Staff(this);
+    Staff* ns = Factory::createStaff(this);
     ns->init(st);
     ns->setPart(p);
     // convert staffIdx from score-relative to part-relative
@@ -3983,7 +3983,7 @@ void Score::appendPart(const InstrumentTemplate* t)
     part->initFromInstrTemplate(t);
     int n = nstaves();
     for (int i = 0; i < t->staffCount; ++i) {
-        Staff* staff = createStaff(this, part);
+        Staff* staff = Factory::createStaff(this, part);
         StaffType* stt = staff->staffType(Fraction(0, 1));
         stt->setLines(t->staffLines[i]);
         stt->setSmall(t->smallStaff[i]);

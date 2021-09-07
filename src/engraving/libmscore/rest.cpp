@@ -27,6 +27,7 @@
 #include "style/style.h"
 #include "io/xml.h"
 
+#include "factory.h"
 #include "score.h"
 #include "utils.h"
 #include "tuplet.h"
@@ -46,6 +47,7 @@
 #include "image.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -91,7 +93,7 @@ Rest::Rest(const Rest& r, bool link)
     m_sym      = r.m_sym;
     m_dotline  = r.m_dotline;
     for (NoteDot* dot : r.m_dots) {
-        add(new NoteDot(*dot));
+        add(Factory::copyNoteDot(*dot));
     }
 }
 
@@ -406,7 +408,7 @@ void Rest::checkDots()
 {
     int n = dots() - int(m_dots.size());
     for (int i = 0; i < n; ++i) {
-        NoteDot* dot = new NoteDot(this);
+        NoteDot* dot = Factory::createNoteDot(this);
         dot->setParent(this);
         dot->setVisible(visible());
         score()->undoAddElement(dot);
@@ -957,7 +959,7 @@ void Rest::read(XmlReader& e)
                 add(image);
             }
         } else if (tag == "NoteDot") {
-            NoteDot* dot = new NoteDot(this);
+            NoteDot* dot = Factory::createNoteDot(this);
             dot->read(e);
             add(dot);
         } else if (readStyledProperty(e, tag)) {

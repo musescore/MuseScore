@@ -24,6 +24,13 @@
 
 #include "score.h"
 
+#include "page.h"
+#include "segment.h"
+#include "staff.h"
+#include "stafflines.h"
+#include "stemslash.h"
+#include "system.h"
+
 #include "log.h"
 
 using namespace mu::engraving;
@@ -154,7 +161,7 @@ static const ElementName elementNames[] = {
 EngravingItem* Factory::createItem(ElementType type, EngravingItem* parent)
 {
     EngravingItem* item = doCreateItem(type, parent);
-    item->init();
+    item->setup();
     return item;
 }
 
@@ -236,7 +243,6 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::FBOX:              return new FBox(parent->isSystem() ? toSystem(parent) : dummy->system());
     case ElementType::MEASURE:           return new Measure(parent->isSystem() ? toSystem(parent) : dummy->system());
     case ElementType::TAB_DURATION_SYMBOL: return new TabDurationSymbol(parent->isChordRest() ? toChordRest(parent) : dummy->chord());
-    case ElementType::OSSIA:               return new Ossia(parent);
     case ElementType::IMAGE:             return new Image(parent);
     case ElementType::BAGPIPE_EMBELLISHMENT: return new BagpipeEmbellishment(parent);
     case ElementType::AMBITUS:           return new Ambitus(parent->isSegment() ? toSegment(parent) : dummy->segment());
@@ -280,6 +286,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::STAFF:
     case ElementType::SCORE:
     case ElementType::BRACKET_ITEM:
+    case ElementType::OSSIA:
         break;
     }
     qDebug("cannot create type %d <%s>", int(type), Factory::name(type));
@@ -358,7 +365,7 @@ MAKE_ITEM_IMPL(BarLine, Segment)
 Beam* Factory::createBeam(EngravingItem * parent, Score * score)
 {
     Beam* b = new Beam(parent, score);
-    b->init();
+    b->setup();
     return b;
 }
 
@@ -421,3 +428,78 @@ Note* Factory::copyNote(const Note& src, bool link)
     return copy;
 }
 MAKE_ITEM_IMPL(Note, Chord)
+
+CREATE_ITEM_IMPL(NoteDot, ElementType::NOTEDOT, Note)
+CREATE_ITEM_IMPL(NoteDot, ElementType::NOTEDOT, Rest)
+COPY_ITEM_IMPL(NoteDot)
+
+Ms::Page* Factory::createPage(Ms::EngravingObject* parent)
+{
+    Page* page = new Page(parent);
+    page->setup();
+    return page;
+}
+
+Ms::Segment* Factory::createSegment(Ms::Measure* parent)
+{
+    Segment* s = new Segment(parent);
+    s->setup();
+    return s;
+}
+
+Ms::Segment* Factory::createSegment(Ms::Measure* parent, Ms::SegmentType type, const Ms::Fraction& t)
+{
+    Segment* s = new Segment(parent, type, t);
+    s->setup();
+    return s;
+}
+
+CREATE_ITEM_IMPL(Spacer, ElementType::SPACER, Measure)
+MAKE_ITEM_IMPL(Spacer, Measure)
+
+Ms::Staff* Factory::createStaff(Ms::Score* parent)
+{
+    Staff* s = new Staff(parent);
+    s->setup();
+    return s;
+}
+
+Staff* Factory::createStaff(Score* score, Part* part)
+{
+    Staff* staff = createStaff(score);
+    staff->setPart(part);
+    return staff;
+}
+
+StaffLines* Factory::createStaffLines(Measure* parent)
+{
+    StaffLines* sl = new StaffLines(parent);
+    sl->setup();
+    return sl;
+}
+
+COPY_ITEM_IMPL(StaffLines)
+
+CREATE_ITEM_IMPL(StaffState, ElementType::STAFF_STATE, EngravingItem)
+
+CREATE_ITEM_IMPL(StaffTypeChange, ElementType::STAFFTYPE_CHANGE, MeasureBase)
+MAKE_ITEM_IMPL(StaffTypeChange, MeasureBase)
+
+CREATE_ITEM_IMPL(Stem, ElementType::STEM, Chord)
+COPY_ITEM_IMPL(Stem)
+
+Ms::StemSlash* Factory::createStemSlash(Ms::Chord* parent)
+{
+    StemSlash* s = new StemSlash(parent);
+    s->setup();
+    return s;
+}
+
+COPY_ITEM_IMPL(StemSlash)
+
+Ms::System* Factory::createSystem(Ms::Page* parent)
+{
+    System* s = new System(parent);
+    s->setup();
+    return s;
+}

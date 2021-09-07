@@ -39,8 +39,10 @@ class StaffLines final : public EngravingItem
     qreal lw { 0.0 };
     std::vector<mu::LineF> lines;
 
-public:
+    friend class mu::engraving::Factory;
     StaffLines(Measure* parent);
+
+public:
 
     StaffLines* clone() const override { return new StaffLines(*this); }
 

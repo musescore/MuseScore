@@ -103,7 +103,6 @@ void TestElement::testIds()
         ElementType::FBOX,
         ElementType::MEASURE,
         ElementType::TAB_DURATION_SYMBOL,
-        ElementType::OSSIA
     };
 
     for (ElementType t : ids) {

@@ -23,6 +23,7 @@
 #include "testing/qtestsuite.h"
 #include "testbase.h"
 
+#include "libmscore/factory.h"
 #include "libmscore/chord.h"
 #include "libmscore/excerpt.h"
 #include "libmscore/glissando.h"
@@ -39,6 +40,7 @@
 static const QString SPANNERS_DATA_DIR("spanners_data/");
 
 using namespace Ms;
+using namespace mu::engraving;
 
 //---------------------------------------------------------
 //   TestSpanners
@@ -278,7 +280,7 @@ void TestSpanners::spanners04()
     // add a linked staff to the existing staff
     // (copied and adapted from void MuseScore::editInstrList() in mscore/instrdialog.cpp)
     Staff* oldStaff   = score->staff(0);
-    Staff* newStaff   = new Staff(score);
+    Staff* newStaff   = Factory::createStaff(score);
     newStaff->setPart(oldStaff->part());
     newStaff->initFromStaffType(oldStaff->staffType(Fraction(0, 1)));
     newStaff->setDefaultClefType(ClefTypeList(ClefType::G));

@@ -2143,7 +2143,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             m->setRepeatEnd(true);
         } else if (tag == "vspacer" || tag == "vspacerDown") {
             if (!m->vspacerDown(staffIdx)) {
-                Spacer* spacer = new Spacer(m);
+                Spacer* spacer = Factory::createSpacer(m);
                 spacer->setSpacerType(SpacerType::DOWN);
                 spacer->setTrack(staffIdx * VOICES);
                 m->add(spacer);
@@ -2151,7 +2151,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             m->vspacerDown(staffIdx)->setGap(e.readDouble() * _spatium);
         } else if (tag == "vspacer" || tag == "vspacerUp") {
             if (!m->vspacerUp(staffIdx)) {
-                Spacer* spacer = new Spacer(m);
+                Spacer* spacer = Factory::createSpacer(m);
                 spacer->setSpacerType(SpacerType::UP);
                 spacer->setTrack(staffIdx * VOICES);
                 m->add(spacer);
@@ -2575,7 +2575,7 @@ static void readPart(Part* part, XmlReader& e)
     while (e.readNextStartElement()) {
         const QStringRef& tag(e.name());
         if (tag == "Staff") {
-            Staff* staff = createStaff(_score, part);
+            Staff* staff = Factory::createStaff(_score, part);
             staff->setStaffType(Fraction(0, 1), StaffType());       // will reset later if needed
             _score->appendStaff(staff);
             readStaff(staff, e);

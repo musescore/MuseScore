@@ -2,9 +2,9 @@
 
 #include <chrono>
 
-#include "global/log.h"
-
 #include "gpdommodel.h"
+
+#include "libmscore/factory.h"
 #include "libmscore/arpeggio.h"
 #include "libmscore/box.h"
 #include "libmscore/bend.h"
@@ -44,6 +44,10 @@
 #include "libmscore/volta.h"
 
 #include "../importgtp.h"
+
+#include "log.h"
+
+using namespace mu::engraving;
 
 namespace Ms {
 GPConverter::GPConverter(Score* score, std::unique_ptr<GPDomModel>&& gpDom)
@@ -626,7 +630,7 @@ void GPConverter::setUpTrack(const std::unique_ptr<GPTrack>& tR)
     //part->setId(QString("%1").arg(idx));
     _score->appendPart(part);
     for (size_t staffIdx = 0; staffIdx < tR->staffCount(); staffIdx++) {
-        Staff* s = new Staff(_score);
+        Staff* s = Factory::createStaff(_score);
         StaffType stType;
         stType.fretFont();
         part->insertStaff(s, -1);

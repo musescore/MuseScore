@@ -103,6 +103,37 @@ public:
     static Ms::Note* copyNote(const Ms::Note& src, bool link = false);
     static std::shared_ptr<Ms::Note> makeNote(Ms::Chord* parent);
 
+    static Ms::NoteDot* createNoteDot(Ms::Note* parent);
+    static Ms::NoteDot* createNoteDot(Ms::Rest* parent);
+    static Ms::NoteDot* copyNoteDot(const Ms::NoteDot& src);
+
+    static Ms::Page* createPage(Ms::EngravingObject* parent);
+
+    static Ms::Segment* createSegment(Ms::Measure* parent);
+    static Ms::Segment* createSegment(Ms::Measure* parent, Ms::SegmentType type, const Ms::Fraction& t);
+
+    static Ms::Spacer* createSpacer(Ms::Measure* parent);
+    static std::shared_ptr<Ms::Spacer> makeSpacer(Ms::Measure* parent);
+
+    static Ms::Staff* createStaff(Ms::Score* parent);
+    static Ms::Staff* createStaff(Ms::Score* parent, Ms::Part* part);
+
+    static Ms::StaffLines* createStaffLines(Ms::Measure* parent);
+    static Ms::StaffLines* copyStaffLines(const Ms::StaffLines& src);
+
+    static Ms::StaffState* createStaffState(Ms::EngravingItem* parent);
+
+    static Ms::StaffTypeChange* createStaffTypeChange(Ms::MeasureBase* parent);
+    static std::shared_ptr<Ms::StaffTypeChange> makeStaffTypeChange(Ms::MeasureBase* parent);
+
+    static Ms::Stem* createStem(Ms::Chord* parent);
+    static Ms::Stem* copyStem(const Ms::Stem& src);
+
+    static Ms::StemSlash* createStemSlash(Ms::Chord* parent);
+    static Ms::StemSlash* copyStemSlash(const Ms::StemSlash& src);
+
+    static Ms::System* createSystem(Ms::Page* parent);
+
 private:
     static Ms::EngravingItem* doCreateItem(Ms::ElementType type, Ms::EngravingItem* parent);
 };

@@ -120,7 +120,7 @@ MStaff::MStaff(const MStaff& m)
 {
     m_noText    = 0;
     m_mmRangeText = 0;
-    m_lines     = new StaffLines(*m.m_lines);
+    m_lines     = Factory::copyStaffLines(*m.m_lines);
     m_hasVoices = m.m_hasVoices;
     m_vspacerUp = 0;
     m_vspacerDown = 0;
@@ -193,7 +193,7 @@ Measure::Measure(System* parent)
     for (int staffIdx = 0; staffIdx < n; ++staffIdx) {
         MStaff* ms = new MStaff;
         Staff* staff = score()->staff(staffIdx);
-        ms->setLines(new StaffLines(this));
+        ms->setLines(Factory::createStaffLines(this));
         ms->lines()->setTrack(staffIdx * VOICES);
         ms->lines()->setParent(this);
         ms->lines()->setVisible(!staff->isLinesInvisible(tick()));
@@ -261,7 +261,7 @@ void Measure::createStaves(int staffIdx)
     for (int n = int(m_mstaves.size()); n <= staffIdx; ++n) {
         Staff* staff = score()->staff(n);
         MStaff* s    = new MStaff;
-        s->setLines(new StaffLines(this));
+        s->setLines(Factory::createStaffLines(this));
         s->lines()->setParent(this);
         s->lines()->setTrack(n * VOICES);
         s->lines()->setVisible(!staff->isLinesInvisible(tick()));
@@ -854,7 +854,7 @@ Segment* Measure::undoGetSegmentR(SegmentType type, const Fraction& t)
 {
     Segment* s = findSegmentR(type, t);
     if (s == 0) {
-        s = new Segment(this, type, t);
+        s = Factory::createSegment(this, type, t);
         score()->undoAddElement(s);
     }
     return s;
@@ -888,7 +888,7 @@ Segment* Measure::getSegmentR(SegmentType st, const Fraction& t)
 {
     Segment* s = findSegmentR(st, t);
     if (!s) {
-        s = new Segment(this, st, t);
+        s = Factory::createSegment(this, st, t);
         add(s);
     }
     return s;
@@ -1291,7 +1291,7 @@ void Measure::cmdAddStaves(int sStaff, int eStaff, bool createRest)
     for (int i = sStaff; i < eStaff; ++i) {
         Staff* staff = score()->staff(i);
         MStaff* ms   = new MStaff;
-        ms->setLines(new StaffLines(this));
+        ms->setLines(Factory::createStaffLines(this));
         ms->lines()->setTrack(i * VOICES);
         ms->lines()->setParent(this);
         ms->lines()->setVisible(!staff->isLinesInvisible(tick()));
@@ -1413,7 +1413,7 @@ void Measure::insertStaff(Staff* staff, int staffIdx)
     }
 
     MStaff* ms = new MStaff;
-    ms->setLines(new StaffLines(this));
+    ms->setLines(Factory::createStaffLines(this));
     ms->lines()->setParent(this);
     ms->lines()->setTrack(staffIdx * VOICES);
     ms->lines()->setVisible(!staff->isLinesInvisible(tick()));
@@ -2079,7 +2079,7 @@ void Measure::read(XmlReader& e, int staffIdx)
     for (int n = int(m_mstaves.size()); n <= staffIdx; ++n) {
         Staff* staff = score()->staff(n);
         MStaff* s    = new MStaff;
-        s->setLines(new StaffLines(this));
+        s->setLines(Factory::createStaffLines(this));
         s->lines()->setParent(this);
         s->lines()->setTrack(n * VOICES);
         s->lines()->setVisible(!staff->isLinesInvisible(tick()));
@@ -2139,7 +2139,7 @@ void Measure::read(XmlReader& e, int staffIdx)
             setRepeatEnd(true);
         } else if (tag == "vspacer" || tag == "vspacerDown") {
             if (!m_mstaves[staffIdx]->vspacerDown()) {
-                Spacer* spacer = new Spacer(this);
+                Spacer* spacer = Factory::createSpacer(this);
                 spacer->setSpacerType(SpacerType::DOWN);
                 spacer->setTrack(staffIdx * VOICES);
                 add(spacer);
@@ -2147,7 +2147,7 @@ void Measure::read(XmlReader& e, int staffIdx)
             m_mstaves[staffIdx]->vspacerDown()->setGap(e.readDouble() * _spatium);
         } else if (tag == "vspacerFixed") {
             if (!m_mstaves[staffIdx]->vspacerDown()) {
-                Spacer* spacer = new Spacer(this);
+                Spacer* spacer = Factory::createSpacer(this);
                 spacer->setSpacerType(SpacerType::FIXED);
                 spacer->setTrack(staffIdx * VOICES);
                 add(spacer);
@@ -2155,7 +2155,7 @@ void Measure::read(XmlReader& e, int staffIdx)
             m_mstaves[staffIdx]->vspacerDown()->setGap(e.readDouble() * _spatium);
         } else if (tag == "vspacerUp") {
             if (!m_mstaves[staffIdx]->vspacerUp()) {
-                Spacer* spacer = new Spacer(this);
+                Spacer* spacer = Factory::createSpacer(this);
                 spacer->setSpacerType(SpacerType::UP);
                 spacer->setTrack(staffIdx * VOICES);
                 add(spacer);
@@ -3150,7 +3150,7 @@ Measure* Measure::cloneMeasure(Score* sc, const Fraction& tick, TieMap* tieMap)
     TupletMap tupletMap;
 
     for (Segment* oseg = first(); oseg; oseg = oseg->next()) {
-        Segment* s = new Segment(m, oseg->segmentType(), oseg->rtick());
+        Segment* s = Factory::createSegment(m, oseg->segmentType(), oseg->rtick());
         s->setEnabled(oseg->enabled());
         s->setVisible(oseg->visible());
         s->setHeader(oseg->header());
@@ -4251,7 +4251,7 @@ void Measure::addSystemHeader(bool isFirstSystem)
             }
             Clef* clef;
             if (!cSegment) {
-                cSegment = new Segment(this, SegmentType::HeaderClef, Fraction(0, 1));
+                cSegment = Factory::createSegment(this, SegmentType::HeaderClef, Fraction(0, 1));
                 cSegment->setHeader(true);
                 add(cSegment);
                 clef = 0;
@@ -4317,7 +4317,7 @@ void Measure::addSystemHeader(bool isFirstSystem)
         if (needKeysig) {
             KeySig* keysig;
             if (!kSegment) {
-                kSegment = new Segment(this, SegmentType::KeySig, Fraction(0, 1));
+                kSegment = Factory::createSegment(this, SegmentType::KeySig, Fraction(0, 1));
                 kSegment->setHeader(true);
                 add(kSegment);
                 keysig = 0;
@@ -4384,7 +4384,7 @@ void Measure::addSystemHeader(bool isFirstSystem)
     int n       = score()->nstaves();
     if ((n > 1 && score()->styleB(Sid::startBarlineMultiple)) || (n == 1 && score()->styleB(Sid::startBarlineSingle))) {
         if (!s) {
-            s = new Segment(this, SegmentType::BeginBarLine, Fraction(0, 1));
+            s = Factory::createSegment(this, SegmentType::BeginBarLine, Fraction(0, 1));
             add(s);
         }
         for (int track = 0; track < score()->ntracks(); track += VOICES) {
@@ -4438,7 +4438,7 @@ void Measure::addSystemTrailer(Measure* nm)
                 showCourtesySig = true;
                 // if due, create a new courtesy time signature for each staff
                 if (!s) {
-                    s  = new Segment(this, SegmentType::TimeSigAnnounce, _rtick);
+                    s  = Factory::createSegment(this, SegmentType::TimeSigAnnounce, _rtick);
                     s->setTrailer(true);
                     add(s);
                 }
@@ -4483,7 +4483,7 @@ void Measure::addSystemTrailer(Measure* nm)
 
         if (show) {
             if (!s) {
-                s = new Segment(this, SegmentType::KeySigAnnounce, _rtick);
+                s = Factory::createSegment(this, SegmentType::KeySigAnnounce, _rtick);
                 s->setTrailer(true);
                 add(s);
             }

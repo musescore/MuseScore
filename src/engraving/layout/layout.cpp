@@ -21,6 +21,7 @@
  */
 #include "layout.h"
 
+#include "libmscore/factory.h"
 #include "libmscore/score.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/measure.h"
@@ -300,12 +301,12 @@ void Layout::resetSystems(bool layoutAll, const LayoutOptions& options, LayoutCo
             mb->moveToDummy();
         }
 
-        page = new Page(m_score);
+        page = Factory::createPage(m_score);
         m_score->pages().push_back(page);
         page->bbox().setRect(0.0, 0.0, options.loWidth, options.loHeight);
         page->setNo(0);
 
-        System* system = new System(page);
+        System* system = Factory::createSystem(page);
         m_score->_systems.push_back(system);
         page->appendSystem(system);
         system->adjustStavesNumber(m_score->nstaves());

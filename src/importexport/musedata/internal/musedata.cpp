@@ -671,7 +671,7 @@ bool MuseData::read(const QString& name)
             Part* mpart = new Part(score);
             int staves  = countStaves(part);
             for (int i = 0; i < staves; ++i) {
-                Staff* staff = createStaff(score, mpart);
+                Staff* staff = Factory::createStaff(score, mpart);
                 score->appendStaff(staff);
 
                 if ((staves == 2) && (i == 0)) {

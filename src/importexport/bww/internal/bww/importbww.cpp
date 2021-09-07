@@ -554,7 +554,7 @@ Score::FileError importBww(MasterScore* score, const QString& path)
 
     Part* part = new Part(score);
     score->appendPart(part);
-    Staff* staff = createStaff(score, part);
+    Staff* staff = Factory::createStaff(score, part);
     score->appendStaff(staff);
 
     Bww::Lexer lex(&fp);

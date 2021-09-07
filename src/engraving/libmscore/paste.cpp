@@ -971,7 +971,7 @@ void Score::pasteSymbols(XmlReader& e, ChordRest* dst)
                                 nextSegm = nextSegm->next1(SegmentType::ChordRest);
                             }
                             if (!nextSegm || nextSegm->tick() > destTick1) {                    // no ChordRest segm at this tick
-                                nextSegm = new Segment(prevSegm->measure(), SegmentType::ChordRest, destTick1);
+                                nextSegm = Factory::createSegment(prevSegm->measure(), SegmentType::ChordRest, destTick1);
                                 if (!nextSegm) {
                                     qDebug("PasteSymbols: can't find or create destination segment for FiguredBass");
                                     delete el;

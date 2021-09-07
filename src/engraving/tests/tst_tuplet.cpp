@@ -22,6 +22,8 @@
 
 #include "testing/qtestsuite.h"
 #include "testbase.h"
+
+#include "libmscore/factory.h"
 #include "libmscore/staff.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/tuplet.h"
@@ -31,6 +33,7 @@
 
 static const QString TUPLET_DATA_DIR("tuplet_data/");
 
+using namespace mu::engraving;
 using namespace Ms;
 
 //---------------------------------------------------------
@@ -180,7 +183,7 @@ void TestTuplet::addStaff()
     // add a staff to the existing staff
     // (copied and adapted from void MuseScore::editInstrList() in mscore/instrdialog.cpp)
     Staff* oldStaff   = score->staff(0);
-    Staff* newStaff   = new Staff(score);
+    Staff* newStaff   = Factory::createStaff(score);
     newStaff->setPart(oldStaff->part());
     newStaff->initFromStaffType(oldStaff->staffType(Fraction(0, 1)));
     newStaff->setDefaultClefType(ClefTypeList(ClefType::F));

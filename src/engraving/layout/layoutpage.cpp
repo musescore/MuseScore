@@ -23,6 +23,7 @@
 
 #include "realfn.h"
 
+#include "libmscore/factory.h"
 #include "libmscore/score.h"
 #include "libmscore/page.h"
 #include "libmscore/system.h"
@@ -57,7 +58,7 @@ using namespace Ms;
 void LayoutPage::getNextPage(const LayoutOptions& options, LayoutContext& lc)
 {
     if (!lc.page || lc.curPage >= lc.score->npages()) {
-        lc.page = new Page(lc.score);
+        lc.page = Factory::createPage(lc.score);
         lc.score->pages().push_back(lc.page);
         lc.prevSystem = nullptr;
         lc.pageOldMeasure = nullptr;

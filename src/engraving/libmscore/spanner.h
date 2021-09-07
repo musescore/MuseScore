@@ -53,10 +53,11 @@ protected:
     mu::PointF _p2;
     mu::PointF _offset2;
 
-public:
     SpannerSegment(const ElementType& type, Spanner*, Score*, ElementFlags f = ElementFlag::ON_STAFF | ElementFlag::MOVABLE);
     SpannerSegment(const ElementType& type, Score* s, ElementFlags f = ElementFlag::ON_STAFF | ElementFlag::MOVABLE);
     SpannerSegment(const SpannerSegment&);
+
+public:
 
     // Score Tree functions
     virtual EngravingObject* treeParent() const override;
@@ -162,8 +163,11 @@ private:
     std::deque<SpannerSegment*> unusedSegments;   // Currently unused segments which can be reused later.
                                                   // We cannot just delete them as they can be referenced
                                                   // in undo stack or other places already.
-
 protected:
+
+    Spanner(const ElementType& type, EngravingItem* parent, ElementFlags = ElementFlag::NOTHING);
+    Spanner(const Spanner&);
+
     void pushUnusedSegment(SpannerSegment* seg);
     SpannerSegment* popUnusedSegment();
     void reuse(SpannerSegment* seg);              // called when segment from unusedSegments
@@ -175,8 +179,7 @@ protected:
     const std::vector<SpannerSegment*> spannerSegments() const { return segments; }
 
 public:
-    Spanner(const ElementType& type, EngravingItem* parent, ElementFlags = ElementFlag::NOTHING);
-    Spanner(const Spanner&);
+
     ~Spanner();
 
     // Score Tree functions

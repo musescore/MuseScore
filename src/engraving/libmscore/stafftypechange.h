@@ -37,13 +37,15 @@ class StaffTypeChange final : public EngravingItem
     StaffType* _staffType { 0 };
     qreal lw;
 
+    friend class mu::engraving::Factory;
+    StaffTypeChange(MeasureBase* parent = 0);
+    StaffTypeChange(const StaffTypeChange&);
+
     void layout() override;
     void spatiumChanged(qreal oldValue, qreal newValue) override;
     void draw(mu::draw::Painter*) const override;
 
 public:
-    StaffTypeChange(MeasureBase* parent = 0);
-    StaffTypeChange(const StaffTypeChange&);
 
     StaffTypeChange* clone() const override { return new StaffTypeChange(*this); }
 

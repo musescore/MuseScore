@@ -1211,7 +1211,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
         }
         midiPatch = cl->sound;
 
-        Staff* s = createStaff(score, part);
+        Staff* s = Factory::createStaff(score, part);
         s->initFromStaffType(0);
 
         if (cl->bPercussion) {

@@ -784,7 +784,7 @@ void PowerTab::addToScore(ptSection& sec)
         //int lastStaff = sec.staffMap.back() + 1;
         for (int i = 0; i < staves; ++i) {
             Part* part = new Part(score);
-            Staff* s = createStaff(score, part);
+            Staff* s = Factory::createStaff(score, part);
             part->insertStaff(s, -1);
             auto info = &curTrack->infos[i];
             std::string ss = info->name;
@@ -1303,7 +1303,7 @@ Score::FileError PowerTab::read()
 
         Staff* staff = part->staves()->front();
 
-        Staff* s = createStaff(score, p);
+        Staff* s = Factory::createStaff(score, p);
         const StaffType* st = staff->staffType(Fraction(0, 1));
         s->setStaffType(Fraction(0, 1), *st);
 
