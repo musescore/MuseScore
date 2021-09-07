@@ -14,6 +14,7 @@
 #include "libmscore/chordline.h"
 #include "libmscore/drumset.h"
 #include "libmscore/dynamic.h"
+#include "libmscore/factory.h"
 #include "libmscore/fermata.h"
 #include "libmscore/fret.h"
 #include "libmscore/fingering.h"
@@ -41,10 +42,6 @@
 #include "libmscore/trill.h"
 #include "libmscore/tuplet.h"
 #include "libmscore/volta.h"
-
-//#include "libmscore/repeat.h" //!@TODO
-
-//#include "libmscore/symtext.h"
 
 #include "../importgtp.h"
 
@@ -255,7 +252,13 @@ void GPConverter::convertNotes(const std::vector<std::shared_ptr<GPNote> >& note
 
 void GPConverter::convertNote(const GPNote* gpnote, ChordRest* cr)
 {
-    Note* note = new Note(_score);
+    if (cr->type() != ElementType::CHORD) {
+        return;
+    }
+
+    Chord* ch = static_cast<Chord*>(cr);
+
+    Note* note = mu::engraving::Factory::createNote(ch);
     note->setTrack(cr->track());
     cr->add(note);
     configureNote(gpnote, note);
@@ -346,7 +349,7 @@ void GPConverter::addTimeSig(const GPMasterBar* mB, Measure* measure)
     for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
         Staff* staff = _score->staff(staffIdx);
         if (staff->staffType()->genTimesig()) {
-            TimeSig* t = new TimeSig(_score);
+            TimeSig* t = new TimeSig(_score->dummy()->segment());
             t->setTrack(staffIdx * VOICES);
             t->setSig(scoreTimeSig);
             Segment* s = measure->getSegment(SegmentType::TimeSig, tick);
@@ -406,7 +409,7 @@ void GPConverter::doAddVolta(const GPMasterBar* mB, Measure* measure)
         volta = _lastVolta;
         _score->removeElement(volta);
     } else {
-        volta = new Ms::Volta(_score);
+        volta = new Ms::Volta(_score->dummy());
         volta->setTick(measure->tick());
         _lastVolta = volta;
     }
@@ -462,14 +465,11 @@ void GPConverter::addDirection(const GPMasterBar* mB, Measure* measure)
         };
 
         Segment* s = measure->getSegment(SegmentType::KeySig, measure->tick());
-        StaffText* st = new StaffText(_score);
+        StaffText* st = new StaffText(_score->dummy()->segment());
         st->setTid(Tid::STAFF);
-//        st->setTextStyleType(TextStyleType::STAFF);
-//        st->_measureEnd = true;
         st->setXmlText(scoreDirection(mB->direction().jump));
         if (mB->direction().target == "Fine") {
             st->setXmlText("fine");
-//            st->_measureEnd = false;
         }
         st->setParent(s);
         st->setTrack(0);
@@ -478,7 +478,7 @@ void GPConverter::addDirection(const GPMasterBar* mB, Measure* measure)
 
     if (!mB->direction().target.isEmpty()) {
         Segment* s = measure->getSegment(SegmentType::BarLine, measure->tick());
-        Symbol* sym = new Symbol(_score);
+        Symbol* sym = new Symbol(_score->dummy());
         if (mB->direction().target == "Segno") {
             sym->setSym(SymId::segno);
         } else if (mB->direction().target == "SegnoSegno") {
@@ -489,11 +489,9 @@ void GPConverter::addDirection(const GPMasterBar* mB, Measure* measure)
             sym->setSym(SymId::codaSquare);
         }
         if (mB->direction().target == "Fine") {
-            StaffText* st = new StaffText(_score);
+            StaffText* st = new StaffText(_score->dummy()->segment());
             st->setTid(Tid::STAFF);
-//            st->setTextStyleType(TextStyleType::STAFF);
             st->setXmlText("fine");
-//            st->_measureEnd = false;
             st->setParent(s);
             st->setTrack(0);
             _score->addElement(st);
@@ -513,14 +511,14 @@ void GPConverter::addSection(const GPMasterBar* mB, Measure* measure)
 
     if (!mB->section().first.isEmpty()) {
         Segment* s = measure->getSegment(SegmentType::ChordRest, measure->tick());
-        RehearsalMark* t = new RehearsalMark(_score);
+        RehearsalMark* t = new RehearsalMark(_score->dummy()->segment());
         t->setPlainText(mB->section().first);
         t->setTrack(0);
         s->add(t);
     }
     if (!mB->section().second.isEmpty()) {
         Segment* s = measure->getSegment(SegmentType::ChordRest, measure->tick());
-        RehearsalMark* t = new RehearsalMark(_score);
+        RehearsalMark* t = new RehearsalMark(_score->dummy()->segment());
         t->setPlainText(mB->section().second);
         t->setTrack(0);
         s->add(t);
@@ -542,14 +540,6 @@ void GPConverter::addTripletFeel(const GPMasterBar* mB, Measure* measure)
 //        else if (tf == GPMasterBar::TripletFeelType::Scottish16th) return TripletFeelType::Scottish16th;
 //        return TripletFeelType::None;
 //    };
-//
-//    TripletFeelType type = convertTripletFeel(mB->tripletFeel());
-//    TripletFeel* tripletFeel = new TripletFeel(_score, type);
-//    _lastTripletFeel = mB->tripletFeel();
-//
-//    tripletFeel->setTrack(0 * VOICES);
-//    Segment* segment = measure->getSegment(Segment::Type::ChordRest, measure->tick());
-//    segment->add(tripletFeel);
 }
 
 void GPConverter::addKeySig(const GPMasterBar* mB, Measure* measure)
@@ -601,7 +591,7 @@ void GPConverter::addKeySig(const GPMasterBar* mB, Measure* measure)
 
         Staff* staff = _score->staff(staffIdx);
         if (staff->staffType()->genTimesig()) {
-            KeySig* t = new KeySig(_score);
+            KeySig* t = mu::engraving::Factory::createKeySig(_score->dummy()->segment());
             t->setTrack(staffIdx * VOICES);
             t->setKey(scoreKeySig);
             Segment* s = measure->getSegment(SegmentType::KeySig, tick);
@@ -614,8 +604,6 @@ void GPConverter::addKeySig(const GPMasterBar* mB, Measure* measure)
 void GPConverter::setUpGPScore(const GPScore* gpscore)
 {
     UNUSED(gpscore);
-    //! NOTE Заголовок таба (title и тд) добавляется единнобразно для всех версий gp
-    //! в пост обработке
 }
 
 void GPConverter::setUpTracks(const std::map<int, std::unique_ptr<GPTrack> >& tracks)
@@ -646,7 +634,7 @@ void GPConverter::setUpTrack(const std::unique_ptr<GPTrack>& tR)
     }
 
     if (tR->staffCount() > 1) {
-        part->staff(0)->addBracket(new BracketItem(_score, BracketType::BRACE, 2));
+        part->staff(0)->addBracket(mu::engraving::Factory::createBracketItem(_score->dummy(), BracketType::BRACE, 2));
         part->staff(0)->setBarLineSpan(2);
     }
 
@@ -728,133 +716,7 @@ void GPConverter::fillUncompletedMeasure(const Context& ctx)
 
 void GPConverter::addContiniousSlideHammerOn()
 {
-    //!NOTE This function works with previous collected map _slideHummerOnMap
-    //!First take started note and find next note which connected with started note
-    //!via slide or hummerOn or legatoSlide
-    //!Check the situation when started note is a grace note
-    //!add glissando for slide
-    //!add slur for hummerOn
-    //!add glissando + slur for legatoSlide
-
-//    auto searchEndNote = [] (Note* start) -> Note* {
-//
-//        ChordRest* nextCr;
-//        if (static_cast<Chord*>(start->parent())->ChordRest::isGrace()) {
-//            //! this case when start note is a grace note so end note can be next note in grace notes
-//            //! or parent note of grace notes
-//            Chord* startChord =  static_cast<Chord*>(start->parent());
-//
-//            Chord* parentGrace = static_cast<Chord*>(start->parent()->parent());
-//
-//            auto it = parentGrace->graceNotes().begin();
-//            for (; it != parentGrace->graceNotes().end(); ++it) {
-//                if (*it == startChord) {
-//                    break;
-//                }
-//            }
-//
-//            if (it == parentGrace->graceNotes().end()) {
-//                nextCr = nullptr;
-//            } else if (std::next(it) == parentGrace->graceNotes().end()) {
-//                nextCr = parentGrace;
-//            } else {
-//                nextCr = *(++it);
-//            }
-//        }
-//        else {
-//            nextCr = start->chord()->segment()->next1()->nextChordRest(start->track());
-//            if (!nextCr)
-//                return nullptr;
-//
-//            if (nextCr->isChord() && !static_cast<Chord*>(nextCr)->graceNotes().empty()) {
-//                nextCr = static_cast<Chord*>(nextCr)->graceNotes().front();
-//            }
-//        }
-//
-//        if (!nextCr)
-//            return nullptr;
-//
-//        if (nextCr->type() != ElementType::CHORD) {
-//            return nullptr;
-//        }
-//        auto nextChord = static_cast<Chord*>(nextCr);
-//        for (auto note : nextChord->notes()) {
-//            if (note->string() == start->string() && (note->harmonic() == start->harmonic())) {
-//                return note;
-//            }
-//        }
-//        return nullptr;
-//    };
-//
-//    std::unordered_map<Note* , Slur*> legatoSlides;
-//    for (const auto& slide : _slideHummerOnMap) {
-//
-//        Note* startNote = slide.first;
-//        Note* endNote = searchEndNote(startNote);
-//        if (!endNote || startNote->string() == -1 || startNote->fret() == endNote->fret()) {
-//            //mistake in GP: such kind od slides shouldn't exist
-//            continue;
-//        }
-//
-//        if (SlideHummerOn::HammerOn == slide.second) {
-//            endNote->setIsHammerOn(true);
-//        }
-//
-//        int startTick = startNote->chord()->tick();
-//        int endTick = endNote->chord()->tick();
-//        int track = startNote->track();
-//
-//        //! NOTE Отображение
-//        if (slide.second == SlideHummerOn::LegatoSlide || slide.second == SlideHummerOn::Slide) {
-//
-//            Glissando* gl = new Glissando(_score);
-//            gl->setPlayGlissando(false);
-//            gl->setAnchor(Spanner::Anchor::NOTE);
-//            gl->setStartElement(startNote);
-//            gl->setTrack(track);
-//            gl->setTick(startTick);
-//            gl->setTick2(endNote->chord()->tick());
-//            gl->setEndElement(endNote);
-//            gl->setParent(startNote);
-//            gl->setText("");
-//            gl->setGlissandoType(Glissando::Type::STRAIGHT);
-//            _score->addElement(gl);
-//        }
-//
-//        if (slide.second == SlideHummerOn::LegatoSlide || slide.second == SlideHummerOn::HammerOn) {
-//
-//            if (legatoSlides.count(startNote) == 0) {
-//                Slur* slur = new Slur(_score);
-//                slur->setStartElement(startNote->chord());
-//                slur->setTrack(track);
-//                slur->setTrack2(track); // don't know why need to do it. Without it Tab staff don't have slur
-//                slur->setTick(startTick);
-//                slur->setTick2(endTick);
-//                legatoSlides[endNote] = slur;
-//                slur->setEndElement(endNote->chord());
-//                _score->addSpanner(slur);
-//            }
-//            else {
-//                Slur* slur = legatoSlides[startNote];
-//                slur->setTick2(endTick);
-//                slur->setEndElement(endNote->chord());
-//                legatoSlides.erase(startNote);
-//                legatoSlides[endNote] = slur;
-//            }
-//        }
-//
-//        //! NOTE Звучание
-//        if (slide.second == SlideHummerOn::LegatoSlide
-//            || slide.second == SlideHummerOn::Slide)
-//        {
-//            Note::SlideType slideType = (slide.second == SlideHummerOn::Slide ?
-//                                         Note::SlideType::BetweenNotesWithPlayNote :
-//                                         Note::SlideType::BetweenNotesNoPlayNote);
-//            Note::Slide sl{slideType, startNote, endNote};
-//            startNote->attachSlide(sl);
-//            endNote->relateSlide(*startNote);
-//        }
-//    }
+//!@TODO Add Slide Hammer On to MU dom model
 }
 
 void GPConverter::addFermatas()
@@ -880,7 +742,7 @@ void GPConverter::addFermatas()
         Segment* seg = fr.first->getSegment(SegmentType::ChordRest, tick);
 
         for (int staffIdx = 0; staffIdx < _score->staves().count(); staffIdx++) {
-            Fermata* fermata = new Fermata(_score);
+            Fermata* fermata = mu::engraving::Factory::createFermata(_score->dummy());
             SymId type = fermataType(fr.second);
             fermata->setSymId(type);
             fermata->setTimeStretch(convertingLength);
@@ -921,11 +783,11 @@ void GPConverter::addTempoMap()
         measureIdx++;
         for (auto tempIt = range.first; tempIt != range.second; tempIt++) {
             Fraction tick = m->tick() + tempIt->second.position * m->ticks();
+            Segment* segment = m->getSegment(SegmentType::ChordRest, tick);
             int realTemp = realTempo(tempIt->second);
-            TempoText* tt = new TempoText(_score);
+            TempoText* tt = new TempoText(segment);
             tt->setTempo((qreal)realTemp / 60);
             tt->setXmlText(QString("<sym>metNoteQuarterUp</sym> = %1").arg(realTemp));
-            Segment* segment = m->getSegment(SegmentType::ChordRest, tick);
             tt->setTrack(0);
             segment->add(tt);
             _score->setTempo(tick, tt->tempo());
@@ -941,19 +803,6 @@ bool GPConverter::addSimileMark(const GPBar* bar, int curTrack)
     if (bar->simileMark() == GPBar::SimileMark::None) {
         return false;
     }
-
-//    Measure* lastMeasure = _score->lastMeasure();
-//
-//    auto scoreRepeat = [](const auto& str) {
-//        if (str == GPBar::SimileMark::Simple) return RepeatMeasureType::Simple;
-//        if (str == GPBar::SimileMark::FirstOfDouble) return RepeatMeasureType::FirstOfDouble;
-//        return RepeatMeasureType::SecondOfDouble;
-//    };
-//REPEAT_MEASURE
-//    RepeatMeasureType type = scoreRepeat(bar->simileMark());
-//    Ms::RepeatMeasure* rm = lastMeasure->cmdInsertRepeatMeasure(curTrack / 4);
-//    rm->setRepeatType(type);
-//    return true;
 }
 
 void GPConverter::addClef(const GPBar* bar, int curTrack)
@@ -996,7 +845,7 @@ void GPConverter::addClef(const GPBar* bar, int curTrack)
 
     auto tick = lastMeasure->tick();
     Segment* s = lastMeasure->getSegment(SegmentType::Clef, tick);
-    Clef* cl = new Clef(_score);
+    Clef* cl = mu::engraving::Factory::createClef(_score->dummy()->segment());
     cl->setTrack(curTrack);
     cl->setClefType(clef);
     s->add(cl);
@@ -1011,12 +860,11 @@ Measure* GPConverter::addMeasure(const GPMasterBar* mB)
         tick = lastMeasure->tick() + lastMeasure->ticks();
     }
 
-    auto measure = new Measure(_score);
+    Measure* measure = new Measure(_score->dummy()->system());
     measure->setTick(tick);
     GPMasterBar::TimeSig sig = mB->timeSig();
     auto scoreTimeSig = Fraction(sig.enumerator, sig.denumerator);
     measure->setTimesig(scoreTimeSig);
-//    measure->setLen(scoreTimeSig);
     measure->setTicks(scoreTimeSig);
     _score->measures()->add(measure);
 
@@ -1045,9 +893,9 @@ ChordRest* GPConverter::addChordRest(const GPBeat* beat, const Context& ctx)
 
     ChordRest* cr{ nullptr };
     if (beat->isRest()) {
-        cr = new Rest(_score);
+        cr = new Rest(_score->dummy()->segment());
     } else {
-        cr = new Chord(_score);
+        cr = new Chord(_score->dummy()->segment());
     }
 
     cr->setTrack(ctx.curTrack);
@@ -1056,7 +904,7 @@ ChordRest* GPConverter::addChordRest(const GPBeat* beat, const Context& ctx)
     for (int dot = 1; dot <= beat->lenth().first; dot++) {
         fr += Fraction(1, rhytm(beat->lenth().second) * 2 * dot);
     }
-//    cr->setDuration(fr);
+
     cr->setDurationType(TDuration(fr));
 
     return cr;
@@ -1076,12 +924,12 @@ void GPConverter::addFingering(const GPNote* gpnote, Note* note)
     };
 
     if (!gpnote->leftFingering().isEmpty()) {
-        Fingering* f = new Fingering(_score);
+        Fingering* f = new Fingering(note);
         f->setPlainText(scoreFinger(gpnote->leftFingering()));
         note->add(f);
     }
     if (!gpnote->rightFingering().isEmpty()) {
-        Fingering* f = new Fingering(_score);
+        Fingering* f = new Fingering(note);
         f->setPlainText(gpnote->rightFingering());
         note->add(f);
     }
@@ -1118,7 +966,7 @@ void GPConverter::addOrnament(const GPNote* gpnote, Note* note)
         }
     };
 
-    Articulation* art = new Articulation(_score);
+    Articulation* art = mu::engraving::Factory::createArticulation(_score->dummy()->chord());
     art->setSymId(scoreOrnament(gpnote->ornament()));
     if (!_score->addArticulation(note, art)) {
         delete art;
@@ -1172,7 +1020,7 @@ void GPConverter::addVibrato(const GPNote* gpnote, Note* note)
         }
     }
     if (!_vibratos[track]) {
-        Vibrato* v = new Vibrato(_score);
+        Vibrato* v = new Vibrato(_score->dummy());
         v->setVibratoType(vibratoType);
         _vibratos[track] = v;
         Segment* segment = chord->segment();
@@ -1195,7 +1043,7 @@ void GPConverter::addHarmonic(const GPNote* gpnote, Note* note)
     }
 
     if (gpnote->harmonic().type != GPNote::Harmonic::Type::Natural) {
-        Note* hnote = new Note(_score);
+        Note* hnote = mu::engraving::Factory::createNote(_score->dummy()->chord());
         hnote->setTrack(note->track());
         hnote->setString(note->string());
         hnote->setFret(note->fret());
@@ -1231,8 +1079,6 @@ void GPConverter::addHarmonic(const GPNote* gpnote, Note* note)
 
     Text* text = new Text(_score);
     text->setPlainText(harmoniText(gpnote->harmonic().type));
-//    text->setAbove(true);
-//    text->setTextStyleType(TextStyleType::HARMONY);
     note->add(text);
 }
 
@@ -1242,13 +1088,10 @@ void GPConverter::configureNote(const GPNote* gpnote, Note* note)
 
     addBend(gpnote, note);
 
-    //!@TODO let ring and palm mute
     addLetRing(gpnote, note);
     addPalmMute(gpnote, note);
-//    note->setLetRing(gpnote->letRing());
-//    note->setPalmMute(gpnote->palmMute());
-//    note->setGhost(gpnote->ghostNote());
-//    note->setIsDeadNote(gpnote->muted());
+
+//!@TODO addGhost addIsDeadNote
 }
 
 void GPConverter::addAccent(const GPNote* gpnote, Note* note)
@@ -1269,13 +1112,8 @@ void GPConverter::addAccent(const GPNote* gpnote, Note* note)
 
     for (size_t flagIdx = 0; flagIdx < gpnote->accents().size(); flagIdx++) {
         if (gpnote->accents()[flagIdx]) {
-//            if (note->chord()->hasArticulation(accentType(flagIdx))) {
-//                continue;
-//            }
-
-            Articulation* art = new Articulation(_score);
+            Articulation* art = mu::engraving::Factory::createArticulation(_score->dummy()->chord());
             art->setSymId(accentType(flagIdx));
-//            art->setArticulationType(accentType(flagIdx));
             note->chord()->add(art);
         }
     }
@@ -1287,7 +1125,7 @@ void GPConverter::addLeftHandTapping(const GPNote* gpnote, Note* note)
         return;
     }
 
-    Symbol* sym = new Symbol(note->score());
+    Symbol* sym = new Symbol(_score->dummy());
     sym->setSym(SymId::articLaissezVibrerAbove);
     sym->setParent(note);
     note->add(sym);
@@ -1335,7 +1173,7 @@ void GPConverter::addSingleSlide(const GPNote* gpnote, Note* note)
         if (gpnote->slides()[flagIdx]) {
             auto type = slideType(flagIdx);
 
-            ChordLine* cl = new ChordLine(_score);
+            ChordLine* cl = mu::engraving::Factory::createChordLine(_score->dummy()->chord());
             cl->setChordLineType(type);
             cl->setStraight(true);
             note->add(cl);
@@ -1357,7 +1195,6 @@ void GPConverter::collectHummerOn(const GPNote* gpnote, Note* note)
 {
     if (gpnote->hammerOn() == GPNote::HammerOn::Start) {
         _slideHummerOnMap.push_back(std::pair(note, SlideHummerOn::HammerOn));
-        //_slideHummerOnMap[note] = SlideHummerOn::HammerOn;
     }
 }
 
@@ -1367,12 +1204,11 @@ void GPConverter::addBend(const GPNote* gpnote, Note* note)
         return;
     }
 
-    Bend* bend = new Bend(_score);
+    Bend* bend = mu::engraving::Factory::createBend(note);
     auto gpBend = gpnote->bend();
 
     bool bendHasMiddleValue{ true };
     if (gpBend->middleOffset1 == 12 || gpBend->middleOffset2 == 12) {
-        //! таким образом из GP узнаем что точка всего одна
         bendHasMiddleValue = false;
     }
 
@@ -1393,9 +1229,8 @@ void GPConverter::addBend(const GPNote* gpnote, Note* note)
         }
 
         if (gpBend->middleOffset1 == -1 && gpBend->middleOffset2 == -1 && gpBend->middleValue != -1) {
-            //!@NOTE(a.popov@wsmgroup.ru) It seems when middle point is places exatly in the middle
+            //!@NOTE It seems when middle point is places exatly in the middle
             //!of bend  GP6 stores this value equal -1
-            //!@TODO(a.popov@wsmgroup.ru) make this evaluation in gp6dombuilder
             if (gpBend->destinationOffset > 50 || gpBend->destinationOffset == -1) {
                 bend->points().append(PitchValue(50, gpBend->middleValue));
             }
@@ -1444,7 +1279,7 @@ void GPConverter::addLetRing(const GPNote* gpnote, Note* note)
         }
     }
     if (!_letRings[track]) {
-        LetRing* lr = new LetRing(_score);
+        LetRing* lr = new LetRing(_score->dummy());
         _letRings[track] = lr;
         Segment* segment = chord->segment();
         Fraction tick = segment->tick();
@@ -1489,7 +1324,7 @@ void GPConverter::addPalmMute(const GPNote* gpnote, Note* note)
         }
     }
     if (!_palmMutes[track]) {
-        PalmMute* pm = new PalmMute(_score);
+        PalmMute* pm = new PalmMute(_score->dummy());
         _palmMutes[track] = pm;
         Segment* segment = chord->segment();
         Fraction tick = segment->tick();
@@ -1636,7 +1471,7 @@ void GPConverter::addDynamic(const GPBeat* gpb, ChordRest* cr)
         return "ppp";
     };
 
-    Dynamic* dynamic = new Dynamic(_score);
+    Dynamic* dynamic = new Dynamic(_score->dummy()->segment());
     dynamic->setTrack(cr->track());
     dynamic->setDynamicType(convertDynamic(gpb->dynamic()));
     cr->segment()->add(dynamic);
@@ -1652,7 +1487,7 @@ void GPConverter::addTie(const GPNote* gpnote, Note* note)
     using tieMap = std::unordered_multimap<int, Tie*>;
 
     auto startTie = [](Note* note, Score* sc, tieMap& ties, int curTrack) {
-        Tie* tie = new Tie(sc);
+        Tie* tie = new Tie(sc->dummy());
         note->add(tie);
         ties.insert(std::make_pair(curTrack, tie));
     };
@@ -1693,7 +1528,7 @@ void GPConverter::addLegato(const GPBeat* beat, ChordRest* cr)
             slurs.erase(it);
         }
 
-        Slur* slur = new Slur(sc);
+        Slur* slur = new Slur(sc->dummy());
         slur->setStartElement(cr);
         slur->setTrack(curTrack);
         slur->setTick(curTick);
@@ -1754,7 +1589,7 @@ void GPConverter::addFretDiagram(const GPBeat* gpnote, ChordRest* cr, const Cont
 
     GPTrack::Diagram diagram = _gpDom->tracks().at(GPTrackIdx)->diagram().at(diaId);
 
-    FretDiagram* fretDiagram = new FretDiagram(_score);
+    FretDiagram* fretDiagram = mu::engraving::Factory::createFretDiagram(_score->dummy()->segment());
     fretDiagram->setTrack(cr->track());
     //TODO-ws      fretDiagram->setChordName(name);
     fretDiagram->setStrings(diagram.stringCount);
@@ -1811,7 +1646,7 @@ void GPConverter::addBrush(const GPBeat* beat, ChordRest* cr)
         }
     };
 
-    Arpeggio* arp = new Arpeggio(_score);
+    Arpeggio* arp = mu::engraving::Factory::createArpeggio(_score->dummy()->chord());
     arp->setArpeggioType(brushType(beat->brush()));
 //    arp->setTicks(beat->arpeggioTicks()); //!@TODO add customized arrpeggio
     cr->add(arp);
@@ -1831,7 +1666,7 @@ void GPConverter::addArpeggio(const GPBeat* beat, ChordRest* cr)
         }
     };
 
-    Arpeggio* arp = new Arpeggio(_score);
+    Arpeggio* arp = mu::engraving::Factory::createArpeggio(_score->dummy()->chord());
     arp->setArpeggioType(arpeggioType(beat->arpeggio()));
 //    arp->setTicks(beat->arpeggioTicks()); //!@TODO add customized arrpeggio
     cr->add(arp);
@@ -1851,7 +1686,6 @@ void GPConverter::addTimer(const GPBeat* beat, ChordRest* cr)
                      + ":"
                      + (seconds < 10 ? "0" + QString::number(seconds) : QString::number(seconds)));
     st->setParent(cr->segment());
-//    st->setTextStyleType(TextStyleType::TECHNIQUE);
     st->setTrack(cr->track());
     cr->segment()->add(st);
 }
@@ -1865,7 +1699,6 @@ void GPConverter::addFreeText(const GPBeat* beat, ChordRest* cr)
     auto text = new Text(_score);
     text->setTrack(cr->track());
     text->setPlainText(beat->freeText());
-//    text->setTextStyleType(TextStyleType::LYRIC1);
     cr->segment()->add(text);
 }
 
@@ -1891,7 +1724,7 @@ void GPConverter::addTuplet(const GPBeat* beat, ChordRest* cr)
     }
 
     if (!_lastTuplet) {
-        _lastTuplet = new Tuplet(_score);
+        _lastTuplet = new Tuplet(_score->dummy()->measure());
         _lastTuplet->setTrack(cr->track());
         _lastTuplet->setParent(cr->measure());
         _lastTuplet->setTrack(cr->track());
@@ -1923,7 +1756,7 @@ void GPConverter::addVibratoWTremBar(const GPBeat* beat, ChordRest* cr)
         }
     };
 
-    Articulation* art = new Articulation(_score);
+    Articulation* art = mu::engraving::Factory::createArticulation(_score->dummy()->chord());
 
     art->setSymId(scoreVibrato(beat->vibrato()));
     art->setAnchor(ArticulationAnchor::TOP_STAFF);
@@ -1951,7 +1784,7 @@ void GPConverter::addFadding(const GPBeat* beat, ChordRest* cr)
         }
     };
 
-    Articulation* art = new Articulation(_score);
+    Articulation* art = mu::engraving::Factory::createArticulation(_score->dummy()->chord());
     art->setSymId(scoreFadding(beat->fadding()));
     art->setAnchor(ArticulationAnchor::TOP_STAFF);
     if (!_score->addArticulation(static_cast<Chord*>(cr)->upNote(), art)) {
@@ -1975,14 +1808,13 @@ void GPConverter::addHairPin(const GPBeat* beat, ChordRest* cr)
     };
 
     if (!_lastHairpin) {
-        _lastHairpin = new Hairpin(_score);
+        _lastHairpin = new Hairpin(_score->dummy()->segment());
         _lastHairpin->setTick(cr->tick());
         _lastHairpin->setTick2(cr->tick());
         _lastHairpin->setHairpinType(scoreHairpin(beat->hairpin()));
         _lastHairpin->setTrack(cr->track());
         _lastHairpin->setTrack2(cr->track());
         _score->addSpanner(_lastHairpin);
-        //_score->undoAddElement(_lastHairpin);
     }
 
     _lastHairpin->setTick2(cr->tick());
@@ -2018,7 +1850,7 @@ void GPConverter::addPickStroke(const GPBeat* beat, ChordRest* cr)
         }
     };
 
-    Articulation* art = new Articulation(_score);
+    Articulation* art = mu::engraving::Factory::createArticulation(_score->dummy()->chord());
     art->setSymId(scorePickStroke(beat->pickStroke()));
     if (!_score->addArticulation(static_cast<Chord*>(cr)->upNote(), art)) {
         delete art;
@@ -2042,7 +1874,7 @@ void GPConverter::addTremolo(const GPBeat* beat, ChordRest* cr)
         }
     };
 
-    Tremolo* t = new Tremolo(_score);
+    Tremolo* t = new Tremolo(_score->dummy()->chord());
     t->setTremoloType(scoreTremolo(beat->tremolo()));
     cr->add(t);
 }
@@ -2057,17 +1889,6 @@ void GPConverter::addWah(const GPBeat* beat, ChordRest* cr)
     }
 
     //!@TODO add wah
-
-//    auto scoreWah = [] (const auto& wah) {
-//        if (wah == GPBeat::Wah::Open) return SymId::Ouvert;
-//        else return SymId::Plusstop;
-//    };
-//
-//    Articulation* art = new Articulation(_score);
-//    art->setSymId(scoreWah(beat->wah()));
-//    if (!_score->addArticulation(static_cast<Chord*>(cr)->upNote(), art)) {
-//        delete art;
-//    }
 }
 
 void GPConverter::addBarre(const GPBeat* beat, ChordRest* cr)
@@ -2120,7 +1941,7 @@ void GPConverter::addLyrics(const GPBeat* beat, ChordRest* cr, const Context& ct
         return;
     }
 
-    auto lyr = new Lyrics(cr->score());
+    auto lyr = new Lyrics(_score->dummy());
     lyr->setPlainText(QString::fromUtf8(lyrStr.c_str()));
     cr->add(lyr);
 }
@@ -2170,8 +1991,6 @@ void GPConverter::addTextToNote(QString string, Note* note)
         string.resize(string.size() - 1);
     }
     text->setPlainText(string);
-//    text->setAbove(true);
-//    text->setTextStyleType(use_harmony ? TextStyleType::HARMONY : TextStyleType::TECHNIQUE);
     note->add(text);
 }
 
