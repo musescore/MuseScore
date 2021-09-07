@@ -115,7 +115,7 @@ Column {
             width: parent.width
 
             model: [
-                { iconRole: IconCode.NONE, typeRole: TextTypes.FRAME_TYPE_NONE },
+                { iconRole: IconCode.NONE, textRole: qsTrc("inspector", "None"), typeRole: TextTypes.FRAME_TYPE_NONE },
                 { iconRole: IconCode.FRAME_SQUARE, typeRole: TextTypes.FRAME_TYPE_SQUARE },
                 { iconRole: IconCode.FRAME_CIRCLE, typeRole: TextTypes.FRAME_TYPE_CIRCLE }
             ]
@@ -128,6 +128,8 @@ Column {
                 navigation.row: 5 + model.index
 
                 iconCode: modelData["iconRole"]
+                text: modelData["textRole"]
+
                 checked: root.model && !root.model.frameType.isUndefined ? root.model.frameType.value === modelData["typeRole"]
                                                                          : false
                 onToggled: {

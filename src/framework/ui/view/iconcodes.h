@@ -319,9 +319,7 @@ public:
         MUTE = 0xF3D5,
         SOLO = 0xF3D6,
 
-        AUTO,
-        NONE,
-        CUSTOM
+        NONE
     };
 
     Q_ENUM(Code)

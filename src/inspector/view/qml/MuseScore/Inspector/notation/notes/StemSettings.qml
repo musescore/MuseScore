@@ -70,7 +70,7 @@ FocusableItem {
                 width: parent.width
 
                 model: [
-                    { iconRole: IconCode.AUTO, typeRole: DirectionTypes.VERTICAL_AUTO },
+                    { iconRole: IconCode.NONE, textRole: qsTrc("inspector", "Auto"), typeRole: DirectionTypes.VERTICAL_AUTO },
                     { iconRole: IconCode.ARROW_DOWN, typeRole: DirectionTypes.VERTICAL_DOWN },
                     { iconRole: IconCode.ARROW_UP, typeRole: DirectionTypes.VERTICAL_UP }
                 ]
@@ -79,6 +79,8 @@ FocusableItem {
                     ButtonGroup.group: radioButtonList.radioButtonGroup
 
                     iconCode: modelData["iconRole"]
+                    text: modelData["textRole"]
+
                     checked: root.stemModel && !root.stemModel.stemDirection.isUndefined ? root.stemModel.stemDirection.value === modelData["typeRole"]
                                                                                          : false
                     onToggled: {
