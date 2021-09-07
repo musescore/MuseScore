@@ -627,7 +627,7 @@ void GPConverter::setUpTrack(const std::unique_ptr<GPTrack>& tR)
     Part* part = new Part(_score);
     part->setPlainLongName(tR->name());
     part->setId(idx);
-    //part->setId(QString("%1").arg(idx));
+
     _score->appendPart(part);
     for (size_t staffIdx = 0; staffIdx < tR->staffCount(); staffIdx++) {
         Staff* s = Factory::createStaff(_score);
