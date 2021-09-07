@@ -62,13 +62,6 @@ FocusScope {
 
         color: ui.theme.backgroundPrimaryColor
 
-        MouseArea {
-            anchors.fill: parent
-            onClicked: {
-                root.forceActiveFocus()
-            }
-        }
-
         Column {
             id: authorInfo
 

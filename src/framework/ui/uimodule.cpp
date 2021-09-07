@@ -52,6 +52,7 @@
 #include "view/navigationcontrol.h"
 #include "view/navigationevent.h"
 #include "view/qmlaccessible.h"
+#include "view/focuslistener.h"
 
 #include "dev/interactivetestsmodel.h"
 #include "dev/testdialog.h"
@@ -131,6 +132,8 @@ void UiModule::registerUiTypes()
     qmlRegisterType<NavigationControl>("MuseScore.Ui", 1, 0, "NavigationControl");
     qmlRegisterType<AccessibleItem>("MuseScore.Ui", 1, 0, "AccessibleItem");
     qmlRegisterUncreatableType<MUAccessible>("MuseScore.Ui", 1, 0, "MUAccessible", "Cannot create a enum type");
+
+    qmlRegisterType<FocusListener>("MuseScore.Ui", 1, 0, "FocusListener");
 
 #ifdef Q_OS_MAC
     qmlRegisterType<MacOSMainWindowProvider>("MuseScore.Ui", 1, 0, "MainWindowProvider");

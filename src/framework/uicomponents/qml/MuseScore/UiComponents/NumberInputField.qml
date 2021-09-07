@@ -24,7 +24,7 @@ import QtQuick.Controls 2.15
 
 import MuseScore.Ui 1.0
 
-Item {
+FocusScope {
     id: root
 
     property int minValue: 0
@@ -74,6 +74,10 @@ Item {
 
             return str
         }
+    }
+
+    FocusListener {
+        item: root
     }
 
     onValueChanged: {
@@ -159,8 +163,8 @@ Item {
 
         enabled: !textField.readOnly
 
-        onClicked: {
-            textField.forceActiveFocus()
+        onPressed: {
+            root.ensureActiveFocus()
             textField.cursorPosition = textField.text.length
         }
     }
