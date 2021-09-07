@@ -78,6 +78,9 @@ FocusScope {
 
     opacity: root.enabled ? 1.0 : ui.theme.itemOpacityDisabled
 
+    FocusListener {
+        item: root
+    }
 
     NavigationControl {
         id: navCtrl

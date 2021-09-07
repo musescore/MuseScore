@@ -56,16 +56,10 @@ FocusScope {
 
     Rectangle {
         id: background
+
         anchors.fill: parent
 
         color: ui.theme.backgroundSecondaryColor
-
-        MouseArea {
-            anchors.fill: parent
-            onClicked: {
-                root.forceActiveFocus()
-            }
-        }
     }
 
     RowLayout {
