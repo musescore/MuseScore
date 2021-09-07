@@ -126,7 +126,7 @@ ToolConfig UiArrangement::toolConfig(const QString& toolName) const
     ToolConfig config;
 
     config.items.reserve(itemsArr.size());
-    for (const QJsonValue& v : itemsArr) {
+    for (const QJsonValue v : itemsArr) {
         QJsonObject itemObj = v.toObject();
 
         ToolConfig::Item item;
