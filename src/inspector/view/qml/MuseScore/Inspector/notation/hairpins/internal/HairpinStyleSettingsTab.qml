@@ -85,13 +85,15 @@ FocusableItem {
                     { iconRole: IconCode.LINE_NORMAL, typeRole: Hairpin.LINE_STYLE_SOLID },
                     { iconRole: IconCode.LINE_DASHED, typeRole: Hairpin.LINE_STYLE_DASHED },
                     { iconRole: IconCode.LINE_DOTTED, typeRole: Hairpin.LINE_STYLE_DOTTED },
-                    { iconRole: IconCode.CUSTOM, typeRole: Hairpin.LINE_STYLE_CUSTOM }
+                    { iconRole: IconCode.NONE, textRole: qsTrc("inspector", "Custom"), typeRole: Hairpin.LINE_STYLE_CUSTOM }
                 ]
 
                 delegate: FlatRadioButton {
                     ButtonGroup.group: lineStyleButtonList.radioButtonGroup
 
                     iconCode: modelData["iconRole"]
+                    text: modelData["textRole"]
+
                     checked: root.model && !root.model.lineStyle.isUndefined ? root.model.lineStyle.value === modelData["typeRole"]
                                                                              : false
                     onToggled: {

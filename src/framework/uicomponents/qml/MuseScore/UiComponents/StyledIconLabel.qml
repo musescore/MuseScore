@@ -36,18 +36,5 @@ StyledTextLabel {
         pixelSize: ui.theme.iconsFont.pixelSize
     }
 
-    text: iconCharCode(iconCode)
-
-    function iconCharCode(code) {
-        var result = 0
-
-        switch (code) {
-        case IconCode.AUTO: result = "AUTO"; break
-        case IconCode.NONE: result = ""; break
-        case IconCode.CUSTOM: result = "Custom"; break
-        default: result = String.fromCharCode(code); break
-        }
-
-        return result
-    }
+    text: !isEmpty ? String.fromCharCode(iconCode) : ""
 }

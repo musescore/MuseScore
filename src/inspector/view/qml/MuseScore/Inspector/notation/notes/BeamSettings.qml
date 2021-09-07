@@ -89,7 +89,7 @@ FocusableItem {
                     width: parent.width
 
                     model: [
-                        { iconRole: IconCode.NONE, typeRole: Beam.FEATHERING_NONE },
+                        { iconRole: IconCode.NONE, textRole: qsTrc("inspector", "None"), typeRole: Beam.FEATHERING_NONE },
                         { iconRole: IconCode.FEATHERED_LEFT_HEIGHT, typeRole: Beam.FEATHERING_LEFT },
                         { iconRole: IconCode.FEATHERED_RIGHT_HEIGHT, typeRole: Beam.FEATHERING_RIGHT }
                     ]
@@ -98,6 +98,8 @@ FocusableItem {
                         ButtonGroup.group: radioButtonList.radioButtonGroup
 
                         iconCode: modelData["iconRole"]
+                        text: modelData["textRole"]
+
                         checked: root.beamModesModel &&
                                  !(root.model.featheringHeightLeft.isUndefined
                                    ||root.model.featheringHeightRight.isUndefined) ? root.model.featheringMode === modelData["typeRole"]
