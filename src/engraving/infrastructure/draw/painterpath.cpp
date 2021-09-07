@@ -41,7 +41,7 @@ void PainterPath::moveTo(const PointF& p)
 {
     if (!hasValidCoords(p)) {
 #ifdef TRACE_DRAW_OBJ_ENABLED
-        LOGW() << "PainterPath::moveTo: Adding point with invalid coordinates, ignoring call");
+        LOGW() << "PainterPath::moveTo: Adding point with invalid coordinates, ignoring call";
 #endif
         return;
     }

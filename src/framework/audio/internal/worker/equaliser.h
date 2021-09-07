@@ -47,7 +47,7 @@ private:
     unsigned int m_sampleRate = 0;
     bool m_active = true;
 
-    float m_gain = 0, m_frequency = 1'000.f, m_q = 1.f;
+    float m_gain = 0, m_frequency = 1000.f, m_q = 1.f;
     float m_a[3] = { 0, 0, 0 };
     float m_b[3] = { 0, 0, 0 };
     float m_x[3] = { 0, 0, 0 };
