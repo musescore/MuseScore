@@ -266,13 +266,9 @@ std::vector<GPMasterTracks::Automation> GP67DomBuilder::readTempoMap(QDomNode* c
 {
     std::vector<GPMasterTracks::Automation> tempoMap;
     QDomNode currentAutomation = currentNode->firstChild();
-    bool linearTemp{ false };
     while (!currentAutomation.isNull()) {
         if (!currentAutomation.nodeName().compare("Automation")) {
             auto ln = currentAutomation.firstChildElement("Linear");
-            if (!ln.isNull()) {
-                linearTemp = ln.text() == "true";
-            }
             auto first_name = currentAutomation.firstChild().nodeName();
             if (first_name == "Type") {
                 first_name = currentAutomation.firstChild().toElement().text();
