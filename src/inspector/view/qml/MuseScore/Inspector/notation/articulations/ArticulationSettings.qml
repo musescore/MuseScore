@@ -48,7 +48,7 @@ Column {
             width: parent.width
 
             model: [
-                { iconRole: IconCode.AUTO, typeRole: ArticulationTypes.AUTO },
+                { iconRole: IconCode.NONE, textRole: qsTrc("inspector", "Auto"), typeRole: ArticulationTypes.AUTO },
                 { iconRole: IconCode.ARROW_DOWN, typeRole: ArticulationTypes.DOWN },
                 { iconRole: IconCode.ARROW_UP, typeRole: ArticulationTypes.UP }
             ]
@@ -57,6 +57,8 @@ Column {
                 ButtonGroup.group: radioButtonList.radioButtonGroup
 
                 iconCode: modelData["iconRole"]
+                text: modelData["textRole"]
+
                 checked: root.model && !root.model.direction.isUndefined ? root.model.direction.value === modelData["typeRole"]
                                                                          : false
                 onToggled: {

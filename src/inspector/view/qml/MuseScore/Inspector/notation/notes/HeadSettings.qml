@@ -74,7 +74,7 @@ FocusableItem {
                 width: parent.width
 
                 model: [
-                    { iconRole: IconCode.AUTO, typeRole: NoteHead.DOT_POSITION_AUTO },
+                    { iconRole: IconCode.NONE, textRole: qsTrc("inspector", "Auto"), typeRole: NoteHead.DOT_POSITION_AUTO },
                     { iconRole: IconCode.DOT_ABOVE_LINE, typeRole: NoteHead.DOT_POSITION_DOWN },
                     { iconRole: IconCode.DOT_BELOW_LINE, typeRole: NoteHead.DOT_POSITION_UP }
                 ]
@@ -83,6 +83,8 @@ FocusableItem {
                     ButtonGroup.group: notePositionButtonList.radioButtonGroup
 
                     iconCode: modelData["iconRole"]
+                    text: modelData["textRole"]
+
                     checked: root.model && !root.model.dotPosition.isUndefined ? root.model.dotPosition.value === modelData["typeRole"]
                                                                                : false
                     onToggled: {
@@ -157,7 +159,7 @@ FocusableItem {
                         width: parent.width
 
                         model: [
-                            { iconRole: IconCode.AUTO, typeRole: NoteHead.DIRECTION_H_AUTO },
+                            { iconRole: IconCode.NONE, textRole: qsTrc("inspector", "Auto"), typeRole: NoteHead.DIRECTION_H_AUTO },
                             { iconRole: IconCode.ARROW_LEFT, typeRole: NoteHead.DIRECTION_H_LEFT },
                             { iconRole: IconCode.ARROW_RIGHT, typeRole: NoteHead.DIRECTION_H_RIGHT }
                         ]
@@ -166,6 +168,8 @@ FocusableItem {
                             ButtonGroup.group: noteDirectionButtonList.radioButtonGroup
 
                             iconCode: modelData["iconRole"]
+                            text: modelData["textRole"]
+
                             checked: root.model && !root.model.headDirection.isUndefined ? root.model.headDirection.value === modelData["typeRole"]
                                                                                          : false
                             onToggled: {

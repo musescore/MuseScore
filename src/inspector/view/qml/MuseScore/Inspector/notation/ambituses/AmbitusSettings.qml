@@ -248,7 +248,7 @@ Column {
                         width: parent.width
 
                         model: [
-                            { iconRole: IconCode.AUTO, typeRole: NoteHead.TYPE_AUTO },
+                            { iconRole: IconCode.NONE, textRole: qsTrc("inspector", "Auto"), typeRole: NoteHead.TYPE_AUTO },
                             { iconRole: IconCode.NOTE_HEAD_QUARTER, typeRole: NoteHead.TYPE_QUARTER },
                             { iconRole: IconCode.NOTE_HEAD_HALF, typeRole: NoteHead.TYPE_HALF },
                             { iconRole: IconCode.NOTE_HEAD_WHOLE, typeRole: NoteHead.TYPE_WHOLE },
@@ -259,6 +259,8 @@ Column {
                             ButtonGroup.group: headTypeButtonList.radioButtonGroup
 
                             iconCode: modelData["iconRole"]
+                            text: modelData["textRole"]
+
                             checked: root.model && !root.model.noteheadType.isUndefined ? root.model.noteheadType.value === modelData["typeRole"]
                                                                                         : false
                             onToggled: {
