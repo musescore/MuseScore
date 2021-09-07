@@ -31,6 +31,7 @@ ArpeggioPlaybackModel::ArpeggioPlaybackModel(QObject* parent, IElementRepository
     : AbstractInspectorModel(parent, repository)
 {
     setTitle(qtrc("inspector", "Arpeggio"));
+    setModelType(InspectorModelType::TYPE_ARPEGGIO);
 
     createProperties();
 }

@@ -30,6 +30,7 @@ NotePlaybackModel::NotePlaybackModel(QObject* parent, IElementRepositoryService*
     : AbstractInspectorModel(parent, repository)
 {
     setTitle(qtrc("inspector", "Notes"));
+    setModelType(InspectorModelType::TYPE_NOTE);
 
     createProperties();
 }

@@ -31,6 +31,7 @@ BreathPlaybackModel::BreathPlaybackModel(QObject* parent, IElementRepositoryServ
     : AbstractInspectorModel(parent, repository)
 {
     setTitle(qtrc("inspector", "Breaths & pauses"));
+    setModelType(InspectorModelType::TYPE_BREATH);
 
     createProperties();
 }

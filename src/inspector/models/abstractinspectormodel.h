@@ -75,12 +75,14 @@ public:
         TYPE_TEMPO,
         TYPE_GLISSANDO,
         TYPE_BARLINE,
+        TYPE_BREATH,
         TYPE_STAFF,
         TYPE_MARKER,
         TYPE_SECTIONBREAK,
         TYPE_JUMP,
         TYPE_KEYSIGNATURE,
         TYPE_ACCIDENTAL,
+        TYPE_ARPEGGIO,
         TYPE_FRET_DIAGRAM,
         TYPE_PEDAL,
         TYPE_SPACER,
@@ -103,7 +105,8 @@ public:
         TYPE_BEND,
         TYPE_TREMOLOBAR,
         TYPE_TREMOLO,
-        TYPE_MEASURE_REPEAT
+        TYPE_MEASURE_REPEAT,
+        TYPE_DYNAMIC
     };
     Q_ENUM(InspectorModelType)
 

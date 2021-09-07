@@ -31,6 +31,7 @@ FermataPlaybackModel::FermataPlaybackModel(QObject* parent, IElementRepositorySe
     : AbstractInspectorModel(parent, repository)
 {
     setTitle(qtrc("inspector", "Fermatas"));
+    setModelType(InspectorModelType::TYPE_FERMATA);
 
     createProperties();
 }
