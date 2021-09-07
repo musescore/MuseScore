@@ -405,22 +405,13 @@ class GuitarPro6 : public GuitarPro
     QByteArray readString(QByteArray* buffer, int offset, int length);
     int readBits(QByteArray* buffer, int bitsToRead);
     int readBitsReversed(QByteArray* buffer, int bitsToRead);
-    void readScore(QDomNode* metadata);
-    void readChord(QDomNode* diagram, int track);
     int findNumMeasures(GPPartInfo* partInfo);
     void readMasterTracks(QDomNode* masterTrack);
     void readDrumNote(Note* note, int element, int variation);
-    Fraction readBeats(QString beats, GPPartInfo* partInfo, Measure* measure, const Fraction& startTick, int staffIdx, int voiceNum,
-                       Tuplet* tuplets[], int measureCounter);
-    void readBars(QDomNode* barList, Measure* measure, ClefType oldClefId[], GPPartInfo* partInfo, int measureCounter);
-    virtual void readTracks(QDomNode* tracks);
-    void readMasterBars(GPPartInfo* partInfo);
-    Fraction rhythmToDuration(QString value);
-    Fraction fermataToFraction(int numerator, int denominator);
     QDomNode getNode(const QString& id, QDomNode currentDomNode);
     void unhandledNode(QString nodeName);
     void makeTie(Note* note);
-    void addTremoloBar(Segment* segment, int track, int whammyOrigin, int whammyMiddle, int whammyEnd);
+    int readBeatEffects(int track, Segment*) override { return 0; }
 
     std::map<std::pair<int, int>, Note*> slideMap;
 
@@ -428,9 +419,6 @@ protected:
     const static std::map<QString, QString> instrumentMapping;
     int* previousDynamic;
     void readGpif(QByteArray* data);
-    void readNote(int string, Note* note);
-    virtual int readBeatEffects(int track, Segment*);
-    void readTrackProperties(const QDomNode& currentNode, Part* part, int trackCounter, bool& hasTuning);
 
     virtual std::unique_ptr<IGPDomBuilder> createGPDomBuilder() const override;
 
@@ -444,8 +432,6 @@ public:
 
 class GuitarPro7 : public GuitarPro6
 {
-    virtual void readTracks(QDomNode* tracks);
-
     virtual std::unique_ptr<IGPDomBuilder> createGPDomBuilder() const override;
 
 public:
