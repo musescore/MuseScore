@@ -485,7 +485,7 @@ Rectangle {
                 height: 30
 
                 model: [
-                    { iconRole: IconCode.AUTO, valueRole: 0 },
+                    { iconRole: IconCode.SETTINGS_COG, valueRole: 0 },
                     { iconRole: IconCode.ARROW_DOWN, valueRole: 1 },
                     { iconRole: IconCode.ARROW_UP, valueRole: 2 }
                 ]

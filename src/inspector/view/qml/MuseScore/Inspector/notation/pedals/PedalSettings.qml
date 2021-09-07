@@ -131,13 +131,15 @@ Column {
             { iconRole: IconCode.LINE_NORMAL, typeRole: PedalTypes.LINE_STYLE_SOLID },
             { iconRole: IconCode.LINE_DASHED, typeRole: PedalTypes.LINE_STYLE_DASHED },
             { iconRole: IconCode.LINE_DOTTED, typeRole: PedalTypes.LINE_STYLE_DOTTED },
-            { iconRole: IconCode.CUSTOM, typeRole: PedalTypes.LINE_STYLE_CUSTOM }
+            { iconRole: IconCode.NONE, textRole: qsTrc("inspector", "Custom"), typeRole: PedalTypes.LINE_STYLE_CUSTOM }
         ]
 
         delegate: FlatRadioButton {
             ButtonGroup.group: lineStyleButtonList.radioButtonGroup
 
             iconCode: modelData["iconRole"]
+            text: modelData["textRole"]
+
             checked: root.model && !root.model.lineStyle.isUndefined ? root.model.lineStyle.value === modelData["typeRole"]
                                                                      : false
             onToggled: {
