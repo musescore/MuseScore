@@ -662,6 +662,7 @@ std::multimap<int, MTrack> createMTrackList(TimeSigMap *sigmap, const MidiFile *
 
       std::multimap<int, MTrack> tracks;   // <track index, track>
       int trackIndex = -1;
+      int tickOffset = 0;
       for (const auto &t: mf->tracks()) {
             MTrack track;
             track.mtrack = &t;
@@ -673,7 +674,9 @@ std::multimap<int, MTrack> createMTrackList(TimeSigMap *sigmap, const MidiFile *
                         //  - extract some information from track: program, min/max pitch
             for (const auto &i: t.events()) {
                   const MidiEvent& e = i.second;
-                  const auto tick = toMuseScoreTicks(i.first, track.division,
+                  if (tickOffset == 0 && i.first < 0)
+                        tickOffset = 0 - i.first;
+                  const auto tick = toMuseScoreTicks(i.first + tickOffset, track.division,
                                                      track.isDivisionInTps);
                               // remove time signature events
                   if ((e.type() == ME_META) && (e.metaType() == META_TIME_SIGNATURE)) {
@@ -1090,8 +1093,8 @@ QList<MTrack> convertMidi(Score *score, const MidiFile *mf)
                   }
             MidiLyrics::extractLyricsToMidiData(mf);
             }
-                  // for newly opened MIDI file - detect if it is a human performance
-                  // if so - detect beats and set initial time signature
+      // for newly opened MIDI file - detect if it is a human performance
+      // if so - detect beats and set initial time signature
       if (opers.data()->processingsOfOpenedFile == 0)
             Quantize::setIfHumanPerformance(tracks, sigmap);
       else        // user value
