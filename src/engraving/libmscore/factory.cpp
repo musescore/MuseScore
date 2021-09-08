@@ -503,3 +503,14 @@ Ms::System* Factory::createSystem(Ms::Page* parent)
     s->setup();
     return s;
 }
+
+CREATE_ITEM_IMPL(TimeSig, ElementType::TIMESIG, Segment)
+COPY_ITEM_IMPL(TimeSig)
+MAKE_ITEM_IMPL(TimeSig, Segment)
+
+CREATE_ITEM_IMPL(Tremolo, ElementType::TREMOLO, Chord)
+COPY_ITEM_IMPL(Tremolo)
+MAKE_ITEM_IMPL(Tremolo, Chord)
+
+CREATE_ITEM_IMPL(TremoloBar, ElementType::TREMOLOBAR, EngravingItem)
+MAKE_ITEM_IMPL(TremoloBar, EngravingItem)

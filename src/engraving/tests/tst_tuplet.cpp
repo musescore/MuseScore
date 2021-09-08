@@ -153,7 +153,7 @@ void TestTuplet::split(const char* p1, const char* p2)
 {
     MasterScore* score = readScore(TUPLET_DATA_DIR + p1);
     Measure* m         = score->firstMeasure();
-    TimeSig* ts        = new TimeSig(score->dummy()->segment());
+    TimeSig* ts        = Factory::createTimeSig(score->dummy()->segment());
     ts->setSig(Fraction(3, 4), TimeSigType::NORMAL);
 
     score->startCmd();

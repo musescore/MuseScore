@@ -134,6 +134,17 @@ public:
 
     static Ms::System* createSystem(Ms::Page* parent);
 
+    static Ms::TimeSig* createTimeSig(Ms::Segment* parent);
+    static Ms::TimeSig* copyTimeSig(const Ms::TimeSig& src);
+    static std::shared_ptr<Ms::TimeSig> makeTimeSig(Ms::Segment* parent);
+
+    static Ms::Tremolo* createTremolo(Ms::Chord* parent);
+    static Ms::Tremolo* copyTremolo(const Ms::Tremolo& src);
+    static std::shared_ptr<Ms::Tremolo> makeTremolo(Ms::Chord* parent);
+
+    static Ms::TremoloBar* createTremoloBar(Ms::EngravingItem* parent);
+    static std::shared_ptr<Ms::TremoloBar> makeTremoloBar(Ms::EngravingItem* parent);
+
 private:
     static Ms::EngravingItem* doCreateItem(Ms::ElementType type, Ms::EngravingItem* parent);
 };

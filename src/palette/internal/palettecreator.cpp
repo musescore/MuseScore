@@ -106,8 +106,6 @@ MAKE_ELEMENT(RehearsalMark, score->dummy()->segment())
 MAKE_ELEMENT(Jump, score->dummy()->measure())
 MAKE_ELEMENT(MeasureNumber, score->dummy()->measure())
 
-MAKE_ELEMENT(Tremolo, score->dummy()->chord())
-
 MAKE_ELEMENT(Fingering, score->dummy()->note())
 MAKE_ELEMENT(NoteHead, score->dummy()->note())
 
@@ -514,7 +512,7 @@ PalettePtr PaletteCreator::newTremoloPalette()
     sp->setVisible(false);
 
     for (int i = int(TremoloType::R8); i <= int(TremoloType::C64); ++i) {
-        auto tremolo = makeElement<Tremolo>(gpaletteScore);
+        auto tremolo = Factory::makeTremolo(gpaletteScore->dummy()->chord());
         tremolo->setTremoloType(TremoloType(i));
         sp->appendElement(tremolo, tremolo->subtypeName());
     }
@@ -604,7 +602,7 @@ PalettePtr PaletteCreator::newArticulationsPalette()
     bend->points().append(PitchValue(60, 100, false));
     sp->appendElement(bend, QT_TRANSLATE_NOOP("palette", "Bend"));
 
-    auto tb = makeElement<TremoloBar>(gpaletteScore);
+    auto tb = Factory::makeTremoloBar(gpaletteScore->dummy());
     tb->points().append(PitchValue(0,     0, false));       // "Dip"
     tb->points().append(PitchValue(30, -100, false));
     tb->points().append(PitchValue(60,    0, false));
@@ -1400,7 +1398,7 @@ PalettePtr PaletteCreator::newTimePalette()
     sp->setGridSize(42, 38);
 
     for (unsigned i = 0; i < sizeof(tsList) / sizeof(*tsList); ++i) {
-        auto ts = std::make_shared<TimeSig>(gpaletteScore->dummy()->segment());
+        auto ts = Factory::makeTimeSig(gpaletteScore->dummy()->segment());
         ts->setSig(Fraction(tsList[i].numerator, tsList[i].denominator), tsList[i].type);
         sp->appendElement(ts, tsList[i].name);
     }

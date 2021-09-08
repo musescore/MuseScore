@@ -27,6 +27,7 @@
 #include "palettewidget.h"
 #include "internal/palettecreator.h"
 
+#include "engraving/libmscore/factory.h"
 #include "engraving/libmscore/chord.h"
 #include "engraving/libmscore/masterscore.h"
 #include "engraving/libmscore/mcursor.h"
@@ -89,7 +90,7 @@ TimeDialog::TimeDialog(QWidget* parent)
 
 void TimeDialog::addClicked()
 {
-    auto ts = std::make_shared<TimeSig>(gpaletteScore->dummy()->segment());
+    auto ts = mu::engraving::Factory::makeTimeSig(gpaletteScore->dummy()->segment());
     ts->setSig(Fraction(zNominal->value(), denominator()));
     ts->setGroups(groups->groups());
 

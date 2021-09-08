@@ -1850,7 +1850,7 @@ bool Read206::readChordProperties206(XmlReader& e, Chord* ch)
         }
         finalNote->addSpannerBack(gliss);
     } else if (tag == "Tremolo") {
-        Tremolo* tremolo = new Tremolo(ch);
+        Tremolo* tremolo = Factory::createTremolo(ch);
         tremolo->setTrack(ch->track());
         tremolo->read(e);
         tremolo->setParent(ch);
@@ -2752,7 +2752,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             }
             segment->add(clef);
         } else if (tag == "TimeSig") {
-            TimeSig* ts = new TimeSig(score->dummy()->segment());
+            TimeSig* ts = Factory::createTimeSig(score->dummy()->segment());
             ts->setTrack(e.track());
             ts->read(e);
             // if time sig not at beginning of measure => courtesy time sig

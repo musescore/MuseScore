@@ -77,7 +77,7 @@ void MuseData::musicalAttribute(QString s, Part* part)
 //TODO                        score->sigmap()->add(curTick, Fraction(z, n));
                 Measure* mes = score->tick2measure(curTick);
                 Segment* seg = mes->getSegment(SegmentType::TimeSig, curTick);
-                TimeSig* ts = new TimeSig(seg);
+                TimeSig* ts = Factory::createTimeSig(seg);
                 Staff* staff = part->staff(0);
                 ts->setTrack(staff->idx() * VOICES);
                 seg->add(ts);

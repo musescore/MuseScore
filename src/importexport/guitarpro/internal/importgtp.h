@@ -411,7 +411,7 @@ class GuitarPro6 : public GuitarPro
     QDomNode getNode(const QString& id, QDomNode currentDomNode);
     void unhandledNode(QString nodeName);
     void makeTie(Note* note);
-    int readBeatEffects(int track, Segment*) override { return 0; }
+    int readBeatEffects(int /*track*/, Segment*) override { return 0; }
 
     std::map<std::pair<int, int>, Note*> slideMap;
 
