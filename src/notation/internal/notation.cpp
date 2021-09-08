@@ -196,8 +196,6 @@ void Notation::paint(mu::draw::Painter* painter, const RectF& frameRect)
     }
     }
 
-    engraving::Paint::paintDiagnostic(*painter);
-
     static_cast<NotationInteraction*>(m_interaction.get())->paint(painter);
 }
 
