@@ -24,5 +24,6 @@
         <file>qml/MuseScore/NotationScene/UndoRedoToolBar.qml</file>
         <file>qml/MuseScore/NotationScene/Timeline.qml</file>
         <file>qml/MuseScore/NotationScene/SelectionFilterPanel.qml</file>
+        <file>qml/MuseScore/NotationScene/EditGridSizeDialog.qml</file>
     </qresource>
 </RCC>

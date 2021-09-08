@@ -153,6 +153,12 @@ public:
 
     virtual io::paths userScoreOrderListPaths() const = 0;
     virtual void setUserScoreOrderListPaths(const io::paths& paths) = 0;
+
+    virtual bool isSnappedToGrid(framework::Orientation gridOrientation) const = 0;
+    virtual void setIsSnappedToGrid(framework::Orientation gridOrientation, bool isSnapped) = 0;
+
+    virtual int gridSizeSpatium(framework::Orientation gridOrientation) const = 0;
+    virtual void setGridSize(framework::Orientation gridOrientation, int sizeSpatium) = 0;
 };
 }
 
