@@ -142,11 +142,6 @@ QString Notation::title() const
     return m_score ? m_score->title() : QString();
 }
 
-void Notation::setViewSize(const QSizeF& vs)
-{
-    m_viewSize = vs;
-}
-
 void Notation::setViewMode(const ViewMode& viewMode)
 {
     if (!m_score) {
@@ -325,9 +320,4 @@ INotationPartsPtr Notation::parts() const
 Ms::Score* Notation::score() const
 {
     return m_score;
-}
-
-QSizeF Notation::viewSize() const
-{
-    return m_viewSize;
 }

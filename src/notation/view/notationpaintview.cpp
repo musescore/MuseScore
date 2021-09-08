@@ -190,8 +190,6 @@ void NotationPaintView::onCurrentNotationChanged()
         return;
     }
 
-    onViewSizeChanged(); //! NOTE Set view size to notation
-
     m_notation->notationChanged().onNotify(this, [this]() {
         update();
     });
@@ -224,6 +222,10 @@ void NotationPaintView::onCurrentNotationChanged()
     m_loopOutMarker->setStyle(m_notation->style());
 
     update();
+    
+    emit horizontalScrollChanged();
+    emit verticalScrollChanged();
+    emit viewportChanged(viewport());
 }
 
 void NotationPaintView::onViewSizeChanged()
@@ -235,8 +237,6 @@ void NotationPaintView::onViewSizeChanged()
     if (viewport().isValid() && !m_inputController->isZoomInited()) {
         m_inputController->initZoom();
     }
-
-    notation()->setViewSize(viewport().size());
 
     emit horizontalScrollChanged();
     emit verticalScrollChanged();

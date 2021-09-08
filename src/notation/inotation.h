@@ -49,7 +49,6 @@ public:
 
     virtual QString title() const = 0;
 
-    virtual void setViewSize(const QSizeF& vs) = 0;
     virtual void setViewMode(const ViewMode& vm) = 0;
     virtual ViewMode viewMode() const = 0;
     virtual void paint(mu::draw::Painter* painter, const RectF& frameRect) = 0;
