@@ -283,7 +283,7 @@ Staff* NotationInteraction::hitStaff(const PointF& pos) const
 
 Ms::Page* NotationInteraction::point2page(const PointF& p) const
 {
-    if (score()->layoutMode() == engraving::LayoutMode::LINE) {
+    if (score()->linearMode()) {
         return score()->pages().isEmpty() ? 0 : score()->pages().front();
     }
     foreach (Ms::Page* page, score()->pages()) {

@@ -641,7 +641,7 @@ void LayoutMeasure::getNextMeasure(const LayoutOptions& options, Ms::Score* scor
     Measure* measure = toMeasure(lc.curMeasure);
     measure->moveTicks(lc.tick - measure->tick());
 
-    if (score->isLayoutMode(LayoutMode::LINE) && (measure->tick() < lc.startTick || measure->tick() > lc.endTick)) {
+    if (score->linearMode() && (measure->tick() < lc.startTick || measure->tick() > lc.endTick)) {
         // needed to reset segment widths if they can change after measure width is computed
         //for (Segment& s : measure->segments())
         //      s.createShapes();

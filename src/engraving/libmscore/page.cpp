@@ -259,7 +259,7 @@ void Page::doRebuildBspTree()
     scanElements(&n, countElements, false);
 
     RectF r;
-    if (score()->isLayoutMode(LayoutMode::LINE)) {
+    if (score()->linearMode()) {
         qreal w = 0.0;
         qreal h = 0.0;
         if (!_systems.empty()) {

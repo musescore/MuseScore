@@ -82,7 +82,7 @@ void Layout::doLayoutRange(const LayoutOptions& options, const Fraction& st, con
     Fraction etick(et);
     Q_ASSERT(!(stick == Fraction(-1, 1) && etick == Fraction(-1, 1)));
 
-    if (!m_score->last() || (options.isMode(LayoutMode::LINE) && !m_score->firstMeasure())) {
+    if (!m_score->last() || (options.isLinearMode() && !m_score->firstMeasure())) {
         qDebug("empty score");
         qDeleteAll(m_score->_systems);
         m_score->_systems.clear();
@@ -138,7 +138,7 @@ void Layout::doLayoutRange(const LayoutOptions& options, const Fraction& st, con
         m = toMeasure(m)->mmRest();
     }
 
-    if (options.isMode(LayoutMode::LINE)) {
+    if (options.isLinearMode()) {
         lc.prevMeasure = 0;
         lc.nextMeasure = m;         //_showVBox ? first() : firstMeasure();
         lc.startTick   = m->tick();
@@ -329,6 +329,13 @@ void Layout::resetSystems(bool layoutAll, const LayoutOptions& options, LayoutCo
 
 void Layout::collectLinearSystem(const LayoutOptions& options, LayoutContext& lc)
 {
+    std::vector<int> visibleParts;
+    for (int partIdx = 0; partIdx < m_score->parts().size(); partIdx++) {
+        if (m_score->parts().at(partIdx)->show()) {
+            visibleParts.push_back(partIdx);
+        }
+    }
+
     System* system = m_score->systems().front();
     system->setInstrumentNames(/* longNames */ true);
 
@@ -373,10 +380,17 @@ void Layout::collectLinearSystem(const LayoutOptions& options, LayoutContext& lc
             }
             if (m->tick() >= lc.startTick && m->tick() <= lc.endTick) {
                 // for measures in range, do full layout
-                m->createEndBarLines(false);
-                m->computeMinWidth();
-                ww = m->width();
-                m->stretchMeasure(ww);
+                if (options.isMode(LayoutMode::HORIZONTAL_FIXED)) {
+                    m->createEndBarLines(true);
+                    m->layoutSegmentsInPracticeMode(visibleParts);
+                    ww = m->width();
+                    m->stretchMeasureInPracticeMode(ww);
+                } else {
+                    m->createEndBarLines(false);
+                    m->computeMinWidth();
+                    ww = m->width();
+                    m->stretchMeasure(ww);
+                }
             } else {
                 // for measures not in range, use existing layout
                 ww = m->width();

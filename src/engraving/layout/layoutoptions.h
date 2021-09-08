@@ -36,7 +36,7 @@ namespace mu::engraving {
 //---------------------------------------------------------
 
 enum class LayoutMode : char {
-    PAGE, FLOAT, LINE, SYSTEM
+    PAGE, FLOAT, LINE, SYSTEM, HORIZONTAL_FIXED
 };
 
 struct LayoutOptions
@@ -56,6 +56,7 @@ struct LayoutOptions
     Ms::VerticalAlignRange verticalAlignRange = Ms::VerticalAlignRange::SEGMENT;
 
     bool isMode(LayoutMode m) const { return mode == m; }
+    bool isLinearMode() const { return mode == LayoutMode::LINE || mode == LayoutMode::HORIZONTAL_FIXED; }
 
     void updateFromStyle(const Ms::MStyle& style)
     {

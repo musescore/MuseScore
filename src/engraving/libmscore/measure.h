@@ -340,6 +340,19 @@ public:
     void setStretchedWidth(qreal);
     void layoutStaffLines();
 
+    //! puts segments on the positions according to their length
+    void layoutSegmentsInPracticeMode(const std::vector<int>& visibleParts);
+
+    qreal computeFirstSegmentXPosition(Segment* segment);
+
+    void layoutSegmentsWithDuration(const std::vector<int>& visibleParts);
+
+    void calculateQuantumCell(const std::vector<int>& visibleParts);
+
+    Fraction quantumOfSegmentCell() const;
+
+    void stretchMeasureInPracticeMode(qreal stretch);
+
 private:
     void push_back(Segment* e);
     void push_front(Segment* e);
@@ -363,13 +376,15 @@ private:
                                // 0 if this is the start of am mmrest (m_mmRest != 0)
                                // < 0 if this measure is covered by an mmrest
 
-    int m_playbackCount { 0 };  // temp. value used in RepeatList
+    int m_playbackCount = 0;    // temp. value used in RepeatList
                                 // counts how many times this measure was already played
 
     int m_repeatCount;          ///< end repeat marker and repeat count
 
     MeasureNumberMode m_noMode;
     bool m_breakMultiMeasureRest;
+
+    Fraction m_quantumOfSegmentCell = { 1, 16 };
 };
 }     // namespace Ms
 #endif
