@@ -73,6 +73,7 @@
 #include "tuplet.h"
 #include "undo.h"
 #include "utils.h"
+#include "hook.h"
 
 #include "config.h"
 #include "log.h"
@@ -2261,6 +2262,13 @@ void Note::layout2()
         qreal d  = score()->point(score()->styleS(Sid::dotNoteDistance)) * mag();
         qreal dd = score()->point(score()->styleS(Sid::dotDotDistance)) * mag();
         qreal x  = chord()->dotPosX() - pos().x() - chord()->pos().x();
+        // adjust dot distance for hooks
+        if (chord()->hook() && chord()->up()) {
+            qreal hookRight = chord()->hook()->width() + chord()->hook()->x() + chord()->pos().x();
+            if (chord()->dotPosX() < hookRight) {
+                d = chord()->hook()->width();
+            }
+        }
         // if TAB and stems through staff
         if (staff()->isTabStaff(chord()->tick())) {
             const Staff* st = staff();
