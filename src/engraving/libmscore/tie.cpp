@@ -34,6 +34,9 @@
 #include "score.h"
 #include "system.h"
 #include "undo.h"
+#include "chord.h"
+#include "hook.h"
+#include "ledgerline.h"
 
 using namespace mu;
 
@@ -483,9 +486,10 @@ void Tie::slurPos(SlurPos* sp)
         qDebug("No system: measure is %d has %d count %d", m->isMMRest(), m->hasMMRest(), m->mmRestCount());
     }
 
-    qreal xo;
-    qreal yo;
+    qreal x1, y1;
+    qreal x2, y2;
     bool shortStart = false;
+    qreal offsetMargin = 0.25 * _spatium;
 
     // determine attachment points
     // similar code is used in Chord::layoutPitched()
@@ -495,17 +499,66 @@ void Tie::slurPos(SlurPos* sp)
     sp->p1    = sc->pos() + sc->segment()->pos() + sc->measure()->pos();
 
     //------p1
-    if ((sc->notes().size() > 1) || (sc->stem() && (sc->up() == _up))) {
-        xo = startNote()->x() + hw * 1.12;
-        yo = startNote()->pos().y() + yOffInside;
+    if (sc->notes().size() > 1) {
+        y1 = startNote()->pos().y() + yOffInside;
+        x1 = 0;
+        qreal xo = startNote()->pos().x() + hw;  // x offset for p1 will be at least note head width
+
+        // ADJUST FOR COLLISIONS ----------------
+
+        for (auto note : sc->notes()) {
+            // adjust for dots
+            if (startNote()->dots().size() > 0) {
+                qreal dotY = note->pos().y() + note->dots().last()->pos().y();
+                if (qAbs(y1 - dotY) < _spatium * 0.5) {
+                    xo = qMax(xo, startNote()->dots().last()->x() + startNote()->dots().last()->width());
+                }
+            }
+
+            // adjust for note collisions
+            if (note == startNote()) {
+                continue;
+            }
+            qreal noteTop = note->y();
+            qreal noteHeight = note->height();
+            if (y1 > noteTop && y1 < noteTop + noteHeight) {
+                xo = qMax(xo, note->x() + note->width());
+            }
+        }
+
+        // adjust for flags (hooks)
+        if (sc->hook() && sc->up()) {
+            if (y1 < sc->hook()->pos().y() + sc->hook()->bbox().height() + (offsetMargin * 2)) {
+                xo = qMax(xo, sc->hook()->pos().x() + sc->hook()->bbox().width());
+            }
+        }
+
+        // adjust for ledger lines
+        if (startNote()->line() >= 8 || startNote()->line() <= 0) {
+            // note is above or below the staff
+            auto currLedger = sc->ledgerLines();  // search through ledger lines and see if any are within .5sp of tie start
+            while (currLedger) {
+                if (qAbs(y1 - currLedger->y()) < _spatium * 0.5) {
+                    xo = qMax(xo, currLedger->x() + currLedger->len());
+                    break;
+                }
+                currLedger = currLedger->next();
+            }
+        }
+
+        x1 += xo + offsetMargin;
         shortStart = true;
+    } else if (sc->stem() && sc->up() == _up) {
+        x1 = startNote()->x() + hw * 1.12;
+        y1 = startNote()->pos().y() + yOffInside;
     } else {
-        xo = startNote()->x() + hw * 0.65;
-        yo = startNote()->pos().y() + yOffOutside;
+        x1 = startNote()->x() + hw * 0.65;
+        y1 = startNote()->pos().y() + yOffOutside;
     }
-    sp->p1 += PointF(xo, yo);
+    sp->p1 += PointF(x1, y1);
 
     //------p2
+    y2 = y1;
     if (endNote() == 0) {
         sp->p2 = sp->p1 + PointF(_spatium * 3, 0.0);
         sp->system2 = sp->system1;
@@ -519,23 +572,53 @@ void Tie::slurPos(SlurPos* sp)
     bool horizontal = startNote()->line() == endNote()->line() && sc->vStaffIdx() == ec->vStaffIdx();
 
     hw = endNote()->tabHeadWidth(stt);
-    if ((ec->notes().size() > 1) || (ec->stem() && !ec->up() && !_up)) {
-        xo = endNote()->x() - hw * 0.12;
+    if (ec->notes().size() > 1) {
+        x2 = endNote()->x();
+        qreal xo = 0.0;
+
+        // ADJUST FOR COLLISIONS ----------------
+
+        // adjust for ledger lines
+        if (endNote()->line() >= 8 || endNote()->line() <= 0) {
+            // note is above or below the staff
+            auto currLedger = ec->ledgerLines();  // search through ledger lines and see if any are within .5sp of tie end
+            while (currLedger) {
+                if (qAbs(y1 - currLedger->y()) < _spatium * 0.5) {
+                    xo = qMax(xo, x2 - currLedger->x());
+                }
+                currLedger = currLedger->next();
+            }
+        }
+
+        // adjust for shifted notes (such as intervals of unison or second)
+        for (auto note : ec->notes()) {
+            if (note == endNote()) {
+                continue;
+            }
+            qreal noteTop = note->y();
+            if (y2 >= noteTop - offsetMargin && y2 <= noteTop + note->headHeight() + offsetMargin) {
+                xo = qMax(xo, x2 - note->x());
+            }
+        }
+
+        x2 -= (xo + offsetMargin);
+    } else if (ec->stem() && !ec->up() && !_up) {
+        x2 = endNote()->x() - hw * 0.12;
         if (!horizontal) {
-            yo = endNote()->pos().y() + yOffInside;
+            y2 = endNote()->pos().y() + yOffInside;
         }
     } else if (shortStart) {
-        xo = endNote()->x() + hw * 0.15;
+        x2 = endNote()->x() + hw * 0.15;
         if (!horizontal) {
-            yo = endNote()->pos().y() + yOffOutside;
+            y2 = endNote()->pos().y() + yOffOutside;
         }
     } else {
-        xo = endNote()->x() + hw * 0.35;
+        x2 = endNote()->x() + hw * 0.35;
         if (!horizontal) {
-            yo = endNote()->pos().y() + yOffOutside;
+            y2 = endNote()->pos().y() + yOffOutside;
         }
     }
-    sp->p2 += PointF(xo, yo);
+    sp->p2 += PointF(x2, y2);
 
     // adjust for cross-staff
     if (sc->vStaffIdx() != vStaffIdx() && sp->system1) {
