@@ -55,7 +55,7 @@ Loader {
 
         onHandleMenuItem: {
             itemMenu.close()
-            loader.handleMenuItem(itemId)
+            Qt.callLater(loader.handleMenuItem, itemId)
         }
 
         onClosed: {
