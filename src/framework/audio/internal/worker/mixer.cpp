@@ -125,11 +125,11 @@ void Mixer::process(float* outBuffer, unsigned int samplesPerChannel)
 
     for (auto& channel : m_mixerChannels) {
         channel.second->process(m_writeCacheBuff.data(), samplesPerChannel);
-        mixOutput(outBuffer, m_writeCacheBuff.data(), samplesPerChannel);
+        mixOutputFromChannel(outBuffer, m_writeCacheBuff.data(), samplesPerChannel);
         std::fill(m_writeCacheBuff.begin(), m_writeCacheBuff.end(), 0.f);
     }
 
-    // TODO add limiter
+    completeOutput(outBuffer, samplesPerChannel);
 
     for (IFxProcessorPtr& fxProcessor : m_masterFxProcessors) {
         if (fxProcessor->active()) {
@@ -193,9 +193,28 @@ Channel<audioch_t, float> Mixer::masterVolumePressureDbfsChanged() const
     return m_masterVolumePressureDbfsChanged;
 }
 
-void Mixer::mixOutput(float* outBuffer, float* inBuffer, unsigned int samplesCount)
+void Mixer::mixOutputFromChannel(float* outBuffer, float* inBuffer, unsigned int samplesCount)
 {
     IF_ASSERT_FAILED(outBuffer && inBuffer) {
+        return;
+    }
+
+    if (m_masterParams.muted) {
+        return;
+    }
+
+    for (audioch_t audioChNum = 0; audioChNum < audioChannelsCount(); ++audioChNum) {
+        for (samples_t s = 0; s < samplesCount; ++s) {
+            int idx = s * audioChannelsCount() + audioChNum;
+
+            outBuffer[idx] += inBuffer[idx];
+        }
+    }
+}
+
+void Mixer::completeOutput(float* buffer, const samples_t& samplesPerChannel)
+{
+    IF_ASSERT_FAILED(buffer) {
         return;
     }
 
@@ -208,17 +227,14 @@ void Mixer::mixOutput(float* outBuffer, float* inBuffer, unsigned int samplesCou
 
         gain_t totalGain = balanceGain(m_masterParams.balance, audioChNum) * gainFromDecibels(m_masterParams.volume);
 
-        for (samples_t s = 0; s < samplesCount; ++s) {
+        for (samples_t s = 0; s < samplesPerChannel; ++s) {
             int idx = s * audioChannelsCount() + audioChNum;
 
-            float resultSample = (outBuffer[idx] + inBuffer[idx]) * totalGain;
-
-            outBuffer[idx] = resultSample;
-
+            float resultSample = buffer[idx] * totalGain;
             squaredSum += resultSample * resultSample;
         }
 
-        float rms = samplesRootMeanSquare(std::move(squaredSum), samplesCount);
+        float rms = samplesRootMeanSquare(std::move(squaredSum), samplesPerChannel);
         m_masterSignalAmplitudeRmsChanged.send(audioChNum, rms);
         m_masterVolumePressureDbfsChanged.send(audioChNum, dbFullScaleFromSample(rms));
     }

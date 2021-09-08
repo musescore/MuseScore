@@ -64,7 +64,8 @@ public:
     void process(float* outBuffer, unsigned int samplesPerChannel) override;
 
 private:
-    void mixOutput(float* outBuffer, float* inBuffer, unsigned int samplesCount);
+    void mixOutputFromChannel(float* outBuffer, float* inBuffer, unsigned int samplesCount);
+    void completeOutput(float* buffer, const samples_t &samplesPerChannel);
 
     std::vector<float> m_writeCacheBuff;
 
