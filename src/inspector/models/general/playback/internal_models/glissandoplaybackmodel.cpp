@@ -29,6 +29,7 @@ GlissandoPlaybackModel::GlissandoPlaybackModel(QObject* parent, IElementReposito
     : AbstractInspectorModel(parent, repository)
 {
     setTitle(qtrc("inspector", "Glissando"));
+    setModelType(InspectorModelType::TYPE_GLISSANDO);
 
     createProperties();
 }
