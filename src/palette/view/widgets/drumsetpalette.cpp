@@ -114,7 +114,7 @@ void DrumsetPalette::updateDrumset()
             up = line > 4;
         }
 
-        auto chord = std::make_shared<Chord>(gpaletteScore->dummy()->segment());
+        auto chord = Factory::makeChord(gpaletteScore->dummy()->segment());
         chord->setDurationType(TDuration::DurationType::V_QUARTER);
         chord->setStemDirection(dir);
         chord->setUp(up);

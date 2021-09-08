@@ -24,6 +24,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 
+#include "factory.h"
 #include "score.h"
 #include "slur.h"
 #include "measure.h"
@@ -37,6 +38,7 @@
 #include "utils.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -235,7 +237,7 @@ void Measure::fillGap(const Fraction& pos, const Fraction& len, int track, const
     TDuration d;
     d.setVal(len.ticks());
     if (d.isValid()) {
-        Rest* rest = new Rest(score()->dummy()->segment());
+        Rest* rest = Factory::createRest(score()->dummy()->segment());
         rest->setTicks(len);
         rest->setDurationType(d);
         rest->setTrack(track);

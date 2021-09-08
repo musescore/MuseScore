@@ -1273,9 +1273,9 @@ bool GuitarPro1::read(QFile* fp)
                 Fraction l = len2fraction(len);
                 ChordRest* cr;
                 if (strings) {
-                    cr = new Chord(score->dummy()->segment());
+                    cr = Factory::createChord(score->dummy()->segment());
                 } else {
-                    cr = new Rest(score->dummy()->segment());
+                    cr = Factory::createRest(score->dummy()->segment());
                 }
                 cr->setTrack(track);
                 if (lyrics) {
@@ -1459,7 +1459,7 @@ void GuitarPro::restsForEmptyBeats(Segment* seg, Measure* measure, ChordRest* cr
      * at a valid tick of the score. */
     if (seg->empty()) {
         if (tick < measure->first()->tick() + measure->ticks()) {
-            cr = new Rest(seg);
+            cr = Factory::createRest(seg);
             cr->setTrack(track);
             TDuration d(l);
             cr->setDurationType(d);
@@ -1809,9 +1809,9 @@ bool GuitarPro2::read(QFile* fp)
                 Fraction l = len2fraction(len);
                 ChordRest* cr;
                 if (strings) {
-                    cr = new Chord(score->dummy()->segment());
+                    cr = Factory::createChord(score->dummy()->segment());
                 } else {
-                    cr = new Rest(score->dummy()->segment());
+                    cr = Factory::createRest(score->dummy()->segment());
                 }
                 cr->setTrack(track);
                 if (lyrics) {
@@ -1986,7 +1986,7 @@ bool GuitarPro1::readNote(int string, Note* note)
                 gc = note->chord()->graceNotes().first();
             }
             if (!gc) {
-                gc = new Chord(score->dummy()->segment());
+                gc = Factory::createChord(score->dummy()->segment());
                 TDuration d;
                 d.setVal(grace_len);
                 if (grace_len == MScore::division / 6) {
@@ -2542,7 +2542,7 @@ bool GuitarPro3::read(QFile* fp)
                 // if (!pause || strings)
                 if (strings) {
                     if (!segment->cr(track)) {
-                        cr = new Chord(score->dummy()->segment());
+                        cr = Factory::createChord(score->dummy()->segment());
                     }
                 } else {
                     if (segment->cr(track)) {
@@ -2550,7 +2550,7 @@ bool GuitarPro3::read(QFile* fp)
                         delete cr;
                         cr = 0;
                     }
-                    cr = new Rest(score->dummy()->segment());
+                    cr = Factory::createRest(score->dummy()->segment());
                 }
 
                 cr->setTrack(track);
@@ -2622,7 +2622,7 @@ bool GuitarPro3::read(QFile* fp)
                         segment->remove(cr);
                     }
                     delete cr;
-                    cr = new Rest(segment);
+                    cr = Factory::createRest(segment);
                     cr->setTicks(l);
                     cr->setTrack(track);
                     cr->setDurationType(d);
@@ -2689,7 +2689,7 @@ bool GuitarPro3::read(QFile* fp)
                     }
                     seg = seg->next();
                 }
-                auto cr = new Rest(seg);
+                auto cr = Factory::createRest(seg);
                 cr->setTicks(measure->timesig());
                 cr->setDurationType(TDuration::DurationType::V_MEASURE);
                 cr->setTrack(track);
@@ -2774,7 +2774,7 @@ int GuitarPro3::readBeatEffects(int track, Segment* segment)
         }
 
         if (a) {
-            ChordRest* cr = new Chord(segment);
+            ChordRest* cr = Factory::createChord(segment);
             cr->setTrack(track);
             cr->add(a);
             segment->add(cr);

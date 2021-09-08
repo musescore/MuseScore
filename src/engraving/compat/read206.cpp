@@ -2540,7 +2540,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
             }
         } else if (tag == "Chord") {
             segment = m->getSegment(SegmentType::ChordRest, e.tick());
-            Chord* chord = new Chord(segment);
+            Chord* chord = Factory::createChord(segment);
             chord->setTrack(e.track());
             chord->setParent(segment);
             readChord(chord, e);
@@ -2569,7 +2569,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                 e.incTick(mmr->actualTicks());
             } else {
                 segment = m->getSegment(SegmentType::ChordRest, e.tick());
-                Rest* rest = new Rest(segment);
+                Rest* rest = Factory::createRest(segment);
                 rest->setDurationType(TDuration::DurationType::V_MEASURE);
                 rest->setTicks(m->timesig() / timeStretch);
                 rest->setTrack(e.track());

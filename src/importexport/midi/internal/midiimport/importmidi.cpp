@@ -451,7 +451,7 @@ void MTrack::fillGapWithRests(Score* score,
             if (voice == 0) {
                 TDuration duration(TDuration::DurationType::V_MEASURE);
                 Segment* s = measure->getSegment(SegmentType::ChordRest, startChordTick.fraction());
-                Rest* rest = new Rest(s, duration);
+                Rest* rest = Factory::createRest(s, duration);
                 rest->setTicks(measure->ticks());
                 rest->setTrack(track);
                 s->add(rest);
@@ -471,7 +471,7 @@ void MTrack::fillGapWithRests(Score* score,
                 const ReducedFraction& tupletRatio = durationPair.first;
                 len = ReducedFraction(duration.fraction()) / tupletRatio;
                 Segment* s = measure->getSegment(SegmentType::ChordRest, startChordTick.fraction());
-                Rest* rest = new Rest(s, duration);
+                Rest* rest = Factory::createRest(s, duration);
                 rest->setTicks(duration.fraction());
                 rest->setTrack(track);
                 s->add(rest);
@@ -572,7 +572,7 @@ void MTrack::processPendingNotes(QList<MidiChord>& midiChords,
         len = ReducedFraction(d.fraction()) / tupletRatio;
 
         Segment* s = measure->getSegment(SegmentType::ChordRest, tick.fraction());
-        Chord* chord = new Chord(s);
+        Chord* chord = Factory::createChord(s);
         chord->setTrack(track);
         chord->setDurationType(d);
         chord->setTicks(d.fraction());

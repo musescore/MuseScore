@@ -1911,7 +1911,7 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
                 // add rests for any other duration list value
                 Fraction tickOffset = tick() + rest->actualTicks();
                 for (unsigned i = 1; i < durList.size(); i++) {
-                    Rest* newRest = new Rest(s->dummy()->segment());
+                    Rest* newRest = Factory::createRest(s->dummy()->segment());
                     newRest->setDurationType(durList.at(i));
                     newRest->setTicks(durList.at(i).fraction());
                     newRest->setTrack(rest->track());
@@ -2266,7 +2266,7 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
                 fermata = nullptr;
             }
         } else if (tag == "Chord") {
-            Chord* chord = new Chord(score()->dummy()->segment());
+            Chord* chord = Factory::createChord(score()->dummy()->segment());
             chord->setTrack(e.track());
             chord->read(e);
             if (startingBeam) {
@@ -2305,7 +2305,7 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
                 e.incTick(mmr->actualTicks());
             } else {
                 segment = getSegment(SegmentType::ChordRest, e.tick());
-                Rest* rest = new Rest(segment);
+                Rest* rest = Factory::createRest(segment);
                 rest->setDurationType(TDuration::DurationType::V_MEASURE);
                 rest->setTicks(timesig() / timeStretch);
                 rest->setTrack(e.track());

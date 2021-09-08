@@ -443,7 +443,7 @@ Score::FileError importBB(MasterScore* score, const QString& name)
             }
             Measure* measure = (Measure*)mb;
             Segment* s = measure->getSegment(SegmentType::ChordRest, measure->tick());
-            Rest* rest = new Rest(s, TDuration(TDuration::DurationType::V_MEASURE));
+            Rest* rest = Factory::createRest(s, TDuration(TDuration::DurationType::V_MEASURE));
             rest->setTicks(measure->ticks());
             rest->setTrack(0);
             s->add(rest);
@@ -462,7 +462,7 @@ Score::FileError importBB(MasterScore* score, const QString& name)
         Measure* measure = (Measure*)mb;
         Segment* s = measure->findSegment(SegmentType::ChordRest, measure->tick());
         if (s == 0) {
-            Rest* rest = new Rest(s, TDuration(TDuration::DurationType::V_MEASURE));
+            Rest* rest = Factory::createRest(s, TDuration(TDuration::DurationType::V_MEASURE));
             rest->setTicks(measure->ticks());
             rest->setTrack(0);
             Segment* s1 = measure->getSegment(SegmentType::ChordRest, measure->tick());
@@ -599,7 +599,7 @@ Fraction BBFile::processPendingNotes(Score* score, QList<MNote*>* notes, const F
     }
 
     Segment* s = measure->getSegment(SegmentType::ChordRest, tick);
-    Chord* chord = new Chord(s);
+    Chord* chord = Factory::createChord(s);
     chord->setTrack(track);
     TDuration d;
     d.setVal(len.ticks());
@@ -740,7 +740,7 @@ void BBFile::convertTrack(Score* score, BBTrack* track, int staffIdx)
                     TDuration d;
                     d.setVal(len.ticks());
                     Segment* s = measure->getSegment(SegmentType::ChordRest, ctick);
-                    Rest* rest = new Rest(s, d);
+                    Rest* rest = Factory::createRest(s, d);
                     rest->setTicks(d.fraction());
                     rest->setTrack(staffIdx * VOICES);
                     s->add(rest);
@@ -773,7 +773,7 @@ void BBFile::convertTrack(Score* score, BBTrack* track, int staffIdx)
                 TDuration d;
                 d.setVal((measure->endTick() - ctick).ticks());
                 Segment* s = measure->getSegment(SegmentType::ChordRest, ctick);
-                Rest* rest = new Rest(s, d);
+                Rest* rest = Factory::createRest(s, d);
                 rest->setTicks(d.fraction());
                 rest->setTrack(staffIdx * VOICES);
                 s->add(rest);

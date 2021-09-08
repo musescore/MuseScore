@@ -63,7 +63,7 @@ Rectangle {
             anchors.top: parent.top
             anchors.left: reloadBtn.right
             anchors.leftMargin: 8
-            text: elementsModel.isUseTreeParent ? "Use treeParent" : "Use parent"
+            text: "Use treeParent"
             checked: elementsModel.isUseTreeParent
             onClicked: elementsModel.isUseTreeParent = !elementsModel.isUseTreeParent
         }

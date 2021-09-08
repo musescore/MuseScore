@@ -137,7 +137,7 @@ int GuitarPro5::readBeatEffects(int track, Segment* segment)
             a = 0;
         }
         if (a) {
-            ChordRest* cr = new Chord(segment);
+            ChordRest* cr = Factory::createChord(segment);
             cr->setTrack(track);
             cr->add(a);
             segment->add(cr);
@@ -274,10 +274,10 @@ Fraction GuitarPro5::readBeat(const Fraction& tick, int voice, Measure* measure,
                 delete cr;
                 cr = 0;
             }
-            cr = new Rest(score->dummy()->segment());
+            cr = Factory::createRest(score->dummy()->segment());
         } else {
             if (!cr) {
-                cr = new Chord(score->dummy()->segment());
+                cr = Factory::createChord(score->dummy()->segment());
             }
         }
         cr->setParent(segment);
@@ -1376,7 +1376,7 @@ bool GuitarPro5::readNote(int string, Note* note)
                         tuplet->remove(rest);
                     }
                     delete rest;
-                    chord1 = new Chord(seg);
+                    chord1 = Factory::createChord(seg);
                     chord1->setTrack(note->track());
                     chord1->setTicks(dur);
                     chord1->setDurationType(dut);

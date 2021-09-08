@@ -38,11 +38,7 @@ class TDuration;
 class Rest : public ChordRest
 {
 public:
-    Rest(Segment* parent);
-    Rest(const ElementType& type, Segment* parent = 0);
-    Rest(Segment* parent, const TDuration&);
-    Rest(const ElementType& type, Segment* parent, const TDuration&);
-    Rest(const Rest&, bool link = false);
+
     ~Rest() { qDeleteAll(m_dots); }
 
     void hack_toRestType();
@@ -114,10 +110,18 @@ public:
     bool shouldNotBeDrawn() const;
 
 protected:
+    Rest(const ElementType& type, Segment* parent = 0);
+    Rest(const ElementType& type, Segment* parent, const TDuration&);
+    Rest(const Rest&, bool link = false);
+
     Sid getPropertyStyle(Pid pid) const override;
     virtual mu::RectF numberRect() const { return mu::RectF(); } // TODO: add style to show number over 1-measure rests
 
 private:
+
+    friend class mu::engraving::Factory;
+    Rest(Segment* parent);
+    Rest(Segment* parent, const TDuration&);
 
     // values calculated by layout:
     SymId m_sym;
