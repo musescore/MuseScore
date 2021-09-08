@@ -72,6 +72,7 @@
 #include "bagpembell.h"
 #include "hairpin.h"
 #include "textline.h"
+#include "linkedobjects.h"
 
 #include "log.h"
 #include "config.h"

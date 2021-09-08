@@ -169,14 +169,19 @@ Rectangle {
         itemDelegate: Item {
             id: item
 
+            function formatInfo(data) {
+                var str = data.name + ": children: " + data.children + "\n"
+                + "pagePos: " + data.pagePos + ", bbox: " + data.bbox
+                return str
+            }
+
             StyledTextLabel {
                 id: secLabel
                 anchors.fill: parent
                 verticalAlignment: Text.AlignVCenter
                 horizontalAlignment: Text.AlignLeft
                 elide: Text.ElideNone
-                text: styleData.value.name + "\n"
-                      + "pagePos: " + styleData.value.pagePos + ", bbox: " + styleData.value.bbox
+                text: item.formatInfo(styleData.value)
             }
 
             MouseArea {

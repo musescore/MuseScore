@@ -69,6 +69,7 @@
 #include "articulation.h"
 #include "stafftext.h"
 #include "sticking.h"
+#include "linkedobjects.h"
 
 #include "log.h"
 

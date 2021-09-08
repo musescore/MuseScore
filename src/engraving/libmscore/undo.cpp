@@ -88,6 +88,7 @@
 #include "fret.h"
 #include "textedit.h"
 #include "textline.h"
+#include "linkedobjects.h"
 
 #include "masterscore.h"
 
@@ -1282,7 +1283,7 @@ ChangeElement::ChangeElement(EngravingItem* oe, EngravingItem* ne)
 
 void ChangeElement::flip(EditData*)
 {
-    const LinkedElements* links = oldElement->links();
+    const LinkedObjects* links = oldElement->links();
     if (links) {
         newElement->linkTo(oldElement);
         oldElement->unlink();
@@ -2620,9 +2621,9 @@ Link::Link(EngravingObject* e1, EngravingObject* e2)
     le = e2->links();
     if (!le) {
         if (e1->isStaff()) {
-            le = new LinkedElements(e1->score(), -1);
+            le = new LinkedObjects(e1->score(), -1);
         } else {
-            le = new LinkedElements(e1->score());
+            le = new LinkedObjects(e1->score());
         }
         le->push_back(e2);
     }

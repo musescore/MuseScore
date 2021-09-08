@@ -38,6 +38,7 @@
 #include "excerpt.h"
 #include "measurerepeat.h"
 #include "tremolo.h"
+#include "linkedobjects.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -716,7 +717,7 @@ bool ScoreRange::write(Score* score, const Fraction& tick) const
             // clone staff if appropriate after all voices have been copied
             int staffIdx = track / VOICES;
             Staff* ostaff = score->staff(staffIdx);
-            const LinkedElements* linkedStaves = ostaff->links();
+            const LinkedObjects* linkedStaves = ostaff->links();
             if (linkedStaves) {
                 for (auto le : *linkedStaves) {
                     Staff* nstaff = toStaff(le);

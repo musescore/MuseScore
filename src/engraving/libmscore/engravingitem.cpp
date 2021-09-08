@@ -115,6 +115,7 @@
 #include "fermata.h"
 #include "shape.h"
 #include "factory.h"
+#include "linkedobjects.h"
 
 #include "masterscore.h"
 
@@ -187,10 +188,10 @@ void EngravingItem::setup()
 #endif
 }
 
-mu::engraving::AccessibleItem* EngravingItem::createAccessible() const
+mu::engraving::AccessibleItem* EngravingItem::createAccessible()
 {
 #ifdef ENGRAVING_BUILD_ACCESSIBLE_TREE
-    return new mu::engraving::AccessibleItem();
+    return new mu::engraving::AccessibleItem(this);
 #else
     return nullptr;
 #endif
@@ -805,7 +806,7 @@ bool EngravingItem::readProperties(XmlReader& e)
             }
         }
         if (tag == "linkedMain") {
-            _links = new LinkedElements(score());
+            _links = new LinkedObjects(score());
             _links->push_back(this);
             e.addLink(s, _links);
             e.readNext();
@@ -840,7 +841,7 @@ bool EngravingItem::readProperties(XmlReader& e)
             if (!locationRead) {
                 mainLoc = loc;
             }
-            LinkedElements* link = e.getLink(linkedIsMaster, mainLoc, localIndexDiff);
+            LinkedObjects* link = e.getLink(linkedIsMaster, mainLoc, localIndexDiff);
             if (link) {
                 EngravingObject* linked = link->mainElement();
                 if (linked->type() == type()) {
@@ -865,7 +866,7 @@ bool EngravingItem::readProperties(XmlReader& e)
             if (!score()->isMaster()) {       // DEBUG
                 qDebug("---link %d not found (%d)", id, e.linkIds().size());
             }
-            _links = new LinkedElements(score(), id);
+            _links = new LinkedObjects(score(), id);
             e.linkIds().insert(id, _links);
         }
 #ifndef NDEBUG
@@ -2511,7 +2512,9 @@ void EngravingItem::setSelected(bool f)
     setFlag(ElementFlag::SELECTED, f);
 #ifdef ENGRAVING_BUILD_ACCESSIBLE_TREE
     if (f) {
-        m_accessible->setFocus();
+        if (m_accessible) {
+            m_accessible->setFocus();
+        }
     }
 #endif
 }
