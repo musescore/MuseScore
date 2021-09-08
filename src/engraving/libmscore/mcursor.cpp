@@ -89,7 +89,7 @@ Chord* MCursor::addChord(int pitch, const TDuration& duration)
     Segment* segment = measure->getSegment(SegmentType::ChordRest, _tick);
     Chord* chord = toChord(segment->element(_track));
     if (chord == 0) {
-        chord = new Chord(segment);
+        chord = Factory::createChord(segment);
         chord->setTrack(_track);
         chord->setDurationType(duration);
         chord->setTicks(duration.fraction());

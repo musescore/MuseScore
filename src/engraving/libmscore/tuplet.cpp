@@ -26,6 +26,7 @@
 #include "style/style.h"
 #include "io/xml.h"
 
+#include "factory.h"
 #include "score.h"
 #include "chord.h"
 #include "note.h"
@@ -39,6 +40,7 @@
 #include "system.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -1299,7 +1301,7 @@ Fraction Tuplet::addMissingElement(const Fraction& startTick, const Fraction& en
     }
     f = d.fraction();
     Segment* segment = measure()->getSegment(SegmentType::ChordRest, startTick);
-    Rest* rest = new Rest(segment);
+    Rest* rest = Factory::createRest(segment);
     rest->setDurationType(d);
     rest->setTicks(f);
     rest->setTrack(track());

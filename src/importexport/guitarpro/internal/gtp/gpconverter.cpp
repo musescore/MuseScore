@@ -896,9 +896,9 @@ ChordRest* GPConverter::addChordRest(const GPBeat* beat, const Context& ctx)
 
     ChordRest* cr{ nullptr };
     if (beat->isRest()) {
-        cr = new Rest(_score->dummy()->segment());
+        cr = Factory::createRest(_score->dummy()->segment());
     } else {
-        cr = new Chord(_score->dummy()->segment());
+        cr = Factory::createChord(_score->dummy()->segment());
     }
 
     cr->setTrack(ctx.curTrack);
@@ -1952,6 +1952,8 @@ void GPConverter::addLyrics(const GPBeat* beat, ChordRest* cr, const Context& ct
 void GPConverter::clearDefectedGraceChord(ChordRestContainer& graceGhords)
 {
     for (auto [pCr, gpBeat] : graceGhords) {
+        UNUSED(gpBeat);
+
         if (!pCr) {
             continue;
         }

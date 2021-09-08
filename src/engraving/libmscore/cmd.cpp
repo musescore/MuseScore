@@ -647,7 +647,7 @@ void Score::addInterval(int val, const std::vector<Note*>& nl)
 
 Note* Score::setGraceNote(Chord* ch, int pitch, NoteType type, int len)
 {
-    Chord* chord = new Chord(this->dummy()->segment());
+    Chord* chord = Factory::createChord(this->dummy()->segment());
     Note* note = Factory::createNote(chord);
 
     // allow grace notes to be added to other grace notes
@@ -781,7 +781,7 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
             Note* note = nullptr;
             Tie* addTie = nullptr;
             if (isRest) {
-                nr = ncr = new Rest(this->dummy()->segment());
+                nr = ncr = Factory::createRest(this->dummy()->segment());
                 nr->setTrack(track);
                 ncr->setDurationType(d);
                 ncr->setTicks(d == TDuration::DurationType::V_MEASURE ? measure->ticks() : d.fraction());
@@ -794,7 +794,7 @@ Segment* Score::setNoteRest(Segment* segment, int track, NoteVal nval, Fraction 
                     note->setTieBack(tie);
                     addTie = tie;
                 }
-                Chord* chord = new Chord(this->dummy()->segment());
+                Chord* chord = Factory::createChord(this->dummy()->segment());
                 chord->setTrack(track);
                 chord->setDurationType(d);
                 chord->setTicks(d.fraction());
@@ -3427,7 +3427,7 @@ void Score::cmdRealizeChordSymbols(bool literal, Voicing voicing, HDuration dura
         Fraction duration = r.getActualDuration(tick.ticks(), durationType);
         bool concertPitch = styleB(Sid::concertPitch);
 
-        Chord* chord = new Chord(this->dummy()->segment());     //chord template
+        Chord* chord = Factory::createChord(this->dummy()->segment());     //chord template
         chord->setTrack(h->track());     //set track so notes have a track to sit on
 
         //create chord from notes
@@ -3533,7 +3533,7 @@ Segment* Score::setChord(Segment* segment, int track, Chord* chordTemplate, Frac
             const TDuration& d = dl[i];
 
             //create new chord from template and add it
-            Chord* chord = new Chord(*chordTemplate);
+            Chord* chord = Factory::copyChord(*chordTemplate);
             nr = chord;
 
             chord->setTrack(track);

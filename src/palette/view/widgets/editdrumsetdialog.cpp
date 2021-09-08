@@ -586,7 +586,7 @@ void EditDrumsetDialog::updateExample()
     int v         = m_editedDrumset.voice(pitch);
     Direction dir = m_editedDrumset.stemDirection(pitch);
     bool up = (Direction::UP == dir) || (Direction::AUTO == dir && line > 4);
-    std::shared_ptr<Chord> chord = std::make_shared<Chord>(gpaletteScore->dummy()->segment());
+    std::shared_ptr<Chord> chord = Factory::makeChord(gpaletteScore->dummy()->segment());
     chord->setDurationType(TDuration::DurationType::V_QUARTER);
     chord->setStemDirection(dir);
     chord->setTrack(v);

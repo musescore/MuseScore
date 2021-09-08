@@ -28,6 +28,7 @@
 #include <QString>
 
 #include "engravingitem.h"
+#include "durationtype.h"
 
 namespace mu::engraving {
 class Factory
@@ -73,6 +74,10 @@ public:
     static Ms::Breath* createBreath(Ms::Segment* parent);
     static std::shared_ptr<Ms::Breath> makeBreath(Ms::Segment* parent);
 
+    static Ms::Chord* createChord(Ms::Segment* parent);
+    static Ms::Chord* copyChord(const Ms::Chord& src, bool link = false);
+    static std::shared_ptr<Ms::Chord> makeChord(Ms::Segment* parent);
+
     static Ms::ChordLine* createChordLine(Ms::Chord* parent);
     static Ms::ChordLine* copyChordLine(const Ms::ChordLine& src);
     static std::shared_ptr<Ms::ChordLine> makeChordLine(Ms::Chord* parent);
@@ -108,6 +113,10 @@ public:
     static Ms::NoteDot* copyNoteDot(const Ms::NoteDot& src);
 
     static Ms::Page* createPage(Ms::EngravingObject* parent);
+
+    static Ms::Rest* createRest(Ms::Segment* parent);
+    static Ms::Rest* createRest(Ms::Segment* parent, const Ms::TDuration& t);
+    static Ms::Rest* copyRest(const Ms::Rest& src, bool link = false);
 
     static Ms::Segment* createSegment(Ms::Measure* parent);
     static Ms::Segment* createSegment(Ms::Measure* parent, Ms::SegmentType type, const Ms::Fraction& t);

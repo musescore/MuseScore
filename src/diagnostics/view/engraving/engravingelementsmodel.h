@@ -115,7 +115,7 @@ private:
 
     QString m_info;
     QString m_summary;
-    bool m_isUseTreeParent = true;
+    bool m_isUseTreeParent = false;
 };
 }
 

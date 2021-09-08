@@ -227,10 +227,11 @@ void NotationInteraction::showShadowNote(const PointF& pos)
 
     if (inputState.rest()) {
         int yo = 0;
-        Ms::Rest rest(Ms::gpaletteScore->dummy()->segment(), duration.type());
-        rest.setTicks(duration.fraction());
-        symNotehead = rest.getSymbol(inputState.duration().type(), 0, staff->lines(position.segment->tick()), &yo);
+        Ms::Rest* rest = mu::engraving::Factory::createRest(Ms::gpaletteScore->dummy()->segment(), duration.type());
+        rest->setTicks(duration.fraction());
+        symNotehead = rest->getSymbol(inputState.duration().type(), 0, staff->lines(position.segment->tick()), &yo);
         m_shadowNote->setState(symNotehead, duration, true, segmentSkylineTopY, segmentSkylineBottomY);
+        delete rest;
     } else {
         if (Ms::NoteHead::Group::HEAD_CUSTOM == noteheadGroup) {
             symNotehead = instr->drumset()->noteHeads(inputState.drumNote(), noteHead);

@@ -2315,7 +2315,7 @@ void Score::splitStaff(int staffIdx, int splitPoint)
                         Chord* chord = toChord(s->element(dtrack + voice));
                         Q_ASSERT(!chord || (chord->isChord()));
                         if (!chord) {
-                            chord = new Chord(*c);
+                            chord = Factory::copyChord(*c);
                             qDeleteAll(chord->notes());
                             chord->notes().clear();
                             chord->setTuplet(tupletDst[voice]);
@@ -4833,7 +4833,7 @@ void Score::changeSelectedNotesVoice(int voice)
                 // existing rest in destination with correct duration;
                 //   replace with chord, then move note in
                 //   this case allows for tuplets, unlike the more general case below
-                dstChord = new Chord(s);
+                dstChord = Factory::createChord(s);
                 dstChord->setTrack(dstTrack);
                 dstChord->setDurationType(chord->durationType());
                 dstChord->setTicks(chord->ticks());
@@ -4866,7 +4866,7 @@ void Score::changeSelectedNotesVoice(int voice)
                 Fraction gapEnd   = ncr ? ncr->tick() : m->tick() + m->ticks();
                 if (gapStart <= s->tick() && gapEnd >= s->tick() + chord->actualTicks()) {
                     // big enough gap found
-                    dstChord = new Chord(s);
+                    dstChord = Factory::createChord(s);
                     dstChord->setTrack(dstTrack);
                     dstChord->setDurationType(chord->durationType());
                     dstChord->setTicks(chord->ticks());
@@ -4906,7 +4906,7 @@ void Score::changeSelectedNotesVoice(int voice)
                     undoRemoveElement(note);
                 } else if (notes == 1) {
                     // create rest to leave behind
-                    Rest* r = new Rest(s);
+                    Rest* r = Factory::createRest(s);
                     r->setTrack(chord->track());
                     r->setDurationType(chord->durationType());
                     r->setTicks(chord->ticks());
@@ -4915,7 +4915,7 @@ void Score::changeSelectedNotesVoice(int voice)
                     // if there were grace notes, move them
                     while (!chord->graceNotes().empty()) {
                         Chord* gc = chord->graceNotes().first();
-                        Chord* ngc = new Chord(*gc);
+                        Chord* ngc = Factory::copyChord(*gc);
                         undoRemoveElement(gc);
                         ngc->setParent(dstChord);
                         ngc->setTrack(dstChord->track());

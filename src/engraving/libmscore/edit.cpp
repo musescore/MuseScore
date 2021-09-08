@@ -279,7 +279,7 @@ Tuplet* Score::addTuplet(ChordRest* destinationChordRest, Fraction ratio, Tuplet
 Rest* Score::addRest(const Fraction& tick, int track, TDuration d, Tuplet* tuplet)
 {
     Measure* measure = tick2measure(tick);
-    Rest* rest       = new Rest(this->dummy()->segment(), d);
+    Rest* rest = Factory::createRest(this->dummy()->segment(), d);
     if (d.type() == TDuration::DurationType::V_MEASURE) {
         rest->setTicks(measure->stretchedLen(staff(track2staff(track))));
     } else {
@@ -297,7 +297,7 @@ Rest* Score::addRest(const Fraction& tick, int track, TDuration d, Tuplet* tuple
 
 Rest* Score::addRest(Segment* s, int track, TDuration d, Tuplet* tuplet)
 {
-    Rest* rest = new Rest(s, d);
+    Rest* rest = Factory::createRest(s, d);
     if (d.type() == TDuration::DurationType::V_MEASURE) {
         rest->setTicks(s->measure()->stretchedLen(staff(track / VOICES)));
     } else {
@@ -326,7 +326,7 @@ Chord* Score::addChord(const Fraction& tick, TDuration d, Chord* oc, bool genTie
         return 0;
     }
 
-    Chord* chord = new Chord(this->dummy()->segment());
+    Chord* chord = Factory::createChord(this->dummy()->segment());
     chord->setTuplet(tuplet);
     chord->setTrack(oc->track());
     chord->setDurationType(d);
@@ -372,7 +372,7 @@ ChordRest* Score::addClone(ChordRest* cr, const Fraction& tick, const TDuration&
     ChordRest* newcr;
     // change a MeasureRepeat() into an Rest()
     if (cr->isMeasureRepeat()) {
-        newcr = new Rest(*toRest(cr));
+        newcr = Factory::copyRest(*toRest(cr));
     } else {
         newcr = toChordRest(cr->clone());
     }
@@ -2245,7 +2245,7 @@ void Score::deleteItem(EngravingItem* el)
 
         // replace with rest
         if (chord->noteType() == NoteType::NORMAL) {
-            Rest* rest = new Rest(this->dummy()->segment(), chord->durationType());
+            Rest* rest = Factory::createRest(this->dummy()->segment(), chord->durationType());
             rest->setDurationType(chord->durationType());
             rest->setTicks(chord->ticks());
 
@@ -2285,7 +2285,7 @@ void Score::deleteItem(EngravingItem* el)
     {
         MeasureRepeat* mr = toMeasureRepeat(el);
         removeChordRest(mr, false);
-        Rest* rest = new Rest(this->dummy()->segment());
+        Rest* rest = Factory::createRest(this->dummy()->segment());
         rest->setDurationType(TDuration::DurationType::V_MEASURE);
         rest->setTicks(mr->measure()->stretchedLen(mr->staff()));
         rest->setTrack(mr->track());
@@ -2401,7 +2401,7 @@ void Score::deleteItem(EngravingItem* el)
                     }
 
                     for (const TDuration& d : dList) {
-                        Rest* rr = new Rest(this->dummy()->segment());
+                        Rest* rr = Factory::createRest(this->dummy()->segment());
                         rr->setTicks(d.fraction());
                         rr->setDurationType(d);
                         rr->setTrack(track);
@@ -3342,7 +3342,7 @@ void Score::cmdCreateTuplet(ChordRest* ocr, Tuplet* tuplet)
 
     ChordRest* cr;
     if (ocr->isChord()) {
-        cr = new Chord(this->dummy()->segment());
+        cr = Factory::createChord(this->dummy()->segment());
         foreach (Note* oldNote, toChord(ocr)->notes()) {
             Note* note = Factory::createNote(toChord(cr));
             note->setPitch(oldNote->pitch());
@@ -3351,7 +3351,7 @@ void Score::cmdCreateTuplet(ChordRest* ocr, Tuplet* tuplet)
             cr->add(note);
         }
     } else {
-        cr = new Rest(this->dummy()->segment());
+        cr = Factory::createRest(this->dummy()->segment());
     }
 
     Fraction an     = (tuplet->ticks() * tuplet->ratio()) / tuplet->baseLen().fraction();
@@ -3369,7 +3369,7 @@ void Score::cmdCreateTuplet(ChordRest* ocr, Tuplet* tuplet)
 
     for (int i = 0; i < (actualNotes - 1); ++i) {
         tick += ticks;
-        Rest* rest = new Rest(this->dummy()->segment());
+        Rest* rest = Factory::createRest(this->dummy()->segment());
         rest->setTuplet(tuplet);
         rest->setTrack(track);
         rest->setDurationType(tuplet->baseLen());
@@ -3730,7 +3730,7 @@ void Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmp
         // add rest to all staves and to all the staves linked to it
         for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
             int track = staffIdx * VOICES;
-            Rest* rest = new Rest(score->dummy()->segment(), TDuration(TDuration::DurationType::V_MEASURE));
+            Rest* rest = Factory::createRest(score->dummy()->segment(), TDuration(TDuration::DurationType::V_MEASURE));
             Fraction timeStretch(score->staff(staffIdx)->timeStretch(om->tick()));
             rest->setTicks(om->ticks() * timeStretch);
             rest->setTrack(track);
@@ -4300,7 +4300,7 @@ void Score::cloneVoice(int strack, int dtrack, Segment* sf, const Fraction& lTic
         }
         Segment* tst = dm->segments().firstCRSegment();
         if (strack % VOICES && !(dtrack % VOICES) && (!tst || (!tst->element(dtrack)))) {
-            Rest* rest = new Rest(this->dummy()->segment());
+            Rest* rest = Factory::createRest(this->dummy()->segment());
             rest->setTicks(dm->ticks());
             rest->setDurationType(TDuration::DurationType::V_MEASURE);
             rest->setTrack(dtrack);

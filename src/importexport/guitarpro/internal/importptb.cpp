@@ -643,14 +643,14 @@ void PowerTab::fillMeasure(tBeatList& elist, Measure* measure, int staff, std::v
         }
         ChordRest* cr;
         if (beat->notes.empty()) {
-            auto rest = new Rest(segment);
+            auto rest = Factory::createRest(segment);
             cr = rest;
             rest->setTrack(staff * VOICES);
             rest->setTicks(l);
             rest->setDurationType(d);
             segment->add(rest);
         } else {
-            Chord* chord = new Chord(segment);
+            Chord* chord = Factory::createChord(segment);
             cr = chord;
             chord->setTrack(staff * VOICES);
             chord->setTicks(l);
@@ -760,7 +760,7 @@ void PowerTab::fillMeasure(tBeatList& elist, Measure* measure, int staff, std::v
 
     if (tick == measure->tick()) {
         Segment* seg = measure->getSegment(SegmentType::ChordRest, tick);
-        auto rest = new Rest(seg);
+        auto rest = Factory::createRest(seg);
         rest->setTrack(staff * VOICES);
         auto ts = measure->timesig();
         rest->setTicks(ts);
