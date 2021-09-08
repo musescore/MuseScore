@@ -39,12 +39,14 @@ void DiagnosticsActionsController::init()
     dispatcher()->reg(this, "diagnostic-show-navigation-tree", [this]() { openUri(NAVIGATION_TREE_URI); });
     dispatcher()->reg(this, "diagnostic-show-accessible-tree", [this]() { openUri(ACCESSIBLE_TREE_URI); });
     dispatcher()->reg(this, "diagnostic-accessible-tree-dump", []() { DiagnosticAccessibleModel::dumpTree(); });
-    dispatcher()->reg(this, "diagnostic-show-engraving-elements", [this]() { openUri(ENGRAVING_ELEMENTS_URI); });
+    dispatcher()->reg(this, "diagnostic-show-engraving-elements", [this]() { openUri(ENGRAVING_ELEMENTS_URI, false); });
 }
 
-void DiagnosticsActionsController::openUri(const mu::UriQuery& uri)
+void DiagnosticsActionsController::openUri(const mu::UriQuery& uri, bool isSingle)
 {
-    if (!interactive()->isOpened(uri.uri()).val) {
-        interactive()->open(uri);
+    if (isSingle && interactive()->isOpened(uri.uri()).val) {
+        return;
     }
+
+    interactive()->open(uri);
 }

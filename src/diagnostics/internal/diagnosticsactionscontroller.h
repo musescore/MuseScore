@@ -40,7 +40,7 @@ public:
     void init();
 
 private:
-    void openUri(const mu::UriQuery& uri);
+    void openUri(const mu::UriQuery& uri, bool isSingle = true);
 };
 }
 

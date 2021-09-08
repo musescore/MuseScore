@@ -167,36 +167,38 @@ QVariant EngravingElementsModel::makeData(const Ms::EngravingObject* el) const
         return str;
     };
 
-    QVariantMap d;
-
+    QString name;
     if (el->isScore()) {
         const Ms::Score* score = Ms::toScore(el);
         if (score->isMaster()) {
-            d["name"] = "MasterScore: " + score->title();
+            name = "MasterScore: " + score->title();
         } else {
-            d["name"] = "Score: " + score->title();
+            name = "Score: " + score->title();
         }
     } else if (el->isDummy()) {
         if (el->isType(Ms::ElementType::INVALID)) {
-            d["name"] = "Dummy";
+            name = "Dummy";
         } else {
-            d["name"] = QString("Dummy: ") + el->name();
+            name = QString("Dummy: ") + el->name();
         }
     } else {
-        d["name"] = el->name();
+        name = el->name();
     }
 
-    d["selected"] = elementsProvider()->isSelected(el);
-    d["children"] = static_cast<int>(el->children().size());
-
+    QString info = name + ": ";
+    info += "children: " + QString::number(el->children().size());
+    if (!el->isDummy()) {
+        info += ", treechildren: " + QString::number(el->treeChildCount());
+    }
+    info += "\n";
     if (el->isEngravingItem()) {
         const Ms::EngravingItem* item = Ms::toEngravingItem(el);
-        d["pagePos"] = formatPoint(item->pagePos());
-        d["bbox"] = formatRect(item->bbox());
-    } else {
-        d["pagePos"] = "-";
-        d["bbox"] = "-";
+        info += "pagePos: " + formatPoint(item->pagePos()) + ", bbox: " + formatRect(item->bbox());
     }
+
+    QVariantMap d;
+    d["selected"] = elementsProvider()->isSelected(el);
+    d["info"] = info;
 
     return d;
 }
@@ -229,9 +231,7 @@ void EngravingElementsModel::reload()
 
     Item* lostItem = createItem(m_rootItem);
     QVariantMap lostData;
-    lostData["name"] = "Lost items";
-    lostData["pagePos"] = "-";
-    lostData["bbox"] = "-";
+    lostData["info"] = "Lost items";
     lostItem->setData(lostData);
     findAndAddLost(elements, lostItem, m_rootItem);
 
