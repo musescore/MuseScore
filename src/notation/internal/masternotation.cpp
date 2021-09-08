@@ -174,7 +174,7 @@ static void createMeasures(Ms::Score* score, const ScoreCreateOptions& scoreOpti
                             if (k < puRests.count()) {
                                 rest = static_cast<Ms::Rest*>(puRests[k]->linkedClone());
                             } else {
-                                rest = new Ms::Rest(seg, d);
+                                rest = mu::engraving::Factory::createRest(seg, d);
                                 puRests.append(rest);
                             }
                             rest->setScore(_score);
@@ -190,7 +190,7 @@ static void createMeasures(Ms::Score* score, const ScoreCreateOptions& scoreOpti
                     if (linkedToPrevious && rest) {
                         rest = static_cast<Ms::Rest*>(rest->linkedClone());
                     } else {
-                        rest = new Ms::Rest(seg, Ms::TDuration(Ms::TDuration::DurationType::V_MEASURE));
+                        rest = mu::engraving::Factory::createRest(seg, Ms::TDuration(Ms::TDuration::DurationType::V_MEASURE));
                     }
                     rest->setScore(_score);
                     rest->setTicks(measure->ticks());

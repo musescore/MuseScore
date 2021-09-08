@@ -92,6 +92,10 @@ class Chord final : public ChordRest
 
     QVector<Articulation*> _articulations;
 
+    friend class mu::engraving::Factory;
+    Chord(Segment* parent = 0);
+    Chord(const Chord&, bool link = false);
+
     qreal upPos()   const override;
     qreal downPos() const override;
     qreal centerX() const;
@@ -103,8 +107,7 @@ class Chord final : public ChordRest
     qreal noteHeadWidth() const;
 
 public:
-    Chord(Segment* parent = 0);
-    Chord(const Chord&, bool link = false);
+
     ~Chord();
     Chord& operator=(const Chord&) = delete;
 

@@ -154,7 +154,7 @@ int GuitarPro4::readBeatEffects(int track, Segment* segment)
         }
 
         if (a) {
-            ChordRest* cr = new Chord(segment);
+            ChordRest* cr = Factory::createChord(segment);
             cr->setTrack(track);
             cr->add(a);
             segment->add(cr);
@@ -331,7 +331,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
             gn->setPitch(grace_pitch);
             gn->setTpcFromPitch();
 
-            Chord* gc = new Chord(score->dummy()->segment());
+            Chord* gc = Factory::createChord(score->dummy()->segment());
             gc->setTrack(note->chord()->track());
             gc->add(gn);
             gc->setParent(note->chord());
@@ -532,7 +532,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
                         tuplet->remove(rest);
                     }
                     delete rest;
-                    chord1 = new Chord(seg);
+                    chord1 = Factory::createChord(seg);
                     chord1->setTrack(note->track());
                     chord1->setTicks(dur);
                     chord1->setDurationType(dut);
@@ -904,10 +904,10 @@ bool GuitarPro4::read(QFile* fp)
                         delete cr;
                         cr = 0;
                     }
-                    cr = new Rest(score->dummy()->segment());
+                    cr = Factory::createRest(score->dummy()->segment());
                 } else {
                     if (!segment->cr(track)) {
-                        cr = new Chord(score->dummy()->segment());
+                        cr = Factory::createChord(score->dummy()->segment());
                     }
                 }
                 cr->setParent(segment);

@@ -870,7 +870,7 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& sourceS
                         Segment* tst = nm->segments().firstCRSegment();
                         if (srcTrack % VOICES && !(track % VOICES) && (!tst || (!tst->element(track)))) {
                             Segment* segment = nm->getSegment(SegmentType::ChordRest, nm->tick());
-                            Rest* rest = new Rest(segment);
+                            Rest* rest = Factory::createRest(segment);
                             rest->setTicks(nm->ticks());
                             rest->setDurationType(nm->ticks());
                             rest->setTrack(track);

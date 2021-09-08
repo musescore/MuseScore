@@ -357,7 +357,7 @@ void MsScWriter::note(const QString pitch, const QVector<Bww::BeamType> beamList
     Ms::Direction sd = Ms::Direction::AUTO;
 
     // create chord
-    Ms::Chord* cr = new Ms::Chord(score->dummy()->segment());
+    Ms::Chord* cr = Factory::createChord(score->dummy()->segment());
     //ws cr->setTick(tick);
     cr->setBeamMode(bm);
     cr->setTrack(0);

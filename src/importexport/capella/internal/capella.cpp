@@ -585,7 +585,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                     for (unsigned i = 0; i < o->fullMeasures; ++i) {
                         Measure* m1 = score->getCreateMeasure(tick + (ft * i));
                         Segment* s = m1->getSegment(SegmentType::ChordRest, tick + (ft * i));
-                        Rest* rest = new Rest(s);
+                        Rest* rest = Factory::createRest(s);
                         rest->setDurationType(TDuration(TDuration::DurationType::V_MEASURE));
                         rest->setTicks(m1->ticks());
                         rest->setTrack(staffIdx * VOICES + voice);
@@ -595,7 +595,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
             }
             if (!o->invisible || voice == 0) {
                 Segment* s = m->getSegment(SegmentType::ChordRest, tick);
-                Rest* rest = new Rest(s);
+                Rest* rest = Factory::createRest(s);
                 TDuration d1;
                 if (o->fullMeasures) {
                     d1.setType(TDuration::DurationType::V_MEASURE);
@@ -666,7 +666,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                        o->objects.size());
             }
 
-            Chord* chord = new Chord(score->dummy()->segment());
+            Chord* chord = Factory::createChord(score->dummy()->segment());
             if (isgracenote) {             // grace notes
                 SetCapGraceDuration(chord, o);
                 chord->setTicks(chord->durationType().fraction());
@@ -1369,7 +1369,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
             if (empty) {
                 if ((m->ticks() == m->timesig())) {
                     Segment* s = m->getSegment(SegmentType::ChordRest, m->tick());
-                    Rest* rest = new Rest(s);
+                    Rest* rest = Factory::createRest(s);
                     rest->setDurationType(TDuration::DurationType::V_MEASURE);
                     rest->setTicks(m->ticks());
                     rest->setTrack(staffIdx * VOICES);
@@ -1379,7 +1379,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
                     int tickOffset = 0;
                     for (auto d : durList) {
                         Segment* s = m->getSegment(SegmentType::ChordRest, m->tick() + Fraction::fromTicks(tickOffset));
-                        Rest* rest = new Rest(s);
+                        Rest* rest = Factory::createRest(s);
                         rest->setDurationType(d);
                         rest->setTrack(staffIdx * VOICES);
                         s->add(rest);

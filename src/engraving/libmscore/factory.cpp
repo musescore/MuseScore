@@ -25,6 +25,7 @@
 #include "score.h"
 
 #include "page.h"
+#include "rest.h"
 #include "segment.h"
 #include "staff.h"
 #include "stafflines.h"
@@ -395,6 +396,15 @@ BracketItem* Factory::createBracketItem(EngravingItem* parent, BracketType a, in
 CREATE_ITEM_IMPL(Breath, ElementType::BREATH, Segment)
 MAKE_ITEM_IMPL(Breath, Segment)
 
+CREATE_ITEM_IMPL(Chord, ElementType::CHORD, Segment)
+
+Ms::Chord* Factory::copyChord(const Ms::Chord& src, bool link)
+{
+    Chord* copy = new Chord(src, link);
+    return copy;
+}
+MAKE_ITEM_IMPL(Chord, Segment)
+
 CREATE_ITEM_IMPL(ChordLine, ElementType::CHORDLINE, Chord)
 COPY_ITEM_IMPL(ChordLine)
 MAKE_ITEM_IMPL(ChordLine, Chord)
@@ -438,6 +448,26 @@ Ms::Page* Factory::createPage(Ms::EngravingObject* parent)
     Page* page = new Page(parent);
     page->setup();
     return page;
+}
+
+Ms::Rest* Factory::createRest(Ms::Segment* parent)
+{
+    Rest* r = new Rest(parent);
+    r->setup();
+    return r;
+}
+
+Ms::Rest* Factory::createRest(Ms::Segment* parent, const Ms::TDuration& t)
+{
+    Rest* r = new Rest(parent, t);
+    r->setup();
+    return r;
+}
+
+Ms::Rest* Factory::copyRest(const Ms::Rest& src, bool link)
+{
+    Rest* copy = new Rest(src, link);
+    return copy;
 }
 
 Ms::Segment* Factory::createSegment(Ms::Measure* parent)

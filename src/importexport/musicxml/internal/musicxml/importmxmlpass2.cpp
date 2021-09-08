@@ -285,7 +285,7 @@ static void fillGap(Measure* measure, int track, const Fraction& tstart, const F
             d.setVal(len.ticks());
         }
         Segment* s = measure->getSegment(SegmentType::ChordRest, tstart);
-        Rest* rest = new Rest(s, d);
+        Rest* rest = Factory::createRest(s, d);
         rest->setTicks(len);
         rest->setTrack(track);
         rest->setVisible(false);
@@ -1343,7 +1343,7 @@ static Rest* addRest(Score*, Measure* m,
         return nullptr;
     }
 
-    Rest* cr = new Rest(s);
+    Rest* cr = Factory::createRest(s);
     setChordRestDuration(cr, duration, dura);
     cr->setTrack(track);
     cr->setStaffMove(move);
@@ -4105,7 +4105,7 @@ static Chord* findOrCreateChord(Score*, Measure* m,
     Chord* c = m->findChord(tick, track);
     if (c == 0) {
         Segment* s = m->getSegment(SegmentType::ChordRest, tick);
-        c = new Chord(s);
+        c = Factory::createChord(s);
         // better not to force beam end, as the beam palette does not support it
         if (bm == Beam::Mode::END) {
             c->setBeamMode(Beam::Mode::AUTO);
@@ -4156,7 +4156,7 @@ NoteType graceNoteType(const TDuration duration, const bool slash)
 static Chord* createGraceChord(Score* score, const int track,
                                const TDuration duration, const bool slash)
 {
-    Chord* c = new Chord(score->dummy()->segment());
+    Chord* c = Factory::createChord(score->dummy()->segment());
     c->setNoteType(graceNoteType(duration, slash));
     c->setTrack(track);
     // note grace notes have no durations, use default fraction 0/1

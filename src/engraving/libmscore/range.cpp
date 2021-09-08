@@ -21,6 +21,8 @@
  */
 
 #include "range.h"
+
+#include "factory.h"
 #include "measure.h"
 #include "segment.h"
 #include "rest.h"
@@ -38,6 +40,7 @@
 #include "tremolo.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -231,7 +234,7 @@ void TrackList::appendGap(const Fraction& du, Score* score)
         _duration   += du;
         rest->setTicks(dd);
     } else {
-        Rest* rest = new Rest(score->dummy()->segment());
+        Rest* rest = Factory::createRest(score->dummy()->segment());
         rest->setTicks(du);
         QList<EngravingItem*>::append(rest);
         _duration   += du;
@@ -291,14 +294,14 @@ void TrackList::read(const Segment* fs, const Segment* es)
         if (e->isMeasureRepeat()) {
             // TODO: copy previous measure contents?
             MeasureRepeat* rm = toMeasureRepeat(e);
-            Rest r(*rm);
+            Rest* r = Factory::copyRest(*rm);
             //! TODO Perhaps there is a bug.
             //! Previously, the element changed its type (because there was a virtual method that returned the type).
             //! This code has been added for compatibility reasons to maintain the same behavior.
-            r.hack_toRestType();
-            r.reset();
-            append(&r);
-            tick += r.ticks();
+            r->hack_toRestType();
+            r->reset();
+            append(r);
+            tick += r->ticks();
         } else if (e->isChordRest()) {
             DurationElement* de = toDurationElement(e);
             Fraction gap = s->tick() - tick;
@@ -522,7 +525,7 @@ bool TrackList::write(Score* score, const Fraction& tick) const
                     Segment* seg = m->getSegmentR(SegmentType::ChordRest, m->ticks() - remains);
                     if ((_track % VOICES) == 0) {
                         // write only for voice 1
-                        Rest* r = new Rest(seg, TDuration::DurationType::V_MEASURE);
+                        Rest* r = Factory::createRest(seg, TDuration::DurationType::V_MEASURE);
                         // ideally we should be using stretchedLen
                         // but this is not valid during rewrite when adding time signatures
                         // since the time signature has not been added yet

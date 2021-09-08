@@ -523,7 +523,7 @@ EngravingItem* ChordRest::drop(EditData& data)
         Note* note = toNote(e);
         Segment* seg = segment();
         score()->undoRemoveElement(this);
-        Chord* chord = new Chord(score()->dummy()->segment());
+        Chord* chord = Factory::createChord(score()->dummy()->segment());
         chord->setTrack(track());
         chord->setDurationType(durationType());
         chord->setTicks(ticks());

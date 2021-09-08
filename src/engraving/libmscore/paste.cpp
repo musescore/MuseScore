@@ -735,7 +735,7 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t, const Interval& src
             MeasureRepeat* mr = toMeasureRepeat(cr);
             std::vector<TDuration> list = toDurationList(mr->actualTicks(), true);
             for (auto dur : list) {
-                Rest* r = new Rest(this->dummy()->segment(), dur);
+                Rest* r = Factory::createRest(this->dummy()->segment(), dur);
                 r->setTrack(cr->track());
                 Fraction rest = r->ticks();
                 while (!rest.isZero()) {

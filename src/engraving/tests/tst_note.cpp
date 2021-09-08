@@ -81,7 +81,7 @@ void TestNote::initTestCase()
 
 void TestNote::note()
 {
-    Ms::Chord* chord = new Ms::Chord(score->dummy()->segment());
+    Ms::Chord* chord = Factory::createChord(score->dummy()->segment());
     Note* note = Factory::createNote(chord);
     chord->add(note);
 
