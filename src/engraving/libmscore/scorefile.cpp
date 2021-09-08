@@ -726,7 +726,7 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
                 }
                 // we will miss a time sig!
                 Fraction tsf = sigmap()->timesig(segment->tick()).timesig();
-                TimeSig* ts = new TimeSig(this->dummy()->segment());
+                TimeSig* ts = Factory::createTimeSig(this->dummy()->segment());
                 ts->setSig(tsf);
                 ts->write(xml);
                 delete ts;

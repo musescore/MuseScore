@@ -265,7 +265,7 @@ void MsScWriter::beginMeasure(const Bww::MeasureBeginFlags mbf)
         s->add(keysig);
         // timesig
         s = currentMeasure->getSegment(Ms::SegmentType::TimeSig, tick);
-        Ms::TimeSig* timesig = new Ms::TimeSig(s);
+        Ms::TimeSig* timesig = Factory::createTimeSig(s);
         timesig->setSig(Ms::Fraction(beats, beat));
         timesig->setTrack(0);
         s->add(timesig);

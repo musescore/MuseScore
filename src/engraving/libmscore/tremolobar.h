@@ -48,7 +48,6 @@ enum class TremoloBarType {
 class TremoloBar final : public EngravingItem
 {
 public:
-    TremoloBar(EngravingItem* parent);
 
     TremoloBar* clone() const override { return new TremoloBar(*this); }
 
@@ -76,6 +75,10 @@ public:
     void setPlay(bool val) { m_play = val; }
 
 private:
+
+    friend class mu::engraving::Factory;
+    TremoloBar(EngravingItem* parent);
+
     TremoloBarType parseTremoloBarTypeFromCurve(const QList<PitchValue>& curve) const;
     void updatePointsByTremoloBarType(const TremoloBarType type);
 

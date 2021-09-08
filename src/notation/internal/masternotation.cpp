@@ -132,7 +132,7 @@ static void createMeasures(Ms::Score* score, const ScoreCreateOptions& scoreOpti
                 if (tick.isZero()) {
                     Ms::Measure* m = _score->firstMeasure();
                     Ms::Segment* s = m->getSegment(Ms::SegmentType::TimeSig, Ms::Fraction(0, 1));
-                    Ms::TimeSig* ts = new Ms::TimeSig(s);
+                    Ms::TimeSig* ts = mu::engraving::Factory::createTimeSig(s);
                     ts->setTrack(staffIdx * Ms::VOICES);
                     ts->setSig(timesig, scoreOptions.timesigType);
                     s->add(ts);

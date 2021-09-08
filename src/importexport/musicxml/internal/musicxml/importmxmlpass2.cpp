@@ -3979,7 +3979,7 @@ void MusicXMLParserPass2::time(const QString& partId, Measure* measure, const Fr
             Fraction fractionTSig = Fraction(bts, btp);
             for (int i = 0; i < _pass1.getPart(partId)->nstaves(); ++i) {
                 Segment* s = measure->getSegment(SegmentType::TimeSig, tick);
-                TimeSig* timesig = new TimeSig(s);
+                TimeSig* timesig = Factory::createTimeSig(s);
                 timesig->setVisible(printObject);
                 int track = _pass1.trackForPart(partId) + i * VOICES;
                 timesig->setTrack(track);
@@ -4263,7 +4263,7 @@ static void addTremolo(ChordRest* cr,
         //qDebug("tremolo %d type '%s' ticks %d tremStart %p", tremoloNr, qPrintable(tremoloType), ticks, _tremStart);
         if (tremoloNr == 1 || tremoloNr == 2 || tremoloNr == 3 || tremoloNr == 4) {
             if (tremoloType == "" || tremoloType == "single") {
-                const auto tremolo = new Tremolo(Ms::toChord(cr));
+                const auto tremolo = Factory::createTremolo(Ms::toChord(cr));
                 switch (tremoloNr) {
                 case 1: tremolo->setTremoloType(TremoloType::R8);
                     break;
@@ -4286,7 +4286,7 @@ static void addTremolo(ChordRest* cr,
                 }
             } else if (tremoloType == "stop") {
                 if (tremStart) {
-                    const auto tremolo = new Tremolo(Ms::toChord(cr));
+                    const auto tremolo = Factory::createTremolo(Ms::toChord(cr));
                     switch (tremoloNr) {
                     case 1: tremolo->setTremoloType(TremoloType::C8);
                         break;

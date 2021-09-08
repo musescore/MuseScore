@@ -24,12 +24,14 @@
 
 #include "testbase.h"
 
+#include "libmscore/factory.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/measure.h"
 #include "libmscore/undo.h"
 
 static const QString CLEF_DATA_DIR("clef_data/");
 
+using namespace mu::engraving;
 using namespace Ms;
 
 //---------------------------------------------------------
@@ -79,7 +81,7 @@ void TestClef::clef2()
     Measure* m = score->firstMeasure();
     m = m->nextMeasure();
     m = m->nextMeasure();
-    TimeSig* ts = new TimeSig(score->dummy()->segment());
+    TimeSig* ts = Factory::createTimeSig(score->dummy()->segment());
     ts->setSig(Fraction(2, 4));
     score->cmdAddTimeSig(m, 0, ts, false);
 

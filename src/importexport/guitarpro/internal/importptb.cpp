@@ -895,7 +895,7 @@ void PowerTab::addToScore(ptSection& sec)
                 auto staffType = staff->staffType(Fraction(0, 1));
                 if (staffType->genTimesig()) {
                     Segment* s = measure->getSegment(SegmentType::TimeSig, measure->tick());
-                    auto t = new TimeSig(s);
+                    auto t = Factory::createTimeSig(s);
                     t->setTrack(staffIdx * VOICES);
                     t->setSig(lastTS);
                     s->add(t);
