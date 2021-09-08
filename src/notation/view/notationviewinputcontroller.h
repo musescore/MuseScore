@@ -123,8 +123,6 @@ private:
 
     bool needSelect(const QMouseEvent* event, const PointF& clickLogicPos) const;
 
-    double guiScalling() const;
-
     IControlledView* m_view = nullptr;
 
     QList<int> m_possibleZoomsPercentage;

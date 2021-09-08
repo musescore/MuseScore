@@ -628,8 +628,3 @@ mu::PointF NotationViewInputController::hitElementPos() const
     }
     return mu::PointF();
 }
-
-double NotationViewInputController::guiScalling() const
-{
-    return configuration()->guiScaling();
-}
