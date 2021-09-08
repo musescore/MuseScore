@@ -48,7 +48,6 @@ using namespace mu::notation;
 
 Notation::Notation(Ms::Score* score)
 {
-    m_scoreGlobal = new Ms::MScore(); //! TODO May be static?
     m_opened.val = false;
 
     m_undoStack = std::make_shared<NotationUndoStack>(this, m_notationChanged);
@@ -136,11 +135,6 @@ void Notation::setScore(Ms::Score* score)
         static_cast<NotationInteraction*>(m_interaction.get())->init();
         static_cast<NotationPlayback*>(m_playback.get())->init();
     }
-}
-
-Ms::MScore* Notation::scoreGlobal() const
-{
-    return m_scoreGlobal;
 }
 
 QString Notation::title() const

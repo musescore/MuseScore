@@ -73,7 +73,6 @@ public:
 protected:
     Ms::Score* score() const override;
     void setScore(Ms::Score* score);
-    Ms::MScore* scoreGlobal() const;
     void notifyAboutNotationChanged();
 
     INotationPartsPtr m_parts = nullptr;
@@ -89,7 +88,6 @@ private:
     QSizeF viewSize() const;
 
     QSizeF m_viewSize;
-    Ms::MScore* m_scoreGlobal = nullptr;
     Ms::Score* m_score = nullptr;
     ValCh<bool> m_opened;
 
