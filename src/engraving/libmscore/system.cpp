@@ -612,7 +612,9 @@ Bracket* System::createBracket(Ms::BracketItem* bi, int column, int staffIdx, QL
     // do not show bracket if it only spans one
     // system due to some invisible staves
     //
-    if ((span > 1) || (bi->bracketSpan() == span) || (span == 1 && score()->styleB(Sid::alwaysShowBracketsWhenEmptyStavesAreHidden))) {
+    if (span > 1
+        || (bi->bracketSpan() == span)
+        || (span == 1 && score()->styleB(Sid::alwaysShowBracketsWhenEmptyStavesAreHidden))) {
         //
         // this bracket is visible
         //
