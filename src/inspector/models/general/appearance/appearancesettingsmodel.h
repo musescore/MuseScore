@@ -24,10 +24,14 @@
 
 #include "models/abstractinspectormodel.h"
 
+#include "notation/inotationconfiguration.h"
+
 namespace mu::inspector {
 class AppearanceSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
+
+    INJECT(inspector, notation::INotationConfiguration, notationConfiguration)
 
     Q_PROPERTY(PropertyItem * leadingSpace READ leadingSpace CONSTANT)
     Q_PROPERTY(PropertyItem * barWidth READ barWidth CONSTANT)
@@ -75,9 +79,6 @@ private:
     PropertyItem* m_arrangeOrder = nullptr;
     PropertyItem* m_horizontalOffset = nullptr;
     PropertyItem* m_verticalOffset = nullptr;
-
-    bool m_verticallySnapToGrid = false;
-    bool m_horizontallySnapToGrid = false;
 };
 }
 

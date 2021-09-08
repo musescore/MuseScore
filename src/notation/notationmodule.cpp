@@ -47,6 +47,7 @@
 #include "view/notationtoolbarmodel.h"
 #include "view/notationnavigator.h"
 #include "view/selectionfiltermodel.h"
+#include "view/editgridsizedialogmodel.h"
 
 #include "ui/iinteractiveuriregister.h"
 #include "ui/uitypes.h"
@@ -151,6 +152,9 @@ void NotationModule::resolveImports()
 
         ir->registerUri(Uri("musescore://notation/selectmeasurescount"),
                         ContainerMeta(ContainerType::QmlDialog, "MuseScore/NotationScene/SelectMeasuresCountDialog.qml"));
+
+        ir->registerUri(Uri("musescore://notation/editgridsize"),
+                        ContainerMeta(ContainerType::QmlDialog, "MuseScore/NotationScene/EditGridSizeDialog.qml"));
     }
 }
 
@@ -173,6 +177,7 @@ void NotationModule::registerUiTypes()
     qmlRegisterType<UndoRedoModel>("MuseScore.NotationScene", 1, 0, "UndoRedoModel");
     qmlRegisterType<TimelineView>("MuseScore.NotationScene", 1, 0, "TimelineView");
     qmlRegisterType<SelectionFilterModel>("MuseScore.NotationScene", 1, 0, "SelectionFilterModel");
+    qmlRegisterType<EditGridSizeDialogModel>("MuseScore.NotationScene", 1, 0, "EditGridSizeDialogModel");
 
     qRegisterMetaType<EditStyle>("EditStyle");
     qRegisterMetaType<EditStaff>("EditStaff");

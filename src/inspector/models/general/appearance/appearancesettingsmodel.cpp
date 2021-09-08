@@ -26,6 +26,8 @@
 #include "translation.h"
 
 using namespace mu::inspector;
+using namespace mu::actions;
+using namespace mu::framework;
 
 static constexpr int REARRANGE_ORDER_STEP = 100;
 
@@ -79,6 +81,8 @@ void AppearanceSettingsModel::loadProperties()
     loadPropertyItem(m_verticalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
         return DataFormatter::roundDouble(elementPropertyValue.toPointF().y());
     });
+
+    emit isSnappedToGridChanged(isSnappedToGrid());
 }
 
 void AppearanceSettingsModel::resetProperties()
@@ -104,7 +108,7 @@ void AppearanceSettingsModel::pushFrontInOrder()
 
 void AppearanceSettingsModel::configureGrid()
 {
-    NOT_IMPLEMENTED;
+    dispatcher()->dispatch("config-raster");
 }
 
 PropertyItem* AppearanceSettingsModel::leadingSpace() const
@@ -144,7 +148,10 @@ PropertyItem* AppearanceSettingsModel::verticalOffset() const
 
 bool AppearanceSettingsModel::isSnappedToGrid() const
 {
-    return m_horizontallySnapToGrid && m_verticallySnapToGrid;
+    bool isSnapped = notationConfiguration()->isSnappedToGrid(Orientation::Horizontal);
+    isSnapped &= notationConfiguration()->isSnappedToGrid(Orientation::Vertical);
+
+    return isSnapped;
 }
 
 void AppearanceSettingsModel::setIsSnappedToGrid(bool isSnapped)
@@ -153,12 +160,8 @@ void AppearanceSettingsModel::setIsSnappedToGrid(bool isSnapped)
         return;
     }
 
-    m_horizontallySnapToGrid = isSnapped;
-    m_verticallySnapToGrid = isSnapped;
-
-    NOT_IMPLEMENTED;
-    //updateHorizontalGridSnapping(isSnapped);
-    //updateVerticalGridSnapping(isSnapped);
+    notationConfiguration()->setIsSnappedToGrid(Orientation::Horizontal, isSnapped);
+    notationConfiguration()->setIsSnappedToGrid(Orientation::Vertical, isSnapped);
 
     emit isSnappedToGridChanged(isSnappedToGrid());
 }

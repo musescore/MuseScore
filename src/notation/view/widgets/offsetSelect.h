@@ -35,7 +35,6 @@ public:
     void setSuffix(const QString&);
     QPointF offset() const;
     void setOffset(const QPointF&);
-    void showRaster(bool);
 
 signals:
     void offsetChanged(const QPointF&);
