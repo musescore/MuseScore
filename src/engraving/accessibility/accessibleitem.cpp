@@ -36,13 +36,12 @@ AccessibleItem::AccessibleItem(Ms::EngravingItem* e)
 AccessibleItem::~AccessibleItem()
 {
     AccessibleScore* ascore = accessibleScore();
-    m_element = nullptr;
 
     if (!ascore) {
         return;
     }
 
-    if (m_registred) {
+    if (m_registred && accessibilityController()) {
         accessibilityController()->unreg(this);
         m_registred = false;
     }
@@ -50,6 +49,8 @@ AccessibleItem::~AccessibleItem()
     if (ascore->focusedElement() == this) {
         ascore->setFocusedElement(nullptr);
     }
+
+    m_element = nullptr;
 }
 
 AccessibleItem* AccessibleItem::clone(Ms::EngravingItem* e) const
@@ -59,8 +60,10 @@ AccessibleItem* AccessibleItem::clone(Ms::EngravingItem* e) const
 
 void AccessibleItem::setup()
 {
-    accessibilityController()->reg(this);
-    m_registred = true;
+    if (accessibilityController()) {
+        accessibilityController()->reg(this);
+        m_registred = true;
+    }
 }
 
 bool AccessibleItem::isAvalaible() const
@@ -131,12 +134,8 @@ void AccessibleItem::notifyAboutFocus(bool focused)
 
 const IAccessible* AccessibleItem::accessibleParent() const
 {
-    if (!m_element) {
-        return nullptr;
-    }
-
     Ms::EngravingItem* p = m_element->parentElement();
-    IF_ASSERT_FAILED(p) {
+    if (!p) {
         return nullptr;
     }
     return p->accessible();

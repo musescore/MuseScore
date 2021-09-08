@@ -45,6 +45,7 @@
 #include "utils.h"
 #include "excerpt.h"
 #include "part.h"
+#include "linkedobjects.h"
 
 #include "log.h"
 
@@ -586,7 +587,7 @@ void MasterScore::addExcerpt(Excerpt* ex, int index)
     int nstaves { 1 }; // Initialise to 1 to force writing of the first part.
     QList<ID> assignedStavesIds;
     for (Staff* excerptStaff : score->staves()) {
-        const LinkedElements* ls = excerptStaff->links();
+        const LinkedObjects* ls = excerptStaff->links();
         if (ls == 0) {
             continue;
         }

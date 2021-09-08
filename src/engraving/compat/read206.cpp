@@ -89,6 +89,7 @@
 #include "libmscore/marker.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/factory.h"
+#include "libmscore/linkedobjects.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -1922,7 +1923,7 @@ static void convertDoubleArticulations(Chord* chord, XmlReader& e)
         for (Articulation* a : pairableArticulations) {
             chord->remove(a);
             if (a != newArtic) {
-                if (LinkedElements* link = a->links()) {
+                if (LinkedObjects* link = a->links()) {
                     e.linkIds().remove(link->lid());
                 }
                 delete a;
@@ -3443,7 +3444,7 @@ Score::FileError Read206::read206(Ms::MasterScore* masterScore, XmlReader& e)
     masterScore->setEnableVerticalSpread(false);
 
     int id = 1;
-    for (LinkedElements* le : e.linkIds()) {
+    for (LinkedObjects* le : e.linkIds()) {
         le->setLid(masterScore, id++);
     }
 

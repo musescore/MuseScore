@@ -46,6 +46,7 @@
 #include "chord.h"
 #include "masterscore.h"
 #include "excerpt.h"
+#include "linkedobjects.h"
 
 // #define DEBUG_CLEFS
 
@@ -1500,7 +1501,7 @@ QList<Staff*> Staff::staffList() const
 
 Staff* Staff::primaryStaff() const
 {
-    const Ms::LinkedElements* linkedElements = links();
+    const Ms::LinkedObjects* linkedElements = links();
     if (!linkedElements) {
         return nullptr;
     }

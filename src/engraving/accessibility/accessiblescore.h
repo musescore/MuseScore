@@ -38,9 +38,6 @@ public:
     AccessibleScore(Ms::Score* score);
     ~AccessibleScore();
 
-    void addChild(AccessibleItem* e);
-    void removeChild(AccessibleItem* e);
-
     void setActive(bool arg);
 
     void setFocusedElement(AccessibleItem* e);

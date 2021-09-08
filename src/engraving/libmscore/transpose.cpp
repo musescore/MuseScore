@@ -36,6 +36,7 @@
 #include "measure.h"
 #include "fret.h"
 #include "part.h"
+#include "linkedobjects.h"
 
 using namespace mu;
 using namespace mu::engraving;

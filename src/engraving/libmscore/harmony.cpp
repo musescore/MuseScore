@@ -42,6 +42,7 @@
 #include "staff.h"
 #include "system.h"
 #include "utils.h"
+#include "linkedobjects.h"
 
 using namespace mu;
 

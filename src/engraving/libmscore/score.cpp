@@ -84,6 +84,7 @@
 #include "scorefont.h"
 #include "scoreorder.h"
 #include "glissando.h"
+#include "linkedobjects.h"
 
 #include "bracket.h"
 #include "audio.h"

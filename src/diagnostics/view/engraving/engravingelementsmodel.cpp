@@ -187,6 +187,7 @@ QVariant EngravingElementsModel::makeData(const Ms::EngravingObject* el) const
     }
 
     d["selected"] = elementsProvider()->isSelected(el);
+    d["children"] = static_cast<int>(el->children().size());
 
     if (el->isEngravingItem()) {
         const Ms::EngravingItem* item = Ms::toEngravingItem(el);

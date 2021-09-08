@@ -92,7 +92,7 @@ class Instrument;
 class KeyList;
 class KeySig;
 class KeySigEvent;
-class LinkedElements;
+class LinkedObjects;
 class Lyrics;
 class MasterSynthesizer;
 class Measure;

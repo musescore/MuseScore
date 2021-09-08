@@ -29,34 +29,10 @@ using namespace mu::accessibility;
 AccessibleScore::AccessibleScore(Ms::Score* score)
     : m_score(score)
 {
-    accessibilityController()->reg(this);
-    m_registred = true;
 }
 
 AccessibleScore::~AccessibleScore()
 {
-    accessibilityController()->unreg(this);
-}
-
-void AccessibleScore::addChild(AccessibleItem* e)
-{
-    IF_ASSERT_FAILED(!m_children.contains(e)) {
-        return;
-    }
-
-    m_children.append(e);
-    accessibilityController()->reg(e);
-    e->setRegistred(true);
-}
-
-void AccessibleScore::removeChild(AccessibleItem* e)
-{
-    IF_ASSERT_FAILED(m_children.contains(e)) {
-        return;
-    }
-    m_children.removeOne(e);
-    accessibilityController()->unreg(e);
-    e->setRegistred(false);
 }
 
 void AccessibleScore::setActive(bool arg)

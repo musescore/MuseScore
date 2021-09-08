@@ -37,7 +37,7 @@ class AccessibleItem : public accessibility::IAccessible
     INJECT_STATIC(engraving, accessibility::IAccessibilityController, accessibilityController)
 
 public:
-    AccessibleItem(Ms::EngravingItem* e = nullptr);
+    AccessibleItem(Ms::EngravingItem* e);
     virtual ~AccessibleItem();
     virtual AccessibleItem* clone(Ms::EngravingItem* e) const;
 
