@@ -159,6 +159,12 @@ public:
     io::paths userScoreOrderListPaths() const override;
     void setUserScoreOrderListPaths(const io::paths& paths) override;
 
+    bool isSnappedToGrid(framework::Orientation gridOrientation) const override;
+    void setIsSnappedToGrid(framework::Orientation gridOrientation, bool isSnapped) override;
+
+    int gridSizeSpatium(framework::Orientation gridOrientation) const override;
+    void setGridSize(framework::Orientation gridOrientation, int sizeSpatium) override;
+
 private:
     io::path firstInstrumentListPath() const;
     void setFirstInstrumentListPath(const io::path& path);

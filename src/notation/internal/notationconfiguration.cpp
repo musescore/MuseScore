@@ -84,6 +84,13 @@ static const Settings::Key SECOND_INSTRUMENT_LIST_KEY(module_name, "application/
 static const Settings::Key FIRST_SCORE_ORDER_LIST_KEY(module_name, "application/paths/scoreOrderList1");
 static const Settings::Key SECOND_SCORE_ORDER_LIST_KEY(module_name, "application/paths/scoreOrderList2");
 
+static const Settings::Key IS_SNAPPED_TO_VERTICAL_GRID_KEY(module_name,  "ui/application/raster/isSnappedToVerticalGrid");
+static const Settings::Key IS_SNAPPED_TO_HORIZONTAL_GRID_KEY(module_name,  "ui/application/raster/isSnappedToHorizontalGrid");
+static const Settings::Key HORIZONTAL_GRID_SIZE_KEY(module_name,  "ui/application/raster/horizontal");
+static const Settings::Key VERTICAL_GRID_SIZE_KEY(module_name,  "ui/application/raster/vertical");
+
+static constexpr int DEFAULT_GRID_SIZE_SPATIUM = 2;
+
 void NotationConfiguration::init()
 {
     settings()->setDefaultValue(BACKGROUND_USE_COLOR, Val(true));
@@ -191,8 +198,14 @@ void NotationConfiguration::init()
         m_scoreOrderListPathsChanged.notify();
     });
 
+    settings()->setDefaultValue(HORIZONTAL_GRID_SIZE_KEY, Val(DEFAULT_GRID_SIZE_SPATIUM));
+    settings()->setDefaultValue(VERTICAL_GRID_SIZE_KEY, Val(DEFAULT_GRID_SIZE_SPATIUM));
+
     Ms::MScore::warnPitchRange = colorNotesOusideOfUsablePitchRange();
     Ms::MScore::defaultPlayDuration = notePlayDurationMilliseconds();
+
+    Ms::MScore::setHRaster(DEFAULT_GRID_SIZE_SPATIUM);
+    Ms::MScore::setVRaster(DEFAULT_GRID_SIZE_SPATIUM);
 }
 
 QColor NotationConfiguration::anchorLineColor() const
@@ -691,6 +704,52 @@ void NotationConfiguration::setUserScoreOrderListPaths(const io::paths& paths)
     setFirstScoreOrderListPath(paths[0]);
     if (paths.size() > 1) {
         setSecondScoreOrderListPath(paths[1]);
+    }
+}
+
+bool NotationConfiguration::isSnappedToGrid(Orientation gridOrientation) const
+{
+    switch (gridOrientation) {
+    case Orientation::Horizontal: return settings()->value(IS_SNAPPED_TO_HORIZONTAL_GRID_KEY).toBool();
+    case Orientation::Vertical: return settings()->value(IS_SNAPPED_TO_VERTICAL_GRID_KEY).toBool();
+    }
+
+    return false;
+}
+
+void NotationConfiguration::setIsSnappedToGrid(Orientation gridOrientation, bool isSnapped)
+{
+    switch (gridOrientation) {
+    case Orientation::Horizontal:
+        settings()->setSharedValue(IS_SNAPPED_TO_HORIZONTAL_GRID_KEY, Val(isSnapped));
+        break;
+    case Orientation::Vertical:
+        settings()->setSharedValue(IS_SNAPPED_TO_VERTICAL_GRID_KEY, Val(isSnapped));
+        break;
+    }
+}
+
+int NotationConfiguration::gridSizeSpatium(Orientation gridOrientation) const
+{
+    switch (gridOrientation) {
+    case Orientation::Horizontal: return settings()->value(HORIZONTAL_GRID_SIZE_KEY).toInt();
+    case Orientation::Vertical: return settings()->value(VERTICAL_GRID_SIZE_KEY).toInt();
+    }
+
+    return DEFAULT_GRID_SIZE_SPATIUM;
+}
+
+void NotationConfiguration::setGridSize(Orientation gridOrientation, int sizeSpatium)
+{
+    switch (gridOrientation) {
+    case Orientation::Horizontal:
+        Ms::MScore::setHRaster(sizeSpatium);
+        settings()->setSharedValue(HORIZONTAL_GRID_SIZE_KEY, Val(sizeSpatium));
+        break;
+    case Orientation::Vertical:
+        Ms::MScore::setVRaster(sizeSpatium);
+        settings()->setSharedValue(VERTICAL_GRID_SIZE_KEY, Val(sizeSpatium));
+        break;
     }
 }
 

@@ -209,6 +209,7 @@ void NotationActionController::init()
     registerAction("staff-text-properties", &NotationActionController::openStaffTextPropertiesDialog);
     registerAction("system-text-properties", &NotationActionController::openStaffTextPropertiesDialog);
     registerAction("measure-properties", &NotationActionController::openMeasurePropertiesDialog);
+    registerAction("config-raster", &NotationActionController::openEditGridSizeDialog);
 
     registerAction("voice-x12", [this]() { swapVoices(0, 1); });
     registerAction("voice-x13", [this]() { swapVoices(0, 2); });
@@ -1585,6 +1586,11 @@ void NotationActionController::openStaffTextPropertiesDialog()
 void NotationActionController::openMeasurePropertiesDialog()
 {
     interactive()->open("musescore://notation/measureproperties");
+}
+
+void NotationActionController::openEditGridSizeDialog()
+{
+    interactive()->open("musescore://notation/editgridsize");
 }
 
 void NotationActionController::toggleScoreConfig(ScoreConfigType configType)

@@ -78,7 +78,7 @@ void TimeSignatureSettingsModel::resetProperties()
 
 void TimeSignatureSettingsModel::showTimeSignatureProperties()
 {
-    NOT_IMPLEMENTED;
+    dispatcher()->dispatch("time-signature-properties");
 }
 
 PropertyItem* TimeSignatureSettingsModel::horizontalScale() const

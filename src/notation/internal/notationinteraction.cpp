@@ -65,6 +65,7 @@
 #include "notationselection.h"
 
 using namespace mu::notation;
+using namespace mu::framework;
 
 NotationInteraction::NotationInteraction(Notation* notation, INotationUndoStackPtr undoStack)
     : m_notation(notation), m_undoStack(undoStack), m_gripEditData(&m_scoreCallbacks),
@@ -720,12 +721,13 @@ void NotationInteraction::drag(const PointF& fromPos, const PointF& toPos, DragM
     }
 
     m_dragData.ed.lastPos = m_dragData.ed.pos;
-    m_dragData.ed.hRaster = false;    //mscore->hRaster();
-    m_dragData.ed.vRaster = false;    //mscore->vRaster();
-    m_dragData.ed.delta   = delta;
+
+    m_dragData.ed.hRaster = configuration()->isSnappedToGrid(Orientation::Horizontal);
+    m_dragData.ed.vRaster = configuration()->isSnappedToGrid(Orientation::Vertical);
+    m_dragData.ed.delta = delta;
     m_dragData.ed.moveDelta = delta - m_dragData.elementOffset;
     m_dragData.ed.evtDelta = evtDelta;
-    m_dragData.ed.pos     = toPos;
+    m_dragData.ed.pos = toPos;
 
     if (isTextEditingStarted()) {
         m_textEditData.pos = toPos;
