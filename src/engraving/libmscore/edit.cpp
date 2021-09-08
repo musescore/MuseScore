@@ -1116,7 +1116,7 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, int staffIdx)
         if (!s->element(i * VOICES)) {
             TimeSig* ots = staff(i)->timeSig(nm->tick());
             if (ots) {
-                TimeSig* nts = new TimeSig(*ots);
+                TimeSig* nts = Factory::copyTimeSig(*ots);
                 nts->setParent(s);
                 if (sectionBreak) {
                     nts->setGenerated(false);
@@ -1279,7 +1279,7 @@ void Score::cmdAddTimeSig(Measure* fm, int staffIdx, TimeSig* ts, bool local)
                 }
                 TimeSig* nsig = toTimeSig(seg->element(si * VOICES));
                 if (nsig == 0) {
-                    nsig = new TimeSig(*ts);
+                    nsig = Factory::copyTimeSig(*ts);
                     nsig->setScore(score);
                     nsig->setTrack(si * VOICES);
                     nsig->setParent(seg);
@@ -2760,7 +2760,7 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
             if (!s && changed) {
                 Segment* ns = mAfterSel->undoGetSegment(SegmentType::TimeSig, mAfterSel->tick());
                 for (int staffIdx = 0; staffIdx < score->nstaves(); staffIdx++) {
-                    TimeSig* nts = new TimeSig(ns);
+                    TimeSig* nts = Factory::createTimeSig(ns);
                     nts->setTrack(staffIdx * VOICES);
                     nts->setParent(ns);
                     nts->setSig(lastDeletedSig->sig(), lastDeletedSig->timeSigType());
@@ -3682,7 +3682,7 @@ void Score::insertMeasure(ElementType type, MeasureBase* measure, bool createEmp
             // move clef, time, key signatrues
             //
             for (TimeSig* ts : tsl) {
-                TimeSig* nts = new TimeSig(*ts);
+                TimeSig* nts = Factory::copyTimeSig(*ts);
                 Segment* s   = m->undoGetSegmentR(SegmentType::TimeSig, Fraction(0, 1));
                 nts->setParent(s);
                 undoAddElement(nts);

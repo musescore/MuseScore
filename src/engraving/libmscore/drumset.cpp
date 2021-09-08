@@ -256,7 +256,7 @@ DrumInstrumentVariant Drumset::findVariant(int p, const QVector<Articulation*> a
 //   pitch
 /// find a variant for the given pitch with matching chord articulation and tremolo
 //---------------------------------------------------------
-int Drumset::pitch(int element, int variation, const QString& name) const
+int Drumset::pitch(int /*element*/, int /*variation*/, const QString& /*name*/) const
 {
 //    for (const auto& [key, drum] : _drum) {
 //        if (drum.element == element && drum.variation == variation) {

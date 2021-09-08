@@ -297,11 +297,13 @@ std::vector<GPMasterTracks::Automation> GP67DomBuilder::readTempoMap(QDomNode* c
 
 std::unique_ptr<GPMasterTracks> GP67DomBuilder::createGPMasterTrack(QDomNode* metadata)
 {
+    UNUSED(metadata);
     return std::make_unique<GPMasterTracks>();
 }
 
 std::unique_ptr<GPAudioTrack> GP67DomBuilder::createGPAudioTrack(QDomNode* metadata)
 {
+    UNUSED(metadata);
     return nullptr;
 }
 

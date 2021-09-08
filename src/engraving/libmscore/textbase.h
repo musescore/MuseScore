@@ -301,6 +301,10 @@ class TextBase : public EngravingItem
     static QString getHtmlEndTag(Ms::FontStyle, Ms::VerticalAlignment);
 
 protected:
+    TextBase(const ElementType& type, EngravingObject* parent = 0, Tid tid = Tid::DEFAULT, ElementFlags = ElementFlag::NOTHING);
+    TextBase(const ElementType& type, EngravingObject* parent, ElementFlags);
+    TextBase(const TextBase&);
+
     mu::draw::Color textColor() const;
     mu::RectF frame;             // calculated in layout()
     void layoutFrame();
@@ -311,9 +315,7 @@ protected:
     bool prepareFormat(const QString& token, Ms::CharFormat& format);
 
 public:
-    TextBase(const ElementType& type, EngravingObject* parent = 0, Tid tid = Tid::DEFAULT, ElementFlags = ElementFlag::NOTHING);
-    TextBase(const ElementType& type, EngravingObject* parent, ElementFlags);
-    TextBase(const TextBase&);
+
     ~TextBase();
 
     virtual bool mousePress(EditData&) override;

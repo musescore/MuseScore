@@ -516,7 +516,7 @@ static bool findChordRests(BasicDrawObj const* const o, Score* score, const int 
 static Segment* createAndAddTimeSig(Score*, Measure* m, Fraction f, int track, Fraction tick)
 {
     auto s = m->getSegment(SegmentType::TimeSig, tick);
-    TimeSig* ts = new TimeSig(s);
+    TimeSig* ts = Factory::createTimeSig(s);
     ts->setSig(f);
     ts->setTrack(track);
     s->add(ts);

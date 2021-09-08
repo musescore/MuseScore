@@ -353,7 +353,7 @@ void GPConverter::addTimeSig(const GPMasterBar* mB, Measure* measure)
     for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
         Staff* staff = _score->staff(staffIdx);
         if (staff->staffType()->genTimesig()) {
-            TimeSig* t = new TimeSig(_score->dummy()->segment());
+            TimeSig* t = Factory::createTimeSig(_score->dummy()->segment());
             t->setTrack(staffIdx * VOICES);
             t->setSig(scoreTimeSig);
             Segment* s = measure->getSegment(SegmentType::TimeSig, tick);
@@ -529,7 +529,7 @@ void GPConverter::addSection(const GPMasterBar* mB, Measure* measure)
     }
 }
 
-void GPConverter::addTripletFeel(const GPMasterBar* mB, Measure* measure)
+void GPConverter::addTripletFeel(const GPMasterBar* mB, Measure* /*measure*/)
 {
     if (mB->tripletFeel() == _lastTripletFeel) {
         return; // if last triplet of last measure is equal current dont create new staff text
@@ -799,7 +799,7 @@ void GPConverter::addTempoMap()
     }
 }
 
-bool GPConverter::addSimileMark(const GPBar* bar, int curTrack)
+bool GPConverter::addSimileMark(const GPBar* bar, int /*curTrack*/)
 {
     //!@NOTE add simile mark
     return false;
@@ -939,7 +939,7 @@ void GPConverter::addFingering(const GPNote* gpnote, Note* note)
     }
 }
 
-void GPConverter::addTrill(const GPNote* gpnote, Note* note)
+void GPConverter::addTrill(const GPNote* gpnote, Note* /*note*/)
 {
     if (gpnote->trill().auxillaryFret == -1) {
         return;
@@ -1382,7 +1382,7 @@ void GPConverter::setPitch(Note* note, const GPNote::MidiPitch& midiPitch)
     note->setTpcFromPitch();
 }
 
-int GPConverter::calculateDrumPitch(int element, int variation, const QString& instrumentName)
+int GPConverter::calculateDrumPitch(int element, int variation, const QString& /*instrumentName*/)
 {
     //!@NOTE copied from importgtp-gp6.cpp.
 
@@ -1878,7 +1878,7 @@ void GPConverter::addTremolo(const GPBeat* beat, ChordRest* cr)
         }
     };
 
-    Tremolo* t = new Tremolo(_score->dummy()->chord());
+    Tremolo* t = Factory::createTremolo(_score->dummy()->chord());
     t->setTremoloType(scoreTremolo(beat->tremolo()));
     cr->add(t);
 }

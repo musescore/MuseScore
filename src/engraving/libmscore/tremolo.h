@@ -57,14 +57,16 @@ class Tremolo final : public EngravingItem
     int _lines;         // derived from _subtype
     TremoloStyle _style { TremoloStyle::DEFAULT };
 
+    friend class mu::engraving::Factory;
+    Tremolo(Chord* parent);
+    Tremolo(const Tremolo&);
+
     mu::PainterPath basePath() const;
     void computeShape();
     void layoutOneNoteTremolo(qreal x, qreal y, qreal spatium);
     void layoutTwoNotesTremolo(qreal x, qreal y, qreal h, qreal spatium);
 
 public:
-    Tremolo(Chord* parent);
-    Tremolo(const Tremolo&);
 
     Tremolo& operator=(const Tremolo&) = delete;
     Tremolo* clone() const override { return new Tremolo(*this); }

@@ -1133,7 +1133,7 @@ static void readChord(Measure* m, Chord* chord, XmlReader& e)
                 chord->add(el);
             }
         } else if (tag == "Tremolo") {
-            Tremolo* tremolo = new Tremolo(chord);
+            Tremolo* tremolo = Factory::createTremolo(chord);
             tremolo->setDurationType(chord->durationType());
             chord->setTremolo(tremolo);
             tremolo->setTrack(chord->track());
@@ -1900,7 +1900,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
 
             segment->add(clef);
         } else if (tag == "TimeSig") {
-            TimeSig* ts = new TimeSig(m->score()->dummy()->segment());
+            TimeSig* ts = Factory::createTimeSig(m->score()->dummy()->segment());
             ts->setTrack(e.track());
             ts->read(e);
             // if time sig not at beginning of measure => courtesy time sig

@@ -1018,7 +1018,7 @@ void GuitarPro::createMeasures()
                 const StaffType* staffType = staff->staffType(Fraction(0, 1));             // at tick 0
                 if (staffType->genTimesig()) {
                     Segment* s = m->getSegment(SegmentType::TimeSig, tick);
-                    TimeSig* t = new TimeSig(s);
+                    TimeSig* t = Factory::createTimeSig(s);
                     t->setTrack(staffIdx * VOICES);
                     t->setSig(nts);
                     s->add(t);
@@ -1190,7 +1190,7 @@ bool GuitarPro1::read(QFile* fp)
         if (i == 0 || ts != nts) {
             for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
                 Segment* s = m->getSegment(SegmentType::TimeSig, tick);
-                TimeSig* t = new TimeSig(s);
+                TimeSig* t = Factory::createTimeSig(s);
                 t->setTrack(staffIdx * VOICES);
                 t->setSig(nts);
                 s->add(t);
@@ -1639,7 +1639,7 @@ bool GuitarPro2::read(QFile* fp)
         if (i == 0 || ts != nts) {
             for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
                 Segment* s = m->getSegment(SegmentType::TimeSig, tick);
-                TimeSig* t = new TimeSig(s);
+                TimeSig* t = Factory::createTimeSig(s);
                 t->setTrack(staffIdx * VOICES);
                 t->setSig(nts);
                 s->add(t);
@@ -2329,7 +2329,7 @@ bool GuitarPro3::read(QFile* fp)
         if (i == 0 || ts != nts) {
             for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
                 Segment* s = m->getSegment(SegmentType::TimeSig, tick);
-                TimeSig* t = new TimeSig(s);
+                TimeSig* t = Factory::createTimeSig(s);
                 t->setTrack(staffIdx * VOICES);
                 t->setSig(nts);
                 s->add(t);

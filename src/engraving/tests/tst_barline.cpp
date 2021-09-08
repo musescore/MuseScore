@@ -149,7 +149,7 @@ void TestBarline::barline02()
     Score* score = readScore(BARLINE_DATA_DIR + "barline02.mscx");
     QVERIFY(score);
     Measure* msr = score->firstMeasure()->nextMeasure();
-    TimeSig* ts  = new TimeSig(score->dummy()->segment());
+    TimeSig* ts  = Factory::createTimeSig(score->dummy()->segment());
     ts->setSig(Fraction(3, 4), TimeSigType::NORMAL);
 
     score->cmdAddTimeSig(msr, 0, ts, false);

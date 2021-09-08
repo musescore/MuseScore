@@ -1352,7 +1352,7 @@ bool NotationInteraction::applyPaletteElement(Ms::EngravingItem* element, Qt::Ke
                     }
                     case Ms::ElementType::TIMESIG:
                     {
-                        Ms::TimeSig* otimesig = new Ms::TimeSig(score->dummy()->segment());
+                        Ms::TimeSig* otimesig = engraving::Factory::createTimeSig(score->dummy()->segment());
                         otimesig->setFrom(staff->timeSig(tick1));
                         oelement = otimesig;
                         break;

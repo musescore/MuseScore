@@ -388,7 +388,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
         if (modMask2 & EFFECT_TREMOLO) {        // tremolo picking length
             int tremoloDivision = readUChar();
             Chord* chord = note->chord();
-            Tremolo* t = new Tremolo(chord);
+            Tremolo* t = Factory::createTremolo(chord);
             if (tremoloDivision == 1) {
                 t->setTremoloType(TremoloType::R8);
                 chord->add(t);

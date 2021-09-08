@@ -308,7 +308,7 @@ Chord::Chord(const Chord& c, bool link)
         }
     }
     if (c._tremolo) {
-        Tremolo* t = new Tremolo(*(c._tremolo));
+        Tremolo* t = Factory::copyTremolo(*(c._tremolo));
         if (link) {
             score()->undo(new Link(t, const_cast<Tremolo*>(c._tremolo)));
         }
@@ -1197,7 +1197,7 @@ bool Chord::readProperties(XmlReader& e)
         _arpeggio->read(e);
         _arpeggio->setParent(this);
     } else if (tag == "Tremolo") {
-        _tremolo = new Tremolo(this);
+        _tremolo = Factory::createTremolo(this);
         _tremolo->setTrack(track());
         _tremolo->read(e);
         _tremolo->setParent(this);
