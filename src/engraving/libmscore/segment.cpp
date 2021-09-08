@@ -2304,6 +2304,122 @@ qreal Segment::minLeft() const
     return distance;
 }
 
+std::pair<qreal, qreal> Segment::computeCellWidth(const std::vector<int>& visibleParts) const
+{
+    if (!this->enabled()) {
+        return { 0, 0 };
+    }
+
+    auto calculateWidth = [measure = measure(), score = masterScore()](ChordRest* cr) {
+        auto quantum = measure->quantumOfSegmentCell();
+        return score->widthOfSegmentCell()
+               * score->spatium()
+               * cr->globalTicks().numerator() / cr->globalTicks().denominator()
+               * quantum.denominator() / quantum.numerator();
+    };
+
+    if (isChordRestType()) {
+        float width{ 0 };
+        float spacing{ 0 };
+
+        ChordRest* cr{ nullptr };
+
+        cr = ChordRestWithMinDuration(this, visibleParts);
+
+        if (cr) {
+            width = calculateWidth(cr);
+
+            if (cr->type() == ElementType::REST) {
+                //spacing = 0; //!not necessary. It is to more clearly understanding code
+            } else if (cr->type() == ElementType::CHORD) {
+                Chord* ch = toChord(cr);
+
+                //! check that gracenote exist. If exist add additional spacing
+                //! to avoid colliding between grace note and previos chord
+                if (!ch->graceNotes().empty()) {
+                    Segment* prevSeg = prev();
+                    if (prevSeg && prevSeg->segmentType() == SegmentType::ChordRest) {
+                        ChordRest* prevCR = ChordRestWithMinDuration(prevSeg, visibleParts);
+
+                        if (prevCR && prevCR->globalTicks() < measure()->quantumOfSegmentCell()) {
+                            spacing = calculateWidth(prevCR);
+                            return { spacing, width };
+                        }
+                    }
+                }
+
+                //! check that accidental exist in the chord. If exist add additional spacing
+                //! to avoid colliding between grace note and previos chord
+                for (auto note : ch->notes()) {
+                    if (note->accidental()) {
+                        Segment* prevSeg = prev();
+                        if (prevSeg && prevSeg->segmentType() == SegmentType::ChordRest) {
+                            ChordRest* prevCR = ChordRestWithMinDuration(prevSeg, visibleParts);
+
+                            if (prevCR && prevCR->globalTicks() < measure()->quantumOfSegmentCell()) {
+                                spacing = calculateWidth(prevCR);
+                                return { spacing, width };
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return { spacing, width };
+    }
+
+    Segment* nextSeg = nextActive();
+    if (!nextSeg) {
+        nextSeg = next(SegmentType::BarLineType);
+    }
+
+    if (nextSeg) {
+        return { 0, minHorizontalDistance(nextSeg, false) };
+    }
+
+    return { 0, minRight() };
+}
+
+ChordRest* Segment::ChordRestWithMinDuration(const Segment* seg, const std::vector<int>& visibleParts)
+{
+    ChordRest* chordRestWithMinDuration{ nullptr };
+    int minTicks = std::numeric_limits<int>::max();
+    for (int partIdx : visibleParts) {
+        auto staves =  seg->score()->parts().at(partIdx)->staves();
+        for (auto stave : *staves) {
+            int staffIdx = stave->idx();
+            for (int voice = 0; voice < 4; voice++) {
+                if (auto element = seg->elist().at(staffIdx * 4 + voice)) {
+                    if (!element->isChordRest()) {
+                        continue;
+                    }
+
+                    ChordRest* cr = toChordRest(element);
+                    int chordTicks = cr->ticks().ticks();
+                    if (chordTicks > minTicks) {
+                        continue;
+                    }
+                    minTicks = chordTicks;
+                    chordRestWithMinDuration = cr;
+                }
+            }
+        }
+    }
+
+    return chordRestWithMinDuration;
+}
+
+void Segment::setSpacing(qreal val)
+{
+    m_spacing = val;
+}
+
+qreal Segment::spacing() const
+{
+    return m_spacing;
+}
+
 //---------------------------------------------------------
 //   minHorizontalCollidingDistance
 //    calculate the minimum distance to ns avoiding collisions
