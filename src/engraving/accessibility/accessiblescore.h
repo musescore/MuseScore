@@ -26,7 +26,7 @@
 #include "accessibility/iaccessible.h"
 #include "accessibility/iaccessibilitycontroller.h"
 
-#include "accessibleelement.h"
+#include "accessibleitem.h"
 #include "libmscore/masterscore.h"
 
 namespace mu::engraving {
@@ -38,13 +38,13 @@ public:
     AccessibleScore(Ms::Score* score);
     ~AccessibleScore();
 
-    void addChild(AccessibleElement* e);
-    void removeChild(AccessibleElement* e);
+    void addChild(AccessibleItem* e);
+    void removeChild(AccessibleItem* e);
 
     void setActive(bool arg);
 
-    void setFocusedElement(AccessibleElement* e);
-    AccessibleElement* focusedElement() const;
+    void setFocusedElement(AccessibleItem* e);
+    AccessibleItem* focusedElement() const;
 
     QRect toScreenRect(const QRect&, bool* ok = nullptr) const;
 
@@ -66,8 +66,8 @@ private:
     bool m_registred = false;
     bool m_active = false;
     mu::async::Channel<IAccessible::State, bool> m_accessibleStateChanged;
-    QList<AccessibleElement*> m_children;
-    AccessibleElement* m_focusedElement = nullptr;
+    QList<AccessibleItem*> m_children;
+    AccessibleItem* m_focusedElement = nullptr;
 };
 }
 

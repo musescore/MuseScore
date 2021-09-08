@@ -26,7 +26,7 @@
 #include "libmscore/page.h"
 #include "libmscore/score.h"
 
-#include "accessibility/accessibleelement.h"
+#include "accessibility/accessibleitem.h"
 
 #include "paintdebugger.h"
 
@@ -54,7 +54,7 @@ void Paint::initDebugger(mu::draw::Painter& painter, const Ms::EngravingItem* el
     }
 
     // Accessible
-    AccessibleElement* accessible = element->accessible();
+    AccessibleItem* accessible = element->accessible();
     if (accessible) {
         if (accessible->registred() && accessible->accessibleState(IAccessible::State::Focused)) {
             debugger->setDebugPenColor(draw::Color(255, 0, 0));

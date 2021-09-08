@@ -38,7 +38,7 @@ AccessibleScore::~AccessibleScore()
     accessibilityController()->unreg(this);
 }
 
-void AccessibleScore::addChild(AccessibleElement* e)
+void AccessibleScore::addChild(AccessibleItem* e)
 {
     IF_ASSERT_FAILED(!m_children.contains(e)) {
         return;
@@ -49,7 +49,7 @@ void AccessibleScore::addChild(AccessibleElement* e)
     e->setRegistred(true);
 }
 
-void AccessibleScore::removeChild(AccessibleElement* e)
+void AccessibleScore::removeChild(AccessibleItem* e)
 {
     IF_ASSERT_FAILED(m_children.contains(e)) {
         return;
@@ -69,11 +69,11 @@ void AccessibleScore::setActive(bool arg)
     m_accessibleStateChanged.send(State::Active, arg);
 }
 
-void AccessibleScore::setFocusedElement(AccessibleElement* e)
+void AccessibleScore::setFocusedElement(AccessibleItem* e)
 {
     setActive(true);
 
-    AccessibleElement* old = m_focusedElement;
+    AccessibleItem* old = m_focusedElement;
     m_focusedElement = nullptr;
 
     if (old) {
@@ -86,7 +86,7 @@ void AccessibleScore::setFocusedElement(AccessibleElement* e)
     }
 }
 
-AccessibleElement* AccessibleScore::focusedElement() const
+AccessibleItem* AccessibleScore::focusedElement() const
 {
     return m_focusedElement;
 }
