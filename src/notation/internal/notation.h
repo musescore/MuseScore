@@ -51,7 +51,6 @@ public:
 
     QString title() const override;
 
-    void setViewSize(const QSizeF& vs) override;
     void setViewMode(const ViewMode& viewMode) override;
     ViewMode viewMode() const override;
     void paint(draw::Painter* painter, const RectF& frameRect) override;
@@ -85,9 +84,6 @@ private:
     void paintPageBorder(mu::draw::Painter* painter, const Ms::Page* page) const;
     void paintForeground(mu::draw::Painter* painter, const RectF& pageRect) const;
 
-    QSizeF viewSize() const;
-
-    QSizeF m_viewSize;
     Ms::Score* m_score = nullptr;
     ValCh<bool> m_opened;
 
