@@ -19,12 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_PAINT_H
-#define MU_ENGRAVING_PAINT_H
-
-#include <QList>
+#ifndef MU_ENGRAVING_DEBUGPAINT_H
+#define MU_ENGRAVING_DEBUGPAINT_H
 
 #include "infrastructure/draw/painter.h"
+
+#include "modularity/ioc.h"
+#include "diagnostics/iengravingelementsprovider.h"
 
 namespace Ms {
 class EngravingItem;
@@ -32,15 +33,18 @@ class Page;
 }
 
 namespace mu::engraving {
-class Paint
+class PaintDebugger;
+class DebugPaint
 {
+    INJECT_STATIC(engraving, diagnostics::IEngravingElementsProvider, elementsProvider)
 public:
 
-    static void paintElement(mu::draw::Painter& painter, const Ms::EngravingItem* element);
-    static void paintElements(mu::draw::Painter& painter, const QList<Ms::EngravingItem*>& elements);
+    static void paintPageDiagnostic(mu::draw::Painter& painter, Ms::Page* page);
 
-    static void paintPage(mu::draw::Painter& painter, Ms::Page* page, const RectF& rect);
+private:
+    static void paintItems(mu::draw::Painter& painter, const std::list<const Ms::EngravingItem*>& items,
+                           std::shared_ptr<PaintDebugger>& debugger);
 };
 }
 
-#endif // MU_ENGRAVING_PAINT_H
+#endif // MU_ENGRAVING_DEBUGPAINT_H
