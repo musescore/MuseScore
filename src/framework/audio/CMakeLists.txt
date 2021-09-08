@@ -137,6 +137,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/sequenceio.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/track.h
 
+    # DSP
+    ${CMAKE_CURRENT_LIST_DIR}/internal/dsp/compressor.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/dsp/compressor.h
+
     # fx
     ${CMAKE_CURRENT_LIST_DIR}/internal/fx/fxresolver.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/fx/fxresolver.h

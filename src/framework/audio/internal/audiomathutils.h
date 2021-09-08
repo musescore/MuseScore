@@ -24,6 +24,7 @@
 #define MU_AUDIO_AUDIOMATHUTILS_H
 
 #include <cmath>
+#include <limits>
 
 #include "audiotypes.h"
 
@@ -41,6 +42,11 @@ inline float gainFromDecibels(const volume_dbfs_t volumeLevelDb)
 inline volume_dbfs_t dbFullScaleFromSample(const float signalValue)
 {
     return 20 * std::log10(std::abs(signalValue));
+}
+
+inline volume_db_t dbFromSample(const float signalValue)
+{
+    return 20 * std::log10(std::abs(signalValue) / std::numeric_limits<float>::max());
 }
 
 inline float samplesRootMeanSquare(float&& squaredSum, const samples_t sampleCount)
