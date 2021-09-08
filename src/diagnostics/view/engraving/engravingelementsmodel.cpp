@@ -28,6 +28,8 @@
 #include "engraving/libmscore/masterscore.h"
 #include "dataformatter.h"
 
+#include "log.h"
+
 using namespace mu::diagnostics;
 
 EngravingElementsModel::EngravingElementsModel(QObject* parent)
@@ -125,7 +127,12 @@ QVariant EngravingElementsModel::data(const QModelIndex& index, int role) const
         return QVariant();
     }
 
-    return item->data();
+    if (item == m_lostItem) {
+        QVariantMap lostData;
+        lostData["info"] = "Lost items";
+        return lostData;
+    }
+    return makeData(item->element());
 }
 
 QHash<int, QByteArray> EngravingElementsModel::roleNames() const
@@ -147,6 +154,7 @@ EngravingElementsModel::Item* EngravingElementsModel::itemByModelIndex(const QMo
 
 QVariant EngravingElementsModel::makeData(const Ms::EngravingObject* el) const
 {
+    TRACEFUNC;
     if (!el) {
         return QVariant();
     }
@@ -209,6 +217,8 @@ void EngravingElementsModel::init()
 
 void EngravingElementsModel::reload()
 {
+    TRACEFUNC;
+
     beginResetModel();
 
     m_allItems.clear();
@@ -224,16 +234,12 @@ void EngravingElementsModel::reload()
         if (el->isScore() && el->score() == el->masterScore()) {
             Item* scoreItem = createItem(m_rootItem);
             scoreItem->setElement(el);
-            scoreItem->setData(makeData(el));
             load(elements, scoreItem);
         }
     }
 
-    Item* lostItem = createItem(m_rootItem);
-    QVariantMap lostData;
-    lostData["info"] = "Lost items";
-    lostItem->setData(lostData);
-    findAndAddLost(elements, lostItem, m_rootItem);
+    m_lostItem = createItem(m_rootItem);
+    findAndAddLost(elements, m_lostItem);
 
     endResetModel();
 
@@ -242,6 +248,7 @@ void EngravingElementsModel::reload()
 
 void EngravingElementsModel::load(const std::list<const Ms::EngravingObject*>& elements, Item* root)
 {
+    TRACEFUNC;
     for (const Ms::EngravingObject* el : elements) {
         if (el == Ms::gpaletteScore) {
             continue;
@@ -257,7 +264,6 @@ void EngravingElementsModel::load(const std::list<const Ms::EngravingObject*>& e
         if (parent == root->element()) {
             Item* item = createItem(root);
             item->setElement(el);
-            item->setData(makeData(el));
             load(elements, item);
         }
     }
@@ -278,17 +284,23 @@ const EngravingElementsModel::Item* EngravingElementsModel::findItem(const Ms::E
     return nullptr;
 }
 
-void EngravingElementsModel::findAndAddLost(const std::list<const Ms::EngravingObject*>& elements, Item* lossRoot, const Item* root)
+void EngravingElementsModel::findAndAddLost(const std::list<const Ms::EngravingObject*>& elements, Item* lossRoot)
 {
+    TRACEFUNC;
+
+    QSet<const Ms::EngravingObject*> used;
+    for (auto it = m_allItems.begin(); it != m_allItems.end(); ++it) {
+        const Item& item = it.value();
+        used.insert(item.element());
+    }
+
     for (const Ms::EngravingObject* el : elements) {
-        const Item* it = findItem(el, root);
-        if (it) {
+        if (used.contains(el)) {
             continue;
         }
 
         Item* item = createItem(lossRoot);
         item->setElement(el);
-        item->setData(makeData(el));
     }
 }
 
@@ -300,7 +312,6 @@ void EngravingElementsModel::select(QModelIndex index, bool arg)
     }
 
     elementsProvider()->select(item->element(), arg);
-    item->setData(makeData(item->element()));
 
     emit dataChanged(index, index, { rItemData });
 
