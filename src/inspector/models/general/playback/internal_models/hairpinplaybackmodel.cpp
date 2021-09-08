@@ -29,6 +29,7 @@ HairpinPlaybackModel::HairpinPlaybackModel(QObject* parent, IElementRepositorySe
     : AbstractInspectorModel(parent, repository)
 {
     setTitle(qtrc("inspector", "Hairpins, crescendos & diminuendos"));
+    setModelType(InspectorModelType::TYPE_HAIRPIN);
 
     createProperties();
 }

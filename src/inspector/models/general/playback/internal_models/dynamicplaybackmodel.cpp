@@ -31,6 +31,7 @@ DynamicPlaybackModel::DynamicPlaybackModel(QObject* parent, IElementRepositorySe
     : AbstractInspectorModel(parent, repository)
 {
     setTitle(qtrc("inspector", "Dynamics"));
+    setModelType(InspectorModelType::TYPE_DYNAMIC);
 
     createProperties();
 }
