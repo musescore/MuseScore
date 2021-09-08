@@ -357,7 +357,7 @@ void TestNote::grace()
 
     // tremolo
     score->startCmd();
-    Tremolo* tr = new Tremolo(gc);
+    Tremolo* tr = Factory::createTremolo(gc);
     tr->setTremoloType(TremoloType::R16);
     tr->setParent(gc);
     tr->setTrack(gc->track());

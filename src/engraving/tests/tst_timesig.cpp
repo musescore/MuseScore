@@ -22,6 +22,8 @@
 
 #include "testing/qtestsuite.h"
 #include "testbase.h"
+
+#include "libmscore/factory.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/measure.h"
 #include "libmscore/timesig.h"
@@ -29,6 +31,7 @@
 
 static const QString TIMESIG_DATA_DIR("timesig_data/");
 
+using namespace mu::engraving;
 using namespace Ms;
 
 //---------------------------------------------------------
@@ -64,7 +67,7 @@ void TestTimesig::timesig01()
     MasterScore* score = readScore(TIMESIG_DATA_DIR + "timesig01.mscx");
     QVERIFY(score);
     Measure* m  = score->firstMeasure()->nextMeasure();
-    TimeSig* ts = new TimeSig(score->dummy()->segment());
+    TimeSig* ts = Factory::createTimeSig(score->dummy()->segment());
     ts->setSig(Fraction(3, 4), TimeSigType::NORMAL);
 
     score->startCmd();
@@ -88,7 +91,7 @@ void TestTimesig::timesig02()
     MasterScore* score = readScore(TIMESIG_DATA_DIR + "timesig-02.mscx");
     QVERIFY(score);
     Measure* m = score->firstMeasure();
-    TimeSig* ts = new TimeSig(score->dummy()->segment());
+    TimeSig* ts = Factory::createTimeSig(score->dummy()->segment());
     ts->setSig(Fraction(3, 4), TimeSigType::NORMAL);
 
     score->startCmd();
@@ -114,7 +117,7 @@ void TestTimesig::timesig03()
     MasterScore* score = readScore(TIMESIG_DATA_DIR + "timesig-03.mscx");
     QVERIFY(score);
     Measure* m = score->firstMeasure()->nextMeasure();
-    TimeSig* ts = new TimeSig(score->dummy()->segment());
+    TimeSig* ts = Factory::createTimeSig(score->dummy()->segment());
     ts->setSig(Fraction(3, 4), TimeSigType::NORMAL);
 
     score->cmdAddTimeSig(m, 0, ts, false);
@@ -135,7 +138,7 @@ void TestTimesig::timesig04()
     MasterScore* score = readScore(TIMESIG_DATA_DIR + "timesig-04.mscx");
     QVERIFY(score);
     Measure* m = score->firstMeasure()->nextMeasure();
-    TimeSig* ts = new TimeSig(score->dummy()->segment());
+    TimeSig* ts = Factory::createTimeSig(score->dummy()->segment());
     ts->setSig(Fraction(6, 4), TimeSigType::NORMAL);
 
     score->cmdAddTimeSig(m, 0, ts, false);
@@ -159,7 +162,7 @@ void TestTimesig::timesig05()
     MasterScore* score = readScore(TIMESIG_DATA_DIR + "timesig-05.mscx");
     QVERIFY(score);
     Measure* m = score->firstMeasure();
-    TimeSig* ts = new TimeSig(score->dummy()->segment());
+    TimeSig* ts = Factory::createTimeSig(score->dummy()->segment());
     ts->setSig(Fraction(3, 4), TimeSigType::NORMAL);
 
     score->cmdAddTimeSig(m, 0, ts, false);
@@ -179,7 +182,7 @@ void TestTimesig::timesig06()
     MasterScore* score = readScore(TIMESIG_DATA_DIR + "timesig-06.mscx");
     QVERIFY(score);
     Measure* m = score->firstMeasure();
-    TimeSig* ts = new TimeSig(score->dummy()->segment());
+    TimeSig* ts = Factory::createTimeSig(score->dummy()->segment());
     ts->setSig(Fraction(5, 4), TimeSigType::NORMAL);
 
     score->startCmd();
@@ -205,7 +208,7 @@ void TestTimesig::timesig07()
     MasterScore* score = readScore(TIMESIG_DATA_DIR + "timesig-07.mscx");
     QVERIFY(score);
     Measure* m = score->firstMeasure();
-    TimeSig* ts = new TimeSig(score->dummy()->segment());
+    TimeSig* ts = Factory::createTimeSig(score->dummy()->segment());
     ts->setSig(Fraction(3, 4), TimeSigType::NORMAL);
 
     score->startCmd();
@@ -250,7 +253,7 @@ void TestTimesig::timesig09()
     MasterScore* score = readScore(TIMESIG_DATA_DIR + "timesig-09.mscx");
     QVERIFY(score);
     Measure* m = score->firstMeasure();
-    TimeSig* ts = new TimeSig(score->dummy()->segment());
+    TimeSig* ts = Factory::createTimeSig(score->dummy()->segment());
     ts->setSig(Fraction(9, 8), TimeSigType::NORMAL);
 
     score->startCmd();
@@ -277,16 +280,16 @@ void TestTimesig::timesig10()
     MasterScore* score = readScore(TIMESIG_DATA_DIR + "timesig-10.mscx");
 
     Measure* m1 = score->firstMeasure();
-    TimeSig* ts1 = new TimeSig(score->dummy()->segment());
+    TimeSig* ts1 = Factory::createTimeSig(score->dummy()->segment());
     ts1->setSig(Fraction(2, 2), TimeSigType::ALLA_BREVE);
 
     score->startCmd();
     score->cmdAddTimeSig(m1, 0, ts1, false);
 
     Measure* m2 = m1->nextMeasure();
-    TimeSig* ts2 = new TimeSig(score->dummy()->segment());
+    TimeSig* ts2 = Factory::createTimeSig(score->dummy()->segment());
     ts2->setSig(Fraction(2, 2), TimeSigType::NORMAL);
-    TimeSig* ts3 = new TimeSig(score->dummy()->segment());
+    TimeSig* ts3 = Factory::createTimeSig(score->dummy()->segment());
     ts3->setSig(Fraction(4, 4), TimeSigType::FOUR_FOUR);
 
     score->cmdAddTimeSig(m2, 0, ts2, false);

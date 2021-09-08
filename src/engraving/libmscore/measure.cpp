@@ -1339,13 +1339,13 @@ void Measure::cmdAddStaves(int sStaff, int eStaff, bool createRest)
             }
             if (!ots) {
                 // no time signature found; use measure timesig to construct one
-                ots = new TimeSig(score()->dummy()->segment());
+                ots = Factory::createTimeSig(score()->dummy()->segment());
                 ots->setSig(timesig());
                 constructed = true;
             }
             // do no replicate local time signatures
             if (ots && !ots->isLocal()) {
-                TimeSig* timesig = new TimeSig(*ots);
+                TimeSig* timesig = Factory::copyTimeSig(*ots);
                 timesig->setTrack(staffIdx * VOICES);
                 timesig->setParent(ts);
                 timesig->setSig(ots->sig(), ots->timeSigType());
@@ -2380,7 +2380,7 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
 
             segment->add(clef);
         } else if (tag == "TimeSig") {
-            TimeSig* ts = new TimeSig(score()->dummy()->segment());
+            TimeSig* ts = Factory::createTimeSig(score()->dummy()->segment());
             ts->setTrack(e.track());
             ts->read(e);
             // if time sig not at beginning of measure => courtesy time sig
@@ -4450,7 +4450,7 @@ void Measure::addSystemTrailer(Measure* nm)
                     }
                     ts = toTimeSig(s->element(track));
                     if (!ts) {
-                        ts = new TimeSig(s);
+                        ts = Factory::createTimeSig(s);
                         ts->setTrack(track);
                         ts->setGenerated(true);
                         ts->setParent(s);

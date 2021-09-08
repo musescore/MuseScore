@@ -70,8 +70,10 @@ class TimeSig final : public EngravingItem
     bool _showCourtesySig;
     bool _largeParentheses;
 
-public:
+    friend class mu::engraving::Factory;
     TimeSig(Segment* parent = 0);
+
+public:
 
     void setParent(Segment* parent);
 

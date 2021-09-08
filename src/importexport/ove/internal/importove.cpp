@@ -805,7 +805,7 @@ void OveToMScore::convertSignatures()
                 }
 
                 Segment* seg = measure->getSegment(SegmentType::TimeSig, Fraction::fromTicks(tt.m_tick));
-                TimeSig* ts = new TimeSig(seg);
+                TimeSig* ts = Factory::createTimeSig(seg);
                 ts->setTrack(staffIdx * VOICES);
                 ts->setSig(Fraction(tt.m_numerator, tt.m_denominator), subtype);
                 seg->add(ts);
@@ -1816,25 +1816,25 @@ void OveToMScore::convertArticulation(
     // case ovebase::ArticulationType::Sharp_Accidental_For_Trill:
     // case ovebase::ArticulationType::Natural_Accidental_For_Trill:
     case ovebase::ArticulationType::Tremolo_Eighth: {
-        Tremolo* t = new Tremolo(cr);
+        Tremolo* t = Factory::createTremolo(cr);
         t->setTremoloType(TremoloType::R8);
         cr->add(t);
         break;
     }
     case ovebase::ArticulationType::Tremolo_Sixteenth: {
-        Tremolo* t = new Tremolo(cr);
+        Tremolo* t = Factory::createTremolo(cr);
         t->setTremoloType(TremoloType::R16);
         cr->add(t);
         break;
     }
     case ovebase::ArticulationType::Tremolo_Thirty_Second: {
-        Tremolo* t = new Tremolo(cr);
+        Tremolo* t = Factory::createTremolo(cr);
         t->setTremoloType(TremoloType::R32);
         cr->add(t);
         break;
     }
     case ovebase::ArticulationType::Tremolo_Sixty_Fourth: {
-        Tremolo* t = new Tremolo(cr);
+        Tremolo* t = Factory::createTremolo(cr);
         t->setTremoloType(TremoloType::R64);
         cr->add(t);
         break;
