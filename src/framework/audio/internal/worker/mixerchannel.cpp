@@ -33,7 +33,10 @@ using namespace mu::audio;
 using namespace mu::async;
 
 MixerChannel::MixerChannel(const TrackId trackId, IAudioSourcePtr source, const unsigned int sampleRate)
-    : m_trackId(trackId), m_sampleRate(sampleRate), m_audioSource(std::move(source))
+    : m_trackId(trackId),
+    m_sampleRate(sampleRate),
+    m_audioSource(std::move(source)),
+    m_compressor(std::make_unique<dsp::Compressor>())
 {
     ONLY_AUDIO_WORKER_THREAD;
 
@@ -177,7 +180,12 @@ void MixerChannel::completeOutput(float* buffer, unsigned int samplesCount) cons
 
         float rms = samplesRootMeanSquare(std::move(squaredSum), samplesCount);
 
-        m_signalAmplitudeRmsChanged.send(audioChNum, rms);
+        m_compressor->process(buffer, samplesCount, rms, audioChNum, audioChannelsCount());
+
         m_volumePressureDbfsChanged.send(audioChNum, dbFullScaleFromSample(rms));
+
+#ifndef NDEBUG
+        m_signalAmplitudeRmsChanged.send(audioChNum, rms);
+#endif
     }
 }
