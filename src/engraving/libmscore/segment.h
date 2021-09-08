@@ -75,6 +75,7 @@ class Segment final : public EngravingItem
     std::vector<EngravingItem*> _elist;         // EngravingItem storage, size = staves * VOICES.
     std::vector<Shape> _shapes;           // size = staves
     std::vector<qreal> _dotPosX;          // size = staves
+    qreal m_spacing{ 0 };
 
     friend class mu::engraving::Factory;
     Segment(Measure* m = 0);
@@ -255,6 +256,20 @@ public:
 
     qreal elementsTopOffsetFromSkyline(int staffIndex) const;
     qreal elementsBottomOffsetFromSkyline(int staffIndex) const;
+
+    /*! \brief callulate width of segment and additional spacing of segment depends on duration of segment
+     *  \return pair of {spacing, width}
+     */
+    std::pair<qreal, qreal> computeCellWidth(const std::vector<int>& visibleParts) const;
+
+    /*! \brief get among all ChordRests of segment the ChordRest with minimun ticks,
+    * take into account visibleParts
+    */
+    static ChordRest* ChordRestWithMinDuration(const Segment* seg, const std::vector<int>& visibleParts);
+
+    //! spacing is additional width of segment, for example accidental needs this spacing to avoid overlapping
+    void setSpacing(qreal);
+    qreal spacing() const;
 
     // some helper function
     ChordRest* cr(int track) const { return toChordRest(_elist[track]); }

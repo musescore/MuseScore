@@ -210,6 +210,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
             break;
         case LayoutMode::FLOAT:
         case LayoutMode::LINE:
+        case LayoutMode::HORIZONTAL_FIXED:
             lineBreak = false;
             break;
         }
@@ -562,7 +563,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
 
         // in continuous view, entire score is one system
         // but we only need to process the range
-        if (options.isMode(LayoutMode::LINE) && (m->tick() < lc.startTick || m->tick() > lc.endTick)) {
+        if (options.isLinearMode() && (m->tick() < lc.startTick || m->tick() > lc.endTick)) {
             continue;
         }
         for (Segment* s = m->first(); s; s = s->next()) {
@@ -614,7 +615,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
             MeasureNumber* mno = m->noText(staffIdx);
             MMRestRange* mmrr  = m->mmRangeText(staffIdx);
             // no need to build skyline outside of range in continuous view
-            if (options.isMode(LayoutMode::LINE) && (m->tick() < lc.startTick || m->tick() > lc.endTick)) {
+            if (options.isLinearMode() && (m->tick() < lc.startTick || m->tick() > lc.endTick)) {
                 continue;
             }
             if (mno && mno->addToSkyline()) {

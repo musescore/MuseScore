@@ -184,6 +184,7 @@ void Notation::paint(mu::draw::Painter* painter, const RectF& frameRect)
 
     switch (score()->layoutMode()) {
     case engraving::LayoutMode::LINE:
+    case engraving::LayoutMode::HORIZONTAL_FIXED:
     case engraving::LayoutMode::SYSTEM: {
         bool paintBorders = false;
         paintPages(painter, frameRect, { pages.first() }, paintBorders);

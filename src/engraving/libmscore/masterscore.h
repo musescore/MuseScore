@@ -44,20 +44,20 @@ class MasterScore : public Score
     TempoMap* _tempomap;
     RepeatList* _repeatList;
     RepeatList* _repeatList2;
-    bool _expandRepeats     { MScore::playRepeats };
-    bool _playlistDirty     { true };
+    bool _expandRepeats = MScore::playRepeats;
+    bool _playlistDirty = true;
     QList<Excerpt*> _excerpts;
     std::vector<PartChannelSettingsLink> _playbackSettingsLinks;
     Score* _playbackScore = nullptr;
     Revisions* _revisions;
 
-    bool _readOnly          { false };
+    bool _readOnly = false;
 
     CmdState _cmdState;       // modified during cmd processing
 
     Fraction _pos[3];                      ///< 0 - current, 1 - left loop, 2 - right loop
 
-    int _midiPortCount      { 0 };                    // A count of ALSA midi out ports
+    int _midiPortCount = 0;                           // A count of ALSA midi out ports
     QQueue<MidiInputEvent> _midiInputQueue;           // MIDI events that have yet to be processed
     std::list<MidiInputEvent> _activeMidiPitches;     // MIDI keys currently being held down
     std::vector<MidiMapping> _midiMapping;
@@ -65,6 +65,8 @@ class MasterScore : public Score
                                                       // don't decrease and don't have gaps
     QSet<int> occupiedMidiChannels;                   // each entry is port*16+channel, port range: 0-inf, channel: 0-15
     unsigned int searchMidiMappingFrom = 0;           // makes getting next free MIDI mapping faster
+
+    qreal m_widthOfSegmentCell = 3;
 
     std::shared_ptr<mu::engraving::EngravingProject> m_project = nullptr;
 
@@ -185,6 +187,9 @@ public:
     const QFileInfo& sessionStartBackupInfo() const { return _sessionStartBackupInfo; }
 
     virtual QString title() const override;
+
+    void setWidthOfSegmentCell(qreal val) { m_widthOfSegmentCell = val; }
+    uint8_t widthOfSegmentCell() const { return m_widthOfSegmentCell; }
 };
 
 extern Ms::MasterScore* gpaletteScore;

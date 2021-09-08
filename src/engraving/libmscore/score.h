@@ -1148,6 +1148,8 @@ public:
     bool pageMode() const { return m_layoutOptions.isMode(mu::engraving::LayoutMode::PAGE); }
     bool lineMode() const { return m_layoutOptions.isMode(mu::engraving::LayoutMode::LINE); }
     bool systemMode() const { return m_layoutOptions.isMode(mu::engraving::LayoutMode::SYSTEM); }
+    bool horizontalFixedMode() const { return m_layoutOptions.isMode(mu::engraving::LayoutMode::HORIZONTAL_FIXED); }
+    bool linearMode() const { return lineMode() || horizontalFixedMode(); }
     // ----
 
     Tuplet* searchTuplet(XmlReader& e, int id);
