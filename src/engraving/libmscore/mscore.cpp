@@ -107,7 +107,6 @@ int MScore::pedalEventsMinTicks;
 bool MScore::harmonyPlayDisableCompatibility;
 bool MScore::harmonyPlayDisableNew;
 bool MScore::playRepeats;
-bool MScore::panPlayback;
 int MScore::playbackSpeedIncrement;
 qreal MScore::nudgeStep;
 qreal MScore::nudgeStep10;
@@ -277,7 +276,6 @@ void MScore::init()
     warnPitchRange      = true;
     pedalEventsMinTicks = 1;
     playRepeats         = true;
-    panPlayback         = true;
     playbackSpeedIncrement = 5;
 
     lastError           = "";
