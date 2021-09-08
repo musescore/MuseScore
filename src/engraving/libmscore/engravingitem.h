@@ -215,7 +215,7 @@ protected:
     EngravingItem(const ElementType& type, EngravingObject* se = 0, ElementFlags = ElementFlag::NOTHING);
     EngravingItem(const EngravingItem&);
     virtual void setup();
-    virtual mu::engraving::AccessibleItem* createAccessible() const;
+    virtual mu::engraving::AccessibleItem* createAccessible();
 
 public:
 

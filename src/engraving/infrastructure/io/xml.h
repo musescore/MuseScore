@@ -42,7 +42,7 @@ class Spanner;
 class Beam;
 class Tuplet;
 class Measure;
-class LinkedElements;
+class LinkedObjects;
 
 //---------------------------------------------------------
 //   SpannerValues
@@ -107,8 +107,8 @@ class XmlReader : public QXmlStreamReader
 
     void htmlToString(int level, QString*);
     Interval _transpose;
-    QMap<int, LinkedElements*> _elinks;   // for reading old files (< 3.01)
-    QMap<int, QList<QPair<LinkedElements*, Location> > > _staffLinkedElements; // one list per staff
+    QMap<int, LinkedObjects*> _elinks;   // for reading old files (< 3.01)
+    QMap<int, QList<QPair<LinkedObjects*, Location> > > _staffLinkedElements; // one list per staff
     LinksIndexer _linksIndexer;
     QMultiMap<int, int> _tracks;
 
@@ -214,9 +214,9 @@ public:
     void setTransposeChromatic(int v) { _transpose.chromatic = v; }
     void setTransposeDiatonic(int v) { _transpose.diatonic = v; }
 
-    LinkedElements* getLink(bool masterScore, const Location& l, int localIndexDiff);
-    void addLink(Staff* staff, LinkedElements* link);
-    QMap<int, LinkedElements*>& linkIds() { return _elinks; }
+    LinkedObjects* getLink(bool masterScore, const Location& l, int localIndexDiff);
+    void addLink(Staff* staff, LinkedObjects* link);
+    QMap<int, LinkedObjects*>& linkIds() { return _elinks; }
     QMultiMap<int, int>& tracks() { return _tracks; }
 
     void checkTuplets();
@@ -227,7 +227,7 @@ public:
     QList<std::pair<EngravingItem*, mu::PointF> >& fixOffsets() { return _fixOffsets; }
 
     // for reading old files (< 3.01)
-    QMap<int, QList<QPair<LinkedElements*, Location> > >& staffLinkedElements() { return _staffLinkedElements; }
+    QMap<int, QList<QPair<LinkedObjects*, Location> > >& staffLinkedElements() { return _staffLinkedElements; }
     void setOffsetLines(qint64 val) { _offsetLines = val; }
 };
 

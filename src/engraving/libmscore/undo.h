@@ -1375,7 +1375,7 @@ class LinkUnlink : public UndoCommand
     bool mustDelete  { false };
 
 protected:
-    LinkedElements* le = nullptr;
+    LinkedObjects* le = nullptr;
     EngravingObject* e = nullptr;
 
     void link();

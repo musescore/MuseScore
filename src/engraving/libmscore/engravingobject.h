@@ -158,24 +158,7 @@ class StaffTextBase;
 enum class Pid : int;
 enum class PropertyFlags : char;
 
-//---------------------------------------------------------
-//   LinkedElements
-//---------------------------------------------------------
-
-class LinkedElements : public QList<EngravingObject*>
-{
-    int _lid;           // unique id for every linked list
-
-public:
-    LinkedElements(Score*);
-    LinkedElements(Score*, int id);
-
-    void setLid(Score*, int val);
-    int lid() const { return _lid; }
-
-    EngravingObject* mainElement();
-};
-
+class LinkedObjects;
 class EngravingObject : public mu::async::Asyncable
 {
     INJECT_STATIC(engraving, mu::diagnostics::IEngravingElementsProvider, elementsProvider)
@@ -184,6 +167,8 @@ class EngravingObject : public mu::async::Asyncable
     EngravingObject* m_parent = nullptr;
     bool m_isParentExplicitlySet = false;
     bool m_isDummy = false;
+    std::list<EngravingObject*> m_children;
+
     Score* _score = nullptr;
 
     static ElementStyle const emptyStyle;
@@ -195,11 +180,14 @@ class EngravingObject : public mu::async::Asyncable
 protected:
     const ElementStyle* _elementStyle { &emptyStyle };
     PropertyFlags* _propertyFlagsList { 0 };
-    LinkedElements* _links            { 0 };
+    LinkedObjects* _links            { 0 };
     virtual int getPropertyFlagsIdx(Pid id) const;
 
     //! NOTE For compatibility reasons, hope, we will remove the need for this method.
     void hack_setType(const ElementType& t) { m_type = t; }
+
+    void addChild(EngravingObject* o);
+    void removeChild(EngravingObject* o);
 
 public:
     EngravingObject(const ElementType& type, EngravingObject* parent);
@@ -249,6 +237,8 @@ public:
     void moveToDummy();
     void setIsDummy(bool arg);
     bool isDummy() const;
+
+    const std::list<EngravingObject*>& children() const { return m_children; }
 
     // Score Tree functions
     virtual EngravingObject* treeParent() const { return m_parent; }
@@ -342,9 +332,8 @@ public:
     bool isLinked(EngravingObject* se = nullptr) const;
 
     virtual void undoUnlink();
-    int lid() const { return _links ? _links->lid() : 0; }
-    LinkedElements* links() const { return _links; }
-    void setLinks(LinkedElements* le) { _links = le; }
+    LinkedObjects* links() const { return _links; }
+    void setLinks(LinkedObjects* le) { _links = le; }
 
     //---------------------------------------------------
     // check type

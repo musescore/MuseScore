@@ -119,7 +119,7 @@ const Part* Part::masterPart() const
     }
 
     Staff* st = _staves[0];
-    LinkedElements* links = st->links();
+    LinkedObjects* links = st->links();
     if (!links) {
         return this;
     }

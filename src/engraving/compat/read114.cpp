@@ -80,6 +80,7 @@
 #include "libmscore/textline.h"
 #include "libmscore/pedal.h"
 #include "libmscore/factory.h"
+#include "libmscore/linkedobjects.h"
 
 #include "pageformat.h"
 #include "chordlist.h"

@@ -28,6 +28,7 @@
 #include "libmscore/staff.h"
 #include "libmscore/beam.h"
 #include "libmscore/tuplet.h"
+#include "libmscore/linkedobjects.h"
 
 using namespace mu;
 
@@ -698,7 +699,7 @@ void XmlReader::reconnectBrokenConnectors()
 //   addLink
 //---------------------------------------------------------
 
-void XmlReader::addLink(Staff* s, LinkedElements* link)
+void XmlReader::addLink(Staff* s, LinkedObjects* link)
 {
     int staff = s->idx();
     const bool masterScore = s->score()->isMaster();
@@ -706,7 +707,7 @@ void XmlReader::addLink(Staff* s, LinkedElements* link)
         staff *= -1;
     }
 
-    QList<QPair<LinkedElements*, Location> >& staffLinks = _staffLinkedElements[staff];
+    QList<QPair<LinkedObjects*, Location> >& staffLinks = _staffLinkedElements[staff];
     if (!masterScore) {
         if (!staffLinks.empty()
             && (link->mainElement()->score() != staffLinks.front().first->mainElement()->score())
@@ -724,14 +725,14 @@ void XmlReader::addLink(Staff* s, LinkedElements* link)
 //   getLink
 //---------------------------------------------------------
 
-LinkedElements* XmlReader::getLink(bool masterScore, const Location& l, int localIndexDiff)
+LinkedObjects* XmlReader::getLink(bool masterScore, const Location& l, int localIndexDiff)
 {
     int staff = l.staff();
     if (!masterScore) {
         staff *= -1;
     }
     const int localIndex = _linksIndexer.assignLocalIndex(l) + localIndexDiff;
-    QList<QPair<LinkedElements*, Location> >& staffLinks = _staffLinkedElements[staff];
+    QList<QPair<LinkedObjects*, Location> >& staffLinks = _staffLinkedElements[staff];
 
     if (!staffLinks.isEmpty() && staffLinks.constLast().second == l) {
         // This element potentially affects local index for "main"

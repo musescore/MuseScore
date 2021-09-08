@@ -35,6 +35,7 @@
 #include "sym.h"
 #include "masterscore.h"
 #include "factory.h"
+#include "linkedobjects.h"
 
 #include "log.h"
 
@@ -93,6 +94,12 @@ EngravingObject::~EngravingObject()
     m_onDestroyed.send(this);
     doSetParent(nullptr);
 
+    if (!isDummy() && !isScore()) {
+        for (EngravingObject* c : m_children) {
+            c->moveToDummy();
+        }
+    }
+
     if (elementsProvider()) {
         elementsProvider()->unreg(this);
     }
@@ -113,9 +120,12 @@ void EngravingObject::doSetParent(EngravingObject* p)
         return;
     }
 
-    if (p) {
-        p->m_onDestroyed.resetOnReceive(this);
+    if (m_parent) {
+        m_parent->m_onDestroyed.resetOnReceive(this);
+
+        m_parent->removeChild(this);
     }
+
     m_parent = p;
 
     if (m_parent) {
@@ -124,6 +134,8 @@ void EngravingObject::doSetParent(EngravingObject* p)
                 moveToDummy();
             }
         });
+
+        m_parent->addChild(this);
     }
 }
 
@@ -541,9 +553,9 @@ void EngravingObject::linkTo(EngravingObject* element)
         Q_ASSERT(_links->contains(element));
     } else {
         if (isStaff()) {
-            _links = new LinkedElements(score(), -1);       // don’t use lid
+            _links = new LinkedObjects(score(), -1);       // don’t use lid
         } else {
-            _links = new LinkedElements(score());
+            _links = new LinkedObjects(score());
         }
         _links->append(element);
         element->_links = _links;
@@ -620,113 +632,19 @@ QList<EngravingObject*> EngravingObject::linkList() const
     return el;
 }
 
-//---------------------------------------------------------
-//   LinkedElements
-//---------------------------------------------------------
-
-LinkedElements::LinkedElements(Score* score)
-{
-    _lid = score->linkId();   // create new unique id
-}
-
-LinkedElements::LinkedElements(Score* score, int id)
-{
-    _lid = id;
-    if (_lid != -1) {
-        score->linkId(id);          // remember used id
-    }
-}
-
-//---------------------------------------------------------
-//   setLid
-//---------------------------------------------------------
-
-void LinkedElements::setLid(Score* score, int id)
-{
-    _lid = id;
-    score->linkId(id);
-}
-
-//---------------------------------------------------------
-//   mainElement
-//    Returns "main" linked element which is expected to
-//    be written to the file prior to others.
-//---------------------------------------------------------
-
-EngravingObject* LinkedElements::mainElement()
-{
-    if (isEmpty()) {
-        return nullptr;
-    }
-    MasterScore* ms = at(0)->masterScore();
-    const bool elements = at(0)->isEngravingItem();
-    const bool staves = at(0)->isStaff();
-    return *std::min_element(begin(), end(), [ms, elements, staves](EngravingObject* s1, EngravingObject* s2) {
-        if (s1->score() == ms && s2->score() != ms) {
-            return true;
-        }
-        if (s1->score() != s2->score()) {
-            return false;
-        }
-        if (staves) {
-            return toStaff(s1)->idx() < toStaff(s2)->idx();
-        }
-        if (elements) {
-            // Now we compare either two elements from master score
-            // or two elements from excerpt.
-            EngravingItem* e1 = toEngravingItem(s1);
-            EngravingItem* e2 = toEngravingItem(s2);
-            const int tr1 = e1->track();
-            const int tr2 = e2->track();
-            if (tr1 == tr2) {
-                const Fraction tick1 = e1->tick();
-                const Fraction tick2 = e2->tick();
-                if (tick1 == tick2) {
-                    Measure* m1 = e1->findMeasure();
-                    Measure* m2 = e2->findMeasure();
-                    if (!m1 || !m2) {
-                        return false;
-                    }
-
-                    // MM rests are written to MSCX in the following order:
-                    // 1) first measure of MM rest (m->hasMMRest() == true);
-                    // 2) MM rest itself (m->isMMRest() == true);
-                    // 3) other measures of MM rest (m->hasMMRest() == false).
-                    //
-                    // As mainElement() must find the first element that
-                    // is going to be written to a file, MM rest writing
-                    // order should also be considered.
-
-                    if (m1->isMMRest() == m2->isMMRest()) {
-                        // no difference if both are MM rests or both are usual measures
-                        return false;
-                    }
-
-                    // MM rests may be generated but not written (e.g. if
-                    // saving a file right after disabling MM rests)
-                    const bool mmRestsWritten = e1->score()->styleB(Sid::createMultiMeasureRests);
-
-                    if (m1->isMMRest()) {
-                        // m1 is earlier if m2 is *not* the first MM rest measure
-                        return mmRestsWritten && !m2->hasMMRest();
-                    }
-                    if (m2->isMMRest()) {
-                        // m1 is earlier if it *is* the first MM rest measure
-                        return !mmRestsWritten || m1->hasMMRest();
-                    }
-                    return false;
-                }
-                return tick1 < tick2;
-            }
-            return tr1 < tr2;
-        }
-        return false;
-    });
-}
-
 void EngravingObject::setScore(Score* s)
 {
     _score = s;
+}
+
+void EngravingObject::addChild(EngravingObject* o)
+{
+    m_children.push_back(o);
+}
+
+void EngravingObject::removeChild(EngravingObject* o)
+{
+    m_children.remove(o);
 }
 
 EngravingObject* EngravingObject::parent(bool isIncludeDummy) const
@@ -773,6 +691,11 @@ void EngravingObject::setParent(EngravingObject* p, bool isExplicitly)
 
 void EngravingObject::moveToDummy()
 {
+    if (isDummy()) {
+        doSetParent(nullptr);
+        return;
+    }
+
     Score* sc = score();
     IF_ASSERT_FAILED(sc) {
         return;

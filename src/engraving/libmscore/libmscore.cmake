@@ -150,6 +150,8 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/letring.h
     ${CMAKE_CURRENT_LIST_DIR}/line.cpp
     ${CMAKE_CURRENT_LIST_DIR}/line.h
+    ${CMAKE_CURRENT_LIST_DIR}/linkedobjects.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/linkedobjects.h
     ${CMAKE_CURRENT_LIST_DIR}/location.cpp
     ${CMAKE_CURRENT_LIST_DIR}/location.h
     ${CMAKE_CURRENT_LIST_DIR}/lyrics.cpp

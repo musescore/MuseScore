@@ -76,6 +76,7 @@
 #include "lyrics.h"
 #include "tempotext.h"
 #include "factory.h"
+#include "linkedobjects.h"
 
 #include "masterscore.h"
 
@@ -4466,7 +4467,7 @@ void Score::undoChangePitch(Note* note, int pitch, int tpc1, int tpc2)
 
 void Score::undoChangeFretting(Note* note, int pitch, int string, int fret, int tpc1, int tpc2)
 {
-    const LinkedElements* l = note->links();
+    const LinkedObjects* l = note->links();
     if (l) {
         for (EngravingObject* e : *l) {
             Note* n = toNote(e);
@@ -5126,7 +5127,7 @@ void Score::undoAddElement(EngravingItem* element)
         || (et == ElementType::CHORD && toChord(element)->isGrace())
         ) {
         EngravingItem* parent = element->parentElement();
-        const LinkedElements* links = parent->links();
+        const LinkedObjects* links = parent->links();
         // don't link part name
         if (et == ElementType::TEXT) {
             Text* t = toText(element);

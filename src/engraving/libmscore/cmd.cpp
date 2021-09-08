@@ -87,6 +87,7 @@
 #include "tremolo.h"
 #include "rehearsalmark.h"
 #include "sym.h"
+#include "linkedobjects.h"
 
 #include "masterscore.h"
 
