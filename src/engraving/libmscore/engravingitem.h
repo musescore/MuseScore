@@ -41,7 +41,7 @@
 
 namespace mu::engraving {
 class Factory;
-class AccessibleElement;
+class AccessibleItem;
 }
 
 namespace Ms {
@@ -199,7 +199,7 @@ class EngravingItem : public EngravingObject
     ///< valid after call to layout()
     uint _tag;                    ///< tag bitmask
 
-    mu::engraving::AccessibleElement* m_accessible = nullptr;
+    mu::engraving::AccessibleItem* m_accessible = nullptr;
 
 public:
     enum class EditBehavior {
@@ -215,7 +215,7 @@ protected:
     EngravingItem(const ElementType& type, EngravingObject* se = 0, ElementFlags = ElementFlag::NOTHING);
     EngravingItem(const EngravingItem&);
     virtual void setup();
-    virtual mu::engraving::AccessibleElement* createAccessible() const;
+    virtual mu::engraving::AccessibleItem* createAccessible() const;
 
 public:
 
@@ -551,7 +551,7 @@ public:
     virtual EngravingItem* nextSegmentElement();    //< Used for navigation
     virtual EngravingItem* prevSegmentElement();    //< next-element and prev-element command
 
-    mu::engraving::AccessibleElement* accessible() const;
+    mu::engraving::AccessibleItem* accessible() const;
     virtual QString accessibleInfo() const;           //< used to populate the status bar
     virtual QString screenReaderInfo() const          //< by default returns accessibleInfo, but can be overridden
     {

@@ -287,6 +287,7 @@ std::vector<GPMasterTracks::Automation> GP67DomBuilder::readTempoMap(QDomNode* c
         }
         currentAutomation = currentAutomation.nextSibling();
     }
+    UNUSED(linearTemp);
 
     return tempoMap;
 }

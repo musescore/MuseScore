@@ -19,21 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "accessibleelement.h"
+#include "accessibleitem.h"
 
-#include "async/async.h"
 #include "accessiblescore.h"
+
 #include "log.h"
 
 using namespace mu::engraving;
 using namespace mu::accessibility;
 
-AccessibleElement::AccessibleElement(Ms::EngravingItem* e)
+AccessibleItem::AccessibleItem(Ms::EngravingItem* e)
+    : m_element(e)
 {
-    setElement(e);
 }
 
-AccessibleElement::~AccessibleElement()
+AccessibleItem::~AccessibleItem()
 {
     AccessibleScore* ascore = accessibleScore();
     m_element = nullptr;
@@ -43,7 +43,7 @@ AccessibleElement::~AccessibleElement()
     }
 
     if (m_registred) {
-        ascore->removeChild(this);
+        accessibilityController()->unreg(this);
         m_registred = false;
     }
 
@@ -52,12 +52,18 @@ AccessibleElement::~AccessibleElement()
     }
 }
 
-AccessibleElement* AccessibleElement::clone(Ms::EngravingItem* e) const
+AccessibleItem* AccessibleItem::clone(Ms::EngravingItem* e) const
 {
-    return new AccessibleElement(e);
+    return new AccessibleItem(e);
 }
 
-bool AccessibleElement::isAvalaible() const
+void AccessibleItem::setup()
+{
+    accessibilityController()->reg(this);
+    m_registred = true;
+}
+
+bool AccessibleItem::isAvalaible() const
 {
     if (!m_element) {
         return false;
@@ -79,7 +85,7 @@ bool AccessibleElement::isAvalaible() const
     return true;
 }
 
-AccessibleScore* AccessibleElement::accessibleScore() const
+AccessibleScore* AccessibleItem::accessibleScore() const
 {
     if (!m_element) {
         return nullptr;
@@ -92,42 +98,22 @@ AccessibleScore* AccessibleElement::accessibleScore() const
     return m_element->score()->accessible();
 }
 
-void AccessibleElement::setElement(Ms::EngravingItem* e)
-{
-    AccessibleScore* ascore = accessibleScore();
-    if (ascore && m_element) {
-        ascore->removeChild(this);
-    }
-
-    m_element = e;
-
-    if (isAvalaible()) {
-        async::Async::call(this, [this]() {
-            if (!m_element->isNote()) {
-                return;
-            }
-
-            accessibleScore()->addChild(this);
-        });
-    }
-}
-
-const Ms::EngravingItem* AccessibleElement::element() const
+const Ms::EngravingItem* AccessibleItem::element() const
 {
     return m_element;
 }
 
-void AccessibleElement::setRegistred(bool arg)
+void AccessibleItem::setRegistred(bool arg)
 {
     m_registred = arg;
 }
 
-bool AccessibleElement::registred() const
+bool AccessibleItem::registred() const
 {
     return m_registred;
 }
 
-void AccessibleElement::setFocus()
+void AccessibleItem::setFocus()
 {
     LOGI() << accessibleName();
     AccessibleScore* ascore = accessibleScore();
@@ -138,31 +124,25 @@ void AccessibleElement::setFocus()
     ascore->setFocusedElement(this);
 }
 
-void AccessibleElement::notifyAboutFocus(bool focused)
+void AccessibleItem::notifyAboutFocus(bool focused)
 {
     m_accessibleStateChanged.send(IAccessible::State::Focused, focused);
 }
 
-const IAccessible* AccessibleElement::accessibleParent() const
+const IAccessible* AccessibleItem::accessibleParent() const
 {
-    return accessibleScore();
+    if (!m_element) {
+        return nullptr;
+    }
 
-    //! TODO Not completed, please don't remove (igor.korsukov@gmail.com)
-    //    Ms::ScoreElement* treeParent = m_element->treeParent();
-    //    if (!treeParent) {
-    //        return nullptr;
-    //    }
-
-    //    if (treeParent == s || !treeParent->isEngravingItem()) {
-    //        //! TODO Add Accessible Score
-    //        return accessibilityController()->accessibleRoot();
-    //    }
-
-    //    Ms::EngravingItem* p = static_cast<Ms::EngravingItem*>(treeParent);
-    //    return p->accessible();
+    Ms::EngravingItem* p = m_element->parentElement();
+    IF_ASSERT_FAILED(p) {
+        return nullptr;
+    }
+    return p->accessible();
 }
 
-size_t AccessibleElement::accessibleChildCount() const
+size_t AccessibleItem::accessibleChildCount() const
 {
     return 0;
     //! TODO Not completed, please don't remove (igor.korsukov@gmail.com)
@@ -171,7 +151,7 @@ size_t AccessibleElement::accessibleChildCount() const
     //    return count;
 }
 
-const IAccessible* AccessibleElement::accessibleChild(size_t) const
+const IAccessible* AccessibleItem::accessibleChild(size_t) const
 {
     return nullptr;
     //! TODO Not completed, please don't remove (igor.korsukov@gmail.com)
@@ -183,22 +163,22 @@ const IAccessible* AccessibleElement::accessibleChild(size_t) const
     //    return p->accessible();
 }
 
-IAccessible::Role AccessibleElement::accessibleRole() const
+IAccessible::Role AccessibleItem::accessibleRole() const
 {
     return IAccessible::Role::ElementOnScore;
 }
 
-QString AccessibleElement::accessibleName() const
+QString AccessibleItem::accessibleName() const
 {
     return m_element->accessibleInfo();
 }
 
-QString AccessibleElement::accessibleDescription() const
+QString AccessibleItem::accessibleDescription() const
 {
     return m_element->accessibleExtraInfo();
 }
 
-bool AccessibleElement::accessibleState(State st) const
+bool AccessibleItem::accessibleState(State st) const
 {
     if (!isAvalaible()) {
         return false;
@@ -214,7 +194,7 @@ bool AccessibleElement::accessibleState(State st) const
     return false;
 }
 
-QRect AccessibleElement::accessibleRect() const
+QRect AccessibleItem::accessibleRect() const
 {
     if (!isAvalaible()) {
         return QRect();
@@ -227,13 +207,13 @@ QRect AccessibleElement::accessibleRect() const
     return accessibleScore()->toScreenRect(canvasRect);
 }
 
-mu::async::Channel<IAccessible::Property> AccessibleElement::accessiblePropertyChanged() const
+mu::async::Channel<IAccessible::Property> AccessibleItem::accessiblePropertyChanged() const
 {
     static async::Channel<IAccessible::Property> ch;
     return ch;
 }
 
-mu::async::Channel<IAccessible::State, bool> AccessibleElement::accessibleStateChanged() const
+mu::async::Channel<IAccessible::State, bool> AccessibleItem::accessibleStateChanged() const
 {
     return m_accessibleStateChanged;
 }
