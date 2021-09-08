@@ -123,7 +123,7 @@
 #include "config.h"
 
 #ifdef ENGRAVING_BUILD_ACCESSIBLE_TREE
-#include "accessibility/accessibleelement.h"
+#include "accessibility/accessibleitem.h"
 #endif
 
 #include "log.h"
@@ -183,14 +183,14 @@ void EngravingItem::setup()
 {
 #ifdef ENGRAVING_BUILD_ACCESSIBLE_TREE
     m_accessible = createAccessible();
-    m_accessible->setElement(this);
+    m_accessible->setup();
 #endif
 }
 
-mu::engraving::AccessibleElement* EngravingItem::createAccessible() const
+mu::engraving::AccessibleItem* EngravingItem::createAccessible() const
 {
 #ifdef ENGRAVING_BUILD_ACCESSIBLE_TREE
-    return new mu::engraving::AccessibleElement();
+    return new mu::engraving::AccessibleItem();
 #else
     return nullptr;
 #endif
@@ -1823,7 +1823,7 @@ EngravingItem* EngravingItem::prevSegmentElement()
     return score()->firstElement();
 }
 
-mu::engraving::AccessibleElement* EngravingItem::accessible() const
+mu::engraving::AccessibleItem* EngravingItem::accessible() const
 {
     return m_accessible;
 }

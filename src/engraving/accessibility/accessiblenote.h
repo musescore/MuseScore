@@ -22,18 +22,18 @@
 #ifndef MU_ENGRAVING_ACCESSIBLENOTE_H
 #define MU_ENGRAVING_ACCESSIBLENOTE_H
 
-#include "accessibleelement.h"
+#include "accessibleitem.h"
 #include "libmscore/note.h"
 
 //! NOTE Just for example
 namespace mu::engraving {
-class AccessibleNote : public AccessibleElement
+class AccessibleNote : public AccessibleItem
 {
 public:
     AccessibleNote(Ms::EngravingItem* n = nullptr);
     ~AccessibleNote();
 
-    AccessibleElement* clone(Ms::EngravingItem* e) const override;
+    AccessibleItem* clone(Ms::EngravingItem* e) const override;
 };
 }
 

@@ -42,10 +42,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/paint/paintdebugger.cpp
     ${CMAKE_CURRENT_LIST_DIR}/paint/paintdebugger.h
 
+    ${CMAKE_CURRENT_LIST_DIR}/accessibility/accessibleitem.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/accessibility/accessibleitem.h
     ${CMAKE_CURRENT_LIST_DIR}/accessibility/accessiblescore.cpp
     ${CMAKE_CURRENT_LIST_DIR}/accessibility/accessiblescore.h
-    ${CMAKE_CURRENT_LIST_DIR}/accessibility/accessibleelement.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/accessibility/accessibleelement.h
     ${CMAKE_CURRENT_LIST_DIR}/accessibility/accessiblenote.cpp
     ${CMAKE_CURRENT_LIST_DIR}/accessibility/accessiblenote.h
 

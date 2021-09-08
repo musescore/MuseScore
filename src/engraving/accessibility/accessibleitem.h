@@ -19,11 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_ACCESSIBLEELEMENT_H
-#define MU_ENGRAVING_ACCESSIBLEELEMENT_H
+#ifndef MU_ENGRAVING_ACCESSIBLEITEM_H
+#define MU_ENGRAVING_ACCESSIBLEITEM_H
 
 #include "accessibility/iaccessible.h"
-#include "async/asyncable.h"
+#include "modularity/ioc.h"
+#include "accessibility/iaccessibilitycontroller.h"
 
 #include "libmscore/engravingitem.h"
 
@@ -31,15 +32,17 @@
 
 namespace mu::engraving {
 class AccessibleScore;
-class AccessibleElement : public accessibility::IAccessible, public async::Asyncable
+class AccessibleItem : public accessibility::IAccessible
 {
+    INJECT_STATIC(engraving, accessibility::IAccessibilityController, accessibilityController)
+
 public:
-    AccessibleElement(Ms::EngravingItem* e = nullptr);
-    virtual ~AccessibleElement();
+    AccessibleItem(Ms::EngravingItem* e = nullptr);
+    virtual ~AccessibleItem();
+    virtual AccessibleItem* clone(Ms::EngravingItem* e) const;
 
-    virtual AccessibleElement* clone(Ms::EngravingItem* e) const;
+    virtual void setup();
 
-    void setElement(Ms::EngravingItem* e);
     const Ms::EngravingItem* element() const;
 
     void setRegistred(bool arg);
@@ -75,4 +78,4 @@ private:
 };
 }
 
-#endif // MU_ENGRAVING_ACCESSIBLEELEMENT_H
+#endif // MU_ENGRAVING_ACCESSIBLEITEM_H
