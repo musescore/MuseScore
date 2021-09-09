@@ -60,6 +60,7 @@ InspectorSectionView {
 
                 popupContent: NotationInspectorSectionLoader {
                     id: loader
+
                     width: parent.width
 
                     model: modelData

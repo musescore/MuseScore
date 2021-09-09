@@ -28,6 +28,8 @@
 #include "score/scoreappearancesettingsmodel.h"
 #include "notation/inotationinteraction.h"
 
+#include "internal/services/elementrepositoryservice.h"
+
 using namespace mu::inspector;
 using namespace mu::notation;
 
