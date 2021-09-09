@@ -206,7 +206,11 @@ void LayoutPage::collectPage(const LayoutOptions& options, LayoutContext& lc)
                 qreal margin = qMax(lc.curSystem->minBottom(), lc.curSystem->spacerDistance(false));
                 dist += qMax(margin, slb);
             }
-            breakPage = (y + dist) >= ey && breakPages;
+            if (MScore::layoutTitleAlwaysOnSamePage && lc.prevSystem->vbox() && *lc.score->systems().begin() == lc.prevSystem) {
+                breakPage = false;
+            } else {
+                breakPage = (y + dist) >= ey && breakPages;
+            }
         }
         if (breakPage) {
             qreal dist = qMax(lc.prevSystem->minBottom(), lc.prevSystem->spacerDistance(false));

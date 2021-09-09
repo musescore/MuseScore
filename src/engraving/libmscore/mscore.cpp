@@ -100,6 +100,7 @@ bool MScore::_verticalOrientation = false;
 qreal MScore::verticalPageGap = 5.0;
 qreal MScore::horizontalPageGapEven = 1.0;
 qreal MScore::horizontalPageGapOdd = 50.0;
+bool MScore::layoutTitleAlwaysOnSamePage = false;
 
 bool MScore::warnPitchRange;
 int MScore::pedalEventsMinTicks;

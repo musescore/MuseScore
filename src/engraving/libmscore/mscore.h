@@ -378,6 +378,7 @@ public:
     static qreal verticalPageGap;
     static qreal horizontalPageGapEven;
     static qreal horizontalPageGapOdd;
+    static bool layoutTitleAlwaysOnSamePage;
 
     static void setError(MsError e) { _error = e; }
     static const char* errorMessage();
