@@ -1841,6 +1841,12 @@ void Chord::layoutPitched()
     //  process notes
     //-----------------------------------------
 
+    // Keeps track if there are any accidentals in this cord.
+    // Used to remove excess space in front of arpeggios.
+    // See GitHub issue #8970 for more details.
+    // https://github.com/musescore/MuseScore/issues/8970
+    bool chordHasAccidental = false;
+
     for (Note* note : _notes) {
         note->layout();
 
@@ -1852,6 +1858,9 @@ void Chord::layoutPitched()
         lhead    = qMax(lhead, -x1);
 
         Accidental* accidental = note->accidental();
+        if (accidental) {
+            chordHasAccidental = true;
+        }
         if (accidental && accidental->addToSkyline() && !note->fixed()) {
             // convert x position of accidental to segment coordinate system
             qreal x = accidental->pos().x() + note->pos().x() + chordX;
@@ -1936,8 +1945,9 @@ void Chord::layoutPitched()
         _arpeggio->layout();        // only for width() !
         _arpeggio->setHeight(0.0);
         qreal extraX = _arpeggio->width() + arpeggioDistance + chordX;
+        qreal accidentalCorrection = chordHasAccidental ? 0.25 * spatium() : 0;
         qreal y1   = upnote->pos().y() - upnote->headHeight() * .5;
-        _arpeggio->setPos(-(lll + extraX), y1);
+        _arpeggio->setPos(-(lll + extraX - accidentalCorrection), y1);
         if (_arpeggio->visible()) {
             lll += extraX;
         }
