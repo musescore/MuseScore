@@ -933,16 +933,18 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
     }
 
     bool accepted = false;
+    bool needNotifyAboutSelectionChanged = false;
 
     m_dropData.ed.pos       = pos;
     m_dropData.ed.modifiers = modifiers;
+    m_dropData.ed.dropElement->styleChanged();
 
     bool firstStaffOnly = false;
     bool applyUserOffset = false;
-    //bool triggerSpannerDropApplyTour = m_dropData.ed.dropElement->isSpanner();
-    m_dropData.ed.dropElement->styleChanged();
+
     startEdit();
     score()->addRefresh(m_dropData.ed.dropElement->canvasBoundingRect());
+
     switch (m_dropData.ed.dropElement->type()) {
     case ElementType::TEXTLINE:
         firstStaffOnly = m_dropData.ed.dropElement->systemFlag();
@@ -1008,7 +1010,8 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
             EngravingItem* dropElement = el->drop(m_dropData.ed);
             score()->addRefresh(el->canvasBoundingRect());
             if (dropElement) {
-                score()->select(dropElement, SelectType::SINGLE, 0);
+                doSelect({ dropElement }, SelectType::SINGLE);
+                needNotifyAboutSelectionChanged = true;
                 score()->addRefresh(dropElement->canvasBoundingRect());
             }
         }
@@ -1082,7 +1085,8 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
         score()->addRefresh(el->canvasBoundingRect());
         if (dropElement) {
             if (!score()->noteEntryMode()) {
-                score()->select(dropElement, SelectType::SINGLE, 0);
+                doSelect({ dropElement }, SelectType::SINGLE);
+                needNotifyAboutSelectionChanged = true;
             }
             score()->addRefresh(dropElement->canvasBoundingRect());
         }
@@ -1106,6 +1110,11 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
     if (accepted) {
         notifyAboutDropChanged();
     }
+
+    if (needNotifyAboutSelectionChanged) {
+        notifyAboutSelectionChanged();
+    }
+
     return accepted;
 }
 
