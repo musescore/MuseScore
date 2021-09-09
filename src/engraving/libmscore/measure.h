@@ -136,8 +136,7 @@ private:
 class Measure final : public MeasureBase
 {
 public:
-    Measure(System* parent = 0);
-    Measure(const Measure&);
+
     ~Measure();
 
     Measure* clone() const override { return new Measure(*this); }
@@ -354,6 +353,11 @@ public:
     void stretchMeasureInPracticeMode(qreal stretch);
 
 private:
+
+    friend class mu::engraving::Factory;
+    Measure(System* parent = 0);
+    Measure(const Measure&);
+
     void push_back(Segment* e);
     void push_front(Segment* e);
 

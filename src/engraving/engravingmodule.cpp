@@ -35,6 +35,8 @@
 #include "engraving/libmscore/masterscore.h"
 #include "engraving/libmscore/scorefont.h"
 
+#include "engraving/accessibility/accessibleitem.h"
+
 #include "compat/scoreaccess.h"
 
 using namespace mu::engraving;
@@ -88,7 +90,9 @@ void EngravingModule::onInit(const framework::IApplication::RunMode&)
     Ms::MScore::setNudgeStep10(1.0); // Ctrl + cursor key (default 1.0)
     Ms::MScore::setNudgeStep50(0.01); // Alt  + cursor key (default 0.01)
 
+    AccessibleItem::enabled = false;
     Ms::gpaletteScore = compat::ScoreAccess::createMasterScore();
+    AccessibleItem::enabled = true;
     if (Ms::EngravingObject::elementsProvider()) {
         Ms::EngravingObject::elementsProvider()->unreg(Ms::gpaletteScore);
     }

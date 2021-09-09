@@ -42,6 +42,7 @@ public:
     virtual AccessibleItem* clone(Ms::EngravingItem* e) const;
 
     virtual void setup();
+    bool isAvalaible() const;
 
     const Ms::EngravingItem* element() const;
 
@@ -66,9 +67,10 @@ public:
     async::Channel<State, bool> accessibleStateChanged() const override;
     // ---
 
+    static bool enabled;
+
 private:
 
-    bool isAvalaible() const;
     AccessibleScore* accessibleScore() const;
 
     Ms::EngravingItem* m_element = nullptr;

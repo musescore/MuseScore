@@ -635,7 +635,7 @@ void Excerpt::cloneStaves(Score* oscore, Score* score, const QList<int>& sourceS
             nmb->add(ne);
         } else if (mb->isMeasure()) {
             Measure* m  = toMeasure(mb);
-            Measure* nm = new Measure(score->dummy()->system());
+            Measure* nm = Factory::createMeasure(score->dummy()->system());
             nmb = nm;
             nm->setTick(m->tick());
             nm->setTicks(m->ticks());

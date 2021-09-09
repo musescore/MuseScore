@@ -21,6 +21,7 @@
  */
 #include "layoutmeasure.h"
 
+#include "libmscore/factory.h"
 #include "libmscore/score.h"
 #include "libmscore/measure.h"
 #include "libmscore/undo.h"
@@ -80,7 +81,7 @@ void LayoutMeasure::createMMRest(const LayoutOptions& options, Score* score, Mea
         }
         mmrMeasure->removeSystemTrailer();
     } else {
-        mmrMeasure = new Measure(score->dummy()->system());
+        mmrMeasure = Factory::createMeasure(score->dummy()->system());
         mmrMeasure->setTicks(len);
         mmrMeasure->setTick(firstMeasure->tick());
         score->undo(new ChangeMMRest(firstMeasure, mmrMeasure));

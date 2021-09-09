@@ -1007,7 +1007,7 @@ void GuitarPro::createMeasures()
     //      for (int i = 0; i < measures; ++i) {
     for (int i = 0; i < bars.size(); ++i) {     // ?? (ws)
         Fraction nts = bars[i].timesig;
-        Measure* m = new Measure(score->dummy()->system());
+        Measure* m = Factory::createMeasure(score->dummy()->system());
         m->setTick(tick);
         m->setTimesig(nts);
         m->setTicks(nts);
@@ -1182,7 +1182,7 @@ bool GuitarPro1::read(QFile* fp)
     Fraction tick = { 0, 1 };
     for (int i = 0; i < measures; ++i) {
         Fraction nts = bars[i].timesig;
-        Measure* m = new Measure(score->dummy()->system());
+        Measure* m = Factory::createMeasure(score->dummy()->system());
         m->setTick(tick);
         m->setTimesig(nts);
         m->setTicks(nts);
@@ -1631,7 +1631,7 @@ bool GuitarPro2::read(QFile* fp)
     Fraction tick = { 0, 1 };
     for (int i = 0; i < measures; ++i) {
         Fraction nts = bars[i].timesig;
-        Measure* m = new Measure(score->dummy()->system());
+        Measure* m = Factory::createMeasure(score->dummy()->system());
         m->setTick(tick);
         m->setTimesig(nts);
         m->setTicks(nts);
@@ -2321,7 +2321,7 @@ bool GuitarPro3::read(QFile* fp)
     Fraction tick = { 0, 1 };
     for (int i = 0; i < measures; ++i) {
         Fraction nts = bars[i].timesig;
-        Measure* m = new Measure(score->dummy()->system());
+        Measure* m = Factory::createMeasure(score->dummy()->system());
         m->setTick(tick);
         m->setTimesig(nts);
         m->setTicks(nts);

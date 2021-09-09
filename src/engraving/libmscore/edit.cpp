@@ -929,7 +929,7 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, int st
         Measure* nlm = 0;
         Fraction tick     = { 0, 1 };
         for (int i = 0; i < nm; ++i) {
-            Measure* m = new Measure(s->dummy()->system());
+            Measure* m = Factory::createMeasure(s->dummy()->system());
             m->setPrev(nlm);
             if (nlm) {
                 nlm->setNext(m);

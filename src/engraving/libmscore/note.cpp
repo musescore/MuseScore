@@ -3244,6 +3244,10 @@ void Note::setScore(Score* s)
 
 QString Note::accessibleInfo() const
 {
+    if (!chord()) {
+        return QString();
+    }
+
     QString duration = chord()->durationUserName();
     QString voice = QObject::tr("Voice: %1").arg(QString::number(track() % VOICES + 1));
     QString pitchName;

@@ -37,7 +37,7 @@ DummyElement::DummyElement(Ms::Score* s)
 {
     m_page = Factory::createPage(this);
     m_system = Factory::createSystem(m_page);
-    m_measure = new Ms::Measure(m_system);
+    m_measure = Factory::createMeasure(m_system);
     m_segment = Factory::createSegment(m_measure);
     m_chord = Factory::createChord(m_segment);
     m_note = Factory::createNote(m_chord);
