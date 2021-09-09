@@ -21,7 +21,10 @@
  */
 
 #include "sticking.h"
+
 #include "io/xml.h"
+
+#include "segment.h"
 
 using namespace mu;
 

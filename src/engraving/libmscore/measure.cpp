@@ -27,6 +27,8 @@
 
 #include <cmath>
 
+#include "realfn.h"
+
 #include "style/style.h"
 #include "io/xml.h"
 
@@ -95,9 +97,9 @@
 #include "bracketItem.h"
 #include "masterscore.h"
 #include "factory.h"
+#include "linkedobjects.h"
 
 #include "log.h"
-#include "realfn.h"
 
 using namespace mu;
 using namespace mu::engraving;

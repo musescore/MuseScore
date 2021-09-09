@@ -822,7 +822,7 @@ void PaletteWidget::dropEvent(QDropEvent* event)
         QList<QUrl> ul = event->mimeData()->urls();
         QUrl u = ul.front();
         if (u.scheme() == "file") {
-            auto image = makeElement<Image>(gpaletteScore->dummy());
+            auto image = std::make_shared<Image>(gpaletteScore->dummy());
             QString filePath(u.toLocalFile());
             image->load(filePath);
             element = image;
@@ -837,7 +837,7 @@ void PaletteWidget::dropEvent(QDropEvent* event)
         ElementType type = EngravingItem::readType(xml, &dragOffset, &duration);
 
         if (type == ElementType::SYMBOL) {
-            auto symbol = makeElement<Symbol>(gpaletteScore->dummy());
+            auto symbol = std::make_shared<Symbol>(gpaletteScore->dummy());
             symbol->read(xml);
             element = symbol;
         } else {

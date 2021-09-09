@@ -22,7 +22,9 @@
 #include "linkedobjects.h"
 
 #include "score.h"
+#include "masterscore.h"
 #include "measure.h"
+#include "staff.h"
 
 using namespace Ms;
 

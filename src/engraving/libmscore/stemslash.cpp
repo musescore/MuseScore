@@ -28,6 +28,11 @@
 using namespace mu;
 
 namespace Ms {
+StemSlash::StemSlash(Chord* parent)
+    : EngravingItem(ElementType::STEM_SLASH, parent)
+{
+}
+
 //---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
