@@ -32,7 +32,7 @@ BaseSection {
     title: qsTrc("appshell", "UI colors")
     navigation.direction: NavigationPanel.Both
 
-    property alias scoreInversionChecked: scoreInversionEnable.checked
+    property bool scoreInversionChecked: false
 
     signal scoreInversionRequested(var newValue)
     signal colorChangeRequested(var newColor, var propertyType)
@@ -40,11 +40,11 @@ BaseSection {
     CheckBox {
         id: scoreInversionEnable
 
+        checked: root.scoreInversionChecked
         text: qsTrc("appshell", "Invert score colors")
 
         onClicked: {
-            checked = !checked
-            root.scoreInversionRequested(checked)
+            root.scoreInversionRequested(!checked)
         }
     }
 

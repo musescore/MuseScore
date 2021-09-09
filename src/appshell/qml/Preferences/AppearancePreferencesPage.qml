@@ -96,10 +96,10 @@ PreferencesPage {
             //! NOTE: 3 because ThemesSection have two panels
             navigation.order: root.navigationOrderStart + 3
 
-            scoreInversionChecked: appearanceModel.invertScoreColor
+            scoreInversionChecked: appearanceModel.scoreInversionEnabled
 
             onScoreInversionRequested: {
-                appearanceModel.invertScoreColor = newValue
+                appearanceModel.scoreInversionEnabled = newValue
             }
 
             onColorChangeRequested: {
@@ -182,7 +182,7 @@ PreferencesPage {
 
             width: parent.width
 
-            enabled: highContrastEnable.checked ? !appearanceModel.invertScoreColor : true
+            enabled: appearanceModel.highContrastEnabled ? !appearanceModel.scoreInversionEnabled : true
             opacityOverride: paperSettings.enabled ? 1.0 : 0.6
 
             title: qsTrc("appshell", "Paper")
