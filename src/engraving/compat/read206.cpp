@@ -3084,7 +3084,7 @@ static void readStaffContent(Score* score, XmlReader& e)
                 readMeasureLast = true;
 
                 Measure* measure = nullptr;
-                measure = new Measure(score->dummy()->system());
+                measure = Factory::createMeasure(score->dummy()->system());
                 measure->setTick(e.tick());
                 //
                 // inherit timesig from previous measure
@@ -3141,7 +3141,7 @@ static void readStaffContent(Score* score, XmlReader& e)
             if (tag == "Measure") {
                 if (measure == 0) {
                     qDebug("Score::readStaff(): missing measure!");
-                    measure = new Measure(score->dummy()->system());
+                    measure = Factory::createMeasure(score->dummy()->system());
                     measure->setTick(e.tick());
                     score->measures()->add(measure);
                 }

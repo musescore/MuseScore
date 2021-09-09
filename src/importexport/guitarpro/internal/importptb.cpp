@@ -1155,7 +1155,7 @@ std::string crTS(int strings, int tuning[])
 
 Measure* PowerTab::createMeasure(ptBar* bar, const Fraction& tick)
 {
-    auto measure = new Measure(score->dummy()->system());
+    auto measure = Factory::createMeasure(score->dummy()->system());
     Fraction nts(bar->numerator, bar->denominator);
 
     measure->setTick(tick);

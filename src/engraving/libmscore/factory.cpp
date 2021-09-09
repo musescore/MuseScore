@@ -431,6 +431,9 @@ CREATE_ITEM_IMPL(LayoutBreak, ElementType::LAYOUT_BREAK, MeasureBase)
 COPY_ITEM_IMPL(LayoutBreak)
 MAKE_ITEM_IMPL(LayoutBreak, MeasureBase)
 
+CREATE_ITEM_IMPL(Measure, ElementType::MEASURE, System)
+COPY_ITEM_IMPL(Measure)
+
 CREATE_ITEM_IMPL(Note, ElementType::NOTE, Chord)
 Note* Factory::copyNote(const Note& src, bool link)
 {

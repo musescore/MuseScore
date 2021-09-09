@@ -50,6 +50,7 @@ void PaintDebugger::restorePenColor()
     Pen p = pen();
     p.setColor(m_originalPenColor);
     setPen(p);
+    m_debugPenColor = draw::Color();
 }
 
 void PaintDebugger::beginTarget(const std::string& name)

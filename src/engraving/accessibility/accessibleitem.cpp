@@ -27,6 +27,9 @@
 
 using namespace mu::engraving;
 using namespace mu::accessibility;
+using namespace Ms;
+
+bool AccessibleItem::enabled = true;
 
 AccessibleItem::AccessibleItem(Ms::EngravingItem* e)
     : m_element(e)
@@ -60,10 +63,20 @@ AccessibleItem* AccessibleItem::clone(Ms::EngravingItem* e) const
 
 void AccessibleItem::setup()
 {
-    if (accessibilityController()) {
-        accessibilityController()->reg(this);
-        m_registred = true;
+    if (!AccessibleItem::enabled) {
+        return;
     }
+
+    if (!accessibilityController()) {
+        return;
+    }
+
+    if (m_element->score()->isPaletteScore()) {
+        return;
+    }
+
+    accessibilityController()->reg(this);
+    m_registred = true;
 }
 
 bool AccessibleItem::isAvalaible() const
@@ -143,23 +156,35 @@ const IAccessible* AccessibleItem::accessibleParent() const
 
 size_t AccessibleItem::accessibleChildCount() const
 {
-    return 0;
-    //! TODO Not completed, please don't remove (igor.korsukov@gmail.com)
-    //    size_t count = static_cast<size_t>(m_element->treeChildCount());
-    //    LOGI() << "count: " << count;
-    //    return count;
+    TRACEFUNC;
+    size_t count = 0;
+    for (const EngravingObject* obj : m_element->children()) {
+        if (obj->isEngravingItem()) {
+            AccessibleItem* access = Ms::toEngravingItem(obj)->accessible();
+            if (access && access->isAvalaible()) {
+                ++count;
+            }
+        }
+    }
+    return count;
 }
 
-const IAccessible* AccessibleItem::accessibleChild(size_t) const
+const IAccessible* AccessibleItem::accessibleChild(size_t i) const
 {
+    TRACEFUNC;
+    size_t count = 0;
+    for (const EngravingObject* obj : m_element->children()) {
+        if (obj->isEngravingItem()) {
+            AccessibleItem* access = Ms::toEngravingItem(obj)->accessible();
+            if (access && access->isAvalaible()) {
+                if (count == i) {
+                    return access;
+                }
+                ++count;
+            }
+        }
+    }
     return nullptr;
-    //! TODO Not completed, please don't remove (igor.korsukov@gmail.com)
-    //    Ms::ScoreElement* se = m_element->treeChild(static_cast<int>(i));
-    //    if (!se || !se->isEngravingItem()) {
-    //        return nullptr;
-    //    }
-    //    Ms::EngravingItem* p = static_cast<Ms::EngravingItem*>(se);
-    //    return p->accessible();
 }
 
 IAccessible::Role AccessibleItem::accessibleRole() const

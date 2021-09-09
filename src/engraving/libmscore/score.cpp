@@ -313,7 +313,8 @@ void MeasureBaseList::fixupSystems()
 //---------------------------------------------------------
 
 Score::Score()
-    : EngravingObject(ElementType::SCORE, nullptr), _headersText(MAX_HEADERS, nullptr), _footersText(MAX_FOOTERS, nullptr),
+    : EngravingObject(ElementType::SCORE, nullptr), _headersText(MAX_HEADERS, nullptr), _footersText(
+        MAX_FOOTERS, nullptr),
     _selection(this),
     m_layout(this)
 {
@@ -336,6 +337,7 @@ Score::Score()
 
 #ifdef ENGRAVING_BUILD_ACCESSIBLE_TREE
     m_accessible = new mu::engraving::AccessibleScore(this);
+    m_accessible->setup();
 #endif
 }
 
@@ -1424,7 +1426,7 @@ void Score::styleChanged()
 //---------------------------------------------------------
 //   getCreateMeasure
 //    - return Measure for tick
-//    - create new Measure(s) if there is no measure for
+//    - create Factory::createMeasure(s) if there is no measure for
 //      this tick
 //---------------------------------------------------------
 
@@ -1434,7 +1436,7 @@ Measure* Score::getCreateMeasure(const Fraction& tick)
     if (last == 0 || ((last->tick() + last->ticks()) <= tick)) {
         Fraction lastTick  = last ? (last->tick() + last->ticks()) : Fraction(0, 1);
         while (tick >= lastTick) {
-            Measure* m = new Measure(this->dummy()->system());
+            Measure* m = Factory::createMeasure(this->dummy()->system());
             Fraction ts = sigmap()->timesig(lastTick).timesig();
             m->setTick(lastTick);
             m->setTimesig(ts);

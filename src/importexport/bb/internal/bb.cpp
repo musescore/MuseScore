@@ -419,7 +419,7 @@ Score::FileError importBB(MasterScore* score, const QString& name)
     //---------------------------------------------------
 
     for (int i = 0; i < bb.measures(); ++i) {
-        Measure* measure  = new Measure(score->dummy()->system());
+        Measure* measure  = Factory::createMeasure(score->dummy()->system());
         Fraction tick = Fraction::fromTicks(score->sigmap()->bar2tick(i, 0));
         measure->setTick(tick);
         Fraction ts = score->sigmap()->timesig(tick.ticks()).timesig();

@@ -159,6 +159,15 @@ enum class Pid : int;
 enum class PropertyFlags : char;
 
 class LinkedObjects;
+class EngravingObject;
+
+class EngravingObjectList : public std::list<EngravingObject*>
+{
+public:
+
+    EngravingObject* at(size_t i) const;
+};
+
 class EngravingObject : public mu::async::Asyncable
 {
     INJECT_STATIC(engraving, mu::diagnostics::IEngravingElementsProvider, elementsProvider)
@@ -167,7 +176,7 @@ class EngravingObject : public mu::async::Asyncable
     EngravingObject* m_parent = nullptr;
     bool m_isParentExplicitlySet = false;
     bool m_isDummy = false;
-    std::list<EngravingObject*> m_children;
+    EngravingObjectList m_children;
 
     Score* _score = nullptr;
 
@@ -238,7 +247,7 @@ public:
     void setIsDummy(bool arg);
     bool isDummy() const;
 
-    const std::list<EngravingObject*>& children() const { return m_children; }
+    const EngravingObjectList& children() const { return m_children; }
 
     // Score Tree functions
     virtual EngravingObject* treeParent() const { return m_parent; }

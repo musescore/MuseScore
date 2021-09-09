@@ -127,12 +127,11 @@ QVariant EngravingElementsModel::data(const QModelIndex& index, int role) const
         return QVariant();
     }
 
-    if (item == m_lostItem) {
-        QVariantMap lostData;
-        lostData["info"] = "Lost items";
-        return lostData;
+    if (item->data().isEmpty()) {
+        item->setData(makeData(item->element()));
     }
-    return makeData(item->element());
+
+    return item->data();
 }
 
 QHash<int, QByteArray> EngravingElementsModel::roleNames() const
@@ -152,11 +151,11 @@ EngravingElementsModel::Item* EngravingElementsModel::itemByModelIndex(const QMo
     return m_allItems.value(index.internalId(), nullptr);
 }
 
-QVariant EngravingElementsModel::makeData(const Ms::EngravingObject* el) const
+QVariantMap EngravingElementsModel::makeData(const Ms::EngravingObject* el) const
 {
     TRACEFUNC;
     if (!el) {
-        return QVariant();
+        return QVariantMap();
     }
 
     auto formatRect = [](const mu::RectF& r) {
@@ -208,6 +207,10 @@ QVariant EngravingElementsModel::makeData(const Ms::EngravingObject* el) const
     d["selected"] = elementsProvider()->isSelected(el);
     d["info"] = info;
 
+    if (el->children().size() != size_t(el->treeChildCount())) {
+        d["color"] = "#ff0000";
+    }
+
     return d;
 }
 
@@ -238,8 +241,11 @@ void EngravingElementsModel::reload()
         }
     }
 
-    m_lostItem = createItem(m_rootItem);
-    findAndAddLost(elements, m_lostItem);
+    Item* lostItem = createItem(m_rootItem);
+    QVariantMap lostData;
+    lostData["info"] = "Lost items";
+    lostItem->setData(lostData);
+    findAndAddLost(elements, lostItem);
 
     endResetModel();
 
@@ -290,8 +296,8 @@ void EngravingElementsModel::findAndAddLost(const std::list<const Ms::EngravingO
 
     QSet<const Ms::EngravingObject*> used;
     for (auto it = m_allItems.begin(); it != m_allItems.end(); ++it) {
-        const Item& item = it.value();
-        used.insert(item.element());
+        const Item* item = it.value();
+        used.insert(item->element());
     }
 
     for (const Ms::EngravingObject* el : elements) {
@@ -312,10 +318,45 @@ void EngravingElementsModel::select(QModelIndex index, bool arg)
     }
 
     elementsProvider()->select(item->element(), arg);
+    item->setData(QVariantMap());
 
     emit dataChanged(index, index, { rItemData });
 
     dispatcher()->dispatch("diagnostic-notationview-redraw");
+}
+
+void EngravingElementsModel::click1(QModelIndex index)
+{
+    //! NOTE For debugging purposes
+    Item* item = itemByModelIndex(index);
+    if (!item) {
+        return;
+    }
+
+    const Ms::EngravingObject* el = item->element();
+    if (!el) {
+        return;
+    }
+
+    const Ms::EngravingObject* parent = el->parent();
+    UNUSED(parent);
+
+    const Ms::EngravingObject* parent2 = el->parent(true);
+    UNUSED(parent2);
+
+    const Ms::EngravingObject* treeParent = el->treeParent();
+    UNUSED(treeParent);
+
+    size_t children = el->children().size();
+    UNUSED(children);
+
+    int treeChildren = el->treeChildCount();
+    UNUSED(treeChildren);
+
+    if (parent2 != treeParent) {
+        int k = 1;
+        UNUSED(k);
+    }
 }
 
 void EngravingElementsModel::updateInfo()

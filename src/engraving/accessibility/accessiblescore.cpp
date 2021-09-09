@@ -25,6 +25,7 @@
 
 using namespace mu::engraving;
 using namespace mu::accessibility;
+using namespace Ms;
 
 AccessibleScore::AccessibleScore(Ms::Score* score)
     : m_score(score)
@@ -33,6 +34,27 @@ AccessibleScore::AccessibleScore(Ms::Score* score)
 
 AccessibleScore::~AccessibleScore()
 {
+    if (m_registred && accessibilityController()) {
+        accessibilityController()->unreg(this);
+    }
+}
+
+void AccessibleScore::setup()
+{
+    if (!AccessibleItem::enabled) {
+        return;
+    }
+
+    if (!accessibilityController()) {
+        return;
+    }
+
+    if (m_score->isPaletteScore()) {
+        return;
+    }
+
+    accessibilityController()->reg(this);
+    m_registred = true;
 }
 
 void AccessibleScore::setActive(bool arg)
@@ -83,12 +105,35 @@ const IAccessible* AccessibleScore::accessibleParent() const
 
 size_t AccessibleScore::accessibleChildCount() const
 {
-    return m_children.size();
+    TRACEFUNC;
+    size_t count = 0;
+    for (const EngravingObject* obj : m_score->EngravingObject::children()) {
+        if (obj->isEngravingItem()) {
+            AccessibleItem* access = Ms::toEngravingItem(obj)->accessible();
+            if (access && access->isAvalaible()) {
+                ++count;
+            }
+        }
+    }
+    return count;
 }
 
 const IAccessible* AccessibleScore::accessibleChild(size_t i) const
 {
-    return m_children.at(int(i));
+    TRACEFUNC;
+    size_t count = 0;
+    for (const EngravingObject* obj : m_score->EngravingObject::children()) {
+        if (obj->isEngravingItem()) {
+            AccessibleItem* access = Ms::toEngravingItem(obj)->accessible();
+            if (access && access->isAvalaible()) {
+                if (count == i) {
+                    return access;
+                }
+                ++count;
+            }
+        }
+    }
+    return nullptr;
 }
 
 IAccessible::Role AccessibleScore::accessibleRole() const

@@ -863,7 +863,7 @@ Measure* GPConverter::addMeasure(const GPMasterBar* mB)
         tick = lastMeasure->tick() + lastMeasure->ticks();
     }
 
-    Measure* measure = new Measure(_score->dummy()->system());
+    Measure* measure = Factory::createMeasure(_score->dummy()->system());
     measure->setTick(tick);
     GPMasterBar::TimeSig sig = mB->timeSig();
     auto scoreTimeSig = Fraction(sig.enumerator, sig.denumerator);

@@ -104,6 +104,9 @@ public:
     static Ms::LayoutBreak* copyLayoutBreak(const Ms::LayoutBreak& src);
     static std::shared_ptr<Ms::LayoutBreak> makeLayoutBreak(Ms::MeasureBase* parent);
 
+    static Ms::Measure* createMeasure(Ms::System* parent);
+    static Ms::Measure* copyMeasure(const Ms::Measure& src);
+
     static Ms::Note* createNote(Ms::Chord* parent);
     static Ms::Note* copyNote(const Ms::Note& src, bool link = false);
     static std::shared_ptr<Ms::Note> makeNote(Ms::Chord* parent);
