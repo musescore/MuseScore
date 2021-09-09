@@ -59,7 +59,6 @@ public:
     virtual void setSelectionColor(int voiceIndex, draw::Color color) = 0;
     virtual async::Channel<int, draw::Color> selectionColorChanged() const = 0;
 
-    virtual bool isCurrentThemeHighContrast() const = 0;
     virtual bool scoreInversionEnabled() const = 0;
 
     virtual draw::Color highlightSelectionColor(int voiceIndex = 0) const = 0;

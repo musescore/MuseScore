@@ -96,7 +96,6 @@ public:
     bool scoreInversionEnabled() const;
 
     Q_INVOKABLE void resetThemeToDefault();
-    Q_INVOKABLE bool enableHighContrastChecked();
     Q_INVOKABLE void setNewColor(const QColor& newColor, ColorType colorType);
     Q_INVOKABLE QStringList allFonts() const;
     Q_INVOKABLE QString wallpaperPathFilter() const;

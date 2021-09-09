@@ -96,12 +96,6 @@ PreferencesPage {
             //! NOTE: 3 because ThemesSection have two panels
             navigation.order: root.navigationOrderStart + 3
 
-            scoreInversionChecked: appearanceModel.scoreInversionEnabled
-
-            onScoreInversionRequested: {
-                appearanceModel.scoreInversionEnabled = newValue
-            }
-
             onColorChangeRequested: {
                 appearanceModel.setNewColor(newColor, propertyType)
             }
@@ -182,7 +176,7 @@ PreferencesPage {
 
             width: parent.width
 
-            enabled: appearanceModel.highContrastEnabled ? !appearanceModel.scoreInversionEnabled : true
+            enabled: !appearanceModel.scoreInversionEnabled
             opacityOverride: paperSettings.enabled ? 1.0 : 0.6
 
             title: qsTrc("appshell", "Paper")
@@ -212,6 +206,17 @@ PreferencesPage {
                 if (activeFocus) {
                     root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
                 }
+            }
+        }
+
+        CheckBox {
+            id: scoreInversionEnable
+
+            checked: appearanceModel.scoreInversionEnabled
+            text: qsTrc("appshell", "Invert score colors")
+
+            onClicked: {
+                appearanceModel.scoreInversionEnabled = !checked
             }
         }
 
