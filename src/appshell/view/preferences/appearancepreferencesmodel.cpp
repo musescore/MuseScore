@@ -50,7 +50,7 @@ void AppearancePreferencesModel::init()
         emit bodyTextSizeChanged();
     });
 
-    notationConfiguration()->scoreInversionChanged().onNotify(this, [this]() {
+    engravingConfiguration()->scoreInversionChanged().onNotify(this, [this]() {
         emit invertScoreColorChanged();
         emit foregroundColorChanged();
     });
@@ -229,7 +229,7 @@ QString AppearancePreferencesModel::foregroundWallpaperPath() const
 
 bool AppearancePreferencesModel::scoreInversionEnabled() const
 {
-    return notationConfiguration()->scoreInversionEnabled();
+    return engravingConfiguration()->scoreInversionEnabled();
 }
 
 void AppearancePreferencesModel::setCurrentThemeCode(const QString& themeCode)
@@ -350,6 +350,6 @@ void AppearancePreferencesModel::setScoreInversionEnabled(bool value)
         return;
     }
 
-    notationConfiguration()->setScoreInversionEnabled(value);
+    engravingConfiguration()->setScoreInversionEnabled(value);
     emit invertScoreColorChanged();
 }

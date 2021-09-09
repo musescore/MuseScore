@@ -49,6 +49,7 @@ class NotationPaintView : public QQuickPaintedItem, public IControlledView, publ
     Q_OBJECT
 
     INJECT(notation, INotationConfiguration, configuration)
+    INJECT(notation, engraving::IEngravingConfiguration, engravingConfiguration)
     INJECT(notation, ui::IUiConfiguration, uiConfiguration)
     INJECT(notation, actions::IActionsDispatcher, dispatcher)
     INJECT(notation, context::IGlobalContext, globalContext)

@@ -26,6 +26,7 @@
 
 #include "modularity/imoduleexport.h"
 #include "async/channel.h"
+#include "async/notification.h"
 
 namespace mu::draw {
 class Color;
@@ -60,6 +61,8 @@ public:
     virtual async::Channel<int, draw::Color> selectionColorChanged() const = 0;
 
     virtual bool scoreInversionEnabled() const = 0;
+    virtual void setScoreInversionEnabled(bool value) = 0;
+    virtual async::Notification scoreInversionChanged() const = 0;
 
     virtual draw::Color highlightSelectionColor(int voiceIndex = 0) const = 0;
 };

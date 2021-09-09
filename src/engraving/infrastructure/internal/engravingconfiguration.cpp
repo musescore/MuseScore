@@ -27,12 +27,15 @@
 
 #include "log.h"
 
+using namespace mu; //needed so async::Notification is detected as a valid type
 using namespace mu::engraving;
 using namespace mu::framework;
 using namespace mu::draw;
 
 static const Settings::Key DEFAULT_STYLE_FILE_PATH("engraving", "engraving/style/defaultStyleFile");
 static const Settings::Key PART_STYLE_FILE_PATH("engraving", "engraving/style/partStyleFile");
+
+static const Settings::Key INVERT_SCORE_COLOR("engraving", "engraving/scoreColorInversion");
 
 struct VoiceColorKey {
     Settings::Key key;
@@ -49,6 +52,11 @@ void EngravingConfiguration::init()
         "#C53F00",
         "#C31989"
     };
+
+    settings()->setDefaultValue(INVERT_SCORE_COLOR, Val(false));
+    settings()->valueChanged(INVERT_SCORE_COLOR).onReceive(nullptr, [this](const Val&) {
+        m_scoreInversionChanged.notify();
+    });
 
     for (int voice = 0; voice < Ms::VOICES; ++voice) {
         Settings::Key key("engraving", "engraving/colors/voice" + std::to_string(voice + 1));
@@ -148,5 +156,15 @@ Color EngravingConfiguration::highlightSelectionColor(int voice) const
 
 bool EngravingConfiguration::scoreInversionEnabled() const
 {
-    return notationConfiguration()->scoreInversionEnabled();
+    return settings()->value(INVERT_SCORE_COLOR).toBool();
+}
+
+void EngravingConfiguration::setScoreInversionEnabled(bool value)
+{
+    settings()->setSharedValue(INVERT_SCORE_COLOR, Val(value));
+}
+
+async::Notification EngravingConfiguration::scoreInversionChanged() const
+{
+    return m_scoreInversionChanged;
 }

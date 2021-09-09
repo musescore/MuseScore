@@ -384,7 +384,7 @@ void NotationPaintView::onNotationSetup()
         update();
     });
 
-    configuration()->scoreInversionChanged().onNotify(this, [this]() {
+    engravingConfiguration()->scoreInversionChanged().onNotify(this, [this]() {
         update();
     });
 
