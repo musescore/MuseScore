@@ -23,6 +23,7 @@
 #include "layoutbreak.h"
 #include "io/xml.h"
 #include "score.h"
+#include "measurebase.h"
 
 using namespace mu;
 using namespace mu::draw;

@@ -659,11 +659,6 @@ public:
 
 extern bool elementLessThan(const EngravingItem* const, const EngravingItem* const);
 extern void collectElements(void* data, EngravingItem* e);
-
-template<typename T> std::shared_ptr<T> makeElement(Ms::EngravingItem* parent)
-{
-    return std::make_shared<T>(parent);
-}
 }     // namespace Ms
 
 Q_DECLARE_METATYPE(Ms::ElementType);

@@ -51,6 +51,7 @@
 #include "harmony.h"
 #include "hook.h"
 #include "factory.h"
+#include "masterscore.h"
 
 using namespace mu;
 using namespace mu::engraving;
