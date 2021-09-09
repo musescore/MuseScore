@@ -169,6 +169,12 @@ Rectangle {
         itemDelegate: Item {
             id: item
 
+            Rectangle {
+                anchors.fill: parent
+                visible: styleData.value.color ? true : false
+                color: styleData.value.color ? styleData.value.color : "#ffffff"
+            }
+
             StyledTextLabel {
                 id: secLabel
                 anchors.fill: parent
@@ -187,6 +193,17 @@ Rectangle {
                         view.collapse(styleData.index)
                     }
                 }
+            }
+
+            FlatButton {
+                id: btn1
+                anchors.right: selBtn.left
+                anchors.rightMargin: 8
+                height: 16
+                width: 32
+                anchors.verticalCenter: parent.verticalCenter
+                text: "Btn1"
+                onClicked: elementsModel.click1(styleData.index)
             }
 
             FlatButton {

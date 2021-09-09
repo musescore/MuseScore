@@ -24,7 +24,6 @@
 
 #include <QAbstractItemModel>
 #include <QHash>
-#include <QSet>
 
 #include "modularity/ioc.h"
 #include "iengravingelementsprovider.h"
@@ -60,6 +59,7 @@ public:
     Q_INVOKABLE void reload();
 
     Q_INVOKABLE void select(QModelIndex index, bool arg);
+    Q_INVOKABLE void click1(QModelIndex index);
 
 signals:
     void infoChanged();
@@ -91,15 +91,19 @@ private:
         void setElement(const Ms::EngravingObject* el) { m_element = el; }
         const Ms::EngravingObject* element() const { return m_element; }
 
+        void setData(const QVariantMap& data) { m_data = data; }
+        const QVariantMap& data() const { return m_data; }
+
     private:
         const Ms::EngravingObject* m_element = nullptr;
         Item* m_parent = nullptr;
         QList<Item*> m_children;
+        QVariantMap m_data;
     };
 
     Item* createItem(Item* parent);
     Item* itemByModelIndex(const QModelIndex& index) const;
-    QVariant makeData(const Ms::EngravingObject* el) const;
+    QVariantMap makeData(const Ms::EngravingObject* el) const;
 
     void load(const std::list<const Ms::EngravingObject*>& elements, Item* root);
     void findAndAddLost(const std::list<const Ms::EngravingObject*>& elements, Item* lossRoot);
@@ -108,7 +112,6 @@ private:
     void updateInfo();
 
     Item* m_rootItem = nullptr;
-    Item* m_lostItem = nullptr;
     QHash<quintptr, Item*> m_allItems;
 
     QString m_info;

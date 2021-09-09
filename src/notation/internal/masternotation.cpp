@@ -115,7 +115,7 @@ static void createMeasures(Ms::Score* score, const ScoreCreateOptions& scoreOpti
         QList<Ms::Rest*> puRests;
         for (Ms::Score* _score : score->scoreList()) {
             Ms::Rest* rest = 0;
-            Ms::Measure* measure = new Ms::Measure(_score->dummy()->system());
+            Ms::Measure* measure = mu::engraving::Factory::createMeasure(_score->dummy()->system());
             measure->setTimesig(timesig);
             measure->setTicks(timesig);
             measure->setTick(tick);

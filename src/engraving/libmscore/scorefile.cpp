@@ -311,7 +311,7 @@ void Score::readStaff(XmlReader& e)
 
             if (tag == "Measure") {
                 Measure* measure = nullptr;
-                measure = new Measure(this->dummy()->system());
+                measure = Factory::createMeasure(this->dummy()->system());
                 measure->setTick(e.tick());
                 e.setCurrentMeasureIndex(measureIdx++);
                 //
@@ -357,7 +357,7 @@ void Score::readStaff(XmlReader& e)
             if (tag == "Measure") {
                 if (measure == 0) {
                     qDebug("Score::readStaff(): missing measure!");
-                    measure = new Measure(this->dummy()->system());
+                    measure = Factory::createMeasure(this->dummy()->system());
                     measure->setTick(e.tick());
                     measures()->add(measure);
                 }

@@ -38,6 +38,8 @@ public:
     AccessibleScore(Ms::Score* score);
     ~AccessibleScore();
 
+    void setup();
+
     void setActive(bool arg);
 
     void setFocusedElement(AccessibleItem* e);

@@ -323,7 +323,7 @@ void OveToMScore::createStructure()
     }
 
     for (i = 0; i < m_ove->getMeasureCount(); ++i) {
-        Measure* measure  = new Measure(m_score->dummy()->system());
+        Measure* measure  = Factory::createMeasure(m_score->dummy()->system());
         int tick = m_mtt->getTick(i, 0);
         measure->setTick(Fraction::fromTicks(tick));
         measure->setNo(i);

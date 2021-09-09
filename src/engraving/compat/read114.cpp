@@ -2349,7 +2349,7 @@ static void readStaffContent(Score* score, XmlReader& e)
 
         if (tag == "Measure") {
             if (staff == 0) {
-                measure = new Measure(score->dummy()->system());
+                measure = Factory::createMeasure(score->dummy()->system());
                 measure->setTick(e.tick());
                 const SigEvent& ev = score->sigmap()->timesig(measure->tick());
                 measure->setTicks(ev.timesig());
@@ -2375,7 +2375,7 @@ static void readStaffContent(Score* score, XmlReader& e)
             } else {
                 if (measure == 0) {
                     qDebug("Score::readStaff(): missing measure!");
-                    measure = new Measure(score->dummy()->system());
+                    measure = Factory::createMeasure(score->dummy()->system());
                     measure->setTick(e.tick());
                     score->measures()->add(measure);
                 }

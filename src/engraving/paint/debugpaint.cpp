@@ -77,13 +77,8 @@ void DebugPaint::paintItems(mu::draw::Painter& painter, const std::list<const Ms
         //! NOTE Here we can configure the debugger depending on the conditions
 
         // Elements tree
-        if (elementsProvider()->isSelected(item)) {
-            static mu::draw::Pen borderPen(DEBUG_ELTREE_SELECTED_COLOR, 4);
-
-            // Draw bbox
-            painter.setPen(borderPen);
-            painter.drawRect(item->bbox());
-
+        bool isDiagnosticSelected = elementsProvider()->isSelected(item);
+        if (isDiagnosticSelected) {
             // Overriding pen
             debugger->setDebugPenColor(DEBUG_ELTREE_SELECTED_COLOR);
         }
@@ -100,6 +95,18 @@ void DebugPaint::paintItems(mu::draw::Painter& painter, const std::list<const Ms
         PointF pos(item->pagePos());
         painter.translate(pos);
         item->draw(&painter);
+
+        if (isDiagnosticSelected) {
+            static draw::Pen borderPen(DEBUG_ELTREE_SELECTED_COLOR, 4);
+
+            // Draw bbox
+            painter.setPen(borderPen);
+            painter.setBrush(draw::BrushStyle::NoBrush);
+            painter.drawRect(item->bbox());
+        }
+
         painter.translate(-pos);
+
+        debugger->restorePenColor();
     }
 }

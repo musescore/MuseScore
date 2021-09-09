@@ -596,6 +596,10 @@ EngravingItem* Clef::prevSegmentElement()
 
 QString Clef::accessibleInfo() const
 {
+    ClefType type = clefType();
+    if (type == ClefType::INVALID) {
+        return QString();
+    }
     return qtrc("clefTable", ClefInfo::name(clefType()));
 }
 

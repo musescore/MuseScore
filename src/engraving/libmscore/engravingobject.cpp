@@ -22,6 +22,8 @@
 
 #include "engravingobject.h"
 
+#include <iterator>
+
 #include "translation.h"
 #include "io/xml.h"
 
@@ -45,9 +47,10 @@ using namespace mu::engraving;
 namespace Ms {
 ElementStyle const EngravingObject::emptyStyle;
 
-//---------------------------------------------------------
-//   ScoreElement
-//---------------------------------------------------------
+EngravingObject* EngravingObjectList::at(size_t i) const
+{
+    return *std::next(begin(), i);
+}
 
 EngravingObject::EngravingObject(const ElementType& type, EngravingObject* parent)
     : m_type(type)

@@ -863,7 +863,7 @@ static void createMeasuresAndVboxes(Score* const score,
         }
 
         // create and add the measure
-        Measure* measure  = new Measure(score->dummy()->system());
+        Measure* measure  = Factory::createMeasure(score->dummy()->system());
         measure->setTick(ms.at(i));
         measure->setTicks(ml.at(i));
         measure->setNo(i);

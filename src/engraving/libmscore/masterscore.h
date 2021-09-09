@@ -103,6 +103,8 @@ public:
     Score* createScore();
     Score* createScore(const MStyle& s);
 
+    std::shared_ptr<mu::engraving::EngravingProject> project() const { return m_project; }
+
     virtual bool isMaster() const override { return true; }
     virtual bool readOnly() const override { return _readOnly; }
     void setReadOnly(bool ro) { _readOnly = ro; }

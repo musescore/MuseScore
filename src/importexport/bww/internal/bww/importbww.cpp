@@ -215,7 +215,7 @@ void MsScWriter::beginMeasure(const Bww::MeasureBeginFlags mbf)
     ++measureNumber;
 
     // create a new measure
-    currentMeasure  = new Ms::Measure(score->dummy()->system());
+    currentMeasure  = Factory::createMeasure(score->dummy()->system());
     currentMeasure->setTick(tick);
     currentMeasure->setTimesig(Ms::Fraction(beats, beat));
     currentMeasure->setNo(measureNumber);

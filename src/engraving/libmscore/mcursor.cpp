@@ -70,7 +70,7 @@ void MCursor::createMeasures()
                 break;
             }
         }
-        measure = new Measure(_score->dummy()->system());
+        measure = Factory::createMeasure(_score->dummy()->system());
         measure->setTick(tick);
         measure->setTimesig(_sig);
         measure->setTicks(_sig);
