@@ -23,6 +23,7 @@
 #define MU_INSPECTOR_IELEMENTREPOSITORYSERVICE_H
 
 #include "libmscore/engravingitem.h"
+
 #include <QList>
 #include <QObject>
 #include <functional>

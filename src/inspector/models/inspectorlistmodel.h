@@ -29,10 +29,10 @@
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 #include "context/iglobalcontext.h"
-#include "internal/services/elementrepositoryservice.h"
 #include "models/abstractinspectormodel.h"
 
 namespace mu::inspector {
+class IElementRepositoryService;
 class InspectorListModel : public QAbstractListModel, public mu::async::Asyncable
 {
     Q_OBJECT
