@@ -549,11 +549,11 @@ Bracket* System::createBracket(Ms::BracketItem* bi, int column, int staffIdx, QL
             lastStaff = nstaves - 1;
 
       for (; firstStaff <= lastStaff; ++firstStaff) {
-            if (score()->staff(firstStaff)->show())
+            if (staff(firstStaff)->show())
                   break;
             }
       for (; lastStaff >= firstStaff; --lastStaff) {
-            if (score()->staff(lastStaff)->show())
+            if (staff(lastStaff)->show())
                   break;
             }
       int span = lastStaff - firstStaff + 1;
@@ -561,7 +561,9 @@ Bracket* System::createBracket(Ms::BracketItem* bi, int column, int staffIdx, QL
       // do not show bracket if it only spans one
       // system due to some invisible staves
       //
-      if ((span > 1) || (bi->bracketSpan() == span)) {
+      if ((span > 1)
+          || (bi->bracketSpan() == span)
+          || (span == 1 && score()->styleB(Sid::alwaysShowBracketsWhenEmptyStavesAreHidden))) {
             //
             // this bracket is visible
             //
