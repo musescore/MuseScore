@@ -502,9 +502,7 @@ void NotationInteraction::moveChordNoteSelection(MoveDirection d)
         return;
     }
 
-    score()->select(chordElem, SelectType::SINGLE, chordElem->staffIdx());
-
-    notifyAboutSelectionChanged();
+    select({ chordElem }, SelectType::SINGLE, chordElem->staffIdx());
 }
 
 void NotationInteraction::selectTopOrBottomOfChord(MoveDirection d)
@@ -525,9 +523,7 @@ void NotationInteraction::selectTopOrBottomOfChord(MoveDirection d)
         return;
     }
 
-    score()->select(target, SelectType::SINGLE);
-
-    notifyAboutSelectionChanged();
+    select({ target }, SelectType::SINGLE);
 }
 
 void NotationInteraction::doSelect(const std::vector<EngravingItem*>& elements, SelectType type, int staffIndex)
@@ -571,17 +567,13 @@ void NotationInteraction::selectSection()
 void NotationInteraction::selectFirstElement(bool frame)
 {
     EngravingItem* element = score()->firstElement(frame);
-    score()->select(element, SelectType::SINGLE, element->staffIdx());
-
-    notifyAboutSelectionChanged();
+    select({ element }, SelectType::SINGLE, element->staffIdx());
 }
 
 void NotationInteraction::selectLastElement()
 {
     EngravingItem* element = score()->lastElement();
-    score()->select(element, SelectType::SINGLE, element->staffIdx());
-
-    notifyAboutSelectionChanged();
+    select({ element }, SelectType::SINGLE, element->staffIdx());
 }
 
 INotationSelectionPtr NotationInteraction::selection() const
@@ -1949,14 +1941,15 @@ void NotationInteraction::moveElementSelection(MoveDirection d)
         toEl = (MoveDirection::Left == d) ? score()->lastElement() : score()->firstElement();
     }
 
-    if (toEl) {
-        score()->select(toEl, SelectType::SINGLE, 0);
-        if (toEl->type() == ElementType::NOTE || toEl->type() == ElementType::HARMONY) {
-            score()->setPlayNote(true);
-        }
+    if (!toEl) {
+        return;
     }
 
-    notifyAboutSelectionChanged();
+    select({ toEl }, SelectType::SINGLE);
+
+    if (toEl->type() == ElementType::NOTE || toEl->type() == ElementType::HARMONY) {
+        score()->setPlayNote(true);
+    }
 }
 
 void NotationInteraction::movePitch(MoveDirection d, PitchMode mode)
