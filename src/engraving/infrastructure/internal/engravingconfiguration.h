@@ -23,7 +23,6 @@
 #define MU_ENGRAVING_ENGRAVINGCONFIGURATION_H
 
 #include "../iengravingconfiguration.h"
-#include "ui/iuiconfiguration.h"
 #include "notation/inotationconfiguration.h"
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
@@ -31,7 +30,6 @@
 namespace mu::engraving {
 class EngravingConfiguration : public IEngravingConfiguration, public async::Asyncable
 {
-    INJECT(engraving, ui::IUiConfiguration, uiConfiguration)
     INJECT(engraving, notation::INotationConfiguration, notationConfiguration)
 
 public:
@@ -60,8 +58,7 @@ public:
 
     draw::Color highlightSelectionColor(int voice = 0) const override;
 
-    virtual bool isCurrentThemeHighContrast() const override;
-    virtual bool scoreInversionEnabled() const override;
+    bool scoreInversionEnabled() const override;
 
 private:
     async::Channel<int, draw::Color> m_voiceColorChanged;

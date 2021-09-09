@@ -146,11 +146,6 @@ Color EngravingConfiguration::highlightSelectionColor(int voice) const
     return Color::fromQColor(selectionColor(voice).toQColor().lighter(135));
 }
 
-bool EngravingConfiguration::isCurrentThemeHighContrast() const
-{
-    return uiConfiguration()->isHighContrast();
-}
-
 bool EngravingConfiguration::scoreInversionEnabled() const
 {
     return notationConfiguration()->scoreInversionEnabled();

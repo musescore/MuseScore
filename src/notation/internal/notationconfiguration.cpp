@@ -91,6 +91,7 @@ void NotationConfiguration::init()
     settings()->setDefaultValue(INVERT_SCORE_COLOR, Val(false));
     settings()->valueChanged(INVERT_SCORE_COLOR).onReceive(nullptr, [this](const Val&) {
         m_scoreInversionChanged.notify();
+        m_foregroundChanged.notify();
     });
 
     settings()->setDefaultValue(BACKGROUND_USE_COLOR, Val(true));
@@ -273,7 +274,7 @@ async::Notification NotationConfiguration::backgroundChanged() const
 
 QColor NotationConfiguration::foregroundColor() const
 {
-    if (scoreInversionEnabled() && uiConfiguration()->isHighContrast()) {
+    if (scoreInversionEnabled()) {
         return QColorConstants::Black;
     } else {
         return settings()->value(FOREGROUND_COLOR).toQColor();

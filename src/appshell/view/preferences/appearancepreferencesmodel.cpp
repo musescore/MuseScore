@@ -112,11 +112,6 @@ void AppearancePreferencesModel::resetThemeToDefault()
     emit themesChanged();
 }
 
-bool AppearancePreferencesModel::enableHighContrastChecked()
-{
-    return uiConfiguration()->isHighContrast();
-}
-
 void AppearancePreferencesModel::setNewColor(const QColor& newColor, ColorType colorType)
 {
     switch (colorType) {
