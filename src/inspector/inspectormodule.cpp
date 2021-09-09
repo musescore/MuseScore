@@ -28,6 +28,7 @@
 #include "models/inspectorlistmodel.h"
 #include "models/inspectormodelcreator.h"
 #include "models/notation/notes/noteheads/noteheadgroupsmodel.h"
+#include "models/inspectorpopupcontroller.h"
 
 #include "view/widgets/fretcanvas.h"
 #include "view/widgets/gridcanvas.h"
@@ -58,8 +59,6 @@
 using namespace mu::inspector;
 using namespace mu::modularity;
 
-static std::shared_ptr<InspectorModelCreator> s_inspectorModelCreator = std::make_shared<InspectorModelCreator>();
-
 static void inspector_init_qrc()
 {
     Q_INIT_RESOURCE(inspector_resources);
@@ -72,7 +71,7 @@ std::string InspectorModule::moduleName() const
 
 void InspectorModule::registerExports()
 {
-    ioc()->registerExport<IInspectorModelCreator>(moduleName(), s_inspectorModelCreator);
+    ioc()->registerExport<IInspectorModelCreator>(moduleName(), new InspectorModelCreator());
 }
 
 void InspectorModule::registerResources()
@@ -112,6 +111,7 @@ void InspectorModule::registerUiTypes()
     qmlRegisterUncreatableType<BendTypes>("MuseScore.Inspector", 1, 0, "BendTypes", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<TremoloBarTypes>("MuseScore.Inspector", 1, 0, "TremoloBarTypes", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<TremoloTypes>("MuseScore.Inspector", 1, 0, "TremoloTypes", "Not creatable as it is an enum type");
+    qmlRegisterType<InspectorPopupController>("MuseScore.Inspector", 1, 0, "InspectorPopupController");
 
     modularity::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(inspector_QML_IMPORT);
 }

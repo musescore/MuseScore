@@ -42,7 +42,6 @@ Rectangle {
 
     color: ui.theme.backgroundPrimaryColor
 
-
     function focusFirstItem() {
         var item = inspectorRepeater.itemAt(0)
         if (item) {
@@ -151,6 +150,7 @@ Rectangle {
 
                     Component {
                         id: generalInspector
+
                         GeneralInspectorView {
                             model: inspectorData
                             navigationPanel: navPanel
@@ -162,8 +162,10 @@ Rectangle {
                             }
                         }
                     }
+
                     Component {
                         id: textInspector
+
                         TextInspectorView {
                             model: inspectorData
                             navigationPanel: navPanel
@@ -210,6 +212,7 @@ Rectangle {
                             navigationRowOffset: expandableDelegate.navigation.row + 1
                         }
                     }
+
                     Component {
                         id: scoreAppearanceInspector
 

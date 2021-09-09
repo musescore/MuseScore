@@ -24,6 +24,7 @@ import QtQuick.Layouts 1.3
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
+import MuseScore.Inspector 1.0
 
 FlatButton {
     id: root
@@ -34,24 +35,25 @@ FlatButton {
     property int popupAvailableWidth: 0
     property var anchorItem: null
 
-    Layout.fillWidth: true
-    Layout.minimumWidth: (popupAvailableWidth - 4) / 2
-
     signal ensureContentVisibleRequested(int invisibleContentHeight)
     signal popupOpened()
 
-    onVisibleChanged: {
-        if (!visible) {
-            popup.close()
-        }
+    Layout.fillWidth: true
+    Layout.minimumWidth: (popupAvailableWidth - 4) / 2
+
+    InspectorPopupController {
+        id: popupController
+
+        visualControl: root
+        popup: popup
+    }
+
+    Component.onCompleted: {
+        popupController.load()
     }
 
     onClicked: {
-        if (!popup.isOpened) {
-            popup.open()
-        } else {
-            popup.close()
-        }
+        popup.toggleOpened()
     }
 
     StyledPopupView {
@@ -60,6 +62,8 @@ FlatButton {
         anchorItem: root.anchorItem
 
         navigationParentControl: root.navigation
+
+        closePolicy: PopupView.NoAutoClose
 
         onContentHeightChanged: {
             checkForInsufficientSpace()
