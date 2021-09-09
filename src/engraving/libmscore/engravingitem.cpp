@@ -552,7 +552,7 @@ mu::draw::Color EngravingItem::curColor(bool isVisible, mu::draw::Color normalCo
     }
     if (engravingConfiguration()->isCurrentThemeHighContrast() && engravingConfiguration()->scoreInversionEnabled()
         && !score()->isPaletteScore()) {
-        return mu::draw::Color(255, 255, 255, 160); //slightly dulled white for less strain on the eyes
+        return mu::draw::Color(220, 220, 220); //slightly dulled white for less strain on the eyes
     }
 
     return normalColor;

@@ -232,7 +232,7 @@ QString AppearancePreferencesModel::foregroundWallpaperPath() const
     return notationConfiguration()->foregroundWallpaperPath().toQString();
 }
 
-bool AppearancePreferencesModel::invertScoreColor() const
+bool AppearancePreferencesModel::scoreInversionEnabled() const
 {
     return notationConfiguration()->scoreInversionEnabled();
 }
@@ -349,9 +349,9 @@ void AppearancePreferencesModel::setForegroundWallpaperPath(const QString& path)
     emit foregroundWallpaperPathChanged();
 }
 
-void AppearancePreferencesModel::setInvertScoreColor(bool value)
+void AppearancePreferencesModel::setScoreInversionEnabled(bool value)
 {
-    if (value == invertScoreColor()) {
+    if (value == scoreInversionEnabled()) {
         return;
     }
 

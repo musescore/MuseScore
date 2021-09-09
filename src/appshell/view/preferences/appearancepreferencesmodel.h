@@ -58,7 +58,7 @@ class AppearancePreferencesModel : public QObject, public async::Asyncable
     Q_PROPERTY(
         QString foregroundWallpaperPath READ foregroundWallpaperPath WRITE setForegroundWallpaperPath NOTIFY foregroundWallpaperPathChanged)
 
-    Q_PROPERTY(bool invertScoreColor READ invertScoreColor WRITE setInvertScoreColor NOTIFY invertScoreColorChanged)
+    Q_PROPERTY(bool scoreInversionEnabled READ scoreInversionEnabled WRITE setScoreInversionEnabled NOTIFY invertScoreColorChanged)
 
 public:
     explicit AppearancePreferencesModel(QObject* parent = nullptr);
@@ -93,7 +93,7 @@ public:
     QColor foregroundColor() const;
     QString foregroundWallpaperPath() const;
 
-    bool invertScoreColor() const;
+    bool scoreInversionEnabled() const;
 
     Q_INVOKABLE void resetThemeToDefault();
     Q_INVOKABLE bool enableHighContrastChecked();
@@ -114,7 +114,7 @@ public slots:
     void setForegroundUseColor(bool value);
     void setForegroundColor(const QColor& color);
     void setForegroundWallpaperPath(const QString& path);
-    void setInvertScoreColor(bool value);
+    void setScoreInversionEnabled(bool value);
 
 signals:
     void highContrastEnabledChanged();
