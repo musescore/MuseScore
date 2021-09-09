@@ -67,11 +67,6 @@ public:
 
     async::Notification foregroundChanged() const override;
 
-    bool scoreInversionEnabled() const override;
-    void setScoreInversionEnabled(bool value) override;
-
-    async::Notification scoreInversionChanged() const override;
-
     io::path wallpapersDefaultDirPath() const override;
 
     QColor borderColor() const override;
@@ -177,7 +172,6 @@ private:
     io::path secondScoreOrderListPath() const;
     void setSecondScoreOrderListPath(const io::path& path);
 
-    async::Notification m_scoreInversionChanged;
     async::Notification m_backgroundChanged;
     async::Notification m_foregroundChanged;
     async::Channel<int> m_currentZoomChanged;
