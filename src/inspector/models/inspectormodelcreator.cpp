@@ -142,6 +142,9 @@ AbstractInspectorModel* InspectorModelCreator::newInspectorModel(AbstractInspect
         return new TremoloSettingsModel(parent, repository);
     case AbstractInspectorModel::InspectorModelType::TYPE_MEASURE_REPEAT:
         return new MeasureRepeatSettingsModel(parent, repository);
+    case AbstractInspectorModel::InspectorModelType::TYPE_BREATH:
+    case AbstractInspectorModel::InspectorModelType::TYPE_ARPEGGIO:
+    case AbstractInspectorModel::InspectorModelType::TYPE_DYNAMIC:
     case AbstractInspectorModel::InspectorModelType::TYPE_UNDEFINED:
         break;
     }
