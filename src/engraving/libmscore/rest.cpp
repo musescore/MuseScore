@@ -231,7 +231,6 @@ EngravingItem* Rest::drop(EditData& data)
         Chord* c = toChord(e);
         Note* n  = c->upNote();
         Direction dir = c->stemDirection();
-        // score()->select(0, SelectType::SINGLE, 0);
         NoteVal nval;
         nval.pitch = n->pitch();
         nval.headGroup = n->headGroup();
