@@ -24,6 +24,7 @@
 #include "paintdebugger.h"
 
 #include "accessibility/accessibleitem.h"
+#include "libmscore/page.h"
 
 #include "log.h"
 

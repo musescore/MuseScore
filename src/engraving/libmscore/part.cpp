@@ -38,6 +38,7 @@
 #include "chordrest.h"
 #include "fret.h"
 #include "masterscore.h"
+#include "linkedobjects.h"
 
 using namespace mu;
 using namespace mu::engraving;

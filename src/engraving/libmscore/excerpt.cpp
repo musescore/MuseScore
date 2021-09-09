@@ -59,6 +59,7 @@
 #include "undo.h"
 #include "utils.h"
 #include "masterscore.h"
+#include "linkedobjects.h"
 
 #include "log.h"
 
