@@ -534,16 +534,13 @@ void Tie::slurPos(SlurPos* sp)
         }
 
         // adjust for ledger lines
-        if (startNote()->line() >= 8 || startNote()->line() <= 0) {
-            // note is above or below the staff
-            auto currLedger = sc->ledgerLines();  // search through ledger lines and see if any are within .5sp of tie start
-            while (currLedger) {
-                if (qAbs(y1 - currLedger->y()) < _spatium * 0.5) {
-                    xo = qMax(xo, currLedger->x() + currLedger->len());
-                    break;
-                }
-                currLedger = currLedger->next();
+        auto currLedger = sc->ledgerLines();  // search through ledger lines and see if any are within .5sp of tie start
+        while (currLedger) {
+            if (qAbs(y1 - currLedger->y()) < _spatium * 0.5) {
+                xo = qMax(xo, currLedger->x() + currLedger->len());
+                break;
             }
+            currLedger = currLedger->next();
         }
 
         x1 += xo + offsetMargin;
@@ -579,15 +576,12 @@ void Tie::slurPos(SlurPos* sp)
         // ADJUST FOR COLLISIONS ----------------
 
         // adjust for ledger lines
-        if (endNote()->line() >= 8 || endNote()->line() <= 0) {
-            // note is above or below the staff
-            auto currLedger = ec->ledgerLines();  // search through ledger lines and see if any are within .5sp of tie end
-            while (currLedger) {
-                if (qAbs(y1 - currLedger->y()) < _spatium * 0.5) {
-                    xo = qMax(xo, x2 - currLedger->x());
-                }
-                currLedger = currLedger->next();
+        auto currLedger = ec->ledgerLines();  // search through ledger lines and see if any are within .5sp of tie end
+        while (currLedger) {
+            if (qAbs(y1 - currLedger->y()) < _spatium * 0.5) {
+                xo = qMax(xo, x2 - currLedger->x());
             }
+            currLedger = currLedger->next();
         }
 
         // adjust for shifted notes (such as intervals of unison or second)
