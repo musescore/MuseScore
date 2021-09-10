@@ -50,6 +50,12 @@ class Arpeggio final : public Element {
 
       static const std::array<const char*, 6> arpeggioTypeNames;
 
+   private:
+
+      qreal insetTop() const;
+      qreal insetBottom() const;
+      qreal insetWidth() const;
+
    public:
       Arpeggio(Score* s);
 
@@ -82,6 +88,8 @@ class Arpeggio final : public Element {
       qreal userLen2() const    { return _userLen2; }
       void setUserLen1(qreal v) { _userLen1 = v; }
       void setUserLen2(qreal v) { _userLen2 = v; }
+
+      qreal insetDistance(QVector<Accidental*>& accidentals, qreal mag_) const;
 
       bool playArpeggio()       { return _playArpeggio; }
       void setPlayArpeggio(bool p) { _playArpeggio = p; }
