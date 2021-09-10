@@ -2265,7 +2265,10 @@ void Note::layout2()
         // adjust dot distance for hooks
         if (chord()->hook() && chord()->up()) {
             qreal hookRight = chord()->hook()->width() + chord()->hook()->x() + chord()->pos().x();
-            if (chord()->dotPosX() < hookRight) {
+            qreal hookBottom = chord()->hook()->height() + chord()->hook()->y() + chord()->pos().y() + (0.25 * spatium());
+            // the top dot in the chord, not the dot for this particular note:
+            qreal dotY = chord()->notes().back()->y() + chord()->notes().back()->dots().first()->pos().y();
+            if (chord()->dotPosX() < hookRight && dotY < hookBottom) {
                 d = chord()->hook()->width();
             }
         }
