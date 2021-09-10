@@ -2269,7 +2269,7 @@ void Note::layout2()
             // the top dot in the chord, not the dot for this particular note:
             qreal dotY = chord()->notes().back()->y() + chord()->notes().back()->dots().first()->pos().y();
             if (chord()->dotPosX() < hookRight && dotY < hookBottom) {
-                d = chord()->hook()->width();
+                d = chord()->hook()->width() + (0.25 * spatium());
             }
         }
         // if TAB and stems through staff

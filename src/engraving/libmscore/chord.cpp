@@ -1365,6 +1365,7 @@ qreal Chord::defaultStemLength() const
     }
 
     qreal normalStemLen = isSmall() ? 2.5 : 3.5;
+    /* We no longer need to adjust stem hight for dot-hook collisions (Issue #9095)
     if (hookIdx && tab == 0) {
         if (up() && durationType().dots()) {
             //
@@ -1375,7 +1376,7 @@ qreal Chord::defaultStemLength() const
             }
             shortenStem = false;
         }
-    }
+    } */
 
     if (isGrace()) {
         // grace notes stems are not subject to normal
