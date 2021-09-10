@@ -497,6 +497,11 @@ Part* EngravingItem::part() const
     return s ? s->part() : 0;
 }
 
+draw::Color EngravingItem::color() const
+{
+    return _color;
+}
+
 //---------------------------------------------------------
 //   curColor
 //---------------------------------------------------------
@@ -546,6 +551,11 @@ mu::draw::Color EngravingItem::curColor(bool isVisible, mu::draw::Color normalCo
     if (!isVisible) {
         return engravingConfiguration()->invisibleColor();
     }
+    if (engravingConfiguration()->scoreInversionEnabled()
+        && !score()->isPaletteScore()) {
+        return mu::draw::Color(220, 220, 220); //slightly dulled white for less strain on the eyes
+    }
+
     return normalColor;
 }
 

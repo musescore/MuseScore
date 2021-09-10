@@ -36,6 +36,7 @@ class AppearancePreferencesModel : public QObject, public async::Asyncable
 
     INJECT(appshell, ui::IUiConfiguration, uiConfiguration)
     INJECT(appshell, notation::INotationConfiguration, notationConfiguration)
+    INJECT(appshell, engraving::IEngravingConfiguration, engravingConfiguration)
 
     Q_PROPERTY(bool highContrastEnabled READ highContrastEnabled WRITE setHighContrastEnabled NOTIFY highContrastEnabledChanged)
     Q_PROPERTY(QVariantList generalThemes READ generalThemes NOTIFY themesChanged)
@@ -57,6 +58,8 @@ class AppearancePreferencesModel : public QObject, public async::Asyncable
     Q_PROPERTY(QColor foregroundColor READ foregroundColor WRITE setForegroundColor NOTIFY foregroundColorChanged)
     Q_PROPERTY(
         QString foregroundWallpaperPath READ foregroundWallpaperPath WRITE setForegroundWallpaperPath NOTIFY foregroundWallpaperPathChanged)
+
+    Q_PROPERTY(bool scoreInversionEnabled READ scoreInversionEnabled WRITE setScoreInversionEnabled NOTIFY invertScoreColorChanged)
 
 public:
     explicit AppearancePreferencesModel(QObject* parent = nullptr);
@@ -91,8 +94,9 @@ public:
     QColor foregroundColor() const;
     QString foregroundWallpaperPath() const;
 
+    bool scoreInversionEnabled() const;
+
     Q_INVOKABLE void resetThemeToDefault();
-    Q_INVOKABLE bool enableHighContrastChecked();
     Q_INVOKABLE void setNewColor(const QColor& newColor, ColorType colorType);
     Q_INVOKABLE QStringList allFonts() const;
     Q_INVOKABLE QString wallpaperPathFilter() const;
@@ -110,6 +114,7 @@ public slots:
     void setForegroundUseColor(bool value);
     void setForegroundColor(const QColor& color);
     void setForegroundWallpaperPath(const QString& path);
+    void setScoreInversionEnabled(bool value);
 
 signals:
     void highContrastEnabledChanged();
@@ -122,6 +127,7 @@ signals:
     void foregroundUseColorChanged();
     void foregroundColorChanged();
     void foregroundWallpaperPathChanged();
+    void invertScoreColorChanged();
 
 private:
     ui::ThemeInfo currentTheme() const;

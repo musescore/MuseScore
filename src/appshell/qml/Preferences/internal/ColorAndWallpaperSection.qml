@@ -39,11 +39,17 @@ BaseSection {
     property alias wallpapersDir: wallpaperPicker.dir
     property alias wallpaperFilter: wallpaperPicker.filter
 
+    property alias opacityOverride: gridSection.opacity
+
     signal useColorChangeRequested(var newValue)
     signal colorChangeRequested(var newColor)
     signal wallpaperPathChangeRequested(var newWallpaperPath)
 
+    titleOpacity: 1.0
+
     GridLayout {
+        id: gridSection
+
         rows: 2
         columns: 2
 

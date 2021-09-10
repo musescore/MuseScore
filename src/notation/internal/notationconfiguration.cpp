@@ -279,7 +279,11 @@ async::Notification NotationConfiguration::backgroundChanged() const
 
 QColor NotationConfiguration::foregroundColor() const
 {
-    return settings()->value(FOREGROUND_COLOR).toQColor();
+    if (engravingConfiguration()->scoreInversionEnabled()) {
+        return QColorConstants::Black;
+    } else {
+        return settings()->value(FOREGROUND_COLOR).toQColor();
+    }
 }
 
 void NotationConfiguration::setForegroundColor(const QColor& color)
@@ -319,12 +323,20 @@ io::path NotationConfiguration::wallpapersDefaultDirPath() const
 
 QColor NotationConfiguration::borderColor() const
 {
-    return QColor(0, 0, 0, 102);
+    if (uiConfiguration()->isHighContrast()) {
+        return QColorConstants::White;
+    } else {
+        return QColor(0, 0, 0, 102);
+    }
 }
 
 int NotationConfiguration::borderWidth() const
 {
-    return 1;
+    if (uiConfiguration()->isHighContrast()) {
+        return 10;
+    } else {
+        return 1;
+    }
 }
 
 QColor NotationConfiguration::playbackCursorColor() const

@@ -23,6 +23,7 @@
 #define MU_ENGRAVING_ENGRAVINGCONFIGURATION_H
 
 #include "../iengravingconfiguration.h"
+#include "modularity/ioc.h"
 #include "async/asyncable.h"
 
 namespace mu::engraving {
@@ -54,8 +55,14 @@ public:
 
     draw::Color highlightSelectionColor(int voice = 0) const override;
 
+    bool scoreInversionEnabled() const override;
+    void setScoreInversionEnabled(bool value) override;
+
+    async::Notification scoreInversionChanged() const override;
+
 private:
     async::Channel<int, draw::Color> m_voiceColorChanged;
+    async::Notification m_scoreInversionChanged;
 };
 }
 
