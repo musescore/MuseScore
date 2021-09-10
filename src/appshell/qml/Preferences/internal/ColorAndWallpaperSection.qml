@@ -62,7 +62,6 @@ BaseSection {
 
             checked: root.useColor
             text: qsTrc("appshell", "Color:")
-            //opacity: root.opacityOverride
 
             navigation.name: "ColorBox"
             navigation.panel: root.navigation
@@ -80,7 +79,6 @@ BaseSection {
             width: 112
 
             enabled: root.useColor
-            //opacity: root.opacityOverride
 
             navigation.name: "ColorBox"
             navigation.panel: root.navigation
@@ -97,7 +95,6 @@ BaseSection {
 
             checked: !root.useColor
             text: qsTrc("appshell", "Wallpaper:")
-            //opacity: root.opacityOverride
 
             navigation.name: "WallpaperBox"
             navigation.panel: root.navigation
@@ -115,7 +112,6 @@ BaseSection {
             width: 208
 
             enabled: !root.useColor
-            //opacity: root.opacityOverride
 
             navigation: root.navigation
             navigationRowOrder: 1

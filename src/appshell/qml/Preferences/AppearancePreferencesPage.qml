@@ -171,6 +171,17 @@ PreferencesPage {
 
         SeparatorLine {}
 
+        CheckBox {
+            id: scoreInversionEnable
+
+            checked: appearanceModel.scoreInversionEnabled
+            text: qsTrc("appshell", "Invert score colors")
+
+            onClicked: {
+                appearanceModel.scoreInversionEnabled = !checked
+            }
+        }
+
         ColorAndWallpaperSection {
             id: paperSettings
 
@@ -206,17 +217,6 @@ PreferencesPage {
                 if (activeFocus) {
                     root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
                 }
-            }
-        }
-
-        CheckBox {
-            id: scoreInversionEnable
-
-            checked: appearanceModel.scoreInversionEnabled
-            text: qsTrc("appshell", "Invert score colors")
-
-            onClicked: {
-                appearanceModel.scoreInversionEnabled = !checked
             }
         }
 
