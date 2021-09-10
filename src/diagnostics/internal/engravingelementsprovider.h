@@ -22,6 +22,9 @@
 #ifndef MU_DIAGNOSTICS_ENGRAVINGELEMENTSPROVIDER_H
 #define MU_DIAGNOSTICS_ENGRAVINGELEMENTSPROVIDER_H
 
+#include <string>
+#include <map>
+
 #include "../iengravingelementsprovider.h"
 
 namespace mu::diagnostics {
@@ -30,11 +33,14 @@ class EngravingElementsProvider : public IEngravingElementsProvider
 public:
     EngravingElementsProvider() = default;
 
+    // statistic
+    void clearStatistic() override;
+    void printStatistic(const std::string& title) override;
+
     // registr
     void reg(const Ms::EngravingObject* e) override;
     void unreg(const Ms::EngravingObject* e) override;
-    std::list<const Ms::EngravingObject*> elements() const override;
-    async::Channel<const Ms::EngravingObject*, bool> registreChanged() const override;
+    const EngravingObjectList& elements() const override;
 
     // debug draw
     void select(const Ms::EngravingObject* e, bool arg) override;
@@ -43,10 +49,17 @@ public:
 
 private:
 
-    std::list<const Ms::EngravingObject*> m_elements;
-    async::Channel<const Ms::EngravingObject*, bool> m_registreChanged;
+    struct ObjectStatistic
+    {
+        int regCount = 0;
+        int unregCount = 0;
+    };
 
-    std::list<const Ms::EngravingObject*> m_selected;
+    std::map<std::string, ObjectStatistic> m_statistics;
+
+    EngravingObjectList m_elements;
+
+    EngravingObjectList m_selected;
     async::Channel<const Ms::EngravingObject*, bool> m_selectChanged;
 };
 }

@@ -105,8 +105,8 @@ private:
     Item* itemByModelIndex(const QModelIndex& index) const;
     QVariantMap makeData(const Ms::EngravingObject* el) const;
 
-    void load(const std::list<const Ms::EngravingObject*>& elements, Item* root);
-    void findAndAddLost(const std::list<const Ms::EngravingObject*>& elements, Item* lossRoot);
+    void load(const EngravingObjectList& elements, Item* root);
+    void findAndAddLost(const EngravingObjectList& elements, Item* lossRoot);
     const Item* findItem(const Ms::EngravingObject* el, const Item* root) const;
 
     void updateInfo();
