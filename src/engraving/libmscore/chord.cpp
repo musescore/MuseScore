@@ -1945,7 +1945,7 @@ void Chord::layoutPitched()
         _arpeggio->layout();        // only for width() !
         _arpeggio->setHeight(0.0);
         qreal extraX = _arpeggio->width() + arpeggioDistance + chordX;
-        qreal accidentalCorrection = chordHasAccidental ? 0.25 * spatium() : 0;
+        qreal accidentalCorrection = chordHasAccidental ? 0.5 * spatium() : 0;
         qreal y1   = upnote->pos().y() - upnote->headHeight() * .5;
         _arpeggio->setPos(-(lll + extraX - accidentalCorrection), y1);
         if (_arpeggio->visible()) {
