@@ -37,7 +37,7 @@ public:
     //   read114
     //    import old version <= 1.3 files
     //---------------------------------------------------------
-    static Ms::Score::FileError read114(Ms::MasterScore* masterScore, Ms::XmlReader& e);
+    static Ms::Score::FileError read114(Ms::MasterScore* masterScore, Ms::XmlReader& e, ReadContext& ctx);
 };
 }
 

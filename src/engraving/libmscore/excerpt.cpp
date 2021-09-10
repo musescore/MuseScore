@@ -259,9 +259,8 @@ void Excerpt::setVoiceVisible(Staff* staff, int voiceIndex, bool visible)
     updateTracks();
 
     // clone staff
-    Staff* staffCopy = Factory::createStaff(partScore());
+    Staff* staffCopy = Factory::createStaff(staff->part());
     staffCopy->setId(staff->id());
-    staffCopy->setPart(staff->part());
     staffCopy->init(staff);
 
     // remove current staff, insert cloned
@@ -310,7 +309,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
         p->setPartName(part->partName());
 
         for (Staff* staff : *part->staves()) {
-            Staff* s = Factory::createStaff(score, p);
+            Staff* s = Factory::createStaff(p);
             s->setId(staff->id());
             s->init(staff);
             s->setDefaultClefType(staff->defaultClefType());
@@ -348,7 +347,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
     titleFramePart->copyValues(titleFrameScore);
     QString partLabel = excerpt->title();       // parts.front()->longName();
     if (!partLabel.isEmpty()) {
-        Text* txt = new Text(score, Tid::INSTRUMENT_EXCERPT);
+        Text* txt = Factory::createText(measure, Tid::INSTRUMENT_EXCERPT);
         txt->setPlainText(partLabel);
         measure->add(txt);
         score->setMetaTag("partName", partLabel);

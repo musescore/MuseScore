@@ -45,8 +45,7 @@ public:
 
     const Ms::EngravingItem* element() const;
 
-    void setRegistred(bool arg);
-    bool registred() const;
+    bool registered() const;
 
     void setFocus();
     void notifyAboutFocus(bool focused);

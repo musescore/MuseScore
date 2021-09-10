@@ -167,7 +167,7 @@ void MuseData::openSlur(int idx, const Fraction& tick, Staff* staff, int voc)
         qDebug("%06d: slur %d already open", tick.ticks(), idx + 1);
         return;
     }
-    slur[idx] = new Slur(score->dummy());
+    slur[idx] = Factory::createSlur(score->dummy());
     slur[idx]->setTick(tick);
     slur[idx]->setTrack(staffIdx * VOICES + voc);
     score->addElement(slur[idx]);
@@ -671,7 +671,7 @@ bool MuseData::read(const QString& name)
             Part* mpart = new Part(score);
             int staves  = countStaves(part);
             for (int i = 0; i < staves; ++i) {
-                Staff* staff = Factory::createStaff(score, mpart);
+                Staff* staff = Factory::createStaff(mpart);
                 score->appendStaff(staff);
 
                 if ((staves == 2) && (i == 0)) {

@@ -187,7 +187,7 @@ void Tuplet::layout()
     qreal _spatium = spatium();
     if (_numberType != TupletNumberType::NO_TEXT) {
         if (_number == 0) {
-            _number = new Text(this, Tid::TUPLET);
+            _number = Factory::createText(this, Tid::TUPLET);
             _number->setComposition(true);
             _number->setTrack(track());
             _number->setParent(this);
@@ -871,7 +871,7 @@ bool Tuplet::readProperties(XmlReader& e)
     } else if (tag == "baseDots") {
         _baseLen.setDots(e.readInt());
     } else if (tag == "Number") {
-        _number = new Text(this, Tid::TUPLET);
+        _number = Factory::createText(this, Tid::TUPLET);
         _number->setComposition(true);
         _number->setParent(this);
         resetNumberProperty();

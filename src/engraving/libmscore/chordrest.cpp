@@ -464,7 +464,6 @@ EngravingItem* ChordRest::drop(EditData& data)
                     l = toBarLine(obl->linkedClone());
                 }
                 l->setTrack(st->idx() * VOICES);
-                l->setScore(score);
                 l->setParent(seg);
                 score->undoAddElement(l);
                 l->layout();

@@ -64,8 +64,8 @@ namespace Ms {
 //   Staff
 //---------------------------------------------------------
 
-Staff::Staff(Score* score)
-    : EngravingItem(ElementType::STAFF, score)
+Staff::Staff(Part* parent)
+    : EngravingItem(ElementType::STAFF, parent)
 {
     initFromStaffType(0);
 }

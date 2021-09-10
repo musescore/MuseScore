@@ -543,10 +543,10 @@ static void addBreakToPreviousMeasureBase(Score* const score, MeasureBase* const
  Add text \a strTxt to VBox \a vbx using Tid \a stl.
  */
 
-static void addText(VBox* vbx, Score* s, const QString strTxt, const Tid stl)
+static void addText(VBox* vbx, Score*, const QString strTxt, const Tid stl)
 {
     if (!strTxt.isEmpty()) {
-        Text* text = new Text(s, stl);
+        Text* text = Factory::createText(vbx, stl);
         text->setXmlText(strTxt);
         vbx->add(text);
     }
@@ -561,10 +561,10 @@ static void addText(VBox* vbx, Score* s, const QString strTxt, const Tid stl)
  Also sets Align and Yoff.
  */
 
-static void addText2(VBox* vbx, Score* s, const QString strTxt, const Tid stl, const Align align, const double yoffs)
+static void addText2(VBox* vbx, Score*, const QString strTxt, const Tid stl, const Align align, const double yoffs)
 {
     if (!strTxt.isEmpty()) {
-        Text* text = new Text(s, stl);
+        Text* text = Factory::createText(vbx, stl);
         text->setXmlText(strTxt);
         text->setAlign(align);
         text->setPropertyFlags(Pid::ALIGN, PropertyFlags::UNSTYLED);
@@ -1688,7 +1688,7 @@ static void createPart(Score* score, const QString& id, PartMap& pm)
     Part* part = new Part(score);
     pm.insert(id, part);
     score->appendPart(part);
-    Staff* staff = Factory::createStaff(score, part);
+    Staff* staff = Factory::createStaff(part);
     score->appendStaff(staff);
 }
 

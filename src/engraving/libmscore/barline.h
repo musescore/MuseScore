@@ -112,7 +112,6 @@ public:
     void layout2();
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
     void setTrack(int t) override;
-    void setScore(Score* s) override;
     void add(EngravingItem*) override;
     void remove(EngravingItem*) override;
     bool acceptDrop(EditData&) const override;
@@ -136,7 +135,6 @@ public:
     void endEditDrag(EditData&) override;
     Shape shape() const override;
 
-    ElementList* el() { return &_el; }
     const ElementList* el() const { return &_el; }
 
     static QString userTypeName(BarLineType);

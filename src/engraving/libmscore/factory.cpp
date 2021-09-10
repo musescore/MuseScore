@@ -542,20 +542,16 @@ Ms::Segment* Factory::createSegment(Ms::Measure* parent, Ms::SegmentType type, c
     return s;
 }
 
+CREATE_ITEM_IMPL(Slur, ElementType::SLUR, EngravingItem)
+MAKE_ITEM_IMPL(Slur, EngravingItem)
+
 CREATE_ITEM_IMPL(Spacer, ElementType::SPACER, Measure)
 MAKE_ITEM_IMPL(Spacer, Measure)
 
-Ms::Staff* Factory::createStaff(Ms::Score* parent)
+Staff* Factory::createStaff(Part * parent)
 {
-    Staff* s = new Staff(parent);
-    s->setup();
-    return s;
-}
-
-Staff* Factory::createStaff(Score* score, Part* part)
-{
-    Staff* staff = createStaff(score);
-    staff->setPart(part);
+    Staff* staff = new Staff(parent);
+    staff->setPart(parent);
     return staff;
 }
 
@@ -591,6 +587,20 @@ Ms::System* Factory::createSystem(Ms::Page* parent)
     s->setup();
     return s;
 }
+
+Ms::Text* Factory::createText(Ms::EngravingItem* parent, Ms::Tid tid)
+{
+    Text* t = new Text(parent, tid);
+    t->setup();
+    return t;
+}
+
+Ms::Text* Factory::createTextJustForRead(Ms::EngravingItem* parent)
+{
+    return new Text(parent);
+}
+
+COPY_ITEM_IMPL(Text)
 
 CREATE_ITEM_IMPL(TimeSig, ElementType::TIMESIG, Segment)
 COPY_ITEM_IMPL(TimeSig)

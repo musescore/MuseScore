@@ -314,7 +314,7 @@ void OveToMScore::createStructure()
 
         for (int j = 0; j < partStaffCount; ++j) {
             //ovebase::Track* track = m_ove->getTrack(i, j);
-            Staff* staff = Factory::createStaff(m_score, part);
+            Staff* staff = Factory::createStaff(part);
             m_score->appendStaff(staff);
         }
 
@@ -356,11 +356,11 @@ namespace ove {
 void addText(VBox*& vbox, Score* s, QString strTxt, Tid stl)
 {
     if (!strTxt.isEmpty()) {
-        Text* text = new Text(s, stl);
-        text->setPlainText(strTxt);
         if (vbox == 0) {
             vbox = new VBox(s->dummy()->system());
         }
+        Text* text = Factory::createText(vbox, stl);
+        text->setPlainText(strTxt);
         vbox->add(text);
     }
 }
@@ -2292,7 +2292,7 @@ void OveToMScore::convertSlurs(Measure* measure, int part, int staff, int track)
             int absEndTick = m_mtt->getTick(
                 slurPtr->start()->getMeasure() + slurPtr->stop()->getMeasure(), endContainer->getTick());
 
-            Slur* slur = new Slur(m_score->dummy());
+            Slur* slur = Factory::createSlur(m_score->dummy());
             slur->setSlurDirection(slurPtr->getShowOnTop() ? Direction::UP : Direction::DOWN);
             slur->setTick(Fraction::fromTicks(absStartTick));
             slur->setTick2(Fraction::fromTicks(absEndTick));
@@ -2398,12 +2398,11 @@ void OveToMScore::convertExpressions(Measure* measure, int part, int staff, int 
     for (int i = 0; i < expressions.size(); ++i) {
         ovebase::Expressions* expressionPtr = static_cast<ovebase::Expressions*>(expressions[i]);
         int absTick = m_mtt->getTick(measure->no(), expressionPtr->getTick());
-        Text* t = new Text(m_score, Tid::EXPRESSION);
-
+        Segment* s = measure->getSegment(SegmentType::ChordRest, Fraction::fromTicks(absTick));
+        Text* t = Factory::createText(s, Tid::EXPRESSION);
         t->setPlainText(expressionPtr->getText());
         t->setTrack(track);
 
-        Segment* s = measure->getSegment(SegmentType::ChordRest, Fraction::fromTicks(absTick));
         s->add(t);
     }
 }
