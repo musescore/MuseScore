@@ -71,34 +71,8 @@ void AccessibleItem::setup()
         return;
     }
 
-    if (m_element->score()->isPaletteScore()) {
-        return;
-    }
-
     accessibilityController()->reg(this);
     m_registred = true;
-}
-
-bool AccessibleItem::isAvalaible() const
-{
-    if (!m_element) {
-        return false;
-    }
-
-    Ms::Score* s = m_element->score();
-    if (!s) {
-        return false;
-    }
-
-    //! NOTE Disabled for not score elements and palettes
-    if (s->isPaletteScore()) {
-        return false;
-    }
-
-    if (!s->accessible()) {
-        return false;
-    }
-    return true;
 }
 
 AccessibleScore* AccessibleItem::accessibleScore() const
@@ -131,13 +105,6 @@ bool AccessibleItem::registred() const
 
 void AccessibleItem::setFocus()
 {
-    LOGI() << accessibleName();
-    AccessibleScore* ascore = accessibleScore();
-    if (!ascore) {
-        return;
-    }
-
-    ascore->setFocusedElement(this);
 }
 
 void AccessibleItem::notifyAboutFocus(bool focused)
@@ -161,7 +128,7 @@ size_t AccessibleItem::accessibleChildCount() const
     for (const EngravingObject* obj : m_element->children()) {
         if (obj->isEngravingItem()) {
             AccessibleItem* access = Ms::toEngravingItem(obj)->accessible();
-            if (access && access->isAvalaible()) {
+            if (access && access->registred()) {
                 ++count;
             }
         }
@@ -176,7 +143,7 @@ const IAccessible* AccessibleItem::accessibleChild(size_t i) const
     for (const EngravingObject* obj : m_element->children()) {
         if (obj->isEngravingItem()) {
             AccessibleItem* access = Ms::toEngravingItem(obj)->accessible();
-            if (access && access->isAvalaible()) {
+            if (access && access->registred()) {
                 if (count == i) {
                     return access;
                 }
@@ -204,7 +171,7 @@ QString AccessibleItem::accessibleDescription() const
 
 bool AccessibleItem::accessibleState(State st) const
 {
-    if (!isAvalaible()) {
+    if (!registred()) {
         return false;
     }
 
@@ -220,7 +187,7 @@ bool AccessibleItem::accessibleState(State st) const
 
 QRect AccessibleItem::accessibleRect() const
 {
-    if (!isAvalaible()) {
+    if (!registred()) {
         return QRect();
     }
 

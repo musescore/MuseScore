@@ -46,6 +46,7 @@ class LedgerLine final : public EngravingItem
 
 public:
     LedgerLine(Score*);
+    ~LedgerLine();
     LedgerLine& operator=(const LedgerLine&) = delete;
 
     LedgerLine* clone() const override { return new LedgerLine(*this); }
