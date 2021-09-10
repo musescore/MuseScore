@@ -244,7 +244,9 @@ Score::FileError MasterScore::loadMscz(const mu::engraving::MscReader& mscReader
 
         XmlReader xml(scoreData);
         xml.setDocName(completeBaseName);
-        retval = read(xml, ignoreVersionError, &styleHook);
+        mu::engraving::ReadContext ctx(this);
+        ctx.setIgnoreVersionError(ignoreVersionError);
+        retval = read(xml, ctx, &styleHook);
     }
 
     // Read excerpts
@@ -505,7 +507,7 @@ void MasterScore::parseVersion(const QString& val)
 //    return true on success
 //---------------------------------------------------------
 
-Score::FileError MasterScore::read(XmlReader& e, bool ignoreVersionError, mu::engraving::compat::ReadStyleHook* styleHook)
+Score::FileError MasterScore::read(XmlReader& e, mu::engraving::ReadContext& ctx, mu::engraving::compat::ReadStyleHook* styleHook)
 {
     while (e.readNextStartElement()) {
         if (e.name() == "museScore") {
@@ -513,7 +515,7 @@ Score::FileError MasterScore::read(XmlReader& e, bool ignoreVersionError, mu::en
             QStringList sl = version.split('.');
             setMscVersion(sl[0].toInt() * 100 + sl[1].toInt());
 
-            if (!ignoreVersionError) {
+            if (!ctx.ignoreVersionError()) {
                 if (mscVersion() > MSCVERSION) {
                     return FileError::FILE_TOO_NEW;
                 }
@@ -531,9 +533,9 @@ Score::FileError MasterScore::read(XmlReader& e, bool ignoreVersionError, mu::en
 
             Score::FileError error;
             if (mscVersion() <= 114) {
-                error = compat::Read114::read114(this, e);
+                error = compat::Read114::read114(this, e, ctx);
             } else if (mscVersion() <= 207) {
-                error = compat::Read206::read206(this, e);
+                error = compat::Read206::read206(this, e, ctx);
             } else if (mscVersion() < 400 || MScore::testMode) {
                 error = compat::Read302::read302(this, e);
             } else {
@@ -667,7 +669,10 @@ MasterScore* MasterScore::clone()
     QByteArray scoreData = buffer.buffer();
     XmlReader r(scoreData);
     MasterScore* score = new MasterScore(style(), m_project);
-    score->read(r, true);
+
+    ReadContext ctx(this);
+    ctx.setIgnoreVersionError(true);
+    score->read(r, ctx);
 
     score->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
     score->doLayout();

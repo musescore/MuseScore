@@ -409,7 +409,7 @@ Score::FileError importBB(MasterScore* score, const QString& name)
     }
     for (int i = 0; i < ntracks; ++i) {
         Part* part = new Part(score);
-        Staff* s = Factory::createStaff(score, part);
+        Staff* s = Factory::createStaff(part);
         score->appendStaff(s);
         score->appendPart(part);
     }
@@ -476,10 +476,10 @@ Score::FileError importBB(MasterScore* score, const QString& name)
     //    create title
     //---------------------------------------------------
 
-    Text* text = new Text(score, Tid::TITLE);
+    MeasureBase* measureB = score->first();
+    Text* text = Factory::createText(measureB, Tid::TITLE);
     text->setPlainText(bb.title());
 
-    MeasureBase* measureB = score->first();
     if (measureB->type() != ElementType::VBOX) {
         measureB = new VBox(score->dummy()->system());
         measureB->setTick(Fraction(0, 1));

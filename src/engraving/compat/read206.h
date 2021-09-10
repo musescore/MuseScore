@@ -55,28 +55,28 @@ public:
     //   read206
     //    import old version > 1.3  and < 3.x files
     //---------------------------------------------------------
-    static Ms::Score::FileError read206(Ms::MasterScore* masterScore, Ms::XmlReader& e);
+    static Ms::Score::FileError read206(Ms::MasterScore* masterScore, Ms::XmlReader& e, ReadContext& ctx);
 
     static Ms::EngravingItem* readArticulation(Ms::EngravingItem*, Ms::XmlReader&);
     static void readAccidental206(Ms::Accidental*, Ms::XmlReader&);
     static void readTextStyle206(Ms::MStyle* style, Ms::XmlReader& e, std::map<QString, std::map<Ms::Sid, QVariant> >& excessStyles);
-    static void readTextLine206(Ms::XmlReader& e, Ms::TextLineBase* tlb);
+    static void readTextLine206(Ms::XmlReader& e, const ReadContext& ctx, Ms::TextLineBase* tlb);
     static void readTrill206(Ms::XmlReader& e, Ms::Trill* t);
-    static void readHairpin206(Ms::XmlReader& e, Ms::Hairpin* h);
+    static void readHairpin206(Ms::XmlReader& e, const ReadContext& ctx, Ms::Hairpin* h);
     static void readSlur206(Ms::XmlReader& e, Ms::Slur* s);
     static void readTie206(Ms::XmlReader& e, Ms::Tie* t);
 
-    static bool readNoteProperties206(Ms::Note* note, Ms::XmlReader& e);
+    static bool readNoteProperties206(Ms::Note* note, Ms::XmlReader& e, ReadContext& ctx);
     static bool readDurationProperties206(Ms::XmlReader& e, Ms::DurationElement* de);
-    static bool readTupletProperties206(Ms::XmlReader& e, Ms::Tuplet* t);
-    static bool readChordRestProperties206(Ms::XmlReader& e, Ms::ChordRest* cr);
-    static bool readChordProperties206(Ms::XmlReader& e, Ms::Chord* ch);
+    static bool readTupletProperties206(Ms::XmlReader& e, const ReadContext& ctx, Ms::Tuplet* t);
+    static bool readChordRestProperties206(Ms::XmlReader& e, const ReadContext& ctx, Ms::ChordRest* cr);
+    static bool readChordProperties206(Ms::XmlReader& e, ReadContext& ctx, Ms::Chord* ch);
 
     static Ms::SymId articulationNames2SymId206(const QString& s);
 
 private:
-    static bool readScore206(Ms::Score* score, Ms::XmlReader& e);
-    static void readPart206(Ms::Part* part, Ms::XmlReader& e);
+    static bool readScore206(Ms::Score* score, Ms::XmlReader& e, ReadContext& ctx);
+    static void readPart206(Ms::Part* part, Ms::XmlReader& e, ReadContext& ctx);
 };
 }
 

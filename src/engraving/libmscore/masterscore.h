@@ -79,7 +79,7 @@ class MasterScore : public Score
     QFileInfo _sessionStartBackupInfo;
     QFileInfo info;
 
-    FileError read(XmlReader&, bool ignoreVersionError, mu::engraving::compat::ReadStyleHook* styleHook = nullptr);
+    FileError read(XmlReader&, mu::engraving::ReadContext& ctx, mu::engraving::compat::ReadStyleHook* styleHook = nullptr);
     FileError doRead(XmlReader& e);
 
     friend class mu::engraving::EngravingProject;

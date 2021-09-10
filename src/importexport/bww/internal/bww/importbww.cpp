@@ -67,11 +67,11 @@ namespace Bww {
 static void addText(Ms::VBox*& vbx, Ms::Score* s, QString strTxt, Ms::Tid stl)
 {
     if (!strTxt.isEmpty()) {
-        Ms::Text* text = new Ms::Text(s, stl);
-        text->setPlainText(strTxt);
         if (vbx == 0) {
             vbx = new Ms::VBox(s->dummy()->system());
         }
+        Ms::Text* text = Factory::createText(vbx, stl);
+        text->setPlainText(strTxt);
         vbx->add(text);
     }
 }
@@ -554,7 +554,7 @@ Score::FileError importBww(MasterScore* score, const QString& path)
 
     Part* part = new Part(score);
     score->appendPart(part);
-    Staff* staff = Factory::createStaff(score, part);
+    Staff* staff = Factory::createStaff(part);
     score->appendStaff(staff);
 
     Bww::Lexer lex(&fp);

@@ -33,11 +33,16 @@ namespace Ms {
 class Text final : public TextBase
 {
 public:
-    Text(EngravingObject* parent = 0, Tid tid = Tid::DEFAULT);
 
     Text* clone() const override { return new Text(*this); }
     void read(XmlReader&) override;
     QVariant propertyDefault(Pid id) const override;
+
+    static QString readXmlText(XmlReader& r, Score* score);
+
+private:
+    friend class mu::engraving::Factory;
+    Text(EngravingItem* parent, Tid tid = Tid::DEFAULT);
 };
 }     // namespace Ms
 

@@ -122,10 +122,7 @@ bool Read302::readScore302(Ms::Score* score, XmlReader& e)
             }
             score->_scoreFont = ScoreFont::fontByName(score->style().value(Sid::MusicalSymbolFont).toString());
         } else if (tag == "copyright" || tag == "rights") {
-            Text* text = new Text(score->dummy());
-            text->read(e);
-            score->setMetaTag("copyright", text->xmlText());
-            delete text;
+            score->setMetaTag("copyright", Text::readXmlText(e, score));
         } else if (tag == "movement-number") {
             score->setMetaTag("movementNumber", e.readElementText());
         } else if (tag == "movement-title") {

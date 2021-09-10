@@ -280,7 +280,7 @@ void TestSpanners::spanners04()
     // add a linked staff to the existing staff
     // (copied and adapted from void MuseScore::editInstrList() in mscore/instrdialog.cpp)
     Staff* oldStaff   = score->staff(0);
-    Staff* newStaff   = Factory::createStaff(score);
+    Staff* newStaff   = Factory::createStaff(oldStaff->part());
     newStaff->setPart(oldStaff->part());
     newStaff->initFromStaffType(oldStaff->staffType(Fraction(0, 1)));
     newStaff->setDefaultClefType(ClefTypeList(ClefType::G));

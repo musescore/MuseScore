@@ -5499,7 +5499,7 @@ static void addSlur(const Notation& notation, SlurStack& slurs, ChordRest* cr, c
             slurs[slurNo] = SlurDesc();
         } else {
             // slur start for new slur: init
-            auto newSlur = new Slur(score->dummy());
+            auto newSlur = Factory::createSlur(score->dummy());
             if (cr->isGrace()) {
                 newSlur->setAnchor(Spanner::Anchor::CHORD);
             }
@@ -5536,7 +5536,7 @@ static void addSlur(const Notation& notation, SlurStack& slurs, ChordRest* cr, c
             logger->logError(QString("ignoring duplicate slur stop"), xmlreader);
         } else {
             // slur stop for new slur: init
-            auto newSlur = new Slur(score->dummy());
+            auto newSlur = Factory::createSlur(score->dummy());
             if (!(cr->isGrace())) {
                 newSlur->setTick2(Fraction::fromTicks(tick));
                 newSlur->setTrack2(track);

@@ -24,6 +24,7 @@
 #include "draw/fontmetrics.h"
 #include "io/xml.h"
 
+#include "factory.h"
 #include "box.h"
 #include "text.h"
 #include "score.h"
@@ -37,6 +38,7 @@
 #include "mscore.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -47,7 +49,7 @@ TBox::TBox(System* parent)
     : VBox(ElementType::TBOX, parent)
 {
     setBoxHeight(Spatium(1));
-    _text  = new Text(this, Tid::FRAME);
+    _text  = Factory::createText(this, Tid::FRAME);
     _text->setLayoutToParentWidth(true);
     _text->setParent(this);
 }
@@ -55,7 +57,7 @@ TBox::TBox(System* parent)
 TBox::TBox(const TBox& tbox)
     : VBox(tbox)
 {
-    _text = new Text(*(tbox._text));
+    _text = Factory::copyText(*(tbox._text));
 }
 
 TBox::~TBox()
@@ -162,7 +164,7 @@ void TBox::remove(EngravingItem* el)
         // replace with new empty text element
         // this keeps undo/redo happier than just clearing the text
         qDebug("TBox::remove() - replacing _text");
-        _text = new Text(this, Tid::FRAME);
+        _text = Factory::createText(this, Tid::FRAME);
         _text->setLayoutToParentWidth(true);
         _text->setParent(this);
     } else {

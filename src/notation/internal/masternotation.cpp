@@ -220,7 +220,7 @@ mu::Ret MasterNotation::setupNewScore(Ms::MasterScore* score, Ms::MasterScore* t
             part->setPartName(tpart->partName());
 
             for (Ms::Staff* tstaff : *tpart->staves()) {
-                Ms::Staff* staff = engraving::Factory::createStaff(score, part);
+                Ms::Staff* staff = engraving::Factory::createStaff(part);
                 staff->init(tstaff);
                 if (tstaff->links() && !part->staves()->isEmpty()) {
                     Staff* linkedStaff = part->staves()->back();

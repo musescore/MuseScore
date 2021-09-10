@@ -129,10 +129,7 @@ bool Score::readScore400(XmlReader& e)
             // Since version 400, the style is stored in a separate file
             e.skipCurrentElement();
         } else if (tag == "copyright" || tag == "rights") {
-            Text* text = new Text(this);
-            text->read(e);
-            setMetaTag("copyright", text->xmlText());
-            delete text;
+            setMetaTag("copyright", Text::readXmlText(e, this));
         } else if (tag == "movement-number") {
             setMetaTag("movementNumber", e.readElementText());
         } else if (tag == "movement-title") {

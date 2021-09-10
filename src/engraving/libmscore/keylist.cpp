@@ -22,7 +22,7 @@
 
 #include "keylist.h"
 #include "io/xml.h"
-#include "score.h"
+#include "rw/readcontext.h"
 
 using namespace mu;
 
@@ -127,7 +127,7 @@ int KeyList::currentKeyTick(int tick) const
 //   KeyList::read
 //---------------------------------------------------------
 
-void KeyList::read(XmlReader& e, Score* cs)
+void KeyList::read(XmlReader& e, const engraving::ReadContext& ctx)
 {
     while (e.readNextStartElement()) {
         if (e.name() == "key") {
@@ -140,7 +140,7 @@ void KeyList::read(XmlReader& e, Score* cs)
             }
             KeySigEvent ke;
             ke.setKey(k);
-            (*this)[cs->fileDivision(tick)] = ke;
+            (*this)[ctx.fileDivision(tick)] = ke;
             e.readNext();
         } else {
             e.unknown();

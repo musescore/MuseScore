@@ -117,7 +117,7 @@ private:
     PitchList _pitchOffsets;        ///< cached value
 
     friend class mu::engraving::Factory;
-    Staff(Score* score = nullptr);
+    Staff(Part* parent);
     Staff(const Staff& staff);
 
     void fillBrackets(int);

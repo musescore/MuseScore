@@ -264,12 +264,18 @@ void ExampleView::dragLeaveEvent(QDragLeaveEvent*)
 //   moveElement
 //---------------------------------------------------------
 
+struct MoveContext
+{
+    PointF pos;
+    Ms::Score* score = nullptr;
+};
+
 static void moveElement(void* data, EngravingItem* e)
 {
-    QPointF* pos = (QPointF*)data;
-    e->score()->addRefresh(e->canvasBoundingRect());
-    e->setPos(mu::PointF::fromQPointF(*pos));
-    e->score()->addRefresh(e->canvasBoundingRect());
+    MoveContext* ctx = (MoveContext*)data;
+    ctx->score->addRefresh(e->canvasBoundingRect());
+    e->setPos(ctx->pos);
+    ctx->score->addRefresh(e->canvasBoundingRect());
 }
 
 //---------------------------------------------------------
@@ -297,7 +303,9 @@ void ExampleView::dragMoveEvent(QDragMoveEvent* event)
     if (!found) {
         setDropTarget(0);
     }
-    dragElement->scanElements(&pos, moveElement, false);
+
+    MoveContext ctx{ pos, _score };
+    dragElement->scanElements(&ctx, moveElement, false);
     _score->update();
     return;
 }

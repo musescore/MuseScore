@@ -1148,7 +1148,6 @@ void BarLine::endEditDrag(EditData& ed)
                 b = toBarLine(linkedClone());
                 b->setSpanStaff(true);
                 b->setTrack(staffIdx * VOICES);
-                b->setScore(score());
                 b->setParent(s);
                 score()->undoAddElement(b);
             }
@@ -1417,18 +1416,6 @@ void BarLine::setTrack(int t)
     EngravingItem::setTrack(t);
     for (EngravingItem* e : _el) {
         e->setTrack(t);
-    }
-}
-
-//---------------------------------------------------------
-//   setScore
-//---------------------------------------------------------
-
-void BarLine::setScore(Score* s)
-{
-    EngravingItem::setScore(s);
-    for (EngravingItem* e : _el) {
-        e->setScore(s);
     }
 }
 

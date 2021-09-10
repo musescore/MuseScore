@@ -985,7 +985,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                         qDebug("first and second anchor for slur identical (tick %d track %d first %p second %p)",
                                tick.ticks(), track, cr1, cr2);
                     } else {
-                        Slur* slur = new Slur(score->dummy());
+                        Slur* slur = Factory::createSlur(score->dummy());
                         qDebug("tick %d track %d cr1 %p cr2 %p -> slur %p",
                                tick.ticks(), track, cr1, cr2, slur);
                         slur->setTick(cr1->tick());
@@ -1001,13 +1001,14 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
             break;
             case CapellaType::TEXT: {
                 TextObj* to = static_cast<TextObj*>(o);
-                Text* s = new Text(score, Tid::TITLE);
+                MeasureBase* measure = score->measures()->first();
+                Text* s = Factory::createText(measure, Tid::TITLE);
                 QString ss = ::rtf2html(QString(to->text));
 
                 // qDebug("string %f:%f w %d ratio %d <%s>",
                 //    to->relPos.x(), to->relPos.y(), to->width, to->yxRatio, qPrintable(ss));
                 s->setXmlText(ss);
-                MeasureBase* measure = score->measures()->first();
+
                 if (measure->type() != ElementType::VBOX) {
                     MeasureBase* mb = new VBox(score->dummy()->system());
                     mb->setTick(Fraction(0, 1));
@@ -1211,7 +1212,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
         }
         midiPatch = cl->sound;
 
-        Staff* s = Factory::createStaff(score, part);
+        Staff* s = Factory::createStaff(part);
         s->initFromStaffType(0);
 
         if (cl->bPercussion) {
@@ -1276,7 +1277,14 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
             default:  tid = Tid::DEFAULT;
                 break;
             }
-            Text* s = new Text(score, tid);
+
+            if (!measure) {
+                measure = new VBox(score->dummy()->system());
+                measure->setTick(Fraction(0, 1));
+                score->addMeasure(measure, score->measures()->first());
+            }
+
+            Text* s = Factory::createText(measure, tid);
             QFont f(to->font());
             s->setItalic(f.italic());
             // s->setUnderline(f.underline());
@@ -1285,11 +1293,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
 
             QString ss = to->text();
             s->setPlainText(ss);
-            if (!measure) {
-                measure = new VBox(score->dummy()->system());
-                measure->setTick(Fraction(0, 1));
-                score->addMeasure(measure, score->measures()->first());
-            }
+
             measure->add(s);
             // qDebug("page background object type %d (CapellaType::SIMPLE_TEXT) text %s", o->type, qPrintable(ss));
         }

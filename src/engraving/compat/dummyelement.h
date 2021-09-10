@@ -37,6 +37,7 @@ public:
     DummyElement(Ms::Score* s);
     ~DummyElement();
 
+    Ms::Score* score();
     Ms::Page* page();
     Ms::System* system();
     Ms::Measure* measure();
@@ -50,7 +51,6 @@ public:
     bool setProperty(Ms::Pid, const QVariant&) override { return false; }
 
 private:
-    Ms::Score* score();
 
     Ms::Page* m_page = nullptr;
     Ms::System* m_system = nullptr;

@@ -24,6 +24,8 @@
 #include "importmidi_fraction.h"
 #include "importmidi_chord.h"
 #include "importmidi_operations.h"
+
+#include "libmscore/factory.h"
 #include "libmscore/box.h"
 #include "libmscore/engravingitem.h"
 #include "libmscore/measurebase.h"
@@ -166,10 +168,10 @@ void addTitleToScore(Score* score, const QString& string, int textCounter)
         ssid = Tid::COMPOSER;
     }
 
-    Text* text = new Text(score, ssid);
+    MeasureBase* measure = score->first();
+    Text* text = mu::engraving::Factory::createText(measure, ssid);
     text->setPlainText(string.right(string.size() - int(TEXT_PREFIX.size())));
 
-    MeasureBase* measure = score->first();
     if (!measure->isVBox()) {
         measure = new VBox(score->dummy()->system());
         measure->setTick(Fraction(0, 1));

@@ -546,7 +546,7 @@ Slur* Score::addSlur(ChordRest* firstChordRest, ChordRest* secondChordRest, cons
         }
     }
 
-    Slur* slur = slurTemplate ? slurTemplate->clone() : new Slur(firstChordRest->score()->dummy());
+    Slur* slur = slurTemplate ? slurTemplate->clone() : Factory::createSlur(firstChordRest->score()->dummy());
     slur->setScore(firstChordRest->score());
     slur->setTick(firstChordRest->tick());
     slur->setTick2(secondChordRest->tick());
@@ -586,7 +586,7 @@ TextBase* Score::addText(Tid type)
             insertMeasure(ElementType::VBOX, measure);
             measure = measure->prev();
         }
-        textBox = new Text(this, type);
+        textBox = Factory::createText(measure, type);
         textBox->setParent(measure);
         undoAddElement(textBox);
         break;

@@ -93,12 +93,7 @@ const Ms::EngravingItem* AccessibleItem::element() const
     return m_element;
 }
 
-void AccessibleItem::setRegistred(bool arg)
-{
-    m_registred = arg;
-}
-
-bool AccessibleItem::registred() const
+bool AccessibleItem::registered() const
 {
     return m_registred;
 }
@@ -128,7 +123,7 @@ size_t AccessibleItem::accessibleChildCount() const
     for (const EngravingObject* obj : m_element->children()) {
         if (obj->isEngravingItem()) {
             AccessibleItem* access = Ms::toEngravingItem(obj)->accessible();
-            if (access && access->registred()) {
+            if (access && access->registered()) {
                 ++count;
             }
         }
@@ -143,7 +138,7 @@ const IAccessible* AccessibleItem::accessibleChild(size_t i) const
     for (const EngravingObject* obj : m_element->children()) {
         if (obj->isEngravingItem()) {
             AccessibleItem* access = Ms::toEngravingItem(obj)->accessible();
-            if (access && access->registred()) {
+            if (access && access->registered()) {
                 if (count == i) {
                     return access;
                 }
@@ -171,7 +166,7 @@ QString AccessibleItem::accessibleDescription() const
 
 bool AccessibleItem::accessibleState(State st) const
 {
-    if (!registred()) {
+    if (!registered()) {
         return false;
     }
 
@@ -187,7 +182,7 @@ bool AccessibleItem::accessibleState(State st) const
 
 QRect AccessibleItem::accessibleRect() const
 {
-    if (!registred()) {
+    if (!registered()) {
         return QRect();
     }
 
