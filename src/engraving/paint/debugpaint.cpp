@@ -44,7 +44,7 @@ void DebugPaint::paintPageDiagnostic(mu::draw::Painter& painter, Ms::Page* page)
     painter.setProvider(debugger, false);
 
     // Get children
-    std::list<const Ms::EngravingObject*> elements = elementsProvider()->elements();
+    const mu::diagnostics::EngravingObjectList& elements = elementsProvider()->elements();
 
     std::list<const Ms::EngravingItem*> children;
     for (const Ms::EngravingObject* el : elements) {

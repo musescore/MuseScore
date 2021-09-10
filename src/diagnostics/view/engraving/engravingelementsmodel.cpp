@@ -228,7 +228,7 @@ void EngravingElementsModel::reload()
     delete m_rootItem;
     m_rootItem = createItem(nullptr);
 
-    std::list<const Ms::EngravingObject*> elements = elementsProvider()->elements();
+    const EngravingObjectList& elements = elementsProvider()->elements();
     for (const Ms::EngravingObject* el : elements) {
         if (el == Ms::gpaletteScore) {
             continue;
@@ -252,7 +252,7 @@ void EngravingElementsModel::reload()
     updateInfo();
 }
 
-void EngravingElementsModel::load(const std::list<const Ms::EngravingObject*>& elements, Item* root)
+void EngravingElementsModel::load(const EngravingObjectList& elements, Item* root)
 {
     TRACEFUNC;
     for (const Ms::EngravingObject* el : elements) {
@@ -290,7 +290,7 @@ const EngravingElementsModel::Item* EngravingElementsModel::findItem(const Ms::E
     return nullptr;
 }
 
-void EngravingElementsModel::findAndAddLost(const std::list<const Ms::EngravingObject*>& elements, Item* lossRoot)
+void EngravingElementsModel::findAndAddLost(const EngravingObjectList& elements, Item* lossRoot)
 {
     TRACEFUNC;
 
@@ -361,7 +361,7 @@ void EngravingElementsModel::click1(QModelIndex index)
 
 void EngravingElementsModel::updateInfo()
 {
-    std::list<const Ms::EngravingObject*> elements = elementsProvider()->elements();
+    const EngravingObjectList& elements = elementsProvider()->elements();
     QHash<QString, int> els;
     for (const Ms::EngravingObject* el : elements) {
         els[el->name()] += 1;

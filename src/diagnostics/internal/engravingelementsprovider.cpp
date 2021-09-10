@@ -21,42 +21,76 @@
  */
 #include "engravingelementsprovider.h"
 
+#include <sstream>
+
+#include "stringutils.h"
+
 #include "engraving/libmscore/score.h"
+
+#include "log.h"
 
 using namespace mu::diagnostics;
 
-void EngravingElementsProvider::reg(const Ms::EngravingObject* e)
+void EngravingElementsProvider::clearStatistic()
 {
-    if (e->score()->isPaletteScore()) {
-        return;
+    m_statistics.clear();
+}
+
+void EngravingElementsProvider::printStatistic(const std::string& title)
+{
+    #define FORMAT(str, width) mu::strings::leftJustified(str, width)
+    #define TITLE(str) FORMAT(std::string(str), 20)
+    #define VALUE(val) FORMAT(std::to_string(val), 20)
+
+    std::stringstream stream;
+    stream << "\n\n";
+    stream << title << "\n";
+    stream << TITLE("Object") << TITLE("created") << TITLE("deleted") << "\n";
+
+    int regCountTotal = 0;
+    int unregCountTotal = 0;
+    for (auto it = m_statistics.begin(); it != m_statistics.end(); ++it) {
+        const ObjectStatistic& s = it->second;
+        stream << FORMAT(it->first, 20)
+               << VALUE(s.regCount)
+               << VALUE(s.unregCount)
+               << "\n";
+
+        regCountTotal += s.regCount;
+        unregCountTotal += s.unregCount;
     }
 
-    m_elements.push_back(e);
-    m_registreChanged.send(e, true);
+    stream << "-----------------------------------------------------\n";
+    stream << FORMAT("Total", 20) << VALUE(regCountTotal) << VALUE(unregCountTotal);
+
+    LOGI() << stream.str() << '\n';
+}
+
+void EngravingElementsProvider::reg(const Ms::EngravingObject* e)
+{
+    TRACEFUNC;
+    m_elements.insert(e);
+    m_statistics[e->name()].regCount++;
 }
 
 void EngravingElementsProvider::unreg(const Ms::EngravingObject* e)
 {
-    m_elements.remove(e);
-    m_registreChanged.send(e, false);
+    TRACEFUNC;
+    m_elements.erase(e);
+    m_statistics[e->name()].unregCount++;
 }
 
-std::list<const Ms::EngravingObject*> EngravingElementsProvider::elements() const
+const EngravingObjectList& EngravingElementsProvider::elements() const
 {
     return m_elements;
-}
-
-mu::async::Channel<const Ms::EngravingObject*, bool> EngravingElementsProvider::registreChanged() const
-{
-    return m_registreChanged;
 }
 
 void EngravingElementsProvider::select(const Ms::EngravingObject* e, bool arg)
 {
     if (arg) {
-        m_selected.push_back(e);
+        m_selected.insert(e);
     } else {
-        m_selected.remove(e);
+        m_selected.erase(e);
     }
     m_selectChanged.send(e, arg);
 }
