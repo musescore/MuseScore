@@ -32,6 +32,7 @@
 #include <QToolBar>
 #include <QTextEdit>
 #include <QVariant>
+#include <math.h>
 
 #include "log.h"
 
@@ -524,7 +525,7 @@ void UiTheme::drawPrimitive(QStyle::PrimitiveElement element, const QStyleOption
 
     // GroupBox
     case QStyle::PE_FrameGroupBox: {
-        drawRoundedRect(painter, option->rect, 3, QBrush("#03000000"), QPen(strokeColor(), borderWidth()));
+        drawRoundedRect(painter, option->rect, 3, QBrush("#03000000"), QPen(strokeColor(), fmax(borderWidth(), 1.0)));
     } break;
 
     // Menu

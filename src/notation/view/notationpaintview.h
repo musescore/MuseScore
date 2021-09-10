@@ -29,6 +29,7 @@
 #include "notation/inotationconfiguration.h"
 
 #include "actions/iactionsdispatcher.h"
+#include "ui/iuiconfiguration.h"
 #include "actions/actionable.h"
 #include "context/iglobalcontext.h"
 #include "async/asyncable.h"
@@ -48,6 +49,8 @@ class NotationPaintView : public QQuickPaintedItem, public IControlledView, publ
     Q_OBJECT
 
     INJECT(notation, INotationConfiguration, configuration)
+    INJECT(notation, engraving::IEngravingConfiguration, engravingConfiguration)
+    INJECT(notation, ui::IUiConfiguration, uiConfiguration)
     INJECT(notation, actions::IActionsDispatcher, dispatcher)
     INJECT(notation, context::IGlobalContext, globalContext)
     INJECT(notation, playback::IPlaybackController, playbackController)

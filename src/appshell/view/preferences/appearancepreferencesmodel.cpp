@@ -42,11 +42,17 @@ void AppearancePreferencesModel::init()
 {
     uiConfiguration()->currentThemeChanged().onNotify(this, [this]() {
         emit themesChanged();
+        emit foregroundColorChanged();
     });
 
     uiConfiguration()->fontChanged().onNotify(this, [this]() {
         emit currentFontIndexChanged();
         emit bodyTextSizeChanged();
+    });
+
+    engravingConfiguration()->scoreInversionChanged().onNotify(this, [this]() {
+        emit invertScoreColorChanged();
+        emit foregroundColorChanged();
     });
 
     notationConfiguration()->backgroundChanged().onNotify(this, [this]() {
@@ -104,11 +110,6 @@ void AppearancePreferencesModel::resetThemeToDefault()
     notationConfiguration()->resetCurrentBackgroundColorToDefault();
     emit backgroundColorChanged();
     emit themesChanged();
-}
-
-bool AppearancePreferencesModel::enableHighContrastChecked()
-{
-    return uiConfiguration()->isHighContrast();
 }
 
 void AppearancePreferencesModel::setNewColor(const QColor& newColor, ColorType colorType)
@@ -226,6 +227,11 @@ QString AppearancePreferencesModel::foregroundWallpaperPath() const
     return notationConfiguration()->foregroundWallpaperPath().toQString();
 }
 
+bool AppearancePreferencesModel::scoreInversionEnabled() const
+{
+    return engravingConfiguration()->scoreInversionEnabled();
+}
+
 void AppearancePreferencesModel::setCurrentThemeCode(const QString& themeCode)
 {
     if (themeCode == currentThemeCode()) {
@@ -336,4 +342,14 @@ void AppearancePreferencesModel::setForegroundWallpaperPath(const QString& path)
 
     notationConfiguration()->setForegroundWallpaperPath(path);
     emit foregroundWallpaperPathChanged();
+}
+
+void AppearancePreferencesModel::setScoreInversionEnabled(bool value)
+{
+    if (value == scoreInversionEnabled()) {
+        return;
+    }
+
+    engravingConfiguration()->setScoreInversionEnabled(value);
+    emit invertScoreColorChanged();
 }

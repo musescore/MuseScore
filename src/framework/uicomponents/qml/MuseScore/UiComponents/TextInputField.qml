@@ -107,7 +107,7 @@ FocusScope {
         NavigationFocusBorder { navigationCtrl: navCtrl }
 
         border.color: ui.theme.strokeColor
-        border.width: ui.theme.borderWidth
+        border.width: ui.theme.borderWidth > 0 ? ui.theme.borderWidth : 1 //borderWidth of >0 suggests that an HC theme is active, in which case we don't want to make a change
     }
 
     RowLayout {

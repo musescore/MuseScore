@@ -135,6 +135,8 @@ PreferencesPage {
         SeparatorLine {}
 
         ColorAndWallpaperSection {
+            id: backgroundSettings
+
             width: parent.width
 
             title: qsTrc("appshell", "Background")
@@ -169,8 +171,24 @@ PreferencesPage {
 
         SeparatorLine {}
 
+        CheckBox {
+            id: scoreInversionEnable
+
+            checked: appearanceModel.scoreInversionEnabled
+            text: qsTrc("appshell", "Invert score colors")
+
+            onClicked: {
+                appearanceModel.scoreInversionEnabled = !checked
+            }
+        }
+
         ColorAndWallpaperSection {
+            id: paperSettings
+
             width: parent.width
+
+            enabled: !appearanceModel.scoreInversionEnabled
+            opacityOverride: paperSettings.enabled ? 1.0 : 0.6
 
             title: qsTrc("appshell", "Paper")
             wallpaperDialogTitle: qsTrc("appshell", "Choose Notepaper")
