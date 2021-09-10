@@ -28,6 +28,9 @@
 #include "infrastructure/io/mscreader.h"
 #include "infrastructure/io/mscwriter.h"
 
+#include "modularity/ioc.h"
+#include "diagnostics/iengravingelementsprovider.h"
+
 //! NOTE In addition to the score itself, the mscz file also stores other data,
 //! such as synthesizer, mixer settings, omr, etc.
 //! We should talk not just about the score, but about the Project.
@@ -46,6 +49,8 @@ class MStyle;
 namespace mu::engraving {
 class EngravingProject : public std::enable_shared_from_this<EngravingProject>
 {
+    INJECT(engraving, diagnostics::IEngravingElementsProvider, engravingElementsProvider)
+
 public:
     ~EngravingProject();
 

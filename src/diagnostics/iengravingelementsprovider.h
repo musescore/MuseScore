@@ -22,7 +22,7 @@
 #ifndef MU_DIAGNOSTICS_IENGRAVINGELEMENTSPROVIDER_H
 #define MU_DIAGNOSTICS_IENGRAVINGELEMENTSPROVIDER_H
 
-#include <list>
+#include <unordered_set>
 #include "modularity/imoduleexport.h"
 #include "async/channel.h"
 
@@ -31,17 +31,21 @@ class EngravingObject;
 }
 
 namespace mu::diagnostics {
+using EngravingObjectList = std::unordered_set<const Ms::EngravingObject*>;
 class IEngravingElementsProvider : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IEngravingElementsProvider)
 public:
     virtual ~IEngravingElementsProvider() = default;
 
+    // statistic
+    virtual void clearStatistic() = 0;
+    virtual void printStatistic(const std::string& title) = 0;
+
     // register
     virtual void reg(const Ms::EngravingObject* e) = 0;
     virtual void unreg(const Ms::EngravingObject* e) = 0;
-    virtual std::list<const Ms::EngravingObject*> elements() const = 0;
-    virtual async::Channel<const Ms::EngravingObject*, bool> registreChanged() const = 0;
+    virtual const EngravingObjectList& elements() const = 0;
 
     // debug draw
     virtual void select(const Ms::EngravingObject* e, bool arg) = 0;

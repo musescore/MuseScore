@@ -36,6 +36,7 @@ void trim(std::string& s);
 
 std::string toLower(const std::string& source);
 bool endsWith(const std::string& str, const std::string& end);
+std::string leftJustified(const std::string& val, size_t width);
 
 // Locale-independent version of std::to_string
 template<typename T>

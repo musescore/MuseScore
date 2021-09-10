@@ -23,6 +23,7 @@
 #include "engravingobject.h"
 
 #include <iterator>
+#include <unordered_set>
 
 #include "translation.h"
 #include "io/xml.h"
@@ -40,6 +41,7 @@
 #include "linkedobjects.h"
 
 #include "log.h"
+#include "config.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -94,14 +96,22 @@ EngravingObject::EngravingObject(const EngravingObject& se)
 
 EngravingObject::~EngravingObject()
 {
-    m_onDestroyed.send(this);
-    doSetParent(nullptr);
-
     if (!isDummy() && !isScore()) {
-        for (EngravingObject* c : m_children) {
-            c->moveToDummy();
+        Score* sc = score();
+        IF_ASSERT_FAILED(sc) {
+            return;
+        }
+
+        auto dummy = sc->dummy();
+        if (dummy && dummy != this) {
+            for (EngravingObject* c : m_children) {
+                c->m_parent = dummy;
+                c->m_parent->addChild(c);
+            }
         }
     }
+
+    doSetParent(nullptr);
 
     if (elementsProvider()) {
         elementsProvider()->unreg(this);
@@ -123,21 +133,30 @@ void EngravingObject::doSetParent(EngravingObject* p)
         return;
     }
 
-    if (m_parent) {
-        m_parent->m_onDestroyed.resetOnReceive(this);
+#ifdef BUILD_DIAGNOSTICS
+    // check recursion
+    {
+        std::unordered_set<EngravingObject*> used;
+        used.insert(this);
+        EngravingObject* pi = p;
+        while (pi) {
+            IF_ASSERT_FAILED(used.find(pi) == used.end()) {
+                LOGE() << "recursion detected";
+                return;
+            }
+            used.insert(pi);
+            pi = pi->m_parent;
+        }
+    }
+#endif
 
+    if (m_parent) {
         m_parent->removeChild(this);
     }
 
     m_parent = p;
 
     if (m_parent) {
-        m_parent->m_onDestroyed.onReceive(this, [this](EngravingObject* p) {
-            if (!(p->isScore() || p->isDummy() || p != this->m_parent)) {
-                moveToDummy();
-            }
-        });
-
         m_parent->addChild(this);
     }
 }
@@ -642,6 +661,11 @@ void EngravingObject::setScore(Score* s)
 
 void EngravingObject::addChild(EngravingObject* o)
 {
+#ifdef BUILD_DIAGNOSTICS
+    IF_ASSERT_FAILED(std::find(m_children.begin(), m_children.end(), o) == m_children.end()) {
+        return;
+    }
+#endif
     m_children.push_back(o);
 }
 
@@ -721,6 +745,7 @@ bool EngravingObject::isDummy() const
 
 Score* EngravingObject::score(bool required) const
 {
+    TRACEFUNC;
     if (_score) {
         return _score;
     }
