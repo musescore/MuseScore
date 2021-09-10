@@ -2166,15 +2166,14 @@ bool NotationInteraction::isGripEditStarted() const
     return m_gripEditData.element && m_gripEditData.curGrip != Ms::Grip::NO_GRIP;
 }
 
-static int findGrip(const QVector<mu::RectF>& grips, Ms::Page* page, const mu::PointF& canvasPos)
+static int findGrip(const QVector<mu::RectF>& grips, const mu::PointF& canvasPos)
 {
-    if (grips.empty() || page == nullptr) {
+    if (grips.empty()) {
         return -1;
     }
-    mu::PointF pos = canvasPos - page->pos();
     qreal align = grips[0].width() / 2;
     for (int i = 0; i < grips.size(); ++i) {
-        if (grips[i].adjusted(-align, -align, align, align).contains(pos)) {
+        if (grips[i].adjusted(-align, -align, align, align).contains(canvasPos)) {
             return i;
         }
     }
@@ -2183,12 +2182,12 @@ static int findGrip(const QVector<mu::RectF>& grips, Ms::Page* page, const mu::P
 
 bool NotationInteraction::isHitGrip(const PointF& pos) const
 {
-    return selection()->element() && findGrip(m_gripEditData.grip, point2page(pos), pos) != -1;
+    return selection()->element() && findGrip(m_gripEditData.grip, pos) != -1;
 }
 
 void NotationInteraction::startEditGrip(const PointF& pos)
 {
-    int grip = findGrip(m_gripEditData.grip, point2page(pos), pos);
+    int grip = findGrip(m_gripEditData.grip, pos);
     if (grip == -1) {
         return;
     }
