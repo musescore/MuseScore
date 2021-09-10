@@ -1912,6 +1912,12 @@ void Chord::layoutPitched()
       //  process notes
       //-----------------------------------------
 
+      // Keeps track if there are any accidentals in this chord.
+      // Used to remove excess space in front of arpeggios.
+      // See GitHub issue #8970 for more details.
+      // https://github.com/musescore/MuseScore/issues/8970
+      QVector<Accidental*> chordAccidentals;
+
       for (Note* note : _notes) {
             note->layout();
 
@@ -1923,6 +1929,8 @@ void Chord::layoutPitched()
             lhead    = qMax(lhead, -x1);
 
             Accidental* accidental = note->accidental();
+            if (accidental && accidental->visible())
+                  chordAccidentals.append(accidental);
             if (accidental && accidental->addToSkyline() && !note->fixed()) {
                   // convert x position of accidental to segment coordinate system
                   qreal x = accidental->pos().x() + note->pos().x() + chordX;
@@ -2002,10 +2010,22 @@ void Chord::layoutPitched()
       addLedgerLines();
 
       if (_arpeggio) {
-            qreal arpeggioDistance = score()->styleP(Sid::ArpeggioNoteDistance) * mag_;
             _arpeggio->layout();    // only for width() !
             _arpeggio->setHeight(0.0);
-            qreal extraX = _arpeggio->width() + arpeggioDistance + chordX;
+
+            qreal arpeggioNoteDistance = score()->styleP(Sid::ArpeggioNoteDistance) * mag_;
+
+            qreal gapSize = arpeggioNoteDistance;
+
+            if (chordAccidentals.size()) {
+                  qreal arpeggioAccidentalDistance = score()->styleP(Sid::ArpeggioAccidentalDistance) * mag_;
+                  qreal accidentalDistance = score()->styleP(Sid::accidentalDistance) * mag_;
+                  gapSize = arpeggioAccidentalDistance - accidentalDistance;
+                  gapSize -= _arpeggio->insetDistance(chordAccidentals, mag_);
+                  }
+
+            qreal extraX = _arpeggio->width() + gapSize + chordX;
+
             qreal y1   = upnote->pos().y() - upnote->headHeight() * .5;
             _arpeggio->setPos(-(lll + extraX), y1);
             if (_arpeggio->visible())

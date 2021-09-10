@@ -448,6 +448,8 @@ static const StyleType styleTypes[] {
       { Sid::slurGateTime,            "slurGateTime",            QVariant(100) },
 
       { Sid::ArpeggioNoteDistance,    "ArpeggioNoteDistance",    Spatium(.5) },
+      { Sid::ArpeggioAccidentalDistance,    "ArpeggioAccidentalDistance",    Spatium(.5) },
+      { Sid::ArpeggioAccidentalDistanceMin,    "ArpeggioAccidentalDistanceMin",    Spatium(.33) },
       { Sid::ArpeggioLineWidth,       "ArpeggioLineWidth",       Spatium(.18) },
       { Sid::ArpeggioHookLen,         "ArpeggioHookLen",         Spatium(.8) },
       { Sid::ArpeggioHiddenInStdIfTab,"ArpeggioHiddenInStdIfTab",QVariant(false)},
