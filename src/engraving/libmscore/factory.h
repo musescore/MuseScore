@@ -29,6 +29,7 @@
 
 #include "engravingitem.h"
 #include "durationtype.h"
+#include "types.h"
 
 namespace mu::engraving {
 class Factory
@@ -124,11 +125,13 @@ public:
     static Ms::Segment* createSegment(Ms::Measure* parent);
     static Ms::Segment* createSegment(Ms::Measure* parent, Ms::SegmentType type, const Ms::Fraction& t);
 
+    static Ms::Slur* createSlur(Ms::EngravingItem* parent);
+    static std::shared_ptr<Ms::Slur> makeSlur(Ms::EngravingItem* parent);
+
     static Ms::Spacer* createSpacer(Ms::Measure* parent);
     static std::shared_ptr<Ms::Spacer> makeSpacer(Ms::Measure* parent);
 
-    static Ms::Staff* createStaff(Ms::Score* parent);
-    static Ms::Staff* createStaff(Ms::Score* parent, Ms::Part* part);
+    static Ms::Staff* createStaff(Ms::Part* parent);
 
     static Ms::StaffLines* createStaffLines(Ms::Measure* parent);
     static Ms::StaffLines* copyStaffLines(const Ms::StaffLines& src);
@@ -145,6 +148,10 @@ public:
     static Ms::StemSlash* copyStemSlash(const Ms::StemSlash& src);
 
     static Ms::System* createSystem(Ms::Page* parent);
+
+    static Ms::Text* createText(Ms::EngravingItem* parent, Ms::Tid tid = Ms::Tid::DEFAULT);
+    static Ms::Text* createTextJustForRead(Ms::EngravingItem* parent);
+    static Ms::Text* copyText(const Ms::Text& src);
 
     static Ms::TimeSig* createTimeSig(Ms::Segment* parent);
     static Ms::TimeSig* copyTimeSig(const Ms::TimeSig& src);

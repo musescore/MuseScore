@@ -563,7 +563,7 @@ void GuitarPro::addPop(Note* note)
 
 Text* GuitarPro::addTextToNote(QString string, Align a, Note* note)
 {
-    Text* text = new Text(score);
+    Text* text = Factory::createText(note);
     //TODO-ws	if (textStyle.underline())
     //            text->setFramed(true);
     text->setAlign(a);
@@ -1148,7 +1148,7 @@ bool GuitarPro1::read(QFile* fp)
     //
     for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
         Part* part = new Part(score);
-        Staff* s = Factory::createStaff(score, part);
+        Staff* s = Factory::createStaff(part);
 
         score->appendStaff(s);
         score->appendPart(part);
@@ -1478,7 +1478,7 @@ void GuitarPro::restsForEmptyBeats(Segment* seg, Measure* measure, ChordRest* cr
 void GuitarPro::createSlur(bool hasSlur, int staffIdx, ChordRest* cr)
 {
     if (hasSlur && (slurs[staffIdx] == 0)) {
-        Slur* slur = new Slur(score->dummy());
+        Slur* slur = Factory::createSlur(score->dummy());
         slur->setParent(0);
         slur->setTrack(cr->track());
         slur->setTrack2(cr->track());
@@ -1621,7 +1621,7 @@ bool GuitarPro2::read(QFile* fp)
     //
     for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
         Part* part = new Part(score);
-        Staff* s = Factory::createStaff(score, part);
+        Staff* s = Factory::createStaff(part);
 
         score->appendStaff(s);
         score->appendPart(part);
@@ -2020,7 +2020,7 @@ bool GuitarPro1::readNote(int string, Note* note)
                 score->addElement(glis);
                 //HammerOn here??? Maybe version...
 
-                Slur* slur1 = new Slur(score->dummy());
+                Slur* slur1 = Factory::createSlur(score->dummy());
                 slur1->setStartElement(gc);
                 slur1->setEndElement(note->chord());
                 slur1->setTick(gc->tick());
@@ -2047,7 +2047,7 @@ bool GuitarPro1::readNote(int string, Note* note)
                 ChordRest* cr1 = static_cast<Chord*>(gc);
                 ChordRest* cr2 = static_cast<Chord*>(note->chord());
 
-                Slur* slur1 = new Slur(score->dummy());
+                Slur* slur1 = Factory::createSlur(score->dummy());
                 slur1->setStartElement(cr1);
                 slur1->setEndElement(cr2);
                 slur1->setTick(cr1->tick());
@@ -2311,7 +2311,7 @@ bool GuitarPro3::read(QFile* fp)
     //
     for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
         Part* part = new Part(score);
-        Staff* s = Factory::createStaff(score, part);
+        Staff* s = Factory::createStaff(part);
 
         score->appendStaff(s);
         score->appendPart(part);
@@ -2943,12 +2943,12 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
         }
     }
     if (!gp->title.isEmpty()) {
-        Text* s = new Text(score, Tid::TITLE);
+        Text* s = Factory::createText(m, Tid::TITLE);
         s->setPlainText(gp->title);
         m->add(s);
     }
     if (!gp->subtitle.isEmpty() || !gp->artist.isEmpty() || !gp->album.isEmpty()) {
-        Text* s = new Text(score, Tid::SUBTITLE);
+        Text* s = Factory::createText(m, Tid::SUBTITLE);
         QString str;
         if (!gp->subtitle.isEmpty()) {
             str.append(gp->subtitle);
@@ -2969,7 +2969,7 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
         m->add(s);
     }
     if (!gp->composer.isEmpty()) {
-        Text* s = new Text(score, Tid::COMPOSER);
+        Text* s = Factory::createText(m, Tid::COMPOSER);
         s->setPlainText(gp->composer);
         m->add(s);
     }
@@ -3012,7 +3012,7 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
 
         Staff* staff = part->staves()->front();
 
-        Staff* s = Factory::createStaff(score, part);
+        Staff* s = Factory::createStaff(part);
         const StaffType* st = staff->constStaffType(Fraction(0, 1));
         s->setStaffType(Fraction(0, 1), *st);
 
@@ -3062,7 +3062,7 @@ Score::FileError importGTP(MasterScore* score, const QString& name)
             pscore->addMeasure(mb, measure);
             measure = mb;
         }
-        Text* txt = new Text(pscore, Tid::INSTRUMENT_EXCERPT);
+        Text* txt = Factory::createText(measure, Tid::INSTRUMENT_EXCERPT);
         txt->setPlainText(part->longName());
         measure->add(txt);
 

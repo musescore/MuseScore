@@ -110,7 +110,7 @@ size_t AccessibleScore::accessibleChildCount() const
     for (const EngravingObject* obj : m_score->EngravingObject::children()) {
         if (obj->isEngravingItem()) {
             AccessibleItem* access = Ms::toEngravingItem(obj)->accessible();
-            if (access && access->registred()) {
+            if (access && access->registered()) {
                 ++count;
             }
         }
@@ -125,7 +125,7 @@ const IAccessible* AccessibleScore::accessibleChild(size_t i) const
     for (const EngravingObject* obj : m_score->EngravingObject::children()) {
         if (obj->isEngravingItem()) {
             AccessibleItem* access = Ms::toEngravingItem(obj)->accessible();
-            if (access && access->registred()) {
+            if (access && access->registered()) {
                 if (count == i) {
                     return access;
                 }

@@ -352,11 +352,11 @@ void MTrack::processMeta(int tick, const MidiEvent& mm)
             ssid = Tid::TITLE;
             break;
         }
-        Text* text = new Text(cs, ssid);
-
-        text->setPlainText((const char*)(mm.edata()));
 
         MeasureBase* measure = cs->first();
+        Text* text = Factory::createText(measure, ssid);
+        text->setPlainText((const char*)(mm.edata()));
+
         if (!measure->isVBox()) {
             measure = new VBox(cs->dummy()->system());
             measure->setTick(Fraction(0, 1));

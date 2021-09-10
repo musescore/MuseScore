@@ -742,7 +742,8 @@ PalettePtr PaletteCreator::newBracketsPalette()
             { BracketType::LINE,   QT_TRANSLATE_NOOP("palette", "Line") } }
     };
 
-    static Staff* bracketItemOwner = Factory::createStaff(gpaletteScore);
+    static Part* bracketItemOwnerPart = new Part(gpaletteScore);
+    static Staff* bracketItemOwner = Factory::createStaff(bracketItemOwnerPart);
     bracketItemOwner->setBracketType(static_cast<int>(types.size()) - 1, BracketType::NORMAL);
 
     for (size_t i = 0; i < types.size(); ++i) {
@@ -932,7 +933,7 @@ PalettePtr PaletteCreator::newLinesPalette()
 
     qreal w = gpaletteScore->spatium() * 8;
 
-    auto slur = makeElement<Slur>(gpaletteScore);
+    auto slur = Factory::makeSlur(gpaletteScore->dummy());
     sp->appendElement(slur, QT_TRANSLATE_NOOP("palette", "Slur"));
 
     auto gabel0 = makeElement<Hairpin>(gpaletteScore);

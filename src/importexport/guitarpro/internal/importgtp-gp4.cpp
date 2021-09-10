@@ -362,7 +362,7 @@ bool GuitarPro4::readNote(int string, int staffIdx, Note* note)
                 ChordRest* cr1 = toChord(gc);
                 ChordRest* cr2 = toChord(note->chord());
 
-                Slur* slur1 = new Slur(score->dummy());
+                Slur* slur1 = Factory::createSlur(score->dummy());
                 slur1->setAnchor(Spanner::Anchor::CHORD);
                 slur1->setStartElement(cr1);
                 slur1->setEndElement(cr2);
@@ -699,7 +699,7 @@ bool GuitarPro4::read(QFile* fp)
     //
     for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
         Part* part = new Part(score);
-        Staff* s = Factory::createStaff(score, part);
+        Staff* s = Factory::createStaff(part);
 
         score->appendStaff(s);
         score->appendPart(part);
@@ -991,7 +991,7 @@ bool GuitarPro4::read(QFile* fp)
                 bool slurSwap = true;
                 if (slide != 2) {
                     if (hasSlur && (slurs[staffIdx] == 0)) {
-                        Slur* slur = new Slur(score->dummy());
+                        Slur* slur = Factory::createSlur(score->dummy());
                         slur->setParent(0);
                         slur->setTrack(track);
                         slur->setTrack2(track);

@@ -234,7 +234,7 @@ void EngravingElementsModel::reload()
             continue;
         }
 
-        if (el->isScore() && el->score() == el->masterScore()) {
+        if (el->isScore() && Ms::toScore(el)->isMaster()) {
             Item* scoreItem = createItem(m_rootItem);
             scoreItem->setElement(el);
             load(elements, scoreItem);

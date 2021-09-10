@@ -48,6 +48,9 @@
 #include "infrastructure/io/mscwriter.h"
 #include "infrastructure/io/mscreader.h"
 #include "infrastructure/draw/iimageprovider.h"
+
+#include "rw/readcontext.h"
+
 #include "layout/layout.h"
 #include "layout/layoutoptions.h"
 #include "compat/dummyelement.h"

@@ -39,7 +39,7 @@ static const ElementStyle defaultStyle {
 //   Text
 //---------------------------------------------------------
 
-Text::Text(EngravingObject* parent, Tid tid)
+Text::Text(EngravingItem* parent, Tid tid)
     : TextBase(ElementType::TEXT, parent, tid)
 {
     initElementStyle(&defaultStyle);
@@ -78,5 +78,12 @@ QVariant Text::propertyDefault(Pid id) const
     default:
         return TextBase::propertyDefault(id);
     }
+}
+
+QString Text::readXmlText(XmlReader& r, Score* score)
+{
+    Text t(score->dummy());
+    t.read(r);
+    return t.xmlText();
 }
 }

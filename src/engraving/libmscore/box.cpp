@@ -291,7 +291,7 @@ bool Box::readProperties(XmlReader& e)
             t = toTBox(this)->text();
             t->read(e);
         } else {
-            t = new Text(score());
+            t = Factory::createText(this);
             t->read(e);
             if (t->empty()) {
                 qDebug("read empty text");
@@ -613,7 +613,7 @@ EngravingItem* Box::drop(EditData& data)
 
     case ElementType::STAFF_TEXT:
     {
-        Text* text = new Text(this, Tid::FRAME);
+        Text* text = Factory::createText(this, Tid::FRAME);
         text->setParent(this);
         text->setXmlText(toStaffText(e)->xmlText());
         score()->undoAddElement(text);

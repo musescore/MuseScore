@@ -841,7 +841,7 @@ bool GuitarPro5::read(QFile* fp)
     //
     for (int staffIdx = 0; staffIdx < staves; ++staffIdx) {
         Part* part = new Part(score);
-        Staff* s = Factory::createStaff(score, part);
+        Staff* s = Factory::createStaff(part);
 
         score->appendStaff(s);
         score->appendPart(part);
@@ -993,7 +993,7 @@ bool GuitarPro5::readNoteEffects(Note* note)
             // no transition
         } else if (transition == 1) {
         } else if (transition == 3) {
-            Slur* slur1 = new Slur(score->dummy());
+            Slur* slur1 = Factory::createSlur(score->dummy());
             slur1->setAnchor(Spanner::Anchor::CHORD);
             slur1->setStartElement(gnote->chord());
             slur1->setEndElement(note->chord());

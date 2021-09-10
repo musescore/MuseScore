@@ -23,6 +23,8 @@
 #include "score.h"
 #include "cursor.h"
 #include "elements.h"
+
+#include "libmscore/factory.h"
 #include "libmscore/instrtemplate.h"
 #include "libmscore/measure.h"
 #include "libmscore/masterscore.h"
@@ -70,7 +72,7 @@ void Score::addText(const QString& type, const QString& txt)
         tid = Tid::POET;
     }
 
-    Ms::Text* text = new Ms::Text(score(), tid);
+    Ms::Text* text = mu::engraving::Factory::createText(measure, tid);
     text->setParent(measure);
     text->setXmlText(txt);
     score()->undoAddElement(text);

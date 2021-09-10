@@ -152,7 +152,7 @@ bool Part::readProperties(XmlReader& e)
 {
     const QStringRef& tag(e.name());
     if (tag == "Staff") {
-        Staff* staff = Factory::createStaff(score(), this);
+        Staff* staff = Factory::createStaff(this);
         score()->appendStaff(staff);
         staff->read(e);
     } else if (tag == "Instrument") {
@@ -274,7 +274,7 @@ void Part::setStaves(int n)
 
     int staffIdx = score()->staffIdx(this) + ns;
     for (int i = ns; i < n; ++i) {
-        Staff* staff = Factory::createStaff(score(), this);
+        Staff* staff = Factory::createStaff(this);
         _staves.push_back(staff);
         const_cast<QList<Staff*>&>(score()->staves()).insert(staffIdx, staff);
 

@@ -181,7 +181,7 @@ void Page::drawHeaderFooter(mu::draw::Painter* p, int area, const QString& ss) c
     if (area < MAX_HEADERS) {
         text = score()->headerText(area);
         if (!text) {
-            text = new Text(score(), Tid::HEADER);
+            text = Factory::createText((Page*)this, Tid::HEADER);
             text->setFlag(ElementFlag::MOVABLE, false);
             text->setFlag(ElementFlag::GENERATED, true);       // set to disable editing
             text->setLayoutToParentWidth(true);
@@ -190,7 +190,7 @@ void Page::drawHeaderFooter(mu::draw::Painter* p, int area, const QString& ss) c
     } else {
         text = score()->footerText(area - MAX_HEADERS);     // because they are 3 4 5
         if (!text) {
-            text = new Text(score(), Tid::FOOTER);
+            text = Factory::createText((Page*)this, Tid::FOOTER);
             text->setFlag(ElementFlag::MOVABLE, false);
             text->setFlag(ElementFlag::GENERATED, true);       // set to disable editing
             text->setLayoutToParentWidth(true);

@@ -28,6 +28,7 @@
 #include "style/style.h"
 #include "io/xml.h"
 
+#include "factory.h"
 #include "system.h"
 #include "measure.h"
 #include "utils.h"
@@ -37,6 +38,7 @@
 #include "staff.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
 namespace Ms {
 //---------------------------------------------------------
@@ -46,8 +48,8 @@ namespace Ms {
 TextLineBaseSegment::TextLineBaseSegment(const ElementType& type, Spanner* sp, Score* score, ElementFlags f)
     : LineSegment(type, sp, score, f)
 {
-    _text    = new Text(this);
-    _endText = new Text(this);
+    _text    = Factory::createText(this);
+    _endText = Factory::createText(this);
     _text->setParent(this);
     _endText->setParent(this);
     _text->setFlag(ElementFlag::MOVABLE, false);

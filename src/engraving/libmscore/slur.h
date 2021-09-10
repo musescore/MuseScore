@@ -66,9 +66,11 @@ class Slur final : public SlurTie
     void slurPosChord(SlurPos*);
     int _sourceStemArrangement = -1;
 
-public:
+    friend class mu::engraving::Factory;
     Slur(EngravingItem* parent);
     Slur(const Slur&);
+
+public:
     ~Slur() {}
 
     Slur* clone() const override { return new Slur(*this); }

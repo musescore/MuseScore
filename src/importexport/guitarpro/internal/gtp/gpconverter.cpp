@@ -630,7 +630,7 @@ void GPConverter::setUpTrack(const std::unique_ptr<GPTrack>& tR)
 
     _score->appendPart(part);
     for (size_t staffIdx = 0; staffIdx < tR->staffCount(); staffIdx++) {
-        Staff* s = Factory::createStaff(_score);
+        Staff* s = Factory::createStaff(part);
         StaffType stType;
         stType.fretFont();
         part->insertStaff(s, -1);
@@ -1080,7 +1080,7 @@ void GPConverter::addHarmonic(const GPNote* gpnote, Note* note)
         }
     };
 
-    Text* text = new Text(_score);
+    Text* text = Factory::createText(note);
     text->setPlainText(harmoniText(gpnote->harmonic().type));
     note->add(text);
 }
@@ -1531,7 +1531,7 @@ void GPConverter::addLegato(const GPBeat* beat, ChordRest* cr)
             slurs.erase(it);
         }
 
-        Slur* slur = new Slur(sc->dummy());
+        Slur* slur = Factory::createSlur(sc->dummy());
         slur->setStartElement(cr);
         slur->setTrack(curTrack);
         slur->setTick(curTick);
@@ -1684,7 +1684,7 @@ void GPConverter::addTimer(const GPBeat* beat, ChordRest* cr)
     int time = beat->time();
     int minutes = time / 60;
     int seconds = time % 60;
-    Text* st = new Text(_score);
+    Text* st = Factory::createText(cr->segment());
     st->setPlainText(QString::number(minutes)
                      + ":"
                      + (seconds < 10 ? "0" + QString::number(seconds) : QString::number(seconds)));
@@ -1699,7 +1699,7 @@ void GPConverter::addFreeText(const GPBeat* beat, ChordRest* cr)
         return;
     }
 
-    auto text = new Text(_score);
+    auto text = Factory::createText(cr->segment());
     text->setTrack(cr->track());
     text->setPlainText(beat->freeText());
     cr->segment()->add(text);
@@ -1989,7 +1989,7 @@ void GPConverter::clearDefectedGraceChord(ChordRestContainer& graceGhords)
 
 void GPConverter::addTextToNote(QString string, Note* note)
 {
-    Text* text = new Text(_score);
+    Text* text = Factory::createText(note);
 
     bool use_harmony = string[string.size() - 1] == '\\';
     if (use_harmony) {

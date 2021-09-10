@@ -698,7 +698,7 @@ void PowerTab::fillMeasure(tBeatList& elist, Measure* measure, int staff, std::v
                 }
 
                 if (false && n.slide) {
-                    Text* st = new Text(score, Tid::HARMONY_A);
+                    Text* st = Factory::createText(chord->notes().front(), Tid::HARMONY_A);
                     st->setXmlText(QString("SLIDE %1").arg(n.slide));
                     st->setTrack(staff * VOICES);
                     chord->notes().front()->add(st);
@@ -719,7 +719,7 @@ void PowerTab::fillMeasure(tBeatList& elist, Measure* measure, int staff, std::v
                 auto cr2 = chord;
                 hammer = nullptr;
 
-                Slur* slur = new Slur(score->dummy());
+                Slur* slur = Factory::createSlur(score->dummy());
                 slur->setStartElement(cr1);
                 slur->setEndElement(cr2);
                 slur->setTick(cr1->tick());
@@ -728,7 +728,7 @@ void PowerTab::fillMeasure(tBeatList& elist, Measure* measure, int staff, std::v
                 slur->setTrack2(staff * VOICES);
                 score->addElement(slur);
 
-                Text* st = new Text(score, Tid::HARMONY_A);
+                Text* st = Factory::createText(chord->notes().front(), Tid::HARMONY_A);
                 st->setXmlText("H");
                 st->setTrack(staff * VOICES);
                 cr1->notes().front()->add(st);
@@ -784,7 +784,7 @@ void PowerTab::addToScore(ptSection& sec)
         //int lastStaff = sec.staffMap.back() + 1;
         for (int i = 0; i < staves; ++i) {
             Part* part = new Part(score);
-            Staff* s = Factory::createStaff(score, part);
+            Staff* s = Factory::createStaff(part);
             part->insertStaff(s, -1);
             auto info = &curTrack->infos[i];
             std::string ss = info->name;
@@ -1275,7 +1275,7 @@ Score::FileError PowerTab::read()
     // create title
     std::string name = song.info.name;
     if (!name.empty()) {
-        Text* s = new Text(score, Tid::TITLE);
+        Text* s = Factory::createText(m, Tid::TITLE);
         s->setPlainText(QString::fromUtf8(name.data(), int(name.size())));
         m->add(s);
     }
@@ -1303,7 +1303,7 @@ Score::FileError PowerTab::read()
 
         Staff* staff = part->staves()->front();
 
-        Staff* s = Factory::createStaff(score, p);
+        Staff* s = Factory::createStaff(p);
         const StaffType* st = staff->staffType(Fraction(0, 1));
         s->setStaffType(Fraction(0, 1), *st);
 
@@ -1354,7 +1354,7 @@ Score::FileError PowerTab::read()
             pscore->addMeasure(mb, measure);
             measure = mb;
         }
-        Text* txt = new Text(pscore, Tid::INSTRUMENT_EXCERPT);
+        Text* txt = Factory::createText(measure, Tid::INSTRUMENT_EXCERPT);
         txt->setPlainText(part->longName());
         measure->add(txt);
 
