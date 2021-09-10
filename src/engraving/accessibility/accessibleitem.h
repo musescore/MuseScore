@@ -42,7 +42,6 @@ public:
     virtual AccessibleItem* clone(Ms::EngravingItem* e) const;
 
     virtual void setup();
-    bool isAvalaible() const;
 
     const Ms::EngravingItem* element() const;
 

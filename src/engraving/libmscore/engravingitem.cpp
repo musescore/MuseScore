@@ -125,6 +125,7 @@
 
 #ifdef ENGRAVING_BUILD_ACCESSIBLE_TREE
 #include "accessibility/accessibleitem.h"
+#include "accessibility/accessiblescore.h"
 #endif
 
 #include "log.h"
@@ -183,8 +184,16 @@ EngravingItem::~EngravingItem()
 void EngravingItem::setup()
 {
 #ifdef ENGRAVING_BUILD_ACCESSIBLE_TREE
-    m_accessible = createAccessible();
-    m_accessible->setup();
+    static std::list<ElementType> accessibleDisabled = {
+        ElementType::LEDGER_LINE
+    };
+
+    if (score() && !score()->isPaletteScore()) {
+        if (std::find(accessibleDisabled.begin(), accessibleDisabled.end(), type()) == accessibleDisabled.end()) {
+            m_accessible = createAccessible();
+            m_accessible->setup();
+        }
+    }
 #endif
 }
 
@@ -2513,7 +2522,12 @@ void EngravingItem::setSelected(bool f)
 #ifdef ENGRAVING_BUILD_ACCESSIBLE_TREE
     if (f) {
         if (m_accessible) {
-            m_accessible->setFocus();
+            Score* sc = score();
+            AccessibleScore* ascore = sc ? sc->accessible() : nullptr;
+            if (!ascore) {
+                return;
+            }
+            ascore->setFocusedElement(m_accessible);
         }
     }
 #endif
