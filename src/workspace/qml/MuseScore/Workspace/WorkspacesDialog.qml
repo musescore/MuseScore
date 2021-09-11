@@ -31,8 +31,9 @@ import "internal"
 StyledDialogView {
     id: root
 
-    contentWidth: 552
-    contentHeight: 286
+    contentWidth: 664
+    contentHeight: 558
+    resizable: true
 
     WorkspaceListModel {
         id: workspacesModel
