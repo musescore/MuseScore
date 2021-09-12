@@ -50,7 +50,7 @@ public:
     virtual void moveCanvasVertical(int dy) = 0;
 
     virtual qreal currentScaling() const = 0;
-    virtual void scale(qreal scaling, const QPoint& pos) = 0;
+    virtual void setScaling(qreal scaling, const QPoint& pos) = 0;
 
     virtual PointF toLogical(const QPoint& p) const = 0;
 

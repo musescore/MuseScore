@@ -80,124 +80,142 @@ FocusScope {
                 color: notationView.backgroundColor
             }
 
-            NotationPaintView {
-                id: notationView
-
-                NavigationPanel {
-                    id: navPanel
-                    name: "ScoreView"
-                    section: navSec
-                    direction: NavigationPanel.Both
-                    order: 2
-                }
-
-                NavigationControl {
-                    id: fakeNavCtrl
-                    name: "Score"
-
-                    panel: navPanel
-                    order: 1
-
-                    accessible.role: MUAccessible.Panel
-                    accessible.name: "Score"
-
-                    onActiveChanged: {
-                        if (fakeNavCtrl.active) {
-                            notationView.selectOnNavigationActive()
-                        }
-                    }
-                }
-
+            Item {
                 SplitView.fillWidth: true
                 SplitView.fillHeight: true
 
-                onTextEdittingStarted: {
-                    root.textEdittingStarted()
-                }
+                // Hack: the PinchArea must be outside the NotationPaintView, and must have a lower z-index,
+                // to prevent it from stealing hover events from the NotationPaintView.
+                PinchArea {
+                    anchors.fill: notationView
 
-                onShowContextMenuRequested: function (elementType, pos) {
-                    contextMenuModel.loadItems(elementType)
+                    onPinchUpdated: function(pinch) {
+                        notationView.scale(pinch.scale / pinch.previousScale, pinch.center)
+                    }
 
-                    if (contextMenuLoader.isMenuOpened) {
-                        contextMenuLoader.update(contextMenuModel.items, pos.x, pos.y)
-                    } else {
-                        contextMenuLoader.open(contextMenuModel.items, pos.x, pos.y)
+                    // A macOS feature which allows double-tapping with two fingers to zoom in or out
+                    onSmartZoom: function(pinch) {
+                        notationView.scale(pinch.scale === 0 ? 0.5 : 2, pinch.center)
                     }
                 }
 
-                onHideContextMenuRequested: function() {
-                    contextMenuLoader.close()
-                }
+                NotationPaintView {
+                    id: notationView
+                    anchors.fill: parent
 
-                onViewportChanged: {
-                    notationNavigator.setCursorRect(viewport)
-                }
-
-                onHorizontalScrollChanged: {
-                    if (!horizontalScrollBar.pressed) {
-                        horizontalScrollBar.setPosition(notationView.startHorizontalScrollPosition)
+                    NavigationPanel {
+                        id: navPanel
+                        name: "ScoreView"
+                        section: navSec
+                        direction: NavigationPanel.Both
+                        order: 2
                     }
-                }
 
-                onVerticalScrollChanged: {
-                    if (!verticalScrollBar.pressed) {
-                        verticalScrollBar.setPosition(notationView.startVerticalScrollPosition)
-                    }
-                }
+                    NavigationControl {
+                        id: fakeNavCtrl
+                        name: "Score"
 
-                StyledScrollBar {
-                    id: verticalScrollBar
+                        panel: navPanel
+                        order: 1
 
-                    anchors.top: parent.top
-                    anchors.bottomMargin: prv.scrollbarMargin
-                    anchors.bottom: parent.bottom
-                    anchors.right: parent.right
+                        accessible.role: MUAccessible.Panel
+                        accessible.name: "Score"
 
-                    orientation: Qt.Vertical
-
-                    color: "black"
-                    border.width: 1
-                    border.color: "white"
-
-                    size: notationView.verticalScrollSize
-
-                    onPositionChanged: {
-                        if (pressed) {
-                            notationView.scrollVertical(position)
+                        onActiveChanged: {
+                            if (fakeNavCtrl.active) {
+                                notationView.selectOnNavigationActive()
+                            }
                         }
                     }
-                }
 
-                StyledScrollBar {
-                    id: horizontalScrollBar
+                    onTextEdittingStarted: {
+                        root.textEdittingStarted()
+                    }
 
-                    anchors.bottom: parent.bottom
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    anchors.rightMargin: prv.scrollbarMargin
+                    onShowContextMenuRequested: function (elementType, pos) {
+                        contextMenuModel.loadItems(elementType)
 
-                    orientation: Qt.Horizontal
-
-                    color: "black"
-                    border.width: 1
-                    border.color: "white"
-
-                    size: notationView.horizontalScrollSize
-
-                    onPositionChanged: {
-                        if (pressed) {
-                            notationView.scrollHorizontal(position)
+                        if (contextMenuLoader.isMenuOpened) {
+                            contextMenuLoader.update(contextMenuModel.items, pos.x, pos.y)
+                        } else {
+                            contextMenuLoader.open(contextMenuModel.items, pos.x, pos.y)
                         }
                     }
-                }
 
-                StyledMenuLoader {
-                    id: contextMenuLoader
+                    onHideContextMenuRequested: function() {
+                        contextMenuLoader.close()
+                    }
 
-                    navigation: fakeNavCtrl
+                    onViewportChanged: {
+                        notationNavigator.setCursorRect(viewport)
+                    }
 
-                    onHandleMenuItem: function (itemId) {
-                        contextMenuModel.handleMenuItem(itemId)
+                    onHorizontalScrollChanged: {
+                        if (!horizontalScrollBar.pressed) {
+                            horizontalScrollBar.setPosition(notationView.startHorizontalScrollPosition)
+                        }
+                    }
+
+                    onVerticalScrollChanged: {
+                        if (!verticalScrollBar.pressed) {
+                            verticalScrollBar.setPosition(notationView.startVerticalScrollPosition)
+                        }
+                    }
+
+                    StyledScrollBar {
+                        id: verticalScrollBar
+
+                        anchors.top: parent.top
+                        anchors.bottomMargin: prv.scrollbarMargin
+                        anchors.bottom: parent.bottom
+                        anchors.right: parent.right
+
+                        orientation: Qt.Vertical
+
+                        color: "black"
+                        border.width: 1
+                        border.color: "white"
+
+                        size: notationView.verticalScrollSize
+
+                        onPositionChanged: {
+                            if (pressed) {
+                                notationView.scrollVertical(position)
+                            }
+                        }
+                    }
+
+                    StyledScrollBar {
+                        id: horizontalScrollBar
+
+                        anchors.bottom: parent.bottom
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        anchors.rightMargin: prv.scrollbarMargin
+
+                        orientation: Qt.Horizontal
+
+                        color: "black"
+                        border.width: 1
+                        border.color: "white"
+
+                        size: notationView.horizontalScrollSize
+
+                        onPositionChanged: {
+                            if (pressed) {
+                                notationView.scrollHorizontal(position)
+                            }
+                        }
+                    }
+
+                    StyledMenuLoader {
+                        id: contextMenuLoader
+
+                        navigation: fakeNavCtrl
+
+                        onHandleMenuItem: function (itemId) {
+                            contextMenuModel.handleMenuItem(itemId)
+                        }
                     }
                 }
             }

@@ -88,7 +88,8 @@ public:
     void moveCanvasHorizontal(int dx) override;
 
     qreal currentScaling() const override;
-    void scale(qreal scaling, const QPoint& pos) override;
+    void setScaling(qreal scaling, const QPoint& pos) override;
+    Q_INVOKABLE void scale(qreal factor, const QPoint& pos);
 
     bool isNoteEnterMode() const override;
     void showShadowNote(const PointF& pos) override;
