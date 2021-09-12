@@ -295,66 +295,18 @@ Rectangle {
                 }
             }
 
-            ColumnLayout {
+            PianorollAutomationRow {
                 id: automationArea
-                visible: false
-//                SplitView.minimumHeight: 40
                 SplitView.preferredHeight: 100
+                visible: true
 
-                RowLayout {
-                    spacing: 0
-                    Layout.fillWidth: true
-
-                    ColumnLayout {
-                        Layout.preferredWidth: keyboardComponent.width
-                        Layout.fillHeight: true
-
-                        ComboBox {
-                            id: automationAttribute
-                            textRole: "text"
-                            valueRole: "value"
-
-                            model: [
-                                { text: qsTr("Velocity"), value: PianorollAutomationEditor.VELOCITY },
-                                { text: qsTr("Expression"), value: PianorollAutomationEditor.EXPRESSION },
-                                { text: qsTr("Pan"), value: PianorollAutomationEditor.PAN }
-                            ]
-
-                            onActivated: {
-                                automationEditor.automationType = currentValue
-                                //pianoView.tuplet = currentValue
-                            }
-                        }
-                    }
-
-                    PianorollAutomationEditor {
-                        id: automationEditor
-                        Layout.preferredWidth: pianoView.width
-                        Layout.fillHeight: true
-
-                        tuplet: pianoView.tuplet
-                        subdivision: pianoView.subdivision
-
-                        centerX: scrollViewX.center
-
-                        wholeNoteWidth: horizZoom.value
-
-                        Component.onCompleted: {
-                            load()
-                        }
-
-                    }
-
-                    Label {
-                        Layout.fillHeight: true
-
-                        text: " "
-                    }
-                }
-
+                m_graphWidth: pianoView.width
+                m_tuplet: pianoView.tuplet
+                m_subdivision: pianoView.subdivision
+                m_controlWidth: keyboardComponent.width
+                m_centerX: scrollViewX.center
+                m_wholeNoteWidth: horizZoom.value
             }
         }
-
-
     }
 }

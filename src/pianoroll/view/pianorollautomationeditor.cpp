@@ -345,6 +345,9 @@ void PianorollAutomationEditor::mouseMoveEvent(QMouseEvent* e)
 
 void PianorollAutomationEditor::paint(QPainter* p)
 {
+    int areaWidth = width();
+    int areaHeight = height();
+
     p->fillRect(0, 0, width(), height(), m_colorBackground);
 
     notation::INotationPtr notation = globalContext()->currentNotation();
