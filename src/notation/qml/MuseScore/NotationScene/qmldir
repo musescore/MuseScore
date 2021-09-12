@@ -10,3 +10,4 @@ NoteInputBarCustomizationDialog 1.0 NoteInputBarCustomizationDialog.qml
 UndoRedoToolBar 1.0 UndoRedoToolBar.qml
 Timeline 1.0 Timeline.qml
 SelectionFilterPanel 1.0 SelectionFilterPanel.qml
+NotationZoomPinchArea 1.0 NotationZoomPinchArea.qml

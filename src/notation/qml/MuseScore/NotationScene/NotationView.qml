@@ -80,24 +80,9 @@ FocusScope {
                 color: notationView.backgroundColor
             }
 
-            Item {
+            NotationZoomPinchArea {
                 SplitView.fillWidth: true
                 SplitView.fillHeight: true
-
-                // Hack: the PinchArea must be outside the NotationPaintView, and must have a lower z-index,
-                // to prevent it from stealing hover events from the NotationPaintView.
-                PinchArea {
-                    anchors.fill: notationView
-
-                    onPinchUpdated: function(pinch) {
-                        notationView.scale(pinch.scale / pinch.previousScale, pinch.center)
-                    }
-
-                    // A macOS feature which allows double-tapping with two fingers to zoom in or out
-                    onSmartZoom: function(pinch) {
-                        notationView.scale(pinch.scale === 0 ? 0.5 : 2, pinch.center)
-                    }
-                }
 
                 NotationPaintView {
                     id: notationView
