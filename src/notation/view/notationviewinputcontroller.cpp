@@ -233,7 +233,7 @@ void NotationViewInputController::setZoom(int zoomPercentage, const QPoint& pos)
     }
 
     qreal scaling = static_cast<qreal>(correctedZoom) / 100.0 * notationScaling();
-    m_view->scale(scaling, pos);
+    m_view->setScaling(scaling, pos);
 }
 
 void NotationViewInputController::setViewMode(const ViewMode& viewMode)

@@ -222,7 +222,7 @@ void NotationPaintView::onCurrentNotationChanged()
     m_loopOutMarker->setStyle(m_notation->style());
 
     update();
-    
+
     emit horizontalScrollChanged();
     emit verticalScrollChanged();
     emit viewportChanged(viewport());
@@ -634,7 +634,7 @@ qreal NotationPaintView::currentScaling() const
     return m_matrix.m11();
 }
 
-void NotationPaintView::scale(qreal scaling, const QPoint& pos)
+void NotationPaintView::setScaling(qreal scaling, const QPoint& pos)
 {
     qreal currentScaling = this->currentScaling();
 
@@ -646,10 +646,19 @@ void NotationPaintView::scale(qreal scaling, const QPoint& pos)
         currentScaling = 1;
     }
 
+    qreal deltaScaling = scaling / currentScaling;
+    scale(deltaScaling, pos);
+}
+
+void NotationPaintView::scale(qreal factor, const QPoint& pos)
+{
+    if (qFuzzyCompare(factor, 1.0)) {
+        return;
+    }
+
     PointF pointBeforeScaling = toLogical(pos);
 
-    qreal deltaScaling = scaling / currentScaling;
-    m_matrix.scale(deltaScaling, deltaScaling);
+    m_matrix.scale(factor, factor);
 
     PointF pointAfterScaling = toLogical(pos);
 
