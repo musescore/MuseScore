@@ -48,7 +48,6 @@ using namespace mu::notation;
 
 Notation::Notation(Ms::Score* score)
 {
-    m_scoreGlobal = new Ms::MScore(); //! TODO May be static?
     m_opened.val = false;
 
     m_undoStack = std::make_shared<NotationUndoStack>(this, m_notationChanged);
@@ -125,7 +124,6 @@ void Notation::init()
     bool isVertical = configuration()->canvasOrientation().val == framework::Orientation::Vertical;
     Ms::MScore::setVerticalOrientation(isVertical);
 
-    Ms::MScore::panPlayback = configuration()->isAutomaticallyPanEnabled();
     Ms::MScore::playRepeats = configuration()->isPlayRepeatsEnabled();
 }
 
@@ -139,19 +137,9 @@ void Notation::setScore(Ms::Score* score)
     }
 }
 
-Ms::MScore* Notation::scoreGlobal() const
-{
-    return m_scoreGlobal;
-}
-
 QString Notation::title() const
 {
     return m_score ? m_score->title() : QString();
-}
-
-void Notation::setViewSize(const QSizeF& vs)
-{
-    m_viewSize = vs;
 }
 
 void Notation::setViewMode(const ViewMode& viewMode)
@@ -332,9 +320,4 @@ INotationPartsPtr Notation::parts() const
 Ms::Score* Notation::score() const
 {
     return m_score;
-}
-
-QSizeF Notation::viewSize() const
-{
-    return m_viewSize;
 }
