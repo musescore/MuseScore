@@ -214,12 +214,7 @@ int NotationViewInputController::currentZoomIndex() const
 
 int NotationViewInputController::currentZoomPercentage() const
 {
-    return qRound(m_view->currentScaling() * 100.0 / notationScaling());
-}
-
-qreal NotationViewInputController::notationScaling() const
-{
-    return configuration()->notationScaling();
+    return qRound(m_view->currentScaling() * 100.0 / configuration()->notationScaling() / configuration()->guiScaling());
 }
 
 void NotationViewInputController::setZoom(int zoomPercentage, const QPoint& pos)
@@ -232,7 +227,7 @@ void NotationViewInputController::setZoom(int zoomPercentage, const QPoint& pos)
         configuration()->setCurrentZoom(correctedZoom);
     }
 
-    qreal scaling = static_cast<qreal>(correctedZoom) / 100.0 * notationScaling();
+    qreal scaling = static_cast<qreal>(correctedZoom) / 100.0 * configuration()->notationScaling() * configuration()->guiScaling();
     m_view->setScaling(scaling, pos);
 }
 
