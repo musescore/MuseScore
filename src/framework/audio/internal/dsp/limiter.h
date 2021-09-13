@@ -20,33 +20,33 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_AUDIO_AUDIOMATHUTILS_H
-#define MU_AUDIO_AUDIOMATHUTILS_H
+#ifndef MU_AUDIO_LIMITER_H
+#define MU_AUDIO_LIMITER_H
 
-#include <cmath>
+#include <memory>
 
-#include "audiotypes.h"
+#include "envelopefilterconfig.h"
 
-namespace mu::audio {
-inline float balanceGain(const balance_t balance, const int audioChannelNumber)
+namespace mu::audio::dsp {
+class Limiter
 {
-    return 0.5f * balance * ((audioChannelNumber * 2.f) - 1) + 0.5f;
+public:
+    Limiter(const unsigned int sampleRate);
+
+    void process(const float& linearRms, float* buffer, const audioch_t& audioChannelsCount, const samples_t samplesPerChannel);
+
+private:
+    volume_db_t gainSmoothing(const float newGainReduction) const;
+    volume_db_t computeGain(const volume_db_t& logarithmSample) const;
+
+    EnvelopeFilterConfig m_filterConfig;
+
+    float m_softThresholdLower = 0.f;
+    float m_softThresholdUpper = 0.f;
+    float m_previousGainReduction = 0.f;
+};
+
+using LimiterPtr = std::unique_ptr<Limiter>;
 }
 
-inline float gainFromDecibels(const volume_dbfs_t volumeLevelDb)
-{
-    return std::pow(10.0f, volumeLevelDb * 0.05f);
-}
-
-inline volume_dbfs_t dbFullScaleFromSample(const float signalValue)
-{
-    return 20 * std::log10(std::abs(signalValue));
-}
-
-inline float samplesRootMeanSquare(float&& squaredSum, const samples_t sampleCount)
-{
-    return std::sqrt(squaredSum / sampleCount);
-}
-}
-
-#endif // MU_AUDIO_AUDIOMATHUTILS_H
+#endif // MU_AUDIO_LIMITER_H

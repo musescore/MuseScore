@@ -25,7 +25,7 @@
 
 #include "log.h"
 
-#include "internal/audiomathutils.h"
+#include "internal/dsp/audiomathutils.h"
 #include "internal/audiosanitizer.h"
 
 using namespace mu;
@@ -33,7 +33,10 @@ using namespace mu::audio;
 using namespace mu::async;
 
 MixerChannel::MixerChannel(const TrackId trackId, IAudioSourcePtr source, const unsigned int sampleRate)
-    : m_trackId(trackId), m_sampleRate(sampleRate), m_audioSource(std::move(source))
+    : m_trackId(trackId),
+    m_sampleRate(sampleRate),
+    m_audioSource(std::move(source)),
+    m_compressor(std::make_unique<dsp::Compressor>(sampleRate))
 {
     ONLY_AUDIO_WORKER_THREAD;
 
@@ -162,22 +165,30 @@ void MixerChannel::process(float* buffer, unsigned int sampleCount)
 
 void MixerChannel::completeOutput(float* buffer, unsigned int samplesCount) const
 {
-    for (audioch_t audioChNum = 0; audioChNum < audioChannelsCount(); ++audioChNum) {
-        float squaredSum = 0.f;
+    float totalSquaredSum = 0.f;
 
-        gain_t totalGain = balanceGain(m_params.balance, audioChNum) * gainFromDecibels(m_params.volume);
+    for (audioch_t audioChNum = 0; audioChNum < audioChannelsCount(); ++audioChNum) {
+        float singleChannelSquaredSum = 0.f;
+
+        gain_t totalGain = dsp::balanceGain(m_params.balance, audioChNum) * dsp::linearFromDecibels(m_params.volume);
 
         for (unsigned int s = 0; s < samplesCount; ++s) {
             int idx = s * audioChannelsCount() + audioChNum;
 
-            buffer[idx] = buffer[idx] * totalGain;
+            float resultSample = buffer[idx] * totalGain;
+            buffer[idx] = resultSample;
 
-            squaredSum += buffer[idx] * buffer[idx];
+            float squaredSample = resultSample * resultSample;
+            singleChannelSquaredSum += squaredSample;
+            totalSquaredSum += squaredSample;
         }
 
-        float rms = samplesRootMeanSquare(std::move(squaredSum), samplesCount);
+        float rms = dsp::samplesRootMeanSquare(singleChannelSquaredSum, samplesCount);
 
+        m_volumePressureDbfsChanged.send(audioChNum, dsp::dbFromSample(rms));
         m_signalAmplitudeRmsChanged.send(audioChNum, rms);
-        m_volumePressureDbfsChanged.send(audioChNum, dbFullScaleFromSample(rms));
     }
+
+    float totalRms = dsp::samplesRootMeanSquare(totalSquaredSum, samplesCount * audioChannelsCount());
+    m_compressor->process(totalRms, buffer, audioChannelsCount(), samplesCount);
 }

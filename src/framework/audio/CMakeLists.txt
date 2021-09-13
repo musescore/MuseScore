@@ -85,7 +85,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/audiothread.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/audiosanitizer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/audiosanitizer.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/audiomathutils.h
 
     # Driver
     ${DRIVER_SRC}
@@ -136,6 +135,14 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/sequenceio.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/sequenceio.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/worker/track.h
+
+    # DSP
+    ${CMAKE_CURRENT_LIST_DIR}/internal/dsp/envelopefilterconfig.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/dsp/compressor.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/dsp/compressor.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/dsp/limiter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/dsp/limiter.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/dsp/audiomathutils.h
 
     # fx
     ${CMAKE_CURRENT_LIST_DIR}/internal/fx/fxresolver.cpp
