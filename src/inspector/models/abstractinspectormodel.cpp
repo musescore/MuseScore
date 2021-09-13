@@ -184,7 +184,7 @@ Ms::ElementType AbstractInspectorModel::elementTypeByModelType(InspectorModelTyp
 
 bool AbstractInspectorModel::isEmpty() const
 {
-    return m_isEmpty;
+    return m_elementList.isEmpty();
 }
 
 void AbstractInspectorModel::setTitle(QString title)
@@ -213,7 +213,7 @@ void AbstractInspectorModel::setModelType(InspectorModelType modelType)
 
 void AbstractInspectorModel::onPropertyValueChanged(const Ms::Pid pid, const QVariant& newValue)
 {
-    if (!hasAcceptableElements()) {
+    if (isEmpty()) {
         return;
     }
 
@@ -243,21 +243,11 @@ void AbstractInspectorModel::onPropertyValueChanged(const Ms::Pid pid, const QVa
     emit elementsModified();
 }
 
-void AbstractInspectorModel::setIsEmpty(bool isEmpty)
-{
-    if (m_isEmpty == isEmpty) {
-        return;
-    }
-
-    m_isEmpty = isEmpty;
-    emit isEmptyChanged(m_isEmpty);
-}
-
 void AbstractInspectorModel::updateProperties()
 {
     requestElements();
 
-    setIsEmpty(!hasAcceptableElements());
+    emit isEmptyChanged();
 
     if (!isEmpty()) {
         loadProperties();
@@ -516,11 +506,6 @@ void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem,
 bool AbstractInspectorModel::isNotationExisting() const
 {
     return context()->currentProject() != nullptr;
-}
-
-bool AbstractInspectorModel::hasAcceptableElements() const
-{
-    return !m_elementList.isEmpty();
 }
 
 INotationStylePtr AbstractInspectorModel::style() const

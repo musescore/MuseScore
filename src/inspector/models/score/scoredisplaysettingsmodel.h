@@ -44,7 +44,7 @@ public:
     void loadProperties() override;
     void resetProperties() override;
 
-    bool hasAcceptableElements() const override;
+    bool isEmpty() const override;
 
     bool shouldShowInvisible() const;
     bool shouldShowFormatting() const;

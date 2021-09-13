@@ -40,6 +40,25 @@ TabPanel {
                              dynamicsTab.visible ? dynamicsTab.implicitHeight : 0) + tabBarHeight + 24
     width: parent.width
 
+    Connections {
+        target: proxyModel
+
+        function onIsEmptyChanged() {
+            var hasGeneralSettings = proxyModel.hasGeneralSettings
+            var hasDynamicsSettings = proxyModel.hasDynamicsSettings
+
+            if (hasGeneralSettings && !hasDynamicsSettings) {
+                root.currentIndex = 0
+            } else if (!hasGeneralSettings && hasDynamicsSettings) {
+                root.currentIndex = 1
+            }
+        }
+    }
+
+    function focusOnCurrentTab() {
+        focusOnTab(root.currentIndex)
+    }
+
     TabItem {
         id: generalTab
 
