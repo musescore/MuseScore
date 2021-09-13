@@ -2595,4 +2595,53 @@ void Element::autoplaceMeasureElement(bool above, bool add)
       setOffsetChanged(false);
       }
 
+//---------------------------------------------------------
+//   barbeat
+//---------------------------------------------------------
+
+std::pair<int, float> Element::barbeat() const
+      {
+      int bar = 0;
+      int beat = 0;
+      int ticks = 0;
+      TimeSigMap* tsm = this->score()->sigmap();
+      const Element* p = this;
+      int ticksB = ticks_beat(tsm->timesig(0).timesig().denominator());
+      while(p && p->type() != ElementType::SEGMENT && p->type() != ElementType::MEASURE)
+            p = p->parent();
+
+      if (!p) {
+            return std::pair<int, float>(0, 0.0F);
+            }
+      else if (p->type() == ElementType::SEGMENT) {
+            const Segment* seg = static_cast<const Segment*>(p);
+            tsm->tickValues(seg->tick().ticks(), &bar, &beat, &ticks);
+            ticksB = ticks_beat(tsm->timesig(seg->tick().ticks()).timesig().denominator());
+            }
+      else if (p->type() == ElementType::MEASURE) {
+            const Measure* m = static_cast<const Measure*>(p);
+            bar = m->no();
+            beat = -1;
+            ticks = 0;
+            }
+      return std::pair<int,float>(bar + 1, beat + 1 + ticks / static_cast<float>(ticksB));
+      }
+
+//---------------------------------------------------------
+//   accessibleBarbeat
+//---------------------------------------------------------
+
+QString Element::accessibleBarbeat() const
+      {
+      QString barsAndBeats = "";
+      std::pair<int, float>bar_beat = barbeat();
+      if (bar_beat.first) {
+            barsAndBeats += "; " + QObject::tr("Measure: %1").arg(QString::number(bar_beat.first));
+            if (bar_beat.second)
+                  barsAndBeats += "; " + QObject::tr("Beat: %1").arg(QString::number(bar_beat.second));
+            }
+      if (staffIdx() + 1)
+            barsAndBeats += "; " + QObject::tr("Staff: %1").arg(QString::number(staffIdx() + 1));
+      return barsAndBeats;
+      }
 }
