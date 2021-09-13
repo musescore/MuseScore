@@ -30,6 +30,7 @@
 
 #include "abstractaudiosource.h"
 #include "mixerchannel.h"
+#include "internal/dsp/limiter.h"
 #include "ifxresolver.h"
 #include "iclock.h"
 
@@ -64,7 +65,8 @@ public:
     void process(float* outBuffer, unsigned int samplesPerChannel) override;
 
 private:
-    void mixOutput(float* outBuffer, float* inBuffer, unsigned int samplesCount);
+    void mixOutputFromChannel(float* outBuffer, float* inBuffer, unsigned int samplesCount);
+    void completeOutput(float* buffer, const samples_t& samplesPerChannel);
 
     std::vector<float> m_writeCacheBuff;
 
@@ -73,6 +75,7 @@ private:
     std::vector<IFxProcessorPtr> m_masterFxProcessors = {};
 
     std::map<TrackId, MixerChannelPtr> m_mixerChannels = {};
+    dsp::LimiterPtr m_limiter = nullptr;
 
     std::set<IClockPtr> m_clocks;
     audioch_t m_audioChannelsCount = 0;

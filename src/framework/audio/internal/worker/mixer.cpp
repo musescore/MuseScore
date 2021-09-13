@@ -28,7 +28,7 @@
 
 #include "internal/audiosanitizer.h"
 #include "internal/audiothread.h"
-#include "internal/audiomathutils.h"
+#include "internal/dsp/audiomathutils.h"
 #include "audioerrors.h"
 
 using namespace mu;
@@ -95,6 +95,9 @@ void Mixer::setAudioChannelsCount(const audioch_t count)
 void Mixer::setSampleRate(unsigned int sampleRate)
 {
     ONLY_AUDIO_WORKER_THREAD;
+
+    m_limiter = std::make_unique<dsp::Limiter>(sampleRate);
+
     AbstractAudioSource::setSampleRate(sampleRate);
 
     for (auto& channel : m_mixerChannels) {
@@ -125,11 +128,11 @@ void Mixer::process(float* outBuffer, unsigned int samplesPerChannel)
 
     for (auto& channel : m_mixerChannels) {
         channel.second->process(m_writeCacheBuff.data(), samplesPerChannel);
-        mixOutput(outBuffer, m_writeCacheBuff.data(), samplesPerChannel);
+        mixOutputFromChannel(outBuffer, m_writeCacheBuff.data(), samplesPerChannel);
         std::fill(m_writeCacheBuff.begin(), m_writeCacheBuff.end(), 0.f);
     }
 
-    // TODO add limiter
+    completeOutput(outBuffer, samplesPerChannel);
 
     for (IFxProcessorPtr& fxProcessor : m_masterFxProcessors) {
         if (fxProcessor->active()) {
@@ -193,7 +196,7 @@ Channel<audioch_t, float> Mixer::masterVolumePressureDbfsChanged() const
     return m_masterVolumePressureDbfsChanged;
 }
 
-void Mixer::mixOutput(float* outBuffer, float* inBuffer, unsigned int samplesCount)
+void Mixer::mixOutputFromChannel(float* outBuffer, float* inBuffer, unsigned int samplesCount)
 {
     IF_ASSERT_FAILED(outBuffer && inBuffer) {
         return;
@@ -204,22 +207,47 @@ void Mixer::mixOutput(float* outBuffer, float* inBuffer, unsigned int samplesCou
     }
 
     for (audioch_t audioChNum = 0; audioChNum < audioChannelsCount(); ++audioChNum) {
-        float squaredSum = 0.f;
-
-        gain_t totalGain = balanceGain(m_masterParams.balance, audioChNum) * gainFromDecibels(m_masterParams.volume);
-
         for (samples_t s = 0; s < samplesCount; ++s) {
             int idx = s * audioChannelsCount() + audioChNum;
 
-            float resultSample = (outBuffer[idx] + inBuffer[idx]) * totalGain;
+            outBuffer[idx] += inBuffer[idx];
+        }
+    }
+}
 
-            outBuffer[idx] = resultSample;
+void Mixer::completeOutput(float* buffer, const samples_t& samplesPerChannel)
+{
+    IF_ASSERT_FAILED(buffer) {
+        return;
+    }
 
-            squaredSum += resultSample * resultSample;
+    if (m_masterParams.muted) {
+        return;
+    }
+
+    float totalSquaredSum = 0.f;
+
+    for (audioch_t audioChNum = 0; audioChNum < audioChannelsCount(); ++audioChNum) {
+        float singleChannelSquaredSum = 0.f;
+
+        gain_t totalGain = dsp::balanceGain(m_masterParams.balance, audioChNum) * dsp::linearFromDecibels(m_masterParams.volume);
+
+        for (samples_t s = 0; s < samplesPerChannel; ++s) {
+            int idx = s * audioChannelsCount() + audioChNum;
+
+            float resultSample = buffer[idx] * totalGain;
+            buffer[idx] = resultSample;
+
+            float squaredSample = resultSample * resultSample;
+            totalSquaredSum += squaredSample;
+            singleChannelSquaredSum += squaredSample;
         }
 
-        float rms = samplesRootMeanSquare(std::move(squaredSum), samplesCount);
+        float rms = dsp::samplesRootMeanSquare(singleChannelSquaredSum, samplesPerChannel);
         m_masterSignalAmplitudeRmsChanged.send(audioChNum, rms);
-        m_masterVolumePressureDbfsChanged.send(audioChNum, dbFullScaleFromSample(rms));
+        m_masterVolumePressureDbfsChanged.send(audioChNum, dsp::dbFromSample(rms));
     }
+
+    float totalRms = dsp::samplesRootMeanSquare(totalSquaredSum, samplesPerChannel * audioChannelsCount());
+    m_limiter->process(totalRms, buffer, audioChannelsCount(), samplesPerChannel);
 }

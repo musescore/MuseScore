@@ -29,6 +29,7 @@
 #include "ifxresolver.h"
 #include "ifxprocessor.h"
 #include "track.h"
+#include "internal/dsp/compressor.h"
 
 namespace mu::audio {
 class MixerChannel : public ITrackAudioOutput, public async::Asyncable
@@ -61,6 +62,8 @@ private:
 
     IAudioSourcePtr m_audioSource = nullptr;
     std::vector<IFxProcessorPtr> m_fxProcessors = {};
+
+    dsp::CompressorPtr m_compressor = nullptr;
 
     mutable async::Channel<audioch_t, float> m_signalAmplitudeRmsChanged;
     mutable async::Channel<audioch_t, volume_dbfs_t> m_volumePressureDbfsChanged;
