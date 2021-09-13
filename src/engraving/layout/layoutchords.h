@@ -25,11 +25,14 @@
 #include <QtGlobal>
 #include <vector>
 
+#include "layoutcontext.h"
+
 namespace Ms {
 class Score;
 class Segment;
 class Note;
 class Staff;
+class MStyle;
 }
 
 namespace mu::engraving {
@@ -39,7 +42,7 @@ public:
 
     static void layoutChords1(Ms::Score* score, Ms::Segment* segment, int staffIdx);
     static qreal layoutChords2(std::vector<Ms::Note*>& notes, bool up);
-    static void layoutChords3(Ms::Score* score, std::vector<Ms::Note*>&, const Ms::Staff*, Ms::Segment*);
+    static void layoutChords3(const Ms::MStyle& style, std::vector<Ms::Note*>&, const Ms::Staff*, Ms::Segment*);
 };
 }
 

@@ -390,7 +390,7 @@ void LayoutMeasure::createMMRest(const LayoutOptions& options, Score* score, Mea
 //    multi measure rest
 //---------------------------------------------------------
 
-static bool validMMRestMeasure(Measure* m)
+static bool validMMRestMeasure(const LayoutStateContext& ctx, Measure* m)
 {
     if (m->irregular()) {
         return false;
@@ -406,9 +406,9 @@ static bool validMMRestMeasure(Measure* m)
         }
         if (s->isChordRestType()) {
             bool restFound = false;
-            int tracks = m->score()->ntracks();
+            int tracks = ctx.score()->ntracks();
             for (int track = 0; track < tracks; ++track) {
-                if ((track % VOICES) == 0 && !m->score()->staff(track / VOICES)->show()) {
+                if ((track % VOICES) == 0 && !ctx.score()->staff(track / VOICES)->show()) {
                     track += VOICES - 1;
                     continue;
                 }
@@ -442,7 +442,7 @@ static bool validMMRestMeasure(Measure* m)
 //    multi measure rest
 //---------------------------------------------------------
 
-static bool breakMultiMeasureRest(Measure* m)
+static bool breakMultiMeasureRest(const LayoutStateContext& ctx, Measure* m)
 {
     if (m->breakMultiMeasureRest()) {
         return true;
@@ -456,7 +456,7 @@ static bool breakMultiMeasureRest(Measure* m)
         return true;
     }
 
-    auto sl = m->score()->spannerMap().findOverlapping(m->tick().ticks(), m->endTick().ticks());
+    auto sl = ctx.score()->spannerMap().findOverlapping(m->tick().ticks(), m->endTick().ticks());
     for (auto i : sl) {
         Spanner* s = i.value;
         // break for first measure of volta or textline and first measure *after* volta
@@ -491,7 +491,7 @@ static bool breakMultiMeasureRest(Measure* m)
     }
 
     // break for MeasureRepeat group
-    for (int staffIdx = 0; staffIdx < m->score()->nstaves(); ++staffIdx) {
+    for (int staffIdx = 0; staffIdx < ctx.score()->nstaves(); ++staffIdx) {
         if (m->isMeasureRepeatGroup(staffIdx)
             || (m->prevMeasure() && m->prevMeasure()->isMeasureRepeatGroup(staffIdx))) {
             return true;
@@ -506,12 +506,12 @@ static bool breakMultiMeasureRest(Measure* m)
             if (e->isRehearsalMark()
                 || e->isTempoText()
                 || ((e->isHarmony() || e->isStaffText() || e->isSystemText() || e->isInstrumentChange())
-                    && (e->systemFlag() || m->score()->staff(e->staffIdx())->show()))) {
+                    && (e->systemFlag() || ctx.score()->staff(e->staffIdx())->show()))) {
                 return true;
             }
         }
-        for (int staffIdx = 0; staffIdx < m->score()->nstaves(); ++staffIdx) {
-            if (!m->score()->staff(staffIdx)->show()) {
+        for (int staffIdx = 0; staffIdx < ctx.score()->nstaves(); ++staffIdx) {
+            if (!ctx.score()->staff(staffIdx)->show()) {
                 continue;
             }
             EngravingItem* e = s->element(staffIdx * VOICES);
@@ -534,7 +534,7 @@ static bool breakMultiMeasureRest(Measure* m)
     if (pm) {
         Segment* s = pm->findSegmentR(SegmentType::EndBarLine, pm->ticks());
         if (s) {
-            for (int staffIdx = 0; staffIdx < s->score()->nstaves(); ++staffIdx) {
+            for (int staffIdx = 0; staffIdx < ctx.score()->nstaves(); ++staffIdx) {
                 BarLine* bl = toBarLine(s->element(staffIdx * VOICES));
                 if (bl) {
                     BarLineType t = bl->barLineType();
@@ -575,36 +575,37 @@ static void layoutDrumsetChord(Chord* c, const Drumset* drumset, const StaffType
     }
 }
 
-void LayoutMeasure::getNextMeasure(const LayoutOptions& options, Ms::Score* score, LayoutContext& lc)
+void LayoutMeasure::getNextMeasure(const LayoutOptions& options, LayoutStateContext& ctx)
 {
-    lc.prevMeasure = lc.curMeasure;
-    lc.curMeasure  = lc.nextMeasure;
-    if (!lc.curMeasure) {
-        lc.nextMeasure = options.showVBox ? score->first() : score->firstMeasure();
+    Ms::Score* score = ctx.score();
+    ctx.prevMeasure = ctx.curMeasure;
+    ctx.curMeasure  = ctx.nextMeasure;
+    if (!ctx.curMeasure) {
+        ctx.nextMeasure = options.showVBox ? score->first() : score->firstMeasure();
     } else {
-        lc.nextMeasure = options.showVBox ? lc.curMeasure->next() : lc.curMeasure->nextMeasure();
+        ctx.nextMeasure = options.showVBox ? ctx.curMeasure->next() : ctx.curMeasure->nextMeasure();
     }
-    if (!lc.curMeasure) {
+    if (!ctx.curMeasure) {
         return;
     }
 
-    int mno = adjustMeasureNo(lc, lc.curMeasure);
+    int mno = adjustMeasureNo(ctx, ctx.curMeasure);
 
-    if (lc.curMeasure->isMeasure()) {
-        if (score->score()->styleB(Sid::createMultiMeasureRests)) {
-            Measure* m = toMeasure(lc.curMeasure);
+    if (ctx.curMeasure->isMeasure()) {
+        if (ctx.score()->styleB(Sid::createMultiMeasureRests)) {
+            Measure* m = toMeasure(ctx.curMeasure);
             Measure* nm = m;
             Measure* lm = nm;
             int n       = 0;
             Fraction len;
 
-            while (validMMRestMeasure(nm)) {
+            while (validMMRestMeasure(ctx, nm)) {
                 MeasureBase* mb = options.showVBox ? nm->next() : nm->nextMeasure();
-                if (breakMultiMeasureRest(nm) && n) {
+                if (breakMultiMeasureRest(ctx, nm) && n) {
                     break;
                 }
                 if (nm != m) {
-                    adjustMeasureNo(lc, nm);
+                    adjustMeasureNo(ctx, nm);
                 }
                 ++n;
                 len += nm->ticks();
@@ -616,22 +617,22 @@ void LayoutMeasure::getNextMeasure(const LayoutOptions& options, Ms::Score* scor
             }
             if (n >= score->styleI(Sid::minEmptyMeasures)) {
                 createMMRest(options, score, m, lm, len);
-                lc.curMeasure  = m->mmRest();
-                lc.nextMeasure = options.showVBox ? lm->next() : lm->nextMeasure();
+                ctx.curMeasure  = m->mmRest();
+                ctx.nextMeasure = options.showVBox ? lm->next() : lm->nextMeasure();
             } else {
                 if (m->mmRest()) {
                     score->undo(new ChangeMMRest(m, 0));
                 }
                 m->setMMRestCount(0);
-                lc.measureNo = mno;
+                ctx.measureNo = mno;
             }
-        } else if (toMeasure(lc.curMeasure)->isMMRest()) {
-            qDebug("mmrest: no %d += %d", lc.measureNo, toMeasure(lc.curMeasure)->mmRestCount());
-            lc.measureNo += toMeasure(lc.curMeasure)->mmRestCount() - 1;
+        } else if (toMeasure(ctx.curMeasure)->isMMRest()) {
+            qDebug("mmrest: no %d += %d", ctx.measureNo, toMeasure(ctx.curMeasure)->mmRestCount());
+            ctx.measureNo += toMeasure(ctx.curMeasure)->mmRestCount() - 1;
         }
     }
-    if (!lc.curMeasure->isMeasure()) {
-        lc.curMeasure->setTick(lc.tick);
+    if (!ctx.curMeasure->isMeasure()) {
+        ctx.curMeasure->setTick(ctx.tick);
         return;
     }
 
@@ -639,14 +640,14 @@ void LayoutMeasure::getNextMeasure(const LayoutOptions& options, Ms::Score* scor
     //    process one measure
     //-----------------------------------------
 
-    Measure* measure = toMeasure(lc.curMeasure);
-    measure->moveTicks(lc.tick - measure->tick());
+    Measure* measure = toMeasure(ctx.curMeasure);
+    measure->moveTicks(ctx.tick - measure->tick());
 
-    if (score->linearMode() && (measure->tick() < lc.startTick || measure->tick() > lc.endTick)) {
+    if (score->linearMode() && (measure->tick() < ctx.startTick || measure->tick() > ctx.endTick)) {
         // needed to reset segment widths if they can change after measure width is computed
         //for (Segment& s : measure->segments())
         //      s.createShapes();
-        lc.tick += measure->ticks();
+        ctx.tick += measure->ticks();
         return;
     }
 
@@ -656,7 +657,7 @@ void LayoutMeasure::getNextMeasure(const LayoutOptions& options, Ms::Score* scor
     // calculate accidentals and note lines,
     // create stem and set stem direction
     //
-    for (int staffIdx = 0; staffIdx < score->score()->nstaves(); ++staffIdx) {
+    for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
         const Staff* staff     = score->Score::staff(staffIdx);
         const Drumset* drumset
             = staff->part()->instrument(measure->tick())->useDrumset() ? staff->part()->instrument(measure->tick())->drumset() : 0;
@@ -687,14 +688,14 @@ void LayoutMeasure::getNextMeasure(const LayoutOptions& options, Ms::Score* scor
                     }
                     qreal m = staff->staffMag(&segment);
                     if (cr->isSmall()) {
-                        m *= score->score()->styleD(Sid::smallNoteMag);
+                        m *= score->styleD(Sid::smallNoteMag);
                     }
 
                     if (cr->isChord()) {
                         Chord* chord = toChord(cr);
                         chord->cmdUpdateNotes(&as);
                         for (Chord* c : chord->graceNotes()) {
-                            c->setMag(m * score->score()->styleD(Sid::graceNoteMag));
+                            c->setMag(m * score->styleD(Sid::graceNoteMag));
                             c->computeUp();
                             if (c->stemDirection() != Direction::AUTO) {
                                 c->setUp(c->stemDirection() == Direction::UP);
@@ -747,9 +748,9 @@ void LayoutMeasure::getNextMeasure(const LayoutOptions& options, Ms::Score* scor
         }
     }
 
-    LayoutBeams::createBeams(score, lc, measure);
+    LayoutBeams::createBeams(score, ctx, measure);
 
-    for (int staffIdx = 0; staffIdx < score->score()->nstaves(); ++staffIdx) {
+    for (int staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
         for (Segment& segment : measure->segments()) {
             if (segment.isChordRestType()) {
                 LayoutChords::layoutChords1(score, &segment, staffIdx);
@@ -801,7 +802,7 @@ void LayoutMeasure::getNextMeasure(const LayoutOptions& options, Ms::Score* scor
             }
         }
     } else if (seg) {
-        score->score()->undoRemoveElement(seg);
+        score->undoRemoveElement(seg);
     }
 
     for (Segment& s : measure->segments()) {
@@ -824,14 +825,14 @@ void LayoutMeasure::getNextMeasure(const LayoutOptions& options, Ms::Score* scor
         s.createShapes();
     }
 
-    lc.tick += measure->ticks();
+    ctx.tick += measure->ticks();
 }
 
 //---------------------------------------------------------
 //   adjustMeasureNo
 //---------------------------------------------------------
 
-int LayoutMeasure::adjustMeasureNo(LayoutContext& lc, MeasureBase* m)
+int LayoutMeasure::adjustMeasureNo(LayoutStateContext& lc, MeasureBase* m)
 {
     lc.measureNo += m->noOffset();
     m->setNo(lc.measureNo);

@@ -1155,7 +1155,6 @@ public:
     bool linearMode() const { return lineMode() || horizontalFixedMode(); }
     // ----
 
-    Tuplet* searchTuplet(XmlReader& e, int id);
     void cmdSelectAll();
     void cmdSelectSection();
     void transposeSemitone(int semitone);

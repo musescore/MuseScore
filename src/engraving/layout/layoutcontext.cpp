@@ -27,18 +27,18 @@
 using namespace mu::engraving;
 using namespace Ms;
 
-LayoutContext::LayoutContext(Score* s)
-    : score(s)
+LayoutStateContext::LayoutStateContext(Score* score)
+    : m_score(score)
 {
 }
 
-LayoutContext::~LayoutContext()
+LayoutStateContext::~LayoutStateContext()
 {
     for (Spanner* s : processedSpanners) {
         s->layoutSystemsDone();
     }
 
-    for (MuseScoreView* v : score->getViewer()) {
+    for (MuseScoreView* v : score()->getViewer()) {
         v->layoutChanged();
     }
 }

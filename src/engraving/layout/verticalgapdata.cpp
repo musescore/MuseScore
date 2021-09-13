@@ -33,15 +33,15 @@
 using namespace mu::engraving;
 using namespace Ms;
 
-VerticalGapData::VerticalGapData(bool first, System* sys, Staff* st, SysStaff* sst, Spacer* nextSpacer, qreal y)
-    : _fixedHeight(first), system(sys), sysStaff(sst), staff(st)
+VerticalGapData::VerticalGapData(MStyle* style, bool first, System* sys, Staff* st, SysStaff* sst, Spacer* nextSpacer, qreal y)
+    : _fixedHeight(first), style(style), system(sys), sysStaff(sst), staff(st)
 {
     if (_fixedHeight) {
-        _normalisedSpacing = system->score()->styleP(Sid::staffUpperBorder);
+        _normalisedSpacing = style->styleP(Sid::staffUpperBorder);
         _maxActualSpacing = _normalisedSpacing;
     } else {
         _normalisedSpacing = system->y() + (sysStaff ? sysStaff->bbox().y() : 0.0) - y;
-        _maxActualSpacing = system->score()->styleP(Sid::maxStaffSpread);
+        _maxActualSpacing = style->styleP(Sid::maxStaffSpread);
 
         Spacer* spacer { staff ? system->upSpacer(staff->idx(), nextSpacer) : nullptr };
 
@@ -75,9 +75,9 @@ void VerticalGapData::updateFactor(qreal factor)
 
 void VerticalGapData::addSpaceBetweenSections()
 {
-    updateFactor(system->score()->styleD(Sid::spreadSystem));
+    updateFactor(style->styleD(Sid::spreadSystem));
     if (!(_fixedHeight | _fixedSpacer)) {
-        _maxActualSpacing = system->score()->styleP(Sid::maxSystemSpread) / _factor;
+        _maxActualSpacing = style->styleP(Sid::maxSystemSpread) / _factor;
     }
 }
 
@@ -89,8 +89,7 @@ void VerticalGapData::addSpaceAroundVBox(bool above)
 {
     _fixedHeight = true;
     _factor = 1.0;
-    const Score* score { system->score() };
-    _normalisedSpacing = above ? score->styleP(Sid::frameSystemDistance) : score->styleP(Sid::systemFrameDistance);
+    _normalisedSpacing = above ? style->styleP(Sid::frameSystemDistance) : style->styleP(Sid::systemFrameDistance);
     _maxActualSpacing = _normalisedSpacing / _factor;
 }
 
@@ -100,7 +99,7 @@ void VerticalGapData::addSpaceAroundVBox(bool above)
 
 void VerticalGapData::addSpaceAroundNormalBracket()
 {
-    updateFactor(system->score()->styleD(Sid::spreadSquareBracket));
+    updateFactor(style->styleD(Sid::spreadSquareBracket));
 }
 
 //---------------------------------------------------------
@@ -109,7 +108,7 @@ void VerticalGapData::addSpaceAroundNormalBracket()
 
 void VerticalGapData::addSpaceAroundCurlyBracket()
 {
-    updateFactor(system->score()->styleD(Sid::spreadCurlyBracket));
+    updateFactor(style->styleD(Sid::spreadCurlyBracket));
 }
 
 //---------------------------------------------------------
@@ -118,7 +117,7 @@ void VerticalGapData::addSpaceAroundCurlyBracket()
 
 void VerticalGapData::insideCurlyBracket()
 {
-    _maxActualSpacing = system->score()->styleP(Sid::maxAkkoladeDistance) / _factor;
+    _maxActualSpacing = style->styleP(Sid::maxAkkoladeDistance) / _factor;
 }
 
 //---------------------------------------------------------
