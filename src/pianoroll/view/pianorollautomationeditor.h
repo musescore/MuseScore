@@ -134,7 +134,6 @@ private:
     QPoint m_mouseDownPos;
     QPoint m_lastMousePos;
     int m_pickRadius = 4;
-//    double m_dragStartValue = 0;
     NoteEventBlock* m_dragBlock = nullptr;
 
     double m_centerX = 0;  //fraction of note grid camera is focused on
@@ -154,7 +153,6 @@ private:
     QColor m_colorGridBackground = QColor(0xdddddd);
     QColor m_colorPlaybackLine = QColor(0xff0000);
     QColor m_colorGridLine = QColor(0xa2a2a6);
-//    QColor m_colorGridLine = Qt::black;
     QColor m_colorText = Qt::black;
     QColor m_colorVertexFill = QColor(0xffffff);
     QColor m_colorVertexLine = Qt::black;

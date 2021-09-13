@@ -49,7 +49,6 @@ using namespace mu::notation;
 using namespace mu::async;
 using namespace mu::audio;
 using namespace mu::actions;
-//using namespace mu::Ms;
 
 //NoteBlock::NoteBlock(Note* note):
 //    m_note(note)
@@ -190,30 +189,6 @@ Ms::Fraction PianorollController::widthInBeats()
 
 void PianorollController::buildNoteBlocks()
 {
-    //m_notes.clear();
-
-    //notation::INotationPtr notation = globalContext()->currentNotation();
-    //if (!notation) {
-    //    return;
-    //}
-
-    //Ms::Score* score = notation->elements()->msScore();
-    //std::vector<Element*> selectedElements = notation->interaction()->selection()->elements();
-    //m_selectedStaves.clear();
-    //m_activeStaff = -1;
-    //for (Element* e: selectedElements)
-    //{
-    //    int idx = e->staffIdx();
-    //    qDebug() << "ele idx " << idx;
-    //    m_activeStaff = idx;
-    //    if (std::find(m_selectedStaves.begin(), m_selectedStaves.end(), idx) == m_selectedStaves.end())
-    //    {
-    //        m_selectedStaves.push_back(idx);
-
-    //    }
-    //}
-
-    //m_noteLayoutChanged.notify();
 }
 
 void PianorollController::setPitchHighlight(int pitch, bool value)

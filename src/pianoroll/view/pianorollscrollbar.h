@@ -88,9 +88,7 @@ private:
     Direction m_direction = Direction::HORIZONTAL;
 
     QColor m_colorSlider = Qt::gray;
-//    QColor m_colorSlider = Qt::blue;
     QColor m_colorBackground = QColor(0xdddddd);
-//    QColor m_colorBackground = Qt::green;
 };
 }
 

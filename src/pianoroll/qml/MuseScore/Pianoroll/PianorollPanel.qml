@@ -298,7 +298,7 @@ Rectangle {
             PianorollAutomationRow {
                 id: automationArea
                 SplitView.preferredHeight: 100
-                visible: true
+                visible: false
 
                 m_graphWidth: pianoView.width
                 m_tuplet: pianoView.tuplet

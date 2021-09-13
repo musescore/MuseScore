@@ -163,7 +163,6 @@ private:
     void buildNoteData();
     void addChord(Ms::Chord* chrd, int voice, int staffIdx);
 
-//    void drawChord(QPainter* p, Ms::Chord* chrd, int voice, bool active);
     void drawNoteBlock(QPainter* p, NoteBlock* block);
     void drawDraggedNotes(QPainter* painter);
     void drawDraggedNote(QPainter* painter, Ms::Fraction startTick, Ms::Fraction frac, int pitch, int track, QColor color);
@@ -182,7 +181,7 @@ private:
     bool cutChordRest(Ms::ChordRest* targetCr, int track, Ms::Fraction cutTick, Ms::ChordRest*& cr0, Ms::ChordRest*& cr1);
     std::vector<Ms::Note*> getSegmentNotes(Ms::Segment* seg, int track);
 
-    static void append(std::vector<Ms::Note*>& a, std::vector<Ms::Note*>& b)
+    static void append(std::vector<Ms::Note*>& a, const std::vector<Ms::Note*>& b)
     {
         a.insert(a.end(), b.begin(), b.end());
     }

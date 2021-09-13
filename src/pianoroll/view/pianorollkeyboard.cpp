@@ -170,7 +170,6 @@ void PianorollKeyboard::paint(QPainter* p)
     if (activeStaff == -1) {
         activeStaff = 0;
     }
-//        return;
     Ms::Staff* staff = score->staff(activeStaff);
     Ms::Part* part = staff->part();
 
@@ -231,7 +230,6 @@ void PianorollKeyboard::paint(QPainter* p)
 
                 QRect bounds(0, y0, width(), y1 - y0);
                 p->fillRect(bounds, pitch == m_curKeyPressed ? m_colorKeyHighlight : m_colorKeyWhite);
-//                p->drawLine(0, y0, width(), y0);
                 p->drawRect(bounds);
 
                 if (degree == 0 && font.pointSize() + 2 < bounds.height()) {

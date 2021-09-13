@@ -34,10 +34,6 @@ PianorollScrollbar::PianorollScrollbar(QQuickItem* parent)
 
 void PianorollScrollbar::load()
 {
-    //onNotationChanged();
-    //globalContext()->currentNotationChanged().onNotify(this, [this]() {
-    //    onNotationChanged();
-    //});
 }
 
 void PianorollScrollbar::updateSlider()

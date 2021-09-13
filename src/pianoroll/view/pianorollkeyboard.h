@@ -70,16 +70,12 @@ signals:
 
     void keyPressed(int pitch);
     void keyReleased(int pitch);
-//    void pitchHighlightToggled(int pitch);
 
 private:
     void onNotationChanged();
     void onCurrentNotationChanged();
     void onSelectionChanged();
     void updateBoundingSize();
-
-//    void paintKeyboard(QPainter*);
-//    void paintNames(QPainter*);
 
     int m_curKeyPressed = -1;
     int m_curPitch = -1;
