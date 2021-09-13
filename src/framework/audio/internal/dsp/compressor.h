@@ -25,16 +25,30 @@
 
 #include <memory>
 
-#include "audiotypes.h"
+#include "envelopefilterconfig.h"
 
 namespace mu::audio::dsp {
 class Compressor
 {
 public:
-    Compressor() = default;
+    Compressor(const unsigned int sampleRate);
 
-    void process(float* buffer, const samples_t& samplesPerChannel, const float& audioChannelRms,const audioch_t channelNumber,
-                 const audioch_t audioChannelsCount);
+    void process(const float linearRms, float* buffer, const audioch_t& audioChannelsCount, const samples_t samplesPerChannel);
+private:
+    float attackTimeCoefficient() const;
+    float releaseTimeCoefficient() const;
+
+    volume_db_t gainSmoothing(const float& newGainReduction) const;
+    volume_db_t computeGain(const volume_db_t& logarithmSample) const;
+
+    EnvelopeFilterConfig m_filterConfig;
+
+    float m_softThresholdLower = 0.f;
+    float m_softThresholdUpper = 0.f;
+    float m_previousGainReduction = 1.f;
+
+    float m_feedbackGain = 0.f;
+    float m_feedbackFactor = 0.f;
 };
 
 using CompressorPtr = std::unique_ptr<Compressor>;
