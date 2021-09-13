@@ -31,18 +31,18 @@ class AutomationTrack;
 
 class AutomationVertex : public EngravingItem
 {
-    double _value;
-    double _ticks;  //Number of whole notes offset from start of score
+    float _value;
+    int _ticks;  //Number of whole notes offset from start of score
 
 public:
     AutomationVertex(AutomationTrack* parent);
     ~AutomationVertex();
 
-    double value() { return _value; }
-    void setValue(double value);
+    float value() { return _value; }
+    void setValue(float value);
 
-    double ticks() { return _ticks; }
-    void setTicks(double value);
+//    int ticks() { return _ticks; }
+//    void setTicks(int value);
 };
 }
 #endif // __AUTOMATIONVERTEX_H__
