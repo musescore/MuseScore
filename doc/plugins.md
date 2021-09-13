@@ -71,8 +71,55 @@ menu entry or via a shortcut). This is the entry point of your plugin.
 - [`Qt.quit()`](https://doc.qt.io/qt-5/qml-qtqml-qt.html#quit-method) statement
 requests termination of the plugin's execution.
 
+## Documentation from Earlier Versions
+Although it is not up to date, documentation for creating plugins for earlier versions is available, and may be useful.
+https://musescore.org/en/handbook/developers-handbook/plugin-development
+
+
+## Plugins Installed By Default
 MuseScore is shipped with a set of simple plugins which can also be used as
 a reference while developing your own plugins.
+
+### ABC Import
+This plugin imports ABC text from a file or the clipboard. Internet connection is required, because it uses an external web-service for the conversion, which uses abc2xml and gets send the ABC data, returns MusicXML and imports that into MuseScore.
+
+### Color Notes
+This demo plugin colors notes in the selected range (or the entire score), depending on their pitch. It colors the note head of all notes in all staves and voices according to the Boomwhackers convention. Each pitch has a different color. C and C♯ have a different color. C♯ and D♭ have the same color.
+To color all the notes in black, just run that plugin again (on the same selection). You could also use the 'Remove Notes Color' plugin for this.
+
+### Create Score
+This demo plugin creates a new score. It creates a new piano score with 4 quarters C D E F. It's a good start to learn how to make a new score and add notes from a plugin.
+
+### helloQml
+This demo plugin shows some basic tasks.
+
+### Note Names
+This plugin names notes in the selected range or the entire score. It displays the names of the notes (as a staff text) as per MuseScore's language settings, for voices 1 and 3 above the staff, for voices 2 and 4 below the staff, and for chords in a comma separated list, starting with the top note.
+
+### Note Names -Interactive
+This plugin names notes as per your language setting.
+
+### Panel
+This demo plugin creates a GUI panel.
+
+### random
+Creates a random score.
+
+### random2
+Creates a random score too.
+
+### run
+This demo plugin runs an external command. Probably this will only work on Linux.
+
+### scorelist
+This test plugin iterates through the score list.
+
+### View
+Demo plugin to demonstrate the use of a ScoreView
+
+### Walk
+This test plugin walks through all elements in a score
+
 
 ## Porting MuseScore 2 plugins
 This documentation corresponds to the plugins API for MuseScore 3.X version.
@@ -82,4 +129,4 @@ MuseScore 3, please refer to the \ref plugin2to3 page.
 
 ## Internationalization
 For the questions related to making a plugin translatable to different languages
-please refer to \ref i18n page.
+please refer to [i18n](i18n.md).
