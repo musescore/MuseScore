@@ -50,11 +50,6 @@ using namespace mu::async;
 using namespace mu::audio;
 using namespace mu::actions;
 
-//NoteBlock::NoteBlock(Note* note):
-//    m_note(note)
-//{
-//}
-
 void PianorollController::init()
 {
     memset(m_pitchHighlight, 0, 128);

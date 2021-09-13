@@ -64,7 +64,7 @@ int AutomationTrack::vertexIndexForTick(Fraction tick)
     return _vertices.size() - 1;
 }
 
-bool AutomationTrack::isVertexAt(Fraction tick)
+bool AutomationTrack::isVertexAt(Fraction tick) 
 {
     int idx = vertexIndexForTick(tick);
     if (idx == -1)
