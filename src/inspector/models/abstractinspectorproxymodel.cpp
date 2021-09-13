@@ -23,8 +23,8 @@
 
 using namespace mu::inspector;
 
-AbstractInspectorProxyModel::AbstractInspectorProxyModel(QObject* parent, InspectorModelType preferedSubModelType)
-    : AbstractInspectorModel(parent), m_preferedSubModelType(preferedSubModelType)
+AbstractInspectorProxyModel::AbstractInspectorProxyModel(QObject* parent, IElementRepositoryService* repository, InspectorModelType preferedSubModelType)
+    : AbstractInspectorModel(parent, repository), m_preferedSubModelType(preferedSubModelType)
 {
 }
 
@@ -56,6 +56,13 @@ QObject* AbstractInspectorProxyModel::firstModel()
     }
 
     return m_modelsHash.values().first();
+}
+
+void AbstractInspectorProxyModel::requestElements()
+{
+    for (AbstractInspectorModel* model : m_modelsHash.values()) {
+        model->requestElements();
+    }
 }
 
 void AbstractInspectorProxyModel::requestResetToDefaults()

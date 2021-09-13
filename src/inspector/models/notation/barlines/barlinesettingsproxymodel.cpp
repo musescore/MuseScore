@@ -29,7 +29,7 @@
 using namespace mu::inspector;
 
 BarlineSettingsProxyModel::BarlineSettingsProxyModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorProxyModel(parent)
+    : AbstractInspectorProxyModel(parent, repository)
 {
     setModelType(InspectorModelType::TYPE_BARLINE);
     setTitle(qtrc("inspector", "Barline"));
