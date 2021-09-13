@@ -59,8 +59,8 @@ struct EnvelopeFilterConfig
     static constexpr float DEFAULT_KNEE_WIDTH = 6.f; // [0, 20.f]
     static constexpr float DEFAULT_RATIO = 4.f; // [1, 50.f]
     static constexpr volume_db_t DEFAULT_THRESHOLD_DB = -10.f;
-    static constexpr float DEFAULT_ATTACK_TIME = 0.005; // [0, 4.f]
-    static constexpr float DEFAULT_RELEASE_TIME = 0.02; // [0, 4.f]
+    static constexpr float DEFAULT_ATTACK_TIME = 0.005f; // [0, 4.f]
+    static constexpr float DEFAULT_RELEASE_TIME = 0.02f; // [0, 4.f]
     static constexpr volume_db_t DEFAULT_MINIMUM_OPERABLE_LEVEL = -60.f;
     static constexpr volume_db_t DEFAULT_MAKE_UP_GAIN = -10.f; // [-10.f, 12.f]
 
