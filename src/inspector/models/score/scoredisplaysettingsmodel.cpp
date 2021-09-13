@@ -51,13 +51,9 @@ void ScoreSettingsModel::requestElements()
     //!Note the model work only with the parent score, no need to request other child elements
 }
 
-bool ScoreSettingsModel::hasAcceptableElements() const
+bool ScoreSettingsModel::isEmpty() const
 {
-    if (isNotationExisting()) {
-        return true;
-    }
-
-    return false;
+    return !isNotationExisting();
 }
 
 void ScoreSettingsModel::loadProperties()

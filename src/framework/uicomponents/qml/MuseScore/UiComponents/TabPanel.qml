@@ -31,8 +31,8 @@ TabView {
 
     width: parent.width
 
-    function focusOnFirstTab() {
-        var tabItem = root.getTab(0);
+    function focusOnTab(index) {
+        var tabItem = root.getTab(index)
         if (tabItem && tabItem.navigation) {
             tabItem.navigation.requestActive()
         }

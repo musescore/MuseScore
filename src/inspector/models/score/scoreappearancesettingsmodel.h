@@ -40,7 +40,7 @@ public:
     virtual void loadProperties() override { }
     virtual void resetProperties() override { }
 
-    bool hasAcceptableElements() const override;
+    bool isEmpty() const override;
 };
 }
 

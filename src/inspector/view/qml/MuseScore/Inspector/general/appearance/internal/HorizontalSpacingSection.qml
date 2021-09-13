@@ -48,6 +48,8 @@ Item {
     width: parent.width
 
     SpinBoxPropertyView {
+        id: leadingValue
+
         anchors.left: parent.left
         anchors.right: parent.horizontalCenter
         anchors.rightMargin: 4

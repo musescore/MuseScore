@@ -35,13 +35,9 @@ ScoreAppearanceSettingsModel::ScoreAppearanceSettingsModel(QObject* parent, IEle
     setTitle(qtrc("inspector", "Score appearance"));
 }
 
-bool ScoreAppearanceSettingsModel::hasAcceptableElements() const
+bool ScoreAppearanceSettingsModel::isEmpty() const
 {
-    if (isNotationExisting()) {
-        return true;
-    }
-
-    return false;
+    return !isNotationExisting();
 }
 
 void ScoreAppearanceSettingsModel::showPageSettings()
