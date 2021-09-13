@@ -3415,6 +3415,14 @@ QString Chord::accessibleExtraInfo() const
 
 Shape Chord::shape() const
       {
+      // the chord shape will always contain the basic elements of note/stem/hook
+      // however, other elements are only added to the shape if the chord itself has autoplace set
+      // thus, disabling autoplace for the chord removes ledger lines, accidentals, arpeggios, etc. from the shape
+      // this allows the spacing algorithm to do basic spacing of notes according to duration with or without autoplace
+      // by default, with autoplace on, you get space for the other elements too
+      // this avoid collisions, but it can produce noticeably uneven spacing once the measure is stretched
+      // by turning autoplace off, no space is allocated for the other elements
+      // this can produce collisions if spacing is tight, but if the measure is wide enough, spacing can be made more even
       Shape shape;
       if (_hook && _hook->addToSkyline())
             shape.add(_hook->shape().translated(_hook->pos()));
@@ -3425,30 +3433,34 @@ Shape Chord::shape() const
             }
       if (_stemSlash && _stemSlash->addToSkyline())
             shape.add(_stemSlash->shape().translated(_stemSlash->pos()));
-      if (_arpeggio && _arpeggio->addToSkyline())
-            shape.add(_arpeggio->shape().translated(_arpeggio->pos()));
-//      if (_tremolo)
-//            shape.add(_tremolo->shape().translated(_tremolo->pos()));
       for (Note* note : _notes) {
             shape.add(note->shape().translated(note->pos()));
-            for (Element* e : note->el()) {
-                  if (!e->addToSkyline())
-                        continue;
-                  if (e->isFingering() && toFingering(e)->layoutType() == ElementType::CHORD && e->bbox().isValid())
-                        shape.add(e->bbox().translated(e->pos() + note->pos()));
+            if (addToSkyline()) {
+                  for (Element* e : note->el()) {
+                        if (!e->addToSkyline())
+                              continue;
+                        if (e->isFingering() && toFingering(e)->layoutType() == ElementType::CHORD && e->bbox().isValid())
+                              shape.add(e->bbox().translated(e->pos() + note->pos()));
+                        }
                   }
             }
-      for (Element* e : el()) {
-            if (e->addToSkyline())
-                  shape.add(e->shape().translated(e->pos()));
-            }
-      for (Chord* chord : _graceNotes)    // process grace notes last, needed for correct shape calculation
-            shape.add(chord->shape().translated(chord->pos()));
       shape.add(ChordRest::shape());      // add lyrics
-      for (LedgerLine* l = _ledgerLines; l; l = l->next())
-            shape.add(l->shape().translated(l->pos()));
-      if (_spaceLw || _spaceRw)
-            shape.addHorizontalSpacing(Shape::SPACING_GENERAL, -_spaceLw, _spaceRw);
+      if (addToSkyline()) {
+            if (_arpeggio && _arpeggio->addToSkyline())
+                  shape.add(_arpeggio->shape().translated(_arpeggio->pos()));
+            //if (_tremolo)
+            //      shape.add(_tremolo->shape().translated(_tremolo->pos()));
+            for (Element* e : el()) {
+                  if (e->addToSkyline())
+                        shape.add(e->shape().translated(e->pos()));
+                  }
+            for (Chord* chord : _graceNotes)    // process grace notes last, needed for correct shape calculation
+                  shape.add(chord->shape().translated(chord->pos()));
+            for (LedgerLine* l = _ledgerLines; l; l = l->next())
+                  shape.add(l->shape().translated(l->pos()));
+            if (_spaceLw != 0.0 || _spaceRw != 0.0)
+                  shape.addHorizontalSpacing(Shape::SPACING_GENERAL, -_spaceLw, _spaceRw);
+            }
       return shape;
       }
 

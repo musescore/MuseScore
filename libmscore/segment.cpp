@@ -2101,7 +2101,7 @@ void Segment::createShape(int staffIdx)
                   // TODO: we could choose to ignore invisible/no-autoplace notes & rests
                   // but these might be relied upon by some
                   setVisible(true);
-                  if (e->addToSkyline())
+                  if (e->addToSkyline() || e->isChord())
                         s.add(e->shape().translated(e->pos()));
                   }
             }
