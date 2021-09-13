@@ -244,8 +244,8 @@ void ScoreAccessibility::currentInfoChanged()
             QString optimizedBarsAndBeats = "";
             if (el->isSpanner()) {
                   Spanner* s = static_cast<Spanner*>(el);
-                  std::pair<int, float> bar_beat = barbeat(s->startSegment());
-                  barsAndBeats += tr("Start Measure: %1; Start Beat: %2").arg(QString::number(bar_beat.first)).arg(QString::number(bar_beat.second));
+                  std::pair<int, float> bar_beat = s->startSegment()->barbeat();
+                  barsAndBeats += " " + tr("Start Measure: %1; Start Beat: %2").arg(QString::number(bar_beat.first)).arg(QString::number(bar_beat.second));
                   Segment* seg = s->endSegment();
                   if(!seg)
                         seg = score->lastSegment()->prev1MM(SegmentType::ChordRest);
@@ -255,12 +255,12 @@ void ScoreAccessibility::currentInfoChanged()
                       s->type() != ElementType::TIE                                                )
                         seg = seg->prev1MM(SegmentType::ChordRest);
 
-                  bar_beat = barbeat(seg);
+                  bar_beat = seg->barbeat();
                   barsAndBeats += "; " + tr("End Measure: %1; End Beat: %2").arg(QString::number(bar_beat.first)).arg(QString::number(bar_beat.second));
                   optimizedBarsAndBeats = barsAndBeats;
                   }
             else {
-                  std::pair<int, float>bar_beat = barbeat(el);
+                  std::pair<int, float>bar_beat = el->barbeat();
                   if (bar_beat.first) {
                         _oldBar = bar_beat.first;
                         barsAndBeats += " " + tr("Measure: %1").arg(QString::number(bar_beat.first));
@@ -331,7 +331,7 @@ void ScoreAccessibility::currentInfoChanged()
             QString barsAndBeats = "";
             std::pair<int, float> bar_beat;
 
-            bar_beat = barbeat(score->selection().startSegment());
+            bar_beat = score->selection().startSegment()->barbeat();
             barsAndBeats += " " + tr("Start Measure: %1; Start Beat: %2").arg(QString::number(bar_beat.first)).arg(QString::number(bar_beat.second));
             Segment* endSegment = score->selection().endSegment();
 
@@ -340,7 +340,7 @@ void ScoreAccessibility::currentInfoChanged()
             else
                   endSegment = endSegment->prev1MM();
 
-            bar_beat = barbeat(endSegment);
+            bar_beat = endSegment->barbeat();
             barsAndBeats += " " + tr("End Measure: %1; End Beat: %2").arg(QString::number(bar_beat.first)).arg(QString::number(bar_beat.second));
             statusBarLabel->setText(tr("Range Selection") + barsAndBeats);
             score->setAccessibleInfo(tr("Range Selection") + barsAndBeats);
@@ -417,38 +417,6 @@ void ScoreAccessibility::updateAccessibility()
       //QAccessible::updateAccessibility(&ev1);
       //QAccessibleEvent ev2(obj, QAccessible::DescriptionChanged);
       //QAccessible::updateAccessibility(&ev2);
-      }
-
-std::pair<int, float> ScoreAccessibility::barbeat(Element *e)
-      {
-      if (!e) {
-            return std::pair<int, float>(0, 0.0F);
-            }
-
-      int bar = 0;
-      int beat = 0;
-      int ticks = 0;
-      TimeSigMap* tsm = e->score()->sigmap();
-      Element* p = e;
-      int ticksB = ticks_beat(tsm->timesig(0).timesig().denominator());
-      while(p && p->type() != ElementType::SEGMENT && p->type() != ElementType::MEASURE)
-            p = p->parent();
-
-      if (!p) {
-            return std::pair<int, float>(0, 0.0F);
-            }
-      else if (p->type() == ElementType::SEGMENT) {
-            Segment* seg = static_cast<Segment*>(p);
-            tsm->tickValues(seg->tick().ticks(), &bar, &beat, &ticks);
-            ticksB = ticks_beat(tsm->timesig(seg->tick().ticks()).timesig().denominator());
-            }
-      else if (p->type() == ElementType::MEASURE) {
-            Measure* m = static_cast<Measure*>(p);
-            bar = m->no();
-            beat = -1;
-            ticks = 0;
-            }
-      return std::pair<int,float>(bar + 1, beat + 1 + ticks / static_cast<float>(ticksB));
       }
 
 void ScoreAccessibility::makeReadable(QString& s)

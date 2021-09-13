@@ -210,6 +210,8 @@ class Element : public ScoreElement {
       virtual bool isElement() const override { return true;        }
 
       qreal spatium() const;
+      std::pair<int, float>barbeat() const;
+      QString accessibleBarbeat() const;
 
       inline void setFlag(ElementFlag f, bool v)       { if (v) _flags |= f; else _flags &= ~ElementFlags(f); }
       inline void setFlag(ElementFlag f, bool v) const { if (v) _flags |= f; else _flags &= ~ElementFlags(f); }

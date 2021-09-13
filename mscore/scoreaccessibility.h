@@ -75,7 +75,6 @@ class ScoreAccessibility : public QObject {
       QMainWindow* mainWindow;
       QLabel* statusBarLabel;
       ScoreAccessibility(QMainWindow* statusBar);
-      std::pair<int, float>barbeat(Element* e);
       int _oldStaff = -1;
       int _oldBar = -1;
 
