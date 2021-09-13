@@ -27,7 +27,6 @@
 #include "mscore.h"
 
 namespace Ms {
-
 class AutomationTrack;
 
 class AutomationVertex : public EngravingItem
@@ -45,6 +44,5 @@ public:
     double ticks() { return _ticks; }
     void setTicks(double value);
 };
-
 }
 #endif // __AUTOMATIONVERTEX_H__

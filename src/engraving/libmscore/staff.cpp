@@ -123,7 +123,6 @@ void Staff::triggerLayout(const Fraction& tick)
     score()->setLayout(tick, idx());
 }
 
-
 //---------------------------------------------------------
 //   insertAutomationTrack
 //---------------------------------------------------------
@@ -156,7 +155,6 @@ void Staff::deleteAutomationTrack(int index)
 
     delete track;
 }
-
 
 //---------------------------------------------------------
 //   fillBrackets

@@ -26,11 +26,9 @@ using namespace mu;
 using namespace mu::engraving;
 
 namespace Ms {
-
 AutomationTrack::AutomationTrack(Staff* parent)
     : EngravingItem(ElementType::AUTOMATION_TRACK, parent)
 {
-
 }
 
 AutomationTrack::~AutomationTrack()
@@ -52,5 +50,4 @@ void AutomationTrack::addVertex(AutomationVertex* vertex)
 {
     _vertices.append(vertex);
 }
-
 }

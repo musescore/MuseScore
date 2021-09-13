@@ -28,8 +28,6 @@ using namespace mu;
 using namespace mu::engraving;
 
 namespace Ms {
-
-
 AutomationVertex::AutomationVertex(AutomationTrack* parent)
     : EngravingItem(ElementType::AUTOMATION_VERTEX, parent)
 {
@@ -48,5 +46,4 @@ void AutomationVertex::setTicks(double value)
 {
     _ticks = value;
 }
-
 }

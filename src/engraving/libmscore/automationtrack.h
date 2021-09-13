@@ -27,7 +27,6 @@
 #include "mscore.h"
 
 namespace Ms {
-
 class Staff;
 class AutomationVertex;
 
@@ -62,7 +61,6 @@ public:
 
     void addVertex(AutomationVertex* vertex);
 };
-
 }
 
 #endif // __AUTOMATIONTRACK_H__
