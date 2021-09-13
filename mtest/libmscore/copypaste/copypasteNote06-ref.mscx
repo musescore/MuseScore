@@ -82,7 +82,6 @@
           <Chord>
             <durationType>whole</durationType>
             <Note>
-              <autoplace>0</autoplace>
               <pitch>74</pitch>
               <tpc>16</tpc>
               <headScheme>name-pitch-german</headScheme>
@@ -94,6 +93,7 @@
       <Measure>
         <voice>
           <Chord>
+            <autoplace>0</autoplace>
             <durationType>whole</durationType>
             <Note>
               <autoplace>0</autoplace>
