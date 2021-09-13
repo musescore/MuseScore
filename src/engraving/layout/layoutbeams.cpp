@@ -119,7 +119,7 @@ void LayoutBeams::restoreBeams(Measure* m)
 //   breakCrossMeasureBeams
 //---------------------------------------------------------
 
-void LayoutBeams::breakCrossMeasureBeams(Measure* measure)
+void LayoutBeams::breakCrossMeasureBeams(const LayoutStateContext& ctx, Measure* measure)
 {
     MeasureBase* mbNext = measure->next();
     if (!mbNext || !mbNext->isMeasure()) {
@@ -127,15 +127,14 @@ void LayoutBeams::breakCrossMeasureBeams(Measure* measure)
     }
 
     Measure* next = toMeasure(mbNext);
-    Score* score = measure->score();
-    const int ntracks = score->ntracks();
+    const int ntracks = ctx.score()->ntracks();
     Segment* fstSeg = next->first(SegmentType::ChordRest);
     if (!fstSeg) {
         return;
     }
 
     for (int track = 0; track < ntracks; ++track) {
-        Staff* stf = score->staff(track2staff(track));
+        Staff* stf = ctx.score()->staff(track2staff(track));
 
         // don’t compute beams for invisible staves and tablature without stems
         if (!stf->show() || (stf->isTabStaff(measure->tick()) && stf->staffType(measure->tick())->stemless())) {
@@ -170,7 +169,7 @@ void LayoutBeams::breakCrossMeasureBeams(Measure* measure)
 
         Beam* newBeam = nullptr;
         if (nextElements.size() > 1) {
-            newBeam = Factory::createBeam(score->dummy(), score);
+            newBeam = Factory::createBeam(ctx.score()->dummy(), ctx.score());
             newBeam->setGenerated(true);
             newBeam->setTrack(track);
         }
@@ -262,7 +261,7 @@ void LayoutBeams::beamGraceNotes(Score* score, Chord* mainNote, bool after)
     }
 }
 
-void LayoutBeams::createBeams(Score* score, LayoutContext& lc, Measure* measure)
+void LayoutBeams::createBeams(Score* score, LayoutStateContext& lc, Measure* measure)
 {
     bool crossMeasure = score->styleB(Sid::crossMeasureValues);
 

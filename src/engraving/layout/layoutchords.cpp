@@ -99,7 +99,7 @@ void LayoutChords::layoutChords1(Score* score, Segment* segment, int staffIdx)
                     hasGraceBefore = true;
                 }
                 layoutChords2(c->notes(), c->up());               // layout grace note noteheads
-                layoutChords3(score, c->notes(), staff, 0);              // layout grace note chords
+                layoutChords3(score->style(), c->notes(), staff, 0);              // layout grace note chords
             }
             if (chord->up()) {
                 ++upVoices;
@@ -493,7 +493,7 @@ void LayoutChords::layoutChords1(Score* score, Segment* segment, int staffIdx)
             std::sort(notes.begin(), notes.end(),
                       [](Note* n1, const Note* n2) ->bool { return n1->line() > n2->line(); });
         }
-        layoutChords3(score, notes, staff, segment);
+        layoutChords3(score->style(), notes, staff, segment);
     }
 
     layoutSegmentElements(segment, startTrack, endTrack);
@@ -684,7 +684,8 @@ static bool resolveAccidentals(AcEl* left, AcEl* right, qreal& lx, qreal pd, qre
 //   layoutAccidental
 //---------------------------------------------------------
 
-static QPair<qreal, qreal> layoutAccidental(AcEl* me, AcEl* above, AcEl* below, qreal colOffset, QVector<Note*>& leftNotes, qreal pnd,
+static QPair<qreal, qreal> layoutAccidental(const MStyle& style, AcEl* me, AcEl* above, AcEl* below, qreal colOffset,
+                                            QVector<Note*>& leftNotes, qreal pnd,
                                             qreal pd, qreal sp)
 {
     qreal lx = colOffset;
@@ -709,8 +710,8 @@ static QPair<qreal, qreal> layoutAccidental(AcEl* me, AcEl* above, AcEl* below, 
         // TODO: account for cutouts in accidental
         qreal lds = staff->lineDistance(tick) * sp;
         if ((ledgerAbove && me->top + lds <= pnd) || (ledgerBelow && staff->lines(tick) * lds - me->bottom <= pnd)) {
-            ledgerAdjust = -acc->score()->styleS(Sid::ledgerLineLength).val() * sp;
-            ledgerVerticalClear = acc->score()->styleS(Sid::ledgerLineWidth).val() * 0.5 * sp;
+            ledgerAdjust = -style.styleS(Sid::ledgerLineLength).val() * sp;
+            ledgerVerticalClear = style.styleS(Sid::ledgerLineWidth).val() * 0.5 * sp;
             lx = qMin(lx, ledgerAdjust);
         }
     }
@@ -774,7 +775,7 @@ static QPair<qreal, qreal> layoutAccidental(AcEl* me, AcEl* above, AcEl* below, 
 //    - calculate positions of notes, accidentals, dots
 //---------------------------------------------------------
 
-void LayoutChords::layoutChords3(Ms::Score* score, std::vector<Note*>& notes, const Staff* staff, Segment* segment)
+void LayoutChords::layoutChords3(const MStyle& style, std::vector<Note*>& notes, const Staff* staff, Segment* segment)
 {
     //---------------------------------------------------
     //    layout accidentals
@@ -856,7 +857,7 @@ void LayoutChords::layoutChords3(Ms::Score* score, std::vector<Note*>& notes, co
         if (stem) {
             overlapMirror = stem->lineWidth();
         } else if (chord->durationType().headType() == NoteHead::Type::HEAD_WHOLE) {
-            overlapMirror = score->styleP(Sid::stemWidth) * chord->mag();
+            overlapMirror = style.styleP(Sid::stemWidth) * chord->mag();
         } else {
             overlapMirror = 0.0;
         }
@@ -969,8 +970,8 @@ void LayoutChords::layoutChords3(Ms::Score* score, std::vector<Note*>& notes, co
     }
 
     QVector<int> umi;
-    qreal pd  = score->styleP(Sid::accidentalDistance);
-    qreal pnd = score->styleP(Sid::accidentalNoteDistance);
+    qreal pd  = style.styleP(Sid::accidentalDistance);
+    qreal pnd = style.styleP(Sid::accidentalNoteDistance);
     qreal colOffset = 0.0;
 
     if (nAcc >= 2 && aclist[nAcc - 1].line - aclist[0].line >= 7) {
@@ -1073,7 +1074,7 @@ void LayoutChords::layoutChords3(Ms::Score* score, std::vector<Note*>& notes, co
             std::sort(umi.begin(), umi.end());
         }
 
-        bool alignLeft = score->score()->styleB(Sid::alignAccidentalsLeft);
+        bool alignLeft = style.styleB(Sid::alignAccidentalsLeft);
 
         // through columns
         for (int i = 0; i < nColumns; ++i) {
@@ -1085,7 +1086,7 @@ void LayoutChords::layoutChords3(Ms::Score* score, std::vector<Note*>& notes, co
             AcEl* below = 0;
             // through accidentals in this column
             for (int j = columnBottom[pc]; j != -1; j = aclist[j].next) {
-                QPair<qreal, qreal> x = layoutAccidental(&aclist[j], 0, below, colOffset, leftNotes, pnd, pd, sp);
+                QPair<qreal, qreal> x = layoutAccidental(style, &aclist[j], 0, below, colOffset, leftNotes, pnd, pd, sp);
                 minX = qMin(minX, x.first);
                 maxX = qMin(maxX, x.second);
                 below = &aclist[j];
@@ -1123,14 +1124,14 @@ void LayoutChords::layoutChords3(Ms::Score* score, std::vector<Note*>& notes, co
         AcEl* below = 0;
 
         // layout top accidental
-        layoutAccidental(me, above, below, colOffset, leftNotes, pnd, pd, sp);
+        layoutAccidental(style, me, above, below, colOffset, leftNotes, pnd, pd, sp);
 
         // layout bottom accidental
         int n = nAcc - 1;
         if (n > 0) {
             above = me;
             me = &aclist[umi[n]];
-            layoutAccidental(me, above, below, colOffset, leftNotes, pnd, pd, sp);
+            layoutAccidental(style, me, above, below, colOffset, leftNotes, pnd, pd, sp);
         }
 
         // layout middle accidentals
@@ -1139,14 +1140,14 @@ void LayoutChords::layoutChords3(Ms::Score* score, std::vector<Note*>& notes, co
                 // next highest
                 below = me;
                 me = &aclist[umi[i]];
-                layoutAccidental(me, above, below, colOffset, leftNotes, pnd, pd, sp);
+                layoutAccidental(style, me, above, below, colOffset, leftNotes, pnd, pd, sp);
                 if (i == n - 1) {
                     break;
                 }
                 // next lowest
                 above = me;
                 me = &aclist[umi[n - 1]];
-                layoutAccidental(me, above, below, colOffset, leftNotes, pnd, pd, sp);
+                layoutAccidental(style, me, above, below, colOffset, leftNotes, pnd, pd, sp);
             }
         }
     }

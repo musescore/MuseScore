@@ -781,15 +781,4 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
         }
     }
 }
-
-//---------------------------------------------------------
-//   searchTuplet
-//    search complete Dom for tuplet id
-//    last resort in case of error
-//---------------------------------------------------------
-
-Tuplet* Score::searchTuplet(XmlReader& /*e*/, int /*id*/)
-{
-    return 0;
-}
 }

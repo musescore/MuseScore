@@ -33,9 +33,16 @@ class MeasureBase;
 }
 
 namespace mu::engraving {
-struct LayoutContext
+class LayoutStateContext
 {
-    Ms::Score* score = nullptr;
+public:
+    LayoutStateContext(Ms::Score* s);
+    LayoutStateContext(const LayoutStateContext&) = delete;
+    LayoutStateContext& operator=(const LayoutStateContext&) = delete;
+    ~LayoutStateContext();
+
+    Ms::Score* score() const { return m_score; }
+
     bool startWithLongNames = true;
     bool firstSystem = true;
     bool firstSystemIndent = true;
@@ -60,10 +67,8 @@ struct LayoutContext
     Ms::Fraction startTick;
     Ms::Fraction endTick;
 
-    LayoutContext(Ms::Score* s);
-    LayoutContext(const LayoutContext&) = delete;
-    LayoutContext& operator=(const LayoutContext&) = delete;
-    ~LayoutContext();
+private:
+    Ms::Score* m_score = nullptr;
 };
 }
 

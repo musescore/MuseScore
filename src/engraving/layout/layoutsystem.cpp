@@ -53,7 +53,7 @@ using namespace Ms;
 //   collectSystem
 //---------------------------------------------------------
 
-System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext& lc, Ms::Score* score)
+System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutStateContext& lc, Ms::Score* score)
 {
     if (!lc.curMeasure) {
         return nullptr;
@@ -70,7 +70,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
         lc.startWithLongNames = lc.firstSystem && measure->sectionBreakElement()->startWithLongNames();
     }
 
-    System* system = getNextSystem(lc, score);
+    System* system = getNextSystem(lc);
     Fraction lcmTick = lc.curMeasure->tick();
     system->setInstrumentNames(lc.startWithLongNames, lcmTick);
 
@@ -132,7 +132,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
             createHeader = toHBox(lc.curMeasure)->createSystemHeader();
         } else {
             // vbox:
-            LayoutMeasure::getNextMeasure(options, score, lc);
+            LayoutMeasure::getNextMeasure(options, lc);
             system->layout2();         // compute staff distances
             return system;
         }
@@ -237,7 +237,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
             }
         }
 
-        LayoutMeasure::getNextMeasure(options, score, lc);
+        LayoutMeasure::getNextMeasure(options, lc);
 
         minWidth += ww;
 
@@ -298,7 +298,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
     //
     // prevMeasure is the last measure in the system
     if (lc.prevMeasure && lc.prevMeasure->isMeasure()) {
-        LayoutBeams::breakCrossMeasureBeams(toMeasure(lc.prevMeasure));
+        LayoutBeams::breakCrossMeasureBeams(lc, toMeasure(lc.prevMeasure));
         qreal w = toMeasure(lc.prevMeasure)->createEndBarLines(true);
         minWidth += w;
     }
@@ -423,16 +423,17 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext&
 //   getNextSystem
 //---------------------------------------------------------
 
-System* LayoutSystem::getNextSystem(LayoutContext& lc, Ms::Score* score)
+System* LayoutSystem::getNextSystem(LayoutStateContext& ctx)
 {
-    bool isVBox = lc.curMeasure->isVBox();
+    Ms::Score* score = ctx.score();
+    bool isVBox = ctx.curMeasure->isVBox();
     System* system;
-    if (lc.systemList.empty()) {
+    if (ctx.systemList.empty()) {
         system = Factory::createSystem(score->dummy()->page());
-        lc.systemOldMeasure = 0;
+        ctx.systemOldMeasure = 0;
     } else {
-        system = lc.systemList.takeFirst();
-        lc.systemOldMeasure = system->measures().empty() ? 0 : system->measures().back();
+        system = ctx.systemList.takeFirst();
+        ctx.systemOldMeasure = system->measures().empty() ? 0 : system->measures().back();
         system->clear();       // remove measures from system
     }
     score->systems().append(system);
@@ -440,7 +441,7 @@ System* LayoutSystem::getNextSystem(LayoutContext& lc, Ms::Score* score)
         int nstaves = score->Score::nstaves();
         system->adjustStavesNumber(nstaves);
         for (int i = 0; i < nstaves; ++i) {
-            system->staff(i)->setShow(score->score()->staff(i)->show());
+            system->staff(i)->setShow(score->staff(i)->show());
         }
     }
     return system;
@@ -546,7 +547,7 @@ void LayoutSystem::hideEmptyStaves(Score* score, System* system, bool isFirstSys
     }
 }
 
-void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutContext& lc, Score* score, System* system)
+void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutStateContext& lc, Score* score, System* system)
 {
     //-------------------------------------------------------------
     //    create cr segment list to speed up computations
@@ -581,10 +582,10 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
 
     for (Segment* s : sl) {
         for (EngravingItem* e : s->elist()) {
-            if (!e || !e->isChordRest() || !score->score()->staff(e->staffIdx())->show()) {
+            if (!e || !e->isChordRest() || !score->staff(e->staffIdx())->show()) {
                 // the beam and its system may still be referenced when selecting all,
                 // even if the staff is invisible. The old system is invalid and does cause problems in #284012
-                if (e && e->isChordRest() && !score->score()->staff(e->staffIdx())->show() && toChordRest(e)->beam()) {
+                if (e && e->isChordRest() && !score->staff(e->staffIdx())->show() && toChordRest(e)->beam()) {
                     toChordRest(e)->beam()->moveToDummy();
                 }
                 continue;
@@ -706,7 +707,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
     for (Segment* s : sl) {
         std::set<int> recreateShapes;
         for (EngravingItem* e : s->elist()) {
-            if (!e || !e->isChordRest() || !score->score()->staff(e->staffIdx())->show()) {
+            if (!e || !e->isChordRest() || !score->staff(e->staffIdx())->show()) {
                 continue;
             }
             ChordRest* cr = toChordRest(e);
@@ -766,7 +767,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
 
     for (Segment* s : sl) {
         for (EngravingItem* e : s->elist()) {
-            if (!e || !e->isChordRest() || !score->score()->staff(e->staffIdx())->show()) {
+            if (!e || !e->isChordRest() || !score->staff(e->staffIdx())->show()) {
                 continue;
             }
             ChordRest* cr = toChordRest(e);
@@ -785,7 +786,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
 
     for (Segment* s : sl) {
         for (EngravingItem* e : s->elist()) {
-            if (!e || !e->isChordRest() || !score->score()->staff(e->staffIdx())->show()) {
+            if (!e || !e->isChordRest() || !score->staff(e->staffIdx())->show()) {
                 continue;
             }
             ChordRest* cr = toChordRest(e);
@@ -820,7 +821,7 @@ void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutCont
     bool useRange = false;    // TODO: lineMode();
     Fraction stick = useRange ? lc.startTick : system->measures().front()->tick();
     Fraction etick = useRange ? lc.endTick : system->measures().back()->endTick();
-    auto spanners = score->score()->spannerMap().findOverlapping(stick.ticks(), etick.ticks());
+    auto spanners = score->spannerMap().findOverlapping(stick.ticks(), etick.ticks());
 
     std::vector<Spanner*> spanner;
     for (auto interval : spanners) {

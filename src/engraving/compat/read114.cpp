@@ -1124,7 +1124,7 @@ static void readChord(Measure* m, Chord* chord, XmlReader& e, ReadContext& ctx)
             readNote(note, e, ctx);
             chord->add(note);
         } else if (tag == "Attribute" || tag == "Articulation") {
-            EngravingItem* el = Read206::readArticulation(chord, e);
+            EngravingItem* el = Read206::readArticulation(chord, e, ctx);
             if (el->isFermata()) {
                 if (!chord->segment()) {
                     chord->setParent(m->getSegment(SegmentType::ChordRest, e.tick()));
@@ -1151,12 +1151,12 @@ static void readChord(Measure* m, Chord* chord, XmlReader& e, ReadContext& ctx)
 //   readRest
 //---------------------------------------------------------
 
-static void readRest(Measure* m, Rest* rest, XmlReader& e, const ReadContext& ctx)
+static void readRest(Measure* m, Rest* rest, XmlReader& e, ReadContext& ctx)
 {
     while (e.readNextStartElement()) {
         const QStringRef& tag(e.name());
         if (tag == "Attribute" || tag == "Articulation") {
-            EngravingItem* el = Read206::readArticulation(rest, e);
+            EngravingItem* el = Read206::readArticulation(rest, e, ctx);
             if (el->isFermata()) {
                 if (!rest->segment()) {
                     rest->setParent(m->getSegment(SegmentType::ChordRest, e.tick()));
