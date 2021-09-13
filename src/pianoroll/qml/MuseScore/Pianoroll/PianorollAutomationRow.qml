@@ -61,6 +61,14 @@ ColumnLayout {
                 onActivated: {
                     automationEditor.automationType = currentValue
                     //pianoView.tuplet = currentValue
+                    if (currentValue === PianorollAutomationEditor.VELOCITY) {
+                        automationEditor.visible = true
+                        automationCurves.visible = false
+                    }
+                    else {
+                        automationEditor.visible = false
+                        automationCurves.visible = true
+                    }
                 }
             }
 
@@ -81,7 +89,16 @@ ColumnLayout {
             Component.onCompleted: {
                 load()
             }
+        }
 
+        Label {
+            id: automationCurves
+            visible: false
+            Layout.preferredWidth: m_graphWidth
+            Layout.fillHeight: true
+            Text {
+                text: qsTr("text")
+            }
         }
 
         Label {

@@ -154,6 +154,8 @@ enum class ElementType {
     OSSIA,
     BAGPIPE_EMBELLISHMENT,
     STICKING,
+    AUTOMATION_TRACK,
+    AUTOMATION_VERTEX,
 
     MAXTYPE
     ///\}

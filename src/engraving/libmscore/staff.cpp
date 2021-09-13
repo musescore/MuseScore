@@ -47,6 +47,7 @@
 #include "masterscore.h"
 #include "excerpt.h"
 #include "linkedobjects.h"
+#include "automationtrack.h"
 
 // #define DEBUG_CLEFS
 
@@ -121,6 +122,41 @@ void Staff::triggerLayout(const Fraction& tick)
 {
     score()->setLayout(tick, idx());
 }
+
+
+//---------------------------------------------------------
+//   insertAutomationTrack
+//---------------------------------------------------------
+
+void Staff::insertAutomationTrack(AutomationTrack* track, int index)
+{
+    _automationTracks.insert(index, track);
+}
+
+//---------------------------------------------------------
+//   moveAutomationTrack
+//---------------------------------------------------------
+
+void Staff::moveAutomationTrack(int indexFrom, int indexTo)
+{
+    AutomationTrack* track = _automationTracks.at(indexFrom);
+    _automationTracks.removeAt(indexFrom);
+
+    _automationTracks.insert(indexTo, track);
+}
+
+//---------------------------------------------------------
+//   deleteAutomationTrack
+//---------------------------------------------------------
+
+void Staff::deleteAutomationTrack(int index)
+{
+    AutomationTrack* track = _automationTracks.at(index);
+    _automationTracks.removeAt(index);
+
+    delete track;
+}
+
 
 //---------------------------------------------------------
 //   fillBrackets
