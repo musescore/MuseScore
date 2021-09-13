@@ -1941,13 +1941,19 @@ void Chord::layoutPitched()
     addLedgerLines();
 
     if (_arpeggio) {
-        qreal arpeggioDistance = score()->styleP(Sid::ArpeggioNoteDistance) * mag_;
+        qreal arpeggioAccidentalDistance = score()->styleP(Sid::ArpeggioAccidentalDistance) * mag_;
+        qreal arpeggioNoteDistance = score()->styleP(Sid::ArpeggioNoteDistance) * mag_;
+        qreal accidentalDistance = score()->styleP(Sid::accidentalDistance) * mag_;
+
+        qreal gapSize = chordHasAccidental ? (arpeggioAccidentalDistance - accidentalDistance) : arpeggioNoteDistance;
+
         _arpeggio->layout();        // only for width() !
         _arpeggio->setHeight(0.0);
-        qreal extraX = _arpeggio->width() + arpeggioDistance + chordX;
-        qreal accidentalCorrection = chordHasAccidental ? 0.5 * spatium() : 0;
+
+        qreal extraX = _arpeggio->width() + gapSize + chordX;
+
         qreal y1   = upnote->pos().y() - upnote->headHeight() * .5;
-        _arpeggio->setPos(-(lll + extraX - accidentalCorrection), y1);
+        _arpeggio->setPos(-(lll + extraX), y1);
         if (_arpeggio->visible()) {
             lll += extraX;
         }
