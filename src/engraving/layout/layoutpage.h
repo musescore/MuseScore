@@ -35,13 +35,13 @@ class LayoutPage
 {
 public:
 
-    static void getNextPage(const LayoutOptions& options, LayoutContext& lc);
-    static void collectPage(const LayoutOptions& options, LayoutContext& lc);
+    static void getNextPage(const LayoutOptions& options, LayoutStateContext& lc);
+    static void collectPage(const LayoutOptions& options, LayoutStateContext& lc);
 
 private:
-    static void layoutPage(Ms::Page* page, qreal restHeight);
-    static void checkDivider(bool left, Ms::System* s, qreal yOffset, bool remove = false);
-    static void distributeStaves(Ms::Page* page);
+    static void layoutPage(const LayoutStateContext& ctx, Ms::Page* page, qreal restHeight);
+    static void checkDivider(const LayoutStateContext& ctx, bool left, Ms::System* s, qreal yOffset, bool remove = false);
+    static void distributeStaves(const LayoutStateContext& ctx, Ms::Page* page);
 };
 }
 

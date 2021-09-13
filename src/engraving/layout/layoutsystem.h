@@ -38,12 +38,12 @@ class LayoutSystem
 {
 public:
 
-    static Ms::System* collectSystem(const LayoutOptions& options, LayoutContext& lc, Ms::Score* score);
-    static void layoutSystemElements(const LayoutOptions& options, LayoutContext& lc, Ms::Score* score, Ms::System* system);
+    static Ms::System* collectSystem(const LayoutOptions& options, LayoutStateContext& lc, Ms::Score* score);
+    static void layoutSystemElements(const LayoutOptions& options, LayoutStateContext& lc, Ms::Score* score, Ms::System* system);
 
 private:
 
-    static Ms::System* getNextSystem(LayoutContext& lc, Ms::Score* score);
+    static Ms::System* getNextSystem(LayoutStateContext& lc);
     static void hideEmptyStaves(Ms::Score* score, Ms::System* system, bool isFirstSystem);
     static void processLines(Ms::System* system, std::vector<Ms::Spanner*> lines, bool align);
     static void layoutTies(Ms::Chord* ch, Ms::System* system, const Ms::Fraction& stick);

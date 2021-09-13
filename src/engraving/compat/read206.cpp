@@ -973,7 +973,7 @@ bool Read206::readNoteProperties206(Note* note, XmlReader& e, ReadContext& ctx)
         Tie* tie = new Tie(note);
         tie->setParent(note);
         tie->setTrack(note->track());
-        readTie206(e, tie);
+        readTie206(e, ctx, tie);
         tie->setStartNote(note);
         note->setTieFor(tie);
     } else if (tag == "tpc2") {
@@ -1515,22 +1515,17 @@ static void readLyrics(Lyrics* lyrics, XmlReader& e, const ReadContext& ctx)
     }
 }
 
-bool Read206::readDurationProperties206(XmlReader& e, DurationElement* de)
+bool Read206::readDurationProperties206(XmlReader& e, const ReadContext& ctx, DurationElement* de)
 {
     if (e.name() == "Tuplet") {
         int i = e.readInt();
         Tuplet* t = e.findTuplet(i);
         if (!t) {
             qDebug("readDurationProperties206(): Tuplet id %d not found", i);
-            t = de->score()->searchTuplet(e, i);
-            if (t) {
-                qDebug("   ...found outside measure, input file corrupted?");
-                e.addTuplet(t);
-            }
         }
         if (t) {
             de->setTuplet(t);
-            if (!de->score()->undoStack()->active()) {         // HACK, also added in Undo::AddElement()
+            if (!ctx.undoStackActive()) {         // HACK, also added in Undo::AddElement()
                 t->add(de);
             }
         }
@@ -1551,9 +1546,9 @@ bool Read206::readTupletProperties206(XmlReader& e, const ReadContext& ctx, Tupl
     } else if (tag == "actualNotes") {
         de->setProperty(Pid::ACTUAL_NOTES, e.readInt());
     } else if (tag == "p1") {
-        de->setProperty(Pid::P1, QVariant::fromValue(e.readPoint() * de->score()->spatium()));
+        de->setProperty(Pid::P1, QVariant::fromValue(e.readPoint() * ctx.spatium()));
     } else if (tag == "p2") {
-        de->setProperty(Pid::P2, QVariant::fromValue(e.readPoint() * de->score()->spatium()));
+        de->setProperty(Pid::P2, QVariant::fromValue(e.readPoint() * ctx.spatium()));
     } else if (tag == "baseNote") {
         de->setBaseLen(TDuration(e.readElementText()));
     } else if (tag == "Number") {
@@ -1573,20 +1568,20 @@ bool Read206::readTupletProperties206(XmlReader& e, const ReadContext& ctx, Tupl
         for (auto p : { Pid::FONT_FACE, Pid::FONT_SIZE, Pid::FONT_STYLE, Pid::ALIGN }) {
             de->setPropertyFlags(p, _number->propertyFlags(p));
         }
-    } else if (!readDurationProperties206(e, de)) {
+    } else if (!readDurationProperties206(e, ctx, de)) {
         return false;
     }
     return true;
 }
 
-bool Read206::readChordRestProperties206(XmlReader& e, const ReadContext& ctx, ChordRest* ch)
+bool Read206::readChordRestProperties206(XmlReader& e, ReadContext& ctx, ChordRest* ch)
 {
     const QStringRef& tag(e.name());
 
     if (tag == "durationType") {
         ch->setDurationType(e.readElementText());
         if (ch->actualDurationType().type() != TDuration::DurationType::V_MEASURE) {
-            if (ch->score()->mscVersion() < 112 && (ch->type() == ElementType::REST)
+            if (ctx.mscVersion() < 112 && (ch->type() == ElementType::REST)
                 &&            // for backward compatibility, convert V_WHOLE rests to V_MEASURE
                               // if long enough to fill a measure.
                               // OTOH, freshly created (un-initialized) rests have numerator == 0 (< 4/4)
@@ -1603,8 +1598,8 @@ bool Read206::readChordRestProperties206(XmlReader& e, const ReadContext& ctx, C
                 ch->setTicks(ch->actualDurationType().fraction());
             }
         } else {
-            if (ch->score()->mscVersion() <= 114) {
-                SigEvent event = ch->score()->sigmap()->timesig(e.tick());
+            if (ctx.mscVersion() <= 114) {
+                SigEvent event = ctx.sigmap()->timesig(e.tick());
                 ch->setTicks(event.timesig());
             }
         }
@@ -1630,7 +1625,7 @@ bool Read206::readChordRestProperties206(XmlReader& e, const ReadContext& ctx, C
         }
         ch->setBeamMode(bm);
     } else if (tag == "Articulation") {
-        EngravingItem* el = readArticulation(ch, e);
+        EngravingItem* el = readArticulation(ch, e, ctx);
         if (el->isFermata()) {
             ch->segment()->add(el);
         } else {
@@ -1652,7 +1647,7 @@ bool Read206::readChordRestProperties206(XmlReader& e, const ReadContext& ctx, C
     } else if (tag == "duration") {
         ch->setTicks(e.readFraction());
     } else if (tag == "ticklen") {      // obsolete (version < 1.12)
-        int mticks = ch->score()->sigmap()->timesig(e.tick()).timesig().ticks();
+        int mticks = ctx.sigmap()->timesig(e.tick()).timesig().ticks();
         int i = e.readInt();
         if (i == 0) {
             i = mticks;
@@ -1706,7 +1701,7 @@ bool Read206::readChordRestProperties206(XmlReader& e, const ReadContext& ctx, C
                         ls->setTick(spanner->tick());
                         for (EngravingObject* ee : ch->linkList()) {
                             ChordRest* cr = toChordRest(ee);
-                            if (cr->score() == ee->score() && cr->staffIdx() == ls->staffIdx()) {
+                            if (cr->staffIdx() == ls->staffIdx()) {
                                 ls->setTrack(cr->track());
                                 if (ls->type() == ElementType::SLUR) {
                                     ls->setStartElement(cr);
@@ -1735,7 +1730,7 @@ bool Read206::readChordRestProperties206(XmlReader& e, const ReadContext& ctx, C
                         ls->setTick2(spanner->tick2());
                         for (EngravingObject* ee : ch->linkList()) {
                             ChordRest* cr = toChordRest(ee);
-                            if (cr->score() == ee->score() && cr->staffIdx() == ls->staffIdx()) {
+                            if (cr->staffIdx() == ls->staffIdx()) {
                                 ls->setTrack2(cr->track());
                                 if (ls->type() == ElementType::SLUR) {
                                     ls->setEndElement(cr);
@@ -1767,7 +1762,7 @@ bool Read206::readChordRestProperties206(XmlReader& e, const ReadContext& ctx, C
             image->read(e);
             ch->add(image);
         }
-    } else if (!readDurationProperties206(e, ch)) {
+    } else if (!readDurationProperties206(e, ctx, ch)) {
         return false;
     }
     return true;
@@ -1839,13 +1834,13 @@ bool Read206::readChordProperties206(XmlReader& e, ReadContext& ctx, Chord* ch)
         // after the whole score is read, Score::connectTies() will look for
         // the suitable initial note
         Note* finalNote = ch->upNote();
-        Glissando* gliss = new Glissando(ch->score()->dummy());
+        Glissando* gliss = new Glissando(ctx.dummy());
         gliss->read(e);
         gliss->setAnchor(Spanner::Anchor::NOTE);
         gliss->setStartElement(nullptr);
         gliss->setEndElement(nullptr);
         // in TAB, use straight line with no text
-        if (ch->score()->staff(e.track() >> 2)->isTabStaff(ch->tick())) {
+        if (ctx.staff(e.track() >> 2)->isTabStaff(ch->tick())) {
             gliss->setGlissandoType(GlissandoType::STRAIGHT);
             gliss->setShowText(false);
         }
@@ -1999,7 +1994,7 @@ static void readChord(Chord* chord, XmlReader& e, ReadContext& ctx)
 //   readRest
 //---------------------------------------------------------
 
-static void readRest(Rest* rest, XmlReader& e, const ReadContext& ctx)
+static void readRest(Rest* rest, XmlReader& e, ReadContext& ctx)
 {
     while (e.readNextStartElement()) {
         if (!Read206::readChordRestProperties206(e, ctx, rest)) {
@@ -2224,13 +2219,12 @@ static void setFermataPlacement(EngravingItem* el, ArticulationAnchor anchor, Di
     }
 }
 
-EngravingItem* Read206::readArticulation(EngravingItem* parent, XmlReader& e)
+EngravingItem* Read206::readArticulation(EngravingItem* parent, XmlReader& e, const ReadContext& ctx)
 {
     EngravingItem* el = nullptr;
     SymId sym = SymId::fermataAbove;            // default -- backward compatibility (no type = ufermata in 1.2)
     ArticulationAnchor anchor  = ArticulationAnchor::TOP_STAFF;
     Direction direction = Direction::AUTO;
-    Score* score = parent->score();
     int track = parent->track();
     double timeStretch = 0.0;
     bool useDefaultPlacement = true;
@@ -2305,12 +2299,12 @@ EngravingItem* Read206::readArticulation(EngravingItem* parent, XmlReader& e)
             case SymId::fermataLongBelow:
             case SymId::fermataVeryLongAbove:
             case SymId::fermataVeryLongBelow: {
-                Fermata* fe = Factory::createFermata(score->dummy());
+                Fermata* fe = Factory::createFermata(ctx.dummy());
                 fe->setSymId(sym);
                 el = fe;
             } break;
             default:
-                Articulation* ar = Factory::createArticulation(score->dummy()->chord());
+                Articulation* ar = Factory::createArticulation(ctx.dummy()->chord());
                 ar->setSymId(sym);
                 ar->setDirection(direction);
                 el = ar;
@@ -2343,7 +2337,7 @@ EngravingItem* Read206::readArticulation(EngravingItem* parent, XmlReader& e)
     }
     // Special case for "no type" = ufermata, with missing subtype tag
     if (!el) {
-        Fermata* f = Factory::createFermata(score->dummy());
+        Fermata* f = Factory::createFermata(ctx.dummy());
         f->setSymId(sym);
         el = f;
     }
@@ -2403,7 +2397,7 @@ void Read206::readSlur206(XmlReader& e, Slur* s)
     }
 }
 
-void Read206::readTie206(XmlReader& e, Tie* t)
+void Read206::readTie206(XmlReader& e, const ReadContext& ctx, Tie* t)
 {
     e.addSpanner(e.intAttribute("id"), t);
     while (e.readNextStartElement()) {
@@ -2412,7 +2406,7 @@ void Read206::readTie206(XmlReader& e, Tie* t)
             e.unknown();
         }
     }
-    if (t->score()->mscVersion() <= 114 && t->spannerSegments().size() == 1) {
+    if (ctx.mscVersion() <= 114 && t->spannerSegments().size() == 1) {
         // ignore manual adjustments to single-segment ties in older scores
         TieSegment* ss = t->frontSegment();
         PointF zeroP;
@@ -2433,7 +2427,6 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
 {
     Segment* segment = 0;
     qreal _spatium = m->spatium();
-    Score* score = m->score();
 
     QList<Chord*> graceNotes;
     e.tuplets().clear();
@@ -2443,7 +2436,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
 
     // tick is obsolete
     if (e.hasAttribute("tick")) {
-        e.setTick(Fraction::fromTicks(score->fileDivision(e.intAttribute("tick"))));
+        e.setTick(Fraction::fromTicks(ctx.fileDivision(e.intAttribute("tick"))));
     }
 
     bool irregular;
@@ -2455,13 +2448,13 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             qDebug("illegal measure size <%s>", qPrintable(e.attribute("len")));
         }
         irregular = true;
-        score->sigmap()->add(m->tick().ticks(), SigEvent(m->ticks(), m->timesig()));
-        score->sigmap()->add(m->endTick().ticks(), SigEvent(m->timesig()));
+        ctx.sigmap()->add(m->tick().ticks(), SigEvent(m->ticks(), m->timesig()));
+        ctx.sigmap()->add(m->endTick().ticks(), SigEvent(m->timesig()));
     } else {
         irregular = false;
     }
 
-    Staff* staff = score->staff(staffIdx);
+    Staff* staff = ctx.staff(staffIdx);
     Fraction timeStretch(staff->timeStretch(m->tick()));
 
     // keep track of tick of previous element
@@ -2475,12 +2468,12 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
         if (tag == "move") {
             e.setTick(e.readFraction() + m->tick());
         } else if (tag == "tick") {
-            e.setTick(Fraction::fromTicks(score->fileDivision(e.readInt())));
+            e.setTick(Fraction::fromTicks(ctx.fileDivision(e.readInt())));
             lastTick = e.tick();
         } else if (tag == "BarLine") {
             Fermata* fermataAbove = nullptr;
             Fermata* fermataBelow = nullptr;
-            BarLine* bl = Factory::createBarLine(score->dummy()->segment());
+            BarLine* bl = Factory::createBarLine(ctx.dummy()->segment());
             bl->setTrack(e.track());
             while (e.readNextStartElement()) {
                 const QStringRef& t(e.name());
@@ -2499,7 +2492,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 } else if (t == "spanToOffset") {
                     bl->setSpanTo(e.readInt());
                 } else if (t == "Articulation") {
-                    EngravingItem* el = Read206::readArticulation(bl, e);
+                    EngravingItem* el = Read206::readArticulation(bl, e, ctx);
                     if (el->isFermata()) {
                         if (el->placement() == Placement::ABOVE) {
                             fermataAbove = toFermata(el);
@@ -2586,7 +2579,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 e.incTick(rest->actualTicks());
             }
         } else if (tag == "Breath") {
-            Breath* breath = Factory::createBreath(score->dummy()->segment());
+            Breath* breath = Factory::createBreath(ctx.dummy()->segment());
             breath->setTrack(e.track());
             breath->setPlacement(Placement::ABOVE);
             Fraction tick = e.tick();
@@ -2633,7 +2626,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             }
             e.readNext();
         } else if (tag == "Slur") {
-            Slur* sl = Factory::createSlur(score->dummy());
+            Slur* sl = Factory::createSlur(ctx.dummy());
             sl->setTick(e.tick());
             Read206::readSlur206(e, sl);
             //
@@ -2645,14 +2638,14 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 sl->setTick2(sv->tick2);
                 sl->setTrack2(sv->track2);
             }
-            score->addSpanner(sl);
+            ctx.addSpanner(sl);
         } else if (tag == "HairPin"
                    || tag == "Pedal"
                    || tag == "Ottava"
                    || tag == "Trill"
                    || tag == "TextLine"
                    || tag == "Volta") {
-            Spanner* sp = toSpanner(Factory::createItemByName(tag, score->dummy()));
+            Spanner* sp = toSpanner(Factory::createItemByName(tag, ctx.dummy()));
             sp->setTrack(e.track());
             sp->setTick(e.tick());
             sp->eraseSpannerSegments();
@@ -2671,7 +2664,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             } else {
                 Read206::readTextLine206(e, ctx, toTextLineBase(sp));
             }
-            score->addSpanner(sp);
+            ctx.addSpanner(sp);
             //
             // check if we already saw "endSpanner"
             //
@@ -2692,13 +2685,13 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             lastTick = e.tick();
             e.incTick(m->ticks());
         } else if (tag == "Clef") {
-            Clef* clef = Factory::createClef(score->dummy()->segment());
+            Clef* clef = Factory::createClef(ctx.dummy()->segment());
             clef->setTrack(e.track());
             clef->read(e);
             clef->setGenerated(false);
             if (e.tick().isZero()) {
-                if (score->staff(staffIdx)->clef(Fraction(0, 1)) != clef->clefType()) {
-                    score->staff(staffIdx)->setDefaultClefType(clef->clefType());
+                if (ctx.staff(staffIdx)->clef(Fraction(0, 1)) != clef->clefType()) {
+                    ctx.staff(staffIdx)->setDefaultClefType(clef->clefType());
                 }
                 if (clef->links() && clef->links()->size() == 1) {
                     e.linkIds().remove(clef->links()->lid());
@@ -2753,7 +2746,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             }
             segment->add(clef);
         } else if (tag == "TimeSig") {
-            TimeSig* ts = Factory::createTimeSig(score->dummy()->segment());
+            TimeSig* ts = Factory::createTimeSig(ctx.dummy()->segment());
             ts->setTrack(e.track());
             ts->read(e);
             // if time sig not at beginning of measure => courtesy time sig
@@ -2772,15 +2765,15 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 m->setTimesig(ts->sig() / timeStretch);
 
                 if (irregular) {
-                    score->sigmap()->add(m->tick().ticks(), SigEvent(m->ticks(), m->timesig()));
-                    score->sigmap()->add(m->endTick().ticks(), SigEvent(m->timesig()));
+                    ctx.sigmap()->add(m->tick().ticks(), SigEvent(m->ticks(), m->timesig()));
+                    ctx.sigmap()->add(m->endTick().ticks(), SigEvent(m->timesig()));
                 } else {
                     m->setTicks(m->timesig());
-                    score->sigmap()->add(m->tick().ticks(), SigEvent(m->timesig()));
+                    ctx.sigmap()->add(m->tick().ticks(), SigEvent(m->timesig()));
                 }
             }
         } else if (tag == "KeySig") {
-            KeySig* ks = Factory::createKeySig(score->dummy()->segment());
+            KeySig* ks = Factory::createKeySig(ctx.dummy()->segment());
             ks->setTrack(e.track());
             ks->read(e);
             Fraction curTick = e.tick();
@@ -2812,9 +2805,9 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             if (styleName == "System" || styleName == "Tempo"
                 || styleName == "Marker" || styleName == "Jump"
                 || styleName == "Volta") {    // TODO: is it possible to get it from style?
-                t = new SystemText(score->dummy()->segment());
+                t = new SystemText(ctx.dummy()->segment());
             } else {
-                t = new StaffText(score->dummy()->segment());
+                t = new StaffText(ctx.dummy()->segment());
             }
             t->setTrack(e.track());
             readTextPropertyStyle206(tctx.tag(), e, t, t);
@@ -2878,7 +2871,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             readTempoText(tt, e, ctx);
             segment->add(tt);
         } else if (tag == "Marker" || tag == "Jump") {
-            EngravingItem* el = Factory::createItemByName(tag, score->dummy());
+            EngravingItem* el = Factory::createItemByName(tag, ctx.dummy());
             el->setTrack(e.track());
             if (tag == "Marker") {
                 Marker* ma = toMarker(el);
@@ -2956,7 +2949,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
         } else if (tag == "slashStyle") {
             m->setStaffStemless(staffIdx, e.readInt());
         } else if (tag == "Beam") {
-            Beam* beam = Factory::createBeam(score->dummy(), score);
+            Beam* beam = Factory::createBeam(ctx.dummy(), ctx.dummy()->score());
             beam->setTrack(e.track());
             beam->read(e);
             beam->moveToDummy();
@@ -2974,7 +2967,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             noText->setParent(m);
             m->setNoText(noText->staffIdx(), noText);
         } else if (tag == "SystemDivider") {
-            SystemDivider* sd = new SystemDivider(score->dummy()->system());
+            SystemDivider* sd = new SystemDivider(ctx.dummy()->system());
             sd->read(e);
             m->add(sd);
         } else if (tag == "Ambitus") {
@@ -3052,7 +3045,7 @@ static void readBox(Box* b, XmlReader& e, const ReadContext& ctx)
     // with .msc versions prior to 1.17, box margins were only used when nesting another box inside this box:
     // for backward compatibility set them to 0 in all other cases
 
-    if (b->score()->mscVersion() <= 114 && (b->isHBox() || b->isVBox()) && !keepMargins) {
+    if (ctx.mscVersion() <= 114 && (b->isHBox() || b->isVBox()) && !keepMargins) {
         b->setLeftMargin(0.0);
         b->setRightMargin(0.0);
         b->setTopMargin(0.0);

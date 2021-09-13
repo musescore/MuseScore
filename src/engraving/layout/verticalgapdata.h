@@ -25,6 +25,7 @@
 #include <QList>
 
 namespace Ms {
+class MStyle;
 class System;
 class SysStaff;
 class Staff;
@@ -51,11 +52,12 @@ private:
     void  updateFactor(qreal factor);
 
 public:
-    Ms::System* system   { nullptr };
+    Ms::MStyle* style { nullptr };
+    Ms::System* system { nullptr };
     Ms::SysStaff* sysStaff { nullptr };
-    Ms::Staff* staff    { nullptr };
+    Ms::Staff* staff { nullptr };
 
-    VerticalGapData(bool first, Ms::System* sys, Ms::Staff* st, Ms::SysStaff* sst, Ms::Spacer* nextSpacer, qreal y);
+    VerticalGapData(Ms::MStyle* style, bool first, Ms::System* sys, Ms::Staff* st, Ms::SysStaff* sst, Ms::Spacer* nextSpacer, qreal y);
 
     void addSpaceBetweenSections();
     void addSpaceAroundVBox(bool above);

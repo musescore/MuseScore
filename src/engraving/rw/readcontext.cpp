@@ -23,6 +23,7 @@
 #include "readcontext.h"
 
 #include "libmscore/score.h"
+#include "libmscore/undo.h"
 
 using namespace mu::engraving;
 
@@ -89,4 +90,9 @@ void ReadContext::appendStaff(Ms::Staff* staff)
 void ReadContext::addSpanner(Ms::Spanner* s)
 {
     m_score->addSpanner(s);
+}
+
+bool ReadContext::undoStackActive() const
+{
+    return m_score->undoStack()->active();
 }

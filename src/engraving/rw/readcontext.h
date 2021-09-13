@@ -59,6 +59,8 @@ public:
     void appendStaff(Ms::Staff* staff);
     void addSpanner(Ms::Spanner* s);
 
+    bool undoStackActive() const;
+
 private:
     Ms::Score* m_score = nullptr;
     bool m_ignoreVersionError = false;

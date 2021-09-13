@@ -57,19 +57,19 @@ public:
     //---------------------------------------------------------
     static Ms::Score::FileError read206(Ms::MasterScore* masterScore, Ms::XmlReader& e, ReadContext& ctx);
 
-    static Ms::EngravingItem* readArticulation(Ms::EngravingItem*, Ms::XmlReader&);
+    static Ms::EngravingItem* readArticulation(Ms::EngravingItem*, Ms::XmlReader&, const ReadContext& ctx);
     static void readAccidental206(Ms::Accidental*, Ms::XmlReader&);
     static void readTextStyle206(Ms::MStyle* style, Ms::XmlReader& e, std::map<QString, std::map<Ms::Sid, QVariant> >& excessStyles);
     static void readTextLine206(Ms::XmlReader& e, const ReadContext& ctx, Ms::TextLineBase* tlb);
     static void readTrill206(Ms::XmlReader& e, Ms::Trill* t);
     static void readHairpin206(Ms::XmlReader& e, const ReadContext& ctx, Ms::Hairpin* h);
     static void readSlur206(Ms::XmlReader& e, Ms::Slur* s);
-    static void readTie206(Ms::XmlReader& e, Ms::Tie* t);
+    static void readTie206(Ms::XmlReader& e, const ReadContext& ctx, Ms::Tie* t);
 
     static bool readNoteProperties206(Ms::Note* note, Ms::XmlReader& e, ReadContext& ctx);
-    static bool readDurationProperties206(Ms::XmlReader& e, Ms::DurationElement* de);
+    static bool readDurationProperties206(Ms::XmlReader& e, const ReadContext& ctx, Ms::DurationElement* de);
     static bool readTupletProperties206(Ms::XmlReader& e, const ReadContext& ctx, Ms::Tuplet* t);
-    static bool readChordRestProperties206(Ms::XmlReader& e, const ReadContext& ctx, Ms::ChordRest* cr);
+    static bool readChordRestProperties206(Ms::XmlReader& e, ReadContext& ctx, Ms::ChordRest* cr);
     static bool readChordProperties206(Ms::XmlReader& e, ReadContext& ctx, Ms::Chord* ch);
 
     static Ms::SymId articulationNames2SymId206(const QString& s);

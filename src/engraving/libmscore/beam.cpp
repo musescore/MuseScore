@@ -1687,7 +1687,7 @@ void Beam::layout2(std::vector<ChordRest*> crl, SpannerSegmentType, int frag)
                         c->layout();
                     } else {
                         relayoutGrace = true;
-                        mu::engraving::LayoutChords::layoutChords3(score(), c->notes(), c->staff(), 0);
+                        mu::engraving::LayoutChords::layoutChords3(score()->style(), c->notes(), c->staff(), 0);
                     }
                 }
             }

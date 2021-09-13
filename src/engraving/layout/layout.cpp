@@ -76,7 +76,7 @@ Layout::Layout(Ms::Score* score)
 void Layout::doLayoutRange(const LayoutOptions& options, const Fraction& st, const Fraction& et)
 {
     CmdStateLocker cmdStateLocker(m_score);
-    LayoutContext lc(m_score);
+    LayoutStateContext ctx(m_score);
 
     Fraction stick(st);
     Fraction etick(et);
@@ -88,7 +88,7 @@ void Layout::doLayoutRange(const LayoutOptions& options, const Fraction& st, con
         m_score->_systems.clear();
         qDeleteAll(m_score->pages());
         m_score->pages().clear();
-        LayoutPage::getNextPage(options, lc);
+        LayoutPage::getNextPage(options, ctx);
         return;
     }
 
@@ -100,7 +100,7 @@ void Layout::doLayoutRange(const LayoutOptions& options, const Fraction& st, con
         etick = m_score->last()->endTick();
     }
 
-    lc.endTick = etick;
+    ctx.endTick = etick;
 
     if (m_score->cmdState().layoutFlags & LayoutFlag::REBUILD_MIDI_MAPPING) {
         if (m_score->isMaster()) {
@@ -139,37 +139,37 @@ void Layout::doLayoutRange(const LayoutOptions& options, const Fraction& st, con
     }
 
     if (options.isLinearMode()) {
-        lc.prevMeasure = 0;
-        lc.nextMeasure = m;         //_showVBox ? first() : firstMeasure();
-        lc.startTick   = m->tick();
-        layoutLinear(layoutAll, options, lc);
+        ctx.prevMeasure = 0;
+        ctx.nextMeasure = m;         //_showVBox ? first() : firstMeasure();
+        ctx.startTick   = m->tick();
+        layoutLinear(layoutAll, options, ctx);
         return;
     }
 
     if (!layoutAll && m->system()) {
         System* system  = m->system();
         int systemIndex = m_score->_systems.indexOf(system);
-        lc.page         = system->page();
-        lc.curPage      = m_score->pageIdx(lc.page);
-        if (lc.curPage == -1) {
-            lc.curPage = 0;
+        ctx.page         = system->page();
+        ctx.curPage      = m_score->pageIdx(ctx.page);
+        if (ctx.curPage == -1) {
+            ctx.curPage = 0;
         }
-        lc.curSystem   = system;
-        lc.systemList  = m_score->_systems.mid(systemIndex);
+        ctx.curSystem   = system;
+        ctx.systemList  = m_score->_systems.mid(systemIndex);
 
         if (systemIndex == 0) {
-            lc.nextMeasure = options.showVBox ? m_score->first() : m_score->firstMeasure();
+            ctx.nextMeasure = options.showVBox ? m_score->first() : m_score->firstMeasure();
         } else {
             System* prevSystem = m_score->_systems[systemIndex - 1];
-            lc.nextMeasure = prevSystem->measures().back()->next();
+            ctx.nextMeasure = prevSystem->measures().back()->next();
         }
 
         m_score->_systems.erase(m_score->_systems.begin() + systemIndex, m_score->_systems.end());
-        if (!lc.nextMeasure->prevMeasure()) {
-            lc.measureNo = 0;
-            lc.tick      = Fraction(0, 1);
+        if (!ctx.nextMeasure->prevMeasure()) {
+            ctx.measureNo = 0;
+            ctx.tick      = Fraction(0, 1);
         } else {
-            const MeasureBase* mb = lc.nextMeasure->prev();
+            const MeasureBase* mb = ctx.nextMeasure->prev();
             if (mb) {
                 mb = mb->findPotentialSectionBreak();
             }
@@ -177,12 +177,12 @@ void Layout::doLayoutRange(const LayoutOptions& options, const Fraction& st, con
             // TODO: also use mb in else clause here?
             // probably not, only actual measures have meaningful numbers
             if (sectionBreak && sectionBreak->startWithMeasureOne()) {
-                lc.measureNo = 0;
+                ctx.measureNo = 0;
             } else {
-                lc.measureNo = lc.nextMeasure->prevMeasure()->no()                             // will be adjusted later with respect
-                               + (lc.nextMeasure->prevMeasure()->irregular() ? 0 : 1);         // to the user-defined offset.
+                ctx.measureNo = ctx.nextMeasure->prevMeasure()->no()                             // will be adjusted later with respect
+                                + (ctx.nextMeasure->prevMeasure()->irregular() ? 0 : 1);        // to the user-defined offset.
             }
-            lc.tick = lc.nextMeasure->tick();
+            ctx.tick = ctx.nextMeasure->tick();
         }
     } else {
         for (System* s : qAsConst(m_score->_systems)) {
@@ -206,18 +206,18 @@ void Layout::doLayoutRange(const LayoutOptions& options, const Fraction& st, con
         qDeleteAll(m_score->pages());
         m_score->pages().clear();
 
-        lc.nextMeasure = options.showVBox ? m_score->first() : m_score->firstMeasure();
+        ctx.nextMeasure = options.showVBox ? m_score->first() : m_score->firstMeasure();
     }
 
-    lc.prevMeasure = 0;
+    ctx.prevMeasure = 0;
 
-    LayoutMeasure::getNextMeasure(options, m_score, lc);
-    lc.curSystem = LayoutSystem::collectSystem(options, lc, m_score);
+    LayoutMeasure::getNextMeasure(options, ctx);
+    ctx.curSystem = LayoutSystem::collectSystem(options, ctx, m_score);
 
-    doLayout(options, lc);
+    doLayout(options, ctx);
 }
 
-void Layout::doLayout(const LayoutOptions& options, LayoutContext& lc)
+void Layout::doLayout(const LayoutOptions& options, LayoutStateContext& lc)
 {
     MeasureBase* lmb;
     do {
@@ -247,8 +247,8 @@ void Layout::doLayout(const LayoutOptions& options, LayoutContext& lc)
         qDeleteAll(lc.systemList);
         lc.systemList.clear();
         // ...and the remaining pages too
-        while (lc.score->npages() > lc.curPage) {
-            delete lc.score->pages().takeLast();
+        while (lc.score()->npages() > lc.curPage) {
+            delete lc.score()->pages().takeLast();
         }
     } else {
         Page* p = lc.curSystem->page();
@@ -256,16 +256,15 @@ void Layout::doLayout(const LayoutOptions& options, LayoutContext& lc)
             p->invalidateBspTree();
         }
     }
-    lc.score->systems().append(lc.systemList);
+    lc.score()->systems().append(lc.systemList);
 }
 
 //---------------------------------------------------------
 //   layoutLinear
 //---------------------------------------------------------
 
-void Layout::layoutLinear(bool layoutAll, const LayoutOptions& options, LayoutContext& lc)
+void Layout::layoutLinear(bool layoutAll, const LayoutOptions& options, LayoutStateContext& lc)
 {
-    lc.score = m_score;
     resetSystems(layoutAll, options, lc);
 
     collectLinearSystem(options, lc);
@@ -279,7 +278,7 @@ void Layout::layoutLinear(bool layoutAll, const LayoutOptions& options, LayoutCo
 //    which contains one system
 //---------------------------------------------------------
 
-void Layout::resetSystems(bool layoutAll, const LayoutOptions& options, LayoutContext& lc)
+void Layout::resetSystems(bool layoutAll, const LayoutOptions& options, LayoutStateContext& lc)
 {
     Page* page = 0;
     if (layoutAll) {
@@ -327,7 +326,7 @@ void Layout::resetSystems(bool layoutAll, const LayoutOptions& options, LayoutCo
 //   Append all measures to System. VBox is not included to System
 //---------------------------------------------------------
 
-void Layout::collectLinearSystem(const LayoutOptions& options, LayoutContext& lc)
+void Layout::collectLinearSystem(const LayoutOptions& options, LayoutStateContext& lc)
 {
     std::vector<int> visibleParts;
     for (int partIdx = 0; partIdx < m_score->parts().size(); partIdx++) {
@@ -346,13 +345,13 @@ void Layout::collectLinearSystem(const LayoutOptions& options, LayoutContext& lc
     //utilizing in getNextMeasure()
     lc.nextMeasure = m_score->_measures.first();
     lc.tick = Fraction(0, 1);
-    LayoutMeasure::getNextMeasure(options, m_score, lc);
+    LayoutMeasure::getNextMeasure(options, lc);
 
     while (lc.curMeasure) {
         qreal ww = 0.0;
         if (lc.curMeasure->isVBox() || lc.curMeasure->isTBox()) {
             lc.curMeasure->moveToDummy();
-            LayoutMeasure::getNextMeasure(options, m_score, lc);
+            LayoutMeasure::getNextMeasure(options, lc);
             continue;
         }
         system->appendMeasure(lc.curMeasure);
@@ -424,7 +423,7 @@ void Layout::collectLinearSystem(const LayoutOptions& options, LayoutContext& lc
         }
         pos.rx() += ww;
 
-        LayoutMeasure::getNextMeasure(options, m_score, lc);
+        LayoutMeasure::getNextMeasure(options, lc);
     }
 
     system->setWidth(pos.x());
@@ -434,11 +433,11 @@ void Layout::collectLinearSystem(const LayoutOptions& options, LayoutContext& lc
 //   layoutLinear
 //---------------------------------------------------------
 
-void Layout::layoutLinear(const LayoutOptions& options, LayoutContext& lc)
+void Layout::layoutLinear(const LayoutOptions& options, LayoutStateContext& lc)
 {
-    System* system = lc.score->systems().front();
+    System* system = lc.score()->systems().front();
 
-    LayoutSystem::layoutSystemElements(options, lc, lc.score, system);
+    LayoutSystem::layoutSystemElements(options, lc, lc.score(), system);
 
     system->layout2();     // compute staff distances
 
@@ -448,7 +447,7 @@ void Layout::layoutLinear(const LayoutOptions& options, LayoutContext& lc)
         }
         Measure* m = toMeasure(mb);
 
-        for (int track = 0; track < lc.score->ntracks(); ++track) {
+        for (int track = 0; track < lc.score()->ntracks(); ++track) {
             for (Segment* segment = m->first(); segment; segment = segment->next()) {
                 EngravingItem* e = segment->element(track);
                 if (!e) {
@@ -458,7 +457,7 @@ void Layout::layoutLinear(const LayoutOptions& options, LayoutContext& lc)
                     if (m->tick() < lc.startTick || m->tick() > lc.endTick) {
                         continue;
                     }
-                    if (!lc.score->staff(track2staff(track))->show()) {
+                    if (!lc.score()->staff(track2staff(track))->show()) {
                         continue;
                     }
                     ChordRest* cr = toChordRest(e);
@@ -507,12 +506,12 @@ void Layout::layoutLinear(const LayoutOptions& options, LayoutContext& lc)
         m->layout2();
     }
     lc.page->setPos(0, 0);
-    system->setPos(lc.page->lm(), lc.page->tm() + lc.score->styleP(Sid::staffUpperBorder));
+    system->setPos(lc.page->lm(), lc.page->tm() + lc.score()->styleP(Sid::staffUpperBorder));
     lc.page->setWidth(system->width() + system->pos().x());
     // Set buffer space after the last system to avoid problems with mouse input.
     // Mouse input divides space between systems equally (see Score::searchSystem),
     // hence the choice of the value.
-    const qreal buffer = 0.5 * lc.score->styleS(Sid::maxSystemDistance).val() * lc.score->spatium();
+    const qreal buffer = 0.5 * lc.score()->styleS(Sid::maxSystemDistance).val() * lc.score()->spatium();
     lc.page->setHeight(system->height() + system->pos().y() + buffer);
     lc.page->invalidateBspTree();
 }
