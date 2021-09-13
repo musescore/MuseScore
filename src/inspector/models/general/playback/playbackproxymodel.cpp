@@ -32,7 +32,7 @@
 using namespace mu::inspector;
 
 PlaybackProxyModel::PlaybackProxyModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorProxyModel(parent)
+    : AbstractInspectorProxyModel(parent, repository)
 {
     addModel(new NotePlaybackModel(this, repository));
     addModel(new ArpeggioPlaybackModel(this, repository));
