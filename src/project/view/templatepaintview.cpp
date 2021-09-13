@@ -68,7 +68,7 @@ void TemplatePaintView::adjustCanvas()
         return;
     }
 
-    scale(scaling, QPoint());
+    setScaling(scaling, QPoint());
     moveCanvasToCenter();
 }
 

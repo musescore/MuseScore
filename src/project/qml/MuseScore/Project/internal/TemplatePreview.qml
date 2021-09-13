@@ -25,6 +25,7 @@ import QtQuick.Layouts 1.15
 
 import MuseScore.UiComponents 1.0
 import MuseScore.Project 1.0
+import MuseScore.NotationScene 1.0
 
 Item {
     id: root
@@ -50,59 +51,62 @@ Item {
         font: ui.theme.bodyBoldFont
     }
 
-    TemplatePaintView {
-        id: templateView
-
+    NotationZoomPinchArea {
         anchors.top: title.bottom
         anchors.topMargin: 16
         anchors.bottom: parent.bottom
         anchors.left: parent.left
         anchors.right: parent.right
 
-        onHorizontalScrollChanged: {
-            if (!horizontalScrollBar.pressed) {
-                horizontalScrollBar.setPosition(templateView.startHorizontalScrollPosition)
-            }
-        }
+        TemplatePaintView {
+            id: templateView
+            anchors.fill: parent
 
-        onVerticalScrollChanged: {
-            if (!verticalScrollBar.pressed) {
-                verticalScrollBar.setPosition(templateView.startVerticalScrollPosition)
-            }
-        }
-
-        StyledScrollBar {
-            id: verticalScrollBar
-
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            anchors.right: parent.right
-            orientation: Qt.Vertical
-
-            position: templateView.startVerticalScrollPosition
-            size: templateView.verticalScrollSize
-
-            onPositionChanged: {
-                if (pressed) {
-                    templateView.scrollVertical(position)
+            onHorizontalScrollChanged: {
+                if (!horizontalScrollBar.pressed) {
+                    horizontalScrollBar.setPosition(templateView.startHorizontalScrollPosition)
                 }
             }
-        }
 
-        StyledScrollBar {
-            id: horizontalScrollBar
+            onVerticalScrollChanged: {
+                if (!verticalScrollBar.pressed) {
+                    verticalScrollBar.setPosition(templateView.startVerticalScrollPosition)
+                }
+            }
 
-            anchors.bottom: parent.bottom
-            anchors.left: parent.left
-            anchors.right: parent.right
-            orientation: Qt.Horizontal
+            StyledScrollBar {
+                id: verticalScrollBar
 
-            position: templateView.startHorizontalScrollPosition
-            size: templateView.horizontalScrollSize
+                anchors.top: parent.top
+                anchors.bottom: parent.bottom
+                anchors.right: parent.right
+                orientation: Qt.Vertical
 
-            onPositionChanged: {
-                if (pressed) {
-                    templateView.scrollHorizontal(position)
+                position: templateView.startVerticalScrollPosition
+                size: templateView.verticalScrollSize
+
+                onPositionChanged: {
+                    if (pressed) {
+                        templateView.scrollVertical(position)
+                    }
+                }
+            }
+
+            StyledScrollBar {
+                id: horizontalScrollBar
+
+                anchors.bottom: parent.bottom
+                anchors.left: parent.left
+                anchors.right: parent.right
+                orientation: Qt.Horizontal
+
+                position: templateView.startHorizontalScrollPosition
+                size: templateView.horizontalScrollSize
+
+                onPositionChanged: {
+                    if (pressed) {
+                        templateView.scrollHorizontal(position)
+                    }
                 }
             }
         }

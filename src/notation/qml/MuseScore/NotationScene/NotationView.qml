@@ -80,124 +80,127 @@ FocusScope {
                 color: notationView.backgroundColor
             }
 
-            NotationPaintView {
-                id: notationView
-
-                NavigationPanel {
-                    id: navPanel
-                    name: "ScoreView"
-                    section: navSec
-                    direction: NavigationPanel.Both
-                    order: 2
-                }
-
-                NavigationControl {
-                    id: fakeNavCtrl
-                    name: "Score"
-
-                    panel: navPanel
-                    order: 1
-
-                    accessible.role: MUAccessible.Panel
-                    accessible.name: "Score"
-
-                    onActiveChanged: {
-                        if (fakeNavCtrl.active) {
-                            notationView.selectOnNavigationActive()
-                        }
-                    }
-                }
-
+            NotationZoomPinchArea {
                 SplitView.fillWidth: true
                 SplitView.fillHeight: true
 
-                onTextEdittingStarted: {
-                    root.textEdittingStarted()
-                }
+                NotationPaintView {
+                    id: notationView
+                    anchors.fill: parent
 
-                onShowContextMenuRequested: function (elementType, pos) {
-                    contextMenuModel.loadItems(elementType)
-
-                    if (contextMenuLoader.isMenuOpened) {
-                        contextMenuLoader.update(contextMenuModel.items, pos.x, pos.y)
-                    } else {
-                        contextMenuLoader.open(contextMenuModel.items, pos.x, pos.y)
+                    NavigationPanel {
+                        id: navPanel
+                        name: "ScoreView"
+                        section: navSec
+                        direction: NavigationPanel.Both
+                        order: 2
                     }
-                }
 
-                onHideContextMenuRequested: function() {
-                    contextMenuLoader.close()
-                }
+                    NavigationControl {
+                        id: fakeNavCtrl
+                        name: "Score"
 
-                onViewportChanged: {
-                    notationNavigator.setCursorRect(viewport)
-                }
+                        panel: navPanel
+                        order: 1
 
-                onHorizontalScrollChanged: {
-                    if (!horizontalScrollBar.pressed) {
-                        horizontalScrollBar.setPosition(notationView.startHorizontalScrollPosition)
-                    }
-                }
+                        accessible.role: MUAccessible.Panel
+                        accessible.name: "Score"
 
-                onVerticalScrollChanged: {
-                    if (!verticalScrollBar.pressed) {
-                        verticalScrollBar.setPosition(notationView.startVerticalScrollPosition)
-                    }
-                }
-
-                StyledScrollBar {
-                    id: verticalScrollBar
-
-                    anchors.top: parent.top
-                    anchors.bottomMargin: prv.scrollbarMargin
-                    anchors.bottom: parent.bottom
-                    anchors.right: parent.right
-
-                    orientation: Qt.Vertical
-
-                    color: "black"
-                    border.width: 1
-                    border.color: "white"
-
-                    size: notationView.verticalScrollSize
-
-                    onPositionChanged: {
-                        if (pressed) {
-                            notationView.scrollVertical(position)
+                        onActiveChanged: {
+                            if (fakeNavCtrl.active) {
+                                notationView.selectOnNavigationActive()
+                            }
                         }
                     }
-                }
 
-                StyledScrollBar {
-                    id: horizontalScrollBar
+                    onTextEdittingStarted: {
+                        root.textEdittingStarted()
+                    }
 
-                    anchors.bottom: parent.bottom
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-                    anchors.rightMargin: prv.scrollbarMargin
+                    onShowContextMenuRequested: function (elementType, pos) {
+                        contextMenuModel.loadItems(elementType)
 
-                    orientation: Qt.Horizontal
-
-                    color: "black"
-                    border.width: 1
-                    border.color: "white"
-
-                    size: notationView.horizontalScrollSize
-
-                    onPositionChanged: {
-                        if (pressed) {
-                            notationView.scrollHorizontal(position)
+                        if (contextMenuLoader.isMenuOpened) {
+                            contextMenuLoader.update(contextMenuModel.items, pos.x, pos.y)
+                        } else {
+                            contextMenuLoader.open(contextMenuModel.items, pos.x, pos.y)
                         }
                     }
-                }
 
-                StyledMenuLoader {
-                    id: contextMenuLoader
+                    onHideContextMenuRequested: function() {
+                        contextMenuLoader.close()
+                    }
 
-                    navigation: fakeNavCtrl
+                    onViewportChanged: {
+                        notationNavigator.setCursorRect(viewport)
+                    }
 
-                    onHandleMenuItem: function (itemId) {
-                        contextMenuModel.handleMenuItem(itemId)
+                    onHorizontalScrollChanged: {
+                        if (!horizontalScrollBar.pressed) {
+                            horizontalScrollBar.setPosition(notationView.startHorizontalScrollPosition)
+                        }
+                    }
+
+                    onVerticalScrollChanged: {
+                        if (!verticalScrollBar.pressed) {
+                            verticalScrollBar.setPosition(notationView.startVerticalScrollPosition)
+                        }
+                    }
+
+                    StyledScrollBar {
+                        id: verticalScrollBar
+
+                        anchors.top: parent.top
+                        anchors.bottomMargin: prv.scrollbarMargin
+                        anchors.bottom: parent.bottom
+                        anchors.right: parent.right
+
+                        orientation: Qt.Vertical
+
+                        color: "black"
+                        border.width: 1
+                        border.color: "white"
+
+                        size: notationView.verticalScrollSize
+
+                        onPositionChanged: {
+                            if (pressed) {
+                                notationView.scrollVertical(position)
+                            }
+                        }
+                    }
+
+                    StyledScrollBar {
+                        id: horizontalScrollBar
+
+                        anchors.bottom: parent.bottom
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        anchors.rightMargin: prv.scrollbarMargin
+
+                        orientation: Qt.Horizontal
+
+                        color: "black"
+                        border.width: 1
+                        border.color: "white"
+
+                        size: notationView.horizontalScrollSize
+
+                        onPositionChanged: {
+                            if (pressed) {
+                                notationView.scrollHorizontal(position)
+                            }
+                        }
+                    }
+
+                    StyledMenuLoader {
+                        id: contextMenuLoader
+
+                        navigation: fakeNavCtrl
+
+                        onHandleMenuItem: function (itemId) {
+                            contextMenuModel.handleMenuItem(itemId)
+                        }
                     }
                 }
             }

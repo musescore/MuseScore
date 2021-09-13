@@ -483,7 +483,6 @@ bool NotationConfiguration::isAutomaticallyPanEnabled() const
 void NotationConfiguration::setIsAutomaticallyPanEnabled(bool enabled)
 {
     settings()->setSharedValue(IS_AUTOMATICALLY_PAN_ENABLED, Val(enabled));
-    Ms::MScore::panPlayback = enabled;
 }
 
 bool NotationConfiguration::isPlayRepeatsEnabled() const

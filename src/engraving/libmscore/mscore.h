@@ -339,7 +339,6 @@ public:
     static bool harmonyPlayDisableCompatibility;
     static bool harmonyPlayDisableNew;
     static bool playRepeats;
-    static bool panPlayback;
     static int playbackSpeedIncrement;
     static qreal nudgeStep;
     static qreal nudgeStep10;

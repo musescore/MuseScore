@@ -92,7 +92,7 @@ void NotationNavigator::rescale()
         _scale = height() * guiScaling() / scoreHeight;
     }
 
-    scale(_scale, QPoint());
+    setScaling(_scale, QPoint());
 }
 
 void NotationNavigator::wheelEvent(QWheelEvent*)

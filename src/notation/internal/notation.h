@@ -51,7 +51,6 @@ public:
 
     QString title() const override;
 
-    void setViewSize(const QSizeF& vs) override;
     void setViewMode(const ViewMode& viewMode) override;
     ViewMode viewMode() const override;
     void paint(draw::Painter* painter, const RectF& frameRect) override;
@@ -73,7 +72,6 @@ public:
 protected:
     Ms::Score* score() const override;
     void setScore(Ms::Score* score);
-    Ms::MScore* scoreGlobal() const;
     void notifyAboutNotationChanged();
 
     INotationPartsPtr m_parts = nullptr;
@@ -86,10 +84,6 @@ private:
     void paintPageBorder(mu::draw::Painter* painter, const Ms::Page* page) const;
     void paintForeground(mu::draw::Painter* painter, const RectF& pageRect) const;
 
-    QSizeF viewSize() const;
-
-    QSizeF m_viewSize;
-    Ms::MScore* m_scoreGlobal = nullptr;
     Ms::Score* m_score = nullptr;
     ValCh<bool> m_opened;
 
