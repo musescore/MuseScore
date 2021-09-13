@@ -254,7 +254,7 @@ void initDrumset()
       smDrumset->drum(40) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Electric Snare"),     NoteHead::Group::HEAD_NORMAL,   3, Direction::UP);
       smDrumset->drum(41) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Low Floor Tom"),      NoteHead::Group::HEAD_NORMAL,   5, Direction::UP);
       smDrumset->drum(42) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Closed Hi-Hat"),      NoteHead::Group::HEAD_CROSS,   -1, Direction::UP, 0, Qt::Key_G);
-      smDrumset->drum(43) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "High Floor Tom"),     NoteHead::Group::HEAD_NORMAL,   5, Direction::DOWN, 1);
+      smDrumset->drum(43) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "High Floor Tom"),     NoteHead::Group::HEAD_NORMAL,   5, Direction::UP);
       smDrumset->drum(44) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Pedal Hi-Hat"),       NoteHead::Group::HEAD_CROSS,    9, Direction::DOWN, 1, Qt::Key_F);
       smDrumset->drum(45) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Low Tom"),            NoteHead::Group::HEAD_NORMAL,   2, Direction::UP);
       smDrumset->drum(46) = DrumInstrument(QT_TRANSLATE_NOOP("drumset", "Open Hi-Hat"),        NoteHead::Group::HEAD_CROSS,    1, Direction::UP);
