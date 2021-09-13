@@ -21,6 +21,8 @@
  */
 
 #include "animationtrack.h"
+#include "animationkey.h"
+#include <algorithm>
 
 using namespace mu;
 using namespace mu::engraving;
@@ -37,6 +39,29 @@ AnimationTrack::~AnimationTrack()
 void AnimationTrack::setPropertyName(std::string value)
 {
     _propertyName = value;
+}
+
+//Return index of vertex at or immediately before given tick
+int AnimationTrack::keyIndexForTick(Fraction tick)
+{
+    for (int i = 0; i < _keys.size(); ++i) {
+        AnimationKey* v = _keys.at(i);
+        if (v->tick() > tick) {
+            return i - 1;
+        }
+    }
+
+    return _keys.size() - 1;
+}
+
+bool AnimationTrack::isKeyAt(Fraction tick)
+{
+    int idx = keyIndexForTick(tick);
+    if (idx == -1) {
+        return false;
+    }
+
+    return _keys.at(idx)->tick() == tick;
 }
 
 void AnimationTrack::addKey(Fraction tick, float value)

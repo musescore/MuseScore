@@ -37,13 +37,13 @@ AnimationKey::~AnimationKey()
 {
 }
 
-void AnimationKey::setValue(double value)
+void AnimationKey::setValue(float value)
 {
     _value = value;
 }
 
-void AnimationKey::setTicks(double value)
+void AnimationKey::setTick(Fraction tick)
 {
-    _ticks = value;
+    _tick = tick;
 }
 }

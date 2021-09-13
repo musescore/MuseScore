@@ -31,14 +31,18 @@ class AnimationTrack;
 
 class AnimationKey
 {
-    double _value;
+    float _value = 0;
+    Fraction _tick;
+    AnimationTrack* _parent;
 
 public:
     AnimationKey(AnimationTrack* parent);
     ~AnimationKey();
 
-    double value() { return _value; }
-    void setValue(double value);
+    float value() { return _value; }
+    void setValue(float value);
+    Fraction tick() { return _tick; }
+    void setTick(Fraction tick);
 };
 }
 #endif // __ANIMATIONKEY_H__

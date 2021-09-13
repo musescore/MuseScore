@@ -32,6 +32,7 @@ class AnimationKey;
 
 class AnimationTrack
 {
+    std::string _propertyName;
     std::vector<AnimationKey*> _keys;
 
 public:
@@ -41,11 +42,16 @@ public:
 
     AnimationTrack& operator=(const BarLine&) = delete;
 
+    std::string propertyName() const { return _propertyName; }
+    void setPropertyName(std::string value);
+
     const std::vector<AnimationKey*>& keys() const { return _keys; }
     std::vector<AnimationKey*>& keys() { return _keys; }
     // void addKey(AnimationKey* vertex);
     void addKey(Fraction tick, float value);
     void removeKey(Fraction tick);
+    bool isKeyAt(Fraction tick);
+    int keyIndexForTick(Fraction tick);
 };
 }
 
