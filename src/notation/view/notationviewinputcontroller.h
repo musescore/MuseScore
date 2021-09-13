@@ -111,7 +111,6 @@ private:
 
     int currentZoomIndex() const;
     int currentZoomPercentage() const;
-    qreal notationScaling() const;
     void setZoom(int zoomPercentage, const QPoint& pos = QPoint());
 
     void setViewMode(const ViewMode& viewMode);
