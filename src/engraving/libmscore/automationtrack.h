@@ -40,10 +40,9 @@ enum class AutomationDataType : char {
 class AutomationTrack : public EngravingItem
 {
     AutomationDataType _dataType = AutomationDataType::INVALID;
-    bool _enabled;
+    bool _enabled = true;
 
     QList<AutomationVertex*> _vertices;
-//    std::vector<AutomationVertex*> _vertices;
 
 public:
     AutomationTrack(Staff* parent);
@@ -52,9 +51,9 @@ public:
 
     AutomationTrack& operator=(const BarLine&) = delete;
 
-    AutomationDataType dataType() { return _dataType; }
+    AutomationDataType dataType() const { return _dataType; }
     void setDataType(AutomationDataType value);
-    bool enabled() { return _enabled; }
+    bool enabled() const { return _enabled; }
     void setEnabled(bool value);
 
     const QList<AutomationVertex*>& vertices() const { return _vertices; }
