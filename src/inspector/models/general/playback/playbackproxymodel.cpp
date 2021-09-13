@@ -42,3 +42,37 @@ PlaybackProxyModel::PlaybackProxyModel(QObject* parent, IElementRepositoryServic
     addModel(new DynamicPlaybackModel(this, repository));
     addModel(new HairpinPlaybackModel(this, repository));
 }
+
+bool PlaybackProxyModel::hasGeneralSettings() const
+{
+    static const QList<InspectorModelType> generalGroup {
+        InspectorModelType::TYPE_NOTE,
+        InspectorModelType::TYPE_ARPEGGIO,
+        InspectorModelType::TYPE_FERMATA,
+        InspectorModelType::TYPE_BREATH,
+        InspectorModelType::TYPE_GLISSANDO
+    };
+
+    return !isGropEmpty(generalGroup);
+}
+
+bool PlaybackProxyModel::hasDynamicsSettings() const
+{
+    static const QList<InspectorModelType> dynamicsGroup {
+        InspectorModelType::TYPE_DYNAMIC,
+        InspectorModelType::TYPE_HAIRPIN
+    };
+
+    return !isGropEmpty(dynamicsGroup);
+}
+
+bool PlaybackProxyModel::isGropEmpty(const QList<InspectorModelType>& group) const
+{
+    for (const AbstractInspectorModel* model : modelList()) {
+        if (group.contains(model->modelType()) && !model->isEmpty()) {
+            return false;
+        }
+    }
+
+    return true;
+}

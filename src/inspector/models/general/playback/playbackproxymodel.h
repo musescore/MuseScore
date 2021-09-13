@@ -29,8 +29,17 @@ class PlaybackProxyModel : public AbstractInspectorProxyModel
 {
     Q_OBJECT
 
+    Q_PROPERTY(bool hasDynamicsSettings READ hasDynamicsSettings NOTIFY isEmptyChanged)
+    Q_PROPERTY(bool hasGeneralSettings READ hasGeneralSettings NOTIFY isEmptyChanged)
+
 public:
     explicit PlaybackProxyModel(QObject* parent, IElementRepositoryService* repository);
+
+    bool hasGeneralSettings() const;
+    bool hasDynamicsSettings() const;
+
+private:
+    bool isGropEmpty(const QList<InspectorModelType>& group) const;
 };
 }
 

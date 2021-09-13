@@ -146,7 +146,7 @@ InspectorSectionView {
                 }
 
                 onPopupOpened: {
-                    playbackSettings.focusOnFirstTab()
+                    playbackSettings.focusOnCurrentTab()
                 }
 
                 onEnsureContentVisibleRequested: {

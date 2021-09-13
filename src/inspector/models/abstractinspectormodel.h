@@ -127,15 +127,13 @@ public:
     InspectorSectionType sectionType() const;
     InspectorModelType modelType() const;
 
-    bool isEmpty() const;
-
     static QList<InspectorSectionType> sectionTypesByElementKey(const ElementKey& elementKey);
     static InspectorModelType notationElementModelType(const ElementKey& elementKey);
 
     static QList<Ms::ElementType> supportedElementTypesBySectionType(InspectorSectionType sectionType);
     static Ms::ElementType elementTypeByModelType(InspectorModelType modelType);
 
-    virtual bool hasAcceptableElements() const;
+    virtual bool isEmpty() const;
 
     virtual void createProperties() = 0;
     virtual void loadProperties() = 0;
@@ -148,12 +146,11 @@ public slots:
     void setIcon(ui::IconCode::Code icon);
     void setSectionType(InspectorSectionType sectionType);
     void setModelType(InspectorModelType modelType);
-    void setIsEmpty(bool isEmpty);
 
 signals:
     void elementsModified();
     void modelReseted();
-    void isEmptyChanged(bool isEmpty);
+    void isEmptyChanged();
 
     void requestReloadPropertyItems();
 
@@ -195,7 +192,6 @@ private:
     ui::IconCode::Code m_icon;
     InspectorSectionType m_sectionType = InspectorSectionType::SECTION_UNDEFINED;
     InspectorModelType m_modelType = InspectorModelType::TYPE_UNDEFINED;
-    bool m_isEmpty = false;
     Ms::ElementType m_elementType = Ms::ElementType::INVALID;
 };
 }

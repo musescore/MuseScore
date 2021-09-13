@@ -34,7 +34,8 @@ class AbstractInspectorProxyModel : public AbstractInspectorModel
     Q_PROPERTY(InspectorModelType preferedSubModelType READ preferedSubModelType CONSTANT)
 
 public:
-    explicit AbstractInspectorProxyModel(QObject* parent, IElementRepositoryService* repository, InspectorModelType preferedSubModelType = InspectorModelType::TYPE_UNDEFINED);
+    explicit AbstractInspectorProxyModel(QObject* parent, IElementRepositoryService* repository,
+                                         InspectorModelType preferedSubModelType = InspectorModelType::TYPE_UNDEFINED);
 
     Q_INVOKABLE QObject* modelByType(const InspectorModelType type);
     Q_INVOKABLE QVariantList models();
@@ -48,7 +49,7 @@ public:
 
     void requestElements() override;
     void requestResetToDefaults() override;
-    bool hasAcceptableElements() const override;
+    bool isEmpty() const override;
 
     virtual bool isElementSupported(const ElementKey&) const { return false; }
 
@@ -56,6 +57,7 @@ public:
 
 protected:
     void addModel(AbstractInspectorModel* model);
+    QList<AbstractInspectorModel*> modelList() const;
 
 private:
     QHash<int, AbstractInspectorModel*> m_modelsHash;
