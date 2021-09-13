@@ -22,6 +22,9 @@
 
 #include "automationtrack.h"
 
+#include "automationvertex.h"
+#include <algorithm>
+
 using namespace mu;
 using namespace mu::engraving;
 
@@ -46,8 +49,47 @@ void AutomationTrack::setEnabled(bool value)
     _enabled = value;
 }
 
+//Return index of vertex at or immediately before given tick
+int AutomationTrack::vertexIndexForTick(Fraction tick)
+{
+    for (int i = 0; i < _vertices.size(); ++i)
+    {
+        AutomationVertex* v = _vertices.at(0);
+        if (v->tick() > tick)
+        {
+            return i - 1;
+        }
+    }
+
+    return _vertices.size() - 1;
+}
+
+bool AutomationTrack::isVertexAt(Fraction tick)
+{
+    int idx = vertexIndexForTick(tick);
+    if (idx == -1)
+        return false;
+
+    return _vertices.at(idx)->tick() == tick;
+}
+
 void AutomationTrack::addVertex(AutomationVertex* vertex)
 {
-    _vertices.append(vertex);
+    int prevIdx = vertexIndexForTick(vertex->tick());
+
+    if (prevIdx == -1) {
+        _vertices.push_front(vertex);
+        return;
+    }
+
+    AutomationVertex* prevVert = _vertices.at(prevIdx);
+    if (prevVert->tick() == vertex->tick())
+    {
+        prevVert->setValue(vertex->value());
+        delete vertex;
+        return;
+    }
+    
+    _vertices.insert(prevIdx + 1, vertex);
 }
 }

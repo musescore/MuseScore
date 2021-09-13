@@ -43,6 +43,7 @@ class AutomationTrack : public EngravingItem
     bool _enabled;
 
     QList<AutomationVertex*> _vertices;
+//    std::vector<AutomationVertex*> _vertices;
 
 public:
     AutomationTrack(Staff* parent);
@@ -58,8 +59,11 @@ public:
 
     const QList<AutomationVertex*>& vertices() const { return _vertices; }
     QList<AutomationVertex*>& vertices() { return _vertices; }
-
     void addVertex(AutomationVertex* vertex);
+    bool isVertexAt(Fraction tick);
+
+    int vertexIndexForTick(Fraction tick);
+
 };
 }
 

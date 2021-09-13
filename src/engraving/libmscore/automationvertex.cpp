@@ -37,13 +37,13 @@ AutomationVertex::~AutomationVertex()
 {
 }
 
-void AutomationVertex::setValue(double value)
+void AutomationVertex::setValue(float value)
 {
     _value = value;
 }
 
-void AutomationVertex::setTicks(double value)
-{
-    _ticks = value;
-}
+//void AutomationVertex::setTicks(int value)
+//{
+//    _ticks = value;
+//}
 }
