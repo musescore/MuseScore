@@ -9,10 +9,9 @@ using namespace mu::audio::dsp;
 
 static constexpr float RATIO = 4.f;
 
-
 Compressor::Compressor(const unsigned int sampleRate)
     : m_filterConfig(sampleRate, RATIO),
-      m_feedbackFactor(1.f) // 0 = feed forward, 1 = feed back
+    m_feedbackFactor(1.f)   // 0 = feed forward, 1 = feed back
 {
 }
 

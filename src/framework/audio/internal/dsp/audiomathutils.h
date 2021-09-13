@@ -59,7 +59,6 @@ inline float sampleReleaseTimeCoefficient(const unsigned int sampleRate, const f
     return std::exp(-std::log(9) / (sampleRate * releaseTimeInSecs));
 }
 
-
 inline void multiplySamples(float* buffer, const audioch_t& audioChannelsCount,
                             const audioch_t& audioChannelNumber, const samples_t& samplesPerChannel,
                             const float& multiplier)
