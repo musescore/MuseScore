@@ -107,7 +107,7 @@ void VstSynthesiser::allSoundsOff()
 
 void VstSynthesiser::flushSound()
 {
-    NOT_IMPLEMENTED;
+    m_vstAudioClient->flush();
 }
 
 Ret VstSynthesiser::setupMidiChannels(const std::vector<midi::Event>& /*events*/)
