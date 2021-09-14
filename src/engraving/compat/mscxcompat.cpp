@@ -54,14 +54,14 @@ Ms::Score::FileError mu::engraving::compat::loadMsczOrMscx(Ms::MasterScore* scor
 {
     QByteArray msczData;
     QString filePath = path;
-    if (path.endsWith(".mscx")) {
+    if (path.endsWith(".mscx", Qt::CaseInsensitive)) {
         //! NOTE Convert mscx -> mscz
 
         Ms::Score::FileError err = mscxToMscz(path, &msczData);
         if (err != Ms::Score::FileError::FILE_NO_ERROR) {
             return err;
         }
-    } else if (path.endsWith(".mscz")) {
+    } else if (path.endsWith(".mscz", Qt::CaseInsensitive)) {
         QFile msczFile(path);
         if (!msczFile.open(QIODevice::ReadOnly)) {
             LOGE() << "failed open file: " << path;
@@ -91,14 +91,14 @@ mu::engraving::Err mu::engraving::compat::loadMsczOrMscx(EngravingProjectPtr pro
 {
     QByteArray msczData;
     QString filePath = path;
-    if (path.endsWith(".mscx")) {
+    if (path.endsWith(".mscx", Qt::CaseInsensitive)) {
         //! NOTE Convert mscx -> mscz
 
         Ms::Score::FileError err = mscxToMscz(path, &msczData);
         if (err != Ms::Score::FileError::FILE_NO_ERROR) {
             return scoreFileErrorToErr(err);
         }
-    } else if (path.endsWith(".mscz")) {
+    } else if (path.endsWith(".mscz", Qt::CaseInsensitive)) {
         QFile msczFile(path);
         if (!msczFile.open(QIODevice::ReadOnly)) {
             LOGE() << "failed open file: " << path;

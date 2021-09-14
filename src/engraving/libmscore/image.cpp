@@ -397,7 +397,7 @@ void Image::read(XmlReader& e)
         path = _linkPath;
     }
 
-    if (path.endsWith(".svg")) {
+    if (path.endsWith(".svg", Qt::CaseInsensitive)) {
         setImageType(ImageType::SVG);
     } else {
         setImageType(ImageType::RASTER);
@@ -434,7 +434,7 @@ bool Image::load(const QString& ss)
     _linkPath = fi.canonicalFilePath();
     _storeItem = imageStore.add(_linkPath, ba);
     _storeItem->reference(this);
-    if (path.endsWith(".svg")) {
+    if (path.endsWith(".svg", Qt::CaseInsensitive)) {
         setImageType(ImageType::SVG);
     } else {
         setImageType(ImageType::RASTER);
@@ -456,7 +456,7 @@ bool Image::loadFromData(const QString& ss, const QByteArray& ba)
     _linkPath = "";
     _storeItem = imageStore.add(ss, ba);
     _storeItem->reference(this);
-    if (ss.endsWith(".svg")) {
+    if (ss.endsWith(".svg", Qt::CaseInsensitive)) {
         setImageType(ImageType::SVG);
     } else {
         setImageType(ImageType::RASTER);
