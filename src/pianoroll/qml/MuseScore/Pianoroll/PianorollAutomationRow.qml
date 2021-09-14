@@ -91,6 +91,23 @@ ColumnLayout {
             }
         }
 
+        PianorollAutomationCurves {
+            id: automationCurves
+            Layout.preferredWidth: m_graphWidth
+            Layout.fillHeight: true
+
+            tuplet: m_tuplet
+            subdivision: m_subdivision
+
+            centerX: m_centerX
+
+            wholeNoteWidth: m_wholeNoteWidth
+
+            Component.onCompleted: {
+                load()
+            }
+        }
+
         Label {
             Layout.fillHeight: true
 
