@@ -49,11 +49,13 @@ protected:
     virtual void startEditDrag(EditData&) override;
     void startDrag(EditData&) override;
 
+    LineSegment(const ElementType& type, Spanner* sp, EngravingItem* parent, ElementFlags f = ElementFlag::NOTHING)
+        : SpannerSegment(type, sp, parent, f) {}
+    LineSegment(const ElementType& type, EngravingItem* parent, ElementFlags f = ElementFlag::NOTHING)
+        : SpannerSegment(type, parent, f) {}
+
 public:
-    LineSegment(const ElementType& type, Spanner* sp, Score* s, ElementFlags f = ElementFlag::NOTHING)
-        : SpannerSegment(type, sp, s, f) {}
-    LineSegment(const ElementType& type, Score* s, ElementFlags f = ElementFlag::NOTHING)
-        : SpannerSegment(type, s, f) {}
+
     LineSegment(const LineSegment&);
     SLine* line() const { return (SLine*)spanner(); }
     virtual void spatiumChanged(qreal, qreal) override;

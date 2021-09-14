@@ -53,9 +53,9 @@ using namespace Ms;
 //   collectSystem
 //---------------------------------------------------------
 
-System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutStateContext& lc, Ms::Score* score)
+System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutContext& ctx, Ms::Score* score)
 {
-    if (!lc.curMeasure) {
+    if (!ctx.curMeasure) {
         return nullptr;
     }
 
@@ -65,14 +65,14 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutStateCon
     }
 
     if (measure) {
-        lc.firstSystem        = measure->sectionBreak() && !options.isMode(LayoutMode::FLOAT);
-        lc.firstSystemIndent  = lc.firstSystem && options.firstSystemIndent && measure->sectionBreakElement()->firstSystemIdentation();
-        lc.startWithLongNames = lc.firstSystem && measure->sectionBreakElement()->startWithLongNames();
+        ctx.firstSystem        = measure->sectionBreak() && !options.isMode(LayoutMode::FLOAT);
+        ctx.firstSystemIndent  = ctx.firstSystem && options.firstSystemIndent && measure->sectionBreakElement()->firstSystemIdentation();
+        ctx.startWithLongNames = ctx.firstSystem && measure->sectionBreakElement()->startWithLongNames();
     }
 
-    System* system = getNextSystem(lc);
-    Fraction lcmTick = lc.curMeasure->tick();
-    system->setInstrumentNames(lc.startWithLongNames, lcmTick);
+    System* system = getNextSystem(ctx);
+    Fraction lcmTick = ctx.curMeasure->tick();
+    system->setInstrumentNames(ctx, ctx.startWithLongNames, lcmTick);
 
     qreal minWidth    = 0;
     qreal layoutSystemMinWidth = 0;
@@ -82,21 +82,21 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutStateCon
     system->setWidth(systemWidth);
 
     // save state of measure
-    bool curHeader = lc.curMeasure->header();
-    bool curTrailer = lc.curMeasure->trailer();
+    bool curHeader = ctx.curMeasure->header();
+    bool curTrailer = ctx.curMeasure->trailer();
     MeasureBase* breakMeasure = nullptr;
 
-    while (lc.curMeasure) {      // collect measure for system
-        System* oldSystem = lc.curMeasure->system();
-        system->appendMeasure(lc.curMeasure);
+    while (ctx.curMeasure) {      // collect measure for system
+        System* oldSystem = ctx.curMeasure->system();
+        system->appendMeasure(ctx.curMeasure);
 
         qreal ww  = 0;          // width of current measure
 
-        if (lc.curMeasure->isMeasure()) {
-            Measure* m = toMeasure(lc.curMeasure);
+        if (ctx.curMeasure->isMeasure()) {
+            Measure* m = toMeasure(ctx.curMeasure);
             if (firstMeasure) {
                 layoutSystemMinWidth = minWidth;
-                system->layoutSystem(minWidth, lc.firstSystem, lc.firstSystemIndent);
+                system->layoutSystem(ctx, minWidth, ctx.firstSystem, ctx.firstSystemIndent);
                 minWidth += system->leftMargin();
                 if (m->repeatStart()) {
                     Segment* s = m->findSegmentR(SegmentType::StartRepeatBarLine, Fraction(0, 1));
@@ -104,7 +104,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutStateCon
                         s->setEnabled(true);
                     }
                 }
-                m->addSystemHeader(lc.firstSystem);
+                m->addSystemHeader(ctx.firstSystem);
                 firstMeasure = false;
                 createHeader = false;
             } else {
@@ -126,14 +126,14 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutStateCon
             }
             m->computeMinWidth();
             ww = m->width();
-        } else if (lc.curMeasure->isHBox()) {
-            lc.curMeasure->computeMinWidth();
-            ww = lc.curMeasure->width();
-            createHeader = toHBox(lc.curMeasure)->createSystemHeader();
+        } else if (ctx.curMeasure->isHBox()) {
+            ctx.curMeasure->computeMinWidth();
+            ww = ctx.curMeasure->width();
+            createHeader = toHBox(ctx.curMeasure)->createSystemHeader();
         } else {
             // vbox:
-            LayoutMeasure::getNextMeasure(options, lc);
-            system->layout2();         // compute staff distances
+            LayoutMeasure::getNextMeasure(options, ctx);
+            system->layout2(ctx);         // compute staff distances
             return system;
         }
         // check if lc.curMeasure fits, remove if not
@@ -141,33 +141,33 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutStateCon
 
         bool doBreak = (system->measures().size() > 1) && ((minWidth + ww) > systemWidth);
         if (doBreak) {
-            breakMeasure = lc.curMeasure;
+            breakMeasure = ctx.curMeasure;
             system->removeLastMeasure();
-            lc.curMeasure->setParent(oldSystem);
-            while (lc.prevMeasure && lc.prevMeasure->noBreak() && system->measures().size() > 1) {
+            ctx.curMeasure->setParent(oldSystem);
+            while (ctx.prevMeasure && ctx.prevMeasure->noBreak() && system->measures().size() > 1) {
                 // remove however many measures are grouped with nobreak, working backwards
                 // but if too many are grouped, stop before we get 0 measures left on system
                 // TODO: intelligently break group into smaller groups instead
-                lc.tick -= lc.curMeasure->ticks();
-                lc.measureNo = lc.prevMeasure->no();
+                ctx.tick -= ctx.curMeasure->ticks();
+                ctx.measureNo = ctx.prevMeasure->no();
 
-                lc.nextMeasure = lc.curMeasure;
-                lc.curMeasure  = lc.prevMeasure;
-                lc.prevMeasure = lc.curMeasure->prevMeasure();
+                ctx.nextMeasure = ctx.curMeasure;
+                ctx.curMeasure  = ctx.prevMeasure;
+                ctx.prevMeasure = ctx.curMeasure->prevMeasure();
 
                 minWidth -= system->lastMeasure()->width();
                 system->removeLastMeasure();
-                lc.curMeasure->setParent(oldSystem);
+                ctx.curMeasure->setParent(oldSystem);
             }
             break;
         }
 
-        if (lc.prevMeasure && lc.prevMeasure->isMeasure() && lc.prevMeasure->system() == system) {
+        if (ctx.prevMeasure && ctx.prevMeasure->isMeasure() && ctx.prevMeasure->system() == system) {
             //
             // now we know that the previous measure is not the last
             // measure in the system and we finally can create the end barline for it
 
-            Measure* m = toMeasure(lc.prevMeasure);
+            Measure* m = toMeasure(ctx.prevMeasure);
             // TODO: if lc.curMeasure is a frame, removing the trailer may be premature
             // but merely skipping this code isn't good enough,
             // we need to find the right time to re-enable the trailer,
@@ -181,8 +181,8 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutStateCon
             // is an repeat, the createEndBarLines() created an start-end repeat barline
             // and we can remove the start repeat barline of the current barline
 
-            if (lc.curMeasure->isMeasure()) {
-                Measure* m1 = toMeasure(lc.curMeasure);
+            if (ctx.curMeasure->isMeasure()) {
+                Measure* m1 = toMeasure(ctx.curMeasure);
                 if (m1->repeatStart()) {
                     Segment* s = m1->findSegmentR(SegmentType::StartRepeatBarLine, Fraction(0, 1));
                     if (!s->enabled()) {
@@ -201,7 +201,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutStateCon
             minWidth += m->createEndBarLines(false);          // create final barLine
         }
 
-        MeasureBase* mb = lc.curMeasure;
+        MeasureBase* mb = ctx.curMeasure;
         bool lineBreak  = false;
         switch (options.mode) {
         case LayoutMode::PAGE:
@@ -216,8 +216,8 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutStateCon
         }
 
         // preserve state of next measure (which is about to become current measure)
-        if (lc.nextMeasure) {
-            MeasureBase* nmb = lc.nextMeasure;
+        if (ctx.nextMeasure) {
+            MeasureBase* nmb = ctx.nextMeasure;
             if (nmb->isMeasure() && score->styleB(Sid::createMultiMeasureRests)) {
                 Measure* nm = toMeasure(nmb);
                 if (nm->hasMMRest()) {
@@ -225,7 +225,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutStateCon
                 }
             }
             nmb->setOldWidth(nmb->width());
-            if (!lc.curMeasure->noBreak()) {
+            if (!ctx.curMeasure->noBreak()) {
                 // current measure is not a nobreak,
                 // so next measure could possibly start a system
                 curHeader = nmb->header();
@@ -237,35 +237,35 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutStateCon
             }
         }
 
-        LayoutMeasure::getNextMeasure(options, lc);
+        LayoutMeasure::getNextMeasure(options, ctx);
 
         minWidth += ww;
 
         // ElementType nt = lc.curMeasure ? lc.curMeasure->type() : ElementType::INVALID;
-        mb = lc.curMeasure;
+        mb = ctx.curMeasure;
         bool tooWide = false;     // minWidth + minMeasureWidth > systemWidth;  // TODO: noBreak
         if (lineBreak || !mb || mb->isVBox() || mb->isTBox() || mb->isFBox() || tooWide) {
             break;
         }
     }
 
-    if (lc.endTick < lc.prevMeasure->tick()) {
+    if (ctx.endTick < ctx.prevMeasure->tick()) {
         // we've processed the entire range
         // but we need to continue layout until we reach a system whose last measure is the same as previous layout
-        if (lc.prevMeasure == lc.systemOldMeasure) {
+        if (ctx.prevMeasure == ctx.systemOldMeasure) {
             // this system ends in the same place as the previous layout
             // ok to stop
-            if (lc.curMeasure && lc.curMeasure->isMeasure()) {
+            if (ctx.curMeasure && ctx.curMeasure->isMeasure()) {
                 // we may have previously processed first measure(s) of next system
                 // so now we must restore to original state
-                Measure* m = toMeasure(lc.curMeasure);
+                Measure* m = toMeasure(ctx.curMeasure);
                 if (m->repeatStart()) {
                     Segment* s = m->findSegmentR(SegmentType::StartRepeatBarLine, Fraction(0, 1));
                     if (!s->enabled()) {
                         s->setEnabled(true);
                     }
                 }
-                const MeasureBase* pbmb = lc.prevMeasure->findPotentialSectionBreak();
+                const MeasureBase* pbmb = ctx.prevMeasure->findPotentialSectionBreak();
                 bool localFirstSystem = pbmb->sectionBreak() && !options.isMode(LayoutMode::FLOAT);
                 MeasureBase* nm = breakMeasure ? breakMeasure : m;
                 if (curHeader) {
@@ -289,7 +289,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutStateCon
                     m = m->nextMeasure();
                 }
             }
-            lc.rangeDone = true;
+            ctx.rangeDone = true;
         }
     }
 
@@ -297,17 +297,17 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutStateCon
     // now we have a complete set of measures for this system
     //
     // prevMeasure is the last measure in the system
-    if (lc.prevMeasure && lc.prevMeasure->isMeasure()) {
-        LayoutBeams::breakCrossMeasureBeams(lc, toMeasure(lc.prevMeasure));
-        qreal w = toMeasure(lc.prevMeasure)->createEndBarLines(true);
+    if (ctx.prevMeasure && ctx.prevMeasure->isMeasure()) {
+        LayoutBeams::breakCrossMeasureBeams(ctx, toMeasure(ctx.prevMeasure));
+        qreal w = toMeasure(ctx.prevMeasure)->createEndBarLines(true);
         minWidth += w;
     }
 
-    hideEmptyStaves(score, system, lc.firstSystem);
+    hideEmptyStaves(score, system, ctx.firstSystem);
     // Relayout system decorations to reuse space properly for
     // hidden staves' instrument names or other hidden elements.
     minWidth -= system->leftMargin();
-    system->layoutSystem(layoutSystemMinWidth, lc.firstSystem, lc.firstSystemIndent);
+    system->layoutSystem(ctx, layoutSystemMinWidth, ctx.firstSystem, ctx.firstSystemIndent);
     minWidth += system->leftMargin();
 
     //-------------------------------------------------------
@@ -358,7 +358,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutStateCon
         //
         // don’t stretch last system row, if accumulated minWidth is <= lastSystemFillLimit
         //
-        if (lc.curMeasure == 0 && ((minWidth / systemWidth) <= score->styleD(Sid::lastSystemFillLimit))) {
+        if (ctx.curMeasure == 0 && ((minWidth / systemWidth) <= score->styleD(Sid::lastSystemFillLimit))) {
             if (minWidth > rest) {
                 rest = rest * .5;
             } else {
@@ -386,7 +386,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutStateCon
             m->stretchMeasure(ww);
             m->layoutStaffLines();
             if (createBrackets) {
-                system->addBrackets(toMeasure(mb));
+                system->addBrackets(ctx, toMeasure(mb));
                 createBrackets = false;
             }
         } else if (mb->isHBox()) {
@@ -400,8 +400,8 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutStateCon
     }
     system->setWidth(pos.x());
 
-    layoutSystemElements(options, lc, score, system);
-    system->layout2();     // compute staff distances
+    layoutSystemElements(options, ctx, score, system);
+    system->layout2(ctx);     // compute staff distances
     // TODO: now that the code at the top of this function does this same backwards search,
     // we might be able to eliminate this block
     // but, lc might be used elsewhere so we need to be careful
@@ -411,9 +411,9 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutStateCon
         measure = measure->findPotentialSectionBreak();
     }
     if (measure) {
-        lc.firstSystem        = measure->sectionBreak() && !options.isMode(LayoutMode::FLOAT);
-        lc.firstSystemIndent  = lc.firstSystem && options.firstSystemIndent && measure->sectionBreakElement()->firstSystemIdentation();
-        lc.startWithLongNames = lc.firstSystem && measure->sectionBreakElement()->startWithLongNames();
+        ctx.firstSystem        = measure->sectionBreak() && !options.isMode(LayoutMode::FLOAT);
+        ctx.firstSystemIndent  = ctx.firstSystem && options.firstSystemIndent && measure->sectionBreakElement()->firstSystemIdentation();
+        ctx.startWithLongNames = ctx.firstSystem && measure->sectionBreakElement()->startWithLongNames();
     }
 #endif
     return system;
@@ -423,7 +423,7 @@ System* LayoutSystem::collectSystem(const LayoutOptions& options, LayoutStateCon
 //   getNextSystem
 //---------------------------------------------------------
 
-System* LayoutSystem::getNextSystem(LayoutStateContext& ctx)
+System* LayoutSystem::getNextSystem(LayoutContext& ctx)
 {
     Ms::Score* score = ctx.score();
     bool isVBox = ctx.curMeasure->isVBox();
@@ -547,7 +547,7 @@ void LayoutSystem::hideEmptyStaves(Score* score, System* system, bool isFirstSys
     }
 }
 
-void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutStateContext& lc, Score* score, System* system)
+void LayoutSystem::layoutSystemElements(const LayoutOptions& options, LayoutContext& lc, Score* score, System* system)
 {
     //-------------------------------------------------------------
     //    create cr segment list to speed up computations

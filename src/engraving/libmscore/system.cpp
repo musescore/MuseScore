@@ -29,6 +29,7 @@
 
 #include "style/style.h"
 #include "io/xml.h"
+#include "layout/layoutcontext.h"
 
 #include "factory.h"
 #include "measure.h"
@@ -257,7 +258,7 @@ void System::adjustStavesNumber(int nstaves)
 ///   Layout the System
 //---------------------------------------------------------
 
-void System::layoutSystem(qreal xo1, const bool isFirstSystem, bool firstSystemIndent)
+void System::layoutSystem(const LayoutContext& ctx, qreal xo1, const bool isFirstSystem, bool firstSystemIndent)
 {
     if (_staves.empty()) {                 // ignore vbox
         return;
@@ -323,7 +324,7 @@ void System::layoutSystem(qreal xo1, const bool isFirstSystem, bool firstSystemI
                 if (bi->column() != i || bi->bracketType() == BracketType::NO_BRACKET) {
                     continue;
                 }
-                Bracket* b = createBracket(bi, i, staffIdx, bl, this->firstMeasure());
+                Bracket* b = createBracket(ctx, bi, i, staffIdx, bl, this->firstMeasure());
                 if (b != nullptr) {
                     bracketWidth[i] = qMax(bracketWidth[i], b->width());
                 }
@@ -539,7 +540,7 @@ void System::layoutInstrumentNames()
 //   Add brackets in front of this measure, typically behind a HBox
 //---------------------------------------------------------
 
-void System::addBrackets(Measure* measure)
+void System::addBrackets(const LayoutContext& ctx, Measure* measure)
 {
     if (_staves.empty()) {                 // ignore vbox
         return;
@@ -564,7 +565,7 @@ void System::addBrackets(Measure* measure)
                 if (bi->column() != i || bi->bracketType() == BracketType::NO_BRACKET) {
                     continue;
                 }
-                createBracket(bi, i, staffIdx, bl, measure);
+                createBracket(ctx, bi, i, staffIdx, bl, measure);
             }
         }
         if (!staff(staffIdx)->show()) {
@@ -588,7 +589,8 @@ void System::addBrackets(Measure* measure)
 //   Returns the bracket if it got created, else NULL
 //---------------------------------------------------------
 
-Bracket* System::createBracket(Ms::BracketItem* bi, int column, int staffIdx, QList<Ms::Bracket*>& bl, Measure* measure)
+Bracket* System::createBracket(const LayoutContext& ctx, Ms::BracketItem* bi, int column, int staffIdx, QList<Ms::Bracket*>& bl,
+                               Measure* measure)
 {
     int nstaves = _staves.size();
     int firstStaff = staffIdx;
@@ -628,7 +630,7 @@ Bracket* System::createBracket(Ms::BracketItem* bi, int column, int staffIdx, QL
             }
         }
         if (b == 0) {
-            b = Factory::createBracket(score()->dummy());
+            b = Factory::createBracket(ctx.score()->dummy());
             b->setBracketItem(bi);
             b->setGenerated(true);
             b->setTrack(track);
@@ -703,7 +705,7 @@ int System::firstVisibleStaff() const
 //    adjusts staff distance
 //---------------------------------------------------------
 
-void System::layout2()
+void System::layout2(const LayoutContext& ctx)
 {
     Box* vb = vbox();
     if (vb) {
@@ -845,7 +847,7 @@ void System::layout2()
 
     Fraction stick = measures().front()->tick();
     Fraction etick = measures().back()->endTick();
-    auto spanners = score()->spannerMap().findOverlapping(stick.ticks(), etick.ticks());
+    auto spanners = ctx.score()->spannerMap().findOverlapping(stick.ticks(), etick.ticks());
 
     std::vector<Spanner*> spanner;
     for (auto interval : spanners) {
@@ -885,7 +887,7 @@ void System::restoreLayout2()
 //   setInstrumentNames
 //---------------------------------------------------------
 
-void System::setInstrumentNames(bool longName, Fraction tick)
+void System::setInstrumentNames(const LayoutContext& ctx, bool longName, Fraction tick)
 {
     //
     // remark: add/remove instrument names is not undo/redoable
@@ -895,10 +897,10 @@ void System::setInstrumentNames(bool longName, Fraction tick)
         return;
     }
     if (!score()->showInstrumentNames()
-        || (score()->styleB(Sid::hideInstrumentNameIfOneInstrument) && score()->parts().size() == 1)) {
+        || (style()->styleB(Sid::hideInstrumentNameIfOneInstrument) && score()->parts().size() == 1)) {
         for (SysStaff* staff : qAsConst(_staves)) {
             foreach (InstrumentName* t, staff->instrumentNames) {
-                score()->removeElement(t);
+                ctx.score()->removeElement(t);
             }
         }
         return;
@@ -909,7 +911,7 @@ void System::setInstrumentNames(bool longName, Fraction tick)
         Staff* s = score()->staff(staffIdx);
         if (!s->isTop() || !s->show()) {
             for (InstrumentName* t : qAsConst(staff->instrumentNames)) {
-                score()->removeElement(t);
+                ctx.score()->removeElement(t);
             }
             ++staffIdx;
             continue;
@@ -929,13 +931,13 @@ void System::setInstrumentNames(bool longName, Fraction tick)
                 iname->setTrack(staffIdx * VOICES);
                 iname->setInstrumentNameType(longName ? InstrumentNameType::LONG : InstrumentNameType::SHORT);
                 iname->setLayoutPos(sn.pos());
-                score()->addElement(iname);
+                ctx.score()->addElement(iname);
             }
             iname->setXmlText(sn.name());
             ++idx;
         }
         for (; idx < staff->instrumentNames.size(); ++idx) {
-            score()->removeElement(staff->instrumentNames[idx]);
+            ctx.score()->removeElement(staff->instrumentNames[idx]);
         }
         ++staffIdx;
     }
@@ -1032,9 +1034,8 @@ void System::add(EngravingItem* el)
     }
 // qDebug("%p System::add: %p %s", this, el, el->name());
 
-    if (el->parent() != this) {
-        el->setParent(this);
-    }
+    el->setParent(this);
+
     switch (el->type()) {
     case ElementType::INSTRUMENT_NAME:
 // qDebug("  staffIdx %d, staves %d", el->staffIdx(), _staves.size());

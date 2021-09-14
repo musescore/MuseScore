@@ -62,7 +62,7 @@ EngravingObject* LinkedObjects::mainElement()
     if (isEmpty()) {
         return nullptr;
     }
-    MasterScore* ms = at(0)->masterScore();
+    MasterScore* ms = at(0)->score()->masterScore();
     const bool elements = at(0)->isEngravingItem();
     const bool staves = at(0)->isStaff();
     return *std::min_element(begin(), end(), [ms, elements, staves](EngravingObject* s1, EngravingObject* s2) {

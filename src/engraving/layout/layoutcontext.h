@@ -33,13 +33,13 @@ class MeasureBase;
 }
 
 namespace mu::engraving {
-class LayoutStateContext
+class LayoutContext
 {
 public:
-    LayoutStateContext(Ms::Score* s);
-    LayoutStateContext(const LayoutStateContext&) = delete;
-    LayoutStateContext& operator=(const LayoutStateContext&) = delete;
-    ~LayoutStateContext();
+    LayoutContext(Ms::Score* s);
+    LayoutContext(const LayoutContext&) = delete;
+    LayoutContext& operator=(const LayoutContext&) = delete;
+    ~LayoutContext();
 
     Ms::Score* score() const { return m_score; }
 

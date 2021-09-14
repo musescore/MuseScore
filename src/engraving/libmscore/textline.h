@@ -38,7 +38,7 @@ class TextLineSegment final : public TextLineBaseSegment
     Sid getPropertyStyle(Pid) const override;
 
 public:
-    TextLineSegment(Spanner* sp, Score* s, bool system=false);
+    TextLineSegment(Spanner* sp, EngravingItem* parent, bool system=false);
 
     TextLineSegment* clone() const override { return new TextLineSegment(*this); }
 

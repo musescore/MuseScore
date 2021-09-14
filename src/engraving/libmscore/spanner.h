@@ -53,8 +53,8 @@ protected:
     mu::PointF _p2;
     mu::PointF _offset2;
 
-    SpannerSegment(const ElementType& type, Spanner*, Score*, ElementFlags f = ElementFlag::ON_STAFF | ElementFlag::MOVABLE);
-    SpannerSegment(const ElementType& type, Score* s, ElementFlags f = ElementFlag::ON_STAFF | ElementFlag::MOVABLE);
+    SpannerSegment(const ElementType& type, Spanner*, EngravingItem* parent, ElementFlags f = ElementFlag::ON_STAFF | ElementFlag::MOVABLE);
+    SpannerSegment(const ElementType& type, EngravingItem* parent, ElementFlags f = ElementFlag::ON_STAFF | ElementFlag::MOVABLE);
     SpannerSegment(const SpannerSegment&);
 
 public:

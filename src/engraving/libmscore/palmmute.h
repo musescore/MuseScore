@@ -37,8 +37,8 @@ class PalmMuteSegment final : public TextLineBaseSegment
     Sid getPropertyStyle(Pid) const override;
 
 public:
-    PalmMuteSegment(Spanner* sp, Score* s)
-        : TextLineBaseSegment(ElementType::PALM_MUTE_SEGMENT, sp, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF) { }
+    PalmMuteSegment(Spanner* sp, EngravingItem* parent)
+        : TextLineBaseSegment(ElementType::PALM_MUTE_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF) { }
 
     PalmMuteSegment* clone() const override { return new PalmMuteSegment(*this); }
 

@@ -124,7 +124,11 @@ void Excerpt::setTracks(const QMultiMap<int, int>& tracks)
     _tracks = tracks;
 
     for (Staff* staff : partScore()->staves()) {
-        staff->updateVisibilityVoices();
+        Staff* masterStaff = _oscore->staffById(staff->id());
+        if (!masterStaff) {
+            continue;
+        }
+        staff->updateVisibilityVoices(masterStaff);
     }
 }
 

@@ -283,7 +283,7 @@ SpannerSegment* LyricsLine::layoutSystem(System* system)
 
 LineSegment* LyricsLine::createLineSegment()
 {
-    LyricsLineSegment* seg = new LyricsLineSegment(this, score());
+    LyricsLineSegment* seg = new LyricsLineSegment(this, this);
     seg->setTrack(track());
     seg->setColor(color());
     return seg;
@@ -334,8 +334,8 @@ bool LyricsLine::setProperty(Pid propertyId, const QVariant& v)
 //   LyricsLineSegment
 //=========================================================
 
-LyricsLineSegment::LyricsLineSegment(Spanner* sp, Score* s)
-    : LineSegment(ElementType::LYRICSLINE_SEGMENT, sp, s, ElementFlag::ON_STAFF | ElementFlag::NOT_SELECTABLE)
+LyricsLineSegment::LyricsLineSegment(Spanner* sp, EngravingItem* parent)
+    : LineSegment(ElementType::LYRICSLINE_SEGMENT, sp, parent, ElementFlag::ON_STAFF | ElementFlag::NOT_SELECTABLE)
 {
     setGenerated(true);
 }

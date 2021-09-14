@@ -137,7 +137,7 @@ static const ElementStyle letRingSegmentStyle {
 
 LineSegment* LetRing::createLineSegment()
 {
-    LetRingSegment* lr = new LetRingSegment(this, score());
+    LetRingSegment* lr = new LetRingSegment(this, this);
     lr->setTrack(track());
     lr->initElementStyle(&letRingSegmentStyle);
     return lr;

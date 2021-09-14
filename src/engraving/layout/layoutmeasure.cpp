@@ -390,7 +390,7 @@ void LayoutMeasure::createMMRest(const LayoutOptions& options, Score* score, Mea
 //    multi measure rest
 //---------------------------------------------------------
 
-static bool validMMRestMeasure(const LayoutStateContext& ctx, Measure* m)
+static bool validMMRestMeasure(const LayoutContext& ctx, Measure* m)
 {
     if (m->irregular()) {
         return false;
@@ -442,7 +442,7 @@ static bool validMMRestMeasure(const LayoutStateContext& ctx, Measure* m)
 //    multi measure rest
 //---------------------------------------------------------
 
-static bool breakMultiMeasureRest(const LayoutStateContext& ctx, Measure* m)
+static bool breakMultiMeasureRest(const LayoutContext& ctx, Measure* m)
 {
     if (m->breakMultiMeasureRest()) {
         return true;
@@ -575,7 +575,7 @@ static void layoutDrumsetChord(Chord* c, const Drumset* drumset, const StaffType
     }
 }
 
-void LayoutMeasure::getNextMeasure(const LayoutOptions& options, LayoutStateContext& ctx)
+void LayoutMeasure::getNextMeasure(const LayoutOptions& options, LayoutContext& ctx)
 {
     Ms::Score* score = ctx.score();
     ctx.prevMeasure = ctx.curMeasure;
@@ -832,7 +832,7 @@ void LayoutMeasure::getNextMeasure(const LayoutOptions& options, LayoutStateCont
 //   adjustMeasureNo
 //---------------------------------------------------------
 
-int LayoutMeasure::adjustMeasureNo(LayoutStateContext& lc, MeasureBase* m)
+int LayoutMeasure::adjustMeasureNo(LayoutContext& lc, MeasureBase* m)
 {
     lc.measureNo += m->noOffset();
     m->setNo(lc.measureNo);
