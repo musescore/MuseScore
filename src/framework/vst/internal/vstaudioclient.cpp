@@ -92,6 +92,21 @@ void VstAudioClient::process(float* output, unsigned int samples)
     fillOutputBuffer(samples, output);
 }
 
+void VstAudioClient::flush()
+{
+    for (int i = 0; i < m_processData.numSamples; ++i) {
+        for (audio::audioch_t s = 0; s < m_audioChannelsCount; ++s) {
+            for (int inputsNumber = 0; inputsNumber < m_processData.numInputs; ++inputsNumber) {
+                m_processData.inputs[inputsNumber].channelBuffers32[s][i] = 0.f;
+            }
+
+            for (int outputsNumber = 0; outputsNumber < m_processData.numOutputs; ++outputsNumber) {
+                m_processData.outputs[outputsNumber].channelBuffers32[s][i] = 0.f;
+            }
+        }
+    }
+}
+
 void VstAudioClient::setBlockSize(unsigned int samples)
 {
     if (m_samplesInfo.samplesPerBlock == samples) {
