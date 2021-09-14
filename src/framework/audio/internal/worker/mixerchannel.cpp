@@ -138,29 +138,31 @@ async::Channel<unsigned int> MixerChannel::audioChannelsCountChanged() const
     return m_audioSource->audioChannelsCountChanged();
 }
 
-void MixerChannel::process(float* buffer, unsigned int sampleCount)
+samples_t MixerChannel::process(float* buffer, samples_t samplesPerChannel)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
     IF_ASSERT_FAILED(m_audioSource) {
-        return;
+        return 0;
     }
 
-    if (m_params.muted) {
-        std::fill(buffer, buffer + sampleCount * audioChannelsCount(), 0.f);
-        return;
-    }
+    samples_t processedSamplesCount = m_audioSource->process(buffer, samplesPerChannel);
 
-    m_audioSource->process(buffer, sampleCount);
+    if (processedSamplesCount == 0 || m_params.muted) {
+        std::fill(buffer, buffer + samplesPerChannel * audioChannelsCount(), 0.f);
+        return processedSamplesCount;
+    }
 
     for (IFxProcessorPtr fx : m_fxProcessors) {
         if (!fx->active()) {
             continue;
         }
-        fx->process(buffer, sampleCount);
+        fx->process(buffer, samplesPerChannel);
     }
 
-    completeOutput(buffer, sampleCount);
+    completeOutput(buffer, samplesPerChannel);
+
+    return processedSamplesCount;
 }
 
 void MixerChannel::completeOutput(float* buffer, unsigned int samplesCount) const

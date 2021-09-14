@@ -236,17 +236,19 @@ async::Channel<unsigned int> MidiAudioSource::audioChannelsCountChanged() const
     return m_synth->audioChannelsCountChanged();
 }
 
-void MidiAudioSource::process(float* buffer, unsigned int sampleCount)
+samples_t MidiAudioSource::process(float* buffer, samples_t samplesPerChannel)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
     if (!m_synth) {
-        return;
+        return 0;
     }
 
-    m_synth->process(buffer, sampleCount);
+    samples_t processedSamplesCount = m_synth->process(buffer, samplesPerChannel);
 
-    handleNextMsecs(sampleCount * 1000 / m_sampleRate);
+    handleNextMsecs(samplesPerChannel * 1000 / m_sampleRate);
+
+    return processedSamplesCount;
 }
 
 bool MidiAudioSource::sendEvents(const std::vector<Event>& events)
