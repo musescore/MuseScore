@@ -83,6 +83,12 @@ QStringList ChordSymbolEditorModel::majorSeventhList() const
 {
     QStringList qualitySymbolsList;
     for (auto qS: m_majorSeventhList) {
+        if (chordSymbolStyles.contains(m_styles.at(m_currentStyleIndex).styleName)) {
+            if (qS.qualMag != -1.0 && qS.qualMag != 1.0) {
+                qualitySymbolsList << "s" + qS.qualitySymbol;
+                continue;
+            }
+        }
         qualitySymbolsList << qS.qualitySymbol;
     }
     return qualitySymbolsList;
@@ -92,6 +98,12 @@ QStringList ChordSymbolEditorModel::halfDiminishedList() const
 {
     QStringList qualitySymbolsList;
     for (auto qS: m_halfDiminishedList) {
+        if (chordSymbolStyles.contains(m_styles.at(m_currentStyleIndex).styleName)) {
+            if (qS.qualMag != -1.0 && qS.qualMag != 1.0) {
+                qualitySymbolsList << "s" + qS.qualitySymbol;
+                continue;
+            }
+        }
         qualitySymbolsList << qS.qualitySymbol;
     }
     return qualitySymbolsList;
@@ -101,6 +113,12 @@ QStringList ChordSymbolEditorModel::minorList() const
 {
     QStringList qualitySymbolsList;
     for (auto qS: m_minorList) {
+        if (chordSymbolStyles.contains(m_styles.at(m_currentStyleIndex).styleName)) {
+            if (qS.qualMag != -1.0 && qS.qualMag != 1.0) {
+                qualitySymbolsList << "s" + qS.qualitySymbol;
+                continue;
+            }
+        }
         qualitySymbolsList << qS.qualitySymbol;
     }
     return qualitySymbolsList;
@@ -110,6 +128,12 @@ QStringList ChordSymbolEditorModel::augmentedList() const
 {
     QStringList qualitySymbolsList;
     for (auto qS: m_augmentedList) {
+        if (chordSymbolStyles.contains(m_styles.at(m_currentStyleIndex).styleName)) {
+            if (qS.qualMag != -1.0 && qS.qualMag != 1.0) {
+                qualitySymbolsList << "s" + qS.qualitySymbol;
+                continue;
+            }
+        }
         qualitySymbolsList << qS.qualitySymbol;
     }
     return qualitySymbolsList;
@@ -119,6 +143,12 @@ QStringList ChordSymbolEditorModel::diminishedList() const
 {
     QStringList qualitySymbolsList;
     for (auto qS: m_diminishedList) {
+        if (chordSymbolStyles.contains(m_styles.at(m_currentStyleIndex).styleName)) {
+            if (qS.qualMag != -1.0 && qS.qualMag != 1.0) {
+                qualitySymbolsList << "s" + qS.qualitySymbol;
+                continue;
+            }
+        }
         qualitySymbolsList << qS.qualitySymbol;
     }
     return qualitySymbolsList;
@@ -128,6 +158,12 @@ QStringList ChordSymbolEditorModel::sixNineList() const
 {
     QStringList qualitySymbolsList;
     for (auto qS: m_sixNineList) {
+        if (chordSymbolStyles.contains(m_styles.at(m_currentStyleIndex).styleName)) {
+            if (qS.qualMag != -1.0 && qS.qualMag != 1.0) {
+                qualitySymbolsList << "s" + qS.qualitySymbol;
+                continue;
+            }
+        }
         qualitySymbolsList << qS.qualitySymbol;
     }
     return qualitySymbolsList;
@@ -137,6 +173,12 @@ QStringList ChordSymbolEditorModel::omitList() const
 {
     QStringList qualitySymbolsList;
     for (auto qS: m_omitList) {
+        if (chordSymbolStyles.contains(m_styles.at(m_currentStyleIndex).styleName)) {
+            if (qS.qualMag != -1.0 && qS.qualMag != 1.0) {
+                qualitySymbolsList << "s" + qS.qualitySymbol;
+                continue;
+            }
+        }
         qualitySymbolsList << qS.qualitySymbol;
     }
     return qualitySymbolsList;
@@ -146,6 +188,12 @@ QStringList ChordSymbolEditorModel::suspensionList() const
 {
     QStringList qualitySymbolsList;
     for (auto qS: m_suspensionList) {
+        if (chordSymbolStyles.contains(m_styles.at(m_currentStyleIndex).styleName)) {
+            if (qS.qualMag != -1.0 && qS.qualMag != 1.0) {
+                qualitySymbolsList << "s" + qS.qualitySymbol;
+                continue;
+            }
+        }
         qualitySymbolsList << qS.qualitySymbol;
     }
     return qualitySymbolsList;
@@ -155,6 +203,12 @@ QStringList ChordSymbolEditorModel::bassNoteList() const
 {
     QStringList qualitySymbolsList;
     for (auto qS: m_bassNoteList) {
+        if (chordSymbolStyles.contains(m_styles.at(m_currentStyleIndex).styleName)) {
+            if (qS.qualMag != -1.0 && qS.qualMag != 1.0) {
+                qualitySymbolsList << "s" + qS.qualitySymbol;
+                continue;
+            }
+        }
         qualitySymbolsList << qS.qualitySymbol;
     }
     return qualitySymbolsList;
@@ -1234,4 +1288,88 @@ void ChordSymbolEditorModel::updateSelectionHistory(QString currentStyle)
 
     m_selectionHistory.insert(currentStyle, propMap);
     stringifyAndSaveSelectionHistory();
+}
+
+// Temporary implementation
+int ChordSymbolEditorModel::getIconFromText(QString qualSym)
+{
+    QHash<QString, QHash<QString, mu::ui::IconCode::Code> > stringToIconcode = {
+        { "Pop/Contemporary", {
+              { "maj 7", mu::ui::IconCode::Code::POP_MAJ7_MAJ7 },
+              { "ma 7", mu::ui::IconCode::Code::POP_MAJ7_MA7 },
+              { "m", mu::ui::IconCode::Code::POP_MINOR_M },
+              { "min", mu::ui::IconCode::Code::POP_MINOR_MIN },
+              { "aug", mu::ui::IconCode::Code::POP_AUG_AUG },
+              { "+", mu::ui::IconCode::Code::POP_AUG_PLUS },
+              { "+ 5", mu::ui::IconCode::Code::POP_AUG_PLUS5 },
+              { "dim", mu::ui::IconCode::Code::POP_DIM_DIM },
+              { "circle", mu::ui::IconCode::Code::POP_DIM_DEGREE },
+              { "omit", mu::ui::IconCode::Code::POP_OMIT_OMIT },
+              { "no", mu::ui::IconCode::Code::POP_OMIT_NO },
+              { "Stacked", mu::ui::IconCode::Code::POP_STACKED_YES },
+              { "Non-Stacked", mu::ui::IconCode::Code::POP_STACKED_NO }
+          } },
+        { "Jazz", {
+              { "MA 7", mu::ui::IconCode::Code::JAZZ_MAJ7_SCMA7 },
+              { "ma 7", mu::ui::IconCode::Code::JAZZ_MAJ7_MA7 },
+              { "maj 7", mu::ui::IconCode::Code::JAZZ_MAJ7_MAJ7 },
+              { "MI", mu::ui::IconCode::Code::JAZZ_MINOR_SCMI },
+              { "Mi", mu::ui::IconCode::Code::JAZZ_MINOR_MI },
+              { "m", mu::ui::IconCode::Code::JAZZ_MINOR_M },
+              { "min", mu::ui::IconCode::Code::JAZZ_MINOR_MIN },
+              { "-", mu::ui::IconCode::Code::JAZZ_MINOR_MINUS },
+              { "s+", mu::ui::IconCode::Code::JAZZ_AUG_SPLUS },
+              { "aug", mu::ui::IconCode::Code::JAZZ_AUG_SAUG },
+              { "Aug", mu::ui::IconCode::Code::JAZZ_AUG_AUG },
+              { "dim", mu::ui::IconCode::Code::JAZZ_DIM_DIM },
+              { "degree", mu::ui::IconCode::Code::JAZZ_DIM_DEGREE },
+              { "6/9", mu::ui::IconCode::Code::JAZZ_69_69SLASH },
+              { "69", mu::ui::IconCode::Code::JAZZ_69_69STACKED },
+              { "omit", mu::ui::IconCode::Code::JAZZ_OMIT_OMIT },
+              { "no", mu::ui::IconCode::Code::JAZZ_OMIT_NO },
+              { "baseline", mu::ui::IconCode::Code::JAZZ_SUS_BASELINE },
+              { "raised", mu::ui::IconCode::Code::JAZZ_SUS_RAISED },
+              { "Stacked", mu::ui::IconCode::Code::JAZZ_STACKED_YES },
+              { "Non-Stacked", mu::ui::IconCode::Code::JAZZ_STACKED_NO }
+          } },
+        { "Symbols", {
+              { "/lowered", mu::ui::IconCode::Code::SYMBOLS_BASS_TILTED },
+              { "/stacked", mu::ui::IconCode::Code::SYMBOLS_BASS_STACKED },
+              { "/center", mu::ui::IconCode::Code::SYMBOLS_BASS_BASELINE },
+              { "triangle", mu::ui::IconCode::Code::SYMBOLS_MAJ7_TRIANGLE },
+              { "striangle", mu::ui::IconCode::Code::SYMBOLS_MAJ7_STRIANGLE },
+              { "striangle 7", mu::ui::IconCode::Code::SYMBOLS_MAJ7_STRIANGLE7 },
+              { "triangle 7", mu::ui::IconCode::Code::SYMBOLS_MAJ7_TRIANGLE7 },
+              { "+", mu::ui::IconCode::Code::SYMBOLS_AUG_PLUS },
+              { "+ 5", mu::ui::IconCode::Code::SYMBOLS_AUG_PLUS5 },
+              { "soslash 7", mu::ui::IconCode::Code::SYMBOLS_HDIM_SOSLASH7 },
+              { "oslash 7", mu::ui::IconCode::Code::SYMBOLS_HDIM_OSLASH7 },
+              { "scircle", mu::ui::IconCode::Code::SYMBOLS_DIM_SCIRCLE7 },
+              { "circle", mu::ui::IconCode::Code::SYMBOLS_DIM_CIRCLE7 },
+              { "6/9", mu::ui::IconCode::Code::SYMBOLS_69_69SLASH },
+              { "69", mu::ui::IconCode::Code::SYMBOLS_69_69STACKED },
+              { "6-9", mu::ui::IconCode::Code::SYMBOLS_69_69FRACTION },
+              { "omit", mu::ui::IconCode::Code::SYMBOLS_OMIT_OMIT },
+              { "no", mu::ui::IconCode::Code::SYMBOLS_OMIT_NO },
+              { "Stacked", mu::ui::IconCode::Code::SYMBOLS_STACKED_YES },
+              { "Non-Stacked", mu::ui::IconCode::Code::SYMBOLS_STACKED_NO }
+          } }
+    };
+    mu::ui::IconCode::Code iconCode = mu::ui::IconCode::Code::NONE;
+    QString currentStyle = m_styles.at(m_currentStyleIndex).styleName;
+    if (stringToIconcode.find(currentStyle) != stringToIconcode.end()) {
+        iconCode = stringToIconcode[currentStyle][qualSym];
+    } else {
+        QString descFileWithPresets
+            = globalContext()->currentNotation()->style()->styleValue(Ms::Sid::chordDescriptionFileWithPresets).toString();
+        for (auto style: m_styles) {
+            if (style.fileName == descFileWithPresets) {
+                if (stringToIconcode.find(style.styleName) != stringToIconcode.end()) {
+                    iconCode = stringToIconcode[currentStyle][qualSym];
+                }
+            }
+        }
+    }
+
+    return static_cast<int>(iconCode);
 }

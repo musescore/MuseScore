@@ -29,6 +29,7 @@
 #include "context/iglobalcontext.h"
 #include "engraving/style/style.h"
 #include "notation/internal/chordsymbolstylemanager.h"
+#include "framework/ui/view/iconcodes.h"
 
 namespace mu::notation {
 class ChordSymbolEditorModel : public QAbstractListModel
@@ -172,6 +173,7 @@ public:
     Q_INVOKABLE void setQualitySymbol(QString quality, int index);
     Q_INVOKABLE void setProperty(QString property, qreal val);
     Q_INVOKABLE void resetProperties();
+    Q_INVOKABLE int getIconFromText(QString qualSym);
 
 signals:
     void chordSpellingListChanged();
@@ -305,6 +307,8 @@ private:
         { "Solfege", Ms::Sid::useSolfeggioNoteNames },
         { "French", Ms::Sid::useFrenchNoteNames }
     };
+
+    QStringList chordSymbolStyles = { "Pop/Contemporary", "Jazz", "Symbols", "No preset style" };
 };
 }
 #endif // CHORDSYMBOLEDITORMODEL_H
