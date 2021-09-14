@@ -28,8 +28,7 @@ double AutomationVelocityAbs::value(Ms::Staff* staff, NoteEventBlock& block)
     Ms::Note* note = block.note;
 
     //Change velocity to equivalent in new metric
-    switch (Ms::Note::ValueType(note->veloType()))
-    {
+    switch (Ms::Note::ValueType(note->veloType())) {
     case Ms::Note::ValueType::USER_VAL:
         return note->veloOffset();
     default:
@@ -58,7 +57,7 @@ void AutomationVelocityAbs::setValue(Ms::Staff* staff, NoteEventBlock& block, do
 
         score->undo(new Ms::ChangeVelocity(note, Ms::Note::ValueType::OFFSET_VAL, newVelocity));
         break;
-        }
+    }
     }
 
     score->endCmd();

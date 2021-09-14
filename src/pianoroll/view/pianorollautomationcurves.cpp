@@ -129,7 +129,6 @@ void PianorollAutomationCurves::setPropertyName(QString value)
     emit propertyNameChanged();
 }
 
-
 void PianorollAutomationCurves::setWholeNoteWidth(double value)
 {
     if (value == m_wholeNoteWidth) {
@@ -211,7 +210,6 @@ double PianorollAutomationCurves::pixelXToWholeNote(int pixX) const
 {
     return (pixX + m_centerX * m_displayObjectWidth - width() / 2) / m_wholeNoteWidth;
 }
-
 
 void PianorollAutomationCurves::mousePressEvent(QMouseEvent* e)
 {

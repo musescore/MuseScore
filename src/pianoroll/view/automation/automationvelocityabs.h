@@ -23,7 +23,6 @@
 #ifndef MU_PIANOROLL_AUTOMATIONVELOCITYABS_H
 #define MU_PIANOROLL_AUTOMATIONVELOCITYABS_H
 
-
 #include "../ipianorollautomationmodel.h"
 
 namespace mu::pianoroll {

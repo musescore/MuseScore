@@ -62,7 +62,6 @@ public:
     bool isVertexAt(Fraction tick);
 
     int vertexIndexForTick(Fraction tick);
-
 };
 }
 
