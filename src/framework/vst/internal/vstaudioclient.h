@@ -39,6 +39,7 @@ public:
     bool handleEvent(const midi::Event& e);
 
     void process(float* output, unsigned int samples);
+    void flush();
 
     void setBlockSize(unsigned int samples);
     void setSampleRate(unsigned int sampleRate);
