@@ -72,7 +72,7 @@ public:
     void setSampleRate(unsigned int sampleRate) override;
     unsigned int audioChannelsCount() const override;
     async::Channel<unsigned int> audioChannelsCountChanged() const override;
-    void process(float* buffer, unsigned int samplelPerChannel) override;
+    audio::samples_t process(float* buffer, audio::samples_t samplelPerChannel) override;
 
 private:
     VstPluginPtr m_pluginPtr = nullptr;

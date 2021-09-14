@@ -154,13 +154,13 @@ async::Channel<unsigned int> VstSynthesiser::audioChannelsCountChanged() const
     return m_streamsCountChanged;
 }
 
-void VstSynthesiser::process(float* buffer, unsigned int samplelPerChannel)
+audio::samples_t VstSynthesiser::process(float* buffer, audio::samples_t samplelPerChannel)
 {
     if (!buffer) {
-        return;
+        return 0;
     }
 
     m_vstAudioClient->setBlockSize(samplelPerChannel);
 
-    m_vstAudioClient->process(buffer, samplelPerChannel);
+    return m_vstAudioClient->process(buffer, samplelPerChannel);
 }

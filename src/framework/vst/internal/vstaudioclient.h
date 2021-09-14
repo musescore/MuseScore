@@ -38,7 +38,7 @@ public:
 
     bool handleEvent(const midi::Event& e);
 
-    void process(float* output, unsigned int samples);
+    audio::samples_t process(float* output, audio::samples_t samplesPerChannel);
     void flush();
 
     void setBlockSize(unsigned int samples);

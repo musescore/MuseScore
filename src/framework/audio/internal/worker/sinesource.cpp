@@ -33,10 +33,10 @@ unsigned int SineSource::audioChannelsCount() const
     return 1;
 }
 
-void SineSource::process(float* buffer, unsigned int sampleCount)
+samples_t SineSource::process(float* buffer, samples_t samplesPerChannel)
 {
     auto streams = audioChannelsCount();
-    for (unsigned int i = 0; i < sampleCount; ++i) {
+    for (unsigned int i = 0; i < samplesPerChannel; ++i) {
         m_phase += m_frequency / m_sampleRate * 2 * M_PI;
         if (m_phase > 2 * M_PI) {
             m_phase -= 2 * float(M_PI);
@@ -46,4 +46,6 @@ void SineSource::process(float* buffer, unsigned int sampleCount)
             buffer[streams * i + s] = 0.1 * std::sin(m_phase + s * 2 * M_PI / streams);
         }
     }
+
+    return samplesPerChannel;
 }
