@@ -53,7 +53,7 @@ class PianorollAutomationNote : public QQuickPaintedItem, public async::Asyncabl
 
 public:
     enum class AutomationType {
-        VELOCITY, EXPRESSION, PAN
+        DURATION, DURATION_MULT, VELOCITY, VELOCITY_ABS, POSITION, EXPRESSION, PAN
     };
     Q_ENUM(AutomationType)
 

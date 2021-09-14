@@ -26,6 +26,10 @@
 
 #include "audio/iplayer.h"
 #include "automation/automationvelocity.h"
+#include "automation/automationvelocityabs.h"
+#include "automation/automationposition.h"
+#include "automation/automationduration.h"
+#include "automation/automationdurationmult.h"
 #include "ipianorollautomationmodel.h"
 
 #include "pianorollview.h"
@@ -33,7 +37,11 @@
 using namespace mu::pianoroll;
 
 std::vector<IPianorollAutomationModel*> PianorollAutomationNote::m_automationModels = {
-    new AutomationVelocity()
+    new AutomationVelocity(),
+    new AutomationVelocityAbs(),
+    new AutomationPosition(),
+    new AutomationDuration(),
+    new AutomationDurationMult(),
 };
 
 PianorollAutomationNote::PianorollAutomationNote(QQuickItem* parent)

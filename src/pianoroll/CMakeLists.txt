@@ -50,8 +50,17 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/pianorollautomationcurves.h
     ${CMAKE_CURRENT_LIST_DIR}/view/pianorollautomationcurves.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/ipianorollautomationmodel.h
+
     ${CMAKE_CURRENT_LIST_DIR}/view/automation/automationvelocity.h
     ${CMAKE_CURRENT_LIST_DIR}/view/automation/automationvelocity.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/automation/automationvelocityabs.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/automation/automationvelocityabs.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/automation/automationposition.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/automation/automationposition.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/automation/automationduration.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/automation/automationduration.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/automation/automationdurationmult.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/automation/automationdurationmult.cpp
     )
 
 set(MODULE_LINK
