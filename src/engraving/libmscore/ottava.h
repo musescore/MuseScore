@@ -82,8 +82,8 @@ class OttavaSegment final : public TextLineBaseSegment
     Sid getPropertyStyle(Pid) const override;
 
 public:
-    OttavaSegment(Spanner* sp, Score* s)
-        : TextLineBaseSegment(ElementType::OTTAVA_SEGMENT, sp, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF) { }
+    OttavaSegment(Spanner* sp, EngravingItem* parent)
+        : TextLineBaseSegment(ElementType::OTTAVA_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF) { }
 
     OttavaSegment* clone() const override { return new OttavaSegment(*this); }
     Ottava* ottava() const { return (Ottava*)spanner(); }

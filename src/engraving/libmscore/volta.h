@@ -41,7 +41,7 @@ extern LineSegment* voltaDebug;
 class VoltaSegment final : public TextLineBaseSegment
 {
 public:
-    VoltaSegment(Spanner*, Score*);
+    VoltaSegment(Spanner*, EngravingItem* parent);
 
     VoltaSegment* clone() const override { return new VoltaSegment(*this); }
 

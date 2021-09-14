@@ -97,12 +97,14 @@ protected:
     mu::PainterPath shapePath;
     Shape _shape;
 
+    SlurTieSegment(const ElementType& type, EngravingItem*);
+    SlurTieSegment(const SlurTieSegment&);
+
     virtual void changeAnchor(EditData&, EngravingItem*) = 0;
     QVector<mu::LineF> gripAnchorLines(Grip grip) const override;
 
 public:
-    SlurTieSegment(const ElementType& type, Score*);
-    SlurTieSegment(const SlurTieSegment&);
+
     virtual void spatiumChanged(qreal, qreal) override;
     SlurTie* slurTie() const { return (SlurTie*)spanner(); }
 

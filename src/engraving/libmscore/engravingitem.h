@@ -442,8 +442,10 @@ public:
     mu::draw::Color curColor(bool isVisible) const;
     mu::draw::Color curColor(bool isVisible, mu::draw::Color normalColor) const;
     virtual void setColor(const mu::draw::Color& c) { _color = c; }
+
     void undoSetColor(const mu::draw::Color& c);
     void undoSetVisible(bool v);
+    void undoAddElement(EngravingItem* element);
 
     static ElementType readType(XmlReader& node, mu::PointF*, Fraction*);
     static EngravingItem* readMimeData(Score* score, const QByteArray& data, mu::PointF*, Fraction*);

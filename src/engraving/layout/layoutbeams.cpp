@@ -119,7 +119,7 @@ void LayoutBeams::restoreBeams(Measure* m)
 //   breakCrossMeasureBeams
 //---------------------------------------------------------
 
-void LayoutBeams::breakCrossMeasureBeams(const LayoutStateContext& ctx, Measure* measure)
+void LayoutBeams::breakCrossMeasureBeams(const LayoutContext& ctx, Measure* measure)
 {
     MeasureBase* mbNext = measure->next();
     if (!mbNext || !mbNext->isMeasure()) {
@@ -261,7 +261,7 @@ void LayoutBeams::beamGraceNotes(Score* score, Chord* mainNote, bool after)
     }
 }
 
-void LayoutBeams::createBeams(Score* score, LayoutStateContext& lc, Measure* measure)
+void LayoutBeams::createBeams(Score* score, LayoutContext& lc, Measure* measure)
 {
     bool crossMeasure = score->styleB(Sid::crossMeasureValues);
 

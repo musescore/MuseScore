@@ -42,8 +42,8 @@ enum class GlissandoType;
 class GlissandoSegment final : public LineSegment
 {
 public:
-    GlissandoSegment(Spanner* sp, Score* s)
-        : LineSegment(ElementType::GLISSANDO_SEGMENT, sp, s) {}
+    GlissandoSegment(Spanner* sp, EngravingItem* parent)
+        : LineSegment(ElementType::GLISSANDO_SEGMENT, sp, parent) {}
     Glissando* glissando() const { return toGlissando(spanner()); }
 
     GlissandoSegment* clone() const override { return new GlissandoSegment(*this); }

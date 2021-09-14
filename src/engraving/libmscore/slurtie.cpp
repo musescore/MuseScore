@@ -42,8 +42,8 @@ namespace Ms {
 //   SlurTieSegment
 //---------------------------------------------------------
 
-SlurTieSegment::SlurTieSegment(const ElementType& type, Score* score)
-    : SpannerSegment(type, score)
+SlurTieSegment::SlurTieSegment(const ElementType& type, EngravingItem* parent)
+    : SpannerSegment(type, parent)
 {
     setFlag(ElementFlag::ON_STAFF, true);
 }

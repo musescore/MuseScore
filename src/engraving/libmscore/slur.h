@@ -38,8 +38,8 @@ protected:
     void changeAnchor(EditData&, EngravingItem*) override;
 
 public:
-    SlurSegment(Score* s)
-        : SlurTieSegment(ElementType::SLUR_SEGMENT, s) {}
+    SlurSegment(EngravingItem* parent)
+        : SlurTieSegment(ElementType::SLUR_SEGMENT, parent) {}
     SlurSegment(const SlurSegment& ss)
         : SlurTieSegment(ss) {}
 
@@ -89,7 +89,7 @@ public:
     SlurSegment* segmentAt(int n) { return toSlurSegment(Spanner::segmentAt(n)); }
     const SlurSegment* segmentAt(int n) const { return toSlurSegment(Spanner::segmentAt(n)); }
 
-    SlurTieSegment* newSlurTieSegment() override { return new SlurSegment(score()); }
+    SlurTieSegment* newSlurTieSegment() override { return new SlurSegment(this); }
 };
 }     // namespace Ms
 #endif

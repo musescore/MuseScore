@@ -28,12 +28,12 @@
 using namespace mu::engraving;
 using namespace Ms;
 
-LayoutStateContext::LayoutStateContext(Score* score)
+LayoutContext::LayoutContext(Score* score)
     : m_score(score)
 {
 }
 
-LayoutStateContext::~LayoutStateContext()
+LayoutContext::~LayoutContext()
 {
     for (Spanner* s : processedSpanners) {
         s->layoutSystemsDone();

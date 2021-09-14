@@ -63,7 +63,7 @@ class HairpinSegment final : public TextLineBaseSegment
     EngravingItem* drop(EditData&) override;
 
 public:
-    HairpinSegment(Spanner* sp, Score* s);
+    HairpinSegment(Spanner* sp, EngravingItem* parent);
 
     HairpinSegment* clone() const override { return new HairpinSegment(*this); }
 

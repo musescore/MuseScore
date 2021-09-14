@@ -305,7 +305,7 @@ public:
     bool isVoiceVisible(int voice) const;
     void setVoiceVisible(int voice, bool visible);
     bool canDisableVoice() const;
-    void updateVisibilityVoices();
+    void updateVisibilityVoices(Staff* masterStaff);
 
 #ifndef NDEBUG
     void dumpClefs(const char* title) const;

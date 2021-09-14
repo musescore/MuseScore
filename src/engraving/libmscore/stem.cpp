@@ -356,7 +356,7 @@ EngravingItem* Stem::drop(EditData& data)
     switch (e->type()) {
     case ElementType::TREMOLO:
         toTremolo(e)->setParent(ch);
-        score()->undoAddElement(e);
+        undoAddElement(e);
         return e;
     default:
         delete e;

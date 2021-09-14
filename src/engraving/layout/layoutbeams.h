@@ -30,16 +30,16 @@ class ChordRest;
 }
 
 namespace mu::engraving {
-class LayoutStateContext;
+class LayoutContext;
 class LayoutBeams
 {
 public:
 
     static bool isTopBeam(Ms::ChordRest* cr);
     static bool notTopBeam(Ms::ChordRest* cr);
-    static void createBeams(Ms::Score* score, LayoutStateContext& lc, Ms::Measure* measure);
+    static void createBeams(Ms::Score* score, LayoutContext& lc, Ms::Measure* measure);
     static void restoreBeams(Ms::Measure* m);
-    static void breakCrossMeasureBeams(const LayoutStateContext& ctx, Ms::Measure* measure);
+    static void breakCrossMeasureBeams(const LayoutContext& ctx, Ms::Measure* measure);
     static void respace(std::vector<Ms::ChordRest*>* elements);
 
 private:

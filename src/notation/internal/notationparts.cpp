@@ -720,8 +720,8 @@ void NotationParts::doSetStaffConfig(Staff* staff, const StaffConfig& config)
     newStaffType.setShowLedgerLines(config.showLedgerLinesPitched);
     newStaffType.setNoteHeadScheme(config.noteheadScheme);
 
-    score()->undo(new Ms::ChangeStaff(staff, config.visible, config.clefTypeList, config.userDistance, config.hideMode, config.showIfEmpty,
-                                      config.cutaway, config.hideSystemBarline, config.mergeMatchingRests));
+    score()->undo(new Ms::ChangeStaff(staff, config.visible, config.clefTypeList, config.userDistance, config.hideMode,
+                                      config.showIfEmpty, config.cutaway, config.hideSystemBarline, config.mergeMatchingRests));
 
     score()->undo(new Ms::ChangeStaffType(staff, newStaffType));
 }

@@ -41,7 +41,7 @@ NoteLine::NoteLine(const NoteLine& nl)
 
 LineSegment* NoteLine::createLineSegment()
 {
-    TextLineSegment* seg = new TextLineSegment(this, score());
+    TextLineSegment* seg = new TextLineSegment(this, this);
     seg->setTrack(track());
     return seg;
 }

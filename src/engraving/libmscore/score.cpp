@@ -473,7 +473,7 @@ bool Score::isPaletteScore() const
 
 void Score::onElementDestruction(EngravingItem* e)
 {
-    Score* score = e->score(false);
+    Score* score = e->EngravingObject::score(false);
     if (!score || Score::validScores.find(score) == Score::validScores.end()) {
         // No score or the score is already deleted
         return;

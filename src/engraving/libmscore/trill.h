@@ -43,10 +43,10 @@ class TrillSegment final : public LineSegment
 
 protected:
 public:
-    TrillSegment(Spanner* sp, Score* s)
-        : LineSegment(ElementType::TRILL_SEGMENT, sp, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF) {}
-    TrillSegment(Score* s)
-        : LineSegment(ElementType::TRILL_SEGMENT, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF) {}
+    TrillSegment(Spanner* sp, EngravingItem* parent)
+        : LineSegment(ElementType::TRILL_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF) {}
+    TrillSegment(EngravingItem* parent)
+        : LineSegment(ElementType::TRILL_SEGMENT, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF) {}
 
     Trill* trill() const { return (Trill*)spanner(); }
 

@@ -27,6 +27,7 @@
 #include "infrastructure/draw/geometry.h"
 #include "style/styledef.h"
 #include "style/textstyle.h"
+#include "style/style.h"
 
 #include "modularity/ioc.h"
 #include "diagnostics/iengravingelementsprovider.h"
@@ -201,6 +202,8 @@ public:
 
     inline ElementType type() const { return m_type; }
     inline bool isType(ElementType t) const { return t == m_type; }
+    const char* name() const;
+    virtual QString userName() const;
 
     //! NOTE Before, element tree is made to be done like this
     //! class ScoreElement
@@ -281,11 +284,13 @@ public:
     const_iterator begin() const { return const_iterator(this, 0); }
     const_iterator end() const { return const_iterator(this, treeChildCount()); }
 
+    // context
+    virtual void setScore(Score* s);
     Score* score(bool required = true) const;
     MasterScore* masterScore() const;
-    virtual void setScore(Score* s);
-    const char* name() const;
-    virtual QString userName() const;
+    bool onSameScore(const EngravingObject* other) const;
+    const MStyle* style() const;
+    QString mscoreVersion() const;
 
     virtual void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true);
 

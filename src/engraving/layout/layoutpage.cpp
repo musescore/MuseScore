@@ -55,7 +55,7 @@ using namespace Ms;
 //   getNextPage
 //---------------------------------------------------------
 
-void LayoutPage::getNextPage(const LayoutOptions& options, LayoutStateContext& lc)
+void LayoutPage::getNextPage(const LayoutOptions& options, LayoutContext& lc)
 {
     if (!lc.page || lc.curPage >= lc.score()->npages()) {
         lc.page = Factory::createPage(lc.score());
@@ -98,7 +98,7 @@ void LayoutPage::getNextPage(const LayoutOptions& options, LayoutStateContext& l
 //   collectPage
 //---------------------------------------------------------
 
-void LayoutPage::collectPage(const LayoutOptions& options, LayoutStateContext& ctx)
+void LayoutPage::collectPage(const LayoutOptions& options, LayoutContext& ctx)
 {
     const qreal slb = ctx.score()->styleP(Sid::staffLowerBorder);
     bool breakPages = ctx.score()->layoutMode() != LayoutMode::SYSTEM;
@@ -307,7 +307,7 @@ void LayoutPage::collectPage(const LayoutOptions& options, LayoutStateContext& c
 //    systems.
 //---------------------------------------------------------
 
-void LayoutPage::layoutPage(const LayoutStateContext& ctx, Page* page, qreal restHeight)
+void LayoutPage::layoutPage(const LayoutContext& ctx, Page* page, qreal restHeight)
 {
     if (restHeight < 0.0) {
         qDebug("restHeight < 0.0: %f\n", restHeight);
@@ -424,7 +424,7 @@ void LayoutPage::layoutPage(const LayoutStateContext& ctx, Page* page, qreal res
     page->systems().back()->rypos() = y;
 }
 
-void LayoutPage::checkDivider(const LayoutStateContext& ctx, bool left, System* s, qreal yOffset, bool remove)
+void LayoutPage::checkDivider(const LayoutContext& ctx, bool left, System* s, qreal yOffset, bool remove)
 {
     SystemDivider* divider = left ? s->systemDividerLeft() : s->systemDividerRight();
     if ((ctx.score()->styleB(left ? Sid::dividerLeft : Sid::dividerRight)) && !remove) {
@@ -454,7 +454,7 @@ void LayoutPage::checkDivider(const LayoutStateContext& ctx, bool left, System* 
     }
 }
 
-void LayoutPage::distributeStaves(const LayoutStateContext& ctx, Page* page)
+void LayoutPage::distributeStaves(const LayoutContext& ctx, Page* page)
 {
     Score* score = ctx.score();
     VerticalGapDataList vgdl;

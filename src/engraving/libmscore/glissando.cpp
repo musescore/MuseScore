@@ -223,7 +223,7 @@ QString Glissando::glissandoTypeName() const
 
 LineSegment* Glissando::createLineSegment()
 {
-    GlissandoSegment* seg = new GlissandoSegment(this, score());
+    GlissandoSegment* seg = new GlissandoSegment(this, this);
     seg->setTrack(track());
     seg->setColor(color());
     return seg;
