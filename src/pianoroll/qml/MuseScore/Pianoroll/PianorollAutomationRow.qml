@@ -91,15 +91,32 @@ ColumnLayout {
             }
         }
 
-        Label {
+        PianorollAutomationCurves {
             id: automationCurves
-            visible: false
             Layout.preferredWidth: m_graphWidth
             Layout.fillHeight: true
-            Text {
-                text: qsTr("text")
+
+            tuplet: m_tuplet
+            subdivision: m_subdivision
+
+            centerX: m_centerX
+
+            wholeNoteWidth: m_wholeNoteWidth
+
+            Component.onCompleted: {
+                load()
             }
         }
+
+//        Label {
+//            id: automationCurves
+//            visible: false
+//            Layout.preferredWidth: m_graphWidth
+//            Layout.fillHeight: true
+//            Text {
+//                text: qsTr("text")
+//            }
+//        }
 
         Label {
             Layout.fillHeight: true
