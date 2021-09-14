@@ -53,7 +53,7 @@ public:
     void setSampleRate(unsigned int sampleRate) override;
     unsigned int audioChannelsCount() const override;
     async::Channel<unsigned int> audioChannelsCountChanged() const override;
-    void process(float* buffer, unsigned int sampleCount) override;
+    samples_t process(float* buffer, samples_t samplesPerChannel) override;
 
     void seek(const msecs_t newPositionMsecs) override;
     void applyInputParams(const AudioInputParams& originParams, AudioInputParams& resultParams) override;

@@ -65,7 +65,7 @@ public:
     bool midiChannelPitch(midi::channel_t chan, int16_t pitch) override; // -12 - 12
 
     unsigned int audioChannelsCount() const override;
-    void process(float* buffer, unsigned int sampleCount) override;
+    samples_t process(float* buffer, samples_t samplesPerChannel) override;
     async::Channel<unsigned int> audioChannelsCountChanged() const override;
 
 private:

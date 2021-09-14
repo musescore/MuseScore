@@ -38,7 +38,7 @@ using namespace mu::midi;
 using namespace mu::audio;
 using namespace mu::audio::synth;
 
-static const double FLUID_GLOBAL_VOLUME_GAIN{ 1.8 };
+static const double FLUID_GLOBAL_VOLUME_GAIN { 1.8 };
 
 /// @note
 ///  Fluid does not support MONO, so they start counting audio channels from 1, which means "1 pair of audio channels"
@@ -389,15 +389,21 @@ unsigned int FluidSynth::audioChannelsCount() const
     return FLUID_AUDIO_CHANNELS_PAIR * 2;
 }
 
-void FluidSynth::process(float* buffer, unsigned int sampleCount)
+samples_t FluidSynth::process(float* buffer, samples_t samplesPerChannel)
 {
-    IF_ASSERT_FAILED(sampleCount > 0) {
-        return;
+    IF_ASSERT_FAILED(samplesPerChannel > 0) {
+        return 0;
     }
 
-    fluid_synth_write_float(m_fluid->synth, sampleCount,
-                            buffer, 0, audioChannelsCount(),
-                            buffer, 1, audioChannelsCount());
+    int result = fluid_synth_write_float(m_fluid->synth, samplesPerChannel,
+                                         buffer, 0, audioChannelsCount(),
+                                         buffer, 1, audioChannelsCount());
+
+    if (result != FLUID_OK) {
+        return 0;
+    }
+
+    return samplesPerChannel;
 }
 
 async::Channel<unsigned int> FluidSynth::audioChannelsCountChanged() const

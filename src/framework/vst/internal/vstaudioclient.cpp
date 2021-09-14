@@ -68,28 +68,30 @@ bool VstAudioClient::handleEvent(const mu::midi::Event& e)
     return false;
 }
 
-void VstAudioClient::process(float* output, unsigned int samples)
+audio::samples_t VstAudioClient::process(float* output, audio::samples_t samplesPerChannel)
 {
     IAudioProcessorPtr processor = pluginProcessor();
     if (!processor || !output) {
-        return;
+        return 0;
     }
 
-    m_processData.numSamples = samples;
+    m_processData.numSamples = samplesPerChannel;
 
     if (m_type == VstPluginType::Fx) {
-        extractInputSamples(samples, output);
+        extractInputSamples(samplesPerChannel, output);
     }
 
     if (processor->process(m_processData) != Steinberg::kResultOk) {
-        return;
+        return 0;
     }
 
     if (m_type == VstPluginType::Instrument) {
         m_eventList.clear();
     }
 
-    fillOutputBuffer(samples, output);
+    fillOutputBuffer(samplesPerChannel, output);
+
+    return samplesPerChannel;
 }
 
 void VstAudioClient::flush()

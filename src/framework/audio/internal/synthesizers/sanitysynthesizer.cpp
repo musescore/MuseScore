@@ -151,8 +151,8 @@ async::Channel<unsigned int> SanitySynthesizer::audioChannelsCountChanged() cons
     return m_synth->audioChannelsCountChanged();
 }
 
-void SanitySynthesizer::process(float* buffer, unsigned int sampleCount)
+audio::samples_t SanitySynthesizer::process(float* buffer, samples_t samplesPerChannel)
 {
     ONLY_AUDIO_WORKER_THREAD;
-    m_synth->process(buffer, sampleCount);
+    return m_synth->process(buffer, samplesPerChannel);
 }

@@ -112,7 +112,7 @@ unsigned int Mixer::audioChannelsCount() const
     return m_audioChannelsCount;
 }
 
-void Mixer::process(float* outBuffer, unsigned int samplesPerChannel)
+samples_t Mixer::process(float* outBuffer, samples_t samplesPerChannel)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
@@ -126,10 +126,18 @@ void Mixer::process(float* outBuffer, unsigned int samplesPerChannel)
         m_writeCacheBuff.resize(samplesPerChannel * audioChannelsCount(), 0.f);
     }
 
+    samples_t masterChannelSampleCount = 0;
+
     for (auto& channel : m_mixerChannels) {
-        channel.second->process(m_writeCacheBuff.data(), samplesPerChannel);
-        mixOutputFromChannel(outBuffer, m_writeCacheBuff.data(), samplesPerChannel);
+        samples_t processedSamplesCount = channel.second->process(m_writeCacheBuff.data(), samplesPerChannel);
+        mixOutputFromChannel(outBuffer, m_writeCacheBuff.data(), processedSamplesCount);
         std::fill(m_writeCacheBuff.begin(), m_writeCacheBuff.end(), 0.f);
+
+        masterChannelSampleCount = std::max(processedSamplesCount, masterChannelSampleCount);
+    }
+
+    if (m_masterParams.muted || masterChannelSampleCount == 0) {
+        return 0;
     }
 
     completeOutput(outBuffer, samplesPerChannel);
@@ -139,6 +147,8 @@ void Mixer::process(float* outBuffer, unsigned int samplesPerChannel)
             fxProcessor->process(outBuffer, samplesPerChannel);
         }
     }
+
+    return masterChannelSampleCount;
 }
 
 void Mixer::addClock(IClockPtr clock)
@@ -218,10 +228,6 @@ void Mixer::mixOutputFromChannel(float* outBuffer, float* inBuffer, unsigned int
 void Mixer::completeOutput(float* buffer, const samples_t& samplesPerChannel)
 {
     IF_ASSERT_FAILED(buffer) {
-        return;
-    }
-
-    if (m_masterParams.muted) {
         return;
     }
 
