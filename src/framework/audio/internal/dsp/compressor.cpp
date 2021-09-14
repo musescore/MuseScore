@@ -48,6 +48,10 @@ void Compressor::process(const float linearRms, float* buffer, const audioch_t& 
 {
     float dbGain = dbFromSample(linearRms);
 
+    if (dbGain <= m_filterConfig.minimumOperableLevel()) {
+        return;
+    }
+
     // trying to predict the next sample by the previous gain reduction
     dbGain += m_feedbackFactor * m_feedbackGain;
 
