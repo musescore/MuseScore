@@ -22,9 +22,19 @@
 #ifndef MU_ENGRAVING_MASTERSCORE_H
 #define MU_ENGRAVING_MASTERSCORE_H
 
+#include <QFileInfo>
+
 #include "score.h"
+#include "instrument.h"
+
+namespace mu::engraving {
+class EngravingProject;
+class MscReader;
+class MscWriter;
+}
 
 namespace mu::engraving::compat {
+class ScoreAccess;
 class Read114;
 class Read206;
 class Read302;
@@ -32,9 +42,35 @@ class ReadStyleHook;
 }
 
 namespace Ms {
-//---------------------------------------------------------
-//   MasterScore
-//---------------------------------------------------------
+class Excerpt;
+class MasterScore;
+class Part;
+class RepeatList;
+class Revisions;
+class TempoMap;
+class TimeSigMap;
+class UndoStack;
+
+class MidiMapping
+{
+    Part* _part;
+    std::unique_ptr<Channel> _articulation;
+    signed char _port;
+    signed char _channel;
+    Channel* masterChannel;
+    PartChannelSettingsLink link;
+
+    MidiMapping() = default;   // should be created only within MasterScore
+    friend class MasterScore;
+
+public:
+    Part* part() { return _part; }
+    const Part* part() const { return _part; }
+    Channel* articulation() { return _articulation.get(); }
+    const Channel* articulation() const { return _articulation.get(); }
+    signed char port() const { return _port; }
+    signed char channel() const { return _channel; }
+};
 
 class MasterScore : public Score
 {
@@ -97,7 +133,7 @@ class MasterScore : public Score
 
 public:
 
-    virtual ~MasterScore();
+    ~MasterScore();
     MasterScore* clone();
 
     Score* createScore();
@@ -105,37 +141,37 @@ public:
 
     std::shared_ptr<mu::engraving::EngravingProject> project() const { return m_project; }
 
-    virtual bool isMaster() const override { return true; }
-    virtual bool readOnly() const override { return _readOnly; }
+    bool isMaster() const override { return true; }
+    bool readOnly() const override { return _readOnly; }
     void setReadOnly(bool ro) { _readOnly = ro; }
-    virtual UndoStack* undoStack() const override { return _undoStack; }
-    virtual TimeSigMap* sigmap() const override { return _sigmap; }
-    virtual TempoMap* tempomap() const override { return _tempomap; }
+    UndoStack* undoStack() const override { return _undoStack; }
+    TimeSigMap* sigmap() const override { return _sigmap; }
+    TempoMap* tempomap() const override { return _tempomap; }
 
-    virtual bool playlistDirty() const override { return _playlistDirty; }
-    virtual void setPlaylistDirty() override;
+    bool playlistDirty() const override { return _playlistDirty; }
+    void setPlaylistDirty() override;
     void setPlaylistClean() { _playlistDirty = false; }
 
     void setExpandRepeats(bool expandRepeats);
     void updateRepeatListTempo();
-    virtual const RepeatList& repeatList() const override;
-    virtual const RepeatList& repeatList2() const override;
+    const RepeatList& repeatList() const override;
+    const RepeatList& repeatList2() const override;
 
     QList<Excerpt*>& excerpts() { return _excerpts; }
     const QList<Excerpt*>& excerpts() const { return _excerpts; }
-    virtual QQueue<MidiInputEvent>* midiInputQueue() override { return &_midiInputQueue; }
-    virtual std::list<MidiInputEvent>* activeMidiPitches() override { return &_activeMidiPitches; }
+    QQueue<MidiInputEvent>* midiInputQueue() override { return &_midiInputQueue; }
+    std::list<MidiInputEvent>* activeMidiPitches() override { return &_activeMidiPitches; }
 
-    virtual void setUpdateAll() override;
+    void setUpdateAll() override;
 
     void setLayoutAll(int staff = -1, const EngravingItem* e = nullptr);
     void setLayout(const Fraction& tick, int staff, const EngravingItem* e = nullptr);
     void setLayout(const Fraction& tick1, const Fraction& tick2, int staff1, int staff2, const EngravingItem* e = nullptr);
 
-    virtual CmdState& cmdState() override { return _cmdState; }
+    CmdState& cmdState() override { return _cmdState; }
     const CmdState& cmdState() const override { return _cmdState; }
-    virtual void addLayoutFlags(LayoutFlags val) override { _cmdState.layoutFlags |= val; }
-    virtual void setInstrumentsChanged(bool val) override { _cmdState._instrumentsChanged = val; }
+    void addLayoutFlags(LayoutFlags val) override { _cmdState.layoutFlags |= val; }
+    void setInstrumentsChanged(bool val) override { _cmdState._instrumentsChanged = val; }
 
     void setExcerptsChanged(bool val) { _cmdState._excerptsChanged = val; }
     bool excerptsChanged() const { return _cmdState._excerptsChanged; }
@@ -188,10 +224,10 @@ public:
 
     const QFileInfo& sessionStartBackupInfo() const { return _sessionStartBackupInfo; }
 
-    virtual QString title() const override;
+    QString title() const override;
 
     void setWidthOfSegmentCell(qreal val) { m_widthOfSegmentCell = val; }
-    uint8_t widthOfSegmentCell() const { return m_widthOfSegmentCell; }
+    qreal widthOfSegmentCell() const { return m_widthOfSegmentCell; }
 };
 
 extern Ms::MasterScore* gpaletteScore;

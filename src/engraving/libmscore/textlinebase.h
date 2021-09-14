@@ -77,15 +77,19 @@ enum class HookType : char {
 };
 
 //---------------------------------------------------------
+//   PlaceText
+//---------------------------------------------------------
+
+enum class PlaceText : char {
+    AUTO, ABOVE, BELOW, LEFT
+};
+
+//---------------------------------------------------------
 //   @@ TextLineBase
 //---------------------------------------------------------
 
 class TextLineBase : public SLine
 {
-    enum class LineType : char {
-        CRESCENDO, DECRESCENDO
-    };
-
     M_PROPERTY(bool,      lineVisible,           setLineVisible)
     M_PROPERTY2(HookType, beginHookType,         setBeginHookType,          HookType::NONE)
     M_PROPERTY2(HookType, endHookType,           setEndHookType,            HookType::NONE)

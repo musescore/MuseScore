@@ -16,13 +16,6 @@ static constexpr bool isValidComp(int num);
 static constexpr bool isRgbaValid(int r, int g, int b, int a = Color::DEFAULT_ALPHA);
 static void insertHexComponent(int num, std::stringstream& ss);
 
-const Color Color::black { 0, 0, 0 };
-const Color Color::white { 255, 255, 255 };
-const Color Color::transparent { 0, 0, 0, 0 };
-const Color Color::redColor { 255, 0, 0 };
-const Color Color::greenColor { 0, 255, 0 };
-const Color Color::blueColor { 0, 0, 255 };
-
 Color::Color()
 {
     m_isValid = false;

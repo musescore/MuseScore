@@ -120,14 +120,14 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, std::map<QString, st
     FrameType frameType = FrameType::NO_FRAME;
     Spatium paddingWidth(0.0);
     Spatium frameWidth(0.0);
-    mu::draw::Color foregroundColor = mu::draw::Color(0, 0, 0, 255);
-    mu::draw::Color backgroundColor = mu::draw::Color(255, 255, 255, 0);
+    mu::draw::Color foregroundColor = mu::draw::Color::black;
+    mu::draw::Color backgroundColor = mu::draw::Color::transparent;
 
     Placement placement = Placement::ABOVE;
     bool placementValid = false;
 
     QString name = e.attribute("name");
-    mu::draw::Color frameColor = mu::draw::Color(0, 0, 0, 255);
+    mu::draw::Color frameColor = mu::draw::Color::black;
 
     bool systemFlag = false;
     qreal lineWidth = -1.0;
