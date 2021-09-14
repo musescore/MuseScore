@@ -384,17 +384,6 @@ void FluidSynth::setIsActive(bool arg)
     m_isActive = arg;
 }
 
-void FluidSynth::writeBuf(float* stream, unsigned int samples)
-{
-    IF_ASSERT_FAILED(samples > 0) {
-        return;
-    }
-
-    fluid_synth_write_float(m_fluid->synth, static_cast<int>(samples),
-                            stream, 0, audioChannelsCount(),
-                            stream, 1, audioChannelsCount());
-}
-
 unsigned int FluidSynth::audioChannelsCount() const
 {
     return FLUID_AUDIO_CHANNELS_PAIR * 2;
@@ -402,7 +391,13 @@ unsigned int FluidSynth::audioChannelsCount() const
 
 void FluidSynth::process(float* buffer, unsigned int sampleCount)
 {
-    writeBuf(buffer, sampleCount);
+    IF_ASSERT_FAILED(sampleCount > 0) {
+        return;
+    }
+
+    fluid_synth_write_float(m_fluid->synth, sampleCount,
+                            buffer, 0, audioChannelsCount(),
+                            buffer, 1, audioChannelsCount());
 }
 
 async::Channel<unsigned int> FluidSynth::audioChannelsCountChanged() const

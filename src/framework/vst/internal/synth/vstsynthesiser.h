@@ -59,7 +59,6 @@ public:
     Ret removeSoundFonts() override;
 
     bool handleEvent(const midi::Event& e) override;
-    void writeBuf(float* stream, unsigned int samples) override;
     void allSoundsOff() override;
     void flushSound() override;
 
@@ -73,7 +72,7 @@ public:
     void setSampleRate(unsigned int sampleRate) override;
     unsigned int audioChannelsCount() const override;
     async::Channel<unsigned int> audioChannelsCountChanged() const override;
-    void process(float* buffer, unsigned int sampleCount) override;
+    void process(float* buffer, unsigned int samplelPerChannel) override;
 
 private:
     VstPluginPtr m_pluginPtr = nullptr;
