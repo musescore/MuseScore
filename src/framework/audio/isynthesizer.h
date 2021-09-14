@@ -47,7 +47,6 @@ public:
 
     virtual Ret setupMidiChannels(const std::vector<midi::Event>& events) = 0;
     virtual bool handleEvent(const midi::Event& e) = 0;
-    virtual void writeBuf(float* stream, unsigned int samples) = 0;
 
     virtual void allSoundsOff() = 0; // all channels
     virtual void flushSound() = 0;

@@ -45,7 +45,6 @@ public:
 
     Ret setupMidiChannels(const std::vector<midi::Event>& events) override;
     bool handleEvent(const midi::Event& e) override;
-    void writeBuf(float* stream, unsigned int samples) override;
 
     void allSoundsOff() override;  // all channels
     void flushSound() override;

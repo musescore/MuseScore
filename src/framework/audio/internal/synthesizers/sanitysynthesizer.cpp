@@ -96,12 +96,6 @@ bool SanitySynthesizer::handleEvent(const midi::Event& e)
     return m_synth->handleEvent(e);
 }
 
-void SanitySynthesizer::writeBuf(float* stream, unsigned int samples)
-{
-    ONLY_AUDIO_WORKER_THREAD;
-    m_synth->writeBuf(stream, samples);
-}
-
 void SanitySynthesizer::allSoundsOff()
 {
     ONLY_AUDIO_WORKER_THREAD;

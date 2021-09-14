@@ -100,11 +100,6 @@ bool VstSynthesiser::handleEvent(const midi::Event& e)
     return m_vstAudioClient->handleEvent(e);
 }
 
-void VstSynthesiser::writeBuf(float* stream, unsigned int samples)
-{
-    m_vstAudioClient->process(stream, samples);
-}
-
 void VstSynthesiser::allSoundsOff()
 {
     NOT_IMPLEMENTED;
@@ -159,13 +154,13 @@ async::Channel<unsigned int> VstSynthesiser::audioChannelsCountChanged() const
     return m_streamsCountChanged;
 }
 
-void VstSynthesiser::process(float* buffer, unsigned int sampleCount)
+void VstSynthesiser::process(float* buffer, unsigned int samplelPerChannel)
 {
     if (!buffer) {
         return;
     }
 
-    m_vstAudioClient->setBlockSize(sampleCount);
+    m_vstAudioClient->setBlockSize(samplelPerChannel);
 
-    writeBuf(buffer, sampleCount);
+    m_vstAudioClient->process(buffer, samplelPerChannel);
 }
