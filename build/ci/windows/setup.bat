@@ -34,15 +34,15 @@ MKDIR %TEMP_DIR%
 :: Install Qt
 ECHO "=== Install Qt ==="
 
-:: Default for x64
-SET "Qt_ARCHIVE=Qt5152_msvc2019_64.7z"
-
 IF %TARGET_PROCESSOR_BITS% == 32 (
-    SET "Qt_ARCHIVE=Qt5152_msvc2019.7z"
+    SET "Qt_ARCHIVE=qt599_msvc2015.7z"
+    SET "QT_DIR=C:\Qt\5.9.9"
+) ELSE (
+    SET "Qt_ARCHIVE=Qt5152_msvc2019_64.7z"
+    SET "QT_DIR=C:\Qt\5.15.2"
 )
 
 SET "QT_URL=https://s3.amazonaws.com/utils.musescore.org/%Qt_ARCHIVE%"
-SET "QT_DIR=C:\Qt\5.15.2"
 
 CALL "wget.exe" -q --show-progress --no-check-certificate "%QT_URL%" -O "%TEMP_DIR%\%Qt_ARCHIVE%"
 CALL "7z" x -y "%TEMP_DIR%\%Qt_ARCHIVE%" "-o%QT_DIR%"
