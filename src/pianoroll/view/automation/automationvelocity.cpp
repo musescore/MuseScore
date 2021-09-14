@@ -8,9 +8,9 @@ AutomationVelocity::AutomationVelocity()
 {
 }
 
-PianorollAutomationEditor::AutomationType AutomationVelocity::type()
+PianorollAutomationNote::AutomationType AutomationVelocity::type()
 {
-    return PianorollAutomationEditor::AutomationType::VELOCITY;
+    return PianorollAutomationNote::AutomationType::VELOCITY;
 }
 
 double AutomationVelocity::maxValue()
