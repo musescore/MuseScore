@@ -23,7 +23,7 @@
 #ifndef MU_PIANOROLL_IPIANOROLLAUTOMATIONMODEL_H
 #define MU_PIANOROLL_IPIANOROLLAUTOMATIONMODEL_H
 
-#include "pianorollautomationeditor.h"
+#include "pianorollautomationnote.h"
 
 #include <vector>
 
@@ -40,7 +40,7 @@ class IPianorollAutomationModel
 public:
     virtual ~IPianorollAutomationModel() = default;
 
-    virtual PianorollAutomationEditor::AutomationType type() = 0;
+    virtual PianorollAutomationNote::AutomationType type() = 0;
 
     virtual double maxValue() = 0;
     virtual double minValue() = 0;

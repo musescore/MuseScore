@@ -31,7 +31,7 @@ class AutomationVelocity : public IPianorollAutomationModel
 public:
     AutomationVelocity();
 
-    PianorollAutomationEditor::AutomationType type() override;
+    PianorollAutomationNote::AutomationType type() override;
 
     double maxValue() override;
     double minValue() override;

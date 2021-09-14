@@ -45,8 +45,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/pianorollruler.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/pianorollkeyboard.h
     ${CMAKE_CURRENT_LIST_DIR}/view/pianorollkeyboard.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/pianorollautomationeditor.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/pianorollautomationeditor.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/pianorollautomationnote.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/pianorollautomationnote.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/pianorollautomationcurves.h
     ${CMAKE_CURRENT_LIST_DIR}/view/pianorollautomationcurves.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/ipianorollautomationmodel.h

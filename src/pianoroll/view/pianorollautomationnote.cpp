@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "pianorollautomationeditor.h"
+#include "pianorollautomationnote.h"
 
 #include <QPainter>
 
@@ -32,17 +32,17 @@
 
 using namespace mu::pianoroll;
 
-std::vector<IPianorollAutomationModel*> PianorollAutomationEditor::m_automationModels = {
+std::vector<IPianorollAutomationModel*> PianorollAutomationNote::m_automationModels = {
     new AutomationVelocity()
 };
 
-PianorollAutomationEditor::PianorollAutomationEditor(QQuickItem* parent)
+PianorollAutomationNote::PianorollAutomationNote(QQuickItem* parent)
     : QQuickPaintedItem(parent)
 {
     setAcceptedMouseButtons(Qt::AllButtons);
 }
 
-IPianorollAutomationModel* PianorollAutomationEditor::lookupModel(AutomationType type)
+IPianorollAutomationModel* PianorollAutomationNote::lookupModel(AutomationType type)
 {
     for (auto model: m_automationModels) {
         if (model->type() == type) {
@@ -52,7 +52,7 @@ IPianorollAutomationModel* PianorollAutomationEditor::lookupModel(AutomationType
     return nullptr;
 }
 
-void PianorollAutomationEditor::load()
+void PianorollAutomationNote::load()
 {
     onNotationChanged();
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
@@ -67,7 +67,7 @@ void PianorollAutomationEditor::load()
     });
 }
 
-void PianorollAutomationEditor::onNotationChanged()
+void PianorollAutomationNote::onNotationChanged()
 {
     auto notation = globalContext()->currentNotation();
     if (notation) {
@@ -84,19 +84,19 @@ void PianorollAutomationEditor::onNotationChanged()
     updateBoundingSize();
 }
 
-void PianorollAutomationEditor::onCurrentNotationChanged()
+void PianorollAutomationNote::onCurrentNotationChanged()
 {
     buildNoteData();
     updateBoundingSize();
 }
 
-void PianorollAutomationEditor::onSelectionChanged()
+void PianorollAutomationNote::onSelectionChanged()
 {
     buildNoteData();
     update();
 }
 
-void PianorollAutomationEditor::buildNoteData()
+void PianorollAutomationNote::buildNoteData()
 {
     for (auto n: m_noteLevels) {
         delete n;
@@ -144,7 +144,7 @@ void PianorollAutomationEditor::buildNoteData()
     }
 }
 
-void PianorollAutomationEditor::addChord(Ms::Chord* chrd, int voice, int staffIdx)
+void PianorollAutomationNote::addChord(Ms::Chord* chrd, int voice, int staffIdx)
 {
     for (Ms::Chord* c : chrd->graceNotes()) {
         addChord(c, voice, staffIdx);
@@ -159,7 +159,7 @@ void PianorollAutomationEditor::addChord(Ms::Chord* chrd, int voice, int staffId
     }
 }
 
-Ms::Score* PianorollAutomationEditor::score()
+Ms::Score* PianorollAutomationNote::score()
 {
     notation::INotationPtr notation = globalContext()->currentNotation();
     if (!notation) {
@@ -171,7 +171,7 @@ Ms::Score* PianorollAutomationEditor::score()
     return score;
 }
 
-Ms::Staff* PianorollAutomationEditor::activeStaff()
+Ms::Staff* PianorollAutomationNote::activeStaff()
 {
     notation::INotationPtr notation = globalContext()->currentNotation();
     if (!notation) {
@@ -184,7 +184,7 @@ Ms::Staff* PianorollAutomationEditor::activeStaff()
     return staff;
 }
 
-void PianorollAutomationEditor::setPlaybackPosition(Ms::Fraction value)
+void PianorollAutomationNote::setPlaybackPosition(Ms::Fraction value)
 {
     if (value == m_playbackPosition) {
         return;
@@ -195,7 +195,7 @@ void PianorollAutomationEditor::setPlaybackPosition(Ms::Fraction value)
     emit playbackPositionChanged();
 }
 
-void PianorollAutomationEditor::setAutomationType(AutomationType value)
+void PianorollAutomationNote::setAutomationType(AutomationType value)
 {
     if (value == m_automationType) {
         return;
@@ -206,7 +206,7 @@ void PianorollAutomationEditor::setAutomationType(AutomationType value)
     emit automationTypeChanged();
 }
 
-void PianorollAutomationEditor::setWholeNoteWidth(double value)
+void PianorollAutomationNote::setWholeNoteWidth(double value)
 {
     if (value == m_wholeNoteWidth) {
         return;
@@ -217,7 +217,7 @@ void PianorollAutomationEditor::setWholeNoteWidth(double value)
     emit wholeNoteWidthChanged();
 }
 
-void PianorollAutomationEditor::setCenterX(double value)
+void PianorollAutomationNote::setCenterX(double value)
 {
     if (value == m_centerX) {
         return;
@@ -228,7 +228,7 @@ void PianorollAutomationEditor::setCenterX(double value)
     emit centerXChanged();
 }
 
-void PianorollAutomationEditor::setDisplayObjectWidth(double value)
+void PianorollAutomationNote::setDisplayObjectWidth(double value)
 {
     if (value == m_displayObjectWidth) {
         return;
@@ -239,7 +239,7 @@ void PianorollAutomationEditor::setDisplayObjectWidth(double value)
     emit displayObjectWidthChanged();
 }
 
-void PianorollAutomationEditor::setTuplet(int value)
+void PianorollAutomationNote::setTuplet(int value)
 {
     if (value == m_tuplet) {
         return;
@@ -250,7 +250,7 @@ void PianorollAutomationEditor::setTuplet(int value)
     emit tupletChanged();
 }
 
-void PianorollAutomationEditor::setSubdivision(int value)
+void PianorollAutomationNote::setSubdivision(int value)
 {
     if (value == m_subdivision) {
         return;
@@ -261,7 +261,7 @@ void PianorollAutomationEditor::setSubdivision(int value)
     emit subdivisionChanged();
 }
 
-void PianorollAutomationEditor::updateBoundingSize()
+void PianorollAutomationNote::updateBoundingSize()
 {
     notation::INotationPtr notation = globalContext()->currentNotation();
     if (!notation) {
@@ -278,17 +278,17 @@ void PianorollAutomationEditor::updateBoundingSize()
     update();
 }
 
-int PianorollAutomationEditor::wholeNoteToPixelX(double tick) const
+int PianorollAutomationNote::wholeNoteToPixelX(double tick) const
 {
     return tick * m_wholeNoteWidth - m_centerX * m_displayObjectWidth + width() / 2;
 }
 
-double PianorollAutomationEditor::pixelXToWholeNote(int pixX) const
+double PianorollAutomationNote::pixelXToWholeNote(int pixX) const
 {
     return (pixX + m_centerX * m_displayObjectWidth - width() / 2) / m_wholeNoteWidth;
 }
 
-void PianorollAutomationEditor::mousePressEvent(QMouseEvent* e)
+void PianorollAutomationNote::mousePressEvent(QMouseEvent* e)
 {
     if (e->button() == Qt::LeftButton) {
         m_mouseDown = true;
@@ -298,14 +298,14 @@ void PianorollAutomationEditor::mousePressEvent(QMouseEvent* e)
     }
 }
 
-void PianorollAutomationEditor::mouseReleaseEvent(QMouseEvent* e)
+void PianorollAutomationNote::mouseReleaseEvent(QMouseEvent* e)
 {
     m_mouseDown = false;
     m_dragging = false;
     m_dragBlock = nullptr;
 }
 
-void PianorollAutomationEditor::mouseMoveEvent(QMouseEvent* e)
+void PianorollAutomationNote::mouseMoveEvent(QMouseEvent* e)
 {
     if (m_mouseDown) {
         m_lastMousePos = e->pos();
@@ -343,7 +343,7 @@ void PianorollAutomationEditor::mouseMoveEvent(QMouseEvent* e)
     }
 }
 
-void PianorollAutomationEditor::paint(QPainter* p)
+void PianorollAutomationNote::paint(QPainter* p)
 {
     p->fillRect(0, 0, width(), height(), m_colorBackground);
 
@@ -458,21 +458,21 @@ void PianorollAutomationEditor::paint(QPainter* p)
     }
 }
 
-double PianorollAutomationEditor::pixYToValue(double pixY, double valMin, double valMax)
+double PianorollAutomationNote::pixYToValue(double pixY, double valMin, double valMax)
 {
     int span = height() - m_marginY * 2;
     double frac = (span + m_marginY - pixY) / (double)span;
     return (valMax - valMin) * frac + valMin;
 }
 
-double PianorollAutomationEditor::valueToPixY(double value, double valMin, double valMax)
+double PianorollAutomationNote::valueToPixY(double value, double valMin, double valMax)
 {
     double frac = (value - valMin) / (valMax - valMin);
     int span = height() - m_marginY * 2;
     return m_marginY + span - frac * span;
 }
 
-NoteEventBlock* PianorollAutomationEditor::pickBlock(QPointF point)
+NoteEventBlock* PianorollAutomationNote::pickBlock(QPointF point)
 {
     Ms::Score* curScore = score();
     IPianorollAutomationModel* model = lookupModel(m_automationType);

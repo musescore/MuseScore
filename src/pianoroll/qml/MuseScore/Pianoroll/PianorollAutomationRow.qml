@@ -53,15 +53,15 @@ ColumnLayout {
                 valueRole: "value"
 
                 model: [
-                    { text: qsTr("Velocity"), value: PianorollAutomationEditor.VELOCITY },
-                    { text: qsTr("Expression"), value: PianorollAutomationEditor.EXPRESSION },
-                    { text: qsTr("Pan"), value: PianorollAutomationEditor.PAN }
+                    { text: qsTr("Velocity"), value: PianorollAutomationNote.VELOCITY },
+                    { text: qsTr("Expression"), value: PianorollAutomationNote.EXPRESSION },
+                    { text: qsTr("Pan"), value: PianorollAutomationNote.PAN }
                 ]
 
                 onActivated: {
                     automationEditor.automationType = currentValue
                     //pianoView.tuplet = currentValue
-                    if (currentValue === PianorollAutomationEditor.VELOCITY) {
+                    if (currentValue === PianorollAutomationNote.VELOCITY) {
                         automationEditor.visible = true
                         automationCurves.visible = false
                     }
@@ -74,7 +74,7 @@ ColumnLayout {
 
         }
 
-        PianorollAutomationEditor {
+        PianorollAutomationNote {
             id: automationEditor
             Layout.preferredWidth: m_graphWidth
             Layout.fillHeight: true
@@ -107,16 +107,6 @@ ColumnLayout {
                 load()
             }
         }
-
-//        Label {
-//            id: automationCurves
-//            visible: false
-//            Layout.preferredWidth: m_graphWidth
-//            Layout.fillHeight: true
-//            Text {
-//                text: qsTr("text")
-//            }
-//        }
 
         Label {
             Layout.fillHeight: true

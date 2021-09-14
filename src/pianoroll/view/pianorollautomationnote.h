@@ -36,7 +36,7 @@ namespace mu::pianoroll {
 class IPianorollAutomationModel;
 struct NoteEventBlock;
 
-class PianorollAutomationEditor : public QQuickPaintedItem, public async::Asyncable
+class PianorollAutomationNote : public QQuickPaintedItem, public async::Asyncable
 {
     Q_OBJECT
 
@@ -57,7 +57,7 @@ public:
     };
     Q_ENUM(AutomationType)
 
-    PianorollAutomationEditor(QQuickItem* parent = nullptr);
+    PianorollAutomationNote(QQuickItem* parent = nullptr);
 
     Q_INVOKABLE void load();
 
