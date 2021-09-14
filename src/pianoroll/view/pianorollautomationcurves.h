@@ -31,7 +31,6 @@
 #include "pianoroll/ipianorollcontroller.h"
 
 namespace mu::pianoroll {
-
 class PianorollAutomationCurves : public QQuickPaintedItem, public async::Asyncable
 {
     Q_OBJECT
@@ -133,7 +132,6 @@ private:
     QColor m_colorVertexFill = QColor(0xffffff);
     QColor m_colorVertexLine = Qt::black;
     QColor m_colorGraphFill = QColor(0x80, 0x9b, 0xcd, 0x80);
-
 };
 }
 

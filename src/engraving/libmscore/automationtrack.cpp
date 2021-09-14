@@ -52,11 +52,9 @@ void AutomationTrack::setEnabled(bool value)
 //Return index of vertex at or immediately before given tick
 int AutomationTrack::vertexIndexForTick(Fraction tick)
 {
-    for (int i = 0; i < _vertices.size(); ++i)
-    {
+    for (int i = 0; i < _vertices.size(); ++i) {
         AutomationVertex* v = _vertices.at(0);
-        if (v->tick() > tick)
-        {
+        if (v->tick() > tick) {
             return i - 1;
         }
     }
@@ -64,11 +62,12 @@ int AutomationTrack::vertexIndexForTick(Fraction tick)
     return _vertices.size() - 1;
 }
 
-bool AutomationTrack::isVertexAt(Fraction tick) 
+bool AutomationTrack::isVertexAt(Fraction tick)
 {
     int idx = vertexIndexForTick(tick);
-    if (idx == -1)
+    if (idx == -1) {
         return false;
+    }
 
     return _vertices.at(idx)->tick() == tick;
 }
@@ -83,13 +82,12 @@ void AutomationTrack::addVertex(AutomationVertex* vertex)
     }
 
     AutomationVertex* prevVert = _vertices.at(prevIdx);
-    if (prevVert->tick() == vertex->tick())
-    {
+    if (prevVert->tick() == vertex->tick()) {
         prevVert->setValue(vertex->value());
         delete vertex;
         return;
     }
-    
+
     _vertices.insert(prevIdx + 1, vertex);
 }
 }
