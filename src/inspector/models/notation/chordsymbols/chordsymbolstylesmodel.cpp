@@ -33,6 +33,10 @@ ChordSymbolStylesModel::ChordSymbolStylesModel(QObject* parent)
     initCurrentStyleIndex();
     setQualitySymbolsOnStyleChange();
     setPropertiesOnStyleChange();
+    // For refreshing the inspector view when style is changed through the styles dialog
+    globalContext()->currentNotation()->style()->chordSymbolStyleChanged().onNotify(this, [this]() {
+        initCurrentStyleIndex();
+    });
 }
 
 int ChordSymbolStylesModel::rowCount(const QModelIndex&) const

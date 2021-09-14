@@ -41,6 +41,7 @@ public:
     virtual void applyToAllParts() = 0;
 
     virtual async::Notification styleChanged() const = 0;
+    virtual async::Notification chordSymbolStyleChanged() const = 0;
 };
 
 using INotationStylePtr = std::shared_ptr<INotationStyle>;

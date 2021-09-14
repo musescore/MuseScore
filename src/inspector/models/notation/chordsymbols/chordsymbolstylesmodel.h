@@ -26,10 +26,11 @@
 #include <QAbstractListModel>
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
+#include "async/asyncable.h"
 #include "notation/internal/chordsymbolstylemanager.h"
 
 namespace mu::inspector {
-class ChordSymbolStylesModel : public QAbstractListModel
+class ChordSymbolStylesModel : public QAbstractListModel, async::Asyncable
 {
     INJECT(inspector, context::IGlobalContext, globalContext)
 

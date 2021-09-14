@@ -845,6 +845,7 @@ void ChordSymbolEditorModel::setChordStyle(int index)
     if (!chordStyles.contains(m_styles.at(m_currentStyleIndex).styleName)) {
         globalContext()->currentNotation()->style()->setStyleValue(Ms::Sid::chordStyle, "custom");
     }
+    globalContext()->currentNotation()->style()->chordSymbolStyleChanged().notify();
     m_styleDescription = m_styles.at(m_currentStyleIndex).description;
     m_usePresets = m_styles.at(m_currentStyleIndex).usePresets;
 

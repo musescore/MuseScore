@@ -42,10 +42,12 @@ public:
     void applyToAllParts() override;
 
     async::Notification styleChanged() const override;
+    async::Notification chordSymbolStyleChanged() const override;
 
 private:
     IGetScore* m_getScore = nullptr;
     async::Notification m_styleChanged;
+    async::Notification m_chordSymbolStyleChanged;
 };
 }
 

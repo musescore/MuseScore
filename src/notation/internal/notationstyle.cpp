@@ -89,3 +89,8 @@ Notification NotationStyle::styleChanged() const
 {
     return m_styleChanged;
 }
+
+Notification NotationStyle::chordSymbolStyleChanged() const
+{
+    return m_chordSymbolStyleChanged;
+}
