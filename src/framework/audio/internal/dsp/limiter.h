@@ -41,8 +41,6 @@ private:
 
     EnvelopeFilterConfig m_filterConfig;
 
-    float m_softThresholdLower = 0.f;
-    float m_softThresholdUpper = 0.f;
     float m_previousGainReduction = 0.f;
 };
 
