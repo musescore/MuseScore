@@ -24,13 +24,14 @@
 #include "draw/pen.h"
 #include "io/xml.h"
 
+#include "chord.h"
 #include "measure.h"
+#include "mscoreview.h"
+#include "page.h"
 #include "score.h"
 #include "system.h"
-#include "undo.h"
 #include "tie.h"
-#include "chord.h"
-#include "page.h"
+#include "undo.h"
 
 #include "log.h"
 

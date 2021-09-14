@@ -28,16 +28,17 @@
 #include "draw/brush.h"
 #include "io/xml.h"
 
-#include "measure.h"
-#include "score.h"
-#include "system.h"
-#include "undo.h"
-#include "chord.h"
-#include "stem.h"
-#include "tie.h"
-#include "part.h"
-#include "navigate.h"
 #include "articulation.h"
+#include "chord.h"
+#include "measure.h"
+#include "mscoreview.h"
+#include "navigate.h"
+#include "part.h"
+#include "score.h"
+#include "stem.h"
+#include "system.h"
+#include "tie.h"
+#include "undo.h"
 
 using namespace mu;
 using namespace mu::draw;

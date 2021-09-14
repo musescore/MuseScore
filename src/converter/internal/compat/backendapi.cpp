@@ -32,7 +32,8 @@
 #include <QRandomGenerator>
 
 #include "engraving/compat/scoreaccess.h"
-#include "libmscore/excerpt.h"
+#include "engraving/infrastructure/io/mscwriter.h"
+#include "engraving/libmscore/excerpt.h"
 
 #include "backendjsonwriter.h"
 #include "notationmeta.h"

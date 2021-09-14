@@ -122,7 +122,7 @@ PaletteCellPtr Palette::appendElement(ElementPtr element, const QString& name, q
 PaletteCellPtr Palette::appendActionIcon(Ms::ActionIconType type, actions::ActionCode code)
 {
     const ui::UiAction& action = actionsRegister()->action(code);
-    auto icon = makeElement<ActionIcon>(gpaletteScore);
+    auto icon = std::make_shared<ActionIcon>(gpaletteScore->dummy());
     icon->setActionType(type);
     icon->setAction(code, static_cast<char16_t>(action.iconCode));
     return appendElement(icon, action.title);

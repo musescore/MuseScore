@@ -88,7 +88,7 @@
 #include "rehearsalmark.h"
 #include "sym.h"
 #include "linkedobjects.h"
-
+#include "mscoreview.h"
 #include "masterscore.h"
 
 #include "log.h"

@@ -22,6 +22,8 @@
 
 #include "dockwindowactionscontroller.h"
 
+#include "../idockwindow.h"
+
 using namespace mu::dock;
 using namespace mu::actions;
 

@@ -25,7 +25,6 @@
 
 #include "infrastructure/draw/color.h"
 #include "spanner.h"
-#include "mscore.h"
 
 namespace Ms {
 class SLine;
