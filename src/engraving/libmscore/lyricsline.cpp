@@ -237,14 +237,14 @@ SpannerSegment* LyricsLine::layoutSystem(System* system)
         System* s;
         PointF p1 = linePos(Grip::START, &s);
         lineSegm->setPos(p1);
-        qreal x2 = system->bbox().right();
+        qreal x2 = system->lastNoteRestSegmentX(true);
         lineSegm->setPos2(PointF(x2 - p1.x(), 0.0));
     }
     break;
     case SpannerSegmentType::MIDDLE: {
         bool leading = (anchor() == Anchor::SEGMENT || anchor() == Anchor::MEASURE);
         qreal x1 = system->firstNoteRestSegmentX(leading);
-        qreal x2 = system->bbox().right();
+        qreal x2 = system->lastNoteRestSegmentX(true);
         System* s;
         PointF p1 = linePos(Grip::START, &s);
         lineSegm->setPos(PointF(x1, p1.y()));
@@ -419,10 +419,12 @@ void LyricsLineSegment::layout()
     if (isEndMelisma) {                   // melisma
         _numOfDashes = 1;
         rypos()      -= lyricsLine()->lineWidth() * .5;     // let the line 'sit on' the base line
-        // if not final segment, shorten it
+        // if not final segment, shorten it (why? -AS)
+        /*
         if (isBeginType() || isMiddleType()) {
             rxpos2() -= score()->styleP(Sid::minNoteDistance) * mag();
         }
+        */
     } else {                              // dash(es)
         // set conventional dash Y pos
         rypos() -= lyr->fontMetrics().xHeight() * score()->styleD(Sid::lyricsDashYposRatio);
