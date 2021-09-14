@@ -447,8 +447,11 @@ void Dynamic::startEdit(EditData& ed)
 void Dynamic::endEdit(EditData& ed)
 {
     TextBase::endEdit(ed);
-    if (xmlText() != QString::fromUtf8(dynList[int(_dynamicType)].text)) {
-        _dynamicType = DynamicType::OTHER;
+    auto text = xmlText();
+    auto it = std::find_if(std::begin(dynList), std::end(dynList), [text](const Ms::Dyn& d) { return text == QString::fromUtf8(d.text); });
+    _dynamicType = it == std::end(dynList) ? DynamicType::OTHER : static_cast<DynamicType>(it - std::begin(dynList));
+    for (auto* e : this->linkList()) {
+        toDynamic(e)->_dynamicType = _dynamicType;
     }
 }
 
