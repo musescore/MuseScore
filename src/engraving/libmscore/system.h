@@ -33,6 +33,10 @@
 #include "symbol.h"
 #include "skyline.h"
 
+namespace mu::engraving {
+class LayoutContext;
+}
+
 namespace Ms {
 class Staff;
 class StaffLines;
@@ -120,7 +124,8 @@ class System final : public EngravingItem
 
     int getBracketsColumnsCount();
     void setBracketsXPosition(const qreal xOffset);
-    Bracket* createBracket(Ms::BracketItem* bi, int column, int staffIdx, QList<Ms::Bracket*>& bl, Measure* measure);
+    Bracket* createBracket(const mu::engraving::LayoutContext& ctx, Ms::BracketItem* bi, int column, int staffIdx, QList<Ms::Bracket*>& bl,
+                           Measure* measure);
 
 public:
 
@@ -149,15 +154,15 @@ public:
 
     Page* page() const { return (Page*)parent(); }
 
-    void layoutSystem(qreal, const bool isFirstSystem = false, bool firstSystemIndent = false);
+    void layoutSystem(const mu::engraving::LayoutContext& ctx, qreal, const bool isFirstSystem = false, bool firstSystemIndent = false);
 
     void setMeasureHeight(qreal height);
     void layoutBracketsVertical();
     void layoutInstrumentNames();
 
-    void addBrackets(Measure* measure);
+    void addBrackets(const mu::engraving::LayoutContext& ctx, Measure* measure);
 
-    void layout2();                       ///< Called after Measure layout.
+    void layout2(const mu::engraving::LayoutContext& ctx);                       ///< Called after Measure layout.
     void restoreLayout2();
     void clear();                         ///< Clear measure list.
 
@@ -176,7 +181,7 @@ public:
 
     int y2staff(qreal y) const;
     int searchStaff(qreal y, int preferredStaff = -1, qreal spacingFactor = 0.5) const;
-    void setInstrumentNames(bool longName, Fraction tick = { 0, 1 });
+    void setInstrumentNames(const mu::engraving::LayoutContext& ctx, bool longName, Fraction tick = { 0, 1 });
     Fraction snap(const Fraction& tick, const mu::PointF p) const;
     Fraction snapNote(const Fraction& tick, const mu::PointF p, int staff) const;
 

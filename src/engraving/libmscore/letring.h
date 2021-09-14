@@ -35,8 +35,8 @@ class LetRing;
 class LetRingSegment final : public TextLineBaseSegment
 {
 public:
-    LetRingSegment(Spanner* sp, Score* s)
-        : TextLineBaseSegment(ElementType::LET_RING_SEGMENT, sp, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF) { }
+    LetRingSegment(Spanner* sp, EngravingItem* parent)
+        : TextLineBaseSegment(ElementType::LET_RING_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF) { }
 
     LetRingSegment* clone() const override { return new LetRingSegment(*this); }
 

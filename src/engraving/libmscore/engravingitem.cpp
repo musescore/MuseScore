@@ -1582,6 +1582,11 @@ void EngravingItem::undoSetVisible(bool v)
     undoChangeProperty(Pid::VISIBLE, v);
 }
 
+void EngravingItem::undoAddElement(EngravingItem* element)
+{
+    score()->undoAddElement(element);
+}
+
 //---------------------------------------------------------
 //   drawSymbol
 //---------------------------------------------------------

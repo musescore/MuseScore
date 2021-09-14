@@ -75,8 +75,8 @@ static const ElementStyle hairpinStyle {
 //   HairpinSegment
 //---------------------------------------------------------
 
-HairpinSegment::HairpinSegment(Spanner* sp, Score* s)
-    : TextLineBaseSegment(ElementType::HAIRPIN_SEGMENT, sp, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+HairpinSegment::HairpinSegment(Spanner* sp, EngravingItem* parent)
+    : TextLineBaseSegment(ElementType::HAIRPIN_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
 }
 
@@ -655,7 +655,7 @@ static const ElementStyle hairpinSegmentStyle {
 
 LineSegment* Hairpin::createLineSegment()
 {
-    HairpinSegment* h = new HairpinSegment(this, score());
+    HairpinSegment* h = new HairpinSegment(this, this);
     h->setTrack(track());
     h->initElementStyle(&hairpinSegmentStyle);
     return h;

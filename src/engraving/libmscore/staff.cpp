@@ -329,7 +329,7 @@ bool Staff::canDisableVoice() const
     return countOfVisibleVoices > 1;
 }
 
-void Staff::updateVisibilityVoices()
+void Staff::updateVisibilityVoices(Staff* masterStaff)
 {
     if (!score()->excerpt()) {
         return;
@@ -338,11 +338,6 @@ void Staff::updateVisibilityVoices()
     auto tracks = score()->excerpt()->tracks();
     if (tracks.empty()) {
         _visibilityVoices = { true, true, true, true };
-        return;
-    }
-
-    Staff* masterStaff = this->masterScore()->staffById(id());
-    if (!masterStaff) {
         return;
     }
 
@@ -912,7 +907,7 @@ bool Staff::readProperties(XmlReader& e)
         e.readDouble(0.1, 10.0);
     } else if (tag == "linkedTo") {
         int v = e.readInt() - 1;
-        Staff* st = masterScore()->staff(v);
+        Staff* st = score()->masterScore()->staff(v);
         if (_links) {
             qDebug("Staff::readProperties: multiple <linkedTo> tags");
             if (!st || isLinked(st)) {     // maybe we don't need actually to relink...

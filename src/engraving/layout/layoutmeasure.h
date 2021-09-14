@@ -32,21 +32,21 @@ class MeasureBase;
 }
 
 namespace mu::engraving {
-class LayoutStateContext;
+class LayoutContext;
 class LayoutContext;
 class LayoutMeasure
 {
 public:
     LayoutMeasure() = default;
 
-    static void getNextMeasure(const LayoutOptions& options, LayoutStateContext& lc);
+    static void getNextMeasure(const LayoutOptions& options, LayoutContext& lc);
 
 private:
 
     static void createMMRest(const LayoutOptions& options, Ms::Score* score, Ms::Measure* firstMeasure, Ms::Measure* lastMeasure,
                              const Ms::Fraction& len);
 
-    static int adjustMeasureNo(LayoutStateContext& lc, Ms::MeasureBase* m);
+    static int adjustMeasureNo(LayoutContext& lc, Ms::MeasureBase* m);
 };
 }
 

@@ -152,7 +152,7 @@ protected:
     qreal _dashLength = 0;
 
 public:
-    LyricsLineSegment(Spanner*, Score*);
+    LyricsLineSegment(Spanner*, EngravingItem* parent);
 
     LyricsLineSegment* clone() const override { return new LyricsLineSegment(*this); }
     void draw(mu::draw::Painter*) const override;

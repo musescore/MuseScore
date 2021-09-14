@@ -359,7 +359,7 @@ static const ElementStyle trillSegmentStyle {
 
 LineSegment* Trill::createLineSegment()
 {
-    TrillSegment* seg = new TrillSegment(this, score());
+    TrillSegment* seg = new TrillSegment(this, this);
     seg->setTrack(track());
     seg->setColor(color());
     seg->initElementStyle(&trillSegmentStyle);

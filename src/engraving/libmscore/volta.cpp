@@ -65,8 +65,8 @@ static const ElementStyle voltaStyle {
 //   VoltaSegment
 //---------------------------------------------------------
 
-VoltaSegment::VoltaSegment(Spanner* sp, Score* s)
-    : TextLineBaseSegment(ElementType::VOLTA_SEGMENT, sp, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF | ElementFlag::SYSTEM)
+VoltaSegment::VoltaSegment(Spanner* sp, EngravingItem* parent)
+    : TextLineBaseSegment(ElementType::VOLTA_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF | ElementFlag::SYSTEM)
 {
 }
 
@@ -218,7 +218,7 @@ static const ElementStyle voltaSegmentStyle {
 
 LineSegment* Volta::createLineSegment()
 {
-    VoltaSegment* vs = new VoltaSegment(this, score());
+    VoltaSegment* vs = new VoltaSegment(this, this);
     vs->setTrack(track());
     vs->initElementStyle(&voltaSegmentStyle);
     return vs;

@@ -32,7 +32,7 @@ class Tremolo;
 }
 
 namespace mu::engraving {
-class LayoutStateContext;
+class LayoutContext;
 class Layout
 {
 public:
@@ -42,12 +42,12 @@ public:
 
 private:
 
-    void layoutLinear(const LayoutOptions& options, LayoutStateContext& lc);
-    void layoutLinear(bool layoutAll, const LayoutOptions& options, LayoutStateContext& lc);
-    void resetSystems(bool layoutAll, const LayoutOptions& options, LayoutStateContext& lc);
-    void collectLinearSystem(const LayoutOptions& options, LayoutStateContext& lc);
+    void layoutLinear(const LayoutOptions& options, LayoutContext& ctx);
+    void layoutLinear(bool layoutAll, const LayoutOptions& options, LayoutContext& lc);
+    void resetSystems(bool layoutAll, const LayoutOptions& options, LayoutContext& lc);
+    void collectLinearSystem(const LayoutOptions& options, LayoutContext& ctx);
 
-    void doLayout(const LayoutOptions& options, LayoutStateContext& lc);
+    void doLayout(const LayoutOptions& options, LayoutContext& lc);
 
     Ms::Score* m_score = nullptr;
 };

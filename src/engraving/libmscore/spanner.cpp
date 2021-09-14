@@ -57,15 +57,15 @@ public:
 //   SpannerSegment
 //---------------------------------------------------------
 
-SpannerSegment::SpannerSegment(const ElementType& type, Spanner* sp, Score* s, ElementFlags f)
-    : EngravingItem(type, s, f)
+SpannerSegment::SpannerSegment(const ElementType& type, Spanner* sp, EngravingItem* parent, ElementFlags f)
+    : EngravingItem(type, parent, f)
 {
     _spanner = sp;
     setSpannerSegmentType(SpannerSegmentType::SINGLE);
 }
 
-SpannerSegment::SpannerSegment(const ElementType& type, Score* s, ElementFlags f)
-    : EngravingItem(type, s, f)
+SpannerSegment::SpannerSegment(const ElementType& type, EngravingItem* parent, ElementFlags f)
+    : EngravingItem(type, parent, f)
 {
     setSpannerSegmentType(SpannerSegmentType::SINGLE);
     _spanner = 0;

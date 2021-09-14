@@ -2311,10 +2311,10 @@ std::pair<qreal, qreal> Segment::computeCellWidth(const std::vector<int>& visibl
         return { 0, 0 };
     }
 
-    auto calculateWidth = [measure = measure(), score = masterScore()](ChordRest* cr) {
+    auto calculateWidth = [measure = measure(), sc = score()->masterScore()](ChordRest* cr) {
         auto quantum = measure->quantumOfSegmentCell();
-        return score->widthOfSegmentCell()
-               * score->spatium()
+        return sc->widthOfSegmentCell()
+               * sc->spatium()
                * cr->globalTicks().numerator() / cr->globalTicks().denominator()
                * quantum.denominator() / quantum.numerator();
     };

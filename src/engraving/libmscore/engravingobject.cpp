@@ -564,7 +564,6 @@ void EngravingObject::readAddConnector(ConnectorInfoReader* info, bool pasteMode
 //   linkTo
 //    link this to element
 //---------------------------------------------------------
-
 void EngravingObject::linkTo(EngravingObject* element)
 {
     Q_ASSERT(element != this);
@@ -774,6 +773,16 @@ MasterScore* EngravingObject::masterScore() const
     return score()->masterScore();
 }
 
+bool EngravingObject::onSameScore(const EngravingObject* other) const
+{
+    return this->score() == other->score();
+}
+
+const MStyle* EngravingObject::style() const
+{
+    return &score()->style();
+}
+
 //---------------------------------------------------------
 //   getPropertyFlagsIdx
 //---------------------------------------------------------
@@ -930,5 +939,10 @@ QVariant EngravingObject::styleValue(Pid pid, Sid sid) const
     default:
         return score()->styleV(sid);
     }
+}
+
+QString EngravingObject::mscoreVersion() const
+{
+    return score()->masterScore()->mscoreVersion();
 }
 }

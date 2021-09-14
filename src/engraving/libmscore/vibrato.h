@@ -43,8 +43,8 @@ class VibratoSegment final : public LineSegment
 
 protected:
 public:
-    VibratoSegment(Spanner* sp, Score* s)
-        : LineSegment(ElementType::VIBRATO_SEGMENT, sp, s, ElementFlag::MOVABLE | ElementFlag::ON_STAFF) {}
+    VibratoSegment(Spanner* sp, EngravingItem* parent)
+        : LineSegment(ElementType::VIBRATO_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF) {}
 
     VibratoSegment* clone() const override { return new VibratoSegment(*this); }
 

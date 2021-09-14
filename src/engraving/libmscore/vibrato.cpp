@@ -224,7 +224,7 @@ static const ElementStyle vibratoSegmentStyle {
 
 LineSegment* Vibrato::createLineSegment()
 {
-    VibratoSegment* seg = new VibratoSegment(this, score());
+    VibratoSegment* seg = new VibratoSegment(this, this);
     seg->setTrack(track());
     seg->setColor(color());
     seg->initElementStyle(&vibratoSegmentStyle);
