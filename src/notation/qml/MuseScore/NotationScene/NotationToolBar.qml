@@ -41,6 +41,7 @@ Rectangle {
         id: keynavSub
         name: "NotationToolBar"
         enabled: root.enabled && root.visible
+        accessible.name: qsTrc("notation", "Notation toolbar")
         onActiveChanged: {
             if (active) {
                 root.activeFocusRequested()
