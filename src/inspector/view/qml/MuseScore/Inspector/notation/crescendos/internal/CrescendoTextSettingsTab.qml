@@ -41,23 +41,9 @@ FocusableItem {
 
         spacing: 12
 
-        InspectorPropertyView {
+        TextSection {
             titleText: qsTrc("inspector", "Beginning text")
             propertyItem: root.model ? root.model.beginningText : null
-
-            TextInputField {
-                isIndeterminate: root.model ? root.model.beginningText.isUndefined : false
-                currentText: root.model ? root.model.beginningText.value : ""
-                enabled: root.model ? root.model.beginningText.isEnabled : false
-
-                onCurrentTextEdited: {
-                    if (!root.model) {
-                        return
-                    }
-
-                    root.model.beginningText.value = newTextValue
-                }
-            }
         }
 
         OffsetSection {
@@ -67,27 +53,9 @@ FocusableItem {
 
         SeparatorLine { anchors.margins: -10 }
 
-        Column {
-            width: parent.width
-            spacing: 8
-
-            StyledTextLabel {
-                text: qsTrc("inspector", "Text when continuing to a new system")
-            }
-
-            TextInputField {
-                isIndeterminate: root.model ? root.model.continiousText.isUndefined : false
-                currentText: root.model ? root.model.continiousText.value : ""
-                enabled: root.model ? root.model.continiousText.isEnabled : false
-
-                onCurrentTextEdited: {
-                    if (!root.model) {
-                        return
-                    }
-
-                    root.model.continiousText.value = newTextValue
-                }
-            }
+        TextSection {
+            titleText: qsTrc("inspector", "Text when continuing to a new system")
+            propertyItem: root.model ? root.model.continiousText : null
         }
 
         OffsetSection {

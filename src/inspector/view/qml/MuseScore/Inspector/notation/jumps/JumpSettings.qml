@@ -35,54 +35,19 @@ Column {
 
     spacing: 12
 
-    InspectorPropertyView {
+    TextSection {
         titleText: qsTrc("inspector", "Jump to")
         propertyItem: root.model ? root.model.jumpTo : null
-
-        TextInputField {
-            isIndeterminate: root.model ? root.model.jumpTo.isUndefined : false
-            currentText: root.model ? root.model.jumpTo.value : ""
-            enabled: root.model ? root.model.jumpTo.isEnabled : false
-
-            onCurrentTextEdited: {
-                if (!root.model) {
-                    return
-                }
-
-                root.model.jumpTo.value = newTextValue
-            }
-        }
     }
 
-    InspectorPropertyView {
-
+    TextSection {
         titleText: qsTrc("inspector", "Play until")
         propertyItem: root.model ? root.model.playUntil : null
-
-        TextInputField {
-            isIndeterminate: root.model ? root.model.playUntil.isUndefined : false
-            currentText: root.model ? root.model.playUntil.value : ""
-            enabled: root.model ? root.model.playUntil.isEnabled : false
-
-            onCurrentTextEdited: {
-                if (!root.model) {
-                    return
-                }
-
-                root.model.playUntil.value = newTextValue
-            }
-        }
     }
 
-    InspectorPropertyView {
+    TextSection {
         titleText: qsTrc("inspector", "Continue at")
         propertyItem: root.model ? root.model.continueAt : null
-
-        TextInputField {
-            isIndeterminate: root.model ? root.model.continueAt.isUndefined : false
-            currentText: root.model ? root.model.continueAt.value : ""
-            enabled: root.model ? root.model.continueAt.isEnabled : false
-        }
     }
 
     CheckBox {
