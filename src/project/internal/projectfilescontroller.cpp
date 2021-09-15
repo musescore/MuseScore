@@ -231,7 +231,7 @@ IInteractive::Button ProjectFilesController::askAboutSavingScore(const io::path&
         IInteractive::Button::Save
     }, IInteractive::Button::Save, options);
 
-    return result.standartButton();
+    return result.standardButton();
 }
 
 void ProjectFilesController::saveScore()
@@ -373,7 +373,7 @@ bool ProjectFilesController::checkCanIgnoreError(const Ret& ret, const io::path&
         IInteractive::Button::Ignore
     }, IInteractive::Button::Ignore, options);
 
-    return result.standartButton() == IInteractive::Button::Ignore;
+    return result.standardButton() == IInteractive::Button::Ignore;
 }
 
 void ProjectFilesController::importPdf()

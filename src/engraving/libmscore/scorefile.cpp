@@ -459,7 +459,7 @@ bool Score::saveStyle(const QString& name)
     }
     QFile f(info.filePath());
     if (!f.open(QIODevice::WriteOnly)) {
-        MScore::lastError = tr("Open Style File\n%1\nfailed: %2").arg(info.filePath(), strerror(errno));
+        MScore::lastError = tr("Open Style File %1 failed: %2").arg(info.filePath(), f.errorString());
         return false;
     }
 

@@ -56,7 +56,7 @@ Notation::Notation(Ms::Score* score)
     m_accessibility = std::make_shared<NotationAccessibility>(this, m_interaction->selectionChanged());
     m_parts = std::make_shared<NotationParts>(this, m_interaction, m_undoStack);
     m_playback = std::make_shared<NotationPlayback>(this, m_notationChanged);
-    m_style = std::make_shared<NotationStyle>(this);
+    m_style = std::make_shared<NotationStyle>(this, m_undoStack);
     m_elements = std::make_shared<NotationElements>(this);
 
     m_interaction->noteInput()->noteAdded().onNotify(this, [this]() {

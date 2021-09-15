@@ -99,7 +99,7 @@ public:
         Result(const int& button, bool showAgain)
             : m_button(button), m_showAgain(showAgain) {}
 
-        Button standartButton() const { return static_cast<Button>(m_button); }
+        Button standardButton() const { return static_cast<Button>(m_button); }
         int button() const { return m_button; }
 
         bool showAgain() const { return m_showAgain; }

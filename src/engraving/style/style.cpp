@@ -284,6 +284,21 @@ bool MStyle::read(QIODevice* device, bool ign)
     return true;
 }
 
+bool MStyle::isValid(QIODevice* device)
+{
+    XmlReader e(device);
+    while (e.error() == XmlReader::Error::NoError && e.readNextStartElement()) {
+        if (e.name() == "museScore") {
+            while (e.readNextStartElement()) {
+                if (e.name() == "Style") {
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
+
 void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
 {
     TRACEFUNC;

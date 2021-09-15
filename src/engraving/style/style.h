@@ -72,6 +72,7 @@ public:
     bool read(QIODevice* device, bool ign = false);
     bool write(QIODevice* device);
     void save(XmlWriter& xml, bool optimize);
+    static bool isValid(QIODevice* device);
 
     void precomputeValues();
 

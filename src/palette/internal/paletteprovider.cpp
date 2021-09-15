@@ -366,7 +366,7 @@ void UserPaletteController::queryRemove(const QModelIndexList& removeIndices, in
                     IInteractive::Button::No
                 });
 
-            if (result.standartButton() == IInteractive::Button::Yes) {
+            if (result.standardButton() == IInteractive::Button::Yes) {
                 remove(removeIndices, RemoveAction::DeletePermanently);
             }
 
@@ -774,7 +774,7 @@ bool PaletteProvider::removeCustomPalette(const QPersistentModelIndex& index)
                 IInteractive::Button::Yes, IInteractive::Button::No
             });
 
-        if (result.standartButton() == IInteractive::Button::Yes) {
+        if (result.standardButton() == IInteractive::Button::Yes) {
             return m_userPaletteModel->removeRow(index.row(), index.parent());
         }
 
@@ -795,7 +795,7 @@ bool PaletteProvider::resetPalette(const QModelIndex& index)
                                               "Do you want to restore this palette to its default state? All changes to this palette will be lost."), {
             IInteractive::Button::No, IInteractive::Button::Yes
         });
-    if (result.standartButton() != IInteractive::Button::Yes) {
+    if (result.standardButton() != IInteractive::Button::Yes) {
         return false;
     }
 

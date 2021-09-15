@@ -93,7 +93,7 @@ void InstrumentSettingsModel::resetAllFormatting()
     IInteractive::Button button = interactive()->question(title, body, {
         IInteractive::Button::No,
         IInteractive::Button::Yes
-    }).standartButton();
+    }).standardButton();
 
     if (button == IInteractive::Button::No) {
         return;

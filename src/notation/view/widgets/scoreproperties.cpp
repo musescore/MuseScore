@@ -314,12 +314,12 @@ void ScorePropertiesDialog::closeEvent(QCloseEvent* event)
         IInteractive::Button::Save, IInteractive::Button::Discard, IInteractive::Button::Cancel
     }, IInteractive::Button::Save);
 
-    if (result.standartButton() == IInteractive::Button::Save) {
+    if (result.standardButton() == IInteractive::Button::Save) {
         if (!save()) {
             event->ignore();
             return;
         }
-    } else if (result.standartButton() == IInteractive::Button::Cancel) {
+    } else if (result.standardButton() == IInteractive::Button::Cancel) {
         event->ignore();
         return;
     }
