@@ -23,40 +23,49 @@ import QtQuick 2.15
 import QtQuick.Layouts 1.15
 
 import MuseScore.UiComponents 1.0
-import MuseScore.Preferences 1.0
 
-import "internal"
-
-PreferencesPage {
+BaseSection {
     id: root
 
-    contentHeight: content.height
+    title: qsTrc("appshell", "Default files")
 
-    ScorePreferencesModel {
-        id: scorePreferencesModel
-    }
+    property alias model: view.model
 
-    Component.onCompleted: {
-        scorePreferencesModel.load()
-    }
+    ListView {
+        id: view
 
-    Column {
-        id: content
+        anchors.left: parent.left
+        anchors.right: parent.right
 
-        width: parent.width
-        spacing: 24
+        height: contentHeight
 
-        DefaultFilesSection {
-            model: scorePreferencesModel
-        }
+        spacing: 4
 
-        SeparatorLine { }
+        delegate: RowLayout {
+            width: ListView.view.width
+            height: 30
 
-        ScoreViewSection {
-            isShowMIDIControls: scorePreferencesModel.isShowMIDIControls
+            spacing: 20
 
-            onShowMIDIControlsChangeRequested: {
-                scorePreferencesModel.isShowMIDIControls = show
+            StyledTextLabel {
+                Layout.alignment: Qt.AlignLeft
+
+                text: model.title + ":"
+            }
+
+            FilePicker {
+                Layout.alignment: Qt.AlignRight
+                Layout.preferredWidth: 380
+
+                dialogTitle: model.chooseTitle
+                filter: model.pathFilter
+                dir: model.directory
+
+                path: model.path
+
+                onPathEdited: {
+                    model.path = newPath
+                }
             }
         }
     }

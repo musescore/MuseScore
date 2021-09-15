@@ -90,5 +90,7 @@
         <file>qml/Preferences/internal/ScrollPagesSection.qml</file>
         <file>qml/Preferences/internal/NoteInputSection.qml</file>
         <file>qml/Preferences/internal/NoteInputPlaySection.qml</file>
+        <file>qml/Preferences/internal/DefaultFilesSection.qml</file>
+        <file>qml/Preferences/internal/ScoreViewSection.qml</file>
     </qresource>
 </RCC>
