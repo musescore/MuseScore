@@ -1364,7 +1364,7 @@ static void creditWords(XmlWriter& xml, const Score* const s, const int pageNr,
 
 static double parentHeight(const EngravingItem* element)
 {
-    const EngravingItem* parent = element->parentElement();
+    const EngravingItem* parent = element->parentItem();
 
     if (!parent) {
         return 0;
@@ -3903,7 +3903,7 @@ static void directionTag(XmlWriter& xml, Attributes& attr, EngravingItem const* 
                         seg->pagePos().x(), seg->pagePos().y(),
                         seg->offset().y());
                  */
-                pel = seg->parentElement();
+                pel = seg->parentItem();
             }
         } else if (el->type() == ElementType::DYNAMIC
                    || el->type() == ElementType::INSTRUMENT_CHANGE
@@ -3913,7 +3913,7 @@ static void directionTag(XmlWriter& xml, Attributes& attr, EngravingItem const* 
                    || el->type() == ElementType::TEXT) {
             // handle other elements attached (e.g. via Segment / Measure) to a system
             // find the system containing this element
-            for (const EngravingItem* e = el; e; e = e->parentElement()) {
+            for (const EngravingItem* e = el; e; e = e->parentItem()) {
                 if (e->type() == ElementType::SYSTEM) {
                     pel = e;
                 }

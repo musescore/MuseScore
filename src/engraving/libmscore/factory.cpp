@@ -501,7 +501,7 @@ CREATE_ITEM_IMPL(NoteDot, ElementType::NOTEDOT, Note)
 CREATE_ITEM_IMPL(NoteDot, ElementType::NOTEDOT, Rest)
 COPY_ITEM_IMPL(NoteDot)
 
-Ms::Page* Factory::createPage(Ms::EngravingObject* parent)
+Ms::Page* Factory::createPage(RootItem * parent)
 {
     Page* page = new Page(parent);
     page->setup();

@@ -28,6 +28,7 @@
 #include "bsp.h"
 
 namespace mu::engraving {
+class RootItem;
 class Factory;
 }
 
@@ -55,7 +56,7 @@ class Page final : public EngravingItem
     bool bspTreeValid;
 
     friend class mu::engraving::Factory;
-    Page(EngravingObject* parent);
+    Page(mu::engraving::RootItem* parent);
 
     QString replaceTextMacros(const QString&) const;
     void drawHeaderFooter(mu::draw::Painter*, int area, const QString&) const;

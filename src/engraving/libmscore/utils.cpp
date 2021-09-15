@@ -237,7 +237,7 @@ Segment* Score::tick2rightSegment(const Fraction& tick, bool useMMrest) const
 {
     Measure* m = useMMrest ? tick2measureMM(tick) : tick2measure(tick);
     if (m == 0) {
-        qDebug("tick2nearestSegment(): not found tick %d", tick.ticks());
+        //qDebug("tick2nearestSegment(): not found tick %d", tick.ticks());
         return 0;
     }
     // loop over all segments

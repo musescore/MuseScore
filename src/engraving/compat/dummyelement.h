@@ -30,14 +30,19 @@ namespace Ms {
 enum class Pid : int;
 }
 
+namespace mu::engraving {
+class RootItem;
+}
+
 namespace mu::engraving::compat {
 class DummyElement : public Ms::EngravingItem
 {
 public:
-    DummyElement(Ms::Score* s);
+    DummyElement(EngravingObject* parent);
     ~DummyElement();
 
-    Ms::Score* score();
+    void init();
+
     Ms::Page* page();
     Ms::System* system();
     Ms::Measure* measure();
@@ -51,7 +56,7 @@ public:
     bool setProperty(Ms::Pid, const QVariant&) override { return false; }
 
 private:
-
+    RootItem* m_root = nullptr;
     Ms::Page* m_page = nullptr;
     Ms::System* m_system = nullptr;
     Ms::Measure* m_measure = nullptr;

@@ -19,35 +19,39 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef __STEMSLASH_H__
-#define __STEMSLASH_H__
+#ifndef MU_ENGRAVING_ROOTITEM_H
+#define MU_ENGRAVING_ROOTITEM_H
 
 #include "engravingitem.h"
-#include "stem.h"
+
+#include "compat/dummyelement.h"
 
 namespace Ms {
-//---------------------------------------------------------
-//   @@ StemSlash
-///    used for grace notes of type acciaccatura
-//---------------------------------------------------------
+class Score;
+}
 
-class StemSlash final : public EngravingItem
+namespace mu::engraving {
+class RootItem : public Ms::EngravingItem
 {
-    mu::LineF line;
-
-    friend class mu::engraving::Factory;
-    StemSlash(Chord* parent = 0);
-
 public:
+    RootItem(Ms::Score* score);
+    ~RootItem();
 
-    qreal mag() const override { return parentItem()->mag(); }
-    void setLine(const mu::LineF& l);
+    compat::DummyElement* dummy() const;
+    void initDummy();
 
-    StemSlash* clone() const override { return new StemSlash(*this); }
-    void draw(mu::draw::Painter*) const override;
-    void layout() override;
-    Chord* chord() const { return (Chord*)parent(); }
+    EngravingObject* treeParent() const override;
+    EngravingObject* treeChild(int n) const override;
+    int treeChildCount() const override;
+
+    Ms::EngravingItem* clone() const override { return nullptr; }
+    QVariant getProperty(Ms::Pid) const override { return QVariant(); }
+    bool setProperty(Ms::Pid, const QVariant&) override { return false; }
+
+private:
+    Ms::Score* m_score = nullptr;
+    compat::DummyElement* m_dummy = nullptr;
 };
-}     // namespace Ms
-#endif
+}
+
+#endif // MU_ENGRAVING_ROOTITEM_H

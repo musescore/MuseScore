@@ -42,6 +42,7 @@
 #include "select.h"
 #include "spannermap.h"
 #include "synthesizerstate.h"
+#include "rootitem.h"
 
 #include "infrastructure/io/mscwriter.h"
 #include "infrastructure/io/mscreader.h"
@@ -51,7 +52,6 @@
 
 #include "layout/layout.h"
 #include "layout/layoutoptions.h"
-#include "compat/dummyelement.h"
 
 #include "style/style.h"
 
@@ -472,11 +472,10 @@ private:
     QString accInfo;                      ///< information about selected element(s) for use by screen-readers
     QString accMessage;                   ///< temporary status message for use by screen-readers
 
+    mu::engraving::RootItem* m_rootItem = nullptr;
     mu::engraving::AccessibleScore* m_accessible = nullptr;
-
     mu::engraving::Layout m_layout;
     mu::engraving::LayoutOptions m_layoutOptions;
-    mu::engraving::compat::DummyElement* m_dummyElement = nullptr;
 
     ChordRest* nextMeasure(ChordRest* element, bool selectBehavior = false, bool mmRest = false);
     ChordRest* prevMeasure(ChordRest* element, bool mmRest = false);
@@ -574,7 +573,8 @@ public:
     int treeChildCount() const override;
     void dumpScoreTree();  // for debugging purposes
 
-    mu::engraving::compat::DummyElement* dummy() { return m_dummyElement; }
+    mu::engraving::RootItem* rootItem() const { return m_rootItem; }
+    mu::engraving::compat::DummyElement* dummy() { return m_rootItem->dummy(); }
 
     void rebuildBspTree();
     bool noStaves() const { return _staves.empty(); }

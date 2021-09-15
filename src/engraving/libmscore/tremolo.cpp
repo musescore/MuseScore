@@ -102,7 +102,7 @@ qreal Tremolo::chordMag() const
 
 qreal Tremolo::mag() const
 {
-    return parentElement() ? parentElement()->mag() : 1.0;
+    return parentItem() ? parentItem()->mag() : 1.0;
 }
 
 //---------------------------------------------------------

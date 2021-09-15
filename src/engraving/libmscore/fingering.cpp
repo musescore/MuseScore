@@ -105,7 +105,7 @@ Placement Fingering::calculatePlacement() const
 void Fingering::layout()
 {
     if (parent()) {
-        Fraction tick = parentElement()->tick();
+        Fraction tick = parentItem()->tick();
         const Staff* st = staff();
         if (st && st->isTabStaff(tick) && !st->staffType(tick)->showTabFingering()) {
             setbbox(RectF());

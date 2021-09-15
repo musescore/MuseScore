@@ -687,7 +687,7 @@ int Note::treeChildCount() const
 
 EngravingObject* Accidental::treeParent() const
 {
-    if (parent()->isTrillSegment()) {
+    if (parent() && parent()->isTrillSegment()) {
         return parent()->treeParent();
     }
     return note();

@@ -380,7 +380,7 @@ void Bracket::endEditDrag(EditData&)
     if (staffIdx1 + 1 >= n) {
         staffIdx2 = staffIdx1;
     } else {
-        qreal ay  = parentElement()->pagePos().y();
+        qreal ay  = parentItem()->pagePos().y();
         System* s = system();
         qreal y   = s->staff(staffIdx1)->y() + ay;
         qreal h1  = staff()->height();

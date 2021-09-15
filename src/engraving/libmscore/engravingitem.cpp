@@ -137,6 +137,11 @@ using namespace mu::engraving;
 namespace Ms {
 // extern bool showInvisible;
 
+EngravingItem* EngravingItemList::at(size_t i) const
+{
+    return *std::next(begin(), i);
+}
+
 EngravingItem::EngravingItem(const ElementType& type, EngravingObject* se, ElementFlags f)
     : EngravingObject(type, se)
 {
@@ -197,6 +202,28 @@ void EngravingItem::setup()
 #endif
 }
 
+EngravingItem* EngravingItem::parentItem() const
+{
+    EngravingObject* p = parent();
+    while (p) {
+        if (p->isEngravingItem()) {
+            return static_cast<EngravingItem*>(p);
+        }
+    }
+    return nullptr;
+}
+
+EngravingItemList EngravingItem::childrenItems() const
+{
+    EngravingItemList list;
+    for (EngravingObject* ch : children()) {
+        if (ch->isEngravingItem()) {
+            list.push_back(static_cast<EngravingItem*>(ch));
+        }
+    }
+    return list;
+}
+
 mu::engraving::AccessibleItem* EngravingItem::createAccessible()
 {
 #ifdef ENGRAVING_BUILD_ACCESSIBLE_TREE
@@ -235,7 +262,7 @@ void EngravingItem::localSpatiumChanged(qreal oldValue, qreal newValue)
 
 qreal EngravingItem::spatium() const
 {
-    if (systemFlag() || (parent() && parentElement()->systemFlag())) {
+    if (systemFlag() || (parent() && parentItem()->systemFlag())) {
         return score()->spatium();
     }
     Staff* s = staff();
@@ -448,7 +475,7 @@ Fraction EngravingItem::tick() const
         } else if (e->parent()->isMeasureBase()) {
             return toMeasureBase(e->parent())->tick();
         }
-        e = e->parentElement();
+        e = e->parentItem();
     }
     return Fraction(0, 1);
 }
@@ -464,7 +491,7 @@ Fraction EngravingItem::rtick() const
         if (e->parent()->isSegment()) {
             return toSegment(e->parent())->rtick();
         }
-        e = e->parentElement();
+        e = e->parentItem();
     }
     return Fraction(0, 1);
 }
@@ -590,7 +617,7 @@ PointF EngravingItem::pagePos() const
         } else if (parent()->isSystem()) {
             system = toSystem(parent());
         } else if (parent()->isFretDiagram()) {
-            return p + parentElement()->pagePos();
+            return p + parentItem()->pagePos();
         } else {
             qFatal("this %s parent %s\n", name(), parent()->name());
         }
@@ -607,7 +634,7 @@ PointF EngravingItem::pagePos() const
         p.rx() = pageX();
     } else {
         if (parent()->parent()) {
-            p += parentElement()->pagePos();
+            p += parentItem()->pagePos();
         }
     }
     return p;
@@ -638,7 +665,7 @@ PointF EngravingItem::canvasPos() const
         } else if (parent()->isChord()) {       // grace chord
             measure = toSegment(parent()->parent())->measure();
         } else if (parent()->isFretDiagram()) {
-            return p + parentElement()->canvasPos() + PointF(toFretDiagram(parent())->centerX(), 0.0);
+            return p + parentItem()->canvasPos() + PointF(toFretDiagram(parent())->centerX(), 0.0);
         } else {
             qFatal("this %s parent %s\n", name(), parent()->name());
         }
@@ -657,7 +684,7 @@ PointF EngravingItem::canvasPos() const
         }
         p.rx() = canvasX();
     } else {
-        p += parentElement()->canvasPos();
+        p += parentItem()->canvasPos();
     }
     return p;
 }
@@ -669,7 +696,7 @@ PointF EngravingItem::canvasPos() const
 qreal EngravingItem::pageX() const
 {
     qreal xp = x();
-    for (EngravingItem* e = parentElement(); e && e->parentElement(); e = e->parentElement()) {
+    for (EngravingItem* e = parentItem(); e && e->parentItem(); e = e->parentItem()) {
         xp += e->x();
     }
     return xp;
@@ -682,7 +709,7 @@ qreal EngravingItem::pageX() const
 qreal EngravingItem::canvasX() const
 {
     qreal xp = x();
-    for (EngravingItem* e = parentElement(); e; e = e->parentElement()) {
+    for (EngravingItem* e = parentItem(); e; e = e->parentItem()) {
         xp += e->x();
     }
     return xp;
@@ -1500,7 +1527,7 @@ EngravingItem* EngravingItem::findAncestor(ElementType t)
 {
     EngravingItem* e = this;
     while (e && e->type() != t) {
-        e = e->parentElement();
+        e = e->parentItem();
     }
     return e;
 }
@@ -1509,7 +1536,7 @@ const EngravingItem* EngravingItem::findAncestor(ElementType t) const
 {
     const EngravingItem* e = this;
     while (e && e->type() != t) {
-        e = e->parentElement();
+        e = e->parentItem();
     }
     return e;
 }
@@ -1523,7 +1550,7 @@ Measure* EngravingItem::findMeasure()
     if (isMeasure()) {
         return toMeasure(this);
     } else if (parent()) {
-        return parentElement()->findMeasure();
+        return parentItem()->findMeasure();
     } else {
         return 0;
     }
@@ -1548,7 +1575,7 @@ MeasureBase* EngravingItem::findMeasureBase()
     if (isMeasureBase()) {
         return toMeasureBase(this);
     } else if (parent()) {
-        return parentElement()->findMeasureBase();
+        return parentItem()->findMeasureBase();
     } else {
         return 0;
     }
@@ -1711,7 +1738,7 @@ EngravingItem* EngravingItem::nextElement()
         case ElementType::BAR_LINE:
             return nextSegmentElement();
         default: {
-            return e->parentElement()->nextElement();
+            return e->parentItem()->nextElement();
         }
         }
     }
@@ -1745,7 +1772,7 @@ EngravingItem* EngravingItem::prevElement()
         case ElementType::BAR_LINE:
             return prevSegmentElement();
         default: {
-            return e->parentElement()->prevElement();
+            return e->parentItem()->prevElement();
         }
         }
     }
@@ -1795,7 +1822,7 @@ EngravingItem* EngravingItem::nextSegmentElement()
         default:
             break;
         }
-        p = p->parentElement();
+        p = p->parentItem();
     }
     return score()->firstElement();
 }
@@ -1843,7 +1870,7 @@ EngravingItem* EngravingItem::prevSegmentElement()
         default:
             break;
         }
-        p = p->parentElement();
+        p = p->parentItem();
     }
     return score()->firstElement();
 }
@@ -2086,7 +2113,7 @@ RectF EngravingItem::drag(EditData& ed)
                 p = toPage(e);
                 break;
             }
-            e = e->parentElement();
+            e = e->parentItem();
         }
         if (p) {
             bool move = false;
@@ -2144,7 +2171,7 @@ void EngravingItem::endDrag(EditData& ed)
 QVector<LineF> EngravingItem::genericDragAnchorLines() const
 {
     qreal xp = 0.0;
-    for (EngravingItem* e = parentElement(); e; e = e->parentElement()) {
+    for (EngravingItem* e = parentItem(); e; e = e->parentItem()) {
         xp += e->x();
     }
     qreal yp;
@@ -2160,7 +2187,7 @@ QVector<LineF> EngravingItem::genericDragAnchorLines() const
             yp += staff()->staffTypeForElement(this)->yoffset().val() * spatium();
         }
     } else {
-        yp = parentElement()->canvasPos().y();
+        yp = parentItem()->canvasPos().y();
     }
     PointF p1(xp, yp);
     LineF anchorLine(p1, canvasPos());

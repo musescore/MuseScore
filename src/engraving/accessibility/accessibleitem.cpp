@@ -109,7 +109,7 @@ void AccessibleItem::notifyAboutFocus(bool focused)
 
 const IAccessible* AccessibleItem::accessibleParent() const
 {
-    Ms::EngravingItem* p = m_element->parentElement();
+    Ms::EngravingItem* p = m_element->parentItem();
     if (!p) {
         return nullptr;
     }

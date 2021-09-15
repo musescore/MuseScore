@@ -142,3 +142,90 @@ bool EngravingProject::writeMscz(mu::engraving::MscWriter& writer, bool onlySele
 
     return ok;
 }
+
+void EngravingProject::checkTree()
+{
+    LOGI() << "\n\n\n";
+    LOGI() << "========================";
+    checkTree(m_masterScore->rootItem());
+
+    LOGI() << "========================";
+//    LOGI() << "dumpTree:";
+//    int level = 0;
+//    dumpTree(m_masterScore->rootItem(), level);
+
+//    LOGI() << "========================";
+//    LOGI() << "dumpTreeTree:";
+//    level = 0;
+//    dumpTreeTree(m_masterScore, level);
+
+//    LOGI() << "========================";
+}
+
+void EngravingProject::dumpTree(const Ms::EngravingItem* item, int& level)
+{
+    if (item->isDummy()) {
+        return;
+    }
+
+    ++level;
+    QString gap;
+    gap.fill(' ', level);
+    LOGI() << gap << item->name();
+    for (const Ms::EngravingObject* ch : item->children()) {
+        if (!ch->isEngravingItem()) {
+            LOGI() << "[" << item->name() << ": not item ch: " << ch->name();
+            continue;
+        }
+        dumpTree(static_cast<const Ms::EngravingItem*>(ch), level);
+    }
+    --level;
+}
+
+void EngravingProject::dumpTreeTree(const Ms::EngravingObject* obj, int& level)
+{
+    ++level;
+    QString gap;
+    gap.fill(' ', level);
+    LOGI() << gap << obj->name();
+    for (int i = 0; i < obj->treeChildCount(); ++i) {
+        const Ms::EngravingObject* ch = obj->treeChild(i);
+        dumpTreeTree(ch, level);
+    }
+    --level;
+}
+
+void EngravingProject::checkTree(const Ms::EngravingObject* obj)
+{
+    if (obj->isDummy()) {
+        return;
+    }
+
+    Ms::EngravingObject* p1 = obj->parent(true);
+    Ms::EngravingObject* p2 = obj->treeParent();
+    if (p1 && p2 && p1 != p2) {
+        LOGI() << "obj: " << obj->name();
+        LOGE() << "parents is differens, p1: " << p1->name() << ", p2: " << p2->name();
+    }
+
+    int ch1 = obj->children().size();
+    int ch2 = obj->treeChildCount();
+    if (ch1 != ch2) {
+        LOGI() << "obj: " << obj->name();
+        LOGE() << "chcount is differens, ch1: " << ch1 << ", ch2: " << ch2;
+
+        LOGI() << "children1:";
+        for (size_t i = 0; i < obj->children().size(); ++i) {
+            LOGI() << i << ": " << obj->children().at(i)->name();
+        }
+
+        LOGI() << "children2:";
+        for (int i = 0; i < obj->treeChildCount(); ++i) {
+            LOGI() << i << ": " << obj->treeChild(i)->name();
+        }
+    }
+
+    for (const Ms::EngravingObject* ch : obj->children()) {
+        checkTree(ch);
+    }
+}

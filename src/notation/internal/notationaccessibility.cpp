@@ -198,7 +198,7 @@ std::pair<int, float> NotationAccessibility::barbeat(const EngravingItem* elemen
 
     const EngravingItem* parent = element;
     while (parent && parent->type() != ElementType::SEGMENT && parent->type() != ElementType::MEASURE) {
-        parent = parent->parentElement();
+        parent = parent->parentItem();
     }
 
     if (!parent) {

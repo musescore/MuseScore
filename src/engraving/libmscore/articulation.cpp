@@ -301,7 +301,7 @@ bool Articulation::layoutCloseToNote() const
 QVector<mu::LineF> Articulation::dragAnchorLines() const
 {
     QVector<LineF> result;
-    result << LineF(canvasPos(), parentElement()->canvasPos());
+    result << LineF(canvasPos(), parentItem()->canvasPos());
     return result;
 }
 
@@ -586,7 +586,7 @@ void Articulation::resetProperty(Pid id)
 
 qreal Articulation::mag() const
 {
-    return parent() ? parentElement()->mag() * score()->styleD(Sid::articulationMag) : 1.0;
+    return parent() ? parentItem()->mag() * score()->styleD(Sid::articulationMag) : 1.0;
 }
 
 bool Articulation::isTenuto() const

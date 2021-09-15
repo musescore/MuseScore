@@ -1028,7 +1028,7 @@ void TextBlock::layout(TextBase* t)
     qreal lm     = 0.0;
 
     qreal layoutWidth = 0;
-    EngravingItem* e = t->parentElement();
+    EngravingItem* e = t->parentItem();
     if (e && t->layoutToParentWidth()) {
         layoutWidth = e->width();
         switch (e->type()) {
@@ -2043,7 +2043,7 @@ void TextBase::layout1()
                 yoff = p->tm();
             } else if (parent()->isMeasure()) {
             } else {
-                h  = parentElement()->height();
+                h  = parentItem()->height();
             }
         }
     } else {
