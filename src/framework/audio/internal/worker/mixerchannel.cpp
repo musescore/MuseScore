@@ -150,6 +150,11 @@ samples_t MixerChannel::process(float* buffer, samples_t samplesPerChannel)
 
     if (processedSamplesCount == 0 || m_params.muted) {
         std::fill(buffer, buffer + samplesPerChannel * audioChannelsCount(), 0.f);
+
+        for (audioch_t audioChNum = 0; audioChNum < audioChannelsCount(); ++audioChNum) {
+            notifyAboutAudioSignalChanges(audioChNum, 0.f);
+        }
+
         return processedSamplesCount;
     }
 
@@ -187,10 +192,15 @@ void MixerChannel::completeOutput(float* buffer, unsigned int samplesCount) cons
 
         float rms = dsp::samplesRootMeanSquare(singleChannelSquaredSum, samplesCount);
 
-        m_volumePressureDbfsChanged.send(audioChNum, dsp::dbFromSample(rms));
-        m_signalAmplitudeRmsChanged.send(audioChNum, rms);
+        notifyAboutAudioSignalChanges(audioChNum, rms);
     }
 
     float totalRms = dsp::samplesRootMeanSquare(totalSquaredSum, samplesCount * audioChannelsCount());
     m_compressor->process(totalRms, buffer, audioChannelsCount(), samplesCount);
+}
+
+void MixerChannel::notifyAboutAudioSignalChanges(const audioch_t audioChannelNumber, const float linearRms) const
+{
+    m_volumePressureDbfsChanged.send(audioChannelNumber, dsp::dbFromSample(linearRms));
+    m_signalAmplitudeRmsChanged.send(audioChannelNumber, linearRms);
 }
