@@ -22,12 +22,15 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
 BaseSection {
     id: root
 
     title: qsTrc("appshell", "Zoom")
+
+    navigation.direction: NavigationPanel.Both
 
     property var defaultZoom: null
     property alias zoomTypes: defaultZoomTypesBox.model
@@ -54,6 +57,11 @@ BaseSection {
 
                 currentIndex: control.indexOfValue(root.defaultZoom.type)
 
+                navigation.name: "DefaultZoomBox"
+                navigation.panel: root.navigation
+                navigation.row: 0
+                navigation.column: 0
+
                 onValueEdited: {
                     root.defaultZoomTypeChangeRequested(newValue)
                 }
@@ -73,6 +81,11 @@ BaseSection {
                 currentValue: root.defaultZoom.level
                 enabled: root.defaultZoom.isPercentage
 
+                navigation.name: "DefaultZoomControl"
+                navigation.panel: root.navigation
+                navigation.row: 0
+                navigation.column: 1
+
                 onValueEdited: {
                     root.defaultZoomLevelChangeRequested(newValue)
                 }
@@ -89,6 +102,11 @@ BaseSection {
 
             minValue: 1
             maxValue: 16
+
+            navigation.name: "MouseZoomPercisionControl"
+            navigation.panel: root.navigation
+            navigation.row: 1
+            navigation.column: 0
 
             onValueEdited: {
                 root.mouseZoomPrecisionChangeRequested(newValue)

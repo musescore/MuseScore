@@ -48,6 +48,9 @@ PreferencesPage {
             zoomTypes: preferencesModel.zoomTypes()
             mouseZoomPrecision: preferencesModel.mouseZoomPrecision
 
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 1
+
             onDefaultZoomTypeChangeRequested: {
                 preferencesModel.setDefaultZoomType(zoomType)
             }
@@ -66,6 +69,9 @@ PreferencesPage {
         ScrollPagesSection {
             orientation: preferencesModel.scrollPagesOrientation
             limitScrollArea: preferencesModel.limitScrollArea
+
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 2
 
             onOrientationChangeRequested: {
                 preferencesModel.scrollPagesOrientation = orientation

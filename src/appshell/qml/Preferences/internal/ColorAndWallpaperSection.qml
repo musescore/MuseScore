@@ -68,7 +68,7 @@ BaseSection {
             navigation.row: 0
             navigation.column: 0
 
-            onClicked: {
+            onToggled: {
                 root.useColorChangeRequested(true)
             }
         }
@@ -101,7 +101,7 @@ BaseSection {
             navigation.row: 1
             navigation.column: 0
 
-            onClicked: {
+            onToggled: {
                 root.useColorChangeRequested(false)
             }
         }
