@@ -128,8 +128,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/fretdiagrams/fretdiagramsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/glissandos/glissandosettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/glissandos/glissandosettingsmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/models/notation/hairpins/hairpinsettingsmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/models/notation/hairpins/hairpinsettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/hairpinsettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/hairpinsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/images/imagesettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/images/imagesettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/jumps/jumpsettingsmodel.cpp
