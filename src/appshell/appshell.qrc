@@ -88,5 +88,7 @@
         <file>qml/Preferences/internal/AdvancedTopSection.qml</file>
         <file>qml/Preferences/internal/ZoomSection.qml</file>
         <file>qml/Preferences/internal/ScrollPagesSection.qml</file>
+        <file>qml/Preferences/internal/NoteInputSection.qml</file>
+        <file>qml/Preferences/internal/NoteInputPlaySection.qml</file>
     </qresource>
 </RCC>
