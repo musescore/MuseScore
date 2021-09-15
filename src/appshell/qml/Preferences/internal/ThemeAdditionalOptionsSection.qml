@@ -21,21 +21,36 @@
  */
 import QtQuick 2.15
 
-import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
-import MuseScore.Preferences 1.0
 
 BaseSection {
     id: root
 
+    property alias scoreInversionEnabled: scoreInversionEnable.checked
+
     signal resetThemeToDefaultRequested()
+    signal scoreInversionEnableChangeRequested(bool enable)
+
+    CheckBox {
+        id: scoreInversionEnable
+
+        text: qsTrc("appshell", "Invert score")
+
+        navigation.name: "ScoreInversionBox"
+        navigation.panel: root.navigation
+        navigation.row: 0
+
+        onClicked: {
+            root.scoreInversionEnableChangeRequested(!checked)
+        }
+    }
 
     FlatButton {
-        text: qsTrc("appshell", "Reset theme to default")
+        text: qsTrc("appshell", "Reset to default")
 
         navigation.name: "ResetButton"
         navigation.panel: root.navigation
-        navigation.order: 1
+        navigation.row: 1
 
         onClicked: {
             root.resetThemeToDefaultRequested()

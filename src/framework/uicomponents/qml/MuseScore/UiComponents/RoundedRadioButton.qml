@@ -119,7 +119,7 @@ RadioDelegate {
         }
     }
 
-    background: { }
+    background: Item { }
 
     states: [
         State {
