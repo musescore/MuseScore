@@ -48,26 +48,17 @@ Column {
         height: childrenRect.height
         width: parent.width
 
-        InspectorPropertyView {
+        OffsetSection {
             anchors.left: parent.left
             anchors.right: parent.horizontalCenter
             anchors.rightMargin: 2
 
-            titleText: qsTrc("inspector", "Offset")
-            propertyItem: root.model ? root.model.verticalOffset : null
+            verticalOffset: root.model ? root.model.verticalOffset : null
 
-            IncrementalPropertyControl {
-                isIndeterminate: root.model ? root.model.verticalOffset.isUndefined : false
-                currentValue: root.model ? root.model.verticalOffset.value : 0
-                icon: IconCode.VERTICAL
-
-                step: 0.1
-                decimals: 2
-                minValue: 0.1
-                maxValue: 5
-
-                onValueEdited: { root.model.verticalOffset.value = newValue }
-            }
+            verticalOffsetControl.step: 0.1
+            verticalOffsetControl.decimals: 2
+            verticalOffsetControl.minValue: 0.1
+            verticalOffsetControl.maxValue: 5
         }
 
         InspectorPropertyView {
