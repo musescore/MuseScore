@@ -23,6 +23,7 @@ import QtQuick 2.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
+
 import "../../common"
 import "internal"
 
@@ -61,7 +62,7 @@ Column {
 
     SeparatorLine { anchors.margins: -10 }
 
-    OffsetSection {
+    AppearanceOffsetSection {
         navigationPanel: root.navigationPanel
         navigationRowOffset: 300
         horizontalOffset: model ? model.horizontalOffset : null

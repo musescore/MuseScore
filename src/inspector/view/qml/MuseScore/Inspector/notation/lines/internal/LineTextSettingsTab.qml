@@ -19,12 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+
 import MuseScore.Inspector 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
+
 import "../../../common"
+import "../../../"
 
 FocusableItem {
     id: root
@@ -43,18 +46,18 @@ FocusableItem {
 
         TextSection {
             titleText: qsTrc("inspector", "Beginning text")
-            propertyItem: root.model ? root.model.beginningText : null
+            propertyItem: root.model ? root.model.beginingText : null
         }
 
         OffsetSection {
-            horizontalOffset: root.model ? root.model.beginningTextHorizontalOffset : null
-            verticalOffset: root.model ? root.model.beginningTextVerticalOffset : null
+            horizontalOffset: root.model ? root.model.beginingTextHorizontalOffset : null
+            verticalOffset: root.model ? root.model.beginingTextVerticalOffset : null
         }
 
         SeparatorLine { anchors.margins: -10 }
 
         TextSection {
-            titleText: qsTrc("inspector", "Text when continuing to a new system")
+            titleText:  qsTrc("inspector", "Text when continuing to a new system")
             propertyItem: root.model ? root.model.continiousText : null
         }
 
@@ -62,6 +65,19 @@ FocusableItem {
             horizontalOffset: root.model ? root.model.continiousTextHorizontalOffset : null
             verticalOffset: root.model ? root.model.continiousTextVerticalOffset : null
         }
+
+        SeparatorLine { anchors.margins: -10; visible: endTextSection.visible }
+
+        TextSection {
+            id: endTextSection
+
+            titleText:  qsTrc("inspector", "End text")
+            propertyItem: root.model ? root.model.endText : null
+        }
+
+        OffsetSection {
+            horizontalOffset: root.model ? root.model.endTextHorizontalOffset : null
+            verticalOffset: root.model ? root.model.endTextVerticalOffset : null
+        }
     }
 }
-

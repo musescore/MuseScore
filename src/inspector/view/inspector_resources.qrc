@@ -60,16 +60,17 @@
         <file>resources/icons/beams/beam_feathered_none.svg</file>
         <file>resources/icons/beams/beam_feathered_left.svg</file>
         <file>qml/MuseScore/Inspector/general/appearance/internal/HorizontalSpacingSection.qml</file>
-        <file>qml/MuseScore/Inspector/general/appearance/internal/OffsetSection.qml</file>
+        <file>qml/MuseScore/Inspector/general/appearance/internal/AppearanceOffsetSection.qml</file>
         <file>qml/MuseScore/Inspector/general/appearance/internal/ArrangeSection.qml</file>
         <file>qml/MuseScore/Inspector/general/appearance/internal/VerticalSpacingSection.qml</file>
         <file>resources/icons/question_mark.svg</file>
         <file>resources/icons/orientation_auto.svg</file>
         <file>qml/MuseScore/Inspector/common/PopupViewButton.qml</file>
+        <file>qml/MuseScore/Inspector/common/OffsetSection.qml</file>
         <file>qml/MuseScore/Inspector/text/TextInspectorView.qml</file>
         <file>qml/MuseScore/Inspector/common/InspectorSectionView.qml</file>
-        <file>qml/MuseScore/Inspector/notation/hairpins/internal/HairpinStyleSettingsTab.qml</file>
-        <file>qml/MuseScore/Inspector/notation/hairpins/internal/HairpinTextSettingsTab.qml</file>
+        <file>qml/MuseScore/Inspector/notation/lines/internal/HairpinStyleSettingsTab.qml</file>
+        <file>qml/MuseScore/Inspector/notation/lines/internal/LineTextSettingsTab.qml</file>
         <file>qml/MuseScore/Inspector/notation/crescendos/internal/CrescendoStyleSettingsTab.qml</file>
         <file>qml/MuseScore/Inspector/notation/crescendos/internal/CrescendoTextSettingsTab.qml</file>
         <file>qml/MuseScore/Inspector/notation/frames/internal/HorizontalGapsSection.qml</file>
@@ -85,6 +86,7 @@
         <file>qml/MuseScore/Inspector/score/ScoreDisplayInspectorView.qml</file>
         <file>qml/MuseScore/Inspector/score/ScoreAppearanceInspectorView.qml</file>
         <file>qml/MuseScore/Inspector/common/InspectorPropertyView.qml</file>
+        <file>qml/MuseScore/Inspector/common/TextSection.qml</file>
         <file>qml/MuseScore/Inspector/qmldir</file>
         <file>qml/MuseScore/Inspector/common/ColorSection.qml</file>
         <file>qml/MuseScore/Inspector/notation/NotationInspectorSectionLoader.qml</file>
@@ -100,7 +102,7 @@
         <file>qml/MuseScore/Inspector/notation/pedals/PedalSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/spacers/SpacerSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/clefs/ClefSettings.qml</file>
-        <file>qml/MuseScore/Inspector/notation/hairpins/HairpinSettings.qml</file>
+        <file>qml/MuseScore/Inspector/notation/lines/HairpinSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/crescendos/CrescendoSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/frames/TextFrameSettings.qml</file>

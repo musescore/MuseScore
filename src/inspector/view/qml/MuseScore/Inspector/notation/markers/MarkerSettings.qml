@@ -58,22 +58,8 @@ Column {
         }
     }
 
-    InspectorPropertyView {
+    TextSection {
         titleText: qsTrc("inspector", "Label")
         propertyItem: root.model ? root.model.label : null
-
-        TextInputField {
-            isIndeterminate: root.model ? root.model.label.isUndefined : false
-            currentText: root.model ? root.model.label.value : ""
-            enabled: root.model ? root.model.label.isEnabled : false
-
-            onCurrentTextEdited: {
-                if (!root.model) {
-                    return
-                }
-
-                root.model.label.value = newTextValue
-            }
-        }
     }
 }
