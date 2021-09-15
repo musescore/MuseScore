@@ -21,6 +21,7 @@
  */
 import QtQuick 2.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
 BaseSection {
@@ -42,6 +43,10 @@ BaseSection {
         text: qsTrc("appshell", "Play notes when editing")
         font: ui.theme.bodyBoldFont
 
+        navigation.name: "PlayNotesBox"
+        navigation.panel: root.navigation
+        navigation.row: 0
+
         onClicked: {
             root.playNotesWhenEditingChangeRequested(!checked)
         }
@@ -56,6 +61,10 @@ BaseSection {
 
         measureUnitsSymbol: qsTrc("appshell", "ms")
 
+        navigation.name: "NotePlayDurationControl"
+        navigation.panel: root.navigation
+        navigation.row: 1
+
         onValueEdited: {
             root.notePlayDurationChangeRequested(newValue)
         }
@@ -68,6 +77,10 @@ BaseSection {
 
         enabled: root.playNotesWhenEditing
 
+        navigation.name: "PlayChordBox"
+        navigation.panel: root.navigation
+        navigation.row: 2
+
         onClicked: {
             root.playChordWhenEditingChangeRequested(!checked)
         }
@@ -79,6 +92,10 @@ BaseSection {
         text: qsTrc("appshell", "Play chord symbol when editing")
 
         enabled: root.playNotesWhenEditing
+
+        navigation.name: "PlayChordSymbolBox"
+        navigation.panel: root.navigation
+        navigation.row: 3
 
         onClicked: {
             root.playChordSymbolWhenEditingChangeRequested(!checked)
