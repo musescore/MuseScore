@@ -70,7 +70,7 @@
         <file>qml/MuseScore/Inspector/text/TextInspectorView.qml</file>
         <file>qml/MuseScore/Inspector/common/InspectorSectionView.qml</file>
         <file>qml/MuseScore/Inspector/notation/lines/internal/HairpinStyleSettingsTab.qml</file>
-        <file>qml/MuseScore/Inspector/notation/lines/internal/HairpinTextSettingsTab.qml</file>
+        <file>qml/MuseScore/Inspector/notation/lines/internal/LineTextSettingsTab.qml</file>
         <file>qml/MuseScore/Inspector/notation/crescendos/internal/CrescendoStyleSettingsTab.qml</file>
         <file>qml/MuseScore/Inspector/notation/crescendos/internal/CrescendoTextSettingsTab.qml</file>
         <file>qml/MuseScore/Inspector/notation/frames/internal/HorizontalGapsSection.qml</file>
