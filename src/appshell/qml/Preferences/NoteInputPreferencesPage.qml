@@ -40,91 +40,51 @@ PreferencesPage {
 
         spacing: 22
 
-        StyledTextLabel {
-            text: qsTrc("appshell", "Note input")
-            font: ui.theme.bodyBoldFont
-        }
+        NoteInputSection {
+            advanceToNextNote: noteInputModel.advanceToNextNoteOnKeyRelease
+            colorNotes: noteInputModel.colorNotesOusideOfUsablePitchRange
 
-        CheckBox {
-            text: qsTrc("appshell", "Advance to next note on key release (MIDI)")
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 1
 
-            checked: noteInputModel.advanceToNextNoteOnKeyRelease
-
-            onClicked: {
-                noteInputModel.advanceToNextNoteOnKeyRelease = !checked
+            onAdvanceToNextNoteChangeRequested: {
+                noteInputModel.advanceToNextNoteOnKeyRelease = advance
             }
-        }
 
-        CheckBox {
-            width: 170
-            text: qsTrc("appshell", "Colour notes outside of usable pitch range")
-
-            checked: noteInputModel.colorNotesOusideOfUsablePitchRange
-
-            onClicked: {
-                noteInputModel.colorNotesOusideOfUsablePitchRange = !checked
+            onColorNotesChangeRequested: {
+                noteInputModel.colorNotesOusideOfUsablePitchRange = color
             }
-        }
 
-        IncrementalPropertyControlWithTitle {
-            title: qsTrc("appshell", "Delay between notes in automatic real time mode:")
-
-            titleWidth: 173
-            spacing: 46
-
-            currentValue: noteInputModel.delayBetweenNotesInRealTimeModeMilliseconds
-            measureUnitsSymbol: qsTrc("appshell", "ms")
-
-            onValueEdited: {
-                noteInputModel.delayBetweenNotesInRealTimeModeMilliseconds = newValue
+            onDelayBetweenNotesChangeRequested: {
+                noteInputModel.delayBetweenNotesInRealTimeModeMilliseconds = delay
             }
         }
 
         SeparatorLine {}
 
-        CheckBox {
-            text: qsTrc("appshell", "Play notes when editing")
-            font: ui.theme.bodyBoldFont
+        NoteInputPlaySection {
+            playNotesWhenEditing: noteInputModel.playNotesWhenEditing
+            playChordWhenEditing: noteInputModel.playChordWhenEditing
+            playChordSymbolWhenEditing: noteInputModel.playChordSymbolWhenEditing
+            notePlayDurationMilliseconds: noteInputModel.notePlayDurationMilliseconds
 
-            checked: noteInputModel.playNotesWhenEditing
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 2
 
-            onClicked: {
-                noteInputModel.playNotesWhenEditing = !checked
+            onPlayNotesWhenEditingChangeRequested: {
+                noteInputModel.playChordWhenEditing = play
             }
-        }
 
-        IncrementalPropertyControlWithTitle {
-            title: qsTrc("appshell", "Default duration:")
-
-            spacing: 126
-
-            currentValue: noteInputModel.notePlayDurationMilliseconds
-            measureUnitsSymbol: qsTrc("appshell", "ms")
-
-            onValueEdited: {
-                noteInputModel.notePlayDurationMilliseconds = newValue
+            onPlayChordWhenEditingChangeRequested: {
+                noteInputModel.playChordWhenEditing = play
             }
-        }
 
-        CheckBox {
-            text: qsTrc("appshell", "Play chord when editing")
-
-            checked: noteInputModel.playChordWhenEditing
-            enabled: noteInputModel.playNotesWhenEditing
-
-            onClicked: {
-                noteInputModel.playChordWhenEditing = !checked
+            onPlayChordSymbolWhenEditingChangeRequested: {
+                noteInputModel.playChordSymbolWhenEditing = play
             }
-        }
 
-        CheckBox {
-            text: qsTrc("appshell", "Play chord symbol when editing")
-
-            checked: noteInputModel.playChordSymbolWhenEditing
-            enabled: noteInputModel.playNotesWhenEditing
-
-            onClicked: {
-                noteInputModel.playChordSymbolWhenEditing = !checked
+            onNotePlayDurationChangeRequested: {
+                noteInputModel.notePlayDurationMilliseconds = duration
             }
         }
     }

@@ -57,6 +57,8 @@ BaseSection {
                 leftPadding: 0
                 spacing: 6
 
+                property string title: modelData["title"]
+
                 ButtonGroup.group: radioButtonList.radioButtonGroup
 
                 checked: root.orientation === modelData["value"]
@@ -64,11 +66,10 @@ BaseSection {
                 navigation.name: "ScrollPagesOrientationButton"
                 navigation.panel: root.navigation
                 navigation.row: model.index
-                navigation.accessible.name: titleLabel.text
+                navigation.accessible.name: title
 
                 StyledTextLabel {
-                    id: titleLabel
-                    text: modelData["title"]
+                    text: title
                     horizontalAlignment: Text.AlignLeft
                 }
 
