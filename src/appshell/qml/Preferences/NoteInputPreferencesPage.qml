@@ -43,6 +43,7 @@ PreferencesPage {
         NoteInputSection {
             advanceToNextNote: noteInputModel.advanceToNextNoteOnKeyRelease
             colorNotes: noteInputModel.colorNotesOusideOfUsablePitchRange
+            delayBetweenNotes: noteInputModel.delayBetweenNotesInRealTimeModeMilliseconds
 
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 1

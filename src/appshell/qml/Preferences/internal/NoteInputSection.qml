@@ -43,6 +43,10 @@ BaseSection {
 
         text: qsTrc("appshell", "Advance to next note on key release (MIDI)")
 
+        navigation.name: "AdvanceToNextNoteBox"
+        navigation.panel: root.navigation
+        navigation.row: 0
+
         onClicked: {
             root.advanceToNextNoteOnKeyReleaseChangeRequested(!checked)
         }
@@ -53,6 +57,10 @@ BaseSection {
 
         width: 170
         text: qsTrc("appshell", "Colour notes outside of usable pitch range")
+
+        navigation.name: "ColorNotesBox"
+        navigation.panel: root.navigation
+        navigation.row: 1
 
         onClicked: {
             root.colorNotesOusideOfUsablePitchRangeChangeRequested(!checked)
@@ -68,6 +76,10 @@ BaseSection {
         spacing: 46
 
         measureUnitsSymbol: qsTrc("appshell", "ms")
+
+        navigation.name: "DelayBetweenNotesControl"
+        navigation.panel: root.navigation
+        navigation.row: 2
 
         onValueEdited: {
             root.delayBetweenNotesChangeRequested(newValue)

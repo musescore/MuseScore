@@ -88,7 +88,7 @@ FocusScope {
         enabled: root.enabled && root.visible
 
         accessible.role: MUAccessible.EditableText
-        accessible.name: Boolean(valueInput.text) ? valueInput.text : valueInput.placeholderText
+        accessible.name: Boolean(valueInput.text) ? valueInput.text + " " + measureUnitsLabel.text : valueInput.placeholderText
         accessible.visualItem: root
 
         onActiveChanged: {
