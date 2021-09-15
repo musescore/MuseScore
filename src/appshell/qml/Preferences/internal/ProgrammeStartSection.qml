@@ -64,7 +64,7 @@ BaseSection {
                 navigation.row: model.index
                 navigation.column: 0
 
-                onClicked: {
+                onToggled: {
                     root.currentStartupModesChanged(model.index)
                 }
             }

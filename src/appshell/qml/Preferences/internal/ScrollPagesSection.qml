@@ -61,7 +61,13 @@ BaseSection {
 
                 checked: root.orientation === modelData["value"]
 
+                navigation.name: "ScrollPagesOrientationButton"
+                navigation.panel: root.navigation
+                navigation.row: model.index
+                navigation.accessible.name: titleLabel.text
+
                 StyledTextLabel {
+                    id: titleLabel
                     text: modelData["title"]
                     horizontalAlignment: Text.AlignLeft
                 }
@@ -76,6 +82,10 @@ BaseSection {
             id: limitScrollAreaBox
 
             text: qsTrc("appshell", "Limit scroll area to page borders")
+
+            navigation.name: "LimitScrollAreaBox"
+            navigation.panel: root.navigation
+            navigation.row: radioButtonList.model.length
 
             onClicked: {
                 root.limitScrollAreaChangeRequested(!checked)
