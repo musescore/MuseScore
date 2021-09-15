@@ -20,44 +20,26 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Layouts 1.15
 
 import MuseScore.UiComponents 1.0
-import MuseScore.Preferences 1.0
 
-import "internal"
-
-PreferencesPage {
+BaseSection {
     id: root
 
-    contentHeight: content.height
+    title: qsTrc("appshell", "View")
 
-    ScorePreferencesModel {
-        id: scorePreferencesModel
-    }
+    property alias isShowMIDIControls: isShowMIDIControlsBox.checked
 
-    Component.onCompleted: {
-        scorePreferencesModel.load()
-    }
+    signal showMIDIControlsChangeRequested(bool show)
 
-    Column {
-        id: content
+    CheckBox {
+        id:  isShowMIDIControlsBox
 
-        width: parent.width
-        spacing: 24
+        width: 216
+        text: qsTrc("appshell", "Show MIDI controls in mixer")
 
-        DefaultFilesSection {
-            model: scorePreferencesModel
-        }
-
-        SeparatorLine { }
-
-        ScoreViewSection {
-            isShowMIDIControls: scorePreferencesModel.isShowMIDIControls
-
-            onShowMIDIControlsChangeRequested: {
-                scorePreferencesModel.isShowMIDIControls = show
-            }
+        onClicked: {
+            root.showMIDIControlsChangeRequested(!checked)
         }
     }
 }

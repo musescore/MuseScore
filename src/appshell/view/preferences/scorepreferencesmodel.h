@@ -49,7 +49,6 @@ public:
     QHash<int, QByteArray> roleNames() const override;
 
     Q_INVOKABLE void load();
-    Q_INVOKABLE QString fileDirectory(const QString& filePath) const;
 
     bool isShowMIDIControls() const;
 
@@ -64,7 +63,8 @@ private:
         TitleRole = Qt::UserRole + 1,
         PathRole,
         PathFilterRole,
-        ChooseTitleRole
+        ChooseTitleRole,
+        DirectoryRole
     };
 
     enum class DefaultFileType {
@@ -113,6 +113,8 @@ private:
 
     void setPath(DefaultFileType fileType, const QString& path);
     QModelIndex fileIndex(DefaultFileType fileType);
+
+    QString fileDirectory(const QString& filePath) const;
 
     QList<DefaultFileInfo> m_defaultFiles;
 };
