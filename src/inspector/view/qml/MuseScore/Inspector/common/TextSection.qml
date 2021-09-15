@@ -26,6 +26,8 @@ import MuseScore.UiComponents 1.0
 InspectorPropertyView {
     id: root
 
+    visible: Boolean(propertyItem)
+
     TextInputField {
         isIndeterminate: root.propertyItem ? root.propertyItem.isUndefined : false
         currentText: root.propertyItem ? root.propertyItem.value : ""
