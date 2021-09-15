@@ -55,6 +55,7 @@ FocusScope {
         enabled: root.enabled
         accessible.role: MUAccessible.CheckBox
         accessible.name: root.text
+        accessible.checked: root.checked
 
         onActiveChanged: {
             if (!root.activeFocus) {

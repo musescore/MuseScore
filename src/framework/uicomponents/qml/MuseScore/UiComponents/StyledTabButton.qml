@@ -60,7 +60,7 @@ TabButton {
 
         accessible.role: MUAccessible.RadioButton
         accessible.name: root.text
-        accessible.selected: root.isCurrent
+        accessible.checked: root.isCurrent
 
         onActiveChanged: {
             if (active) {
