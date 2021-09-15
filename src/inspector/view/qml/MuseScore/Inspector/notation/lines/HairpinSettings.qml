@@ -58,7 +58,7 @@ TabPanel {
 
         title: qsTrc("inspector", "Text")
 
-        HairpinTextSettingsTab {
+        LineTextSettingsTab {
             anchors.top: parent.top
             anchors.topMargin: 24
 
