@@ -24,6 +24,7 @@ import QtQuick.Controls 1.5
 import QtQuick.Layouts 1.15
 
 import MuseScore.UiComponents 1.0
+
 import "../../common"
 import "internal"
 
@@ -32,7 +33,7 @@ TabPanel {
 
     property QtObject model: null
 
-    objectName: "HairpinSettings"
+    objectName: "LineSettings"
 
     implicitHeight: Math.max(styleTab.visible ? styleTab.implicitHeight : 0,
                              textTab.visible ? textTab.implicitHeight : 0) + tabBarHeight + 24
