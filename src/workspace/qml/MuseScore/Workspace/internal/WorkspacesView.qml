@@ -34,6 +34,10 @@ RadioButtonGroup {
     boundsBehavior: Flickable.StopAtBounds
     orientation: Qt.Vertical
 
+    ScrollBar.vertical: StyledScrollBar {
+        policy: ScrollBar.AsNeeded
+    }
+
     property int leftPadding: 0
 
     Connections {
