@@ -300,7 +300,7 @@ void Layout::resetSystems(bool layoutAll, const LayoutOptions& options, LayoutCo
             mb->moveToDummy();
         }
 
-        page = Factory::createPage(m_score);
+        page = Factory::createPage(m_score->rootItem());
         m_score->pages().push_back(page);
         page->bbox().setRect(0.0, 0.0, options.loWidth, options.loHeight);
         page->setNo(0);

@@ -330,7 +330,8 @@ Score::Score()
 //      accInfo = tr("No selection");     // ??
     accInfo = "No selection";
 
-    m_dummyElement = new mu::engraving::compat::DummyElement(this);
+    m_rootItem = new mu::engraving::RootItem(this);
+    m_rootItem->initDummy();
 
 #ifdef ENGRAVING_BUILD_ACCESSIBLE_TREE
     m_accessible = new mu::engraving::AccessibleScore(this);
@@ -421,7 +422,7 @@ Score::~Score()
 
     imageStore.clearUnused();
 
-    delete m_dummyElement;
+    delete m_rootItem;
 
 #ifdef ENGRAVING_BUILD_ACCESSIBLE_TREE
     delete m_accessible;
@@ -1458,7 +1459,7 @@ Measure* Score::getCreateMeasure(const Fraction& tick)
 
 void Score::addElement(EngravingItem* element)
 {
-    EngravingItem* parent = element->parentElement();
+    EngravingItem* parent = element->parentItem();
     element->triggerLayout();
 
 //      qDebug("Score(%p) EngravingItem(%p)(%s) parent %p(%s)",
@@ -1584,7 +1585,7 @@ void Score::addElement(EngravingItem* element)
 
 void Score::removeElement(EngravingItem* element)
 {
-    EngravingItem* parent = element->parentElement();
+    EngravingItem* parent = element->parentItem();
     element->triggerLayout();
 
 //      qDebug("Score(%p) EngravingItem(%p)(%s) parent %p(%s)",
@@ -1718,7 +1719,7 @@ void Score::removeElement(EngravingItem* element)
     case ElementType::ARTICULATION:
     case ElementType::ARPEGGIO:
     {
-        EngravingItem* cr = element->parentElement();
+        EngravingItem* cr = element->parentItem();
         if (cr->isChord()) {
             createPlayEvents(toChord(cr));
         }
@@ -3183,7 +3184,7 @@ void Score::selectSingle(EngravingItem* e, int staffIdx)
         _is.setTrack(e->track());
         selState = SelState::LIST;
         if (e->type() == ElementType::NOTE) {
-            e = e->parentElement();
+            e = e->parentItem();
         }
         if (e->isChordRest()) {
             _is.setLastSegment(_is.segment());
@@ -3273,7 +3274,7 @@ void Score::selectRange(EngravingItem* e, int staffIdx)
             EngravingItem* oe = selection().element();
             if (oe->isNote() || oe->isChordRest()) {
                 if (oe->isNote()) {
-                    oe = oe->parentElement();
+                    oe = oe->parentItem();
                 }
                 ChordRest* cr = toChordRest(oe);
                 Fraction oetick = cr->segment()->tick();
@@ -3304,7 +3305,7 @@ void Score::selectRange(EngravingItem* e, int staffIdx)
         }
     } else if (e->isNote() || e->isChordRest()) {
         if (e->isNote()) {
-            e = e->parentElement();
+            e = e->parentItem();
         }
         ChordRest* cr = toChordRest(e);
 
@@ -3319,7 +3320,7 @@ void Score::selectRange(EngravingItem* e, int staffIdx)
             EngravingItem* oe = _selection.element();
             if (oe && (oe->isNote() || oe->isRest() || oe->isMMRest())) {
                 if (oe->isNote()) {
-                    oe = oe->parentElement();
+                    oe = oe->parentItem();
                 }
                 ChordRest* ocr = toChordRest(oe);
 
@@ -3448,7 +3449,7 @@ void Score::collectMatch(void* data, EngravingItem* e)
                 }
                 break;
             }
-            ee = ee->parentElement();
+            ee = ee->parentItem();
         } while (ee);
     }
 
@@ -3709,7 +3710,7 @@ void Score::lassoSelectEnd(bool convertToRange)
         }
         ++noteRestCount;
         if (e->type() == ElementType::NOTE) {
-            e = e->parentElement();
+            e = e->parentItem();
         }
         Segment* seg = static_cast<const ChordRest*>(e)->segment();
         if ((startSegment == 0) || (*seg < *startSegment)) {
@@ -4111,7 +4112,7 @@ ChordRest* Score::findCR(Fraction tick, int track) const
 {
     Measure* m = tick2measureMM(tick);
     if (!m) {
-        qDebug("findCR: no measure for tick %d", tick.ticks());
+        //qDebug("findCR: no measure for tick %d", tick.ticks());
         return nullptr;
     }
     // attach to first rest all spanner when mmRest

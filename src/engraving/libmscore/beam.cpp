@@ -151,7 +151,7 @@ PointF Beam::canvasPos() const
 {
     PointF p(pagePos());
     if (system() && system()->parent()) {
-        p += system()->parentElement()->pos();
+        p += system()->parentItem()->pos();
     }
     return p;
 }
@@ -1693,7 +1693,7 @@ void Beam::layout2(std::vector<ChordRest*> crl, SpannerSegmentType, int frag)
             }
             _up = crl.front()->up();
             if (relayoutGrace) {
-                c1->parentElement()->layout();
+                c1->parentItem()->layout();
             }
         } else if (_cross) {
             qreal beamY   = 0.0;        // y position of main beam start

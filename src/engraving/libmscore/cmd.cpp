@@ -2309,7 +2309,7 @@ EngravingItem* Score::move(const QString& cmd)
         // cr is the ChordRest to move from on other cmd's
         int track = el->track();                // keep note of element track
         if (!el->isBox()) {
-            el = el->parentElement();
+            el = el->parentItem();
         }
         // element with no parent (eg, a newly-added line) - no way to find context
         if (!el) {
@@ -2677,7 +2677,7 @@ void Score::cmdIncDecDuration(int nSteps, bool stepDotted)
         return;
     }
     if (el->isNote()) {
-        el = el->parentElement();
+        el = el->parentItem();
     }
     if (!el->isChordRest()) {
         return;
@@ -4258,7 +4258,7 @@ void Score::cmdToggleVisible()
         if (e->isBracket()) {       // ignore
             continue;
         }
-        if (e->isNoteDot() && selection().elements().contains(e->parentElement())) {
+        if (e->isNoteDot() && selection().elements().contains(e->parentItem())) {
             // already handled in ScoreElement::undoChangeProperty(); don't toggle twice
             continue;
         }

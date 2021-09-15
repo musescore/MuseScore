@@ -484,7 +484,7 @@ void Spanner::insertTimeUnmanaged(const Fraction& fromTick, const Fraction& len)
         if (tick() > fromTick) {          // start after beginning of removed time
             if (tick() < toTick) {        // start within removed time: bring start at removing point
                 if (parent()) {
-                    parentElement()->remove(this);
+                    parentItem()->remove(this);
                     return;
                 } else {
                     newTick1 = fromTick;
@@ -505,7 +505,7 @@ void Spanner::insertTimeUnmanaged(const Fraction& fromTick, const Fraction& len)
     // update properties as required
     if (newTick2 <= newTick1) {                 // if no longer any span: remove it
         if (parent()) {
-            parentElement()->remove(this);
+            parentItem()->remove(this);
         }
     } else {                                    // if either TICKS or TICK did change, update property
         if (newTick2 - newTick1 != tick2() - tick()) {

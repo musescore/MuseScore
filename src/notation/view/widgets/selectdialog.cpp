@@ -138,7 +138,7 @@ Ms::System* SelectDialog::elementSystem(const EngravingItem* element) const
         if (_element->type() == ElementType::SYSTEM) {
             return dynamic_cast<Ms::System*>(_element);
         }
-        _element = _element->parentElement();
+        _element = _element->parentItem();
     } while (element);
 
     return nullptr;

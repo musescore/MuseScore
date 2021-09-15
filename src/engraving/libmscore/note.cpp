@@ -2537,7 +2537,7 @@ qreal Note::mag() const
 //---------------------------------------------------------
 EngravingItem* Note::elementBase() const
 {
-    return parentElement();
+    return parentItem();
 }
 
 //---------------------------------------------------------

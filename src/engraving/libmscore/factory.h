@@ -32,6 +32,7 @@
 #include "types.h"
 
 namespace mu::engraving {
+class RootItem;
 class Factory
 {
 public:
@@ -116,7 +117,7 @@ public:
     static Ms::NoteDot* createNoteDot(Ms::Rest* parent);
     static Ms::NoteDot* copyNoteDot(const Ms::NoteDot& src);
 
-    static Ms::Page* createPage(Ms::EngravingObject* parent);
+    static Ms::Page* createPage(RootItem* parent);
 
     static Ms::Rest* createRest(Ms::Segment* parent);
     static Ms::Rest* createRest(Ms::Segment* parent, const Ms::TDuration& t);

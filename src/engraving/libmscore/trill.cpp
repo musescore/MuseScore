@@ -287,7 +287,7 @@ Trill::Trill(EngravingItem* parent)
 }
 
 Trill::Trill(const Trill& t)
-    : SLine(ElementType::TRILL, t.parentElement())
+    : SLine(ElementType::TRILL, t.parentItem())
 {
     _trillType = t._trillType;
     _accidental = t._accidental ? t._accidental->clone() : nullptr;

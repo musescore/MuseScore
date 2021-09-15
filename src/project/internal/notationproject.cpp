@@ -140,6 +140,8 @@ mu::Ret NotationProject::doLoad(engraving::MscReader& reader, const io::path& st
         }
     }
 
+    project->checkTree();
+
     // Load other stuff from the project file
     ProjectAudioSettingsPtr audioSettings = std::shared_ptr<ProjectAudioSettings>(new ProjectAudioSettings());
     Ret ret = audioSettings->read(reader);

@@ -267,7 +267,7 @@ ChordRest* Selection::cr() const
         return 0;
     }
     if (e->isNote()) {
-        e = e->parentElement();
+        e = e->parentItem();
     }
     if (e->isChordRest()) {
         return toChordRest(e);
@@ -341,7 +341,7 @@ ChordRest* Selection::firstChordRest(int track) const
     ChordRest* cr = 0;
     for (EngravingItem* el : _el) {
         if (el->isNote()) {
-            el = el->parentElement();
+            el = el->parentItem();
         }
         if (el->isChordRest()) {
             if (track != -1 && el->track() != track) {

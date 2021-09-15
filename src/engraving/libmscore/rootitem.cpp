@@ -19,35 +19,45 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include "rootitem.h"
 
-#ifndef __HOOK_H__
-#define __HOOK_H__
+#include "score.h"
 
-#include "symbol.h"
+using namespace mu::engraving;
+using namespace Ms;
 
-namespace Ms {
-class Chord;
-
-//---------------------------------------------------------
-//   @@ Hook
-//---------------------------------------------------------
-
-class Hook final : public Symbol
+RootItem::RootItem(Score* score)
+    : EngravingItem(ElementType::INVALID, score), m_score(score)
 {
-    int _hookType { 0 };
+    m_dummy = new compat::DummyElement(m_score);
+}
 
-public:
-    Hook(Chord* parent = 0);
+RootItem::~RootItem()
+{
+    delete m_dummy;
+}
 
-    Hook* clone() const override { return new Hook(*this); }
-    qreal mag() const override { return parentItem()->mag(); }
-    EngravingItem* elementBase() const override;
+compat::DummyElement* RootItem::dummy() const
+{
+    return m_dummy;
+}
 
-    void setHookType(int v);
-    int hookType() const { return _hookType; }
-    void layout() override;
-    void draw(mu::draw::Painter*) const override;
-    Chord* chord() const { return (Chord*)parent(); }
-};
-}     // namespace Ms
-#endif
+void RootItem::initDummy()
+{
+    m_dummy->init();
+}
+
+EngravingObject* RootItem::treeParent() const
+{
+    return m_score->treeParent();
+}
+
+EngravingObject* RootItem::treeChild(int n) const
+{
+    return m_score->treeChild(n);
+}
+
+int RootItem::treeChildCount() const
+{
+    return m_score->treeChildCount();
+}

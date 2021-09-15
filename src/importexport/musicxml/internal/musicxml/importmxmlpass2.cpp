@@ -175,7 +175,7 @@ void MusicXmlLyricsExtend::setExtend(const int no, const int track, const Fracti
 {
     QList<Lyrics*> list;
     foreach (Lyrics* l, _lyrics) {
-        EngravingItem* const el = l->parentElement();
+        EngravingItem* const el = l->parentItem();
         if (el->type() == ElementType::CHORD) {           // TODO: rest also possible ?
             ChordRest* const par = static_cast<ChordRest*>(el);
             if (par->track() == track && (no == -1 || l->no() == no)) {

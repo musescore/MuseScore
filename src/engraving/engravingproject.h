@@ -68,7 +68,13 @@ public:
     Err loadMscz(const mu::engraving::MscReader& reader, bool ignoreVersionError);
     bool writeMscz(mu::engraving::MscWriter& writer, bool onlySelection, bool createThumbnail);
 
+    void checkTree();
+
 private:
+
+    void dumpTree(const Ms::EngravingItem* item, int& level);
+    void dumpTreeTree(const Ms::EngravingObject* obj, int& level);
+    void checkTree(const Ms::EngravingObject* obj);
 
     friend class Ms::MasterScore;
 

@@ -3625,7 +3625,7 @@ EngravingItem* Measure::nextElementStaff(int staff)
         }
     }
 
-    for (; e && e->type() != ElementType::SEGMENT; e = e->parentElement()) {
+    for (; e && e->type() != ElementType::SEGMENT; e = e->parentItem()) {
     }
     Segment* seg = toSegment(e);
     Segment* nextSegment = seg ? seg->next() : first();
@@ -4281,7 +4281,7 @@ void Measure::addSystemHeader(bool isFirstSystem)
                 clef->setSmall(false);
                 clef->layout();
             } else if (clef) {
-                clef->parentElement()->remove(clef);
+                clef->parentItem()->remove(clef);
                 delete clef;
             }
             //cSegment->createShape(staffIdx);

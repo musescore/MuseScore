@@ -3099,8 +3099,8 @@ qreal Chord::mag() const
 
 Segment* Chord::segment() const
 {
-    EngravingItem* e = parentElement();
-    for (; e && e->type() != ElementType::SEGMENT; e = e->parentElement()) {
+    EngravingItem* e = parentItem();
+    for (; e && e->type() != ElementType::SEGMENT; e = e->parentItem()) {
     }
     return toSegment(e);
 }
@@ -3111,8 +3111,8 @@ Segment* Chord::segment() const
 
 Measure* Chord::measure() const
 {
-    EngravingItem* e = parentElement();
-    for (; e && e->type() != ElementType::MEASURE; e = e->parentElement()) {
+    EngravingItem* e = parentItem();
+    for (; e && e->type() != ElementType::MEASURE; e = e->parentItem()) {
     }
     return toMeasure(e);
 }
@@ -3332,7 +3332,7 @@ EngravingItem* Chord::nextElement()
         break;
 
     case ElementType::ACCIDENTAL:
-        e = e->parentElement();
+        e = e->parentItem();
     // fall through
 
     case ElementType::NOTE: {

@@ -1805,13 +1805,13 @@ EngravingItem* Segment::nextElement(int activeStaff)
             p = sp->startElement();
         } else {
             p = e;
-            EngravingItem* pp = p->parentElement();
+            EngravingItem* pp = p->parentItem();
             if (pp->isNote() || pp->isRest() || (pp->isChord() && !p->isNote())) {
                 p = pp;
             }
         }
         EngravingItem* el = p;
-        for (; p && p->type() != ElementType::SEGMENT; p = p->parentElement()) {
+        for (; p && p->type() != ElementType::SEGMENT; p = p->parentItem()) {
         }
         Segment* seg = toSegment(p);
         // next in _elist
@@ -1955,9 +1955,9 @@ EngravingItem* Segment::prevElement(int activeStaff)
             el = sp->startElement();
             seg = sp->startSegment();
         } else {
-            EngravingItem* ep = e->parentElement();
+            EngravingItem* ep = e->parentItem();
             if (ep->isNote() || ep->isRest() || (ep->isChord() && !e->isNote())) {
-                el = e->parentElement();
+                el = e->parentItem();
             }
         }
 

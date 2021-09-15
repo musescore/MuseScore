@@ -571,7 +571,7 @@ void Tuplet::layout()
     }
 
     setPos(0.0, 0.0);
-    PointF mp(parentElement()->pagePos());
+    PointF mp(parentItem()->pagePos());
     if (parent()->isMeasure()) {
         System* s = toMeasure(parent())->system();
         if (s) {

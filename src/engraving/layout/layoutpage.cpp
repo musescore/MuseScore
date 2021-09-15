@@ -58,7 +58,7 @@ using namespace Ms;
 void LayoutPage::getNextPage(const LayoutOptions& options, LayoutContext& lc)
 {
     if (!lc.page || lc.curPage >= lc.score()->npages()) {
-        lc.page = Factory::createPage(lc.score());
+        lc.page = Factory::createPage(lc.score()->rootItem());
         lc.score()->pages().push_back(lc.page);
         lc.prevSystem = nullptr;
         lc.pageOldMeasure = nullptr;

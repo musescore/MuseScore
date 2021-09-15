@@ -71,13 +71,13 @@ PointF StaffLines::pagePos() const
 PointF StaffLines::canvasPos() const
 {
     PointF p(pagePos());
-    EngravingItem* e = parentElement();
+    EngravingItem* e = parentItem();
     while (e) {
         if (e->type() == ElementType::PAGE) {
             p += e->pos();
             break;
         }
-        e = e->parentElement();
+        e = e->parentItem();
     }
     return p;
 }

@@ -175,6 +175,13 @@ public:
     bool isStartEndGrip() { return curGrip == Grip::START || curGrip == Grip::END; }
 };
 
+class EngravingItemList : public std::list<EngravingItem*>
+{
+public:
+
+    EngravingItem* at(size_t i) const;
+};
+
 //-------------------------------------------------------------------
 //    @@ EngravingItem
 ///     \brief Base class of score layout elements
@@ -228,7 +235,8 @@ public:
 
     void deleteLater();
 
-    EngravingItem* parentElement() const { return static_cast<EngravingItem*>(parent()); }
+    EngravingItem* parentItem() const;
+    EngravingItemList childrenItems() const;
 
     EngravingItem* findAncestor(ElementType t);
     const EngravingItem* findAncestor(ElementType t) const;

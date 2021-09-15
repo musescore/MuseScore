@@ -406,7 +406,7 @@ class EngravingItem : public Ms::PluginAPI::ScoreElement
 
     QPointF pagePos() const { return mu::PointF(element()->pagePos() / element()->spatium()).toQPointF(); }
 
-    Ms::PluginAPI::EngravingItem* parent() const { return wrap(element()->parentElement()); }
+    Ms::PluginAPI::EngravingItem* parent() const { return wrap(element()->parentItem()); }
     Staff* staff() { return wrap<Staff>(element()->staff()); }
 
     QRectF bbox() const;
