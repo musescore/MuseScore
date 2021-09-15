@@ -79,15 +79,12 @@ bool EngravingProject::readOnly() const
 
 Err EngravingProject::setupMasterScore()
 {
-    PROFILER_CLEAR;
-    Err err;
-    {
-        TRACEFUNC;
-        engravingElementsProvider()->clearStatistic();
-        err = doSetupMasterScore(m_masterScore);
-        engravingElementsProvider()->printStatistic("=== Update and Layout ===");
-    }
-    PROFILER_PRINT;
+    TRACEFUNC;
+
+    engravingElementsProvider()->clearStatistic();
+    Err err = doSetupMasterScore(m_masterScore);
+    engravingElementsProvider()->printStatistic("=== Update and Layout ===");
+
     return err;
 }
 
@@ -125,15 +122,12 @@ Ms::MasterScore* EngravingProject::masterScore() const
 
 Err EngravingProject::loadMscz(const MscReader& reader, bool ignoreVersionError)
 {
-    PROFILER_CLEAR;
-    Ms::Score::FileError err;
-    {
-        TRACEFUNC;
-        engravingElementsProvider()->clearStatistic();
-        err = m_masterScore->loadMscz(reader, ignoreVersionError);
-        engravingElementsProvider()->printStatistic("=== Load ===");
-    }
-    PROFILER_PRINT;
+    TRACEFUNC;
+
+    engravingElementsProvider()->clearStatistic();
+    Ms::Score::FileError err = m_masterScore->loadMscz(reader, ignoreVersionError);
+    engravingElementsProvider()->printStatistic("=== Load ===");
+
     return scoreFileErrorToErr(err);
 }
 
