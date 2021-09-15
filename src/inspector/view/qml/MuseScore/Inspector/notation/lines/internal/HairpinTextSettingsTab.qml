@@ -19,12 +19,15 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+
 import MuseScore.Inspector 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
+
 import "../../../common"
+import "../../../"
 
 FocusableItem {
     id: root
@@ -60,38 +63,9 @@ FocusableItem {
             }
         }
 
-        InspectorPropertyView {
-            titleText: qsTrc("inspector", "Offset")
-            propertyItem: root.model ? root.model.beginingTextHorizontalOffset : null
-
-            Item {
-                height: childrenRect.height
-                width: parent.width
-
-                IncrementalPropertyControl {
-                    anchors.left: parent.left
-                    anchors.right: parent.horizontalCenter
-                    anchors.rightMargin: 2
-
-                    icon: IconCode.HORIZONTAL
-                    isIndeterminate: root.model ? root.model.beginingTextHorizontalOffset.isUndefined : false
-                    currentValue: root.model ? root.model.beginingTextHorizontalOffset.value : 0
-
-                    onValueEdited: { root.model.beginingTextHorizontalOffset.value = newValue }
-                }
-
-                IncrementalPropertyControl {
-                    anchors.left: parent.horizontalCenter
-                    anchors.leftMargin: 2
-                    anchors.right: parent.right
-
-                    icon: IconCode.VERTICAL
-                    isIndeterminate: root.model ? root.model.beginingTextVerticalOffset.isUndefined : false
-                    currentValue: root.model ? root.model.beginingTextVerticalOffset.value : 0
-
-                    onValueEdited: { root.model.beginingTextVerticalOffset.value = newValue }
-                }
-            }
+        OffsetSection {
+            horizontalOffset: root.model ? root.model.beginingTextHorizontalOffset : null
+            verticalOffset: root.model ? root.model.beginingTextVerticalOffset : null
         }
 
         SeparatorLine { anchors.margins: -10 }
@@ -115,39 +89,9 @@ FocusableItem {
             }
         }
 
-        InspectorPropertyView {
-            titleText: qsTrc("inspector", "Offset")
-            propertyItem: root.model ? root.model.continiousTextHorizontalOffset : null
-
-            Item {
-                height: childrenRect.height
-                width: parent.width
-
-                IncrementalPropertyControl {
-                    anchors.left: parent.left
-                    anchors.right: parent.horizontalCenter
-                    anchors.rightMargin: 2
-
-                    icon: IconCode.HORIZONTAL
-                    isIndeterminate: root.model ? root.model.continiousTextHorizontalOffset.isUndefined : false
-                    currentValue: root.model ? root.model.continiousTextHorizontalOffset.value : 0
-
-                    onValueEdited: { root.model.continiousTextHorizontalOffset.value = newValue }
-                }
-
-                IncrementalPropertyControl {
-                    anchors.left: parent.horizontalCenter
-                    anchors.leftMargin: 2
-                    anchors.right: parent.right
-
-                    icon: IconCode.VERTICAL
-                    isIndeterminate: root.model ? root.model.continiousTextVerticalOffset.isUndefined : false
-                    currentValue: root.model ? root.model.continiousTextVerticalOffset.value : 0
-
-                    onValueEdited: { root.model.continiousTextVerticalOffset.value = newValue }
-                }
-            }
+        OffsetSection {
+            horizontalOffset: root.model ? root.model.continiousTextHorizontalOffset : null
+            verticalOffset: root.model ? root.model.continiousTextVerticalOffset : null
         }
     }
 }
-
