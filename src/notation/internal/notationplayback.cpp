@@ -222,7 +222,7 @@ RetVal<midi::tick_t> NotationPlayback::playPositionTickByElement(const Engraving
     }
 
     if (element->isNote()) {
-        element = element->parentElement();
+        element = element->parentItem();
     }
 
     const Ms::ChordRest* cr = Ms::toChordRest(element);

@@ -63,7 +63,7 @@ Stem::Stem(Chord* parent)
 //---------------------------------------------------------
 EngravingItem* Stem::elementBase() const
 {
-    return parentElement();
+    return parentItem();
 }
 
 //---------------------------------------------------------

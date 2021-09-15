@@ -568,8 +568,8 @@ void Image::layout()
             qreal f = _sizeIsSpatium ? spatium() : DPMM;
             SizeF size(imageSize());
             qreal ratio = size.width() / size.height();
-            qreal w = parentElement()->width();
-            qreal h = parentElement()->height();
+            qreal w = parentItem()->width();
+            qreal h = parentItem()->height();
             if ((w / h) < ratio) {
                 _size.setWidth(w / f);
                 _size.setHeight((w / ratio) / f);
@@ -578,7 +578,7 @@ void Image::layout()
                 _size.setWidth(h * ratio / f);
             }
         } else {
-            _size = pixel2size(parentElement()->bbox().size());
+            _size = pixel2size(parentItem()->bbox().size());
         }
     }
 

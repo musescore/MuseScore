@@ -875,7 +875,7 @@ void PaletteTreeModel::updateCellsState(const Selection& sel)
 
     for (EngravingItem* e : sel.elements()) {
         if (e->isNote()) {
-            e = e->parentElement();
+            e = e->parentItem();
         }
         if (e->isChordRest()) {
             if (toChordRest(e)->beamMode() != bm) {

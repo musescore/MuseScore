@@ -714,6 +714,7 @@ void Item::setGeometry(QRect rect)
 
 void Item::dumpLayout(int level)
 {
+    return;
     QString indent;
     indent.fill(QLatin1Char(' '), level);
 
@@ -2056,6 +2057,7 @@ int ItemBoxContainer::length() const
 
 void ItemBoxContainer::dumpLayout(int level)
 {
+    return;
     if (level == 0 && hostWidget()) {
 
         const auto screens = qApp->screens();

@@ -83,7 +83,7 @@ void NoteDot::layout()
 
 EngravingItem* NoteDot::elementBase() const
 {
-    return parentElement();
+    return parentItem();
 }
 
 //---------------------------------------------------------
@@ -109,6 +109,6 @@ void NoteDot::read(XmlReader& e)
 
 qreal NoteDot::mag() const
 {
-    return parentElement()->mag() * score()->styleD(Sid::dotMag);
+    return parentItem()->mag() * score()->styleD(Sid::dotMag);
 }
 }

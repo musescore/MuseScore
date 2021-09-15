@@ -666,7 +666,7 @@ RectF HBox::drag(EditData& data)
     qreal x1   = offset().x() + diff;
     if (parent()->type() == ElementType::VBOX) {
         VBox* vb = toVBox(parent());
-        qreal x2 = parentElement()->width() - width() - (vb->leftMargin() + vb->rightMargin()) * DPMM;
+        qreal x2 = parentItem()->width() - width() - (vb->leftMargin() + vb->rightMargin()) * DPMM;
         if (x1 < 0.0) {
             x1 = 0.0;
         } else if (x1 > x2) {

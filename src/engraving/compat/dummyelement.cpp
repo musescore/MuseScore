@@ -30,12 +30,22 @@
 #include "libmscore/chord.h"
 #include "libmscore/note.h"
 
+using namespace mu::engraving;
 using namespace mu::engraving::compat;
 
-DummyElement::DummyElement(Ms::Score* s)
-    : Ms::EngravingItem(Ms::ElementType::INVALID, s)
+DummyElement::DummyElement(EngravingObject* parent)
+    : Ms::EngravingItem(Ms::ElementType::INVALID, parent)
 {
-    m_page = Factory::createPage(this);
+}
+
+DummyElement::~DummyElement()
+{
+}
+
+void DummyElement::init()
+{
+    m_root = new RootItem(score());
+    m_page = Factory::createPage(m_root);
     m_system = Factory::createSystem(m_page);
     m_measure = Factory::createMeasure(m_system);
     m_segment = Factory::createSegment(m_measure);
@@ -43,21 +53,13 @@ DummyElement::DummyElement(Ms::Score* s)
     m_note = Factory::createNote(m_chord);
 
     setIsDummy(true);
+    m_root->setIsDummy(true);
     m_page->setIsDummy(true);
     m_system->setIsDummy(true);
     m_measure->setIsDummy(true);
     m_segment->setIsDummy(true);
     m_chord->setIsDummy(true);
     m_note->setIsDummy(true);
-}
-
-DummyElement::~DummyElement()
-{
-}
-
-Ms::Score* DummyElement::score()
-{
-    return static_cast<Ms::Score*>(parent());
 }
 
 Ms::Page* DummyElement::page()

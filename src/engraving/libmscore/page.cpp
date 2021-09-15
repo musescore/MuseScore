@@ -58,7 +58,7 @@ static QString revision;
 //   Page
 //---------------------------------------------------------
 
-Page::Page(EngravingObject* parent)
+Page::Page(RootItem* parent)
     : EngravingItem(ElementType::PAGE, parent, ElementFlag::NOT_SELECTABLE), _no(0)
 {
     bspTreeValid = false;
@@ -105,9 +105,7 @@ QList<EngravingItem*> Page::items(const mu::PointF& p)
 
 void Page::appendSystem(System* s)
 {
-    if (s->parent() != this) {
-        s->moveToPage(this);
-    }
+    s->moveToPage(this);
     _systems.push_back(s);
 }
 

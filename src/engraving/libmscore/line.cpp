@@ -921,7 +921,7 @@ PointF SLine::linePos(Grip grip, System** sys) const
                     Segment* seg = score()->tick2segmentMM(tick2(), false, SegmentType::ChordRest);
                     if (!seg) {
                         // no end segment found, use measure width
-                        x2 = endElement()->parentElement()->parentElement()->width() - sp;
+                        x2 = endElement()->parentItem()->parentItem()->width() - sp;
                     } else if (currentSeg->measure() == seg->measure()) {
                         // next chordrest found in same measure;
                         // end line 1sp to left
@@ -939,7 +939,7 @@ PointF SLine::linePos(Grip grip, System** sys) const
                         qreal x3 = seg->enabled() ? seg->x() : seg->measure()->width();
                         x2 = qMax(x2, x3 - gap);
                     }
-                    x = x2 - endElement()->parentElement()->x();
+                    x = x2 - endElement()->parentItem()->x();
                 }
             }
         }

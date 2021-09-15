@@ -125,7 +125,7 @@ void Score::getSelectedChordRest2(ChordRest** cr1, ChordRest** cr2) const
     *cr2 = 0;
     for (EngravingItem* e : selection().elements()) {
         if (e->isNote()) {
-            e = e->parentElement();
+            e = e->parentItem();
         }
         if (e->isChordRest()) {
             ChordRest* cr = toChordRest(e);
@@ -154,7 +154,7 @@ QSet<ChordRest*> Score::getSelectedChordRests() const
     QSet<ChordRest*> set;
     for (EngravingItem* e : selection().elements()) {
         if (e->isNote()) {
-            e = e->parentElement();
+            e = e->parentItem();
         }
         if (e->isChordRest()) {
             set.insert(toChordRest(e));
@@ -176,7 +176,7 @@ Fraction Score::pos()
     if (el) {
         switch (el->type()) {
         case ElementType::NOTE:
-            el = el->parentElement();
+            el = el->parentItem();
         // fall through
         case ElementType::MEASURE_REPEAT:
         case ElementType::REST:
@@ -3067,7 +3067,7 @@ void Score::cmdDeleteSelection()
                     }
                 } else if (e->parent()
                            && (e->parent()->isSegment() || e->parent()->isChord() || e->parent()->isNote() || e->parent()->isRest())) {
-                    tick = e->parentElement()->tick();
+                    tick = e->parentItem()->tick();
                 }
                 //else tick < 0
                 track = e->track();
@@ -3477,7 +3477,7 @@ void Score::removeChordRest(ChordRest* cr, bool clearSegment)
     if (cr->beam()) {
         Beam* beam = cr->beam();
         if (beam->generated()) {
-            beam->parentElement()->remove(beam);
+            beam->parentItem()->remove(beam);
             delete beam;
         } else {
             undoRemoveElement(beam);
@@ -5123,7 +5123,7 @@ void Score::undoAddElement(EngravingItem* element)
         || et == ElementType::BEND
         || (et == ElementType::CHORD && toChord(element)->isGrace())
         ) {
-        EngravingItem* parent = element->parentElement();
+        EngravingItem* parent = element->parentItem();
         const LinkedObjects* links = parent->links();
         // don't link part name
         if (et == ElementType::TEXT) {
