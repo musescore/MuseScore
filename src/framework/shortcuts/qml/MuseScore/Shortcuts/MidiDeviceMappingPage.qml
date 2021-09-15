@@ -69,6 +69,8 @@ Item {
         spacing: 20
 
         MidiMappingTopPanel {
+            useRemoteControl: mappingsModel.useRemoteControl
+
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 1
 

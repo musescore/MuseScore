@@ -86,5 +86,7 @@
         <file>qml/Preferences/internal/FoldersSection.qml</file>
         <file>qml/Preferences/internal/ResetThemeButtonSection.qml</file>
         <file>qml/Preferences/internal/AdvancedTopSection.qml</file>
+        <file>qml/Preferences/internal/ZoomSection.qml</file>
+        <file>qml/Preferences/internal/ScrollPagesSection.qml</file>
     </qresource>
 </RCC>
