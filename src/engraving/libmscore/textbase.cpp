@@ -71,37 +71,37 @@ static const qreal superScriptOffset = -.9;      // of x-height
 
 static QString accessibleChar(QChar chr)
 {
-    if (chr == " ") {
+    if (chr == ' ') {
         return QObject::tr("space");
     }
-    if (chr == "-") {
+    if (chr == '-') {
         return QObject::tr("dash");
     }
-    if (chr == "=") {
+    if (chr == '=') {
         return QObject::tr("equals");
     }
-    if (chr == ",") {
+    if (chr == ',') {
         return QObject::tr("comma");
     }
-    if (chr == ".") {
+    if (chr == '.') {
         return QObject::tr("period");
     }
-    if (chr == ":") {
+    if (chr == ':') {
         return QObject::tr("colon");
     }
-    if (chr == ";") {
+    if (chr == ';') {
         return QObject::tr("semicolon");
     }
-    if (chr == "(") {
+    if (chr == '(') {
         return QObject::tr("left parenthesis");
     }
-    if (chr == ")") {
+    if (chr == ')') {
         return QObject::tr("right parenthesis");
     }
-    if (chr == "[") {
+    if (chr == '[') {
         return QObject::tr("left bracket");
     }
-    if (chr == "]") {
+    if (chr == ']') {
         return QObject::tr("right bracket");
     }
     return chr;
