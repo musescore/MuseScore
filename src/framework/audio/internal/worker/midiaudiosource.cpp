@@ -244,9 +244,14 @@ samples_t MidiAudioSource::process(float* buffer, samples_t samplesPerChannel)
         return 0;
     }
 
-    samples_t processedSamplesCount = m_synth->process(buffer, samplesPerChannel);
+    samples_t processedSamplesCount = 0;
+    msecs_t nextMsecsNumber = samplesPerChannel * 1000 / m_sampleRate;
 
-    handleNextMsecs(samplesPerChannel * 1000 / m_sampleRate);
+    if (hasAnythingToPlayback(nextMsecsNumber)) {
+        processedSamplesCount = m_synth->process(buffer, samplesPerChannel);
+    }
+
+    handleNextMsecs(nextMsecsNumber);
 
     return processedSamplesCount;
 }
@@ -342,4 +347,15 @@ tick_t MidiAudioSource::tickFromMsec(const msecs_t msec) const
     msecs_t delta = msec - t.startMsec;
     tick_t ticks = static_cast<tick_t>(delta / t.onetickMsec);
     return t.startTicks + ticks;
+}
+
+bool MidiAudioSource::hasAnythingToPlayback(const msecs_t nextMsecsNumber) const
+{
+    if (isActive()) {
+        return true;
+    }
+
+    tick_t nextTicksNumber = tickFromMsec(nextMsecsNumber);
+
+    return m_backgroundStreamEventsBuffer.hasEventsForNextTicks(nextTicksNumber);
 }

@@ -85,6 +85,21 @@ private:
             }
         }
 
+        bool hasEventsForNextTicks(const midi::tick_t nextTicksCount) const
+        {
+            if (isEmpty()) {
+                return false;
+            }
+
+            for (midi::tick_t tick = currentTick; tick <= currentTick + nextTicksCount; ++tick) {
+                if (hasEventsForTick(tick)) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         bool isEmpty() const
         {
             return m_eventsMap.empty();
@@ -105,6 +120,7 @@ private:
 
     midi::tick_t tickFromMsec(const msecs_t msec) const;
 
+    bool hasAnythingToPlayback(const msecs_t nextMsecsNumber) const;
     void handleBackgroundStream(const msecs_t nextMsecsNumber);
     void handleMainStream(const msecs_t nextMsecsNumber);
 
