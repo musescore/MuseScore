@@ -40,7 +40,7 @@
 #include "notation/pedals/pedalsettingsmodel.h"
 #include "notation/spacers/spacersettingsmodel.h"
 #include "notation/clefs/clefsettingsmodel.h"
-#include "notation/hairpins/hairpinsettingsmodel.h"
+#include "notation/lines/hairpinsettingsmodel.h"
 #include "notation/crescendos/crescendosettingsmodel.h"
 #include "notation/stafftype/stafftypesettingsmodel.h"
 #include "notation/frames/textframesettingsmodel.h"
