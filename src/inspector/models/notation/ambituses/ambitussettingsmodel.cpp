@@ -35,7 +35,7 @@ AmbitusSettingsModel::AmbitusSettingsModel(QObject* parent, IElementRepositorySe
     setIcon(ui::IconCode::Code::AMBITUS);
     createProperties();
 
-    setNoteheadGroupsModel(new NoteheadTypesModel(this));
+    setNoteheadGroupsModel(new NoteheadGroupsModel(this));
 }
 
 void AmbitusSettingsModel::createProperties()
@@ -109,7 +109,7 @@ void AmbitusSettingsModel::matchRangesToStaff()
     m_bottomPitch->resetToDefault();
 }
 
-NoteheadTypesModel* AmbitusSettingsModel::noteheadGroupsModel() const
+NoteheadGroupsModel* AmbitusSettingsModel::noteheadGroupsModel() const
 {
     return m_noteheadGroupsModel;
 }
@@ -164,7 +164,7 @@ PropertyItem* AmbitusSettingsModel::bottomPitch() const
     return m_bottomPitch;
 }
 
-void AmbitusSettingsModel::setNoteheadGroupsModel(NoteheadTypesModel* noteheadGroupsModel)
+void AmbitusSettingsModel::setNoteheadGroupsModel(NoteheadGroupsModel* noteheadGroupsModel)
 {
     if (m_noteheadGroupsModel == noteheadGroupsModel) {
         return;
@@ -172,7 +172,7 @@ void AmbitusSettingsModel::setNoteheadGroupsModel(NoteheadTypesModel* noteheadGr
 
     m_noteheadGroupsModel = noteheadGroupsModel;
 
-    connect(m_noteheadGroupsModel, &NoteheadTypesModel::noteHeadGroupSelected, [this](const int noteHeadGroup) {
+    connect(m_noteheadGroupsModel, &NoteheadGroupsModel::noteHeadGroupSelected, [this](const int noteHeadGroup) {
         m_noteheadGroup->setValue(noteHeadGroup);
     });
 

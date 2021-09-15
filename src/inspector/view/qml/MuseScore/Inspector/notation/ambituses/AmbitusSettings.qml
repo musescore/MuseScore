@@ -37,7 +37,7 @@ Column {
 
     spacing: 12
 
-    property var tpcListModel: [
+    readonly property var tpcListModel: [
         { text: "C♭♭", value: AmbitusTypes.TPC_C_BB },
         { text: "C♭", value: AmbitusTypes.TPC_C_B },
         { text: "C", value: AmbitusTypes.TPC_C },
@@ -87,10 +87,14 @@ Column {
         }
     }
 
-    NoteheadsGrid {
-        id: noteheadGridView
+    InspectorPropertyView {
+        titleText: qsTrc("inspector", "Noteheads")
+        propertyItem: root.model ? root.model.noteheadGroup : null
 
-        noteHeadTypesModel: root.model ? root.model.noteheadGroupsModel : null
+        NoteheadsGrid {
+            id: noteheadGridView
+            noteHeadGroupsModel: root.model ? root.model.noteheadGroupsModel : null
+        }
     }
 
     Column {

@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_INSPECTOR_NOTEHEADTYPESMODEL_H
-#define MU_INSPECTOR_NOTEHEADTYPESMODEL_H
+#ifndef MU_INSPECTOR_NOTEHEADGROUPSMODEL_H
+#define MU_INSPECTOR_NOTEHEADGROUPSMODEL_H
 
 #include <QObject>
 #include <QAbstractListModel>
@@ -28,11 +28,11 @@
 #include "types/noteheadtypes.h"
 
 namespace mu::inspector {
-class NoteheadTypesModel : public QAbstractListModel
+class NoteheadGroupsModel : public QAbstractListModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(int selectedHeadTypeIndex READ selectedHeadTypeIndex WRITE setSelectedHeadTypeIndex NOTIFY selectedHeadTypeIndexChanged)
+    Q_PROPERTY(int selectedHeadGroupIndex READ selectedHeadGroupIndex WRITE setSelectedHeadGroupIndex NOTIFY selectedHeadGroupIndexChanged)
 
 public:
     enum RoleNames {
@@ -40,7 +40,7 @@ public:
         HintRole
     };
 
-    explicit NoteheadTypesModel(QObject* parent = nullptr);
+    explicit NoteheadGroupsModel(QObject* parent = nullptr);
 
     void load();
 
@@ -50,27 +50,26 @@ public:
 
     void init(const Ms::NoteHead::Group noteHeadGroup);
 
-    int selectedHeadTypeIndex() const;
+    int selectedHeadGroupIndex() const;
 
 public slots:
-    void setSelectedHeadTypeIndex(int selectedHeadTypeIndex);
+    void setSelectedHeadGroupIndex(int selectedHeadTypeIndex);
 
 signals:
     void noteHeadGroupSelected(int headGroup);
-    void selectedHeadTypeIndexChanged(int selectedHeadTypeIndex);
+    void selectedHeadGroupIndexChanged(int selectedHeadTypeIndex);
 
 private:
-    struct HeadTypeData {
+    struct HeadGroupData {
         Ms::NoteHead::Group group = Ms::NoteHead::Group::HEAD_INVALID;
         QString hint;
     };
 
     int indexOfHeadGroup(const Ms::NoteHead::Group group) const;
 
-    QList<HeadTypeData> m_noteheadTypeDataList;
-    QHash<int, QByteArray> m_roleNames;
-    int m_selectedHeadTypeIndex = 0;
+    QList<HeadGroupData> m_noteheadGroupDataList;
+    int m_selectedHeadGroupIndex = 0;
 };
 }
 
-#endif // MU_INSPECTOR_NOTEHEADTYPESMODEL_H
+#endif // MU_INSPECTOR_NOTEHEADGROUPSMODEL_H
