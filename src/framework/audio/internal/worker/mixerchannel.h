@@ -54,6 +54,7 @@ public:
 
 private:
     void completeOutput(float* buffer, unsigned int samplesCount) const;
+    void notifyAboutAudioSignalChanges(const audioch_t audioChannelNumber, const float linearRms) const;
 
     TrackId m_trackId = -1;
 
