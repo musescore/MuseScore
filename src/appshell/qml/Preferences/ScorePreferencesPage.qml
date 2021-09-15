@@ -48,12 +48,18 @@ PreferencesPage {
 
         DefaultFilesSection {
             model: scorePreferencesModel
+
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 1
         }
 
         SeparatorLine { }
 
         ScoreViewSection {
             isShowMIDIControls: scorePreferencesModel.isShowMIDIControls
+
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 2
 
             onShowMIDIControlsChangeRequested: {
                 scorePreferencesModel.isShowMIDIControls = show

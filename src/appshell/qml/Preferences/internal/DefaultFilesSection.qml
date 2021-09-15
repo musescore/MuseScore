@@ -22,12 +22,15 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
 BaseSection {
     id: root
 
     title: qsTrc("appshell", "Default files")
+
+    navigation.direction: NavigationPanel.Both
 
     property alias model: view.model
 
@@ -48,6 +51,8 @@ BaseSection {
             spacing: 20
 
             StyledTextLabel {
+                id: titleLabel
+
                 Layout.alignment: Qt.AlignLeft
 
                 text: model.title + ":"
@@ -62,6 +67,10 @@ BaseSection {
                 dir: model.directory
 
                 path: model.path
+
+                navigation: root.navigation
+                navigationRowOrder: model.index
+                pathFieldTitle: titleLabel.text
 
                 onPathEdited: {
                     model.path = newPath

@@ -38,6 +38,10 @@ BaseSection {
         width: 216
         text: qsTrc("appshell", "Show MIDI controls in mixer")
 
+        navigation.name: "ShowMIDIControlsBox"
+        navigation.panel: root.navigation
+        navigation.row: 0
+
         onClicked: {
             root.showMIDIControlsChangeRequested(!checked)
         }
