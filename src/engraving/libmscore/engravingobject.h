@@ -264,7 +264,7 @@ public:
             : el(el), i(pos) {}
         iterator operator++() { return iterator(el, i++); }
         EngravingObject* operator*() { return el->treeChild(i); }
-        bool operator!=(const iterator& o) { return o.el != el || o.i != i; }
+        bool operator!=(const iterator& o) const { return o.el != el || o.i != i; }
     };
 
     class const_iterator
@@ -276,7 +276,7 @@ public:
             : el(el), i(pos) {}
         const_iterator operator++() { return const_iterator(el, i++); }
         const EngravingObject* operator*() { return el->treeChild(i); }
-        bool operator!=(const const_iterator& o) { return o.el != el || o.i != i; }
+        bool operator!=(const const_iterator& o) const { return o.el != el || o.i != i; }
     };
 
     iterator begin() { return iterator(this, 0); }
