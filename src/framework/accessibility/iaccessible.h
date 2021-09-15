@@ -63,7 +63,8 @@ public:
         Enabled,
         Active,
         Focused,
-        Selected
+        Selected,
+        Checked
     };
 
     enum class Property {

@@ -62,7 +62,7 @@ RadioDelegate {
 
         accessible.role: MUAccessible.RadioButton
         accessible.name: root.text
-        accessible.selected: root.checked
+        accessible.checked: root.checked
 
         onTriggered: root.checked = !root.checked
     }
