@@ -28,6 +28,7 @@
 #include "io/xml.h"
 
 #include "scorefont.h"
+#include "accidental.h"
 #include "chord.h"
 #include "note.h"
 #include "score.h"
@@ -479,6 +480,144 @@ void Arpeggio::reset()
     undoChangeProperty(Pid::ARP_USER_LEN1, 0.0);
     undoChangeProperty(Pid::ARP_USER_LEN2, 0.0);
     EngravingItem::reset();
+}
+
+//
+// INSET:
+// Arpeggios have inset white space. For instance, the bracket
+// "[" shape has whitespace inside of the "C". Symbols like
+// accidentals can fit inside this whitespace. These inset
+// functions are used to get the size of the inner dimensions
+// for this area on all arpeggios.
+//
+
+//---------------------------------------------------------
+//   insetTop
+//---------------------------------------------------------
+
+qreal Arpeggio::insetTop() const
+{
+    qreal top = chord()->upNote()->y() - chord()->upNote()->height() / 2;
+
+    // use wiggle width, not height, since it's rotated 90 degrees
+    if (arpeggioType() == ArpeggioType::UP) {
+        top += symBbox(SymId::wiggleArpeggiatoUpArrow).width();
+    } else if (arpeggioType() == ArpeggioType::UP_STRAIGHT) {
+        top += symBbox(SymId::arrowheadBlackUp).width();
+    }
+
+    return top;
+}
+
+//---------------------------------------------------------
+//   insetBottom
+//---------------------------------------------------------
+
+qreal Arpeggio::insetBottom() const
+{
+    qreal bottom = chord()->downNote()->y() + chord()->downNote()->height() / 2;
+
+    // use wiggle width, not height, since it's rotated 90 degrees
+    if (arpeggioType() == ArpeggioType::DOWN) {
+        bottom -= symBbox(SymId::wiggleArpeggiatoUpArrow).width();
+    } else if (arpeggioType() == ArpeggioType::DOWN_STRAIGHT) {
+        bottom -= symBbox(SymId::arrowheadBlackDown).width();
+    }
+
+    return bottom;
+}
+
+//---------------------------------------------------------
+//   insetWidth
+//---------------------------------------------------------
+
+qreal Arpeggio::insetWidth() const
+{
+    switch (arpeggioType()) {
+    case ArpeggioType::NORMAL:
+    {
+        return 0.0;
+    }
+
+    case ArpeggioType::UP:
+    case ArpeggioType::DOWN:
+    {
+        // use wiggle height, not width, since it's rotated 90 degrees
+        return (width() - symBbox(SymId::wiggleArpeggiatoUp).height()) / 2;
+    }
+
+    case ArpeggioType::UP_STRAIGHT:
+    case ArpeggioType::DOWN_STRAIGHT:
+    {
+        return (width() - score()->styleP(Sid::ArpeggioLineWidth)) / 2;
+    }
+
+    case ArpeggioType::BRACKET:
+    {
+        return width() - score()->styleP(Sid::ArpeggioLineWidth) / 2;
+    }
+    }
+    return 0.0;
+}
+
+//---------------------------------------------------------
+//   insetDistance
+//---------------------------------------------------------
+
+qreal Arpeggio::insetDistance(QVector<Accidental*>& accidentals, qreal mag_) const
+{
+    if (accidentals.size() == 0) {
+        return 0.0;
+    }
+
+    qreal arpeggioTop = insetTop() * mag_;
+    qreal arpeggioBottom = insetBottom() * mag_;
+    ArpeggioType type = arpeggioType();
+    bool hasTopArrow = type == ArpeggioType::UP
+                       || type == ArpeggioType::UP_STRAIGHT
+                       || type == ArpeggioType::BRACKET;
+    bool hasBottomArrow = type == ArpeggioType::DOWN
+                          || type == ArpeggioType::DOWN_STRAIGHT
+                          || type == ArpeggioType::BRACKET;
+
+    Accidental* furthestAccidental = nullptr;
+    for (auto accidental : accidentals) {
+        if (furthestAccidental) {
+            bool currentIsFurtherX = accidental->x() < furthestAccidental->x();
+            bool currentIsSameX = accidental->x() == furthestAccidental->x();
+            auto accidentalBbox = symBbox(accidental->symbol());
+            qreal currentTop = accidental->note()->pos().y() + accidentalBbox.top() * mag_;
+            qreal currentBottom = accidental->note()->pos().y() + accidentalBbox.bottom() * mag_;
+            bool collidesWithTop = currentTop <= arpeggioTop && hasTopArrow;
+            bool collidesWithBottom = currentBottom >= arpeggioBottom && hasBottomArrow;
+
+            if (currentIsFurtherX || (currentIsSameX && (collidesWithTop || collidesWithBottom))) {
+                furthestAccidental = accidental;
+            }
+        } else {
+            furthestAccidental = accidental;
+        }
+    }
+
+    // this cutout means the vertical lines for a ♯, ♭, and ♮ are in the same position
+    // if an accidental does not have a cutout (e.g., ♭), this value is 0
+    qreal accidentalCutOutX = symSmuflAnchor(furthestAccidental->symbol(), SmuflAnchorId::cutOutNW).x();
+
+    auto bbox = symBbox(furthestAccidental->symbol());
+    qreal top = furthestAccidental->note()->pos().y() * mag_ + bbox.top() * mag_;
+    qreal bottom = furthestAccidental->note()->pos().y() * mag_ + bbox.bottom() * mag_;
+
+    // if it collides with the top arrow/hoo
+    if (hasTopArrow && top <= arpeggioTop) {
+        return accidentalCutOutX;
+    }
+
+    // if it collides with the bottom arrow/hook
+    if (hasBottomArrow && bottom >= arpeggioBottom) {
+        return accidentalCutOutX;
+    }
+
+    return insetWidth() + accidentalCutOutX;
 }
 
 //---------------------------------------------------------
