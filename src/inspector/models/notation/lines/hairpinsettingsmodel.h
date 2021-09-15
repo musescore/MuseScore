@@ -49,6 +49,10 @@ class HairpinSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(PropertyItem * continiousTextHorizontalOffset READ continiousTextHorizontalOffset CONSTANT)
     Q_PROPERTY(PropertyItem * continiousTextVerticalOffset READ continiousTextVerticalOffset CONSTANT)
 
+    Q_PROPERTY(PropertyItem * endText READ endText CONSTANT)
+    Q_PROPERTY(PropertyItem * endTextHorizontalOffset READ endTextHorizontalOffset CONSTANT)
+    Q_PROPERTY(PropertyItem * endTextVerticalOffset READ endTextVerticalOffset CONSTANT)
+
 public:
     explicit HairpinSettingsModel(QObject* parent, IElementRepositoryService* repository);
 
@@ -76,6 +80,10 @@ public:
     PropertyItem* continiousText() const;
     PropertyItem* continiousTextHorizontalOffset() const;
     PropertyItem* continiousTextVerticalOffset() const;
+
+    PropertyItem* endText() const;
+    PropertyItem* endTextHorizontalOffset() const;
+    PropertyItem* endTextVerticalOffset() const;
 
 private:
     void updateLinePropertiesAvailability();

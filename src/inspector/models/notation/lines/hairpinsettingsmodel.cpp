@@ -215,6 +215,21 @@ PropertyItem* HairpinSettingsModel::continiousTextVerticalOffset() const
     return m_continiousTextVerticalOffset;
 }
 
+PropertyItem* HairpinSettingsModel::endText() const
+{
+    return nullptr;
+}
+
+PropertyItem* HairpinSettingsModel::endTextHorizontalOffset() const
+{
+    return nullptr;
+}
+
+PropertyItem* HairpinSettingsModel::endTextVerticalOffset() const
+{
+    return nullptr;
+}
+
 void HairpinSettingsModel::updateLinePropertiesAvailability()
 {
     HairpinTypes::LineStyle currentStyle = static_cast<HairpinTypes::LineStyle>(m_lineStyle->value().toInt());

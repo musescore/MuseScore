@@ -46,6 +46,8 @@ InspectorPropertyView {
     navigation.panel: root.navigationPanel
     navigation.row: prv.navigationRow(1)
 
+    visible: Boolean(horizontalOffset) || Boolean(verticalOffset)
+
     QtObject {
         id: prv
 

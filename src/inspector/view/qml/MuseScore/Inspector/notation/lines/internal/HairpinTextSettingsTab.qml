@@ -65,5 +65,19 @@ FocusableItem {
             horizontalOffset: root.model ? root.model.continiousTextHorizontalOffset : null
             verticalOffset: root.model ? root.model.continiousTextVerticalOffset : null
         }
+
+        SeparatorLine { anchors.margins: -10; visible: endTextSection.visible }
+
+        TextSection {
+            id: endTextSection
+
+            titleText:  qsTrc("inspector", "End text")
+            propertyItem: root.model ? root.model.endText : null
+        }
+
+        OffsetSection {
+            horizontalOffset: root.model ? root.model.endTextHorizontalOffset : null
+            verticalOffset: root.model ? root.model.endTextVerticalOffset : null
+        }
     }
 }
