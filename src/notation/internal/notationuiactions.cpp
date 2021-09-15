@@ -266,6 +266,11 @@ const UiActionList NotationUiActions::m_actions = {
              QT_TRANSLATE_NOOP("action", "Load style…"),
              QT_TRANSLATE_NOOP("action", "Load style")
              ),
+    UiAction("save-style",
+             mu::context::UiCtxNotationOpened,
+             QT_TRANSLATE_NOOP("action", "Save style..."),
+             QT_TRANSLATE_NOOP("action", "Save style")
+             ),
     UiAction("transpose",
              mu::context::UiCtxNotationOpened,
              QT_TRANSLATE_NOOP("action", "&Transpose…"),
