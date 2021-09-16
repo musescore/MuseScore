@@ -22,30 +22,30 @@
 import QtQuick 2.15
 
 import MuseScore.UiComponents 1.0
-import MuseScore.Preferences 1.0
 
-Column {
-    spacing: 18
+BaseSection {
+    id: root
 
-    property var preferencesModel: null
+    title: qsTrc("appshell", "MIDI")
 
-    StyledTextLabel {
-        text: qsTrc("appshell", "MIDI")
-        font: ui.theme.bodyBoldFont
-    }
+    property alias shortestNotes: shortestNotesBox.model
+    property int currentShortestNote: 0
+
+    signal currentShortestNoteChangeRequested(int note)
 
     ComboBoxWithTitle {
+        id: shortestNotesBox
+
         title: qsTrc("appshell", "Shortest note:")
         titleWidth: 220
 
-        currentIndex: control.indexOfValue(preferencesModel.currentShortestNote)
-        model: preferencesModel.shortestNotes()
+        currentIndex: control.indexOfValue(root.currentShortestNote)
 
         control.textRole: "title"
         control.valueRole: "value"
 
         onValueEdited: {
-            preferencesModel.currentShortestNote = newValue
+            root.currentShortestNoteChangeRequested(newValue)
         }
     }
 }

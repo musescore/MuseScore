@@ -22,49 +22,50 @@
 import QtQuick 2.15
 
 import MuseScore.UiComponents 1.0
-import MuseScore.Preferences 1.0
 
-Column {
-    spacing: 18
+BaseSection {
+    id: root
 
-    property var preferencesModel: null
+    title: qsTrc("appshell", "MusicXML")
 
-    StyledTextLabel {
-        text: qsTrc("appshell", "MusicXML")
-        font: ui.theme.bodyBoldFont
+    property alias importLayout: importLayoutBox.checked
+    property alias importBreaks: importBreaksBox.checked
+    property alias needUseDefaultFont: needUseDefaultFontBox.checked
+
+    signal importLayoutChangeRequested(bool importLayout)
+    signal importBreaksChangeRequested(bool importBreaks)
+    signal useDefaultFontChangeRequested(bool use)
+
+    CheckBox {
+        id: importLayoutBox
+
+        width: 208
+        text: qsTrc("appshell", "Import layout")
+
+        onClicked: {
+            root.importLayoutChangeRequested(!checked)
+        }
     }
 
-    Column {
-        spacing: 12
+    CheckBox {
+        id: importBreaksBox
 
-        CheckBox {
-            width: 208
-            text: qsTrc("appshell", "Import layout")
-            checked: preferencesModel.importLayout
+        width: 208
+        text: qsTrc("appshell", "Import system and page breaks")
 
-            onClicked: {
-                preferencesModel.importLayout = !preferencesModel.importLayout
-            }
+        onClicked: {
+            root.importBreaksChangeRequested(!checked)
         }
+    }
 
-        CheckBox {
-            width: 208
-            text: qsTrc("appshell", "Import system and page breaks")
-            checked: preferencesModel.importBreaks
+    CheckBox {
+        id: needUseDefaultFontBox
 
-            onClicked: {
-                preferencesModel.importBreaks = !preferencesModel.importBreaks
-            }
-        }
+        width: 208
+        text: qsTrc("appshell", "Apply default typeface (Edwin) to imported scores")
 
-        CheckBox {
-            width: 208
-            text: qsTrc("appshell", "Apply default typeface (Edwin) to imported scores")
-            checked: preferencesModel.needUseDefaultFont
-
-            onClicked: {
-                preferencesModel.needUseDefaultFont = !preferencesModel.needUseDefaultFont
-            }
+        onClicked: {
+            root.useDefaultFontChangeRequested(!checked)
         }
     }
 }

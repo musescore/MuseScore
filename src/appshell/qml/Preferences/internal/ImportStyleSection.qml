@@ -22,74 +22,69 @@
 import QtQuick 2.15
 
 import MuseScore.UiComponents 1.0
-import MuseScore.Preferences 1.0
 
-Column {
-    spacing: 18
+BaseSection {
+    id: root
 
-    property var preferencesModel: null
+    title: qsTrc("appshell", "Style used for import")
 
-    StyledTextLabel {
-        text: qsTrc("appshell", "Style used for import")
-        font: ui.theme.bodyBoldFont
-    }
+    property string styleFileImportPath: ""
+    property string fileChooseTitle: ""
+    property string filePathFilter: ""
+    property string fileDirectory: ""
 
-    Column {
+    signal styleFileImportPathChangeRequested(string path)
+
+    RoundedRadioButton {
         anchors.left: parent.left
         anchors.right: parent.right
-        spacing: 12
 
-        RoundedRadioButton {
-            anchors.left: parent.left
-            anchors.right: parent.right
+        checked: root.styleFileImportPath === ""
 
-            checked: preferencesModel.styleFileImportPath === ""
+        StyledTextLabel {
+            text: qsTrc("appshell", "Built-in style")
+            horizontalAlignment: Text.AlignLeft
+        }
 
+        onToggled: {
+            root.styleFileImportPathChangeRequested("")
+        }
+    }
+
+    RoundedRadioButton {
+        anchors.left: parent.left
+        anchors.right: parent.right
+
+        checked: root.styleFileImportPath !== ""
+
+        onToggled: {
+            root.styleFileImportPathChangeRequested("")
+        }
+
+        Item {
             StyledTextLabel {
-                text: qsTrc("appshell", "Built-in style")
+                id: title
+
+                width: 193
+                anchors.verticalCenter: parent.verticalCenter
+
+                text: qsTrc("appshell", "Use style file:")
                 horizontalAlignment: Text.AlignLeft
             }
 
-            onToggled: {
-                preferencesModel.styleFileImportPath = ""
-            }
-        }
+            FilePicker {
+                anchors.left: title.right
+                width: 246
+                anchors.verticalCenter: parent.verticalCenter
 
-        RoundedRadioButton {
-            anchors.left: parent.left
-            anchors.right: parent.right
+                dialogTitle: root.fileChooseTitle
+                filter: root.filePathFilter
+                dir: root.fileDirectory
 
-            checked: preferencesModel.styleFileImportPath !== ""
+                path: root.styleFileImportPath
 
-            onToggled: {
-                preferencesModel.styleFileImportPath = ""
-            }
-
-            Item {
-                StyledTextLabel {
-                    id: title
-
-                    width: 193
-                    anchors.verticalCenter: parent.verticalCenter
-
-                    text: qsTrc("appshell", "Use style file:")
-                    horizontalAlignment: Text.AlignLeft
-                }
-
-                FilePicker {
-                    anchors.left: title.right
-                    width: 246
-                    anchors.verticalCenter: parent.verticalCenter
-
-                    dialogTitle: preferencesModel.styleChooseTitle()
-                    filter: preferencesModel.stylePathFilter()
-                    dir: preferencesModel.fileDirectory(preferencesModel.styleFileImportPath)
-
-                    path: preferencesModel.styleFileImportPath
-
-                    onPathEdited: {
-                        preferencesModel.styleFileImportPath = newPath
-                    }
+                onPathEdited: {
+                    root.styleFileImportPathChangeRequested(newPath)
                 }
             }
         }
