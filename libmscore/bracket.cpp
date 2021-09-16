@@ -116,6 +116,13 @@ void Bracket::setStaffSpan(int a, int b)
          score()->styleSt(Sid::MusicalSymbolFont) != "Emmentaler" && score()->styleSt(Sid::MusicalSymbolFont) != "Gonville")
             {
             int v = _lastStaff - _firstStaff + 1;
+
+            // if staves inner staves are hidden, decrease span
+            for (int staffIndex = _firstStaff; staffIndex <= _lastStaff; ++staffIndex) {
+                  if (system() && !system()->staff(staffIndex)->show())
+                        --v;
+                  }
+
             if (score()->styleSt(Sid::MusicalSymbolFont) == "Leland")
                   v = qMin(4, v);
             // total default height of a system of n staves / height of a 5 line staff
