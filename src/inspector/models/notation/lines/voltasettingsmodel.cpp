@@ -20,54 +20,55 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "ottavasettingsmodel.h"
+#include "voltasettingsmodel.h"
 
 #include "translation.h"
 
 using namespace mu::inspector;
 
-OttavaSettingsModel::OttavaSettingsModel(QObject* parent, IElementRepositoryService* repository)
+VoltaSettingsModel::VoltaSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : LineSettingsModel(parent, repository)
 {
-    setTitle(qtrc("inspector", "Ottava"));
+    setTitle(qtrc("inspector", "Volta"));
     createProperties();
 }
 
-PropertyItem* OttavaSettingsModel::ottavaType() const
+PropertyItem* VoltaSettingsModel::repeatCount() const
 {
-    return m_ottavaType;
+    return m_repeatCount;
 }
 
-PropertyItem* OttavaSettingsModel::showNumbersOnly() const
+PropertyItem* VoltaSettingsModel::lineType() const
 {
-    return m_showNumbersOnly;
+    return m_lineType;
 }
 
-void OttavaSettingsModel::createProperties()
+void VoltaSettingsModel::createProperties()
 {
     LineSettingsModel::createProperties();
 
-    m_ottavaType = buildPropertyItem(Ms::Pid::OTTAVA_TYPE);
-    m_showNumbersOnly = buildPropertyItem(Ms::Pid::NUMBERS_ONLY);
+    m_repeatCount = buildPropertyItem(Ms::Pid::REPEAT_COUNT);
+    m_lineType = buildPropertyItem(Ms::Pid::END_HOOK_TYPE);
 }
 
-void OttavaSettingsModel::loadProperties()
+void VoltaSettingsModel::loadProperties()
 {
     LineSettingsModel::loadProperties();
 
-    loadPropertyItem(m_ottavaType);
-    loadPropertyItem(m_showNumbersOnly);
+    loadPropertyItem(m_repeatCount);
+    loadPropertyItem(m_lineType);
 }
 
-void OttavaSettingsModel::resetProperties()
+void VoltaSettingsModel::resetProperties()
 {
     LineSettingsModel::resetProperties();
 
-    m_ottavaType->resetToDefault();
-    m_showNumbersOnly->resetToDefault();
+    m_repeatCount->resetToDefault();
+    m_lineType->resetToDefault();
 }
 
-void OttavaSettingsModel::requestElements()
+void VoltaSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::OTTAVA);
+    m_elementList = m_repository->findElementsByType(Ms::ElementType::VOLTA);
 }
+
