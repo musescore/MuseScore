@@ -44,7 +44,7 @@ PreferencesPage {
         id: content
 
         width: parent.width
-        spacing: 24
+        spacing: root.sectionsSpacing
 
         DefaultFilesSection {
             model: scorePreferencesModel

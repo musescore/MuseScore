@@ -40,12 +40,17 @@ PreferencesPage {
         foldersPreferencesModel.load()
     }
 
-    FoldersSection {
-        id: content
+    Column {
+        anchors.fill: parent
+        spacing: root.sectionsSpacing
 
-        model: foldersPreferencesModel
+        FoldersSection {
+            id: content
 
-        navigation.section: root.navigationSection
-        navigation.order: root.navigationOrderStart + 1
+            model: foldersPreferencesModel
+
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 1
+        }
     }
 }

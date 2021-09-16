@@ -41,7 +41,7 @@ PreferencesPage {
 
     Column {
         anchors.fill: parent
-        spacing: 24
+        spacing: root.sectionsSpacing
 
         ZoomSection {
             defaultZoom: preferencesModel.defaultZoom

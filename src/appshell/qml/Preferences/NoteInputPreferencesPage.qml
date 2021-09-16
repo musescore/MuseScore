@@ -37,8 +37,7 @@ PreferencesPage {
 
     Column {
         anchors.fill: parent
-
-        spacing: 22
+        spacing: root.sectionsSpacing
 
         NoteInputSection {
             advanceToNextNote: noteInputModel.advanceToNextNoteOnKeyRelease
