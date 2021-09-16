@@ -29,6 +29,7 @@ using namespace mu::inspector;
 VoltaSettingsModel::VoltaSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : LineSettingsModel(parent, repository, Ms::ElementType::VOLTA, qtrc("inspector", "Volta"))
 {
+    createProperties();
 }
 
 PropertyItem* VoltaSettingsModel::repeatCount() const

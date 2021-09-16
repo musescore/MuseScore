@@ -150,8 +150,8 @@ FocusableItem {
                 width: parent.width
 
                 model: [
-                    { textRole: qsTrc("inspector", "Above"), valueRole: Hairpin.PLACEMENT_TYPE_ABOVE },
-                    { textRole: qsTrc("inspector", "Below"), valueRole: Hairpin.PLACEMENT_TYPE_BELOW }
+                    { textRole: qsTrc("inspector", "Above"), valueRole: LineTypes.PLACEMENT_TYPE_ABOVE },
+                    { textRole: qsTrc("inspector", "Below"), valueRole: LineTypes.PLACEMENT_TYPE_BELOW }
                 ]
 
                 delegate: FlatRadioButton {

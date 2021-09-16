@@ -34,6 +34,8 @@ HairpinSettingsModel::HairpinSettingsModel(QObject* parent, IElementRepositorySe
     setModelType(InspectorModelType::TYPE_HAIRPIN);
     setTitle(qtrc("inspector", "Hairpin"));
     setIcon(ui::IconCode::Code::HAIRPIN);
+
+    createProperties();
 }
 
 PropertyItem* HairpinSettingsModel::isNienteCircleVisible() const
@@ -93,16 +95,6 @@ void HairpinSettingsModel::requestElements()
 
         return hairpin->hairpinType() == Ms::HairpinType::CRESC_HAIRPIN || hairpin->hairpinType() == Ms::HairpinType::DECRESC_HAIRPIN;
     });
-}
-
-void HairpinSettingsModel::onUpdateLinePropertiesAvailability()
-{
-    HairpinTypes::LineStyle currentStyle = static_cast<HairpinTypes::LineStyle>(lineStyle()->value().toInt());
-
-    bool isAvailable = currentStyle == HairpinTypes::LineStyle::LINE_STYLE_CUSTOM;
-
-    dashGapLength()->setIsEnabled(isAvailable);
-    dashLineLength()->setIsEnabled(isAvailable);
 }
 
 bool HairpinSettingsModel::isTextVisible(TextType type) const
