@@ -55,6 +55,11 @@ static const ElementStyle pedalStyle {
     { Sid::pedalPosBelow,                      Pid::OFFSET },
 };
 
+PedalSegment::PedalSegment(Pedal* sp, System* parent)
+    : TextLineBaseSegment(ElementType::PEDAL_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+{
+}
+
 //---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
@@ -167,9 +172,9 @@ static const ElementStyle pedalSegmentStyle {
     { Sid::pedalMinDistance, Pid::MIN_DISTANCE },
 };
 
-LineSegment* Pedal::createLineSegment()
+LineSegment* Pedal::createLineSegment(System* parent)
 {
-    PedalSegment* p = new PedalSegment(this, this);
+    PedalSegment* p = new PedalSegment(this, parent);
     p->setTrack(track());
     p->initElementStyle(&pedalSegmentStyle);
     return p;

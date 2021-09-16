@@ -43,6 +43,16 @@
 using namespace mu;
 
 namespace Ms {
+LineSegment::LineSegment(const ElementType& type, Spanner* sp, System* parent, ElementFlags f)
+    : SpannerSegment(type, sp, parent, f)
+{
+}
+
+LineSegment::LineSegment(const ElementType& type, System* parent, ElementFlags f)
+    : SpannerSegment(type, parent, f)
+{
+}
+
 //---------------------------------------------------------
 //   LineSegment
 //---------------------------------------------------------
@@ -1084,7 +1094,7 @@ SpannerSegment* SLine::layoutSystem(System* system)
     Fraction stick = system->firstMeasure()->tick();
     Fraction etick = system->lastMeasure()->endTick();
 
-    LineSegment* lineSegm = toLineSegment(getNextLayoutSystemSegment(system, [this]() { return createLineSegment(); }));
+    LineSegment* lineSegm = toLineSegment(getNextLayoutSystemSegment(system, [this](System* parent) { return createLineSegment(parent); }));
 
     SpannerSegmentType sst;
     if (tick() >= stick) {
@@ -1198,7 +1208,7 @@ void SLine::layout()
     int segCount = int(spannerSegments().size());
 
     if (segmentsNeeded != segCount) {
-        fixupSegments(segmentsNeeded, [this]() { return createLineSegment(); });
+        fixupSegments(segmentsNeeded, [this](System* parent) { return createLineSegment(parent); });
         if (segmentsNeeded > segCount) {
             for (int i = segCount; i < segmentsNeeded; ++i) {
                 LineSegment* lineSegm = segmentAt(i);
@@ -1346,7 +1356,7 @@ bool SLine::readProperties(XmlReader& e)
     } else if (tag == "ticks") {
         setTicks(Fraction::fromTicks(e.readInt()));
     } else if (tag == "Segment") {
-        LineSegment* ls = createLineSegment();
+        LineSegment* ls = createLineSegment(score()->dummy()->system());
         ls->setTrack(track());     // needed in read to get the right staff mag
         ls->read(e);
         add(ls);
@@ -1383,7 +1393,7 @@ bool SLine::readProperties(XmlReader& e)
 void SLine::setLen(qreal l)
 {
     if (spannerSegments().empty()) {
-        add(createLineSegment());
+        add(createLineSegment(score()->dummy()->system()));
     }
     LineSegment* s = frontSegment();
     s->setPos(PointF());

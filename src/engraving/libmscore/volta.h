@@ -41,7 +41,7 @@ extern LineSegment* voltaDebug;
 class VoltaSegment final : public TextLineBaseSegment
 {
 public:
-    VoltaSegment(Spanner*, EngravingItem* parent);
+    VoltaSegment(Volta*, System* parent);
 
     VoltaSegment* clone() const override { return new VoltaSegment(*this); }
 
@@ -70,7 +70,7 @@ public:
 
     Volta* clone() const override { return new Volta(*this); }
 
-    LineSegment* createLineSegment() override;
+    LineSegment* createLineSegment(System* parent) override;
 
     void write(XmlWriter&) const override;
     void read(XmlReader& e) override;

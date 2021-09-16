@@ -2359,7 +2359,7 @@ EngravingItem* Read206::readArticulation(EngravingItem* parent, XmlReader& e, co
 //   readSlurTieProperties
 //---------------------------------------------------------
 
-static bool readSlurTieProperties(XmlReader& e, SlurTie* st)
+static bool readSlurTieProperties(XmlReader& e, const ReadContext& ctx, SlurTie* st)
 {
     const QStringRef& tag(e.name());
 
@@ -2367,7 +2367,7 @@ static bool readSlurTieProperties(XmlReader& e, SlurTie* st)
     } else if (tag == "lineType") {
         st->setLineType(e.readInt());
     } else if (tag == "SlurSegment") {
-        SlurTieSegment* s = st->newSlurTieSegment();
+        SlurTieSegment* s = st->newSlurTieSegment(ctx.dummy()->system());
         s->read(e);
         st->add(s);
     } else if (!st->EngravingItem::readProperties(e)) {
@@ -2376,7 +2376,7 @@ static bool readSlurTieProperties(XmlReader& e, SlurTie* st)
     return true;
 }
 
-void Read206::readSlur206(XmlReader& e, Slur* s)
+void Read206::readSlur206(XmlReader& e, const ReadContext& ctx, Slur* s)
 {
     s->setTrack(e.track());        // set staff
     e.addSpanner(e.intAttribute("id"), s);
@@ -2388,7 +2388,7 @@ void Read206::readSlur206(XmlReader& e, Slur* s)
             s->setTrack(e.readInt());
         } else if (tag == "endTrack") {         // obsolete
             e.readInt();
-        } else if (!readSlurTieProperties(e, s)) {
+        } else if (!readSlurTieProperties(e, ctx, s)) {
             e.unknown();
         }
     }
@@ -2401,7 +2401,7 @@ void Read206::readTie206(XmlReader& e, const ReadContext& ctx, Tie* t)
 {
     e.addSpanner(e.intAttribute("id"), t);
     while (e.readNextStartElement()) {
-        if (readSlurTieProperties(e, t)) {
+        if (readSlurTieProperties(e, ctx, t)) {
         } else {
             e.unknown();
         }
@@ -2628,7 +2628,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
         } else if (tag == "Slur") {
             Slur* sl = Factory::createSlur(ctx.dummy());
             sl->setTick(e.tick());
-            Read206::readSlur206(e, sl);
+            Read206::readSlur206(e, ctx, sl);
             //
             // check if we already saw "endSpanner"
             //
@@ -3325,7 +3325,7 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
             } else if (tag == "Trill") {
                 Read206::readTrill206(e, toTrill(s));
             } else if (tag == "Slur") {
-                readSlur206(e, toSlur(s));
+                readSlur206(e, ctx, toSlur(s));
             } else {
                 Q_ASSERT(tag == "Pedal");
                 readPedal(e, ctx, toPedal(s));

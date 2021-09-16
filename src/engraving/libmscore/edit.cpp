@@ -558,7 +558,7 @@ Slur* Score::addSlur(ChordRest* firstChordRest, ChordRest* secondChordRest, cons
     slur->setEndElement(secondChordRest);
 
     firstChordRest->score()->undoAddElement(slur);
-    SlurSegment* ss = new SlurSegment(firstChordRest);
+    SlurSegment* ss = new SlurSegment(firstChordRest->score()->dummy()->system());
     ss->setSpannerSegmentType(SpannerSegmentType::SINGLE);
     if (firstChordRest == secondChordRest) {
         ss->setSlurOffset(Grip::END, PointF(3.0 * firstChordRest->score()->spatium(), 0.0));

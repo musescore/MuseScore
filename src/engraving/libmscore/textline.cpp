@@ -98,7 +98,7 @@ static const ElementStyle systemTextLineStyle {
 //   TextLineSegment
 //---------------------------------------------------------
 
-TextLineSegment::TextLineSegment(Spanner* sp, EngravingItem* parent, bool system)
+TextLineSegment::TextLineSegment(Spanner* sp, System* parent, bool system)
     : TextLineBaseSegment(ElementType::TEXTLINE_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     setSystemFlag(system);
@@ -220,9 +220,9 @@ void TextLine::read(XmlReader& e)
 //   createLineSegment
 //---------------------------------------------------------
 
-LineSegment* TextLine::createLineSegment()
+LineSegment* TextLine::createLineSegment(System* parent)
 {
-    TextLineSegment* seg = new TextLineSegment(this, this, systemFlag());
+    TextLineSegment* seg = new TextLineSegment(this, parent, systemFlag());
     seg->setTrack(track());
     // note-anchored line segments are relative to system not to staff
     if (anchor() == Spanner::Anchor::NOTE) {

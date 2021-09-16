@@ -43,10 +43,8 @@ protected:
     void changeAnchor(EditData&, EngravingItem*) override;
 
 public:
-    TieSegment(EngravingItem* parent)
-        : SlurTieSegment(ElementType::TIE_SEGMENT, parent) { autoAdjustOffset = mu::PointF(); }
-    TieSegment(const TieSegment& s)
-        : SlurTieSegment(s) { autoAdjustOffset = mu::PointF(); }
+    TieSegment(System* parent);
+    TieSegment(const TieSegment& s);
 
     TieSegment* clone() const override { return new TieSegment(*this); }
 
@@ -98,7 +96,7 @@ public:
     TieSegment* segmentAt(int n) { return toTieSegment(Spanner::segmentAt(n)); }
     const TieSegment* segmentAt(int n) const { return toTieSegment(Spanner::segmentAt(n)); }
 
-    SlurTieSegment* newSlurTieSegment() override { return new TieSegment(this); }
+    SlurTieSegment* newSlurTieSegment(System* parent) override { return new TieSegment(parent); }
 };
 }     // namespace Ms
 #endif

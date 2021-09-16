@@ -64,6 +64,11 @@ static const ElementStyle ottavaStyle {
     { Sid::ottavaPosAbove,                     Pid::OFFSET },
 };
 
+OttavaSegment::OttavaSegment(Ottava* sp, System* parent)
+    : TextLineBaseSegment(ElementType::OTTAVA_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+{
+}
+
 //---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
@@ -259,9 +264,9 @@ static const ElementStyle ottavaSegmentStyle {
     { Sid::ottavaMinDistance, Pid::MIN_DISTANCE },
 };
 
-LineSegment* Ottava::createLineSegment()
+LineSegment* Ottava::createLineSegment(System* parent)
 {
-    OttavaSegment* os = new OttavaSegment(this, this);
+    OttavaSegment* os = new OttavaSegment(this, parent);
     os->setTrack(track());
     os->initElementStyle(&ottavaSegmentStyle);
     return os;

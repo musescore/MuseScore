@@ -97,7 +97,7 @@ protected:
     mu::PainterPath shapePath;
     Shape _shape;
 
-    SlurTieSegment(const ElementType& type, EngravingItem*);
+    SlurTieSegment(const ElementType& type, System*);
     SlurTieSegment(const SlurTieSegment&);
 
     virtual void changeAnchor(EditData&, EngravingItem*) = 0;
@@ -179,7 +179,7 @@ public:
     void undoSetLineType(int);
 
     virtual void slurPos(SlurPos*) = 0;
-    virtual SlurTieSegment* newSlurTieSegment() = 0;
+    virtual SlurTieSegment* newSlurTieSegment(System* parent) = 0;
 
     virtual QVariant getProperty(Pid propertyId) const override;
     virtual bool setProperty(Pid propertyId, const QVariant&) override;

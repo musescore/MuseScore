@@ -49,10 +49,8 @@ protected:
     virtual void startEditDrag(EditData&) override;
     void startDrag(EditData&) override;
 
-    LineSegment(const ElementType& type, Spanner* sp, EngravingItem* parent, ElementFlags f = ElementFlag::NOTHING)
-        : SpannerSegment(type, sp, parent, f) {}
-    LineSegment(const ElementType& type, EngravingItem* parent, ElementFlags f = ElementFlag::NOTHING)
-        : SpannerSegment(type, parent, f) {}
+    LineSegment(const ElementType& type, Spanner* sp, System* parent, ElementFlags f = ElementFlag::NOTHING);
+    LineSegment(const ElementType& type, System* parent, ElementFlags f = ElementFlag::NOTHING);
 
 public:
 
@@ -113,7 +111,7 @@ public:
 
     bool readProperties(XmlReader& node) override;
     void writeProperties(XmlWriter& xml) const override;
-    virtual LineSegment* createLineSegment() = 0;
+    virtual LineSegment* createLineSegment(System* parent) = 0;
     void setLen(qreal l);
     using EngravingItem::bbox;
     const mu::RectF& bbox() const override;

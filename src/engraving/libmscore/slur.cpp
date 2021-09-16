@@ -44,6 +44,16 @@ using namespace mu;
 using namespace mu::draw;
 
 namespace Ms {
+SlurSegment::SlurSegment(System* parent)
+    : SlurTieSegment(ElementType::SLUR_SEGMENT, parent)
+{
+}
+
+SlurSegment::SlurSegment(const SlurSegment& ss)
+    : SlurTieSegment(ss)
+{
+}
+
 //---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
@@ -1064,8 +1074,8 @@ SpannerSegment* Slur::layoutSystem(System* system)
     Fraction stick = system->firstMeasure()->tick();
     Fraction etick = system->lastMeasure()->endTick();
 
-    SlurSegment* slurSegment = toSlurSegment(getNextLayoutSystemSegment(system, [this]() {
-        return new SlurSegment(this);
+    SlurSegment* slurSegment = toSlurSegment(getNextLayoutSystemSegment(system, [this](System* parent) {
+        return new SlurSegment(parent);
     }));
 
     SpannerSegmentType sst;
@@ -1197,7 +1207,7 @@ void Slur::layout()
         //
         SlurSegment* s;
         if (spannerSegments().empty()) {
-            s = new SlurSegment(this);
+            s = new SlurSegment(score()->dummy()->system());
             s->setTrack(track());
             add(s);
         } else {

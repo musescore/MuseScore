@@ -77,6 +77,11 @@ const std::array<const char*, 2> Glissando::glissandoTypeNames = {
 //   GlisandoSegment
 //=========================================================
 
+GlissandoSegment::GlissandoSegment(Glissando* sp, System* parent)
+    : LineSegment(ElementType::GLISSANDO_SEGMENT, sp, parent)
+{
+}
+
 //---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
@@ -221,9 +226,9 @@ QString Glissando::glissandoTypeName() const
 //   createLineSegment
 //---------------------------------------------------------
 
-LineSegment* Glissando::createLineSegment()
+LineSegment* Glissando::createLineSegment(System* parent)
 {
-    GlissandoSegment* seg = new GlissandoSegment(this, this);
+    GlissandoSegment* seg = new GlissandoSegment(this, parent);
     seg->setTrack(track());
     seg->setColor(color());
     return seg;
@@ -239,7 +244,7 @@ void Glissando::layout()
 
     if (score()->isPaletteScore() || !startElement() || !endElement()) {    // for use in palettes or while dragging
         if (spannerSegments().empty()) {
-            add(createLineSegment());
+            add(createLineSegment(score()->dummy()->system()));
         }
         LineSegment* s = frontSegment();
         s->setPos(PointF());

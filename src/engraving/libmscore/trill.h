@@ -41,12 +41,9 @@ class TrillSegment final : public LineSegment
     void symbolLine(SymId start, SymId fill, SymId end);
     Sid getPropertyStyle(Pid) const override;
 
-protected:
 public:
-    TrillSegment(Spanner* sp, EngravingItem* parent)
-        : LineSegment(ElementType::TRILL_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF) {}
-    TrillSegment(EngravingItem* parent)
-        : LineSegment(ElementType::TRILL_SEGMENT, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF) {}
+    TrillSegment(Trill* sp, System* parent);
+    TrillSegment(System* parent);
 
     Trill* trill() const { return (Trill*)spanner(); }
 
@@ -99,7 +96,7 @@ public:
     Trill* clone() const override { return new Trill(*this); }
 
     void layout() override;
-    LineSegment* createLineSegment() override;
+    LineSegment* createLineSegment(System* parent) override;
     void add(EngravingItem*) override;
     void remove(EngravingItem*) override;
     void write(XmlWriter&) const override;

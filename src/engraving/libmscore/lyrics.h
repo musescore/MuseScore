@@ -128,7 +128,7 @@ public:
 
     LyricsLine* clone() const override { return new LyricsLine(*this); }
     void layout() override;
-    LineSegment* createLineSegment() override;
+    LineSegment* createLineSegment(System* parent) override;
     void removeUnmanaged() override;
     void styleChanged() override;
 
@@ -152,7 +152,7 @@ protected:
     qreal _dashLength = 0;
 
 public:
-    LyricsLineSegment(Spanner*, EngravingItem* parent);
+    LyricsLineSegment(LyricsLine*, System* parent);
 
     LyricsLineSegment* clone() const override { return new LyricsLineSegment(*this); }
     void draw(mu::draw::Painter*) const override;

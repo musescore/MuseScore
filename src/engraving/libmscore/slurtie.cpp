@@ -42,7 +42,7 @@ namespace Ms {
 //   SlurTieSegment
 //---------------------------------------------------------
 
-SlurTieSegment::SlurTieSegment(const ElementType& type, EngravingItem* parent)
+SlurTieSegment::SlurTieSegment(const ElementType& type, System* parent)
     : SpannerSegment(type, parent)
 {
     setFlag(ElementFlag::ON_STAFF, true);
@@ -478,9 +478,9 @@ bool SlurTie::readProperties(XmlReader& e)
         const int idx = e.intAttribute("no", 0);
         const int n = int(spannerSegments().size());
         for (int i = n; i < idx; ++i) {
-            add(newSlurTieSegment());
+            add(newSlurTieSegment(score()->dummy()->system()));
         }
-        SlurTieSegment* s = newSlurTieSegment();
+        SlurTieSegment* s = newSlurTieSegment(score()->dummy()->system());
         s->read(e);
         add(s);
     } else if (!Spanner::readProperties(e)) {
@@ -574,7 +574,7 @@ QVariant SlurTie::propertyDefault(Pid id) const
 
 void SlurTie::fixupSegments(unsigned nsegs)
 {
-    Spanner::fixupSegments(nsegs, [this]() { return newSlurTieSegment(); });
+    Spanner::fixupSegments(nsegs, [this](System* parent) { return newSlurTieSegment(parent); });
 }
 
 //---------------------------------------------------------

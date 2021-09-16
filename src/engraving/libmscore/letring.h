@@ -35,8 +35,7 @@ class LetRing;
 class LetRingSegment final : public TextLineBaseSegment
 {
 public:
-    LetRingSegment(Spanner* sp, EngravingItem* parent)
-        : TextLineBaseSegment(ElementType::LET_RING_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF) { }
+    LetRingSegment(LetRing* sp, System* parent);
 
     LetRingSegment* clone() const override { return new LetRingSegment(*this); }
 
@@ -63,7 +62,7 @@ public:
 
     void read(XmlReader&) override;
 //      virtual void write(XmlWriter& xml) const override;
-    LineSegment* createLineSegment() override;
+    LineSegment* createLineSegment(System* parent) override;
 
     QVariant propertyDefault(Pid propertyId) const override;
     Sid getPropertyStyle(Pid) const override;

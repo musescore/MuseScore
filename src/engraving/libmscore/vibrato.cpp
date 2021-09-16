@@ -56,6 +56,11 @@ int vibratoTableSize()
     return sizeof(vibratoTable) / sizeof(VibratoTableItem);
 }
 
+VibratoSegment::VibratoSegment(Vibrato* sp, System* parent)
+    : LineSegment(ElementType::VIBRATO_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+{
+}
+
 //---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
@@ -222,9 +227,9 @@ static const ElementStyle vibratoSegmentStyle {
 //   createLineSegment
 //---------------------------------------------------------
 
-LineSegment* Vibrato::createLineSegment()
+LineSegment* Vibrato::createLineSegment(System* parent)
 {
-    VibratoSegment* seg = new VibratoSegment(this, this);
+    VibratoSegment* seg = new VibratoSegment(this, parent);
     seg->setTrack(track());
     seg->setColor(color());
     seg->initElementStyle(&vibratoSegmentStyle);

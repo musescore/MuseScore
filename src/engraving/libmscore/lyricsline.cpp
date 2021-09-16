@@ -194,8 +194,8 @@ SpannerSegment* LyricsLine::layoutSystem(System* system)
     Fraction stick = system->firstMeasure()->tick();
     Fraction etick = system->lastMeasure()->endTick();
 
-    LyricsLineSegment* lineSegm = toLyricsLineSegment(getNextLayoutSystemSegment(system, [this]() {
-        return createLineSegment();
+    LyricsLineSegment* lineSegm = toLyricsLineSegment(getNextLayoutSystemSegment(system, [this](System* parent) {
+        return createLineSegment(parent);
     }));
 
     SpannerSegmentType sst;
@@ -281,9 +281,9 @@ SpannerSegment* LyricsLine::layoutSystem(System* system)
 //   createLineSegment
 //---------------------------------------------------------
 
-LineSegment* LyricsLine::createLineSegment()
+LineSegment* LyricsLine::createLineSegment(System* parent)
 {
-    LyricsLineSegment* seg = new LyricsLineSegment(this, this);
+    LyricsLineSegment* seg = new LyricsLineSegment(this, parent);
     seg->setTrack(track());
     seg->setColor(color());
     return seg;
@@ -334,7 +334,7 @@ bool LyricsLine::setProperty(Pid propertyId, const QVariant& v)
 //   LyricsLineSegment
 //=========================================================
 
-LyricsLineSegment::LyricsLineSegment(Spanner* sp, EngravingItem* parent)
+LyricsLineSegment::LyricsLineSegment(LyricsLine* sp, System* parent)
     : LineSegment(ElementType::LYRICSLINE_SEGMENT, sp, parent, ElementFlag::ON_STAFF | ElementFlag::NOT_SELECTABLE)
 {
     setGenerated(true);

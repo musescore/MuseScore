@@ -53,8 +53,8 @@ protected:
     mu::PointF _p2;
     mu::PointF _offset2;
 
-    SpannerSegment(const ElementType& type, Spanner*, EngravingItem* parent, ElementFlags f = ElementFlag::ON_STAFF | ElementFlag::MOVABLE);
-    SpannerSegment(const ElementType& type, EngravingItem* parent, ElementFlags f = ElementFlag::ON_STAFF | ElementFlag::MOVABLE);
+    SpannerSegment(const ElementType& type, Spanner*, System* parent, ElementFlags f = ElementFlag::ON_STAFF | ElementFlag::MOVABLE);
+    SpannerSegment(const ElementType& type, System* parent, ElementFlags f = ElementFlag::ON_STAFF | ElementFlag::MOVABLE);
     SpannerSegment(const SpannerSegment&);
 
 public:
@@ -173,8 +173,8 @@ protected:
     void reuse(SpannerSegment* seg);              // called when segment from unusedSegments
                                                   // is added back to the spanner.
     int reuseSegments(int number);
-    SpannerSegment* getNextLayoutSystemSegment(System* system, std::function<SpannerSegment* ()> createSegment);
-    void fixupSegments(unsigned int targetNumber, std::function<SpannerSegment* ()> createSegment);
+    SpannerSegment* getNextLayoutSystemSegment(System* system, std::function<SpannerSegment* (System*)> createSegment);
+    void fixupSegments(unsigned int targetNumber, std::function<SpannerSegment* (System*)> createSegment);
 
     const std::vector<SpannerSegment*> spannerSegments() const { return segments; }
 
