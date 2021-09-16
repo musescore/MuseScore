@@ -108,41 +108,40 @@ Column {
             width: parent.width
 
             InspectorPropertyView {
-                titleText: qsTrc("inspector", "Top TPC")
                 propertyItem: root.model ? root.model.topTpc : null
+                titleText: qsTrc("inspector", "Top note")
+                showMenuButton: false
+
+                anchors.left: parent.left
+                anchors.right: parent.horizontalCenter
+                anchors.rightMargin: 2
 
                 Dropdown {
-                    id: ttpcs
-                    anchors.left: parent.left
-                    anchors.right: parent.horizontalCenter
-                    anchors.rightMargin: 2
+                    id: topTpc
                     width: parent.width
-
                     model: root.tpcListModel
-
-                    currentIndex: root.model && !root.model.topTpc.isUndefined ? ttpcs.indexOfValue(root.model.topTpc.value) : -1
-
+                    currentIndex: root.model && !root.model.topTpc.isUndefined ? topTpc.indexOfValue(root.model.topTpc.value) : -1
                     onCurrentValueChanged: {
-                        if (currentIndex === -1) {
+                        if (currentIndex === -1 || !root.model) {
                             return
                         }
 
-                        root.model.topTpc.value = ttpcs.currentValue
+                        root.model.topTpc.value = topTpc.currentValue
                     }
                 }
             }
 
             InspectorPropertyView {
-                titleText: qsTrc("inspector", "Top octave")
                 propertyItem: root.model ? root.model.topOctave : null
+                showTitle: true // Show empty label for correct alignment
+                showMenuButton: false
+
+                anchors.left: parent.horizontalCenter
+                anchors.leftMargin: 2
+                anchors.right: parent.right
 
                 IncrementalPropertyControl {
                     id: topOctaveControl
-
-                    anchors.left: parent.horizontalCenter
-                    anchors.leftMargin: 2
-                    anchors.right: parent.right
-
                     isIndeterminate: root.model ? root.model.topOctave.isUndefined : false
                     currentValue: root.model ? root.model.topOctave.value : 0
 
@@ -151,7 +150,11 @@ Column {
                     maxValue: 8
                     minValue: -1
 
-                    onValueEdited: { root.model.topOctave.value = newValue }
+                    onValueEdited: function(newValue) {
+                        if (root.model) {
+                            root.model.topOctave.value = newValue
+                        }
+                    }
                 }
             }
         }
@@ -160,42 +163,56 @@ Column {
             height: childrenRect.height
             width: parent.width
 
-            Dropdown {
-                id: tpcs
+            InspectorPropertyView {
+                propertyItem: root.model ? root.model.bottomTpc : null
+                titleText: qsTrc("inspector", "Bottom note")
+                showMenuButton: false
+
                 anchors.left: parent.left
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
-                width: parent.width
 
-                model: root.tpcListModel
+                Dropdown {
+                    id: bottomTpc
+                    width: parent.width
+                    model: root.tpcListModel
+                    currentIndex: root.model && !root.model.bottomTpc.isUndefined ? bottomTpc.indexOfValue(root.model.bottomTpc.value) : -1
+                    onCurrentValueChanged: {
+                        if (currentIndex === -1 || !root.model) {
+                            return
+                        }
 
-                currentIndex: root.model && !root.model.bottomTpc.isUndefined ? tpcs.indexOfValue(root.model.bottomTpc.value) : -1
-
-                onCurrentValueChanged: {
-                    if (currentIndex === -1) {
-                        return
+                        root.model.bottomTpc.value = bottomTpc.currentValue
                     }
-
-                    root.model.bottomTpc.value = tpcs.currentValue
                 }
             }
 
-            IncrementalPropertyControl {
-                id: bottomOctaveControl
+            InspectorPropertyView {
+                propertyItem: root.model ? root.model.bottomOctave : null
+                showTitle: true // Show empty label for correct alignment
+                showMenuButton: false
 
                 anchors.left: parent.horizontalCenter
                 anchors.leftMargin: 2
                 anchors.right: parent.right
 
-                isIndeterminate: root.model ? root.model.bottomOctave.isUndefined : false
-                currentValue: root.model ? root.model.bottomOctave.value : 0
+                IncrementalPropertyControl {
+                    id: bottomOctaveControl
 
-                step: 1
-                decimals: 0
-                maxValue: 8
-                minValue: -1
+                    isIndeterminate: root.model ? root.model.bottomOctave.isUndefined : false
+                    currentValue: root.model ? root.model.bottomOctave.value : 0
 
-                onValueEdited: { root.model.bottomOctave.value = newValue }
+                    step: 1
+                    decimals: 0
+                    maxValue: 8
+                    minValue: -1
+
+                    onValueEdited: function(newValue) {
+                        if (root.model) {
+                            root.model.bottomOctave.value = newValue
+                        }
+                    }
+                }
             }
         }
 
@@ -242,13 +259,13 @@ Column {
                 }
 
                 InspectorPropertyView {
-                    titleText: qsTrc("inspector", "Head type (visual only)")
+                    titleText: qsTrc("inspector", "Head type")
                     propertyItem: root.model ? root.model.noteheadType : null
 
                     RadioButtonGroup {
                         id: headTypeButtonList
 
-                        height: 30
+                        height: 40
                         width: parent.width
 
                         model: [
