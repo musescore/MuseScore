@@ -25,6 +25,7 @@
 
 #include <memory>
 
+#include "id.h"
 #include "audio/audiotypes.h"
 
 namespace mu::project {
@@ -35,6 +36,14 @@ public:
 
     virtual audio::AudioOutputParams masterAudioOutputParams() const = 0;
     virtual void setMasterAudioOutputParams(const audio::AudioOutputParams& params) = 0;
+
+    virtual audio::AudioInputParams trackInputParams(const ID& partId) const = 0;
+    virtual void setTrackInputParams(const ID& partId, const audio::AudioInputParams& params) = 0;
+
+    virtual audio::AudioOutputParams trackOutputParams(const ID& partId) const = 0;
+    virtual void setTrackOutputParams(const ID& partId, const audio::AudioOutputParams& params) = 0;
+
+    virtual void removeTrackParams(const ID& partId) = 0;
 };
 
 using IProjectAudioSettingsPtr = std::shared_ptr<IProjectAudioSettings>;
