@@ -30,6 +30,8 @@ OttavaSettingsModel::OttavaSettingsModel(QObject* parent, IElementRepositoryServ
     : LineSettingsModel(parent, repository, Ms::ElementType::OTTAVA)
 {
     setTitle(qtrc("inspector", "Ottava"));
+
+    createProperties();
 }
 
 PropertyItem* OttavaSettingsModel::ottavaType() const

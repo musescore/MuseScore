@@ -48,20 +48,3 @@ void CrescendoSettingsModel::requestElements()
         return hairpin->hairpinType() == Ms::HairpinType::CRESC_LINE || hairpin->hairpinType() == Ms::HairpinType::DECRESC_LINE;
     });
 }
-
-void CrescendoSettingsModel::onUpdateLinePropertiesAvailability()
-{
-    bool isLineAvailable = isLineVisible()->value().toBool();
-
-    endHookType()->setIsEnabled(isLineAvailable);
-    thickness()->setIsEnabled(isLineAvailable);
-    hookHeight()->setIsEnabled(isLineAvailable);
-    lineStyle()->setIsEnabled(isLineAvailable);
-
-    CrescendoTypes::LineStyle currentStyle = static_cast<CrescendoTypes::LineStyle>(lineStyle()->value().toInt());
-
-    bool areDashPropertiesAvailable = currentStyle == CrescendoTypes::LineStyle::LINE_STYLE_CUSTOM;
-
-    dashLineLength()->setIsEnabled(isLineAvailable && areDashPropertiesAvailable);
-    dashGapLength()->setIsEnabled(isLineAvailable && areDashPropertiesAvailable);
-}

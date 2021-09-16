@@ -34,8 +34,6 @@ public:
 
 private:
     void requestElements() override;
-
-    void onUpdateLinePropertiesAvailability() override;
 };
 }
 

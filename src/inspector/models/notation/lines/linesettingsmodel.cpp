@@ -24,6 +24,8 @@
 #include "dataformatter.h"
 #include "log.h"
 
+#include "types/linetypes.h"
+
 using namespace mu::inspector;
 
 LineSettingsModel::LineSettingsModel(QObject* parent, IElementRepositoryService* repository, Ms::ElementType elementType, const QString &title)
@@ -264,6 +266,19 @@ PropertyItem* LineSettingsModel::endTextVerticalOffset() const
 
 void LineSettingsModel::onUpdateLinePropertiesAvailability()
 { 
+    bool isLineAvailable = m_isLineVisible->value().toBool();
+
+    m_beginingHookType->setIsEnabled(isLineAvailable);
+    m_endHookType->setIsEnabled(isLineAvailable);
+    m_thickness->setIsEnabled(isLineAvailable);
+    m_hookHeight->setIsEnabled(isLineAvailable);
+    m_lineStyle->setIsEnabled(isLineAvailable);
+
+    auto currentStyle = static_cast<LineTypes::LineStyle>(m_lineStyle->value().toInt());
+    bool areDashPropertiesAvailable = currentStyle == LineTypes::LineStyle::LINE_STYLE_CUSTOM;
+
+    m_dashLineLength->setIsEnabled(isLineAvailable && areDashPropertiesAvailable);
+    m_dashGapLength->setIsEnabled(isLineAvailable && areDashPropertiesAvailable);
 }
 
 bool LineSettingsModel::isTextVisible(TextType) const
