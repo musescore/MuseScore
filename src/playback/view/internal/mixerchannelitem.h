@@ -150,7 +150,6 @@ private:
 
     bool m_mutedBySolo = false;
     bool m_mutedManually = false;
-    bool m_solo = false;
 };
 }
 

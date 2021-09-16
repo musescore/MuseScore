@@ -93,7 +93,7 @@ bool MixerChannelItem::muted() const
 
 bool MixerChannelItem::solo() const
 {
-    return m_solo;
+    return m_outParams.solo;
 }
 
 void MixerChannelItem::loadInputParams(AudioInputParams&& newParams)
@@ -121,6 +121,11 @@ void MixerChannelItem::loadOutputParams(AudioOutputParams&& newParams)
     if (m_outParams.muted != newParams.muted) {
         m_mutedManually = newParams.muted;
         emit mutedChanged(newParams.muted);
+    }
+
+    if (m_outParams.solo != newParams.solo) {
+        m_outParams.solo = newParams.solo;
+        emit soloChanged(m_outParams.solo);
     }
 
     if (m_outParams.fxChain != newParams.fxChain) {
@@ -240,7 +245,7 @@ void MixerChannelItem::setMutedBySolo(bool isMuted)
 
 void MixerChannelItem::setSolo(bool solo)
 {
-    if (m_solo == solo) {
+    if (m_outParams.solo == solo) {
         return;
     }
 
@@ -248,8 +253,9 @@ void MixerChannelItem::setSolo(bool solo)
         setMutedBySolo(false);
     }
 
-    m_solo = solo;
-    emit soloChanged(m_solo);
+    m_outParams.solo = solo;
+    emit outputParamsChanged(m_outParams);
+    emit soloChanged(solo);
 }
 
 void MixerChannelItem::setAudioChannelVolumePressure(const audio::audioch_t chNum, const float newValue)

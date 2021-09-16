@@ -120,8 +120,11 @@ private:
 
     void notifyActionCheckedChanged(const actions::ActionCode& actionCode);
 
+    project::IProjectAudioSettingsPtr audioSettings() const;
+
     void resetCurrentSequence();
     void setupNewCurrentSequence(const audio::TrackSequenceId sequenceId);
+    void subscribeOnAudioParamsChanges();
     void setupSequenceTracks();
     void setupSequencePlayer();
 
