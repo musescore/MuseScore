@@ -146,8 +146,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/markers/markersettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/ornaments/ornamentsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/ornaments/ornamentsettingsmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/models/notation/pedals/pedalsettingsmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/models/notation/pedals/pedalsettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/pedalsettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/pedalsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/sectionbreaks/sectionbreaksettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/sectionbreaks/sectionbreaksettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/spacers/spacersettingsmodel.cpp

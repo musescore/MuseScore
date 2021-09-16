@@ -37,7 +37,7 @@
 #include "notation/keysignatures/keysignaturesettingsmodel.h"
 #include "notation/accidentals/accidentalsettingsmodel.h"
 #include "notation/fretdiagrams/fretdiagramsettingsmodel.h"
-#include "notation/pedals/pedalsettingsmodel.h"
+#include "notation/lines/pedalsettingsmodel.h"
 #include "notation/spacers/spacersettingsmodel.h"
 #include "notation/clefs/clefsettingsmodel.h"
 #include "notation/lines/hairpinsettingsmodel.h"
@@ -114,6 +114,10 @@ AbstractInspectorModel* InspectorModelCreator::newInspectorModel(AbstractInspect
         return new OttavaSettingsModel(parent, repository);
     case AbstractInspectorModel::InspectorModelType::TYPE_VOLTA:
         return new VoltaSettingsModel(parent, repository);
+    case AbstractInspectorModel::InspectorModelType::TYPE_PALM_MUTE:
+        return new LineSettingsModel(parent, repository, Ms::ElementType::PALM_MUTE, qtrc("inspector", "Palm mute"));
+    case AbstractInspectorModel::InspectorModelType::TYPE_LET_RING:
+        return new LineSettingsModel(parent, repository, Ms::ElementType::LET_RING, qtrc("inspector", "Let ring"));
     case AbstractInspectorModel::InspectorModelType::TYPE_STAFF_TYPE_CHANGES:
         return new StaffTypeSettingsModel(parent, repository);
     case AbstractInspectorModel::InspectorModelType::TYPE_TEXT_FRAME:

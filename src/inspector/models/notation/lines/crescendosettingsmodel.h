@@ -29,25 +29,13 @@ class CrescendoSettingsModel : public LineSettingsModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(PropertyItem * endHookType READ endHookType CONSTANT)
-    Q_PROPERTY(PropertyItem * hookHeight READ hookHeight CONSTANT)
-
 public:
     explicit CrescendoSettingsModel(QObject* parent, IElementRepositoryService* repository); 
 
-    PropertyItem* endHookType() const;
-    PropertyItem* hookHeight() const;
-
 private:
-    void createProperties() override;
     void requestElements() override;
-    void loadProperties() override;
-    void resetProperties() override;
 
     void onUpdateLinePropertiesAvailability() override;
-
-    PropertyItem* m_endHookType = nullptr;
-    PropertyItem* m_hookHeight = nullptr;
 };
 }
 

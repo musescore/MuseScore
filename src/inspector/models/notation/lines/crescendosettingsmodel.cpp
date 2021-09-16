@@ -34,15 +34,6 @@ CrescendoSettingsModel::CrescendoSettingsModel(QObject* parent, IElementReposito
     setModelType(InspectorModelType::TYPE_CRESCENDO);
     setTitle(qtrc("inspector", "Crescendo"));
     setIcon(ui::IconCode::Code::CRESCENDO_LINE);
-    createProperties();
-}
-
-void CrescendoSettingsModel::createProperties()
-{
-    LineSettingsModel::createProperties();
-
-    m_endHookType = buildPropertyItem(Ms::Pid::END_HOOK_TYPE);
-    m_hookHeight = buildPropertyItem(Ms::Pid::END_HOOK_HEIGHT);
 }
 
 void CrescendoSettingsModel::requestElements()
@@ -56,32 +47,6 @@ void CrescendoSettingsModel::requestElements()
 
         return hairpin->hairpinType() == Ms::HairpinType::CRESC_LINE || hairpin->hairpinType() == Ms::HairpinType::DECRESC_LINE;
     });
-}
-
-void CrescendoSettingsModel::loadProperties()
-{
-    LineSettingsModel::loadProperties();
-
-    loadPropertyItem(m_endHookType);
-    loadPropertyItem(m_hookHeight);
-}
-
-void CrescendoSettingsModel::resetProperties()
-{
-    LineSettingsModel::resetProperties();
-
-    m_endHookType->resetToDefault();
-    m_hookHeight->resetToDefault();
-}
-
-PropertyItem* CrescendoSettingsModel::endHookType() const
-{
-    return m_endHookType;
-}
-
-PropertyItem* CrescendoSettingsModel::hookHeight() const
-{
-    return m_hookHeight;
 }
 
 void CrescendoSettingsModel::onUpdateLinePropertiesAvailability()
