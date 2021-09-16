@@ -133,6 +133,14 @@ void Bracket::setStaffSpan(int a, int b)
     if (bracketType() == BracketType::BRACE
         && score()->styleSt(Sid::MusicalSymbolFont) != "Emmentaler" && score()->styleSt(Sid::MusicalSymbolFont) != "Gonville") {
         int v = _lastStaff - _firstStaff + 1;
+
+        // if staves inner staves are hidden, decrease span
+        for (int staffIndex = _firstStaff; staffIndex <= _lastStaff; ++staffIndex) {
+            if (system() && !system()->staff(staffIndex)->show()) {
+                --v;
+            }
+        }
+
         if (score()->styleSt(Sid::MusicalSymbolFont) == "Leland") {
             v = qMin(4, v);
         }
