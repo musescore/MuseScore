@@ -43,6 +43,10 @@ BaseSection {
 
         visible: root.isAppUpdatable
 
+        navigation.name: "NeedCheckBox"
+        navigation.panel: root.navigation
+        navigation.row: 0
+
         onClicked: {
             root.needCheckForNewAppVersionChangeRequested(!checked)
         }
@@ -54,6 +58,10 @@ BaseSection {
         width: 200
 
         text: qsTrc("appshell", "Check for new version of MuseScore extensions")
+
+        navigation.name: "NeedCheckExtensionsBox"
+        navigation.panel: root.navigation
+        navigation.row: 1
 
         onClicked: {
             root.needCheckForNewExtensionsVersionChangeRequested(!checked)

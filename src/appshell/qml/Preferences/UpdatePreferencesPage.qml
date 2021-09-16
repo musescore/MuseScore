@@ -43,6 +43,9 @@ PreferencesPage {
             needCheckForNewAppVersion: updateModel.needCheckForNewAppVersion
             needCheckForNewExtensionsVersion: updateModel.needCheckForNewExtensionsVersion
 
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 1
+
             onNeedCheckForNewAppVersionChangeRequested: {
                 updateModel.needCheckForNewAppVersion = check
             }
