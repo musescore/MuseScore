@@ -418,16 +418,16 @@ CREATE_ITEM_IMPL(BarLine, ElementType::BAR_LINE, Segment)
 COPY_ITEM_IMPL(BarLine)
 MAKE_ITEM_IMPL(BarLine, Segment)
 
-Beam* Factory::createBeam(EngravingItem * parent, Score * score)
+Beam* Factory::createBeam(System * parent)
 {
-    Beam* b = new Beam(parent, score);
+    Beam* b = new Beam(parent);
     b->setup();
     return b;
 }
 
-std::shared_ptr<Beam> Factory::makeBeam(EngravingItem* parent, Score* score)
+std::shared_ptr<Beam> Factory::makeBeam(System* parent)
 {
-    return std::shared_ptr<Beam>(createBeam(parent, score));
+    return std::shared_ptr<Beam>(createBeam(parent));
 }
 
 CREATE_ITEM_IMPL(Bend, ElementType::BEND, Note)

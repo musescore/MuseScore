@@ -84,7 +84,6 @@ Err EngravingProject::setupMasterScore()
     engravingElementsProvider()->clearStatistic();
     Err err = doSetupMasterScore(m_masterScore);
     engravingElementsProvider()->printStatistic("=== Update and Layout ===");
-
     return err;
 }
 
@@ -127,7 +126,6 @@ Err EngravingProject::loadMscz(const MscReader& reader, bool ignoreVersionError)
     engravingElementsProvider()->clearStatistic();
     Ms::Score::FileError err = m_masterScore->loadMscz(reader, ignoreVersionError);
     engravingElementsProvider()->printStatistic("=== Load ===");
-
     return scoreFileErrorToErr(err);
 }
 

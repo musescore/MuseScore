@@ -25,6 +25,7 @@
 
 #include "accessibility/accessibleitem.h"
 #include "libmscore/page.h"
+#include "libmscore/score.h"
 
 #include "log.h"
 
@@ -45,6 +46,9 @@ void DebugPaint::paintPageDiagnostic(mu::draw::Painter& painter, Ms::Page* page)
 
     // Get children
     const mu::diagnostics::EngravingObjectList& elements = elementsProvider()->elements();
+
+    Ms::Score* score = page->score();
+    RootItem* root = score->rootItem();
 
     std::list<const Ms::EngravingItem*> children;
     for (const Ms::EngravingObject* el : elements) {

@@ -2514,7 +2514,7 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
             }
             e.readNext();
         } else if (tag == "Beam") {
-            Beam* beam = Factory::createBeam(score()->dummy(), score());
+            Beam* beam = Factory::createBeam(score()->dummy()->system());
             beam->setTrack(e.track());
             beam->read(e);
             beam->moveToDummy();

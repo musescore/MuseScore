@@ -2166,7 +2166,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
         } else if (tag == "slashStyle") {
             m->setStaffStemless(staffIdx, e.readInt());
         } else if (tag == "Beam") {
-            Beam* beam = Factory::createBeam(ctx.dummy(), ctx.dummy()->score());
+            Beam* beam = Factory::createBeam(ctx.dummy()->system());
             beam->setTrack(e.track());
             beam->read(e);
             beam->moveToDummy();
@@ -2950,7 +2950,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
                 masterScore->_excerpts.append(ex);
             }
         } else if (tag == "Beam") {
-            Beam* beam = Factory::createBeam(masterScore->dummy(), masterScore);
+            Beam* beam = Factory::createBeam(masterScore->dummy()->system());
             beam->read(e);
             beam->moveToDummy();
             // _beams.append(beam);

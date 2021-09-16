@@ -77,7 +77,7 @@ class Beam final : public EngravingItem
     qreal slope             { 0.0 };
 
     friend class mu::engraving::Factory;
-    Beam(EngravingItem* parent, Ms::Score* score);
+    Beam(System* parent);
     Beam(const Beam&);
 
     void layout2(std::vector<ChordRest*>, SpannerSegmentType, int frag);
