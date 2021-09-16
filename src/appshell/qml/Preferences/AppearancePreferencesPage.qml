@@ -44,7 +44,7 @@ PreferencesPage {
         id: content
 
         width: parent.width
-        spacing: 24
+        spacing: root.sectionsSpacing
 
         ThemesSection {
             width: content.width
@@ -171,17 +171,6 @@ PreferencesPage {
 
         SeparatorLine {}
 
-        CheckBox {
-            id: scoreInversionEnable
-
-            checked: appearanceModel.scoreInversionEnabled
-            text: qsTrc("appshell", "Invert score colors")
-
-            onClicked: {
-                appearanceModel.scoreInversionEnabled = !checked
-            }
-        }
-
         ColorAndWallpaperSection {
             id: paperSettings
 
@@ -220,7 +209,11 @@ PreferencesPage {
             }
         }
 
-        ResetThemeButtonSection {
+        SeparatorLine {}
+
+        ThemeAdditionalOptionsSection {
+            scoreInversionEnabled: appearanceModel.scoreInversionEnabled
+
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 7
 
@@ -232,6 +225,10 @@ PreferencesPage {
                 if (activeFocus) {
                     root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
                 }
+            }
+
+            onScoreInversionEnableChangeRequested: {
+                appearanceModel.scoreInversionEnabled = enable
             }
         }
     }

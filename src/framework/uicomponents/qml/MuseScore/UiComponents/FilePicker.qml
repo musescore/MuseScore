@@ -41,7 +41,7 @@ Item {
     property alias dir: filePickerModel.dir
 
     property NavigationPanel navigation: null
-    property int navigationRowOrder: 0
+    property int navigationRowOrderStart: 0
     property int navigationColumnOrderStart: 0
 
     property string pathFieldTitle: qsTrc("uicomponents", "Current path:")
@@ -65,7 +65,7 @@ Item {
 
             navigation.name: "PathFieldBox"
             navigation.panel: root.navigation
-            navigation.row: root.navigationRowOrder
+            navigation.row: root.navigationRowOrderStart
             navigation.enabled: root.visible && root.enabled
             navigation.column: root.navigationColumnOrderStart
             navigation.accessible.name: root.pathFieldTitle + " " + pathField.currentText
@@ -81,7 +81,7 @@ Item {
 
             navigation.name: "FilePickerButton"
             navigation.panel: root.navigation
-            navigation.row: root.navigationRowOrder
+            navigation.row: root.navigationRowOrderStart
             navigation.enabled: root.visible && root.enabled
             navigation.column: root.navigationColumnOrderStart + 1
             accessible.name: root.pickerType === FilePicker.PickerType.File ? qsTrc("uicomponents", "File choose")

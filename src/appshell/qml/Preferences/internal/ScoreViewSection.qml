@@ -21,24 +21,29 @@
  */
 import QtQuick 2.15
 
-import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
-import MuseScore.Preferences 1.0
 
 BaseSection {
     id: root
 
-    signal resetThemeToDefaultRequested()
+    title: qsTrc("appshell", "View")
 
-    FlatButton {
-        text: qsTrc("appshell", "Reset theme to default")
+    property alias isShowMIDIControls: isShowMIDIControlsBox.checked
 
-        navigation.name: "ResetButton"
+    signal showMIDIControlsChangeRequested(bool show)
+
+    CheckBox {
+        id:  isShowMIDIControlsBox
+
+        width: 216
+        text: qsTrc("appshell", "Show MIDI controls in mixer")
+
+        navigation.name: "ShowMIDIControlsBox"
         navigation.panel: root.navigation
-        navigation.order: 1
+        navigation.row: 0
 
         onClicked: {
-            root.resetThemeToDefaultRequested()
+            root.showMIDIControlsChangeRequested(!checked)
         }
     }
 }

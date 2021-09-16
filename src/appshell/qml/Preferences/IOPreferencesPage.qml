@@ -43,7 +43,7 @@ PreferencesPage {
         id: content
 
         width: parent.width
-        spacing: 24
+        spacing: root.sectionsSpacing
 
         readonly property int firstColumnWidth: 220
 

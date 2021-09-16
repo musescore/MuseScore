@@ -44,6 +44,7 @@ QVariant ScorePreferencesModel::data(const QModelIndex& index, int role) const
     case PathRole: return file.path;
     case PathFilterRole: return file.pathFilter;
     case ChooseTitleRole: return file.chooseTitle;
+    case DirectoryRole: return fileDirectory(file.path);
     }
 
     return QVariant();
@@ -75,7 +76,8 @@ QHash<int, QByteArray> ScorePreferencesModel::roleNames() const
         { TitleRole, "title" },
         { PathRole, "path" },
         { PathFilterRole, "pathFilter" },
-        { ChooseTitleRole, "chooseTitle" }
+        { ChooseTitleRole, "chooseTitle" },
+        { DirectoryRole, "directory" }
     };
 
     return roles;
@@ -101,11 +103,6 @@ void ScorePreferencesModel::load()
     };
 
     endResetModel();
-}
-
-QString ScorePreferencesModel::fileDirectory(const QString& filePath) const
-{
-    return io::dirpath(filePath.toStdString()).toQString();
 }
 
 bool ScorePreferencesModel::isShowMIDIControls() const
@@ -288,7 +285,7 @@ void ScorePreferencesModel::setPath(ScorePreferencesModel::DefaultFileType fileT
     }
 
     m_defaultFiles[index.row()].path = path;
-    emit dataChanged(index, index, { PathRole });
+    emit dataChanged(index, index, { PathRole, DirectoryRole });
 }
 
 QModelIndex ScorePreferencesModel::fileIndex(ScorePreferencesModel::DefaultFileType fileType)
@@ -301,4 +298,9 @@ QModelIndex ScorePreferencesModel::fileIndex(ScorePreferencesModel::DefaultFileT
     }
 
     return QModelIndex();
+}
+
+QString ScorePreferencesModel::fileDirectory(const QString& filePath) const
+{
+    return io::dirpath(filePath.toStdString()).toQString();
 }

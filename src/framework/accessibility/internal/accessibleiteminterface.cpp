@@ -141,7 +141,7 @@ QAccessible::State AccessibleItemInterface::state() const
         state.focused = item->accessibleState(IAccessible::State::Focused);
 
         state.checkable = true;
-        state.checked = item->accessibleState(IAccessible::State::Selected);
+        state.checked = item->accessibleState(IAccessible::State::Checked);
     } break;
     case IAccessible::Role::EditableText: {
         state.focusable = true;
@@ -165,6 +165,13 @@ QAccessible::State AccessibleItemInterface::state() const
 
 //        state.checkable = true;
 //        state.checked = item->accessibleState(IAccessible::State::Selected);
+    } break;
+    case IAccessible::Role::CheckBox: {
+        state.focusable = true;
+        state.focused = item->accessibleState(IAccessible::State::Focused);
+
+        state.checkable = true;
+        state.checked = item->accessibleState(IAccessible::State::Checked);
     } break;
     default: {
         LOGW() << "not handled role: " << static_cast<int>(r);

@@ -45,7 +45,7 @@ PreferencesPage {
         id: content
 
         width: parent.width
-        spacing: 24
+        spacing: root.sectionsSpacing
 
         LanguagesSection {
             languages: preferencesModel.languages

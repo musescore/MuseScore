@@ -45,40 +45,100 @@ PreferencesPage {
         width: parent.width
         height: childrenRect.height
 
-        spacing: 24
+        spacing: root.sectionsSpacing
 
         ImportStyleSection {
-            anchors.left: parent.left
-            anchors.right: parent.right
+            styleFileImportPath: importPreferencesModel.styleFileImportPath
+            fileChooseTitle: importPreferencesModel.styleChooseTitle()
+            filePathFilter: importPreferencesModel.stylePathFilter()
+            fileDirectory: importPreferencesModel.fileDirectory(styleFileImportPath)
 
-            preferencesModel: importPreferencesModel
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 1
+
+            onStyleFileImportPathChangeRequested: {
+                importPreferencesModel.styleFileImportPath = path
+            }
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+                }
+            }
         }
 
         SeparatorLine { }
 
         CharsetsSection {
-            anchors.left: parent.left
-            anchors.right: parent.right
+            charsets: importPreferencesModel.charsets()
+            currentGuitarProCharset: importPreferencesModel.currentGuitarProCharset
+            currentOvertuneCharset: importPreferencesModel.currentOvertuneCharset
 
-            preferencesModel: importPreferencesModel
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 2
+
+            onGuitarProCharsetChangeRequested: {
+                importPreferencesModel.currentGuitarProCharset = charset
+            }
+
+            onOvertuneCharsetChangeRequested: {
+                importPreferencesModel.currentOvertuneCharset = charset
+            }
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+                }
+            }
         }
 
         SeparatorLine { }
 
         MusicXmlSection {
-            anchors.left: parent.left
-            anchors.right: parent.right
+            importLayout: importPreferencesModel.importLayout
+            importBreaks: importPreferencesModel.importBreaks
+            needUseDefaultFont: importPreferencesModel.needUseDefaultFont
 
-            preferencesModel: importPreferencesModel
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 3
+
+            onImportLayoutChangeRequested: {
+                importPreferencesModel.importLayout = importLayout
+            }
+
+            onImportBreaksChangeRequested: {
+                importPreferencesModel.importBreaks = importBreaks
+            }
+
+            onUseDefaultFontChangeRequested: {
+                importPreferencesModel.needUseDefaultFont = use
+            }
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+                }
+            }
         }
 
         SeparatorLine { }
 
         MidiSection {
-            anchors.left: parent.left
-            anchors.right: parent.right
+            shortestNotes: importPreferencesModel.shortestNotes()
+            currentShortestNote: importPreferencesModel.currentShortestNote
 
-            preferencesModel: importPreferencesModel
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 4
+
+            onCurrentShortestNoteChangeRequested: {
+                importPreferencesModel.currentShortestNote = note
+            }
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+                }
+            }
         }
     }
 }

@@ -104,7 +104,7 @@ BaseSection {
                 navigation.row: 1
                 navigation.column: index
 
-                onClicked: {
+                onToggled: {
                     root.themeChangeRequested(modelData.codeKey)
                 }
             }

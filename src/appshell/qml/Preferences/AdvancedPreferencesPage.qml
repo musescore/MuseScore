@@ -42,7 +42,7 @@ PreferencesPage {
 
     ColumnLayout {
         anchors.fill: parent
-        spacing: 20
+        spacing: root.sectionsSpacing
 
         AdvancedTopSection {
             id: topSection

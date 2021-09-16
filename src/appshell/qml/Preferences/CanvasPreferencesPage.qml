@@ -41,134 +41,44 @@ PreferencesPage {
 
     Column {
         anchors.fill: parent
-        spacing: 24
+        spacing: root.sectionsSpacing
 
-        Column {
-            anchors.left: parent.left
-            anchors.right: parent.right
-            spacing: 18
+        ZoomSection {
+            defaultZoom: preferencesModel.defaultZoom
+            zoomTypes: preferencesModel.zoomTypes()
+            mouseZoomPrecision: preferencesModel.mouseZoomPrecision
 
-            StyledTextLabel {
-                text: qsTrc("appshell", "Zoom")
-                font: ui.theme.bodyBoldFont
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 1
+
+            onDefaultZoomTypeChangeRequested: {
+                preferencesModel.setDefaultZoomType(zoomType)
             }
 
-            Column {
-                spacing: 8
+            onDefaultZoomLevelChangeRequested: {
+                preferencesModel.setDefaultZoomLevel(zoomLevel)
+            }
 
-                Row {
-                    spacing: 12
-
-                    ComboBoxWithTitle {
-                        title: qsTrc("appshell", "Default zoom:")
-                        titleWidth: 210
-
-                        control.textRole: "title"
-                        control.valueRole: "value"
-
-                        currentIndex: control.indexOfValue(preferencesModel.defaultZoom.type)
-
-                        model: preferencesModel.zoomTypes()
-
-                        onValueEdited: {
-                            preferencesModel.setDefaultZoomType(newValue)
-                        }
-                    }
-
-                    IncrementalPropertyControl {
-                        id: defaultZoomControl
-                        width: 64
-
-                        maxValue: 1600
-                        minValue: 10
-                        step: 10
-                        decimals: 0
-
-                        measureUnitsSymbol: "%"
-
-                        currentValue: preferencesModel.defaultZoom.level
-                        enabled: preferencesModel.defaultZoom.isPercentage
-
-                        onValueEdited: {
-                            preferencesModel.setDefaultZoomLevel(newValue)
-                        }
-                    }
-                }
-
-                IncrementalPropertyControlWithTitle {
-                    title: qsTrc("appshell", "Mouse zoom precision:")
-
-                    titleWidth: 208
-                    control.width: 60
-
-                    minValue: 1
-                    maxValue: 16
-                    currentValue: preferencesModel.mouseZoomPrecision
-
-                    onValueEdited: {
-                        preferencesModel.mouseZoomPrecision = newValue
-                    }
-                }
+            onMouseZoomPrecisionChangeRequested: {
+                preferencesModel.mouseZoomPrecision = zoomPrecision
             }
         }
 
         SeparatorLine { }
 
-        Column {
-            anchors.left: parent.left
-            anchors.right: parent.right
-            spacing: 18
+        ScrollPagesSection {
+            orientation: preferencesModel.scrollPagesOrientation
+            limitScrollArea: preferencesModel.limitScrollArea
 
-            StyledTextLabel {
-                text: qsTrc("appshell", "Scroll pages")
-                font: ui.theme.bodyBoldFont
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 2
+
+            onOrientationChangeRequested: {
+                preferencesModel.scrollPagesOrientation = orientation
             }
 
-            Column {
-                spacing: 16
-
-                RadioButtonGroup {
-                    id: radioButtonList
-
-                    width: 100
-                    height: implicitHeight
-
-                    spacing: 12
-                    orientation: ListView.Vertical
-
-                    model: [
-                        { title: qsTrc("appshell", "Horizontal"), value: Qt.Horizontal },
-                        { title: qsTrc("appshell", "Vertical"), value: Qt.Vertical }
-                    ]
-
-                    delegate: RoundedRadioButton {
-                        width: parent.width
-                        leftPadding: 0
-                        spacing: 6
-
-                        ButtonGroup.group: radioButtonList.radioButtonGroup
-
-                        checked: preferencesModel.scrollPagesOrientation === modelData["value"]
-
-                        StyledTextLabel {
-                            text: modelData["title"]
-                            horizontalAlignment: Text.AlignLeft
-                        }
-
-                        onToggled: {
-                            preferencesModel.scrollPagesOrientation = modelData["value"]
-                        }
-                    }
-                }
-
-                CheckBox {
-                    text: qsTrc("appshell", "Limit scroll area to page borders")
-                    checked: preferencesModel.limitScrollArea
-
-                    onClicked: {
-                        preferencesModel.limitScrollArea = !preferencesModel.limitScrollArea
-                    }
-                }
+            onLimitScrollAreaChangeRequested: {
+                preferencesModel.limitScrollArea = limit
             }
         }
     }

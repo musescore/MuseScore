@@ -64,7 +64,7 @@ BaseSection {
                 navigation.row: model.index
                 navigation.column: 0
 
-                onClicked: {
+                onToggled: {
                     root.currentStartupModesChanged(model.index)
                 }
             }
@@ -79,7 +79,7 @@ BaseSection {
                 path: modelData.scorePath
 
                 navigation: root.navigation
-                navigationRowOrder: model.index
+                navigationRowOrderStart: model.index
                 navigationColumnOrderStart: 1
 
                 onPathEdited: {

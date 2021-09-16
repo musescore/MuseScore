@@ -20,37 +20,40 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Layouts 1.15
 
 import MuseScore.UiComponents 1.0
-import MuseScore.Preferences 1.0
 
-import "internal"
-
-PreferencesPage {
+BaseSection {
     id: root
 
-    contentHeight: content.height
+    property alias scoreInversionEnabled: scoreInversionEnable.checked
 
-    FoldersPreferencesModel {
-        id: foldersPreferencesModel
+    signal resetThemeToDefaultRequested()
+    signal scoreInversionEnableChangeRequested(bool enable)
+
+    CheckBox {
+        id: scoreInversionEnable
+
+        text: qsTrc("appshell", "Invert score")
+
+        navigation.name: "ScoreInversionBox"
+        navigation.panel: root.navigation
+        navigation.row: 0
+
+        onClicked: {
+            root.scoreInversionEnableChangeRequested(!checked)
+        }
     }
 
-    Component.onCompleted: {
-        foldersPreferencesModel.load()
-    }
+    FlatButton {
+        text: qsTrc("appshell", "Reset to default")
 
-    Column {
-        anchors.fill: parent
-        spacing: root.sectionsSpacing
+        navigation.name: "ResetButton"
+        navigation.panel: root.navigation
+        navigation.row: 1
 
-        FoldersSection {
-            id: content
-
-            model: foldersPreferencesModel
-
-            navigation.section: root.navigationSection
-            navigation.order: root.navigationOrderStart + 1
+        onClicked: {
+            root.resetThemeToDefaultRequested()
         }
     }
 }

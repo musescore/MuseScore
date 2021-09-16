@@ -21,49 +21,50 @@
  */
 import QtQuick 2.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
 BaseSection {
     id: root
 
-    title: qsTrc("appshell", "Character set used when importing binary files")
+    title: qsTrc("appshell", "Automatic update check")
 
-    property var charsets: null
-    property string currentGuitarProCharset: ""
-    property string currentOvertuneCharset: ""
+    property bool isAppUpdatable: true
+    property alias needCheckForNewAppVersion: needCheckBox.checked
+    property alias needCheckForNewExtensionsVersion: needCheckForNewExtensionsVersionBox.checked
 
-    signal guitarProCharsetChangeRequested(string charset)
-    signal overtuneCharsetChangeRequested(string charset)
+    signal needCheckForNewAppVersionChangeRequested(bool check)
+    signal needCheckForNewExtensionsVersionChangeRequested(bool check)
 
-    ComboBoxWithTitle {
-        title: qsTrc("appshell", "Guitar Pro import character set:")
-        titleWidth: 220
+    CheckBox {
+        id: needCheckBox
 
-        currentIndex: control.indexOfValue(root.currentGuitarProCharset)
-        model: root.charsets
+        text: qsTrc("appshell", "Check for new version of MuseScore")
 
-        navigation.name: "GuitarProBox"
+        visible: root.isAppUpdatable
+
+        navigation.name: "NeedCheckBox"
         navigation.panel: root.navigation
         navigation.row: 0
 
-        onValueEdited: {
-            root.guitarProCharsetChangeRequested(newValue)
+        onClicked: {
+            root.needCheckForNewAppVersionChangeRequested(!checked)
         }
     }
 
-    ComboBoxWithTitle {
-        title: qsTrc("appshell", "Overture import character set:")
-        titleWidth: 220
+    CheckBox {
+        id: needCheckForNewExtensionsVersionBox
 
-        currentIndex: control.indexOfValue(root.currentOvertuneCharset)
-        model: root.charsets
+        width: 200
 
-        navigation.name: "OvertureBox"
+        text: qsTrc("appshell", "Check for new version of MuseScore extensions")
+
+        navigation.name: "NeedCheckExtensionsBox"
         navigation.panel: root.navigation
         navigation.row: 1
 
-        onValueEdited: {
-            root.overtuneCharsetChangeRequested(newValue)
+        onClicked: {
+            root.needCheckForNewExtensionsVersionChangeRequested(!checked)
         }
     }
 }

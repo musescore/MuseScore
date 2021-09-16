@@ -81,7 +81,7 @@ Row {
             navigation.column: model.index
             navigation.accessible.name: Utils.colorToString(accentColor)
 
-            onClicked: {
+            onToggled: {
                 root.accentColorChangeRequested(model.index)
             }
 
