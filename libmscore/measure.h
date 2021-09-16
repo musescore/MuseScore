@@ -279,6 +279,9 @@ class Measure final : public MeasureBase {
       void checkTrailer();
       void setStretchedWidth(qreal);
       void layoutStaffLines();
+
+      qreal computeFirstSegmentXPosition(Segment* segment);
+
       };
 
 }     // namespace Ms
