@@ -71,7 +71,7 @@ Item {
     NavigationPanel {
         id: navPanel
         name: "InstrumentsOnScoreView"
-        direction: NavigationPanel.Vertical
+        direction: NavigationPanel.Both
         enabled: root.visible
     }
 
@@ -100,7 +100,8 @@ Item {
 
             navigation.name: "Orders"
             navigation.panel: navPanel
-            navigation.row: 1
+            navigation.row: 0
+            navigation.column: 0
 
             model: instrumentsOnScore.orders
 
@@ -124,7 +125,8 @@ Item {
 
             navigation.name: "Delete"
             navigation.panel: navPanel
-            navigation.row: 3
+            navigation.row: 0
+            navigation.column: 1
 
             icon: IconCode.DELETE_TANK
 
@@ -163,7 +165,8 @@ Item {
 
             navigation.name: model.name
             navigation.panel: navPanel
-            navigation.row: 4 + model.index
+            navigation.row: 1 + model.index
+            navigation.column: 0
 
             onNavigationActived: {
                 item.clicked()
@@ -191,6 +194,11 @@ Item {
 
                 text: model.isSoloist ? qsTrc("instruments", "Undo soloist") : qsTrc("instruments", "Make soloist")
                 visible: model.isSelected
+
+                navigation.name: model.name + "MakeSoloist"
+                navigation.panel: navPanel
+                navigation.row: 1 + model.index
+                navigation.column: 1
 
                 onClicked: {
                     model.isSoloist = !model.isSoloist
