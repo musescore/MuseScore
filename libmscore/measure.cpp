@@ -3487,11 +3487,11 @@ void Measure::stretchMeasure(qreal targetWidth)
       std::multimap<qreal, Segment*> springs;
 
       Segment* seg = first();
-      while (seg && !seg->enabled())
+      while (seg && (!seg->enabled() || seg->allElementsInvisible()))
             seg = seg->next();
       qreal minimumWidth = seg ? seg->x() : 0.0;
       for (Segment& s : _segments) {
-            if (!s.enabled() || !s.visible())
+            if (!s.enabled() || !s.visible() || s.allElementsInvisible())
                   continue;
             Fraction t = s.ticks();
             if (t.isNotZero()) {
@@ -3536,7 +3536,7 @@ void Measure::stretchMeasure(qreal targetWidth)
             //---------------------------------------------------
 
             Segment* s = first();
-            while (s && !s->enabled())
+            while (s && (!s->enabled() || s->allElementsInvisible()))
                   s = s->next();
             qreal x = s ? s->pos().x() : 0.0;
             while (s) {
@@ -4454,21 +4454,17 @@ void Measure::computeMinWidth(Segment* s, qreal x, bool isSystemHeader)
 
       while (s) {
             s->rxpos() = x;
-            // skip disabled / invisible segments
-            // segments with all elements invisible are skipped,
-            // but only for headers or segments later in the measure -
-            // invisible key or time signatures at the beginning of non-header measures are treated normally here
-            // otherwise we would not allocate enough space for the first note
-            // as it is, this isn't quite right as the space will be given by key or time margins,
-            // not the bar to note distance
-            // TODO: skip these segments entirely and get the correct bar to note distance
-            if (!s->enabled() || !s->visible() || ((header() || s->rtick().isNotZero()) && s->allElementsInvisible())) {
+            // segments with all elements invisible are skipped, though these are already
+            // skipped in computeMinWidth() -- the only way this would be an issue here is
+            // if this method was called specifically with the invisible segment specified
+            // which I'm pretty sure doesn't happen at this point. still...
+            if (!s->enabled() || !s->visible() || s->allElementsInvisible()) {
                   s->setWidth(0);
                   s = s->next();
                   continue;
                   }
             Segment* ns = s->nextActive();
-            while (ns && ((header() || ns->rtick().isNotZero()) && ns->allElementsInvisible()))
+            while (ns && ns->allElementsInvisible())
                   ns = ns->nextActive();
             // end barline might be disabled
             // but still consider it for spacing of previous segment
@@ -4547,15 +4543,10 @@ void Measure::computeMinWidth()
       {
       Segment* s;
 
-      //
       // skip disabled segment
-      //
-      // TODO: skip segments with all elements invisible also
-      // this will eventually allow us to calculate correct bar to note distance
-      // even if there is an invisible key or time signature present
-      for (s = first(); s && !s->enabled(); s = s->next()) {
-            s->rxpos() = 0;
-            s->setWidth(0);
+      for (s = first(); s && (!s->enabled() || s->allElementsInvisible()); s = s->next()) {
+            s->rxpos() = computeFirstSegmentXPosition(s);  // this is where placement of hidden key/time sigs is set
+            s->setWidth(0);                                // it shouldn't affect the width of the bar no matter what it is
             }
       if (!s) {
             setWidth(0.0);
