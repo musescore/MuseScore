@@ -130,6 +130,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/glissandos/glissandosettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/hairpinsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/hairpinsettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/ottavasettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/ottavasettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/linesettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/linesettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/images/imagesettingsmodel.cpp

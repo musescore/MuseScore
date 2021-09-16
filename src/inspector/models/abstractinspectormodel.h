@@ -88,6 +88,7 @@ public:
         TYPE_SPACER,
         TYPE_CLEF,
         TYPE_HAIRPIN,
+        TYPE_OTTAVA,
         TYPE_CRESCENDO,
         TYPE_STAFF_TYPE_CHANGES,
         TYPE_TEXT_FRAME,
