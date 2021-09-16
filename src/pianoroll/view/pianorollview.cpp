@@ -1090,12 +1090,12 @@ void PianorollView::selectNotes(double startTick, double endTick, double lowPitc
         }
     }
 
-    for (Ms::MuseScoreView* view : curScore->getViewer()) {
-        view->updateAll();
-    }
+    //for (Ms::MuseScoreView* view : curScore->getViewer()) {
+    //    view->updateAll();
+    //}
 
-    curScore->setUpdateAll();
-    curScore->update();
+    //curScore->setUpdateAll();
+    //curScore->update();
     curScore->endCmd();
 
     update();
