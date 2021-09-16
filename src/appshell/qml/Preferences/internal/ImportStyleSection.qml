@@ -21,12 +21,15 @@
  */
 import QtQuick 2.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
 BaseSection {
     id: root
 
     title: qsTrc("appshell", "Style used for import")
+
+    navigation.direction: NavigationPanel.Both
 
     property string styleFileImportPath: ""
     property string fileChooseTitle: ""
@@ -35,57 +38,72 @@ BaseSection {
 
     signal styleFileImportPathChangeRequested(string path)
 
+    QtObject {
+        id: prv
+
+        property bool useStyleFile: root.styleFileImportPath !== ""
+    }
+
     RoundedRadioButton {
-        anchors.left: parent.left
-        anchors.right: parent.right
+        id: builtInStyleButton
+        width: 193
 
-        checked: root.styleFileImportPath === ""
+        text: qsTrc("appshell", "Built-in style")
+        checked: !prv.useStyleFile
 
-        StyledTextLabel {
-            text: qsTrc("appshell", "Built-in style")
-            horizontalAlignment: Text.AlignLeft
-        }
+        navigation.name: "BuiltInStyleButton"
+        navigation.panel: root.navigation
+        navigation.row: 0
+        navigation.column: 0
 
         onToggled: {
+            prv.useStyleFile = false
             root.styleFileImportPathChangeRequested("")
         }
     }
 
-    RoundedRadioButton {
-        anchors.left: parent.left
-        anchors.right: parent.right
+    Row {
+        width: parent.width
 
-        checked: root.styleFileImportPath !== ""
+        RoundedRadioButton {
+            id: useStyleFileButton
 
-        onToggled: {
-            root.styleFileImportPathChangeRequested("")
+            width: 193
+            anchors.verticalCenter: parent.verticalCenter
+
+            text: qsTrc("appshell", "Use style file:")
+            checked: prv.useStyleFile
+
+            navigation.name: "UseStyleButton"
+            navigation.panel: root.navigation
+            navigation.row: 1
+            navigation.column: 0
+
+            onToggled: {
+                prv.useStyleFile = true
+            }
         }
 
-        Item {
-            StyledTextLabel {
-                id: title
+        FilePicker {
+            id: styleFilePicker
 
-                width: 193
-                anchors.verticalCenter: parent.verticalCenter
+            width: 246
+            anchors.verticalCenter: parent.verticalCenter
 
-                text: qsTrc("appshell", "Use style file:")
-                horizontalAlignment: Text.AlignLeft
-            }
+            dialogTitle: root.fileChooseTitle
+            filter: root.filePathFilter
+            dir: root.fileDirectory
 
-            FilePicker {
-                anchors.left: title.right
-                width: 246
-                anchors.verticalCenter: parent.verticalCenter
+            path: root.styleFileImportPath
 
-                dialogTitle: root.fileChooseTitle
-                filter: root.filePathFilter
-                dir: root.fileDirectory
+            enabled: prv.useStyleFile
 
-                path: root.styleFileImportPath
+            navigation: root.navigation
+            navigationRowOrderStart: 1
+            navigationColumnOrderStart: 1
 
-                onPathEdited: {
-                    root.styleFileImportPathChangeRequested(newPath)
-                }
+            onPathEdited: {
+                root.styleFileImportPathChangeRequested(newPath)
             }
         }
     }

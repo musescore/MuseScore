@@ -69,7 +69,7 @@ BaseSection {
                 path: model.path
 
                 navigation: root.navigation
-                navigationRowOrder: model.index
+                navigationRowOrderStart: model.index
                 pathFieldTitle: titleLabel.text
 
                 onPathEdited: {

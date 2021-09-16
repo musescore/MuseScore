@@ -114,7 +114,7 @@ BaseSection {
             enabled: !root.useColor
 
             navigation: root.navigation
-            navigationRowOrder: 1
+            navigationRowOrderStart: 1
             navigationColumnOrderStart: 1
 
             onPathEdited: {
