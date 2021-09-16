@@ -4596,4 +4596,26 @@ void Measure::computeMinWidth()
       computeMinWidth(s, x, isSystemHeader);
       }
 
+qreal Measure::computeFirstSegmentXPosition(Segment* segment)
+      {
+      qreal x = 0;
+
+      Shape ls(QRectF(0.0, 0.0, 0.0, spatium() * 4));
+
+      x = segment->minLeft(ls);
+
+      if (segment->isChordRestType())
+            x += score()->styleP(hasAccidental(segment) ? Sid::barAccidentalDistance : Sid::barNoteDistance);
+      else if (segment->isClefType() || segment->isHeaderClefType())
+            x += score()->styleP(Sid::clefLeftMargin);
+      else if (segment->isKeySigType())
+            x = qMax(x, score()->styleP(Sid::keysigLeftMargin));
+      else if (segment->isTimeSigType())
+            x = qMax(x, score()->styleP(Sid::timesigLeftMargin));
+
+      x += segment->extraLeadingSpace().val() * spatium();
+
+      return x;
+      }
+
 }
