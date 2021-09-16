@@ -195,7 +195,7 @@ QVariantMap EngravingElementsModel::makeData(const Ms::EngravingObject* el) cons
     QString info = name + ": ";
     info += "children: " + QString::number(el->children().size());
     if (!el->isDummy()) {
-        info += ", treechildren: " + QString::number(el->treeChildCount());
+        //info += ", treechildren: " + QString::number(el->treeChildCount());
     }
     info += "\n";
     if (el->isEngravingItem()) {
@@ -207,9 +207,9 @@ QVariantMap EngravingElementsModel::makeData(const Ms::EngravingObject* el) cons
     d["selected"] = elementsProvider()->isSelected(el);
     d["info"] = info;
 
-    if (el->children().size() != size_t(el->treeChildCount())) {
-        d["color"] = "#ff0000";
-    }
+//    if (el->children().size() != size_t(el->treeChildCount())) {
+//        d["color"] = "#ff0000";
+//    }
 
     return d;
 }

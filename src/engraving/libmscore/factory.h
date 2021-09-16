@@ -61,9 +61,8 @@ public:
     static Ms::BarLine* copyBarLine(const Ms::BarLine& src);
     static std::shared_ptr<Ms::BarLine> makeBarLine(Ms::Segment* parent);
 
-    //! NOTE Ms::Score* is needed temporarily
-    static Ms::Beam* createBeam(Ms::EngravingItem* parent, Ms::Score* score);
-    static std::shared_ptr<Ms::Beam> makeBeam(Ms::EngravingItem* parent, Ms::Score* score);
+    static Ms::Beam* createBeam(Ms::System* parent);
+    static std::shared_ptr<Ms::Beam> makeBeam(Ms::System* parent);
 
     static Ms::Bend* createBend(Ms::Note* parent);
     static std::shared_ptr<Ms::Bend> makeBend(Ms::Note* parent);

@@ -2949,7 +2949,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
         } else if (tag == "slashStyle") {
             m->setStaffStemless(staffIdx, e.readInt());
         } else if (tag == "Beam") {
-            Beam* beam = Factory::createBeam(ctx.dummy(), ctx.dummy()->score());
+            Beam* beam = Factory::createBeam(ctx.dummy()->system());
             beam->setTrack(e.track());
             beam->read(e);
             beam->moveToDummy();

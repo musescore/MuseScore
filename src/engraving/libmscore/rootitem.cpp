@@ -34,7 +34,8 @@ RootItem::RootItem(Score* score)
 
 RootItem::~RootItem()
 {
-    delete m_dummy;
+    //! TODO Please don't remove (igor.korsukov@gmail.com)
+    // delete m_dummy;
 }
 
 compat::DummyElement* RootItem::dummy() const

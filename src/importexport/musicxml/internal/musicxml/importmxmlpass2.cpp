@@ -1809,7 +1809,7 @@ static void handleBeamAndStemDir(ChordRest* cr, const Beam::Mode bm, const Direc
             removeBeam(beam);
         }
         // create a new beam
-        beam = Factory::createBeam(cr->score()->dummy(), cr->score());
+        beam = Factory::createBeam(cr->score()->dummy()->system());
         beam->setTrack(cr->track());
         beam->setBeamDirection(sd);
     }

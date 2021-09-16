@@ -437,7 +437,7 @@ bool Score::pasteStaff(XmlReader& e, Segment* dst, int dstStaff, Fraction scale)
                     breath->setParent(segment);
                     undoChangeElement(segment->element(e.track()), breath);
                 } else if (tag == "Beam") {
-                    Beam* beam = Factory::createBeam(this->dummy(), this);
+                    Beam* beam = Factory::createBeam(this->dummy()->system());
                     beam->setTrack(e.track());
                     beam->read(e);
                     beam->moveToDummy();
