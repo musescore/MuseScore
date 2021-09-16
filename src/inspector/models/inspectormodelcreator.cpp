@@ -43,6 +43,7 @@
 #include "notation/lines/hairpinsettingsmodel.h"
 #include "notation/lines/crescendosettingsmodel.h"
 #include "notation/lines/ottavasettingsmodel.h"
+#include "notation/lines/voltasettingsmodel.h"
 #include "notation/stafftype/stafftypesettingsmodel.h"
 #include "notation/frames/textframesettingsmodel.h"
 #include "notation/frames/verticalframesettingsmodel.h"
@@ -111,6 +112,8 @@ AbstractInspectorModel* InspectorModelCreator::newInspectorModel(AbstractInspect
         return new CrescendoSettingsModel(parent, repository);
     case AbstractInspectorModel::InspectorModelType::TYPE_OTTAVA:
         return new OttavaSettingsModel(parent, repository);
+    case AbstractInspectorModel::InspectorModelType::TYPE_VOLTA:
+        return new VoltaSettingsModel(parent, repository);
     case AbstractInspectorModel::InspectorModelType::TYPE_STAFF_TYPE_CHANGES:
         return new StaffTypeSettingsModel(parent, repository);
     case AbstractInspectorModel::InspectorModelType::TYPE_TEXT_FRAME:
