@@ -75,7 +75,7 @@ static const ElementStyle hairpinStyle {
 //   HairpinSegment
 //---------------------------------------------------------
 
-HairpinSegment::HairpinSegment(Spanner* sp, EngravingItem* parent)
+HairpinSegment::HairpinSegment(Hairpin* sp, System* parent)
     : TextLineBaseSegment(ElementType::HAIRPIN_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
 }
@@ -653,9 +653,9 @@ static const ElementStyle hairpinSegmentStyle {
     { Sid::hairpinMinDistance, Pid::MIN_DISTANCE },
 };
 
-LineSegment* Hairpin::createLineSegment()
+LineSegment* Hairpin::createLineSegment(System* parent)
 {
-    HairpinSegment* h = new HairpinSegment(this, this);
+    HairpinSegment* h = new HairpinSegment(this, parent);
     h->setTrack(track());
     h->initElementStyle(&hairpinSegmentStyle);
     return h;

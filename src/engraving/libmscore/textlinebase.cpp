@@ -45,7 +45,7 @@ namespace Ms {
 //   TextLineBaseSegment
 //---------------------------------------------------------
 
-TextLineBaseSegment::TextLineBaseSegment(const ElementType& type, Spanner* sp, EngravingItem* parent, ElementFlags f)
+TextLineBaseSegment::TextLineBaseSegment(const ElementType& type, Spanner* sp, System* parent, ElementFlags f)
     : LineSegment(type, sp, parent, f)
 {
     _text    = Factory::createText(this);

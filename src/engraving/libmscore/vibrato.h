@@ -41,10 +41,8 @@ class VibratoSegment final : public LineSegment
     void symbolLine(SymId start, SymId fill, SymId end);
     virtual Sid getPropertyStyle(Pid) const override;
 
-protected:
 public:
-    VibratoSegment(Spanner* sp, EngravingItem* parent)
-        : LineSegment(ElementType::VIBRATO_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF) {}
+    VibratoSegment(Vibrato* sp, System* parent);
 
     VibratoSegment* clone() const override { return new VibratoSegment(*this); }
 
@@ -83,7 +81,7 @@ public:
     Vibrato* clone() const override { return new Vibrato(*this); }
 
     void layout() override;
-    LineSegment* createLineSegment() override;
+    LineSegment* createLineSegment(System* parent) override;
 
     void write(XmlWriter&) const override;
     void read(XmlReader&) override;

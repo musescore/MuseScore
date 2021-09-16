@@ -48,7 +48,7 @@ public:
     Note* startNote() const { return _startNote; }
     void setEndNote(Note* n) { _endNote = n; }
     Note* endNote() const { return _endNote; }
-    LineSegment* createLineSegment() override;
+    LineSegment* createLineSegment(System* parent) override;
 };
 }     // namespace Ms
 #endif

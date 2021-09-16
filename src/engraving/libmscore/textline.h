@@ -38,7 +38,7 @@ class TextLineSegment final : public TextLineBaseSegment
     Sid getPropertyStyle(Pid) const override;
 
 public:
-    TextLineSegment(Spanner* sp, EngravingItem* parent, bool system=false);
+    TextLineSegment(Spanner* sp, System* parent, bool system=false);
 
     TextLineSegment* clone() const override { return new TextLineSegment(*this); }
 
@@ -72,7 +72,7 @@ public:
 
     void initStyle();
 
-    LineSegment* createLineSegment() override;
+    LineSegment* createLineSegment(System* parent) override;
     QVariant propertyDefault(Pid) const override;
     bool setProperty(Pid propertyId, const QVariant&) override;
 };

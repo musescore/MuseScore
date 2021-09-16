@@ -57,14 +57,14 @@ public:
 //   SpannerSegment
 //---------------------------------------------------------
 
-SpannerSegment::SpannerSegment(const ElementType& type, Spanner* sp, EngravingItem* parent, ElementFlags f)
+SpannerSegment::SpannerSegment(const ElementType& type, Spanner* sp, System* parent, ElementFlags f)
     : EngravingItem(type, parent, f)
 {
     _spanner = sp;
     setSpannerSegmentType(SpannerSegmentType::SINGLE);
 }
 
-SpannerSegment::SpannerSegment(const ElementType& type, EngravingItem* parent, ElementFlags f)
+SpannerSegment::SpannerSegment(const ElementType& type, System* parent, ElementFlags f)
     : EngravingItem(type, parent, f)
 {
     setSpannerSegmentType(SpannerSegmentType::SINGLE);
@@ -1306,7 +1306,7 @@ int Spanner::reuseSegments(int number)
 //    Previously unused segments are added via reuse() call
 //---------------------------------------------------------
 
-void Spanner::fixupSegments(unsigned int targetNumber, std::function<SpannerSegment* ()> createSegment)
+void Spanner::fixupSegments(unsigned int targetNumber, std::function<SpannerSegment* (System* parent)> createSegment)
 {
     const int diff = targetNumber - int(nsegments());
     if (diff == 0) {
@@ -1315,7 +1315,7 @@ void Spanner::fixupSegments(unsigned int targetNumber, std::function<SpannerSegm
     if (diff > 0) {
         const int ncreate = reuseSegments(diff);
         for (int i = 0; i < ncreate; ++i) {
-            add(createSegment());
+            add(createSegment(score()->dummy()->system()));
         }
     } else { // diff < 0
         const int nremove = -diff;
@@ -1355,7 +1355,7 @@ SpannerSegment* Spanner::layoutSystem(System*)
 //   getNextLayoutSystemSegment
 //---------------------------------------------------------
 
-SpannerSegment* Spanner::getNextLayoutSystemSegment(System* system, std::function<SpannerSegment* ()> createSegment)
+SpannerSegment* Spanner::getNextLayoutSystemSegment(System* system, std::function<SpannerSegment* (System* parent)> createSegment)
 {
     SpannerSegment* seg = nullptr;
     for (SpannerSegment* ss : spannerSegments()) {
@@ -1368,7 +1368,7 @@ SpannerSegment* Spanner::getNextLayoutSystemSegment(System* system, std::functio
         if ((seg = popUnusedSegment())) {
             reuse(seg);
         } else {
-            seg = createSegment();
+            seg = createSegment(system);
             Q_ASSERT(seg);
             add(seg);
         }

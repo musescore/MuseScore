@@ -68,6 +68,16 @@ static const ElementStyle trillStyle {
     { Sid::trillPosAbove,  Pid::OFFSET },
 };
 
+TrillSegment::TrillSegment(Trill* sp, System* parent)
+    : LineSegment(ElementType::TRILL_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+{
+}
+
+TrillSegment::TrillSegment(System* parent)
+    : LineSegment(ElementType::TRILL_SEGMENT, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+{
+}
+
 //---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
@@ -357,9 +367,9 @@ static const ElementStyle trillSegmentStyle {
     { Sid::trillMinDistance, Pid::MIN_DISTANCE },
 };
 
-LineSegment* Trill::createLineSegment()
+LineSegment* Trill::createLineSegment(System* parent)
 {
-    TrillSegment* seg = new TrillSegment(this, this);
+    TrillSegment* seg = new TrillSegment(this, parent);
     seg->setTrack(track());
     seg->setColor(color());
     seg->initElementStyle(&trillSegmentStyle);

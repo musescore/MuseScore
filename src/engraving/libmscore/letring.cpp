@@ -53,6 +53,11 @@ static const ElementStyle letRingStyle {
     //{ Sid::letRingPosBelow,                      Pid::OFFSET                 },
 };
 
+LetRingSegment::LetRingSegment(LetRing* sp, System* parent)
+    : TextLineBaseSegment(ElementType::LET_RING_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+{
+}
+
 //---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
@@ -135,9 +140,9 @@ static const ElementStyle letRingSegmentStyle {
 //   createLineSegment
 //---------------------------------------------------------
 
-LineSegment* LetRing::createLineSegment()
+LineSegment* LetRing::createLineSegment(System* parent)
 {
-    LetRingSegment* lr = new LetRingSegment(this, this);
+    LetRingSegment* lr = new LetRingSegment(this, parent);
     lr->setTrack(track());
     lr->initElementStyle(&letRingSegmentStyle);
     return lr;

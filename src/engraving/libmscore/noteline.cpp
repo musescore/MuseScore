@@ -39,9 +39,9 @@ NoteLine::NoteLine(const NoteLine& nl)
 //   createLineSegment
 //---------------------------------------------------------
 
-LineSegment* NoteLine::createLineSegment()
+LineSegment* NoteLine::createLineSegment(System* parent)
 {
-    TextLineSegment* seg = new TextLineSegment(this, this);
+    TextLineSegment* seg = new TextLineSegment(this, parent);
     seg->setTrack(track());
     return seg;
 }

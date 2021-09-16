@@ -41,6 +41,18 @@ namespace Ms {
 Note* Tie::editStartNote;
 Note* Tie::editEndNote;
 
+TieSegment::TieSegment(System* parent)
+    : SlurTieSegment(ElementType::TIE_SEGMENT, parent)
+{
+    autoAdjustOffset = mu::PointF();
+}
+
+TieSegment::TieSegment(const TieSegment& s)
+    : SlurTieSegment(s)
+{
+    autoAdjustOffset = mu::PointF();
+}
+
 //---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
