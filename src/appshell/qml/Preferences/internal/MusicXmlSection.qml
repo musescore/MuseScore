@@ -42,6 +42,10 @@ BaseSection {
         width: 208
         text: qsTrc("appshell", "Import layout")
 
+        navigation.name: "ImportLayoutBox"
+        navigation.panel: root.navigation
+        navigation.row: 0
+
         onClicked: {
             root.importLayoutChangeRequested(!checked)
         }
@@ -53,6 +57,10 @@ BaseSection {
         width: 208
         text: qsTrc("appshell", "Import system and page breaks")
 
+        navigation.name: "ImportBreaksBox"
+        navigation.panel: root.navigation
+        navigation.row: 1
+
         onClicked: {
             root.importBreaksChangeRequested(!checked)
         }
@@ -63,6 +71,10 @@ BaseSection {
 
         width: 208
         text: qsTrc("appshell", "Apply default typeface (Edwin) to imported scores")
+
+        navigation.name: "UseDefaultFontBox"
+        navigation.panel: root.navigation
+        navigation.row: 2
 
         onClicked: {
             root.useDefaultFontChangeRequested(!checked)

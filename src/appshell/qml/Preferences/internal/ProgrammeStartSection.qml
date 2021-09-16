@@ -79,7 +79,7 @@ BaseSection {
                 path: modelData.scorePath
 
                 navigation: root.navigation
-                navigationRowOrder: model.index
+                navigationRowOrderStart: model.index
                 navigationColumnOrderStart: 1
 
                 onPathEdited: {

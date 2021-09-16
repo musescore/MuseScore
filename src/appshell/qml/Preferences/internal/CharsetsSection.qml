@@ -42,6 +42,10 @@ BaseSection {
         currentIndex: control.indexOfValue(root.currentGuitarProCharset)
         model: root.charsets
 
+        navigation.name: "GuitarProBox"
+        navigation.panel: root.navigation
+        navigation.row: 0
+
         onValueEdited: {
             root.guitarProCharsetChangeRequested(newValue)
         }
@@ -53,6 +57,10 @@ BaseSection {
 
         currentIndex: control.indexOfValue(root.currentOvertuneCharset)
         model: root.charsets
+
+        navigation.name: "OvertureBox"
+        navigation.panel: root.navigation
+        navigation.row: 1
 
         onValueEdited: {
             root.overtuneCharsetChangeRequested(newValue)

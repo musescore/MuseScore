@@ -44,6 +44,10 @@ BaseSection {
         control.textRole: "title"
         control.valueRole: "value"
 
+        navigation.name: "ShortestNoteBox"
+        navigation.panel: root.navigation
+        navigation.row: 0
+
         onValueEdited: {
             root.currentShortestNoteChangeRequested(newValue)
         }

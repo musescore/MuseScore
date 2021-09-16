@@ -53,8 +53,17 @@ PreferencesPage {
             filePathFilter: importPreferencesModel.stylePathFilter()
             fileDirectory: importPreferencesModel.fileDirectory(styleFileImportPath)
 
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 1
+
             onStyleFileImportPathChangeRequested: {
                 importPreferencesModel.styleFileImportPath = path
+            }
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+                }
             }
         }
 
@@ -65,12 +74,21 @@ PreferencesPage {
             currentGuitarProCharset: importPreferencesModel.currentGuitarProCharset
             currentOvertuneCharset: importPreferencesModel.currentOvertuneCharset
 
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 2
+
             onGuitarProCharsetChangeRequested: {
                 importPreferencesModel.currentGuitarProCharset = charset
             }
 
             onOvertuneCharsetChangeRequested: {
                 importPreferencesModel.currentOvertuneCharset = charset
+            }
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+                }
             }
         }
 
@@ -80,6 +98,9 @@ PreferencesPage {
             importLayout: importPreferencesModel.importLayout
             importBreaks: importPreferencesModel.importBreaks
             needUseDefaultFont: importPreferencesModel.needUseDefaultFont
+
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 3
 
             onImportLayoutChangeRequested: {
                 importPreferencesModel.importLayout = importLayout
@@ -92,6 +113,12 @@ PreferencesPage {
             onUseDefaultFontChangeRequested: {
                 importPreferencesModel.needUseDefaultFont = use
             }
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+                }
+            }
         }
 
         SeparatorLine { }
@@ -100,8 +127,17 @@ PreferencesPage {
             shortestNotes: importPreferencesModel.shortestNotes()
             currentShortestNote: importPreferencesModel.currentShortestNote
 
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 4
+
             onCurrentShortestNoteChangeRequested: {
                 importPreferencesModel.currentShortestNote = note
+            }
+
+            onFocusChanged: {
+                if (activeFocus) {
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+                }
             }
         }
     }
