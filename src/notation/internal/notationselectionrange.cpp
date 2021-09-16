@@ -82,6 +82,9 @@ std::vector<mu::RectF> NotationSelectionRange::boundingArea() const
 
     Ms::Segment* startSegment = rangeStartSegment();
     Ms::Segment* endSegment = rangeEndSegment();
+    if (!endSegment) {
+        endSegment = score()->lastSegment();
+    }
 
     if (!startSegment || !endSegment || startSegment->tick() > endSegment->tick()) {
         return {};
