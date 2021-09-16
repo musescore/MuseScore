@@ -36,7 +36,7 @@ class LineSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(PropertyItem * dashLineLength READ dashLineLength CONSTANT)
     Q_PROPERTY(PropertyItem * dashGapLength READ dashGapLength CONSTANT)
 
-    Q_PROPERTY(PropertyItem * lineVisible READ lineVisible CONSTANT)
+    Q_PROPERTY(PropertyItem * isLineVisible READ isLineVisible CONSTANT)
     Q_PROPERTY(PropertyItem * isDiagonalLocked READ isDiagonalLocked CONSTANT)
 
     Q_PROPERTY(PropertyItem * beginingText READ beginingText CONSTANT)
@@ -61,7 +61,7 @@ public:
     PropertyItem* dashLineLength() const;
     PropertyItem* dashGapLength() const;
 
-    PropertyItem* lineVisible() const;
+    PropertyItem* isLineVisible() const;
     PropertyItem* isDiagonalLocked() const;
 
     PropertyItem* beginingText() const;
@@ -99,7 +99,7 @@ private:
     PropertyItem* m_dashLineLength = nullptr;
     PropertyItem* m_dashGapLength = nullptr;
 
-    PropertyItem* m_lineVisible = nullptr;
+    PropertyItem* m_isLineVisible = nullptr;
     PropertyItem* m_isDiagonalLocked = nullptr;
 
     PropertyItem* m_beginingText = nullptr;

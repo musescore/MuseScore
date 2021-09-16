@@ -46,7 +46,7 @@ void LineSettingsModel::createProperties()
     m_dashLineLength = buildPropertyItem(Ms::Pid::DASH_LINE_LEN);
     m_dashGapLength = buildPropertyItem(Ms::Pid::DASH_GAP_LEN);
 
-    m_lineVisible = buildPropertyItem(Ms::Pid::LINE_VISIBLE);
+    m_isLineVisible = buildPropertyItem(Ms::Pid::LINE_VISIBLE);
     m_isDiagonalLocked = buildPropertyItem(Ms::Pid::DIAGONAL);
 
     if (isTextVisible(BeginingText)) {
@@ -98,7 +98,7 @@ void LineSettingsModel::loadProperties()
     loadPropertyItem(m_dashLineLength, formatDoubleFunc);
     loadPropertyItem(m_dashGapLength, formatDoubleFunc);
 
-    loadPropertyItem(m_lineVisible);
+    loadPropertyItem(m_isLineVisible);
     loadPropertyItem(m_isDiagonalLocked);
 
     loadPropertyItem(m_beginingText);
@@ -136,7 +136,7 @@ void LineSettingsModel::resetProperties()
         m_thickness,
         m_dashLineLength,
         m_dashGapLength,
-        m_lineVisible,
+        m_isLineVisible,
         m_isDiagonalLocked,
         m_beginingText,
         m_beginingTextHorizontalOffset,
@@ -181,9 +181,9 @@ PropertyItem* LineSettingsModel::placement() const
     return m_placement;
 }
 
-PropertyItem* LineSettingsModel::lineVisible() const
+PropertyItem* LineSettingsModel::isLineVisible() const
 {
-    return m_lineVisible;
+    return m_isLineVisible;
 }
 
 PropertyItem* LineSettingsModel::isDiagonalLocked() const
@@ -237,7 +237,7 @@ PropertyItem* LineSettingsModel::endTextVerticalOffset() const
 }
 
 void LineSettingsModel::onUpdateLinePropertiesAvailability()
-{
+{ 
 }
 
 bool LineSettingsModel::isTextVisible(TextType) const
