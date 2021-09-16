@@ -42,8 +42,8 @@ enum class GlissandoType;
 class GlissandoSegment final : public LineSegment
 {
 public:
-    GlissandoSegment(Spanner* sp, EngravingItem* parent)
-        : LineSegment(ElementType::GLISSANDO_SEGMENT, sp, parent) {}
+    GlissandoSegment(Glissando* sp, System* parent);
+
     Glissando* glissando() const { return toGlissando(spanner()); }
 
     GlissandoSegment* clone() const override { return new GlissandoSegment(*this); }
@@ -84,7 +84,7 @@ public:
     // overridden inherited methods
     Glissando* clone() const override { return new Glissando(*this); }
 
-    LineSegment* createLineSegment() override;
+    LineSegment* createLineSegment(System* parent) override;
 
     void layout() override;
     void write(XmlWriter&) const override;

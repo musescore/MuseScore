@@ -63,7 +63,7 @@ class HairpinSegment final : public TextLineBaseSegment
     EngravingItem* drop(EditData&) override;
 
 public:
-    HairpinSegment(Spanner* sp, EngravingItem* parent);
+    HairpinSegment(Hairpin* sp, System* parent);
 
     HairpinSegment* clone() const override { return new HairpinSegment(*this); }
 
@@ -111,7 +111,7 @@ public:
 
     Segment* segment() const { return (Segment*)parent(); }
     void layout() override;
-    LineSegment* createLineSegment() override;
+    LineSegment* createLineSegment(System* parent) override;
 
     bool hairpinCircledTip() const { return _hairpinCircledTip; }
     void setHairpinCircledTip(bool val) { _hairpinCircledTip = val; }

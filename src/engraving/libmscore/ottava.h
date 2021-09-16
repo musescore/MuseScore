@@ -82,8 +82,7 @@ class OttavaSegment final : public TextLineBaseSegment
     Sid getPropertyStyle(Pid) const override;
 
 public:
-    OttavaSegment(Spanner* sp, EngravingItem* parent)
-        : TextLineBaseSegment(ElementType::OTTAVA_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF) { }
+    OttavaSegment(Ottava* sp, System* parent);
 
     OttavaSegment* clone() const override { return new OttavaSegment(*this); }
     Ottava* ottava() const { return (Ottava*)spanner(); }
@@ -122,7 +121,7 @@ public:
 
     void setPlacement(Placement);
 
-    LineSegment* createLineSegment() override;
+    LineSegment* createLineSegment(System* parent) override;
     int pitchShift() const;
 
     void write(XmlWriter& xml) const override;

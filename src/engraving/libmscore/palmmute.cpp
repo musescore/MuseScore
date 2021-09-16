@@ -54,6 +54,11 @@ static const ElementStyle palmMuteStyle {
     { Sid::palmMutePosBelow,                      Pid::OFFSET },
 };
 
+PalmMuteSegment::PalmMuteSegment(PalmMute* sp, System* parent)
+    : TextLineBaseSegment(ElementType::PALM_MUTE_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+{
+}
+
 //---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
@@ -156,9 +161,9 @@ static const ElementStyle palmMuteSegmentStyle {
     { Sid::palmMuteMinDistance,                   Pid::MIN_DISTANCE },
 };
 
-LineSegment* PalmMute::createLineSegment()
+LineSegment* PalmMute::createLineSegment(System* parent)
 {
-    PalmMuteSegment* pms = new PalmMuteSegment(this, this);
+    PalmMuteSegment* pms = new PalmMuteSegment(this, parent);
     pms->setTrack(track());
     pms->initElementStyle(&palmMuteSegmentStyle);
     return pms;

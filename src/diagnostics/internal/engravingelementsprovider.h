@@ -27,6 +27,11 @@
 
 #include "../iengravingelementsprovider.h"
 
+namespace Ms {
+class Score;
+class EngravingItem;
+}
+
 namespace mu::diagnostics {
 class EngravingElementsProvider : public IEngravingElementsProvider
 {
@@ -47,7 +52,13 @@ public:
     bool isSelected(const Ms::EngravingObject* e) const override;
     async::Channel<const Ms::EngravingObject*, bool> selectChanged() const override;
 
+    void checkTree(Ms::Score* score);
+
 private:
+
+    void checkObjectTree(const Ms::EngravingObject* obj);
+    void dumpTree(const Ms::EngravingItem* item, int& level);
+    void dumpTreeTree(const Ms::EngravingObject* obj, int& level);
 
     struct ObjectStatistic
     {

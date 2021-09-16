@@ -1221,7 +1221,7 @@ static void readLineSegment114(XmlReader& e, LineSegment* ls)
 //   readTextLineProperties114
 //---------------------------------------------------------
 
-static bool readTextLineProperties114(XmlReader& e, TextLineBase* tl)
+static bool readTextLineProperties114(XmlReader& e, const ReadContext& ctx, TextLineBase* tl)
 {
     const QStringRef& tag(e.name());
 
@@ -1252,7 +1252,7 @@ static bool readTextLineProperties114(XmlReader& e, TextLineBase* tl)
     } else if (tag == "endHookType") {
         tl->setEndHookType(e.readInt() == 0 ? HookType::HOOK_90 : HookType::HOOK_45);
     } else if (tag == "Segment") {
-        LineSegment* ls = tl->createLineSegment();
+        LineSegment* ls = tl->createLineSegment(ctx.dummy()->system());
         ls->setTrack(tl->track());     // needed in read to get the right staff mag
         readLineSegment114(e, ls);
         // in v1.x "visible" is a property of the segment only;
@@ -1273,7 +1273,7 @@ static bool readTextLineProperties114(XmlReader& e, TextLineBase* tl)
 //   readVolta114
 //---------------------------------------------------------
 
-static void readVolta114(XmlReader& e, Volta* volta)
+static void readVolta114(XmlReader& e, const ReadContext& ctx, Volta* volta)
 {
     while (e.readNextStartElement()) {
         const QStringRef& tag(e.name());
@@ -1290,7 +1290,7 @@ static void readVolta114(XmlReader& e, Volta* volta)
         } else if (tag == "lineWidth") {
             volta->setLineWidth(e.readDouble() * volta->spatium());
             volta->setPropertyFlags(Pid::LINE_WIDTH, PropertyFlags::UNSTYLED);
-        } else if (!readTextLineProperties114(e, volta)) {
+        } else if (!readTextLineProperties114(e, ctx, volta)) {
             e.unknown();
         }
     }
@@ -1302,7 +1302,7 @@ static void readVolta114(XmlReader& e, Volta* volta)
 //   readOttava114
 //---------------------------------------------------------
 
-static void readOttava114(XmlReader& e, Ottava* ottava)
+static void readOttava114(XmlReader& e, const ReadContext& ctx, Ottava* ottava)
 {
     while (e.readNextStartElement()) {
         const QStringRef& tag(e.name());
@@ -1334,7 +1334,7 @@ static void readOttava114(XmlReader& e, Ottava* ottava)
             ottava->readProperty(e, Pid::LINE_STYLE);
         } else if (tag == "beginSymbol") {                        // obsolete
         } else if (tag == "continueSymbol") {                     // obsolete
-        } else if (!readTextLineProperties114(e, ottava)) {
+        } else if (!readTextLineProperties114(e, ctx, ottava)) {
             e.unknown();
         }
     }
@@ -1413,7 +1413,7 @@ static void readTextLine114(XmlReader& e, const ReadContext& ctx, TextLine* text
             textLine->setContinueTextPlace(readPlacement(e));
         } else if (tag == "endTextPlace") {
             textLine->setEndTextPlace(readPlacement(e));
-        } else if (!readTextLineProperties114(e, textLine)) {
+        } else if (!readTextLineProperties114(e, ctx, textLine)) {
             e.unknown();
         }
     }
@@ -1423,7 +1423,7 @@ static void readTextLine114(XmlReader& e, const ReadContext& ctx, TextLine* text
 //   readPedal114
 //---------------------------------------------------------
 
-static void readPedal114(XmlReader& e, Pedal* pedal)
+static void readPedal114(XmlReader& e, const ReadContext& ctx, Pedal* pedal)
 {
     while (e.readNextStartElement()) {
         const QStringRef& tag(e.name());
@@ -1443,7 +1443,7 @@ static void readPedal114(XmlReader& e, Pedal* pedal)
         } else if (tag == "lineStyle") {
             pedal->setLineStyle(mu::draw::PenStyle(e.readInt()));
             pedal->setPropertyFlags(Pid::LINE_STYLE, PropertyFlags::UNSTYLED);
-        } else if (!readTextLineProperties114(e, pedal)) {
+        } else if (!readTextLineProperties114(e, ctx, pedal)) {
             e.unknown();
         }
     }
@@ -1812,7 +1812,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
         } else if (tag == "Slur") {
             Slur* sl = Factory::createSlur(m);
             sl->setTick(e.tick());
-            Read206::readSlur206(e, sl);
+            Read206::readSlur206(e, ctx, sl);
             //
             // check if we already saw "endSpanner"
             //
@@ -1834,7 +1834,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             sp->setTick(e.tick());
             // ?? sp->setAnchor(Spanner::Anchor::SEGMENT);
             if (tag == "Volta") {
-                readVolta114(e, toVolta(sp));
+                readVolta114(e, ctx, toVolta(sp));
             } else {
                 Read206::readTextLine206(e, ctx, toTextLineBase(sp));
             }
@@ -2899,7 +2899,7 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
             masterScore->appendPart(part);
         } else if (tag == "Slur") {
             Slur* slur = Factory::createSlur(ctx.dummy());
-            Read206::readSlur206(e, slur);
+            Read206::readSlur206(e, ctx, slur);
             ctx.addSpanner(slur);
         } else if ((tag == "HairPin")
                    || (tag == "Ottava")
@@ -2909,13 +2909,13 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
                    || (tag == "Pedal")) {
             Spanner* s = toSpanner(Factory::createItemByName(tag, masterScore->dummy()));
             if (tag == "Volta") {
-                readVolta114(e, toVolta(s));
+                readVolta114(e, ctx, toVolta(s));
             } else if (tag == "Ottava") {
-                readOttava114(e, toOttava(s));
+                readOttava114(e, ctx, toOttava(s));
             } else if (tag == "TextLine") {
                 readTextLine114(e, ctx, toTextLine(s));
             } else if (tag == "Pedal") {
-                readPedal114(e, toPedal(s));
+                readPedal114(e, ctx, toPedal(s));
             } else if (tag == "Trill") {
                 Read206::readTrill206(e, toTrill(s));
             } else {

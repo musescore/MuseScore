@@ -38,10 +38,8 @@ protected:
     void changeAnchor(EditData&, EngravingItem*) override;
 
 public:
-    SlurSegment(EngravingItem* parent)
-        : SlurTieSegment(ElementType::SLUR_SEGMENT, parent) {}
-    SlurSegment(const SlurSegment& ss)
-        : SlurTieSegment(ss) {}
+    SlurSegment(System* parent);
+    SlurSegment(const SlurSegment& ss);
 
     SlurSegment* clone() const override { return new SlurSegment(*this); }
     int subtype() const override { return static_cast<int>(spanner()->type()); }
@@ -89,7 +87,7 @@ public:
     SlurSegment* segmentAt(int n) { return toSlurSegment(Spanner::segmentAt(n)); }
     const SlurSegment* segmentAt(int n) const { return toSlurSegment(Spanner::segmentAt(n)); }
 
-    SlurTieSegment* newSlurTieSegment() override { return new SlurSegment(this); }
+    SlurTieSegment* newSlurTieSegment(System* parent) override { return new SlurSegment(parent); }
 };
 }     // namespace Ms
 #endif

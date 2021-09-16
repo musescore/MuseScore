@@ -37,8 +37,7 @@ class PedalSegment final : public TextLineBaseSegment
     Sid getPropertyStyle(Pid) const override;
 
 public:
-    PedalSegment(Spanner* sp, EngravingItem* parent)
-        : TextLineBaseSegment(ElementType::PEDAL_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF) {}
+    PedalSegment(Pedal* sp, System* parent);
 
     PedalSegment* clone() const override { return new PedalSegment(*this); }
     Pedal* pedal() const { return toPedal(spanner()); }
@@ -66,7 +65,7 @@ public:
     void read(XmlReader&) override;
     void write(XmlWriter& xml) const override;
 
-    LineSegment* createLineSegment() override;
+    LineSegment* createLineSegment(System* parent) override;
     QVariant propertyDefault(Pid propertyId) const override;
 
     friend class PedalLine;

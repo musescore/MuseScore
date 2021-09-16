@@ -49,7 +49,7 @@ protected:
     bool twoLines { false };
 
 public:
-    TextLineBaseSegment(const ElementType& type, Spanner*, EngravingItem* parent, ElementFlags f = ElementFlag::NOTHING);
+    TextLineBaseSegment(const ElementType& type, Spanner*, System* parent, ElementFlags f = ElementFlag::NOTHING);
     TextLineBaseSegment(const TextLineBaseSegment&);
     ~TextLineBaseSegment();
 

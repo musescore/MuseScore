@@ -37,8 +37,7 @@ class PalmMuteSegment final : public TextLineBaseSegment
     Sid getPropertyStyle(Pid) const override;
 
 public:
-    PalmMuteSegment(Spanner* sp, EngravingItem* parent)
-        : TextLineBaseSegment(ElementType::PALM_MUTE_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF) { }
+    PalmMuteSegment(PalmMute* sp, System* parent);
 
     PalmMuteSegment* clone() const override { return new PalmMuteSegment(*this); }
 
@@ -68,7 +67,7 @@ public:
     void read(XmlReader&) override;
 //      virtual void write(XmlWriter& xml) const override;
 
-    LineSegment* createLineSegment() override;
+    LineSegment* createLineSegment(System* parent) override;
     QVariant propertyDefault(Pid propertyId) const override;
 
     friend class PalmMuteLine;
