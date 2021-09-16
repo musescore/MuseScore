@@ -55,7 +55,7 @@ RadioDelegate {
 
         accessible.role: MUAccessible.RadioButton
         accessible.name: root.title
-        accessible.selected: root.checked
+        accessible.checked: root.checked
 
         onActiveChanged: {
             if (keynavCtrl.active) {

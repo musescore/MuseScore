@@ -51,7 +51,7 @@ RadioDelegate {
 
         accessible.role: MUAccessible.RadioButton
         accessible.name: root.text
-        accessible.selected: root.checked
+        accessible.checked: root.checked
 
         onActiveChanged: {
             if (keynavCtrl.active) {
@@ -59,7 +59,7 @@ RadioDelegate {
             }
         }
 
-        onTriggered: root.clicked()
+        onTriggered: root.toggled()
     }
 
     contentItem: Item {
@@ -119,11 +119,7 @@ RadioDelegate {
         }
     }
 
-    background: Rectangle {
-        anchors.fill: parent
-
-        color: ui.theme.backgroundSecondaryColor
-    }
+    background: Item { }
 
     states: [
         State {

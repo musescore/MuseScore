@@ -21,76 +21,89 @@
  */
 import QtQuick 2.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
-import MuseScore.Preferences 1.0
 
-Column {
-    spacing: 18
+BaseSection {
+    id: root
 
-    property var preferencesModel: null
+    title: qsTrc("appshell", "Style used for import")
 
-    StyledTextLabel {
-        text: qsTrc("appshell", "Style used for import")
-        font: ui.theme.bodyBoldFont
+    navigation.direction: NavigationPanel.Both
+
+    property string styleFileImportPath: ""
+    property string fileChooseTitle: ""
+    property string filePathFilter: ""
+    property string fileDirectory: ""
+
+    signal styleFileImportPathChangeRequested(string path)
+
+    QtObject {
+        id: prv
+
+        property bool useStyleFile: root.styleFileImportPath !== ""
     }
 
-    Column {
-        anchors.left: parent.left
-        anchors.right: parent.right
-        spacing: 12
+    RoundedRadioButton {
+        id: builtInStyleButton
+        width: 193
+
+        text: qsTrc("appshell", "Built-in style")
+        checked: !prv.useStyleFile
+
+        navigation.name: "BuiltInStyleButton"
+        navigation.panel: root.navigation
+        navigation.row: 0
+        navigation.column: 0
+
+        onToggled: {
+            prv.useStyleFile = false
+            root.styleFileImportPathChangeRequested("")
+        }
+    }
+
+    Row {
+        width: parent.width
 
         RoundedRadioButton {
-            anchors.left: parent.left
-            anchors.right: parent.right
+            id: useStyleFileButton
 
-            checked: preferencesModel.styleFileImportPath === ""
+            width: 193
+            anchors.verticalCenter: parent.verticalCenter
 
-            StyledTextLabel {
-                text: qsTrc("appshell", "Built-in style")
-                horizontalAlignment: Text.AlignLeft
-            }
+            text: qsTrc("appshell", "Use style file:")
+            checked: prv.useStyleFile
+
+            navigation.name: "UseStyleButton"
+            navigation.panel: root.navigation
+            navigation.row: 1
+            navigation.column: 0
 
             onToggled: {
-                preferencesModel.styleFileImportPath = ""
+                prv.useStyleFile = true
             }
         }
 
-        RoundedRadioButton {
-            anchors.left: parent.left
-            anchors.right: parent.right
+        FilePicker {
+            id: styleFilePicker
 
-            checked: preferencesModel.styleFileImportPath !== ""
+            width: 246
+            anchors.verticalCenter: parent.verticalCenter
 
-            onToggled: {
-                preferencesModel.styleFileImportPath = ""
-            }
+            dialogTitle: root.fileChooseTitle
+            filter: root.filePathFilter
+            dir: root.fileDirectory
 
-            Item {
-                StyledTextLabel {
-                    id: title
+            path: root.styleFileImportPath
 
-                    width: 193
-                    anchors.verticalCenter: parent.verticalCenter
+            enabled: prv.useStyleFile
 
-                    text: qsTrc("appshell", "Use style file:")
-                    horizontalAlignment: Text.AlignLeft
-                }
+            navigation: root.navigation
+            navigationRowOrderStart: 1
+            navigationColumnOrderStart: 1
 
-                FilePicker {
-                    anchors.left: title.right
-                    width: 246
-                    anchors.verticalCenter: parent.verticalCenter
-
-                    dialogTitle: preferencesModel.styleChooseTitle()
-                    filter: preferencesModel.stylePathFilter()
-                    dir: preferencesModel.fileDirectory(preferencesModel.styleFileImportPath)
-
-                    path: preferencesModel.styleFileImportPath
-
-                    onPathEdited: {
-                        preferencesModel.styleFileImportPath = newPath
-                    }
-                }
+            onPathEdited: {
+                root.styleFileImportPathChangeRequested(newPath)
             }
         }
     }

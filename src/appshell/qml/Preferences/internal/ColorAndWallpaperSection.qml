@@ -68,7 +68,7 @@ BaseSection {
             navigation.row: 0
             navigation.column: 0
 
-            onClicked: {
+            onToggled: {
                 root.useColorChangeRequested(true)
             }
         }
@@ -101,7 +101,7 @@ BaseSection {
             navigation.row: 1
             navigation.column: 0
 
-            onClicked: {
+            onToggled: {
                 root.useColorChangeRequested(false)
             }
         }
@@ -114,7 +114,7 @@ BaseSection {
             enabled: !root.useColor
 
             navigation: root.navigation
-            navigationRowOrder: 1
+            navigationRowOrderStart: 1
             navigationColumnOrderStart: 1
 
             onPathEdited: {
