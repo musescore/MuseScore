@@ -30,13 +30,16 @@ import MuseScore.AppShell 1.0
 import MuseScore.Pianoroll 1.0
 
 ColumnLayout {
-
+    id: root
     property int m_graphWidth: 0
     property int m_tuplet: 1
     property int m_subdivision: 0
     property int m_controlWidth: 0
     property double m_centerX: 0
     property double m_wholeNoteWidth: 20
+
+    signal rowAddClicked()
+    signal rowRemoveClicked()
 
     enum Shape {
         //Note event tweaks
@@ -55,10 +58,29 @@ ColumnLayout {
         spacing: 0
         Layout.fillWidth: true
 
-        ColumnLayout {
+        RowLayout {
             Layout.preferredWidth: m_controlWidth
             Layout.maximumWidth: m_controlWidth
             Layout.fillHeight: true
+
+            ColumnLayout {
+                Layout.fillHeight: true
+                ToolButton {
+                    text: qsTr("+")
+
+                    onClicked: {
+                        root.rowAddClicked()
+                    }
+                }
+
+                ToolButton {
+                    text: qsTr("-")
+
+                    onClicked: {
+                        root.rowRemoveClicked()
+                    }
+                }
+            }
 
             ComboBox {
                 id: automationAttribute
@@ -80,7 +102,6 @@ ColumnLayout {
 
                     switch (currentValue) {
                     case PianorollAutomationRow.Shape.Velocity:
-//                    case Display.VELOCITY:
                     {
                         noteTweak = true;
                         automationNotes.automationType = PianorollAutomationNote.VELOCITY;
@@ -131,21 +152,6 @@ ColumnLayout {
                         automationNotes.visible = false
                         automationCurves.visible = true
                     }
-
-//                    //pianoView.tuplet = currentValue
-//                    if (currentValue === Display.VELOCITY
-//                            || currentValue === Display.VELOCITY_ABS
-//                            || currentValue === Display.POSITION
-//                            || currentValue === Display.DURATION
-//                            || currentValue === Display.DURATION_MULT) {
-//                        automationEditor.visible = true
-//                        automationCurves.visible = false
-//                        automationEditor.automationType = currentValue
-//                    }
-//                    else {
-//                        automationEditor.visible = false
-//                        automationCurves.visible = true
-//                    }
                 }
             }
 
