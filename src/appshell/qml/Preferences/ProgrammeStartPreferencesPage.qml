@@ -34,24 +34,29 @@ PreferencesPage {
         id: programmeStartModel
     }
 
-    ProgrammeStartSection {
-        startupModes: programmeStartModel.startupModes
-        scorePathFilter: programmeStartModel.scorePathFilter()
-        panels: programmeStartModel.panels
+    Column {
+        anchors.fill: parent
+        spacing: root.sectionsSpacing
 
-        navigation.section: root.navigationSection
-        navigation.order: root.navigationOrderStart + 1
+        ProgrammeStartSection {
+            startupModes: programmeStartModel.startupModes
+            scorePathFilter: programmeStartModel.scorePathFilter()
+            panels: programmeStartModel.panels
 
-        onCurrentStartupModesChanged: {
-            programmeStartModel.setCurrentStartupMode(index)
-        }
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrderStart + 1
 
-        onStartupScorePathChanged: {
-            programmeStartModel.setStartupScorePath(path)
-        }
+            onCurrentStartupModesChanged: {
+                programmeStartModel.setCurrentStartupMode(index)
+            }
 
-        onPanelsVisibleChanged: {
-            programmeStartModel.setPanelVisible(panelIndex, visible)
+            onStartupScorePathChanged: {
+                programmeStartModel.setStartupScorePath(path)
+            }
+
+            onPanelsVisibleChanged: {
+                programmeStartModel.setPanelVisible(panelIndex, visible)
+            }
         }
     }
 }

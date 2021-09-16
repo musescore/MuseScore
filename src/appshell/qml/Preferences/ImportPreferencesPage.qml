@@ -45,7 +45,7 @@ PreferencesPage {
         width: parent.width
         height: childrenRect.height
 
-        spacing: 24
+        spacing: root.sectionsSpacing
 
         ImportStyleSection {
             anchors.left: parent.left

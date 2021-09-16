@@ -39,6 +39,8 @@ Flickable {
     property NavigationSection navigationSection: null
     property int navigationOrderStart: 0
 
+    readonly property int sectionsSpacing: 24
+
     signal hideRequested()
 
     function apply() {
