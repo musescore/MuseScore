@@ -55,6 +55,8 @@ static const QMap<Ms::ElementType, AbstractInspectorModel::InspectorModelType> N
     { Ms::ElementType::CLEF, AbstractInspectorModel::InspectorModelType::TYPE_CLEF },
     { Ms::ElementType::HAIRPIN, AbstractInspectorModel::InspectorModelType::TYPE_HAIRPIN },
     { Ms::ElementType::HAIRPIN_SEGMENT, AbstractInspectorModel::InspectorModelType::TYPE_HAIRPIN },
+    { Ms::ElementType::OTTAVA, AbstractInspectorModel::InspectorModelType::TYPE_OTTAVA },
+    { Ms::ElementType::OTTAVA_SEGMENT, AbstractInspectorModel::InspectorModelType::TYPE_OTTAVA },
     { Ms::ElementType::STAFFTYPE_CHANGE, AbstractInspectorModel::InspectorModelType::TYPE_STAFF_TYPE_CHANGES },
     { Ms::ElementType::TBOX, AbstractInspectorModel::InspectorModelType::TYPE_TEXT_FRAME },// text frame
     { Ms::ElementType::VBOX, AbstractInspectorModel::InspectorModelType::TYPE_VERTICAL_FRAME },// vertical frame
