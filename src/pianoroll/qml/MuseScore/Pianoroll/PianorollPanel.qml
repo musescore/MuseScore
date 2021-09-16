@@ -76,7 +76,6 @@ Rectangle {
                         onClicked: {
                             pianoView.tool = PianorollView.ADD
                         }
-
                     }
 
                     ToolButton {
@@ -306,6 +305,14 @@ Rectangle {
                 m_controlWidth: keyboardComponent.width
                 m_centerX: scrollViewX.center
                 m_wholeNoteWidth: horizZoom.value
+
+                onRowAddClicked: {
+
+                }
+
+                onRowRemoveClicked: {
+
+                }
             }
         }
     }
