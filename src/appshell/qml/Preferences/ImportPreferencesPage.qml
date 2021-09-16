@@ -48,37 +48,61 @@ PreferencesPage {
         spacing: root.sectionsSpacing
 
         ImportStyleSection {
-            anchors.left: parent.left
-            anchors.right: parent.right
+            styleFileImportPath: importPreferencesModel.styleFileImportPath
+            fileChooseTitle: importPreferencesModel.styleChooseTitle()
+            filePathFilter: importPreferencesModel.stylePathFilter()
+            fileDirectory: importPreferencesModel.fileDirectory(styleFileImportPath)
 
-            preferencesModel: importPreferencesModel
+            onStyleFileImportPathChangeRequested: {
+                importPreferencesModel.styleFileImportPath = path
+            }
         }
 
         SeparatorLine { }
 
         CharsetsSection {
-            anchors.left: parent.left
-            anchors.right: parent.right
+            charsets: importPreferencesModel.charsets()
+            currentGuitarProCharset: importPreferencesModel.currentGuitarProCharset
+            currentOvertuneCharset: importPreferencesModel.currentOvertuneCharset
 
-            preferencesModel: importPreferencesModel
+            onGuitarProCharsetChangeRequested: {
+                importPreferencesModel.currentGuitarProCharset = charset
+            }
+
+            onOvertuneCharsetChangeRequested: {
+                importPreferencesModel.currentOvertuneCharset = charset
+            }
         }
 
         SeparatorLine { }
 
         MusicXmlSection {
-            anchors.left: parent.left
-            anchors.right: parent.right
+            importLayout: importPreferencesModel.importLayout
+            importBreaks: importPreferencesModel.importBreaks
+            needUseDefaultFont: importPreferencesModel.needUseDefaultFont
 
-            preferencesModel: importPreferencesModel
+            onImportLayoutChangeRequested: {
+                importPreferencesModel.importLayout = importLayout
+            }
+
+            onImportBreaksChangeRequested: {
+                importPreferencesModel.importBreaks = importBreaks
+            }
+
+            onUseDefaultFontChangeRequested: {
+                importPreferencesModel.needUseDefaultFont = use
+            }
         }
 
         SeparatorLine { }
 
         MidiSection {
-            anchors.left: parent.left
-            anchors.right: parent.right
+            shortestNotes: importPreferencesModel.shortestNotes()
+            currentShortestNote: importPreferencesModel.currentShortestNote
 
-            preferencesModel: importPreferencesModel
+            onCurrentShortestNoteChangeRequested: {
+                importPreferencesModel.currentShortestNote = note
+            }
         }
     }
 }

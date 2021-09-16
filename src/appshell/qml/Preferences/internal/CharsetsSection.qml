@@ -22,43 +22,40 @@
 import QtQuick 2.15
 
 import MuseScore.UiComponents 1.0
-import MuseScore.Preferences 1.0
 
-Column {
-    spacing: 18
+BaseSection {
+    id: root
 
-    property var preferencesModel: null
+    title: qsTrc("appshell", "Character set used when importing binary files")
 
-    StyledTextLabel {
-        text: qsTrc("appshell", "Character set used when importing binary files")
-        font: ui.theme.bodyBoldFont
+    property var charsets: null
+    property string currentGuitarProCharset: ""
+    property string currentOvertuneCharset: ""
+
+    signal guitarProCharsetChangeRequested(string charset)
+    signal overtuneCharsetChangeRequested(string charset)
+
+    ComboBoxWithTitle {
+        title: qsTrc("appshell", "Guitar Pro import character set:")
+        titleWidth: 220
+
+        currentIndex: control.indexOfValue(root.currentGuitarProCharset)
+        model: root.charsets
+
+        onValueEdited: {
+            root.guitarProCharsetChangeRequested(newValue)
+        }
     }
 
-    Column {
-        spacing: 12
+    ComboBoxWithTitle {
+        title: qsTrc("appshell", "Overture import character set:")
+        titleWidth: 220
 
-        ComboBoxWithTitle {
-            title: qsTrc("appshell", "Guitar Pro import character set:")
-            titleWidth: 220
+        currentIndex: control.indexOfValue(root.currentOvertuneCharset)
+        model: root.charsets
 
-            currentIndex: control.indexOfValue(preferencesModel.currentGuitarProCharset)
-            model: preferencesModel.charsets()
-
-            onValueEdited: {
-                preferencesModel.currentGuitarProCharset = newValue
-            }
-        }
-
-        ComboBoxWithTitle {
-            title: qsTrc("appshell", "Overture import character set:")
-            titleWidth: 220
-
-            currentIndex: control.indexOfValue(preferencesModel.currentOvertuneCharset)
-            model: preferencesModel.charsets()
-
-            onValueEdited: {
-                preferencesModel.currentOvertuneCharset = newValue
-            }
+        onValueEdited: {
+            root.overtuneCharsetChangeRequested(newValue)
         }
     }
 }
