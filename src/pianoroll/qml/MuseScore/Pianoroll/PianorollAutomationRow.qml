@@ -30,13 +30,16 @@ import MuseScore.AppShell 1.0
 import MuseScore.Pianoroll 1.0
 
 ColumnLayout {
-
+    id: root
     property int m_graphWidth: 0
     property int m_tuplet: 1
     property int m_subdivision: 0
     property int m_controlWidth: 0
     property double m_centerX: 0
     property double m_wholeNoteWidth: 20
+
+    signal rowAddClicked()
+    signal rowRemoveClicked()
 
     enum Shape {
         //Note event tweaks
@@ -55,10 +58,29 @@ ColumnLayout {
         spacing: 0
         Layout.fillWidth: true
 
-        ColumnLayout {
+        RowLayout {
             Layout.preferredWidth: m_controlWidth
             Layout.maximumWidth: m_controlWidth
             Layout.fillHeight: true
+
+            ColumnLayout {
+                Layout.fillHeight: true
+                ToolButton {
+                    text: qsTr("+")
+
+                    onClicked: {
+                        root.rowAddClicked()
+                    }
+                }
+
+                ToolButton {
+                    text: qsTr("-")
+
+                    onClicked: {
+                        root.rowRemoveClicked()
+                    }
+                }
+            }
 
             ComboBox {
                 id: automationAttribute

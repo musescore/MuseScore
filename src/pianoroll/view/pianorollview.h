@@ -31,6 +31,7 @@
 #include "context/iglobalcontext.h"
 #include "pianoroll/ipianorollcontroller.h"
 #include "audio/iplayback.h"
+#include "notation/inotationinteraction.h"
 
 namespace mu::pianoroll {
 enum class NoteSelectType

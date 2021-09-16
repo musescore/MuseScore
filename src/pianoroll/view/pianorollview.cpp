@@ -30,6 +30,7 @@
 #include "engraving/dom/undo.h"
 #include "engraving/dom/tuplet.h"
 #include "notation/inotationplayback.h"
+#include "notation/inotationinteraction.h"
 #include "audio/iplayer.h"
 #include "audio/audiotypes.h"
 
