@@ -51,7 +51,7 @@ FocusableItem {
         }
 
         InspectorPropertyView {
-            titleText: qsTrc("inspector", "Noteheads")
+            titleText: qsTrc("inspector", "Notehead group")
             propertyItem: root.model ? root.model.headGroup : null
 
             NoteheadsGrid {
@@ -108,7 +108,7 @@ FocusableItem {
                     width: root.width
                     height: implicitHeight
 
-                    titleText: qsTrc("inspector", "Head type (visual only)")
+                    titleText: qsTrc("inspector", "Notehead type (visual only)")
                     propertyItem: root.model ? root.model.headType : null
 
                     RadioButtonGroup {

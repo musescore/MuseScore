@@ -75,11 +75,124 @@ Column {
         { text: "B♯♯", value: AmbitusTypes.TPC_B_SS }
     ]
 
-    FlatButton {
+    height: childrenRect.height
+
+    Item {
+        height: childrenRect.height
         width: parent.width
 
-        text: qsTrc("inspector", "Update to match the notes on the staff")
+        InspectorPropertyView {
+            propertyItem: root.model ? root.model.topTpc : null
+            titleText: qsTrc("inspector", "Top note")
+            showMenuButton: false
 
+            anchors.left: parent.left
+            anchors.right: parent.horizontalCenter
+            anchors.rightMargin: 2
+
+            Dropdown {
+                id: topTpc
+                width: parent.width
+                model: root.tpcListModel
+                currentIndex: root.model && !root.model.topTpc.isUndefined ? topTpc.indexOfValue(root.model.topTpc.value) : -1
+                onCurrentValueChanged: {
+                    if (currentIndex === -1 || !root.model) {
+                        return
+                    }
+
+                    root.model.topTpc.value = topTpc.currentValue
+                }
+            }
+        }
+
+        InspectorPropertyView {
+            propertyItem: root.model ? root.model.topOctave : null
+            showTitle: true // Show empty label for correct alignment
+            showMenuButton: false
+
+            anchors.left: parent.horizontalCenter
+            anchors.leftMargin: 2
+            anchors.right: parent.right
+
+            IncrementalPropertyControl {
+                id: topOctaveControl
+                isIndeterminate: root.model ? root.model.topOctave.isUndefined : false
+                currentValue: root.model ? root.model.topOctave.value : 0
+
+                step: 1
+                decimals: 0
+                maxValue: 8
+                minValue: -1
+
+                onValueEdited: function(newValue) {
+                    if (root.model) {
+                        root.model.topOctave.value = newValue
+                    }
+                }
+            }
+        }
+    }
+
+    Item {
+        height: childrenRect.height
+        width: parent.width
+
+        InspectorPropertyView {
+            propertyItem: root.model ? root.model.bottomTpc : null
+            titleText: qsTrc("inspector", "Bottom note")
+            showMenuButton: false
+
+            anchors.left: parent.left
+            anchors.right: parent.horizontalCenter
+            anchors.rightMargin: 2
+
+            Dropdown {
+                id: bottomTpc
+                width: parent.width
+                model: root.tpcListModel
+                currentIndex: root.model && !root.model.bottomTpc.isUndefined ? bottomTpc.indexOfValue(root.model.bottomTpc.value) : -1
+                onCurrentValueChanged: {
+                    if (currentIndex === -1 || !root.model) {
+                        return
+                    }
+
+                    root.model.bottomTpc.value = bottomTpc.currentValue
+                }
+            }
+        }
+
+        InspectorPropertyView {
+            propertyItem: root.model ? root.model.bottomOctave : null
+            showTitle: true // Show empty label for correct alignment
+            showMenuButton: false
+
+            anchors.left: parent.horizontalCenter
+            anchors.leftMargin: 2
+            anchors.right: parent.right
+
+            IncrementalPropertyControl {
+                id: bottomOctaveControl
+
+                isIndeterminate: root.model ? root.model.bottomOctave.isUndefined : false
+                currentValue: root.model ? root.model.bottomOctave.value : 0
+
+                step: 1
+                decimals: 0
+                maxValue: 8
+                minValue: -1
+
+                onValueEdited: function(newValue) {
+                    if (root.model) {
+                        root.model.bottomOctave.value = newValue
+                    }
+                }
+            }
+        }
+    }
+
+    FlatButton {
+        width: parent.width
+        text: qsTrc("inspector", "Update to match the notes on the staff")
         onClicked: {
             if (root.model) {
                 root.model.matchRangesToStaff()
@@ -87,228 +200,108 @@ Column {
         }
     }
 
-    InspectorPropertyView {
-        titleText: qsTrc("inspector", "Noteheads")
-        propertyItem: root.model ? root.model.noteheadGroup : null
+    ExpandableBlank {
+        isExpanded: false
 
-        NoteheadsGrid {
-            id: noteheadGridView
-            noteHeadGroupsModel: root.model ? root.model.noteheadGroupsModel : null
-        }
-    }
+        title: isExpanded ? qsTrc("inspector", "Show less") : qsTrc("inspector", "Show more")
 
-    Column {
-        spacing: 8
-
-        height: childrenRect.height
         width: parent.width
 
-        Item {
-            height: childrenRect.height
+        contentItemComponent: Column {
+            height: implicitHeight
             width: parent.width
 
-            InspectorPropertyView {
-                propertyItem: root.model ? root.model.topTpc : null
-                titleText: qsTrc("inspector", "Top note")
-                showMenuButton: false
+            spacing: 16
 
+            InspectorPropertyView {
+                titleText: qsTrc("inspector", "Direction")
+                propertyItem: root.model ? root.model.direction : null
+
+                RadioButtonGroup {
+                    id: directionButtonList
+
+                    height: 30
+                    width: parent.width
+
+                    model: [
+                        { iconRole: IconCode.AMBITUS, typeRole: DirectionTypes.HORIZONTAL_AUTO },
+                        { iconRole: IconCode.AMBITUS_LEANING_LEFT, typeRole: DirectionTypes.HORIZONTAL_LEFT },
+                        { iconRole: IconCode.AMBITUS_LEANING_RIGHT, typeRole: DirectionTypes.HORIZONTAL_RIGHT }
+                    ]
+
+                    delegate: FlatRadioButton {
+                        ButtonGroup.group: directionButtonList.radioButtonGroup
+
+                        iconCode: modelData["iconRole"]
+                        checked: root.model && !root.model.direction.isUndefined ? root.model.direction.value === modelData["typeRole"]
+                                                                                 : false
+                        onToggled: {
+                            root.model.direction.value = modelData["typeRole"]
+                        }
+                    }
+                }
+            }
+
+            InspectorPropertyView {
+                titleText: qsTrc("inspector", "Notehead group")
+                propertyItem: root.model ? root.model.noteheadGroup : null
+
+                NoteheadsGrid {
+                    id: noteheadGridView
+                    noteHeadGroupsModel: root.model ? root.model.noteheadGroupsModel : null
+                }
+            }
+
+            InspectorPropertyView {
+                titleText: qsTrc("inspector", "Notehead type")
+                propertyItem: root.model ? root.model.noteheadType : null
+
+                RadioButtonGroup {
+                    id: headTypeButtonList
+
+                    height: 40
+                    width: parent.width
+
+                    model: [
+                        { iconRole: IconCode.NONE, textRole: qsTrc("inspector", "Auto"), typeRole: NoteHead.TYPE_AUTO },
+                        { iconRole: IconCode.NOTE_HEAD_QUARTER, typeRole: NoteHead.TYPE_QUARTER },
+                        { iconRole: IconCode.NOTE_HEAD_HALF, typeRole: NoteHead.TYPE_HALF },
+                        { iconRole: IconCode.NOTE_HEAD_WHOLE, typeRole: NoteHead.TYPE_WHOLE },
+                        { iconRole: IconCode.NOTE_HEAD_BREVIS, typeRole: NoteHead.TYPE_BREVIS }
+                    ]
+
+                    delegate: FlatRadioButton {
+                        ButtonGroup.group: headTypeButtonList.radioButtonGroup
+
+                        iconCode: modelData["iconRole"]
+                        text: modelData["textRole"]
+
+                        checked: root.model && !root.model.noteheadType.isUndefined ? root.model.noteheadType.value === modelData["typeRole"]
+                                                                                    : false
+                        onToggled: {
+                            root.model.noteheadType.value = modelData["typeRole"]
+                        }
+                    }
+                }
+            }
+
+            InspectorPropertyView {
                 anchors.left: parent.left
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
 
-                Dropdown {
-                    id: topTpc
-                    width: parent.width
-                    model: root.tpcListModel
-                    currentIndex: root.model && !root.model.topTpc.isUndefined ? topTpc.indexOfValue(root.model.topTpc.value) : -1
-                    onCurrentValueChanged: {
-                        if (currentIndex === -1 || !root.model) {
-                            return
-                        }
-
-                        root.model.topTpc.value = topTpc.currentValue
-                    }
-                }
-            }
-
-            InspectorPropertyView {
-                propertyItem: root.model ? root.model.topOctave : null
-                showTitle: true // Show empty label for correct alignment
-                showMenuButton: false
-
-                anchors.left: parent.horizontalCenter
-                anchors.leftMargin: 2
-                anchors.right: parent.right
+                titleText: qsTrc("inspector", "Line thickness")
+                propertyItem: root.model ? root.model.lineThickness : null
 
                 IncrementalPropertyControl {
-                    id: topOctaveControl
-                    isIndeterminate: root.model ? root.model.topOctave.isUndefined : false
-                    currentValue: root.model ? root.model.topOctave.value : 0
+                    isIndeterminate: root.model ? root.model.lineThickness.isUndefined : false
+                    currentValue: root.model ? root.model.lineThickness.value : 0
+                    step: 0.1
+                    maxValue: 10
+                    minValue: 0.1
+                    decimals: 2
 
-                    step: 1
-                    decimals: 0
-                    maxValue: 8
-                    minValue: -1
-
-                    onValueEdited: function(newValue) {
-                        if (root.model) {
-                            root.model.topOctave.value = newValue
-                        }
-                    }
-                }
-            }
-        }
-
-        Item {
-            height: childrenRect.height
-            width: parent.width
-
-            InspectorPropertyView {
-                propertyItem: root.model ? root.model.bottomTpc : null
-                titleText: qsTrc("inspector", "Bottom note")
-                showMenuButton: false
-
-                anchors.left: parent.left
-                anchors.right: parent.horizontalCenter
-                anchors.rightMargin: 2
-
-                Dropdown {
-                    id: bottomTpc
-                    width: parent.width
-                    model: root.tpcListModel
-                    currentIndex: root.model && !root.model.bottomTpc.isUndefined ? bottomTpc.indexOfValue(root.model.bottomTpc.value) : -1
-                    onCurrentValueChanged: {
-                        if (currentIndex === -1 || !root.model) {
-                            return
-                        }
-
-                        root.model.bottomTpc.value = bottomTpc.currentValue
-                    }
-                }
-            }
-
-            InspectorPropertyView {
-                propertyItem: root.model ? root.model.bottomOctave : null
-                showTitle: true // Show empty label for correct alignment
-                showMenuButton: false
-
-                anchors.left: parent.horizontalCenter
-                anchors.leftMargin: 2
-                anchors.right: parent.right
-
-                IncrementalPropertyControl {
-                    id: bottomOctaveControl
-
-                    isIndeterminate: root.model ? root.model.bottomOctave.isUndefined : false
-                    currentValue: root.model ? root.model.bottomOctave.value : 0
-
-                    step: 1
-                    decimals: 0
-                    maxValue: 8
-                    minValue: -1
-
-                    onValueEdited: function(newValue) {
-                        if (root.model) {
-                            root.model.bottomOctave.value = newValue
-                        }
-                    }
-                }
-            }
-        }
-
-        ExpandableBlank {
-            isExpanded: false
-
-            title: isExpanded ? qsTrc("inspector", "Show less") : qsTrc("inspector", "Show more")
-
-            width: parent.width
-
-            contentItemComponent: Column {
-                height: implicitHeight
-                width: parent.width
-
-                spacing: 16
-
-                InspectorPropertyView {
-                    titleText: qsTrc("inspector", "Direction")
-                    propertyItem: root.model ? root.model.direction : null
-
-                    RadioButtonGroup {
-                        id: directionButtonList
-
-                        height: 30
-                        width: parent.width
-
-                        model: [
-                            { iconRole: IconCode.AMBITUS, typeRole: DirectionTypes.HORIZONTAL_AUTO },
-                            { iconRole: IconCode.AMBITUS_LEANING_LEFT, typeRole: DirectionTypes.HORIZONTAL_LEFT },
-                            { iconRole: IconCode.AMBITUS_LEANING_RIGHT, typeRole: DirectionTypes.HORIZONTAL_RIGHT }
-                        ]
-
-                        delegate: FlatRadioButton {
-                            ButtonGroup.group: directionButtonList.radioButtonGroup
-
-                            iconCode: modelData["iconRole"]
-                            checked: root.model && !root.model.direction.isUndefined ? root.model.direction.value === modelData["typeRole"]
-                                                                                     : false
-                            onToggled: {
-                                root.model.direction.value = modelData["typeRole"]
-                            }
-                        }
-                    }
-                }
-
-                InspectorPropertyView {
-                    titleText: qsTrc("inspector", "Head type")
-                    propertyItem: root.model ? root.model.noteheadType : null
-
-                    RadioButtonGroup {
-                        id: headTypeButtonList
-
-                        height: 40
-                        width: parent.width
-
-                        model: [
-                            { iconRole: IconCode.NONE, textRole: qsTrc("inspector", "Auto"), typeRole: NoteHead.TYPE_AUTO },
-                            { iconRole: IconCode.NOTE_HEAD_QUARTER, typeRole: NoteHead.TYPE_QUARTER },
-                            { iconRole: IconCode.NOTE_HEAD_HALF, typeRole: NoteHead.TYPE_HALF },
-                            { iconRole: IconCode.NOTE_HEAD_WHOLE, typeRole: NoteHead.TYPE_WHOLE },
-                            { iconRole: IconCode.NOTE_HEAD_BREVIS, typeRole: NoteHead.TYPE_BREVIS }
-                        ]
-
-                        delegate: FlatRadioButton {
-                            ButtonGroup.group: headTypeButtonList.radioButtonGroup
-
-                            iconCode: modelData["iconRole"]
-                            text: modelData["textRole"]
-
-                            checked: root.model && !root.model.noteheadType.isUndefined ? root.model.noteheadType.value === modelData["typeRole"]
-                                                                                        : false
-                            onToggled: {
-                                root.model.noteheadType.value = modelData["typeRole"]
-                            }
-                        }
-                    }
-                }
-
-                InspectorPropertyView {
-                    anchors.left: parent.left
-                    anchors.right: parent.horizontalCenter
-                    anchors.rightMargin: 2
-
-                    titleText: qsTrc("inspector", "Line thickness")
-                    propertyItem: root.model ? root.model.lineThickness : null
-
-                    IncrementalPropertyControl {
-                        isIndeterminate: root.model ? root.model.lineThickness.isUndefined : false
-                        currentValue: root.model ? root.model.lineThickness.value : 0
-                        step: 0.1
-                        maxValue: 10
-                        minValue: 0.1
-                        decimals: 2
-
-                        onValueEdited: { root.model.lineThickness.value = newValue }
-                    }
+                    onValueEdited: { root.model.lineThickness.value = newValue }
                 }
             }
         }
