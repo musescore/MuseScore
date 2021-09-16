@@ -216,8 +216,12 @@ bool ProjectFilesController::closeOpenedProject()
 
 IInteractive::Button ProjectFilesController::askAboutSavingScore(const io::path& filePath)
 {
+    QString scoreName = qtrc("project", "Untitled");
+    if (!filePath.empty()) {
+        scoreName = io::completebasename(filePath).toQString();
+    }
     std::string title = qtrc("project", "Do you want to save changes to the score “%1” before closing?")
-                        .arg(io::completebasename(filePath).toQString()).toStdString();
+                        .arg(scoreName).toStdString();
 
     std::string body = trc("project", "Your changes will be lost if you don’t save them.");
 
