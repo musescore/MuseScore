@@ -88,6 +88,7 @@ Rectangle {
         FamilyView {
             id: familyView
 
+            Layout.minimumWidth: 200
             Layout.preferredWidth: root.canSelectMultipleInstruments ? root.width / 5 : 0
             Layout.fillWidth: !root.canSelectMultipleInstruments
             Layout.fillHeight: true
@@ -117,6 +118,7 @@ Rectangle {
         InstrumentsView {
             id: instrumentsView
 
+            Layout.minimumWidth: 276
             Layout.preferredWidth: root.canSelectMultipleInstruments ? root.width / 4 : 0
             Layout.fillWidth: !root.canSelectMultipleInstruments
             Layout.fillHeight: true
