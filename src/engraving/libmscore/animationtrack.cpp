@@ -47,7 +47,7 @@ void AnimationTrack::setPropertyName(QString value)
 int AnimationTrack::keyIndexForTick(Fraction tick)
 {
     for (int i = 0; i < _keys.size(); ++i) {
-        AnimationKey* v = _keys.at(0);
+        AnimationKey* v = _keys.at(i);
         if (v->tick() > tick) {
             return i - 1;
         }
