@@ -114,8 +114,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/chordsymbols/chordsymbolsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/clefs/clefsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/clefs/clefsettingsmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/models/notation/crescendos/crescendosettingsmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/models/notation/crescendos/crescendosettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/crescendosettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/crescendosettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/fermatas/fermatasettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/fermatas/fermatasettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/frames/horizontalframesettingsmodel.cpp
