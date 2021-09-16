@@ -96,6 +96,10 @@ EngravingObject::EngravingObject(const EngravingObject& se)
 
 EngravingObject::~EngravingObject()
 {
+    for (EngravingObject* c : m_children) {
+        c->m_parent = nullptr;
+    }
+
     if (!isDummy() && !isScore()) {
         Score* sc = score();
         IF_ASSERT_FAILED(sc) {
@@ -670,6 +674,10 @@ void EngravingObject::addChild(EngravingObject* o)
 
 void EngravingObject::removeChild(EngravingObject* o)
 {
+    IF_ASSERT_FAILED(o->m_parent == this) {
+        return;
+    }
+    o->m_parent = nullptr;
     m_children.remove(o);
 }
 
