@@ -394,7 +394,7 @@ void PianorollAutomationCurves::finishDrag()
     Ms::Measure* lm = curScore->lastMeasure();
     Ms::Fraction end = lm->tick() + lm->ticks();
 
-    double endTicks = end.numerator() / (double)end.denominator();
+    double endTicks = end.toDouble();
 
     double val = pixYToValue(m_lastMousePos.y(), pMin, pMax);
     double tick = pixelXToWholeNote(m_lastMousePos.x());
@@ -560,7 +560,8 @@ void PianorollAutomationCurves::paint(QPainter* p)
         int y = valueToPixY(val, pMin, pMax);
         int x = wholeNoteToPixelX(tick);
 
-        points[tick] = QPoint(x, y);
+        int iticks = Ms::Fraction::fromFloat(tick).ticks();
+        points[iticks] = QPoint(x, y);
     }
 
     //Draw lines between points

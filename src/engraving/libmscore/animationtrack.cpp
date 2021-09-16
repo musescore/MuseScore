@@ -104,25 +104,6 @@ void AnimationTrack::removeKey(Fraction tick)
     }
 }
 
-//void AnimationTrack::addKey(AnimationKey* vertex)
-//{
-//    int prevIdx = keyIndexForTick(vertex->tick());
-
-//    if (prevIdx == -1) {
-//        _keys.push_front(vertex);
-//        return;
-//    }
-
-//    AnimationKey* prevVert = _keys.at(prevIdx);
-//    if (prevVert->tick() == vertex->tick()) {
-//        prevVert->setValue(vertex->value());
-//        delete vertex;
-//        return;
-//    }
-
-//    _keys.insert(prevIdx + 1, vertex);
-//}
-
 float AnimationTrack::evaluate(Fraction tick)
 {
     int index = keyIndexForTick(tick);
@@ -145,8 +126,8 @@ float AnimationTrack::evaluate(Fraction tick)
     Ms::Fraction t0 = k0->tick();
     Ms::Fraction t1 = k1->tick();
 
-    double t0d = t0.numerator() / (double)t0.denominator();
-    double t1d = t1.numerator() / (double)t1.denominator();
+    double t0d = t0.toDouble();
+    double t1d = t1.toDouble();
 
     double tmd = tick.numerator() / (double)tick.denominator();
     double ratio = (tmd - t0d) / (t1d - t0d);
