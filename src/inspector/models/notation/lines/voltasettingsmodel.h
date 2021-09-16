@@ -30,22 +30,18 @@ class VoltaSettingsModel : public LineSettingsModel
     Q_OBJECT
 
     Q_PROPERTY(PropertyItem * repeatCount READ repeatCount CONSTANT)
-    Q_PROPERTY(PropertyItem * lineType READ lineType CONSTANT)
 
 public:
     explicit VoltaSettingsModel(QObject* parent, IElementRepositoryService* repository);
 
     PropertyItem* repeatCount() const;
-    PropertyItem* lineType() const;
 
 private:
     void createProperties() override;
-    void requestElements() override;
     void loadProperties() override;
     void resetProperties() override;
 
     PropertyItem* m_repeatCount = nullptr;
-    PropertyItem* m_lineType = nullptr;
 };
 }
 

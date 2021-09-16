@@ -39,6 +39,10 @@ class LineSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(PropertyItem * isLineVisible READ isLineVisible CONSTANT)
     Q_PROPERTY(PropertyItem * isDiagonalLocked READ isDiagonalLocked CONSTANT)
 
+    Q_PROPERTY(PropertyItem* beginingHookType READ beginingHookType CONSTANT)
+    Q_PROPERTY(PropertyItem* endHookType READ endHookType CONSTANT)
+    Q_PROPERTY(PropertyItem* hookHeight READ hookHeight CONSTANT)
+
     Q_PROPERTY(PropertyItem * beginingText READ beginingText CONSTANT)
     Q_PROPERTY(PropertyItem * beginingTextHorizontalOffset READ beginingTextHorizontalOffset CONSTANT)
     Q_PROPERTY(PropertyItem * beginingTextVerticalOffset READ beginingTextVerticalOffset CONSTANT)
@@ -52,7 +56,7 @@ class LineSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(PropertyItem * endTextVerticalOffset READ endTextVerticalOffset CONSTANT)
 
 public:
-    explicit LineSettingsModel(QObject* parent, IElementRepositoryService* repository);
+    explicit LineSettingsModel(QObject* parent, IElementRepositoryService* repository, Ms::ElementType elementType = Ms::ElementType::INVALID, const QString& title = QString());
 
     PropertyItem* lineStyle() const;
     PropertyItem* placement() const;
@@ -63,6 +67,10 @@ public:
 
     PropertyItem* isLineVisible() const;
     PropertyItem* isDiagonalLocked() const;
+
+    PropertyItem* beginingHookType() const;
+    PropertyItem* endHookType() const;
+    PropertyItem* hookHeight() const;
 
     PropertyItem* beginingText() const;
     PropertyItem* beginingTextHorizontalOffset() const;
@@ -101,6 +109,10 @@ private:
 
     PropertyItem* m_isLineVisible = nullptr;
     PropertyItem* m_isDiagonalLocked = nullptr;
+
+    PropertyItem* m_beginingHookType = nullptr;
+    PropertyItem* m_endHookType = nullptr;
+    PropertyItem* m_hookHeight = nullptr;
 
     PropertyItem* m_beginingText = nullptr;
     PropertyItem* m_beginingTextHorizontalOffset = nullptr;

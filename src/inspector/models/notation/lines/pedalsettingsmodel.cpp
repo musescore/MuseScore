@@ -19,40 +19,42 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#include "voltasettingsmodel.h"
+#include "pedalsettingsmodel.h"
 
 #include "translation.h"
 
 using namespace mu::inspector;
 
-VoltaSettingsModel::VoltaSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : LineSettingsModel(parent, repository, Ms::ElementType::VOLTA, qtrc("inspector", "Volta"))
+PedalSettingsModel::PedalSettingsModel(QObject* parent, IElementRepositoryService* repository)
+    : LineSettingsModel(parent, repository, Ms::ElementType::PEDAL)
 {
+    setModelType(InspectorModelType::TYPE_PEDAL);
+    setTitle(qtrc("inspector", "Pedal"));
+    setIcon(ui::IconCode::Code::PEDAL_MARKING);
 }
 
-PropertyItem* VoltaSettingsModel::repeatCount() const
+PropertyItem* PedalSettingsModel::showPedalSymbol() const
 {
-    return m_repeatCount;
+    return m_showPedalSymbol;
 }
 
-void VoltaSettingsModel::createProperties()
+void PedalSettingsModel::createProperties()
 {
     LineSettingsModel::createProperties();
 
-    m_repeatCount = buildPropertyItem(Ms::Pid::REPEAT_COUNT);
+    m_showPedalSymbol = buildPropertyItem(Ms::Pid::SYMBOL);
 }
 
-void VoltaSettingsModel::loadProperties()
+void PedalSettingsModel::loadProperties()
 {
     LineSettingsModel::loadProperties();
 
-    loadPropertyItem(m_repeatCount);
+    loadPropertyItem(m_showPedalSymbol);
 }
 
-void VoltaSettingsModel::resetProperties()
+void PedalSettingsModel::resetProperties()
 {
     LineSettingsModel::resetProperties();
 
-    m_repeatCount->resetToDefault();
+    m_showPedalSymbol->resetToDefault();
 }

@@ -59,6 +59,10 @@ static const QMap<Ms::ElementType, AbstractInspectorModel::InspectorModelType> N
     { Ms::ElementType::OTTAVA_SEGMENT, AbstractInspectorModel::InspectorModelType::TYPE_OTTAVA },
     { Ms::ElementType::VOLTA, AbstractInspectorModel::InspectorModelType::TYPE_VOLTA },
     { Ms::ElementType::VOLTA_SEGMENT, AbstractInspectorModel::InspectorModelType::TYPE_VOLTA },
+    { Ms::ElementType::PALM_MUTE, AbstractInspectorModel::InspectorModelType::TYPE_PALM_MUTE },
+    { Ms::ElementType::PALM_MUTE_SEGMENT, AbstractInspectorModel::InspectorModelType::TYPE_PALM_MUTE },
+    { Ms::ElementType::LET_RING, AbstractInspectorModel::InspectorModelType::TYPE_LET_RING },
+    { Ms::ElementType::LET_RING_SEGMENT, AbstractInspectorModel::InspectorModelType::TYPE_LET_RING },
     { Ms::ElementType::STAFFTYPE_CHANGE, AbstractInspectorModel::InspectorModelType::TYPE_STAFF_TYPE_CHANGES },
     { Ms::ElementType::TBOX, AbstractInspectorModel::InspectorModelType::TYPE_TEXT_FRAME },// text frame
     { Ms::ElementType::VBOX, AbstractInspectorModel::InspectorModelType::TYPE_VERTICAL_FRAME },// vertical frame
@@ -76,10 +80,12 @@ static const QMap<Ms::ElementType, AbstractInspectorModel::InspectorModelType> N
     { Ms::ElementType::MEASURE_REPEAT, AbstractInspectorModel::InspectorModelType::TYPE_MEASURE_REPEAT }
 };
 
-AbstractInspectorModel::AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository)
-    : QObject(parent)
+AbstractInspectorModel::AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository, Ms::ElementType elementType, const QString& title)
+    : QObject(parent), m_elementType(elementType)
 {
     m_repository = repository;
+
+    setTitle(title);
 
     if (!m_repository) {
         return;
@@ -246,6 +252,13 @@ void AbstractInspectorModel::updateProperties()
 
     if (!isEmpty()) {
         loadProperties();
+    }
+}
+
+void AbstractInspectorModel::requestElements()
+{
+    if (m_elementType != Ms::ElementType::INVALID) {
+        m_elementList = m_repository->findElementsByType(m_elementType);
     }
 }
 

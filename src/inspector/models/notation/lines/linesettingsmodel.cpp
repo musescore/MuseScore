@@ -26,8 +26,8 @@
 
 using namespace mu::inspector;
 
-LineSettingsModel::LineSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository)
+LineSettingsModel::LineSettingsModel(QObject* parent, IElementRepositoryService* repository, Ms::ElementType elementType, const QString &title)
+    : AbstractInspectorModel(parent, repository, elementType, title)
 {
     createProperties();
 }
@@ -48,6 +48,10 @@ void LineSettingsModel::createProperties()
 
     m_isLineVisible = buildPropertyItem(Ms::Pid::LINE_VISIBLE);
     m_isDiagonalLocked = buildPropertyItem(Ms::Pid::DIAGONAL);
+
+    m_beginingHookType = buildPropertyItem(Ms::Pid::BEGIN_HOOK_TYPE);
+    m_endHookType = buildPropertyItem(Ms::Pid::END_HOOK_TYPE);
+    m_hookHeight = buildPropertyItem(Ms::Pid::END_HOOK_HEIGHT);
 
     if (isTextVisible(BeginingText)) {
         m_beginingText = buildPropertyItem(Ms::Pid::BEGIN_TEXT);
@@ -101,6 +105,10 @@ void LineSettingsModel::loadProperties()
     loadPropertyItem(m_isLineVisible);
     loadPropertyItem(m_isDiagonalLocked);
 
+    loadPropertyItem(m_beginingHookType);
+    loadPropertyItem(m_endHookType);
+    loadPropertyItem(m_hookHeight);
+
     loadPropertyItem(m_beginingText);
     loadPropertyItem(m_beginingTextHorizontalOffset, [](const QVariant& elementPropertyValue) -> QVariant {
         return DataFormatter::roundDouble(elementPropertyValue.value<PointF>().x());
@@ -138,6 +146,9 @@ void LineSettingsModel::resetProperties()
         m_dashGapLength,
         m_isLineVisible,
         m_isDiagonalLocked,
+        m_beginingHookType,
+        m_endHookType,
+        m_hookHeight,
         m_beginingText,
         m_beginingTextHorizontalOffset,
         m_beginingTextVerticalOffset,
@@ -189,6 +200,21 @@ PropertyItem* LineSettingsModel::isLineVisible() const
 PropertyItem* LineSettingsModel::isDiagonalLocked() const
 {
     return m_isDiagonalLocked;
+}
+
+PropertyItem* LineSettingsModel::beginingHookType() const
+{
+    return m_beginingHookType;
+}
+
+PropertyItem* LineSettingsModel::endHookType() const
+{
+    return m_endHookType;
+}
+
+PropertyItem* LineSettingsModel::hookHeight() const
+{
+    return m_hookHeight;
 }
 
 PropertyItem* LineSettingsModel::beginingText() const

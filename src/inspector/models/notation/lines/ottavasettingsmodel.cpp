@@ -27,10 +27,9 @@
 using namespace mu::inspector;
 
 OttavaSettingsModel::OttavaSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : LineSettingsModel(parent, repository)
+    : LineSettingsModel(parent, repository, Ms::ElementType::OTTAVA)
 {
     setTitle(qtrc("inspector", "Ottava"));
-    createProperties();
 }
 
 PropertyItem* OttavaSettingsModel::ottavaType() const
@@ -65,9 +64,4 @@ void OttavaSettingsModel::resetProperties()
 
     m_ottavaType->resetToDefault();
     m_showNumbersOnly->resetToDefault();
-}
-
-void OttavaSettingsModel::requestElements()
-{
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::OTTAVA);
 }
