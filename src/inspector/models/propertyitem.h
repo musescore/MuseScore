@@ -36,6 +36,7 @@ class PropertyItem : public QObject
     Q_PROPERTY(QVariant value READ value WRITE setValue NOTIFY valueChanged)
     Q_PROPERTY(QVariant defaultValue READ defaultValue NOTIFY defaultValueChanged)
     Q_PROPERTY(bool isUndefined READ isUndefined NOTIFY isUndefinedChanged)
+    Q_PROPERTY(bool isVisible READ isVisible NOTIFY isVisibleChanged)
     Q_PROPERTY(bool isEnabled READ isEnabled NOTIFY isEnabledChanged)
     Q_PROPERTY(bool isStyled READ isStyled NOTIFY isStyledChanged)
     Q_PROPERTY(bool isModified READ isModified NOTIFY isModifiedChanged)
@@ -54,6 +55,7 @@ public:
     QVariant defaultValue() const;
     bool isUndefined() const;
     bool isEnabled() const;
+    bool isVisible() const;
     bool isStyled() const;
     bool isModified() const;
 
@@ -63,6 +65,7 @@ public slots:
     void setValue(const QVariant& value);
     void setDefaultValue(const QVariant& defaultValue);
     void setIsEnabled(bool isEnabled);
+    void setIsVisible(bool isVisible);
 
 signals:
     void valueChanged(QVariant value);
@@ -70,6 +73,7 @@ signals:
     void isUndefinedChanged(bool isUndefined);
     void isEnabledChanged(bool isEnabled);
     void isStyledChanged();
+    void isVisibleChanged(bool isVisible);
     void isModifiedChanged(bool isModified);
 
     void propertyModified(Ms::Pid propertyId, QVariant newValue);
@@ -82,6 +86,7 @@ private:
     QVariant m_defaultValue;
     QVariant m_currentValue;
     bool m_isEnabled = false;
+    bool m_isVisible = false;
 };
 }
 

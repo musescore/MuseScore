@@ -22,43 +22,57 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
-import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
+import MuseScore.Ui 1.0
 import MuseScore.Inspector 1.0
 
-import "../../common"
-import "internal"
+import "../../../common"
 
 Column {
     id: root
 
     property QtObject model: null
 
-    objectName: "PedalSettings"
+    property alias possibleEndHookTypes: lineTypeSection.possibleEndHookTypes
+
+    width: parent.width
 
     spacing: 12
 
-    LineTypeSection {
-        endHookType: root.model ? root.model.endHookType : null
-        thickness: root.model ? root.model.thickness : null
-        hookHeight: root.model ? root.model.hookHeight : null
+    Column {
+        width: parent.width
 
-        possibleEndHookTypes: [
-            { iconCode: IconCode.LINE_NORMAL, value: PedalTypes.HOOK_TYPE_NONE },
-            { iconCode: IconCode.LINE_WITH_END_HOOK, value: PedalTypes.HOOK_TYPE_RIGHT_ANGLE },
-            { iconCode: IconCode.LINE_WITH_ANGLED_END_HOOK, value: PedalTypes.HOOK_TYPE_ACUTE_ANGLE },
-            { iconCode: IconCode.LINE_PEDAL_STAR_ENDING, value: PedalTypes.HOOK_TYPE_STAR }
-        ]
+        spacing: 6
+
+        CheckBox {
+            id: showLineCheckBox
+
+            isIndeterminate: root.model ? root.model.isLineVisible.isUndefined : false
+            checked: root.model && !isIndeterminate ? root.model.isLineVisible.value : false
+            text: qsTrc("inspector", "Show line")
+
+            onClicked: {
+                root.model.isLineVisible.value = !checked
+            }
+        }
+
+        CheckBox {
+            isIndeterminate: root.model ? root.model.allowDiagonal.isUndefined : false
+            checked: root.model && !isIndeterminate ? root.model.allowDiagonal.value : false
+            text: qsTrc("inspector", "Allow diagonal")
+
+            onClicked: {
+                root.model.allowDiagonal.value = !checked
+            }
+        }
     }
 
-    CheckBox {
-        id: showBothSideHookCheckbox
+    LineTypeSection {
+       id: lineTypeSection
 
-        /*isIndeterminate: model ? model.isDefaultTempoForced.isUndefined : false
-            checked: model && !isIndeterminate ? model.isDefaultTempoForced.value : false*/
-        text: qsTrc("inspector", "Show hook on both ends")
-
-        //onClicked: { model.isDefaultTempoForced.value = !checked }
+       endHookType: root.model ? root.model.endHookType : null
+       thickness: root.model ? root.model.thickness : null
+       hookHeight: root.model ? root.model.hookHeight : null
     }
 
     SeparatorLine { anchors.margins: -10 }
@@ -69,7 +83,11 @@ Column {
         dashGapLength: root.model ? root.model.dashGapLength : null
     }
 
+    SeparatorLine { anchors.margins: -10; visible: placementSection }
+
     PlacementSection {
+        id: placementSection
+
         propertyItem: root.model ? root.model.placement : null
     }
 }

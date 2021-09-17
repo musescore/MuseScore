@@ -26,7 +26,7 @@
 using namespace mu::inspector;
 
 PropertyItem::PropertyItem(const Ms::Pid propertyId, QObject* parent)
-    : QObject(parent)
+    : QObject(parent), m_isVisible(true)
 {
     m_propertyId = propertyId;
 
@@ -90,6 +90,11 @@ bool PropertyItem::isEnabled() const
     return m_isEnabled;
 }
 
+bool PropertyItem::isVisible() const
+{
+    return m_isVisible;
+}
+
 bool PropertyItem::isStyled() const
 {
     return m_styleId != Ms::Sid::NOSTYLE;
@@ -136,4 +141,14 @@ void PropertyItem::setIsEnabled(bool isEnabled)
 
     m_isEnabled = isEnabled;
     emit isEnabledChanged(m_isEnabled);
+}
+
+void PropertyItem::setIsVisible(bool isVisible)
+{
+    if (m_isVisible == isVisible) {
+        return;
+    }
+
+    m_isVisible = isVisible;
+    emit isVisibleChanged(isVisible);
 }
