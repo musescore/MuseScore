@@ -509,9 +509,9 @@ void Tie::slurPos(SlurPos* sp)
         for (auto note : sc->notes()) {
             // adjust for dots
             if (startNote()->dots().size() > 0) {
-                qreal dotY = note->pos().y() + note->dots().last()->pos().y();
+                qreal dotY = note->pos().y() + note->dots().last()->y();
                 if (qAbs(y1 - dotY) < _spatium * 0.5) {
-                    xo = qMax(xo, startNote()->dots().last()->x() + startNote()->dots().last()->width());
+                    xo = qMax(xo, note->x() + note->dots().last()->x() + note->dots().last()->width());
                 }
             }
 
