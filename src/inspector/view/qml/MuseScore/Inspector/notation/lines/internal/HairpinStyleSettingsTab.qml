@@ -19,11 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+
 import MuseScore.Inspector 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
+
 import "../../../common"
 
 FocusableItem {
@@ -70,88 +72,10 @@ FocusableItem {
             }
         }
 
-        InspectorPropertyView {
-
-            titleText: qsTrc("inspector", "Style")
-            propertyItem: root.model ? root.model.lineStyle : null
-
-            RadioButtonGroup {
-                id: lineStyleButtonList
-
-                height: 30
-                width: parent.width
-
-                model: [
-                    { iconRole: IconCode.LINE_NORMAL, typeRole: LineTypes.LINE_STYLE_SOLID },
-                    { iconRole: IconCode.LINE_DASHED, typeRole: LineTypes.LINE_STYLE_DASHED },
-                    { iconRole: IconCode.LINE_DOTTED, typeRole: LineTypes.LINE_STYLE_DOTTED },
-                    { iconRole: IconCode.NONE, textRole: qsTrc("inspector", "Custom"), typeRole: LineTypes.LINE_STYLE_CUSTOM }
-                ]
-
-                delegate: FlatRadioButton {
-                    ButtonGroup.group: lineStyleButtonList.radioButtonGroup
-
-                    iconCode: modelData["iconRole"]
-                    text: modelData["textRole"]
-
-                    checked: root.model && !root.model.lineStyle.isUndefined ? root.model.lineStyle.value === modelData["typeRole"]
-                                                                             : false
-                    onToggled: {
-                        root.model.lineStyle.value = modelData["typeRole"]
-                    }
-                }
-            }
-        }
-
-        Item {
-            height: childrenRect.height
-            width: parent.width
-
-            InspectorPropertyView {
-                anchors.left: parent.left
-                anchors.right: parent.horizontalCenter
-                anchors.rightMargin: 2
-
-                visible: root.model ? root.model.dashLineLength.isEnabled : false
-                height: visible ? implicitHeight : 0
-
-                titleText: qsTrc("inspector", "Dash")
-                propertyItem: root.model ? root.model.dashLineLength : null
-
-                IncrementalPropertyControl {
-                    isIndeterminate: root.model ? root.model.dashLineLength.isUndefined : false
-                    currentValue: root.model ? root.model.dashLineLength.value : 0
-                    step: 0.1
-                    maxValue: 10
-                    minValue: 0.1
-                    decimals: 2
-
-                    onValueEdited: { root.model.dashLineLength.value = newValue }
-                }
-            }
-
-            InspectorPropertyView {
-                anchors.left: parent.horizontalCenter
-                anchors.leftMargin: 2
-                anchors.right: parent.right
-
-                visible: root.model ? root.model.dashGapLength.isEnabled : false
-                height: visible ? implicitHeight : 0
-
-                titleText: qsTrc("inspector", "Gap")
-                propertyItem: root.model ? root.model.dashGapLength : null
-
-                IncrementalPropertyControl {
-                    isIndeterminate: root.model && enabled ? root.model.dashGapLength.isUndefined : false
-                    currentValue: root.model ? root.model.dashGapLength.value : 0
-                    step: 0.1
-                    maxValue: 10
-                    minValue: 0.1
-                    decimals: 2
-
-                    onValueEdited: { root.model.dashGapLength.value = newValue }
-                }
-            }
+        LineStyleSection {
+            lineStyle: root.model ? root.model.lineStyle : null
+            dashLineLength: root.model ? root.model.dashLineLength : null
+            dashGapLength: root.model ? root.model.dashGapLength : null
         }
 
         SeparatorLine { anchors.margins: -10 }
