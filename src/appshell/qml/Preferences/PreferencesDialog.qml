@@ -98,7 +98,7 @@ StyledDialogView {
                 Layout.fillHeight: true
                 Layout.preferredWidth: 220
 
-                navigation.section: root.navigation
+                navigation.section: root.navigationSection
                 navigation.order: 1
 
                 model: preferencesModel
@@ -134,7 +134,7 @@ StyledDialogView {
             Layout.fillWidth: true
             Layout.preferredHeight: 70
 
-            navigation.section: root.navigation
+            navigation.section: root.navigationSection
             navigation.order: 100000
 
             onRevertFactorySettingsRequested: {

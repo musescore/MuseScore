@@ -38,6 +38,15 @@ Column {
 
     spacing: 20
 
+    property alias navigationPanel: navPanel
+
+    NavigationPanel {
+        id: navPanel
+        name: "NavPanel"
+        direction: NavigationPanel.Horizontal
+        enabled: root.visible
+    }
+
     Row {
         anchors.left: parent.left
         anchors.right: parent.right
@@ -56,6 +65,9 @@ Column {
             width: parent.childWidth
 
             title: qsTrc("project", "Title")
+
+            navigation.panel: root.navigationPanel
+            navigation.column: 0
         }
         GeneralInfoItem {
             id: composerInfo
@@ -65,6 +77,9 @@ Column {
             width: parent.childWidth
 
             title: qsTrc("project", "Composer")
+
+            navigation.panel: root.navigationPanel
+            navigation.column: 1
         }
     }
 
@@ -86,6 +101,9 @@ Column {
             width: parent.childWidth
 
             title: qsTrc("project", "Subtitle")
+
+            navigation.panel: root.navigationPanel
+            navigation.column: 2
         }
 
         GeneralInfoItem {
@@ -96,6 +114,9 @@ Column {
             width: parent.childWidth
 
             title: qsTrc("project", "Lyricist")
+
+            navigation.panel: root.navigationPanel
+            navigation.column: 3
         }
 
         GeneralInfoItem {
@@ -106,6 +127,9 @@ Column {
             width: parent.childWidth
 
             title: qsTrc("project", "Copyright")
+
+            navigation.panel: root.navigationPanel
+            navigation.column: 4
         }
     }
 }
