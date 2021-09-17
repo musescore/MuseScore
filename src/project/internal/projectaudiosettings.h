@@ -75,7 +75,6 @@ private:
     QString sourceTypeToString(const audio::AudioSourceType& type) const;
     QString resourceTypeToString(const audio::AudioResourceType& type) const;
 
-
     QJsonObject buildTrackObject(const ID& id) const;
 
     audio::AudioOutputParams m_masterOutputParams;

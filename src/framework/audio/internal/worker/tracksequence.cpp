@@ -66,12 +66,13 @@ TrackSequenceId TrackSequence::id() const
     return m_id;
 }
 
-RetVal<TrackId> TrackSequence::addTrack(const std::string& trackName, const midi::MidiData& midiData, const AudioParams& params)
+RetVal2<TrackId, AudioParams> TrackSequence::addTrack(const std::string& trackName, const midi::MidiData& midiData,
+                                                      const AudioParams& requiredParams)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    RetVal<TrackId> result;
-    result.val = -1;
+    RetVal2<TrackId, AudioParams> result;
+    result.val1 = -1;
 
     IF_ASSERT_FAILED(mixer()) {
         result.ret = make_ret(Err::Undefined);
@@ -91,27 +92,31 @@ RetVal<TrackId> TrackSequence::addTrack(const std::string& trackName, const midi
     track.setPlaybackData(midiData);
     track.inputHandler = std::make_shared<MidiAudioSource>(track.id, midiData);
     track.outputHandler = mixer()->addChannel(track.id, track.inputHandler).val;
-    track.setInputParams(params.in);
-    track.setOutputParams(params.out);
+    track.setInputParams(requiredParams.in);
+    track.setOutputParams(requiredParams.out);
 
     m_tracks.emplace(newId, std::make_shared<MidiTrack>(std::move(track)));
 
     m_trackAdded.send(newId);
 
-    return result.make_ok(newId);
+    result.ret = make_ret(Err::NoError);
+    result.val1 = newId;
+    result.val2 = { track.inputParams(), track.outputParams() };
+
+    return result;
 }
 
-RetVal<TrackId> TrackSequence::addTrack(const std::string& trackName, io::Device* device, const AudioParams& params)
+RetVal2<TrackId, AudioParams> TrackSequence::addTrack(const std::string& trackName, io::Device* device, const AudioParams& requiredParams)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
     NOT_IMPLEMENTED;
 
-    RetVal<TrackId> result;
+    RetVal2<TrackId, AudioParams> result;
 
     if (!device) {
         result.ret = make_ret(Err::InvalidAudioFilePath);
-        result.val = -1;
+        result.val1 = -1;
         return result;
     }
 
@@ -121,15 +126,19 @@ RetVal<TrackId> TrackSequence::addTrack(const std::string& trackName, io::Device
     track.id = newId;
     track.name = trackName;
     track.setPlaybackData(device);
-    track.setInputParams(params.in);
-    track.setOutputParams(params.out);
+    track.setInputParams(requiredParams.in);
+    track.setOutputParams(requiredParams.out);
     //TODO create AudioSource and MixerChannel
 
     m_tracks.emplace(newId, std::make_shared<AudioTrack>(std::move(track)));
 
     m_trackAdded.send(newId);
 
-    return result.make_ok(newId);
+    result.ret = make_ret(Err::NoError);
+    result.val1 = newId;
+    result.val2 = { track.inputParams(), track.outputParams() };
+
+    return result;
 }
 
 TrackName TrackSequence::trackName(const TrackId id) const

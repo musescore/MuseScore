@@ -40,10 +40,10 @@ public:
 
     virtual async::Promise<TrackIdList> trackIdList(const TrackSequenceId sequenceId) const = 0;
     virtual async::Promise<TrackName> trackName(const TrackSequenceId sequenceId, const TrackId trackId) const = 0;
-    virtual async::Promise<TrackId> addTrack(const TrackSequenceId sequenceId, const std::string& trackName, midi::MidiData&& playbackData,
-                                             AudioParams&& params) = 0;
-    virtual async::Promise<TrackId> addTrack(const TrackSequenceId sequenceId, const std::string& trackName, io::Device* playbackData,
-                                             AudioParams&& params) = 0;
+    virtual async::Promise<TrackId, AudioParams> addTrack(const TrackSequenceId sequenceId, const std::string& trackName,
+                                                          midi::MidiData&& playbackData, AudioParams&& params) = 0;
+    virtual async::Promise<TrackId, AudioParams> addTrack(const TrackSequenceId sequenceId, const std::string& trackName,
+                                                          io::Device* playbackData, AudioParams&& params) = 0;
     virtual void removeTrack(const TrackSequenceId sequenceId, const TrackId trackId) = 0;
     virtual void removeAllTracks(const TrackSequenceId sequenceId) = 0;
 
