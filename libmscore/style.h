@@ -174,6 +174,7 @@ enum class Sid {
       keyBarlineDistance,
       systemHeaderDistance,
       systemHeaderTimeSigDistance,
+      systemTrailerRightMargin,
 
       clefBarlineDistance,
       timesigBarlineDistance,

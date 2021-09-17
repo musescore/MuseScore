@@ -189,6 +189,7 @@ static const StyleType styleTypes[] {
       { Sid::keyBarlineDistance,      "keyBarlineDistance",      Spatium(1.0) },
       { Sid::systemHeaderDistance,    "systemHeaderDistance",    Spatium(2.5) },     // gould: 2.5
       { Sid::systemHeaderTimeSigDistance, "systemHeaderTimeSigDistance", Spatium(2.0) },  // gould: 2.0
+      { Sid::systemTrailerRightMargin, "systemTrailerRightMargin", Spatium(0.5) },
 
       { Sid::clefBarlineDistance,     "clefBarlineDistance",     Spatium(0.5) },
       { Sid::timesigBarlineDistance,  "timesigBarlineDistance",  Spatium(0.5) },
