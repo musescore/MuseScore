@@ -36,11 +36,23 @@ Item {
 
     signal titleClicked(var index)
 
+    QtObject {
+        id: prv
+
+        property var currentItemNavigationIndex: []
+    }
+
     NavigationPanel {
         id: navPanel
         name: "TitleListView"
         direction: NavigationPanel.Vertical
         enabled: root.visible
+
+        onNavigationEvent: {
+            if (event.type === NavigationEvent.AboutActive) {
+                event.setData("controlIndex", prv.currentItemNavigationIndex)
+            }
+        }
     }
 
     StyledTextLabel {
@@ -87,7 +99,10 @@ Item {
             navigation.name: modelData
             navigation.panel: navPanel
             navigation.row: 2 + model.index
-            onNavigationActived: item.clicked()
+            onNavigationActived: {
+                prv.currentItemNavigationIndex = [navigation.row, navigation.column]
+                item.clicked()
+            }
 
             StyledTextLabel {
                 id: titleLabel

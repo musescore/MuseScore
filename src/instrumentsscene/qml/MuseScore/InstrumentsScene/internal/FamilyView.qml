@@ -45,11 +45,23 @@ Item {
         groupsView.positionViewAtIndex(groupIndex, ListView.Beginning)
     }
 
+    QtObject {
+        id: prv
+
+        property var currentItemNavigationIndex: []
+    }
+
     NavigationPanel {
         id: navPanel
         name: "FamilyView"
         direction: NavigationPanel.Vertical
         enabled: root.visible
+
+        onNavigationEvent: {
+            if (event.type === NavigationEvent.AboutActive) {
+                event.setData("controlIndex", prv.currentItemNavigationIndex)
+            }
+        }
     }
 
     StyledTextLabel {
@@ -75,6 +87,7 @@ Item {
         navigation.row: 1
 
         onActivated: {
+            prv.currentItemNavigationIndex = [navigation.row, navigation.column]
             root.genreSelected(genreBox.currentIndex)
         }
     }
@@ -106,7 +119,10 @@ Item {
             navigation.panel: navPanel
             navigation.row: 2 + model.index
 
-            onNavigationActived: item.clicked()
+            onNavigationActived: {
+                prv.currentItemNavigationIndex = [navigation.row, navigation.column]
+                item.clicked()
+            }
 
             StyledTextLabel {
                 anchors.fill: parent

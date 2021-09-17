@@ -35,19 +35,31 @@ Item {
 
     signal addSelectedInstrumentsToScoreRequested()
 
-    NavigationPanel {
-        id: navPanel
-        name: "InstrumentsView"
-        direction: NavigationPanel.Vertical
-        enabled: root.visible
-    }
-
     function clearSearch() {
         searchField.clear()
     }
 
     function focusInstrument(instrumentIndex) {
         instrumentsView.positionViewAtIndex(instrumentIndex, ListView.Beginning)
+    }
+
+    QtObject {
+        id: prv
+
+        property var currentItemNavigationIndex: []
+    }
+
+    NavigationPanel {
+        id: navPanel
+        name: "InstrumentsView"
+        direction: NavigationPanel.Vertical
+        enabled: root.visible
+
+        onNavigationEvent: {
+            if (event.type === NavigationEvent.AboutActive) {
+                event.setData("controlIndex", prv.currentItemNavigationIndex)
+            }
+        }
     }
 
     StyledTextLabel {
@@ -71,6 +83,12 @@ Item {
         navigation.name: "SearchInstruments"
         navigation.panel: navPanel
         navigation.row: 1
+
+        onFocusChanged: {
+            if (activeFocus) {
+                prv.currentItemNavigationIndex = [navigation.row, navigation.column]
+            }
+        }
 
         onSearchTextChanged: {
             root.instrumentsModel.setSearchText(searchText)
@@ -105,6 +123,7 @@ Item {
             navigation.row: 2 + model.index
 
             onNavigationActived: {
+                prv.currentItemNavigationIndex = [navigation.row, navigation.column]
                 item.clicked()
             }
 
