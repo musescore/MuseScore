@@ -31,6 +31,7 @@ GlissandoSettingsModel::GlissandoSettingsModel(QObject* parent, IElementReposito
     setModelType(InspectorModelType::TYPE_GLISSANDO);
     setTitle(qtrc("inspector", "Glissando"));
     setIcon(ui::IconCode::Code::GLISSANDO);
+
     createProperties();
 }
 

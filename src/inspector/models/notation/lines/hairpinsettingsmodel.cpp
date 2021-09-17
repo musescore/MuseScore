@@ -96,16 +96,3 @@ void HairpinSettingsModel::requestElements()
         return hairpin->hairpinType() == Ms::HairpinType::CRESC_HAIRPIN || hairpin->hairpinType() == Ms::HairpinType::DECRESC_HAIRPIN;
     });
 }
-
-bool HairpinSettingsModel::isTextVisible(TextType type) const
-{
-    switch (type) {
-    case TextType::BeginingText:
-    case TextType::ContiniousText:
-        return true;
-    case TextType::EndText:
-        return false;
-    }
-
-    return false;
-}

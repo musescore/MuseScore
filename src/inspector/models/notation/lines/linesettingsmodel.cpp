@@ -28,7 +28,8 @@
 
 using namespace mu::inspector;
 
-LineSettingsModel::LineSettingsModel(QObject* parent, IElementRepositoryService* repository, Ms::ElementType elementType, const QString &title)
+LineSettingsModel::LineSettingsModel(QObject* parent, IElementRepositoryService* repository, Ms::ElementType elementType,
+                                     const QString& title)
     : AbstractInspectorModel(parent, repository, elementType, title)
 {
     createProperties();
@@ -58,18 +59,22 @@ void LineSettingsModel::createProperties()
     if (isTextVisible(BeginingText)) {
         m_beginingText = buildPropertyItem(Ms::Pid::BEGIN_TEXT);
         m_beginingTextHorizontalOffset = buildPropertyItem(Ms::Pid::BEGIN_TEXT_OFFSET, [this](const int pid, const QVariant& newValue) {
-            onPropertyValueChanged(static_cast<Ms::Pid>(pid), PointF(newValue.toDouble(), m_beginingTextVerticalOffset->value().toDouble()));
+            onPropertyValueChanged(static_cast<Ms::Pid>(pid), PointF(newValue.toDouble(),
+                                                                     m_beginingTextVerticalOffset->value().toDouble()));
         });
 
         m_beginingTextVerticalOffset = buildPropertyItem(Ms::Pid::BEGIN_TEXT_OFFSET, [this](const int pid, const QVariant& newValue) {
-            onPropertyValueChanged(static_cast<Ms::Pid>(pid), PointF(m_beginingTextHorizontalOffset->value().toDouble(), newValue.toDouble()));
+            onPropertyValueChanged(static_cast<Ms::Pid>(pid),
+                                   PointF(m_beginingTextHorizontalOffset->value().toDouble(), newValue.toDouble()));
         });
     }
 
     if (isTextVisible(ContiniousText)) {
         m_continiousText = buildPropertyItem(Ms::Pid::CONTINUE_TEXT);
-        m_continiousTextHorizontalOffset = buildPropertyItem(Ms::Pid::CONTINUE_TEXT_OFFSET, [this](const int pid, const QVariant& newValue) {
-            onPropertyValueChanged(static_cast<Ms::Pid>(pid), PointF(newValue.toDouble(), m_continiousTextVerticalOffset->value().toDouble()));
+        m_continiousTextHorizontalOffset = buildPropertyItem(Ms::Pid::CONTINUE_TEXT_OFFSET, [this](const int pid,
+                                                                                                   const QVariant& newValue) {
+            onPropertyValueChanged(static_cast<Ms::Pid>(pid),
+                                   PointF(newValue.toDouble(), m_continiousTextVerticalOffset->value().toDouble()));
         });
 
         m_continiousTextVerticalOffset = buildPropertyItem(Ms::Pid::CONTINUE_TEXT_OFFSET, [this](const int pid, const QVariant& newValue) {
@@ -265,7 +270,7 @@ PropertyItem* LineSettingsModel::endTextVerticalOffset() const
 }
 
 void LineSettingsModel::onUpdateLinePropertiesAvailability()
-{ 
+{
     bool isLineAvailable = m_isLineVisible->value().toBool();
 
     m_beginingHookType->setIsEnabled(isLineAvailable);
@@ -281,7 +286,8 @@ void LineSettingsModel::onUpdateLinePropertiesAvailability()
     m_dashGapLength->setIsEnabled(isLineAvailable && areDashPropertiesAvailable);
 }
 
-bool LineSettingsModel::isTextVisible(TextType) const
+bool LineSettingsModel::isTextVisible(TextType type) const
 {
-    return true;
+    //! NOTE: the end text is hidden for most lines by default
+    return type != TextType::EndText;
 }
