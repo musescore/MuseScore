@@ -111,11 +111,6 @@ public:
     ~Chord();
     Chord& operator=(const Chord&) = delete;
 
-    // Score Tree functions
-    EngravingObject* treeParent() const override;
-    EngravingObject* treeChild(int idx) const override;
-    int treeChildCount() const override;
-
     Chord* clone() const override { return new Chord(*this, false); }
     EngravingItem* linkedClone() override { return new Chord(*this, true); }
     void undoUnlink() override;

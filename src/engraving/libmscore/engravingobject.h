@@ -247,43 +247,6 @@ public:
 
     const EngravingObjectList& children() const { return m_children; }
 
-    // Score Tree functions
-    virtual EngravingObject* treeParent() const { return m_parent; }
-    virtual EngravingObject* treeChild(int n) const { Q_UNUSED(n); return nullptr; }
-    virtual int treeChildCount() const { return 0; }
-
-    int treeChildIdx(EngravingObject* child) const;
-
-    // For iterating over child elements
-    class iterator
-    {
-        EngravingObject* el;
-        int i;
-    public:
-        iterator(EngravingObject* el, int pos)
-            : el(el), i(pos) {}
-        iterator operator++() { return iterator(el, i++); }
-        EngravingObject* operator*() { return el->treeChild(i); }
-        bool operator!=(const iterator& o) const { return o.el != el || o.i != i; }
-    };
-
-    class const_iterator
-    {
-        const EngravingObject* el;
-        int i;
-    public:
-        const_iterator(const EngravingObject* el, int pos)
-            : el(el), i(pos) {}
-        const_iterator operator++() { return const_iterator(el, i++); }
-        const EngravingObject* operator*() { return el->treeChild(i); }
-        bool operator!=(const const_iterator& o) const { return o.el != el || o.i != i; }
-    };
-
-    iterator begin() { return iterator(this, 0); }
-    iterator end() { return iterator(this, treeChildCount()); }
-    const_iterator begin() const { return const_iterator(this, 0); }
-    const_iterator end() const { return const_iterator(this, treeChildCount()); }
-
     // context
     virtual void setScore(Score* s);
     Score* score(bool required = true) const;

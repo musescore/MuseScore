@@ -43,11 +43,6 @@ public:
 
     void hack_toRestType();
 
-    // Score Tree functions
-    EngravingObject* treeParent() const override;
-    EngravingObject* treeChild(int idx) const override;
-    int treeChildCount() const override;
-
     Rest& operator=(const Rest&) = delete;
 
     Rest* clone() const override { return new Rest(*this, false); }

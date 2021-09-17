@@ -766,7 +766,7 @@ Shape Tuplet::shape() const
 
 void Tuplet::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
-    for (EngravingObject* child : *this) {
+    for (EngravingObject* child : children()) {
         if (child == _number && !all) {
             continue; // don't scan number unless all is true
         }

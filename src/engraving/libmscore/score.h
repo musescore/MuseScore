@@ -567,12 +567,6 @@ public:
 
     static void onElementDestruction(EngravingItem* se);
 
-    // Score Tree functions
-    EngravingObject* treeParent() const override;
-    EngravingObject* treeChild(int idx) const override;
-    int treeChildCount() const override;
-    void dumpScoreTree();  // for debugging purposes
-
     mu::engraving::RootItem* rootItem() const { return m_rootItem; }
     mu::engraving::compat::DummyElement* dummy() { return m_rootItem->dummy(); }
 

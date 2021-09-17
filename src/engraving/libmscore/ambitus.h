@@ -63,11 +63,6 @@ public:
 
     Ambitus* clone() const override { return new Ambitus(*this); }
 
-    // Score Tree functions
-    EngravingObject* treeParent() const override;
-    EngravingObject* treeChild(int idx) const override;
-    int treeChildCount() const override;
-
     qreal mag() const override;
 
     void initFrom(Ambitus* a);

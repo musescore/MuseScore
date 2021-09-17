@@ -183,11 +183,6 @@ public:
 
     ~FretDiagram();
 
-    // Score Tree functions
-    EngravingObject* treeParent() const override;
-    EngravingObject* treeChild(int idx) const override;
-    int treeChildCount() const override;
-
     void draw(mu::draw::Painter*) const override;
     EngravingItem* linkedClone() override;
     FretDiagram* clone() const override { return new FretDiagram(*this); }

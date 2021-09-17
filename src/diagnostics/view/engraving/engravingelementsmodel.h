@@ -36,8 +36,6 @@ class EngravingElementsModel : public QAbstractItemModel
     Q_PROPERTY(QString info READ info NOTIFY infoChanged)
     Q_PROPERTY(QString summary READ summary NOTIFY summaryChanged)
 
-    Q_PROPERTY(bool isUseTreeParent READ isUseTreeParent WRITE setIsUseTreeParent NOTIFY isUseTreeParentChanged)
-
     INJECT(diagnostics, IEngravingElementsProvider, elementsProvider)
     INJECT(diagnostics, actions::IActionsDispatcher, dispatcher)
 
@@ -53,10 +51,10 @@ public:
 
     QString info() const;
     QString summary() const;
-    bool isUseTreeParent() const;
 
     Q_INVOKABLE void init();
     Q_INVOKABLE void reload();
+    Q_INVOKABLE void dump();
 
     Q_INVOKABLE void select(QModelIndex index, bool arg);
     Q_INVOKABLE void click1(QModelIndex index);
@@ -64,10 +62,8 @@ public:
 signals:
     void infoChanged();
     void summaryChanged();
-    void isUseTreeParentChanged();
 
 public slots:
-    void setIsUseTreeParent(bool arg);
 
 private:
 
@@ -116,7 +112,6 @@ private:
 
     QString m_info;
     QString m_summary;
-    bool m_isUseTreeParent = false;
 };
 }
 

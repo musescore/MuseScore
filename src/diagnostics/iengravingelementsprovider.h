@@ -51,6 +51,9 @@ public:
     virtual void select(const Ms::EngravingObject* e, bool arg) = 0;
     virtual bool isSelected(const Ms::EngravingObject* e) const = 0;
     virtual async::Channel<const Ms::EngravingObject*, bool> selectChanged() const = 0;
+
+    // dump
+    virtual void dumpTree(const Ms::EngravingObject* e) const = 0;
 };
 }
 

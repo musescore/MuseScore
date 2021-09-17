@@ -75,11 +75,6 @@ public:
 
     void setParent(Measure* parent);
 
-    // Score Tree functions
-    EngravingObject* treeParent() const override;
-    EngravingObject* treeChild(int idx) const override;
-    int treeChildCount() const override;
-
     Tuplet* clone() const override { return new Tuplet(*this); }
     void setTrack(int val) override;
 

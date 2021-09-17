@@ -98,11 +98,6 @@ public:
 
     Accidental* clone() const override { return new Accidental(*this); }
 
-    // Score Tree functions
-    EngravingObject* treeParent() const override;
-    EngravingObject* treeChild(int idx) const override;
-    int treeChildCount() const override;
-
     QString subtypeUserName() const;
     void setSubtype(const QString& s);
     void setAccidentalType(AccidentalType t) { _accidentalType = t; }

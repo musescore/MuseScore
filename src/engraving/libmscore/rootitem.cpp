@@ -47,18 +47,3 @@ void RootItem::initDummy()
 {
     m_dummy->init();
 }
-
-EngravingObject* RootItem::treeParent() const
-{
-    return m_score->treeParent();
-}
-
-EngravingObject* RootItem::treeChild(int n) const
-{
-    return m_score->treeChild(n);
-}
-
-int RootItem::treeChildCount() const
-{
-    return m_score->treeChildCount();
-}

@@ -52,13 +52,11 @@ public:
     bool isSelected(const Ms::EngravingObject* e) const override;
     async::Channel<const Ms::EngravingObject*, bool> selectChanged() const override;
 
-    void checkTree(Ms::Score* score);
+    // dump
+    void dumpTree(const Ms::EngravingObject* e) const override;
 
 private:
-
-    void checkObjectTree(const Ms::EngravingObject* obj);
-    void dumpTree(const Ms::EngravingItem* item, int& level);
-    void dumpTreeTree(const Ms::EngravingObject* obj, int& level);
+    void dumpTree(const Ms::EngravingObject* e, int& level) const;
 
     struct ObjectStatistic
     {

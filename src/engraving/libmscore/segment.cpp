@@ -1254,7 +1254,7 @@ void Segment::scanElements(void* data, void (* func)(void*, EngravingItem*), boo
         return;
     }
 
-    for (EngravingObject* el : (*this)) {
+    for (EngravingObject* el : children()) {
         EngravingItem* e = toEngravingItem(el);
         if (all || e->systemFlag() || (score()->staff(e->staffIdx())->show() && measure()->visible(e->staffIdx()))) {
             e->scanElements(data, func, all);

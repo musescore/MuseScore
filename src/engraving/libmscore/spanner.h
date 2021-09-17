@@ -59,11 +59,6 @@ protected:
 
 public:
 
-    // Score Tree functions
-    virtual EngravingObject* treeParent() const override;
-    virtual EngravingObject* treeChild(int idx) const override;
-    virtual int treeChildCount() const override;
-
     virtual qreal mag() const override;
     virtual Fraction tick() const override;
 
@@ -181,11 +176,6 @@ protected:
 public:
 
     ~Spanner();
-
-    // Score Tree functions
-    virtual EngravingObject* treeParent() const override;
-    virtual EngravingObject* treeChild(int idx) const override;
-    virtual int treeChildCount() const override;
 
     virtual qreal mag() const override;
 

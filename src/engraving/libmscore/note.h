@@ -346,11 +346,6 @@ public:
     Chord* chord() const { return (Chord*)parent(); }
     void setParent(Chord* ch);
 
-    // Score Tree functions
-    EngravingObject* treeParent() const override;
-    EngravingObject* treeChild(int idx) const override;
-    int treeChildCount() const override;
-
     void undoUnlink() override;
 
     qreal mag() const override;

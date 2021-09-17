@@ -58,20 +58,18 @@ Rectangle {
             onClicked: elementsModel.reload()
         }
 
-        CheckBox {
-            id: modeCheckBox
-            anchors.top: parent.top
+        FlatButton {
+            id: dumpBtn
             anchors.left: reloadBtn.right
             anchors.leftMargin: 8
-            text: "Use treeParent"
-            checked: elementsModel.isUseTreeParent
-            onClicked: elementsModel.isUseTreeParent = !elementsModel.isUseTreeParent
+            text: "Dump"
+            onClicked: elementsModel.dump()
         }
 
         StyledTextLabel {
             id: summaryLabel
             anchors.top: parent.top
-            anchors.left: modeCheckBox.right
+            anchors.left: dumpBtn.right
             anchors.right: parent.right
             anchors.leftMargin: 8
             height: 32

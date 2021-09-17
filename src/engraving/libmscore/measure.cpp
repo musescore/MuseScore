@@ -2673,7 +2673,7 @@ bool Measure::isFirstInSystem() const
 
 void Measure::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
-    for (EngravingObject* el : (*this)) {
+    for (EngravingObject* el : children()) {
         if (el->isMeasure()) {
             continue;  // do not scan Measures 'inside' mmrest measure
         }

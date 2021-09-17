@@ -80,26 +80,26 @@ void TestTreeModel::tstTree(QString file)
 
 void TestTreeModel::traverseTree(EngravingObject* element)
 {
-    for (EngravingObject* child : (*element)) {
+    for (EngravingObject* child : element->children()) {
         // child should never be nullptr
         if (!child) {
             qDebug() << "EngravingItem returned nullptr in treeChild()!";
             qDebug() << "EngravingItem: " << elementToText(element);
-            qDebug() << "Number of children: " << element->treeChildCount();
+            qDebug() << "Number of children: " << element->children().size();
             qDebug() << "Children: ";
-            for (int i = 0; i < element->treeChildCount(); i++) {
-                qDebug() << element->treeChild(i);
+            for (size_t i = 0; i < element->children().size(); i++) {
+                qDebug() << element->children().at(i);
             }
         }
         QVERIFY(child);
         // if parent is not correct print some logging info and exit
-        if (child->treeParent() != element) {
+        if (child->parent() != element) {
             qDebug() << "EngravingItem does not have correct parent!";
             qDebug() << "EngravingItem name: " << elementToText(child);
-            qDebug() << "Parent in tree model: " << elementToText(child->treeParent());
+            qDebug() << "Parent in tree model: " << elementToText(child->parent());
             qDebug() << "Expected parent: " << elementToText(element);
         }
-        QCOMPARE(child->treeParent(), element);
+        QCOMPARE(child->parent(), element);
 
         // recursively apply to the rest of the tree
         traverseTree(child);

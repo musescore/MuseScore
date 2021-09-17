@@ -83,11 +83,6 @@ public:
     ChordRest& operator=(const ChordRest&) = delete;
     ~ChordRest();
 
-    // Score Tree functions
-    virtual EngravingObject* treeParent() const override;
-    virtual EngravingObject* treeChild(int idx) const override;
-    virtual int treeChildCount() const override;
-
     virtual EngravingItem* drop(EditData&) override;
     virtual void undoUnlink() override;
 

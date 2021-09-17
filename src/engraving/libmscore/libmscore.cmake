@@ -241,7 +241,6 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/scoreorder.cpp
     ${CMAKE_CURRENT_LIST_DIR}/scoreorder.h
     ${CMAKE_CURRENT_LIST_DIR}/score.h
-    ${CMAKE_CURRENT_LIST_DIR}/scoretree.cpp
     ${CMAKE_CURRENT_LIST_DIR}/segment.cpp
     ${CMAKE_CURRENT_LIST_DIR}/segment.h
     ${CMAKE_CURRENT_LIST_DIR}/segmentlist.cpp

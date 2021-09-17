@@ -1643,6 +1643,7 @@ void Score::removeElement(EngravingItem* element)
 
     if (parent) {
         parent->remove(element);
+        element->moveToDummy();
     }
 
     switch (et) {

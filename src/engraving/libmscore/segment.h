@@ -96,11 +96,6 @@ public:
 
     void setParent(Measure* parent);
 
-    // Score Tree functions
-    EngravingObject* treeParent() const override;
-    EngravingObject* treeChild(int idx) const override;
-    int treeChildCount() const override;
-
     Segment* clone() const override { return new Segment(*this); }
 
     void setScore(Score*) override;

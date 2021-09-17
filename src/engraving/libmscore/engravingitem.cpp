@@ -339,7 +339,7 @@ void EngravingItem::deleteLater()
 
 void EngravingItem::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
-    if (treeChildCount() == 0) {
+    if (children().size() == 0) {
         if (all || visible() || score()->showInvisible()) {
             func(data, this);
         }

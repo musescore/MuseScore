@@ -2728,7 +2728,7 @@ void Beam::startDrag(EditData& editData)
 
 void Beam::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
-    ChordRest* cr = toChordRest(treeParent());
+    ChordRest* cr = toChordRest(_elements[0]);
     if (!all && cr->measure()->stemless(cr->staffIdx())) {
         return;
     }

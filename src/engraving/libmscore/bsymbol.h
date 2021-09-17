@@ -37,11 +37,6 @@ public:
 
     Segment* segment() const { return (Segment*)parent(); }
 
-    // Score Tree functions
-    EngravingObject* treeParent() const override;
-    EngravingObject* treeChild(int idx) const override;
-    int treeChildCount() const override;
-
     BSymbol& operator=(const BSymbol&) = delete;
 
     void add(EngravingItem*) override;
