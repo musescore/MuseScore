@@ -32,9 +32,9 @@ import "../../../common"
 Column {
     id: root
 
-    property QtObject lineStyle: null
-    property QtObject dashLineLength: null
-    property QtObject dashGapLength: null
+    property PropertyItem lineStyle: null
+    property PropertyItem dashLineLength: null
+    property PropertyItem dashGapLength: null
 
     width: parent.width
 

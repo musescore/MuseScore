@@ -34,6 +34,7 @@ RadioDelegate {
     //!      and has the wrong type (QQuickIcon).
     //!      It can't be overridden either, as it is marked `FINAL`.
     property int iconCode: IconCode.NONE
+    property int iconFontSize: ui.theme.iconsFont.pixelSize
 
     property alias radius: backgroundRect.radius
 
@@ -105,6 +106,7 @@ RadioDelegate {
 
             StyledIconLabel {
                 iconCode: root.iconCode
+                font.pixelSize: root.iconFontSize
             }
         }
 

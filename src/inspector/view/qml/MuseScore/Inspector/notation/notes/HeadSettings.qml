@@ -104,42 +104,8 @@ FocusableItem {
                 height: implicitHeight
                 width: parent.width
 
-                InspectorPropertyView {
-                    width: root.width
-                    height: implicitHeight
-
-                    titleText: qsTrc("inspector", "Notehead type (visual only)")
+                NoteHeadTypeSelector {
                     propertyItem: root.model ? root.model.headType : null
-
-                    RadioButtonGroup {
-                        id: headTypeButtonList
-
-                        height: 30
-                        width: parent.width
-
-                        model: [
-                            { iconRole: "qrc:/resources/icons/orientation_auto.svg", typeRole: NoteHead.TYPE_AUTO },
-                            { iconRole: "qrc:/resources/icons/notehead_quarter.svg", typeRole: NoteHead.TYPE_QUARTER },
-                            { iconRole: "qrc:/resources/icons/notehead_half.svg", typeRole: NoteHead.TYPE_HALF },
-                            { iconRole: "qrc:/resources/icons/notehead_whole.svg", typeRole: NoteHead.TYPE_WHOLE },
-                            { iconRole: "qrc:/resources/icons/notehead_brevis.svg", typeRole: NoteHead.TYPE_BREVIS }
-                        ]
-
-                        delegate: FlatRadioButton {
-                            ButtonGroup.group: headTypeButtonList.radioButtonGroup
-
-                            checked: root.model && !root.model.headType.isUndefined ? root.model.headType.value === modelData["typeRole"]
-                                                                                    : false
-                            onToggled: {
-                                root.model.headType.value = modelData["typeRole"]
-                            }
-
-                            Icon {
-                                anchors.fill: parent
-                                icon: modelData["iconRole"]
-                            }
-                        }
-                    }
                 }
 
                 InspectorPropertyView {

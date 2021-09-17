@@ -20,16 +20,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
+
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Inspector 1.0
+
 import "../../../common"
 
 Item {
     id: root
 
-    property QtObject leadingSpace: undefined
-    property QtObject barWidth: undefined
+    property PropertyItem leadingSpace: null
+    property PropertyItem barWidth: null
 
     property NavigationPanel navigationPanel: null
     property int navigationRowOffset: 0

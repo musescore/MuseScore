@@ -85,6 +85,8 @@ void InspectorModule::registerUiTypes()
 {
     qmlRegisterType<InspectorListModel>("MuseScore.Inspector", 1, 0, "InspectorListModel");
     qmlRegisterUncreatableType<AbstractInspectorModel>("MuseScore.Inspector", 1, 0, "Inspector", "Not creatable as it is an enum type");
+    qmlRegisterUncreatableType<PropertyItem>("MuseScore.Inspector", 1, 0, "PropertyItem", "Not creatable from QML");
+
     qmlRegisterUncreatableType<DirectionTypes>("MuseScore.Inspector", 1, 0, "DirectionTypes", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<NoteHeadTypes>("MuseScore.Inspector", 1, 0, "NoteHead", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<BeamTypes>("MuseScore.Inspector", 1, 0, "Beam", "Not creatable as it is an enum type");

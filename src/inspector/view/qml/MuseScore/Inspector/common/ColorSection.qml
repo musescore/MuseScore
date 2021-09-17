@@ -20,14 +20,15 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Dialogs 1.2
+
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
+import MuseScore.Inspector 1.0
 
 InspectorPropertyView {
     id: root
 
-    property QtObject color: undefined
+    property PropertyItem color: undefined
 
     property NavigationPanel navigationPanel: null
     property int navigationRowOffset: 0
