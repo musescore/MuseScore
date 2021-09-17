@@ -23,6 +23,7 @@
 
 #include "libmscore/hairpin.h"
 
+#include "dataformatter.h"
 #include "translation.h"
 #include "types/hairpintypes.h"
 

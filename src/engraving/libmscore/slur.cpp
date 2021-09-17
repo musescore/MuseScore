@@ -1074,7 +1074,7 @@ SpannerSegment* Slur::layoutSystem(System* system)
     Fraction stick = system->firstMeasure()->tick();
     Fraction etick = system->lastMeasure()->endTick();
 
-    SlurSegment* slurSegment = toSlurSegment(getNextLayoutSystemSegment(system, [this](System* parent) {
+    SlurSegment* slurSegment = toSlurSegment(getNextLayoutSystemSegment(system, [](System* parent) {
         return new SlurSegment(parent);
     }));
 
