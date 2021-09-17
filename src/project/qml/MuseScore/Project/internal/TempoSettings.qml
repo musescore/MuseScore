@@ -67,10 +67,23 @@ FlatButton {
         contentWidth: content.width
         contentHeight: content.height
 
+        navigationParentControl: root.navigation
+
+        onOpened: {
+            withTempo.navigation.requestActive()
+        }
+
         ColumnLayout {
             id: content
 
             spacing: 0
+
+            property NavigationPanel navigationPanel: NavigationPanel {
+                name: "TempoSettingsPanel"
+                section: popup.navigationSection
+                direction: NavigationPanel.Both
+                order: 1
+            }
 
             CheckBox {
                 id: withTempo
@@ -81,6 +94,11 @@ FlatButton {
                 checked: root.model.withTempo
 
                 text: qsTrc("project", "Show tempo marking on my score")
+
+                navigation.name: "WithTempoBox"
+                navigation.panel: content.navigationPanel
+                navigation.row: 0
+                navigation.column: 0
 
                 onClicked: {
                     root.model.withTempo = !checked
@@ -109,6 +127,11 @@ FlatButton {
 
                     enabled: withTempo.checked
                     checked: model.index === root.model.currentTempoNoteIndex
+
+                    navigation.name: modelData.noteSymbol
+                    navigation.panel: content.navigationPanel
+                    navigation.row: 1
+                    navigation.column: model.index
 
                     onClicked: {
                         var tempo = root.model.tempo
@@ -153,6 +176,10 @@ FlatButton {
                     decimals: 0
                     maxValue: root.model.tempoValueRange().max
                     minValue: root.model.tempoValueRange().min
+
+                    navigation.panel: content.navigationPanel
+                    navigation.row: 2
+                    navigation.column: 0
 
                     onValueEdited: {
                         var tempo = root.model.tempo

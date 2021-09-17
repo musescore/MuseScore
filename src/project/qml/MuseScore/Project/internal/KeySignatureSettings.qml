@@ -61,8 +61,6 @@ FlatButton {
         contentHeight: 242
 
         navigationParentControl: root.navigation
-        navigation.name: root.navigation.name + "Popup"
-        navigation.direction: NavigationPanel.Both
 
         onOpened: {
             majorTab.navigation.requestActive()
@@ -80,10 +78,20 @@ FlatButton {
 
                 implicitHeight: 28
 
-//                property NavigationPanel navigationPanel: NavigationPanel {
-//                    name: "KeySignatureTabPanel"
-//                    direction: NavigationPanel.Both
-//                }
+                property NavigationPanel navigationPanel: NavigationPanel {
+                    name: "KeySignatureTabPanel"
+                    section: popup.navigationSection
+                    direction: NavigationPanel.Horizontal
+                    order: 1
+
+                    onNavigationEvent: {
+                        if (event.type === NavigationEvent.AboutActive) {
+                            event.setData("controlIndex", bar.currentItemNavigationIndex)
+                        }
+                    }
+                }
+
+                property var currentItemNavigationIndex: []
 
                 StyledTabButton {
                     id: majorTab
@@ -92,10 +100,12 @@ FlatButton {
                     isCurrent: bar.currentIndex === 0
 
                     navigation.name: "MajorTab"
-                    navigation.panel: popup.navigation
-                    navigation.row: 0
+                    navigation.panel: bar.navigationPanel
                     navigation.column: 0
-                    onNavigationTriggered: bar.currentIndex = 0
+                    onNavigationTriggered: {
+                        bar.currentItemNavigationIndex = [navigation.row, navigation.column]
+                        bar.currentIndex = 0
+                    }
                 }
 
                 StyledTabButton {
@@ -104,10 +114,12 @@ FlatButton {
                     isCurrent: bar.currentIndex === 1
 
                     navigation.name: "MinorTab"
-                    navigation.panel: popup.navigation
-                    navigation.row: 0
+                    navigation.panel: bar.navigationPanel
                     navigation.column: 1
-                    onNavigationTriggered: bar.currentIndex = 1
+                    onNavigationTriggered: {
+                        bar.currentItemNavigationIndex = [navigation.row, navigation.column]
+                        bar.currentIndex = 1
+                    }
                 }
             }
 
@@ -126,11 +138,10 @@ FlatButton {
                     currentSignature: root.model.keySignature
                     mode: "major"
 
-                    navigationPanel.section: popup.navigation.section
+                    navigationPanel.name: "KeySignatureMajorPanel"
+                    navigationPanel.section: popup.navigationSection
                     navigationPanel.enabled: bar.currentIndex === 0
-                    navigationPanel.order: popup.navigation.order + 1
-                    navigationRowStart: 0
-                    navigationColumnStart: 0
+                    navigationPanel.order: 2
 
                     onSignatureSelected: {
                         root.model.keySignature = signature
@@ -142,9 +153,10 @@ FlatButton {
                     currentSignature: root.model.keySignature
                     mode: "minor"
 
-                    navigationPanel: popup.navigation
-                    navigationRowStart: 1
-                    navigationColumnStart: 0
+                    navigationPanel.name: "KeySignatureMinorPanel"
+                    navigationPanel.section: popup.navigationSection
+                    navigationPanel.enabled: bar.currentIndex === 1
+                    navigationPanel.order: 2
 
                     onSignatureSelected: {
                         root.model.keySignature = signature

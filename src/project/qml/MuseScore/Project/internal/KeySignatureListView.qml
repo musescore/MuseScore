@@ -32,13 +32,12 @@ GridView {
     property var mode: null
     signal signatureSelected(var signature)
 
+    property int rows: Math.max(0, Math.floor(root.height / root.cellHeight))
+    property int columns: Math.max(0, Math.floor(root.width / root.cellWidth))
+
     property NavigationPanel navigationPanel: NavigationPanel {
-        name: "KeySignaturePanel"
         direction: NavigationPanel.Both
     }
-
-    property int navigationRowStart: 1
-    property int navigationColumnStart: 1
 
     height: contentHeight
 
@@ -60,6 +59,7 @@ GridView {
         width: root.cellWidth
 
         ListItemBlank {
+            id: item
             anchors.centerIn: parent
             height: root.cellHeight - prv.spacing
             width: root.cellWidth - prv.spacing
@@ -72,9 +72,8 @@ GridView {
 
             navigation.name: keySignature.text
             navigation.panel: root.navigationPanel
-            navigation.row: root.navigationRowStart + model.row
-            navigation.column: root.navigationRowStart + model.column
-            navigation.enabled: root.visible
+            navigation.row: root.columns === 0 ? 0 : Math.floor(model.index / root.columns)
+            navigation.column: model.index - (navigation.row * root.columns)
 
             KeySignature {
                 id: keySignature
