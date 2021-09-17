@@ -35,7 +35,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/types/chordsymboltypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/crescendotypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/dynamictypes.h
-    ${CMAKE_CURRENT_LIST_DIR}/types/fermatatypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/fretdiagramtypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/glissandotypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/hairpintypes.h
@@ -48,6 +47,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/types/scoreappearancetypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/stemtypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/texttypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/types/commontypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/tremolobartypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/tremolotypes.h
     ${CMAKE_CURRENT_LIST_DIR}/models/iinspectormodelcreator.h

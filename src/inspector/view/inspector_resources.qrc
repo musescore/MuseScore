@@ -87,6 +87,7 @@
         <file>qml/MuseScore/Inspector/score/ScoreAppearanceInspectorView.qml</file>
         <file>qml/MuseScore/Inspector/common/InspectorPropertyView.qml</file>
         <file>qml/MuseScore/Inspector/common/TextSection.qml</file>
+        <file>qml/MuseScore/Inspector/common/PlacementSection.qml</file>
         <file>qml/MuseScore/Inspector/qmldir</file>
         <file>qml/MuseScore/Inspector/common/ColorSection.qml</file>
         <file>qml/MuseScore/Inspector/notation/NotationInspectorSectionLoader.qml</file>

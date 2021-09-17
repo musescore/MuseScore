@@ -40,13 +40,7 @@ public:
         LINE_STYLE_CUSTOM
     };
 
-    enum class PlacementType : signed char {
-        PLACEMENT_TYPE_ABOVE = 0,
-        PLACEMENT_TYPE_BELOW
-    };
-
     Q_ENUM(LineStyle)
-    Q_ENUM(PlacementType)
 };
 }
 

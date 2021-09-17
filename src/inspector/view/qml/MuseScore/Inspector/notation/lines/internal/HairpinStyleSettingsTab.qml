@@ -150,32 +150,8 @@ FocusableItem {
             }
         }
 
-        InspectorPropertyView {
-            titleText: qsTrc("inspector", "Hairpin position")
+        PlacementSection {
             propertyItem: root.model ? root.model.placement : null
-
-            RadioButtonGroup {
-                id: positionButtonList
-
-                height: 30
-                width: parent.width
-
-                model: [
-                    { textRole: qsTrc("inspector", "Above"), valueRole: LineTypes.PLACEMENT_TYPE_ABOVE },
-                    { textRole: qsTrc("inspector", "Below"), valueRole: LineTypes.PLACEMENT_TYPE_BELOW }
-                ]
-
-                delegate: FlatRadioButton {
-                    ButtonGroup.group: positionButtonList.radioButtonGroup
-
-                    text: modelData["textRole"]
-                    checked: root.model && !root.model.placement.isUndefined ? root.model.placement.value === modelData["valueRole"]
-                                                                             : false
-                    onToggled: {
-                        root.model.placement.value = modelData["valueRole"]
-                    }
-                }
-            }
         }
     }
 }
