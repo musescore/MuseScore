@@ -173,6 +173,10 @@ QAccessible::State AccessibleItemInterface::state() const
         state.checkable = true;
         state.checked = item->accessibleState(IAccessible::State::Checked);
     } break;
+    case IAccessible::Role::MenuItem: {
+        state.focusable = true;
+        state.focused = item->accessibleState(IAccessible::State::Focused);
+    } break;
     default: {
         LOGW() << "not handled role: " << static_cast<int>(r);
     } break;
