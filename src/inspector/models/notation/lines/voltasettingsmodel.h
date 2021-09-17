@@ -19,26 +19,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_INSPECTOR_PEDALTYPES_H
-#define MU_INSPECTOR_PEDALTYPES_H
+#ifndef MU_INSPECTOR_VOLTASETTINGSMODEL_H
+#define MU_INSPECTOR_VOLTASETTINGSMODEL_H
 
-#include "qobjectdefs.h"
+#include "linesettingsmodel.h"
 
 namespace mu::inspector {
-class PedalTypes
+class VoltaSettingsModel : public LineSettingsModel
 {
-    Q_GADGET
+    Q_OBJECT
+
+    Q_PROPERTY(PropertyItem * repeatCount READ repeatCount CONSTANT)
 
 public:
-    enum class HookType {
-        HOOK_TYPE_NONE = 0,
-        HOOK_TYPE_RIGHT_ANGLE,
-        HOOK_TYPE_ACUTE_ANGLE,
-        HOOK_TYPE_STAR
-    };
+    explicit VoltaSettingsModel(QObject* parent, IElementRepositoryService* repository);
 
-    Q_ENUM(HookType)
+    PropertyItem* repeatCount() const;
+
+private:
+    void createProperties() override;
+    void loadProperties() override;
+    void resetProperties() override;
+
+    PropertyItem* m_repeatCount = nullptr;
 };
 }
 
-#endif // MU_INSPECTOR_PEDALTYPES_H
+#endif // MU_INSPECTOR_VOLTASETTINGSMODEL_H

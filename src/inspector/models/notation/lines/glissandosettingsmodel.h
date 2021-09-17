@@ -19,26 +19,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_INSPECTOR_PEDALTYPES_H
-#define MU_INSPECTOR_PEDALTYPES_H
+#ifndef MU_INSPECTOR_GLISSANDOSETTINGSMODEL_H
+#define MU_INSPECTOR_GLISSANDOSETTINGSMODEL_H
 
-#include "qobjectdefs.h"
+#include "models/abstractinspectormodel.h"
 
 namespace mu::inspector {
-class PedalTypes
+class GlissandoSettingsModel : public AbstractInspectorModel
 {
-    Q_GADGET
+    Q_OBJECT
+
+    Q_PROPERTY(PropertyItem * lineType READ lineType CONSTANT)
 
 public:
-    enum class HookType {
-        HOOK_TYPE_NONE = 0,
-        HOOK_TYPE_RIGHT_ANGLE,
-        HOOK_TYPE_ACUTE_ANGLE,
-        HOOK_TYPE_STAR
-    };
+    explicit GlissandoSettingsModel(QObject* parent, IElementRepositoryService* repository);
 
-    Q_ENUM(HookType)
+    void createProperties() override;
+    void requestElements() override;
+    void loadProperties() override;
+    void resetProperties() override;
+
+    PropertyItem* lineType() const;
+
+private:
+    PropertyItem* m_lineType = nullptr;
 };
 }
 
-#endif // MU_INSPECTOR_PEDALTYPES_H
+#endif // MU_INSPECTOR_GLISSANDOSETTINGSMODEL_H

@@ -98,10 +98,10 @@ FocusableItem {
                 width: parent.width
 
                 model: [
-                    { iconRole: IconCode.LINE_NORMAL, typeRole: CrescendoTypes.LINE_STYLE_SOLID },
-                    { iconRole: IconCode.LINE_DASHED, typeRole: CrescendoTypes.LINE_STYLE_DASHED },
-                    { iconRole: IconCode.LINE_DOTTED, typeRole: CrescendoTypes.LINE_STYLE_DOTTED },
-                    { iconRole: IconCode.NONE, textRole: qsTrc("inspector", "Custom"), typeRole: CrescendoTypes.LINE_STYLE_CUSTOM }
+                    { iconRole: IconCode.LINE_NORMAL, typeRole: LineTypes.LINE_STYLE_SOLID },
+                    { iconRole: IconCode.LINE_DASHED, typeRole: LineTypes.LINE_STYLE_DASHED },
+                    { iconRole: IconCode.LINE_DOTTED, typeRole: LineTypes.LINE_STYLE_DOTTED },
+                    { iconRole: IconCode.NONE, textRole: qsTrc("inspector", "Custom"), typeRole: LineTypes.LINE_STYLE_CUSTOM }
                 ]
 
                 delegate: FlatRadioButton {
@@ -243,8 +243,8 @@ FocusableItem {
                         width: parent.width
 
                         model: [
-                            { textRole: qsTrc("inspector", "Above"), valueRole: CrescendoTypes.PLACEMENT_TYPE_ABOVE },
-                            { textRole: qsTrc("inspector", "Below"), valueRole: CrescendoTypes.PLACEMENT_TYPE_BELOW }
+                            { textRole: qsTrc("inspector", "Above"), valueRole: LineTypes.PLACEMENT_TYPE_ABOVE },
+                            { textRole: qsTrc("inspector", "Below"), valueRole: LineTypes.PLACEMENT_TYPE_BELOW }
                         ]
 
                         delegate: FlatRadioButton {

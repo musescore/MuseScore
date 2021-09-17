@@ -39,7 +39,7 @@ Column {
     InspectorPropertyView {
 
         titleText: qsTrc("inspector", "Line type")
-        propertyItem: root.model ? root.model.hookType : null
+        propertyItem: root.model ? root.model.endHookType : null
 
         RadioButtonGroup {
             id: lineTypeButtonList
@@ -58,10 +58,10 @@ Column {
                 ButtonGroup.group: lineTypeButtonList.radioButtonGroup
 
                 iconCode: modelData["iconRole"]
-                checked: root.model && !root.model.hookType.isUndefined ? root.model.hookType.value === modelData["typeRole"]
-                                                                        : false
+                checked: root.model && !root.model.endHookType.isUndefined ? root.model.endHookType.value === modelData["typeRole"]
+                                                                           : false
                 onToggled: {
-                    root.model.hookType.value = modelData["typeRole"]
+                    root.model.endHookType.value = modelData["typeRole"]
                 }
             }
         }
@@ -128,10 +128,10 @@ Column {
         width: parent.width
 
         model: [
-            { iconRole: IconCode.LINE_NORMAL, typeRole: PedalTypes.LINE_STYLE_SOLID },
-            { iconRole: IconCode.LINE_DASHED, typeRole: PedalTypes.LINE_STYLE_DASHED },
-            { iconRole: IconCode.LINE_DOTTED, typeRole: PedalTypes.LINE_STYLE_DOTTED },
-            { iconRole: IconCode.NONE, textRole: qsTrc("inspector", "Custom"), typeRole: PedalTypes.LINE_STYLE_CUSTOM }
+            { iconRole: IconCode.LINE_NORMAL, typeRole: LineTypes.LINE_STYLE_SOLID },
+            { iconRole: IconCode.LINE_DASHED, typeRole: LineTypes.LINE_STYLE_DASHED },
+            { iconRole: IconCode.LINE_DOTTED, typeRole: LineTypes.LINE_STYLE_DOTTED },
+            { iconRole: IconCode.NONE, textRole: qsTrc("inspector", "Custom"), typeRole: LineTypes.LINE_STYLE_CUSTOM }
         ]
 
         delegate: FlatRadioButton {
@@ -197,8 +197,8 @@ Column {
         width: parent.width
 
         model: [
-            { textRole: qsTrc("inspector", "Above"), valueRole: PedalTypes.PLACEMENT_TYPE_ABOVE },
-            { textRole: qsTrc("inspector", "Below"), valueRole: PedalTypes.PLACEMENT_TYPE_BELOW }
+            { textRole: qsTrc("inspector", "Above"), valueRole: LineTypes.PLACEMENT_TYPE_ABOVE },
+            { textRole: qsTrc("inspector", "Below"), valueRole: LineTypes.PLACEMENT_TYPE_BELOW }
         ]
 
         delegate: FlatRadioButton {
