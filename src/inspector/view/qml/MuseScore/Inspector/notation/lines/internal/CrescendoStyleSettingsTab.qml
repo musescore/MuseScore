@@ -49,38 +49,17 @@ FocusableItem {
             onClicked: { root.model.isLineVisible.value = !checked }
         }
 
-        InspectorPropertyView {
-            width: parent.width
+        LineTypeSection {
+           endHookType: root.model ? root.model.endHookType : null
+           thickness: root.model ? root.model.thickness : null
+           hookHeight: root.model ? root.model.hookHeight : null
 
-            titleText: qsTrc("inspector", "Line type")
-            propertyItem: root.model ? root.model.endHookType : null
-
-            enabled: root.model && root.model.endHookType.isEnabled
-
-            RadioButtonGroup {
-                id: lineTypeButtonList
-
-                height: 30
-                width: parent.width
-
-                model: [
-                    { iconRole: IconCode.LINE_NORMAL, typeRole: CrescendoTypes.HOOK_TYPE_NONE },
-                    { iconRole: IconCode.LINE_WITH_END_HOOK, typeRole: CrescendoTypes.HOOK_TYPE_90 },
-                    { iconRole: IconCode.LINE_WITH_ANGLED_END_HOOK, typeRole: CrescendoTypes.HOOK_TYPE_45 },
-                    { iconRole: IconCode.LINE_WITH_T_LIKE_END_HOOK, typeRole: CrescendoTypes.HOOK_TYPE_T_LIKE },
-                ]
-
-                delegate: FlatRadioButton {
-                    ButtonGroup.group: lineTypeButtonList.radioButtonGroup
-
-                    iconCode: modelData["iconRole"]
-                    checked: root.model && !root.model.endHookType.isUndefined ? root.model.endHookType.value === modelData["typeRole"]
-                                                                               : false
-                    onToggled: {
-                        root.model.endHookType.value = modelData["typeRole"]
-                    }
-                }
-            }
+           possibleEndHookTypes: [
+               { iconRole: IconCode.LINE_NORMAL, typeRole: CrescendoTypes.HOOK_TYPE_NONE },
+               { iconRole: IconCode.LINE_WITH_END_HOOK, typeRole: CrescendoTypes.HOOK_TYPE_90 },
+               { iconRole: IconCode.LINE_WITH_ANGLED_END_HOOK, typeRole: CrescendoTypes.HOOK_TYPE_45 },
+               { iconRole: IconCode.LINE_WITH_T_LIKE_END_HOOK, typeRole: CrescendoTypes.HOOK_TYPE_T_LIKE },
+           ]
         }
 
         SeparatorLine { anchors.margins: -10 }
@@ -91,72 +70,10 @@ FocusableItem {
             dashGapLength: root.model ? root.model.dashGapLength : null
         }
 
-        ExpandableBlank {
-            isExpanded: false
+        SeparatorLine { anchors.margins: -10 }
 
-            title: isExpanded ? qsTrc("inspector", "Show less") : qsTrc("inspector", "Show more")
-
-            width: parent.width
-
-            contentItemComponent: Column {
-                height: implicitHeight
-                width: root.width
-
-                spacing: 16
-
-                Item {
-                    height: childrenRect.height
-                    width: parent.width
-
-                    InspectorPropertyView {
-                        anchors.left: parent.left
-                        anchors.right: parent.horizontalCenter
-                        anchors.rightMargin: 2
-
-                        titleText: qsTrc("inspector", "Thickness")
-                        propertyItem: root.model ? root.model.thickness : null
-
-                        enabled: root.model && root.model.thickness.isEnabled
-
-                        IncrementalPropertyControl {
-                            isIndeterminate: root.model ? root.model.thickness.isUndefined : false
-                            currentValue: root.model ? root.model.thickness.value : 0
-                            step: 0.1
-                            maxValue: 10
-                            minValue: 0.1
-                            decimals: 2
-
-                            onValueEdited: { root.model.thickness.value = newValue }
-                        }
-                    }
-
-                    InspectorPropertyView {
-                        anchors.left: parent.horizontalCenter
-                        anchors.leftMargin: 2
-                        anchors.right: parent.right
-
-                        titleText: qsTrc("inspector", "Hook height")
-                        propertyItem: root.model ? root.model.hookHeight : null
-
-                        enabled: root.model && root.model.hookHeight.isEnabled
-
-                        IncrementalPropertyControl {
-                            isIndeterminate: root.model ? root.model.hookHeight.isUndefined : false
-                            currentValue: root.model ? root.model.hookHeight.value : 0
-                            step: 0.1
-                            maxValue: 10
-                            minValue: 0.1
-                            decimals: 2
-
-                            onValueEdited: { root.model.hookHeight.value = newValue }
-                        }
-                    }
-                }
-
-                PlacementSection {
-                    propertyItem: root.model ? root.model.placement : null
-                }
-            }
+        PlacementSection {
+            propertyItem: root.model ? root.model.placement : null
         }
     }
 }

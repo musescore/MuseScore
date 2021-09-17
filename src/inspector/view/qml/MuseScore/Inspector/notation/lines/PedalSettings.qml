@@ -38,77 +38,17 @@ Column {
 
     spacing: 12
 
-    InspectorPropertyView {
+    LineTypeSection {
+        endHookType: root.model ? root.model.endHookType : null
+        thickness: root.model ? root.model.thickness : null
+        hookHeight: root.model ? root.model.hookHeight : null
 
-        titleText: qsTrc("inspector", "Line type")
-        propertyItem: root.model ? root.model.endHookType : null
-
-        RadioButtonGroup {
-            id: lineTypeButtonList
-
-            height: 30
-            width: parent.width
-
-            model: [
-                { iconRole: IconCode.LINE_NORMAL, typeRole: PedalTypes.HOOK_TYPE_NONE },
-                { iconRole: IconCode.LINE_WITH_END_HOOK, typeRole: PedalTypes.HOOK_TYPE_RIGHT_ANGLE },
-                { iconRole: IconCode.LINE_WITH_ANGLED_END_HOOK, typeRole: PedalTypes.HOOK_TYPE_ACUTE_ANGLE },
-                { iconRole: IconCode.LINE_PEDAL_STAR_ENDING, typeRole: PedalTypes.HOOK_TYPE_STAR }
-            ]
-
-            delegate: FlatRadioButton {
-                ButtonGroup.group: lineTypeButtonList.radioButtonGroup
-
-                iconCode: modelData["iconRole"]
-                checked: root.model && !root.model.endHookType.isUndefined ? root.model.endHookType.value === modelData["typeRole"]
-                                                                           : false
-                onToggled: {
-                    root.model.endHookType.value = modelData["typeRole"]
-                }
-            }
-        }
-    }
-
-    Item {
-        height: childrenRect.height
-        width: parent.width
-
-        InspectorPropertyView {
-            anchors.left: parent.left
-            anchors.right: parent.horizontalCenter
-            anchors.rightMargin: 2
-
-            titleText: qsTrc("inspector", "Thickness")
-            propertyItem: root.model ? root.model.thickness : null
-
-            IncrementalPropertyControl {
-                id: thicknessControl
-
-                isIndeterminate: root.model ? root.model.thickness.isUndefined : false
-                currentValue: root.model ? root.model.thickness.value : 0
-
-                onValueEdited: { root.model.thickness.value = newValue }
-            }
-        }
-
-        InspectorPropertyView {
-            anchors.left: parent.horizontalCenter
-            anchors.leftMargin: 2
-            anchors.right: parent.right
-
-            titleText: qsTrc("inspector", "Hook height")
-            propertyItem: root.model ? root.model.hookHeight : null
-
-            IncrementalPropertyControl {
-                id: hookHeightControl
-
-                enabled: root.model ? root.model.hookHeight.isEnabled : false
-                isIndeterminate: root.model && enabled ? root.model.hookHeight.isUndefined : false
-                currentValue: root.model ? root.model.hookHeight.value : 0
-
-                onValueEdited: { root.model.hookHeight.value = newValue }
-            }
-        }
+        possibleEndHookTypes: [
+            { iconRole: IconCode.LINE_NORMAL, typeRole: PedalTypes.HOOK_TYPE_NONE },
+            { iconRole: IconCode.LINE_WITH_END_HOOK, typeRole: PedalTypes.HOOK_TYPE_RIGHT_ANGLE },
+            { iconRole: IconCode.LINE_WITH_ANGLED_END_HOOK, typeRole: PedalTypes.HOOK_TYPE_ACUTE_ANGLE },
+            { iconRole: IconCode.LINE_PEDAL_STAR_ENDING, typeRole: PedalTypes.HOOK_TYPE_STAR }
+        ]
     }
 
     CheckBox {
