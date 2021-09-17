@@ -48,6 +48,7 @@ PopupView {
     y: root.parent.height
 
     property bool isDoActiveParentOnClose: true
+    property bool isCloseByEscape: true
     property NavigationSection navigationSection: NavigationSection {
         id: navSec
         name: root.objectName !== "" ? root.objectName : "StyledPopupView"
@@ -62,7 +63,7 @@ PopupView {
         }
 
         onNavigationEvent: {
-            if (event.type === NavigationEvent.Escape) {
+            if (event.type === NavigationEvent.Escape && root.isCloseByEscape) {
                 root.close()
             }
         }

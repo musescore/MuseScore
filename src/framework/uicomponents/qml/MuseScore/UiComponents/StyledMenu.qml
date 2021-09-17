@@ -59,8 +59,24 @@ StyledPopupView {
 
     animationEnabled: false //! NOTE disabled - because trouble with simultaneous opening of submenu
 
-    navigation.name: "StyledMenu"
-    navigation.direction: NavigationPanel.Vertical
+    isCloseByEscape: false
+
+    property NavigationPanel navigationPanel: NavigationPanel {
+        name: "StyledMenu"
+        section: root.navigationSection
+        direction: NavigationPanel.Vertical
+        order: 1
+    }
+
+    navigationSection.onNavigationEvent: {
+        if (event.type === NavigationEvent.Escape) {
+            if (prv.showedSubMenu) {
+                prv.showedSubMenu.close()
+            } else {
+                root.close()
+            }
+        }
+    }
 
     signal loaded()
 
@@ -237,8 +253,7 @@ StyledPopupView {
                 StyledMenuItem {
                     id: item
 
-                    navigation.panel: root.navigation
-                    navigation.column: 0
+                    navigation.panel: root.navigationPanel
                     navigation.row: model.index
 
                     iconAndCheckMarkMode: prv.iconAndCheckMarkMode

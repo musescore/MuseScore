@@ -76,7 +76,6 @@ Loader {
 
         if (loader.navigation) {
             menu.navigationParentControl = loader.navigation
-            menu.navigation.name = loader.navigation.name + "PopupMenu"
         }
 
         update(model, x, y)

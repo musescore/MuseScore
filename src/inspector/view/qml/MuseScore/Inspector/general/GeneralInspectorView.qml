@@ -140,7 +140,8 @@ InspectorSectionView {
 
                 popupContent: PlaybackSettings {
                     id: playbackSettings
-                    navigationPanel: playbackButton.popup.navigation
+                    navigationPanel.section: playbackButton.popup.navigationSection
+                    navigationPanel.order: 1
                     proxyModel: model ? model.playbackProxyModel : null
                 }
 
@@ -168,7 +169,8 @@ InspectorSectionView {
 
                 popupContent: AppearanceSettings {
                     id: appearanceSettings
-                    navigationPanel: appearanceButton.popup.navigation
+                    navigationPanel.section: playbackButton.popup.navigationSection
+                    navigationPanel.order: 1
                     model: root.model ? root.model.appearanceSettingsModel : null
                 }
 
