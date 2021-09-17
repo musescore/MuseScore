@@ -59,7 +59,7 @@ TabPanel {
 
         title: qsTrc("inspector", "Text")
 
-        CrescendoTextSettingsTab {
+        LineTextSettingsTab {
             anchors.top: parent.top
             anchors.topMargin: 24
 
