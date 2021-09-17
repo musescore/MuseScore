@@ -33,7 +33,10 @@ Column {
 
     property QtObject model: null
 
-    property NavigationPanel navigationPanel: null
+    property NavigationPanel navigationPanel: NavigationPanel {
+        name: "PlaybackSettings"
+        direction: NavigationPanel.Both
+    }
 
     width: parent.width
 

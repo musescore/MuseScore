@@ -146,7 +146,6 @@ ListItemBlank {
             menu.y = 0
 
             menu.navigationParentControl = root.navigation
-            menu.navigation.name = root.navigation.name+"SubMenu"
 
             menu.model = modelData.subitems
 
