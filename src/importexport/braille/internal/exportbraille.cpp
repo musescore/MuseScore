@@ -327,7 +327,6 @@ namespace Ms {
 //https://www.teachingvisuallyimpaired.com/uploads/1/4/1/2/14122361/ueb_braille_chart.pdf
 class TextToUEBBraille
 {
-    const int MAX_CHARS_PER_LINE = 40;
     const QString ASCII_PREFIX_CAPITAL_LETTER = QString(",");
     const QString ASCII_PREFIX_CAPITAL_WORD = QString(",,");
     const QString ASCII_PREFIX_NUMBER = QString("#");

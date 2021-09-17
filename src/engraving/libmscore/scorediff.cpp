@@ -921,8 +921,8 @@ struct MeasureInfo {
     MeasureInfo(const Measure* m1, const Measure* m2, int staff)
         : m1(m1), m2(m2), staff(staff) {}
 
-    bool operator==(const MeasureInfo& other) { return m1 == other.m1 && m2 == other.m2 && staff == other.staff; }
-    bool operator!=(const MeasureInfo& other) { return !(*this == other); }
+    bool operator==(const MeasureInfo& other) const { return m1 == other.m1 && m2 == other.m2 && staff == other.staff; }
+    bool operator!=(const MeasureInfo& other) const { return !(*this == other); }
 };
 
 //---------------------------------------------------------

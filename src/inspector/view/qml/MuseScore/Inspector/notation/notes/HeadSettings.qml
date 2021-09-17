@@ -51,19 +51,16 @@ FocusableItem {
         }
 
         InspectorPropertyView {
-            titleText: qsTrc("inspector", "Noteheads")
+            titleText: qsTrc("inspector", "Notehead group")
             propertyItem: root.model ? root.model.headGroup : null
-            height: 120
 
             NoteheadsGrid {
                 id: noteheadGridView
-
-                noteHeadTypesModel: root.model ? root.model.noteheadTypesModel : null
+                noteHeadGroupsModel: root.model ? root.model.noteheadGroupsModel : null
             }
         }
 
         InspectorPropertyView {
-
             titleText: qsTrc("inspector", "Dotted note position")
             propertyItem: root.model ? root.model.dotPosition : null
 
@@ -111,7 +108,7 @@ FocusableItem {
                     width: root.width
                     height: implicitHeight
 
-                    titleText: qsTrc("inspector", "Head type (visual only)")
+                    titleText: qsTrc("inspector", "Notehead type (visual only)")
                     propertyItem: root.model ? root.model.headType : null
 
                     RadioButtonGroup {

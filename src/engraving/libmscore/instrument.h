@@ -213,7 +213,7 @@ public:
     void write(XmlWriter&, const Part* part) const;
     void read(XmlReader&, Part* part);
     void updateInitList() const;
-    bool operator==(const Channel& c) { return (_name == c._name) && (_channel == c._channel); }
+    bool operator==(const Channel& c) const { return (_name == c._name) && (_channel == c._channel); }
 
     void addListener(ChannelListener* l);
     void removeListener(ChannelListener* l);

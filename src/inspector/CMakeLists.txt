@@ -170,8 +170,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/notes/hooks/hooksettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/notes/noteheads/noteheadsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/notes/noteheads/noteheadsettingsmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/models/notation/notes/noteheads/noteheadtypesmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/models/notation/notes/noteheads/noteheadtypesmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/notes/noteheads/noteheadgroupsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/notes/noteheads/noteheadgroupsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/notes/stems/stemsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/notes/stems/stemsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/mmrests/mmrestsettingsmodel.cpp

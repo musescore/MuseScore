@@ -20,7 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Controls 2.0
+import QtQuick.Controls 2.15
+
 import MuseScore.Ui 1.0
 
 RadioDelegate {
@@ -43,7 +44,7 @@ RadioDelegate {
 
     property alias navigation: navCtrl
 
-    implicitHeight: 30
+    implicitHeight: ListView.view ? ListView.view.height : 30
     implicitWidth: ListView.view ? (ListView.view.width - (ListView.view.spacing * (ListView.view.count - 1))) / ListView.view.count
                                  : 30
     hoverEnabled: true

@@ -19,27 +19,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import MuseScore.Inspector 1.0
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+
 import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
+import MuseScore.Inspector 1.0
+
 import "../../../common"
 
 FocusableItem {
     id: root
 
-    property alias noteHeadTypesModel: gridView.model
+    property alias noteHeadGroupsModel: gridView.model
     property bool isIndeterminate: false
 
-    function iconByNoteHeadType(noteHeadType) {
-        switch (noteHeadType) {
+    function iconByNoteHeadGroup(noteHeadGroup) {
+        switch (noteHeadGroup) {
         case NoteHead.HEAD_NORMAL: return "qrc:/resources/icons/notehead_normal.svg"
         case NoteHead.HEAD_CROSS: return "qrc:/resources/icons/notehead_cross.svg"
         case NoteHead.HEAD_PLUS: return "qrc:/resources/icons/notehead_plus.svg"
         case NoteHead.HEAD_XCIRCLE: return "qrc:/resources/icons/notehead_xcircle.svg"
         case NoteHead.HEAD_WITHX: return "qrc:/resources/icons/notehead_xellipse.svg"
-        case NoteHead.HEAD_TRIANGLE_UP: return "qrc:/resources/icons/notehead_triangle_down.svg"
-        case NoteHead.HEAD_TRIANGLE_DOWN: return "qrc:/resources/icons/notehead_triangle_up.svg"
+        case NoteHead.HEAD_TRIANGLE_UP: return "qrc:/resources/icons/notehead_triangle_up.svg"
+        case NoteHead.HEAD_TRIANGLE_DOWN: return "qrc:/resources/icons/notehead_triangle_down.svg"
         case NoteHead.HEAD_SLASHED1: return "qrc:/resources/icons/notehead_slashed_left.svg"
         case NoteHead.HEAD_SLASHED2: return "qrc:/resources/icons/notehead_slashed_right.svg"
         case NoteHead.HEAD_DIAMOND: return "qrc:/resources/icons/notehead_diamond.svg"
@@ -59,12 +62,13 @@ FocusableItem {
         default: return "qrc:/resources/icons/note.svg"
         }
     }
+
     width: parent.width
+    height: gridView.implicitHeight + 2 * gridView.anchors.margins
 
     Rectangle {
         id: gridViewEnclosure
-        height: 3 * gridView.cellHeight + 16
-        width: parent.width
+        anchors.fill: parent
 
         color: ui.theme.textFieldColor
         radius: 3
@@ -72,14 +76,10 @@ FocusableItem {
 
     GridView {
         id: gridView
-
-        height: Math.min(contentHeight,3*cellHeight)
-
-        anchors.top: gridViewEnclosure.top
-        anchors.bottom: gridViewEnclosure.bottom
-        anchors.left: parent.left
-        anchors.right: parent.right
+        anchors.fill: parent
         anchors.margins: 8
+
+        implicitHeight: Math.min(contentHeight, 3 * cellHeight)
 
         cellHeight: 40
         cellWidth: 40
@@ -87,7 +87,8 @@ FocusableItem {
         interactive: true
         boundsBehavior: Flickable.StopAtBounds
         clip: true
-        maximumFlickVelocity: 1500
+
+        ScrollBar.vertical: StyledScrollBar {}
 
         delegate: FocusableItem {
             implicitHeight: gridView.cellHeight
@@ -97,14 +98,14 @@ FocusableItem {
                 anchors.centerIn: parent
 
                 pixelSize: 30
-                icon: iconByNoteHeadType(headGroupRole)
+                icon: iconByNoteHeadGroup(headGroupRole)
             }
 
             MouseArea {
                 anchors.fill: parent
 
                 onClicked: {
-                    noteHeadTypesModel.selectedHeadTypeIndex = index
+                    noteHeadGroupsModel.selectedHeadGroupIndex = index
                 }
             }
         }
@@ -115,6 +116,6 @@ FocusableItem {
             radius: 2
         }
 
-        currentIndex: noteHeadTypesModel ? noteHeadTypesModel.selectedHeadTypeIndex : -1
+        currentIndex: noteHeadGroupsModel && !isIndeterminate ? noteHeadGroupsModel.selectedHeadGroupIndex : -1
     }
 }
