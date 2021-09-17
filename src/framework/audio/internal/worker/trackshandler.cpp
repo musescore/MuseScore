@@ -73,11 +73,12 @@ Promise<TrackName> TracksHandler::trackName(const TrackSequenceId sequenceId, co
     }, AudioThread::ID);
 }
 
-Promise<TrackId> TracksHandler::addTrack(const TrackSequenceId sequenceId, const std::string& trackName, midi::MidiData&& playbackData,
-                                         AudioParams&& params)
+Promise<TrackId, AudioParams> TracksHandler::addTrack(const TrackSequenceId sequenceId, const std::string& trackName,
+                                                      midi::MidiData&& playbackData,
+                                                      AudioParams&& params)
 {
-    return Promise<TrackId>([this, sequenceId, trackName, playbackData, params](Promise<TrackId>::Resolve resolve,
-                                                                                Promise<TrackId>::Reject reject) {
+    return Promise<TrackId, AudioParams>([this, sequenceId, trackName, playbackData, params](Promise<TrackId, AudioParams>::Resolve resolve,
+                                                                                             Promise<TrackId, AudioParams>::Reject reject) {
         ONLY_AUDIO_WORKER_THREAD;
 
         ITrackSequencePtr s = sequence(sequenceId);
@@ -87,21 +88,22 @@ Promise<TrackId> TracksHandler::addTrack(const TrackSequenceId sequenceId, const
             return;
         }
 
-        RetVal<TrackId> result = s->addTrack(trackName, playbackData, params);
+        RetVal2<TrackId, AudioParams> result = s->addTrack(trackName, playbackData, params);
 
         if (!result.ret) {
             reject(result.ret.code(), result.ret.text());
         }
 
-        resolve(result.val);
+        resolve(result.val1, result.val2);
     }, AudioThread::ID);
 }
 
-Promise<TrackId> TracksHandler::addTrack(const TrackSequenceId sequenceId, const std::string& trackName, io::Device* playbackData,
-                                         AudioParams&& params)
+Promise<TrackId, AudioParams> TracksHandler::addTrack(const TrackSequenceId sequenceId, const std::string& trackName,
+                                                      io::Device* playbackData,
+                                                      AudioParams&& params)
 {
-    return Promise<TrackId>([this, sequenceId, trackName, playbackData, params](Promise<TrackId>::Resolve resolve,
-                                                                                Promise<TrackId>::Reject reject) {
+    return Promise<TrackId, AudioParams>([this, sequenceId, trackName, playbackData, params](Promise<TrackId, AudioParams>::Resolve resolve,
+                                                                                             Promise<TrackId, AudioParams>::Reject reject) {
         ONLY_AUDIO_WORKER_THREAD;
 
         ITrackSequencePtr s = sequence(sequenceId);
@@ -111,14 +113,14 @@ Promise<TrackId> TracksHandler::addTrack(const TrackSequenceId sequenceId, const
             return;
         }
 
-        RetVal<TrackId> result = s->addTrack(trackName, playbackData, params);
+        RetVal2<TrackId, AudioParams> result = s->addTrack(trackName, playbackData, params);
 
         if (!result.ret) {
             reject(result.ret.code(), result.ret.text());
             return;
         }
 
-        resolve(result.val);
+        resolve(result.val1, result.val2);
     }, AudioThread::ID);
 }
 

@@ -64,7 +64,7 @@ AudioInputParams ProjectAudioSettings::trackInputParams(const ID& partId) const
 
 void ProjectAudioSettings::setTrackInputParams(const ID& partId, const audio::AudioInputParams& params)
 {
-    m_trackInputParamsMap.insert({ partId, params });
+    m_trackInputParamsMap.insert_or_assign(partId, params);
 }
 
 AudioOutputParams ProjectAudioSettings::trackOutputParams(const ID& partId) const
@@ -80,7 +80,7 @@ AudioOutputParams ProjectAudioSettings::trackOutputParams(const ID& partId) cons
 
 void ProjectAudioSettings::setTrackOutputParams(const ID& partId, const audio::AudioOutputParams& params)
 {
-    m_trackOutputParamsMap.insert({ partId, params });
+    m_trackOutputParamsMap.insert_or_assign(partId, params);
 }
 
 void ProjectAudioSettings::removeTrackParams(const ID& partId)
@@ -109,7 +109,7 @@ mu::Ret ProjectAudioSettings::read(const engraving::MscReader& reader)
     for (const QString& key : tracksObj.keys()) {
         QJsonObject trackObject = tracksObj.value(key).toObject();
 
-        ID partId = trackObject.value("partId").toInt();
+        ID partId(key);
 
         audio::AudioInputParams inParams = inputParamsFromJson(trackObject.value("in").toObject());
         audio::AudioOutputParams outParams = outputParamsFromJson(trackObject.value("out").toObject());

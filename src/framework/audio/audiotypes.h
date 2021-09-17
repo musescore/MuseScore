@@ -157,7 +157,7 @@ using AudioFxChain = std::map<AudioFxChainOrder, AudioFxParams>;
 
 struct AudioOutputParams {
     AudioFxChain fxChain;
-    volume_db_t volume = 1.f;
+    volume_db_t volume = 0.f;
     balance_t balance = 0.f;
     bool muted = false;
     bool solo = false;

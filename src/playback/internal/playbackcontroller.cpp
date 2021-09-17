@@ -484,8 +484,11 @@ void PlaybackController::addTrack(const ID& partId, const std::string& title)
 
     playback()->tracks()->addTrack(m_currentSequenceId, title, masterNotationMidiData()->trackMidiData(
                                        partId), { std::move(inParams), std::move(outParams) })
-    .onResolve(this, [this, partId](const TrackId trackId) {
+    .onResolve(this, [this, partId](const TrackId trackId, const AudioParams& appliedParams) {
         m_trackIdMap.insert({ partId, trackId });
+
+        audioSettings()->setTrackInputParams(partId, appliedParams.in);
+        audioSettings()->setTrackOutputParams(partId, appliedParams.out);
     })
     .onReject(this, [](int code, const std::string& msg) {
         LOGE() << "can't add a new track, code: [" << code << "] " << msg;
