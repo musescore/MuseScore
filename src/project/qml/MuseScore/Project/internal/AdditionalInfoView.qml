@@ -41,7 +41,7 @@ Row {
     property alias pickupTimeSignature: infoModel.pickupTimeSignature
     property alias measureCount: infoModel.measureCount
 
-    property NavigationSection navigationSection: null
+    property alias navigationPanel: navPanel
     property var popupsAnchorItem: null
 
     spacing: 20
@@ -68,8 +68,6 @@ Row {
     NavigationPanel {
         id: navPanel
         name: "NavPanel"
-        section: root.navigationSection
-        order: 1
         direction: NavigationPanel.Horizontal
         enabled: root.visible
     }

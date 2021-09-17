@@ -30,7 +30,7 @@ import MuseScore.Project 1.0
 Item {
     id: root
 
-    property NavigationSection navigation: null
+    property NavigationSection navigationSection: null
     property var popupsAnchorItem: null
 
     function result() {
@@ -85,7 +85,8 @@ Item {
 
             popupsAnchorItem: root.popupsAnchorItem
 
-            navigationSection: root.navigation
+            navigationPanel.section: root.navigationSection
+            navigationPanel.order: 1
         }
 
         SeparatorLine {}
@@ -94,6 +95,9 @@ Item {
             id: generalInfo
 
             Layout.fillWidth: true
+
+            navigationPanel.section: root.navigationSection
+            navigationPanel.order: 2
         }
     }
 }

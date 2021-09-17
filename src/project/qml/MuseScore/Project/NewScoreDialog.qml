@@ -65,7 +65,7 @@ StyledDialogView {
             ChooseInstrumentsAndTemplatesPage {
                 id: chooseInstrumentsAndTemplatePage
 
-                navigationSection: root.navigation
+                navigationSection: root.navigationSection
 
                 Component.onCompleted: {
                     preferredScoreCreationMode = newScoreModel.preferredScoreCreationMode()
@@ -75,7 +75,7 @@ StyledDialogView {
             ScoreInfoPage {
                 id: scoreInfoPage
 
-                navigation: root.navigation
+                navigationSection: root.navigationSection
                 popupsAnchorItem: content
             }
 
