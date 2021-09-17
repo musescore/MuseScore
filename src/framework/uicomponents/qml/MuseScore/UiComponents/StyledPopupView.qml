@@ -42,40 +42,21 @@ PopupView {
 
     property bool animationEnabled: false
 
-    property alias navigation: keynavPanel
-    property bool isDoActiveParentOnClose: true
-
     closePolicy: PopupView.CloseOnPressOutsideParent
 
     x: (root.parent.width / 2) - (root.width / 2)
     y: root.parent.height
 
-    property NavigationPanel keynavPanel: NavigationPanel {
-        id: keynavPanel
+    property bool isDoActiveParentOnClose: true
+    property NavigationSection navigationSection: NavigationSection {
+        id: navSec
+        name: root.objectName !== "" ? root.objectName : "StyledPopupView"
+        type: NavigationSection.Exclusive
         enabled: root.isOpened
-        order: {
-            var pctrl = root.navigationParentControl;
-            if (pctrl) {
-                if (pctrl.panel) {
-                    return pctrl.panel.order + 1
-                }
-            }
-            return -1
-        }
-
-        section: {
-            var pctrl = root.navigationParentControl;
-            if (pctrl) {
-                if (pctrl.panel) {
-                    return pctrl.panel.section
-                }
-            }
-            return null
-        }
+        order: 1
 
         onActiveChanged: {
-            if (keynavPanel.active) {
-                root.forceActiveFocus()
+            if (navSec.active) {
                 rootContainer.forceActiveFocus()
             }
         }
