@@ -19,26 +19,33 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_INSPECTOR_PEDALTYPES_H
-#define MU_INSPECTOR_PEDALTYPES_H
+#ifndef MU_INSPECTOR_OTTAVASETTINGSMODEL_H
+#define MU_INSPECTOR_OTTAVASETTINGSMODEL_H
 
-#include "qobjectdefs.h"
+#include "linesettingsmodel.h"
 
 namespace mu::inspector {
-class PedalTypes
+class OttavaSettingsModel : public LineSettingsModel
 {
-    Q_GADGET
+    Q_OBJECT
+
+    Q_PROPERTY(PropertyItem * ottavaType READ ottavaType CONSTANT)
+    Q_PROPERTY(PropertyItem * showNumbersOnly READ showNumbersOnly CONSTANT)
 
 public:
-    enum class HookType {
-        HOOK_TYPE_NONE = 0,
-        HOOK_TYPE_RIGHT_ANGLE,
-        HOOK_TYPE_ACUTE_ANGLE,
-        HOOK_TYPE_STAR
-    };
+    explicit OttavaSettingsModel(QObject* parent, IElementRepositoryService* repository);
 
-    Q_ENUM(HookType)
+    PropertyItem* ottavaType() const;
+    PropertyItem* showNumbersOnly() const;
+
+private:
+    void createProperties() override;
+    void loadProperties() override;
+    void resetProperties() override;
+
+    PropertyItem* m_ottavaType = nullptr;
+    PropertyItem* m_showNumbersOnly = nullptr;
 };
 }
 
-#endif // MU_INSPECTOR_PEDALTYPES_H
+#endif // MU_INSPECTOR_OTTAVASETTINGSMODEL_H

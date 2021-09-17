@@ -88,7 +88,7 @@ Loader {
             case Inspector.TYPE_PEDAL: return pedalComp
             case Inspector.TYPE_SPACER: return spacerComp
             case Inspector.TYPE_CLEF: return clefComp
-            case Inspector.TYPE_HAIRPIN: return hairpinComp
+            case Inspector.TYPE_HAIRPIN: return lineComp
             case Inspector.TYPE_CRESCENDO: return crescendoComp
             case Inspector.TYPE_STAFF_TYPE_CHANGES: return staffTypeComp
             case Inspector.TYPE_TEXT_FRAME: return textFrameComp
@@ -190,8 +190,8 @@ Loader {
     }
 
     Component {
-        id: hairpinComp
-        HairpinSettings { }
+        id: lineComp
+        LineSettings { }
     }
 
     Component {

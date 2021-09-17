@@ -88,6 +88,10 @@ public:
         TYPE_SPACER,
         TYPE_CLEF,
         TYPE_HAIRPIN,
+        TYPE_OTTAVA,
+        TYPE_PALM_MUTE,
+        TYPE_LET_RING,
+        TYPE_VOLTA,
         TYPE_CRESCENDO,
         TYPE_STAFF_TYPE_CHANGES,
         TYPE_TEXT_FRAME,
@@ -110,7 +114,8 @@ public:
     };
     Q_ENUM(InspectorModelType)
 
-    explicit AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository = nullptr);
+    explicit AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository = nullptr,
+                                    Ms::ElementType elementType = Ms::ElementType::INVALID, const QString& title = QString());
 
     Q_INVOKABLE virtual void requestResetToDefaults();
 
@@ -129,9 +134,10 @@ public:
     virtual bool hasAcceptableElements() const;
 
     virtual void createProperties() = 0;
-    virtual void requestElements() = 0;
     virtual void loadProperties() = 0;
     virtual void resetProperties() = 0;
+
+    virtual void requestElements();
 
 public slots:
     void setTitle(QString title);
@@ -186,6 +192,7 @@ private:
     InspectorSectionType m_sectionType = InspectorSectionType::SECTION_UNDEFINED;
     InspectorModelType m_modelType = InspectorModelType::TYPE_UNDEFINED;
     bool m_isEmpty = false;
+    Ms::ElementType m_elementType = Ms::ElementType::INVALID;
 };
 }
 

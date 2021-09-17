@@ -28,7 +28,7 @@
 #include "notation/notes/stems/stemsettingsmodel.h"
 #include "notation/fermatas/fermatasettingsmodel.h"
 #include "notation/tempos/temposettingsmodel.h"
-#include "notation/glissandos/glissandosettingsmodel.h"
+#include "notation/lines/glissandosettingsmodel.h"
 #include "notation/barlines/barlinesettingsproxymodel.h"
 #include "notation/staffs/staffsettingsmodel.h"
 #include "notation/sectionbreaks/sectionbreaksettingsmodel.h"
@@ -37,11 +37,13 @@
 #include "notation/keysignatures/keysignaturesettingsmodel.h"
 #include "notation/accidentals/accidentalsettingsmodel.h"
 #include "notation/fretdiagrams/fretdiagramsettingsmodel.h"
-#include "notation/pedals/pedalsettingsmodel.h"
+#include "notation/lines/pedalsettingsmodel.h"
 #include "notation/spacers/spacersettingsmodel.h"
 #include "notation/clefs/clefsettingsmodel.h"
 #include "notation/lines/hairpinsettingsmodel.h"
-#include "notation/crescendos/crescendosettingsmodel.h"
+#include "notation/lines/crescendosettingsmodel.h"
+#include "notation/lines/ottavasettingsmodel.h"
+#include "notation/lines/voltasettingsmodel.h"
 #include "notation/stafftype/stafftypesettingsmodel.h"
 #include "notation/frames/textframesettingsmodel.h"
 #include "notation/frames/verticalframesettingsmodel.h"
@@ -108,6 +110,14 @@ AbstractInspectorModel* InspectorModelCreator::newInspectorModel(AbstractInspect
         return new HairpinSettingsModel(parent, repository);
     case AbstractInspectorModel::InspectorModelType::TYPE_CRESCENDO:
         return new CrescendoSettingsModel(parent, repository);
+    case AbstractInspectorModel::InspectorModelType::TYPE_OTTAVA:
+        return new OttavaSettingsModel(parent, repository);
+    case AbstractInspectorModel::InspectorModelType::TYPE_VOLTA:
+        return new VoltaSettingsModel(parent, repository);
+    case AbstractInspectorModel::InspectorModelType::TYPE_PALM_MUTE:
+        return new LineSettingsModel(parent, repository, Ms::ElementType::PALM_MUTE, qtrc("inspector", "Palm mute"));
+    case AbstractInspectorModel::InspectorModelType::TYPE_LET_RING:
+        return new LineSettingsModel(parent, repository, Ms::ElementType::LET_RING, qtrc("inspector", "Let ring"));
     case AbstractInspectorModel::InspectorModelType::TYPE_STAFF_TYPE_CHANGES:
         return new StaffTypeSettingsModel(parent, repository);
     case AbstractInspectorModel::InspectorModelType::TYPE_TEXT_FRAME:

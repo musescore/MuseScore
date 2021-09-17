@@ -102,7 +102,7 @@
         <file>qml/MuseScore/Inspector/notation/pedals/PedalSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/spacers/SpacerSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/clefs/ClefSettings.qml</file>
-        <file>qml/MuseScore/Inspector/notation/lines/HairpinSettings.qml</file>
+        <file>qml/MuseScore/Inspector/notation/lines/LineSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/crescendos/CrescendoSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/frames/TextFrameSettings.qml</file>

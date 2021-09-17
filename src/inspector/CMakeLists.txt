@@ -44,6 +44,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/types/noteheadtypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/ornamenttypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/pedaltypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/types/linetypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/scoreappearancetypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/stemtypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/texttypes.h
@@ -114,8 +115,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/chordsymbols/chordsymbolsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/clefs/clefsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/clefs/clefsettingsmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/models/notation/crescendos/crescendosettingsmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/models/notation/crescendos/crescendosettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/crescendosettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/crescendosettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/fermatas/fermatasettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/fermatas/fermatasettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/frames/horizontalframesettingsmodel.cpp
@@ -126,10 +127,16 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/frames/verticalframesettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/fretdiagrams/fretdiagramsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/fretdiagrams/fretdiagramsettingsmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/models/notation/glissandos/glissandosettingsmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/models/notation/glissandos/glissandosettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/glissandosettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/glissandosettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/hairpinsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/hairpinsettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/ottavasettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/ottavasettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/voltasettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/voltasettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/linesettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/linesettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/images/imagesettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/images/imagesettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/jumps/jumpsettingsmodel.cpp
@@ -140,8 +147,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/markers/markersettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/ornaments/ornamentsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/ornaments/ornamentsettingsmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/models/notation/pedals/pedalsettingsmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/models/notation/pedals/pedalsettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/pedalsettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/pedalsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/sectionbreaks/sectionbreaksettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/sectionbreaks/sectionbreaksettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/spacers/spacersettingsmodel.cpp

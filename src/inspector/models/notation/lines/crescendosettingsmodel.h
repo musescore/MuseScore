@@ -19,30 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_INSPECTOR_GLISSANDOSETTINGSMODEL_H
-#define MU_INSPECTOR_GLISSANDOSETTINGSMODEL_H
+#ifndef MU_INSPECTOR_CRESCENDOSETTINGSMODEL_H
+#define MU_INSPECTOR_CRESCENDOSETTINGSMODEL_H
 
-#include "models/abstractinspectormodel.h"
+#include "linesettingsmodel.h"
 
 namespace mu::inspector {
-class GlissandoSettingsModel : public AbstractInspectorModel
+class CrescendoSettingsModel : public LineSettingsModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(PropertyItem * lineType READ lineType CONSTANT)
 public:
-    explicit GlissandoSettingsModel(QObject* parent, IElementRepositoryService* repository);
-
-    void createProperties() override;
-    void requestElements() override;
-    void loadProperties() override;
-    void resetProperties() override;
-
-    PropertyItem* lineType() const;
+    explicit CrescendoSettingsModel(QObject* parent, IElementRepositoryService* repository);
 
 private:
-    PropertyItem* m_lineType = nullptr;
+    void requestElements() override;
 };
 }
 
-#endif // MU_INSPECTOR_GLISSANDOSETTINGSMODEL_H
+#endif // MU_INSPECTOR_CRESCENDOSETTINGSMODEL_H

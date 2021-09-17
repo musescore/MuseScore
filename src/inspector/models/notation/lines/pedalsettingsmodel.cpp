@@ -19,42 +19,44 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "glissandosettingsmodel.h"
+#include "pedalsettingsmodel.h"
 
 #include "translation.h"
 
 using namespace mu::inspector;
 
-GlissandoSettingsModel::GlissandoSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository)
+PedalSettingsModel::PedalSettingsModel(QObject* parent, IElementRepositoryService* repository)
+    : LineSettingsModel(parent, repository, Ms::ElementType::PEDAL)
 {
-    setModelType(InspectorModelType::TYPE_GLISSANDO);
-    setTitle(qtrc("inspector", "Glissando"));
-    setIcon(ui::IconCode::Code::GLISSANDO);
+    setModelType(InspectorModelType::TYPE_PEDAL);
+    setTitle(qtrc("inspector", "Pedal"));
+    setIcon(ui::IconCode::Code::PEDAL_MARKING);
+
     createProperties();
 }
 
-void GlissandoSettingsModel::createProperties()
+PropertyItem* PedalSettingsModel::showPedalSymbol() const
 {
-    m_lineType = buildPropertyItem(Ms::Pid::GLISS_TYPE);
+    return m_showPedalSymbol;
 }
 
-void GlissandoSettingsModel::requestElements()
+void PedalSettingsModel::createProperties()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::GLISSANDO);
+    LineSettingsModel::createProperties();
+
+    m_showPedalSymbol = buildPropertyItem(Ms::Pid::SYMBOL);
 }
 
-void GlissandoSettingsModel::loadProperties()
+void PedalSettingsModel::loadProperties()
 {
-    loadPropertyItem(m_lineType);
+    LineSettingsModel::loadProperties();
+
+    loadPropertyItem(m_showPedalSymbol);
 }
 
-void GlissandoSettingsModel::resetProperties()
+void PedalSettingsModel::resetProperties()
 {
-    m_lineType->resetToDefault();
-}
+    LineSettingsModel::resetProperties();
 
-PropertyItem* GlissandoSettingsModel::lineType() const
-{
-    return m_lineType;
+    m_showPedalSymbol->resetToDefault();
 }
