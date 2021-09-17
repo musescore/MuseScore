@@ -32,8 +32,10 @@ FlatButton {
 
     property var model: null
 
+    property alias popupAnchorItem: popup.anchorItem
+
     height: 96
-    accentButton: popup.visible
+    accentButton: popup.isOpened
 
     TimeSignatureView {
         id: timeSignatureView
@@ -54,25 +56,21 @@ FlatButton {
         }
     }
 
-    StyledPopup {
+    StyledPopupView {
         id: popup
 
-        implicitHeight: radioButtonList.height + topPadding + bottomPadding + 40
-        implicitWidth: 310
+        padding: 8
+        margins: 36
 
-        x: root.x - (width - root.width) / 2
-        y: root.height
+        contentWidth: 200
+        contentHeight: 120
 
         RadioButtonGroup {
             id: radioButtonList
 
-            anchors.top: parent.top
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.margins: 20
-            height: implicitHeight
+            anchors.fill: parent
 
-            spacing: 30
+            spacing: 32
 
             orientation: ListView.Vertical
 
@@ -89,6 +87,7 @@ FlatButton {
                 width: parent.width
 
                 spacing: 30
+                leftPadding: 0
 
                 contentComponent: modelData["comp"]
                 checked: (root.model.timeSignatureType === modelData["valueRole"])

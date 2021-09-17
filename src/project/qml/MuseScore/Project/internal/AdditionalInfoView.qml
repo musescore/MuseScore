@@ -41,7 +41,14 @@ Row {
     property alias pickupTimeSignature: infoModel.pickupTimeSignature
     property alias measureCount: infoModel.measureCount
 
+    property NavigationSection navigationSection: null
+    property var popupsAnchorItem: null
+
     spacing: 20
+
+    function focusOnFirst() {
+        keySignatureSettings.navigation.requestActive()
+    }
 
     QtObject {
         id: privatesProperties
@@ -56,6 +63,15 @@ Row {
 
     AdditionalInfoModel {
         id: infoModel
+    }
+
+    NavigationPanel {
+        id: navPanel
+        name: "NavPanel"
+        section: root.navigationSection
+        order: 1
+        direction: NavigationPanel.Horizontal
+        enabled: root.visible
     }
 
     Column {
@@ -77,12 +93,20 @@ Row {
         }
 
         KeySignatureSettings {
+            id: keySignatureSettings
+
             anchors.left: parent.left
             anchors.right: parent.right
 
             height: privatesProperties.buttonHeight
 
             model: infoModel
+
+            popupAnchorItem: root.popupsAnchorItem
+
+            navigation.name: "KeySignatureButton"
+            navigation.panel: navPanel
+            navigation.column: 0
         }
     }
 
@@ -110,6 +134,12 @@ Row {
             height: privatesProperties.buttonHeight
 
             model: infoModel
+
+            popupAnchorItem: root.popupsAnchorItem
+
+            navigation.name: "TimeSignatureButton"
+            navigation.panel: navPanel
+            navigation.column: 1
         }
     }
 
@@ -137,6 +167,12 @@ Row {
             height: privatesProperties.buttonHeight
 
             model: infoModel
+
+            popupAnchorItem: root.popupsAnchorItem
+
+            navigation.name: "TempoSignatureButton"
+            navigation.panel: navPanel
+            navigation.column: 2
         }
     }
 
@@ -164,6 +200,12 @@ Row {
             height: privatesProperties.buttonHeight
 
             model: infoModel
+
+            popupAnchorItem: root.popupsAnchorItem
+
+            navigation.name: "MeasuresSignatureButton"
+            navigation.panel: navPanel
+            navigation.column: 3
         }
     }
 }

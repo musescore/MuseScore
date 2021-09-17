@@ -33,8 +33,10 @@ FlatButton {
     property var model: null
     property var mode: bar.currentIndex === 0 ? "major" : "minor"
 
+    property alias popupAnchorItem: popup.anchorItem
+
     height: 96
-    accentButton: popup.visible
+    accentButton: popup.isOpened
 
     KeySignature {
         icon: model.keySignature.icon
@@ -49,51 +51,73 @@ FlatButton {
         }
     }
 
-    StyledPopup {
+    StyledPopupView {
         id: popup
 
-        implicitHeight: 300
-        implicitWidth: 724
+        padding: 8
+        margins: 20
 
-        arrowX: root.x + root.width / 2
-        y: root.height
+        contentWidth: 688
+        contentHeight: 242
 
-        Item {
-            id: item
+        navigationParentControl: root.navigation
+        navigation.name: root.navigation.name + "Popup"
+        navigation.direction: NavigationPanel.Both
+
+        onOpened: {
+            majorTab.navigation.requestActive()
+        }
+
+        ColumnLayout {
+            id: content
 
             anchors.fill: parent
-            anchors.topMargin: 10
-            anchors.margins: 20
 
             TabBar {
                 id: bar
 
-                anchors.top: parent.top
-                anchors.horizontalCenter: parent.horizontalCenter
+                Layout.alignment: Qt.AlignHCenter
 
                 implicitHeight: 28
 
+//                property NavigationPanel navigationPanel: NavigationPanel {
+//                    name: "KeySignatureTabPanel"
+//                    direction: NavigationPanel.Both
+//                }
+
                 StyledTabButton {
+                    id: majorTab
                     text: qsTrc("project", "Major")
                     sideMargin: 22
                     isCurrent: bar.currentIndex === 0
+
+                    navigation.name: "MajorTab"
+                    navigation.panel: popup.navigation
+                    navigation.row: 0
+                    navigation.column: 0
+                    onNavigationTriggered: bar.currentIndex = 0
                 }
 
                 StyledTabButton {
                     text: qsTrc("appshell", "Minor")
                     sideMargin: 22
                     isCurrent: bar.currentIndex === 1
+
+                    navigation.name: "MinorTab"
+                    navigation.panel: popup.navigation
+                    navigation.row: 0
+                    navigation.column: 1
+                    onNavigationTriggered: bar.currentIndex = 1
                 }
             }
 
             StackLayout {
                 id: pagesStack
 
-                anchors.top: bar.bottom
-                anchors.topMargin: 24
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.bottom: parent.bottom
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+
+                Layout.topMargin: 20
 
                 currentIndex: bar.currentIndex
 
@@ -101,6 +125,12 @@ FlatButton {
                     model: root.model.keySignatureList()
                     currentSignature: root.model.keySignature
                     mode: "major"
+
+                    navigationPanel.section: popup.navigation.section
+                    navigationPanel.enabled: bar.currentIndex === 0
+                    navigationPanel.order: popup.navigation.order + 1
+                    navigationRowStart: 0
+                    navigationColumnStart: 0
 
                     onSignatureSelected: {
                         root.model.keySignature = signature
@@ -111,6 +141,10 @@ FlatButton {
                     model: root.model.keySignatureList()
                     currentSignature: root.model.keySignature
                     mode: "minor"
+
+                    navigationPanel: popup.navigation
+                    navigationRowStart: 1
+                    navigationColumnStart: 0
 
                     onSignatureSelected: {
                         root.model.keySignature = signature
