@@ -85,89 +85,10 @@ FocusableItem {
 
         SeparatorLine { anchors.margins: -10 }
 
-        InspectorPropertyView {
-            titleText:  qsTrc("inspector", "Style")
-            propertyItem: root.model ? root.model.lineStyle : null
-
-            enabled: root.model && root.model.lineStyle.isEnabled
-
-            RadioButtonGroup {
-                id: lineStyleButtonList
-
-                height: 30
-                width: parent.width
-
-                model: [
-                    { iconRole: IconCode.LINE_NORMAL, typeRole: LineTypes.LINE_STYLE_SOLID },
-                    { iconRole: IconCode.LINE_DASHED, typeRole: LineTypes.LINE_STYLE_DASHED },
-                    { iconRole: IconCode.LINE_DOTTED, typeRole: LineTypes.LINE_STYLE_DOTTED },
-                    { iconRole: IconCode.NONE, textRole: qsTrc("inspector", "Custom"), typeRole: LineTypes.LINE_STYLE_CUSTOM }
-                ]
-
-                delegate: FlatRadioButton {
-                    ButtonGroup.group: lineStyleButtonList.radioButtonGroup
-
-                    iconCode: modelData["iconRole"]
-                    text: modelData["textRole"]
-
-                    checked: root.model && !root.model.lineStyle.isUndefined ? root.model.lineStyle.value === modelData["typeRole"]
-                                                                             : false
-                    onToggled: {
-                        root.model.lineStyle.value = modelData["typeRole"]
-                    }
-                }
-            }
-        }
-
-        Item {
-            height: childrenRect.height
-            width: parent.width
-
-            InspectorPropertyView {
-                anchors.left: parent.left
-                anchors.right: parent.horizontalCenter
-                anchors.rightMargin: 2
-
-                titleText: qsTrc("inspector", "Dash")
-                propertyItem: root.model ? root.model.dashLineLength : null
-
-                visible: root.model ? root.model.dashLineLength.isEnabled : false
-                height: visible ? implicitHeight : 0
-
-                IncrementalPropertyControl {
-                    isIndeterminate: root.model ? root.model.dashLineLength.isUndefined : false
-                    currentValue: root.model ? root.model.dashLineLength.value : 0
-                    step: 0.1
-                    maxValue: 10
-                    minValue: 0.1
-                    decimals: 2
-
-                    onValueEdited: { root.model.dashLineLength.value = newValue }
-                }
-            }
-
-            InspectorPropertyView {
-                anchors.left: parent.horizontalCenter
-                anchors.leftMargin: 2
-                anchors.right: parent.right
-
-                titleText: qsTrc("inspector", "Gap")
-                propertyItem: root.model ? root.model.dashGapLength : null
-
-                visible: root.model ? root.model.dashGapLength.isEnabled : false
-                height: visible ? implicitHeight : 0
-
-                IncrementalPropertyControl {
-                    isIndeterminate: root.model && enabled ? root.model.dashGapLength.isUndefined : false
-                    currentValue: root.model ? root.model.dashGapLength.value : 0
-                    step: 0.1
-                    maxValue: 10
-                    minValue: 0.1
-                    decimals: 2
-
-                    onValueEdited: { root.model.dashGapLength.value = newValue }
-                }
-            }
+        LineStyleSection {
+            lineStyle: root.model ? root.model.lineStyle : null
+            dashLineLength: root.model ? root.model.dashLineLength : null
+            dashGapLength: root.model ? root.model.dashGapLength : null
         }
 
         ExpandableBlank {
