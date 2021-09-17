@@ -64,11 +64,11 @@ FocusableItem {
                 anchors.leftMargin: 2
                 anchors.right: parent.right
 
-                isIndeterminate: root.model ? root.model.isDiagonalLocked.isUndefined : false
-                checked: root.model && !isIndeterminate ? root.model.isDiagonalLocked.value : false
+                isIndeterminate: root.model ? root.model.allowDiagonal.isUndefined : false
+                checked: root.model && !isIndeterminate ? root.model.allowDiagonal.value : false
                 text: qsTrc("inspector", "Allow diagonal")
 
-                onClicked: { root.model.isDiagonalLocked.value = !checked }
+                onClicked: { root.model.allowDiagonal.value = !checked }
             }
         }
 
