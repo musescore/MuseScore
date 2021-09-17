@@ -50,7 +50,7 @@ void LineSettingsModel::createProperties()
     m_dashGapLength = buildPropertyItem(Ms::Pid::DASH_GAP_LEN);
 
     m_isLineVisible = buildPropertyItem(Ms::Pid::LINE_VISIBLE);
-    m_isDiagonalLocked = buildPropertyItem(Ms::Pid::DIAGONAL);
+    m_allowDiagonal = buildPropertyItem(Ms::Pid::DIAGONAL);
 
     m_beginingHookType = buildPropertyItem(Ms::Pid::BEGIN_HOOK_TYPE);
     m_endHookType = buildPropertyItem(Ms::Pid::END_HOOK_TYPE);
@@ -110,7 +110,7 @@ void LineSettingsModel::loadProperties()
     loadPropertyItem(m_dashGapLength, formatDoubleFunc);
 
     loadPropertyItem(m_isLineVisible);
-    loadPropertyItem(m_isDiagonalLocked);
+    loadPropertyItem(m_allowDiagonal);
 
     loadPropertyItem(m_beginingHookType);
     loadPropertyItem(m_endHookType);
@@ -152,7 +152,7 @@ void LineSettingsModel::resetProperties()
         m_dashLineLength,
         m_dashGapLength,
         m_isLineVisible,
-        m_isDiagonalLocked,
+        m_allowDiagonal,
         m_beginingHookType,
         m_endHookType,
         m_hookHeight,
@@ -204,9 +204,9 @@ PropertyItem* LineSettingsModel::isLineVisible() const
     return m_isLineVisible;
 }
 
-PropertyItem* LineSettingsModel::isDiagonalLocked() const
+PropertyItem* LineSettingsModel::allowDiagonal() const
 {
-    return m_isDiagonalLocked;
+    return m_allowDiagonal;
 }
 
 PropertyItem* LineSettingsModel::beginingHookType() const

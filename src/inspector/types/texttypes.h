@@ -116,11 +116,6 @@ public:
         TEXT_TYPE_USER12
     };
 
-    enum class TextPlacement {
-        TEXT_PLACEMENT_ABOVE = 0,
-        TEXT_PLACEMENT_BELOW
-    };
-
     enum class TextSubscriptMode {
         TEXT_SUBSCRIPT_NORMAL = 0,
         TEXT_SUBSCRIPT_TOP,
@@ -130,7 +125,6 @@ public:
     Q_ENUM(FontStyle)
     Q_ENUM(FrameType)
     Q_ENUM(TextType)
-    Q_ENUM(TextPlacement)
     Q_ENUM(TextSubscriptMode)
 
     Q_ENUM(FontHorizontalAlignment)

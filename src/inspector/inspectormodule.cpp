@@ -38,7 +38,7 @@
 #include "types/ornamenttypes.h"
 #include "types/dynamictypes.h"
 #include "types/glissandotypes.h"
-#include "types/fermatatypes.h"
+#include "types/commontypes.h"
 #include "types/barlinetypes.h"
 #include "types/markertypes.h"
 #include "types/keysignaturetypes.h"
@@ -92,7 +92,7 @@ void InspectorModule::registerUiTypes()
     qmlRegisterUncreatableType<OrnamentTypes>("MuseScore.Inspector", 1, 0, "OrnamentTypes", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<DynamicTypes>("MuseScore.Inspector", 1, 0, "Dynamic", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<GlissandoTypes>("MuseScore.Inspector", 1, 0, "Glissando", "Not creatable as it is an enum type");
-    qmlRegisterUncreatableType<FermataTypes>("MuseScore.Inspector", 1, 0, "FermataTypes", "Not creatable as it is an enum type");
+    qmlRegisterUncreatableType<CommonTypes>("MuseScore.Inspector", 1, 0, "CommonTypes", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<BarlineTypes>("MuseScore.Inspector", 1, 0, "BarlineTypes", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<MarkerTypes>("MuseScore.Inspector", 1, 0, "MarkerTypes", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<KeySignatureTypes>("MuseScore.Inspector", 1, 0, "KeySignatureTypes", "Not creatable as it is an enum type");
