@@ -55,10 +55,10 @@ FocusableItem {
            hookHeight: root.model ? root.model.hookHeight : null
 
            possibleEndHookTypes: [
-               { iconRole: IconCode.LINE_NORMAL, typeRole: CrescendoTypes.HOOK_TYPE_NONE },
-               { iconRole: IconCode.LINE_WITH_END_HOOK, typeRole: CrescendoTypes.HOOK_TYPE_90 },
-               { iconRole: IconCode.LINE_WITH_ANGLED_END_HOOK, typeRole: CrescendoTypes.HOOK_TYPE_45 },
-               { iconRole: IconCode.LINE_WITH_T_LIKE_END_HOOK, typeRole: CrescendoTypes.HOOK_TYPE_T_LIKE },
+               { iconCode: IconCode.LINE_NORMAL, value: CrescendoTypes.HOOK_TYPE_NONE },
+               { iconCode: IconCode.LINE_WITH_END_HOOK, value: CrescendoTypes.HOOK_TYPE_90 },
+               { iconCode: IconCode.LINE_WITH_ANGLED_END_HOOK, value: CrescendoTypes.HOOK_TYPE_45 },
+               { iconCode: IconCode.LINE_WITH_T_LIKE_END_HOOK, value: CrescendoTypes.HOOK_TYPE_T_LIKE }
            ]
         }
 

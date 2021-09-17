@@ -56,6 +56,7 @@ private:
     QList<Ms::EngravingItem*> findBeams() const;
     QList<Ms::EngravingItem*> findGlissandos() const;
     QList<Ms::EngravingItem*> findHairpins() const;
+    QList<Ms::EngravingItem*> findVoltas() const;
     QList<Ms::EngravingItem*> findStaffs() const;
     QList<Ms::EngravingItem*> findSectionBreaks() const;
     QList<Ms::EngravingItem*> findPedals() const;

@@ -58,6 +58,8 @@ InspectorPropertyView {
     }
 
     RowLayout {
+        id: row
+
         height: childrenRect.height
         width: parent.width
 
@@ -66,7 +68,7 @@ InspectorPropertyView {
         IncrementalPropertyControl {
             id: horizontalOffsetControl
 
-            Layout.fillWidth: true
+            Layout.preferredWidth: parent.width / 2 - row.spacing / 2
 
             navigation.name: "HorizontalOffsetControl"
             navigation.panel: root.navigationPanel
@@ -75,7 +77,7 @@ InspectorPropertyView {
             icon: IconCode.HORIZONTAL
 
             enabled: Boolean(root.horizontalOffset) && root.horizontalOffset.isEnabled
-            visible: Boolean(root.horizontalOffset)
+            visible: Boolean(root.horizontalOffset) && root.horizontalOffset.isVisible
 
             isIndeterminate: root.horizontalOffset && enabled ? root.horizontalOffset.isUndefined : false
             currentValue: root.horizontalOffset ? root.horizontalOffset.value : 0
@@ -88,7 +90,7 @@ InspectorPropertyView {
         IncrementalPropertyControl {
             id: verticalOffsetControl
 
-            Layout.fillWidth: true
+            Layout.preferredWidth: parent.width / 2 - row.spacing / 2
 
             navigation.name: "VerticalOffsetControl"
             navigation.panel: root.navigationPanel
@@ -97,7 +99,7 @@ InspectorPropertyView {
             icon: IconCode.VERTICAL
 
             enabled: Boolean(root.verticalOffset) && root.verticalOffset.isEnabled
-            visible: Boolean(root.verticalOffset)
+            visible: Boolean(root.verticalOffset) && root.verticalOffset.isVisible
 
             isIndeterminate: root.verticalOffset && enabled ? root.verticalOffset.isUndefined : false
             currentValue: root.verticalOffset ? root.verticalOffset.value : 0
