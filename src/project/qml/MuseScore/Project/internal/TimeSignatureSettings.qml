@@ -65,6 +65,8 @@ FlatButton {
         contentWidth: 200
         contentHeight: 120
 
+        navigationParentControl: root.navigation
+
         RadioButtonGroup {
             id: radioButtonList
 
@@ -80,8 +82,17 @@ FlatButton {
                 { comp: cutComp, valueRole: AdditionalInfoModel.Cut }
             ]
 
+            property NavigationPanel navigationPanel: NavigationPanel {
+                name: "TimeSignatureTabPanel"
+                section: popup.navigationSection
+                direction: NavigationPanel.Both
+                order: 1
+            }
+
             delegate: RoundedRadioButton {
                 id: timeFractionButton
+
+                property bool isCurrent: radioButtonList.currentIndex === model.index
 
                 ButtonGroup.group: radioButtonList.radioButtonGroup
                 width: parent.width
@@ -90,10 +101,21 @@ FlatButton {
                 leftPadding: 0
 
                 contentComponent: modelData["comp"]
-                checked: (root.model.timeSignatureType === modelData["valueRole"])
+                checked: (root.model.timeSignatureType === modelData["valueRole"]) && popup.isOpened
+
+                navigation.name: modelData["valueRole"]
+                navigation.panel: radioButtonList.navigationPanel
+                navigation.row: model.index
+                navigation.column: 0
 
                 onToggled: {
                     root.model.timeSignatureType = modelData["valueRole"]
+                }
+
+                onCheckedChanged: {
+                    if (checked && !navigation.active) {
+                        navigation.requestActive()
+                    }
                 }
             }
         }
@@ -110,6 +132,10 @@ FlatButton {
 
             numerator: enabled ? root.model.timeSignature.numerator : numerator
             denominator: enabled ? root.model.timeSignature.denominator : denominator
+
+            navigationPanel: radioButtonList.navigationPanel
+            navigationRowStart: 0
+            navigationColumnStart: 1
 
             onNumeratorSelected: {
                 root.model.setTimeSignatureNumerator(value)

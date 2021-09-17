@@ -21,6 +21,7 @@
  */
 import QtQuick 2.9
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
 Row {
@@ -32,6 +33,10 @@ Row {
 
     signal numeratorSelected(var value)
     signal denominatorSelected(var value)
+
+    property NavigationPanel navigationPanel: null
+    property int navigationRowStart: 0
+    property int navigationColumnStart: 0
 
     spacing: 12
 
@@ -46,6 +51,11 @@ Row {
         decimals: 0
         maxValue: 63
         minValue: 1
+
+        navigation.name: "TimeControl"
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationRowStart
+        navigation.column: root.navigationColumnStart
 
         onValueEdited: {
             root.numeratorSelected(newValue)
@@ -67,6 +77,11 @@ Row {
 
         popupItemsCount: 4
         currentIndex: timeComboBox.indexOfValue(root.denominator)
+
+        navigation.name: "TimeBox"
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationRowStart
+        navigation.column: root.navigationRowStart + 1
 
         model: {
             var resultList = []

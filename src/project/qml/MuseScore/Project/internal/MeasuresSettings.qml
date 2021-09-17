@@ -70,10 +70,23 @@ FlatButton {
         contentWidth: content.width
         contentHeight: content.height
 
+        navigationParentControl: root.navigation
+
+        onOpened: {
+            withPickupMeasure.navigation.requestActive()
+        }
+
         ColumnLayout {
             id: content
 
             spacing: 0
+
+            property NavigationPanel navigationPanel: NavigationPanel {
+                name: "MeasuresSettingsPanel"
+                section: popup.navigationSection
+                direction: NavigationPanel.Both
+                order: 1
+            }
 
             CheckBox {
                 id: withPickupMeasure
@@ -84,6 +97,11 @@ FlatButton {
                 checked: root.model.withPickupMeasure
 
                 text: qsTrc("project", "Show pickup measure")
+
+                navigation.name: "WithPickupMeasure"
+                navigation.panel: content.navigationPanel
+                navigation.row: 0
+                navigation.column: 0
 
                 onClicked: {
                     root.model.withPickupMeasure = !checked
@@ -98,6 +116,10 @@ FlatButton {
                 denominator: root.model.pickupTimeSignature.denominator
                 availableDenominators: root.model.timeSignatureDenominators()
                 enabled: withPickupMeasure.checked
+
+                navigationPanel: content.navigationPanel
+                navigationRowStart: 1
+                navigationColumnStart: 0
 
                 onNumeratorSelected: {
                     root.model.setPickupTimeSignatureNumerator(value)
@@ -135,6 +157,11 @@ FlatButton {
                 decimals: 0
                 maxValue: root.model.measureCountRange().max
                 minValue: root.model.measureCountRange().min
+
+                navigation.name: "MeasuresCountControl"
+                navigation.panel: content.navigationPanel
+                navigation.row: 2
+                navigation.column: 0
 
                 onValueEdited: {
                     root.model.measureCount = newValue
