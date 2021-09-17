@@ -227,8 +227,8 @@ class TextBlock
 
 public:
     TextBlock() {}
-    bool operator ==(const TextBlock& x) { return _fragments == x._fragments; }
-    bool operator !=(const TextBlock& x) { return _fragments != x._fragments; }
+    bool operator ==(const TextBlock& x) const { return _fragments == x._fragments; }
+    bool operator !=(const TextBlock& x) const { return _fragments != x._fragments; }
     void draw(mu::draw::Painter*, const TextBase*) const;
     void layout(TextBase*);
     const QList<TextFragment>& fragments() const { return _fragments; }

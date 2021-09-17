@@ -34,66 +34,66 @@ Column {
     property alias navigation: menuButton.navigation
 
     property alias titleText: titleLabel.text
-    property bool isStyled: propertyItem ? propertyItem.isStyled : false
-    property bool isModified: propertyItem ? propertyItem.isModified : false
+    property alias showTitle: titleLabel.visible
+    property alias showMenuButton: menuButton.visible
+
+    readonly property bool isStyled: propertyItem ? propertyItem.isStyled : false
+    readonly property bool isModified: propertyItem ? propertyItem.isModified : false
 
     width: parent.width
 
     spacing: 8
 
-    Item {
-        height: contentRow.implicitHeight
+    RowLayout {
+        id: contentRow
+
         width: parent.width
+        height: implicitHeight
 
-        RowLayout {
-            id: contentRow
+        spacing: 4
 
-            width: parent.width
+        StyledTextLabel {
+            id: titleLabel
 
-            spacing: 4
+            visible: !isEmpty
+            Layout.alignment: Qt.AlignLeft
+            Layout.fillWidth: true
 
-            StyledTextLabel {
-                id: titleLabel
+            horizontalAlignment: Text.AlignLeft
+        }
 
-                Layout.alignment: Qt.AlignLeft
-                Layout.fillWidth: true
+        MenuButton {
+            id: menuButton
 
-                horizontalAlignment: Text.AlignLeft
-            }
+            height: 20
+            width: height
 
-            MenuButton {
-                id: menuButton
+            menuModel: {
+                var result = []
 
-                height: 20
-                width: height
+                result.push({ title: qsTrc("inspector", "Reset"), enabled: root.isModified, icon: IconCode.NONE, id: "reset" })
 
-                menuModel: {
-                    var result = []
-
-                    result.push({ title: qsTrc("inspector", "Reset"), enabled: root.isModified, icon: IconCode.NONE, id: "reset" })
-
-                    if (root.isStyled) {
-                        if (root.isModified) {
-                            result.push({ title: qsTrc("inspector", "Save as default style for this score"), enabled: true, icon: IconCode.SAVE, id: "save" })
-                        } else {
-                            result.push({ title: qsTrc("inspector", "This is set as the default style for this score"), enabled: false, icon: IconCode.TICK_RIGHT_ANGLE })
-                        }
+                if (root.isStyled) {
+                    if (root.isModified) {
+                        result.push({ title: qsTrc("inspector", "Save as default style for this score"), enabled: true, icon: IconCode.SAVE, id: "save" })
+                    } else {
+                        result.push({ title: qsTrc("inspector", "This is set as the default style for this score"), enabled: false, icon: IconCode.TICK_RIGHT_ANGLE })
                     }
-
-                    return result
                 }
 
-                menuAlign: Qt.AlignHCenter
+                return result
+            }
 
-                onHandleMenuItem: function(itemId) {
-                    switch (itemId) {
-                    case "reset":
-                        root.propertyItem.resetToDefault()
-                        break
-                    case "save":
-                        root.propertyItem.applyToStyle()
-                        break
-                    }
+            menuAlign: Qt.AlignHCenter
+
+            onHandleMenuItem: function(itemId) {
+                switch (itemId) {
+                case "reset":
+                    root.propertyItem.resetToDefault()
+                    break
+                case "save":
+                    root.propertyItem.applyToStyle()
+                    break
                 }
             }
         }

@@ -786,7 +786,6 @@ static QWidgetOrQuick *qtTopLevelForHWND(HWND hwnd)
     qCDebug(toplevels) << Q_FUNC_INFO << "Couldn't find hwnd for top-level" << hwnd;
     return nullptr;
 }
-#endif
 
 static QRect topLevelGeometry(const QWidgetOrQuick* topLevel)
 {
@@ -795,6 +794,8 @@ static QRect topLevelGeometry(const QWidgetOrQuick* topLevel)
 
     return topLevel->geometry();
 }
+
+#endif
 
 template <typename T>
 static WidgetType* qtTopLevelUnderCursor_impl(QPoint globalPos, const QVector<QWindow*> &windows, T windowBeingDragged)

@@ -35,7 +35,7 @@ AmbitusSettingsModel::AmbitusSettingsModel(QObject* parent, IElementRepositorySe
     setIcon(ui::IconCode::Code::AMBITUS);
     createProperties();
 
-    setNoteheadGroupsModel(new NoteheadTypesModel(this));
+    setNoteheadGroupsModel(new NoteheadGroupsModel(this));
 }
 
 void AmbitusSettingsModel::createProperties()
@@ -103,13 +103,17 @@ void AmbitusSettingsModel::resetProperties()
 
 void AmbitusSettingsModel::matchRangesToStaff()
 {
+    // TODO: The "default values" are not always actual and correct
+    // That is because the default value gets set to a fixed value
+    // only when loadProperties() is called, but for an Ambitus, it
+    // is crucial that the default value is recalculated every time.
     m_topTpc->resetToDefault();
     m_bottomTpc->resetToDefault();
     m_topPitch->resetToDefault();
     m_bottomPitch->resetToDefault();
 }
 
-NoteheadTypesModel* AmbitusSettingsModel::noteheadGroupsModel() const
+NoteheadGroupsModel* AmbitusSettingsModel::noteheadGroupsModel() const
 {
     return m_noteheadGroupsModel;
 }
@@ -164,7 +168,7 @@ PropertyItem* AmbitusSettingsModel::bottomPitch() const
     return m_bottomPitch;
 }
 
-void AmbitusSettingsModel::setNoteheadGroupsModel(NoteheadTypesModel* noteheadGroupsModel)
+void AmbitusSettingsModel::setNoteheadGroupsModel(NoteheadGroupsModel* noteheadGroupsModel)
 {
     if (m_noteheadGroupsModel == noteheadGroupsModel) {
         return;
@@ -172,7 +176,7 @@ void AmbitusSettingsModel::setNoteheadGroupsModel(NoteheadTypesModel* noteheadGr
 
     m_noteheadGroupsModel = noteheadGroupsModel;
 
-    connect(m_noteheadGroupsModel, &NoteheadTypesModel::noteHeadGroupSelected, [this](const int noteHeadGroup) {
+    connect(m_noteheadGroupsModel, &NoteheadGroupsModel::noteHeadGroupSelected, [this](const int noteHeadGroup) {
         m_noteheadGroup->setValue(noteHeadGroup);
     });
 

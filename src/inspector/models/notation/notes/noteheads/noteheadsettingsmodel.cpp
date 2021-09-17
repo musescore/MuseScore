@@ -36,7 +36,7 @@ NoteheadSettingsModel::NoteheadSettingsModel(QObject* parent, IElementRepository
 
     createProperties();
 
-    setNoteheadTypesModel(new NoteheadTypesModel(this));
+    setNoteheadGroupsModel(new NoteheadGroupsModel(this));
 }
 
 void NoteheadSettingsModel::createProperties()
@@ -96,9 +96,9 @@ void NoteheadSettingsModel::resetProperties()
     m_verticalOffset->resetToDefault();
 }
 
-QObject* NoteheadSettingsModel::noteheadTypesModel() const
+QObject* NoteheadSettingsModel::noteheadGroupsModel() const
 {
-    return m_noteheadTypesModel;
+    return m_noteheadGroupsModel;
 }
 
 PropertyItem* NoteheadSettingsModel::isHeadHidden() const
@@ -136,26 +136,26 @@ PropertyItem* NoteheadSettingsModel::verticalOffset() const
     return m_verticalOffset;
 }
 
-void NoteheadSettingsModel::setNoteheadTypesModel(NoteheadTypesModel* noteheadTypesModel)
+void NoteheadSettingsModel::setNoteheadGroupsModel(NoteheadGroupsModel* noteheadGroupsModel)
 {
-    if (m_noteheadTypesModel == noteheadTypesModel) {
+    if (m_noteheadGroupsModel == noteheadGroupsModel) {
         return;
     }
 
-    m_noteheadTypesModel = noteheadTypesModel;
+    m_noteheadGroupsModel = noteheadGroupsModel;
 
-    connect(m_noteheadTypesModel, &NoteheadTypesModel::noteHeadGroupSelected, [this](const int noteHeadGroup) {
+    connect(m_noteheadGroupsModel, &NoteheadGroupsModel::noteHeadGroupSelected, [this](const int noteHeadGroup) {
         m_headGroup->setValue(noteHeadGroup);
     });
 
     connect(m_headGroup, &PropertyItem::valueChanged, [this](const QVariant noteHeadGroup) {
         if (m_headGroup->isUndefined()) {
-            m_noteheadTypesModel->init(Ms::NoteHead::Group::HEAD_INVALID);
+            m_noteheadGroupsModel->init(Ms::NoteHead::Group::HEAD_INVALID);
         } else {
-            m_noteheadTypesModel->init(static_cast<Ms::NoteHead::Group>(noteHeadGroup.toInt()));
+            m_noteheadGroupsModel->init(static_cast<Ms::NoteHead::Group>(noteHeadGroup.toInt()));
         }
-        emit noteheadTypesModelChanged();
+        emit noteheadGroupsModelChanged();
     });
 
-    emit noteheadTypesModelChanged();
+    emit noteheadGroupsModelChanged();
 }
