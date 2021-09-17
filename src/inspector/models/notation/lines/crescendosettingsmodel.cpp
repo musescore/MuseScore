@@ -34,6 +34,8 @@ CrescendoSettingsModel::CrescendoSettingsModel(QObject* parent, IElementReposito
     setModelType(InspectorModelType::TYPE_CRESCENDO);
     setTitle(qtrc("inspector", "Crescendo"));
     setIcon(ui::IconCode::Code::CRESCENDO_LINE);
+
+    createProperties();
 }
 
 void CrescendoSettingsModel::requestElements()

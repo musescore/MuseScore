@@ -30,7 +30,7 @@ class CrescendoSettingsModel : public LineSettingsModel
     Q_OBJECT
 
 public:
-    explicit CrescendoSettingsModel(QObject* parent, IElementRepositoryService* repository); 
+    explicit CrescendoSettingsModel(QObject* parent, IElementRepositoryService* repository);
 
 private:
     void requestElements() override;

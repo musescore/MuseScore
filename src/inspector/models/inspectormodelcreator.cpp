@@ -28,7 +28,7 @@
 #include "notation/notes/stems/stemsettingsmodel.h"
 #include "notation/fermatas/fermatasettingsmodel.h"
 #include "notation/tempos/temposettingsmodel.h"
-#include "notation/glissandos/glissandosettingsmodel.h"
+#include "notation/lines/glissandosettingsmodel.h"
 #include "notation/barlines/barlinesettingsproxymodel.h"
 #include "notation/staffs/staffsettingsmodel.h"
 #include "notation/sectionbreaks/sectionbreaksettingsmodel.h"

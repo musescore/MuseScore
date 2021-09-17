@@ -127,8 +127,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/frames/verticalframesettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/fretdiagrams/fretdiagramsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/fretdiagrams/fretdiagramsettingsmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/models/notation/glissandos/glissandosettingsmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/models/notation/glissandos/glissandosettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/glissandosettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/glissandosettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/hairpinsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/hairpinsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/ottavasettingsmodel.cpp
