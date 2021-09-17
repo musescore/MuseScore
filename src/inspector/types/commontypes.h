@@ -19,22 +19,22 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_INSPECTOR_FERMATATYPES_H
-#define MU_INSPECTOR_FERMATATYPES_H
+#ifndef MU_INSPECTOR_COMMONTYPES_H
+#define MU_INSPECTOR_COMMONTYPES_H
 
 #include "qobjectdefs.h"
 
-class FermataTypes
+class CommonTypes
 {
     Q_GADGET
 
 public:
     enum class Placement {
-        ABOVE,
-        BELOW
+        PLACEMENT_TYPE_ABOVE,
+        PLACEMENT_TYPE_BELOW
     };
 
     Q_ENUM(Placement)
 };
 
-#endif // MU_INSPECTOR_FERMATATYPES_H
+#endif // MU_INSPECTOR_COMMONTYPES_H

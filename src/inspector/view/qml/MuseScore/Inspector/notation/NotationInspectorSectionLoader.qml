@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import QtQuick.Layouts 1.3
+import QtQuick 2.15
+import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -30,7 +30,6 @@ import "../common"
 import "notes"
 import "fermatas"
 import "tempos"
-import "glissandos"
 import "barlines"
 import "sectionbreaks"
 import "markers"
@@ -38,11 +37,9 @@ import "jumps"
 import "keysignatures"
 import "accidentals"
 import "fretdiagrams"
-import "pedals"
 import "spacers"
 import "clefs"
 import "lines"
-import "crescendos"
 import "stafftype"
 import "frames"
 import "articulations"
