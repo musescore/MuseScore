@@ -19,10 +19,12 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import QtQuick.Controls 2.2
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+
 import MuseScore.Inspector 1.0
 import MuseScore.UiComponents 1.0
+
 import "../../../common"
 
 FocusableItem {
@@ -139,32 +141,9 @@ FocusableItem {
             }
         }
 
-        InspectorPropertyView {
+        PlacementSection {
             titleText: qsTrc("inspector", "Placement on staff")
             propertyItem: root.model ? root.model.placement : null
-
-            RadioButtonGroup {
-                id: positionButtonList
-
-                height: 30
-                width: parent.width
-
-                model: [
-                    { textRole: qsTrc("inspector", "Above"), valueRole: LineTypes.PLACEMENT_TYPE_ABOVE },
-                    { textRole: qsTrc("inspector", "Below"), valueRole: LineTypes.PLACEMENT_TYPE_BELOW }
-                ]
-
-                delegate: FlatRadioButton {
-                    ButtonGroup.group: positionButtonList.radioButtonGroup
-
-                    text: modelData["textRole"]
-                    checked: root.model && !root.model.placement.isUndefined ? root.model.placement.value === modelData["valueRole"]
-                                                                             : false
-                    onToggled: {
-                        root.model.placement.value = modelData["valueRole"]
-                    }
-                }
-            }
         }
 
         CheckBox {

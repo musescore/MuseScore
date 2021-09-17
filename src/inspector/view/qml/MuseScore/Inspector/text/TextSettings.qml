@@ -26,6 +26,7 @@ import QtQuick.Controls 2.2
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Inspector 1.0
+
 import "../common"
 
 Column {
@@ -373,31 +374,8 @@ Column {
         }
     }
 
-    RadioButtonGroup {
-        id: textPositionButtonList
-
-        height: 30
-        width: parent.width
-
-        model: [
-            { textRole: qsTrc("inspector", "Above"), valueRole: TextTypes.TEXT_PLACEMENT_ABOVE },
-            { textRole: qsTrc("inspector", "Below"), valueRole: TextTypes.TEXT_PLACEMENT_BELOW }
-        ]
-
-        delegate: FlatRadioButton {
-            ButtonGroup.group: textPositionButtonList.radioButtonGroup
-
-            navigation.name: "Position" + model.index
-            navigation.panel: root.navigationPanel
-            navigation.row: 21 + model.index
-
-            text: modelData["textRole"]
-            checked: root.model && !root.model.textPlacement.isUndefined ? root.model.textPlacement.value === modelData["valueRole"]
-                                                                         : false
-            onToggled: {
-                root.model.textPlacement.value = modelData["valueRole"]
-            }
-        }
+    PlacementSection {
+        propertyItem: root.model ? root.model.textPlacement : null
     }
 
     FlatButton {
