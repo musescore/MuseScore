@@ -27,8 +27,11 @@
 using namespace mu::inspector;
 
 VoltaSettingsModel::VoltaSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : LineSettingsModel(parent, repository, Ms::ElementType::VOLTA, qtrc("inspector", "Volta"))
+    : LineSettingsModel(parent, repository, Ms::ElementType::VOLTA)
 {
+    setModelType(InspectorModelType::TYPE_VOLTA);
+    setTitle(qtrc("inspector", "Volta"));
+
     createProperties();
 }
 
@@ -41,7 +44,11 @@ void VoltaSettingsModel::createProperties()
 {
     LineSettingsModel::createProperties();
 
-    m_repeatCount = buildPropertyItem(Ms::Pid::REPEAT_COUNT);
+    m_repeatCount = buildPropertyItem(Ms::Pid::VOLTA_ENDING);
+
+    placement()->setIsVisible(false);
+    beginingTextHorizontalOffset()->setIsVisible(false);
+    continiousTextHorizontalOffset()->setIsVisible(false);
 }
 
 void VoltaSettingsModel::loadProperties()

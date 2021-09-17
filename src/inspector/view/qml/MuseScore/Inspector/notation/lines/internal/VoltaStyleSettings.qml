@@ -20,52 +20,45 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Controls 1.5
-import QtQuick.Layouts 1.15
+import QtQuick.Controls 2.15
 
 import MuseScore.UiComponents 1.0
+import MuseScore.Ui 1.0
+import MuseScore.Inspector 1.0
 
-import "../../common"
-import "internal"
+import "../../../common"
 
-TabPanel {
+FocusableItem {
     id: root
 
     property QtObject model: null
 
-    objectName: "CrescendoSettings"
+    implicitHeight: contentColumn.height
+    width: parent.width
 
-    implicitHeight: Math.max(styleTab.visible ? styleTab.implicitHeight : 0,
-                             textTab.visible ? textTab.implicitHeight : 0) + tabBarHeight + 24
-    width: parent ? parent.width : 0
+    Column {
+        id: contentColumn
 
-    Tab {
-        id: styleTab
+        width: parent.width
 
-        title: qsTrc("inspector", "Style")
+        spacing: 12
 
-        CrescendoStyleSettingsTab {
-            anchors.top: parent.top
-            anchors.topMargin: 24
+        TextSection {
+            width: parent.width / 2
 
-            width: root.width
-
-            model: root.model
+            titleText: qsTrc("inspector", "Repeat list")
+            propertyItem: root.model ? root.model.repeatCount : null
         }
-    }
 
-    Tab {
-        id: textTab
+        SeparatorLine { anchors.margins: -10 }
 
-        title: qsTrc("inspector", "Text")
-
-        LineTextSettingsTab {
-            anchors.top: parent.top
-            anchors.topMargin: 24
-
-            width: root.width
-
+        LineWithHooksCommonStyleSettings {
             model: root.model
+
+            possibleEndHookTypes: [
+                { iconCode: IconCode.LINE_WITH_INVERTED_START_HOOK, value: VoltaTypes.HOOK_TYPE_LEFT_ONLY },
+                { iconCode: IconCode.LINE_WITH_TWO_INVERTED_HOOKS, value: VoltaTypes.HOOK_TYPE_BOTH }
+            ]
         }
     }
 }

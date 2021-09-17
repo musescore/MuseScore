@@ -24,6 +24,7 @@ import QtQuick.Controls 1.5
 import QtQuick.Layouts 1.15
 
 import MuseScore.UiComponents 1.0
+import MuseScore.Inspector 1.0
 
 import "../../common"
 import "internal"
@@ -32,6 +33,7 @@ TabPanel {
     id: root
 
     property QtObject model: null
+    property int lineType: 0
 
     objectName: "LineSettings"
 
@@ -39,18 +41,60 @@ TabPanel {
                              textTab.visible ? textTab.implicitHeight : 0) + tabBarHeight + 24
     width: parent ? parent.width : 0
 
-    Tab {
-        id: styleTab
+    Component {
+        id: hairpinStyleSettings
 
-        title: qsTrc("inspector", "Style")
-
-        HairpinStyleSettingsTab {
+        HairpinStyleSettings {
             anchors.top: parent.top
             anchors.topMargin: 24
 
             width: root.width
 
             model: root.model
+        }
+    }
+
+    Component {
+        id: voltaStyleSettings
+
+        VoltaStyleSettings {
+            anchors.top: parent.top
+            anchors.topMargin: 24
+
+            width: root.width
+
+            model: root.model
+        }
+    }
+
+    Component {
+        id: crescendoStyleSettings
+
+        CrescendoStyleSettings {
+            anchors.top: parent.top
+            anchors.topMargin: 24
+
+            width: root.width
+
+            model: root.model
+        }
+    }
+
+    Tab {
+        id: styleTab
+
+        title: qsTrc("inspector", "Style")
+
+        sourceComponent: {
+            var modelType = root.model ? root.model.modelType : -1
+
+            switch(modelType) {
+            case Inspector.TYPE_HAIRPIN: return hairpinStyleSettings
+            case Inspector.TYPE_VOLTA: return voltaStyleSettings
+            case Inspector.TYPE_CRESCENDO: return crescendoStyleSettings
+            }
+
+            return null
         }
     }
 

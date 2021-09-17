@@ -29,11 +29,13 @@
         <file>qml/MuseScore/Inspector/text/TextInspectorView.qml</file>
         <file>qml/MuseScore/Inspector/common/InspectorSectionView.qml</file>
         <file>qml/MuseScore/Inspector/common/SpinBoxPropertyView.qml</file>
-        <file>qml/MuseScore/Inspector/notation/lines/internal/HairpinStyleSettingsTab.qml</file>
+        <file>qml/MuseScore/Inspector/notation/lines/internal/HairpinStyleSettings.qml</file>
+        <file>qml/MuseScore/Inspector/notation/lines/internal/VoltaStyleSettings.qml</file>
+        <file>qml/MuseScore/Inspector/notation/lines/internal/LineWithHooksCommonStyleSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/lines/internal/LineTextSettingsTab.qml</file>
         <file>qml/MuseScore/Inspector/notation/lines/internal/LineStyleSection.qml</file>
         <file>qml/MuseScore/Inspector/notation/lines/internal/LineTypeSection.qml</file>
-        <file>qml/MuseScore/Inspector/notation/lines/internal/CrescendoStyleSettingsTab.qml</file>
+        <file>qml/MuseScore/Inspector/notation/lines/internal/CrescendoStyleSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/frames/internal/HorizontalGapsSection.qml</file>
         <file>qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml</file>
         <file>qml/MuseScore/Inspector/notation/frames/internal/HorizontalMarginsSection.qml</file>
@@ -64,7 +66,6 @@
         <file>qml/MuseScore/Inspector/notation/spacers/SpacerSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/clefs/ClefSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/lines/LineSettings.qml</file>
-        <file>qml/MuseScore/Inspector/notation/lines/CrescendoSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/stafftype/StaffTypeSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/frames/TextFrameSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/frames/VerticalFrameSettings.qml</file>

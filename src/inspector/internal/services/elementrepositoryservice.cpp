@@ -27,6 +27,7 @@
 #include "beam.h"
 #include "glissando.h"
 #include "hairpin.h"
+#include "volta.h"
 #include "staff.h"
 #include "layoutbreak.h"
 #include "pedal.h"
@@ -67,6 +68,7 @@ QList<Ms::EngravingItem*> ElementRepositoryService::findElementsByType(const Ms:
     case Ms::ElementType::BEAM: return findBeams();
     case Ms::ElementType::GLISSANDO: return findGlissandos();
     case Ms::ElementType::HAIRPIN: return findHairpins();
+    case Ms::ElementType::VOLTA: return findVoltas();
     case Ms::ElementType::STAFF: return findStaffs();
     case Ms::ElementType::LAYOUT_BREAK: return findSectionBreaks(); //Page breaks and line breaks are of type LAYOUT_BREAK, but they don't appear in the inspector for now.
     case Ms::ElementType::PEDAL: return findPedals();
@@ -233,6 +235,27 @@ QList<Ms::EngravingItem*> ElementRepositoryService::findGlissandos() const
 
             resultList << glissandoSegment->glissando();
         } else if (element->type() == Ms::ElementType::GLISSANDO) {
+            resultList << element;
+        }
+    }
+
+    return resultList;
+}
+
+QList<Ms::EngravingItem*> ElementRepositoryService::findVoltas() const
+{
+    QList<Ms::EngravingItem*> resultList;
+
+    for (Ms::EngravingItem* element : m_elementList) {
+        if (element->type() == Ms::ElementType::VOLTA_SEGMENT) {
+            const Ms::VoltaSegment* voltaSegment = Ms::toVoltaSegment(element);
+
+            if (!voltaSegment) {
+                continue;
+            }
+
+            resultList << voltaSegment->volta();
+        } else if (element->type() == Ms::ElementType::VOLTA) {
             resultList << element;
         }
     }
