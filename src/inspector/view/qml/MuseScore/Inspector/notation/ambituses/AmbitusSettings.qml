@@ -247,42 +247,12 @@ Column {
                 propertyItem: root.model ? root.model.noteheadGroup : null
 
                 NoteheadsGrid {
-                    id: noteheadGridView
                     noteHeadGroupsModel: root.model ? root.model.noteheadGroupsModel : null
                 }
             }
 
-            InspectorPropertyView {
-                titleText: qsTrc("inspector", "Notehead type")
+            NoteHeadTypeSelector {
                 propertyItem: root.model ? root.model.noteheadType : null
-
-                RadioButtonGroup {
-                    id: headTypeButtonList
-
-                    height: 40
-                    width: parent.width
-
-                    model: [
-                        { iconRole: IconCode.NONE, textRole: qsTrc("inspector", "Auto"), typeRole: NoteHead.TYPE_AUTO },
-                        { iconRole: IconCode.NOTE_HEAD_QUARTER, typeRole: NoteHead.TYPE_QUARTER },
-                        { iconRole: IconCode.NOTE_HEAD_HALF, typeRole: NoteHead.TYPE_HALF },
-                        { iconRole: IconCode.NOTE_HEAD_WHOLE, typeRole: NoteHead.TYPE_WHOLE },
-                        { iconRole: IconCode.NOTE_HEAD_BREVIS, typeRole: NoteHead.TYPE_BREVIS }
-                    ]
-
-                    delegate: FlatRadioButton {
-                        ButtonGroup.group: headTypeButtonList.radioButtonGroup
-
-                        iconCode: modelData["iconRole"]
-                        text: modelData["textRole"]
-
-                        checked: root.model && !root.model.noteheadType.isUndefined ? root.model.noteheadType.value === modelData["typeRole"]
-                                                                                    : false
-                        onToggled: {
-                            root.model.noteheadType.value = modelData["typeRole"]
-                        }
-                    }
-                }
             }
 
             InspectorPropertyView {

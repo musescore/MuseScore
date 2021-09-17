@@ -32,9 +32,9 @@ import "../../../common"
 Column {
     id: root
 
-    property QtObject endHookType: null
-    property QtObject thickness: null
-    property QtObject hookHeight: null
+    property PropertyItem endHookType: null
+    property PropertyItem thickness: null
+    property PropertyItem hookHeight: null
 
     property alias possibleEndHookTypes: lineTypeButtonList.model
 

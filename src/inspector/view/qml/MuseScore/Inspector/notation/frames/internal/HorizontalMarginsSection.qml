@@ -19,16 +19,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
+import QtQuick 2.15
+
 import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
+import MuseScore.Inspector 1.0
+
 import "../../../common"
 
 Item {
     id: root
 
-    property QtObject frameLeftMargin: undefined
-    property QtObject frameRightMargin: undefined
+    property PropertyItem frameLeftMargin: null
+    property PropertyItem frameRightMargin: null
 
     height: childrenRect.height
     width: parent.width

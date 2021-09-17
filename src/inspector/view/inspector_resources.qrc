@@ -7,6 +7,7 @@
         <file>qml/MuseScore/Inspector/notation/notes/NoteSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/notes/HeadSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/notes/internal/NoteheadsGrid.qml</file>
+        <file>qml/MuseScore/Inspector/notation/notes/internal/NoteHeadTypeSelector.qml</file>
         <file>resources/icons/raster-vertical.svg</file>
         <file>resources/icons/raster-horizontal.svg</file>
         <file>resources/icons/notehead_brevis_alt.svg</file>
