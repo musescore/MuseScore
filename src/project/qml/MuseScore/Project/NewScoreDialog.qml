@@ -37,139 +37,158 @@ StyledDialogView {
     contentWidth: 1024
     resizable: true
 
+    onOpened: {
+        chooseInstrumentsAndTemplatePage.focusOnFirst()
+    }
+
     NewScoreModel {
         id: newScoreModel
     }
 
-    StackLayout {
-        id: pagesStack
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.right: parent.right
-        anchors.bottom: buttons.top
-        anchors.margins: 20
+    ColumnLayout {
+        id: content
 
-        ChooseInstrumentsAndTemplatesPage {
-            id: chooseInstrumentsAndTemplatePage
-
-            property bool isOpened: root.isOpened
-            onIsOpenedChanged: {
-                if (isOpened) {
-                    chooseInstrumentsAndTemplatePage.focusOnFirst()
-                }
-            }
-
-            navigationSection: root.navigation
-
-            Component.onCompleted: {
-                preferredScoreCreationMode = newScoreModel.preferredScoreCreationMode()
-            }
-        }
-
-        ScoreInfoPage {
-            id: scoreInfoPage
-        }
-    }
-
-    Row {
-        id: buttons
-        anchors.bottom: parent.bottom
+        anchors.fill: parent
+        anchors.leftMargin: 12
+        anchors.rightMargin: 12
+        anchors.topMargin: 16
         anchors.bottomMargin: 16
-        anchors.right: parent.right
-        anchors.rightMargin: 16
 
-        spacing: 12
+        spacing: 40
 
-        readonly property int buttonHeight: 30
-        readonly property int buttonWidth: 132
+        StackLayout {
+            id: pagesStack
 
-        NavigationPanel {
-            id: navBottomPanel
+            Layout.fillHeight: true
+            Layout.fillWidth: true
 
-            name: "BottomPanel"
-            section: root.navigationSection
-            order: 100
-            direction: NavigationPanel.Horizontal
-        }
+            ChooseInstrumentsAndTemplatesPage {
+                id: chooseInstrumentsAndTemplatePage
 
-        FlatButton {
-            height: buttons.buttonHeight
-            width: buttons.buttonWidth
+                navigationSection: root.navigation
 
-            navigation.name: "Cancel"
-            navigation.panel: navBottomPanel
-            navigation.column: 1
-
-            text: qsTrc("global", "Cancel")
-
-            onClicked: {
-                root.reject()
-            }
-        }
-
-        FlatButton {
-            height: buttons.buttonHeight
-            width: buttons.buttonWidth
-
-            navigation.name: "Back"
-            navigation.panel: navBottomPanel
-            navigation.column: 2
-
-            visible: pagesStack.currentIndex > 0
-
-            text: qsTrc("project", "Back")
-
-            onClicked: {
-                pagesStack.currentIndex--
-            }
-        }
-
-        FlatButton {
-            height: buttons.buttonHeight
-            width: buttons.buttonWidth
-
-            navigation.name: "Next"
-            navigation.panel: navBottomPanel
-            navigation.column: 3
-
-            visible: pagesStack.currentIndex < pagesStack.count - 1
-            enabled: chooseInstrumentsAndTemplatePage.hasSelection
-
-            text: qsTrc("project", "Next")
-
-            onClicked: {
-                pagesStack.currentIndex++
-            }
-        }
-
-        FlatButton {
-            height: buttons.buttonHeight
-            width: buttons.buttonWidth
-
-            navigation.name: "Done"
-            navigation.panel: navBottomPanel
-            navigation.column: 4
-
-            enabled: chooseInstrumentsAndTemplatePage.hasSelection
-
-            text: qsTrc("project", "Done")
-
-            onClicked: {
-                var result = {}
-
-                var instrumentsAndTemplatePageResult = chooseInstrumentsAndTemplatePage.result()
-                for (var key in instrumentsAndTemplatePageResult) {
-                    result[key] = instrumentsAndTemplatePageResult[key]
+                Component.onCompleted: {
+                    preferredScoreCreationMode = newScoreModel.preferredScoreCreationMode()
                 }
+            }
 
-                var scoreInfoPageResult = scoreInfoPage.result()
-                for (key in scoreInfoPageResult) {
-                    result[key] = scoreInfoPageResult[key]
+            ScoreInfoPage {
+                id: scoreInfoPage
+
+                navigation: root.navigation
+                popupsAnchorItem: content
+            }
+
+            onCurrentIndexChanged: {
+                switch(currentIndex) {
+                case 0:
+                    chooseInstrumentsAndTemplatePage.focusOnFirst()
+                    break
+                case 1:
+                    scoreInfoPage.focusOnFirst()
+                    break
                 }
+            }
+        }
 
-                if (newScoreModel.createScore(result)) {
-                    root.isDoActiveParentOnClose = false
-                    root.accept()
+        Row {
+            id: buttons
+
+            Layout.alignment: Qt.AlignRight
+
+            spacing: 12
+
+            readonly property int buttonHeight: 30
+            readonly property int buttonWidth: 132
+
+            NavigationPanel {
+                id: navBottomPanel
+
+                name: "BottomPanel"
+                section: root.navigationSection
+                order: 100
+                direction: NavigationPanel.Horizontal
+            }
+
+            FlatButton {
+                height: buttons.buttonHeight
+                width: buttons.buttonWidth
+
+                navigation.name: "Cancel"
+                navigation.panel: navBottomPanel
+                navigation.column: 1
+
+                text: qsTrc("global", "Cancel")
+
+                onClicked: {
+                    root.reject()
+                }
+            }
+
+            FlatButton {
+                height: buttons.buttonHeight
+                width: buttons.buttonWidth
+
+                navigation.name: "Back"
+                navigation.panel: navBottomPanel
+                navigation.column: 2
+
+                visible: pagesStack.currentIndex > 0
+
+                text: qsTrc("project", "Back")
+
+                onClicked: {
+                    pagesStack.currentIndex--
+                }
+            }
+
+            FlatButton {
+                height: buttons.buttonHeight
+                width: buttons.buttonWidth
+
+                navigation.name: "Next"
+                navigation.panel: navBottomPanel
+                navigation.column: 3
+
+                visible: pagesStack.currentIndex < pagesStack.count - 1
+                enabled: chooseInstrumentsAndTemplatePage.hasSelection
+
+                text: qsTrc("project", "Next")
+
+                onClicked: {
+                    pagesStack.currentIndex++
+                }
+            }
+
+            FlatButton {
+                height: buttons.buttonHeight
+                width: buttons.buttonWidth
+
+                navigation.name: "Done"
+                navigation.panel: navBottomPanel
+                navigation.column: 4
+
+                enabled: chooseInstrumentsAndTemplatePage.hasSelection
+
+                text: qsTrc("project", "Done")
+
+                onClicked: {
+                    var result = {}
+
+                    var instrumentsAndTemplatePageResult = chooseInstrumentsAndTemplatePage.result()
+                    for (var key in instrumentsAndTemplatePageResult) {
+                        result[key] = instrumentsAndTemplatePageResult[key]
+                    }
+
+                    var scoreInfoPageResult = scoreInfoPage.result()
+                    for (key in scoreInfoPageResult) {
+                        result[key] = scoreInfoPageResult[key]
+                    }
+
+                    if (newScoreModel.createScore(result)) {
+                        root.isDoActiveParentOnClose = false
+                        root.accept()
+                    }
                 }
             }
         }

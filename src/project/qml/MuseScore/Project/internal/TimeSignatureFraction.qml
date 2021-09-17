@@ -33,12 +33,12 @@ Row {
     signal numeratorSelected(var value)
     signal denominatorSelected(var value)
 
-    spacing: 14
+    spacing: 12
 
     IncrementalPropertyControl {
         id: control
 
-        implicitWidth: 68
+        implicitWidth: 60
         anchors.verticalCenter: parent.verticalCenter
 
         currentValue: root.numerator
@@ -53,6 +53,7 @@ Row {
     }
 
     StyledTextLabel {
+        width: 8
         anchors.verticalCenter: parent.verticalCenter
         font: ui.theme.largeBodyFont
         text: "/"

@@ -33,8 +33,10 @@ FlatButton {
 
     property var model: null
 
+    property alias popupAnchorItem: popup.anchorItem
+
     height: 96
-    accentButton: popup.visible
+    accentButton: popup.isOpened
 
     TempoView {
         anchors.centerIn: parent
@@ -56,26 +58,25 @@ FlatButton {
         }
     }
 
-    StyledPopup {
+    StyledPopupView {
         id: popup
 
-        implicitHeight: 250
-        implicitWidth: 520
+        padding: 8
+        margins: 0
 
-        x: root.x - (width - root.width) / 2
-        y: root.height
+        contentWidth: content.width
+        contentHeight: content.height
 
-        Column {
-            anchors.fill: parent
-            anchors.margins: 10
+        ColumnLayout {
+            id: content
 
-            spacing: 30
+            spacing: 0
 
             CheckBox {
                 id: withTempo
 
-                anchors.left: parent.left
-                anchors.right: parent.right
+                Layout.topMargin: 26
+                Layout.leftMargin: 32
 
                 checked: root.model.withTempo
 
@@ -87,14 +88,15 @@ FlatButton {
             }
 
             SeparatorLine {
-                anchors.leftMargin: -(parent.anchors.leftMargin + popup.leftPadding)
-                anchors.rightMargin: -(parent.anchors.rightMargin + popup.rightPadding)
+                Layout.topMargin: 26
             }
 
             RadioButtonGroup {
-                anchors.horizontalCenter: parent.horizontalCenter
+                Layout.topMargin: 26
+                Layout.leftMargin: 32
+                Layout.rightMargin: 32
 
-                height: 50
+                height: 48
 
                 model: root.model.tempoNotes()
 
@@ -128,7 +130,9 @@ FlatButton {
             }
 
             Row {
-                anchors.horizontalCenter: parent.horizontalCenter
+                Layout.topMargin: 26
+                Layout.alignment: Qt.AlignHCenter
+                Layout.bottomMargin: 22
 
                 spacing: 20
                 enabled: withTempo.checked

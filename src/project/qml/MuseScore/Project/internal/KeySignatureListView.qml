@@ -32,32 +32,59 @@ GridView {
     property var mode: null
     signal signatureSelected(var signature)
 
+    property NavigationPanel navigationPanel: NavigationPanel {
+        name: "KeySignaturePanel"
+        direction: NavigationPanel.Both
+    }
+
+    property int navigationRowStart: 1
+    property int navigationColumnStart: 1
+
     height: contentHeight
 
     clip: true
     
-    cellWidth: 82
-    cellHeight: 90
+    cellWidth: 82 + prv.spacing
+    cellHeight: 90 + prv.spacing
     
     interactive: height < contentHeight
     
-    delegate: ListItemBlank {
+    QtObject {
+        id: prv
+
+        readonly property int spacing: 4
+    }
+
+    delegate: Item {
         height: root.cellHeight
         width: root.cellWidth
 
-        itemBorderColor: ui.theme.strokeColor
-        itemBorderWidth: ui.theme.borderWidth
+        ListItemBlank {
+            anchors.centerIn: parent
+            height: root.cellHeight - prv.spacing
+            width: root.cellWidth - prv.spacing
 
-        radius: 3
-        isSelected: modelData.titleMajor === currentSignature.titleMajor
+            itemBorderColor: ui.theme.strokeColor
+            itemBorderWidth: ui.theme.borderWidth
 
-        KeySignature {
-            icon: modelData.icon
-            text: root.mode === "major" ? modelData.titleMajor : modelData.titleMinor
-        }
-        
-        onClicked: {
-            root.signatureSelected(modelData)
+            radius: 3
+            isSelected: modelData.titleMajor === currentSignature.titleMajor
+
+            navigation.name: keySignature.text
+            navigation.panel: root.navigationPanel
+            navigation.row: root.navigationRowStart + model.row
+            navigation.column: root.navigationRowStart + model.column
+            navigation.enabled: root.visible
+
+            KeySignature {
+                id: keySignature
+                icon: modelData.icon
+                text: root.mode === "major" ? modelData.titleMajor : modelData.titleMinor
+            }
+
+            onClicked: {
+                root.signatureSelected(modelData)
+            }
         }
     }
 }

@@ -42,8 +42,9 @@ Column {
         anchors.left: parent.left
         anchors.right: parent.right
 
-        property real childWidth: (width / 2) - 15
         height: 60
+
+        property real childWidth: (width - spacing) / 2
 
         spacing: 20
 
@@ -71,8 +72,9 @@ Column {
         anchors.left: parent.left
         anchors.right: parent.right
 
-        property real childWidth: (width / 3) - 15
         height: 60
+
+        property real childWidth: (width - (spacing * 2)) / 3
 
         spacing: 20
 
