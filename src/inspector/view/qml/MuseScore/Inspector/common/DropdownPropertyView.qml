@@ -19,39 +19,38 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import MuseScore.Inspector 1.0
-import MuseScore.UiComponents 1.0
-import "../../../common"
+import QtQuick 2.15
+import QtQuick.Controls 2.15
 
-ExpandableBlank {
+import MuseScore.UiComponents 1.0
+import MuseScore.Ui 1.0
+import MuseScore.Inspector 1.0
+
+InspectorPropertyView {
     id: root
 
-    property QtObject model: null
+    property alias dropdown: dropdownItem
+    property alias model: dropdownItem.model
 
-    enabled: model ? !model.isEmpty : false
+    Dropdown {
+        id: dropdownItem
+        width: parent.width
 
-    title: model ? model.title : ""
-
-    width: parent.width
-
-    contentItemComponent: DropdownPropertyView {
-        width: root.width
-
-        navigation.name: "Glissando Style"
+        navigation.name: root.navigation.name + " Value"
         navigation.panel: root.navigation.panel
         navigation.column: root.navigation.column
         navigation.row: root.navigation.row + 1
 
-        titleText: qsTrc("inspector", "Style")
-        propertyItem: root.model ? root.model.styleType : null
+        currentIndex: root.propertyItem && !root.propertyItem.isUndefined
+                      ? indexOfValue(root.propertyItem.value)
+                      : -1
 
-        model: [
-            { text: qsTrc("inspector", "Chromatic"), value: Glissando.STYLE_CHROMATIC },
-            { text: qsTrc("inspector", "White keys"), value: Glissando.STYLE_WHITE_KEYS },
-            { text: qsTrc("inspector", "Black keys"), value: Glissando.STYLE_BLACK_KEYS },
-            { text: qsTrc("inspector", "Diatonic"), value: Glissando.STYLE_DIATONIC },
-            { text: qsTrc("inspector", "Portamento"), value: Glissando.STYLE_PORTAENTO }
-        ]
+        onCurrentValueChanged: {
+            if (!root.propertyItem || currentIndex === -1) {
+                return
+            }
+
+            root.propertyItem.value = currentValue
+        }
     }
 }

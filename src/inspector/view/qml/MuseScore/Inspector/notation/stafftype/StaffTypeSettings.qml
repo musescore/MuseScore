@@ -140,38 +140,22 @@ Column {
 
     SeparatorLine { anchors.margins: -10 }
 
-    InspectorPropertyView {
+    DropdownPropertyView {
         titleText: qsTrc("inspector", "Notehead scheme")
         propertyItem: root.model ? root.model.noteheadSchemeType : null
 
-        Dropdown {
-            id: schemes
-
-            width: parent.width
-
-            model: [
-                { text: qsTrc("inspector", "Auto"), value: NoteHead.SCHEME_AUTO },
-                { text: qsTrc("inspector", "Normal"), value: NoteHead.SCHEME_NORMAL },
-                { text: qsTrc("inspector", "Pitch names"), value: NoteHead.SCHEME_PITCHNAME },
-                { text: qsTrc("inspector", "German pitch names"), value: NoteHead.SCHEME_PITCHNAME_GERMAN },
-                { text: qsTrc("inspector", "Solfege movable Do"), value: NoteHead.SCHEME_SOLFEGE },
-                { text: qsTrc("inspector", "Solfege fixed Do"), value: NoteHead.SCHEME_SOLFEGE_FIXED },
-                { text: qsTrc("inspector", "4-shape (Walker)"), value: NoteHead.SCHEME_SHAPE_NOTE_4 },
-                { text: qsTrc("inspector", "7-shape (Aikin)"), value: NoteHead.SCHEME_SHAPE_NOTE_7_AIKIN },
-                { text: qsTrc("inspector", "7-shape (Funk)"), value: NoteHead.SCHEME_SHAPE_NOTE_7_FUNK },
-                { text: qsTrc("inspector", "7-shape (Walker)"), value: NoteHead.SCHEME_SHAPE_NOTE_7_WALKER }
-            ]
-
-            currentIndex: root.model && !root.model.noteheadSchemeType.isUndefined ? schemes.indexOfValue(root.model.noteheadSchemeType.value) : -1
-
-            onCurrentValueChanged: {
-                if (currentIndex === -1) {
-                    return
-                }
-
-                root.model.noteheadSchemeType.value = schemes.currentValue
-            }
-        }
+        model: [
+            { text: qsTrc("inspector", "Auto"), value: NoteHead.SCHEME_AUTO },
+            { text: qsTrc("inspector", "Normal"), value: NoteHead.SCHEME_NORMAL },
+            { text: qsTrc("inspector", "Pitch names"), value: NoteHead.SCHEME_PITCHNAME },
+            { text: qsTrc("inspector", "German pitch names"), value: NoteHead.SCHEME_PITCHNAME_GERMAN },
+            { text: qsTrc("inspector", "Solfege movable Do"), value: NoteHead.SCHEME_SOLFEGE },
+            { text: qsTrc("inspector", "Solfege fixed Do"), value: NoteHead.SCHEME_SOLFEGE_FIXED },
+            { text: qsTrc("inspector", "4-shape (Walker)"), value: NoteHead.SCHEME_SHAPE_NOTE_4 },
+            { text: qsTrc("inspector", "7-shape (Aikin)"), value: NoteHead.SCHEME_SHAPE_NOTE_7_AIKIN },
+            { text: qsTrc("inspector", "7-shape (Funk)"), value: NoteHead.SCHEME_SHAPE_NOTE_7_FUNK },
+            { text: qsTrc("inspector", "7-shape (Walker)"), value: NoteHead.SCHEME_SHAPE_NOTE_7_WALKER }
+        ]
     }
 
     Column {

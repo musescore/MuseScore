@@ -60,44 +60,22 @@ ExpandableBlank {
             minValue: 0
         }
 
-        InspectorPropertyView {
-            titleText: qsTrc("inspector", "Changes in dynamics range")
-
-            navigation.name: "Changes in dynamics range Menu"
+        DropdownPropertyView {
+            navigation.name: "Changes in dynamics range"
             navigation.panel: root.navigation.panel
             navigation.column: root.navigation.column
             navigation.row: root.navigation.row + 3
 
+            titleText: qsTrc("inspector", "Changes in dynamics range")
             propertyItem: root.model ? root.model.velocityChangeType : null
 
-            Dropdown {
-                id: dranges
-
-                width: parent.width
-
-                navigation.name: "Changes in dynamics range Value"
-                navigation.panel: root.navigation.panel
-                navigation.column: root.navigation.column
-                navigation.row: root.navigation.row + 4
-
-                model: [
-                    { text: qsTrc("inspector", "Linear (default)"), value: Hairpin.VELOCITY_EASING_LINEAR },
-                    { text: qsTrc("inspector", "Exponential"), value: Hairpin.VELOCITY_EASING_EXPONENTIAL },
-                    { text: qsTrc("inspector", "Ease-in"), value: Hairpin.VELOCITY_EASING_IN },
-                    { text: qsTrc("inspector", "Ease-out"), value: Hairpin.VELOCITY_EASING_OUT },
-                    { text: qsTrc("inspector", "Ease-in and out"), value: Hairpin.VELOCITY_EASING_IN_OUT }
-                ]
-
-                currentIndex: root.model && !root.model.velocityChangeType.isUndefined ? dranges.indexOfValue(root.model.velocityChangeType.value) : -1
-
-                onCurrentValueChanged: {
-                    if (currentIndex == -1) {
-                        return
-                    }
-
-                    root.model.velocityChangeType.value = dranges.currentValue
-                }
-            }
+            model: [
+                { text: qsTrc("inspector", "Linear (default)"), value: Hairpin.VELOCITY_EASING_LINEAR },
+                { text: qsTrc("inspector", "Exponential"), value: Hairpin.VELOCITY_EASING_EXPONENTIAL },
+                { text: qsTrc("inspector", "Ease-in"), value: Hairpin.VELOCITY_EASING_IN },
+                { text: qsTrc("inspector", "Ease-out"), value: Hairpin.VELOCITY_EASING_OUT },
+                { text: qsTrc("inspector", "Ease-in and out"), value: Hairpin.VELOCITY_EASING_IN_OUT }
+            ]
         }
     }
 }

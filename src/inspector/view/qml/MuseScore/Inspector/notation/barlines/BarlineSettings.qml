@@ -40,41 +40,23 @@ Column {
 
     spacing: 12
 
-    InspectorPropertyView {
+    DropdownPropertyView {
         titleText: qsTrc("inspector", "Style")
         propertyItem: root.barlineSettingsModel ? root.barlineSettingsModel.type : null
 
-        Dropdown {
-            id: styles
-
-            width: parent.width
-
-            model: [
-                { text: qsTrc("symUserNames", "Single barline"), value: BarlineTypes.TYPE_NORMAL },
-                { text: qsTrc("symUserNames", "Double barline"), value: BarlineTypes.TYPE_DOUBLE },
-                { text: qsTrc("symUserNames", "Left (start) repeat sign"), value: BarlineTypes.TYPE_START_REPEAT },
-                { text: qsTrc("symUserNames", "Right (end) repeat sign"), value: BarlineTypes.TYPE_END_REPEAT },
-                { text: qsTrc("symUserNames", "Right and left repeat sign"), value: BarlineTypes.TYPE_END_START_REPEAT },
-                { text: qsTrc("symUserNames", "Dashed barline"), value: BarlineTypes.TYPE_DASHED },
-                { text: qsTrc("symUserNames", "Final barline"), value: BarlineTypes.TYPE_FINAL },
-                { text: qsTrc("symUserNames", "Dotted barline"), value: BarlineTypes.TYPE_DOTTED },
-                { text: qsTrc("symUserNames", "Reverse final barline"), value: BarlineTypes.TYPE_REVERSE_END },
-                { text: qsTrc("symUserNames", "Heavy barline"), value: BarlineTypes.TYPE_HEAVY },
-                { text: qsTrc("symUserNames", "Heavy double barline"), value: BarlineTypes.TYPE_DOUBLE_HEAVY },
-            ]
-
-            currentIndex: root.barlineSettingsModel && !root.barlineSettingsModel.type.isUndefined ? styles.indexOfValue(root.barlineSettingsModel.type.value) : -1
-
-            onCurrentValueChanged: {
-                if (currentIndex == -1) {
-                    return
-                }
-
-                if (root.barlineSettingsModel) {
-                    root.barlineSettingsModel.type.value = styles.currentValue
-                }
-            }
-        }
+        model: [
+            { text: qsTrc("symUserNames", "Single barline"), value: BarlineTypes.TYPE_NORMAL },
+            { text: qsTrc("symUserNames", "Double barline"), value: BarlineTypes.TYPE_DOUBLE },
+            { text: qsTrc("symUserNames", "Left (start) repeat sign"), value: BarlineTypes.TYPE_START_REPEAT },
+            { text: qsTrc("symUserNames", "Right (end) repeat sign"), value: BarlineTypes.TYPE_END_REPEAT },
+            { text: qsTrc("symUserNames", "Right and left repeat sign"), value: BarlineTypes.TYPE_END_START_REPEAT },
+            { text: qsTrc("symUserNames", "Dashed barline"), value: BarlineTypes.TYPE_DASHED },
+            { text: qsTrc("symUserNames", "Final barline"), value: BarlineTypes.TYPE_FINAL },
+            { text: qsTrc("symUserNames", "Dotted barline"), value: BarlineTypes.TYPE_DOTTED },
+            { text: qsTrc("symUserNames", "Reverse final barline"), value: BarlineTypes.TYPE_REVERSE_END },
+            { text: qsTrc("symUserNames", "Heavy barline"), value: BarlineTypes.TYPE_HEAVY },
+            { text: qsTrc("symUserNames", "Heavy double barline"), value: BarlineTypes.TYPE_DOUBLE_HEAVY },
+        ]
     }
 
     FlatRadioButtonGroupPropertyView {

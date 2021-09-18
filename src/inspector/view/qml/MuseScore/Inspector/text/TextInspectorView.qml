@@ -41,48 +41,27 @@ InspectorSectionView {
 
         spacing: 12
 
-        InspectorPropertyView {
-            titleText: qsTrc("inspector", "Font")
-
+        DropdownPropertyView {
             navigation.panel: root.navigationPanel
-            navigation.name: "FontMenu"
+            navigation.name: "Font"
             navigation.row: root.navigationRow(1)
 
+            titleText: qsTrc("inspector", "Font")
             propertyItem: root.model ? root.model.fontFamily : null
 
-            Dropdown {
-                id: fontFamilyComboBox
+            dropdown.textRole: "text"
+            dropdown.valueRole: "text"
 
-                navigation.panel: root.navigationPanel
-                navigation.name: "FontFamily"
-                navigation.row: root.navigationRow(2)
+            model: {
+                var resultList = []
 
-                width: parent.width
+                var fontFamilies = Qt.fontFamilies()
 
-                textRole: "text"
-                valueRole: "text"
-
-                model: {
-                    var resultList = []
-
-                    var fontFamilies = Qt.fontFamilies()
-
-                    for (var i = 0; i < fontFamilies.length; ++i) {
-                        resultList.push({"text" : fontFamilies[i]})
-                    }
-
-                    return resultList
+                for (var i = 0; i < fontFamilies.length; ++i) {
+                    resultList.push({"text" : fontFamilies[i]})
                 }
 
-                currentIndex: root.model && !root.model.fontFamily.isUndefined ? fontFamilyComboBox.indexOfValue(root.model.fontFamily.value) : -1
-
-                onCurrentValueChanged: {
-                    if (currentIndex == -1) {
-                        return
-                    }
-
-                    root.model.fontFamily.value = fontFamilyComboBox.currentValue
-                }
+                return resultList
             }
         }
 
@@ -109,52 +88,32 @@ InspectorSectionView {
                 ]
             }
 
-            InspectorPropertyView {
+            DropdownPropertyView {
                 anchors.left: parent.horizontalCenter
                 anchors.leftMargin: 2
                 anchors.right: parent.right
 
                 navigation.panel: root.navigationPanel
-                navigation.name: "SizeMenu"
+                navigation.name: "Size"
                 navigation.row: root.navigationRow(7)
 
                 titleText: qsTrc("inspector", "Size")
                 propertyItem: root.model ? root.model.fontSize : null
 
-                Dropdown {
-                    id: sizes
-
-                    width: parent.width
-
-                    navigation.panel: root.navigationPanel
-                    navigation.name: "Size"
-                    navigation.row: root.navigationRow(8)
-
-                    model: [
-                        { text: "8",  value: 8 },
-                        { text: "9",  value: 9 },
-                        { text: "10", value: 10 },
-                        { text: "11", value: 11 },
-                        { text: "12", value: 12 },
-                        { text: "14", value: 14 },
-                        { text: "16", value: 16 },
-                        { text: "18", value: 18 },
-                        { text: "24", value: 24 },
-                        { text: "30", value: 30 },
-                        { text: "36", value: 36 },
-                        { text: "48", value: 48 }
-                    ]
-
-                    currentIndex: root.model && !root.model.fontSize.isUndefined ? sizes.indexOfValue(root.model.fontSize.value) : -1
-
-                    onCurrentValueChanged: {
-                        if (currentIndex == -1) {
-                            return
-                        }
-
-                        root.model.fontSize.value = sizes.currentValue
-                    }
-                }
+                model: [
+                    { text: "8",  value: 8 },
+                    { text: "9",  value: 9 },
+                    { text: "10", value: 10 },
+                    { text: "11", value: 11 },
+                    { text: "12", value: 12 },
+                    { text: "14", value: 14 },
+                    { text: "16", value: 16 },
+                    { text: "18", value: 18 },
+                    { text: "24", value: 24 },
+                    { text: "30", value: 30 },
+                    { text: "36", value: 36 },
+                    { text: "48", value: 48 }
+                ]
             }
         }
 

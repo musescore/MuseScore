@@ -41,37 +41,21 @@ Item {
 
         spacing: 12
 
-        InspectorPropertyView {
+        DropdownPropertyView {
             visible: root.model ? root.model.areSettingsAvailable : false
 
             titleText: qsTrc("inspector", "Tremolo bar type")
             propertyItem: root.model ? root.model.type : null
 
-            Dropdown {
-                id: tremolos
-
-                width: parent.width
-
-                model: [
-                    { text: qsTrc("inspector", "Dip"), value: TremoloBarTypes.TYPE_DIP },
-                    { text: qsTrc("inspector", "Dive"), value: TremoloBarTypes.TYPE_DIVE },
-                    { text: qsTrc("inspector", "Release (Up)"), value: TremoloBarTypes.TYPE_RELEASE_UP },
-                    { text: qsTrc("inspector", "Inverted dip"), value: TremoloBarTypes.TYPE_INVERTED_DIP },
-                    { text: qsTrc("inspector", "Return"), value: TremoloBarTypes.TYPE_RETURN },
-                    { text: qsTrc("inspector", "Release (Down)"), value: TremoloBarTypes.TYPE_RELEASE_DOWN },
-                    { text: qsTrc("inspector", "Custom"), value: TremoloBarTypes.TYPE_CUSTOM }
-                ]
-
-                currentIndex: root.model && !root.model.type.isUndefined ? tremolos.indexOfValue(root.model.type.value) : -1
-
-                onCurrentValueChanged: {
-                    if (currentIndex == -1) {
-                        return
-                    }
-
-                    root.model.type.value = tremolos.currentValue
-                }
-            }
+            model: [
+                { text: qsTrc("inspector", "Dip"), value: TremoloBarTypes.TYPE_DIP },
+                { text: qsTrc("inspector", "Dive"), value: TremoloBarTypes.TYPE_DIVE },
+                { text: qsTrc("inspector", "Release (Up)"), value: TremoloBarTypes.TYPE_RELEASE_UP },
+                { text: qsTrc("inspector", "Inverted dip"), value: TremoloBarTypes.TYPE_INVERTED_DIP },
+                { text: qsTrc("inspector", "Return"), value: TremoloBarTypes.TYPE_RETURN },
+                { text: qsTrc("inspector", "Release (Down)"), value: TremoloBarTypes.TYPE_RELEASE_DOWN },
+                { text: qsTrc("inspector", "Custom"), value: TremoloBarTypes.TYPE_CUSTOM }
+            ]
         }
 
         InspectorPropertyView {
