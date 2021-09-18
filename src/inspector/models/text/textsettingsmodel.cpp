@@ -49,17 +49,17 @@ void TextSettingsModel::createProperties()
     m_fontFamily = buildPropertyItem(Ms::Pid::FONT_FACE);
     m_fontStyle = buildPropertyItem(Ms::Pid::FONT_STYLE);
     m_fontSize = buildPropertyItem(Ms::Pid::FONT_SIZE);
-    m_horizontalAlignment = buildPropertyItem(Ms::Pid::ALIGN, [this](const int pid, const QVariant& newValue) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue.toInt() | m_verticalAlignment->value().toInt());
+    m_horizontalAlignment = buildPropertyItem(Ms::Pid::ALIGN, [this](const Ms::Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, newValue.toInt() | m_verticalAlignment->value().toInt());
     });
-    m_verticalAlignment = buildPropertyItem(Ms::Pid::ALIGN, [this](const int pid, const QVariant& newValue) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue.toInt() | m_horizontalAlignment->value().toInt());
+    m_verticalAlignment = buildPropertyItem(Ms::Pid::ALIGN, [this](const Ms::Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, newValue.toInt() | m_horizontalAlignment->value().toInt());
     });
 
     m_isSizeSpatiumDependent = buildPropertyItem(Ms::Pid::SIZE_SPATIUM_DEPENDENT);
 
-    m_frameType = buildPropertyItem(Ms::Pid::FRAME_TYPE, [this](const int pid, const QVariant& newValue) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue);
+    m_frameType = buildPropertyItem(Ms::Pid::FRAME_TYPE, [this](const Ms::Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, newValue);
 
         updateFramePropertiesAvailability();
     });

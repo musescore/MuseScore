@@ -39,20 +39,20 @@ StemSettingsModel::StemSettingsModel(QObject* parent, IElementRepositoryService*
 
 void StemSettingsModel::createProperties()
 {
-    m_isStemHidden = buildPropertyItem(Ms::Pid::VISIBLE, [this](const int pid, const QVariant& isStemHidden) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), !isStemHidden.toBool());
+    m_isStemHidden = buildPropertyItem(Ms::Pid::VISIBLE, [this](const Ms::Pid pid, const QVariant& isStemHidden) {
+        onPropertyValueChanged(pid, !isStemHidden.toBool());
     });
 
     m_thickness = buildPropertyItem(Ms::Pid::LINE_WIDTH);
     m_length = buildPropertyItem(Ms::Pid::USER_LEN);
     m_stemDirection = buildPropertyItem(Ms::Pid::STEM_DIRECTION);
 
-    m_horizontalOffset = buildPropertyItem(Ms::Pid::OFFSET, [this](const int pid, const QVariant& newValue) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), PointF(newValue.toDouble(), m_verticalOffset->value().toDouble()));
+    m_horizontalOffset = buildPropertyItem(Ms::Pid::OFFSET, [this](const Ms::Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, PointF(newValue.toDouble(), m_verticalOffset->value().toDouble()));
     });
 
-    m_verticalOffset = buildPropertyItem(Ms::Pid::OFFSET, [this](const int pid, const QVariant& newValue) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), PointF(m_horizontalOffset->value().toDouble(), newValue.toDouble()));
+    m_verticalOffset = buildPropertyItem(Ms::Pid::OFFSET, [this](const Ms::Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, PointF(m_horizontalOffset->value().toDouble(), newValue.toDouble()));
     });
 }
 
