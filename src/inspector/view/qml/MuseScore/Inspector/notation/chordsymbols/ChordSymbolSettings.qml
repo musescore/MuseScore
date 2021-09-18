@@ -33,7 +33,7 @@ Column {
 
     objectName: "ChordSymbolSettings"
 
-    spacing: 16
+    spacing: 12
 
     FlatRadioButtonGroupPropertyView {
         titleText: qsTrc("inspector", "Interpretation")

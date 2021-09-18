@@ -70,6 +70,7 @@
         <file>qml/MuseScore/Inspector/common/OffsetSection.qml</file>
         <file>qml/MuseScore/Inspector/text/TextInspectorView.qml</file>
         <file>qml/MuseScore/Inspector/common/InspectorSectionView.qml</file>
+        <file>qml/MuseScore/Inspector/common/SpinBoxPropertyView.qml</file>
         <file>qml/MuseScore/Inspector/notation/lines/internal/HairpinStyleSettingsTab.qml</file>
         <file>qml/MuseScore/Inspector/notation/lines/internal/LineTextSettingsTab.qml</file>
         <file>qml/MuseScore/Inspector/notation/lines/internal/LineStyleSection.qml</file>
@@ -79,9 +80,6 @@
         <file>qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml</file>
         <file>qml/MuseScore/Inspector/notation/frames/internal/HorizontalMarginsSection.qml</file>
         <file>qml/MuseScore/Inspector/notation/frames/internal/VerticalMarginsSection.qml</file>
-        <file>qml/MuseScore/Inspector/notation/frames/internal/HeightSection.qml</file>
-        <file>qml/MuseScore/Inspector/notation/frames/internal/WidthSection.qml</file>
-        <file>qml/MuseScore/Inspector/notation/brackets/internal/BracketPopupSection.qml</file>
         <file>qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretDiagramTabPanel.qml</file>
         <file>qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretGeneralSettingsTab.qml</file>
         <file>qml/MuseScore/Inspector/notation/fretdiagrams/internal/FretAdvancedSettingsTab.qml</file>

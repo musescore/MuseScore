@@ -40,7 +40,7 @@ FocusableItem {
 
         width: parent.width
 
-        spacing: 16
+        spacing: 12
 
         CheckBox {
             isIndeterminate: root.model ? root.model.isHeadHidden.isUndefined : false

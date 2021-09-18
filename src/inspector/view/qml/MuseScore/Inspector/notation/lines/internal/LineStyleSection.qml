@@ -38,7 +38,7 @@ Column {
 
     width: parent.width
 
-    spacing: 16
+    spacing: 12
 
     FlatRadioButtonGroupPropertyView {
         titleText: qsTrc("inspector", "Style")
@@ -56,7 +56,7 @@ Column {
         height: childrenRect.height
         width: parent.width
 
-        InspectorPropertyView {
+        SpinBoxPropertyView {
             anchors.left: parent.left
             anchors.right: parent.horizontalCenter
             anchors.rightMargin: 2
@@ -67,21 +67,13 @@ Column {
             titleText: qsTrc("inspector", "Dash")
             propertyItem: root.dashLineLength
 
-            IncrementalPropertyControl {
-                isIndeterminate: root.dashLineLength ? root.dashLineLength.isUndefined : false
-                currentValue: root.dashLineLength ? root.dashLineLength.value : 0
-                step: 0.1
-                maxValue: 10
-                minValue: 0.1
-                decimals: 2
-
-                onValueEdited: {
-                    root.dashLineLength.value = newValue
-                }
-            }
+            step: 0.1
+            maxValue: 10
+            minValue: 0.1
+            decimals: 2
         }
 
-        InspectorPropertyView {
+        SpinBoxPropertyView {
             anchors.left: parent.horizontalCenter
             anchors.leftMargin: 2
             anchors.right: parent.right
@@ -92,18 +84,10 @@ Column {
             titleText: qsTrc("inspector", "Gap")
             propertyItem: root.dashGapLength
 
-            IncrementalPropertyControl {
-                isIndeterminate: root.dashGapLength && enabled ? root.dashGapLength.isUndefined : false
-                currentValue: root.dashGapLength ? root.dashGapLength.value : 0
-                step: 0.1
-                maxValue: 10
-                minValue: 0.1
-                decimals: 2
-
-                onValueEdited: {
-                    root.dashGapLength.value = newValue
-                }
-            }
+            step: 0.1
+            maxValue: 10
+            minValue: 0.1
+            decimals: 2
         }
     }
 }

@@ -87,20 +87,13 @@ Column {
         }
     }
 
-    InspectorPropertyView {
+    SpinBoxPropertyView {
         titleText: qsTrc("inspector", "Line thickness")
         propertyItem: root.model ? root.model.lineThickness : null
 
-        IncrementalPropertyControl {
-            isIndeterminate: root.model ? root.model.lineThickness.isUndefined : false
-            currentValue: root.model ? root.model.lineThickness.value : 0
-
-            maxValue: 10
-            minValue: 0.1
-            step: 0.1
-            decimals: 2
-
-            onValueEdited: { root.model.lineThickness.value = newValue }
-        }
+        maxValue: 10
+        minValue: 0.1
+        step: 0.1
+        decimals: 2
     }
 }

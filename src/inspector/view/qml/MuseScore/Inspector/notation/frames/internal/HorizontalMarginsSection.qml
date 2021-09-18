@@ -36,7 +36,7 @@ Item {
     height: childrenRect.height
     width: parent.width
 
-    InspectorPropertyView {
+    SpinBoxPropertyView {
         anchors.left: parent.left
         anchors.right: parent.horizontalCenter
         anchors.rightMargin: 4
@@ -44,20 +44,11 @@ Item {
         titleText: qsTrc("inspector", "Left margin")
         propertyItem: root.frameLeftMargin
 
-        IncrementalPropertyControl {
-            icon: IconCode.LEFT_MARGIN
-
-            measureUnitsSymbol: qsTrc("inspector", "mm")
-
-            enabled: root.frameLeftMargin ? root.frameLeftMargin.isEnabled : false
-            isIndeterminate: root.frameLeftMargin && enabled ? root.frameLeftMargin.isUndefined : false
-            currentValue: root.frameLeftMargin ? root.frameLeftMargin.value : 0
-
-            onValueEdited: { root.frameLeftMargin.value = newValue }
-        }
+        icon: IconCode.LEFT_MARGIN
+        measureUnitsSymbol: qsTrc("inspector", "mm")
     }
 
-    InspectorPropertyView {
+    SpinBoxPropertyView {
         anchors.left: parent.horizontalCenter
         anchors.leftMargin: 4
         anchors.right: parent.right
@@ -65,16 +56,7 @@ Item {
         titleText: qsTrc("inspector", "Right margin")
         propertyItem: root.frameRightMargin
 
-        IncrementalPropertyControl {
-            icon: IconCode.RIGHT_MARGIN
-
-            measureUnitsSymbol: qsTrc("inspector", "mm")
-
-            enabled: root.frameRightMargin ? root.frameRightMargin.isEnabled : false
-            isIndeterminate: root.frameRightMargin && enabled ? root.frameRightMargin.isUndefined : false
-            currentValue: root.frameRightMargin ? root.frameRightMargin.value : 0
-
-            onValueEdited: { root.frameRightMargin.value = newValue }
-        }
+        icon: IconCode.RIGHT_MARGIN
+        measureUnitsSymbol: qsTrc("inspector", "mm")
     }
 }

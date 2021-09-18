@@ -39,7 +39,7 @@ InspectorSectionView {
         height: implicitHeight
         width: parent.width
 
-        spacing: 16
+        spacing: 12
 
         InspectorPropertyView {
             titleText: qsTrc("inspector", "Font")

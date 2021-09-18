@@ -46,7 +46,7 @@ FocusableItem {
             height: childrenRect.height
             width: parent.width
 
-            InspectorPropertyView {
+            SpinBoxPropertyView {
                 anchors.left: parent.left
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
@@ -54,22 +54,14 @@ FocusableItem {
                 titleText: qsTrc("inspector", "Scale")
                 propertyItem: root.model ? root.model.scale : null
 
-                IncrementalPropertyControl {
-                    id: scaleControl
-
-                    isIndeterminate: root.model ? root.model.scale.isUndefined : false
-                    currentValue: root.model ? root.model.scale.value : 0
-                    measureUnitsSymbol: "%"
-                    step: 1
-                    decimals: 0
-                    maxValue: 300
-                    minValue: 1
-
-                    onValueEdited: { root.model.scale.value = newValue }
-                }
+                measureUnitsSymbol: "%"
+                step: 1
+                decimals: 0
+                maxValue: 300
+                minValue: 1
             }
 
-            InspectorPropertyView {
+            SpinBoxPropertyView {
                 anchors.left: parent.horizontalCenter
                 anchors.leftMargin: 2
                 anchors.right: parent.right
@@ -77,18 +69,10 @@ FocusableItem {
                 titleText: qsTrc("inspector", "Strings")
                 propertyItem: root.model ? root.model.stringsCount : null
 
-                IncrementalPropertyControl {
-                    id: stringsCountControl
-
-                    isIndeterminate: root.model ? root.model.stringsCount.isUndefined : false
-                    currentValue: root.model ? root.model.stringsCount.value : 0
-                    step: 1
-                    decimals: 0
-                    maxValue: 12
-                    minValue: 4
-
-                    onValueEdited: { root.model.stringsCount.value = newValue }
-                }
+                step: 1
+                decimals: 0
+                maxValue: 12
+                minValue: 4
             }
         }
 
@@ -96,7 +80,7 @@ FocusableItem {
             height: childrenRect.height
             width: parent.width
 
-            InspectorPropertyView {
+            SpinBoxPropertyView {
                 anchors.left: parent.left
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
@@ -104,21 +88,13 @@ FocusableItem {
                 titleText: qsTrc("inspector", "Visible frets")
                 propertyItem: root.model ? root.model.fretsCount : null
 
-                IncrementalPropertyControl {
-                    id: visibleFretsCountControl
-
-                    isIndeterminate: root.model ? root.model.fretsCount.isUndefined : false
-                    currentValue: root.model ? root.model.fretsCount.value : 0
-                    step: 1
-                    decimals: 0
-                    maxValue: 6
-                    minValue: 3
-
-                    onValueEdited: { root.model.fretsCount.value = newValue }
-                }
+                step: 1
+                decimals: 0
+                maxValue: 6
+                minValue: 3
             }
 
-            InspectorPropertyView {
+            SpinBoxPropertyView {
                 anchors.left: parent.horizontalCenter
                 anchors.leftMargin: 2
                 anchors.right: parent.right
@@ -126,18 +102,10 @@ FocusableItem {
                 titleText: qsTrc("inspector", "Starting fret number")
                 propertyItem: root.model ? root.model : null
 
-                IncrementalPropertyControl {
-                    id: startingFretNumberControl
-
-                    isIndeterminate: root.model ? root.model.startingFretNumber.isUndefined : false
-                    currentValue: root.model ? root.model.startingFretNumber.value : 0
-                    step: 1
-                    decimals: 0
-                    maxValue: 12
-                    minValue: 1
-
-                    onValueEdited: { root.model.startingFretNumber.value = newValue }
-                }
+                step: 1
+                decimals: 0
+                maxValue: 12
+                minValue: 1
             }
         }
 

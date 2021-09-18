@@ -23,8 +23,8 @@ import QtQuick 2.15
 
 import MuseScore.UiComponents 1.0
 import MuseScore.Inspector 1.0
+
 import "../../common"
-import "internal"
 
 Column {
     id: root
@@ -35,13 +35,23 @@ Column {
 
     spacing: 12
 
-    BracketPopupSection {
-        intBracketProperty: root.model ? root.model.bracketColumnPosition : nul
+    SpinBoxPropertyView {
         titleText: qsTrc("inspector", "Column")
+        propertyItem: root.model ? root.model.bracketColumnPosition : nul
+
+        step: 1
+        decimals: 0
+        maxValue: 127
+        minValue: 0
     }
 
-    BracketPopupSection {
-        intBracketProperty: root.model ? root.model.bracketSpanStaves : nul
+    SpinBoxPropertyView {
         titleText: qsTrc("inspector", "Span")
+        propertyItem: root.model ? root.model.bracketSpanStaves : nul
+
+        step: 1
+        decimals: 0
+        maxValue: 127
+        minValue: 0
     }
 }

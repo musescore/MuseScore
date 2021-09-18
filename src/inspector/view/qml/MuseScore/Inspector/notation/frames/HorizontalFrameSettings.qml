@@ -22,6 +22,8 @@
 import QtQuick 2.15
 
 import MuseScore.UiComponents 1.0
+
+import "../../common"
 import "internal"
 
 Column {
@@ -32,10 +34,17 @@ Column {
     objectName: "HorizontalFrameSettings"
 
     height: implicitHeight
-    spacing: 16
+    spacing: 12
 
-    WidthSection {
-        widthProperty: root.model ? root.model.frameWidth : null
+    SpinBoxPropertyView {
+        anchors.left: parent.left
+        anchors.right: parent.horizontalCenter
+        anchors.rightMargin: 2
+
+        titleText: qsTrc("inspector", "Width")
+        propertyItem: root.model ? root.model.frameWidth : null
+
+        icon: IconCode.HORIZONTAL
     }
 
     SeparatorLine { anchors.margins: -10 }

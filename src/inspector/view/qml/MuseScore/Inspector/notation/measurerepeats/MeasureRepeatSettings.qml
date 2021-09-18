@@ -24,6 +24,7 @@ import QtQuick 2.15
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Inspector 1.0
+
 import "../../common"
 
 Column {
@@ -35,19 +36,13 @@ Column {
 
     spacing: 12
 
-    InspectorPropertyView {
+    SpinBoxPropertyView {
         titleText: qsTrc("inspector", "Number position")
         propertyItem: root.model ? root.model.numberPosition : null
 
-        IncrementalPropertyControl {
-            isIndeterminate: root.model ? root.model.numberPosition.isUndefined : false
-            currentValue: root.model ? root.model.numberPosition.value : 0
-            maxValue: 99.0
-            minValue: -99.0
-            step: 0.5
-            decimals: 2
-
-            onValueEdited: { root.model.numberPosition.value = newValue }
-        }
+        maxValue: 99.0
+        minValue: -99.0
+        step: 0.5
+        decimals: 2
     }
 }

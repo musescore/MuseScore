@@ -36,7 +36,7 @@ Item {
     height: childrenRect.height
     width: parent.width
 
-    InspectorPropertyView {
+    SpinBoxPropertyView {
         anchors.left: parent.left
         anchors.right: parent.horizontalCenter
         anchors.rightMargin: 4
@@ -44,18 +44,10 @@ Item {
         titleText: qsTrc("inspector", "Gap above")
         propertyItem: root.gapAbove
 
-        IncrementalPropertyControl {
-            icon: IconCode.GAP_ABOVE
-
-            enabled: root.gapAbove ? root.gapAbove.isEnabled : false
-            isIndeterminate: root.gapAbove && enabled ? root.gapAbove.isUndefined : false
-            currentValue: root.gapAbove ? root.gapAbove.value : 0
-
-            onValueEdited: { root.gapAbove.value = newValue }
-        }
+        icon: IconCode.GAP_ABOVE
     }
 
-    InspectorPropertyView {
+    SpinBoxPropertyView {
         anchors.left: parent.horizontalCenter
         anchors.leftMargin: 4
         anchors.right: parent.right
@@ -63,14 +55,6 @@ Item {
         titleText: qsTrc("inspector", "Gap below")
         propertyItem: root.gapBelow
 
-        IncrementalPropertyControl {
-            icon: IconCode.GAP_BELOW
-
-            enabled: root.gapBelow ? root.gapBelow.isEnabled : false
-            isIndeterminate: root.gapBelow && enabled ? root.gapBelow.isUndefined : false
-            currentValue: root.gapBelow ? root.gapBelow.value : 0
-
-            onValueEdited: { root.gapBelow.value = newValue }
-        }
+        icon: IconCode.GAP_BELOW
     }
 }
