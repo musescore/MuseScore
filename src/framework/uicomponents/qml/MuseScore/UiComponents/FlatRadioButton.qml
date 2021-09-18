@@ -45,6 +45,8 @@ RadioDelegate {
 
     property alias navigation: navCtrl
 
+    ButtonGroup.group: ListView.view && ListView.view instanceof RadioButtonGroup ? ListView.view.radioButtonGroup : null
+
     implicitHeight: ListView.view ? ListView.view.height : 30
     implicitWidth: ListView.view ? (ListView.view.width - (ListView.view.spacing * (ListView.view.count - 1))) / ListView.view.count
                                  : 30
