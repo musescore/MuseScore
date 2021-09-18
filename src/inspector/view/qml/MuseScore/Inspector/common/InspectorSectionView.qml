@@ -34,8 +34,6 @@ FocusScope {
     property var anchorItem: null
     signal ensureContentVisibleRequested(int invisibleContentHeight)
 
-    property var contentHeight: implicitHeight
-
     anchors.left: parent.left
     anchors.right: parent.right
 

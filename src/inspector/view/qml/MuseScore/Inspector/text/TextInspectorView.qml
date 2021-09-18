@@ -32,7 +32,6 @@ InspectorSectionView {
     id: root
 
     implicitHeight: contentColumn.height
-    contentHeight: implicitHeight
 
     Column {
         id: contentColumn
