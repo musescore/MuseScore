@@ -81,7 +81,7 @@ Column {
         height: childrenRect.height
         width: parent.width
 
-        InspectorPropertyView {
+        DropdownPropertyView {
             propertyItem: root.model ? root.model.topTpc : null
             titleText: qsTrc("inspector", "Top note")
             showMenuButton: false
@@ -90,19 +90,7 @@ Column {
             anchors.right: parent.horizontalCenter
             anchors.rightMargin: 2
 
-            Dropdown {
-                id: topTpc
-                width: parent.width
-                model: root.tpcListModel
-                currentIndex: root.model && !root.model.topTpc.isUndefined ? topTpc.indexOfValue(root.model.topTpc.value) : -1
-                onCurrentValueChanged: {
-                    if (currentIndex === -1 || !root.model) {
-                        return
-                    }
-
-                    root.model.topTpc.value = topTpc.currentValue
-                }
-            }
+            model: root.tpcListModel
         }
 
         SpinBoxPropertyView {
@@ -125,7 +113,7 @@ Column {
         height: childrenRect.height
         width: parent.width
 
-        InspectorPropertyView {
+        DropdownPropertyView {
             propertyItem: root.model ? root.model.bottomTpc : null
             titleText: qsTrc("inspector", "Bottom note")
             showMenuButton: false
@@ -134,19 +122,7 @@ Column {
             anchors.right: parent.horizontalCenter
             anchors.rightMargin: 2
 
-            Dropdown {
-                id: bottomTpc
-                width: parent.width
-                model: root.tpcListModel
-                currentIndex: root.model && !root.model.bottomTpc.isUndefined ? bottomTpc.indexOfValue(root.model.bottomTpc.value) : -1
-                onCurrentValueChanged: {
-                    if (currentIndex === -1 || !root.model) {
-                        return
-                    }
-
-                    root.model.bottomTpc.value = bottomTpc.currentValue
-                }
-            }
+            model: root.tpcListModel
         }
 
         SpinBoxPropertyView {

@@ -218,63 +218,43 @@ Column {
 
     SeparatorLine { anchors.margins: -10 }
 
-    InspectorPropertyView {
+    DropdownPropertyView {
         titleText: qsTrc("inspector", "Text style")
         propertyItem: root.model ? root.model.textType : null
 
-        navigation.name: "Text style Menu"
+        navigation.name: "Text style"
         navigation.panel: root.navigationPanel
         navigation.row: 19
 
-        Dropdown {
-            id: textStyles
-
-            width: parent.width
-
-            navigation.name: "Text style Value"
-            navigation.panel: root.navigationPanel
-            navigation.row: 20
-
-            model: [
-                { text: qsTrc("inspector", "Title"), value: TextTypes.TEXT_TYPE_TITLE },
-                { text: qsTrc("inspector", "Subtitle"), value: TextTypes.TEXT_TYPE_SUBTITLE},
-                { text: qsTrc("inspector", "Composer"), value: TextTypes.TEXT_TYPE_COMPOSER },
-                { text: qsTrc("inspector", "Lyricist"), value: TextTypes.TEXT_TYPE_LYRICS_ODD },
-                { text: qsTrc("inspector", "Translator"), value: TextTypes.TEXT_TYPE_TRANSLATOR },
-                { text: qsTrc("inspector", "Frame"), value: TextTypes.TEXT_TYPE_FRAME },
-                { text: qsTrc("inspector", "Header"), value: TextTypes.TEXT_TYPE_HEADER },
-                { text: qsTrc("inspector", "Footer"), value: TextTypes.TEXT_TYPE_FOOTER },
-                { text: qsTrc("inspector", "Measure number"), value: TextTypes.TEXT_TYPE_MEASURE_NUMBER },
-                { text: qsTrc("inspector", "Instrument name (Part)"), value: TextTypes.TEXT_TYPE_INSTRUMENT_EXCERPT },
-                { text: qsTrc("inspector", "Instrument change"), value: TextTypes.TEXT_TYPE_INSTRUMENT_CHANGE },
-                { text: qsTrc("inspector", "Staff"), value: TextTypes.TEXT_TYPE_STAFF },
-                { text: qsTrc("inspector", "System"), value: TextTypes.TEXT_TYPE_SYSTEM },
-                { text: qsTrc("inspector", "Expression"), value: TextTypes.TEXT_TYPE_EXPRESSION },
-                { text: qsTrc("inspector", "Dynamics"), value: TextTypes.TEXT_TYPE_DYNAMICS },
-                { text: qsTrc("inspector", "Hairpin"), value: TextTypes.TEXT_TYPE_HAIRPIN },
-                { text: qsTrc("inspector", "Tempo"), value: TextTypes.TEXT_TYPE_TEMPO },
-                { text: qsTrc("inspector", "Rehearshal mark"), value: TextTypes.TEXT_TYPE_REHEARSAL_MARK },
-                { text: qsTrc("inspector", "Repeat text left"), value: TextTypes.TEXT_TYPE_REPEAT_LEFT },
-                { text: qsTrc("inspector", "Repeat text right"), value: TextTypes.TEXT_TYPE_REPEAT_RIGHT },
-                { text: qsTrc("inspector", "Lyrics odd lines"), value: TextTypes.TEXT_TYPE_LYRICS_ODD },
-                { text: qsTrc("inspector", "Lyrics even lines"), value: TextTypes.TEXT_TYPE_LYRICS_EVEN },
-                { text: qsTrc("inspector", "Chord symbol"), value: TextTypes.TEXT_TYPE_HARMONY_A },
-                { text: qsTrc("inspector", "Chord symbol (Alternate)"), value: TextTypes.TEXT_TYPE_HARMONY_B },
-                { text: qsTrc("inspector", "Roman numeral analysis"), value: TextTypes.TEXT_TYPE_HARMONY_ROMAN },
-                { text: qsTrc("inspector", "Nashville number"), value: TextTypes.TEXT_TYPE_HARMONY_NASHVILLE },
-                { text: qsTrc("inspector", "Sticking"), value: TextTypes.TEXT_TYPE_STICKING }
-            ]
-
-            currentIndex: root.model && !root.model.textType.isUndefined ? textStyles.indexOfValue(root.model.textType.value) : -1
-
-            onCurrentValueChanged: {
-                if (currentIndex == -1) {
-                    return
-                }
-
-                root.model.textType.value = textStyles.currentValue
-            }
-        }
+        model: [
+            { text: qsTrc("inspector", "Title"), value: TextTypes.TEXT_TYPE_TITLE },
+            { text: qsTrc("inspector", "Subtitle"), value: TextTypes.TEXT_TYPE_SUBTITLE},
+            { text: qsTrc("inspector", "Composer"), value: TextTypes.TEXT_TYPE_COMPOSER },
+            { text: qsTrc("inspector", "Lyricist"), value: TextTypes.TEXT_TYPE_LYRICS_ODD },
+            { text: qsTrc("inspector", "Translator"), value: TextTypes.TEXT_TYPE_TRANSLATOR },
+            { text: qsTrc("inspector", "Frame"), value: TextTypes.TEXT_TYPE_FRAME },
+            { text: qsTrc("inspector", "Header"), value: TextTypes.TEXT_TYPE_HEADER },
+            { text: qsTrc("inspector", "Footer"), value: TextTypes.TEXT_TYPE_FOOTER },
+            { text: qsTrc("inspector", "Measure number"), value: TextTypes.TEXT_TYPE_MEASURE_NUMBER },
+            { text: qsTrc("inspector", "Instrument name (Part)"), value: TextTypes.TEXT_TYPE_INSTRUMENT_EXCERPT },
+            { text: qsTrc("inspector", "Instrument change"), value: TextTypes.TEXT_TYPE_INSTRUMENT_CHANGE },
+            { text: qsTrc("inspector", "Staff"), value: TextTypes.TEXT_TYPE_STAFF },
+            { text: qsTrc("inspector", "System"), value: TextTypes.TEXT_TYPE_SYSTEM },
+            { text: qsTrc("inspector", "Expression"), value: TextTypes.TEXT_TYPE_EXPRESSION },
+            { text: qsTrc("inspector", "Dynamics"), value: TextTypes.TEXT_TYPE_DYNAMICS },
+            { text: qsTrc("inspector", "Hairpin"), value: TextTypes.TEXT_TYPE_HAIRPIN },
+            { text: qsTrc("inspector", "Tempo"), value: TextTypes.TEXT_TYPE_TEMPO },
+            { text: qsTrc("inspector", "Rehearshal mark"), value: TextTypes.TEXT_TYPE_REHEARSAL_MARK },
+            { text: qsTrc("inspector", "Repeat text left"), value: TextTypes.TEXT_TYPE_REPEAT_LEFT },
+            { text: qsTrc("inspector", "Repeat text right"), value: TextTypes.TEXT_TYPE_REPEAT_RIGHT },
+            { text: qsTrc("inspector", "Lyrics odd lines"), value: TextTypes.TEXT_TYPE_LYRICS_ODD },
+            { text: qsTrc("inspector", "Lyrics even lines"), value: TextTypes.TEXT_TYPE_LYRICS_EVEN },
+            { text: qsTrc("inspector", "Chord symbol"), value: TextTypes.TEXT_TYPE_HARMONY_A },
+            { text: qsTrc("inspector", "Chord symbol (Alternate)"), value: TextTypes.TEXT_TYPE_HARMONY_B },
+            { text: qsTrc("inspector", "Roman numeral analysis"), value: TextTypes.TEXT_TYPE_HARMONY_ROMAN },
+            { text: qsTrc("inspector", "Nashville number"), value: TextTypes.TEXT_TYPE_HARMONY_NASHVILLE },
+            { text: qsTrc("inspector", "Sticking"), value: TextTypes.TEXT_TYPE_STICKING }
+        ]
     }
 
     PlacementSection {
