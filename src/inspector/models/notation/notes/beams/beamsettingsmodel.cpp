@@ -39,19 +39,19 @@ BeamSettingsModel::BeamSettingsModel(QObject* parent, IElementRepositoryService*
 void BeamSettingsModel::createProperties()
 {
     m_featheringHeightLeft = buildPropertyItem(Ms::Pid::GROW_LEFT);
-    m_featheringHeightRight = buildPropertyItem(Ms::Pid::GROW_RIGHT, [this](const int pid, const QVariant& newValue) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue);
+    m_featheringHeightRight = buildPropertyItem(Ms::Pid::GROW_RIGHT, [this](const Ms::Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, newValue);
     });
 
-    m_isBeamHidden = buildPropertyItem(Ms::Pid::VISIBLE, [this](const int pid, const QVariant& isBeamHidden) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), !isBeamHidden.toBool());
+    m_isBeamHidden = buildPropertyItem(Ms::Pid::VISIBLE, [this](const Ms::Pid pid, const QVariant& isBeamHidden) {
+        onPropertyValueChanged(pid, !isBeamHidden.toBool());
     });
 
-    m_beamVectorX = buildPropertyItem(Ms::Pid::BEAM_POS, [this](const int, const QVariant& newValue) {
+    m_beamVectorX = buildPropertyItem(Ms::Pid::BEAM_POS, [this](const Ms::Pid, const QVariant& newValue) {
         updateBeamHeight(newValue.toDouble(), m_beamVectorY->value().toDouble());
     });
 
-    m_beamVectorY = buildPropertyItem(Ms::Pid::BEAM_POS, [this](const int, const QVariant& newValue) {
+    m_beamVectorY = buildPropertyItem(Ms::Pid::BEAM_POS, [this](const Ms::Pid, const QVariant& newValue) {
         updateBeamHeight(m_beamVectorX->value().toDouble(), newValue.toDouble());
     });
 }
@@ -231,7 +231,8 @@ void BeamSettingsModel::setBeamModesModel(BeamModesModel* beamModesModel)
 {
     m_beamModesModel = beamModesModel;
 
-    connect(m_beamModesModel->isFeatheringAvailable(), &PropertyItem::propertyModified, this, [this](const QVariant& newValue) {
+    connect(m_beamModesModel->isFeatheringAvailable(), &PropertyItem::propertyModified, this, [this](const Ms::Pid,
+                                                                                                     const QVariant& newValue) {
         if (!newValue.toBool()) {
             setFeatheringMode(BeamTypes::FeatheringMode::FEATHERING_NONE);
         }

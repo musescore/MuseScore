@@ -48,14 +48,14 @@ void AmbitusSettingsModel::createProperties()
     m_topOctave = buildPropertyItem(Ms::Pid::FBPARENTHESIS3);
     m_bottomOctave = buildPropertyItem(Ms::Pid::FBPARENTHESIS4);
 
-    m_topPitch = buildPropertyItem(Ms::Pid::PITCH, [this](const int pid, const QVariant& newValue) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue);
+    m_topPitch = buildPropertyItem(Ms::Pid::PITCH, [this](const Ms::Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, newValue);
 
         emit requestReloadPropertyItems();
     });
 
-    m_bottomPitch = buildPropertyItem(Ms::Pid::FBPARENTHESIS2, [this](const int pid, const QVariant& newValue) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue);
+    m_bottomPitch = buildPropertyItem(Ms::Pid::FBPARENTHESIS2, [this](const Ms::Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, newValue);
 
         emit requestReloadPropertyItems();
     });

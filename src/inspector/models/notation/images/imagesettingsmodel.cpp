@@ -40,30 +40,30 @@ void ImageSettingsModel::createProperties()
 {
     m_isAspectRatioLocked = buildPropertyItem(Ms::Pid::LOCK_ASPECT_RATIO);
 
-    m_shouldScaleToFrameSize = buildPropertyItem(Ms::Pid::AUTOSCALE, [this](const int pid, const QVariant& newValue) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue);
+    m_shouldScaleToFrameSize = buildPropertyItem(Ms::Pid::AUTOSCALE, [this](const Ms::Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, newValue);
 
         emit requestReloadPropertyItems();
     });
 
-    m_height = buildPropertyItem(Ms::Pid::IMAGE_HEIGHT, [this](const int pid, const QVariant& newValue) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue);
+    m_height = buildPropertyItem(Ms::Pid::IMAGE_HEIGHT, [this](const Ms::Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, newValue);
 
         if (m_isAspectRatioLocked->value().toBool()) {
             emit requestReloadPropertyItems();
         }
     });
 
-    m_width = buildPropertyItem(Ms::Pid::IMAGE_WIDTH, [this](const int pid, const QVariant& newValue) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue);
+    m_width = buildPropertyItem(Ms::Pid::IMAGE_WIDTH, [this](const Ms::Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, newValue);
 
         if (m_isAspectRatioLocked->value().toBool()) {
             emit requestReloadPropertyItems();
         }
     });
 
-    m_isSizeInSpatiums = buildPropertyItem(Ms::Pid::SIZE_IS_SPATIUM, [this](const int pid, const QVariant& newValue) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue);
+    m_isSizeInSpatiums = buildPropertyItem(Ms::Pid::SIZE_IS_SPATIUM, [this](const Ms::Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, newValue);
 
         emit requestReloadPropertyItems();
     });

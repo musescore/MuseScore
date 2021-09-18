@@ -41,8 +41,8 @@ NoteheadSettingsModel::NoteheadSettingsModel(QObject* parent, IElementRepository
 
 void NoteheadSettingsModel::createProperties()
 {
-    m_isHeadHidden = buildPropertyItem(Ms::Pid::VISIBLE, [this](const int pid, const QVariant& isHeadHidden) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), !isHeadHidden.toBool());
+    m_isHeadHidden = buildPropertyItem(Ms::Pid::VISIBLE, [this](const Ms::Pid pid, const QVariant& isHeadHidden) {
+        onPropertyValueChanged(pid, !isHeadHidden.toBool());
     });
 
     m_headDirection = buildPropertyItem(Ms::Pid::MIRROR_HEAD);
@@ -50,12 +50,12 @@ void NoteheadSettingsModel::createProperties()
     m_headType = buildPropertyItem(Ms::Pid::HEAD_TYPE);
     m_dotPosition = buildPropertyItem(Ms::Pid::DOT_POSITION);
 
-    m_horizontalOffset = buildPropertyItem(Ms::Pid::OFFSET, [this](const int pid, const QVariant& newValue) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), PointF(newValue.toDouble(), m_verticalOffset->value().toDouble()));
+    m_horizontalOffset = buildPropertyItem(Ms::Pid::OFFSET, [this](const Ms::Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, PointF(newValue.toDouble(), m_verticalOffset->value().toDouble()));
     });
 
-    m_verticalOffset = buildPropertyItem(Ms::Pid::OFFSET, [this](const int pid, const QVariant& newValue) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), PointF(m_horizontalOffset->value().toDouble(), newValue.toDouble()));
+    m_verticalOffset = buildPropertyItem(Ms::Pid::OFFSET, [this](const Ms::Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, PointF(m_horizontalOffset->value().toDouble(), newValue.toDouble()));
     });
 }
 

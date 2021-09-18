@@ -38,8 +38,8 @@ FermataPlaybackModel::FermataPlaybackModel(QObject* parent, IElementRepositorySe
 
 void FermataPlaybackModel::createProperties()
 {
-    m_timeStretch = buildPropertyItem(Ms::Pid::TIME_STRETCH, [this](const int pid, const QVariant& newValue) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue.toDouble() / 100);
+    m_timeStretch = buildPropertyItem(Ms::Pid::TIME_STRETCH, [this](const Ms::Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, newValue.toDouble() / 100);
     });
 }
 

@@ -32,7 +32,7 @@ BeamModesModel::BeamModesModel(QObject* parent, IElementRepositoryService* repos
 void BeamModesModel::createProperties()
 {
     m_mode = buildPropertyItem(Ms::Pid::BEAM_MODE);
-    m_isFeatheringAvailable = buildPropertyItem(Ms::Pid::DURATION_TYPE, [](const int, const QVariant&) {}); //@note readonly property, there is no need to modify it
+    m_isFeatheringAvailable = buildPropertyItem(Ms::Pid::DURATION_TYPE, [](const Ms::Pid, const QVariant&) {}); //@note readonly property, there is no need to modify it
 
     setModeListModel(new BeamModeListModel(this));
 }
