@@ -40,6 +40,8 @@ Column {
     readonly property bool isStyled: propertyItem ? propertyItem.isStyled : false
     readonly property bool isModified: propertyItem ? propertyItem.isModified : false
 
+    enabled: propertyItem && propertyItem.isEnabled
+
     width: parent.width
 
     spacing: 8

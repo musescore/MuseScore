@@ -26,31 +26,12 @@ import MuseScore.Inspector 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
 
-InspectorPropertyView {
+FlatRadioButtonGroupPropertyView {
     id: root
-
     titleText: qsTrc("inspector", "Position")
 
-    RadioButtonGroup {
-        id: positionButtonList
-
-        height: 30
-        width: parent.width
-
-        model: [
-            { textRole: qsTrc("inspector", "Above"), valueRole: CommonTypes.PLACEMENT_TYPE_ABOVE },
-            { textRole: qsTrc("inspector", "Below"), valueRole: CommonTypes.PLACEMENT_TYPE_BELOW }
-        ]
-
-        delegate: FlatRadioButton {
-            ButtonGroup.group: positionButtonList.radioButtonGroup
-
-            text: modelData["textRole"]
-            checked: root.propertyItem && !root.propertyItem.isUndefined ? root.propertyItem.value === modelData["valueRole"]
-                                                                         : false
-            onToggled: {
-                root.propertyItem.value = modelData["valueRole"]
-            }
-        }
-    }
+    model: [
+        { text: qsTrc("inspector", "Above"), value: CommonTypes.PLACEMENT_TYPE_ABOVE },
+        { text: qsTrc("inspector", "Below"), value: CommonTypes.PLACEMENT_TYPE_BELOW }
+    ]
 }

@@ -35,33 +35,14 @@ Column {
 
     spacing: 12
 
-    InspectorPropertyView {
-
+    FlatRadioButtonGroupPropertyView {
         titleText: qsTrc("inspector", "Performance")
         propertyItem: root.model ? root.model.performanceType : null
 
-        RadioButtonGroup {
-            id: radioButtonList
-
-            height: 30
-            width: parent.width
-
-            model: [
-                { textRole: qsTrc("inspector", "Standard"), valueRole: OrnamentTypes.STYLE_STANDARD },
-                { textRole: qsTrc("inspector", "Baroque"), valueRole: OrnamentTypes.STYLE_BAROQUE }
-            ]
-
-            delegate: FlatRadioButton {
-                ButtonGroup.group: radioButtonList.radioButtonGroup
-
-                text: modelData["textRole"]
-                checked: root.model && !root.model.performanceType.isUndefined ? root.model.performanceType.value === modelData["valueRole"]
-                                                                               : false
-                onToggled: {
-                    root.model.performanceType.value = modelData["valueRole"]
-                }
-            }
-        }
+        model: [
+            { text: qsTrc("inspector", "Standard"), value: OrnamentTypes.STYLE_STANDARD },
+            { text: qsTrc("inspector", "Baroque"), value: OrnamentTypes.STYLE_BAROQUE }
+        ]
     }
 
     InspectorPropertyView {

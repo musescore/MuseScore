@@ -90,7 +90,10 @@ InspectorSectionView {
             height: childrenRect.height
             width: parent.width
 
-            InspectorPropertyView {
+            FlatRadioButtonGroupPropertyView {
+                titleText: qsTrc("inspector", "Style")
+                propertyItem: root.model ? root.model.fontStyle : null
+
                 anchors.left: parent.left
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
@@ -99,37 +102,11 @@ InspectorSectionView {
                 navigation.name: "StyleMenu"
                 navigation.row: root.navigationRow(3)
 
-                titleText: qsTrc("inspector", "Style")
-                propertyItem: root.model ? root.model.fontStyle : null
-
-                RadioButtonGroup {
-                    height: 30
-                    width: implicitWidth
-
-                    model: [
-                        { iconRole: IconCode.TEXT_BOLD, valueRole: TextTypes.FONT_STYLE_BOLD },
-                        { iconRole: IconCode.TEXT_ITALIC, valueRole: TextTypes.FONT_STYLE_ITALIC  },
-                        { iconRole: IconCode.TEXT_UNDERLINE, valueRole: TextTypes.FONT_STYLE_UNDERLINE  }
-                    ]
-
-                    delegate: FlatToggleButton {
-
-                        navigation.panel: root.navigationPanel
-                        navigation.name: "FontStyle"+model.index
-                        navigation.row: root.navigationRow(model.index + 4)
-
-                        icon: modelData["iconRole"]
-
-                        checked: root.model && !root.model.fontStyle.isUndefined ? root.model.fontStyle.value & modelData["valueRole"] : false
-
-                        backgroundColor: ui.theme.backgroundPrimaryColor
-
-                        onToggled: {
-                            root.model.fontStyle.value = checked ? root.model.fontStyle.value & ~modelData["valueRole"]
-                                                                 : root.model.fontStyle.value | modelData["valueRole"]
-                        }
-                    }
-                }
+                model: [
+                    { iconCode: IconCode.TEXT_BOLD, value: TextTypes.FONT_STYLE_BOLD },
+                    { iconCode: IconCode.TEXT_ITALIC, value: TextTypes.FONT_STYLE_ITALIC  },
+                    { iconCode: IconCode.TEXT_UNDERLINE, value: TextTypes.FONT_STYLE_UNDERLINE  }
+                ]
             }
 
             InspectorPropertyView {
@@ -209,8 +186,6 @@ InspectorSectionView {
                     ]
 
                     delegate: FlatRadioButton {
-                        ButtonGroup.group: horizontalAlignmentButtonList.radioButtonGroup
-
                         navigation.panel: root.navigationPanel
                         navigation.name: "HAlign"+model.index
                         navigation.row: root.navigationRow(model.index + 10)
@@ -244,8 +219,6 @@ InspectorSectionView {
                     ]
 
                     delegate: FlatRadioButton {
-                        ButtonGroup.group: verticalAlignmentButtonList.radioButtonGroup
-
                         navigation.panel: root.navigationPanel
                         navigation.name: "VAlign"+model.index
                         navigation.row: root.navigationRow(model.index + 13)

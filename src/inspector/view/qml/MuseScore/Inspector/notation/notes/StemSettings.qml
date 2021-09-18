@@ -58,36 +58,15 @@ FocusableItem {
             }
         }
 
-        InspectorPropertyView {
-
+        FlatRadioButtonGroupPropertyView {
             titleText: qsTrc("inspector", "Stem direction")
             propertyItem: root.stemModel ? root.stemModel.stemDirection : null
 
-            RadioButtonGroup {
-                id: radioButtonList
-
-                height: 30
-                width: parent.width
-
-                model: [
-                    { iconRole: IconCode.NONE, textRole: qsTrc("inspector", "Auto"), typeRole: DirectionTypes.VERTICAL_AUTO },
-                    { iconRole: IconCode.ARROW_DOWN, typeRole: DirectionTypes.VERTICAL_DOWN },
-                    { iconRole: IconCode.ARROW_UP, typeRole: DirectionTypes.VERTICAL_UP }
-                ]
-
-                delegate: FlatRadioButton {
-                    ButtonGroup.group: radioButtonList.radioButtonGroup
-
-                    iconCode: modelData["iconRole"]
-                    text: modelData["textRole"]
-
-                    checked: root.stemModel && !root.stemModel.stemDirection.isUndefined ? root.stemModel.stemDirection.value === modelData["typeRole"]
-                                                                                         : false
-                    onToggled: {
-                        root.stemModel.stemDirection.value = modelData["typeRole"]
-                    }
-                }
-            }
+            model: [
+                { text: qsTrc("inspector", "Auto"), value: DirectionTypes.VERTICAL_AUTO },
+                { iconCode: IconCode.ARROW_DOWN, value: DirectionTypes.VERTICAL_DOWN },
+                { iconCode: IconCode.ARROW_UP, value: DirectionTypes.VERTICAL_UP }
+            ]
         }
 
         ExpandableBlank {

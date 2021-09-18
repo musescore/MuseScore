@@ -213,33 +213,15 @@ Column {
 
             spacing: 16
 
-            InspectorPropertyView {
+            FlatRadioButtonGroupPropertyView {
                 titleText: qsTrc("inspector", "Direction")
                 propertyItem: root.model ? root.model.direction : null
 
-                RadioButtonGroup {
-                    id: directionButtonList
-
-                    height: 30
-                    width: parent.width
-
-                    model: [
-                        { iconRole: IconCode.AMBITUS, typeRole: DirectionTypes.HORIZONTAL_AUTO },
-                        { iconRole: IconCode.AMBITUS_LEANING_LEFT, typeRole: DirectionTypes.HORIZONTAL_LEFT },
-                        { iconRole: IconCode.AMBITUS_LEANING_RIGHT, typeRole: DirectionTypes.HORIZONTAL_RIGHT }
-                    ]
-
-                    delegate: FlatRadioButton {
-                        ButtonGroup.group: directionButtonList.radioButtonGroup
-
-                        iconCode: modelData["iconRole"]
-                        checked: root.model && !root.model.direction.isUndefined ? root.model.direction.value === modelData["typeRole"]
-                                                                                 : false
-                        onToggled: {
-                            root.model.direction.value = modelData["typeRole"]
-                        }
-                    }
-                }
+                model: [
+                    { iconCode: IconCode.AMBITUS, value: DirectionTypes.HORIZONTAL_AUTO },
+                    { iconCode: IconCode.AMBITUS_LEANING_LEFT, value: DirectionTypes.HORIZONTAL_LEFT },
+                    { iconCode: IconCode.AMBITUS_LEANING_RIGHT, value: DirectionTypes.HORIZONTAL_RIGHT }
+                ]
             }
 
             InspectorPropertyView {

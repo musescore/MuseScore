@@ -35,32 +35,14 @@ Column {
 
     spacing: 16
 
-    InspectorPropertyView {
+    FlatRadioButtonGroupPropertyView {
         titleText: qsTrc("inspector", "Interpretation")
         propertyItem: root.model ? root.model.isLiteral : null
 
-        RadioButtonGroup {
-            id: interpretationTypeList
-
-            height: 30
-            width: parent.width
-
-            model: [
-                { textRole: qsTrc("inspector", "Literal"), valueRole: true },
-                { textRole: qsTrc("inspector", "Jazz"), valueRole: false }
-            ]
-
-            delegate: FlatRadioButton {
-                ButtonGroup.group: interpretationTypeList.radioButtonGroup
-
-                text: modelData["textRole"]
-                checked: root.model && !root.model.isLiteral.isUndefined ? root.model.isLiteral.value === modelData["valueRole"]
-                                                                         : false
-                onToggled: {
-                    root.model.isLiteral.value = modelData["valueRole"]
-                }
-            }
-        }
+        model: [
+            { text: qsTrc("inspector", "Literal"), value: true },
+            { text: qsTrc("inspector", "Jazz"), value: false }
+        ]
     }
 
     InspectorPropertyView {

@@ -60,35 +60,15 @@ FocusableItem {
             }
         }
 
-        InspectorPropertyView {
+        FlatRadioButtonGroupPropertyView {
             titleText: qsTrc("inspector", "Dotted note position")
             propertyItem: root.model ? root.model.dotPosition : null
 
-            RadioButtonGroup {
-                id: notePositionButtonList
-
-                height: 30
-                width: parent.width
-
-                model: [
-                    { iconRole: IconCode.NONE, textRole: qsTrc("inspector", "Auto"), typeRole: NoteHead.DOT_POSITION_AUTO },
-                    { iconRole: IconCode.DOT_ABOVE_LINE, typeRole: NoteHead.DOT_POSITION_DOWN },
-                    { iconRole: IconCode.DOT_BELOW_LINE, typeRole: NoteHead.DOT_POSITION_UP }
-                ]
-
-                delegate: FlatRadioButton {
-                    ButtonGroup.group: notePositionButtonList.radioButtonGroup
-
-                    iconCode: modelData["iconRole"]
-                    text: modelData["textRole"]
-
-                    checked: root.model && !root.model.dotPosition.isUndefined ? root.model.dotPosition.value === modelData["typeRole"]
-                                                                               : false
-                    onToggled: {
-                        root.model.dotPosition.value = modelData["typeRole"]
-                    }
-                }
-            }
+            model: [
+                { text: qsTrc("inspector", "Auto"), value: NoteHead.DOT_POSITION_AUTO },
+                { iconCode: IconCode.DOT_ABOVE_LINE, value: NoteHead.DOT_POSITION_DOWN },
+                { iconCode: IconCode.DOT_BELOW_LINE, value: NoteHead.DOT_POSITION_UP }
+            ]
         }
 
         ExpandableBlank {
@@ -105,80 +85,25 @@ FocusableItem {
                 width: parent.width
 
                 NoteHeadTypeSelector {
+                    titleText: qsTrc("inspector", "Notehead type (visual only)")
                     propertyItem: root.model ? root.model.headType : null
                 }
 
-                InspectorPropertyView {
-                    width: root.width
-                    height: implicitHeight
-
+                FlatRadioButtonGroupPropertyView {
                     titleText: qsTrc("inspector", "Note direction")
                     propertyItem: root.model ? root.model.headDirection : null
 
-                    RadioButtonGroup {
-                        id: noteDirectionButtonList
-
-                        height: 30
-                        width: parent.width
-
-                        model: [
-                            { iconRole: IconCode.NONE, textRole: qsTrc("inspector", "Auto"), typeRole: NoteHead.DIRECTION_H_AUTO },
-                            { iconRole: IconCode.ARROW_LEFT, typeRole: NoteHead.DIRECTION_H_LEFT },
-                            { iconRole: IconCode.ARROW_RIGHT, typeRole: NoteHead.DIRECTION_H_RIGHT }
-                        ]
-
-                        delegate: FlatRadioButton {
-                            ButtonGroup.group: noteDirectionButtonList.radioButtonGroup
-
-                            iconCode: modelData["iconRole"]
-                            text: modelData["textRole"]
-
-                            checked: root.model && !root.model.headDirection.isUndefined ? root.model.headDirection.value === modelData["typeRole"]
-                                                                                         : false
-                            onToggled: {
-                                root.model.headDirection.value = modelData["typeRole"]
-                            }
-                        }
-                    }
+                    model: [
+                        { text: qsTrc("inspector", "Auto"), value: NoteHead.DIRECTION_H_AUTO },
+                        { iconCode: IconCode.ARROW_LEFT, value: NoteHead.DIRECTION_H_LEFT },
+                        { iconCode: IconCode.ARROW_RIGHT, value: NoteHead.DIRECTION_H_RIGHT }
+                    ]
                 }
 
-                InspectorPropertyView {
-                    height: childrenRect.height
-                    width: parent.width
-
+                OffsetSection {
                     titleText: qsTrc("inspector", "Notehead offset")
-                    propertyItem: root.model ? root.model.horizontalOffset : null
-
-                    Item {
-                        height: childrenRect.height
-                        width: parent.width
-
-                        IncrementalPropertyControl {
-                            anchors.left: parent.left
-                            anchors.right: parent.horizontalCenter
-                            anchors.rightMargin: 4
-
-                            icon: IconCode.HORIZONTAL
-                            enabled: root.model ? !root.model.isEmpty : false
-                            isIndeterminate: root.model ? root.model.horizontalOffset.isUndefined : false
-                            currentValue: root.model ? root.model.horizontalOffset.value : 0
-
-                            onValueEdited: { root.model.horizontalOffset.value = newValue }
-                        }
-
-                        IncrementalPropertyControl {
-                            anchors.left: parent.horizontalCenter
-                            anchors.leftMargin: 4
-                            anchors.right: parent.right
-
-                            icon: IconCode.VERTICAL
-                            enabled: root.model ? !root.model.isEmpty : false
-                            isIndeterminate: root.model ? root.model.verticalOffset.isUndefined : false
-                            currentValue: root.model ? root.model.verticalOffset.value : 0
-
-                            onValueEdited: { root.model.verticalOffset.value = newValue }
-                        }
-                    }
+                    horizontalOffset: root.model ? root.model.horizontalOffset : null
+                    verticalOffset: root.model ? root.model.verticalOffset : null
                 }
             }
         }

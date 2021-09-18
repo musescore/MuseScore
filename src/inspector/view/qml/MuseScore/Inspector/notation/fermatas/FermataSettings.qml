@@ -26,36 +26,17 @@ import MuseScore.UiComponents 1.0
 import MuseScore.Inspector 1.0
 import "../../common"
 
-InspectorPropertyView {
+Column {
     id: root
 
     property QtObject model: null
 
     objectName: "FermataSettings"
 
-    titleText: qsTrc("inspector", "Placement on staff")
-    propertyItem: root.model ? root.model.placementType : null
+    spacing: 12
 
-    RadioButtonGroup {
-        id: radioButtonList
-
-        height: 30
-        width: parent.width
-
-        model: [
-            { textRole: "Above", valueRole: FermataTypes.ABOVE },
-            { textRole: "Below", valueRole: FermataTypes.BELOW }
-        ]
-
-        delegate: FlatRadioButton {
-            ButtonGroup.group: radioButtonList.radioButtonGroup
-
-            text: modelData["textRole"]
-            checked: root.model && !root.model.placementType.isUndefined ? root.model.placementType.value === modelData["valueRole"]
-                                                                         : false
-            onToggled: {
-                root.model.placementType.value = modelData["valueRole"]
-            }
-        }
+    PlacementSection {
+        titleText: qsTrc("inspector", "Placement on staff")
+        propertyItem: root.model ? root.model.placementType : null
     }
 }

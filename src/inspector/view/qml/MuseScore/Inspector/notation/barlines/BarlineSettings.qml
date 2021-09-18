@@ -77,36 +77,16 @@ Column {
         }
     }
 
-    InspectorPropertyView {
+    FlatRadioButtonGroupPropertyView {
         titleText: qsTrc("inspector", "Repeat style")
         propertyItem: root.barlineSettingsModel ? root.barlineSettingsModel.hasToShowTips : null
 
         visible: root.barlineSettingsModel && root.barlineSettingsModel.isRepeatStyleChangingAllowed
 
-        RadioButtonGroup {
-            id: repeatStyle
-
-            height: 30
-            width: parent.width
-
-            model: [
-                { iconRole: IconCode.BARLINE_UNWINGED, valueRole: false },
-                { iconRole: IconCode.BARLINE_WINGED, valueRole: true }
-            ]
-
-            delegate: FlatRadioButton {
-                ButtonGroup.group: repeatStyle.radioButtonGroup
-
-                iconCode: modelData["iconRole"]
-                checked: root.barlineSettingsModel && !root.barlineSettingsModel.hasToShowTips.isUndefined ? root.barlineSettingsModel.hasToShowTips.value === modelData["valueRole"]
-                                                                                                           : false
-                onToggled: {
-                    if (root.barlineSettingsModel) {
-                        root.barlineSettingsModel.hasToShowTips.value = modelData["valueRole"]
-                    }
-                }
-            }
-        }
+        model: [
+            { iconCode: IconCode.BARLINE_UNWINGED, value: false },
+            { iconCode: IconCode.BARLINE_WINGED, value: true }
+        ]
     }
 
     CheckBox {

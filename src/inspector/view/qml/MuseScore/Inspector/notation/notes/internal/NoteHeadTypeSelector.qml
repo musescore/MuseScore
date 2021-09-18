@@ -28,36 +28,20 @@ import MuseScore.Inspector 1.0
 
 import "../../../common"
 
-InspectorPropertyView {
+FlatRadioButtonGroupPropertyView {
     id: root
     titleText: qsTrc("inspector", "Notehead type")
 
-    RadioButtonGroup {
-        id: headTypeButtonList
+    radioButtonGroup.height: 40
+    model: [
+        { text: qsTrc("inspector", "Auto"), value: NoteHead.TYPE_AUTO },
+        { iconCode: IconCode.NOTE_HEAD_QUARTER, value: NoteHead.TYPE_QUARTER },
+        { iconCode: IconCode.NOTE_HEAD_HALF, value: NoteHead.TYPE_HALF },
+        { iconCode: IconCode.NOTE_HEAD_WHOLE, value: NoteHead.TYPE_WHOLE },
+        { iconCode: IconCode.NOTE_HEAD_BREVIS, value: NoteHead.TYPE_BREVIS }
+    ]
 
-        height: 40
-        width: parent.width
-
-        model: [
-            { iconRole: IconCode.NONE, textRole: qsTrc("inspector", "Auto"), typeRole: NoteHead.TYPE_AUTO },
-            { iconRole: IconCode.NOTE_HEAD_QUARTER, typeRole: NoteHead.TYPE_QUARTER },
-            { iconRole: IconCode.NOTE_HEAD_HALF, typeRole: NoteHead.TYPE_HALF },
-            { iconRole: IconCode.NOTE_HEAD_WHOLE, typeRole: NoteHead.TYPE_WHOLE },
-            { iconRole: IconCode.NOTE_HEAD_BREVIS, typeRole: NoteHead.TYPE_BREVIS }
-        ]
-
-        delegate: FlatRadioButton {
-            ButtonGroup.group: headTypeButtonList.radioButtonGroup
-
-            text: modelData["textRole"]
-            iconCode: modelData["iconRole"]
-            iconFontSize: 30
-
-            checked: root.propertyItem && !root.propertyItem.isUndefined ? root.propertyItem.value === modelData["typeRole"]
-                                                                         : false
-            onToggled: {
-                root.propertyItem.value = modelData["typeRole"]
-            }
-        }
+    radioButtonGroup.delegate: FlatRadioButtonGroupPropertyView.Delegate {
+        iconFontSize: 30
     }
 }

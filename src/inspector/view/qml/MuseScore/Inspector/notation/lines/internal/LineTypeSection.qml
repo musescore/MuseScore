@@ -36,33 +36,16 @@ Column {
     property PropertyItem thickness: null
     property PropertyItem hookHeight: null
 
-    property alias possibleEndHookTypes: lineTypeButtonList.model
+    property alias possibleEndHookTypes: lineTypeButtonGroup.model
 
     width: parent.width
 
     spacing: 12
 
-    InspectorPropertyView {
+    FlatRadioButtonGroupPropertyView {
+        id: lineTypeButtonGroup
         titleText: qsTrc("inspector", "Line type")
         propertyItem: root.endHookType
-
-        RadioButtonGroup {
-            id: lineTypeButtonList
-
-            height: 30
-            width: parent.width
-
-            delegate: FlatRadioButton {
-                ButtonGroup.group: lineTypeButtonList.radioButtonGroup
-
-                iconCode: modelData["iconRole"]
-                checked: root.endHookType && !root.endHookType.isUndefined ? root.endHookType.value === modelData["typeRole"]
-                                                                           : false
-                onToggled: {
-                    root.endHookType.value = modelData["typeRole"]
-                }
-            }
-        }
     }
 
     Item {

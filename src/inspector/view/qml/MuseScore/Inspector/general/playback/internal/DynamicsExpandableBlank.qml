@@ -154,44 +154,20 @@ ExpandableBlank {
             }
         }
 
-        InspectorPropertyView {
+        FlatRadioButtonGroupPropertyView {
             titleText: qsTrc("inspector", "Change speed")
+            propertyItem: root.model ? root.model.velocityChangeSpeed : null
 
             navigation.name: "Change speed Menu"
             navigation.panel: root.navigation.panel
             navigation.column: root.navigation.column
             navigation.row: root.navigation.row + 7
 
-            propertyItem: root.model ? root.model.velocityChangeSpeed : null
-
-            RadioButtonGroup {
-                id: radioButtonList
-
-                height: 30
-                width: parent.width
-
-                model: [
-                    { textRole: "Slow", valueRole: Dynamic.VELOCITY_CHANGE_SPEED_SLOW },
-                    { textRole: "Normal", valueRole: Dynamic.VELOCITY_CHANGE_SPEED_NORMAL },
-                    { textRole: "Fast", valueRole: Dynamic.VELOCITY_CHANGE_SPEED_FAST }
-                ]
-
-                delegate: FlatRadioButton {
-                    ButtonGroup.group: radioButtonList.radioButtonGroup
-
-                    navigation.name: "Change speed Value " + root.model.index
-                    navigation.panel: root.navigation.panel
-                    navigation.column: root.navigation.column
-                    navigation.row: root.navigation.row + 8 + root.model.index
-
-                    text: modelData["textRole"]
-                    checked: root.model && !root.model.velocityChangeSpeed.isUndefined ? root.model.velocityChangeSpeed.value === modelData["valueRole"]
-                                                                                       : false
-                    onToggled: {
-                        root.model.velocityChangeSpeed.value = modelData["valueRole"]
-                    }
-                }
-            }
+            model: [
+                { text: "Slow", value: Dynamic.VELOCITY_CHANGE_SPEED_SLOW },
+                { text: "Normal", value: Dynamic.VELOCITY_CHANGE_SPEED_NORMAL },
+                { text: "Fast", value: Dynamic.VELOCITY_CHANGE_SPEED_FAST }
+            ]
         }
     }
 }
