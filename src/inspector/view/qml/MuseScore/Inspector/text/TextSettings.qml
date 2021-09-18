@@ -78,8 +78,6 @@ Column {
             ]
 
             delegate: FlatRadioButton {
-                ButtonGroup.group: subscriptOptionsButtonList.radioButtonGroup
-
                 navigation.name: "ScriptOptions" + model.index
                 navigation.panel: root.navigationPanel
                 navigation.row: 2 + model.index
@@ -101,7 +99,7 @@ Column {
         }
     }
 
-    InspectorPropertyView {
+    FlatRadioButtonGroupPropertyView {
         titleText: qsTrc("inspector", "Frame")
         propertyItem: root.model ? root.model.frameType : null
 
@@ -109,35 +107,11 @@ Column {
         navigation.panel: root.navigationPanel
         navigation.row: 4
 
-        RadioButtonGroup {
-            id: frameType
-
-            height: 30
-            width: parent.width
-
-            model: [
-                { iconRole: IconCode.NONE, textRole: qsTrc("inspector", "None"), typeRole: TextTypes.FRAME_TYPE_NONE },
-                { iconRole: IconCode.FRAME_SQUARE, typeRole: TextTypes.FRAME_TYPE_SQUARE },
-                { iconRole: IconCode.FRAME_CIRCLE, typeRole: TextTypes.FRAME_TYPE_CIRCLE }
-            ]
-
-            delegate: FlatRadioButton {
-                ButtonGroup.group: frameType.radioButtonGroup
-
-                navigation.name: "FrameType" + model.index
-                navigation.panel: root.navigationPanel
-                navigation.row: 5 + model.index
-
-                iconCode: modelData["iconRole"]
-                text: modelData["textRole"]
-
-                checked: root.model && !root.model.frameType.isUndefined ? root.model.frameType.value === modelData["typeRole"]
-                                                                         : false
-                onToggled: {
-                    root.model.frameType.value = modelData["typeRole"]
-                }
-            }
-        }
+        model: [
+            { text: qsTrc("inspector", "None"), value: TextTypes.FRAME_TYPE_NONE },
+            { iconCode: IconCode.FRAME_SQUARE, value: TextTypes.FRAME_TYPE_SQUARE },
+            { iconCode: IconCode.FRAME_CIRCLE, value: TextTypes.FRAME_TYPE_CIRCLE }
+        ]
     }
 
     Item {

@@ -92,6 +92,7 @@
         <file>qml/MuseScore/Inspector/common/PlacementSection.qml</file>
         <file>qml/MuseScore/Inspector/qmldir</file>
         <file>qml/MuseScore/Inspector/common/ColorSection.qml</file>
+        <file>qml/MuseScore/Inspector/common/FlatRadioButtonGroupPropertyView.qml</file>
         <file>qml/MuseScore/Inspector/notation/NotationInspectorSectionLoader.qml</file>
         <file>qml/MuseScore/Inspector/notation/fermatas/FermataSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/lines/GlissandoSettings.qml</file>

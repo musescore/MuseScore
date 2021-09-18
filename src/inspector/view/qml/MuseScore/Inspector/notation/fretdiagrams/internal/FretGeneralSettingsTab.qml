@@ -102,8 +102,6 @@ FocusableItem {
                 ]
 
                 delegate: FlatRadioButton {
-                    ButtonGroup.group: lineStyleButtonList.radioButtonGroup
-
                     iconCode: modelData["iconRole"]
                     checked: root.model ? root.model.currentFretDotType === modelData["typeRole"] : false
 
