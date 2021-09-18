@@ -38,7 +38,7 @@ Column {
     property QtObject barlineSettingsModel: root.model ? root.model.modelByType(Inspector.TYPE_BARLINE) : null
     property QtObject staffSettingsModel: root.model ? root.model.modelByType(Inspector.TYPE_STAFF) : null
 
-    spacing: 16
+    spacing: 12
 
     InspectorPropertyView {
         titleText: qsTrc("inspector", "Style")
@@ -111,44 +111,22 @@ Column {
         height: childrenRect.height
         width: parent.width
 
-        InspectorPropertyView {
+        SpinBoxPropertyView {
             anchors.left: parent.left
             anchors.right: parent.horizontalCenter
             anchors.rightMargin: 2
 
             titleText: qsTrc("inspector", "Span from")
             propertyItem: root.barlineSettingsModel ? root.barlineSettingsModel.spanFrom : null
-
-            IncrementalPropertyControl {
-                id: spanFromControl
-
-                enabled: root.barlineSettingsModel ? root.barlineSettingsModel.spanFrom.isEnabled : false
-
-                isIndeterminate: root.barlineSettingsModel && enabled ? root.barlineSettingsModel.spanFrom.isUndefined : false
-                currentValue: root.barlineSettingsModel ? root.barlineSettingsModel.spanFrom.value : 0
-
-                onValueEdited: { root.barlineSettingsModel.spanFrom.value = newValue }
-            }
         }
 
-        InspectorPropertyView {
+        SpinBoxPropertyView {
             anchors.left: parent.horizontalCenter
             anchors.leftMargin: 2
             anchors.right: parent.right
 
             titleText: qsTrc("inspector", "Span to")
             propertyItem: root.barlineSettingsModel ? root.barlineSettingsModel.spanTo : null
-
-            IncrementalPropertyControl {
-                id: spanToControl
-
-                enabled: root.barlineSettingsModel ? root.barlineSettingsModel.spanTo.isEnabled : false
-
-                isIndeterminate: root.barlineSettingsModel && enabled ? root.barlineSettingsModel.spanTo.isUndefined : false
-                currentValue: root.barlineSettingsModel ? root.barlineSettingsModel.spanTo.value : 0
-
-                onValueEdited: { root.barlineSettingsModel.spanTo.value = newValue }
-            }
         }
     }
 
@@ -157,14 +135,17 @@ Column {
 
         text: qsTrc("inspector", "Apply to all staffs")
 
-        enabled: !spanFromControl.isIndeterminate && !spanToControl.isIndeterminate
+        enabled: root.barlineSettingsModel
+                 && !root.barlineSettingsModel.spanFrom.isUndefined
+                 && !root.barlineSettingsModel.spanTo.isUndefined
 
         onClicked: {
-            if (!root.staffSettingsModel)
+            if (!root.staffSettingsModel || !root.barlineSettingsModel) {
                 return
+            }
 
-            root.staffSettingsModel.barlinesSpanFrom.value = spanFromControl.currentValue
-            root.staffSettingsModel.barlinesSpanTo.value = spanToControl.currentValue
+            root.staffSettingsModel.barlinesSpanFrom.value = barlineSettingsModel.spanFrom.currentValue
+            root.staffSettingsModel.barlinesSpanTo.value = barlineSettingsModel.spanTo.currentValue
         }
     }
 
@@ -181,6 +162,7 @@ Column {
 
         RowLayout {
             width: parent.width
+            spacing: 4
 
             FlatButton {
                 text: qsTrc("inspector", "Default")
@@ -194,7 +176,6 @@ Column {
                 onClicked: { root.barlineSettingsModel.applySpanPreset(BarlineTypes.PRESET_TICK_1) }
             }
 
-
             FlatButton {
                 text: qsTrc("inspector", "Tick 2")
                 Layout.fillWidth: true
@@ -204,6 +185,7 @@ Column {
 
         RowLayout {
             width: parent.width
+            spacing: 4
 
             FlatButton {
                 text: qsTrc("inspector", "Short 1")

@@ -40,7 +40,7 @@ FocusableItem {
         height: childrenRect.height
         width: parent.width
 
-        spacing: 16
+        spacing: 12
 
         visible: root.model ? root.model.areSettingsAvailable : false
 

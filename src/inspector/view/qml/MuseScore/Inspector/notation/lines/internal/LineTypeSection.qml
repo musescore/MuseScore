@@ -52,41 +52,22 @@ Column {
         height: childrenRect.height
         width: parent.width
 
-        InspectorPropertyView {
+        SpinBoxPropertyView {
             anchors.left: parent.left
             anchors.right: parent.horizontalCenter
             anchors.rightMargin: 2
 
             titleText: qsTrc("inspector", "Thickness")
             propertyItem: root.thickness
-
-            IncrementalPropertyControl {
-                isIndeterminate: root.thickness ? root.thickness.isUndefined : false
-                currentValue: root.thickness ? root.thickness.value : 0
-
-                onValueEdited: {
-                    root.thickness.value = newValue
-                }
-            }
         }
 
-        InspectorPropertyView {
+        SpinBoxPropertyView {
             anchors.left: parent.horizontalCenter
             anchors.leftMargin: 2
             anchors.right: parent.right
 
             titleText: qsTrc("inspector", "Hook height")
             propertyItem: root.hookHeight
-
-            IncrementalPropertyControl {
-                enabled: root.hookHeight ? root.hookHeight.isEnabled : false
-                isIndeterminate: root.hookHeight && enabled ? root.hookHeight.isUndefined : false
-                currentValue: root.hookHeight ? root.hookHeight.value : 0
-
-                onValueEdited: {
-                    root.hookHeight.value = newValue
-                }
-            }
         }
     }
 }

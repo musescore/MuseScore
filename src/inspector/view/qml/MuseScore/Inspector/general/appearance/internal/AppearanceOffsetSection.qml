@@ -44,7 +44,7 @@ Column {
     height: implicitHeight
     width: parent.width
 
-    spacing: 16
+    spacing: 12
 
     QtObject {
         id: prv

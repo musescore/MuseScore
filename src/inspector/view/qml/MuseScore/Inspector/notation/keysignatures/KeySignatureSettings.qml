@@ -32,7 +32,7 @@ Column {
 
     objectName: "KeySignatureSettings"
 
-    spacing: 16
+    spacing: 12
 
     CheckBox {
         isIndeterminate: root.model ? root.model.hasToShowCourtesy.isUndefined : false
@@ -43,7 +43,6 @@ Column {
     }
 
     InspectorPropertyView {
-
         titleText: qsTrc("inspector", "Mode")
         propertyItem: root.model ? root.model.mode : null
 

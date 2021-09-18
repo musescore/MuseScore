@@ -105,7 +105,7 @@ Column {
             }
         }
 
-        InspectorPropertyView {
+        SpinBoxPropertyView {
             propertyItem: root.model ? root.model.topOctave : null
             showTitle: true // Show empty label for correct alignment
             showMenuButton: false
@@ -114,22 +114,10 @@ Column {
             anchors.leftMargin: 2
             anchors.right: parent.right
 
-            IncrementalPropertyControl {
-                id: topOctaveControl
-                isIndeterminate: root.model ? root.model.topOctave.isUndefined : false
-                currentValue: root.model ? root.model.topOctave.value : 0
-
-                step: 1
-                decimals: 0
-                maxValue: 8
-                minValue: -1
-
-                onValueEdited: function(newValue) {
-                    if (root.model) {
-                        root.model.topOctave.value = newValue
-                    }
-                }
-            }
+            step: 1
+            decimals: 0
+            maxValue: 8
+            minValue: -1
         }
     }
 
@@ -161,7 +149,7 @@ Column {
             }
         }
 
-        InspectorPropertyView {
+        SpinBoxPropertyView {
             propertyItem: root.model ? root.model.bottomOctave : null
             showTitle: true // Show empty label for correct alignment
             showMenuButton: false
@@ -170,23 +158,10 @@ Column {
             anchors.leftMargin: 2
             anchors.right: parent.right
 
-            IncrementalPropertyControl {
-                id: bottomOctaveControl
-
-                isIndeterminate: root.model ? root.model.bottomOctave.isUndefined : false
-                currentValue: root.model ? root.model.bottomOctave.value : 0
-
-                step: 1
-                decimals: 0
-                maxValue: 8
-                minValue: -1
-
-                onValueEdited: function(newValue) {
-                    if (root.model) {
-                        root.model.bottomOctave.value = newValue
-                    }
-                }
-            }
+            step: 1
+            decimals: 0
+            maxValue: 8
+            minValue: -1
         }
     }
 
@@ -211,7 +186,7 @@ Column {
             height: implicitHeight
             width: parent.width
 
-            spacing: 16
+            spacing: 12
 
             FlatRadioButtonGroupPropertyView {
                 titleText: qsTrc("inspector", "Direction")
@@ -237,7 +212,7 @@ Column {
                 propertyItem: root.model ? root.model.noteheadType : null
             }
 
-            InspectorPropertyView {
+            SpinBoxPropertyView {
                 anchors.left: parent.left
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
@@ -245,16 +220,10 @@ Column {
                 titleText: qsTrc("inspector", "Line thickness")
                 propertyItem: root.model ? root.model.lineThickness : null
 
-                IncrementalPropertyControl {
-                    isIndeterminate: root.model ? root.model.lineThickness.isUndefined : false
-                    currentValue: root.model ? root.model.lineThickness.value : 0
-                    step: 0.1
-                    maxValue: 10
-                    minValue: 0.1
-                    decimals: 2
-
-                    onValueEdited: { root.model.lineThickness.value = newValue }
-                }
+                step: 0.1
+                maxValue: 10
+                minValue: 0.1
+                decimals: 2
             }
         }
     }

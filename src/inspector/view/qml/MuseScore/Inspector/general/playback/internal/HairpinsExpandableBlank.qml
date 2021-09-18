@@ -41,12 +41,12 @@ ExpandableBlank {
 
         spacing: 12
 
-        InspectorPropertyView {
+        SpinBoxPropertyView {
             anchors.left: parent.left
             anchors.right: parent.horizontalCenter
             anchors.rightMargin: 2
 
-            navigation.name: "Velocity change Menu"
+            navigation.name: "Velocity change"
             navigation.panel: root.navigation.panel
             navigation.column: root.navigation.column
             navigation.row: root.navigation.row + 1
@@ -54,24 +54,10 @@ ExpandableBlank {
             titleText: qsTrc("inspector", "Velocity change")
             propertyItem: root.model ? root.model.velocityChange : null
 
-            IncrementalPropertyControl {
-                id: velocityChangeControl
-
-                navigation.name: "Velocity change Value"
-                navigation.panel: root.navigation.panel
-                navigation.column: root.navigation.column
-                navigation.row: root.navigation.row + 2
-
-                step: 1
-                decimals: 0
-                maxValue: 127
-                minValue: 0
-
-                isIndeterminate: root.model ? root.model.velocityChange.isUndefined : false
-                currentValue: root.model ? root.model.velocityChange.value : 0
-
-                onValueEdited: { root.model.velocityChange.value = newValue }
-            }
+            step: 1
+            decimals: 0
+            maxValue: 127
+            minValue: 0
         }
 
         InspectorPropertyView {

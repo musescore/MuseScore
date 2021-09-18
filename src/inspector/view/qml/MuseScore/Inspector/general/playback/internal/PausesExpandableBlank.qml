@@ -34,12 +34,12 @@ ExpandableBlank {
 
     width: parent.width
 
-    contentItemComponent: InspectorPropertyView {
+    contentItemComponent: SpinBoxPropertyView {
         anchors.left: parent.left
         anchors.right: parent.horizontalCenter
         anchors.rightMargin: 2
 
-        navigation.name: "Pause time Menu"
+        navigation.name: "Pause time"
         navigation.panel: root.navigation.panel
         navigation.column: root.navigation.column
         navigation.row: root.navigation.row + 1
@@ -47,20 +47,8 @@ ExpandableBlank {
         titleText: qsTrc("inspector", "Pause time")
         propertyItem: root.model ? root.model.pauseTime : null
 
-        IncrementalPropertyControl {
-            navigation.name: "Pause time Value"
-            navigation.panel: root.navigation.panel
-            navigation.column: root.navigation.column
-            navigation.row: root.navigation.row + 2
-
-            measureUnitsSymbol: "s"
-            isIndeterminate: root.model ? root.model.pauseTime.isUndefined : false
-            currentValue: root.model ? root.model.pauseTime.value : 0
-
-            minValue: 0.0
-            maxValue: 60.0
-
-            onValueEdited: { root.model.pauseTime.value = newValue }
-        }
+        minValue: 0.0
+        maxValue: 60.0
+        measureUnitsSymbol: "s"
     }
 }

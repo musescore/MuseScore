@@ -37,7 +37,7 @@ Column {
     height: implicitHeight
     width: parent.width
 
-    spacing: 16
+    spacing: 12
 
     function focusOnFirst() {
         horizontalSpacingSection.focusOnFirst()
@@ -103,8 +103,8 @@ Column {
     SeparatorLine { anchors.margins: -10 }
 
     ColorSection {
-        navigationPanel: root.navigationPanel
-        navigationRowOffset: 500
-        color: root.model ? root.model.color : null
+        navigation.panel: root.navigationPanel
+        navigation.row: 500
+        propertyItem: root.model ? root.model.color : null
     }
 }

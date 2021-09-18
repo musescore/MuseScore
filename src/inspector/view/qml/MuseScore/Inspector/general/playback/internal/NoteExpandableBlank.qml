@@ -37,7 +37,7 @@ ExpandableBlank {
     width: parent.width
 
     contentItemComponent: Column {
-        spacing: 16
+        spacing: 12
 
         height: implicitHeight
         width: root.width
@@ -46,12 +46,12 @@ ExpandableBlank {
             height: childrenRect.height
             width: root.width
 
-            InspectorPropertyView {
+            SpinBoxPropertyView {
                 anchors.left: parent.left
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
 
-                navigation.name: "VelocityMenu"
+                navigation.name: "Velocity"
                 navigation.panel: root.navigation.panel
                 navigation.column: root.navigation.column
                 navigation.row: root.navigation.row + 1
@@ -59,50 +59,24 @@ ExpandableBlank {
                 titleText: qsTrc("inspector", "Velocity")
                 propertyItem: root.model ? root.model.velocity : null
 
-                IncrementalPropertyControl {
-                    id: velocityControl
-
-                    navigation.name: "VelocityValue"
-                    navigation.panel: root.navigation.panel
-                    navigation.column: root.navigation.column
-                    navigation.row: root.navigation.row + 2
-
-                    step: 1
-                    decimals: 0
-                    maxValue: 127
-                    minValue: -127
-
-                    isIndeterminate: root.model ? root.model.velocity.isUndefined : false
-                    currentValue: root.model ? root.model.velocity.value : 0
-
-                    onValueEdited: { root.model.velocity.value = newValue }
-                }
+                step: 1
+                decimals: 0
+                maxValue: 127
+                minValue: -127
             }
 
-            InspectorPropertyView {
+            SpinBoxPropertyView {
                 anchors.left: parent.horizontalCenter
                 anchors.leftMargin: 2
                 anchors.right: parent.right
 
-                navigation.name: "TuningsMenu"
+                navigation.name: "Tunings"
                 navigation.panel: root.navigation.panel
                 navigation.column: root.navigation.column
                 navigation.row: root.navigation.row + 3
 
                 titleText: qsTrc("inspector", "Tunings (cents)")
                 propertyItem: root.model ? root.model.tuning : null
-
-                IncrementalPropertyControl {
-                    navigation.name: "TuningsValue"
-                    navigation.panel: root.navigation.panel
-                    navigation.column: root.navigation.column
-                    navigation.row: root.navigation.row + 4
-
-                    isIndeterminate: root.model ? root.model.tuning.isUndefined : false
-                    currentValue: root.model ? root.model.tuning.value : 0
-
-                    onValueEdited: { root.model.tuning.value = newValue }
-                }
             }
         }
 

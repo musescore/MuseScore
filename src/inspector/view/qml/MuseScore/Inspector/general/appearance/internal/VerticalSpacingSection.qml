@@ -27,7 +27,7 @@ import MuseScore.Inspector 1.0
 
 import "../../../common"
 
-InspectorPropertyView {
+SpinBoxPropertyView {
     id: root
 
     property PropertyItem minimumDistance: null
@@ -46,16 +46,5 @@ InspectorPropertyView {
     titleText: qsTrc("inspector", "Minimum distance")
     propertyItem: minimumDistance
 
-    IncrementalPropertyControl {
-        icon: IconCode.VERTICAL
-
-        navigation.name: "Minimum distance Value"
-        navigation.panel: root.navigationPanel
-        navigation.row: root.navigationRowOffset + 2
-
-        isIndeterminate: root.minimumDistance ? root.minimumDistance.isUndefined : false
-        currentValue: root.minimumDistance ? root.minimumDistance.value : 0
-
-        onValueEdited: { root.minimumDistance.value = newValue }
-    }
+    icon: IconCode.VERTICAL
 }
