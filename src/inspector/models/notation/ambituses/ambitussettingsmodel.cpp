@@ -34,8 +34,6 @@ AmbitusSettingsModel::AmbitusSettingsModel(QObject* parent, IElementRepositorySe
     setTitle(qtrc("inspector", "Ambitus"));
     setIcon(ui::IconCode::Code::AMBITUS);
     createProperties();
-
-    setNoteheadGroupsModel(new NoteheadGroupsModel(this));
 }
 
 void AmbitusSettingsModel::createProperties()
@@ -113,11 +111,6 @@ void AmbitusSettingsModel::matchRangesToStaff()
     m_bottomPitch->resetToDefault();
 }
 
-NoteheadGroupsModel* AmbitusSettingsModel::noteheadGroupsModel() const
-{
-    return m_noteheadGroupsModel;
-}
-
 PropertyItem* AmbitusSettingsModel::noteheadGroup() const
 {
     return m_noteheadGroup;
@@ -166,27 +159,4 @@ PropertyItem* AmbitusSettingsModel::topPitch() const
 PropertyItem* AmbitusSettingsModel::bottomPitch() const
 {
     return m_bottomPitch;
-}
-
-void AmbitusSettingsModel::setNoteheadGroupsModel(NoteheadGroupsModel* noteheadGroupsModel)
-{
-    if (m_noteheadGroupsModel == noteheadGroupsModel) {
-        return;
-    }
-
-    m_noteheadGroupsModel = noteheadGroupsModel;
-
-    connect(m_noteheadGroupsModel, &NoteheadGroupsModel::noteHeadGroupSelected, [this](const int noteHeadGroup) {
-        m_noteheadGroup->setValue(noteHeadGroup);
-    });
-
-    connect(m_noteheadGroup, &PropertyItem::valueChanged, [this](const QVariant& noteHeadGroup) {
-        if (m_noteheadGroup->isUndefined()) {
-            m_noteheadGroupsModel->init(Ms::NoteHead::Group::HEAD_INVALID);
-        } else {
-            m_noteheadGroupsModel->init(static_cast<Ms::NoteHead::Group>(noteHeadGroup.toInt()));
-        }
-    });
-
-    emit noteheadGroupsModelChanged(m_noteheadGroupsModel);
 }

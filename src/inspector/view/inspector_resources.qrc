@@ -6,38 +6,8 @@
         <file>qml/MuseScore/Inspector/notation/notes/StemSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/notes/NoteSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/notes/HeadSettings.qml</file>
-        <file>qml/MuseScore/Inspector/notation/notes/internal/NoteheadsGrid.qml</file>
-        <file>qml/MuseScore/Inspector/notation/notes/internal/NoteHeadTypeSelector.qml</file>
-        <file>resources/icons/raster-vertical.svg</file>
-        <file>resources/icons/raster-horizontal.svg</file>
-        <file>resources/icons/notehead_brevis_alt.svg</file>
-        <file>resources/icons/notehead_circled.svg</file>
-        <file>resources/icons/notehead_circled_large.svg</file>
-        <file>resources/icons/notehead_cross.svg</file>
-        <file>resources/icons/notehead_diamond.svg</file>
-        <file>resources/icons/notehead_diamond_old.svg</file>
-        <file>resources/icons/notehead_do.svg</file>
-        <file>resources/icons/notehead_fa.svg</file>
-        <file>resources/icons/notehead_la.svg</file>
-        <file>resources/icons/notehead_large_arrow.svg</file>
-        <file>resources/icons/notehead_mi.svg</file>
-        <file>resources/icons/notehead_normal.svg</file>
-        <file>resources/icons/notehead_plus.svg</file>
-        <file>resources/icons/notehead_re.svg</file>
-        <file>resources/icons/notehead_slash.svg</file>
-        <file>resources/icons/notehead_slashed_left.svg</file>
-        <file>resources/icons/notehead_slashed_right.svg</file>
-        <file>resources/icons/notehead_sol.svg</file>
-        <file>resources/icons/notehead_ti.svg</file>
-        <file>resources/icons/notehead_triangle_down.svg</file>
-        <file>resources/icons/notehead_triangle_up.svg</file>
-        <file>resources/icons/notehead_xcircle.svg</file>
-        <file>resources/icons/notehead_xellipse.svg</file>
-        <file>resources/icons/notehead_parentheses.svg</file>
-        <file>resources/icons/notehead_brevis.svg</file>
-        <file>resources/icons/notehead_half.svg</file>
-        <file>resources/icons/notehead_quarter.svg</file>
-        <file>resources/icons/notehead_whole.svg</file>
+        <file>qml/MuseScore/Inspector/notation/notes/internal/NoteheadGroupSelector.qml</file>
+        <file>qml/MuseScore/Inspector/notation/notes/internal/NoteheadTypeSelector.qml</file>
         <file>qml/MuseScore/Inspector/notation/notes/BeamSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/notes/internal/BeamTypeSelector.qml</file>
         <file>qml/MuseScore/Inspector/general/playback/PlaybackSettings.qml</file>
@@ -54,8 +24,6 @@
         <file>qml/MuseScore/Inspector/general/appearance/internal/AppearanceOffsetSection.qml</file>
         <file>qml/MuseScore/Inspector/general/appearance/internal/ArrangeSection.qml</file>
         <file>qml/MuseScore/Inspector/general/appearance/internal/VerticalSpacingSection.qml</file>
-        <file>resources/icons/question_mark.svg</file>
-        <file>resources/icons/orientation_auto.svg</file>
         <file>qml/MuseScore/Inspector/common/PopupViewButton.qml</file>
         <file>qml/MuseScore/Inspector/common/OffsetSection.qml</file>
         <file>qml/MuseScore/Inspector/text/TextInspectorView.qml</file>
