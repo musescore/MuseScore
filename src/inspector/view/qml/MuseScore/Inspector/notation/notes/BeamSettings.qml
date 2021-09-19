@@ -44,16 +44,10 @@ FocusableItem {
         width: parent.width
         spacing: 12
 
-        InspectorPropertyView {
+        BeamTypeSelector {
             titleText: qsTrc("inspector", "Beam types")
             propertyItem: root.beamModesModel ? root.beamModesModel.mode : null
-
-            BeamTypesGrid {
-                id: beamTypesGridView
-
-                beamTypesModel: root.beamModesModel ? root.beamModesModel.modeListModel : null
-                enabled: root.beamModesModel ? !root.beamModesModel.isEmpty : false
-            }
+            enabled: root.beamModesModel && !root.beamModesModel.isEmpty
         }
 
         Column {
@@ -91,23 +85,20 @@ FocusableItem {
                     width: parent.width
 
                     model: [
-                        { iconRole: IconCode.NONE, textRole: qsTrc("inspector", "None"), typeRole: Beam.FEATHERING_NONE },
-                        { iconRole: IconCode.FEATHERED_LEFT_HEIGHT, typeRole: Beam.FEATHERING_LEFT },
-                        { iconRole: IconCode.FEATHERED_RIGHT_HEIGHT, typeRole: Beam.FEATHERING_RIGHT }
+                        { text: qsTrc("inspector", "None"), value: Beam.FEATHERING_NONE },
+                        { iconCode: IconCode.FEATHERED_LEFT_HEIGHT, value: Beam.FEATHERING_LEFT },
+                        { iconCode: IconCode.FEATHERED_RIGHT_HEIGHT, value: Beam.FEATHERING_RIGHT }
                     ]
 
                     delegate: FlatRadioButton {
-                        ButtonGroup.group: radioButtonList.radioButtonGroup
+                        iconCode: modelData["iconCode"] ?? IconCode.NONE
+                        text: modelData["text"] ?? ""
 
-                        iconCode: modelData["iconRole"]
-                        text: modelData["textRole"]
-
-                        checked: root.beamModesModel &&
-                                 !(root.model.featheringHeightLeft.isUndefined
-                                   ||root.model.featheringHeightRight.isUndefined) ? root.model.featheringMode === modelData["typeRole"]
-                                                                                   : false
+                        checked: root.beamModesModel && !(root.model.featheringHeightLeft.isUndefined || root.model.featheringHeightRight.isUndefined)
+                                 ? root.model.featheringMode === modelData["value"]
+                                 : false
                         onToggled: {
-                            root.model.featheringMode = modelData["typeRole"]
+                            root.model.featheringMode = modelData["value"]
                         }
                     }
                 }

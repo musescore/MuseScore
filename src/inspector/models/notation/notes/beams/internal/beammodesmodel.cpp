@@ -33,8 +33,6 @@ void BeamModesModel::createProperties()
 {
     m_mode = buildPropertyItem(Ms::Pid::BEAM_MODE);
     m_isFeatheringAvailable = buildPropertyItem(Ms::Pid::DURATION_TYPE, [](const Ms::Pid, const QVariant&) {}); //@note readonly property, there is no need to modify it
-
-    setModeListModel(new BeamModeListModel(this));
 }
 
 void BeamModesModel::requestElements()
@@ -80,28 +78,4 @@ PropertyItem* BeamModesModel::mode() const
 PropertyItem* BeamModesModel::isFeatheringAvailable() const
 {
     return m_isFeatheringAvailable;
-}
-
-QObject* BeamModesModel::modeListModel() const
-{
-    return m_modeListModel;
-}
-
-void BeamModesModel::setModeListModel(BeamModeListModel* modeListModel)
-{
-    m_modeListModel = modeListModel;
-
-    connect(m_modeListModel, &BeamModeListModel::beamModeSelected, [this](const BeamTypes::Mode beamMode) {
-        m_mode->setValue(static_cast<int>(beamMode));
-    });
-
-    connect(m_mode, &PropertyItem::valueChanged, [this](const QVariant& beamMode) {
-        if (m_mode->isUndefined()) {
-            m_modeListModel->setSelectedBeamMode(BeamTypes::Mode::MODE_INVALID);
-        } else {
-            m_modeListModel->setSelectedBeamMode(static_cast<BeamTypes::Mode>(beamMode.toInt()));
-        }
-    });
-
-    emit modeListModelChanged(m_modeListModel);
 }

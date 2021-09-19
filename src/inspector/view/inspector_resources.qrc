@@ -39,14 +39,7 @@
         <file>resources/icons/notehead_quarter.svg</file>
         <file>resources/icons/notehead_whole.svg</file>
         <file>qml/MuseScore/Inspector/notation/notes/BeamSettings.qml</file>
-        <file>qml/MuseScore/Inspector/notation/notes/internal/BeamTypesGrid.qml</file>
-        <file>resources/icons/beams/beam_32_sub.svg</file>
-        <file>resources/icons/beams/beam_16_sub.svg</file>
-        <file>resources/icons/beams/beam_middle.svg</file>
-        <file>resources/icons/beams/beam_start.svg</file>
-        <file>resources/icons/beams/beam_none.svg</file>
-        <file>resources/icons/beams/beam_auto.svg</file>
-        <file>resources/icons/beams/beam_pos_lock.svg</file>
+        <file>qml/MuseScore/Inspector/notation/notes/internal/BeamTypeSelector.qml</file>
         <file>qml/MuseScore/Inspector/general/playback/PlaybackSettings.qml</file>
         <file>qml/MuseScore/Inspector/general/playback/GeneralSettingsTab.qml</file>
         <file>qml/MuseScore/Inspector/general/playback/internal/NoteExpandableBlank.qml</file>
@@ -57,9 +50,6 @@
         <file>qml/MuseScore/Inspector/general/playback/DynamicsSettingsTab.qml</file>
         <file>qml/MuseScore/Inspector/general/playback/internal/HairpinsExpandableBlank.qml</file>
         <file>qml/MuseScore/Inspector/general/playback/internal/ArpeggioExpandableBlank.qml</file>
-        <file>resources/icons/beams/beam_feathered_right.svg</file>
-        <file>resources/icons/beams/beam_feathered_none.svg</file>
-        <file>resources/icons/beams/beam_feathered_left.svg</file>
         <file>qml/MuseScore/Inspector/general/appearance/internal/HorizontalSpacingSection.qml</file>
         <file>qml/MuseScore/Inspector/general/appearance/internal/AppearanceOffsetSection.qml</file>
         <file>qml/MuseScore/Inspector/general/appearance/internal/ArrangeSection.qml</file>
