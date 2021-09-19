@@ -35,62 +35,27 @@ Column {
 
     spacing: 12
 
-    InspectorPropertyView {
-
+    FlatRadioButtonGroupPropertyView {
         titleText: qsTrc("inspector", "Performance")
         propertyItem: root.model ? root.model.performanceType : null
 
-        RadioButtonGroup {
-            id: radioButtonList
-
-            height: 30
-            width: parent.width
-
-            model: [
-                { textRole: qsTrc("inspector", "Standard"), valueRole: OrnamentTypes.STYLE_STANDARD },
-                { textRole: qsTrc("inspector", "Baroque"), valueRole: OrnamentTypes.STYLE_BAROQUE }
-            ]
-
-            delegate: FlatRadioButton {
-                ButtonGroup.group: radioButtonList.radioButtonGroup
-
-                text: modelData["textRole"]
-                checked: root.model && !root.model.performanceType.isUndefined ? root.model.performanceType.value === modelData["valueRole"]
-                                                                               : false
-                onToggled: {
-                    root.model.performanceType.value = modelData["valueRole"]
-                }
-            }
-        }
+        model: [
+            { text: qsTrc("inspector", "Standard"), value: OrnamentTypes.STYLE_STANDARD },
+            { text: qsTrc("inspector", "Baroque"), value: OrnamentTypes.STYLE_BAROQUE }
+        ]
     }
 
-    InspectorPropertyView {
+    DropdownPropertyView {
         titleText: qsTrc("inspector", "Placement")
         propertyItem: root.model ? root.model.placement : null
 
-        Dropdown {
-            id: placements
-
-            width: parent.width
-
-            model: [
-                { text: qsTrc("inspector", "Above staff"), value: ArticulationTypes.TYPE_ABOVE_STAFF },
-                { text: qsTrc("inspector", "Below staff"), value: ArticulationTypes.TYPE_BELOW_STAFF },
-                { text: qsTrc("inspector", "Chord automatic"), value: ArticulationTypes.TYPE_CHORD_AUTO },
-                { text: qsTrc("inspector", "Above chord"), value: ArticulationTypes.TYPE_ABOVE_CHORD },
-                { text: qsTrc("inspector", "Below chord"), value: ArticulationTypes.TYPE_BELOW_CHORD }
-            ]
-
-            currentIndex: root.model && !root.model.placement.isUndefined ? placements.indexOfValue(root.model.placement.value) : -1
-
-            onCurrentValueChanged: {
-                if (currentIndex == -1) {
-                    return
-                }
-
-                root.model.placement.value = placements.currentValue
-            }
-        }
+        model: [
+            { text: qsTrc("inspector", "Above staff"), value: ArticulationTypes.TYPE_ABOVE_STAFF },
+            { text: qsTrc("inspector", "Below staff"), value: ArticulationTypes.TYPE_BELOW_STAFF },
+            { text: qsTrc("inspector", "Chord automatic"), value: ArticulationTypes.TYPE_CHORD_AUTO },
+            { text: qsTrc("inspector", "Above chord"), value: ArticulationTypes.TYPE_ABOVE_CHORD },
+            { text: qsTrc("inspector", "Below chord"), value: ArticulationTypes.TYPE_BELOW_CHORD }
+        ]
     }
 
     FlatButton {

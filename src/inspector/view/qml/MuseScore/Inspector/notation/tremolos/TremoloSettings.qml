@@ -20,44 +20,30 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Controls 2.2
+import QtQuick.Controls 2.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Inspector 1.0
 import "../../common"
 
-InspectorPropertyView {
+Column {
     id: root
 
     property QtObject model: null
 
     objectName: "TremoloSettings"
 
-    titleText: qsTrc("inspector", "Style (between notes)")
-    propertyItem: root.model ? root.model.style : null
+    spacing: 12
 
-    RadioButtonGroup {
-        id: radioButtonList
-
-        height: 30
-        width: parent.width
+    FlatRadioButtonGroupPropertyView {
+        titleText: qsTrc("inspector", "Style (between notes)")
+        propertyItem: root.model ? root.model.style : null
 
         model: [
-            { iconRole: IconCode.TREMOLO_STYLE_DEFAULT, typeRole: TremoloTypes.STYLE_DEFAULT },
-            { iconRole: IconCode.TREMOLO_STYLE_TRADITIONAL, typeRole: TremoloTypes.STYLE_TRADITIONAL },
-            { iconRole: IconCode.TREMOLO_STYLE_TRADITIONAL_ALTERNATE, typeRole: TremoloTypes.STYLE_TRADITIONAL_ALTERNATE }
+            { iconCode: IconCode.TREMOLO_STYLE_DEFAULT, value: TremoloTypes.STYLE_DEFAULT },
+            { iconCode: IconCode.TREMOLO_STYLE_TRADITIONAL, value: TremoloTypes.STYLE_TRADITIONAL },
+            { iconCode: IconCode.TREMOLO_STYLE_TRADITIONAL_ALTERNATE, value: TremoloTypes.STYLE_TRADITIONAL_ALTERNATE }
         ]
-
-        delegate: FlatRadioButton {
-            ButtonGroup.group: radioButtonList.radioButtonGroup
-
-            iconCode: modelData["iconRole"]
-            checked: root.model && !root.model.style.isUndefined ? root.model.style.value === modelData["typeRole"]
-                                                                 : false
-            onToggled: {
-                root.model.style.value = modelData["typeRole"]
-            }
-        }
     }
 }

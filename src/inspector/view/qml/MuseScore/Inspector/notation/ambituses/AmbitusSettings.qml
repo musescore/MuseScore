@@ -81,7 +81,7 @@ Column {
         height: childrenRect.height
         width: parent.width
 
-        InspectorPropertyView {
+        DropdownPropertyView {
             propertyItem: root.model ? root.model.topTpc : null
             titleText: qsTrc("inspector", "Top note")
             showMenuButton: false
@@ -90,22 +90,10 @@ Column {
             anchors.right: parent.horizontalCenter
             anchors.rightMargin: 2
 
-            Dropdown {
-                id: topTpc
-                width: parent.width
-                model: root.tpcListModel
-                currentIndex: root.model && !root.model.topTpc.isUndefined ? topTpc.indexOfValue(root.model.topTpc.value) : -1
-                onCurrentValueChanged: {
-                    if (currentIndex === -1 || !root.model) {
-                        return
-                    }
-
-                    root.model.topTpc.value = topTpc.currentValue
-                }
-            }
+            model: root.tpcListModel
         }
 
-        InspectorPropertyView {
+        SpinBoxPropertyView {
             propertyItem: root.model ? root.model.topOctave : null
             showTitle: true // Show empty label for correct alignment
             showMenuButton: false
@@ -114,22 +102,10 @@ Column {
             anchors.leftMargin: 2
             anchors.right: parent.right
 
-            IncrementalPropertyControl {
-                id: topOctaveControl
-                isIndeterminate: root.model ? root.model.topOctave.isUndefined : false
-                currentValue: root.model ? root.model.topOctave.value : 0
-
-                step: 1
-                decimals: 0
-                maxValue: 8
-                minValue: -1
-
-                onValueEdited: function(newValue) {
-                    if (root.model) {
-                        root.model.topOctave.value = newValue
-                    }
-                }
-            }
+            step: 1
+            decimals: 0
+            maxValue: 8
+            minValue: -1
         }
     }
 
@@ -137,7 +113,7 @@ Column {
         height: childrenRect.height
         width: parent.width
 
-        InspectorPropertyView {
+        DropdownPropertyView {
             propertyItem: root.model ? root.model.bottomTpc : null
             titleText: qsTrc("inspector", "Bottom note")
             showMenuButton: false
@@ -146,22 +122,10 @@ Column {
             anchors.right: parent.horizontalCenter
             anchors.rightMargin: 2
 
-            Dropdown {
-                id: bottomTpc
-                width: parent.width
-                model: root.tpcListModel
-                currentIndex: root.model && !root.model.bottomTpc.isUndefined ? bottomTpc.indexOfValue(root.model.bottomTpc.value) : -1
-                onCurrentValueChanged: {
-                    if (currentIndex === -1 || !root.model) {
-                        return
-                    }
-
-                    root.model.bottomTpc.value = bottomTpc.currentValue
-                }
-            }
+            model: root.tpcListModel
         }
 
-        InspectorPropertyView {
+        SpinBoxPropertyView {
             propertyItem: root.model ? root.model.bottomOctave : null
             showTitle: true // Show empty label for correct alignment
             showMenuButton: false
@@ -170,23 +134,10 @@ Column {
             anchors.leftMargin: 2
             anchors.right: parent.right
 
-            IncrementalPropertyControl {
-                id: bottomOctaveControl
-
-                isIndeterminate: root.model ? root.model.bottomOctave.isUndefined : false
-                currentValue: root.model ? root.model.bottomOctave.value : 0
-
-                step: 1
-                decimals: 0
-                maxValue: 8
-                minValue: -1
-
-                onValueEdited: function(newValue) {
-                    if (root.model) {
-                        root.model.bottomOctave.value = newValue
-                    }
-                }
-            }
+            step: 1
+            decimals: 0
+            maxValue: 8
+            minValue: -1
         }
     }
 
@@ -211,81 +162,28 @@ Column {
             height: implicitHeight
             width: parent.width
 
-            spacing: 16
+            spacing: 12
 
-            InspectorPropertyView {
+            FlatRadioButtonGroupPropertyView {
                 titleText: qsTrc("inspector", "Direction")
                 propertyItem: root.model ? root.model.direction : null
 
-                RadioButtonGroup {
-                    id: directionButtonList
-
-                    height: 30
-                    width: parent.width
-
-                    model: [
-                        { iconRole: IconCode.AMBITUS, typeRole: DirectionTypes.HORIZONTAL_AUTO },
-                        { iconRole: IconCode.AMBITUS_LEANING_LEFT, typeRole: DirectionTypes.HORIZONTAL_LEFT },
-                        { iconRole: IconCode.AMBITUS_LEANING_RIGHT, typeRole: DirectionTypes.HORIZONTAL_RIGHT }
-                    ]
-
-                    delegate: FlatRadioButton {
-                        ButtonGroup.group: directionButtonList.radioButtonGroup
-
-                        iconCode: modelData["iconRole"]
-                        checked: root.model && !root.model.direction.isUndefined ? root.model.direction.value === modelData["typeRole"]
-                                                                                 : false
-                        onToggled: {
-                            root.model.direction.value = modelData["typeRole"]
-                        }
-                    }
-                }
+                model: [
+                    { iconCode: IconCode.AMBITUS, value: DirectionTypes.HORIZONTAL_AUTO },
+                    { iconCode: IconCode.AMBITUS_LEANING_LEFT, value: DirectionTypes.HORIZONTAL_LEFT },
+                    { iconCode: IconCode.AMBITUS_LEANING_RIGHT, value: DirectionTypes.HORIZONTAL_RIGHT }
+                ]
             }
 
-            InspectorPropertyView {
-                titleText: qsTrc("inspector", "Notehead group")
+            NoteheadGroupSelector {
                 propertyItem: root.model ? root.model.noteheadGroup : null
-
-                NoteheadsGrid {
-                    id: noteheadGridView
-                    noteHeadGroupsModel: root.model ? root.model.noteheadGroupsModel : null
-                }
             }
 
-            InspectorPropertyView {
-                titleText: qsTrc("inspector", "Notehead type")
+            NoteheadTypeSelector {
                 propertyItem: root.model ? root.model.noteheadType : null
-
-                RadioButtonGroup {
-                    id: headTypeButtonList
-
-                    height: 40
-                    width: parent.width
-
-                    model: [
-                        { iconRole: IconCode.NONE, textRole: qsTrc("inspector", "Auto"), typeRole: NoteHead.TYPE_AUTO },
-                        { iconRole: IconCode.NOTE_HEAD_QUARTER, typeRole: NoteHead.TYPE_QUARTER },
-                        { iconRole: IconCode.NOTE_HEAD_HALF, typeRole: NoteHead.TYPE_HALF },
-                        { iconRole: IconCode.NOTE_HEAD_WHOLE, typeRole: NoteHead.TYPE_WHOLE },
-                        { iconRole: IconCode.NOTE_HEAD_BREVIS, typeRole: NoteHead.TYPE_BREVIS }
-                    ]
-
-                    delegate: FlatRadioButton {
-                        ButtonGroup.group: headTypeButtonList.radioButtonGroup
-
-                        iconCode: modelData["iconRole"]
-                        text: modelData["textRole"]
-
-                        checked: root.model && !root.model.noteheadType.isUndefined ? root.model.noteheadType.value === modelData["typeRole"]
-                                                                                    : false
-                        onToggled: {
-                            root.model.noteheadType.value = modelData["typeRole"]
-                        }
-                    }
-                }
             }
 
-            InspectorPropertyView {
+            SpinBoxPropertyView {
                 anchors.left: parent.left
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
@@ -293,16 +191,10 @@ Column {
                 titleText: qsTrc("inspector", "Line thickness")
                 propertyItem: root.model ? root.model.lineThickness : null
 
-                IncrementalPropertyControl {
-                    isIndeterminate: root.model ? root.model.lineThickness.isUndefined : false
-                    currentValue: root.model ? root.model.lineThickness.value : 0
-                    step: 0.1
-                    maxValue: 10
-                    minValue: 0.1
-                    decimals: 2
-
-                    onValueEdited: { root.model.lineThickness.value = newValue }
-                }
+                step: 0.1
+                maxValue: 10
+                minValue: 0.1
+                decimals: 2
             }
         }
     }

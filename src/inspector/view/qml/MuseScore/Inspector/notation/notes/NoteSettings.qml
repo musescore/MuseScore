@@ -42,40 +42,20 @@ TabPanel {
 
     function indexByType(modelType) {
         switch (modelType) {
-        case Inspector.TYPE_BEAM: return 0
-        case Inspector.TYPE_NOTE: return 1
-        case Inspector.TYPE_NOTEHEAD: return 1
-        case Inspector.TYPE_STEM: return 2
-        case Inspector.TYPE_HOOK: return 2
+        case Inspector.TYPE_NOTE: return 0
+        case Inspector.TYPE_NOTEHEAD: return 0
+        case Inspector.TYPE_STEM: return 1
+        case Inspector.TYPE_HOOK: return 1
+        case Inspector.TYPE_BEAM: return 2
         }
 
-        return 1 // note
-    }
-
-    Tab {
-        id: beamTab
-
-        property QtObject beamModel: root.model ? root.model.modelByType(Inspector.TYPE_BEAM) : null
-
-        title: beamModel ? beamModel.title : ""
-        width: root.width
-
-        BeamSettings {
-            id: beamSettings
-
-            anchors.top: parent.top
-            anchors.topMargin: 24
-
-            width: root.width
-
-            model: beamTab.beamModel
-        }
+        return 0
     }
 
     Tab {
         id: headTab
 
-        property QtObject headModel: root.model ? root.model.modelByType(Inspector.TYPE_NOTEHEAD) : null
+        readonly property QtObject headModel: root.model ? root.model.modelByType(Inspector.TYPE_NOTEHEAD) : null
 
         title: headModel ? headModel.title : ""
         width: root.width
@@ -95,9 +75,9 @@ TabPanel {
     Tab {
         id: stemTab
 
-        property QtObject stemModel: root.model ? root.model.modelByType(Inspector.TYPE_STEM) : null
-        property QtObject hookModel: root.model ? root.model.modelByType(Inspector.TYPE_HOOK) : null
-        property QtObject beamModel: root.model ? root.model.modelByType(Inspector.TYPE_BEAM) : null
+        readonly property QtObject stemModel: root.model ? root.model.modelByType(Inspector.TYPE_STEM) : null
+        readonly property QtObject hookModel: root.model ? root.model.modelByType(Inspector.TYPE_HOOK) : null
+        readonly property QtObject beamModel: root.model ? root.model.modelByType(Inspector.TYPE_BEAM) : null
 
         height: implicitHeight
         width: root.width
@@ -115,6 +95,26 @@ TabPanel {
             stemModel: stemTab.stemModel
             hookModel: stemTab.hookModel
             beamModel: stemTab.beamModel
+        }
+    }
+
+    Tab {
+        id: beamTab
+
+        readonly property QtObject beamModel: root.model ? root.model.modelByType(Inspector.TYPE_BEAM) : null
+
+        title: beamModel ? beamModel.title : ""
+        width: root.width
+
+        BeamSettings {
+            id: beamSettings
+
+            anchors.top: parent.top
+            anchors.topMargin: 24
+
+            width: root.width
+
+            model: beamTab.beamModel
         }
     }
 }

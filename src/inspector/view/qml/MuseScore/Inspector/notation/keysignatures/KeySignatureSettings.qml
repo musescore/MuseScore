@@ -32,7 +32,7 @@ Column {
 
     objectName: "KeySignatureSettings"
 
-    spacing: 16
+    spacing: 12
 
     CheckBox {
         isIndeterminate: root.model ? root.model.hasToShowCourtesy.isUndefined : false
@@ -42,38 +42,21 @@ Column {
         onClicked: { root.model.hasToShowCourtesy.value = !checked }
     }
 
-    InspectorPropertyView {
-
+    DropdownPropertyView {
         titleText: qsTrc("inspector", "Mode")
         propertyItem: root.model ? root.model.mode : null
 
-        Dropdown {
-            id: modes
-
-            width: parent.width
-
-            model: [
-                { text: qsTrc("inspector", "Unknown"), value: KeySignatureTypes.MODE_UNKNOWN },
-                { text: qsTrc("inspector", "None"), value: KeySignatureTypes.MODE_NONE },
-                { text: qsTrc("inspector", "Major"), value: KeySignatureTypes.MODE_MAJOR },
-                { text: qsTrc("inspector", "Minor"), value: KeySignatureTypes.MODE_MINOR },
-                { text: qsTrc("inspector", "Dorian"), value: KeySignatureTypes.MODE_DORIAN },
-                { text: qsTrc("inspector", "Phrygian"), value: KeySignatureTypes.MODE_PHRYGIAN },
-                { text: qsTrc("inspector", "Lydian"), value: KeySignatureTypes.MODE_LYDIAN },
-                { text: qsTrc("inspector", "Mixolydian"), value: KeySignatureTypes.MODE_MIXOLYDIAN },
-                { text: qsTrc("inspector", "Ionian"), value: KeySignatureTypes.MODE_IONIAN },
-                { text: qsTrc("inspector", "Locrian"), value: KeySignatureTypes.MODE_LOCRIAN }
-            ]
-
-            currentIndex: root.model && !root.model.mode.isUndefined ? modes.indexOfValue(root.model.mode.value) : -1
-
-            onCurrentValueChanged: {
-                if (currentIndex === -1) {
-                    return
-                }
-
-                root.model.mode.value = modes.currentValue
-            }
-        }
+        model: [
+            { text: qsTrc("inspector", "Unknown"), value: KeySignatureTypes.MODE_UNKNOWN },
+            { text: qsTrc("inspector", "None"), value: KeySignatureTypes.MODE_NONE },
+            { text: qsTrc("inspector", "Major"), value: KeySignatureTypes.MODE_MAJOR },
+            { text: qsTrc("inspector", "Minor"), value: KeySignatureTypes.MODE_MINOR },
+            { text: qsTrc("inspector", "Dorian"), value: KeySignatureTypes.MODE_DORIAN },
+            { text: qsTrc("inspector", "Phrygian"), value: KeySignatureTypes.MODE_PHRYGIAN },
+            { text: qsTrc("inspector", "Lydian"), value: KeySignatureTypes.MODE_LYDIAN },
+            { text: qsTrc("inspector", "Mixolydian"), value: KeySignatureTypes.MODE_MIXOLYDIAN },
+            { text: qsTrc("inspector", "Ionian"), value: KeySignatureTypes.MODE_IONIAN },
+            { text: qsTrc("inspector", "Locrian"), value: KeySignatureTypes.MODE_LOCRIAN }
+        ]
     }
 }

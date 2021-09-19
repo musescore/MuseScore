@@ -41,41 +41,24 @@ Item {
 
         spacing: 12
 
-        InspectorPropertyView {
+        DropdownPropertyView {
             visible: root.model ? root.model.areSettingsAvailable : false
 
             titleText: qsTrc("inspector", "Tremolo bar type")
             propertyItem: root.model ? root.model.type : null
 
-            Dropdown {
-                id: tremolos
-
-                width: parent.width
-
-                model: [
-                    { text: qsTrc("inspector", "Dip"), value: TremoloBarTypes.TYPE_DIP },
-                    { text: qsTrc("inspector", "Dive"), value: TremoloBarTypes.TYPE_DIVE },
-                    { text: qsTrc("inspector", "Release (Up)"), value: TremoloBarTypes.TYPE_RELEASE_UP },
-                    { text: qsTrc("inspector", "Inverted dip"), value: TremoloBarTypes.TYPE_INVERTED_DIP },
-                    { text: qsTrc("inspector", "Return"), value: TremoloBarTypes.TYPE_RETURN },
-                    { text: qsTrc("inspector", "Release (Down)"), value: TremoloBarTypes.TYPE_RELEASE_DOWN },
-                    { text: qsTrc("inspector", "Custom"), value: TremoloBarTypes.TYPE_CUSTOM }
-                ]
-
-                currentIndex: root.model && !root.model.type.isUndefined ? tremolos.indexOfValue(root.model.type.value) : -1
-
-                onCurrentValueChanged: {
-                    if (currentIndex == -1) {
-                        return
-                    }
-
-                    root.model.type.value = tremolos.currentValue
-                }
-            }
+            model: [
+                { text: qsTrc("inspector", "Dip"), value: TremoloBarTypes.TYPE_DIP },
+                { text: qsTrc("inspector", "Dive"), value: TremoloBarTypes.TYPE_DIVE },
+                { text: qsTrc("inspector", "Release (Up)"), value: TremoloBarTypes.TYPE_RELEASE_UP },
+                { text: qsTrc("inspector", "Inverted dip"), value: TremoloBarTypes.TYPE_INVERTED_DIP },
+                { text: qsTrc("inspector", "Return"), value: TremoloBarTypes.TYPE_RETURN },
+                { text: qsTrc("inspector", "Release (Down)"), value: TremoloBarTypes.TYPE_RELEASE_DOWN },
+                { text: qsTrc("inspector", "Custom"), value: TremoloBarTypes.TYPE_CUSTOM }
+            ]
         }
 
         InspectorPropertyView {
-
             visible: root.model ? root.model.areSettingsAvailable : false
 
             titleText: qsTrc("inspector", "Click to add or remove points")
@@ -107,7 +90,7 @@ Item {
 
             visible: root.model ? root.model.areSettingsAvailable : false
 
-            InspectorPropertyView {
+            SpinBoxPropertyView {
                 anchors.left: parent.left
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
@@ -115,20 +98,13 @@ Item {
                 titleText: qsTrc("inspector", "Line thickness")
                 propertyItem: root.model ? root.model.lineThickness : null
 
-                IncrementalPropertyControl {
-                    isIndeterminate: root.model ? root.model.lineThickness.isUndefined : false
-                    currentValue: root.model ? root.model.lineThickness.value : 0
-
-                    maxValue: 10
-                    minValue: 0.1
-                    step: 0.1
-                    decimals: 2
-
-                    onValueEdited: { root.model.lineThickness.value = newValue }
-                }
+                maxValue: 10
+                minValue: 0.1
+                step: 0.1
+                decimals: 2
             }
 
-            InspectorPropertyView {
+            SpinBoxPropertyView {
                 anchors.left: parent.horizontalCenter
                 anchors.leftMargin: 2
                 anchors.right: parent.right
@@ -136,17 +112,10 @@ Item {
                 titleText: qsTrc("inspector", "Scale")
                 propertyItem: root.model ? root.model.scale : null
 
-                IncrementalPropertyControl {
-                    isIndeterminate: root.model ? root.model.scale.isUndefined : false
-                    currentValue: root.model ? root.model.scale.value : 0
-
-                    maxValue: 5
-                    minValue: 0.1
-                    step: 0.1
-                    decimals: 2
-
-                    onValueEdited: { root.model.scale.value = newValue }
-                }
+                maxValue: 5
+                minValue: 0.1
+                step: 0.1
+                decimals: 2
             }
         }
     }

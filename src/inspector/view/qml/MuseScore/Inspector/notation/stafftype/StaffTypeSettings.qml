@@ -61,7 +61,7 @@ Column {
             verticalOffsetControl.maxValue: 5
         }
 
-        InspectorPropertyView {
+        SpinBoxPropertyView {
             anchors.left: parent.horizontalCenter
             anchors.leftMargin: 2
             anchors.right: parent.right
@@ -69,20 +69,11 @@ Column {
             titleText: qsTrc("inspector", "Scale")
             propertyItem: root.model ? root.model.scale : null
 
-            IncrementalPropertyControl {
-                id: scaleControl
-
-                isIndeterminate: root.model ? root.model.scale.isUndefined : false
-                currentValue: root.model ? root.model.scale.value : 0
-
-                measureUnitsSymbol: "%"
-                step: 20
-                decimals: 2
-                maxValue: 400
-                minValue: 20
-
-                onValueEdited: { root.model.scale.value = newValue }
-            }
+            measureUnitsSymbol: "%"
+            step: 20
+            decimals: 2
+            maxValue: 400
+            minValue: 20
         }
     }
 
@@ -92,7 +83,7 @@ Column {
         height: childrenRect.height
         width: parent.width
 
-        InspectorPropertyView {
+        SpinBoxPropertyView {
             anchors.left: parent.left
             anchors.right: parent.horizontalCenter
             anchors.rightMargin: 2
@@ -100,22 +91,13 @@ Column {
             titleText: qsTrc("inspector", "Number of lines")
             propertyItem: root.model ? root.model.lineCount : null
 
-            IncrementalPropertyControl {
-                id: lineCountControl
-
-                isIndeterminate: root.model ? root.model.lineCount.isUndefined : false
-                currentValue: root.model ? root.model.lineCount.value : 0
-
-                step: 1
-                decimals: 0
-                maxValue: 14
-                minValue: 1
-
-                onValueEdited: { root.model.lineCount.value = newValue }
-            }
+            step: 1
+            decimals: 0
+            maxValue: 14
+            minValue: 1
         }
 
-        InspectorPropertyView {
+        SpinBoxPropertyView {
             anchors.left: parent.horizontalCenter
             anchors.leftMargin: 2
             anchors.right: parent.right
@@ -123,22 +105,13 @@ Column {
             titleText: qsTrc("inspector", "Line distance")
             propertyItem: root.model ? root.model.lineDistance : null
 
-            IncrementalPropertyControl {
-                id: lineDistanceControl
-
-                isIndeterminate: root.model ? root.model.lineDistance.isUndefined : false
-                currentValue: root.model ? root.model.lineDistance.value : 0
-
-                step: 0.25
-                maxValue: 3
-                minValue: 0
-
-                onValueEdited: { root.model.lineDistance.value = newValue }
-            }
+            step: 0.25
+            maxValue: 3
+            minValue: 0
         }
     }
 
-    InspectorPropertyView {
+    SpinBoxPropertyView {
         anchors.left: parent.left
         anchors.right: parent.horizontalCenter
         anchors.rightMargin: 2
@@ -146,19 +119,10 @@ Column {
         titleText: qsTrc("inspector", "Step offset")
         propertyItem: root.model ? root.model.stepOffset : null
 
-        IncrementalPropertyControl {
-            id: stepOffsetControl
-
-            isIndeterminate: root.model ? root.model.stepOffset.isUndefined : false
-            currentValue: root.model ? root.model.stepOffset.value : 0
-
-            step: 1
-            decimals: 0
-            maxValue: 8
-            minValue: -8
-
-            onValueEdited: { root.model.stepOffset.value = newValue }
-        }
+        step: 1
+        decimals: 0
+        maxValue: 8
+        minValue: -8
     }
 
     CheckBox {
@@ -171,43 +135,27 @@ Column {
 
     ColorSection {
         titleText: qsTrc("inspector", "Staff line color")
-        color: root.model ? root.model.color : null
+        propertyItem: root.model ? root.model.color : null
     }
 
     SeparatorLine { anchors.margins: -10 }
 
-    InspectorPropertyView {
+    DropdownPropertyView {
         titleText: qsTrc("inspector", "Notehead scheme")
         propertyItem: root.model ? root.model.noteheadSchemeType : null
 
-        Dropdown {
-            id: schemes
-
-            width: parent.width
-
-            model: [
-                { text: qsTrc("inspector", "Auto"), value: NoteHead.SCHEME_AUTO },
-                { text: qsTrc("inspector", "Normal"), value: NoteHead.SCHEME_NORMAL },
-                { text: qsTrc("inspector", "Pitch names"), value: NoteHead.SCHEME_PITCHNAME },
-                { text: qsTrc("inspector", "German pitch names"), value: NoteHead.SCHEME_PITCHNAME_GERMAN },
-                { text: qsTrc("inspector", "Solfege movable Do"), value: NoteHead.SCHEME_SOLFEGE },
-                { text: qsTrc("inspector", "Solfege fixed Do"), value: NoteHead.SCHEME_SOLFEGE_FIXED },
-                { text: qsTrc("inspector", "4-shape (Walker)"), value: NoteHead.SCHEME_SHAPE_NOTE_4 },
-                { text: qsTrc("inspector", "7-shape (Aikin)"), value: NoteHead.SCHEME_SHAPE_NOTE_7_AIKIN },
-                { text: qsTrc("inspector", "7-shape (Funk)"), value: NoteHead.SCHEME_SHAPE_NOTE_7_FUNK },
-                { text: qsTrc("inspector", "7-shape (Walker)"), value: NoteHead.SCHEME_SHAPE_NOTE_7_WALKER }
-            ]
-
-            currentIndex: root.model && !root.model.noteheadSchemeType.isUndefined ? schemes.indexOfValue(root.model.noteheadSchemeType.value) : -1
-
-            onCurrentValueChanged: {
-                if (currentIndex === -1) {
-                    return
-                }
-
-                root.model.noteheadSchemeType.value = schemes.currentValue
-            }
-        }
+        model: [
+            { text: qsTrc("inspector", "Auto"), value: NoteHead.SCHEME_AUTO },
+            { text: qsTrc("inspector", "Normal"), value: NoteHead.SCHEME_NORMAL },
+            { text: qsTrc("inspector", "Pitch names"), value: NoteHead.SCHEME_PITCHNAME },
+            { text: qsTrc("inspector", "German pitch names"), value: NoteHead.SCHEME_PITCHNAME_GERMAN },
+            { text: qsTrc("inspector", "Solfege movable Do"), value: NoteHead.SCHEME_SOLFEGE },
+            { text: qsTrc("inspector", "Solfege fixed Do"), value: NoteHead.SCHEME_SOLFEGE_FIXED },
+            { text: qsTrc("inspector", "4-shape (Walker)"), value: NoteHead.SCHEME_SHAPE_NOTE_4 },
+            { text: qsTrc("inspector", "7-shape (Aikin)"), value: NoteHead.SCHEME_SHAPE_NOTE_7_AIKIN },
+            { text: qsTrc("inspector", "7-shape (Funk)"), value: NoteHead.SCHEME_SHAPE_NOTE_7_FUNK },
+            { text: qsTrc("inspector", "7-shape (Walker)"), value: NoteHead.SCHEME_SHAPE_NOTE_7_WALKER }
+        ]
     }
 
     Column {

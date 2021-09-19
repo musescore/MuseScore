@@ -19,11 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.0
-import QtQuick.Controls 2.0
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+
 import MuseScore.Inspector 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
+
 import "../../common"
 import "internal"
 
@@ -31,7 +33,7 @@ FocusableItem {
     id: root
 
     property QtObject model: null
-    property QtObject beamModesModel: model ? model.beamModesModel : null
+    readonly property QtObject beamModesModel: model ? model.beamModesModel : null
 
     implicitHeight: contentColumn.height
     width: parent.width
@@ -42,20 +44,14 @@ FocusableItem {
         width: parent.width
         spacing: 12
 
-        InspectorPropertyView {
+        BeamTypeSelector {
             titleText: qsTrc("inspector", "Beam types")
             propertyItem: root.beamModesModel ? root.beamModesModel.mode : null
-
-            BeamTypesGrid {
-                id: beamTypesGridView
-
-                beamTypesModel: root.beamModesModel ? root.beamModesModel.modeListModel : null
-                enabled: root.beamModesModel ? !root.beamModesModel.isEmpty : false
-            }
+            enabled: root.beamModesModel && !root.beamModesModel.isEmpty
         }
 
         Column {
-            spacing: 16
+            spacing: 12
 
             height: implicitHeight
             width: parent.width
@@ -89,23 +85,20 @@ FocusableItem {
                     width: parent.width
 
                     model: [
-                        { iconRole: IconCode.NONE, textRole: qsTrc("inspector", "None"), typeRole: Beam.FEATHERING_NONE },
-                        { iconRole: IconCode.FEATHERED_LEFT_HEIGHT, typeRole: Beam.FEATHERING_LEFT },
-                        { iconRole: IconCode.FEATHERED_RIGHT_HEIGHT, typeRole: Beam.FEATHERING_RIGHT }
+                        { text: qsTrc("inspector", "None"), value: Beam.FEATHERING_NONE },
+                        { iconCode: IconCode.FEATHERED_LEFT_HEIGHT, value: Beam.FEATHERING_LEFT },
+                        { iconCode: IconCode.FEATHERED_RIGHT_HEIGHT, value: Beam.FEATHERING_RIGHT }
                     ]
 
                     delegate: FlatRadioButton {
-                        ButtonGroup.group: radioButtonList.radioButtonGroup
+                        iconCode: modelData["iconCode"] ?? IconCode.NONE
+                        text: modelData["text"] ?? ""
 
-                        iconCode: modelData["iconRole"]
-                        text: modelData["textRole"]
-
-                        checked: root.beamModesModel &&
-                                 !(root.model.featheringHeightLeft.isUndefined
-                                   ||root.model.featheringHeightRight.isUndefined) ? root.model.featheringMode === modelData["typeRole"]
-                                                                                   : false
+                        checked: root.beamModesModel && !(root.model.featheringHeightLeft.isUndefined || root.model.featheringHeightRight.isUndefined)
+                                 ? root.model.featheringMode === modelData["value"]
+                                 : false
                         onToggled: {
-                            root.model.featheringMode = modelData["typeRole"]
+                            root.model.featheringMode = modelData["value"]
                         }
                     }
                 }
@@ -116,47 +109,35 @@ FocusableItem {
 
                     visible: root.model && root.model.isFeatheringHeightChangingAllowed
 
-                    InspectorPropertyView {
+                    SpinBoxPropertyView {
                         anchors.left: parent.left
                         anchors.right: parent.horizontalCenter
                         anchors.rightMargin: 4
 
                         titleText: qsTrc("inspector", "Feathering left")
                         propertyItem: root.model ? root.model.featheringHeightLeft : null
+                        enabled: root.beamModesModel ? root.beamModesModel.isFeatheringAvailable : false
 
-                        IncrementalPropertyControl {
-                            icon: IconCode.FEATHERED_LEFT_HEIGHT
-                            enabled: root.beamModesModel ? root.beamModesModel.isFeatheringAvailable : false
-                            isIndeterminate: root.model ? root.model.featheringHeightLeft.isUndefined : false
-                            currentValue: root.model ? root.model.featheringHeightLeft.value : 0
-                            maxValue: 4
-                            minValue: 0
-                            step: 0.1
-
-                            onValueEdited: { root.model.featheringHeightLeft.value = newValue }
-                        }
+                        icon: IconCode.FEATHERED_LEFT_HEIGHT
+                        maxValue: 4
+                        minValue: 0
+                        step: 0.1
                     }
 
-                    InspectorPropertyView {
+                    SpinBoxPropertyView {
                         anchors.left: parent.horizontalCenter
                         anchors.leftMargin: 4
                         anchors.right: parent.right
 
                         titleText: qsTrc("inspector", "Feathering right")
                         propertyItem: root.model ? root.model.featheringHeightRight : null
+                        enabled: root.beamModesModel ? root.beamModesModel.isFeatheringAvailable : false
 
-                        IncrementalPropertyControl {
-                            icon: IconCode.FEATHERED_RIGHT_HEIGHT
-                            enabled: root.beamModesModel ? root.beamModesModel.isFeatheringAvailable : false
-                            isIndeterminate: root.model ? root.model.featheringHeightRight.isUndefined : false
-                            iconMode: IncrementalPropertyControl.Right
-                            currentValue: root.model ? root.model.featheringHeightRight.value : 0
-                            maxValue: 4
-                            minValue: 0
-                            step: 0.1
-
-                            onValueEdited: { root.model.featheringHeightRight.value = newValue }
-                        }
+                        icon: IconCode.FEATHERED_RIGHT_HEIGHT
+                        iconMode: IncrementalPropertyControl.Right
+                        maxValue: 4
+                        minValue: 0
+                        step: 0.1
                     }
                 }
             }
@@ -191,10 +172,9 @@ FocusableItem {
                     height: implicitHeight
                     width: root.width
 
-                    spacing: 16
+                    spacing: 12
 
                     InspectorPropertyView {
-
                         titleText: qsTrc("inspector", "Beam height")
                         propertyItem: root.model ? root.model.beamVectorX : null
 

@@ -417,22 +417,22 @@ QVariant AbstractInspectorModel::valueFromElementUnits(const Ms::Pid& pid, const
     }
 }
 
-PropertyItem* AbstractInspectorModel::buildPropertyItem(const Ms::Pid& propertyId, std::function<void(const int propertyId,
+PropertyItem* AbstractInspectorModel::buildPropertyItem(const Ms::Pid& propertyId, std::function<void(const Ms::Pid propertyId,
                                                                                                       const QVariant& newValue)> onPropertyChangedCallBack)
 {
-    PropertyItem* newPropertyItem = new PropertyItem(static_cast<int>(propertyId), this);
+    PropertyItem* newPropertyItem = new PropertyItem(propertyId, this);
 
     auto callback = onPropertyChangedCallBack;
 
     if (!callback) {
-        callback = [this](const int propertyId, const QVariant& newValue) {
-            onPropertyValueChanged(static_cast<Ms::Pid>(propertyId), newValue);
+        callback = [this](const Ms::Pid propertyId, const QVariant& newValue) {
+            onPropertyValueChanged(propertyId, newValue);
         };
     }
 
     connect(newPropertyItem, &PropertyItem::propertyModified, this, callback);
-    connect(newPropertyItem, &PropertyItem::applyToStyleRequested, this, [this](const int sid, const QVariant& newStyleValue) {
-        updateStyleValue(static_cast<Ms::Sid>(sid), newStyleValue);
+    connect(newPropertyItem, &PropertyItem::applyToStyleRequested, this, [this](const Ms::Sid sid, const QVariant& newStyleValue) {
+        updateStyleValue(sid, newStyleValue);
 
         emit requestReloadPropertyItems();
     });
@@ -440,18 +440,17 @@ PropertyItem* AbstractInspectorModel::buildPropertyItem(const Ms::Pid& propertyI
     return newPropertyItem;
 }
 
-void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem, std::function<QVariant(
-                                                                                            const QVariant&)> convertElementPropertyValueFunc)
+void AbstractInspectorModel::loadPropertyItem(PropertyItem* propertyItem,
+                                              std::function<QVariant(const QVariant&)> convertElementPropertyValueFunc)
 {
     if (!propertyItem || m_elementList.isEmpty()) {
         return;
     }
 
-    Ms::Pid pid = static_cast<Ms::Pid>(propertyItem->propertyId());
+    Ms::Pid pid = propertyItem->propertyId();
 
     Ms::Sid styleId = styleIdByPropertyId(pid);
-    propertyItem->setStyleId(static_cast<int>(styleId));
-    propertyItem->setIsStyled(styleId != Ms::Sid::NOSTYLE);
+    propertyItem->setStyleId(styleId);
 
     QVariant propertyValue;
     QVariant defaultPropertyValue;

@@ -34,6 +34,7 @@ RadioDelegate {
     //!      and has the wrong type (QQuickIcon).
     //!      It can't be overridden either, as it is marked `FINAL`.
     property int iconCode: IconCode.NONE
+    property int iconFontSize: ui.theme.iconsFont.pixelSize
 
     property alias radius: backgroundRect.radius
 
@@ -43,6 +44,8 @@ RadioDelegate {
     property color selectedStateColor: ui.theme.accentColor
 
     property alias navigation: navCtrl
+
+    ButtonGroup.group: ListView.view && ListView.view instanceof RadioButtonGroup ? ListView.view.radioButtonGroup : null
 
     implicitHeight: ListView.view ? ListView.view.height : 30
     implicitWidth: ListView.view ? (ListView.view.width - (ListView.view.spacing * (ListView.view.count - 1))) / ListView.view.count
@@ -105,6 +108,7 @@ RadioDelegate {
 
             StyledIconLabel {
                 iconCode: root.iconCode
+                font.pixelSize: root.iconFontSize
             }
         }
 

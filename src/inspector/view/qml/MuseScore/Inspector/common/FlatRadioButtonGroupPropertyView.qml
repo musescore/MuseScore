@@ -20,35 +20,46 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
+import QtQuick.Controls 2.15
 
-import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
+import MuseScore.Ui 1.0
 import MuseScore.Inspector 1.0
 
 InspectorPropertyView {
     id: root
 
-    height: implicitHeight
-    width: parent.width
+    property alias radioButtonGroup: radioButtonGroupItem
+    property alias model: radioButtonGroupItem.model
 
-    titleText: qsTrc("inspector", "Color")
-    navigation.name: "Color Section Menu"
+    component Delegate: FlatRadioButton {
+        required property var modelData
+        required property int index
 
-    ColorPicker {
-        id: colorPicker
+        text: modelData["text"] ?? ""
+        iconCode: modelData["iconCode"] ?? IconCode.NONE
 
+        navigation.name: root.navigation.name + " Value " + index
         navigation.panel: root.navigation.panel
         navigation.column: root.navigation.column
-        navigation.row: root.navigation.row + 1
+        navigation.row: root.navigation.row + 1 + index
 
-        enabled: root.propertyItem ? root.propertyItem.isEnabled : false
-        isIndeterminate: root.propertyItem && enabled ? root.propertyItem.isUndefined : false
-        color: root.propertyItem && !root.propertyItem.isUndefined ? root.propertyItem.value : ui.theme.backgroundPrimaryColor
-
-        onNewColorSelected: function(newColor) {
+        checked: root.propertyItem && !root.propertyItem.isUndefined
+                 ? root.propertyItem.value === modelData["value"]
+                 : false
+        onToggled: {
             if (root.propertyItem) {
-                root.propertyItem.value = newColor
+                root.propertyItem.value = modelData["value"]
             }
         }
+    }
+
+    RadioButtonGroup {
+        id: radioButtonGroupItem
+
+        height: 30
+        width: parent.width
+
+        delegate: Delegate {}
     }
 }

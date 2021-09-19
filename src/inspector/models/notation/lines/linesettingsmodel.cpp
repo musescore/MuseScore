@@ -37,8 +37,8 @@ LineSettingsModel::LineSettingsModel(QObject* parent, IElementRepositoryService*
 
 void LineSettingsModel::createProperties()
 {
-    m_lineStyle = buildPropertyItem(Ms::Pid::LINE_STYLE, [this](const int pid, const QVariant& newValue) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue);
+    m_lineStyle = buildPropertyItem(Ms::Pid::LINE_STYLE, [this](const Ms::Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, newValue);
 
         onUpdateLinePropertiesAvailability();
     });
@@ -58,40 +58,36 @@ void LineSettingsModel::createProperties()
 
     if (isTextVisible(BeginingText)) {
         m_beginingText = buildPropertyItem(Ms::Pid::BEGIN_TEXT);
-        m_beginingTextHorizontalOffset = buildPropertyItem(Ms::Pid::BEGIN_TEXT_OFFSET, [this](const int pid, const QVariant& newValue) {
-            onPropertyValueChanged(static_cast<Ms::Pid>(pid), PointF(newValue.toDouble(),
-                                                                     m_beginingTextVerticalOffset->value().toDouble()));
+        m_beginingTextHorizontalOffset = buildPropertyItem(Ms::Pid::BEGIN_TEXT_OFFSET, [this](const Ms::Pid pid, const QVariant& newValue) {
+            onPropertyValueChanged(pid, PointF(newValue.toDouble(), m_beginingTextVerticalOffset->value().toDouble()));
         });
 
-        m_beginingTextVerticalOffset = buildPropertyItem(Ms::Pid::BEGIN_TEXT_OFFSET, [this](const int pid, const QVariant& newValue) {
-            onPropertyValueChanged(static_cast<Ms::Pid>(pid),
-                                   PointF(m_beginingTextHorizontalOffset->value().toDouble(), newValue.toDouble()));
+        m_beginingTextVerticalOffset = buildPropertyItem(Ms::Pid::BEGIN_TEXT_OFFSET, [this](const Ms::Pid pid, const QVariant& newValue) {
+            onPropertyValueChanged(pid, PointF(m_beginingTextHorizontalOffset->value().toDouble(), newValue.toDouble()));
         });
     }
 
     if (isTextVisible(ContiniousText)) {
         m_continiousText = buildPropertyItem(Ms::Pid::CONTINUE_TEXT);
-        m_continiousTextHorizontalOffset = buildPropertyItem(Ms::Pid::CONTINUE_TEXT_OFFSET, [this](const int pid,
-                                                                                                   const QVariant& newValue) {
-            onPropertyValueChanged(static_cast<Ms::Pid>(pid),
-                                   PointF(newValue.toDouble(), m_continiousTextVerticalOffset->value().toDouble()));
+        m_continiousTextHorizontalOffset
+            = buildPropertyItem(Ms::Pid::CONTINUE_TEXT_OFFSET, [this](const Ms::Pid pid, const QVariant& newValue) {
+            onPropertyValueChanged(pid, PointF(newValue.toDouble(), m_continiousTextVerticalOffset->value().toDouble()));
         });
 
-        m_continiousTextVerticalOffset = buildPropertyItem(Ms::Pid::CONTINUE_TEXT_OFFSET, [this](const int pid, const QVariant& newValue) {
-            onPropertyValueChanged(static_cast<Ms::Pid>(pid), PointF(m_continiousTextHorizontalOffset->value().toDouble(),
-                                                                     newValue.toDouble()));
+        m_continiousTextVerticalOffset = buildPropertyItem(Ms::Pid::CONTINUE_TEXT_OFFSET, [this](const Ms::Pid pid,
+                                                                                                 const QVariant& newValue) {
+            onPropertyValueChanged(pid, PointF(m_continiousTextHorizontalOffset->value().toDouble(), newValue.toDouble()));
         });
     }
 
     if (isTextVisible(EndText)) {
         m_endText = buildPropertyItem(Ms::Pid::END_TEXT);
-        m_endTextHorizontalOffset = buildPropertyItem(Ms::Pid::END_TEXT_OFFSET, [this](const int pid, const QVariant& newValue) {
-            onPropertyValueChanged(static_cast<Ms::Pid>(pid), PointF(newValue.toDouble(), m_endTextHorizontalOffset->value().toDouble()));
+        m_endTextHorizontalOffset = buildPropertyItem(Ms::Pid::END_TEXT_OFFSET, [this](const Ms::Pid pid, const QVariant& newValue) {
+            onPropertyValueChanged(pid, PointF(newValue.toDouble(), m_endTextHorizontalOffset->value().toDouble()));
         });
 
-        m_endTextVerticalOffset = buildPropertyItem(Ms::Pid::END_TEXT_OFFSET, [this](const int pid, const QVariant& newValue) {
-            onPropertyValueChanged(static_cast<Ms::Pid>(pid), PointF(m_endTextVerticalOffset->value().toDouble(),
-                                                                     newValue.toDouble()));
+        m_endTextVerticalOffset = buildPropertyItem(Ms::Pid::END_TEXT_OFFSET, [this](const Ms::Pid pid, const QVariant& newValue) {
+            onPropertyValueChanged(pid, PointF(m_endTextVerticalOffset->value().toDouble(), newValue.toDouble()));
         });
     }
 }

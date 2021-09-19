@@ -33,91 +33,41 @@ Column {
 
     objectName: "ChordSymbolSettings"
 
-    spacing: 16
+    spacing: 12
 
-    InspectorPropertyView {
+    FlatRadioButtonGroupPropertyView {
         titleText: qsTrc("inspector", "Interpretation")
         propertyItem: root.model ? root.model.isLiteral : null
 
-        RadioButtonGroup {
-            id: interpretationTypeList
-
-            height: 30
-            width: parent.width
-
-            model: [
-                { textRole: qsTrc("inspector", "Literal"), valueRole: true },
-                { textRole: qsTrc("inspector", "Jazz"), valueRole: false }
-            ]
-
-            delegate: FlatRadioButton {
-                ButtonGroup.group: interpretationTypeList.radioButtonGroup
-
-                text: modelData["textRole"]
-                checked: root.model && !root.model.isLiteral.isUndefined ? root.model.isLiteral.value === modelData["valueRole"]
-                                                                         : false
-                onToggled: {
-                    root.model.isLiteral.value = modelData["valueRole"]
-                }
-            }
-        }
+        model: [
+            { text: qsTrc("inspector", "Literal"), value: true },
+            { text: qsTrc("inspector", "Jazz"), value: false }
+        ]
     }
 
-    InspectorPropertyView {
+    DropdownPropertyView {
         titleText: qsTrc("inspector", "Voicing")
         propertyItem: root.model ? root.model.voicingType : null
 
-        Dropdown {
-            id: voicing
-
-            width: parent.width
-
-            model: [
-                { text: qsTrc("inspector", "Auto"), value: ChordSymbolTypes.VOICING_AUTO },
-                { text: qsTrc("inspector", "Root only"), value: ChordSymbolTypes.VOICING_ROOT_ONLY },
-                { text: qsTrc("inspector", "Close"), value: ChordSymbolTypes.VOICING_CLOSE },
-                { text: qsTrc("inspector", "Drop two"), value: ChordSymbolTypes.VOICING_DROP_TWO },
-                { text: qsTrc("inspector", "Six note"), value: ChordSymbolTypes.VOICING_SIX_NOTE },
-                { text: qsTrc("inspector", "Four note"), value: ChordSymbolTypes.VOICING_FOUR_NOTE },
-                { text: qsTrc("inspector", "Three note"), value: ChordSymbolTypes.VOICING_THREE_NOTE }
-            ]
-
-            currentIndex: root.model && !root.model.voicingType.isUndefined ? voicing.indexOfValue(root.model.voicingType.value) : -1
-
-            onCurrentValueChanged: {
-                if (currentIndex === -1) {
-                    return
-                }
-
-                root.model.voicingType.value = voicing.currentValue
-            }
-        }
+        model: [
+            { text: qsTrc("inspector", "Auto"), value: ChordSymbolTypes.VOICING_AUTO },
+            { text: qsTrc("inspector", "Root only"), value: ChordSymbolTypes.VOICING_ROOT_ONLY },
+            { text: qsTrc("inspector", "Close"), value: ChordSymbolTypes.VOICING_CLOSE },
+            { text: qsTrc("inspector", "Drop two"), value: ChordSymbolTypes.VOICING_DROP_TWO },
+            { text: qsTrc("inspector", "Six note"), value: ChordSymbolTypes.VOICING_SIX_NOTE },
+            { text: qsTrc("inspector", "Four note"), value: ChordSymbolTypes.VOICING_FOUR_NOTE },
+            { text: qsTrc("inspector", "Three note"), value: ChordSymbolTypes.VOICING_THREE_NOTE }
+        ]
     }
 
-    InspectorPropertyView {
+    DropdownPropertyView {
         titleText: qsTrc("inspector", "Duration")
         propertyItem: root.model ? root.model.durationType : null
 
-        Dropdown {
-            id: durations
-
-            width: parent.width
-
-            model: [
-                { text: qsTrc("inspector", "Until the next chord symbol"), value: ChordSymbolTypes.DURATION_UNTIL_NEXT_CHORD_SYMBOL },
-                { text: qsTrc("inspector", "Until the end of the bar"), value: ChordSymbolTypes.DURATION_STOP_AT_MEASURE_END },
-                { text: qsTrc("inspector", "Until the end of the attached duration"), value: ChordSymbolTypes.DURATION_SEGMENT_DURATION }
-            ]
-
-            currentIndex: root.model && !root.model.durationType.isUndefined ? durations.indexOfValue(root.model.durationType.value) : -1
-
-            onCurrentValueChanged: {
-                if (currentIndex === -1) {
-                    return
-                }
-
-                root.model.durationType.value = durations.currentValue
-            }
-        }
+        model: [
+            { text: qsTrc("inspector", "Until the next chord symbol"), value: ChordSymbolTypes.DURATION_UNTIL_NEXT_CHORD_SYMBOL },
+            { text: qsTrc("inspector", "Until the end of the bar"), value: ChordSymbolTypes.DURATION_STOP_AT_MEASURE_END },
+            { text: qsTrc("inspector", "Until the end of the attached duration"), value: ChordSymbolTypes.DURATION_SEGMENT_DURATION }
+        ]
     }
 }

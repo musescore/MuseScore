@@ -37,27 +37,27 @@ FretDiagramSettingsModel::FretDiagramSettingsModel(QObject* parent, IElementRepo
 
 void FretDiagramSettingsModel::createProperties()
 {
-    m_scale = buildPropertyItem(Ms::Pid::MAG, [this](const int pid, const QVariant& newValue) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue.toDouble() / 100);
+    m_scale = buildPropertyItem(Ms::Pid::MAG, [this](const Ms::Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, newValue.toDouble() / 100);
     });
 
-    m_stringsCount = buildPropertyItem(Ms::Pid::FRET_STRINGS, [this](const int pid, const QVariant& newValue) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue);
+    m_stringsCount = buildPropertyItem(Ms::Pid::FRET_STRINGS, [this](const Ms::Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, newValue);
         emit fretDiagramChanged(fretDiagram());
     });
 
-    m_fretsCount = buildPropertyItem(Ms::Pid::FRET_FRETS, [this](const int pid, const QVariant& newValue) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue);
+    m_fretsCount = buildPropertyItem(Ms::Pid::FRET_FRETS, [this](const Ms::Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, newValue);
         emit fretDiagramChanged(fretDiagram());
     });
 
-    m_startingFretNumber = buildPropertyItem(Ms::Pid::FRET_OFFSET, [this](const int pid, const QVariant& newValue) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue.toInt() - 1);
+    m_startingFretNumber = buildPropertyItem(Ms::Pid::FRET_OFFSET, [this](const Ms::Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, newValue.toInt() - 1);
         emit fretDiagramChanged(fretDiagram());
     });
 
-    m_isNutVisible = buildPropertyItem(Ms::Pid::FRET_NUT, [this](const int pid, const QVariant& newValue) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue);
+    m_isNutVisible = buildPropertyItem(Ms::Pid::FRET_NUT, [this](const Ms::Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, newValue);
 
         emit fretDiagramChanged(fretDiagram());
     });

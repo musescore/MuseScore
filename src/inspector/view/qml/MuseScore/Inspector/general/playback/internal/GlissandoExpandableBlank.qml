@@ -35,10 +35,10 @@ ExpandableBlank {
 
     width: parent.width
 
-    contentItemComponent: InspectorPropertyView {
+    contentItemComponent: DropdownPropertyView {
         width: root.width
 
-        navigation.name: "Glissando Style Menu"
+        navigation.name: "Glissando Style"
         navigation.panel: root.navigation.panel
         navigation.column: root.navigation.column
         navigation.row: root.navigation.row + 1
@@ -46,33 +46,12 @@ ExpandableBlank {
         titleText: qsTrc("inspector", "Style")
         propertyItem: root.model ? root.model.styleType : null
 
-        Dropdown {
-            id: gstyles
-
-            width: parent.width
-
-            navigation.name: "Glissando Style Value"
-            navigation.panel: root.navigation.panel
-            navigation.column: root.navigation.column
-            navigation.row: root.navigation.row + 2
-
-            model: [
-                { text: "Chromatic", value: Glissando.STYLE_CHROMATIC },
-                { text: "White keys", value: Glissando.STYLE_WHITE_KEYS },
-                { text: "Black keys", value: Glissando.STYLE_BLACK_KEYS },
-                { text: "Diatonic", value: Glissando.STYLE_DIATONIC },
-                { text: "Portamento", value: Glissando.STYLE_PORTAENTO }
-            ]
-
-            currentIndex: root.model && !root.model.styleType.isUndefined ? gstyles.indexOfValue(root.model.styleType.value) : -1
-
-            onCurrentValueChanged: {
-                if (currentIndex === -1) {
-                    return
-                }
-
-                root.model.styleType.value = gstyles.currentValue
-            }
-        }
+        model: [
+            { text: qsTrc("inspector", "Chromatic"), value: Glissando.STYLE_CHROMATIC },
+            { text: qsTrc("inspector", "White keys"), value: Glissando.STYLE_WHITE_KEYS },
+            { text: qsTrc("inspector", "Black keys"), value: Glissando.STYLE_BLACK_KEYS },
+            { text: qsTrc("inspector", "Diatonic"), value: Glissando.STYLE_DIATONIC },
+            { text: qsTrc("inspector", "Portamento"), value: Glissando.STYLE_PORTAENTO }
+        ]
     }
 }

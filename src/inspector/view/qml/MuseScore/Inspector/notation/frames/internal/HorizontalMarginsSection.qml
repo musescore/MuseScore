@@ -19,21 +19,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
+import QtQuick 2.15
+
 import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
+import MuseScore.Inspector 1.0
+
 import "../../../common"
 
 Item {
     id: root
 
-    property QtObject frameLeftMargin: undefined
-    property QtObject frameRightMargin: undefined
+    property PropertyItem frameLeftMargin: null
+    property PropertyItem frameRightMargin: null
 
     height: childrenRect.height
     width: parent.width
 
-    InspectorPropertyView {
+    SpinBoxPropertyView {
         anchors.left: parent.left
         anchors.right: parent.horizontalCenter
         anchors.rightMargin: 4
@@ -41,20 +44,11 @@ Item {
         titleText: qsTrc("inspector", "Left margin")
         propertyItem: root.frameLeftMargin
 
-        IncrementalPropertyControl {
-            icon: IconCode.LEFT_MARGIN
-
-            measureUnitsSymbol: qsTrc("inspector", "mm")
-
-            enabled: root.frameLeftMargin ? root.frameLeftMargin.isEnabled : false
-            isIndeterminate: root.frameLeftMargin && enabled ? root.frameLeftMargin.isUndefined : false
-            currentValue: root.frameLeftMargin ? root.frameLeftMargin.value : 0
-
-            onValueEdited: { root.frameLeftMargin.value = newValue }
-        }
+        icon: IconCode.LEFT_MARGIN
+        measureUnitsSymbol: qsTrc("inspector", "mm")
     }
 
-    InspectorPropertyView {
+    SpinBoxPropertyView {
         anchors.left: parent.horizontalCenter
         anchors.leftMargin: 4
         anchors.right: parent.right
@@ -62,16 +56,7 @@ Item {
         titleText: qsTrc("inspector", "Right margin")
         propertyItem: root.frameRightMargin
 
-        IncrementalPropertyControl {
-            icon: IconCode.RIGHT_MARGIN
-
-            measureUnitsSymbol: qsTrc("inspector", "mm")
-
-            enabled: root.frameRightMargin ? root.frameRightMargin.isEnabled : false
-            isIndeterminate: root.frameRightMargin && enabled ? root.frameRightMargin.isUndefined : false
-            currentValue: root.frameRightMargin ? root.frameRightMargin.value : 0
-
-            onValueEdited: { root.frameRightMargin.value = newValue }
-        }
+        icon: IconCode.RIGHT_MARGIN
+        measureUnitsSymbol: qsTrc("inspector", "mm")
     }
 }

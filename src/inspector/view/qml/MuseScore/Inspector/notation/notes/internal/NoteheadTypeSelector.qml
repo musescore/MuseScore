@@ -19,29 +19,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+
 import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
+import MuseScore.Inspector 1.0
+
 import "../../../common"
 
-InspectorPropertyView {
+FlatRadioButtonGroupPropertyView {
     id: root
+    titleText: qsTrc("inspector", "Notehead type")
 
-    property QtObject heightProperty: undefined
+    radioButtonGroup.height: 40
+    model: [
+        { text: qsTrc("inspector", "Auto"), value: NoteHead.TYPE_AUTO },
+        { iconCode: IconCode.NOTE_HEAD_QUARTER, value: NoteHead.TYPE_QUARTER },
+        { iconCode: IconCode.NOTE_HEAD_HALF, value: NoteHead.TYPE_HALF },
+        { iconCode: IconCode.NOTE_HEAD_WHOLE, value: NoteHead.TYPE_WHOLE },
+        { iconCode: IconCode.NOTE_HEAD_BREVIS, value: NoteHead.TYPE_BREVIS }
+    ]
 
-    anchors.left: parent.left
-    anchors.right: parent.horizontalCenter
-    anchors.rightMargin: 2
-
-    titleText: qsTrc("inspector", "Height")
-    propertyItem: heightProperty
-
-    IncrementalPropertyControl {
-        icon: IconCode.VERTICAL
-
-        isIndeterminate: root.heightProperty ? root.heightProperty.isUndefined : false
-        currentValue: root.heightProperty ? root.heightProperty.value : 0
-
-        onValueEdited: { root.heightProperty.value = newValue }
+    radioButtonGroup.delegate: FlatRadioButtonGroupPropertyView.Delegate {
+        iconFontSize: 30
     }
 }

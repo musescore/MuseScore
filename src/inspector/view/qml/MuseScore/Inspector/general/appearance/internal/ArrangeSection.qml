@@ -36,7 +36,7 @@ Column {
     height: implicitHeight
     width: parent.width
 
-    spacing: 16
+    spacing: 12
 
     Column {
         width: parent.width

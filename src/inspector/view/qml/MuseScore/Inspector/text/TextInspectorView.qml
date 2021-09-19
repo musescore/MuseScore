@@ -32,7 +32,6 @@ InspectorSectionView {
     id: root
 
     implicitHeight: contentColumn.height
-    contentHeight: implicitHeight
 
     Column {
         id: contentColumn
@@ -40,50 +39,29 @@ InspectorSectionView {
         height: implicitHeight
         width: parent.width
 
-        spacing: 16
+        spacing: 12
 
-        InspectorPropertyView {
-            titleText: qsTrc("inspector", "Font")
-
+        DropdownPropertyView {
             navigation.panel: root.navigationPanel
-            navigation.name: "FontMenu"
+            navigation.name: "Font"
             navigation.row: root.navigationRow(1)
 
+            titleText: qsTrc("inspector", "Font")
             propertyItem: root.model ? root.model.fontFamily : null
 
-            Dropdown {
-                id: fontFamilyComboBox
+            dropdown.textRole: "text"
+            dropdown.valueRole: "text"
 
-                navigation.panel: root.navigationPanel
-                navigation.name: "FontFamily"
-                navigation.row: root.navigationRow(2)
+            model: {
+                var resultList = []
 
-                width: parent.width
+                var fontFamilies = Qt.fontFamilies()
 
-                textRole: "text"
-                valueRole: "text"
-
-                model: {
-                    var resultList = []
-
-                    var fontFamilies = Qt.fontFamilies()
-
-                    for (var i = 0; i < fontFamilies.length; ++i) {
-                        resultList.push({"text" : fontFamilies[i]})
-                    }
-
-                    return resultList
+                for (var i = 0; i < fontFamilies.length; ++i) {
+                    resultList.push({"text" : fontFamilies[i]})
                 }
 
-                currentIndex: root.model && !root.model.fontFamily.isUndefined ? fontFamilyComboBox.indexOfValue(root.model.fontFamily.value) : -1
-
-                onCurrentValueChanged: {
-                    if (currentIndex == -1) {
-                        return
-                    }
-
-                    root.model.fontFamily.value = fontFamilyComboBox.currentValue
-                }
+                return resultList
             }
         }
 
@@ -91,7 +69,10 @@ InspectorSectionView {
             height: childrenRect.height
             width: parent.width
 
-            InspectorPropertyView {
+            FlatRadioButtonGroupPropertyView {
+                titleText: qsTrc("inspector", "Style")
+                propertyItem: root.model ? root.model.fontStyle : null
+
                 anchors.left: parent.left
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
@@ -100,85 +81,39 @@ InspectorSectionView {
                 navigation.name: "StyleMenu"
                 navigation.row: root.navigationRow(3)
 
-                titleText: qsTrc("inspector", "Style")
-                propertyItem: root.model ? root.model.fontStyle : null
-
-                RadioButtonGroup {
-                    height: 30
-                    width: implicitWidth
-
-                    model: [
-                        { iconRole: IconCode.TEXT_BOLD, valueRole: TextTypes.FONT_STYLE_BOLD },
-                        { iconRole: IconCode.TEXT_ITALIC, valueRole: TextTypes.FONT_STYLE_ITALIC  },
-                        { iconRole: IconCode.TEXT_UNDERLINE, valueRole: TextTypes.FONT_STYLE_UNDERLINE  }
-                    ]
-
-                    delegate: FlatToggleButton {
-
-                        navigation.panel: root.navigationPanel
-                        navigation.name: "FontStyle"+model.index
-                        navigation.row: root.navigationRow(model.index + 4)
-
-                        icon: modelData["iconRole"]
-
-                        checked: root.model && !root.model.fontStyle.isUndefined ? root.model.fontStyle.value & modelData["valueRole"] : false
-
-                        backgroundColor: ui.theme.backgroundPrimaryColor
-
-                        onToggled: {
-                            root.model.fontStyle.value = checked ? root.model.fontStyle.value & ~modelData["valueRole"]
-                                                                 : root.model.fontStyle.value | modelData["valueRole"]
-                        }
-                    }
-                }
+                model: [
+                    { iconCode: IconCode.TEXT_BOLD, value: TextTypes.FONT_STYLE_BOLD },
+                    { iconCode: IconCode.TEXT_ITALIC, value: TextTypes.FONT_STYLE_ITALIC  },
+                    { iconCode: IconCode.TEXT_UNDERLINE, value: TextTypes.FONT_STYLE_UNDERLINE  }
+                ]
             }
 
-            InspectorPropertyView {
+            DropdownPropertyView {
                 anchors.left: parent.horizontalCenter
                 anchors.leftMargin: 2
                 anchors.right: parent.right
 
                 navigation.panel: root.navigationPanel
-                navigation.name: "SizeMenu"
+                navigation.name: "Size"
                 navigation.row: root.navigationRow(7)
 
                 titleText: qsTrc("inspector", "Size")
                 propertyItem: root.model ? root.model.fontSize : null
 
-                Dropdown {
-                    id: sizes
-
-                    width: parent.width
-
-                    navigation.panel: root.navigationPanel
-                    navigation.name: "Size"
-                    navigation.row: root.navigationRow(8)
-
-                    model: [
-                        { text: "8",  value: 8 },
-                        { text: "9",  value: 9 },
-                        { text: "10", value: 10 },
-                        { text: "11", value: 11 },
-                        { text: "12", value: 12 },
-                        { text: "14", value: 14 },
-                        { text: "16", value: 16 },
-                        { text: "18", value: 18 },
-                        { text: "24", value: 24 },
-                        { text: "30", value: 30 },
-                        { text: "36", value: 36 },
-                        { text: "48", value: 48 }
-                    ]
-
-                    currentIndex: root.model && !root.model.fontSize.isUndefined ? sizes.indexOfValue(root.model.fontSize.value) : -1
-
-                    onCurrentValueChanged: {
-                        if (currentIndex == -1) {
-                            return
-                        }
-
-                        root.model.fontSize.value = sizes.currentValue
-                    }
-                }
+                model: [
+                    { text: "8",  value: 8 },
+                    { text: "9",  value: 9 },
+                    { text: "10", value: 10 },
+                    { text: "11", value: 11 },
+                    { text: "12", value: 12 },
+                    { text: "14", value: 14 },
+                    { text: "16", value: 16 },
+                    { text: "18", value: 18 },
+                    { text: "24", value: 24 },
+                    { text: "30", value: 30 },
+                    { text: "36", value: 36 },
+                    { text: "48", value: 48 }
+                ]
             }
         }
 
@@ -210,8 +145,6 @@ InspectorSectionView {
                     ]
 
                     delegate: FlatRadioButton {
-                        ButtonGroup.group: horizontalAlignmentButtonList.radioButtonGroup
-
                         navigation.panel: root.navigationPanel
                         navigation.name: "HAlign"+model.index
                         navigation.row: root.navigationRow(model.index + 10)
@@ -245,8 +178,6 @@ InspectorSectionView {
                     ]
 
                     delegate: FlatRadioButton {
-                        ButtonGroup.group: verticalAlignmentButtonList.radioButtonGroup
-
                         navigation.panel: root.navigationPanel
                         navigation.name: "VAlign"+model.index
                         navigation.row: root.navigationRow(model.index + 13)

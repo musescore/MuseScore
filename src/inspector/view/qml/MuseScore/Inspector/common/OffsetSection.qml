@@ -24,12 +24,13 @@ import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
+import MuseScore.Inspector 1.0
 
 InspectorPropertyView {
     id: root
 
-    property QtObject horizontalOffset: null
-    property QtObject verticalOffset: null
+    property PropertyItem horizontalOffset: null
+    property PropertyItem verticalOffset: null
 
     property alias horizontalOffsetControl: horizontalOffsetControl
     property alias verticalOffsetControl: verticalOffsetControl
