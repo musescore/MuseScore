@@ -27,6 +27,7 @@
 #include "models/abstractinspectormodel.h"
 #include "models/inspectorlistmodel.h"
 #include "models/inspectormodelcreator.h"
+#include "models/notation/notes/noteheads/noteheadgroupsmodel.h"
 
 #include "view/widgets/fretcanvas.h"
 #include "view/widgets/gridcanvas.h"
@@ -86,6 +87,8 @@ void InspectorModule::registerUiTypes()
     qmlRegisterType<InspectorListModel>("MuseScore.Inspector", 1, 0, "InspectorListModel");
     qmlRegisterUncreatableType<AbstractInspectorModel>("MuseScore.Inspector", 1, 0, "Inspector", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<PropertyItem>("MuseScore.Inspector", 1, 0, "PropertyItem", "Not creatable from QML");
+
+    qmlRegisterType<NoteheadGroupsModel>("MuseScore.Inspector", 1, 0, "NoteheadGroupsModel");
 
     qmlRegisterUncreatableType<DirectionTypes>("MuseScore.Inspector", 1, 0, "DirectionTypes", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<NoteHeadTypes>("MuseScore.Inspector", 1, 0, "NoteHead", "Not creatable as it is an enum type");

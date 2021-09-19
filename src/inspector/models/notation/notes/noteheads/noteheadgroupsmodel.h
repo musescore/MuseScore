@@ -24,51 +24,25 @@
 
 #include <QObject>
 #include <QAbstractListModel>
-#include "note.h"
-#include "types/noteheadtypes.h"
 
 namespace mu::inspector {
 class NoteheadGroupsModel : public QAbstractListModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(int selectedHeadGroupIndex READ selectedHeadGroupIndex WRITE setSelectedHeadGroupIndex NOTIFY selectedHeadGroupIndexChanged)
-
 public:
-    enum RoleNames {
-        HeadGroupRole = Qt::UserRole + 1,
-        HintRole
-    };
-
     explicit NoteheadGroupsModel(QObject* parent = nullptr);
-
-    void load();
 
     QHash<int, QByteArray> roleNames() const;
     int rowCount(const QModelIndex& parent = QModelIndex()) const;
     QVariant data(const QModelIndex& index, int role) const;
 
-    void init(const Ms::NoteHead::Group noteHeadGroup);
-
-    int selectedHeadGroupIndex() const;
-
-public slots:
-    void setSelectedHeadGroupIndex(int selectedHeadTypeIndex);
-
-signals:
-    void noteHeadGroupSelected(int headGroup);
-    void selectedHeadGroupIndexChanged(int selectedHeadTypeIndex);
-
 private:
-    struct HeadGroupData {
-        Ms::NoteHead::Group group = Ms::NoteHead::Group::HEAD_INVALID;
-        QString hint;
+    enum RoleNames {
+        HeadGroupRole = Qt::UserRole + 1,
+        HintRole,
+        IconCodeRole
     };
-
-    int indexOfHeadGroup(const Ms::NoteHead::Group group) const;
-
-    QList<HeadGroupData> m_noteheadGroupDataList;
-    int m_selectedHeadGroupIndex = 0;
 };
 }
 

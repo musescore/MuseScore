@@ -175,16 +175,11 @@ Column {
                 ]
             }
 
-            InspectorPropertyView {
-                titleText: qsTrc("inspector", "Notehead group")
+            NoteheadGroupSelector {
                 propertyItem: root.model ? root.model.noteheadGroup : null
-
-                NoteheadsGrid {
-                    noteHeadGroupsModel: root.model ? root.model.noteheadGroupsModel : null
-                }
             }
 
-            NoteHeadTypeSelector {
+            NoteheadTypeSelector {
                 propertyItem: root.model ? root.model.noteheadType : null
             }
 

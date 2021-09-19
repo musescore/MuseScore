@@ -35,8 +35,6 @@ NoteheadSettingsModel::NoteheadSettingsModel(QObject* parent, IElementRepository
     setModelType(InspectorModelType::TYPE_NOTEHEAD);
 
     createProperties();
-
-    setNoteheadGroupsModel(new NoteheadGroupsModel(this));
 }
 
 void NoteheadSettingsModel::createProperties()
@@ -96,11 +94,6 @@ void NoteheadSettingsModel::resetProperties()
     m_verticalOffset->resetToDefault();
 }
 
-QObject* NoteheadSettingsModel::noteheadGroupsModel() const
-{
-    return m_noteheadGroupsModel;
-}
-
 PropertyItem* NoteheadSettingsModel::isHeadHidden() const
 {
     return m_isHeadHidden;
@@ -134,28 +127,4 @@ PropertyItem* NoteheadSettingsModel::horizontalOffset() const
 PropertyItem* NoteheadSettingsModel::verticalOffset() const
 {
     return m_verticalOffset;
-}
-
-void NoteheadSettingsModel::setNoteheadGroupsModel(NoteheadGroupsModel* noteheadGroupsModel)
-{
-    if (m_noteheadGroupsModel == noteheadGroupsModel) {
-        return;
-    }
-
-    m_noteheadGroupsModel = noteheadGroupsModel;
-
-    connect(m_noteheadGroupsModel, &NoteheadGroupsModel::noteHeadGroupSelected, [this](const int noteHeadGroup) {
-        m_headGroup->setValue(noteHeadGroup);
-    });
-
-    connect(m_headGroup, &PropertyItem::valueChanged, [this](const QVariant noteHeadGroup) {
-        if (m_headGroup->isUndefined()) {
-            m_noteheadGroupsModel->init(Ms::NoteHead::Group::HEAD_INVALID);
-        } else {
-            m_noteheadGroupsModel->init(static_cast<Ms::NoteHead::Group>(noteHeadGroup.toInt()));
-        }
-        emit noteheadGroupsModelChanged();
-    });
-
-    emit noteheadGroupsModelChanged();
 }

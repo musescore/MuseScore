@@ -50,14 +50,8 @@ FocusableItem {
             onClicked: { root.model.isHeadHidden.value = !checked }
         }
 
-        InspectorPropertyView {
-            titleText: qsTrc("inspector", "Notehead group")
+        NoteheadGroupSelector {
             propertyItem: root.model ? root.model.headGroup : null
-
-            NoteheadsGrid {
-                id: noteheadGridView
-                noteHeadGroupsModel: root.model ? root.model.noteheadGroupsModel : null
-            }
         }
 
         FlatRadioButtonGroupPropertyView {
@@ -79,12 +73,12 @@ FocusableItem {
             width: parent.width
 
             contentItemComponent: Column {
-                spacing: 24
-
                 height: implicitHeight
                 width: parent.width
 
-                NoteHeadTypeSelector {
+                spacing: 12
+
+                NoteheadTypeSelector {
                     titleText: qsTrc("inspector", "Notehead type (visual only)")
                     propertyItem: root.model ? root.model.headType : null
                 }
