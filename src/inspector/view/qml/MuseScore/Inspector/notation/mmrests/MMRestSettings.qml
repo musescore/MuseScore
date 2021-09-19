@@ -45,7 +45,6 @@ Column {
             height: childrenRect.height
             width: parent.width
 
-
             InspectorPropertyView {
                 titleText: qsTrc("inspector", "Number visible")
                 propertyItem: root.model ? root.model.isNumberVisible : null
@@ -53,8 +52,6 @@ Column {
                 anchors.left: parent.left
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
-
-                spacing: 8
 
                 CheckBox {
                     id: numberVisibilityCheckBox
@@ -65,7 +62,7 @@ Column {
                 }
             }
 
-            InspectorPropertyView {
+            SpinBoxPropertyView {
                 titleText: qsTrc("inspector", "Number position")
                 propertyItem: root.model ? root.model.numberPosition : null
 
@@ -73,23 +70,12 @@ Column {
                 anchors.leftMargin: 2
                 anchors.right: parent.right
 
-                spacing: 8
+                icon: IconCode.VERTICAL
 
-                IncrementalPropertyControl {
-                    id: numberPositionControl
-
-                    icon: IconCode.VERTICAL
-                    enabled: root.model ? root.model.isEmpty || numberVisibilityCheckBox.checked : true
-                    isIndeterminate: root.model ? root.model.numberPosition.isUndefined : false
-                    currentValue: root.model ? root.model.numberPosition.value : 0
-
-                    step: 0.5
-                    decimals: 2
-                    maxValue: 99.00
-                    minValue: -99.00
-
-                    onValueEdited: { root.model.numberPosition.value = newValue }
-                }
+                step: 0.5
+                decimals: 2
+                maxValue: 99.00
+                minValue: -99.00
             }
         }
     }

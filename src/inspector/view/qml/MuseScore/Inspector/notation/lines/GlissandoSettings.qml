@@ -24,38 +24,25 @@ import QtQuick.Controls 2.15
 
 import MuseScore.UiComponents 1.0
 import MuseScore.Inspector 1.0
+
 import "../../common"
 
-InspectorPropertyView {
+Column {
     id: root
 
     property QtObject model: null
 
     objectName: "GlissandoSettings"
 
-    titleText: qsTrc("inspector", "Glissando line")
-    propertyItem: root.model ? root.model.lineType : null
+    spacing: 12
 
-    RadioButtonGroup {
-        id: radioButtonList
-
-        height: 30
-        width: parent.width
+    FlatRadioButtonGroupPropertyView {
+        titleText: qsTrc("inspector", "Glissando line")
+        propertyItem: root.model ? root.model.lineType : null
 
         model: [
-            { textRole: qsTrc("inspector", "Straight"), valueRole: Glissando.LINE_TYPE_STRAIGHT },
-            { textRole: qsTrc("inspector", "Wavy"), valueRole: Glissando.LINE_TYPE_WAVY }
+            { text: qsTrc("inspector", "Straight"), value: Glissando.LINE_TYPE_STRAIGHT },
+            { text: qsTrc("inspector", "Wavy"), value: Glissando.LINE_TYPE_WAVY }
         ]
-
-        delegate: FlatRadioButton {
-            ButtonGroup.group: radioButtonList.radioButtonGroup
-
-            text: modelData["textRole"]
-            checked: root.model && !root.model.lineType.isUndefined ? root.model.lineType.value === modelData["valueRole"]
-                                                                    : false
-            onToggled: {
-                root.model.lineType.value = modelData["valueRole"]
-            }
-        }
     }
 }

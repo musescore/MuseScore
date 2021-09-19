@@ -24,40 +24,27 @@ import QtQuick.Controls 2.15
 
 import MuseScore.UiComponents 1.0
 import MuseScore.Inspector 1.0
+
 import "../../common"
 
-InspectorPropertyView {
+Column {
     id: root
 
     property QtObject model: null
 
     objectName: "AccidentalSettings"
 
-    titleText: qsTrc("inspector", "Bracket type")
-    propertyItem: root.model ? root.model.bracketType : null
+    spacing: 12
 
-    RadioButtonGroup {
-        id: radioButtonList
-
-        height: 30
-        width: parent.width
+    FlatRadioButtonGroupPropertyView {
+        titleText: qsTrc("inspector", "Bracket type")
+        propertyItem: root.model ? root.model.bracketType : null
 
         model: [
-            { textRole: qsTrc("inspector", "None"), valueRole: AccidentalTypes.BRACKET_TYPE_NONE },
-            { textRole: qsTrc("inspector", "Parenthesis"), valueRole: AccidentalTypes.BRACKET_TYPE_PARENTHESIS },
-            { textRole: qsTrc("inspector", "Bracket"), valueRole: AccidentalTypes.BRACKET_TYPE_SQUARE },
-            { textRole: qsTrc("inspector", "Brace"), valueRole: AccidentalTypes.BRACKET_TYPE_ROUND },
+            { text: qsTrc("inspector", "None"), value: AccidentalTypes.BRACKET_TYPE_NONE },
+            { text: qsTrc("inspector", "Parenthesis"), value: AccidentalTypes.BRACKET_TYPE_PARENTHESIS },
+            { text: qsTrc("inspector", "Bracket"), value: AccidentalTypes.BRACKET_TYPE_SQUARE },
+            { text: qsTrc("inspector", "Brace"), value: AccidentalTypes.BRACKET_TYPE_ROUND },
         ]
-
-        delegate: FlatRadioButton {
-            ButtonGroup.group: radioButtonList.radioButtonGroup
-
-            text: modelData["textRole"]
-            checked: root.model && !root.model.bracketType.isUndefined ? root.model.bracketType.value === modelData["valueRole"]
-                                                                       : false
-            onToggled: {
-                root.model.bracketType.value = modelData["valueRole"]
-            }
-        }
     }
 }

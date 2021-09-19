@@ -25,6 +25,7 @@ import QtQuick.Controls 2.15
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Inspector 1.0
+
 import "../../common"
 
 Column {
@@ -36,65 +37,28 @@ Column {
 
     spacing: 12
 
-    InspectorPropertyView {
-
+    FlatRadioButtonGroupPropertyView {
         titleText: qsTrc("inspector", "Direction")
         propertyItem: root.model ? root.model.direction : null
 
-        RadioButtonGroup {
-            id: radioButtonList
-
-            height: 30
-            width: parent.width
-
-            model: [
-                { iconRole: IconCode.NONE, textRole: qsTrc("inspector", "Auto"), typeRole: ArticulationTypes.AUTO },
-                { iconRole: IconCode.ARROW_DOWN, typeRole: ArticulationTypes.DOWN },
-                { iconRole: IconCode.ARROW_UP, typeRole: ArticulationTypes.UP }
-            ]
-
-            delegate: FlatRadioButton {
-                ButtonGroup.group: radioButtonList.radioButtonGroup
-
-                iconCode: modelData["iconRole"]
-                text: modelData["textRole"]
-
-                checked: root.model && !root.model.direction.isUndefined ? root.model.direction.value === modelData["typeRole"]
-                                                                         : false
-                onToggled: {
-                    root.model.direction.value = modelData["typeRole"]
-                }
-            }
-        }
+        model: [
+            { text: qsTrc("inspector", "Auto"), value: ArticulationTypes.AUTO },
+            { iconCode: IconCode.ARROW_DOWN, value: ArticulationTypes.DOWN },
+            { iconCode: IconCode.ARROW_UP, value: ArticulationTypes.UP }
+        ]
     }
 
-    InspectorPropertyView {
+    DropdownPropertyView {
         titleText: qsTrc("inspector", "Placement")
         propertyItem: root.model ? root.model.placement : null
 
-        Dropdown {
-            id: placements
-
-            width: parent.width
-
-            model: [
-                { text: qsTrc("inspector", "Above staff"), value: ArticulationTypes.TYPE_ABOVE_STAFF },
-                { text: qsTrc("inspector", "Below staff"), value: ArticulationTypes.TYPE_BELOW_STAFF },
-                { text: qsTrc("inspector", "Chord automatic"), value: ArticulationTypes.TYPE_CHORD_AUTO },
-                { text: qsTrc("inspector", "Above chord"), value: ArticulationTypes.TYPE_ABOVE_CHORD },
-                { text: qsTrc("inspector", "Below chord"), value: ArticulationTypes.TYPE_BELOW_CHORD }
-            ]
-
-            currentIndex: root.model && !root.model.placement.isUndefined ? placements.indexOfValue(root.model.placement.value) : -1
-
-            onCurrentValueChanged: {
-                if (currentIndex === -1) {
-                    return
-                }
-
-                root.model.placement.value = placements.currentValue
-            }
-        }
+        model: [
+            { text: qsTrc("inspector", "Above staff"), value: ArticulationTypes.TYPE_ABOVE_STAFF },
+            { text: qsTrc("inspector", "Below staff"), value: ArticulationTypes.TYPE_BELOW_STAFF },
+            { text: qsTrc("inspector", "Chord automatic"), value: ArticulationTypes.TYPE_CHORD_AUTO },
+            { text: qsTrc("inspector", "Above chord"), value: ArticulationTypes.TYPE_ABOVE_CHORD },
+            { text: qsTrc("inspector", "Below chord"), value: ArticulationTypes.TYPE_BELOW_CHORD }
+        ]
     }
 
     FlatButton {

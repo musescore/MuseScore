@@ -39,16 +39,16 @@ TremoloBarSettingsModel::TremoloBarSettingsModel(QObject* parent, IElementReposi
 
 void TremoloBarSettingsModel::createProperties()
 {
-    m_type = buildPropertyItem(Ms::Pid::TREMOLOBAR_TYPE, [this](const int pid, const QVariant& newValue) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue);
+    m_type = buildPropertyItem(Ms::Pid::TREMOLOBAR_TYPE, [this](const Ms::Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, newValue);
 
         if (newValue.toInt() != static_cast<int>(TremoloBarTypes::TremoloBarType::TYPE_CUSTOM)) {
             emit requestReloadPropertyItems();
         }
     });
 
-    m_curve = buildPropertyItem(Ms::Pid::TREMOLOBAR_CURVE, [this](const int pid, const QVariant& newValue) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue);
+    m_curve = buildPropertyItem(Ms::Pid::TREMOLOBAR_CURVE, [this](const Ms::Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, newValue);
 
         emit requestReloadPropertyItems();
     });

@@ -19,11 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.0
-import QtQuick.Controls 2.0
-import MuseScore.Inspector 1.0
+import QtQuick 2.15
+import QtQuick.Controls 2.15
+
 import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
+import MuseScore.Inspector 1.0
+
 import "../../common"
 
 FocusableItem {
@@ -44,7 +46,7 @@ FocusableItem {
         height: implicitHeight
         width: root.width
 
-        spacing: 16
+        spacing: 12
 
         CheckBox {
             isIndeterminate: root.stemModel && root.beamModel ? root.stemModel.isStemHidden.isUndefined || root.beamModel.isBeamHidden.isUndefined : false
@@ -58,36 +60,15 @@ FocusableItem {
             }
         }
 
-        InspectorPropertyView {
-
+        FlatRadioButtonGroupPropertyView {
             titleText: qsTrc("inspector", "Stem direction")
             propertyItem: root.stemModel ? root.stemModel.stemDirection : null
 
-            RadioButtonGroup {
-                id: radioButtonList
-
-                height: 30
-                width: parent.width
-
-                model: [
-                    { iconRole: IconCode.NONE, textRole: qsTrc("inspector", "Auto"), typeRole: DirectionTypes.VERTICAL_AUTO },
-                    { iconRole: IconCode.ARROW_DOWN, typeRole: DirectionTypes.VERTICAL_DOWN },
-                    { iconRole: IconCode.ARROW_UP, typeRole: DirectionTypes.VERTICAL_UP }
-                ]
-
-                delegate: FlatRadioButton {
-                    ButtonGroup.group: radioButtonList.radioButtonGroup
-
-                    iconCode: modelData["iconRole"]
-                    text: modelData["textRole"]
-
-                    checked: root.stemModel && !root.stemModel.stemDirection.isUndefined ? root.stemModel.stemDirection.value === modelData["typeRole"]
-                                                                                         : false
-                    onToggled: {
-                        root.stemModel.stemDirection.value = modelData["typeRole"]
-                    }
-                }
-            }
+            model: [
+                { text: qsTrc("inspector", "Auto"), value: DirectionTypes.VERTICAL_AUTO },
+                { iconCode: IconCode.ARROW_DOWN, value: DirectionTypes.VERTICAL_DOWN },
+                { iconCode: IconCode.ARROW_UP, value: DirectionTypes.VERTICAL_UP }
+            ]
         }
 
         ExpandableBlank {
@@ -101,13 +82,13 @@ FocusableItem {
                 height: implicitHeight
                 width: root.width
 
-                spacing: 16
+                spacing: 12
 
                 Item {
                     height: childrenRect.height
                     width: parent.width
 
-                    InspectorPropertyView {
+                    SpinBoxPropertyView {
                         anchors.left: parent.left
                         anchors.right: parent.horizontalCenter
                         anchors.rightMargin: 2
@@ -115,20 +96,12 @@ FocusableItem {
                         titleText: qsTrc("inspector", "Thickness")
                         propertyItem: root.stemModel ? root.stemModel.thickness : null
 
-                        IncrementalPropertyControl {
-                            enabled: root.stemModel ? !root.stemModel.isEmpty : false
-                            isIndeterminate: root.stemModel ? root.stemModel.thickness.isUndefined : false
-                            currentValue: root.stemModel ? root.stemModel.thickness.value : 0
-
-                            maxValue: 4
-                            minValue: 0.01
-                            step: 0.01
-
-                            onValueEdited: { root.stemModel.thickness.value = newValue }
-                        }
+                        maxValue: 4
+                        minValue: 0.01
+                        step: 0.01
                     }
 
-                    InspectorPropertyView {
+                    SpinBoxPropertyView {
                         anchors.left: parent.horizontalCenter
                         anchors.leftMargin: 2
                         anchors.right: parent.right
@@ -136,93 +109,21 @@ FocusableItem {
                         titleText: qsTrc("inspector", "Length")
                         propertyItem: root.stemModel ? root.stemModel.length : null
 
-                        IncrementalPropertyControl {
-                            enabled: root.stemModel ? !root.stemModel.isEmpty : false
-                            isIndeterminate: root.stemModel ? root.stemModel.length.isUndefined : false
-                            currentValue: root.stemModel ? root.stemModel.length.value : 0
-
-                            maxValue: 10
-                            minValue: 0.01
-
-                            onValueEdited: { root.stemModel.length.value = newValue }
-                        }
+                        maxValue: 10
+                        minValue: -10
                     }
                 }
 
-                InspectorPropertyView {
-                    height: implicitHeight
-
+                OffsetSection {
                     titleText: qsTrc("inspector", "Stem offset")
-                    propertyItem: root.stemModel ? root.stemModel.horizontalOffset : null
-
-                    Item {
-                        height: childrenRect.height
-                        width: parent.width
-
-                        IncrementalPropertyControl {
-                            anchors.left: parent.left
-                            anchors.right: parent.horizontalCenter
-                            anchors.rightMargin: 4
-
-                            icon: IconCode.HORIZONTAL
-                            enabled: root.stemModel ? !root.stemModel.isEmpty : false
-                            isIndeterminate: root.stemModel ? root.stemModel.horizontalOffset.isUndefined : false
-                            currentValue: root.stemModel ? root.stemModel.horizontalOffset.value : 0
-
-                            onValueEdited: { root.stemModel.horizontalOffset.value = newValue }
-                        }
-
-                        IncrementalPropertyControl {
-                            anchors.left: parent.horizontalCenter
-                            anchors.leftMargin: 4
-                            anchors.right: parent.right
-
-                            icon: IconCode.VERTICAL
-                            enabled: root.stemModel ? !root.stemModel.isEmpty : false
-                            isIndeterminate: root.stemModel ? root.stemModel.verticalOffset.isUndefined : false
-                            currentValue: root.stemModel ? root.stemModel.verticalOffset.value : 0
-
-                            onValueEdited: { root.stemModel.verticalOffset.value = newValue }
-                        }
-                    }
+                    horizontalOffset: root.stemModel ? root.stemModel.horizontalOffset : null
+                    verticalOffset: root.stemModel ? root.stemModel.verticalOffset : null
                 }
 
-                InspectorPropertyView {
-                    height: childrenRect.height
-
+                OffsetSection {
                     titleText: qsTrc("inspector", "Flag offset")
-                    propertyItem: root.hookModel ? root.hookModel.horizontalOffset : null
-
-                    Item {
-                        height: childrenRect.height
-                        width: parent.width
-
-                        IncrementalPropertyControl {
-                            anchors.left: parent.left
-                            anchors.right: parent.horizontalCenter
-                            anchors.rightMargin: 4
-
-                            enabled: root.hookModel ? !root.hookModel.isEmpty : false
-                            isIndeterminate: root.hookModel ? root.hookModel.horizontalOffset.isUndefined : false
-                            icon: IconCode.HORIZONTAL
-                            currentValue: root.hookModel ? root.hookModel.horizontalOffset.value : 0.00
-
-                            onValueEdited: { root.hookModel.horizontalOffset.value = newValue }
-                        }
-
-                        IncrementalPropertyControl {
-                            anchors.left: parent.horizontalCenter
-                            anchors.leftMargin: 4
-                            anchors.right: parent.right
-
-                            enabled: root.hookModel ? !root.hookModel.isEmpty : false
-                            isIndeterminate: root.hookModel ? root.hookModel.verticalOffset.isUndefined : false
-                            icon: IconCode.VERTICAL
-                            currentValue: root.hookModel ? root.hookModel.verticalOffset.value : 0.00
-
-                            onValueEdited: { root.hookModel.verticalOffset.value = newValue }
-                        }
-                    }
+                    horizontalOffset: root.hookModel ? root.hookModel.horizontalOffset : null
+                    verticalOffset: root.hookModel ? root.hookModel.verticalOffset : null
                 }
             }
         }

@@ -19,21 +19,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
+import QtQuick 2.15
+
 import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
+import MuseScore.Inspector 1.0
+
 import "../../../common"
 
 Item {
     id: root
 
-    property QtObject gapAbove: undefined
-    property QtObject gapBelow: undefined
+    property PropertyItem gapAbove: null
+    property PropertyItem gapBelow: null
 
     height: childrenRect.height
     width: parent.width
 
-    InspectorPropertyView {
+    SpinBoxPropertyView {
         anchors.left: parent.left
         anchors.right: parent.horizontalCenter
         anchors.rightMargin: 4
@@ -41,18 +44,10 @@ Item {
         titleText: qsTrc("inspector", "Gap above")
         propertyItem: root.gapAbove
 
-        IncrementalPropertyControl {
-            icon: IconCode.GAP_ABOVE
-
-            enabled: root.gapAbove ? root.gapAbove.isEnabled : false
-            isIndeterminate: root.gapAbove && enabled ? root.gapAbove.isUndefined : false
-            currentValue: root.gapAbove ? root.gapAbove.value : 0
-
-            onValueEdited: { root.gapAbove.value = newValue }
-        }
+        icon: IconCode.GAP_ABOVE
     }
 
-    InspectorPropertyView {
+    SpinBoxPropertyView {
         anchors.left: parent.horizontalCenter
         anchors.leftMargin: 4
         anchors.right: parent.right
@@ -60,14 +55,6 @@ Item {
         titleText: qsTrc("inspector", "Gap below")
         propertyItem: root.gapBelow
 
-        IncrementalPropertyControl {
-            icon: IconCode.GAP_BELOW
-
-            enabled: root.gapBelow ? root.gapBelow.isEnabled : false
-            isIndeterminate: root.gapBelow && enabled ? root.gapBelow.isUndefined : false
-            currentValue: root.gapBelow ? root.gapBelow.value : 0
-
-            onValueEdited: { root.gapBelow.value = newValue }
-        }
+        icon: IconCode.GAP_BELOW
     }
 }

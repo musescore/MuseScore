@@ -40,7 +40,7 @@ FocusableItem {
         height: childrenRect.height
         width: parent.width
 
-        spacing: 16
+        spacing: 12
 
         visible: root.model ? root.model.areSettingsAvailable : false
 
@@ -102,8 +102,6 @@ FocusableItem {
                 ]
 
                 delegate: FlatRadioButton {
-                    ButtonGroup.group: lineStyleButtonList.radioButtonGroup
-
                     iconCode: modelData["iconRole"]
                     checked: root.model ? root.model.currentFretDotType === modelData["typeRole"] : false
 

@@ -34,34 +34,18 @@ Column {
 
     spacing: 12
 
-    InspectorPropertyView {
+    DropdownPropertyView {
         titleText: qsTrc("inspector", "Bend type")
         propertyItem: root.model ? root.model.bendType : null
 
-        Dropdown {
-            id: btypes
-
-            width: parent.width
-
-            model: [
-                { text: qsTrc("inspector", "Bend"), value: BendTypes.TYPE_BEND },
-                { text: qsTrc("inspector", "Bend/Release"), value: BendTypes.TYPE_BEND_RELEASE },
-                { text: qsTrc("inspector", "Bend/Release/Bend"), value: BendTypes.TYPE_BEND_RELEASE_BEND },
-                { text: qsTrc("inspector", "Prebend"), value: BendTypes.TYPE_PREBEND },
-                { text: qsTrc("inspector", "Prebend/Release"), value: BendTypes.TYPE_PREBEND_RELEASE },
-                { text: qsTrc("inspector", "Custom"), value: BendTypes.TYPE_CUSTOM }
-            ]
-
-            currentIndex: root.model && !root.model.bendType.isUndefined ? btypes.indexOfValue(root.model.bendType.value) : -1
-
-            onCurrentValueChanged: {
-                if (currentIndex === -1) {
-                    return
-                }
-
-                root.model.bendType.value = btypes.currentValue
-            }
-        }
+        model: [
+            { text: qsTrc("inspector", "Bend"), value: BendTypes.TYPE_BEND },
+            { text: qsTrc("inspector", "Bend/Release"), value: BendTypes.TYPE_BEND_RELEASE },
+            { text: qsTrc("inspector", "Bend/Release/Bend"), value: BendTypes.TYPE_BEND_RELEASE_BEND },
+            { text: qsTrc("inspector", "Prebend"), value: BendTypes.TYPE_PREBEND },
+            { text: qsTrc("inspector", "Prebend/Release"), value: BendTypes.TYPE_PREBEND_RELEASE },
+            { text: qsTrc("inspector", "Custom"), value: BendTypes.TYPE_CUSTOM }
+        ]
     }
 
     InspectorPropertyView {
@@ -87,20 +71,13 @@ Column {
         }
     }
 
-    InspectorPropertyView {
+    SpinBoxPropertyView {
         titleText: qsTrc("inspector", "Line thickness")
         propertyItem: root.model ? root.model.lineThickness : null
 
-        IncrementalPropertyControl {
-            isIndeterminate: root.model ? root.model.lineThickness.isUndefined : false
-            currentValue: root.model ? root.model.lineThickness.value : 0
-
-            maxValue: 10
-            minValue: 0.1
-            step: 0.1
-            decimals: 2
-
-            onValueEdited: { root.model.lineThickness.value = newValue }
-        }
+        maxValue: 10
+        minValue: 0.1
+        step: 0.1
+        decimals: 2
     }
 }

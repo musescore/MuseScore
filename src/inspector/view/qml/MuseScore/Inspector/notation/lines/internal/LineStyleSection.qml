@@ -32,53 +32,31 @@ import "../../../common"
 Column {
     id: root
 
-    property QtObject lineStyle: null
-    property QtObject dashLineLength: null
-    property QtObject dashGapLength: null
+    property PropertyItem lineStyle: null
+    property PropertyItem dashLineLength: null
+    property PropertyItem dashGapLength: null
 
     width: parent.width
 
-    spacing: 16
+    spacing: 12
 
-    InspectorPropertyView {
-        titleText:  qsTrc("inspector", "Style")
+    FlatRadioButtonGroupPropertyView {
+        titleText: qsTrc("inspector", "Style")
         propertyItem: root.lineStyle
 
-        enabled: root.lineStyle && root.lineStyle.isEnabled
-
-        RadioButtonGroup {
-            id: lineStyleButtonList
-
-            height: 30
-            width: parent.width
-
-            model: [
-                { iconRole: IconCode.LINE_NORMAL, typeRole: LineTypes.LINE_STYLE_SOLID },
-                { iconRole: IconCode.LINE_DASHED, typeRole: LineTypes.LINE_STYLE_DASHED },
-                { iconRole: IconCode.LINE_DOTTED, typeRole: LineTypes.LINE_STYLE_DOTTED },
-                { iconRole: IconCode.NONE, textRole: qsTrc("inspector", "Custom"), typeRole: LineTypes.LINE_STYLE_CUSTOM }
-            ]
-
-            delegate: FlatRadioButton {
-                ButtonGroup.group: lineStyleButtonList.radioButtonGroup
-
-                iconCode: modelData["iconRole"]
-                text: modelData["textRole"]
-
-                checked: root.lineStyle && !root.lineStyle.isUndefined ? root.lineStyle.value === modelData["typeRole"]
-                                                                       : false
-                onToggled: {
-                    root.lineStyle.value = modelData["typeRole"]
-                }
-            }
-        }
+        model: [
+            { iconCode: IconCode.LINE_NORMAL, value: LineTypes.LINE_STYLE_SOLID },
+            { iconCode: IconCode.LINE_DASHED, value: LineTypes.LINE_STYLE_DASHED },
+            { iconCode: IconCode.LINE_DOTTED, value: LineTypes.LINE_STYLE_DOTTED },
+            { text: qsTrc("inspector", "Custom"), value: LineTypes.LINE_STYLE_CUSTOM }
+        ]
     }
 
     Item {
         height: childrenRect.height
         width: parent.width
 
-        InspectorPropertyView {
+        SpinBoxPropertyView {
             anchors.left: parent.left
             anchors.right: parent.horizontalCenter
             anchors.rightMargin: 2
@@ -89,21 +67,13 @@ Column {
             titleText: qsTrc("inspector", "Dash")
             propertyItem: root.dashLineLength
 
-            IncrementalPropertyControl {
-                isIndeterminate: root.dashLineLength ? root.dashLineLength.isUndefined : false
-                currentValue: root.dashLineLength ? root.dashLineLength.value : 0
-                step: 0.1
-                maxValue: 10
-                minValue: 0.1
-                decimals: 2
-
-                onValueEdited: {
-                    root.dashLineLength.value = newValue
-                }
-            }
+            step: 0.1
+            maxValue: 10
+            minValue: 0.1
+            decimals: 2
         }
 
-        InspectorPropertyView {
+        SpinBoxPropertyView {
             anchors.left: parent.horizontalCenter
             anchors.leftMargin: 2
             anchors.right: parent.right
@@ -114,18 +84,10 @@ Column {
             titleText: qsTrc("inspector", "Gap")
             propertyItem: root.dashGapLength
 
-            IncrementalPropertyControl {
-                isIndeterminate: root.dashGapLength && enabled ? root.dashGapLength.isUndefined : false
-                currentValue: root.dashGapLength ? root.dashGapLength.value : 0
-                step: 0.1
-                maxValue: 10
-                minValue: 0.1
-                decimals: 2
-
-                onValueEdited: {
-                    root.dashGapLength.value = newValue
-                }
-            }
+            step: 0.1
+            maxValue: 10
+            minValue: 0.1
+            decimals: 2
         }
     }
 }

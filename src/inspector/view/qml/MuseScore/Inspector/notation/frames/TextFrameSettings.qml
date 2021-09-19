@@ -31,7 +31,7 @@ Column {
 
     objectName: "TextFrameSettings"
 
-    spacing: 16
+    spacing: 12
 
     VerticalGapsSection {
         gapAbove: root.model ? root.model.gapAbove : null

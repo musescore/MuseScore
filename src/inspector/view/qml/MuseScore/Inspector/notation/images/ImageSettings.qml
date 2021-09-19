@@ -39,7 +39,7 @@ Column {
         height: childrenRect.height
         width: parent.width
 
-        InspectorPropertyView {
+        SpinBoxPropertyView {
             id: heightControl
 
             anchors.left: parent.left
@@ -49,14 +49,8 @@ Column {
             titleText: qsTrc("inspector", "Image height")
             propertyItem: root.model ? root.model.height : null
 
-            IncrementalPropertyControl {
-                icon: IconCode.VERTICAL
-                measureUnitsSymbol: staffSpaceUnitsCheckbox.checked ? qsTrc("inspector", "sp") : qsTrc("inspector", "mm")
-                isIndeterminate: root.model ? root.model.height.isUndefined : false
-                currentValue: root.model ? root.model.height.value : 0
-
-                onValueEdited: { root.model.height.value = newValue }
-            }
+            icon: IconCode.VERTICAL
+            measureUnitsSymbol: staffSpaceUnitsCheckbox.checked ? qsTrc("inspector", "sp") : qsTrc("inspector", "mm")
         }
 
         FlatToggleButton {
@@ -76,7 +70,7 @@ Column {
             }
         }
 
-        InspectorPropertyView {
+        SpinBoxPropertyView {
             anchors.left: lockButton.right
             anchors.leftMargin: 6
             anchors.right: parent.right
@@ -84,15 +78,9 @@ Column {
             titleText: qsTrc("inspector", "Image width")
             propertyItem: root.model ? root.model.width : null
 
-            IncrementalPropertyControl {
-                icon: IconCode.HORIZONTAL
-                iconMode: IncrementalPropertyControl.Right
-                measureUnitsSymbol: staffSpaceUnitsCheckbox.checked ? qsTrc("inspector", "sp") : qsTrc("inspector", "mm")
-                isIndeterminate: root.model ? root.model.width.isUndefined : false
-                currentValue: root.model ? root.model.width.value : 0
-
-                onValueEdited: { root.model.width.value = newValue }
-            }
+            icon: IconCode.HORIZONTAL
+            iconMode: IncrementalPropertyControl.Right
+            measureUnitsSymbol: staffSpaceUnitsCheckbox.checked ? qsTrc("inspector", "sp") : qsTrc("inspector", "mm")
         }
     }
 

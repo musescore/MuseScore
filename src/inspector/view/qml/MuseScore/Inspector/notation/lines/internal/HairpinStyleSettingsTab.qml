@@ -84,7 +84,7 @@ FocusableItem {
             height: childrenRect.height
             width: parent.width
 
-            InspectorPropertyView {
+            SpinBoxPropertyView {
                 anchors.left: parent.left
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
@@ -92,19 +92,13 @@ FocusableItem {
                 titleText: qsTrc("inspector", "Thickness")
                 propertyItem: root.model ? root.model.thickness : null
 
-                IncrementalPropertyControl {
-                    isIndeterminate: root.model ? root.model.thickness.isUndefined : false
-                    currentValue: root.model ? root.model.thickness.value : 0
-                    step: 0.1
-                    maxValue: 10
-                    minValue: 0.1
-                    decimals: 2
-
-                    onValueEdited: { root.model.thickness.value = newValue }
-                }
+                step: 0.1
+                maxValue: 10
+                minValue: 0.1
+                decimals: 2
             }
 
-            InspectorPropertyView {
+            SpinBoxPropertyView {
                 anchors.left: parent.horizontalCenter
                 anchors.leftMargin: 2
                 anchors.right: parent.right
@@ -112,16 +106,10 @@ FocusableItem {
                 titleText: qsTrc("inspector", "Height")
                 propertyItem: root.model ? root.model.height : null
 
-                IncrementalPropertyControl {
-                    isIndeterminate: root.model ? root.model.height.isUndefined : false
-                    currentValue: root.model ? root.model.height.value : 0
-                    step: 0.1
-                    maxValue: 10
-                    minValue: 0.1
-                    decimals: 2
-
-                    onValueEdited: { root.model.height.value = newValue }
-                }
+                step: 0.1
+                maxValue: 10
+                minValue: 0.1
+                decimals: 2
             }
         }
 
@@ -129,7 +117,7 @@ FocusableItem {
             height: childrenRect.height
             width: parent.width
 
-            InspectorPropertyView {
+            SpinBoxPropertyView {
                 anchors.left: parent.left
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
@@ -137,16 +125,10 @@ FocusableItem {
                 titleText: qsTrc("inspector", "Height (continuing to a new system)")
                 propertyItem: root.model ? root.model.continiousHeight : null
 
-                IncrementalPropertyControl {
-                    isIndeterminate: root.model ? root.model.continiousHeight.isUndefined : false
-                    currentValue: root.model ? root.model.continiousHeight.value : 0
-                    step: 0.1
-                    maxValue: 10
-                    minValue: 0.1
-                    decimals: 2
-
-                    onValueEdited: { root.model.continiousHeight.value = newValue }
-                }
+                step: 0.1
+                maxValue: 10
+                minValue: 0.1
+                decimals: 2
             }
         }
 

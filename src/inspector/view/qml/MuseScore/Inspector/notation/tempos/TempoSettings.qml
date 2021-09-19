@@ -45,17 +45,11 @@ Column {
         onClicked: { root.model.isDefaultTempoForced.value = !checked }
     }
 
-    InspectorPropertyView {
+    SpinBoxPropertyView {
         titleText: qsTrc("inspector", "Override written tempo")
         propertyItem: root.model ? root.model.tempo : null
+        enabled: root.model ? !root.model.isEmpty && !followWrittenTempoCheckbox.checked : false
 
-        IncrementalPropertyControl {
-            enabled: root.model ? !root.model.isEmpty && !followWrittenTempoCheckbox.checked : false
-            isIndeterminate: root.model ? root.model.tempo.isUndefined : false
-            currentValue: root.model ? root.model.tempo.value : 0
-            measureUnitsSymbol: qsTrc("inspector", "BPM")
-
-            onValueEdited: { root.model.tempo.value = newValue }
-        }
+        measureUnitsSymbol: qsTrc("inspector", "BPM")
     }
 }

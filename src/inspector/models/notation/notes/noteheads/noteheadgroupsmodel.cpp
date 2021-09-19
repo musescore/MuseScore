@@ -21,92 +21,51 @@
  */
 #include "noteheadgroupsmodel.h"
 
+#include "engraving/libmscore/note.h"
+#include "engraving/libmscore/scorefont.h"
+
 using namespace mu::inspector;
+using namespace Ms;
 
 NoteheadGroupsModel::NoteheadGroupsModel(QObject* parent)
     : QAbstractListModel(parent)
 {
 }
 
-void NoteheadGroupsModel::load()
-{
-    beginResetModel();
-
-    if (!m_noteheadGroupDataList.isEmpty()) {
-        return;
-    }
-
-    for (int i = 0; i < static_cast<int>(Ms::NoteHead::Group::HEAD_DO_WALKER); ++i) {
-        HeadGroupData headGroupData;
-
-        headGroupData.group = static_cast<Ms::NoteHead::Group>(i);
-        headGroupData.hint = Ms::NoteHead::group2userName(headGroupData.group);
-
-        m_noteheadGroupDataList << headGroupData;
-    }
-
-    endResetModel();
-}
-
 QHash<int, QByteArray> NoteheadGroupsModel::roleNames() const
 {
     return {
-        { HeadGroupRole, "headGroupRole" },
-        { HintRole, "hintRole" }
+        { HeadGroupRole, "headGroup" },
+        { HintRole, "hint" },
+        { IconCodeRole, "iconCode" }
     };
 }
 
 int NoteheadGroupsModel::rowCount(const QModelIndex&) const
 {
-    return m_noteheadGroupDataList.count();
+    return static_cast<int>(NoteHead::Group::HEAD_DO_WALKER);
 }
 
 QVariant NoteheadGroupsModel::data(const QModelIndex& index, int role) const
 {
-    if (!index.isValid() || index.row() >= rowCount() || m_noteheadGroupDataList.isEmpty()) {
+    if (!index.isValid() || index.row() >= rowCount()) {
         return QVariant();
     }
 
-    HeadGroupData headTypeData = m_noteheadGroupDataList.at(index.row());
+    int row = index.row();
+    auto group = static_cast<NoteHead::Group>(row);
 
     switch (role) {
-    case HeadGroupRole: return static_cast<int>(headTypeData.group);
-    case HintRole: return headTypeData.hint;
-    default: return QVariant();
+    case HeadGroupRole:
+        return row;
+    case HintRole:
+        return NoteHead::group2userName(group);
+    case IconCodeRole: {
+        auto type = (group == NoteHead::Group::HEAD_BREVIS_ALT) ? NoteHead::Type::HEAD_BREVIS : NoteHead::Type::HEAD_QUARTER;
+        return ScoreFont::fallbackFont()->symCode(Note::noteHead(0, group, type));
     }
-}
-
-void NoteheadGroupsModel::init(const Ms::NoteHead::Group noteHeadGroup)
-{
-    load();
-    m_selectedHeadGroupIndex = indexOfHeadGroup(noteHeadGroup);
-    emit selectedHeadGroupIndexChanged(m_selectedHeadGroupIndex);
-}
-
-int NoteheadGroupsModel::selectedHeadGroupIndex() const
-{
-    return m_selectedHeadGroupIndex;
-}
-
-void NoteheadGroupsModel::setSelectedHeadGroupIndex(int selectedHeadTypeIndex)
-{
-    if (m_selectedHeadGroupIndex == selectedHeadTypeIndex) {
-        return;
+    default: break;
     }
 
-    m_selectedHeadGroupIndex = selectedHeadTypeIndex;
-    emit selectedHeadGroupIndexChanged(m_selectedHeadGroupIndex);
-
-    emit noteHeadGroupSelected(selectedHeadTypeIndex);
-}
-
-int NoteheadGroupsModel::indexOfHeadGroup(const Ms::NoteHead::Group group) const
-{
-    for (int i = 0; i < m_noteheadGroupDataList.count(); ++i) {
-        if (m_noteheadGroupDataList.at(i).group == group) {
-            return i;
-        }
-    }
-
-    return -1;
+    return QVariant();
 }

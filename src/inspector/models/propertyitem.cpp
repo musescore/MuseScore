@@ -25,12 +25,12 @@
 
 using namespace mu::inspector;
 
-PropertyItem::PropertyItem(const int propertyId, QObject* parent)
+PropertyItem::PropertyItem(const Ms::Pid propertyId, QObject* parent)
     : QObject(parent)
 {
     m_propertyId = propertyId;
 
-    Ms::P_TYPE propertyType = Ms::propertyType(static_cast<Ms::Pid>(propertyId));
+    Ms::P_TYPE propertyType = Ms::propertyType(propertyId);
 
     if (propertyType != Ms::P_TYPE::COLOR) {
         m_currentValue = 0;
@@ -65,7 +65,7 @@ void PropertyItem::applyToStyle()
     emit applyToStyleRequested(m_styleId, m_currentValue);
 }
 
-int PropertyItem::propertyId() const
+Ms::Pid PropertyItem::propertyId() const
 {
     return m_propertyId;
 }
@@ -92,7 +92,7 @@ bool PropertyItem::isEnabled() const
 
 bool PropertyItem::isStyled() const
 {
-    return m_isStyled;
+    return m_styleId != Ms::Sid::NOSTYLE;
 }
 
 bool PropertyItem::isModified() const
@@ -100,9 +100,14 @@ bool PropertyItem::isModified() const
     return m_currentValue != m_defaultValue;
 }
 
-void PropertyItem::setStyleId(const int styleId)
+void PropertyItem::setStyleId(const Ms::Sid styleId)
 {
+    if (m_styleId == styleId) {
+        return;
+    }
+
     m_styleId = styleId;
+    emit isStyledChanged();
 }
 
 void PropertyItem::setValue(const QVariant& value)
@@ -131,14 +136,4 @@ void PropertyItem::setIsEnabled(bool isEnabled)
 
     m_isEnabled = isEnabled;
     emit isEnabledChanged(m_isEnabled);
-}
-
-void PropertyItem::setIsStyled(bool isStyled)
-{
-    if (m_isStyled == isStyled) {
-        return;
-    }
-
-    m_isStyled = isStyled;
-    emit isStyledChanged(m_isStyled);
 }

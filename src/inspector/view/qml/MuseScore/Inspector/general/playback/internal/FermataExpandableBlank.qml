@@ -35,12 +35,12 @@ ExpandableBlank {
 
     width: parent.width
 
-    contentItemComponent: InspectorPropertyView {
+    contentItemComponent: SpinBoxPropertyView {
         anchors.left: parent.left
         anchors.right: parent.horizontalCenter
         anchors.rightMargin: 2
 
-        navigation.name: "Time stretch Menu"
+        navigation.name: "Time stretch"
         navigation.panel: root.navigation.panel
         navigation.column: root.navigation.column
         navigation.row: root.navigation.row + 1
@@ -48,24 +48,10 @@ ExpandableBlank {
         titleText: qsTrc("inspector", "Time stretch")
         propertyItem: root.model ? root.model.timeStretch : null
 
-        IncrementalPropertyControl {
-            id: timeStretchControl
-
-            navigation.name: "Time stretch Value"
-            navigation.panel: root.navigation.panel
-            navigation.column: root.navigation.column
-            navigation.row: root.navigation.row + 2
-
-            measureUnitsSymbol: "%"
-            isIndeterminate: root.model ? root.model.timeStretch.isUndefined : false
-            currentValue: root.model ? root.model.timeStretch.value : 0
-
-            step: 1
-            decimals: 0
-            maxValue: 400
-            minValue: 0
-
-            onValueEdited: { root.model.timeStretch.value = newValue }
-        }
+        step: 1
+        decimals: 0
+        maxValue: 400
+        minValue: 0
+        measureUnitsSymbol: "%"
     }
 }

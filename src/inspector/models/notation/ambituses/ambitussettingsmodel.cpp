@@ -34,8 +34,6 @@ AmbitusSettingsModel::AmbitusSettingsModel(QObject* parent, IElementRepositorySe
     setTitle(qtrc("inspector", "Ambitus"));
     setIcon(ui::IconCode::Code::AMBITUS);
     createProperties();
-
-    setNoteheadGroupsModel(new NoteheadGroupsModel(this));
 }
 
 void AmbitusSettingsModel::createProperties()
@@ -48,14 +46,14 @@ void AmbitusSettingsModel::createProperties()
     m_topOctave = buildPropertyItem(Ms::Pid::FBPARENTHESIS3);
     m_bottomOctave = buildPropertyItem(Ms::Pid::FBPARENTHESIS4);
 
-    m_topPitch = buildPropertyItem(Ms::Pid::PITCH, [this](const int pid, const QVariant& newValue) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue);
+    m_topPitch = buildPropertyItem(Ms::Pid::PITCH, [this](const Ms::Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, newValue);
 
         emit requestReloadPropertyItems();
     });
 
-    m_bottomPitch = buildPropertyItem(Ms::Pid::FBPARENTHESIS2, [this](const int pid, const QVariant& newValue) {
-        onPropertyValueChanged(static_cast<Ms::Pid>(pid), newValue);
+    m_bottomPitch = buildPropertyItem(Ms::Pid::FBPARENTHESIS2, [this](const Ms::Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, newValue);
 
         emit requestReloadPropertyItems();
     });
@@ -113,11 +111,6 @@ void AmbitusSettingsModel::matchRangesToStaff()
     m_bottomPitch->resetToDefault();
 }
 
-NoteheadGroupsModel* AmbitusSettingsModel::noteheadGroupsModel() const
-{
-    return m_noteheadGroupsModel;
-}
-
 PropertyItem* AmbitusSettingsModel::noteheadGroup() const
 {
     return m_noteheadGroup;
@@ -166,27 +159,4 @@ PropertyItem* AmbitusSettingsModel::topPitch() const
 PropertyItem* AmbitusSettingsModel::bottomPitch() const
 {
     return m_bottomPitch;
-}
-
-void AmbitusSettingsModel::setNoteheadGroupsModel(NoteheadGroupsModel* noteheadGroupsModel)
-{
-    if (m_noteheadGroupsModel == noteheadGroupsModel) {
-        return;
-    }
-
-    m_noteheadGroupsModel = noteheadGroupsModel;
-
-    connect(m_noteheadGroupsModel, &NoteheadGroupsModel::noteHeadGroupSelected, [this](const int noteHeadGroup) {
-        m_noteheadGroup->setValue(noteHeadGroup);
-    });
-
-    connect(m_noteheadGroup, &PropertyItem::valueChanged, [this](const QVariant& noteHeadGroup) {
-        if (m_noteheadGroup->isUndefined()) {
-            m_noteheadGroupsModel->init(Ms::NoteHead::Group::HEAD_INVALID);
-        } else {
-            m_noteheadGroupsModel->init(static_cast<Ms::NoteHead::Group>(noteHeadGroup.toInt()));
-        }
-    });
-
-    emit noteheadGroupsModelChanged(m_noteheadGroupsModel);
 }

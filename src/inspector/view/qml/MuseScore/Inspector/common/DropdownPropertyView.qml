@@ -19,38 +19,38 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.9
-import MuseScore.Inspector 1.0
-import MuseScore.UiComponents 1.0
+import QtQuick 2.15
+import QtQuick.Controls 2.15
 
-import "../../../common"
+import MuseScore.UiComponents 1.0
+import MuseScore.Ui 1.0
+import MuseScore.Inspector 1.0
 
 InspectorPropertyView {
     id: root
 
-    property QtObject intBracketProperty: undefined
+    property alias dropdown: dropdownItem
+    property alias model: dropdownItem.model
 
-    propertyItem: intBracketProperty
+    Dropdown {
+        id: dropdownItem
+        width: parent.width
 
-    IncrementalPropertyControl {
-        id: columnsPositionControl
+        navigation.name: root.navigation.name + " Value"
+        navigation.panel: root.navigation.panel
+        navigation.column: root.navigation.column
+        navigation.row: root.navigation.row + 1
 
-        step: 1
-        decimals: 0
-        maxValue: 127
-        minValue: 0
+        currentIndex: root.propertyItem && !root.propertyItem.isUndefined
+                      ? indexOfValue(root.propertyItem.value)
+                      : -1
 
-        isIndeterminate: root.intBracketProperty ? root.intBracketProperty.isUndefined : false
-        currentValue: root.intBracketProperty ? root.intBracketProperty.value : -1
-
-        onValueEdited: {
-            if (newValue === -1) {
+        onCurrentValueChanged: {
+            if (!root.propertyItem || currentIndex === -1) {
                 return
             }
 
-            intBracketProperty.value = newValue
+            root.propertyItem.value = currentValue
         }
-
     }
 }
-

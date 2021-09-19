@@ -154,7 +154,7 @@ signals:
     void requestReloadPropertyItems();
 
 protected:
-    PropertyItem* buildPropertyItem(const Ms::Pid& pid, std::function<void(const int propertyId,
+    PropertyItem* buildPropertyItem(const Ms::Pid& pid, std::function<void(const Ms::Pid propertyId,
                                                                            const QVariant& newValue)> onPropertyChangedCallBack = nullptr);
 
     void loadPropertyItem(PropertyItem* propertyItem, std::function<QVariant(const QVariant&)> convertElementPropertyValueFunc = nullptr);

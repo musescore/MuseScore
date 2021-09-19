@@ -35,20 +35,14 @@ Column {
 
     spacing: 12
 
-    InspectorPropertyView {
+    SpinBoxPropertyView {
         titleText: qsTrc("inspector", "Pause before new section starts")
         propertyItem: root.model ? root.model.pauseDuration : null
 
-        IncrementalPropertyControl {
-            isIndeterminate: root.model ? root.model.pauseDuration.isUndefined : false
-            currentValue: root.model ? root.model.pauseDuration.value : 0
-            maxValue: 999
-            minValue: 0
-            step: 0.5
-            measureUnitsSymbol: qsTrc("inspector", "s")
-
-            onValueEdited: { root.model.pauseDuration.value = newValue }
-        }
+        maxValue: 999
+        minValue: 0
+        step: 0.5
+        measureUnitsSymbol: qsTrc("inspector", "s")
     }
 
     CheckBox {
