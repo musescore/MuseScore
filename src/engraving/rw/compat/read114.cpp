@@ -27,8 +27,6 @@
 #include "style/style.h"
 #include "style/defaultstyle.h"
 #include "compat/pageformat.h"
-#include "compat/chordlist.h"
-#include "compat/readstyle.h"
 #include "io/htmlparser.h"
 #include "io/xml.h"
 
@@ -82,8 +80,8 @@
 #include "libmscore/factory.h"
 #include "libmscore/linkedobjects.h"
 
-#include "pageformat.h"
-#include "chordlist.h"
+#include "compat/pageformat.h"
+#include "readchordlisthook.h"
 #include "readstyle.h"
 #include "read206.h"
 
@@ -608,59 +606,6 @@ static void readAccidental(Accidental* a, XmlReader& e)
 }
 
 //---------------------------------------------------------
-//   convertHeadGroup
-//---------------------------------------------------------
-
-static NoteHead::Group convertHeadGroup(int i)
-{
-    NoteHead::Group val;
-    switch (i) {
-    case 1:
-        val = NoteHead::Group::HEAD_CROSS;
-        break;
-    case 2:
-        val = NoteHead::Group::HEAD_DIAMOND;
-        break;
-    case 3:
-        val = NoteHead::Group::HEAD_TRIANGLE_DOWN;
-        break;
-    case 4:
-        val = NoteHead::Group::HEAD_MI;
-        break;
-    case 5:
-        val = NoteHead::Group::HEAD_SLASH;
-        break;
-    case 6:
-        val = NoteHead::Group::HEAD_XCIRCLE;
-        break;
-    case 7:
-        val = NoteHead::Group::HEAD_DO;
-        break;
-    case 8:
-        val = NoteHead::Group::HEAD_RE;
-        break;
-    case 9:
-        val = NoteHead::Group::HEAD_FA;
-        break;
-    case 10:
-        val = NoteHead::Group::HEAD_LA;
-        break;
-    case 11:
-        val = NoteHead::Group::HEAD_TI;
-        break;
-    case 12:
-        val = NoteHead::Group::HEAD_SOL;
-        break;
-    case 13:
-        val = NoteHead::Group::HEAD_BREVIS_ALT;
-        break;
-    default:
-        val = NoteHead::Group::HEAD_NORMAL;
-    }
-    return val;
-}
-
-//---------------------------------------------------------
 //   readFingering114
 //---------------------------------------------------------
 
@@ -859,7 +804,7 @@ static void readNote(Note* note, XmlReader& e, ReadContext& ctx)
             note->chord()->setStaffMove(e.readInt());
         } else if (tag == "head") {
             int i = e.readInt();
-            NoteHead::Group val = convertHeadGroup(i);
+            NoteHead::Group val = Read206::convertHeadGroup(i);
             note->setHeadGroup(val);
         } else if (tag == "headType") {
             int i = e.readInt();
@@ -2477,7 +2422,7 @@ static void readDrumset(Drumset* ds, XmlReader& e)
     while (e.readNextStartElement()) {
         const QStringRef& tag(e.name());
         if (tag == "head") {
-            ds->drum(pitch).notehead = convertHeadGroup(e.readInt());
+            ds->drum(pitch).notehead = Read206::convertHeadGroup(e.readInt());
         } else if (ds->readProperties(e, pitch)) {
         } else {
             e.unknown();
@@ -2811,7 +2756,6 @@ Score::FileError Read114::read114(MasterScore* masterScore, XmlReader& e, ReadCo
             masterScore->_sigmap->read(e, ctx.fileDivision());
         } else if (tag == "programVersion") {
             masterScore->setMscoreVersion(e.readElementText());
-            masterScore->parseVersion(masterScore->mscoreVersion());
         } else if (tag == "programRevision") {
             masterScore->setMscoreRevision(e.readInt());
         } else if (tag == "Mag"

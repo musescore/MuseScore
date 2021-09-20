@@ -19,26 +19,24 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_SCOREACCESS_H
-#define MU_ENGRAVING_SCOREACCESS_H
+#ifndef MU_ENGRAVING_READ400_H
+#define MU_ENGRAVING_READ400_H
 
 #include "libmscore/masterscore.h"
+#include "../engravingerrors.h"
 
-//! NOTE This is a temporary class for controlling (master)score access
-//! See Project class description for detail
+namespace Ms {
+class XmlReader;
+}
 
-namespace mu::engraving::compat {
-class ScoreAccess
+namespace mu::engraving {
+class Read400
 {
 public:
 
-    static Ms::MasterScore* createMasterScore();
-    static Ms::MasterScore* createMasterScoreWithBaseStyle();
-    static Ms::MasterScore* createMasterScoreWithDefaultStyle();
-    static Ms::MasterScore* createMasterScore(const Ms::MStyle& style);
-
-    static bool exportPart(mu::engraving::MscWriter& mscWriter, Ms::Score* partScore);
+    static bool read400(Ms::Score* score, Ms::XmlReader& e);
+    static bool readScore400(Ms::Score* score, Ms::XmlReader& e);
 };
 }
 
-#endif // MU_ENGRAVING_SCOREACCESS_H
+#endif // MU_ENGRAVING_READ400_H

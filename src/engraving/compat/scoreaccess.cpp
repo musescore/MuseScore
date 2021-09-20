@@ -45,11 +45,6 @@ Ms::MasterScore* ScoreAccess::createMasterScore(const Ms::MStyle& style)
     return new Ms::MasterScore(style, nullptr);
 }
 
-Ms::Score::FileError ScoreAccess::loadMscz(Ms::MasterScore* masterScore, mu::engraving::MscReader& msczFile, bool ignoreVersionError)
-{
-    return masterScore->loadMscz(msczFile, ignoreVersionError);
-}
-
 bool ScoreAccess::exportPart(mu::engraving::MscWriter& mscWriter, Ms::Score* partScore)
 {
     return partScore->masterScore()->exportPart(mscWriter, partScore);

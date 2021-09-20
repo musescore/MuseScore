@@ -62,11 +62,11 @@ class QMimeData;
 
 namespace mu::engraving {
 class AccessibleScore;
+class Read400;
 }
 
 namespace mu::engraving::compat {
 class Read302;
-class ReadScoreHook;
 class WriteScoreHook;
 }
 
@@ -393,8 +393,8 @@ public:
 
 private:
 
-    friend class mu::engraving::compat::ReadScoreHook;
     friend class mu::engraving::compat::Read302;
+    friend class mu::engraving::Read400;
     friend class mu::engraving::Layout;
 
     static std::set<Score*> validScores;

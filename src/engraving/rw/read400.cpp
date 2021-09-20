@@ -19,37 +19,56 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "read302.h"
+#include "read400.h"
 
-#include "style/style.h"
-#include "style/defaultstyle.h"
 #include "io/xml.h"
 
-#include "chordlist.h"
-#include "readstyle.h"
-
 #include "libmscore/score.h"
-#include "libmscore/staff.h"
-#include "libmscore/revisions.h"
-#include "libmscore/part.h"
-#include "libmscore/page.h"
-#include "libmscore/scorefont.h"
-#include "libmscore/audio.h"
-#include "libmscore/sig.h"
-#include "libmscore/barline.h"
-#include "libmscore/excerpt.h"
-#include "libmscore/spanner.h"
-#include "libmscore/scoreorder.h"
-#include "libmscore/measurebase.h"
 #include "libmscore/masterscore.h"
+#include "libmscore/audio.h"
+#include "libmscore/text.h"
+#include "libmscore/part.h"
+#include "libmscore/spanner.h"
+#include "libmscore/excerpt.h"
+#include "libmscore/staff.h"
 #include "libmscore/factory.h"
 
-using namespace mu;
 using namespace mu::engraving;
-using namespace mu::engraving::compat;
 using namespace Ms;
 
-bool Read302::readScore302(Ms::Score* score, XmlReader& e)
+bool Read400::read400(Ms::Score* score, XmlReader& e)
+{
+    if (!e.readNextStartElement()) {
+        qDebug("%s: xml file is empty", qPrintable(e.getDocName()));
+        return false;
+    }
+
+    if (e.name() == "museScore") {
+        while (e.readNextStartElement()) {
+            const QStringRef& tag(e.name());
+            if (tag == "programVersion") {
+                e.skipCurrentElement();
+            } else if (tag == "programRevision") {
+                e.skipCurrentElement();
+            } else if (tag == "Revision") {
+                e.skipCurrentElement();
+            } else if (tag == "Score") {
+                if (!readScore400(score, e)) {
+                    return false;
+                }
+            } else {
+                e.skipCurrentElement();
+            }
+        }
+    } else {
+        qDebug("%s: invalid structure of xml file", qPrintable(e.getDocName()));
+        return false;
+    }
+
+    return true;
+}
+
+bool Read400::readScore400(Ms::Score* score, XmlReader& e)
 {
     // HACK
     // style setting compatibility settings for minor versions
@@ -110,17 +129,8 @@ bool Read302::readScore302(Ms::Score* score, XmlReader& e)
         } else if (tag == "markIrregularMeasures") {
             score->_markIrregularMeasures = e.readInt();
         } else if (tag == "Style") {
-            qreal sp = score->style().value(Sid::spatium).toDouble();
-
-            ReadStyleHook::readStyleTag(score, e);
-
-            // if (_layoutMode == LayoutMode::FLOAT || _layoutMode == LayoutMode::SYSTEM) {
-            if (score->layoutOptions().isMode(LayoutMode::FLOAT)) {
-                // style should not change spatium in
-                // float mode
-                score->style().set(Sid::spatium, sp);
-            }
-            score->_scoreFont = ScoreFont::fontByName(score->style().value(Sid::MusicalSymbolFont).toString());
+            // Since version 400, the style is stored in a separate file
+            e.skipCurrentElement();
         } else if (tag == "copyright" || tag == "rights") {
             score->setMetaTag("copyright", Text::readXmlText(e, score));
         } else if (tag == "movement-number") {
@@ -157,19 +167,8 @@ bool Read302::readScore302(Ms::Score* score, XmlReader& e)
             s->read(e);
             score->addSpanner(s);
         } else if (tag == "Excerpt") {
-            if (MScore::noExcerpts) {
-                e.skipCurrentElement();
-            } else {
-                if (score->isMaster()) {
-                    MasterScore* mScore = static_cast<MasterScore*>(score);
-                    Excerpt* ex = new Excerpt(mScore);
-                    ex->read(e);
-                    mScore->excerpts().append(ex);
-                } else {
-                    qDebug("Score::read(): part cannot have parts");
-                    e.skipCurrentElement();
-                }
-            }
+            // Since version 400, the Excerpts are stored in a separate file
+            e.skipCurrentElement();
         } else if (e.name() == "Tracklist") {
             int strack = e.intAttribute("sTrack",   -1);
             int dtrack = e.intAttribute("dstTrack", -1);
@@ -177,26 +176,9 @@ bool Read302::readScore302(Ms::Score* score, XmlReader& e)
                 e.tracks().insert(strack, dtrack);
             }
             e.skipCurrentElement();
-        } else if (tag == "Score") {            // recursion
-            if (MScore::noExcerpts) {
-                e.skipCurrentElement();
-            } else {
-                e.tracks().clear();             // ???
-                MasterScore* m = score->masterScore();
-                Score* s = m->createScore();
-
-                ReadStyleHook::setupDefaultStyle(s);
-
-                Excerpt* ex = new Excerpt(m);
-                ex->setPartScore(s);
-                e.setLastMeasure(nullptr);
-
-                readScore302(s, e);
-
-                s->linkMeasures(m);
-                ex->setTracks(e.tracks());
-                m->addExcerpt(ex);
-            }
+        } else if (tag == "Score") {
+            // Since version 400, the Excerpts is stored in a separate file
+            e.skipCurrentElement();
         } else if (tag == "name") {
             QString n = e.readElementText();
             if (!score->isMaster()) {     //ignore the name if it's not a child score
@@ -256,31 +238,6 @@ bool Read302::readScore302(Ms::Score* score, XmlReader& e)
     }
 
 //      createPlayEvents();
+
     return true;
-}
-
-Score::FileError Read302::read302(Ms::MasterScore* masterScore, XmlReader& e)
-{
-    while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
-        if (tag == "programVersion") {
-            masterScore->setMscoreVersion(e.readElementText());
-            masterScore->parseVersion(masterScore->mscoreVersion());
-        } else if (tag == "programRevision") {
-            masterScore->setMscoreRevision(e.readIntHex());
-        } else if (tag == "Score") {
-            if (!readScore302(masterScore, e)) {
-                if (e.error() == QXmlStreamReader::CustomError) {
-                    return Score::FileError::FILE_CRITICALLY_CORRUPTED;
-                }
-                return Score::FileError::FILE_BAD_FORMAT;
-            }
-        } else if (tag == "Revision") {
-            Revision* revision = new Revision;
-            revision->read(e);
-            masterScore->revisions()->add(revision);
-        }
-    }
-
-    return Score::FileError::FILE_NO_ERROR;
 }

@@ -27,7 +27,6 @@
 
 #include "style/defaultstyle.h"
 
-#include "compat/chordlist.h"
 #include "compat/writescorehook.h"
 #include "io/xml.h"
 

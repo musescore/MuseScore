@@ -217,7 +217,6 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/property.h
     ${CMAKE_CURRENT_LIST_DIR}/range.cpp
     ${CMAKE_CURRENT_LIST_DIR}/range.h
-    ${CMAKE_CURRENT_LIST_DIR}/read400.cpp
     ${CMAKE_CURRENT_LIST_DIR}/realizedharmony.cpp
     ${CMAKE_CURRENT_LIST_DIR}/realizedharmony.h
     ${CMAKE_CURRENT_LIST_DIR}/rehearsalmark.cpp

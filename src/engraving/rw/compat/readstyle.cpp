@@ -27,7 +27,7 @@
 
 #include "libmscore/masterscore.h"
 
-#include "chordlist.h"
+#include "readchordlisthook.h"
 
 #include "log.h"
 

@@ -19,26 +19,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_SCOREACCESS_H
-#define MU_ENGRAVING_SCOREACCESS_H
+#ifndef MU_ENGRAVING_SCOREREADER_H
+#define MU_ENGRAVING_SCOREREADER_H
 
-#include "libmscore/masterscore.h"
+#include "../engravingerrors.h"
+#include "../infrastructure/io/xml.h"
+#include "../infrastructure/io/mscreader.h"
+#include "readcontext.h"
+#include "../libmscore/masterscore.h"
 
-//! NOTE This is a temporary class for controlling (master)score access
-//! See Project class description for detail
-
-namespace mu::engraving::compat {
-class ScoreAccess
+namespace mu::engraving {
+class ScoreReader
 {
 public:
+    ScoreReader() = default;
 
-    static Ms::MasterScore* createMasterScore();
-    static Ms::MasterScore* createMasterScoreWithBaseStyle();
-    static Ms::MasterScore* createMasterScoreWithDefaultStyle();
-    static Ms::MasterScore* createMasterScore(const Ms::MStyle& style);
+    Err loadMscz(Ms::MasterScore* score, const mu::engraving::MscReader& mscReader, bool ignoreVersionError);
 
-    static bool exportPart(mu::engraving::MscWriter& mscWriter, Ms::Score* partScore);
+private:
+
+    friend class Ms::MasterScore;
+
+    Err read(Ms::MasterScore* score, Ms::XmlReader&, ReadContext& ctx, compat::ReadStyleHook* styleHook = nullptr);
+    Err doRead(Ms::MasterScore* score, Ms::XmlReader& e);
 };
 }
 
-#endif // MU_ENGRAVING_SCOREACCESS_H
+#endif // MU_ENGRAVING_SCOREREADER_H

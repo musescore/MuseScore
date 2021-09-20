@@ -74,6 +74,8 @@ public:
 
     static Ms::SymId articulationNames2SymId206(const QString& s);
 
+    static Ms::NoteHead::Group convertHeadGroup(int i);
+
 private:
     static bool readScore206(Ms::Score* score, Ms::XmlReader& e, ReadContext& ctx);
     static void readPart206(Ms::Part* part, Ms::XmlReader& e, ReadContext& ctx);
