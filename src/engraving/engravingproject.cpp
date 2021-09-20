@@ -24,7 +24,7 @@
 #include <QFileInfo>
 
 #include "style/defaultstyle.h"
-
+#include "rw/scorereader.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/part.h"
 #include "libmscore/undo.h"
@@ -119,14 +119,15 @@ Ms::MasterScore* EngravingProject::masterScore() const
     return m_masterScore;
 }
 
-Err EngravingProject::loadMscz(const MscReader& reader, bool ignoreVersionError)
+Err EngravingProject::loadMscz(const MscReader& msc, bool ignoreVersionError)
 {
     TRACEFUNC;
 
     engravingElementsProvider()->clearStatistic();
-    Ms::Score::FileError err = m_masterScore->loadMscz(reader, ignoreVersionError);
+    ScoreReader scoreReader;
+    Err err = scoreReader.loadMscz(m_masterScore, msc, ignoreVersionError);
     engravingElementsProvider()->printStatistic("=== Load ===");
-    return scoreFileErrorToErr(err);
+    return err;
 }
 
 bool EngravingProject::writeMscz(mu::engraving::MscWriter& writer, bool onlySelection, bool createThumbnail)

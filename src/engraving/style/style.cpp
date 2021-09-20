@@ -23,7 +23,7 @@
 #include "style.h"
 
 #include "compat/pageformat.h"
-#include "compat/chordlist.h"
+#include "rw/compat/readchordlisthook.h"
 #include "io/xml.h"
 
 #include "libmscore/mscore.h"

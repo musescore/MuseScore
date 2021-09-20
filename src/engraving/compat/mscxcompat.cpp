@@ -24,7 +24,7 @@
 #include <QFile>
 #include <QBuffer>
 
-#include "scoreaccess.h"
+#include "../rw/scorereader.h"
 
 #include "log.h"
 
@@ -83,8 +83,9 @@ Ms::Score::FileError mu::engraving::compat::loadMsczOrMscx(Ms::MasterScore* scor
     MscReader reader(params);
     reader.open();
 
-    Ms::Score::FileError err = ScoreAccess::loadMscz(score, reader, ignoreVersionError);
-    return err;
+    ScoreReader scoreReader;
+    engraving::Err err = scoreReader.loadMscz(score, reader, ignoreVersionError);
+    return err == Err::NoError ? Ms::Score::FileError::FILE_NO_ERROR : Ms::Score::FileError::FILE_ERROR;
 }
 
 mu::engraving::Err mu::engraving::compat::loadMsczOrMscx(EngravingProjectPtr project, const QString& path, bool ignoreVersionError)

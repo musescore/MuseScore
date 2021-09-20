@@ -30,10 +30,7 @@
 #include "io/xml.h"
 #include "style/defaultstyle.h"
 #include "compat/writescorehook.h"
-#include "compat/read114.h"
-#include "compat/read206.h"
-#include "compat/read302.h"
-#include "compat/readstyle.h"
+#include "rw/scorereader.h"
 
 #include "engravingproject.h"
 
@@ -215,99 +212,6 @@ const RepeatList& MasterScore::repeatList2() const
     return *_repeatList2;
 }
 
-Score::FileError MasterScore::loadMscz(const mu::engraving::MscReader& mscReader, bool ignoreVersionError)
-{
-    using namespace mu::engraving;
-
-    IF_ASSERT_FAILED(mscReader.isOpened()) {
-        return FileError::FILE_OPEN_ERROR;
-    }
-
-    ScoreLoad sl;
-    fileInfo()->setFile(mscReader.params().filePath);
-
-    FileError retval;
-    // Read style
-    {
-        QByteArray styleData = mscReader.readStyleFile();
-        QBuffer buf(&styleData);
-        buf.open(QIODevice::ReadOnly);
-        style().read(&buf);
-    }
-
-    // Read score
-    {
-        QByteArray scoreData = mscReader.readScoreFile();
-        QString completeBaseName = masterScore()->fileInfo()->completeBaseName();
-
-        compat::ReadStyleHook styleHook(this, scoreData, completeBaseName);
-
-        XmlReader xml(scoreData);
-        xml.setDocName(completeBaseName);
-        mu::engraving::ReadContext ctx(this);
-        ctx.setIgnoreVersionError(ignoreVersionError);
-        retval = read(xml, ctx, &styleHook);
-    }
-
-    // Read excerpts
-    if (mscVersion() >= 400) {
-        std::vector<QString> excerptNames = mscReader.excerptNames();
-        for (const QString& excerptName : excerptNames) {
-            Score* partScore = this->createScore();
-
-            compat::ReadStyleHook::setupDefaultStyle(partScore);
-
-            Excerpt* ex = new Excerpt(this);
-            ex->setPartScore(partScore);
-
-            QByteArray excerptStyleData = mscReader.readExcerptStyleFile(excerptName);
-            QBuffer excerptStyleBuf(&excerptStyleData);
-            excerptStyleBuf.open(QIODevice::ReadOnly);
-            partScore->style().read(&excerptStyleBuf);
-
-            QByteArray excerptData = mscReader.readExcerptFile(excerptName);
-            XmlReader xml(excerptData);
-            xml.setDocName(excerptName);
-            partScore->read400(xml);
-
-            partScore->linkMeasures(this);
-            ex->setTracks(xml.tracks());
-
-            ex->setTitle(excerptName);
-
-            this->addExcerpt(ex);
-        }
-    }
-
-    // Read ChordList
-    {
-        QByteArray styleData = mscReader.readChordListFile();
-        QBuffer buf(&styleData);
-        buf.open(QIODevice::ReadOnly);
-        chordList()->read(&buf);
-    }
-
-    // Read images
-    {
-        if (!MScore::noImages) {
-            std::vector<QString> images = mscReader.imageFileNames();
-            for (const QString& name : images) {
-                imageStore.add(name, mscReader.readImageFile(name));
-            }
-        }
-    }
-
-    //  Read audio
-    {
-        if (audio()) {
-            QByteArray dbuf1 = mscReader.readAudioFile();
-            audio()->setData(dbuf1);
-        }
-    }
-
-    return retval;
-}
-
 bool MasterScore::writeMscz(MscWriter& mscWriter, bool onlySelection, bool doCreateThumbnail)
 {
     IF_ASSERT_FAILED(mscWriter.isOpened()) {
@@ -455,130 +359,6 @@ bool MasterScore::exportPart(mu::engraving::MscWriter& mscWriter, Score* partSco
 }
 
 //---------------------------------------------------------
-//   parseVersion
-//---------------------------------------------------------
-
-void MasterScore::parseVersion(const QString& val)
-{
-    int appVersion = version();
-
-    QRegularExpression majorMinorPatchRegEx("(\\d+)\\.(\\d+)\\.(\\d+)");
-    QRegularExpressionMatch scoreVersionMatch = majorMinorPatchRegEx.match(val);
-
-    if (scoreVersionMatch.hasMatch()) {
-        QStringList scoreVersionList = scoreVersionMatch.capturedTexts();
-        if (scoreVersionList.size() == 4) {
-            int rv1 = scoreVersionList[1].toInt();
-            int rv2 = scoreVersionList[2].toInt();
-            int rv3 = scoreVersionList[3].toInt();
-
-            int scoreVersion = rv1 * 10000 + rv2 * 100 + rv3;
-            if (scoreVersion > appVersion) {
-                qDebug("Parsed score version is higher than current app version: %d vs %d", scoreVersion, appVersion);
-            }
-
-            return;
-        }
-    }
-
-    QRegularExpression majorMinorRegEx("(\\d+)\\.(\\d+)");
-    scoreVersionMatch = majorMinorRegEx.match(val);
-
-    if (scoreVersionMatch.hasMatch()) {
-        QStringList scoreVersionList = scoreVersionMatch.capturedTexts();
-        if (scoreVersionList.size() == 3) {
-            int rv1 = scoreVersionList[1].toInt();
-            int rv2 = scoreVersionList[2].toInt();
-
-            int scoreVersion = rv1 * 10000 + rv2 * 100;
-            if (scoreVersion > appVersion) {
-                qDebug("Parsed score version is higher than current app version: %d vs %d", scoreVersion, appVersion);
-            }
-
-            return;
-        }
-    }
-
-    qDebug("Cannot parse score version: %s", qPrintable(val));
-}
-
-//---------------------------------------------------------
-//   read1
-//    return true on success
-//---------------------------------------------------------
-
-Score::FileError MasterScore::read(XmlReader& e, mu::engraving::ReadContext& ctx, mu::engraving::compat::ReadStyleHook* styleHook)
-{
-    while (e.readNextStartElement()) {
-        if (e.name() == "museScore") {
-            const QString& version = e.attribute("version");
-            QStringList sl = version.split('.');
-            setMscVersion(sl[0].toInt() * 100 + sl[1].toInt());
-
-            if (!ctx.ignoreVersionError()) {
-                if (mscVersion() > MSCVERSION) {
-                    return FileError::FILE_TOO_NEW;
-                }
-                if (mscVersion() < 114) {
-                    return FileError::FILE_TOO_OLD;
-                }
-                if (mscVersion() == 300) {
-                    return FileError::FILE_OLD_300_FORMAT;
-                }
-            }
-
-            if (styleHook) {
-                styleHook->setupDefaultStyle();
-            }
-
-            Score::FileError error;
-            if (mscVersion() <= 114) {
-                error = compat::Read114::read114(this, e, ctx);
-            } else if (mscVersion() <= 207) {
-                error = compat::Read206::read206(this, e, ctx);
-            } else if (mscVersion() < 400 || MScore::testMode) {
-                error = compat::Read302::read302(this, e);
-            } else {
-                error = doRead(e);
-            }
-
-            setCreated(false);
-            setExcerptsChanged(false);
-            return error;
-        } else {
-            e.unknown();
-        }
-    }
-    return FileError::FILE_CORRUPTED;
-}
-
-Score::FileError MasterScore::doRead(XmlReader& e)
-{
-    while (e.readNextStartElement()) {
-        const QStringRef& tag(e.name());
-        if (tag == "programVersion") {
-            setMscoreVersion(e.readElementText());
-            parseVersion(mscoreVersion());
-        } else if (tag == "programRevision") {
-            setMscoreRevision(e.readIntHex());
-        } else if (tag == "Score") {
-            if (!Score::readScore400(e)) {
-                if (e.error() == QXmlStreamReader::CustomError) {
-                    return FileError::FILE_CRITICALLY_CORRUPTED;
-                }
-                return FileError::FILE_BAD_FORMAT;
-            }
-        } else if (tag == "Revision") {
-            Revision* revision = new Revision;
-            revision->read(e);
-            revisions()->add(revision);
-        }
-    }
-
-    return FileError::FILE_NO_ERROR;
-}
-
-//---------------------------------------------------------
 //   addExcerpt
 //---------------------------------------------------------
 
@@ -672,7 +452,7 @@ MasterScore* MasterScore::clone()
 
     ReadContext ctx(this);
     ctx.setIgnoreVersionError(true);
-    score->read(r, ctx);
+    ScoreReader().read(score, r, ctx);
 
     score->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
     score->doLayout();
