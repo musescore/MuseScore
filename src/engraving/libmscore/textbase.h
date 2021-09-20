@@ -340,6 +340,7 @@ public:
     qreal lineSpacing() const;
     qreal lineHeight() const;
     virtual qreal baseLine() const override;
+    qreal visibleHeight();
 
     bool empty() const { return xmlText().isEmpty(); }
     void clear() { setXmlText(QString()); }
