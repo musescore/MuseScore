@@ -59,6 +59,7 @@ class Page final : public EngravingItem
 
     QString replaceTextMacros(const QString&) const;
     void drawHeaderFooter(mu::draw::Painter*, int area, const QString&) const;
+    Text* layoutHeaderFooter(int area, const QString& ss) const;
 
 public:
 
@@ -86,6 +87,8 @@ public:
     qreal bm() const;
     qreal lm() const;
     qreal rm() const;
+    qreal headerHeight() const;
+    qreal footerHeight() const;
 
     void draw(mu::draw::Painter*) const override;
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
