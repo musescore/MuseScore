@@ -36,6 +36,14 @@ OttavaSettingsModel::OttavaSettingsModel(QObject* parent, IElementRepositoryServ
     setTitle(qtrc("inspector", "Ottava"));
     setModelType(InspectorModelType::TYPE_OTTAVA);
 
+    static const QList<HookTypeInfo> hookTypes {
+        { Ms::HookType::NONE, IconCode::LINE_NORMAL },
+        { Ms::HookType::HOOK_90, IconCode::LINE_WITH_END_HOOK },
+        { Ms::HookType::HOOK_45, IconCode::LINE_WITH_ANGLED_END_HOOK }
+    };
+
+    setPossibleHookTypes(hookTypes );
+
     createProperties();
 }
 
@@ -66,27 +74,6 @@ QVariantList OttavaSettingsModel::possibleOttavaTypes() const
         QVariantMap obj;
         obj["value"] = static_cast<int>(type);
         obj["text"] = ottavaTypes[type];
-
-        result << obj;
-    }
-
-    return result;
-}
-
-QVariantList OttavaSettingsModel::possibleEndHookTypes() const
-{
-    static const QMap<Ms::HookType, IconCode> hookTypes {
-        { Ms::HookType::NONE, IconCode::LINE_NORMAL },
-        { Ms::HookType::HOOK_90, IconCode::LINE_WITH_END_HOOK },
-        { Ms::HookType::HOOK_45, IconCode::LINE_WITH_ANGLED_END_HOOK }
-    };
-
-    QVariantList result;
-
-    for (Ms::HookType type : hookTypes.keys()) {
-        QVariantMap obj;
-        obj["value"] = static_cast<int>(type);
-        obj["iconCode"] = static_cast<int>(hookTypes[type]);
 
         result << obj;
     }

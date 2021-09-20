@@ -67,19 +67,6 @@ TabPanel {
     }
 
     Component {
-        id: crescendoStyleSettings
-
-        CrescendoStyleSettings {
-            anchors.top: parent.top
-            anchors.topMargin: 24
-
-            width: root.width
-
-            model: root.model
-        }
-    }
-
-    Component {
         id: ottavaStyleSettings
 
         OttavaStyleSettings {
@@ -102,6 +89,7 @@ TabPanel {
             width: root.width
 
             model: root.model
+            possibleEndHookTypes: root.model ? root.model.possibleEndHookTypes() : null
         }
     }
 
@@ -116,7 +104,6 @@ TabPanel {
             switch(modelType) {
             case Inspector.TYPE_HAIRPIN: return hairpinStyleSettings
             case Inspector.TYPE_VOLTA: return voltaStyleSettings
-            case Inspector.TYPE_CRESCENDO: return crescendoStyleSettings
             case Inspector.TYPE_OTTAVA: return ottavaStyleSettings
             }
 

@@ -33,6 +33,7 @@ public:
     explicit CrescendoSettingsModel(QObject* parent, IElementRepositoryService* repository);
 
 private:
+    void createProperties() override;
     void requestElements() override;
 };
 }

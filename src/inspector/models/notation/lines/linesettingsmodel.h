@@ -24,6 +24,8 @@
 
 #include "models/abstractinspectormodel.h"
 
+#include "ui/view/iconcodes.h"
+
 namespace mu::inspector {
 class LineSettingsModel : public AbstractInspectorModel
 {
@@ -85,11 +87,18 @@ public:
     PropertyItem* endTextHorizontalOffset() const;
     PropertyItem* endTextVerticalOffset() const;
 
+    Q_INVOKABLE QVariantList possibleEndHookTypes() const;
+
 protected:
     enum TextType {
         BeginingText,
         ContiniousText,
         EndText
+    };
+
+    struct HookTypeInfo {
+        Ms::HookType type = Ms::HookType::NONE;
+        mu::ui::IconCode::Code icon = mu::ui::IconCode::Code::NONE;
     };
 
     void createProperties() override;
@@ -99,6 +108,8 @@ protected:
     virtual void onUpdateLinePropertiesAvailability();
 
     virtual bool isTextVisible(TextType type) const;
+
+    void setPossibleHookTypes(const QList<HookTypeInfo>& types);
 
 private:
     PropertyItem* m_lineStyle = nullptr;
@@ -126,6 +137,8 @@ private:
     PropertyItem* m_endText = nullptr;
     PropertyItem* m_endTextHorizontalOffset = nullptr;
     PropertyItem* m_endTextVerticalOffset = nullptr;
+
+    QList<HookTypeInfo> m_possibleHookTypes;
 };
 }
 

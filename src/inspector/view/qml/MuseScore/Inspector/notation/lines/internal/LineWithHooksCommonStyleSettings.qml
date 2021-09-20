@@ -47,8 +47,10 @@ Column {
         CheckBox {
             id: showLineCheckBox
 
-            isIndeterminate: root.model ? root.model.isLineVisible.isUndefined : false
-            checked: root.model && !isIndeterminate ? root.model.isLineVisible.value : false
+            isIndeterminate: root.model && root.model.isLineVisible.isUndefined
+            checked: root.model && !isIndeterminate && root.model.isLineVisible.value
+            visible: root.model && root.model.isLineVisible.isVisible
+
             text: qsTrc("inspector", "Show line")
 
             onClicked: {
@@ -57,8 +59,10 @@ Column {
         }
 
         CheckBox {
-            isIndeterminate: root.model ? root.model.allowDiagonal.isUndefined : false
-            checked: root.model && !isIndeterminate ? root.model.allowDiagonal.value : false
+            isIndeterminate: root.model && root.model.allowDiagonal.isUndefined
+            checked: root.model && !isIndeterminate && root.model.allowDiagonal.value
+            visible: root.model && root.model.allowDiagonal.isVisible
+
             text: qsTrc("inspector", "Allow diagonal")
 
             onClicked: {

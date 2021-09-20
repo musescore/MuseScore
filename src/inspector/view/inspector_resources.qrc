@@ -36,7 +36,6 @@
         <file>qml/MuseScore/Inspector/notation/lines/internal/LineTextSettingsTab.qml</file>
         <file>qml/MuseScore/Inspector/notation/lines/internal/LineStyleSection.qml</file>
         <file>qml/MuseScore/Inspector/notation/lines/internal/LineTypeSection.qml</file>
-        <file>qml/MuseScore/Inspector/notation/lines/internal/CrescendoStyleSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/frames/internal/HorizontalGapsSection.qml</file>
         <file>qml/MuseScore/Inspector/notation/frames/internal/VerticalGapsSection.qml</file>
         <file>qml/MuseScore/Inspector/notation/frames/internal/HorizontalMarginsSection.qml</file>
