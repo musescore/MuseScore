@@ -31,6 +31,9 @@ FlatButton {
     id: root
 
     property var model: null
+    property string currentValueAccessibleName: root.model.timeSignatureAccessibleName(root.model.timeSignatureType,
+                                                                                       root.model.timeSignature.numerator,
+                                                                                       root.model.timeSignature.denominator)
 
     property alias popupAnchorItem: popup.anchorItem
 
@@ -127,6 +130,9 @@ FlatButton {
         TimeSignatureFraction {
             anchors.fill: parent
 
+            property string accessibleName: root.model.timeSignatureAccessibleName(AdditionalInfoModel.Fraction,
+                                                                                   numerator, denominator)
+
             enabled: (root.model.timeSignatureType === AdditionalInfoModel.Fraction)
             availableDenominators: root.model.timeSignatureDenominators()
 
@@ -151,9 +157,11 @@ FlatButton {
         id: commonComp
 
         StyledIconLabel {
-            horizontalAlignment: Text.AlignLeft
+            property string accessibleName: root.model.timeSignatureAccessibleName(AdditionalInfoModel.Common)
+
             font.family: ui.theme.musicalFont.family
             font.pixelSize: 30
+            horizontalAlignment: Text.AlignLeft
             iconCode: MusicalSymbolCodes.TIMESIG_COMMON
         }
     }
@@ -162,9 +170,11 @@ FlatButton {
         id: cutComp
 
         StyledIconLabel {
-            horizontalAlignment: Text.AlignLeft
+            property string accessibleName: root.model.timeSignatureAccessibleName(AdditionalInfoModel.Cut)
+
             font.family: ui.theme.musicalFont.family
             font.pixelSize: 30
+            horizontalAlignment: Text.AlignLeft
             iconCode: MusicalSymbolCodes.TIMESIG_CUT
         }
     }

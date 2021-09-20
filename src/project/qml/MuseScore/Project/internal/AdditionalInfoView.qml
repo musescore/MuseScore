@@ -70,6 +70,7 @@ Row {
         name: "NavPanel"
         direction: NavigationPanel.Horizontal
         enabled: root.visible
+        accessible.name: qsTrc("project", "Score options")
     }
 
     Column {
@@ -82,6 +83,8 @@ Row {
         spacing: 10
 
         StyledTextLabel {
+            id: keySignatureTitle
+
             anchors.left: parent.left
             anchors.right: parent.right
 
@@ -105,6 +108,7 @@ Row {
             navigation.name: "KeySignatureButton"
             navigation.panel: navPanel
             navigation.column: 0
+            accessible.name: keySignatureTitle.text + " " + currentValueAccessibleName
         }
     }
 
@@ -117,6 +121,8 @@ Row {
         spacing: 10
 
         StyledTextLabel {
+            id: timeSignatureTitle
+
             anchors.left: parent.left
             anchors.right: parent.right
 
@@ -138,6 +144,7 @@ Row {
             navigation.name: "TimeSignatureButton"
             navigation.panel: navPanel
             navigation.column: 1
+            accessible.name: timeSignatureTitle.text + " " + currentValueAccessibleName
         }
     }
 
@@ -150,6 +157,7 @@ Row {
         spacing: 10
 
         StyledTextLabel {
+            id: tempoSignatureTitle
             anchors.left: parent.left
             anchors.right: parent.right
 
@@ -171,6 +179,7 @@ Row {
             navigation.name: "TempoSignatureButton"
             navigation.panel: navPanel
             navigation.column: 2
+            accessible.name: tempoSignatureTitle.text + " " + currentValueAccessibleName
         }
     }
 
@@ -183,6 +192,7 @@ Row {
         spacing: 10
 
         StyledTextLabel {
+            id: measuresSignatureTitle
             anchors.left: parent.left
             anchors.right: parent.right
 
@@ -204,6 +214,7 @@ Row {
             navigation.name: "MeasuresSignatureButton"
             navigation.panel: navPanel
             navigation.column: 3
+            accessible.name: measuresSignatureTitle.text + " " + currentValueAccessibleName
         }
     }
 }

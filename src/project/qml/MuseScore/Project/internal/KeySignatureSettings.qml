@@ -32,6 +32,7 @@ FlatButton {
 
     property var model: null
     property var mode: bar.currentIndex === 0 ? "major" : "minor"
+    property string currentValueAccessibleName: title.text
 
     property alias popupAnchorItem: popup.anchorItem
 
@@ -39,6 +40,7 @@ FlatButton {
     accentButton: popup.isOpened
 
     KeySignature {
+        id: title
         icon: model.keySignature.icon
         text: mode === "major" ? model.keySignature.titleMajor : model.keySignature.titleMinor
     }

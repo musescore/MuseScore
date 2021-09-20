@@ -32,6 +32,8 @@ FlatButton {
     id: root
 
     property var model: null
+    property string currentValueAccessibleName: model.tempoAccessibleName(root.model.tempo.noteIcon,
+                                                                          root.model.tempo.withDot) + " " + root.model.tempo.value
 
     property alias popupAnchorItem: popup.anchorItem
 
@@ -132,6 +134,8 @@ FlatButton {
                     navigation.panel: content.navigationPanel
                     navigation.row: 1
                     navigation.column: model.index
+
+                    navigation.accessible.name: root.model.tempoAccessibleName(modelData.noteIcon, modelData.withDot)
 
                     onClicked: {
                         var tempo = root.model.tempo

@@ -31,12 +31,16 @@ FlatButton {
     id: root
 
     property var model: null
+    property string currentValueAccessibleName: title.text
+
     property alias popupAnchorItem: popup.anchorItem
 
     height: 96
     accentButton: popup.isOpened
 
     StyledTextLabel {
+        id: title
+
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
 
@@ -135,6 +139,7 @@ FlatButton {
             }
 
             StyledTextLabel {
+                id: numberOfMeasuresLabel
                 Layout.topMargin: 26
                 Layout.leftMargin: 32
                 Layout.rightMargin: 32
@@ -162,6 +167,7 @@ FlatButton {
                 navigation.panel: content.navigationPanel
                 navigation.row: 2
                 navigation.column: 0
+                navigation.accessible.name: numberOfMeasuresLabel.text + " " + currentValue
 
                 onValueEdited: {
                     root.model.measureCount = newValue

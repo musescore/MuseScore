@@ -143,27 +143,47 @@ QVariantMap AdditionalInfoModel::keySignature() const
 
 QVariantMap AdditionalInfoModel::timeSignature() const
 {
+    notation::Fraction timeSignatureFraction;
+
     switch (m_timeSignatureType) {
     case TimeSigType::FOUR_FOUR:
-        return FOUR_FOUR_TIME_SIGNATURE.toMap();
+        timeSignatureFraction = FOUR_FOUR_TIME_SIGNATURE;
+        break;
     case TimeSigType::ALLA_BREVE:
-        return ALLA_BREVE_TIME_SIGNATURE.toMap();
+        timeSignatureFraction = ALLA_BREVE_TIME_SIGNATURE;
+        break;
     case TimeSigType::CUT_BACH:
-        return CUT_BACH_TIME_SIGNATURE.toMap();
+        timeSignatureFraction = CUT_BACH_TIME_SIGNATURE;
         break;
     case TimeSigType::CUT_TRIPLE:
-        return CUT_TRIPLE_TIME_SIGNATURE.toMap();
+        timeSignatureFraction = CUT_TRIPLE_TIME_SIGNATURE;
         break;
     case TimeSigType::NORMAL:
+        timeSignatureFraction = m_timeSignature;
         break;
     }
 
-    return m_timeSignature.toMap();
+    return timeSignatureFraction.toMap();
 }
 
 int AdditionalInfoModel::timeSignatureType() const
 {
     return static_cast<int>(m_timeSignatureType);
+}
+
+QString AdditionalInfoModel::timeSignatureAccessibleName(int timeSignatureType,
+                                                         int numerator, int denominator) const
+{
+    switch (timeSignatureType) {
+    case Fraction:
+        return qtrc("project", "%1/%2").arg(QString::number(numerator), QString::number(denominator));
+    case Common:
+        return qtrc("symUserNames", "Common time");
+    case Cut:
+        return qtrc("symUserNames", "Cut time");
+    }
+
+    return QString();
 }
 
 void AdditionalInfoModel::setTimeSignatureType(int timeSignatureType)
@@ -282,6 +302,37 @@ QVariantList AdditionalInfoModel::tempoNotes() const
           << makeNote(MusicalSymbolCode::SEMIBREVE);
 
     return notes;
+}
+
+QString AdditionalInfoModel::tempoAccessibleName(int noteIcon, bool withDot) const
+{
+    QString name;
+
+    if (withDot) {
+        name += qtrc("project", "Dotted") + " ";
+    }
+
+    switch (static_cast<MusicalSymbolCode>(noteIcon)) {
+    case MusicalSymbolCode::SEMIQUAVER:
+        name += qtrc("project", "semiquaver");
+        break;
+    case MusicalSymbolCode::QUAVER:
+        name += qtrc("project", "quaver");
+        break;
+    case MusicalSymbolCode::CROTCHET:
+        name += qtrc("project", "crotchet");
+        break;
+    case MusicalSymbolCode::MINIM:
+        name += qtrc("project", "minim");
+        break;
+    case MusicalSymbolCode::SEMIBREVE:
+        name += qtrc("project", "semibreve");
+        break;
+    default:
+        break;
+    }
+
+    return name;
 }
 
 QVariantMap AdditionalInfoModel::pickupTimeSignature() const
