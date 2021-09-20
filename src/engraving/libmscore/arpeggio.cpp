@@ -607,13 +607,16 @@ qreal Arpeggio::insetDistance(QVector<Accidental*>& accidentals, qreal mag_) con
     qreal top = furthestAccidental->note()->pos().y() * mag_ + bbox.top() * mag_;
     qreal bottom = furthestAccidental->note()->pos().y() * mag_ + bbox.bottom() * mag_;
 
-    // if it collides with the top arrow/hoo
-    if (hasTopArrow && top <= arpeggioTop) {
-        return accidentalCutOutX;
-    }
-
-    // if it collides with the bottom arrow/hook
-    if (hasBottomArrow && bottom >= arpeggioBottom) {
+    // if it collides with the top arrow/hook
+    if ((hasTopArrow && top <= arpeggioTop)
+        // if it collides with the bottom arrow/hook
+        || (hasBottomArrow && bottom >= arpeggioBottom)) {
+        // optical adjustment for one edge case
+        if (type == ArpeggioType::BRACKET
+            && (furthestAccidental->symbol() == SymId::accidentalNatural
+                || furthestAccidental->symbol() == SymId::accidentalFlat)) {
+            return accidentalCutOutX + score()->styleP(Sid::ArpeggioAccidentalDistance) * mag_ / 2;
+        }
         return accidentalCutOutX;
     }
 
