@@ -50,7 +50,8 @@ enum class DragStyle
     SELECTION_RECT,
     NOTE_POSITION,
     NOTE_LENGTH_START,
-    NOTE_LENGTH_END
+    NOTE_LENGTH_END,
+    DRAW_NOTE
 };
 
 struct BarPattern
@@ -175,7 +176,7 @@ private:
     void insertNote(int modifiers);
     void cutChord(const QPointF& pos);
     void eraseNote(const QPointF& pos);
-    Ms::Fraction roundDownToSubdivision(double wholeNote);
+    Ms::Fraction roundToSubdivision(double wholeNote, bool down = true);
 
     void pasteNotes(const QString& copiedNotes, Ms::Fraction pasteStartTick, Ms::Fraction lengthOffset, int pitchOffset, bool xIsOffset);
     std::vector<Ms::Note*> addNote(Ms::Fraction startTick, Ms::Fraction duration, int pitch, int track);
