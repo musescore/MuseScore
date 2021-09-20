@@ -166,22 +166,6 @@ void EngravingObject::doSetParent(EngravingObject* p)
 }
 
 //---------------------------------------------------------
-//   treeChildIdx
-//---------------------------------------------------------
-
-int EngravingObject::treeChildIdx(EngravingObject* child) const
-{
-    int i = 0;
-    for (const EngravingObject* el : (*this)) {
-        if (el == child) {
-            return i;
-        }
-        i++;
-    }
-    return -1;
-}
-
-//---------------------------------------------------------
 //   scanElements
 /// Recursively apply scanElements to all children.
 /// See also EngravingItem::scanElements.
@@ -189,7 +173,8 @@ int EngravingObject::treeChildIdx(EngravingObject* child) const
 
 void EngravingObject::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
-    for (EngravingObject* child : (*this)) {
+    for (int i = 0; i < scanChildCount(); ++i) {
+        EngravingObject* child = scanChild(i);
         child->scanElements(data, func, all);
     }
 }

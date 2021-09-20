@@ -66,18 +66,18 @@ namespace Ms {
 //   Score
 //---------------------------------------------------------
 
-EngravingObject* Score::treeParent() const
+EngravingObject* Score::scanParent() const
 {
     return nullptr;  // Score is root node
 }
 
-EngravingObject* Score::treeChild(int idx) const
+EngravingObject* Score::scanChild(int idx) const
 {
-    Q_ASSERT(0 <= idx && idx < treeChildCount());
+    Q_ASSERT(0 <= idx && idx < scanChildCount());
     return pages()[idx];
 }
 
-int Score::treeChildCount() const
+int Score::scanChildCount() const
 {
     return pages().size();
 }
@@ -86,18 +86,18 @@ int Score::treeChildCount() const
 //   Page
 //---------------------------------------------------------
 
-EngravingObject* Page::treeParent() const
+EngravingObject* Page::scanParent() const
 {
     return score();
 }
 
-EngravingObject* Page::treeChild(int idx) const
+EngravingObject* Page::scanChild(int idx) const
 {
-    Q_ASSERT(0 <= idx && idx < treeChildCount());
+    Q_ASSERT(0 <= idx && idx < scanChildCount());
     return systems()[idx];
 }
 
-int Page::treeChildCount() const
+int Page::scanChildCount() const
 {
     return systems().size();
 }
@@ -106,14 +106,14 @@ int Page::treeChildCount() const
 //   System
 //---------------------------------------------------------
 
-EngravingObject* System::treeParent() const
+EngravingObject* System::scanParent() const
 {
     return page();
 }
 
-EngravingObject* System::treeChild(int idx) const
+EngravingObject* System::scanChild(int idx) const
 {
-    Q_ASSERT(0 <= idx && idx < treeChildCount());
+    Q_ASSERT(0 <= idx && idx < scanChildCount());
     if (idx < int(brackets().size())) {
         return brackets()[idx];
     }
@@ -143,7 +143,7 @@ EngravingObject* System::treeChild(int idx) const
     return nullptr;
 }
 
-int System::treeChildCount() const
+int System::scanChildCount() const
 {
     int numChildren = 0;
     numChildren += brackets().size();
@@ -164,18 +164,18 @@ int System::treeChildCount() const
 //   MeasureBase
 //---------------------------------------------------------
 
-EngravingObject* MeasureBase::treeParent() const
+EngravingObject* MeasureBase::scanParent() const
 {
     return system();
 }
 
-EngravingObject* MeasureBase::treeChild(int idx) const
+EngravingObject* MeasureBase::scanChild(int idx) const
 {
-    Q_ASSERT(0 <= idx && idx < treeChildCount());
+    Q_ASSERT(0 <= idx && idx < scanChildCount());
     return el()[idx];
 }
 
-int MeasureBase::treeChildCount() const
+int MeasureBase::scanChildCount() const
 {
     return int(el().size());
 }
@@ -184,7 +184,7 @@ int MeasureBase::treeChildCount() const
 //   Measure
 //---------------------------------------------------------
 
-EngravingObject* Measure::treeParent() const
+EngravingObject* Measure::scanParent() const
 {
     // A MMRest measure will contain Measures that it has replaced
     // System > MMR > Measure
@@ -197,9 +197,9 @@ EngravingObject* Measure::treeParent() const
     return system();
 }
 
-EngravingObject* Measure::treeChild(int idx) const
+EngravingObject* Measure::scanChild(int idx) const
 {
-    Q_ASSERT(0 <= idx && idx < treeChildCount());
+    Q_ASSERT(0 <= idx && idx < scanChildCount());
 
     if (isMMRest()) {
         // if this measure is a MMR measure then add all child measures
@@ -266,7 +266,7 @@ EngravingObject* Measure::treeChild(int idx) const
     }
     const std::set<Spanner*>& unmanagedSpanners = score()->unmanagedSpanners();
     for (Spanner* s : unmanagedSpanners) {
-        if (s->treeParent() == this) {
+        if (s->scanParent() == this) {
             if (idx == 0) {
                 return s;
             }
@@ -274,10 +274,10 @@ EngravingObject* Measure::treeChild(int idx) const
         }
     }
 
-    return MeasureBase::treeChild(idx);
+    return MeasureBase::scanChild(idx);
 }
 
-int Measure::treeChildCount() const
+int Measure::scanChildCount() const
 {
     int numChildren = 0;
     if (isMMRest()) {
@@ -311,12 +311,12 @@ int Measure::treeChildCount() const
     }
     const std::set<Spanner*>& unmanagedSpanners = score()->unmanagedSpanners();
     for (Spanner* s : unmanagedSpanners) {
-        if (s->treeParent() == this) {
+        if (s->scanParent() == this) {
             numChildren++;
         }
     }
 
-    numChildren += MeasureBase::treeChildCount();
+    numChildren += MeasureBase::scanChildCount();
     return numChildren;
 }
 
@@ -324,14 +324,14 @@ int Measure::treeChildCount() const
 //   Segment
 //---------------------------------------------------------
 
-EngravingObject* Segment::treeParent() const
+EngravingObject* Segment::scanParent() const
 {
     return measure();
 }
 
-EngravingObject* Segment::treeChild(int idx) const
+EngravingObject* Segment::scanChild(int idx) const
 {
-    Q_ASSERT(0 <= idx && idx < treeChildCount());
+    Q_ASSERT(0 <= idx && idx < scanChildCount());
     for (int i = 0; i < int(_elist.size()); i++) {
         if (_elist[i]) {
             if (idx == 0) {
@@ -359,7 +359,7 @@ EngravingObject* Segment::treeChild(int idx) const
         }
         const std::set<Spanner*>& unmanagedSpanners = score()->unmanagedSpanners();
         for (Spanner* s : unmanagedSpanners) {
-            if (s->treeParent() == this) {
+            if (s->scanParent() == this) {
                 if (idx == 0) {
                     return s;
                 }
@@ -371,7 +371,7 @@ EngravingObject* Segment::treeChild(int idx) const
     return nullptr;
 }
 
-int Segment::treeChildCount() const
+int Segment::scanChildCount() const
 {
     size_t numChildren = 0;
     for (size_t i = 0; i < _elist.size(); i++) {
@@ -391,7 +391,7 @@ int Segment::treeChildCount() const
         }
         const std::set<Spanner*>& unmanagedSpanners = score()->unmanagedSpanners();
         for (Spanner* s : unmanagedSpanners) {
-            if (s->treeParent() == this) {
+            if (s->scanParent() == this) {
                 numChildren++;
             }
         }
@@ -404,7 +404,7 @@ int Segment::treeChildCount() const
 //   ChordRest
 //---------------------------------------------------------
 
-EngravingObject* ChordRest::treeParent() const
+EngravingObject* ChordRest::scanParent() const
 {
     if (isGrace()) {
         // grace notes do not have a segment of their own
@@ -414,10 +414,10 @@ EngravingObject* ChordRest::treeParent() const
     return segment();
 }
 
-EngravingObject* ChordRest::treeChild(int idx) const
+EngravingObject* ChordRest::scanChild(int idx) const
 {
-    Q_ASSERT(0 <= idx && idx < treeChildCount());
-    if (beam() && beam()->treeParent() == this) {
+    Q_ASSERT(0 <= idx && idx < scanChildCount());
+    if (beam() && beam()->scanParent() == this) {
         if (idx == 0) {
             return beam();
         }
@@ -450,7 +450,7 @@ EngravingObject* ChordRest::treeChild(int idx) const
     int start_tick = tick().ticks();
     for (auto i = spannerMap.lower_bound(start_tick); i != spannerMap.upper_bound(start_tick); ++i) {
         Spanner* s = i->second;
-        if (s->anchor() == Spanner::Anchor::CHORD && s->treeParent() == this) {
+        if (s->anchor() == Spanner::Anchor::CHORD && s->scanParent() == this) {
             if (idx == 0) {
                 return s;
             }
@@ -459,7 +459,7 @@ EngravingObject* ChordRest::treeChild(int idx) const
     }
     const std::set<Spanner*>& unmanagedSpanners = score()->unmanagedSpanners();
     for (Spanner* s : unmanagedSpanners) {
-        if (s->treeParent() == this) {
+        if (s->scanParent() == this) {
             if (idx == 0) {
                 return s;
             }
@@ -470,10 +470,10 @@ EngravingObject* ChordRest::treeChild(int idx) const
     return nullptr;
 }
 
-int ChordRest::treeChildCount() const
+int ChordRest::scanChildCount() const
 {
     size_t numChildren = 0;
-    if (beam() && beam()->treeParent() == this) {
+    if (beam() && beam()->scanParent() == this) {
         numChildren++;
     }
     numChildren += _lyrics.size();
@@ -491,13 +491,13 @@ int ChordRest::treeChildCount() const
     int start_tick = tick().ticks();
     for (auto i = spannerMap.lower_bound(start_tick); i != spannerMap.upper_bound(start_tick); ++i) {
         Spanner* s = i->second;
-        if (s->anchor() == Spanner::Anchor::CHORD && s->treeParent() == this) {
+        if (s->anchor() == Spanner::Anchor::CHORD && s->scanParent() == this) {
             numChildren++;
         }
     }
     const std::set<Spanner*>& unmanagedSpanners = score()->unmanagedSpanners();
     for (Spanner* s : unmanagedSpanners) {
-        if (s->treeParent() == this) {
+        if (s->scanParent() == this) {
             numChildren++;
         }
     }
@@ -509,14 +509,14 @@ int ChordRest::treeChildCount() const
 //   Chord
 //---------------------------------------------------------
 
-EngravingObject* Chord::treeParent() const
+EngravingObject* Chord::scanParent() const
 {
-    return ChordRest::treeParent();
+    return ChordRest::scanParent();
 }
 
-EngravingObject* Chord::treeChild(int idx) const
+EngravingObject* Chord::scanChild(int idx) const
 {
-    Q_ASSERT(0 <= idx && idx < treeChildCount());
+    Q_ASSERT(0 <= idx && idx < scanChildCount());
 
     if (idx < int(notes().size())) {
         return notes()[idx];
@@ -568,10 +568,10 @@ EngravingObject* Chord::treeChild(int idx) const
         idx--;
         ll = ll->next();
     }
-    return ChordRest::treeChild(idx);
+    return ChordRest::scanChild(idx);
 }
 
-int Chord::treeChildCount() const
+int Chord::scanChildCount() const
 {
     size_t numChildren = 0;
 
@@ -598,7 +598,7 @@ int Chord::treeChildCount() const
         numChildren++;
         ll = ll->next();
     }
-    numChildren += ChordRest::treeChildCount();
+    numChildren += ChordRest::scanChildCount();
 
     return int(numChildren);
 }
@@ -607,38 +607,38 @@ int Chord::treeChildCount() const
 //   Rest
 //---------------------------------------------------------
 
-EngravingObject* Rest::treeParent() const
+EngravingObject* Rest::scanParent() const
 {
-    return ChordRest::treeParent();
+    return ChordRest::scanParent();
 }
 
-EngravingObject* Rest::treeChild(int idx) const
+EngravingObject* Rest::scanChild(int idx) const
 {
-    Q_ASSERT(0 <= idx && idx < treeChildCount());
+    Q_ASSERT(0 <= idx && idx < scanChildCount());
     if (idx < int(m_dots.size())) {
         return m_dots[idx];
     }
     idx -= int(m_dots.size());
-    return ChordRest::treeChild(idx);
+    return ChordRest::scanChild(idx);
 }
 
-int Rest::treeChildCount() const
+int Rest::scanChildCount() const
 {
-    return int(m_dots.size()) + ChordRest::treeChildCount();
+    return int(m_dots.size()) + ChordRest::scanChildCount();
 }
 
 //---------------------------------------------------------
 //   Note
 //---------------------------------------------------------
 
-EngravingObject* Note::treeParent() const
+EngravingObject* Note::scanParent() const
 {
     return chord();
 }
 
-EngravingObject* Note::treeChild(int idx) const
+EngravingObject* Note::scanChild(int idx) const
 {
-    Q_ASSERT(0 <= idx && idx < treeChildCount());
+    Q_ASSERT(0 <= idx && idx < scanChildCount());
     if (accidental()) {
         if (idx == 0) {
             return accidental();
@@ -666,7 +666,7 @@ EngravingObject* Note::treeChild(int idx) const
     return nullptr;
 }
 
-int Note::treeChildCount() const
+int Note::scanChildCount() const
 {
     size_t numChildren = 0;
     if (accidental()) {
@@ -685,21 +685,21 @@ int Note::treeChildCount() const
 //   Accidental
 //---------------------------------------------------------
 
-EngravingObject* Accidental::treeParent() const
+EngravingObject* Accidental::scanParent() const
 {
     if (parent() && parent()->isTrillSegment()) {
-        return parent()->treeParent();
+        return parent()->scanParent();
     }
     return note();
 }
 
-EngravingObject* Accidental::treeChild(int idx) const
+EngravingObject* Accidental::scanChild(int idx) const
 {
     Q_UNUSED(idx);
     return nullptr;
 }
 
-int Accidental::treeChildCount() const
+int Accidental::scanChildCount() const
 {
     return 0;
 }
@@ -708,18 +708,18 @@ int Accidental::treeChildCount() const
 //   Beam
 //---------------------------------------------------------
 
-EngravingObject* Beam::treeParent() const
+EngravingObject* Beam::scanParent() const
 {
     return _elements[0];
 }
 
-EngravingObject* Beam::treeChild(int idx) const
+EngravingObject* Beam::scanChild(int idx) const
 {
     Q_UNUSED(idx);
     return nullptr;
 }
 
-int Beam::treeChildCount() const
+int Beam::scanChildCount() const
 {
     return 0;
 }
@@ -728,14 +728,14 @@ int Beam::treeChildCount() const
 //   Ambitus
 //---------------------------------------------------------
 
-EngravingObject* Ambitus::treeParent() const
+EngravingObject* Ambitus::scanParent() const
 {
     return segment();
 }
 
-EngravingObject* Ambitus::treeChild(int idx) const
+EngravingObject* Ambitus::scanChild(int idx) const
 {
-    Q_ASSERT(0 <= idx && idx < treeChildCount());
+    Q_ASSERT(0 <= idx && idx < scanChildCount());
     Accidental* topAccid = const_cast<Accidental*>(_topAccid);
     Accidental* bottomAccid = const_cast<Accidental*>(_bottomAccid);
     if (topAccid && topAccid->accidentalType() != AccidentalType::NONE) {
@@ -753,7 +753,7 @@ EngravingObject* Ambitus::treeChild(int idx) const
     return nullptr;
 }
 
-int Ambitus::treeChildCount() const
+int Ambitus::scanChildCount() const
 {
     int numChildren = 0;
     Accidental* topAccid = const_cast<Accidental*>(_topAccid);
@@ -771,21 +771,21 @@ int Ambitus::treeChildCount() const
 //   FretDiagram
 //---------------------------------------------------------
 
-EngravingObject* FretDiagram::treeParent() const
+EngravingObject* FretDiagram::scanParent() const
 {
     return segment();
 }
 
-EngravingObject* FretDiagram::treeChild(int idx) const
+EngravingObject* FretDiagram::scanChild(int idx) const
 {
-    Q_ASSERT(0 <= idx && idx < treeChildCount());
+    Q_ASSERT(0 <= idx && idx < scanChildCount());
     if (idx == 0) {
         return harmony();
     }
     return nullptr;
 }
 
-int FretDiagram::treeChildCount() const
+int FretDiagram::scanChildCount() const
 {
     if (harmony()) {
         return 1;
@@ -797,7 +797,7 @@ int FretDiagram::treeChildCount() const
 //   Spanner
 //---------------------------------------------------------
 
-EngravingObject* Spanner::treeParent() const
+EngravingObject* Spanner::scanParent() const
 {
     switch (anchor()) {
     case Anchor::SEGMENT:
@@ -813,13 +813,13 @@ EngravingObject* Spanner::treeParent() const
     }
 }
 
-EngravingObject* Spanner::treeChild(int idx) const
+EngravingObject* Spanner::scanChild(int idx) const
 {
-    Q_ASSERT(0 <= idx && idx < treeChildCount());
+    Q_ASSERT(0 <= idx && idx < scanChildCount());
     return spannerSegments()[idx];
 }
 
-int Spanner::treeChildCount() const
+int Spanner::scanChildCount() const
 {
     return int(spannerSegments().size());
 }
@@ -828,21 +828,21 @@ int Spanner::treeChildCount() const
 //   SpannerSegment
 //---------------------------------------------------------
 
-EngravingObject* SpannerSegment::treeParent() const
+EngravingObject* SpannerSegment::scanParent() const
 {
     return spanner();
 }
 
-EngravingObject* SpannerSegment::treeChild(int idx) const
+EngravingObject* SpannerSegment::scanChild(int idx) const
 {
 #ifdef NDEBUG
     Q_UNUSED(idx)
 #endif
-    Q_ASSERT(0 <= idx && idx < treeChildCount());
+    Q_ASSERT(0 <= idx && idx < scanChildCount());
     return nullptr;
 }
 
-int SpannerSegment::treeChildCount() const
+int SpannerSegment::scanChildCount() const
 {
     return 0;
 }
@@ -851,18 +851,18 @@ int SpannerSegment::treeChildCount() const
 //   BSymbol
 //---------------------------------------------------------
 
-EngravingObject* BSymbol::treeParent() const
+EngravingObject* BSymbol::scanParent() const
 {
     return segment();
 }
 
-EngravingObject* BSymbol::treeChild(int idx) const
+EngravingObject* BSymbol::scanChild(int idx) const
 {
-    Q_ASSERT(0 <= idx && idx < treeChildCount());
+    Q_ASSERT(0 <= idx && idx < scanChildCount());
     return _leafs[idx];
 }
 
-int BSymbol::treeChildCount() const
+int BSymbol::scanChildCount() const
 {
     return _leafs.size();
 }
@@ -871,21 +871,21 @@ int BSymbol::treeChildCount() const
 //   Tuplet
 //---------------------------------------------------------
 
-EngravingObject* Tuplet::treeParent() const
+EngravingObject* Tuplet::scanParent() const
 {
     return elements()[0];
 }
 
-EngravingObject* Tuplet::treeChild(int idx) const
+EngravingObject* Tuplet::scanChild(int idx) const
 {
-    Q_ASSERT(0 <= idx && idx < treeChildCount());
+    Q_ASSERT(0 <= idx && idx < scanChildCount());
     if (idx == 0) {
         return _number;
     }
     return nullptr;
 }
 
-int Tuplet::treeChildCount() const
+int Tuplet::scanChildCount() const
 {
     if (_number) {
         return 1;
@@ -897,18 +897,18 @@ int Tuplet::treeChildCount() const
 //   BarLine
 //---------------------------------------------------------
 
-EngravingObject* BarLine::treeParent() const
+EngravingObject* BarLine::scanParent() const
 {
     return segment();
 }
 
-EngravingObject* BarLine::treeChild(int idx) const
+EngravingObject* BarLine::scanChild(int idx) const
 {
-    Q_ASSERT(0 <= idx && idx < treeChildCount());
+    Q_ASSERT(0 <= idx && idx < scanChildCount());
     return _el[idx];
 }
 
-int BarLine::treeChildCount() const
+int BarLine::scanChildCount() const
 {
     return int(_el.size());
 }
@@ -917,50 +917,50 @@ int BarLine::treeChildCount() const
 //   Trill
 //---------------------------------------------------------
 
-EngravingObject* Trill::treeParent() const
+EngravingObject* Trill::scanParent() const
 {
-    return Spanner::treeParent();
+    return Spanner::scanParent();
 }
 
-EngravingObject* Trill::treeChild(int idx) const
+EngravingObject* Trill::scanChild(int idx) const
 {
-    Q_ASSERT(0 <= idx && idx < treeChildCount());
+    Q_ASSERT(0 <= idx && idx < scanChildCount());
     if (accidental()) {
         if (idx == 0) {
             return accidental();
         }
         idx--;
     }
-    return Spanner::treeChild(idx);
+    return Spanner::scanChild(idx);
 }
 
-int Trill::treeChildCount() const
+int Trill::scanChildCount() const
 {
     if (accidental()) {
-        return 1 + Spanner::treeChildCount();
+        return 1 + Spanner::scanChildCount();
     }
-    return Spanner::treeChildCount();
+    return Spanner::scanChildCount();
 }
 
 //---------------------------------------------------------
 //   TBox
 //---------------------------------------------------------
 
-EngravingObject* TBox::treeParent() const
+EngravingObject* TBox::scanParent() const
 {
     return parent();
 }
 
-EngravingObject* TBox::treeChild(int idx) const
+EngravingObject* TBox::scanChild(int idx) const
 {
-    Q_ASSERT(0 <= idx && idx < treeChildCount());
+    Q_ASSERT(0 <= idx && idx < scanChildCount());
     if (idx == 0) {
         return _text;
     }
     return nullptr;
 }
 
-int TBox::treeChildCount() const
+int TBox::scanChildCount() const
 {
     if (_text) {
         return 1;
@@ -976,7 +976,8 @@ int TBox::treeChildCount() const
 void _dumpScoreTree(EngravingObject* s, int depth)
 {
     qDebug() << qPrintable(QString(" ").repeated(4 * depth)) << s->name() << "at" << s;
-    for (EngravingObject* c : *s) {
+    for (int i = 0; i < s->scanChildCount(); ++i) {
+        EngravingObject* c = s->scanChild(i);
         _dumpScoreTree(c, depth + 1);
     }
 }

@@ -184,9 +184,9 @@ public:
     ~FretDiagram();
 
     // Score Tree functions
-    EngravingObject* treeParent() const override;
-    EngravingObject* treeChild(int idx) const override;
-    int treeChildCount() const override;
+    EngravingObject* scanParent() const override;
+    EngravingObject* scanChild(int idx) const override;
+    int scanChildCount() const override;
 
     void draw(mu::draw::Painter*) const override;
     EngravingItem* linkedClone() override;

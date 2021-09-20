@@ -32,6 +32,10 @@
 #include "modularity/ioc.h"
 #include "diagnostics/iengravingelementsprovider.h"
 
+namespace mu::diagnostics {
+class EngravingElementsProvider;
+}
+
 namespace Ms {
 class EngravingObject;
 class MasterScore;
@@ -247,42 +251,12 @@ public:
 
     const EngravingObjectList& children() const { return m_children; }
 
-    // Score Tree functions
-    virtual EngravingObject* treeParent() const { return m_parent; }
-    virtual EngravingObject* treeChild(int n) const { Q_UNUSED(n); return nullptr; }
-    virtual int treeChildCount() const { return 0; }
-
-    int treeChildIdx(EngravingObject* child) const;
-
-    // For iterating over child elements
-    class iterator
-    {
-        EngravingObject* el;
-        int i;
-    public:
-        iterator(EngravingObject* el, int pos)
-            : el(el), i(pos) {}
-        iterator operator++() { return iterator(el, i++); }
-        EngravingObject* operator*() { return el->treeChild(i); }
-        bool operator!=(const iterator& o) const { return o.el != el || o.i != i; }
-    };
-
-    class const_iterator
-    {
-        const EngravingObject* el;
-        int i;
-    public:
-        const_iterator(const EngravingObject* el, int pos)
-            : el(el), i(pos) {}
-        const_iterator operator++() { return const_iterator(el, i++); }
-        const EngravingObject* operator*() { return el->treeChild(i); }
-        bool operator!=(const const_iterator& o) const { return o.el != el || o.i != i; }
-    };
-
-    iterator begin() { return iterator(this, 0); }
-    iterator end() { return iterator(this, treeChildCount()); }
-    const_iterator begin() const { return const_iterator(this, 0); }
-    const_iterator end() const { return const_iterator(this, treeChildCount()); }
+    // Score Tree functions for scan function
+    friend class mu::diagnostics::EngravingElementsProvider;
+    virtual EngravingObject* scanParent() const { return m_parent; }
+    virtual EngravingObject* scanChild(int n) const { Q_UNUSED(n); return nullptr; }
+    virtual int scanChildCount() const { return 0; }
+    virtual void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true);
 
     // context
     virtual void setScore(Score* s);
@@ -291,8 +265,6 @@ public:
     bool onSameScore(const EngravingObject* other) const;
     const MStyle* style() const;
     QString mscoreVersion() const;
-
-    virtual void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true);
 
     virtual QVariant getProperty(Pid) const = 0;
     virtual bool setProperty(Pid, const QVariant&) = 0;

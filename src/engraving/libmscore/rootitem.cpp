@@ -48,17 +48,17 @@ void RootItem::initDummy()
     m_dummy->init();
 }
 
-EngravingObject* RootItem::treeParent() const
+EngravingObject* RootItem::scanParent() const
 {
-    return m_score->treeParent();
+    return m_score->scanParent();
 }
 
-EngravingObject* RootItem::treeChild(int n) const
+EngravingObject* RootItem::scanChild(int n) const
 {
-    return m_score->treeChild(n);
+    return m_score->scanChild(n);
 }
 
-int RootItem::treeChildCount() const
+int RootItem::scanChildCount() const
 {
-    return m_score->treeChildCount();
+    return m_score->scanChildCount();
 }

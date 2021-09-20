@@ -97,9 +97,9 @@ public:
     void setParent(Segment* parent);
 
     // Score Tree functions
-    EngravingObject* treeParent() const override;
-    EngravingObject* treeChild(int idx) const override;
-    int treeChildCount() const override;
+    EngravingObject* scanParent() const override;
+    EngravingObject* scanChild(int idx) const override;
+    int scanChildCount() const override;
 
     BarLine* clone() const override { return new BarLine(*this); }
     Fraction playTick() const override;
