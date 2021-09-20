@@ -26,12 +26,12 @@
 using namespace mu::inspector;
 
 NotationSettingsProxyModel::NotationSettingsProxyModel(QObject* parent, IElementRepositoryService* repository,
-                                                       const QSet<Ms::ElementType>& elementSet)
+                                                       const QSet<ElementKey>& elementKeySet)
     : AbstractInspectorProxyModel(parent)
 {
     setSectionType(InspectorSectionType::SECTION_NOTATION);
 
-    QList<AbstractInspectorModel::InspectorModelType> modelTypes = this->modelTypes(elementSet);
+    QList<AbstractInspectorModel::InspectorModelType> modelTypes = this->modelTypes(elementKeySet);
 
     if (modelTypes.count() == 1) {
         auto model = inspectorModelCreator()->newInspectorModel(modelTypes.first(), parent, repository);
@@ -39,8 +39,8 @@ NotationSettingsProxyModel::NotationSettingsProxyModel(QObject* parent, IElement
         addModel(model);
     } else {
         setTitle(qtrc("inspector", "Notation"));
-        for (const Ms::ElementType elementType : elementSet) {
-            AbstractInspectorModel::InspectorModelType modelType = AbstractInspectorModel::notationElementModelType(elementType);
+        for (const ElementKey& elementKey : elementKeySet) {
+            AbstractInspectorModel::InspectorModelType modelType = AbstractInspectorModel::notationElementModelType(elementKey);
             if (modelType == AbstractInspectorModel::InspectorModelType::TYPE_UNDEFINED) {
                 continue;
             }
@@ -50,12 +50,12 @@ NotationSettingsProxyModel::NotationSettingsProxyModel(QObject* parent, IElement
     }
 }
 
-bool NotationSettingsProxyModel::isTypeSupported(Ms::ElementType elementType) const
+bool NotationSettingsProxyModel::isElementSupported(const ElementKey& elementKey) const
 {
-    return AbstractInspectorModel::notationElementModelType(elementType) != AbstractInspectorModel::InspectorModelType::TYPE_UNDEFINED;
+    return AbstractInspectorModel::notationElementModelType(elementKey) != AbstractInspectorModel::InspectorModelType::TYPE_UNDEFINED;
 }
 
-QList<AbstractInspectorModel::InspectorModelType> NotationSettingsProxyModel::modelTypes(const QSet<Ms::ElementType>& elements)
+QList<AbstractInspectorModel::InspectorModelType> NotationSettingsProxyModel::modelTypes(const QSet<ElementKey>& elementKeySet)
 const
 {
     static QList<AbstractInspectorModel::InspectorModelType> notePartTypes {
@@ -69,8 +69,8 @@ const
     QList<AbstractInspectorModel::InspectorModelType> types;
 
     AbstractInspectorModel::InspectorModelType noteModelType = AbstractInspectorModel::InspectorModelType::TYPE_UNDEFINED;
-    for (const Ms::ElementType elementType : elements) {
-        AbstractInspectorModel::InspectorModelType modelType = AbstractInspectorModel::notationElementModelType(elementType);
+    for (const ElementKey& elementKey : elementKeySet) {
+        AbstractInspectorModel::InspectorModelType modelType = AbstractInspectorModel::notationElementModelType(elementKey);
         if (modelType == AbstractInspectorModel::InspectorModelType::TYPE_UNDEFINED) {
             continue;
         }

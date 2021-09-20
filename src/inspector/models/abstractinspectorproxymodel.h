@@ -50,7 +50,7 @@ public:
     void requestResetToDefaults() override;
     bool hasAcceptableElements() const override;
 
-    virtual bool isTypeSupported(Ms::ElementType) const { return false; }
+    virtual bool isElementSupported(const ElementKey&) const { return false; }
 
     InspectorModelType preferedSubModelType() const;
 

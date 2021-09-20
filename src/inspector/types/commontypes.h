@@ -24,6 +24,47 @@
 
 #include "qobjectdefs.h"
 
+#include "libmscore/types.h"
+
+namespace mu::inspector {
+struct ElementKey
+{
+    Ms::ElementType type = Ms::ElementType::INVALID;
+    int subtype = -1;
+
+    ElementKey() = default;
+
+    ElementKey(Ms::ElementType type, int subtype = -1)
+        : type(type), subtype(subtype)
+    {
+    }
+
+    bool operator==(const ElementKey& key) const
+    {
+        return type == key.type && subtype == key.subtype;
+    }
+
+    bool operator!=(const ElementKey& key) const
+    {
+        return !(*this == key);
+    }
+
+    bool operator<(const ElementKey& key) const
+    {
+        if (type < key.type) {
+            return true;
+        }
+
+        return subtype < key.subtype;
+    }
+};
+
+inline uint qHash(const ElementKey& key)
+{
+    QString subtypePart = key.subtype >= 0 ? QString::number(key.subtype) : "";
+    return qHash(QString::number(static_cast<int>(key.type)) + subtypePart);
+}
+
 class CommonTypes
 {
     Q_GADGET
@@ -36,5 +77,6 @@ public:
 
     Q_ENUM(Placement)
 };
+}
 
 #endif // MU_INSPECTOR_COMMONTYPES_H

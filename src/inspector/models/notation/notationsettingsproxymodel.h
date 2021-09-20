@@ -33,12 +33,12 @@ class NotationSettingsProxyModel : public AbstractInspectorProxyModel
     INJECT(inspector, IInspectorModelCreator, inspectorModelCreator)
 
 public:
-    explicit NotationSettingsProxyModel(QObject* parent, IElementRepositoryService* repository, const QSet<Ms::ElementType>& elementSet);
+    explicit NotationSettingsProxyModel(QObject* parent, IElementRepositoryService* repository, const QSet<ElementKey>& elementKeySet);
 
-    bool isTypeSupported(Ms::ElementType elementType) const override;
+    bool isElementSupported(const ElementKey& elementKey) const override;
 
 private:
-    QList<AbstractInspectorModel::InspectorModelType> modelTypes(const QSet<Ms::ElementType>& elements) const;
+    QList<AbstractInspectorModel::InspectorModelType> modelTypes(const QSet<ElementKey>& elementKeySet) const;
 };
 }
 

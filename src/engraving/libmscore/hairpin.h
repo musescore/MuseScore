@@ -65,6 +65,8 @@ class HairpinSegment final : public TextLineBaseSegment
 public:
     HairpinSegment(Hairpin* sp, System* parent);
 
+    int subtype() const override;
+
     HairpinSegment* clone() const override { return new HairpinSegment(*this); }
 
     Hairpin* hairpin() const { return (Hairpin*)spanner(); }
@@ -105,6 +107,8 @@ public:
     Hairpin(Segment* parent);
 
     Hairpin* clone() const override { return new Hairpin(*this); }
+
+    int subtype() const override;
 
     HairpinType hairpinType() const { return _hairpinType; }
     void setHairpinType(HairpinType val);

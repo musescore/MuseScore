@@ -48,51 +48,51 @@ InspectorListModel::InspectorListModel(QObject* parent)
     subscribeOnSelectionChanges();
 }
 
-void InspectorListModel::buildModelsForSelectedElements(const QSet<Ms::ElementType>& selectedElementSet)
+void InspectorListModel::buildModelsForSelectedElements(const QSet<ElementKey>& selectedElementKeySet)
 {
     static QList<AbstractInspectorModel::InspectorSectionType> persistentSectionList
         = { AbstractInspectorModel::InspectorSectionType::SECTION_GENERAL };
 
-    removeUnusedModels(selectedElementSet, persistentSectionList);
+    removeUnusedModels(selectedElementKeySet, persistentSectionList);
 
     QSet<AbstractInspectorModel::InspectorSectionType> buildingSectionTypeSet(persistentSectionList.begin(), persistentSectionList.end());
-    for (const Ms::ElementType elementType : selectedElementSet) {
-        QList<AbstractInspectorModel::InspectorSectionType> sections = AbstractInspectorModel::sectionTypesFromElementType(elementType);
+    for (const ElementKey& elementKey : selectedElementKeySet) {
+        QList<AbstractInspectorModel::InspectorSectionType> sections = AbstractInspectorModel::sectionTypesFromElementKey(elementKey);
 
         for (AbstractInspectorModel::InspectorSectionType sectionType : sections) {
             buildingSectionTypeSet << sectionType;
         }
     }
 
-    createModelsBySectionType(buildingSectionTypeSet.values(), selectedElementSet);
+    createModelsBySectionType(buildingSectionTypeSet.values(), selectedElementKeySet);
 
     sortModels();
 }
 
-void InspectorListModel::buildModelsForEmptySelection(const QSet<Ms::ElementType>& selectedElementSet)
+void InspectorListModel::buildModelsForEmptySelection(const QSet<ElementKey>& selectedElementKeySet)
 {
     static QList<AbstractInspectorModel::InspectorSectionType> persistentSectionList {
         AbstractInspectorModel::InspectorSectionType::SECTION_SCORE_DISPLAY,
         AbstractInspectorModel::InspectorSectionType::SECTION_SCORE_APPEARANCE
     };
 
-    removeUnusedModels(selectedElementSet, persistentSectionList);
+    removeUnusedModels(selectedElementKeySet, persistentSectionList);
 
     createModelsBySectionType(persistentSectionList);
 }
 
 void InspectorListModel::setElementList(const QList<Ms::EngravingItem*>& selectedElementList)
 {
-    QSet<Ms::ElementType> newElementTypeSet;
+    QSet<ElementKey> newElementKeySet;
 
     for (const Ms::EngravingItem* element : selectedElementList) {
-        newElementTypeSet << element->type();
+        newElementKeySet << ElementKey(element->type(), element->subtype());
     }
 
     if (selectedElementList.isEmpty()) {
-        buildModelsForEmptySelection(newElementTypeSet);
+        buildModelsForEmptySelection(newElementKeySet);
     } else {
-        buildModelsForSelectedElements(newElementTypeSet);
+        buildModelsForSelectedElements(newElementKeySet);
     }
 
     m_repository->updateElementList(selectedElementList);
@@ -129,7 +129,7 @@ int InspectorListModel::columnCount(const QModelIndex&) const
 }
 
 void InspectorListModel::createModelsBySectionType(const QList<AbstractInspectorModel::InspectorSectionType>& sectionTypeList,
-                                                   const QSet<Ms::ElementType>& selectedElementSet)
+                                                   const QSet<ElementKey>& selectedElementKeySet)
 {
     using SectionType = AbstractInspectorModel::InspectorSectionType;
 
@@ -152,7 +152,7 @@ void InspectorListModel::createModelsBySectionType(const QList<AbstractInspector
             m_modelList << new TextSettingsModel(this, m_repository);
             break;
         case AbstractInspectorModel::InspectorSectionType::SECTION_NOTATION:
-            m_modelList << new NotationSettingsProxyModel(this, m_repository, selectedElementSet);
+            m_modelList << new NotationSettingsProxyModel(this, m_repository, selectedElementKeySet);
             break;
         case AbstractInspectorModel::InspectorSectionType::SECTION_SCORE_DISPLAY:
             m_modelList << new ScoreSettingsModel(this, m_repository);
@@ -168,7 +168,7 @@ void InspectorListModel::createModelsBySectionType(const QList<AbstractInspector
     }
 }
 
-void InspectorListModel::removeUnusedModels(const QSet<Ms::ElementType>& newElementTypeSet,
+void InspectorListModel::removeUnusedModels(const QSet<ElementKey>& newElementKeySet,
                                             const QList<AbstractInspectorModel::InspectorSectionType>& exclusions)
 {
     QList<AbstractInspectorModel*> modelsToRemove;
@@ -178,32 +178,32 @@ void InspectorListModel::removeUnusedModels(const QSet<Ms::ElementType>& newElem
             continue;
         }
 
-        QList<Ms::ElementType> supportedElementTypes;
+        QList<ElementKey> supportedElementKeys;
         AbstractInspectorProxyModel* proxyModel = dynamic_cast<AbstractInspectorProxyModel*>(model);
         if (proxyModel) {
-            QList<Ms::ElementType> proxyElementTypes;
+            QList<ElementKey> proxyElementKeys;
             for (const QVariant& modelVar : proxyModel->models()) {
                 AbstractInspectorModel* prModel = qobject_cast<AbstractInspectorModel*>(modelVar.value<QObject*>());
                 if (prModel) {
-                    proxyElementTypes << AbstractInspectorModel::elementType(prModel->modelType());
+                    proxyElementKeys << AbstractInspectorModel::elementKey(prModel->modelType());
                 }
             }
 
             bool needRemove = false;
-            for (Ms::ElementType elementType: proxyElementTypes) {
-                if (!newElementTypeSet.contains(elementType)) {
+            for (const ElementKey& elementKey: proxyElementKeys) {
+                if (!newElementKeySet.contains(elementKey)) {
                     needRemove = true;
                     break;
                 }
             }
 
             if (!needRemove) {
-                for (Ms::ElementType elementType: newElementTypeSet) {
-                    if (!proxyModel->isTypeSupported(elementType)) {
+                for (const ElementKey& elementKey: newElementKeySet) {
+                    if (!proxyModel->isElementSupported(elementKey)) {
                         continue;
                     }
 
-                    if (!proxyElementTypes.contains(elementType)) {
+                    if (!proxyElementKeys.contains(elementKey)) {
                         needRemove = true;
                         break;
                     }
@@ -214,11 +214,11 @@ void InspectorListModel::removeUnusedModels(const QSet<Ms::ElementType>& newElem
                 modelsToRemove << model;
             }
         } else {
-            supportedElementTypes = AbstractInspectorModel::supportedElementTypesBySectionType(model->sectionType());
-            QSet<Ms::ElementType> supportedElementTypesSet(supportedElementTypes.begin(), supportedElementTypes.end());
-            supportedElementTypesSet.intersect(newElementTypeSet);
+            supportedElementKeys = AbstractInspectorModel::supportedElementTypesBySectionType(model->sectionType());
+            QSet<ElementKey> supportedElementKeysSet(supportedElementKeys.begin(), supportedElementKeys.end());
+            supportedElementKeysSet.intersect(newElementKeySet);
 
-            if (supportedElementTypesSet.isEmpty()) {
+            if (supportedElementKeys.isEmpty()) {
                 modelsToRemove << model;
             }
         }
