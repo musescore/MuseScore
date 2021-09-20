@@ -44,6 +44,8 @@
 #include "notation/lines/crescendosettingsmodel.h"
 #include "notation/lines/ottavasettingsmodel.h"
 #include "notation/lines/voltasettingsmodel.h"
+#include "notation/lines/letringsettingsmodel.h"
+#include "notation/lines/palmmutesettingsmodel.h"
 #include "notation/stafftype/stafftypesettingsmodel.h"
 #include "notation/frames/textframesettingsmodel.h"
 #include "notation/frames/verticalframesettingsmodel.h"
@@ -115,9 +117,9 @@ AbstractInspectorModel* InspectorModelCreator::newInspectorModel(AbstractInspect
     case AbstractInspectorModel::InspectorModelType::TYPE_VOLTA:
         return new VoltaSettingsModel(parent, repository);
     case AbstractInspectorModel::InspectorModelType::TYPE_PALM_MUTE:
-        return new LineSettingsModel(parent, repository, Ms::ElementType::PALM_MUTE, qtrc("inspector", "Palm mute"));
+        return new PalmMuteSettingsModel(parent, repository);
     case AbstractInspectorModel::InspectorModelType::TYPE_LET_RING:
-        return new LineSettingsModel(parent, repository, Ms::ElementType::LET_RING, qtrc("inspector", "Let ring"));
+        return new LetRingSettingsModel(parent, repository);
     case AbstractInspectorModel::InspectorModelType::TYPE_STAFF_TYPE_CHANGES:
         return new StaffTypeSettingsModel(parent, repository);
     case AbstractInspectorModel::InspectorModelType::TYPE_TEXT_FRAME:

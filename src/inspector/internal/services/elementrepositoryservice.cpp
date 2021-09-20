@@ -66,15 +66,17 @@ QList<Ms::EngravingItem*> ElementRepositoryService::findElementsByType(const Ms:
     case Ms::ElementType::STEM: return findStems();
     case Ms::ElementType::HOOK: return findHooks();
     case Ms::ElementType::BEAM: return findBeams();
-    case Ms::ElementType::GLISSANDO: return findGlissandos();
-    case Ms::ElementType::HAIRPIN: return findHairpins();
-    case Ms::ElementType::VOLTA: return findVoltas();
     case Ms::ElementType::STAFF: return findStaffs();
     case Ms::ElementType::LAYOUT_BREAK: return findSectionBreaks(); //Page breaks and line breaks are of type LAYOUT_BREAK, but they don't appear in the inspector for now.
     case Ms::ElementType::PEDAL: return findPedals();
     case Ms::ElementType::CLEF: return findPairedClefs();
     case Ms::ElementType::TEXT: return findTexts();
     case Ms::ElementType::TREMOLO: return findTremolos();
+    case Ms::ElementType::GLISSANDO:
+    case Ms::ElementType::HAIRPIN:
+    case Ms::ElementType::VOLTA:
+    case Ms::ElementType::LET_RING:
+    case Ms::ElementType::PALM_MUTE: return findLines(elementType);
     default:
         QList<Ms::EngravingItem*> resultList;
 
@@ -221,62 +223,28 @@ QList<Ms::EngravingItem*> ElementRepositoryService::findBeams() const
     return resultList;
 }
 
-QList<Ms::EngravingItem*> ElementRepositoryService::findGlissandos() const
+QList<Ms::EngravingItem*> ElementRepositoryService::findLines(Ms::ElementType lineType) const
 {
+    static const QMap<Ms::ElementType, Ms::ElementType> lineTypeToSegmentType {
+        { Ms::ElementType::GLISSANDO, Ms::ElementType::GLISSANDO_SEGMENT },
+        { Ms::ElementType::HAIRPIN, Ms::ElementType::HAIRPIN_SEGMENT },
+        { Ms::ElementType::VOLTA, Ms::ElementType::VOLTA_SEGMENT },
+        { Ms::ElementType::LET_RING, Ms::ElementType::LET_RING_SEGMENT },
+        { Ms::ElementType::PALM_MUTE, Ms::ElementType::PALM_MUTE_SEGMENT }
+    };
+
     QList<Ms::EngravingItem*> resultList;
+    Ms::ElementType segmentType = lineTypeToSegmentType[lineType];
 
     for (Ms::EngravingItem* element : m_elementList) {
-        if (element->type() == Ms::ElementType::GLISSANDO_SEGMENT) {
-            const Ms::GlissandoSegment* glissandoSegment = Ms::toGlissandoSegment(element);
+        if (element->type() == segmentType) {
+            const Ms::TextLineBaseSegment* segment = Ms::toTextLineBaseSegment(element);
+            Ms::TextLineBase* line = segment ? segment->textLineBase() : nullptr;
 
-            if (!glissandoSegment) {
-                continue;
+            if (line) {
+                resultList << line;
             }
-
-            resultList << glissandoSegment->glissando();
-        } else if (element->type() == Ms::ElementType::GLISSANDO) {
-            resultList << element;
-        }
-    }
-
-    return resultList;
-}
-
-QList<Ms::EngravingItem*> ElementRepositoryService::findVoltas() const
-{
-    QList<Ms::EngravingItem*> resultList;
-
-    for (Ms::EngravingItem* element : m_elementList) {
-        if (element->type() == Ms::ElementType::VOLTA_SEGMENT) {
-            const Ms::VoltaSegment* voltaSegment = Ms::toVoltaSegment(element);
-
-            if (!voltaSegment) {
-                continue;
-            }
-
-            resultList << voltaSegment->volta();
-        } else if (element->type() == Ms::ElementType::VOLTA) {
-            resultList << element;
-        }
-    }
-
-    return resultList;
-}
-
-QList<Ms::EngravingItem*> ElementRepositoryService::findHairpins() const
-{
-    QList<Ms::EngravingItem*> resultList;
-
-    for (Ms::EngravingItem* element : m_elementList) {
-        if (element->type() == Ms::ElementType::HAIRPIN_SEGMENT) {
-            const Ms::HairpinSegment* hairpinSegment = Ms::toHairpinSegment(element);
-
-            if (!hairpinSegment) {
-                continue;
-            }
-
-            resultList << hairpinSegment->hairpin();
-        } else if (element->type() == Ms::ElementType::HAIRPIN) {
+        } else if (element->type() == lineType) {
             resultList << element;
         }
     }
