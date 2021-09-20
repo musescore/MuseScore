@@ -80,6 +80,11 @@ HairpinSegment::HairpinSegment(Hairpin* sp, System* parent)
 {
 }
 
+int HairpinSegment::subtype() const
+{
+    return hairpin()->subtype();
+}
+
 bool HairpinSegment::acceptDrop(EditData& data) const
 {
     EngravingItem* e = data.dropElement;
@@ -618,6 +623,11 @@ Hairpin::Hairpin(Segment* parent)
     _dynRange              = Dynamic::Range::PART;
     _singleNoteDynamics    = true;
     _veloChangeMethod      = ChangeMethod::NORMAL;
+}
+
+int Hairpin::subtype() const
+{
+    return static_cast<int>(_hairpinType);
 }
 
 //---------------------------------------------------------
