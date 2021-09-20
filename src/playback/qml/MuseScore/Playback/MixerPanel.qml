@@ -43,6 +43,18 @@ Rectangle {
         property alias navigation: navPanel
         property alias contextMenuModel: contextMenuModel
 
+        function positionViewAtEnd() {
+            if (flickable.contentY == flickable.contentHeight) {
+                return
+            }
+
+            flickable.contentY = flickable.contentHeight - flickable.height
+        }
+
+        onContentHeightChanged: {
+            flickable.positionViewAtEnd()
+        }
+
         anchors.fill: parent
 
         clip: true
@@ -140,5 +152,9 @@ Rectangle {
                 model: mixerPanelModel
             }
         }
+    }
+
+    onHeightChanged: {
+        flickable.positionViewAtEnd()
     }
 }
