@@ -60,8 +60,6 @@ FlatButton {
         anchorItem: root.anchorItem
 
         navigationParentControl: root.navigation
-        navigation.name: root.navigation.name + "Popup"
-        navigation.direction: NavigationPanel.Both
 
         onContentHeightChanged: {
             checkForInsufficientSpace()

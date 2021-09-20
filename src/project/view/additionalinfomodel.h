@@ -50,6 +50,13 @@ class AdditionalInfoModel : public QObject
 public:
     explicit AdditionalInfoModel(QObject* parent = nullptr);
 
+    enum TimeSignatureType {
+        Fraction,
+        Common,
+        Cut
+    };
+    Q_ENUMS(TimeSignatureType)
+
     Q_INVOKABLE void init();
 
     Q_INVOKABLE QVariantList keySignatureList() const;
@@ -58,6 +65,8 @@ public:
 
     QVariantMap timeSignature() const;
     int timeSignatureType() const;
+
+    Q_INVOKABLE QString timeSignatureAccessibleName(int timeSignatureType, int numerator = 0, int denominator = 1) const;
 
     Q_INVOKABLE void setTimeSignatureNumerator(int numerator);
     Q_INVOKABLE void setTimeSignatureDenominator(int denominator);
@@ -72,19 +81,14 @@ public:
     Q_INVOKABLE QVariantMap tempoValueRange() const;
     Q_INVOKABLE QVariantList tempoNotes() const;
 
+    Q_INVOKABLE QString tempoAccessibleName(int noteIcon, bool withDot) const;
+
     QVariantMap pickupTimeSignature() const;
     Q_INVOKABLE void setPickupTimeSignatureNumerator(int numerator);
     Q_INVOKABLE void setPickupTimeSignatureDenominator(int denominator);
     bool withPickupMeasure() const;
     int measureCount() const;
     Q_INVOKABLE QVariantMap measureCountRange() const;
-
-    enum TimeSignatureType {
-        Fraction,
-        Common,
-        Cut
-    };
-    Q_ENUMS(TimeSignatureType)
 
 public slots:
     void setKeySignature(QVariantMap keySignature);

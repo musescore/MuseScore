@@ -32,11 +32,15 @@ FlatButton {
 
     property var model: null
     property var mode: bar.currentIndex === 0 ? "major" : "minor"
+    property string currentValueAccessibleName: title.text
+
+    property alias popupAnchorItem: popup.anchorItem
 
     height: 96
-    accentButton: popup.visible
+    accentButton: popup.isOpened
 
     KeySignature {
+        id: title
         icon: model.keySignature.icon
         text: mode === "major" ? model.keySignature.titleMajor : model.keySignature.titleMinor
     }
@@ -49,51 +53,85 @@ FlatButton {
         }
     }
 
-    StyledPopup {
+    StyledPopupView {
         id: popup
 
-        implicitHeight: 300
-        implicitWidth: 724
+        padding: 8
+        margins: 20
 
-        arrowX: root.x + root.width / 2
-        y: root.height
+        contentWidth: 688
+        contentHeight: 242
 
-        Item {
-            id: item
+        navigationParentControl: root.navigation
+
+        onOpened: {
+            majorTab.navigation.requestActive()
+        }
+
+        ColumnLayout {
+            id: content
 
             anchors.fill: parent
-            anchors.topMargin: 10
-            anchors.margins: 20
 
             TabBar {
                 id: bar
 
-                anchors.top: parent.top
-                anchors.horizontalCenter: parent.horizontalCenter
+                Layout.alignment: Qt.AlignHCenter
 
                 implicitHeight: 28
 
+                property NavigationPanel navigationPanel: NavigationPanel {
+                    name: "KeySignatureTabPanel"
+                    section: popup.navigationSection
+                    direction: NavigationPanel.Horizontal
+                    order: 1
+
+                    onNavigationEvent: {
+                        if (event.type === NavigationEvent.AboutActive) {
+                            event.setData("controlIndex", bar.currentItemNavigationIndex)
+                        }
+                    }
+                }
+
+                property var currentItemNavigationIndex: []
+
                 StyledTabButton {
+                    id: majorTab
                     text: qsTrc("project", "Major")
                     sideMargin: 22
                     isCurrent: bar.currentIndex === 0
+
+                    navigation.name: "MajorTab"
+                    navigation.panel: bar.navigationPanel
+                    navigation.column: 0
+                    onNavigationTriggered: {
+                        bar.currentItemNavigationIndex = [navigation.row, navigation.column]
+                        bar.currentIndex = 0
+                    }
                 }
 
                 StyledTabButton {
                     text: qsTrc("appshell", "Minor")
                     sideMargin: 22
                     isCurrent: bar.currentIndex === 1
+
+                    navigation.name: "MinorTab"
+                    navigation.panel: bar.navigationPanel
+                    navigation.column: 1
+                    onNavigationTriggered: {
+                        bar.currentItemNavigationIndex = [navigation.row, navigation.column]
+                        bar.currentIndex = 1
+                    }
                 }
             }
 
             StackLayout {
                 id: pagesStack
 
-                anchors.top: bar.bottom
-                anchors.topMargin: 24
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.bottom: parent.bottom
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+
+                Layout.topMargin: 20
 
                 currentIndex: bar.currentIndex
 
@@ -101,6 +139,11 @@ FlatButton {
                     model: root.model.keySignatureList()
                     currentSignature: root.model.keySignature
                     mode: "major"
+
+                    navigationPanel.name: "KeySignatureMajorPanel"
+                    navigationPanel.section: popup.navigationSection
+                    navigationPanel.enabled: bar.currentIndex === 0
+                    navigationPanel.order: 2
 
                     onSignatureSelected: {
                         root.model.keySignature = signature
@@ -111,6 +154,11 @@ FlatButton {
                     model: root.model.keySignatureList()
                     currentSignature: root.model.keySignature
                     mode: "minor"
+
+                    navigationPanel.name: "KeySignatureMinorPanel"
+                    navigationPanel.section: popup.navigationSection
+                    navigationPanel.enabled: bar.currentIndex === 1
+                    navigationPanel.order: 2
 
                     onSignatureSelected: {
                         root.model.keySignature = signature

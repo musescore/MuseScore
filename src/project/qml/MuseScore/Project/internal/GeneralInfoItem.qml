@@ -21,6 +21,7 @@
  */
 import QtQuick 2.9
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
 Column {
@@ -28,6 +29,8 @@ Column {
 
     property string title: ""
     property alias info: textField.currentText
+
+    property alias navigation: textField.navigation
 
     spacing: 10
 
@@ -43,6 +46,8 @@ Column {
     TextInputField {
         id: textField
         hint: qsTrc("project", "Optional")
+
+        navigation.accessible.name: root.title + " " + currentText
 
         onCurrentTextEdited: {
             root.info = newTextValue

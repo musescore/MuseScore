@@ -150,6 +150,7 @@ Rectangle {
             navigation.name: "Select"
             navigation.panel: navSelectPanel
             navigation.order: 1
+            navigation.accessible.name: qsTrc("project", "Select instrument")
 
             visible: root.canSelectMultipleInstruments
 

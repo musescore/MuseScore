@@ -32,7 +32,10 @@ Column {
 
     property QtObject model: null
 
-    property NavigationPanel navigationPanel: null
+    property NavigationPanel navigationPanel: NavigationPanel {
+        name: "AppearanceSettings"
+        direction: NavigationPanel.Both
+    }
 
     height: implicitHeight
     width: parent.width

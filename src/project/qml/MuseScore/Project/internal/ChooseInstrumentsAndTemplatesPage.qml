@@ -58,8 +58,15 @@ Item {
         return result
     }
 
-    function focusOnFirst() {
-        chooseInstrumentsBtn.navigation.requestActive()
+    function focusOnSelected() {
+        switch (bar.currentIndex) {
+        case 0:
+            chooseInstrumentsBtn.navigation.requestActive()
+            break
+        case 1:
+            chooseFromTemplateBtn.navigation.requestActive()
+            break
+        }
     }
 
     TabBar {
@@ -71,11 +78,19 @@ Item {
         contentHeight: 28
         spacing: 0
 
+        property var currentItemNavigationIndex: []
+
         NavigationPanel {
             id: topNavPanel
             name: "ChooseTabPanel"
             section: root.navigationSection
             order: 1
+
+            onNavigationEvent: {
+                if (event.type === NavigationEvent.AboutActive) {
+                    event.setData("controlIndex", bar.currentItemNavigationIndex)
+                }
+            }
         }
 
         StyledTabButton {
@@ -86,26 +101,35 @@ Item {
 
             navigation.name: "Choose instruments"
             navigation.panel: topNavPanel
-            navigation.column: 1
-            onNavigationTriggered: bar.currentIndex = 0
+            navigation.column: 0
+            onNavigationTriggered: {
+                bar.currentItemNavigationIndex = [navigation.row, navigation.column]
+                bar.currentIndex = 0
+            }
         }
 
         StyledTabButton {
+            id: chooseFromTemplateBtn
             text: qsTrc("project", "Choose from template")
             sideMargin: 22
             isCurrent: bar.currentIndex === 1
 
             navigation.name: "Choose instruments"
             navigation.panel: topNavPanel
-            navigation.column: 2
-            onNavigationTriggered: bar.currentIndex = 1
+            navigation.column: 1
+            onNavigationTriggered: {
+                bar.currentItemNavigationIndex = [navigation.row, navigation.column]
+                bar.currentIndex = 1
+            }
         }
 
         Component.onCompleted: {
             if (root.preferredScoreCreationMode === "FromInstruments") {
                 currentIndex = 0
+                chooseInstrumentsBtn.navigation.requestActive()
             } else if (root.preferredScoreCreationMode === "FromTemplate") {
                 currentIndex = 1
+                chooseFromTemplateBtn.navigation.requestActive()
             }
         }
     }

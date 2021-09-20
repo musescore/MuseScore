@@ -30,15 +30,19 @@ StyledPopupView {
 
     contentHeight: contentColumn.childrenRect.height
 
-    navigation.name: "InstrumentSettingsPopup"
-    navigation.direction: NavigationPanel.Vertical
-
     onOpened: {
-        instrNameField.ensureActiveFocus()
+        instrNameField.navigation.requestActive()
     }
 
     function load(instrument) {
         settingsModel.load(instrument)
+    }
+
+    property NavigationPanel navigationPanel: NavigationPanel {
+        name: "InstrumentSettingsPopup"
+        section: root.navigationSection
+        order: 1
+        direction: NavigationPanel.Vertical
     }
 
     InstrumentSettingsModel {
@@ -61,7 +65,7 @@ StyledPopupView {
 
             objectName: "InstrNameField"
 
-            navigation.panel: root.navigation
+            navigation.panel: root.navigationPanel
             navigation.row: 1
 
             currentText: settingsModel.instrumentName
@@ -78,7 +82,7 @@ StyledPopupView {
         TextInputField {
             objectName: "AbbreviatureField"
 
-            navigation.panel: root.navigation
+            navigation.panel: root.navigationPanel
             navigation.row: 2
 
             currentText: settingsModel.abbreviature
@@ -95,7 +99,7 @@ StyledPopupView {
         TextInputField {
             objectName: "PartNameField"
 
-            navigation.panel: root.navigation
+            navigation.panel: root.navigationPanel
             navigation.row: 3
 
             currentText: settingsModel.partName
@@ -110,7 +114,7 @@ StyledPopupView {
         FlatButton {
             width: parent.width
 
-            navigation.panel: root.navigation
+            navigation.panel: root.navigationPanel
             navigation.row: 4
 
             text: qsTrc("instruments", "Replace instrument")
@@ -126,7 +130,7 @@ StyledPopupView {
         FlatButton {
             width: parent.width
 
-            navigation.panel: root.navigation
+            navigation.panel: root.navigationPanel
             navigation.row: 4
 
             text: qsTrc("instruments", "Reset all formatting")

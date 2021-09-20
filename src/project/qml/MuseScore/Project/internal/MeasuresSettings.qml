@@ -31,11 +31,16 @@ FlatButton {
     id: root
 
     property var model: null
+    property string currentValueAccessibleName: title.text
+
+    property alias popupAnchorItem: popup.anchorItem
 
     height: 96
-    accentButton: popup.visible
+    accentButton: popup.isOpened
 
     StyledTextLabel {
+        id: title
+
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
 
@@ -60,103 +65,126 @@ FlatButton {
         }
     }
 
-    StyledPopup {
+    StyledPopupView {
         id: popup
 
-        implicitHeight: 310
-        implicitWidth: 320
+        padding: 8
+        margins: 0
 
-        x: root.x - (width - root.width)
-        y: root.height
-        arrowX: root.x + root.width
+        contentWidth: content.width
+        contentHeight: content.height
 
-        Column {
-            anchors.fill: parent
-            anchors.margins: 10
+        navigationParentControl: root.navigation
 
-            spacing: 30
+        onOpened: {
+            withPickupMeasure.navigation.requestActive()
+        }
 
-            Column {
-                anchors.left: parent.left
-                anchors.right: parent.right
+        ColumnLayout {
+            id: content
 
-                spacing: 14
+            spacing: 0
 
-                CheckBox {
-                    id: withPickupMeasure
+            property NavigationPanel navigationPanel: NavigationPanel {
+                name: "MeasuresSettingsPanel"
+                section: popup.navigationSection
+                direction: NavigationPanel.Both
+                order: 1
+            }
 
-                    anchors.left: parent.left
-                    anchors.right: parent.right
+            CheckBox {
+                id: withPickupMeasure
 
-                    checked: root.model.withPickupMeasure
+                Layout.topMargin: 26
+                Layout.leftMargin: 32
 
-                    text: qsTrc("project", "Show pickup measure")
+                checked: root.model.withPickupMeasure
 
-                    onClicked: {
-                        root.model.withPickupMeasure = !checked
-                    }
+                text: qsTrc("project", "Show pickup measure")
+
+                navigation.name: "WithPickupMeasure"
+                navigation.panel: content.navigationPanel
+                navigation.row: 0
+                navigation.column: 0
+
+                onClicked: {
+                    root.model.withPickupMeasure = !checked
+                }
+            }
+
+            TimeSignatureFraction {
+                Layout.topMargin: 12
+                Layout.leftMargin: 32
+
+                numerator: root.model.pickupTimeSignature.numerator
+                denominator: root.model.pickupTimeSignature.denominator
+                availableDenominators: root.model.timeSignatureDenominators()
+                enabled: withPickupMeasure.checked
+
+                navigationPanel: content.navigationPanel
+                navigationRowStart: 1
+                navigationColumnStart: 0
+
+                onNumeratorSelected: {
+                    root.model.setPickupTimeSignatureNumerator(value)
                 }
 
-                TimeSignatureFraction {
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-
-                    numerator: root.model.pickupTimeSignature.numerator
-                    denominator: root.model.pickupTimeSignature.denominator
-                    availableDenominators: root.model.timeSignatureDenominators()
-                    enabled: withPickupMeasure.checked
-
-                    onNumeratorSelected: {
-                        root.model.setPickupTimeSignatureNumerator(value)
-                    }
-
-                    onDenominatorSelected: {
-                        root.model.setPickupTimeSignatureDenominator(value)
-                    }
+                onDenominatorSelected: {
+                    root.model.setPickupTimeSignatureDenominator(value)
                 }
             }
 
             SeparatorLine {
-                anchors.leftMargin: -(parent.anchors.leftMargin + popup.leftPadding)
-                anchors.rightMargin: -(parent.anchors.rightMargin + popup.rightPadding)
+                Layout.topMargin: 26
             }
 
-            Column {
-                anchors.left: parent.left
-                anchors.right: parent.right
+            StyledTextLabel {
+                id: numberOfMeasuresLabel
+                Layout.topMargin: 26
+                Layout.leftMargin: 32
+                Layout.rightMargin: 32
 
-                spacing: 14
+                horizontalAlignment: Text.AlignLeft
+                text: qsTrc("project", "Initial number of measures")
+            }
 
-                StyledTextLabel {
-                    horizontalAlignment: Text.AlignLeft
-                    text: qsTrc("project", "Initial number of measures")
+            IncrementalPropertyControl {
+                id: measuresCountControl
+
+                Layout.topMargin: 12
+                Layout.leftMargin: 32
+                Layout.rightMargin: 32
+
+                implicitWidth: 68
+
+                currentValue: root.model.measureCount
+                step: 1
+                decimals: 0
+                maxValue: root.model.measureCountRange().max
+                minValue: root.model.measureCountRange().min
+
+                navigation.name: "MeasuresCountControl"
+                navigation.panel: content.navigationPanel
+                navigation.row: 2
+                navigation.column: 0
+                navigation.accessible.name: numberOfMeasuresLabel.text + " " + currentValue
+
+                onValueEdited: {
+                    root.model.measureCount = newValue
                 }
+            }
 
-                IncrementalPropertyControl {
-                    id: measuresCountControl
+            StyledTextLabel {
+                Layout.topMargin: 18
+                Layout.leftMargin: 32
+                Layout.rightMargin: 32
+                Layout.bottomMargin: 24
+                Layout.preferredWidth: 246
 
-                    implicitWidth: 68
-
-                    currentValue: root.model.measureCount
-                    step: 1
-                    decimals: 0
-                    maxValue: root.model.measureCountRange().max
-                    minValue: root.model.measureCountRange().min
-
-                    onValueEdited: {
-                        root.model.measureCount = newValue
-                    }
-                }
-
-                StyledTextLabel {
-                    anchors.left: parent.left
-                    anchors.right: parent.right
-
-                    horizontalAlignment: Text.AlignLeft
-                    text: qsTrc("project", "Hint: You can also add & delete measures after you have created your score")
-                    wrapMode: Text.WordWrap
-                    maximumLineCount: 2
-                }
+                horizontalAlignment: Text.AlignLeft
+                text: qsTrc("project", "Hint: You can also add & delete measures after you have created your score")
+                wrapMode: Text.WordWrap
+                maximumLineCount: 2
             }
         }
     }

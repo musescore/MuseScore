@@ -224,12 +224,13 @@ InspectorSectionView {
             navigation.name: "TextAdvancedSettings"
             navigation.row: root.navigationRow(19)
 
-            text: qsTrc("inspector", "More...")
+            text: qsTrc("inspector", "More…")
             visible: root.model ? !root.model.isEmpty : false
 
             popupContent: TextSettings {
                 id: textSettings
-                navigationPanel: textAdvancedSettingsButton.popup.navigation
+                navigationPanel.section: textAdvancedSettingsButton.popup.navigationSection
+                navigationPanel.order: 1
                 model: root.model
             }
 
