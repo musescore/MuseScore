@@ -118,6 +118,7 @@ Item {
             navigation.name: modelData
             navigation.panel: navPanel
             navigation.row: 2 + model.index
+            navigation.accessible.name: itemTitleLabel.text
 
             onNavigationActived: {
                 prv.currentItemNavigationIndex = [navigation.row, navigation.column]
@@ -125,6 +126,7 @@ Item {
             }
 
             StyledTextLabel {
+                id: itemTitleLabel
                 anchors.fill: parent
                 anchors.leftMargin: 12
 

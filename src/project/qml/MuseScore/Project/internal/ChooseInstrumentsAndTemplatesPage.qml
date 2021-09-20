@@ -58,8 +58,15 @@ Item {
         return result
     }
 
-    function focusOnFirst() {
-        chooseInstrumentsBtn.navigation.requestActive()
+    function focusOnSelected() {
+        switch (bar.currentIndex) {
+        case 0:
+            chooseInstrumentsBtn.navigation.requestActive()
+            break
+        case 1:
+            chooseFromTemplateBtn.navigation.requestActive()
+            break
+        }
     }
 
     TabBar {
@@ -102,6 +109,7 @@ Item {
         }
 
         StyledTabButton {
+            id: chooseFromTemplateBtn
             text: qsTrc("project", "Choose from template")
             sideMargin: 22
             isCurrent: bar.currentIndex === 1
@@ -118,8 +126,10 @@ Item {
         Component.onCompleted: {
             if (root.preferredScoreCreationMode === "FromInstruments") {
                 currentIndex = 0
+                chooseInstrumentsBtn.navigation.requestActive()
             } else if (root.preferredScoreCreationMode === "FromTemplate") {
                 currentIndex = 1
+                chooseFromTemplateBtn.navigation.requestActive()
             }
         }
     }

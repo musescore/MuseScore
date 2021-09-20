@@ -121,15 +121,21 @@ Item {
             navigation.name: model.name
             navigation.panel: navPanel
             navigation.row: 2 + model.index
+            navigation.accessible.name: itemTitleLabel.text
 
             onNavigationActived: {
                 prv.currentItemNavigationIndex = [navigation.row, navigation.column]
-                item.clicked()
+                root.instrumentsModel.selectInstrument(model.index)
+            }
+
+            onNavigationTriggered: {
+                root.addSelectedInstrumentsToScoreRequested()
             }
 
             isSelected: model.isSelected
 
             StyledTextLabel {
+                id: itemTitleLabel
                 anchors.left: parent.left
                 anchors.leftMargin: 12
                 anchors.right: traitsBox.visible ? traitsBox.left : parent.right

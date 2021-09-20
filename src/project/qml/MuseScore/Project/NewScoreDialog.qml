@@ -37,10 +37,6 @@ StyledDialogView {
     contentWidth: 1024
     resizable: true
 
-    onOpened: {
-        chooseInstrumentsAndTemplatePage.focusOnFirst()
-    }
-
     NewScoreModel {
         id: newScoreModel
     }
@@ -82,7 +78,7 @@ StyledDialogView {
             onCurrentIndexChanged: {
                 switch(currentIndex) {
                 case 0:
-                    chooseInstrumentsAndTemplatePage.focusOnFirst()
+                    chooseInstrumentsAndTemplatePage.focusOnSelected()
                     break
                 case 1:
                     scoreInfoPage.focusOnFirst()
