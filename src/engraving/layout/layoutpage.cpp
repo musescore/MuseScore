@@ -102,7 +102,8 @@ void LayoutPage::collectPage(const LayoutOptions& options, LayoutContext& ctx)
 {
     const qreal slb = ctx.score()->styleP(Sid::staffLowerBorder);
     bool breakPages = ctx.score()->layoutMode() != LayoutMode::SYSTEM;
-    qreal footerExtension = qMax(0.0, ctx.page->footerHeight() - ctx.score()->styleP(Sid::footerOffset)); // how much the footer extends above the margin
+    qreal footerExtension = qMax(0.0, ctx.page->footerHeight() - ctx.score()->styleV(Sid::footerOffset).value<PointF>().y()); // how much the footer extends above the margin
+    qreal headerExtension = qMax(0.0, ctx.page->headerHeight() - ctx.score()->styleV(Sid::headerOffset).value<PointF>().y()); // how much the header extends below the margin
     qreal endY      = ctx.page->height() - ctx.page->bm() - footerExtension;
     qreal y         = 0.0;
 
@@ -116,7 +117,7 @@ void LayoutPage::collectPage(const LayoutOptions& options, LayoutContext& ctx)
         ctx.page->system(0)->restoreLayout2();
         y = ctx.page->system(0)->y() + ctx.page->system(0)->height();
     } else {
-        y = ctx.page->tm();
+        y = ctx.page->tm() + headerExtension;
     }
     for (int i = 1; i < pSystems; ++i) {
         System* cs = ctx.page->system(i);
