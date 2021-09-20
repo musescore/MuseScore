@@ -65,7 +65,7 @@ public:
     Ms::MasterScore* masterScore() const;
     Err setupMasterScore();
 
-    Err loadMscz(const mu::engraving::MscReader& reader, bool ignoreVersionError);
+    Err loadMscz(const mu::engraving::MscReader& msc, bool ignoreVersionError);
     bool writeMscz(mu::engraving::MscWriter& writer, bool onlySelection, bool createThumbnail);
 
     void checkTree();

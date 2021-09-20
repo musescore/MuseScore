@@ -39,6 +39,20 @@ set(MODULE_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/rw/readcontext.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/readcontext.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/scorereader.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/scorereader.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read400.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read400.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/compat/readstyle.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/compat/readstyle.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/compat/read114.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/compat/read114.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/compat/read206.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/compat/read206.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/compat/read302.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/compat/read302.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/compat/readchordlisthook.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/compat/readchordlisthook.h
 
     ${CMAKE_CURRENT_LIST_DIR}/paint/paint.cpp
     ${CMAKE_CURRENT_LIST_DIR}/paint/paint.h
@@ -60,18 +74,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/compat/mscxcompat.h
     ${CMAKE_CURRENT_LIST_DIR}/compat/pageformat.cpp
     ${CMAKE_CURRENT_LIST_DIR}/compat/pageformat.h
-    ${CMAKE_CURRENT_LIST_DIR}/compat/chordlist.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/compat/chordlist.h
     ${CMAKE_CURRENT_LIST_DIR}/compat/writescorehook.cpp
     ${CMAKE_CURRENT_LIST_DIR}/compat/writescorehook.h
-    ${CMAKE_CURRENT_LIST_DIR}/compat/readstyle.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/compat/readstyle.h
-    ${CMAKE_CURRENT_LIST_DIR}/compat/read114.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/compat/read114.h
-    ${CMAKE_CURRENT_LIST_DIR}/compat/read206.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/compat/read206.h
-    ${CMAKE_CURRENT_LIST_DIR}/compat/read302.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/compat/read302.h
     ${CMAKE_CURRENT_LIST_DIR}/compat/dummyelement.cpp
     ${CMAKE_CURRENT_LIST_DIR}/compat/dummyelement.h
 

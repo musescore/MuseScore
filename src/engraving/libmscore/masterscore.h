@@ -31,6 +31,8 @@ namespace mu::engraving {
 class EngravingProject;
 class MscReader;
 class MscWriter;
+class ScoreReader;
+class Read400;
 }
 
 namespace mu::engraving::compat {
@@ -106,7 +108,6 @@ class MasterScore : public Score
 
     std::shared_ptr<mu::engraving::EngravingProject> m_project = nullptr;
 
-    void parseVersion(const QString&);
     void reorderMidiMapping();
     void rebuildExcerptsMidiMapping();
     void removeDeletedMidiMapping();
@@ -115,19 +116,16 @@ class MasterScore : public Score
     QFileInfo _sessionStartBackupInfo;
     QFileInfo info;
 
-    FileError read(XmlReader&, mu::engraving::ReadContext& ctx, mu::engraving::compat::ReadStyleHook* styleHook = nullptr);
-    FileError doRead(XmlReader& e);
-
     friend class mu::engraving::EngravingProject;
     friend class mu::engraving::compat::ScoreAccess;
     friend class mu::engraving::compat::Read114;
     friend class mu::engraving::compat::Read206;
     friend class mu::engraving::compat::Read302;
+    friend class mu::engraving::Read400;
 
     MasterScore(std::shared_ptr<mu::engraving::EngravingProject> project);
     MasterScore(const MStyle&, std::shared_ptr<mu::engraving::EngravingProject> project);
 
-    FileError loadMscz(const mu::engraving::MscReader& mscReader, bool ignoreVersionError);
     bool writeMscz(mu::engraving::MscWriter& mscWriter, bool onlySelection = false, bool createThumbnail = true);
     bool exportPart(mu::engraving::MscWriter& mscWriter, Score* partScore);
 

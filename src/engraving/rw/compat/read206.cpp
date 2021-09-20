@@ -29,9 +29,7 @@
 #include "style/defaultstyle.h"
 #include "io/xml.h"
 
-#include "pageformat.h"
-#include "chordlist.h"
-#include "readstyle.h"
+#include "compat/pageformat.h"
 
 #include "libmscore/score.h"
 #include "libmscore/staff.h"
@@ -90,6 +88,9 @@
 #include "libmscore/masterscore.h"
 #include "libmscore/factory.h"
 #include "libmscore/linkedobjects.h"
+
+#include "readchordlisthook.h"
+#include "readstyle.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -478,7 +479,7 @@ void Read206::readAccidental206(Accidental* a, XmlReader& e)
     }
 }
 
-static NoteHead::Group convertHeadGroup(int i)
+NoteHead::Group Read206::convertHeadGroup(int i)
 {
     NoteHead::Group val;
     switch (i) {
@@ -618,7 +619,7 @@ SymId Read206::articulationNames2SymId206(const QString& s)
 //   readDrumset
 //---------------------------------------------------------
 
-static void readDrumset(Drumset* ds, XmlReader& e)
+static void readDrumset206(Drumset* ds, XmlReader& e)
 {
     int pitch = e.intAttribute("pitch", -1);
     if (pitch < 0 || pitch > 127) {
@@ -628,7 +629,7 @@ static void readDrumset(Drumset* ds, XmlReader& e)
     while (e.readNextStartElement()) {
         const QStringRef& tag(e.name());
         if (tag == "head") {
-            ds->drum(pitch).notehead = convertHeadGroup(e.readInt());
+            ds->drum(pitch).notehead = Read206::convertHeadGroup(e.readInt());
         } else if (tag == "variants") {
             while (e.readNextStartElement()) {
                 const QStringRef& tagv(e.name());
@@ -659,7 +660,7 @@ static void readDrumset(Drumset* ds, XmlReader& e)
 //   readInstrument
 //---------------------------------------------------------
 
-static void readInstrument(Instrument* i, Part* p, XmlReader& e)
+static void readInstrument206(Instrument* i, Part* p, XmlReader& e)
 {
     int bank    = 0;
     int volume  = 100;
@@ -680,7 +681,7 @@ static void readInstrument(Instrument* i, Part* p, XmlReader& e)
                 i->drumset()->clear();
                 customDrumset = true;
             }
-            readDrumset(i->drumset(), e);
+            readDrumset206(i->drumset(), e);
         } else if (i->readProperties(e, p, &customDrumset)) {
         } else {
             e.unknown();
@@ -752,7 +753,7 @@ void Read206::readPart206(Part* part, XmlReader& e, ReadContext& ctx)
         const QStringRef& tag(e.name());
         if (tag == "Instrument") {
             Instrument* i = part->_instruments.instrument(/* tick */ -1);
-            readInstrument(i, part, e);
+            readInstrument206(i, part, e);
             Drumset* ds = i->drumset();
             Staff* s = part->staff(0);
             int lld = s ? qRound(s->lineDistance(Fraction(0, 1))) : 1;
@@ -781,7 +782,7 @@ static void readAmbitus(Ambitus* ambitus, XmlReader& e)
     while (e.readNextStartElement()) {
         const QStringRef& tag(e.name());
         if (tag == "head") {
-            ambitus->setNoteHeadGroup(convertHeadGroup(e.readInt()));
+            ambitus->setNoteHeadGroup(Read206::convertHeadGroup(e.readInt()));
         } else if (tag == "headType") {
             ambitus->setNoteHeadType(convertHeadType(e.readInt()));
         } else if (ambitus->readProperties(e)) {
@@ -795,7 +796,7 @@ static void readAmbitus(Ambitus* ambitus, XmlReader& e)
 //   readNote
 //---------------------------------------------------------
 
-static void readNote(Note* note, XmlReader& e, ReadContext& ctx)
+static void readNote206(Note* note, XmlReader& e, ReadContext& ctx)
 {
     note->setTpc1(Tpc::TPC_INVALID);
     note->setTpc2(Tpc::TPC_INVALID);
@@ -809,7 +810,7 @@ static void readNote(Note* note, XmlReader& e, ReadContext& ctx)
             note->add(a);
         } else if (tag == "head") {
             int i = e.readInt();
-            NoteHead::Group val = convertHeadGroup(i);
+            NoteHead::Group val = Read206::convertHeadGroup(i);
             note->setHeadGroup(val);
         } else if (tag == "headType") {
             int i = e.readInt();
@@ -1440,7 +1441,7 @@ static void readDynamic(Dynamic* d, XmlReader& e, const ReadContext& ctx)
 //   readTuplet
 //---------------------------------------------------------
 
-static void readTuplet(Tuplet* tuplet, XmlReader& e, const ReadContext& ctx)
+static void readTuplet206(Tuplet* tuplet, XmlReader& e, const ReadContext& ctx)
 {
     tuplet->setId(e.intAttribute("id", 0));
     while (e.readNextStartElement()) {
@@ -1776,7 +1777,7 @@ bool Read206::readChordProperties206(XmlReader& e, ReadContext& ctx, Chord* ch)
         Note* note = Factory::createNote(ch);
         // the note needs to know the properties of the track it belongs to
         note->setTrack(ch->track());
-        readNote(note, e, ctx);
+        readNote206(note, e, ctx);
         ch->add(note);
     } else if (readChordRestProperties206(e, ctx, ch)) {
     } else if (tag == "Stem") {
@@ -1963,7 +1964,7 @@ static void readChord(Chord* chord, XmlReader& e, ReadContext& ctx)
             Note* note = Factory::createNote(chord);
             // the note needs to know the properties of the track it belongs to
             note->setTrack(chord->track());
-            readNote(note, e, ctx);
+            readNote206(note, e, ctx);
             chord->add(note);
         } else if (tag == "Stem") {
             Stem* stem = Factory::createStem(chord);
@@ -2423,7 +2424,7 @@ void Read206::readTie206(XmlReader& e, const ReadContext& ctx, Tie* t)
 //   readMeasure
 //---------------------------------------------------------
 
-static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx)
+static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx)
 {
     Segment* segment = 0;
     qreal _spatium = m->spatium();
@@ -2920,7 +2921,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
             tuplet->setTrack(e.track());
             tuplet->setTick(e.tick());
             tuplet->setParent(m);
-            readTuplet(tuplet, e, ctx);
+            readTuplet206(tuplet, e, ctx);
             e.addTuplet(tuplet);
         } else if (tag == "startRepeat") {
             m->setRepeatStart(true);
@@ -3057,7 +3058,7 @@ static void readBox(Box* b, XmlReader& e, const ReadContext& ctx)
 //   readStaffContent
 //---------------------------------------------------------
 
-static void readStaffContent(Score* score, XmlReader& e, ReadContext& ctx)
+static void readStaffContent206(Score* score, XmlReader& e, ReadContext& ctx)
 {
     int staff = e.intAttribute("id", 1) - 1;
     e.setTick(Fraction(0, 1));
@@ -3087,7 +3088,7 @@ static void readStaffContent(Score* score, XmlReader& e, ReadContext& ctx)
                 measure->setTicks(f);
                 measure->setTimesig(f);
 
-                readMeasure(measure, staff, e, ctx);
+                readMeasure206(measure, staff, e, ctx);
                 measure->checkMeasure(staff);
                 if (!measure->isMMRest()) {
                     score->measures()->add(measure);
@@ -3139,7 +3140,7 @@ static void readStaffContent(Score* score, XmlReader& e, ReadContext& ctx)
                     score->measures()->add(measure);
                 }
                 e.setTick(measure->tick());
-                readMeasure(measure, staff, e, ctx);
+                readMeasure206(measure, staff, e, ctx);
                 measure->checkMeasure(staff);
                 if (measure->isMMRest()) {
                     measure = e.lastMeasure()->nextMeasure();
@@ -3164,7 +3165,7 @@ static void readStaffContent(Score* score, XmlReader& e, ReadContext& ctx)
 //   readStyle
 //---------------------------------------------------------
 
-static void readStyle(MStyle* style, XmlReader& e, ReadChordListHook& readChordListHook)
+static void readStyle206(MStyle* style, XmlReader& e, ReadChordListHook& readChordListHook)
 {
     excessTextStyles206.clear();
     while (e.readNextStartElement()) {
@@ -3228,7 +3229,7 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
         e.setTrack(-1);
         const QStringRef& tag(e.name());
         if (tag == "Staff") {
-            readStaffContent(score, e, ctx);
+            readStaffContent206(score, e, ctx);
         } else if (tag == "siglist") {
             score->sigmap()->read(e, score->fileDivision());
         } else if (tag == "Omr") {
@@ -3273,7 +3274,7 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
         } else if (tag == "Style") {
             qreal sp = score->style().value(Sid::spatium).toDouble();
             ReadChordListHook clhook(score);
-            readStyle(&score->style(), e, clhook);
+            readStyle206(&score->style(), e, clhook);
             if (score->style().value(Sid::MusicalTextFont).toString() == "MuseJazz") {
                 score->style().set(Sid::MusicalTextFont, "MuseJazz Text");
             }
@@ -3420,7 +3421,6 @@ Score::FileError Read206::read206(Ms::MasterScore* masterScore, XmlReader& e, Re
         const QStringRef& tag(e.name());
         if (tag == "programVersion") {
             masterScore->setMscoreVersion(e.readElementText());
-            masterScore->parseVersion(masterScore->mscoreVersion());
         } else if (tag == "programRevision") {
             masterScore->setMscoreRevision(e.readIntHex());
         } else if (tag == "Score") {
