@@ -38,6 +38,7 @@
 #include "modularity/ioc.h"
 #include "models/propertyitem.h"
 #include "ui/view/iconcodes.h"
+#include "types/commontypes.h"
 
 namespace mu::inspector {
 class AbstractInspectorModel : public QObject
@@ -93,6 +94,7 @@ public:
         TYPE_LET_RING,
         TYPE_VOLTA,
         TYPE_CRESCENDO,
+        TYPE_DIMINUENDO,
         TYPE_STAFF_TYPE_CHANGES,
         TYPE_TEXT_FRAME,
         TYPE_VERTICAL_FRAME,
@@ -126,10 +128,10 @@ public:
 
     bool isEmpty() const;
 
-    static QList<Ms::ElementType> supportedElementTypesBySectionType(const InspectorSectionType sectionType);
-    static QList<InspectorSectionType> sectionTypesFromElementType(const Ms::ElementType elementType);
-    static InspectorModelType notationElementModelType(const Ms::ElementType elementType);
-    static Ms::ElementType elementType(const InspectorModelType modelType);
+    static QList<ElementKey> supportedElementTypesBySectionType(const InspectorSectionType sectionType);
+    static QList<InspectorSectionType> sectionTypesFromElementKey(const ElementKey& elementKey);
+    static InspectorModelType notationElementModelType(const ElementKey& elementKey);
+    static ElementKey elementKey(const InspectorModelType& modelType);
 
     virtual bool hasAcceptableElements() const;
 
