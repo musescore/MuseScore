@@ -173,8 +173,8 @@ void EngravingElementsProvider::checkObjectTree(const Ms::EngravingObject* obj)
         LOGE() << "parents is differens, p1: " << p1->name() << ", p2: " << p2->name();
     }
 
-    int ch1 = obj->children().size();
-    int ch2 = obj->treeChildCount();
+    size_t ch1 = obj->children().size();
+    size_t ch2 = obj->treeChildCount();
     if (ch1 != ch2) {
         LOGI() << "obj: " << obj->name();
         LOGE() << "chcount is differens, ch1: " << ch1 << ", ch2: " << ch2;
