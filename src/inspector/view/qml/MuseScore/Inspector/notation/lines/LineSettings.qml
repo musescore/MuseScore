@@ -33,7 +33,6 @@ TabPanel {
     id: root
 
     property QtObject model: null
-    property int lineType: 0
 
     objectName: "LineSettings"
 
@@ -80,6 +79,19 @@ TabPanel {
         }
     }
 
+    Component {
+        id: commonStyleSettings
+
+        LineWithHooksCommonStyleSettings {
+            anchors.top: parent.top
+            anchors.topMargin: 24
+
+            width: root.width
+
+            model: root.model
+        }
+    }
+
     Tab {
         id: styleTab
 
@@ -94,7 +106,7 @@ TabPanel {
             case Inspector.TYPE_CRESCENDO: return crescendoStyleSettings
             }
 
-            return null
+            return commonStyleSettings
         }
     }
 

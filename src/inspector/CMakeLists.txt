@@ -136,6 +136,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/ottavasettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/voltasettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/voltasettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/letringsettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/letringsettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/palmmutesettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/palmmutesettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/linesettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/lines/linesettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/images/imagesettingsmodel.cpp
