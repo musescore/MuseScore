@@ -28,9 +28,8 @@
 
 using namespace mu::inspector;
 
-LineSettingsModel::LineSettingsModel(QObject* parent, IElementRepositoryService* repository, Ms::ElementType elementType,
-                                     const QString& title)
-    : AbstractInspectorModel(parent, repository, elementType, title)
+LineSettingsModel::LineSettingsModel(QObject* parent, IElementRepositoryService* repository, Ms::ElementType elementType)
+    : AbstractInspectorModel(parent, repository, elementType)
 {
     createProperties();
 }

@@ -54,15 +54,13 @@ private:
     QList<Ms::EngravingItem*> findStems() const;
     QList<Ms::EngravingItem*> findHooks() const;
     QList<Ms::EngravingItem*> findBeams() const;
-    QList<Ms::EngravingItem*> findGlissandos() const;
-    QList<Ms::EngravingItem*> findHairpins() const;
-    QList<Ms::EngravingItem*> findVoltas() const;
     QList<Ms::EngravingItem*> findStaffs() const;
     QList<Ms::EngravingItem*> findSectionBreaks() const;
     QList<Ms::EngravingItem*> findPedals() const;
     QList<Ms::EngravingItem*> findPairedClefs() const;
     QList<Ms::EngravingItem*> findTexts() const;
     QList<Ms::EngravingItem*> findTremolos() const;
+    QList<Ms::EngravingItem*> findLines(Ms::ElementType lineType) const;
 };
 }
 

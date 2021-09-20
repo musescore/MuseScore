@@ -44,6 +44,7 @@ Column {
 
     FlatRadioButtonGroupPropertyView {
         id: lineTypeButtonGroup
+
         titleText: qsTrc("inspector", "Line type")
         propertyItem: root.endHookType
     }

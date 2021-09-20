@@ -41,6 +41,7 @@ Column {
     readonly property bool isModified: propertyItem ? propertyItem.isModified : false
 
     enabled: propertyItem && propertyItem.isEnabled
+    visible: propertyItem && propertyItem.isVisible
 
     width: parent.width
 
