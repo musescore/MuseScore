@@ -24,12 +24,17 @@
 
 #include "translation.h"
 
+#include "ui/view/iconcodes.h"
+
 using namespace mu::inspector;
+
+using IconCode = mu::ui::IconCode::Code;
 
 OttavaSettingsModel::OttavaSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : LineSettingsModel(parent, repository, Ms::ElementType::OTTAVA)
 {
     setTitle(qtrc("inspector", "Ottava"));
+    setModelType(InspectorModelType::TYPE_OTTAVA);
 
     createProperties();
 }
@@ -44,12 +49,61 @@ PropertyItem* OttavaSettingsModel::showNumbersOnly() const
     return m_showNumbersOnly;
 }
 
+QVariantList OttavaSettingsModel::possibleOttavaTypes() const
+{
+    QMap<Ms::OttavaType, QString> ottavaTypes {
+        { Ms::OttavaType::OTTAVA_8VA, mu::qtrc("inspector", "8va alta") },
+        { Ms::OttavaType::OTTAVA_8VB, mu::qtrc("inspector", "8va bassa") },
+        { Ms::OttavaType::OTTAVA_15MA, mu::qtrc("inspector", "15ma alta") },
+        { Ms::OttavaType::OTTAVA_15MB, mu::qtrc("inspector", "15ma bassa") },
+        { Ms::OttavaType::OTTAVA_22MA, mu::qtrc("inspector", "22ma alta") },
+        { Ms::OttavaType::OTTAVA_22MB, mu::qtrc("inspector", "22ma bassa") }
+    };
+
+    QVariantList result;
+
+    for (Ms::OttavaType type : ottavaTypes.keys()) {
+        QVariantMap obj;
+        obj["value"] = static_cast<int>(type);
+        obj["text"] = ottavaTypes[type];
+
+        result << obj;
+    }
+
+    return result;
+}
+
+QVariantList OttavaSettingsModel::possibleEndHookTypes() const
+{
+    static const QMap<Ms::HookType, IconCode> hookTypes {
+        { Ms::HookType::NONE, IconCode::LINE_NORMAL },
+        { Ms::HookType::HOOK_90, IconCode::LINE_WITH_END_HOOK },
+        { Ms::HookType::HOOK_45, IconCode::LINE_WITH_ANGLED_END_HOOK }
+    };
+
+    QVariantList result;
+
+    for (Ms::HookType type : hookTypes.keys()) {
+        QVariantMap obj;
+        obj["value"] = static_cast<int>(type);
+        obj["iconCode"] = static_cast<int>(hookTypes[type]);
+
+        result << obj;
+    }
+
+    return result;
+}
+
 void OttavaSettingsModel::createProperties()
 {
     LineSettingsModel::createProperties();
 
     m_ottavaType = buildPropertyItem(Ms::Pid::OTTAVA_TYPE);
     m_showNumbersOnly = buildPropertyItem(Ms::Pid::NUMBERS_ONLY);
+
+    placement()->setIsVisible(false);
+    beginingTextHorizontalOffset()->setIsVisible(false);
+    continiousTextHorizontalOffset()->setIsVisible(false);
 }
 
 void OttavaSettingsModel::loadProperties()
