@@ -41,9 +41,7 @@ DialogView {
     property int contentWidth: 240
     property int contentHeight: contentBody.childrenRect.height
 
-    property alias navigation: navSec
     property bool isDoActiveParentOnClose: true
-
     property NavigationSection navigationSection: NavigationSection {
         id: navSec
         name: root.objectName !== "" ? root.objectName : "StyledDialogView"

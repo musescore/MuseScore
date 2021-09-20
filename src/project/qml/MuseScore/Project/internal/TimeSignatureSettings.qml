@@ -31,9 +31,14 @@ FlatButton {
     id: root
 
     property var model: null
+    property string currentValueAccessibleName: root.model.timeSignatureAccessibleName(root.model.timeSignatureType,
+                                                                                       root.model.timeSignature.numerator,
+                                                                                       root.model.timeSignature.denominator)
+
+    property alias popupAnchorItem: popup.anchorItem
 
     height: 96
-    accentButton: popup.visible
+    accentButton: popup.isOpened
 
     TimeSignatureView {
         id: timeSignatureView
@@ -54,25 +59,23 @@ FlatButton {
         }
     }
 
-    StyledPopup {
+    StyledPopupView {
         id: popup
 
-        implicitHeight: radioButtonList.height + topPadding + bottomPadding + 40
-        implicitWidth: 310
+        padding: 8
+        margins: 36
 
-        x: root.x - (width - root.width) / 2
-        y: root.height
+        contentWidth: 200
+        contentHeight: 120
+
+        navigationParentControl: root.navigation
 
         RadioButtonGroup {
             id: radioButtonList
 
-            anchors.top: parent.top
-            anchors.left: parent.left
-            anchors.right: parent.right
-            anchors.margins: 20
-            height: implicitHeight
+            anchors.fill: parent
 
-            spacing: 30
+            spacing: 32
 
             orientation: ListView.Vertical
 
@@ -82,19 +85,40 @@ FlatButton {
                 { comp: cutComp, valueRole: AdditionalInfoModel.Cut }
             ]
 
+            property NavigationPanel navigationPanel: NavigationPanel {
+                name: "TimeSignatureTabPanel"
+                section: popup.navigationSection
+                direction: NavigationPanel.Both
+                order: 1
+            }
+
             delegate: RoundedRadioButton {
                 id: timeFractionButton
+
+                property bool isCurrent: radioButtonList.currentIndex === model.index
 
                 ButtonGroup.group: radioButtonList.radioButtonGroup
                 width: parent.width
 
                 spacing: 30
+                leftPadding: 0
 
                 contentComponent: modelData["comp"]
-                checked: (root.model.timeSignatureType === modelData["valueRole"])
+                checked: (root.model.timeSignatureType === modelData["valueRole"]) && popup.isOpened
+
+                navigation.name: modelData["valueRole"]
+                navigation.panel: radioButtonList.navigationPanel
+                navigation.row: model.index
+                navigation.column: 0
 
                 onToggled: {
                     root.model.timeSignatureType = modelData["valueRole"]
+                }
+
+                onCheckedChanged: {
+                    if (checked && !navigation.active) {
+                        navigation.requestActive()
+                    }
                 }
             }
         }
@@ -106,11 +130,18 @@ FlatButton {
         TimeSignatureFraction {
             anchors.fill: parent
 
+            property string accessibleName: root.model.timeSignatureAccessibleName(AdditionalInfoModel.Fraction,
+                                                                                   numerator, denominator)
+
             enabled: (root.model.timeSignatureType === AdditionalInfoModel.Fraction)
             availableDenominators: root.model.timeSignatureDenominators()
 
             numerator: enabled ? root.model.timeSignature.numerator : numerator
             denominator: enabled ? root.model.timeSignature.denominator : denominator
+
+            navigationPanel: radioButtonList.navigationPanel
+            navigationRowStart: 0
+            navigationColumnStart: 1
 
             onNumeratorSelected: {
                 root.model.setTimeSignatureNumerator(value)
@@ -126,9 +157,11 @@ FlatButton {
         id: commonComp
 
         StyledIconLabel {
-            horizontalAlignment: Text.AlignLeft
+            property string accessibleName: root.model.timeSignatureAccessibleName(AdditionalInfoModel.Common)
+
             font.family: ui.theme.musicalFont.family
             font.pixelSize: 30
+            horizontalAlignment: Text.AlignLeft
             iconCode: MusicalSymbolCodes.TIMESIG_COMMON
         }
     }
@@ -137,9 +170,11 @@ FlatButton {
         id: cutComp
 
         StyledIconLabel {
-            horizontalAlignment: Text.AlignLeft
+            property string accessibleName: root.model.timeSignatureAccessibleName(AdditionalInfoModel.Cut)
+
             font.family: ui.theme.musicalFont.family
             font.pixelSize: 30
+            horizontalAlignment: Text.AlignLeft
             iconCode: MusicalSymbolCodes.TIMESIG_CUT
         }
     }

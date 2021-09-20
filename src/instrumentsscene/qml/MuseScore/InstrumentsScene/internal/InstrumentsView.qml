@@ -35,19 +35,31 @@ Item {
 
     signal addSelectedInstrumentsToScoreRequested()
 
-    NavigationPanel {
-        id: navPanel
-        name: "InstrumentsView"
-        direction: NavigationPanel.Vertical
-        enabled: root.visible
-    }
-
     function clearSearch() {
         searchField.clear()
     }
 
     function focusInstrument(instrumentIndex) {
         instrumentsView.positionViewAtIndex(instrumentIndex, ListView.Beginning)
+    }
+
+    QtObject {
+        id: prv
+
+        property var currentItemNavigationIndex: []
+    }
+
+    NavigationPanel {
+        id: navPanel
+        name: "InstrumentsView"
+        direction: NavigationPanel.Vertical
+        enabled: root.visible
+
+        onNavigationEvent: {
+            if (event.type === NavigationEvent.AboutActive) {
+                event.setData("controlIndex", prv.currentItemNavigationIndex)
+            }
+        }
     }
 
     StyledTextLabel {
@@ -71,6 +83,12 @@ Item {
         navigation.name: "SearchInstruments"
         navigation.panel: navPanel
         navigation.row: 1
+
+        onFocusChanged: {
+            if (activeFocus) {
+                prv.currentItemNavigationIndex = [navigation.row, navigation.column]
+            }
+        }
 
         onSearchTextChanged: {
             root.instrumentsModel.setSearchText(searchText)
@@ -103,14 +121,21 @@ Item {
             navigation.name: model.name
             navigation.panel: navPanel
             navigation.row: 2 + model.index
+            navigation.accessible.name: itemTitleLabel.text
 
             onNavigationActived: {
-                item.clicked()
+                prv.currentItemNavigationIndex = [navigation.row, navigation.column]
+                root.instrumentsModel.selectInstrument(model.index)
+            }
+
+            onNavigationTriggered: {
+                root.addSelectedInstrumentsToScoreRequested()
             }
 
             isSelected: model.isSelected
 
             StyledTextLabel {
+                id: itemTitleLabel
                 anchors.left: parent.left
                 anchors.leftMargin: 12
                 anchors.right: traitsBox.visible ? traitsBox.left : parent.right

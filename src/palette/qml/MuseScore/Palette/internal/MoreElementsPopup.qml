@@ -60,11 +60,19 @@ StyledPopupView {
 
     signal addElementsRequested(var mimeDataList)
 
-    navigation.name: "MoreElementsPopup"
-    navigation.direction: NavigationPanel.Both
+    property NavigationPanel navigationPanel: NavigationPanel {
+        name: "MoreElementsPopup"
+        section: moreElementsPopup.navigationSection
+        order: 1
+        direction: NavigationPanel.Both
+    }
 
     onOpened: {
         masterPalette.focusFirstItem()
+
+        if (masterPalette.count === 0) {
+            elementEditorButton.navigation.requestActive()
+        }
     }
 
     Column {
@@ -79,7 +87,7 @@ StyledPopupView {
             text: qsTrc("palette", "Add to %1").arg(paletteName)
             enabled: moreElementsPopup.paletteEditingEnabled && (masterPaletteSelectionModel.hasSelection || customPaletteSelectionModel.hasSelection)
 
-            navigation.panel: moreElementsPopup.navigation
+            navigation.panel: moreElementsPopup.navigationPanel
             navigation.name: "addToPaletteButton"
             navigation.column: 1
             navigation.row: 1
@@ -121,7 +129,7 @@ StyledPopupView {
                 normalStateColor: "transparent"
                 enabled: prevIndex && prevIndex.valid
 
-                navigation.panel: moreElementsPopup.navigation
+                navigation.panel: moreElementsPopup.navigationPanel
                 navigation.name: "prevButton"
                 navigation.column: 1
                 navigation.row: 2
@@ -169,7 +177,7 @@ StyledPopupView {
 
                 enabled: nextIndex && nextIndex.valid
 
-                navigation.panel: moreElementsPopup.navigation
+                navigation.panel: moreElementsPopup.navigationPanel
                 navigation.name: "nextButton"
                 navigation.column: 1
                 navigation.row: 3
@@ -215,7 +223,7 @@ StyledPopupView {
                     cellSize: moreElementsPopup.cellSize
                     drawGrid: moreElementsPopup.drawGrid
 
-                    navigationPanel: moreElementsPopup.navigation
+                    navigationPanel: moreElementsPopup.navigationPanel
                     navigationCol: 1
                     navigationRow: 4
 
@@ -250,7 +258,7 @@ StyledPopupView {
 
                         toolTipTitle: text
 
-                        navigation.panel: moreElementsPopup.navigation
+                        navigation.panel: moreElementsPopup.navigationPanel
                         navigation.name: "deleteButton"
                         navigation.column: 1
                         navigation.row: 100 // Should be more than palette cells
@@ -274,7 +282,7 @@ StyledPopupView {
                     cellSize: control.cellSize
                     drawGrid: control.drawGrid
 
-                    navigationPanel: moreElementsPopup.navigation
+                    navigationPanel: moreElementsPopup.navigationPanel
                     navigationCol: 1
                     navigationRow: 4
 
@@ -301,7 +309,7 @@ StyledPopupView {
             enabled: moreElementsPopup.paletteEditingEnabled
             width: parent.width
             text: moreElementsPopup.elementEditor ? moreElementsPopup.elementEditor.actionName : ""
-            navigation.panel: moreElementsPopup.navigation
+            navigation.panel: moreElementsPopup.navigationPanel
             navigation.name: "elementEditorButton"
             navigation.column: 1
             navigation.row: 101 // after deleteButton

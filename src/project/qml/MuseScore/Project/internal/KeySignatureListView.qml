@@ -32,32 +32,59 @@ GridView {
     property var mode: null
     signal signatureSelected(var signature)
 
+    property int rows: Math.max(0, Math.floor(root.height / root.cellHeight))
+    property int columns: Math.max(0, Math.floor(root.width / root.cellWidth))
+
+    property NavigationPanel navigationPanel: NavigationPanel {
+        direction: NavigationPanel.Both
+    }
+
     height: contentHeight
 
     clip: true
     
-    cellWidth: 82
-    cellHeight: 90
+    cellWidth: 82 + prv.spacing
+    cellHeight: 90 + prv.spacing
     
     interactive: height < contentHeight
     
-    delegate: ListItemBlank {
+    QtObject {
+        id: prv
+
+        readonly property int spacing: 4
+    }
+
+    delegate: Item {
         height: root.cellHeight
         width: root.cellWidth
 
-        itemBorderColor: ui.theme.strokeColor
-        itemBorderWidth: ui.theme.borderWidth
+        ListItemBlank {
+            id: item
+            anchors.centerIn: parent
+            height: root.cellHeight - prv.spacing
+            width: root.cellWidth - prv.spacing
 
-        radius: 3
-        isSelected: modelData.titleMajor === currentSignature.titleMajor
+            itemBorderColor: ui.theme.strokeColor
+            itemBorderWidth: ui.theme.borderWidth
 
-        KeySignature {
-            icon: modelData.icon
-            text: root.mode === "major" ? modelData.titleMajor : modelData.titleMinor
-        }
-        
-        onClicked: {
-            root.signatureSelected(modelData)
+            radius: 3
+            isSelected: modelData.titleMajor === currentSignature.titleMajor
+
+            navigation.name: keySignature.text
+            navigation.panel: root.navigationPanel
+            navigation.row: root.columns === 0 ? 0 : Math.floor(model.index / root.columns)
+            navigation.column: model.index - (navigation.row * root.columns)
+            navigation.accessible.name: keySignature.text
+
+            KeySignature {
+                id: keySignature
+                icon: modelData.icon
+                text: root.mode === "major" ? modelData.titleMajor : modelData.titleMinor
+            }
+
+            onClicked: {
+                root.signatureSelected(modelData)
+            }
         }
     }
 }

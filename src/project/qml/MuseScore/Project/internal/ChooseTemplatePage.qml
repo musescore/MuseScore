@@ -127,6 +127,7 @@ Item {
                 navigation.name: "ZOOM_IN"
                 navigation.panel: navZoomPanel
                 navigation.row: 1
+                navigation.accessible.name: qsTrc("project", "Zoom in")
 
                 onClicked: {
                     templatePreview.zoomIn()
@@ -139,6 +140,7 @@ Item {
                 navigation.name: "ZOOM_OUT"
                 navigation.panel: navZoomPanel
                 navigation.row: 2
+                navigation.accessible.name: qsTrc("project", "Zoom out")
 
                 onClicked: {
                     templatePreview.zoomOut()

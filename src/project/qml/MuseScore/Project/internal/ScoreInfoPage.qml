@@ -30,6 +30,9 @@ import MuseScore.Project 1.0
 Item {
     id: root
 
+    property NavigationSection navigationSection: null
+    property var popupsAnchorItem: null
+
     function result() {
         var result = {
             title: generalInfo.title,
@@ -50,6 +53,10 @@ Item {
         return result
     }
 
+    function focusOnFirst() {
+        additionalInfo.focusOnFirst()
+    }
+
     StyledTextLabel {
         id: title
 
@@ -63,9 +70,10 @@ Item {
     ColumnLayout {
         anchors.top: title.bottom
         anchors.left: parent.left
+        anchors.leftMargin: 8
         anchors.right: parent.right
+        anchors.rightMargin: 8
         anchors.bottom: parent.bottom
-        anchors.margins: 20
 
         spacing: 30
 
@@ -74,6 +82,11 @@ Item {
 
             Layout.preferredHeight: 150
             Layout.fillWidth: true
+
+            popupsAnchorItem: root.popupsAnchorItem
+
+            navigationPanel.section: root.navigationSection
+            navigationPanel.order: 1
         }
 
         SeparatorLine {}
@@ -82,6 +95,9 @@ Item {
             id: generalInfo
 
             Layout.fillWidth: true
+
+            navigationPanel.section: root.navigationSection
+            navigationPanel.order: 2
         }
     }
 }

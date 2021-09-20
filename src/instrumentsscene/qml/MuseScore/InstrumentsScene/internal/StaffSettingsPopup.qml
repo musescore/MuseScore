@@ -31,15 +31,19 @@ StyledPopupView {
     contentHeight: contentColumn.childrenRect.height
     contentWidth: 240
 
-    navigation.name: "StaffSettingsPopup"
-    navigation.direction: NavigationPanel.Vertical
+    property NavigationPanel navigationPanel: NavigationPanel {
+        name: "StaffSettingsPopup"
+        section: root.navigationSection
+        order: 1
+        direction: NavigationPanel.Vertical
+    }
 
     function load(staff) {
         settingsModel.load(staff.id)
     }
 
     onOpened: {
-        staffTypesComboBox.ensureActiveFocus()
+        staffTypesComboBox.navigation.requestActive()
     }
 
     StaffSettingsModel {
@@ -62,7 +66,7 @@ StyledPopupView {
             id: staffTypesComboBox
             width: parent.width
 
-            navigation.panel: root.navigation
+            navigation.panel: root.navigationPanel
             navigation.row: 1
 
             model: settingsModel.allStaffTypes()
@@ -72,7 +76,9 @@ StyledPopupView {
             }
         }
 
-        SeparatorLine {}
+        SeparatorLine {
+            visible: !settingsModel.isMainScore
+        }
 
         StyledTextLabel {
             visible: !settingsModel.isMainScore
@@ -97,8 +103,9 @@ StyledPopupView {
 
                     objectName: "Voice" + modelData.title + "CheckBox"
 
-                    navigation.panel: root.navigation
+                    navigation.panel: root.navigationPanel
                     navigation.row: model.index + 2 //! NOTE after staffTypesComboBox
+                    navigation.enabled: !settingsModel.isMainScore
 
                     text: modelData.title
                     checked: modelData.visible
@@ -122,7 +129,7 @@ StyledPopupView {
         SeparatorLine {}
 
         CheckBox {
-            navigation.panel: root.navigation
+            navigation.panel: root.navigationPanel
             navigation.row: 20 // Should be more than a voices checkbox
 
             text: qsTrc("instruments", "Small staff")
@@ -138,7 +145,7 @@ StyledPopupView {
             anchors.right: parent.right
             anchors.rightMargin: 20
 
-            navigation.panel: root.navigation
+            navigation.panel: root.navigationPanel
             navigation.row: 21 // after small staff CheckBox
 
             text: qsTrc("instruments", "Hide all measures that do not contain notation (cutaway)")
@@ -156,7 +163,7 @@ StyledPopupView {
         FlatButton {
             width: parent.width
 
-            navigation.panel: root.navigation
+            navigation.panel: root.navigationPanel
             navigation.row: 22 // after cutaway CheckBox
 
             text: qsTrc("instruments", "Create a linked staff")

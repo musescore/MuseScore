@@ -21,6 +21,7 @@
  */
 import QtQuick 2.9
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
 Row {
@@ -33,12 +34,16 @@ Row {
     signal numeratorSelected(var value)
     signal denominatorSelected(var value)
 
-    spacing: 14
+    property NavigationPanel navigationPanel: null
+    property int navigationRowStart: 0
+    property int navigationColumnStart: 0
+
+    spacing: 12
 
     IncrementalPropertyControl {
         id: control
 
-        implicitWidth: 68
+        implicitWidth: 60
         anchors.verticalCenter: parent.verticalCenter
 
         currentValue: root.numerator
@@ -47,12 +52,18 @@ Row {
         maxValue: 63
         minValue: 1
 
+        navigation.name: "TimeControl"
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationRowStart
+        navigation.column: root.navigationColumnStart
+
         onValueEdited: {
             root.numeratorSelected(newValue)
         }
     }
 
     StyledTextLabel {
+        width: 8
         anchors.verticalCenter: parent.verticalCenter
         font: ui.theme.largeBodyFont
         text: "/"
@@ -66,6 +77,11 @@ Row {
 
         popupItemsCount: 4
         currentIndex: timeComboBox.indexOfValue(root.denominator)
+
+        navigation.name: "TimeBox"
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationRowStart
+        navigation.column: root.navigationColumnStart + 1
 
         model: {
             var resultList = []

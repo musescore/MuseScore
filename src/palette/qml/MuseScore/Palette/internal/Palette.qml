@@ -391,9 +391,9 @@ GridView {
 
     function focusFirstItem() {
         if (count == 0 && moreButton.visible) {
-            moreButton.forceActiveFocus();
+            moreButton.forceActiveFocus()
         } else {
-            currentIndex = 0;
+            currentIndex = 0
         }
     }
 
@@ -524,6 +524,16 @@ GridView {
                 }
             }
             navigation.onTriggered: paletteCell.clicked()
+
+            Connections {
+                target: paletteView
+
+                function onCurrentIndexChanged() {
+                    if (paletteView.currentIndex === paletteCell.rowIndex && !paletteCell.navigation.active) {
+                        paletteCell.navigation.requestActive()
+                    }
+                }
+            }
 
             IconView {
                 anchors.fill: parent

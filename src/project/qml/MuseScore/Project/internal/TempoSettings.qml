@@ -32,9 +32,13 @@ FlatButton {
     id: root
 
     property var model: null
+    property string currentValueAccessibleName: model.tempoAccessibleName(root.model.tempo.noteIcon,
+                                                                          root.model.tempo.withDot) + " " + root.model.tempo.value
+
+    property alias popupAnchorItem: popup.anchorItem
 
     height: 96
-    accentButton: popup.visible
+    accentButton: popup.isOpened
 
     TempoView {
         anchors.centerIn: parent
@@ -56,30 +60,47 @@ FlatButton {
         }
     }
 
-    StyledPopup {
+    StyledPopupView {
         id: popup
 
-        implicitHeight: 250
-        implicitWidth: 520
+        padding: 8
+        margins: 0
 
-        x: root.x - (width - root.width) / 2
-        y: root.height
+        contentWidth: content.width
+        contentHeight: content.height
 
-        Column {
-            anchors.fill: parent
-            anchors.margins: 10
+        navigationParentControl: root.navigation
 
-            spacing: 30
+        onOpened: {
+            withTempo.navigation.requestActive()
+        }
+
+        ColumnLayout {
+            id: content
+
+            spacing: 0
+
+            property NavigationPanel navigationPanel: NavigationPanel {
+                name: "TempoSettingsPanel"
+                section: popup.navigationSection
+                direction: NavigationPanel.Both
+                order: 1
+            }
 
             CheckBox {
                 id: withTempo
 
-                anchors.left: parent.left
-                anchors.right: parent.right
+                Layout.topMargin: 26
+                Layout.leftMargin: 32
 
                 checked: root.model.withTempo
 
                 text: qsTrc("project", "Show tempo marking on my score")
+
+                navigation.name: "WithTempoBox"
+                navigation.panel: content.navigationPanel
+                navigation.row: 0
+                navigation.column: 0
 
                 onClicked: {
                     root.model.withTempo = !checked
@@ -87,14 +108,15 @@ FlatButton {
             }
 
             SeparatorLine {
-                anchors.leftMargin: -(parent.anchors.leftMargin + popup.leftPadding)
-                anchors.rightMargin: -(parent.anchors.rightMargin + popup.rightPadding)
+                Layout.topMargin: 26
             }
 
             RadioButtonGroup {
-                anchors.horizontalCenter: parent.horizontalCenter
+                Layout.topMargin: 26
+                Layout.leftMargin: 32
+                Layout.rightMargin: 32
 
-                height: 50
+                height: 48
 
                 model: root.model.tempoNotes()
 
@@ -107,6 +129,13 @@ FlatButton {
 
                     enabled: withTempo.checked
                     checked: model.index === root.model.currentTempoNoteIndex
+
+                    navigation.name: modelData.noteSymbol
+                    navigation.panel: content.navigationPanel
+                    navigation.row: 1
+                    navigation.column: model.index
+
+                    navigation.accessible.name: root.model.tempoAccessibleName(modelData.noteIcon, modelData.withDot)
 
                     onClicked: {
                         var tempo = root.model.tempo
@@ -128,7 +157,9 @@ FlatButton {
             }
 
             Row {
-                anchors.horizontalCenter: parent.horizontalCenter
+                Layout.topMargin: 26
+                Layout.alignment: Qt.AlignHCenter
+                Layout.bottomMargin: 22
 
                 spacing: 20
                 enabled: withTempo.checked
@@ -149,6 +180,10 @@ FlatButton {
                     decimals: 0
                     maxValue: root.model.tempoValueRange().max
                     minValue: root.model.tempoValueRange().min
+
+                    navigation.panel: content.navigationPanel
+                    navigation.row: 2
+                    navigation.column: 0
 
                     onValueEdited: {
                         var tempo = root.model.tempo

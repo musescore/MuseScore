@@ -41,7 +41,14 @@ Row {
     property alias pickupTimeSignature: infoModel.pickupTimeSignature
     property alias measureCount: infoModel.measureCount
 
+    property alias navigationPanel: navPanel
+    property var popupsAnchorItem: null
+
     spacing: 20
+
+    function focusOnFirst() {
+        keySignatureSettings.navigation.requestActive()
+    }
 
     QtObject {
         id: privatesProperties
@@ -58,6 +65,14 @@ Row {
         id: infoModel
     }
 
+    NavigationPanel {
+        id: navPanel
+        name: "NavPanel"
+        direction: NavigationPanel.Horizontal
+        enabled: root.visible
+        accessible.name: qsTrc("project", "Score options")
+    }
+
     Column {
         id: keySignatureСolumn
 
@@ -68,6 +83,8 @@ Row {
         spacing: 10
 
         StyledTextLabel {
+            id: keySignatureTitle
+
             anchors.left: parent.left
             anchors.right: parent.right
 
@@ -77,12 +94,21 @@ Row {
         }
 
         KeySignatureSettings {
+            id: keySignatureSettings
+
             anchors.left: parent.left
             anchors.right: parent.right
 
             height: privatesProperties.buttonHeight
 
             model: infoModel
+
+            popupAnchorItem: root.popupsAnchorItem
+
+            navigation.name: "KeySignatureButton"
+            navigation.panel: navPanel
+            navigation.column: 0
+            accessible.name: keySignatureTitle.text + " " + currentValueAccessibleName
         }
     }
 
@@ -95,6 +121,8 @@ Row {
         spacing: 10
 
         StyledTextLabel {
+            id: timeSignatureTitle
+
             anchors.left: parent.left
             anchors.right: parent.right
 
@@ -110,6 +138,13 @@ Row {
             height: privatesProperties.buttonHeight
 
             model: infoModel
+
+            popupAnchorItem: root.popupsAnchorItem
+
+            navigation.name: "TimeSignatureButton"
+            navigation.panel: navPanel
+            navigation.column: 1
+            accessible.name: timeSignatureTitle.text + " " + currentValueAccessibleName
         }
     }
 
@@ -122,6 +157,7 @@ Row {
         spacing: 10
 
         StyledTextLabel {
+            id: tempoSignatureTitle
             anchors.left: parent.left
             anchors.right: parent.right
 
@@ -137,6 +173,13 @@ Row {
             height: privatesProperties.buttonHeight
 
             model: infoModel
+
+            popupAnchorItem: root.popupsAnchorItem
+
+            navigation.name: "TempoSignatureButton"
+            navigation.panel: navPanel
+            navigation.column: 2
+            accessible.name: tempoSignatureTitle.text + " " + currentValueAccessibleName
         }
     }
 
@@ -149,6 +192,7 @@ Row {
         spacing: 10
 
         StyledTextLabel {
+            id: measuresSignatureTitle
             anchors.left: parent.left
             anchors.right: parent.right
 
@@ -164,6 +208,13 @@ Row {
             height: privatesProperties.buttonHeight
 
             model: infoModel
+
+            popupAnchorItem: root.popupsAnchorItem
+
+            navigation.name: "MeasuresSignatureButton"
+            navigation.panel: navPanel
+            navigation.column: 3
+            accessible.name: measuresSignatureTitle.text + " " + currentValueAccessibleName
         }
     }
 }

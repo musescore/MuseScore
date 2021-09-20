@@ -31,7 +31,10 @@ TabPanel {
 
     property QtObject proxyModel: null
 
-    property NavigationPanel navigationPanel: null
+    property NavigationPanel navigationPanel: NavigationPanel {
+        name: "PlaybackSettings"
+        direction: NavigationPanel.Both
+    }
 
     implicitHeight: Math.max(generalTab.visible ? generalTab.implicitHeight : 0,
                              dynamicsTab.visible ? dynamicsTab.implicitHeight : 0) + tabBarHeight + 24
