@@ -167,12 +167,14 @@ Item {
             navigation.panel: navPanel
             navigation.row: 1 + model.index
             navigation.column: 0
+            navigation.accessible.name: itemTitleLabel.text
 
             onNavigationActived: {
                 item.clicked()
             }
 
             StyledTextLabel {
+                id: itemTitleLabel
                 anchors.left: parent.left
                 anchors.leftMargin: 12
                 anchors.right: parent.right
