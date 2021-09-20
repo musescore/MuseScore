@@ -467,7 +467,7 @@ void PianorollView::paint(QPainter* p)
     }
 
     if (m_dragStyle == DragStyle::NOTE_POSITION || m_dragStyle == DragStyle::NOTE_LENGTH_END
-        || m_dragStyle == DragStyle::NOTE_LENGTH_START) {
+        || m_dragStyle == DragStyle::NOTE_LENGTH_START || m_dragStyle == DragStyle::DRAW_NOTE) {
         drawDraggedNotes(p);
     }
 
@@ -501,6 +501,25 @@ void PianorollView::drawDraggedNotes(QPainter* painter)
     QColor noteColor = m_colorNoteDrag;
 
     Ms::Score* curScore = score();
+    Ms::Staff* staff = activeStaff();
+
+    if (m_dragStyle == DragStyle::DRAW_NOTE) {
+        double startTick = pixelXToWholeNote(m_mouseDownPos.x());
+        double endTick = pixelXToWholeNote(m_lastMousePos.x());
+        if (startTick > endTick)
+            std::swap(startTick, endTick);
+
+        Ms::Fraction startTickFrac = roundToSubdivision(startTick);
+        Ms::Fraction endTickFrac = roundToSubdivision(endTick, false);
+
+        if (endTickFrac != startTickFrac) {
+            double pitch = pixelYToPitch(m_mouseDownPos.y());
+            int track = staff->idx() * VOICES + m_editNoteVoice;
+
+            drawDraggedNote(painter, startTickFrac, endTickFrac - startTickFrac, pitch, track, m_colorNoteDrag);
+        }
+        return;
+    }
 
     Ms::Fraction pos(pixelXToWholeNote(m_lastMousePos.x()) * 1000, 1000);
     Ms::Measure* m = curScore->tick2measure(pos);
@@ -544,8 +563,6 @@ void PianorollView::drawDraggedNotes(QPainter* painter)
     //Iterate thorugh note data
     QXmlStreamReader xml(m_dragNoteCache);
     Ms::Fraction firstTick;
-
-    Ms::Staff* staff = activeStaff();
 
     while (!xml.atEnd())
     {
@@ -759,8 +776,37 @@ void PianorollView::mouseReleaseEvent(QMouseEvent* event)
                     m_inProgressUndoEvent = false;
                 }
             }
-        }
+        } else if (m_dragStyle == DragStyle::DRAW_NOTE) {
+            double startTick = pixelXToWholeNote(m_mouseDownPos.x());
+            double endTick = pixelXToWholeNote(m_lastMousePos.x());
+            if (startTick > endTick)
+                std::swap(startTick, endTick);
 
+            Ms::Fraction startTickFrac = roundToSubdivision(startTick);
+            Ms::Fraction endTickFrac = roundToSubdivision(endTick, false);
+
+            if (endTickFrac != startTickFrac) {
+                double pitch = pixelYToPitch(m_mouseDownPos.y());
+
+                Ms::Score* curScore = score();
+                Ms::Staff* staff = activeStaff();
+
+                int voice = m_editNoteVoice;
+                int track = staff->idx() * VOICES + voice;
+
+                Ms::Fraction duration = endTickFrac - startTickFrac;
+
+                //Store duration as new length for future single-click note add events
+                m_editNoteLength = duration;
+
+                //Do command
+                curScore->startCmd();
+                addNote(startTickFrac, duration, (int)pitch, track);
+                curScore->endCmd();
+
+                buildNoteData();
+            }
+        }
         m_dragStarted = false;
     } else {
         //This was just a click, not a drag
@@ -854,6 +900,8 @@ void PianorollView::mouseMoveEvent(QMouseEvent* event)
                 m_dragNoteCache = serializeSelectedNotes();
             } else if (!pi && m_tool == PianorollTool::SELECT) {
                 m_dragStyle = DragStyle::SELECTION_RECT;
+            } else if ( m_tool == PianorollTool::ADD) {
+                m_dragStyle = DragStyle::DRAW_NOTE;
             } else {
                 m_dragStyle = DragStyle::NONE;
             }
@@ -878,7 +926,7 @@ void PianorollView::mouseMoveEvent(QMouseEvent* event)
     }
 }
 
-Ms::Fraction PianorollView::roundDownToSubdivision(double wholeNote)
+Ms::Fraction PianorollView::roundToSubdivision(double wholeNote, bool down)
 {
     Ms::Score* curScore = score();
 
@@ -893,7 +941,7 @@ Ms::Fraction PianorollView::roundDownToSubdivision(double wholeNote)
     int divisions = noteWithBeat * subbeats;
 
     //Round down to nearest division
-    Ms::Fraction roundedTick = Ms::Fraction(floor(wholeNote * divisions), divisions);
+    Ms::Fraction roundedTick = Ms::Fraction(down ? floor(wholeNote * divisions) : ceil(wholeNote * divisions), divisions);
     return roundedTick;
 }
 
@@ -910,7 +958,7 @@ void PianorollView::insertNote(int modifiers)
 
     Ms::Fraction timeSig = m->timesig();
 
-    Ms::Fraction insertPosition = roundDownToSubdivision(pickTick);
+    Ms::Fraction insertPosition = roundToSubdivision(pickTick);
 
     int voice = m_editNoteVoice;
 
@@ -947,7 +995,7 @@ void PianorollView::cutChord(const QPointF& pos)
     //Find best chord to add to
     int track = staff->idx() * VOICES + voice;
 
-    Ms::Fraction insertPosition = roundDownToSubdivision(pickTick);
+    Ms::Fraction insertPosition = roundToSubdivision(pickTick);
 
     Ms::Segment* seg = curScore->tick2segment(insertPosition);
     curScore->expandVoice(seg, track);
