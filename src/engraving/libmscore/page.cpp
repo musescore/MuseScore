@@ -172,9 +172,25 @@ void Page::draw(mu::draw::Painter* painter) const
 
 void Page::drawHeaderFooter(mu::draw::Painter* p, int area, const QString& ss) const
 {
+    Text* text = layoutHeaderFooter(area, ss);
+    if (!text) {
+        return;
+    }
+    p->translate(text->pos());
+    text->draw(p);
+    p->translate(-text->pos());
+    text->moveToDummy();
+}
+
+//---------------------------------------------------------
+//   layoutHeaderFooter
+//---------------------------------------------------------
+
+Text* Page::layoutHeaderFooter(int area, const QString& ss) const
+{
     QString s = replaceTextMacros(ss);
     if (s.isEmpty()) {
-        return;
+        return nullptr;
     }
 
     Text* text;
@@ -216,10 +232,88 @@ void Page::drawHeaderFooter(mu::draw::Painter* p, int area, const QString& ss) c
     text->setAlign(flags);
     text->setXmlText(s);
     text->layout();
-    p->translate(text->pos());
-    text->draw(p);
-    p->translate(-text->pos());
-    text->moveToDummy();
+    return text;
+}
+
+//---------------------------------------------------------
+//   headerHeight
+//---------------------------------------------------------
+
+qreal Page::headerHeight() const
+{
+    if (!score()->isLayoutMode(LayoutMode::PAGE)) {
+        return 0.0;
+    }
+
+    int n = no() + 1 + score()->pageNumberOffset();
+
+    QString s1, s2, s3;
+
+    if (score()->styleB(Sid::showHeader) && (no() || score()->styleB(Sid::headerFirstPage))) {
+        bool odd = (n & 1) || !score()->styleB(Sid::headerOddEven);
+        if (odd) {
+            s1 = score()->styleSt(Sid::oddHeaderL);
+            s2 = score()->styleSt(Sid::oddHeaderC);
+            s3 = score()->styleSt(Sid::oddHeaderR);
+        } else {
+            s1 = score()->styleSt(Sid::evenHeaderL);
+            s2 = score()->styleSt(Sid::evenHeaderC);
+            s3 = score()->styleSt(Sid::evenHeaderR);
+        }
+
+        Text* headerLeft = layoutHeaderFooter(0, s1);
+        Text* headerCenter = layoutHeaderFooter(1, s2);
+        Text* headerRight = layoutHeaderFooter(2, s3);
+
+        qreal headerLeftHeight = headerLeft ? headerLeft->height() : 0.0;
+        qreal headerCenterHeight = headerCenter ? headerCenter->height() : 0.0;
+        qreal headerRightHeight = headerRight ? headerRight->height() : 0.0;
+        return qMax(headerLeftHeight, qMax(headerCenterHeight, headerRightHeight));
+    }
+
+    return 0.0;
+}
+
+//---------------------------------------------------------
+//   footerHeight
+//---------------------------------------------------------
+
+qreal Page::footerHeight() const
+{
+    if (!score()->isLayoutMode(LayoutMode::PAGE)) {
+        return 0.0;
+    }
+
+    int n = no() + 1 + score()->pageNumberOffset();
+
+    QString s1, s2, s3;
+
+    if (score()->styleB(Sid::showFooter) && (no() || score()->styleB(Sid::footerFirstPage))) {
+        bool odd = (n & 1) || !score()->styleB(Sid::footerOddEven);
+        if (odd) {
+            s1 = score()->styleSt(Sid::oddFooterL);
+            s2 = score()->styleSt(Sid::oddFooterC);
+            s3 = score()->styleSt(Sid::oddFooterR);
+        } else {
+            s1 = score()->styleSt(Sid::evenFooterL);
+            s2 = score()->styleSt(Sid::evenFooterC);
+            s3 = score()->styleSt(Sid::evenFooterR);
+        }
+
+        Text* footerLeft = layoutHeaderFooter(3, s1);
+        Text* footerCenter = layoutHeaderFooter(4, s2);
+        Text* footerRight = layoutHeaderFooter(5, s3);
+
+        qreal footerLeftHeight = footerLeft ? footerLeft->height() : 0.0;
+        qreal footerCenterHeight = footerCenter ? footerCenter->height() : 0.0;
+        qreal footerRightHeight = footerRight ? footerRight->height() : 0.0;
+
+        qreal footerHeight = qMax(footerLeftHeight, qMax(footerCenterHeight, footerRightHeight));
+
+        return footerHeight;
+    }
+
+    return 0.0;
 }
 
 //---------------------------------------------------------
