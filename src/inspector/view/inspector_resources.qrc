@@ -31,6 +31,7 @@
         <file>qml/MuseScore/Inspector/common/SpinBoxPropertyView.qml</file>
         <file>qml/MuseScore/Inspector/notation/lines/internal/HairpinStyleSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/lines/internal/VoltaStyleSettings.qml</file>
+        <file>qml/MuseScore/Inspector/notation/lines/internal/OttavaStyleSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/lines/internal/LineWithHooksCommonStyleSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/lines/internal/LineTextSettingsTab.qml</file>
         <file>qml/MuseScore/Inspector/notation/lines/internal/LineStyleSection.qml</file>

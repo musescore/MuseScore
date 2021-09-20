@@ -80,6 +80,19 @@ TabPanel {
     }
 
     Component {
+        id: ottavaStyleSettings
+
+        OttavaStyleSettings {
+            anchors.top: parent.top
+            anchors.topMargin: 24
+
+            width: root.width
+
+            model: root.model
+        }
+    }
+
+    Component {
         id: commonStyleSettings
 
         LineWithHooksCommonStyleSettings {
@@ -104,6 +117,7 @@ TabPanel {
             case Inspector.TYPE_HAIRPIN: return hairpinStyleSettings
             case Inspector.TYPE_VOLTA: return voltaStyleSettings
             case Inspector.TYPE_CRESCENDO: return crescendoStyleSettings
+            case Inspector.TYPE_OTTAVA: return ottavaStyleSettings
             }
 
             return commonStyleSettings

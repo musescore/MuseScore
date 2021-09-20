@@ -87,6 +87,7 @@ Loader {
             case Inspector.TYPE_CLEF: return clefComp
             case Inspector.TYPE_HAIRPIN:
             case Inspector.TYPE_CRESCENDO:
+            case Inspector.TYPE_OTTAVA:
             case Inspector.TYPE_PALM_MUTE:
             case Inspector.TYPE_LET_RING:
             case Inspector.TYPE_VOLTA: return lineComp
