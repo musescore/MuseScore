@@ -42,13 +42,7 @@ Column {
         endHookType: root.model ? root.model.endHookType : null
         thickness: root.model ? root.model.thickness : null
         hookHeight: root.model ? root.model.hookHeight : null
-
-        possibleEndHookTypes: [
-            { iconCode: IconCode.LINE_NORMAL, value: PedalTypes.HOOK_TYPE_NONE },
-            { iconCode: IconCode.LINE_WITH_END_HOOK, value: PedalTypes.HOOK_TYPE_RIGHT_ANGLE },
-            { iconCode: IconCode.LINE_WITH_ANGLED_END_HOOK, value: PedalTypes.HOOK_TYPE_ACUTE_ANGLE },
-            { iconCode: IconCode.LINE_PEDAL_STAR_ENDING, value: PedalTypes.HOOK_TYPE_STAR }
-        ]
+        possibleEndHookTypes: root.model ? root.model.possibleEndHookTypes() : null
     }
 
     CheckBox {

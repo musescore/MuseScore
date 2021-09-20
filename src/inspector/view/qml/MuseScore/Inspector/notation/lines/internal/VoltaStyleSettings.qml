@@ -54,11 +54,7 @@ FocusableItem {
 
         LineWithHooksCommonStyleSettings {
             model: root.model
-
-            possibleEndHookTypes: [
-                { iconCode: IconCode.LINE_WITH_INVERTED_START_HOOK, value: VoltaTypes.HOOK_TYPE_LEFT_ONLY },
-                { iconCode: IconCode.LINE_WITH_TWO_INVERTED_HOOKS, value: VoltaTypes.HOOK_TYPE_BOTH }
-            ]
+            possibleEndHookTypes: root.model ? root.model.possibleEndHookTypes() : null
         }
     }
 }
