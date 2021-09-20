@@ -40,9 +40,9 @@ public:
     compat::DummyElement* dummy() const;
     void initDummy();
 
-    EngravingObject* treeParent() const override;
-    EngravingObject* treeChild(int n) const override;
-    int treeChildCount() const override;
+    EngravingObject* scanParent() const override;
+    EngravingObject* scanChild(int n) const override;
+    int scanChildCount() const override;
 
     Ms::EngravingItem* clone() const override { return nullptr; }
     QVariant getProperty(Ms::Pid) const override { return QVariant(); }

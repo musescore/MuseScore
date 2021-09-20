@@ -523,8 +523,9 @@ void Spanner::insertTimeUnmanaged(const Fraction& fromTick, const Fraction& len)
 
 void Spanner::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
-    for (EngravingObject* el : *this) {
-        if (treeParent() && el->isSpannerSegment()) {
+    for (int i = 0; i < scanChildCount(); ++i) {
+        EngravingObject* el = scanChild(i);
+        if (scanParent() && el->isSpannerSegment()) {
             continue; // spanner segments are scanned by the system
                       // except in the palette (in which case treeParent() == nullptr)
         }
