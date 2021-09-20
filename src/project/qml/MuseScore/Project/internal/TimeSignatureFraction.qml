@@ -81,7 +81,7 @@ Row {
         navigation.name: "TimeBox"
         navigation.panel: root.navigationPanel
         navigation.row: root.navigationRowStart
-        navigation.column: root.navigationRowStart + 1
+        navigation.column: root.navigationColumnStart + 1
 
         model: {
             var resultList = []

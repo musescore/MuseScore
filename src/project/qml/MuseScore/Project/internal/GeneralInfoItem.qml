@@ -47,6 +47,8 @@ Column {
         id: textField
         hint: qsTrc("project", "Optional")
 
+        navigation.accessible.name: root.title + " " + currentText
+
         onCurrentTextEdited: {
             root.info = newTextValue
         }

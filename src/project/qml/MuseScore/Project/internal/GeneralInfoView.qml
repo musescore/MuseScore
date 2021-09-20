@@ -45,6 +45,7 @@ Column {
         name: "NavPanel"
         direction: NavigationPanel.Horizontal
         enabled: root.visible
+        accessible.name: qsTrc("project", "Score general info")
     }
 
     Row {

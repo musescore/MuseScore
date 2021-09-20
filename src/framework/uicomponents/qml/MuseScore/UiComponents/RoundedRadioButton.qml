@@ -50,7 +50,7 @@ RadioDelegate {
         name: root.objectName
 
         accessible.role: MUAccessible.RadioButton
-        accessible.name: root.text
+        accessible.name: Boolean(contentLoader.item) ? contentLoader.item.accessibleName : ""
         accessible.checked: root.checked
 
         onActiveChanged: {
@@ -77,6 +77,8 @@ RadioDelegate {
                 id: textLabel
 
                 StyledTextLabel {
+                    property string accessibleName: text
+
                     text: root.text
                     font: root.font
                     horizontalAlignment: Qt.AlignLeft
