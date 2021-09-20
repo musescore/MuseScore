@@ -506,8 +506,9 @@ void PianorollView::drawDraggedNotes(QPainter* painter)
     if (m_dragStyle == DragStyle::DRAW_NOTE) {
         double startTick = pixelXToWholeNote(m_mouseDownPos.x());
         double endTick = pixelXToWholeNote(m_lastMousePos.x());
-        if (startTick > endTick)
+        if (startTick > endTick) {
             std::swap(startTick, endTick);
+        }
 
         Ms::Fraction startTickFrac = roundToSubdivision(startTick);
         Ms::Fraction endTickFrac = roundToSubdivision(endTick, false);
@@ -779,8 +780,9 @@ void PianorollView::mouseReleaseEvent(QMouseEvent* event)
         } else if (m_dragStyle == DragStyle::DRAW_NOTE) {
             double startTick = pixelXToWholeNote(m_mouseDownPos.x());
             double endTick = pixelXToWholeNote(m_lastMousePos.x());
-            if (startTick > endTick)
+            if (startTick > endTick) {
                 std::swap(startTick, endTick);
+            }
 
             Ms::Fraction startTickFrac = roundToSubdivision(startTick);
             Ms::Fraction endTickFrac = roundToSubdivision(endTick, false);
@@ -900,7 +902,7 @@ void PianorollView::mouseMoveEvent(QMouseEvent* event)
                 m_dragNoteCache = serializeSelectedNotes();
             } else if (!pi && m_tool == PianorollTool::SELECT) {
                 m_dragStyle = DragStyle::SELECTION_RECT;
-            } else if ( m_tool == PianorollTool::ADD) {
+            } else if (m_tool == PianorollTool::ADD) {
                 m_dragStyle = DragStyle::DRAW_NOTE;
             } else {
                 m_dragStyle = DragStyle::NONE;
