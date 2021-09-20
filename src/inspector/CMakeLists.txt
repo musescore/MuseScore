@@ -33,17 +33,14 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/types/beamtypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/bendtypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/chordsymboltypes.h
-    ${CMAKE_CURRENT_LIST_DIR}/types/crescendotypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/dynamictypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/fretdiagramtypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/glissandotypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/hairpintypes.h
-    ${CMAKE_CURRENT_LIST_DIR}/types/voltatypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/keysignaturetypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/markertypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/noteheadtypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/ornamenttypes.h
-    ${CMAKE_CURRENT_LIST_DIR}/types/pedaltypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/linetypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/scoreappearancetypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/stemtypes.h

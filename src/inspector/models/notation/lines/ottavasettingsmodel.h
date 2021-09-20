@@ -39,7 +39,6 @@ public:
     PropertyItem* showNumbersOnly() const;
 
     Q_INVOKABLE QVariantList possibleOttavaTypes() const;
-    Q_INVOKABLE QVariantList possibleEndHookTypes() const;
 
 private:
     void createProperties() override;

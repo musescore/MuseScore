@@ -23,7 +23,11 @@
 
 #include "translation.h"
 
+#include "ui/view/iconcodes.h"
+
 using namespace mu::inspector;
+
+using IconCode = mu::ui::IconCode::Code;
 
 PedalSettingsModel::PedalSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : LineSettingsModel(parent, repository, Ms::ElementType::PEDAL)
@@ -31,6 +35,15 @@ PedalSettingsModel::PedalSettingsModel(QObject* parent, IElementRepositoryServic
     setModelType(InspectorModelType::TYPE_PEDAL);
     setTitle(qtrc("inspector", "Pedal"));
     setIcon(ui::IconCode::Code::PEDAL_MARKING);
+
+    static const QList<HookTypeInfo> hookTypes {
+        { Ms::HookType::NONE, IconCode::LINE_NORMAL },
+        { Ms::HookType::HOOK_90, IconCode::LINE_WITH_END_HOOK },
+        { Ms::HookType::HOOK_45, IconCode::LINE_WITH_ANGLED_END_HOOK },
+        { Ms::HookType::HOOK_90T, IconCode::LINE_PEDAL_STAR_ENDING }
+    };
+
+    setPossibleHookTypes(hookTypes);
 
     createProperties();
 }

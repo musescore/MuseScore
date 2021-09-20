@@ -264,6 +264,21 @@ PropertyItem* LineSettingsModel::endTextVerticalOffset() const
     return m_endTextVerticalOffset;
 }
 
+QVariantList LineSettingsModel::possibleEndHookTypes() const
+{
+    QVariantList result;
+
+    for (HookTypeInfo typeInfo : m_possibleHookTypes) {
+        QVariantMap obj;
+        obj["value"] = static_cast<int>(typeInfo.type);
+        obj["iconCode"] = static_cast<int>(typeInfo.icon);
+
+        result << obj;
+    }
+
+    return result;
+}
+
 void LineSettingsModel::onUpdateLinePropertiesAvailability()
 {
     bool isLineAvailable = m_isLineVisible->value().toBool();
@@ -285,4 +300,9 @@ bool LineSettingsModel::isTextVisible(TextType type) const
 {
     //! NOTE: the end text is hidden for most lines by default
     return type != TextType::EndText;
+}
+
+void LineSettingsModel::setPossibleHookTypes(const QList<HookTypeInfo>& types)
+{
+    m_possibleHookTypes = types;
 }

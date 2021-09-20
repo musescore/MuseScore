@@ -45,9 +45,7 @@
 #include "types/keysignaturetypes.h"
 #include "types/accidentaltypes.h"
 #include "types/fretdiagramtypes.h"
-#include "types/pedaltypes.h"
 #include "types/texttypes.h"
-#include "types/crescendotypes.h"
 #include "types/articulationtypes.h"
 #include "types/ambitustypes.h"
 #include "types/chordsymboltypes.h"
@@ -56,7 +54,6 @@
 #include "types/tremolobartypes.h"
 #include "types/tremolotypes.h"
 #include "types/linetypes.h"
-#include "types/voltatypes.h"
 
 using namespace mu::inspector;
 using namespace mu::modularity;
@@ -104,11 +101,8 @@ void InspectorModule::registerUiTypes()
     qmlRegisterUncreatableType<KeySignatureTypes>("MuseScore.Inspector", 1, 0, "KeySignatureTypes", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<AccidentalTypes>("MuseScore.Inspector", 1, 0, "AccidentalTypes", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<FretDiagramTypes>("MuseScore.Inspector", 1, 0, "FretDiagramTypes", "Not creatable as it is an enum type");
-    qmlRegisterUncreatableType<PedalTypes>("MuseScore.Inspector", 1, 0, "PedalTypes", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<LineTypes>("MuseScore.Inspector", 1, 0, "LineTypes", "Not creatable as it is an enum type");
-    qmlRegisterUncreatableType<VoltaTypes>("MuseScore.Inspector", 1, 0, "VoltaTypes", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<TextTypes>("MuseScore.Inspector", 1, 0, "TextTypes", "Not creatable as it is an enum type");
-    qmlRegisterUncreatableType<CrescendoTypes>("MuseScore.Inspector", 1, 0, "CrescendoTypes", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<ArticulationTypes>("MuseScore.Inspector", 1, 0, "ArticulationTypes", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<AmbitusTypes>("MuseScore.Inspector", 1, 0, "AmbitusTypes", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<ChordSymbolTypes>("MuseScore.Inspector", 1, 0, "ChordSymbolTypes", "Not creatable as it is an enum type");

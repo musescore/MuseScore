@@ -24,13 +24,24 @@
 
 #include "translation.h"
 
+#include "ui/view/iconcodes.h"
+
 using namespace mu::inspector;
+
+using IconCode = mu::ui::IconCode::Code;
 
 VoltaSettingsModel::VoltaSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : LineSettingsModel(parent, repository, Ms::ElementType::VOLTA)
 {
     setModelType(InspectorModelType::TYPE_VOLTA);
     setTitle(qtrc("inspector", "Volta"));
+
+    static const QList<HookTypeInfo> hookTypes {
+        { Ms::HookType::NONE, IconCode::LINE_WITH_INVERTED_START_HOOK },
+        { Ms::HookType::HOOK_90, IconCode::LINE_WITH_TWO_INVERTED_HOOKS },
+    };
+
+    setPossibleHookTypes(hookTypes);
 
     createProperties();
 }
