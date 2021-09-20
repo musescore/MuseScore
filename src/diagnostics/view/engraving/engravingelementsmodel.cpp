@@ -260,12 +260,7 @@ void EngravingElementsModel::load(const EngravingObjectList& elements, Item* roo
             continue;
         }
 
-        Ms::EngravingObject* parent = nullptr;
-        if (isUseTreeParent()) {
-            parent = el->treeParent();
-        } else {
-            parent = el->parent(true);
-        }
+        Ms::EngravingObject* parent = el->parent(true);
 
         if (parent == root->element()) {
             Item* item = createItem(root);
@@ -344,19 +339,8 @@ void EngravingElementsModel::click1(QModelIndex index)
     const Ms::EngravingObject* parent2 = el->parent(true);
     UNUSED(parent2);
 
-    const Ms::EngravingObject* treeParent = el->treeParent();
-    UNUSED(treeParent);
-
     size_t children = el->children().size();
     UNUSED(children);
-
-    int treeChildren = el->treeChildCount();
-    UNUSED(treeChildren);
-
-    if (parent2 != treeParent) {
-        int k = 1;
-        UNUSED(k);
-    }
 }
 
 void EngravingElementsModel::updateInfo()
@@ -417,20 +401,4 @@ int EngravingElementsModel::Item::row() const
         return m_parent->m_children.indexOf(const_cast<Item*>(this));
     }
     return 0;
-}
-
-bool EngravingElementsModel::isUseTreeParent() const
-{
-    return m_isUseTreeParent;
-}
-
-void EngravingElementsModel::setIsUseTreeParent(bool arg)
-{
-    if (m_isUseTreeParent == arg) {
-        return;
-    }
-    m_isUseTreeParent = arg;
-    emit isUseTreeParentChanged();
-
-    reload();
 }

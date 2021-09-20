@@ -84,9 +84,9 @@ public:
     ~ChordRest();
 
     // Score Tree functions
-    virtual EngravingObject* treeParent() const override;
-    virtual EngravingObject* treeChild(int idx) const override;
-    virtual int treeChildCount() const override;
+    virtual EngravingObject* scanParent() const override;
+    virtual EngravingObject* scanChild(int idx) const override;
+    virtual int scanChildCount() const override;
 
     virtual EngravingItem* drop(EditData&) override;
     virtual void undoUnlink() override;
