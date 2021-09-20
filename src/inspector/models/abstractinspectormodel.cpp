@@ -80,13 +80,10 @@ static const QMap<Ms::ElementType, AbstractInspectorModel::InspectorModelType> N
     { Ms::ElementType::MEASURE_REPEAT, AbstractInspectorModel::InspectorModelType::TYPE_MEASURE_REPEAT }
 };
 
-AbstractInspectorModel::AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository, Ms::ElementType elementType,
-                                               const QString& title)
+AbstractInspectorModel::AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository, Ms::ElementType elementType)
     : QObject(parent), m_elementType(elementType)
 {
     m_repository = repository;
-
-    setTitle(title);
 
     if (!m_repository) {
         return;

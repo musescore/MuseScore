@@ -57,7 +57,7 @@ class LineSettingsModel : public AbstractInspectorModel
 
 public:
     explicit LineSettingsModel(QObject* parent, IElementRepositoryService* repository,
-                               Ms::ElementType elementType = Ms::ElementType::INVALID, const QString& title = QString());
+                               Ms::ElementType elementType = Ms::ElementType::INVALID);
 
     PropertyItem* lineStyle() const;
     PropertyItem* placement() const;

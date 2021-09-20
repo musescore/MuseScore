@@ -115,7 +115,7 @@ public:
     Q_ENUM(InspectorModelType)
 
     explicit AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository = nullptr,
-                                    Ms::ElementType elementType = Ms::ElementType::INVALID, const QString& title = QString());
+                                    Ms::ElementType elementType = Ms::ElementType::INVALID);
 
     Q_INVOKABLE virtual void requestResetToDefaults();
 
