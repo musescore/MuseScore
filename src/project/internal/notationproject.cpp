@@ -328,8 +328,10 @@ mu::Ret NotationProject::saveScore(const io::path& path, SaveMode saveMode)
 
     Ret ret = doSave(true);
     if (!ret) {
-        ret.setText(Ms::MScore::lastError.toStdString());
-    } else if (saveMode != SaveMode::SaveCopy || oldFilePath == path) {
+        return ret;
+    }
+
+    if (saveMode != SaveMode::SaveCopy || oldFilePath == path) {
         m_masterNotation->onSaveCopy();
     }
 
@@ -338,40 +340,60 @@ mu::Ret NotationProject::saveScore(const io::path& path, SaveMode saveMode)
 
 mu::Ret NotationProject::doSave(bool generateBackup)
 {
-    // Step 1: create backup if need
-    if (generateBackup) {
-        makeCurrentFileAsBackup();
+    QString currentPath = m_engravingProject->path();
+    QString savePath = currentPath + "_saving";
+
+    // Step 1: check writable
+    {
+        QFileInfo fi(savePath);
+        if (fi.exists() && !QFileInfo(savePath).isWritable()) {
+            LOGE() << "failed save, not writable path: " << savePath;
+            return make_ret(notation::Err::UnknownError);
+        }
     }
 
-    // Step 2: check writable
-    QFileInfo info(m_engravingProject->path());
-    if (info.exists() && !info.isWritable()) {
-        LOGE() << "failed save, not writable path: " << info.filePath();
-        return make_ret(notation::Err::UnknownError);
+    // Step 2: write project
+    {
+        std::string suffix = io::suffix(currentPath);
+        MscWriter::Params params;
+        params.filePath = savePath;
+        params.mode = mcsIoModeBySuffix(suffix);
+        IF_ASSERT_FAILED(params.mode != MscIoMode::Unknown) {
+            return make_ret(Ret::Code::InternalError);
+        }
+
+        MscWriter msczWriter(params);
+        Ret ret = writeProject(msczWriter, false);
+        if (!ret) {
+            LOGE() << "failed write project to buffer";
+            return ret;
+        }
+
+        msczWriter.close();
     }
 
-    // Step 3: write project
-    std::string suffix = io::suffix(info.fileName());
-    MscWriter::Params params;
-    params.filePath = m_engravingProject->path();
-    params.mode = mcsIoModeBySuffix(suffix);
-    IF_ASSERT_FAILED(params.mode != MscIoMode::Unknown) {
-        return make_ret(Ret::Code::InternalError);
+    // Step 3: create backup if need
+    {
+        if (generateBackup) {
+            makeCurrentFileAsBackup();
+        }
     }
 
-    MscWriter msczWriter(params);
-    Ret ret = writeProject(msczWriter, false);
-    if (!ret) {
-        LOGE() << "failed write project to buffer";
-        return ret;
+    // Step 4: replace to saved file
+    {
+        Ret ret = fileSystem()->move(savePath, currentPath, true);
+        if (!ret) {
+            return ret;
+        }
     }
-
-    msczWriter.close();
 
     // make file readable by all
-    QFile::setPermissions(info.filePath(), QFile::ReadOwner | QFile::WriteOwner | QFile::ReadUser | QFile::ReadGroup | QFile::ReadOther);
+    {
+        QFile::setPermissions(currentPath,
+                              QFile::ReadOwner | QFile::WriteOwner | QFile::ReadUser | QFile::ReadGroup | QFile::ReadOther);
+    }
 
-    LOGI() << "success save file: " << info.filePath();
+    LOGI() << "success save file: " << currentPath;
     return make_ret(Ret::Code::Ok);
 }
 
