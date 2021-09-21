@@ -784,7 +784,7 @@ void Tuplet::scanElements(void* data, void (* func)(void*, EngravingItem*), bool
 
 void Tuplet::write(XmlWriter& xml) const
 {
-    xml.stag(this);
+    xml.startObject(this);
     EngravingItem::writeProperties(xml);
 
     writeProperty(xml, Pid::NORMAL_NOTES);
@@ -798,15 +798,15 @@ void Tuplet::write(XmlWriter& xml) const
     }
 
     if (_number) {
-        xml.stag("Number", _number);
+        xml.startObject("Number", _number);
         _number->writeProperty(xml, Pid::SUB_STYLE);
         _number->writeProperty(xml, Pid::TEXT);
-        xml.etag();
+        xml.endObject();
     }
 
     writeStyledProperties(xml);
 
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------

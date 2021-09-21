@@ -84,7 +84,7 @@ void XmlWriter::header()
 //    <mops attribute="value">
 //---------------------------------------------------------
 
-void XmlWriter::stag(const QString& s)
+void XmlWriter::startObject(const QString& s)
 {
     putLevel();
     *this << '<' << s << '>' << Qt::endl;
@@ -96,9 +96,9 @@ void XmlWriter::stag(const QString& s)
 //    <mops attribute="value">
 //---------------------------------------------------------
 
-void XmlWriter::stag(const EngravingObject* se, const QString& attributes)
+void XmlWriter::startObject(const EngravingObject* se, const QString& attributes)
 {
-    stag(se->name(), se, attributes);
+    startObject(se->name(), se, attributes);
 }
 
 //---------------------------------------------------------
@@ -106,7 +106,7 @@ void XmlWriter::stag(const EngravingObject* se, const QString& attributes)
 //    <mops attribute="value">
 //---------------------------------------------------------
 
-void XmlWriter::stag(const QString& name, const EngravingObject* se, const QString& attributes)
+void XmlWriter::startObject(const QString& name, const EngravingObject* se, const QString& attributes)
 {
     putLevel();
     *this << '<' << name;
@@ -126,7 +126,7 @@ void XmlWriter::stag(const QString& name, const EngravingObject* se, const QStri
 //    </mops>
 //---------------------------------------------------------
 
-void XmlWriter::etag()
+void XmlWriter::endObject()
 {
     putLevel();
     *this << "</" << stack.takeLast() << '>' << Qt::endl;

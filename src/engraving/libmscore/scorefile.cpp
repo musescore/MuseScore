@@ -121,7 +121,7 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
         }
     }
 
-    xml.stag(this);
+    xml.startObject(this);
     if (excerpt()) {
         Excerpt* e = excerpt();
         QMultiMap<int, int> trackList = e->tracks();
@@ -236,7 +236,7 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
     xml.setTrackDiff(-staffStart * VOICES);
     if (measureStart) {
         for (int staffIdx = staffStart; staffIdx < staffEnd; ++staffIdx) {
-            xml.stag(staff(staffIdx), QString("id=\"%1\"").arg(staffIdx + 1 - staffStart));
+            xml.startObject(staff(staffIdx), QString("id=\"%1\"").arg(staffIdx + 1 - staffStart));
             xml.setCurTick(measureStart->tick());
             xml.setTickDiff(xml.curTick());
             xml.setCurTrack(staffIdx * VOICES);
@@ -255,14 +255,14 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
                 }
                 writeMeasure(xml, m, staffIdx, writeSystemElements, forceTimeSig);
             }
-            xml.etag();
+            xml.endObject();
         }
     }
     xml.setCurTrack(-1);
 
     hook.onWriteExcerpts302(this, xml, selectionOnly);
 
-    xml.etag();
+    xml.endObject();
 
     if (unhide) {
         endCmd(true);
@@ -395,14 +395,14 @@ bool Score::writeScore(QIODevice* f, bool msczFormat, bool onlySelection, compat
     xml.setIsMsczMode(msczFormat);
     xml.header();
 
-    xml.stag("museScore version=\"" MSC_VERSION "\"");
+    xml.startObject("museScore version=\"" MSC_VERSION "\"");
 
     if (!MScore::testMode) {
         xml.tag("programVersion", VERSION);
         xml.tag("programRevision", revision);
     }
     write(xml, onlySelection, hook);
-    xml.etag();
+    xml.endObject();
     if (isMaster()) {
         masterScore()->revisions()->write(xml);
     }
@@ -457,7 +457,7 @@ static bool writeVoiceMove(XmlWriter& xml, Segment* seg, const Fraction& startTi
             xml.tagE("voice");
             ++lastTrackWritten;
         }
-        xml.stag("voice");
+        xml.startObject("voice");
         xml.setCurTick(startTick);
         xml.setCurTrack(track);
         ++lastTrackWritten;
@@ -685,7 +685,7 @@ void Score::writeSegments(XmlWriter& xml, int strack, int etrack,
         }
 
         if (voiceTagWritten) {
-            xml.etag();       // </voice>
+            xml.endObject();       // </voice>
         }
     }
 }

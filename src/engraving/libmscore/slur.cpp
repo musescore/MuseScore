@@ -999,12 +999,12 @@ void Slur::write(XmlWriter& xml) const
     if (!xml.canWrite(this)) {
         return;
     }
-    xml.stag(this);
+    xml.startObject(this);
     if (xml.clipboardmode()) {
         xml.tag("stemArr", calcStemArrangement(startElement(), endElement()));
     }
     SlurTie::writeProperties(xml);
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------

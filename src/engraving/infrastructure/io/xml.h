@@ -303,11 +303,11 @@ public:
 
     void header();
 
-    void stag(const QString&);
-    void etag();
+    void startObject(const QString&);
+    void endObject();
 
-    void stag(const EngravingObject* se, const QString& attributes = QString());
-    void stag(const QString& name, const EngravingObject* se, const QString& attributes = QString());
+    void startObject(const EngravingObject* se, const QString& attributes = QString());
+    void startObject(const QString& name, const EngravingObject* se, const QString& attributes = QString());
 
     void tagE(const QString&);
     void tagE(const char* format, ...);

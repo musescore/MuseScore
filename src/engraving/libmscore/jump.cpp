@@ -149,13 +149,13 @@ void Jump::read(XmlReader& e)
 
 void Jump::write(XmlWriter& xml) const
 {
-    xml.stag(this);
+    xml.startObject(this);
     TextBase::writeProperties(xml);
     xml.tag("jumpTo", _jumpTo);
     xml.tag("playUntil", _playUntil);
     xml.tag("continueAt", _continueAt);
     writeProperty(xml, Pid::PLAY_REPEATS);
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------

@@ -2113,7 +2113,7 @@ void Beam::write(XmlWriter& xml) const
     if (_elements.empty()) {
         return;
     }
-    xml.stag(this);
+    xml.startObject(this);
     EngravingItem::writeProperties(xml);
 
     writeProperty(xml, Pid::STEM_DIRECTION);
@@ -2126,10 +2126,10 @@ void Beam::write(XmlWriter& xml) const
     if (_userModified[idx]) {
         qreal _spatium = spatium();
         for (BeamFragment* f : fragments) {
-            xml.stag("Fragment");
+            xml.startObject("Fragment");
             xml.tag("y1", f->py1[idx] / _spatium);
             xml.tag("y2", f->py2[idx] / _spatium);
-            xml.etag();
+            xml.endObject();
         }
     }
 
@@ -2143,7 +2143,7 @@ void Beam::write(XmlWriter& xml) const
         }
     }
 
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------

@@ -43,17 +43,17 @@ void Drumset::save(XmlWriter& xml) const
         if (!isValid(i)) {
             continue;
         }
-        xml.stag(QString("Drum pitch=\"%1\"").arg(i));
+        xml.startObject(QString("Drum pitch=\"%1\"").arg(i));
         const NoteHead::Group nh = noteHead(i);
         //write custom as Normal notehead group + noteheads tag to keep compatibility with 2.X versions
         const NoteHead::Group saveNHValue = (nh == NoteHead::Group::HEAD_CUSTOM) ? NoteHead::Group::HEAD_NORMAL : nh;
         xml.tag("head", NoteHead::group2name(saveNHValue));
         if (nh == NoteHead::Group::HEAD_CUSTOM) {
-            xml.stag("noteheads");
+            xml.startObject("noteheads");
             for (int j = 0; j < int(NoteHead::Type::HEAD_TYPES); j++) {
                 xml.tag(NoteHead::type2name(NoteHead::Type(j)), Sym::id2name(noteHeads(i, NoteHead::Type(j))));
             }
-            xml.etag();
+            xml.endObject();
         }
         xml.tag("line", line(i));
         xml.tag("voice", voice(i));
@@ -82,20 +82,20 @@ void Drumset::save(XmlWriter& xml) const
         }
         auto vs = variants(i);
         if (!vs.isEmpty()) {
-            xml.stag("variants");
+            xml.startObject("variants");
             for (const auto& v : qAsConst(vs)) {
-                xml.stag(QString("variant pitch=\"%1\"").arg(v.pitch));
+                xml.startObject(QString("variant pitch=\"%1\"").arg(v.pitch));
                 if (!v.articulationName.isEmpty()) {
                     xml.tag("articulation", v.articulationName);
                 }
                 if (v.tremolo != TremoloType::INVALID_TREMOLO) {
                     xml.tag("tremolo", Tremolo::type2name(v.tremolo));
                 }
-                xml.etag();
+                xml.endObject();
             }
-            xml.etag();
+            xml.endObject();
         }
-        xml.etag();
+        xml.endObject();
     }
 }
 

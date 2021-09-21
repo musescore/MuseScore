@@ -220,7 +220,7 @@ void PaletteCell::write(XmlWriter& xml) const
 
     // using attributes for `custom` and `visible` properties instead of nested tags
     // for pre-3.3 version compatibility
-    xml.stag(QString("Cell")
+    xml.startObject(QString("Cell")
              + (!name.isEmpty() ? " name=\"" + XmlWriter::xmlString(name) + "\"" : "")
              + (custom ? " custom=\"1\"" : "")
              + (!visible ? " visible=\"0\"" : "")
@@ -245,7 +245,7 @@ void PaletteCell::write(XmlWriter& xml) const
     } else {
         element->write(xml);
     }
-    xml.etag();
+    xml.endObject();
 }
 
 PaletteCellPtr PaletteCell::fromMimeData(const QByteArray& data)

@@ -101,12 +101,12 @@ mu::RectF SystemDivider::drag(EditData& ed)
 void SystemDivider::write(XmlWriter& xml) const
 {
     if (dividerType() == SystemDivider::Type::LEFT) {
-        xml.stag(this, "type=\"left\"");
+        xml.startObject(this, "type=\"left\"");
     } else {
-        xml.stag(this, "type=\"right\"");
+        xml.startObject(this, "type=\"right\"");
     }
     writeProperties(xml);
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------

@@ -280,13 +280,13 @@ void Accidental::read(XmlReader& e)
 
 void Accidental::write(XmlWriter& xml) const
 {
-    xml.stag(this);
+    xml.startObject(this);
     writeProperty(xml, Pid::ACCIDENTAL_BRACKET);
     writeProperty(xml, Pid::ROLE);
     writeProperty(xml, Pid::SMALL);
     writeProperty(xml, Pid::ACCIDENTAL_TYPE);
     EngravingItem::writeProperties(xml);
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------

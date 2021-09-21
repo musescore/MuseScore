@@ -365,7 +365,7 @@ void Clef::read(XmlReader& e)
 
 void Clef::write(XmlWriter& xml) const
 {
-    xml.stag(this);
+    xml.startObject(this);
     writeProperty(xml, Pid::CLEF_TYPE_CONCERT);
     writeProperty(xml, Pid::CLEF_TYPE_TRANSPOSING);
     if (!_showCourtesy) {
@@ -375,7 +375,7 @@ void Clef::write(XmlWriter& xml) const
         xml.tag("forInstrumentChange", _forInstrumentChange);
     }
     EngravingItem::writeProperties(xml);
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------

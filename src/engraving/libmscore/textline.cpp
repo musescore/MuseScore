@@ -193,15 +193,15 @@ void TextLine::write(XmlWriter& xml) const
         return;
     }
     if (systemFlag()) {
-        xml.stag(QString("TextLine"), this, QString("system=\"1\""));
+        xml.startObject(QString("TextLine"), this, QString("system=\"1\""));
     } else {
-        xml.stag(this);
+        xml.startObject(this);
     }
     // other styled properties are included in TextLineBase pids list
     writeProperty(xml, Pid::PLACEMENT);
     writeProperty(xml, Pid::OFFSET);
     TextLineBase::writeProperties(xml);
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------

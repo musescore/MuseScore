@@ -392,11 +392,11 @@ int TimeSigMap::bar2tick(int bar, int beat) const
 
 void TimeSigMap::write(XmlWriter& xml) const
 {
-    xml.stag("siglist");
+    xml.startObject("siglist");
     for (auto i = begin(); i != end(); ++i) {
         i->second.write(xml, i->first);
     }
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------
@@ -424,10 +424,10 @@ void TimeSigMap::read(XmlReader& e, int fileDivision)
 
 void SigEvent::write(XmlWriter& xml, int tick) const
 {
-    xml.stag(QString("sig tick=\"%1\"").arg(tick));
+    xml.startObject(QString("sig tick=\"%1\"").arg(tick));
     xml.tag("nom",   _timesig.numerator());
     xml.tag("denom", _timesig.denominator());
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------

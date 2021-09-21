@@ -294,7 +294,7 @@ QByteArray Palette::toMimeData() const
 
 void Palette::write(XmlWriter& xml) const
 {
-    xml.stag(QString("Palette name=\"%1\"").arg(XmlWriter::xmlString(m_name)));
+    xml.startObject(QString("Palette name=\"%1\"").arg(XmlWriter::xmlString(m_name)));
     xml.tag("type", QMetaEnum::fromType<Type>().valueToKey(int(m_type)));
     xml.tag("gridWidth", m_gridSize.width());
     xml.tag("gridHeight", m_gridSize.height());
@@ -321,7 +321,7 @@ void Palette::write(XmlWriter& xml) const
         }
         cell->write(xml);
     }
-    xml.etag();
+    xml.endObject();
 }
 
 PalettePtr Palette::fromMimeData(const QByteArray& data)
@@ -443,16 +443,16 @@ bool Palette::writeToFile(const QString& p) const
     cbuf.open(QIODevice::ReadWrite);
     XmlWriter xml(gpaletteScore, &cbuf);
     xml.header();
-    xml.stag("container");
-    xml.stag("rootfiles");
-    xml.stag(QString("rootfile full-path=\"%1\"").arg(XmlWriter::xmlString("palette.xml")));
-    xml.etag();
+    xml.startObject("container");
+    xml.startObject("rootfiles");
+    xml.startObject(QString("rootfile full-path=\"%1\"").arg(XmlWriter::xmlString("palette.xml")));
+    xml.endObject();
     foreach (ImageStoreItem* ip, images) {
         QString ipath = QString("Pictures/") + ip->hashName();
         xml.tag("file", ipath);
     }
-    xml.etag();
-    xml.etag();
+    xml.endObject();
+    xml.endObject();
     cbuf.seek(0);
     //f.addDirectory("META-INF");
     //f.addDirectory("Pictures");
@@ -468,9 +468,9 @@ bool Palette::writeToFile(const QString& p) const
         cbuf1.open(QIODevice::ReadWrite);
         XmlWriter xml1(gpaletteScore, &cbuf1);
         xml1.header();
-        xml1.stag("museScore version=\"" MSC_VERSION "\"");
+        xml1.startObject("museScore version=\"" MSC_VERSION "\"");
         write(xml1);
-        xml1.etag();
+        xml1.endObject();
         cbuf1.close();
         f.addFile("palette.xml", cbuf1.data());
     }
