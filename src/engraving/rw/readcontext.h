@@ -61,6 +61,8 @@ public:
 
     bool undoStackActive() const;
 
+    bool isSameScore(const Ms::EngravingObject* obj) const;
+
 private:
     Ms::Score* m_score = nullptr;
     bool m_ignoreVersionError = false;
