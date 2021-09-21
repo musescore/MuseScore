@@ -41,6 +41,7 @@
 #include "libmscore/masterscore.h"
 #include "libmscore/factory.h"
 
+#include "../read400.h"
 #include "readchordlisthook.h"
 #include "readstyle.h"
 
@@ -67,7 +68,8 @@ bool Read302::readScore302(Ms::Score* score, XmlReader& e)
         e.setTrack(-1);
         const QStringRef& tag(e.name());
         if (tag == "Staff") {
-            score->readStaff(e);
+            //score->readStaff(e);
+            Read400::readStaff(score, e);
         } else if (tag == "Omr") {
             e.skipCurrentElement();
         } else if (tag == "Audio") {
