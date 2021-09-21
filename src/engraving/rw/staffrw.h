@@ -30,6 +30,8 @@ class StaffRW
 public:
 
     static void readStaff(Ms::Score* score, Ms::XmlReader&, ReadContext& ctx);
+    static void writeStaff(const Ms::Staff* staff, Ms::XmlWriter& xml, Ms::MeasureBase* measureStart, Ms::MeasureBase* measureEnd,
+                           int staffStart, int staffIdx, bool selectionOnly);
 };
 }
 

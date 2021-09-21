@@ -26,6 +26,7 @@
 #include "libmscore/factory.h"
 #include "libmscore/score.h"
 #include "libmscore/measure.h"
+#include "libmscore/staff.h"
 
 #include "measurerw.h"
 
@@ -116,4 +117,49 @@ void StaffRW::readStaff(Ms::Score* score, Ms::XmlReader& e, ReadContext& ctx)
             }
         }
     }
+}
+
+static void writeMeasure(XmlWriter& xml, MeasureBase* m, int staffIdx, bool writeSystemElements, bool forceTimeSig)
+{
+    //
+    // special case multi measure rest
+    //
+    if (m->isMeasure() || staffIdx == 0) {
+        m->write(xml, staffIdx, writeSystemElements, forceTimeSig);
+    }
+
+    if (m->score()->styleB(Sid::createMultiMeasureRests) && m->isMeasure() && toMeasure(m)->mmRest()) {
+        toMeasure(m)->mmRest()->write(xml, staffIdx, writeSystemElements, forceTimeSig);
+    }
+
+    xml.setCurTick(m->endTick());
+}
+
+void StaffRW::writeStaff(const Ms::Staff* staff, Ms::XmlWriter& xml,
+                         Ms::MeasureBase* measureStart, Ms::MeasureBase* measureEnd,
+                         int staffStart, int staffIdx,
+                         bool selectionOnly)
+{
+    xml.startObject(staff, QString("id=\"%1\"").arg(staffIdx + 1 - staffStart));
+
+    xml.setCurTick(measureStart->tick());
+    xml.setTickDiff(xml.curTick());
+    xml.setCurTrack(staffIdx * VOICES);
+    bool writeSystemElements = (staffIdx == staffStart);
+    bool firstMeasureWritten = false;
+    bool forceTimeSig = false;
+    for (MeasureBase* m = measureStart; m != measureEnd; m = m->next()) {
+        // force timesig if first measure and selectionOnly
+        if (selectionOnly && m->isMeasure()) {
+            if (!firstMeasureWritten) {
+                forceTimeSig = true;
+                firstMeasureWritten = true;
+            } else {
+                forceTimeSig = false;
+            }
+        }
+        writeMeasure(xml, m, staffIdx, writeSystemElements, forceTimeSig);
+    }
+
+    xml.endObject();
 }

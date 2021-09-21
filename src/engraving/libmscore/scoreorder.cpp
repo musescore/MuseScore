@@ -402,12 +402,13 @@ void ScoreOrder::write(Ms::XmlWriter& xml) const
                 xml.endObject();
             }
             if (!sg.section.isEmpty()) {
-                xml.startObject(QString("section id=\"%1\" brackets=\"%2\" showSystemMarkings=\"%3\" barLineSpan=\"%4\" thinBrackets=\"%5\"")
-                         .arg(sg.section,
-                              sg.bracket ? "true" : "false",
-                              sg.showSystemMarkings ? "true" : "false",
-                              sg.barLineSpan ? "true" : "false",
-                              sg.thinBracket ? "true" : "false"));
+                xml.startObject(QString(
+                                    "section id=\"%1\" brackets=\"%2\" showSystemMarkings=\"%3\" barLineSpan=\"%4\" thinBrackets=\"%5\"")
+                                .arg(sg.section,
+                                     sg.bracket ? "true" : "false",
+                                     sg.showSystemMarkings ? "true" : "false",
+                                     sg.barLineSpan ? "true" : "false",
+                                     sg.thinBracket ? "true" : "false"));
             }
             section = sg.section;
         }

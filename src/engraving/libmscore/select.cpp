@@ -826,7 +826,7 @@ QByteArray Selection::staffMimeData() const
     QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
     XmlWriter xml(score(), &buffer);
-    xml.header();
+    xml.writeHeader();
     xml.setClipboardmode(true);
     xml.setFilter(selectionFilter());
 
@@ -834,13 +834,13 @@ QByteArray Selection::staffMimeData() const
     int staves = staffEnd() - staffStart();
     if (!MScore::testMode) {
         xml.startObject(QString("StaffList version=\"" MSC_VERSION "\" tick=\"%1\" len=\"%2\" staff=\"%3\" staves=\"%4\"").arg(
-                     tickStart().ticks()).arg(ticks.ticks()).arg(staffStart()).arg(staves));
+                            tickStart().ticks()).arg(ticks.ticks()).arg(staffStart()).arg(staves));
     } else {
         xml.startObject(QString("StaffList version=\"2.00\" tick=\"%1\" len=\"%2\" staff=\"%3\" staves=\"%4\"")
-                 .arg(tickStart().ticks())
-                 .arg(ticks.ticks())
-                 .arg(staffStart())
-                 .arg(staves));
+                        .arg(tickStart().ticks())
+                        .arg(ticks.ticks())
+                        .arg(staffStart())
+                        .arg(staves));
     }
     Segment* seg1 = _startSegment;
     Segment* seg2 = _endSegment;
@@ -889,7 +889,7 @@ QByteArray Selection::symbolListMimeData() const
     QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
     XmlWriter xml(score(), &buffer);
-    xml.header();
+    xml.writeHeader();
     xml.setClipboardmode(true);
 
     int topTrack    = 1000000;
@@ -1052,7 +1052,7 @@ QByteArray Selection::symbolListMimeData() const
     }
 
     xml.startObject(QString("SymbolList version=\"" MSC_VERSION "\" fromtrack=\"%1\" totrack=\"%2\"")
-             .arg(topTrack).arg(bottomTrack));
+                    .arg(topTrack).arg(bottomTrack));
     // scan the map, outputting elements each with a relative <track> tag on track change,
     // a relative tick and the number of CR segments to skip
     int currTrack = -1;

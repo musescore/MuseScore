@@ -436,7 +436,7 @@ MasterScore* MasterScore::clone()
     QBuffer buffer;
     buffer.open(QIODevice::WriteOnly);
     XmlWriter xml(this, &buffer);
-    xml.header();
+    xml.writeHeader();
 
     xml.startObject("museScore version=\"" MSC_VERSION "\"");
 
