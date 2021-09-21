@@ -22,12 +22,15 @@
 #include "pedalsettingsmodel.h"
 
 #include "translation.h"
-
 #include "ui/view/iconcodes.h"
+
+#include "libmscore/pedal.h"
 
 using namespace mu::inspector;
 
 using IconCode = mu::ui::IconCode::Code;
+
+static constexpr int HOOK_STAR = static_cast<int>(Ms::HookType::HOOK_90T) + 1;
 
 PedalSettingsModel::PedalSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : LineSettingsModel(parent, repository, Ms::ElementType::PEDAL)
@@ -36,54 +39,102 @@ PedalSettingsModel::PedalSettingsModel(QObject* parent, IElementRepositoryServic
     setTitle(qtrc("inspector", "Pedal"));
     setIcon(ui::IconCode::Code::PEDAL_MARKING);
 
-    static const QList<HookTypeInfo> hookTypes {
+    static const QList<HookTypeInfo> startHookTypes {
+        { Ms::HookType::NONE, IconCode::LINE_NORMAL },
+        { Ms::HookType::HOOK_45, IconCode::LINE_WITH_ANGLED_START_HOOK },
+        { Ms::HookType::HOOK_90T, IconCode::LINE_WITH_T_LINE_START_HOOK }
+    };
+
+    setPossibleStartHookTypes(startHookTypes);
+
+    static const QList<HookTypeInfo> endHookTypes {
         { Ms::HookType::NONE, IconCode::LINE_NORMAL },
         { Ms::HookType::HOOK_90, IconCode::LINE_WITH_END_HOOK },
         { Ms::HookType::HOOK_45, IconCode::LINE_WITH_ANGLED_END_HOOK },
-        { Ms::HookType::HOOK_90T, IconCode::LINE_PEDAL_STAR_ENDING }
+        { Ms::HookType::HOOK_90T, IconCode::LINE_WITH_T_LIKE_END_HOOK },
+        { HOOK_STAR, IconCode::LINE_PEDAL_STAR_ENDING }
     };
 
-    setPossibleHookTypes(hookTypes);
+    setPossibleEndHookTypes(endHookTypes);
 
     createProperties();
 }
 
-PropertyItem* PedalSettingsModel::showPedalSymbol() const
+PropertyItem* PedalSettingsModel::lineType() const
 {
-    return m_showPedalSymbol;
+    return m_lineType;
 }
 
-PropertyItem* PedalSettingsModel::showLineWithRosette() const
+bool PedalSettingsModel::pedalSymbolVisible() const
 {
-    return m_showLineWithRosette;
+    return beginingText()->value().toString() == Ms::Pedal::PEDAL_SYMBOL;
 }
 
-bool PedalSettingsModel::showLineWithRosetteVisible() const
+bool PedalSettingsModel::isChangingLineVisibilityAllowed() const
 {
-    return m_showLineWithRosetteVisible;
+    return isStarSymbolVisible();
+}
+
+bool PedalSettingsModel::isStarSymbolVisible() const
+{
+    return endText()->value().toString() == Ms::Pedal::STAR_SYMBOL;
+}
+
+void PedalSettingsModel::setPedalSymbolVisible(bool visible)
+{
+    beginingText()->setValue(visible ? Ms::Pedal::PEDAL_SYMBOL : "");
 }
 
 void PedalSettingsModel::createProperties()
 {
     LineSettingsModel::createProperties();
 
-    //! TODO: determine suitable properties
-    m_showPedalSymbol = buildPropertyItem(Ms::Pid::SYMBOL);
-    m_showLineWithRosette = buildPropertyItem(Ms::Pid::SYMBOL);
+    connect(beginingText(), &PropertyItem::isModifiedChanged, this, [this]() {
+        emit pedalSymbolVisibleChanged();
+    });
+
+    connect(endText(), &PropertyItem::isModifiedChanged, this, [this]() {
+        emit isChangingLineVisibilityAllowedChanged();
+    });
+
+    m_lineType = buildPropertyItem(Ms::Pid::END, [this](const Ms::Pid, const QVariant& newValue) {
+        setLineType(newValue.toInt());
+    });
 }
 
 void PedalSettingsModel::loadProperties()
 {
     LineSettingsModel::loadProperties();
 
-    loadPropertyItem(m_showPedalSymbol);
-    loadPropertyItem(m_showLineWithRosette);
+    m_lineType->setIsEnabled(true);
+
+    if (isStarSymbolVisible()) {
+        m_lineType->setValue(HOOK_STAR);
+    } else {
+        m_lineType->setValue(endHookType()->value());
+    }
 }
 
-void PedalSettingsModel::resetProperties()
+void PedalSettingsModel::setLineType(int newType)
 {
-    LineSettingsModel::resetProperties();
+    bool rosetteHookSelected = (newType == HOOK_STAR);
+    int hookType = newType;
+    QString text = QString();
 
-    m_showPedalSymbol->resetToDefault();
-    m_showLineWithRosette->resetToDefault();
+    if (rosetteHookSelected) {
+        hookType = static_cast<int>(Ms::HookType::NONE);
+        text = Ms::Pedal::STAR_SYMBOL;
+        startHookType()->setValue(hookType);
+    }
+
+    endHookType()->setValue(hookType);
+    endText()->setValue(text);
+    isLineVisible()->setValue(!rosetteHookSelected);
+
+    m_lineType->setValue(newType);
+}
+
+bool PedalSettingsModel::isTextVisible(TextType) const
+{
+    return true;
 }

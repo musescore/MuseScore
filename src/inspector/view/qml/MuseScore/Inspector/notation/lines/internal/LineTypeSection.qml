@@ -32,10 +32,12 @@ import "../../../common"
 Column {
     id: root
 
+    property PropertyItem startHookType: null
     property PropertyItem endHookType: null
     property PropertyItem thickness: null
     property PropertyItem hookHeight: null
 
+    property alias possibleStartHookTypes: startHookButtonGroup.model
     property alias possibleEndHookTypes: lineTypeButtonGroup.model
 
     width: parent.width
@@ -47,6 +49,13 @@ Column {
 
         titleText: qsTrc("inspector", "Line type")
         propertyItem: root.endHookType
+    }
+
+    FlatRadioButtonGroupPropertyView {
+        id: startHookButtonGroup
+
+        titleText: qsTrc("inspector", "Start hook")
+        propertyItem: root.startHookType
     }
 
     Item {

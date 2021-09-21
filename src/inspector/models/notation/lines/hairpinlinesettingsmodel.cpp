@@ -54,7 +54,7 @@ HairpinLineSettingsModel::HairpinLineSettingsModel(QObject* parent, IElementRepo
         { Ms::HookType::HOOK_90T, IconCode::LINE_WITH_T_LIKE_END_HOOK }
     };
 
-    setPossibleHookTypes(hookTypes);
+    setPossibleEndHookTypes(hookTypes);
 
     createProperties();
 }

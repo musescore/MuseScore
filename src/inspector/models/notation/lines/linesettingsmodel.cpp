@@ -36,11 +36,13 @@ LineSettingsModel::LineSettingsModel(QObject* parent, IElementRepositoryService*
 
 void LineSettingsModel::createProperties()
 {
-    m_lineStyle = buildPropertyItem(Ms::Pid::LINE_STYLE, [this](const Ms::Pid pid, const QVariant& newValue) {
+    auto applyPropertyValueAndUpdateAvailability = [this](const Ms::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, newValue);
-
         onUpdateLinePropertiesAvailability();
-    });
+    };
+
+    m_lineStyle = buildPropertyItem(Ms::Pid::LINE_STYLE, applyPropertyValueAndUpdateAvailability);
+    m_isLineVisible = buildPropertyItem(Ms::Pid::LINE_VISIBLE, applyPropertyValueAndUpdateAvailability);
 
     m_placement = buildPropertyItem(Ms::Pid::PLACEMENT);
 
@@ -48,10 +50,9 @@ void LineSettingsModel::createProperties()
     m_dashLineLength = buildPropertyItem(Ms::Pid::DASH_LINE_LEN);
     m_dashGapLength = buildPropertyItem(Ms::Pid::DASH_GAP_LEN);
 
-    m_isLineVisible = buildPropertyItem(Ms::Pid::LINE_VISIBLE);
     m_allowDiagonal = buildPropertyItem(Ms::Pid::DIAGONAL);
 
-    m_beginingHookType = buildPropertyItem(Ms::Pid::BEGIN_HOOK_TYPE);
+    m_startHookType = buildPropertyItem(Ms::Pid::BEGIN_HOOK_TYPE);
     m_endHookType = buildPropertyItem(Ms::Pid::END_HOOK_TYPE);
     m_hookHeight = buildPropertyItem(Ms::Pid::END_HOOK_HEIGHT);
 
@@ -107,7 +108,7 @@ void LineSettingsModel::loadProperties()
     loadPropertyItem(m_isLineVisible);
     loadPropertyItem(m_allowDiagonal);
 
-    loadPropertyItem(m_beginingHookType);
+    loadPropertyItem(m_startHookType);
     loadPropertyItem(m_endHookType);
     loadPropertyItem(m_hookHeight);
 
@@ -148,7 +149,7 @@ void LineSettingsModel::resetProperties()
         m_dashGapLength,
         m_isLineVisible,
         m_allowDiagonal,
-        m_beginingHookType,
+        m_startHookType,
         m_endHookType,
         m_hookHeight,
         m_beginingText,
@@ -204,9 +205,9 @@ PropertyItem* LineSettingsModel::allowDiagonal() const
     return m_allowDiagonal;
 }
 
-PropertyItem* LineSettingsModel::beginingHookType() const
+PropertyItem* LineSettingsModel::startHookType() const
 {
-    return m_beginingHookType;
+    return m_startHookType;
 }
 
 PropertyItem* LineSettingsModel::endHookType() const
@@ -264,13 +265,23 @@ PropertyItem* LineSettingsModel::endTextVerticalOffset() const
     return m_endTextVerticalOffset;
 }
 
+QVariantList LineSettingsModel::possibleStartHookTypes() const
+{
+    return m_possibleStartHookTypes;
+}
+
 QVariantList LineSettingsModel::possibleEndHookTypes() const
+{
+    return m_possibleEndHookTypes;
+}
+
+QVariantList LineSettingsModel::hookTypesToObjList(const QList<HookTypeInfo>& types) const
 {
     QVariantList result;
 
-    for (HookTypeInfo typeInfo : m_possibleHookTypes) {
+    for (HookTypeInfo typeInfo : types) {
         QVariantMap obj;
-        obj["value"] = static_cast<int>(typeInfo.type);
+        obj["value"] = typeInfo.type;
         obj["iconCode"] = static_cast<int>(typeInfo.icon);
 
         result << obj;
@@ -283,7 +294,7 @@ void LineSettingsModel::onUpdateLinePropertiesAvailability()
 {
     bool isLineAvailable = m_isLineVisible->value().toBool();
 
-    m_beginingHookType->setIsEnabled(isLineAvailable);
+    m_startHookType->setIsEnabled(isLineAvailable);
     m_endHookType->setIsEnabled(isLineAvailable);
     m_thickness->setIsEnabled(isLineAvailable);
     m_hookHeight->setIsEnabled(isLineAvailable);
@@ -302,7 +313,12 @@ bool LineSettingsModel::isTextVisible(TextType type) const
     return type != TextType::EndText;
 }
 
-void LineSettingsModel::setPossibleHookTypes(const QList<HookTypeInfo>& types)
+void LineSettingsModel::setPossibleStartHookTypes(const QList<HookTypeInfo>& types)
 {
-    m_possibleHookTypes = types;
+    m_possibleStartHookTypes = hookTypesToObjList(types);
+}
+
+void LineSettingsModel::setPossibleEndHookTypes(const QList<HookTypeInfo>& types)
+{
+    m_possibleEndHookTypes = hookTypesToObjList(types);
 }

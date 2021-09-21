@@ -39,32 +39,35 @@ Column {
     spacing: 12
 
     CheckBox {
-        isIndeterminate: root.model && root.model.showPedalSymbol.isUndefined
-        checked: root.model && !isIndeterminate && root.model.showPedalSymbol.value
+        checked: root.model && root.model.pedalSymbolVisible
 
         text: qsTrc("inspector", "Show pedal symbol")
 
         onClicked: {
-            root.model.showPedalSymbol.value = !checked
+            root.model.pedalSymbolVisible = !checked
         }
     }
 
     LineTypeSection {
-        endHookType: root.model ? root.model.endHookType : null
+        startHookType: root.model ? root.model.startHookType : null
+        endHookType: root.model ? root.model.lineType : null
+
         thickness: root.model ? root.model.thickness : null
         hookHeight: root.model ? root.model.hookHeight : null
+
+        possibleStartHookTypes: root.model ? root.model.possibleStartHookTypes() : null
         possibleEndHookTypes: root.model ? root.model.possibleEndHookTypes() : null
     }
 
     CheckBox {
-        isIndeterminate: root.model && root.model.showLineWithRosette.isUndefined
-        checked: root.model && !isIndeterminate && root.model.showLineWithRosette.value
-        visible: root.model & root.model.showLineWithRosetteVisible
+        isIndeterminate: root.model && root.model.isLineVisible.isUndefined
+        checked: root.model && !isIndeterminate && root.model.isLineVisible.value
+        visible: root.model && root.model.isChangingLineVisibilityAllowed
 
         text: qsTrc("inspector", "Show line with rosette")
 
         onClicked: {
-            root.model.showLineWithRosette.value = !checked
+            root.model.isLineVisible.value = !checked
         }
     }
 
