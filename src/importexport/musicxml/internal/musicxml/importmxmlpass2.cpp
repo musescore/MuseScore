@@ -3107,7 +3107,7 @@ void MusicXMLParserDirection::pedal(const QString& type, const int /* number */,
         if (type == "start") {
             auto p = spdesc._isStopped ? toPedal(spdesc._sp) : new Pedal(_score->dummy());
             if (sign == "yes") {
-                p->setBeginText("<sym>keyboardPedalPed</sym>");
+                p->setBeginText(Pedal::PEDAL_SYMBOL);
             } else {
                 p->setBeginHookType(HookType::HOOK_90);
             }

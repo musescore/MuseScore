@@ -41,7 +41,7 @@ class LineSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(PropertyItem * isLineVisible READ isLineVisible CONSTANT)
     Q_PROPERTY(PropertyItem * allowDiagonal READ allowDiagonal CONSTANT)
 
-    Q_PROPERTY(PropertyItem * beginingHookType READ beginingHookType CONSTANT)
+    Q_PROPERTY(PropertyItem * startHookType READ startHookType CONSTANT)
     Q_PROPERTY(PropertyItem * endHookType READ endHookType CONSTANT)
     Q_PROPERTY(PropertyItem * hookHeight READ hookHeight CONSTANT)
 
@@ -71,7 +71,7 @@ public:
     PropertyItem* isLineVisible() const;
     PropertyItem* allowDiagonal() const;
 
-    PropertyItem* beginingHookType() const;
+    PropertyItem* startHookType() const;
     PropertyItem* endHookType() const;
     PropertyItem* hookHeight() const;
 
@@ -87,6 +87,7 @@ public:
     PropertyItem* endTextHorizontalOffset() const;
     PropertyItem* endTextVerticalOffset() const;
 
+    Q_INVOKABLE QVariantList possibleStartHookTypes() const;
     Q_INVOKABLE QVariantList possibleEndHookTypes() const;
 
 protected:
@@ -97,7 +98,17 @@ protected:
     };
 
     struct HookTypeInfo {
-        Ms::HookType type = Ms::HookType::NONE;
+        HookTypeInfo(Ms::HookType type, ui::IconCode::Code icon)
+            : type(static_cast<int>(type)), icon(icon)
+        {
+        }
+
+        HookTypeInfo(int type, ui::IconCode::Code icon)
+            : type(type), icon(icon)
+        {
+        }
+
+        int type = 0;
         ui::IconCode::Code icon = ui::IconCode::Code::NONE;
     };
 
@@ -106,12 +117,14 @@ protected:
     void resetProperties() override;
 
     virtual void onUpdateLinePropertiesAvailability();
-
     virtual bool isTextVisible(TextType type) const;
 
-    void setPossibleHookTypes(const QList<HookTypeInfo>& types);
+    void setPossibleStartHookTypes(const QList<HookTypeInfo>& types);
+    void setPossibleEndHookTypes(const QList<HookTypeInfo>& types);
 
 private:
+    QVariantList hookTypesToObjList(const QList<HookTypeInfo>& types) const;
+
     PropertyItem* m_lineStyle = nullptr;
     PropertyItem* m_placement = nullptr;
 
@@ -122,7 +135,7 @@ private:
     PropertyItem* m_isLineVisible = nullptr;
     PropertyItem* m_allowDiagonal = nullptr;
 
-    PropertyItem* m_beginingHookType = nullptr;
+    PropertyItem* m_startHookType = nullptr;
     PropertyItem* m_endHookType = nullptr;
     PropertyItem* m_hookHeight = nullptr;
 
@@ -138,7 +151,8 @@ private:
     PropertyItem* m_endTextHorizontalOffset = nullptr;
     PropertyItem* m_endTextVerticalOffset = nullptr;
 
-    QList<HookTypeInfo> m_possibleHookTypes;
+    QVariantList m_possibleStartHookTypes;
+    QVariantList m_possibleEndHookTypes;
 };
 }
 

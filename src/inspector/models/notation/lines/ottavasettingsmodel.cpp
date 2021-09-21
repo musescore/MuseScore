@@ -42,7 +42,7 @@ OttavaSettingsModel::OttavaSettingsModel(QObject* parent, IElementRepositoryServ
         { Ms::HookType::HOOK_45, IconCode::LINE_WITH_ANGLED_END_HOOK }
     };
 
-    setPossibleHookTypes(hookTypes);
+    setPossibleEndHookTypes(hookTypes);
 
     createProperties();
 }

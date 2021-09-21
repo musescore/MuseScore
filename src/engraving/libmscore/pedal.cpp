@@ -55,6 +55,9 @@ static const ElementStyle pedalStyle {
     { Sid::pedalPosBelow,                      Pid::OFFSET },
 };
 
+const QString Pedal::PEDAL_SYMBOL = "<sym>keyboardPedalPed</sym>";
+const QString Pedal::STAR_SYMBOL = "<sym>keyboardPedalUp</sym>";
+
 PedalSegment::PedalSegment(Pedal* sp, System* parent)
     : TextLineBaseSegment(ElementType::PEDAL_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {

@@ -41,7 +41,7 @@ VoltaSettingsModel::VoltaSettingsModel(QObject* parent, IElementRepositoryServic
         { Ms::HookType::HOOK_90, IconCode::LINE_WITH_TWO_INVERTED_HOOKS },
     };
 
-    setPossibleHookTypes(hookTypes);
+    setPossibleEndHookTypes(hookTypes);
 
     createProperties();
 }

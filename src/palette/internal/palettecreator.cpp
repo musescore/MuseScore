@@ -1042,16 +1042,16 @@ PalettePtr PaletteCreator::newLinesPalette()
 
     auto pedal = makeElement<Pedal>(gpaletteScore);
     pedal->setLen(w);
-    pedal->setBeginText("<sym>keyboardPedalPed</sym>");
-    pedal->setContinueText("(<sym>keyboardPedalPed</sym>)");
+    pedal->setBeginText(Pedal::PEDAL_SYMBOL);
+    pedal->setContinueText(QString("(%1)").arg(Pedal::PEDAL_SYMBOL));
     pedal->setEndHookType(HookType::HOOK_90);
     sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (with ped and line)"));
 
     pedal = makeElement<Pedal>(gpaletteScore);
     pedal->setLen(w);
-    pedal->setBeginText("<sym>keyboardPedalPed</sym>");
-    pedal->setContinueText("(<sym>keyboardPedalPed</sym>)");
-    pedal->setEndText("<sym>keyboardPedalUp</sym>");
+    pedal->setBeginText(Pedal::PEDAL_SYMBOL);
+    pedal->setContinueText(QString("(%1)").arg(Pedal::PEDAL_SYMBOL));
+    pedal->setEndText(Pedal::STAR_SYMBOL);
     pedal->setLineVisible(false);
     sp->appendElement(pedal, QT_TRANSLATE_NOOP("palette", "Pedal (with ped and asterisk)"));
 
