@@ -38,6 +38,17 @@ Column {
 
     spacing: 12
 
+    CheckBox {
+        isIndeterminate: root.model && root.model.showPedalSymbol.isUndefined
+        checked: root.model && !isIndeterminate && root.model.showPedalSymbol.value
+
+        text: qsTrc("inspector", "Show pedal symbol")
+
+        onClicked: {
+            root.model.showPedalSymbol.value = !checked
+        }
+    }
+
     LineTypeSection {
         endHookType: root.model ? root.model.endHookType : null
         thickness: root.model ? root.model.thickness : null
@@ -46,13 +57,15 @@ Column {
     }
 
     CheckBox {
-        id: showBothSideHookCheckbox
+        isIndeterminate: root.model && root.model.showLineWithRosette.isUndefined
+        checked: root.model && !isIndeterminate && root.model.showLineWithRosette.value
+        visible: root.model & root.model.showLineWithRosetteVisible
 
-        /*isIndeterminate: model ? model.isDefaultTempoForced.isUndefined : false
-            checked: model && !isIndeterminate ? model.isDefaultTempoForced.value : false*/
-        text: qsTrc("inspector", "Show hook on both ends")
+        text: qsTrc("inspector", "Show line with rosette")
 
-        //onClicked: { model.isDefaultTempoForced.value = !checked }
+        onClicked: {
+            root.model.showLineWithRosette.value = !checked
+        }
     }
 
     SeparatorLine { anchors.margins: -10 }
@@ -61,9 +74,5 @@ Column {
         lineStyle: root.model ? root.model.lineStyle : null
         dashLineLength: root.model ? root.model.dashLineLength : null
         dashGapLength: root.model ? root.model.dashGapLength : null
-    }
-
-    PlacementSection {
-        propertyItem: root.model ? root.model.placement : null
     }
 }
