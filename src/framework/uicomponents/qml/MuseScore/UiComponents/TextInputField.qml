@@ -39,6 +39,8 @@ FocusScope {
     property alias hintIcon: hintIcon.iconCode
     property bool clearTextButtonVisible: false
 
+    property alias textHorizontalAlignment: valueInput.horizontalAlignment
+    property alias textVerticalAlignment: valueInput.verticalAlignment
     property bool hasText: valueInput.text.length > 0
     property alias readOnly: valueInput.readOnly
 
@@ -112,7 +114,7 @@ FocusScope {
 
     RowLayout {
         anchors.fill: parent
-        anchors.leftMargin: hintIcon.visible ? 0 : 12
+        anchors.leftMargin: 4
         anchors.rightMargin: 4
 
         spacing: 0
@@ -121,7 +123,7 @@ FocusScope {
             id: hintIcon
 
             Layout.fillHeight: true
-            Layout.preferredWidth: 30
+            Layout.preferredWidth: hintIcon.visible ? 30 : 0
 
             visible: Boolean(!hintIcon.isEmpty)
         }

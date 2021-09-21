@@ -35,6 +35,32 @@ MixerPanelSection {
 
         spacing: 4
 
+        TextInputField {
+            id: balanceTextInputField
+
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            height: 24
+            width: 42
+
+            textHorizontalAlignment: Qt.AlignHCenter
+
+            validator: DoubleInputValidator {
+                id: intInputValidator
+                top: 12.0
+                bottom: -60.0
+                decimal: 1
+            }
+
+            currentText: Math.round(item.volumeLevel * 100) / 100
+
+            onCurrentTextEdited: {
+                if (item.volumeLevel !== Number(newTextValue)) {
+                    item.volumeLevel = Number(newTextValue)
+                }
+            }
+        }
+
         Row {
             anchors.horizontalCenter: parent.horizontalCenter
             width: parent.width
@@ -42,10 +68,10 @@ MixerPanelSection {
             spacing: 8
 
             VolumeSlider {
-                value: item.volumeLevel
+                volumeLevel: item.volumeLevel
 
-                onMoved: {
-                    item.volumeLevel = value
+                onVolumeLevelMoved: {
+                    item.volumeLevel = Math.round(level * 100) / 100
                 }
             }
 
