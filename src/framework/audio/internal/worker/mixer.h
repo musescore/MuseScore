@@ -67,6 +67,7 @@ public:
 private:
     void mixOutputFromChannel(float* outBuffer, float* inBuffer, unsigned int samplesCount);
     void completeOutput(float* buffer, const samples_t& samplesPerChannel);
+    void notifyAboutAudioSignalChanges(const audioch_t audioChannelNumber, const float linearRms) const;
 
     std::vector<float> m_writeCacheBuff;
 
@@ -80,8 +81,8 @@ private:
     std::set<IClockPtr> m_clocks;
     audioch_t m_audioChannelsCount = 0;
 
-    async::Channel<audioch_t, float> m_masterSignalAmplitudeRmsChanged;
-    async::Channel<audioch_t, volume_dbfs_t> m_masterVolumePressureDbfsChanged;
+    mutable async::Channel<audioch_t, float> m_masterSignalAmplitudeRmsChanged;
+    mutable async::Channel<audioch_t, volume_dbfs_t> m_masterVolumePressureDbfsChanged;
 };
 
 using MixerPtr = std::shared_ptr<Mixer>;

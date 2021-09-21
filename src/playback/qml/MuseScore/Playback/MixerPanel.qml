@@ -43,6 +43,18 @@ Rectangle {
         property alias navigation: navPanel
         property alias contextMenuModel: contextMenuModel
 
+        function positionViewAtEnd() {
+            if (flickable.contentY == flickable.contentHeight) {
+                return
+            }
+
+            flickable.contentY = flickable.contentHeight - flickable.height
+        }
+
+        onContentHeightChanged: {
+            flickable.positionViewAtEnd()
+        }
+
         anchors.fill: parent
 
         clip: true
@@ -100,6 +112,7 @@ Rectangle {
 
                 visible: contextMenuModel.soundSectionVisible
                 headerVisible: contextMenuModel.labelsSectionVisible
+                rootPanel: root
 
                 model: mixerPanelModel
             }
@@ -109,6 +122,7 @@ Rectangle {
 
                 visible: contextMenuModel.audioFxSectionVisible
                 headerVisible: contextMenuModel.labelsSectionVisible
+                rootPanel: root
 
                 model: mixerPanelModel
             }
@@ -118,6 +132,7 @@ Rectangle {
 
                 visible: contextMenuModel.balanceSectionVisible
                 headerVisible: contextMenuModel.labelsSectionVisible
+                rootPanel: root
 
                 model: mixerPanelModel
             }
@@ -127,6 +142,7 @@ Rectangle {
 
                 visible: contextMenuModel.volumeSectionVisible
                 headerVisible: contextMenuModel.labelsSectionVisible
+                rootPanel: root
 
                 model: mixerPanelModel
             }
@@ -136,9 +152,14 @@ Rectangle {
 
                 visible: contextMenuModel.titleSectionVisible
                 headerVisible: contextMenuModel.labelsSectionVisible
+                rootPanel: root
 
                 model: mixerPanelModel
             }
         }
+    }
+
+    onHeightChanged: {
+        flickable.positionViewAtEnd()
     }
 }
