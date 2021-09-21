@@ -41,7 +41,7 @@ private:
     friend class Ms::MasterScore;
 
     Err read(Ms::MasterScore* score, Ms::XmlReader&, ReadContext& ctx, compat::ReadStyleHook* styleHook = nullptr);
-    Err doRead(Ms::MasterScore* score, Ms::XmlReader& e);
+    Err doRead(Ms::MasterScore* score, Ms::XmlReader& e, ReadContext& ctx);
 };
 }
 
