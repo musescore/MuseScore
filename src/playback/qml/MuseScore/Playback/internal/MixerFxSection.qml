@@ -39,9 +39,13 @@ MixerPanelSection {
         spacing: 6
 
         Repeater {
+            anchors.horizontalCenter: parent.horizontalCenter
+
             model: item.outputResourceItemList
             delegate: AudioResourceControl {
                 id: inputResourceControl
+
+                anchors.horizontalCenter: parent.horizontalCenter
 
                 resourceItemModel: modelData
                 active: modelData.isActive

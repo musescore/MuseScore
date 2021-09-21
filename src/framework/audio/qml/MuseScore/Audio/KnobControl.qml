@@ -33,6 +33,11 @@ Dial {
     width: prv.radius * 2
     height: width
 
+    implicitHeight: height
+    implicitWidth: width
+
+    wheelEnabled: true
+
     from: -root.valueScale
     to: root.valueScale
     value: 0

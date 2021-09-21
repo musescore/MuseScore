@@ -30,40 +30,51 @@ MixerPanelSection {
 
     headerTitle: qsTrc("playback", "Pan")
 
-    Row {
+    Item {
+        id: contentWrapper
+
+        height: contentRow.implicitHeight
         width: root.delegateDefaultWidth
 
-        spacing: 8
+        Row {
+            id: contentRow
 
-        KnobControl {
-            id: balanceKnob
+            anchors.horizontalCenter: parent.horizontalCenter
 
-            value: item.balance
+            spacing: 8
 
-            onMoved: {
-                item.balance = value
-            }
-        }
+            KnobControl {
+                id: balanceKnob
 
-        TextInputField {
-            id: balanceTextInputField
+                value: item.balance
 
-            anchors.verticalCenter: balanceKnob.verticalCenter
-
-            height: 24
-            width: 40
-
-            validator: IntInputValidator {
-                id: intInputValidator
-                top: 100
-                bottom: -100
+                onMoved: {
+                    item.balance = value
+                }
             }
 
-            currentText: item.balance
+            TextInputField {
+                id: balanceTextInputField
 
-            onCurrentTextEdited: {
-                if (item.balance !== Number(newTextValue)) {
-                    item.balance = Number(newTextValue)
+                anchors.verticalCenter: balanceKnob.verticalCenter
+
+                textHorizontalAlignment: Qt.AlignHCenter
+
+                height: 24
+                width: 36
+
+                validator: IntInputValidator {
+                    id: intInputValidator
+                    top: 100
+                    bottom: -100
+                }
+
+                currentText: item.balance
+
+                onCurrentTextEdited: {
+                    if (item.balance !== Number(newTextValue)) {
+                        item.balance = Number(newTextValue)
+                    }
                 }
             }
         }
