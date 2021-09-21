@@ -29,6 +29,7 @@
 
 #include "compat/writescorehook.h"
 #include "io/xml.h"
+#include "rw/staffrw.h"
 
 #include "score.h"
 #include "engravingitem.h"
@@ -68,28 +69,9 @@
 
 using namespace mu;
 using namespace mu::engraving;
+using namespace mu::engraving::rw;
 
 namespace Ms {
-//---------------------------------------------------------
-//   writeMeasure
-//---------------------------------------------------------
-
-static void writeMeasure(XmlWriter& xml, MeasureBase* m, int staffIdx, bool writeSystemElements, bool forceTimeSig)
-{
-    //
-    // special case multi measure rest
-    //
-    if (m->isMeasure() || staffIdx == 0) {
-        m->write(xml, staffIdx, writeSystemElements, forceTimeSig);
-    }
-
-    if (m->score()->styleB(Sid::createMultiMeasureRests) && m->isMeasure() && toMeasure(m)->mmRest()) {
-        toMeasure(m)->mmRest()->write(xml, staffIdx, writeSystemElements, forceTimeSig);
-    }
-
-    xml.setCurTick(m->endTick());
-}
-
 //---------------------------------------------------------
 //   write
 //---------------------------------------------------------
@@ -122,6 +104,7 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
     }
 
     xml.startObject(this);
+
     if (excerpt()) {
         Excerpt* e = excerpt();
         QMultiMap<int, int> trackList = e->tracks();
@@ -236,26 +219,8 @@ void Score::write(XmlWriter& xml, bool selectionOnly, compat::WriteScoreHook& ho
     xml.setTrackDiff(-staffStart * VOICES);
     if (measureStart) {
         for (int staffIdx = staffStart; staffIdx < staffEnd; ++staffIdx) {
-            xml.startObject(staff(staffIdx), QString("id=\"%1\"").arg(staffIdx + 1 - staffStart));
-            xml.setCurTick(measureStart->tick());
-            xml.setTickDiff(xml.curTick());
-            xml.setCurTrack(staffIdx * VOICES);
-            bool writeSystemElements = (staffIdx == staffStart);
-            bool firstMeasureWritten = false;
-            bool forceTimeSig = false;
-            for (MeasureBase* m = measureStart; m != measureEnd; m = m->next()) {
-                // force timesig if first measure and selectionOnly
-                if (selectionOnly && m->isMeasure()) {
-                    if (!firstMeasureWritten) {
-                        forceTimeSig = true;
-                        firstMeasureWritten = true;
-                    } else {
-                        forceTimeSig = false;
-                    }
-                }
-                writeMeasure(xml, m, staffIdx, writeSystemElements, forceTimeSig);
-            }
-            xml.endObject();
+            const Staff* st = staff(staffIdx);
+            StaffRW::writeStaff(st, xml, measureStart, measureEnd, staffStart, staffIdx, selectionOnly);
         }
     }
     xml.setCurTrack(-1);
@@ -393,7 +358,7 @@ bool Score::writeScore(QIODevice* f, bool msczFormat, bool onlySelection, compat
 {
     XmlWriter xml(this, f);
     xml.setIsMsczMode(msczFormat);
-    xml.header();
+    xml.writeHeader();
 
     xml.startObject("museScore version=\"" MSC_VERSION "\"");
 
@@ -402,7 +367,9 @@ bool Score::writeScore(QIODevice* f, bool msczFormat, bool onlySelection, compat
         xml.tag("programRevision", revision);
     }
     write(xml, onlySelection, hook);
+
     xml.endObject();
+
     if (isMaster()) {
         masterScore()->revisions()->write(xml);
     }

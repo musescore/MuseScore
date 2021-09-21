@@ -301,7 +301,7 @@ public:
     void sTag(const char* name, Spatium sp) { XmlWriter::tag(name, QVariant(sp.val())); }
     void pTag(const char* name, PlaceText);
 
-    void header();
+    void writeHeader();
 
     void startObject(const QString&);
     void endObject();

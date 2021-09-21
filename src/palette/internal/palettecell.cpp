@@ -221,11 +221,11 @@ void PaletteCell::write(XmlWriter& xml) const
     // using attributes for `custom` and `visible` properties instead of nested tags
     // for pre-3.3 version compatibility
     xml.startObject(QString("Cell")
-             + (!name.isEmpty() ? " name=\"" + XmlWriter::xmlString(name) + "\"" : "")
-             + (custom ? " custom=\"1\"" : "")
-             + (!visible ? " visible=\"0\"" : "")
-             + (untranslatedElement ? " trElement=\"1\"" : "")
-             );
+                    + (!name.isEmpty() ? " name=\"" + XmlWriter::xmlString(name) + "\"" : "")
+                    + (custom ? " custom=\"1\"" : "")
+                    + (!visible ? " visible=\"0\"" : "")
+                    + (untranslatedElement ? " trElement=\"1\"" : "")
+                    );
 
     if (drawStaff) {
         xml.tag("staff", drawStaff);
