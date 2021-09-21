@@ -37,13 +37,7 @@ public:
         STYLE_DIATONIC
     };
 
-    enum class LineType {
-        LINE_TYPE_STRAIGHT = 0,
-        LINE_TYPE_WAVY
-    };
-
     Q_ENUM(Style)
-    Q_ENUM(LineType)
 };
 }
 

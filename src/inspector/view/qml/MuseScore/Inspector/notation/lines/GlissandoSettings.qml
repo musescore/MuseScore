@@ -39,10 +39,22 @@ Column {
     FlatRadioButtonGroupPropertyView {
         titleText: qsTrc("inspector", "Glissando line")
         propertyItem: root.model ? root.model.lineType : null
+        model: root.model ? root.model.possibleLineTypes() : null
+    }
 
-        model: [
-            { text: qsTrc("inspector", "Straight"), value: Glissando.LINE_TYPE_STRAIGHT },
-            { text: qsTrc("inspector", "Wavy"), value: Glissando.LINE_TYPE_WAVY }
-        ]
+    CheckBox {
+        isIndeterminate: root.model && root.model.showText.isUndefined
+        checked: root.model && !isIndeterminate && root.model.showText.value
+
+        text: qsTrc("inspector", "Show text")
+
+        onClicked: {
+            root.model.showText.value = !checked
+        }
+    }
+
+    TextSection {
+        titleText: qsTrc("inspector", "Text")
+        propertyItem: root.model ? root.model.text : null
     }
 }
