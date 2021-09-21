@@ -452,6 +452,7 @@ const StyleDef::StyleValue StyleDef::styleValues[int(Sid::STYLES)] = {
 
     { Sid::ArpeggioNoteDistance,    "ArpeggioNoteDistance",    Spatium(.5) },
     { Sid::ArpeggioAccidentalDistance,    "ArpeggioAccidentalDistance",    Spatium(.5) },
+    { Sid::ArpeggioAccidentalDistanceShort,    "ArpeggioAccidentalDistanceShort",    Spatium(0.25) },
     { Sid::ArpeggioLineWidth,       "ArpeggioLineWidth",       Spatium(.18) },
     { Sid::ArpeggioHookLen,         "ArpeggioHookLen",         Spatium(.8) },
     { Sid::ArpeggioHiddenInStdIfTab, "ArpeggioHiddenInStdIfTab", QVariant(false) },

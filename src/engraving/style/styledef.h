@@ -450,6 +450,7 @@ enum class Sid {
 
     ArpeggioNoteDistance,
     ArpeggioAccidentalDistance,
+    ArpeggioAccidentalDistanceShort,
     ArpeggioLineWidth,
     ArpeggioHookLen,
     ArpeggioHiddenInStdIfTab,
