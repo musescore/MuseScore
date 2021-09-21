@@ -28,20 +28,59 @@ import MuseScore.UiComponents 1.0
 Slider {
     id: root
 
+    property real volumeLevel: 0.0
+
+    signal volumeLevelMoved(var level)
+
     height: 140 + prv.handleHeight
     width: 32 + prv.unitsTextWidth
 
-    from: -48
+    from: -60
     to: 12
-    value: 0
+    value: convertor.volumeLevelToLocal(root.volumeLevel)
     stepSize: 0.1
     orientation: Qt.Vertical
+    wheelEnabled: true
+
+    QtObject {
+        id: convertor
+
+        readonly property real highAccuracyStep: 1.5
+        readonly property real lowAccuracyStep: 0.75
+
+        readonly property real localCenter: -24
+        readonly property real logicalCenter: -12
+
+        function volumeLevelToLocal(newValue) {
+            var diff
+
+            if (newValue > convertor.logicalCenter) {
+                diff = root.to - newValue
+                return root.to - (diff * convertor.highAccuracyStep)
+            } else {
+                diff = convertor.logicalCenter - newValue
+                return convertor.localCenter - (diff * convertor.lowAccuracyStep)
+            }
+        }
+
+        function volumeLevelFromLocal(newValue) {
+            var diff
+
+            if (newValue > convertor.localCenter) {
+                diff = root.to - newValue
+                return root.to - (diff / convertor.highAccuracyStep)
+            } else {
+                diff = convertor.localCenter - newValue
+                return convertor.logicalCenter - (diff / convertor.lowAccuracyStep)
+            }
+        }
+    }
 
     QtObject {
         id: prv
 
         readonly property real rulerLineWidth: 2
-        readonly property real rulerLineHeight: root.height - prv.handleHeight
+        readonly property real rulerLineHeight: root.height - prv.handleHeight 
 
         // value ranges
         readonly property real lowAccuracyEdge: -12
@@ -197,6 +236,11 @@ Slider {
                 color: "#000000"
             }
         }
+    }
+
+    onMoved: {
+        var newLevel = convertor.volumeLevelFromLocal(value)
+        root.volumeLevelMoved(newLevel)
     }
 
     Component.onCompleted: {
