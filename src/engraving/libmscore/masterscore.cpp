@@ -450,7 +450,7 @@ MasterScore* MasterScore::clone()
     XmlReader r(scoreData);
     MasterScore* score = new MasterScore(style(), m_project);
 
-    ReadContext ctx(this);
+    ReadContext ctx(score);
     ctx.setIgnoreVersionError(true);
     ScoreReader().read(score, r, ctx);
 

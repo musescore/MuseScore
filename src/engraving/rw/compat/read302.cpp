@@ -41,12 +41,13 @@
 #include "libmscore/masterscore.h"
 #include "libmscore/factory.h"
 
-#include "../read400.h"
+#include "../staffrw.h"
 #include "readchordlisthook.h"
 #include "readstyle.h"
 
 using namespace mu;
 using namespace mu::engraving;
+using namespace mu::engraving::rw;
 using namespace mu::engraving::compat;
 using namespace Ms;
 
@@ -68,7 +69,7 @@ bool Read302::readScore302(Ms::Score* score, XmlReader& e, ReadContext& ctx)
         e.setTrack(-1);
         const QStringRef& tag(e.name());
         if (tag == "Staff") {
-            Read400::readStaff(score, e, ctx);
+            StaffRW::readStaff(score, e, ctx);
         } else if (tag == "Omr") {
             e.skipCurrentElement();
         } else if (tag == "Audio") {
