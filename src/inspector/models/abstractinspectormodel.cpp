@@ -42,6 +42,8 @@ static const QMap<ElementKey, InspectorModelType> NOTATION_ELEMENT_MODEL_TYPES =
     { Ms::ElementType::BEAM, InspectorModelType::TYPE_BEAM },
     { Ms::ElementType::GLISSANDO, InspectorModelType::TYPE_GLISSANDO },
     { Ms::ElementType::GLISSANDO_SEGMENT, InspectorModelType::TYPE_GLISSANDO },
+    { Ms::ElementType::VIBRATO, InspectorModelType::TYPE_VIBRATO },
+    { Ms::ElementType::VIBRATO_SEGMENT, InspectorModelType::TYPE_VIBRATO },
     { Ms::ElementType::TEMPO_TEXT, InspectorModelType::TYPE_TEMPO },
     { Ms::ElementType::FERMATA, InspectorModelType::TYPE_FERMATA },
     { Ms::ElementType::LAYOUT_BREAK, InspectorModelType::TYPE_SECTIONBREAK },

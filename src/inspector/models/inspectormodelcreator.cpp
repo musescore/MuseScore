@@ -46,6 +46,7 @@
 #include "notation/lines/voltasettingsmodel.h"
 #include "notation/lines/letringsettingsmodel.h"
 #include "notation/lines/palmmutesettingsmodel.h"
+#include "notation/lines/vibratosettingsmodel.h"
 #include "notation/stafftype/stafftypesettingsmodel.h"
 #include "notation/frames/textframesettingsmodel.h"
 #include "notation/frames/verticalframesettingsmodel.h"
@@ -124,6 +125,8 @@ AbstractInspectorModel* InspectorModelCreator::newInspectorModel(AbstractInspect
         return new PalmMuteSettingsModel(parent, repository);
     case InspectorModelType::TYPE_LET_RING:
         return new LetRingSettingsModel(parent, repository);
+    case InspectorModelType::TYPE_VIBRATO:
+        return new VibratoSettingsModel(parent, repository);
     case InspectorModelType::TYPE_STAFF_TYPE_CHANGES:
         return new StaffTypeSettingsModel(parent, repository);
     case InspectorModelType::TYPE_TEXT_FRAME:

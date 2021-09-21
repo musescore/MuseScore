@@ -68,11 +68,12 @@ QList<Ms::EngravingItem*> ElementRepositoryService::findElementsByType(const Ms:
     case Ms::ElementType::BEAM: return findBeams();
     case Ms::ElementType::STAFF: return findStaffs();
     case Ms::ElementType::LAYOUT_BREAK: return findSectionBreaks(); //Page breaks and line breaks are of type LAYOUT_BREAK, but they don't appear in the inspector for now.
-    case Ms::ElementType::PEDAL: return findPedals();
     case Ms::ElementType::CLEF: return findPairedClefs();
     case Ms::ElementType::TEXT: return findTexts();
     case Ms::ElementType::TREMOLO: return findTremolos();
+    case Ms::ElementType::PEDAL:
     case Ms::ElementType::GLISSANDO:
+    case Ms::ElementType::VIBRATO:
     case Ms::ElementType::HAIRPIN:
     case Ms::ElementType::VOLTA:
     case Ms::ElementType::LET_RING:
@@ -228,6 +229,8 @@ QList<Ms::EngravingItem*> ElementRepositoryService::findLines(Ms::ElementType li
 {
     static const QMap<Ms::ElementType, Ms::ElementType> lineTypeToSegmentType {
         { Ms::ElementType::GLISSANDO, Ms::ElementType::GLISSANDO_SEGMENT },
+        { Ms::ElementType::VIBRATO, Ms::ElementType::VIBRATO_SEGMENT },
+        { Ms::ElementType::PEDAL, Ms::ElementType::PEDAL_SEGMENT },
         { Ms::ElementType::HAIRPIN, Ms::ElementType::HAIRPIN_SEGMENT },
         { Ms::ElementType::VOLTA, Ms::ElementType::VOLTA_SEGMENT },
         { Ms::ElementType::LET_RING, Ms::ElementType::LET_RING_SEGMENT },
@@ -285,27 +288,6 @@ QList<Ms::EngravingItem*> ElementRepositoryService::findSectionBreaks() const
                 continue;
             }
 
-            resultList << element;
-        }
-    }
-
-    return resultList;
-}
-
-QList<Ms::EngravingItem*> ElementRepositoryService::findPedals() const
-{
-    QList<Ms::EngravingItem*> resultList;
-
-    for (Ms::EngravingItem* element : m_elementList) {
-        if (element->type() == Ms::ElementType::PEDAL_SEGMENT) {
-            const Ms::PedalSegment* pedalSegment = Ms::toPedalSegment(element);
-
-            if (!pedalSegment) {
-                continue;
-            }
-
-            resultList << pedalSegment->pedal();
-        } else if (element->type() == Ms::ElementType::PEDAL) {
             resultList << element;
         }
     }
