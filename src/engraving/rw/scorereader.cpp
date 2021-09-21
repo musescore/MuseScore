@@ -92,7 +92,8 @@ Err ScoreReader::loadMscz(Ms::MasterScore* score, const mu::engraving::MscReader
             QByteArray excerptData = mscReader.readExcerptFile(excerptName);
             XmlReader xml(excerptData);
             xml.setDocName(excerptName);
-            Read400::read400(partScore, xml);
+            ReadContext ctx(score);
+            Read400::read400(partScore, xml, ctx);
 
             partScore->linkMeasures(score);
             ex->setTracks(xml.tracks());
@@ -164,10 +165,10 @@ Err ScoreReader::read(MasterScore* score, XmlReader& e, ReadContext& ctx, compat
                 Score::FileError error = compat::Read206::read206(score, e, ctx);
                 err = scoreFileErrorToErr(error);
             } else if (score->mscVersion() < 400 || MScore::testMode) {
-                Score::FileError error = compat::Read302::read302(score, e);
+                Score::FileError error = compat::Read302::read302(score, e, ctx);
                 err = scoreFileErrorToErr(error);
             } else {
-                err = doRead(score, e);
+                err = doRead(score, e, ctx);
             }
 
             score->setCreated(false);
@@ -180,7 +181,7 @@ Err ScoreReader::read(MasterScore* score, XmlReader& e, ReadContext& ctx, compat
     return Err::FileCorrupted;
 }
 
-Err ScoreReader::doRead(MasterScore* score, XmlReader& e)
+Err ScoreReader::doRead(MasterScore* score, XmlReader& e, ReadContext& ctx)
 {
     while (e.readNextStartElement()) {
         const QStringRef& tag(e.name());
@@ -189,7 +190,7 @@ Err ScoreReader::doRead(MasterScore* score, XmlReader& e)
         } else if (tag == "programRevision") {
             score->setMscoreRevision(e.readIntHex());
         } else if (tag == "Score") {
-            if (!Read400::readScore400(score, e)) {
+            if (!Read400::readScore400(score, e, ctx)) {
                 if (e.error() == QXmlStreamReader::CustomError) {
                     return Err::FileCriticalCorrupted;
                 }

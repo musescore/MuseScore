@@ -33,10 +33,10 @@ class Read302
 {
 public:
 
-    static Ms::Score::FileError read302(Ms::MasterScore* masterScore, Ms::XmlReader& e);
+    static Ms::Score::FileError read302(Ms::MasterScore* masterScore, Ms::XmlReader& e, ReadContext& ctx);
 
 private:
-    static bool readScore302(Ms::Score* score, Ms::XmlReader& e);
+    static bool readScore302(Ms::Score* score, Ms::XmlReader& e, ReadContext& ctx);
 };
 }
 
