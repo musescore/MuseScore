@@ -47,6 +47,7 @@ MixerPanelSection {
 
                 anchors.horizontalCenter: parent.horizontalCenter
 
+                menuAnchorItem: root.rootPanel
                 resourceItemModel: modelData
                 active: modelData.isActive
 
