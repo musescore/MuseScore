@@ -599,12 +599,6 @@ static inline BSymbol* toBSymbol(EngravingObject* e)
     return (BSymbol*)e;
 }
 
-static inline TextLineBaseSegment* toTextLineBaseSegment(EngravingObject* e)
-{
-    Q_ASSERT(e == 0 || e->isTextLineBaseSegment());
-    return (TextLineBaseSegment*)e;
-}
-
 static inline TextLineBase* toTextLineBase(EngravingObject* e)
 {
     Q_ASSERT(e == 0 || e->isTextLineBase());

@@ -30,19 +30,26 @@ class GlissandoSettingsModel : public AbstractInspectorModel
     Q_OBJECT
 
     Q_PROPERTY(PropertyItem * lineType READ lineType CONSTANT)
+    Q_PROPERTY(PropertyItem * showText READ showText CONSTANT)
+    Q_PROPERTY(PropertyItem * text READ text CONSTANT)
 
 public:
     explicit GlissandoSettingsModel(QObject* parent, IElementRepositoryService* repository);
 
+    PropertyItem* lineType() const;
+    PropertyItem* showText() const;
+    PropertyItem* text() const;
+
+    Q_INVOKABLE QVariantList possibleLineTypes() const;
+
+private:
     void createProperties() override;
-    void requestElements() override;
     void loadProperties() override;
     void resetProperties() override;
 
-    PropertyItem* lineType() const;
-
-private:
     PropertyItem* m_lineType = nullptr;
+    PropertyItem* m_showText = nullptr;
+    PropertyItem* m_text = nullptr;
 };
 }
 

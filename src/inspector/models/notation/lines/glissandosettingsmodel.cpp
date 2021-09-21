@@ -26,7 +26,7 @@
 using namespace mu::inspector;
 
 GlissandoSettingsModel::GlissandoSettingsModel(QObject* parent, IElementRepositoryService* repository)
-    : AbstractInspectorModel(parent, repository)
+    : AbstractInspectorModel(parent, repository, Ms::ElementType::GLISSANDO)
 {
     setModelType(InspectorModelType::TYPE_GLISSANDO);
     setTitle(qtrc("inspector", "Glissando"));
@@ -35,27 +35,59 @@ GlissandoSettingsModel::GlissandoSettingsModel(QObject* parent, IElementReposito
     createProperties();
 }
 
+PropertyItem* GlissandoSettingsModel::lineType() const
+{
+    return m_lineType;
+}
+
+PropertyItem* GlissandoSettingsModel::showText() const
+{
+    return m_showText;
+}
+
+PropertyItem* GlissandoSettingsModel::text() const
+{
+    return m_text;
+}
+
+QVariantList GlissandoSettingsModel::possibleLineTypes() const
+{
+    QMap<Ms::GlissandoType, QString> types {
+        { Ms::GlissandoType::STRAIGHT, mu::qtrc("inspector", "Straight") },
+        { Ms::GlissandoType::WAVY, mu::qtrc("inspector", "Wavy") }
+    };
+
+    QVariantList result;
+
+    for (Ms::GlissandoType type : types.keys()) {
+        QVariantMap obj;
+
+        obj["text"] = types[type];
+        obj["value"] = static_cast<int>(type);
+
+        result << obj;
+    }
+
+    return result;
+}
+
 void GlissandoSettingsModel::createProperties()
 {
     m_lineType = buildPropertyItem(Ms::Pid::GLISS_TYPE);
-}
-
-void GlissandoSettingsModel::requestElements()
-{
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::GLISSANDO);
+    m_showText = buildPropertyItem(Ms::Pid::GLISS_SHOW_TEXT);
+    m_text = buildPropertyItem(Ms::Pid::GLISS_TEXT);
 }
 
 void GlissandoSettingsModel::loadProperties()
 {
     loadPropertyItem(m_lineType);
+    loadPropertyItem(m_showText);
+    loadPropertyItem(m_text);
 }
 
 void GlissandoSettingsModel::resetProperties()
 {
     m_lineType->resetToDefault();
-}
-
-PropertyItem* GlissandoSettingsModel::lineType() const
-{
-    return m_lineType;
+    m_showText->resetToDefault();
+    m_text->resetToDefault();
 }
