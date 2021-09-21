@@ -23,6 +23,7 @@
 #include "arpeggio.h"
 
 #include <cmath>
+#include <QVector>
 
 #include "translation.h"
 #include "io/xml.h"
@@ -32,6 +33,7 @@
 #include "chord.h"
 #include "note.h"
 #include "score.h"
+#include "sym.h"
 #include "staff.h"
 #include "part.h"
 #include "page.h"
@@ -604,21 +606,25 @@ qreal Arpeggio::insetDistance(QVector<Accidental*>& accidentals, qreal mag_) con
 
     // this cutout means the vertical lines for a ♯, ♭, and ♮ are in the same position
     // if an accidental does not have a cutout (e.g., ♭), this value is 0
-    qreal accidentalCutOutX = symSmuflAnchor(furthestAccidental->symbol(), SmuflAnchorId::cutOutNW).x();
+    qreal accidentalCutOutX = symSmuflAnchor(furthestAccidental->symbol(), SmuflAnchorId::cutOutNW).x() * mag_;
+    qreal accidentalCutOutYTop = symSmuflAnchor(furthestAccidental->symbol(), SmuflAnchorId::cutOutNW).y() * mag_;
+    qreal accidentalCutOutYBottom = symSmuflAnchor(furthestAccidental->symbol(), SmuflAnchorId::cutOutSW).y() * mag_;
 
     auto bbox = symBbox(furthestAccidental->symbol());
-    qreal top = furthestAccidental->note()->pos().y() * mag_ + bbox.top() * mag_;
-    qreal bottom = furthestAccidental->note()->pos().y() * mag_ + bbox.bottom() * mag_;
+    qreal center = furthestAccidental->note()->pos().y() * mag_;
+    qreal top = center + bbox.top() * mag_;
+    qreal bottom = center + bbox.bottom() * mag_;
+    bool collidesWithTop = hasTopArrow && top <= arpeggioTop;
+    bool collidesWithBottom = hasBottomArrow && bottom >= arpeggioBottom;
+    bool cutoutCollidesWithTop = collidesWithTop && top - accidentalCutOutYTop >= arpeggioTop;
+    bool cutoutCollidesWithBottom = collidesWithBottom && bottom - accidentalCutOutYBottom <= arpeggioBottom;
 
-    // if it collides with the top arrow/hook
-    if ((hasTopArrow && top <= arpeggioTop)
-        // if it collides with the bottom arrow/hook
-        || (hasBottomArrow && bottom >= arpeggioBottom)) {
+    if (collidesWithTop || collidesWithBottom) {
         // optical adjustment for one edge case
-        if (type == ArpeggioType::BRACKET
-            && (furthestAccidental->symbol() == SymId::accidentalNatural
-                || furthestAccidental->symbol() == SymId::accidentalFlat)) {
-            return accidentalCutOutX + score()->styleP(Sid::ArpeggioAccidentalDistance) * mag_ / 2;
+        if (accidentalCutOutX == 0.0 || cutoutCollidesWithTop || cutoutCollidesWithBottom) {
+            qreal offset = score()->styleP(Sid::ArpeggioAccidentalDistance)
+                           - score()->styleP(Sid::ArpeggioAccidentalDistanceShort);
+            return accidentalCutOutX + offset * mag_;
         }
         return accidentalCutOutX;
     }
