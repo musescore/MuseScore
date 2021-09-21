@@ -53,11 +53,23 @@ PropertyItem* PedalSettingsModel::showPedalSymbol() const
     return m_showPedalSymbol;
 }
 
+PropertyItem* PedalSettingsModel::showLineWithRosette() const
+{
+    return m_showLineWithRosette;
+}
+
+bool PedalSettingsModel::showLineWithRosetteVisible() const
+{
+    return m_showLineWithRosetteVisible;
+}
+
 void PedalSettingsModel::createProperties()
 {
     LineSettingsModel::createProperties();
 
+    //! TODO: determine suitable properties
     m_showPedalSymbol = buildPropertyItem(Ms::Pid::SYMBOL);
+    m_showLineWithRosette = buildPropertyItem(Ms::Pid::SYMBOL);
 }
 
 void PedalSettingsModel::loadProperties()
@@ -65,6 +77,7 @@ void PedalSettingsModel::loadProperties()
     LineSettingsModel::loadProperties();
 
     loadPropertyItem(m_showPedalSymbol);
+    loadPropertyItem(m_showLineWithRosette);
 }
 
 void PedalSettingsModel::resetProperties()
@@ -72,4 +85,5 @@ void PedalSettingsModel::resetProperties()
     LineSettingsModel::resetProperties();
 
     m_showPedalSymbol->resetToDefault();
+    m_showLineWithRosette->resetToDefault();
 }

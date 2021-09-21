@@ -30,11 +30,20 @@ class PedalSettingsModel : public LineSettingsModel
     Q_OBJECT
 
     Q_PROPERTY(PropertyItem * showPedalSymbol READ showPedalSymbol CONSTANT)
+    Q_PROPERTY(PropertyItem * showLineWithRosette READ showLineWithRosette CONSTANT)
+
+    Q_PROPERTY(bool showLineWithRosetteVisible READ showLineWithRosetteVisible NOTIFY showLineWithRosetteVisibleChanged)
 
 public:
     explicit PedalSettingsModel(QObject* parent, IElementRepositoryService* repository);
 
     PropertyItem* showPedalSymbol() const;
+    PropertyItem* showLineWithRosette() const;
+
+    bool showLineWithRosetteVisible() const;
+
+signals:
+    void showLineWithRosetteVisibleChanged();
 
 private:
     void createProperties() override;
@@ -42,6 +51,8 @@ private:
     void resetProperties() override;
 
     PropertyItem* m_showPedalSymbol = nullptr;
+    PropertyItem* m_showLineWithRosette = nullptr;
+    bool m_showLineWithRosetteVisible = false;
 };
 }
 
