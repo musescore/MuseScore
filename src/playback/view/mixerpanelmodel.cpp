@@ -189,7 +189,7 @@ MixerChannelItem* MixerPanelModel::buildTrackChannelItem(const audio::TrackSeque
         playback()->audioOutput()->setOutputParams(sequenceId, trackId, params);
     });
 
-    connect(item, &MixerChannelItem::soloChanged, this, [this, item](const bool solo) {
+    connect(item, &MixerChannelItem::soloStateToggled, this, [this, item](const bool solo) {
         for (MixerChannelItem* ch : m_mixerChannelList) {
             if (item == ch || ch->isMasterChannel() || ch->solo()) {
                 continue;
@@ -230,7 +230,7 @@ MixerChannelItem* MixerPanelModel::buildMasterChannelItem()
         playback()->audioOutput()->setMasterOutputParams(params);
     });
 
-    connect(item, &MixerChannelItem::soloChanged, this, [this, item](const bool solo) {
+    connect(item, &MixerChannelItem::soloStateToggled, this, [this, item](const bool solo) {
         for (MixerChannelItem* ch : m_mixerChannelList) {
             if (item == ch || ch->solo()) {
                 continue;

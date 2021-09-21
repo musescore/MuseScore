@@ -125,7 +125,7 @@ void MixerChannelItem::loadOutputParams(AudioOutputParams&& newParams)
 
     if (m_outParams.solo != newParams.solo) {
         m_outParams.solo = newParams.solo;
-        emit soloChanged(m_outParams.solo);
+        emit soloChanged();
     }
 
     if (m_outParams.fxChain != newParams.fxChain) {
@@ -255,7 +255,8 @@ void MixerChannelItem::setSolo(bool solo)
 
     m_outParams.solo = solo;
     emit outputParamsChanged(m_outParams);
-    emit soloChanged(solo);
+    emit soloStateToggled(solo);
+    emit soloChanged();
 }
 
 void MixerChannelItem::setAudioChannelVolumePressure(const audio::audioch_t chNum, const float newValue)

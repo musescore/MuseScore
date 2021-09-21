@@ -109,13 +109,13 @@ signals:
     void balanceChanged(int balance);
 
     void mutedChanged(bool muted);
-    void soloChanged(bool solo);
+    void soloChanged();
+    void soloStateToggled(bool solo);
 
     void inputParamsChanged(const audio::AudioInputParams& params);
     void outputParamsChanged(const audio::AudioOutputParams& params);
 
     void outputResourceItemListChanged(QList<OutputResourceItem*> itemList);
-
     void inputResourceItemChanged();
 
 private:
