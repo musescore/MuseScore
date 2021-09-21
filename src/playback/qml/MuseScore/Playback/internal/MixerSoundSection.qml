@@ -39,6 +39,8 @@ MixerPanelSection {
         AudioResourceControl {
             id: inputResourceControl
 
+            anchors.horizontalCenter: parent.horizontalCenter
+
             supportsByPassing: false
             resourceItemModel: item.inputResourceItem
 

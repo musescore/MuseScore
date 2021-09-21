@@ -30,97 +30,106 @@ MixerPanelSection {
 
     headerTitle: qsTrc("playback", "Volume")
 
-    Column {
+    Item {
+        height: contentColumn.implicitHeight
         width: root.delegateDefaultWidth
 
-        spacing: 4
-
-        TextInputField {
-            id: balanceTextInputField
+        Column {
+            id: contentColumn
 
             anchors.horizontalCenter: parent.horizontalCenter
 
-            height: 24
-            width: 42
-
-            textHorizontalAlignment: Qt.AlignHCenter
-
-            validator: DoubleInputValidator {
-                id: intInputValidator
-                top: 12.0
-                bottom: -60.0
-                decimal: 1
-            }
-
-            currentText: Math.round(item.volumeLevel * 100) / 100
-
-            onCurrentTextEdited: {
-                if (item.volumeLevel !== Number(newTextValue)) {
-                    item.volumeLevel = Number(newTextValue)
-                }
-            }
-        }
-
-        Row {
-            anchors.horizontalCenter: parent.horizontalCenter
             width: parent.width
 
-            spacing: 8
+            spacing: 4
 
-            VolumeSlider {
-                volumeLevel: item.volumeLevel
+            TextInputField {
+                id: balanceTextInputField
 
-                onVolumeLevelMoved: {
-                    item.volumeLevel = Math.round(level * 100) / 100
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                height: 24
+                width: 46
+
+                textHorizontalAlignment: Qt.AlignHCenter
+
+                validator: DoubleInputValidator {
+                    id: intInputValidator
+                    top: 12.0
+                    bottom: -60.0
+                    decimal: 1
+                }
+
+                currentText: Math.round(item.volumeLevel * 100) / 100
+
+                onCurrentTextEdited: {
+                    if (item.volumeLevel !== Number(newTextValue)) {
+                        item.volumeLevel = Number(newTextValue)
+                    }
                 }
             }
 
             Row {
-                anchors.verticalCenter: parent.verticalCenter
+                anchors.horizontalCenter: parent.horizontalCenter
+                width: parent.width
 
-                spacing: 2
+                spacing: 8
 
-                VolumePressureMeter {
-                    id: leftPressure
-                    currentVolumePressure: item.leftChannelPressure
+                VolumeSlider {
+                    volumeLevel: item.volumeLevel
+
+                    onVolumeLevelMoved: {
+                        item.volumeLevel = Math.round(level * 100) / 100
+                    }
                 }
 
-                VolumePressureMeter {
-                    id: rightPressure
-                    currentVolumePressure: item.rightChannelPressure
-                    showRuler: true
-                }
-            }
-        }
+                Row {
+                    anchors.verticalCenter: parent.verticalCenter
 
-        Row {
-            anchors.horizontalCenter: parent.horizontalCenter
+                    spacing: 2
 
-            spacing: 6
+                    VolumePressureMeter {
+                        id: leftPressure
+                        currentVolumePressure: item.leftChannelPressure
+                    }
 
-            FlatToggleButton {
-                id: muteButton
-
-                height: 20
-                width: 20
-
-                icon: IconCode.MUTE
-                checked: item.muted
-                onToggled: {
-                    item.muted = !item.muted
+                    VolumePressureMeter {
+                        id: rightPressure
+                        currentVolumePressure: item.rightChannelPressure
+                        showRuler: true
+                    }
                 }
             }
 
-            FlatToggleButton {
-                id: soloButton
+            Row {
+                anchors.horizontalCenter: parent.horizontalCenter
 
-                height: 20
-                width: 20
+                spacing: 6
 
-                icon: IconCode.SOLO
-                checked: item.solo
-                onToggled: {
-                    item.solo = !item.solo
+                FlatToggleButton {
+                    id: muteButton
+
+                    height: 20
+                    width: 20
+
+                    icon: IconCode.MUTE
+                    checked: item.muted
+                    onToggled: {
+                        item.muted = !item.muted
+                    }
+                }
+
+                FlatToggleButton {
+                    id: soloButton
+
+                    height: 20
+                    width: 20
+
+                    icon: IconCode.SOLO
+                    checked: item.solo
+                    onToggled: {
+                        item.solo = !item.solo
+                    }
                 }
             }
         }
