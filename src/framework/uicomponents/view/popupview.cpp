@@ -569,17 +569,17 @@ void PopupView::updatePosition()
         return;
     }
 
-    QRect anchorRect = anchorGeometry();
-    QRect popupRect(m_globalPos.x(), m_globalPos.y(), contentItem()->width(), contentItem()->height());
+    QRectF anchorRect = anchorGeometry();
+    QRectF popupRect(m_globalPos, contentItem()->size());
 
     setOpensUpward(false);
     setCascadeAlign(Qt::AlignmentFlag::AlignRight);
 
-    auto movePos = [this, &popupRect](int x, int y) {
+    auto movePos = [this, &popupRect](qreal x, qreal y) {
         m_globalPos.setX(x);
         m_globalPos.setY(y);
 
-        popupRect.moveTopLeft(m_globalPos.toPoint());
+        popupRect.moveTopLeft(m_globalPos);
     };
 
     const QQuickItem* parentPopupContentItem = this->parentPopupContentItem();
@@ -668,14 +668,12 @@ Qt::AlignmentFlag PopupView::parentCascadeAlign(const QQuickItem* parent) const
     return static_cast<Qt::AlignmentFlag>(parent->property("cascadeAlign").toInt());
 }
 
-QRect PopupView::anchorGeometry() const
+QRectF PopupView::anchorGeometry() const
 {
-    QRect geometry;
+    QRectF geometry = currentScreenGeometry();
     if (m_anchorItem) {
         QPointF anchorItemTopLeft = m_anchorItem->mapToGlobal(QPoint(0, 0));
-        geometry = QRect(anchorItemTopLeft.x(), anchorItemTopLeft.y(), m_anchorItem->width(), m_anchorItem->height());
-    } else {
-        geometry = currentScreenGeometry();
+        geometry &= QRectF(anchorItemTopLeft, m_anchorItem->size());
     }
 
     return geometry;
