@@ -353,23 +353,23 @@ void ConnectorInfoWriter::write()
     if (!xml.canWrite(_connector)) {
         return;
     }
-    xml.stag(QString("%1 type=\"%2\"").arg(tagName(), _connector->name()));
+    xml.startObject(QString("%1 type=\"%2\"").arg(tagName(), _connector->name()));
     if (isStart()) {
         _connector->write(xml);
     }
     if (hasPrevious()) {
-        xml.stag("prev");
+        xml.startObject("prev");
         _prevLoc.toRelative(_currentLoc);
         _prevLoc.write(xml);
-        xml.etag();
+        xml.endObject();
     }
     if (hasNext()) {
-        xml.stag("next");
+        xml.startObject("next");
         _nextLoc.toRelative(_currentLoc);
         _nextLoc.write(xml);
-        xml.etag();
+        xml.endObject();
     }
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------

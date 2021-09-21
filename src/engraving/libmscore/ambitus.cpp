@@ -221,7 +221,7 @@ void Ambitus::setBottomTpc(int val)
 
 void Ambitus::write(XmlWriter& xml) const
 {
-    xml.stag(this);
+    xml.startObject(this);
     xml.tag(Pid::HEAD_GROUP, int(_noteHeadGroup), int(NOTEHEADGROUP_DEFAULT));
     xml.tag(Pid::HEAD_TYPE,  int(_noteHeadType),  int(NOTEHEADTYPE_DEFAULT));
     xml.tag(Pid::MIRROR_HEAD, int(_dir),           int(DIR_DEFAULT));
@@ -232,17 +232,17 @@ void Ambitus::write(XmlWriter& xml) const
     xml.tag("bottomPitch", _bottomPitch);
     xml.tag("bottomTpc",  _bottomTpc);
     if (_topAccid->accidentalType() != AccidentalType::NONE) {
-        xml.stag("topAccidental");
+        xml.startObject("topAccidental");
         _topAccid->write(xml);
-        xml.etag();
+        xml.endObject();
     }
     if (_bottomAccid->accidentalType() != AccidentalType::NONE) {
-        xml.stag("bottomAccidental");
+        xml.startObject("bottomAccidental");
         _bottomAccid->write(xml);
-        xml.etag();
+        xml.endObject();
     }
     EngravingItem::writeProperties(xml);
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------

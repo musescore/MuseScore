@@ -357,7 +357,7 @@ void Bend::draw(mu::draw::Painter* painter) const
 
 void Bend::write(XmlWriter& xml) const
 {
-    xml.stag(this);
+    xml.startObject(this);
     for (const PitchValue& v : m_points) {
         xml.tagE(QString("point time=\"%1\" pitch=\"%2\" vibrato=\"%3\"")
                  .arg(v.time).arg(v.pitch).arg(v.vibrato));
@@ -365,7 +365,7 @@ void Bend::write(XmlWriter& xml) const
     writeStyledProperties(xml);
     writeProperty(xml, Pid::PLAY);
     EngravingItem::writeProperties(xml);
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------

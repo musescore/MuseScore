@@ -97,10 +97,10 @@ void TBox::layout()
 
 void TBox::write(XmlWriter& xml) const
 {
-    xml.stag(this);
+    xml.startObject(this);
     Box::writeProperties(xml);
     _text->write(xml);
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------

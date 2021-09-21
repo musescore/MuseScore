@@ -218,7 +218,7 @@ bool StaffType::isSameStructure(const StaffType& st) const
 
 void StaffType::write(XmlWriter& xml) const
 {
-    xml.stag(QString("StaffType group=\"%1\"").arg(fileGroupNames[(int)_group]));
+    xml.startObject(QString("StaffType group=\"%1\"").arg(fileGroupNames[(int)_group]));
     if (!_xmlName.isEmpty()) {
         xml.tag("name", _xmlName);
     }
@@ -295,7 +295,7 @@ void StaffType::write(XmlWriter& xml) const
             xml.tag("showBackTied",  _showBackTied);
         }
     }
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------

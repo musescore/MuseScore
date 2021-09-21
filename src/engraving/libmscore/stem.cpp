@@ -249,11 +249,11 @@ void Stem::draw(mu::draw::Painter* painter) const
 
 void Stem::write(XmlWriter& xml) const
 {
-    xml.stag(this);
+    xml.startObject(this);
     EngravingItem::writeProperties(xml);
     writeProperty(xml, Pid::USER_LEN);
     writeProperty(xml, Pid::LINE_WIDTH);
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------

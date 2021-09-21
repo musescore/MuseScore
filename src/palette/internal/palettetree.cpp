@@ -56,13 +56,13 @@ bool PaletteTree::read(Ms::XmlReader& e)
 
 void PaletteTree::write(Ms::XmlWriter& xml) const
 {
-    xml.stag("PaletteBox"); // for compatibility with old palettes file format
+    xml.startObject("PaletteBox"); // for compatibility with old palettes file format
 
     for (PalettePtr palette : palettes) {
         palette->write(xml);
     }
 
-    xml.etag();
+    xml.endObject();
 }
 
 void PaletteTree::retranslate()

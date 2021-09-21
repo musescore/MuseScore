@@ -653,9 +653,9 @@ Tie::Tie(EngravingItem* parent)
 
 void Tie::write(XmlWriter& xml) const
 {
-    xml.stag(this);
+    xml.startObject(this);
     SlurTie::writeProperties(xml);
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------

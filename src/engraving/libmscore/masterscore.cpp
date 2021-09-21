@@ -438,11 +438,11 @@ MasterScore* MasterScore::clone()
     XmlWriter xml(this, &buffer);
     xml.header();
 
-    xml.stag("museScore version=\"" MSC_VERSION "\"");
+    xml.startObject("museScore version=\"" MSC_VERSION "\"");
 
     compat::WriteScoreHook hook;
     write(xml, false, hook);
-    xml.etag();
+    xml.endObject();
 
     buffer.close();
 

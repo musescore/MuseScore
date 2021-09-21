@@ -52,12 +52,12 @@ StaffTypeChange::StaffTypeChange(const StaffTypeChange& lb)
 
 void StaffTypeChange::write(XmlWriter& xml) const
 {
-    xml.stag(this);
+    xml.startObject(this);
     if (_staffType) {
         _staffType->write(xml);
     }
     EngravingItem::writeProperties(xml);
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------

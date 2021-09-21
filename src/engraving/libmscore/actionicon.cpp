@@ -70,12 +70,12 @@ void ActionIcon::setExtent(qreal extent)
 
 void ActionIcon::write(XmlWriter& xml) const
 {
-    xml.stag(this);
+    xml.startObject(this);
     xml.tag("subtype", int(m_actionType));
     if (!m_actionCode.empty()) {
         xml.tag("action", QString::fromStdString(m_actionCode));
     }
-    xml.etag();
+    xml.endObject();
 }
 
 void ActionIcon::read(XmlReader& e)

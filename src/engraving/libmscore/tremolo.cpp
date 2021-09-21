@@ -558,11 +558,11 @@ void Tremolo::write(XmlWriter& xml) const
     if (!xml.canWrite(this)) {
         return;
     }
-    xml.stag(this);
+    xml.startObject(this);
     writeProperty(xml, Pid::TREMOLO_TYPE);
     writeProperty(xml, Pid::TREMOLO_STYLE);
     EngravingItem::writeProperties(xml);
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------

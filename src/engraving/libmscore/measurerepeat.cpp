@@ -182,11 +182,11 @@ Shape MeasureRepeat::shape() const
 
 void MeasureRepeat::write(XmlWriter& xml) const
 {
-    xml.stag(this);
+    xml.startObject(this);
     writeProperty(xml, Pid::SUBTYPE);
     Rest::writeProperties(xml);
     el().write(xml);
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------

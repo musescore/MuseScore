@@ -204,10 +204,10 @@ RectF MMRest::numberRect() const
 
 void MMRest::write(XmlWriter& xml) const
 {
-    xml.stag("Rest"); // for compatibility, see also Measure::readVoice()
+    xml.startObject("Rest"); // for compatibility, see also Measure::readVoice()
     ChordRest::writeProperties(xml);
     el().write(xml);
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------

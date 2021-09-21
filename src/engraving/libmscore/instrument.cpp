@@ -96,14 +96,14 @@ static void midi_event_write(const MidiCoreEvent& e, XmlWriter& xml)
 
 void NamedEventList::write(XmlWriter& xml, const QString& n) const
 {
-    xml.stag(QString("%1 name=\"%2\"").arg(n, name));
+    xml.startObject(QString("%1 name=\"%2\"").arg(n, name));
     if (!descr.isEmpty()) {
         xml.tag("descr", descr);
     }
     for (const MidiCoreEvent& e : events) {
         midi_event_write(e, xml);
     }
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------
@@ -278,9 +278,9 @@ void StaffName::read(XmlReader& e)
 void Instrument::write(XmlWriter& xml, const Part* part) const
 {
     if (_id.isEmpty()) {
-        xml.stag("Instrument");
+        xml.startObject("Instrument");
     } else {
-        xml.stag(QString("Instrument id=\"%1\"").arg(_id));
+        xml.startObject(QString("Instrument id=\"%1\"").arg(_id));
     }
     _longNames.write(xml, "longName");
     _shortNames.write(xml, "shortName");
@@ -351,7 +351,7 @@ void Instrument::write(XmlWriter& xml, const Part* part) const
     for (const Channel* a : _channel) {
         a->write(xml, part);
     }
-    xml.etag();
+    xml.endObject();
 }
 
 QString Instrument::recognizeInstrumentId() const
@@ -797,9 +797,9 @@ void Channel::setUserBankController(bool val)
 void Channel::write(XmlWriter& xml, const Part* part) const
 {
     if (_name.isEmpty() || _name == DEFAULT_NAME) {
-        xml.stag("Channel");
+        xml.startObject("Channel");
     } else {
-        xml.stag(QString("Channel name=\"%1\"").arg(_name));
+        xml.startObject(QString("Channel name=\"%1\"").arg(_name));
     }
     if (!_descr.isEmpty()) {
         xml.tag("descr", _descr);
@@ -857,7 +857,7 @@ void Channel::write(XmlWriter& xml, const Part* part) const
     for (const MidiArticulation& a : articulation) {
         a.write(xml);
     }
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------
@@ -1228,16 +1228,16 @@ int Instrument::channelIdx(const QString& s) const
 void MidiArticulation::write(XmlWriter& xml) const
 {
     if (name.isEmpty()) {
-        xml.stag("Articulation");
+        xml.startObject("Articulation");
     } else {
-        xml.stag(QString("Articulation name=\"%1\"").arg(name));
+        xml.startObject(QString("Articulation name=\"%1\"").arg(name));
     }
     if (!descr.isEmpty()) {
         xml.tag("descr", descr);
     }
     xml.tag("velocity", velocity);
     xml.tag("gateTime", gateTime);
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------

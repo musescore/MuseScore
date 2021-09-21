@@ -49,7 +49,7 @@ void StaffTextBase::write(XmlWriter& xml) const
     if (!xml.canWrite(this)) {
         return;
     }
-    xml.stag(this);
+    xml.startObject(this);
 
     for (const ChannelActions& s : _channelActions) {
         int channel = s.channel;
@@ -84,7 +84,7 @@ void StaffTextBase::write(XmlWriter& xml) const
     }
     TextBase::writeProperties(xml);
 
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------

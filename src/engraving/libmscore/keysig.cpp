@@ -392,17 +392,17 @@ void KeySig::setKey(Key key)
 
 void KeySig::write(XmlWriter& xml) const
 {
-    xml.stag(this);
+    xml.startObject(this);
     EngravingItem::writeProperties(xml);
     if (_sig.isAtonal()) {
         xml.tag("custom", 1);
     } else if (_sig.custom()) {
         xml.tag("custom", 1);
         for (const KeySym& ks : _sig.keySymbols()) {
-            xml.stag("KeySym");
+            xml.startObject("KeySym");
             xml.tag("sym", Sym::id2name(ks.sym));
             xml.tag("pos", ks.spos);
-            xml.etag();
+            xml.endObject();
         }
     } else {
         xml.tag("accidental", int(_sig.key()));
@@ -438,7 +438,7 @@ void KeySig::write(XmlWriter& xml) const
     if (forInstrumentChange()) {
         xml.tag("forInstrumentChange", true);
     }
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------

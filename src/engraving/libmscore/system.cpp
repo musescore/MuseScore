@@ -1285,14 +1285,14 @@ SysStaff* System::staff(int staffIdx) const
 
 void System::write(XmlWriter& xml) const
 {
-    xml.stag(this);
+    xml.startObject(this);
     if (_systemDividerLeft && _systemDividerLeft->isUserModified()) {
         _systemDividerLeft->write(xml);
     }
     if (_systemDividerRight && _systemDividerRight->isUserModified()) {
         _systemDividerRight->write(xml);
     }
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------

@@ -281,14 +281,14 @@ void Ottava::write(XmlWriter& xml) const
     if (!xml.canWrite(this)) {
         return;
     }
-    xml.stag(this);
+    xml.startObject(this);
     writeProperty(xml, Pid::OTTAVA_TYPE);
     writeProperty(xml, Pid::PLACEMENT);
     writeProperty(xml, Pid::NUMBERS_ONLY);
 //      for (const StyledProperty& spp : *styledProperties())
 //            writeProperty(xml, spp.pid);
     TextLineBase::writeProperties(xml);
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------

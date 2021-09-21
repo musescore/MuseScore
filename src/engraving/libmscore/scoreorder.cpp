@@ -384,25 +384,25 @@ void ScoreOrder::write(Ms::XmlWriter& xml) const
         return;
     }
 
-    xml.stag(QString("Order id=\"%1\"").arg(id));
+    xml.startObject(QString("Order id=\"%1\"").arg(id));
     xml.tag("name", name);
 
     QMapIterator<QString, InstrumentOverwrite> i(instrumentMap);
     while (i.hasNext()) {
         i.next();
-        xml.stag(QString("instrument id=\"%1\"").arg(i.key()));
+        xml.startObject(QString("instrument id=\"%1\"").arg(i.key()));
         xml.tag(QString("family id=\"%1\"").arg(i.value().id), i.value().name);
-        xml.etag();
+        xml.endObject();
     }
 
     QString section { "" };
     for (const ScoreGroup& sg : groups) {
         if (sg.section != section) {
             if (!section.isEmpty()) {
-                xml.etag();
+                xml.endObject();
             }
             if (!sg.section.isEmpty()) {
-                xml.stag(QString("section id=\"%1\" brackets=\"%2\" showSystemMarkings=\"%3\" barLineSpan=\"%4\" thinBrackets=\"%5\"")
+                xml.startObject(QString("section id=\"%1\" brackets=\"%2\" showSystemMarkings=\"%3\" barLineSpan=\"%4\" thinBrackets=\"%5\"")
                          .arg(sg.section,
                               sg.bracket ? "true" : "false",
                               sg.showSystemMarkings ? "true" : "false",
@@ -422,9 +422,9 @@ void ScoreOrder::write(Ms::XmlWriter& xml) const
         }
     }
     if (!section.isEmpty()) {
-        xml.etag();
+        xml.endObject();
     }
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------

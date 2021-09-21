@@ -102,7 +102,7 @@ void StringData::read(XmlReader& e)
 
 void StringData::write(XmlWriter& xml) const
 {
-    xml.stag("StringData");
+    xml.startObject("StringData");
     xml.tag("frets", _frets);
     foreach (instrString strg, stringTable) {
         if (strg.open) {
@@ -111,7 +111,7 @@ void StringData::write(XmlWriter& xml) const
             xml.tag("string", strg.pitch);
         }
     }
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------

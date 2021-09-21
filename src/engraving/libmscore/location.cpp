@@ -63,14 +63,14 @@ void Location::setTrack(int track)
 void Location::write(XmlWriter& xml) const
 {
     Q_ASSERT(isRelative());
-    xml.stag("location");
+    xml.startObject("location");
     xml.tag("staves", _staff, relDefaults._staff);
     xml.tag("voices", _voice, relDefaults._voice);
     xml.tag("measures", _measure, relDefaults._measure);
     xml.tag("fractions", _frac.reduced(), relDefaults._frac);
     xml.tag("grace", _graceIndex, relDefaults._graceIndex);
     xml.tag("notes", _note, relDefaults._note);
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------
