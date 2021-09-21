@@ -1392,7 +1392,7 @@ static void readPedal114(XmlReader& e, const ReadContext& ctx, Pedal* pedal)
             e.unknown();
         }
     }
-    pedal->setBeginText("<sym>keyboardPedalPed</sym>");
+    pedal->setBeginText(Pedal::PEDAL_SYMBOL);
 }
 
 //---------------------------------------------------------

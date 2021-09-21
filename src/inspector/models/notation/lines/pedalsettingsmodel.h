@@ -29,30 +29,34 @@ class PedalSettingsModel : public LineSettingsModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(PropertyItem * showPedalSymbol READ showPedalSymbol CONSTANT)
-    Q_PROPERTY(PropertyItem * showLineWithRosette READ showLineWithRosette CONSTANT)
-
-    Q_PROPERTY(bool showLineWithRosetteVisible READ showLineWithRosetteVisible NOTIFY showLineWithRosetteVisibleChanged)
+    Q_PROPERTY(PropertyItem* lineType READ lineType CONSTANT)
+    Q_PROPERTY(bool pedalSymbolVisible READ pedalSymbolVisible WRITE setPedalSymbolVisible NOTIFY pedalSymbolVisibleChanged)
+    Q_PROPERTY(bool isChangingLineVisibilityAllowed READ isChangingLineVisibilityAllowed NOTIFY isChangingLineVisibilityAllowedChanged)
 
 public:
     explicit PedalSettingsModel(QObject* parent, IElementRepositoryService* repository);
 
-    PropertyItem* showPedalSymbol() const;
-    PropertyItem* showLineWithRosette() const;
+    PropertyItem* lineType() const;
+    bool pedalSymbolVisible() const;
+    bool isChangingLineVisibilityAllowed() const;
 
-    bool showLineWithRosetteVisible() const;
+public slots:
+    void setPedalSymbolVisible(bool visible);
 
 signals:
-    void showLineWithRosetteVisibleChanged();
+    void pedalSymbolVisibleChanged();
+    void isChangingLineVisibilityAllowedChanged();
 
 private:
+    bool isStarSymbolVisible() const;
+
     void createProperties() override;
     void loadProperties() override;
-    void resetProperties() override;
+    bool isTextVisible(TextType type) const override;
 
-    PropertyItem* m_showPedalSymbol = nullptr;
-    PropertyItem* m_showLineWithRosette = nullptr;
-    bool m_showLineWithRosetteVisible = false;
+    void setLineType(int newType);
+
+    PropertyItem* m_lineType = nullptr;
 };
 }
 

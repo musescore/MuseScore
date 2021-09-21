@@ -37,7 +37,7 @@ void LetRingSettingsModel::createProperties()
 {
     LineSettingsModel::createProperties();
 
-    beginingHookType()->setIsVisible(false);
+    startHookType()->setIsVisible(false);
     endHookType()->setIsVisible(false);
 
     beginingTextHorizontalOffset()->setIsVisible(false);
