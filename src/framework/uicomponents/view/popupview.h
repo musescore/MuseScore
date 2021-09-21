@@ -194,7 +194,7 @@ protected:
     QQuickItem* parentPopupContentItem() const;
     Qt::AlignmentFlag parentCascadeAlign(const QQuickItem* parent) const;
 
-    QRect anchorGeometry() const;
+    QRectF anchorGeometry() const;
 
     IPopupWindow* m_window = nullptr;
     QQuickItem* m_contentItem = nullptr;
