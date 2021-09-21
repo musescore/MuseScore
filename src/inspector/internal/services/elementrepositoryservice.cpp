@@ -245,8 +245,8 @@ QList<Ms::EngravingItem*> ElementRepositoryService::findLines(Ms::ElementType li
 
     for (Ms::EngravingItem* element : m_elementList) {
         if (element->type() == segmentType) {
-            const Ms::TextLineBaseSegment* segment = Ms::toTextLineBaseSegment(element);
-            Ms::TextLineBase* line = segment ? segment->textLineBase() : nullptr;
+            const Ms::LineSegment* segment = Ms::toLineSegment(element);
+            Ms::SLine* line = segment ? segment->line() : nullptr;
 
             if (line) {
                 resultList << line;
