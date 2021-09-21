@@ -42,6 +42,7 @@ class Page final : public Element {
 
       QString replaceTextMacros(const QString&) const;
       void drawHeaderFooter(QPainter*, int area, const QString&) const;
+      Text* layoutHeaderFooter(int area, const QString& ss) const;
 
    public:
       Page(Score*);
@@ -65,6 +66,8 @@ class Page final : public Element {
       qreal bm() const;
       qreal lm() const;
       qreal rm() const;
+      qreal headerExtension() const;
+      qreal footerExtension() const;
 
       void draw(QPainter*) const override;
       void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;

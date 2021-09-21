@@ -76,6 +76,7 @@ static const StyleType styleTypes[] {
 
       { Sid::staffUpperBorder,        "staffUpperBorder",        Spatium(7.0)  },
       { Sid::staffLowerBorder,        "staffLowerBorder",        Spatium(7.0)  },
+      { Sid::staffHeaderFooterPadding, "staffHeaderFooterPadding", Spatium(1.0) },
       { Sid::staffDistance,           "staffDistance",           Spatium(6.5)  },
       { Sid::akkoladeDistance,        "akkoladeDistance",        Spatium(6.5)  },
       { Sid::minSystemDistance,       "minSystemDistance",       Spatium(8.5)  },
@@ -1119,7 +1120,7 @@ static const StyleType styleTypes[] {
       { Sid::footerFontStyle,               "footerFontStyle",              int(FontStyle::Normal) },
       { Sid::footerColor,                   "footerColor",                  QColor(0, 0, 0, 255) },
       { Sid::footerAlign,                   "footerAlign",                  QVariant::fromValue(Align::CENTER | Align::BOTTOM) },
-      { Sid::footerOffset,                  "footerOffset",                 QPointF(0.0, 5.0) },
+      { Sid::footerOffset,                  "footerOffset",                 QPointF(0.0, 0.0) },
       { Sid::footerFrameType,               "footerFrameType",              int(FrameType::NO_FRAME) },
       { Sid::footerFramePadding,            "footerFramePadding",           0.2 },
       { Sid::footerFrameWidth,              "footerFrameWidth",             0.1 },
