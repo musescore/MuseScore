@@ -114,6 +114,11 @@ struct LayoutContext {
       int adjustMeasureNo(MeasureBase*);
       void getNextPage();
       void collectPage();
+
+   private:
+      static void layoutPage(Page* page, qreal restHeight, qreal footerPadding);
+      static void checkDivider(bool left, System* s, qreal yOffset, bool remove = false);
+      static void distributeStaves(Page* page, qreal footerPadding);
       };
 
 //---------------------------------------------------------

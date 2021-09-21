@@ -1627,7 +1627,8 @@ static qreal parseNumProperty(const QString& s)
 
 void TextBase::createLayout()
       {
-      _layout.clear();  // deletes the text fragments so we lose all formatting information
+      // reset all previous formatting information
+      _layout.clear();
       TextCursor cursor(this);
       cursor.init();
 
@@ -1798,6 +1799,8 @@ void TextBase::layout1()
             _layout.append(TextBlock());
       QRectF bb;
       qreal y = 0;
+
+      // adjust the bounding box for the text item
       for (int i = 0; i < rows(); ++i) {
             TextBlock* t = &_layout[i];
             t->layout(this);

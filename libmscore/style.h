@@ -64,6 +64,7 @@ enum class Sid {
 
       staffUpperBorder,
       staffLowerBorder,
+      staffHeaderFooterPadding,
       staffDistance,
       akkoladeDistance,
       minSystemDistance,
