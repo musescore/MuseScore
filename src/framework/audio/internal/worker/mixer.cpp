@@ -137,6 +137,9 @@ samples_t Mixer::process(float* outBuffer, samples_t samplesPerChannel)
     }
 
     if (m_masterParams.muted || masterChannelSampleCount == 0) {
+        for (audioch_t audioChNum = 0; audioChNum < audioChannelsCount(); ++audioChNum) {
+            notifyAboutAudioSignalChanges(audioChNum, 0);
+        }
         return 0;
     }
 
@@ -250,10 +253,15 @@ void Mixer::completeOutput(float* buffer, const samples_t& samplesPerChannel)
         }
 
         float rms = dsp::samplesRootMeanSquare(singleChannelSquaredSum, samplesPerChannel);
-        m_masterSignalAmplitudeRmsChanged.send(audioChNum, rms);
-        m_masterVolumePressureDbfsChanged.send(audioChNum, dsp::dbFromSample(rms));
+        notifyAboutAudioSignalChanges(audioChNum, rms);
     }
 
     float totalRms = dsp::samplesRootMeanSquare(totalSquaredSum, samplesPerChannel * audioChannelsCount());
     m_limiter->process(totalRms, buffer, audioChannelsCount(), samplesPerChannel);
+}
+
+void Mixer::notifyAboutAudioSignalChanges(const audioch_t audioChannelNumber, const float linearRms) const
+{
+    m_masterVolumePressureDbfsChanged.send(audioChannelNumber, dsp::dbFromSample(linearRms));
+    m_masterSignalAmplitudeRmsChanged.send(audioChannelNumber, linearRms);
 }
