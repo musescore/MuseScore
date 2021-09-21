@@ -32,9 +32,11 @@
 #include "libmscore/excerpt.h"
 #include "libmscore/staff.h"
 #include "libmscore/factory.h"
-#include "libmscore/measure.h"
+
+#include "staffrw.h"
 
 using namespace mu::engraving;
+using namespace mu::engraving::rw;
 using namespace Ms;
 
 bool Read400::read400(Ms::Score* score, XmlReader& e, ReadContext& ctx)
@@ -87,7 +89,7 @@ bool Read400::readScore400(Ms::Score* score, XmlReader& e, ReadContext& ctx)
         e.setTrack(-1);
         const QStringRef& tag(e.name());
         if (tag == "Staff") {
-            readStaff(score, e, ctx);
+            StaffRW::readStaff(score, e, ctx);
         } else if (tag == "Omr") {
             e.skipCurrentElement();
         } else if (tag == "Audio") {
@@ -241,90 +243,4 @@ bool Read400::readScore400(Ms::Score* score, XmlReader& e, ReadContext& ctx)
 //      createPlayEvents();
 
     return true;
-}
-
-void Read400::readStaff(Ms::Score* score, Ms::XmlReader& e, ReadContext& ctx)
-{
-    int staff = e.intAttribute("id", 1) - 1;
-    int measureIdx = 0;
-    e.setCurrentMeasureIndex(0);
-    e.setTick(Fraction(0, 1));
-    e.setTrack(staff * VOICES);
-
-    if (staff == 0) {
-        while (e.readNextStartElement()) {
-            const QStringRef& tag(e.name());
-
-            if (tag == "Measure") {
-                Measure* measure = Factory::createMeasure(score->dummy()->system());
-                measure->setTick(e.tick());
-                e.setCurrentMeasureIndex(measureIdx++);
-                //
-                // inherit timesig from previous measure
-                //
-                Measure* m = e.lastMeasure();             // measure->prevMeasure();
-                Fraction f(m ? m->timesig() : Fraction(4, 4));
-                measure->setTicks(f);
-                measure->setTimesig(f);
-
-                measure->read(e, staff);
-                measure->checkMeasure(staff);
-                if (!measure->isMMRest()) {
-                    score->measures()->add(measure);
-                    e.setLastMeasure(measure);
-                    e.setTick(measure->tick() + measure->ticks());
-                } else {
-                    // this is a multi measure rest
-                    // always preceded by the first measure it replaces
-                    Measure* m1 = e.lastMeasure();
-
-                    if (m1) {
-                        m1->setMMRest(measure);
-                        measure->setTick(m1->tick());
-                    }
-                }
-            } else if (tag == "HBox" || tag == "VBox" || tag == "TBox" || tag == "FBox") {
-                MeasureBase* mb = toMeasureBase(Factory::createItemByName(tag, score->dummy()));
-                mb->read(e);
-                mb->setTick(e.tick());
-                score->measures()->add(mb);
-            } else if (tag == "tick") {
-                e.setTick(Fraction::fromTicks(score->fileDivision(e.readInt())));
-            } else {
-                e.unknown();
-            }
-        }
-    } else {
-        Measure* measure = score->firstMeasure();
-        while (e.readNextStartElement()) {
-            const QStringRef& tag(e.name());
-
-            if (tag == "Measure") {
-                if (measure == 0) {
-                    qDebug("Score::readStaff(): missing measure!");
-                    measure = Factory::createMeasure(score->dummy()->system());
-                    measure->setTick(e.tick());
-                    score->measures()->add(measure);
-                }
-                e.setTick(measure->tick());
-                e.setCurrentMeasureIndex(measureIdx++);
-                measure->read(e, staff);
-                measure->checkMeasure(staff);
-                if (measure->isMMRest()) {
-                    measure = e.lastMeasure()->nextMeasure();
-                } else {
-                    e.setLastMeasure(measure);
-                    if (measure->mmRest()) {
-                        measure = measure->mmRest();
-                    } else {
-                        measure = measure->nextMeasure();
-                    }
-                }
-            } else if (tag == "tick") {
-                e.setTick(Fraction::fromTicks(score->fileDivision(e.readInt())));
-            } else {
-                e.unknown();
-            }
-        }
-    }
 }
