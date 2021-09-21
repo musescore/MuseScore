@@ -102,7 +102,7 @@ FocusScope {
         id: background
         anchors.fill: parent
         color: ui.theme.textFieldColor
-        radius: 4
+        radius: 2
 
         NavigationFocusBorder { navigationCtrl: navCtrl }
 
