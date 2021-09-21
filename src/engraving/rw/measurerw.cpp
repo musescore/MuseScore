@@ -534,3 +534,82 @@ void MeasureRW::readVoice(Measure* measure, XmlReader& e, ReadContext& ctx, int 
         fermata = nullptr;
     }
 }
+
+void MeasureRW::writeMeasure(const Ms::Measure* measure, XmlWriter& xml, int staff, bool writeSystemElements, bool forceTimeSig)
+{
+    if (MScore::debugMode) {
+        const int mno = measure->no() + 1;
+        xml.comment(QString("Measure %1").arg(mno));
+    }
+    if (measure->_len != measure->m_timesig) {
+        // this is an irregular measure
+        xml.stag(measure, QString("len=\"%1/%2\"").arg(measure->_len.numerator()).arg(measure->_len.denominator()));
+    } else {
+        xml.stag(measure);
+    }
+
+    xml.setCurTick(measure->tick());
+    xml.setCurTrack(staff * VOICES);
+
+    if (measure->m_mmRestCount > 0) {
+        xml.tag("multiMeasureRest", measure->m_mmRestCount);
+    }
+    if (writeSystemElements) {
+        if (measure->repeatStart()) {
+            xml.tagE("startRepeat");
+        }
+        if (measure->repeatEnd()) {
+            xml.tag("endRepeat", measure->m_repeatCount);
+        }
+        measure->writeProperty(xml, Pid::IRREGULAR);
+        measure->writeProperty(xml, Pid::BREAK_MMR);
+        measure->writeProperty(xml, Pid::USER_STRETCH);
+        measure->writeProperty(xml, Pid::NO_OFFSET);
+        measure->writeProperty(xml, Pid::MEASURE_NUMBER_MODE);
+    }
+    qreal _spatium = measure->spatium();
+    MStaff* mstaff = measure->m_mstaves[staff];
+    if (mstaff->noText() && !mstaff->noText()->generated()) {
+        mstaff->noText()->write(xml);
+    }
+
+    if (mstaff->mmRangeText() && !mstaff->mmRangeText()->generated()) {
+        mstaff->mmRangeText()->write(xml);
+    }
+
+    if (mstaff->vspacerUp()) {
+        xml.tag("vspacerUp", mstaff->vspacerUp()->gap() / _spatium);
+    }
+    if (mstaff->vspacerDown()) {
+        if (mstaff->vspacerDown()->spacerType() == SpacerType::FIXED) {
+            xml.tag("vspacerFixed", mstaff->vspacerDown()->gap() / _spatium);
+        } else {
+            xml.tag("vspacerDown", mstaff->vspacerDown()->gap() / _spatium);
+        }
+    }
+    if (!mstaff->visible()) {
+        xml.tag("visible", mstaff->visible());
+    }
+    if (mstaff->stemless()) {
+        xml.tag("slashStyle", mstaff->stemless());     // for backwards compatibility
+        xml.tag("stemless", mstaff->stemless());
+    }
+    if (mstaff->measureRepeatCount()) {
+        xml.tag("measureRepeatCount", mstaff->measureRepeatCount());
+    }
+
+    int strack = staff * VOICES;
+    int etrack = strack + VOICES;
+    for (const EngravingItem* e : measure->el()) {
+        if (!e->generated() && ((e->staffIdx() == staff) || (e->systemFlag() && writeSystemElements))) {
+            e->write(xml);
+        }
+    }
+    Q_ASSERT(measure->first());
+    Q_ASSERT(measure->last());
+    if (measure->first() && measure->last()) {
+        measure->score()->writeSegments(xml, strack, etrack, measure->first(), measure->last()->next1(), writeSystemElements, forceTimeSig);
+    }
+
+    xml.etag();
+}
