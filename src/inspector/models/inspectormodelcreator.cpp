@@ -41,7 +41,7 @@
 #include "notation/spacers/spacersettingsmodel.h"
 #include "notation/clefs/clefsettingsmodel.h"
 #include "notation/lines/hairpinsettingsmodel.h"
-#include "notation/lines/crescendosettingsmodel.h"
+#include "notation/lines/hairpinlinesettingsmodel.h"
 #include "notation/lines/ottavasettingsmodel.h"
 #include "notation/lines/voltasettingsmodel.h"
 #include "notation/lines/letringsettingsmodel.h"
@@ -66,98 +66,102 @@
 
 using namespace mu::inspector;
 
+using InspectorModelType = AbstractInspectorModel::InspectorModelType;
+
 AbstractInspectorModel* InspectorModelCreator::newInspectorModel(AbstractInspectorModel::InspectorModelType modelType, QObject* parent,
                                                                  IElementRepositoryService* repository) const
 {
     switch (modelType) {
-    case AbstractInspectorModel::InspectorModelType::TYPE_NOTE:
+    case InspectorModelType::TYPE_NOTE:
         return new NoteSettingsProxyModel(parent, repository);
-    case AbstractInspectorModel::InspectorModelType::TYPE_BEAM:
-        return new NoteSettingsProxyModel(parent, repository, AbstractInspectorModel::InspectorModelType::TYPE_BEAM);
-    case AbstractInspectorModel::InspectorModelType::TYPE_NOTEHEAD:
-        return new NoteSettingsProxyModel(parent, repository, AbstractInspectorModel::InspectorModelType::TYPE_NOTEHEAD);
-    case AbstractInspectorModel::InspectorModelType::TYPE_STEM:
-        return new NoteSettingsProxyModel(parent, repository, AbstractInspectorModel::InspectorModelType::TYPE_STEM);
-    case AbstractInspectorModel::InspectorModelType::TYPE_HOOK:
-        return new NoteSettingsProxyModel(parent, repository, AbstractInspectorModel::InspectorModelType::TYPE_HOOK);
-    case AbstractInspectorModel::InspectorModelType::TYPE_FERMATA:
+    case InspectorModelType::TYPE_BEAM:
+        return new NoteSettingsProxyModel(parent, repository, InspectorModelType::TYPE_BEAM);
+    case InspectorModelType::TYPE_NOTEHEAD:
+        return new NoteSettingsProxyModel(parent, repository, InspectorModelType::TYPE_NOTEHEAD);
+    case InspectorModelType::TYPE_STEM:
+        return new NoteSettingsProxyModel(parent, repository, InspectorModelType::TYPE_STEM);
+    case InspectorModelType::TYPE_HOOK:
+        return new NoteSettingsProxyModel(parent, repository, InspectorModelType::TYPE_HOOK);
+    case InspectorModelType::TYPE_FERMATA:
         return new FermataSettingsModel(parent, repository);
-    case AbstractInspectorModel::InspectorModelType::TYPE_TEMPO:
+    case InspectorModelType::TYPE_TEMPO:
         return new TempoSettingsModel(parent, repository);
-    case AbstractInspectorModel::InspectorModelType::TYPE_GLISSANDO:
+    case InspectorModelType::TYPE_GLISSANDO:
         return new GlissandoSettingsModel(parent, repository);
-    case AbstractInspectorModel::InspectorModelType::TYPE_BARLINE:
+    case InspectorModelType::TYPE_BARLINE:
         return new BarlineSettingsProxyModel(parent, repository);
-    case AbstractInspectorModel::InspectorModelType::TYPE_STAFF:
+    case InspectorModelType::TYPE_STAFF:
         return new StaffSettingsModel(parent, repository);
-    case AbstractInspectorModel::InspectorModelType::TYPE_MARKER:
+    case InspectorModelType::TYPE_MARKER:
         return new MarkerSettingsModel(parent, repository);
-    case AbstractInspectorModel::InspectorModelType::TYPE_SECTIONBREAK:
+    case InspectorModelType::TYPE_SECTIONBREAK:
         return new SectionBreakSettingsModel(parent, repository);
-    case AbstractInspectorModel::InspectorModelType::TYPE_JUMP:
+    case InspectorModelType::TYPE_JUMP:
         return new JumpSettingsModel(parent, repository);
-    case AbstractInspectorModel::InspectorModelType::TYPE_KEYSIGNATURE:
+    case InspectorModelType::TYPE_KEYSIGNATURE:
         return new KeySignatureSettingsModel(parent, repository);
-    case AbstractInspectorModel::InspectorModelType::TYPE_ACCIDENTAL:
+    case InspectorModelType::TYPE_ACCIDENTAL:
         return new AccidentalSettingsModel(parent, repository);
-    case AbstractInspectorModel::InspectorModelType::TYPE_FRET_DIAGRAM:
+    case InspectorModelType::TYPE_FRET_DIAGRAM:
         return new FretDiagramSettingsModel(parent, repository);
-    case AbstractInspectorModel::InspectorModelType::TYPE_PEDAL:
+    case InspectorModelType::TYPE_PEDAL:
         return new PedalSettingsModel(parent, repository);
-    case AbstractInspectorModel::InspectorModelType::TYPE_SPACER:
+    case InspectorModelType::TYPE_SPACER:
         return new SpacerSettingsModel(parent, repository);
-    case AbstractInspectorModel::InspectorModelType::TYPE_CLEF:
+    case InspectorModelType::TYPE_CLEF:
         return new ClefSettingsModel(parent, repository);
-    case AbstractInspectorModel::InspectorModelType::TYPE_HAIRPIN:
+    case InspectorModelType::TYPE_HAIRPIN:
         return new HairpinSettingsModel(parent, repository);
-    case AbstractInspectorModel::InspectorModelType::TYPE_CRESCENDO:
-        return new CrescendoSettingsModel(parent, repository);
-    case AbstractInspectorModel::InspectorModelType::TYPE_OTTAVA:
+    case InspectorModelType::TYPE_CRESCENDO:
+        return new HairpinLineSettingsModel(parent, repository, HairpinLineSettingsModel::Crescendo);
+    case InspectorModelType::TYPE_DIMINUENDO:
+        return new HairpinLineSettingsModel(parent, repository, HairpinLineSettingsModel::Diminuendo);
+    case InspectorModelType::TYPE_OTTAVA:
         return new OttavaSettingsModel(parent, repository);
-    case AbstractInspectorModel::InspectorModelType::TYPE_VOLTA:
+    case InspectorModelType::TYPE_VOLTA:
         return new VoltaSettingsModel(parent, repository);
-    case AbstractInspectorModel::InspectorModelType::TYPE_PALM_MUTE:
+    case InspectorModelType::TYPE_PALM_MUTE:
         return new PalmMuteSettingsModel(parent, repository);
-    case AbstractInspectorModel::InspectorModelType::TYPE_LET_RING:
+    case InspectorModelType::TYPE_LET_RING:
         return new LetRingSettingsModel(parent, repository);
-    case AbstractInspectorModel::InspectorModelType::TYPE_STAFF_TYPE_CHANGES:
+    case InspectorModelType::TYPE_STAFF_TYPE_CHANGES:
         return new StaffTypeSettingsModel(parent, repository);
-    case AbstractInspectorModel::InspectorModelType::TYPE_TEXT_FRAME:
+    case InspectorModelType::TYPE_TEXT_FRAME:
         return new TextFrameSettingsModel(parent, repository);
-    case AbstractInspectorModel::InspectorModelType::TYPE_VERTICAL_FRAME:
+    case InspectorModelType::TYPE_VERTICAL_FRAME:
         return new VerticalFrameSettingsModel(parent, repository);
-    case AbstractInspectorModel::InspectorModelType::TYPE_HORIZONTAL_FRAME:
+    case InspectorModelType::TYPE_HORIZONTAL_FRAME:
         return new HorizontalFrameSettingsModel(parent, repository);
-    case AbstractInspectorModel::InspectorModelType::TYPE_ARTICULATION:
+    case InspectorModelType::TYPE_ARTICULATION:
         return new ArticulationSettingsModel(parent, repository);
-    case AbstractInspectorModel::InspectorModelType::TYPE_ORNAMENT:
+    case InspectorModelType::TYPE_ORNAMENT:
         return new OrnamentSettingsModel(parent, repository);
-    case AbstractInspectorModel::InspectorModelType::TYPE_AMBITUS:
+    case InspectorModelType::TYPE_AMBITUS:
         return new AmbitusSettingsModel(parent, repository);
-    case AbstractInspectorModel::InspectorModelType::TYPE_IMAGE:
+    case InspectorModelType::TYPE_IMAGE:
         return new ImageSettingsModel(parent, repository);
-    case AbstractInspectorModel::InspectorModelType::TYPE_CHORD_SYMBOL:
+    case InspectorModelType::TYPE_CHORD_SYMBOL:
         return new ChordSymbolSettingsModel(parent, repository);
-    case AbstractInspectorModel::InspectorModelType::TYPE_BRACKET:
+    case InspectorModelType::TYPE_BRACKET:
         return new BracketSettingsModel(parent, repository);
-    case AbstractInspectorModel::InspectorModelType::TYPE_BRACE:
+    case InspectorModelType::TYPE_BRACE:
         return new BraceSettingsModel(parent, repository);
-    case AbstractInspectorModel::InspectorModelType::TYPE_TIME_SIGNATURE:
+    case InspectorModelType::TYPE_TIME_SIGNATURE:
         return new TimeSignatureSettingsModel(parent, repository);
-    case AbstractInspectorModel::InspectorModelType::TYPE_MMREST:
+    case InspectorModelType::TYPE_MMREST:
         return new MMRestSettingsModel(parent, repository);
-    case AbstractInspectorModel::InspectorModelType::TYPE_BEND:
+    case InspectorModelType::TYPE_BEND:
         return new BendSettingsModel(parent, repository);
-    case AbstractInspectorModel::InspectorModelType::TYPE_TREMOLOBAR:
+    case InspectorModelType::TYPE_TREMOLOBAR:
         return new TremoloBarSettingsModel(parent, repository);
-    case AbstractInspectorModel::InspectorModelType::TYPE_TREMOLO:
+    case InspectorModelType::TYPE_TREMOLO:
         return new TremoloSettingsModel(parent, repository);
-    case AbstractInspectorModel::InspectorModelType::TYPE_MEASURE_REPEAT:
+    case InspectorModelType::TYPE_MEASURE_REPEAT:
         return new MeasureRepeatSettingsModel(parent, repository);
-    case AbstractInspectorModel::InspectorModelType::TYPE_BREATH:
-    case AbstractInspectorModel::InspectorModelType::TYPE_ARPEGGIO:
-    case AbstractInspectorModel::InspectorModelType::TYPE_DYNAMIC:
-    case AbstractInspectorModel::InspectorModelType::TYPE_UNDEFINED:
+    case InspectorModelType::TYPE_BREATH:
+    case InspectorModelType::TYPE_ARPEGGIO:
+    case InspectorModelType::TYPE_DYNAMIC:
+    case InspectorModelType::TYPE_UNDEFINED:
         break;
     }
 

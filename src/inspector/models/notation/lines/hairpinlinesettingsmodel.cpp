@@ -19,7 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "crescendosettingsmodel.h"
+
+#include "hairpinlinesettingsmodel.h"
 
 #include "libmscore/hairpin.h"
 
@@ -31,11 +32,19 @@ using namespace mu::inspector;
 
 using IconCode = mu::ui::IconCode::Code;
 
-CrescendoSettingsModel::CrescendoSettingsModel(QObject* parent, IElementRepositoryService* repository)
+HairpinLineSettingsModel::HairpinLineSettingsModel(QObject* parent, IElementRepositoryService* repository, HairpinLineType lineType)
     : LineSettingsModel(parent, repository)
 {
-    setModelType(InspectorModelType::TYPE_CRESCENDO);
-    setTitle(qtrc("inspector", "Crescendo"));
+    QString title = qtrc("inspector", "Crescendo");
+    InspectorModelType type = InspectorModelType::TYPE_CRESCENDO;
+
+    if (lineType == Diminuendo) {
+        title = qtrc("inspector", "Diminuendo");
+        type = InspectorModelType::TYPE_DIMINUENDO;
+    }
+
+    setModelType(type);
+    setTitle(title);
     setIcon(ui::IconCode::Code::CRESCENDO_LINE);
 
     static const QList<HookTypeInfo> hookTypes {
@@ -50,14 +59,14 @@ CrescendoSettingsModel::CrescendoSettingsModel(QObject* parent, IElementReposito
     createProperties();
 }
 
-void CrescendoSettingsModel::createProperties()
+void HairpinLineSettingsModel::createProperties()
 {
     LineSettingsModel::createProperties();
 
     allowDiagonal()->setIsVisible(false);
 }
 
-void CrescendoSettingsModel::requestElements()
+void HairpinLineSettingsModel::requestElements()
 {
     m_elementList = m_repository->findElementsByType(Ms::ElementType::HAIRPIN, [](const Ms::EngravingItem* element) -> bool {
         const Ms::Hairpin* hairpin = Ms::toHairpin(element);
