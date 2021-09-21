@@ -35,6 +35,7 @@ Loader {
     property int headerWidth: headerVisible ? 98 : 0
     property int delegateDefaultWidth: 108
     property var model: undefined
+    property var rootPanel: undefined
 
     default property Component delegateComponent
 

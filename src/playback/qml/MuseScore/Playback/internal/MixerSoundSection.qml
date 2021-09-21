@@ -41,6 +41,7 @@ MixerPanelSection {
 
             anchors.horizontalCenter: parent.horizontalCenter
 
+            menuAnchorItem: root.rootPanel
             supportsByPassing: false
             resourceItemModel: item.inputResourceItem
 

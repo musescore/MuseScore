@@ -35,6 +35,8 @@ Item {
     property bool supportsTitle: true
     property bool supportsMenu: true
 
+    property var menuAnchorItem: undefined
+
     property string title: root.resourceItemModel ? root.resourceItemModel.title : ""
     property bool active: root.resourceItemModel ? !root.resourceItemModel.isBlank : false
 
@@ -266,7 +268,7 @@ Item {
                 StyledMenuLoader {
                     id: menuLoader
 
-                    menuAnchorItem: ui.rootItem
+                    menuAnchorItem: root.menuAnchorItem ? root.menuAnchorItem : ui.rootItem
                     navigation: menuButton.navigation
 
                     onHandleMenuItem: {

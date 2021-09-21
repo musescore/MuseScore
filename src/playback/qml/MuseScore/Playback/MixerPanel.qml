@@ -112,6 +112,7 @@ Rectangle {
 
                 visible: contextMenuModel.soundSectionVisible
                 headerVisible: contextMenuModel.labelsSectionVisible
+                rootPanel: root
 
                 model: mixerPanelModel
             }
@@ -121,6 +122,7 @@ Rectangle {
 
                 visible: contextMenuModel.audioFxSectionVisible
                 headerVisible: contextMenuModel.labelsSectionVisible
+                rootPanel: root
 
                 model: mixerPanelModel
             }
@@ -130,6 +132,7 @@ Rectangle {
 
                 visible: contextMenuModel.balanceSectionVisible
                 headerVisible: contextMenuModel.labelsSectionVisible
+                rootPanel: root
 
                 model: mixerPanelModel
             }
@@ -139,6 +142,7 @@ Rectangle {
 
                 visible: contextMenuModel.volumeSectionVisible
                 headerVisible: contextMenuModel.labelsSectionVisible
+                rootPanel: root
 
                 model: mixerPanelModel
             }
@@ -148,6 +152,7 @@ Rectangle {
 
                 visible: contextMenuModel.titleSectionVisible
                 headerVisible: contextMenuModel.labelsSectionVisible
+                rootPanel: root
 
                 model: mixerPanelModel
             }
