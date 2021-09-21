@@ -36,6 +36,7 @@ public:
 
     static bool read400(Ms::Score* score, Ms::XmlReader& e);
     static bool readScore400(Ms::Score* score, Ms::XmlReader& e);
+    static void readStaff(Ms::Score* score, Ms::XmlReader&);
 };
 }
 

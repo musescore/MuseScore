@@ -586,7 +586,6 @@ public:
     void cmdRemoveStaff(int staffIdx);
     void removeStaff(Staff*);
     void addMeasure(MeasureBase*, MeasureBase*);
-    void readStaff(XmlReader&);
     void linkMeasures(Score* score);
 
     Excerpt* excerpt() { return _excerpt; }
