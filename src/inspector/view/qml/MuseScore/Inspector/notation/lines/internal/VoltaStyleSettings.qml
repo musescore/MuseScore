@@ -54,7 +54,6 @@ FocusableItem {
 
         LineWithHooksCommonStyleSettings {
             model: root.model
-            possibleEndHookTypes: root.model ? root.model.possibleEndHookTypes() : null
         }
     }
 }

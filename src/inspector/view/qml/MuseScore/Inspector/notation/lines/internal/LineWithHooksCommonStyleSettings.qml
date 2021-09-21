@@ -33,8 +33,6 @@ Column {
 
     property QtObject model: null
 
-    property alias possibleEndHookTypes: lineTypeSection.possibleEndHookTypes
-
     width: parent.width
 
     spacing: 12
@@ -72,11 +70,10 @@ Column {
     }
 
     LineTypeSection {
-       id: lineTypeSection
-
        endHookType: root.model ? root.model.endHookType : null
        thickness: root.model ? root.model.thickness : null
        hookHeight: root.model ? root.model.hookHeight : null
+       possibleEndHookTypes: root.model ? root.model.possibleEndHookTypes() : null
     }
 
     SeparatorLine { anchors.margins: -10 }
