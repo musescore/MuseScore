@@ -610,7 +610,14 @@ qreal Arpeggio::insetDistance(QVector<Accidental*>& accidentals, qreal mag_) con
     qreal accidentalCutOutYTop = symSmuflAnchor(furthestAccidental->symbol(), SmuflAnchorId::cutOutNW).y() * mag_;
     qreal accidentalCutOutYBottom = symSmuflAnchor(furthestAccidental->symbol(), SmuflAnchorId::cutOutSW).y() * mag_;
 
-    auto bbox = symBbox(furthestAccidental->symbol());
+    qreal maximumInset = (score()->styleP(Sid::ArpeggioAccidentalDistance)
+                          - score()->styleP(Sid::ArpeggioAccidentalDistanceMin)) * mag_;
+
+    if (accidentalCutOutX > maximumInset) {
+        accidentalCutOutX = maximumInset;
+    }
+
+    RectF bbox = symBbox(furthestAccidental->symbol());
     qreal center = furthestAccidental->note()->pos().y() * mag_;
     qreal top = center + bbox.top() * mag_;
     qreal bottom = center + bbox.bottom() * mag_;
@@ -622,9 +629,7 @@ qreal Arpeggio::insetDistance(QVector<Accidental*>& accidentals, qreal mag_) con
     if (collidesWithTop || collidesWithBottom) {
         // optical adjustment for one edge case
         if (accidentalCutOutX == 0.0 || cutoutCollidesWithTop || cutoutCollidesWithBottom) {
-            qreal offset = score()->styleP(Sid::ArpeggioAccidentalDistance)
-                           - score()->styleP(Sid::ArpeggioAccidentalDistanceShort);
-            return accidentalCutOutX + offset * mag_;
+            return accidentalCutOutX + maximumInset;
         }
         return accidentalCutOutX;
     }
