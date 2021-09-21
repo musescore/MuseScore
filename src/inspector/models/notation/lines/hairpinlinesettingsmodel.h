@@ -19,18 +19,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_INSPECTOR_CRESCENDOSETTINGSMODEL_H
-#define MU_INSPECTOR_CRESCENDOSETTINGSMODEL_H
+#ifndef MU_INSPECTOR_HAIRPINLINESETTINGSMODEL_H
+#define MU_INSPECTOR_HAIRPINLINESETTINGSMODEL_H
 
 #include "linesettingsmodel.h"
 
 namespace mu::inspector {
-class CrescendoSettingsModel : public LineSettingsModel
+class HairpinLineSettingsModel : public LineSettingsModel
 {
     Q_OBJECT
 
 public:
-    explicit CrescendoSettingsModel(QObject* parent, IElementRepositoryService* repository);
+    enum HairpinLineType {
+        Crescendo,
+        Diminuendo
+    };
+
+    explicit HairpinLineSettingsModel(QObject* parent, IElementRepositoryService* repository, HairpinLineType lineType);
 
 private:
     void createProperties() override;
@@ -38,4 +43,4 @@ private:
 };
 }
 
-#endif // MU_INSPECTOR_CRESCENDOSETTINGSMODEL_H
+#endif // MU_INSPECTOR_HAIRPINLINESETTINGSMODEL_H

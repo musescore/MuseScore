@@ -89,7 +89,6 @@ TabPanel {
             width: root.width
 
             model: root.model
-            possibleEndHookTypes: root.model ? root.model.possibleEndHookTypes() : null
         }
     }
 

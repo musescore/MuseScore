@@ -98,7 +98,7 @@ protected:
 
     struct HookTypeInfo {
         Ms::HookType type = Ms::HookType::NONE;
-        mu::ui::IconCode::Code icon = mu::ui::IconCode::Code::NONE;
+        ui::IconCode::Code icon = ui::IconCode::Code::NONE;
     };
 
     void createProperties() override;

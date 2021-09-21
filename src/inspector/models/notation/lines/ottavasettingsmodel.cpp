@@ -42,7 +42,7 @@ OttavaSettingsModel::OttavaSettingsModel(QObject* parent, IElementRepositoryServ
         { Ms::HookType::HOOK_45, IconCode::LINE_WITH_ANGLED_END_HOOK }
     };
 
-    setPossibleHookTypes(hookTypes );
+    setPossibleHookTypes(hookTypes);
 
     createProperties();
 }
@@ -91,6 +91,7 @@ void OttavaSettingsModel::createProperties()
     placement()->setIsVisible(false);
     beginingTextHorizontalOffset()->setIsVisible(false);
     continiousTextHorizontalOffset()->setIsVisible(false);
+    endTextHorizontalOffset()->setIsVisible(false);
 }
 
 void OttavaSettingsModel::loadProperties()
@@ -107,4 +108,9 @@ void OttavaSettingsModel::resetProperties()
 
     m_ottavaType->resetToDefault();
     m_showNumbersOnly->resetToDefault();
+}
+
+bool OttavaSettingsModel::isTextVisible(TextType) const
+{
+    return true;
 }
