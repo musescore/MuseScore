@@ -93,6 +93,7 @@ public:
         TYPE_PALM_MUTE,
         TYPE_LET_RING,
         TYPE_VOLTA,
+        TYPE_VIBRATO,
         TYPE_CRESCENDO,
         TYPE_DIMINUENDO,
         TYPE_STAFF_TYPE_CHANGES,

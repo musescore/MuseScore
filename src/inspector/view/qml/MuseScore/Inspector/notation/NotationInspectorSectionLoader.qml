@@ -74,6 +74,7 @@ Loader {
             case Inspector.TYPE_HOOK: return noteComp
             case Inspector.TYPE_FERMATA: return fermataComp
             case Inspector.TYPE_GLISSANDO: return glissandoComp
+            case Inspector.TYPE_VIBRATO: return vibratoCompo
             case Inspector.TYPE_TEMPO: return tempoComp
             case Inspector.TYPE_BARLINE: return barlineComp
             case Inspector.TYPE_SECTIONBREAK: return sectionBreakComp
@@ -134,6 +135,11 @@ Loader {
     Component {
         id: glissandoComp
         GlissandoSettings { }
+    }
+
+    Component {
+        id: vibratoCompo
+        VibratoSettings { }
     }
 
     Component {
