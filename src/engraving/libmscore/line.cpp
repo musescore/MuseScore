@@ -1323,7 +1323,7 @@ void SLine::writeProperties(XmlWriter& xml) const
     //
     qreal _spatium = score()->spatium();
     for (const SpannerSegment* seg : spannerSegments()) {
-        xml.stag("Segment", seg);
+        xml.startObject("Segment", seg);
         xml.tag("subtype", int(seg->spannerSegmentType()));
         // TODO:
         // NOSTYLE offset written in EngravingItem::writeProperties,
@@ -1334,7 +1334,7 @@ void SLine::writeProperties(XmlWriter& xml) const
         xml.tag("off2", seg->userOff2() / _spatium);
         seg->writeProperty(xml, Pid::MIN_DISTANCE);
         seg->EngravingItem::writeProperties(xml);
-        xml.etag();
+        xml.endObject();
     }
 }
 
@@ -1421,9 +1421,9 @@ const mu::RectF& SLine::bbox() const
 
 void SLine::write(XmlWriter& xml) const
 {
-    xml.stag(this);
+    xml.startObject(this);
     SLine::writeProperties(xml);
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------

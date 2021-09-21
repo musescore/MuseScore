@@ -82,7 +82,7 @@ void LayoutBreak::setParent(MeasureBase* parent)
 
 void LayoutBreak::write(XmlWriter& xml) const
 {
-    xml.stag(this);
+    xml.startObject(this);
     EngravingItem::writeProperties(xml);
 
     for (auto id :
@@ -90,7 +90,7 @@ void LayoutBreak::write(XmlWriter& xml) const
         writeProperty(xml, id);
     }
 
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------

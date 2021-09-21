@@ -194,7 +194,7 @@ bool Volta::readProperties(XmlReader& e)
 
 void Volta::write(XmlWriter& xml) const
 {
-    xml.stag(this);
+    xml.startObject(this);
     TextLineBase::writeProperties(xml);
     QString s;
     for (int i : _endings) {
@@ -204,7 +204,7 @@ void Volta::write(XmlWriter& xml) const
         s += QString("%1").arg(i);
     }
     xml.tag("endings", s);
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------

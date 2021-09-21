@@ -143,7 +143,7 @@ void Pedal::write(XmlWriter& xml) const
     if (!xml.canWrite(this)) {
         return;
     }
-    xml.stag(this);
+    xml.startObject(this);
 
     for (auto i : {
             Pid::END_HOOK_TYPE,
@@ -160,7 +160,7 @@ void Pedal::write(XmlWriter& xml) const
     }
 
     SLine::writeProperties(xml);
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------

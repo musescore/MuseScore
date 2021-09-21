@@ -341,15 +341,15 @@ bool MStyle::write(QIODevice* device)
 {
     XmlWriter xml(nullptr, device);
     xml.header();
-    xml.stag("museScore version=\"" MSC_VERSION "\"");
+    xml.startObject("museScore version=\"" MSC_VERSION "\"");
     save(xml, false);
-    xml.etag();
+    xml.endObject();
     return true;
 }
 
 void MStyle::save(XmlWriter& xml, bool optimize)
 {
-    xml.stag("Style");
+    xml.startObject("Style");
 
     for (const StyleDef::StyleValue& st : StyleDef::styleValues) {
         Sid idx = st.styleIdx();
@@ -393,7 +393,7 @@ void MStyle::save(XmlWriter& xml, bool optimize)
     }
 
     xml.tag("Spatium", value(Sid::spatium).toDouble() / DPMM);
-    xml.etag();
+    xml.endObject();
 }
 
 // ====================================================

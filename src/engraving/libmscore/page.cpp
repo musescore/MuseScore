@@ -458,11 +458,11 @@ bool Page::isOdd() const
 
 void Page::write(XmlWriter& xml) const
 {
-    xml.stag(this);
+    xml.startObject(this);
     foreach (System* system, _systems) {
         system->write(xml);
     }
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------

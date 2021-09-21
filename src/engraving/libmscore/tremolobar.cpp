@@ -122,7 +122,7 @@ void TremoloBar::draw(mu::draw::Painter* painter) const
 
 void TremoloBar::write(XmlWriter& xml) const
 {
-    xml.stag(this);
+    xml.startObject(this);
     writeProperty(xml, Pid::MAG);
     writeProperty(xml, Pid::LINE_WIDTH);
     writeProperty(xml, Pid::PLAY);
@@ -130,7 +130,7 @@ void TremoloBar::write(XmlWriter& xml) const
         xml.tagE(QString("point time=\"%1\" pitch=\"%2\" vibrato=\"%3\"")
                  .arg(v.time).arg(v.pitch).arg(v.vibrato));
     }
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------

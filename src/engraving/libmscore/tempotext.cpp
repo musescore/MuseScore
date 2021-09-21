@@ -72,13 +72,13 @@ TempoText::TempoText(Segment* parent)
 
 void TempoText::write(XmlWriter& xml) const
 {
-    xml.stag(this);
+    xml.startObject(this);
     xml.tag("tempo", _tempo);
     if (_followText) {
         xml.tag("followText", _followText);
     }
     TextBase::writeProperties(xml);
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------

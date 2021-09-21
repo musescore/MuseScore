@@ -680,7 +680,7 @@ void Hairpin::write(XmlWriter& xml) const
     if (!xml.canWrite(this)) {
         return;
     }
-    xml.stag(this);
+    xml.startObject(this);
     xml.tag("subtype", int(_hairpinType));
     writeProperty(xml, Pid::VELO_CHANGE);
     writeProperty(xml, Pid::HAIRPIN_CIRCLEDTIP);
@@ -698,7 +698,7 @@ void Hairpin::write(XmlWriter& xml) const
         }
     }
     SLine::writeProperties(xml);
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------

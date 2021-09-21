@@ -193,13 +193,13 @@ std::vector<Clef*> InstrumentChange::clefs() const
 
 void InstrumentChange::write(XmlWriter& xml) const
 {
-    xml.stag(this);
+    xml.startObject(this);
     _instrument->write(xml, part());
     if (_init) {
         xml.tag("init", _init);
     }
     TextBase::writeProperties(xml);
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------

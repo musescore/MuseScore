@@ -89,7 +89,7 @@ void Lyrics::write(XmlWriter& xml) const
     if (!xml.canWrite(this)) {
         return;
     }
-    xml.stag(this);
+    xml.startObject(this);
     writeProperty(xml, Pid::VERSE);
     if (_syllabic != Syllabic::SINGLE) {
         static const char* sl[] = {
@@ -101,7 +101,7 @@ void Lyrics::write(XmlWriter& xml) const
     writeProperty(xml, Pid::LYRIC_TICKS);
 
     TextBase::writeProperties(xml);
-    xml.etag();
+    xml.endObject();
 }
 
 //---------------------------------------------------------

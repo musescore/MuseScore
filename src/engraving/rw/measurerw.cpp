@@ -543,9 +543,9 @@ void MeasureRW::writeMeasure(const Ms::Measure* measure, XmlWriter& xml, int sta
     }
     if (measure->_len != measure->m_timesig) {
         // this is an irregular measure
-        xml.stag(measure, QString("len=\"%1/%2\"").arg(measure->_len.numerator()).arg(measure->_len.denominator()));
+        xml.startObject(measure, QString("len=\"%1/%2\"").arg(measure->_len.numerator()).arg(measure->_len.denominator()));
     } else {
-        xml.stag(measure);
+        xml.startObject(measure);
     }
 
     xml.setCurTick(measure->tick());
@@ -611,5 +611,5 @@ void MeasureRW::writeMeasure(const Ms::Measure* measure, XmlWriter& xml, int sta
         measure->score()->writeSegments(xml, strack, etrack, measure->first(), measure->last()->next1(), writeSystemElements, forceTimeSig);
     }
 
-    xml.etag();
+    xml.endObject();
 }

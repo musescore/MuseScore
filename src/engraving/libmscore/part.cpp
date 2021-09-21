@@ -202,7 +202,7 @@ void Part::read(XmlReader& e)
 
 void Part::write(XmlWriter& xml) const
 {
-    xml.stag(this);
+    xml.startObject(this);
 
     for (const Staff* staff : _staves) {
         staff->write(xml);
@@ -223,7 +223,7 @@ void Part::write(XmlWriter& xml) const
     }
     instrument()->write(xml, this);
 
-    xml.etag();
+    xml.endObject();
 }
 
 int Part::nstaves() const
