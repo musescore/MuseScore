@@ -96,3 +96,8 @@ bool ReadContext::undoStackActive() const
 {
     return m_score->undoStack()->active();
 }
+
+bool ReadContext::isSameScore(const Ms::EngravingObject* obj) const
+{
+    return obj->score() == m_score;
+}

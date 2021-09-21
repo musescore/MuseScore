@@ -33,6 +33,10 @@
 #include "fraction.h"
 #include "segmentlist.h"
 
+namespace mu::engraving::rw {
+class MeasureRW;
+}
+
 namespace Ms {
 class XmlWriter;
 class Beam;
@@ -148,8 +152,7 @@ public:
     EngravingObject* scanChild(int idx) const override;
     int scanChildCount() const override;
 
-    void read(XmlReader&, int idx);
-    void read(XmlReader& d) override { read(d, 0); }
+    void read(XmlReader& d) override;
     void readAddConnector(ConnectorInfoReader* info, bool pasteMode) override;
     void write(XmlWriter& xml) const override { EngravingItem::write(xml); }
     void write(XmlWriter&, int, bool writeSystemElements, bool forceTimeSig) const override;
@@ -355,6 +358,8 @@ public:
 private:
 
     friend class mu::engraving::Factory;
+    friend class mu::engraving::rw::MeasureRW;
+
     Measure(System* parent = 0);
     Measure(const Measure&);
 
@@ -363,8 +368,6 @@ private:
 
     void fillGap(const Fraction& pos, const Fraction& len, int track, const Fraction& stretch, bool useGapRests = true);
     void computeMinWidth(Segment* s, qreal x, bool isSystemHeader);
-
-    void readVoice(XmlReader& e, int staffIdx, bool irregular);
 
     MStaff* mstaff(int staffIndex) const;
 

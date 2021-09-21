@@ -27,15 +27,13 @@
 #include "libmscore/score.h"
 #include "libmscore/measure.h"
 
+#include "measurerw.h"
+
 using namespace mu::engraving::rw;
 using namespace Ms;
 
 void StaffRW::readStaff(Ms::Score* score, Ms::XmlReader& e, ReadContext& ctx)
 {
-    if (score->dummy() != ctx.dummy()) {
-        int k = 1;
-    }
-
     int staff = e.intAttribute("id", 1) - 1;
     int measureIdx = 0;
     e.setCurrentMeasureIndex(0);
@@ -58,7 +56,7 @@ void StaffRW::readStaff(Ms::Score* score, Ms::XmlReader& e, ReadContext& ctx)
                 measure->setTicks(f);
                 measure->setTimesig(f);
 
-                measure->read(e, staff);
+                MeasureRW::readMeasure(measure, e, ctx, staff);
                 measure->checkMeasure(staff);
                 if (!measure->isMMRest()) {
                     score->measures()->add(measure);
@@ -99,7 +97,7 @@ void StaffRW::readStaff(Ms::Score* score, Ms::XmlReader& e, ReadContext& ctx)
                 }
                 e.setTick(measure->tick());
                 e.setCurrentMeasureIndex(measureIdx++);
-                measure->read(e, staff);
+                MeasureRW::readMeasure(measure, e, ctx, staff);
                 measure->checkMeasure(staff);
                 if (measure->isMMRest()) {
                     measure = e.lastMeasure()->nextMeasure();
