@@ -34,9 +34,9 @@ class Read400
 {
 public:
 
-    static bool read400(Ms::Score* score, Ms::XmlReader& e);
-    static bool readScore400(Ms::Score* score, Ms::XmlReader& e);
-    static void readStaff(Ms::Score* score, Ms::XmlReader&);
+    static bool read400(Ms::Score* score, Ms::XmlReader& e, ReadContext& ctx);
+    static bool readScore400(Ms::Score* score, Ms::XmlReader& e, ReadContext& ctx);
+    static void readStaff(Ms::Score* score, Ms::XmlReader&, ReadContext& ctx);
 };
 }
 

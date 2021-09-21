@@ -50,7 +50,7 @@ using namespace mu::engraving;
 using namespace mu::engraving::compat;
 using namespace Ms;
 
-bool Read302::readScore302(Ms::Score* score, XmlReader& e)
+bool Read302::readScore302(Ms::Score* score, XmlReader& e, ReadContext& ctx)
 {
     // HACK
     // style setting compatibility settings for minor versions
@@ -68,8 +68,7 @@ bool Read302::readScore302(Ms::Score* score, XmlReader& e)
         e.setTrack(-1);
         const QStringRef& tag(e.name());
         if (tag == "Staff") {
-            //score->readStaff(e);
-            Read400::readStaff(score, e);
+            Read400::readStaff(score, e, ctx);
         } else if (tag == "Omr") {
             e.skipCurrentElement();
         } else if (tag == "Audio") {
@@ -193,7 +192,8 @@ bool Read302::readScore302(Ms::Score* score, XmlReader& e)
                 ex->setPartScore(s);
                 e.setLastMeasure(nullptr);
 
-                readScore302(s, e);
+                ReadContext exCtx(s);
+                readScore302(s, e, exCtx);
 
                 s->linkMeasures(m);
                 ex->setTracks(e.tracks());
@@ -261,7 +261,7 @@ bool Read302::readScore302(Ms::Score* score, XmlReader& e)
     return true;
 }
 
-Score::FileError Read302::read302(Ms::MasterScore* masterScore, XmlReader& e)
+Score::FileError Read302::read302(Ms::MasterScore* masterScore, XmlReader& e, ReadContext& ctx)
 {
     while (e.readNextStartElement()) {
         const QStringRef& tag(e.name());
@@ -270,7 +270,7 @@ Score::FileError Read302::read302(Ms::MasterScore* masterScore, XmlReader& e)
         } else if (tag == "programRevision") {
             masterScore->setMscoreRevision(e.readIntHex());
         } else if (tag == "Score") {
-            if (!readScore302(masterScore, e)) {
+            if (!readScore302(masterScore, e, ctx)) {
                 if (e.error() == QXmlStreamReader::CustomError) {
                     return Score::FileError::FILE_CRITICALLY_CORRUPTED;
                 }

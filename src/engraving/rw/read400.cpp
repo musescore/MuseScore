@@ -37,7 +37,7 @@
 using namespace mu::engraving;
 using namespace Ms;
 
-bool Read400::read400(Ms::Score* score, XmlReader& e)
+bool Read400::read400(Ms::Score* score, XmlReader& e, ReadContext& ctx)
 {
     if (!e.readNextStartElement()) {
         qDebug("%s: xml file is empty", qPrintable(e.getDocName()));
@@ -54,7 +54,7 @@ bool Read400::read400(Ms::Score* score, XmlReader& e)
             } else if (tag == "Revision") {
                 e.skipCurrentElement();
             } else if (tag == "Score") {
-                if (!readScore400(score, e)) {
+                if (!readScore400(score, e, ctx)) {
                     return false;
                 }
             } else {
@@ -69,7 +69,7 @@ bool Read400::read400(Ms::Score* score, XmlReader& e)
     return true;
 }
 
-bool Read400::readScore400(Ms::Score* score, XmlReader& e)
+bool Read400::readScore400(Ms::Score* score, XmlReader& e, ReadContext& ctx)
 {
     // HACK
     // style setting compatibility settings for minor versions
@@ -87,7 +87,7 @@ bool Read400::readScore400(Ms::Score* score, XmlReader& e)
         e.setTrack(-1);
         const QStringRef& tag(e.name());
         if (tag == "Staff") {
-            readStaff(score, e);
+            readStaff(score, e, ctx);
         } else if (tag == "Omr") {
             e.skipCurrentElement();
         } else if (tag == "Audio") {
@@ -243,7 +243,7 @@ bool Read400::readScore400(Ms::Score* score, XmlReader& e)
     return true;
 }
 
-void Read400::readStaff(Ms::Score* score, Ms::XmlReader& e)
+void Read400::readStaff(Ms::Score* score, Ms::XmlReader& e, ReadContext& ctx)
 {
     int staff = e.intAttribute("id", 1) - 1;
     int measureIdx = 0;
@@ -256,8 +256,7 @@ void Read400::readStaff(Ms::Score* score, Ms::XmlReader& e)
             const QStringRef& tag(e.name());
 
             if (tag == "Measure") {
-                Measure* measure = nullptr;
-                measure = Factory::createMeasure(score->dummy()->system());
+                Measure* measure = Factory::createMeasure(score->dummy()->system());
                 measure->setTick(e.tick());
                 e.setCurrentMeasureIndex(measureIdx++);
                 //
