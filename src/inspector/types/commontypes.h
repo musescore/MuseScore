@@ -48,16 +48,10 @@ struct ElementKey
     {
         return !(*this == key);
     }
-
-    bool operator<(const ElementKey& key) const
-    {
-        if (type < key.type) {
-            return true;
-        }
-
-        return subtype < key.subtype;
-    }
 };
+
+using ElementKeyList = QList<ElementKey>;
+using ElementKeySet = QSet<ElementKey>;
 
 inline uint qHash(const ElementKey& key)
 {
