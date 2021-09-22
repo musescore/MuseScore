@@ -31,7 +31,7 @@ using namespace mu::notation;
 
 using InspectorModelType = AbstractInspectorModel::InspectorModelType;
 
-static const QMap<ElementKey, InspectorModelType> NOTATION_ELEMENT_MODEL_TYPES = {
+static const QMap<Ms::ElementType, InspectorModelType> NOTATION_ELEMENT_MODEL_TYPES = {
     { Ms::ElementType::NOTE, InspectorModelType::TYPE_NOTE },
     { Ms::ElementType::STEM, InspectorModelType::TYPE_STEM },
     { Ms::ElementType::NOTEDOT, InspectorModelType::TYPE_NOTE },
@@ -84,6 +84,13 @@ static const QMap<ElementKey, InspectorModelType> NOTATION_ELEMENT_MODEL_TYPES =
     { Ms::ElementType::MEASURE_REPEAT, InspectorModelType::TYPE_MEASURE_REPEAT }
 };
 
+static QMap<Ms::HairpinType, InspectorModelType> HAIRPIN_ELEMENT_MODEL_TYPES = {
+    { Ms::HairpinType::CRESC_HAIRPIN, InspectorModelType::TYPE_HAIRPIN },
+    { Ms::HairpinType::DECRESC_HAIRPIN, InspectorModelType::TYPE_HAIRPIN },
+    { Ms::HairpinType::CRESC_LINE, InspectorModelType::TYPE_CRESCENDO },
+    { Ms::HairpinType::DECRESC_LINE, InspectorModelType::TYPE_DIMINUENDO },
+};
+
 AbstractInspectorModel::AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository, Ms::ElementType elementType)
     : QObject(parent), m_elementType(elementType)
 {
@@ -122,10 +129,10 @@ InspectorModelType AbstractInspectorModel::modelType() const
     return m_modelType;
 }
 
-QList<AbstractInspectorModel::InspectorSectionType> AbstractInspectorModel::sectionTypesFromElementKey(const ElementKey& elementKey)
+QList<AbstractInspectorModel::InspectorSectionType> AbstractInspectorModel::sectionTypesByElementKey(const ElementKey& elementKey)
 {
     QList<AbstractInspectorModel::InspectorSectionType> result;
-    if (NOTATION_ELEMENT_MODEL_TYPES.keys().contains(elementKey)) {
+    if (NOTATION_ELEMENT_MODEL_TYPES.keys().contains(elementKey.type)) {
         result << InspectorSectionType::SECTION_NOTATION;
     }
 
@@ -138,14 +145,31 @@ QList<AbstractInspectorModel::InspectorSectionType> AbstractInspectorModel::sect
 
 InspectorModelType AbstractInspectorModel::notationElementModelType(const ElementKey& elementKey)
 {
-    if (NOTATION_ELEMENT_MODEL_TYPES.contains(elementKey)) {
-        return NOTATION_ELEMENT_MODEL_TYPES.value(elementKey);
+    if (elementKey.type == Ms::ElementType::HAIRPIN || elementKey.type == Ms::ElementType::HAIRPIN_SEGMENT) {
+        return HAIRPIN_ELEMENT_MODEL_TYPES.value(static_cast<Ms::HairpinType>(elementKey.subtype));
     }
 
-    return InspectorModelType::TYPE_UNDEFINED;
+    return NOTATION_ELEMENT_MODEL_TYPES.value(elementKey.type, InspectorModelType::TYPE_UNDEFINED);
 }
 
-ElementKey AbstractInspectorModel::elementKey(const InspectorModelType& modelType)
+QList<Ms::ElementType> AbstractInspectorModel::supportedElementTypesBySectionType(
+    const AbstractInspectorModel::InspectorSectionType sectionType)
+{
+    switch (sectionType) {
+    case InspectorSectionType::SECTION_GENERAL:
+        return { Ms::ElementType::MAXTYPE };
+    case InspectorSectionType::SECTION_NOTATION: {
+        return NOTATION_ELEMENT_MODEL_TYPES.keys();
+    }
+    case InspectorSectionType::SECTION_TEXT: {
+        return TEXT_ELEMENT_TYPES;
+    }
+    default:
+        return QList<Ms::ElementType>();
+    }
+}
+
+Ms::ElementType AbstractInspectorModel::elementTypeByModelType(InspectorModelType modelType)
 {
     if (modelType == InspectorModelType::TYPE_UNDEFINED) {
         return Ms::ElementType::INVALID;
@@ -161,29 +185,6 @@ ElementKey AbstractInspectorModel::elementKey(const InspectorModelType& modelTyp
 bool AbstractInspectorModel::isEmpty() const
 {
     return m_isEmpty;
-}
-
-QList<ElementKey> AbstractInspectorModel::supportedElementTypesBySectionType(
-    const AbstractInspectorModel::InspectorSectionType sectionType)
-{
-    switch (sectionType) {
-    case InspectorSectionType::SECTION_GENERAL:
-        return { Ms::ElementType::MAXTYPE };
-    case InspectorSectionType::SECTION_NOTATION: {
-        return NOTATION_ELEMENT_MODEL_TYPES.keys();
-    }
-    case InspectorSectionType::SECTION_TEXT: {
-        QList<ElementKey> keys;
-
-        for (Ms::ElementType elementType : TEXT_ELEMENT_TYPES) {
-            keys << ElementKey(elementType);
-        }
-
-        return keys;
-    }
-    default:
-        return QList<ElementKey>();
-    }
 }
 
 void AbstractInspectorModel::setTitle(QString title)

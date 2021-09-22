@@ -59,12 +59,12 @@ private:
 
     void setElementList(const QList<Ms::EngravingItem*>& selectedElementList);
 
-    void buildModelsForEmptySelection(const QSet<ElementKey>& selectedElementKeySet);
-    void buildModelsForSelectedElements(const QSet<ElementKey>& selectedElementKeySet);
+    void buildModelsForEmptySelection(const ElementKeySet& selectedElementKeySet);
+    void buildModelsForSelectedElements(const ElementKeySet& selectedElementKeySet);
 
     void createModelsBySectionType(const QList<AbstractInspectorModel::InspectorSectionType>& sectionTypeList,
-                                   const QSet<ElementKey>& selectedElementKeySet = {});
-    void removeUnusedModels(const QSet<ElementKey>& newElementKeySet,
+                                   const ElementKeySet& selectedElementKeySet = {});
+    void removeUnusedModels(const ElementKeySet& newElementKeySet,
                             const QList<AbstractInspectorModel::InspectorSectionType>& exclusions = QList<AbstractInspectorModel::InspectorSectionType>());
 
     void sortModels();
