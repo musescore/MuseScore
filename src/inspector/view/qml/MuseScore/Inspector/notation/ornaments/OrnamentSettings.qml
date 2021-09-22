@@ -57,16 +57,4 @@ Column {
             { text: qsTrc("inspector", "Below chord"), value: ArticulationTypes.TYPE_BELOW_CHORD }
         ]
     }
-
-    FlatButton {
-        width: parent.width
-
-        text: qsTrc("inspector", "Channel & MIDI properties")
-
-        onClicked: {
-            if (root.model) {
-                root.model.openChannelAndMidiProperties()
-            }
-        }
-    }
 }

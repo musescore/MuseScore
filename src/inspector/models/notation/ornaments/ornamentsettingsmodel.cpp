@@ -37,11 +37,6 @@ OrnamentSettingsModel::OrnamentSettingsModel(QObject* parent, IElementRepository
     createProperties();
 }
 
-void OrnamentSettingsModel::openChannelAndMidiProperties()
-{
-    NOT_IMPLEMENTED;
-}
-
 void OrnamentSettingsModel::createProperties()
 {
     m_performanceType = buildPropertyItem(Ms::Pid::ORNAMENT_STYLE);
