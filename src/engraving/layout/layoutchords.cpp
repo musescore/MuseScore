@@ -879,7 +879,7 @@ void LayoutChords::layoutChords3(const MStyle& style, std::vector<Note*>& notes,
             if (chord->stem()) {
                 chord->stem()->layout();
                 if (chord->hook()) {
-                    chord->hook()->rypos() = chord->stem()->hookPos().y();
+                    chord->hook()->rypos() = chord->stem()->flagPosition().y();
                 }
             }
         }

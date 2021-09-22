@@ -70,14 +70,14 @@ enum class TremoloChordType : char {
 class Chord final : public ChordRest
 {
     std::vector<Note*> _notes;           // sorted to decreasing line step
-    LedgerLine* _ledgerLines;            // single linked list
+    LedgerLine* _ledgerLines = nullptr;  // single linked list
 
-    Stem* _stem;
-    Hook* _hook;
-    StemSlash* _stemSlash;               // for acciacatura
+    Stem* _stem = nullptr;
+    Hook* _hook = nullptr;
+    StemSlash* _stemSlash = nullptr;     // for acciacatura
 
-    Arpeggio* _arpeggio;
-    Tremolo* _tremolo;
+    Arpeggio* _arpeggio = nullptr;
+    Tremolo* _tremolo = nullptr;
     bool _endsGlissando;                 ///< true if this chord is the ending point of a glissando (needed for layout)
     QVector<Chord*> _graceNotes;
     int _graceIndex;                     ///< if this is a grace note, index in parent list
@@ -105,6 +105,9 @@ class Chord final : public ChordRest
     void layoutPitched();
     void layoutTablature();
     qreal noteHeadWidth() const;
+
+    bool shouldHaveStem() const;
+    bool shouldHaveHook() const;
 
 public:
 
@@ -138,7 +141,6 @@ public:
     qreal defaultStemLength() const;
     qreal minAbsStemLength() const;
 
-    void layoutStem1() override;
     void layoutStem();
     void layoutArpeggio2();
     void layoutSpanners();

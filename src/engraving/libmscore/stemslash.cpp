@@ -67,7 +67,7 @@ void StemSlash::layout()
     qreal h2;
     qreal _spatium = spatium();
     qreal l = chord()->up() ? _spatium : -_spatium;
-    PointF p(stem->hookPos());
+    PointF p(stem->flagPosition());
     qreal x = p.x() + _spatium * .1;
     qreal y = p.y();
 

@@ -705,14 +705,14 @@ void LayoutMeasure::getNextMeasure(const LayoutOptions& options, LayoutContext& 
                             if (drumset) {
                                 layoutDrumsetChord(c, drumset, st, score->spatium());
                             }
-                            c->layoutStem1();
+                            c->layoutStem();
                         }
                         if (drumset) {
                             layoutDrumsetChord(chord, drumset, st, score->spatium());
                         }
                         chord->computeUp();
-                        chord->layoutStem1();               // create stems needed to calculate spacing
-                                                            // stem direction can change later during beam processing
+                        chord->layoutStem();               // create stems needed to calculate spacing
+                                                           // stem direction can change later during beam processing
 
                         // if there is a two-note tremolo attached, and it is too steep,
                         // extend stem of one of the chords (if not cross-staff)
@@ -726,8 +726,8 @@ void LayoutMeasure::getNextMeasure(const LayoutOptions& options, LayoutContext& 
                                     chord->tremolo(),
                                     stem1->p2().y(),
                                     stem2->p2().y());
-                                stem1->setLen(extendedLen.first);
-                                stem2->setLen(extendedLen.second);
+                                stem1->setBaseLength(extendedLen.first);
+                                stem2->setBaseLength(extendedLen.second);
                             }
                         }
                     }
