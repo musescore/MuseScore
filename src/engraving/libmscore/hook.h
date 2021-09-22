@@ -28,10 +28,6 @@
 namespace Ms {
 class Chord;
 
-//---------------------------------------------------------
-//   @@ Hook
-//---------------------------------------------------------
-
 class Hook final : public Symbol
 {
     int _hookType { 0 };
@@ -47,7 +43,8 @@ public:
     int hookType() const { return _hookType; }
     void layout() override;
     void draw(mu::draw::Painter*) const override;
-    Chord* chord() const { return (Chord*)parent(); }
+    Chord* chord() const { return toChord(parent()); }
+    mu::PointF smuflAnchor() const;
 };
 }     // namespace Ms
 #endif

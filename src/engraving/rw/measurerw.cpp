@@ -45,6 +45,7 @@
 #include "../libmscore/keysig.h"
 #include "../libmscore/stafftext.h"
 #include "../libmscore/ambitus.h"
+#include "../libmscore/dynamic.h"
 
 #include "../libmscore/score.h"
 
