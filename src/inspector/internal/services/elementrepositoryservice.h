@@ -45,12 +45,11 @@ signals:
     void elementsUpdated() override;
 
 private:
-    QList<Ms::EngravingItem*> m_elementList;
-
     QList<Ms::EngravingItem*> exposeRawElements(const QList<Ms::EngravingItem*>& rawElementList) const;
 
     QList<Ms::EngravingItem*> findChords() const;
     QList<Ms::EngravingItem*> findNotes() const;
+    QList<Ms::EngravingItem*> findNoteHeads() const;
     QList<Ms::EngravingItem*> findStems() const;
     QList<Ms::EngravingItem*> findHooks() const;
     QList<Ms::EngravingItem*> findBeams() const;
@@ -60,6 +59,9 @@ private:
     QList<Ms::EngravingItem*> findTexts() const;
     QList<Ms::EngravingItem*> findTremolos() const;
     QList<Ms::EngravingItem*> findLines(Ms::ElementType lineType) const;
+
+    QList<Ms::EngravingItem*> m_exposedElementList;
+    QList<Ms::EngravingItem*> m_rawElementList;
 };
 }
 

@@ -59,7 +59,7 @@ void NoteheadSettingsModel::createProperties()
 
 void NoteheadSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(Ms::ElementType::NOTE);
+    m_elementList = m_repository->findElementsByType(Ms::ElementType::NOTEHEAD);
 }
 
 void NoteheadSettingsModel::loadProperties()
