@@ -84,7 +84,7 @@ Column {
         dashGapLength: root.model ? root.model.dashGapLength : null
     }
 
-    SeparatorLine { anchors.margins: -10; visible: placementSection }
+    SeparatorLine { anchors.margins: -10; visible: placementSection.visible }
 
     PlacementSection {
         id: placementSection
