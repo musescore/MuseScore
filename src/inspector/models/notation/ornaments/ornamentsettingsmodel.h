@@ -35,8 +35,6 @@ class OrnamentSettingsModel : public AbstractInspectorModel
 public:
     explicit OrnamentSettingsModel(QObject* parent, IElementRepositoryService* repository);
 
-    Q_INVOKABLE void openChannelAndMidiProperties();
-
     void createProperties() override;
     void requestElements() override;
     void loadProperties() override;

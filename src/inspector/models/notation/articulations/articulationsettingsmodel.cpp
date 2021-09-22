@@ -37,11 +37,6 @@ ArticulationSettingsModel::ArticulationSettingsModel(QObject* parent, IElementRe
     createProperties();
 }
 
-void ArticulationSettingsModel::openChannelAndMidiProperties()
-{
-    NOT_IMPLEMENTED;
-}
-
 void ArticulationSettingsModel::createProperties()
 {
     m_direction = buildPropertyItem(Ms::Pid::DIRECTION);
