@@ -348,6 +348,9 @@ QVariant AbstractInspectorModel::valueToElementUnits(const Ms::Pid& pid, const Q
     case Ms::P_TYPE::SP_REAL:
         return value.toDouble() * element->spatium();
 
+    case Ms::P_TYPE::SPATIUM:
+        return value.value<Ms::Spatium>().val();
+
     case Ms::P_TYPE::TEMPO:
         return value.toDouble() / 60.0;
 
@@ -398,6 +401,9 @@ QVariant AbstractInspectorModel::valueFromElementUnits(const Ms::Pid& pid, const
 
     case Ms::P_TYPE::SP_REAL:
         return value.toDouble() / element->spatium();
+
+    case Ms::P_TYPE::SPATIUM:
+        return value.value<Ms::Spatium>().val();
 
     case Ms::P_TYPE::TEMPO:
         return value.toDouble() * 60.0;

@@ -44,6 +44,9 @@ void LineSettingsModel::createProperties()
     m_lineStyle = buildPropertyItem(Ms::Pid::LINE_STYLE, applyPropertyValueAndUpdateAvailability);
     m_isLineVisible = buildPropertyItem(Ms::Pid::LINE_VISIBLE, applyPropertyValueAndUpdateAvailability);
 
+    m_startHookType = buildPropertyItem(Ms::Pid::BEGIN_HOOK_TYPE, applyPropertyValueAndUpdateAvailability);
+    m_endHookType = buildPropertyItem(Ms::Pid::END_HOOK_TYPE, applyPropertyValueAndUpdateAvailability);
+
     m_placement = buildPropertyItem(Ms::Pid::PLACEMENT);
 
     m_thickness = buildPropertyItem(Ms::Pid::LINE_WIDTH);
@@ -52,9 +55,10 @@ void LineSettingsModel::createProperties()
 
     m_allowDiagonal = buildPropertyItem(Ms::Pid::DIAGONAL);
 
-    m_startHookType = buildPropertyItem(Ms::Pid::BEGIN_HOOK_TYPE);
-    m_endHookType = buildPropertyItem(Ms::Pid::END_HOOK_TYPE);
-    m_hookHeight = buildPropertyItem(Ms::Pid::END_HOOK_HEIGHT);
+    m_hookHeight = buildPropertyItem(Ms::Pid::END_HOOK_HEIGHT, [this](const Ms::Pid pid, const QVariant& newValue) {
+        onPropertyValueChanged(pid, newValue);
+        onPropertyValueChanged(Ms::Pid::BEGIN_HOOK_HEIGHT, newValue);
+    });
 
     if (isTextVisible(BeginingText)) {
         m_beginingText = buildPropertyItem(Ms::Pid::BEGIN_TEXT);
@@ -292,12 +296,18 @@ QVariantList LineSettingsModel::hookTypesToObjList(const QList<HookTypeInfo>& ty
 
 void LineSettingsModel::onUpdateLinePropertiesAvailability()
 {
+    auto hasHook = [](const PropertyItem* item) {
+        return static_cast<Ms::HookType>(item->value().toInt()) != Ms::HookType::NONE;
+    };
+
     bool isLineAvailable = m_isLineVisible->value().toBool();
+    bool hasStartHook = hasHook(m_startHookType);
+    bool hasEndHook = hasHook(m_endHookType);
 
     m_startHookType->setIsEnabled(isLineAvailable);
     m_endHookType->setIsEnabled(isLineAvailable);
     m_thickness->setIsEnabled(isLineAvailable);
-    m_hookHeight->setIsEnabled(isLineAvailable);
+    m_hookHeight->setIsEnabled(isLineAvailable && (hasStartHook || hasEndHook));
     m_lineStyle->setIsEnabled(isLineAvailable);
 
     auto currentStyle = static_cast<LineTypes::LineStyle>(m_lineStyle->value().toInt());

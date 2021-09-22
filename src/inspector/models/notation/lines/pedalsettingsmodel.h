@@ -29,7 +29,7 @@ class PedalSettingsModel : public LineSettingsModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(PropertyItem* lineType READ lineType CONSTANT)
+    Q_PROPERTY(PropertyItem * lineType READ lineType CONSTANT)
     Q_PROPERTY(bool pedalSymbolVisible READ pedalSymbolVisible WRITE setPedalSymbolVisible NOTIFY pedalSymbolVisibleChanged)
     Q_PROPERTY(bool isChangingLineVisibilityAllowed READ isChangingLineVisibilityAllowed NOTIFY isChangingLineVisibilityAllowedChanged)
 
