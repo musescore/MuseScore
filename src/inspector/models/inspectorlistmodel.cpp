@@ -86,7 +86,7 @@ void InspectorListModel::setElementList(const QList<Ms::EngravingItem*>& selecte
     QSet<ElementKey> newElementKeySet;
 
     for (const Ms::EngravingItem* element : selectedElementList) {
-        newElementKeySet << ElementKey(element->type(), element->subtype());
+        newElementKeySet << ElementKey(element->type());
     }
 
     if (selectedElementList.isEmpty()) {
