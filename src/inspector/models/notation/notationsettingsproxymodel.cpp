@@ -26,7 +26,7 @@
 using namespace mu::inspector;
 
 NotationSettingsProxyModel::NotationSettingsProxyModel(QObject* parent, IElementRepositoryService* repository,
-                                                       const QSet<ElementKey>& elementKeySet)
+                                                       const ElementKeySet& elementKeySet)
     : AbstractInspectorProxyModel(parent)
 {
     setSectionType(InspectorSectionType::SECTION_NOTATION);
@@ -55,7 +55,7 @@ bool NotationSettingsProxyModel::isElementSupported(const ElementKey& elementKey
     return AbstractInspectorModel::notationElementModelType(elementKey) != AbstractInspectorModel::InspectorModelType::TYPE_UNDEFINED;
 }
 
-QList<AbstractInspectorModel::InspectorModelType> NotationSettingsProxyModel::modelTypes(const QSet<ElementKey>& elementKeySet)
+QList<AbstractInspectorModel::InspectorModelType> NotationSettingsProxyModel::modelTypes(const ElementKeySet& elementKeySet)
 const
 {
     static QList<AbstractInspectorModel::InspectorModelType> notePartTypes {

@@ -129,10 +129,11 @@ public:
 
     bool isEmpty() const;
 
-    static QList<ElementKey> supportedElementTypesBySectionType(const InspectorSectionType sectionType);
-    static QList<InspectorSectionType> sectionTypesFromElementKey(const ElementKey& elementKey);
+    static QList<InspectorSectionType> sectionTypesByElementKey(const ElementKey& elementKey);
     static InspectorModelType notationElementModelType(const ElementKey& elementKey);
-    static ElementKey elementKey(const InspectorModelType& modelType);
+
+    static QList<Ms::ElementType> supportedElementTypesBySectionType(InspectorSectionType sectionType);
+    static Ms::ElementType elementTypeByModelType(InspectorModelType modelType);
 
     virtual bool hasAcceptableElements() const;
 
