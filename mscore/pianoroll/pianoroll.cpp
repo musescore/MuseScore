@@ -318,7 +318,7 @@ PianorollEditor::PianorollEditor(QWidget* parent)
 
       tbTweak->addWidget(new QLabel(tr("Len:")));
       tbTweak->addWidget((tickLen = new QSpinBox));
-      tickLen->setRange(-2000, 2000);
+      tickLen->setRange(-2000, 60000);
 
 
       // --------------------------------------------------
