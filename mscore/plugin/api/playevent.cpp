@@ -103,7 +103,7 @@ void PlayEvent::setLen(int v)
       {
       if (!ne || ne->len() == v)
             return;                                   // Value hasn't changed so no need to do more.
-      if (v <= 0 || v > 2 * Ms::NoteEvent::NOTE_LENGTH) {
+      if (v <= 0 || v > 60 * Ms::NoteEvent::NOTE_LENGTH) {
             qWarning("PluginAPI::PlayEvent::setLen: Invalid value.");
             return;
             }
