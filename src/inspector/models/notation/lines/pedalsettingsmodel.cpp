@@ -100,6 +100,8 @@ void PedalSettingsModel::createProperties()
     m_lineType = buildPropertyItem(Ms::Pid::END, [this](const Ms::Pid, const QVariant& newValue) {
         setLineType(newValue.toInt());
     });
+
+    placement()->setIsVisible(false);
 }
 
 void PedalSettingsModel::loadProperties()
