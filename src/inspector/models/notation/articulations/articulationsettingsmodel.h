@@ -35,8 +35,6 @@ class ArticulationSettingsModel : public AbstractInspectorModel
 public:
     explicit ArticulationSettingsModel(QObject* parent, IElementRepositoryService* repository);
 
-    Q_INVOKABLE void openChannelAndMidiProperties();
-
     void createProperties() override;
     void requestElements() override;
     void loadProperties() override;
