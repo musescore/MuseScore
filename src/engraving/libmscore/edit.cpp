@@ -5123,7 +5123,6 @@ void Score::undoAddElement(EngravingItem* element)
         || et == ElementType::BEND
         || (et == ElementType::CHORD && toChord(element)->isGrace())
         ) {
-
         const EngravingItem* parent = element->parentItem();
         const LinkedObjects* links = parent ? parent->links() : nullptr;
 

@@ -550,6 +550,15 @@ void NotationViewInputController::dragEnterEvent(QDragEnterEvent* event)
         return;
     }
 
+    if (mimeData->hasUrls()) {
+        QUrl url = mimeData->urls().first();
+
+        if (viewInteraction()->startDrop(url)) {
+            event->accept();
+            return;
+        }
+    }
+
     event->ignore();
 }
 

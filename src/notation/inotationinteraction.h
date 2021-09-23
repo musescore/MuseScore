@@ -88,6 +88,7 @@ public:
     // Drop
     //! TODO Change KeyboardModifiers to modes
     virtual void startDrop(const QByteArray& edata) = 0;
+    virtual bool startDrop(const QUrl& url) = 0;
     virtual bool isDropAccepted(const PointF& pos, Qt::KeyboardModifiers modifiers) = 0; //! NOTE Also may set drop target
     virtual bool drop(const PointF& pos, Qt::KeyboardModifiers modifiers) = 0;
     virtual void endDrop() = 0;
