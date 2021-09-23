@@ -145,7 +145,9 @@ Rectangle {
                         model: [
                             { text: qsTr("None"), value: 1 },
                             { text: qsTr("Duplet"), value: 2 },
-                            { text: qsTr("Triplet"), value: 3 }
+                            { text: qsTr("Triplet"), value: 3 },
+                            { text: qsTr("Quadruplet"), value: 4 },
+                            { text: qsTr("Quintuplet"), value: 5 }
                         ]
 
                         onActivated: {
