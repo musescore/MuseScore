@@ -69,7 +69,7 @@ InspectorSectionView {
             height: childrenRect.height
             width: parent.width
 
-            FlatRadioButtonGroupPropertyView {
+            InspectorPropertyView {
                 titleText: qsTrc("inspector", "Style")
                 propertyItem: root.model ? root.model.fontStyle : null
 
@@ -81,11 +81,31 @@ InspectorSectionView {
                 navigation.name: "StyleMenu"
                 navigation.row: root.navigationRow(3)
 
-                model: [
-                    { iconCode: IconCode.TEXT_BOLD, value: TextTypes.FONT_STYLE_BOLD },
-                    { iconCode: IconCode.TEXT_ITALIC, value: TextTypes.FONT_STYLE_ITALIC  },
-                    { iconCode: IconCode.TEXT_UNDERLINE, value: TextTypes.FONT_STYLE_UNDERLINE  }
-                ]
+                RadioButtonGroup {
+                    height: 30
+                    width: implicitWidth
+
+                    model: [
+                        { iconCode: IconCode.TEXT_BOLD, value: TextTypes.FONT_STYLE_BOLD },
+                        { iconCode: IconCode.TEXT_ITALIC, value: TextTypes.FONT_STYLE_ITALIC  },
+                        { iconCode: IconCode.TEXT_UNDERLINE, value: TextTypes.FONT_STYLE_UNDERLINE  }
+                    ]
+
+                    delegate: FlatToggleButton {
+                        navigation.panel: root.navigationPanel
+                        navigation.name: "FontStyle" + model.index
+                        navigation.row: root.navigationRow(model.index + 4)
+
+                        icon: modelData["iconCode"]
+
+                        checked: root.model && !root.model.fontStyle.isUndefined ? root.model.fontStyle.value & modelData["value"] : false
+
+                        onToggled: {
+                            root.model.fontStyle.value = checked ? root.model.fontStyle.value & ~modelData["value"]
+                                                                 : root.model.fontStyle.value | modelData["value"]
+                        }
+                    }
+                }
             }
 
             DropdownPropertyView {
