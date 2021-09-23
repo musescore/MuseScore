@@ -53,7 +53,6 @@ Image::Image(EngravingItem* parent)
     : BSymbol(ElementType::IMAGE, parent, ElementFlag::MOVABLE)
 {
     imageType        = ImageType::NONE;
-    rasterDoc        = 0;
     _size            = SizeF(0.0, 0.0);
     _storeItem       = 0;
     _dirty           = false;
@@ -80,7 +79,7 @@ Image::Image(const Image& img)
     _linkPath        = img._linkPath;
     _linkIsValid     = img._linkIsValid;
     if (imageType == ImageType::RASTER) {
-        rasterDoc = img.rasterDoc ? new Pixmap(*img.rasterDoc) : 0;
+        rasterDoc = img.rasterDoc ? std::make_shared<Pixmap>(*img.rasterDoc) : nullptr;
     } else if (imageType == ImageType::SVG) {
         svgDoc = img.svgDoc ? new SvgRenderer(_storeItem->buffer()) : 0;
     }
@@ -98,8 +97,6 @@ Image::~Image()
     }
     if (imageType == ImageType::SVG) {
         delete svgDoc;
-    } else if (imageType == ImageType::RASTER) {
-        delete rasterDoc;
     }
 }
 
@@ -113,7 +110,7 @@ void Image::setImageType(ImageType t)
     if (imageType == ImageType::SVG) {
         svgDoc = 0;
     } else if (imageType == ImageType::RASTER) {
-        rasterDoc = 0;
+        rasterDoc.reset();
     } else {
         qDebug("illegal image type");
     }
@@ -551,8 +548,7 @@ void Image::layout()
         }
     } else if (imageType == ImageType::RASTER && !rasterDoc) {
         if (_storeItem) {
-            rasterDoc = new Pixmap;
-            rasterDoc->setData(_storeItem->buffer());
+            rasterDoc = imageProvider()->createPixmap(_storeItem->buffer());
             if (!rasterDoc->isNull()) {
                 _dirty = true;
             }

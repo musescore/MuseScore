@@ -10,6 +10,24 @@ using namespace mu::draw;
 
 static const char FILE_FORMAT[] = "PNG";
 
+std::shared_ptr<Pixmap> QImageProvider::createPixmap(const QByteArray& data) const
+{
+    QImage image;
+    image.loadFromData(data);
+
+    return std::make_shared<Pixmap>(Pixmap::fromQPixmap(QPixmap::fromImage(image)));
+}
+
+std::shared_ptr<Pixmap> QImageProvider::createPixmap(int w, int h, int dpm, const Color& color) const
+{
+    QImage image(w, h, QImage::Format_ARGB32_Premultiplied);
+    image.setDotsPerMeterX(dpm);
+    image.setDotsPerMeterY(dpm);
+    image.fill(color.toQColor());
+
+    return std::make_shared<Pixmap>(Pixmap::fromQPixmap(QPixmap::fromImage(image)));
+}
+
 Pixmap QImageProvider::scaled(const Pixmap& origin, const Size& s) const
 {
     QPixmap qtPixmap = Pixmap::toQPixmap(origin);
@@ -40,14 +58,4 @@ std::shared_ptr<IPaintProvider> QImageProvider::painterForImage(std::shared_ptr<
 void QImageProvider::saveAsPng(std::shared_ptr<Pixmap> px, QIODevice* device)
 {
     Pixmap::toQPixmap(*px).save(device, FILE_FORMAT);
-}
-
-std::shared_ptr<Pixmap> QImageProvider::createPixmap(int w, int h, int dpm, const Color& color)
-{
-    QImage image(w, h, QImage::Format_ARGB32_Premultiplied);
-    image.setDotsPerMeterX(dpm);
-    image.setDotsPerMeterY(dpm);
-    image.fill(color.toQColor());
-
-    return std::make_shared<Pixmap>(Pixmap::fromQPixmap(QPixmap::fromImage(image)));
 }
