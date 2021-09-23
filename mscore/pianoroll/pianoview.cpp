@@ -86,13 +86,12 @@ PianoItem::PianoItem(Note* n, PianoView* pianoView)
 QRect PianoItem::boundingRectTicks(NoteEvent* evt)
       {
       Chord* chord = _note->chord();
-      int ticks = chord->ticks().ticks();
-      int tieLen = _note->playTicks() - ticks;
+      int chordTicks = chord->ticks().ticks();
+      int ticks = _note->playTicks();
+      int len = evt ? ticks * evt->len() / 1000 : ticks;
       int pitch = _note->pitch() + (evt ? evt->pitch() : 0);
-      int len = (evt ? ticks * evt->len() / 1000 : ticks) + tieLen;
 
-      int x1 = _note->chord()->tick().ticks()
-            + (evt ? evt->ontime() * ticks / 1000 : 0);
+      int x1 = ticks + (evt ? evt->ontime() * chordTicks / 1000 : 0);
       qreal y1 = pitch;
 
       QRect rect;
