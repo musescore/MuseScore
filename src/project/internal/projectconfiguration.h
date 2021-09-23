@@ -68,6 +68,9 @@ public:
     PreferredScoreCreationMode preferredScoreCreationMode() const override;
     void setPreferredScoreCreationMode(PreferredScoreCreationMode mode) override;
 
+    MigrationOptions migrationOptions() const override;
+    void setMigrationOptions(const MigrationOptions& opt) override;
+
 private:
 
     io::paths parsePaths(const mu::Val& value) const;

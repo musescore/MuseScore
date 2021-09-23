@@ -54,6 +54,9 @@ Val::Val(QColor color)
 Val::Val(QVariant val)
     : m_val(std::move(val)), m_type(Type::Variant) {}
 
+Val::Val(QString val)
+    : m_val(std::move(val)), m_type(Type::String) {}
+
 void Val::setType(Type t)
 {
     m_type = t;

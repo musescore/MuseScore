@@ -26,15 +26,28 @@
 
 #include "modularity/ioc.h"
 #include "iinteractive.h"
+#include "iprojectconfiguration.h"
 
 namespace mu::project {
 class ProjectMigrator : public IProjectMigrator
 {
+    INJECT(project, IProjectConfiguration, configuration)
     INJECT(project, framework::IInteractive, interactive)
 public:
     ProjectMigrator() = default;
 
     Ret migrateEngravingProjectIfNeed(engraving::EngravingProjectPtr project) override;
+
+private:
+
+    Ret askAboutMigration(MigrationOptions& out, const engraving::EngravingProjectPtr project);
+
+    Ret migrateProject(engraving::EngravingProjectPtr project, const MigrationOptions& opt);
+
+    bool applyStyleDefaults(Ms::MasterScore* score);
+    bool applyLelandStyle(Ms::MasterScore* score);
+    bool applyEdwinStyle(Ms::MasterScore* score);
+    bool resetAllElementsPositions(Ms::MasterScore* score);
 };
 }
 
