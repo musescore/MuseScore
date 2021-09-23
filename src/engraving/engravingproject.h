@@ -61,6 +61,7 @@ public:
     QString path() const;
 
     std::string title() const;
+    int mscVersion() const;
 
     bool readOnly() const;
 

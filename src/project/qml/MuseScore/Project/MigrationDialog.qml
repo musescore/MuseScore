@@ -31,9 +31,9 @@ StyledDialogView {
     title: "" // will be set when open
 
     property string version: "?"
-    property bool applyLeland: false
-    property bool applyEdwin: false
-    property bool rememberChoice: false
+    property bool isApplyLeland: false
+    property bool isApplyEdwin: false
+    property bool isAskAgain: false
 
     contentWidth: 600
     contentHeight: 600
@@ -44,10 +44,10 @@ StyledDialogView {
         var ret = {
             errcode: 0,
             value: {
-                apply: isApply,
-                rememberChoice: dialog.rememberChoice,
-                applyLeland: dialog.applyLeland,
-                applyEdwin: dialog.applyEdwin
+                isApplyMigration: isApply,
+                isAskAgain: dialog.isAskAgain,
+                isApplyLeland: dialog.isApplyLeland,
+                isApplyEdwin: dialog.isApplyEdwin
             }
         }
 
@@ -90,8 +90,8 @@ StyledDialogView {
             anchors.left: parent.left
             anchors.topMargin: 24
             text: qsTrc("project", "Our new professional notation font, Leland")
-            checked: dialog.applyLeland
-            onClicked: dialog.applyLeland = !dialog.applyLeland
+            checked: dialog.isApplyLeland
+            onClicked: dialog.isApplyLeland = !dialog.isApplyLeland
         }
 
         CheckBox {
@@ -100,8 +100,8 @@ StyledDialogView {
             anchors.left: parent.left
             anchors.topMargin: 16
             text: qsTrc("project", "Our improved text font, Edwin")
-            checked: dialog.applyEdwin
-            onClicked: dialog.applyEdwin = !dialog.applyEdwin
+            checked: dialog.isApplyEdwin
+            onClicked: dialog.isApplyEdwin = !dialog.isApplyEdwin
         }
 
         StyledTextLabel {
@@ -153,8 +153,8 @@ StyledDialogView {
                 anchors.left: parent.left
                 anchors.topMargin: 16
                 text: qsTrc("project", "Remember my choice and don't ask again")
-                checked: dialog.rememberChoice
-                onClicked: dialog.rememberChoice = !dialog.rememberChoice
+                checked: !dialog.isAskAgain
+                onClicked: dialog.isAskAgain = !dialog.isAskAgain
             }
 
             FlatButton {

@@ -77,6 +77,11 @@ std::string EngravingProject::title() const
     return m_masterScore->title().toStdString();
 }
 
+int EngravingProject::mscVersion() const
+{
+    return m_masterScore->mscVersion();
+}
+
 bool EngravingProject::readOnly() const
 {
     return m_masterScore->readOnly();
