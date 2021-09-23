@@ -22,6 +22,7 @@
 #include "notationinteraction.h"
 
 #include "log.h"
+
 #include <memory>
 #include <QRectF>
 #include <QPainter>
@@ -58,6 +59,7 @@
 #include "libmscore/textedit.h"
 #include "libmscore/lyrics.h"
 #include "libmscore/factory.h"
+#include "libmscore/image.h"
 
 #include "masternotation.h"
 #include "scorecallbacks.h"
@@ -66,6 +68,7 @@
 
 using namespace mu::notation;
 using namespace mu::framework;
+using namespace mu::engraving;
 
 NotationInteraction::NotationInteraction(Notation* notation, INotationUndoStackPtr undoStack)
     : m_notation(notation), m_undoStack(undoStack), m_gripEditData(&m_scoreCallbacks),
@@ -817,10 +820,7 @@ mu::async::Notification NotationInteraction::dragChanged() const
 //! NOTE Copied from ScoreView::dragEnterEvent
 void NotationInteraction::startDrop(const QByteArray& edata)
 {
-    if (m_dropData.ed.dropElement) {
-        delete m_dropData.ed.dropElement;
-        m_dropData.ed.dropElement = nullptr;
-    }
+    resetDropElement();
 
     Ms::XmlReader e(edata);
     m_dropData.ed.dragOffset = QPointF();
@@ -838,6 +838,27 @@ void NotationInteraction::startDrop(const QByteArray& edata)
         m_dropData.ed.dropElement->read(e);
         m_dropData.ed.dropElement->layout();
     }
+}
+
+bool NotationInteraction::startDrop(const QUrl& url)
+{
+    if (url.scheme() != "file") {
+        return false;
+    }
+
+    auto image = static_cast<Ms::Image*>(Factory::createItem(Ms::ElementType::IMAGE, score()->dummy()));
+    if (!image->load(url.toLocalFile())) {
+        return false;
+    }
+
+    resetDropElement();
+
+    m_dropData.ed.dropElement = image;
+    m_dropData.ed.dragOffset = QPointF();
+    m_dropData.ed.dropElement->setParent(nullptr);
+    m_dropData.ed.dropElement->layout();
+
+    return true;
 }
 
 //! NOTE Copied from ScoreView::dragMoveEvent
@@ -999,8 +1020,7 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
                 score()->undoAddElement(m_dropData.ed.dropElement);
             } else {
                 qDebug("cannot drop here");
-                delete m_dropData.ed.dropElement;
-                m_dropData.ed.dropElement = nullptr;
+                resetDropElement();
             }
         } else {
             score()->addRefresh(el->canvasBoundingRect());
@@ -1066,8 +1086,7 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
         if (!el) {
             if (!dropCanvas(m_dropData.ed.dropElement)) {
                 qDebug("cannot drop %s(%p) to canvas", m_dropData.ed.dropElement->name(), m_dropData.ed.dropElement);
-                delete m_dropData.ed.dropElement;
-                m_dropData.ed.dropElement = nullptr;
+                resetDropElement();
             }
             break;
         }
@@ -1097,7 +1116,7 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
     }
     break;
     default:
-        delete m_dropData.ed.dropElement;
+        resetDropElement();
         break;
     }
     m_dropData.ed.dropElement = nullptr;
@@ -1609,8 +1628,7 @@ void NotationInteraction::endDrop()
 {
     if (m_dropData.ed.dropElement) {
         score()->setUpdateAll();
-        delete m_dropData.ed.dropElement;
-        m_dropData.ed.dropElement = nullptr;
+        resetDropElement();
         score()->update();
     }
     setDropTarget(nullptr);
@@ -1750,6 +1768,14 @@ void NotationInteraction::setDropTarget(EngravingItem* el)
     //! ---
 
     notifyAboutDragChanged();
+}
+
+void NotationInteraction::resetDropElement()
+{
+    if (m_dropData.ed.dropElement) {
+        delete m_dropData.ed.dropElement;
+        m_dropData.ed.dropElement = nullptr;
+    }
 }
 
 void NotationInteraction::setAnchorLines(const std::vector<LineF>& anchorList)
