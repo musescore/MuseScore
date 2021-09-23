@@ -33,6 +33,7 @@
 
 #include "notation/internal/masternotation.h"
 #include "projectaudiosettings.h"
+#include "iprojectmigrator.h"
 
 namespace mu::engraving {
 class MscReader;
@@ -45,6 +46,7 @@ class NotationProject : public INotationProject
     INJECT(project, system::IFileSystem, fileSystem)
     INJECT(project, INotationReadersRegister, readers)
     INJECT(project, INotationWritersRegister, writers)
+    INJECT(project, IProjectMigrator, migrator)
 
 public:
     NotationProject();

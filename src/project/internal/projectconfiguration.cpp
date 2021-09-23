@@ -21,6 +21,10 @@
  */
 #include "projectconfiguration.h"
 
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonValue>
+
 #include "settings.h"
 #include "async/async.h"
 #include "log.h"
@@ -36,6 +40,7 @@ static const Settings::Key RECENT_PROJECTS_PATHS(module_name, "project/recentLis
 static const Settings::Key USER_TEMPLATES_PATH(module_name, "application/paths/myTemplates");
 static const Settings::Key USER_PROJECTS_PATH(module_name, "application/paths/myScores");
 static const Settings::Key PREFERRED_SCORE_CREATION_MODE_KEY(module_name, "userscores/preferredScoreCreationMode");
+static const Settings::Key MIGRATION_OPTIONS(module_name, "project/migration");
 
 const QString ProjectConfiguration::DEFAULT_FILE_SUFFIX(".mscz");
 
@@ -199,4 +204,34 @@ ProjectConfiguration::PreferredScoreCreationMode ProjectConfiguration::preferred
 void ProjectConfiguration::setPreferredScoreCreationMode(PreferredScoreCreationMode mode)
 {
     settings()->setSharedValue(PREFERRED_SCORE_CREATION_MODE_KEY, Val(static_cast<int>(mode)));
+}
+
+MigrationOptions ProjectConfiguration::migrationOptions() const
+{
+    QString json = settings()->value(MIGRATION_OPTIONS).toQString();
+    QJsonObject obj = QJsonDocument::fromJson(json.toUtf8()).object();
+
+    MigrationOptions opt;
+    opt.appVersion = obj.value("appVersion").toInt(0);
+    opt.isApplyMigration = obj.value("isApplyMigration").toBool(false);
+    opt.isAskAgain = obj.value("isAskAgain").toBool(true);
+
+    opt.isApplyLeland = obj.value("isApplyLeland").toBool(false);
+    opt.isApplyEdwin = obj.value("isApplyEdwin").toBool(false);
+
+    return opt;
+}
+
+void ProjectConfiguration::setMigrationOptions(const MigrationOptions& opt)
+{
+    QJsonObject obj;
+    obj["appVersion"] = opt.appVersion;
+    obj["isApplyMigration"] = opt.isApplyMigration;
+    obj["isAskAgain"] = opt.isAskAgain;
+
+    obj["isApplyLeland"] = opt.isApplyLeland;
+    obj["isApplyEdwin"] = opt.isApplyEdwin;
+
+    QString json = QJsonDocument(obj).toJson(QJsonDocument::Compact);
+    settings()->setSharedValue(MIGRATION_OPTIONS, Val(json));
 }

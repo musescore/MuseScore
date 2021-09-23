@@ -126,6 +126,14 @@ mu::Ret NotationProject::doLoad(engraving::MscReader& reader, const io::path& st
         return make_ret(err);
     }
 
+    // Migration
+    if (migrator()) {
+        Ret ret = migrator()->migrateEngravingProjectIfNeed(project);
+        if (!ret) {
+            return ret;
+        }
+    }
+
     // Setup master score
     err = project->setupMasterScore();
     if (err != engraving::Err::NoError) {
