@@ -70,6 +70,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/imscmetareader.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/iplatformrecentfilescontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/iprojectmigrator.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationproject.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationproject.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/projectcreator.cpp
@@ -100,6 +101,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/itemplatesrepository.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/templatesrepository.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/templatesrepository.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/projectmigrator.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/projectmigrator.h
 
     ${PLATFORM_SRC}
 

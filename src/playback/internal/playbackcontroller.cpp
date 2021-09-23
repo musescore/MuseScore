@@ -151,7 +151,7 @@ Channel<uint32_t> PlaybackController::midiTickPlayed() const
 
 float PlaybackController::playbackPositionInSeconds() const
 {
-    return notationPlayback()->tickToSec(m_currentTick);
+    return notationPlayback() ? notationPlayback()->tickToSec(m_currentTick) : 0.0;
 }
 
 TrackSequenceId PlaybackController::currentTrackSequenceId() const

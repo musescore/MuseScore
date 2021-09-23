@@ -42,6 +42,18 @@ struct ProjectCreateOptions
     notation::ScoreCreateOptions scoreOptions;
 };
 
+struct MigrationOptions
+{
+    // common
+    int appVersion = 0;
+    bool isApplyMigration = false;
+    bool isAskAgain = true;
+
+    // for MU 4.0 (from 3.6)
+    bool isApplyLeland = false;
+    bool isApplyEdwin = false;
+};
+
 enum class SaveMode
 {
     Save,

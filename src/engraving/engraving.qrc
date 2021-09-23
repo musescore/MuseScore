@@ -5,5 +5,7 @@
         <file alias="engraving/styles/legacy-style-defaults-v1.mss">data/styles/legacy-style-defaults-v1.mss</file>
         <file alias="engraving/styles/legacy-style-defaults-v2.mss">data/styles/legacy-style-defaults-v2.mss</file>
         <file alias="engraving/styles/legacy-style-defaults-v3.mss">data/styles/legacy-style-defaults-v3.mss</file>
+        <file alias="engraving/styles/migration-306-style-Leland.mss">data/styles/migration-306-style-Leland.mss</file>
+        <file alias="engraving/styles/migration-306-style-Edwin.mss">data/styles/migration-306-style-Edwin.mss</file>
     </qresource>
 </RCC>

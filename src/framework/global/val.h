@@ -69,6 +69,7 @@ public:
 #ifndef NO_QT_SUPPORT
     explicit Val(QColor color);
     explicit Val(QVariant val);
+    explicit Val(QString val);
 
     QColor toQColor() const;
     QString toQString() const;

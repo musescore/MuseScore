@@ -85,6 +85,11 @@ UriQuery::UriQuery(const std::string& str)
     parceParams(str, m_params);
 }
 
+UriQuery::UriQuery(const Uri& uri)
+    : m_uri(uri)
+{
+}
+
 void UriQuery::parceParams(const std::string& uri, Params& out) const
 {
     auto paramsPos = uri.find('?');
