@@ -625,10 +625,18 @@ QRect PianorollView::boundingRect(Ms::Note* note, Ms::NoteEvent* evt)
 {
     Ms::Chord* chord = note->chord();
 
-    Ms::Fraction baseLen = chord->ticks();
-    Ms::Fraction tieLen = note->playTicksFraction() - baseLen;
+    //Ms::Tuplet* tuplet = chord->tuplet();
+    //Ms::Fraction tupletRatio(1, 1);
+    //if (tuplet) {
+    //    tupletRatio = tuplet->ratio();
+    //}
+
+//    Ms::Fraction baseLen = chord->ticks();
+    Ms::Fraction playLen = note->playTicksFraction();
+//    Ms::Fraction tieLen = note->playTicksFraction() - baseLen;
     int pitch = note->pitch() + (evt ? evt->pitch() : 0);
-    Ms::Fraction len = (evt ? baseLen * evt->len() / 1000 : baseLen) + tieLen;
+//    Ms::Fraction len = (evt ? baseLen * evt->len() / 1000 : baseLen) + tieLen;
+    Ms::Fraction len = evt ? playLen * evt->len() / 1000 : playLen;
 
     Ms::Fraction start = note->chord()->tick();
     if (evt) {
