@@ -258,6 +258,11 @@ QAccessibleInterface* AccessibilityController::parentIface(const IAccessible* it
     if (!it.isValid()) {
         return nullptr;
     }
+
+    if (it.item->accessibleRole() == IAccessible::Role::Application) {
+        return QAccessible::queryAccessibleInterface(mainWindow()->topWindow());
+    }
+
     return it.iface;
 }
 
