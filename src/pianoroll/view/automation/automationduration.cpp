@@ -29,8 +29,9 @@ double AutomationDuration::value(Staff* staff, NoteEventBlock& block)
     Note* note = block.note;
     NoteEvent* evt = &(note->playEvents()[0]);
 
-    Chord* chord = note->chord();
-    Fraction noteLen = chord->ticks();
+//    Chord* chord = note->chord();
+//    Fraction noteLen = chord->ticks();
+    Fraction noteLen = note->playTicksFraction();
     int evtLen = evt->len();
     Fraction offsetLen = noteLen - (noteLen * evtLen / 1000);
 
@@ -42,8 +43,9 @@ void AutomationDuration::setValue(Staff* staff, NoteEventBlock& block, double va
     Note* note = block.note;
     NoteEvent* evt = &(note->playEvents()[0]);
 
-    Chord* chord = note->chord();
-    Fraction noteLen = chord->ticks();
+    Fraction noteLen = note->playTicksFraction();
+//    Chord* chord = note->chord();
+//    Fraction noteLen = chord->ticks();
     Fraction cutLen(-value, 1000);
     Fraction playLen = noteLen - cutLen;
     Fraction evtLenFrac = playLen / noteLen;
