@@ -232,6 +232,6 @@ void ProjectConfiguration::setMigrationOptions(const MigrationOptions& opt)
     obj["isApplyLeland"] = opt.isApplyLeland;
     obj["isApplyEdwin"] = opt.isApplyEdwin;
 
-    QString json = QJsonDocument(obj).toJson();
+    QString json = QJsonDocument(obj).toJson(QJsonDocument::Compact);
     settings()->setSharedValue(MIGRATION_OPTIONS, Val(json));
 }

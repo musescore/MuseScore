@@ -44,7 +44,6 @@ private:
 
     Ret migrateProject(engraving::EngravingProjectPtr project, const MigrationOptions& opt);
 
-    bool applyStyleDefaults(Ms::MasterScore* score);
     bool applyLelandStyle(Ms::MasterScore* score);
     bool applyEdwinStyle(Ms::MasterScore* score);
     bool resetAllElementsPositions(Ms::MasterScore* score);
