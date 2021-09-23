@@ -64,6 +64,7 @@ public:
 
     UriQuery() = default;
     explicit UriQuery(const std::string& str);
+    explicit UriQuery(const Uri& uri);
 
     const Uri& uri() const;
     bool isValid() const;

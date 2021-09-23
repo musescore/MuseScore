@@ -60,6 +60,8 @@ public:
     void setPath(const QString& path);
     QString path() const;
 
+    std::string title() const;
+
     bool readOnly() const;
 
     Ms::MasterScore* masterScore() const;
