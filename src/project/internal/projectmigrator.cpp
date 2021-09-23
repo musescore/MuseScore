@@ -21,6 +21,8 @@
  */
 #include "projectmigrator.h"
 
+#include "engraving/libmscore/score.h"
+#include "engraving/libmscore/excerpt.h"
 #include "engraving/libmscore/undo.h"
 
 #include "log.h"
@@ -28,6 +30,8 @@
 using namespace mu::project;
 
 static const Uri MIGRATION_DIALOG_URI("musescore://project/migration");
+static const QString LELAND_STYLE_PATH(":/engraving/styles/migration-306-style-Leland.mss");
+static const QString EDWIN_STYLE_PATH(":/engraving/styles/migration-306-style-Edwin.mss");
 
 Ret ProjectMigrator::migrateEngravingProjectIfNeed(engraving::EngravingProjectPtr project)
 {
@@ -82,9 +86,8 @@ Ret ProjectMigrator::migrateProject(engraving::EngravingProjectPtr project, cons
 
     score->startCmd();
 
-    bool ok = applyStyleDefaults(score);
-
-    if (ok && opt.isApplyLeland) {
+    bool ok = true;
+    if (opt.isApplyLeland) {
         ok = applyLelandStyle(score);
     }
 
@@ -105,18 +108,30 @@ Ret ProjectMigrator::migrateProject(engraving::EngravingProjectPtr project, cons
     return make_ret(Ret::Code::Ok);
 }
 
-bool ProjectMigrator::applyStyleDefaults(Ms::MasterScore* score)
-{
-}
-
 bool ProjectMigrator::applyLelandStyle(Ms::MasterScore* score)
 {
+    for (Ms::Excerpt* excerpt : score->excerpts()) {
+        if (!excerpt->partScore()->loadStyle(LELAND_STYLE_PATH, /*ign*/ false, /*overlap*/ true)) {
+            return false;
+        }
+    }
+
+    return score->loadStyle(LELAND_STYLE_PATH, /*ign*/ false, /*overlap*/ true);
 }
 
 bool ProjectMigrator::applyEdwinStyle(Ms::MasterScore* score)
 {
+    for (Ms::Excerpt* excerpt : score->excerpts()) {
+        if (!excerpt->partScore()->loadStyle(EDWIN_STYLE_PATH, /*ign*/ false, /*overlap*/ true)) {
+            return false;
+        }
+    }
+
+    return score->loadStyle(EDWIN_STYLE_PATH, /*ign*/ false, /*overlap*/ true);
 }
 
 bool ProjectMigrator::resetAllElementsPositions(Ms::MasterScore* score)
 {
+    score->resetAllPositions();
+    return true;
 }

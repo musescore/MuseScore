@@ -33,7 +33,7 @@ StyledDialogView {
     property string version: "?"
     property bool isApplyLeland: false
     property bool isApplyEdwin: false
-    property bool isAskAgain: false
+    property bool isAskAgain: true
 
     contentWidth: 600
     contentHeight: 600
@@ -174,6 +174,7 @@ StyledDialogView {
                 anchors.bottom: parent.bottom
                 anchors.margins: 16
                 text: qsTrc("project", "Apply new style")
+                enabled: dialog.isApplyLeland || dialog.isApplyEdwin
                 onClicked: {
                     dialog.ret = dialog.makeRet(true)
                     dialog.hide()
