@@ -137,9 +137,9 @@ const StyleDef::StyleValue StyleDef::styleValues[int(Sid::STYLES)] = {
     { Sid::doubleBarWidth,          "doubleBarWidth",          Spatium(0.18) },
 
     { Sid::endBarWidth,             "endBarWidth",             Spatium(0.55) },
-    { Sid::doubleBarDistance,       "doubleBarDistance",       Spatium(0.55) },
-    { Sid::endBarDistance,          "endBarDistance",          Spatium(0.7) },
-    { Sid::repeatBarlineDotSeparation, "repeatBarlineDotSeparation", Spatium(0.7) },
+    { Sid::doubleBarDistance,       "doubleBarDistance",       Spatium(0.37) },
+    { Sid::endBarDistance,          "endBarDistance",          Spatium(0.37) },
+    { Sid::repeatBarlineDotSeparation, "repeatBarlineDotSeparation", Spatium(0.52) },
     { Sid::repeatBarTips,           "repeatBarTips",           QVariant(false) },
     { Sid::startBarlineSingle,      "startBarlineSingle",      QVariant(false) },
     { Sid::startBarlineMultiple,    "startBarlineMultiple",    QVariant(true) },
