@@ -95,7 +95,7 @@ jobs:
         T_ID=${{ secrets.TELEMETRY_TRACK_ID }}; if [ -z "$T_ID" ]; then T_ID="''"; fi
         YT_API_KEY=${{ secrets.YOUTUBE_API_KEY }}; if [ -z "$YT_API_KEY" ]; then YT_API_KEY="''"; fi
         sudo bash ./build/ci/linux/build.sh -n ${{ github.run_id }} --telemetry $T_ID --youtube_api_key $YT_API_KEY
-      name: Package
+    - name: Package
       if: env.DO_BUILD == 'true'
       run: |
         sudo bash ./build/ci/linux/package.sh
