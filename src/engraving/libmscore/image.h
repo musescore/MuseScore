@@ -47,31 +47,6 @@ enum class ImageType : char {
 class Image final : public BSymbol
 {
     INJECT(engraving, mu::draw::IImageProvider, imageProvider)
-    union {
-        mu::draw::Pixmap* rasterDoc;
-        mu::draw::SvgRenderer* svgDoc;
-    };
-    ImageType imageType;
-
-    mu::SizeF pixel2size(const mu::SizeF& s) const;
-    mu::SizeF size2pixel(const mu::SizeF& s) const;
-
-protected:
-    ImageStoreItem* _storeItem;
-    QString _storePath;             // the path of the img in the ImageStore
-    QString _linkPath;              // the path of an external linked img
-    bool _linkIsValid;              // whether _linkPath file exists or not
-    mutable mu::draw::Pixmap buffer;         ///< cached rendering
-    mu::SizeF _size;                   // in mm or spatium units
-    bool _lockAspectRatio;
-    bool _autoScale;                ///< fill parent frame
-    bool _sizeIsSpatium;
-    mutable bool _dirty;
-
-    bool isEditable() const override { return true; }
-    void startEditDrag(EditData&) override;
-    void editDrag(EditData& ed) override;
-    QVector<mu::LineF> gripAnchorLines(Grip) const override { return QVector<mu::LineF>(); }
 
 public:
     Image(EngravingItem* parent = 0);
@@ -118,6 +93,32 @@ public:
     Grip initialEditModeGrip() const override { return Grip(1); }
     Grip defaultGrip() const override { return Grip(1); }
     std::vector<mu::PointF> gripsPositions(const EditData&) const override;
+
+protected:
+    ImageStoreItem* _storeItem;
+    QString _storePath;             // the path of the img in the ImageStore
+    QString _linkPath;              // the path of an external linked img
+    bool _linkIsValid;              // whether _linkPath file exists or not
+    mutable mu::draw::Pixmap buffer;         ///< cached rendering
+    mu::SizeF _size;                   // in mm or spatium units
+    bool _lockAspectRatio;
+    bool _autoScale;                ///< fill parent frame
+    bool _sizeIsSpatium;
+    mutable bool _dirty;
+
+    bool isEditable() const override { return true; }
+    void startEditDrag(EditData&) override;
+    void editDrag(EditData& ed) override;
+    QVector<mu::LineF> gripAnchorLines(Grip) const override { return QVector<mu::LineF>(); }
+
+private:
+    mu::SizeF pixel2size(const mu::SizeF& s) const;
+    mu::SizeF size2pixel(const mu::SizeF& s) const;
+
+    std::shared_ptr<mu::draw::Pixmap> rasterDoc;
+    mu::draw::SvgRenderer* svgDoc = nullptr;
+
+    ImageType imageType = ImageType::NONE;
 };
 }     // namespace Ms
 #endif

@@ -47,12 +47,6 @@ public:
 
     bool isNull() const { return m_data.isNull(); }
 
-    void setData(const QByteArray& data)
-    {
-        m_data = data;
-        m_key = qHash(data);
-    }
-
     uint key() const { return m_key; }
 
 #ifndef NO_QT_SUPPORT
@@ -80,6 +74,12 @@ public:
 #endif
 
 private:
+    void setData(const QByteArray& data)
+    {
+        m_data = data;
+        m_key = qHash(data);
+    }
+
     Size m_size;
     QByteArray m_data; //! usually png
     uint m_key;
