@@ -5123,8 +5123,10 @@ void Score::undoAddElement(EngravingItem* element)
         || et == ElementType::BEND
         || (et == ElementType::CHORD && toChord(element)->isGrace())
         ) {
-        EngravingItem* parent = element->parentItem();
-        const LinkedObjects* links = parent->links();
+
+        const EngravingItem* parent = element->parentItem();
+        const LinkedObjects* links = parent ? parent->links() : nullptr;
+
         // don't link part name
         if (et == ElementType::TEXT) {
             Text* t = toText(element);
