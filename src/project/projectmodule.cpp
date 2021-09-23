@@ -35,6 +35,7 @@
 #include "internal/recentprojectsprovider.h"
 #include "internal/mscmetareader.h"
 #include "internal/templatesrepository.h"
+#include "internal/projectmigrator.h"
 
 #include "view/exportdialogmodel.h"
 #include "view/recentprojectsmodel.h"
@@ -83,6 +84,7 @@ void ProjectModule::registerExports()
     ioc()->registerExport<IRecentProjectsProvider>(moduleName(), s_recentProjectsProvider);
     ioc()->registerExport<IMscMetaReader>(moduleName(), new MscMetaReader());
     ioc()->registerExport<ITemplatesRepository>(moduleName(), new TemplatesRepository());
+    ioc()->registerExport<IProjectMigrator>(moduleName(), new ProjectMigrator());
 
 #ifdef Q_OS_MAC
     ioc()->registerExport<IPlatformRecentFilesController>(moduleName(), new MacOSRecentFilesController());
@@ -104,6 +106,7 @@ void ProjectModule::resolveImports()
     if (ir) {
         ir->registerQmlUri(Uri("musescore://project/newscore"), "MuseScore/Project/NewScoreDialog.qml");
         ir->registerQmlUri(Uri("musescore://project/export"), "MuseScore/Project/ExportDialog.qml");
+        ir->registerQmlUri(Uri("musescore://project/migration"), "MuseScore/Project/MigrationDialog.qml");
     }
 }
 

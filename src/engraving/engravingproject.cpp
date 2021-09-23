@@ -72,6 +72,11 @@ QString EngravingProject::path() const
     return m_path;
 }
 
+std::string EngravingProject::title() const
+{
+    return m_masterScore->title().toStdString();
+}
+
 bool EngravingProject::readOnly() const
 {
     return m_masterScore->readOnly();
