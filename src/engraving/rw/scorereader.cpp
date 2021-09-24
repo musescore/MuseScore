@@ -153,7 +153,12 @@ Err ScoreReader::read(MasterScore* score, XmlReader& e, ReadContext& ctx, compat
                 }
             }
 
-            if (styleHook) {
+            //! NOTE We need to achieve that the default style corresponds to the version in which the score is created.
+            //! The values that the user changed will be written on over (only they are stored in the `mscz` file)
+            //! For version 4.0 (400), this does not need to be done,
+            //! because starting from version 4.0 the entire style is stored in a file,
+            //! respectively, the entire style will be loaded, which was when the score was created.
+            if (styleHook && score->mscVersion() < 400) {
                 styleHook->setupDefaultStyle();
             }
 

@@ -107,7 +107,7 @@ void EngravingModule::onInit(const framework::IApplication::RunMode&)
     //! NOTE And some initialization in the `Notation::init()`
 }
 
-void EngravingModule::onDeinit()
+void EngravingModule::onDestroy()
 {
     delete Ms::gpaletteScore;
     Ms::gpaletteScore = nullptr;
