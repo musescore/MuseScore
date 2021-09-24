@@ -126,7 +126,7 @@ StyledPopupView {
                 id: prevButton
                 width: height
                 icon: IconCode.ARROW_LEFT
-                normalStateColor: "transparent"
+                transparent: true
                 enabled: prevIndex && prevIndex.valid
 
                 navigation.panel: moreElementsPopup.navigationPanel
@@ -161,7 +161,7 @@ StyledPopupView {
 
             FlatButton {
                 icon: IconCode.ARROW_RIGHT
-                normalStateColor: "transparent"
+                transparent: true
 
                 Layout.alignment: Qt.AlignRight
 
@@ -254,7 +254,7 @@ StyledPopupView {
 
                         icon: IconCode.DELETE_TANK
                         enabled: customPaletteSelectionModel.hasSelection
-                        normalStateColor: "transparent"
+                        transparent: true
 
                         toolTipTitle: text
 

@@ -28,6 +28,7 @@ FlatButton {
 
     property var menuModel
     property alias isMenuOpened: menuLoader.isMenuOpened
+    property alias menuAnchorItem: menuLoader.menuAnchorItem
 
     property int menuOffsetX: 0
     property int menuOffsetY: 0
@@ -43,7 +44,8 @@ FlatButton {
     enabled: visible
 
     icon: IconCode.MENU_THREE_DOTS
-    normalStateColor: isMenuOpened ? ui.theme.accentColor : "transparent"
+    transparent: !isMenuOpened
+    accentButton: isMenuOpened
 
     StyledMenuLoader {
         id: menuLoader

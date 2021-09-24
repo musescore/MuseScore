@@ -206,9 +206,8 @@ FocusScope {
             icon: IconCode.CLOSE_X_ROUNDED
             visible: root.clearTextButtonVisible
 
-            normalStateColor: background.color
-            hoveredStateColor: ui.theme.accentColor
-            pressedStateColor: ui.theme.accentColor
+            transparent: true
+            accentButton: true
 
             navigation.panel: navCtrl.panel
             navigation.order: navCtrl.order + 1

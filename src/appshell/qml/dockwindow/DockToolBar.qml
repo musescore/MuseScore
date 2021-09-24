@@ -62,7 +62,7 @@ Dock.DockToolBar {
 
                 mouseArea.objectName: root.objectName + "_toolBarMouseAreaHorizontal"
 
-                normalStateColor: "transparent"
+                transparent: true
                 icon: IconCode.TOOLBAR_GRIP
 
                 visible: root.movable
@@ -93,7 +93,7 @@ Dock.DockToolBar {
 
                 mouseArea.objectName: root.objectName + "_toolBarMouseAreaVertical"
 
-                normalStateColor: "transparent"
+                transparent: true
                 icon: IconCode.TOOLBAR_GRIP
                 rotation: 90
 

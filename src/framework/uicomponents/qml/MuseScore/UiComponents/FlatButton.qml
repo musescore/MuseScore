@@ -36,14 +36,20 @@ FocusScope {
     property font iconFont: ui.theme.iconsFont
     property font textFont: ui.theme.bodyFont
 
-    property color normalStateColor: prv.defaultColor
-    property color hoveredStateColor: prv.defaultColor
-    property color pressedStateColor: prv.defaultColor
+    property bool transparent: false
     property bool accentButton: false
 
+    property color normalColor:
+        transparent ? "transparent" : accentButton ? accentColor : ui.theme.buttonColor
+    property color hoverHitColor: accentButton ? accentColor : ui.theme.buttonColor
+    property color accentColor: ui.theme.accentColor
+
     property bool narrowMargins: false
+    property real margins: narrowMargins ? 12 : 32
+    property real minWidth: narrowMargins ? 24 : 132
 
     property int orientation: Qt.Vertical
+    readonly property bool isVertical: root.orientation === Qt.Vertical
 
     property alias navigation: navCtrl
     property alias accessible: navCtrl.accessible
@@ -61,22 +67,10 @@ FocusScope {
     objectName: root.text
 
     height: contentLoader.item.height + 14
-    width: {
-        if (narrowMargins) {
-            return (Boolean(text) ? Math.max(contentLoader.item.width + 12, prv.isVertical ? 24 : 0) : contentLoader.item.width + 16)
-        } else {
-            return (Boolean(text) ? Math.max(contentLoader.item.width + 32, prv.isVertical ? 132 : 0) : contentLoader.item.width + 16)
-        }
-    }
+    width: Boolean(text) ? Math.max(contentLoader.item.width + margins, root.isVertical ? minWidth : 0)
+                         : contentLoader.item.width + 16
 
     opacity: root.enabled ? 1.0 : ui.theme.itemOpacityDisabled
-
-    QtObject {
-        id: prv
-
-        property color defaultColor: root.accentButton ? ui.theme.accentColor : ui.theme.buttonColor
-        property bool isVertical: root.orientation === Qt.Vertical
-    }
 
     NavigationControl {
         id: navCtrl
@@ -107,7 +101,7 @@ FocusScope {
         Rectangle {
             id: background
 
-            color: root.normalStateColor
+            color: root.normalColor
             opacity: ui.theme.buttonOpacityNormal
 
             radius: 3
@@ -123,7 +117,7 @@ FocusScope {
 
                     PropertyChanges {
                         target: background
-                        color: root.pressedStateColor
+                        color: root.hoverHitColor
                         opacity: ui.theme.buttonOpacityHit
                     }
                 },
@@ -134,7 +128,7 @@ FocusScope {
 
                     PropertyChanges {
                         target: background
-                        color: root.hoveredStateColor
+                        color: root.hoverHitColor
                         opacity: ui.theme.buttonOpacityHover
                     }
                 }
@@ -159,8 +153,8 @@ FocusScope {
 
             property int spacing: Boolean(!buttonIcon.isEmpty) && Boolean(textLabel.text) ? 4 : 0
 
-            height: !prv.isVertical ? Math.max(buttonIcon.height, textLabel.height) : buttonIcon.height + textLabel.height + spacing
-            width: prv.isVertical ? Math.max(textLabel.width, buttonIcon.width) : buttonIcon.width + textLabel.width + spacing
+            height: !root.isVertical ? Math.max(buttonIcon.height, textLabel.height) : buttonIcon.height + textLabel.height + spacing
+            width: root.isVertical ? Math.max(textLabel.width, buttonIcon.width) : buttonIcon.width + textLabel.width + spacing
 
             StyledIconLabel {
                 id: buttonIcon
@@ -181,7 +175,7 @@ FocusScope {
 
             states: [
                 State {
-                    when: !prv.isVertical
+                    when: !root.isVertical
                     AnchorChanges {
                         target: buttonIcon
                         anchors.left: parent.left
@@ -198,7 +192,7 @@ FocusScope {
                     }
                 },
                 State {
-                    when: prv.isVertical
+                    when: root.isVertical
                     AnchorChanges {
                         target: buttonIcon
                         anchors.top: parent.top

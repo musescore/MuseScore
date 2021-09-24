@@ -29,7 +29,7 @@ import MuseScore.InstrumentsScene 1.0
 Item {
     id: root
 
-    property var attachedControl: undefined
+    property var treeView: undefined
     property var index: styleData.index
     property string filterKey
     property int type: InstrumentsTreeItemType.UNDEFINED
@@ -38,7 +38,7 @@ Item {
     property alias isExpandable: expandButton.visible
     property alias isEditable: settingsButton.visible
 
-    property int keynavRow: 0
+    property int navigationRow: 0
     property NavigationPanel navigationPanel: null
 
     property int sideMargin: 0
@@ -59,7 +59,7 @@ Item {
 
         onDraggedChanged: {
             if (dragged && styleData.isExpanded) {
-                root.attachedControl.collapse(styleData.index)
+                root.treeView.collapse(styleData.index)
             }
         }
 
@@ -104,10 +104,10 @@ Item {
     Drag.hotSpot.y: height / 2
 
     NavigationControl {
-        id: keynavItem
+        id: navCtrl
         name: "ItemInstrumentsTree"
         panel: root.navigationPanel
-        row: root.keynavRow
+        row: root.navigationRow
         column: 0
         enabled: root.visible
 
@@ -122,17 +122,17 @@ Item {
         id: background
 
         anchors.fill: parent
-        anchors.margins: keynavItem.active ? ui.theme.navCtrlBorderWidth : 0
+        anchors.margins: navCtrl.active ? ui.theme.navCtrlBorderWidth : 0
 
         color: ui.theme.backgroundPrimaryColor
         opacity: 1
 
-        NavigationFocusBorder { navigationCtrl: keynavItem }
+        NavigationFocusBorder { navigationCtrl: navCtrl }
 
         states: [
             State {
                 name: "HOVERED"
-                when: mouseArea.containsMouse && !mouseArea.containsPress && !root.isSelected && !prv.dragged
+                when: mouseArea.containsMouse && !mouseArea.pressed && !root.isSelected && !prv.dragged
 
                 PropertyChanges {
                     target: background
@@ -143,7 +143,7 @@ Item {
 
             State {
                 name: "PRESSED"
-                when: mouseArea.containsPress && !root.isSelected && !prv.dragged
+                when: mouseArea.pressed && !root.isSelected && !prv.dragged
 
                 PropertyChanges {
                     target: background
@@ -154,12 +154,34 @@ Item {
 
             State {
                 name: "SELECTED"
-                when: root.isSelected
+                when: root.isSelected && !mouseArea.containsMouse && !mouseArea.pressed
 
                 PropertyChanges {
                     target: background
                     color: ui.theme.accentColor
-                    opacity: 0.5
+                    opacity: ui.theme.accentOpacityNormal
+                }
+            },
+
+            State {
+                name: "SELECTED_HOVERED"
+                when: root.isSelected && mouseArea.containsMouse && !mouseArea.pressed
+
+                PropertyChanges {
+                    target: background
+                    color: ui.theme.accentColor
+                    opacity: ui.theme.accentOpacityHover
+                }
+            },
+
+            State {
+                name: "SELECTED_PRESSED"
+                when: root.isSelected && mouseArea.pressed
+
+                PropertyChanges {
+                    target: background
+                    color: ui.theme.accentColor
+                    opacity: ui.theme.accentOpacityHit
                 }
             },
 
@@ -211,11 +233,11 @@ Item {
         drag.target: root
         drag.axis: Drag.YAxis
 
-        onClicked: {
+        onClicked: function(mouse) {
             root.clicked(mouse)
         }
 
-        onDoubleClicked: {
+        onDoubleClicked: function(mouse) {
             root.doubleClicked(mouse)
         }
     }
@@ -271,7 +293,7 @@ Item {
 
             objectName: "VisibleBtnInstrument"
             navigation.panel: root.navigationPanel
-            navigation.row: root.keynavRow
+            navigation.row: root.navigationRow
             navigation.column: 1
 
             isVisible: model && model.itemRole.isVisible
@@ -281,36 +303,33 @@ Item {
                     return
                 }
 
-                model.itemRole.isVisible = !model.itemRole.isVisible
+                model.itemRole.isVisible = !isVisible
             }
         }
 
         Item {
             Layout.fillWidth: true
-            Layout.leftMargin: 10 * styleData.depth
+            Layout.leftMargin: 12 * styleData.depth
             height: childrenRect.height
 
             FlatButton {
                 id: expandButton
-
                 anchors.left: parent.left
 
                 objectName: "ExpandBtnInstrument"
                 enabled: expandButton.visible
                 navigation.panel: root.navigationPanel
-                navigation.row: root.keynavRow
+                navigation.row: root.navigationRow
                 navigation.column: 2
 
-                normalStateColor: "transparent"
-                pressedStateColor: ui.theme.accentColor
-
+                transparent: true
                 icon: styleData.isExpanded ? IconCode.SMALL_ARROW_DOWN : IconCode.SMALL_ARROW_RIGHT
 
                 onClicked: {
                     if (!styleData.isExpanded) {
-                        root.attachedControl.expand(styleData.index)
+                        root.treeView.expand(styleData.index)
                     } else {
-                        root.attachedControl.collapse(styleData.index)
+                        root.treeView.collapse(styleData.index)
                     }
                 }
             }
@@ -345,10 +364,8 @@ Item {
             objectName: "SettingsBtnInstrument"
             enabled: root.visible
             navigation.panel: root.navigationPanel
-            navigation.row: root.keynavRow
+            navigation.row: root.navigationRow
             navigation.column: 3
-
-            pressedStateColor: ui.theme.accentColor
 
             icon: IconCode.SETTINGS_COG
 
@@ -404,7 +421,7 @@ Item {
 
             ParentChange {
                 target: root
-                parent: root.attachedControl.contentItem
+                parent: root.treeView.contentItem
             }
 
             PropertyChanges {
@@ -415,7 +432,7 @@ Item {
             PropertyChanges {
                 target: root
                 height: implicitHeight
-                width: attachedControl.contentItem.width
+                width: treeView.contentItem.width
             }
 
             AnchorChanges {

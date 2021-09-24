@@ -28,15 +28,11 @@ FocusScope {
     default property alias content: contentItemContaner.data
     property alias contentItem: contentItemContaner
     property alias background: focusRectItem
-
-    property int navCtrlBorderOverride: 0
-    property int itemBorderWidth: 0
-    property color itemBorderColor: ui.theme.focusColor
+    property alias focusBorder: focusBorderItem
 
     property alias mouseArea: mouseAreaItem
-    property alias pressAndHoldInterval: mouseAreaItem.pressAndHoldInterval
 
-    property alias navigation: keynavItem
+    property alias navigation: navCtrl
 
     signal navigationActived()
     signal navigationTriggered()
@@ -48,12 +44,12 @@ FocusScope {
     }
 
     NavigationControl {
-        id: keynavItem
+        id: navCtrl
         name: root.objectName
         enabled: root.enabled && root.visible
 
         onActiveChanged: {
-            if (keynavItem.active) {
+            if (navCtrl.active) {
                 root.ensureActiveFocus()
                 root.navigationActived()
             }
@@ -67,12 +63,14 @@ FocusScope {
     Rectangle {
         id: focusRectItem
         anchors.fill: parent
-        anchors.margins: keynavItem.active ? root.navCtrlBorderOverride : 0
 
-        NavigationFocusBorder { navigationCtrl: keynavItem }
+        NavigationFocusBorder {
+            id: focusBorderItem
+            navigationCtrl: navCtrl
+        }
 
-        border.color: root.itemBorderColor
-        border.width: root.itemBorderWidth
+        border.color: ui.theme.strokeColor
+        border.width: ui.theme.borderWidth
     }
 
     MouseArea {
@@ -88,6 +86,5 @@ FocusScope {
         id: contentItemContaner
         objectName: "FocusableControlContent"
         anchors.fill: focusRectItem
-        anchors.margins: 2 //! NOTE margin needed to show focus border
     }
 }

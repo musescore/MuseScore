@@ -77,15 +77,12 @@ TabView {
             implicitHeight: tabBarHeight
 
             Rectangle {
-
                 anchors.fill: parent
-                color:  ui.theme.backgroundPrimaryColor
+                color: ui.theme.backgroundPrimaryColor
                 radius: 4
                 anchors.margins: 1
 
-                NavigationFocusBorder {
-                    visible: Boolean(tab.tabItem.navigation) && Boolean(tab.tabItem.navigation.active)
-                }
+                NavigationFocusBorder { navigationCtrl: tab.tabItem.navigation ?? null }
 
                 border.width: ui.theme.borderWidth
                 border.color: ui.theme.strokeColor

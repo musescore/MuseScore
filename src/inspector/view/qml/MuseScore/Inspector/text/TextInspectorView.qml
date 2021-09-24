@@ -172,7 +172,7 @@ InspectorSectionView {
                         navigation.row: root.navigationRow(model.index + 10)
 
                         width: 30
-                        normalStateColor: ui.theme.backgroundPrimaryColor
+                        transparent: true
 
                         iconCode: modelData["iconRole"]
                         checked: root.model && !root.model.horizontalAlignment.isUndefined ? root.model.horizontalAlignment.value === modelData["typeRole"]
@@ -205,7 +205,7 @@ InspectorSectionView {
                         navigation.row: root.navigationRow(model.index + 13)
 
                         width: 30
-                        normalStateColor: ui.theme.backgroundPrimaryColor
+                        transparent: true
 
                         iconCode: modelData["iconRole"]
                         checked: root.model && !root.model.verticalAlignment.isUndefined ? root.model.verticalAlignment.value === modelData["typeRole"]

@@ -394,20 +394,16 @@ Rectangle {
 
         Column {
             spacing: 8
-
             width: 200
 
             FlatButton {
                 icon: IconCode.SAVE
-
                 text: "Text with icon"
             }
 
             FlatButton {
                 icon: IconCode.SAVE
-
                 text: "Text with icon"
-
                 orientation: Qt.Horizontal
             }
 
@@ -421,20 +417,15 @@ Rectangle {
 
             FlatButton {
                 icon: IconCode.SAVE
-
-                accentButton: true
-
                 text: "Accent button"
+                accentButton: true
             }
 
             FlatButton {
                 icon: IconCode.SAVE
-
-                normalStateColor: "transparent"
-
-                text: "Transparent button"
+                text: "Flat button"
+                transparent: true
             }
-
         }
     }
 

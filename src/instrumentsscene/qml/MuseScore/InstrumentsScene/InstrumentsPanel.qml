@@ -163,6 +163,7 @@ Item {
                 selection: instrumentsTreeModel ? instrumentsTreeModel.selectionModel : null
 
                 alternatingRowColors: false
+                backgroundVisible: false
                 headerVisible: false
                 frameVisible: false
 
@@ -185,14 +186,11 @@ Item {
                     scrollBarBackground: Item {}
                     branchDelegate: Item {}
 
-                    backgroundColor: background.color
+                    backgroundColor: "transparent"
 
-                    rowDelegate: Rectangle {
-                        id: rowTreeDelegate
-
-                        height: Boolean(model) && instrumentsTreeView.isControl(model.itemRole.type) ? 64 : 38
+                    rowDelegate: Item {
+                        height: 38
                         width: parent.width
-                        color: ui.theme.strokeColor
                     }
                 }
 
@@ -232,10 +230,10 @@ Item {
                             id: treeItemDelegateComponent
 
                             InstrumentsTreeItemDelegate {
-                                attachedControl: instrumentsTreeView
+                                treeView: instrumentsTreeView
 
-                                keynavRow: model ? model.index : 0
                                 navigationPanel: navigationTreePanel
+                                navigationRow: model ? model.index : 0
 
                                 type: treeItemDelegateLoader.delegateType
                                 isSelected: treeItemDelegateLoader.isSelected
@@ -260,10 +258,6 @@ Item {
                                     } else {
                                         instrumentsTreeView.collapse(styleData.index)
                                     }
-                                }
-
-                                onFocusActived: {
-                                    instrumentsTreeModel.selectRow(styleData.index)
                                 }
 
                                 onVisibleChanged: {
@@ -294,10 +288,12 @@ Item {
                             id: controlItemDelegateComponent
 
                             InstrumentsTreeItemControl {
-                                isHighlighted: treeItemDelegateLoader.isSelected
+                                isSelected: treeItemDelegateLoader.isSelected
 
-                                keynavRow: model ? model.index : 0
-                                navigationPanel: navigationTreePanel
+                                navigation.panel: navigationTreePanel
+                                navigation.row: model ? model.index : 0
+
+                                sideMargin: contentColumn.sideMargin
 
                                 onClicked: {
                                     styleData.value.appendNewItem()

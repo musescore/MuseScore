@@ -50,8 +50,7 @@ Rectangle {
         }
 
         delegate: ListItemBlank {
-            hoveredStateColor: "transparent"
-            pressedStateColor: "transparent"
+            hoverHitColor: "transparent"
 
             CheckBox {
                 anchors.margins: 4

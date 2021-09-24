@@ -195,9 +195,8 @@ GridView {
 
             text: qsTrc("palette", "More")
 
-            normalStateColor: "transparent"
-            hoveredStateColor: ui.theme.accentColor
-            pressedStateColor: ui.theme.accentColor
+            transparent: true
+            accentButton: true
 
             onClicked: paletteView.moreButtonClicked(moreButton)
         }

@@ -86,7 +86,7 @@ Column {
                 navigation.row: 2 + model.index
 
                 width: 30
-                normalStateColor: "transparent"
+                transparent: true
 
                 iconCode: modelData["iconRole"]
                 checked: root.model && !root.model.textScriptAlignment.isUndefined ? root.model.textScriptAlignment.value === modelData["typeRole"]
