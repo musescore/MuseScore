@@ -205,8 +205,15 @@ bool Rest::acceptDrop(EditData& data) const
         ) {
         return true;
     }
+
     // prevent 'hanging' slurs, avoid crash on tie
-    return type != ElementType::SLUR && type != ElementType::TIE && e->isSpanner();
+    static const QSet<ElementType> ignoredTypes {
+        ElementType::SLUR,
+        ElementType::TIE,
+        ElementType::GLISSANDO
+    };
+
+    return e->isSpanner() && !ignoredTypes.contains(type);
 }
 
 //---------------------------------------------------------

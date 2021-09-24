@@ -41,15 +41,27 @@ ExpandableBlank {
 
         spacing: 12
 
-        SpinBoxPropertyView {
-            anchors.left: parent.left
-            anchors.right: parent.horizontalCenter
-            anchors.rightMargin: 2
+        DropdownPropertyView {
+            titleText: qsTrc("inspector", "Applies to")
+            propertyItem: root.model ? root.model.scopeType : null
 
-            navigation.name: "Velocity change"
+            navigation.name: "Dynamic Applies to"
             navigation.panel: root.navigation.panel
             navigation.column: root.navigation.column
             navigation.row: root.navigation.row + 1
+
+            model: [
+                { text: qsTrc("inspector", "Staff"), value: Dynamic.SCOPE_STAFF },
+                { text: qsTrc("inspector", "Single instrument"), value: Dynamic.SCOPE_SINGLE_INSTRUMENT },
+                { text: qsTrc("inspector", "All instruments"), value: Dynamic.SCOPE_ALL_INSTRUMENTS }
+            ]
+        }
+
+        SpinBoxPropertyView {
+            navigation.name: "Velocity change"
+            navigation.panel: root.navigation.panel
+            navigation.column: root.navigation.column
+            navigation.row: root.navigation.row + 2
 
             titleText: qsTrc("inspector", "Velocity change")
             propertyItem: root.model ? root.model.velocityChange : null
@@ -60,11 +72,26 @@ ExpandableBlank {
             minValue: 0
         }
 
+        CheckBox {
+            navigation.name: "Use single note dynamics"
+            navigation.panel: root.navigation.panel
+            navigation.column: root.navigation.column
+            navigation.row: root.navigation.row + 3
+
+            text: qsTrc("inspector", "Use single note dynamics")
+
+            checked: root.model && root.model.useSingleNoteDynamics.value
+
+            onClicked: {
+                root.model.useSingleNoteDynamics.value = !checked
+            }
+        }
+
         DropdownPropertyView {
             navigation.name: "Changes in dynamics range"
             navigation.panel: root.navigation.panel
             navigation.column: root.navigation.column
-            navigation.row: root.navigation.row + 3
+            navigation.row: root.navigation.row + 4
 
             titleText: qsTrc("inspector", "Changes in dynamics range")
             propertyItem: root.model ? root.model.velocityChangeType : null

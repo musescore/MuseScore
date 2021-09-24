@@ -37,13 +37,16 @@ namespace mu::draw {
 class IImageProvider : MODULE_EXPORT_INTERFACE
 {
     INTERFACE_ID(IImageProvider)
+
 public:
     virtual ~IImageProvider() = default;
+
+    virtual std::shared_ptr<Pixmap> createPixmap(const QByteArray& data) const = 0;
+    virtual std::shared_ptr<Pixmap> createPixmap(int w, int h, int dpm, const Color& color) const = 0;
 
     virtual Pixmap scaled(const Pixmap& origin, const Size& s) const = 0;
 
     virtual IPaintProviderPtr painterForImage(std::shared_ptr<Pixmap> pixmap) = 0;
-    virtual std::shared_ptr<Pixmap> createPixmap(int w, int h, int dpm, const Color& color) = 0;
 
     virtual void saveAsPng(std::shared_ptr<Pixmap> px, QIODevice* device) = 0;
     virtual std::shared_ptr<Pixmap> pixmapFromQVariant(const QVariant& val) = 0;
