@@ -157,5 +157,7 @@ void PaletteModule::onDeinit()
     s_paletteWorkspaceSetup.reset();
     s_configuration.reset();
     s_paletteUiActions.reset();
+
+    ioc()->unregisterExportIfRegistered<IPaletteProvider>(moduleName(), s_paletteProvider);
     s_paletteProvider.reset();
 }

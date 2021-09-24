@@ -34,7 +34,27 @@
 using namespace mu::engraving::compat;
 using namespace Ms;
 
-static int styleDefaultByMscVersion(const int mscVer)
+static int readStyleDefaultsVersion(MasterScore* score, const QByteArray& scoreData, const QString& completeBaseName)
+{
+    XmlReader e(scoreData);
+    e.setDocName(completeBaseName);
+
+    while (!e.atEnd()) {
+        e.readNext();
+        if (e.name() == "defaultsVersion") {
+            return e.readInt();
+        }
+    }
+
+    return ReadStyleHook::styleDefaultByMscVersion(score->mscVersion());
+}
+
+ReadStyleHook::ReadStyleHook(Ms::Score* score, const QByteArray& scoreData, const QString& completeBaseName)
+    : m_score(score), m_scoreData(scoreData), m_completeBaseName(completeBaseName)
+{
+}
+
+int ReadStyleHook::styleDefaultByMscVersion(const int mscVer)
 {
     constexpr int LEGACY_MSC_VERSION_V3 = 301;
     constexpr int LEGACY_MSC_VERSION_V2 = 206;
@@ -55,30 +75,6 @@ static int styleDefaultByMscVersion(const int mscVer)
     return MSCVERSION;
 }
 
-static int readStyleDefaultsVersion(MasterScore* score, const QByteArray& scoreData, const QString& completeBaseName)
-{
-    if (score->styleB(Sid::usePre_3_6_defaults)) {
-        return score->style().defaultStyleVersion();
-    }
-
-    XmlReader e(scoreData);
-    e.setDocName(completeBaseName);
-
-    while (!e.atEnd()) {
-        e.readNext();
-        if (e.name() == "defaultsVersion") {
-            return e.readInt();
-        }
-    }
-
-    return styleDefaultByMscVersion(score->mscVersion());
-}
-
-ReadStyleHook::ReadStyleHook(Ms::Score* score, const QByteArray& scoreData, const QString& completeBaseName)
-    : m_score(score), m_scoreData(scoreData), m_completeBaseName(completeBaseName)
-{
-}
-
 void ReadStyleHook::setupDefaultStyle()
 {
     IF_ASSERT_FAILED(m_score) {
@@ -90,7 +86,7 @@ void ReadStyleHook::setupDefaultStyle()
     } else {
         int defaultsVersion = -1;
         if (m_score->isMaster()) {
-            defaultsVersion =  readStyleDefaultsVersion(m_score->masterScore(), m_scoreData, m_completeBaseName);
+            defaultsVersion = readStyleDefaultsVersion(m_score->masterScore(), m_scoreData, m_completeBaseName);
         } else {
             defaultsVersion = m_score->masterScore()->style().defaultStyleVersion();
         }

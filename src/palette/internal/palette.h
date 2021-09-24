@@ -31,7 +31,7 @@
 #include "actions/actiontypes.h"
 
 #include "modularity/ioc.h"
-#include "ipaletteconfiguration.h"
+#include "../ipaletteconfiguration.h"
 #include "iinteractive.h"
 
 namespace Ms {

@@ -32,7 +32,6 @@
 #endif
 #include "view/dockwindow/docksetup.h"
 
-#include "log.h"
 #include "modularity/ioc.h"
 #include "ui/internal/uiengine.h"
 #include "version.h"
@@ -40,6 +39,8 @@
 #include "commandlinecontroller.h"
 
 #include "framework/global/globalmodule.h"
+
+#include "log.h"
 
 using namespace mu::appshell;
 
@@ -242,6 +243,7 @@ int AppShell::run(int argc, char** argv)
     ui::UiEngine::instance()->quit();
 
     // Deinit
+
     for (mu::modularity::IModuleSetup* m : m_modules) {
         m->onDeinit();
     }

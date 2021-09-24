@@ -48,7 +48,7 @@ class XmlWriter;
 class MStyle
 {
 public:
-    MStyle();
+    MStyle() = default;
 
     //! TODO Can be optimized
     const QVariant& styleV(Sid idx) const { return value(idx); }
@@ -92,8 +92,6 @@ private:
 
     std::array<QVariant, size_t(Sid::STYLES)> m_values;
     std::array<qreal, size_t(Sid::STYLES)> m_precomputedValues;
-
-    int m_defaultStyleVersion = -1;
 };
 }     // namespace Ms
 

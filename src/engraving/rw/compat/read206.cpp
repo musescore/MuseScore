@@ -3354,9 +3354,7 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
                 e.clearUserTextStyles();
                 MasterScore* m = score->masterScore();
                 Score* s = m->createScore();
-                int defaultsVersion = m->style().defaultStyleVersion();
-                s->setStyle(DefaultStyle::resolveStyleDefaults(defaultsVersion));
-                s->style().setDefaultStyleVersion(defaultsVersion);
+                ReadStyleHook::setupDefaultStyle(s);
                 s->setEnableVerticalSpread(false);
                 Excerpt* ex = new Excerpt(m);
 

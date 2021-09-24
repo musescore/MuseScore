@@ -45,6 +45,7 @@ public:
     virtual void onAllInited(const framework::IApplication::RunMode& mode) { (void)mode; }
     virtual void onDelayedInit() {}
     virtual void onDeinit() {}
+    virtual void onDestroy() {}
 
     virtual void onStartApp() {}
 };
