@@ -126,6 +126,10 @@ class System final : public EngravingItem
     void setBracketsXPosition(const qreal xOffset);
     Bracket* createBracket(const mu::engraving::LayoutContext& ctx, Ms::BracketItem* bi, int column, int staffIdx, QList<Ms::Bracket*>& bl,
                            Measure* measure);
+    
+    qreal systemNamesWidth(bool getTotalWidth);
+    qreal layoutBrackets(const mu::engraving::LayoutContext& ctx);
+    qreal totalBracketOffset(const mu::engraving::LayoutContext& ctx);
 
 public:
 
@@ -154,7 +158,7 @@ public:
 
     Page* page() const { return (Page*)parent(); }
 
-    void layoutSystem(const mu::engraving::LayoutContext& ctx, qreal, const bool isFirstSystem = false, bool firstSystemIndent = false);
+    void layoutSystem(const mu::engraving::LayoutContext& ctx, qreal xo1, const bool isFirstSystem = false, bool firstSystemIndent = false);
 
     void setMeasureHeight(qreal height);
     void layoutBracketsVertical();
