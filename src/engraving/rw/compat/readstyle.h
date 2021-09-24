@@ -42,6 +42,7 @@ public:
 
     void readStyleTag(Ms::XmlReader& e);
 
+    static int styleDefaultByMscVersion(const int mscVer);
     static void setupDefaultStyle(Ms::Score* score);
     static void readStyleTag(Ms::Score* score, Ms::XmlReader& e);
     static bool readStyleProperties(Ms::MStyle* style, Ms::XmlReader& e);

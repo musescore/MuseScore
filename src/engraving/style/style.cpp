@@ -36,11 +36,6 @@ using namespace mu;
 using namespace mu::engraving;
 using namespace Ms;
 
-MStyle::MStyle()
-{
-    m_defaultStyleVersion = MSCVERSION;
-}
-
 const QVariant& MStyle::value(Sid idx) const
 {
     const QVariant& val = m_values[size_t(idx)];
@@ -87,17 +82,17 @@ void MStyle::precomputeValues()
 
 bool MStyle::isDefault(Sid idx) const
 {
-    return value(idx) == DefaultStyle::resolveStyleDefaults(m_defaultStyleVersion).value(idx);
+    return value(idx) == DefaultStyle::resolveStyleDefaults(defaultStyleVersion()).value(idx);
 }
 
 void MStyle::setDefaultStyleVersion(const int defaultsVersion)
 {
-    m_defaultStyleVersion = defaultsVersion;
+    set(Sid::defaultsVersion, defaultsVersion);
 }
 
 int MStyle::defaultStyleVersion() const
 {
-    return m_defaultStyleVersion;
+    return styleI(Sid::defaultsVersion);
 }
 
 bool MStyle::readProperties(XmlReader& e)

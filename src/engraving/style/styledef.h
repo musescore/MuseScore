@@ -1446,7 +1446,6 @@ enum class Sid {
     tupletMinDistance,
 
     autoplaceEnabled,
-    usePre_3_6_defaults,
     defaultsVersion,
 
     STYLES

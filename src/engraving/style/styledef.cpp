@@ -1435,6 +1435,5 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::tupletMinDistance,             "tupletMinDistance",             Spatium(0.5) },
 
     { Sid::autoplaceEnabled,              "autoplaceEnabled",              true },
-    { Sid::usePre_3_6_defaults,           "usePre_3_6_defaults",           false },
     { Sid::defaultsVersion,               "defaultsVersion",               Ms::MSCVERSION }
 } };

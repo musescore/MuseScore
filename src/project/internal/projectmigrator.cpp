@@ -25,10 +25,13 @@
 #include "engraving/libmscore/excerpt.h"
 #include "engraving/libmscore/undo.h"
 
+#include "rw/compat/readstyle.h"
+
 #include "log.h"
 
 using namespace mu;
 using namespace mu::project;
+using namespace mu::engraving::compat;
 
 static const Uri MIGRATION_DIALOG_URI("musescore://project/migration");
 static const QString LELAND_STYLE_PATH(":/engraving/styles/migration-306-style-Leland.mss");
@@ -39,6 +42,10 @@ Ret ProjectMigrator::migrateEngravingProjectIfNeed(engraving::EngravingProjectPt
     if (!(project->mscVersion() < Ms::MSCVERSION)) {
         return true;
     }
+
+    //! NOTE If the migration is not done, then the default style for the score is determined by the version.
+    //! When migrating, the version becomes the current one, so remember the version of the default style before migrating
+    project->masterScore()->style().setDefaultStyleVersion(ReadStyleHook::styleDefaultByMscVersion(project->mscVersion()));
 
     MigrationOptions migrationOptions = configuration()->migrationOptions();
     if (migrationOptions.isAskAgain) {
