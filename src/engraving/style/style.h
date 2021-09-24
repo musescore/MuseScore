@@ -90,8 +90,8 @@ private:
     bool readStyleValCompat(XmlReader&);
     bool readTextStyleValCompat(XmlReader&);
 
-    std::array<QVariant, int(Sid::STYLES)> m_values;
-    std::array<qreal, int(Sid::STYLES)> m_precomputedValues;
+    std::array<QVariant, size_t(Sid::STYLES)> m_values;
+    std::array<qreal, size_t(Sid::STYLES)> m_precomputedValues;
 
     int m_defaultStyleVersion = -1;
 };

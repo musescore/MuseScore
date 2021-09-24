@@ -43,7 +43,7 @@
 #include "page.h"
 #include "textframe.h"
 #include "scorefont.h"
-#include "sym.h"
+#include "symnames.h"
 #include "undo.h"
 #include "mscore.h"
 
@@ -1630,7 +1630,7 @@ TextBlock TextBlock::split(int column, Ms::TextCursor* cursor)
 static QString toSymbolXml(QChar c)
 {
     SymId symId = ScoreFont::fallbackFont()->fromCode(c.unicode());
-    return "<sym>" + QString(Sym::id2name(symId)) + "</sym>";
+    return "<sym>" + QString(SymNames::nameForSymId(symId)) + "</sym>";
 }
 
 //---------------------------------------------------------
@@ -1880,14 +1880,15 @@ void TextBase::createLayout()
                     sym.clear();
                 } else if (token == "/sym") {
                     symState = false;
-                    SymId id = Sym::name2id(sym);
+                    SymId id = SymNames::symIdByName(sym);
                     if (id != SymId::noSym) {
-                        CharFormat fmt = *cursor.format();  // save format
-                                                            // uint code = score()->scoreFont()->sym(id).code();
-                        uint code = id == SymId::space ? static_cast<uint>(' ') : ScoreFont::fallbackFont()->sym(id).code();
+                        CharFormat fmt = *cursor.format(); // save format
+
+                        //uint code = score()->scoreFont()->symCode(id);
+                        uint code = id == SymId::space ? static_cast<uint>(' ') : ScoreFont::fallbackFont()->symCode(id);
                         cursor.format()->setFontFamily("ScoreText");
                         insert(&cursor, code);
-                        cursor.setFormat(fmt);  // restore format
+                        cursor.setFormat(fmt); // restore format
                     } else {
                         qDebug("unknown symbol <%s>", qPrintable(sym));
                     }
@@ -1907,7 +1908,7 @@ void TextBase::createLayout()
                 } else if (token == "quot") {
                     insert(&cursor, '"');
                 } else {
-                    // TODO insert(&cursor, Sym::name2id(token));
+                    // TODO insert(&cursor, SymNames::symIdByName(token));
                 }
             } else {
                 token += c;

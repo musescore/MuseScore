@@ -294,9 +294,8 @@ set(LIBMSCORE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/symbol.cpp
     ${CMAKE_CURRENT_LIST_DIR}/symbol.h
     ${CMAKE_CURRENT_LIST_DIR}/symid.h
-    ${CMAKE_CURRENT_LIST_DIR}/sym.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/sym.h
     ${CMAKE_CURRENT_LIST_DIR}/symnames.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/symnames.h
     ${CMAKE_CURRENT_LIST_DIR}/synthesizerstate.cpp
     ${CMAKE_CURRENT_LIST_DIR}/synthesizerstate.h
     ${CMAKE_CURRENT_LIST_DIR}/system.cpp

@@ -83,7 +83,7 @@
 #include "libmscore/trill.h"
 #include "libmscore/harmony.h"
 #include "libmscore/tempotext.h"
-#include "libmscore/sym.h"
+#include "libmscore/symnames.h"
 #include "libmscore/pitchspelling.h"
 #include "libmscore/utils.h"
 #include "libmscore/articulation.h"
@@ -2105,7 +2105,7 @@ static double accSymId2alter(SymId id)
         break;
     case SymId::accidentalDoubleSharp:                     res =  2;
         break;
-    default: qDebug("accSymId2alter: unsupported sym %s", Sym::id2name(id));
+    default: qDebug("accSymId2alter: unsupported sym %s", SymNames::nameForSymId(id));
     }
     return res;
 }
@@ -4909,7 +4909,7 @@ void ExportMusicXml::dynamic(Dynamic const* const dyn, int staff)
 
 void ExportMusicXml::symbol(Symbol const* const sym, int staff)
 {
-    QString name = Sym::id2name(sym->sym());
+    QString name = SymNames::nameForSymId(sym->sym());
     QString mxmlName = "";
     if (name == "keyboardPedalPed") {
         mxmlName = "pedal type=\"start\"";

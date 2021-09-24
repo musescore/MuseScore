@@ -31,7 +31,7 @@
 #include "framework/global/widgetstatestore.h"
 #include "libmscore/figuredbass.h"
 #include "libmscore/scorefont.h"
-#include "libmscore/sym.h"
+#include "libmscore/symnames.h"
 #include "libmscore/realizedharmony.h"
 #include "offsetSelect.h"
 #include "settings.h"
@@ -524,8 +524,8 @@ EditStyle::EditStyle(QWidget* parent)
         Ms::SymId::systemDivider, Ms::SymId::systemDividerLong, Ms::SymId::systemDividerExtraLong
     };
     for (Ms::SymId id : ids) {
-        const QString& un = Ms::Sym::id2userName(id);
-        const char* n  = Ms::Sym::id2name(id);
+        const QString& un = Ms::SymNames::translatedUserNameForSymId(id);
+        const char* n = Ms::SymNames::nameForSymId(id);
         dividerLeftSym->addItem(un,  QVariant(QString(n)));
         dividerRightSym->addItem(un, QVariant(QString(n)));
     }

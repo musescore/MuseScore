@@ -96,7 +96,7 @@ extern int pitch2step(int pitch);
 extern int step2pitch(int step);
 
 extern Segment* skipTuplet(Tuplet* tuplet);
-extern std::vector<SymId> toTimeSigString(const QString&);
+extern SymIdList timeSigSymIdsFromString(const QString&);
 extern Fraction actualTicks(Fraction duration, Tuplet* tuplet, Fraction timeStretch);
 }     // namespace Ms
 #endif

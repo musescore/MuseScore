@@ -73,7 +73,7 @@
 #include <libmscore/ottava.h>
 #include <libmscore/notedot.h>
 #include <libmscore/stafftext.h>
-#include <libmscore/sym.h>
+#include <libmscore/symid.h>
 #include <libmscore/textline.h>
 #include <libmscore/letring.h>
 #include <libmscore/palmmute.h>

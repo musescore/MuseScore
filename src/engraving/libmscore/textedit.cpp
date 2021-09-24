@@ -25,7 +25,7 @@
 #include "mscoreview.h"
 #include "score.h"
 #include "scorefont.h"
-#include "sym.h"
+#include "symnames.h"
 
 #include "log.h"
 
@@ -718,7 +718,7 @@ void TextBase::paste(EditData& ed, const QString& txt)
                     sym.clear();
                 } else if (token == "/sym") {
                     symState = false;
-                    insertSym(ed, Sym::name2id(sym));
+                    insertSym(ed, SymNames::symIdByName(sym));
                 } else {
                     prepareFormat(token, format);
                 }
@@ -737,7 +737,7 @@ void TextBase::paste(EditData& ed, const QString& txt)
                 } else if (token == "quot") {
                     insertText(ed, "\"");
                 } else {
-                    insertSym(ed, Sym::name2id(token));
+                    insertSym(ed, SymNames::symIdByName(token));
                 }
             } else if (!c.isLetter()) {
                 state = 0;

@@ -43,17 +43,17 @@ MStyle::MStyle()
 
 const QVariant& MStyle::value(Sid idx) const
 {
-    const QVariant& val = m_values[int(idx)];
+    const QVariant& val = m_values[size_t(idx)];
     if (val.isValid()) {
         return val;
     }
 
-    return StyleDef::styleValues[int(idx)].defaultValue();
+    return StyleDef::styleValues[size_t(idx)].defaultValue();
 }
 
 qreal MStyle::pvalue(Sid idx) const
 {
-    return m_precomputedValues[int(idx)];
+    return m_precomputedValues[size_t(idx)];
 }
 
 void MStyle::set(Sid idx, const mu::PointF& v)
@@ -63,7 +63,7 @@ void MStyle::set(Sid idx, const mu::PointF& v)
 
 void MStyle::set(const Sid t, const QVariant& val)
 {
-    const int idx = int(t);
+    const size_t idx = size_t(t);
     m_values[idx] = val;
     if (t == Sid::spatium) {
         precomputeValues();
@@ -402,7 +402,7 @@ void MStyle::save(XmlWriter& xml, bool optimize)
 
 const char* MStyle::valueType(const Sid i)
 {
-    return StyleDef::styleValues[int(i)].valueType();
+    return StyleDef::styleValues[size_t(i)].valueType();
 }
 
 const char* MStyle::valueName(const Sid i)
@@ -411,7 +411,7 @@ const char* MStyle::valueName(const Sid i)
         static const char* no_style = "no style";
         return no_style;
     }
-    return StyleDef::styleValues[int(i)].name();
+    return StyleDef::styleValues[size_t(i)].name();
 }
 
 Sid MStyle::styleIdx(const QString& name)

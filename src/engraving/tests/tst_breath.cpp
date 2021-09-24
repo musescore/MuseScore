@@ -29,7 +29,7 @@
 #include "libmscore/undo.h"
 #include "libmscore/measure.h"
 #include "libmscore/breath.h"
-#include "libmscore/sym.h"
+#include "libmscore/symid.h"
 
 static const QString BREATH_DATA_DIR("breath_data/");
 

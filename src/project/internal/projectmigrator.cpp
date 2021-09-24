@@ -27,6 +27,7 @@
 
 #include "log.h"
 
+using namespace mu;
 using namespace mu::project;
 
 static const Uri MIGRATION_DIALOG_URI("musescore://project/migration");

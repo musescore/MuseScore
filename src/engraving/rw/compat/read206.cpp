@@ -36,7 +36,7 @@
 #include "libmscore/revisions.h"
 #include "libmscore/part.h"
 #include "libmscore/page.h"
-#include "libmscore/sym.h"
+#include "libmscore/symnames.h"
 #include "libmscore/scorefont.h"
 #include "libmscore/arpeggio.h"
 #include "libmscore/audio.h"
@@ -2284,7 +2284,7 @@ EngravingItem* Read206::readArticulation(EngravingItem* parent, XmlReader& e, co
                         }
                     }
                     if (i == n) {
-                        sym = Sym::name2id(s);
+                        sym = SymNames::symIdByName(s);
                         if (sym == SymId::noSym) {
                             qDebug("Articulation: unknown type <%s>", qPrintable(s));
                         }

@@ -38,7 +38,7 @@
 #include "groups.h"
 #include "note.h"
 #include "barline.h"
-#include "sym.h"
+#include "symnames.h"
 #include "changeMap.h"
 #include "fret.h"
 
@@ -597,7 +597,7 @@ QVariant propertyFromString(Pid id, QString value)
         // unsupported
         return QVariant();
     case P_TYPE::SYMID:
-        return QVariant::fromValue(Sym::name2id(value));
+        return QVariant::fromValue(SymNames::symIdByName(value));
     case P_TYPE::HEAD_SCHEME:
         return QVariant::fromValue(NoteHead::name2scheme(value));
     case P_TYPE::HEAD_GROUP:
@@ -876,7 +876,7 @@ QString propertyToString(Pid id, QVariant value, bool mscx)
         }
         break;
     case P_TYPE::SYMID:
-        return Sym::id2name(SymId(value.toInt()));
+        return SymNames::nameForSymId(SymId(value.toInt()));
     case P_TYPE::BARLINE_TYPE:
         return BarLine::barLineTypeName(BarLineType(value.toInt()));
     case P_TYPE::HEAD_SCHEME:

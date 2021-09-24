@@ -64,7 +64,7 @@
 #include "staff.h"
 #include "stafftype.h"
 #include "stringdata.h"
-#include "sym.h"
+#include "symid.h"
 #include "system.h"
 #include "text.h"
 #include "textline.h"

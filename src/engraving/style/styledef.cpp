@@ -25,27 +25,25 @@
 #include "draw/geometry.h"
 #include "io/xml.h"
 
-#include "libmscore/mscore.h"
-#include "libmscore/types.h"
-#include "libmscore/spatium.h"
-#include "libmscore/mscore.h"
-#include "libmscore/masterscore.h"
 #include "libmscore/articulation.h"
-#include "libmscore/harmony.h"
 #include "libmscore/chordlist.h"
-#include "libmscore/page.h"
-#include "libmscore/mscore.h"
 #include "libmscore/clef.h"
+#include "libmscore/harmony.h"
+#include "libmscore/masterscore.h"
+#include "libmscore/mscore.h"
+#include "libmscore/page.h"
+#include "libmscore/property.h"
+#include "libmscore/spatium.h"
 #include "libmscore/textlinebase.h"
 #include "libmscore/tuplet.h"
-#include "libmscore/property.h"
+#include "libmscore/types.h"
 #include "libmscore/undo.h"
 
 using namespace mu;
 using namespace Ms;
 
 //! Keep in sync with Sid in styledef.h
-const StyleDef::StyleValue StyleDef::styleValues[int(Sid::STYLES)] = {
+const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValues { {
     { Sid::pageWidth,               "pageWidth",               210.0 / INCH },
     { Sid::pageHeight,              "pageHeight",              297.0 / INCH }, // A4
     { Sid::pagePrintableWidth,      "pagePrintableWidth",      180.0 / INCH },
@@ -1439,4 +1437,4 @@ const StyleDef::StyleValue StyleDef::styleValues[int(Sid::STYLES)] = {
     { Sid::autoplaceEnabled,              "autoplaceEnabled",              true },
     { Sid::usePre_3_6_defaults,           "usePre_3_6_defaults",           false },
     { Sid::defaultsVersion,               "defaultsVersion",               Ms::MSCVERSION }
-};
+} };

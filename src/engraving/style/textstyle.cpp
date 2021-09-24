@@ -1010,7 +1010,7 @@ struct TextStyleName {
 
 // Must be in sync with Tid enum (in types.h)
 
-static constexpr std::array<TextStyleName, int(Tid::TEXT_STYLES)> textStyles { {
+static constexpr std::array<TextStyleName, size_t(Tid::TEXT_STYLES)> textStyles { {
     { QT_TRANSLATE_NOOP("TextStyle", "Default"),                 &defaultTextStyle,           Tid::DEFAULT },
 // Page-orientde styles
     { QT_TRANSLATE_NOOP("TextStyle", "Title"),                   &titleTextStyle,             Tid::TITLE },

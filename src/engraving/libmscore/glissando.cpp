@@ -117,7 +117,6 @@ void GlissandoSegment::draw(mu::draw::Painter* painter) const
     qreal h     = pos2().y();
     qreal l     = sqrt(w * w + h * h);
     qreal wi    = asin(-h / l) * 180.0 / M_PI;
-    qreal scale = painter->worldTransform().m11();
     painter->rotate(-wi);
 
     if (glissando()->glissandoType() == GlissandoType::STRAIGHT) {
@@ -127,12 +126,12 @@ void GlissandoSegment::draw(mu::draw::Painter* painter) const
         qreal a  = symAdvance(SymId::wiggleTrill);
         int n    = static_cast<int>(l / a);          // always round down (truncate) to avoid overlap
         qreal x  = (l - n * a) * 0.5;     // centre line in available space
-        std::vector<SymId> ids;
+        SymIdList ids;
         for (int i = 0; i < n; ++i) {
             ids.push_back(SymId::wiggleTrill);
         }
 
-        score()->scoreFont()->draw(ids, painter, magS(), PointF(x, -(b.y() + b.height() * 0.5)), scale);
+        score()->scoreFont()->draw(ids, painter, magS(), PointF(x, -(b.y() + b.height() * 0.5)));
     }
 
     if (glissando()->showText()) {
