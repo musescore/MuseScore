@@ -126,8 +126,8 @@ class System final : public EngravingItem
     void setBracketsXPosition(const qreal xOffset);
     Bracket* createBracket(const mu::engraving::LayoutContext& ctx, Ms::BracketItem* bi, int column, int staffIdx, QList<Ms::Bracket*>& bl,
                            Measure* measure);
-    
-    qreal systemNamesWidth(bool getTotalWidth);
+
+    qreal systemNamesWidth();
     qreal layoutBrackets(const mu::engraving::LayoutContext& ctx);
     qreal totalBracketOffset(const mu::engraving::LayoutContext& ctx);
 
