@@ -29,23 +29,27 @@ class HairpinPlaybackModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
+    Q_PROPERTY(PropertyItem * scopeType READ scopeType CONSTANT)
     Q_PROPERTY(PropertyItem * velocityChange READ velocityChange CONSTANT)
+    Q_PROPERTY(PropertyItem * useSingleNoteDynamics READ useSingleNoteDynamics CONSTANT)
     Q_PROPERTY(PropertyItem * velocityChangeType READ velocityChangeType CONSTANT)
 
 public:
     explicit HairpinPlaybackModel(QObject* parent, IElementRepositoryService* repository);
 
+    PropertyItem* scopeType() const;
     PropertyItem* velocityChange() const;
+    PropertyItem* useSingleNoteDynamics() const;
     PropertyItem* velocityChangeType() const;
 
-protected:
+private:
     void createProperties() override;
-    void requestElements() override;
     void loadProperties() override;
     void resetProperties() override;
 
-private:
+    PropertyItem* m_scopeType = nullptr;
     PropertyItem* m_velocityChange = nullptr;
+    PropertyItem* m_useSingleNoteDynamics = nullptr;
     PropertyItem* m_velocityChangeType = nullptr;
 };
 }

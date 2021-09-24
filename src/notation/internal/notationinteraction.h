@@ -98,6 +98,7 @@ public:
 
     // Drop
     void startDrop(const QByteArray& edata) override;
+    bool startDrop(const QUrl& url) override;
     bool isDropAccepted(const PointF& pos, Qt::KeyboardModifiers modifiers) override;
     bool drop(const PointF& pos, Qt::KeyboardModifiers modifiers) override;
     void endDrop() override;
@@ -242,6 +243,7 @@ private:
     bool dragTimeAnchorElement(const PointF& pos);
     void setDropTarget(EngravingItem* el);
     bool dropCanvas(EngravingItem* e);
+    void resetDropElement();
 
     void selectInstrument(Ms::InstrumentChange* instrumentChange);
 
