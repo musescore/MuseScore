@@ -751,6 +751,7 @@ void NotationParts::doInsertPart(Part* part, int index)
 
         Staff* staffCopy = engraving::Factory::createStaff(part);
         staffCopy->setId(staff->id());
+        staffCopy->setScore(score());
         staffCopy->setPart(part);
         staffCopy->init(staff);
 
