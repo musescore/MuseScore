@@ -58,12 +58,14 @@ class Arpeggio final : public EngravingItem
     Arpeggio(Chord* parent);
 
     void symbolLine(SymId start, SymId fill);
-    void symbolLine2(SymId end, SymId fill);
 
     void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
     QVector<mu::LineF> dragAnchorLines() const override;
     QVector<mu::LineF> gripAnchorLines(Grip) const override;
     void startEdit(EditData&) override;
+
+    qreal calcTop() const;
+    qreal calcBottom() const;
 
     static const std::array<const char*, 6> arpeggioTypeNames;
 
