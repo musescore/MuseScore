@@ -19,22 +19,26 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.0
+import QtQuick 2.15
+
 import MuseScore.Ui 1.0
 
 Rectangle {
     id: root
 
     property NavigationControl navigationCtrl: null
+    property bool drawOutsideParent: true
 
     anchors.fill: parent
-    anchors.margins: -ui.theme.navCtrlBorderWidth
+    anchors.margins: drawOutsideParent ? -border.width : 0
 
-    visible: navigationCtrl.active
+    visible: navigationCtrl ? navigationCtrl.active : false
 
     color: "transparent"
-    radius: parent.radius + root.border.width
 
-    border.width: ui.theme.navCtrlBorderWidth
     border.color: ui.theme.fontPrimaryColor
+    border.width: ui.theme.navCtrlBorderWidth
+    radius: Number(parent.radius) > 0
+            ? (drawOutsideParent ? parent.radius + root.border.width : parent.radius)
+            : 0
 }

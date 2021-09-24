@@ -87,7 +87,7 @@ Rectangle {
             height: gridView.cellWidth
 
             accentButton: (Boolean(item) && item.checked) || menuLoader.isMenuOpened
-            normalStateColor: accentButton ? ui.theme.accentColor : "transparent"
+            transparent: !accentButton
 
             icon: Boolean(item) ? item.icon : IconCode.NONE
             iconFont: ui.theme.toolbarIconsFont
@@ -191,7 +191,7 @@ Rectangle {
 
         icon: IconCode.CONFIGURE
         iconFont: ui.theme.toolbarIconsFont
-        normalStateColor: "transparent"
+        transparent: true
         navigation.panel: keynavSub
         navigation.order: 100
 

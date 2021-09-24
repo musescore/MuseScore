@@ -32,7 +32,7 @@ FlatButton {
     signal toggleConcertPitchRequested()
 
     orientation: Qt.Horizontal
-    normalStateColor: "transparent"
+    transparent: true
 
     contentItem: Row {
         spacing: 6

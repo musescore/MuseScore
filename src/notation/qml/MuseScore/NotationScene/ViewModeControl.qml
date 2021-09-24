@@ -32,7 +32,8 @@ FlatButton {
 
     signal changeCurrentViewModeRequested(var newViewMode)
 
-    normalStateColor: menu.isMenuOpened ? ui.theme.accentColor : "transparent"
+    transparent: !menu.isMenuOpened
+    accentButton: menu.isMenuOpened
 
     visible: Boolean(root.currentViewMode)
 

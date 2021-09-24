@@ -66,14 +66,17 @@ RadioDelegate {
         onTriggered: root.toggled()
     }
 
-    background: Rectangle {
-        id: backgroundRect
-        anchors.fill: parent
+    background: Item {
+        Rectangle {
+            id: backgroundRect
+            anchors.fill: parent
 
-        color: Utils.colorWithAlpha(ui.theme.backgroundPrimaryColor, ui.theme.buttonOpacityNormal)
+            color: ui.theme.backgroundPrimaryColor
+            opacity: ui.theme.buttonOpacityNormal
 
-        border.color: navCtrl.active ? ui.theme.fontPrimaryColor : ui.theme.strokeColor
-        border.width: navCtrl.active ? ui.theme.navCtrlBorderWidth : ui.theme.borderWidth
+            border.color: navCtrl.active ? ui.theme.fontPrimaryColor : ui.theme.strokeColor
+            border.width: navCtrl.active ? ui.theme.navCtrlBorderWidth : ui.theme.borderWidth
+        }
 
         Item {
             id: backgroundGradientRect
@@ -174,7 +177,8 @@ RadioDelegate {
 
             PropertyChanges {
                 target: backgroundRect
-                color: Utils.colorWithAlpha(ui.theme.buttonColor, ui.theme.buttonOpacityHover)
+                color: ui.theme.buttonColor
+                opacity: ui.theme.buttonOpacityHover
             }
         },
 
@@ -184,7 +188,8 @@ RadioDelegate {
 
             PropertyChanges {
                 target: backgroundRect
-                color: Utils.colorWithAlpha(ui.theme.buttonColor, ui.theme.buttonOpacityHit)
+                color: ui.theme.buttonColor
+                opacity: ui.theme.buttonOpacityHit
             }
         },
 

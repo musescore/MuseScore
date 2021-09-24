@@ -49,7 +49,7 @@ RowLayout {
         icon: IconCode.ZOOM_IN
         iconFont: ui.theme.toolbarIconsFont
 
-        normalStateColor: "transparent"
+        transparent: true
 
         navigation.panel: root.navigationPanel
         navigation.order: root.navigationOrderMin
@@ -66,7 +66,7 @@ RowLayout {
         icon: IconCode.ZOOM_OUT
         iconFont: ui.theme.toolbarIconsFont
 
-        normalStateColor: "transparent"
+        transparent: true
 
         navigation.panel: root.navigationPanel
         navigation.order: zoomInButton.navigation.order + 1
@@ -105,32 +105,20 @@ RowLayout {
         }
     }
 
-    FlatButton {
+    MenuButton {
         id: menuButton
         Layout.leftMargin: 4
         Layout.preferredWidth: 20
 
         icon: IconCode.SMALL_ARROW_DOWN
 
-        normalStateColor: menuLoader.isMenuOpened ? ui.theme.accentColor : "transparent"
-
         navigation.panel: root.navigationPanel
         navigation.order: zoomInputField.navigation.order + 1
 
-        StyledMenuLoader {
-            id: menuLoader
-
-            menuAnchorItem: ui.rootItem
-
-            navigation: menuButton.navigation
-
-            onHandleMenuItem: {
-                root.changeZoomRequested(itemId)
-            }
-        }
-
-        onClicked: {
-            menuLoader.toggleOpened(root.availableZoomList)
+        menuModel: root.availableZoomList
+        menuAnchorItem: ui.rootItem
+        onHandleMenuItem: {
+            root.changeZoomRequested(itemId)
         }
     }
 }

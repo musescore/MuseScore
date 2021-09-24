@@ -304,8 +304,6 @@ ListView {
                 visible: !control.Drag.active
                 isSelected: control.selected
 
-                navCtrlBorderOverride: ui.theme.navCtrlBorderWidth
-
                 navigation.name: "PaletteTreeItem"
                 navigation.panel: keynavTree
                 navigation.row: control.navigationRow
