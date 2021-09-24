@@ -514,9 +514,9 @@ void Tremolo::layout()
     Stem* stem    = _chord1->stem();
     qreal x, y, h;
     if (stem) {
-        x  = stem->pos().x();
-        y  = stem->pos().y();
-        h  = stem->stemLen();
+        x = stem->pos().x();
+        y = stem->pos().y();
+        h = stem->length();
     } else {
         // center tremolo above note
         x = anchor1->x() + anchor1->headWidth() * .5;

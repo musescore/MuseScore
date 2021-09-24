@@ -201,7 +201,6 @@ public:
     virtual EngravingItem* prevSegmentElement() override;
     virtual QString accessibleExtraInfo() const override;
     virtual Shape shape() const override;
-    virtual void layoutStem1() {}
     virtual void computeUp() { _up = true; }
 
     bool isFullMeasureRest() const { return _durationType == TDuration::DurationType::V_MEASURE; }
