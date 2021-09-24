@@ -58,10 +58,11 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::staffUpperBorder,        "staffUpperBorder",        Spatium(7.0) },
     { Sid::staffLowerBorder,        "staffLowerBorder",        Spatium(7.0) },
     { Sid::staffDistance,           "staffDistance",           Spatium(6.5) },
-    { Sid::instrumentNameOffset,    "instrumentNameOffset",    Spatium(1.0)   },
+    { Sid::instrumentNameOffset,    "instrumentNameOffset",    Spatium(1.0) },
     { Sid::akkoladeDistance,        "akkoladeDistance",        Spatium(6.5) },
     { Sid::minSystemDistance,       "minSystemDistance",       Spatium(8.5) },
     { Sid::maxSystemDistance,       "maxSystemDistance",       Spatium(15.0) },
+    { Sid::alignSystemToMargin,     "alignSystemToMargin",     true },
 
     { Sid::enableVerticalSpread,    "enableVerticalSpread",    false },
     { Sid::spreadSystem,            "spreadSystem",            2.5 },

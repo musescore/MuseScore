@@ -257,15 +257,13 @@ void System::adjustStavesNumber(int nstaves)
 //   systemNamesWidth
 //---------------------------------------------------------
 
-qreal System::systemNamesWidth(bool getTotalWidth) {
+qreal System::systemNamesWidth()
+{
     qreal instrumentNameOffset = score()->styleP(Sid::instrumentNameOffset);
 
     qreal namesWidth = 0.0;
 
     for (const Part* part : score()->parts()) {
-        if (!getTotalWidth && firstVisibleSysStaffOfPart(part) < 0) {
-            continue;
-        }
         for (int staffIdx = firstSysStaffOfPart(part); staffIdx <= lastSysStaffOfPart(part); ++staffIdx) {
             SysStaff* staff = this->staff(staffIdx);
             if (!staff) {
@@ -287,7 +285,8 @@ qreal System::systemNamesWidth(bool getTotalWidth) {
 //   layoutBrackets
 //---------------------------------------------------------
 
-qreal System::layoutBrackets(const LayoutContext& ctx) {
+qreal System::layoutBrackets(const LayoutContext& ctx)
+{
     int nstaves  = _staves.size();
     int columns = getBracketsColumnsCount();
 
@@ -340,7 +339,8 @@ qreal System::layoutBrackets(const LayoutContext& ctx) {
 //   totalBracketOffset
 //---------------------------------------------------------
 
-qreal System::totalBracketOffset(const LayoutContext& ctx) {
+qreal System::totalBracketOffset(const LayoutContext& ctx)
+{
     bool hideEmptyStaves = score()->styleB(Sid::hideEmptyStaves);
     score()->setStyleValue(Sid::hideEmptyStaves, false);
 
@@ -368,7 +368,7 @@ void System::layoutSystem(const LayoutContext& ctx, qreal xo1, const bool isFirs
     //---------------------------------------------------
     //  find x position of staves
     //---------------------------------------------------
-    qreal maxNamesWidth = systemNamesWidth(true);
+    qreal maxNamesWidth = systemNamesWidth();
 
     if (isFirstSystem && firstSystemIndent) {
         maxNamesWidth = qMax(maxNamesWidth, styleP(Sid::firstSystemIndentationValue) * mag());
@@ -377,8 +377,17 @@ void System::layoutSystem(const LayoutContext& ctx, qreal xo1, const bool isFirs
     qreal maxBracketsWidth = totalBracketOffset(ctx);
     qreal bracketsWidth = layoutBrackets(ctx);
     qreal bracketWidthDifference = maxBracketsWidth - bracketsWidth;
-    _leftMargin = maxNamesWidth + bracketWidthDifference + instrumentNameOffset;
-    qreal nameOffset = _leftMargin - bracketsWidth - instrumentNameOffset;
+    qreal nameOffset = 0.0;
+    if (maxNamesWidth == 0.0) {
+        if (score()->styleB(Sid::alignSystemToMargin)) {
+            _leftMargin = bracketWidthDifference;
+        } else {
+            _leftMargin = maxBracketsWidth;
+        }
+    } else {
+        _leftMargin = maxNamesWidth + bracketWidthDifference + instrumentNameOffset;
+        nameOffset = _leftMargin - bracketsWidth - instrumentNameOffset;
+    }
 
     int nVisible = 0;
     for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {

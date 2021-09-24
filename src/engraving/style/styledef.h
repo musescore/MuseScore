@@ -77,6 +77,7 @@ enum class Sid {
     akkoladeDistance,
     minSystemDistance,
     maxSystemDistance,
+    alignSystemToMargin,
 
     enableVerticalSpread,
     spreadSystem,
