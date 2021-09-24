@@ -151,6 +151,7 @@ public:
     void setPlaylistClean() { _playlistDirty = false; }
 
     void setExpandRepeats(bool expandRepeats);
+    bool expandRepeats() const { return _expandRepeats; }
     void updateRepeatListTempo();
     const RepeatList& repeatList() const override;
     const RepeatList& repeatList2() const override;
