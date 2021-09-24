@@ -380,7 +380,9 @@ void Beam::layout1()
         }
         for (ChordRest* cr : qAsConst(_elements)) {
             cr->setUp(_up);
-            cr->layoutStem1();
+            if (cr->isChord()) {
+                toChord(cr)->layoutStem();
+            }
         }
     } else {
         //PITCHED STAVES (and TAB's with stems through staves)
@@ -470,7 +472,9 @@ void Beam::layout1()
             if (!_cross || !staffMove) {
                 if (cr->up() != _up) {
                     cr->setUp(_up);
-                    cr->layoutStem1();
+                    if (cr->isChord()) {
+                        toChord(cr)->layoutStem();
+                    }
                 }
             }
         }
@@ -542,7 +546,7 @@ void Beam::layoutGraceNotes()
     for (ChordRest* cr : qAsConst(_elements)) {
         cr->setUp(_up);
         if (cr->isChord()) {
-            toChord(cr)->layoutStem1();                    /* create stems needed to calculate horizontal spacing */
+            toChord(cr)->layoutStem(); /* create stems needed to calculate horizontal spacing */
         }
     }
 }
@@ -1872,8 +1876,8 @@ void Beam::layout2(std::vector<ChordRest*> crl, SpannerSegmentType, int frag)
                 }
             }
 
-            qreal stemWidth  = (cr1->isChord() && toChord(cr1)->stem()) ? toChord(cr1)->stem()->lineWidthMag() : 0.0;
-            qreal x2         = cr1->stemPosX() + cr1->pageX() - _pagePos.x();
+            qreal stemWidth = (cr1->isChord() && toChord(cr1)->stem()) ? toChord(cr1)->stem()->lineWidthMag() : 0.0;
+            qreal x2 = cr1->stemPosX() + cr1->pageX() - _pagePos.x();
             qreal x3;
 
             if ((chordRestEndGroupIndex - currentChordRestIndex) > 1) {
@@ -1881,20 +1885,23 @@ void Beam::layout2(std::vector<ChordRest*> crl, SpannerSegmentType, int frag)
                 // create segment
                 x3 = chordRest2->stemPosX() + chordRest2->pageX() - _pagePos.x();
 
+                qreal stemWidth2
+                    = (chordRest2->isChord() && toChord(chordRest2)->stem()) ? toChord(chordRest2)->stem()->lineWidthMag() : 0.0;
+
                 if (tab) {
                     x2 -= stemWidth * 0.5;
-                    x3 += stemWidth * 0.5;
+                    x3 += stemWidth2 * 0.5;
                 } else {
                     if (cr1->up()) {
                         x2 -= stemWidth;
                     }
                     if (!chordRest2->up()) {
-                        x3 += (chordRest2->isChord() && toChord(chordRest2)->stem()) ? toChord(chordRest2)->stem()->lineWidthMag() : 0.0;
+                        x3 += stemWidth2;
                     }
                 }
             } else {
                 // create broken segment
-                if (cr1->type() == ElementType::REST) {
+                if (cr1->isRest()) {
                     continue;
                 }
 
@@ -2040,9 +2047,9 @@ void Beam::layout2(std::vector<ChordRest*> crl, SpannerSegmentType, int frag)
         }
 
         PointF stemPos(c->stemPosX() + c->pagePos().x(), c->stemPos().y());
-        qreal x2   = stemPos.x() - _pagePos.x();
-        qreal y1   = (x2 - x1) * slope + py1 + _pagePos.y();
-        qreal y2   = stemPos.y();
+        qreal x2 = stemPos.x() - _pagePos.x();
+        qreal y1 = (x2 - x1) * slope + py1 + _pagePos.y();
+        qreal y2 = stemPos.y();
         // qreal fuzz = _spatium * .1;
         qreal fuzz = _spatium * .4;       // something is wrong
 
@@ -2066,14 +2073,9 @@ void Beam::layout2(std::vector<ChordRest*> crl, SpannerSegmentType, int frag)
 
         Stem* stem = c->stem();
         if (stem) {
-            bool useTablature = staff() && staff()->isTabStaff(cr->tick());
-            qreal sw2  = useTablature ? 0.f : stem->lineWidthMag() * .5;
-            if (c->up()) {
-                sw2 = -sw2;
-            }
-            stem->rxpos() = c->stemPosX() + sw2;
-            qreal l       = y2 - (by + _pagePos.y());
-            stem->setLen(l);
+            stem->rxpos() = c->stemPosX();
+            qreal l = y2 - (by + _pagePos.y());
+            stem->setBaseLength(l);
 
             StemSlash* stemSlash = c->stemSlash();
             if (stemSlash) {
