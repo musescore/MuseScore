@@ -254,53 +254,41 @@ void System::adjustStavesNumber(int nstaves)
 }
 
 //---------------------------------------------------------
-//   layoutSystem
-///   Layout the System
+//   systemNamesWidth
 //---------------------------------------------------------
 
-void System::layoutSystem(const LayoutContext& ctx, qreal xo1, const bool isFirstSystem, bool firstSystemIndent)
-{
-    if (_staves.empty()) {                 // ignore vbox
-        return;
-    }
+qreal System::systemNamesWidth(bool getTotalWidth) {
+    qreal instrumentNameOffset = score()->styleP(Sid::instrumentNameOffset);
 
-    static const Spatium instrumentNameOffset(1.0);         // TODO: make style value
+    qreal namesWidth = 0.0;
 
-    int nstaves  = _staves.size();
-
-    //---------------------------------------------------
-    //  find x position of staves
-    //---------------------------------------------------
-    qreal xoff2 = 0.0;   // x offset for instrument name
-
-    for (const Part* p : score()->parts()) {
-        if (firstVisibleSysStaffOfPart(p) < 0) {
+    for (const Part* part : score()->parts()) {
+        if (!getTotalWidth && firstVisibleSysStaffOfPart(part) < 0) {
             continue;
         }
-        for (int staffIdx = firstSysStaffOfPart(p); staffIdx <= lastSysStaffOfPart(p); ++staffIdx) {
+        for (int staffIdx = firstSysStaffOfPart(part); staffIdx <= lastSysStaffOfPart(part); ++staffIdx) {
             SysStaff* staff = this->staff(staffIdx);
             if (!staff) {
                 continue;
             }
 
-            for (InstrumentName* t : qAsConst(staff->instrumentNames)) {
-                t->layout();
-                qreal w = t->width() + point(instrumentNameOffset);
-                if (w > xoff2) {
-                    xoff2 = w;
-                }
+            for (InstrumentName* name : qAsConst(staff->instrumentNames)) {
+                name->layout();
+                qreal width = name->width() + instrumentNameOffset;
+                namesWidth = qMax(namesWidth, width);
             }
         }
     }
 
-    if (isFirstSystem && firstSystemIndent) {
-        xoff2 = qMax(xoff2, styleP(Sid::firstSystemIndentationValue) * mag());
-    }
+    return namesWidth;
+}
 
-    //---------------------------------------------------
-    //  create brackets
-    //---------------------------------------------------
+//---------------------------------------------------------
+//   layoutBrackets
+//---------------------------------------------------------
 
+qreal System::layoutBrackets(const LayoutContext& ctx) {
+    int nstaves  = _staves.size();
     int columns = getBracketsColumnsCount();
 
 #if (!defined (_MSCVER) && !defined (_MSC_VER))
@@ -336,18 +324,61 @@ void System::layoutSystem(const LayoutContext& ctx, qreal xo1, const bool isFirs
         delete b;
     }
 
-    //---------------------------------------------------
-    //  layout  SysStaff and StaffLines
-    //---------------------------------------------------
-
-    _leftMargin = xoff2;
+    qreal totalBracketWidth = 0.0;
 
     qreal bd = score()->styleP(Sid::bracketDistance);
     if (!_brackets.empty()) {
         for (int w : bracketWidth) {
-            _leftMargin += w + bd;
+            totalBracketWidth += w + bd;
         }
     }
+
+    return totalBracketWidth;
+}
+
+//---------------------------------------------------------
+//   totalBracketOffset
+//---------------------------------------------------------
+
+qreal System::totalBracketOffset(const LayoutContext& ctx) {
+    bool hideEmptyStaves = score()->styleB(Sid::hideEmptyStaves);
+    score()->setStyleValue(Sid::hideEmptyStaves, false);
+
+    qreal offset = layoutBrackets(ctx);
+
+    score()->setStyleValue(Sid::hideEmptyStaves, hideEmptyStaves);
+    return offset;
+}
+
+//---------------------------------------------------------
+//   layoutSystem
+///   Layout the System
+//---------------------------------------------------------
+
+void System::layoutSystem(const LayoutContext& ctx, qreal xo1, const bool isFirstSystem, bool firstSystemIndent)
+{
+    if (_staves.empty()) {                 // ignore vbox
+        return;
+    }
+
+    qreal instrumentNameOffset = score()->styleP(Sid::instrumentNameOffset);
+
+    int nstaves  = _staves.size();
+
+    //---------------------------------------------------
+    //  find x position of staves
+    //---------------------------------------------------
+    qreal maxNamesWidth = systemNamesWidth(true);
+
+    if (isFirstSystem && firstSystemIndent) {
+        maxNamesWidth = qMax(maxNamesWidth, styleP(Sid::firstSystemIndentationValue) * mag());
+    }
+
+    qreal maxBracketsWidth = totalBracketOffset(ctx);
+    qreal bracketsWidth = layoutBrackets(ctx);
+    qreal bracketWidthDifference = maxBracketsWidth - bracketsWidth;
+    _leftMargin = maxNamesWidth + bracketWidthDifference + instrumentNameOffset;
+    qreal nameOffset = _leftMargin - bracketsWidth - instrumentNameOffset;
 
     int nVisible = 0;
     for (int staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
@@ -386,14 +417,14 @@ void System::layoutSystem(const LayoutContext& ctx, qreal xo1, const bool isFirs
         for (InstrumentName* t : qAsConst(s->instrumentNames)) {
             switch (int(t->align()) & int(Align::HMASK)) {
             case int(Align::LEFT):
-                t->rxpos() = 0;
+                t->rxpos() = t->width() - maxNamesWidth + nameOffset + xo1;
                 break;
             case int(Align::HCENTER):
-                t->rxpos() = (xoff2 - point(instrumentNameOffset) + xo1) * .5;
+                t->rxpos() = (t->width() - maxNamesWidth) / 2 + nameOffset + xo1;
                 break;
             case int(Align::RIGHT):
             default:
-                t->rxpos() = xoff2 - point(instrumentNameOffset) + xo1;
+                t->rxpos() = nameOffset + xo1;
                 break;
             }
         }
