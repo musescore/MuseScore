@@ -55,7 +55,7 @@
 #include "libmscore/stafftext.h"
 #include "libmscore/stafftype.h"
 #include "libmscore/stringdata.h"
-#include "libmscore/sym.h"
+#include "libmscore/symid.h"
 #include "libmscore/tempotext.h"
 #include "libmscore/text.h"
 #include "libmscore/tie.h"

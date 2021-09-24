@@ -24,7 +24,7 @@
 #include "io/xml.h"
 #include "note.h"
 #include "symbol.h"
-#include "sym.h"
+#include "symnames.h"
 #include "score.h"
 #include "scorefont.h"
 #include "actionicon.h"
@@ -295,7 +295,7 @@ void Accidental::write(XmlWriter& xml) const
 
 QString Accidental::subtypeUserName() const
 {
-    return Sym::id2userName(symbol());
+    return SymNames::translatedUserNameForSymId(symbol());
 }
 
 //---------------------------------------------------------
@@ -323,7 +323,7 @@ AccidentalVal Accidental::subtype2value(AccidentalType st)
 
 const char* Accidental::subtype2name(AccidentalType st)
 {
-    return Sym::id2name(accList[int(st)].sym);
+    return SymNames::nameForSymId(accList[int(st)].sym);
 }
 
 //---------------------------------------------------------
@@ -341,7 +341,7 @@ SymId Accidental::subtype2symbol(AccidentalType st)
 
 AccidentalType Accidental::name2subtype(const QString& tag)
 {
-    SymId symId = Sym::name2id(tag);
+    SymId symId = SymNames::symIdByName(tag);
     if (symId == SymId::noSym) {
         // qDebug("no symbol found");
     } else {

@@ -24,7 +24,7 @@
 
 #include "io/xml.h"
 
-#include "sym.h"
+#include "symnames.h"
 #include "system.h"
 #include "segment.h"
 #include "measure.h"
@@ -129,7 +129,7 @@ void Breath::read(XmlReader& e)
                 break;
             }
         } else if (tag == "symbol") {
-            _symId = Sym::name2id(e.readElementText());
+            _symId = SymNames::symIdByName(e.readElementText());
         } else if (tag == "pause") {
             _pause = e.readDouble();
         } else if (!EngravingItem::readProperties(e)) {
@@ -255,6 +255,6 @@ EngravingItem* Breath::prevSegmentElement()
 
 QString Breath::accessibleInfo() const
 {
-    return Sym::id2userName(_symId);
+    return SymNames::translatedUserNameForSymId(_symId);
 }
 }

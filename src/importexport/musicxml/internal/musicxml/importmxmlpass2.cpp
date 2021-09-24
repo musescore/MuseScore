@@ -65,7 +65,7 @@
 #include "libmscore/slur.h"
 #include "libmscore/staff.h"
 #include "libmscore/stafftext.h"
-#include "libmscore/sym.h"
+#include "libmscore/symnames.h"
 #include "libmscore/tempo.h"
 #include "libmscore/tempotext.h"
 #include "libmscore/textline.h"
@@ -690,7 +690,7 @@ static QString text2syms(const QString& t)
         while (maxMatch > 0) {
             QString toBeMatched = in.left(maxMatch);
             if (map.contains(toBeMatched)) {
-                sym = Sym::id2name(map.value(toBeMatched));
+                sym = SymNames::nameForSymId(map.value(toBeMatched));
                 break;
             }
             maxMatch--;

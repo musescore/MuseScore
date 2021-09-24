@@ -25,7 +25,7 @@
 #include "translation.h"
 #include "io/xml.h"
 
-#include "sym.h"
+#include "symnames.h"
 #include "staff.h"
 #include "clef.h"
 #include "measure.h"
@@ -400,7 +400,7 @@ void KeySig::write(XmlWriter& xml) const
         xml.tag("custom", 1);
         for (const KeySym& ks : _sig.keySymbols()) {
             xml.startObject("KeySym");
-            xml.tag("sym", Sym::id2name(ks.sym));
+            xml.tag("sym", SymNames::nameForSymId(ks.sym));
             xml.tag("pos", ks.spos);
             xml.endObject();
         }
@@ -461,13 +461,14 @@ void KeySig::read(XmlReader& e)
                     bool valid;
                     SymId id = SymId(val.toInt(&valid));
                     if (!valid) {
-                        id = Sym::name2id(val);
+                        id = SymNames::symIdByName(val);
                     }
                     if (score()->mscVersion() <= 114) {
                         if (valid) {
                             id = KeySig::convertFromOldId(val.toInt(&valid));
-                        } else {
-                            id = Sym::oldName2id(val);
+                        }
+                        if (!valid) {
+                            id = SymNames::symIdByOldName(val);
                         }
                     }
                     ks.sym = id;

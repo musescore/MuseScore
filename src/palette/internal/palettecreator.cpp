@@ -67,7 +67,7 @@
 #include "libmscore/staffstate.h"
 #include "libmscore/stafftext.h"
 #include "libmscore/stafftypechange.h"
-#include "libmscore/sym.h"
+#include "libmscore/symnames.h"
 #include "libmscore/systemtext.h"
 #include "libmscore/tempo.h"
 #include "libmscore/tempotext.h"
@@ -305,13 +305,13 @@ PalettePtr PaletteCreator::newBarLinePalette()
     }
 
     // bar line spans
-    struct {
+    const struct {
         int from, to;
         const char* userName;
     } spans[] = {
-        { BARLINE_SPAN_TICK1_FROM,  BARLINE_SPAN_TICK1_TO,  Sym::symUserNames[int(SymId::barlineDashed)] },
+        { BARLINE_SPAN_TICK1_FROM,  BARLINE_SPAN_TICK1_TO,  SymNames::userNameForSymId(SymId::barlineDashed) },
         { BARLINE_SPAN_TICK2_FROM,  BARLINE_SPAN_TICK2_TO,  QT_TRANSLATE_NOOP("symUserNames", "Tick barline 2") },  // Not in SMuFL
-        { BARLINE_SPAN_SHORT1_FROM, BARLINE_SPAN_SHORT1_TO, Sym::symUserNames[int(SymId::barlineShort)] },
+        { BARLINE_SPAN_SHORT1_FROM, BARLINE_SPAN_SHORT1_TO, SymNames::userNameForSymId(SymId::barlineShort) },
         { BARLINE_SPAN_SHORT2_FROM, BARLINE_SPAN_SHORT2_TO, QT_TRANSLATE_NOOP("symUserNames", "Short barline 2") }, // Not in SMuFL
     };
     for (auto span : spans) {
@@ -348,7 +348,7 @@ PalettePtr PaletteCreator::newRepeatsPalette()
         auto rm = makeElement<MeasureRepeat>(gpaletteScore);
         rm->setSymId(repeat.id);
         rm->setNumMeasures(repeat.measuresCount);
-        sp->appendElement(rm, mu::qtrc("symUserNames", Sym::symUserNames[int(repeat.id)]));
+        sp->appendElement(rm, mu::qtrc("symUserNames", SymNames::userNameForSymId(repeat.id)));
     }
 
     for (int i = 0; i < markerTypeTableSize(); i++) {
@@ -489,7 +489,7 @@ PalettePtr PaletteCreator::newFingeringPalette()
         sp->appendElement(f, QT_TRANSLATE_NOOP("palette", "String number %1"));
     }
 
-    static const std::vector<SymId> lute {
+    static const SymIdList lute {
         SymId::stringsThumbPosition,
         SymId::luteFingeringRHThumb, SymId::luteFingeringRHFirst,
         SymId::luteFingeringRHSecond, SymId::luteFingeringRHThird
@@ -550,7 +550,7 @@ PalettePtr PaletteCreator::newArticulationsPalette()
     sp->setGridSize(42, 25);
     sp->setDrawGrid(true);
 
-    static const std::vector<SymId> art {
+    static const SymIdList art {
         SymId::articAccentAbove,
         SymId::articStaccatoAbove,
         SymId::articStaccatissimoAbove,
@@ -620,7 +620,7 @@ PalettePtr PaletteCreator::newOrnamentsPalette()
     sp->setVisible(false);
 
     // do not include additional symbol-based fingerings (temporarily?) implemented as articulations
-    static const std::vector<SymId> art {
+    static const SymIdList art {
         SymId::ornamentTurnInverted,
         SymId::ornamentTurnSlash,
         SymId::ornamentTurn,
@@ -655,7 +655,7 @@ PalettePtr PaletteCreator::newAccordionPalette()
     sp->setVisible(false);
 
     // do not include additional symbol-based fingerings (temporarily?) implemented as articulations
-    static std::vector<SymId> art {
+    static SymIdList art {
         SymId::accdnCombDot,
         SymId::accdnCombLH2RanksEmpty,
         SymId::accdnCombLH3RanksEmptySquare,
@@ -721,7 +721,7 @@ PalettePtr PaletteCreator::newAccordionPalette()
     for (auto i : art) {
         auto s = makeElement<Symbol>(gpaletteScore);
         s->setSym(i);
-        sp->appendElement(s, Sym::id2userName(i));
+        sp->appendElement(s, SymNames::translatedUserNameForSymId(i));
     }
     return sp;
 }
@@ -765,7 +765,7 @@ PalettePtr PaletteCreator::newBreathPalette()
     sp->setDrawGrid(true);
     sp->setVisible(false);
 
-    static const std::vector<SymId> fermatas {
+    static const SymIdList fermatas {
         SymId::fermataAbove,
         SymId::fermataShortAbove,
         SymId::fermataLongAbove,
@@ -785,7 +785,7 @@ PalettePtr PaletteCreator::newBreathPalette()
         auto a = Factory::makeBreath(gpaletteScore->dummy()->segment());
         a->setSymId(bt.id);
         a->setPause(bt.pause);
-        sp->appendElement(a, Sym::id2userName(bt.id));
+        sp->appendElement(a, SymNames::translatedUserNameForSymId(bt.id));
     }
 
     return sp;

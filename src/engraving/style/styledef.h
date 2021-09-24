@@ -32,7 +32,7 @@
 namespace Ms {
 enum class Pid : int;
 
-// Needs to be duplicated here and in sym.h since moc doesn't handle macros from #include'd files
+// Needs to be duplicated here and in symid.h since moc doesn't handle macros from #include'd files
 #ifdef SCRIPT_INTERFACE
 #define BEGIN_QT_REGISTERED_ENUM(Name) \
     class MSQE_##Name { \
@@ -1501,7 +1501,7 @@ private:
         const QVariant& defaultValue() const { return _defaultValue; }
     };
 
-    static const StyleValue styleValues[int(Sid::STYLES)];
+    static const std::array<StyleValue, size_t(Sid::STYLES)> styleValues;
 };
 }
 

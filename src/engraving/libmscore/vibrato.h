@@ -35,7 +35,7 @@ class Accidental;
 
 class VibratoSegment final : public LineSegment
 {
-    std::vector<SymId> _symbols;
+    SymIdList _symbols;
 
     void symbolLine(SymId start, SymId fill);
     void symbolLine(SymId start, SymId fill, SymId end);
@@ -54,8 +54,8 @@ public:
     EngravingItem* propertyDelegate(Pid) override;
 
     Shape shape() const override;
-    std::vector<SymId> symbols() const { return _symbols; }
-    void setSymbols(const std::vector<SymId>& s) { _symbols = s; }
+    SymIdList symbols() const { return _symbols; }
+    void setSymbols(const SymIdList& s) { _symbols = s; }
 };
 
 //---------------------------------------------------------

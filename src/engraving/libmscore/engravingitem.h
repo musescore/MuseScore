@@ -542,13 +542,13 @@ public:
 
     void drawSymbol(SymId id, mu::draw::Painter* p, const mu::PointF& o = mu::PointF(), qreal scale = 1.0) const;
     void drawSymbol(SymId id, mu::draw::Painter* p, const mu::PointF& o, int n) const;
-    void drawSymbols(const std::vector<SymId>&, mu::draw::Painter* p, const mu::PointF& o = mu::PointF(), qreal scale = 1.0) const;
-    void drawSymbols(const std::vector<SymId>&, mu::draw::Painter* p, const mu::PointF& o, const mu::SizeF& scale) const;
+    void drawSymbols(const SymIdList&, mu::draw::Painter* p, const mu::PointF& o = mu::PointF(), qreal scale = 1.0) const;
+    void drawSymbols(const SymIdList&, mu::draw::Painter* p, const mu::PointF& o, const mu::SizeF& scale) const;
     qreal symHeight(SymId id) const;
     qreal symWidth(SymId id) const;
-    qreal symWidth(const std::vector<SymId>&) const;
+    qreal symWidth(const SymIdList&) const;
     mu::RectF symBbox(SymId id) const;
-    mu::RectF symBbox(const std::vector<SymId>&) const;
+    mu::RectF symBbox(const SymIdList&) const;
 
     mu::PointF symSmuflAnchor(SymId symId, SmuflAnchorId anchorId) const;
 

@@ -59,12 +59,12 @@ public:
 
 private:
     Sid getPropertyStyle(Pid) const override;
-    qreal m_width;                  // width of multimeasure rest
-    int m_number;                   // number of measures represented
-    qreal m_numberPos;              // vertical position of number relative to staff
-    bool m_numberVisible;           // show or hide number
-    std::vector<SymId> m_restSyms;  // stores symbols when using old-style rests
-    qreal m_symsWidth;              // width of symbols with spacing when using old-style
+    qreal m_width;        // width of multimeasure rest
+    int m_number;         // number of measures represented
+    qreal m_numberPos;    // vertical position of number relative to staff
+    bool m_numberVisible; // show or hide number
+    SymIdList m_restSyms; // stores symbols when using old-style rests
+    qreal m_symsWidth;    // width of symbols with spacing when using old-style
 };
 }     // namespace Ms
 #endif

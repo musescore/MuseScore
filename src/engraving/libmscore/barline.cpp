@@ -30,7 +30,7 @@
 #include "factory.h"
 #include "score.h"
 #include "scorefont.h"
-#include "sym.h"
+#include "symnames.h"
 #include "staff.h"
 #include "part.h"
 #include "system.h"
@@ -246,17 +246,17 @@ public:
 //---------------------------------------------------------
 
 const std::vector<BarLineTableItem> BarLine::barLineTable {
-    { BarLineType::NORMAL,           Sym::symUserNames[int(SymId::barlineSingle)],        "normal" },
-    { BarLineType::DOUBLE,           Sym::symUserNames[int(SymId::barlineDouble)],        "double" },
-    { BarLineType::START_REPEAT,     Sym::symUserNames[int(SymId::repeatLeft)],           "start-repeat" },
-    { BarLineType::END_REPEAT,       Sym::symUserNames[int(SymId::repeatRight)],          "end-repeat" },
-    { BarLineType::BROKEN,           Sym::symUserNames[int(SymId::barlineDashed)],        "dashed" },
-    { BarLineType::END,              Sym::symUserNames[int(SymId::barlineFinal)],         "end" },
-    { BarLineType::END_START_REPEAT, Sym::symUserNames[int(SymId::repeatRightLeft)],      "end-start-repeat" },
-    { BarLineType::DOTTED,           Sym::symUserNames[int(SymId::barlineDotted)],        "dotted" },
-    { BarLineType::REVERSE_END,      Sym::symUserNames[int(SymId::barlineReverseFinal)],  "reverse-end" },
-    { BarLineType::HEAVY,            Sym::symUserNames[int(SymId::barlineHeavy)],         "heavy" },
-    { BarLineType::DOUBLE_HEAVY,     Sym::symUserNames[int(SymId::barlineHeavyHeavy)],    "double-heavy" },
+    { BarLineType::NORMAL,           SymNames::userNameForSymId(SymId::barlineSingle),       "normal" },
+    { BarLineType::DOUBLE,           SymNames::userNameForSymId(SymId::barlineDouble),       "double" },
+    { BarLineType::START_REPEAT,     SymNames::userNameForSymId(SymId::repeatLeft),          "start-repeat" },
+    { BarLineType::END_REPEAT,       SymNames::userNameForSymId(SymId::repeatRight),         "end-repeat" },
+    { BarLineType::BROKEN,           SymNames::userNameForSymId(SymId::barlineDashed),       "dashed" },
+    { BarLineType::END,              SymNames::userNameForSymId(SymId::barlineFinal),        "end" },
+    { BarLineType::END_START_REPEAT, SymNames::userNameForSymId(SymId::repeatRightLeft),     "end-start-repeat" },
+    { BarLineType::DOTTED,           SymNames::userNameForSymId(SymId::barlineDotted),       "dotted" },
+    { BarLineType::REVERSE_END,      SymNames::userNameForSymId(SymId::barlineReverseFinal), "reverse-end" },
+    { BarLineType::HEAVY,            SymNames::userNameForSymId(SymId::barlineHeavy),        "heavy" },
+    { BarLineType::DOUBLE_HEAVY,     SymNames::userNameForSymId(SymId::barlineHeavyHeavy),   "double-heavy" },
 };
 
 //---------------------------------------------------------

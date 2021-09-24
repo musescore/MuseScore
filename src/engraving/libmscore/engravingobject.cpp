@@ -35,7 +35,7 @@
 #include "measure.h"
 #include "spanner.h"
 #include "musescoreCore.h"
-#include "sym.h"
+#include "symnames.h"
 #include "masterscore.h"
 #include "factory.h"
 #include "linkedobjects.h"
@@ -496,7 +496,7 @@ QString EngravingObject::propertyUserValue(Pid id) const
     case P_TYPE::DIRECTION:
         return toUserString(val.value<Direction>());
     case P_TYPE::SYMID:
-        return Sym::id2userName(val.value<SymId>());
+        return SymNames::translatedUserNameForSymId(val.value<SymId>());
     default:
         break;
     }
