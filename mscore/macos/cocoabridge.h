@@ -28,7 +28,11 @@ class CocoaBridge {
       static bool isSystemDarkModeSupported();
       static bool isSystemDarkTheme();
       static void setWindowAppearanceIsDark(bool flag);
+
       static void setAllowsAutomaticWindowTabbing(bool flag);
+
+      static void addRecentFile(const QString& path);
+      static void clearRecentFiles();
       };
 
 #endif
