@@ -19,11 +19,6 @@ struct color {
    {
       return !(*this==clr);
    }
-   color &operator=(const color &clr)
-   {
-      r=clr.r; g=clr.g; b=clr.b;
-      return *this;
-   }
 };
 
 typedef std::vector<color> colorvect;
@@ -43,11 +38,6 @@ struct font {
    bool operator!=(const font &f)
    {
       return !(*this==f);
-   }
-   font &operator=(const font &f)
-   {
-      family=f.family; name=f.name; pitch=f.pitch; charset=f.charset;
-      return *this;
    }
 };
 
@@ -90,20 +80,6 @@ struct formatting_options
    bool operator!=(const formatting_options &opt) // tests only for character options
    {
       return !(*this==opt);
-   }
-   formatting_options &operator=(const formatting_options &opt)
-   {
-      chpBold=opt.chpBold; chpAllCaps=opt.chpAllCaps;
-      chpItalic=opt.chpItalic;
-      chpUnderline=opt.chpUnderline; chpVAlign=opt.chpVAlign;
-      chpFontSize=opt.chpFontSize; 
-      chpFColor=opt.chpFColor; chpBColor=opt.chpBColor;
-      chpHighlight=opt.chpHighlight; chpFont=opt.chpFont;
-      chpVShift=opt.chpVShift;
-      papLeft=opt.papLeft; papRight=opt.papRight;
-      papFirst=opt.papFirst; papBefore=opt.papBefore; papAfter=opt.papAfter;
-      papAlign=opt.papAlign; papInTbl=opt.papInTbl;
-      return *this;
    }
    std::string get_par_str() const;
    static std::string get_style_id(const std::string &style);

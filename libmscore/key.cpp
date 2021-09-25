@@ -22,19 +22,6 @@
 namespace Ms {
 
 //---------------------------------------------------------
-//   KeySigEvent
-//---------------------------------------------------------
-
-KeySigEvent::KeySigEvent(const KeySigEvent& k)
-      {
-      _key        = k._key;
-      _mode       = k._mode;
-      _custom     = k._custom;
-      _keySymbols = k._keySymbols;
-      _forInstrumentChange = k._forInstrumentChange;
-      }
-
-//---------------------------------------------------------
 //   enforceLimits - ensure _key
 //   is within acceptable limits (-7 .. +7).
 //   see KeySig::layout()

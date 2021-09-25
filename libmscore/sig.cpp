@@ -394,17 +394,6 @@ void TimeSigMap::read(XmlReader& e, int fileDivision)
       }
 
 //---------------------------------------------------------
-//   SigEvent
-//---------------------------------------------------------
-
-SigEvent::SigEvent(const SigEvent& e)
-      {
-      _timesig = e._timesig;
-      _nominal = e._nominal;
-      _bar     = e._bar;
-      }
-
-//---------------------------------------------------------
 //   SigEvent::write
 //---------------------------------------------------------
 
