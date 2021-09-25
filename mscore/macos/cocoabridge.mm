@@ -60,3 +60,13 @@ void CocoaBridge::setAllowsAutomaticWindowTabbing(bool flag)
       if ([NSWindow respondsToSelector:@selector(allowsAutomaticWindowTabbing)])
             [NSWindow setAllowsAutomaticWindowTabbing: flag];
       }
+
+void CocoaBridge::addRecentFile(const QString& path)
+{
+    [[NSDocumentController sharedDocumentController] noteNewRecentDocumentURL:[NSURL fileURLWithPath:path.toNSString()]];
+}
+
+void CocoaBridge::clearRecentFiles()
+{
+    [[NSDocumentController sharedDocumentController] clearRecentDocuments:nil];
+}

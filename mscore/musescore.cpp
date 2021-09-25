@@ -2374,6 +2374,9 @@ void MuseScore::selectScore(QAction* action)
             case QVariant::String: {
                   if (actionData.toString() == "clear-recent") {
                         _recentScores.clear();
+#ifdef Q_OS_MAC
+                        CocoaBridge::clearRecentFiles();
+#endif
 
                         if (startcenter)
                               startcenter->updateRecentScores();
@@ -2498,11 +2501,16 @@ void MuseScore::addRecentScore(const QString& scorePath)
       {
       if (scorePath.isEmpty())
             return;
+
       QFileInfo fi(scorePath);
       QString absoluteFilePath = fi.absoluteFilePath();
       _recentScores.removeAll(absoluteFilePath);
       _recentScores.prepend(absoluteFilePath);
-      if (_recentScores.size() > RECENT_LIST_SIZE)
+#ifdef Q_OS_MAC
+      CocoaBridge::addRecentFile(absoluteFilePath);
+#endif
+
+      while (_recentScores.size() > RECENT_LIST_SIZE)
             _recentScores.removeLast();
       }
 
