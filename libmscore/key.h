@@ -93,17 +93,16 @@ struct KeySym {
 //---------------------------------------------------------
 
 class KeySigEvent {
-      Key _key            { Key::INVALID     };          // -7 -> +7
-      KeyMode _mode       { KeyMode::UNKNOWN };
-      bool _custom        { false            };
-      bool _forInstrumentChange{ false          };
+      Key _key { Key::INVALID }; // -7 -> +7
+      KeyMode _mode { KeyMode::UNKNOWN };
+      bool _custom { false };
+      bool _forInstrumentChange { false };
       QList<KeySym> _keySymbols;
 
       void enforceLimits();
 
    public:
       KeySigEvent() {}
-      KeySigEvent(const KeySigEvent&);
 
       bool operator==(const KeySigEvent& e) const;
       bool operator!=(const KeySigEvent& e) const { return !(*this == e); }
