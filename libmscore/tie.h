@@ -42,6 +42,7 @@ class TieSegment final : public SlurTieSegment {
       void draw(QPainter*) const override;
 
       void layoutSegment(const QPointF& p1, const QPointF& p2);
+      void adjustX();
 
       bool isEdited() const;
       void editDrag(EditData&) override;
@@ -61,6 +62,9 @@ class Tie final : public SlurTie {
       static Note* editStartNote;
       static Note* editEndNote;
 
+   private:
+      bool _isInside{ false };
+
    public:
       Tie(Score* = 0);
 
@@ -71,6 +75,8 @@ class Tie final : public SlurTie {
       void setEndNote(Note* note)                 { setEndElement((Element*)note); }
       Note* startNote() const;
       Note* endNote() const;
+
+      bool isInside() const { return _isInside; }
 
       void calculateDirection();
       void write(XmlWriter& xml) const override;
