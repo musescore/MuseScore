@@ -2562,7 +2562,7 @@ void MuseScore::loadScoreList()
 void MuseScore::openRecentMenu()
       {
       openRecent->clear();
-      bool one = false;
+      bool hasAnyRecentFiles = false;
       for (const QFileInfo& fi : recentScores()) {
             QAction* action = openRecent->addAction(fi.fileName().replace("&", "&&"));  // show filename only
 
@@ -2574,12 +2574,17 @@ void MuseScore::openRecentMenu()
 
             action->setData(actionData);
             action->setToolTip(filePath);
-            one = true;
+            hasAnyRecentFiles = true;
             }
-      if (one) {
+      if (hasAnyRecentFiles) {
             openRecent->addSeparator();
             QAction* action = openRecent->addAction(tr("Clear Recent Files"));
             action->setData("clear-recent");
+            }
+      else {
+            // Don't leave the menu empty, but add a hint
+            QAction* hint = openRecent->addAction(tr("No recent files"));
+            hint->setEnabled(false);
             }
       }
 
