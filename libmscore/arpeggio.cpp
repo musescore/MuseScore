@@ -18,6 +18,7 @@
 #include "score.h"
 #include "sym.h"
 #include "staff.h"
+#include "stafflines.h"
 #include "part.h"
 #include "page.h"
 #include "segment.h"
@@ -114,9 +115,9 @@ void Arpeggio::read(XmlReader& e)
 
 void Arpeggio::symbolLine(SymId end, SymId fill)
       {
-      qreal y1 = -_userLen1;
-      qreal y2 = _height + _userLen2;
-      qreal w   = y2 - y1;
+      qreal top = calcTop();
+      qreal bottom = calcBottom();
+      qreal w   = bottom - top;
       qreal mag = magS();
       ScoreFont* f = score()->scoreFont();
 
@@ -130,13 +131,73 @@ void Arpeggio::symbolLine(SymId end, SymId fill)
       }
 
 //---------------------------------------------------------
+//   calcTop
+//---------------------------------------------------------
+
+qreal Arpeggio::calcTop() const
+      {
+      qreal top = -_userLen1;
+      if (!parent())
+            return top;
+
+      switch (arpeggioType()) {
+            case ArpeggioType::BRACKET: {
+                  qreal lineWidth = score()->styleP(Sid::ArpeggioLineWidth);
+                  return top - lineWidth / 2.0;
+                  }
+            case ArpeggioType::NORMAL:
+            case ArpeggioType::UP:
+            case ArpeggioType::DOWN: {
+                  // if the top is in the staff on a space, move it up
+                  // if the bottom note is on a line, the distance is 0.25 spaces
+                  // if the bottom note is on a space, the distance is 0.5 spaces
+                  int topNoteLine = chord()->upNote()->line();
+                  int lines = staff()->lines(tick());
+                  int bottomLine = (lines - 1) * 2;
+                  if (topNoteLine <= 0 || topNoteLine % 2 == 0 || topNoteLine >= bottomLine)
+                        return top;
+                  int downNoteLine = chord()->downNote()->line();
+                  if (downNoteLine % 2 == 1 && downNoteLine < bottomLine)
+                        return top - 0.4 * spatium();
+                  return top - 0.25 * spatium();
+                  }
+            default:
+                  return top - spatium() / 4;
+            }
+      }
+
+//---------------------------------------------------------
+//   calcBottom
+//---------------------------------------------------------
+
+qreal Arpeggio::calcBottom() const
+      {
+      qreal top = -_userLen1;
+      qreal bottom = _height + _userLen2;
+      if (!parent())
+            return bottom;
+      switch (arpeggioType()) {
+            case ArpeggioType::BRACKET: {
+                  qreal lineWidth = score()->styleP(Sid::ArpeggioLineWidth);
+                  return bottom - top + lineWidth;
+                  }
+            case ArpeggioType::NORMAL:
+            case ArpeggioType::UP:
+            case ArpeggioType::DOWN:
+                  return bottom;
+            default:
+                  return bottom + spatium() / 2;
+            }
+      }
+
+//---------------------------------------------------------
 //   layout
 //---------------------------------------------------------
 
 void Arpeggio::layout()
       {
-      qreal y1 = -_userLen1;
-      qreal y2 = _height + _userLen2;
+      qreal top = calcTop();
+      qreal bottom = calcBottom();
       _hidden = false;
       if (score()->styleB(Sid::ArpeggioHiddenInStdIfTab)) {
             if (staff() && staff()->isPitchedStaff(tick())) {
@@ -156,7 +217,7 @@ void Arpeggio::layout()
                   symbolLine(SymId::wiggleArpeggiatoUp, SymId::wiggleArpeggiatoUp);
                   // string is rotated -90 degrees
                   QRectF r(symBbox(symbols));
-                  setbbox(QRectF(0.0, -r.x() + y1, r.height(), r.width()));
+                  setbbox(QRectF(0.0, -r.x() + top, r.height(), r.width()));
                   }
                   break;
 
@@ -164,7 +225,7 @@ void Arpeggio::layout()
                   symbolLine(SymId::wiggleArpeggiatoUpArrow, SymId::wiggleArpeggiatoUp);
                   // string is rotated -90 degrees
                   QRectF r(symBbox(symbols));
-                  setbbox(QRectF(0.0, -r.x() + y1, r.height(), r.width()));
+                  setbbox(QRectF(0.0, -r.x() + top, r.height(), r.width()));
                   }
                   break;
 
@@ -172,7 +233,7 @@ void Arpeggio::layout()
                   symbolLine(SymId::wiggleArpeggiatoUpArrow, SymId::wiggleArpeggiatoUp);
                   // string is rotated +90 degrees (so that UpArrow turns into a DownArrow)
                   QRectF r(symBbox(symbols));
-                  setbbox(QRectF(0.0, r.x() + y1, r.height(), r.width()));
+                  setbbox(QRectF(0.0, r.x() + top, r.height(), r.width()));
                   }
                   break;
 
@@ -180,10 +241,7 @@ void Arpeggio::layout()
                   qreal _spatium = spatium();
                   qreal x1 = _spatium * .5;
                   qreal w  = symBbox(SymId::arrowheadBlackUp).width();
-                  qreal terminalDistance = 0;
-                  if (parent())
-                        terminalDistance = _spatium / 4 - score()->styleP(Sid::ArpeggioLineWidth) / 2;
-                  setbbox(QRectF(x1 - w * .5, y1, w, y2 - y1 + terminalDistance));
+                  setbbox(QRectF(x1 - w * .5, top, w, bottom));
                   }
                   break;
 
@@ -191,19 +249,16 @@ void Arpeggio::layout()
                   qreal _spatium = spatium();
                   qreal x1 = _spatium * .5;
                   qreal w  = symBbox(SymId::arrowheadBlackDown).width();
-                  qreal terminalDistance = 0;
-                  if (parent())
-                        terminalDistance = _spatium / 4 - score()->styleP(Sid::ArpeggioLineWidth) / 2;
-                  setbbox(QRectF(x1 - w * .5, y1 - terminalDistance, w, y2 - y1 + terminalDistance));
+                  setbbox(QRectF(x1 - w * .5, top, w, bottom));
                   }
                   break;
 
             case ArpeggioType::BRACKET: {
                   qreal _spatium = spatium();
                   qreal w  = score()->styleS(Sid::ArpeggioHookLen).val() * _spatium;
-                  setbbox(QRectF(0.0, y1, w, y2 - y1));
-                  break;
+                  setbbox(QRectF(0.0, top, w, bottom));
                   }
+                  break;
             }
       }
 
