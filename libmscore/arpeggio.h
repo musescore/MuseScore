@@ -41,12 +41,14 @@ class Arpeggio final : public Element {
       bool _hidden = false; // set in layout, will skip draw if true
 
       void symbolLine(SymId start, SymId fill);
-      void symbolLine2(SymId end, SymId fill);
 
       void spatiumChanged(qreal /*oldValue*/, qreal /*newValue*/) override;
       QVector<QLineF> dragAnchorLines() const override;
       QVector<QLineF> gripAnchorLines(Grip) const override;
       void startEdit(EditData&) override;
+
+      qreal calcTop() const;
+      qreal calcBottom() const;
 
       static const std::array<const char*, 6> arpeggioTypeNames;
 
