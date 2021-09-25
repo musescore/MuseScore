@@ -52,6 +52,7 @@ public:
     void draw(mu::draw::Painter*) const override;
 
     void layoutSegment(const mu::PointF& p1, const mu::PointF& p2);
+    void adjustX();
 
     bool isEdited() const;
     void editDrag(EditData&) override;
@@ -72,6 +73,9 @@ class Tie final : public SlurTie
     static Note* editStartNote;
     static Note* editEndNote;
 
+private:
+    bool _isInside{ false };
+
 public:
     Tie(EngravingItem* parent = 0);
 
@@ -81,6 +85,8 @@ public:
     void setEndNote(Note* note) { setEndElement((EngravingItem*)note); }
     Note* startNote() const;
     Note* endNote() const;
+
+    bool isInside() const { return _isInside; }
 
     void calculateDirection();
     void write(XmlWriter& xml) const override;
