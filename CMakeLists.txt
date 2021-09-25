@@ -349,7 +349,7 @@ endif (MINGW OR MSVC OR APPLE)
 
 # Download MuseScore SoundFont
 if (DOWNLOAD_SOUNDFONT)
-  set (SF_VERSION_REMOTE_FILE ${PROJECT_BINARY_DIR}/VERSION)
+  set (SF_VERSION_REMOTE_FILE ${PROJECT_BINARY_DIR}/SF_VERSION)
   set (SF_VERSION_LOCAL_FILE ${PROJECT_SOURCE_DIR}/share/sound/VERSION)
   set (DOWNLOAD_URL_ROOT "https://ftp.osuosl.org/pub/musescore/soundfont/MuseScore_General")
   set (SOUND_DIRECTORY ${PROJECT_SOURCE_DIR}/share/sound)
