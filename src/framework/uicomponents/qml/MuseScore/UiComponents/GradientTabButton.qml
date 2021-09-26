@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Layouts 1.3
-import QtQuick.Controls 2.0
+import QtQuick.Controls 2.15
 import QtGraphicalEffects 1.0
 
 import MuseScore.Ui 1.0
@@ -34,11 +33,12 @@ RadioDelegate {
     property string title: ""
 
     property int orientation: Qt.Vertical
+    readonly property bool isVertical: orientation === Qt.Vertical
 
     property var normalStateFont: ui.theme.tabFont
     property var selectedStateFont: ui.theme.tabBoldFont
 
-    property alias navigation: keynavCtrl
+    property alias navigation: navCtrl
 
     height: 48
 
@@ -50,7 +50,7 @@ RadioDelegate {
     Accessible.role: Accessible.NoRole
 
     NavigationControl {
-        id: keynavCtrl
+        id: navCtrl
         name: root.objectName
 
         accessible.role: MUAccessible.RadioButton
@@ -58,7 +58,7 @@ RadioDelegate {
         accessible.checked: root.checked
 
         onActiveChanged: {
-            if (keynavCtrl.active) {
+            if (navCtrl.active) {
                 root.forceActiveFocus()
             }
         }
@@ -66,38 +66,26 @@ RadioDelegate {
         onTriggered: root.toggled()
     }
 
-    background: Item {
+    background: Rectangle {
+        id: backgroundRect
         anchors.fill: parent
 
-        Rectangle {
-            id: backgroundRect
-            anchors.fill: parent
-            anchors.bottomMargin: 2
+        color: Utils.colorWithAlpha(ui.theme.backgroundPrimaryColor, ui.theme.buttonOpacityNormal)
 
-            color: ui.theme.backgroundPrimaryColor
-            opacity: ui.theme.buttonOpacityNormal
-
-            NavigationFocusBorder { navigationCtrl: keynavCtrl }
-
-            border.color: ui.theme.strokeColor
-            border.width: ui.theme.borderWidth
-            radius: 2
-        }
+        border.color: navCtrl.active ? ui.theme.fontPrimaryColor : ui.theme.strokeColor
+        border.width: navCtrl.active ? ui.theme.navCtrlBorderWidth : ui.theme.borderWidth
 
         Item {
             id: backgroundGradientRect
             anchors.fill: parent
-            anchors.margins: 2 //! NOTE margin needed to show focus border
+            anchors.margins: backgroundRect.border.width
 
-            readonly property bool isVertical: root.orientation === Qt.Vertical
             visible: false
 
             LinearGradient {
-                id: backgroundGradient
                 anchors.fill: parent
-
                 start: Qt.point(0, 0)
-                end: backgroundGradientRect.isVertical ? Qt.point(0, root.height) : Qt.point(root.width, 0)
+                end: root.isVertical ? Qt.point(0, root.height) : Qt.point(root.width, 0)
                 gradient: Gradient {
                     GradientStop {
                         position: 0.0
@@ -105,8 +93,7 @@ RadioDelegate {
                     }
                     GradientStop {
                         position: 1.0
-                        color: Utils.colorWithAlpha(ui.theme.accentColor,
-                                                    backgroundGradientRect.isVertical ? 0.2 : 0.1)
+                        color: Utils.colorWithAlpha(ui.theme.accentColor, root.isVertical ? 0.2 : 0.1)
                     }
                 }
             }
@@ -117,7 +104,7 @@ RadioDelegate {
 
                 states: [
                     State {
-                        when: backgroundGradientRect.isVertical
+                        when: root.isVertical
                         AnchorChanges {
                             target: line
                             anchors.left: parent.left
@@ -127,12 +114,11 @@ RadioDelegate {
 
                         PropertyChanges {
                             target: line
-                            width: parent.width
                             height: 2
                         }
                     },
                     State {
-                        when: !backgroundGradientRect.isVertical
+                        when: !root.isVertical
                         AnchorChanges {
                             target: line
                             anchors.top: parent.top
@@ -143,7 +129,6 @@ RadioDelegate {
                         PropertyChanges {
                             target: line
                             width: 2
-                            height: parent.height
                         }
                     }
                 ]
@@ -189,8 +174,7 @@ RadioDelegate {
 
             PropertyChanges {
                 target: backgroundRect
-                color: ui.theme.buttonColor
-                opacity: ui.theme.buttonOpacityHover
+                color: Utils.colorWithAlpha(ui.theme.buttonColor, ui.theme.buttonOpacityHover)
             }
         },
 
@@ -200,8 +184,7 @@ RadioDelegate {
 
             PropertyChanges {
                 target: backgroundRect
-                color: ui.theme.buttonColor
-                opacity: ui.theme.buttonOpacityHit
+                color: Utils.colorWithAlpha(ui.theme.buttonColor, ui.theme.buttonOpacityHit)
             }
         },
 
@@ -216,7 +199,7 @@ RadioDelegate {
 
             PropertyChanges {
                 target: textLabel
-                font: selectedStateFont
+                font: root.selectedStateFont
             }
         }
     ]
