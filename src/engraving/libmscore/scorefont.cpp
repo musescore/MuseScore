@@ -430,6 +430,70 @@ void ScoreFont::loadStylisticAlternates(const QJsonObject& glyphsWithAlternatesO
         { QString("brace"),
           QString("braceLarger"),
           SymId::braceLarger
+        },
+        { QString("flag1024thDown"),
+          QString("flag1024thDownStraight"),
+          SymId::flag1024thDownStraight
+        },
+        { QString("flag1024thUp"),
+          QString("flag1024thUpStraight"),
+          SymId::flag1024thUpStraight
+        },
+        { QString("flag128thDown"),
+          QString("flag128thDownStraight"),
+          SymId::flag128thDownStraight
+        },
+        { QString("flag128thUp"),
+          QString("flag128thUpStraight"),
+          SymId::flag128thUpStraight
+        },
+        { QString("flag16thDown"),
+          QString("flag16thDownStraight"),
+          SymId::flag16thDownStraight
+        },
+        { QString("flag16thUp"),
+          QString("flag16thUpStraight"),
+          SymId::flag16thUpStraight
+        },
+        { QString("flag256thDown"),
+          QString("flag256thDownStraight"),
+          SymId::flag256thDownStraight
+        },
+        { QString("flag256thUp"),
+          QString("flag256thUpStraight"),
+          SymId::flag256thUpStraight
+        },
+        { QString("flag32ndDown"),
+          QString("flag32ndDownStraight"),
+          SymId::flag32ndDownStraight
+        },
+        { QString("flag32ndUp"),
+          QString("flag32ndUpStraight"),
+          SymId::flag32ndUpStraight
+        },
+        { QString("flag512thDown"),
+          QString("flag512thDownStraight"),
+          SymId::flag512thDownStraight
+        },
+        { QString("flag512thUp"),
+          QString("flag512thUpStraight"),
+          SymId::flag512thUpStraight
+        },
+        { QString("flag64thDown"),
+          QString("flag64thDownStraight"),
+          SymId::flag64thDownStraight
+        },
+        { QString("flag64thUp"),
+          QString("flag64thUpStraight"),
+          SymId::flag64thUpStraight
+        },
+        { QString("flag8thDown"),
+          QString("flag8thDownStraight"),
+          SymId::flag8thDownStraight
+        },
+        { QString("flag8thUp"),
+          QString("flag8thUpStraight"),
+          SymId::flag8thUpStraight
         }
     };
 

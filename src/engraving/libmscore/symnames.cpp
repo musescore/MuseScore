@@ -3033,6 +3033,23 @@ constexpr const std::array<const char*, size_t(SymId::lastSym) + 1> SymNames::s_
     "braceLarge",
     "braceLarger",
 
+    "flag1024thDownStraight",
+    "flag1024thUpStraight",
+    "flag128thDownStraight",
+    "flag128thUpStraight",
+    "flag16thDownStraight",
+    "flag16thUpStraight",
+    "flag256thDownStraight",
+    "flag256thUpStraight",
+    "flag32ndDownStraight",
+    "flag32ndUpStraight",
+    "flag512thDownStraight",
+    "flag512thUpStraight",
+    "flag64thDownStraight",
+    "flag64thUpStraight",
+    "flag8thDownStraight",
+    "flag8thUpStraight",
+
     //MuseScore-local symbols, precomposed symbols to mimic some Emmentaler glyphs
 
     "ornamentPrallMordent",         // ornamentPrecompTrillWithMordent ?
@@ -6014,6 +6031,23 @@ constexpr const std::array<const char*, size_t(SymId::lastSym) + 1> SymNames::s_
     "Small brace",
     "Large brace",
     "Larger brace",
+
+    "Combining flag 8 (1024th) below straight",
+    "Combining flag 8 (1024th) above straight",
+    "Combining flag 5 (128th) below straight",
+    "Combining flag 5 (128th) above straight",
+    "Combining flag 2 (16th) below straight",
+    "Combining flag 2 (16th) above straight",
+    "Combining flag 6 (256th) below straight",
+    "Combining flag 6 (256th) above straight",
+    "Combining flag 3 (32nd) below straight",
+    "Combining flag 3 (32nd) above straight",
+    "Combining flag 7 (512th) below straight",
+    "Combining flag 7 (512th) above straight",
+    "Combining flag 4 (64th) below straight",
+    "Combining flag 4 (64th) above straight",
+    "Combining flag 1 (8th) below straight",
+    "Combining flag 1 (8th) above straight",
 
     //MuseScore-local symbols, precomposed symbols to mimic some Emmentaler glyphs
 
