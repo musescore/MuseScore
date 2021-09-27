@@ -49,6 +49,9 @@ void AbstractInvoker::invoke(int type, const NotifyData& data)
 void AbstractInvoker::invokeCallback(int type, const CallBack& c, const NotifyData& data)
 {
     assert(c.threadID == std::this_thread::get_id());
+    if (c.receiver && !c.receiver->isConnectedAsync()) {
+        return;
+    }
     doInvoke(type, c.call, data);
 }
 
