@@ -82,7 +82,7 @@ private:
 
     Size m_size;
     QByteArray m_data; //! usually png
-    uint m_key;
+    uint m_key = 0;
 };
 }
 
