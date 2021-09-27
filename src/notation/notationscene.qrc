@@ -29,5 +29,7 @@
         <file>qml/MuseScore/NotationScene/NotationZoomPinchArea.qml</file>
         <file>qml/MuseScore/NotationScene/internal/PartsTopPanel.qml</file>
         <file>qml/MuseScore/NotationScene/internal/PartsBottomPanel.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/CustomiseControlPanel.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/CustomiseView.qml</file>
     </qresource>
 </RCC>
