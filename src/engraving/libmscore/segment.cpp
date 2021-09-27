@@ -2273,6 +2273,9 @@ qreal Segment::minRight() const
     if (isClefType()) {
         distance += score()->styleP(Sid::clefBarlineDistance);
     }
+    if (trailer()) {
+        distance += score()->styleP(Sid::systemTrailerRightMargin);
+    }
     return distance;
 }
 
