@@ -42,44 +42,61 @@ EngravingItem* Hook::elementBase() const
 
 void Hook::setHookType(int i)
 {
+    bool straight = score()->styleB(Sid::useModernNoteFlags);
     _hookType = i;
 
     switch (i) {
-    case 0: break;
-    case 1: setSym(SymId::flag8thUp);
+    case 0:
         break;
-    case 2: setSym(SymId::flag16thUp);
+    case 1:
+        setSym(straight ? SymId::flag8thUpStraight : SymId::flag8thUp);
         break;
-    case 3: setSym(SymId::flag32ndUp);
+    case 2:
+        setSym(straight ? SymId::flag16thUpStraight : SymId::flag16thUp);
         break;
-    case 4: setSym(SymId::flag64thUp);
+    case 3:
+        setSym(straight ? SymId::flag32ndUpStraight : SymId::flag32ndUp);
         break;
-    case 5: setSym(SymId::flag128thUp);
+    case 4:
+        setSym(straight ? SymId::flag64thUpStraight : SymId::flag64thUp);
         break;
-    case 6: setSym(SymId::flag256thUp);
+    case 5:
+        setSym(straight ? SymId::flag128thUpStraight : SymId::flag128thUp);
         break;
-    case 7: setSym(SymId::flag512thUp);
+    case 6:
+        setSym(straight ? SymId::flag256thUpStraight : SymId::flag256thUp);
         break;
-    case 8: setSym(SymId::flag1024thUp);
+    case 7:
+        setSym(straight ? SymId::flag512thUpStraight : SymId::flag512thUp);
         break;
-
-    case -1: setSym(SymId::flag8thDown);
-        break;
-    case -2: setSym(SymId::flag16thDown);
-        break;
-    case -3: setSym(SymId::flag32ndDown);
-        break;
-    case -4: setSym(SymId::flag64thDown);
-        break;
-    case -5: setSym(SymId::flag128thDown);
-        break;
-    case -6: setSym(SymId::flag256thDown);
-        break;
-    case -7: setSym(SymId::flag512thDown);
-        break;
-    case -8: setSym(SymId::flag1024thDown);
+    case 8:
+        setSym(straight ? SymId::flag1024thUpStraight : SymId::flag1024thUp);
         break;
 
+    case -1:
+        setSym(straight ? SymId::flag8thDownStraight : SymId::flag8thDown);
+        break;
+    case -2:
+        setSym(straight ? SymId::flag16thDownStraight : SymId::flag16thDown);
+        break;
+    case -3:
+        setSym(straight ? SymId::flag32ndDownStraight : SymId::flag32ndDown);
+        break;
+    case -4:
+        setSym(straight ? SymId::flag64thDownStraight : SymId::flag64thDown);
+        break;
+    case -5:
+        setSym(straight ? SymId::flag128thDownStraight : SymId::flag128thDown);
+        break;
+    case -6:
+        setSym(straight ? SymId::flag256thDownStraight : SymId::flag256thDown);
+        break;
+    case -7:
+        setSym(straight ? SymId::flag512thDownStraight : SymId::flag512thDown);
+        break;
+    case -8:
+        setSym(straight ? SymId::flag1024thDownStraight : SymId::flag1024thDown);
+        break;
     default:
         qDebug("no hook/flag for subtype %d", i);
         break;
