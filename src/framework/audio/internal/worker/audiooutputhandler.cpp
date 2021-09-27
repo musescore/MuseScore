@@ -142,6 +142,11 @@ Promise<AudioSignalChanges> AudioOutputHandler::signalChanges(const TrackSequenc
             return;
         }
 
+        if (!s->audioIO()->isHasTrack(trackId)) {
+            reject(static_cast<int>(Err::InvalidTrackId), "no track");
+            return;
+        }
+
         resolve({ s->audioIO()->signalAmplitudeChanged(trackId), s->audioIO()->volumePressureChanged(trackId) });
     }, AudioThread::ID);
 }
