@@ -40,12 +40,27 @@ RowLayout {
     signal moveSelectionUpRequested()
     signal moveSelectionDownRequested()
 
+    property NavigationPanel navigationPanel: NavigationPanel {
+        name: "CostomiseControlPanel"
+        direction: NavigationPanel.Horizontal
+        accessible.name: qsTrc("notation", "Costomise control")
+        onActiveChanged: {
+            if (active) {
+                root.forceActiveFocus()
+            }
+        }
+    }
+
     FlatButton {
         Layout.fillWidth: true
 
         text: qsTrc("notation", "Add separator line")
 
         enabled: root.isAddSeparatorAvailable
+
+        navigation.name: text
+        navigation.panel: root.navigationPanel
+        navigation.column: 0
 
         onClicked: {
             root.addSeparatorLineRequested()
@@ -59,6 +74,11 @@ RowLayout {
         icon: IconCode.DELETE_TANK
         enabled: root.isRemovingAvailable
 
+        navigation.name: text
+        navigation.panel: root.navigationPanel
+        navigation.column: 1
+        navigation.accessible.name: qsTrc("uicomponents", "Delete")
+
         onClicked: {
             root.removeSelectionRequested()
         }
@@ -71,6 +91,11 @@ RowLayout {
         icon: IconCode.ARROW_UP
         enabled: root.isMovingUpAvailable
 
+        navigation.name: text
+        navigation.panel: root.navigationPanel
+        navigation.column: 2
+        navigation.accessible.name: qsTrc("uicomponents", "Up")
+
         onClicked: {
             root.moveSelectionUpRequested()
         }
@@ -82,6 +107,11 @@ RowLayout {
 
         icon: IconCode.ARROW_DOWN
         enabled: root.isMovingDownAvailable
+
+        navigation.name: text
+        navigation.panel: root.navigationPanel
+        navigation.column: 3
+        navigation.accessible.name: qsTrc("uicomponents", "Down")
 
         onClicked: {
             root.moveSelectionDownRequested()

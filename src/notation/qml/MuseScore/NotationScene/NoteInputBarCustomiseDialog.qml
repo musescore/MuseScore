@@ -46,6 +46,10 @@ StyledDialogView {
         customiseModel.load()
     }
 
+    onOpened: {
+        view.focusOnFirst()
+    }
+
     ColumnLayout {
         anchors.fill: parent
 
@@ -70,6 +74,9 @@ StyledDialogView {
             isRemovingAvailable: customiseModel.isRemovingAvailable
             isMovingUpAvailable: customiseModel.isMovingUpAvailable
             isMovingDownAvailable: customiseModel.isMovingDownAvailable
+
+            navigationPanel.section: root.navigationSection
+            navigationPanel.order: 1
 
             onAddSeparatorLineRequested: {
                 customiseModel.addSeparatorLine()
@@ -97,6 +104,9 @@ StyledDialogView {
             Layout.topMargin: 12
 
             model: customiseModel
+
+            navigationPanel.section: root.navigationSection
+            navigationPanel.order: 2
 
             onSelectRowRequested: {
                 customiseModel.selectRow(index)

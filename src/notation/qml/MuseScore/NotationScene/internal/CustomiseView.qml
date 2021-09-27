@@ -43,6 +43,41 @@ ListView {
         }
     }
 
+    function focusOnFirst() {
+        var selectedIndexes = root.model.selectionModel.selectedIndexes
+        if (selectedIndexes.lenght > 0) {
+            root.selectRowRequested(selectedIndexes[0])
+        } else {
+            root.selectRowRequested(0)
+        }
+
+        root.positionViewAtSelectedItems()
+    }
+
+    property NavigationPanel navigationPanel: NavigationPanel {
+        name: "CostomiseView"
+        direction: NavigationPanel.Both
+        accessible.name: qsTrc("notation", "Costomise view")
+        onActiveChanged: {
+            if (active) {
+                root.forceActiveFocus()
+            }
+        }
+
+        onNavigationEvent: {
+            if (event.type === NavigationEvent.AboutActive) {
+                event.setData("controlName", prv.currentItemNavigationName)
+            }
+        }
+    }
+
+
+    QtObject {
+        id: prv
+
+        property var currentItemNavigationName: []
+    }
+
     ScrollBar.vertical: StyledScrollBar {
 
         anchors.top: parent.top
@@ -56,6 +91,8 @@ ListView {
     delegate: ListItemBlank {
         id: itemDelegate
 
+        property var item: model.item
+
         height: 38
 
         isSelected: model.isSelected
@@ -64,7 +101,23 @@ ListView {
             root.selectRowRequested(index)
         }
 
-        property var item: model.item
+        navigation.name: item.title
+        navigation.panel: root.navigationPanel
+        navigation.row: model.index
+        navigation.column: 0
+        navigation.accessible.name: item.title
+        navigation.onActiveChanged: {
+            if (navigation.active) {
+                prv.currentItemNavigationName = navigation.name
+                root.positionViewAtIndex(index, ListView.Contain)
+            }
+        }
+
+        onIsSelectedChanged: {
+            if (isSelected && !navigation.active) {
+                navigation.requestActive()
+            }
+        }
 
         Loader {
             property var delegateType: Boolean(itemDelegate.item) ? itemDelegate.item.type : NoteInputBarCustomiseItem.UNDEFINED
@@ -77,6 +130,9 @@ ListView {
 
                 NoteInputBarActionDelegate {
                     item: itemDelegate.item
+
+                    navigationPanel: root.navigationPanel
+                    navigationRow: index
                 }
             }
 
