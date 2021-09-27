@@ -250,6 +250,12 @@ int AppShell::run(int argc, char** argv)
 
     globalModule.onDeinit();
 
+    for (mu::modularity::IModuleSetup* m : m_modules) {
+        m->onDestroy();
+    }
+
+    globalModule.onDestroy();
+
     // Delete modules
     qDeleteAll(m_modules);
     m_modules.clear();
