@@ -22,6 +22,7 @@
 import QtQuick 2.12
 import QtQuick.Controls 2.12
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
 Item {
@@ -29,10 +30,17 @@ Item {
 
     property var model
 
+    property alias navigationPanel: view.navigationPanel
+
+    function focusOnFirst() {
+        root.model.selectPart(0)
+    }
+
     QtObject {
         id: prv
 
         readonly property int sideMargin: 36
+        property var currentItemNavigationName: ""
     }
 
     Column {
@@ -72,6 +80,23 @@ Item {
         interactive: height < contentHeight
         clip: true
 
+        property NavigationPanel navigationPanel: NavigationPanel {
+            name: "PartsView"
+            direction: NavigationPanel.Both
+            accessible.name: qsTrc("notation", "Parts view")
+            onActiveChanged: {
+                if (active) {
+                    root.forceActiveFocus()
+                }
+            }
+
+            onNavigationEvent: {
+                if (event.type === NavigationEvent.AboutActive) {
+                    event.setData("controlName", prv.currentItemNavigationName)
+                }
+            }
+        }
+
         ScrollBar.vertical: StyledScrollBar {
             anchors.top: parent.top
             anchors.bottom: parent.bottom
@@ -96,6 +121,16 @@ Item {
             currentPartIndex: view.currentIndex
             isSelected: model.isSelected
             isCreated: model.isCreated
+
+            navigation.name: model.title + model.index
+            navigation.panel: view.navigationPanel
+            navigation.row: model.index
+            navigation.onActiveChanged: {
+                if (navigation.active) {
+                    prv.currentItemNavigationName = navigation.name
+                    view.positionViewAtIndex(index, ListView.Contain)
+                }
+            }
 
             onPartClicked: {
                 root.model.selectPart(model.index)
