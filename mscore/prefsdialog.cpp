@@ -504,12 +504,16 @@ void PreferenceDialog::start()
                   new BoolPreferenceItem(PREF_IO_JACK_USEJACKTRANSPORT, useJackTransport, doNothing),
                   new BoolPreferenceItem(PREF_IO_JACK_TIMEBASEMASTER, becomeTimebaseMaster, doNothing),
                   new BoolPreferenceItem(PREF_IO_JACK_REMEMBERLASTCONNECTIONS, rememberLastMidiConnections, doNothing),
+            #ifdef USE_ALSA
                   new StringPreferenceItem(PREF_IO_ALSA_DEVICE, alsaDevice, doNothing),
                   new IntPreferenceItem(PREF_IO_ALSA_SAMPLERATE, alsaSampleRate, doNothing),
                   new IntPreferenceItem(PREF_IO_ALSA_PERIODSIZE, alsaPeriodSize, doNothing),
                   new IntPreferenceItem(PREF_IO_ALSA_FRAGMENTS, alsaFragments, doNothing),
+            #endif
+            #ifdef USE_PORTAUDIO
                   new IntPreferenceItem(PREF_IO_PORTAUDIO_DEVICE, portaudioApi, doNothing, doNothing),
                   new IntPreferenceItem(PREF_IO_PORTAUDIO_DEVICE, portaudioDevice, doNothing, doNothing),
+            #endif
             #ifdef USE_PORTMIDI
                   new StringPreferenceItem(PREF_IO_PORTMIDI_INPUTDEVICE, portMidiInput, doNothing, doNothing),
                   new StringPreferenceItem(PREF_IO_PORTMIDI_OUTPUTDEVICE, portMidiOutput, doNothing, doNothing),
@@ -1418,6 +1422,7 @@ void PreferenceDialog::apply()
                   }
             else if (
                (wasJack != nowJack)
+               || (preferences.getBool(PREF_IO_ALSA_USEALSAAUDIO) != alsaDriver->isChecked())
                || (preferences.getBool(PREF_IO_PORTAUDIO_USEPORTAUDIO) != portaudioDriver->isChecked())
                || (preferences.getBool(PREF_IO_PULSEAUDIO_USEPULSEAUDIO) != pulseaudioDriver->isChecked())
       #ifdef USE_ALSA
@@ -1430,10 +1435,12 @@ void PreferenceDialog::apply()
                   preferences.setPreference(PREF_IO_ALSA_USEALSAAUDIO, alsaDriver->isChecked());
                   preferences.setPreference(PREF_IO_PORTAUDIO_USEPORTAUDIO, portaudioDriver->isChecked());
                   preferences.setPreference(PREF_IO_PULSEAUDIO_USEPULSEAUDIO, pulseaudioDriver->isChecked());
+      #ifdef USE_ALSA
                   preferences.setPreference(PREF_IO_ALSA_DEVICE, alsaDevice->text());
                   preferences.setPreference(PREF_IO_ALSA_SAMPLERATE, alsaSampleRate->currentData().toInt());
                   preferences.setPreference(PREF_IO_ALSA_PERIODSIZE, alsaPeriodSize->currentData().toInt());
                   preferences.setPreference(PREF_IO_ALSA_FRAGMENTS, alsaFragments->value());
+      #endif
 
                   restartAudioEngine();
                   }

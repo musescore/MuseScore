@@ -177,10 +177,12 @@ void Preferences::init(bool storeInMemoryOnly)
             {PREF_IMPORT_MUSICXML_REMOVEINSTRUMENTNAMES,           new BoolPreference(true, false)}, // TODO: add to preferences menu
             {PREF_IMPORT_OVERTURE_CHARSET,                         new StringPreference("GBK", false)},
             {PREF_IMPORT_STYLE_STYLEFILE,                          new StringPreference("", false)},
+     #ifdef USE_ALSA
             {PREF_IO_ALSA_DEVICE,                                  new StringPreference("default", false)},
             {PREF_IO_ALSA_FRAGMENTS,                               new IntPreference(3, false)},
             {PREF_IO_ALSA_PERIODSIZE,                              new IntPreference(1024, false)},
             {PREF_IO_ALSA_SAMPLERATE,                              new IntPreference(48000, false)},
+     #endif
             {PREF_IO_ALSA_USEALSAAUDIO,                            new BoolPreference(defaultUseAlsaAudio, false)},
             {PREF_IO_JACK_REMEMBERLASTCONNECTIONS,                 new BoolPreference(true, false)},
             {PREF_IO_JACK_TIMEBASEMASTER,                          new BoolPreference(false, false)},
@@ -198,13 +200,17 @@ void Preferences::init(bool storeInMemoryOnly)
             {PREF_IO_MIDI_USEREMOTECONTROL,                        new BoolPreference(false, false)},
             {PREF_IO_OSC_PORTNUMBER,                               new IntPreference(5282, false)},
             {PREF_IO_OSC_USEREMOTECONTROL,                         new BoolPreference(false, false)},
+      #ifdef USE_PORTAUDIO
             {PREF_IO_PORTAUDIO_DEVICE,                             new IntPreference(-1, false)},
             {PREF_IO_PORTAUDIO_USEPORTAUDIO,                       new BoolPreference(defaultUsePortAudio, false)},
+      #endif
+      #ifdef USE_PORTMIDI
             {PREF_IO_PORTMIDI_INPUTBUFFERCOUNT,                    new IntPreference(100)},
             {PREF_IO_PORTMIDI_INPUTDEVICE,                         new StringPreference("")},
             {PREF_IO_PORTMIDI_OUTPUTBUFFERCOUNT,                   new IntPreference(65536)},
             {PREF_IO_PORTMIDI_OUTPUTDEVICE,                        new StringPreference("")},
             {PREF_IO_PORTMIDI_OUTPUTLATENCYMILLISECONDS,           new IntPreference(0)},
+      #endif
             {PREF_IO_PULSEAUDIO_USEPULSEAUDIO,                     new BoolPreference(defaultUsePulseAudio, false)},
             {PREF_SCORE_CHORD_PLAYONADDNOTE,                       new BoolPreference(true, false)},
             {PREF_SCORE_HARMONY_PLAY_ONEDIT,                       new BoolPreference(true, false)},
