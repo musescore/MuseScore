@@ -217,7 +217,7 @@ void PlaybackController::onNotationChanged()
 
     for (const Part* part : m_masterNotation->parts()->partList()) {
         if (!notationParts->partExists(part->id())) {
-            audio::TrackId& trackId = m_trackIdMap[part->id()];
+            audio::TrackId trackId = m_trackIdMap[part->id()];
 
             playback()->audioOutput()->outputParams(m_currentSequenceId, trackId)
             .onResolve(this, [this, trackId](AudioOutputParams params) {
@@ -478,13 +478,20 @@ void PlaybackController::addTrack(const ID& partId, const std::string& title)
     IF_ASSERT_FAILED(notationPlayback() && playback()) {
         return;
     }
-
     AudioInputParams inParams = audioSettings()->trackInputParams(partId);
     AudioOutputParams outParams = audioSettings()->trackOutputParams(partId);
+    MidiData midiData = masterNotationMidiData()->trackMidiData(partId);
+    uint64_t notationPlaybackKey = reinterpret_cast<uint64_t>(notationPlayback().get());
 
-    playback()->tracks()->addTrack(m_currentSequenceId, title, masterNotationMidiData()->trackMidiData(
-                                       partId), { std::move(inParams), std::move(outParams) })
-    .onResolve(this, [this, partId](const TrackId trackId, const AudioParams& appliedParams) {
+    playback()->tracks()->addTrack(m_currentSequenceId, title, std::move(midiData), { std::move(inParams), std::move(outParams) })
+    .onResolve(this, [this, partId, notationPlaybackKey](const TrackId trackId, const AudioParams& appliedParams) {
+        //! NOTE It may be that while we were adding a track, the notation was already closed (or opened another)
+        //! This situation can be if the notation was opened and immediately closed.
+        quint64 currentNotationPlaybackKey = reinterpret_cast<uint64_t>(notationPlayback().get());
+        if (currentNotationPlaybackKey != notationPlaybackKey) {
+            return;
+        }
+
         m_trackIdMap.insert({ partId, trackId });
 
         audioSettings()->setTrackInputParams(partId, appliedParams.in);

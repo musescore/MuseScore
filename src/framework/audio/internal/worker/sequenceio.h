@@ -33,6 +33,8 @@ class SequenceIO : public ISequenceIO
 public:
     explicit SequenceIO(IGetTracks* getTracks);
 
+    bool isHasTrack(const TrackId id) const override;
+
     RetVal<AudioInputParams> inputParams(const TrackId id) const override;
     RetVal<AudioOutputParams> outputParams(const TrackId id) const override;
 

@@ -36,6 +36,18 @@ SequenceIO::SequenceIO(IGetTracks* getTracks)
 {
 }
 
+bool SequenceIO::isHasTrack(const TrackId id) const
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    IF_ASSERT_FAILED(m_getTracks) {
+        return false;
+    }
+
+    TrackPtr track = m_getTracks->track(id);
+    return track != nullptr;
+}
+
 RetVal<AudioInputParams> SequenceIO::inputParams(const TrackId id) const
 {
     ONLY_AUDIO_WORKER_THREAD;
@@ -123,6 +135,9 @@ Channel<audioch_t, float> SequenceIO::signalAmplitudeChanged(const TrackId id) c
     }
 
     TrackPtr track = m_getTracks->track(id);
+    IF_ASSERT_FAILED(track) {
+        return Channel<audioch_t, float>();
+    }
 
     return track->outputHandler->signalAmplitudeRmsChanged();
 }
@@ -136,6 +151,9 @@ Channel<audioch_t, volume_dbfs_t> SequenceIO::volumePressureChanged(const TrackI
     }
 
     TrackPtr track = m_getTracks->track(id);
+    IF_ASSERT_FAILED(track) {
+        return Channel<audioch_t, volume_dbfs_t>();
+    }
 
     return track->outputHandler->volumePressureDbfsChanged();
 }
