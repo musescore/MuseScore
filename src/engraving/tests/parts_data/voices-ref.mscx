@@ -1065,6 +1065,7 @@
       <Style>
         <lastSystemFillLimit>0</lastSystemFillLimit>
         <createMultiMeasureRests>1</createMultiMeasureRests>
+        <defaultsVersion>301</defaultsVersion>
         <Spatium>1.74978</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
@@ -1922,6 +1923,7 @@
       <Style>
         <lastSystemFillLimit>0</lastSystemFillLimit>
         <createMultiMeasureRests>1</createMultiMeasureRests>
+        <defaultsVersion>301</defaultsVersion>
         <Spatium>1.74978</Spatium>
         </Style>
       <showInvisible>1</showInvisible>
@@ -2463,6 +2465,7 @@
       <Style>
         <lastSystemFillLimit>0</lastSystemFillLimit>
         <createMultiMeasureRests>1</createMultiMeasureRests>
+        <defaultsVersion>301</defaultsVersion>
         <Spatium>1.74978</Spatium>
         </Style>
       <showInvisible>1</showInvisible>

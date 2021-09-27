@@ -5,6 +5,7 @@
     <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
+      <defaultsVersion>301</defaultsVersion>
       <Spatium>1.76389</Spatium>
       </Style>
     <showInvisible>1</showInvisible>

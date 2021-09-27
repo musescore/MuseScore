@@ -6,6 +6,7 @@
     <Division>480</Division>
     <Style>
       <enableVerticalSpread>1</enableVerticalSpread>
+      <defaultsVersion>301</defaultsVersion>
       <Spatium>1.74978</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
