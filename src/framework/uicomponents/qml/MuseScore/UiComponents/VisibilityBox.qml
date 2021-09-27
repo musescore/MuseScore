@@ -56,6 +56,9 @@ FocusScope {
             icon: root.isVisible ? IconCode.VISIBILITY_ON : IconCode.VISIBILITY_OFF
             transparent: true
 
+            navigation.accessible.name: label.text + " " + qsTrc("uicomponents", "visibility") + " "
+                                        + (root.isVisible ? qsTrc("uicomponents", "on") : qsTrc("uicomponents", "off"))
+
             onClicked: {
                 root.visibleToggled()
             }
