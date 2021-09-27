@@ -91,6 +91,13 @@ static QMap<Ms::HairpinType, InspectorModelType> HAIRPIN_ELEMENT_MODEL_TYPES = {
     { Ms::HairpinType::DECRESC_LINE, InspectorModelType::TYPE_DIMINUENDO },
 };
 
+static QMap<Ms::LayoutBreak::Type, InspectorModelType> LAYOUT_BREAK_ELEMENT_MODEL_TYPES = {
+    { Ms::LayoutBreak::Type::PAGE, InspectorModelType::TYPE_UNDEFINED },
+    { Ms::LayoutBreak::Type::LINE, InspectorModelType::TYPE_UNDEFINED },
+    { Ms::LayoutBreak::Type::SECTION, InspectorModelType::TYPE_SECTIONBREAK },
+    { Ms::LayoutBreak::Type::NOBREAK, InspectorModelType::TYPE_UNDEFINED }
+};
+
 AbstractInspectorModel::AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository, Ms::ElementType elementType)
     : QObject(parent), m_elementType(elementType)
 {
@@ -132,7 +139,8 @@ InspectorModelType AbstractInspectorModel::modelType() const
 QList<AbstractInspectorModel::InspectorSectionType> AbstractInspectorModel::sectionTypesByElementKey(const ElementKey& elementKey)
 {
     QList<AbstractInspectorModel::InspectorSectionType> result;
-    if (NOTATION_ELEMENT_MODEL_TYPES.keys().contains(elementKey.type)) {
+    if (NOTATION_ELEMENT_MODEL_TYPES.keys().contains(elementKey.type)
+        && (notationElementModelType(elementKey) != InspectorModelType::TYPE_UNDEFINED)) {
         result << InspectorSectionType::SECTION_NOTATION;
     }
 
@@ -147,6 +155,9 @@ InspectorModelType AbstractInspectorModel::notationElementModelType(const Elemen
 {
     if (elementKey.type == Ms::ElementType::HAIRPIN || elementKey.type == Ms::ElementType::HAIRPIN_SEGMENT) {
         return HAIRPIN_ELEMENT_MODEL_TYPES.value(static_cast<Ms::HairpinType>(elementKey.subtype));
+    }
+    if (elementKey.type == Ms::ElementType::LAYOUT_BREAK) {
+        return LAYOUT_BREAK_ELEMENT_MODEL_TYPES.value(static_cast<Ms::LayoutBreak::Type>(elementKey.subtype));
     }
 
     return NOTATION_ELEMENT_MODEL_TYPES.value(elementKey.type, InspectorModelType::TYPE_UNDEFINED);
