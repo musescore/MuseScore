@@ -57,43 +57,18 @@ StyledDialogView {
         anchors.fill: parent
         spacing: 0
 
-        Item {
+        PartsTopPanel {
             Layout.fillWidth: true
             Layout.preferredHeight: childrenRect.height
             Layout.topMargin: privateProperties.sideMargin
 
-            StyledTextLabel {
-                anchors.left: parent.left
-                anchors.leftMargin: privateProperties.sideMargin
+            sideMargin: privateProperties.sideMargin
+            buttonsMargin: privateProperties.buttonsMargin
 
-                text: qsTrc("notation", "Parts")
-                font: ui.theme.headerBoldFont
-            }
+            isRemovingAvailable: partsModel.isRemovingAvailable
 
-            FlatButton {
-                text: qsTrc("notation", "Create new part")
-
-                anchors.right: deleteButton.left
-                anchors.rightMargin: 8
-
-                onClicked: {
-                    partsModel.createNewPart()
-                }
-            }
-
-            FlatButton {
-                id: deleteButton
-
-                anchors.right: parent.right
-                anchors.rightMargin: privateProperties.buttonsMargin
-
-                icon: IconCode.DELETE_TANK
-
-                enabled: partsModel.isRemovingAvailable
-
-                onClicked: {
-                    partsModel.removeSelectedParts()
-                }
+            onRemoveSelectedPartsRequested: {
+                partsModel.removeSelectedParts()
             }
         }
 
@@ -106,31 +81,21 @@ StyledDialogView {
             model: partsModel
         }
 
-        Row {
+        PartsBottomPanel {
             Layout.preferredHeight: childrenRect.height
-            Layout.bottomMargin: privateProperties.buttonsMargin
             Layout.rightMargin: privateProperties.buttonsMargin
+            Layout.bottomMargin: privateProperties.buttonsMargin
             Layout.alignment: Qt.AlignRight | Qt.AlignBottom
 
-            spacing: 12
+            canOpen: partsModel.hasSelection
 
-            FlatButton {
-                text: qsTrc("global", "Close")
-
-                onClicked: {
-                    root.hide()
-                }
+            onCloseRequested: {
+                root.hide()
             }
 
-            FlatButton {
-                text: qsTrc("global", "Open")
-
-                enabled: partsModel.hasSelection
-
-                onClicked: {
-                    partsModel.openSelectedParts()
-                    root.hide()
-                }
+            onOpenSelectedPartsRequested: {
+                partsModel.openSelectedParts()
+                root.hide()
             }
         }
     }
