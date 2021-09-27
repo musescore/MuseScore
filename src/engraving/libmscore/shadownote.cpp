@@ -152,6 +152,8 @@ void ShadowNote::draw(mu::draw::Painter* painter) const
     Pen pen(engravingConfiguration()->highlightSelectionColor(voice()), lw, PenStyle::SolidLine, PenCapStyle::FlatCap);
     painter->setPen(pen);
 
+    bool up = computeUp();
+
     // Draw the accidental
     SymId acc = Accidental::subtype2symbol(score()->inputState().accidentalType());
     if (acc != SymId::noSym) {
@@ -178,6 +180,10 @@ void ShadowNote::draw(mu::draw::Painter* painter) const
         } else {
             posDot.ry() += Rest::getDotline(m_duration.type()) * sp2 * mag();
         }
+        SymId flag = getNoteFlag();
+        if ((flag != SymId::lastSym) && up) {
+            posDot.rx() = qMax(posDot.rx(), noteheadWidth + symBbox(flag).right());
+        }
         for (int i = 0; i < m_duration.dots(); i++) {
             posDot.rx() += dd * i;
             drawSymbol(SymId::augmentationDot, painter, posDot, 1);
@@ -188,15 +194,11 @@ void ShadowNote::draw(mu::draw::Painter* painter) const
     // Draw stem and flag
     SymId flag = getNoteFlag();
     if (flag != SymId::noSym) {
-        bool up = computeUp();
         qreal x = up ? (noteheadWidth - (lw / 2)) : lw / 2;
         qreal y1 = symSmuflAnchor(m_noteheadSymbol, up ? SmuflAnchorId::stemUpSE : SmuflAnchorId::stemDownNW).y();
         qreal y2 = (up ? -3.5 : 3.5) * sp * mag();
 
         if (flag != SymId::lastSym) { // If there is a flag
-            if (up && m_duration.dots() && !(m_lineIndex & 1)) {
-                y2 -= sp2 * mag(); // Lengthen stem to avoid collision of flag with dots
-            }
             drawSymbol(flag, painter, PointF(x - (lw / 2), y2), 1);
             y2 += symSmuflAnchor(flag, up ? SmuflAnchorId::stemUpNW : SmuflAnchorId::stemDownSW).y();
         }
