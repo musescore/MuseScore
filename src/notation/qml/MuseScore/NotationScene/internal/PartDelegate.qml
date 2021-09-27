@@ -36,6 +36,9 @@ ListItemBlank {
 
     property int sideMargin: 0
 
+    navigation.column: 0
+    navigation.accessible.name: title
+
     signal copyPartRequested()
     signal removePartRequested()
     signal partClicked()
@@ -52,6 +55,7 @@ ListItemBlank {
         if (titleLoader.sourceComponent !== partTitle) {
             titleLoader.sourceComponent = partTitle
             titleEditingFinished()
+            root.navigation.requestActive()
         }
     }
 
@@ -64,6 +68,12 @@ ListItemBlank {
 
     onDoubleClicked: {
         root.startEditTitle()
+    }
+
+    onIsSelectedChanged: {
+        if (isSelected && !navigation.active) {
+            navigation.requestActive()
+        }
     }
 
     RowLayout {
@@ -109,8 +119,13 @@ ListItemBlank {
                 id: editPartTitleField
 
                 TextInputField {
+                    navigation.panel: root.navigation.panel
+                    navigation.row: root.navigation.row
+                    navigation.column: 1
+
                     Component.onCompleted: {
                         forceActiveFocus()
+                        navigation.requestActive()
                     }
 
                     currentText: root.title
@@ -132,6 +147,11 @@ ListItemBlank {
                 { "id": "delete", "title": qsTrc("notation", "Delete"), "enabled": root.isCreated },
                 { "id": "rename", "title": qsTrc("notation", "Rename") },
             ]
+
+            navigation.name: title
+            navigation.panel: root.navigation.panel
+            navigation.row: root.navigation.row
+            navigation.column: 2
 
             onHandleMenuItem: {
                 switch(itemId) {

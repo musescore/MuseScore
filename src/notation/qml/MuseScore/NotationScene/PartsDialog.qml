@@ -53,6 +53,10 @@ StyledDialogView {
         partsModel.load()
     }
 
+    onOpened: {
+        view.focusOnFirst()
+    }
+
     ColumnLayout {
         anchors.fill: parent
         spacing: 0
@@ -67,18 +71,29 @@ StyledDialogView {
 
             isRemovingAvailable: partsModel.isRemovingAvailable
 
+            navigationPanel.section: root.navigationSection
+            navigationPanel.order: 1
+
+            onCreateNewPartRequested: {
+                partsModel.createNewPart()
+            }
+
             onRemoveSelectedPartsRequested: {
                 partsModel.removeSelectedParts()
             }
         }
 
         PartsView {
+            id: view
             Layout.fillWidth: true
             Layout.fillHeight: true
             Layout.topMargin: 38
             Layout.bottomMargin: 24
 
             model: partsModel
+
+            navigationPanel.section: root.navigationSection
+            navigationPanel.order: 2
         }
 
         PartsBottomPanel {
@@ -88,6 +103,9 @@ StyledDialogView {
             Layout.alignment: Qt.AlignRight | Qt.AlignBottom
 
             canOpen: partsModel.hasSelection
+
+            navigationPanel.section: root.navigationSection
+            navigationPanel.order: 3
 
             onCloseRequested: {
                 root.hide()
