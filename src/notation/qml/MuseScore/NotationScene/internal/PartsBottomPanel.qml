@@ -36,8 +36,22 @@ Row {
     signal closeRequested()
     signal openSelectedPartsRequested()
 
+    property NavigationPanel navigationPanel: NavigationPanel {
+        name: "PartsBottomPanel"
+        direction: NavigationPanel.Horizontal
+        onActiveChanged: {
+            if (active) {
+                root.forceActiveFocus()
+            }
+        }
+    }
+
     FlatButton {
         text: qsTrc("global", "Close")
+
+        navigation.name: "CloseButton"
+        navigation.panel: root.navigationPanel
+        navigation.column: 0
 
         onClicked: {
             root.closeRequested()
@@ -48,6 +62,10 @@ Row {
         text: qsTrc("global", "Open")
 
         enabled: root.canOpen
+
+        navigation.name: "OpenButton"
+        navigation.panel: root.navigationPanel
+        navigation.column: 1
 
         onClicked: {
             root.openSelectedPartsRequested()

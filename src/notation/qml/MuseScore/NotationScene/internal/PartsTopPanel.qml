@@ -37,6 +37,17 @@ Item {
     signal createNewPartRequested()
     signal removeSelectedPartsRequested()
 
+    property NavigationPanel navigationPanel: NavigationPanel {
+        name: "PartsControlPanel"
+        direction: NavigationPanel.Horizontal
+        accessible.name: qsTrc("notation", "Parts control")
+        onActiveChanged: {
+            if (active) {
+                root.forceActiveFocus()
+            }
+        }
+    }
+
     StyledTextLabel {
         anchors.left: parent.left
         anchors.leftMargin: root.sideMargin
@@ -50,6 +61,10 @@ Item {
 
         anchors.right: deleteButton.left
         anchors.rightMargin: 8
+
+        navigation.name: "CreateNewPartButton"
+        navigation.panel: root.navigationPanel
+        navigation.column: 0
 
         onClicked: {
             root.createNewPartRequested()
@@ -65,6 +80,11 @@ Item {
         icon: IconCode.DELETE_TANK
 
         enabled: root.isRemovingAvailable
+
+        navigation.name: "DeleteButton"
+        navigation.panel: root.navigationPanel
+        navigation.column: 1
+        navigation.accessible.name: qsTrc("uicomponents", "Delete")
 
         onClicked: {
             root.removeSelectedPartsRequested()

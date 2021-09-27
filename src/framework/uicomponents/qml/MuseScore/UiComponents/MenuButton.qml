@@ -45,6 +45,8 @@ FlatButton {
     icon: IconCode.MENU_THREE_DOTS
     normalStateColor: isMenuOpened ? ui.theme.accentColor : "transparent"
 
+    navigation.accessible.name: qsTrc("uicomponents", "Menu")
+
     StyledMenuLoader {
         id: menuLoader
 
