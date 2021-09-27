@@ -65,6 +65,7 @@
 #include "view/widgets/timelineview.h"
 #include "view/notationcontextmenumodel.h"
 #include "view/internal/undoredomodel.h"
+#include "view/internal/noteflagstypeselectormodel.h"
 
 #include "diagnostics/idiagnosticspathsregister.h"
 
@@ -178,6 +179,7 @@ void NotationModule::registerUiTypes()
     qmlRegisterType<TimelineView>("MuseScore.NotationScene", 1, 0, "TimelineView");
     qmlRegisterType<SelectionFilterModel>("MuseScore.NotationScene", 1, 0, "SelectionFilterModel");
     qmlRegisterType<EditGridSizeDialogModel>("MuseScore.NotationScene", 1, 0, "EditGridSizeDialogModel");
+    qmlRegisterType<NoteFlagsTypeSelectorModel>("MuseScore.NotationScene", 1, 0, "NoteFlagsTypeSelectorModel");
 
     qRegisterMetaType<EditStyle>("EditStyle");
     qRegisterMetaType<EditStaff>("EditStaff");

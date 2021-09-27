@@ -321,6 +321,9 @@ public:
         MUTE = 0xF3D5,
         SOLO = 0xF3D6,
 
+        NOTEFLAGS_TRADITIONAL = 0xF420,
+        NOTEFLAGS_STRAIGHT = 0xF421,
+
         NONE
     };
 
