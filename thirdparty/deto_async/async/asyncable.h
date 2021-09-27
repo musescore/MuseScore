@@ -25,6 +25,8 @@ public:
         virtual void disconnectAsync(Asyncable* a) = 0;
     };
 
+    bool isConnectedAsync() const { return !m_connects.empty(); }
+
     void connectAsync(IConnectable* c)
     {
         if (c && m_connects.count(c) == 0) {
