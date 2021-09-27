@@ -186,7 +186,7 @@ enum class Sid {
     clefBarlineDistance,
     timesigBarlineDistance,
 
-    useModernNoteFlags,
+    useStraightNoteFlags,
     stemWidth,
     shortenStem,
     shortStemProgression,
