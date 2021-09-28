@@ -38,8 +38,7 @@ Item {
     property alias isExpandable: expandButton.visible
     property alias isEditable: settingsButton.visible
 
-    property int navigationRow: 0
-    property NavigationPanel navigationPanel: null
+    property alias navigation: navCtrl
 
     property int sideMargin: 0
 
@@ -47,7 +46,6 @@ Item {
 
     signal clicked(var mouse)
     signal doubleClicked(var mouse)
-    signal focusActived()
 
     signal popupOpened(var popupX, var popupY, var popupHeight)
     signal popupClosed()
@@ -105,16 +103,19 @@ Item {
 
     NavigationControl {
         id: navCtrl
-        name: "ItemInstrumentsTree"
-        panel: root.navigationPanel
-        row: root.navigationRow
         column: 0
         enabled: root.visible
+        accessible.role: MUAccessible.ListItem
+        accessible.name: titleLabel.text
 
         onActiveChanged: {
             if (active) {
-                root.focusActived()
+                root.forceActiveFocus()
             }
+        }
+
+        onTriggered: {
+            root.clicked(null)
         }
     }
 
@@ -292,8 +293,8 @@ Item {
             Layout.preferredWidth: width
 
             objectName: "VisibleBtnInstrument"
-            navigation.panel: root.navigationPanel
-            navigation.row: root.navigationRow
+            navigation.panel: root.navigation.panel
+            navigation.row: root.navigation.row
             navigation.column: 1
 
             isVisible: model && model.itemRole.isVisible
@@ -318,9 +319,10 @@ Item {
 
                 objectName: "ExpandBtnInstrument"
                 enabled: expandButton.visible
-                navigation.panel: root.navigationPanel
-                navigation.row: root.navigationRow
+                navigation.panel: root.navigation.panel
+                navigation.row: root.navigation.row
                 navigation.column: 2
+                navigation.accessible.name: qsTrc("instruments", "Expand")
 
                 transparent: true
                 icon: styleData.isExpanded ? IconCode.SMALL_ARROW_DOWN : IconCode.SMALL_ARROW_RIGHT
@@ -335,6 +337,8 @@ Item {
             }
 
             StyledTextLabel {
+                id: titleLabel
+
                 anchors.left: expandButton.right
                 anchors.leftMargin: 4
                 anchors.right: parent.right
@@ -363,9 +367,10 @@ Item {
 
             objectName: "SettingsBtnInstrument"
             enabled: root.visible
-            navigation.panel: root.navigationPanel
-            navigation.row: root.navigationRow
+            navigation.panel: root.navigation.panel
+            navigation.row: root.navigation.row
             navigation.column: 3
+            navigation.accessible.name: qsTrc("instruments", "Settings")
 
             icon: IconCode.SETTINGS_COG
 
