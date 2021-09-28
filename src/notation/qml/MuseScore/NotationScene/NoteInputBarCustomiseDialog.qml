@@ -46,6 +46,10 @@ StyledDialogView {
         customiseModel.load()
     }
 
+    onOpened: {
+        view.focusOnFirst()
+    }
+
     ColumnLayout {
         anchors.fill: parent
 
@@ -61,131 +65,51 @@ StyledDialogView {
             font: ui.theme.largeBodyBoldFont
         }
 
-        RowLayout {
+        CustomiseControlPanel {
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignTop
             Layout.topMargin: 20
 
-            height: childrenRect.height
+            isAddSeparatorAvailable: customiseModel.isAddSeparatorAvailable
+            isRemovingAvailable: customiseModel.isRemovingAvailable
+            isMovingUpAvailable: customiseModel.isMovingUpAvailable
+            isMovingDownAvailable: customiseModel.isMovingDownAvailable
 
-            FlatButton {
-                Layout.fillWidth: true
+            navigationPanel.section: root.navigationSection
+            navigationPanel.order: 1
 
-                text: qsTrc("notation", "Add separator line")
-
-                enabled: customiseModel.isAddSeparatorAvailable
-
-                onClicked: {
-                    customiseModel.addSeparatorLine()
-                }
+            onAddSeparatorLineRequested: {
+                customiseModel.addSeparatorLine()
             }
 
-            FlatButton {
-                Layout.alignment: Qt.AlignRight
-                Layout.preferredWidth: 30
-
-                icon: IconCode.DELETE_TANK
-                enabled: customiseModel.isRemovingAvailable
-
-                onClicked: {
-                    customiseModel.removeSelection()
-                }
+            onRemoveSelectionRequested: {
+                customiseModel.removeSelection()
             }
 
-            FlatButton {
-                Layout.alignment: Qt.AlignRight
-                Layout.preferredWidth: 30
-
-                icon: IconCode.ARROW_UP
-                enabled: customiseModel.isMovingUpAvailable
-
-                onClicked: {
-                    customiseModel.moveSelectionUp()
-                    Qt.callLater(view.positionViewAtSelectedItems)
-                }
+            onMoveSelectionUpRequested: {
+                customiseModel.moveSelectionUp()
+                Qt.callLater(view.positionViewAtSelectedItems)
             }
 
-            FlatButton {
-                Layout.alignment: Qt.AlignRight
-                Layout.preferredWidth: 30
-
-                icon: IconCode.ARROW_DOWN
-                enabled: customiseModel.isMovingDownAvailable
-
-                onClicked: {
-                    customiseModel.moveSelectionDown()
-                    Qt.callLater(view.positionViewAtSelectedItems)
-                }
+            onMoveSelectionDownRequested: {
+                customiseModel.moveSelectionDown()
+                Qt.callLater(view.positionViewAtSelectedItems)
             }
         }
 
-        ListView {
+        CustomiseView {
             id: view
-
-            Layout.fillWidth: true
             Layout.fillHeight: true
+            Layout.fillWidth: true
             Layout.topMargin: 12
-
-            spacing: 0
 
             model: customiseModel
 
-            boundsBehavior: Flickable.StopAtBounds
-            clip: true
+            navigationPanel.section: root.navigationSection
+            navigationPanel.order: 2
 
-            function positionViewAtSelectedItems() {
-                var selectedIndexes = customiseModel.selectionModel.selectedIndexes
-                for (var _index in selectedIndexes) {
-                    positionViewAtIndex(selectedIndexes[_index].row, ListView.Contain)
-                }
-            }
-
-            ScrollBar.vertical: StyledScrollBar {
-
-                anchors.top: parent.top
-                anchors.bottom: parent.bottom
-                anchors.right: parent.right
-
-                visible: view.contentHeight > view.height
-                z: 1
-            }
-
-            delegate: ListItemBlank {
-                id: itemDelegate
-
-                height: 38
-
-                isSelected: model.isSelected
-
-                onClicked: {
-                    customiseModel.selectRow(index)
-                }
-
-                property var item: model.item
-
-                Loader {
-                    property var delegateType: Boolean(itemDelegate.item) ? itemDelegate.item.type : NoteInputBarCustomiseItem.UNDEFINED
-
-                    anchors.fill: parent
-                    sourceComponent: delegateType === NoteInputBarCustomiseItem.ACTION ? actionComponent : separatorLineComponent
-
-                    Component {
-                        id: actionComponent
-
-                        NoteInputBarActionDelegate {
-                            item: itemDelegate.item
-                        }
-                    }
-
-                    Component {
-                        id: separatorLineComponent
-
-                        StyledTextLabel {
-                            anchors.centerIn: parent
-                            text: Boolean(itemDelegate.item) ? itemDelegate.item.title : ""
-                        }
-                    }
-                }
+            onSelectRowRequested: {
+                customiseModel.selectRow(index)
             }
         }
     }

@@ -33,6 +33,9 @@ Item {
 
     property var item
 
+    property var navigationPanel: null
+    property int navigationRow: 0
+
     RowLayout {
         anchors.fill: parent
         anchors.leftMargin: 6
@@ -40,13 +43,20 @@ Item {
 
         spacing: 16
 
-        FlatButton {
+        VisibilityBox {
+            id: visibilityButton
+
             Layout.alignment: Qt.AlignLeft
 
-            transparent: true
-            icon: Boolean(root.item) && root.item.checked ? IconCode.VISIBILITY_ON : IconCode.VISIBILITY_OFF
+            navigation.panel: root.navigationPanel
+            navigation.row: root.navigationRow
+            navigation.column: 1
+            navigation.accessible.name: titleLabel.text + " " + qsTrc("uicomponents", "visibility") + " "
+                                        + (visibilityButton.isVisible ? qsTrc("uicomponents", "on") : qsTrc("uicomponents", "off"))
 
-            onClicked: {
+            isVisible: root.item.checked
+
+            onVisibleToggled: {
                 root.item.checked = !root.item.checked
             }
         }
@@ -61,6 +71,8 @@ Item {
         }
 
         StyledTextLabel {
+            id: titleLabel
+
             Layout.fillWidth: true
 
             horizontalAlignment: Qt.AlignLeft
