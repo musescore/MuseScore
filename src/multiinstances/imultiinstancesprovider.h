@@ -59,6 +59,9 @@ public:
     virtual const std::string& selfID() const = 0;
     virtual std::vector<InstanceMeta> instances() const = 0;
     virtual async::Notification instancesChanged() const = 0;
+
+    // Quit for all
+    virtual void quitForAll() = 0;
 };
 }
 
