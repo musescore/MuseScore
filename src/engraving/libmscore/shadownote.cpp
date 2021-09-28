@@ -25,6 +25,7 @@
 #include "accidental.h"
 #include "articulation.h"
 #include "drumset.h"
+#include "hook.h"
 #include "rest.h"
 #include "score.h"
 
@@ -59,57 +60,25 @@ void ShadowNote::setState(SymId noteSymbol, TDuration duration, bool rest, qreal
     m_segmentSkylineBottomY = segmentSkylineBottomY;
 }
 
-SymId ShadowNote::getNoteFlag() const
+bool ShadowNote::hasStem() const
 {
-    SymId flag = SymId::noSym;
-    if (m_isRest) {
-        return flag;
+    return !m_isRest && m_duration.hasStem();
+}
+
+bool ShadowNote::hasFlag() const
+{
+    return hasStem() && m_duration.hooks() > 0;
+}
+
+SymId ShadowNote::flagSym() const
+{
+    if (!hasStem()) {
+        return SymId::noSym;
     }
-    TDuration::DurationType type = m_duration.type();
-    switch (type) {
-    case TDuration::DurationType::V_LONG:
-        flag = SymId::lastSym;
-        break;
-    case TDuration::DurationType::V_BREVE:
-        flag = SymId::noSym;
-        break;
-    case TDuration::DurationType::V_WHOLE:
-        flag = SymId::noSym;
-        break;
-    case TDuration::DurationType::V_HALF:
-        flag = SymId::lastSym;
-        break;
-    case TDuration::DurationType::V_QUARTER:
-        flag = SymId::lastSym;
-        break;
-    case TDuration::DurationType::V_EIGHTH:
-        flag = computeUp() ? SymId::flag8thUp : SymId::flag8thDown;
-        break;
-    case TDuration::DurationType::V_16TH:
-        flag = computeUp() ? SymId::flag16thUp : SymId::flag16thDown;
-        break;
-    case TDuration::DurationType::V_32ND:
-        flag = computeUp() ? SymId::flag32ndUp : SymId::flag32ndDown;
-        break;
-    case TDuration::DurationType::V_64TH:
-        flag = computeUp() ? SymId::flag64thUp : SymId::flag64thDown;
-        break;
-    case TDuration::DurationType::V_128TH:
-        flag = computeUp() ? SymId::flag128thUp : SymId::flag128thDown;
-        break;
-    case TDuration::DurationType::V_256TH:
-        flag = computeUp() ? SymId::flag256thUp : SymId::flag256thDown;
-        break;
-    case TDuration::DurationType::V_512TH:
-        flag = computeUp() ? SymId::flag512thUp : SymId::flag512thDown;
-        break;
-    case TDuration::DurationType::V_1024TH:
-        flag = computeUp() ? SymId::flag1024thUp : SymId::flag1024thDown;
-        break;
-    default:
-        flag = SymId::noSym;
-    }
-    return flag;
+
+    bool straight = score()->styleB(Sid::useStraightNoteFlags);
+    int hooks = computeUp() ? m_duration.hooks() : -m_duration.hooks();
+    return Hook::symIdForHookIndex(hooks, straight);
 }
 
 //---------------------------------------------------------
@@ -175,15 +144,17 @@ void ShadowNote::draw(mu::draw::Painter* painter) const
         qreal d  = score()->styleP(Sid::dotNoteDistance) * mag();
         qreal dd = score()->styleP(Sid::dotDotDistance) * mag();
         posDot.rx() += (noteheadWidth + d);
-        if (!m_isRest) {
-            posDot.ry() -= (m_lineIndex % 2 == 0 ? sp2 : 0);
-        } else {
+
+        if (m_isRest) {
             posDot.ry() += Rest::getDotline(m_duration.type()) * sp2 * mag();
+        } else {
+            posDot.ry() -= (m_lineIndex % 2 == 0 ? sp2 : 0);
         }
-        SymId flag = getNoteFlag();
-        if ((flag != SymId::lastSym) && up) {
-            posDot.rx() = qMax(posDot.rx(), noteheadWidth + symBbox(flag).right());
+
+        if (hasFlag() && up) {
+            posDot.rx() = qMax(posDot.rx(), noteheadWidth + symBbox(flagSym()).right());
         }
+
         for (int i = 0; i < m_duration.dots(); i++) {
             posDot.rx() += dd * i;
             drawSymbol(SymId::augmentationDot, painter, posDot, 1);
@@ -192,13 +163,13 @@ void ShadowNote::draw(mu::draw::Painter* painter) const
     }
 
     // Draw stem and flag
-    SymId flag = getNoteFlag();
-    if (flag != SymId::noSym) {
+    if (hasStem()) {
         qreal x = up ? (noteheadWidth - (lw / 2)) : lw / 2;
         qreal y1 = symSmuflAnchor(m_noteheadSymbol, up ? SmuflAnchorId::stemUpSE : SmuflAnchorId::stemDownNW).y();
         qreal y2 = (up ? -3.5 : 3.5) * sp * mag();
 
-        if (flag != SymId::lastSym) { // If there is a flag
+        if (hasFlag()) {
+            SymId flag = flagSym();
             drawSymbol(flag, painter, PointF(x - (lw / 2), y2), 1);
             y2 += symSmuflAnchor(flag, up ? SmuflAnchorId::stemUpNW : SmuflAnchorId::stemDownSW).y();
         }
@@ -307,17 +278,20 @@ void ShadowNote::layout()
     qreal _spatium = spatium();
     RectF newBbox;
     RectF noteheadBbox = symBbox(m_noteheadSymbol);
-    SymId flag = getNoteFlag();
+    bool up = computeUp();
 
     // TODO: Take into account accidentals and articulations?
 
     // Layout dots
     qreal dotWidth = 0;
     if (m_duration.dots() > 0) {
-        qreal noteheadWidth = symWidth(m_noteheadSymbol);
+        qreal noteheadWidth = noteheadBbox.width();
         qreal d  = score()->styleP(Sid::dotNoteDistance) * mag();
         qreal dd = score()->styleP(Sid::dotDotDistance) * mag();
-        dotWidth += (noteheadWidth + d);
+        dotWidth = (noteheadWidth + d);
+        if (hasFlag() && up) {
+            dotWidth = qMax(dotWidth, noteheadWidth + symBbox(flagSym()).right());
+        }
         for (int i = 0; i < m_duration.dots(); i++) {
             dotWidth += dd * i;
         }
@@ -325,24 +299,20 @@ void ShadowNote::layout()
     newBbox.setRect(noteheadBbox.x(), noteheadBbox.y(), noteheadBbox.width() + dotWidth, noteheadBbox.height());
 
     // Layout stem and flag
-    if (flag != SymId::noSym) {
-        bool up = computeUp();
+    if (hasStem()) {
         qreal x = noteheadBbox.x();
         qreal w = noteheadBbox.width();
 
         qreal stemWidth = score()->styleP(Sid::stemWidth);
         qreal stemLenght = (up ? -3.5 : 3.5) * _spatium;
         qreal stemAnchor = symSmuflAnchor(m_noteheadSymbol, up ? SmuflAnchorId::stemUpSE : SmuflAnchorId::stemDownNW).y();
-        if (up && flag != SymId::lastSym && m_duration.dots() && !(m_lineIndex & 1)) {
-            stemLenght -= 0.5 * spatium(); // Lengthen stem to avoid collision of flag with dots
-        }
         newBbox |= RectF(up ? x + w - stemWidth : x,
                          stemAnchor,
                          stemWidth,
                          stemLenght - stemAnchor);
 
-        if (flag != SymId::lastSym) { // If there is a flag
-            RectF flagBbox = symBbox(flag);
+        if (hasFlag()) {
+            RectF flagBbox = symBbox(flagSym());
             newBbox |= RectF(up ? x + w - stemWidth : x,
                              stemAnchor + stemLenght + flagBbox.y(),
                              flagBbox.width(),

@@ -76,7 +76,9 @@ public:
 
     bool computeUp() const;
     SymId noteheadSymbol() const { return m_noteheadSymbol; }
-    SymId getNoteFlag() const;
+    bool hasStem() const;
+    bool hasFlag() const;
+    SymId flagSym() const;
 };
 } // namespace Ms
 #endif
