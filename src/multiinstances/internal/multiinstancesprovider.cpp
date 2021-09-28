@@ -43,6 +43,7 @@ static const QString METHOD_SETTINGS_BEGIN_TRANSACTION("SETTINGS_BEGIN_TRANSACTI
 static const QString METHOD_SETTINGS_COMMIT_TRANSACTION("SETTINGS_COMMIT_TRANSACTION");
 static const QString METHOD_SETTINGS_ROLLBACK_TRANSACTION("SETTINGS_ROLLBACK_TRANSACTION");
 static const QString METHOD_SETTINGS_SET_VALUE("SETTINGS_SET_VALUE");
+static const QString METHOD_QUIT("METHOD_QUIT");
 
 MultiInstancesProvider::~MultiInstancesProvider()
 {
@@ -112,6 +113,8 @@ void MultiInstancesProvider::onMsg(const Msg& msg)
         Val val(msg.args.at(1).toStdString());
         val.setType(static_cast<Val::Type>(msg.args.at(2).toInt()));
         settings()->setLocalValue(key, val);
+    } else if (msg.method == METHOD_QUIT) {
+        dispatcher()->dispatch("quit", actions::ActionData::make_arg1<bool>(false));
     }
 }
 
@@ -275,4 +278,13 @@ std::vector<InstanceMeta> MultiInstancesProvider::instances() const
 mu::async::Notification MultiInstancesProvider::instancesChanged() const
 {
     return m_instancesChanged;
+}
+
+void MultiInstancesProvider::quitForAll()
+{
+    if (!isInited()) {
+        return;
+    }
+
+    m_ipcChannel->broadcast(METHOD_QUIT);
 }

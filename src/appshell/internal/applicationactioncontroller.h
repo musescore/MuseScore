@@ -58,7 +58,7 @@ private:
 
     void setupConnections();
 
-    void quit();
+    void quit(bool isAllInstances);
     void toggleFullScreen();
     void openAboutDialog();
     void openAboutQtDialog();
