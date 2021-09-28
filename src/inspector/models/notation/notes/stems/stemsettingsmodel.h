@@ -24,8 +24,12 @@
 
 #include "models/abstractinspectormodel.h"
 
+#include "async/asyncable.h"
+#include "modularity/ioc.h"
+#include "context/iglobalcontext.h"
+
 namespace mu::inspector {
-class StemSettingsModel : public AbstractInspectorModel
+class StemSettingsModel : public AbstractInspectorModel, public async::Asyncable
 {
     Q_OBJECT
 
@@ -35,6 +39,11 @@ class StemSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(PropertyItem * horizontalOffset READ horizontalOffset CONSTANT)
     Q_PROPERTY(PropertyItem * verticalOffset READ verticalOffset CONSTANT)
     Q_PROPERTY(PropertyItem * stemDirection READ stemDirection CONSTANT)
+
+    Q_PROPERTY(bool useStraightNoteFlags READ useStraightNoteFlags WRITE setUseStraightNoteFlags NOTIFY useStraightNoteFlagsChanged)
+
+    INJECT(inspector, context::IGlobalContext, context)
+
 public:
     explicit StemSettingsModel(QObject* parent, IElementRepositoryService* repository);
 
@@ -45,6 +54,12 @@ public:
     PropertyItem* horizontalOffset() const;
     PropertyItem* verticalOffset() const;
     PropertyItem* stemDirection() const;
+
+    bool useStraightNoteFlags() const;
+    void setUseStraightNoteFlags(bool use);
+
+signals:
+    void useStraightNoteFlagsChanged();
 
 protected:
     void createProperties() override;
