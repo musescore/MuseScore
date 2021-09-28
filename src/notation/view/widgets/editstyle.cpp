@@ -23,6 +23,8 @@
 #include "editstyle.h"
 
 #include <QButtonGroup>
+#include <QQuickItem>
+#include <QQuickWidget>
 #include <QSignalMapper>
 
 #include "alignSelect.h"
@@ -529,6 +531,19 @@ EditStyle::EditStyle(QWidget* parent)
         dividerLeftSym->addItem(un,  QVariant(QString(n)));
         dividerRightSym->addItem(un, QVariant(QString(n)));
     }
+
+    // ====================================================
+    // Notes (QML)
+    // ====================================================
+
+    QQuickWidget* noteFlagsTypeSelector = new QQuickWidget(/*QmlEngine*/ uiEngine()->qmlEngine(),
+                                                           /*parent*/ groupBox_noteFlags);
+    noteFlagsTypeSelector->setObjectName("noteFlagsTypeSelector_QQuickWidget");
+    noteFlagsTypeSelector->setSource(
+        QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/NoteFlagsTypeSelector.qml")));
+    noteFlagsTypeSelector->setMinimumSize(224, 70);
+    noteFlagsTypeSelector->setResizeMode(QQuickWidget::SizeRootObjectToView);
+    groupBox_noteFlags->layout()->addWidget(noteFlagsTypeSelector);
 
     // ====================================================
     // Figured Bass

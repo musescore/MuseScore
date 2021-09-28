@@ -4081,7 +4081,7 @@
             "alternates": [
                 {
                     "codepoint": "U+F426",
-                    "name": "flag512thDownStraight"
+                    "name": "flag1024thDownStraight"
                 }
             ]
         },
@@ -4089,7 +4089,7 @@
             "alternates": [
                 {
                     "codepoint": "U+F424",
-                    "name": "flag512thUpStraight"
+                    "name": "flag1024thUpStraight"
                 }
             ]
         },
@@ -4097,7 +4097,7 @@
             "alternates": [
                 {
                     "codepoint": "U+F41D",
-                    "name": "flag64thDownStraight"
+                    "name": "flag128thDownStraight"
                 }
             ]
         },
@@ -4105,7 +4105,7 @@
             "alternates": [
                 {
                     "codepoint": "U+F41B",
-                    "name": "flag64thUpStraight"
+                    "name": "flag128thUpStraight"
                 }
             ]
         },
@@ -4129,7 +4129,7 @@
             "alternates": [
                 {
                     "codepoint": "U+F420",
-                    "name": "flag128thDownStraight"
+                    "name": "flag256thDownStraight"
                 }
             ]
         },
@@ -4137,7 +4137,7 @@
             "alternates": [
                 {
                     "codepoint": "U+F41E",
-                    "name": "flag128thUpStraight"
+                    "name": "flag256thUpStraight"
                 }
             ]
         },
@@ -4161,7 +4161,7 @@
             "alternates": [
                 {
                     "codepoint": "U+F423",
-                    "name": "flag256thDownStraight"
+                    "name": "flag512thDownStraight"
                 }
             ]
         },
@@ -4169,7 +4169,7 @@
             "alternates": [
                 {
                     "codepoint": "U+F421",
-                    "name": "flag256thUpStraight"
+                    "name": "flag512thUpStraight"
                 }
             ]
         },
@@ -4177,7 +4177,7 @@
             "alternates": [
                 {
                     "codepoint": "U+F41A",
-                    "name": "U+F41A"
+                    "name": "flag64thDownStraight"
                 }
             ]
         },
@@ -4185,7 +4185,7 @@
             "alternates": [
                 {
                     "codepoint": "U+F418",
-                    "name": "U+F418"
+                    "name": "flag64thUpStraight"
                 }
             ]
         },
