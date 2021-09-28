@@ -3015,6 +3015,23 @@ enum class SymId {
     braceLarge,
     braceLarger,
 
+    flag1024thDownStraight,
+    flag1024thUpStraight,
+    flag128thDownStraight,
+    flag128thUpStraight,
+    flag16thDownStraight,
+    flag16thUpStraight,
+    flag256thDownStraight,
+    flag256thUpStraight,
+    flag32ndDownStraight,
+    flag32ndUpStraight,
+    flag512thDownStraight,
+    flag512thUpStraight,
+    flag64thDownStraight,
+    flag64thUpStraight,
+    flag8thDownStraight,
+    flag8thUpStraight,
+
 //    MuseScore-local symbols, precomposed symbols to mimic some Emmentaler glyphs
 
     ornamentPrallMordent,

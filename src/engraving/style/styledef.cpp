@@ -173,6 +173,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
 
     { Sid::clefBarlineDistance,     "clefBarlineDistance",     Spatium(0.5) },
     { Sid::timesigBarlineDistance,  "timesigBarlineDistance",  Spatium(0.5) },
+    { Sid::useStraightNoteFlags,    "useStraightNoteFlags",    QVariant(false) },
     { Sid::stemWidth,               "stemWidth",               Spatium(0.11) },
     { Sid::shortenStem,             "shortenStem",             QVariant(true) },
     { Sid::shortStemProgression,    "shortStemProgression",    Spatium(0.25) },
