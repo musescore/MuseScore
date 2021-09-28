@@ -75,6 +75,7 @@ RowLayout {
 
         navigation.panel: keynavSub
         navigation.order: 2
+        navigation.accessible.name: qsTrc("instruments", "Up")
 
         enabled: root.isMovingUpAvailable
 
@@ -90,6 +91,7 @@ RowLayout {
 
         navigation.panel: keynavSub
         navigation.order: 3
+        navigation.accessible.name: qsTrc("instruments", "Down")
 
         enabled: root.isMovingDownAvailable
 
@@ -105,6 +107,7 @@ RowLayout {
 
         navigation.panel: keynavSub
         navigation.order: 4
+        navigation.accessible.name: qsTrc("instruments", "Remove")
 
         enabled: root.isRemovingAvailable
 

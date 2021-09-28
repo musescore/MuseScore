@@ -54,21 +54,18 @@ Item {
         }
     }
 
-    NavigationPanel {
-        id: navigationTreePanel
-        name: "InstrumentsTree"
-        section: root.navigationSection
-        direction: NavigationPanel.Both
-        enabled: root.visible
-        order: 3
-    }
-
     InstrumentsPanelContextMenuModel {
         id: contextMenuModel
     }
 
     Component.onCompleted: {
         contextMenuModel.load()
+    }
+
+    QtObject {
+        id: prv
+
+        property var currentItemNavigationName: ""
     }
 
     ColumnLayout {
@@ -167,6 +164,20 @@ Item {
                 headerVisible: false
                 frameVisible: false
 
+                property NavigationPanel navigationTreePanel : NavigationPanel {
+                    name: "InstrumentsTree"
+                    section: root.navigationSection
+                    direction: NavigationPanel.Both
+                    enabled: root.visible
+                    order: 3
+
+                    onNavigationEvent: {
+                        if (event.type === NavigationEvent.AboutActive) {
+                            event.setData("controlName", prv.currentItemNavigationName)
+                        }
+                    }
+                }
+
                 TableViewColumn {
                     role: "itemRole"
                 }
@@ -232,9 +243,6 @@ Item {
                             InstrumentsTreeItemDelegate {
                                 treeView: instrumentsTreeView
 
-                                navigationPanel: navigationTreePanel
-                                navigationRow: model ? model.index : 0
-
                                 type: treeItemDelegateLoader.delegateType
                                 isSelected: treeItemDelegateLoader.isSelected
                                 isDragAvailable: dropArea.isSelectable
@@ -243,6 +251,15 @@ Item {
 
                                 sideMargin: contentColumn.sideMargin
                                 popupAnchorItem: root
+
+                                navigation.name: model ? (model.itemRole.title + model.index) : "ItemInstrumentsTree"
+                                navigation.panel: instrumentsTreeView.navigationTreePanel
+                                navigation.row: model ? model.index : 0
+                                navigation.onActiveChanged: {
+                                    if (navigation.active) {
+                                        prv.currentItemNavigationName = navigation.name
+                                    }
+                                }
 
                                 onClicked: {
                                     instrumentsTreeModel.selectRow(styleData.index)
@@ -290,7 +307,7 @@ Item {
                             InstrumentsTreeItemControl {
                                 isSelected: treeItemDelegateLoader.isSelected
 
-                                navigation.panel: navigationTreePanel
+                                navigation.panel: instrumentsTreeView.navigationTreePanel
                                 navigation.row: model ? model.index : 0
 
                                 sideMargin: contentColumn.sideMargin

@@ -39,6 +39,10 @@ StyledDialogView {
     title: canSelectMultipleInstruments ? qsTrc("instruments", "Instruments") :
                                           qsTrc("instruments", "Select instrument")
 
+    onOpened: {
+        instrumentsPage.focusOnFirst()
+    }
+
     ColumnLayout {
         anchors.fill: parent
 
@@ -50,14 +54,29 @@ StyledDialogView {
 
             canSelectMultipleInstruments: root.canSelectMultipleInstruments
             currentInstrumentId: root.currentInstrumentId
+
+            navigationSection: root.navigationSection
         }
 
         Row {
             Layout.alignment: Qt.AlignTrailing
             spacing: 8
 
+            NavigationPanel {
+                id: navBottomPanel
+
+                name: "BottomPanel"
+                section: root.navigationSection
+                order: 100
+                direction: NavigationPanel.Horizontal
+            }
+
             FlatButton {
                 text: qsTrc("global", "Cancel")
+
+                navigation.name: "Cancel"
+                navigation.panel: navBottomPanel
+                navigation.column: 1
 
                 onClicked: {
                     root.reject()
@@ -67,6 +86,10 @@ StyledDialogView {
             FlatButton {
                 text: qsTrc("global", "OK")
                 enabled: instrumentsPage.hasSelectedInstruments
+
+                navigation.name: "OK"
+                navigation.panel: navBottomPanel
+                navigation.column: 2
 
                 onClicked: {
                     var result = {}

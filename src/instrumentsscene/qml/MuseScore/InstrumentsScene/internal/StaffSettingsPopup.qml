@@ -59,6 +59,7 @@ StyledPopupView {
         spacing: 12
 
         StyledTextLabel {
+            id: typeLabel
             text: qsTrc("instruments", "Staff type")
         }
 
@@ -68,6 +69,7 @@ StyledPopupView {
 
             navigation.panel: root.navigationPanel
             navigation.row: 1
+            navigation.accessible.name: typeLabel.text + " " + currentValue
 
             model: settingsModel.allStaffTypes()
 
