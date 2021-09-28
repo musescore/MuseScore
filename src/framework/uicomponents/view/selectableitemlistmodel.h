@@ -66,6 +66,7 @@ public:
     Q_INVOKABLE void moveSelectionUp();
     Q_INVOKABLE void moveSelectionDown();
     Q_INVOKABLE void removeSelection();
+    Q_INVOKABLE void clearSelection();
 
 signals:
     void countChanged();

@@ -149,6 +149,8 @@ DockPage {
 
                 navigation.section: root.noteInputKeyNavSec
                 navigation.order: 1
+
+                floating: noteInputBar.floating
             }
         }
     ]

@@ -159,6 +159,11 @@ void SelectableItemListModel::removeSelection()
     onRowsRemoved();
 }
 
+void SelectableItemListModel::clearSelection()
+{
+    m_selection->clearSelection();
+}
+
 bool SelectableItemListModel::moveRows(const QModelIndex& sourceParent,
                                        int sourceRow,
                                        int count,
