@@ -21,13 +21,24 @@
 set(MODULE_TEST engraving_utests)
 
 set(MODULE_TEST_SRC
+    ${CMAKE_CURRENT_LIST_DIR}/environment.cpp
+
     ${CMAKE_CURRENT_LIST_DIR}/msczfile_tests.cpp
+
+    ${CMAKE_CURRENT_LIST_DIR}/utils/scorerw.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/utils/scorerw.h
+    ${CMAKE_CURRENT_LIST_DIR}/utils/scorecomp.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/utils/scorecomp.h
+    ${CMAKE_CURRENT_LIST_DIR}/barline_tests.cpp
 )
 
 set(MODULE_TEST_LINK
     qzip
     engraving
+    fonts
     )
+
+set(MODULE_TEST_DATA_ROOT ${CMAKE_CURRENT_LIST_DIR})
 
 include(${PROJECT_SOURCE_DIR}/src/framework/testing/gtest.cmake)
 
