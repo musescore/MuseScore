@@ -19,7 +19,6 @@
         <file>view/resources/icons/go-next.svg</file>
         <file>view/resources/icons/go-previous.svg</file>
         <file>qml/MuseScore/NotationScene/NoteInputBar.qml</file>
-        <file>qml/MuseScore/NotationScene/NoteInputBarCustomiseDialog.qml</file>
         <file>qml/MuseScore/NotationScene/internal/NoteInputBarActionDelegate.qml</file>
         <file>qml/MuseScore/NotationScene/SelectMeasuresCountDialog.qml</file>
         <file>qml/MuseScore/NotationScene/UndoRedoToolBar.qml</file>
@@ -31,5 +30,6 @@
         <file>qml/MuseScore/NotationScene/internal/PartsBottomPanel.qml</file>
         <file>qml/MuseScore/NotationScene/internal/CustomiseControlPanel.qml</file>
         <file>qml/MuseScore/NotationScene/internal/CustomiseView.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/NoteInputBarCustomisePopup.qml</file>
     </qresource>
 </RCC>

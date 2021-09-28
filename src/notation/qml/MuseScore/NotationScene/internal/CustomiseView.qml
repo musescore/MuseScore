@@ -35,6 +35,7 @@ ListView {
     clip: true
 
     signal selectRowRequested(int index)
+    signal clearSelectionRequested()
 
     function positionViewAtSelectedItems() {
         var selectedIndexes = root.model.selectionModel.selectedIndexes
@@ -54,10 +55,13 @@ ListView {
         root.positionViewAtSelectedItems()
     }
 
+    function clearFocus() {
+        root.clearSelectionRequested()
+    }
+
     property NavigationPanel navigationPanel: NavigationPanel {
         name: "CostomiseView"
         direction: NavigationPanel.Both
-        accessible.name: qsTrc("notation", "Costomise view")
         onActiveChanged: {
             if (active) {
                 root.forceActiveFocus()

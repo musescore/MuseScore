@@ -27,16 +27,12 @@ import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.NotationScene 1.0
 
-import "internal"
-
-StyledDialogView {
+StyledPopupView {
     id: root
 
     contentWidth: 280
     contentHeight: 600
     margins: 12
-
-    modal: true
 
     NoteInputBarCustomiseModel {
         id: customiseModel
@@ -50,12 +46,17 @@ StyledDialogView {
         view.focusOnFirst()
     }
 
+    onClosed: {
+        view.clearFocus()
+    }
+
     ColumnLayout {
         anchors.fill: parent
 
         spacing: 0
 
         StyledTextLabel {
+            id: titleLabel
             Layout.alignment: Qt.AlignTop
             Layout.fillWidth: true
             Layout.topMargin: 8
@@ -107,9 +108,14 @@ StyledDialogView {
 
             navigationPanel.section: root.navigationSection
             navigationPanel.order: 2
+            navigationPanel.accessible.name: titleLabel.text
 
             onSelectRowRequested: {
                 customiseModel.selectRow(index)
+            }
+
+            onClearSelectionRequested: {
+                customiseModel.clearSelection()
             }
         }
     }
