@@ -124,6 +124,8 @@ void ShadowNote::draw(QPainter* painter) const
       QPen pen(MScore::selectColor[_voice].lighter(SHADOW_NOTE_LIGHT), lw, Qt::SolidLine, Qt::FlatCap);
       painter->setPen(pen);
 
+      bool up = computeUp();
+
       // draw the accidental
       SymId acc = Accidental::subtype2symbol(score()->inputState().accidentalType());
       if (acc != SymId::noSym) {
@@ -149,6 +151,9 @@ void ShadowNote::draw(QPainter* painter) const
                   posDot.ry() -= (_line % 2 == 0 ? sp5 : 0);
             else
                   posDot.ry() += Rest::getDotline(_duration.type()) * spmag5;
+            SymId flag = getNoteFlag();
+            if ((flag != SymId::lastSym) && up)
+                  posDot.rx() = qMax(posDot.rx(), noteheadWidth + symBbox(flag).right());
             for (int i = 0; i < _duration.dots(); i++) {
                   posDot.rx() += dd * i;
                   drawSymbol(SymId::augmentationDot, painter, posDot, 1);
@@ -159,15 +164,11 @@ void ShadowNote::draw(QPainter* painter) const
       // stem and flag
       SymId flag = getNoteFlag();
       if (flag != SymId::noSym) {
-            bool up  = computeUp();
             qreal x  =  up ? (noteheadWidth - (lw / 2)) : lw / 2;
             qreal y1 = (up ? symStemUpSE(_notehead) : symStemDownNW(_notehead)).y() * mag();
             qreal y2 = (up ? -3.5 : 3.5) * spmag;
             
             if (flag != SymId::lastSym) { // If there is a flag
-                  if (up && _duration.dots() > 0 && !(_line & 1)) {
-                        y2 -= spmag5; // Lengthen stem to avoid collision of dots with hook
-                        }
                   QPointF flagPoint(x - (lw / 2), y2);
                   drawSymbol(flag, painter, flagPoint, 1);
                   y2 += ( up ? symStemUpNW(flag) : symStemDownSW(flag) ).y();
