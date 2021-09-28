@@ -148,9 +148,6 @@ void NotationModule::resolveImports()
         ir->registerUri(Uri("musescore://notation/parts"),
                         ContainerMeta(ContainerType::QmlDialog, "MuseScore/NotationScene/PartsDialog.qml"));
 
-        ir->registerUri(Uri("musescore://notation/noteinputbar/customise"),
-                        ContainerMeta(ContainerType::QmlDialog, "MuseScore/NotationScene/NoteInputBarCustomiseDialog.qml"));
-
         ir->registerUri(Uri("musescore://notation/selectmeasurescount"),
                         ContainerMeta(ContainerType::QmlDialog, "MuseScore/NotationScene/SelectMeasuresCountDialog.qml"));
 
