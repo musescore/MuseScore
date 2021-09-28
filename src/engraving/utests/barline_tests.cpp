@@ -20,9 +20,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "testing/qtestsuite.h"
+#include <gtest/gtest.h>
 
-#include "testbase.h"
+#include "utils/scorerw.h"
+#include "utils/scorecomp.h"
 
 #include "libmscore/factory.h"
 #include "libmscore/barline.h"
@@ -38,37 +39,17 @@ using namespace Ms;
 using namespace mu::engraving;
 
 //---------------------------------------------------------
-//   TestBarline
+//   BarlineTests
 //---------------------------------------------------------
 
-class TestBarline : public QObject, public MTest
+class BarlineTests : public ::testing::Test
 {
-    Q_OBJECT
-
-private slots:
-    void initTestCase();
-    void barline01();
-    void barline02();
-    void barline03();
-    void barline04();
-    void barline05();
-    void barline06();
-    void barline179726();
-    void deleteSkipBarlines();
+public:
 };
 
 //---------------------------------------------------------
-//   initTestCase
-//---------------------------------------------------------
-
-void TestBarline::initTestCase()
-{
-    initMTest();
-}
-
-//---------------------------------------------------------
-///  barline01
-///   Check bar line and brackets presence and length with hidden empty staves:
+//  barline01
+//  Check bar line and brackets presence and length with hidden empty staves:
 //    A score with:
 //          3 staves,
 //          bracket across all 3 staves
@@ -93,18 +74,17 @@ static const qreal BARLINE0_HEIGHT_MAX     = 26;
 static const qreal BARLINE_HEIGHT_MIN      = 14;
 static const qreal BARLINE_HEIGHT_MAX      = 15;
 
-void TestBarline::barline01()
+TEST_F(BarlineTests, barline01)
 {
-    char msg[256];
-    Score* score = readScore(BARLINE_DATA_DIR + "barline01.mscx");
+    Score* score = ScoreRW::readScore(BARLINE_DATA_DIR + "barline01.mscx");
+    EXPECT_TRUE(score);
 
     qreal height, heightMin, heightMax;
     qreal spatium = score->spatium();
     int sysNo = 0;
     for (System* sys : score->systems()) {
         // check number of the brackets of each system
-        sprintf(msg, "Wrong number of brackets in system %d.", sysNo + 1);
-        QVERIFY2(sys->brackets().count() == 1, msg);
+        EXPECT_EQ(sys->brackets().count(), 1);
 
         // check height of the bracket of each system
         // (bracket height is different between first system (3 staves) and other systems (2 staves) )
@@ -112,23 +92,19 @@ void TestBarline::barline01()
         height      = bracket->bbox().height() / spatium;
         heightMin   = (sysNo == 0) ? BRACKET0_HEIGHT_MIN : BRACKET_HEIGHT_MIN;
         heightMax   = (sysNo == 0) ? BRACKET0_HEIGHT_MAX : BRACKET_HEIGHT_MAX;
-        sprintf(msg, "Wrong bracket height in system %d.", sysNo + 1);
-        QVERIFY2(height > heightMin && height < heightMax, msg);
+
+        EXPECT_GT(height, heightMin);
+        EXPECT_LT(height, heightMax);
 
         // check presence and height of the bar line of each measure of each system
         // (2 measure for each system)
-        heightMin = (sysNo == 0) ? BARLINE0_HEIGHT_MIN : BARLINE_HEIGHT_MIN;
-        heightMax = (sysNo == 0) ? BARLINE0_HEIGHT_MAX : BARLINE_HEIGHT_MAX;
         for (int msrNo=0; msrNo < 2; ++msrNo) {
-            BarLine* bar = nullptr;
             Measure* msr = toMeasure(sys->measure(msrNo));
             Segment* seg = msr->findSegment(SegmentType::EndBarLine, msr->tick() + msr->ticks());
-            sprintf(msg, "No SegEndBarLine in measure %d of system %d.", msrNo + 1, sysNo + 1);
-            QVERIFY2(seg != nullptr, msg);
+            EXPECT_TRUE(seg);
 
-            bar = toBarLine(seg->element(0));
-            sprintf(msg, "No barline in measure %d of system %d.", msrNo + 1, sysNo + 1);
-            QVERIFY2(bar != nullptr, msg);
+            BarLine* bar = toBarLine(seg->element(0));
+            EXPECT_TRUE(bar);
         }
         sysNo++;
     }
@@ -137,17 +113,16 @@ void TestBarline::barline01()
 }
 
 //---------------------------------------------------------
-///   barline02
-///   add a 3/4 time signature in the second measure and check bar line 'generated' status
+//   barline02
+//   add a 3/4 time signature in the second measure and check bar line 'generated' status
 //
 //    NO REFERENCE SCORE IS USED.
 //---------------------------------------------------------
-
-void TestBarline::barline02()
+TEST_F(BarlineTests, barline02)
 {
-    char msg[256];
-    Score* score = readScore(BARLINE_DATA_DIR + "barline02.mscx");
-    QVERIFY(score);
+    Score* score = ScoreRW::readScore(BARLINE_DATA_DIR + "barline02.mscx");
+    EXPECT_TRUE(score);
+
     Measure* msr = score->firstMeasure()->nextMeasure();
     TimeSig* ts  = Factory::createTimeSig(score->dummy()->segment());
     ts->setSig(Fraction(3, 4), TimeSigType::NORMAL);
@@ -160,36 +135,31 @@ void TestBarline::barline02()
     while ((msr = msr->nextMeasure())) {
         ++msrNo;
         Segment* seg = msr->findSegment(SegmentType::EndBarLine, msr->tick() + msr->ticks());
-        sprintf(msg, "No SegEndBarLine in measure %d.", msrNo);
-        QVERIFY2(seg != nullptr, msg);
+        EXPECT_TRUE(seg);
 
         BarLine* bar = static_cast<BarLine*>(seg->element(0));
-        sprintf(msg, "No barline in measure %d.", msrNo);
-        QVERIFY2(bar != nullptr, msg);
+        EXPECT_TRUE(bar);
 
         // bar line should be generated if NORMAL, except the END one at the end
-        sprintf(msg, "Barline in measure %d changed into 'non-generated'.", msrNo);
-// ws: end barline is also generated
-//            bool test = (bar->barLineType() == BarLineType::NORMAL) ? bar->generated() : !bar->generated();
         bool test = bar->generated();
-        QVERIFY2(test, msg);
+        EXPECT_TRUE(test);
     }
-//      QVERIFY(saveCompareScore(score, "barline02.mscx", DIR + "barline02-ref.mscx"));
+
     delete score;
 }
 
 //---------------------------------------------------------
-///   barline03
-///   Sets a staff bar line span involving spanFrom and spanTo and
-///   check that it is properly applied to start-repeat
+//   barline03
+//   Sets a staff bar line span involving spanFrom and spanTo and
+//   check that it is properly applied to start-repeat
 //
-//    NO REFERENCE SCORE IS USED.
+//   NO REFERENCE SCORE IS USED.
 //---------------------------------------------------------
-
-void TestBarline::barline03()
+TEST_F(BarlineTests, barline03)
 {
-    Score* score = readScore(BARLINE_DATA_DIR + "barline03.mscx");
-    QVERIFY(score);
+    Score* score = ScoreRW::readScore(BARLINE_DATA_DIR + "barline03.mscx");
+    EXPECT_TRUE(score);
+
     score->startCmd();
     score->undo(new ChangeProperty(score->staff(0), Pid::STAFF_BARLINE_SPAN, 1));
     score->undo(new ChangeProperty(score->staff(0), Pid::STAFF_BARLINE_SPAN_FROM, 2));
@@ -203,33 +173,26 @@ void TestBarline::barline03()
     }
     // check span data of measure-initial start-repeat bar line
     Segment* seg = msr->findSegment(SegmentType::StartRepeatBarLine, msr->tick());
-    QVERIFY2(seg != nullptr, "No SegStartRepeatBarLine segment in measure 5.");
+    EXPECT_TRUE(seg);
 
     BarLine* bar = toBarLine(seg->element(0));
-    QVERIFY2(bar != nullptr, "No start-repeat barline in measure 5.");
+    EXPECT_TRUE(bar);
 
-//TODO      QVERIFY2(bar->spanStaff() && bar->spanFrom() == 2 && bar->spanTo() == -2,
-//            "Wrong span data in start-repeat barline of measure 5.");
-
-    // check start-repeat bar ine in second staff is gone
-//TODO:      QVERIFY2(seg->element(1) == nullptr, "Extra start-repeat barline in 2nd staff of measure 5.");
-
-//      QVERIFY(saveCompareScore(score, "barline03.mscx", DIR + "barline03-ref.mscx"));
     delete score;
 }
 
 //---------------------------------------------------------
-///   barline04
-///   Sets custom span parameters to a system-initial start-repeat bar line and
-///   check that it is properly applied to it and to the start-reapeat bar lines of staves below.
+//   barline04
+//   Sets custom span parameters to a system-initial start-repeat bar line and
+//   check that it is properly applied to it and to the start-reapeat bar lines of staves below.
 //
-//    NO REFERENCE SCORE IS USED.
+//   NO REFERENCE SCORE IS USED.
 //---------------------------------------------------------
-
-void TestBarline::barline04()
+TEST_F(BarlineTests, barline04)
 {
-    Score* score = readScore(BARLINE_DATA_DIR + "barline04.mscx");
-    QVERIFY(score);
+    Score* score = ScoreRW::readScore(BARLINE_DATA_DIR + "barline04.mscx");
+    EXPECT_TRUE(score);
+
     score->doLayout();
 
     score->startCmd();
@@ -240,38 +203,38 @@ void TestBarline::barline04()
     }
     // check span data of measure-initial start-repeat bar line
     Segment* seg = msr->findSegment(SegmentType::StartRepeatBarLine, msr->tick());
-    QVERIFY2(seg != nullptr, "No SegStartRepeatBarLine segment in measure 5.");
+    EXPECT_TRUE(seg);
 
     BarLine* bar = static_cast<BarLine*>(seg->element(0));
-    QVERIFY2(bar != nullptr, "No start-repeat barline in measure 5.");
+    EXPECT_TRUE(bar);
 
     bar->undoChangeProperty(Pid::BARLINE_SPAN, 2);
     bar->undoChangeProperty(Pid::BARLINE_SPAN_FROM, 2);
     bar->undoChangeProperty(Pid::BARLINE_SPAN_TO, 6);
     score->endCmd();
 
-    QVERIFY2(bar->spanStaff() && bar->spanFrom() == 2 && bar->spanTo() == 6,
-             "Wrong span data in start-repeat barline of measure 5.");
+    EXPECT_GT(bar->spanStaff(), 0);
+    EXPECT_EQ(bar->spanFrom(), 2);
+    EXPECT_EQ(bar->spanTo(), 6);
 
     // check start-repeat bar ine in second staff is gone
-    QVERIFY2(seg->element(1) == nullptr, "Extra start-repeat barline in 2nd staff of measure 5.");
+    EXPECT_EQ(seg->element(1), nullptr);
 
-//      QVERIFY(saveCompareScore(score, "barline04.mscx", DIR + "barline04-ref.mscx"));
     delete score;
 }
 
 //---------------------------------------------------------
-///   barline05
-///   Adds a line break in the middle of a end-start-repeat bar line and then checks the two resulting
-///   bar lines (an end-repeat and a start-repeat) are not marked as generated.
+//   barline05
+//   Adds a line break in the middle of a end-start-repeat bar line and then checks the two resulting
+//   bar lines (an end-repeat and a start-repeat) are not marked as generated.
 //
-//    NO REFERENCE SCORE IS USED.
+//   NO REFERENCE SCORE IS USED.
 //---------------------------------------------------------
-
-void TestBarline::barline05()
+TEST_F(BarlineTests, barline05)
 {
-    Score* score = readScore(BARLINE_DATA_DIR + "barline05.mscx");
-    QVERIFY(score);
+    Score* score = ScoreRW::readScore(BARLINE_DATA_DIR + "barline05.mscx");
+    EXPECT_TRUE(score);
+
     score->doLayout();
 
     // 'go' to 4th measure
@@ -289,82 +252,75 @@ void TestBarline::barline05()
 
     // check an end-repeat bar line has been created at the end of this measure and it is generated
     Segment* seg = msr->findSegment(SegmentType::EndBarLine, msr->tick() + msr->ticks());
-    QVERIFY2(seg != nullptr, "No SegEndBarLine segment in measure 4.");
+    EXPECT_TRUE(seg);
+
     BarLine* bar = static_cast<BarLine*>(seg->element(0));
-    QVERIFY2(bar != nullptr, "No end-repeat barline in measure 4.");
-    QVERIFY2(bar->barLineType() == BarLineType::END_REPEAT, "Barline at measure 4 is not END-REPEAT");
-    QVERIFY2(bar->generated(), "End-repeat barline in measure 4 is non-generated.");
+    EXPECT_TRUE(bar);
+
+    EXPECT_EQ(bar->barLineType(), BarLineType::END_REPEAT);
+    EXPECT_TRUE(bar->generated());
 
     // // check an end-repeat bar line has been created at the beginning of the next measure and it is not generated
     // check an end-repeat bar line has been created at the beginning of the next measure and it is generated
     msr = msr->nextMeasure();
     seg = msr->findSegment(SegmentType::StartRepeatBarLine, msr->tick());
-    QVERIFY2(seg != nullptr, "No SegStartRepeatBarLine segment in measure 5.");
-    bar = static_cast<BarLine*>(seg->element(0));
-    QVERIFY2(bar != nullptr, "No start-repeat barline in measure 5.");
-    QVERIFY2(bar->generated(), "Start-reapeat barline in measure 5 is not generated.");
+    EXPECT_TRUE(seg);
 
-//      QVERIFY(saveCompareScore(score, "barline05.mscx", DIR + "barline05-ref.mscx"));
+    bar = static_cast<BarLine*>(seg->element(0));
+    EXPECT_TRUE(bar);
+    EXPECT_TRUE(bar->generated());
+
     delete score;
 }
 
 //---------------------------------------------------------
-///   barline06
-///   Read a score with 3 staves and custom bar line sub-types for staff i-th at measure i-th
-///   and check the custom syb-types are applied only to their respective bar lines,
-///   rather than to whole measures.
+//   barline06
+//   Read a score with 3 staves and custom bar line sub-types for staff i-th at measure i-th
+//   and check the custom syb-types are applied only to their respective bar lines,
+//   rather than to whole measures.
 //
-//    NO REFERENCE SCORE IS USED.
+//   NO REFERENCE SCORE IS USED.
 //---------------------------------------------------------
-
-void TestBarline::barline06()
+TEST_F(BarlineTests, barline06)
 {
-    char msg[256];
-    Score* score = readScore(BARLINE_DATA_DIR + "barline06.mscx");
-    QVERIFY(score);
+    Score* score = ScoreRW::readScore(BARLINE_DATA_DIR + "barline06.mscx");
+    EXPECT_TRUE(score);
+
     score->doLayout();
 
     // scan each measure
     Measure* msr   = score->firstMeasure();
     int msrNo = 1;
     for (int i=0; i < 3; i++) {
-        // check measure endbarline type
-        sprintf(msg, "EndBarLineType not NORMAL in measure %d.", msrNo);
-//TODO            QVERIFY2(msr->endBarLineType() == BarLineType::NORMAL, msg);
         // locate end-measure bar line segment
         Segment* seg = msr->findSegment(SegmentType::EndBarLine, msr->tick() + msr->ticks());
-        sprintf(msg, "No SegEndBarLine in measure %d.", msr->no());
-        QVERIFY2(seg != nullptr, msg);
+        EXPECT_TRUE(seg);
 
         // check only i-th staff has custom bar line type
         for (int j=0; j < 3; j++) {
             BarLine* bar = static_cast<BarLine*>(seg->element(j * VOICES));
+            EXPECT_TRUE(bar);
+
             // if not the i-th staff, bar should be normal and not custom
             if (j != i) {
-                sprintf(msg, "barline type NOT NORMAL or CUSTOM TYPE in staff %d of measure %d.", j + 1, msrNo);
-                QVERIFY2(bar->barLineType() == BarLineType::NORMAL, msg);
-//                        QVERIFY2(bar->customSubtype() == false, msg);
+                EXPECT_EQ(bar->barLineType(), BarLineType::NORMAL);
             }
             // in the i-th staff, the bar line should be of type DOUBLE and custom type should be true
             else {
-                sprintf(msg, "No barline for staff %d in measure %d", j + 1, msrNo);
-                QVERIFY2(bar != nullptr, msg);
-                sprintf(msg, "barline type NOT DOUBLE or NOT CUSTOM TYPE in staff %d of measure %d.", j + 1, msrNo);
-                QVERIFY2(bar->barLineType() == BarLineType::DOUBLE, msg);
-//                        QVERIFY2(bar->customSubtype() == true, msg);
+                EXPECT_EQ(bar->barLineType(), BarLineType::DOUBLE);
             }
         }
 
         msr = msr->nextMeasure();
         msrNo++;
     }
-//      QVERIFY(saveCompareScore(score, "barline06.mscx", DIR + "barline06-ref.mscx"));
+
     delete score;
 }
 
 //---------------------------------------------------------
-///   dropNormalBarline
-///    helper for barline179726()
+//   dropNormalBarline
+//   helper for barline179726()
 //---------------------------------------------------------
 
 void dropNormalBarline(EngravingItem* e)
@@ -380,75 +336,82 @@ void dropNormalBarline(EngravingItem* e)
 }
 
 //---------------------------------------------------------
-///   barline179726
-///   Drop a normal barline onto measures and barlines of each type of barline
+//   barline179726
+//   Drop a normal barline onto measures and barlines of each type of barline
 //
 //    NO REFERENCE SCORE IS USED.
 //---------------------------------------------------------
-
-void TestBarline::barline179726()
+TEST_F(BarlineTests, barline179726)
 {
-    Score* score = readScore(BARLINE_DATA_DIR + "barline179726.mscx");
-    QVERIFY(score);
+    Score* score = ScoreRW::readScore(BARLINE_DATA_DIR + "barline179726.mscx");
+    EXPECT_TRUE(score);
+
     score->doLayout();
 
     Measure* m = score->firstMeasure();
 
     // drop NORMAL onto initial START_REPEAT barline will remove that START_REPEAT
     dropNormalBarline(m->findSegment(SegmentType::StartRepeatBarLine, m->tick())->elementAt(0));
-    QVERIFY(m->findSegment(SegmentType::StartRepeatBarLine, Fraction(0, 1)) == NULL);
+    EXPECT_EQ(m->findSegment(SegmentType::StartRepeatBarLine, Fraction(0, 1)), nullptr);
 
     // drop NORMAL onto END_START_REPEAT will turn into NORMAL
     dropNormalBarline(m->findSegment(SegmentType::EndBarLine, m->endTick())->elementAt(0));
-    QVERIFY(static_cast<BarLine*>(m->findSegment(SegmentType::EndBarLine, m->endTick())->elementAt(
-                                      0))->barLineType() == BarLineType::NORMAL);
+    BarLine* bar = static_cast<BarLine*>(m->findSegment(SegmentType::EndBarLine, m->endTick())->elementAt(0));
+    EXPECT_TRUE(bar);
+    EXPECT_EQ(bar->barLineType(), BarLineType::NORMAL);
 
     m = m->nextMeasure();
 
     // drop NORMAL onto the END_REPEAT part of an END_START_REPEAT straddling a newline will turn into NORMAL at the end of this meas
     dropNormalBarline(m->findSegment(SegmentType::EndBarLine, m->endTick())->elementAt(0));
-    QVERIFY(static_cast<BarLine*>(m->findSegment(SegmentType::EndBarLine, m->endTick())->elementAt(
-                                      0))->barLineType() == BarLineType::NORMAL);
+    bar = static_cast<BarLine*>(m->findSegment(SegmentType::EndBarLine, m->endTick())->elementAt(0));
+    EXPECT_TRUE(bar);
+    EXPECT_EQ(bar->barLineType(), BarLineType::NORMAL);
 
     m = m->nextMeasure();
 
     // but leave START_REPEAT at the beginning of the newline
-    QVERIFY(static_cast<BarLine*>(m->findSegment(SegmentType::StartRepeatBarLine, m->tick())->elementAt(0)));
+    bar = static_cast<BarLine*>(m->findSegment(SegmentType::StartRepeatBarLine, m->tick())->elementAt(0));
+    EXPECT_TRUE(bar);
 
     // drop NORMAL onto the meas ending with an END_START_REPEAT straddling a newline will turn into NORMAL at the end of this meas
     // but note I'm not verifying what happens to the START_REPEAT at the beginning of the newline...I'm not sure that behavior is well-defined yet
     dropNormalBarline(m);
-    QVERIFY(static_cast<BarLine*>(m->findSegment(SegmentType::EndBarLine, m->endTick())->elementAt(
-                                      0))->barLineType() == BarLineType::NORMAL);
+    bar = static_cast<BarLine*>(m->findSegment(SegmentType::EndBarLine, m->endTick())->elementAt(0));
+    EXPECT_TRUE(bar);
+    EXPECT_EQ(bar->barLineType(), BarLineType::NORMAL);
 
     m = m->nextMeasure();
     m = m->nextMeasure();
 
     // drop NORMAL onto the START_REPEAT part of an END_START_REPEAT straddling a newline will remove the START_REPEAT at the beginning of this measure
     dropNormalBarline(m->findSegment(SegmentType::StartRepeatBarLine, m->tick())->elementAt(0));
-    QVERIFY(m->findSegment(SegmentType::StartRepeatBarLine, m->tick()) == NULL);
+    EXPECT_EQ(m->findSegment(SegmentType::StartRepeatBarLine, m->tick()), nullptr);
 
     // but leave END_REPEAT at the end of previous line
-    QVERIFY(static_cast<BarLine*>(m->prevMeasure()->findSegment(SegmentType::EndBarLine, m->tick())->elementAt(
-                                      0))->barLineType() == BarLineType::END_REPEAT);
+    bar = static_cast<BarLine*>(m->prevMeasure()->findSegment(SegmentType::EndBarLine, m->tick())->elementAt(0));
+    EXPECT_TRUE(bar);
+    EXPECT_EQ(bar->barLineType(), BarLineType::END_REPEAT);
 
     for (int i = 0; i < 4; i++, m = m->nextMeasure()) {
         // drop NORMAL onto END_REPEAT, BROKEN, DOTTED, DOUBLE at the end of this meas will turn into NORMAL
         dropNormalBarline(m->findSegment(SegmentType::EndBarLine, m->endTick())->elementAt(0));
-        QVERIFY(static_cast<BarLine*>(m->findSegment(SegmentType::EndBarLine, m->endTick())->elementAt(
-                                          0))->barLineType() == BarLineType::NORMAL);
+        bar = static_cast<BarLine*>(m->findSegment(SegmentType::EndBarLine, m->endTick())->elementAt(0));
+        EXPECT_TRUE(bar);
+        EXPECT_EQ(bar->barLineType(), BarLineType::NORMAL);
     }
 
     m = m->nextMeasure();
 
     // drop NORMAL onto a START_REPEAT in middle of a line will remove the START_REPEAT at the beginning of this measure
     dropNormalBarline(m->findSegment(SegmentType::StartRepeatBarLine, m->tick())->elementAt(0));
-    QVERIFY(m->findSegment(SegmentType::StartRepeatBarLine, m->tick()) == NULL);
+    EXPECT_EQ(m->findSegment(SegmentType::StartRepeatBarLine, m->tick()), nullptr);
 
     // drop NORMAL onto final END_REPEAT at end of score will turn into NORMAL
     dropNormalBarline(m->findSegment(SegmentType::EndBarLine, m->endTick())->elementAt(0));
-    QVERIFY(static_cast<BarLine*>(m->findSegment(SegmentType::EndBarLine, m->endTick())->elementAt(
-                                      0))->barLineType() == BarLineType::NORMAL);
+    bar = static_cast<BarLine*>(m->findSegment(SegmentType::EndBarLine, m->endTick())->elementAt(0));
+    EXPECT_TRUE(bar);
+    EXPECT_EQ(bar->barLineType(), BarLineType::NORMAL);
 
     delete score;
 }
@@ -456,13 +419,13 @@ void TestBarline::barline179726()
 //---------------------------------------------------------
 //   deleteSkipBarlines
 //---------------------------------------------------------
-
-void TestBarline::deleteSkipBarlines()
+TEST_F(BarlineTests, deleteSkipBarlines)
 {
-    MasterScore* score = readScore(BARLINE_DATA_DIR + "barlinedelete.mscx");
+    MasterScore* score = ScoreRW::readScore(BARLINE_DATA_DIR + "barlinedelete.mscx");
+    EXPECT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
-    QVERIFY(m1);
+    EXPECT_TRUE(m1);
 
     score->startCmd();
     score->cmdSelectAll();
@@ -471,10 +434,7 @@ void TestBarline::deleteSkipBarlines()
 
     score->doLayout();
 
-    QVERIFY(saveCompareScore(score, QString("barlinedelete.mscx"),
-                             BARLINE_DATA_DIR + QString("barlinedelete-ref.mscx")));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, QString("barlinedelete.mscx"), BARLINE_DATA_DIR + QString("barlinedelete-ref.mscx")));
+
     delete score;
 }
-
-QTEST_MAIN(TestBarline)
-#include "tst_barline.moc"

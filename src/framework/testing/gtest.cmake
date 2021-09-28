@@ -20,8 +20,10 @@
 ## Setup
 # set(MODULE_TEST somename)          - set module (target) name
 # set(MODULE_TEST_INCLUDE ...)       - set include (by default see below include_directories)
+# set(MODULE_TEST_DEF ...)           - set definitions
 # set(MODULE_TEST_SRC ...)           - set sources and headers files
 # set(MODULE_TEST_LINK ...)          - set libraries for link
+# set(MODULE_TEST_DATA_ROOT ...)     - set test data root path
 
 # After all the settings you need to do:
 # include(${PROJECT_SOURCE_DIR}/framework/testing/gtest.cmake)
@@ -46,6 +48,11 @@ target_include_directories(${MODULE_TEST} PRIVATE
     ${PROJECT_SOURCE_DIR}/src/framework/global
     ${PROJECT_SOURCE_DIR}/src
     ${MODULE_TEST_INCLUDE}
+)
+
+target_compile_definitions(${MODULE_TEST} PRIVATE
+    ${MODULE_TEST_DEF}
+    ${MODULE_TEST}_DATA_ROOT="${MODULE_TEST_DATA_ROOT}"
 )
 
 find_package(Qt5 COMPONENTS Core Gui REQUIRED)
