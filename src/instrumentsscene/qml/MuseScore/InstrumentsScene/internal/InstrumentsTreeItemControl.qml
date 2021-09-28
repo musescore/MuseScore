@@ -25,91 +25,55 @@ import QtQuick.Layouts 1.15
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
-Item {
+ListItemBlank {
     id: root
 
-    property bool isHighlighted: false
+    property int sideMargin: 12
 
-    property int keynavRow: 0
-    property NavigationPanel navigationPanel: null
+    normalColor: ui.theme.textFieldColor
+    navigation.column: 0
 
-    Rectangle {
-        anchors.fill: parent
+    anchors.verticalCenter: parent ? parent.verticalCenter : undefined
+    anchors.horizontalCenter: parent ? parent.horizontalCenter : undefined
 
-        color: root.isHighlighted ? ui.theme.accentColor : ui.theme.textFieldColor
-        opacity: root.isHighlighted ? 0.5 : 1
+    height: parent ? parent.height : implicitHeight
+    width: parent ? parent.width : implicitWidth
 
-        NavigationFocusBorder { navigationCtrl: keynavItem }
-    }
+    implicitHeight: 38
+    implicitWidth: 248
 
-    signal clicked()
-
-    NavigationControl {
-        id: keynavItem
-        name: "InstrumentsTreeItemControl"
-        panel: root.navigationPanel
-        row: root.keynavRow
-        column: 0
-        enabled: root.visible
-
-        onActiveChanged: {
-            if (active) {
-                root.focusActived()
-            }
-        }
-    }
+    background.border.width: 0
 
     RowLayout {
-        anchors.top: parent.top
-        anchors.topMargin: 16
-        anchors.bottom: separator.top
-        anchors.bottomMargin: 16
-        anchors.left: parent.left
-        anchors.right: parent.right
-
-        spacing: 2
-
-        Item {
-            Layout.fillWidth: true
-            Layout.leftMargin: 90 * styleData.depth
-            Layout.preferredHeight: childrenRect.height
-
-            FlatButton {
-                id: addButton
-
-                anchors.left: parent.left
-
-                width: 24
-                height: width
-
-                objectName: "InstrumentsAddStaffBtn"
-                navigation.panel: root.navigationPanel
-                navigation.row: root.keynavRow
-                navigation.column: 1
-
-                icon: IconCode.PLUS
-            }
-
-            StyledTextLabel {
-                anchors.left: addButton.right
-                anchors.leftMargin: 8
-                anchors.right: parent.right
-                anchors.rightMargin: 8
-                anchors.verticalCenter: addButton.verticalCenter
-
-                text: model ? model.itemRole.title : ""
-                horizontalAlignment: Text.AlignLeft
-            }
-        }
-    }
-
-    SeparatorLine { id: separator; anchors.bottom: parent.bottom; }
-
-    MouseArea {
         anchors.fill: parent
 
-        onClicked: {
-            root.clicked()
+        // 70 = 32+2+32+4 for the buttons and spacing in InstrumentsTreeItemDelegate
+        // to make sure that the Add button aligns vertically with the text of the item above it
+        anchors.leftMargin: sideMargin + 70 + 12 * styleData.depth
+        spacing: 4
+
+        FlatButton {
+            id: addButton
+
+            Layout.preferredWidth: 24
+            Layout.preferredHeight: 24
+
+            objectName: "InstrumentsAddStaffBtn"
+            navigation.panel: root.navigation.panel
+            navigation.row: root.navigation.row
+            navigation.column: 1
+
+            icon: IconCode.PLUS
+            onClicked: root.clicked(null)
+        }
+
+        StyledTextLabel {
+            Layout.fillWidth: true
+
+            text: model ? model.itemRole.title : ""
+            horizontalAlignment: Text.AlignLeft
         }
     }
+
+    SeparatorLine { anchors.bottom: parent.bottom; }
 }

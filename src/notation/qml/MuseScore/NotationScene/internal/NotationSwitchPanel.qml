@@ -66,7 +66,6 @@ Rectangle {
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.bottom: parent.bottom
-        anchors.margins: 1
 
         width: Math.min(contentWidth, parent.width)
 

@@ -52,8 +52,7 @@ ListItemBlank {
 
     implicitHeight: 32
 
-    hoveredStateColor: ui.theme.accentColor
-    pressedStateColor: ui.theme.accentColor
+    hoverHitColor: ui.theme.accentColor
     enabled: (Boolean(modelData) && modelData.enabled !== undefined) ? Boolean(modelData.enabled) : true // default true
 
     isSelected: Boolean(itemPrv.showedSubMenu) || (itemPrv.isSelectable && itemPrv.isSelected) || navigation.active

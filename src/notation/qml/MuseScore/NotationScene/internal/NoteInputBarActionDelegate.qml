@@ -43,9 +43,7 @@ Item {
         FlatButton {
             Layout.alignment: Qt.AlignLeft
 
-            normalStateColor: "transparent"
-            pressedStateColor: ui.theme.accentColor
-
+            transparent: true
             icon: Boolean(root.item) && root.item.checked ? IconCode.VISIBILITY_ON : IconCode.VISIBILITY_OFF
 
             onClicked: {

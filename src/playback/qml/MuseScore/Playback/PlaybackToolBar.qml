@@ -106,9 +106,8 @@ Rectangle {
 
                             iconFont: ui.theme.toolbarIconsFont
 
-                            normalStateColor: modelData.checked || menuLoader.isMenuOpened
-                                              ? ui.theme.accentColor : "transparent"
                             accentButton: modelData.checked || menuLoader.isMenuOpened
+                            transparent: !accentButton
 
                             navigation.panel: navPanel
                             navigation.name: modelData.title

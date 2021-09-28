@@ -41,7 +41,7 @@ RadioButtonGroup {
     property int leftPadding: 0
 
     Connections {
-        target: model
+        target: root.model
 
         function onSelectedWorkspaceChanged(selectedWorkspace) {
             if (Boolean(selectedWorkspace)) {
@@ -51,10 +51,12 @@ RadioButtonGroup {
     }
 
     delegate: RoundedRadioButton {
-        width: ListView.view.width
-        leftPadding: root.leftPadding
+        ButtonGroup.group: root.radioButtonGroup
 
+        width: ListView.view.width
         height: 46
+
+        leftPadding: root.leftPadding
         spacing: 12
 
         text: model.name
@@ -62,17 +64,15 @@ RadioButtonGroup {
 
         checked: model.isSelected
 
-        background: FlatRadioButton {
+        background: ListItemBlank {
             anchors.fill: parent
 
-            ButtonGroup.group: root.radioButtonGroup
-            normalStateColor: "transparent"
-
-            checked: model.isSelected
-
+            isSelected: model.isSelected
             onClicked: {
                 root.model.selectWorkspace(model.index)
             }
+
+            SeparatorLine { anchors.bottom: parent.bottom }
         }
     }
 }

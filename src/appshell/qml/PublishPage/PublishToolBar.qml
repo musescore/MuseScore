@@ -70,7 +70,7 @@ Rectangle {
             toolTipShortcut: model.shortcut
 
             orientation: Qt.Horizontal
-            normalStateColor: "transparent"
+            transparent: true
 
             navigation.panel: navPanel
             navigation.order: model.index

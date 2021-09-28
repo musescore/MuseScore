@@ -62,7 +62,7 @@ Rectangle {
             toolTipShortcut: model.undoItem.shortcut
 
             enabled: model.undoItem.enabled
-            normalStateColor: "transparent"
+            transparent: true
 
             navigation.panel: navPanel
             navigation.order: 1
@@ -81,7 +81,7 @@ Rectangle {
             toolTipShortcut: model.redoItem.shortcut
 
             enabled: model.redoItem.enabled
-            normalStateColor: "transparent"
+            transparent: true
 
             navigation.panel: navPanel
             navigation.order: 2

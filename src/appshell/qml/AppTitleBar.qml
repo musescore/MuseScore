@@ -97,7 +97,7 @@ Rectangle {
 
             FlatButton {
                 icon: IconCode.MINUS
-                normalStateColor: "transparent"
+                transparent: true
 
                 navigation.name: "AppControl"
                 navigation.panel: navAppControlPanel
@@ -111,7 +111,7 @@ Rectangle {
 
             FlatButton {
                 icon: IconCode.SPLIT_OUT_ARROWS
-                normalStateColor: "transparent"
+                transparent: true
 
                 navigation.name: "AppControl"
                 navigation.panel: navAppControlPanel
@@ -125,9 +125,8 @@ Rectangle {
 
             FlatButton {
                 icon: IconCode.CLOSE_X_ROUNDED
-                normalStateColor: "transparent"
-                pressedStateColor: "red"
-                hoveredStateColor: "red"
+                transparent: true
+                accentColor: "red"
 
                 navigation.name: "AppControl"
                 navigation.panel: navAppControlPanel

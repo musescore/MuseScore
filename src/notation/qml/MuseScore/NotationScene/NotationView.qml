@@ -68,6 +68,8 @@ FocusScope {
             navigationSection: navSec
         }
 
+        SeparatorLine {}
+
         SplitView {
             id: splitView
 
