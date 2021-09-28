@@ -758,7 +758,7 @@ void PianorollView::mouseReleaseEvent(QMouseEvent* event)
             selectNotes(startTick, endTick, lowPitch, highPitch, selType);
         } else if (m_dragStyle == DragStyle::NOTE_POSITION || m_dragStyle == DragStyle::NOTE_LENGTH_START
                    || m_dragStyle == DragStyle::NOTE_LENGTH_END) {
-            if (m_tool == PianorollTool::SELECT) {
+            if (m_tool == PianorollTool::SELECT || m_tool == PianorollTool::ADD) {
                 finishNoteGroupDrag();
 
                 //Keep last note drag event, if any
@@ -809,8 +809,15 @@ void PianorollView::mouseReleaseEvent(QMouseEvent* event)
             eraseNote(m_mouseDownPos);
             break;
         case PianorollTool::ADD:
-            insertNote(modifiers);
+        {
+            NoteBlock* pi = pickNote(m_mouseDownPos.x(), m_mouseDownPos.y());
+            if (pi) {
+                handleSelectionClick();
+            } else {
+                insertNote(modifiers);
+            }
             break;
+        }
         case PianorollTool::CUT:
             cutChord(m_mouseDownPos);
             break;
@@ -827,7 +834,7 @@ void PianorollView::mouseReleaseEvent(QMouseEvent* event)
 
 void PianorollView::hoverMoveEvent(QHoverEvent* event)
 {
-    if (m_tool == PianorollTool::SELECT) {
+    if (m_tool == PianorollTool::SELECT || m_tool == PianorollTool::ADD) {
         QPointF pos = event->pos();
         NoteBlock* pi = pickNote(pos.x(), pos.y());
 
@@ -871,7 +878,7 @@ void PianorollView::mouseMoveEvent(QMouseEvent* event)
             double mouseDownPitch = pixelYToPitch(m_mouseDownPos.y());
 
             NoteBlock* pi = pickNote(m_mouseDownPos.x(), m_mouseDownPos.y());
-            if (pi && m_tool == PianorollTool::SELECT) {
+            if (pi && (m_tool == PianorollTool::SELECT || m_tool == PianorollTool::ADD)) {
                 if (!pi->note->selected()) {
                     selectNotes(tick, tick, mouseDownPitch, mouseDownPitch, NoteSelectType::REPLACE);
                 }
@@ -891,7 +898,7 @@ void PianorollView::mouseMoveEvent(QMouseEvent* event)
                 m_dragNoteCache = serializeSelectedNotes();
             } else if (!pi && m_tool == PianorollTool::SELECT) {
                 m_dragStyle = DragStyle::SELECTION_RECT;
-            } else if (m_tool == PianorollTool::ADD) {
+            } else if (!pi && m_tool == PianorollTool::ADD) {
                 m_dragStyle = DragStyle::DRAW_NOTE;
             } else {
                 m_dragStyle = DragStyle::NONE;
