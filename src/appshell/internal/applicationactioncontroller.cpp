@@ -33,7 +33,10 @@ using namespace mu::actions;
 
 void ApplicationActionController::init()
 {
-    dispatcher()->reg(this, "quit", this, &ApplicationActionController::quit);
+    dispatcher()->reg(this, "quit", [this](const ActionData& args) {
+        bool isAllInstances = args.count() > 0 ? args.arg<bool>(0) : true;
+        quit(isAllInstances);
+    });
 
     dispatcher()->reg(this, "fullscreen", this, &ApplicationActionController::toggleFullScreen);
 
@@ -55,7 +58,7 @@ bool ApplicationActionController::eventFilter(QObject* watched, QEvent* event)
 {
     QCloseEvent* closeEvent = dynamic_cast<QCloseEvent*>(event);
     if (closeEvent && watched == mainWindow()->qWindow()) {
-        quit();
+        quit(false);
         closeEvent->ignore();
         return true;
     }
@@ -72,9 +75,13 @@ mu::ValCh<bool> ApplicationActionController::isFullScreen() const
     return result;
 }
 
-void ApplicationActionController::quit()
+void ApplicationActionController::quit(bool isAllInstances)
 {
     if (projectFilesController()->closeOpenedProject()) {
+        if (isAllInstances) {
+            multiInstancesProvider()->quitForAll();
+        }
+
         QCoreApplication::quit();
     }
 }
