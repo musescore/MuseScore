@@ -54,9 +54,7 @@ FocusScope {
             Layout.preferredWidth: width
 
             icon: root.isVisible ? IconCode.VISIBILITY_ON : IconCode.VISIBILITY_OFF
-
-            normalStateColor: "transparent"
-            pressedStateColor: ui.theme.accentColor
+            transparent: true
 
             onClicked: {
                 root.visibleToggled()

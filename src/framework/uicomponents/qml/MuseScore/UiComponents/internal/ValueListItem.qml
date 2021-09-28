@@ -44,8 +44,7 @@ ListItemBlank {
 
     height: 34
 
-    normalStateColor: (index % 2 == 0) ? ui.theme.backgroundSecondaryColor
-                                       : ui.theme.backgroundPrimaryColor
+    normalColor: (index % 2 == 0) ? ui.theme.backgroundSecondaryColor : ui.theme.backgroundPrimaryColor
 
     navigation.accessible.name: titleLabel.text + ": " + (Boolean(loader.item) ? loader.item.accessibleName : "")
 

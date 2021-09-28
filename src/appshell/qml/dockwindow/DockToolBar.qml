@@ -33,17 +33,13 @@ Dock.DockToolBar {
 
     Rectangle {
         anchors.fill: parent
-
         color: ui.theme.backgroundPrimaryColor
 
         Loader {
             id: loader
-
             anchors.fill: parent
-            anchors.margins: 2
 
-            sourceComponent: orientation === Qt.Horizontal ? horizontalView : verticalView
-
+            sourceComponent: root.orientation === Qt.Horizontal ? horizontalView : verticalView
             onLoaded: {
                 root.setDraggableMouseArea(loader.item.gripMouseArea)
             }
@@ -54,18 +50,19 @@ Dock.DockToolBar {
         id: horizontalView
 
         RowLayout {
-            spacing: 2
+            spacing: 0
 
-            property var gripMouseArea: gripButton.mouseArea
+            property alias gripMouseArea: gripButton.mouseArea
 
             FlatButton {
                 id: gripButton
 
                 Layout.alignment: Qt.AlignLeft | Qt.AlignVCenter
+                Layout.margins: 2
 
                 mouseArea.objectName: root.objectName + "_toolBarMouseAreaHorizontal"
 
-                normalStateColor: "transparent"
+                transparent: true
                 icon: IconCode.TOOLBAR_GRIP
 
                 visible: root.movable
@@ -84,18 +81,19 @@ Dock.DockToolBar {
         id: verticalView
 
         ColumnLayout {
-            spacing: 2
+            spacing: 0
 
-            property var gripMouseArea: gripButton.mouseArea
+            property alias gripMouseArea: gripButton.mouseArea
 
             FlatButton {
                 id: gripButton
 
                 Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
+                Layout.margins: 2
 
                 mouseArea.objectName: root.objectName + "_toolBarMouseAreaVertical"
 
-                normalStateColor: "transparent"
+                transparent: true
                 icon: IconCode.TOOLBAR_GRIP
                 rotation: 90
 

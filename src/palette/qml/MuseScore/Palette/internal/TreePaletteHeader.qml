@@ -62,7 +62,7 @@ Item {
         visible: !root.unresolved // TODO: make a separate palette placeholder component
         activeFocusOnTab: false // same focus object as parent palette
         icon: root.expanded ? IconCode.SMALL_ARROW_DOWN : IconCode.SMALL_ARROW_RIGHT
-        normalStateColor: "transparent"
+        transparent: true
 
         enabled: paletteExpandArrow.visible
         navigation.panel: root.navigationPanel
@@ -100,7 +100,7 @@ Item {
         toolTipTitle: deleteButton.text
         visible: root.hidePaletteElementVisible && root.editingEnabled
         activeFocusOnTab: mainPalette.currentItem === paletteTree.currentTreeItem
-        normalStateColor: "transparent"
+        transparent: true
 
         enabled: deleteButton.visible
         navigation.panel: root.navigationPanel

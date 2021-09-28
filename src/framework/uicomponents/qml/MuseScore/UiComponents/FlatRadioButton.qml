@@ -38,10 +38,10 @@ RadioDelegate {
 
     property alias radius: backgroundRect.radius
 
-    property color normalStateColor: ui.theme.buttonColor
-    property color hoverStateColor: ui.theme.buttonColor
-    property color pressedStateColor: ui.theme.buttonColor
-    property color selectedStateColor: ui.theme.accentColor
+    property bool transparent: false
+    property color normalColor: transparent ? "transparent" : ui.theme.buttonColor
+    property color hoverHitColor: ui.theme.buttonColor
+    property color checkedColor: ui.theme.accentColor
 
     property alias navigation: navCtrl
 
@@ -74,17 +74,15 @@ RadioDelegate {
 
     background: Rectangle {
         id: backgroundRect
-
         anchors.fill: parent
 
         NavigationFocusBorder { navigationCtrl: navCtrl }
 
-        border.width: ui.theme.borderWidth
-        border.color: ui.theme.strokeColor
-
-        color: root.normalStateColor
+        color: root.checked ? root.checkedColor : root.normalColor
         opacity: ui.theme.buttonOpacityNormal
 
+        border.width: ui.theme.borderWidth
+        border.color: ui.theme.strokeColor
         radius: 2
     }
 
@@ -127,34 +125,23 @@ RadioDelegate {
     states: [
         State {
             name: "HOVERED"
-            when: root.hovered && !root.checked && !root.pressed
+            when: root.hovered && !root.pressed
 
             PropertyChanges {
                 target: backgroundRect
-                color: root.hoverStateColor
+                color: root.checked ? root.checkedColor : root.hoverHitColor
                 opacity: ui.theme.buttonOpacityHover
             }
         },
 
         State {
             name: "PRESSED"
-            when: root.pressed && !root.checked
+            when: root.pressed
 
             PropertyChanges {
                 target: backgroundRect
-                color: root.pressedStateColor
+                color: root.checked ? root.checkedColor : root.hoverHitColor
                 opacity: ui.theme.buttonOpacityHit
-            }
-        },
-
-        State {
-            name: "SELECTED"
-            when: root.checked
-
-            PropertyChanges {
-                target: backgroundRect
-                color: root.selectedStateColor
-                opacity: ui.theme.buttonOpacityNormal
             }
         }
     ]

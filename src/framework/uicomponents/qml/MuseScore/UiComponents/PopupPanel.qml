@@ -125,8 +125,7 @@ Rectangle {
         anchors.rightMargin: 20
 
         icon: IconCode.CLOSE_X_ROUNDED
-
-        normalStateColor: "transparent"
+        transparent: true
 
         onClicked: {
             close()

@@ -85,7 +85,7 @@ Rectangle {
             navigation.order: model.index
             navigation.enabled: model.enabled
 
-            normalStateColor: "transparent"
+            transparent: true
             orientation: Qt.Horizontal
 
             onClicked: {

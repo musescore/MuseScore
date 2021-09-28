@@ -93,7 +93,7 @@ Rectangle {
             anchors.verticalCenter: parent.verticalCenter
 
             text: model.currentWorkspaceAction.title
-            normalStateColor: "transparent"
+            transparent: true
             visible: statusBarRow.remainingSpace > width + concertPitchControl.width
 
             navigation.panel: navPanel

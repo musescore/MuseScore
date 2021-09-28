@@ -64,8 +64,9 @@ ListView {
 
         width: 60
 
-        normalStateColor: !menuLoader.isMenuOpened ? "transparent" : ui.theme.accentColor
-        hoveredStateColor: ui.theme.accentColor
+        transparent: !menuLoader.isMenuOpened
+        accentButton: menuLoader.isMenuOpened
+
         text: Boolean(item) ? item.title : ""
 
         navigation.name: text
@@ -76,8 +77,7 @@ ListView {
         }
 
         mouseArea.onContainsMouseChanged: {
-            if (!mouseArea.containsMouse || !prv.showedMenu ||
-                    prv.showedMenu === menuLoader.menu) {
+            if (!mouseArea.containsMouse || !prv.showedMenu || prv.showedMenu === menuLoader.menu) {
                 return
             }
 
