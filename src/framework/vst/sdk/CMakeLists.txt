@@ -164,3 +164,5 @@ set(MODULE_INCLUDE
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
 
 target_no_warning(${MODULE} -w)
+
+set_property(TARGET ${MODULE} APPEND_STRING PROPERTY COMPILE_FLAGS "-fobjc-arc")
