@@ -32,7 +32,7 @@ bool filterFxParams(const std::pair<AudioFxChainOrder, AudioFxParams>& f,
                     const std::pair<AudioFxChainOrder, AudioFxParams>& s)
 {
     return (f.first == s.first) && !(f.second == s.second);
-};
+}
 
 std::vector<IFxProcessorPtr> VstFxResolver::resolveFxList(const audio::TrackId trackId, const AudioFxChain& fxChain)
 {

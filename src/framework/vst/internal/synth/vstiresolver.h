@@ -43,7 +43,7 @@ public:
     void refresh() override;
 
 private:
-    VstSynthPtr createSynth(const audio::TrackId trackId, const audio::AudioInputParams &params) const;
+    VstSynthPtr createSynth(const audio::TrackId trackId, const audio::AudioInputParams& params) const;
 
     using SynthPair = std::pair<audio::AudioResourceId, VstSynthPtr>;
 
