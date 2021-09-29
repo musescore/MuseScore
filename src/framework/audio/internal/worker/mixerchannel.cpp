@@ -43,18 +43,32 @@ MixerChannel::MixerChannel(const TrackId trackId, IAudioSourcePtr source, const 
     setSampleRate(sampleRate);
 }
 
-void MixerChannel::applyOutputParams(const AudioOutputParams& originParams, AudioOutputParams& resultParams)
+const AudioOutputParams& MixerChannel::outputParams() const
+{
+    return m_params;
+}
+
+void MixerChannel::applyOutputParams(const AudioOutputParams& requiredParams)
 {
     ONLY_AUDIO_WORKER_THREAD;
 
+    if (m_params == requiredParams) {
+        return;
+    }
+
     m_fxProcessors.clear();
-    m_fxProcessors = fxResolver()->resolveFxList(m_trackId, originParams.fxChain);
+    m_fxProcessors = fxResolver()->resolveFxList(m_trackId, requiredParams.fxChain);
 
     for (IFxProcessorPtr& fx : m_fxProcessors) {
         fx->setSampleRate(m_sampleRate);
+
+        fx->paramsChanged().onReceive(this, [this](const AudioFxParams& fxParams) {
+            m_params.fxChain.insert_or_assign(fxParams.chainOrder, fxParams);
+            m_paramsChanges.send(m_params);
+        });
     }
 
-    resultParams = originParams;
+    AudioOutputParams resultParams = requiredParams;
 
     auto filterOutInvalidFxParams = [this](const std::pair<AudioFxChainOrder, AudioFxParams>& params) {
         for (IFxProcessorPtr& fx : m_fxProcessors) {
@@ -75,6 +89,12 @@ void MixerChannel::applyOutputParams(const AudioOutputParams& originParams, Audi
     }
 
     m_params = resultParams;
+    m_paramsChanges.send(std::move(resultParams));
+}
+
+async::Channel<AudioOutputParams> MixerChannel::outputParamsChanged() const
+{
+    return m_paramsChanges;
 }
 
 Channel<audioch_t, float> MixerChannel::signalAmplitudeRmsChanged() const

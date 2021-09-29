@@ -56,7 +56,11 @@ public:
     samples_t process(float* buffer, samples_t samplesPerChannel) override;
 
     void seek(const msecs_t newPositionMsecs) override;
-    void applyInputParams(const AudioInputParams& originParams, AudioInputParams& resultParams) override;
+
+    const AudioInputParams& inputParams() const override;
+    void applyInputParams(const AudioInputParams& requiredParams) override;
+    async::Channel<AudioInputParams> inputParamsChanged() const override;
+
 
 private:
     struct EventsBuffer {
@@ -139,6 +143,7 @@ private:
     TrackId m_trackId = -1;
     synth::ISynthesizerPtr m_synth = nullptr;
     AudioInputParams m_params;
+    async::Channel<AudioInputParams> m_paramsChanges;
 
     midi::MidiStream m_stream;
     midi::MidiMapping m_mapping;

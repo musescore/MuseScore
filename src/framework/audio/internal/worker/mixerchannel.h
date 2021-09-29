@@ -39,7 +39,9 @@ class MixerChannel : public ITrackAudioOutput, public async::Asyncable
 public:
     explicit MixerChannel(const TrackId trackId, IAudioSourcePtr source, const unsigned int sampleRate);
 
-    void applyOutputParams(const AudioOutputParams& originParams, AudioOutputParams& resultParams) override;
+    const AudioOutputParams& outputParams() const override;
+    void applyOutputParams(const AudioOutputParams& requiredParams) override;
+    async::Channel<AudioOutputParams> outputParamsChanged() const override;
 
     async::Channel<audioch_t, float> signalAmplitudeRmsChanged() const override;
     async::Channel<audioch_t, volume_dbfs_t> volumePressureDbfsChanged() const override;
@@ -66,6 +68,7 @@ private:
 
     dsp::CompressorPtr m_compressor = nullptr;
 
+    mutable async::Channel<AudioOutputParams> m_paramsChanges;
     mutable async::Channel<audioch_t, float> m_signalAmplitudeRmsChanged;
     mutable async::Channel<audioch_t, volume_dbfs_t> m_volumePressureDbfsChanged;
 };
