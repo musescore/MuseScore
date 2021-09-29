@@ -29,7 +29,6 @@ set(MODULE_TEST_SRC
     # ${CMAKE_CURRENT_LIST_DIR}/tst_compat114.cpp # fail
     # ${CMAKE_CURRENT_LIST_DIR}/tst_compat206.cpp # fail
     ${CMAKE_CURRENT_LIST_DIR}/tst_concertpitchbenchmark.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/tst_exchangevoices.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_hairpin.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_implodeExplode.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_instrumentchange.cpp
