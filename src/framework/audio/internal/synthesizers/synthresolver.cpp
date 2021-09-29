@@ -50,7 +50,7 @@ ISynthesizerPtr SynthResolver::resolveSynth(const TrackId trackId, const AudioIn
 
     TRACEFUNC;
 
-    IF_ASSERT_FAILED(params.isValid()) {
+    if (!params.isValid()) {
         LOGE() << "invalid audio source params for trackId: " << trackId;
         return nullptr;
     }
@@ -64,7 +64,7 @@ ISynthesizerPtr SynthResolver::resolveSynth(const TrackId trackId, const AudioIn
     }
 
     const IResolverPtr& resolver = search->second;
-    return resolver->resolveSynth(trackId, params.resourceMeta.id);
+    return resolver->resolveSynth(trackId, params);
 }
 
 ISynthesizerPtr SynthResolver::resolveDefaultSynth(const TrackId trackId) const

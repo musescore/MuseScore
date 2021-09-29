@@ -38,12 +38,12 @@ class VstiResolver : public audio::synth::ISynthResolver::IResolver
     INJECT(vst, IVstModulesRepository, pluginModulesRepo)
     INJECT(vst, IVstPluginsRegister, pluginsRegister)
 public:
-    audio::synth::ISynthesizerPtr resolveSynth(const audio::TrackId trackId, const audio::AudioResourceId& resourceId) const override;
+    audio::synth::ISynthesizerPtr resolveSynth(const audio::TrackId trackId, const audio::AudioInputParams& params) const override;
     audio::AudioResourceMetaList resolveResources() const override;
     void refresh() override;
 
 private:
-    VstSynthPtr createSynth(const audio::TrackId trackId, const audio::AudioResourceId& resourceId) const;
+    VstSynthPtr createSynth(const audio::TrackId trackId, const audio::AudioInputParams &params) const;
 
     using SynthPair = std::pair<audio::AudioResourceId, VstSynthPtr>;
 

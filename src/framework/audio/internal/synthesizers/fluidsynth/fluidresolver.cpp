@@ -50,17 +50,17 @@ FluidResolver::FluidResolver(const io::paths& soundFontDirs, async::Channel<io::
     });
 }
 
-ISynthesizerPtr FluidResolver::resolveSynth(const TrackId /*trackId*/, const AudioResourceId& resourceId) const
+ISynthesizerPtr FluidResolver::resolveSynth(const TrackId /*trackId*/, const AudioInputParams& params) const
 {
     ONLY_AUDIO_WORKER_THREAD;
 
-    ISynthesizerPtr synth = std::make_shared<FluidSynth>();
+    ISynthesizerPtr synth = std::make_shared<FluidSynth>(params);
     synth->init();
 
-    auto search = m_resourcesCache.find(resourceId);
+    auto search = m_resourcesCache.find(params.resourceMeta.id);
 
     if (search == m_resourcesCache.end()) {
-        LOGE() << "Not found: " << resourceId;
+        LOGE() << "Not found: " << params.resourceMeta.id;
         return synth;
     }
 

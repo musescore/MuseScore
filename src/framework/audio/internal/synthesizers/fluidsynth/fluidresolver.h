@@ -40,7 +40,7 @@ class FluidResolver : public ISynthResolver::IResolver, public async::Asyncable
 public:
     explicit FluidResolver(const io::paths& soundFontDirs, async::Channel<io::paths> sfDirsChanges);
 
-    ISynthesizerPtr resolveSynth(const audio::TrackId trackId, const audio::AudioResourceId& resourceId) const override;
+    ISynthesizerPtr resolveSynth(const audio::TrackId trackId, const audio::AudioInputParams& params) const override;
     audio::AudioResourceMetaList resolveResources() const override;
 
     void refresh() override;

@@ -25,6 +25,7 @@
 
 #include <memory>
 
+#include "async/asyncable.h"
 #include "audio/isynthesizer.h"
 #include "audio/iaudioconfiguration.h"
 #include "audio/audiotypes.h"
@@ -36,14 +37,14 @@
 #include "vsttypes.h"
 
 namespace mu::vst {
-class VstSynthesiser : public audio::synth::ISynthesizer
+class VstSynthesiser : public audio::synth::ISynthesizer, public async::Asyncable
 {
     INJECT(vst, IVstPluginsRegister, pluginsRegister)
     INJECT(vst, IVstModulesRepository, modulesRepo)
     INJECT(vst, audio::IAudioConfiguration, config)
 
 public:
-    explicit VstSynthesiser(VstPluginPtr&& pluginPtr);
+    explicit VstSynthesiser(VstPluginPtr&& pluginPtr, const audio::AudioInputParams& params);
 
     Ret init() override;
 
@@ -53,6 +54,9 @@ public:
 
     audio::AudioSourceType type() const override;
     std::string name() const override;
+
+    const audio::AudioInputParams& params() const override;
+    async::Channel<audio::AudioInputParams> paramsChanged() const override;
 
     audio::synth::SoundFontFormats soundFontFormats() const override;
     Ret addSoundFonts(const std::vector<io::path>& sfonts) override;
@@ -81,6 +85,9 @@ private:
 
     bool m_isActive = false;
 
+    audio::AudioInputParams m_params;
+
+    async::Channel<audio::AudioInputParams> m_paramsChanges;
     async::Channel<unsigned int> m_streamsCountChanged;
 };
 
