@@ -3,6 +3,7 @@
 
 #include <memory>
 
+#include "async/asyncable.h"
 #include "audio/ifxprocessor.h"
 
 #include "internal/vstaudioclient.h"
@@ -10,7 +11,7 @@
 #include "vsttypes.h"
 
 namespace mu::vst {
-class VstFxProcessor : public audio::IFxProcessor
+class VstFxProcessor : public audio::IFxProcessor, public async::Asyncable
 {
 public:
     explicit VstFxProcessor(VstPluginPtr&& pluginPtr, const audio::AudioFxParams& params);
@@ -19,6 +20,7 @@ public:
 
     audio::AudioFxType type() const override;
     const audio::AudioFxParams& params() const override;
+    async::Channel<audio::AudioFxParams> paramsChanged() const override;
     void setSampleRate(unsigned int sampleRate) override;
     bool active() const override;
     void setActive(bool active) override;
@@ -29,6 +31,7 @@ private:
     std::unique_ptr<VstAudioClient> m_vstAudioClient = nullptr;
 
     audio::AudioFxParams m_params;
+    async::Channel<audio::AudioFxParams> m_paramsChanges;
 };
 
 using VstFxPtr = std::shared_ptr<VstFxProcessor>;

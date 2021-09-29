@@ -46,7 +46,7 @@ std::vector<IFxProcessorPtr> FxResolver::resolveMasterFxList(const AudioFxChain&
         AudioFxChain fxChainByType;
 
         for (const auto& fx : fxChain) {
-            if (resolver.first == fx.second.type()) {
+            if (resolver.first == fx.second.type() || fx.second.type() == AudioFxType::Undefined) {
                 fxChainByType.insert(fx);
             }
         }
@@ -76,7 +76,7 @@ std::vector<IFxProcessorPtr> FxResolver::resolveFxList(const TrackId trackId, co
         AudioFxChain fxChainByType;
 
         for (const auto& fx : fxChain) {
-            if (resolver.first == fx.second.type()) {
+            if (resolver.first == fx.second.type() || fx.second.type() == AudioFxType::Undefined) {
                 fxChainByType.insert(fx);
             }
         }

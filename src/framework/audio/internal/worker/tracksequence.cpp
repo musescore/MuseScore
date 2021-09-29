@@ -86,22 +86,22 @@ RetVal2<TrackId, AudioParams> TrackSequence::addTrack(const std::string& trackNa
 
     TrackId newId = static_cast<TrackId>(m_tracks.size());
 
-    MidiTrack track;
-    track.id = newId;
-    track.name = trackName;
-    track.setPlaybackData(midiData);
-    track.inputHandler = std::make_shared<MidiAudioSource>(track.id, midiData);
-    track.outputHandler = mixer()->addChannel(track.id, track.inputHandler).val;
-    track.setInputParams(requiredParams.in);
-    track.setOutputParams(requiredParams.out);
+    MidiTrackPtr trackPtr = std::make_shared<MidiTrack>();
+    trackPtr->id = newId;
+    trackPtr->name = trackName;
+    trackPtr->setPlaybackData(midiData);
+    trackPtr->inputHandler = std::make_shared<MidiAudioSource>(newId, midiData);
+    trackPtr->outputHandler = mixer()->addChannel(newId, trackPtr->inputHandler).val;
+    trackPtr->setInputParams(requiredParams.in);
+    trackPtr->setOutputParams(requiredParams.out);
 
-    m_tracks.emplace(newId, std::make_shared<MidiTrack>(std::move(track)));
-
+    m_trackAboutToBeAdded.send(trackPtr);
+    m_tracks.emplace(newId, trackPtr);
     m_trackAdded.send(newId);
 
     result.ret = make_ret(Err::NoError);
     result.val1 = newId;
-    result.val2 = { track.inputParams(), track.outputParams() };
+    result.val2 = { trackPtr->inputParams(), trackPtr->outputParams() };
 
     return result;
 }
@@ -122,21 +122,21 @@ RetVal2<TrackId, AudioParams> TrackSequence::addTrack(const std::string& trackNa
 
     TrackId newId = static_cast<TrackId>(m_tracks.size());
 
-    AudioTrack track;
-    track.id = newId;
-    track.name = trackName;
-    track.setPlaybackData(device);
-    track.setInputParams(requiredParams.in);
-    track.setOutputParams(requiredParams.out);
+    AudioTrackPtr trackPtr = std::make_shared<AudioTrack>();
+    trackPtr->id = newId;
+    trackPtr->name = trackName;
+    trackPtr->setPlaybackData(device);
+    trackPtr->setInputParams(requiredParams.in);
+    trackPtr->setOutputParams(requiredParams.out);
     //TODO create AudioSource and MixerChannel
 
-    m_tracks.emplace(newId, std::make_shared<AudioTrack>(std::move(track)));
-
+    m_trackAboutToBeAdded.send(trackPtr);
+    m_tracks.emplace(newId, trackPtr);
     m_trackAdded.send(newId);
 
     result.ret = make_ret(Err::NoError);
     result.val1 = newId;
-    result.val2 = { track.inputParams(), track.outputParams() };
+    result.val2 = { trackPtr->inputParams(), trackPtr->outputParams() };
 
     return result;
 }
@@ -177,6 +177,7 @@ Ret TrackSequence::removeTrack(const TrackId id)
     auto search = m_tracks.find(id);
 
     if (search != m_tracks.end() && search->second) {
+        m_trackAboutToBeRemoved.send(search->second);
         mixer()->removeChannel(id);
         m_tracks.erase(id);
         m_trackRemoved.send(id);
@@ -237,6 +238,20 @@ TracksMap TrackSequence::allTracks() const
     ONLY_AUDIO_WORKER_THREAD;
 
     return m_tracks;
+}
+
+Channel<TrackPtr> TrackSequence::trackAboutToBeAdded() const
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    return m_trackAboutToBeAdded;
+}
+
+Channel<TrackPtr> TrackSequence::trackAboutToBeRemoved() const
+{
+    ONLY_AUDIO_WORKER_THREAD;
+
+    return m_trackAboutToBeRemoved;
 }
 
 std::shared_ptr<Mixer> TrackSequence::mixer() const
