@@ -53,6 +53,7 @@ using AudioSourceName = std::string;
 using AudioResourceId = std::string;
 using AudioResourceIdList = std::vector<AudioResourceId>;
 using AudioResourceVendor = std::string;
+using AudioUnitConfig = std::map<std::string, std::string>;
 
 enum class AudioResourceType {
     Undefined = -1,
@@ -116,7 +117,6 @@ enum class AudioFxCategory {
 };
 
 using AudioFxCategories = std::set<AudioFxCategory>;
-
 using AudioFxChainOrder = int8_t;
 
 struct AudioFxParams {
@@ -131,6 +131,7 @@ struct AudioFxParams {
     AudioFxCategories categories;
     AudioFxChainOrder chainOrder = -1;
     AudioResourceMeta resourceMeta;
+    AudioUnitConfig configuration;
     bool active = false;
 
     bool operator ==(const AudioFxParams& other) const
@@ -138,7 +139,8 @@ struct AudioFxParams {
         return resourceMeta == other.resourceMeta
                && active == other.active
                && chainOrder == other.chainOrder
-               && categories == other.categories;
+               && categories == other.categories
+               && configuration == other.configuration;
     }
 
     bool operator<(const AudioFxParams& other) const
@@ -189,6 +191,7 @@ struct AudioSourceParams {
     }
 
     AudioResourceMeta resourceMeta;
+    AudioUnitConfig configuration;
 
     bool isValid() const
     {
@@ -199,7 +202,8 @@ struct AudioSourceParams {
     bool operator ==(const AudioSourceParams& other) const
     {
         return type() == other.type()
-               && resourceMeta == other.resourceMeta;
+               && resourceMeta == other.resourceMeta
+               && configuration == other.configuration;
     }
 };
 
