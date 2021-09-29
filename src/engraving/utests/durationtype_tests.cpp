@@ -20,9 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "testing/qtestsuite.h"
-
-#include "testbase.h"
+#include <gtest/gtest.h>
 
 #include "libmscore/mscore.h"
 #include "libmscore/masterscore.h"
@@ -36,20 +34,18 @@
 #include "libmscore/key.h"
 #include "libmscore/pitchspelling.h"
 
+#include "utils/scorerw.h"
+#include "utils/scorecomp.h"
+
 static const QString DURATIONTYPE_DATA_DIR("durationtype_data/");
 
+using namespace mu::engraving;
 using namespace Ms;
 
-//---------------------------------------------------------
-//   TestDurationType
-//---------------------------------------------------------
-
-class TestDurationType : public QObject, public MTest
+class DurationTypeTests : public ::testing::Test
 {
-    Q_OBJECT
-
 private slots:
-    void initTestCase();
+
     void halfDuration();
     void doubleDuration();
     void decDurationDotted();
@@ -57,23 +53,14 @@ private slots:
 };
 
 //---------------------------------------------------------
-//   initTestCase
-//---------------------------------------------------------
-
-void TestDurationType::initTestCase()
-{
-    initMTest();
-}
-
-//---------------------------------------------------------
-//   halfDuration
 //    Simple tests for command "half-duration" (default shortcut "Q").
 //    starts with Whole note and repeatedly applies cmdHalfDuration()
 //---------------------------------------------------------
-
-void TestDurationType::halfDuration()
+TEST_F(DurationTypeTests, halfDuration)
 {
-    MasterScore* score = readScore(DURATIONTYPE_DATA_DIR + "empty.mscx");
+    MasterScore* score = ScoreRW::readScore(DURATIONTYPE_DATA_DIR + "empty.mscx");
+    EXPECT_TRUE(score);
+
     score->inputState().setTrack(0);
     score->inputState().setSegment(score->tick2segment(Fraction(0, 1), false, SegmentType::ChordRest));
     score->inputState().setDuration(TDuration::DurationType::V_WHOLE);
@@ -82,7 +69,7 @@ void TestDurationType::halfDuration()
     score->startCmd();
     score->cmdAddPitch(42, false, false);
     Ms::Chord* c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
-    QVERIFY(c->ticks() == Fraction(1, 1));
+    EXPECT_EQ(c->ticks(), Fraction(1, 1));
     score->endCmd();
 
     // repeatedly half-duration from V_WHOLE to V_128
@@ -91,7 +78,7 @@ void TestDurationType::halfDuration()
         score->cmdHalfDuration();
         score->endCmd();
         Ms::Chord* c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
-        QVERIFY(c->ticks() == Fraction(i / 2, 128));
+        EXPECT_EQ(c->ticks(), Fraction(i / 2, 128));
     }
 }
 
@@ -100,10 +87,11 @@ void TestDurationType::halfDuration()
 //    Simple tests for command "double-duration" (default shortcut "W").
 //    Starts with 128th note and repeatedly applies cmdDoubleDuration() up to Whole note.
 //---------------------------------------------------------
-
-void TestDurationType::doubleDuration()
+TEST_F(DurationTypeTests, doubleDuration)
 {
-    MasterScore* score = readScore(DURATIONTYPE_DATA_DIR + "empty.mscx");
+    MasterScore* score = ScoreRW::readScore(DURATIONTYPE_DATA_DIR + "empty.mscx");
+    EXPECT_TRUE(score);
+
     score->inputState().setTrack(0);
     score->inputState().setSegment(score->tick2segment(Fraction(0, 1), false, SegmentType::ChordRest));
     score->inputState().setDuration(TDuration::DurationType::V_128TH);
@@ -111,13 +99,13 @@ void TestDurationType::doubleDuration()
 
     score->startCmd();
     score->cmdAddPitch(42, false, false);
-    QVERIFY(score->firstMeasure()->findChord(Fraction(0, 1), 0)->ticks() == Fraction(1, 128));
+    EXPECT_EQ(score->firstMeasure()->findChord(Fraction(0, 1), 0)->ticks(), Fraction(1, 128));
 
     // repeatedly double-duration from V_128 to V_WHOLE
     for (int i = 1; i < 128; i *= 2) {
         score->cmdDoubleDuration();
         Ms::Chord* c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
-        QVERIFY(c->ticks() == Fraction(2 * i, 128));
+        EXPECT_EQ(c->ticks(), Fraction(2 * i, 128));
     }
     score->endCmd();
 }
@@ -127,10 +115,11 @@ void TestDurationType::doubleDuration()
 //    Simple tests for command "dec-duration-dotted" (default shortcut "Shift+Q").
 //    Starts with Whole note and repeatedly applies cmdDecDurationDotted() down to 128th note.
 //---------------------------------------------------------
-
-void TestDurationType::decDurationDotted()
+TEST_F(DurationTypeTests, decDurationDotted)
 {
-    MasterScore* score = readScore(DURATIONTYPE_DATA_DIR + "empty.mscx");
+    MasterScore* score = ScoreRW::readScore(DURATIONTYPE_DATA_DIR + "empty.mscx");
+    EXPECT_TRUE(score);
+
     score->inputState().setTrack(0);
     score->inputState().setSegment(score->tick2segment(Fraction(0, 1), false, SegmentType::ChordRest));
     score->inputState().setDuration(TDuration::DurationType::V_WHOLE);
@@ -139,17 +128,17 @@ void TestDurationType::decDurationDotted()
     score->startCmd();
     score->cmdAddPitch(42, false, false);
     Ms::Chord* c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
-    QVERIFY(c->ticks() == Fraction(1, 1));
+    EXPECT_EQ(c->ticks(), Fraction(1, 1));
 
     // repeatedly dec-duration-dotted from V_WHOLE to V_128
     for (int i = 128; i > 1; i /= 2) {
         score->cmdDecDurationDotted();
         Ms::Chord* c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
-        QVERIFY(c->ticks() == Fraction(i + i / 2, 256));
+        EXPECT_EQ(c->ticks(), Fraction(i + i / 2, 256));
 
         score->cmdDecDurationDotted();
         c = score->firstMeasure()->findChord(Fraction(0, 1), 0);
-        QVERIFY(c->ticks() == Fraction(i / 2, 128));
+        EXPECT_EQ(c->ticks(), Fraction(i / 2, 128));
     }
     score->endCmd();
 }
@@ -159,10 +148,11 @@ void TestDurationType::decDurationDotted()
 //    Simple tests for command "inc-duration-dotted" (default shortcut "Shift+W").
 //    Starts with 128th note and repeatedly applies cmdIncDurationDotted() up to Whole note.
 //---------------------------------------------------------
-
-void TestDurationType::incDurationDotted()
+TEST_F(DurationTypeTests, incDurationDotted)
 {
-    MasterScore* score = readScore(DURATIONTYPE_DATA_DIR + "empty.mscx");
+    MasterScore* score = ScoreRW::readScore(DURATIONTYPE_DATA_DIR + "empty.mscx");
+    EXPECT_TRUE(score);
+
     score->inputState().setTrack(0);
     score->inputState().setSegment(score->tick2segment(Fraction(0, 1), false, SegmentType::ChordRest));
     score->inputState().setDuration(TDuration::DurationType::V_128TH);
@@ -170,19 +160,15 @@ void TestDurationType::incDurationDotted()
 
     score->startCmd();
     score->cmdAddPitch(42, false, false);
-    QVERIFY(score->firstMeasure()->findChord(Fraction(0, 1), 0)->ticks() == Fraction(1, 128));
+    EXPECT_EQ(score->firstMeasure()->findChord(Fraction(0, 1), 0)->ticks(), Fraction(1, 128));
 
     // repeatedly inc-duration-dotted from V_128 to V_WHOLE
     for (int i = 1; i < 128; i *= 2) {
         score->cmdIncDurationDotted();
-        QVERIFY(score->firstMeasure()->findChord(Fraction(0, 1), 0)->ticks() == Fraction(3 * i, 256));
+        EXPECT_EQ(score->firstMeasure()->findChord(Fraction(0, 1), 0)->ticks(), Fraction(3 * i, 256));
 
         score->cmdIncDurationDotted();
-        QVERIFY(score->firstMeasure()->findChord(Fraction(0, 1), 0)->ticks() == Fraction(i, 64));
+        EXPECT_EQ(score->firstMeasure()->findChord(Fraction(0, 1), 0)->ticks(), Fraction(i, 64));
     }
     score->endCmd();
 }
-
-QTEST_MAIN(TestDurationType)
-
-#include "tst_durationtype.moc"
