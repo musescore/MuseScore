@@ -35,10 +35,6 @@ static const QString BOX_DATA_DIR("box_data/");
 using namespace mu::engraving;
 using namespace Ms;
 
-//---------------------------------------------------------
-//   TestBox
-//---------------------------------------------------------
-
 class BoxTests : public ::testing::Test
 {
 };
