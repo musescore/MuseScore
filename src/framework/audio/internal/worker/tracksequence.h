@@ -64,6 +64,9 @@ public:
     TrackPtr track(const TrackId id) const override;
     TracksMap allTracks() const override;
 
+    async::Channel<TrackPtr> trackAboutToBeAdded() const override;
+    async::Channel<TrackPtr> trackAboutToBeRemoved() const override;
+
 private:
     std::shared_ptr<Mixer> mixer() const;
 
@@ -78,6 +81,9 @@ private:
 
     async::Channel<TrackId> m_trackAdded;
     async::Channel<TrackId> m_trackRemoved;
+
+    async::Channel<TrackPtr> m_trackAboutToBeAdded;
+    async::Channel<TrackPtr> m_trackAboutToBeRemoved;
 };
 }
 
