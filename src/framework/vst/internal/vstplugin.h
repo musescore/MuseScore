@@ -24,13 +24,18 @@
 #define MU_VST_VSTPLUGIN_H
 
 #include <mutex>
+#include <atomic>
 
 #include "modularity/ioc.h"
 #include "io/path.h"
 #include "async/asyncable.h"
+#include "async/notification.h"
+#include "async/channel.h"
 #include "audio/iaudiothreadsecurer.h"
+#include "audio/audiotypes.h"
 
 #include "vsttypes.h"
+#include "vstcomponenthandler.h"
 #include "vsterrors.h"
 
 namespace mu::vst {
@@ -44,17 +49,33 @@ public:
     const std::string& name() const;
 
     PluginViewPtr view() const;
-    PluginComponentPtr component() const;
+    PluginProviderPtr provider() const;
+
+    void updatePluginConfig(const audio::AudioUnitConfig& config);
+
+    void load();
 
     bool isValid() const;
+    bool isLoaded() const;
+
+    async::Notification loadingCompleted() const;
+    async::Channel<audio::AudioUnitConfig> pluginSettingsChanged() const;
 
 private:
-    void load();
+    void rescanParams();
+    void stateBufferFromString(VstMemoryStream &buffer, char *strData, const size_t strSize) const;
 
     PluginModulePtr m_module = nullptr;
     PluginProviderPtr m_pluginProvider = nullptr;
-    mutable PluginComponentPtr m_pluginComponent = nullptr;
     mutable PluginViewPtr m_pluginView = nullptr;
+
+    VstComponentHandler m_componentHandler;
+
+    VstMemoryStream m_pluginStateBuffer;
+    mutable async::Channel<audio::AudioUnitConfig> m_pluginSettingsChanges;
+
+    std::atomic_bool m_isLoaded = false;
+    async::Notification m_loadingCompleted;
 
     mutable std::mutex m_mutex;
 };
