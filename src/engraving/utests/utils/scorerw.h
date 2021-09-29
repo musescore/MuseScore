@@ -37,6 +37,7 @@ public:
 
     static Ms::MasterScore* readScore(const QString& path);
     static bool saveScore(Ms::Score* score, const QString& name);
+    static Ms::EngravingItem* writeReadElement(Ms::EngravingItem* element);
 };
 }
 
