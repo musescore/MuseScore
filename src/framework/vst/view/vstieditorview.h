@@ -26,12 +26,13 @@
 #include <QDialog>
 #include <QWidget>
 
+#include "async/asyncable.h"
 #include "modularity/ioc.h"
 
 #include "ivstpluginsregister.h"
 
 namespace mu::vst {
-class VstiEditorView : public QDialog, public Steinberg::IPlugFrame
+class VstiEditorView : public QDialog, public Steinberg::IPlugFrame, public async::Asyncable
 {
     Q_OBJECT
 
@@ -61,9 +62,11 @@ signals:
 
 private:
     void wrapPluginView();
+    void attachView(VstPluginPtr pluginPtr);
 
     FIDString currentPlatformUiType() const;
 
+    VstPluginPtr m_pluginPtr = nullptr;
     PluginViewPtr m_view = nullptr;
 
     audio::TrackId m_trackId = -1;

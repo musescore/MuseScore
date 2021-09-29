@@ -71,7 +71,8 @@ private:
 
     VstComponentHandler m_componentHandler;
 
-    VstMemoryStream m_pluginStateBuffer;
+    VstMemoryStream m_componentStateBuffer;
+    VstMemoryStream m_controllerStateBuffer;
     mutable async::Channel<audio::AudioUnitConfig> m_pluginSettingsChanges;
 
     std::atomic_bool m_isLoaded = false;
