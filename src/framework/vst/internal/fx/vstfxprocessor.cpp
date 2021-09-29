@@ -36,6 +36,23 @@ VstFxProcessor::VstFxProcessor(VstPluginPtr&& pluginPtr, const AudioFxParams& pa
 void VstFxProcessor::init()
 {
     m_vstAudioClient->init(VstPluginType::Fx, m_pluginPtr);
+
+    if (m_pluginPtr->isLoaded()) {
+        m_pluginPtr->updatePluginConfig(m_params.configuration);
+    } else {
+        m_pluginPtr->loadingCompleted().onNotify(this, [this]() {
+            m_pluginPtr->updatePluginConfig(m_params.configuration);
+        });
+    }
+
+    m_pluginPtr->pluginSettingsChanged().onReceive(this, [this](const audio::AudioUnitConfig& newConfig) {
+        if (m_params.configuration == newConfig) {
+            return;
+        }
+
+        m_params.configuration = newConfig;
+        m_paramsChanges.send(m_params);
+    });
 }
 
 AudioFxType VstFxProcessor::type() const
@@ -46,6 +63,11 @@ AudioFxType VstFxProcessor::type() const
 const AudioFxParams& VstFxProcessor::params() const
 {
     return m_params;
+}
+
+async::Channel<AudioFxParams> VstFxProcessor::paramsChanged() const
+{
+    return m_paramsChanges;
 }
 
 void VstFxProcessor::setSampleRate(unsigned int sampleRate)

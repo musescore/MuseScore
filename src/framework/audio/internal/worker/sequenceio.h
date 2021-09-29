@@ -23,12 +23,14 @@
 #ifndef MU_AUDIO_SEQUENCEIO_H
 #define MU_AUDIO_SEQUENCEIO_H
 
+#include "async/asyncable.h"
+
 #include "isequenceio.h"
 #include "igettracks.h"
 #include "audiotypes.h"
 
 namespace mu::audio {
-class SequenceIO : public ISequenceIO
+class SequenceIO : public ISequenceIO, public async::Asyncable
 {
 public:
     explicit SequenceIO(IGetTracks* getTracks);
