@@ -280,30 +280,37 @@ void MidiAudioSource::seek(const msecs_t newPositionMsecs)
     requestNextEvents(MINIMAL_REQUIRED_LOOKAHEAD);
 }
 
-void MidiAudioSource::applyInputParams(const AudioInputParams& originParams, AudioInputParams& resultParams)
+const AudioInputParams& MidiAudioSource::inputParams() const
 {
-    auto fallbackSynth = [this](AudioInputParams& result) {
-        m_synth = synthResolver()->resolveDefaultSynth(m_trackId);
-        m_synth->setSampleRate(m_sampleRate);
-        result = synthResolver()->resolveDefaultInputParams();
-        setupChannels();
-    };
+    return m_params;
+}
 
-    if (!originParams.isValid()) {
-        fallbackSynth(resultParams);
+void MidiAudioSource::applyInputParams(const AudioInputParams& requiredParams)
+{
+    if (m_params.isValid() && m_params == requiredParams) {
         return;
     }
 
-    m_synth = synthResolver()->resolveSynth(m_trackId, originParams);
+    m_synth = synthResolver()->resolveSynth(m_trackId, requiredParams);
 
     if (!m_synth) {
-        fallbackSynth(resultParams);
-        return;
+        m_synth = synthResolver()->resolveDefaultSynth(m_trackId);
     }
+
+    m_synth->paramsChanged().onReceive(this, [this](const AudioInputParams& params) {
+        m_paramsChanges.send(params);
+    });
 
     m_synth->setSampleRate(m_sampleRate);
     setupChannels();
-    resultParams = originParams;
+
+    m_params = m_synth->params();
+    m_paramsChanges.send(m_params);
+}
+
+async::Channel<AudioInputParams> MidiAudioSource::inputParamsChanged() const
+{
+    return m_paramsChanges;
 }
 
 void MidiAudioSource::buildTempoMap()

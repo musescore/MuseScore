@@ -27,6 +27,7 @@
 #include <memory>
 #include <vector>
 
+#include "async/asyncable.h"
 #include "async/channel.h"
 
 #include "iaudiosource.h"
@@ -45,7 +46,9 @@ public:
     virtual ~ITrackAudioInput() = default;
 
     virtual void seek(const msecs_t newPositionMsecs) = 0;
-    virtual void applyInputParams(const AudioInputParams& originParams, AudioInputParams& resultParams) = 0;
+    virtual const AudioInputParams& inputParams() const = 0;
+    virtual void applyInputParams(const AudioInputParams& requiredParams) = 0;
+    virtual async::Channel<AudioInputParams> inputParamsChanged() const = 0;
 };
 
 class ITrackAudioOutput : public IAudioSource
@@ -53,7 +56,9 @@ class ITrackAudioOutput : public IAudioSource
 public:
     virtual ~ITrackAudioOutput() = default;
 
-    virtual void applyOutputParams(const AudioOutputParams& originParams, AudioOutputParams& resultParams) = 0;
+    virtual const AudioOutputParams& outputParams() const = 0;
+    virtual void applyOutputParams(const AudioOutputParams& requiredParams) = 0;
+    virtual async::Channel<AudioOutputParams> outputParamsChanged() const = 0;
 
     // root mean square of a processed sample block
     virtual async::Channel<audioch_t, float> signalAmplitudeRmsChanged() const = 0;
@@ -65,7 +70,7 @@ public:
 using ITrackAudioInputPtr = std::shared_ptr<ITrackAudioInput>;
 using ITrackAudioOutputPtr = std::shared_ptr<ITrackAudioOutput>;
 
-struct Track
+struct Track : public async::Asyncable
 {
 public:
     Track(const TrackType trackType = Undefined)
@@ -89,52 +94,65 @@ public:
 
     AudioInputParams inputParams() const
     {
-        return m_inParams;
+        if (!inputHandler) {
+            return {};
+        }
+
+        return inputHandler->inputParams();
     }
 
     bool setInputParams(const AudioInputParams& requiredParams)
     {
-        if (m_inParams.isValid() && m_inParams == requiredParams) {
+        if (!inputHandler) {
             return false;
         }
 
-        AudioInputParams appliedParams;
-        inputHandler->applyInputParams(requiredParams, appliedParams);
-        m_inParams = std::move(appliedParams);
-        inputParamsChanged.send(m_inParams);
+        inputHandler->applyInputParams(requiredParams);
 
         return true;
     }
 
     AudioOutputParams outputParams() const
     {
-        return m_outParams;
+        if (!outputHandler) {
+            return {};
+        }
+
+        return outputHandler->outputParams();
     }
 
     bool setOutputParams(const AudioOutputParams& requiredParams)
     {
-        if (m_outParams == requiredParams) {
+        if (!outputHandler) {
             return false;
         }
 
-        AudioOutputParams appliedParams;
-        outputHandler->applyOutputParams(requiredParams, appliedParams);
-        m_outParams = std::move(appliedParams);
-        outputParamsChanged.send(m_outParams);
+        outputHandler->applyOutputParams(requiredParams);
 
         return true;
     }
 
-    async::Channel<AudioInputParams> inputParamsChanged;
-    async::Channel<AudioOutputParams> outputParamsChanged;
-    async::Channel<PlaybackData> playbackDataChanged;
-
     ITrackAudioInputPtr inputHandler = nullptr;
     ITrackAudioOutputPtr outputHandler = nullptr;
 
-private:
-    AudioInputParams m_inParams;
-    AudioOutputParams m_outParams;
+    async::Channel<AudioInputParams> inputParamsChanged()
+    {
+        if (!inputHandler) {
+            return {};
+        }
+
+        return inputHandler->inputParamsChanged();
+    }
+    async::Channel<AudioOutputParams> outputParamsChanged()
+    {
+        if (!outputHandler) {
+            return {};
+        }
+
+        return outputHandler->outputParamsChanged();
+    }
+
+    async::Channel<PlaybackData> playbackDataChanged;
 };
 
 struct MidiTrack : public Track
