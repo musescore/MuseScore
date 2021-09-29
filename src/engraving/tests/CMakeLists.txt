@@ -26,7 +26,6 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/testbase.h
     ${CMAKE_CURRENT_LIST_DIR}/tst_all_elements_layout_elements.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_all_elements_tree_model.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/tst_breath.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_chordsymbol.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_clef.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_clef_courtesy.cpp
