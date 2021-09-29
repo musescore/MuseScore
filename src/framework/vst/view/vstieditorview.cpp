@@ -51,6 +51,10 @@ VstiEditorView::~VstiEditorView()
     if (m_view) {
         m_view->removed();
     }
+
+    if (m_pluginPtr) {
+        m_pluginPtr->loadingCompleted().resetOnNotify(this);
+    }
 }
 
 tresult VstiEditorView::resizeView(IPlugView* view, ViewRect* newSize)
@@ -65,17 +69,24 @@ tresult VstiEditorView::resizeView(IPlugView* view, ViewRect* newSize)
 
 void VstiEditorView::wrapPluginView()
 {
-    VstPluginPtr plugin = pluginsRegister()->instrumentPlugin(m_trackId, m_resourceId.toStdString());
+    m_pluginPtr = pluginsRegister()->instrumentPlugin(m_trackId, m_resourceId.toStdString());
 
-    if (!plugin) {
+    if (!m_pluginPtr) {
         return;
     }
 
-    if (!plugin->view()) {
-        return;
+    if (m_pluginPtr->isLoaded()) {
+        attachView(m_pluginPtr);
+    } else {
+        m_pluginPtr->loadingCompleted().onNotify(this, [this]() {
+            attachView(m_pluginPtr);
+        });
     }
+}
 
-    m_view = plugin->view();
+void VstiEditorView::attachView(VstPluginPtr pluginPtr)
+{
+    m_view = pluginPtr->view();
 
     if (m_view->isPlatformTypeSupported(currentPlatformUiType()) != Steinberg::kResultTrue) {
         return;
@@ -86,7 +97,7 @@ void VstiEditorView::wrapPluginView()
     Steinberg::tresult attached;
     attached = m_view->attached(reinterpret_cast<void*>(windowHandle()->winId()), currentPlatformUiType());
     if (attached != kResultOk) {
-        LOGE() << "Unable to attach vst plugin view to window"
+        LOGE() << "Unable to attach vst fx plugin view to window"
                << ", resourceId: " << m_resourceId;
         return;
     }

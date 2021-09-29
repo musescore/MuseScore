@@ -106,13 +106,11 @@ void VstPlugin::rescanParams()
 
     audio::AudioUnitConfig updatedConfig;
 
-    VstMemoryStream componentStateBuffer;
-    component->getState(&componentStateBuffer);
-    updatedConfig.emplace(COMPONENT_STATE_KEY, std::string(componentStateBuffer.getData(), componentStateBuffer.getSize()));
+    component->getState(&m_componentStateBuffer);
+    updatedConfig.emplace(COMPONENT_STATE_KEY, std::string(m_componentStateBuffer.getData(), m_componentStateBuffer.getSize()));
 
-    VstMemoryStream controllerStateBuffer;
-    controller->getState(&controllerStateBuffer);
-    updatedConfig.emplace(CONTROLLER_STATE_KEY, std::string(controllerStateBuffer.getData(), controllerStateBuffer.getSize()));
+    controller->getState(&m_controllerStateBuffer);
+    updatedConfig.emplace(CONTROLLER_STATE_KEY, std::string(m_controllerStateBuffer.getData(), m_controllerStateBuffer.getSize()));
 
     for (int32_t i = 0; i < controller->getParameterCount(); ++i) {
         PluginParamInfo info;
@@ -182,18 +180,15 @@ void VstPlugin::updatePluginConfig(const audio::AudioUnitConfig& config)
 
     for (auto& pair : config) {
         if (pair.first == COMPONENT_STATE_KEY) {
-            VstMemoryStream componentStateBuffer;
-            stateBufferFromString(componentStateBuffer, const_cast<char*>(pair.second.data()), pair.second.size());
-            component->setState(&componentStateBuffer);
-            controller->setComponentState(&componentStateBuffer);
-
+            stateBufferFromString(m_componentStateBuffer, const_cast<char*>(pair.second.data()), pair.second.size());
+            component->setState(&m_componentStateBuffer);
+            controller->setComponentState(&m_componentStateBuffer);
             continue;
         }
 
         if (pair.first == CONTROLLER_STATE_KEY) {
-            VstMemoryStream controllerStateBuffer;
-            stateBufferFromString(controllerStateBuffer, const_cast<char*>(pair.second.data()), pair.second.size());
-            controller->setState(&controllerStateBuffer);
+            stateBufferFromString(m_controllerStateBuffer, const_cast<char*>(pair.second.data()), pair.second.size());
+            controller->setState(&m_controllerStateBuffer);
 
             continue;
         }
