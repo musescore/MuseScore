@@ -126,7 +126,10 @@ void AudioConfiguration::setIsShowControlsInMixer(bool show)
 
 AudioInputParams AudioConfiguration::defaultAudioInputParams() const
 {
-    return { DEFAULT_AUDIO_RESOURCE_META };
+    AudioInputParams result;
+    result.resourceMeta = DEFAULT_AUDIO_RESOURCE_META;
+
+    return result;
 }
 
 const SynthesizerState& AudioConfiguration::defaultSynthesizerState() const
