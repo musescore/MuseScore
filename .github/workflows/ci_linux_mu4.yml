@@ -130,5 +130,5 @@ jobs:
       if: env.DO_BUILD == 'true'
       uses: actions/upload-artifact@v2
       with:
-        name: MuseScore_MU4_${{ github.run_id }}
+        name: MU4_${{ github.run_id }}_Lin_${{ github.event.pull_request.title }}
         path: ./build.artifacts/      
