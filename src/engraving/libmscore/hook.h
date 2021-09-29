@@ -25,6 +25,8 @@
 
 #include "symbol.h"
 
+#include "symid.h"
+
 namespace Ms {
 class Chord;
 
@@ -45,6 +47,10 @@ public:
     void draw(mu::draw::Painter*) const override;
     Chord* chord() const { return toChord(parent()); }
     mu::PointF smuflAnchor() const;
+
+    //! @p index: the number of flags (positive: upwards, negative: downwards)
+    //! @p straight: whether to use straight flags
+    static SymId symIdForHookIndex(int index, bool straight);
 };
 }     // namespace Ms
 #endif
