@@ -31,17 +31,15 @@ WaveFormModel::WaveFormModel(QObject* parent)
     : QObject(parent)
 {
     playback()->audioOutput()->masterSignalChanges().onResolve(this, [this](AudioSignalChanges signalChanges) {
-        signalChanges.amplitudeChanges.onReceive(this, [this](const audioch_t, const float amplitude) {
-            setCurrentSignalAmplitude(amplitude);
-        });
+        signalChanges.onReceive(this, [this](const audioch_t, const AudioSignalVal& newValue) {
+            setCurrentSignalAmplitude(newValue.amplitude);
 
-        signalChanges.pressureChanges.onReceive(this, [this](const audioch_t, const volume_dbfs_t pressure) {
-            if (pressure < MIN_DISPLAYED_DBFS) {
+            if (newValue.pressure < MIN_DISPLAYED_DBFS) {
                 setCurrentVolumePressure(MIN_DISPLAYED_DBFS);
-            } else if (pressure > MAX_DISPLAYED_DBFS) {
+            } else if (newValue.pressure > MAX_DISPLAYED_DBFS) {
                 setCurrentVolumePressure(MAX_DISPLAYED_DBFS);
             } else {
-                setCurrentVolumePressure(pressure);
+                setCurrentVolumePressure(newValue.pressure);
             }
         });
     });

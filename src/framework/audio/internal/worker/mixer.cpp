@@ -199,14 +199,9 @@ Channel<AudioOutputParams> Mixer::masterOutputParamsChanged() const
     return m_masterOutputParamsChanged;
 }
 
-Channel<audioch_t, float> Mixer::masterSignalAmplitudeRmsChanged() const
+async::Channel<audioch_t, AudioSignalVal> Mixer::masterAudioSignalChanges() const
 {
-    return m_masterSignalAmplitudeRmsChanged;
-}
-
-Channel<audioch_t, float> Mixer::masterVolumePressureDbfsChanged() const
-{
-    return m_masterVolumePressureDbfsChanged;
+    return m_audioSignalNotifier.audioSignalChanges;
 }
 
 void Mixer::mixOutputFromChannel(float* outBuffer, float* inBuffer, unsigned int samplesCount)
@@ -262,6 +257,5 @@ void Mixer::completeOutput(float* buffer, const samples_t& samplesPerChannel)
 
 void Mixer::notifyAboutAudioSignalChanges(const audioch_t audioChannelNumber, const float linearRms) const
 {
-    m_masterVolumePressureDbfsChanged.send(audioChannelNumber, dsp::dbFromSample(linearRms));
-    m_masterSignalAmplitudeRmsChanged.send(audioChannelNumber, linearRms);
+    m_audioSignalNotifier.updateSignalValues(audioChannelNumber, linearRms, dsp::dbFromSample(linearRms));
 }

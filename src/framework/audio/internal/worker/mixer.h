@@ -56,8 +56,7 @@ public:
     void setMasterOutputParams(const AudioOutputParams& params);
     async::Channel<AudioOutputParams> masterOutputParamsChanged() const;
 
-    async::Channel<audioch_t, float> masterSignalAmplitudeRmsChanged() const;
-    async::Channel<audioch_t, volume_dbfs_t> masterVolumePressureDbfsChanged() const;
+    async::Channel<audioch_t, AudioSignalVal> masterAudioSignalChanges() const;
 
     // IAudioSource
     void setSampleRate(unsigned int sampleRate) override;
@@ -81,8 +80,7 @@ private:
     std::set<IClockPtr> m_clocks;
     audioch_t m_audioChannelsCount = 0;
 
-    mutable async::Channel<audioch_t, float> m_masterSignalAmplitudeRmsChanged;
-    mutable async::Channel<audioch_t, volume_dbfs_t> m_masterVolumePressureDbfsChanged;
+    mutable AudioSignalsNotifier m_audioSignalNotifier;
 };
 
 using MixerPtr = std::shared_ptr<Mixer>;

@@ -43,8 +43,7 @@ public:
     void applyOutputParams(const AudioOutputParams& requiredParams) override;
     async::Channel<AudioOutputParams> outputParamsChanged() const override;
 
-    async::Channel<audioch_t, float> signalAmplitudeRmsChanged() const override;
-    async::Channel<audioch_t, volume_dbfs_t> volumePressureDbfsChanged() const override;
+    async::Channel<audioch_t, AudioSignalVal> audioSignalChanges() const override;
 
     bool isActive() const override;
     void setIsActive(bool arg) override;
@@ -69,8 +68,7 @@ private:
     dsp::CompressorPtr m_compressor = nullptr;
 
     mutable async::Channel<AudioOutputParams> m_paramsChanges;
-    mutable async::Channel<audioch_t, float> m_signalAmplitudeRmsChanged;
-    mutable async::Channel<audioch_t, volume_dbfs_t> m_volumePressureDbfsChanged;
+    mutable AudioSignalsNotifier m_audioSignalNotifier;
 };
 
 using MixerChannelPtr = std::shared_ptr<MixerChannel>;

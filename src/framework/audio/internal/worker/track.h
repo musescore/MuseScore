@@ -60,11 +60,7 @@ public:
     virtual void applyOutputParams(const AudioOutputParams& requiredParams) = 0;
     virtual async::Channel<AudioOutputParams> outputParamsChanged() const = 0;
 
-    // root mean square of a processed sample block
-    virtual async::Channel<audioch_t, float> signalAmplitudeRmsChanged() const = 0;
-
-    // root mean square of a processed sample block in the "decibels relative to full scale" units
-    virtual async::Channel<audioch_t, volume_dbfs_t> volumePressureDbfsChanged() const = 0;
+    virtual async::Channel<audioch_t, AudioSignalVal> audioSignalChanges() const = 0;
 };
 
 using ITrackAudioInputPtr = std::shared_ptr<ITrackAudioInput>;
