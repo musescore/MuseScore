@@ -20,9 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "testing/qtestsuite.h"
-
-#include "testbase.h"
+#include <gtest/gtest.h>
 
 #include "libmscore/factory.h"
 #include "libmscore/masterscore.h"
@@ -31,38 +29,19 @@
 #include "libmscore/breath.h"
 #include "libmscore/symid.h"
 
+#include "utils/scorerw.h"
+#include "utils/scorecomp.h"
+
 static const QString BREATH_DATA_DIR("breath_data/");
 
 using namespace mu::engraving;
 using namespace Ms;
 
-//---------------------------------------------------------
-//   TestBreath
-//---------------------------------------------------------
-
-class TestBreath : public QObject, public MTest
+class BreathTests : public ::testing::Test
 {
-    Q_OBJECT
-
-private slots:
-    void initTestCase();
-    void breath();
 };
 
-//---------------------------------------------------------
-//   initTestCase
-//---------------------------------------------------------
-
-void TestBreath::initTestCase()
-{
-    initMTest();
-}
-
-//---------------------------------------------------------
-//   breath
-//---------------------------------------------------------
-
-void TestBreath::breath()
+TEST_F(BreathTests, breath)
 {
     QString readFile(BREATH_DATA_DIR + "breath.mscx");
     QString writeFile1("breath01-test.mscx");
@@ -70,7 +49,9 @@ void TestBreath::breath()
     QString writeFile2("breath02-test.mscx");
     QString reference2(BREATH_DATA_DIR + "breath02-ref.mscx");
 
-    MasterScore* score = readScore(readFile);
+    MasterScore* score = ScoreRW::readScore(readFile);
+    EXPECT_TRUE(score);
+
     score->doLayout();
 
     // do
@@ -86,14 +67,11 @@ void TestBreath::breath()
         }
     }
     score->endCmd();
-    QVERIFY(saveCompareScore(score, writeFile1, reference1));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
 
     // undo
     score->undoStack()->undo(0);
-    QVERIFY(saveCompareScore(score, writeFile2, reference2));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, reference2));
 
     delete score;
 }
-
-QTEST_MAIN(TestBreath)
-#include "tst_breath.moc"

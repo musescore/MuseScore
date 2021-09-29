@@ -20,47 +20,30 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "testing/qtestsuite.h"
-
-#include "testbase.h"
+#include <gtest/gtest.h>
 
 #include "libmscore/masterscore.h"
 #include "libmscore/system.h"
 #include "libmscore/undo.h"
 #include "libmscore/box.h"
 
+#include "utils/scorerw.h"
+#include "utils/scorecomp.h"
+
 static const QString BOX_DATA_DIR("box_data/");
 
+using namespace mu::engraving;
 using namespace Ms;
 
-//---------------------------------------------------------
-//   TestBox
-//---------------------------------------------------------
-
-class TestBox : public QObject, public MTest
+class BoxTests : public ::testing::Test
 {
-    Q_OBJECT
-
-private slots:
-    void initTestCase();
-    void undoRemoveVBox();
 };
-
-//---------------------------------------------------------
-//   initTestCase
-//---------------------------------------------------------
-
-void TestBox::initTestCase()
-{
-    initMTest();
-}
 
 //---------------------------------------------------------
 //   undoRemoveVBox
 ///   read a file with a vbox. Delete it, and undo. Check that the VBox still exists.
 //---------------------------------------------------------
-
-void TestBox::undoRemoveVBox()
+TEST_F(BoxTests, undoRemoveVBox)
 {
     QString readFile(BOX_DATA_DIR + "undoRemoveVBox.mscx");
     QString writeFile1("undoRemoveVBox1-test.mscx");
@@ -68,7 +51,9 @@ void TestBox::undoRemoveVBox()
     QString writeFile2("undoRemoveVBox2-test.mscx");
     QString reference2(BOX_DATA_DIR + "undoRemoveVBox2-ref.mscx");
 
-    MasterScore* score = readScore(readFile);
+    MasterScore* score = ScoreRW::readScore(readFile);
+    EXPECT_TRUE(score);
+
     score->doLayout();
 
     System* s = score->systems()[0];
@@ -78,14 +63,13 @@ void TestBox::undoRemoveVBox()
     score->select(box);
     score->cmdDeleteSelection();
     score->endCmd();
-    QVERIFY(saveCompareScore(score, writeFile1, reference1));
+
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
 
     // undo
     score->undoStack()->undo(nullptr);
-    QVERIFY(saveCompareScore(score, writeFile2, reference2));
+
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, reference2));
 
     delete score;
 }
-
-QTEST_MAIN(TestBox)
-#include "tst_box.moc"
