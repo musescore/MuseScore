@@ -118,6 +118,8 @@ set(VST_SDK_COMMON_SRC
     ${VST3_SDK_PATH}/public.sdk/source/common/threadchecker.h
     ${VST3_SDK_PATH}/public.sdk/source/common/pluginview.cpp
     ${VST3_SDK_PATH}/public.sdk/source/common/pluginview.h
+    ${VST3_SDK_PATH}/public.sdk/source/common/memorystream.cpp
+    ${VST3_SDK_PATH}/public.sdk/source/common/memorystream.h
     ${VST3_SDK_PATH}/public.sdk/source/main/pluginfactory.cpp
     ${VST3_SDK_PATH}/public.sdk/source/main/pluginfactory.h
     )
