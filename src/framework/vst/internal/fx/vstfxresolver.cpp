@@ -28,6 +28,12 @@ using namespace mu::vst;
 using namespace mu::audio;
 using namespace mu::audio::fx;
 
+bool filterFxParams(const std::pair<AudioFxChainOrder, AudioFxParams>& f,
+                    const std::pair<AudioFxChainOrder, AudioFxParams>& s)
+{
+    return (f.first == s.first) && !(f.second == s.second);
+};
+
 std::vector<IFxProcessorPtr> VstFxResolver::resolveFxList(const audio::TrackId trackId, const AudioFxChain& fxChain)
 {
     if (fxChain.empty()) {
@@ -96,12 +102,17 @@ VstFxPtr VstFxResolver::createTrackFx(const audio::TrackId trackId, const audio:
 {
     PluginModulePtr modulePtr = pluginModulesRepo()->pluginModule(fxParams.resourceMeta.id);
 
-    IF_ASSERT_FAILED(modulePtr) {
+    if (!modulePtr) {
+        LOGE() << "Unable to create VST plugin"
+               << ", pluginId: " << fxParams.resourceMeta.id
+               << ", trackId: " << trackId;
         return nullptr;
     }
 
     VstPluginPtr pluginPtr = std::make_shared<VstPlugin>(modulePtr);
     pluginsRegister()->registerFxPlugin(trackId, fxParams.resourceMeta.id, fxParams.chainOrder, pluginPtr);
+
+    pluginPtr->load();
 
     std::shared_ptr<VstFxProcessor> fx = std::make_shared<VstFxProcessor>(std::move(pluginPtr), fxParams);
     fx->init();
@@ -128,7 +139,15 @@ void VstFxResolver::updateTrackFxMap(FxMap& fxMap, const audio::TrackId trackId,
     fxChainToCreate(newFxChain, currentFxChain, fxToCreate);
 
     for (const auto& pair : fxToCreate) {
-        fxMap.emplace(pair.first, createTrackFx(trackId, pair.second));
+        if (!pair.second.isValid()) {
+            continue;
+        }
+
+        VstFxPtr fxPtr = createTrackFx(trackId, pair.second);
+
+        if (fxPtr) {
+            fxMap.emplace(pair.first, std::move(fxPtr));
+        }
     }
 }
 
@@ -151,24 +170,29 @@ void VstFxResolver::updateMasterFxMap(const AudioFxChain& newFxChain)
     fxChainToCreate(newFxChain, currentFxChain, fxToCreate);
 
     for (const auto& pair : fxToCreate) {
+        if (!pair.second.isValid()) {
+            continue;
+        }
         m_masterFxMap.emplace(pair.first, createMasterFx(pair.second));
     }
 }
 
 void VstFxResolver::fxChainToRemove(const AudioFxChain& currentFxChain,
-                                    const audio::AudioFxChain& newFxChain,
-                                    audio::AudioFxChain& resultChain)
+                                    const AudioFxChain& newFxChain,
+                                    AudioFxChain& resultChain)
 {
     std::set_difference(newFxChain.begin(), newFxChain.end(),
                         currentFxChain.begin(), currentFxChain.end(),
-                        std::inserter(resultChain, resultChain.begin()));
+                        std::inserter(resultChain, resultChain.begin()),
+                        filterFxParams);
 }
 
 void VstFxResolver::fxChainToCreate(const AudioFxChain& currentFxChain,
-                                    const audio::AudioFxChain& newFxChain,
-                                    audio::AudioFxChain& resultChain)
+                                    const AudioFxChain& newFxChain,
+                                    AudioFxChain& resultChain)
 {
     std::set_difference(currentFxChain.begin(), currentFxChain.end(),
                         newFxChain.begin(), newFxChain.end(),
-                        std::inserter(resultChain, resultChain.begin()));
+                        std::inserter(resultChain, resultChain.begin()),
+                        filterFxParams);
 }
