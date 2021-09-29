@@ -28,14 +28,31 @@
 using namespace mu;
 using namespace mu::vst;
 
-VstSynthesiser::VstSynthesiser(VstPluginPtr&& pluginPtr)
-    : m_pluginPtr(pluginPtr), m_vstAudioClient(std::make_unique<VstAudioClient>())
+VstSynthesiser::VstSynthesiser(VstPluginPtr&& pluginPtr, const audio::AudioInputParams& params)
+    : m_pluginPtr(pluginPtr), m_vstAudioClient(std::make_unique<VstAudioClient>()), m_params(params)
 {
 }
 
 Ret VstSynthesiser::init()
 {
     m_vstAudioClient->init(VstPluginType::Instrument, m_pluginPtr);
+
+    if (m_pluginPtr->isLoaded()) {
+        m_pluginPtr->updatePluginConfig(m_params.configuration);
+    } else {
+        m_pluginPtr->loadingCompleted().onNotify(this, [this]() {
+            m_pluginPtr->updatePluginConfig(m_params.configuration);
+        });
+    }
+
+    m_pluginPtr->pluginSettingsChanged().onReceive(this, [this](const audio::AudioUnitConfig& newConfig) {
+        if (m_params.configuration == newConfig) {
+            return;
+        }
+
+        m_params.configuration = newConfig;
+        m_paramsChanges.send(m_params);
+    });
 
     return make_ret(Ret::Code::Ok);
 }
@@ -61,7 +78,7 @@ void VstSynthesiser::setIsActive(bool arg)
 
 audio::AudioSourceType VstSynthesiser::type() const
 {
-    return audio::AudioSourceType::Vsti;
+    return m_params.type();
 }
 
 std::string VstSynthesiser::name() const
@@ -71,6 +88,16 @@ std::string VstSynthesiser::name() const
     }
 
     return m_pluginPtr->name();
+}
+
+const audio::AudioInputParams& VstSynthesiser::params() const
+{
+    return m_params;
+}
+
+async::Channel<audio::AudioInputParams> VstSynthesiser::paramsChanged() const
+{
+    return m_paramsChanges;
 }
 
 audio::synth::SoundFontFormats VstSynthesiser::soundFontFormats() const

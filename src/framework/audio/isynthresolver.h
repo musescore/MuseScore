@@ -43,7 +43,7 @@ public:
     public:
         virtual ~IResolver() = default;
 
-        virtual ISynthesizerPtr resolveSynth(const audio::TrackId trackId, const audio::AudioResourceId& resourceId) const = 0;
+        virtual ISynthesizerPtr resolveSynth(const audio::TrackId trackId, const audio::AudioInputParams& params) const = 0;
         virtual audio::AudioResourceMetaList resolveResources() const = 0;
         virtual void refresh() = 0;
     };

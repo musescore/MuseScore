@@ -28,11 +28,11 @@ using namespace mu::vst;
 using namespace mu::audio;
 using namespace mu::audio::synth;
 
-ISynthesizerPtr VstiResolver::resolveSynth(const audio::TrackId trackId, const audio::AudioResourceId& resourceId) const
+ISynthesizerPtr VstiResolver::resolveSynth(const audio::TrackId trackId, const audio::AudioInputParams& params) const
 {
     SynthPair& pair = m_synthMap[trackId];
 
-    if (pair.first == resourceId) {
+    if (pair.first == params.resourceMeta.id) {
         return pair.second;
     }
 
@@ -40,7 +40,7 @@ ISynthesizerPtr VstiResolver::resolveSynth(const audio::TrackId trackId, const a
         pluginsRegister()->unregisterInstrPlugin(trackId, pair.first);
     }
 
-    pair.second = createSynth(trackId, resourceId);
+    pair.second = createSynth(trackId, params);
 
     return pair.second;
 }
@@ -50,18 +50,20 @@ void VstiResolver::refresh()
     pluginModulesRepo()->refresh();
 }
 
-VstSynthPtr VstiResolver::createSynth(const audio::TrackId trackId, const audio::AudioResourceId& resourceId) const
+VstSynthPtr VstiResolver::createSynth(const audio::TrackId trackId, const audio::AudioInputParams& params) const
 {
-    PluginModulePtr modulePtr = pluginModulesRepo()->pluginModule(resourceId);
+    PluginModulePtr modulePtr = pluginModulesRepo()->pluginModule(params.resourceMeta.id);
 
     IF_ASSERT_FAILED(modulePtr) {
         return nullptr;
     }
 
     VstPluginPtr pluginPtr = std::make_shared<VstPlugin>(modulePtr);
-    pluginsRegister()->registerInstrPlugin(trackId, resourceId, pluginPtr);
+    pluginsRegister()->registerInstrPlugin(trackId, params.resourceMeta.id, pluginPtr);
 
-    std::shared_ptr<VstSynthesiser> synth = std::make_shared<VstSynthesiser>(std::move(pluginPtr));
+    pluginPtr->load();
+
+    std::shared_ptr<VstSynthesiser> synth = std::make_shared<VstSynthesiser>(std::move(pluginPtr), params);
     synth->init();
 
     return synth;
