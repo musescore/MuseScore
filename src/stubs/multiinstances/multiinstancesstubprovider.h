@@ -51,6 +51,9 @@ public:
     const std::string& selfID() const override;
     std::vector<InstanceMeta> instances() const override;
     async::Notification instancesChanged() const override;
+
+    // Quit for all
+    void quitForAll() override;
 };
 }
 

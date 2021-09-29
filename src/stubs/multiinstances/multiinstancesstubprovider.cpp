@@ -93,3 +93,7 @@ mu::async::Notification MultiInstancesStubProvider::instancesChanged() const
     static mu::async::Notification n;
     return n;
 }
+
+void MultiInstancesStubProvider::quitForAll()
+{
+}
