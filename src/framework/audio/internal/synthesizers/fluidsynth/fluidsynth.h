@@ -37,12 +37,14 @@ struct Fluid;
 class FluidSynth : public ISynthesizer
 {
 public:
-    FluidSynth();
+    FluidSynth(const audio::AudioSourceParams& params);
 
     bool isValid() const override;
 
     std::string name() const override;
     AudioSourceType type() const override;
+    const audio::AudioInputParams& params() const override;
+    async::Channel<audio::AudioInputParams> paramsChanged() const override;
     SoundFontFormats soundFontFormats() const override;
 
     Ret init() override;
@@ -92,6 +94,8 @@ private:
     bool m_isActive = false;
 
     unsigned int m_sampleRate = 0;
+    audio::AudioInputParams m_params;
+    async::Channel<audio::AudioInputParams> m_paramsChanges;
     async::Channel<unsigned int> m_streamsCountChanged;
 };
 

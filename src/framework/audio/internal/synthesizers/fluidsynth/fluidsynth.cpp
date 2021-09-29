@@ -56,8 +56,9 @@ struct mu::audio::synth::Fluid {
     }
 };
 
-FluidSynth::FluidSynth()
+FluidSynth::FluidSynth(const AudioSourceParams& params)
 {
+    m_params = params;
     m_fluid = std::make_shared<Fluid>();
 }
 
@@ -74,6 +75,16 @@ std::string FluidSynth::name() const
 AudioSourceType FluidSynth::type() const
 {
     return AudioSourceType::Fluid;
+}
+
+const AudioInputParams& FluidSynth::params() const
+{
+    return m_params;
+}
+
+async::Channel<AudioInputParams> FluidSynth::paramsChanged() const
+{
+    return m_paramsChanges;
 }
 
 SoundFontFormats FluidSynth::soundFontFormats() const
