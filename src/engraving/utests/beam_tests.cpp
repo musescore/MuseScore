@@ -20,66 +20,109 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "testing/qtestsuite.h"
-
-#include "testbase.h"
+#include <gtest/gtest.h>
 
 #include "libmscore/masterscore.h"
 #include "libmscore/measure.h"
 #include "libmscore/chordrest.h"
 
+#include "utils/scorerw.h"
+#include "utils/scorecomp.h"
+
 static const QString BEAM_DATA_DIR("beam_data/");
 
+using namespace mu::engraving;
 using namespace Ms;
 
 //---------------------------------------------------------
 //   TestBeam
 //---------------------------------------------------------
 
-class TestBeam : public QObject, public MTest
+class BeamTests : public ::testing::Test
 {
-    Q_OBJECT
-
+public:
     void beam(const char* path);
-
-private slots:
-    void initTestCase();
-    void beamA() { beam("Beam-A.mscx"); }
-    void beamB() { beam("Beam-B.mscx"); }
-    void beamC() { beam("Beam-C.mscx"); }
-    void beamD() { beam("Beam-D.mscx"); }
-    void beamE() { beam("Beam-E.mscx"); }
-    void beamF() { beam("Beam-F.mscx"); }
-    void beamG() { beam("Beam-G.mscx"); }
-    void beam2() { beam("Beam-2.mscx"); }
-    void beam23() { beam("Beam-23.mscx"); }
-    void beamS0() { beam("Beam-S0.mscx"); }
-    void beamDir() { beam("Beam-dir.mscx"); }
-    void beamCrossMeasure1();
-    void beamCrossMeasure2() { beam("Beam-CrossM2.mscx"); }
-    void beamCrossMeasure3() { beam("Beam-CrossM3.mscx"); }
-    void beamCrossMeasure4() { beam("Beam-CrossM4.mscx"); }
 };
-
-//---------------------------------------------------------
-//   initTestCase
-//---------------------------------------------------------
-
-void TestBeam::initTestCase()
-{
-    initMTest();
-}
 
 //---------------------------------------------------------
 //   beam
 //---------------------------------------------------------
-
-void TestBeam::beam(const char* path)
+void BeamTests::beam(const char* path)
 {
-    MasterScore* score = readScore(BEAM_DATA_DIR + path);
-    QVERIFY(score);
-    QVERIFY(saveCompareScore(score, path, BEAM_DATA_DIR + path));
+    MasterScore* score = ScoreRW::readScore(BEAM_DATA_DIR + path);
+    EXPECT_TRUE(score);
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, path, BEAM_DATA_DIR + path));
     delete score;
+}
+
+TEST_F(BeamTests, beamA)
+{
+    beam("Beam-A.mscx");
+}
+
+TEST_F(BeamTests, beamB)
+{
+    beam("Beam-B.mscx");
+}
+
+TEST_F(BeamTests, beamC)
+{
+    beam("Beam-C.mscx");
+}
+
+TEST_F(BeamTests, beamD)
+{
+    beam("Beam-D.mscx");
+}
+
+TEST_F(BeamTests, beamE)
+{
+    beam("Beam-E.mscx");
+}
+
+TEST_F(BeamTests, beamF)
+{
+    beam("Beam-F.mscx");
+}
+
+TEST_F(BeamTests, beamG)
+{
+    beam("Beam-G.mscx");
+}
+
+TEST_F(BeamTests, beam2)
+{
+    beam("Beam-2.mscx");
+}
+
+TEST_F(BeamTests, beam23)
+{
+    beam("Beam-23.mscx");
+}
+
+TEST_F(BeamTests, beamS0)
+{
+    beam("Beam-S0.mscx");
+}
+
+TEST_F(BeamTests, beamDir)
+{
+    beam("Beam-dir.mscx");
+}
+
+TEST_F(BeamTests, beamCrossMeasure2)
+{
+    beam("Beam-CrossM2.mscx");
+}
+
+TEST_F(BeamTests, beamCrossMeasure3)
+{
+    beam("Beam-CrossM3.mscx");
+}
+
+TEST_F(BeamTests, beamCrossMeasure4)
+{
+    beam("Beam-CrossM4.mscx");
 }
 
 //---------------------------------------------------------
@@ -88,25 +131,31 @@ void TestBeam::beam(const char* path)
 //   - Update the score
 //   - Check if the beam has been recreated. If yes, this is wrong behaviour
 //---------------------------------------------------------
-void TestBeam::beamCrossMeasure1()
+TEST_F(BeamTests, beamCrossMeasure1)
 {
-    MasterScore* score = readScore(BEAM_DATA_DIR + "Beam-CrossM1.mscx");
-    QVERIFY(score);
+    MasterScore* score = ScoreRW::readScore(BEAM_DATA_DIR + "Beam-CrossM1.mscx");
+    EXPECT_TRUE(score);
+
     Measure* first_measure = score->firstMeasure();
+    EXPECT_TRUE(first_measure);
+
     // find the first segment that has a chord
     Segment* s = first_measure->first(SegmentType::ChordRest);
     while (s && !s->element(0)->isChord()) {
         s = s->next(SegmentType::ChordRest);
     }
+    EXPECT_TRUE(s);
+
     // locate the first beam
     ChordRest* first_note = toChordRest(s->element(0));
+    EXPECT_TRUE(first_note);
+
     Beam* b = first_note->beam();
     score->update();
     // locate the beam again, and check if it is still b
     Beam* new_b = first_note->beam();
-    QCOMPARE(new_b, b);
+
+    EXPECT_EQ(new_b, b);
+
     delete score;
 }
-
-QTEST_MAIN(TestBeam)
-#include "tst_beam.moc"
