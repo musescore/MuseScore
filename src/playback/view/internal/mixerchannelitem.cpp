@@ -133,16 +133,13 @@ void MixerChannelItem::loadOutputParams(AudioOutputParams&& newParams)
         m_outputResourceItemList.clear();
 
         for (int i = 0; i < OUTPUT_RESOURCE_COUNT_LIMIT; ++i) {
-            AudioFxParams& params = newParams.fxChain[i];
-            params.chainOrder = i;
-
-            m_outputResourceItemList << buildOutputResourceItem(params);
+            m_outputResourceItemList << buildOutputResourceItem(newParams.fxChain[i]);
         }
+
+        emit outputResourceItemListChanged(m_outputResourceItemList);
     }
 
     ensureBlankOutputResourceSlot();
-
-    emit outputResourceItemListChanged(m_outputResourceItemList);
 }
 
 void MixerChannelItem::subscribeOnAudioSignalChanges(AudioSignalChanges&& audioSignalChanges)

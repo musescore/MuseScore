@@ -130,8 +130,8 @@ void OutputResourceItem::updateCurrentFxParams(const AudioResourceMeta& newMeta)
 
     emit isActiveChanged();
     emit titleChanged();
-    emit isBlankChanged();
     emit fxParamsChanged();
+    emit isBlankChanged();
 
     requestToLaunchNativeEditorView();
 }
