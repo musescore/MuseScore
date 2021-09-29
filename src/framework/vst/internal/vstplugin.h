@@ -63,7 +63,7 @@ public:
 
 private:
     void rescanParams();
-    void stateBufferFromString(VstMemoryStream &buffer, char *strData, const size_t strSize) const;
+    void stateBufferFromString(VstMemoryStream& buffer, char* strData, const size_t strSize) const;
 
     PluginModulePtr m_module = nullptr;
     PluginProviderPtr m_pluginProvider = nullptr;

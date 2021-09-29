@@ -46,7 +46,7 @@ SequenceIO::SequenceIO(IGetTracks* getTracks)
         });
 
         trackPtr->outputParamsChanged().onReceive(this, [this, id](const AudioOutputParams& params) {
-           m_outputParamsChanged.send(id, params);
+            m_outputParamsChanged.send(id, params);
         });
     });
 

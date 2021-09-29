@@ -61,7 +61,6 @@ public:
     void applyInputParams(const AudioInputParams& requiredParams) override;
     async::Channel<AudioInputParams> inputParamsChanged() const override;
 
-
 private:
     struct EventsBuffer {
         midi::tick_t size = 480 * 4 * 10;

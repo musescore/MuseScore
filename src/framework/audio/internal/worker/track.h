@@ -143,6 +143,7 @@ public:
 
         return inputHandler->inputParamsChanged();
     }
+
     async::Channel<AudioOutputParams> outputParamsChanged()
     {
         if (!outputHandler) {
