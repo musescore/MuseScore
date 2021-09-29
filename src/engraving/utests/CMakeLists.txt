@@ -30,6 +30,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/utils/scorecomp.cpp
     ${CMAKE_CURRENT_LIST_DIR}/utils/scorecomp.h
     ${CMAKE_CURRENT_LIST_DIR}/barline_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/beam_tests.cpp
 )
 
 set(MODULE_TEST_LINK
