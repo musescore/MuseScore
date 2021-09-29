@@ -34,6 +34,7 @@ public:
 
     virtual AudioFxType type() const = 0;
     virtual const AudioFxParams& params() const = 0;
+    virtual async::Channel<audio::AudioFxParams> paramsChanged() const = 0;
     virtual void setSampleRate(unsigned int sampleRate) = 0;
 
     virtual bool active() const = 0;
