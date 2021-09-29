@@ -154,6 +154,13 @@ MixerChannelItem* MixerPanelModel::buildTrackChannelItem(const audio::TrackSeque
                << ", " << text;
     });
 
+    playback()->tracks()->inputParamsChanged().onReceive(this,
+                                                         [item](const TrackSequenceId /*sequenceId*/,
+                                                                const TrackId /*trackId*/,
+                                                                AudioInputParams params) {
+        item->loadInputParams(std::move(params));
+    });
+
     playback()->tracks()->trackName(sequenceId, trackId)
     .onResolve(this, [item](const TrackName& trackName) {
         item->setTitle(QString::fromStdString(trackName));
@@ -170,6 +177,13 @@ MixerChannelItem* MixerPanelModel::buildTrackChannelItem(const audio::TrackSeque
     .onReject(this, [](int errCode, std::string text) {
         LOGE() << "unable to get track output parameters, error code: " << errCode
                << ", " << text;
+    });
+
+    playback()->audioOutput()->outputParamsChanged().onReceive(this,
+                                                               [item](const TrackSequenceId /*sequenceId*/,
+                                                                      const TrackId /*trackId*/,
+                                                                      AudioOutputParams params) {
+        item->loadOutputParams(std::move(params));
     });
 
     playback()->audioOutput()->signalChanges(sequenceId, trackId)
