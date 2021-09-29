@@ -46,8 +46,7 @@ public:
     async::Channel<TrackId, AudioInputParams> inputParamsChanged() const override;
     async::Channel<TrackId, AudioOutputParams> outputParamsChanged() const override;
 
-    async::Channel<audioch_t, float> signalAmplitudeChanged(const TrackId id) const override;
-    async::Channel<audioch_t, volume_dbfs_t> volumePressureChanged(const TrackId id) const override;
+    async::Channel<audioch_t, AudioSignalVal> audioSignalChanges(const TrackId id) const override;
 
 private:
     IGetTracks* m_getTracks = nullptr;

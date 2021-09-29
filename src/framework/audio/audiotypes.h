@@ -28,6 +28,7 @@
 #include <set>
 #include <string>
 
+#include "realfn.h"
 #include "midi/miditypes.h"
 #include "io/path.h"
 #include "io/device.h"
@@ -214,9 +215,44 @@ struct AudioParams {
     AudioOutputParams out;
 };
 
-struct AudioSignalChanges {
-    async::Channel<audioch_t, float> amplitudeChanges;
-    async::Channel<audioch_t, volume_dbfs_t> pressureChanges;
+struct AudioSignalVal {
+    float amplitude = 0.f;
+    volume_dbfs_t pressure = 0.f;
+};
+
+using AudioSignalChanges = async::Channel<audioch_t, AudioSignalVal>;
+
+struct AudioSignalsNotifier {
+    void updateSignalValues(const audioch_t audioChNumber, const float newAmplitude, const volume_dbfs_t newPressure)
+    {
+        AudioSignalVal& signalVal = m_signalValuesMap[audioChNumber];
+
+        volume_dbfs_t validatedPressure = std::max(newPressure, MINIMUM_OPERABLE_DBFS_LEVEL);
+
+        if (RealIsEqual(signalVal.amplitude, newAmplitude)
+            && RealIsEqual(signalVal.pressure, validatedPressure)) {
+            return;
+        }
+
+        if (std::abs(signalVal.amplitude - newAmplitude) < AMPLITUDE_MINIMAL_VALUABLE_DIFF
+            && std::abs(signalVal.pressure - newPressure) < PRESSURE_MINIMAL_VALUABLE_DIFF) {
+            return;
+        }
+
+        signalVal.amplitude = newAmplitude;
+        signalVal.pressure = validatedPressure;
+
+        audioSignalChanges.send(audioChNumber, signalVal);
+    }
+
+    AudioSignalChanges audioSignalChanges;
+
+private:
+    static constexpr float AMPLITUDE_MINIMAL_VALUABLE_DIFF = 0.001;
+    static constexpr volume_dbfs_t PRESSURE_MINIMAL_VALUABLE_DIFF = 0.5;
+    static constexpr volume_dbfs_t MINIMUM_OPERABLE_DBFS_LEVEL = -100.f;
+
+    std::map<audioch_t, AudioSignalVal> m_signalValuesMap;
 };
 
 using PlaybackData = std::variant<midi::MidiData, io::Device*>;
