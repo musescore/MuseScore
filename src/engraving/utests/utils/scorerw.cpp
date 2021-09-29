@@ -27,6 +27,8 @@
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/compat/mscxcompat.h"
 #include "engraving/compat/writescorehook.h"
+#include "engraving/infrastructure/io/xml.h"
+#include "engraving/libmscore/factory.h"
 
 #include "log.h"
 
@@ -78,4 +80,27 @@ bool ScoreRW::saveScore(Ms::Score* score, const QString& name)
     }
     compat::WriteScoreHook hook;
     return score->writeScore(&file, false, false, hook);
+}
+
+EngravingItem* ScoreRW::writeReadElement(EngravingItem* element)
+{
+    //
+    // write element
+    //
+    QBuffer buffer;
+    buffer.open(QIODevice::WriteOnly);
+    XmlWriter xml(element->score(), &buffer);
+    xml.writeHeader();
+    element->write(xml);
+    buffer.close();
+
+    //
+    // read element
+    //
+
+    XmlReader e(buffer.buffer());
+    e.readNextStartElement();
+    element = Factory::createItemByName(e.name(), element->score()->dummy());
+    element->read(e);
+    return element;
 }
