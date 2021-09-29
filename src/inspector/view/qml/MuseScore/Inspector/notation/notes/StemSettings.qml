@@ -71,6 +71,56 @@ FocusableItem {
             ]
         }
 
+        Column {
+            width: parent.width
+            height: childrenRect.height
+            spacing: 8
+
+            StyledTextLabel {
+                width: parent.width
+                text: qsTrc("inspector", "Flag style")
+                horizontalAlignment: Text.AlignLeft
+            }
+
+            RadioButtonGroup {
+                width: parent.width
+                height: 70
+
+                model: [
+                    { iconCode: IconCode.NOTEFLAGS_TRADITIONAL, text: qsTrc("inspector", "Traditional", "Note flags"), value: false },
+                    { iconCode: IconCode.NOTEFLAGS_STRAIGHT, text: qsTrc("inspector", "Straight", "Note flags"), value: true }
+                ]
+
+                delegate: FlatRadioButton {
+                    height: 70
+
+                    Column {
+                        anchors.centerIn: parent
+                        height: childrenRect.height
+                        spacing: 8
+
+                        StyledIconLabel {
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            iconCode: modelData.iconCode
+                            font.pixelSize: 32
+                        }
+
+                        StyledTextLabel {
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            text: modelData.text
+                        }
+                    }
+
+                    checked: root.stemModel && root.stemModel.useStraightNoteFlags === modelData.value
+                    onToggled: {
+                        if (root.stemModel) {
+                            root.stemModel.useStraightNoteFlags = modelData.value
+                        }
+                    }
+                }
+            }
+        }
+
         ExpandableBlank {
             isExpanded: false
 

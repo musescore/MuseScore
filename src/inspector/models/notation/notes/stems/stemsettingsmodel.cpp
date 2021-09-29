@@ -54,6 +54,10 @@ void StemSettingsModel::createProperties()
     m_verticalOffset = buildPropertyItem(Ms::Pid::OFFSET, [this](const Ms::Pid pid, const QVariant& newValue) {
         onPropertyValueChanged(pid, PointF(m_horizontalOffset->value().toDouble(), newValue.toDouble()));
     });
+
+    context()->currentNotation()->style()->styleChanged().onNotify(this, [this]() {
+        emit useStraightNoteFlagsChanged();
+    });
 }
 
 void StemSettingsModel::requestElements()
@@ -124,4 +128,20 @@ PropertyItem* StemSettingsModel::verticalOffset() const
 PropertyItem* StemSettingsModel::stemDirection() const
 {
     return m_stemDirection;
+}
+
+bool StemSettingsModel::useStraightNoteFlags() const
+{
+    return context()->currentNotation()->style()->styleValue(Ms::Sid::useStraightNoteFlags).toBool();
+}
+
+void StemSettingsModel::setUseStraightNoteFlags(bool use)
+{
+    if (use == useStraightNoteFlags()) {
+        return;
+    }
+
+    context()->currentNotation()->undoStack()->prepareChanges();
+    context()->currentNotation()->style()->setStyleValue(Ms::Sid::useStraightNoteFlags, use);
+    context()->currentNotation()->undoStack()->commitChanges();
 }
