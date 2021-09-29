@@ -36,6 +36,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/chordsymbol_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/clef_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/clef_courtesy_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/copypaste_tests.cpp
 )
 
 set(MODULE_TEST_LINK
