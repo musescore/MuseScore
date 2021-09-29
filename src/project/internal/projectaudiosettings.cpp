@@ -148,6 +148,7 @@ AudioInputParams ProjectAudioSettings::inputParamsFromJson(const QJsonObject& ob
 {
     AudioInputParams result;
     result.resourceMeta = resourceMetaFromJson(object.value("resourceMeta").toObject());
+    result.configuration = unitConfigFromJson(object.value("unitConfiguration").toObject());
 
     return result;
 }
@@ -182,6 +183,7 @@ AudioFxParams ProjectAudioSettings::fxParamsFromJson(const QJsonObject& object) 
     result.active = object.value("active").toBool();
     result.chainOrder = static_cast<AudioFxChainOrder>(object.value("chainOrder").toInt());
     result.resourceMeta = resourceMetaFromJson(object.value("resourceMeta").toObject());
+    result.configuration = unitConfigFromJson(object.value("unitConfiguration").toObject());
 
     return result;
 }
@@ -190,8 +192,20 @@ AudioResourceMeta ProjectAudioSettings::resourceMetaFromJson(const QJsonObject& 
 {
     AudioResourceMeta result;
     result.id = object.value("id").toString().toStdString();
+    result.hasNativeEditorSupport = object.value("hasNativeEditorSupport").toBool();
     result.vendor = object.value("vendor").toString().toStdString();
     result.type = resourceTypeFromString(object.value("type").toString());
+
+    return result;
+}
+
+AudioUnitConfig ProjectAudioSettings::unitConfigFromJson(const QJsonObject& object) const
+{
+    AudioUnitConfig result;
+
+    for (const QString& key : object.keys()) {
+        result.emplace(key.toStdString(), object.value(key).toString().toStdString());
+    }
 
     return result;
 }
@@ -200,6 +214,7 @@ QJsonObject ProjectAudioSettings::inputParamsToJson(const audio::AudioInputParam
 {
     QJsonObject result;
     result.insert("resourceMeta", resourceMetaToJson(params.resourceMeta));
+    result.insert("unitConfiguration", unitConfigToJson(params.configuration));
 
     return result;
 }
@@ -233,6 +248,7 @@ QJsonObject ProjectAudioSettings::fxParamsToJson(const audio::AudioFxParams& fxP
     result.insert("active", fxParams.active);
     result.insert("chainOrder", static_cast<int>(fxParams.chainOrder));
     result.insert("resourceMeta", resourceMetaToJson(fxParams.resourceMeta));
+    result.insert("unitConfiguration", unitConfigToJson(fxParams.configuration));
 
     return result;
 }
@@ -241,8 +257,20 @@ QJsonObject ProjectAudioSettings::resourceMetaToJson(const audio::AudioResourceM
 {
     QJsonObject result;
     result.insert("id", QString::fromStdString(meta.id));
+    result.insert("hasNativeEditorSupport", meta.hasNativeEditorSupport);
     result.insert("vendor", QString::fromStdString(meta.vendor));
     result.insert("type", resourceTypeToString(meta.type));
+
+    return result;
+}
+
+QJsonObject ProjectAudioSettings::unitConfigToJson(const audio::AudioUnitConfig& config) const
+{
+    QJsonObject result;
+
+    for (const auto& pair : config) {
+        result.insert(QString::fromStdString(pair.first), QString::fromStdString(pair.second));
+    }
 
     return result;
 }

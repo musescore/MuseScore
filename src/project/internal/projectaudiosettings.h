@@ -62,12 +62,14 @@ private:
     audio::AudioFxChain fxChainFromJson(const QJsonObject& fxChainObject) const;
     audio::AudioFxParams fxParamsFromJson(const QJsonObject& object) const;
     audio::AudioResourceMeta resourceMetaFromJson(const QJsonObject& object) const;
+    audio::AudioUnitConfig unitConfigFromJson(const QJsonObject& object) const;
 
     QJsonObject inputParamsToJson(const audio::AudioInputParams& params) const;
     QJsonObject outputParamsToJson(const audio::AudioOutputParams& params) const;
     QJsonObject fxChainToJson(const audio::AudioFxChain& fxChain) const;
     QJsonObject fxParamsToJson(const audio::AudioFxParams& fxParams) const;
     QJsonObject resourceMetaToJson(const audio::AudioResourceMeta& meta) const;
+    QJsonObject unitConfigToJson(const audio::AudioUnitConfig& config) const;
 
     audio::AudioSourceType sourceTypeFromString(const QString& string) const;
     audio::AudioResourceType resourceTypeFromString(const QString& string) const;
