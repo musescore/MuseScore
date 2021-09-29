@@ -29,12 +29,17 @@ using namespace mu;
 using namespace mu::vst;
 using namespace mu::async;
 
+static const std::string_view COMPONENT_STATE_KEY = "componentState";
+static const std::string_view CONTROLLER_STATE_KEY = "controllerState";
+
 VstPlugin::VstPlugin(PluginModulePtr module)
     : m_module(std::move(module))
 {
     ONLY_AUDIO_THREAD(threadSecurer);
 
-    load();
+    m_componentHandler.pluginParamsChanged().onNotify(this, [this]() {
+        rescanParams();
+    });
 }
 
 const std::string& VstPlugin::name() const
@@ -72,8 +77,63 @@ void VstPlugin::load()
 
         if (!m_pluginProvider) {
             LOGE() << "Unable to load vst plugin provider";
+            return;
         }
+
+        auto controller = m_pluginProvider->getController();
+
+        if (!controller) {
+            return;
+        }
+
+        controller->setComponentHandler(&m_componentHandler);
+
+        m_isLoaded = true;
+        m_loadingCompleted.notify();
     }, threadSecurer()->mainThreadId());
+}
+
+void VstPlugin::rescanParams()
+{
+    ONLY_AUDIO_THREAD(threadSecurer);
+
+    auto component = m_pluginProvider->getComponent();
+    auto controller = m_pluginProvider->getController();
+
+    if (!controller || !component) {
+        return;
+    }
+
+    audio::AudioUnitConfig updatedConfig;
+
+    VstMemoryStream componentStateBuffer;
+    component->getState(&componentStateBuffer);
+    updatedConfig.emplace(COMPONENT_STATE_KEY, std::string(componentStateBuffer.getData(), componentStateBuffer.getSize()));
+
+    VstMemoryStream controllerStateBuffer;
+    controller->getState(&controllerStateBuffer);
+    updatedConfig.emplace(CONTROLLER_STATE_KEY, std::string(controllerStateBuffer.getData(), controllerStateBuffer.getSize()));
+
+    for (int32_t i = 0; i < controller->getParameterCount(); ++i) {
+        PluginParamInfo info;
+        controller->getParameterInfo(i, info);
+
+        updatedConfig.insert_or_assign(std::to_string(info.id), std::to_string(controller->getParamNormalized(info.id)));
+    }
+
+    m_pluginSettingsChanges.send(std::move(updatedConfig));
+}
+
+void VstPlugin::stateBufferFromString(VstMemoryStream& buffer, char* strData, const size_t strSize) const
+{
+    if (strSize == 0) {
+        return;
+    }
+
+    static Steinberg::int32 numBytesRead = 0;
+
+    buffer.write(strData, strSize, &numBytesRead);
+    buffer.seek(0, Steinberg::IBStream::kIBSeekSet, nullptr);
 }
 
 PluginViewPtr VstPlugin::view() const
@@ -97,23 +157,52 @@ PluginViewPtr VstPlugin::view() const
     return m_pluginView;
 }
 
-PluginComponentPtr VstPlugin::component() const
+PluginProviderPtr VstPlugin::provider() const
 {
     ONLY_AUDIO_THREAD(threadSecurer);
 
     std::lock_guard lock(m_mutex);
 
-    if (!m_pluginProvider) {
-        return nullptr;
+    return m_pluginProvider;
+}
+
+void VstPlugin::updatePluginConfig(const audio::AudioUnitConfig& config)
+{
+    ONLY_AUDIO_THREAD(threadSecurer);
+
+    std::lock_guard lock(m_mutex);
+
+    auto controller = m_pluginProvider->getController();
+    auto component = m_pluginProvider->getComponent();
+
+    if (!controller || !component) {
+        LOGE() << "Unable to update settings for VST plugin";
+        return;
     }
 
-    if (m_pluginComponent) {
-        return m_pluginComponent;
+    for (auto& pair : config) {
+        if (pair.first == COMPONENT_STATE_KEY) {
+            VstMemoryStream componentStateBuffer;
+            stateBufferFromString(componentStateBuffer, const_cast<char*>(pair.second.data()), pair.second.size());
+            component->setState(&componentStateBuffer);
+            controller->setComponentState(&componentStateBuffer);
+
+            continue;
+        }
+
+        if (pair.first == CONTROLLER_STATE_KEY) {
+            VstMemoryStream controllerStateBuffer;
+            stateBufferFromString(controllerStateBuffer, const_cast<char*>(pair.second.data()), pair.second.size());
+            controller->setState(&controllerStateBuffer);
+
+            continue;
+        }
+
+        PluginParamId id = std::stoi(pair.first);
+        PluginParamValue val = std::stod(pair.second);
+
+        controller->setParamNormalized(id, val);
     }
-
-    m_pluginComponent = m_pluginProvider->getComponent();
-
-    return m_pluginComponent;
 }
 
 bool VstPlugin::isValid() const
@@ -128,4 +217,23 @@ bool VstPlugin::isValid() const
     }
 
     return true;
+}
+
+bool VstPlugin::isLoaded() const
+{
+    ONLY_AUDIO_OR_MAIN_THREAD(threadSecurer);
+
+    return m_isLoaded;
+}
+
+Notification VstPlugin::loadingCompleted() const
+{
+    return m_loadingCompleted;
+}
+
+async::Channel<audio::AudioUnitConfig> VstPlugin::pluginSettingsChanged() const
+{
+    ONLY_AUDIO_THREAD(threadSecurer);
+
+    return m_pluginSettingsChanges;
 }

@@ -29,7 +29,7 @@ using namespace mu::vst;
 
 VstAudioClient::~VstAudioClient()
 {
-    if (!pluginComponent()) {
+    if (!m_pluginComponent) {
         return;
     }
 
@@ -134,8 +134,12 @@ IAudioProcessorPtr VstAudioClient::pluginProcessor() const
 
 PluginComponentPtr VstAudioClient::pluginComponent() const
 {
+    IF_ASSERT_FAILED(m_pluginPtr && m_pluginPtr->provider()) {
+        return nullptr;
+    }
+
     if (!m_pluginComponent) {
-        m_pluginComponent = m_pluginPtr->component();
+        m_pluginComponent = m_pluginPtr->provider()->getComponent();
     }
 
     return m_pluginComponent;
