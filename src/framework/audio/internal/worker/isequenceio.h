@@ -46,8 +46,7 @@ public:
     virtual async::Channel<TrackId, AudioInputParams> inputParamsChanged() const = 0;
     virtual async::Channel<TrackId, AudioOutputParams> outputParamsChanged() const = 0;
 
-    virtual async::Channel<audioch_t, float> signalAmplitudeChanged(const TrackId id) const = 0;
-    virtual async::Channel<audioch_t, volume_dbfs_t> volumePressureChanged(const TrackId id) const = 0;
+    virtual async::Channel<audioch_t, AudioSignalVal> audioSignalChanges(const TrackId id) const = 0;
 };
 
 using ISequenceIOPtr = std::shared_ptr<ISequenceIO>;

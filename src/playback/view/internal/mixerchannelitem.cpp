@@ -48,7 +48,7 @@ MixerChannelItem::MixerChannelItem(QObject* parent, const audio::TrackId id, con
 
 MixerChannelItem::~MixerChannelItem()
 {
-    m_audioSignalChanges.pressureChanges.resetOnReceive(this);
+    m_audioSignalChanges.resetOnReceive(this);
 }
 
 TrackId MixerChannelItem::id() const
@@ -146,7 +146,7 @@ void MixerChannelItem::subscribeOnAudioSignalChanges(AudioSignalChanges&& audioS
 {
     m_audioSignalChanges = audioSignalChanges;
 
-    m_audioSignalChanges.pressureChanges.onReceive(this, [this](const audioch_t audioChNum, const volume_dbfs_t newValue) {
+    m_audioSignalChanges.onReceive(this, [this](const audioch_t audioChNum, const AudioSignalVal& newValue) {
         //!Note There should be no signal changes when the mixer channel is muted.
         //!     But some audio signal changes still might be "on the way" from the times when the mixer channel wasn't muted
         //!     So that we have to just ignore them
@@ -154,12 +154,12 @@ void MixerChannelItem::subscribeOnAudioSignalChanges(AudioSignalChanges&& audioS
             return;
         }
 
-        if (newValue < MIN_DISPLAYED_DBFS) {
+        if (newValue.pressure < MIN_DISPLAYED_DBFS) {
             setAudioChannelVolumePressure(audioChNum, MIN_DISPLAYED_DBFS);
-        } else if (newValue > MAX_DISPLAYED_DBFS) {
+        } else if (newValue.pressure > MAX_DISPLAYED_DBFS) {
             setAudioChannelVolumePressure(audioChNum, MAX_DISPLAYED_DBFS);
         } else {
-            setAudioChannelVolumePressure(audioChNum, newValue);
+            setAudioChannelVolumePressure(audioChNum, newValue.pressure);
         }
     });
 }

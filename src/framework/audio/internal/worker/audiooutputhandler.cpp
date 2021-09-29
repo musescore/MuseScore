@@ -147,7 +147,7 @@ Promise<AudioSignalChanges> AudioOutputHandler::signalChanges(const TrackSequenc
             return;
         }
 
-        resolve({ s->audioIO()->signalAmplitudeChanged(trackId), s->audioIO()->volumePressureChanged(trackId) });
+        resolve(s->audioIO()->audioSignalChanges(trackId));
     }, AudioThread::ID);
 }
 
@@ -161,7 +161,7 @@ Promise<AudioSignalChanges> AudioOutputHandler::masterSignalChanges() const
             reject(static_cast<int>(Err::Undefined), "undefined reference to a mixer");
         }
 
-        resolve({ mixer()->masterSignalAmplitudeRmsChanged(), mixer()->masterVolumePressureDbfsChanged() });
+        resolve(mixer()->masterAudioSignalChanges());
     }, AudioThread::ID);
 }
 

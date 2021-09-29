@@ -155,9 +155,13 @@ MixerChannelItem* MixerPanelModel::buildTrackChannelItem(const audio::TrackSeque
     });
 
     playback()->tracks()->inputParamsChanged().onReceive(this,
-                                                         [item](const TrackSequenceId /*sequenceId*/,
-                                                                const TrackId /*trackId*/,
-                                                                AudioInputParams params) {
+                                                         [item, sequenceId, trackId](const TrackSequenceId _sequenceId,
+                                                                                     const TrackId _trackId,
+                                                                                     AudioInputParams params) {
+        if (trackId != _trackId || sequenceId != _sequenceId) {
+            return;
+        }
+
         item->loadInputParams(std::move(params));
     });
 
@@ -180,9 +184,13 @@ MixerChannelItem* MixerPanelModel::buildTrackChannelItem(const audio::TrackSeque
     });
 
     playback()->audioOutput()->outputParamsChanged().onReceive(this,
-                                                               [item](const TrackSequenceId /*sequenceId*/,
-                                                                      const TrackId /*trackId*/,
-                                                                      AudioOutputParams params) {
+                                                               [item, sequenceId, trackId](const TrackSequenceId _sequenceId,
+                                                                                           const TrackId _trackId,
+                                                                                           AudioOutputParams params) {
+        if (trackId != _trackId || sequenceId != _sequenceId) {
+            return;
+        }
+
         item->loadOutputParams(std::move(params));
     });
 
