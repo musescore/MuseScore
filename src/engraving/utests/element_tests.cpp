@@ -20,33 +20,23 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "testing/qtestsuite.h"
-#include "testbase.h"
+#include <gtest/gtest.h>
+
 #include "libmscore/masterscore.h"
 #include "libmscore/engravingitem.h"
 #include "libmscore/factory.h"
 
+#include "utils/scorerw.h"
+#include "engraving/compat/scoreaccess.h"
+
 using namespace mu::engraving;
 using namespace Ms;
 
-//---------------------------------------------------------
-//   TestElement
-//---------------------------------------------------------
-
-class TestElement : public QObject, public MTest
+class ElementTests : public ::testing::Test
 {
-    Q_OBJECT
-
-private slots:
-    void initTestCase() { initMTest(); }
-    void testIds();
 };
 
-//---------------------------------------------------------
-//   testIds
-//---------------------------------------------------------
-
-void TestElement::testIds()
+TEST_F(ElementTests, DISABLED_testIds)
 {
     ElementType ids[] = {
         ElementType::VOLTA,
@@ -105,15 +95,12 @@ void TestElement::testIds()
         ElementType::TAB_DURATION_SYMBOL,
     };
 
+    MasterScore* score = compat::ScoreAccess::createMasterScore();
     for (ElementType t : ids) {
         EngravingItem* e = Factory::createItem(t, score->dummy());
-        EngravingItem* ee = writeReadElement(e);
-        QCOMPARE(e->type(), ee->type());
+        EngravingItem* ee = ScoreRW::writeReadElement(e);
+        EXPECT_EQ(e->type(), ee->type());
         delete e;
         delete ee;
     }
 }
-
-QTEST_MAIN(TestElement)
-
-#include "tst_element.moc"
