@@ -20,50 +20,26 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "testing/qtestsuite.h"
+#include <gtest/gtest.h>
 
-#include "testbase.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/undo.h"
 #include "libmscore/measure.h"
 #include "libmscore/chord.h"
 
+#include "utils/scorerw.h"
+#include "utils/scorecomp.h"
+
 static const QString IMPLODEEXP_DATA_DIR("implode_explode_data/");
 
+using namespace mu::engraving;
 using namespace Ms;
 
-//---------------------------------------------------------
-//   TestImplodeExplode
-//---------------------------------------------------------
-
-class TestImplodeExplode : public QObject, public MTest
+class ImplodeExplodeTests : public ::testing::Test
 {
-    Q_OBJECT
-
-private slots:
-    void initTestCase();
-    void undoExplode();
-    void undoExplodeVoices();
-    void undoExplode1();
-    void undoImplode();
-    void undoImplodeVoice();
-    void implode1();
 };
 
-//---------------------------------------------------------
-//   initTestCase
-//---------------------------------------------------------
-
-void TestImplodeExplode::initTestCase()
-{
-    initMTest();
-}
-
-//---------------------------------------------------------
-//   undoExplode
-//---------------------------------------------------------
-
-void TestImplodeExplode::undoExplode()
+TEST_F(ImplodeExplodeTests, undoExplode)
 {
     QString readFile(IMPLODEEXP_DATA_DIR + "undoExplode.mscx");
     QString writeFile1("undoExplode01-test.mscx");
@@ -71,7 +47,8 @@ void TestImplodeExplode::undoExplode()
     QString writeFile2("undoExplode02-test.mscx");
     QString reference2(IMPLODEEXP_DATA_DIR + "undoExplode02-ref.mscx");
 
-    MasterScore* score = readScore(readFile);
+    MasterScore* score = ScoreRW::readScore(readFile);
+    EXPECT_TRUE(score);
     score->doLayout();
 
     // select all
@@ -83,33 +60,17 @@ void TestImplodeExplode::undoExplode()
     score->startCmd();
     score->cmdExplode();
     score->endCmd();
-    QVERIFY(saveCompareScore(score, writeFile1, reference1));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
 
     // undo
+    EditData ed;
     score->undoStack()->undo(&ed);
-    QVERIFY(saveCompareScore(score, writeFile2, reference2));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, reference2));
 
     delete score;
 }
 
-//---------------------------------------------------------
-//   undoExplodeVoices
-//---------------------------------------------------------
-
-void TestImplodeExplode::undoExplodeVoices()
-{
-    QString readFile(IMPLODEEXP_DATA_DIR + "undoExplode.mscx");
-    QString writeFile1("undoExplode01-test.mscx");
-    QString reference1(IMPLODEEXP_DATA_DIR + "undoExplode01-ref.mscx");
-    QString writeFile2("undoExplode02-test.mscx");
-    QString reference2(IMPLODEEXP_DATA_DIR + "undoExplode02-ref.mscx");
-}
-
-//---------------------------------------------------------
-//   undoImplode
-//---------------------------------------------------------
-
-void TestImplodeExplode::undoImplode()
+TEST_F(ImplodeExplodeTests, undoImplode)
 {
     QString readFile(IMPLODEEXP_DATA_DIR + "undoImplode.mscx");
     QString writeFile1("undoImplode01-test.mscx");
@@ -117,7 +78,8 @@ void TestImplodeExplode::undoImplode()
     QString writeFile2("undoImplode02-test.mscx");
     QString reference2(IMPLODEEXP_DATA_DIR + "undoImplode02-ref.mscx");
 
-    MasterScore* score = readScore(readFile);
+    MasterScore* score = ScoreRW::readScore(readFile);
+    EXPECT_TRUE(score);
     score->doLayout();
 
     // select all
@@ -129,33 +91,17 @@ void TestImplodeExplode::undoImplode()
     score->startCmd();
     score->cmdImplode();
     score->endCmd();
-    QVERIFY(saveCompareScore(score, writeFile1, reference1));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
 
     // undo
+    EditData ed;
     score->undoStack()->undo(&ed);
-    QVERIFY(saveCompareScore(score, writeFile2, reference2));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, reference2));
 
     delete score;
 }
 
-//---------------------------------------------------------
-//   undoExplode1
-//---------------------------------------------------------
-
-void TestImplodeExplode::undoExplode1()
-{
-    QString readFile(IMPLODEEXP_DATA_DIR + "explode1.mscx");
-    QString writeFile1("explode1-test.mscx");
-    QString reference1(IMPLODEEXP_DATA_DIR + "explode1-ref.mscx");
-    QString writeFile2("explode1-test2.mscx");
-    QString reference2(IMPLODEEXP_DATA_DIR + "explode1-ref2.mscx");
-}
-
-//---------------------------------------------------------
-//   undoImplodeVoice
-//---------------------------------------------------------
-
-void TestImplodeExplode::undoImplodeVoice()
+TEST_F(ImplodeExplodeTests, undoImplodeVoice)
 {
     QString readFile(IMPLODEEXP_DATA_DIR + "undoImplodeVoice.mscx");
     QString writeFile1("undoImplodeVoice01-test.mscx");
@@ -163,7 +109,8 @@ void TestImplodeExplode::undoImplodeVoice()
     QString writeFile2("undoImplodeVoice02-test.mscx");
     QString reference2(IMPLODEEXP_DATA_DIR + "undoImplodeVoice02-ref.mscx");
 
-    MasterScore* score = readScore(readFile);
+    MasterScore* score = ScoreRW::readScore(readFile);
+    EXPECT_TRUE(score);
     score->doLayout();
 
     // select all
@@ -175,27 +122,25 @@ void TestImplodeExplode::undoImplodeVoice()
     score->startCmd();
     score->cmdImplode();
     score->endCmd();
-    QVERIFY(saveCompareScore(score, writeFile1, reference1));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
 
     // undo
+    EditData ed;
     score->undoStack()->undo(&ed);
-    QVERIFY(saveCompareScore(score, writeFile2, reference2));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, reference2));
 
     delete score;
 }
 
-//---------------------------------------------------------
-//   implode1
-//---------------------------------------------------------
-
-void TestImplodeExplode::implode1()
+TEST_F(ImplodeExplodeTests, implode1)
 {
     QString readFile(IMPLODEEXP_DATA_DIR + "implode1.mscx");
     QString writeFile1("implode1-test1.mscx");
     QString writeFile2("implode1-test2.mscx");
     QString reference(IMPLODEEXP_DATA_DIR + "implode1-ref.mscx");
 
-    MasterScore* score = readScore(readFile);
+    MasterScore* score = ScoreRW::readScore(readFile);
+    EXPECT_TRUE(score);
     score->doLayout();
 
     // select all
@@ -207,15 +152,12 @@ void TestImplodeExplode::implode1()
     score->startCmd();
     score->cmdImplode();
     score->endCmd();
-    QVERIFY(saveCompareScore(score, writeFile1, reference));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference));
 
     // undo
+    EditData ed;
     score->undoStack()->undo(&ed);
-    QVERIFY(saveCompareScore(score, writeFile2, readFile));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, readFile));
 
     delete score;
 }
-
-QTEST_MAIN(TestImplodeExplode)
-
-#include "tst_implodeExplode.moc"
