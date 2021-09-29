@@ -30,6 +30,8 @@
 #include "public.sdk/source/vst/hosting/hostclasses.h"
 #include "public.sdk/source/vst/hosting/eventlist.h"
 #include "public.sdk/source/vst/hosting/processdata.h"
+#include "public.sdk/source/vst/hosting/parameterchanges.h"
+#include "public.sdk/source/common/memorystream.h"
 #include "pluginterfaces/gui/iplugview.h"
 #include "pluginterfaces/vst/ivstaudioprocessor.h"
 #include "pluginterfaces/vst/ivsteditcontroller.h"
@@ -54,7 +56,12 @@ using PluginProvider = Steinberg::Vst::PlugProvider;
 using PluginControllerPtr = Steinberg::IPtr<Steinberg::Vst::IEditController>;
 using PluginComponentPtr = Steinberg::IPtr<Steinberg::Vst::IComponent>;
 using PluginViewPtr = Steinberg::IPtr<Steinberg::IPlugView>;
+using PluginParamInfo = Steinberg::Vst::ParameterInfo;
+using PluginParamId = Steinberg::Vst::ParamID;
+using PluginParamValue = Steinberg::Vst::ParamValue;
 using IAudioProcessorPtr = Steinberg::FUnknownPtr<Steinberg::Vst::IAudioProcessor>;
+using IComponentHandler = Steinberg::Vst::IComponentHandler;
+using IAdvancedComponentHandler = Steinberg::Vst::IComponentHandler2;
 using FIDString = Steinberg::FIDString;
 
 enum class VstPluginType {
@@ -86,6 +93,7 @@ using VstEvent = Steinberg::Vst::Event;
 using VstProcessData = Steinberg::Vst::HostProcessData;
 using VstProcessContext = Steinberg::Vst::ProcessContext;
 using VstProcessSetup = Steinberg::Vst::ProcessSetup;
+using VstMemoryStream = Steinberg::MemoryStream;
 
 namespace PluginEditorViewType = Steinberg::Vst::ViewType;
 }
