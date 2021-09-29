@@ -248,8 +248,8 @@ struct AudioSignalsNotifier {
     AudioSignalChanges audioSignalChanges;
 
 private:
-    static constexpr float AMPLITUDE_MINIMAL_VALUABLE_DIFF = 0.001;
-    static constexpr volume_dbfs_t PRESSURE_MINIMAL_VALUABLE_DIFF = 0.5;
+    static constexpr float AMPLITUDE_MINIMAL_VALUABLE_DIFF = 0.01;
+    static constexpr volume_dbfs_t PRESSURE_MINIMAL_VALUABLE_DIFF = 1.f;
     static constexpr volume_dbfs_t MINIMUM_OPERABLE_DBFS_LEVEL = -100.f;
 
     std::map<audioch_t, AudioSignalVal> m_signalValuesMap;
