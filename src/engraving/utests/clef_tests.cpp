@@ -20,64 +20,45 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "testing/qtestsuite.h"
-
-#include "testbase.h"
+#include <gtest/gtest.h>
 
 #include "libmscore/factory.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/measure.h"
 #include "libmscore/undo.h"
 
+#include "utils/scorerw.h"
+#include "utils/scorecomp.h"
+
 static const QString CLEF_DATA_DIR("clef_data/");
 
 using namespace mu::engraving;
 using namespace Ms;
 
-//---------------------------------------------------------
-//   TestClef
-//---------------------------------------------------------
-
-class TestClef : public QObject, public MTest
+class ClefTests : public ::testing::Test
 {
-    Q_OBJECT
-
-private slots:
-    void initTestCase();
-    void clef1();
-    void clef2();
-    void clef3();
 };
 
 //---------------------------------------------------------
-//   initTestCase
-//---------------------------------------------------------
-
-void TestClef::initTestCase()
-{
-    initMTest();
-}
-
-//---------------------------------------------------------
-//   clef1
 //    two clefs at tick position zero
 //---------------------------------------------------------
-
-void TestClef::clef1()
+TEST_F(ClefTests, clef1)
 {
-    MasterScore* score = readScore(CLEF_DATA_DIR + "clef-1.mscx");
-    QVERIFY(saveCompareScore(score, "clef-1.mscx", CLEF_DATA_DIR + "clef-1-ref.mscx"));
+    MasterScore* score = ScoreRW::readScore(CLEF_DATA_DIR + "clef-1.mscx");
+    EXPECT_TRUE(score);
+
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "clef-1.mscx", CLEF_DATA_DIR + "clef-1-ref.mscx"));
     delete score;
 }
 
 //---------------------------------------------------------
-//   clef2
 //    change timesig -> rewrite measures ->insertTime
 //---------------------------------------------------------
-
-void TestClef::clef2()
+TEST_F(ClefTests, clef2)
 {
-    MasterScore* score = readScore(CLEF_DATA_DIR + "clef-2.mscx");
+    MasterScore* score = ScoreRW::readScore(CLEF_DATA_DIR + "clef-2.mscx");
+    EXPECT_TRUE(score);
+
     Measure* m = score->firstMeasure();
     m = m->nextMeasure();
     m = m->nextMeasure();
@@ -86,25 +67,22 @@ void TestClef::clef2()
     score->cmdAddTimeSig(m, 0, ts, false);
 
     score->doLayout();
-    QVERIFY(saveCompareScore(score, "clef-2.mscx", CLEF_DATA_DIR + "clef-2-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "clef-2.mscx", CLEF_DATA_DIR + "clef-2-ref.mscx"));
     delete score;
 }
 
 //---------------------------------------------------------
-//   clef3
 //    change the first clef of a score by changing the first measure's clef
 //---------------------------------------------------------
-
-void TestClef::clef3()
+TEST_F(ClefTests, clef3)
 {
-    MasterScore* score = readScore(CLEF_DATA_DIR + "clef-3.mscx");
+    MasterScore* score = ScoreRW::readScore(CLEF_DATA_DIR + "clef-3.mscx");
+    EXPECT_TRUE(score);
+
     Measure* m = score->firstMeasure();
     score->undoChangeClef(score->staff(0), m, ClefType::F);
 
     score->doLayout();
-    QVERIFY(saveCompareScore(score, "clef-3.mscx", CLEF_DATA_DIR + "clef-3-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "clef-3.mscx", CLEF_DATA_DIR + "clef-3-ref.mscx"));
     delete score;
 }
-
-QTEST_MAIN(TestClef)
-#include "tst_clef.moc"
