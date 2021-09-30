@@ -20,55 +20,34 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "testing/qtestsuite.h"
-#include "testbase.h"
+#include <gtest/gtest.h>
+
 #include "libmscore/masterscore.h"
 #include "libmscore/hairpin.h"
 
+#include "engraving/compat/scoreaccess.h"
+#include "utils/scorerw.h"
+
+using namespace mu::engraving;
 using namespace Ms;
 
-//---------------------------------------------------------
-//   TestHairpin
-//---------------------------------------------------------
-
-class TestHairpin : public QObject, public MTest
+class HairpinTests : public ::testing::Test
 {
-    Q_OBJECT
-
-private slots:
-    void initTestCase();
-    void hairpin();
 };
 
-//---------------------------------------------------------
-//   initTestCase
-//---------------------------------------------------------
-
-void TestHairpin::initTestCase()
+TEST_F(HairpinTests, hairpin)
 {
-    initMTest();
-}
-
-//---------------------------------------------------------
-//   hairpin
-//---------------------------------------------------------
-
-void TestHairpin::hairpin()
-{
+    MasterScore* score = compat::ScoreAccess::createMasterScore();
     Hairpin* hp = new Hairpin(score->dummy()->segment());
 
     // subtype
     hp->setHairpinType(HairpinType::DECRESC_HAIRPIN);
-    Hairpin* hp2 = static_cast<Hairpin*>(writeReadElement(hp));
-    QCOMPARE(hp2->hairpinType(), HairpinType::DECRESC_HAIRPIN);
+    Hairpin* hp2 = static_cast<Hairpin*>(ScoreRW::writeReadElement(hp));
+    EXPECT_EQ(hp2->hairpinType(), HairpinType::DECRESC_HAIRPIN);
     delete hp2;
 
     hp->setHairpinType(HairpinType::CRESC_HAIRPIN);
-    hp2 = static_cast<Hairpin*>(writeReadElement(hp));
-    QCOMPARE(hp2->hairpinType(), HairpinType::CRESC_HAIRPIN);
+    hp2 = static_cast<Hairpin*>(ScoreRW::writeReadElement(hp));
+    EXPECT_EQ(hp2->hairpinType(), HairpinType::CRESC_HAIRPIN);
     delete hp2;
 }
-
-QTEST_MAIN(TestHairpin)
-
-#include "tst_hairpin.moc"

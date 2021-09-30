@@ -20,51 +20,29 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "testing/qtestsuite.h"
-#include "testbase.h"
+#include <gtest/gtest.h>
+
 #include "libmscore/masterscore.h"
 #include "libmscore/undo.h"
 #include "libmscore/chord.h"
 #include "libmscore/segment.h"
 
+#include "utils/scorerw.h"
+#include "utils/scorecomp.h"
+
 static const QString EXCHVOICES_DATA_DIR("exchangevoices_data/");
 
+using namespace mu::engraving;
 using namespace Ms;
 
-//---------------------------------------------------------
-//   TestExchangevoices
-//---------------------------------------------------------
-
-class TestExchangevoices : public QObject, public MTest
+class ExchangevoicesTests : public ::testing::Test
 {
-    Q_OBJECT
-
-private slots:
-    void initTestCase();
-
-    void slurs();
-    void glissandi();
-    void undoChangeVoice();
 };
 
-//---------------------------------------------------------
-//   initTestCase
-//---------------------------------------------------------
-
-void TestExchangevoices::initTestCase()
+TEST_F(ExchangevoicesTests, slurs)
 {
-    initMTest();
-}
-
-//---------------------------------------------------------
-//   slurs
-//---------------------------------------------------------
-
-void TestExchangevoices::slurs()
-{
-    QString p1 = EXCHVOICES_DATA_DIR + "exchangevoices-slurs.mscx";
-    QVERIFY(score);
-    Score* score = readScore(p1);
+    Score* score = ScoreRW::readScore(EXCHVOICES_DATA_DIR + "exchangevoices-slurs.mscx");
+    EXPECT_TRUE(score);
     score->doLayout();
 
     // select all
@@ -78,18 +56,13 @@ void TestExchangevoices::slurs()
     score->endCmd();
 
     // compare
-    QVERIFY(saveCompareScore(score, "exchangevoices-slurs.mscx", EXCHVOICES_DATA_DIR + "exchangevoices-slurs-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "exchangevoices-slurs.mscx", EXCHVOICES_DATA_DIR + "exchangevoices-slurs-ref.mscx"));
 }
 
-//---------------------------------------------------------
-//   glissandi
-//---------------------------------------------------------
-
-void TestExchangevoices::glissandi()
+TEST_F(ExchangevoicesTests, glissandi)
 {
-    QString p1 = EXCHVOICES_DATA_DIR + "exchangevoices-gliss.mscx";
-    QVERIFY(score);
-    Score* score = readScore(p1);
+    Score* score = ScoreRW::readScore(EXCHVOICES_DATA_DIR + "exchangevoices-gliss.mscx");
+    EXPECT_TRUE(score);
     score->doLayout();
 
     // select all
@@ -103,14 +76,10 @@ void TestExchangevoices::glissandi()
     score->endCmd();
 
     // compare
-    QVERIFY(saveCompareScore(score, "exchangevoices-gliss.mscx", EXCHVOICES_DATA_DIR + "exchangevoices-gliss-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "exchangevoices-gliss.mscx", EXCHVOICES_DATA_DIR + "exchangevoices-gliss-ref.mscx"));
 }
 
-//---------------------------------------------------------
-//   undoChangeVoice
-//---------------------------------------------------------
-
-void TestExchangevoices::undoChangeVoice()
+TEST_F(ExchangevoicesTests, undoChangeVoice)
 {
     QString readFile(EXCHVOICES_DATA_DIR + "undoChangeVoice.mscx");
     QString writeFile1("undoChangeVoice01-test.mscx");
@@ -118,7 +87,8 @@ void TestExchangevoices::undoChangeVoice()
     QString writeFile2("undoChangeVoice02-test.mscx");
     QString reference2(EXCHVOICES_DATA_DIR + "undoChangeVoice02-ref.mscx");
 
-    MasterScore* score = readScore(readFile);
+    MasterScore* score = ScoreRW::readScore(readFile);
+    EXPECT_TRUE(score);
     score->doLayout();
 
     // do
@@ -135,14 +105,12 @@ void TestExchangevoices::undoChangeVoice()
     score->startCmd();
     score->changeSelectedNotesVoice(1);
     score->endCmd();
-    QVERIFY(saveCompareScore(score, writeFile1, reference1));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
 
     // undo
+    EditData ed;
     score->undoStack()->undo(&ed);
-    QVERIFY(saveCompareScore(score, writeFile2, reference2));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, reference2));
 
     delete score;
 }
-
-QTEST_MAIN(TestExchangevoices)
-#include "tst_exchangevoices.moc"
