@@ -222,6 +222,7 @@ void InstrumentListModel::loadInstruments()
     sortInstruments(m_instruments);
 
     endResetModel();
+    emit selectionChanged();
 }
 
 void InstrumentListModel::sortInstruments(Instruments& instruments) const
@@ -281,6 +282,7 @@ void InstrumentListModel::selectInstrument(int instrumentIndex)
         }
     }
 
+    emit selectionChanged();
     emit dataChanged(index(0), index(rowCount() - 1), { RoleIsSelected });
 }
 
@@ -393,6 +395,16 @@ int InstrumentListModel::currentGroupIndex() const
 bool InstrumentListModel::hasSelection() const
 {
     return m_selection->hasSelection();
+}
+
+QString InstrumentListModel::selectedInstrumentDescription() const
+{
+    QList<int> selectedRows = m_selection->selectedRows();
+    if (selectedRows.length() != 1) {
+        return QString();
+    }
+    CombinedInstrument instrument = m_instruments.at(selectedRows.at(0));
+    return instrument.templates.at(instrument.currentTemplateIndex)->description;
 }
 
 bool InstrumentListModel::isSearching() const

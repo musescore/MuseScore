@@ -33,6 +33,10 @@ Item {
 
     property string preferredScoreCreationMode: ""
 
+    property string description: pagesStack.currentIndex === 0
+                                 ? instrumentsPage.description
+                                 : ""
+
     property NavigationSection navigationSection: null
 
     readonly property bool hasSelection: {
