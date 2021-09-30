@@ -48,6 +48,10 @@ ScrollBar {
     function setPosition(position) {
         root.position = position
 
+        if (root.policy === ScrollBar.AlwaysOn) {
+            return
+        }
+
         root.active = true
 
         if (!resetActiveTimer.running) {
