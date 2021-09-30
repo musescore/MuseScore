@@ -251,7 +251,7 @@ DockPage {
             allowedAreas: Qt.TopDockWidgetArea | Qt.BottomDockWidgetArea
 
             height: minimumHeight
-            minimumHeight: 180
+            minimumHeight: 260
             maximumHeight: 520
 
             tabifyPanel: pianoRollPanel
