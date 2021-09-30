@@ -39,9 +39,9 @@ public:
     static void collectPage(const LayoutOptions& options, LayoutContext& lc);
 
 private:
-    static void layoutPage(const LayoutContext& ctx, Ms::Page* page, qreal restHeight);
+    static void layoutPage(const LayoutContext& ctx, Ms::Page* page, qreal restHeight, qreal systemPaddingBottom);
     static void checkDivider(const LayoutContext& ctx, bool left, Ms::System* s, qreal yOffset, bool remove = false);
-    static void distributeStaves(const LayoutContext& ctx, Ms::Page* page);
+    static void distributeStaves(const LayoutContext& ctx, Ms::Page* page, qreal systemPaddingBottom);
 };
 }
 

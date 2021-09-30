@@ -59,6 +59,7 @@ const StyleDef::StyleValue StyleDef::styleValues[int(Sid::STYLES)] = {
 
     { Sid::staffUpperBorder,        "staffUpperBorder",        Spatium(7.0) },
     { Sid::staffLowerBorder,        "staffLowerBorder",        Spatium(7.0) },
+    { Sid::staffHeaderFooterPadding, "staffHeaderFooterPadding", Spatium(1.0) },
     { Sid::staffDistance,           "staffDistance",           Spatium(6.5) },
     { Sid::akkoladeDistance,        "akkoladeDistance",        Spatium(6.5) },
     { Sid::minSystemDistance,       "minSystemDistance",       Spatium(8.5) },
@@ -1111,7 +1112,7 @@ const StyleDef::StyleValue StyleDef::styleValues[int(Sid::STYLES)] = {
     { Sid::footerFontStyle,               "footerFontStyle",              int(FontStyle::Normal) },
     { Sid::footerColor,                   "footerColor",                  QVariant::fromValue(draw::Color::black) },
     { Sid::footerAlign,                   "footerAlign",                  QVariant::fromValue(Align::CENTER | Align::BOTTOM) },
-    { Sid::footerOffset,                  "footerOffset",                 PointF(0.0, 5.0) },
+    { Sid::footerOffset,                  "footerOffset",                 PointF(0.0, 0.0) },
     { Sid::footerFrameType,               "footerFrameType",              int(FrameType::NO_FRAME) },
     { Sid::footerFramePadding,            "footerFramePadding",           0.2 },
     { Sid::footerFrameWidth,              "footerFrameWidth",             0.1 },

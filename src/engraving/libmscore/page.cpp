@@ -236,10 +236,11 @@ Text* Page::layoutHeaderFooter(int area, const QString& ss) const
 }
 
 //---------------------------------------------------------
-//   headerHeight
+//   headerExtension
+//   - how much the header extends into the page (i.e., not in the margins)
 //---------------------------------------------------------
 
-qreal Page::headerHeight() const
+qreal Page::headerExtension() const
 {
     if (!score()->isLayoutMode(LayoutMode::PAGE)) {
         return 0.0;
@@ -265,20 +266,24 @@ qreal Page::headerHeight() const
         Text* headerCenter = layoutHeaderFooter(1, s2);
         Text* headerRight = layoutHeaderFooter(2, s3);
 
-        qreal headerLeftHeight = headerLeft ? headerLeft->visibleHeight() : 0.0;
-        qreal headerCenterHeight = headerCenter ? headerCenter->visibleHeight() : 0.0;
-        qreal headerRightHeight = headerRight ? headerRight->visibleHeight() : 0.0;
-        return qMax(headerLeftHeight, qMax(headerCenterHeight, headerRightHeight));
+        qreal headerLeftHeight = headerLeft ? headerLeft->height() : 0.0;
+        qreal headerCenterHeight = headerCenter ? headerCenter->height() : 0.0;
+        qreal headerRightHeight = headerRight ? headerRight->height() : 0.0;
+
+        qreal headerHeight = qMax(headerLeftHeight, qMax(headerCenterHeight, headerRightHeight));
+        qreal headerOffset = score()->styleV(Sid::headerOffset).value<PointF>().y() * DPMM;
+        return qMax(0.0, headerHeight - headerOffset);
     }
 
     return 0.0;
 }
 
 //---------------------------------------------------------
-//   footerHeight
+//   footerExtension
+//   - how much the footer extends into the page (i.e., not in the margins)
 //---------------------------------------------------------
 
-qreal Page::footerHeight() const
+qreal Page::footerExtension() const
 {
     if (!score()->isLayoutMode(LayoutMode::PAGE)) {
         return 0.0;
@@ -304,13 +309,14 @@ qreal Page::footerHeight() const
         Text* footerCenter = layoutHeaderFooter(4, s2);
         Text* footerRight = layoutHeaderFooter(5, s3);
 
-        qreal footerLeftHeight = footerLeft ? footerLeft->visibleHeight() : 0.0;
-        qreal footerCenterHeight = footerCenter ? footerCenter->visibleHeight() : 0.0;
-        qreal footerRightHeight = footerRight ? footerRight->visibleHeight() : 0.0;
+        qreal footerLeftHeight = footerLeft ? footerLeft->height() : 0.0;
+        qreal footerCenterHeight = footerCenter ? footerCenter->height() : 0.0;
+        qreal footerRightHeight = footerRight ? footerRight->height() : 0.0;
 
         qreal footerHeight = qMax(footerLeftHeight, qMax(footerCenterHeight, footerRightHeight));
 
-        return footerHeight;
+        qreal footerOffset = score()->styleV(Sid::footerOffset).value<PointF>().y() * DPMM;
+        return qMax(0.0, footerHeight - footerOffset);
     }
 
     return 0.0;
