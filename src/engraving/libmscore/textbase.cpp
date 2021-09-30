@@ -1818,8 +1818,11 @@ static qreal parseNumProperty(const QString& s)
 
 void TextBase::createLayout()
 {
-    _layout.clear();  // deletes the text fragments so we lose all formatting information
+    // reset all previous formatting information
+    _layout.clear();
     TextCursor cursor = *_cursor;
+    cursor.setRow(0);
+    cursor.setColumn(0);
 
     int state = 0;
     QString token;
@@ -2130,34 +2133,6 @@ qreal TextBase::lineSpacing() const
 qreal TextBase::lineHeight() const
 {
     return fontMetrics().height();
-}
-
-//---------------------------------------------------------
-//   visibleHeight
-//---------------------------------------------------------
-
-qreal TextBase::visibleHeight()
-{
-    RectF bb;
-    qreal y = 0;
-
-    // adjust the bounding box for the text item
-    for (int i = 0; i < rows(); ++i) {
-        TextBlock* t = &_layout[i];
-        if (t->columns() == 0 && i != rows() - 1) {
-            continue;
-        }
-        t->layout(this);
-        const RectF* r = &t->boundingRect();
-
-        if (r->height() == 0) {
-            r = &_layout[i - i].boundingRect();
-        }
-        y += t->lineSpacing();
-        t->setY(y);
-        bb |= r->translated(0.0, y);
-    }
-    return bb.height();
 }
 
 //---------------------------------------------------------
