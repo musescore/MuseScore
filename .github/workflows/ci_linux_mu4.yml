@@ -130,5 +130,5 @@ jobs:
       if: env.DO_BUILD == 'true'
       uses: actions/upload-artifact@v2
       with:
-        name: MU4_${{ github.run_id }}_Lin_${{ github.event.pull_request.title }}
+        name: MU4_${{ github.run_id }}_Lin${{ github.event.pull_request.title }}
         path: ./build.artifacts/      
