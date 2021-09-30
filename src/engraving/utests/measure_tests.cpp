@@ -20,9 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "testing/qtestsuite.h"
-
-#include "testbase.h"
+#include <gtest/gtest.h>
 
 #include "libmscore/masterscore.h"
 #include "libmscore/excerpt.h"
@@ -40,193 +38,124 @@
 #include "libmscore/system.h"
 #include "libmscore/durationtype.h"
 
+#include "utils/scorerw.h"
+#include "utils/scorecomp.h"
+
 static const QString MEASURE_DATA_DIR("measure_data/");
 
+using namespace mu::engraving;
 using namespace Ms;
 
-//---------------------------------------------------------
-//   TestMeasure
-//---------------------------------------------------------
-
-class TestMeasure : public QObject, public MTest
+class MeasureTests : public ::testing::Test
 {
-    Q_OBJECT
-
-private slots:
-    void initTestCase();
-
-    void insertMeasureMiddle();
-    void insertMeasureBegin();
-    void insertMeasureEnd();
-    void insertBfClefChange();
-    void insertBfKeyChange();
-    void spanner_a();
-    void spanner_b();
-    void spanner_A();
-    void spanner_B();
-    void spanner_C();
-    void spanner_D();
-    void deleteLast();
-//      void minWidth();
-    void undoDelInitialVBox_269919();
-    void mmrest();
-    void measureNumbers();
-
-    void gap();
-    void checkMeasure();
 };
 
-//---------------------------------------------------------
-//   initTestCase
-//---------------------------------------------------------
-
-void TestMeasure::initTestCase()
+TEST_F(MeasureTests, DISABLED_insertMeasureMiddle) //TODO: verify program change, 72 is wrong surely?
 {
-    initMTest();
-}
-
-//---------------------------------------------------------
-///   insertMeasureMiddle
-//---------------------------------------------------------
-
-void TestMeasure::insertMeasureMiddle()
-{
-    MasterScore* score = readScore(MEASURE_DATA_DIR + "measure-1.mscx");
+    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + "measure-1.mscx");
+    EXPECT_TRUE(score);
 
     score->startCmd();
     Measure* m = score->firstMeasure()->nextMeasure();
     score->insertMeasure(ElementType::MEASURE, m);
     score->endCmd();
-    QSKIP("TODO: verify program change, 72 is wrong surely?");
-    QVERIFY(saveCompareScore(score, "measure-1.mscx", MEASURE_DATA_DIR + "measure-1-ref.mscx"));
+
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measure-1.mscx", MEASURE_DATA_DIR + "measure-1-ref.mscx"));
     delete score;
 }
 
-//---------------------------------------------------------
-///   insertMeasureBegin
-//---------------------------------------------------------
-
-void TestMeasure::insertMeasureBegin()
+TEST_F(MeasureTests, DISABLED_insertMeasureBegin) // TODO: verify program change, 72 is wrong surely?
 {
-    MasterScore* score = readScore(MEASURE_DATA_DIR + "measure-1.mscx");
+    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + "measure-1.mscx");
+    EXPECT_TRUE(score);
 
     score->startCmd();
     Measure* m = score->firstMeasure();
     score->insertMeasure(ElementType::MEASURE, m);
     score->endCmd();
-    QSKIP("TODO: verify program change, 72 is wrong surely?");
-    QVERIFY(saveCompareScore(score, "measure-2.mscx", MEASURE_DATA_DIR + "measure-2-ref.mscx"));
 
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measure-2.mscx", MEASURE_DATA_DIR + "measure-2-ref.mscx"));
     delete score;
 }
 
-//---------------------------------------------------------
-///   insertMeasureEnd
-//---------------------------------------------------------
-
-void TestMeasure::insertMeasureEnd()
+TEST_F(MeasureTests, DISABLED_insertMeasureEnd) // TODO: verify program change, 72 is wrong surely?
 {
-    MasterScore* score = readScore(MEASURE_DATA_DIR + "measure-1.mscx");
+    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + "measure-1.mscx");
+    EXPECT_TRUE(score);
 
     score->startCmd();
     score->insertMeasure(ElementType::MEASURE, 0);
     score->endCmd();
 
-    QSKIP("TODO: verify program change, 72 is wrong surely?");
-    QVERIFY(saveCompareScore(score, "measure-3.mscx", MEASURE_DATA_DIR + "measure-3-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measure-3.mscx", MEASURE_DATA_DIR + "measure-3-ref.mscx"));
     delete score;
 }
 
-//---------------------------------------------------------
-///   insertBfClefChange
-//---------------------------------------------------------
-
-void TestMeasure::insertBfClefChange()
+TEST_F(MeasureTests, insertBfClefChange)
 {
-    MasterScore* score = readScore(MEASURE_DATA_DIR + "measure-insert_bf_clef.mscx");
+    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + "measure-insert_bf_clef.mscx");
+    EXPECT_TRUE(score);
+
     // 4th measure
     Measure* m = score->firstMeasure()->nextMeasure();
     m = m->nextMeasure()->nextMeasure();
     score->startCmd();
     score->insertMeasure(ElementType::MEASURE, m);
     score->endCmd();
-    QVERIFY(saveCompareScore(score, "measure-insert_bf_clef.mscx", MEASURE_DATA_DIR + "measure-insert_bf_clef-ref.mscx"));
+
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measure-insert_bf_clef.mscx", MEASURE_DATA_DIR + "measure-insert_bf_clef-ref.mscx"));
+
     score->undoRedo(true, 0);
-    QVERIFY(saveCompareScore(score, "measure-insert_bf_clef_undo.mscx", MEASURE_DATA_DIR + "measure-insert_bf_clef.mscx"));
+
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measure-insert_bf_clef_undo.mscx", MEASURE_DATA_DIR + "measure-insert_bf_clef.mscx"));
+
     m = score->firstMeasure()->nextMeasure()->nextMeasure()->nextMeasure()->nextMeasure()->nextMeasure();
     score->startCmd();
     score->insertMeasure(ElementType::MEASURE, m);
     score->endCmd();
-    QVERIFY(saveCompareScore(score, "measure-insert_bf_clef-2.mscx", MEASURE_DATA_DIR + "measure-insert_bf_clef-2-ref.mscx"));
+
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measure-insert_bf_clef-2.mscx",
+                                            MEASURE_DATA_DIR + "measure-insert_bf_clef-2-ref.mscx"));
+
     score->undoRedo(true, 0);
-    QVERIFY(saveCompareScore(score, "measure-insert_bf_clef_undo.mscx", MEASURE_DATA_DIR + "measure-insert_bf_clef.mscx"));
+
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measure-insert_bf_clef_undo.mscx", MEASURE_DATA_DIR + "measure-insert_bf_clef.mscx"));
     delete score;
 }
 
-//---------------------------------------------------------
-///   insertBfKeyChange
-//---------------------------------------------------------
-
-void TestMeasure::insertBfKeyChange()
+TEST_F(MeasureTests, insertBfKeyChange)
 {
-    MasterScore* score = readScore(MEASURE_DATA_DIR + "measure-insert_bf_key.mscx");
+    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + "measure-insert_bf_key.mscx");
+    EXPECT_TRUE(score);
+
     // 4th measure
     Measure* m = score->firstMeasure()->nextMeasure();
     m = m->nextMeasure()->nextMeasure();
     score->startCmd();
     score->insertMeasure(ElementType::MEASURE, m);
     score->endCmd();
-    QVERIFY(score->checkKeys());
-    QVERIFY(saveCompareScore(score, "measure-insert_bf_key.mscx", MEASURE_DATA_DIR + "measure-insert_bf_key-ref.mscx"));
+
+    EXPECT_TRUE(score->checkKeys());
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measure-insert_bf_key.mscx", MEASURE_DATA_DIR + "measure-insert_bf_key-ref.mscx"));
+
     score->undoRedo(true, 0);
-    QVERIFY(score->checkKeys());
-    QVERIFY(saveCompareScore(score, "measure-insert_bf_key_undo.mscx", MEASURE_DATA_DIR + "measure-insert_bf_key.mscx"));
+
+    EXPECT_TRUE(score->checkKeys());
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measure-insert_bf_key_undo.mscx", MEASURE_DATA_DIR + "measure-insert_bf_key.mscx"));
+
     m = score->firstMeasure()->nextMeasure()->nextMeasure()->nextMeasure()->nextMeasure()->nextMeasure();
     score->startCmd();
     score->insertMeasure(ElementType::MEASURE, m);
     score->endCmd();
-    QVERIFY(score->checkKeys());
-    QVERIFY(saveCompareScore(score, "measure-insert_bf_key-2.mscx", MEASURE_DATA_DIR + "measure-insert_bf_key-2-ref.mscx"));
+    EXPECT_TRUE(score->checkKeys());
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measure-insert_bf_key-2.mscx", MEASURE_DATA_DIR + "measure-insert_bf_key-2-ref.mscx"));
+
     score->undoRedo(true, 0);
-    QVERIFY(score->checkKeys());
-    QVERIFY(saveCompareScore(score, "measure-insert_bf_key_undo.mscx", MEASURE_DATA_DIR + "measure-insert_bf_key.mscx"));
+
+    EXPECT_TRUE(score->checkKeys());
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measure-insert_bf_key_undo.mscx", MEASURE_DATA_DIR + "measure-insert_bf_key.mscx"));
     delete score;
 }
-
-//---------------------------------------------------------
-//   minWidth
-//---------------------------------------------------------
-
-#if 0
-void TestMeasure::minWidth()
-{
-    MasterScore* score = readScore(MEASURE_DATA_DIR + "measure-2.mscx");
-
-    int n = score->systems().size();
-    int measuresSystem[n];
-    for (int i = 0; i < n; ++i) {
-        measuresSystem[i] = score->systems().at(i)->measures().size();
-    }
-
-    score->doLayout();
-
-    Measure* m1 = score->systems().at(1)->lastMeasure();
-    Measure* m2 = score->systems().at(2)->firstMeasure();
-    qreal mw1   = m1->minWidth1();
-    qreal mw2   = m2->minWidth1();
-
-    score->doLayout();
-
-    QCOMPARE(mw1, m1->minWidth1());
-    QCOMPARE(mw2, m2->minWidth1());
-
-    // after second layout nothing should be changed:
-    for (int i = 0; i < n; ++i) {
-        QCOMPARE(measuresSystem[i], int(score->systems().at(i)->measures().size()));
-    }
-}
-
-#endif
 
 //---------------------------------------------------------
 ///   spanner_a
@@ -236,15 +165,17 @@ void TestMeasure::minWidth()
 //
 //---------------------------------------------------------
 
-void TestMeasure::spanner_a()
+TEST_F(MeasureTests, spanner_a)
 {
-    MasterScore* score = readScore(MEASURE_DATA_DIR + "measure-3.mscx");
+    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + "measure-3.mscx");
+    EXPECT_TRUE(score);
 
     Measure* m = score->firstMeasure()->nextMeasure();
     score->startCmd();
     score->insertMeasure(ElementType::MEASURE, m);
     score->endCmd();
-    QVERIFY(saveCompareScore(score, "measure-4.mscx", MEASURE_DATA_DIR + "measure-4-ref.mscx"));
+
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measure-4.mscx", MEASURE_DATA_DIR + "measure-4-ref.mscx"));
     delete score;
 }
 
@@ -256,15 +187,17 @@ void TestMeasure::spanner_a()
 //
 //---------------------------------------------------------
 
-void TestMeasure::spanner_b()
+TEST_F(MeasureTests, spanner_b)
 {
-    MasterScore* score = readScore(MEASURE_DATA_DIR + "measure-4.mscx");
+    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + "measure-4.mscx");
+    EXPECT_TRUE(score);
 
     Measure* m = score->firstMeasure();
     score->startCmd();
     score->insertMeasure(ElementType::MEASURE, m);
     score->endCmd();
-    QVERIFY(saveCompareScore(score, "measure-5.mscx", MEASURE_DATA_DIR + "measure-5-ref.mscx"));
+
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measure-5.mscx", MEASURE_DATA_DIR + "measure-5-ref.mscx"));
     delete score;
 }
 
@@ -275,16 +208,18 @@ void TestMeasure::spanner_b()
 //
 //---------------------------------------------------------
 
-void TestMeasure::spanner_A()
+TEST_F(MeasureTests, spanner_A)
 {
-    MasterScore* score = readScore(MEASURE_DATA_DIR + "measure-6.mscx");
+    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + "measure-6.mscx");
+    EXPECT_TRUE(score);
 
     score->select(score->firstMeasure());
     score->startCmd();
     score->localTimeDelete();
     score->endCmd();
     score->doLayout();
-    QVERIFY(saveCompareScore(score, "measure-6.mscx", MEASURE_DATA_DIR + "measure-6-ref.mscx"));
+
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measure-6.mscx", MEASURE_DATA_DIR + "measure-6-ref.mscx"));
     delete score;
 }
 
@@ -296,9 +231,10 @@ void TestMeasure::spanner_A()
 //
 //---------------------------------------------------------
 
-void TestMeasure::spanner_B()
+TEST_F(MeasureTests, spanner_B)
 {
-    MasterScore* score = readScore(MEASURE_DATA_DIR + "measure-7.mscx");
+    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + "measure-7.mscx");
+    EXPECT_TRUE(score);
 
     Measure* m = score->firstMeasure()->nextMeasure();
     score->select(m);
@@ -306,7 +242,7 @@ void TestMeasure::spanner_B()
     score->localTimeDelete();
     score->endCmd();
 
-    QVERIFY(saveCompareScore(score, "measure-7.mscx", MEASURE_DATA_DIR + "measure-7-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measure-7.mscx", MEASURE_DATA_DIR + "measure-7-ref.mscx"));
     delete score;
 }
 
@@ -318,9 +254,10 @@ void TestMeasure::spanner_B()
 //
 //---------------------------------------------------------
 
-void TestMeasure::spanner_C()
+TEST_F(MeasureTests, spanner_C)
 {
-    MasterScore* score = readScore(MEASURE_DATA_DIR + "measure-8.mscx");
+    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + "measure-8.mscx");
+    EXPECT_TRUE(score);
 
     Measure* m = score->firstMeasure()->nextMeasure();
     score->select(m);
@@ -328,7 +265,7 @@ void TestMeasure::spanner_C()
     score->localTimeDelete();
     score->endCmd();
 
-    QVERIFY(saveCompareScore(score, "measure-8.mscx", MEASURE_DATA_DIR + "measure-8-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measure-8.mscx", MEASURE_DATA_DIR + "measure-8-ref.mscx"));
     delete score;
 }
 
@@ -340,18 +277,18 @@ void TestMeasure::spanner_C()
 //
 //---------------------------------------------------------
 
-void TestMeasure::spanner_D()
+TEST_F(MeasureTests, spanner_D)
 {
-    MasterScore* score = readScore(MEASURE_DATA_DIR + "measure-9.mscx");
+    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + "measure-9.mscx");
+    EXPECT_TRUE(score);
 
     Measure* m = score->firstMeasure()->nextMeasure();
     score->select(m);
-
     score->startCmd();
     score->localTimeDelete();
     score->endCmd();
 
-    QVERIFY(saveCompareScore(score, "measure-9.mscx", MEASURE_DATA_DIR + "measure-9-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measure-9.mscx", MEASURE_DATA_DIR + "measure-9-ref.mscx"));
     delete score;
 }
 
@@ -359,32 +296,31 @@ void TestMeasure::spanner_D()
 //    deleteLast
 //---------------------------------------------------------
 
-void TestMeasure::deleteLast()
+TEST_F(MeasureTests, deleteLast)
 {
-    MasterScore* score = readScore(MEASURE_DATA_DIR + "measure-10.mscx");
+    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + "measure-10.mscx");
+    EXPECT_TRUE(score);
 
     Measure* m = score->lastMeasure();
     score->select(m);
-
     score->startCmd();
     score->localTimeDelete();
     score->endCmd();
 
-    QVERIFY(saveCompareScore(score, "measure-10.mscx", MEASURE_DATA_DIR + "measure-10-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measure-10.mscx", MEASURE_DATA_DIR + "measure-10-ref.mscx"));
     delete score;
 }
 
 //---------------------------------------------------------
-///   gaps
-//
 //    delete rests and check reorganization of lengths
-//
 //---------------------------------------------------------
 
-void TestMeasure::gap()
+TEST_F(MeasureTests, gap)
 {
-    MasterScore* score = readScore(MEASURE_DATA_DIR + "gaps.mscx");
-    EngravingItem* tst       = 0;
+    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + "gaps.mscx");
+    EXPECT_TRUE(score);
+
+    EngravingItem* tst = 0;
 
     //Select and delete third quarter rest in first Measure (voice 2)
     score->startCmd();
@@ -396,10 +332,11 @@ void TestMeasure::gap()
     score->endCmd();
 
     tst = s->element(1);
-    Q_ASSERT(tst);
+    EXPECT_TRUE(tst);
 
-    QVERIFY(tst->isRest()
-            && toRest(tst)->isGap() /*&& toRest(tst)->durationType() == TDuration::DurationType::V_QUARTER*/);
+    EXPECT_TRUE(tst->isRest());
+    EXPECT_TRUE(toRest(tst)->isGap());
+    /*&& toRest(tst)->durationType() == TDuration::DurationType::V_QUARTER*/
 
     //Select and delete second quarter rest in third Measure (voice 4)
     score->startCmd();
@@ -411,10 +348,11 @@ void TestMeasure::gap()
     score->endCmd();
 
     tst = s->element(3);
-    Q_ASSERT(tst);
+    EXPECT_TRUE(tst);
 
-    QVERIFY(tst->isRest()
-            && toRest(tst)->isGap() /*&& toRest(tst)->durationType() == TDuration::DurationType::V_QUARTER*/);
+    EXPECT_TRUE(tst->isRest());
+    EXPECT_TRUE(toRest(tst)->isGap());
+    /*&& toRest(tst)->durationType() == TDuration::DurationType::V_QUARTER*/
 
     //Select and delete first quarter rest in third Measure (voice 4)
     score->startCmd();
@@ -425,12 +363,12 @@ void TestMeasure::gap()
     score->endCmd();
 
     tst = s->element(3);
-    Q_ASSERT(tst);
+    EXPECT_TRUE(tst);
 
-    QVERIFY(tst->isRest() && toRest(tst)->isGap()
-            && toRest(tst)->actualTicks() == Fraction::fromTicks(960)
-            /*&& toRest(tst)->durationType() == TDuration::DurationType::V_HALF*/
-            );
+    EXPECT_TRUE(tst->isRest());
+    EXPECT_TRUE(toRest(tst)->isGap());
+    EXPECT_EQ(toRest(tst)->actualTicks(), Fraction::fromTicks(960));
+    /*&& toRest(tst)->durationType() == TDuration::DurationType::V_HALF*/
 
     delete score;
 }
@@ -442,19 +380,22 @@ void TestMeasure::gap()
 //
 //---------------------------------------------------------
 
-void TestMeasure::checkMeasure()
+TEST_F(MeasureTests, checkMeasure)
 {
-    MasterScore* score = readScore(MEASURE_DATA_DIR + "checkMeasure.mscx");
-    EngravingItem* tst       = 0;
-    Measure* m         = score->firstMeasure()->nextMeasure();
+    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + "checkMeasure.mscx");
+    EXPECT_TRUE(score);
+
+    EngravingItem* tst = 0;
+    Measure* m = score->firstMeasure()->nextMeasure();
 
     Segment* s = m->undoGetSegment(SegmentType::ChordRest, Fraction::fromTicks(2880));
     tst = s->element(1);
-    Q_ASSERT(tst);
+    EXPECT_TRUE(tst);
 
-    QVERIFY(tst->isRest() && toRest(tst)->isGap() && toRest(tst)->actualTicks() == Fraction::fromTicks(480)
-            /*&& toRest(tst)->durationType() == TDuration::DurationType::V_HALF*/
-            );
+    EXPECT_TRUE(tst->isRest());
+    EXPECT_TRUE(toRest(tst)->isGap());
+    EXPECT_EQ(toRest(tst)->actualTicks(), Fraction::fromTicks(480));
+    /*&& toRest(tst)->durationType() == TDuration::DurationType::V_HALF*/
 
     m = m->nextMeasure();
 //      s = m->undoGetSegment(SegmentType::ChordRest, Fraction::fromTicks(3840));
@@ -466,19 +407,21 @@ void TestMeasure::checkMeasure()
     m = m->nextMeasure();
     s = m->undoGetSegment(SegmentType::ChordRest, Fraction::fromTicks(6240));
     tst = s->element(1);
-    Q_ASSERT(tst);
+    EXPECT_TRUE(tst);
 
-    QVERIFY(tst->isRest() && toRest(tst)->isGap() && toRest(tst)->actualTicks() == Fraction::fromTicks(120)
-            /*&& toRest(tst)->durationType() == TDuration::DurationType::V_HALF*/
-            );
+    EXPECT_TRUE(tst->isRest());
+    EXPECT_TRUE(toRest(tst)->isGap());
+    EXPECT_EQ(toRest(tst)->actualTicks(), Fraction::fromTicks(120));
+    /*&& toRest(tst)->durationType() == TDuration::DurationType::V_HALF*/
 
     s = m->undoGetSegment(SegmentType::ChordRest, Fraction::fromTicks(6480));
     tst = s->element(1);
-    Q_ASSERT(tst);
+    EXPECT_TRUE(tst);
 
-    QVERIFY(tst->isRest() && toRest(tst)->isGap() && toRest(tst)->actualTicks() == Fraction::fromTicks(120)
-            /*&& toRest(tst)->durationType() == TDuration::DurationType::V_HALF*/
-            );
+    EXPECT_TRUE(tst->isRest());
+    EXPECT_TRUE(toRest(tst)->isGap());
+    EXPECT_EQ(toRest(tst)->actualTicks(), Fraction::fromTicks(120));
+    /*&& toRest(tst)->durationType() == TDuration::DurationType::V_HALF*/
 
     delete score;
 }
@@ -491,9 +434,10 @@ void TestMeasure::checkMeasure()
 ///    4. Undo to restore initial VBox results in assert failure crash
 //---------------------------------------------------------
 
-void TestMeasure::undoDelInitialVBox_269919()
+TEST_F(MeasureTests, undoDelInitialVBox_269919)
 {
-    MasterScore* score = readScore(MEASURE_DATA_DIR + "undoDelInitialVBox_269919.mscx");
+    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + "undoDelInitialVBox_269919.mscx");
+    EXPECT_TRUE(score);
 
     // 1. delete initial VBox
     score->startCmd();
@@ -516,7 +460,8 @@ void TestMeasure::undoDelInitialVBox_269919()
     // 4. Undo to restore initial VBox resulted in assert failure crash
     score->undoRedo(true, 0);
 
-    QVERIFY(saveCompareScore(score, "undoDelInitialVBox_269919.mscx", MEASURE_DATA_DIR + "undoDelInitialVBox_269919-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "undoDelInitialVBox_269919.mscx",
+                                            MEASURE_DATA_DIR + "undoDelInitialVBox_269919-ref.mscx"));
     delete score;
 }
 
@@ -525,14 +470,17 @@ void TestMeasure::undoDelInitialVBox_269919()
 ///    mmrest creation
 //---------------------------------------------------------
 
-void TestMeasure::mmrest()
+TEST_F(MeasureTests, mmrest)
 {
-    MasterScore* score = readScore(MEASURE_DATA_DIR + "mmrest.mscx");
+    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + "mmrest.mscx");
+    EXPECT_TRUE(score);
+
     score->startCmd();
     score->undo(new ChangeStyleVal(score, Sid::createMultiMeasureRests, true));
     score->setLayoutAll();
     score->endCmd();
-    QVERIFY(saveCompareScore(score, "mmrest.mscx", MEASURE_DATA_DIR + "mmrest-ref.mscx"));
+
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "mmrest.mscx", MEASURE_DATA_DIR + "mmrest-ref.mscx"));
     delete score;
 }
 
@@ -541,38 +489,39 @@ void TestMeasure::mmrest()
 ///    test measure numbers properties
 //---------------------------------------------------------
 
-void TestMeasure::measureNumbers()
+TEST_F(MeasureTests, measureNumbers)
 {
+    MasterScore* score = ScoreRW::readScore(MEASURE_DATA_DIR + "measurenumber.mscx");
+    EXPECT_TRUE(score);
+
     MeasureNumber* measureNumber = new MeasureNumber(score->dummy()->measure());
 
     // horizontal placement
     measureNumber->setHPlacement(HPlacement::CENTER);
     measureNumber->setPropertyFlags(Pid::HPLACEMENT, PropertyFlags::UNSTYLED);
-    MeasureNumber* mn = static_cast<MeasureNumber*>(writeReadElement(measureNumber));
-    QCOMPARE(mn->hPlacement(), HPlacement::CENTER);
+    MeasureNumber* mn = static_cast<MeasureNumber*>(ScoreRW::writeReadElement(measureNumber));
+    EXPECT_EQ(mn->hPlacement(), HPlacement::CENTER);
     delete mn;
-
-    MasterScore* score = readScore(MEASURE_DATA_DIR + "measurenumber.mscx");
 
     // Place measure numbers below
     score->startCmd();
     score->undo(new ChangeStyleVal(score, Sid::measureNumberVPlacement, QVariant(int(Placement::BELOW))));
     score->setLayoutAll();
     score->endCmd();
-    QVERIFY(saveCompareScore(score, "measurenumber-1.mscx", MEASURE_DATA_DIR + "measurenumber-1-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measurenumber-1.mscx", MEASURE_DATA_DIR + "measurenumber-1-ref.mscx"));
 
     // center measure numbers
     score->startCmd();
     score->undo(new ChangeStyleVal(score, Sid::measureNumberHPlacement, QVariant(int(HPlacement::CENTER))));
     score->setLayoutAll();
     score->endCmd();
-    QVERIFY(saveCompareScore(score, "measurenumber-2.mscx", MEASURE_DATA_DIR + "measurenumber-2-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measurenumber-2.mscx", MEASURE_DATA_DIR + "measurenumber-2-ref.mscx"));
 
     // show on first system too
     score->undo(new ChangeStyleVal(score, Sid::showMeasureNumberOne, QVariant(true)));
     score->setLayoutAll();
     score->endCmd();
-    QVERIFY(saveCompareScore(score, "measurenumber-3.mscx", MEASURE_DATA_DIR + "measurenumber-3-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measurenumber-3.mscx", MEASURE_DATA_DIR + "measurenumber-3-ref.mscx"));
 
     // every 5 measures (default interval)
     score->startCmd();
@@ -581,7 +530,7 @@ void TestMeasure::measureNumbers()
     score->undo(new ChangeStyleVal(score, Sid::measureNumberSystem, QVariant(false)));
     score->setLayoutAll();
     score->endCmd();
-    QVERIFY(saveCompareScore(score, "measurenumber-4.mscx", MEASURE_DATA_DIR + "measurenumber-4-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measurenumber-4.mscx", MEASURE_DATA_DIR + "measurenumber-4-ref.mscx"));
 
     // do not show first measure number. This should shift all measure numbers,
     // because they are still placed at regular intervals.
@@ -590,14 +539,14 @@ void TestMeasure::measureNumbers()
     score->undo(new ChangeStyleVal(score, Sid::showMeasureNumberOne, QVariant(false)));
     score->setLayoutAll();
     score->endCmd();
-    QVERIFY(saveCompareScore(score, "measurenumber-5.mscx", MEASURE_DATA_DIR + "measurenumber-5-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measurenumber-5.mscx", MEASURE_DATA_DIR + "measurenumber-5-ref.mscx"));
 
     // show at every measure (except fist)
     score->startCmd();
     score->undo(new ChangeStyleVal(score, Sid::measureNumberInterval, QVariant(1)));
     score->setLayoutAll();
     score->endCmd();
-    QVERIFY(saveCompareScore(score, "measurenumber-6.mscx", MEASURE_DATA_DIR + "measurenumber-6-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measurenumber-6.mscx", MEASURE_DATA_DIR + "measurenumber-6-ref.mscx"));
 
     // Disable measure numbers
     score->startCmd();
@@ -606,11 +555,7 @@ void TestMeasure::measureNumbers()
     score->undo(new ChangeStyleVal(score, Sid::showMeasureNumber, QVariant(false)));
     score->setLayoutAll();
     score->endCmd();
-    QVERIFY(saveCompareScore(score, "measurenumber-7.mscx", MEASURE_DATA_DIR + "measurenumber-7-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "measurenumber-7.mscx", MEASURE_DATA_DIR + "measurenumber-7-ref.mscx"));
 
     delete score;
 }
-
-QTEST_MAIN(TestMeasure)
-
-#include "tst_measure.moc"
