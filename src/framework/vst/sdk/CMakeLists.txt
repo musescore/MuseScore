@@ -25,6 +25,7 @@ if (NOT VST3_SDK_PATH)
 endif()
 
 include(GetPlatformInfo)
+include(GetCompilerInfo)
 include(GetBuildType)
 
 if (BUILD_IS_DEBUG)
@@ -165,4 +166,6 @@ include(${PROJECT_SOURCE_DIR}/build/module.cmake)
 
 target_no_warning(${MODULE} -w)
 
-set_property(TARGET ${MODULE} APPEND_STRING PROPERTY COMPILE_FLAGS "-fobjc-arc")
+if (CC_IS_CLANG)
+    set_property(TARGET ${MODULE} APPEND_STRING PROPERTY COMPILE_FLAGS "-fobjc-arc")
+endif()
