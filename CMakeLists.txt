@@ -86,7 +86,7 @@ option(ACCESSIBILITY_LOGGING_ENABLED "Enable accessibility logging" OFF)
 option(SOUNDFONT3    "Ogg Vorbis compressed fonts"        ON)  # Enable Ogg Vorbis compressed fonts, requires Ogg & Vorbis
 option(DOWNLOAD_SOUNDFONT "Download the latest soundfont version as part of the build process" ON)
 
-option(BUILD_UNIT_TESTS "Build gtest unit test" OFF)
+option(BUILD_UNIT_TESTS "Build gtest unit test" ON)
 option(PACKAGE_FILE_ASSOCIATION "File types association" OFF)
 
 option(TRY_USE_CCACHE "Try use ccache" ON)

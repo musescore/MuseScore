@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "testing/qtestsuite.h"
-#include "testbase.h"
+#include <gtest/gtest.h>
+
 #include "libmscore/masterscore.h"
 #include "libmscore/measure.h"
 #include "libmscore/segment.h"
@@ -33,60 +33,39 @@
 
 #include "engraving/compat/midi/midipatch.h"
 
+#include "utils/scorerw.h"
+#include "utils/scorecomp.h"
+
 static const QString INSTRUMENTCHANGE_DATA_DIR("instrumentchange_data/");
 
+using namespace mu::engraving;
 using namespace Ms;
 
-//---------------------------------------------------------
-//   TestInstrumentChange
-//---------------------------------------------------------
-
-class TestInstrumentChange : public QObject, public MTest
+class InstrumentChangeTests : public ::testing::Test
 {
-    Q_OBJECT
-
+public:
     MasterScore* test_pre(const char* p);
     void test_post(MasterScore* score, const char* p);
-
-private slots:
-    void initTestCase();
-    void testAdd();
-    void testDelete();
-    void testChange();
-    void testMixer();
-    void testCopy();
 };
 
-//---------------------------------------------------------
-//   initTestCase
-//---------------------------------------------------------
-
-void TestInstrumentChange::initTestCase()
-{
-    initMTest();
-}
-
-//---------------------------------------------------------
-//   chordsymbol
-//---------------------------------------------------------
-
-MasterScore* TestInstrumentChange::test_pre(const char* p)
+MasterScore* InstrumentChangeTests::test_pre(const char* p)
 {
     QString p1 = INSTRUMENTCHANGE_DATA_DIR + p + ".mscx";
-    MasterScore* score = readScore(p1);
+    MasterScore* score = ScoreRW::readScore(p1);
+    EXPECT_TRUE(score);
     return score;
 }
 
-void TestInstrumentChange::test_post(MasterScore* score, const char* p)
+void InstrumentChangeTests::test_post(MasterScore* score, const char* p)
 {
     QString p1 = p;
     p1 += "-test.mscx";
     QString p2 = INSTRUMENTCHANGE_DATA_DIR + p + "-ref.mscx";
-    QVERIFY(saveCompareScore(score, p1, p2));
+    EXPECT_TRUE(ScoreComp:: saveCompareScore(score, p1, p2));
     delete score;
 }
 
-void TestInstrumentChange::testAdd()
+TEST_F(InstrumentChangeTests, testAdd)
 {
     MasterScore* score = test_pre("add");
     Measure* m = score->firstMeasure()->nextMeasure();
@@ -101,7 +80,7 @@ void TestInstrumentChange::testAdd()
     test_post(score, "add");
 }
 
-void TestInstrumentChange::testDelete()
+TEST_F(InstrumentChangeTests, testDelete)
 {
     MasterScore* score = test_pre("delete");
     Measure* m = score->firstMeasure()->nextMeasure();
@@ -112,7 +91,7 @@ void TestInstrumentChange::testDelete()
     test_post(score, "delete");
 }
 
-void TestInstrumentChange::testChange()
+TEST_F(InstrumentChangeTests, testChange)
 {
     MasterScore* score   = test_pre("change");
     Measure* m           = score->firstMeasure()->nextMeasure();
@@ -128,7 +107,7 @@ void TestInstrumentChange::testChange()
     test_post(score, "change");
 }
 
-void TestInstrumentChange::testMixer()
+TEST_F(InstrumentChangeTests, testMixer)
 {
     MasterScore* score = test_pre("mixer");
     Measure* m = score->firstMeasure()->nextMeasure();
@@ -150,7 +129,7 @@ void TestInstrumentChange::testMixer()
     test_post(score, "mixer");
 }
 
-void TestInstrumentChange::testCopy()
+TEST_F(InstrumentChangeTests, testCopy)
 {
     MasterScore* score = test_pre("copy");
     Measure* m = score->firstMeasure()->nextMeasure();
@@ -165,6 +144,3 @@ void TestInstrumentChange::testCopy()
     score->doLayout();
     test_post(score, "copy");
 }
-
-QTEST_MAIN(TestInstrumentChange)
-#include "tst_instrumentchange.moc"
