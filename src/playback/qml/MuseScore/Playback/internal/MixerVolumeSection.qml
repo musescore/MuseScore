@@ -44,7 +44,7 @@ MixerPanelSection {
             spacing: 4
 
             TextInputField {
-                id: balanceTextInputField
+                id: volumeTextInputField
 
                 anchors.horizontalCenter: parent.horizontalCenter
 
@@ -54,13 +54,13 @@ MixerPanelSection {
                 textHorizontalAlignment: Qt.AlignHCenter
 
                 validator: DoubleInputValidator {
-                    id: intInputValidator
+                    id: doubleInputValidator
                     top: 12.0
                     bottom: -60.0
                     decimal: 1
                 }
 
-                currentText: Math.round(item.volumeLevel * 100) / 100
+                currentText: Math.round(item.volumeLevel * 10) / 10
 
                 onCurrentTextEdited: {
                     if (item.volumeLevel !== Number(newTextValue)) {
@@ -79,7 +79,7 @@ MixerPanelSection {
                     volumeLevel: item.volumeLevel
 
                     onVolumeLevelMoved: {
-                        item.volumeLevel = Math.round(level * 100) / 100
+                        item.volumeLevel = Math.round(level * 10) / 10
                     }
                 }
 
