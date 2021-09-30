@@ -159,6 +159,8 @@ void VstFxEditorView::setResourceId(const QString& newResourceId)
     m_resourceId = newResourceId;
     emit resourceIdChanged();
 
+    setWindowTitle(newResourceId);
+
     if (isAbleToWrapPlugin()) {
         wrapPluginView();
     }

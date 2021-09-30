@@ -147,6 +147,8 @@ void VstiEditorView::setResourceId(const QString& newResourceId)
     m_resourceId = newResourceId;
     emit resourceIdChanged();
 
+    setWindowTitle(newResourceId);
+
     if (m_trackId != -1 && !m_resourceId.isEmpty()) {
         wrapPluginView();
     }
