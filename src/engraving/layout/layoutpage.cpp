@@ -102,10 +102,11 @@ void LayoutPage::collectPage(const LayoutOptions& options, LayoutContext& ctx)
 {
     const qreal slb = ctx.score()->styleP(Sid::staffLowerBorder);
     bool breakPages = ctx.score()->layoutMode() != LayoutMode::SYSTEM;
-    qreal footerExtension = qMax(0.0, ctx.page->footerHeight() - ctx.score()->styleV(Sid::footerOffset).value<PointF>().y()); // how much the footer extends above the margin
-    qreal headerExtension = qMax(0.0, ctx.page->headerHeight() - ctx.score()->styleV(Sid::headerOffset).value<PointF>().y()); // how much the header extends below the margin
-    qreal endY      = ctx.page->height() - ctx.page->bm() - footerExtension;
-    qreal y         = 0.0;
+    qreal footerExtension = ctx.page->footerExtension();
+    qreal headerExtension = ctx.page->headerExtension();
+    qreal headerFooterPadding = ctx.score()->styleP(Sid::staffHeaderFooterPadding);
+    qreal endY = ctx.page->height() - ctx.page->bm();
+    qreal y = 0.0;
 
     System* nextSystem = 0;
     int systemIdx = -1;
@@ -117,7 +118,7 @@ void LayoutPage::collectPage(const LayoutOptions& options, LayoutContext& ctx)
         ctx.page->system(0)->restoreLayout2();
         y = ctx.page->system(0)->y() + ctx.page->system(0)->height();
     } else {
-        y = ctx.page->tm() + headerExtension;
+        y = ctx.page->tm();
     }
     for (int i = 1; i < pSystems; ++i) {
         System* cs = ctx.page->system(i);
@@ -139,7 +140,9 @@ void LayoutPage::collectPage(const LayoutOptions& options, LayoutContext& ctx)
         } else {
             // this is the first system on page
             if (ctx.curSystem->vbox()) {
-                distance = 0.0;
+                // if the header exists and there is a frame, move the frame downwards
+                // to avoid collisions
+                distance = headerExtension ? headerExtension + headerFooterPadding : 0.0;
             } else {
                 distance = ctx.score()->styleP(Sid::staffUpperBorder);
                 bool fixedDistance = false;
@@ -159,7 +162,12 @@ void LayoutPage::collectPage(const LayoutOptions& options, LayoutContext& ctx)
                     }
                 }
                 if (!fixedDistance) {
-                    distance = qMax(distance, ctx.curSystem->minTop());
+                    qreal top = ctx.curSystem->minTop();
+                    // ensure it doesn't collide with header
+                    if (headerExtension > 0.0) {
+                        top += headerExtension + headerFooterPadding;
+                    }
+                    distance = qMax(distance, top);
                 }
             }
         }
@@ -204,16 +212,29 @@ void LayoutPage::collectPage(const LayoutOptions& options, LayoutContext& ctx)
             Box* vbox = ctx.curSystem->vbox();
             if (vbox) {
                 dist += vbox->bottomGap();
+                if (footerExtension > 0) {
+                    dist += footerExtension;
+                }
             } else if (!ctx.prevSystem->hasFixedDownDistance()) {
                 qreal margin = qMax(ctx.curSystem->minBottom(), ctx.curSystem->spacerDistance(false));
+                // ensure it doesn't collide with footer
+                if (footerExtension > 0) {
+                    margin += footerExtension + headerFooterPadding;
+                }
                 dist += qMax(margin, slb);
             }
             breakPage = (y + dist) >= endY && breakPages;
         }
         if (breakPage) {
             qreal dist = qMax(ctx.prevSystem->minBottom(), ctx.prevSystem->spacerDistance(false));
+            qreal footerPadding = 0.0;
+            // ensure it doesn't collide with footer
+            if (footerExtension > 0) {
+                footerPadding = footerExtension + headerFooterPadding;
+                dist += footerPadding;
+            }
             dist = qMax(dist, slb);
-            layoutPage(ctx, ctx.page, endY - (y + dist));
+            layoutPage(ctx, ctx.page, endY - (y + dist), footerPadding);
             // if we collected a system we cannot fit onto this page,
             // we need to collect next page in order to correctly set system positions
             if (collected) {
@@ -309,7 +330,7 @@ void LayoutPage::collectPage(const LayoutOptions& options, LayoutContext& ctx)
 //    systems.
 //---------------------------------------------------------
 
-void LayoutPage::layoutPage(const LayoutContext& ctx, Page* page, qreal restHeight)
+void LayoutPage::layoutPage(const LayoutContext& ctx, Page* page, qreal restHeight, qreal footerPadding)
 {
     if (restHeight < 0.0) {
         qDebug("restHeight < 0.0: %f\n", restHeight);
@@ -351,7 +372,7 @@ void LayoutPage::layoutPage(const LayoutContext& ctx, Page* page, qreal restHeig
                 system->move(PointF(0.0, y));
             }
         } else if ((score->layoutMode() != LayoutMode::SYSTEM) && score->enableVerticalSpread()) {
-            distributeStaves(ctx, page);
+            distributeStaves(ctx, page, footerPadding);
         }
 
         // system dividers
@@ -456,7 +477,7 @@ void LayoutPage::checkDivider(const LayoutContext& ctx, bool left, System* s, qr
     }
 }
 
-void LayoutPage::distributeStaves(const LayoutContext& ctx, Page* page)
+void LayoutPage::distributeStaves(const LayoutContext& ctx, Page* page, qreal footerPadding)
 {
     Score* score = ctx.score();
     VerticalGapDataList vgdl;
@@ -542,18 +563,18 @@ void LayoutPage::distributeStaves(const LayoutContext& ctx, Page* page)
     }
     --ngaps;
 
-    qreal spaceLeft { page->height() - page->bm() - score->styleP(Sid::staffLowerBorder) - yBottom };
+    qreal spaceRemaining { page->height() - page->bm() - footerPadding - yBottom };
     if (nextSpacer) {
-        spaceLeft -= qMax(0.0, nextSpacer->gap() - spacerOffset - score->styleP(Sid::staffLowerBorder));
+        spaceRemaining -= qMax(0.0, nextSpacer->gap() - spacerOffset - score->styleP(Sid::staffLowerBorder));
     }
-    if (spaceLeft <= 0.0) {
+    if (spaceRemaining <= 0.0) {
         return;
     }
 
     // Try to make the gaps equal, taking the spread factors and maximum spacing into account.
     static const int maxPasses { 20 };     // Saveguard to prevent endless loops.
     int pass { 0 };
-    while (!RealIsNull(spaceLeft) && (ngaps > 0) && (++pass < maxPasses)) {
+    while (!RealIsNull(spaceRemaining) && (ngaps > 0) && (++pass < maxPasses)) {
         ngaps = 0;
         qreal smallest     { vgdl.smallest() };
         qreal nextSmallest { vgdl.smallest(smallest) };
@@ -561,8 +582,8 @@ void LayoutPage::distributeStaves(const LayoutContext& ctx, Page* page)
             break;
         }
 
-        if ((nextSmallest - smallest) * vgdl.sumStretchFactor() > spaceLeft) {
-            nextSmallest = smallest + spaceLeft / vgdl.sumStretchFactor();
+        if ((nextSmallest - smallest) * vgdl.sumStretchFactor() > spaceRemaining) {
+            nextSmallest = smallest + spaceRemaining / vgdl.sumStretchFactor();
         }
 
         qreal addedSpace { 0.0 };
@@ -581,30 +602,30 @@ void LayoutPage::distributeStaves(const LayoutContext& ctx, Page* page)
                 modified.append(vgd);
                 ++ngaps;
             }
-            if ((spaceLeft - addedSpace) <= 0.0) {
+            if ((spaceRemaining - addedSpace) <= 0.0) {
                 break;
             }
         }
-        if ((spaceLeft - addedSpace) <= 0.0) {
+        if ((spaceRemaining - addedSpace) <= 0.0) {
             for (VerticalGapData* vgd : modified) {
                 vgd->undoLastAddSpacing();
             }
             ngaps = 0;
         } else {
-            spaceLeft -= addedSpace;
+            spaceRemaining -= addedSpace;
         }
     }
 
     // If there is still space left, distribute the space of the staves.
     // However, there is a limit on how much space is added per gap.
     const qreal maxPageFill { score->styleP(Sid::maxPageFillSpread) };
-    spaceLeft = qMin(maxPageFill * vgdl.length(), spaceLeft);
+    spaceRemaining = qMin(maxPageFill * vgdl.length(), spaceRemaining);
     pass = 0;
     ngaps = 1;
-    while (!RealIsNull(spaceLeft) && !RealIsNull(maxPageFill) && (ngaps > 0) && (++pass < maxPasses)) {
+    while (!RealIsNull(spaceRemaining) && !RealIsNull(maxPageFill) && (ngaps > 0) && (++pass < maxPasses)) {
         ngaps = 0;
         qreal addedSpace { 0.0 };
-        qreal step { spaceLeft / vgdl.sumStretchFactor() };
+        qreal step { spaceRemaining / vgdl.sumStretchFactor() };
         for (VerticalGapData* vgd : vgdl) {
             qreal res { vgd->addFillSpacing(step, maxPageFill) };
             if (!RealIsNull(res)) {
@@ -612,7 +633,7 @@ void LayoutPage::distributeStaves(const LayoutContext& ctx, Page* page)
                 ++ngaps;
             }
         }
-        spaceLeft -= addedSpace;
+        spaceRemaining -= addedSpace;
     }
 
     QSet<System*> systems;

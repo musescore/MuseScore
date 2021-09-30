@@ -72,6 +72,7 @@ enum class Sid {
 
     staffUpperBorder,
     staffLowerBorder,
+    staffHeaderFooterPadding,
     staffDistance,
     instrumentNameOffset,
     akkoladeDistance,
