@@ -302,7 +302,9 @@ InputResourceItem* MixerChannelItem::buildInputResourceItem()
                   .arg(QString::fromStdString(newItem->params().resourceMeta.id));
         }
 
-        interactive()->open(uri.toStdString());
+        if (!interactive()->isOpened(uri.toStdString()).val) {
+            interactive()->open(uri.toStdString());
+        }
     });
 
     return newItem;
@@ -342,7 +344,9 @@ OutputResourceItem* MixerChannelItem::buildOutputResourceItem(const audio::Audio
                   .arg(newItem->params().chainOrder);
         }
 
-        interactive()->open(uri.toStdString());
+        if (!interactive()->isOpened(uri.toStdString()).val) {
+            interactive()->open(uri.toStdString());
+        }
     });
 
     return newItem;
