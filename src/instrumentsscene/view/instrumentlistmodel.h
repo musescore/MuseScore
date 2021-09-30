@@ -45,6 +45,7 @@ class InstrumentListModel : public QAbstractListModel, public async::Asyncable
     Q_PROPERTY(int currentGroupIndex READ currentGroupIndex WRITE setCurrentGroupIndex NOTIFY currentGroupChanged)
 
     Q_PROPERTY(bool hasSelection READ hasSelection NOTIFY selectionChanged)
+    Q_PROPERTY(QString selectedInstrumentDescription READ selectedInstrumentDescription NOTIFY selectionChanged)
 
 public:
     InstrumentListModel(QObject* parent = nullptr);
@@ -61,6 +62,7 @@ public:
     int currentGroupIndex() const;
 
     bool hasSelection() const;
+    QString selectedInstrumentDescription() const;
 
     Q_INVOKABLE void load(bool canSelectMultipleInstruments, const QString& currentInstrumentId);
 

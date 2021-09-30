@@ -87,10 +87,8 @@ StyledDialogView {
             }
         }
 
-        Row {
-            id: buttons
-
-            Layout.alignment: Qt.AlignRight
+        RowLayout {
+            id: footer
 
             spacing: 12
 
@@ -106,9 +104,25 @@ StyledDialogView {
                 direction: NavigationPanel.Horizontal
             }
 
+            StyledTextLabel {
+                id: descriptionLabel
+                text: pagesStack.currentIndex === 0
+                      ? chooseInstrumentsAndTemplatePage.description
+                      : ""
+
+                height: footer.buttonHeight
+                Layout.fillWidth: true
+                Layout.leftMargin: 12
+
+                font: ui.theme.bodyFont
+                opacity: 0.7
+                horizontalAlignment: Text.AlignLeft
+                wrapMode: Text.Wrap
+            }
+
             FlatButton {
-                height: buttons.buttonHeight
-                width: buttons.buttonWidth
+                height: footer.buttonHeight
+                width: footer.buttonWidth
 
                 navigation.name: "Cancel"
                 navigation.panel: navBottomPanel
@@ -122,8 +136,8 @@ StyledDialogView {
             }
 
             FlatButton {
-                height: buttons.buttonHeight
-                width: buttons.buttonWidth
+                height: footer.buttonHeight
+                width: footer.buttonWidth
 
                 navigation.name: "Back"
                 navigation.panel: navBottomPanel
@@ -139,8 +153,8 @@ StyledDialogView {
             }
 
             FlatButton {
-                height: buttons.buttonHeight
-                width: buttons.buttonWidth
+                height: footer.buttonHeight
+                width: footer.buttonWidth
 
                 navigation.name: "Next"
                 navigation.panel: navBottomPanel
@@ -157,8 +171,8 @@ StyledDialogView {
             }
 
             FlatButton {
-                height: buttons.buttonHeight
-                width: buttons.buttonWidth
+                height: footer.buttonHeight
+                width: footer.buttonWidth
 
                 navigation.name: "Done"
                 navigation.panel: navBottomPanel
