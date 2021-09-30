@@ -49,6 +49,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/join_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/keysig_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/measure_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/note_tests.cpp
 )
 
 set(MODULE_TEST_LINK
