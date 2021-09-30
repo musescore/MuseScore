@@ -138,7 +138,7 @@ jobs:
       if: ${{ always() }}
       uses: actions/upload-artifact@v2
       with:
-        name: MU4_${{ github.run_id }}_Win_${{ github.event.pull_request.title }}
+        name: MU4_${{ github.run_id }}_Win${{ github.event.pull_request.title }}
         path: build.artifacts\ 
   
   # Builds x32 and portable currently disabled 
