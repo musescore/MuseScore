@@ -69,6 +69,7 @@ Rectangle {
             anchors.bottom: parent.bottom
             anchors.right: parent.right
             anchors.rightMargin: 8
+            policy: ScrollBar.AlwaysOn
         }
 
         ScrollBar.horizontal: StyledScrollBar {
@@ -76,6 +77,7 @@ Rectangle {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.bottomMargin: 8
+            policy: ScrollBar.AlwaysOn
         }
 
         NavigationPanel {
