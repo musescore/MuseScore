@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "testing/qtestsuite.h"
-#include "testbase.h"
+#include <gtest/gtest.h>
+
 #include "libmscore/masterscore.h"
 #include "libmscore/measure.h"
 #include "libmscore/keysig.h"
@@ -29,40 +29,19 @@
 #include "libmscore/fraction.h"
 #include "libmscore/part.h"
 
+#include "utils/scorerw.h"
+#include "utils/scorecomp.h"
+
 static const QString KEYSIG_DATA_DIR("keysig_data/");
 
+using namespace mu::engraving;
 using namespace Ms;
 
-//---------------------------------------------------------
-//   TestKeySig
-//---------------------------------------------------------
-
-class TestKeySig : public QObject, public MTest
+class KeySigTests : public ::testing::Test
 {
-    Q_OBJECT
-
-private slots:
-    void initTestCase();
-    void keysig();
-    void concertPitch();
-    void keysig_78216();
-    void preferSharpFlat();
 };
 
-//---------------------------------------------------------
-//   initTestCase
-//---------------------------------------------------------
-
-void TestKeySig::initTestCase()
-{
-    initMTest();
-}
-
-//---------------------------------------------------------
-//   keysig
-//---------------------------------------------------------
-
-void TestKeySig::keysig()
+TEST_F(KeySigTests, keysig)
 {
     QString writeFile1("keysig01-test.mscx");
     QString reference1(KEYSIG_DATA_DIR + "keysig01-ref.mscx");     // with D maj
@@ -78,8 +57,10 @@ void TestKeySig::keysig()
     QString reference6(KEYSIG_DATA_DIR + "keysig.mscx");           // orig
 
     // read file
-    MasterScore* score = readScore(KEYSIG_DATA_DIR + "keysig.mscx");
+    MasterScore* score = ScoreRW::readScore(KEYSIG_DATA_DIR + "keysig.mscx");
+    EXPECT_TRUE(score);
     Measure* m2 = score->firstMeasure()->nextMeasure();
+    EXPECT_TRUE(m2);
 
     // add a key signature (D major) in measure 2
     KeySigEvent ke2;
@@ -87,7 +68,7 @@ void TestKeySig::keysig()
     score->startCmd();
     score->undoChangeKeySig(score->staff(0), m2->tick(), ke2);
     score->endCmd();
-    QVERIFY(saveCompareScore(score, writeFile1, reference1));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
 
     // change key signature in measure 2 to E flat major
     KeySigEvent ke_3;
@@ -95,7 +76,7 @@ void TestKeySig::keysig()
     score->startCmd();
     score->undoChangeKeySig(score->staff(0), m2->tick(), ke_3);
     score->endCmd();
-    QVERIFY(saveCompareScore(score, writeFile2, reference2));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, reference2));
 
     // remove key signature in measure 2
     Segment* s = m2->first();
@@ -106,19 +87,20 @@ void TestKeySig::keysig()
     score->startCmd();
     score->undoRemoveElement(e);
     score->endCmd();
-    QVERIFY(saveCompareScore(score, writeFile3, reference3));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile3, reference3));
 
     // undo remove
+    EditData ed;
     score->undoStack()->undo(&ed);
-    QVERIFY(saveCompareScore(score, writeFile4, reference4));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile4, reference4));
 
     // undo change
     score->undoStack()->undo(&ed);
-    QVERIFY(saveCompareScore(score, writeFile5, reference5));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile5, reference5));
 
     // undo add
     score->undoStack()->undo(&ed);
-    QVERIFY(saveCompareScore(score, writeFile6, reference6));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile6, reference6));
 
     delete score;
 }
@@ -128,67 +110,59 @@ void TestKeySig::keysig()
 //    input score has section breaks on non-measure MeasureBase objects.
 //    should not display courtesy keysig at the end of final measure of each section (meas 1, 2, & 3), even if section break occurs on subsequent non-measure frame.
 //---------------------------------------------------------
-
-void TestKeySig::keysig_78216()
+TEST_F(KeySigTests, keysig_78216)
 {
-    MasterScore* score = readScore(KEYSIG_DATA_DIR + "keysig_78216.mscx");
+    MasterScore* score = ScoreRW::readScore(KEYSIG_DATA_DIR + "keysig_78216.mscx");
+    EXPECT_TRUE(score);
 
     Measure* m1 = score->firstMeasure();
+    EXPECT_TRUE(m1);
     Measure* m2 = m1->nextMeasure();
+    EXPECT_TRUE(m2);
     Measure* m3 = m2->nextMeasure();
+    EXPECT_TRUE(m3);
 
     // verify no keysig exists in segment of final tick of m1, m2, m3
-    QVERIFY2(m1->findSegment(SegmentType::KeySig, m1->endTick()) == nullptr,
-             "Should be no keysig at end of measure 1.");
-    QVERIFY2(m2->findSegment(SegmentType::KeySig, m2->endTick()) == nullptr,
-             "Should be no keysig at end of measure 2.");
-    QVERIFY2(m3->findSegment(SegmentType::KeySig, m3->endTick()) == nullptr,
-             "Should be no keysig at end of measure 3.");
+    EXPECT_EQ(m1->findSegment(SegmentType::KeySig, m1->endTick()), nullptr) << "Should be no keysig at end of measure 1.";
+    EXPECT_EQ(m2->findSegment(SegmentType::KeySig, m2->endTick()), nullptr) << "Should be no keysig at end of measure 2.";
+    EXPECT_EQ(m3->findSegment(SegmentType::KeySig, m3->endTick()), nullptr) << "Should be no keysig at end of measure 3.";
 
     delete score;
 }
 
-//---------------------------------------------------------
-//   concertPitch
-//---------------------------------------------------------
-
-void TestKeySig::concertPitch()
+TEST_F(KeySigTests, concertPitch)
 {
-    MasterScore* score = readScore(KEYSIG_DATA_DIR + "concert-pitch.mscx");
+    MasterScore* score = ScoreRW::readScore(KEYSIG_DATA_DIR + "concert-pitch.mscx");
+    EXPECT_TRUE(score);
+
     score->cmdConcertPitchChanged(true);
-    QVERIFY(saveCompareScore(score, "concert-pitch-01-test.mscx", KEYSIG_DATA_DIR + "concert-pitch-01-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "concert-pitch-01-test.mscx", KEYSIG_DATA_DIR + "concert-pitch-01-ref.mscx"));
     score->cmdConcertPitchChanged(false);
-    QVERIFY(saveCompareScore(score, "concert-pitch-02-test.mscx", KEYSIG_DATA_DIR + "concert-pitch-02-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "concert-pitch-02-test.mscx", KEYSIG_DATA_DIR + "concert-pitch-02-ref.mscx"));
 
     delete score;
 }
 
-//---------------------------------------------------------
-//   preferSharpFlat
-//---------------------------------------------------------
-
-void TestKeySig::preferSharpFlat()
+TEST_F(KeySigTests, preferSharpFlat)
 {
-    MasterScore* score1 = readScore(KEYSIG_DATA_DIR + "preferSharpFlat-1.mscx");
+    MasterScore* score1 = ScoreRW::readScore(KEYSIG_DATA_DIR + "preferSharpFlat-1.mscx");
+    EXPECT_TRUE(score1);
     auto parts = score1->parts();
     Part* part1 = parts[0];
     part1->setPreferSharpFlat(PreferSharpFlat::FLATS);
-    score1->transpositionChanged(part1, part1->instrument(Fraction(0, 1))->transpose(), Fraction(0, 1),
-                                 Fraction(16, 4));
+    score1->transpositionChanged(part1, part1->instrument(Fraction(0, 1))->transpose(), Fraction(0, 1), Fraction(16, 4));
     score1->update();
     score1->doLayout();
-    QVERIFY(saveCompareScore(score1, "preferSharpFlat-1-test.mscx", KEYSIG_DATA_DIR + "preferSharpFlat-1-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score1, "preferSharpFlat-1-test.mscx", KEYSIG_DATA_DIR + "preferSharpFlat-1-ref.mscx"));
     delete score1;
 
-    MasterScore* score2 = readScore(KEYSIG_DATA_DIR + "preferSharpFlat-2.mscx");
+    MasterScore* score2 = ScoreRW::readScore(KEYSIG_DATA_DIR + "preferSharpFlat-2.mscx");
+    EXPECT_TRUE(score2);
     score2->cmdSelectAll();
     score2->startCmd();
     // transpose augmented unison up
     score2->transpose(TransposeMode::BY_INTERVAL, TransposeDirection::UP, Key::C, 1, true, true, true);
     score2->endCmd();
-    QVERIFY(saveCompareScore(score2, "preferSharpFlat-2-test.mscx", KEYSIG_DATA_DIR + "preferSharpFlat-2-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score2, "preferSharpFlat-2-test.mscx", KEYSIG_DATA_DIR + "preferSharpFlat-2-ref.mscx"));
     delete score2;
 }
-
-QTEST_MAIN(TestKeySig)
-#include "tst_keysig.moc"

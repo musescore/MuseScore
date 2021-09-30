@@ -47,6 +47,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/implodeexplode_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/instrumentchange_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/join_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/keysig_tests.cpp
 )
 
 set(MODULE_TEST_LINK
