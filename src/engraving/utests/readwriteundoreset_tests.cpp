@@ -19,69 +19,43 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include <gtest/gtest.h>
 
-#include "testing/qtestsuite.h"
-#include "testbase.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/undo.h"
 
+#include "utils/scorerw.h"
+#include "utils/scorecomp.h"
+
 static const QString RWUNDORESET_DATA_DIR("readwriteundoreset_data/");
 
+using namespace mu::engraving;
 using namespace Ms;
 
-//---------------------------------------------------------
-//   TestReadWrite
-//---------------------------------------------------------
-
-class TestReadWriteUndoReset : public QObject, public MTest
+class ReadWriteUndoResetTests : public ::testing::Test
 {
-    Q_OBJECT
-
-private slots:
-    void initTestCase();
-
-    void testReadWriteResetPositions_data();
-    void testReadWriteResetPositions();
-
-    void testMMRestLinksRecreateMMRest();
 };
 
-//---------------------------------------------------------
-//   initTestCase
-//---------------------------------------------------------
-
-void TestReadWriteUndoReset::initTestCase()
+TEST_F(ReadWriteUndoResetTests, testReadWriteResetPositions)
 {
-    initMTest();
-}
+    QStringList files = {
+        "barlines",
+        "slurs",
+        "mmrestBarlineTextLinks" // see issue #296426
+    };
 
-//---------------------------------------------------------
-//   testReadWriteResetPositions
-//---------------------------------------------------------
+    for (const QString& file : files) {
+        QString readFile(RWUNDORESET_DATA_DIR + file + ".mscx");
+        QString writeFile(file + "-undoreset-test.mscx");
 
-void TestReadWriteUndoReset::testReadWriteResetPositions_data()
-{
-    QTest::addColumn<QString>("file");
+        MasterScore* score = ScoreRW::readScore(readFile);
+        EXPECT_TRUE(score);
+        score->cmdResetAllPositions();
+        score->undoRedo(/* undo */ true, nullptr);
+        EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile, readFile));
 
-    QTest::newRow("barlines") << "barlines";
-    QTest::newRow("slurs") << "slurs";
-    QTest::newRow("mmrestBarlineTextLinks") << "mmrestBarlineTextLinks";   // see issue #296426
-}
-
-void TestReadWriteUndoReset::testReadWriteResetPositions()
-{
-    QFETCH(QString, file);
-
-    QString readFile(RWUNDORESET_DATA_DIR + file + ".mscx");
-    QString writeFile(file + "-undoreset-test.mscx");
-
-    MasterScore* score = readScore(readFile);
-    QVERIFY(score);
-    score->cmdResetAllPositions();
-    score->undoRedo(/* undo */ true, nullptr);
-    QVERIFY(saveCompareScore(score, writeFile, readFile));
-
-    delete score;
+        delete score;
+    }
 }
 
 //---------------------------------------------------------
@@ -95,7 +69,7 @@ void TestReadWriteUndoReset::testReadWriteResetPositions()
 ///   See issue #296426
 //---------------------------------------------------------
 
-void TestReadWriteUndoReset::testMMRestLinksRecreateMMRest()
+TEST_F(ReadWriteUndoResetTests, testMMRestLinksRecreateMMRest)
 {
     const QString file("mmrestBarlineTextLinks");
 
@@ -104,8 +78,8 @@ void TestReadWriteUndoReset::testMMRestLinksRecreateMMRest()
     QString disableMMRestRefFile(RWUNDORESET_DATA_DIR + file + "-disable-mmrest-ref.mscx");
     QString recreateMMRestRefFile(RWUNDORESET_DATA_DIR + file + "-recreate-mmrest-ref.mscx");
 
-    MasterScore* score = readScore(readFile);
-    QVERIFY(score);
+    MasterScore* score = ScoreRW::readScore(readFile);
+    EXPECT_TRUE(score);
 
     // Regenerate MM rests from scratch:
     // 1) turn MM rests off
@@ -114,19 +88,16 @@ void TestReadWriteUndoReset::testMMRestLinksRecreateMMRest()
     score->endCmd();
 
     // 2) save/close/reopen the score
-    QVERIFY(saveCompareScore(score, writeFile, disableMMRestRefFile));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile, disableMMRestRefFile));
     delete score;
-    score = readCreatedScore(writeFile);
+    score = ScoreRW::readScore(writeFile, true);
 
     // 3) turn MM rests back on
     score->startCmd();
     score->undo(new ChangeStyleVal(score, Sid::createMultiMeasureRests, true));
     score->endCmd();
 
-    QVERIFY(saveCompareScore(score, writeFile, recreateMMRestRefFile));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile, recreateMMRestRefFile));
 
     delete score;
 }
-
-QTEST_MAIN(TestReadWriteUndoReset)
-#include "tst_readwriteundoreset.moc"

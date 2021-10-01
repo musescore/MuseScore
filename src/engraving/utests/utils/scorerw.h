@@ -35,7 +35,7 @@ public:
 
     static QString rootPath();
 
-    static Ms::MasterScore* readScore(const QString& path);
+    static Ms::MasterScore* readScore(const QString& path, bool isAbsolutePath = false);
     static bool saveScore(Ms::Score* score, const QString& name);
     static Ms::EngravingItem* writeReadElement(Ms::EngravingItem* element);
 };
