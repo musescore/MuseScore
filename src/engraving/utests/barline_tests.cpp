@@ -22,9 +22,6 @@
 
 #include <gtest/gtest.h>
 
-#include "utils/scorerw.h"
-#include "utils/scorecomp.h"
-
 #include "libmscore/factory.h"
 #include "libmscore/barline.h"
 #include "libmscore/measure.h"
@@ -32,6 +29,9 @@
 #include "libmscore/system.h"
 #include "libmscore/undo.h"
 #include "libmscore/bracket.h"
+
+#include "utils/scorerw.h"
+#include "utils/scorecomp.h"
 
 static const QString BARLINE_DATA_DIR("barline_data/");
 
