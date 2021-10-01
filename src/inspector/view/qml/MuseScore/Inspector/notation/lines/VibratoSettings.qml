@@ -21,6 +21,7 @@
  */
 import QtQuick 2.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Inspector 1.0
 
@@ -31,19 +32,34 @@ Column {
 
     property QtObject model: null
 
+    property NavigationPanel navigationPanel: null
+    property int navigationRowOffset: 1
+
     objectName: "VibratoSettings"
 
     spacing: 12
 
+    function focusOnFirst() {
+        typeSection.navigation.requestActive()
+    }
+
     DropdownPropertyView {
+        id: typeSection
         titleText: qsTrc("inspector", "Type")
         propertyItem: root.model ? root.model.lineType : null
         model: root.model ? root.model.possibleLineTypes() : null
+
+        navigation.name: "Type"
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationRowOffset
     }
 
     SeparatorLine { anchors.margins: -10 }
 
     PlacementSection {
         propertyItem: root.model ? root.model.placement : null
+
+        navigation.panel: root.navigationPanel
+        navigationRowStart: typeSection.navigationRowEnd + 1
     }
 }
