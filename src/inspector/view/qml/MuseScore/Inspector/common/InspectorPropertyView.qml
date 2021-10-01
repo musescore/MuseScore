@@ -32,6 +32,8 @@ Column {
     property PropertyItem propertyItem: null
 
     property alias navigation: menuButton.navigation
+    property int navigationRowStart: 0
+    property int navigationRowEnd: 0
 
     property alias titleText: titleLabel.text
     property alias showTitle: titleLabel.visible
@@ -70,6 +72,9 @@ Column {
 
             height: 20
             width: height
+
+            navigation.row: root.navigationRowStart
+            navigation.accessible.name: root.titleText + " " + qsTrc("inspector", "Menu")
 
             menuModel: {
                 var result = []

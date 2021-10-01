@@ -30,7 +30,10 @@ import "../../../common"
 
 InspectorPropertyView {
     id: root
+
     titleText: qsTrc("inspector", "Notehead group")
+
+    navigationRowEnd: navigationRowStart + gridView.count + 1 /*menu button*/
 
     FocusableItem {
         width: parent.width
@@ -63,14 +66,23 @@ InspectorPropertyView {
 
             ScrollBar.vertical: StyledScrollBar {}
 
-            delegate: FocusableItem {
+            delegate: ListItemBlank {
                 id: delegateItem
                 implicitHeight: gridView.cellHeight
                 implicitWidth: gridView.cellWidth
 
-                required property int headGroup
-                required property string hint
-                required property int iconCode
+                hint: model.headHint
+
+                navigation.name: hint
+                navigation.panel: root.navigation.panel
+                navigation.row: root.navigationRowStart + 1 + index
+                navigation.accessible.name: hint
+                navigation.enabled: root.enabled
+                navigation.onActiveChanged: {
+                    if (navigation.active) {
+                        gridView.positionViewAtIndex(index, ListView.Contain)
+                    }
+                }
 
                 StyledIconLabel {
                     anchors.centerIn: parent
@@ -79,16 +91,12 @@ InspectorPropertyView {
                     font.family: "Bravura"
                     font.pixelSize: 30
 
-                    iconCode: delegateItem.iconCode
+                    iconCode: model.iconCode
                 }
 
-                MouseArea {
-                    anchors.fill: parent
-
-                    onClicked: {
-                        if (root.propertyItem) {
-                            root.propertyItem.value = delegateItem.headGroup
-                        }
+                onClicked: {
+                    if (root.propertyItem) {
+                        root.propertyItem.value = model.headGroup
                     }
                 }
             }

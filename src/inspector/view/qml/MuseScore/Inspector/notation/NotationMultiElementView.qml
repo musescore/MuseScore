@@ -64,10 +64,16 @@ InspectorSectionView {
                     width: parent.width
 
                     model: modelData
+
+                    navigationPanel: button.popupNavigationPanel
                 }
 
                 onEnsureContentVisibleRequested: {
                     root.ensureContentVisibleRequested(invisibleContentHeight)
+                }
+
+                onPopupOpened: {
+                    Qt.callLater(loader.focusOnFirst)
                 }
             }
         }

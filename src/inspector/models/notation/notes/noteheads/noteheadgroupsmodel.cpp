@@ -36,7 +36,7 @@ QHash<int, QByteArray> NoteheadGroupsModel::roleNames() const
 {
     return {
         { HeadGroupRole, "headGroup" },
-        { HintRole, "hint" },
+        { HintRole, "headHint" },
         { IconCodeRole, "iconCode" }
     };
 }

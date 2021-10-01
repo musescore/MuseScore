@@ -60,7 +60,14 @@ Loader {
 
     property QtObject model: null
 
+    property NavigationPanel navigationPanel: null
+    property int navigationRowOffset: 0
+
     property string viewObjectName: root.item ? root.item.objectName : ""
+
+    function focusOnFirst() {
+        root.item.focusOnFirst()
+    }
 
     QtObject {
         id: prv
@@ -120,6 +127,8 @@ Loader {
 
     onLoaded: {
         root.item.model = root.model
+        root.item.navigationPanel = root.navigationPanel
+        root.item.navigationRowOffset = root.navigationRowOffset
     }
 
     Component {

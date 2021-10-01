@@ -37,6 +37,9 @@ FocusableItem {
     property QtObject hookModel: null
     property QtObject beamModel: null
 
+    property NavigationPanel navigationPanel: null
+    property int navigationRowOffset: 1
+
     implicitHeight: contentColumn.height
     width: parent.width
 
@@ -53,6 +56,11 @@ FocusableItem {
             checked: root.stemModel && !isIndeterminate && root.beamModel ? root.stemModel.isStemHidden.value && root.beamModel.isBeamHidden.value : false
             text: qsTrc("inspector", "Hide stem (also hides beam)")
 
+            navigation.name: "HideStemCheckBox"
+            navigation.panel: root.navigationPanel
+            navigation.row: root.navigationRowOffset + 1
+            navigation.enabled: root.enabled
+
             onClicked: {
                 var isHidden = !checked
                 root.stemModel.isStemHidden.value = isHidden
@@ -61,13 +69,20 @@ FocusableItem {
         }
 
         FlatRadioButtonGroupPropertyView {
+            id: stemDirectionGroup
+
             titleText: qsTrc("inspector", "Stem direction")
             propertyItem: root.stemModel ? root.stemModel.stemDirection : null
 
+            navigation.name: "StemDirectionGroup"
+            navigation.panel: root.navigationPanel
+            navigation.row: root.navigationRowOffset + 2
+            navigation.enabled: root.enabled
+
             model: [
-                { text: qsTrc("inspector", "Auto"), value: DirectionTypes.VERTICAL_AUTO },
-                { iconCode: IconCode.ARROW_DOWN, value: DirectionTypes.VERTICAL_DOWN },
-                { iconCode: IconCode.ARROW_UP, value: DirectionTypes.VERTICAL_UP }
+                { text: qsTrc("inspector", "Auto"), value: DirectionTypes.VERTICAL_AUTO, title: qsTrc("inspector", "Auto") },
+                { iconCode: IconCode.ARROW_DOWN, value: DirectionTypes.VERTICAL_DOWN, title: qsTrc("inspector", "Down") },
+                { iconCode: IconCode.ARROW_UP, value: DirectionTypes.VERTICAL_UP, title: qsTrc("inspector", "Up") }
             ]
         }
 
@@ -77,14 +92,20 @@ FocusableItem {
             spacing: 8
 
             StyledTextLabel {
+                id: flagStyleLabel
                 width: parent.width
                 text: qsTrc("inspector", "Flag style")
                 horizontalAlignment: Text.AlignLeft
             }
 
             RadioButtonGroup {
+                id: flagStyleGroup
+
                 width: parent.width
                 height: 70
+
+                property int navigationRowOffset: stemDirectionGroup.navigationRowEnd + 1
+                property int lastNavigationRow: navigationRowOffset + model.length
 
                 model: [
                     { iconCode: IconCode.NOTEFLAGS_TRADITIONAL, text: qsTrc("inspector", "Traditional", "Note flags"), value: false },
@@ -93,6 +114,12 @@ FocusableItem {
 
                 delegate: FlatRadioButton {
                     height: 70
+
+                    navigation.name: "FlagStyleGroup"
+                    navigation.panel: root.navigationPanel
+                    navigation.row: flagStyleGroup.navigationRowOffset + index
+                    navigation.enabled: root.enabled
+                    navigation.accessible.name: flagStyleLabel.text + " " + modelData.text
 
                     Column {
                         anchors.centerIn: parent
@@ -122,11 +149,15 @@ FocusableItem {
         }
 
         ExpandableBlank {
+            id: showItem
             isExpanded: false
 
             title: isExpanded ? qsTrc("inspector", "Show less") : qsTrc("inspector", "Show more")
 
             width: parent.width
+
+            navigation.panel: root.navigationPanel
+            navigation.row: flagStyleGroup.lastNavigationRow + 1
 
             contentItemComponent: Column {
                 height: implicitHeight
@@ -139,6 +170,7 @@ FocusableItem {
                     width: parent.width
 
                     SpinBoxPropertyView {
+                        id: thicknessView
                         anchors.left: parent.left
                         anchors.right: parent.horizontalCenter
                         anchors.rightMargin: 2
@@ -149,9 +181,14 @@ FocusableItem {
                         maxValue: 4
                         minValue: 0.01
                         step: 0.01
+
+                        navigation.name: "Thickness"
+                        navigation.panel: root.navigationPanel
+                        navigation.row: showItem.navigation.row + 1
                     }
 
                     SpinBoxPropertyView {
+                        id: lengthView
                         anchors.left: parent.horizontalCenter
                         anchors.leftMargin: 2
                         anchors.right: parent.right
@@ -161,19 +198,32 @@ FocusableItem {
 
                         maxValue: 10
                         minValue: -10
+
+                        navigation.name: "Length"
+                        navigation.panel: root.navigationPanel
+                        navigation.row: thicknessView.navigationRowEnd + 1
                     }
                 }
 
                 OffsetSection {
+                    id: stemOffsetSection
                     titleText: qsTrc("inspector", "Stem offset")
                     horizontalOffset: root.stemModel ? root.stemModel.horizontalOffset : null
                     verticalOffset: root.stemModel ? root.stemModel.verticalOffset : null
+
+                    navigation.name: "StemOffset"
+                    navigation.panel: root.navigationPanel
+                    navigationRowStart: lengthView.navigationRowEnd + 1
                 }
 
                 OffsetSection {
                     titleText: qsTrc("inspector", "Flag offset")
                     horizontalOffset: root.hookModel ? root.hookModel.horizontalOffset : null
                     verticalOffset: root.hookModel ? root.hookModel.verticalOffset : null
+
+                    navigation.name: "FlagOffset"
+                    navigation.panel: root.navigationPanel
+                    navigationRowStart: stemOffsetSection.navigationRowEnd + 1
                 }
             }
         }

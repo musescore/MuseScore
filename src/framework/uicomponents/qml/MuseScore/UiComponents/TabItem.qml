@@ -28,12 +28,16 @@ Tab {
     id: root
 
     property alias navigation: navCtrl
+    property bool checked: false
 
     signal navigationTriggered()
 
     property NavigationControl _nav: NavigationControl {
         id: navCtrl
         name: root.objectName != "" ? root.objectName : "TabItem"
+        accessible.name: root.title
+        accessible.role: MUAccessible.RadioButton
+        accessible.checked: root.checked
         onTriggered: root.navigationTriggered()
     }
 

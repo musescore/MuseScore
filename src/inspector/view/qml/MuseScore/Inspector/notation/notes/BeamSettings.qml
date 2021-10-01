@@ -35,6 +35,9 @@ FocusableItem {
     property QtObject model: null
     readonly property QtObject beamModesModel: model ? model.beamModesModel : null
 
+    property NavigationPanel navigationPanel: null
+    property int navigationRowOffset: 1
+
     implicitHeight: contentColumn.height
     width: parent.width
 
@@ -45,9 +48,14 @@ FocusableItem {
         spacing: 12
 
         BeamTypeSelector {
+            id: beamTypeSection
             titleText: qsTrc("inspector", "Beam types")
             propertyItem: root.beamModesModel ? root.beamModesModel.mode : null
             enabled: root.beamModesModel && !root.beamModesModel.isEmpty
+
+            navigation.panel: root.navigationPanel
+            navigationRowStart: root.navigationRowOffset
+            navigation.enabled: root.enabled
         }
 
         Column {
@@ -75,24 +83,34 @@ FocusableItem {
                                              : false
 
                 StyledTextLabel {
+                    id: featheredBeamsLabel
                     text: qsTrc("inspector", "Feathered beams")
                 }
 
                 RadioButtonGroup {
-                    id: radioButtonList
+                    id: featheredBeamsButtonList
+
+                    property int navigationRowStart: beamTypeSection.navigationRowEnd + 1
+                    property int navigationRowEnd: navigationRowOffset + model.length
 
                     height: 30
                     width: parent.width
 
                     model: [
-                        { text: qsTrc("inspector", "None"), value: Beam.FEATHERING_NONE },
-                        { iconCode: IconCode.FEATHERED_LEFT_HEIGHT, value: Beam.FEATHERING_LEFT },
-                        { iconCode: IconCode.FEATHERED_RIGHT_HEIGHT, value: Beam.FEATHERING_RIGHT }
+                        { text: qsTrc("inspector", "None"), value: Beam.FEATHERING_NONE, title: qsTrc("inspector", "None") },
+                        { iconCode: IconCode.FEATHERED_LEFT_HEIGHT, value: Beam.FEATHERING_LEFT, title: qsTrc("inspector", "Left") },
+                        { iconCode: IconCode.FEATHERED_RIGHT_HEIGHT, value: Beam.FEATHERING_RIGHT, title: qsTrc("inspector", "Right") }
                     ]
 
                     delegate: FlatRadioButton {
                         iconCode: modelData["iconCode"] ?? IconCode.NONE
                         text: modelData["text"] ?? ""
+
+                        navigation.name: text
+                        navigation.panel: root.navigationPanel
+                        navigation.row: featheredBeamsButtonList.navigationRowStart + index
+                        navigation.enabled: root.enabled && featheringControlsColumn.visible
+                        navigation.accessible.name: featheredBeamsLabel.text + " " + text
 
                         checked: root.beamModesModel && !(root.model.featheringHeightLeft.isUndefined || root.model.featheringHeightRight.isUndefined)
                                  ? root.model.featheringMode === modelData["value"]
@@ -110,6 +128,7 @@ FocusableItem {
                     visible: root.model && root.model.isFeatheringHeightChangingAllowed
 
                     SpinBoxPropertyView {
+                        id: featheringLeftSection
                         anchors.left: parent.left
                         anchors.right: parent.horizontalCenter
                         anchors.rightMargin: 4
@@ -122,9 +141,14 @@ FocusableItem {
                         maxValue: 4
                         minValue: 0
                         step: 0.1
+
+                        navigation.name: "FeatheringLeft"
+                        navigation.panel: root.navigationPanel
+                        navigation.row: featheredBeamsButtonList.navigationRowEnd + 1
                     }
 
                     SpinBoxPropertyView {
+                        id: featheringRightSection
                         anchors.left: parent.horizontalCenter
                         anchors.leftMargin: 4
                         anchors.right: parent.right
@@ -138,6 +162,10 @@ FocusableItem {
                         maxValue: 4
                         minValue: 0
                         step: 0.1
+
+                        navigation.name: "FeatheringRight"
+                        navigation.panel: root.navigationPanel
+                        navigation.row: featheringLeftSection.navigationRowEnd + 1
                     }
                 }
             }
@@ -148,9 +176,14 @@ FocusableItem {
             }
 
             FlatButton {
+                id: forceHorizontalButton
                 width: parent.width
 
                 text: qsTrc("inspector", "Force horizontal")
+
+                navigation.name: "ForceHorizontal"
+                navigation.panel: root.navigationPanel
+                navigation.row: featheringRightSection.navigationRowEnd + 1
 
                 onClicked: {
                     if (!root.model) {
@@ -162,11 +195,15 @@ FocusableItem {
             }
 
             ExpandableBlank {
+                id: showItem
                 isExpanded: false
 
                 title: isExpanded ? qsTrc("inspector", "Show less") : qsTrc("inspector", "Show more")
 
                 width: parent.width
+
+                navigation.panel: root.navigationPanel
+                navigation.row: forceHorizontalButton.navigation.row + 1
 
                 contentItemComponent: Column {
                     height: implicitHeight
@@ -175,6 +212,7 @@ FocusableItem {
                     spacing: 12
 
                     InspectorPropertyView {
+                        id: beamHeight
                         titleText: qsTrc("inspector", "Beam height")
                         propertyItem: root.model ? root.model.beamVectorX : null
 
@@ -183,7 +221,7 @@ FocusableItem {
                             width: parent.width
 
                             IncrementalPropertyControl {
-                                id: beamHightLeftControl
+                                id: beamHightRightControl
 
                                 anchors.left: parent.left
                                 anchors.right: lockButton.left
@@ -193,6 +231,12 @@ FocusableItem {
                                 isIndeterminate: root.model ? root.model.beamVectorX.isUndefined : false
                                 currentValue: root.model ? root.model.beamVectorX.value : 0
 
+                                navigation.name: "BeamHightRightControl"
+                                navigation.panel: root.navigationPanel
+                                navigation.row: showItem.navigation.row + 1
+                                navigation.accessible.name: beamHeight.titleText + " " + qsTrc("inspector", "Right") + " " + currentValue
+                                navigation.enabled: root.enabled && beamHeight.enabled
+
                                 onValueEdited: { root.model.beamVectorX.value = newValue }
                             }
 
@@ -200,7 +244,7 @@ FocusableItem {
                                 id: lockButton
 
                                 anchors.horizontalCenter: parent.horizontalCenter
-                                anchors.verticalCenter: beamHightLeftControl.verticalCenter
+                                anchors.verticalCenter: beamHightRightControl.verticalCenter
 
                                 height: 20
                                 width: 20
@@ -208,6 +252,12 @@ FocusableItem {
                                 icon: checked ? IconCode.LOCK_CLOSED : IconCode.LOCK_OPEN
 
                                 checked: root.model ? root.model.isBeamHeightLocked : false
+
+                                navigation.panel: root.navigationPanel
+                                navigation.name: "FontStyle" + model.index
+                                navigation.row: showItem.navigation.row + 2
+                                navigation.accessible.name: qsTrc("inspector", "Lock")
+                                navigation.enabled: root.enabled && beamHeight.enabled
 
                                 onToggled: {
                                     root.model.isBeamHeightLocked = !root.model.isBeamHeightLocked
@@ -223,6 +273,12 @@ FocusableItem {
                                 iconMode: IncrementalPropertyControl.Right
                                 isIndeterminate: root.model ? root.model.beamVectorY.isUndefined : false
                                 currentValue: root.model ? root.model.beamVectorY.value : 0
+
+                                navigation.name: "BeamHightLeftControl"
+                                navigation.panel: root.navigationPanel
+                                navigation.row: showItem.navigation.row + 3
+                                navigation.accessible.name: beamHeight.titleText + " " + qsTrc("inspector", "Left") + " " + currentValue
+                                navigation.enabled: root.enabled && beamHeight.enabled
 
                                 onValueEdited: { root.model.beamVectorY.value = newValue }
                             }

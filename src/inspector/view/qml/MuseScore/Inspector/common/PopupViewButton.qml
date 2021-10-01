@@ -31,6 +31,7 @@ FlatButton {
 
     property alias popup: popup
     property alias popupContent: popup.contentData
+    property alias popupNavigationPanel: popup.navigationPanel
 
     property int popupAvailableWidth: 0
     property var anchorItem: null
@@ -88,6 +89,13 @@ FlatButton {
             var invisibleContentHeight = root.anchorItem.height - (buttonGlobalPos.y + root.height + popupHeight)
 
             root.ensureContentVisibleRequested(invisibleContentHeight)
+        }
+
+        property NavigationPanel navigationPanel: NavigationPanel {
+            name: "Popup"
+            section: popup.navigationSection
+            order: 1
+            direction: NavigationPanel.Vertical
         }
     }
 }

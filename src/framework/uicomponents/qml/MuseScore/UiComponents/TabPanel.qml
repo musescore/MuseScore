@@ -27,9 +27,20 @@ import MuseScore.Ui 1.0
 TabView {
     id: root
 
+    width: parent.width
+
     readonly property int tabBarHeight: 32
 
-    width: parent.width
+    property NavigationPanel navigationPanel: NavigationPanel {
+        name: "TabViewPanel"
+        direction: NavigationPanel.Horizontal
+
+        onActiveChanged: {
+            if (navigation.active) {
+                root.forceActiveFocus()
+            }
+        }
+    }
 
     function focusOnTab(index) {
         var tabItem = root.getTab(index)

@@ -34,11 +34,11 @@ FlatRadioButtonGroupPropertyView {
 
     radioButtonGroup.height: 40
     model: [
-        { text: qsTrc("inspector", "Auto"), value: NoteHead.TYPE_AUTO },
-        { iconCode: IconCode.NOTE_HEAD_QUARTER, value: NoteHead.TYPE_QUARTER },
-        { iconCode: IconCode.NOTE_HEAD_HALF, value: NoteHead.TYPE_HALF },
-        { iconCode: IconCode.NOTE_HEAD_WHOLE, value: NoteHead.TYPE_WHOLE },
-        { iconCode: IconCode.NOTE_HEAD_BREVIS, value: NoteHead.TYPE_BREVIS }
+        { text: qsTrc("inspector", "Auto"), value: NoteHead.TYPE_AUTO, title: qsTrc("inspector", "Auto") },
+        { iconCode: IconCode.NOTE_HEAD_QUARTER, value: NoteHead.TYPE_QUARTER, title: qsTrc("inspector", "Quarter") },
+        { iconCode: IconCode.NOTE_HEAD_HALF, value: NoteHead.TYPE_HALF, title: qsTrc("inspector", "Half") },
+        { iconCode: IconCode.NOTE_HEAD_WHOLE, value: NoteHead.TYPE_WHOLE, title: qsTrc("inspector", "Whole") },
+        { iconCode: IconCode.NOTE_HEAD_BREVIS, value: NoteHead.TYPE_BREVIS, title: qsTrc("inspector", "Brevis") }
     ]
 
     radioButtonGroup.delegate: FlatRadioButtonGroupPropertyView.Delegate {
