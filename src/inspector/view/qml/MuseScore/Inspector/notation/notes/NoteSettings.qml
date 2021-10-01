@@ -22,14 +22,19 @@
 import QtQuick 2.9
 import QtQuick.Controls 1.5
 import QtQuick.Layouts 1.3
-import MuseScore.Inspector 1.0
+
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
+import MuseScore.Inspector 1.0
+
 import "../../common"
 
 TabPanel {
     id: root
 
     property QtObject model: null
+
+    property int navigationRowOffset: 1
 
     objectName: "NoteSettings"
 
@@ -52,13 +57,24 @@ TabPanel {
         return 0
     }
 
-    Tab {
+    function focusOnFirst() {
+        headTab.navigation.requestActive()
+    }
+
+    TabItem {
         id: headTab
 
         readonly property QtObject headModel: root.model ? root.model.modelByType(Inspector.TYPE_NOTEHEAD) : null
 
-        title: headModel ? headModel.title : ""
         width: root.width
+
+        title: headModel ? headModel.title : ""
+        checked: root.currentIndex === 0
+
+        navigation.name: "HeadTab"
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationRowOffset
+        onNavigationTriggered: root.currentIndex = 0
 
         HeadSettings {
             id: headSettings
@@ -69,10 +85,15 @@ TabPanel {
             width: root.width
 
             model: headTab.headModel
+
+            enabled: headTab.checked
+
+            navigationPanel: root.navigationPanel
+            navigationRowOffset: root.navigationRowOffset + 1000
         }
     }
 
-    Tab {
+    TabItem {
         id: stemTab
 
         readonly property QtObject stemModel: root.model ? root.model.modelByType(Inspector.TYPE_STEM) : null
@@ -83,6 +104,12 @@ TabPanel {
         width: root.width
 
         title: stemModel ? stemModel.title : ""
+        checked: root.currentIndex === 1
+
+        navigation.name: "StemTab"
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationRowOffset + 1
+        onNavigationTriggered: root.currentIndex = 1
 
         StemSettings {
             id: stemSettings
@@ -95,16 +122,28 @@ TabPanel {
             stemModel: stemTab.stemModel
             hookModel: stemTab.hookModel
             beamModel: stemTab.beamModel
+
+            enabled: stemTab.checked
+
+            navigationPanel: root.navigationPanel
+            navigationRowOffset: root.navigationRowOffset + 2000
         }
     }
 
-    Tab {
+    TabItem {
         id: beamTab
 
         readonly property QtObject beamModel: root.model ? root.model.modelByType(Inspector.TYPE_BEAM) : null
 
-        title: beamModel ? beamModel.title : ""
         width: root.width
+
+        title: beamModel ? beamModel.title : ""
+        checked: root.currentIndex === 2
+
+        navigation.name: "BeamTab"
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationRowOffset + 2
+        onNavigationTriggered: root.currentIndex = 2
 
         BeamSettings {
             id: beamSettings
@@ -115,6 +154,11 @@ TabPanel {
             width: root.width
 
             model: beamTab.beamModel
+
+            enabled: beamTab.checked
+
+            navigationPanel: root.navigationPanel
+            navigationRowOffset: root.navigationRowOffset + 3000
         }
     }
 }

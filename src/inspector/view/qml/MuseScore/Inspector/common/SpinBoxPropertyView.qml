@@ -38,6 +38,8 @@ InspectorPropertyView {
     property alias icon: spinBoxItem.icon
     property alias iconMode: spinBoxItem.iconMode
 
+    navigationRowEnd: spinBox.navigation.row
+
     IncrementalPropertyControl {
         id: spinBoxItem
 
@@ -45,6 +47,7 @@ InspectorPropertyView {
         navigation.panel: root.navigation.panel
         navigation.column: root.navigation.column
         navigation.row: root.navigation.row + 1
+        navigation.accessible.name: root.titleText + " " + currentValue
 
         isIndeterminate: root.propertyItem ? root.propertyItem.isUndefined : true
         currentValue: root.propertyItem ? root.propertyItem.value : 0

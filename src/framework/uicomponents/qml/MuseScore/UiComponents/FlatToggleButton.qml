@@ -53,6 +53,10 @@ FocusScope {
     NavigationControl {
         id: navCtrl
         name: root.objectName != "" ? root.objectName : "FlatToggleButton"
+
+        accessible.role: MUAccessible.RadioButton
+        accessible.checked: root.checked
+
         onTriggered: root.toggled()
     }
 

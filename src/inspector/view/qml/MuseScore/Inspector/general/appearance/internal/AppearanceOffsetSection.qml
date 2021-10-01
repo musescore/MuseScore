@@ -57,7 +57,7 @@ Column {
     OffsetSection {
         id: offsets
 
-        navigationPanel: root.navigationPanel
+        navigation.panel: root.navigationPanel
         navigationRowStart: root.navigationRowOffset
     }
 
