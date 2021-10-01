@@ -45,7 +45,7 @@ InspectorPropertyView {
         navigation.panel: root.navigation.panel
         navigation.column: root.navigation.column
         navigation.row: root.navigation.row + 1 + index
-        navigation.accessible.name: root.titleText + " " + modelData["title"] ?? ""
+        navigation.accessible.name: root.titleText + " " + (Boolean(text) ? text : modelData["title"])
 
         checked: root.propertyItem && !root.propertyItem.isUndefined
                  ? root.propertyItem.value === modelData["value"]
