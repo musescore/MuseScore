@@ -35,16 +35,12 @@ InspectorPropertyView {
     property alias horizontalOffsetControl: horizontalOffsetControl
     property alias verticalOffsetControl: verticalOffsetControl
 
-    property NavigationPanel navigationPanel: null
-
-    property int navigationRowStart: 0
-    readonly property alias navigationRowEnd: verticalOffsetControl.navigation.row
+    navigationRowEnd: verticalOffsetControl.navigation.row
 
     titleText: qsTrc("inspector", "Offset")
     propertyItem: root.horizontalOffset
 
     navigation.name: "OffsetSection"
-    navigation.panel: root.navigationPanel
     navigation.row: prv.navigationRow(1)
 
     visible: Boolean(horizontalOffset) || Boolean(verticalOffset)
@@ -71,8 +67,9 @@ InspectorPropertyView {
             Layout.preferredWidth: parent.width / 2 - row.spacing / 2
 
             navigation.name: "HorizontalOffsetControl"
-            navigation.panel: root.navigationPanel
+            navigation.panel: root.navigation.panel
             navigation.row: prv.navigationRow(2)
+            navigation.accessible.name: root.titleText + " " + qsTrc("inspector", "Horizontal") + " " + currentValue
 
             icon: IconCode.HORIZONTAL
 
@@ -93,8 +90,9 @@ InspectorPropertyView {
             Layout.preferredWidth: parent.width / 2 - row.spacing / 2
 
             navigation.name: "VerticalOffsetControl"
-            navigation.panel: root.navigationPanel
+            navigation.panel: root.navigation.panel
             navigation.row: prv.navigationRow(3)
+            navigation.accessible.name: root.titleText + " " + qsTrc("inspector", "Vertical") + " " + currentValue
 
             icon: IconCode.VERTICAL
 

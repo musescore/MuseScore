@@ -31,6 +31,8 @@ import "../../../common"
 InspectorPropertyView {
     id: root
 
+    navigationRowEnd: navigationRowStart + gridView.count + 1 /*menu button*/
+
     FocusableItem {
         width: parent.width
         height: gridView.implicitHeight + 2 * gridView.anchors.margins
@@ -53,12 +55,12 @@ InspectorPropertyView {
             cellWidth: 40
 
             model: [
-                { value: Beam.MODE_AUTO, iconCode: IconCode.AUTO_TEXT },
-                { value: Beam.MODE_BEGIN, iconCode: IconCode.BEAM_START },
-                { value: Beam.MODE_MID, iconCode: IconCode.BEAM_MIDDLE },
-                { value: Beam.MODE_NONE, iconCode: IconCode.NOTE_HEAD_EIGHTH },
-                { value: Beam.MODE_BEGIN32, iconCode: IconCode.BEAM_32 },
-                { value: Beam.MODE_BEGIN64, iconCode: IconCode.BEAM_64 }
+                { value: Beam.MODE_AUTO, iconCode: IconCode.AUTO_TEXT, hint: qsTrc("inspector", "Auto") },
+                { value: Beam.MODE_BEGIN, iconCode: IconCode.BEAM_START, hint: qsTrc("inspector", "Begin") },
+                { value: Beam.MODE_MID, iconCode: IconCode.BEAM_MIDDLE, hint: qsTrc("inspector", "Middle") },
+                { value: Beam.MODE_NONE, iconCode: IconCode.NOTE_HEAD_EIGHTH, hint: qsTrc("inspector", "None") },
+                { value: Beam.MODE_BEGIN32, iconCode: IconCode.BEAM_32, hint: qsTrc("inspector", "Begin 32") },
+                { value: Beam.MODE_BEGIN64, iconCode: IconCode.BEAM_64, hint: qsTrc("inspector", "Begin 64") }
             ]
 
             interactive: true
@@ -67,9 +69,22 @@ InspectorPropertyView {
 
             ScrollBar.vertical: StyledScrollBar {}
 
-            delegate: FocusableItem {
+            delegate: ListItemBlank {
                 implicitHeight: gridView.cellHeight
                 implicitWidth: gridView.cellWidth
+
+                hint: modelData["hint"] ?? ""
+
+                navigation.name: hint
+                navigation.panel: root.navigation.panel
+                navigation.row: root.navigationRowStart + 1 + index
+                navigation.accessible.name: hint
+                navigation.enabled: root.enabled
+                navigation.onActiveChanged: {
+                    if (navigation.active) {
+                        gridView.positionViewAtIndex(index, ListView.Contain)
+                    }
+                }
 
                 StyledIconLabel {
                     anchors.centerIn: parent

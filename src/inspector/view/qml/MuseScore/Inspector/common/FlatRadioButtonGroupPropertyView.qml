@@ -32,6 +32,8 @@ InspectorPropertyView {
     property alias radioButtonGroup: radioButtonGroupItem
     property alias model: radioButtonGroupItem.model
 
+    navigationRowEnd: navigationRowStart + model.length + 1 /*menu button*/
+
     component Delegate: FlatRadioButton {
         required property var modelData
         required property int index
@@ -43,6 +45,7 @@ InspectorPropertyView {
         navigation.panel: root.navigation.panel
         navigation.column: root.navigation.column
         navigation.row: root.navigation.row + 1 + index
+        navigation.accessible.name: root.titleText + " " + modelData["title"] ?? ""
 
         checked: root.propertyItem && !root.propertyItem.isUndefined
                  ? root.propertyItem.value === modelData["value"]

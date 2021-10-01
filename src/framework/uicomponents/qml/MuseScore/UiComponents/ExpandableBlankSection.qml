@@ -44,6 +44,8 @@ FocusScope {
     NavigationControl {
         id: navCtrl
         name: root.title
+        accessible.role: MUAccessible.ListItem
+        accessible.name: root.title
         enabled: root.enabled
         onTriggered: {
             root.isExpanded = !root.isExpanded
