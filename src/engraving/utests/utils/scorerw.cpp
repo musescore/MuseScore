@@ -104,3 +104,14 @@ EngravingItem* ScoreRW::writeReadElement(EngravingItem* element)
     element->read(e);
     return element;
 }
+
+bool ScoreRW::saveMimeData(QByteArray mimeData, const QString& saveName)
+{
+    QFile f(saveName);
+    if (!f.open(QIODevice::WriteOnly)) {
+        return false;
+    }
+
+    f.write(mimeData);
+    return f.error() == QFile::NoError;
+}
