@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "testing/qtestsuite.h"
-#include "testbase.h"
+#include <gtest/gtest.h>
+
 #include "libmscore/measure.h"
 #include "libmscore/page.h"
 #include "libmscore/rest.h"
@@ -30,41 +30,19 @@
 #include "libmscore/system.h"
 #include "libmscore/tuplet.h"
 
+#include "utils/scorerw.h"
+#include "utils/scorecomp.h"
+
 static const QString ALL_ELEMENTS_DATA_DIR("all_elements_data/");
 
 using namespace mu::engraving;
 using namespace Ms;
 
-//---------------------------------------------------------
-//   TestBechmark
-//---------------------------------------------------------
-
-class TestLayoutElements : public QObject, public MTest
+class LayoutElementsTests : public ::testing::Test
 {
-    Q_OBJECT
-
-    MasterScore * score;
-    void beam(const char* path);
+public:
     void tstLayoutAll(QString file);
-
-private slots:
-    void initTestCase();
-    void tstLayoutElements() { tstLayoutAll("layout_elements.mscx"); }
-    void tstLayoutTablature() { tstLayoutAll("layout_elements_tab.mscx"); }
-    void tstLayoutMoonlight() { tstLayoutAll("moonlight.mscx"); }
-    // FIXME goldberg.mscx does not pass the test because of some
-    // TimeSig and Clef elements. Need to check it later!
-//       void tstLayoutGoldberg()  { tstLayoutAll("goldberg.mscx");        }
 };
-
-//---------------------------------------------------------
-//   initTestCase
-//---------------------------------------------------------
-
-void TestLayoutElements::initTestCase()
-{
-    initMTest();
-}
 
 //---------------------------------------------------------
 //   isLayoutDone
@@ -116,9 +94,9 @@ static void isLayoutDone(void* data, EngravingItem* e)
 //    Test that all elements in the score are laid out
 //---------------------------------------------------------
 
-void TestLayoutElements::tstLayoutAll(QString file)
+void LayoutElementsTests::tstLayoutAll(QString file)
 {
-    MasterScore* score = readScore(ALL_ELEMENTS_DATA_DIR + file);
+    MasterScore* score = ScoreRW::readScore(ALL_ELEMENTS_DATA_DIR + file);
     // readScore should also do layout of the score
 
     for (LayoutMode mode : { LayoutMode::PAGE }) {
@@ -126,10 +104,29 @@ void TestLayoutElements::tstLayoutAll(QString file)
         bool layoutDone = true;
         for (Score* s : score->scoreList()) {
             s->scanElements(&layoutDone, isLayoutDone, /* all */ true);
-            QVERIFY(layoutDone);
+            EXPECT_TRUE(layoutDone);
         }
     }
 }
 
-QTEST_MAIN(TestLayoutElements)
-#include "tst_all_elements_layout_elements.moc"
+TEST_F(LayoutElementsTests, tstLayoutElements)
+{
+    tstLayoutAll("layout_elements.mscx");
+}
+
+TEST_F(LayoutElementsTests, tstLayoutTablature)
+{
+    tstLayoutAll("layout_elements_tab.mscx");
+}
+
+TEST_F(LayoutElementsTests, tstLayoutMoonlight)
+{
+    tstLayoutAll("moonlight.mscx");
+}
+
+// FIXME goldberg.mscx does not pass the test because of some
+// TimeSig and Clef elements. Need to check it later!
+TEST_F(LayoutElementsTests, DISABLED_tstLayoutGoldberg)
+{
+    tstLayoutAll("goldberg.mscx");
+}
