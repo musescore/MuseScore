@@ -22,8 +22,10 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Inspector 1.0
+
 import "../../common"
 
 Column {
@@ -31,9 +33,16 @@ Column {
 
     property QtObject model: null
 
+    property NavigationPanel navigationPanel: null
+    property int navigationRowOffset: 1
+
     objectName: "TempoSettings"
 
     spacing: 12
+
+    function focusOnFirst() {
+        followWrittenTempoCheckbox.navigation.requestActive()
+    }
 
     CheckBox {
         id: followWrittenTempoCheckbox
@@ -41,6 +50,10 @@ Column {
         isIndeterminate: root.model ? root.model.isDefaultTempoForced.isUndefined : false
         checked: root.model && !isIndeterminate ? root.model.isDefaultTempoForced.value : false
         text: qsTrc("inspector", "Follow written tempo")
+
+        navigation.name: "FollowCheckBox"
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationRowOffset + 1
 
         onClicked: { root.model.isDefaultTempoForced.value = !checked }
     }
@@ -51,5 +64,9 @@ Column {
         enabled: root.model ? !root.model.isEmpty && !followWrittenTempoCheckbox.checked : false
 
         measureUnitsSymbol: qsTrc("inspector", "BPM")
+
+        navigation.name: "Override"
+        navigation.panel: root.navigationPanel
+        navigation.row: followWrittenTempoCheckbox.navigation.row + 1
     }
 }

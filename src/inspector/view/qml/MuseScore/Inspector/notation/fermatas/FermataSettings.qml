@@ -40,7 +40,12 @@ Column {
 
     spacing: 12
 
+    function focusOnFirst() {
+        placementOnStaffSection.navigation.requestActive()
+    }
+
     PlacementSection {
+        id: placementOnStaffSection
         titleText: qsTrc("inspector", "Placement on staff")
         propertyItem: root.model ? root.model.placementType : null
 

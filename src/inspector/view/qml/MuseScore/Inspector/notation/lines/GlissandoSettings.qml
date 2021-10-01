@@ -40,6 +40,10 @@ Column {
 
     spacing: 12
 
+    function focusOnFirst() {
+        lineSection.navigation.requestActive()
+    }
+
     FlatRadioButtonGroupPropertyView {
         id: lineSection
         titleText: qsTrc("inspector", "Glissando line")
