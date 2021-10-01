@@ -22,8 +22,8 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
-import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
 import MuseScore.Inspector 1.0
 
 import "../../common"
@@ -76,7 +76,7 @@ FocusableItem {
 
             navigation.name: "StemDirectionGroup"
             navigation.panel: root.navigationPanel
-            navigation.row: root.navigationRowOffset + 2
+            navigationRowStart: root.navigationRowOffset + 2
             navigation.enabled: root.enabled
 
             model: [
@@ -104,8 +104,8 @@ FocusableItem {
                 width: parent.width
                 height: 70
 
-                property int navigationRowOffset: stemDirectionGroup.navigationRowEnd + 1
-                property int lastNavigationRow: navigationRowOffset + model.length
+                property int navigationRowStart: stemDirectionGroup.navigationRowEnd + 1
+                property int navigationRowEnd: navigationRowStart + count
 
                 model: [
                     { iconCode: IconCode.NOTEFLAGS_TRADITIONAL, text: qsTrc("inspector", "Traditional", "Note flags"), value: false },
@@ -117,7 +117,7 @@ FocusableItem {
 
                     navigation.name: "FlagStyleGroup"
                     navigation.panel: root.navigationPanel
-                    navigation.row: flagStyleGroup.navigationRowOffset + index
+                    navigation.row: flagStyleGroup.navigationRowEnd + index
                     navigation.enabled: root.enabled
                     navigation.accessible.name: flagStyleLabel.text + " " + modelData.text
 
@@ -157,7 +157,7 @@ FocusableItem {
             width: parent.width
 
             navigation.panel: root.navigationPanel
-            navigation.row: flagStyleGroup.lastNavigationRow + 1
+            navigation.row: flagStyleGroup.navigationRowEnd + 1
 
             contentItemComponent: Column {
                 height: implicitHeight

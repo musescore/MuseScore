@@ -32,6 +32,8 @@ InspectorPropertyView {
     property alias dropdown: dropdownItem
     property alias model: dropdownItem.model
 
+    navigationRowEnd: navigationRowStart + 2
+
     Dropdown {
         id: dropdownItem
         width: parent.width
@@ -40,6 +42,7 @@ InspectorPropertyView {
         navigation.panel: root.navigation.panel
         navigation.column: root.navigation.column
         navigation.row: root.navigation.row + 1
+        navigation.accessible.name: root.titleText + " " + currentText
 
         currentIndex: root.propertyItem && !root.propertyItem.isUndefined
                       ? indexOfValue(root.propertyItem.value)
