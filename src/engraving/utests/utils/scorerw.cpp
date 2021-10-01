@@ -40,9 +40,9 @@ QString ScoreRW::rootPath()
     return QString(engraving_utests_DATA_ROOT);
 }
 
-MasterScore* ScoreRW::readScore(const QString& name)
+MasterScore* ScoreRW::readScore(const QString& name, bool isAbsolutePath)
 {
-    QString path = rootPath() + "/" + name;
+    QString path = isAbsolutePath ? name : (rootPath() + "/" + name);
     MasterScore* score = mu::engraving::compat::ScoreAccess::createMasterScoreWithBaseStyle();
     QFileInfo fi(path);
     score->setName(fi.completeBaseName());
