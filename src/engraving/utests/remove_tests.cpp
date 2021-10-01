@@ -20,40 +20,27 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "testing/qtestsuite.h"
-#include "testbase.h"
+#include <gtest/gtest.h>
+
 #include "libmscore/excerpt.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/spanner.h"
 
+#include "utils/scorerw.h"
+#include "utils/scorecomp.h"
+
+#include "log.h"
+
 static const QString REMOVE_DATA_DIR("remove_data/");
 
+using namespace mu::engraving;
 using namespace Ms;
 
-//---------------------------------------------------------
-//   TestRemove
-//---------------------------------------------------------
-
-class TestRemove : public QObject, public MTest
+class RemoveTests : public ::testing::Test
 {
-    Q_OBJECT
-
-private slots:
-    void initTestCase();
-    void removeStaff();
 };
 
 //---------------------------------------------------------
-//   initTestCase
-//---------------------------------------------------------
-
-void TestRemove::initTestCase()
-{
-    initMTest();
-}
-
-//---------------------------------------------------------
-//   StaffCheckData
 //    For passing to the defined below inStaff() function.
 //---------------------------------------------------------
 
@@ -63,7 +50,6 @@ struct StaffCheckData {
 };
 
 //---------------------------------------------------------
-//   inStaff
 //    for usage with Score::scanElements to check whether
 //    the element belongs to a staff with a certain number.
 //---------------------------------------------------------
@@ -72,21 +58,17 @@ static void inStaff(void* staffCheckData, EngravingItem* e)
 {
     StaffCheckData* checkData = static_cast<StaffCheckData*>(staffCheckData);
     if (e->staffIdx() == checkData->staffIdx) {
-        qDebug() << e->name() << "is in staff" << checkData->staffIdx;
+        LOGE() << e->name() << "is in staff" << checkData->staffIdx;
         checkData->staffHasElements = true;
     }
 }
-
-//---------------------------------------------------------
-//   staffHasElements
-//---------------------------------------------------------
 
 static bool staffHasElements(Score* score, int staffIdx)
 {
     for (auto i = score->spannerMap().cbegin(); i != score->spannerMap().cend(); ++i) {
         Spanner* s = i->second;
         if (s->staffIdx() == staffIdx) {
-            qDebug() << s->name() << "is in staff" << staffIdx;
+            LOGE() << s->name() << "is in staff" << staffIdx;
             return true;
         }
     }
@@ -107,23 +89,21 @@ static bool staffHasElements(Score* score, int staffIdx)
 //    belonging to it are not removed in excerpts.
 //---------------------------------------------------------
 
-void TestRemove::removeStaff()
+TEST_F(RemoveTests, removeStaff)
 {
-    MasterScore* score = readScore(REMOVE_DATA_DIR + "remove_staff.mscx");
+    MasterScore* score = ScoreRW::readScore(REMOVE_DATA_DIR + "remove_staff.mscx");
+    EXPECT_TRUE(score);
 
     // Remove the second staff and see what happens
     score->startCmd();
     score->cmdRemoveStaff(1);
     score->endCmd();
 
-    QVERIFY(!staffHasElements(score, 1));
+    EXPECT_FALSE(staffHasElements(score, 1));
     for (Excerpt* ex : score->excerpts()) {
         Score* s = ex->partScore();
-        QVERIFY(staffHasElements(s, 1));
+        EXPECT_TRUE(staffHasElements(s, 1));
     }
 
     delete score;
 }
-
-QTEST_MAIN(TestRemove);
-#include "tst_remove.moc"
