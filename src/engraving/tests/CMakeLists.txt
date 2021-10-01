@@ -33,7 +33,6 @@ set(MODULE_TEST_SRC
     # ${CMAKE_CURRENT_LIST_DIR}/tst_midimapping.cpp not ported
     #${CMAKE_CURRENT_LIST_DIR}/tst_parts.cpp # won't compile
     # ${CMAKE_CURRENT_LIST_DIR}/tst_repeat.cpp # fail
-    ${CMAKE_CURRENT_LIST_DIR}/tst_spanners.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_split.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_splitstaff.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tst_textbase.cpp
