@@ -22,14 +22,19 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Inspector 1.0
+
 import "../../common"
 
 Column {
     id: root
 
     property QtObject model: null
+
+    property NavigationPanel navigationPanel: null
+    property int navigationRowOffset: 1
 
     objectName: "FermataSettings"
 
@@ -38,5 +43,8 @@ Column {
     PlacementSection {
         titleText: qsTrc("inspector", "Placement on staff")
         propertyItem: root.model ? root.model.placementType : null
+
+        navigation.panel: root.navigationPanel
+        navigationRowStart: 1
     }
 }
