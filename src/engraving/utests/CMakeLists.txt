@@ -62,6 +62,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/timesig_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tools_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/transpose_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/tuplet_tests.cpp
 )
 
 set(MODULE_TEST_LINK
