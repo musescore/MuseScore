@@ -37,6 +37,14 @@ bool ScoreComp::saveCompareScore(Ms::Score* score, const QString& saveName, cons
     return compareFiles(saveName, ScoreRW::rootPath() + "/" + compareWithLocalPath);
 }
 
+bool ScoreComp::saveCompareMimeData(QByteArray mimeData, const QString& saveName, const QString& compareWithLocalPath)
+{
+    if (!ScoreRW::saveMimeData(mimeData, saveName)) {
+        return false;
+    }
+    return compareFiles(saveName, ScoreRW::rootPath() + "/" + compareWithLocalPath);
+}
+
 bool ScoreComp::compareFiles(const QString& fullPath1, const QString& fullPath2)
 {
     QString cmd = "diff";
@@ -48,11 +56,18 @@ bool ScoreComp::compareFiles(const QString& fullPath1, const QString& fullPath2)
 
     QProcess p;
     p.start(cmd, args);
-    if (!p.waitForFinished() || p.exitCode()) {
+    if (!p.waitForFinished()) {
+        QTextStream outputText(stdout);
+        outputText << "diff failed finished";
+        return false;
+    }
+
+    int code = p.exitCode();
+    if (code) {
         QByteArray ba = p.readAll();
         QTextStream outputText(stdout);
         outputText << QString(ba);
-        outputText << QString("   <diff -u %1 %2 failed").arg(fullPath1, fullPath2);
+        outputText << QString("   <diff -u %1 %2 failed, code: %3 \n").arg(fullPath1, fullPath2).arg(code);
         return false;
     }
 
