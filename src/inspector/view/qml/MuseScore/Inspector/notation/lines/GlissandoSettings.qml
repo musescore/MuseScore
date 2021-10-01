@@ -22,6 +22,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Inspector 1.0
 
@@ -32,21 +33,33 @@ Column {
 
     property QtObject model: null
 
+    property NavigationPanel navigationPanel: null
+    property int navigationRowOffset: 1
+
     objectName: "GlissandoSettings"
 
     spacing: 12
 
     FlatRadioButtonGroupPropertyView {
+        id: lineSection
         titleText: qsTrc("inspector", "Glissando line")
         propertyItem: root.model ? root.model.lineType : null
         model: root.model ? root.model.possibleLineTypes() : null
+
+        navigation.panel: root.navigationPanel
+        navigationRowStart: root.navigationRowOffset
     }
 
     CheckBox {
+        id: showTextCheckBox
         isIndeterminate: root.model && root.model.showText.isUndefined
         checked: root.model && !isIndeterminate && root.model.showText.value
 
         text: qsTrc("inspector", "Show text")
+
+        navigation.name: "ShowTextCheckBox"
+        navigation.panel: root.navigationPanel
+        navigation.row: lineSection.navigationRowEnd + 1
 
         onClicked: {
             root.model.showText.value = !checked
@@ -56,5 +69,8 @@ Column {
     TextSection {
         titleText: qsTrc("inspector", "Text")
         propertyItem: root.model ? root.model.text : null
+
+        navigation.panel: root.navigationPanel
+        navigationRowStart: showTextCheckBox.navigation.row + 1
     }
 }

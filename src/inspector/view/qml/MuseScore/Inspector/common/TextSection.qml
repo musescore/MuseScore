@@ -28,10 +28,15 @@ InspectorPropertyView {
 
     visible: Boolean(propertyItem)
 
+    navigationRowEnd: navigationRowStart + 2
+
     TextInputField {
         isIndeterminate: root.propertyItem ? root.propertyItem.isUndefined : false
         currentText: root.propertyItem ? root.propertyItem.value : ""
         enabled: root.propertyItem ? root.propertyItem.isEnabled : false
+
+        navigation.panel: root.navigation.panel
+        navigation.row: root.navigationRowStart + 1
 
         onCurrentTextEdited: {
             if (root.propertyItem) {
