@@ -211,10 +211,6 @@ static T* nextEnabled(const std::set<T*>& set, const INavigation::Index& current
         return nullptr;
     }
 
-    IF_ASSERT_FAILED(direction == MoveDirection::Right || direction == MoveDirection::Down) {
-        return nullptr;
-    }
-
     return findNearestEnabled<T>(set, currentIndex, direction);
 }
 
@@ -222,10 +218,6 @@ template<class T>
 static T* prevEnabled(const std::set<T*>& set, const INavigation::Index& currentIndex, MoveDirection direction = MoveDirection::Left)
 {
     if (set.empty()) {
-        return nullptr;
-    }
-
-    IF_ASSERT_FAILED(direction == MoveDirection::Left || direction == MoveDirection::Up) {
         return nullptr;
     }
 
@@ -699,18 +691,7 @@ void NavigationController::onRight()
         }
     }
 
-    INavigationPanel::Direction direction = activePanel->direction();
-    switch (direction) {
-    case INavigationPanel::Direction::Horizontal: {
-        goToControl(MoveDirection::Right, activePanel);
-    } break;
-    case INavigationPanel::Direction::Vertical: {
-        // noop
-    } break;
-    case INavigationPanel::Direction::Both: {
-        goToControl(MoveDirection::Right, activePanel);
-    } break;
-    }
+    goToControl(MoveDirection::Right, activePanel);
 }
 
 void NavigationController::onLeft()
@@ -735,18 +716,7 @@ void NavigationController::onLeft()
         }
     }
 
-    INavigationPanel::Direction direction = activePanel->direction();
-    switch (direction) {
-    case INavigationPanel::Direction::Horizontal: {
-        goToControl(MoveDirection::Left, activePanel);
-    } break;
-    case INavigationPanel::Direction::Vertical: {
-        // noop
-    } break;
-    case INavigationPanel::Direction::Both: {
-        goToControl(MoveDirection::Left, activePanel);
-    } break;
-    }
+    goToControl(MoveDirection::Left, activePanel);
 }
 
 void NavigationController::onDown()
@@ -771,18 +741,7 @@ void NavigationController::onDown()
         }
     }
 
-    INavigationPanel::Direction direction = activePanel->direction();
-    switch (direction) {
-    case INavigationPanel::Direction::Horizontal: {
-        // noop
-    } break;
-    case INavigationPanel::Direction::Vertical: {
-        goToControl(MoveDirection::Down, activePanel);
-    } break;
-    case INavigationPanel::Direction::Both: {
-        goToControl(MoveDirection::Down, activePanel);
-    } break;
-    }
+    goToControl(MoveDirection::Down, activePanel);
 }
 
 void NavigationController::onUp()
@@ -807,18 +766,7 @@ void NavigationController::onUp()
         }
     }
 
-    INavigationPanel::Direction direction = activePanel->direction();
-    switch (direction) {
-    case INavigationPanel::Direction::Horizontal: {
-        // noop
-    } break;
-    case INavigationPanel::Direction::Vertical: {
-        goToControl(MoveDirection::Up, activePanel);
-    } break;
-    case INavigationPanel::Direction::Both: {
-        goToControl(MoveDirection::Up, activePanel);
-    } break;
-    }
+    goToControl(MoveDirection::Up, activePanel);
 }
 
 void NavigationController::onEscape()
@@ -945,6 +893,9 @@ void NavigationController::goToControl(MoveDirection direction, INavigationPanel
     INavigationControl* activeControl = findActive(activePanel->controls());
     INavigationControl* toControl = nullptr;
 
+    bool tryOtherOrientation = activePanel->direction() == INavigationPanel::Direction::Horizontal ||
+                                 activePanel->direction() == INavigationPanel::Direction::Vertical;
+
     switch (direction) {
     case MoveDirection::First: {
         toControl = firstEnabled(activePanel->controls());
@@ -954,49 +905,85 @@ void NavigationController::goToControl(MoveDirection direction, INavigationPanel
     } break;
     case MoveDirection::Right: {
         if (!activeControl) { // no any active
-            toControl = firstEnabled(activePanel->controls(), INavigation::Index(), direction);
+            toControl = firstEnabled(activePanel->controls(), INavigation::Index(), MoveDirection::Right);
         } else {
-            toControl = nextEnabled(activePanel->controls(), activeControl->index(), direction);
+            toControl = nextEnabled(activePanel->controls(), activeControl->index(), MoveDirection::Right);
+            if (!toControl && tryOtherOrientation) {
+                toControl = nextEnabled(activePanel->controls(), activeControl->index(), MoveDirection::Down);
+            }
             if (!toControl) { // active is last
                 INavigation::Index index = activeControl->index();
                 index.column = -1;
-                toControl = firstEnabled(activePanel->controls(), index, direction); // the first to be the next
+                toControl = firstEnabled(activePanel->controls(), index, MoveDirection::Right); // the first to be the next
+
+                if (!toControl && tryOtherOrientation) {
+                    index = activeControl->index();
+                    index.row = -1;
+                    toControl = nextEnabled(activePanel->controls(), index, MoveDirection::Down);
+                }
             }
         }
     } break;
     case MoveDirection::Down: {
         if (!activeControl) { // no any active
-            toControl = firstEnabled(activePanel->controls(), INavigation::Index(), direction);
+            toControl = firstEnabled(activePanel->controls(), INavigation::Index(), MoveDirection::Down);
         } else {
-            toControl = nextEnabled(activePanel->controls(), activeControl->index(), direction);
+            toControl = nextEnabled(activePanel->controls(), activeControl->index(), MoveDirection::Down);
+            if (!toControl && tryOtherOrientation) {
+                toControl = nextEnabled(activePanel->controls(), activeControl->index(), MoveDirection::Right);
+            }
             if (!toControl) { // active is last
                 INavigation::Index index = activeControl->index();
                 index.row = -1;
-                toControl = firstEnabled(activePanel->controls(), index, direction); // the first to be the next
+                toControl = firstEnabled(activePanel->controls(), index, MoveDirection::Down); // the first to be the next
+
+                if (!toControl && tryOtherOrientation) {
+                    index = activeControl->index();
+                    index.column = -1;
+                    toControl = nextEnabled(activePanel->controls(), index, MoveDirection::Right);
+                }
             }
         }
     } break;
     case MoveDirection::Left: {
         if (!activeControl) { // no any active
-            toControl = lastEnabled(activePanel->controls(), INavigation::Index(), direction);
+            toControl = lastEnabled(activePanel->controls(), INavigation::Index(), MoveDirection::Left);
         } else {
-            toControl = prevEnabled(activePanel->controls(), activeControl->index(), direction);
+            toControl = nextEnabled(activePanel->controls(), activeControl->index(), MoveDirection::Left);
+            if (!toControl && tryOtherOrientation) {
+                toControl = nextEnabled(activePanel->controls(), activeControl->index(), MoveDirection::Up);
+            }
             if (!toControl) { // active is first
                 INavigation::Index index = activeControl->index();
                 index.column = std::numeric_limits<int>::max();
-                toControl = lastEnabled(activePanel->controls(), index, direction); // the last to be the next
+                toControl = lastEnabled(activePanel->controls(), index, MoveDirection::Left); // the last to be the next
+
+                if (!toControl && tryOtherOrientation) {
+                    index = activeControl->index();
+                    index.row = std::numeric_limits<int>::max();
+                    toControl = nextEnabled(activePanel->controls(), index, MoveDirection::Up);
+                }
             }
         }
     } break;
     case MoveDirection::Up: {
         if (!activeControl) { // no any active
-            toControl = lastEnabled(activePanel->controls(), INavigation::Index(), direction);
+            toControl = lastEnabled(activePanel->controls(), INavigation::Index(), MoveDirection::Up);
         } else {
-            toControl = prevEnabled(activePanel->controls(), activeControl->index(), direction);
+            toControl = nextEnabled(activePanel->controls(), activeControl->index(), MoveDirection::Up);
+            if (!toControl && tryOtherOrientation) {
+                toControl = nextEnabled(activePanel->controls(), activeControl->index(), MoveDirection::Left);
+            }
             if (!toControl) { // active is first
                 INavigation::Index index = activeControl->index();
                 index.row = std::numeric_limits<int>::max();
-                toControl = lastEnabled(activePanel->controls(), index, direction); // the last to be the next
+                toControl = lastEnabled(activePanel->controls(), index, MoveDirection::Up); // the last to be the next
+
+                if (!toControl && tryOtherOrientation) {
+                    index = activeControl->index();
+                    index.column = std::numeric_limits<int>::max();
+                    toControl = nextEnabled(activePanel->controls(), index, MoveDirection::Left);
+                }
             }
         }
     } break;
