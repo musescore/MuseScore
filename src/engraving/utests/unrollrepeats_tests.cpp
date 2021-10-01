@@ -20,39 +20,21 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "testing/qtestsuite.h"
-#include "testbase.h"
+#include <gtest/gtest.h>
+
 #include "libmscore/masterscore.h"
+
+#include "utils/scorerw.h"
+#include "utils/scorecomp.h"
 
 static const QString UNROLLREPEATS_DATA_DIR("unrollrepeats_data/");
 
+using namespace mu::engraving;
 using namespace Ms;
 
-//---------------------------------------------------------
-//   TestUnrollRepeats
-//---------------------------------------------------------
-
-class TestUnrollRepeats : public QObject, public MTest
+class UnrollRepeatsTests : public ::testing::Test
 {
-    Q_OBJECT
-
-private slots:
-    void initTestCase();
-    void clefKeyTs();
-    void pickupMeasure();
 };
-
-QTEST_MAIN(TestUnrollRepeats)
-#include "tst_unrollrepeats.moc"
-
-//---------------------------------------------------------
-//   initTestCase
-//---------------------------------------------------------
-
-void TestUnrollRepeats::initTestCase()
-{
-    initMTest();
-}
 
 //---------------------------------------------------------
 ///   clefKeyTs
@@ -60,13 +42,13 @@ void TestUnrollRepeats::initTestCase()
 ///   clef, key, time signature changes.
 //---------------------------------------------------------
 
-void TestUnrollRepeats::clefKeyTs()
+TEST_F(UnrollRepeatsTests, clefKeyTs)
 {
-    MasterScore* score = readScore(UNROLLREPEATS_DATA_DIR + "clef-key-ts-test.mscx");
+    MasterScore* score = ScoreRW::readScore(UNROLLREPEATS_DATA_DIR + "clef-key-ts-test.mscx");
 
     MasterScore* unrolled = score->unrollRepeats();
 
-    QVERIFY(saveCompareScore(unrolled, "clef-key-ts-test.mscx", UNROLLREPEATS_DATA_DIR + "clef-key-ts-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(unrolled, "clef-key-ts-test.mscx", UNROLLREPEATS_DATA_DIR + "clef-key-ts-ref.mscx"));
 }
 
 //---------------------------------------------------------
@@ -75,11 +57,11 @@ void TestUnrollRepeats::clefKeyTs()
 ///   pickup measure should get merged to a full bar on repeat
 //---------------------------------------------------------
 
-void TestUnrollRepeats::pickupMeasure()
+TEST_F(UnrollRepeatsTests, pickupMeasure)
 {
-    MasterScore* score = readScore(UNROLLREPEATS_DATA_DIR + "pickup-measure-test.mscx");
+    MasterScore* score = ScoreRW::readScore(UNROLLREPEATS_DATA_DIR + "pickup-measure-test.mscx");
 
     MasterScore* unrolled = score->unrollRepeats();
 
-    QVERIFY(saveCompareScore(unrolled, "pickup-measure-test.mscx", UNROLLREPEATS_DATA_DIR + "pickup-measure-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(unrolled, "pickup-measure-test.mscx", UNROLLREPEATS_DATA_DIR + "pickup-measure-ref.mscx"));
 }
