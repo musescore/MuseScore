@@ -54,6 +54,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/remove_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rhythmicgrouping_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/selectionfilter_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/selectionrangedelete_tests.cpp
 )
 
 set(MODULE_TEST_LINK
