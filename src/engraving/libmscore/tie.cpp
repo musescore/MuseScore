@@ -448,7 +448,7 @@ void TieSegment::adjustX()
     qreal xo;
 
     // ADJUST LEFT GRIP -----------
-    if (sc && spannerSegmentType() == SpannerSegmentType::SINGLE || spannerSegmentType() == SpannerSegmentType::BEGIN) {
+    if (sc && (spannerSegmentType() == SpannerSegmentType::SINGLE || spannerSegmentType() == SpannerSegmentType::BEGIN)) {
         // grips are in system coordinates, normalize to note position
         PointF p1 = ups(Grip::START).p + PointF(system()->pos().x() - sn->canvasX() + sn->headWidth(), 0);
         xo = 0;
@@ -519,7 +519,7 @@ void TieSegment::adjustX()
     }
 
     // ADJUST RIGHT GRIP ----------
-    if (ec && spannerSegmentType() == SpannerSegmentType::SINGLE || spannerSegmentType() == SpannerSegmentType::END) {
+    if (ec && (spannerSegmentType() == SpannerSegmentType::SINGLE || spannerSegmentType() == SpannerSegmentType::END)) {
         // grips are in system coordinates, normalize to note position
         PointF p2 = ups(Grip::END).p + PointF(system()->pos().x() - en->canvasX(), 0);
         xo = 0;
