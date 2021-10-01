@@ -56,6 +56,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/selectionfilter_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/selectionrangedelete_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/spanners_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/split_tests.cpp
 )
 
 set(MODULE_TEST_LINK
