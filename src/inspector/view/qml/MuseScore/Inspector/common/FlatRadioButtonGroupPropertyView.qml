@@ -32,7 +32,7 @@ InspectorPropertyView {
     property alias radioButtonGroup: radioButtonGroupItem
     property alias model: radioButtonGroupItem.model
 
-    navigationRowEnd: navigationRowStart + model.length + 1 /*menu button*/
+    navigationRowEnd: navigationRowStart + radioButtonGroupItem.count + 1 /*menu button*/
 
     component Delegate: FlatRadioButton {
         required property var modelData
