@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "testing/qtestsuite.h"
-#include "testbase.h"
+#include <gtest/gtest.h>
 
 #include "libmscore/factory.h"
 #include "libmscore/staff.h"
@@ -31,48 +30,23 @@
 #include "libmscore/measure.h"
 #include "libmscore/timesig.h"
 
+#include "utils/scorerw.h"
+#include "utils/scorecomp.h"
+
 static const QString TUPLET_DATA_DIR("tuplet_data/");
 
 using namespace mu::engraving;
 using namespace Ms;
 
-//---------------------------------------------------------
-//   TestTuplet
-//---------------------------------------------------------
-
-class TestTuplet : public QObject, public MTest
+class TupletTests : public ::testing::Test
 {
-    Q_OBJECT
-
+public:
     bool createTuplet(int n, ChordRest* cr);
     void tuplet(const char* p1, const char* p2);
     void split(const char* p1, const char* p2);
-
-private slots:
-    void initTestCase();
-    void join1() { tuplet("tuplet1.mscx", "tuplet1-ref.mscx"); }
-    void split1() { split("split1.mscx",   "split1-ref.mscx"); }
-    void split2() { split("split2.mscx",   "split2-ref.mscx"); }
-    void split3() { split("split3.mscx",   "split3-ref.mscx"); }
-    void split4() { split("split4.mscx",   "split4-ref.mscx"); }
-    void saveLoad();
-    void addStaff();
 };
 
-//---------------------------------------------------------
-//   initTestCase
-//---------------------------------------------------------
-
-void TestTuplet::initTestCase()
-{
-    initMTest();
-}
-
-//---------------------------------------------------------
-//   createTuplet
-//---------------------------------------------------------
-
-bool TestTuplet::createTuplet(int n, ChordRest* cr)
+bool TupletTests::createTuplet(int n, ChordRest* cr)
 {
     if (cr->durationType() < TDuration(TDuration::DurationType::V_128TH)) {
         return false;
@@ -120,38 +94,35 @@ bool TestTuplet::createTuplet(int n, ChordRest* cr)
     return true;
 }
 
-//---------------------------------------------------------
-//   tuplet
-//---------------------------------------------------------
-
-void TestTuplet::tuplet(const char* p1, const char* p2)
+void TupletTests::tuplet(const char* p1, const char* p2)
 {
-    MasterScore* score = readScore(TUPLET_DATA_DIR + p1);
+    MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + p1);
     Measure* m1 = score->firstMeasure();
     Measure* m2 = m1->nextMeasure();
 
-    QVERIFY(m1 != 0);
-    QVERIFY(m2 != 0);
-    QVERIFY(m1 != m2);
+    EXPECT_TRUE(m1 != 0);
+    EXPECT_TRUE(m2 != 0);
+    EXPECT_TRUE(m1 != m2);
 
     Segment* s = m2->first(SegmentType::ChordRest);
-    QVERIFY(s != 0);
+    EXPECT_TRUE(s != 0);
     Ms::Chord* c = toChord(s->element(0));
-    QVERIFY(c != 0);
+    EXPECT_TRUE(c != 0);
 
-    QVERIFY(createTuplet(3, c));
+    EXPECT_TRUE(createTuplet(3, c));
 
-    QVERIFY(saveCompareScore(score, p1, TUPLET_DATA_DIR + p2));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, p1, TUPLET_DATA_DIR + p2));
     delete score;
 }
 
-//---------------------------------------------------------
-//   split
-//---------------------------------------------------------
-
-void TestTuplet::split(const char* p1, const char* p2)
+TEST_F(TupletTests, join1)
 {
-    MasterScore* score = readScore(TUPLET_DATA_DIR + p1);
+    tuplet("tuplet1.mscx", "tuplet1-ref.mscx");
+}
+
+void TupletTests::split(const char* p1, const char* p2)
+{
+    MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + p1);
     Measure* m         = score->firstMeasure();
     TimeSig* ts        = Factory::createTimeSig(score->dummy()->segment());
     ts->setSig(Fraction(3, 4), TimeSigType::NORMAL);
@@ -165,8 +136,28 @@ void TestTuplet::split(const char* p1, const char* p2)
     m->drop(dd);
     score->endCmd();
 
-    QVERIFY(saveCompareScore(score, p1, TUPLET_DATA_DIR + p2));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, p1, TUPLET_DATA_DIR + p2));
     delete score;
+}
+
+TEST_F(TupletTests, split1)
+{
+    split("split1.mscx",   "split1-ref.mscx");
+}
+
+TEST_F(TupletTests, split2)
+{
+    split("split2.mscx",   "split2-ref.mscx");
+}
+
+TEST_F(TupletTests, split3)
+{
+    split("split3.mscx",   "split3-ref.mscx");
+}
+
+TEST_F(TupletTests, split4)
+{
+    split("split4.mscx",   "split4-ref.mscx");
 }
 
 //---------------------------------------------------------
@@ -175,10 +166,10 @@ void TestTuplet::split(const char* p1, const char* p2)
 //    score is equal to the reference score
 //---------------------------------------------------------
 
-void TestTuplet::addStaff()
+TEST_F(TupletTests, addStaff)
 {
-    MasterScore* score = readScore(TUPLET_DATA_DIR + "nestedTuplets_addStaff.mscx");
-    QVERIFY(score);
+    MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + "nestedTuplets_addStaff.mscx");
+    EXPECT_TRUE(score);
 
     // add a staff to the existing staff
     // (copied and adapted from void MuseScore::editInstrList() in mscore/instrdialog.cpp)
@@ -191,7 +182,7 @@ void TestTuplet::addStaff()
     newStaff->setKey(Fraction(0, 1), ke);
     score->undoInsertStaff(newStaff, 0, true);
 
-    QVERIFY(saveCompareScore(score, "nestedTuplets_addStaff.mscx", TUPLET_DATA_DIR + "nestedTuplets_addStaff-ref.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "nestedTuplets_addStaff.mscx", TUPLET_DATA_DIR + "nestedTuplets_addStaff-ref.mscx"));
     delete score;
 }
 
@@ -199,14 +190,11 @@ void TestTuplet::addStaff()
 //    saveLoad
 //     checks that properties persist after loading and saving
 //-----------------------------------------
-void TestTuplet::saveLoad()
+TEST_F(TupletTests, saveLoad)
 {
-    MasterScore* score = readScore(TUPLET_DATA_DIR + "save-load.mscx");
-    QVERIFY(score);
+    MasterScore* score = ScoreRW::readScore(TUPLET_DATA_DIR + "save-load.mscx");
+    EXPECT_TRUE(score);
     //simply load and save
-    QVERIFY(saveCompareScore(score, "save-load.mscx", TUPLET_DATA_DIR + "save-load.mscx"));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, "save-load.mscx", TUPLET_DATA_DIR + "save-load.mscx"));
     delete score;
 }
-
-QTEST_MAIN(TestTuplet)
-#include "tst_tuplet.moc"
