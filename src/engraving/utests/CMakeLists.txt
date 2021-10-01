@@ -52,6 +52,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/note_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/readwriteundoreset_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/remove_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rhythmicgrouping_tests.cpp
 )
 
 set(MODULE_TEST_LINK
