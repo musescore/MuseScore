@@ -49,23 +49,8 @@ Rectangle {
         }
     }
 
-    NavigationPanel {
-        id: navPanel
-        name: "Inspector"
-        section: root.navigationSection
-        direction: NavigationPanel.Vertical
-        enabled: root.visible
-        order: 2
-    }
-
     InspectorListModel {
         id: inspectorListModel
-
-        onModelChanged: {
-            if (navPanel.active) {
-                root.focusFirstItem()
-            }
-        }
     }
 
     StyledScrollBar {
@@ -122,8 +107,18 @@ Rectangle {
 
                     property var contentHeight: implicitHeight
 
+                    NavigationPanel {
+                        id: navPanel
+                        name: expandableDelegate.title
+                        section: root.navigationSection
+                        direction: NavigationPanel.Vertical
+                        accessible.name: expandableDelegate.title
+                        enabled: root.visible
+                        order: model.index + 2
+                    }
+
                     navigation.panel: navPanel
-                    navigation.row: (model.index + 1) * 1000 // make unique
+                    navigation.row: 0
 
                     function viewBySectionType() {
                         flickableArea.contentY = 0
