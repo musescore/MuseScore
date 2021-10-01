@@ -20,58 +20,28 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "testing/qtestsuite.h"
-#include "testbase.h"
+#include <gtest/gtest.h>
+
 #include "libmscore/masterscore.h"
 #include "libmscore/undo.h"
 #include "libmscore/measure.h"
 #include "libmscore/chord.h"
 
+#include "utils/scorerw.h"
+#include "utils/scorecomp.h"
+
 static const QString TOOLS_DATA_DIR("tools_data/");
 
 using namespace Ms;
+using namespace mu::engraving;
 
-// Q_LOGGING_CATEGORY(undoRedo, "undoRedo")
-
-//---------------------------------------------------------
-//   TestTools
-//---------------------------------------------------------
-
-class TestTools : public QObject, public MTest
+class ToolsTests : public ::testing::Test
 {
-    Q_OBJECT
-
-private slots:
-    void initTestCase();
-    void undoAddLineBreaks();
-//      void undoLockLineBreaks();        // makes assumptions on layout for empty measures
-//      void undoRemoveLineBreaks();
-    void undoSlashFill();
-    void undoSlashRhythm();
-    void undoResequenceAlpha();
-    void undoResequenceNumeric();
-    void undoResequenceMeasure();
-    void undoResequencePart();
-    void changeEnharmonicBoth();
-    void changeEnharmonicCurrent();
-private:
+public:
     void changeEnharmonic(bool);
 };
 
-//---------------------------------------------------------
-//   initTestCase
-//---------------------------------------------------------
-
-void TestTools::initTestCase()
-{
-    initMTest();
-}
-
-//---------------------------------------------------------
-//   undoAddLineBreaks
-//---------------------------------------------------------
-
-void TestTools::undoAddLineBreaks()
+TEST_F(ToolsTests, undoAddLineBreaks)
 {
     QString readFile(TOOLS_DATA_DIR + "undoAddLineBreaks.mscx");
     QString writeFile1("undoAddLineBreaks01-test.mscx");
@@ -79,7 +49,7 @@ void TestTools::undoAddLineBreaks()
     QString writeFile2("undoAddLineBreaks02-test.mscx");
     QString reference2(TOOLS_DATA_DIR + "undoAddLineBreaks02-ref.mscx");
 
-    MasterScore* score = readScore(readFile);
+    MasterScore* score = ScoreRW::readScore(readFile);
     score->doLayout();
 
     // select all
@@ -91,85 +61,17 @@ void TestTools::undoAddLineBreaks()
     score->startCmd();
     score->addRemoveBreaks(4, false);
     score->endCmd();
-    QVERIFY(saveCompareScore(score, writeFile1, reference1));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
 
     // undo
+    EditData ed;
     score->undoStack()->undo(&ed);
-    QVERIFY(saveCompareScore(score, writeFile2, reference2));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, reference2));
 
     delete score;
 }
 
-//---------------------------------------------------------
-//   undoAddLineBreaks
-//---------------------------------------------------------
-
-#if 0
-void TestTools::undoLockLineBreaks()
-{
-    QString readFile(TOOLS_DATA_DIR + "undoLockLineBreaks.mscx");
-    QString writeFile1("undoLockLineBreaks01-test.mscx");
-    QString reference1(TOOLS_DATA_DIR + "undoLockLineBreaks01-ref.mscx");
-    QString writeFile2("undoLockLineBreaks02-test.mscx");
-    QString reference2(TOOLS_DATA_DIR + "undoLockLineBreaks02-ref.mscx");
-
-    MasterScore* score = readScore(readFile);
-    score->doLayout();
-
-    // select all
-    score->startCmd();
-    score->cmdSelectAll();
-    score->endCmd();
-
-    // do
-    score->startCmd();
-    score->addRemoveBreaks(0, true);
-    score->endCmd();
-    QVERIFY(saveCompareScore(score, writeFile1, reference1));
-
-    // undo
-    score->undoStack()->undo();
-    QVERIFY(saveCompareScore(score, writeFile2, reference2));
-
-    delete score;
-}
-
-//---------------------------------------------------------
-//   undoRemoveLineBreaks
-//---------------------------------------------------------
-
-void TestTools::undoRemoveLineBreaks()
-{
-    QString readFile(TOOLS_DATA_DIR + "undoRemoveLineBreaks.mscx");
-    QString writeFile1("undoRemoveLineBreaks01-test.mscx");
-    QString reference1(TOOLS_DATA_DIR + "undoRemoveLineBreaks01-ref.mscx");
-    QString writeFile2("undoRemoveLineBreaks02-test.mscx");
-    QString reference2(TOOLS_DATA_DIR + "undoRemoveLineBreaks02-ref.mscx");
-
-    MasterScore* score = readScore(readFile);
-    score->doLayout();
-
-    // select all
-    score->startCmd();
-    score->cmdSelectAll();
-    score->endCmd();
-
-    // do
-    score->startCmd();
-    score->addRemoveBreaks(0, false);
-    score->endCmd();
-    QVERIFY(saveCompareScore(score, writeFile1, reference1));
-
-    // undo
-    score->undoStack()->undo();
-    QVERIFY(saveCompareScore(score, writeFile2, reference2));
-
-    delete score;
-}
-
-#endif
-
-void TestTools::undoSlashFill()
+TEST_F(ToolsTests, undoSlashFill)
 {
     QString readFile(TOOLS_DATA_DIR + "undoSlashFill.mscx");
     QString writeFile1("undoSlashFill01-test.mscx");
@@ -177,7 +79,7 @@ void TestTools::undoSlashFill()
     QString writeFile2("undoSlashFill02-test.mscx");
     QString reference2(TOOLS_DATA_DIR + "undoSlashFill02-ref.mscx");
 
-    MasterScore* score = readScore(readFile);
+    MasterScore* score = ScoreRW::readScore(readFile);
 
     // select
     Segment* s = score->firstMeasure()->findSegment(SegmentType::ChordRest, Fraction(2, 4));
@@ -187,16 +89,17 @@ void TestTools::undoSlashFill()
     score->startCmd();
     score->cmdSlashFill();
     score->endCmd();
-    QVERIFY(saveCompareScore(score, writeFile1, reference1));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
 
     // undo
+    EditData ed;
     score->undoStack()->undo(&ed);
-    QVERIFY(saveCompareScore(score, writeFile2, reference2));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, reference2));
 
     delete score;
 }
 
-void TestTools::undoSlashRhythm()
+TEST_F(ToolsTests, undoSlashRhythm)
 {
     QString readFile(TOOLS_DATA_DIR + "undoSlashRhythm.mscx");
     QString writeFile1("undoSlashRhythm01-test.mscx");
@@ -204,7 +107,7 @@ void TestTools::undoSlashRhythm()
     QString writeFile2("undoSlashRhythm02-test.mscx");
     QString reference2(TOOLS_DATA_DIR + "undoSlashRhythm02-ref.mscx");
 
-    MasterScore* score = readScore(readFile);
+    MasterScore* score = ScoreRW::readScore(readFile);
     score->doLayout();
 
     // select all
@@ -216,16 +119,17 @@ void TestTools::undoSlashRhythm()
     score->startCmd();
     score->cmdSlashRhythm();
     score->endCmd();
-    QVERIFY(saveCompareScore(score, writeFile1, reference1));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
 
     // undo
+    EditData ed;
     score->undoStack()->undo(&ed);
-    QVERIFY(saveCompareScore(score, writeFile2, reference2));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, reference2));
 
     delete score;
 }
 
-void TestTools::undoResequenceAlpha()
+TEST_F(ToolsTests, undoResequenceAlpha)
 {
     QString readFile(TOOLS_DATA_DIR + "undoResequenceAlpha.mscx");
     QString writeFile1("undoResequenceAlpha01-test.mscx");
@@ -233,23 +137,24 @@ void TestTools::undoResequenceAlpha()
     QString writeFile2("undoResequenceAlpha02-test.mscx");
     QString reference2(TOOLS_DATA_DIR + "undoResequenceAlpha02-ref.mscx");
 
-    MasterScore* score = readScore(readFile);
+    MasterScore* score = ScoreRW::readScore(readFile);
     score->doLayout();
 
     // do
     score->startCmd();
     score->cmdResequenceRehearsalMarks();
     score->endCmd();
-    QVERIFY(saveCompareScore(score, writeFile1, reference1));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
 
     // undo
+    EditData ed;
     score->undoStack()->undo(&ed);
-    QVERIFY(saveCompareScore(score, writeFile2, reference2));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, reference2));
 
     delete score;
 }
 
-void TestTools::undoResequenceNumeric()
+TEST_F(ToolsTests, undoResequenceNumeric)
 {
     QString readFile(TOOLS_DATA_DIR + "undoResequenceNumeric.mscx");
     QString writeFile1("undoResequenceNumeric01-test.mscx");
@@ -257,23 +162,24 @@ void TestTools::undoResequenceNumeric()
     QString writeFile2("undoResequenceNumeric02-test.mscx");
     QString reference2(TOOLS_DATA_DIR + "undoResequenceNumeric02-ref.mscx");
 
-    MasterScore* score = readScore(readFile);
+    MasterScore* score = ScoreRW::readScore(readFile);
     score->doLayout();
 
     // do
     score->startCmd();
     score->cmdResequenceRehearsalMarks();
     score->endCmd();
-    QVERIFY(saveCompareScore(score, writeFile1, reference1));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
 
     // undo
+    EditData ed;
     score->undoStack()->undo(&ed);
-    QVERIFY(saveCompareScore(score, writeFile2, reference2));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, reference2));
 
     delete score;
 }
 
-void TestTools::undoResequenceMeasure()
+TEST_F(ToolsTests, undoResequenceMeasure)
 {
     QString readFile(TOOLS_DATA_DIR + "undoResequenceMeasure.mscx");
     QString writeFile1("undoResequenceMeasure01-test.mscx");
@@ -281,23 +187,24 @@ void TestTools::undoResequenceMeasure()
     QString writeFile2("undoResequenceMeasure02-test.mscx");
     QString reference2(TOOLS_DATA_DIR + "undoResequenceMeasure02-ref.mscx");
 
-    MasterScore* score = readScore(readFile);
+    MasterScore* score = ScoreRW::readScore(readFile);
     score->doLayout();
 
     // do
     score->startCmd();
     score->cmdResequenceRehearsalMarks();
     score->endCmd();
-    QVERIFY(saveCompareScore(score, writeFile1, reference1));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
 
     // undo
+    EditData ed;
     score->undoStack()->undo(&ed);
-    QVERIFY(saveCompareScore(score, writeFile2, reference2));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, reference2));
 
     delete score;
 }
 
-void TestTools::undoResequencePart()
+TEST_F(ToolsTests, undoResequencePart)
 {
     QString readFile(TOOLS_DATA_DIR + "undoResequencePart.mscx");
     QString writeFile1("undoResequencePart01-test.mscx");
@@ -305,26 +212,27 @@ void TestTools::undoResequencePart()
     QString writeFile2("undoResequencePart02-test.mscx");
     QString reference2(TOOLS_DATA_DIR + "undoResequencePart02-ref.mscx");
 
-    MasterScore* score = readScore(readFile);
+    MasterScore* score = ScoreRW::readScore(readFile);
     score->doLayout();
 
     // do
     score->startCmd();
     score->cmdResequenceRehearsalMarks();
     score->endCmd();
-    QVERIFY(saveCompareScore(score, writeFile1, reference1));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
 
     // undo
+    EditData ed;
     score->undoStack()->undo(&ed);
-    QVERIFY(saveCompareScore(score, writeFile2, reference2));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, reference2));
 
     delete score;
 }
 
-void TestTools::changeEnharmonic(bool both)
+void ToolsTests::changeEnharmonic(bool both)
 {
     QString readFile(TOOLS_DATA_DIR + "change-enharmonic.mscx");
-    MasterScore* score = readScore(readFile);
+    MasterScore* score = ScoreRW::readScore(readFile);
     QString mode = both ? "both" : "current";
     score->doLayout();
     score->cmdSelectAll();
@@ -333,19 +241,16 @@ void TestTools::changeEnharmonic(bool both)
         score->changeEnharmonicSpelling(both);
         score->endCmd();
         QString prefix = "change-enharmonic-" + mode + "-0" + ('0' + i);
-        QVERIFY(saveCompareScore(score, prefix + "-test.mscx", TOOLS_DATA_DIR + prefix + "-ref.mscx"));
+        EXPECT_TRUE(ScoreComp::saveCompareScore(score, prefix + "-test.mscx", TOOLS_DATA_DIR + prefix + "-ref.mscx"));
     }
 }
 
-void TestTools::changeEnharmonicBoth()
+TEST_F(ToolsTests, changeEnharmonicBoth)
 {
     changeEnharmonic(true);
 }
 
-void TestTools::changeEnharmonicCurrent()
+TEST_F(ToolsTests, changeEnharmonicCurrent)
 {
     changeEnharmonic(false);
 }
-
-QTEST_MAIN(TestTools)
-#include "tst_tools.moc"
