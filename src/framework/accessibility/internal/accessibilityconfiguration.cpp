@@ -35,7 +35,7 @@ bool AccessibilityConfiguration::enabled() const
 
 #ifdef BUILD_DIAGNOSTICS
     return true;
-#endif
+#else
 
     if (!QAccessible::isActive()) {
         return false;
@@ -43,4 +43,5 @@ bool AccessibilityConfiguration::enabled() const
 
     //! NOTE Accessibility available if navigation is used
     return navigationController()->activeSection() != nullptr;
+#endif
 }
