@@ -34,7 +34,6 @@ set(MODULE_TEST_SRC
     #${CMAKE_CURRENT_LIST_DIR}/tst_parts.cpp # won't compile
     # ${CMAKE_CURRENT_LIST_DIR}/tst_repeat.cpp # fail
     # ${CMAKE_CURRENT_LIST_DIR}/tst_text.cpp not actual, not compile
-    ${CMAKE_CURRENT_LIST_DIR}/tst_utils.cpp
 )
 
 set(MODULE_TEST_LINK
