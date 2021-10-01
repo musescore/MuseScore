@@ -20,43 +20,24 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "testing/qtestsuite.h"
-#include "testbase.h"
+#include <gtest/gtest.h>
+
 #include "libmscore/masterscore.h"
 #include "libmscore/undo.h"
+
+#include "utils/scorerw.h"
+#include "utils/scorecomp.h"
 
 static const QString TRANSPOSE_DATA_DIR("transpose_data/");
 
 using namespace Ms;
+using namespace mu::engraving;
 
-//---------------------------------------------------------
-//   TestTranspose
-//---------------------------------------------------------
-
-class TestTranspose : public QObject, public MTest
+class TransposeTests : public ::testing::Test
 {
-    Q_OBJECT
-
-private slots:
-    void initTestCase();
-    void undoTranspose();
-    void undoDiatonicTranspose();
 };
 
-//---------------------------------------------------------
-//   initTestCase
-//---------------------------------------------------------
-
-void TestTranspose::initTestCase()
-{
-    initMTest();
-}
-
-//---------------------------------------------------------
-//   undoTranspose
-//---------------------------------------------------------
-
-void TestTranspose::undoTranspose()
+TEST_F(TransposeTests, undoTranspose)
 {
     QString readFile(TRANSPOSE_DATA_DIR + "undoTranspose.mscx");
     QString writeFile1("undoTranspose01-test.mscx");
@@ -64,7 +45,7 @@ void TestTranspose::undoTranspose()
     QString writeFile2("undoTranspose02-test.mscx");
     QString reference2(TRANSPOSE_DATA_DIR + "undoTranspose02-ref.mscx");
 
-    MasterScore* score = readScore(readFile);
+    MasterScore* score = ScoreRW::readScore(readFile);
 
     // select all
     score->cmdSelectAll();
@@ -74,20 +55,17 @@ void TestTranspose::undoTranspose()
     score->transpose(TransposeMode::BY_INTERVAL, TransposeDirection::UP, Key::C, 4,
                      true, true, true);
     score->endCmd();
-    QVERIFY(saveCompareScore(score, writeFile1, reference1));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
 
     // undo
+    EditData ed;
     score->undoStack()->undo(&ed);
-    QVERIFY(saveCompareScore(score, writeFile2, reference2));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, reference2));
 
     delete score;
 }
 
-//---------------------------------------------------------
-//   undoDiatonicTranspose
-//---------------------------------------------------------
-
-void TestTranspose::undoDiatonicTranspose()
+TEST_F(TransposeTests, undoDiatonicTranspose)
 {
     QString readFile(TRANSPOSE_DATA_DIR + "undoDiatonicTranspose.mscx");
     QString writeFile1("undoDiatonicTranspose01-test.mscx");
@@ -95,7 +73,7 @@ void TestTranspose::undoDiatonicTranspose()
     QString writeFile2("undoDiatonicTranspose02-test.mscx");
     QString reference2(TRANSPOSE_DATA_DIR + "undoDiatonicTranspose02-ref.mscx");
 
-    MasterScore* score = readScore(readFile);
+    MasterScore* score = ScoreRW::readScore(readFile);
     score->doLayout();
 
     // select all
@@ -106,14 +84,12 @@ void TestTranspose::undoDiatonicTranspose()
     score->transpose(TransposeMode::DIATONICALLY, TransposeDirection::DOWN, Key::C, 3,
                      true, false, false);
     score->endCmd();
-    QVERIFY(saveCompareScore(score, writeFile1, reference1));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
 
     // undo
+    EditData ed;
     score->undoStack()->undo(&ed);
-    QVERIFY(saveCompareScore(score, writeFile2, reference2));
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile2, reference2));
 
     delete score;
 }
-
-QTEST_MAIN(TestTranspose)
-#include "tst_transpose.moc"
