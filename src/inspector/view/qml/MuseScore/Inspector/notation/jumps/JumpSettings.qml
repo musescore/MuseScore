@@ -22,8 +22,10 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
+import MuseScore.Ui 1.0
 import MuseScore.Inspector 1.0
 import MuseScore.UiComponents 1.0
+
 import "../../common"
 
 Column {
@@ -31,29 +33,48 @@ Column {
 
     property QtObject model: null
 
+    property NavigationPanel navigationPanel: null
+    property int navigationRowOffset: 1
+
     objectName: "JumpSettings"
 
     spacing: 12
 
     TextSection {
+        id: jumpTo
         titleText: qsTrc("inspector", "Jump to")
         propertyItem: root.model ? root.model.jumpTo : null
+
+        navigation.panel: root.navigationPanel
+        navigationRowStart: root.navigationRowOffset
     }
 
     TextSection {
+        id: playUntil
         titleText: qsTrc("inspector", "Play until")
         propertyItem: root.model ? root.model.playUntil : null
+
+        navigation.panel: root.navigationPanel
+        navigationRowStart: jumpTo.navigationRowEnd + 1
     }
 
     TextSection {
+        id: continueAt
         titleText: qsTrc("inspector", "Continue at")
         propertyItem: root.model ? root.model.continueAt : null
+
+        navigation.panel: root.navigationPanel
+        navigationRowStart: playUntil.navigationRowEnd + 1
     }
 
     CheckBox {
         isIndeterminate: root.model ? root.model.hasToPlayRepeats.isUndefined : false
         checked: root.model && !isIndeterminate ? root.model.hasToPlayRepeats.value : false
         text: qsTrc("inspector", "Play repeats")
+
+        navigation.name: "PlayRepeats"
+        navigation.panel: root.navigationPanel
+        navigation.row: continueAt.navigationRowEnd + 1
 
         onClicked: { root.model.hasToPlayRepeats.value = !checked }
     }
