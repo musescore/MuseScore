@@ -44,12 +44,13 @@ Column {
     spacing: 12
 
     DropdownPropertyView {
+        id: styleSection
         titleText: qsTrc("inspector", "Style")
         propertyItem: root.barlineSettingsModel ? root.barlineSettingsModel.type : null
 
         navigation.name: "Style"
         navigation.panel: root.navigationPanel
-        navigation.row: root.navigationRowOffset
+        navigationRowStart: root.navigationRowOffset
 
         model: [
             { text: qsTrc("symUserNames", "Single barline"), value: BarlineTypes.TYPE_NORMAL },
@@ -75,7 +76,7 @@ Column {
 
         navigation.name: "RepeatStyle"
         navigation.panel: root.navigationPanel
-        navigationRowStart: root.navigationRowOffset + 1
+        navigationRowStart: styleSection.navigationRowEnd + 1
 
         model: [
             { iconCode: IconCode.BARLINE_UNWINGED, value: false },
