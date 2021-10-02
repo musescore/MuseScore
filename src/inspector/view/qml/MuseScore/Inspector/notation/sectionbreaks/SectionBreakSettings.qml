@@ -22,8 +22,10 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Inspector 1.0
+
 import "../../common"
 
 Column {
@@ -31,11 +33,15 @@ Column {
 
     property QtObject model: null
 
+    property NavigationPanel navigationPanel: null
+    property int navigationRowOffset: 1
+
     objectName: "SectionBreakSettings"
 
     spacing: 12
 
     SpinBoxPropertyView {
+        id: pauseBeforStartsSection
         titleText: qsTrc("inspector", "Pause before new section starts")
         propertyItem: root.model ? root.model.pauseDuration : null
 
@@ -43,12 +49,21 @@ Column {
         minValue: 0
         step: 0.5
         measureUnitsSymbol: qsTrc("inspector", "s")
+
+        navigation.name: "PauseBeforStarts"
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationRowOffset
     }
 
     CheckBox {
+        id: startWithLongInstrNames
         isIndeterminate: root.model ? root.model.shouldStartWithLongInstrNames.isUndefined : false
         checked: root.model && !isIndeterminate ? root.model.shouldStartWithLongInstrNames.value : false
         text: qsTrc("inspector", "Start new section with long instrument names")
+
+        navigation.name: "StartWithLong"
+        navigation.panel: root.navigationPanel
+        navigation.row: pauseBeforStartsSection.navigationRowEnd + 1
 
         onClicked: { root.model.shouldStartWithLongInstrNames.value = !checked }
     }
@@ -57,6 +72,10 @@ Column {
         isIndeterminate: root.model ? root.model.shouldResetBarNums.isUndefined : false
         checked: root.model && !isIndeterminate ? root.model.shouldResetBarNums.value : false
         text: qsTrc("inspector", "Reset bar numbers for new section")
+
+        navigation.name: "ResetBarNumbers"
+        navigation.panel: root.navigationPanel
+        navigation.row: startWithLongInstrNames.navigation.row + 1
 
         onClicked: { root.model.shouldResetBarNums.value = !checked }
     }
