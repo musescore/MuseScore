@@ -835,6 +835,7 @@ enum class Sid {
 
     dynamicsFontFace,
     dynamicsFontSize,
+    dynamicsSymbolFontSize,
     dynamicsLineSpacing,
     dynamicsFontSpatiumDependent,
     dynamicsFontStyle,
@@ -865,6 +866,7 @@ enum class Sid {
 
     tempoFontFace,
     tempoFontSize,
+    tempoSymbolFontSize,
     tempoLineSpacing,
     tempoFontSpatiumDependent,
     tempoFontStyle,

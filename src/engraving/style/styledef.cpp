@@ -824,6 +824,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
 
     { Sid::dynamicsFontFace,              "dynamicsFontFace",             "Edwin" },
     { Sid::dynamicsFontSize,              "dynamicsFontSize",             11.0 },
+    { Sid::dynamicsSymbolFontSize,        "dynamicsSymbolFontSize",       20.0 },
     { Sid::dynamicsLineSpacing,           "dynamicsLineSpacing",          1.0 },
     { Sid::dynamicsFontSpatiumDependent,  "dynamicsFontSpatiumDependent", true },
     { Sid::dynamicsFontStyle,             "dynamicsFontStyle",            int(FontStyle::Italic) },
@@ -854,6 +855,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
 
     { Sid::tempoFontFace,                 "tempoFontFace",                "Edwin" },
     { Sid::tempoFontSize,                 "tempoFontSize",                12.0 },
+    { Sid::tempoSymbolFontSize,           "tempoSymbolFontSize",          20.0 },
     { Sid::tempoLineSpacing,              "tempoLineSpacing",             1.0 },
     { Sid::tempoFontSpatiumDependent,     "tempoFontSpatiumDependent",    true },
     { Sid::tempoFontStyle,                "tempoFontStyle",               int(FontStyle::Bold) },
