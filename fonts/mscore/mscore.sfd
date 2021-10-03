@@ -22,7 +22,7 @@ OS2Version: 3
 OS2_WeightWidthSlopeOnly: 0
 OS2_UseTypoMetrics: 1
 CreationTime: 1403170689
-ModificationTime: 1607266094
+ModificationTime: 1633461074
 PfmFamily: 17
 TTFWeight: 400
 TTFWidth: 5
@@ -55,7 +55,7 @@ OS2StrikeYPos: 264
 OS2Vendor: 'PfEd'
 OS2CodePages: 00000001.00000000
 OS2UnicodeRanges: 00000001.10000000.00000000.00000000
-Lookup: 258 0 0 "'kern' Horizontal Kerning in Latin lookup 0" { "'kern' Horizontal Kerning in Latin lookup 0 subtable"  } ['kern' ('latn' <'dflt' > ) ]
+Lookup: 258 0 0 "'kern' Horizontal Kerning in Latin lookup 0" { "'kern' Horizontal Kerning in Latin lookup 0 subtable" [153,15,0] } ['kern' ('latn' <'dflt' > ) ]
 MarkAttachClasses: 1
 DEI: 91125
 LangName: 1033
@@ -66,7 +66,7 @@ NameList: Adobe Glyph List
 DisplaySize: -96
 AntiAlias: 1
 FitToEm: 1
-WinInfo: 60 15 7
+WinInfo: 0 11 14
 BeginPrivate: 7
 BlueValues 21 [0 0 256 257 478 478]
 OtherBlues 11 [-141 -141]
@@ -96,6 +96,7 @@ BeginChars: 65542 329
 
 StartChar: .notdef
 Encoding: 65536 -1 0
+GlifName: _notdef
 Width: 371
 Flags: MW
 LayerCount: 2
@@ -117,6 +118,7 @@ EndChar
 
 StartChar: space
 Encoding: 32 32 1
+GlifName: space
 Width: 352
 GlyphClass: 2
 Flags: MW
@@ -127,6 +129,7 @@ EndChar
 
 StartChar: plus
 Encoding: 43 43 2
+GlifName: plus
 Width: 256
 GlyphClass: 2
 Flags: MW
@@ -164,6 +167,7 @@ EndChar
 
 StartChar: comma
 Encoding: 44 44 3
+GlifName: comma
 Width: 117
 GlyphClass: 2
 Flags: MW
@@ -191,6 +195,7 @@ EndChar
 
 StartChar: hyphen
 Encoding: 45 45 4
+GlifName: hyphen
 Width: 169
 GlyphClass: 2
 Flags: MW
@@ -210,6 +215,7 @@ EndChar
 
 StartChar: period
 Encoding: 46 46 5
+GlifName: period
 Width: 117
 GlyphClass: 2
 Flags: MW
@@ -281,6 +287,7 @@ EndChar
 
 StartChar: uniE0A2
 Encoding: 57506 57506 7
+GlifName: uniE_0A_2
 Width: 506
 GlyphClass: 2
 Flags: MW
@@ -310,6 +317,7 @@ EndChar
 
 StartChar: uniE0A3
 Encoding: 57507 57507 8
+GlifName: uniE_0A_3
 Width: 355
 GlyphClass: 2
 Flags: MW
@@ -342,6 +350,7 @@ EndChar
 
 StartChar: uniE101
 Encoding: 57601 57601 9
+GlifName: uniE_101
 Width: 439
 GlyphClass: 2
 Flags: MW
@@ -366,6 +375,7 @@ EndChar
 
 StartChar: uniE102
 Encoding: 57602 57602 10
+GlifName: uniE_102
 Width: 773
 GlyphClass: 2
 Flags: MW
@@ -394,6 +404,7 @@ EndChar
 
 StartChar: uniE103
 Encoding: 57603 57603 11
+GlifName: uniE_103
 Width: 601
 GlyphClass: 2
 Flags: MW
@@ -422,6 +433,7 @@ EndChar
 
 StartChar: uniE1B0
 Encoding: 57776 57776 12
+GlifName: uniE_1B_0
 Width: 347
 GlyphClass: 2
 Flags: MW
@@ -458,6 +470,7 @@ EndChar
 
 StartChar: uniE1B1
 Encoding: 57777 57777 13
+GlifName: uniE_1B_1
 Width: 347
 GlyphClass: 2
 Flags: MW
@@ -481,6 +494,7 @@ EndChar
 
 StartChar: uniE1B2
 Encoding: 57778 57778 14
+GlifName: uniE_1B_2
 Width: 355
 GlyphClass: 2
 Flags: MW
@@ -511,6 +525,7 @@ EndChar
 
 StartChar: uniE1B3
 Encoding: 57779 57779 15
+GlifName: uniE_1B_3
 Width: 336
 GlyphClass: 2
 Flags: MW
@@ -536,6 +551,7 @@ EndChar
 
 StartChar: uniE1B4
 Encoding: 57780 57780 16
+GlifName: uniE_1B_4
 Width: 355
 GlyphClass: 2
 Flags: MW
@@ -564,6 +580,7 @@ EndChar
 
 StartChar: uniE1B5
 Encoding: 57781 57781 17
+GlifName: uniE_1B_5
 Width: 336
 GlyphClass: 2
 Flags: MW
@@ -588,6 +605,7 @@ EndChar
 
 StartChar: uniE1B6
 Encoding: 57782 57782 18
+GlifName: uniE_1B_6
 Width: 355
 GlyphClass: 2
 Flags: MW
@@ -616,6 +634,7 @@ EndChar
 
 StartChar: uniE1B7
 Encoding: 57783 57783 19
+GlifName: uniE_1B_7
 Width: 336
 GlyphClass: 2
 Flags: MW
@@ -640,6 +659,7 @@ EndChar
 
 StartChar: uniE1B8
 Encoding: 57784 57784 20
+GlifName: uniE_1B_8
 Width: 336
 GlyphClass: 2
 Flags: MW
@@ -670,6 +690,7 @@ EndChar
 
 StartChar: uniE1B9
 Encoding: 57785 57785 21
+GlifName: uniE_1B_9
 Width: 336
 GlyphClass: 2
 Flags: MW
@@ -695,6 +716,7 @@ EndChar
 
 StartChar: uniE1BA
 Encoding: 57786 57786 22
+GlifName: uniE_1B_A_
 Width: 355
 GlyphClass: 2
 Flags: MW
@@ -723,6 +745,7 @@ EndChar
 
 StartChar: uniE1BB
 Encoding: 57787 57787 23
+GlifName: uniE_1B_B_
 Width: 336
 GlyphClass: 2
 Flags: MW
@@ -747,6 +770,7 @@ EndChar
 
 StartChar: uniE1BC
 Encoding: 57788 57788 24
+GlifName: uniE_1B_C_
 Width: 355
 GlyphClass: 2
 Flags: MW
@@ -779,6 +803,7 @@ EndChar
 
 StartChar: uniE1BD
 Encoding: 57789 57789 25
+GlifName: uniE_1B_D_
 Width: 336
 GlyphClass: 2
 Flags: MW
@@ -803,6 +828,7 @@ EndChar
 
 StartChar: uniE1BE
 Encoding: 57790 57790 26
+GlifName: uniE_1B_E_
 Width: 355
 GlyphClass: 2
 Flags: MW
@@ -833,6 +859,7 @@ EndChar
 
 StartChar: uniE1BF
 Encoding: 57791 57791 27
+GlifName: uniE_1B_F_
 Width: 336
 GlyphClass: 2
 Flags: MW
@@ -857,6 +884,7 @@ EndChar
 
 StartChar: uniE1C0
 Encoding: 57792 57792 28
+GlifName: uniE_1C_0
 Width: 246
 VWidth: 1000
 GlyphClass: 2
@@ -888,6 +916,7 @@ EndChar
 
 StartChar: uniE1C3
 Encoding: 57795 57795 29
+GlifName: uniE_1C_3
 Width: 246
 VWidth: 1000
 GlyphClass: 2
@@ -911,6 +940,7 @@ EndChar
 
 StartChar: uniE1C4
 Encoding: 57796 57796 30
+GlifName: uniE_1C_4
 Width: 246
 VWidth: 1000
 GlyphClass: 2
@@ -938,6 +968,7 @@ EndChar
 
 StartChar: uniE1C5
 Encoding: 57797 57797 31
+GlifName: uniE_1C_5
 Width: 246
 VWidth: 1000
 GlyphClass: 2
@@ -961,6 +992,7 @@ EndChar
 
 StartChar: uniE1C7
 Encoding: 57799 57799 32
+GlifName: uniE_1C_7
 Width: 246
 VWidth: 1000
 GlyphClass: 2
@@ -981,6 +1013,7 @@ EndChar
 
 StartChar: uniE1C8
 Encoding: 57800 57800 33
+GlifName: uniE_1C_8
 Width: 246
 VWidth: 1000
 GlyphClass: 2
@@ -1012,6 +1045,7 @@ EndChar
 
 StartChar: uniE1C9
 Encoding: 57801 57801 34
+GlifName: uniE_1C_9
 Width: 246
 VWidth: 1000
 GlyphClass: 2
@@ -1038,6 +1072,7 @@ EndChar
 
 StartChar: uniE1CA
 Encoding: 57802 57802 35
+GlifName: uniE_1C_A_
 Width: 246
 VWidth: 1000
 GlyphClass: 2
@@ -1067,6 +1102,7 @@ EndChar
 
 StartChar: uniE4A0
 Encoding: 58528 58528 36
+GlifName: uniE_4A_0
 Width: 460
 GlyphClass: 2
 Flags: MW
@@ -1094,6 +1130,7 @@ EndChar
 
 StartChar: uniE4A1
 Encoding: 58529 58529 37
+GlifName: uniE_4A_1
 Width: 460
 GlyphClass: 2
 Flags: MW
@@ -1105,6 +1142,7 @@ EndChar
 
 StartChar: uniE4A2
 Encoding: 58530 58530 38
+GlifName: uniE_4A_2
 Width: 102
 GlyphClass: 2
 Flags: MW
@@ -1126,6 +1164,7 @@ EndChar
 
 StartChar: uniE4A3
 Encoding: 58531 58531 39
+GlifName: uniE_4A_3
 Width: 102
 GlyphClass: 2
 Flags: MW
@@ -1137,6 +1176,7 @@ EndChar
 
 StartChar: uniE4A4
 Encoding: 58532 58532 40
+GlifName: uniE_4A_4
 Width: 308
 GlyphClass: 2
 Flags: MW
@@ -1160,6 +1200,7 @@ EndChar
 
 StartChar: uniE4A5
 Encoding: 58533 58533 41
+GlifName: uniE_4A_5
 Width: 308
 GlyphClass: 2
 Flags: MW
@@ -1171,6 +1212,7 @@ EndChar
 
 StartChar: .null
 Encoding: 65537 -1 42
+GlifName: _null
 Width: 0
 GlyphClass: 2
 Flags: MW
@@ -1181,6 +1223,7 @@ EndChar
 
 StartChar: nonmarkingreturn
 Encoding: 65538 -1 43
+GlifName: nonmarkingreturn
 Width: 339
 GlyphClass: 2
 Flags: MW
@@ -1191,6 +1234,7 @@ EndChar
 
 StartChar: fadeout
 Encoding: 59460 59460 44
+GlifName: fadeout
 Width: 362
 VWidth: 1000
 Flags: MW
@@ -1220,6 +1264,7 @@ EndChar
 
 StartChar: fadein
 Encoding: 59459 59459 45
+GlifName: fadein
 Width: 362
 VWidth: 1000
 Flags: MW
@@ -1248,6 +1293,7 @@ EndChar
 
 StartChar: volumeswell
 Encoding: 59461 59461 46
+GlifName: volumeswell
 Width: 724
 VWidth: 1000
 Flags: MW
@@ -1294,6 +1340,7 @@ EndChar
 
 StartChar: wigglesawtooth
 Encoding: 60091 60091 47
+GlifName: wigglesawtooth
 Width: 748
 VWidth: 1000
 Flags: MW
@@ -1320,6 +1367,7 @@ EndChar
 
 StartChar: wigglesawtoothwide
 Encoding: 60092 60092 48
+GlifName: wigglesawtoothwide
 Width: 1000
 VWidth: 1000
 Flags: MW
@@ -1347,6 +1395,7 @@ EndChar
 
 StartChar: wigglevibratolargefaster
 Encoding: 60132 60132 49
+GlifName: wigglevibratolargefaster
 Width: 376
 VWidth: 1000
 Flags: MW
@@ -1383,6 +1432,7 @@ EndChar
 
 StartChar: wigglevibratolargeslowest
 Encoding: 60136 60136 50
+GlifName: wigglevibratolargeslowest
 Width: 763
 VWidth: 1000
 Flags: MW
@@ -1425,6 +1475,7 @@ EndChar
 
 StartChar: uniE094
 Encoding: 57492 57492 51
+GlifName: uniE_094
 Width: 138
 Flags: MW
 LayerCount: 2
@@ -1451,6 +1502,7 @@ EndChar
 
 StartChar: uniE095
 Encoding: 57493 57493 52
+GlifName: uniE_095
 Width: 128
 Flags: MW
 LayerCount: 2
@@ -1477,6 +1529,7 @@ EndChar
 
 StartChar: uniEBAE
 Encoding: 60334 60334 53
+GlifName: uniE_B_A_E_
 Width: 128
 VWidth: 0
 Flags: MW
@@ -1498,6 +1551,7 @@ EndChar
 
 StartChar: uniEBAF
 Encoding: 60335 60335 54
+GlifName: uniE_B_A_F_
 Width: 328
 VWidth: 0
 Flags: MW
@@ -1510,6 +1564,7 @@ EndChar
 
 StartChar: uniEBB0
 Encoding: 60336 60336 55
+GlifName: uniE_B_B_0
 Width: 428
 VWidth: 0
 Flags: MW
@@ -1523,6 +1578,7 @@ EndChar
 
 StartChar: uniEBAD
 Encoding: 60333 60333 56
+GlifName: uniE_B_A_D_
 Width: 48
 VWidth: 0
 Flags: MW
@@ -1540,6 +1596,7 @@ EndChar
 
 StartChar: uniE910
 Encoding: 59664 59664 57
+GlifName: uniE_910
 Width: 513
 Flags: MW
 LayerCount: 2
@@ -1580,6 +1637,7 @@ EndChar
 
 StartChar: uniE911
 Encoding: 59665 59665 58
+GlifName: uniE_911
 Width: 513
 Flags: MW
 LayerCount: 2
@@ -1611,6 +1669,7 @@ EndChar
 
 StartChar: uniE912
 Encoding: 59666 59666 59
+GlifName: uniE_912
 Width: 513
 Flags: MW
 LayerCount: 2
@@ -1657,6 +1716,7 @@ EndChar
 
 StartChar: uniE913
 Encoding: 59667 59667 60
+GlifName: uniE_913
 Width: 513
 Flags: MW
 LayerCount: 2
@@ -1714,6 +1774,7 @@ EndChar
 
 StartChar: uniE914
 Encoding: 59668 59668 61
+GlifName: uniE_914
 Width: 435
 Flags: MW
 LayerCount: 2
@@ -1757,6 +1818,7 @@ EndChar
 
 StartChar: uniE915
 Encoding: 59669 59669 62
+GlifName: uniE_915
 Width: 435
 Flags: MW
 LayerCount: 2
@@ -1767,6 +1829,7 @@ EndChar
 
 StartChar: uniE916
 Encoding: 59670 59670 63
+GlifName: uniE_916
 Width: 435
 Flags: MW
 LayerCount: 2
@@ -1804,6 +1867,7 @@ EndChar
 
 StartChar: uniE917
 Encoding: 59671 59671 64
+GlifName: uniE_917
 Width: 435
 Flags: MW
 LayerCount: 2
@@ -1862,6 +1926,7 @@ EndChar
 
 StartChar: uniE918
 Encoding: 59672 59672 65
+GlifName: uniE_918
 Width: 435
 Flags: MW
 LayerCount: 2
@@ -1872,6 +1937,7 @@ EndChar
 
 StartChar: uniE919
 Encoding: 59673 59673 66
+GlifName: uniE_919
 Width: 435
 Flags: MW
 LayerCount: 2
@@ -1928,6 +1994,7 @@ EndChar
 
 StartChar: uniE91A
 Encoding: 59674 59674 67
+GlifName: uniE_91A_
 Width: 435
 Flags: MW
 LayerCount: 2
@@ -1973,6 +2040,7 @@ EndChar
 
 StartChar: uniE26A
 Encoding: 57962 57962 68
+GlifName: uniE_26A_
 Width: 118
 UnlinkRmOvrlpSave: 1
 Flags: MW
@@ -1983,6 +2051,7 @@ EndChar
 
 StartChar: uniE26B
 Encoding: 57963 57963 69
+GlifName: uniE_26B_
 Width: 118
 UnlinkRmOvrlpSave: 1
 Flags: MW
@@ -1993,6 +2062,7 @@ EndChar
 
 StartChar: uniE057
 Encoding: 57431 57431 70
+GlifName: uniE_057
 Width: 641
 Flags: MW
 LayerCount: 2
@@ -2004,6 +2074,7 @@ EndChar
 
 StartChar: uniE4E5
 Encoding: 58597 58597 71
+GlifName: uniE_4E_5
 Width: 242
 Flags: MW
 LayerCount: 2
@@ -2050,6 +2121,7 @@ EndChar
 
 StartChar: uniE4C4
 Encoding: 58564 58564 72
+GlifName: uniE_4C_4
 Width: 512
 Flags: MW
 LayerCount: 2
@@ -2085,6 +2157,7 @@ EndChar
 
 StartChar: uniE261
 Encoding: 57953 57953 73
+GlifName: uniE_261
 Width: 168
 VWidth: 921
 Flags: MW
@@ -2115,6 +2188,7 @@ EndChar
 
 StartChar: uniE048
 Encoding: 57416 57416 74
+GlifName: uniE_048
 Width: 540
 Flags: MW
 LayerCount: 2
@@ -2179,6 +2253,7 @@ EndChar
 
 StartChar: uniEB86
 Encoding: 60294 60294 75
+GlifName: uniE_B_86
 Width: 256
 Flags: MW
 LayerCount: 2
@@ -2208,6 +2283,7 @@ EndChar
 
 StartChar: uniE240
 Encoding: 57920 57920 76
+GlifName: uniE_240
 Width: 246
 Flags: MW
 LayerCount: 2
@@ -2236,6 +2312,7 @@ EndChar
 
 StartChar: uniE442
 Encoding: 58434 58434 77
+GlifName: uniE_442
 Width: 201
 Flags: MW
 LayerCount: 2
@@ -2284,6 +2361,7 @@ EndChar
 
 StartChar: uniE4F5
 Encoding: 58613 58613 78
+GlifName: uniE_4F_5
 Width: 384
 Flags: MW
 LayerCount: 2
@@ -2312,6 +2390,7 @@ EndChar
 
 StartChar: uniE273
 Encoding: 57971 57971 79
+GlifName: uniE_273
 Width: 166
 Flags: MW
 LayerCount: 2
@@ -2352,6 +2431,7 @@ EndChar
 
 StartChar: uniE0A4
 Encoding: 57508 57508 80
+GlifName: uniE_0A_4
 Width: 336
 Flags: MW
 LayerCount: 2
@@ -2372,6 +2452,7 @@ EndChar
 
 StartChar: uniE4C5
 Encoding: 58565 58565 81
+GlifName: uniE_4C_5
 Width: 512
 Flags: MW
 LayerCount: 2
@@ -2406,6 +2487,7 @@ EndChar
 
 StartChar: uniEB84
 Encoding: 60292 60292 82
+GlifName: uniE_B_84
 Width: 128
 Flags: MW
 LayerCount: 2
@@ -2435,6 +2517,7 @@ EndChar
 
 StartChar: uniEAA0
 Encoding: 60064 60064 83
+GlifName: uniE_A_A_0
 Width: 214
 Flags: MW
 LayerCount: 2
@@ -2459,6 +2542,7 @@ EndChar
 
 StartChar: uniE246
 Encoding: 57926 57926 84
+GlifName: uniE_246
 Width: 246
 Flags: MW
 LayerCount: 2
@@ -2510,10 +2594,12 @@ SplineSet
  197 -474 197 -474 148.5 -409 c 4,64,65
  101 -346 101 -346 32 -283 c 5,56,-1
 EndSplineSet
+Validated: 33
 EndChar
 
 StartChar: uniE568
 Encoding: 58728 58728 85
+GlifName: uniE_568
 Width: 559
 Flags: MW
 LayerCount: 2
@@ -2562,6 +2648,7 @@ EndChar
 
 StartChar: uniE243
 Encoding: 57923 57923 86
+GlifName: uniE_243
 Width: 307
 Flags: MW
 LayerCount: 2
@@ -2601,6 +2688,7 @@ EndChar
 
 StartChar: uniE4E7
 Encoding: 58599 58599 87
+GlifName: uniE_4E_7
 Width: 307
 Flags: MW
 LayerCount: 2
@@ -2641,6 +2729,7 @@ EndChar
 
 StartChar: uniE282
 Encoding: 57986 57986 88
+GlifName: uniE_282
 Width: 179
 Flags: MW
 LayerCount: 2
@@ -2683,6 +2772,7 @@ EndChar
 
 StartChar: uniE272
 Encoding: 57970 57970 89
+GlifName: uniE_272
 Width: 166
 Flags: MW
 LayerCount: 2
@@ -2723,6 +2813,7 @@ EndChar
 
 StartChar: uniE064
 Encoding: 57444 57444 90
+GlifName: uniE_064
 Width: 688
 Flags: MW
 LayerCount: 2
@@ -2734,6 +2825,7 @@ EndChar
 
 StartChar: uniE651
 Encoding: 58961 58961 91
+GlifName: uniE_651
 Width: 427
 Flags: MW
 LayerCount: 2
@@ -2799,6 +2891,7 @@ EndChar
 
 StartChar: uniE274
 Encoding: 57972 57972 92
+GlifName: uniE_274
 Width: 261
 Flags: MW
 LayerCount: 2
@@ -2866,6 +2959,7 @@ EndChar
 
 StartChar: uniE083
 Encoding: 57475 57475 93
+GlifName: uniE_083
 Width: 340
 Flags: MW
 LayerCount: 2
@@ -2920,6 +3014,7 @@ EndChar
 
 StartChar: uniE0C0
 Encoding: 57536 57536 94
+GlifName: uniE_0C_0
 Width: 336
 Flags: MW
 LayerCount: 2
@@ -2943,6 +3038,7 @@ EndChar
 
 StartChar: uniEAA4
 Encoding: 60068 60068 95
+GlifName: uniE_A_A_4
 Width: 256
 Flags: MW
 LayerCount: 2
@@ -2976,6 +3072,7 @@ EndChar
 
 StartChar: uniE564
 Encoding: 58724 58724 96
+GlifName: uniE_564
 Width: 212
 Flags: MW
 LayerCount: 2
@@ -2998,6 +3095,7 @@ EndChar
 
 StartChar: uniE4E9
 Encoding: 58601 58601 97
+GlifName: uniE_4E_9
 Width: 358
 Flags: MW
 LayerCount: 2
@@ -3062,6 +3160,7 @@ EndChar
 
 StartChar: uniE610
 Encoding: 58896 58896 98
+GlifName: uniE_610
 Width: 384
 Flags: MW
 LayerCount: 2
@@ -3088,6 +3187,7 @@ EndChar
 
 StartChar: uniE624
 Encoding: 58916 58916 99
+GlifName: uniE_624
 Width: 203
 Flags: MW
 LayerCount: 2
@@ -3121,6 +3221,7 @@ EndChar
 
 StartChar: uniE093
 Encoding: 57491 57491 100
+GlifName: uniE_093
 Width: 180
 Flags: MW
 LayerCount: 2
@@ -3147,6 +3248,7 @@ EndChar
 
 StartChar: uniE0D9
 Encoding: 57561 57561 101
+GlifName: uniE_0D_9
 Width: 372
 Flags: MW
 LayerCount: 2
@@ -3190,6 +3292,7 @@ EndChar
 
 StartChar: uniE092
 Encoding: 57490 57490 102
+GlifName: uniE_092
 Width: 180
 Flags: MW
 LayerCount: 2
@@ -3216,6 +3319,7 @@ EndChar
 
 StartChar: uniE522
 Encoding: 58658 58658 103
+GlifName: uniE_522
 Width: 437
 Flags: MW
 LayerCount: 2
@@ -3273,10 +3377,12 @@ SplineSet
  47 -65 47 -65 48 -63 c 128,-1,1
 EndSplineSet
 Validated: 1
+Kerns2: 103 -140 "'kern' Horizontal Kerning in Latin lookup 0 subtable" 104 -140 "'kern' Horizontal Kerning in Latin lookup 0 subtable" 129 -110 "'kern' Horizontal Kerning in Latin lookup 0 subtable"
 EndChar
 
 StartChar: uniE520
 Encoding: 58656 58656 104
+GlifName: uniE_520
 Width: 407
 Flags: MW
 LayerCount: 2
@@ -3325,10 +3431,12 @@ SplineSet
  119 -112 l 2,11,12
 EndSplineSet
 Validated: 1
+Kerns2: 103 -20 "'kern' Horizontal Kerning in Latin lookup 0 subtable" 104 -30 "'kern' Horizontal Kerning in Latin lookup 0 subtable" 233 -5 "'kern' Horizontal Kerning in Latin lookup 0 subtable"
 EndChar
 
 StartChar: uniE062
 Encoding: 57442 57442 105
+GlifName: uniE_062
 Width: 688
 Flags: MW
 LayerCount: 2
@@ -3385,6 +3493,7 @@ EndChar
 
 StartChar: uniE4D1
 Encoding: 58577 58577 106
+GlifName: uniE_4D_1
 Width: 457
 Flags: MW
 LayerCount: 2
@@ -3418,6 +3527,7 @@ EndChar
 
 StartChar: uniE047
 Encoding: 57415 57415 107
+GlifName: uniE_047
 Width: 512
 Flags: MW
 LayerCount: 2
@@ -3484,6 +3594,7 @@ EndChar
 
 StartChar: uniE4E1
 Encoding: 58593 58593 108
+GlifName: uniE_4E_1
 Width: 152
 Flags: MW
 LayerCount: 2
@@ -3504,6 +3615,7 @@ EndChar
 
 StartChar: uniE086
 Encoding: 57478 57478 109
+GlifName: uniE_086
 Width: 348
 Flags: MW
 LayerCount: 2
@@ -3549,6 +3661,7 @@ EndChar
 
 StartChar: uniE4E0
 Encoding: 58592 58592 110
+GlifName: uniE_4E_0
 Width: 460
 Flags: MW
 LayerCount: 2
@@ -3578,6 +3691,7 @@ EndChar
 
 StartChar: uniE4C9
 Encoding: 58569 58569 111
+GlifName: uniE_4C_9
 Width: 784
 Flags: MW
 LayerCount: 2
@@ -3632,6 +3746,7 @@ EndChar
 
 StartChar: uniE4E8
 Encoding: 58600 58600 112
+GlifName: uniE_4E_8
 Width: 332
 Flags: MW
 LayerCount: 2
@@ -3683,6 +3798,7 @@ EndChar
 
 StartChar: uniE0D8
 Encoding: 57560 57560 113
+GlifName: uniE_0D_8
 Width: 506
 Flags: MW
 LayerCount: 2
@@ -3730,6 +3846,7 @@ EndChar
 
 StartChar: uniE0BC
 Encoding: 57532 57532 114
+GlifName: uniE_0B_C_
 Width: 355
 Flags: MW
 LayerCount: 2
@@ -3757,6 +3874,7 @@ EndChar
 
 StartChar: uniE264
 Encoding: 57956 57956 115
+GlifName: uniE_264
 Width: 384
 Flags: MW
 LayerCount: 2
@@ -3811,6 +3929,7 @@ EndChar
 
 StartChar: uniE280
 Encoding: 57984 57984 116
+GlifName: uniE_280
 Width: 202
 Flags: MW
 LayerCount: 2
@@ -3845,6 +3964,7 @@ EndChar
 
 StartChar: uniEB7E
 Encoding: 60286 60286 117
+GlifName: uniE_B_7E_
 Width: 256
 Flags: MW
 LayerCount: 2
@@ -3877,6 +3997,7 @@ EndChar
 
 StartChar: uniE0B2
 Encoding: 57522 57522 118
+GlifName: uniE_0B_2
 Width: 400
 Flags: MW
 LayerCount: 2
@@ -3887,6 +4008,7 @@ EndChar
 
 StartChar: uniEB82
 Encoding: 60290 60290 119
+GlifName: uniE_B_82
 Width: 256
 Flags: MW
 LayerCount: 2
@@ -3915,6 +4037,7 @@ EndChar
 
 StartChar: uniE664
 Encoding: 58980 58980 120
+GlifName: uniE_664
 Width: 256
 Flags: MW
 LayerCount: 2
@@ -3943,6 +4066,7 @@ EndChar
 
 StartChar: uniE1E7
 Encoding: 57831 57831 121
+GlifName: uniE_1E_7
 Width: 116
 Flags: MW
 LayerCount: 2
@@ -3953,6 +4077,7 @@ EndChar
 
 StartChar: uniE652
 Encoding: 58962 58962 122
+GlifName: uniE_652
 Width: 203
 Flags: MW
 LayerCount: 2
@@ -3992,6 +4117,7 @@ EndChar
 
 StartChar: uniE653
 Encoding: 58963 58963 123
+GlifName: uniE_653
 Width: 340
 Flags: MW
 LayerCount: 2
@@ -4024,6 +4150,7 @@ EndChar
 
 StartChar: uniE8C8
 Encoding: 59592 59592 124
+GlifName: uniE_8C_8
 Width: 272
 Flags: MW
 LayerCount: 2
@@ -4056,6 +4183,7 @@ EndChar
 
 StartChar: uniE248
 Encoding: 57928 57928 125
+GlifName: uniE_248
 Width: 244
 Flags: MW
 LayerCount: 2
@@ -4122,10 +4250,12 @@ SplineSet
  138 -385 138 -385 107 -352.5 c 128,-1,84
  76 -320 76 -320 32 -282 c 1,72,-1
 EndSplineSet
+Validated: 33
 EndChar
 
 StartChar: uniE59E
 Encoding: 58782 58782 126
+GlifName: uniE_59E_
 Width: 213
 Flags: MW
 LayerCount: 2
@@ -4156,6 +4286,7 @@ EndChar
 
 StartChar: uniE247
 Encoding: 57927 57927 127
+GlifName: uniE_247
 Width: 307
 Flags: MW
 LayerCount: 2
@@ -4216,6 +4347,7 @@ EndChar
 
 StartChar: uniE565
 Encoding: 58725 58725 128
+GlifName: uniE_565
 Width: 275
 Flags: MW
 LayerCount: 2
@@ -4238,6 +4370,7 @@ EndChar
 
 StartChar: uniE525
 Encoding: 58661 58661 129
+GlifName: uniE_525
 Width: 276
 Flags: MW
 LayerCount: 2
@@ -4278,6 +4411,7 @@ EndChar
 
 StartChar: uniE271
 Encoding: 57969 57969 130
+GlifName: uniE_271
 Width: 178
 Flags: MW
 LayerCount: 2
@@ -4323,6 +4457,7 @@ EndChar
 
 StartChar: uniE069
 Encoding: 57449 57449 131
+GlifName: uniE_069
 Width: 512
 Flags: MW
 LayerCount: 2
@@ -4352,6 +4487,7 @@ EndChar
 
 StartChar: uniE4A6
 Encoding: 58534 58534 132
+GlifName: uniE_4A_6
 Width: 102
 Flags: MW
 LayerCount: 2
@@ -4372,6 +4508,7 @@ EndChar
 
 StartChar: uniE4E3
 Encoding: 58595 58595 133
+GlifName: uniE_4E_3
 Width: 384
 Flags: MW
 LayerCount: 2
@@ -4392,6 +4529,7 @@ EndChar
 
 StartChar: uniE650
 Encoding: 58960 58960 134
+GlifName: uniE_650
 Width: 818
 Flags: MW
 LayerCount: 2
@@ -4500,6 +4638,7 @@ EndChar
 
 StartChar: uniE082
 Encoding: 57474 57474 135
+GlifName: uniE_082
 Width: 375
 Flags: MW
 LayerCount: 2
@@ -4548,6 +4687,7 @@ EndChar
 
 StartChar: uniE4A7
 Encoding: 58535 58535 136
+GlifName: uniE_4A_7
 Width: 102
 Flags: MW
 LayerCount: 2
@@ -4568,6 +4708,7 @@ EndChar
 
 StartChar: uniE08B
 Encoding: 57483 57483 137
+GlifName: uniE_08B_
 Width: 435
 Flags: MW
 LayerCount: 2
@@ -4625,6 +4766,7 @@ EndChar
 
 StartChar: uniE56E
 Encoding: 58734 58734 138
+GlifName: uniE_56E_
 Width: 684
 Flags: MW
 LayerCount: 2
@@ -4669,6 +4811,7 @@ EndChar
 
 StartChar: uniE4E2
 Encoding: 58594 58594 139
+GlifName: uniE_4E_2
 Width: 152
 Flags: MW
 LayerCount: 2
@@ -4689,6 +4832,7 @@ EndChar
 
 StartChar: uniE05C
 Encoding: 57436 57436 140
+GlifName: uniE_05C_
 Width: 697
 Flags: MW
 LayerCount: 2
@@ -4769,6 +4913,7 @@ EndChar
 
 StartChar: uniE262
 Encoding: 57954 57954 141
+GlifName: uniE_262
 Width: 254
 VWidth: 921
 Flags: MW
@@ -4827,6 +4972,7 @@ EndChar
 
 StartChar: uniE440
 Encoding: 58432 58432 142
+GlifName: uniE_440
 Width: 201
 Flags: MW
 LayerCount: 2
@@ -4886,6 +5032,7 @@ EndChar
 
 StartChar: uniE003
 Encoding: 57347 57347 143
+GlifName: uniE_003
 Width: 466
 Flags: MW
 LayerCount: 2
@@ -4914,6 +5061,7 @@ EndChar
 
 StartChar: uniE5B0
 Encoding: 58800 58800 144
+GlifName: uniE_5B_0
 Width: 469
 Flags: MW
 LayerCount: 2
@@ -4955,6 +5103,7 @@ EndChar
 
 StartChar: uniE4C8
 Encoding: 58568 58568 145
+GlifName: uniE_4C_8
 Width: 784
 Flags: MW
 LayerCount: 2
@@ -5009,6 +5158,7 @@ EndChar
 
 StartChar: uniE242
 Encoding: 57922 57922 146
+GlifName: uniE_242
 Width: 246
 Flags: MW
 LayerCount: 2
@@ -5047,6 +5197,7 @@ EndChar
 
 StartChar: uniE245
 Encoding: 57925 57925 147
+GlifName: uniE_245
 Width: 307
 Flags: MW
 LayerCount: 2
@@ -5094,6 +5245,7 @@ EndChar
 
 StartChar: uniE5E7
 Encoding: 58855 58855 148
+GlifName: uniE_5E_7
 Width: 204
 Flags: MW
 LayerCount: 2
@@ -5123,6 +5275,7 @@ EndChar
 
 StartChar: uniE4E6
 Encoding: 58598 58598 149
+GlifName: uniE_4E_6
 Width: 256
 Flags: MW
 LayerCount: 2
@@ -5152,6 +5305,7 @@ EndChar
 
 StartChar: uniE612
 Encoding: 58898 58898 150
+GlifName: uniE_612
 Width: 332
 Flags: MW
 LayerCount: 2
@@ -5176,6 +5330,7 @@ EndChar
 
 StartChar: uniE4C6
 Encoding: 58566 58566 151
+GlifName: uniE_4C_6
 Width: 638
 Flags: MW
 LayerCount: 2
@@ -5213,6 +5368,7 @@ EndChar
 
 StartChar: uniE654
 Encoding: 58964 58964 152
+GlifName: uniE_654
 Width: 70
 Flags: MW
 LayerCount: 2
@@ -5233,6 +5389,7 @@ EndChar
 
 StartChar: uniE631
 Encoding: 58929 58929 153
+GlifName: uniE_631
 Width: 271
 Flags: MW
 LayerCount: 2
@@ -5270,6 +5427,7 @@ EndChar
 
 StartChar: uniE4AD
 Encoding: 58541 58541 154
+GlifName: uniE_4A_D_
 Width: 256
 Flags: MW
 LayerCount: 2
@@ -5295,6 +5453,7 @@ EndChar
 
 StartChar: uniE065
 Encoding: 57445 57445 155
+GlifName: uniE_065
 Width: 688
 Flags: MW
 LayerCount: 2
@@ -5306,6 +5465,7 @@ EndChar
 
 StartChar: uniE8C7
 Encoding: 59591 59591 156
+GlifName: uniE_8C_7
 Width: 529
 Flags: MW
 LayerCount: 2
@@ -5352,6 +5512,7 @@ EndChar
 
 StartChar: uniE4C0
 Encoding: 58560 58560 157
+GlifName: uniE_4C_0
 Width: 678
 Flags: MW
 LayerCount: 2
@@ -5391,6 +5552,7 @@ EndChar
 
 StartChar: uniE044
 Encoding: 57412 57412 158
+GlifName: uniE_044
 Width: 116
 Flags: MW
 LayerCount: 2
@@ -5411,6 +5573,7 @@ EndChar
 
 StartChar: uniE5E5
 Encoding: 58853 58853 159
+GlifName: uniE_5E_5
 Width: 282
 Flags: MW
 LayerCount: 2
@@ -5447,6 +5610,7 @@ EndChar
 
 StartChar: uniEAAE
 Encoding: 60078 60078 160
+GlifName: uniE_A_A_E_
 Width: 257
 Flags: MW
 LayerCount: 2
@@ -5482,6 +5646,7 @@ EndChar
 
 StartChar: uniE614
 Encoding: 58900 58900 161
+GlifName: uniE_614
 Width: 272
 Flags: MW
 LayerCount: 2
@@ -5511,6 +5676,7 @@ EndChar
 
 StartChar: uniE0F5
 Encoding: 57589 57589 162
+GlifName: uniE_0F_5
 Width: 116
 UnlinkRmOvrlpSave: 1
 Flags: MW
@@ -5521,6 +5687,7 @@ EndChar
 
 StartChar: uniE658
 Encoding: 58968 58968 163
+GlifName: uniE_658
 Width: 214
 Flags: MW
 LayerCount: 2
@@ -5541,6 +5708,7 @@ EndChar
 
 StartChar: uniE088
 Encoding: 57480 57480 164
+GlifName: uniE_088
 Width: 375
 Flags: MW
 LayerCount: 2
@@ -5582,6 +5750,7 @@ EndChar
 
 StartChar: uniE089
 Encoding: 57481 57481 165
+GlifName: uniE_089
 Width: 348
 Flags: MW
 LayerCount: 2
@@ -5627,6 +5796,7 @@ EndChar
 
 StartChar: uniE0A8
 Encoding: 57512 57512 166
+GlifName: uniE_0A_8
 Width: 388
 Flags: MW
 LayerCount: 2
@@ -5688,6 +5858,7 @@ EndChar
 
 StartChar: uniE0BE
 Encoding: 57534 57534 167
+GlifName: uniE_0B_E_
 Width: 336
 Flags: MW
 LayerCount: 2
@@ -5711,6 +5882,7 @@ EndChar
 
 StartChar: uniE084
 Encoding: 57476 57476 168
+GlifName: uniE_084
 Width: 409
 Flags: MW
 LayerCount: 2
@@ -5763,6 +5935,7 @@ EndChar
 
 StartChar: uniE8CA
 Encoding: 59594 59594 169
+GlifName: uniE_8C_A_
 Width: 62
 Flags: MW
 LayerCount: 2
@@ -5783,6 +5956,7 @@ EndChar
 
 StartChar: uniE275
 Encoding: 57973 57973 170
+GlifName: uniE_275
 Width: 261
 Flags: MW
 LayerCount: 2
@@ -5851,6 +6025,7 @@ EndChar
 
 StartChar: uniE283
 Encoding: 57987 57987 171
+GlifName: uniE_283
 Width: 371
 Flags: MW
 LayerCount: 2
@@ -5923,6 +6098,7 @@ EndChar
 
 StartChar: uniE080
 Encoding: 57472 57472 172
+GlifName: uniE_080
 Width: 375
 Flags: MW
 LayerCount: 2
@@ -5954,6 +6130,7 @@ EndChar
 
 StartChar: uniE081
 Encoding: 57473 57473 173
+GlifName: uniE_081
 Width: 325
 Flags: MW
 LayerCount: 2
@@ -5995,6 +6172,7 @@ EndChar
 
 StartChar: uniE249
 Encoding: 57929 57929 174
+GlifName: uniE_249
 Width: 307
 Flags: MW
 LayerCount: 2
@@ -6069,6 +6247,7 @@ EndChar
 
 StartChar: uniE4B2
 Encoding: 58546 58546 175
+GlifName: uniE_4B_2
 Width: 308
 Flags: MW
 LayerCount: 2
@@ -6098,6 +6277,7 @@ EndChar
 
 StartChar: uniE4F2
 Encoding: 58610 58610 176
+GlifName: uniE_4F_2
 Width: 256
 Flags: MW
 LayerCount: 2
@@ -6127,6 +6307,7 @@ EndChar
 
 StartChar: uniE0F6
 Encoding: 57590 57590 177
+GlifName: uniE_0F_6
 Width: 116
 UnlinkRmOvrlpSave: 1
 Flags: MW
@@ -6137,6 +6318,7 @@ EndChar
 
 StartChar: uniE051
 Encoding: 57425 57425 178
+GlifName: uniE_051
 Width: 641
 Flags: MW
 LayerCount: 2
@@ -6148,6 +6330,7 @@ EndChar
 
 StartChar: uniE054
 Encoding: 57428 57428 179
+GlifName: uniE_054
 Width: 641
 Flags: MW
 LayerCount: 2
@@ -6159,6 +6342,7 @@ EndChar
 
 StartChar: uniEB7C
 Encoding: 60284 60284 180
+GlifName: uniE_B_7C_
 Width: 256
 Flags: MW
 LayerCount: 2
@@ -6186,6 +6370,7 @@ EndChar
 
 StartChar: uniE0B3
 Encoding: 57523 57523 181
+GlifName: uniE_0B_3
 Width: 400
 Flags: MW
 LayerCount: 2
@@ -6226,6 +6411,7 @@ EndChar
 
 StartChar: uniE270
 Encoding: 57968 57968 182
+GlifName: uniE_270
 Width: 178
 Flags: MW
 LayerCount: 2
@@ -6269,6 +6455,7 @@ EndChar
 
 StartChar: uniE241
 Encoding: 57921 57921 183
+GlifName: uniE_241
 Width: 307
 Flags: MW
 LayerCount: 2
@@ -6297,6 +6484,7 @@ EndChar
 
 StartChar: uniE087
 Encoding: 57479 57479 184
+GlifName: uniE_087
 Width: 345
 Flags: MW
 LayerCount: 2
@@ -6345,6 +6533,7 @@ EndChar
 
 StartChar: uniE460
 Encoding: 58464 58464 185
+GlifName: uniE_460
 Width: 565
 Flags: MW
 LayerCount: 2
@@ -6372,6 +6561,7 @@ EndChar
 
 StartChar: uniE0BB
 Encoding: 57531 57531 186
+GlifName: uniE_0B_B_
 Width: 506
 Flags: MW
 LayerCount: 2
@@ -6399,6 +6589,7 @@ EndChar
 
 StartChar: uniEAA9
 Encoding: 60073 60073 187
+GlifName: uniE_A_A_9
 Width: 256
 Flags: MW
 LayerCount: 2
@@ -6409,6 +6600,7 @@ EndChar
 
 StartChar: uniE8C9
 Encoding: 59593 59593 188
+GlifName: uniE_8C_9
 Width: 272
 Flags: MW
 LayerCount: 2
@@ -6444,6 +6636,7 @@ EndChar
 
 StartChar: uniEAAD
 Encoding: 60077 60077 189
+GlifName: uniE_A_A_D_
 Width: 257
 Flags: MW
 LayerCount: 2
@@ -6485,6 +6678,7 @@ EndChar
 
 StartChar: uniE085
 Encoding: 57477 57477 190
+GlifName: uniE_085
 Width: 345
 Flags: MW
 LayerCount: 2
@@ -6530,6 +6724,7 @@ EndChar
 
 StartChar: uniE0DB
 Encoding: 57563 57563 191
+GlifName: uniE_0D_B_
 Width: 377
 Flags: MW
 LayerCount: 2
@@ -6561,6 +6756,7 @@ EndChar
 
 StartChar: uniE4E4
 Encoding: 58596 58596 192
+GlifName: uniE_4E_4
 Width: 384
 Flags: MW
 LayerCount: 2
@@ -6581,6 +6777,7 @@ EndChar
 
 StartChar: uniE006
 Encoding: 57350 57350 193
+GlifName: uniE_006
 Width: 466
 Flags: MW
 LayerCount: 2
@@ -6608,6 +6805,7 @@ EndChar
 
 StartChar: uniE662
 Encoding: 58978 58978 194
+GlifName: uniE_662
 Width: 256
 Flags: MW
 LayerCount: 2
@@ -6640,6 +6838,7 @@ EndChar
 
 StartChar: uniE661
 Encoding: 58977 58977 195
+GlifName: uniE_661
 Width: 256
 Flags: MW
 LayerCount: 2
@@ -6672,6 +6871,7 @@ EndChar
 
 StartChar: uniE521
 Encoding: 58657 58657 196
+GlifName: uniE_521
 Width: 442
 Flags: MW
 LayerCount: 2
@@ -6729,10 +6929,12 @@ SplineSet
  -14 134 -14 134 -14 138 c 2,0,1
 EndSplineSet
 Validated: 1
+Kerns2: 103 -55 "'kern' Horizontal Kerning in Latin lookup 0 subtable" 104 -40 "'kern' Horizontal Kerning in Latin lookup 0 subtable"
 EndChar
 
 StartChar: uniEB78
 Encoding: 60280 60280 197
+GlifName: uniE_B_78
 Width: 256
 Flags: MW
 LayerCount: 2
@@ -6760,6 +6962,7 @@ EndChar
 
 StartChar: uniE4C1
 Encoding: 58561 58561 198
+GlifName: uniE_4C_1
 Width: 678
 Flags: MW
 LayerCount: 2
@@ -6799,6 +7002,7 @@ EndChar
 
 StartChar: uniE8C6
 Encoding: 59590 59590 199
+GlifName: uniE_8C_6
 Width: 400
 Flags: MW
 LayerCount: 2
@@ -6838,6 +7042,7 @@ EndChar
 
 StartChar: uniE0A7
 Encoding: 57511 57511 200
+GlifName: uniE_0A_7
 Width: 439
 Flags: MW
 LayerCount: 2
@@ -6899,6 +7104,7 @@ EndChar
 
 StartChar: uniE08D
 Encoding: 57485 57485 201
+GlifName: uniE_08D_
 Width: 256
 Flags: MW
 LayerCount: 2
@@ -6909,6 +7115,7 @@ EndChar
 
 StartChar: uniE4CE
 Encoding: 58574 58574 202
+GlifName: uniE_4C_E_
 Width: 118
 Flags: MW
 LayerCount: 2
@@ -6933,6 +7140,7 @@ EndChar
 
 StartChar: uniE063
 Encoding: 57443 57443 203
+GlifName: uniE_063
 Width: 688
 Flags: MW
 LayerCount: 2
@@ -6944,6 +7152,7 @@ EndChar
 
 StartChar: uniE066
 Encoding: 57446 57446 204
+GlifName: uniE_066
 Width: 688
 Flags: MW
 LayerCount: 2
@@ -6955,6 +7164,7 @@ EndChar
 
 StartChar: uniE59D
 Encoding: 58781 58781 205
+GlifName: uniE_59D_
 Width: 214
 VWidth: 1023
 Flags: MW
@@ -6981,6 +7191,7 @@ EndChar
 
 StartChar: uniE050
 Encoding: 57424 57424 206
+GlifName: uniE_050
 Width: 641
 Flags: MW
 LayerCount: 2
@@ -7072,6 +7283,7 @@ EndChar
 
 StartChar: uniE0B1
 Encoding: 57521 57521 207
+GlifName: uniE_0B_1
 Width: 400
 Flags: MW
 LayerCount: 2
@@ -7082,6 +7294,7 @@ EndChar
 
 StartChar: uniE4EA
 Encoding: 58602 58602 208
+GlifName: uniE_4E_A_
 Width: 384
 Flags: MW
 LayerCount: 2
@@ -7156,6 +7369,7 @@ EndChar
 
 StartChar: uniE0B0
 Encoding: 57520 57520 209
+GlifName: uniE_0B_0
 Width: 400
 Flags: MW
 LayerCount: 2
@@ -7166,6 +7380,7 @@ EndChar
 
 StartChar: uniE4C7
 Encoding: 58567 58567 210
+GlifName: uniE_4C_7
 Width: 638
 Flags: MW
 LayerCount: 2
@@ -7203,6 +7418,7 @@ EndChar
 
 StartChar: uniE524
 Encoding: 58660 58660 211
+GlifName: uniE_524
 Width: 218
 Flags: MW
 LayerCount: 2
@@ -7242,10 +7458,12 @@ SplineSet
  169 233 169 233 169 246 c 0,0,1
 EndSplineSet
 Validated: 1
+Kerns2: 103 -30 "'kern' Horizontal Kerning in Latin lookup 0 subtable" 104 -10 "'kern' Horizontal Kerning in Latin lookup 0 subtable" 233 30 "'kern' Horizontal Kerning in Latin lookup 0 subtable"
 EndChar
 
 StartChar: uniE444
 Encoding: 58436 58436 212
+GlifName: uniE_444
 Width: 179
 Flags: MW
 LayerCount: 2
@@ -7256,6 +7474,7 @@ EndChar
 
 StartChar: uniE052
 Encoding: 57426 57426 213
+GlifName: uniE_052
 Width: 641
 Flags: MW
 LayerCount: 2
@@ -7267,6 +7486,7 @@ EndChar
 
 StartChar: uniE053
 Encoding: 57427 57427 214
+GlifName: uniE_053
 Width: 641
 Flags: MW
 LayerCount: 2
@@ -7278,6 +7498,7 @@ EndChar
 
 StartChar: uniE446
 Encoding: 58438 58438 215
+GlifName: uniE_446
 Width: 291
 Flags: MW
 LayerCount: 2
@@ -7332,6 +7553,7 @@ EndChar
 
 StartChar: uniE461
 Encoding: 58465 58465 216
+GlifName: uniE_461
 Width: 868
 Flags: MW
 LayerCount: 2
@@ -7392,6 +7614,7 @@ EndChar
 
 StartChar: uniE049
 Encoding: 57417 57417 217
+GlifName: uniE_049
 Width: 536
 Flags: MW
 LayerCount: 2
@@ -7460,6 +7683,7 @@ EndChar
 
 StartChar: uniE630
 Encoding: 58928 58928 218
+GlifName: uniE_630
 Width: 271
 Flags: MW
 LayerCount: 2
@@ -7497,6 +7721,7 @@ EndChar
 
 StartChar: uniE260
 Encoding: 57952 57952 219
+GlifName: uniE_260
 Width: 192
 Flags: MW
 LayerCount: 2
@@ -7529,6 +7754,7 @@ EndChar
 
 StartChar: uniE244
 Encoding: 57924 57924 220
+GlifName: uniE_244
 Width: 246
 Flags: MW
 LayerCount: 2
@@ -7580,6 +7806,7 @@ EndChar
 
 StartChar: uniE56D
 Encoding: 58733 58733 221
+GlifName: uniE_56D_
 Width: 469
 Flags: MW
 LayerCount: 2
@@ -7632,6 +7859,7 @@ EndChar
 
 StartChar: uniE08A
 Encoding: 57482 57482 222
+GlifName: uniE_08A_
 Width: 435
 Flags: MW
 LayerCount: 2
@@ -7673,6 +7901,7 @@ EndChar
 
 StartChar: uniE04A
 Encoding: 57418 57418 223
+GlifName: uniE_04A_
 Width: 312
 Flags: MW
 LayerCount: 2
@@ -7788,6 +8017,7 @@ EndChar
 
 StartChar: uniE0C9
 Encoding: 57545 57545 224
+GlifName: uniE_0C_9
 Width: 336
 Flags: MW
 LayerCount: 2
@@ -7811,6 +8041,7 @@ EndChar
 
 StartChar: uniE4D4
 Encoding: 58580 58580 225
+GlifName: uniE_4D_4
 Width: 322
 Flags: MW
 LayerCount: 2
@@ -7845,6 +8076,7 @@ EndChar
 
 StartChar: uniE06D
 Encoding: 57453 57453 226
+GlifName: uniE_06D_
 Width: 536
 Flags: MW
 LayerCount: 2
@@ -7898,6 +8130,7 @@ EndChar
 
 StartChar: uniE447
 Encoding: 58439 58439 227
+GlifName: uniE_447
 Width: 347
 Flags: MW
 LayerCount: 2
@@ -7974,6 +8207,7 @@ EndChar
 
 StartChar: uniE655
 Encoding: 58965 58965 228
+GlifName: uniE_655
 Width: 398
 Flags: MW
 LayerCount: 2
@@ -8075,6 +8309,7 @@ EndChar
 
 StartChar: uniEAAA
 Encoding: 60074 60074 229
+GlifName: uniE_A_A_A_
 Width: 256
 Flags: MW
 LayerCount: 2
@@ -8108,6 +8343,7 @@ EndChar
 
 StartChar: uniE567
 Encoding: 58727 58727 230
+GlifName: uniE_567
 Width: 559
 Flags: MW
 LayerCount: 2
@@ -8158,6 +8394,7 @@ EndChar
 
 StartChar: uniE4B3
 Encoding: 58547 58547 231
+GlifName: uniE_4B_3
 Width: 308
 Flags: MW
 LayerCount: 2
@@ -8187,6 +8424,7 @@ EndChar
 
 StartChar: uniE281
 Encoding: 57985 57985 232
+GlifName: uniE_281
 Width: 433
 Flags: MW
 LayerCount: 2
@@ -8236,6 +8474,7 @@ EndChar
 
 StartChar: uniE523
 Encoding: 58659 58659 233
+GlifName: uniE_523
 Width: 284
 Flags: MW
 LayerCount: 2
@@ -8268,10 +8507,12 @@ SplineSet
  -8 209 -8 209 -9 216 c 0,0,1
 EndSplineSet
 Validated: 1
+Kerns2: 103 -40 "'kern' Horizontal Kerning in Latin lookup 0 subtable" 104 -10 "'kern' Horizontal Kerning in Latin lookup 0 subtable"
 EndChar
 
 StartChar: uniE0A9
 Encoding: 57513 57513 234
+GlifName: uniE_0A_9
 Width: 336
 Flags: MW
 LayerCount: 2
@@ -8312,6 +8553,7 @@ EndChar
 
 StartChar: uniE0A1
 Encoding: 57505 57505 235
+GlifName: uniE_0A_1
 Width: 455
 Flags: MW
 LayerCount: 2
@@ -8345,6 +8587,7 @@ EndChar
 
 StartChar: uniE566
 Encoding: 58726 58726 236
+GlifName: uniE_566
 Width: 681
 Flags: MW
 LayerCount: 2
@@ -8412,6 +8655,7 @@ EndChar
 
 StartChar: uniE0A0
 Encoding: 57504 57504 237
+GlifName: uniE_0A_0
 Width: 587
 Flags: MW
 LayerCount: 2
@@ -8454,6 +8698,7 @@ EndChar
 
 StartChar: uniE0C8
 Encoding: 57544 57544 238
+GlifName: uniE_0C_8
 Width: 355
 Flags: MW
 LayerCount: 2
@@ -8481,6 +8726,7 @@ EndChar
 
 StartChar: uniEB7A
 Encoding: 60282 60282 239
+GlifName: uniE_B_7A_
 Width: 0
 Flags: MW
 LayerCount: 2
@@ -8513,6 +8759,7 @@ EndChar
 
 StartChar: uniE004
 Encoding: 57348 57348 240
+GlifName: uniE_004
 Width: 466
 Flags: MW
 LayerCount: 2
@@ -8541,6 +8788,7 @@ EndChar
 
 StartChar: uniE263
 Encoding: 57955 57955 241
+GlifName: uniE_263
 Width: 256
 VWidth: 1149
 Flags: MW
@@ -8594,6 +8842,7 @@ EndChar
 
 StartChar: uniE005
 Encoding: 57349 57349 242
+GlifName: uniE_005
 Width: 466
 Flags: MW
 LayerCount: 2
@@ -8622,6 +8871,7 @@ EndChar
 
 StartChar: uniE56C
 Encoding: 58732 58732 243
+GlifName: uniE_56C_
 Width: 469
 Flags: MW
 LayerCount: 2
@@ -8660,6 +8910,7 @@ EndChar
 
 StartChar: uniE4AC
 Encoding: 58540 58540 244
+GlifName: uniE_4A_C_
 Width: 256
 Flags: MW
 LayerCount: 2
@@ -8685,6 +8936,7 @@ EndChar
 
 StartChar: uniE665
 Encoding: 58981 58981 245
+GlifName: uniE_665
 Width: 256
 Flags: MW
 LayerCount: 2
@@ -8712,6 +8964,7 @@ EndChar
 
 StartChar: uniE4F4
 Encoding: 58612 58612 246
+GlifName: uniE_4F_4
 Width: 384
 Flags: MW
 LayerCount: 2
@@ -8740,6 +8993,7 @@ EndChar
 
 StartChar: uniEB80
 Encoding: 60288 60288 247
+GlifName: uniE_B_80
 Width: 128
 Flags: MW
 LayerCount: 2
@@ -8769,6 +9023,7 @@ EndChar
 
 StartChar: uniE055
 Encoding: 57429 57429 248
+GlifName: uniE_055
 Width: 1006
 Flags: MW
 LayerCount: 2
@@ -8950,6 +9205,7 @@ EndChar
 
 StartChar: uniE06A
 Encoding: 57450 57450 249
+GlifName: uniE_06A_
 Width: 327
 VWidth: 0
 Flags: MW
@@ -8988,6 +9244,7 @@ EndChar
 
 StartChar: uniE061
 Encoding: 57441 57441 250
+GlifName: uniE_061
 Width: 1024
 VWidth: 0
 Flags: M
@@ -9024,6 +9281,7 @@ EndChar
 
 StartChar: uniE056
 Encoding: 57430 57430 251
+GlifName: uniE_056
 Width: 828
 VWidth: 0
 Flags: MW
@@ -9036,6 +9294,7 @@ EndChar
 
 StartChar: uniE06B
 Encoding: 57451 57451 252
+GlifName: uniE_06B_
 Width: 263
 VWidth: 0
 Flags: MW
@@ -9079,6 +9338,7 @@ EndChar
 
 StartChar: uniE06C
 Encoding: 57452 57452 253
+GlifName: uniE_06C_
 Width: 484
 VWidth: 0
 Flags: MW
@@ -9110,6 +9370,7 @@ EndChar
 
 StartChar: uniE441
 Encoding: 58433 58433 254
+GlifName: uniE_441
 Width: 192
 Flags: MW
 LayerCount: 2
@@ -9120,6 +9381,7 @@ EndChar
 
 StartChar: uniE0BD
 Encoding: 57533 57533 255
+GlifName: uniE_0B_D_
 Width: 355
 Flags: MW
 LayerCount: 2
@@ -9147,6 +9409,7 @@ EndChar
 
 StartChar: uniE0BF
 Encoding: 57535 57535 256
+GlifName: uniE_0B_F_
 Width: 355
 Flags: MW
 LayerCount: 2
@@ -9174,6 +9437,7 @@ EndChar
 
 StartChar: uniE0CA
 Encoding: 57546 57546 257
+GlifName: uniE_0C_A_
 Width: 355
 Flags: MW
 LayerCount: 2
@@ -9205,6 +9469,7 @@ EndChar
 
 StartChar: uniE0CB
 Encoding: 57547 57547 258
+GlifName: uniE_0C_B_
 Width: 336
 Flags: MW
 LayerCount: 2
@@ -9228,6 +9493,7 @@ EndChar
 
 StartChar: uniE0DE
 Encoding: 57566 57566 259
+GlifName: uniE_0D_E_
 Width: 506
 Flags: MW
 LayerCount: 2
@@ -9257,6 +9523,7 @@ EndChar
 
 StartChar: uniE0B8
 Encoding: 57528 57528 260
+GlifName: uniE_0B_8
 Width: 506
 Flags: MW
 LayerCount: 2
@@ -9286,6 +9553,7 @@ EndChar
 
 StartChar: uniE0CC
 Encoding: 57548 57548 261
+GlifName: uniE_0C_C_
 Width: 355
 Flags: MW
 LayerCount: 2
@@ -9315,6 +9583,7 @@ EndChar
 
 StartChar: uniE0CD
 Encoding: 57549 57549 262
+GlifName: uniE_0C_D_
 Width: 336
 Flags: MW
 LayerCount: 2
@@ -9338,6 +9607,7 @@ EndChar
 
 StartChar: uniED40
 Encoding: 60736 60736 263
+GlifName: uniE_D_40
 Width: 486
 Flags: MW
 LayerCount: 2
@@ -9379,6 +9649,7 @@ EndChar
 
 StartChar: uniED41
 Encoding: 60737 60737 264
+GlifName: uniE_D_41
 Width: 486
 Flags: MW
 LayerCount: 2
@@ -9389,6 +9660,7 @@ EndChar
 
 StartChar: uniE590
 Encoding: 58768 58768 265
+GlifName: uniE_590
 Width: 0
 Flags: MW
 LayerCount: 2
@@ -9413,6 +9685,7 @@ EndChar
 
 StartChar: uniE591
 Encoding: 58769 58769 266
+GlifName: uniE_591
 Width: 62
 Flags: MW
 LayerCount: 2
@@ -9434,6 +9707,7 @@ EndChar
 
 StartChar: uniE592
 Encoding: 58770 58770 267
+GlifName: uniE_592
 Width: 62
 Flags: MW
 LayerCount: 2
@@ -9455,6 +9729,7 @@ EndChar
 
 StartChar: uniE5B8
 Encoding: 58808 58808 268
+GlifName: uniE_5B_8
 Width: 721
 Flags: MW
 LayerCount: 2
@@ -9519,6 +9794,7 @@ EndChar
 
 StartChar: uniE5BB
 Encoding: 58811 58811 269
+GlifName: uniE_5B_B_
 Width: 684
 Flags: MW
 LayerCount: 2
@@ -9571,6 +9847,7 @@ EndChar
 
 StartChar: uniE5BD
 Encoding: 58813 58813 270
+GlifName: uniE_5B_D_
 Width: 684
 Flags: MW
 LayerCount: 2
@@ -9631,6 +9908,7 @@ EndChar
 
 StartChar: uniE5B5
 Encoding: 58805 58805 271
+GlifName: uniE_5B_5
 Width: 721
 Flags: MW
 LayerCount: 2
@@ -9681,6 +9959,7 @@ EndChar
 
 StartChar: uniE5B1
 Encoding: 58801 58801 272
+GlifName: uniE_5B_1
 Width: 684
 Flags: MW
 LayerCount: 2
@@ -9732,6 +10011,7 @@ EndChar
 
 StartChar: uniE5B2
 Encoding: 58802 58802 273
+GlifName: uniE_5B_2
 Width: 684
 Flags: MW
 LayerCount: 2
@@ -9781,6 +10061,7 @@ EndChar
 
 StartChar: uniE5C4
 Encoding: 58820 58820 274
+GlifName: uniE_5C_4
 Width: 721
 Flags: MW
 LayerCount: 2
@@ -9846,6 +10127,7 @@ EndChar
 
 StartChar: uniE5C6
 Encoding: 58822 58822 275
+GlifName: uniE_5C_6
 Width: 721
 Flags: MW
 LayerCount: 2
@@ -9897,6 +10179,7 @@ EndChar
 
 StartChar: uniF474
 Encoding: 62580 62580 276
+GlifName: uniF_474
 Width: 688
 Flags: MW
 LayerCount: 2
@@ -9907,6 +10190,7 @@ EndChar
 
 StartChar: uniF473
 Encoding: 62579 62579 277
+GlifName: uniF_473
 Width: 557
 Flags: MW
 LayerCount: 2
@@ -9917,6 +10201,7 @@ EndChar
 
 StartChar: uniF472
 Encoding: 62578 62578 278
+GlifName: uniF_472
 Width: 513
 Flags: MW
 LayerCount: 2
@@ -10006,6 +10291,7 @@ EndChar
 
 StartChar: uniF40B
 Encoding: 62475 62475 279
+GlifName: uniF_40B_
 Width: 717
 Flags: MW
 LayerCount: 2
@@ -10132,6 +10418,7 @@ EndChar
 
 StartChar: uniF40D
 Encoding: 62477 62477 280
+GlifName: uniF_40D_
 Width: 574
 Flags: MW
 LayerCount: 2
@@ -10142,6 +10429,7 @@ EndChar
 
 StartChar: uniE265
 Encoding: 57957 57957 281
+GlifName: uniE_265
 Width: 574
 Flags: MW
 LayerCount: 2
@@ -10153,6 +10441,7 @@ EndChar
 
 StartChar: uniE266
 Encoding: 57958 57958 282
+GlifName: uniE_266
 Width: 576
 Flags: MW
 LayerCount: 2
@@ -10229,6 +10518,7 @@ EndChar
 
 StartChar: uniE267
 Encoding: 57959 57959 283
+GlifName: uniE_267
 Width: 423
 Flags: MW
 LayerCount: 2
@@ -10240,6 +10530,7 @@ EndChar
 
 StartChar: uniE268
 Encoding: 57960 57960 284
+GlifName: uniE_268
 Width: 485
 Flags: MW
 LayerCount: 2
@@ -10251,6 +10542,7 @@ EndChar
 
 StartChar: uniE269
 Encoding: 57961 57961 285
+GlifName: uniE_269
 Width: 541
 Flags: MW
 LayerCount: 2
@@ -10262,6 +10554,7 @@ EndChar
 
 StartChar: uniE4CF
 Encoding: 58575 58575 286
+GlifName: uniE_4C_F_
 Width: 425
 VWidth: 1000
 Flags: MW
@@ -10290,6 +10583,7 @@ EndChar
 
 StartChar: uniE1C1
 Encoding: 57793 57793 287
+GlifName: uniE_1C_1
 Width: 246
 VWidth: 1000
 Flags: MW
@@ -10315,6 +10609,7 @@ EndChar
 
 StartChar: uniE1C2
 Encoding: 57794 57794 288
+GlifName: uniE_1C_2
 Width: 246
 VWidth: 1000
 Flags: MW
@@ -10344,6 +10639,7 @@ EndChar
 
 StartChar: uniE1C6
 Encoding: 57798 57798 289
+GlifName: uniE_1C_6
 Width: 246
 VWidth: 1000
 Flags: MW
@@ -10369,6 +10665,7 @@ EndChar
 
 StartChar: uniE1CB
 Encoding: 57803 57803 290
+GlifName: uniE_1C_B_
 Width: 246
 VWidth: 1000
 Flags: MW
@@ -10392,6 +10689,7 @@ EndChar
 
 StartChar: uniE8CB
 Encoding: 59595 59595 291
+GlifName: uniE_8C_B_
 Width: 0
 VWidth: 1000
 Flags: MW
@@ -10419,6 +10717,7 @@ EndChar
 
 StartChar: uniE8CC
 Encoding: 59596 59596 292
+GlifName: uniE_8C_C_
 Width: 37
 VWidth: 1000
 Flags: MW
@@ -10447,6 +10746,7 @@ EndChar
 
 StartChar: uniE59F
 Encoding: 58783 58783 293
+GlifName: uniE_59F_
 Width: 0
 Flags: MW
 LayerCount: 2
@@ -10469,6 +10769,7 @@ EndChar
 
 StartChar: uniE59A
 Encoding: 58778 58778 294
+GlifName: uniE_59A_
 Width: 41
 Flags: MW
 LayerCount: 2
@@ -10494,6 +10795,7 @@ EndChar
 
 StartChar: uniE5A7
 Encoding: 58791 58791 295
+GlifName: uniE_5A_7
 Width: 263
 Flags: MW
 LayerCount: 2
@@ -10525,6 +10827,7 @@ EndChar
 
 StartChar: uniE594
 Encoding: 58772 58772 296
+GlifName: uniE_594
 Width: 0
 Flags: MW
 LayerCount: 2
@@ -10547,6 +10850,7 @@ EndChar
 
 StartChar: uniE5A1
 Encoding: 58785 58785 297
+GlifName: uniE_5A_1
 Width: 76
 Flags: MW
 LayerCount: 2
@@ -10571,6 +10875,7 @@ EndChar
 
 StartChar: uniE570
 Encoding: 58736 58736 298
+GlifName: uniE_570
 Width: 278
 Flags: MW
 LayerCount: 2
@@ -10591,6 +10896,7 @@ EndChar
 
 StartChar: uniE571
 Encoding: 58737 58737 299
+GlifName: uniE_571
 Width: 162
 Flags: MW
 LayerCount: 2
@@ -10624,6 +10930,7 @@ EndChar
 
 StartChar: uniE572
 Encoding: 58738 58738 300
+GlifName: uniE_572
 Width: 159
 Flags: MW
 LayerCount: 2
@@ -10652,6 +10959,7 @@ EndChar
 
 StartChar: uniE573
 Encoding: 58739 58739 301
+GlifName: uniE_573
 Width: 218
 Flags: MW
 LayerCount: 2
@@ -10681,6 +10989,7 @@ EndChar
 
 StartChar: uniE574
 Encoding: 58740 58740 302
+GlifName: uniE_574
 Width: 221
 Flags: MW
 LayerCount: 2
@@ -10709,6 +11018,7 @@ EndChar
 
 StartChar: uniE575
 Encoding: 58741 58741 303
+GlifName: uniE_575
 Width: 256
 Flags: MW
 LayerCount: 2
@@ -10732,6 +11042,7 @@ EndChar
 
 StartChar: uniE576
 Encoding: 58742 58742 304
+GlifName: uniE_576
 Width: 256
 Flags: MW
 LayerCount: 2
@@ -10756,6 +11067,7 @@ EndChar
 
 StartChar: uniE577
 Encoding: 58743 58743 305
+GlifName: uniE_577
 Width: 392
 Flags: MW
 LayerCount: 2
@@ -10780,6 +11092,7 @@ EndChar
 
 StartChar: uniE578
 Encoding: 58744 58744 306
+GlifName: uniE_578
 Width: 392
 Flags: MW
 LayerCount: 2
@@ -10804,6 +11117,7 @@ EndChar
 
 StartChar: uniE579
 Encoding: 58745 58745 307
+GlifName: uniE_579
 Width: 201
 Flags: MW
 LayerCount: 2
@@ -10820,6 +11134,7 @@ EndChar
 
 StartChar: uniE57A
 Encoding: 58746 58746 308
+GlifName: uniE_57A_
 Width: 201
 Flags: MW
 LayerCount: 2
@@ -10836,6 +11151,7 @@ EndChar
 
 StartChar: uniE57B
 Encoding: 58747 58747 309
+GlifName: uniE_57B_
 Width: 314
 Flags: MW
 LayerCount: 2
@@ -10852,6 +11168,7 @@ EndChar
 
 StartChar: uniE57C
 Encoding: 58748 58748 310
+GlifName: uniE_57C_
 Width: 313
 Flags: MW
 LayerCount: 2
@@ -10868,6 +11185,7 @@ EndChar
 
 StartChar: uniE57D
 Encoding: 58749 58749 311
+GlifName: uniE_57D_
 Width: 500
 Flags: MW
 LayerCount: 2
@@ -10889,6 +11207,7 @@ EndChar
 
 StartChar: uniE57E
 Encoding: 58750 58750 312
+GlifName: uniE_57E_
 Width: 519
 Flags: MW
 LayerCount: 2
@@ -10910,6 +11229,7 @@ EndChar
 
 StartChar: uniE57F
 Encoding: 58751 58751 313
+GlifName: uniE_57F_
 Width: 492
 Flags: MW
 LayerCount: 2
@@ -10932,6 +11252,7 @@ EndChar
 
 StartChar: uniE580
 Encoding: 58752 58752 314
+GlifName: uniE_580
 Width: 492
 Flags: MW
 LayerCount: 2
@@ -10954,6 +11275,7 @@ EndChar
 
 StartChar: uniE581
 Encoding: 58753 58753 315
+GlifName: uniE_581
 Width: 118
 Flags: MW
 LayerCount: 2
@@ -10978,6 +11300,7 @@ EndChar
 
 StartChar: uniE582
 Encoding: 58754 58754 316
+GlifName: uniE_582
 Width: 262
 Flags: MW
 LayerCount: 2
@@ -11014,6 +11337,7 @@ EndChar
 
 StartChar: uniE583
 Encoding: 58755 58755 317
+GlifName: uniE_583
 Width: 52
 Flags: MW
 LayerCount: 2
@@ -11036,6 +11360,7 @@ EndChar
 
 StartChar: uniE584
 Encoding: 58756 58756 318
+GlifName: uniE_584
 Width: 219
 Flags: MW
 LayerCount: 2
@@ -11072,6 +11397,7 @@ EndChar
 
 StartChar: uniE585
 Encoding: 58757 58757 319
+GlifName: uniE_585
 Width: 1088
 Flags: MW
 LayerCount: 2
@@ -11170,6 +11496,7 @@ EndChar
 
 StartChar: uniE586
 Encoding: 58758 58758 320
+GlifName: uniE_586
 Width: 1088
 Flags: MW
 LayerCount: 2
@@ -11265,6 +11592,7 @@ EndChar
 
 StartChar: uniE587
 Encoding: 58759 58759 321
+GlifName: uniE_587
 Width: 880
 Flags: MW
 LayerCount: 2
@@ -11309,6 +11637,7 @@ EndChar
 
 StartChar: uniE588
 Encoding: 58760 58760 322
+GlifName: uniE_588
 Width: 548
 Flags: MW
 LayerCount: 2
@@ -11355,6 +11684,7 @@ EndChar
 
 StartChar: uniE589
 Encoding: 58761 58761 323
+GlifName: uniE_589
 Width: 421
 Flags: MW
 LayerCount: 2
@@ -11404,6 +11734,7 @@ EndChar
 
 StartChar: uniE443
 Encoding: 58435 58435 324
+GlifName: uniE_443
 Width: 202
 Flags: MW
 LayerCount: 2
@@ -11414,6 +11745,7 @@ EndChar
 
 StartChar: uniE445
 Encoding: 58437 58437 325
+GlifName: uniE_445
 Width: 254
 VWidth: 921
 Flags: MW
@@ -11425,6 +11757,7 @@ EndChar
 
 StartChar: comb.15.halfsize
 Encoding: 65539 -1 326
+GlifName: comb.15.halfsize
 Width: 351
 Flags: MW
 LayerCount: 2
@@ -11436,6 +11769,7 @@ EndChar
 
 StartChar: comb.8.halfsize
 Encoding: 65540 -1 327
+GlifName: comb.8.halfsize
 Width: 191
 Flags: MW
 LayerCount: 2
@@ -11446,6 +11780,7 @@ EndChar
 
 StartChar: comb.paren_8.halfsize
 Encoding: 65541 -1 328
+GlifName: comb.paren_8.halfsize
 Width: 128
 Flags: MW
 LayerCount: 2
