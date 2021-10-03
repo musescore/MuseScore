@@ -33,7 +33,7 @@ class NavigationPanel;
 class NavigationControl : public AbstractNavigation, public INavigationControl, public async::Asyncable
 {
     Q_OBJECT
-    Q_PROPERTY(mu::ui::NavigationPanel* panel READ panel_property WRITE setPanel NOTIFY panelChanged)
+    Q_PROPERTY(mu::ui::NavigationPanel * panel READ panel_property WRITE setPanel NOTIFY panelChanged)
 
 public:
     explicit NavigationControl(QObject* parent = nullptr);

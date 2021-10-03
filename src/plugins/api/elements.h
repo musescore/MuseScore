@@ -103,12 +103,12 @@ class EngravingItem : public Ms::PluginAPI::ScoreElement
      * Parent element for this element.
      * \since 3.3
      */
-    Q_PROPERTY(Ms::PluginAPI::EngravingItem* parent READ parent)
+    Q_PROPERTY(Ms::PluginAPI::EngravingItem * parent READ parent)
     /**
      * Staff which this element belongs to.
      * \since MuseScore 3.5
      */
-    Q_PROPERTY(Ms::PluginAPI::Staff* staff READ staff)
+    Q_PROPERTY(Ms::PluginAPI::Staff * staff READ staff)
     /**
      * X-axis offset from a reference position in spatium units.
      * \see EngravingItem::offset
@@ -439,7 +439,7 @@ public:
 class Note : public EngravingItem
 {
     Q_OBJECT
-    Q_PROPERTY(Ms::PluginAPI::EngravingItem* accidental READ accidental)
+    Q_PROPERTY(Ms::PluginAPI::EngravingItem * accidental READ accidental)
     Q_PROPERTY(Ms::AccidentalType accidentalType READ accidentalType WRITE setAccidentalType)
     /** List of dots attached to this note */
     Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::EngravingItem> dots READ dots)
@@ -466,18 +466,18 @@ class Note : public EngravingItem
 //       Q_PROPERTY(int                            subchannel        READ subchannel)
     /// Backward tie for this Note.
     /// \since MuseScore 3.3
-    Q_PROPERTY(Ms::PluginAPI::Tie* tieBack READ tieBack)
+    Q_PROPERTY(Ms::PluginAPI::Tie * tieBack READ tieBack)
     /// Forward tie for this Note.
     /// \since MuseScore 3.3
-    Q_PROPERTY(Ms::PluginAPI::Tie* tieForward READ tieForward)
+    Q_PROPERTY(Ms::PluginAPI::Tie * tieForward READ tieForward)
     /// The first note of a series of ties to this note.
     /// This will return the calling note if there is not tieBack.
     /// \since MuseScore 3.3
-    Q_PROPERTY(Ms::PluginAPI::Note* firstTiedNote READ firstTiedNote)
+    Q_PROPERTY(Ms::PluginAPI::Note * firstTiedNote READ firstTiedNote)
     /// The last note of a series of ties to this note.
     /// This will return the calling note if there is not tieForward.
     /// \since MuseScore 3.3
-    Q_PROPERTY(Ms::PluginAPI::Note* lastTiedNote READ lastTiedNote)
+    Q_PROPERTY(Ms::PluginAPI::Note * lastTiedNote READ lastTiedNote)
     /// The NoteType of the note.
     /// \since MuseScore 3.2.1
     Q_PROPERTY(Ms::NoteType noteType READ noteType)
@@ -576,20 +576,20 @@ class DurationElement : public EngravingItem
     * parent tuplets if there are any.
     * \since MuseScore 3.5
     */
-    Q_PROPERTY(Ms::PluginAPI::FractionWrapper* globalDuration READ globalDuration)
+    Q_PROPERTY(Ms::PluginAPI::FractionWrapper * globalDuration READ globalDuration)
 
     /**
     * Actual duration of this element, taking into account ratio of
     * parent tuplets and local time signatures if there are any.
     * \since MuseScore 3.5
     */
-    Q_PROPERTY(Ms::PluginAPI::FractionWrapper* actualDuration READ actualDuration)
+    Q_PROPERTY(Ms::PluginAPI::FractionWrapper * actualDuration READ actualDuration)
 
     /**
     * Tuplet which this element belongs to. If there is no parent tuplet, returns null.
     * \since MuseScore 3.5
     */
-    Q_PROPERTY(Ms::PluginAPI::Tuplet* tuplet READ parentTuplet)
+    Q_PROPERTY(Ms::PluginAPI::Tuplet * tuplet READ parentTuplet)
 
 public:
     /// \cond MS_INTERNAL
@@ -664,7 +664,7 @@ class ChordRest : public DurationElement
      * Beam which covers this chord/rest, if such exists.
      * \since MuseScore 3.6
      */
-    Q_PROPERTY(Ms::PluginAPI::EngravingItem* beam READ beam)
+    Q_PROPERTY(Ms::PluginAPI::EngravingItem * beam READ beam)
 
 public:
     /// \cond MS_INTERNAL
@@ -691,12 +691,12 @@ class Chord : public ChordRest
     /// List of notes belonging to this chord.
     Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Note> notes READ notes)
     /// Stem of this chord, if exists. \since MuseScore 3.6
-    Q_PROPERTY(Ms::PluginAPI::EngravingItem* stem READ stem)
+    Q_PROPERTY(Ms::PluginAPI::EngravingItem * stem READ stem)
     /// Stem slash of this chord, if exists. Stem slashes are present in grace notes of type acciaccatura.
     /// \since MuseScore 3.6
-    Q_PROPERTY(Ms::PluginAPI::EngravingItem* stemSlash READ stemSlash)
+    Q_PROPERTY(Ms::PluginAPI::EngravingItem * stemSlash READ stemSlash)
     /// Hook on a stem of this chord, if exists. \since MuseScore 3.6
-    Q_PROPERTY(Ms::PluginAPI::EngravingItem* hook READ hook)
+    Q_PROPERTY(Ms::PluginAPI::EngravingItem * hook READ hook)
     /// The NoteType of the chord.
     /// \since MuseScore 3.2.1
     Q_PROPERTY(Ms::NoteType noteType READ noteType)
@@ -748,19 +748,19 @@ class Segment : public EngravingItem
     /// \brief Next segment in this measure
     /// \returns The next segment in this segment's measure.
     /// Null if there is no such segment.
-    Q_PROPERTY(Ms::PluginAPI::Segment* nextInMeasure READ nextInMeasure)
+    Q_PROPERTY(Ms::PluginAPI::Segment * nextInMeasure READ nextInMeasure)
     /// \brief Next segment in this score.\ Doesn't stop at measure border.
     /// \returns The next segment in this score. Null if there is
     /// no such segment (i.e. this is the last segment in the score).
-    Q_PROPERTY(Ms::PluginAPI::Segment* next READ nextInScore)
+    Q_PROPERTY(Ms::PluginAPI::Segment * next READ nextInScore)
     /// \brief Previous segment in this measure
     /// \returns The previous segment in this segment's measure.
     /// Null if there is no such segment.
-    Q_PROPERTY(Ms::PluginAPI::Segment* prevInMeasure READ prevInMeasure)
+    Q_PROPERTY(Ms::PluginAPI::Segment * prevInMeasure READ prevInMeasure)
     /// \brief Previous segment in this score.\ Doesn't stop at measure border.
     /// \returns The previous segment in this score. Null if there is
     /// no such segment (i.e. this is the first segment in the score).
-    Q_PROPERTY(Ms::PluginAPI::Segment* prev READ prevInScore)
+    Q_PROPERTY(Ms::PluginAPI::Segment * prev READ prevInScore)
     // segmentType was read&write in MuseScore 2.X plugin API.
     // Allowing plugins to change random segments types doesn't seem to be a
     // good idea though.
@@ -808,14 +808,14 @@ class Measure : public EngravingItem
 {
     Q_OBJECT
     /// The first segment of this measure
-    Q_PROPERTY(Ms::PluginAPI::Segment* firstSegment READ firstSegment)
+    Q_PROPERTY(Ms::PluginAPI::Segment * firstSegment READ firstSegment)
     /// The last segment of this measure
-    Q_PROPERTY(Ms::PluginAPI::Segment* lastSegment READ lastSegment)
+    Q_PROPERTY(Ms::PluginAPI::Segment * lastSegment READ lastSegment)
 
     // TODO: to MeasureBase?
 //       Q_PROPERTY(bool         lineBreak         READ lineBreak   WRITE undoSetLineBreak)
     /// Next measure.
-    Q_PROPERTY(Ms::PluginAPI::Measure* nextMeasure READ nextMeasure)
+    Q_PROPERTY(Ms::PluginAPI::Measure * nextMeasure READ nextMeasure)
     /// Next measure, accounting for multimeasure rests.
     /// This property may differ from \ref nextMeasure if multimeasure rests
     /// are enabled. If next measure is a multimeasure rest, this property
@@ -825,15 +825,15 @@ class Measure : public EngravingItem
     /// score structure) this property should be preferred.
     /// \see \ref Score.firstMeasureMM
     /// \since MuseScore 3.6
-    Q_PROPERTY(Ms::PluginAPI::Measure* nextMeasureMM READ nextMeasureMM)
+    Q_PROPERTY(Ms::PluginAPI::Measure * nextMeasureMM READ nextMeasureMM)
 //       Q_PROPERTY(bool         pageBreak         READ pageBreak   WRITE undoSetPageBreak)
     /// Previous measure.
-    Q_PROPERTY(Ms::PluginAPI::Measure* prevMeasure READ prevMeasure)
+    Q_PROPERTY(Ms::PluginAPI::Measure * prevMeasure READ prevMeasure)
     /// Previous measure, accounting for multimeasure rests.
     /// See \ref nextMeasureMM for a reference on multimeasure rests.
     /// \see \ref Score.lastMeasureMM
     /// \since MuseScore 3.6
-    Q_PROPERTY(Ms::PluginAPI::Measure* prevMeasureMM READ prevMeasureMM)
+    Q_PROPERTY(Ms::PluginAPI::Measure * prevMeasureMM READ prevMeasureMM)
 
     /// List of measure-related elements: layout breaks, jump/repeat markings etc.
     /// \since MuseScore 3.3
@@ -933,7 +933,7 @@ class Staff : public ScoreElement
     API_PROPERTY_T(qreal, staffUserdist,  STAFF_USERDIST)
 
     /** Part which this staff belongs to. */
-    Q_PROPERTY(Ms::PluginAPI::Part* part READ part);
+    Q_PROPERTY(Ms::PluginAPI::Part * part READ part);
 
 public:
     /// \cond MS_INTERNAL

@@ -47,8 +47,8 @@ class DockPageView : public QQuickItem
     Q_PROPERTY(QQmlListProperty<mu::dock::DockToolBarHolder> toolBarsDockingHolders READ toolBarsDockingHoldersProperty)
     Q_PROPERTY(QQmlListProperty<mu::dock::DockPanelView> panels READ panelsProperty)
     Q_PROPERTY(QQmlListProperty<mu::dock::DockPanelHolder> panelsDockingHolders READ panelsDockingHoldersProperty)
-    Q_PROPERTY(mu::dock::DockCentralView* centralDock READ centralDock WRITE setCentralDock NOTIFY centralDockChanged)
-    Q_PROPERTY(mu::dock::DockStatusBarView* statusBar READ statusBar WRITE setStatusBar NOTIFY statusBarChanged)
+    Q_PROPERTY(mu::dock::DockCentralView * centralDock READ centralDock WRITE setCentralDock NOTIFY centralDockChanged)
+    Q_PROPERTY(mu::dock::DockStatusBarView * statusBar READ statusBar WRITE setStatusBar NOTIFY statusBarChanged)
 
 public:
     explicit DockPageView(QQuickItem* parent = nullptr);

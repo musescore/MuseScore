@@ -34,7 +34,7 @@ class NavigationSection;
 class NavigationPanel : public AbstractNavigation, public INavigationPanel, public async::Asyncable
 {
     Q_OBJECT
-    Q_PROPERTY(mu::ui::NavigationSection* section READ section_property WRITE setSection_property NOTIFY sectionChanged)
+    Q_PROPERTY(mu::ui::NavigationSection * section READ section_property WRITE setSection_property NOTIFY sectionChanged)
     Q_PROPERTY(QmlDirection direction READ direction_property WRITE setDirection NOTIFY directionChanged)
     Q_PROPERTY(QString directionInfo READ directionInfo NOTIFY directionChanged)
 

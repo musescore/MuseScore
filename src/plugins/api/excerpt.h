@@ -46,7 +46,7 @@ class Excerpt : public QObject
 {
     Q_OBJECT
     /** The score object for this part */
-    Q_PROPERTY(Ms::PluginAPI::Score* partScore READ partScore)
+    Q_PROPERTY(Ms::PluginAPI::Score * partScore READ partScore)
     /** The title of this part */
     Q_PROPERTY(QString title READ title)
 

@@ -572,7 +572,7 @@ MAKE_ITEM_IMPL(StaffTypeChange, MeasureBase)
 CREATE_ITEM_IMPL(Stem, ElementType::STEM, Chord)
 COPY_ITEM_IMPL(Stem)
 
-Ms::StemSlash* Factory::createStemSlash(Ms::Chord* parent)
+Ms::StemSlash* Factory::createStemSlash(Ms::Chord * parent)
 {
     StemSlash* s = new StemSlash(parent);
     s->setup();
@@ -581,7 +581,7 @@ Ms::StemSlash* Factory::createStemSlash(Ms::Chord* parent)
 
 COPY_ITEM_IMPL(StemSlash)
 
-Ms::System* Factory::createSystem(Ms::Page* parent)
+Ms::System* Factory::createSystem(Ms::Page * parent)
 {
     System* s = new System(parent);
     s->setup();

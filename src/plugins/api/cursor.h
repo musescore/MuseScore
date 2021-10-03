@@ -88,14 +88,14 @@ class Cursor : public QObject
     /** Key signature of current staff at tick pos. (read only) */
     Q_PROPERTY(int keySignature READ qmlKeySignature)
     /** Associated score */
-    Q_PROPERTY(Ms::PluginAPI::Score* score READ score WRITE setScore)
+    Q_PROPERTY(Ms::PluginAPI::Score * score READ score WRITE setScore)
 
     /** Current element at track, read only */
-    Q_PROPERTY(Ms::PluginAPI::EngravingItem* element READ element)
+    Q_PROPERTY(Ms::PluginAPI::EngravingItem * element READ element)
     /** Current segment, read only */
-    Q_PROPERTY(Ms::PluginAPI::Segment* segment READ qmlSegment)
+    Q_PROPERTY(Ms::PluginAPI::Segment * segment READ qmlSegment)
     /** Current measure, read only */
-    Q_PROPERTY(Ms::PluginAPI::Measure* measure READ measure)
+    Q_PROPERTY(Ms::PluginAPI::Measure * measure READ measure)
     /**
      * A physical string number where this cursor currently at. This is useful
      * in conjunction with \ref InputStateMode.INPUT_STATE_SYNC_WITH_SCORE
