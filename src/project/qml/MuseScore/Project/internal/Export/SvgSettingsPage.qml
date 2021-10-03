@@ -20,16 +20,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Layouts 1.15
 
 import MuseScore.UiComponents 1.0
-import MuseScore.Project 1.0
 
-StyledTextLabel {
-    property ExportDialogModel model
-    property int firstColumnWidth
-
-    text: qsTrc("project", "Each page of the selected parts will be exported as a separate SVG file.")
-    horizontalAlignment: Text.AlignLeft
-    wrapMode: Text.WordWrap
+ExportSettingsPage {
+    StyledTextLabel {
+        width: parent.width
+        text: qsTrc("project", "Each page of the selected parts will be exported as a separate SVG file.")
+        horizontalAlignment: Text.AlignLeft
+        wrapMode: Text.WordWrap
+    }
 }

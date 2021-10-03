@@ -20,22 +20,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Layouts 1.15
 
-import MuseScore.UiComponents 1.0
+import MuseScore.Ui 1.0
+import MuseScore.Project 1.0
 
-RowLayout {
+Column {
     id: root
-
-    property int labelWidth: 72
-    property alias text: label.text
-
-    width: Math.min(implicitWidth, parent.width)
     spacing: 12
 
-    StyledTextLabel {
-        id: label
-        Layout.preferredWidth: root.labelWidth
-        horizontalAlignment: Text.AlignLeft
-    }
+    property ExportDialogModel model
+
+    property NavigationPanel navigationPanel: null
+    property int navigationOrder: 3
 }
