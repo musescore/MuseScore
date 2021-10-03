@@ -40,6 +40,8 @@ enum { PART_LIST_ITEM = QTreeWidgetItem::UserType, STAFF_LIST_ITEM };
 //---------------------------------------------------------
 
 class ScoreOrderListModel : public QAbstractListModel {
+      Q_OBJECT
+
    private:
       ScoreOrderList* _scoreOrders;
 

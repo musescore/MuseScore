@@ -24,6 +24,8 @@ namespace Ms {
 //---------------------------------------------------------
 
 class MsSplashScreen : public QSplashScreen {
+      Q_OBJECT
+
       static const QSize designSize;
 
       static const QRectF designDevBuildIconRect;

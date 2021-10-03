@@ -173,6 +173,8 @@ enum class SaveReplacePolicy {
 //---------------------------------------------------------
 
 class MuseScoreApplication : public QtSingleApplication {
+      Q_OBJECT
+
    public:
       QStringList paths;
       MuseScoreApplication(const QString& id, int &argc, char **argv)
