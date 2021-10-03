@@ -20,27 +20,27 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
-import QtQuick.Layouts 1.15
 
 import MuseScore.UiComponents 1.0
 import MuseScore.Project 1.0
 
-ColumnLayout {
+ExportSettingsPage {
     id: root
-    spacing: 12
-
-    property ExportDialogModel model
-    property int firstColumnWidth
 
     RadioButtonGroup {
+        width: parent.width
         spacing: 12
         orientation: Qt.Vertical
-        Layout.fillWidth: true
+
         model: root.model.musicXmlLayoutTypes()
 
         delegate: RoundedRadioButton {
             text: modelData["text"]
-            width: parent.width
+
+            navigation.name: "MusicXmlLayoutTypeRadioButton " + text
+            navigation.panel: root.navigationPanel
+            navigation.row: root.navigationOrder + model.index
+
             checked: root.model.musicXmlLayoutType === modelData["value"]
             onToggled: {
                 root.model.musicXmlLayoutType = modelData["value"]

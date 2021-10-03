@@ -23,19 +23,22 @@ import QtQuick 2.15
 import QtQuick.Layouts 1.15
 
 import MuseScore.UiComponents 1.0
+import MuseScore.Ui 1.0
 import MuseScore.Project 1.0
 
-ColumnLayout {
+ExportSettingsPage {
     id: root
-    spacing: 12
-
-    property ExportDialogModel model
-    property int firstColumnWidth
 
     property bool showBitRateControl: false
 
     CheckBox {
+        width: parent.width
         text: qsTrc("project", "Normalize")
+
+        navigation.name: "NormalizeAudioCheckbox"
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationOrder + 1
+
         checked: root.model.normalizeAudio
         onClicked: {
             root.model.normalizeAudio = !checked
@@ -43,21 +46,22 @@ ColumnLayout {
     }
 
     ExportOptionItem {
-        Layout.fillWidth: false
         text: qsTrc("project", "Sample rate:")
-        firstColumnWidth: root.firstColumnWidth
 
         Dropdown {
-            id: srates
             Layout.preferredWidth: 126
+
+            navigation.name: "SampleRatesDropdown"
+            navigation.panel: root.navigationPanel
+            navigation.row: root.navigationOrder + 2
 
             model: root.model.availableSampleRates().map(function (sampleRate) {
                 return { text: qsTrc("project", "%1 Hz").arg(sampleRate), value: sampleRate }
             })
 
-            currentIndex: srates.indexOfValue(root.model.sampleRate)
+            currentIndex: indexOfValue(root.model.sampleRate)
             onCurrentValueChanged: {
-                root.model.sampleRate = srates.currentValue
+                root.model.sampleRate = currentValue
             }
         }
     }
@@ -65,25 +69,27 @@ ColumnLayout {
     ExportOptionItem {
         visible: root.showBitRateControl
         text: qsTrc("project", "Bitrate:")
-        firstColumnWidth: root.firstColumnWidth
 
         Dropdown {
-            id: bitrates
             Layout.preferredWidth: 126
+
+            navigation.name: "BitratesDropdown"
+            navigation.panel: root.navigationPanel
+            navigation.row: root.navigationOrder + 3
 
             model: root.model.availableBitRates().map(function (bitRate) {
                 return { text: qsTrc("project", "%1 kBit/s").arg(bitRate), value: bitRate }
             })
 
-            currentIndex: bitrates.indexOfValue(root.model.bitRate)
+            currentIndex: indexOfValue(root.model.bitRate)
             onCurrentValueChanged: {
-                root.model.bitRate = bitrates.currentValue
+                root.model.bitRate = currentValue
             }
         }
     }
 
     StyledTextLabel {
-        Layout.fillWidth: true
+        width: parent.width
         text: qsTrc("project", "Each selected part will be exported as a separate audio file.")
         horizontalAlignment: Text.AlignLeft
         wrapMode: Text.WordWrap

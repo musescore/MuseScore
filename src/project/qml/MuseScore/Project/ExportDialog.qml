@@ -35,32 +35,28 @@ StyledDialogView {
     title: qsTrc("project", "Export")
 
     contentWidth: 756
-    contentHeight: 386
-    margins: privateProperties.sideMargin
-
-    modal: true
+    contentHeight: 336
+    margins: 24
 
     ExportDialogModel {
         id: exportModel
     }
 
-    QtObject {
-        id: privateProperties
-
-        readonly property int sideMargin: 24
+    Component.onCompleted: {
+        exportModel.load()
     }
 
-    Component.onCompleted: {
-        exportModel.load();
+    onOpened: {
+        exportScoresListView.focusOnFirst()
     }
 
     RowLayout {
         anchors.fill: parent
-        spacing: 2 * privateProperties.sideMargin
+        spacing: 2 * root.margins
 
         ColumnLayout {
             Layout.fillWidth: true
-            Layout.preferredWidth: parent.width / 2 - parent.spacing / 2
+            Layout.preferredWidth: (parent.width - parent.spacing) / 2
             spacing: 18
 
             StyledTextLabel {
@@ -74,16 +70,29 @@ StyledDialogView {
                 Layout.fillHeight: true
 
                 scoresModel: exportModel
+                navigation.section: root.navigationSection
+                navigation.order: 1
             }
 
             RowLayout {
-                Layout.topMargin: 10
                 spacing: 12
+
+                NavigationPanel {
+                    id: leftButtonsNavPanel
+                    name: "Export dialog left buttons"
+                    section: root.navigationSection
+                    order: 2
+                    direction: NavigationPanel.Horizontal
+                }
 
                 FlatButton {
                     Layout.fillWidth: true
 
                     text: qsTrc("project", "Select all")
+
+                    navigation.name: "Select all"
+                    navigation.panel: leftButtonsNavPanel
+                    navigation.column: 1
 
                     onClicked: {
                         exportModel.setAllSelected(true)
@@ -94,6 +103,10 @@ StyledDialogView {
                     Layout.fillWidth: true
 
                     text: qsTrc("project", "Clear selection")
+
+                    navigation.name: "Clear selection"
+                    navigation.panel: leftButtonsNavPanel
+                    navigation.order: 2
 
                     onClicked: {
                         exportModel.setAllSelected(false)
@@ -112,26 +125,33 @@ StyledDialogView {
                 font: ui.theme.bodyBoldFont
             }
 
-            Column {
+            ExportOptionsView {
                 Layout.fillHeight: true
                 Layout.fillWidth: true
 
-                ExportOptionsView {
-                    id: exportOptionsView
-                    width: parent.width
-
-                    exportModel: exportModel
-                }
+                exportModel: exportModel
+                navigation.section: root.navigationSection
+                navigation.order: 3
             }
 
             RowLayout {
                 Layout.alignment: Qt.AlignRight
-                Layout.topMargin: 10
                 spacing: 12
+
+                NavigationPanel {
+                    id: rightButtonsNavPanel
+                    name: "Export dialog right buttons"
+                    section: root.navigationSection
+                    order: 4
+                    direction: NavigationPanel.Horizontal
+                }
 
                 FlatButton {
                     text: qsTrc("global", "Cancel")
-                    accentButton: !exportButton.enabled
+
+                    navigation.name: "Cancel"
+                    navigation.panel: rightButtonsNavPanel
+                    navigation.order: 2
 
                     onClicked: {
                         root.hide()
@@ -144,6 +164,11 @@ StyledDialogView {
                     text: qsTrc("project", "Export…")
                     enabled: exportModel.selectionLength > 0;
                     accentButton: enabled
+
+                    navigation.name: "Export"
+                    navigation.panel: rightButtonsNavPanel
+                    navigation.order: 1
+
                     onClicked: {
                         if (exportModel.exportScores()) {
                             root.hide();

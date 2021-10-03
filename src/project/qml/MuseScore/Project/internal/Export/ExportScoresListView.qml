@@ -24,21 +24,34 @@ import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 
 import MuseScore.UiComponents 1.0
+import MuseScore.Ui 1.0
 import MuseScore.Project 1.0
 
 Rectangle {
-    id: background
+    id: root
 
     property alias scoresModel: listView.model
+    property alias navigation: navPanel
 
     color: ui.theme.textFieldColor
     border.width: 1
     border.color: ui.theme.strokeColor
 
+    function focusOnFirst() {
+        listView.itemAtIndex(0).requestActiveFocus()
+    }
+
+    NavigationPanel {
+        id: navPanel
+        name: "ExportScoresListView"
+        enabled: root.visible && root.enabled
+        direction: NavigationPanel.Vertical
+    }
+
     ListView {
         id: listView
         anchors.fill: parent
-        anchors.margins: background.border.width
+        anchors.margins: root.border.width
 
         boundsBehavior: Flickable.StopAtBounds
         clip: true
@@ -50,9 +63,15 @@ Rectangle {
         }
 
         delegate: ListItemBlank {
+            mouseArea.hoverEnabled: false
             hoverHitColor: "transparent"
 
+            function requestActiveFocus() {
+                checkBox.navigation.requestActive()
+            }
+
             CheckBox {
+                id: checkBox
                 anchors.margins: 4
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.left: parent.left
@@ -61,10 +80,14 @@ Rectangle {
                 text: model.isMain ? qsTrc("project", "Main Score") : model.title
                 font: model.isMain ? ui.theme.bodyBoldFont : ui.theme.bodyFont
 
+                navigation.name: "ExportScoreCheckBox " + text
+                navigation.panel: navPanel
+                navigation.row: model.index
+
                 checked: model.isSelected
 
                 onClicked: {
-                    scoresModel.setSelected(model.index, !model.isSelected)
+                    scoresModel.setSelected(model.index, !checked)
                 }
             }
         }

@@ -32,9 +32,15 @@ RadioDelegate {
 
     property alias navigation: keynavCtrl
 
+    ButtonGroup.group: ListView.view && ListView.view instanceof RadioButtonGroup ? ListView.view.radioButtonGroup : null
+
     implicitHeight: 20
-    implicitWidth: ListView.view ? (ListView.view.width - (ListView.view.spacing * (ListView.view.count - 1))) / ListView.view.count
-                                 : 30
+    implicitWidth: ListView.view
+                   ? (ListView.view.orientation === Qt.Vertical
+                      ? ListView.view.width
+                      : (ListView.view.width - (ListView.view.spacing * (ListView.view.count - 1))) / ListView.view.count)
+                   : 20
+
     spacing: 6
     padding: 0
 
@@ -47,7 +53,8 @@ RadioDelegate {
 
     NavigationControl {
         id: keynavCtrl
-        name: root.objectName
+        name: root.objectName != "" ? root.objectName : "RoundedRadioButton"
+        enabled: root.enabled && root.visible
 
         accessible.role: MUAccessible.RadioButton
         accessible.name: Boolean(contentLoader.item) ? contentLoader.item.accessibleName : ""
