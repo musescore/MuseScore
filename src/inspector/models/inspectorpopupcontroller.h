@@ -37,7 +37,7 @@ class InspectorPopupController : public QObject
     Q_OBJECT
 
     Q_PROPERTY(QQuickItem * visualControl READ visualControl WRITE setVisualControl NOTIFY visualControlChanged)
-    Q_PROPERTY(mu::uicomponents::PopupView* popup READ popup WRITE setPopup NOTIFY popupChanged)
+    Q_PROPERTY(mu::uicomponents::PopupView * popup READ popup WRITE setPopup NOTIFY popupChanged)
 
 public:
     explicit InspectorPopupController(QObject* parent = nullptr);

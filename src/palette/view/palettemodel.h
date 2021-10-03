@@ -44,7 +44,7 @@ class PaletteCellFilter : public QObject
 {
     Q_OBJECT
 
-    PaletteCellFilter* chainedFilter = nullptr;
+    PaletteCellFilter * chainedFilter = nullptr;
 
 signals:
     void filterChanged();

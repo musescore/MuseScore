@@ -417,7 +417,7 @@ void FretDiagram::draw(mu::draw::Painter* painter) const
     if (_fretOffset > 0) {
         qreal fretNumMag = score()->styleD(Sid::fretNumMag);
         mu::draw::Font scaledFont(font);
-        scaledFont.setPointSizeF(font.pointSizeF() * _userMag * (spatium() / SPATIUM20) * MScore::pixelRatio* fretNumMag);
+        scaledFont.setPointSizeF(font.pointSizeF() * _userMag * (spatium() / SPATIUM20) * MScore::pixelRatio * fretNumMag);
         painter->setFont(scaledFont);
         QString text = QString("%1").arg(_fretOffset + 1);
 
