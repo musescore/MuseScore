@@ -960,8 +960,15 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
 
     QString family;
     if (format.fontFamily() == "ScoreText") {
-        family = t->score()->styleSt(Sid::MusicalTextFont);
-
+        if (t->parent() && t->isDynamic()) {
+            family = t->score()->scoreFont()->fontByName(t->score()->styleSt(Sid::MusicalSymbolFont))->family();
+            m = t->score()->styleV(Sid::dynamicsSymbolFontSize).toReal() * t->mag();
+        } else if (t->parent() && t->isTempoText()) {
+            family = t->score()->styleSt(Sid::MusicalTextFont);
+            m = t->score()->styleV(Sid::tempoSymbolFontSize).toReal();
+        } else {
+            family = t->score()->styleSt(Sid::MusicalTextFont);
+        }
         // check if all symbols are available
         font.setFamily(family);
         mu::draw::FontMetrics fm(font);
