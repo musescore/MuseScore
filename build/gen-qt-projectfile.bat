@@ -12,9 +12,13 @@ echo FORMS = \
 for /r %1 %%a in (*.ui) do echo     %%a \
 echo.
 
+echo INCLUDEPATH = \
+echo     %1/libmscore \
+echo     %1/mscore \
+echo.
+
 echo SOURCES = \
 for /r %1 %%a in (*.cpp) do echo     %%a \
-echo.
 echo.
 
 echo RESOURCES = \

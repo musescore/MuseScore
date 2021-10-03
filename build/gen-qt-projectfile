@@ -14,6 +14,11 @@ for a in $uis; do
       done
 echo
 
+echo "INCLUDEPATH = \\"
+echo "    %1/libmscore \\"
+echo "    %1/mscore \\"
+echo
+
 echo "SOURCES = \\"
 uis=`find $1 -name "*.cpp"`
 for a in $uis; do
@@ -24,6 +29,4 @@ echo
 echo "RESOURCES = \\"
 echo "    ./mscore/qml.qrc \\"
 echo "    ./telemetry/telemetry_resources.qrc \\"
-echo
-
 echo
