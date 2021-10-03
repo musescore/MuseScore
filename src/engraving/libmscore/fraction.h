@@ -249,7 +249,7 @@ public:
         if (ticks == -1) {
             return Fraction(-1, 1);        // HACK
         }
-        return Fraction(ticks, MScore::division* 4).reduced();
+        return Fraction(ticks, MScore::division * 4).reduced();
     }
 
     //---------------------------------------------------------
@@ -257,7 +257,7 @@ public:
     ///   A very small fraction, corresponds to 1 MIDI tick
     //---------------------------------------------------------
 
-    static Fraction eps() { return Fraction(1, MScore::division* 4); }
+    static Fraction eps() { return Fraction(1, MScore::division * 4); }
 
     //---------------------------------------------------------
     //   ticks

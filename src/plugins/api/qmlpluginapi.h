@@ -53,7 +53,7 @@ class MsProcess;
 class Score;
 
 #define DECLARE_API_ENUM(qmlName, cppName, enumName) \
-    Q_PROPERTY(Ms::PluginAPI::Enum* qmlName READ get_##cppName CONSTANT) \
+    Q_PROPERTY(Ms::PluginAPI::Enum * qmlName READ get_##cppName CONSTANT) \
     static Enum* cppName; \
     static Enum* get_##cppName() { \
         if (!cppName) \
@@ -108,7 +108,7 @@ class PluginAPI : public Ms::QmlPlugin
     /** (read-only) */
     Q_PROPERTY(qreal mscoreDPI READ mscoreDPI)
     /** Current score, if any (read only) */
-    Q_PROPERTY(Ms::PluginAPI::Score* curScore READ curScore)
+    Q_PROPERTY(Ms::PluginAPI::Score * curScore READ curScore)
     /** List of currently open scores (read only).\n \since MuseScore 3.2 */
     Q_PROPERTY(QQmlListProperty<Ms::PluginAPI::Score> scores READ scores)
 

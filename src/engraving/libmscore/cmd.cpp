@@ -3753,7 +3753,7 @@ void Score::cmdPitchUp()
     if (el && el->isLyrics()) {
         cmdMoveLyrics(toLyrics(el), Direction::UP);
     } else if (el && (el->isArticulation() || el->isTextBase())) {
-        el->undoChangeProperty(Pid::OFFSET, el->offset() + PointF(0.0, -MScore::nudgeStep* el->spatium()), PropertyFlags::UNSTYLED);
+        el->undoChangeProperty(Pid::OFFSET, el->offset() + PointF(0.0, -MScore::nudgeStep * el->spatium()), PropertyFlags::UNSTYLED);
     } else if (el && el->isRest()) {
         cmdMoveRest(toRest(el), Direction::UP);
     } else {
@@ -3771,7 +3771,7 @@ void Score::cmdPitchDown()
     if (el && el->isLyrics()) {
         cmdMoveLyrics(toLyrics(el), Direction::DOWN);
     } else if (el && (el->isArticulation() || el->isTextBase())) {
-        el->undoChangeProperty(Pid::OFFSET, QVariant::fromValue(el->offset() + PointF(0.0, MScore::nudgeStep* el->spatium())),
+        el->undoChangeProperty(Pid::OFFSET, QVariant::fromValue(el->offset() + PointF(0.0, MScore::nudgeStep * el->spatium())),
                                PropertyFlags::UNSTYLED);
     } else if (el && el->isRest()) {
         cmdMoveRest(toRest(el), Direction::DOWN);
@@ -3808,7 +3808,7 @@ void Score::cmdPitchUpOctave()
     EngravingItem* el = selection().element();
     if (el && (el->isArticulation() || el->isTextBase())) {
         el->undoChangeProperty(Pid::OFFSET,
-                               QVariant::fromValue(el->offset() + PointF(0.0, -MScore::nudgeStep10* el->spatium())),
+                               QVariant::fromValue(el->offset() + PointF(0.0, -MScore::nudgeStep10 * el->spatium())),
                                PropertyFlags::UNSTYLED);
     } else {
         upDown(true, UpDownMode::OCTAVE);
@@ -3823,7 +3823,7 @@ void Score::cmdPitchDownOctave()
 {
     EngravingItem* el = selection().element();
     if (el && (el->isArticulation() || el->isTextBase())) {
-        el->undoChangeProperty(Pid::OFFSET, el->offset() + PointF(0.0, MScore::nudgeStep10* el->spatium()), PropertyFlags::UNSTYLED);
+        el->undoChangeProperty(Pid::OFFSET, el->offset() + PointF(0.0, MScore::nudgeStep10 * el->spatium()), PropertyFlags::UNSTYLED);
     } else {
         upDown(false, UpDownMode::OCTAVE);
     }

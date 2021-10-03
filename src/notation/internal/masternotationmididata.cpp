@@ -308,7 +308,7 @@ Ret MasterNotationMidiData::playNoteMidiData(const Ms::Note* note) const
     MidiData midiData = trackMidiData(masterNote->part()->id());
 
     Events events = retrieveEventsForElement(masterNote, midiChannel);
-    midiData.stream.backgroundStream.send(std::move(events), Ms::MScore::defaultPlayDuration* 2);
+    midiData.stream.backgroundStream.send(std::move(events), Ms::MScore::defaultPlayDuration * 2);
 
     return make_ret(Ret::Code::Ok);
 }
@@ -327,7 +327,7 @@ Ret MasterNotationMidiData::playChordMidiData(const Ms::Chord* chord) const
     MidiData midiData = trackMidiData(part->id());
 
     Events events = retrieveEventsForElement(chord, midiChannel);
-    midiData.stream.backgroundStream.send(std::move(events), Ms::MScore::defaultPlayDuration* 2);
+    midiData.stream.backgroundStream.send(std::move(events), Ms::MScore::defaultPlayDuration * 2);
 
     return make_ret(Ret::Code::Ok);
 }
@@ -352,7 +352,7 @@ Ret MasterNotationMidiData::playHarmonyMidiData(const Ms::Harmony* harmony) cons
     MidiData midiData = trackMidiData(harmony->part()->id());
 
     Events events = retrieveEventsForElement(harmony, midiChannel);
-    midiData.stream.backgroundStream.send(std::move(events), Ms::MScore::defaultPlayDuration* 2);
+    midiData.stream.backgroundStream.send(std::move(events), Ms::MScore::defaultPlayDuration * 2);
 
     return make_ret(Ret::Code::Ok);
 }

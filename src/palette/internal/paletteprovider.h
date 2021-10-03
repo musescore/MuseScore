@@ -205,11 +205,11 @@ class PaletteProvider : public QObject, public mu::palette::IPaletteProvider
     INJECT(palette, mu::framework::IInteractive, interactive)
 
     Q_PROPERTY(QAbstractItemModel * mainPaletteModel READ mainPaletteModel NOTIFY mainPaletteChanged)
-    Q_PROPERTY(Ms::AbstractPaletteController* mainPaletteController READ mainPaletteController NOTIFY mainPaletteChanged)
+    Q_PROPERTY(Ms::AbstractPaletteController * mainPaletteController READ mainPaletteController NOTIFY mainPaletteChanged)
 
-    Q_PROPERTY(Ms::FilterPaletteTreeModel* customElementsPaletteModel READ customElementsPaletteModel CONSTANT)
+    Q_PROPERTY(Ms::FilterPaletteTreeModel * customElementsPaletteModel READ customElementsPaletteModel CONSTANT)
     Q_PROPERTY(
-        Ms::AbstractPaletteController* customElementsPaletteController READ customElementsPaletteController CONSTANT)
+        Ms::AbstractPaletteController * customElementsPaletteController READ customElementsPaletteController CONSTANT)
 
 public:
     void init() override;
