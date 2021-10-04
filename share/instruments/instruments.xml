@@ -10110,8 +10110,12 @@
                   <bracketSpan>2</bracketSpan>
                   <barlineSpan>2</barlineSpan>
                   <clef staff="2">F</clef>
-                  <clef staff="3">F8vb</clef>
+                  <clef staff="3">F</clef>
                   <barlineSpan staff="3">1</barlineSpan>
+                  <!--
+                  <transposeDiatonic>-7</transposeDiatonic>
+                  <transposeChromatic>-12</transposeChromatic>
+                  -->
                   <Channel>
                         <!--MIDI: Bank 0, Prog 19; MS General: Church Organ-->
                         <program value="19"/> <!--Church Organ-->
