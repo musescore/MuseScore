@@ -144,7 +144,7 @@ FocusableItem {
 
                         navigation.name: "FeatheringLeft"
                         navigation.panel: root.navigationPanel
-                        navigation.row: featheredBeamsButtonList.navigationRowEnd + 1
+                        navigationRowStart: featheredBeamsButtonList.navigationRowEnd + 1
                     }
 
                     SpinBoxPropertyView {
@@ -165,7 +165,7 @@ FocusableItem {
 
                         navigation.name: "FeatheringRight"
                         navigation.panel: root.navigationPanel
-                        navigation.row: featheringLeftSection.navigationRowEnd + 1
+                        navigationRowStart: featheringLeftSection.navigationRowEnd + 1
                     }
                 }
             }
