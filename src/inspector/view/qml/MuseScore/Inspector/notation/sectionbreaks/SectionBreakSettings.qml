@@ -52,7 +52,7 @@ Column {
 
         navigation.name: "PauseBeforStarts"
         navigation.panel: root.navigationPanel
-        navigation.row: root.navigationRowOffset
+        navigationRowStart: root.navigationRowOffset
     }
 
     CheckBox {

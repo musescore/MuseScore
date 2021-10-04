@@ -21,14 +21,19 @@
  */
 import QtQuick 2.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Inspector 1.0
+
 import "internal"
 
 Item {
     id: root
 
     property alias model: fretDiagramTabPanel.model
+
+    property NavigationPanel navigationPanel: null
+    property int navigationRowOffset: 1
 
     objectName: "FretDiagramSettings"
 
@@ -45,6 +50,9 @@ Item {
             id: fretDiagramTabPanel
 
             width: parent.width
+
+            navigationPanel: root.navigationPanel
+            navigationRowOffset: root.navigationRowOffset
         }
 
         Column {
@@ -59,6 +67,10 @@ Item {
                 visible: root.model ? root.model.areSettingsAvailable : false
 
                 text: qsTrc("inspector", "Reset")
+
+                navigation.name: "Reset"
+                navigation.panel: root.navigationPanel
+                navigation.row: 10000
 
                 onClicked: {
                     fretCanvas.clear()
