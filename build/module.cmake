@@ -106,6 +106,7 @@ target_include_directories(${MODULE} PUBLIC
     ${PROJECT_ROOT_DIR}/src/framework
     ${PROJECT_ROOT_DIR}/src/framework/global
     ${PROJECT_ROOT_DIR}/src/engraving
+    ${PROJECT_ROOT_DIR}/thirdparty/googletest/googletest/include
     ${MODULE_INCLUDE}
 )
 
