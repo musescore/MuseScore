@@ -46,6 +46,7 @@ InspectorPropertyView {
         navigation.column: root.navigation.column
         navigation.row: root.navigation.row + 1 + index
         navigation.accessible.name: root.titleText + " " + (Boolean(text) ? text : modelData["title"])
+        navigation.enabled: root.enabled && root.visible
 
         checked: root.propertyItem && !root.propertyItem.isUndefined
                  ? root.propertyItem.value === modelData["value"]

@@ -21,14 +21,19 @@
  */
 import QtQuick 2.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Inspector 1.0
+
 import "../../common"
 
 Column {
     id: root
 
     property QtObject model: null
+
+    property NavigationPanel navigationPanel: null
+    property int navigationRowOffset: 1
 
     objectName: "KeySignatureSettings"
 
@@ -39,12 +44,20 @@ Column {
         checked: root.model && !isIndeterminate ? root.model.hasToShowCourtesy.value : false
         text: qsTrc("inspector", "Show courtesy key signature on previous system")
 
+        navigation.name: "ShowCourtesyKeySignature"
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationRowOffset + 1
+
         onClicked: { root.model.hasToShowCourtesy.value = !checked }
     }
 
     DropdownPropertyView {
         titleText: qsTrc("inspector", "Mode")
         propertyItem: root.model ? root.model.mode : null
+
+        navigation.name: "Mode"
+        navigation.panel: root.navigationPanel
+        navigationRowStart: root.navigationRowOffset + 2
 
         model: [
             { text: qsTrc("inspector", "Unknown"), value: KeySignatureTypes.MODE_UNKNOWN },
