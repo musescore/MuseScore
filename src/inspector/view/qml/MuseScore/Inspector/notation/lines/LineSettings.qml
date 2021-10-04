@@ -34,6 +34,8 @@ TabPanel {
 
     property QtObject model: null
 
+    property int navigationRowOffset: 1
+
     objectName: "LineSettings"
 
     implicitHeight: Math.max(styleTab.visible ? styleTab.implicitHeight : 0,
@@ -50,6 +52,11 @@ TabPanel {
             width: root.width
 
             model: root.model
+
+            enabled: styleTab.checked
+
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowOffset + 1000
         }
     }
 
@@ -63,6 +70,11 @@ TabPanel {
             width: root.width
 
             model: root.model
+
+            enabled: styleTab.checked
+
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowOffset + 1000
         }
     }
 
@@ -76,6 +88,11 @@ TabPanel {
             width: root.width
 
             model: root.model
+
+            enabled: styleTab.checked
+
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowOffset + 1000
         }
     }
 
@@ -89,13 +106,24 @@ TabPanel {
             width: root.width
 
             model: root.model
+
+            enabled: styleTab.checked
+
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowOffset + 1000
         }
     }
 
-    Tab {
+    TabItem {
         id: styleTab
 
         title: qsTrc("inspector", "Style")
+        checked: root.currentIndex === 0
+
+        navigation.name: "StyleTab"
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationRowOffset
+        onNavigationTriggered: root.currentIndex = 0
 
         sourceComponent: {
             var modelType = root.model ? root.model.modelType : -1
@@ -110,10 +138,16 @@ TabPanel {
         }
     }
 
-    Tab {
+    TabItem {
         id: textTab
 
         title: qsTrc("inspector", "Text")
+        checked: root.currentIndex === 1
+
+        navigation.name: "GeneralTab"
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationRowOffset + 1
+        onNavigationTriggered: root.currentIndex = 1
 
         LineTextSettingsTab {
             anchors.top: parent.top
@@ -122,6 +156,11 @@ TabPanel {
             width: root.width
 
             model: root.model
+
+            enabled: textTab.checked
+
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowOffset + 2000
         }
     }
 }

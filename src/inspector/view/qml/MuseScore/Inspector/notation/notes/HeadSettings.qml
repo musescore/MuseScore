@@ -137,7 +137,7 @@ FocusableItem {
                     navigation.name: "NoteHeadOffsetSection"
                     navigation.panel: root.navigationPanel
                     navigationRowStart: noteDirectionSection.navigationRowEnd + 1
-                    navigation.enabled: root.enabled
+                    navigation.enabled: root.enabled && visible
                 }
             }
         }

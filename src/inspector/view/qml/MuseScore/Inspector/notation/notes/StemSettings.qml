@@ -117,7 +117,7 @@ FocusableItem {
 
                     navigation.name: "FlagStyleGroup"
                     navigation.panel: root.navigationPanel
-                    navigation.row: flagStyleGroup.navigationRowEnd + index
+                    navigation.row: flagStyleGroup.navigationRowStart + index
                     navigation.enabled: root.enabled
                     navigation.accessible.name: flagStyleLabel.text + " " + modelData.text
 

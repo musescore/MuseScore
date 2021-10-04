@@ -69,7 +69,7 @@ RadioDelegate {
         accessible.name: root.text
         accessible.checked: root.checked
 
-        onTriggered: root.checked = !root.checked
+        onTriggered: root.toggled()
     }
 
     background: Rectangle {
