@@ -33,6 +33,7 @@ Rectangle {
 
     property bool canSelectMultipleInstruments: true
     property string currentInstrumentId: ""
+    property string description: instrumentsModel.selectedInstrumentDescription
 
     property bool hasSelectedInstruments: instrumentsOnScoreView.hasInstruments
 
