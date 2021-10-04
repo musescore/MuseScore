@@ -42,6 +42,10 @@ TabPanel {
                              textTab.visible ? textTab.implicitHeight : 0) + tabBarHeight + 24
     width: parent ? parent.width : 0
 
+    function focusOnFirst() {
+        styleTab.navigation.requestActive()
+    }
+
     Component {
         id: hairpinStyleSettings
 

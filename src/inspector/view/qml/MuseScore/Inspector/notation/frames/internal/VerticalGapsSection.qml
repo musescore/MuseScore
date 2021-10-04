@@ -40,6 +40,10 @@ Item {
     height: childrenRect.height
     width: parent.width
 
+    function focusOnFirst() {
+        gapAbove.focusOnFirst()
+    }
+
     SpinBoxPropertyView {
         id: gapAbove
         anchors.left: parent.left

@@ -41,7 +41,12 @@ Column {
 
     spacing: 12
 
+    function focusOnFirst() {
+        showPedalSymbol.navigation.requestActive()
+    }
+
     CheckBox {
+        id: showPedalSymbol
         checked: root.model && root.model.pedalSymbolVisible
 
         text: qsTrc("inspector", "Show pedal symbol")

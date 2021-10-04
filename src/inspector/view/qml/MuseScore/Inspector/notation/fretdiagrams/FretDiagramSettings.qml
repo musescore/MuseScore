@@ -39,6 +39,10 @@ Item {
 
     height: content.implicitHeight
 
+    function focusOnFirst() {
+        fretDiagramTabPanel.focusOnFirst()
+    }
+
     Column {
         id: content
 
