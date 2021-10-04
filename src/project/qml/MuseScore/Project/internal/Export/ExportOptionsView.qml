@@ -43,6 +43,7 @@ Column {
     }
 
     ExportOptionItem {
+        id: typeLabel
         width: parent.width
         text: qsTrc("project", "Format:")
 
@@ -53,6 +54,7 @@ Column {
             navigation.name: "ExportTypeDropdown"
             navigation.panel: navPanel
             navigation.row: 1
+            navigation.accessible.name: typeLabel.text + " " + currentText
 
             model: exportModel.exportTypeList()
             popupItemsCount: typeComboBox.count
@@ -83,6 +85,7 @@ Column {
     }
 
     ExportOptionItem {
+        id: subtypeLabel
         width: parent.width
         visible: subtypeComboBox.count > 0
         text: qsTrc("project", "File type:")
@@ -94,6 +97,7 @@ Column {
             navigation.name: "ExportSubtypeDropdown"
             navigation.panel: navPanel
             navigation.row: 2
+            navigation.accessible.name: subtypeLabel.text + " " + currentText
 
             model: {
                 if (typeComboBox.currentIndex > -1) {
@@ -119,6 +123,7 @@ Column {
 
         Connections {
             target: root.exportModel
+
             function onSelectedExportTypeChanged() {
                 var properties = {
                     model: Qt.binding(() => root.exportModel),
