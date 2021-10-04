@@ -37,8 +37,8 @@ VoltaSettingsModel::VoltaSettingsModel(QObject* parent, IElementRepositoryServic
     setTitle(qtrc("inspector", "Volta"));
 
     static const QList<HookTypeInfo> hookTypes {
-        { Ms::HookType::NONE, IconCode::LINE_WITH_INVERTED_START_HOOK },
-        { Ms::HookType::HOOK_90, IconCode::LINE_WITH_TWO_INVERTED_HOOKS },
+        { Ms::HookType::NONE, IconCode::LINE_WITH_INVERTED_START_HOOK, qtrc("inspector", "Normal") },
+        { Ms::HookType::HOOK_90, IconCode::LINE_WITH_TWO_INVERTED_HOOKS, qtrc("inspector", "Normal") }, // todo
     };
 
     setPossibleEndHookTypes(hookTypes);

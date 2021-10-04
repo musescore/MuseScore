@@ -122,7 +122,7 @@ Column {
 
             navigation.name: "SpanFrom"
             navigation.panel: root.navigationPanel
-            navigation.row: spanToNextStaffCheckBox.navigation.row + 1
+            navigationRowStart: spanToNextStaffCheckBox.navigation.row + 1
         }
 
         SpinBoxPropertyView {
@@ -136,7 +136,7 @@ Column {
 
             navigation.name: "SpanTo"
             navigation.panel: root.navigationPanel
-            navigation.row: spanFrom.navigationRowEnd + 1
+            navigationRowStart: spanFrom.navigationRowEnd + 1
         }
     }
 

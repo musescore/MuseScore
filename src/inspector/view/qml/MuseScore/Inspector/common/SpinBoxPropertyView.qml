@@ -46,7 +46,7 @@ InspectorPropertyView {
         navigation.name: root.navigation.name + " Value"
         navigation.panel: root.navigation.panel
         navigation.column: root.navigation.column
-        navigation.row: root.navigation.row + 1
+        navigation.row: root.navigationRowStart + 1
         navigation.accessible.name: root.titleText + " " + currentValue
 
         isIndeterminate: root.propertyItem ? root.propertyItem.isUndefined : true

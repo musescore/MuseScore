@@ -184,7 +184,7 @@ FocusableItem {
 
                         navigation.name: "Thickness"
                         navigation.panel: root.navigationPanel
-                        navigation.row: showItem.navigation.row + 1
+                        navigationRowStart: showItem.navigation.row + 1
                     }
 
                     SpinBoxPropertyView {
@@ -201,7 +201,7 @@ FocusableItem {
 
                         navigation.name: "Length"
                         navigation.panel: root.navigationPanel
-                        navigation.row: thicknessView.navigationRowEnd + 1
+                        navigationRowStart: thicknessView.navigationRowEnd + 1
                     }
                 }
 

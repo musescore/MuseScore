@@ -36,19 +36,27 @@ Column {
     property PropertyItem dashLineLength: null
     property PropertyItem dashGapLength: null
 
+    property NavigationPanel navigationPanel: null
+    property int navigationRowStart: 1
+    property int navigationRowEnd: gapSection.navigationRowEnd
+
     width: parent.width
 
     spacing: 12
 
     FlatRadioButtonGroupPropertyView {
+        id: styleSection
         titleText: qsTrc("inspector", "Style")
         propertyItem: root.lineStyle
 
+        navigation.panel: root.navigationPanel
+        navigationRowStart: root.navigationRowStart
+
         model: [
-            { iconCode: IconCode.LINE_NORMAL, value: LineTypes.LINE_STYLE_SOLID },
-            { iconCode: IconCode.LINE_DASHED, value: LineTypes.LINE_STYLE_DASHED },
-            { iconCode: IconCode.LINE_DOTTED, value: LineTypes.LINE_STYLE_DOTTED },
-            { text: qsTrc("inspector", "Custom"), value: LineTypes.LINE_STYLE_CUSTOM }
+            { iconCode: IconCode.LINE_NORMAL, value: LineTypes.LINE_STYLE_SOLID, title: qsTrc("inspector", "Normal") },
+            { iconCode: IconCode.LINE_DASHED, value: LineTypes.LINE_STYLE_DASHED, title: qsTrc("inspector", "Dashed") },
+            { iconCode: IconCode.LINE_DOTTED, value: LineTypes.LINE_STYLE_DOTTED, title: qsTrc("inspector", "Dotted") },
+            { text: qsTrc("inspector", "Custom"), value: LineTypes.LINE_STYLE_CUSTOM, title: qsTrc("inspector", "Custom") }
         ]
     }
 
@@ -57,6 +65,7 @@ Column {
         width: parent.width
 
         SpinBoxPropertyView {
+            id: dashSection
             anchors.left: parent.left
             anchors.right: parent.horizontalCenter
             anchors.rightMargin: 2
@@ -71,9 +80,14 @@ Column {
             maxValue: 10
             minValue: 0.1
             decimals: 2
+
+            navigation.name: "Dash"
+            navigation.panel: root.navigationPanel
+            navigationRowStart: styleSection.navigationRowEnd + 1
         }
 
         SpinBoxPropertyView {
+            id: gapSection
             anchors.left: parent.horizontalCenter
             anchors.leftMargin: 2
             anchors.right: parent.right
@@ -88,6 +102,10 @@ Column {
             maxValue: 10
             minValue: 0.1
             decimals: 2
+
+            navigation.name: "Gap"
+            navigation.panel: root.navigationPanel
+            navigationRowStart: dashSection.navigationRowEnd + 1
         }
     }
 }
