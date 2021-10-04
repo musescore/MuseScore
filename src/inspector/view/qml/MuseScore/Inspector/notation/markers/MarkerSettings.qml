@@ -22,14 +22,19 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Inspector 1.0
+
 import "../../common"
 
 Column {
     id: root
 
     property QtObject model: null
+
+    property NavigationPanel navigationPanel: null
+    property int navigationRowOffset: 1
 
     objectName: "MarkerSettings"
 
@@ -61,5 +66,8 @@ Column {
     TextSection {
         titleText: qsTrc("inspector", "Label")
         propertyItem: root.model ? root.model.label : null
+
+        navigation.panel: root.navigationPanel
+        navigationRowStart: root.navigationRowOffset
     }
 }
