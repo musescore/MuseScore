@@ -248,6 +248,26 @@ void BufferedPaintProvider::drawTiledPixmap(const RectF& rect, const Pixmap& pm,
     editableData().tiledPixmap.push_back(DrawTiledPixmap { rect, pm, offset });
 }
 
+void BufferedPaintProvider::drawPixmap(const PointF& p, const QPixmap& pm)
+{
+    editableData().pixmaps.push_back(DrawPixmap { p, Pixmap::fromQPixmap(pm) });
+}
+
+void BufferedPaintProvider::drawTiledPixmap(const RectF& rect, const QPixmap& pm, const PointF& offset)
+{
+    editableData().tiledPixmap.push_back(DrawTiledPixmap { rect, Pixmap::fromQPixmap(pm), offset });
+}
+
+void BufferedPaintProvider::setClipRect(const RectF& rect)
+{
+    UNUSED(rect);
+}
+
+void BufferedPaintProvider::setClipping(bool enable)
+{
+    UNUSED(enable);
+}
+
 const DrawData& BufferedPaintProvider::drawData() const
 {
     return m_buf;

@@ -30,7 +30,7 @@
 namespace mu::autobot {
 class AbScoreLoadStep : public AbBaseStep
 {
-    INJECT(autobot, project::IFileScoreController, fileScoreController)
+    INJECT(autobot, project::IProjectFilesController, projectFilesController)
 public:
     AbScoreLoadStep() = default;
 

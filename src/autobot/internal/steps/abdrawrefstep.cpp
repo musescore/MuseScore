@@ -23,7 +23,7 @@
 
 #include "log.h"
 #include "io/path.h"
-#include "engraving/draw/utils/drawjson.h"
+#include "engraving/infrastructure/draw/utils/drawjson.h"
 
 using namespace mu::autobot;
 
