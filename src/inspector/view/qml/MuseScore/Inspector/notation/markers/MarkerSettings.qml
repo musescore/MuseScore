@@ -40,6 +40,10 @@ Column {
 
     spacing: 12
 
+    function focusOnFirst() {
+        labelSection.focusOnFirst()
+    }
+
     StyledTextLabel {
         text: qsTrc("inspector", "Marker type: ") + markerTypeToString(root.model ? root.model.type : null)
 
@@ -64,6 +68,7 @@ Column {
     }
 
     TextSection {
+        id: labelSection
         titleText: qsTrc("inspector", "Label")
         propertyItem: root.model ? root.model.label : null
 

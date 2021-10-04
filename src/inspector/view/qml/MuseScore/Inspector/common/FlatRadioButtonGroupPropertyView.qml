@@ -34,6 +34,10 @@ InspectorPropertyView {
 
     navigationRowEnd: navigationRowStart + radioButtonGroupItem.count + 1 /*menu button*/
 
+    function focusOnFirst() {
+        radioButtonGroupItem.itemAtIndex(0).navigation.requestActive()
+    }
+
     component Delegate: FlatRadioButton {
         required property var modelData
         required property int index

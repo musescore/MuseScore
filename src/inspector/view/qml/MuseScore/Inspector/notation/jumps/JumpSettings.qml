@@ -40,6 +40,10 @@ Column {
 
     spacing: 12
 
+    function focusOnFirst() {
+        jumpTo.focusOnFirst()
+    }
+
     TextSection {
         id: jumpTo
         titleText: qsTrc("inspector", "Jump to")
