@@ -287,6 +287,7 @@ QVariantList LineSettingsModel::hookTypesToObjList(const QList<HookTypeInfo>& ty
         QVariantMap obj;
         obj["value"] = typeInfo.type;
         obj["iconCode"] = static_cast<int>(typeInfo.icon);
+        obj["title"] = typeInfo.title;
 
         result << obj;
     }
