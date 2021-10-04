@@ -33,6 +33,6 @@ std::string AbScoreLoadStep::name() const
 void AbScoreLoadStep::doRun(IAbContextPtr ctx)
 {
     AbPaintProvider::instance()->clear();
-    Ret ret = fileScoreController()->openScore(ctx->globalVal<io::path>(IAbContext::Key::FilePath));
+    Ret ret = projectFilesController()->openProject(ctx->globalVal<io::path>(IAbContext::Key::FilePath));
     doFinish(ctx, ret);
 }

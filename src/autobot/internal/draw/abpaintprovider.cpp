@@ -22,7 +22,7 @@
 #include "abpaintprovider.h"
 
 #include "log.h"
-#include "engraving/draw/painter.h"
+#include "engraving/infrastructure/draw/painter.h"
 
 static const QColor REMOVED_COLOR("#cc0000");
 static const QColor ADDED_COLOR("#009900");
@@ -75,7 +75,7 @@ void AbPaintProvider::paintData(draw::IPaintProviderPtr provider, const draw::Dr
         for (const DrawData::Data& d : obj.datas) {
             DrawData::State st = d.state;
             st.pen.setColor(overcolor);
-            st.pen.setWidth(10);
+            st.pen.setWidthF(10.);
             st.brush.setColor(overcolor);
 
             provider->setPen(st.pen);
