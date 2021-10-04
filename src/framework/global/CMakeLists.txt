@@ -47,6 +47,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/io/device.h
     ${CMAKE_CURRENT_LIST_DIR}/log.h
     ${CMAKE_CURRENT_LIST_DIR}/logstream.h
+    ${CMAKE_CURRENT_LIST_DIR}/logremover.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/logremover.h
     ${CMAKE_CURRENT_LIST_DIR}/dataformatter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dataformatter.h
     ${CMAKE_CURRENT_LIST_DIR}/id.cpp
