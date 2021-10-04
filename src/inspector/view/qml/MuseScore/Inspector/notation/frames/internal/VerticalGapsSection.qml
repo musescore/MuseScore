@@ -33,10 +33,15 @@ Item {
     property PropertyItem gapAbove: null
     property PropertyItem gapBelow: null
 
+    property NavigationPanel navigationPanel: null
+    property int navigationRowStart: 1
+    property int navigationRowEnd: gapBelow.navigationRowEnd
+
     height: childrenRect.height
     width: parent.width
 
     SpinBoxPropertyView {
+        id: gapAbove
         anchors.left: parent.left
         anchors.right: parent.horizontalCenter
         anchors.rightMargin: 4
@@ -45,9 +50,13 @@ Item {
         propertyItem: root.gapAbove
 
         icon: IconCode.GAP_ABOVE
+
+        navigation.panel: root.navigationPanel
+        navigationRowStart: root.navigationRowStart + 1
     }
 
     SpinBoxPropertyView {
+        id: gapBelow
         anchors.left: parent.horizontalCenter
         anchors.leftMargin: 4
         anchors.right: parent.right
@@ -56,5 +65,8 @@ Item {
         propertyItem: root.gapBelow
 
         icon: IconCode.GAP_BELOW
+
+        navigation.panel: root.navigationPanel
+        navigationRowStart: gapAbove.navigationRowEnd + 1
     }
 }
