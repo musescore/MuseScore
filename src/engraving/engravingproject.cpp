@@ -134,6 +134,7 @@ Err EngravingProject::loadMscz(const MscReader& msc, bool ignoreVersionError)
     TRACEFUNC;
 
     engravingElementsProvider()->clearStatistic();
+    Ms::MScore::setError(Ms::MsError::MS_NO_ERROR);
     ScoreReader scoreReader;
     Err err = scoreReader.loadMscz(m_masterScore, msc, ignoreVersionError);
     engravingElementsProvider()->printStatistic("=== Load ===");

@@ -114,7 +114,7 @@ TEST_F(ScanTreeTests, tstTreeMoonlight)
     tstTree("moonlight.mscx");
 }
 
-TEST_F(ScanTreeTests, tstTreeGoldberg)
+TEST_F(ScanTreeTests, DISABLED_tstTreeGoldberg) // too long
 {
     tstTree("goldberg.mscx");
 }
