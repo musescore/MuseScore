@@ -804,9 +804,9 @@ qreal NotationPaintView::height() const
     return QQuickPaintedItem::height();
 }
 
-QPoint NotationPaintView::canvasPos() const
+PointF NotationPaintView::canvasPos() const
 {
-    return QPoint(m_matrix.dx(), m_matrix.dy());
+    return PointF(m_matrix.dx(), m_matrix.dy());
 }
 
 PointF NotationPaintView::toLogical(const QPoint& point) const
