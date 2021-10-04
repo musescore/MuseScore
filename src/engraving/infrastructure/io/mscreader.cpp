@@ -228,7 +228,7 @@ bool MscReader::ZipReader::open(QIODevice* device, const QString& filePath)
 
     if (!m_device->isOpen()) {
         if (!m_device->open(QIODevice::ReadOnly)) {
-            LOGE() << "failed open file: " << filePath;
+            LOGD() << "failed open file: " << filePath;
             return false;
         }
     }
@@ -268,7 +268,7 @@ QStringList MscReader::ZipReader::fileList() const
     QStringList files;
     QVector<MQZipReader::FileInfo> fileInfoList = m_zip->fileInfoList();
     if (m_zip->status() != MQZipReader::NoError) {
-        LOGE() << "failed read meta, status: " << m_zip->status();
+        LOGD() << "failed read meta, status: " << m_zip->status();
     }
 
     for (const MQZipReader::FileInfo& fi : fileInfoList) {
@@ -288,7 +288,7 @@ QByteArray MscReader::ZipReader::fileData(const QString& fileName) const
 
     QByteArray data = m_zip->fileData(fileName);
     if (m_zip->status() != MQZipReader::NoError) {
-        LOGE() << "failed read data, status: " << m_zip->status();
+        LOGD() << "failed read data, status: " << m_zip->status();
         return QByteArray();
     }
     return data;
@@ -304,7 +304,7 @@ bool MscReader::DirReader::open(QIODevice* device, const QString& filePath)
     m_rootPath = QFileInfo(filePath).absolutePath();
 
     if (!QFileInfo::exists(m_rootPath)) {
-        LOGE() << "not exists path: " << m_rootPath;
+        LOGD() << "not exists path: " << m_rootPath;
         return false;
     }
 
@@ -347,7 +347,7 @@ QByteArray MscReader::DirReader::fileData(const QString& fileName) const
     QString filePath = m_rootPath + "/" + fileName;
     QFile file(filePath);
     if (!file.open(QIODevice::ReadOnly)) {
-        LOGE() << "failed open file: " << filePath;
+        LOGD() << "failed open file: " << filePath;
         return QByteArray();
     }
 
@@ -365,7 +365,7 @@ bool MscReader::XmlFileReader::open(QIODevice* device, const QString& filePath)
 
     if (!m_device->isOpen()) {
         if (!m_device->open(QIODevice::ReadOnly)) {
-            LOGE() << "failed open file: " << filePath;
+            LOGD() << "failed open file: " << filePath;
             return false;
         }
     }

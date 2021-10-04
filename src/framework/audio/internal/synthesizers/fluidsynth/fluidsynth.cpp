@@ -298,7 +298,7 @@ bool FluidSynth::handleEvent(const Event& e)
         ret = fluid_synth_pitch_bend(m_fluid->synth, e.channel(), e.data());
     } break;
     default: {
-        LOGW() << "not supported event type: " << e.opcodeString();
+        LOGD() << "not supported event type: " << e.opcodeString();
         ret = FLUID_FAILED;
     }
     }

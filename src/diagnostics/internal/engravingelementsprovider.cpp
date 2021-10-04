@@ -63,7 +63,7 @@ void EngravingElementsProvider::printStatistic(const std::string& title)
     stream << "-----------------------------------------------------\n";
     stream << FORMAT("Total", 20) << VALUE(regCountTotal) << VALUE(unregCountTotal);
 
-    LOGI() << stream.str() << '\n';
+    LOGD() << stream.str() << '\n';
 }
 
 void EngravingElementsProvider::reg(const Ms::EngravingObject* e)
@@ -110,11 +110,11 @@ mu::async::Channel<const Ms::EngravingObject*, bool> EngravingElementsProvider::
 
 void EngravingElementsProvider::checkTree(Ms::Score* score)
 {
-    LOGI() << "\n\n\n";
-    LOGI() << "========================";
+    LOGD() << "\n\n\n";
+    LOGD() << "========================";
     checkObjectTree(score->rootItem());
 
-    LOGI() << "========================";
+    LOGD() << "========================";
 //    LOGI() << "dumpTree:";
 //    int level = 0;
 //    dumpTree(m_masterScore->rootItem(), level);
@@ -136,10 +136,10 @@ void EngravingElementsProvider::dumpTree(const Ms::EngravingItem* item, int& lev
     ++level;
     QString gap;
     gap.fill(' ', level);
-    LOGI() << gap << item->name();
+    LOGD() << gap << item->name();
     for (const Ms::EngravingObject* ch : item->children()) {
         if (!ch->isEngravingItem()) {
-            LOGI() << "[" << item->name() << ": not item ch: " << ch->name();
+            LOGD() << "[" << item->name() << ": not item ch: " << ch->name();
             continue;
         }
         dumpTree(static_cast<const Ms::EngravingItem*>(ch), level);
@@ -152,7 +152,7 @@ void EngravingElementsProvider::dumpTreeTree(const Ms::EngravingObject* obj, int
     ++level;
     QString gap;
     gap.fill(' ', level);
-    LOGI() << gap << obj->name();
+    LOGD() << gap << obj->name();
     for (int i = 0; i < obj->scanChildCount(); ++i) {
         const Ms::EngravingObject* ch = obj->scanChild(i);
         dumpTreeTree(ch, level);
@@ -169,24 +169,24 @@ void EngravingElementsProvider::checkObjectTree(const Ms::EngravingObject* obj)
     Ms::EngravingObject* p1 = obj->parent(true);
     Ms::EngravingObject* p2 = obj->scanParent();
     if (p1 && p2 && p1 != p2) {
-        LOGI() << "obj: " << obj->name();
-        LOGE() << "parents is differens, p1: " << p1->name() << ", p2: " << p2->name();
+        LOGD() << "obj: " << obj->name();
+        LOGD() << "parents is differens, p1: " << p1->name() << ", p2: " << p2->name();
     }
 
     size_t ch1 = obj->children().size();
     size_t ch2 = obj->scanChildCount();
     if (ch1 != ch2) {
-        LOGI() << "obj: " << obj->name();
-        LOGE() << "chcount is differens, ch1: " << ch1 << ", ch2: " << ch2;
+        LOGD() << "obj: " << obj->name();
+        LOGD() << "chcount is differens, ch1: " << ch1 << ", ch2: " << ch2;
 
-        LOGI() << "children1:";
+        LOGD() << "children1:";
         for (size_t i = 0; i < obj->children().size(); ++i) {
-            LOGI() << i << ": " << obj->children().at(i)->name();
+            LOGD() << i << ": " << obj->children().at(i)->name();
         }
 
-        LOGI() << "children2:";
+        LOGD() << "children2:";
         for (int i = 0; i < obj->scanChildCount(); ++i) {
-            LOGI() << i << ": " << obj->scanChild(i)->name();
+            LOGD() << i << ": " << obj->scanChild(i)->name();
         }
     }
 
