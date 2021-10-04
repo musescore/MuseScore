@@ -29,6 +29,7 @@ ExportSettingsPage {
     id: root
 
     ExportOptionItem {
+        id: resolutionLabel
         text: qsTrc("project", "Resolution:")
 
         IncrementalPropertyControl {
@@ -37,6 +38,7 @@ ExportSettingsPage {
             navigation.name: "ResolutionSpinbox"
             navigation.panel: root.navigationPanel
             navigation.row: root.navigationOrder + 1
+            navigation.accessible.name: resolutionLabel.text + " " + String(currentValue)
 
             currentValue: root.model.pdfResolution
 
@@ -46,7 +48,7 @@ ExportSettingsPage {
             decimals: 0
             measureUnitsSymbol: qsTrc("project", "dpi")
 
-            onValueEdited: {
+            onValueEdited: function (newValue) {
                 root.model.pdfResolution = newValue
             }
         }
