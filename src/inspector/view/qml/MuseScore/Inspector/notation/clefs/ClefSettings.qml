@@ -21,6 +21,7 @@
  */
 import QtQuick 2.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Inspector 1.0
 
@@ -28,6 +29,9 @@ Column {
     id: root
 
     property QtObject model: null
+
+    property NavigationPanel navigationPanel: null
+    property int navigationRowOffset: 1
 
     objectName: "ClefSettings"
 
@@ -37,6 +41,11 @@ Column {
         isIndeterminate: root.model ? root.model.shouldShowCourtesy.isUndefined : false
         checked: root.model && !isIndeterminate ? root.model.shouldShowCourtesy.value : false
         text: qsTrc("inspector", "Show courtesy clef on previous measure")
+
+        navigation.name: "ShowCourtesyClefCheckBox"
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationRowOffset
+        navigation.enabled: root.enabled
 
         onClicked: { root.model.shouldShowCourtesy.value = !checked }
     }
