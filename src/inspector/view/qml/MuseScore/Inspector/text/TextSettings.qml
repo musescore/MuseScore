@@ -128,7 +128,7 @@ Column {
 
             navigation.name: "BorderColorMenu"
             navigation.panel: root.navigationPanel
-            navigation.row: 9
+            navigationRowStart: 9
 
             visible: root.model ? root.model.frameBorderColor.isEnabled : false
             height: visible ? implicitHeight : 0
@@ -144,7 +144,7 @@ Column {
 
             navigation.name: "HighlightColorMenu"
             navigation.panel: root.navigationPanel
-            navigation.row: 11
+            navigationRowStart: 11
 
             visible: root.model ? root.model.frameHighlightColor.isEnabled : false
             height: visible ? implicitHeight : 0

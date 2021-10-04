@@ -25,12 +25,16 @@ import QtQuick.Controls 2.15
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Inspector 1.0
+
 import "../../common"
 
 Column {
     id: root
 
     property QtObject model: null
+
+    property NavigationPanel navigationPanel: null
+    property int navigationRowOffset: 1
 
     objectName: "StaffTypeSettings"
 
@@ -41,6 +45,11 @@ Column {
         checked: root.model && !isIndeterminate ? root.model.isSmall.value : false
         text: qsTrc("inspector", "Cue size")
 
+        navigation.name: "CuteSizeCheckBox"
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationRowOffset + 1
+        navigation.enabled: root.enabled
+
         onClicked: { root.model.isSmall.value = !checked }
     }
 
@@ -49,6 +58,7 @@ Column {
         width: parent.width
 
         OffsetSection {
+            id: sizeOffset
             anchors.left: parent.left
             anchors.right: parent.horizontalCenter
             anchors.rightMargin: 2
@@ -59,9 +69,13 @@ Column {
             verticalOffsetControl.decimals: 2
             verticalOffsetControl.minValue: 0.1
             verticalOffsetControl.maxValue: 5
+
+            navigation.panel: root.navigationPanel
+            navigationRowStart: root.navigationRowOffset + 1
         }
 
         SpinBoxPropertyView {
+            id: scaleSection
             anchors.left: parent.horizontalCenter
             anchors.leftMargin: 2
             anchors.right: parent.right
@@ -74,6 +88,9 @@ Column {
             decimals: 2
             maxValue: 400
             minValue: 20
+
+            navigation.panel: root.navigationPanel
+            navigationRowStart: sizeOffset.navigationRowEnd + 1
         }
     }
 
@@ -84,6 +101,7 @@ Column {
         width: parent.width
 
         SpinBoxPropertyView {
+            id: numberOfLinesSection
             anchors.left: parent.left
             anchors.right: parent.horizontalCenter
             anchors.rightMargin: 2
@@ -95,9 +113,13 @@ Column {
             decimals: 0
             maxValue: 14
             minValue: 1
+
+            navigation.panel: root.navigationPanel
+            navigationRowStart: scaleSection.navigationRowEnd + 1
         }
 
         SpinBoxPropertyView {
+            id: lineDistance
             anchors.left: parent.horizontalCenter
             anchors.leftMargin: 2
             anchors.right: parent.right
@@ -108,10 +130,14 @@ Column {
             step: 0.25
             maxValue: 3
             minValue: 0
+
+            navigation.panel: root.navigationPanel
+            navigationRowStart: numberOfLinesSection.navigationRowEnd + 1
         }
     }
 
     SpinBoxPropertyView {
+        id: stepOffset
         anchors.left: parent.left
         anchors.right: parent.horizontalCenter
         anchors.rightMargin: 2
@@ -123,26 +149,43 @@ Column {
         decimals: 0
         maxValue: 8
         minValue: -8
+
+        navigation.panel: root.navigationPanel
+        navigationRowStart: lineDistance.navigationRowEnd + 1
     }
 
     CheckBox {
+        id: invisibleStaffLinesCheckBox
         isIndeterminate: root.model ? root.model.isInvisible.isUndefined : false
         checked: root.model && !isIndeterminate ? root.model.isInvisible.value : false
         text: qsTrc("inspector", "Invisible staff lines")
+
+        navigation.name: "InvisibleStaffLinesCheckBox"
+        navigation.panel: root.navigationPanel
+        navigation.row: stepOffset.navigationRowEnd + 1
+        navigation.enabled: root.enabled
 
         onClicked: { root.model.isInvisible.value = !checked }
     }
 
     ColorSection {
+        id: staffLineColorSection
         titleText: qsTrc("inspector", "Staff line color")
         propertyItem: root.model ? root.model.color : null
+
+        navigation.panel: root.navigationPanel
+        navigationRowStart: invisibleStaffLinesCheckBox.navigation.row + 1
     }
 
     SeparatorLine { anchors.margins: -10 }
 
     DropdownPropertyView {
+        id: noteHeadScheme
         titleText: qsTrc("inspector", "Notehead scheme")
         propertyItem: root.model ? root.model.noteheadSchemeType : null
+
+        navigation.panel: root.navigationPanel
+        navigationRowStart: staffLineColorSection.navigationRowEnd + 1
 
         model: [
             { text: qsTrc("inspector", "Auto"), value: NoteHead.SCHEME_AUTO },
@@ -168,6 +211,11 @@ Column {
             checked: root.model && !isIndeterminate ? root.model.isStemless.value : false
             text: qsTrc("inspector", "Stemless")
 
+            navigation.name: "StremlessCheckBox"
+            navigation.panel: root.navigationPanel
+            navigation.row: noteHeadScheme.navigationRowEnd + 1
+            navigation.enabled: root.enabled
+
             onClicked: { root.model.isStemless.value = !checked }
         }
 
@@ -175,6 +223,11 @@ Column {
             isIndeterminate: root.model ? root.model.shouldShowBarlines.isUndefined : false
             checked: root.model && !isIndeterminate ? root.model.shouldShowBarlines.value : false
             text: qsTrc("inspector", "Show barlines")
+
+            navigation.name: "ShowBarlinesCheckBox"
+            navigation.panel: root.navigationPanel
+            navigation.row: noteHeadScheme.navigationRowEnd + 2
+            navigation.enabled: root.enabled
 
             onClicked: { root.model.shouldShowBarlines.value = !checked }
         }
@@ -184,6 +237,11 @@ Column {
             checked: root.model && !isIndeterminate ? root.model.shouldShowLedgerLines.value : false
             text: qsTrc("inspector", "Show ledger lines")
 
+            navigation.name: "ShowLedgerLinesCheckBox"
+            navigation.panel: root.navigationPanel
+            navigation.row: noteHeadScheme.navigationRowEnd + 3
+            navigation.enabled: root.enabled
+
             onClicked: { root.model.shouldShowLedgerLines.value = !checked }
         }
 
@@ -191,6 +249,11 @@ Column {
             isIndeterminate: root.model ? root.model.shouldGenerateClefs.isUndefined : false
             checked: root.model && !isIndeterminate ? root.model.shouldGenerateClefs.value : false
             text: qsTrc("inspector", "Generate clefs")
+
+            navigation.name: "GenerateClefsCheckBox"
+            navigation.panel: root.navigationPanel
+            navigation.row: noteHeadScheme.navigationRowEnd + 4
+            navigation.enabled: root.enabled
 
             onClicked: { root.model.shouldGenerateClefs.value = !checked }
         }
@@ -200,6 +263,11 @@ Column {
             checked: root.model && !isIndeterminate ? root.model.shouldGenerateTimeSignatures.value : false
             text: qsTrc("inspector", "Generate time signatures")
 
+            navigation.name: "GenerateTimeSignaturesCheckBox"
+            navigation.panel: root.navigationPanel
+            navigation.row: noteHeadScheme.navigationRowEnd + 5
+            navigation.enabled: root.enabled
+
             onClicked: { root.model.shouldGenerateTimeSignatures.value = !checked }
         }
 
@@ -207,6 +275,11 @@ Column {
             isIndeterminate: root.model ? root.model.shouldGenerateKeySignatures.isUndefined : false
             checked: root.model && !isIndeterminate ? root.model.shouldGenerateKeySignatures.value : false
             text: qsTrc("inspector", "Generate key signatures")
+
+            navigation.name: "GenerateKeySignaturesCheckBox"
+            navigation.panel: root.navigationPanel
+            navigation.row: noteHeadScheme.navigationRowEnd + 6
+            navigation.enabled: root.enabled
 
             onClicked: { root.model.shouldGenerateKeySignatures.value = !checked }
         }

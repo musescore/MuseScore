@@ -107,7 +107,7 @@ Column {
 
     ColorSection {
         navigation.panel: root.navigationPanel
-        navigation.row: 500
+        navigationRowStart: 500
         propertyItem: root.model ? root.model.color : null
     }
 }
