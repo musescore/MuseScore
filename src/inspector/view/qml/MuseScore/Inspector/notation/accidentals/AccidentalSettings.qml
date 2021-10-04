@@ -22,6 +22,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Inspector 1.0
 
@@ -32,6 +33,9 @@ Column {
 
     property QtObject model: null
 
+    property NavigationPanel navigationPanel: null
+    property int navigationRowOffset: 1
+
     objectName: "AccidentalSettings"
 
     spacing: 12
@@ -39,6 +43,9 @@ Column {
     FlatRadioButtonGroupPropertyView {
         titleText: qsTrc("inspector", "Bracket type")
         propertyItem: root.model ? root.model.bracketType : null
+
+        navigation.panel: root.navigationPanel
+        navigationRowStart: root.navigationRowOffset
 
         model: [
             { text: qsTrc("inspector", "None"), value: AccidentalTypes.BRACKET_TYPE_NONE },
