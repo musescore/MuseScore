@@ -98,18 +98,19 @@ protected:
     };
 
     struct HookTypeInfo {
-        HookTypeInfo(Ms::HookType type, ui::IconCode::Code icon)
-            : type(static_cast<int>(type)), icon(icon)
-        {
-        }
-
-        HookTypeInfo(int type, ui::IconCode::Code icon)
-            : type(type), icon(icon)
-        {
-        }
-
         int type = 0;
         ui::IconCode::Code icon = ui::IconCode::Code::NONE;
+        QString title;
+
+        HookTypeInfo(Ms::HookType type, ui::IconCode::Code icon, const QString& title)
+            : type(static_cast<int>(type)), icon(icon), title(title)
+        {
+        }
+
+        HookTypeInfo(int type, ui::IconCode::Code icon, const QString& title)
+            : type(type), icon(icon), title(title)
+        {
+        }
     };
 
     void createProperties() override;

@@ -40,19 +40,19 @@ PedalSettingsModel::PedalSettingsModel(QObject* parent, IElementRepositoryServic
     setIcon(ui::IconCode::Code::PEDAL_MARKING);
 
     static const QList<HookTypeInfo> startHookTypes {
-        { Ms::HookType::NONE, IconCode::LINE_NORMAL },
-        { Ms::HookType::HOOK_45, IconCode::LINE_WITH_ANGLED_START_HOOK },
-        { Ms::HookType::HOOK_90T, IconCode::LINE_WITH_T_LINE_START_HOOK }
+        { Ms::HookType::NONE, IconCode::LINE_NORMAL, qtrc("inspector", "Normal") },
+        { Ms::HookType::HOOK_45, IconCode::LINE_WITH_ANGLED_START_HOOK, qtrc("inspector", "Hooked 45") },
+        { Ms::HookType::HOOK_90T, IconCode::LINE_WITH_T_LINE_START_HOOK, qtrc("inspector", "Hooked 90 T-style") }
     };
 
     setPossibleStartHookTypes(startHookTypes);
 
     static const QList<HookTypeInfo> endHookTypes {
-        { Ms::HookType::NONE, IconCode::LINE_NORMAL },
-        { Ms::HookType::HOOK_90, IconCode::LINE_WITH_END_HOOK },
-        { Ms::HookType::HOOK_45, IconCode::LINE_WITH_ANGLED_END_HOOK },
-        { Ms::HookType::HOOK_90T, IconCode::LINE_WITH_T_LIKE_END_HOOK },
-        { HOOK_STAR, IconCode::LINE_PEDAL_STAR_ENDING }
+        { Ms::HookType::NONE, IconCode::LINE_NORMAL, qtrc("inspector", "Normal") },
+        { Ms::HookType::HOOK_90, IconCode::LINE_WITH_END_HOOK, qtrc("inspector", "Hooked 90") },
+        { Ms::HookType::HOOK_45, IconCode::LINE_WITH_ANGLED_END_HOOK, qtrc("inspector", "Hooked 45") },
+        { Ms::HookType::HOOK_90T, IconCode::LINE_WITH_T_LIKE_END_HOOK, qtrc("inspector", "Hooked 90 T-style") },
+        { HOOK_STAR, IconCode::LINE_PEDAL_STAR_ENDING, qtrc("inspector", "Asterisk") }
     };
 
     setPossibleEndHookTypes(endHookTypes);

@@ -34,6 +34,9 @@ Column {
 
     property QtObject model: null
 
+    property NavigationPanel navigationPanel: null
+    property int navigationRowOffset: 1
+
     objectName: "PedalSettings"
 
     spacing: 12
@@ -43,12 +46,18 @@ Column {
 
         text: qsTrc("inspector", "Show pedal symbol")
 
+        navigation.name: "ShowPedalSymbolCheckBox"
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationRowOffset
+        navigation.enabled: root.enabled
+
         onClicked: {
             root.model.pedalSymbolVisible = !checked
         }
     }
 
     LineTypeSection {
+        id: lineTypeSectuion
         startHookType: root.model ? root.model.startHookType : null
         endHookType: root.model ? root.model.lineType : null
 
@@ -57,14 +66,23 @@ Column {
 
         possibleStartHookTypes: root.model ? root.model.possibleStartHookTypes() : null
         possibleEndHookTypes: root.model ? root.model.possibleEndHookTypes() : null
+
+        navigationPanel: root.navigationPanel
+        navigationRowStart: root.navigationRowOffset + 1
     }
 
     CheckBox {
+        id: showLineCheckBox
         isIndeterminate: root.model && root.model.isLineVisible.isUndefined
         checked: root.model && !isIndeterminate && root.model.isLineVisible.value
         visible: root.model && root.model.isChangingLineVisibilityAllowed
 
         text: qsTrc("inspector", "Show line with rosette")
+
+        navigation.name: "ShowLineWithRosetteCheckBox"
+        navigation.panel: root.navigationPanel
+        navigation.row: lineTypeSectuion.navigationRowEnd + 1
+        navigation.enabled: root.enabled && visible
 
         onClicked: {
             root.model.isLineVisible.value = !checked
@@ -77,5 +95,8 @@ Column {
         lineStyle: root.model ? root.model.lineStyle : null
         dashLineLength: root.model ? root.model.dashLineLength : null
         dashGapLength: root.model ? root.model.dashGapLength : null
+
+        navigationPanel: root.navigationPanel
+        navigationRowStart: showLineCheckBox.navigation.row + 1
     }
 }
