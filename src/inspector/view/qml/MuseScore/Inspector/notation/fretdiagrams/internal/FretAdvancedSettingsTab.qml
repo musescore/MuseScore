@@ -22,6 +22,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
+import MuseScore.Ui 1.0
 import MuseScore.Inspector 1.0
 import MuseScore.UiComponents 1.0
 
@@ -31,6 +32,9 @@ FocusableItem {
     id: root
 
     property QtObject model: null
+
+    property NavigationPanel navigationPanel: null
+    property int navigationRowOffset: 1
 
     implicitHeight: contentColumn.height
     width: parent.width
@@ -47,6 +51,7 @@ FocusableItem {
             width: parent.width
 
             SpinBoxPropertyView {
+                id: scaleSection
                 anchors.left: parent.left
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
@@ -59,9 +64,14 @@ FocusableItem {
                 decimals: 0
                 maxValue: 300
                 minValue: 1
+
+                navigation.name: "Scale"
+                navigation.panel: root.navigationPanel
+                navigationRowStart: root.navigationRowOffset
             }
 
             SpinBoxPropertyView {
+                id: stringsSection
                 anchors.left: parent.horizontalCenter
                 anchors.leftMargin: 2
                 anchors.right: parent.right
@@ -73,6 +83,10 @@ FocusableItem {
                 decimals: 0
                 maxValue: 12
                 minValue: 4
+
+                navigation.name: "Strings"
+                navigation.panel: root.navigationPanel
+                navigationRowStart: scaleSection.navigationRowEnd + 1
             }
         }
 
@@ -81,6 +95,7 @@ FocusableItem {
             width: parent.width
 
             SpinBoxPropertyView {
+                id: visibleFrets
                 anchors.left: parent.left
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
@@ -92,9 +107,14 @@ FocusableItem {
                 decimals: 0
                 maxValue: 6
                 minValue: 3
+
+                navigation.name: "VisibleFrets"
+                navigation.panel: root.navigationPanel
+                navigationRowStart: stringsSection.navigationRowEnd + 1
             }
 
             SpinBoxPropertyView {
+                id: startingFretNumber
                 anchors.left: parent.horizontalCenter
                 anchors.leftMargin: 2
                 anchors.right: parent.right
@@ -106,12 +126,20 @@ FocusableItem {
                 decimals: 0
                 maxValue: 12
                 minValue: 1
+
+                navigation.name: "StartingFretNumber"
+                navigation.panel: root.navigationPanel
+                navigationRowStart: visibleFrets.navigationRowEnd + 1
             }
         }
 
         PlacementSection {
+            id: placementSection
             titleText: qsTrc("inspector", "Placement on staff")
             propertyItem: root.model ? root.model.placement : null
+
+            navigation.panel: root.navigationPanel
+            navigationRowStart: startingFretNumber.navigationRowEnd + 1
         }
 
         CheckBox {
@@ -122,6 +150,11 @@ FocusableItem {
             isIndeterminate: root.model ? root.model.isNutVisible.isUndefined : false
             checked: root.model && !isIndeterminate ? root.model.isNutVisible.value : false
             text: qsTrc("inspector", "Show nut")
+
+            navigation.name: "MultipleDotsCheckBox"
+            navigation.panel: root.navigationPanel
+            navigation.row: placementSection.navigationRowEnd + 2
+            navigation.enabled: root.enabled
 
             onClicked: { root.model.isNutVisible.value = !checked }
         }

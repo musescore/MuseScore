@@ -165,7 +165,7 @@ Column {
 
             navigation.name: "Thickness"
             navigation.panel: root.navigationPanel
-            navigation.row: 13
+            navigationRowStart: 13
 
             visible: root.model ? root.model.frameThickness.isEnabled : false
             height: visible ? implicitHeight : 0
@@ -185,7 +185,7 @@ Column {
 
             navigation.name: "Margin"
             navigation.panel: root.navigationPanel
-            navigation.row: 15
+            navigationRowStart: 15
 
             visible: root.model ? root.model.frameMargin.isEnabled : false
             height: visible ? implicitHeight : 0
@@ -206,7 +206,7 @@ Column {
 
         navigation.name: "Corner radius"
         navigation.panel: root.navigationPanel
-        navigation.row: 17
+        navigationRowStart: 17
 
         visible: root.model ? root.model.frameCornerRadius.isEnabled : false
         height: visible ? implicitHeight : 0

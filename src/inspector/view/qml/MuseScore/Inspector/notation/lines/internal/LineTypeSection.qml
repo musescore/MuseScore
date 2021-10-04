@@ -23,9 +23,9 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 
-import MuseScore.Inspector 1.0
-import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
+import MuseScore.Inspector 1.0
 
 import "../../../common"
 
@@ -40,6 +40,10 @@ Column {
     property alias possibleStartHookTypes: startHookButtonGroup.model
     property alias possibleEndHookTypes: lineTypeButtonGroup.model
 
+    property NavigationPanel navigationPanel: null
+    property int navigationRowStart: 1
+    property int navigationRowEnd: hookHeightSection.navigationRowEnd
+
     width: parent.width
 
     spacing: 12
@@ -49,6 +53,9 @@ Column {
 
         titleText: qsTrc("inspector", "Line type")
         propertyItem: root.endHookType
+
+        navigation.panel: root.navigationPanel
+        navigationRowStart: root.navigationRowStart
     }
 
     FlatRadioButtonGroupPropertyView {
@@ -56,6 +63,9 @@ Column {
 
         titleText: qsTrc("inspector", "Start hook")
         propertyItem: root.startHookType
+
+        navigation.panel: root.navigationPanel
+        navigationRowStart: lineTypeButtonGroup.navigationRowEnd + 1
     }
 
     Item {
@@ -63,21 +73,31 @@ Column {
         width: parent.width
 
         SpinBoxPropertyView {
+            id: thicknessSection
             anchors.left: parent.left
             anchors.right: parent.horizontalCenter
             anchors.rightMargin: 2
 
             titleText: qsTrc("inspector", "Thickness")
             propertyItem: root.thickness
+
+            navigation.name: "Thickness"
+            navigation.panel: root.navigationPanel
+            navigationRowStart: startHookButtonGroup.navigationRowEnd + 1
         }
 
         SpinBoxPropertyView {
+            id: hookHeightSection
             anchors.left: parent.horizontalCenter
             anchors.leftMargin: 2
             anchors.right: parent.right
 
             titleText: qsTrc("inspector", "Hook height")
             propertyItem: root.hookHeight
+
+            navigation.name: "HookHeight"
+            navigation.panel: root.navigationPanel
+            navigationRowStart: thicknessSection.navigationRowEnd + 1
         }
     }
 }

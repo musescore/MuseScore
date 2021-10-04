@@ -67,6 +67,6 @@ Column {
 
         navigation.name: "Override"
         navigation.panel: root.navigationPanel
-        navigation.row: followWrittenTempoCheckbox.navigation.row + 1
+        navigationRowStart: followWrittenTempoCheckbox.navigation.row + 1
     }
 }

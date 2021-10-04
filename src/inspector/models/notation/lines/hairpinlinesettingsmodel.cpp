@@ -48,10 +48,10 @@ HairpinLineSettingsModel::HairpinLineSettingsModel(QObject* parent, IElementRepo
     setIcon(ui::IconCode::Code::CRESCENDO_LINE);
 
     static const QList<HookTypeInfo> hookTypes {
-        { Ms::HookType::NONE, IconCode::LINE_NORMAL },
-        { Ms::HookType::HOOK_90, IconCode::LINE_WITH_END_HOOK },
-        { Ms::HookType::HOOK_45, IconCode::LINE_WITH_ANGLED_END_HOOK },
-        { Ms::HookType::HOOK_90T, IconCode::LINE_WITH_T_LIKE_END_HOOK }
+        { Ms::HookType::NONE, IconCode::LINE_NORMAL, qtrc("inspector", "Normal") },
+        { Ms::HookType::HOOK_90, IconCode::LINE_WITH_END_HOOK, qtrc("inspector", "Hooked 90") },
+        { Ms::HookType::HOOK_45, IconCode::LINE_WITH_ANGLED_END_HOOK, qtrc("inspector", "Hooked 45") },
+        { Ms::HookType::HOOK_90T, IconCode::LINE_WITH_T_LIKE_END_HOOK, qtrc("inspector", "Hoocked 90 T-style") }
     };
 
     setPossibleEndHookTypes(hookTypes);

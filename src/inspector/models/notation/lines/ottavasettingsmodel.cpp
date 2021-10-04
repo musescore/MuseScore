@@ -37,9 +37,9 @@ OttavaSettingsModel::OttavaSettingsModel(QObject* parent, IElementRepositoryServ
     setModelType(InspectorModelType::TYPE_OTTAVA);
 
     static const QList<HookTypeInfo> hookTypes {
-        { Ms::HookType::NONE, IconCode::LINE_NORMAL },
-        { Ms::HookType::HOOK_90, IconCode::LINE_WITH_END_HOOK },
-        { Ms::HookType::HOOK_45, IconCode::LINE_WITH_ANGLED_END_HOOK }
+        { Ms::HookType::NONE, IconCode::LINE_NORMAL, qtrc("inspector", "Normal") },
+        { Ms::HookType::HOOK_90, IconCode::LINE_WITH_END_HOOK, qtrc("inspector", "Hooked 90") },
+        { Ms::HookType::HOOK_45, IconCode::LINE_WITH_ANGLED_END_HOOK, qtrc("inspector", "Hooked 45") }
     };
 
     setPossibleEndHookTypes(hookTypes);
