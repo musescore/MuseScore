@@ -22,9 +22,9 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 
-import MuseScore.Inspector 1.0
-import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
+import MuseScore.Inspector 1.0
 
 import "../../../common"
 
@@ -32,6 +32,9 @@ FocusableItem {
     id: root
 
     property QtObject model: null
+
+    property NavigationPanel navigationPanel: null
+    property int navigationRowStart: 1
 
     implicitHeight: contentColumn.height
     width: parent.width
@@ -56,6 +59,11 @@ FocusableItem {
                 checked: root.model && !isIndeterminate ? root.model.isNienteCircleVisible.value : false
                 text: qsTrc("inspector", "Niente circle")
 
+                navigation.name: "NienteCircleCheckBox"
+                navigation.panel: root.navigationPanel
+                navigation.row: root.navigationRowStart + 1
+                navigation.enabled: root.enabled
+
                 onClicked: { root.model.isNienteCircleVisible.value = !checked }
             }
 
@@ -68,14 +76,23 @@ FocusableItem {
                 checked: root.model && !isIndeterminate ? root.model.allowDiagonal.value : false
                 text: qsTrc("inspector", "Allow diagonal")
 
+                navigation.name: "AllowDiagonalCheckBox"
+                navigation.panel: root.navigationPanel
+                navigation.row: root.navigationRowStart + 2
+                navigation.enabled: root.enabled
+
                 onClicked: { root.model.allowDiagonal.value = !checked }
             }
         }
 
         LineStyleSection {
+            id: lineStyleSection
             lineStyle: root.model ? root.model.lineStyle : null
             dashLineLength: root.model ? root.model.dashLineLength : null
             dashGapLength: root.model ? root.model.dashGapLength : null
+
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart + 3
         }
 
         SeparatorLine { anchors.margins: -10 }
@@ -85,6 +102,7 @@ FocusableItem {
             width: parent.width
 
             SpinBoxPropertyView {
+                id: thicknessSection
                 anchors.left: parent.left
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
@@ -96,9 +114,14 @@ FocusableItem {
                 maxValue: 10
                 minValue: 0.1
                 decimals: 2
+
+                navigation.name: "Thickness"
+                navigation.panel: root.navigationPanel
+                navigationRowStart: lineStyleSection.navigationRowEnd + 1
             }
 
             SpinBoxPropertyView {
+                id: heightSection
                 anchors.left: parent.horizontalCenter
                 anchors.leftMargin: 2
                 anchors.right: parent.right
@@ -110,6 +133,10 @@ FocusableItem {
                 maxValue: 10
                 minValue: 0.1
                 decimals: 2
+
+                navigation.name: "Height"
+                navigation.panel: root.navigationPanel
+                navigationRowStart: thicknessSection.navigationRowEnd + 1
             }
         }
 
@@ -118,6 +145,7 @@ FocusableItem {
             width: parent.width
 
             SpinBoxPropertyView {
+                id: continiousHeightSection
                 anchors.left: parent.left
                 anchors.right: parent.horizontalCenter
                 anchors.rightMargin: 2
@@ -129,11 +157,18 @@ FocusableItem {
                 maxValue: 10
                 minValue: 0.1
                 decimals: 2
+
+                navigation.name: "ContiniousHeight"
+                navigation.panel: root.navigationPanel
+                navigationRowStart: heightSection.navigationRowEnd + 1
             }
         }
 
         PlacementSection {
             propertyItem: root.model ? root.model.placement : null
+
+            navigation.panel: root.navigationPanel
+            navigationRowStart: continiousHeightSection.navigationRowEnd + 1
         }
     }
 }

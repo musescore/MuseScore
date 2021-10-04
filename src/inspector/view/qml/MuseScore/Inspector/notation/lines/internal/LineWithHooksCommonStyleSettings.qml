@@ -33,6 +33,9 @@ Column {
 
     property QtObject model: null
 
+    property NavigationPanel navigationPanel: null
+    property int navigationRowStart: 1
+
     width: parent.width
 
     spacing: 12
@@ -51,6 +54,11 @@ Column {
 
             text: qsTrc("inspector", "Show line")
 
+            navigation.name: "ShowLineCheckBox"
+            navigation.panel: root.navigationPanel
+            navigation.row: root.navigationRowStart + 1
+            navigation.enabled: root.enabled && visible
+
             onClicked: {
                 root.model.isLineVisible.value = !checked
             }
@@ -63,6 +71,11 @@ Column {
 
             text: qsTrc("inspector", "Allow diagonal")
 
+            navigation.name: "AllowDiagonalCheckBox"
+            navigation.panel: root.navigationPanel
+            navigation.row: root.navigationRowStart + 2
+            navigation.enabled: root.enabled && visible
+
             onClicked: {
                 root.model.allowDiagonal.value = !checked
             }
@@ -70,18 +83,26 @@ Column {
     }
 
     LineTypeSection {
-       endHookType: root.model ? root.model.endHookType : null
-       thickness: root.model ? root.model.thickness : null
-       hookHeight: root.model ? root.model.hookHeight : null
-       possibleEndHookTypes: root.model ? root.model.possibleEndHookTypes() : null
+        id: lineTypeSection
+        endHookType: root.model ? root.model.endHookType : null
+        thickness: root.model ? root.model.thickness : null
+        hookHeight: root.model ? root.model.hookHeight : null
+        possibleEndHookTypes: root.model ? root.model.possibleEndHookTypes() : null
+
+        navigationPanel: root.navigationPanel
+        navigationRowStart: root.navigationRowStart + 3
     }
 
     SeparatorLine { anchors.margins: -10 }
 
     LineStyleSection {
+        id: lineStyleSection
         lineStyle: root.model ? root.model.lineStyle : null
         dashLineLength: root.model ? root.model.dashLineLength : null
         dashGapLength: root.model ? root.model.dashGapLength : null
+
+        navigationPanel: root.navigationPanel
+        navigationRowStart: lineTypeSection.navigationRowEnd + 1
     }
 
     SeparatorLine { anchors.margins: -10; visible: placementSection.visible }
@@ -90,5 +111,8 @@ Column {
         id: placementSection
 
         propertyItem: root.model ? root.model.placement : null
+
+        navigation.panel: root.navigationPanel
+        navigationRowStart: lineStyleSection.navigationRowEnd + 1
     }
 }
