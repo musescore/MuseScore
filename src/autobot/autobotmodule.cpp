@@ -30,7 +30,7 @@
 #include "internal/autobotconfiguration.h"
 #include "view/autobotmodel.h"
 
-#include "engraving/draw/painter.h"
+#include "engraving/infrastructure/draw/painter.h"
 #include "internal/draw/abpaintprovider.h"
 
 using namespace mu::autobot;
