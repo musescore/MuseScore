@@ -21,7 +21,9 @@
  */
 import QtQuick 2.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
+
 import "internal"
 
 Column {
@@ -29,24 +31,38 @@ Column {
 
     property QtObject model: null
 
+    property NavigationPanel navigationPanel: null
+    property int navigationRowOffset: 1
+
     objectName: "TextFrameSettings"
 
     spacing: 12
 
     VerticalGapsSection {
+        id: verticalGapsSection
         gapAbove: root.model ? root.model.gapAbove : null
         gapBelow: root.model ? root.model.gapBelow : null
+
+        navigationPanel: root.navigationPanel
+        navigationRowStart: root.navigationRowOffset + 1
     }
 
     SeparatorLine { anchors.margins: -10 }
 
     HorizontalMarginsSection {
+        id: horizontalMarginsSection
         frameLeftMargin: root.model ? root.model.frameLeftMargin : null
         frameRightMargin: root.model ? root.model.frameRightMargin : null
+
+        navigationPanel: root.navigationPanel
+        navigationRowStart: verticalGapsSection.navigationRowEnd + 1
     }
 
     VerticalMarginsSection {
         frameTopMargin: root.model ? root.model.frameTopMargin : null
         frameBottomMargin: root.model ? root.model.frameBottomMargin : null
+
+        navigationPanel: root.navigationPanel
+        navigationRowStart: horizontalMarginsSection.navigationRowEnd + 1
     }
 }

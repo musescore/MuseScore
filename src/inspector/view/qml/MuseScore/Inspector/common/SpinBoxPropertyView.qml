@@ -38,7 +38,7 @@ InspectorPropertyView {
     property alias icon: spinBoxItem.icon
     property alias iconMode: spinBoxItem.iconMode
 
-    navigationRowEnd: spinBox.navigation.row
+    navigationRowEnd: spinBoxItem.navigation.row
 
     IncrementalPropertyControl {
         id: spinBoxItem
