@@ -852,7 +852,25 @@ QFont TextFragment::font(const TextBase* t) const
 
       QString family;
       if (format.fontFamily() == "ScoreText") {
-            family = t->score()->styleSt(Sid::MusicalTextFont);
+            if (t->parent() && t->isDynamic()) {
+#if 0 // no fontByName() in 3.x?
+                  family = t->score()->scoreFont()->fontByName(t->score()->styleSt(Sid::MusicalSymbolFont))->family();
+#else
+                  family = t->score()->styleSt(Sid::MusicalSymbolFont);
+                  if (family == "Emmentaler")
+                        family = "MScore";
+                  else if (family == "Gonville")
+                        family = "Gootville";
+#endif
+                  m = t->score()->styleV(Sid::dynamicsSymbolFontSize).toReal() * t->mag();
+                  }
+            else if (t->parent() && t->isTempoText()) {
+                  family = t->score()->styleSt(Sid::MusicalTextFont);
+                  m = t->score()->styleV(Sid::tempoSymbolFontSize).toReal();
+                  }
+            else {
+                  family = t->score()->styleSt(Sid::MusicalTextFont);
+                  }
 
             // check if all symbols are available
             font.setFamily(family);
