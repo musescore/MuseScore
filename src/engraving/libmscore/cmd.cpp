@@ -244,6 +244,8 @@ void Score::startCmd()
         qDebug("===startCmd()");
     }
 
+    MScore::setError(MsError::MS_NO_ERROR);
+
     cmdState().reset();
 
     // Start collecting low-level undo operations for a
