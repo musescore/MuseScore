@@ -21,14 +21,19 @@
  */
 import QtQuick 2.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Inspector 1.0
+
 import "../../common"
 
 Column {
     id: root
 
     property QtObject model: null
+
+    property NavigationPanel navigationPanel: null
+    property int navigationRowOffset: 1
 
     objectName: "SpacerSettings"
 
@@ -41,5 +46,9 @@ Column {
         maxValue: 999
         minValue: 0
         step: 0.5
+
+        navigation.name: "Height"
+        navigation.panel: root.navigationPanel
+        navigationRowStart: root.navigationRowOffset
     }
 }
