@@ -893,8 +893,8 @@ void NavigationController::goToControl(MoveDirection direction, INavigationPanel
     INavigationControl* activeControl = findActive(activePanel->controls());
     INavigationControl* toControl = nullptr;
 
-    bool tryOtherOrientation = activePanel->direction() == INavigationPanel::Direction::Horizontal ||
-                                 activePanel->direction() == INavigationPanel::Direction::Vertical;
+    bool tryOtherOrientation = activePanel->direction() == INavigationPanel::Direction::Horizontal
+                               || activePanel->direction() == INavigationPanel::Direction::Vertical;
 
     switch (direction) {
     case MoveDirection::First: {
