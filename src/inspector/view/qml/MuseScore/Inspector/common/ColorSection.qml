@@ -34,12 +34,15 @@ InspectorPropertyView {
     titleText: qsTrc("inspector", "Color")
     navigation.name: "Color Section Menu"
 
+    navigationRowEnd: colorPicker.navigation.row
+
     ColorPicker {
         id: colorPicker
 
         navigation.panel: root.navigation.panel
         navigation.column: root.navigation.column
-        navigation.row: root.navigation.row + 1
+        navigation.row: root.navigationRowStart + 1
+        navigation.accessible.name: root.titleText + " " + Utils.colorToString(colorPicker.color)
 
         enabled: root.propertyItem ? root.propertyItem.isEnabled : false
         isIndeterminate: root.propertyItem && enabled ? root.propertyItem.isUndefined : false
