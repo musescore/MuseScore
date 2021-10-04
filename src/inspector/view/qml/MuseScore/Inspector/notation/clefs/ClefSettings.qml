@@ -37,7 +37,12 @@ Column {
 
     spacing: 12
 
+    function focusOnFirst() {
+        showCourtesyClef.navigation.requestActive()
+    }
+
     CheckBox {
+        id: showCourtesyClef
         isIndeterminate: root.model ? root.model.shouldShowCourtesy.isUndefined : false
         checked: root.model && !isIndeterminate ? root.model.shouldShowCourtesy.value : false
         text: qsTrc("inspector", "Show courtesy clef on previous measure")

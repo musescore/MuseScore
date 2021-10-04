@@ -38,6 +38,10 @@ Column {
 
     spacing: 12
 
+    function focusOnFirst() {
+        verticalGapsSection.focusOnFirst()
+    }
+
     VerticalGapsSection {
         id: verticalGapsSection
         gapAbove: root.model ? root.model.gapAbove : null

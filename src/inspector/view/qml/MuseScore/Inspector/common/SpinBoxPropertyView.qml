@@ -40,6 +40,10 @@ InspectorPropertyView {
 
     navigationRowEnd: spinBoxItem.navigation.row
 
+    function focusOnFirst() {
+        spinBoxItem.navigation.requestActive()
+    }
+
     IncrementalPropertyControl {
         id: spinBoxItem
 

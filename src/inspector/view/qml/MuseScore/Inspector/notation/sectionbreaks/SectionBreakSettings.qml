@@ -40,6 +40,10 @@ Column {
 
     spacing: 12
 
+    function focusOnFirst() {
+        pauseBeforStartsSection.focusOnFirst()
+    }
+
     SpinBoxPropertyView {
         id: pauseBeforStartsSection
         titleText: qsTrc("inspector", "Pause before new section starts")

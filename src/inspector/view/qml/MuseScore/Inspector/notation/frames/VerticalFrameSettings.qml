@@ -40,6 +40,10 @@ Column {
     height: implicitHeight
     spacing: 12
 
+    function focusOnFirst() {
+        heightSection.focusOnFirst()
+    }
+
     SpinBoxPropertyView {
         id: heightSection
         anchors.left: parent.left

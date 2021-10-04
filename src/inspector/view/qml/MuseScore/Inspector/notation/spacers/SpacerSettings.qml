@@ -39,7 +39,12 @@ Column {
 
     spacing: 12
 
+    function focusOnFirst() {
+        heightSection.focusOnFirst()
+    }
+
     SpinBoxPropertyView {
+        id: heightSection
         titleText: qsTrc("inspector", "Height")
         propertyItem: root.model ? root.model.spacerHeight : null
 

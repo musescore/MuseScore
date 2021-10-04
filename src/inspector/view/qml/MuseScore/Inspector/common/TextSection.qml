@@ -30,7 +30,12 @@ InspectorPropertyView {
 
     navigationRowEnd: navigationRowStart + 2
 
+    function focusOnFirst() {
+        textField.navigation.requestActive()
+    }
+
     TextInputField {
+        id: textField
         isIndeterminate: root.propertyItem ? root.propertyItem.isUndefined : false
         currentText: root.propertyItem ? root.propertyItem.value : ""
         enabled: root.propertyItem ? root.propertyItem.isEnabled : false

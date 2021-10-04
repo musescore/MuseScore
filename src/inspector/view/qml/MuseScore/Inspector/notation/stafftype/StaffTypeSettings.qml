@@ -40,7 +40,12 @@ Column {
 
     spacing: 12
 
+    function focusOnFirst() {
+        cutSize.navigation.requestActive()
+    }
+
     CheckBox {
+        id: cutSize
         isIndeterminate: root.model ? root.model.isSmall.isUndefined : false
         checked: root.model && !isIndeterminate ? root.model.isSmall.value : false
         text: qsTrc("inspector", "Cue size")

@@ -34,6 +34,10 @@ InspectorPropertyView {
 
     navigationRowEnd: navigationRowStart + 2
 
+    function focusOnFirst() {
+        dropdownItem.navigation.requestActive()
+    }
+
     Dropdown {
         id: dropdownItem
         width: parent.width

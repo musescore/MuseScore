@@ -39,7 +39,12 @@ Column {
 
     spacing: 12
 
+    function focusOnFirst() {
+        showCourtesyKeySignature.navigation.requestActive()
+    }
+
     CheckBox {
+        id: showCourtesyKeySignature
         isIndeterminate: root.model ? root.model.hasToShowCourtesy.isUndefined : false
         checked: root.model && !isIndeterminate ? root.model.hasToShowCourtesy.value : false
         text: qsTrc("inspector", "Show courtesy key signature on previous system")

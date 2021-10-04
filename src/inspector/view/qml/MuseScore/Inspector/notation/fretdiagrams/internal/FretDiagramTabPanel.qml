@@ -36,6 +36,10 @@ TabPanel {
                              advancedTab.visible ? advancedTab.implicitHeight : 0) + tabBarHeight + 24
     width: parent ? parent.width : 0
 
+    function focusOnFirst() {
+        generalTab.navigation.requestActive()
+    }
+
     TabItem {
         id: generalTab
 

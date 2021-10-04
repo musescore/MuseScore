@@ -43,6 +43,10 @@ Column {
 
     spacing: 12
 
+    function focusOnFirst() {
+        styleSection.focusOnFirst()
+    }
+
     DropdownPropertyView {
         id: styleSection
         titleText: qsTrc("inspector", "Style")

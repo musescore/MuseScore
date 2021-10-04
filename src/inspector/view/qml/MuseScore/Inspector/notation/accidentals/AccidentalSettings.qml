@@ -40,7 +40,12 @@ Column {
 
     spacing: 12
 
+    function focusOnFirst() {
+        breacketType.focusOnFirst()
+    }
+
     FlatRadioButtonGroupPropertyView {
+        id: breacketType
         titleText: qsTrc("inspector", "Bracket type")
         propertyItem: root.model ? root.model.bracketType : null
 
