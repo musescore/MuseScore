@@ -33,6 +33,9 @@ FocusableItem {
 
     property QtObject model: null
 
+    property NavigationPanel navigationPanel: null
+    property int navigationRowStart: 1
+
     implicitHeight: contentColumn.height
     width: parent.width
 
@@ -44,15 +47,27 @@ FocusableItem {
         spacing: 12
 
         DropdownPropertyView {
+            id: typeSection
             titleText: qsTrc("inspector", "Type")
             propertyItem: root.model ? root.model.ottavaType : null
             model: root.model ? root.model.possibleOttavaTypes() : null
+
+            navigation.name: "Type"
+            navigation.panel: root.navigationPanel
+            navigation.row: root.navigationRowStart
+            navigation.enabled: root.enabled
         }
 
         CheckBox {
+            id: showNumbersOnlyCheckBox
             isIndeterminate: root.model ? root.model.showNumbersOnly.isUndefined : false
             checked: root.model && !isIndeterminate ? root.model.showNumbersOnly.value : false
             text: qsTrc("inspector", "Show numbers only")
+
+            navigation.name: "ShowNumbersOnly"
+            navigation.panel: root.navigationPanel
+            navigation.row: typeSection.navigationRowEnd + 1
+            navigation.enabled: root.enabled
 
             onClicked: {
                 root.model.showNumbersOnly.value = !checked
@@ -63,6 +78,9 @@ FocusableItem {
 
         LineWithHooksCommonStyleSettings {
             model: root.model
+
+            navigationPanel: root.navigationPanel
+            navigationRowStart: showNumbersOnlyCheckBox.navigation.row + 1
         }
     }
 }

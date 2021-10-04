@@ -51,7 +51,7 @@ Column {
 
         navigation.name: "Type"
         navigation.panel: root.navigationPanel
-        navigation.row: root.navigationRowOffset
+        navigationRowStart: root.navigationRowOffset
     }
 
     SeparatorLine { anchors.margins: -10 }

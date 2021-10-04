@@ -33,6 +33,9 @@ FocusableItem {
 
     property QtObject model: null
 
+    property NavigationPanel navigationPanel: null
+    property int navigationRowStart: 1
+
     implicitHeight: contentColumn.height
     width: parent.width
 
@@ -44,16 +47,23 @@ FocusableItem {
         spacing: 12
 
         TextSection {
+            id: repeatList
             width: parent.width / 2
 
             titleText: qsTrc("inspector", "Repeat list")
             propertyItem: root.model ? root.model.repeatCount : null
+
+            navigation.panel: root.navigationPanel
+            navigationRowStart: root.navigationRowStart + 1
         }
 
         SeparatorLine { anchors.margins: -10 }
 
         LineWithHooksCommonStyleSettings {
             model: root.model
+
+            navigationPanel: root.navigationPanel
+            navigationRowStart: repeatList.navigationRowEnd + 1
         }
     }
 }
