@@ -81,7 +81,7 @@ public:
     qreal width() const override;
     qreal height() const override;
 
-    QPoint canvasPos() const override;
+    PointF canvasPos() const override;
 
     PointF toLogical(const QPoint& point) const override;
 

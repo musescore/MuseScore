@@ -45,7 +45,7 @@ public:
     virtual qreal width() const = 0;
     virtual qreal height() const = 0;
 
-    virtual QPoint canvasPos() const = 0;
+    virtual PointF canvasPos() const = 0;
 
     virtual void moveCanvas(int dx, int dy) = 0;
     virtual void moveCanvasHorizontal(int dx) = 0;
@@ -113,7 +113,7 @@ private:
 
     int currentZoomIndex() const;
     int currentZoomPercentage() const;
-    QPoint findZoomFocusPoint();
+    QPointF findZoomFocusPoint();
     void setZoom(int zoomPercentage, const QPoint& pos = QPoint());
 
     void setViewMode(const ViewMode& viewMode);
