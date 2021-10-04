@@ -804,6 +804,11 @@ qreal NotationPaintView::height() const
     return QQuickPaintedItem::height();
 }
 
+QPoint NotationPaintView::canvasPos() const
+{
+    return QPoint(m_matrix.dx(), m_matrix.dy());
+}
+
 PointF NotationPaintView::toLogical(const QPoint& point) const
 {
     double scale = guiScaling();

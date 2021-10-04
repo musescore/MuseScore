@@ -128,7 +128,7 @@ void NotationViewInputController::zoomIn()
 
     int zoom = m_possibleZoomsPercentage[currentIndex];
 
-    setZoom(zoom);
+    setZoom(zoom, findZoomFocusPoint());
 }
 
 void NotationViewInputController::zoomOut()
@@ -137,7 +137,23 @@ void NotationViewInputController::zoomOut()
 
     int zoom = m_possibleZoomsPercentage[currentIndex];
 
-    setZoom(zoom);
+    setZoom(zoom, findZoomFocusPoint());
+}
+
+
+QPoint NotationViewInputController::findZoomFocusPoint()
+{
+    INotationSelection* selection = m_view->notationInteraction().get()->selection().get();
+
+    // No selection: zoom at the center of the view
+    if (selection->isNone()) {
+        return QPoint(m_view->width() / 2, m_view->height() / 2);
+    }
+    // Selection: zoom at the center of the selection
+    else {
+        return (selection->canvasBoundingRect().center().toPoint() * m_view->currentScaling()) + m_view->canvasPos();
+    }
+
 }
 
 void NotationViewInputController::zoomToPageWidth()
