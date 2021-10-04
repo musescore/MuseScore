@@ -21,8 +21,8 @@
  */
 import QtQuick 2.15
 
-import MuseScore.UiComponents 1.0
 import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
 import MuseScore.Inspector 1.0
 
 import "../../../common"
@@ -33,10 +33,15 @@ Item {
     property PropertyItem frameTopMargin: null
     property PropertyItem frameBottomMargin: null
 
+    property NavigationPanel navigationPanel: null
+    property int navigationRowStart: 1
+    property int navigationRowEnd: bottomMarginsSection.navigationRowEnd
+
     height: childrenRect.height
     width: parent.width
 
     SpinBoxPropertyView {
+        id: topMarginsSection
         anchors.left: parent.left
         anchors.right: parent.horizontalCenter
         anchors.rightMargin: 4
@@ -46,9 +51,13 @@ Item {
 
         icon: IconCode.TOP_MARGIN
         measureUnitsSymbol: qsTrc("inspector", "mm")
+
+        navigation.panel: root.navigationPanel
+        navigationRowStart: root.navigationRowStart + 1
     }
 
     SpinBoxPropertyView {
+        id: bottomMarginsSection
         anchors.left: parent.horizontalCenter
         anchors.leftMargin: 4
         anchors.right: parent.right
@@ -58,5 +67,8 @@ Item {
 
         icon: IconCode.BOTTOM_MARGIN
         measureUnitsSymbol: qsTrc("inspector", "mm")
+
+        navigation.panel: root.navigationPanel
+        navigationRowStart: topMarginsSection.navigationRowEnd + 1
     }
 }

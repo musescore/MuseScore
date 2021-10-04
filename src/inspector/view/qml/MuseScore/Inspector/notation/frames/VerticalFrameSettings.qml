@@ -21,6 +21,7 @@
  */
 import QtQuick 2.15
 
+import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
 import "../../common"
@@ -31,12 +32,16 @@ Column {
 
     property QtObject model: null
 
+    property NavigationPanel navigationPanel: null
+    property int navigationRowOffset: 1
+
     objectName: "VerticalFrameSettings"
 
     height: implicitHeight
     spacing: 12
 
     SpinBoxPropertyView {
+        id: heightSection
         anchors.left: parent.left
         anchors.right: parent.horizontalCenter
         anchors.rightMargin: 2
@@ -45,24 +50,38 @@ Column {
         propertyItem: root.model ? root.model.frameHeight : null
 
         icon: IconCode.VERTICAL
+
+        navigation.panel: root.navigationPanel
+        navigationRowStart: root.navigationRowOffset + 1
     }
 
     SeparatorLine { anchors.margins: -10 }
 
     VerticalGapsSection {
+        id: verticalGapsSection
         gapAbove: root.model ? root.model.gapAbove : null
         gapBelow: root.model ? root.model.gapBelow : null
+
+        navigationPanel: root.navigationPanel
+        navigationRowStart: heightSection.navigationRowEnd + 1
     }
 
     SeparatorLine { anchors.margins: -10 }
 
     HorizontalMarginsSection {
+        id: horizontalMargindSection
         frameLeftMargin: root.model ? root.model.frameLeftMargin : null
         frameRightMargin: root.model ? root.model.frameRightMargin : null
+
+        navigationPanel: root.navigationPanel
+        navigationRowStart: verticalGapsSection.navigationRowEnd + 1
     }
 
     VerticalMarginsSection {
         frameTopMargin: root.model ? root.model.frameTopMargin : null
         frameBottomMargin: root.model ? root.model.frameBottomMargin : null
+
+        navigationPanel: root.navigationPanel
+        navigationRowStart: horizontalMargindSection.navigationRowEnd + 1
     }
 }
