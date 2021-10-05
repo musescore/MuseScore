@@ -24,6 +24,7 @@ import QtQuick 2.15
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Inspector 1.0
+
 import "../../common"
 
 Column {
@@ -31,15 +32,27 @@ Column {
 
     property QtObject model: null
 
+    property NavigationPanel navigationPanel: null
+    property int navigationRowOffset: 1
+
     objectName: "TimeSignatureSettings"
 
     spacing: 12
 
+    function focusOnFirst() {
+        horizontalScaleControl.focusOnFirst()
+    }
+
     InspectorPropertyView {
+        id: scaleSection
         height: childrenRect.height
 
         titleText: qsTrc("inspector", "Scale")
         propertyItem: root.model ? root.model.horizontalScale : null
+
+        navigation.panel: root.navigationPanel
+        navigationRowStart: root.navigationRowOffset + 1
+        navigationRowEnd: verticalScaleControl.navigation.row
 
         Item {
             height: childrenRect.height
@@ -62,6 +75,11 @@ Column {
                 maxValue: 300
                 minValue: 1
 
+                navigation.name: "HorizontalScale"
+                navigation.panel: root.navigationPanel
+                navigation.row: scaleSection.navigationRowStart + 2
+                navigation.accessible.name: scaleSection.titleText + " " + qsTrc("inspector", "Horizontal") + currentValue
+
                 onValueEdited: { root.model.horizontalScale.value = newValue }
             }
 
@@ -82,6 +100,11 @@ Column {
                 maxValue: 300
                 minValue: 1
 
+                navigation.name: "VeriticalScale"
+                navigation.panel: root.navigationPanel
+                navigation.row: scaleSection.navigationRowStart + 3
+                navigation.accessible.name: scaleSection.titleText + " " + qsTrc("inspector", "Vertical") + currentValue
+
                 onValueEdited: { root.model.verticalScale.value = newValue }
             }
         }
@@ -92,6 +115,10 @@ Column {
         checked: root.model && !isIndeterminate ? root.model.shouldShowCourtesy.value : false
         text: qsTrc("inspector", "Show courtesy time signature on previous system")
 
+        navigation.name: "ShowCourtesyCheckBox"
+        navigation.panel: root.navigationPanel
+        navigation.row: scaleSection.navigationRowEnd + 1
+
         onClicked: { root.model.shouldShowCourtesy.value = !checked }
     }
 
@@ -99,6 +126,10 @@ Column {
         width: parent.width
 
         text: qsTrc("inspector", "Change time signature")
+
+        navigation.name: "ChangeButton"
+        navigation.panel: root.navigationPanel
+        navigation.row: scaleSection.navigationRowEnd + 2
 
         onClicked: {
             if (root.model) {
