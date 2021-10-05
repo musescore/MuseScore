@@ -37,6 +37,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/iteststep.h
     ${CMAKE_CURRENT_LIST_DIR}/iabcontext.h
     ${CMAKE_CURRENT_LIST_DIR}/iautobotconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/iautobotscriptsrepository.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/autobot.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/autobot.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/autobotconfiguration.cpp
@@ -57,6 +58,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/autobotactions.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/autobotactionscontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/autobotactionscontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/autobotscriptsrepository.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/autobotscriptsrepository.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/draw/abpaintprovider.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/draw/abpaintprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/steps/abscoreloadstep.cpp
@@ -77,6 +80,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/autobotmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/abfilesmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/abfilesmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/autobotscriptsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/autobotscriptsmodel.h
     )
 
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)

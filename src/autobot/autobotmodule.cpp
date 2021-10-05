@@ -30,11 +30,13 @@
 #include "internal/autobot.h"
 #include "internal/autobotconfiguration.h"
 #include "view/autobotmodel.h"
+#include "view/autobotscriptsmodel.h"
 
 #include "engraving/infrastructure/draw/painter.h"
 #include "internal/draw/abpaintprovider.h"
 #include "internal/autobotactionscontroller.h"
 #include "internal/autobotactions.h"
+#include "internal/autobotscriptsrepository.h"
 
 using namespace mu::autobot;
 
@@ -50,6 +52,7 @@ void AutobotModule::registerExports()
 {
     modularity::ioc()->registerExport<IAutobot>(moduleName(), s_autobot);
     modularity::ioc()->registerExport<IAutobotConfiguration>(moduleName(), new AutobotConfiguration());
+    modularity::ioc()->registerExport<IAutobotScriptsRepository>(moduleName(), new AutobotScriptsRepository());
 
     draw::Painter::extended = AbPaintProvider::instance();
 }
@@ -71,6 +74,7 @@ void AutobotModule::resolveImports()
 void AutobotModule::registerUiTypes()
 {
     qmlRegisterType<AutobotModel>("MuseScore.Autobot", 1, 0, "AutobotModel");
+    qmlRegisterType<AutobotScriptsModel>("MuseScore.Autobot", 1, 0, "AutobotScriptsModel");
 }
 
 void AutobotModule::onInit(const framework::IApplication::RunMode&)

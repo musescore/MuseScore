@@ -40,6 +40,8 @@ public:
     io::path fileDrawDataPath(const io::path& filePath) const override;
 
     io::path reportsPath() const override;
+
+    io::path scriptsPath() const override;
 };
 }
 
