@@ -154,6 +154,7 @@ public:
     virtual RetVal<Val> open(const UriQuery& uri) const = 0;
     virtual RetVal<bool> isOpened(const std::string& uri) const = 0;
     virtual RetVal<bool> isOpened(const Uri& uri) const = 0;
+    virtual RetVal<bool> isOpened(const UriQuery& uri) const = 0;
 
     virtual void close(const std::string& uri) = 0;
     virtual void close(const Uri& uri) = 0;

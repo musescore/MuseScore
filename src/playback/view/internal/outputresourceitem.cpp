@@ -43,7 +43,9 @@ void OutputResourceItem::requestAvailableResources()
                                 NO_FX_MENU_ITEM_ID(),
                                 m_currentFxParams.resourceMeta.id.empty());
 
-        result << buildSeparator();
+        if (!m_fxByVendorMap.empty()) {
+            result << buildSeparator();
+        }
 
         for (const auto& pair : m_fxByVendorMap) {
             const QString& vendor = QString::fromStdString(pair.first);

@@ -25,16 +25,19 @@
 using namespace mu::playback;
 using namespace mu::audio;
 
-static const volume_dbfs_t MAX_DISPLAYED_DBFS = 0.f; // 100%
-static const volume_dbfs_t MIN_DISPLAYED_DBFS = -60.f; // 0%
+static constexpr volume_dbfs_t MAX_DISPLAYED_DBFS = 0.f; // 100%
+static constexpr volume_dbfs_t MIN_DISPLAYED_DBFS = -60.f; // 0%
 
-static const float BALANCE_SCALING_FACTOR = 100.f;
+static constexpr float BALANCE_SCALING_FACTOR = 100.f;
 
-static const int OUTPUT_RESOURCE_COUNT_LIMIT = 4;
+static constexpr int OUTPUT_RESOURCE_COUNT_LIMIT = 4;
 
-static const QString MASTER_VSTFX_EDITOR_URI_BODY("musescore://vstfx/editor?sync=false&modal=false&resourceId=%1&chainOrder=%2");
-static const QString TRACK_VSTFX_EDITOR_URI_BODY("musescore://vstfx/editor?sync=false&modal=false&trackId=%1&resourceId=%2&chainOrder=%3");
-static const QString TRACK_VSTI_EDITOR_URI_BODY("musescore://vsti/editor?sync=false&modal=false&trackId=%1&resourceId=%2");
+static const std::string VSTFX_EDITOR_URI("musescore://vstfx/editor?sync=false&modal=false");
+static const std::string VSTI_EDITOR_URI("musescore://vsti/editor?sync=false&modal=false");
+
+static const std::string TRACK_ID_KEY("trackId");
+static const std::string RESOURCE_ID_KEY("resourceId");
+static const std::string CHAIN_ORDER_KEY("chainOrder");
 
 MixerChannelItem::MixerChannelItem(QObject* parent, const audio::TrackId id, const bool isMaster)
     : QObject(parent),
@@ -294,16 +297,16 @@ InputResourceItem* MixerChannelItem::buildInputResourceItem()
     connect(newItem, &InputResourceItem::isBlankChanged, this, &MixerChannelItem::inputResourceItemChanged);
 
     connect(newItem, &InputResourceItem::nativeEditorViewLaunchRequested, this, [this, newItem]() {
-        QString uri;
-
-        if (newItem->params().type() == AudioSourceType::Vsti) {
-            uri = TRACK_VSTI_EDITOR_URI_BODY
-                  .arg(m_id)
-                  .arg(QString::fromStdString(newItem->params().resourceMeta.id));
+        if (newItem->params().type() != AudioSourceType::Vsti) {
+            return;
         }
 
-        if (!interactive()->isOpened(uri.toStdString()).val) {
-            interactive()->open(uri.toStdString());
+        UriQuery uri(VSTI_EDITOR_URI);
+        uri.addParam(TRACK_ID_KEY, Val(m_id));
+        uri.addParam(RESOURCE_ID_KEY, Val(newItem->params().resourceMeta.id));
+
+        if (!interactive()->isOpened(uri).val) {
+            interactive()->open(uri);
         }
     });
 
@@ -331,21 +334,17 @@ OutputResourceItem* MixerChannelItem::buildOutputResourceItem(const audio::Audio
             return;
         }
 
-        QString uri;
+        UriQuery uri(VSTFX_EDITOR_URI);
 
-        if (isMasterChannel()) {
-            uri = MASTER_VSTFX_EDITOR_URI_BODY
-                  .arg(QString::fromStdString(newItem->params().resourceMeta.id))
-                  .arg(newItem->params().chainOrder);
-        } else {
-            uri = TRACK_VSTFX_EDITOR_URI_BODY
-                  .arg(m_id)
-                  .arg(QString::fromStdString(newItem->params().resourceMeta.id))
-                  .arg(newItem->params().chainOrder);
+        if (!isMasterChannel()) {
+            uri.addParam(TRACK_ID_KEY, Val(m_id));
         }
 
-        if (!interactive()->isOpened(uri.toStdString()).val) {
-            interactive()->open(uri.toStdString());
+        uri.addParam(RESOURCE_ID_KEY, Val(newItem->params().resourceMeta.id));
+        uri.addParam(CHAIN_ORDER_KEY, Val(newItem->params().chainOrder));
+
+        if (!interactive()->isOpened(uri).val) {
+            interactive()->open(uri);
         }
     });
 

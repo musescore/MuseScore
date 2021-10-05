@@ -74,6 +74,7 @@ public:
 
     RetVal<Val> open(const UriQuery& uri) override;
     RetVal<bool> isOpened(const Uri& uri) const override;
+    RetVal<bool> isOpened(const UriQuery& uri) const override;
 
     void close(const Uri& uri) override;
 
