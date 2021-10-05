@@ -53,6 +53,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/abinvoker.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/abreport.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/abreport.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/autobotactions.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/autobotactions.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/autobotactionscontroller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/autobotactionscontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/draw/abpaintprovider.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/draw/abpaintprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/steps/abscoreloadstep.cpp

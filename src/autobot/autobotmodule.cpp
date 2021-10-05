@@ -25,6 +25,7 @@
 
 #include "modularity/ioc.h"
 #include "ui/iinteractiveuriregister.h"
+#include "ui/iuiactionsregister.h"
 
 #include "internal/autobot.h"
 #include "internal/autobotconfiguration.h"
@@ -32,10 +33,13 @@
 
 #include "engraving/infrastructure/draw/painter.h"
 #include "internal/draw/abpaintprovider.h"
+#include "internal/autobotactionscontroller.h"
+#include "internal/autobotactions.h"
 
 using namespace mu::autobot;
 
 static const std::shared_ptr<Autobot> s_autobot = std::make_shared<Autobot>();
+static std::shared_ptr<AutobotActionsController> s_actionsController = std::make_shared<AutobotActionsController>();
 
 std::string AutobotModule::moduleName() const
 {
@@ -54,7 +58,12 @@ void AutobotModule::resolveImports()
 {
     auto ir = modularity::ioc()->resolve<ui::IInteractiveUriRegister>(moduleName());
     if (ir) {
-        ir->registerQmlUri(Uri("musescore://autobot/main"), "MuseScore/Autobot/AutobotDialog.qml");
+        ir->registerQmlUri(Uri("musescore://autobot/batchtests"), "MuseScore/Autobot/AutobotDialog.qml");
+    }
+
+    auto ar = modularity::ioc()->resolve<ui::IUiActionsRegister>(moduleName());
+    if (ar) {
+        ar->reg(std::make_shared<AutobotActions>());
     }
 }
 
@@ -66,4 +75,5 @@ void AutobotModule::registerUiTypes()
 void AutobotModule::onInit(const framework::IApplication::RunMode&)
 {
     s_autobot->init();
+    s_actionsController->init();
 }

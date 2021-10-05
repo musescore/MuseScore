@@ -329,10 +329,15 @@ MenuItem AppMenuModel::diagnosticItem() const
         makeMenuItem("diagnostic-show-engraving-elements"),
     };
 
+    MenuItemList autobotItems {
+        makeMenuItem("autobot-show-batchtests"),
+    };
+
     MenuItemList items {
         makeMenu(qtrc("appshell", "System"), systemItems),
         makeMenu(qtrc("appshell", "Accessibility"), accessibilityItems),
         makeMenu(qtrc("appshell", "Engraving"), engravingItems),
+        makeMenu(qtrc("appshell", "Autobot"), autobotItems),
     };
 
     return makeMenu(qtrc("appshell", "Diagnostic"), items);
